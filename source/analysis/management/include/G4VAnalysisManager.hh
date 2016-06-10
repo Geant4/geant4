@@ -43,6 +43,7 @@
 
 #include <vector>
 #include <fstream>
+#include <memory>
 
 
 class G4AnalysisMessenger;
@@ -55,6 +56,12 @@ class G4VP2Manager;
 class G4VNtupleManager;
 class G4VFileManager;
 
+namespace tools {
+namespace histo{
+class hmpi;  
+}  
+}
+
 class G4VAnalysisManager
 {
   public:
@@ -65,16 +72,21 @@ class G4VAnalysisManager
     G4bool OpenFile(const G4String& fileName = "");
     G4bool Write(); 
     G4bool CloseFile(); 
+    G4bool Merge(tools::histo::hmpi* hmpi);   
+    G4bool Plot();
+    G4bool IsOpenFile() const;
 
     // Methods for handling files and directories names  
     G4bool SetFileName(const G4String& fileName);
     G4bool SetHistoDirectoryName(const G4String& dirName);
     G4bool SetNtupleDirectoryName(const G4String& dirName);
+    void   SetCompressionLevel(G4int level);
 
     G4String GetFileName() const;
     G4String GetHistoDirectoryName() const;
     G4String GetNtupleDirectoryName() const;
-    
+    G4int    GetCompressionLevel() const;
+
     // Methods for handling histograms
     //
     G4int CreateH1(const G4String& name, const G4String& title,
@@ -366,6 +378,12 @@ class G4VAnalysisManager
     // return true otherwise
     G4bool IsAscii() const;
 
+    // Plotting option
+
+    // Return false if there is no object selected for plottng,
+    // return true otherwise
+    G4bool IsPlotting() const;
+
     // Access methods
     G4int GetFirstH1Id() const;
     G4int GetFirstH2Id() const;
@@ -387,27 +405,36 @@ class G4VAnalysisManager
     G4int GetH2Id(const G4String& name, G4bool warn = true) const;
     G4int GetH3Id(const G4String& name, G4bool warn = true) const;
    
-    // Methods to manipulate histogram & profiles additional information
+    // Methods to manipulate histogram, profiles & ntuples additional information
     //
     void  SetH1Activation(G4bool activation);
     void  SetH1Activation(G4int id, G4bool activation);
     void  SetH1Ascii(G4int id, G4bool ascii);
+    void  SetH1Plotting(G4int id, G4bool plotting);
     //
     void  SetH2Activation(G4bool activation);
     void  SetH2Activation(G4int id, G4bool activation);
     void  SetH2Ascii(G4int id, G4bool ascii);
+    void  SetH2Plotting(G4int id, G4bool plotting);
     //
     void  SetH3Activation(G4bool activation);
     void  SetH3Activation(G4int id, G4bool activation);
     void  SetH3Ascii(G4int id, G4bool ascii);
+    void  SetH3Plotting(G4int id, G4bool plotting);
     //
     void  SetP1Activation(G4bool activation);
     void  SetP1Activation(G4int id, G4bool activation);
     void  SetP1Ascii(G4int id, G4bool ascii);
+    void  SetP1Plotting(G4int id, G4bool plotting);
     //
     void  SetP2Activation(G4bool activation);
     void  SetP2Activation(G4int id, G4bool activation);
     void  SetP2Ascii(G4int id, G4bool ascii);
+    void  SetP2Plotting(G4int id, G4bool plotting);
+    //
+    void  SetNtupleActivation(G4bool activation);
+    void  SetNtupleActivation(G4int id, G4bool activation);
+
     
     // Access to histogram & profiles parameters
     //
@@ -462,12 +489,14 @@ class G4VAnalysisManager
     G4double GetH1Unit(G4int id) const;
     G4bool   GetH1Activation(G4int id) const;
     G4bool   GetH1Ascii(G4int id) const;
+    G4bool   GetH1Plotting(G4int id) const;
     //
     G4String GetH2Name(G4int id) const;
     G4double GetH2XUnit(G4int id) const;
     G4double GetH2YUnit(G4int id) const;
     G4bool   GetH2Activation(G4int id) const;
     G4bool   GetH2Ascii(G4int id) const;
+    G4bool   GetH2Plotting(G4int id) const;
     //
     G4String GetH3Name(G4int id) const;
     G4double GetH3XUnit(G4int id) const;
@@ -475,12 +504,14 @@ class G4VAnalysisManager
     G4double GetH3ZUnit(G4int id) const;
     G4bool   GetH3Activation(G4int id) const;
     G4bool   GetH3Ascii(G4int id) const;
+    G4bool   GetH3Plotting(G4int id) const;
     //
     G4String GetP1Name(G4int id) const;
     G4double GetP1XUnit(G4int id) const;
     G4double GetP1YUnit(G4int id) const;
     G4bool   GetP1Activation(G4int id) const;
     G4bool   GetP1Ascii(G4int id) const;
+    G4bool   GetP1Plotting(G4int id) const;
     //
     G4String GetP2Name(G4int id) const;
     G4double GetP2XUnit(G4int id) const;
@@ -488,6 +519,9 @@ class G4VAnalysisManager
     G4double GetP2ZUnit(G4int id) const;
     G4bool   GetP2Activation(G4int id) const;
     G4bool   GetP2Ascii(G4int id) const;
+    G4bool   GetP2Plotting(G4int id) const;
+    //
+    G4bool   GetNtupleActivation(G4int id) const;
     
     // Setters for histogram & profiles attributes for plotting
     //
@@ -554,6 +588,9 @@ class G4VAnalysisManager
     virtual G4bool OpenFileImpl(const G4String& fileName) = 0;
     virtual G4bool WriteImpl() = 0;
     virtual G4bool CloseFileImpl() = 0;
+    virtual G4bool PlotImpl() = 0;
+    virtual G4bool MergeImpl(tools::histo::hmpi* hmpi) = 0;
+    virtual G4bool IsOpenFileImpl() const = 0;
  
     // methods
     void SetH1Manager(G4VH1Manager* h1Manager);
@@ -561,30 +598,30 @@ class G4VAnalysisManager
     void SetH3Manager(G4VH3Manager* h3Manager);
     void SetP1Manager(G4VP1Manager* p1Manager);
     void SetP2Manager(G4VP2Manager* p2Manager);
-    void SetNtupleManager(G4VNtupleManager* ntupleManager);
-    void SetFileManager(G4VFileManager* fileManager);
+    void SetNtupleManager(G4VNtupleManager* ntupleManager);   
+    void SetFileManager(std::shared_ptr<G4VFileManager> fileManager);
 
     // Methods to manipulate additional information
     G4bool  WriteAscii(const G4String& fileName); 
 
     // data members
     G4AnalysisManagerState fState;
+    std::shared_ptr<G4VFileManager>  fVFileManager;
 
   private:
     // data members
-    G4AnalysisMessenger* fMessenger;
-    G4HnManager*      fH1HnManager;
-    G4HnManager*      fH2HnManager;
-    G4HnManager*      fH3HnManager;
-    G4HnManager*      fP1HnManager;
-    G4HnManager*      fP2HnManager;
-    G4VH1Manager*     fVH1Manager;
-    G4VH2Manager*     fVH2Manager;
-    G4VH3Manager*     fVH3Manager;
-    G4VP1Manager*     fVP1Manager;
-    G4VP2Manager*     fVP2Manager;
-    G4VNtupleManager* fVNtupleManager;
-    G4VFileManager*   fVFileManager;
+    std::unique_ptr<G4AnalysisMessenger> fMessenger;
+    std::shared_ptr<G4HnManager>   fH1HnManager;
+    std::shared_ptr<G4HnManager>   fH2HnManager;
+    std::shared_ptr<G4HnManager>   fH3HnManager;
+    std::shared_ptr<G4HnManager>   fP1HnManager;
+    std::shared_ptr<G4HnManager>   fP2HnManager;
+    std::unique_ptr<G4VH1Manager>  fVH1Manager;
+    std::unique_ptr<G4VH2Manager>  fVH2Manager;
+    std::unique_ptr<G4VH3Manager>  fVH3Manager;
+    std::unique_ptr<G4VP1Manager>  fVP1Manager;
+    std::unique_ptr<G4VP2Manager>  fVP2Manager;
+    std::unique_ptr<G4VNtupleManager> fVNtupleManager;
 };
 
 // inline functions

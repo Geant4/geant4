@@ -67,7 +67,7 @@ Build(G4NeutronInelasticProcess * aP)
 G4INCLXXNeutronBuilder::
 ~G4INCLXXNeutronBuilder() 
 {
-  delete theModel;
+  //delete theModel;
 }
 
 void G4INCLXXNeutronBuilder::

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc 85582 2014-10-31 09:07:30Z gcosmo $
+// $Id: G4OpenGLStoredViewer.cc 91686 2015-07-31 09:40:08Z gcosmo $
 //
 //
 // Andrew Walkden  7th February 1997
@@ -48,7 +48,8 @@ G4OpenGLStoredViewer::G4OpenGLStoredViewer
 (G4OpenGLStoredSceneHandler& sceneHandler):
 G4VViewer (sceneHandler, -1),
 G4OpenGLViewer (sceneHandler),
-fG4OpenGLStoredSceneHandler (sceneHandler)
+fG4OpenGLStoredSceneHandler (sceneHandler),
+fDepthTestEnable(true)
 {
   fLastVP = fDefaultVP; // Not sure if this gets executed before or
   // after G4VViewer::G4VViewer!!  Doesn't matter much.
@@ -129,17 +130,11 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
 }
 
 void G4OpenGLStoredViewer::DrawDisplayLists () {
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLStoredViewer::DrawDisplayLists \n");
-#endif
   
   const G4Planes& cutaways = fVP.GetCutawayPlanes();
   G4bool cutawayUnion = fVP.IsCutaway() &&
   fVP.GetCutawayMode() == G4ViewParameters::cutawayUnion;
   const size_t nCutaways = cutawayUnion? cutaways.size(): 1;
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLStoredViewer::DrawDisplayLists");
-#endif
   G4int iPass = 1;
   G4bool secondPassForTransparencyRequested = false;
   G4bool thirdPassForNonHiddenMarkersRequested = false;
@@ -212,7 +207,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
               glMatrixMode (GL_PROJECTION);
               glPushMatrix();
               glLoadIdentity();
-              glOrtho (-1., 1., -1., 1., -G4OPENGL_FLT_BIG, G4OPENGL_FLT_BIG);
+              g4GlOrtho (-1., 1., -1., 1., -G4OPENGL_FLT_BIG, G4OPENGL_FLT_BIG);
               glMatrixMode (GL_MODELVIEW);
               glPushMatrix();
               glLoadIdentity();
@@ -291,7 +286,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
                 glMatrixMode (GL_PROJECTION);
                 glPushMatrix();
                 glLoadIdentity();
-                glOrtho (-1., 1., -1., 1., -G4OPENGL_FLT_BIG, G4OPENGL_FLT_BIG);
+                g4GlOrtho (-1., 1., -1., 1., -G4OPENGL_FLT_BIG, G4OPENGL_FLT_BIG);
                 glMatrixMode (GL_MODELVIEW);
                 glPushMatrix();
                 glLoadIdentity();
@@ -375,7 +370,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
     glMatrixMode (GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-    glOrtho (-1., 1., -1., 1., -G4OPENGL_FLT_BIG, G4OPENGL_FLT_BIG);
+    g4GlOrtho (-1., 1., -1., 1., -G4OPENGL_FLT_BIG, G4OPENGL_FLT_BIG);
     glMatrixMode (GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();

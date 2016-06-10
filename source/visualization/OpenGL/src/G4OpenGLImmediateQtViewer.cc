@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.cc 87164 2014-11-26 08:48:31Z gcosmo $
+// $Id: G4OpenGLImmediateQtViewer.cc 94206 2015-11-09 08:11:59Z gcosmo $
 //
 //
 // Class G4OpenGLImmediateQtViewer : a class derived from G4OpenGLQtViewer and
@@ -76,9 +76,6 @@ G4OpenGLImmediateQtViewer::~G4OpenGLImmediateQtViewer() {
 }
 
 void G4OpenGLImmediateQtViewer::Initialise() {
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLImmediateQtViewer::Initialise \n");
-#endif
   fQGLWidgetInitialiseCompleted = false;
   CreateMainWindow (this,QString(GetName()));
   CreateFontLists ();
@@ -141,7 +138,7 @@ void G4OpenGLImmediateQtViewer::initializeGL () {
   setVisible(true) ;
   
   // and update it immediatly before wait for SessionStart() (batch mode)
-  QCoreApplication::sendPostedEvents () ;
+//  QCoreApplication::sendPostedEvents () ;
 }
 
 
@@ -158,9 +155,6 @@ void  G4OpenGLImmediateQtViewer::DrawView() {
 
 void G4OpenGLImmediateQtViewer::ComputeView () {
 
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLImmediateQtViewer::ComputeView %d %d   VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n",getWinWidth(), getWinHeight());
-#endif
   makeCurrent();
   // If a double buffer context has been forced upon us, ignore the
   // back buffer for this OpenGLImmediate view.
@@ -175,9 +169,6 @@ void G4OpenGLImmediateQtViewer::ComputeView () {
     NeedKernelVisit ();
     ProcessView ();
     FinishView();
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLImmediateQtViewer::ComputeView First ProcessView ok\n");
-#endif
     HaloingSecondPass ();
 
   }
@@ -189,9 +180,6 @@ void G4OpenGLImmediateQtViewer::ComputeView () {
     savePPMToTemp();
   }
    
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLImmediateQtViewer::ComputeView %d %d ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n",getWinWidth(), getWinHeight());
-#endif
   fHasToRepaint = true;
 }
 
@@ -246,9 +234,6 @@ void G4OpenGLImmediateQtViewer::paintGL()
       }
     }
   }
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLImmediateQtViewer::paintGL VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV ready %d\n",fReadyToPaint);
-#endif
 
   SetView();
    
@@ -257,9 +242,6 @@ void G4OpenGLImmediateQtViewer::paintGL()
 
   fHasToRepaint = false; // could be set to false by ComputeView
 
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLImmediateQtViewer::paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ready %d\n\n\n",fReadyToPaint);
-#endif
   fPaintEventLock = false;
 }
 

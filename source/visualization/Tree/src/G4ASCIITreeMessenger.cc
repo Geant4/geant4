@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeMessenger.cc 66870 2013-01-14 23:38:59Z adotti $
+// $Id: G4ASCIITreeMessenger.cc 88761 2015-03-09 12:23:46Z gcosmo $
 //
 // 
 // John Allison  5th April 2001
@@ -75,6 +75,10 @@ G4ASCIITreeMessenger::G4ASCIITreeMessenger
   fVerbosityGuidance.push_back
     ("  >=  5: daughter-subtracted volume and mass.");
   fVerbosityGuidance.push_back
+    ("  >=  6: physical volume dump.");
+  fVerbosityGuidance.push_back
+    ("  >=  7: polyhedron dump.");
+  fVerbosityGuidance.push_back
     ("and in the summary at the end of printing:");
   fVerbosityGuidance.push_back
     ("  >=  4: daughter-included mass of top physical volume(s) in scene"
@@ -97,6 +101,9 @@ G4ASCIITreeMessenger::G4ASCIITreeMessenger
     ("  /vis/sceneHandler/attach");
   fVerbosityGuidance.push_back
     ("  /vis/viewer/flush");
+  fVerbosityGuidance.push_back
+    ("Note: dumping the physical volumes produces a lot of output. It is"
+     " advisable to select the volume of interest, as for a sub-tree above.");
   for (size_t i = 0; i < fVerbosityGuidance.size(); ++i) {
     fpCommandVerbose -> SetGuidance(fVerbosityGuidance[i]);
   }

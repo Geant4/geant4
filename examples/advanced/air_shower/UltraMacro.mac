@@ -1,7 +1,7 @@
 /control/verbose  1
 /run/verbose 2
 /event/verbose    0
-/tracking/verbose 1
+/tracking/verbose 0
 /run/initialize
 /gps/particle mu-
 /gps/direction 0.0 0.0 -1.0
@@ -11,4 +11,4 @@
 /gps/pos/radius 25.0 cm
 /gps/energy 300.0 MeV
 
-/run/beamOn 1
+/run/beamOn 100

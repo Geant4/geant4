@@ -85,41 +85,49 @@ public:
   void StartTracking(G4Track*);
 
   G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition* particle,
-				      G4double KineticEnergy,
-				      G4double AtomicNumber,
-				      G4double AtomicWeight=0., 
-				      G4double cut =0.,
-				      G4double emax=DBL_MAX);
+                                      G4double KineticEnergy,
+                                      G4double AtomicNumber,
+                                      G4double AtomicWeight=0., 
+                                      G4double cut =0.,
+                                      G4double emax=DBL_MAX);
 
   G4ThreeVector& SampleScattering(const G4ThreeVector&, G4double safety);
 
   G4double ComputeTruePathLengthLimit(const G4Track& track,
-				      G4double& currentMinimalStep);
+                                      G4double& currentMinimalStep);
 
   G4double ComputeGeomPathLength(G4double truePathLength);
 
   G4double ComputeTrueStepLength(G4double geomStepLength);
 
-  inline G4double ComputeTheta0(G4double truePathLength, 
-				G4double KineticEnergy);
+  G4double ComputeTheta0(G4double truePathLength, G4double KineticEnergy);
+
+  inline void SetNewDisplacementFlag(G4bool);
 
 private:
 
   G4double SampleCosineTheta(G4double trueStepLength, G4double KineticEnergy);
 
+  void SampleDisplacement(G4double sinTheta, G4double phi);
+
+  void SampleDisplacementNew(G4double sinTheta, G4double phi);
+
   inline void SetParticle(const G4ParticleDefinition*);
 
   inline void UpdateCache();
+
+  inline G4double Randomizetlimit();
   
   inline G4double SimpleScattering(G4double xmeanth, G4double x2meanth);
-
-  inline G4double LatCorrelation();
 
   //  hide assignment operator
   G4UrbanMscModel & operator=(const  G4UrbanMscModel &right);
   G4UrbanMscModel(const  G4UrbanMscModel&);
 
+  CLHEP::HepRandomEngine*     rndmEngineMod;
+
   const G4ParticleDefinition* particle;
+  const G4ParticleDefinition* positron;
   G4ParticleChangeForMSC*     fParticleChange;
 
   const G4MaterialCutsCouple* couple;
@@ -159,29 +167,33 @@ private:
   G4double rangeinit;
   G4double currentRadLength;
 
-  G4double theta0max,rellossmax;
-  G4double third;
-
   G4int    currentMaterialIndex;
 
-  G4double y;
   G4double Zold;
   G4double Zeff,Z2,Z23,lnZ;
   G4double coeffth1,coeffth2;
   G4double coeffc1,coeffc2,coeffc3,coeffc4;
 
   G4bool   firstStep;
-  G4bool   inside;
   G4bool   insideskin;
 
   G4bool   latDisplasmentbackup ;
+  G4bool   displacementFlag;
 
   G4double rangecut;
   G4double drr,finalr;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4UrbanMscModel::SetNewDisplacementFlag(G4bool val)
+{
+  displacementFlag = val;
+}
 
 inline
 void G4UrbanMscModel::SetParticle(const G4ParticleDefinition* p)
@@ -195,7 +207,24 @@ void G4UrbanMscModel::SetParticle(const G4ParticleDefinition* p)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+inline
+G4double G4UrbanMscModel::Randomizetlimit()
+{
+  G4double temptlimit = tlimit;
+  if(tlimit > tlimitmin)
+  {
+    do {
+         temptlimit = G4RandGauss::shoot(rndmEngineMod,tlimit,0.3*tlimit);
+         // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
+       } while ((temptlimit < tlimitmin) ||
+                (temptlimit > 2.*tlimit-tlimitmin));
+  }
+  else temptlimit = tlimitmin;
 
+  return temptlimit;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 inline
 void G4UrbanMscModel::UpdateCache()                                   
 {
@@ -222,26 +251,6 @@ void G4UrbanMscModel::UpdateCache()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
-G4double G4UrbanMscModel::ComputeTheta0(G4double trueStepLength,
-					G4double KineticEnergy)
-{
-  // for all particles take the width of the central part
-  //  from a  parametrization similar to the Highland formula
-  // ( Highland formula: Particle Physics Booklet, July 2002, eq. 26.10)
-  G4double invbetacp = std::sqrt((currentKinEnergy+mass)*(KineticEnergy+mass)/
-				 (currentKinEnergy*(currentKinEnergy+2.*mass)*
-				  KineticEnergy*(KineticEnergy+2.*mass)));
-  y = trueStepLength/currentRadLength;
-  G4double theta0 = c_highland*std::abs(charge)*std::sqrt(y)*invbetacp;
-  y = G4Log(y);
-  // correction factor from e- scattering data
-  theta0 *= (coeffth1+coeffth2*y);
-  return theta0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
 G4double G4UrbanMscModel::SimpleScattering(G4double xmeanth, G4double x2meanth)
 {
   // 'large angle scattering'
@@ -261,32 +270,6 @@ G4double G4UrbanMscModel::SimpleScattering(G4double xmeanth, G4double x2meanth)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline
-G4double G4UrbanMscModel::LatCorrelation()
-{
-  static const G4double kappa = 2.5;
-  static const G4double kappami1 = 1.5;
-  
-  G4double latcorr = 0.;
-  if((currentTau >= tausmall) && !insideskin)
-  {
-    if(currentTau < taulim)
-      latcorr = lambdaeff*kappa*currentTau*currentTau*
-                (1.-(kappa+1.)*currentTau*third)*third;
-    else
-    {
-      G4double etau = 0.;
-      if(currentTau < taubig) { etau = G4Exp(-currentTau); }
-      latcorr = -kappa*currentTau;
-      latcorr = G4Exp(latcorr)/kappami1;
-      latcorr += 1.-kappa*etau/kappami1 ;
-      latcorr *= 2.*lambdaeff*third;
-    }
-  }
-  return latcorr;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

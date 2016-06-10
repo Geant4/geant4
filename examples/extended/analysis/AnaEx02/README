@@ -1,4 +1,4 @@
-$Id: README 85990 2014-11-06 15:40:51Z gcosmo $
+$Id: README 92322 2015-08-27 14:54:05Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -86,15 +86,15 @@ $Id: README 85990 2014-11-06 15:40:51Z gcosmo $
     
  AnaEx02 can produce 4 histograms :
   
-  histo 1 : total energy deposit in absorber per event
-  histo 2 : total energy deposit in gap per event	  
-  histo 3 : total track length of charged particles in absorber per event 	
-  histo 4 : total track length of charged particles in gap per event 
+  EAbs : total energy deposit in absorber per event
+  EGap : total energy deposit in gap per event	  
+  LAbs : total track length of charged particles in absorber per event 	
+  LGap : total track length of charged particles in gap per event 
  
  And 2 Ntuples :
- - ntuple 1:
+ - Ntuple1:
    - one row per event : EnergyAbs EnergyGap
- - ntuple 1:
+ - Ntuple2:
    - one row per event : TrackLAbs TrackLGap
   
  These histos and ntuples are booked in HistoManager and filled from 

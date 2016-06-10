@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALTestbeamSetupSD.hh 84371 2014-10-14 12:51:18Z gcosmo $
+// $Id: FCALTestbeamSetupSD.hh 89572 2015-04-20 07:18:15Z gcosmo $
 //
 // 
 
@@ -36,6 +36,9 @@
 #include "G4VSensitiveDetector.hh"
 #include "globals.hh"
 #include "FCALCalorHit.hh"
+
+static const G4int NLENGTH = 10;
+
 class FCALTestbeamSetup;
 class G4HCofThisEvent;
 class G4Step;
@@ -71,7 +74,7 @@ public:
   G4double EHoleScint, EBeamHole;
   G4double EBeamDead;
   G4int TailCatcherID;
-  G4double ETailVis[8], ETailDep[7];
+  G4double ETailVis[NLENGTH], ETailDep[NLENGTH];
   
 };
 

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 85243 2014-10-27 08:22:42Z gcosmo $
+// $Id: RunAction.hh 91581 2015-07-27 12:55:57Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -75,10 +75,8 @@ private:
 
 private:
 
-  G4AnalysisManager*      fAnalysisManager;
+  G4AnalysisManager* fAnalysisManager;
   Run*  fRun;
-
-  G4String fHistName;
 };
 
 #endif

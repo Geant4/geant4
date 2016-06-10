@@ -70,6 +70,8 @@
 #include "G4LivermoreGammaConversionModel.hh"
 #include "G4RayleighScattering.hh" 
 #include "G4LivermoreRayleighModel.hh"
+
+#include "G4EmParameters.hh"
 // end of warning
 
 #include "G4LossTableManager.hh"
@@ -88,6 +90,7 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_option1);
 G4EmDNAPhysics_option1::G4EmDNAPhysics_option1(G4int ver)
   : G4VPhysicsConstructor("G4EmDNAPhysics_option1"), verbose(ver)
 {
+  G4EmParameters::Instance()->SetDefaults();
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -96,6 +99,7 @@ G4EmDNAPhysics_option1::G4EmDNAPhysics_option1(G4int ver)
 G4EmDNAPhysics_option1::G4EmDNAPhysics_option1(G4int ver, const G4String&)
   : G4VPhysicsConstructor("G4EmDNAPhysics_option1"), verbose(ver)
 {
+  G4EmParameters::Instance()->SetDefaults();
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -126,10 +130,10 @@ void G4EmDNAPhysics_option1::ConstructParticle()
   genericIonsManager->GetIon("alpha+");
   genericIonsManager->GetIon("helium");
   genericIonsManager->GetIon("hydrogen");
-  genericIonsManager->GetIon("carbon");
-  genericIonsManager->GetIon("nitrogen");
-  genericIonsManager->GetIon("oxygen");
-  genericIonsManager->GetIon("iron");
+  //genericIonsManager->GetIon("carbon");
+  //genericIonsManager->GetIon("nitrogen");
+  //genericIonsManager->GetIon("oxygen");
+  //genericIonsManager->GetIon("iron");
 
 }
 
@@ -220,6 +224,17 @@ void G4EmDNAPhysics_option1::ConstructProcess()
     
     // Extension to HZE proposed by Z. Francis
 
+    // S. Incerti
+
+    } else if ( particleName == "GenericIon" ) {
+
+      G4hMultipleScattering* msc = new G4hMultipleScattering();
+      msc->SetEmModel(new G4LowEWentzelVIModel(), 1);
+      ph->RegisterProcess(msc, particle);
+
+      ph->RegisterProcess(new G4DNAIonisation("GenericIon_G4DNAIonisation"), particle);
+
+    /*
     } else if ( particleName == "carbon" ) {
 
       G4hMultipleScattering* msc = new G4hMultipleScattering();
@@ -251,7 +266,7 @@ void G4EmDNAPhysics_option1::ConstructProcess()
       ph->RegisterProcess(msc, particle);
 
       ph->RegisterProcess(new G4DNAIonisation("iron_G4DNAIonisation"), particle);
-
+    */
     }
     
     // Warning : the following particles and processes are needed by EM Physics builders

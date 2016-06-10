@@ -1,0 +1,67 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_sf_img
+#define tools_sg_sf_img
+
+#include "sf"
+
+#include "../img"
+
+namespace tools {
+namespace sg {
+
+template <class T>
+class sf_img : public bsf< img<T> > {
+  typedef bsf< img<T> > parent;
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::sg::sf_img<"+stype(T())+">");
+    return s_v;
+  }
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast< sf_img<T> >(this,a_class)) {return p;}
+    return parent::cast(a_class);
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  virtual bool write(io::iwbuf& a_buffer) {
+    const img<T>& im = parent::m_value;
+    return a_buffer.write_img(im.width(),im.height(),im.bpp(),im.buffer());
+  }
+  virtual bool read(io::irbuf& a_buffer) {
+    uint32 w,h,n;uchar* b;
+    if(!a_buffer.read_img(w,h,n,b)) return false;
+    img<T>& im = parent::m_value;
+    if(w && h && n && b) {
+      im.set(w,h,n,b,true);
+#ifdef TOOLS_MEM
+      mem::decrement(s_new().c_str());
+#endif
+    }
+    return true;    
+  }
+  virtual bool dump(std::ostream&) {
+    //a_out << parent::m_value << std::endl;
+    return true;
+  }
+public:
+  sf_img():parent(){}
+  sf_img(const img<T>& a_value):parent(a_value){}
+  virtual ~sf_img(){}
+public:
+  sf_img(const sf_img& a_from):parent(a_from){}
+  sf_img& operator=(const sf_img& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+public:
+  sf_img& operator=(const img<T>& a_value){
+    parent::operator=(a_value);
+    return *this;
+  }
+};
+
+}}
+
+#endif

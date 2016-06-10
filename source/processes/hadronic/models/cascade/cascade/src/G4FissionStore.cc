@@ -28,10 +28,13 @@
 // 20100728  Move ::addConfig() implementation to .cc file
 // 20110801  Make configuration probs a data member array, reduce memory churn
 // 20110922  Replace config::print() with stream output.
+// 20150608  M. Kelsey -- Label all while loops as terminating.
+// 20150619  M. Kelsey -- Replace std::exp with G4Exp
 
 #include "G4FissionStore.hh"
 #include "G4FissionConfiguration.hh"
-#include <cmath>
+#include "G4Exp.hh"
+
 
 G4FissionStore::G4FissionStore() : verboseLevel(0) {
   if (verboseLevel > 1) 
@@ -63,7 +66,7 @@ G4FissionConfiguration G4FissionStore::generateConfiguration(G4double amax,
     G4double pr = ez - amax;
 
     if (pr < small) pr = small;
-    pr = std::exp(pr);
+    pr = G4Exp(pr);
     if (verboseLevel > 2) {
       G4cout << configurations[i] << "\n probability " << pr << G4endl; 
     }
@@ -74,6 +77,7 @@ G4FissionConfiguration G4FissionStore::generateConfiguration(G4double amax,
   G4double st = totProb * rand;
 
   size_t igen = 0;
+  /* Loop checking 08.06.2015 MHK */
   while (configProbs[igen] <= st && igen < size()) igen++;
 
   if (verboseLevel > 3) G4cout << " igen " << igen << G4endl;

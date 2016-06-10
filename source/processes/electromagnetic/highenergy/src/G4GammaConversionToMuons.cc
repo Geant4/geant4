@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.cc 83660 2014-09-08 09:57:12Z gcosmo $
+// $Id: G4GammaConversionToMuons.cc 91869 2015-08-07 15:21:02Z gcosmo $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, April 2002
@@ -270,7 +270,9 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
 	     << " in dSigxPlusGen, result=" << result << " > 1" << G4endl;
     }
     ++nn;
+    if(nn >= nmax) { break; }
   }
+  // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
   while (G4UniformRand() > result);
 
   // now generate the angular variables via the auxilary variables t,psi,rho
@@ -298,7 +300,9 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
 		 << G4endl;
           f1 = 0.0;
 	}
+      if(nn > nmax) { break; }
     }
+    // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
     while ( G4UniformRand()*f1_max > f1);
     // generate psi by the rejection method
     G4double f2_max=1.-2.*xPM*(1.-4.*t*(1.-t));
@@ -317,7 +321,9 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
 		 << G4endl;
           f2 = 0.0;
 	}
+      if(nn >= nmax) { break; }
     }
+    // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
     while ( G4UniformRand()*f2_max > f2);
 
     // generate rho by direct transformation
@@ -341,6 +347,7 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
       if(std::abs(thetaMinus)>pi) { thetaMinus = 0.0; }
     }
 
+    // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
   } while ( std::abs(thetaPlus)>pi || std::abs(thetaMinus) >pi);
 
   // now construct the vectors

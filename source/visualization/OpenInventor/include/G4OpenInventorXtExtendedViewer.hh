@@ -60,6 +60,7 @@ private:
   void AddButton(Widget,const G4String&,XtCallbackProc);
 private:
   static void PostScriptCbk(Widget,XtPointer,XtPointer);
+  static void PDFCbk(Widget,XtPointer,XtPointer);
   static void PixmapPostScriptCbk(Widget,XtPointer,XtPointer);
   static void WriteInventorCbk(Widget,XtPointer,XtPointer);
   static void LoadInventorCbk(Widget,XtPointer,XtPointer);
@@ -82,6 +83,7 @@ private:
   G4OpenInventorXtExaminerViewer* fViewer;
   Widget fHelpForm;
   Widget fHelpText;
+  Widget fPDFButton;
 };
 
 #endif

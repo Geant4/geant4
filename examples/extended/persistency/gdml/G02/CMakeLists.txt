@@ -41,6 +41,7 @@ target_link_libraries(geotest ${Geant4_LIBRARIES} )
 #
 set(G02_SCRIPTS
     read_gdml.mac read_step.mac test.gdml vis.mac write_gdml.mac
+    mbb.geom mbb.tree
   )
 
 foreach(_script ${G02_SCRIPTS})

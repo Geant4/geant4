@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ProtonEvaporationProbability.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4ProtonEvaporationProbability.hh 89518 2015-04-15 14:43:30Z gcosmo $
 //
 // J.M. Quesada (August2008). Based on:
 //
@@ -37,53 +37,32 @@
 #ifndef G4ProtonEvaporationProbability_h
 #define G4ProtonEvaporationProbability_h 1
 
-
 #include "G4EvaporationProbability.hh"
 #include "G4ProtonCoulombBarrier.hh"
 
 class G4ProtonEvaporationProbability : public G4EvaporationProbability
 {
 public:
-  // Only available constructor
+
   G4ProtonEvaporationProbability();
 
   virtual ~G4ProtonEvaporationProbability();
 
+protected:
+
+  virtual G4double CalcAlphaParam(const G4Fragment & fragment);
+ 
+  virtual G4double CalcBetaParam(const G4Fragment & fragment);
+ 
 private:  
-  // Copy constructor
+
   G4ProtonEvaporationProbability(const G4ProtonEvaporationProbability &right);
 
   const G4ProtonEvaporationProbability & operator=(const G4ProtonEvaporationProbability &right);
   G4bool operator==(const G4ProtonEvaporationProbability &right) const;
   G4bool operator!=(const G4ProtonEvaporationProbability &right) const;
 
-private:
-
-  virtual G4double CrossSection(const  G4Fragment & fragment, G4double K);
-
-  G4double GetOpt0(G4double K);
-  G4double GetOpt1(G4double K);
-  G4double GetOpt2(G4double K);
-  G4double GetOpt3(G4double K);
-
-  virtual G4double CalcAlphaParam(const G4Fragment & fragment)  ;
- 
-  virtual G4double CalcBetaParam(const G4Fragment & fragment) ;
- 
-  G4double CCoeficient(G4int aZ) ;
-  
-  //data members
-
   G4ProtonCoulombBarrier theCoulombBarrier; 
-
-  G4int ResidualA;
-  G4int ResidualZ; 
-  G4int theA;
-  G4int theZ;
-  G4double ResidualAthrd;
-  G4int FragmentA;
-  G4double FragmentAthrd;
-  G4double U;
 
 };
 

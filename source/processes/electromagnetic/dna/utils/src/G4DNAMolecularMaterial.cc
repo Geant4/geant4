@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularMaterial.cc 84858 2014-10-21 16:08:22Z gcosmo $
+// $Id: G4DNAMolecularMaterial.cc 94289 2015-11-11 08:33:40Z gcosmo $
 //
 #include "G4DNAMolecularMaterial.hh"
 #include "G4Material.hh"
@@ -349,8 +349,8 @@ void G4DNAMolecularMaterial::SearchMolecularMaterial(G4Material* parentMaterial,
                               currentFraction * fraction);
     }
 
-    compMat = 0;
-    fraction = -1;
+    //compMat = 0;
+    //fraction = -1;
   }
 }
 

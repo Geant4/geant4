@@ -24,12 +24,14 @@
 // ********************************************************************
 //
 #include "G4LENDInelastic.hh"
+
 #include "G4SystemOfUnits.hh"
 #include "G4Nucleus.hh"
 #include "G4IonTable.hh"
   
 G4HadFinalState * G4LENDInelastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTarg )
 {
+   //return preco->ApplyYourself( aTrack, aTarg );
 
    G4ThreeVector proj_p = aTrack.Get4Momentum().vect();
 
@@ -54,13 +56,26 @@ G4HadFinalState * G4LENDInelastic::ApplyYourself(const G4HadProjectile& aTrack, 
    theResult->Clear();
 
    G4GIDI_target* aTarget = usedTarget_map.find( lend_manager->GetNucleusEncoding( iZ , iA , iM ) )->second->GetTarget();
-   std::vector<G4GIDI_Product>* products = aTarget->getOthersFinalState( ke*MeV, temp, NULL, NULL );
+   //std::vector<G4GIDI_Product>* products = aTarget->getOthersFinalState( ke*MeV, temp, MyRNG, NULL );
+
+   std::vector<G4GIDI_Product>* products; 
+   for ( G4int i = 0 ; i != 1024 ; i++ ) {
+      products = aTarget->getOthersFinalState( ke*MeV, temp, MyRNG, NULL );
+      if ( products != NULL ) break;
+   }
+   //return preco->ApplyYourself( aTrack, aTarg );
+
+   G4int iTotZ = iZ + aTrack.GetDefinition()->GetAtomicNumber();
+   G4int iTotA = iA + aTrack.GetDefinition()->GetAtomicMass();
+
    if ( products != NULL ) 
    {
+      //G4cout << "Using LENDModel" << G4endl;
 
       G4ThreeVector psum(0);
-
+      G4bool needResidual = true;
       int totN = 0;
+      int totZ = 0;
       for ( G4int j = 0; j < int( products->size() ); j++ ) 
       {
 
@@ -79,12 +94,16 @@ G4HadFinalState * G4LENDInelastic::ApplyYourself(const G4HadProjectile& aTrack, 
          //     << " pz  " <<  (*products)[j].pz
          //     << G4endl;
 
+         iTotZ -= jZ;
+         iTotA -= jA;
+
          G4DynamicParticle* theSec = new G4DynamicParticle;
 
          if ( jA == 1 && jZ == 1 )
          {
             theSec->SetDefinition( G4Proton::Proton() );
             totN += 1;
+            totZ += 1;
          }
          else if ( jA == 1 && jZ == 0 )
          {
@@ -97,10 +116,14 @@ G4HadFinalState * G4LENDInelastic::ApplyYourself(const G4HadProjectile& aTrack, 
             {
                theSec->SetDefinition( G4IonTable::GetIonTable()->GetIon( jZ , jA , jm ) );
                totN += jA;
+               totZ += jZ;
             }
             else 
             {
-               theSec->SetDefinition( G4IonTable::GetIonTable()->GetIon( jZ , iA+1-totN , jm ) );
+               theSec->SetDefinition( G4IonTable::GetIonTable()->GetIon( jZ , iA+aTrack.GetDefinition()->GetAtomicMass()-totN , jm ) );
+               iTotZ -= jZ;
+               iTotA -= iA+aTrack.GetDefinition()->GetAtomicMass()-totN;
+               needResidual=false;
             }
          } 
          else
@@ -116,6 +139,38 @@ G4HadFinalState * G4LENDInelastic::ApplyYourself(const G4HadProjectile& aTrack, 
 
          theResult->AddSecondary( theSec );
       } 
+
+      if ( !( iTotZ == 0 && iTotA == 0 ) ) {
+
+      if ( iTotZ >= 0 && iTotA > 0 ) {
+         if ( needResidual ) {
+         G4DynamicParticle* residual = new G4DynamicParticle;
+         residual->SetDefinition( G4IonTable::GetIonTable()->GetIon( iTotZ , iTotA ) );
+         residual->SetMomentum( proj_p - psum );
+         theResult->AddSecondary( residual );
+         } else { 
+            //G4cout << "Charge or Baryon Number Error #1 iTotZ = " << iTotZ << ", iTotA = " << iTotA << G4endl;
+            ;
+         }
+      } else {
+
+         if ( needResidual ) {
+            //G4cout << "Charge or Baryon Number Error #2 iTotZ = " << iTotZ << ", iTotA = " << iTotA << G4endl;
+            ;
+         }
+      }
+
+      }
+
+   } 
+   else {
+      //G4cout << "Using PreCompoundModel" << G4endl;
+      if ( aTrack.GetDefinition() == G4Proton::Proton() || 
+           aTrack.GetDefinition() == G4Neutron::Neutron() ) {
+         theResult = preco->ApplyYourself( aTrack, aTarg );
+      } else {
+         return theResult;
+      }
    }
    delete products;
 

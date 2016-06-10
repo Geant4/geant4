@@ -21,28 +21,27 @@ public:
   p2d(const std::string& a_title,
       unsigned int aXnumber,double aXmin,double aXmax,
       unsigned int aYnumber,double aYmin,double aYmax)
-  : parent(a_title,aXnumber,aXmin,aXmax,
-                   aYnumber,aYmin,aYmax)
+  :parent(a_title,aXnumber,aXmin,aXmax,aYnumber,aYmin,aYmax)
   {}
 
   p2d(const std::string& a_title,
       unsigned int aXnumber,double aXmin,double aXmax,
       unsigned int aYnumber,double aYmin,double aYmax,
       double aVmin,double aVmax)
-  : parent(a_title,aXnumber,aXmin,aXmax,aYnumber,aYmin,aYmax,aVmin,aVmax)
+  :parent(a_title,aXnumber,aXmin,aXmax,aYnumber,aYmin,aYmax,aVmin,aVmax)
   {}
 
   p2d(const std::string& a_title,
       const std::vector<double>& aEdgesX,
       const std::vector<double>& aEdgesY)
-  : parent(a_title,aEdgesX,aEdgesY)
+  :parent(a_title,aEdgesX,aEdgesY)
   {}
 
   p2d(const std::string& a_title,
       const std::vector<double>& aEdgesX,
       const std::vector<double>& aEdgesY,
       double aVmin,double aVmax)
-  : parent(a_title,aEdgesX,aEdgesY,aVmin,aVmax)
+  :parent(a_title,aEdgesX,aEdgesY,aVmin,aVmax)
   {}
 
   virtual ~p2d(){}

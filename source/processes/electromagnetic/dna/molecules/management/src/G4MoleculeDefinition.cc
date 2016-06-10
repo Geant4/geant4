@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MoleculeDefinition.cc 84858 2014-10-21 16:08:22Z gcosmo $
+// $Id: G4MoleculeDefinition.cc 93883 2015-11-03 08:25:04Z gcosmo $
 //
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -35,12 +35,13 @@
 #include "G4MoleculeDefinition.hh"
 #include "G4MolecularConfiguration.hh"
 #include "G4MoleculeTable.hh"
+#include "G4Serialize.hh"
 
 using namespace std;
 
-// ######################################################################
-// ###                       MoleculeDefinition                       ###
-// ######################################################################
+// -----------------------------------------------------------------------------
+// ###                          MoleculeDefinition                           ###
+// -----------------------------------------------------------------------------
 
 G4MoleculeDefinition::G4MoleculeDefinition(const G4String& name,
                                            G4double mass,
@@ -60,7 +61,7 @@ G4MoleculeDefinition::G4MoleculeDefinition(const G4String& name,
 
 {
   fCharge = charge;
-  if (electronicLevels)
+  if(electronicLevels)
   {
     fElectronOccupancy = new G4ElectronOccupancy(electronicLevels);
   }
@@ -72,7 +73,61 @@ G4MoleculeDefinition::G4MoleculeDefinition(const G4String& name,
   G4MoleculeTable::Instance()->Insert(this);
 }
 
-//___________________________________________________________________________
+G4MoleculeDefinition* G4MoleculeDefinition::Load(std::istream& in)
+{
+  G4String name;
+  G4double mass;
+  G4double diffCoeff;
+  G4int charge;
+  G4int electronicLevels;
+  G4double radius;
+  G4int atomsNumber;
+  G4double lifetime;
+  G4String aType;
+
+  READ(in,name);
+  READ(in,mass);
+  READ(in,diffCoeff);
+  READ(in,charge);
+  READ(in,electronicLevels);
+  READ(in,radius);
+  READ(in,atomsNumber);
+  READ(in,lifetime);
+  READ(in,aType);
+
+  return new G4MoleculeDefinition(name,
+                                  mass,
+                                  diffCoeff,
+                                  charge,
+                                  electronicLevels,
+                                  radius,
+                                  atomsNumber,
+                                  lifetime,
+                                  aType);
+}
+
+void G4MoleculeDefinition::Serialize(std::ostream& out)
+{
+  WRITE(out,this->G4ParticleDefinition::GetParticleName());
+  WRITE(out,this->G4ParticleDefinition::GetPDGMass());
+  WRITE(out,this->G4ParticleDefinition::GetPDGLifeTime());
+  WRITE(out,this->G4ParticleDefinition::GetParticleType());
+  WRITE(out,fDiffusionCoefficient);
+  WRITE(out,fCharge);
+  if(fElectronOccupancy)
+  {
+    WRITE(out,fElectronOccupancy->GetSizeOfOrbit());
+  }
+  else
+  {
+    WRITE(out,(int) 0);
+  }
+  WRITE(out,fVanDerVaalsRadius);
+  WRITE(out,fAtomsNb);
+}
+
+//______________________________________________________________________________
+
 G4MoleculeDefinition::~G4MoleculeDefinition()
 {
   if (fElectronOccupancy)
@@ -86,27 +141,60 @@ G4MoleculeDefinition::~G4MoleculeDefinition()
     fDecayTable = 0;
   }
 }
+
 //___________________________________________________________________________
-void G4MoleculeDefinition::AddeConfToExcitedState(const G4String& exStId,
-                                                  const G4ElectronOccupancy& conf,
-                                                  double decayTime)
+
+G4MolecularConfiguration*
+ G4MoleculeDefinition::NewConfiguration(const G4String& molConfLabel)
 {
-  if (!fDecayTable)
-  {
-    fDecayTable = new G4MolecularDissociationTable();
-  }
-  fDecayTable->AddeConfToExcitedState(exStId, conf);
-  G4MolecularConfiguration::GetMolecularConfiguration(this, conf)->SetDecayTime(
-      decayTime);
+  bool alreadyExist(false);
+  return G4MolecularConfiguration::CreateMolecularConfiguration(GetName()+"_"+
+                                                                molConfLabel,
+                                                                this,
+                                                                molConfLabel,
+                                                                alreadyExist);
 }
+
 //___________________________________________________________________________
+
+G4MolecularConfiguration*
+G4MoleculeDefinition::GetConfigurationWithLabel(const G4String& molecularConfLabel)
+{
+  return G4MolecularConfiguration::GetMolecularConfiguration(this,
+                                                             molecularConfLabel);
+}
+
+//______________________________________________________________________________
+
+G4MolecularConfiguration*
+G4MoleculeDefinition::
+  NewConfigurationWithElectronOccupancy(const G4String& exStId,
+                                        const G4ElectronOccupancy& elecConf,
+                                        double decayTime)
+{
+  bool alreadyExist(false);
+  G4MolecularConfiguration* conf =
+      G4MolecularConfiguration::CreateMolecularConfiguration(GetName()+"_"+
+                                                             exStId,
+                                                             this,
+                                                             exStId,
+                                                             elecConf,
+                                                             alreadyExist);
+
+  conf->SetDecayTime(decayTime);
+
+  return conf;
+}
+
+//______________________________________________________________________________
+
 void G4MoleculeDefinition::SetLevelOccupation(G4int shell, G4int eNb)
 {
-  if (fElectronOccupancy)
+  if(fElectronOccupancy)
   {
     G4int levelOccupancy = fElectronOccupancy->GetOccupancy(shell);
 
-    if (levelOccupancy)
+    if(levelOccupancy)
     {
 
       fElectronOccupancy->RemoveElectron(shell, levelOccupancy);
@@ -115,84 +203,86 @@ void G4MoleculeDefinition::SetLevelOccupation(G4int shell, G4int eNb)
     fElectronOccupancy->AddElectron(shell, eNb);
   }
 }
-//___________________________________________________________________________
-void G4MoleculeDefinition::AddExcitedState(const G4String& val)
+
+//______________________________________________________________________________
+
+void G4MoleculeDefinition::AddDecayChannel(const G4String& molecularConfLabel,
+                                           const G4MolecularDissociationChannel* channel)
 {
-  if (!fDecayTable)
+  if(!fDecayTable)
   {
     fDecayTable = new G4MolecularDissociationTable();
   }
 
-  fDecayTable->AddExcitedState(val);
+  fDecayTable->AddChannel(G4MolecularConfiguration::GetMolecularConfiguration(this,
+                                                                              molecularConfLabel),
+                          channel);
 }
-//___________________________________________________________________________
-const G4String& G4MoleculeDefinition::GetExcitedState(const G4ElectronOccupancy* occ) const
-{
-  if (fDecayTable)
-  {
-    return fDecayTable->GetExcitedState(occ);
-  }
-  else
-  {
-    G4String const errMsg = ": no Excited States and Decays for" + GetName()
-                            + " are defined.";
-    G4Exception("G4MoleculeDefinition::GetExcitedState", "",
-                FatalErrorInArgument, errMsg);
-  }
-  return *(new G4String(""));
-}
-//___________________________________________________________________________
-void G4MoleculeDefinition::AddDecayChannel(const G4String& chanId,
-                                           const G4MolecularDissociationChannel* chan)
+
+//______________________________________________________________________________
+
+void G4MoleculeDefinition::AddDecayChannel(const G4MolecularConfiguration* molConf,
+                                           const G4MolecularDissociationChannel* channel)
 {
   if (!fDecayTable)
   {
     fDecayTable = new G4MolecularDissociationTable();
   }
-  fDecayTable->AddDecayChannel(chanId, chan);
+  fDecayTable->AddChannel(molConf, channel);
 }
+
 //___________________________________________________________________________
+
 const vector<const G4MolecularDissociationChannel*>*
 G4MoleculeDefinition::GetDecayChannels(const G4String& ExState) const
 {
   if (fDecayTable)
   {
-    const vector<const G4MolecularDissociationChannel*>* output = fDecayTable
-        ->GetDecayChannels(ExState);
+    const vector<const G4MolecularDissociationChannel*>* output =
+        fDecayTable->GetDecayChannels(ExState);
     return output;
   }
   else
   {
-    G4String const errMsg = ": no Excited States and Decays for" + GetName()
-                            + " are defined.";
-    G4Exception("G4MoleculeDefinition::GetDecayChannels", "",
-                FatalErrorInArgument, errMsg);
-  }
-  return 0;
-}
-//___________________________________________________________________________
-const vector<const G4MolecularDissociationChannel*>*
-G4MoleculeDefinition::GetDecayChannels(const G4ElectronOccupancy* occ) const
-{
-  if (fDecayTable)
-  {
-    const vector<const G4MolecularDissociationChannel*>* output = fDecayTable
-        ->GetDecayChannels(occ);
-    return output;
-  }
-  else
-  {
-    G4String const errMsg = ": no Excited States and Decays for" + GetName()
-                            + " are defined.";
+    G4ExceptionDescription errMsg;
+    errMsg <<  ": no Excited States and Decays for"
+           << GetName()
+           << " are defined.";
     G4Exception("G4MoleculeDefinition::GetDecayChannels", "",
                 FatalErrorInArgument, errMsg);
   }
   return 0;
 }
 
-/////////////////////////////////////////
+//___________________________________________________________________________
+
+const vector<const G4MolecularDissociationChannel*>*
+G4MoleculeDefinition::GetDecayChannels(const G4MolecularConfiguration* conf)
+  const
+{
+  if(fDecayTable)
+  {
+    const vector<const G4MolecularDissociationChannel*>* output =
+        fDecayTable->GetDecayChannels(conf);
+    return output;
+  }
+//  else
+//  {
+//    G4ExceptionDescription errMsg;
+//    errMsg << ": no Excited States and Decays for"
+//           << GetName()
+//           << " are defined.";
+//    G4Exception("G4MoleculeDefinition::GetDecayChannels",
+//                "",
+//                FatalErrorInArgument,
+//                errMsg);
+//  }
+  return 0;
+}
+
+//___________________________________________________________________________
 // Protected
-/////////////////////////////////////////
+//___________________________________________________________________________
 
 G4MoleculeDefinition::G4MoleculeDefinition(const G4MoleculeDefinition& right) :
     G4ParticleDefinition((const G4ParticleDefinition &) right),
@@ -217,10 +307,22 @@ G4MoleculeDefinition::G4MoleculeDefinition(const G4MoleculeDefinition& right) :
 
 //___________________________________________________________________________
 
-const G4MoleculeDefinition & G4MoleculeDefinition::operator=(const G4MoleculeDefinition &right)
+const G4MoleculeDefinition&
+G4MoleculeDefinition::operator=(const G4MoleculeDefinition &right)
 {
   if (this != &right)
   {
   }
   return *this;
 }
+
+//___________________________________________________________________________
+
+void G4MoleculeDefinition::Finalize()
+{
+  G4MoleculeTable::Instance()->Finalize(this);
+}
+
+//___________________________________________________________________________
+
+

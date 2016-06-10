@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 85243 2014-10-27 08:22:42Z gcosmo $
+// $Id: DetectorConstruction.hh 92047 2015-08-14 07:23:37Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -49,6 +49,7 @@ class G4Material;
 class G4Region;
 class DetectorMessenger;
 class TargetSD;
+class G4Tubs;
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4ProductionCuts;
@@ -76,6 +77,7 @@ public:
 private:
 
   void DefineMaterials();
+  void ChangeGeometry();
 
   G4Material*        fGasMat;
   G4double           fGasThickness;
@@ -85,14 +87,17 @@ private:
   G4double           fWindowThick;
 
   G4Material*        fWorldMaterial;
+
+  G4Tubs*            fSolidWorld;
+  G4Tubs*            fSolidContainer;
+  G4Tubs*            fSolidDetector;
             
   G4VPhysicalVolume* fPhysWorld;
   G4LogicalVolume*   fLogicWorld;
-  G4LogicalVolume*   fLogicWind;
-  G4LogicalVolume*   fLogicDet;
+  G4LogicalVolume*   fLogicContainer;
+  G4LogicalVolume*   fLogicDetector;
 
   DetectorMessenger* fDetectorMessenger;  
-  TargetSD*          fTargetSD;
   G4ProductionCuts*  fGasDetectorCuts;
   G4Region*          fRegGasDet;
 

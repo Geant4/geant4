@@ -45,7 +45,7 @@ class G4EmExtraPhysics;
 
 #include "G4UImessenger.hh"
 #include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithABool.hh"
 
 class G4EmMessenger: public G4UImessenger
 {
@@ -57,9 +57,10 @@ public:
 
 private:
   G4EmExtraPhysics*   theB;
-  G4UIcmdWithAString* theSynch;
-  G4UIcmdWithAString* theGN;
-  G4UIcmdWithAString* theMUN;
+  G4UIcmdWithABool*   theSynch;
+  G4UIcmdWithABool*   theSynchAll;
+  G4UIcmdWithABool*   theGN;
+  G4UIcmdWithABool*   theMUN;
   G4UIdirectory*      aDir1;
   G4UIdirectory*      aDir2;
 };

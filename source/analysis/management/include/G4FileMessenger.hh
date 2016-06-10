@@ -40,23 +40,25 @@
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
+#include <memory>
+
 class G4VAnalysisManager;
 class G4UIcmdWithAString;
 
 class G4FileMessenger : public G4UImessenger
 {
   public:
-    G4FileMessenger(G4VAnalysisManager* manager);
+    explicit G4FileMessenger(G4VAnalysisManager* manager);
     virtual ~G4FileMessenger();
    
     // methods
-    virtual void SetNewValue(G4UIcommand* command, G4String value);
+    virtual void SetNewValue(G4UIcommand* command, G4String value) final;
  
     G4VAnalysisManager*  fManager; ///< Associated class
     
-    G4UIcmdWithAString*  fSetFileNameCmd;
-    G4UIcmdWithAString*  fSetHistoDirNameCmd;
-    G4UIcmdWithAString*  fSetNtupleDirNameCmd;
+    std::unique_ptr<G4UIcmdWithAString>  fSetFileNameCmd;
+    std::unique_ptr<G4UIcmdWithAString>  fSetHistoDirNameCmd;
+    std::unique_ptr<G4UIcmdWithAString>  fSetNtupleDirNameCmd;
 };
   
 #endif

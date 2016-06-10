@@ -26,18 +26,24 @@
 /// \file medical/fanoCavity/fanoCavity.cc
 /// \brief Main program of the medical/fanoCavity example
 //
-// $Id: fanoCavity.cc 86064 2014-11-07 08:49:32Z gcosmo $
+// $Id: fanoCavity.cc 90848 2015-06-10 13:44:30Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
+#include "ActionInitialization.hh"
 
 #include "RunAction.hh"
 #include "EventAction.hh"
@@ -60,21 +66,30 @@ int main(int argc,char** argv) {
  
   //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
+
     
   //Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+#ifdef G4MULTITHREADED
+    G4MTRunManager* runManager = new G4MTRunManager;
+    G4int nThreads = G4Threading::G4GetNumberOfCores();
+    if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
+    runManager->SetNumberOfThreads(nThreads);
+#else
+    G4VSteppingVerbose::SetInstance(new SteppingVerbose);
+    G4RunManager* runManager = new G4RunManager;
+#endif
 
   //set mandatory initialization classes
    DetectorConstruction* det;
    PhysicsList* phys;
-   PrimaryGeneratorAction* kin;
+
   runManager->SetUserInitialization(det  = new DetectorConstruction);
   runManager->SetUserInitialization(phys = new PhysicsList(det));
-  runManager->SetUserAction(kin = new PrimaryGeneratorAction(det));
 
+  // set user action classes
+   runManager->SetUserInitialization(new ActionInitialization(det));
+
+   /*
   //set user action classes
   RunAction* run        = new RunAction(det,kin);
   EventAction* event    = new EventAction(run);
@@ -87,7 +102,7 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(track);
   runManager->SetUserAction(step);
   runManager->SetUserAction(stack);
-
+*/
   //get the pointer to the User Interface manager
   G4UImanager* UI = G4UImanager::GetUIpointer();
 

@@ -82,8 +82,8 @@ G4IonsKoxCrossSection::GetElementCrossSection(
 
    G4double one_third = 1.0 / 3.0;
 
-   G4double cubicrAt = std::pow ( G4double(At) , G4double(one_third) );  
-   G4double cubicrAp = std::pow ( G4double(Ap) , G4double(one_third) );  
+   G4double cubicrAt = G4Pow::GetInstance()->powA ( G4double(At) , G4double(one_third) );  
+   G4double cubicrAp = G4Pow::GetInstance()->powA ( G4double(Ap) , G4double(one_third) );  
 
    // rc divide fermi
    G4double Bc = Zt * Zp / ( (rc/fermi) * (cubicrAp+cubicrAt) );
@@ -134,12 +134,12 @@ G4double G4IonsKoxCrossSection::calCeValue(const G4double ke)
    G4double log10_ke = std::log10 ( ke );   
    if (log10_ke > 1.5) 
    {
-      Ce = - 10.0 / std::pow ( G4double(log10_ke) , G4double(5) ) + 2.0;
+      Ce = - 10.0 / G4Pow::GetInstance()->powA ( G4double(log10_ke) , G4double(5) ) + 2.0;
    }
    else
    {
-      Ce = (-10.0/std::pow(G4double(1.5), G4double(5) ) + 2.0) /
-           std::pow(G4double(1.5), G4double(3)) * std::pow(G4double(log10_ke), G4double(3) );
+      Ce = (-10.0/G4Pow::GetInstance()->powA(G4double(1.5), G4double(5) ) + 2.0) /
+           G4Pow::GetInstance()->powA(G4double(1.5), G4double(3)) * G4Pow::GetInstance()->powA(G4double(log10_ke), G4double(3) );
 
    }
    return Ce;

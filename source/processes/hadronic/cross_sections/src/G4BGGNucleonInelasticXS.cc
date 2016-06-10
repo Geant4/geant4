@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGNucleonInelasticXS.cc 79981 2014-03-27 15:24:11Z gcosmo $
+// $Id: G4BGGNucleonInelasticXS.cc 93682 2015-10-28 10:09:49Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -43,7 +43,7 @@
 
 #include "G4BGGNucleonInelasticXS.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4GlauberGribovCrossSection.hh"
+#include "G4ComponentGGHadronNucleusXsc.hh"
 #include "G4NucleonNuclearCrossSection.hh"
 #include "G4HadronNucleonXsc.hh"
 #include "G4ComponentSAIDTotalXS.hh"
@@ -91,8 +91,10 @@ G4BGGNucleonInelasticXS::G4BGGNucleonInelasticXS(const G4ParticleDefinition* p)
 
 G4BGGNucleonInelasticXS::~G4BGGNucleonInelasticXS()
 {
-  delete fHadron;
   delete fSAID;
+  delete fHadron;
+  // The cross section registry will delete fNucleon
+  delete fGlauber;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -213,8 +215,7 @@ void G4BGGNucleonInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   isInitialized = true;
 
   fNucleon = (G4NucleonNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NucleonNuclearCrossSection::Default_Name());
-  fGlauber = (G4GlauberGribovCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4GlauberGribovCrossSection::Default_Name());
-
+  fGlauber = new G4ComponentGGHadronNucleusXsc();
   fHadron  = new G4HadronNucleonXsc();
   fSAID    = new G4ComponentSAIDTotalXS();
 
@@ -349,7 +350,7 @@ void G4BGGNucleonInelasticXS::CrossSectionDescription(std::ostream& outFile) con
           << "Barashenkov parameterization below 91 GeV and the Glauber-Gribov\n"
           << "parameterization above 91 GeV.  It uses the G4HadronNucleonXsc\n"
           << "cross section component for hydrogen targets, and the\n"
-          << "G4GlauberGribovCrossSection component for other targets.\n";
+          << "G4ComponentGGHadronNucleusXsc component for other targets.\n";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

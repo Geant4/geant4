@@ -235,6 +235,7 @@ G4double G4UCNMicroRoughnessHelper::IntIplus(G4double E, G4double fermipot,
 
   // Break-condition for refining
 
+  // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
   while ((ang_stepphi>=AngCut*AngCut) || (ang_steptheta>=AngCut*AngCut))
     {
       a_max_theta_o=max_theta_o;

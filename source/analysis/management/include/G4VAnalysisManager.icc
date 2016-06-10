@@ -114,14 +114,14 @@ G4bool G4VAnalysisManager::AddNtupleRow()
 //_____________________________________________________________________________
 inline 
 G4bool G4VAnalysisManager::FillNtupleIColumn(G4int ntupleId, G4int columnId, 
-                                               G4int value)
+                                            G4int value)
 {
   return fVNtupleManager->FillNtupleIColumn(ntupleId, columnId, value);
 }                                         
 //_____________________________________________________________________________
 inline 
 G4bool G4VAnalysisManager::FillNtupleFColumn(G4int ntupleId, G4int columnId, 
-                                               G4float value)
+                                            G4float value)
 {
   return fVNtupleManager->FillNtupleFColumn(ntupleId, columnId, value);
 }                                         
@@ -129,7 +129,7 @@ G4bool G4VAnalysisManager::FillNtupleFColumn(G4int ntupleId, G4int columnId,
 //_____________________________________________________________________________
 inline 
 G4bool G4VAnalysisManager::FillNtupleDColumn(G4int ntupleId, G4int columnId, 
-                                               G4double value)
+                                            G4double value)
 {
   return fVNtupleManager->FillNtupleDColumn(ntupleId, columnId, value);
 }                                         
@@ -137,7 +137,7 @@ G4bool G4VAnalysisManager::FillNtupleDColumn(G4int ntupleId, G4int columnId,
 //_____________________________________________________________________________
 inline 
 G4bool G4VAnalysisManager::FillNtupleSColumn(G4int ntupleId, G4int columnId, 
-                                               const G4String& value)
+                                            const G4String& value)
 {
   return fVNtupleManager->FillNtupleSColumn(ntupleId, columnId, value);
 }                                         
@@ -509,6 +509,13 @@ G4bool G4VAnalysisManager::GetH1Ascii(G4int id) const
 
 //_____________________________________________________________________________
 inline 
+G4bool G4VAnalysisManager::GetH1Plotting(G4int id) const
+{
+  return fH1HnManager->GetPlotting(id);
+}  
+
+//_____________________________________________________________________________
+inline 
 G4String G4VAnalysisManager::GetH2Name(G4int id) const
 {
   return fH2HnManager->GetName(id);
@@ -542,6 +549,12 @@ G4bool G4VAnalysisManager::GetH2Ascii(G4int id) const
   return fH2HnManager->GetAscii(id);
 }  
 
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::GetH2Plotting(G4int id) const
+{
+  return fH2HnManager->GetPlotting(id);
+}  
 
 //_____________________________________________________________________________
 inline 
@@ -583,8 +596,14 @@ inline
 G4bool G4VAnalysisManager::GetH3Ascii(G4int id) const
 {
   return fH3HnManager->GetAscii(id);
-}  
+}
 
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::GetH3Plotting(G4int id) const
+{
+  return fH3HnManager->GetPlotting(id);
+}
 
 //_____________________________________________________________________________
 inline 
@@ -621,6 +640,12 @@ G4bool G4VAnalysisManager::GetP1Ascii(G4int id) const
   return fP1HnManager->GetAscii(id);
 }  
 
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::GetP1Plotting(G4int id) const
+{
+  return fP1HnManager->GetPlotting(id);
+}  
 
 //_____________________________________________________________________________
 inline 
@@ -664,6 +689,19 @@ G4bool G4VAnalysisManager::GetP2Ascii(G4int id) const
   return fP2HnManager->GetAscii(id);
 }  
 
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::GetP2Plotting(G4int id) const
+{
+  return fP2HnManager->GetPlotting(id);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::GetNtupleActivation(G4int id) const
+{
+  return fVNtupleManager->GetActivation(id);
+}  
 
 //_____________________________________________________________________________
 inline 

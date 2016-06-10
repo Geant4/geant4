@@ -1,0 +1,203 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_plottable
+#define tools_sg_plottable
+
+// Pure abstract interfaces.
+
+#include <string>
+
+#include "../scast"
+#include "../S_STRING"
+
+namespace tools {
+namespace sg {
+
+class plottable {
+public:
+  TOOLS_SCLASS(tools::sg::plottable)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<plottable>(this,a_class)) {return p;}
+    return 0;
+  }
+public:
+  virtual ~plottable(){}
+public:
+  virtual plottable* copy() const = 0;
+  virtual bool is_valid() const = 0;
+  virtual void infos(const std::string&,std::string&) const = 0;
+
+  virtual const std::string& name() const = 0;
+  virtual void set_name(const std::string&) = 0;
+
+  virtual const std::string& title() const = 0;
+  virtual const std::string& legend() const = 0;
+  virtual void set_legend(const std::string&) = 0;
+
+  //virtual unsigned int dimension() const = 0;
+};
+
+class bins1D : public virtual plottable {
+public:
+  TOOLS_SCLASS(tools::sg::bins1D)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<bins1D>(this,a_class)) {return p;}
+    return plottable::cast(a_class);
+  }
+public:
+  virtual ~bins1D(){}
+public:
+  virtual void bins_Sw_range(float&,float&) const = 0;
+public:
+  // axis :
+  virtual unsigned int bins() const = 0;
+  virtual float axis_min() const = 0;
+  virtual float axis_max() const = 0;
+  // bins on axis :
+  virtual float bin_lower_edge(int) const = 0;
+  virtual float bin_upper_edge(int) const = 0;
+  // bins :
+  virtual float bin_Sw(int) const = 0;
+  virtual float bin_error(int) const = 0;
+public:
+  virtual bool is_profile() const = 0;
+};
+
+class bins2D : public virtual plottable {
+public:
+  TOOLS_SCLASS(tools::sg::bins2D)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<bins2D>(this,a_class)) {return p;}
+    return plottable::cast(a_class);
+  }
+public:
+  virtual ~bins2D(){}
+public:
+  virtual void bins_Sw_range(float&,float&) const = 0;
+public:
+  // x axis :
+  virtual unsigned int x_bins() const = 0;
+  virtual float x_axis_min() const = 0;
+  virtual float x_axis_max() const = 0;
+  // y axis :
+  virtual unsigned int y_bins() const = 0;
+  virtual float y_axis_min() const = 0;
+  virtual float y_axis_max() const = 0;
+  // bins on x axis :
+  virtual float bin_lower_edge_x(int) const = 0;
+  virtual float bin_upper_edge_x(int) const = 0;
+  // bins on y axis :
+  virtual float bin_lower_edge_y(int) const = 0;
+  virtual float bin_upper_edge_y(int) const = 0;
+  // bins :
+  virtual bool has_entries_per_bin() const = 0;
+  virtual unsigned int bin_entries(int,int) const = 0;
+  virtual float bin_Sw(int,int) const = 0;
+  virtual float bin_error(int,int) const = 0;
+};
+
+class func1D : public virtual plottable {
+public:
+  TOOLS_SCLASS(tools::sg::func1D)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<func1D>(this,a_class)) {return p;}
+    return plottable::cast(a_class);
+  }
+public:
+  virtual ~func1D(){}
+public:
+  virtual bool value(float,float&) const = 0;
+  virtual unsigned int x_steps() const = 0;
+  virtual float x_min() const = 0;
+  virtual float x_max() const = 0;
+};
+
+class func2D : public virtual plottable {
+public:
+  TOOLS_SCLASS(tools::sg::func2D)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<func2D>(this,a_class)) {return p;}
+    return plottable::cast(a_class);
+  }
+public:
+  virtual ~func2D(){}
+public:
+  virtual bool value(float,float,float&) const = 0;
+  virtual unsigned int x_steps() const = 0;
+  virtual float x_min() const = 0;
+  virtual float x_max() const = 0;
+  virtual unsigned int y_steps() const = 0;
+  virtual float y_min() const = 0;
+  virtual float y_max() const = 0;
+/*
+  //For "inside" functions :
+  virtual unsigned int number_of_points() const = 0;
+  virtual bool ith_point(int,float&,float&,bool&) const = 0;
+  virtual bool set_ith_point(int,float,float) = 0;
+  virtual bool dragger_update_points() const = 0;
+*/
+};
+
+class points2D : public virtual plottable {
+public:
+  TOOLS_SCLASS(tools::sg::points2D)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<points2D>(this,a_class)) {return p;}
+    return plottable::cast(a_class);
+  }
+public:
+  virtual ~points2D(){}
+public:
+  virtual float x_axis_min() const = 0;
+  virtual float x_axis_max() const = 0;
+  virtual float y_axis_min() const = 0;
+  virtual float y_axis_max() const = 0;
+
+  virtual unsigned int points() const = 0;
+  virtual bool ith_point(unsigned int,float&,float&) const = 0;
+};
+
+class points3D : public virtual plottable {
+public:
+  TOOLS_SCLASS(tools::sg::points3D)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<points3D>(this,a_class)) {return p;}
+    return plottable::cast(a_class);
+  }
+public:
+  virtual ~points3D(){}
+public:
+  virtual float x_axis_min() const = 0;
+  virtual float x_axis_max() const = 0;
+  virtual float y_axis_min() const = 0;
+  virtual float y_axis_max() const = 0;
+  virtual float z_axis_min() const = 0;
+  virtual float z_axis_max() const = 0;
+
+  virtual unsigned int points() const = 0;
+  virtual bool ith_point(unsigned int,float&,float&,float&) const = 0;
+};
+
+//class primitive {
+//public:
+//  virtual ~primitive(){}
+//public:
+//  virtual void* cast(const char*) const = 0;
+//};
+
+inline const std::string& s_inlib_sg_fit2plot() {
+  static const std::string s_v("tools::sg::fit2plot");
+  return s_v;
+}
+
+}}
+
+#endif

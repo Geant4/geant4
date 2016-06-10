@@ -44,8 +44,9 @@
 #include "G4HadronicInteraction.hh"
 #include "G4HadProjectile.hh"
 #include "G4Nucleus.hh"
+#include "G4LorentzVector.hh"
 
-class G4PhotonEvaporation;
+class G4VEvaporationChannel;
 class G4IonTable;
 
 class G4NeutronRadCapture : public G4HadronicInteraction
@@ -66,8 +67,10 @@ private:
 
   G4double lowestEnergyLimit;
   G4double minExcitation;
-  G4PhotonEvaporation* photonEvaporation;
+  G4VEvaporationChannel* photonEvaporation;
   G4IonTable*  theTableOfIons;
+  G4LorentzVector lab4mom;
+
 };
 
 #endif

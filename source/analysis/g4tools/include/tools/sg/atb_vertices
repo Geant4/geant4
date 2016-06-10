@@ -1,0 +1,396 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_atb_vertices
+#define tools_sg_atb_vertices
+
+#include "vertices"
+#include "gstos"
+
+namespace tools {
+namespace sg {
+
+class atb_vertices : public vertices, public gstos {
+  TOOLS_NODE(atb_vertices,tools::sg::atb_vertices,vertices)
+public:
+  mf<float> rgbas;
+  mf<float> nms;
+  sf<bool> do_back;
+  sf<float> epsilon;
+public:
+  virtual const std::vector<field_desc>& node_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::atb_vertices)
+    static std::vector<field_desc> s_v;
+    if(s_v.empty()) {
+      s_v = parent::node_fields();
+      TOOLS_ADD_FIELD_DESC(rgbas)
+      TOOLS_ADD_FIELD_DESC(nms)
+      TOOLS_ADD_FIELD_DESC(do_back)
+      TOOLS_ADD_FIELD_DESC(epsilon)
+    }
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&rgbas);
+    add_field(&nms);
+    add_field(&do_back);
+    add_field(&epsilon);
+  }
+protected: //gstos
+  virtual unsigned int create_gsto(std::ostream&,sg::gl_manager& a_mgr) {
+    //unsigned int npt = xyzs.values().size()/3;
+    //::printf("debug : atb_vertices : %lu : create_gsto : %u\n",this,npt);
+
+    std::vector<float> gsto_data;  
+    if(rgbas.size()) {
+      if(nms.size()) {
+        if(do_back.value()) {
+          append(gsto_data,xyzs.values());
+          append(gsto_data,nms.values());
+          append(gsto_data,m_back_xyzs);
+          append(gsto_data,m_back_nms);
+          append(gsto_data,rgbas.values());
+        } else {
+          append(gsto_data,xyzs.values());
+          append(gsto_data,nms.values());
+          append(gsto_data,rgbas.values());
+        }
+      } else {
+        append(gsto_data,xyzs.values());
+        append(gsto_data,rgbas.values());
+      }    
+    } else {
+      if(nms.size()) {
+        append(gsto_data,xyzs.values());
+        append(gsto_data,nms.values());
+      } else {
+        append(gsto_data,xyzs.values());
+      }
+    }
+    return a_mgr.create_gsto_from_data(gsto_data);
+  }
+
+public:
+  virtual void render(render_action& a_action) {
+    if(touched()) {
+      if(do_back.value()) gen_back();
+      reset_touched();
+    }
+    if(xyzs.empty()) return;
+
+    const state& state = a_action.state();
+
+    if(state.m_use_gsto) {
+      unsigned int _id = get_gsto_id(a_action.out(),a_action.gl_manager());
+      if(_id) {
+        a_action.begin_gsto(_id);
+        if(rgbas.size()) {
+          if(nms.size()) {
+            unsigned int npt = xyzs.values().size()/3;
+            bufpos pos_xyzs = 0;
+            bufpos pos_nms = 0;
+            bufpos pos_back_xyzs = 0;
+            bufpos pos_back_nms = 0;
+            bufpos pos_rgbas = 0;
+           {unsigned int sz = npt*3;
+            if(do_back.value()) {
+              pos_xyzs = 0;
+              pos_nms = sz*sizeof(float);  //bytes
+              pos_back_xyzs = 2*sz*sizeof(float);
+              pos_back_nms = 3*sz*sizeof(float);
+              pos_rgbas = 4*sz*sizeof(float);
+            } else {
+              pos_xyzs = 0;
+              pos_nms = sz*sizeof(float);
+              pos_rgbas = 2*sz*sizeof(float);
+            }}
+  
+            if(tools::gl::is_line(mode.value())) {
+              //Same logic as Inventor SoLightModel.model = BASE_COLOR.
+              a_action.set_lighting(false);
+              if(do_back.value()) a_action.draw_gsto_vcn(mode.value(),npt,pos_back_xyzs,pos_rgbas,pos_back_nms);
+              a_action.draw_gsto_vcn(mode.value(),npt,pos_xyzs,pos_rgbas,pos_nms);
+              a_action.set_lighting(state.m_GL_LIGHTING);
+            } else {
+              if(do_back.value()) a_action.draw_gsto_vcn(mode.value(),npt,pos_back_xyzs,pos_rgbas,pos_back_nms);
+              a_action.draw_gsto_vcn(mode.value(),npt,pos_xyzs,pos_rgbas,pos_nms);
+            }
+    
+          } else {
+            unsigned int npt = xyzs.values().size()/3;
+            bufpos pos_xyzs = 0;
+            bufpos pos_rgbas = npt*3*sizeof(float);
+            if(tools::gl::is_line(mode.value())) {
+              //Same logic as Inventor SoLightModel.model = BASE_COLOR.
+              a_action.set_lighting(false);
+              a_action.draw_gsto_vc(mode.value(),npt,pos_xyzs,pos_rgbas);
+              a_action.set_lighting(state.m_GL_LIGHTING);
+            } else {
+              a_action.draw_gsto_vc(mode.value(),npt,pos_xyzs,pos_rgbas);
+            }
+          }    
+        } else { //rgbas.empty()
+          if(nms.size()) {
+            unsigned int npt = xyzs.values().size()/3;
+            bufpos pos_xyzs = 0;
+            bufpos pos_nms = npt*3*sizeof(float);
+            if(tools::gl::is_line(mode.value())) {
+              //Same logic as Inventor SoLightModel.model = BASE_COLOR.
+              a_action.set_lighting(false);
+              a_action.draw_gsto_vn(mode.value(),npt,pos_xyzs,pos_nms);
+              a_action.set_lighting(state.m_GL_LIGHTING);
+            } else {
+              a_action.draw_gsto_vn(mode.value(),npt,pos_xyzs,pos_nms);
+            }
+          } else {
+            unsigned int npt = xyzs.values().size()/3;
+            bufpos pos = 0;
+            if(tools::gl::is_line(mode.value())) {
+              //Same logic as Inventor SoLightModel.model = BASE_COLOR.
+              a_action.set_lighting(false);
+              a_action.draw_gsto_v(mode.value(),npt,pos);
+              a_action.set_lighting(state.m_GL_LIGHTING);
+            } else {
+              a_action.draw_gsto_v(mode.value(),npt,pos);
+            }
+          }
+        }
+        a_action.end_gsto();
+        return;
+  
+      } else { //!_id
+        // use immediate rendering.
+      }
+
+    } else {
+      clean_gstos(&a_action.gl_manager());
+    }
+
+    // immediate rendering :
+    if(rgbas.size()) {
+      if(nms.size()) {
+          if(tools::gl::is_line(mode.value())) {
+            //Same logic as Inventor SoLightModel.model = BASE_COLOR.
+            a_action.set_lighting(false);
+            if(do_back.value()) a_action.draw_vertex_color_normal_array(mode.value(),m_back_xyzs,rgbas.values(),m_back_nms);
+            a_action.draw_vertex_color_normal_array(mode.value(),xyzs.values(),rgbas.values(),nms.values());
+            a_action.set_lighting(state.m_GL_LIGHTING);
+          } else {
+            if(do_back.value()) a_action.draw_vertex_color_normal_array(mode.value(),m_back_xyzs,rgbas.values(),m_back_nms);
+            a_action.draw_vertex_color_normal_array(mode.value(),xyzs.values(),rgbas.values(),nms.values());
+          }
+  
+  
+      } else {
+          if(tools::gl::is_line(mode.value())) {
+            //Same logic as Inventor SoLightModel.model = BASE_COLOR.
+            a_action.set_lighting(false);
+            a_action.draw_vertex_color_array(mode.value(),xyzs.values(),rgbas.values());
+            a_action.set_lighting(state.m_GL_LIGHTING);
+          } else {
+            a_action.draw_vertex_color_array(mode.value(),xyzs.values(),rgbas.values());
+          }
+      }    
+
+    } else { //rgbas.empty()
+      if(nms.size()) {
+          if(tools::gl::is_line(mode.value())) {
+            //Same logic as Inventor SoLightModel.model = BASE_COLOR.
+            a_action.set_lighting(false);
+            a_action.draw_vertex_normal_array(mode.value(),xyzs.values(),nms.values());
+            a_action.set_lighting(state.m_GL_LIGHTING);
+          } else {
+            a_action.draw_vertex_normal_array(mode.value(),xyzs.values(),nms.values());
+          }
+      } else {
+          if(tools::gl::is_line(mode.value())) {
+            //Same logic as Inventor SoLightModel.model = BASE_COLOR.
+            a_action.set_lighting(false);
+            a_action.draw_vertex_array(mode.value(),xyzs.values());
+            a_action.set_lighting(state.m_GL_LIGHTING);
+          } else {
+            a_action.draw_vertex_array(mode.value(),xyzs.values());
+          }
+      }
+  
+    }
+
+  }
+public:
+  atb_vertices()
+  :parent()
+  ,do_back(false)
+  ,epsilon(0)
+  {
+#ifdef TOOLS_MEM
+    tools::mem::increment(s_class().c_str());
+#endif
+    add_fields();
+  }
+  virtual ~atb_vertices(){
+#ifdef TOOLS_MEM
+    tools::mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  atb_vertices(const atb_vertices& a_from)
+  :parent(a_from)
+  ,gstos(a_from)
+  ,rgbas(a_from.rgbas)
+  ,nms(a_from.nms)
+  ,do_back(a_from.do_back)
+  ,epsilon(a_from.epsilon)
+  {
+#ifdef TOOLS_MEM
+    tools::mem::increment(s_class().c_str());
+#endif
+    add_fields();
+  }
+  atb_vertices& operator=(const atb_vertices& a_from){
+    parent::operator=(a_from);
+    gstos::operator=(a_from);
+    rgbas = a_from.rgbas;
+    nms = a_from.nms;
+    do_back = a_from.do_back;
+    epsilon = a_from.epsilon;
+    return *this;
+  }
+public:
+  template <class VEC,class COLOR>
+  void add_pos_color(const VEC& a_pos,const COLOR& a_col) {
+    xyzs.add(a_pos.x());
+    xyzs.add(a_pos.y());
+    xyzs.add(a_pos.z());
+    rgbas.add(a_col.r());
+    rgbas.add(a_col.g());
+    rgbas.add(a_col.b());
+    rgbas.add(a_col.a());
+  }
+  template <class VEC,class COLOR>
+  void add_pos_color_normal(const VEC& a_pos,const COLOR& a_col,const VEC& a_nm) {
+    xyzs.add(a_pos.x());
+    xyzs.add(a_pos.y());
+    xyzs.add(a_pos.z());
+    rgbas.add(a_col.r());
+    rgbas.add(a_col.g());
+    rgbas.add(a_col.b());
+    rgbas.add(a_col.a());
+    nms.add(a_nm.x());
+    nms.add(a_nm.y());
+    nms.add(a_nm.z());
+  }
+  void add_rgba(float a_r,float a_g,float a_b,float a_a) {
+    rgbas.add(a_r);
+    rgbas.add(a_g);
+    rgbas.add(a_b);
+    rgbas.add(a_a);
+  }
+  void add_color(const colorf& a_col) {
+    rgbas.add(a_col.r());
+    rgbas.add(a_col.g());
+    rgbas.add(a_col.b());
+    rgbas.add(a_col.a());
+  }
+  void add_normal(float a_x,float a_y,float a_z) {
+    nms.add(a_x);
+    nms.add(a_y);
+    nms.add(a_z);
+  }
+  void add_rgba_allocated(unsigned int& a_pos,float a_r,float a_g,float a_b,float a_a) {
+    std::vector<float>& v = rgbas.values();
+    v[a_pos] = a_r;a_pos++;
+    v[a_pos] = a_g;a_pos++;
+    v[a_pos] = a_b;a_pos++;
+    v[a_pos] = a_a;a_pos++;
+    rgbas.touch();
+  }
+  void add_normal_allocated(unsigned int& a_pos,float a_x,float a_y,float a_z) {
+    std::vector<float>& v = nms.values();
+    v[a_pos] = a_x;a_pos++;
+    v[a_pos] = a_y;a_pos++;
+    v[a_pos] = a_z;a_pos++;
+    nms.touch();
+  }
+  void clear() {
+    rgbas.clear();
+    nms.clear();
+    parent::clear();
+  }
+protected:
+  void gen_back(){
+    m_back_xyzs.clear();
+    m_back_nms.clear();
+
+    clean_gstos(); //must reset for all gl_manager.
+
+    std::vector<float>& _xyzs = xyzs.values();
+    std::vector<float>& _nms = nms.values();
+
+    if(_xyzs.empty()) return;
+
+    m_back_xyzs.resize(_xyzs.size(),0);
+    m_back_nms.resize(_nms.size(),0);
+
+    float epsil = epsilon.value();
+
+    if(mode.value()==gl::triangle_fan()) { //reverse after first point.
+
+      m_back_xyzs[0] = _xyzs[0] - _nms[0] * epsil;
+      m_back_xyzs[1] = _xyzs[1] - _nms[1] * epsil;
+      m_back_xyzs[2] = _xyzs[2] - _nms[2] * epsil;
+
+     {std::vector<float>::const_iterator it = _xyzs.begin()+3;
+      std::vector<float>::const_iterator _end = _xyzs.end();
+      std::vector<float>::const_iterator itn = _nms.begin()+3;
+      std::vector<float>::reverse_iterator it2 = m_back_xyzs.rbegin();
+      for(;it!=_end;it2+=3) {
+        *(it2+2) = *it - *itn * epsil; it++;itn++; //x
+        *(it2+1) = *it - *itn * epsil; it++;itn++; //y
+        *(it2+0) = *it - *itn * epsil; it++;itn++; //z
+      }}
+  
+      m_back_nms[0] = _nms[0] * -1.0f;
+      m_back_nms[1] = _nms[1] * -1.0f;
+      m_back_nms[2] = _nms[2] * -1.0f;
+
+     {std::vector<float>::const_iterator it = _nms.begin()+3;
+      std::vector<float>::const_iterator _end = _nms.end();
+      std::vector<float>::reverse_iterator it2 = m_back_nms.rbegin();
+      for(;it!=_end;it2+=3) {
+        *(it2+2) = *it * -1.0f; it++;
+        *(it2+1) = *it * -1.0f; it++;
+        *(it2+0) = *it * -1.0f; it++;
+      }}
+  
+    } else {
+
+     {std::vector<float>::const_iterator it = _xyzs.begin();
+      std::vector<float>::const_iterator _end = _xyzs.end();
+      std::vector<float>::const_iterator itn = _nms.begin();
+      std::vector<float>::reverse_iterator it2 = m_back_xyzs.rbegin();
+      for(;it!=_end;it2+=3) {
+        *(it2+2) = *it - *itn * epsil; it++;itn++; //x
+        *(it2+1) = *it - *itn * epsil; it++;itn++; //y
+        *(it2+0) = *it - *itn * epsil; it++;itn++; //z
+      }}
+  
+     {std::vector<float>::const_iterator it = _nms.begin();
+      std::vector<float>::const_iterator _end = _nms.end();
+      std::vector<float>::reverse_iterator it2 = m_back_nms.rbegin();
+      for(;it!=_end;it2+=3) {
+        *(it2+2) = *it * -1.0f; it++;
+        *(it2+1) = *it * -1.0f; it++;
+        *(it2+0) = *it * -1.0f; it++;
+      }}
+  
+    }
+  }
+protected:
+  std::vector<float> m_back_xyzs;
+  std::vector<float> m_back_nms;
+};
+
+}}
+
+#endif

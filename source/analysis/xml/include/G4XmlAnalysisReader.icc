@@ -27,47 +27,7 @@
 
 // Author: Ivana Hrivnacova, 25/07/2014 (ivana@ipno.in2p3.fr)
 
-#include "G4H1ToolsManager.hh"
-#include "G4H2ToolsManager.hh"
-#include "G4H3ToolsManager.hh"
-#include "G4P1ToolsManager.hh"
-#include "G4P2ToolsManager.hh"
 //#include "G4XmlRNtupleManager.hh"
-
-//_____________________________________________________________________________
-inline 
-tools::histo::h1d*  G4XmlAnalysisReader::GetH1(G4int id, G4bool warn) const 
-{
-  return fH1Manager->GetH1(id, warn, false);
-}
-
-//_____________________________________________________________________________
-inline 
-tools::histo::h2d*  G4XmlAnalysisReader::GetH2(G4int id, G4bool warn) const 
-{
-  return fH2Manager->GetH2(id, warn, false);
-}
-
-//_____________________________________________________________________________
-inline 
-tools::histo::h3d*  G4XmlAnalysisReader::GetH3(G4int id, G4bool warn) const 
-{
-  return fH3Manager->GetH3(id, warn, false);
-}
-
-//_____________________________________________________________________________
-inline 
-tools::histo::p1d*  G4XmlAnalysisReader::GetP1(G4int id, G4bool warn) const 
-{
-  return fP1Manager->GetP1(id, warn, false);
-}
-
-//_____________________________________________________________________________
-inline 
-tools::histo::p2d*  G4XmlAnalysisReader::GetP2(G4int id, G4bool warn) const 
-{
-  return fP2Manager->GetP2(id, warn, false);
-}
 
 //_____________________________________________________________________________
 inline

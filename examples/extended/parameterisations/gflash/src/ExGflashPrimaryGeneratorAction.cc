@@ -23,29 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExGflashPrimaryGeneratorAction.cc 70923 2013-06-07 13:10:39Z gcosmo $
+// $Id: ExGflashPrimaryGeneratorAction.cc 94396 2015-11-13 13:37:16Z gcosmo $
 //
 /// \file parameterisations/gflash/src/ExGflashPrimaryGeneratorAction.cc
 /// \brief Implementation of the ExGflashPrimaryGeneratorAction class
 //
 #include "ExGflashPrimaryGeneratorAction.hh"
 
+#include "G4GeneralParticleSource.hh"
 #include "G4Event.hh"
-#include "globals.hh"
-#include "Randomize.hh"
-#include "G4ios.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExGflashPrimaryGeneratorAction::ExGflashPrimaryGeneratorAction()
+ : G4VUserPrimaryGeneratorAction(), fParticleGun(0)
 {
   fParticleGun=new G4GeneralParticleSource;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExGflashPrimaryGeneratorAction::~ExGflashPrimaryGeneratorAction()
 {
   delete fParticleGun;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void ExGflashPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 { 
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

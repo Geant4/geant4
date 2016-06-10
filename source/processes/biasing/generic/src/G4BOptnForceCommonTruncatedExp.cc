@@ -86,7 +86,7 @@ G4VParticleChange* G4BOptnForceCommonTruncatedExp::ApplyFinalStateBiasing( const
       fDummyParticleChange.Initialize( *track );
       return &fDummyParticleChange;
     }
-
+  
   // -- checks if process won the GPIL race:
   G4double processGPIL = callingProcess->GetPostStepGPIL() < callingProcess->GetAlongStepGPIL() ?
     callingProcess->GetPostStepGPIL() : callingProcess->GetAlongStepGPIL() ;
@@ -109,11 +109,6 @@ G4VParticleChange* G4BOptnForceCommonTruncatedExp::ApplyFinalStateBiasing( const
 }
 
 
-void G4BOptnForceCommonTruncatedExp::PostStepInteractionOccured( const G4VProcess* )
-{
-}
-
-
 void G4BOptnForceCommonTruncatedExp::AddCrossSection( const G4VProcess* process, G4double crossSection )
 {
   fTotalCrossSection      += crossSection;
@@ -128,6 +123,7 @@ void G4BOptnForceCommonTruncatedExp::Initialize( const G4Track* track )
   fTotalCrossSection  = 0.0;
   fNumberOfSharing    = 0;
   fProcessToApply     = 0;
+  fInteractionOccured = false;
   fInitialMomentum    = track->GetMomentum();
 
   G4VSolid* currentSolid = track->GetVolume()->GetLogicalVolume()->GetSolid();

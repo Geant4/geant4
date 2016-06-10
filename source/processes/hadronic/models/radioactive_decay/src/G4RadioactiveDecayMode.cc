@@ -46,10 +46,20 @@ std::istream &operator >> (std::istream& strm, G4RadioactiveDecayMode& q)
     {q = Alpha;}
   else if (a == "Proton")
     {q = Proton;}
+  else if (a == "Neutron")
+    {q = Neutron;}
+  else if (a == "BDProton")
+    {q = BDProton;}
+  else if (a == "BDNeutron")
+    {q = BDNeutron;}
   else if (a == "Beta2Minus")
     {q = Beta2Minus;}
   else if (a == "Beta2Plus")
     {q = Beta2Plus;}
+  else if (a == "Proton2")
+    {q = Proton2;}
+  else if (a == "Neutron2")
+    {q = Neutron2;}
   else if (a == "SpFission")
     {q = SpFission;}
   else

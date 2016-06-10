@@ -36,6 +36,8 @@
 #define ExG4HbookH2Manager_h 1
 
 #include "G4VH2Manager.hh"
+#include "G4THnManager.hh"
+#include "G4HnManager.hh"
 #include "ExG4HbookBaseHnManager.hh"
 #include "globals.hh"
 
@@ -50,6 +52,9 @@ struct h2_booking {
   h2_booking(G4int nxbins, G4double xmin, G4double xmax,
              G4int nybins, G4double ymin, G4double ymax)
     : fTitle(""),
+      fXAxisTitle(""),
+      fYAxisTitle(""),
+      fZAxisTitle(""),
       fNxbins(nxbins), 
       fXmin(xmin), 
       fXmax(xmax),
@@ -57,6 +62,9 @@ struct h2_booking {
       fYmin(ymin), 
       fYmax(ymax) {}
   G4String fTitle;    
+  G4String fXAxisTitle;
+  G4String fYAxisTitle;
+  G4String fZAxisTitle;
   G4int fNxbins;
   G4double fXmin;
   G4double fXmax;
@@ -71,7 +79,8 @@ struct h2_booking {
 /// It is provided separately from geant4/source/analysis in order
 /// to avoid a need of linking Geant4 kernel libraries with cerblib.
 
-class ExG4HbookH2Manager : public G4VH2Manager
+class ExG4HbookH2Manager : public G4VH2Manager,
+                           public G4THnManager<tools::hbook::h2>
 {
   friend class ExG4HbookAnalysisManager;
 
@@ -176,6 +185,9 @@ class ExG4HbookH2Manager : public G4VH2Manager
     // Write data on ASCII file
     virtual G4bool WriteOnAscii(std::ofstream& output);
 
+    // Access to Hn manager
+    virtual std::shared_ptr<G4HnManager> GetHnManager();
+
   private:
     // static data members
     //
@@ -213,19 +225,21 @@ inline G4int ExG4HbookH2Manager::GetH2HbookIdOffset() const {
 }  
 
 inline  std::vector<tools::hbook::h2*>::iterator ExG4HbookH2Manager::BeginH2()
-{ return fH2Vector.begin(); }
+{ return BeginT(); }
 
 inline  std::vector<tools::hbook::h2*>::iterator ExG4HbookH2Manager::EndH2()
-{ return fH2Vector.end(); }
+{ return EndT(); }
 
 inline  std::vector<tools::hbook::h2*>::const_iterator 
 ExG4HbookH2Manager::BeginConstH2() const
-{ return fH2Vector.begin(); }
+{ return BeginConstT(); }
 
 inline  std::vector<tools::hbook::h2*>::const_iterator 
 ExG4HbookH2Manager::EndConstH2() const
-{ return fH2Vector.end(); }
+{ return EndConstT(); }
 
+inline std::shared_ptr<G4HnManager> ExG4HbookH2Manager::GetHnManager() 
+{ return std::shared_ptr<G4HnManager>(fHnManager); }
 
 #endif 
 

@@ -17,6 +17,77 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+9-November-2015: G.Cosmo (externals-V10-01-19)
+- Updated to CLHEP-2.3.1.1.
+- Added MixMaxRng to Randomize.h.
+
+30-October-2015 - G.Cosmo (externals-V10-01-18)
+- CLHEP: Fixed default seeding in MixMaxRng::setSeeds().
+
+7-October-2015 - G.Cosmo (externals-V10-01-17)
+- Removed internal USolids module. Now USolids/VecGeom can be used only as
+  external installation.
+
+28-September-2015 - G.Cosmo (externals-V10-01-16)
+- CLHEP: fixed compilation warning on gcc in mixmax.h for signed/unsigned
+  comparison. Added reference to MixMaxRng.h.
+
+25-September-2015 - G.Cosmo (externals-V10-01-15)
+- CLHEP: added MixMaxRng to EngineFactory and fixed symbols clashes for
+  definition of N in mixmax[h.cc].
+  Added copy-constructor and assignment operator to MixMaxRng.
+- Includes tag "expat-V10-01-01".
+
+18-September-2015 - G.Cosmo (externals-V10-01-14)
+- CLHEP: disable thread_local and atomic c++11 features specific for Intel-icc
+  compiler in Utility module: thread_local.h, atomic_int.h.
+  Use settings related to gcc.
+
+15-September-2015 - G.Cosmo (externals-V10-01-13)
+- CLHEP: added MixMax random engine classes implementing the "Matrix Generator
+  of Pseudorandom Numbers", as described in J. Compt. Phy. 97, 573 (1991).
+  Added files:
+  o MixMaxRng[h.cc]: CLHEP interface class to MixMax generator.
+  o minmax[h.cc]: C++ translation/adaptation of the MixMax generator.
+  o mixmax_skip_N256.icc: table of skipping coefficients for MixMax (N=256).
+
+19-August-2015: M.Maire (externals-V10-01-12)
+- CLHEP: added liter and its sub units to SystemOfUnits.h:
+  liter, L, dL, cL, mL.
+
+12-August-2015: G.Cosmo (externals-V10-01-11)
+- CLHEP: use std::shared_ptr in random classes instead of internal
+  Boost-derived implementation. In the Utility module, removed Boost derived
+  implementation of shared_ptr and weak_ptr; removed no longer used
+  type_traits.h header.
+  Corrected RandExpZiggurat to use shared_ptr as for all other distributions.
+
+7-August-2015: G.Cosmo (externals-V10-01-10)
+- CLHEP: temporarly commented out assertion in memory.h, in view of full
+  transition to C++11 for use of shared_ptr et al..
+
+6-August-2015: G.Cosmo (externals-V10-01-09)
+- CLHEP: enable thread_local and atomic c++11 features for Intel-icc compiler
+  in Utility module: thread_local.h, atomic_int.h.
+- Includes tags "expat-V10-01-00" and "zlib-V10-01-01".
+
+19-June-2015: G.Cosmo (externals-V10-01-08, 07, 06, 05, 04)
+- Updated to CLHEP-2.2.0.8:
+  o Avoid gcc-5 warnings on deprecated calls to auto_ptr in Utility headers.
+  o Switch off gcc-5 warning for unused variable in Randomize.h header.
+
+11-June-2015: G.Cosmo (externals-V10-01-03, 02)
+- CLHEP: Moved static methods handling static data in G4RandGauss from inline
+  to source. Addressing problem report #1754.
+  Switch off warnings for deprecated calls to auto_ptr in Utility headers.
+
+9-April-2015: G.Cosmo (externals-V10-01-01)
+- CLHEP: Fixed usage of std::abs() in RandGaussZiggurat source.
+
+12-December-2014: G.Cosmo (externals-V10-01-00)
+- CLHEP: Fixed usage of std::abs() in RandGaussZiggurat header.
+- USolids: Use canonical form for operator=() in UPolycone.
+
 24-November-2014: G.Cosmo (externals-V10-00-08)
 - Updated to CLHEP-2.2.0.4:
   o Fixed a type mismatch in Utility/memory.h,

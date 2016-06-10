@@ -46,11 +46,18 @@
 
 #include <QContextMenuEvent>
 #include <TObject.h>
-#include <TCanvas.h>
 #include <TH1.h>
 #include <TAxis.h>
 #include <TList.h>
 #include "CexmcHistoWidget.hh"
+
+
+CexmcHistoWidget::CexmcHistoWidget()
+{
+    /* this is a workaround of the repaint bug in the ROOT Qt backend:
+     * see http://root.cern.ch/phpBB3/viewtopic.php?f=3&t=17081#p73055 */
+    fCanvas->SetFillColor( 10 );
+}
 
 
 void  CexmcHistoWidget::contextMenuEvent( QContextMenuEvent *  event )
@@ -64,12 +71,11 @@ void  CexmcHistoWidget::contextMenuEvent( QContextMenuEvent *  event )
      * TRootContextMenu object. */
     if ( event->reason() == QContextMenuEvent::Other )
     {
-        TCanvas *  canvas( Canvas() );
         TObject *  object( NULL );
-        TListIter  curPrimitive( canvas->GetListOfPrimitives() );
+        TListIter  curPrimitive( fCanvas->GetListOfPrimitives() );
         while ( ( object = curPrimitive.Next() ) )
         {
-            if ( ! object->InheritsFrom( "TH1" ) )
+            if ( ! object->InheritsFrom( TH1::Class() ) )
                 continue;
             TH1 *    histo( static_cast< TH1 * >( object ) );
             TAxis *  axis( histo->GetXaxis() );
@@ -82,7 +88,7 @@ void  CexmcHistoWidget::contextMenuEvent( QContextMenuEvent *  event )
             if ( axis )
                 axis->UnZoom();
         }
-        canvas->Update();
+        fCanvas->Update();
     }
 }
 

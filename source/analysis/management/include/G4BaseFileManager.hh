@@ -38,7 +38,7 @@
 class G4BaseFileManager
 {
   public:
-    G4BaseFileManager(const G4AnalysisManagerState& state);
+    explicit G4BaseFileManager(const G4AnalysisManagerState& state);
     virtual ~G4BaseFileManager();
 
     virtual G4bool SetFileName(const G4String& fileName);
@@ -67,6 +67,9 @@ class G4BaseFileManager
       // - add _tN suffix if called on thread worker
       // - add file extension if not present
     
+    G4String GetPlotFileName() const;
+      // Return the file name for batch plotting output
+
     G4String GetFileType() const;                 
      // Return the manager file type (starts with a lowercase letter)
 

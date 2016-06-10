@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 66793 2013-01-12 15:31:15Z gcosmo $
+# $Id: GNUmakefile 87883 2015-01-16 10:21:34Z gcosmo $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -19,10 +19,12 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/geometry/volumes/include \
             -I$(G4BASE)/geometry/management/include \
+            -I$(G4BASE)/materials/include \
             -I$(G4BASE)/processes/cuts/include \
             -I$(G4BASE)/processes/management/include \
-            -I$(G4BASE)/processes/electromagnetic/utils/include/ \
-            -I$(G4BASE)/processes/hadronic/management/include/ \
+            -I$(G4BASE)/processes/electromagnetic/lowenergy/include \
+            -I$(G4BASE)/processes/electromagnetic/utils/include \
+            -I$(G4BASE)/processes/hadronic/management/include \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/processes/hadronic/processes/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
@@ -30,13 +32,11 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/management/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include \
             -I$(G4BASE)/processes/hadronic/models/util/include \
-            -I$(G4BASE)/processes/hadronic/management/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/leptons/include \
             -I$(G4BASE)/particles/bosons/include \
             -I$(G4BASE)/particles/hadrons/mesons/include \
             -I$(G4BASE)/particles/hadrons/barions/include \
-            -I$(G4BASE)/particles/hadrons/ions/include \
-            -I$(G4BASE)/materials/include
+            -I$(G4BASE)/particles/hadrons/ions/include
            
 include $(G4INSTALL)/config/common.gmk

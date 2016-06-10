@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundEmission.cc 74903 2013-10-23 16:47:40Z gcosmo $
+// $Id: G4PreCompoundEmission.cc 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -114,24 +114,22 @@ G4PreCompoundEmission::PerformEmission(G4Fragment & aFragment)
   //G4cout << *thePreFragment << G4endl;
 
   // Kinetic Energy of emitted fragment
-  G4double kinEnergyOfEmittedFragment = 
-    thePreFragment->GetKineticEnergy(aFragment);
-  //  if(kinEnergyOfEmittedFragment < MeV) {
+  G4double kinEnergy = thePreFragment->SampleKineticEnergy(aFragment);
+  //  if(kinEnergy < MeV) {
   //  G4cout << "Chosen fragment: " << G4endl;
   //  G4cout << *thePreFragment << G4endl;
-  //  G4cout << "Ekin= " << kinEnergyOfEmittedFragment << G4endl;
+  //  G4cout << "Ekin= " << kinEnergy << G4endl;
     // }
-  if(kinEnergyOfEmittedFragment < 0.0) { kinEnergyOfEmittedFragment = 0.0; }
+  if(kinEnergy < 0.0) { kinEnergy = 0.0; }
   
   // Calculate the fragment momentum (three vector)
-  AngularDistribution(thePreFragment,aFragment,kinEnergyOfEmittedFragment);
+  AngularDistribution(thePreFragment,aFragment,kinEnergy);
   
   // Mass of emittef fragment
   G4double EmittedMass = thePreFragment->GetNuclearMass();
   // Now we can calculate the four momentum 
   // both options are valid and give the same result but 2nd one is faster
-  G4LorentzVector Emitted4Momentum(theFinalMomentum,
-				   EmittedMass + kinEnergyOfEmittedFragment);
+  G4LorentzVector Emitted4Momentum(theFinalMomentum,EmittedMass + kinEnergy);
     
   // Perform Lorentz boost
   G4LorentzVector Rest4Momentum = aFragment.GetMomentum();
@@ -166,9 +164,9 @@ G4PreCompoundEmission::PerformEmission(G4Fragment & aFragment)
   // Create a G4ReactionProduct 
   G4ReactionProduct * MyRP = thePreFragment->GetReactionProduct();
 
-  //  if(kinEnergyOfEmittedFragment < MeV) {
+  //  if(kinEnergy < MeV) {
   //  G4cout << "G4PreCompoundEmission::Fragment emitted" << G4endl;
-  //  G4cout << thePreFragment << G4endl;
+  //  G4cout << *thePreFragment << G4endl;
     // }
   return MyRP;
 }
@@ -185,10 +183,6 @@ void G4PreCompoundEmission::AngularDistribution(
   // Emission particle separation energy
   G4double Bemission = thePreFragment->GetBindingEnergy();
 	
-  //
-  //  G4EvaporationLevelDensityParameter theLDP;
-  //  G4double gg = (6.0/pi2)*aFragment.GetA()*
-
   G4double gg = (6.0/pi2)*aFragment.GetA_asInt()*fLevelDensity;
 	
   // Average exciton energy relative to bottom of nuclear well

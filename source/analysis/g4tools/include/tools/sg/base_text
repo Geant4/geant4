@@ -1,0 +1,95 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_base_text
+#define tools_sg_base_text
+
+#include "node"
+
+#include "sf_enum"
+#include "mf"
+#include "enums" //hjust,vjust
+//#include "../lina/box3f"
+
+namespace tools {
+namespace sg {
+
+class base_text : public node {
+  typedef node parent;
+public:
+  virtual float ascent(float) const = 0;
+  virtual float descent(float) const = 0;
+  virtual float y_advance(float) const = 0;
+  virtual void get_bounds(float,
+                          float&,float&,float&,
+                          float&,float&,float&) const = 0;
+
+  virtual bool truncate(const std::string&,float,float,std::string&) const = 0;
+public:
+  mf_string strings;
+  sf<float> height;
+  sf_enum<sg::hjust> hjust;
+  sf_enum<sg::vjust> vjust;
+public:
+  virtual const std::vector<field_desc>& node_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::base_text)
+    static std::vector<field_desc> s_v;
+    if(s_v.empty()) {
+      s_v = parent::node_fields();
+      TOOLS_ADD_FIELD_DESC(strings)
+      TOOLS_ADD_FIELD_DESC(height)
+      TOOLS_ADD_FIELD_DESC(hjust)
+      TOOLS_ADD_FIELD_DESC(vjust)
+    }
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&strings);
+    add_field(&height);
+    add_field(&hjust);
+    add_field(&vjust);
+  }
+public:
+  base_text()
+  :parent()
+  ,height(1.0f)
+  ,hjust(left)
+  ,vjust(bottom)
+  {
+    add_fields();
+  }
+  virtual ~base_text(){}
+protected:
+  base_text(const base_text& a_from)
+  :parent(a_from)
+  ,strings(a_from.strings)
+  ,height(a_from.height)
+  ,hjust(a_from.hjust)
+  ,vjust(a_from.vjust)
+  {
+    add_fields();
+  }
+  base_text& operator=(const base_text& a_from){
+    parent::operator=(a_from);
+    height = a_from.height;
+    strings = a_from.strings;
+    hjust = a_from.hjust;
+    vjust = a_from.vjust;
+    return *this;
+  }
+public:
+
+//  void get_bounds(float a_height,tools::box3f& a_box) {
+//    //for backward compatibility.
+//    float mn_x,mn_y,mn_z;
+//    float mx_x,mx_y,mx_z;
+//    get_bounds(a_height,mn_x,mn_y,mn_z,mx_x,mx_y,mx_z);
+//    a_box.set_bounds(mn_x,mn_y,mn_z,mx_x,mx_y,mx_z);
+//  }
+
+};
+
+}}
+
+#endif

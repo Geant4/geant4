@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 69005 2013-04-15 09:26:47Z gcosmo $
+# $Id: sources.cmake 90644 2015-06-05 13:19:36Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -61,6 +61,7 @@ GEANT4_DEFINE_MODULE(NAME G4track
         G4VParticleChange.hh
         G4VParticleChange.icc
         G4VelocityTable.hh
+        G4VAuxiliaryTrackInformation.hh
         G4VUserTrackInformation.hh
         trkdefs.hh
     SOURCES
@@ -76,6 +77,7 @@ GEANT4_DEFINE_MODULE(NAME G4track
         G4Track.cc
         G4VParticleChange.cc
         G4VelocityTable.cc
+        G4VAuxiliaryTrackInformation.cc
         G4VUserTrackInformation.cc
     GRANULAR_DEPENDENCIES
         G4geometrymng

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hCoulombScatteringModel.hh 79067 2014-02-14 09:48:52Z gcosmo $
+// $Id: G4hCoulombScatteringModel.hh 91612 2015-07-29 08:51:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -75,6 +75,9 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
+  virtual void InitialiseLocal(const G4ParticleDefinition*, 
+                               G4VEmModel* masterModel);
+
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
 				G4double kinEnergy, 
@@ -89,11 +92,21 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
+  virtual G4double MinPrimaryEnergy(const G4Material*,
+				    const G4ParticleDefinition*,
+				    G4double);
+
   // defines low energy limit of the model
   inline void SetLowEnergyThreshold(G4double val);
 
   // user definition of low-energy threshold of recoil
   inline void SetRecoilThreshold(G4double eth);
+
+  // defines low energy limit on energy transfer to atomic electron
+  inline void SetFixedCut(G4double);
+
+  // low energy limit on energy transfer to atomic electron
+  inline G4double GetFixedCut() const;
 
 protected:
 
@@ -106,8 +119,6 @@ private:
   // hide assignment operator
   G4hCoulombScatteringModel & operator=(const G4hCoulombScatteringModel &right);
   G4hCoulombScatteringModel(const  G4hCoulombScatteringModel&);
-
-  //protected:
  
   G4IonTable*               theIonTable;
   G4ParticleChangeForGamma* fParticleChange;
@@ -122,23 +133,17 @@ private:
 
   G4double                  cosThetaMin;
   G4double                  cosThetaMax;
-  G4double                  cosTetMinNuc;
-  G4double                  cosTetMaxNuc;
   G4double                  recoilThreshold;
   G4double                  elecRatio;
   G4double                  mass;
+
+  G4double                  fixedCut;
 
   // projectile
   const G4ParticleDefinition* particle;
   const G4ParticleDefinition* theProton;
 
-  G4double                  lowEnergyThreshold;
-
   G4bool                    isCombined;  
-
-  //private:
-
-  G4bool                    isInitialised;             
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -168,16 +173,23 @@ void G4hCoulombScatteringModel::SetupParticle(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4hCoulombScatteringModel::SetLowEnergyThreshold(G4double val)
+inline void G4hCoulombScatteringModel::SetRecoilThreshold(G4double eth)
 {
-  lowEnergyThreshold = val;
+  recoilThreshold = eth;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4hCoulombScatteringModel::SetRecoilThreshold(G4double eth)
+inline void G4hCoulombScatteringModel::SetFixedCut(G4double val)
 {
-  recoilThreshold = eth;
+  fixedCut = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4hCoulombScatteringModel::GetFixedCut() const
+{
+  return fixedCut;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

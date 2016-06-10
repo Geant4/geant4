@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4StepPoint.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: pyG4StepPoint.cc 94509 2015-11-20 10:14:44Z gcosmo $
 // ====================================================================
 //   pyG4StepPoint.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "G4VProcess.hh"
 #include "G4StepPoint.hh"
 
 using namespace boost::python;
@@ -47,20 +48,23 @@ void export_G4StepPoint()
     .def("GetGlobalTime",         &G4StepPoint::GetGlobalTime)
     .def("GetProperTime",         &G4StepPoint::GetProperTime)
     .def("GetMomentumDirection",  &G4StepPoint::GetMomentumDirection,
-	 return_value_policy<return_by_value>())
+	      return_value_policy<return_by_value>())
     .def("GetMomentum",           &G4StepPoint::GetMomentum,
-	 return_value_policy<return_by_value>())
+	      return_value_policy<return_by_value>())
     .def("GetTotalEnergy",        &G4StepPoint::GetTotalEnergy)
     .def("GetKineticEnergy",      &G4StepPoint::GetKineticEnergy)
     .def("GetVelocity",           &G4StepPoint::GetVelocity)
     .def("GetBeta",               &G4StepPoint::GetBeta)
     .def("GetGamma",              &G4StepPoint::GetGamma)
-    //.def("GetTouchable",          &G4StepPoint::GetTouchable)
-    //.def("GetMaterial",           &G4StepPoint::GetMaterial)
+    .def("GetTouchable",          &G4StepPoint::GetTouchable,
+         return_value_policy<reference_existing_object>())
+    .def("GetMaterial",           &G4StepPoint::GetMaterial,
+         return_value_policy<reference_existing_object>())
     .def("GetPolarization",       &G4StepPoint::GetPolarization,
-	 return_value_policy<return_by_value>())
+	       return_value_policy<return_by_value>())
     .def("GetStepStatus",         &G4StepPoint::GetStepStatus)
-    //.def("GetProcessDefinedStep", &G4StepPoint::GetProcessDefinedStep)
+    .def("GetProcessDefinedStep", &G4StepPoint::GetProcessDefinedStep,
+         return_value_policy<reference_existing_object>())
     .def("GetMass",               &G4StepPoint::GetMass)
     .def("GetCharge",             &G4StepPoint::GetCharge)
     .def("GetWeight",             &G4StepPoint::GetWeight)

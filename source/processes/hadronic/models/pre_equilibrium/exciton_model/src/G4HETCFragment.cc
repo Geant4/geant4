@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HETCFragment.cc 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4HETCFragment.cc 91837 2015-08-07 07:27:08Z gcosmo $
 //
 // by V. Lara
 //
@@ -57,35 +57,26 @@ CalcEmissionProbability(const G4Fragment & aFragment)
     }    
   // Coulomb barrier is the lower limit 
   // of integration over kinetic energy
-  G4double LowerLimit = theCoulombBarrier;
-  
-  // Excitation energy of nucleus after fragment emission is the upper limit
-  // of integration over kinetic energy
-  G4double UpperLimit = GetMaximalKineticEnergy();
-  
   theEmissionProbability = 
-    IntegrateEmissionProbability(LowerLimit,UpperLimit,aFragment);
+    IntegrateEmissionProbability(theCoulombBarrier,theMaxKinEnergy,aFragment);
     
   return theEmissionProbability;
 }
 
 G4double G4HETCFragment::
-IntegrateEmissionProbability(const G4double & Low, const G4double & Up,
+IntegrateEmissionProbability(G4double & Low, G4double & Up,
 			     const G4Fragment & aFragment)
-{
-  
-  if ( !IsItPossible(aFragment) ) { return 0.0; }
-    
+{    
   G4double U = aFragment.GetExcitationEnergy();
 
   G4int P  = aFragment.GetNumberOfParticles();
   G4int H  = aFragment.GetNumberOfHoles();
   G4int N  = P + H;
-  G4int Pb = P - GetA();
+  G4int Pb = P - theA;
   G4int Nb = Pb + H;
   if (Nb <= 0.0) { return 0.0; }
-  G4double ga = (6.0/pi2)*aFragment.GetA_asInt()*theParameters->GetLevelDensity();
-  G4double gb = (6.0/pi2)*GetRestA()*theParameters->GetLevelDensity();
+  G4double ga = (6.0/pi2)*theFragA*theParameters->GetLevelDensity();
+  G4double gb = (6.0/pi2)*theResA*theParameters->GetLevelDensity();
 
   G4double A  = G4double(P*P+H*H+P-3*H)/(4.0*ga);
   G4double Ab = G4double(Pb*Pb+H*H+Pb-3*H)/(4.0*gb);
@@ -95,7 +86,7 @@ IntegrateEmissionProbability(const G4double & Low, const G4double & Up,
   G4int Pf = P;
   G4int Hf = H;
   G4int Nf = N-1;
-  for (G4int i = 1; i < GetA(); ++i)
+  for (G4int i = 1; i < theA; ++i)
     {
       Pf *= (P-i);
       Hf *= (H-i);
@@ -105,15 +96,9 @@ IntegrateEmissionProbability(const G4double & Low, const G4double & Up,
   G4double X = std::max(Up - Ab + GetBeta(),0.0);
   G4double Y = std::max(Up - Ab - Low, 0.0);
 
-  G4double Probability = r2norm*GetSpinFactor()*GetReducedMass()*GetAlpha() 
-    *g4pow->Z23(GetRestA())*Pf*Hf*Nf*K(aFragment)*(X/Nb - Y/(Nb+1))
+  G4double Probability = r2norm*GetSpinFactor()*theReducedMass*GetAlpha() 
+    *g4pow->Z23(theResA)*Pf*Hf*Nf*K(aFragment)*(X/Nb - Y/(Nb+1))
     *U*g4pow->powN(gb*Y,Nb)/g4pow->powN(ga*U,N);
-
-  //  G4double Probability = GetSpinFactor()/(pi*hbarc*hbarc*hbarc) 
-  //  * GetReducedMass() * GetAlpha() *
-  //  r0 * r0 * std::pow->Z23(GetRestA())/std::pow->pow(U,G4double(N-1)) * 
-  //  (std::pow->(gb,Nb)/std::pow(ga,N)) * Pf * Hf * Nf * K(aFragment) *
-  //  std::pow(Y,Nb) * (X/Nb - Y/(Nb+1));
 
   return Probability;
 }

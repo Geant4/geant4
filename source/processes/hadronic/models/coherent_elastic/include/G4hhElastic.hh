@@ -52,7 +52,9 @@
 #include "G4Nucleus.hh"
 #include "G4HadronNucleonXsc.hh"
 
-using namespace std;
+#include "G4Exp.hh"
+#include "G4Log.hh"
+
 
 class G4ParticleDefinition;
 class G4PhysicsTable;
@@ -510,7 +512,7 @@ inline G4complex G4hhElastic::Pomeron()
 {
   G4double re, im;
 
-  re = fAlphaP*std::log(fSpp/fSo);
+  re = fAlphaP*G4Log(fSpp/fSo);
   im = -0.5*fAlphaP*fImCof*CLHEP::pi;
   return G4complex(re,im);
 } 
@@ -868,7 +870,7 @@ inline G4complex G4hhElastic::GetAqq()
 {
   G4double re, im;
 
-  re = fRq*fRq/8. + fAlphaP*std::log(fSpp/fSo) + 8.*fLambda/9.;
+  re = fRq*fRq/8. + fAlphaP*G4Log(fSpp/fSo) + 8.*fLambda/9.;
   im = -0.5*fAlphaP*fImCof*CLHEP::pi;
   return G4complex(re,im);
 }
@@ -881,7 +883,7 @@ inline G4complex G4hhElastic::GetAQQ()
 {
   G4double re, im;
 
-  re = fRQ*fRQ/8. + fAlphaP*std::log(fSpp/fSo) + 2.*fLambda/9.;
+  re = fRQ*fRQ/8. + fAlphaP*G4Log(fSpp/fSo) + 2.*fLambda/9.;
   im = -0.5*fAlphaP*fImCof*CLHEP::pi;
   return G4complex(re,im);
 }
@@ -1161,7 +1163,7 @@ inline  G4double G4hhElastic::GetExpRatioF123(G4double spp, G4double t)
   G4double dsdt0 = CLHEP::pi/p/p;
   dsdt0 *= real(F10)*real(F10) + imag(F10)*imag(F10); 
 
-  dsdt0 *= std::exp(-fExpSlope*t);
+  dsdt0 *= G4Exp(-fExpSlope*t);
 
   G4double ratio = dsdt/dsdt0;
  

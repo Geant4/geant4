@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// PassiveCarbonBeamLine.cc; 
-// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+// Hadrontherapy advanced example for Geant4
+// See more at: https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamplesHadrontherapy
 
 #ifndef PassiveCarbonBeamLine_H
 #define PassiveCarbonBeamLine_H 1

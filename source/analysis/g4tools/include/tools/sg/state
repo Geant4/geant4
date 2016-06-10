@@ -1,0 +1,251 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_state
+#define tools_sg_state
+
+#include <string>
+
+#include "../lina/rotf"  //m_camera_orientation
+#include "../lina/mat4f"
+#include "../lina/vec3f"
+#include "../lina/vec4f"
+#include "../colorf"
+
+#ifdef TOOLS_MEM
+#include "../mem"
+#include "../S_STRING"
+#endif
+
+#include "enums"
+
+namespace tools {
+namespace sg {
+
+class state {
+#ifdef TOOLS_MEM
+  TOOLS_SCLASS(tools::sg::state)
+#endif
+public:
+  state()
+  //must be consistent with exlib::sg::viewer::render.
+  :m_ww(0)
+  ,m_wh(0)
+
+  ,m_GL_DEPTH_TEST(true)
+  ,m_GL_LIGHTING(false)
+  ,m_GL_CULL_FACE(true)
+  ,m_GL_POLYGON_OFFSET_FILL(false)
+  ,m_GL_TEXTURE_2D(false)
+  ,m_GL_POINT_SMOOTH(false)
+  ,m_GL_LINE_SMOOTH(false)
+
+  ,m_use_gsto(false)
+
+  ,m_winding(winding_ccw)
+
+  ,m_light(0)
+
+  ,m_line_width(1)
+  ,m_line_pattern(sg::line_solid)
+  ,m_point_size(1)
+
+  ,m_camera_ortho(true)
+  ,m_camera_znear(1)
+  ,m_camera_zfar(10)
+  ,m_camera_position(vec3f(0,0,1))
+  ,m_camera_orientation(rotf(vec3f(0,0,1),0))
+  //,m_camera_near_height(0)
+  ,m_camera_lrbt(0,0,0,0)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    //m_proj.set_identity();
+    //m_model.set_identity();
+  }
+  virtual ~state(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  state(const state& a_from)
+  :m_ww(a_from.m_ww)
+  ,m_wh(a_from.m_wh)
+
+  ,m_proj(a_from.m_proj)
+  ,m_model(a_from.m_model)
+
+  ,m_GL_DEPTH_TEST(a_from.m_GL_DEPTH_TEST)
+  ,m_GL_LIGHTING(a_from.m_GL_LIGHTING)
+  ,m_GL_CULL_FACE(a_from.m_GL_CULL_FACE)
+  ,m_GL_POLYGON_OFFSET_FILL(a_from.m_GL_POLYGON_OFFSET_FILL)
+  ,m_GL_TEXTURE_2D(a_from.m_GL_TEXTURE_2D)
+  ,m_GL_POINT_SMOOTH(a_from.m_GL_POINT_SMOOTH)
+  ,m_GL_LINE_SMOOTH(a_from.m_GL_LINE_SMOOTH)
+
+  ,m_use_gsto(a_from.m_use_gsto)
+
+  ,m_winding(a_from.m_winding)
+  ,m_color(a_from.m_color)
+
+  ,m_light(a_from.m_light)
+
+  ,m_line_width(a_from.m_line_width)
+  ,m_line_pattern(a_from.m_line_pattern)
+  ,m_point_size(a_from.m_point_size)
+
+  ,m_camera_ortho(a_from.m_camera_ortho)
+  ,m_camera_znear(a_from.m_camera_znear)
+  ,m_camera_zfar(a_from.m_camera_zfar)
+  ,m_camera_position(a_from.m_camera_position)
+  ,m_camera_orientation(a_from.m_camera_orientation)
+  //,m_camera_near_height(a_from.m_camera_near_height)
+  ,m_camera_lrbt(a_from.m_camera_lrbt)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  state& operator=(const state& a_from){
+    m_ww = a_from.m_ww;
+    m_wh = a_from.m_wh;
+
+    m_proj = a_from.m_proj;
+    m_model = a_from.m_model;
+
+    m_GL_DEPTH_TEST = a_from.m_GL_DEPTH_TEST;
+    m_GL_LIGHTING = a_from.m_GL_LIGHTING;
+    m_GL_CULL_FACE = a_from.m_GL_CULL_FACE;
+    m_GL_POLYGON_OFFSET_FILL = a_from.m_GL_POLYGON_OFFSET_FILL;
+    m_GL_TEXTURE_2D = a_from.m_GL_TEXTURE_2D;
+    m_GL_POINT_SMOOTH = a_from.m_GL_POINT_SMOOTH;
+    m_GL_LINE_SMOOTH = a_from.m_GL_LINE_SMOOTH;
+
+    m_use_gsto = a_from.m_use_gsto;
+
+    m_winding = a_from.m_winding;
+    m_color = a_from.m_color;
+
+    m_light = a_from.m_light;
+
+    m_line_width = a_from.m_line_width;
+    m_line_pattern = a_from.m_line_pattern;
+    m_point_size = a_from.m_point_size;
+
+    m_camera_ortho = a_from.m_camera_ortho;
+    m_camera_znear = a_from.m_camera_znear;
+    m_camera_zfar = a_from.m_camera_zfar;
+    m_camera_position = a_from.m_camera_position;
+    m_camera_orientation = a_from.m_camera_orientation;
+    //m_camera_near_height = a_from.m_camera_near_height;
+    m_camera_lrbt = a_from.m_camera_lrbt;
+
+    return *this;
+  }
+public:
+  void screen2ndc(int a_x,int a_y, //signed because of wall.
+                  float& a_wcx,float& a_wcy,float& a_wcz,float& a_wcw) const {
+    // a proj point in near plan has (z,w) :
+    //   ortho -1,1   -> z/w = -1    and xy in [-1,1][-1,1]
+    //   persp -n,n   -> z/w = -1    and xy in [-n,n][-n,n]
+
+    a_wcx = 2*(float(a_x)/float(m_ww)-0.5f); //in [-1,1]
+    a_wcy = 2*(float(a_y)/float(m_wh)-0.5f);
+    a_wcz = -1;
+
+    if(m_camera_ortho) {
+      a_wcw = 1;
+    } else {
+      float t = m_camera_znear;
+      a_wcx *= t;
+      a_wcy *= t;
+      a_wcz *= t; 
+      a_wcw = t;
+    }
+  }  
+
+  bool screen2wc(int a_x,int a_y, //signed because of wall.
+                 float& a_wcx,float& a_wcy,float& a_wcz) const {
+    mat4f mtx = m_proj;
+    mtx.mul_mtx(m_model);
+    mat4f inv;
+    if(!mtx.invert(inv)) {a_wcx = 0;a_wcy = 0;a_wcz = 0;return false;}  
+    float w;
+    screen2ndc(a_x,a_y,a_wcx,a_wcy,a_wcz,w);
+    inv.mul_4f(a_wcx,a_wcy,a_wcz,w);
+    if(w==0.0F) return false;
+    a_wcx /= w;
+    a_wcy /= w;
+    a_wcz /= w;
+    return true;
+  }  
+  bool screen2pwc(int a_x,int a_y, //signed because of wall.
+                  float& a_wcx,float& a_wcy,float& a_wcz) const {
+    mat4f mtx = m_proj;
+    //mtx.mul_mtx(m_model);
+    mat4f inv;
+    if(!mtx.invert(inv)) {a_wcx = 0;a_wcy = 0;a_wcz = 0;return false;}  
+    float w;
+    screen2ndc(a_x,a_y,a_wcx,a_wcy,a_wcz,w);
+    inv.mul_4f(a_wcx,a_wcy,a_wcz,w);
+    if(w==0.0F) return false;
+    a_wcx /= w;
+    a_wcy /= w;
+    a_wcz /= w;
+    return true;
+  }  
+  void camera_proj_only(mat4f& a_mtx) const {
+    float l = m_camera_lrbt[0];
+    float r = m_camera_lrbt[1];
+    float b = m_camera_lrbt[2];
+    float t = m_camera_lrbt[3];
+    float n = m_camera_znear;
+    float f = m_camera_zfar;
+    if(m_camera_ortho) {
+      a_mtx.set_ortho(l,r,b,t,n,f);
+    } else {
+      a_mtx.set_frustum(l,r,b,t,n,f);
+    }
+  }
+
+public:
+  unsigned int m_ww;  //window width
+  unsigned int m_wh;  //window height
+
+  mat4f m_proj;
+  mat4f m_model;
+
+  bool m_GL_DEPTH_TEST;
+  bool m_GL_LIGHTING;
+  bool m_GL_CULL_FACE;
+  bool m_GL_POLYGON_OFFSET_FILL;
+  bool m_GL_TEXTURE_2D;
+  bool m_GL_POINT_SMOOTH;
+  bool m_GL_LINE_SMOOTH;
+
+  bool m_use_gsto;
+
+  winding_type m_winding;
+  colorf m_color;
+
+  unsigned int m_light;
+
+  float m_line_width;
+  unsigned short m_line_pattern;
+  float m_point_size;
+
+  //camera (see base_camera::set_state()) :
+  bool m_camera_ortho;
+  float m_camera_znear;
+  float m_camera_zfar;
+  vec3f m_camera_position;
+  rotf m_camera_orientation; //used by head_light
+  //float m_camera_near_height;
+  vec4f m_camera_lrbt;
+};
+
+}}
+
+#endif

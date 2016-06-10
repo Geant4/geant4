@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForDecay.cc 78546 2014-01-07 09:35:55Z gcosmo $
+// $Id: G4ParticleChangeForDecay.cc 93028 2015-09-30 16:09:00Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -145,9 +145,13 @@ void G4ParticleChangeForDecay::Initialize(const G4Track& track)
 
 G4Step* G4ParticleChangeForDecay::UpdateStepForPostStep(G4Step* pStep)
 { 
+  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
+
   if (isParentWeightProposed ){
-    pStep->GetPostStepPoint()->SetWeight( theParentWeight );
+    pPostStepPoint->SetWeight( theParentWeight );
   }
+  // update polarization
+  pPostStepPoint->SetPolarization( thePolarizationChange );
 
   //  Update the G4Step specific attributes 
   return UpdateStepInfo(pStep);

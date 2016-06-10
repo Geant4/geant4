@@ -33,10 +33,21 @@
 #
 # Add trajectories to the current scene
 /vis/scene/add/trajectories smooth
+#/vis/modeling/trajectories/create/drawByCharge
+#/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+#/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+# (if too many tracks cause core dump => /tracking/storeTrajectory 0)
+#
+#/vis/modeling/trajectories/create/drawByParticleID
+#/vis/modeling/trajectories/drawByParticleID-0/set e- blue
+#/vis/modeling/trajectories/drawByParticleID-0/set mu+ green
+#/vis/modeling/trajectories/drawByParticleID-0/set e+ red
+#/vis/modeling/trajectories/drawByParticleID-0/set gamma gray
+#/vis/modeling/trajectories/drawByParticleID-0/set nu_e yellow
+#/vis/modeling/trajectories/drawByParticleID-0/set anti_nu_mu yellow
 #
 # Requests viewer to accumulate hits, tracks, etc. at end of event.
 # detector remains or is redrawn.
 /vis/scene/endOfEventAction refresh
 #/vis/scene/endOfEventAction accumulate
 #
-#/event/drawTracks charged

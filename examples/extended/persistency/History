@@ -1,4 +1,4 @@
-$Id: History 70248 2013-05-27 15:43:20Z gcosmo $
+$Id: History 94340 2015-11-12 10:07:47Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -15,6 +15,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 11, 2015 W. Pokorski (exPersistency-V10-01-01)
+- Adding ROOT6 as minimal version
+
+November 02, 2015 W. Pokorski (exPersistency-V10-01-00)
+- Removing obsolete check for GCCXML
 
 May 27th, 2013 I. Hrivnacova (exPersistency-V09-06-01)
 - Fixed handling required packages/options in CMake files

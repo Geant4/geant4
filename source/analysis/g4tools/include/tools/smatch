@@ -1,0 +1,106 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_smatch
+#define tools_smatch
+
+#include "words"
+#include <cstring>
+
+namespace tools {
+
+inline bool match(const std::string& a_string,const std::string& a_pattern,bool a_check_for_wilds = true){
+  std::string::size_type lpattern = a_pattern.length();
+  std::string::size_type lstring  = a_string.length();
+  if ((lpattern==0)&&(lstring==0)) return true;
+  if ((lpattern==0)&&(lstring!=0)) return true;
+  if ((lpattern!=0)&&(lstring==0)) return false;
+
+  if((lpattern==1)&&(a_pattern[0]=='*')) return true;
+
+  if(a_check_for_wilds) {
+    bool some_star = false;
+    for(std::string::size_type count=0;count<lpattern;count++) {
+      if(a_pattern[count]=='*') {some_star = true;break;}
+    }
+    if(!some_star) {  // no wildcard :
+      return (a_pattern==a_string ? true : false );
+    }
+  }
+
+  // complex pattern :
+  //std::string::size_type* wps = new std::string::size_type[2*lpattern];
+  if((2*lpattern)>1024) return false; //throw
+  std::string::size_type wps[1024]; //OPTIMIZATION : we gain a lot with that.
+
+  unsigned int wn;
+  std::string::size_type* wls = wps+lpattern;
+  words(a_pattern,"*",false,wn,wps,wls);  
+  if(!wn) {
+    //delete [] wps;
+    return true; // only wildcards :
+  }
+
+  // tricky case :
+  char* token = (char*)a_string.c_str();
+ {for(unsigned int count=0;count<wn;count++) { 
+    unsigned int lword = wls[count];
+    if(!lword) continue;//should never happen !
+    //WARNING : ws_pos does not have a null char at ws_pos+lword !
+    char* ws_pos = (char*)(a_pattern.c_str()+wps[count]);
+    if(count==0) {
+      if(a_pattern[0]!='*') {
+        // Begin of pattern (ws[0]) and a_string must match :
+        if(::strncmp(token,ws_pos,lword)) {
+          //delete [] wps;
+          return false;
+        }
+        token = token + lword;
+        continue;
+      }
+    }
+    char old_char = *(ws_pos+lword);
+    *(ws_pos+lword) = 0;
+    char* pos = ::strstr(token,ws_pos);
+    *(ws_pos+lword) = old_char;
+    if(!pos) {
+      //delete [] wps;
+      return false;
+    }
+    if((count==(wn-1)) && (a_pattern[lpattern-1]!='*') ) { // Last word.
+      // Compare last word and end of a_string.
+      if(::strncmp(a_string.c_str()+lstring-lword,ws_pos,lword)) {
+        //delete [] wps;
+        return false;
+      }
+      break;
+    } else {
+      token = pos + lword;
+    }
+  }}
+
+  //delete [] wps;
+  return true;
+}
+
+//for inlib/app/find.cpp :
+inline bool match2(const std::string& a_string,const std::string& a_pattern){
+  return match(a_string,a_pattern,true);
+}
+
+inline void filter(std::vector<std::string>& a_v,
+                   const std::string& a_pattern,
+                   bool a_check_for_wilds = true){
+  std::vector<std::string>::iterator it;
+  for(it=a_v.begin();it!=a_v.end();) {
+    if(match(*it,a_pattern,a_check_for_wilds)) {
+      it++;
+    } else {
+      it = a_v.erase(it);
+    }
+  }
+}
+
+}
+
+#endif

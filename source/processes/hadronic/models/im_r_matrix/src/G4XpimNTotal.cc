@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 #include <cmath>
-
+#include "G4Exp.hh"
+#include "G4Log.hh"
 #include "G4XpimNTotal.hh"
 #include "G4SystemOfUnits.hh"
 
@@ -78,12 +79,12 @@ G4double G4XpimNTotal::
      if(theLowEData[i].first/MeV>sqrts) break;
      it = i;
    }
-   G4double x1 = std::log(theLowEData[it].first);
-   G4double x2 = std::log(theLowEData[it+1].first);
-   G4double y1 = std::log(theLowEData[it].second);
-   G4double y2 = std::log(theLowEData[it+1].second);
-   G4double x = std::log(sqrts);
+   G4double x1 = G4Log(theLowEData[it].first);
+   G4double x2 = G4Log(theLowEData[it+1].first);
+   G4double y1 = G4Log(theLowEData[it].second);
+   G4double y2 = G4Log(theLowEData[it+1].second);
+   G4double x = G4Log(sqrts);
    G4double y = y1+(x-x1)*(y2-y1)/(x2-x1);
-   result = std::exp(y);
+   result = G4Exp(y);
    return result*millibarn;
  }

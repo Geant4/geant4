@@ -41,6 +41,7 @@ class G4AnalysisManagerState
   // Only G4VAnalysisManager can change the state
   friend class G4VAnalysisManager;
   friend class G4VAnalysisReader;
+  friend class G4ParameterManager;
 
   public: 
     G4AnalysisManagerState(const G4String& type, G4bool isMaster);
@@ -54,6 +55,7 @@ class G4AnalysisManagerState
     const G4AnalysisVerbose* GetVerboseL2() const;
     const G4AnalysisVerbose* GetVerboseL3() const;
     const G4AnalysisVerbose* GetVerboseL4() const;
+    G4int    GetCompressionLevel() const;
 
   private:
     // disabled constructors, operators  
@@ -65,12 +67,14 @@ class G4AnalysisManagerState
     // (hidden from all clients except for G4VAnalysisManager friend)
     void SetIsActivation(G4bool isActivation);
     void SetVerboseLevel(G4int verboseLevel);
+    void SetCompressionLevel(G4int level);
 
     // data members
     G4String fType;
     G4bool   fIsMaster;
     G4bool   fIsActivation;
     G4int    fVerboseLevel;
+    G4int    fCompressionLevel;
     G4AnalysisVerbose  fVerboseL1;
     G4AnalysisVerbose  fVerboseL2;
     G4AnalysisVerbose  fVerboseL3;
@@ -85,6 +89,9 @@ class G4AnalysisManagerState
 
 inline void G4AnalysisManagerState::SetIsActivation(G4bool isActivation)
 { fIsActivation = isActivation; }
+
+inline void G4AnalysisManagerState::SetCompressionLevel(G4int level)
+{ fCompressionLevel = level; }
 
 inline G4String G4AnalysisManagerState::GetType() const
 { return fType; }
@@ -109,6 +116,9 @@ inline const G4AnalysisVerbose* G4AnalysisManagerState::GetVerboseL3() const
 
 inline const G4AnalysisVerbose* G4AnalysisManagerState::GetVerboseL4() const
 { return fpVerboseL4; }
+
+inline G4int  G4AnalysisManagerState::GetCompressionLevel() const
+{ return fCompressionLevel; }
 
 #endif  
 

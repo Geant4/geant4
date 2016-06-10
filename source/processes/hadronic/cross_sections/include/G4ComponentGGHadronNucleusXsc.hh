@@ -55,6 +55,7 @@ public:
   G4ComponentGGHadronNucleusXsc ();
   virtual ~G4ComponentGGHadronNucleusXsc ();
 
+  static const char* Default_Name() { return "Glauber-Gribov"; }
 
   // virtual interface methods
 
@@ -125,7 +126,8 @@ virtual
   G4double GetHadronNucleonXscPDG(const G4DynamicParticle*, G4int At, G4int Zt);
   G4double GetHadronNucleonXscNS(const G4DynamicParticle*, const G4Element*);
   G4double GetHadronNucleonXscNS(const G4DynamicParticle*, G4int At, G4int Zt);
-  G4double GetKaonNucleonXscVector(const G4DynamicParticle*, G4int At, G4int Zt);
+
+  // G4double GetKaonNucleonXscVector(const G4DynamicParticle*, G4int At, G4int Zt);
 
   G4double GetHNinelasticXsc(const G4DynamicParticle*, const G4Element*);
   G4double GetHNinelasticXsc(const G4DynamicParticle*, G4int At, G4int Zt);

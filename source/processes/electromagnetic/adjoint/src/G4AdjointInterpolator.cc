@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointInterpolator.cc 71508 2013-06-17 11:57:13Z gcosmo $
+// $Id: G4AdjointInterpolator.cc 91870 2015-08-07 15:21:40Z gcosmo $
 //
 #include "G4AdjointCSMatrix.hh"
 #include "G4AdjointInterpolator.hh"
@@ -140,6 +140,7 @@ size_t  G4AdjointInterpolator::FindPosition(G4double& x,std::vector<G4double>& x
            				ind2 = midBin;
          		else 
 					ind1 = midBin;
+		  // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
       		} while (ind2 - ind1 > 1);
 	}
 	else {
@@ -149,6 +150,7 @@ size_t  G4AdjointInterpolator::FindPosition(G4double& x,std::vector<G4double>& x
            				ind1 = midBin;
          		else 
 					ind2 = midBin;
+                  // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
       		} while (ind2 - ind1 > 1);
 	}
   

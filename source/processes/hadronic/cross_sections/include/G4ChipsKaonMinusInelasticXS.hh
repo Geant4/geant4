@@ -25,7 +25,6 @@
 //
 //
 //
-//
 // GEANT4 physics class: G4ChipsKaonMinusInelasticXS -- header file
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 20-Dec-01
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 17-May-02
@@ -54,6 +53,7 @@ public:
 
   static const char* Default_Name() {return "ChipsKaonMinusInelasticXS";}
 
+  virtual void CrossSectionDescription(std::ostream&) const;
 
   virtual G4bool IsIsoApplicable(const G4DynamicParticle* Pt, G4int Z, G4int A,    
 				 const G4Element* elm,

@@ -22,11 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request
-// the *COMPLETE* version of this program, together with its documentation;
-// Hadrontherapy (both basic and full version) are supported by the Italian INFN
-// Institute in the framework of the MC-INFN Group
 //
+// Hadrontherapy advanced example for Geant4
+// See more at: https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamplesHadrontherapy
 
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
@@ -382,7 +380,7 @@ void LaserDrivenBeamLine::SetDefaultDimensions()
     Magnet_3YSize=defaultMagnet_YSize;
     Magnet_3ZSize=defaultMagnet_ZSize;
     
-    G4double defaultMagnet4ToMagnet3=60.*mm; //85.*mm ANTONELLA
+    G4double defaultMagnet4ToMagnet3=65.*mm; //85.*mm ANTONELLA
     Magnet4ToMagnet3=defaultMagnet4ToMagnet3;
     
     G4double defaultExternalMagnet_3XPosition =-(Magnet4ToMagnet3+defaultExternalMagnet_XSize/2.+defaultExternalMagnet_XSize/2.)+externalMagnet_4XPosition;
@@ -783,17 +781,17 @@ void LaserDrivenBeamLine::ConstructSDandField()
      G4double minEps=1.0e-5;  //   Minimum & value for smallest steps
      G4double maxEps=1.0e-4;
     G4bool allLocal = true;
-    G4int nvar = 8;
+     // G4int nvar = 8;  For pure magnetic field, the number of integration variables is the default!
 
  //....oooOO0OOooo..........ENERGY SELECTOR SYSTEM FIELD..........oooOO0OOooo....        
      if(logicInternalChamber){G4double xOffset =(internalChamberXSize/2.0)+externalSlitXPosition;
-     PurgMagField = new HadrontherapyMagneticField3D("field/Mappa32shift25Dip.TABLE", xOffset);
+     PurgMagField = new HadrontherapyMagneticField3D("field/ESSMagneticField.TABLE", xOffset);
      pFieldMgr =new G4FieldManager();  
      pFieldMgr -> SetDetectorField(PurgMagField);  
      G4cout << "DeltaStep "<< pFieldMgr -> GetDeltaOneStep()/mm <<"mm" <<endl;
      pFieldMgr -> CreateChordFinder(PurgMagField); 
      fEquation = new G4Mag_UsualEqRhs(PurgMagField);     
-     fstepper = new G4ClassicalRK4(fEquation,nvar);
+     fstepper = new G4ClassicalRK4(fEquation);
      //////fstepper = new G4HelixImplicitEuler(fEquation);     
      pIntgrDriver = new G4MagInt_Driver(1*mm,fstepper,fstepper-> GetNumberOfVariables());    
      //the first parameter is the minimum step
@@ -806,13 +804,13 @@ void LaserDrivenBeamLine::ConstructSDandField()
  //....oooOO0OOooo..........QUADS FIELDS..........oooOO0OOooo....  
  //....oooOO0OOooo..........FOURTH QUAD FIELD..........oooOO0OOooo....        
      if(LFourthTriplet){G4double xOffsetFQ =-(QuadChamberWallPosX+FourthQuadXPosition);
-     PurgMagFieldQuadFourth = new HadrontherapyMagneticField3D("field/MappaQuad80NoF90deg.TABLE", xOffsetFQ);
+     PurgMagFieldQuadFourth = new HadrontherapyMagneticField3D("field/Quad80MagneticField.TABLE", xOffsetFQ);
      pFieldMgrQuadFourth =  new G4FieldManager();
      pFieldMgrQuadFourth -> SetDetectorField(PurgMagFieldQuadFourth);
      
      pFieldMgrQuadFourth -> CreateChordFinder(PurgMagFieldQuadFourth);
      fEquationQuadFourth = new G4Mag_UsualEqRhs(PurgMagFieldQuadFourth);     
-     fstepperQuadFourth = new G4ClassicalRK4(fEquationQuadFourth,nvar);     
+     fstepperQuadFourth = new G4ClassicalRK4(fEquationQuadFourth);     
      pIntgrDriverQuadFourth = new G4MagInt_Driver(1*mm,fstepperQuadFourth,fstepperQuadFourth-> GetNumberOfVariables());    
      //the first parameter is the minimum step
      pChordFinderQuadFourth = new G4ChordFinder(pIntgrDriverQuadFourth);
@@ -823,12 +821,12 @@ void LaserDrivenBeamLine::ConstructSDandField()
       LFourthTriplet -> SetFieldManager(pFieldMgrQuadFourth, allLocal);}
  //....oooOO0OOooo..........THIRD QUAD FIELD..........oooOO0OOooo....           
     if(LThirdTriplet){ G4double xOffsetTQ =-(QuadChamberWallPosX+ThirdQuadXPosition);
-     PurgMagFieldQuadThird = new HadrontherapyMagneticField3D("field/MappaQuadNoF.TABLE", xOffsetTQ);
+     PurgMagFieldQuadThird = new HadrontherapyMagneticField3D("field/Quad40MagneticField.TABLE", xOffsetTQ);
      pFieldMgrQuadThird =  new G4FieldManager();
      pFieldMgrQuadThird -> SetDetectorField(PurgMagFieldQuadThird);     
      pFieldMgrQuadThird -> CreateChordFinder(PurgMagFieldQuadThird);
      fEquationQuadThird = new G4Mag_UsualEqRhs(PurgMagFieldQuadThird);
-     fstepperQuadThird = new G4ClassicalRK4(fEquationQuadThird,nvar);     
+     fstepperQuadThird = new G4ClassicalRK4(fEquationQuadThird);     
      pIntgrDriverQuadThird = new G4MagInt_Driver(1*mm,fstepperQuadThird,fstepperQuadThird-> GetNumberOfVariables());    
      //the first parameter is the minimum step
      pChordFinderQuadThird = new G4ChordFinder(pIntgrDriverQuadThird);
@@ -839,12 +837,12 @@ void LaserDrivenBeamLine::ConstructSDandField()
      LThirdTriplet -> SetFieldManager(pFieldMgrQuadThird, allLocal);}
  //....oooOO0OOooo..........SECOND QUAD FIELD..........oooOO0OOooo....        
      if(LSecondTriplet){G4double xOffsetSQ =-(QuadChamberWallPosX+SecondQuadXPosition);
-     PurgMagFieldQuadSecond = new HadrontherapyMagneticField3D("field/MappaQuadNoF.TABLE", xOffsetSQ);
+     PurgMagFieldQuadSecond = new HadrontherapyMagneticField3D("field/Quad40MagneticField.TABLE", xOffsetSQ);
      pFieldMgrQuadSecond =  new G4FieldManager();
      pFieldMgrQuadSecond -> SetDetectorField(PurgMagFieldQuadSecond);     
      pFieldMgrQuadSecond -> CreateChordFinder(PurgMagFieldQuadSecond);
      fEquationQuadSecond = new G4Mag_UsualEqRhs(PurgMagFieldQuadSecond);     
-     fstepperQuadSecond = new G4ClassicalRK4(fEquationQuadSecond,nvar);     
+     fstepperQuadSecond = new G4ClassicalRK4(fEquationQuadSecond);     
      pIntgrDriverQuadSecond = new G4MagInt_Driver(1*mm,fstepperQuadSecond,fstepperQuadSecond-> GetNumberOfVariables());    
      //the first parameter is the minimum step
      pChordFinderQuadSecond = new G4ChordFinder(pIntgrDriverQuadSecond);
@@ -855,12 +853,12 @@ void LaserDrivenBeamLine::ConstructSDandField()
      LSecondTriplet -> SetFieldManager(pFieldMgrQuadSecond, allLocal);}
  //....oooOO0OOooo..........FIRST QUAD FIELD..........oooOO0OOooo....           
      if(LFirstTriplet) {G4double xOffsetFirstQ =-(QuadChamberWallPosX+FirstQuadXPosition);
-     PurgMagFieldQuadFirst = new HadrontherapyMagneticField3D("field/MappaQuad80NoF90deg.TABLE", xOffsetFirstQ);
+     PurgMagFieldQuadFirst = new HadrontherapyMagneticField3D("field/Quad80MagneticField.TABLE", xOffsetFirstQ);
      pFieldMgrQuadFirst =  new G4FieldManager();
      pFieldMgrQuadFirst -> SetDetectorField(PurgMagFieldQuadFirst);     
      pFieldMgrQuadFirst -> CreateChordFinder(PurgMagFieldQuadFirst);
      fEquationQuadFirst = new G4Mag_UsualEqRhs(PurgMagFieldQuadFirst);    
-     fstepperQuadFirst = new G4ClassicalRK4(fEquationQuadFirst,nvar);     
+     fstepperQuadFirst = new G4ClassicalRK4(fEquationQuadFirst);     
      pIntgrDriverQuadFirst = new G4MagInt_Driver(1*mm,fstepperQuadFirst,fstepperQuadFirst-> GetNumberOfVariables());    
      //the first parameter is the minimum step
      pChordFinderQuadFirst = new G4ChordFinder(pIntgrDriverQuadFirst);
@@ -874,13 +872,17 @@ void LaserDrivenBeamLine::ConstructSDandField()
     G4double eyOffset= 0*cm;
     G4double ezOffset= 0*cm;
     G4FieldManager *pEFieldmanager = new G4FieldManager();      
-    G4ElectricField *ElectricField = new HadrontherapyElectricTabulatedField3D("field/ElectricField-600V.TABLE", exOffset, eyOffset, ezOffset);
+    G4ElectricField *ElectricField = new HadrontherapyElectricTabulatedField3D("field/ElectricFieldFC-600V.TABLE", exOffset, eyOffset, ezOffset);
     // UNIFORM FIELD
     // G4ElectroMagneticField* ElectricField = new G4UniformElectricField(G4ThreeVector(0.0, 10.0*volt/m, 0.0)); //G4UniformElectricField
     // The following is only for global field in the whole geometry
-    //pEFieldmanager = G4TransportationManager::GetTransportationManager() -> GetFieldManager();   
+    //pEFieldmanager = G4TransportationManager::GetTransportationManager() -> GetFieldManager();
+
+    const G4int nvarElectric=8;  // The Equation of motion for Electric (or combined Electric/Magnetic)
+                                 // field requires 8 integration variables
+    
     G4EqMagElectricField *fLocalEquation = new G4EqMagElectricField(ElectricField);    
-    G4MagIntegratorStepper* fLocalStepper = new G4ClassicalRK4(fLocalEquation, nvar); 
+    G4MagIntegratorStepper* fLocalStepper = new G4ClassicalRK4(fLocalEquation, nvarElectric); 
     G4MagInt_Driver  *pIntgrDriver_E = new G4MagInt_Driver(0.02*mm, fLocalStepper, fLocalStepper -> GetNumberOfVariables() );
     G4ChordFinder *fLocalChordFinder = new G4ChordFinder(pIntgrDriver_E);
     pEFieldmanager -> SetDetectorField(ElectricField);

@@ -27,50 +27,76 @@
 #define G4MPISCORERMERGER_HH
 #include "G4ScoringManager.hh"
 #include <vector>
+#include <memory>
+#include <utility>
 #include <mpi.h>
 #include "G4MPImanager.hh"
 
-class G4MPIScorerMerger {
+typedef G4THitsMap<G4double> HitMap;
+
+class G4MPIscorerMerger {
 public:
-  G4MPIScorerMerger( G4ScoringManager* mgr, 
+  G4MPIscorerMerger();
+  G4MPIscorerMerger( G4ScoringManager* mgr, 
                      G4int destination =  G4MPImanager::kRANK_MASTER,
                      G4int verbosity = 0 );
-  virtual ~G4MPIScorerMerger() { clear(); }
+  virtual ~G4MPIscorerMerger();
+
+  //Get/set methods
   void SetDestinationRank( G4int i ) { destinationRank = i; }
-  G4int GetDestinationRank() const { return destinationRank; }
   void SetScoringManager( G4ScoringManager* mgr ) { scoringManager = mgr; }
-  G4ScoringManager* GetScoringManager() const { return scoringManager; }
-  G4int GetCommSize() const { return commSize; }
-  virtual void Merge();
   void SetVerbosity( G4int ver ) { verbose = ver; }
-  G4int GetVerbosity() const { return verbose; }
+
+  //Main Interface: call this method to merge all results to rank0
+  void Merge();
 
 protected:
-  //Internal MPI-friendly format
-  //for a single MeshScoreMap
-  struct convMap_t {
-    G4String name;
-    G4int numElems;
-    G4int* indexes;
-    G4double* values;
-  };
-  virtual convMap_t* convertMap( const G4String& mapName ,
-                                 G4THitsMap<double>* map ) const;
-  virtual void convertMesh( const G4VScoringMesh* mesh );
-  void clear();
-  std::vector<convMap_t*> convertedMesh;
-  G4int meshID;
+  void SetupOutputBuffer(char* buff, G4int size, G4int position) {
+    outputBuffer = buff;
+    outputBufferSize=size;
+    outputBufferPosition=position;
+  }
+  void DestroyBuffer() {
+    delete[] outputBuffer;
+    outputBuffer = nullptr;
+    outputBufferSize=0;
+    outputBufferPosition=0;
+    ownsBuffer = false;
+  }
 
+  //! Pack all meshes into buffer
+  void Pack(const G4ScoringManager*);
+  void UnPackAndMerge(const G4ScoringManager*);
+
+  //! Pack a single mesh
+  void Pack(const G4VScoringMesh*);
+  void UnPackAndMerge(G4VScoringMesh* );
+
+  //! Pack a single score map
+  void Pack(const HitMap*);
+  HitMap* UnPackHitMap(const G4String& detName, const G4String& colName);
+
+  //Return size (in bytes) of the message needed to send the mesh
+  G4int CalculatePackSize(const G4ScoringManager*) const;
+  G4int CalculatePackSize(const G4VScoringMesh*) const;
+  G4int CalculatePackSize(const HitMap*) const;
+
+protected:
+  void Send(const unsigned int destination);
+  void Receive(const unsigned int source);
+
+private:
+   char* outputBuffer;
+   G4int outputBufferSize;
+   G4int outputBufferPosition;
+   long bytesSent;
+   G4bool ownsBuffer;
   G4ScoringManager* scoringManager;
-  G4int commSize;
-  G4int destinationRank;
-  MPI::Intracomm COMM_G4COMMAND_;
+  unsigned int commSize;
+  unsigned int destinationRank;
+  MPI::Intracomm comm;
   G4int verbose;
 
-  virtual void SendOneMesh();
-  virtual void ReceiveOneMesh();
-  virtual void MergeOneMesh();
-  friend std::ostream& operator<<(std::ostream& os ,  const convMap_t& cnv );
 };
 
 #endif //G4MPISCORERMERGER_HH

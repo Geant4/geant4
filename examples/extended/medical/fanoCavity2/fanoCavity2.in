@@ -1,6 +1,7 @@
-# $Id: fanoCavity2.in 68763 2013-04-05 12:36:20Z gcosmo $
+# $Id: fanoCavity2.in 93259 2015-10-14 08:35:22Z gcosmo $
 #
 /control/verbose 2
+/control/cout/ignoreThreadsExcept 0
 /run/verbose 2
 #
 /testem/phys/addPhysics standard_opt3
@@ -9,6 +10,6 @@
 #
 /gun/energy 1 MeV
 #
-/testem/event/printModulo 10000
+/run/printProgress 10000
 #
 /run/beamOn 40000

@@ -51,7 +51,7 @@ class G4RepleteEofM : public G4EquationOfMotion
 {
   public:  // with description
 
-    G4RepleteEofM(G4Field*);
+    G4RepleteEofM(G4Field*, G4int nvar = 8);
     ~G4RepleteEofM();
 
     void SetChargeMomentumMass(G4ChargeState particleCharge, // in e+ units
@@ -74,6 +74,8 @@ class G4RepleteEofM : public G4EquationOfMotion
     inline void SetSpin()   {fSpin   = true;}
 
   private:
+
+    G4int fNvar;
 
     G4bool fBfield, fEfield, fGfield, fgradB, fSpin;
 

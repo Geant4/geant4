@@ -1,4 +1,4 @@
-$Id: History 78053 2013-12-03 08:25:13Z gcosmo $
+$Id: History 92496 2015-09-02 07:22:25Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 01, 2015 - I. Hrivnacova - fieldex01-V10-01-02
+- Removed F01EventActionMessenger classes, now obsolete, and 
+  replaced /event/printModulo commands in macros with /run/printProgress
+- Code cleanup
+
+May 22, 2015 - P. Gumplinger - fieldex01-V10-01-00
+- apply coding guideline 3.3
 
 December 02, 2013
 - More fixes in gui.mac:

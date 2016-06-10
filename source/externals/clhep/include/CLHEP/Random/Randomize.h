@@ -27,6 +27,7 @@
 
 #include "CLHEP/Random/DualRand.h"
 #include "CLHEP/Random/JamesRandom.h"
+#include "CLHEP/Random/MixMaxRng.h"
 #include "CLHEP/Random/MTwistEngine.h"
 #include "CLHEP/Random/RanecuEngine.h"
 #include "CLHEP/Random/RanluxEngine.h"
@@ -58,7 +59,11 @@ namespace CLHEP {
 // On some compilers the static instance of the HepRandom generator
 // needs to be created explicitly in the client code (i.e. here).
 
+#if __GNUC__
+static const int HepRandomGenActive __attribute__((unused)) = HepRandom::createInstance();
+#else
 static const int HepRandomGenActive = HepRandom::createInstance();
+#endif
 
 }  // namespace CLHEP
 

@@ -1,0 +1,110 @@
+//$Id$
+
+///\file "electromagnetic/TestEm18/.README.txt"
+///\brief Example TestEm18 README page
+
+/*! \page ExampleTestEm18 Example TestEm18
+
+ This example allows to study the energy lost by a charged particle in a
+ single layer, due to ionization and bremsstrahlung. Results are compared to
+ 'reference' values.
+	
+\section TestEm18_s1 GEOMETRY DEFINITION
+ 
+ It is a single box of homogeneous medium.
+ Two parameters define the geometry :
+     - the material of the box,
+     - the (full) size of the box.
+ 
+ The default geometry (1 cm of water) is constructed in DetectorConstruction,
+ but the above parameters can be changed interactively via the commands
+ defined in DetectorMessenger.
+ 	
+\section TestEm18_s2 PHYSICS
+ 
+ The physics list, PhysicsList, contains the 'standard' electromagnetic processes.
+ However the MultipleScattering is not registered, in order to focuse on
+ fluctuations due to energy loss alone.
+	 	 
+\section TestEm18_s3 BEAM
+ 
+ The primary kinematic is a single particle starting at the edge
+ of the box. The type of the particle and its energy are set in 
+ PrimaryGeneratorAction (e- 10 MeV), and can be changed via the G4 
+ build-in commands of G4ParticleGun class.
+ 	
+\section TestEm18_s4 RUN
+ 
+ During the tracking of the incident particle, the secondary particles 
+ are immediately killed, after that their energy has been registered
+ (see StackingAction).
+ Therefore, we study here the total energy lost by the incident particle,
+ not the energy deposited in a layer of finite thickness.
+ 
+ At RunAction::EndOfRunAction(), the above results are compared with 'reference' values,
+ i.e. the values read from EnergyLoss tables.
+
+\section TestEm18_s5 HISTOGRAMS
+         
+ The test contains 6 built-in 1D histograms, which are managed by
+ G4AnalysisManager and its messenger.
+ 
+ - 1 :  continuous energy loss along primary track
+ - 2 :  energy from secondaries
+ - 3 :  total energy lost by primary track (1+2)
+ - 4 :  energy spectrum of e-+
+ - 5 :  energy spectrum of gamma
+ - 6 :  step size of primary track
+      
+ The histograms are defined in HistoManager.
+     
+ The histos can be activated individually with the command :
+\verbatim
+/analysis/h1/set id nbBins valMin valMax unit
+\endverbatim
+ where 'unit' is the desired unit for the histo (MeV or KeV, cm or mm, etc..)
+								  
+ One can control the name of the histograms file with the command:
+\verbatim
+/analysis/setFileName  name  (default testem18)
+\endverbatim
+ 
+ It is possible to choose the format of the histogram file : root (default),
+ xml, csv, by using namespace in HistoManager.hh     
+ 
+ It is also possible to print selected histograms on an ascii file:
+\verbatim
+/analysis/h1/sweAscii id
+\endverbatim
+ All selected histos will be written on a file name.ascii  (default testem18)
+ 	 				
+\section TestEm18_s6 VISUALIZATION
+ 
+ The Visualization Manager is set in the main () (see TestEm18.cc).
+ The initialisation of the drawing is done via the commands
+ /vis/... in the macro vis.mac. To get visualisation:
+\verbatim
+> /control/execute vis.mac
+\endverbatim
+ 	
+ The detector has a default view which is a longitudinal view of the box.
+ The tracks are drawn at the end of event, and erased at the end of run.
+	
+\section TestEm18_s7 HOW TO START ?
+ 
+ - Execute TestEm18 in 'batch' mode from macro files :
+\verbatim
+% TestEm18   electron.mac
+\endverbatim
+ 		
+ - Execute TestEm18 in 'interactive mode' with visualization :
+\verbatim
+% TestEm18
+Idle> control/execute vis.mac
+....
+Idle> type your commands
+....
+Idle> exit
+\endverbatim
+  
+*/

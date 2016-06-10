@@ -66,7 +66,7 @@ public:
   ~Residue() {};
 
   //! information about molecule (not implemented)
-  void affiche();
+  void Affiche();
   //! Get the next residue
   Residue *GetNext();
   //! Get the first atom

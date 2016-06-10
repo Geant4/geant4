@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChemistryManager.hh 87375 2014-12-02 08:17:28Z gcosmo $
+// $Id: G4DNAChemistryManager.hh 93883 2015-11-03 08:25:04Z gcosmo $
 //
 
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
@@ -61,6 +61,7 @@ class G4DNAWaterIonisationStructure;
 class G4Molecule;
 class G4VUserChemistryList;
 class G4UIcmdWithABool;
+class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 class G4ITGun;
 
@@ -110,6 +111,7 @@ public:
   //============================================================================
   virtual G4bool Notify(G4ApplicationState requestedState);
   virtual void SetNewValue(G4UIcommand*, G4String);
+  virtual G4String GetCurrentValue(G4UIcommand * command);
 
   //============================================================================
   // INITIALIZATION AND FINALIZATION METHODS
@@ -117,6 +119,7 @@ public:
   void Initialize();
   inline void SetChemistryList(G4VUserChemistryList*);
   inline void Deregister(G4VUserChemistryList*);
+  void SetGlobalTemperature(double temp_K);
 
   inline void ForceMasterReinitialization();
   inline void TagThreadForReinitialization();
@@ -197,6 +200,19 @@ public:
     fVerbose = verbose;
   }
 
+  inline void SetBuildPhysicsTable(bool flag)
+  {fBuildPhysicsTable = flag;}
+
+  G4bool IsCounterResetWhenRunEnds() const
+  {
+    return fResetCounterWhenRunEnds;
+  }
+
+  void ResetCounterWhenRunEnds(G4bool resetCounterWhenRunEnds)
+  {
+    fResetCounterWhenRunEnds = resetCounterWhenRunEnds;
+  }
+
 protected:
   G4DNAWaterExcitationStructure* GetExcitationLevel();
   G4DNAWaterIonisationStructure* GetIonisationLevel();
@@ -210,6 +226,10 @@ private:
   G4UIdirectory* fpChemDNADirectory;
   G4UIcmdWithABool* fpActivateChem;
   G4UIcmdWithoutParameter* fpRunChem;
+  G4UIcmdWithoutParameter* fpSkipReactionsFromChemList;
+  //G4UIcmdWithADoubleAndUnit* fpGridSize;
+  G4UIcmdWithADoubleAndUnit* fpScaleForNewTemperature;
+  G4UIcmdWithoutParameter* fpInitChem;
 
   static G4DNAChemistryManager* fgInstance;
 //  static bool fActiveChemistry;
@@ -227,10 +247,12 @@ private:
   G4VUserChemistryList* fpUserChemistryList;
   G4bool fBuildPhysicsTable;
   G4bool fPhysicsTableBuilt;
+  G4bool fSkipReactions;
 
   G4bool fGeometryClosed;
 
   G4int fVerbose;
+  G4bool fResetCounterWhenRunEnds;
 };
 
 inline void G4DNAChemistryManager::ForceRebuildingPhysicsTable()

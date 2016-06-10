@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -18,19 +18,21 @@ Registering graphics systems...
 
 You have successfully registered the following graphics systems.
 Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  G4HepRep (HepRepXML)
-  G4HepRepFile (HepRepFile)
-  OpenGLImmediateX (OGLIX)
-  OpenGLImmediateXm (OGLI, OGLIXm)
-  OpenGLStoredX (OGLSX)
-  OpenGLStoredXm (OGL, OGLS, OGLSXm)
-  RayTracer (RayTracer)
-  RayTracerX (RayTracerX)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-  gMocrenFile (gMocrenFile)
+ASCIITree (ATree)
+DAWNFILE (DAWNFILE)
+G4HepRep (HepRepXML)
+G4HepRepFile (HepRepFile)
+RayTracer (RayTracer)
+VRML1FILE (VRML1FILE)
+VRML2FILE (VRML2FILE)
+gMocrenFile (gMocrenFile)
+OpenGLImmediateQt (OGLIQt, OGLI)
+OpenGLStoredQt (OGLSQt, OGL, OGLS)
+OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
+RayTracerX (RayTracerX)
 
 Registering model factories...
 
@@ -89,6 +91,9 @@ Build only world volume and bounding volume for computation.
 G4Material WARNING: duplicate name of material Galactic
 This PDB file is DNA.
 
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
+          DefaultRegionForTheWorld
+
 phot:   for  gamma    SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -146,9 +151,6 @@ msc:   for e+    SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
-### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
-          DefaultRegionForTheWorld
-
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
@@ -159,7 +161,7 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 1 GeV,  HighEnergyThreshold(GeV)= 10000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
@@ -204,206 +206,106 @@ alpha_G4DNAChargeDecrease:   for  alpha    SubType= 56  BuildTable= 0
  Total cross sections computed from DNADingfelderChargeDecreaseModel model
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=      400 MeV
-
----> Begin of Event: 0
-
----> Begin of Event: 100
-
----> Begin of Event: 200
-
----> Begin of Event: 300
-
----> Begin of Event: 400
-
----> Begin of Event: 500
-
----> Begin of Event: 600
-
----> Begin of Event: 700
-
----> Begin of Event: 800
-
----> Begin of Event: 900
-
----> Begin of Event: 1000
-
----> Begin of Event: 1100
-
----> Begin of Event: 1200
-
----> Begin of Event: 1300
-
----> Begin of Event: 1400
-
----> Begin of Event: 1500
-
----> Begin of Event: 1600
-
----> Begin of Event: 1700
-
----> Begin of Event: 1800
-
----> Begin of Event: 1900
-
----> Begin of Event: 2000
-
----> Begin of Event: 2100
-
----> Begin of Event: 2200
-
----> Begin of Event: 2300
-
----> Begin of Event: 2400
-
----> Begin of Event: 2500
-
----> Begin of Event: 2600
-
----> Begin of Event: 2700
-
----> Begin of Event: 2800
-
----> Begin of Event: 2900
-
----> Begin of Event: 3000
-
----> Begin of Event: 3100
-
----> Begin of Event: 3200
-
----> Begin of Event: 3300
-
----> Begin of Event: 3400
-
----> Begin of Event: 3500
-
----> Begin of Event: 3600
-
----> Begin of Event: 3700
-
----> Begin of Event: 3800
-
----> Begin of Event: 3900
-
----> Begin of Event: 4000
-
----> Begin of Event: 4100
-
----> Begin of Event: 4200
-
----> Begin of Event: 4300
-
----> Begin of Event: 4400
-
----> Begin of Event: 4500
-
----> Begin of Event: 4600
-
----> Begin of Event: 4700
-
----> Begin of Event: 4800
-
----> Begin of Event: 4900
-
----> Begin of Event: 5000
-
----> Begin of Event: 5100
-
----> Begin of Event: 5200
-
----> Begin of Event: 5300
-
----> Begin of Event: 5400
-
----> Begin of Event: 5500
-
----> Begin of Event: 5600
-
----> Begin of Event: 5700
-
----> Begin of Event: 5800
-
----> Begin of Event: 5900
-
----> Begin of Event: 6000
-
----> Begin of Event: 6100
-
----> Begin of Event: 6200
-
----> Begin of Event: 6300
-
----> Begin of Event: 6400
-
----> Begin of Event: 6500
-
----> Begin of Event: 6600
-
----> Begin of Event: 6700
-
----> Begin of Event: 6800
-
----> Begin of Event: 6900
-
----> Begin of Event: 7000
-
----> Begin of Event: 7100
-
----> Begin of Event: 7200
-
----> Begin of Event: 7300
-
----> Begin of Event: 7400
-
----> Begin of Event: 7500
-
----> Begin of Event: 7600
-
----> Begin of Event: 7700
-
----> Begin of Event: 7800
-
----> Begin of Event: 7900
-
----> Begin of Event: 8000
-
----> Begin of Event: 8100
-
----> Begin of Event: 8200
-
----> Begin of Event: 8300
-
----> Begin of Event: 8400
-
----> Begin of Event: 8500
-
----> Begin of Event: 8600
-
----> Begin of Event: 8700
-
----> Begin of Event: 8800
-
----> Begin of Event: 8900
-
----> Begin of Event: 9000
-
----> Begin of Event: 9100
-
----> Begin of Event: 9200
-
----> Begin of Event: 9300
-
----> Begin of Event: 9400
-
----> Begin of Event: 9500
-
----> Begin of Event: 9600
-
----> Begin of Event: 9700
-
----> Begin of Event: 9800
-
----> Begin of Event: 9900
+### Run 0 starts.
+--> Event 0 starts.
+--> Event 100 starts.
+--> Event 200 starts.
+--> Event 300 starts.
+--> Event 400 starts.
+--> Event 500 starts.
+--> Event 600 starts.
+--> Event 700 starts.
+--> Event 800 starts.
+--> Event 900 starts.
+--> Event 1000 starts.
+--> Event 1100 starts.
+--> Event 1200 starts.
+--> Event 1300 starts.
+--> Event 1400 starts.
+--> Event 1500 starts.
+--> Event 1600 starts.
+--> Event 1700 starts.
+--> Event 1800 starts.
+--> Event 1900 starts.
+--> Event 2000 starts.
+--> Event 2100 starts.
+--> Event 2200 starts.
+--> Event 2300 starts.
+--> Event 2400 starts.
+--> Event 2500 starts.
+--> Event 2600 starts.
+--> Event 2700 starts.
+--> Event 2800 starts.
+--> Event 2900 starts.
+--> Event 3000 starts.
+--> Event 3100 starts.
+--> Event 3200 starts.
+--> Event 3300 starts.
+--> Event 3400 starts.
+--> Event 3500 starts.
+--> Event 3600 starts.
+--> Event 3700 starts.
+--> Event 3800 starts.
+--> Event 3900 starts.
+--> Event 4000 starts.
+--> Event 4100 starts.
+--> Event 4200 starts.
+--> Event 4300 starts.
+--> Event 4400 starts.
+--> Event 4500 starts.
+--> Event 4600 starts.
+--> Event 4700 starts.
+--> Event 4800 starts.
+--> Event 4900 starts.
+--> Event 5000 starts.
+--> Event 5100 starts.
+--> Event 5200 starts.
+--> Event 5300 starts.
+--> Event 5400 starts.
+--> Event 5500 starts.
+--> Event 5600 starts.
+--> Event 5700 starts.
+--> Event 5800 starts.
+--> Event 5900 starts.
+--> Event 6000 starts.
+--> Event 6100 starts.
+--> Event 6200 starts.
+--> Event 6300 starts.
+--> Event 6400 starts.
+--> Event 6500 starts.
+--> Event 6600 starts.
+--> Event 6700 starts.
+--> Event 6800 starts.
+--> Event 6900 starts.
+--> Event 7000 starts.
+--> Event 7100 starts.
+--> Event 7200 starts.
+--> Event 7300 starts.
+--> Event 7400 starts.
+--> Event 7500 starts.
+--> Event 7600 starts.
+--> Event 7700 starts.
+--> Event 7800 starts.
+--> Event 7900 starts.
+--> Event 8000 starts.
+--> Event 8100 starts.
+--> Event 8200 starts.
+--> Event 8300 starts.
+--> Event 8400 starts.
+--> Event 8500 starts.
+--> Event 8600 starts.
+--> Event 8700 starts.
+--> Event 8800 starts.
+--> Event 8900 starts.
+--> Event 9000 starts.
+--> Event 9100 starts.
+--> Event 9200 starts.
+--> Event 9300 starts.
+--> Event 9400 starts.
+--> Event 9500 starts.
+--> Event 9600 starts.
+--> Event 9700 starts.
+--> Event 9800 starts.
+--> Event 9900 starts.
 Graphics systems deleted.
 Visualization Manager deleting...
-Total navigation history collections cleaned: 7

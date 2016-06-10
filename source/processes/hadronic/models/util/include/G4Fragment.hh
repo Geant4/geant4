@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.hh 85824 2014-11-05 15:26:17Z gcosmo $
+// $Id: G4Fragment.hh 92198 2015-08-21 10:00:50Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -48,17 +48,15 @@
 #ifndef G4Fragment_h
 #define G4Fragment_h 1
 
-#include <vector>
-
 #include "globals.hh"
 #include "G4Allocator.hh"
 #include "G4LorentzVector.hh"
 #include "G4ThreeVector.hh"
+#include "G4NuclearPolarization.hh"
 #include "G4NucleiProperties.hh"
-#include "Randomize.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
-#include "G4HadTmpUtil.hh"
+#include <vector>
 
 class G4ParticleDefinition;
 
@@ -115,9 +113,6 @@ public:
   inline const G4LorentzVector& GetMomentum() const;
   inline void SetMomentum(const G4LorentzVector& value);
   
-  inline const G4ThreeVector& GetAngularMomentum() const;
-  inline void SetAngularMomentum(const G4ThreeVector& value);
-
   // computation of mass for any Z and A
   inline G4double ComputeGroundStateMass(G4int Z, G4int A) const;
 
@@ -158,8 +153,11 @@ public:
   inline G4double GetCreationTime() const;
   inline void SetCreationTime(G4double time);
 
-  inline G4bool IsStable() const;
-  inline void SetStable(G4bool val);
+  inline G4NuclearPolarization* GetNuclearPolarization() const;
+  inline void SetNuclearPolarization(G4NuclearPolarization*);
+
+  void SetAngularMomentum(G4ThreeVector&);
+  G4ThreeVector GetAngularMomentum() const;
 
   // ============= PRIVATE METHODS ==============================
 
@@ -185,31 +183,35 @@ private:
 
   G4LorentzVector theMomentum;
   
-  G4ThreeVector theAngularMomentum;
+  // Nuclear polarisation by default is nullptr
+  G4NuclearPolarization* thePolarization;
 
+  // creator model type
   G4int creatorModel;
 
   // Exciton model data members  
-  G4int numberOfParticles;
-  
+  G4int numberOfParticles;  
   G4int numberOfCharged;
-
   G4int numberOfHoles;
-  
   G4int numberOfChargedHoles;
 
   // Gamma evaporation data members
   G4int numberOfShellElectrons;
 
-  const G4ParticleDefinition * theParticleDefinition;
+  const G4ParticleDefinition* theParticleDefinition;
   
   G4double theCreationTime;
-
-  G4bool isStable;
-
 };
 
 // ============= INLINE METHOD IMPLEMENTATIONS ===================
+
+inline void G4Fragment::SetNuclearPolarization(G4NuclearPolarization* p)
+{
+  if(p !=  thePolarization) {
+    delete thePolarization;
+    thePolarization = p;
+  }
+}
 
 #if defined G4HADRONIC_ALLOC_EXPORT
   extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4Fragment> *pFragmentAllocator;
@@ -225,6 +227,7 @@ inline void * G4Fragment::operator new(size_t)
 
 inline void G4Fragment::operator delete(void * aFragment)
 {
+  ((G4Fragment *)aFragment)->SetNuclearPolarization(0);
   pFragmentAllocator->FreeSingle((G4Fragment *) aFragment);
 }
 
@@ -232,7 +235,12 @@ inline void G4Fragment::CalculateExcitationEnergy()
 {
   theExcitationEnergy = theMomentum.mag() - theGroundStateMass;
   if(theExcitationEnergy < 0.0) { ExcitationEnergyWarning(); }
-  if(theExcitationEnergy < CLHEP::keV) { isStable = true; }
+}
+
+inline G4double 
+G4Fragment::ComputeGroundStateMass(G4int Z, G4int A) const
+{
+  return G4NucleiProperties::GetNuclearMass(A, Z); 
 }
 	 
 inline void G4Fragment::CalculateGroundStateMass() 
@@ -282,22 +290,6 @@ inline void G4Fragment::SetMomentum(const G4LorentzVector& value)
 {
   theMomentum = value;
   CalculateExcitationEnergy();
-}
-
-inline const G4ThreeVector& G4Fragment::GetAngularMomentum()  const
-{
-  return theAngularMomentum;
-}
-
-inline void G4Fragment::SetAngularMomentum(const G4ThreeVector& value)
-{
-  theAngularMomentum = value;
-}
-
-inline G4double 
-G4Fragment::ComputeGroundStateMass(G4int Z, G4int A) const
-{
-  return G4NucleiProperties::GetNuclearMass(A, Z); 
 }
 
 inline G4double G4Fragment::GetZ()  const
@@ -400,7 +392,7 @@ inline void G4Fragment::SetCreatorModelType(G4int value)
 }
 
 inline 
-const G4ParticleDefinition * G4Fragment::GetParticleDefinition(void) const
+const G4ParticleDefinition* G4Fragment::GetParticleDefinition(void) const
 {
   return theParticleDefinition;
 }
@@ -420,14 +412,9 @@ inline void G4Fragment::SetCreationTime(G4double time)
   theCreationTime = time;
 }
 
-inline G4bool G4Fragment::IsStable() const
+inline G4NuclearPolarization* G4Fragment::GetNuclearPolarization() const
 {
-  return isStable;
-}
-
-inline void G4Fragment::SetStable(G4bool val)
-{
-  isStable = val;
+  return thePolarization;
 }
 
 #endif

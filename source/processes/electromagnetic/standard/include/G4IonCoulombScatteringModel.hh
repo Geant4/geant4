@@ -63,7 +63,6 @@
 #include "G4IonCoulombCrossSection.hh"
 
 #include <vector>
-using namespace std;
 
 class G4ParticleChangeForGamma;
 class G4ParticleDefinition;
@@ -126,7 +125,7 @@ private:
   const G4Element*            currentElement;
   G4int                       currentMaterialIndex;
   
-  G4int 			  heavycorr;
+  G4int 		      heavycorr;
 
   G4double                  cosThetaMin;
   G4double                  recoilThreshold;
@@ -135,9 +134,6 @@ private:
   const G4ParticleDefinition* particle;		
   const G4ParticleDefinition* theProton;	
   G4double                  mass;		
-  G4double                  lowEnergyLimit;
-  //private:
-  G4bool                    isInitialised;	
 
 };
 
@@ -176,7 +172,7 @@ inline void G4IonCoulombScatteringModel::SetRecoilThreshold(G4double eth)
 
 inline void G4IonCoulombScatteringModel::SetHeavyIonCorr(G4int b) 
 {
-  heavycorr=b; 
+  heavycorr = b; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

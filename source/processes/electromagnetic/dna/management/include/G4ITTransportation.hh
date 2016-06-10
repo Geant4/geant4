@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITTransportation.hh 87375 2014-12-02 08:17:28Z gcosmo $
+// $Id: G4ITTransportation.hh 94218 2015-11-09 08:24:48Z gcosmo $
 //
 /// \brief This class is a slightly modified version of G4Transportation
 ///        initially written by John Apostolakis and colleagues (1997)
@@ -61,7 +61,6 @@
 
 #include <CLHEP/Units/SystemOfUnits.h>
 
-#include "G4IT.hh"
 #include "G4VITProcess.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
@@ -95,6 +94,11 @@ public:
 
   virtual void StartTracking(G4Track* aTrack);
   // Give to the track a pointer to the transportation state
+
+  G4bool IsStepLimitedByGeometry()
+  {
+    return GetState<G4ITTransportationState>()->fGeometryLimitedStep;
+  }
 
   //________________________________________________________
 public:

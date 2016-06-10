@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc 80288 2014-04-10 09:50:40Z gcosmo $
+// $Id: G4Region.cc 91803 2015-08-06 12:17:01Z gcosmo $
 //
 // 
 // class G4Region Implementation
@@ -365,7 +365,7 @@ G4bool G4Region::BelongsTo(G4VPhysicalVolume* thePhys) const
   if (currLog->GetRegion()==this) {return true;}
 
   G4int nDaughters = currLog->GetNoDaughters();
-  while (nDaughters--)
+  while (nDaughters--)  // Loop checking, 06.08.2015, G.Cosmo
   {
     if (BelongsTo(currLog->GetDaughter(nDaughters))) {return true;}
   }

@@ -47,6 +47,7 @@
 // 20130622  Inherit from G4CascadeDeexciteBase, move to deExcite() interface
 //		with G4Fragment
 // 20130924  M. Kelsey -- Replace std::pow with G4Pow::powN() for CPU speed
+// 20150608  M. Kelsey -- Label all while loops as terminating.
 
 #include <algorithm>
 
@@ -169,7 +170,7 @@ void G4BigBanger::generateBangInSCM(G4double etot, G4int a, G4int z) {
 
   G4bool bad = true;
   G4int itry = 0;
-  while(bad && itry < itry_max) {
+  while(bad && itry < itry_max) {	/* Loop checking 08.06.2015 MHK */
     itry++;
     scm_momentums.clear();
 
@@ -316,7 +317,7 @@ G4double G4BigBanger::generateX(G4int a, G4double promax) const {
   G4int itry = 0;
   G4double x;
   
-  while(itry < itry_max) {
+  while(itry < itry_max) {	/* Loop checking 08.06.2015 MHK */
     itry++;
     x = inuclRndm();
 

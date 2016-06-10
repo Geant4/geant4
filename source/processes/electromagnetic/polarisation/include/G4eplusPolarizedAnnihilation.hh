@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusPolarizedAnnihilation.hh 68046 2013-03-13 14:31:38Z gcosmo $
+// $Id: G4eplusPolarizedAnnihilation.hh 93113 2015-10-07 07:49:04Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -53,14 +53,14 @@
 #ifndef G4eplusPolarizedAnnihilation_h
 #define G4eplusPolarizedAnnihilation_h 1
 
-#include "G4VEmProcess.hh"
+#include "G4eplusAnnihilation.hh"
 #include "G4Positron.hh"
 #include "G4VEmModel.hh"
 
 
 class G4PolarizedAnnihilationModel;
 
-class G4eplusPolarizedAnnihilation : public G4VEmProcess
+class G4eplusPolarizedAnnihilation : public G4eplusAnnihilation
 {
 
 public:
@@ -69,49 +69,37 @@ public:
 
   virtual ~G4eplusPolarizedAnnihilation();
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
-
-  virtual G4VParticleChange* AtRestDoIt(
-                             const G4Track& track,
-                             const G4Step& stepData);
-
-  G4double AtRestGetPhysicalInteractionLength(
-                             const G4Track& track,
-                             G4ForceCondition* condition
-                            );
-
   // Print out of the class parameters
   virtual void PrintInfo();
 
-  // for polarization
-  //  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+  virtual G4double GetMeanFreePath(const G4Track& track,
+				   G4double previousStepSize,
+				   G4ForceCondition* condition);
 
-  G4double GetMeanFreePath(const G4Track& track,
-                              G4double previousStepSize,
-                              G4ForceCondition* condition);
-
-  G4double PostStepGetPhysicalInteractionLength(
+  virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4double   previousStepSize,
-                             G4ForceCondition* condition
-                            );
+                             G4ForceCondition* condition);
 
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
-  void BuildAsymmetryTable(const G4ParticleDefinition& part);
-  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
+
+private:
+
+  void CleanTables();
+
+  void BuildAsymmetryTables(const G4ParticleDefinition& part);
 
   G4double ComputeAsymmetry(G4double energy,
 			    const G4MaterialCutsCouple* couple,
 			    const G4ParticleDefinition& particle,
 			    G4double cut,
 			    G4double &tasm);
-
-protected:
-
-  virtual void InitialiseProcess(const G4ParticleDefinition*);
-
-private:
   
+  G4double ComputeSaturationFactor(const G4Track& aTrack);
+
+  G4eplusPolarizedAnnihilation& operator=(const G4eplusPolarizedAnnihilation &right);
+  G4eplusPolarizedAnnihilation(const G4eplusPolarizedAnnihilation& );
+
   G4bool isInitialised;
 
   // for polarization:
@@ -121,24 +109,5 @@ private:
   G4PhysicsTable* theAsymmetryTable;          // table for cross section assym.
   G4PhysicsTable* theTransverseAsymmetryTable; // table for transverse cross section assym.
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4bool G4eplusPolarizedAnnihilation::IsApplicable(const G4ParticleDefinition& p)
-{
-  return (&p == G4Positron::Positron());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4eplusPolarizedAnnihilation::AtRestGetPhysicalInteractionLength(
-                              const G4Track&, G4ForceCondition* condition)
-{
-  *condition = NotForced;
-  return 0.0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

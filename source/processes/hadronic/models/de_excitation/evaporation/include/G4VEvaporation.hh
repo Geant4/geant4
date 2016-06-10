@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEvaporation.hh 85443 2014-10-29 14:35:57Z gcosmo $
+// $Id: G4VEvaporation.hh 88841 2015-03-12 10:34:14Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations interface
 //
@@ -55,14 +55,6 @@ public:
   G4VEvaporation();
   virtual ~G4VEvaporation(); 
 
-private:  
-  G4VEvaporation(const G4VEvaporation &right);
-  const G4VEvaporation & operator=(const G4VEvaporation &right);
-  G4bool operator==(const G4VEvaporation &right) const;
-  G4bool operator!=(const G4VEvaporation &right) const;
-  
-public:
-
   // primary fragment is copied to the new instance, the copy is deleted 
   // or is added to the list of products 
   virtual G4FragmentVector * BreakItUp(const G4Fragment &theNucleus) = 0;
@@ -73,7 +65,7 @@ public:
   virtual void BreakFragment(G4FragmentVector*, G4Fragment* theNucleus);
 
   // definition of options
-  virtual void Initialise();
+  virtual void InitialiseChannels();
 
   virtual void SetPhotonEvaporation(G4VEvaporationChannel* ptr);
 
@@ -87,6 +79,8 @@ public:
 
 protected:
 
+  void CleanChannels();
+
   G4VEvaporationChannel* thePhotonEvaporation;
 
   G4int OPTxs;
@@ -94,6 +88,12 @@ protected:
 
   std::vector<G4VEvaporationChannel*> * theChannels;
   G4VEvaporationFactory * theChannelFactory;
+
+private:  
+  G4VEvaporation(const G4VEvaporation &right);
+  const G4VEvaporation & operator=(const G4VEvaporation &right);
+  G4bool operator==(const G4VEvaporation &right) const;
+  G4bool operator!=(const G4VEvaporation &right) const;
 
 };
 
@@ -104,12 +104,9 @@ inline G4VEvaporationChannel* G4VEvaporation::GetPhotonEvaporation()
 
 inline G4VEvaporationChannel* G4VEvaporation::GetFissionChannel()
 {
-  for(std::vector<G4VEvaporationChannel*>::const_iterator iC = theChannels->begin(),
-      eC = theChannels->end(); iC!=eC; ++iC) {
-    if((*iC)->GetName() == "fission")
-      return *iC;
-  }
-  return 0;
+  G4VEvaporationChannel* p = 0;
+  if(theChannels->size() > 1) { p = (*theChannels)[1]; }
+  return p;
 }
 
 #endif

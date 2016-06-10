@@ -24,13 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIntersectionLocator.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4VIntersectionLocator.hh 93289 2015-10-15 10:01:15Z gcosmo $
 //
 //
 // Class G4VIntersectionLocator 
 //
 // class description:
-// 
+//
 // Base class for the calculation of the intersection point with a boundary 
 // when PropagationInField is used.
 // Gives possibility to choose the method of intersection; concrete locators
@@ -80,7 +80,7 @@ class G4VIntersectionLocator
                        const G4FieldTrack& currentFT, 
                              G4double      requestStep, 
                              G4double      safety,
-                             G4int         step);
+                             G4int         stepNum);
        // Print Method, useful mostly for debugging
 
      inline G4bool IntersectChord( const G4ThreeVector&  StartPointA,
@@ -109,6 +109,7 @@ class G4VIntersectionLocator
        // Controling verbosity enables checking of the locating of intersections
 
   public:  // without description
+
     // Additional inline Set/Get methods for parameters, dependent objects
 
     inline G4double       GetDeltaIntersectionFor();
@@ -125,15 +126,33 @@ class G4VIntersectionLocator
     inline G4bool AreIntersectionsAdjusted(){ return fUseNormalCorrection; }  
       // Change adjustment flag  ( New Interface ) 
 
+    static void printStatus( const G4FieldTrack& startFT,
+                             const G4FieldTrack& currentFT, 
+                                   G4double      requestStep, 
+                                   G4double      safety,
+                                   G4int         stepNum,
+                                   std::ostream& oss,
+                                   G4int         verboseLevel );
+      // Print Method for any ostream - e.g. cerr -- and for G4Exception
+    
   protected:  // with description
 
     G4FieldTrack ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,  
                                      const G4FieldTrack &EstimtdEndStateB,
-                                           G4double      linearDistSq,
-                                           G4double      curveDist);
+                                           G4double linearDistSq, // not used
+                                           G4double curveDist );  // not used
       // Return new estimate for state after curveDist starting from
       // CurrentStateA, to replace EstimtdEndStateB, and report displacement
       // (if field is compiled verbose)
+
+    G4bool CheckAndReEstimateEndpoint( const G4FieldTrack& CurrentStartA,  
+                                       const G4FieldTrack& EstimatedEndB,
+                                             G4FieldTrack& RevisedEndPoint,
+                                             G4int &       errorCode);
+      // Check whether EndB is too far from StartA to be reached 
+      // and if, re-estimate new value for EndB (return in RevisedEndPoint)
+      // Report error if  EndB is before StartA (in curve length)
+      // In that case return errorCode = 2.
 
     G4ThreeVector GetSurfaceNormal(const G4ThreeVector &CurrentInt_Point,
                                          G4bool        &validNormal); // const
@@ -170,8 +189,60 @@ class G4VIntersectionLocator
                           const G4ThreeVector& NewMomentumDir,
                           const G4ThreeVector& NormalAtEntry,
                           G4bool validNormal   );
-      // Print a three-line report on the current "sub-step", ie trial intersection
+      // Print a three-line report on the current "sub-step", ie trial
+      // intersection
 
+    G4bool LocateGlobalPointWithinVolumeAndCheck( const G4ThreeVector& pos );
+      // Locate point using navigator - updates state of Navigator.
+      // By default, it assumes that the point is inside the current volume,
+      // and returns true.
+      // In check mode, checks whether the point is *inside* the volume.
+      //   If it is inside, it returns true.
+      //   If not, issues a warning and returns false.
+
+    void LocateGlobalPointWithinVolumeCheckAndReport( const G4ThreeVector& pos,
+                                            const G4String& CodeLocationInfo,
+                                                  G4int     CheckMode );
+      // As above, but report information about code location.
+      // If CheckMode > 1, report extra information.
+   
+    inline void   SetCheckMode( G4bool value ) { fCheckMode = value; }
+    inline G4bool GetCheckMode()               { return fCheckMode; }
+
+  protected:  // without description
+
+    // Auxiliary methods -- to report issues
+
+    void ReportReversedPoints( std::ostringstream& ossMsg,
+                               const G4FieldTrack& StartPointVel, 
+                               const G4FieldTrack& EndPointVel,
+                                     G4double NewSafety, G4double epsStep,
+                               const G4FieldTrack& CurrentA_PointVelocity,
+                               const G4FieldTrack& CurrentB_PointVelocity,
+                               const G4FieldTrack& SubStart_PointVelocity,
+                               const G4ThreeVector& CurrentE_Point,
+                               const G4FieldTrack& ApproxIntersecPointV,
+                               G4int sbstp_no, G4int sbstp_no_p, G4int depth );
+      // Build error messsage (in ossMsg) to report that point 'B' has
+      // gone past 'A'
+
+    void ReportProgress( std::ostream& oss,
+                         const G4FieldTrack& StartPointVel, 
+                         const G4FieldTrack& EndPointVel,
+                               G4int         substep_no, 
+                         const G4FieldTrack& A_PtVel,    // G4double safetyA
+                         const G4FieldTrack& B_PtVel,  
+                               G4double      safetyLast,
+                               G4int         depth= -1 );
+      // Report the current status / progress in finding the first intersection
+
+     void ReportImmediateHit( const char*          MethodName, 
+                              const G4ThreeVector& StartPosition, 
+                              const G4ThreeVector& TrialPoint, 
+                                    double         tolerance,
+                                 unsigned long int numCalls );
+      // Report case: trial point is 'close' to start, within tolerance
+    
   private:  // no description
 
     G4ThreeVector GetLocalSurfaceNormal(const G4ThreeVector &CurrentE_Point,
@@ -190,7 +261,8 @@ class G4VIntersectionLocator
 
     G4int    fVerboseLevel;          // For debugging
     G4bool   fUseNormalCorrection;   // Configuration parameter
-
+    G4bool   fCheckMode;
+   
     G4Navigator   *fiNavigator;
 
     G4ChordFinder *fiChordFinder;

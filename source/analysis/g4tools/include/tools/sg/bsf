@@ -1,0 +1,125 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_bsf
+#define tools_sg_bsf
+
+// sf for simple field.
+
+// bsf is intended to have no implementation of :
+//   virtual bool write(io::iwbuf&)  
+//   virtual bool read(io::irbuf&)  
+
+#include "field"
+
+namespace tools {
+namespace sg {
+
+template <class T>
+class bsf : public field {
+  typedef field parent;
+public:
+  static const std::string& s_class() {
+    //we do not use stype(T()).
+    static const std::string s_v("tools::sg::bsf");
+    return s_v;
+  }
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast< bsf<T> >(this,a_class)) {return p;}
+    return parent::cast(a_class);
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+/*
+  virtual bool equal(const field& a_field) const {    
+    bsf<T>* fld = safe_cast<field,bsf<T>>(a_field);
+    if(!fld) return false;
+    return operator==(*fld);    
+  }
+*/
+protected:
+  bsf(){}
+public:
+  bsf(const T& a_value):m_value(a_value){}
+  virtual ~bsf(){}
+public:
+  bsf(const bsf& a_from)
+  :parent(a_from)
+  ,m_value(a_from.m_value){}
+
+  bsf& operator=(const bsf& a_from){
+    parent::operator=(a_from);
+    if(a_from.m_value!=m_value) m_touched = true;
+    m_value = a_from.m_value;
+    return *this;
+  }
+public:
+  bsf& operator=(const T& a_value){
+    if(a_value!=m_value) m_touched = true;
+    m_value = a_value;
+    return *this;
+  }
+  bool operator==(const bsf& a_from) const {
+    return m_value==a_from.m_value;
+  }
+  bool operator!=(const bsf& a_from) const {
+    return !operator==(a_from);
+  }
+
+  bool operator==(const T& a_value) const {
+    return m_value==a_value;
+  }
+  bool operator!=(const T& a_value) const { 
+    return !operator==(a_value);
+  }
+
+  operator const T& () const {return m_value;}
+  operator T() {return m_value;}
+
+/* does not work with qrot
+  bsf& operator+=(const T& a_value){
+    m_value += a_value;
+    m_touched = true;
+    return *this;
+  }
+*/
+/* does not work with T=std::string
+  bsf& operator-=(const T& a_value){
+    m_value -= a_value;
+    m_touched = true;
+    return *this;
+  }
+  bsf& operator*=(const T& a_value){
+    m_value *= a_value;
+    m_touched = true;
+    return *this;
+  }
+*/
+public:
+  T& value() {return m_value;}
+  const T& value() const {return m_value;}
+  void value(const T& a_value) {
+    if(a_value!=m_value) m_touched = true;
+    m_value = a_value;
+  }
+  void value_no_cmp(const T& a_value) {
+    //if(a_value!=m_value) m_touched = true;
+    m_value = a_value;
+  }
+//public: //for style.
+//  bool s2v(const std::string& a_s) {
+//    T v;
+//    if(!tools::to<T>(a_s,v)) return false;
+//    if(v!=m_value) m_touched = true;
+//    m_value = v;
+//    return true;
+//  }  
+public: //for iv2sg
+  void setValue(const T& a_value) {value(a_value);}
+  const T& getValue() const {return m_value;}
+protected:
+  T m_value;
+};
+
+}}
+
+#endif

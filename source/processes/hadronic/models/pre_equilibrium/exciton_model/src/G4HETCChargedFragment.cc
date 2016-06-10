@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HETCChargedFragment.cc 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4HETCChargedFragment.cc 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // by V. Lara
 //
@@ -46,17 +46,17 @@ G4HETCChargedFragment::~G4HETCChargedFragment()
 {}
 
 G4double G4HETCChargedFragment::
-GetKineticEnergy(const G4Fragment & aFragment)
+SampleKineticEnergy(const G4Fragment & aFragment)
 {
   G4int Pb = aFragment.GetNumberOfParticles();
   G4int H = aFragment.GetNumberOfHoles();
 
-  G4double g0 = (6.0/pi2)*aFragment.GetA_asInt()*theParameters->GetLevelDensity();
+  G4double g0 = (6.0/pi2)*theFragA*theParameters->GetLevelDensity();
 
   G4double Ab = std::max(0.0,G4double(Pb*Pb+H*H+Pb-3*H)/(4.0*g0));
-  G4double Emax = GetMaximalKineticEnergy() - Ab;
+  G4double Emax = theMaxKinEnergy - Ab;
 
   G4double x = BetaRand(Pb + H, 2);
   
-  return Emax - (Emax-GetCoulombBarrier())*x;
+  return Emax - (Emax-theCoulombBarrier)*x;
 }

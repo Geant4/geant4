@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationFactory.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4EvaporationFactory.hh 88911 2015-03-16 12:52:18Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -43,8 +43,6 @@
 class G4EvaporationFactory : public G4VEvaporationFactory
 {
 public:
-
-  G4EvaporationFactory();
 
   G4EvaporationFactory(G4VEvaporationChannel* photoEvaporation);
 

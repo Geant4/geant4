@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITTrackingManager.cc 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id: G4ITTrackingManager.cc 91584 2015-07-27 13:01:48Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -39,6 +39,8 @@
 #include "G4IT.hh"
 #include "G4TrackingInformation.hh"
 #include "G4ITTrackingInteractivity.hh"
+#include "G4VITSteppingVerbose.hh"
+#include "G4ITTrackHolder.hh"
 
 G4ITTrackingManager::G4ITTrackingManager()
 {
@@ -57,7 +59,13 @@ G4ITTrackingManager::~G4ITTrackingManager()
 //___________________________________________________
 void G4ITTrackingManager::StartTracking(G4Track* track)
 {
-  if (fpTrackingInteractivity) fpTrackingInteractivity->StartTracking(track);
+  if (fpTrackingInteractivity)
+  {
+    fpTrackingInteractivity->StartTracking(track);
+#ifdef G4VERBOSE
+    fpTrackingInteractivity->GetSteppingVerbose()->TrackingStarted(track);
+#endif
+  }
 
   // Inform beginning of tracking to physics processes
   track->GetDefinition()->GetProcessManager()->StartTracking(track);
@@ -81,5 +89,24 @@ void G4ITTrackingManager::SetInteractivity(G4ITTrackingInteractivity* iteractivi
 //___________________________________________________
 void G4ITTrackingManager::EndTracking(G4Track* track)
 {
-  if (fpTrackingInteractivity) fpTrackingInteractivity->EndTracking(track);
+  if (fpTrackingInteractivity)
+  {
+    fpTrackingInteractivity->EndTracking(track);
+#ifdef G4VERBOSE
+    fpTrackingInteractivity->GetSteppingVerbose()->TrackingEnded(track);
+#endif
+  }
+  G4TrackList::Pop(track);
+  G4ITTrackHolder::Instance()->PushToKill(track);
+}
+
+void G4ITTrackingManager::EndTrackingWOKill(G4Track* track)
+{
+  if (fpTrackingInteractivity)
+  {
+    fpTrackingInteractivity->EndTracking(track);
+#ifdef G4VERBOSE
+    fpTrackingInteractivity->GetSteppingVerbose()->TrackingEnded(track);
+#endif
+  }
 }

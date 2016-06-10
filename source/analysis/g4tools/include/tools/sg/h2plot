@@ -1,0 +1,509 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_h2plot
+#define tools_sg_h2plot
+
+// Connexion inlib/histo to sg/plotter.
+
+// Inheritance :
+#include "plottable"
+
+#include "../histo/h1d"
+#include "../histo/h2d"
+#include "../histo/p1d"
+#include "../histo/p2d"
+
+#include "../words"
+#include "../num2s"
+
+#ifdef TOOLS_MEM
+#include "../mem"
+#endif
+
+namespace tools {
+namespace sg {
+
+class h1d2plot : public virtual bins1D {
+public:
+  TOOLS_SCLASS(tools::sg::h1d2plot)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<h1d2plot>(this,a_class)) {return p;}
+    return bins1D::cast(a_class);
+  }
+public: //plottable
+  virtual plottable* copy() const {return new h1d2plot(*this);}
+  virtual bool is_valid() const {return true;}
+  virtual const std::string& name() const {return m_name;}
+  virtual void set_name(const std::string& a_s) {m_name = a_s;}
+
+  virtual const std::string& title() const {return m_data.title();}
+  virtual const std::string& legend() const {return m_legend;}
+  virtual void set_legend(const std::string& a_s) {m_legend = a_s;}
+
+  virtual void infos(const std::string& a_opts,std::string& a_sinfos) const {
+    a_sinfos.clear();
+    std::string f_lf("\n");
+    std::vector<std::string> words;
+    tools::words(a_opts," ",false,words);
+    std::vector<std::string>::const_iterator it;
+  
+  /*bool show_fit_ndf = false;
+   {for(it=words.begin();it!=words.end();++it) {
+      if((*it)=="fit_ndf") {show_fit_ndf = true;break;}
+    }}*/
+
+    for(it=words.begin();it!=words.end();++it) {
+      if(((*it)=="name") && m_name.size()) {
+        if(a_sinfos.size()) a_sinfos += f_lf;
+        a_sinfos += "Name";
+        a_sinfos += f_lf;
+        a_sinfos += m_name;
+  
+      } else if((*it)=="entries") {
+        if(a_sinfos.size()) a_sinfos += f_lf;
+        a_sinfos += "Entries";
+        a_sinfos += f_lf;
+        if(!numas<unsigned int>(m_data.all_entries(),a_sinfos)){}
+  
+      } else if((*it)=="mean") {
+        if(a_sinfos.size()) a_sinfos += f_lf;
+        a_sinfos += "Mean";
+        a_sinfos += f_lf;
+        if(!numas<double>(m_data.mean(),a_sinfos)) {}
+  
+      } else if((*it)=="rms") {
+        if(a_sinfos.size()) a_sinfos += f_lf;
+        a_sinfos += "RMS";
+        a_sinfos += f_lf;
+        if(!numas<double>(m_data.rms(),a_sinfos)) {}
+  
+      } else if((*it)=="underflow") {
+        if(a_sinfos.size()) a_sinfos += f_lf;
+        a_sinfos += "UDFLW";
+        a_sinfos += f_lf;
+        if(!numas<double>(m_data.bin_height(tools::histo::axis_UNDERFLOW_BIN),a_sinfos)){}
+  
+      } else if((*it)=="overflow") {
+        if(a_sinfos.size()) a_sinfos += f_lf;
+        a_sinfos += "OVFLW";
+        a_sinfos += f_lf;
+        if(!numas<double>(m_data.bin_height(tools::histo::axis_OVERFLOW_BIN),a_sinfos)){}
+  
+/*
+      } else if((*it)=="fit_quality") {
+        //look in m_data annotations for "fit.chi2" and "fit.ndf" keys :
+        if(show_fit_ndf) {
+          std::string schi2;
+          std::string sndf;
+          if(m_data.annotation("fit.chi2",schi2) &&
+             m_data.annotation("fit.ndf",sndf)   ){
+            if(a_sinfos.size()) a_sinfos += f_lf;
+            a_sinfos += "[h]^2! / ndf";
+            a_sinfos += f_lf; 
+            a_sinfos += schi2;
+            a_sinfos += " / "; 
+            a_sinfos += sndf;
+          }
+        } else { //show chi2 only.
+          std::string schi2;
+          if(m_data.annotation("fit.chi2",schi2)){
+            if(a_sinfos.size()) a_sinfos += f_lf;
+            a_sinfos += "[h]^2!";
+            a_sinfos += f_lf;
+            a_sinfos += schi2;
+          }
+        }
+
+      } else if((*it)=="fit_parameters") {
+        //look in m_data annotations for "fit.param.<name>" keys :
+        typedef std::map<std::string,std::string> annots_t;
+        const annots_t& annots = m_data.annotations();
+        annots_t::const_iterator it;
+        for(it=annots.begin();it!=annots.end();++it) {
+          const std::string& key = (*it).first;
+          if(key.substr(0,10)=="fit.param.") { 
+            //fit.param.mean 14
+            //01234567890123
+            std::string name = key.substr(10,key.size()-10);
+            if(a_sinfos.size()) a_sinfos += f_lf;
+            a_sinfos += name;
+            a_sinfos += f_lf;
+            a_sinfos += (*it).second;
+          }
+        }
+*/
+      }
+    }
+  }
+public: //bins1D
+  virtual void bins_Sw_range(float& a_mn,float& a_mx) const {
+    a_mn = (float)m_data.min_bin_height();
+    a_mx = (float)m_data.max_bin_height();
+  }
+  virtual unsigned int bins() const {return m_data.axis().bins();}
+  virtual float axis_min() const {return (float)m_data.axis().lower_edge();}
+  virtual float axis_max() const {return (float)m_data.axis().upper_edge();}
+  virtual float bin_lower_edge(int aI) const {return (float)m_data.axis().bin_lower_edge(aI);}
+  virtual float bin_upper_edge(int aI) const {return (float)m_data.axis().bin_upper_edge(aI);}
+
+  virtual float bin_Sw(int aI) const {return (float)m_data.bin_height(aI);}
+
+  virtual float bin_error(int aI) const {return (float)m_data.bin_error(aI);}
+  virtual bool is_profile() const {return false;}
+public:
+  h1d2plot(const tools::histo::h1d& a_data):m_data(a_data) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~h1d2plot(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  h1d2plot(const h1d2plot& a_from)
+  :plottable(a_from),bins1D(a_from)
+  ,m_data(a_from.m_data)
+  ,m_name(a_from.m_name)
+  ,m_legend(a_from.m_legend)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }  
+  h1d2plot& operator=(const h1d2plot& a_from){
+    m_name = a_from.m_name;
+    m_legend = a_from.m_legend;
+    return *this;
+  }
+public:
+  const tools::histo::h1d& data() const {return m_data;}
+protected:
+  const tools::histo::h1d& m_data;
+  std::string m_name;
+  std::string m_legend;
+};
+
+class h2d2plot : public virtual bins2D {
+public:
+  TOOLS_SCLASS(tools::sg::h2d2plot)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<h2d2plot>(this,a_class)) {return p;}
+    return bins2D::cast(a_class);
+  }
+public: //plottable
+  virtual plottable* copy() const {return new h2d2plot(*this);}
+  virtual bool is_valid() const {return true;}
+  virtual const std::string& name() const {return m_name;}
+  virtual void set_name(const std::string& a_s) {m_name = a_s;}
+  virtual const std::string& title() const {return m_data.title();}
+  virtual const std::string& legend() const {return m_legend;}
+  virtual void set_legend(const std::string& a_s) {m_legend = a_s;}
+
+  virtual void infos(const std::string& a_opts,std::string& a_sinfos) const {
+    a_sinfos.clear();
+    std::string f_lf("\n");
+    std::vector<std::string> words;
+    tools::words(a_opts," ",false,words);
+    std::vector<std::string>::const_iterator it;
+    for(it=words.begin();it!=words.end();++it) {
+      if(((*it)=="name") && m_name.size()) {
+        if(a_sinfos.size()) a_sinfos += f_lf;
+        a_sinfos += "Name\n";
+        a_sinfos += m_name;
+  
+      } else if((*it)=="entries") {
+        if(a_sinfos.size()) a_sinfos += f_lf;
+        a_sinfos += "Entries\n";
+        if(!numas<unsigned int>(m_data.all_entries(),a_sinfos)) {}
+
+      } else if((*it)=="mean") {
+        if(a_sinfos.size()) a_sinfos += f_lf;
+        a_sinfos += "MeanX\n";
+        if(!numas<double>(m_data.mean_x(),a_sinfos)) {}
+        a_sinfos += f_lf;
+        a_sinfos += "MeanY\n";
+        if(!numas<double>(m_data.mean_y(),a_sinfos)) {}
+
+      } else if((*it)=="rms") {
+        if(a_sinfos.size()) a_sinfos += f_lf;
+        a_sinfos += "RMS X\n";
+        if(!numas<double>(m_data.rms_x(),a_sinfos)) {}
+        a_sinfos += f_lf;
+        a_sinfos += "RMS Y\n";
+        if(!numas<double>(m_data.rms_y(),a_sinfos)) {}
+  
+      }
+    }
+  }
+public: //bins2D
+  virtual void bins_Sw_range(float& a_mn,float& a_mx) const {
+    a_mn = (float)m_data.min_bin_height();
+    a_mx = (float)m_data.max_bin_height();
+  }
+  virtual unsigned int x_bins() const {return m_data.axis_x().bins();}
+  virtual unsigned int y_bins() const {return m_data.axis_y().bins();}
+  virtual float x_axis_min() const {return (float)m_data.axis_x().lower_edge();}
+  virtual float x_axis_max() const {return (float)m_data.axis_x().upper_edge();}
+  virtual float y_axis_min() const {return (float)m_data.axis_y().lower_edge();}
+  virtual float y_axis_max() const {return (float)m_data.axis_y().upper_edge();}
+
+  virtual float bin_lower_edge_x(int aI) const {return (float)m_data.axis_x().bin_lower_edge(aI);}
+  virtual float bin_upper_edge_x(int aI) const {return (float)m_data.axis_x().bin_upper_edge(aI);}
+  virtual float bin_lower_edge_y(int aI) const {return (float)m_data.axis_y().bin_lower_edge(aI);}
+  virtual float bin_upper_edge_y(int aI) const {return (float)m_data.axis_y().bin_upper_edge(aI);}
+
+  virtual bool has_entries_per_bin() const {return m_data.has_entries_per_bin();}
+  virtual unsigned int bin_entries(int aI,int aJ) const {return m_data.bin_entries(aI,aJ);}
+
+  virtual float bin_Sw(int aI,int aJ) const {return (float)m_data.bin_height(aI,aJ);}
+
+  virtual float bin_error(int aI,int aJ) const {return (float)m_data.bin_error(aI,aJ);}
+public:
+  h2d2plot(const tools::histo::h2d& a_data)
+  :m_data(a_data)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~h2d2plot(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  h2d2plot(const h2d2plot& a_from)
+  :plottable(a_from),bins2D(a_from)
+  ,m_data(a_from.m_data)
+  ,m_name(a_from.m_name)
+  ,m_legend(a_from.m_legend)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  h2d2plot& operator=(const h2d2plot& a_from){
+    m_name = a_from.m_name;
+    m_legend = a_from.m_legend;
+    return *this;
+  }
+protected:
+  const tools::histo::h2d& m_data;
+  std::string m_name;
+  std::string m_legend;
+};
+
+//NOTE : for the moment, same code as h1d2plot !
+class p1d2plot : public virtual bins1D {
+public:
+  TOOLS_SCLASS(tools::sg::p1d2plot)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<p1d2plot>(this,a_class)) {return p;}
+    return bins1D::cast(a_class);
+  }
+public:
+  virtual plottable* copy() const {return new p1d2plot(*this);}
+  virtual bool is_valid() const {return true;}
+  virtual const std::string& name() const {return m_name;}
+  virtual void set_name(const std::string& a_s) {m_name = a_s;}
+  virtual const std::string& title() const {return m_data.title();}
+  virtual const std::string& legend() const {return m_legend;}
+  virtual void set_legend(const std::string& a_s) {m_legend = a_s;}
+
+  virtual void infos(const std::string& a_opts,std::string& a_sinfos) const {
+    a_sinfos.clear();
+    std::string f_lf("\n");
+    std::vector<std::string> words;
+    tools::words(a_opts," ",false,words);
+    std::vector<std::string>::const_iterator it;
+    for(it=words.begin();it!=words.end();++it) {
+      if(((*it)=="name") && m_name.size()) {
+        if(a_sinfos.size()) a_sinfos += f_lf;
+        a_sinfos += "Name\n";
+        a_sinfos += m_name;
+  
+      } else if((*it)=="entries") {
+        if(a_sinfos.size()) a_sinfos += f_lf;
+        a_sinfos += "Entries\n";
+        if(!numas<unsigned int>(m_data.all_entries(),a_sinfos)) {}
+      } else if((*it)=="mean") {
+        if(a_sinfos.size()) a_sinfos += f_lf;
+        a_sinfos += "Mean\n";
+        if(!numas<double>(m_data.mean(),a_sinfos)) {}
+      } else if((*it)=="rms") {
+        if(a_sinfos.size()) a_sinfos += f_lf;
+        a_sinfos += "RMS\n";
+        if(!numas<double>(m_data.rms(),a_sinfos)) {}
+  
+      }
+    }
+  }
+public:
+  virtual unsigned int bins() const {return m_data.axis().bins();}
+
+  virtual void bins_Sw_range(float& a_mn,float& a_mx) const {
+    a_mn = (float)m_data.min_bin_height();
+    a_mx = (float)m_data.max_bin_height();
+  }
+
+  virtual float axis_min() const {return (float)m_data.axis().lower_edge();}
+  virtual float axis_max() const {return (float)m_data.axis().upper_edge();}
+  virtual float bin_lower_edge(int aI) const {return (float)m_data.axis().bin_lower_edge(aI);}
+  virtual float bin_upper_edge(int aI) const {return (float)m_data.axis().bin_upper_edge(aI);}
+
+  virtual unsigned int bin_entries(int aI) const {return m_data.bin_entries(aI);}
+
+  virtual float bin_Sw(int aI) const {return (float)m_data.bin_height(aI);}
+
+  virtual float bin_error(int aI) const {return (float)m_data.bin_error(aI);}
+
+  virtual bool is_profile() const {return true;}
+public:
+  p1d2plot(const tools::histo::p1d& a_data):m_data(a_data){}
+  virtual ~p1d2plot(){}
+public:
+  p1d2plot(const p1d2plot& a_from)
+  :plottable(a_from),bins1D(a_from)
+  ,m_data(a_from.m_data)
+  ,m_name(a_from.m_name)
+  ,m_legend(a_from.m_legend)
+  {}  
+  p1d2plot& operator=(const p1d2plot& a_from){
+    m_name = a_from.m_name;
+    m_legend = a_from.m_legend;
+    return *this;
+  }
+protected:
+  const tools::histo::p1d& m_data;
+  std::string m_name;
+  std::string m_legend;
+};
+
+/*
+class p2d2plot : public virtual SbPlottableBins2D {
+public:
+  TOOLS_SCLASS(tools::sg::p2d2plot)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<p2d2plot>(this,a_class)) {return p;}
+    return bins2D::cast(a_class);
+  }
+public: //SbPlottableObject
+  virtual bool is_valid() const {return true;}
+  virtual const char* name(){return m_name;}
+  virtual const char* legend(){return m_legend;}
+public:
+  virtual int getDimension() const{return 2;}
+  virtual const char* title(){return m_data.title();}
+public: //SbPlottableBins2D
+  virtual void getBinsSumOfWeightsRange(float& a_mn,float& a_mx) const {
+    a_mn = (float)m_data.min_bin_height();
+    a_mx = (float)m_data.max_bin_height();
+  }
+  virtual int getAxisNumberOfBinsX() const {return m_data.axis_x().bins();}
+  virtual int getAxisNumberOfBinsY() const {return m_data.axis_y().bins();}
+  virtual float getAxisMinimumX() const {return (float)m_data.axis_x().lower_edge();}
+  virtual float getAxisMaximumX() const {return (float)m_data.axis_x().upper_edge();}
+  virtual float getAxisMinimumY() const {return (float)m_data.axis_y().lower_edge();}
+  virtual float getAxisMaximumY() const {return (float)m_data.axis_y().upper_edge();}
+  virtual float getBinLowerEdgeX(int aI) const {
+    return (float)m_data.axis_x().bin_lower_edge(aI);
+  }
+  virtual float bin_upper_edgeX(int aI) const {
+    return (float)m_data.axis_x().bin_upper_edge(aI);
+  }
+  virtual float getBinLowerEdgeY(int aI) const {
+    return (float)m_data.axis_y().bin_lower_edge(aI);
+  }
+  virtual float bin_upper_edgeY(int aI) const {
+    return (float)m_data.axis_y().bin_upper_edge(aI);
+  }
+  virtual int getBinNumberOfEntries(int aI,int aJ) const {
+    return m_data.bin_entries(aI,aJ);
+  }
+  virtual float getBinSumOfWeights(int aI,int aJ) const {
+    return (float)m_data.bin_height(aI,aJ);
+  }
+  virtual float getBinBar(int aI,int aJ) const {
+    return (float)m_data.bin_error(aI,aJ);
+  }
+
+  virtual void infos(const std::string& a_opts,std::string& a_sinfos) const {
+    a_sinfos.clear();
+    std::string f_lf("\n");
+    std::vector<std::string> words;
+    tools::words(a_opts," ",false,words);
+    std::vector<std::string>::const_iterator it;
+    for(it=words.begin();it!=words.end();++it) {
+      if(((*it)=="name") && m_name.size()) {
+        if(a_sinfos.size()) a_sinfos += f_lf;
+        a_sinfos += "Name\n";
+        a_sinfos += m_name;
+  
+      } else if((*it)=="entries") {
+        if(a_sinfos.size()) a_sinfos += f_lf;
+        a_sinfos += "Entries\n";
+        if(!numasd int>(m_data.all_entries(),a_sinfos)) {}
+      } else if((*it)=="mean") {
+        if(a_sinfos.size()) a_sinfos += f_lf;
+        a_sinfos += "MeanX\n";
+        if(!numas<double>(m_data.mean_x(),a_sinfos)) {}
+        a_sinfos += f_lf;
+        a_sinfos += "MeanY\n";
+        if(!numas<double>(m_data.mean_y(),a_sinfos)) {}
+      } else if((*it)=="rms") {
+        if(a_sinfos.size()) a_sinfos += f_lf;
+        a_sinfos += "RMS X\n";
+        if(!numas<double>(m_data.rms_x(),a_sinfos)) {}
+        a_sinfos += f_lf;
+        a_sinfos += "RMS Y\n";
+        if(!numas<double>(m_data.rms_y(),a_sinfos)) {}
+  
+      }
+    }
+  }
+
+public:
+  p2d2plot(const tools::histo::p2d& a_data)
+  :m_data(a_data)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~p2d2plot(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  p2d2plot(const p2d2plot& a_from)
+  :m_data(a_from.m_data)
+  ,m_name(a_from.m_name)
+  ,m_legend(a_from.m_legend)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }  
+  p2d2plot& operator=(const p2d2plot& a_from){
+    m_name = a_from.m_name;
+    m_legend = a_from.m_legend;
+    return *this;
+  }
+protected:
+  const tools::histo::p2d& m_data;
+  std::string m_name;
+  std::string m_legend;
+};
+*/
+
+}}
+
+#endif

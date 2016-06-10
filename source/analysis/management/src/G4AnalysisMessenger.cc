@@ -35,34 +35,40 @@
 #include "G4H3Messenger.hh"
 #include "G4P1Messenger.hh"
 #include "G4P2Messenger.hh"
+#include "G4NtupleMessenger.hh"
 #include "G4HnMessenger.hh"
+#include "G4AnalysisUtilities.hh"
 
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAnInteger.hh"
+
+using namespace G4Analysis;
 
 //_____________________________________________________________________________
 G4AnalysisMessenger::G4AnalysisMessenger(G4VAnalysisManager* manager)
   : G4UImessenger(),
     fManager(manager),
-    fFileMessenger(0),
-    fH1Messenger(0),
-    fH2Messenger(0),
-    fH3Messenger(0),
-    fP1Messenger(0),
-    fP2Messenger(0),
-    fH1HnMessenger(0),
-    fH2HnMessenger(0),
-    fH3HnMessenger(0),
-    fP1HnMessenger(0),
-    fP2HnMessenger(0),
-    fAnalysisDir(0),  
-    fSetActivationCmd(0),
-    fVerboseCmd(0)
+    fFileMessenger(nullptr),
+    fH1Messenger(nullptr),
+    fH2Messenger(nullptr),
+    fH3Messenger(nullptr),
+    fP1Messenger(nullptr),
+    fP2Messenger(nullptr),
+    fNtupleMessenger(nullptr),
+    fH1HnMessenger(nullptr),
+    fH2HnMessenger(nullptr),
+    fH3HnMessenger(nullptr),
+    fP1HnMessenger(nullptr),
+    fP2HnMessenger(nullptr),
+    fAnalysisDir(nullptr),  
+    fSetActivationCmd(nullptr),
+    fVerboseCmd(nullptr),
+    fCompressionCmd(nullptr)
 {  
-  fAnalysisDir = new G4UIdirectory("/analysis/");
+  fAnalysisDir = G4Analysis::make_unique<G4UIdirectory>("/analysis/");
   fAnalysisDir->SetGuidance("analysis control");
 
-  fSetActivationCmd = new G4UIcmdWithABool("/analysis/setActivation",this);
+  fSetActivationCmd = G4Analysis::make_unique<G4UIcmdWithABool>("/analysis/setActivation",this);
   G4String guidance = "Set activation. \n";
   guidance += "When this option is enabled, only the histograms marked as activated\n";
   guidance += "are returned, filled or saved on file.\n";
@@ -70,79 +76,73 @@ G4AnalysisMessenger::G4AnalysisMessenger(G4VAnalysisManager* manager)
   fSetActivationCmd->SetGuidance(guidance);
   fSetActivationCmd->SetParameterName("Activation",false);
 
-  fVerboseCmd = new G4UIcmdWithAnInteger("/analysis/verbose",this);
+  fVerboseCmd = G4Analysis::make_unique<G4UIcmdWithAnInteger>("/analysis/verbose",this);
   fVerboseCmd->SetGuidance("Set verbose level");
   fVerboseCmd->SetParameterName("VerboseLevel",false);
   fVerboseCmd->SetRange("VerboseLevel>=0 && VerboseLevel<=4");
   
-  fFileMessenger = new G4FileMessenger(manager);
-  fH1Messenger = new G4H1Messenger(manager);
-  fH2Messenger = new G4H2Messenger(manager);
-  fH3Messenger = new G4H3Messenger(manager);
-  fP1Messenger = new G4P1Messenger(manager);
-  fP2Messenger = new G4P2Messenger(manager);
+  fCompressionCmd = G4Analysis::make_unique<G4UIcmdWithAnInteger>("/analysis/compression",this);
+  fCompressionCmd->SetGuidance("Set compression level");
+  fCompressionCmd->SetParameterName("CompressionLevel",false);
+  fCompressionCmd->SetRange("CompressionLevel>=0 && CompressionLevel<=4");
+  
+  fFileMessenger = G4Analysis::make_unique<G4FileMessenger>(manager);
+  fH1Messenger = G4Analysis::make_unique<G4H1Messenger>(manager);
+  fH2Messenger = G4Analysis::make_unique<G4H2Messenger>(manager);
+  fH3Messenger = G4Analysis::make_unique<G4H3Messenger>(manager);
+  fP1Messenger = G4Analysis::make_unique<G4P1Messenger>(manager);
+  fP2Messenger = G4Analysis::make_unique<G4P2Messenger>(manager);
+  fNtupleMessenger = G4Analysis::make_unique<G4NtupleMessenger>(manager);
 }
 
 //_____________________________________________________________________________
 G4AnalysisMessenger::~G4AnalysisMessenger()
-{
-  delete fSetActivationCmd;
-  delete fVerboseCmd;
-  delete fAnalysisDir;
-  delete fFileMessenger;
-  delete fH1Messenger;
-  delete fH2Messenger;
-  delete fH3Messenger;
-  delete fP1Messenger;
-  delete fP2Messenger;
-  delete fH1HnMessenger;
-  delete fH2HnMessenger;
-  delete fH3HnMessenger;
-  delete fP1HnMessenger;
-  delete fP2HnMessenger;
-}
+{}
 
 //
 // public functions
 //
 
 //_____________________________________________________________________________
-void G4AnalysisMessenger::SetH1HnManager(G4HnManager* h1HnManager)
+void G4AnalysisMessenger::SetH1HnManager(G4HnManager& h1HnManager)
 {
-  fH1HnMessenger = new G4HnMessenger(h1HnManager);
+  fH1HnMessenger = G4Analysis::make_unique<G4HnMessenger>(h1HnManager);
 }  
 
 //_____________________________________________________________________________
-void G4AnalysisMessenger::SetH2HnManager(G4HnManager* h2HnManager)
+void G4AnalysisMessenger::SetH2HnManager(G4HnManager& h2HnManager)
 {
-  fH2HnMessenger = new G4HnMessenger(h2HnManager);
+  fH2HnMessenger = G4Analysis::make_unique<G4HnMessenger>(h2HnManager);
 }  
 
 //_____________________________________________________________________________
-void G4AnalysisMessenger::SetH3HnManager(G4HnManager* h2HnManager)
+void G4AnalysisMessenger::SetH3HnManager(G4HnManager& h2HnManager)
 {
-  fH2HnMessenger = new G4HnMessenger(h2HnManager);
+  fH2HnMessenger = G4Analysis::make_unique<G4HnMessenger>(h2HnManager);
 }  
 
 //_____________________________________________________________________________
-void G4AnalysisMessenger::SetP1HnManager(G4HnManager* p1HnManager)
+void G4AnalysisMessenger::SetP1HnManager(G4HnManager& p1HnManager)
 {
-  fP1HnMessenger = new G4HnMessenger(p1HnManager);
+  fP1HnMessenger = G4Analysis::make_unique<G4HnMessenger>(p1HnManager);
 }  
 
 //_____________________________________________________________________________
-void G4AnalysisMessenger::SetP2HnManager(G4HnManager* p2HnManager)
+void G4AnalysisMessenger::SetP2HnManager(G4HnManager& p2HnManager)
 {
-  fP2HnMessenger = new G4HnMessenger(p2HnManager);
+  fP2HnMessenger = G4Analysis::make_unique<G4HnMessenger>(p2HnManager);
 }  
 
 //_____________________________________________________________________________
 void G4AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
 {
-  if ( command == fSetActivationCmd ) {
+  if ( command == fSetActivationCmd.get() ) {
     fManager->SetActivation(fSetActivationCmd->GetNewBoolValue(newValues));
   }  
-  else if ( command == fVerboseCmd ) {
+  else if ( command == fVerboseCmd.get() ) {
     fManager->SetVerboseLevel(fVerboseCmd->GetNewIntValue(newValues));
+  }  
+  else if ( command == fCompressionCmd.get() ) {
+    fManager->SetCompressionLevel(fCompressionCmd->GetNewIntValue(newValues));
   }  
 }  

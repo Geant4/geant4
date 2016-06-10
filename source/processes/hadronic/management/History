@@ -14,6 +14,50 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+30 October 2015  Gunter Folger    (hadr-man-V10-01-06)
+- while loop check: G4HadronicProcess.cc has one loops, already checked with
+    counter
+
+21 September 2015  Dennis Wright  (hadr-man-V10-01-05)
+------------------------------------------------------
+- G4HadronicProcess::BiasCrossSectionByFactor : replace 
+  if( (it != "PhotonInelastic") &&
+      (it != "ElectroNuclear") &&
+      (it != "PositronNuclear") )
+
+    by
+ 
+  if( (it != "photonNuclear") &&
+      (it != "electronNuclear") &&
+      (it != "positronNuclear") )
+
+    to fix fatal exception in bug report 1740.
+ 
+
+09 September 2015 A. Ribon (hadr-man-V10-01-04)
+---------------------------------------------------
+- G4HadronicProcessStore : print "/n", i.e. "per nucleon", in the
+  kinetic energy limits of hadronic models in the case of ions
+  (address bug report #1775).
+
+13 August 2015 A. Ribon (hadr-man-V10-01-03)
+---------------------------------------------------
+- G4HadronicProcess : trivial and useless Coverity fixes.
+
+27 May 2015 G.Folger (hadr-man-V10-01-02)
+---------------------------------------------------
+- Updates to G4HadronicProcessStore for Html documentation
+
+15 May 2015 A. Ribon (hadr-man-V10-01-01)
+---------------------------------------------------
+- G4HadronicProcess : improved the method GetElementCrossSection
+  to be used also with neutronHP (which needs a material defined).
+
+11 March 2015 V. Ivanchenko (hadr-man-V10-01-00)
+---------------------------------------------------
+- G4HadronicProcessStore, G4HadronicProcess - fixed procedure of deletion
+    at exit
+
 19 November 2014 G. Folger(hadr-man-V10-00-17)
 ---------------------------------------------------
 - G4HadronicProcess::CheckResult(): Add check for dynamic mass 

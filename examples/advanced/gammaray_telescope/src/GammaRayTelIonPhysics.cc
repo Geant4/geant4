@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelIonPhysics.cc 83708 2014-09-10 10:08:47Z gcosmo $
+// $Id: GammaRayTelIonPhysics.cc 93678 2015-10-28 10:03:43Z gcosmo $
 //
 // 
 
@@ -91,8 +91,8 @@ void GammaRayTelIonPhysics::ConstructProcess()
   pManager->SetProcessOrdering(&fIonMultipleScattering, idxAlongStep,  1);
   pManager->SetProcessOrdering(&fIonMultipleScattering, idxPostStep,  1);
 
-  G4VCrossSectionDataSet * theGGNuclNuclData = G4CrossSectionDataSetRegistry::Instance()->
-    GetCrossSectionDataSet(G4GGNuclNuclCrossSection::Default_Name());
+  G4ComponentGGNuclNuclXsc * ggNuclNuclXsec = new G4ComponentGGNuclNuclXsc();
+  G4VCrossSectionDataSet * theGGNuclNuclData = new G4CrossSectionInelastic(ggNuclNuclXsec);
   
   // Deuteron 
   pManager = G4Deuteron::Deuteron()->GetProcessManager();

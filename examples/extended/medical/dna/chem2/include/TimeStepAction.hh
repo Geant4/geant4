@@ -55,7 +55,7 @@ public:
 
   virtual void UserReactionAction(const G4Track&,
                                   const G4Track&,
-                                  const std::vector<G4Track*>&);
+                                  const std::vector<G4Track*>*);
 
   virtual void EndProcessing();
 };

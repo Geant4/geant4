@@ -25,7 +25,8 @@
 //
 // This is the *BASIC* version of IORT, a Geant4-based application
 //
-// Main Authors: G.Russo(a,b), C.Casarino*(c), G.C. Candiano(c), G.A.P. Cirrone(d), F.Romano(d)
+// Main Authors: G.Russo(a,b), C.Casarino*(c), G.C. Candiano(c), 
+//  G.A.P. Cirrone(d), F.Romano(d)
 // Contributor Authors: S.Guatelli(e)
 // Past Authors: G.Arnetta(c), S.E.Mazzaglia(d)
 //    
@@ -38,18 +39,12 @@
 //   *Corresponding author, email to carlo.casarino@polooncologicocefalu.it
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef HADRONTHERAPYANALYSISMANAGER_HH
-#define HADRONTHERAPYANALYSISMANAGER_HH 1
+#ifndef IORTTHERAPYANALYSISMANAGER_HH
+#define IORTTHERAPYANALYSISMANAGER_HH 1
 
 #include "globals.hh"
+#include "g4root.hh"
 
-
-#ifdef G4ANALYSIS_USE_ROOT ///< If analysis is done directly with ROOT
-#include "TROOT.h"
-#include "TFile.h"
-#include "TNtuple.h"
-#include "TH1F.h"
-#endif
 /**
  * Messenger class for analysis-settings for HadronTherapyAnalysisManager 
  */
@@ -77,17 +72,8 @@ public:
    */
   static IORTAnalysisManager* GetInstance();
 
-#ifdef G4ANALYSIS_USE_ROOT 
   /**
-   * Clear analysis manager heap.
-   */
-  void Clear();
-  /**
-   * Check if TFile is there!
-   */
-  G4bool IsTheTFile();
-  /**
-   * Book the histograms and ntuples in an AIDA or ROOT file.
+   * Book the histograms and ntuples.
    */
   void book();
   /**
@@ -179,59 +165,19 @@ public:
   void flush();
   ///< Close the .hbk file with the histograms and the ntuples
 private:
-  TH1F *createHistogram1D(const TString name, const TString title, int bins, double xmin, double xmax) {
-    TH1F *histo = new TH1F(name, title, bins, xmin, xmax);
-    histo->SetLineWidth(2);
-    return histo;
-  }
-	
-private:
-#endif
+  
   static IORTAnalysisManager* instance;
   IORTAnalysisFileMessenger* fMess;
-#ifdef G4ANALYSIS_USE_ROOT 
+
   G4String analysisFileName;
-  TFile *theTFile;
-  TH1F *histo1;
-  TH1F *histo2;
-  TH1F *histo3;
-  TH1F *histo4;
-  TH1F *histo5;
-  TH1F *histo6;
-  TH1F *histo7;
-  TH1F *histo8;
-  TH1F *histo9;
-  TH1F *histo10;
-  TH1F *histo11;
-  TH1F *histo12;
-  TH1F *histo13;
-  TH1F *histo14;
-  TH1F *histo15;
-  TH1F *histo16;
-	
-  TNtuple *kinFragNtuple;
-  TNtuple *kineticEnergyPrimaryNtuple;
-
-  // ntuple containing the fluence of all the particle in any voxel
-  TNtuple *doseFragNtuple; 
-
-  // ntuple containing the fluence of all the particle in any voxel
-  TNtuple *fluenceFragNtuple;
-	
-  // ntuple containing the fluence of all the particle in any voxel
-  TNtuple *letFragNtuple;
-
-  TNtuple *theROOTNtuple;
-  TNtuple *theROOTIonTuple;
-  TNtuple *fragmentNtuple; // fragments
-  TNtuple *metaData;
+        
   G4long eventCounter;      // Simulation metadata
   G4double detectorDistance;
   G4double phantomDepth;
   G4double beamEnergy;
   G4double energyError;
   G4double phantomCenterDistance;
-#endif
+
 };
 #endif
 

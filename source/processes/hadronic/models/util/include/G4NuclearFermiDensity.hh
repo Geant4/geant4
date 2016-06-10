@@ -33,7 +33,9 @@
 #include "G4VNuclearDensity.hh"
 
 #include <CLHEP/Units/PhysicalConstants.h>	// pi, fermi,..
-#include <cmath>				// pow
+#include "G4Exp.hh"
+#include "G4Log.hh"
+//#include <cmath>				// pow
 
 class G4NuclearFermiDensity : public G4VNuclearDensity
 {
@@ -43,20 +45,20 @@ class G4NuclearFermiDensity : public G4VNuclearDensity
     
     G4double GetRelativeDensity(const G4ThreeVector & aPosition) const
     {
-      return 1./(1.+std::exp((aPosition.mag()-theR)/a));
+      return 1./(1.+G4Exp((aPosition.mag()-theR)/a));
     }
     
     G4double GetRadius(const G4double maxRelativeDenisty) const
     {
       return (maxRelativeDenisty>0 && maxRelativeDenisty <= 1 ) ?
-             (theR + a*std::log((1-maxRelativeDenisty+std::exp(-1*theR/a))/maxRelativeDenisty))  : DBL_MAX;
+             (theR + a*G4Log((1-maxRelativeDenisty+G4Exp(-1*theR/a))/maxRelativeDenisty))  : DBL_MAX;
     }
     
     G4double GetDeriv(const G4ThreeVector & aPosition) const
     {
       G4double currentR=aPosition.mag();
       if (currentR > 40*theR  ) {return 0;}
-      else return -std::exp((currentR-theR)/a) * sqr(GetDensity(aPosition)) / (a*Getrho0());
+      else return -G4Exp((currentR-theR)/a) * sqr(GetDensity(aPosition)) / (a*Getrho0());
     }   
    
   private:

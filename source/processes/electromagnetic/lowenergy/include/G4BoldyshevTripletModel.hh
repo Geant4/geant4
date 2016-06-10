@@ -23,9 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BoldyshevTripletModel.hh 66241 2012-12-13 18:34:42Z gunter $
-// GEANT4 tag $Name: geant4-09-03-patch-01 $
-//
+// Author: G.Depaola & F.Longo
 
 #ifndef G4BoldyshevTripletModel_h
 #define G4BoldyshevTripletModel_h 1
@@ -34,22 +32,27 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4ParticleChangeForGamma.hh"
-#include "G4CrossSectionHandler.hh"
-#include "G4ForceCondition.hh"
-#include "G4CompositeEMDataSet.hh"
-#include "G4Gamma.hh"
+#include "G4LPhysicsFreeVector.hh"
+#include "G4ProductionCutsTable.hh"
 
 class G4BoldyshevTripletModel : public G4VEmModel
 {
 
 public:
-
-  G4BoldyshevTripletModel(const G4ParticleDefinition* p = 0, 
-		     const G4String& nam = "BoldyshevTriplet");
-
+  
+  G4BoldyshevTripletModel(const G4ParticleDefinition* p = 0, const G4String& nam = "BoldyshevTripletConversion");
+  
   virtual ~G4BoldyshevTripletModel();
+  
+  virtual void Initialise(const G4ParticleDefinition*, 
+                          const G4DataVector&);
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  //MT
+  virtual void InitialiseLocal(const G4ParticleDefinition*, 
+			             G4VEmModel* masterModel);
+
+  virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
+  //END MT
 
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
@@ -62,47 +65,57 @@ public:
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy);
+				       G4double tmin,
+				       G4double maxEnergy);
 
-protected:
+  virtual G4double MinPrimaryEnergy(const G4Material*,
+				    const G4ParticleDefinition*,
+				    G4double);
 
-  G4ParticleChangeForGamma* fParticleChange;
-
-  G4double GetMeanFreePath(const G4Track& aTrack, 
-			   G4double previousStepSize, 
-			   G4ForceCondition* condition);
 private:
 
-  const G4double smallEnergy;
-  G4double lowEnergyLimit;  
-  G4double highEnergyLimit;
+  void ReadData(size_t Z, const char* path = 0);
 
-  G4int verboseLevel;
-  G4bool isInitialised;
-  
-  G4VCrossSectionHandler* crossSectionHandler;
-  G4VEMDataSet* meanFreePathTable;
+  G4double ScreenFunction1(G4double screenVariable);
+  G4double ScreenFunction2(G4double screenVariable);
 
   G4BoldyshevTripletModel & operator=(const  G4BoldyshevTripletModel &right);
   G4BoldyshevTripletModel(const  G4BoldyshevTripletModel&);
 
+  G4bool isInitialised;
+  G4int verboseLevel;
+
+  G4double lowEnergyLimit;  
+  G4double smallEnergy;
+  
+  //MT
+  static G4int maxZ;
+  static G4LPhysicsFreeVector* data[100]; // 100 because Z range is 1-99
+                                          // in LivermoreRayleighModel, 101
+					  //  because Z range is 1-100
+  //END MT
+  
+  G4ParticleChangeForGamma* fParticleChange;
+
   G4double asinh (G4double value);
+
+
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....                                                                                                           
 
 inline G4double G4BoldyshevTripletModel::asinh (G4double value)
 {
   G4double out;
-  
-  if (value>0) 
+
+  if (value>0)
     out = std::log(value+std::sqrt(value*value+1));
   else
     out = -std::log(-value+std::sqrt(value*value+1));
-  
-  return out;  
+
+  return out;
 }
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

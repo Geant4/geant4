@@ -1,0 +1,697 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_text_hershey
+#define tools_sg_text_hershey
+
+#include "base_text"
+#include "enums"
+#include "strings"
+#include "render_action"
+#include "pick_action"
+#include "bbox_action"
+#include "gstos"
+#include "sf_string"
+
+#include "../hershey"
+#include "../lina/box_3f"
+#include "../mnmx"
+
+namespace tools {
+namespace sg {
+
+class hchar {
+#ifdef TOOLS_MEM
+  TOOLS_SCLASS(tools::sg::hchar)
+#endif
+public:
+  hchar()
+  :m_char(0)
+  ,m_font(sg::latin)
+  ,m_y_move(none)
+  ,m_back(false)
+  ,m_bar(false)
+  ,m_cr(false)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~hchar(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  hchar(const hchar& aFrom)
+  :m_char(aFrom.m_char)
+  ,m_font(aFrom.m_font)
+  ,m_y_move(aFrom.m_y_move)
+  ,m_back(aFrom.m_back)
+  ,m_bar(aFrom.m_bar)
+  ,m_cr(aFrom.m_cr)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  hchar& operator=(const hchar& aFrom) {
+    m_char = aFrom.m_char;
+    m_font = aFrom.m_font;
+    m_y_move = aFrom.m_y_move;
+    m_back = aFrom.m_back;
+    m_bar = aFrom.m_bar;
+    m_cr = aFrom.m_cr;
+    return *this;
+  }
+public:
+  enum e_move {  
+    none,
+    up,
+    down
+  };
+public:
+  char m_char;
+  font_type m_font;
+  e_move m_y_move;
+  bool m_back;
+  bool m_bar;
+  bool m_cr;
+};
+
+class text_hershey : public base_text, public gstos {
+public:
+  TOOLS_NODE(text_hershey,tools::sg::text_hershey,base_text)
+public:
+  sf_string encoding;
+  sf_enum<font_type> font;
+public:
+  virtual const std::vector<field_desc>& node_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::text_hershey)
+    static std::vector<field_desc> s_v;
+    if(s_v.empty()) {
+      s_v = parent::node_fields();
+      TOOLS_ADD_FIELD_DESC(encoding)
+      TOOLS_ADD_FIELD_DESC(font)
+    }
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&encoding);
+    add_field(&font);
+  }
+protected: //gstos
+  virtual unsigned int create_gsto(std::ostream&,sg::gl_manager& a_mgr) {
+    std::vector<float> gsto_data;
+
+   {unsigned int npts = m_segs.size()/2;  //2 coords
+    unsigned int ngsto = npts*3;     //3 coords.
+    unsigned int sz = gsto_data.size();
+    gsto_data.resize(sz+ngsto);
+    float* pxyz = tools::vec_data<float>(gsto_data)+sz;    
+    const float* data = tools::vec_data<float>(m_segs);
+    tools::gl::cvt_2to3(npts,data,pxyz);}
+
+    m_gsto_sz = gsto_data.size();
+
+    if(gsto_data.empty()) return 0;
+
+    return a_mgr.create_gsto_from_data(gsto_data);
+  }
+public:
+  virtual void render(render_action& a_action) {
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+    const state& state = a_action.state();
+    if(state.m_use_gsto) {
+      unsigned int _id = get_gsto_id(a_action.out(),a_action.gl_manager());
+      if(_id) {        
+        a_action.begin_gsto(_id);
+        a_action.draw_gsto_v(tools::gl::lines(),m_gsto_sz/3,0);
+        a_action.end_gsto();
+        return;
+  
+      } else { //!_id
+        // use immediate rendering.
+      }
+
+    } else {
+      clean_gstos(&a_action.gl_manager());
+    }
+
+    // immediate rendering :
+    a_action.draw_vertex_array_xy(tools::gl::lines(),m_segs);         
+  }
+
+  virtual void pick(pick_action& a_action) {
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+    a_action.add__lines_xy(*this,m_segs,true);
+  }
+
+  virtual void bbox(bbox_action& a_action) {
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+
+    float x,y;
+    std::vector<float>::const_iterator it;
+    for(it=m_segs.begin();it!=m_segs.end();) {
+      x = *it;it++;
+      y = *it;it++;
+      a_action.add_one_point(x,y,0);
+    }
+  }
+
+public:
+  text_hershey()
+  :parent()
+  ,encoding(encoding_none())
+  ,font(sg::latin)
+  ,m_gsto_sz(0)
+  {
+    add_fields();
+  }
+  virtual ~text_hershey(){}
+public:
+  text_hershey(const text_hershey& a_from)
+  :parent(a_from)
+  ,gstos(a_from)
+  ,encoding(a_from.encoding)
+  ,font(a_from.font)
+  ,m_gsto_sz(0)
+  {
+    add_fields();
+  }
+  text_hershey& operator=(const text_hershey& a_from){
+    parent::operator=(a_from);
+    gstos::operator=(a_from);
+    encoding = a_from.encoding;
+    font = a_from.font;
+    return *this;
+  }
+public: //sg::base_text :
+  virtual void get_bounds(float a_height,
+                          float& a_mn_x,float& a_mn_y,float& a_mn_z,
+                          float& a_mx_x,float& a_mx_y,float& a_mx_z) const {
+    get_bounds(a_height,encoding.value(),font.value(),
+               strings.values(),
+               a_mn_x,a_mn_y,a_mn_z,
+               a_mx_x,a_mx_y,a_mx_z);
+  }
+  virtual float ascent(float a_height) const {
+    // '/' seems to be the char with the max ascent.
+    // NOTE : If 'A', the ascent = height.value().
+    float mn_x,mn_y,mn_z;
+    float mx_x,mx_y,mx_z;
+    get_char_bound('/',sg::latin,a_height,false,
+                   mn_x,mn_y,mn_z,
+                   mx_x,mx_y,mx_z);
+    return mx_y;
+  }
+  virtual float y_advance(float a_height) const {
+    float HEIGHT = a_height;
+    return 2 * HEIGHT; //Y_ADVANCE
+  }
+
+public:
+  virtual float descent(float a_height) const {return _descent(a_height);}
+
+  virtual bool truncate(const std::string& a_string,float a_height,float a_cut_width,std::string& a_out) const {
+    return _truncate(a_string,a_height,font.value(),a_cut_width,a_out);
+  }
+
+public:
+  static void get_bounds(float a_height,
+                         const std::string& a_encoding,
+                         font_type a_font,
+                         const std::vector<std::string>& a_ss,
+                         float& a_mn_x,float& a_mn_y,float& a_mn_z,
+                         float& a_mx_x,float& a_mx_y,float& a_mx_z){
+    if(a_ss.size()) {
+      float HEIGHT = a_height;
+      float Y_ADVANCE = 2 * HEIGHT;
+      float width = 0;
+      float Y = 0;
+      std::vector<float> dummy;
+      tools_vforcit(std::string,a_ss,it) {
+        float XL = 0;
+        string_segs(false,*it,a_height,a_encoding,a_font,XL,Y,dummy,false);
+        Y -= Y_ADVANCE;
+        width = tools::mx(width,XL);
+      }
+              
+      a_mn_x = 0;
+      a_mn_y = -Y_ADVANCE*(a_ss.size()-1)-_descent(a_height);
+      a_mn_z = 0;
+      a_mx_x = width;
+      a_mx_y = HEIGHT;
+      a_mx_z = 0;
+    } else {
+      tools::box_3f_make_empty(a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z);
+    }
+  }
+
+  static void get_bounds(float a_height,
+                         const std::string& a_encoding,
+                         font_type a_font,
+                         const std::string& a_s,
+                         float& a_mn_x,float& a_mn_y,float& a_mn_z,
+                         float& a_mx_x,float& a_mx_y,float& a_mx_z){
+    float HEIGHT = a_height;
+    float Y_ADVANCE = 2 * HEIGHT;
+    float width = 0;
+    float Y = 0;
+    std::vector<float> dummy;
+    float XL = 0;
+    string_segs(false,a_s,a_height,a_encoding,a_font,XL,Y,dummy,false);
+    Y -= Y_ADVANCE;
+    width = tools::mx(width,XL);
+
+    a_mn_x = 0;
+    a_mn_y = -_descent(a_height);
+    a_mn_z = 0;
+    a_mx_x = width;
+    a_mx_y = HEIGHT;
+    a_mx_z = 0;
+  }
+
+protected:
+  void update_sg() {
+    clean_gstos();
+    m_segs.clear();
+    get_segments(m_segs);
+  }
+
+  void get_segments(std::vector<float>& a_segs) const {
+
+    float Y = 0;
+    if( (vjust.value()==sg::middle) ||
+        (vjust.value()==sg::top) ){
+      float mn_x,mn_y,mn_z;
+      float mx_x,mx_y,mx_z;
+      get_bounds(height.value(),mn_x,mn_y,mn_z,mx_x,mx_y,mx_z);
+      float szy = mx_y - mn_y;
+
+      if(vjust.value()==sg::middle) {
+        Y -= 0.5F * szy;
+      } else if(vjust.value()==sg::top) {
+        Y -= szy;
+      }
+    }
+  
+    float HEIGHT = height.value();
+    float Y_ADVANCE = 2 * HEIGHT;
+  
+    const std::string& encod = encoding.value();
+
+    const std::vector<std::string>& ss = strings.values();
+    tools_vforcit(std::string,ss,it) {
+
+      float X = 0;
+      if( (hjust.value()==sg::center) ||
+          (hjust.value()==sg::right)  ){
+        float mn_x,mn_y,mn_z;
+        float mx_x,mx_y,mx_z;
+        get_bounds(height,encoding.value(),font,*it,
+                   mn_x,mn_y,mn_z,mx_x,mx_y,mx_z);
+        float szx = mx_x - mn_x;
+
+        if(hjust.value()==sg::center) {
+          X -= 0.5F * szx;
+        } else if(hjust.value()==sg::right) {
+          X -= szx;
+        }
+      }
+
+      string_segs(true,*it,HEIGHT,encod,font.value(),X,Y,a_segs,true);
+      Y -= Y_ADVANCE;
+    }
+  }
+protected:
+  static float _descent(float a_height) {
+    // '/' seems to be the char with the max descent.
+    float mn_x,mn_y,mn_z;
+    float mx_x,mx_y,mx_z;
+    get_char_bound('/',sg::latin,a_height,false,
+                   mn_x,mn_y,mn_z,
+                   mx_x,mx_y,mx_z);
+    return -mn_y; //return then a positive number.
+  }
+
+  static bool _truncate(const std::string& a_string,
+                        float a_height,
+                        font_type a_font,float a_cut_width,
+                        std::string& a_out) {
+    //It does not take into account encoding.
+
+    a_out.clear();
+
+    float width = 0;
+
+    const unsigned int mx_poly = 4;
+    const unsigned int mx_point = 160;
+
+    int max_point[mx_poly];
+    float xp[mx_point];
+    float yp[mx_point];
+
+    tools_sforcit(a_string,it) {
+
+      float cwidth;
+      int number;
+      if (a_font==sg::greek) {
+        tools::hershey::greek_char_points(*it,a_height,number,max_point,xp,yp,cwidth);
+      } else if (a_font==sg::special) {
+        tools::hershey::special_char_points(*it,a_height,number,max_point,xp,yp,cwidth);
+      } else {
+        tools::hershey::latin_char_points(*it,a_height,number,max_point,xp,yp,cwidth);
+      }
+
+      float advance = cwidth + a_height * 0.01F;
+
+      if((width+cwidth)>=a_cut_width) return true;
+      a_out += *it;
+      width += advance;
+    }
+
+    return true;
+  }
+
+  static void get_char_bound(char a_char,
+                             font_type a_font,
+                             float a_scale,bool a_bar,
+                             float& a_mn_x,float& a_mn_y,float& a_mn_z,
+                             float& a_mx_x,float& a_mx_y,float& a_mx_z){
+    tools::box_3f_make_empty(a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z);
+
+    const unsigned int mx_poly = 4;
+    const unsigned int mx_point = 160;
+
+    int max_point[mx_poly];
+    float xp[mx_point];
+    float yp[mx_point];
+
+    int number;
+    float width;
+    if (a_font==sg::greek) {
+      tools::hershey::greek_char_points(a_char,a_scale,number,max_point,xp,yp,width);
+    } else if (a_font==sg::special) {
+      tools::hershey::special_char_points(a_char,a_scale,number,max_point,xp,yp,width);
+    } else {
+      tools::hershey::latin_char_points(a_char,a_scale,number,max_point,xp,yp,width);
+    }
+
+    float ymax = 0;
+  
+    int ipoint = 0;
+    for (int ipoly=0;ipoly<number;ipoly++) { 
+      int pointn  = max_point[ipoly];
+      if(pointn>0) {
+        for(int count=0;count<pointn-1;count++) {
+          ymax = tools::mx(ymax,yp[ipoint]);
+          tools::box_3f_extend_by(a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z,
+                                  xp[ipoint],yp[ipoint],0);
+
+          ymax = tools::mx(ymax,yp[ipoint+1]);
+          tools::box_3f_extend_by(a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z,
+                                  xp[ipoint+1],yp[ipoint+1],0);
+
+          ipoint ++;
+        }
+        ipoint ++;
+      }
+    }
+  
+    if(a_bar) { //Draw a bar on top of the character.
+      float xbar = 0;
+      float ybar = ymax * 1.3F;
+      tools::box_3f_extend_by(a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z,
+                              xbar,ybar,0);
+      tools::box_3f_extend_by(a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z,
+                              xbar+width,ybar,0);
+    }
+  }
+
+  static void string_segs(
+   bool aGEN_POINTS // false = advance only.
+  ,const std::string& aString
+  ,float a_height
+  ,const std::string& a_encoding
+  ,font_type a_font
+  ,float& aX
+  ,float& aY
+  ,std::vector<float>& a_segs
+  ,bool a_fill_segs
+  ){
+    float oldX = 0;
+    float HEIGHT = a_height;
+  
+    bool encod_PAW = (a_encoding==encoding_PAW()?true:false);
+  
+    sencoded sed = encod_PAW ? decode_PAW(aString) : decode_plain(aString);
+  
+    tools_vforcit(hchar,sed,it) {
+      const hchar& hc = *it;
+  
+      font_type hershey_font = hc.m_font;
+      if(encod_PAW) {
+        hershey_font = hc.m_font;
+      } else {
+        hershey_font = a_font;
+      }
+  
+      float scale = HEIGHT;
+      float ymove = 0;
+      if(hc.m_y_move==hchar::up) {
+        scale = HEIGHT*0.6F;
+        ymove = HEIGHT*0.6F;
+      } else if(hc.m_y_move==hchar::down) {
+        scale = HEIGHT*0.6F;
+        ymove = -HEIGHT*0.6F;
+      }
+      if(hc.m_back) aX = oldX;
+      oldX = aX;
+      //FIXME : bar
+      aY += ymove;
+
+      float advance = char_segs(aGEN_POINTS,hc.m_char,hershey_font,scale,hc.m_bar,aX,aY,a_segs,a_fill_segs) + HEIGHT * 0.01F;
+
+      aX += advance;
+
+      aY -= ymove;
+    }
+  }
+  
+  static float char_segs(
+   bool aGEN_POINTS // false = advance only.
+  ,char a_char 
+  ,font_type a_font
+  ,float a_scale
+  ,bool aBar
+  ,float aX
+  ,float aY
+  ,std::vector<float>& a_segs
+  ,bool a_fill_segs
+  ){
+    const unsigned int mx_poly = 8;
+    const unsigned int mx_point = 160;
+
+    int max_point[mx_poly];
+    float xp[mx_point];
+    float yp[mx_point];
+
+    int number;
+    float width;
+    if (a_font==sg::greek) {
+      tools::hershey::greek_char_points(a_char,a_scale,number,max_point,xp,yp,width);
+    } else if (a_font==sg::special) {
+      tools::hershey::special_char_points(a_char,a_scale,number,max_point,xp,yp,width);
+    } else {
+      tools::hershey::latin_char_points(a_char,a_scale,number,max_point,xp,yp,width);
+    }
+    if(!aGEN_POINTS) return width;
+  
+    float ymax = 0;
+  
+    int ipoint = 0;
+    int pointn;
+    for (int ipoly=0;ipoly<number;ipoly++) { 
+      pointn  = max_point[ipoly];
+      if(pointn>0) {
+        for(int count=0;count<pointn-1;count++) {
+          ymax = tools::mx(ymax,yp[ipoint]);
+          if(a_fill_segs) {
+            a_segs.push_back(aX+xp[ipoint]);
+            a_segs.push_back(aY+yp[ipoint]);
+          }
+          ymax = tools::mx(ymax,yp[ipoint+1]);
+          if(a_fill_segs) {
+            a_segs.push_back(aX+xp[ipoint+1]);
+            a_segs.push_back(aY+yp[ipoint+1]);
+          }
+          ipoint ++;
+        }
+        ipoint ++;
+      }
+    }
+    
+    if(aBar) { //Draw a bar on top of the character.
+      float xbar = 0;
+      float ybar = ymax * 1.3F;
+  
+      if(a_fill_segs) {
+        a_segs.push_back(aX+xbar);
+        a_segs.push_back(aY+ybar);
+  
+        a_segs.push_back(aX+xbar+width);
+        a_segs.push_back(aY+ybar);
+      }
+    }
+  
+    return width;
+  }
+  
+  typedef std::vector<hchar> sencoded;
+
+  static sencoded decode_plain(const std::string& a_s){
+    sencoded sed;
+    tools_sforcit(a_s,it) {
+      hchar hc;
+      hc.m_char = *it;
+      sed.push_back(hc);
+    }
+    if(sed.size()) sed[sed.size()-1].m_cr = true;
+    return sed;
+  }
+  ///////////////////////////////////////////////////////////////////////////
+  /// PAW encoding //////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////
+  // PAW control characters :
+  //  [ go to greek (roman = default)
+  //  ] end of greek
+  //  " go to special
+  //  # end of special
+  //  ! go to normal level of script
+  //  ^ go to superscript
+  //  ? go to subscript
+  //  & backscpace one charachter
+  // Extension :
+  //  | draw a bar over one character
+  ///////////////////////////////////////////////////////////////////////////
+  static sencoded decode_PAW(const std::string& a_s){
+    sencoded sed;
+  
+    font_type font = sg::latin;
+    hchar::e_move move = hchar::none;
+    bool back = false;
+    bool bar = false;
+  
+    tools_sforcit(a_s,it) {
+      char c = *it;
+      // Control characters :
+      if(c=='[') {
+        font = sg::greek;
+        continue;
+      } else if(c==']') {
+        font = sg::latin;
+        continue;
+      } else if(c=='"') {
+        font = sg::special;
+        continue;
+      } else if(c=='#') {
+        font = sg::latin;
+        continue;
+      } else if(c=='!') {
+        move = hchar::none;
+        continue;
+      } else if(c=='^') {
+        move = hchar::up;
+        continue;
+      } else if(c=='?') {
+        move = hchar::down;
+        continue;
+      } else if(c=='&') {
+        back = true;
+        continue;
+      } else if(c=='|') {
+        bar = true;
+        continue;
+      }
+  
+      hchar hc;
+      hc.m_y_move = move;
+      hc.m_back = back;
+      hc.m_bar = bar;
+  
+      if(font==sg::special) {
+        hc.m_font = sg::latin;
+      //if(c=='A') {
+      //  hc.m_char = '';
+      //} else 
+        if(c=='B') {
+          hc.m_char = '|';
+      //} else if(c=='C') {
+      //  hc.m_char = '';
+        } else if(c=='D') {
+          hc.m_char = '$';
+        } else if(c=='E') {
+          hc.m_char = '!';
+        } else if(c=='F') {
+          hc.m_char = '#';
+        } else if(c=='G') {
+          hc.m_char = '>';
+        } else if(c=='H') {
+          hc.m_char = '?';
+      //} else if(c=='I') {
+      //  hc.m_char = '';
+        } else if(c=='J') {
+          hc.m_char = ':';
+        } else if(c=='K') {
+          hc.m_char = ';';
+        } else if(c=='L') {
+          hc.m_char = '<';
+        } else if(c=='M') {
+          hc.m_char = '[';
+        } else if(c=='N') {
+          hc.m_char = ']';
+  
+        } else if(c=='W') {
+          hc.m_char = '&';
+        } else if(c=='Y') {
+          hc.m_char = '%';
+        } else {
+          //FIXME : handle other characters.
+          hc.m_char = c;
+        }
+  
+      } else {
+        hc.m_font = font;
+        hc.m_char = c;
+      }
+  
+  
+      sed.push_back(hc);
+  
+      back = false;
+      bar = false;
+    }
+  
+    if(sed.size()) sed[sed.size()-1].m_cr = true;
+    return sed;
+  }
+
+protected:
+  std::vector<float> m_segs; //list of [begin,end]
+  unsigned int m_gsto_sz;
+};
+
+}}
+
+#endif

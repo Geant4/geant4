@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReduciblePolygon.cc 72091 2013-07-09 09:55:52Z gcosmo $
+// $Id: G4ReduciblePolygon.cc 92024 2015-08-13 14:16:00Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -109,7 +109,7 @@ void G4ReduciblePolygon::Create( const G4double a[],
   
   const G4double *anext = a, *bnext = b;
   ABVertex *prev = 0;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     ABVertex *newVertex = new ABVertex;
     newVertex->a = *anext;
@@ -149,7 +149,7 @@ G4ReduciblePolygon::G4ReduciblePolygon( __void__& )
 G4ReduciblePolygon::~G4ReduciblePolygon()
 {
   ABVertex *curr = vertexHead;
-  while( curr )
+  while( curr )    // Loop checking, 13.08.2015, G.Cosmo
   {
     ABVertex *toDelete = curr;
     curr = curr->next;
@@ -169,7 +169,7 @@ void G4ReduciblePolygon::CopyVertices( G4double a[], G4double b[] ) const
 {
   G4double *anext = a, *bnext = b;
   ABVertex *curr = vertexHead;
-  while( curr )
+  while( curr )    // Loop checking, 13.08.2015, G.Cosmo
   {
     *anext++ = curr->a;
     *bnext++ = curr->b;
@@ -186,7 +186,7 @@ void G4ReduciblePolygon::CopyVertices( G4double a[], G4double b[] ) const
 void G4ReduciblePolygon::ScaleA( G4double scale )
 {
   ABVertex *curr = vertexHead;
-  while( curr )
+  while( curr )    // Loop checking, 13.08.2015, G.Cosmo
   {
     curr->a *= scale;
     curr = curr->next;
@@ -202,7 +202,7 @@ void G4ReduciblePolygon::ScaleA( G4double scale )
 void G4ReduciblePolygon::ScaleB( G4double scale )
 {
   ABVertex *curr = vertexHead;
-  while( curr )
+  while( curr )    // Loop checking, 13.08.2015, G.Cosmo
   {
     curr->b *= scale;
     curr = curr->next;
@@ -220,7 +220,7 @@ G4bool G4ReduciblePolygon::RemoveDuplicateVertices( G4double tolerance )
 {
   ABVertex *curr = vertexHead, 
            *prev = 0, *next = 0;
-  while( curr )
+  while( curr )    // Loop checking, 13.08.2015, G.Cosmo
   {
     next = curr->next;
     if (next == 0) next = vertexHead;
@@ -283,7 +283,7 @@ G4bool G4ReduciblePolygon::RemoveRedundantVertices( G4double tolerance )
   // Loop over all vertices
   //
   ABVertex *curr = vertexHead, *next = 0;
-  while( curr )
+  while( curr )    // Loop checking, 13.08.2015, G.Cosmo
   {
     next = curr->next;
     if (next == 0) next = vertexHead;
@@ -423,13 +423,13 @@ void G4ReduciblePolygon::StartWithZMin()
   ABVertex *curr = vertexHead;
   G4double bcurr = curr->b;
   ABVertex *prev = curr;
-  while( curr )
+  while( curr )    // Loop checking, 13.08.2015, G.Cosmo
   { 
     if(curr->b < bcurr)
     { 
       bcurr = curr->b;
       ABVertex *curr1 = curr;   
-      while( curr1 )
+      while( curr1 )    // Loop checking, 13.08.2015, G.Cosmo
       {
         if(curr1->next == 0) { curr1->next = vertexHead; break; }
         curr1 = curr1->next;
@@ -460,7 +460,7 @@ G4bool G4ReduciblePolygon::CrossesItself( G4double tolerance )
   // with the second to last segment, we're done.
   //
   ABVertex *curr1 = vertexHead, *next1=0;
-  while (curr1->next)
+  while (curr1->next)    // Loop checking, 13.08.2015, G.Cosmo
   {
     next1 = curr1->next;
     G4double da1 = next1->a-curr1->a,
@@ -470,7 +470,7 @@ G4bool G4ReduciblePolygon::CrossesItself( G4double tolerance )
     // Inner loop over subsequent line segments
     //
     ABVertex *curr2 = next1->next;
-    while( curr2 )
+    while( curr2 )    // Loop checking, 13.08.2015, G.Cosmo
     {
       ABVertex *next2 = curr2->next;
       if (next2==0) next2 = vertexHead;
@@ -519,7 +519,7 @@ G4bool G4ReduciblePolygon::BisectedBy( G4double a1, G4double b1,
   a12 /= len12; b12 /= len12;
   
   ABVertex *curr = vertexHead;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     G4double av = curr->a - a1,
        bv = curr->b - b1;
@@ -558,7 +558,7 @@ G4double G4ReduciblePolygon::Area()
   G4double answer = 0;
   
   ABVertex *curr = vertexHead, *next;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     next = curr->next;
     if (next==0) next = vertexHead;
@@ -577,7 +577,7 @@ G4double G4ReduciblePolygon::Area()
 void G4ReduciblePolygon::Print()
 {
   ABVertex *curr = vertexHead;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     G4cerr << curr->a << " " << curr->b << G4endl;
     curr = curr->next;
@@ -597,7 +597,7 @@ void G4ReduciblePolygon::CalculateMaxMin()
   aMin = aMax = curr->a;
   bMin = bMax = curr->b;
   curr = curr->next;
-  while( curr )
+  while( curr )    // Loop checking, 13.08.2015, G.Cosmo
   {
     if (curr->a < aMin)
       aMin = curr->a;

@@ -1,0 +1,60 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_mat4f
+#define tools_mat4f
+
+#include "mat4"
+
+namespace tools {
+
+class mat4f : public mat4<float> {
+public:
+  mat4f(){}
+  virtual ~mat4f() {}
+public:
+  mat4f(const mat4f& a_from):mat4<float>(a_from){}
+  mat4f& operator=(const mat4f& a_from){
+    mat4<float>::operator=(a_from);
+    return *this;
+  }
+public:
+  mat4f(float a_00,float a_01,float a_02,float a_03, //first  row
+        float a_10,float a_11,float a_12,float a_13, //second row
+        float a_20,float a_21,float a_22,float a_23, //third  row
+        float a_30,float a_31,float a_32,float a_33) //fourth row
+  :mat4<float>(a_00,a_01,a_02,a_03,
+               a_10,a_11,a_12,a_13,
+               a_20,a_21,a_22,a_23,
+               a_30,a_31,a_32,a_33)
+  {}
+  mat4f(const mat4<float>& a_from):mat4<float>(a_from){}
+  mat4f& operator=(const mat4<float>& a_from){
+    mat4<float>::operator=(a_from);
+    return *this;
+  }
+public: //backward compatibility
+  void mul_2f(float& a_x,float& a_y) const {
+    mat4<float>::mul_2(a_x,a_y);
+  }
+  void mul_3f(float& a_x,float& a_y,float& a_z) const {
+    mat4<float>::mul_3(a_x,a_y,a_z);
+  }
+  void mul_dir_3f(float& a_x,float& a_y,float& a_z) const {
+    mat4<float>::mul_dir_3(a_x,a_y,a_z);
+  }
+  void mul_4f(float& a_x,float& a_y,float& a_z,float& a_w) const {
+    mat4<float>::mul_4(a_x,a_y,a_z,a_w);
+  }
+public: //operators
+};
+
+// for sf_vec<mat4f,float>, sf_mat4f :
+inline const std::string& stype(const mat4f&) {
+  static const std::string s_v("tools::mat4f");
+  return s_v;
+}
+
+}
+
+#endif

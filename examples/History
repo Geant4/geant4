@@ -1,4 +1,4 @@
-$Id: History 85757 2014-11-05 10:07:06Z gcosmo $
+$Id: History 91639 2015-07-30 10:16:41Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,108 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4th December 2015  Gabriele Cosmo (examples-V10-02-00)
+- Updated reference outputs according to reference tag geant4-10-02-ref-00.
+- Includes tags: doxygen-V10-01-03, ccal-V10-01-00, hadrontherapy-V10-01-03,
+                 DMX-V10-01-01, exampleB1-V10-01-03, exampleB3-V10-01-01,
+                 exampleB5-V10-01-00, GB02-V10-01-01, testem0-V10-01-01,
+                 testem1-V10-01-03, testem2-V10-01-03, testem3-V10-01-04,
+                 testem5-V10-01-06, testem6-V10-01-00, testem11-V10-01-03.
+                 testem17-V10-01-01, exEventgenerator-V10-01-00, MPI-V10-01-23,
+                 exhadr03-V10-01-00, exhadr04-V10-01-00, exhadr06-V10-01-00,
+                 exampleES2-V10-01-05, dnaphysics-V10-01-04, microyz-V10-01-05,
+                 ThreadsafeScorers-V10-01-02, exPersistency-V10-01-01,
+                 exgflash-V10-01-01, exampleP01-V10-01-02, exampleP02-V10-01-02,
+                 rdecay01-V10-01-06.
+
+30th October 2015  Gabriele Cosmo (examples-V10-01-10)
+- Updated reference outputs according to reference tag geant4-10-01-ref-10.
+- Includes tags: air_shower-V10-01-03, gammaraytel-V10-01-00, DMX-V10-01-00,
+                 nanobeam-V10-01-00, AnaEx01-V10-01-09, testem0-V10-01-00,
+                 testem1-V10-01-02, testem2-V10-01-02, testem3-V10-01-03,
+                 testem5-V10-01-03, testem7-V10-01-01, testem8-V10-01-06,
+                 testem9-V10-01-01, testem11-V10-01-01, testem12-V10-01-02,
+                 testem17-V10-01-00, exExtHadFissFrag-V10-01-01, fano-V10-01-03,
+                 exampleES2-V10-01-04, clustering-V10-01-00, range-V10-01-02,
+                 dnaphysics-V10-01-03, wvalue-V10-01-03, fano2-V10-01-03,
+                 expar02-V10-01-07, G04-V10-01-01, exampleP01-V10-01-00.
+                 exampleP02-V10-01-00, rdecay01-V10-01-05.
+
+14th October 2015  Gabriele Cosmo (examples-V10-01-09)
+- Updated reference outputs according to reference tag geant4-10-01-ref-09.
+- Includes tags: iort_therapy-V10-01-00, XrayFluo-V10-01-00, testem3-V10-01-02,
+                 testem8-V10-01-05, testem9-V10-01-00, testem13-V10-01-00,
+                 testem14-V10-01-00, DICOM-V10-01-01, microdosimetry-V10-01-00,
+                 exdna-V10-01-04, dnaphysics-V10-01-02, pdb4dna-V10-01-02,
+                 range-V10-01-01, svalue-V10-01-08, wvalue-V10-01-02,
+                 expar02-V10-01-06, exampleP03-V10-01-01.
+
+4th September 2015  Gabriele Cosmo (examples-V10-01-08)
+- Updated reference outputs according to reference tag geant4-10-01-ref-08.
+- Includes tags: microbeam-V10-01-03, AnaEx01-V10-01-08, AnaEx02-V10-01-02,
+                 AnaEx03-V10-01-02, testem5-V10-01-02, testem8-V10-01-04,
+                 monopole-V10-01-00, phononExample-V10-01-01, exdna-V10-01-03,
+                 fieldex01-V10-01-02, fieldex02-V10-01-02, fieldex03-V10-01-00,
+                 exhadr01-V10-01-00, dnaphysics-V10-01-01, range-V10-01-00,
+                 svalue-V10-01-07, wvalue-V10-01-01, MPI-V10-01-20,
+                 G02-V10-01-00, rdecay01-V10-01-04, rdecay02-V10-01-03.
+
+31st July 2015  Gabriele Cosmo (examples-V10-01-07)
+- Updated reference outputs according to reference tag geant4-10-01-ref-07.
+- Includes tags: testem7-V10-01-00, testem8-V10-01-03, exampleES2-V10-01-03,
+                 ExUCN-V10-01-03, fieldex06-V10-01-03, exTransforms-V10-01-00,
+                 fano-V10-01-02, fano2-V10-01-02, MPI-V10-01-13.
+
+26th Jun 2015  Gabriele Cosmo (examples-V10-01-06)
+- Updated reference outputs according to reference tag geant4-10-01-ref-06.
+- Includes tags: AnaEx01-V10-01-00, GB04-V10-01-00, excommon-V10-01-00,
+                 testem2-V10-01-00, testem3-V10-01-01, testem5-V10-01-01,
+                 testem12-V10-01-00, p6decayer-V10-01-00, g3tog4Tests-V10-01-00,
+                 channelingExample-V10-01-05, fano-V10-01-01, fano2-V10-01-01,
+                 OpNovice-V10-01-04, exParameterisations-V10-01-01,
+                 rdecay01-V10-01-03, exampleRE01-V10-01-00.
+
+4th Jun 2015  Gabriele Cosmo (examples-V10-01-05)
+- Updated reference outputs according to reference tag geant4-10-01-ref-05.
+- Includes tags: ReverseMC01-V10-01-00, testem10-V10-01-00, exgps-V10-01-02,
+                 basicPrimary-V10-01-00, ExUCN-V10-01-01, fieldex01-V10-01-00,
+                 fieldex02-V10-01-00, fieldex04-V10-01-01, microyz-V10-01-04,
+                 pdb4dna-V10-01-01, svalue-V10-01-04, LXe-V10-01-00,
+                 OpNovice-V10-01-01, WLS-V10-01-03, exPolarisation-V10-01-00,
+                 exParameterisations-V10-01-00, rdecay02-V10-01-02,
+                 exampleB1-V10-01-02.
+
+30th April 2015  Gabriele Cosmo (examples-V10-01-04)
+- Updated reference outputs according to reference tag geant4-10-01-ref-04.
+- Includes tags: air_shower-V10-01-02, lAr_calorimeter-V10-01-00,
+                 exampleB1-V10-01-01, particleGunExample-V10-01-01,
+                 testem8-V10-01-01, fieldex05-V10-01-00, exdna-V10-01-01,
+                 microyz-V10-01-03, exampleES2-V10-01-02, expar02-V10-01-04.
+
+2nd April 2015  Gabriele Cosmo (examples-V10-01-03)
+- Updated reference outputs according to reference tag geant4-10-01-ref-03.
+- Includes tags: doxygen-V10-01-01, brachy-V10-01-00, gammaknife-V10-01-00,
+                 human_phantom-V10-01-01, radioprotection-V10-01-00,
+                 xraytel-V10-01-00, testem5-V10-01-00, exdna-V10-01-00,
+                 channelingExample-V10-01-00, chem2-V10-01-01, chem3-V10-01-01,
+                 microyz-V10-01-02, WLS-V10-01-02, exgflash-V10-01-00,
+                 G01-V10-01-01, G03-V10-01-00, rdecay01-V10-01-02,
+                 rdecay02-V10-01-01.
+
+27th February 2015  Gabriele Cosmo (examples-V10-01-02)
+- Updated reference outputs according to reference tag geant4-10-01-ref-02.
+- Includes tags: air_shower-V10-01-01, hadrontherapy-V10-01-02, exgps-V10-01-01,
+                 exampleB4-V10-01-01, testem8-V10-01-00, exhadr02-V10-01-00,
+                 MPI-V10-01-05, exampleRE06-V10-01-00.
+
+30th January 2015  Gabriele Cosmo (examples-V10-01-01)
+- Updated reference outputs according to reference tag geant4-10-01-ref-01.
+- Includes tags: doxygen-V10-01-00, ChargeExchangeMC-V10-01-00,
+                 microbeam-V10-01-00, B03-V10-01-00, testem1-V10-01-00,
+                 testem3-V10-01-00, testem16-V10-01-00, ExUCN-V10-01-00,
+                 particleGunExample-V10-01-00, electronScattering-V10-01-00,
+                 fieldex06-V10-01-00, rdecay01-V10-01-01.
 
 4th December 2014  Gabriele Cosmo (examples-V10-01-00)
 - Updated reference outputs according to reference tag geant4-10-01-ref-00.

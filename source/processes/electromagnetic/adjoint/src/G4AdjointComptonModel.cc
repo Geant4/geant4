@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointComptonModel.cc 75591 2013-11-04 12:33:11Z gcosmo $
+// $Id: G4AdjointComptonModel.cc 91870 2015-08-07 15:21:40Z gcosmo $
 //
 #include "G4AdjointComptonModel.hh"
 #include "G4AdjointCSManager.hh"
@@ -296,7 +296,7 @@ G4double G4AdjointComptonModel::DiffCrossSectionPerAtomPrimToScatPrim(
 				      G4double Z, 
                                       G4double )
 { //Based on Klein Nishina formula
- // In the forward case (see G4KleinNishinaModel)  the  cross section is parametrised while
+ // In the forward case (see G4KleinNishinaModel)  the  cross section is parametrised 
  // the secondaries are sampled from the 
  // Klein Nishida differential cross section
  // The used diffrential cross section here is therefore the cross section multiplied by the normalised 

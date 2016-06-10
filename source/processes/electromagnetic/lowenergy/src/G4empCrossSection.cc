@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4empCrossSection.cc 83410 2014-08-21 15:17:53Z gcosmo $
+// $Id: G4empCrossSection.cc 92765 2015-09-15 15:20:47Z gcosmo $
 //
 //         
 //
@@ -51,7 +51,9 @@ G4empCrossSection::G4empCrossSection(const G4String& nam)
   }
   else 
   { 
-    G4cout << "ERROR in G4empCrossSection name ; Paul+Orlic is selected." << G4endl; 
+    G4cout << "G4empCrossSection::G4empCrossSection: " 
+	   << "ERROR in G4empCrossSection name; Paul+Orlic is selected." 
+	   << G4endl; 
     paulShellK = new G4PaulKxsModel();
     orlicShellLi = new G4OrlicLiXsModel();
     flag=0;
@@ -61,10 +63,8 @@ G4empCrossSection::G4empCrossSection(const G4String& nam)
 
 G4empCrossSection::~G4empCrossSection()
 { 
-
   delete paulShellK;
-  if (orlicShellLi)   delete orlicShellLi;
-
+  delete orlicShellLi;
 }
 
 std::vector<G4double> G4empCrossSection::GetCrossSection(G4int Z,

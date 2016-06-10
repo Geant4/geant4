@@ -2,11 +2,23 @@
 # This module sets up ROOT information 
 # It defines:
 # ROOT_FOUND          If the ROOT is found
-# ROOT_INCLUDE_DIR    PATH to the include directory
+# ROOT_INCLUDE_DIR    PATH to the include directory (deprecated)
+# ROOT_INCLUDE_DIRS   PATH to the include directory
 # ROOT_LIBRARIES      Most common libraries
 # ROOT_LIBRARY_DIR    PATH to the library directory 
 # ROOT_BIN_DIR	      PATH to the excutables directory
 # ROOT_PYTHONVER      Compatible python version string
+
+# First search for ROOTConfig.cmake on the path defined via user setting 
+# ROOT_DIR
+
+if(EXISTS ${ROOT_DIR}/ROOTConfig.cmake)
+  include(${ROOT_DIR}/ROOTConfig.cmake)
+  message(STATUS "Found ROOT CMake configuration in ${ROOT_DIR}")
+  set(ROOT_INCLUDE_DIR ${ROOT_INCLUDE_DIRS})
+  set(ROOT_FOUND TRUE)
+  return()
+endif()
 
 find_program(ROOT_CONFIG_EXECUTABLE root-config
   PATHS ${ROOTSYS}/bin $ENV{ROOTSYS}/bin)
@@ -28,7 +40,7 @@ else()
 
   execute_process(
     COMMAND ${ROOT_CONFIG_EXECUTABLE} --incdir
-    OUTPUT_VARIABLE ROOT_INCLUDE_DIR
+    OUTPUT_VARIABLE ROOT_INCLUDE_DIRS
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 
   execute_process(
@@ -50,6 +62,7 @@ else()
   #set(ROOT_LIBRARIES ${ROOT_LIBRARIES} -lThread -lMinuit -lHtml -lVMC -lEG -lGeom -lTreePlayer -lXMLIO -lProof)
   #set(ROOT_LIBRARIES ${ROOT_LIBRARIES} -lProofPlayer -lMLP -lSpectrum -lEve -lRGL -lGed -lXMLParser -lPhysics)
   set(ROOT_LIBRARY_DIR ${ROOTSYS}/lib)
+  set(ROOT_INCLUDE_DIR ${ROOT_INCLUDE_DIRS})
 
   # Make variables changeble to the advanced user
   mark_as_advanced(ROOT_CONFIG_EXECUTABLE)
@@ -59,6 +72,11 @@ else()
   endif()
 endif()
 
+if (NOT ROOT_FOUND)
+  if (ROOT_FIND_REQUIRED)
+    message(FATAL_ERROR "ROOT required, but not found")
+  endif (ROOT_FIND_REQUIRED)   
+endif()
 
 include(CMakeMacroParseArguments)
 find_program(ROOTCINT_EXECUTABLE rootcint PATHS $ENV{ROOTSYS}/bin)

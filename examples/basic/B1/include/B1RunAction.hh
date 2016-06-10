@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B1RunAction.hh 69565 2013-05-08 12:35:31Z gcosmo $
+// $Id: B1RunAction.hh 93886 2015-11-03 08:28:26Z gcosmo $
 //
 /// \file B1RunAction.hh
 /// \brief Definition of the B1RunAction class
@@ -32,10 +32,10 @@
 #define B1RunAction_h 1
 
 #include "G4UserRunAction.hh"
+#include "G4Parameter.hh"
 #include "globals.hh"
 
 class G4Run;
-class G4LogicalVolume;
 
 /// Run action class
 ///
@@ -49,12 +49,16 @@ class B1RunAction : public G4UserRunAction
     B1RunAction();
     virtual ~B1RunAction();
 
-    virtual G4Run* GenerateRun();
+    // virtual G4Run* GenerateRun();
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
-};
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    void AddEdep (G4double edep); 
+
+  private:
+    G4Parameter<G4double> fEdep;
+    G4Parameter<G4double> fEdep2;
+};
 
 #endif
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.cc 87077 2014-11-24 15:29:00Z gcosmo $
+// $Id: G4GDMLWriteSolids.cc 93151 2015-10-08 11:53:10Z gcosmo $
 //
 // class G4GDMLWriteSolids Implementation
 //
@@ -78,6 +78,17 @@ G4GDMLWriteSolids::~G4GDMLWriteSolids()
 {
 }
 
+#if !defined(G4GEOM_USE_USOLIDS)
+void G4GDMLWriteSolids::
+MultiUnionWrite(xercesc::DOMElement*,
+                const G4MultiUnion* const)
+{
+   G4Exception("G4GDMLWriteSolids::MultiUnionWrite()",
+               "InvalidSetup", FatalException,
+               "Installation with USolids primitives required!");
+   return;
+}
+#else
 void G4GDMLWriteSolids::
 MultiUnionWrite(xercesc::DOMElement* solElement,
                 const G4MultiUnion* const munionSolid)
@@ -136,6 +147,7 @@ MultiUnionWrite(xercesc::DOMElement* solElement,
    solElement->appendChild(multiUnionElement);
      // Add the multiUnion solid AFTER the constituent nodes!
 }
+#endif
 
 void G4GDMLWriteSolids::
 BooleanWrite(xercesc::DOMElement* solElement,
@@ -1029,7 +1041,7 @@ void G4GDMLWriteSolids::AddSolid(const G4VSolid* const solidPtr)
    if (const G4BooleanSolid* const booleanPtr
      = dynamic_cast<const G4BooleanSolid*>(solidPtr))
      { BooleanWrite(solidsElement,booleanPtr); } else
-   if (solidPtr->GetEntityType()=="G4MultipleUnion")
+   if (solidPtr->GetEntityType()=="G4MultiUnion")
      { const G4MultiUnion* const munionPtr
      = static_cast<const G4MultiUnion*>(solidPtr);
        MultiUnionWrite(solidsElement,munionPtr); } else

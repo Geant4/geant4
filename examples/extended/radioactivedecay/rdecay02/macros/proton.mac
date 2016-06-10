@@ -1,0 +1,37 @@
+# $Id$
+# 									
+# Demonstrate that isotopes produced in hadronic processes
+# can be treated by RadioactiveDecay.  
+#
+# To register hadronic processes, uncomment corresponding lines
+# in PhysicsList.cc
+#                                                                         
+/control/verbose 2
+/run/verbose 1
+#
+# set the target/detector geometry
+/rdecay02/det/setTargetMate G4_Pb
+#
+/run/initialize
+#
+/process/list
+#
+# rdm is applied only to the target volume
+/grdm/noVolumes
+/grdm/selectVolume Target
+
+/gun/particle proton 
+/gun/energy 1 GeV
+/gun/position 0. 0. -2.4 cm
+#
+/analysis/setFileName proton
+/run/printProgress 1000
+/run/beamOn 10000
+
+
+ 
+
+
+
+
+

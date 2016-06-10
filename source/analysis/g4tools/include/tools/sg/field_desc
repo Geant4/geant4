@@ -1,0 +1,66 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_field_desc
+#define tools_sg_field_desc
+
+#include <string>
+#include <cstddef> //ptrdiff_t
+
+#include <vector>
+
+namespace tools {
+namespace sg {
+
+class field_desc {
+  //typedef int offset_t; //could be <0 ?
+public:
+  typedef ptrdiff_t offset_t;
+public:
+  field_desc():m_offset(0){} //touchy
+  field_desc(const std::string& a_name,
+             const std::string& a_class,
+             offset_t a_offset)
+  :m_name(a_name)
+  ,m_class(a_class)
+  ,m_offset(a_offset)
+  {}
+  virtual ~field_desc(){}
+public:
+  field_desc(const field_desc& a_from)
+  :m_name(a_from.m_name)
+  ,m_class(a_from.m_class)
+  ,m_offset(a_from.m_offset)
+  ,m_enums(a_from.m_enums)
+  ,m_opts(a_from.m_opts)
+  {}
+  field_desc& operator=(const field_desc& a_from){
+    m_name = a_from.m_name;
+    m_class = a_from.m_class;
+    m_offset = a_from.m_offset;
+    m_enums = a_from.m_enums;
+    m_opts = a_from.m_opts;
+    return *this;
+  }
+public:
+  const std::string& name() const {return m_name;}
+  const std::string& cls() const {return m_class;}
+  offset_t offset() const {return m_offset;}
+
+  void add_enum(const std::string& a_key,int a_value) {m_enums.push_back(enum_t(a_key,a_value));}
+  typedef std::pair<std::string,int> enum_t;
+  const std::vector<enum_t>& enums() const {return m_enums;}
+
+  void add_opt(const std::string& a_value) {m_opts.push_back(a_value);}
+  const std::vector<std::string>& opts() const {return m_opts;}
+protected:
+  std::string m_name;
+  std::string m_class;
+  offset_t m_offset;
+  std::vector<enum_t> m_enums;
+  std::vector<std::string> m_opts;
+};
+
+}}
+
+#endif

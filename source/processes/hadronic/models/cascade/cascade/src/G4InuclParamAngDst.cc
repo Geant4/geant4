@@ -31,6 +31,7 @@
 //		three-body angular distributions in Bertini-style cascade
 //
 // 20130308  M. Kelsey -- Move PQ,PR calculation to G4InuclSpecialFunctions.
+// 20150608  M. Kelsey -- Label all while loops as terminating.
 
 #include "G4InuclParamAngDst.hh"
 #include "G4InuclSpecialFunctions.hh"
@@ -54,6 +55,8 @@ G4double G4InuclParamAngDst::GetCosTheta(G4int ptype, G4double ekin) const {
 
   G4double Spow = -999.;
   G4int itry = 0;
+
+  /* Loop checking 08.06.2015 MHK */
   while ((Spow < 0. || Spow > 1.) && itry < itry_max) {
     itry++;
     Spow = randomInuclPowers(ekin, coeffAB[J]);

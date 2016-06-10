@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4VSolid.hh 92695 2015-09-14 08:49:44Z gcosmo $
 //
 // 
 // class G4VSolid
@@ -236,6 +236,16 @@ class G4VSolid
     G4VSolid& operator=(const G4VSolid& rhs); 
       // Copy constructor and assignment operator.
 
+    G4double EstimateCubicVolume(G4int nStat, G4double epsilon) const;
+      // Calculate cubic volume based on Inside() method.
+      // Accuracy is limited by the second argument or the statistics
+      // expressed by the first argument.
+
+    G4double EstimateSurfaceArea(G4int nStat, G4double ell) const;
+      // Calculate surface area only based on Inside() method.
+      // Accuracy is limited by the second argument or the statistics
+      // expressed by the first argument.
+
   protected:  // with description
 
     void CalculateClippedPolygonExtent(G4ThreeVectorList& pPolygon,
@@ -288,17 +298,6 @@ class G4VSolid
       // the polygon is described by the vertices at (0),(1),...,(n),(0) in
       // pPolygon. 
       // If the polygon is completely clipped away, the polygon is cleared.
-
-
-    G4double EstimateCubicVolume(G4int nStat, G4double epsilon) const;
-      // Calculate cubic volume based on Inside() method.
-      // Accuracy is limited by the second argument or the statistics
-      // expressed by the first argument.
-
-    G4double EstimateSurfaceArea(G4int nStat, G4double ell) const;
-      // Calculate surface area only based on Inside() method.
-      // Accuracy is limited by the second argument or the statistics
-      // expressed by the first argument.
 
   protected:
 

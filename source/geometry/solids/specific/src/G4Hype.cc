@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4Hype.cc 92024 2015-08-13 14:16:00Z gcosmo $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 //
 // 
@@ -350,7 +350,7 @@ G4bool G4Hype::CalculateExtent( const EAxis axis,
   //
   // Loop over phi segments
   //
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     phi += sigPhi;
     if (numPhi == 1) phi = 0;  // Try to avoid roundoff
@@ -1496,7 +1496,8 @@ G4ThreeVector G4Hype::GetPointOnSurface() const
     rOut2 = outerRadius2+tanOuterStereo2*halfLenZ*halfLenZ;
     rOut  = std::sqrt(rOut2) ;
  
-    do {
+    do    // Loop checking, 13.08.2015, G.Cosmo
+    {
       xRand = RandFlat::shoot(-rOut,rOut) ;
       yRand = RandFlat::shoot(-rOut,rOut) ;
       r2 = xRand*xRand + yRand*yRand ;
@@ -1511,7 +1512,8 @@ G4ThreeVector G4Hype::GetPointOnSurface() const
     rOut2 = outerRadius2+tanOuterStereo2*halfLenZ*halfLenZ;
     rOut  = std::sqrt(rOut2) ;
  
-    do {
+    do    // Loop checking, 13.08.2015, G.Cosmo
+    {
       xRand = RandFlat::shoot(-rOut,rOut) ;
       yRand = RandFlat::shoot(-rOut,rOut) ;
       r2 = xRand*xRand + yRand*yRand ;

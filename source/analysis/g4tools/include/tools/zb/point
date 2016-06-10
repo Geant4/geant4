@@ -1,0 +1,32 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_zb_point
+#define tools_zb_point
+ 
+namespace tools {
+namespace zb {
+
+typedef int    ZPos;
+typedef double ZZ;
+
+class point {
+public:
+  point():x(0),y(0),z(0){}
+public:
+  point(const point& a_from):x(a_from.x),y(a_from.y),z(a_from.z){}
+  point& operator=(const point& a_from){
+    x = a_from.x;
+    y = a_from.y;
+    z = a_from.z;
+    return *this;
+  }
+public:
+  ZPos x;
+  ZPos y;
+  ZZ z; //not used in line,edge_table,polygon
+};
+
+}}
+
+#endif

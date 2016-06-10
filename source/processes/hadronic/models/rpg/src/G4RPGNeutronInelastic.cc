@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGNeutronInelastic.cc 79697 2014-03-12 13:10:09Z gcosmo $
+// $Id: G4RPGNeutronInelastic.cc 92494 2015-09-02 07:19:42Z gcosmo $
 //
  
 #include "G4RPGNeutronInelastic.hh"
@@ -135,8 +135,7 @@ G4RPGNeutronInelastic::SlowNeutron(const G4HadProjectile* originalIncident,
     // distribution in the cms system 
     //
     G4double cost1, eka = 0.0;
-    while (eka <= 0.0)
-    {
+    while (eka <= 0.0) {  /* Loop checking, 01.09.2015, D.Wright */
       cost1 = -1.0 + 2.0*G4UniformRand();
       eka = 1.0 + 2.0*cost1*A + A*A;
     }

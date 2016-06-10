@@ -27,7 +27,7 @@
 /// \brief Definition of the Em10SteppingAction class
 //
 //
-// $Id: Em10SteppingAction.hh 73033 2013-08-15 09:24:45Z gcosmo $
+// $Id: Em10SteppingAction.hh 90463 2015-06-01 09:33:38Z gcosmo $
 //
 // 
 
@@ -61,7 +61,7 @@ private:
   Em10EventAction*          eventaction;
   Em10RunAction*            runaction;
 
-  G4int IDnow,IDold;
+  G4long IDnow,IDold;
 
 };
 

@@ -160,8 +160,8 @@ template<class OBJECT>
     }
     fNbObjects = 0;
 
-    typename std::set<Watcher*>::iterator it = fWatchers.begin();
-    typename std::set<Watcher*>::iterator _end = fWatchers.end();
+    typename WatcherSet::iterator it = fWatchers.begin();
+    typename WatcherSet::iterator _end = fWatchers.end();
 
     for (; it != _end; it++)
     {
@@ -324,12 +324,15 @@ template<class OBJECT>
      */
     fNbObjects++;
 
-    typename std::set<Watcher*>::iterator it = fWatchers.begin();
-    typename std::set<Watcher*>::iterator _end = fWatchers.end();
-
-    for (; it != _end; it++)
+    if(fWatchers.empty() == false)
     {
-      (*it)->NotifyNewObject(__toHook->GetObject(), this);
+      typename WatcherSet::iterator it = fWatchers.begin();
+      typename WatcherSet::iterator _end = fWatchers.end();
+
+      for (; it != _end; it++)
+      {
+        (*it)->NotifyAddObject(__toHook->GetObject(), this);
+      }
     }
   }
 
@@ -359,8 +362,8 @@ template<class OBJECT>
 
     fNbObjects--;
 
-    typename std::set<Watcher*>::iterator it = fWatchers.begin();
-    typename std::set<Watcher*>::iterator _end = fWatchers.end();
+    typename WatcherSet::iterator it = fWatchers.begin();
+    typename WatcherSet::iterator _end = fWatchers.end();
 
     for (; it != _end; it++)
     {
@@ -521,6 +524,27 @@ template<class OBJECT>
 
     if (__destination->fNbObjects == 0)
     {
+
+      if(__destination->fWatchers.empty()==false)
+      {
+        typename WatcherSet::iterator it = __destination->fWatchers.begin();
+        typename WatcherSet::iterator _end = __destination->fWatchers.end();
+
+//        G4cout << "G4FastList<OBJECT>::transferTo --- Watcher size = "
+//               << __destination->fWatchers.size()
+//               << G4endl;
+
+        for (; it != _end; it++)
+        {
+          for(iterator it2 = this->begin() ;
+              it2 != this->end(); ++it2
+          )
+          {
+            (*it)->NotifyAddObject(*it2, this);
+          }
+        }
+      }
+
       __destination->fNbObjects = this->fNbObjects;
 
       __destination->fBoundary.SetNext(fBoundary.GetNext());
@@ -530,6 +554,21 @@ template<class OBJECT>
     }
     else
     {
+      if(__destination->fWatchers.empty()==false)
+      {
+        typename WatcherSet::iterator it = __destination->fWatchers.begin();
+        typename WatcherSet::iterator _end = __destination->fWatchers.end();
+
+        for (; it != _end; it++)
+        {
+          for(iterator it2 = this->begin() ;
+              it2 != this->end(); ++it2)
+          {
+            (*it)->NotifyAddObject(*it2, this);
+          }
+        }
+      }
+
       node* lastNode = __destination->fBoundary.GetPrevious();
       lastNode->SetNext(fBoundary.GetNext());
       fBoundary.GetNext()->SetPrevious(lastNode);
@@ -588,7 +627,7 @@ template<class OBJECT>
     G4FastListNode<OBJECT>* __node = GetNode(__obj);
 
     if (__node == 0) return 0;
-    if (__node->fListRef == 0) return 0;
+    if (__node->fListRef == nullptr) return 0;
 
     return __node->fListRef->fpTrackList;
   }
@@ -598,7 +637,7 @@ template<class OBJECT>
   G4FastList<OBJECT>::GetList(G4FastListNode<OBJECT>* __node)
   {
     if (__node == 0) return 0;
-    if (__node->fListRef == 0) return 0;
+    if (__node->fListRef == nullptr) return 0;
 
     return __node->fListRef->fpList;
   }

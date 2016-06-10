@@ -116,7 +116,8 @@ namespace G4INCL {
   // Enumerator for Cross-Section parametrizations
   enum CrossSectionsType {
     INCL46CrossSections,
-    MultiPionsCrossSections
+    MultiPionsCrossSections,
+    TruncatedMultiPionsCrossSections
   };
 
   // Enumerator for phase-space generator

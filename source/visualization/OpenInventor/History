@@ -1,4 +1,4 @@
-$Id: History 80852 2014-05-13 15:37:00Z gcosmo $
+$Id: History 91687 2015-07-31 09:44:16Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,23 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+30th July 2015  John Allison  (openinventor-V10-01-02)
+- G4OpenInventor:
+  o Added IsUISessionCompatible.
+  o The OI graphics system is not compatible with a batch job.
+
+2nd February 2015  Gabriele Cosmo (openinventor-V10-01-01)
+- Fix to sources.cmake script to include missing dependency on external library.
+
+18 Dec 2014  Frederick Jones
+- G4OpenInventorViewer & G4OpenInventorXtExtendedViewer:
+  o Added viewer menu button and methods for PDF output
+
+5th December 2014  Gabriele Cosmo  (openinventor-V10-01-00)
+- Corrected sources.cmake to include missing files:
+    G4OpenInventorXtExaminerViewerMessenger.hh
+    G4OpenInventorXtExaminerViewerMessenger.cc
 
 13th May 2014  John Allison  (openinventor-V10-00-01)
 - Coworks: DAWN-V10-00-02, visman-V10-00-08, opengl-V10-00-05.

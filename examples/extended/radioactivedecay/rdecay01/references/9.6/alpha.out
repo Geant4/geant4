@@ -1,0 +1,198 @@
+
+*************************************************************
+ Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  OpenGLImmediateX (OGLI, OGLIX)
+  OpenGLStoredX (OGL, OGLS, OGLSX)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+  drawByAttribute
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+  attributeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+Available colours:
+  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
+
+/run/verbose 1
+#
+/gun/particle ion
+/gun/ion 84 212
+#
+/tracking/verbose 2
+/run/beamOn 1
+
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
+          DefaultRegionForTheWorld
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_AIR
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = Po212,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm      0 fm      0 eV      0 eV      0 fm      0 fm      World   initStep
+    1      0 fm      0 fm      0 fm      0 eV      0 eV      0 fm      0 fm      World   RadioactiveDecay
+
+    :----- List of secondaries ----------------
+           Pb208:  energy = 169.3 keV  time = 5.066 ns 
+           alpha:  energy = 8.785 MeV  time = 5.066 ns 
+    :------------------------------------------
+
+
+*********************************************************************************************************
+* G4Track Information:   Particle = alpha,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm      0 fm   8.78 MeV     0 eV      0 fm      0 fm      World   initStep
+    1     -1 mm   -440 um    483 um   8.78 MeV     0 eV   1.19 mm   1.19 mm      World   OutOfWorld
+
+*********************************************************************************************************
+* G4Track Information:   Particle = Pb208,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm      0 fm    169 keV     0 eV      0 fm      0 fm      World   initStep
+    1      0 fm      0 fm      0 fm    169 keV     0 eV      0 fm      0 fm      World   RadioactiveDecay
+
+ end of event      0 : Po212 ---> Pb208
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0.1s Sys=0s
+
+ ======================== run summary ======================
+ The run was 1 Po212 of 0 eV 
+ ===========================================================
+
+ Nb of generated particles: 
+
+          Pb208:       1  Emean =  169.3 keV	( 169.3 keV --> 169.3 keV)
+          alpha:       1  Emean =  8.785 MeV	( 8.785 MeV --> 8.785 MeV)
+
+   Ekin Total (Q): mean =  8.954 MeV	( 8.954 MeV --> 8.954 MeV)
+
+   Momentum balance (excluding gamma desexcitation): mean = 0.007142 eV 	( 0.007142 eV  --> 0.007142 eV )
+
+   Total time of life : mean =  5.066 ns   half-life =  3.512 ns    ( 5.066 ns  --> 5.066 ns )
+
+   Total visible energy : mean =  8.954 MeV   ( 8.954 MeV --> 8.954 MeV)
+
+   Activity of Po212 = 5.607e+29 Bq/g   (1.515e+19 Ci/g) 
+
+#
+/tracking/verbose 0
+/rdecay01/event/printModulo 10000
+#
+/run/beamOn 100000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_AIR
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+ end of event      0 : Po212 ---> Pb208
+
+ end of event  10000 : Po212 ---> Pb208
+
+ end of event  20000 : Po212 ---> Pb208
+
+ end of event  30000 : Po212 ---> Pb208
+
+ end of event  40000 : Po212 ---> Pb208
+
+ end of event  50000 : Po212 ---> Pb208
+
+ end of event  60000 : Po212 ---> Pb208
+
+ end of event  70000 : Po212 ---> Pb208
+
+ end of event  80000 : Po212 ---> Pb208
+
+ end of event  90000 : Po212 ---> Pb208
+Run terminated.
+Run Summary
+  Number of events processed : 100000
+  User=2.05s Real=2.06s Sys=0s
+
+ ======================== run summary ======================
+ The run was 100000 Po212 of 0 eV 
+ ===========================================================
+
+ Nb of generated particles: 
+
+          Pb208:  100000  Emean =  169.3 keV	( 169.3 keV --> 169.3 keV)
+          alpha:  100000  Emean =  8.785 MeV	( 8.785 MeV --> 8.785 MeV)
+
+   Ekin Total (Q): mean =  8.954 MeV	( 8.954 MeV --> 8.954 MeV)
+
+   Momentum balance (excluding gamma desexcitation): mean = 0.007142 eV 	( 0.007142 eV  --> 0.007142 eV )
+
+   Total time of life : mean =  433.7 ns   half-life =  300.6 ns    ( 2.62 ps  --> 6.191 mus)
+
+   Total visible energy : mean =  8.954 MeV   ( 8.954 MeV --> 8.954 MeV)
+
+   Activity of Po212 = 6.55e+27 Bq/g   (1.77e+17 Ci/g) 
+
+Graphics systems deleted.
+Visualization Manager deleting...
+G4 kernel has come to Quit state.
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager

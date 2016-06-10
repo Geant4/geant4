@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFAnnihilation.cc 86646 2014-11-14 13:29:39Z gcosmo $
+// $Id: G4FTFAnnihilation.cc 91914 2015-08-11 07:00:39Z gcosmo $
 //
 
 // ------------------------------------------------------------
@@ -59,13 +59,17 @@
 #include "G4Neutron.hh"
 #include "G4ParticleDefinition.hh"
 
+#include "G4Exp.hh"
+#include "G4Log.hh"
+#include "G4Pow.hh"
+
 //#include "G4ios.hh"
 //#include "UZHI_diffraction.hh"
 
 
 //============================================================================
 
-//efine debugFTFannih
+//define debugFTFannih
 
 
 //============================================================================
@@ -163,7 +167,7 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
     // Process cross sections
     X_a = 25.0*FlowF;  // mb 3-shirt diagram
     if ( SqrtS < MesonProdThreshold ) {
-      X_b = 3.13 + 140.0*std::pow( ( MesonProdThreshold - SqrtS )/GeV, 2.5 ); 
+      X_b = 3.13 + 140.0*G4Pow::GetInstance()->powA( ( MesonProdThreshold - SqrtS )/GeV, 2.5 ); 
     } else {
       X_b = 6.8*GeV / SqrtS;  // mb anti-quark-quark annihilation
     }
@@ -302,7 +306,9 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
     G4int NumberOfTries( 0 );
     G4double ScaleFactor( 1.0 );
 
-    do {  // while ( SumMt > SqrtS );
+    const G4int maxNumberOfLoops = 1000;
+    G4int loopCounter = 0;
+    do {
       NumberOfTries++;
       if ( NumberOfTries == 100*(NumberOfTries/100) ) {
         // At large number of tries it would be better to reduce the values of <Pt^2>
@@ -322,7 +328,11 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
         ModMom2[i] = Quark_Mom[i].mag2();
         SumMt += std::sqrt( ModMom2[i] + MassQ2 );
       }
-    } while ( SumMt > SqrtS );
+    } while ( ( SumMt > SqrtS ) && 
+              ++loopCounter < maxNumberOfLoops );  /* Loop checking, 10.08.2015, A.Ribon */
+    if ( loopCounter >= maxNumberOfLoops ) {
+      return false;
+    }
 
     G4double WminusTarget( 0.0 ), WplusProjectile( 0.0 );
 
@@ -349,7 +359,8 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
     ScaleFactor = 1.0;
     G4bool Succes( true );
 
-    do {  // while ( ! Succes )
+    loopCounter = 0;
+    do {
 
       Succes = true;
       NumberOfTries++;
@@ -412,7 +423,11 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
       WminusTarget = ( S - Alfa + Beta + std::sqrt( DecayMomentum2 ) ) / 2.0 / SqrtS; 
       WplusProjectile = SqrtS - Beta/WminusTarget;
 
-    } while ( ! Succes );
+    } while ( ( ! Succes ) &&
+              ++loopCounter < maxNumberOfLoops );  /* Loop checking, 10.08.2015, A.Ribon */
+    if ( loopCounter >= maxNumberOfLoops ) {
+      return false;
+    }
 
     G4double SqrtScaleF = std::sqrt( ScaleFactor );
     for ( G4int i = 0; i < 3; i++ ) {
@@ -672,6 +687,8 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
       G4int    NumberOfTries( 0 );
       G4double ScaleFactor( 1.0 );
 
+      const G4int maxNumberOfLoops = 1000;
+      G4int loopCounter = 0;
       do { 
         NumberOfTries++;
         if ( NumberOfTries == 100*(NumberOfTries/100) ) { 
@@ -692,7 +709,11 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
           ModMom2[i] = Quark_Mom[i].mag2();
           SumMt += std::sqrt( ModMom2[i] + MassQ2 );
         }
-      } while ( SumMt > SqrtS );
+      } while ( ( SumMt > SqrtS ) &&  
+                ++loopCounter < maxNumberOfLoops );  /* Loop checking, 10.08.2015, A.Ribon */
+      if ( loopCounter >= maxNumberOfLoops ) {
+        return false;
+      }
 
       G4double WminusTarget( 0.0 ), WplusProjectile( 0.0 );
 
@@ -702,6 +723,7 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
       ScaleFactor = 1.0;
       G4bool Succes( true );
 
+      loopCounter = 0;
       do { 
 
         Succes = true;
@@ -760,7 +782,11 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
         WminusTarget = ( S - Alfa + Beta + std::sqrt( DecayMomentum2 ) ) / 2.0 / SqrtS; 
         WplusProjectile = SqrtS - Beta/WminusTarget;
 
-      } while ( ! Succes );
+      } while ( ( ! Succes ) &&
+                ++loopCounter < maxNumberOfLoops );  /* Loop checking, 10.08.2015, A.Ribon */
+      if ( loopCounter >= maxNumberOfLoops ) {
+        return false;
+      }
 
       G4double SqrtScaleF = std::sqrt( ScaleFactor );
 
@@ -942,8 +968,8 @@ G4ThreeVector G4FTFAnnihilation::GaussianPt( G4double AveragePt2, G4double maxPt
   if ( AveragePt2 <= 0.0 ) {
     Pt2 = 0.0;
   } else {
-    Pt2 = -AveragePt2 * std::log( 1.0 + G4UniformRand() * 
-                                        ( std::exp( -maxPtSquare/AveragePt2 ) -1.0 ) );
+    Pt2 = -AveragePt2 * G4Log( 1.0 + G4UniformRand() * 
+                                        ( G4Exp( -maxPtSquare/AveragePt2 ) -1.0 ) );
   }
   G4double Pt = std::sqrt( Pt2 );
   G4double phi = G4UniformRand() * twopi;

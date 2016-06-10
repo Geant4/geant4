@@ -13,6 +13,52 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+9-September 2015, Gunter Folger      had-binary-V10-01-08
+- migrate to G4Exp, G4Log, and G4Pow for std::exp, std::log, and std::pow.
+
+31-August 2015, Gunter Folger        had-binary-V10-01-07
+- undo change by tag ...01-06, was rejected.
+- Add protections for while loops where needed, add comments.
+
+25-May 2015, Vladimir Uzhinsky       had-binary-V10-01-06
+- A bug was fixed in G4BinaryCascade.cc in G4BinaryCascade::CorrectBarionsOnBoundary
+  for slow antibaryons. Search for Uzhi 25.05.2015
+
+15-May 2015, Vladimir Uzhinsky       had-binary-V10-01-05
+- G4GeneratorPrecompoundInterface.cc: Propagate for hA interactions
+  A bug is erased for a case when an ActualMass of a residual nucleus <= 
+  ground state mass of the residual.
+
+ 5-May 2015, Vladimir Uzhinsky       had-binary-V10-01-04
+- G4GeneratorPrecompoundInterface.cc: 
+  Variable CaptureThreshold is introduced.
+  Calculation of excitation energies of projectile and target nuclear residuals
+  was improved.
+
+29-April 2015, Vladimir Uzhinsky       had-binary-V10-01-03
+- G4GeneratorPrecompoundInterface.cc: 
+  Improved calculation of excitation energies of nuclear residuals for QGS model.
+  Improved debug diagnostic.
+
+28-April 2015, Vladimir Uzhinsky       had-binary-V10-01-02
+- G4GeneratorPrecompoundInterface.cc: 
+  Improved calculation of excitation energies of nuclear residuals.
+  Improved debug diagnostic.
+
+27-April 2015, Gunter Folger           had-binary-V10-01-01
+- Fix for compiler warning (clang 3.6) on expression with side effects
+  - G4BinaryCascade::DebugApplyCollisionFail(): use const & as 
+       argument to typeid()
+
+16 April 2015 Vladimir Uzhinsky   had-binary-V10-01-00
+   Re-tag of the previous tag. Tag number was wrong.
+
+ 9 April 2015 Vladimir Uzhinsky   had-binary-V10-00-12
+- G4GeneratorPrecompoundInterface::PropagateNuclNucl
+       Improved fragmentation of fast residual nuclei, with energies some TeV/nucleon.
+       A residual is transformed in its rest frame. After fragmentation, all produced
+       fragments are transformed to Lab. system.
+
 11-November 2014 Gunter Folger    had-binary-V10-00-11
 - BinaryLightReaction: Momentum correction wrong in case of no Fragment, but 
        primary projectile nucleon(s) in final state. 

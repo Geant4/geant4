@@ -30,6 +30,7 @@
 // 11-OCT-2007 F.W. Jones: removed erroneous code for identity
 //             exchange of particles.
 // FWJ 27-AUG-2010: extended to 5 GeV by Tony Kwan TRIUMF
+// 06-Aug-15 A.Ribon migrating to G4Pow
 
 #include "G4LEHadronProtonElastic.hh"
 #include "G4PhysicalConstants.hh"
@@ -37,7 +38,7 @@
 #include "Randomize.hh"
 #include "G4ios.hh"
 
-#include "Randomize.hh"
+#include "G4Pow.hh"
 
 
 G4LEHadronProtonElastic::G4LEHadronProtonElastic():
@@ -295,7 +296,7 @@ G4double G4LEHadronProtonElastic::RandCosThetaDipPen()
       modX = x;
       signX = 1.;
     }
-    cosTheta = signX*std::pow(modX,power);
+    cosTheta = signX*G4Pow::GetInstance()->powA(modX,power);
   }
   return cosTheta; 
 }

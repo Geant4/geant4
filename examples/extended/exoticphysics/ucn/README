@@ -59,7 +59,6 @@ This example exhibits the functionality of UCN physics
 
     G4StepLimiter
     G4UserSpecialCuts
-    G4Decay (G4NeutronBetaDecayChannel)
 
     and in ConstructUCN()
 

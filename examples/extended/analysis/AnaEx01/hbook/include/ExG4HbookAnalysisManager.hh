@@ -103,6 +103,12 @@ class ExG4HbookAnalysisManager : public G4VAnalysisManager
     G4bool SetH2HbookIdOffset(G4int offset);
     G4int  GetH2HbookIdOffset() const;
 
+    // Set the offset of HBOOK ID for P1
+    // ( default value = firstHistoID + 200 if firstHistoID > 0; 
+    //   otherwise = 201 )
+    G4bool SetP1HbookIdOffset(G4int offset);
+    G4int  GetP1HbookIdOffset() const;
+
     // Set the offset of NTUPLE ID for ntuples
     // ( default value = firstNtupleID if firstNtupleID > 0; otherwise = 1)
     G4bool SetNtupleHbookIdOffset(G4int offset);
@@ -114,6 +120,8 @@ class ExG4HbookAnalysisManager : public G4VAnalysisManager
                              G4bool onlyIfActive = true) const;
     tools::hbook::h2*  GetH2(G4int id, G4bool warn = true,
                              G4bool onlyIfActive = true) const;
+    tools::hbook::p1*  GetP1(G4int id, G4bool warn = true,
+                              G4bool onlyIfActive = true) const;
     tools::hbook::wntuple* GetNtuple() const;
     tools::hbook::wntuple* GetNtuple(G4int ntupleId) const;
  
@@ -128,6 +136,11 @@ class ExG4HbookAnalysisManager : public G4VAnalysisManager
     std::vector<tools::hbook::h2*>::const_iterator BeginConstH2() const;
     std::vector<tools::hbook::h2*>::const_iterator EndConstH2() const;
     
+    std::vector<tools::hbook::p1*>::iterator BeginP1();
+    std::vector<tools::hbook::p1*>::iterator EndP1();
+    std::vector<tools::hbook::p1*>::const_iterator BeginConstP1() const;
+    std::vector<tools::hbook::p1*>::const_iterator EndConstP1() const;
+    
     std::vector<tools::hbook::wntuple*>::iterator BeginNtuple();
     std::vector<tools::hbook::wntuple*>::iterator EndNtuple();
     std::vector<tools::hbook::wntuple*>::const_iterator BeginConstNtuple() const;
@@ -138,6 +151,9 @@ class ExG4HbookAnalysisManager : public G4VAnalysisManager
     virtual G4bool OpenFileImpl(const G4String& fileName);
     virtual G4bool WriteImpl();
     virtual G4bool CloseFileImpl(); 
+    virtual G4bool PlotImpl();
+    virtual G4bool MergeImpl(tools::histo::hmpi* hmpi);
+    virtual G4bool IsOpenFileImpl() const;
    
   private:
     // static data members
@@ -154,7 +170,7 @@ class ExG4HbookAnalysisManager : public G4VAnalysisManager
     ExG4HbookP1Manager*      fP1Manager;
     ExG4HbookP2DummyManager* fP2Manager;
     ExG4HbookNtupleManager*  fNtupleManager;
-    ExG4HbookFileManager*    fFileManager;
+    std::shared_ptr<ExG4HbookFileManager> fFileManager;
 };
 
 #include "ExG4HbookAnalysisManager.icc"

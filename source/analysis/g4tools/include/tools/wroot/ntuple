@@ -4,7 +4,7 @@
 #ifndef tools_wroot_ntuple
 #define tools_wroot_ntuple
 
-// An ntuple class to write at the ROOT format.
+// An ntuple class to write at the CERN-ROOT format.
 // It inherits wroot::tree and each column is mapped
 // on a wroot::branch. Each add_row() does a tree::fill().
 
@@ -21,7 +21,7 @@ namespace tools {
 namespace wroot {
 
 class ntuple : public tree {
-protected:
+public:
   class icol {
   public:
     virtual ~icol(){}

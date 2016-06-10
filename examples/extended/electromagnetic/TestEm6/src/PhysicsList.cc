@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm6/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 83428 2014-08-21 15:46:01Z gcosmo $
+// $Id: PhysicsList.cc 93739 2015-10-30 11:04:09Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,9 +39,13 @@
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmStandardPhysics_option4.hh"
+#include "G4EmStandardPhysicsGS.hh"
+#include "G4EmStandardPhysicsWVI.hh"
+#include "G4EmStandardPhysicsSS.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 #include "G4EmLowEPPhysics.hh"
+
 #include "G4DecayPhysics.hh"
 
 #include "G4ParticleDefinition.hh"
@@ -230,6 +234,24 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmLowEPPhysics();
 
+  } else if (name == "emstandardGS") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysicsGS();
+
+  } else if (name == "emstandardSS") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysicsSS();
+  
+  } else if (name == "emstandardWVI") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysicsWVI();
+  
   } else {
 
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"

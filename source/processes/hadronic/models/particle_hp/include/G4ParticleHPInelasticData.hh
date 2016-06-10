@@ -48,6 +48,8 @@
 #include "G4PhysicsTable.hh"
 #include "G4Neutron.hh"
 
+class G4ParticleHPData;
+
 class G4ParticleHPInelasticData : public G4VCrossSectionDataSet
 {
    public:
@@ -75,7 +77,8 @@ class G4ParticleHPInelasticData : public G4VCrossSectionDataSet
 
       G4double GetCrossSection(const G4DynamicParticle*, const G4Element*, G4double aT);
 
-  void BuildPhysicsTableHP(G4ParticleDefinition* projectile, const char* dataDirVariable); // name it 'HP' to avoid compilation warning because of G4VCrossSectionDataSet's method
+  //void BuildPhysicsTableHP(G4ParticleDefinition* projectile, const char* dataDirVariable); // name it 'HP' to avoid compilation warning because of G4VCrossSectionDataSet's method
+      void BuildPhysicsTable( const G4ParticleDefinition& ); 
 
       void DumpPhysicsTable(const G4ParticleDefinition&);
 
@@ -87,6 +90,7 @@ class G4ParticleHPInelasticData : public G4VCrossSectionDataSet
    public:
       G4int GetVerboseLevel() const;
       void SetVerboseLevel( G4int );
+      virtual void CrossSectionDescription(std::ostream&) const;
  
    private:
    
@@ -94,12 +98,10 @@ class G4ParticleHPInelasticData : public G4VCrossSectionDataSet
 
       G4bool onFlightDB;
 
-      G4double ke_cache;
-      G4double xs_cache;
-      const G4Element* element_cache;
-      const G4Material* material_cache;
-
   G4ParticleDefinition* theProjectile;
+
+      G4ParticleHPData* theHPData;
+
   //char envVariable[500];
 };
 

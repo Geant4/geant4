@@ -60,6 +60,7 @@
 #include "G4GenericIon.hh"
 #include "G4LossTableManager.hh"
 #include "G4UAtomicDeexcitation.hh"
+#include "G4EmParameters.hh"
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
 
@@ -67,6 +68,7 @@
 G4EmLEPTSPhysics::G4EmLEPTSPhysics( const G4String& name)
  : G4VPhysicsConstructor(name)
 {
+  G4EmParameters::Instance()->SetDefaults();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

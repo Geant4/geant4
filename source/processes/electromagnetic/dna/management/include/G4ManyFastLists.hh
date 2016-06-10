@@ -34,6 +34,7 @@
 #define G4MANYFASTLISTS_HH_
 
 #include "G4FastList.hh"
+#include <set>
 
 template<class OBJECT>
   struct G4ManyFastLists_iterator;
@@ -49,11 +50,15 @@ template<class OBJECT>
     ManyLists fAssociatedLists;
     // TODO use "marked list" insted of vector
 
+    typedef std::set<typename G4FastList<OBJECT>::Watcher*,
+        sortWatcher<OBJECT>> WatcherSet;
+    WatcherSet* fMainListWatchers;
+
   public:
     typedef G4ManyFastLists_iterator<OBJECT> iterator;
 
     G4ManyFastLists() : G4FastList<OBJECT>::Watcher(),
-        fAssociatedLists()
+        fAssociatedLists(), fMainListWatchers(0)
     {
     }
 
@@ -64,12 +69,73 @@ template<class OBJECT>
       fAssociatedLists.pop(__list);
     }
 
+    void AddGlobalWatcher(typename G4FastList<OBJECT>::Watcher* watcher)
+    {
+      if(fMainListWatchers == 0)
+      {
+        fMainListWatchers = new WatcherSet();
+      }
+
+      G4cout << watcher->GetWatcherName() << G4endl;
+
+      fMainListWatchers->insert(watcher);
+
+      typename ManyLists::iterator it = fAssociatedLists.begin();
+      typename ManyLists::iterator _end = fAssociatedLists.end();
+
+      for(;it != _end ;++it)
+      {
+        watcher->Watch(*it);
+//        (*it)->AddWatcher(watcher);
+//        (*it)->AddWatcher(watcher);
+      }
+    }
+
     inline void Add(G4FastList<OBJECT>* __list)
     {
       if (__list == 0) return;
       fAssociatedLists.push_back(__list); // TODO use the table doubling tech
-      __list->AddWatcher(this);
+      //__list->AddWatcher(this);
       this->Watch(__list);
+
+      if(fMainListWatchers == 0) return;
+
+      typename WatcherSet::iterator it_watcher = fMainListWatchers->begin();
+      typename WatcherSet::iterator end_watcher = fMainListWatchers->end();
+
+//      G4cout << "G4ManyFastLists::Add -- N watchers ="
+//             << fMainListWatchers->size()
+//             << G4endl;
+
+      for(;it_watcher != end_watcher ;++it_watcher)
+      {
+//        G4cout << " *** *** *** WATCH --- "
+//                           << (*it_watcher)->GetWatcherName()
+//                           << G4endl;
+        (*it_watcher)->Watch(__list);
+      }
+
+      if(__list->empty() == false)
+      {
+        it_watcher = fMainListWatchers->begin();
+
+        for(;it_watcher != end_watcher ;++it_watcher)
+        {
+          typename G4FastList<OBJECT>::iterator it_obj = __list->begin();
+          for(;it_obj != __list->end() ;++it_obj)
+          {
+//            G4cout << " *** *** *** NOTIFY ADD OBJ --- "
+//                   << (*it_watcher)->GetWatcherName()
+//                   << G4endl;
+
+            (*it_watcher)->NotifyAddObject(*it_obj,__list);
+          }
+        }
+      }
+//      else
+//      {
+//        G4cout << "__list->empty() == true" << G4endl;
+//      }
 
       /*
       typename ManyLists::const_iterator __it = fAssociatedLists
@@ -89,6 +155,15 @@ template<class OBJECT>
       fAssociatedLists.pop(__list); // TODO use the table doubling tech
       __list->RemoveWatcher(this);
       this->StopWatching(__list);
+
+      typename WatcherSet::iterator it = fMainListWatchers->begin();
+      typename WatcherSet::iterator _end = fMainListWatchers->end();
+
+      for(;it != _end ;++it)
+      {
+        (*it)->StopWatching(__list);
+      }
+
 //      typename ManyLists::node* __node = __list->GetListNode();
 //      if(__node)
 //      {

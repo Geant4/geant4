@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4V3DNucleus.hh 66785 2013-01-12 15:10:13Z gcosmo $
+// $Id: G4V3DNucleus.hh 93818 2015-11-02 11:34:19Z gcosmo $
 //
 // 20110805  M. Kelsey -- Change nucleon vector to use objects, not pointers
 
@@ -92,7 +92,8 @@ ChooseImpactXandY(G4double maxImpact)
     x = 2*G4UniformRand() - 1;
     y = 2*G4UniformRand() - 1;
   }
-  while(x*x + y*y > 1);
+  while(x*x + y*y > 1);  /* Loop checking, 30-Oct-2015, G.Folger */
+
   G4double impactX = x*(maxImpact); 
   G4double impactY = y*(maxImpact);
   theImpactParameter.first = impactX;

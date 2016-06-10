@@ -41,8 +41,6 @@
 #include "G4EnergyLossTables.hh"
 #include "G4UnitsTable.hh"
 #include <iostream> 
-using namespace std;
-
 
 #include "G4LEPTSDiffXS.hh"
 #include "G4LEPTSDistribution.hh"

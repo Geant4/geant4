@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UserTimeStepAction.cc 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id: G4UserTimeStepAction.cc 94289 2015-11-11 08:33:40Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
 //
@@ -44,9 +44,9 @@ G4UserTimeStepAction::~G4UserTimeStepAction()
 
 G4UserTimeStepAction::G4UserTimeStepAction(const G4UserTimeStepAction& /*other*/){;}
 
-G4UserTimeStepAction& G4UserTimeStepAction::operator=(const G4UserTimeStepAction& rhs)
+G4UserTimeStepAction& G4UserTimeStepAction::operator=(const G4UserTimeStepAction& /*rhs*/)
 {
-    if (this == &rhs) return *this;
+//    if (this == &rhs) return *this;
     return *this;
 }
 

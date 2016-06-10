@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.cc 87360 2014-12-01 16:07:16Z gcosmo $
+// $Id: G4GMocrenFileSceneHandler.cc 88772 2015-03-09 12:42:03Z gcosmo $
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura  
@@ -136,18 +136,18 @@ G4GMocrenFileSceneHandler::G4GMocrenFileSceneHandler(G4GMocrenFile& system,
     //std::strcpy(kGddDestDir , "");                    // output dir
     //std::strcpy(kGddFileName, DEFAULT_GDD_FILE_NAME); // filename
     std::strncpy(kGddFileName, DEFAULT_GDD_FILE_NAME,
-		 std::strlen(DEFAULT_GDD_FILE_NAME));   // filename
+		 std::strlen(DEFAULT_GDD_FILE_NAME)+1);   // filename
   } else {
     const char * env = std::getenv("G4GMocrenFile_DEST_DIR");
     int len = std::strlen(env);
-    if(len >= 256) {
+    if(len > 256) {
       G4Exception("G4GMocrenFileSceneHandler::G4GMocrenFileSceneHandler(*)",
                   "gMocren1000", FatalException,
                   "Invalid length of string set in G4GMocrenFile_DEST_DIR");
     }
-    std::strncpy(kGddDestDir, env, len);  // output dir
+    std::strncpy(kGddDestDir, env, len+1);  // output dir
     std::strncpy(kGddFileName, DEFAULT_GDD_FILE_NAME,
-                 std::strlen(DEFAULT_GDD_FILE_NAME));  // filename
+                 std::strlen(DEFAULT_GDD_FILE_NAME)+1);  // filename
   }
 		
   // maximum number of g4.gdd files in the dest directory
@@ -205,7 +205,7 @@ void G4GMocrenFileSceneHandler::SetGddFileName()
   const G4int MAX_FILE_INDEX = kMaxFileNum - 1 ;
 
   // dest directory (null if no environmental variables is set)
-  std::strncpy(kGddFileName, kGddDestDir, std::strlen(kGddDestDir));
+  std::strncpy(kGddFileName, kGddDestDir, std::strlen(kGddDestDir)+1);
 
   // create full path name (default)
   std::strncat ( kGddFileName, DEFAULT_GDD_FILE_NAME, std::strlen(DEFAULT_GDD_FILE_NAME));

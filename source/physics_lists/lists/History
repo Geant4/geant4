@@ -1,4 +1,4 @@
-$Id: History 86364 2014-11-10 08:41:56Z gcosmo $
+$Id: History 94096 2015-11-05 15:19:03Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,70 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05-Nov-2015, Alberto Ribon                (phys-lists-V10-01-13)
+- Removed neutron_hp/ .
+
+04-Nov-2015, Robert Hatcher               (phys-lists-V10-01-12)
+- Migrate responsibility for pulling the $PHYSLIST down to G4PhysListRegistry
+  rather than the g4alt::G4PhysListFactory.
+- Allow user to set a preferred default in case $PHYSLIST is not set;
+  initial value (and value when set to "") is system default "FTFP_BERT".
+
+03-Nov-2015, Alberto Ribon                (phys-lists-V10-01-11)
+- LBE : Migrated to ParticleHP.
+
+27-Oct-2015, Alberto Ribon                (phys-lists-V10-01-10)
+- LBE : Replaced old G4GGNuclNuclCrossSection class with the new,
+        recommended one, G4ComponentGGNuclNuclXsc .
+
+01-Oct-2015, Robert Hatcher               (phys-lists-V10-01-09)
+- g4alt::G4PhysListFactory - added extra EM option "_GS" and registered
+    new QGSP_BIC_AllHP physics list to mirror original factory.
+
+22-Sep-2015, Alberto Ribon              (phys-lists-V10-01-08)
+- FTFP_BERT_TRV : Switch off (temporarily, for the release 10.2)
+  the low-mass diffraction dissociation used in G4HadronHElasticPhysics
+
+18-Sep-2015, V.Ivanchenko               (phys-lists-V10-01-07)
+- G4PhysListFactory - added extra EM option "_GS" where 
+    G4GoudsmithSoundersonMscModel is used for e+-  
+
+10-Jun-2015, V.Ivanchenko               (phys-lists-V10-01-06)
+- FTFP_BERT_TRV - uses G4EmStandardPhysicsGS
+- G4PhysListFactory - added QGSP_BIC_AllHP (fixed problem #1732)
+
+22-May-2015, Robert Hatcher             (phys-lists-V10-01-05)
+- g4alt::G4PhysListFactory should now work with G4GenericPhysicsList
+  on clang (3.4 and 3.5) and vc12
+- cowork with tags "intercoms-V10-01-02", "emdna-V10-01-19", 
+  "emstand-V10-01-16", "hadr-cohe-V10-01-07", and "hadr-inclxx-V10-01-00"
+
+22-May-2015, Robert Hatcher             (phys-lists-V10-01-04)
+- Updates to g4alt::G4PhysListFactory to do more passthrough to underlying
+  G4PhysListRegistry singleton.
+- G4PhysListRegistry more checking that all the requested phys ctor
+  additions are available; update output to closer match old factory
+- Enable registration of ShieldingLEND, ShieldingM and G4GenericPhysicsList
+  to g4alt::G4PhysListFactory; the later need update to G4AnyMethod.hh
+- cowork with tag "intercoms-V10-01-01"
+
+21-Apr-2015, Alberto Ribon              (phys-lists-V10-01-03)
+- FTFP_BERT_TRV : Reverting back, i.e. switching on again the
+  low-mass diffraction dissociation in G4HadronHElasticPhysics
+
+21-Apr-2015, Alberto Ribon              (phys-lists-V10-01-02)
+- FTFP_BERT_TRV : Switch off (temporarily) the low-mass diffraction
+  dissociation in G4HadronHElasticPhysics
+
+17-Feb-2015, Davide Mancusi             (phys-lists-V10-01-01)
+- INCLXXPhysicsListHelper: do not use G4NeutronTrackingCut for *_HP physics
+  lists
+
+08-Jan-2015, Alberto Ribon              (phys-lists-V10-01-00)
+- FTFP_BERT_TRV : Switch on low-mass diffraction dissociation
+  in G4HadronHElasticPhysics
+
 07-Nov-2014, Robert Hatcher             (phys-lists-V10-00-14)
 - Also remove support for G4GenericPhysicsList in new factory
   until the problem w/ mac/clang and G4AnyMethod is understood

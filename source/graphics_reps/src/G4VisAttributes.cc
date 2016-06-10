@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.cc 85261 2014-10-27 08:54:57Z gcosmo $
+// $Id: G4VisAttributes.cc 88083 2015-01-28 08:31:34Z gcosmo $
 //
 // 
 // John Allison  23rd October 1996
@@ -167,63 +167,60 @@ void G4VisAttributes::SetForceLineSegmentsPerCircle (G4int nSegments) {
   fForcedLineSegmentsPerCircle = nSegments;
 }
 
-std::ostream& operator << (std::ostream& os, const G4VisAttributes& a) {
-  
+std::ostream& operator << (std::ostream& os, const G4VisAttributes& a)
+{
   os << "G4VisAttributes: ";
-  if (&a){
-    if (!a.fVisible) os << "in";
-    os << "visible, daughters ";
-    if (a.fDaughtersInvisible) os << "in";
-    os << "visible, colour: " << a.fColour;
-    os << "\n  linestyle: ";
-    switch (a.fLineStyle) {
+  if (!a.fVisible) os << "in";
+  os << "visible, daughters ";
+  if (a.fDaughtersInvisible) os << "in";
+  os << "visible, colour: " << a.fColour;
+  os << "\n  linestyle: ";
+  switch (a.fLineStyle) {
     case G4VisAttributes::unbroken:
       os << "solid"; break;
     case G4VisAttributes::dashed:
       os << "dashed"; break;
     case G4VisAttributes::dotted: os << "dotted"; break;
     default: os << "unrecognised"; break;
-    }
-    os << ", line width: " << a.fLineWidth;
-    os << ", min line segments per circle: " << a.GetMinLineSegmentsPerCircle();
-    os << "\n  drawing style: ";
-    if (a.fForceDrawingStyle) {
-      os << "forced to: ";
-      switch (a.fForcedStyle) {
+  }
+  os << ", line width: " << a.fLineWidth;
+  os << ", min line segments per circle: " << a.GetMinLineSegmentsPerCircle();
+  os << "\n  drawing style: ";
+  if (a.fForceDrawingStyle) {
+    os << "forced to: ";
+    switch (a.fForcedStyle) {
       case G4VisAttributes::wireframe:
         os << "wireframe"; break;
       case G4VisAttributes::solid:
         os << "solid"; break;
       default: os << "unrecognised"; break;
-      }
     }
-    else {
-      os << "not forced";
-    }
-    os << ", auxiliary edge visibility: ";
-    if (!a.fForceAuxEdgeVisible) {
-      os << "not ";
-    }
-    os << "forced";
-    os << "\n  line segments per circle: ";
-    if (a.fForcedLineSegmentsPerCircle > 0) {
-      os << "forced to " << a.fForcedLineSegmentsPerCircle;
-    } else {
-      os << "not forced.";
-    }
-    os << "\n  time range: (" << a.fStartTime << ',' << a.fEndTime << ')';
-    os << "\n  G4AttValue pointer is ";
-    if (a.fAttValues) {
-      os << "non-";
-    }
-    os << "zero";      
-    os << ", G4AttDef pointer is ";
-    if (a.fAttDefs) {
-      os << "non-";
-    }
-    os << "zero";      
-  } 
-  else os << " zero G4VisAttributes pointer";
+  }
+  else {
+    os << "not forced";
+  }
+  os << ", auxiliary edge visibility: ";
+  if (!a.fForceAuxEdgeVisible) {
+    os << "not ";
+  }
+  os << "forced";
+  os << "\n  line segments per circle: ";
+  if (a.fForcedLineSegmentsPerCircle > 0) {
+    os << "forced to " << a.fForcedLineSegmentsPerCircle;
+  } else {
+    os << "not forced.";
+  }
+  os << "\n  time range: (" << a.fStartTime << ',' << a.fEndTime << ')';
+  os << "\n  G4AttValue pointer is ";
+  if (a.fAttValues) {
+    os << "non-";
+  }
+  os << "zero";
+  os << ", G4AttDef pointer is ";
+  if (a.fAttDefs) {
+    os << "non-";
+  }
+  os << "zero";
   return os;
 }
 

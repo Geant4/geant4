@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UserTimeStepAction.hh 87375 2014-12-02 08:17:28Z gcosmo $
+// $Id: G4UserTimeStepAction.hh 89187 2015-03-23 16:15:17Z gcosmo $
 //
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.
@@ -89,7 +89,7 @@ public:
    */
   virtual void UserReactionAction(const G4Track& /*trackA*/,
       const G4Track& /*trackB*/,
-      const std::vector<G4Track*>& /*products*/){;}
+      const std::vector<G4Track*>* /*products*/){;}
   virtual void EndProcessing(){;}
 
 protected:

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VGammaDeexcitation.cc 87376 2014-12-02 08:25:05Z gcosmo $
+// $Id: G4VGammaDeexcitation.cc 94676 2015-12-02 09:51:20Z gunter $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -76,7 +76,7 @@
 G4VGammaDeexcitation::G4VGammaDeexcitation(): _transition(0), _verbose(0),
 					      _electronO (0), _vSN(-1)
 { 
-  _tolerance = 2*CLHEP::keV;
+  _tolerance = 0.1*CLHEP::keV;
   _timeLimit = DBL_MAX;
 }
 
@@ -110,10 +110,22 @@ void G4VGammaDeexcitation::DoChain(G4FragmentVector* products,
 G4Fragment* G4VGammaDeexcitation::GenerateGamma(G4Fragment* aNucleus)
 {
   G4Fragment * thePhoton = 0;
-  if(!CanDoTransition(aNucleus)) { return thePhoton; }
+  _vSN = -1;
 
   _transition->SelectGamma();  // it can be conversion electron too
-  G4double etrans = _transition->GetGammaEnergy(); 
+
+  G4double etrans = _transition->GetGammaEnergy();
+
+  //L.Desorgher 05/01/2015 need to add the bond energy for correct 
+  //                       computation of a transition in case of ICM
+  G4DiscreteGammaTransition* dtransition =
+     dynamic_cast <G4DiscreteGammaTransition*> (_transition);
+  G4double bond_energy=0.;
+
+  if (dtransition && !dtransition->IsAGamma()) { 
+    bond_energy = dtransition->GetBondEnergy(); 
+  }
+  etrans += bond_energy;
   //G4cout << "G4VGammaDeexcitation::GenerateGamma - Etrans(MeV)= " 
   //	 << etrans << G4endl; 
   if(etrans <= 0.0) { return thePhoton; }
@@ -121,13 +133,13 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma(G4Fragment* aNucleus)
   // final excitation
   G4double excitation = aNucleus->GetExcitationEnergy() - etrans;
   if(excitation <= _tolerance) { excitation = 0.0; } 
-  if (_verbose > 1) {
-    G4cout << "G4VGammaDeexcitation::GenerateGamma - Edeexc(MeV)= " << etrans 
-	   << " ** left Eexc(MeV)= " << excitation
-	   << G4endl;
-  }
 
   G4double gammaTime = _transition->GetGammaCreationTime();
+  if (_verbose > 1) {
+    G4cout << "G4VGammaDeexcitation::GenerateGamma - Edeexc(MeV)= " 
+           << etrans << "; Time(ns)= " << gammaTime/CLHEP::ns 
+	   << "; left Eexc(MeV)= " << excitation << G4endl;
+  }
   
   // Do complete Lorentz computation 
   G4LorentzVector lv = aNucleus->GetMomentum();
@@ -136,14 +148,14 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma(G4Fragment* aNucleus)
   // select secondary
   G4ParticleDefinition* gamma = G4Gamma::Gamma();
 
-  G4DiscreteGammaTransition* dtransition = 
-    dynamic_cast <G4DiscreteGammaTransition*> (_transition);
-
-  if (dtransition && !( dtransition->IsAGamma()) ) {
+  if (dtransition && !dtransition->IsAGamma() ) {
     gamma = G4Electron::Electron(); 
     _vSN = dtransition->GetOrbitNumber();   
     _electronO.RemoveElectron(_vSN);
-    lv += G4LorentzVector(0.0,0.0,0.0,CLHEP::electron_mass_c2);
+    //L. Desorgher 05/01/2015 need to remove atomic bond energy 
+    //                        of the IC electron
+    lv += G4LorentzVector(0.0,0.0,0.0,
+                          CLHEP::electron_mass_c2 - bond_energy);
   }
 
   G4double cosTheta = 1. - 2. * G4UniformRand(); 
@@ -156,44 +168,38 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma(G4Fragment* aNucleus)
   G4cout << " Mass= " << eMass << " t= " << gammaTime
   	 << " tlim= " << _timeLimit << G4endl;
   */
-  if(gammaTime > _timeLimit) {
-    // shortcut for long lived levels
-    // not correct position of stopping ion gamma emission
-    // 4-momentum balance is breaked
-    G4double eGamma = aNucleus->GetExcitationEnergy() - excitation;
-    G4double e = eGamma + eMass;
-    G4double mom = std::sqrt(eGamma*(eGamma + 2*eMass));
-    Gamma4P.set(mom * sinTheta * std::cos(phi),
-		mom * sinTheta * std::sin(phi),
-		mom * cosTheta, e); 
+  // 2-body decay in rest frame
+  G4double Ecm       = lv.mag();
+  G4ThreeVector bst  = lv.boostVector();
+
+  G4double GammaEnergy = 0.5*((Ecm - Mass)*(Ecm + Mass) + eMass*eMass)/Ecm;
+  if(GammaEnergy < eMass) { GammaEnergy = eMass; }
+
+  G4double mom = std::sqrt((GammaEnergy - eMass)*(GammaEnergy + eMass));
+  Gamma4P.set(mom * sinTheta * std::cos(phi),
+	      mom * sinTheta * std::sin(phi),
+	      mom * cosTheta, GammaEnergy);
+
+  // Lab system in normal case (_timeLimit = DBL_MAX)
+  if(gammaTime <= _timeLimit) { 
+    Gamma4P.boost(bst); 
     lv -= Gamma4P;
-    e = lv.e();
-    if(e < Mass) { e = Mass; }
-    mom = std::sqrt((e - Mass)*(e + Mass));
+  } else {  
+    // In exceptional case sample decay at rest at not correct position 
+    // of stopping ion, 4-momentum balance is breaked but gamma energy
+    // is correct
+    lv -= Gamma4P;
+    G4double E = lv.e();
+    G4double P2= (E - Mass)*(E + Mass);
     G4ThreeVector v = lv.vect().unit();
-    lv.set(mom*v.x(), mom*v.y(), mom*v.z(), e); 
-
-  } else {
-    // 2-body decay in rest frame
-    G4double Ecm       = lv.mag();
-    G4ThreeVector bst  = lv.boostVector();
-
-    G4double GammaEnergy = 0.5*((Ecm - Mass)*(Ecm + Mass) + eMass*eMass)/Ecm;
-    if(GammaEnergy < eMass) { GammaEnergy = eMass; }
-
-    G4double mom = std::sqrt((GammaEnergy - eMass)*(GammaEnergy + eMass));
-    Gamma4P.set(mom * sinTheta * std::cos(phi),
-		mom * sinTheta * std::sin(phi),
-		mom * cosTheta,
-		GammaEnergy);
-
-    Gamma4P.boost(bst);  
-    lv -= Gamma4P;
+    G4double p = 0.0;
+    if(P2 > 0.0) { p = std::sqrt(P2); } 
+    else { E = Mass; }
+    lv.set(v.x()*p, v.y()*p, v.z()*p, E);  
   }
 
   // modified primary fragment 
   gammaTime += aNucleus->GetCreationTime();
-
   aNucleus->SetMomentum(lv);
   aNucleus->SetCreationTime(gammaTime);
 

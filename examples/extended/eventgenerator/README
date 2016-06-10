@@ -5,17 +5,23 @@
  Examples in this directory demonstrate various ways of primary event
  generation.
 
-exGPS
+particleGun
+------------
+
+This example demonstrate 4 ways of the usage of G4ParticleGun shooting
+primary particles in different cases.
+
+exgps
 -----
 
 This example demonstrates the usage of G4GeneralParticleSource for generating 
 primary incident particle according to user defined distributions.
 
-particleGun
-------------
+userPrimaryGenerator
+--------------------
 
-These examples demonstrate 4 ways of the usage of G4ParticleGun shooting
-primary particles in different cases.
+This example shows how to create a primary event including several vertices and 
+several primary particles per vertex.
 
 HepMC
 ------

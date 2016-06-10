@@ -78,10 +78,12 @@ void G4QMDSystem::Clear ()
 
 void G4QMDSystem::ShowParticipants()
 {
+   //store orginal precision
+   std::ios::fmtflags oldform = G4cout.flags();
+
    G4ThreeVector p_sum( 0.0 );
    std::vector< G4QMDParticipant* >::iterator it; 
    G4cout << "Momentum and Position of each participant " << G4endl; 
-   G4int orginal = G4cout.precision();
    G4int i = 0; 
    for ( it = participants.begin() ; it != participants.end() ; it++ ) 
    { 
@@ -98,8 +100,9 @@ void G4QMDSystem::ShowParticipants()
       i++;
    }
    G4cout << "Sum upped Momentum and its mag " << p_sum << " " << p_sum.mag() << G4endl;
+
    //restore orginal precision
-   G4cout << std::setprecision( orginal );
+   G4cout.flags( oldform );
 }
 
 

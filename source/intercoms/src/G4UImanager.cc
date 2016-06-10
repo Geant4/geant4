@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc 85249 2014-10-27 08:28:57Z gcosmo $
+// $Id: G4UImanager.cc 94366 2015-11-13 08:15:49Z gcosmo $
 //
 //
 // ---------------------------------------------------------------------
@@ -144,6 +144,20 @@ G4UImanager::G4UImanager(const G4UImanager& ui)
   savedCommand= ui.savedCommand;
   session = ui.session;
   treeTop = ui.treeTop;
+  verboseLevel = ui.verboseLevel;
+  saveHistory = ui.saveHistory;
+  CoutMessenger = 0;
+  maxHistSize = ui.maxHistSize;
+  pauseAtBeginOfEvent = ui.pauseAtBeginOfEvent;
+  pauseAtEndOfEvent = ui.pauseAtEndOfEvent;
+  isMaster = ui.isMaster;
+  bridges = ui.bridges;
+  ignoreCmdNotFound = ui.ignoreCmdNotFound;
+  stackCommandsForBroadcast = ui.stackCommandsForBroadcast;
+  commandStack = ui.commandStack;
+  threadID = ui.threadID;
+  threadCout = ui.threadCout;
+  CreateMessenger();
 }
 
 const G4UImanager & G4UImanager::operator=(const G4UImanager &right)

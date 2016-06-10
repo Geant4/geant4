@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveSplitableHadron.cc 86646 2014-11-14 13:29:39Z gcosmo $
+// $Id: G4DiffractiveSplitableHadron.cc 91914 2015-08-11 07:00:39Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -196,6 +196,8 @@ void G4DiffractiveSplitableHadron::ChooseStringEnds( G4int PDGcode, G4int* aEnd,
     if((j1000 == j100) && (j1000 == j10)) SuppresUUDDSS=1.; 
 
 //
+    const G4int maxNumberOfLoops = 1000;
+    G4int loopCounter = 0;
     do
     {
       G4double random = G4UniformRand();
@@ -230,7 +232,12 @@ void G4DiffractiveSplitableHadron::ChooseStringEnds( G4int PDGcode, G4int* aEnd,
           else                        {*bEnd = Diquark( j1000, j100, 1 );}
         break;
        }
-    } while(true);  
+    } while ( (true) && 
+              ++loopCounter < maxNumberOfLoops );  /* Loop checking, 10.08.2015, A.Ribon */
+    if ( loopCounter >= maxNumberOfLoops ) {
+      *aEnd = j10; *bEnd = Diquark( j1000, j100, 1 );  // Just something acceptable, without any physics consideration.
+    }
+
 //
 /*
     if ( std::abs( j100 ) >= std::abs( j10 ) ) {

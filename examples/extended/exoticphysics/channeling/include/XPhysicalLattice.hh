@@ -86,11 +86,12 @@ public:
 public:
     //set methods
     void SetUnitCell(XUnitCell*);
-    G4ThreeVector ProjectMomentumVectorFromWorldToLattice(G4ThreeVector,
-                                                          G4ThreeVector);
-    G4ThreeVector ProjectMomentumVectorFromLatticeToWorld(G4ThreeVector,
-                                                          G4ThreeVector);
-    G4ThreeVector GetLatticeDirection(G4ThreeVector);
+    G4ThreeVector ProjectMomentumVectorFromWorldToLattice(G4ThreeVector&,
+                                                          G4ThreeVector&);
+    G4ThreeVector ProjectMomentumVectorFromLatticeToWorld(G4ThreeVector&,
+                                                          G4ThreeVector&);
+
+    G4ThreeVector GetLatticeDirection(G4ThreeVector&);
 
     //retrieval methods
     XUnitCell* GetXUnitCell();
@@ -100,7 +101,7 @@ public:
 
     G4ThreeVector GetCurvatureRadius();
     void SetCurvatureRadius(G4ThreeVector);
-    G4ThreeVector ComputeBendingAngle(G4ThreeVector);
+    G4ThreeVector ComputeBendingAngle(G4ThreeVector&);
     
     G4bool IsBent();
     

@@ -64,8 +64,10 @@ TestParameters::TestParameters()
 {
   fMaxEnergy   = 100.*keV;
   fBinsE       = 100;
-  fBinsCluster = 1500;
-
+  fBinsCluster = 1;
+  fMaxCluster  = 1500;
+  fNormFactor  = 1.0;
+  fEnergySmear = 0.0;
   fPositionZ   = 0.0;
 
   // normalisation to PAI
@@ -123,6 +125,20 @@ G4int TestParameters::GetNumberBinsCluster() const
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+  
+void TestParameters::SetMaxCluster(G4int value)
+{
+  fMaxCluster = value;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4int TestParameters::GetMaxCluster() const
+{
+  return fMaxCluster;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TestParameters::SetEnergyPerChannel(G4double value)
 {
@@ -134,6 +150,34 @@ void TestParameters::SetEnergyPerChannel(G4double value)
 G4double TestParameters::GetFactorALICE() const
 {
   return fFactorALICE;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void TestParameters::SetNormFactor(G4double value)
+{
+  fNormFactor = value;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double TestParameters::GetNormFactor() const
+{
+  return fNormFactor;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void TestParameters::SetEnergySmear(G4double value)
+{
+  fEnergySmear = value;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double TestParameters::GetEnergySmear() const
+{
+  return fEnergySmear;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -38,7 +38,6 @@
 #include "G4NucleiProperties.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4NistManager.hh"
-#include "G4Pow.hh"
 
 G4IonsShenCrossSection::G4IonsShenCrossSection()
   : G4VCrossSectionDataSet("IonsShen"),

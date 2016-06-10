@@ -52,25 +52,24 @@ G4bool G4OpenGLQt::IsUISessionCompatible () const
   G4bool isCompatible = false;
   G4UImanager* ui = G4UImanager::GetUIpointer();
   G4UIsession* session = ui->GetSession();
-  // In case it's a G4UIbatch, find original session by recursive search until
-  // the session is no longer a G4UIbatch, in which case it will be the
-  // original session, if any.
+
+  // If session is a batch session, it may be:
+  // a) this is a batch job (the user has not instantiated any UI session);
+  // b) we are currently processing a UI command, in which case the UI
+  //    manager creates a temporary batch session and to find out if there is
+  //    a genuine UI session that the user has instantiated we must drill
+  //    down through previous sessions to a possible non-batch session.
   while (G4UIbatch* batch = dynamic_cast<G4UIbatch*>(session)) {
     session = batch->GetPreviousSession();
   }
-  if (!session) {
-    // The user has not instantiated a session - must be batch.
-    // It's OK to have a Qt window in batch - you can open a viewer, create a
-    // scene, set view parameters and /vis/ogl/printEPS.
-    isCompatible = true;
-  } else {
-    // The user has instantiated a session...
+
+  // Qt windows are only appropriate in a Qt session.
+  if (session) {
+    // If non-zero, this is the originating non-batch session
+    // The user has instantiated a UI session...
     if (dynamic_cast<G4UIQt*>(session)) {
       // ...and it's a G4UIQt session, which is OK.
       isCompatible = true;
-    } else {
-      // Not OK - go and find the fallback graphics system.
-      isCompatible = false;
     }
   }
   return isCompatible;

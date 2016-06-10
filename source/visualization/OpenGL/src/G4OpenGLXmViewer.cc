@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc 68043 2013-03-13 14:27:49Z gcosmo $
+// $Id: G4OpenGLXmViewer.cc 87695 2014-12-17 09:35:24Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -645,7 +645,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
 
   win = XtWindow (glxarea);
 
-  glXMakeCurrent (dpy, win, cx);
+  glXMakeCurrent (dpy, win, cxMaster);
 
   // This should be add AFTER glXMakeCurrent done because it will fire a resizeCallback
   XtAddCallback (glxarea, 

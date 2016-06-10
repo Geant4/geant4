@@ -75,7 +75,7 @@ namespace G4INCL {
         }
 
         void clear() {
-          while(!theStack.empty()) {
+          while(!theStack.empty()) { /* Loop checking, 10.07.2015, D.Mancusi */
             ::operator delete(theStack.top());
             theStack.pop();
           }

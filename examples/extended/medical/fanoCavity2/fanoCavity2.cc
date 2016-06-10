@@ -26,15 +26,21 @@
 /// \file medical/fanoCavity2/fanoCavity2.cc
 /// \brief Main program of the medical/fanoCavity2 example
 //
-// $Id: fanoCavity2.cc 72961 2013-08-14 14:35:56Z gcosmo $
+// $Id: fanoCavity2.cc 90829 2015-06-10 08:37:55Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
+#include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
@@ -60,31 +66,35 @@ int main(int argc,char** argv) {
   //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
  
+
+#ifdef G4MULTITHREADED
+    G4MTRunManager* runManager = new G4MTRunManager;
+    G4int nThreads = G4Threading::G4GetNumberOfCores();
+    if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
+    runManager->SetNumberOfThreads(nThreads);
+#else
+    G4VSteppingVerbose::SetInstance(new SteppingVerbose);
+    G4RunManager* runManager = new G4RunManager;
+#endif
+
+
   //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
+  //G4VSteppingVerbose::SetInstance(new SteppingVerbose);
 
   //Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+  //G4RunManager * runManager = new G4RunManager;
 
   //set mandatory initialization classes
   DetectorConstruction* det;
   PhysicsList* phys;
-  PrimaryGeneratorAction* kin;
+
 
   runManager->SetUserInitialization(det  = new DetectorConstruction);
   runManager->SetUserInitialization(phys = new PhysicsList());
-  runManager->SetUserAction(kin = new PrimaryGeneratorAction(det));
 
-  //set user action classes
-  RunAction* run        = new RunAction(det,kin);
-  EventAction* event    = new EventAction(run);
-  TrackingAction* track = new TrackingAction(run);
-  SteppingAction* step  = new SteppingAction(det,run,track);
+  // set user action classes
+  runManager->SetUserInitialization(new ActionInitialization(det));
 
-  runManager->SetUserAction(run);
-  runManager->SetUserAction(event);
-  runManager->SetUserAction(track);      
-  runManager->SetUserAction(step);
 
   //get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();

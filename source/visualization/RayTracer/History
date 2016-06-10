@@ -1,4 +1,4 @@
-$Id: History 86973 2014-11-21 11:57:27Z gcosmo $
+$Id: History 88190 2015-02-02 17:24:54Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for Ray Tracer category
 ---------------------------------------
+
+2nd February 2015  Gabriele Cosmo (raytracer-V10-01-00)
+- Fix to sources.cmake script to include missing dependency on external library.
 
 20th November 2014  Makoto Asai (raytracer-V10-00-00)
 - Fixes for Coverity.

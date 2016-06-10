@@ -1,0 +1,56 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_head_light
+#define tools_sg_head_light
+
+// Directional light following cam direction.
+// It should come after a camera node.
+
+#include "torche"
+
+namespace tools {
+namespace sg {
+
+class head_light : public torche {
+  TOOLS_NODE(head_light,tools::sg::head_light,torche)
+public:
+  virtual void render(render_action& a_action) {
+    if(!on.value()) return;
+
+    state& state = a_action.state();
+
+    if((state.m_light+1)>=a_action.max_lights()) {
+      a_action.out() 
+        << "GL_MAX_LIGHTS (" << a_action.max_lights() << ") reached."
+        << std::endl;
+      return;
+    }
+
+    float dx = direction.value()[0];
+    float dy = direction.value()[1];
+    float dz = direction.value()[2];
+    
+   {tools::mat4f mtx;
+    state.m_camera_orientation.value(mtx);
+    mtx.mul_3f(dx,dy,dz);}
+
+    state.m_GL_LIGHTING = true; //for separator
+
+    a_action.enable_light(state.m_light,vec3f(dx,dy,dz),color.value());
+    state.m_light++;
+  }
+public:
+  head_light():torche(){}
+  virtual ~head_light(){}
+public:
+  head_light(const head_light& a_from):torche(a_from){}
+  head_light& operator=(const head_light& a_from){
+    torche::operator=(a_from);
+    return *this;
+  }
+};
+
+}}
+
+#endif

@@ -1,4 +1,4 @@
-$Id: History 83394 2014-08-21 14:39:09Z gcosmo $
+$Id: History 93259 2015-10-14 08:35:22Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,21 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-10-15 J.Jacquemier (fano2-V10-01-03)
+- Remove EventActionMessenger class
+- Replace printModulo by /run/printProgress
+
+27-07-15 V.Ivant (fano2-V10-01-02)
+- Use G4EmParameters instead of G4EmProcessOptions
+
+19-06-15 J.Jacquemier (fano2-V10-01-01)
+- Change fNbEventCavity, fNbStepWall  andfNbStepCavity initialisation
+  from double to long
+
+
+10-06-15 J.Jacquemier (fano2-V10-01-00)
+- Migrated to multi-threading
 
 13-08-14 mma  (fano2-V10-00-01)
 - update README again

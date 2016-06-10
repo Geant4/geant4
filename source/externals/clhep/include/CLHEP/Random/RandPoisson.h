@@ -115,7 +115,7 @@ protected:
   
 private:
 
-  shared_ptr<HepRandomEngine> localEngine;
+  std::shared_ptr<HepRandomEngine> localEngine;
   double status[3], oldm;
 
   // static data

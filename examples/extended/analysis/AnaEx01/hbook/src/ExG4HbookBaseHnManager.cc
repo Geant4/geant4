@@ -104,6 +104,8 @@ G4bool ExG4HbookBaseHnManager::SetTitle(G4HbookBaseHisto& baseHisto,
 G4bool ExG4HbookBaseHnManager::SetAxisTitle(G4HbookBaseHisto& baseHisto, 
                                         G4int dimension, const G4String& title)
 {
+  if ( title == "" ) return false;
+
   if ( dimension == 0 ) {
     baseHisto.add_annotation(tools::hbook::key_axis_x_title(), title);
   }

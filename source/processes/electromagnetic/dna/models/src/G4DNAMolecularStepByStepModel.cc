@@ -23,78 +23,86 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularStepByStepModel.cc 81769 2014-06-05 08:30:21Z gcosmo $
+// $Id: G4DNAMolecularStepByStepModel.cc 94218 2015-11-09 08:24:48Z gcosmo $
 //
-#include "G4DNAMolecularStepByStepModel.hh"
-#include "G4VDNAReactionModel.hh"
-#include "G4DNASmoluchowskiReactionModel.hh"
+
+#include <globals.hh>
+#include <G4DNAMolecularReaction.hh>
+#include <G4DNAMolecularReactionTable.hh>
+#include <G4DNAMolecularStepByStepModel.hh>
+#include <G4DNAMoleculeEncounterStepper.hh>
+#include <G4DNASmoluchowskiReactionModel.hh>
+#include <G4ExceptionSeverity.hh>
+#include <G4Molecule.hh>
+#include <G4ReferenceCast.hh>
+#include <G4VDNAReactionModel.hh>
 
 G4DNAMolecularStepByStepModel::G4DNAMolecularStepByStepModel(const G4String& name) :
     G4VITStepModel(name),
     fMolecularReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable))
 {
-    fpTimeStepper = new G4DNAMoleculeEncounterStepper();
-    fpReactionProcess = new G4DNAMolecularReaction();
+  fpTimeStepper = new G4DNAMoleculeEncounterStepper();
+  fpReactionProcess = new G4DNAMolecularReaction();
 
-    fType1 = G4Molecule::ITType();
-    fType2 = G4Molecule::ITType();
-    fReactionModel = 0;
+  fType1 = G4Molecule::ITType();
+  fType2 = G4Molecule::ITType();
+  fReactionModel = 0;
 }
 
 G4DNAMolecularStepByStepModel::~G4DNAMolecularStepByStepModel()
 {
-    if(fReactionModel) delete fReactionModel;
+  if(fReactionModel) delete fReactionModel;
 }
 
 G4DNAMolecularStepByStepModel& G4DNAMolecularStepByStepModel::operator=(const G4DNAMolecularStepByStepModel& right)
 {
-    G4ExceptionDescription exceptionDescription
-            ("Use copy constructor rather than assignement operator.");
-    G4Exception("G4DNAMolecularStepByStepModel::operator=(const G4DNAMolecularStepByStepModel&)","G4DNAMolecularStepByStepModel001",
-                FatalErrorInArgument,exceptionDescription);
+  G4ExceptionDescription exceptionDescription("Use copy constructor rather than assignement operator.");
+  G4Exception("G4DNAMolecularStepByStepModel::operator=(const G4DNAMolecularStepByStepModel&)",
+              "G4DNAMolecularStepByStepModel001",
+              FatalErrorInArgument,
+              exceptionDescription);
 
-    if (&right==this) return *this;
-    return *this; // avoid warnings
+  if(&right == this) return *this;
+  return *this; // avoid warnings
 }
 
-
-G4DNAMolecularStepByStepModel::G4DNAMolecularStepByStepModel(const G4DNAMolecularStepByStepModel& right):
+G4DNAMolecularStepByStepModel::G4DNAMolecularStepByStepModel(const G4DNAMolecularStepByStepModel& right) :
     G4VITStepModel(right),
     fMolecularReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable))
 {
-        fpReactionTable = right.fpReactionTable;
-        if(right.fReactionModel)
-        {
-            fReactionModel = right.fReactionModel->Clone();
-            ((G4DNAMolecularReaction*)  fpReactionProcess)->SetReactionModel(fReactionModel);
-            ((G4DNAMoleculeEncounterStepper*) 	fpTimeStepper)->SetReactionModel(fReactionModel);
-        }
-        else fReactionModel = 0;
+  fpReactionTable = right.fpReactionTable;
+  if(right.fReactionModel)
+  {
+    fReactionModel = right.fReactionModel->Clone();
+    ((G4DNAMolecularReaction*) fpReactionProcess)->SetReactionModel(fReactionModel);
+    ((G4DNAMoleculeEncounterStepper*) fpTimeStepper)->SetReactionModel(fReactionModel);
+  }
+  else fReactionModel = 0;
 }
 
 void G4DNAMolecularStepByStepModel::Initialize()
 {
-	if(fpReactionTable == 0)
-	{
-		SetReactionTable(G4DNAMolecularReactionTable::GetReactionTable());
-	}
+  if(fpReactionTable == 0)
+  {
+    SetReactionTable(G4DNAMolecularReactionTable::GetReactionTable());
+  }
 
-    if(fReactionModel == 0)
-    {
-    	fReactionModel = new G4DNASmoluchowskiReactionModel();
-    }
+  if(fReactionModel == 0)
+  {
+    fReactionModel = new G4DNASmoluchowskiReactionModel();
+  }
 
-    fReactionModel ->SetReactionTable((const G4DNAMolecularReactionTable*)fpReactionTable);
+  fReactionModel->SetReactionTable((const G4DNAMolecularReactionTable*) fpReactionTable);
 
-    ((G4DNAMolecularReaction*)      fpReactionProcess)-> SetReactionModel(fReactionModel);
-    ((G4DNAMoleculeEncounterStepper*) 	fpTimeStepper)	 -> SetReactionModel(fReactionModel);
+  ((G4DNAMolecularReaction*) fpReactionProcess)->SetReactionModel(fReactionModel);
+  ((G4DNAMoleculeEncounterStepper*) fpTimeStepper)->SetReactionModel(fReactionModel);
 
-    G4VITStepModel::Initialize();
+  G4VITStepModel::Initialize();
 }
 
 void G4DNAMolecularStepByStepModel::PrintInfo()
 {
 #ifdef G4VERBOSE
-    G4cout << "DNAMolecularStepByStepModel will be used" << G4endl;
+  G4cout << "DNAMolecularStepByStepModel will be used" << G4endl;
 #endif
 }

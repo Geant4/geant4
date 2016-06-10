@@ -1,4 +1,4 @@
-# $Id: binmake.gmk 85534 2014-10-30 16:19:42Z gcosmo $
+# $Id: binmake.gmk 94578 2015-11-25 08:11:03Z gcosmo $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -51,6 +51,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/analysis/csv/include \
               -I$(G4BASE)/analysis/root/include \
               -I$(G4BASE)/analysis/xml/include \
+              -I$(G4BASE)/analysis/parameters/include \
               -I$(G4BASE)/global/management/include \
               -I$(G4BASE)/global/HEPRandom/include \
               -I$(G4BASE)/global/HEPGeometry/include \
@@ -130,7 +131,6 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/models/lend/include \
               -I$(G4BASE)/processes/hadronic/models/lepto_nuclear/include \
               -I$(G4BASE)/processes/hadronic/models/management/include \
-              -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
               -I$(G4BASE)/processes/hadronic/models/particle_hp/include \
               -I$(G4BASE)/processes/hadronic/models/parton_string/diffraction/include \
               -I$(G4BASE)/processes/hadronic/models/parton_string/hadronization/include \
@@ -249,10 +249,6 @@ ifdef GLOBALLIBS
              -lG4graphics_reps \
              -lG4intercoms \
              -lG4global
-
-  ifdef G4LIB_USE_USOLIDS
-    LDLIBS2 += -lG4geomUSolids
-  endif
 
   ifdef G4LIB_USE_CLHEP
     LDLIBS2 += -lG4clhep

@@ -32,6 +32,9 @@
 //
 #include "G4QMDCollision.hh"
 #include "G4Scatterer.hh"
+#include "G4Pow.hh"
+#include "G4Exp.hh"
+#include "G4Log.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
@@ -152,7 +155,8 @@ void G4QMDCollision::CalKinematicsOfBinaryCollisions( G4double dt )
 
          G4bool isThisEnergyOK = false;
 
-         for ( G4int ii = 0 ; ii < 4 ; ii++ )
+         G4int maximumNumberOfTrial=4;
+         for ( G4int ii = 0 ; ii < maximumNumberOfTrial ; ii++ )
          { 
 
             //G4LorentzVector p4 = theSystem->GetParticipant( i )->Get4Momentum();
@@ -292,7 +296,7 @@ void G4QMDCollision::CalKinematicsOfBinaryCollisions( G4double dt )
                {
                   //081118
                   //std::cout << "Decay Blocked deleteing " << i0i+n0  << std::endl;
-                  theSystem->DeleteParticipant( i0i+n0 );
+                  theSystem->DeleteParticipant( i0+n0-i0i-1 );
                }
                //081103
                theMeanField->Update();
@@ -834,11 +838,11 @@ G4bool G4QMDCollision::CalFinalStateOfTheBinaryCollisionJQMD( G4double sig , G4d
 //   std::cout << "Collision ELSTIC " << i << " " << j << std::endl;
 
    
-   G4double as = std::pow ( 3.65 * asrt , 6 );
+   G4double as = G4Pow::GetInstance()->powN ( 3.65 * asrt , 6 );
    G4double a = 6.0 * as / (1.0 + as);
    G4double ta = -2.0 * pra*pra;
    G4double x = G4UniformRand(); 
-   G4double t1 = std::log( (1-x) * std::exp(2.*a*ta) + x )  /  a;
+   G4double t1 = G4Log( (1-x) * G4Exp(2.*a*ta) + x )  /  a;
    G4double c1 = 1.0 - t1/ta;
  
    if( std::abs(c1) > 1.0 ) c1 = 2.0 * x - 1.0;

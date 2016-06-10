@@ -49,11 +49,11 @@
 #include "globals.hh"
 #include "G4ReferenceCountedHandle.hh"
 #include <map>
-#include <CLHEP/Utility/memory.h>
+#include <G4memory.hh>
 
 class G4Molecule;
 
-typedef CLHEP::shared_ptr<const G4Molecule> G4MoleculeHandle;
+typedef G4shared_ptr<const G4Molecule> G4MoleculeHandle;
 
 class G4MoleculeHandleManager
 {

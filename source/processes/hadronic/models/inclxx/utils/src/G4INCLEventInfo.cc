@@ -53,7 +53,6 @@ namespace G4INCL {
 
   G4ThreadLocal Int_t EventInfo::eventNumber = 0;
 
-#ifdef INCL_INVERSE_KINEMATICS
   void EventInfo::fillInverseKinematics(const Double_t gamma) {
     const Double_t beta = std::sqrt(1.-1./(gamma*gamma));
     for(Int_t i=0; i<nParticles; ++i) {
@@ -86,7 +85,6 @@ namespace G4INCL {
         thetaPrime[i] = Math::toDegrees(Math::arcCos(cosThetaPrime));
     }
   }
-#endif // INCL_INVERSE_KINEMATICS
 
   void EventInfo::remnantToParticle(const G4int remnantIndex) {
     A[nParticles] = ARem[remnantIndex];

@@ -31,21 +31,17 @@ function(geant4_compile_definitions_config _target)
     message(FATAL_ERROR "geant4_compile_definitions_config passed target '${_target}' which is not a valid CMake target")
   endif()
 
-  if(CMAKE_CONFIGURATION_TYPES)
-    # - Multimode tools
-    foreach(_mode ${CMAKE_CONFIGURATION_TYPES})
-      string(TOUPPER ${_mode} _mode_upper)
-      set_property(TARGET ${_target}
-        APPEND PROPERTY COMPILE_DEFINITIONS_${_mode_upper} GEANT4_DEVELOPER_${_mode_upper}
-        )
-    endforeach()
-  elseif(CMAKE_BUILD_TYPE)
-    # - Single mode tools, only if set
-    string(TOUPPER ${CMAKE_BUILD_TYPE} _mode_upper)
-    set_property(TARGET ${_target}
-      APPEND PROPERTY COMPILE_DEFINITIONS_${_mode_upper} GEANT4_DEVELOPER_${_mode_upper}
-      )
+  # CMake 3 prefers $<CONFIG> in generator expressions, but 2.8.12 only
+  # supports $<CONFIGURATION>
+  set(__default_config_generator "\$<CONFIG>")
+  if(CMAKE_MAJOR_VERSION LESS 3)
+    set(__default_config_generator "\$<CONFIGURATION>")
   endif()
+
+  set_property(TARGET ${_target}
+    APPEND PROPERTY COMPILE_DEFINITIONS
+      GEANT4_DEVELOPER_${__default_config_generator}
+    )
 endfunction()
 
 
@@ -65,35 +61,37 @@ MACRO(GEANT4_LIBRARY_TARGET)
     # WIN32 first
     if(WIN32)
       # We have to generate the def export file from an archive library.
-      # If we're building Static libraries already, use that existing
-      # target, otherwise, build a temporary uninstalled archive...
-      if(BUILD_STATIC_LIBS)
-        set(_archive ${G4LIBTARGET_NAME}-static)
-      else()
-        add_library(_${G4LIBTARGET_NAME}-archive STATIC EXCLUDE_FROM_ALL ${G4LIBTARGET_SOURCES})
-        set(_archive _${G4LIBTARGET_NAME}-archive)
-      endif()
+      # This is a temporary separate from a real archive library, and
+      # even though it's static, we need to mark that it will have
+      # DLL symbols via the G4LIB_BUILD_DLL macro
+      add_library(_${G4LIBTARGET_NAME}-archive STATIC EXCLUDE_FROM_ALL ${G4LIBTARGET_SOURCES})
+      set(_archive _${G4LIBTARGET_NAME}-archive)
+      target_compile_features(${_archive} PUBLIC ${GEANT4_TARGET_COMPILE_FEATURES})
+      target_compile_definitions(${_archive} PUBLIC -DG4LIB_BUILD_DLL)
 
       # - Add the config specific compile definitions
       geant4_compile_definitions_config(${_archive})
 
       # - Create the .def file for this library
-      # Note that we have to pass the actual full path to the library
-      # to the command. CMake unfortunately won't generate this for us.
-      # Note also that because we're likely to be on a platform with
-      # multiconfig build tools. we use the CFG_INTDIR to locate the
-      # archive we need...
-      add_custom_command(OUTPUT _${G4LIBTARGET_NAME}.def
-        COMMAND genwindef -o _${G4LIBTARGET_NAME}.def -l ${G4LIBTARGET_NAME} ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/${CMAKE_CFG_INTDIR}/${_archive}.lib
+      # Use generator expressions to get path to per-mode lib and
+      # older CMAKE_CFG_INTDIR variable to set name of per-mode def
+      # file (Needed as generator expressions cannot be used in argument
+      # to OUTPUT...
+      add_custom_command(OUTPUT _${G4LIBTARGET_NAME}-${CMAKE_CFG_INTDIR}.def
+        COMMAND genwindef -o _${G4LIBTARGET_NAME}-${CMAKE_CFG_INTDIR}.def -l ${G4LIBTARGET_NAME} $<TARGET_FILE:${_archive}>
         DEPENDS ${_archive} genwindef)
 
       # - Now we can build the DLL
       # We create it from a dummy empty C++ file plus the def file.
+      # Also set the public compile definition on it so that clients
+      # will set correct macro automatically.
       file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/_${G4LIBTARGET_NAME}.cpp
         "// empty _${G4LIBTARGET_NAME}.cpp\n")
 
       add_library(${G4LIBTARGET_NAME} SHARED _${G4LIBTARGET_NAME}.cpp
-        _${G4LIBTARGET_NAME}.def)
+        _${G4LIBTARGET_NAME}-${CMAKE_CFG_INTDIR}.def)
+      target_compile_definitions(${G4LIBTARGET_NAME} PUBLIC -DG4LIB_BUILD_DLL)
+      target_compile_features(${G4LIBTARGET_NAME} PUBLIC ${GEANT4_TARGET_COMPILE_FEATURES})
 
       # - Link the DLL.
       # We link it to the archive, and the supplied libraries,
@@ -104,12 +102,13 @@ MACRO(GEANT4_LIBRARY_TARGET)
         ${G4LIBTARGET_LINK_LIBRARIES})
 
       set_target_properties(${G4LIBTARGET_NAME}
-        PROPERTIES LINK_INTERFACE_LIBRARIES "${G4LIBTARGET_GEANT4_LINK_LIBRARIES};${G4LIBTARGET_LINK_LIBRARIES}")
+        PROPERTIES INTERFACE_LINK_LIBRARIES "${G4LIBTARGET_GEANT4_LINK_LIBRARIES};${G4LIBTARGET_LINK_LIBRARIES}")
 
     else()
       # - We build a Shared library in the usual fashion...
       add_library(${G4LIBTARGET_NAME} SHARED ${G4LIBTARGET_SOURCES})
       geant4_compile_definitions_config(${G4LIBTARGET_NAME})
+      target_compile_features(${G4LIBTARGET_NAME} PUBLIC ${GEANT4_TARGET_COMPILE_FEATURES})
       target_link_libraries(${G4LIBTARGET_NAME}
         ${G4LIBTARGET_GEANT4_LINK_LIBRARIES}
         ${G4LIBTARGET_LINK_LIBRARIES})
@@ -120,13 +119,11 @@ MACRO(GEANT4_LIBRARY_TARGET)
     set_target_properties(${G4LIBTARGET_NAME}
       PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 
-    # Set the INSTALL_NAME_DIR of the library to its final installation
-    # location (Only affects Mac OS X). This will only affect the library
-    # when installed, BUT it does hard code this in. One should still be
-    # able to bundle up the libraries later as CMake should build the
-    # library with headerpad_max_install_names
+    # Always use '@rpath' in install names of libraries. This is the
+    # most flexible mechanism for
     set_target_properties(${G4LIBTARGET_NAME}
-      PROPERTIES INSTALL_NAME_DIR ${CMAKE_INSTALL_FULL_LIBDIR})
+      PROPERTIES MACOSX_RPATH 1
+      )
 
     # Install the library - note the use of RUNTIME, LIBRARY and ARCHIVE
     # this helps with later DLL builds.
@@ -153,6 +150,7 @@ MACRO(GEANT4_LIBRARY_TARGET)
     # libraries as well if we want a pure static build).
     add_library(${G4LIBTARGET_NAME}-static STATIC ${G4LIBTARGET_SOURCES})
     geant4_compile_definitions_config(${G4LIBTARGET_NAME}-static)
+    target_compile_features(${G4LIBTARGET_NAME}-static PUBLIC ${GEANT4_TARGET_COMPILE_FEATURES})
 
     set(G4LIBTARGET_GEANT4_LINK_LIBRARIES_STATIC )
     foreach(_tgt ${G4LIBTARGET_GEANT4_LINK_LIBRARIES})
@@ -164,7 +162,7 @@ MACRO(GEANT4_LIBRARY_TARGET)
     # Because externals like clhep appear in G4LIBTARGET_LINK_LIBRARIES,
     # filter this list to replace shared builtins with their static variant
     string(REGEX REPLACE
-      "(G4clhep|G4expat|G4zlib)(;|$)" "\\1-static\\2"
+      "(G4clhep|G4expat|G4zlib|G4geomUSolids)(;|$)" "\\1-static\\2"
       G4LIBTARGET_LINK_LIBRARIES_STATIC
       "${G4LIBTARGET_LINK_LIBRARIES}"
       )

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearLevelManager.cc 87163 2014-11-26 08:46:54Z gcosmo $
+// $Id: G4NuclearLevelManager.cc 93357 2015-10-19 13:40:13Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -89,6 +89,12 @@ G4NuclearLevelManager::G4NuclearLevelManager(G4int Z, G4int A,
 			      "==== G4NuclearLevelManager ==== (Z,A) <0, or Z>A");
   }
   MakeLevels(filename);
+  /*
+  G4cout << "+++++ New G4NuclearLevelManager Z= " << Z << " A= " << A 
+  	 << "  " << _levels;
+  if(_levels) { G4cout << " Nlevels= " << _levels->size(); }
+  G4cout << G4endl;
+  */
 }
 
 G4NuclearLevelManager::~G4NuclearLevelManager()
@@ -305,6 +311,7 @@ void G4NuclearLevelManager::MakeLevels(const G4String& filename)
   G4NuclearLevel* thisLevel = 0;
   G4int nData = 0;
 
+  // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
   while (Read(inFile)) {
     thisLevel = UseLevelOrMakeNew(thisLevel);	// May create new pointer
     AddDataToLevel(thisLevel);

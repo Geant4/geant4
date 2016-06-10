@@ -257,7 +257,7 @@ namespace G4INCL {
         if(theZ<ParticleTable::clusterTableZSize && theA<ParticleTable::clusterTableASize) {
           finalDaughterZ=theZ;
           finalDaughterA=theA;
-          while(clusterDecayMode[finalDaughterZ][finalDaughterA]==theDecayMode) {
+          while(clusterDecayMode[finalDaughterZ][finalDaughterA]==theDecayMode) { /* Loop checking, 10.07.2015, D.Mancusi */
             finalDaughterA--;
             finalDaughterZ -= theZStep;
           }
@@ -342,7 +342,7 @@ namespace G4INCL {
             theCMMomenta.push_back(pCM);
             weight *= pCM;
           }
-        } while(maximumWeight*Random::shoot()>weight);
+        } while(maximumWeight*Random::shoot()>weight); /* Loop checking, 10.07.2015, D.Mancusi */
 
         for(G4int iSplit=0; iSplit<nSplits; ++iSplit) {
           ThreeVector const velocity = -c->boostVector();
@@ -411,7 +411,7 @@ namespace G4INCL {
         if(theZ<ParticleTable::clusterTableZSize && theA<ParticleTable::clusterTableASize) {
           finalDaughterZ=theZ;
           finalDaughterA=theA;
-          while(finalDaughterA>0 && clusterDecayMode[finalDaughterZ][finalDaughterA]!=StableCluster) {
+          while(finalDaughterA>0 && clusterDecayMode[finalDaughterZ][finalDaughterA]!=StableCluster) { /* Loop checking, 10.07.2015, D.Mancusi */
             finalDaughterA--;
             finalDaughterZ -= theZStep;
           }

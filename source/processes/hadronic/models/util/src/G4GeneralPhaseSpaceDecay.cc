@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeneralPhaseSpaceDecay.cc 67984 2013-03-13 10:44:01Z gcosmo $
+// $Id: G4GeneralPhaseSpaceDecay.cc 93821 2015-11-02 13:06:39Z gcosmo $
 // ----------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -112,6 +112,28 @@ G4GeneralPhaseSpaceDecay::G4GeneralPhaseSpaceDecay(const G4String& theParentName
 					           theDaughterName1,
 					           theDaughterName2,
 					           theDaughterName3),
+			           parentmass(theParentMass),
+				   theDaughterMasses(masses)
+{
+  if (GetVerboseLevel()>1) G4cout << "G4GeneralPhaseSpaceDecay:: constructor " << G4endl;
+}
+
+G4GeneralPhaseSpaceDecay::G4GeneralPhaseSpaceDecay(const G4String& theParentName,
+                                                   G4double        theParentMass,
+			                           G4double        theBR,
+			                           G4int           theNumberOfDaughters,
+			                           const G4String& theDaughterName1,
+			                           const G4String& theDaughterName2,
+			                           const G4String& theDaughterName3,
+			                           const G4String& theDaughterName4,
+						   const G4double *masses) :
+                                   G4VDecayChannel("Phase Space",
+					           theParentName,theBR,
+					           theNumberOfDaughters,
+					           theDaughterName1,
+					           theDaughterName2,
+					           theDaughterName3,
+					           theDaughterName4),
 			           parentmass(theParentMass),
 				   theDaughterMasses(masses)
 {
@@ -268,6 +290,8 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::ThreeBodyDecayIt()
   G4double daughtermomentum[3];
   G4double momentummax=0.0, momentumsum = 0.0;
   G4double energy;
+  const G4int maxNumberOfLoops = 10000;
+  G4int loopCounter = 0;
 
   do 
     {
@@ -299,7 +323,13 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::ThreeBodyDecayIt()
      daughtermomentum[2] = std::sqrt(energy*energy + 2.0*energy* daughtermass[2]);
      if ( daughtermomentum[2] >momentummax )momentummax =  daughtermomentum[2];
      momentumsum  +=  daughtermomentum[2];
-    } while (momentummax >  momentumsum - momentummax );
+    } while ( ( momentummax >  momentumsum - momentummax ) &&  /* Loop checking, 02.11.2015, A.Ribon */ 
+              ++loopCounter < maxNumberOfLoops );
+    if ( loopCounter >= maxNumberOfLoops ) {
+      G4ExceptionDescription ed;
+      ed << " Failed sampling after maxNumberOfLoops attempts : forced exit" << G4endl;
+      G4Exception( " G4GeneralPhaseSpaceDecay::ThreeBodyDecayIt ", "HAD_PHASESPACE_001", FatalException, ed );
+    }
 
   // output message
   if (GetVerboseLevel()>1) {
@@ -465,7 +495,7 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::ManyBodyDecayIt()
       delete [] daughtermomentum;
       return NULL;  // Error detection
     }
-  } while ( weight > G4UniformRand());
+  } while ( weight > G4UniformRand());  /* Loop checking, 02.11.2015, A.Ribon */
   if (GetVerboseLevel()>1) {
       G4cout << "Start calulation of daughters momentum vector "<<G4endl;
   }

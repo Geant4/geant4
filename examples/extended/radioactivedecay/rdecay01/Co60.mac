@@ -16,7 +16,8 @@
 /analysis/h1/set 6  100  0. 2500 keV	#EkinTot (Q)
 /analysis/h1/set 7  150  0. 15e3 keV	#P balance
 /analysis/h1/set 8  100  0. 100. year	#time of life
+/analysis/h1/set 9  100  1. 3. MeV  	#EvisTot
 #
-/rdecay01/event/printModulo 100000
+/run/printProgress 100000
 #  
 /run/beamOn 1000000

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5EventAction.cc 87359 2014-12-01 16:04:27Z gcosmo $
+// $Id: B5EventAction.cc 94486 2015-11-19 08:33:37Z gcosmo $
 //
 /// \file B5EventAction.cc
 /// \brief Implementation of the B5EventAction class
@@ -44,6 +44,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5EventAction::B5EventAction()
@@ -53,10 +54,16 @@ B5EventAction::B5EventAction()
   fDHC1ID(-1),
   fDHC2ID(-1),
   fECHCID(-1),
-  fHCHCID(-1)
+  fHCHCID(-1),
+  fEmCalEdep(), 
+  fHadCalEdep()
 {
   // set printing per each event
-  G4RunManager::GetRunManager()->SetPrintProgress(1);     
+  G4RunManager::GetRunManager()->SetPrintProgress(1);
+
+  // initialize the vectors
+  fEmCalEdep.resize(80, 0.);
+  fHadCalEdep.resize(20, 0.);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -171,6 +178,7 @@ void B5EventAction::EndOfEventAction(const G4Event* event)
             totalEmHit++;
             totalEmE += eDep;
         }
+        fEmCalEdep[i] = eDep;
     }
     analysisManager->FillNtupleDColumn(2, totalEmE);
 
@@ -186,6 +194,7 @@ void B5EventAction::EndOfEventAction(const G4Event* event)
             totalHadHit++;
             totalHadE += eDep;
         }
+        fHadCalEdep[i] = eDep;
     }
     analysisManager->FillNtupleDColumn(3, totalHadE);
 
@@ -200,7 +209,7 @@ void B5EventAction::EndOfEventAction(const G4Event* event)
     {
       analysisManager->FillNtupleDColumn(5,(*hHC2)[i]->GetTime());
     }
-      
+    
     analysisManager->AddNtupleRow();  
     
     //

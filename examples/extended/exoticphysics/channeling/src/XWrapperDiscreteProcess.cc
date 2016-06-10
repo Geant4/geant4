@@ -37,7 +37,7 @@
 #include "G4GeometryTolerance.hh"
 
 #include "G4SystemOfUnits.hh"
-
+#include "G4ParticleChangeForNothing.hh"
 
 XWrapperDiscreteProcess::XWrapperDiscreteProcess(const G4String& aName)
 :G4VDiscreteProcess(aName){
@@ -45,6 +45,8 @@ XWrapperDiscreteProcess::XWrapperDiscreteProcess(const G4String& aName)
         G4cout << GetProcessName() << " is created "<< G4endl;
     }
     bNucleiOrElectronFlag = +0;
+    bBothOrCrystalOrDetectorPhysics = +0;
+    fParticleChangeForNothing = new G4ParticleChangeForNothing();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -54,6 +56,14 @@ XWrapperDiscreteProcess(const G4String&,
                         G4VDiscreteProcess* toRegister)
 :G4VDiscreteProcess("XWrapperDiscreteProcess"){
     fRegisteredProcess = toRegister;
+    theProcessType = fRegisteredProcess->GetProcessType();
+    theProcessSubType = fRegisteredProcess->GetProcessSubType();
+    enableAtRestDoIt = fRegisteredProcess->isAtRestDoItIsEnabled();
+    enableAlongStepDoIt = fRegisteredProcess->isAlongStepDoItIsEnabled();
+    enablePostStepDoIt = fRegisteredProcess->isPostStepDoItIsEnabled();
+    bNucleiOrElectronFlag = +0;
+    bBothOrCrystalOrDetectorPhysics = +0;
+    fParticleChangeForNothing = new G4ParticleChangeForNothing();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -74,14 +84,26 @@ G4VDiscreteProcess(right){
 
 void XWrapperDiscreteProcess::RegisterProcess(G4VDiscreteProcess* toRegister){
     fRegisteredProcess = toRegister;
+    theProcessType = fRegisteredProcess->GetProcessType();
+    theProcessSubType = fRegisteredProcess->GetProcessSubType();
+    enableAtRestDoIt = fRegisteredProcess->isAtRestDoItIsEnabled();
+    enableAlongStepDoIt = fRegisteredProcess->isAlongStepDoItIsEnabled();
+    enablePostStepDoIt = fRegisteredProcess->isPostStepDoItIsEnabled();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XWrapperDiscreteProcess::RegisterProcess(G4VDiscreteProcess* toRegister,
-                                              G4int flag){
+                                              G4int flag,
+                                              G4int region){
     fRegisteredProcess = toRegister;
     bNucleiOrElectronFlag = flag;
+    bBothOrCrystalOrDetectorPhysics = region;
+    theProcessType = fRegisteredProcess->GetProcessType();
+    theProcessSubType = fRegisteredProcess->GetProcessSubType();
+    enableAtRestDoIt = fRegisteredProcess->isAtRestDoItIsEnabled();
+    enableAlongStepDoIt = fRegisteredProcess->isAlongStepDoItIsEnabled();
+    enablePostStepDoIt = fRegisteredProcess->isPostStepDoItIsEnabled();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -98,30 +120,53 @@ G4int XWrapperDiscreteProcess::GetNucleiOrElectronFlag(){
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double XWrapperDiscreteProcess::GetDensity(const G4Track& aTrack){
-    //Retrieve nuclei and electron density
-    //from ExExChParticleUserInfo object
+G4int XWrapperDiscreteProcess::ItHasToWork(const G4Track& aTrack){
     ExExChParticleUserInfo* chanInfo =
-        (ExExChParticleUserInfo*) aTrack.GetUserInformation();
-    
-    G4double vDensity = 1.;
+    (ExExChParticleUserInfo*) aTrack.GetUserInformation();
     
     if(chanInfo){
-        if(bNucleiOrElectronFlag == +1){
-            vDensity = chanInfo->GetNucleiDensity();
+        if((chanInfo->GetInTheCrystal() == true) &&
+           (bBothOrCrystalOrDetectorPhysics == 1 ||
+            bBothOrCrystalOrDetectorPhysics == 0)){
+            return 1;
         }
-        else if(bNucleiOrElectronFlag == -1){
-            vDensity = chanInfo->GetElectronDensity();
-        }
-        else{
-            vDensity = (chanInfo->GetNucleiDensity()
-                        + chanInfo->GetElectronDensity())/2.;
+        if((chanInfo->GetInTheCrystal() == false) &&
+           (bBothOrCrystalOrDetectorPhysics == 2 ||
+            bBothOrCrystalOrDetectorPhysics == 0)){
+            return 2;
         }
     }
     else {
         G4cout << G4endl << "XWrapperDiscreteProcess::";
         G4cout << "ERROR - no ExExChParticleUserInfo object Detected";
         G4cout << G4endl;
+    }
+    
+    return 0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+G4double XWrapperDiscreteProcess::GetDensity(const G4Track& aTrack){
+    //Retrieve nuclei and electron density
+    //from ExExChParticleUserInfo object
+    G4double vDensity = 1.;
+    
+    if(ItHasToWork(aTrack)){
+        ExExChParticleUserInfo* chanInfo =
+        (ExExChParticleUserInfo*) aTrack.GetUserInformation();
+        
+        if(chanInfo){
+            if(bNucleiOrElectronFlag == +1){
+                vDensity = chanInfo->GetNucleiDensity();
+            }
+            else if(bNucleiOrElectronFlag == -1){
+                vDensity = chanInfo->GetElectronDensity();
+            }
+            else{
+                vDensity = (chanInfo->GetNucleiDensity()
+                            + chanInfo->GetElectronDensity())/2.;
+            }
+        }
     }
     
     return vDensity;
@@ -133,12 +178,13 @@ G4double XWrapperDiscreteProcess::
 GetDensityPreviousStep(const G4Track& aTrack){
     //Retrieve nuclei and electron density
     //from ExExChParticleUserInfo object
-    ExExChParticleUserInfo* chanInfo =
-        (ExExChParticleUserInfo*) aTrack.GetUserInformation();
     
     G4double vDensityPreviousStep = 1.;
     
-    if(chanInfo){
+    if(ItHasToWork(aTrack)){
+        ExExChParticleUserInfo* chanInfo =
+        (ExExChParticleUserInfo*) aTrack.GetUserInformation();
+
         if(bNucleiOrElectronFlag == +1){
             vDensityPreviousStep = chanInfo->GetNucleiDensityPreviousStep();
         }
@@ -147,14 +193,9 @@ GetDensityPreviousStep(const G4Track& aTrack){
         }
         else{
             vDensityPreviousStep =
-                (chanInfo->GetNucleiDensityPreviousStep()
-                 + chanInfo->GetElectronDensityPreviousStep())/2.;
+            (chanInfo->GetNucleiDensityPreviousStep()
+             + chanInfo->GetElectronDensityPreviousStep())/2.;
         }
-    }
-    else {
-        G4cout << G4endl << "XWrapperDiscreteProcess::";
-        G4cout << "ERROR - no ExExChParticleUserInfo object Detected";
-        G4cout << G4endl;
     }
     
     return vDensityPreviousStep;
@@ -199,41 +240,64 @@ G4double XWrapperDiscreteProcess::
 PostStepGetPhysicalInteractionLength (const G4Track &aTrack,
                                       G4double previousStepSize,
                                       G4ForceCondition *condition){
-    
-    G4double vDensity = GetDensity(aTrack);
-    G4double vDensityPreviousStep = GetDensityPreviousStep(aTrack);
-    
-    if ( (previousStepSize < 0.0) || (theNumberOfInteractionLengthLeft<=0.0)) {
-        // beginning of tracking (or just after DoIt of this process)
-        ResetNumberOfInteractionLengthLeft();
-    } else if ( previousStepSize > 0.0) {
-        // subtract NumberOfInteractionLengthLeft
-        SubtractNumberOfInteractionLengthLeft(previousStepSize
-                                              * vDensityPreviousStep);
-    } else {
-        // zero step DO NOTHING
-    }
-    
-    G4double regIntLength =
+    if(ItHasToWork(aTrack) == 1){
+        G4double vDensity = GetDensity(aTrack);
+        G4double vDensityPreviousStep = GetDensityPreviousStep(aTrack);
+        
+        if ( (previousStepSize < 0.0) ||
+             (theNumberOfInteractionLengthLeft<=0.0)) {
+            // beginning of tracking (or just after DoIt of this process)
+            ResetNumberOfInteractionLengthLeft();
+        } else if ( previousStepSize > 0.0) {
+            // subtract NumberOfInteractionLengthLeft
+            SubtractNumberOfInteractionLengthLeft(previousStepSize
+                                                  * vDensityPreviousStep);
+        } else {
+            // zero step DO NOTHING
+        }
+        
+        G4double regIntLength =
         fRegisteredProcess->PostStepGetPhysicalInteractionLength(aTrack,
-                                    previousStepSize * vDensityPreviousStep,
-                                    condition);
-    G4double regIntNumber =
+                                       previousStepSize * vDensityPreviousStep,
+                                       condition);
+        G4double regIntNumber =
         fRegisteredProcess->GetNumberOfInteractionLengthLeft();
-    currentInteractionLength = regIntLength / regIntNumber;
-    theNumberOfInteractionLengthLeft = regIntNumber;
-    
-    currentInteractionLength =
+        if(regIntNumber!=0){
+          currentInteractionLength = regIntLength / regIntNumber;
+        }
+        else{
+          return DBL_MAX;
+        }
+        theNumberOfInteractionLengthLeft = regIntNumber;
+        
+        currentInteractionLength =
         theNumberOfInteractionLengthLeft * currentInteractionLength;
-    currentInteractionLength /= vDensity;
-    return currentInteractionLength;
+        if ( vDensity == 0. ) return DBL_MAX;
+        currentInteractionLength /= vDensity;
+        return currentInteractionLength;
+    }
+    else if(ItHasToWork(aTrack) == 2){
+        return fRegisteredProcess->PostStepGetPhysicalInteractionLength(aTrack,
+                                                     previousStepSize,
+                                                     condition);
+    }
+    else{
+        return DBL_MAX;
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VParticleChange* XWrapperDiscreteProcess::PostStepDoIt(const G4Track& aTrack,
                                                          const G4Step& aStep ){
-    return fRegisteredProcess->PostStepDoIt(aTrack, aStep);
+    if(ItHasToWork(aTrack) == 1){
+        return fRegisteredProcess->PostStepDoIt(aTrack, aStep);
+    }
+    else if(ItHasToWork(aTrack) == 2){
+        return fRegisteredProcess->PostStepDoIt(aTrack, aStep);
+    }
+    pParticleChange = fParticleChangeForNothing;
+    return pParticleChange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

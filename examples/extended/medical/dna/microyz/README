@@ -1,0 +1,69 @@
+*** microyz example ***
+
+Author: S. Incerti et al.
+Date: 17 Apr. 2015
+Email: incerti@cenbg.in2p3.fr
+
+****************************************************************
+WARNING: This is a beta example, still buggy and under testing !
+****************************************************************
+
+(c) The Geant4-DNA collaboration.
+
+This examples shows how to compute microdosimetry 
+distributions in liquid water using exclusively Geant4-DNA
+physics processes and models.
+
+1) Geometry
+A box of liquid water.
+
+2) Incident particles
+Particles can be selected from the mycroyz.in macro
+as well as their incident energy.
+They are shot from the center of the box.
+
+3) Physics
+The default Geant4-DNA physics constructor 2 is used in
+the PhysicsList class.
+
+4) Scoring of enery deposition
+Energy depositions are scored in spheres randomly
+along the incident particle track.
+
+The user can select in the TrackerSD class:
+
+1- the number of samplings (1000 by default)
+
+2- the radius of the sphere (1.5 um by default)
+
+5) The code can be run using:
+./microyz microyz.in
+
+6) Results can be analyzed after the run using:
+root plot.C
+
+The following microdosimetry quantities are plotted
+
+- f(y) 
+
+- yf(y)
+
+- d(y)
+
+- yd(y)
+
+y is expressed in keV/um
+
+Plots are shown in lin-lin and log-lin coordinates.
+
+The following quantities are calculated:
+
+- Integral of f(y)dy
+
+- yF (in keV/um)
+
+- Integral of d(y)dy
+
+- yD (in keV/um)
+
+for linear lin-lin and log-lin plots, including normalization in the latter case.

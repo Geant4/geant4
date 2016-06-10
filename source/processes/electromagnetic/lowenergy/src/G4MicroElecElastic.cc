@@ -35,6 +35,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #include "G4MicroElecElastic.hh"
+#include "G4DummyModel.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,10 +69,8 @@ void G4MicroElecElastic::InitialiseProcess(const G4ParticleDefinition*)
   {
     isInitialised = true;
     SetBuildTableFlag(false);
-    if(!EmModel()) SetEmModel(new G4MicroElecElasticModel);
-    EmModel()->SetLowEnergyLimit(5*eV);
-    EmModel()->SetHighEnergyLimit(100*MeV);
-    AddEmModel(1, EmModel());
+    if(!EmModel(1)) SetEmModel(new G4DummyModel(), 1);
+    AddEmModel(2, EmModel(1));
   } 
 }
 
@@ -79,14 +78,9 @@ void G4MicroElecElastic::InitialiseProcess(const G4ParticleDefinition*)
 
 void G4MicroElecElastic::PrintInfo()
 {
-  // V.I. printout of models is perfored by model manager
+  // V.I. printout of models is performed by model manager
   //      if this extra printout is needed it should be 
   //      protected by verbosity level
-  /*
-  G4cout
-    << " Total cross sections computed from " << EmModel()->GetName() << " model"
-    << G4endl;
-  */
 }         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

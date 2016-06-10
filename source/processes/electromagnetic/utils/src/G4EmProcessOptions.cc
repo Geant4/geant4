@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc 84398 2014-10-15 07:20:18Z gcosmo $
+// $Id: G4EmProcessOptions.cc 92766 2015-09-15 15:21:42Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -339,8 +339,7 @@ G4EmProcessOptions::SetDeexcitationActiveRegion(const G4String& rname,
 
 void G4EmProcessOptions::SetPIXECrossSectionModel(const G4String& mname)
 {
-  G4VAtomDeexcitation* ad = theManager->AtomDeexcitation();
-  if(ad) { ad->SetPIXECrossSectionModel(mname); }
+  theParameters->SetPIXECrossSectionModel(mname); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -348,8 +347,7 @@ void G4EmProcessOptions::SetPIXECrossSectionModel(const G4String& mname)
 void 
 G4EmProcessOptions::SetPIXEElectronCrossSectionModel(const G4String& mname)
 {
-  G4VAtomDeexcitation* ad = theManager-> AtomDeexcitation();
-  if(ad) { ad->SetPIXEElectronCrossSectionModel(mname); }
+  theParameters->SetPIXEElectronCrossSectionModel(mname); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

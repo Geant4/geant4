@@ -50,7 +50,6 @@
 
 G4MuonDecayChannelWithSpin::G4MuonDecayChannelWithSpin()
   : G4MuonDecayChannel(),
-    parent_polarization(),
     EMMU( 0.*MeV),
     EMASS( 0.*MeV) 
 {
@@ -59,7 +58,6 @@ G4MuonDecayChannelWithSpin::G4MuonDecayChannelWithSpin()
 G4MuonDecayChannelWithSpin::G4MuonDecayChannelWithSpin(const G4String& theParentName, 
 						       G4double        theBR)
   : G4MuonDecayChannel(theParentName,theBR),
-    parent_polarization(),
     EMMU( 0.*MeV),
     EMASS( 0.*MeV) 
 {
@@ -72,7 +70,6 @@ G4MuonDecayChannelWithSpin::~G4MuonDecayChannelWithSpin()
 G4MuonDecayChannelWithSpin::G4MuonDecayChannelWithSpin(const G4MuonDecayChannelWithSpin &right):
   G4MuonDecayChannel(right)
 {
-  parent_polarization = right.parent_polarization;
   EMMU  = right.EMMU;
   EMASS = right.EMASS;
 }
@@ -100,7 +97,6 @@ G4MuonDecayChannelWithSpin & G4MuonDecayChannelWithSpin::operator=(const G4MuonD
           daughters_name[index] = new G4String(*right.daughters_name[index]);
       }
     }
-    parent_polarization = right.parent_polarization;
     EMMU  = right.EMMU;
     EMASS = right.EMASS;
   }
@@ -159,7 +155,7 @@ G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double)
   G4double x0     =           EMASS/W_mue;
 
   G4double x0_squared = x0*x0;
-
+  
   // ***************************************************
   //     x0 <= x <= 1.   and   -1 <= y <= 1
   //
@@ -168,7 +164,8 @@ G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double)
 
   // ***** sampling F(x,y) directly (brute force) *****
 
-  do{
+  const size_t MAX_LOOP=10000;
+  for (size_t loop_count =0; loop_count <MAX_LOOP; ++loop_count){
 
     // Sample the positron energy by sampling from F
 
@@ -218,7 +215,8 @@ G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double)
 
     rndm = G4UniformRand();
 
-  }while(FG<rndm*FG_max);
+    if (FG >= rndm*FG_max) break;
+  }
 
   G4double energy = x * W_mue;
 

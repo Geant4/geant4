@@ -76,9 +76,12 @@ public:
   // ----------------------------------------------
   void SetCloneWeights(G4double clone1Weight, G4double clone2Weight) {fClone1W = clone1Weight ; fClone2W = clone2Weight;}
 
+  G4Track* GetCloneTrack() const { return fCloneTrack; }
+
 private:
   G4double fClone1W, fClone2W;
   G4ParticleChange fParticleChange;
+  G4Track* fCloneTrack;
 };
 
 #endif

@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 86519 2014-11-13 09:17:38Z gcosmo $
+# $Id: sources.cmake 94498 2015-11-19 15:46:58Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -73,7 +73,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lend/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lepto_nuclear/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/neutron_hp/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/particle_hp/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/diffraction/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/hadronization/include)
@@ -205,7 +204,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4KaonBuilder.cc
         G4NeutronBuilder.cc
         G4NeutronCrossSectionXS.cc
-        G4NeutronHPBuilder.cc
         G4NeutronLENDBuilder.cc
         G4PiKBuilder.cc
         G4PionBuilder.cc

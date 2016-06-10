@@ -71,9 +71,7 @@ public:
     return true;
   }
 
-  void dump(std::ostream& a_out,
-                   const std::string& a_spaces = "",
-                   const std::string& a_indent = " "){
+  void dump(std::ostream& a_out,const std::string& a_spaces = "",const std::string& a_indent = " "){
     a_out << a_spaces
           << "tree :"
           << " name=" << sout(m_name)

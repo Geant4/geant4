@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh 85011 2014-10-23 09:41:59Z gcosmo $
+// $Id: G4VEmProcess.hh 93264 2015-10-14 09:30:04Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -95,7 +95,7 @@ class G4VEmProcess : public G4VDiscreteProcess
 public:
 
   G4VEmProcess(const G4String& name,
-	       G4ProcessType type = fElectromagnetic);
+               G4ProcessType type = fElectromagnetic);
 
   virtual ~G4VEmProcess();
 
@@ -106,6 +106,8 @@ public:
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
 
   virtual void PrintInfo() = 0;
+
+  virtual void ProcessDescription(std::ostream& outFile) const; // = 0;
 
 protected:
 
@@ -125,37 +127,37 @@ protected:
 public:
 
   // Initialise for build of tables
-  void PreparePhysicsTable(const G4ParticleDefinition&);
+  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
 
   // Build physics table during initialisation
-  void BuildPhysicsTable(const G4ParticleDefinition&);
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
 
   // Called before tracking of each new G4Track
-  void StartTracking(G4Track*);
+  virtual void StartTracking(G4Track*);
 
   // implementation of virtual method, specific for G4VEmProcess
-  G4double PostStepGetPhysicalInteractionLength(
+  virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4double   previousStepSize,
                              G4ForceCondition* condition);
 
   // implementation of virtual method, specific for G4VEmProcess
-  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
   // Store PhysicsTable in a file.
   // Return false in case of failure at I/O
-  G4bool StorePhysicsTable(const G4ParticleDefinition*,
-			   const G4String& directory,
-			   G4bool ascii = false);
+  virtual G4bool StorePhysicsTable(const G4ParticleDefinition*,
+                                   const G4String& directory,
+                                   G4bool ascii = false);
 
   // Retrieve Physics from a file.
   // (return true if the Physics Table can be build by using file)
   // (return false if the process has no functionality or in case of failure)
   // File name should is constructed as processName+particleName and the
   // should be placed under the directory specifed by the argument.
-  G4bool RetrievePhysicsTable(const G4ParticleDefinition*,
-			      const G4String& directory,
-			      G4bool ascii);
+  virtual G4bool RetrievePhysicsTable(const G4ParticleDefinition*,
+                                      const G4String& directory,
+                                      G4bool ascii);
 
   //------------------------------------------------------------------------
   // Specific methods for Discrete EM post step simulation 
@@ -163,18 +165,18 @@ public:
 
   // It returns the cross section per volume for energy/ material
   G4double CrossSectionPerVolume(G4double kineticEnergy,
-				 const G4MaterialCutsCouple* couple);
+                                 const G4MaterialCutsCouple* couple);
 
   // It returns the cross section of the process per atom
   G4double ComputeCrossSectionPerAtom(G4double kineticEnergy, 
-				      G4double Z, G4double A=0., 
-				      G4double cut=0.0);
+                                      G4double Z, G4double A=0., 
+                                      G4double cut=0.0);
 
   G4double MeanFreePath(const G4Track& track);
 
   // It returns cross section per volume
   inline G4double GetLambda(G4double& kinEnergy, 
-			    const G4MaterialCutsCouple* couple);
+                            const G4MaterialCutsCouple* couple);
 
   //------------------------------------------------------------------------
   // Specific methods to build and access Physics Tables
@@ -214,7 +216,7 @@ protected:
 public:
   // Select model by energy and region index
   inline G4VEmModel* SelectModelForMaterial(G4double kinEnergy, 
-					    size_t& idxRegion) const;
+                                            size_t& idxRegion) const;
    
   // Add model for region, smaller value of order defines which
   // model will be selected for a given energy interval  
@@ -235,14 +237,17 @@ public:
   // access atom on which interaction happens
   const G4Element* GetCurrentElement() const;
 
+  // access to active model
+  inline const G4VEmModel* GetCurrentModel() const;
+
   // Biasing parameters
   void SetCrossSectionBiasingFactor(G4double f, G4bool flag = true);
   inline G4double CrossSectionBiasingFactor() const;
 
   // Activate forced interaction
   void ActivateForcedInteraction(G4double length = 0.0, 
-				 const G4String& r = "",
-				 G4bool flag = true);
+                                 const G4String& r = "",
+                                 G4bool flag = true);
 
   void ActivateSecondaryBiasing(const G4String& region, G4double factor,
           G4double energyLimit);
@@ -257,9 +262,9 @@ public:
   
 protected:
 
-  G4double GetMeanFreePath(const G4Track& track,
-			   G4double previousStepSize,
-			   G4ForceCondition* condition);
+  virtual G4double GetMeanFreePath(const G4Track& track,
+                                   G4double previousStepSize,
+                                   G4ForceCondition* condition);
 
   G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
 
@@ -275,7 +280,7 @@ protected:
   inline G4bool IsIntegral() const;
 
   inline G4double RecalculateLambda(G4double kinEnergy,
- 				    const G4MaterialCutsCouple* couple);
+                                     const G4MaterialCutsCouple* couple);
 
   inline G4ParticleChangeForGamma* GetParticleChange();
 
@@ -466,7 +471,7 @@ G4VEmModel* G4VEmProcess::SelectModel(G4double& kinEnergy, size_t index)
 
 inline 
 G4VEmModel* G4VEmProcess::SelectModelForMaterial(G4double kinEnergy, 
-						 size_t& idxRegion) const
+                                                 size_t& idxRegion) const
 {
   return modelManager->SelectModel(kinEnergy, idxRegion);
 }
@@ -508,7 +513,7 @@ inline G4double G4VEmProcess::GetCurrentLambda(G4double e)
 
 inline G4double 
 G4VEmProcess::GetLambda(G4double& kinEnergy, 
-			const G4MaterialCutsCouple* couple)
+                        const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
   SelectModel(kinEnergy, currentCoupleIndex);
@@ -683,6 +688,13 @@ inline const G4Element* G4VEmProcess::GetTargetElement() const
 inline const G4Isotope* G4VEmProcess::GetTargetIsotope() const
 {
   return currentModel->GetCurrentIsotope();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline const G4VEmModel* G4VEmProcess::GetCurrentModel() const
+{
+  return currentModel;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

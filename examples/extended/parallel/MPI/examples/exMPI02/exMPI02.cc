@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 /// @file exMPI02.cc
-// $Id: exMPI02.cc 82385 2014-06-18 09:25:07Z gcosmo $
+// $Id: exMPI02.cc 88353 2015-02-16 08:54:08Z gcosmo $
 //
 /// @brief A MPI example code
 
@@ -67,14 +67,13 @@ int main(int argc, char** argv)
   // --------------------------------------------------------------------
   // user application setting
   // --------------------------------------------------------------------
-#ifdef G4MULTITHREADED
+#ifdef G4MULTITHREADED_DISABLE //ROOT ISSUES WITH MT, SEE exMPI03 FOR A MT
   G4MTRunManager* runManager = new G4MTRunManager();
   runManager-> SetNumberOfThreads(4);
 #else
   G4RunManager* runManager = new G4RunManager();
 #endif
-G4ScoringManager * scManager = G4ScoringManager::GetScoringManager();
- scManager->SetVerboseLevel(1);
+
   // setup your application
   runManager-> SetUserInitialization(new DetectorConstruction);
   runManager-> SetUserInitialization(new FTFP_BERT);

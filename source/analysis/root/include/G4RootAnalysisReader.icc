@@ -25,47 +25,7 @@
 //
 // $Id: G4RootAnalysisReader.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
-#include "G4H1ToolsManager.hh"
-#include "G4H2ToolsManager.hh"
-#include "G4H3ToolsManager.hh"
-#include "G4P1ToolsManager.hh"
-#include "G4P2ToolsManager.hh"
 #include "G4RootRNtupleManager.hh"
-
-//_____________________________________________________________________________
-inline 
-tools::histo::h1d*  G4RootAnalysisReader::GetH1(G4int id, G4bool warn) const 
-{
-  return fH1Manager->GetH1(id, warn, false);
-}
-
-//_____________________________________________________________________________
-inline 
-tools::histo::h2d*  G4RootAnalysisReader::GetH2(G4int id, G4bool warn) const 
-{
-  return fH2Manager->GetH2(id, warn, false);
-}
-
-//_____________________________________________________________________________
-inline 
-tools::histo::h3d*  G4RootAnalysisReader::GetH3(G4int id, G4bool warn) const 
-{
-  return fH3Manager->GetH3(id, warn, false);
-}
-
-//_____________________________________________________________________________
-inline 
-tools::histo::p1d*  G4RootAnalysisReader::GetP1(G4int id, G4bool warn) const 
-{
-  return fP1Manager->GetP1(id, warn, false);
-}
-
-//_____________________________________________________________________________
-inline 
-tools::histo::p2d*  G4RootAnalysisReader::GetP2(G4int id, G4bool warn) const 
-{
-  return fP2Manager->GetP2(id, warn, false);
-}
 
 //_____________________________________________________________________________
 inline

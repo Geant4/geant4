@@ -112,67 +112,67 @@ inline bool List_empty_stream(buffer& a_buffer) {
   return true;
 }
 
-template <class HDATA>
-inline std::string axis_title(const HDATA& a_data,
+template <class HIST>
+inline std::string axis_title(const HIST& a_h,
                               const std::string& a_key) {
   typedef std::map<std::string,std::string> annotations_t;
-  annotations_t::const_iterator it = a_data.m_annotations.find(a_key);
-  if(it==a_data.m_annotations.end()) return std::string();
+  annotations_t::const_iterator it = a_h.annotations().find(a_key);
+  if(it==a_h.annotations().end()) return std::string();
   return (*it).second;
 }
 
-template <class HDATA>
+template <class HIST>
 inline bool TH_write_1D(buffer& a_buffer,
-                        const HDATA& a_data,
+                        const HIST& a_h,
                         const std::string& a_name,
                         const std::vector<double>& a_bin_Sw2) {
 
     if(!a_buffer.write_version(3)) return false;
 
-    if(!Named_stream(a_buffer,a_name,a_data.m_title)) return false;
+    if(!Named_stream(a_buffer,a_name,a_h.title())) return false;
 
     if(!AttLine_stream(a_buffer)) return false;
     if(!AttFill_stream(a_buffer)) return false;
     if(!AttMarker_stream(a_buffer)) return false;
 
-    if(!a_buffer.write((int)a_data.m_bin_number)) return false;
+    if(!a_buffer.write((int)a_h.get_bins())) return false;
 
     //fXAxis,fYAxis,fZAxis
-    if(a_data.m_dimension==3) {
+    if(a_h.dimension()==3) {
 
-     {histo::axis<double,unsigned int> haxis(a_data.m_axes[0]);
-      if(!axis_stream(a_buffer,haxis,"xaxis",axis_title(a_data,histo::key_axis_x_title()))) return false;}
+     {histo::axis<double,unsigned int> haxis(a_h.get_axis(0));
+      if(!axis_stream(a_buffer,haxis,"xaxis",axis_title(a_h,histo::key_axis_x_title()))) return false;}
 
-     {histo::axis<double,unsigned int> haxis(a_data.m_axes[1]);
-      if(!axis_stream(a_buffer,haxis,"yaxis",axis_title(a_data,histo::key_axis_y_title()))) return false;}
+     {histo::axis<double,unsigned int> haxis(a_h.get_axis(1));
+      if(!axis_stream(a_buffer,haxis,"yaxis",axis_title(a_h,histo::key_axis_y_title()))) return false;}
 
-     {histo::axis<double,unsigned int> haxis(a_data.m_axes[2]);
-      if(!axis_stream(a_buffer,haxis,"zaxis",axis_title(a_data,histo::key_axis_z_title()))) return false;}
+     {histo::axis<double,unsigned int> haxis(a_h.get_axis(2));
+      if(!axis_stream(a_buffer,haxis,"zaxis",axis_title(a_h,histo::key_axis_z_title()))) return false;}
 
-    } else if(a_data.m_dimension==2) {
+    } else if(a_h.dimension()==2) {
 
-     {histo::axis<double,unsigned int> haxis(a_data.m_axes[0]);
-      if(!axis_stream(a_buffer,haxis,"xaxis",axis_title(a_data,histo::key_axis_x_title()))) return false;}
+     {histo::axis<double,unsigned int> haxis(a_h.get_axis(0));
+      if(!axis_stream(a_buffer,haxis,"xaxis",axis_title(a_h,histo::key_axis_x_title()))) return false;}
 
-     {histo::axis<double,unsigned int> haxis(a_data.m_axes[1]);
-      if(!axis_stream(a_buffer,haxis,"yaxis",axis_title(a_data,histo::key_axis_y_title()))) return false;}
-
-     {histo::axis<double,unsigned int> dummy;
-      dummy.configure(1,0,1);
-      if(!axis_stream(a_buffer,dummy,"zaxis",axis_title(a_data,histo::key_axis_z_title()))) return false;}
-
-    } else if(a_data.m_dimension==1) {
-
-     {histo::axis<double,unsigned int> haxis(a_data.m_axes[0]);
-      if(!axis_stream(a_buffer,haxis,"xaxis",axis_title(a_data,histo::key_axis_x_title()))) return false;}
+     {histo::axis<double,unsigned int> haxis(a_h.get_axis(1));
+      if(!axis_stream(a_buffer,haxis,"yaxis",axis_title(a_h,histo::key_axis_y_title()))) return false;}
 
      {histo::axis<double,unsigned int> dummy;
       dummy.configure(1,0,1);
-      if(!axis_stream(a_buffer,dummy,"yaxis",axis_title(a_data,histo::key_axis_y_title()))) return false;}
+      if(!axis_stream(a_buffer,dummy,"zaxis",axis_title(a_h,histo::key_axis_z_title()))) return false;}
+
+    } else if(a_h.dimension()==1) {
+
+     {histo::axis<double,unsigned int> haxis(a_h.get_axis(0));
+      if(!axis_stream(a_buffer,haxis,"xaxis",axis_title(a_h,histo::key_axis_x_title()))) return false;}
 
      {histo::axis<double,unsigned int> dummy;
       dummy.configure(1,0,1);
-      if(!axis_stream(a_buffer,dummy,"zaxis",axis_title(a_data,histo::key_axis_z_title()))) return false;}
+      if(!axis_stream(a_buffer,dummy,"yaxis",axis_title(a_h,histo::key_axis_y_title()))) return false;}
+
+     {histo::axis<double,unsigned int> dummy;
+      dummy.configure(1,0,1);
+      if(!axis_stream(a_buffer,dummy,"zaxis",axis_title(a_h,histo::key_axis_z_title()))) return false;}
 
     } else {
       return false;
@@ -181,16 +181,16 @@ inline bool TH_write_1D(buffer& a_buffer,
     if(!a_buffer.write((short)(1000 * 0.25))) return false; //fBarOffset
     if(!a_buffer.write((short)(1000 * 0.5))) return false; //fBarWidth
 
-    if(!a_buffer.write((double)a_data.m_all_entries)) return false;
-    if(!a_buffer.write((double)a_data.m_in_range_Sw)) return false;  //enforce double in case h1df
-    if(!a_buffer.write((double)a_data.m_in_range_Sw2)) return false; //idem
+    if(!a_buffer.write((double)a_h.all_entries())) return false;
+    if(!a_buffer.write((double)a_h.get_in_range_Sw())) return false;  //enforce double in case h1df
+    if(!a_buffer.write((double)a_h.get_in_range_Sw2())) return false; //idem
 
    {double value;
-    a_data.get_ith_axis_Sxw(0,value);  
+    a_h.get_ith_axis_Sxw(0,value);  
     if(!a_buffer.write(value)) return false;}
 
    {double value;
-    a_data.get_ith_axis_Sx2w(0,value);  
+    a_h.get_ith_axis_Sx2w(0,value);  
     if(!a_buffer.write(value)) return false;}
 
     if(!a_buffer.write((double)-1111)) return false; //fMaximum
@@ -202,68 +202,66 @@ inline bool TH_write_1D(buffer& a_buffer,
     if(!a_buffer.write_array(a_bin_Sw2)) return false; //fSumw2 TArrayD
 
     // store annotation on fOption    
-    // but try to fool ROOT in order that it does not
-    // understand fOption as.. ROOT options !
+    // but try to fool CERN-ROOT in order that it does not
+    // understand fOption as.. CERN-ROOT options !
    //{std::string opt = " "+fAnnotation;   
    // opt[0] = 0; //awfull trick
    // if(!a_buffer.write(opt)) return false;} //TString fOption
    {std::string opt;   
     if(!a_buffer.write(opt)) return false;} //TString fOption
 
-    if(!List_empty_stream(a_buffer)) return false; //Functions
+    if(!List_empty_stream(a_buffer)) return false; //*TList fFunctions
 
     return true;
 }
 
-template <class HDATA>
+template <class HIST>
 inline bool TH_write_2D(buffer& a_buffer,
-                        const HDATA& a_data,
+                        const HIST& a_h,
                         const std::string& a_name,
                         const std::vector<double>& a_bin_Sw2) {
   if(!a_buffer.write_version(3)) return false;
-  if(!TH_write_1D(a_buffer,a_data,a_name,a_bin_Sw2)) return false;
+  if(!TH_write_1D(a_buffer,a_h,a_name,a_bin_Sw2)) return false;
   if(!a_buffer.write((double)1)) return false; //ScaleFactor
 
  {double value;
-  a_data.get_ith_axis_Sxw(1,value);  
+  a_h.get_ith_axis_Sxw(1,value);  
   if(!a_buffer.write(value)) return false;}
 
  {double value;
-  a_data.get_ith_axis_Sx2w(1,value);  
+  a_h.get_ith_axis_Sx2w(1,value);  
   if(!a_buffer.write(value)) return false;}
 
-  if(!a_buffer.write((double)0)) return false; //Tsumwxy //FIXME.
+  if(!a_buffer.write((double)a_h.Sxyw())) return false; //Tsumwxy
 
   return true;
 }
 
-template <class HDATA>
+template <class HIST>
 inline bool TH_write_3D(buffer& a_buffer,
-                        const HDATA& a_data,
+                        const HIST& a_h,
                         const std::string& a_name,
                         const std::vector<double>& a_bin_Sw2) {
   if(!a_buffer.write_version(4)) return false;
-  if(!TH_write_1D(a_buffer,a_data,a_name,a_bin_Sw2)) return false;
+  if(!TH_write_1D(a_buffer,a_h,a_name,a_bin_Sw2)) return false;
   if(!Att3D_stream(a_buffer)) return false;
 
  {double value;
-  a_data.get_ith_axis_Sxw(1,value);
+  a_h.get_ith_axis_Sxw(1,value);
   if(!a_buffer.write(value)) return false;}    //Tsumwy : Total Sum of weight*Y
  {double value;
-  a_data.get_ith_axis_Sx2w(1,value);
+  a_h.get_ith_axis_Sx2w(1,value);
   if(!a_buffer.write(value)) return false;}    //Tsumwy2 : Total Sum of weight*Y*Y
-  //FIXME
-  if(!a_buffer.write((double)0)) return false; //Tsumwxy : Total Sum of weight*X*Y
+  if(!a_buffer.write((double)a_h.Sxyw())) return false; //Tsumwxy : Total Sum of weight*X*Y
 
  {double value;
-  a_data.get_ith_axis_Sxw(2,value);
+  a_h.get_ith_axis_Sxw(2,value);
   if(!a_buffer.write(value)) return false;}    //Tsumwz : Total Sum of weight*Z
  {double value;
-  a_data.get_ith_axis_Sx2w(2,value);
+  a_h.get_ith_axis_Sx2w(2,value);
   if(!a_buffer.write(value)) return false;}    //Tsumwz2 : Total Sum of weight*Z*Z
-  //FIXME
-  if(!a_buffer.write((double)0)) return false; //Tsumwxz : Total Sum of weight*X*Z
-  if(!a_buffer.write((double)0)) return false; //Tsumwyz : Total Sum of weight*Y*Z
+  if(!a_buffer.write((double)a_h.Szxw())) return false; //Tsumwxz : Total Sum of weight*X*Z
+  if(!a_buffer.write((double)a_h.Syzw())) return false; //Tsumwyz : Total Sum of weight*Y*Z
 
   return true;
 }
@@ -272,8 +270,8 @@ inline bool TH1F_stream(buffer& a_buffer,
                         const histo::h1df& a_h,
                         const std::string& a_name) {
   if(!a_buffer.write_version(1)) return false;
-  if(!TH_write_1D(a_buffer,a_h,a_name,convert<float,double>(a_h.m_bin_Sw2))) return false;
-  if(!a_buffer.write_array(a_h.m_bin_Sw)) return false;
+  if(!TH_write_1D(a_buffer,a_h,a_name,convert<float,double>(a_h.bins_sum_w2()))) return false;
+  if(!a_buffer.write_array(a_h.bins_sum_w())) return false;
   return true;
 }
 
@@ -281,8 +279,8 @@ inline bool TH1F_stream(buffer& a_buffer,
                         const histo::h1d& a_h,
                         const std::string& a_name) {
   if(!a_buffer.write_version(1)) return false;
-  if(!TH_write_1D(a_buffer,a_h,a_name,a_h.m_bin_Sw2)) return false;
-  if(!a_buffer.write_array(convert<double,float>(a_h.m_bin_Sw))) return false;
+  if(!TH_write_1D(a_buffer,a_h,a_name,a_h.bins_sum_w2())) return false;
+  if(!a_buffer.write_array(convert<double,float>(a_h.bins_sum_w()))) return false;
   return true;
 }
 
@@ -290,8 +288,8 @@ inline bool TH1D_stream(buffer& a_buffer,
                         const histo::h1d& a_h,
                         const std::string& a_name) {
   if(!a_buffer.write_version(1)) return false;
-  if(!TH_write_1D(a_buffer,a_h,a_name,a_h.m_bin_Sw2)) return false;
-  if(!a_buffer.write_array(a_h.m_bin_Sw)) return false; //fArray TArrayD
+  if(!TH_write_1D(a_buffer,a_h,a_name,a_h.bins_sum_w2())) return false;
+  if(!a_buffer.write_array(a_h.bins_sum_w())) return false; //fArray TArrayD
   return true;
 }
 
@@ -299,8 +297,8 @@ inline bool TH2F_stream(buffer& a_buffer,
                         const histo::h2d& a_h,
                         const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
-  if(!TH_write_2D(a_buffer,a_h,a_name,a_h.m_bin_Sw2)) return false;
-  if(!a_buffer.write_array(convert<double,float>(a_h.m_bin_Sw))) return false; //fArray TArrayF
+  if(!TH_write_2D(a_buffer,a_h,a_name,a_h.bins_sum_w2())) return false;
+  if(!a_buffer.write_array(convert<double,float>(a_h.bins_sum_w()))) return false; //fArray TArrayF
   return true;
 }
 
@@ -308,8 +306,8 @@ inline bool TH2F_stream(buffer& a_buffer,
                         const histo::h2df& a_h,
                         const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
-  if(!TH_write_2D(a_buffer,a_h,a_name,convert<float,double>(a_h.m_bin_Sw2))) return false;
-  if(!a_buffer.write_array(a_h.m_bin_Sw)) return false;
+  if(!TH_write_2D(a_buffer,a_h,a_name,convert<float,double>(a_h.bins_sum_w2()))) return false;
+  if(!a_buffer.write_array(a_h.bins_sum_w())) return false;
   return true;
 }
 
@@ -317,70 +315,62 @@ inline bool TH2D_stream(buffer& a_buffer,
                         const histo::h2d& a_h,
                         const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
-  if(!TH_write_2D(a_buffer,a_h,a_name,a_h.m_bin_Sw2)) return false;
-  if(!a_buffer.write_array(a_h.m_bin_Sw)) return false; //fArray TArrayD
+  if(!TH_write_2D(a_buffer,a_h,a_name,a_h.bins_sum_w2())) return false;
+  if(!a_buffer.write_array(a_h.bins_sum_w())) return false; //fArray TArrayD
   return true;
 }
 
 inline bool TH3F_stream(buffer& a_buffer,const histo::h3d& a_h,const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
-  if(!TH_write_3D(a_buffer,a_h,a_name,a_h.m_bin_Sw2)) return false;
-  if(!a_buffer.write_array(convert<double,float>(a_h.m_bin_Sw))) return false; //fArray TArrayF
+  if(!TH_write_3D(a_buffer,a_h,a_name,a_h.bins_sum_w2())) return false;
+  if(!a_buffer.write_array(convert<double,float>(a_h.bins_sum_w()))) return false; //fArray TArrayF
   return true;
 }
 
 inline bool TH3F_stream(buffer& a_buffer,const histo::h3df& a_h,const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
-  if(!TH_write_3D(a_buffer,a_h,a_name,convert<float,double>(a_h.m_bin_Sw2))) return false;
-  if(!a_buffer.write_array(a_h.m_bin_Sw)) return false; //fArray TArrayF
+  if(!TH_write_3D(a_buffer,a_h,a_name,convert<float,double>(a_h.bins_sum_w2()))) return false;
+  if(!a_buffer.write_array(a_h.bins_sum_w())) return false; //fArray TArrayF
   return true;
 }
 
 inline bool TH3D_stream(buffer& a_buffer,const histo::h3d& a_h,const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
-  if(!TH_write_3D(a_buffer,a_h,a_name,a_h.m_bin_Sw2)) return false;
-  if(!a_buffer.write_array(a_h.m_bin_Sw)) return false; //fArray TArrayD
+  if(!TH_write_3D(a_buffer,a_h,a_name,a_h.bins_sum_w2())) return false;
+  if(!a_buffer.write_array(a_h.bins_sum_w())) return false; //fArray TArrayD
   return true;
 }
 
-inline bool TProfile_stream(buffer& a_buffer,
-                            const histo::p1d& a_p,
-                            const std::string& a_name){
-    if(!a_buffer.write_version(4)) return false;
+inline bool TProfile_stream(buffer& a_buffer,const histo::p1d& a_p,const std::string& a_name){
+  if(!a_buffer.write_version(4)) return false;
 
-    //WARNING : the mapping histo::p1d / TProfile is not obvious.
-    //p1d::m_bin_Svw  <---> TProfile::fArray
-    //p1d::m_bin_Sv2w <---> TProfile::fSumw2
-    //p1d::m_bin_Sw   <---> TProfile::fBinEntries
+  //WARNING : the mapping histo::p1d / TProfile is not obvious.
+  //p1d::m_bin_Svw  <---> TProfile::fArray
+  //p1d::m_bin_Sv2w <---> TProfile::fSumw2
+  //p1d::m_bin_Sw   <---> TProfile::fBinEntries
 
-    double Svw = a_p.get_Svw();
-    double Sv2w = a_p.get_Sv2w();
+  // TH1D_stream(a_buffer,h,a_name) :
+  //if(!a_buffer.write_version(1)) return false;
+  //if(!TH_write_1D(a_buffer,a_h,a_name,a_h.bins_sum_w2())) return false; //fSumw2 TArrayD
+  //if(!a_buffer.write_array(a_h.bins_sum_w())) return false; //fArray TArrayD
+  // but for profile :
+  if(!a_buffer.write_version(1)) return false;
+  if(!TH_write_1D(a_buffer,a_p,a_name,a_p.bins_sum_v2w())) return false; //fSumw2 TArrayD
+  if(!a_buffer.write_array(a_p.bins_sum_vw())) return false; //fArray TArrayD
 
-    pd_data data = a_p.get_histo_data();
-    //NOTE : histo.m_bin_Sw <---> TH1D::TArrayD::fArray
-    //       then have to copy histo.m_bin_Svw on histo.m_bin_Sw
-    //       before streaming.
+  //TProfile specific :
+  if(!a_buffer.write_array(a_p.bins_sum_w())) return false; //fBinEntries TArrayD
 
-    std::vector<double> vbins = data.m_bin_Sw;
-    data.m_bin_Sw = data.m_bin_Svw;    
+  int errorMode = 0;
+  if(!a_buffer.write(errorMode)) return false;
+  if(!a_buffer.write(a_p.min_v())) return false;
+  if(!a_buffer.write(a_p.max_v())) return false;
 
-    histo::h1d h("",10,0,1);
-    h.copy_from_data(data);
-    if(!TH1D_stream(a_buffer,h,a_name)) return false;
+  // version 4 :
+  if(!a_buffer.write(a_p.get_Svw())) return false;              //Double_t fTsumwy;  //Total Sum of weight*Y
+  if(!a_buffer.write(a_p.get_Sv2w())) return false;             //Double_t fTsumwy2; //Total Sum of weight*Y*Y
 
-    //TProfile specific :
-    if(!a_buffer.write_array(vbins)) return false; //fBinEntries TArrayD
-
-    int errorMode = 0;
-    if(!a_buffer.write(errorMode)) return false;
-    if(!a_buffer.write(data.m_min_v)) return false;
-    if(!a_buffer.write(data.m_max_v)) return false;
-
-    // version 4 :
-    if(!a_buffer.write(Svw)) return false;              //Double_t fTsumwy;  //Total Sum of weight*Y
-    if(!a_buffer.write(Sv2w)) return false;             //Double_t fTsumwy2; //Total Sum of weight*Y*Y
-
-    return true;
+  return true;
 }
 
 inline bool TProfile2D_stream(buffer& a_buffer,const histo::p2d& a_p,const std::string& a_name){
@@ -391,32 +381,26 @@ inline bool TProfile2D_stream(buffer& a_buffer,const histo::p2d& a_p,const std::
   //p2d::m_bin_Sv2w <---> TProfile2D::fSumw2
   //p2d::m_bin_Sw   <---> TProfile2D::fBinEntries
 
-  double Svw = a_p.get_Svw();
-  double Sv2w = a_p.get_Sv2w();
-
-  pd_data data = a_p.get_histo_data();
-  //NOTE : histo.m_bin_Sw <---> TH2D::TArrayD::fArray
-  //       then have to copy histo.m_bin_Svw on histo.m_bin_Sw
-  //       before streaming.
-
-  std::vector<double> vbins = data.m_bin_Sw;
-  data.m_bin_Sw = data.m_bin_Svw;
-
-  histo::h2d h("",10,0,1,10,0,1);
-  h.copy_from_data(data);
-  if(!TH2D_stream(a_buffer,h,a_name)) return false;
+  // TH2D_stream(a_buffer,h,a_name) :
+  //if(!a_buffer.write_version(3)) return false;
+  //if(!TH_write_2D(a_buffer,a_h,a_name,a_h.bins_sum_w2())) return false; //fSumw2 TArrayD
+  //if(!a_buffer.write_array(a_h.bins_sum_w())) return false; //fArray TArrayD
+  // for profile :
+  if(!a_buffer.write_version(3)) return false;
+  if(!TH_write_2D(a_buffer,a_p,a_name,a_p.bins_sum_v2w())) return false; //fSumw2 TArrayD
+  if(!a_buffer.write_array(a_p.bins_sum_vw())) return false; //fArray TArrayD
 
   //TProfile2D specific :
-  if(!a_buffer.write_array(vbins)) return false; //fBinEntries TArrayD
+  if(!a_buffer.write_array(a_p.bins_sum_w())) return false; //fBinEntries TArrayD
 
   int errorMode = 0;
   if(!a_buffer.write(errorMode)) return false;    //fErrorMode
-  if(!a_buffer.write(data.m_min_v)) return false; //fZmin
-  if(!a_buffer.write(data.m_max_v)) return false; //fZmax
+  if(!a_buffer.write(a_p.min_v())) return false; //fZmin
+  if(!a_buffer.write(a_p.max_v())) return false; //fZmax
 
   // version 5 :
-  if(!a_buffer.write(Svw)) return false;              //Double_t fTsumwz;  //Total Sum of weight*Z
-  if(!a_buffer.write(Sv2w)) return false;             //Double_t fTsumwz2; //Total Sum of weight*Z*Z
+  if(!a_buffer.write(a_p.get_Svw())) return false;              //Double_t fTsumwz;  //Total Sum of weight*Z
+  if(!a_buffer.write(a_p.get_Sv2w())) return false;             //Double_t fTsumwz2; //Total Sum of weight*Z*Z
 
   return true;
 }

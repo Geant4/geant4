@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm0/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 68243 2013-03-19 18:03:11Z vnivanch $
+// $Id: RunAction.cc 93512 2015-10-23 13:45:07Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -240,13 +240,13 @@ void RunAction::BeginOfRunAction(const G4Run*)
   G4cout << "\n \n  restricted dE/dx         : ";
   for (size_t j=0; j<=nproc; j++) {             
     G4cout << "\t" << std::setw(13) 
-	   << G4BestUnit(dedx1[j],"Energy/Length");
+           << G4BestUnit(dedx1[j],"Energy/Length");
   }
   
   G4cout << "\n      (MeV/g/cm2)          : ";
   for (size_t j=0; j<=nproc; j++) {
     G4cout << "\t" << std::setw(13) 
-	   << G4BestUnit(dedx2[j],"Energy*Surface/Mass");
+           << G4BestUnit(dedx2[j],"Energy*Surface/Mass");
   }
   dedxtot = 0.;
 
@@ -268,7 +268,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
   G4cout << "\n      (MeV/g/cm2)          : ";
   for (size_t j=0; j<=nproc; j++) {
     G4cout << "\t" << std::setw(13) 
-	   << G4BestUnit(dedx2[j],"Energy*Surface/Mass");
+           << G4BestUnit(dedx2[j],"Energy*Surface/Mass");
   }
   
   //get range from restricted dedx
@@ -286,8 +286,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
     G4double Range2 = Range1*density;
      
     G4cout << "\n  range from full dE/dx    : " 
-	   << "\t" << std::setw(8) << G4BestUnit(Range1,"Length")
-	   << " (" << std::setw(8) << G4BestUnit(Range2,"Mass/Surface") << ")";
+           << "\t" << std::setw(8) << G4BestUnit(Range1,"Length")
+           << " (" << std::setw(8) << G4BestUnit(Range2,"Mass/Surface") << ")";
   }         
 
   //get transport mean free path (for multiple scattering)

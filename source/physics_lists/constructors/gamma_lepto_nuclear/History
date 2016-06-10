@@ -1,4 +1,4 @@
-$Id: History 81364 2014-05-27 12:55:46Z gcosmo $
+$Id: History 94350 2015-11-12 15:34:12Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,25 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-November-2015, V.Ivanchenko          (phys-ctor-glnuclear-V10-01-03)
+- G4EmExtraPhysics - do not use AutoDelete
+
+07-October-2015, V.Ivanchenko           (phys-ctor-glnuclear-V10-01-02)
+- fixed History - problem #1788
+
+08-June-2015, V.Ivanchenko              (phys-ctor-glnuclear-V10-01-01)
+- G4EmExtraPhysics, G4EmMessenger - fixed problem #1752; clean up
+    messenger and add new UI commands; instead of old UI commands 
+    "/physics_lists/tailor/SyncRadiation on" and similar now one
+    should use another syntax: 
+    /physics_lists/em/SyncRadiation true    (for e+-)
+    /physics_lists/em/SyncRadiationAll true (for all charged particles)
+    /physics_lists/em/GammaNuclear true     (for gamma, e+- nuclear)
+    /physics_lists/em/MuonNuclear true      (for mu+- nuclear)
+
+06-April-2015, A. Dotti 	   	(phys-ctro-glnuclear-V10-01-00)
+- Coverity fixes
 
 27-May-2013, V.Ivanchenko               (phys-ctor-glnuclear-V10-00-05)
 - G4BertiniElectroNuclearBuilder - removed double deletion

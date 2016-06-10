@@ -23,54 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExGflashRunAction.cc 70923 2013-06-07 13:10:39Z gcosmo $
+// $Id: ExGflashRunAction.cc 94396 2015-11-13 13:37:16Z gcosmo $
 //
 /// \file parameterisations/gflash/src/ExGflashRunAction.cc
 /// \brief Implementation of the ExGflashRunAction class
 //
 #include "ExGflashRunAction.hh"
 #include "G4Run.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
 #include "G4ios.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+ExGflashRunAction::ExGflashRunAction()
+ : G4UserRunAction(), fRunID(0)
+{}
 
-
-ExGflashRunAction::ExGflashRunAction(): fRunID(0)
-{
-}
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExGflashRunAction::~ExGflashRunAction()
-{
-}
+{}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExGflashRunAction::BeginOfRunAction(const G4Run* aRun)
 {  
    ((G4Run *)(aRun))->SetRunID(fRunID++);
    
-   std::cout << "### Run " << aRun->GetRunID() << " start." << std::endl;
-   
-   if (G4VVisManager::GetConcreteInstance())
-     {
-       G4UImanager* UI = G4UImanager::GetUIpointer();
-       UI->ApplyCommand("/vis/scene/notifyHandlers");
-     } 
+   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExGflashRunAction::EndOfRunAction(const G4Run* aRun)
 { 
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-    }
-
   G4cout << "number of event = " << aRun->GetNumberOfEvent() << G4endl;
 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HETCAlpha.cc 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4HETCAlpha.cc 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // by V. Lara
 //
@@ -41,21 +41,20 @@ G4HETCAlpha::G4HETCAlpha()
 G4HETCAlpha::~G4HETCAlpha() 
 {}
 
-G4double G4HETCAlpha::GetAlpha()
+G4double G4HETCAlpha::GetAlpha() const
 {
   G4double C = 0.0;
-  G4int aZ = GetZ() + GetRestZ();
-  if (aZ <= 30) 
+  if (theFragZ <= 30) 
     {
       C = 0.10;
     } 
-  else if (aZ <= 50) 
+  else if (theFragZ <= 50) 
     {
-      C = 0.1 + -((aZ-50.)/20.)*0.02;
+      C = 0.1 + -((theFragZ-50.)/20.)*0.02;
     }
-  else if (aZ < 70) 
+  else if (theFragZ < 70) 
     {
-      C = 0.08 + -((aZ-70.)/20.)*0.02;
+      C = 0.08 + -((theFragZ-70.)/20.)*0.02;
     }
   else 
     {
@@ -64,12 +63,12 @@ G4double G4HETCAlpha::GetAlpha()
   return 1.0+C;
 }
   
-G4double G4HETCAlpha::GetBeta()
+G4double G4HETCAlpha::GetBeta() const
 {
-  return -GetCoulombBarrier();
+  return theCoulombBarrier;
 }
   
-G4double G4HETCAlpha::GetSpinFactor()
+G4double G4HETCAlpha::GetSpinFactor() const
 {
   return 1.0;
 }
@@ -77,13 +76,11 @@ G4double G4HETCAlpha::GetSpinFactor()
 G4double G4HETCAlpha::K(const G4Fragment & aFragment)
 {
   // Number of protons in emitted fragment
-  G4int Pa = GetZ();
+  G4int Pa = theZ;
   // Number of neutrons in emitted fragment 
-  G4int Na = GetA() - Pa;
+  G4int Na = theA - Pa;
 
-  G4int TargetZ = GetRestZ();
-  G4int TargetA = GetRestA();
-  G4double r = G4double(TargetZ)/G4double(TargetA);
+  G4double r = G4double(theResZ)/G4double(theResA);
 
   G4int P = aFragment.GetNumberOfParticles();
   G4int H = aFragment.GetNumberOfHoles();

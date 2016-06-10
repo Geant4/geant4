@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionInitialState.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4CollisionInitialState.hh 89688 2015-04-27 10:06:44Z gcosmo $
 //
 // $Id: G4CollisionInitialState.hh,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------
@@ -108,7 +108,7 @@ public:
     {theCollisionTime = value;}
 
 // for debugging only
-  G4BCAction * GetGenerator()
+const G4BCAction * GetGenerator()
   {
     return theFSGenerator;
   }

@@ -12,6 +12,7 @@ namespace histo {
 
 //TC is for a coordinate.
 //TO is for an offset/index to identify/find a bind.
+//TN is for a number of entries.
 //TW is for a weight.
 //TH is for a height. Should be the same as TV.
 //TV is for a value (in general same as TC).
@@ -96,7 +97,7 @@ public:
     m_max_v = a_from.m_max_v;
   }
   pd_t get_histo_data() const {
-    pd_t hd(parent::base_get_data());
+    pd_t hd(parent::dac());
     hd.m_is_profile = true;
     hd.m_bin_Svw = m_bin_Svw;
     hd.m_bin_Sv2w = m_bin_Sv2w;
@@ -134,6 +135,7 @@ public:
 
     parent::m_all_entries++;
     if(inRange) {
+      // fast getters :
       parent::m_in_range_entries++;
       parent::m_in_range_Sw += aWeight;
       parent::m_in_range_Sw2 += aWeight*aWeight;
@@ -319,6 +321,8 @@ public:
 public:
   bool configure(bn_t aXnumber,TC aXmin,TC aXmax){
     if(!parent::configure(aXnumber,aXmin,aXmax)) return false;
+    m_bin_Svw.clear();
+    m_bin_Sv2w.clear();
     m_bin_Svw.resize(parent::m_bin_number,0);
     m_bin_Sv2w.resize(parent::m_bin_number,0);
     m_cut_v = false;
@@ -328,6 +332,8 @@ public:
   }
   bool configure(const std::vector<TC>& aEdges) {
     if(!parent::configure(aEdges)) return false;
+    m_bin_Svw.clear();
+    m_bin_Sv2w.clear();
     m_bin_Svw.resize(parent::m_bin_number,0);
     m_bin_Sv2w.resize(parent::m_bin_number,0);
     m_cut_v = false;
@@ -337,6 +343,8 @@ public:
   }
   bool configure(bn_t aXnumber,TC aXmin,TC aXmax,TV aVmin,TV aVmax){
     if(!parent::configure(aXnumber,aXmin,aXmax)) return false;
+    m_bin_Svw.clear();
+    m_bin_Sv2w.clear();
     m_bin_Svw.resize(parent::m_bin_number,0);
     m_bin_Sv2w.resize(parent::m_bin_number,0);
     m_cut_v = true;
@@ -346,6 +354,8 @@ public:
   }
   bool configure(const std::vector<TC>& aEdges,TV aVmin,TV aVmax) {
     if(!parent::configure(aEdges)) return false;
+    m_bin_Svw.clear();
+    m_bin_Sv2w.clear();
     m_bin_Svw.resize(parent::m_bin_number,0);
     m_bin_Sv2w.resize(parent::m_bin_number,0);
     m_cut_v = true;

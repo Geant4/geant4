@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KDTree.icc 87443 2014-12-04 12:26:31Z gunter $
+// $Id: G4KDTree.icc 93883 2015-11-03 08:25:04Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -103,6 +103,40 @@ template<typename PointT>
     else
     {
       fRect->Extend(*pos);
+    }
+
+    return node;
+  }
+
+template<typename PointT>
+  G4KDNode_Base* G4KDTree::Insert(const PointT& pos)
+  {
+    G4KDNode_Base* node = 0;
+    if (!fRoot)
+    {
+      fRoot = new G4KDNodeCopy<PointT>(this, pos, 0);
+      node = fRoot;
+      fNbNodes = 0;
+      fNbNodes++;
+      fNbActiveNodes++;
+    }
+    else
+    {
+      if ((node = fRoot->Insert<PointT>(pos)))
+      {
+        fNbNodes++;
+        fNbActiveNodes++;
+      }
+    }
+
+    if (fRect == 0)
+    {
+      fRect = new HyperRect(fDim);
+      fRect->SetMinMax(pos, pos);
+    }
+    else
+    {
+      fRect->Extend(pos);
     }
 
     return node;
@@ -258,7 +292,7 @@ template<typename Position>
     /* Duplicate the bounding hyperrectangle, we will work on the copy */
     HyperRect* newrect = new HyperRect(*fRect);
 
-    /* Our first guesstimate is the root node */
+    /* Our first estimate is the root node */
     /* Search for the nearest neighbour recursively */
     __NearestToPosition(fRoot, pos, result, &dist_sq, newrect);
 

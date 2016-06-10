@@ -19,6 +19,7 @@ TOOLS_GLOBAL_STRING(format_fog)
 TOOLS_GLOBAL_STRING(format_dot)
 TOOLS_GLOBAL_STRING(format_dcm)
 TOOLS_GLOBAL_STRING(format_iv)
+TOOLS_GLOBAL_STRING(format_wrl)
 TOOLS_GLOBAL_STRING(format_jpeg)
 TOOLS_GLOBAL_STRING(format_png)
 TOOLS_GLOBAL_STRING(format_root)
@@ -47,6 +48,7 @@ TOOLS_GLOBAL_EXT(dot)
 TOOLS_GLOBAL_EXT(dcm)
 TOOLS_GLOBAL_EXT(iv)
 TOOLS_GLOBAL_EXT(hiv)
+TOOLS_GLOBAL_EXT(wrl)
 TOOLS_GLOBAL_EXT(jpg)
 TOOLS_GLOBAL_EXT(png)
 TOOLS_GLOBAL_EXT(root)
@@ -74,6 +76,7 @@ inline void formats(std::vector<std::string>& a_v) {
   a_v.push_back(s_format_dot());
   a_v.push_back(s_format_dcm());
   a_v.push_back(s_format_iv());
+  a_v.push_back(s_format_wrl());
   a_v.push_back(s_format_jpeg());
   a_v.push_back(s_format_png());
   a_v.push_back(s_format_root());
@@ -105,6 +108,7 @@ inline std::string ext_fmt(const std::string& a_ext) {
   if(a_ext==s_ext_dcm()) return s_format_dcm();
   if(a_ext==s_ext_iv()) return s_format_iv();
   if(a_ext==s_ext_hiv()) return s_format_iv();
+  if(a_ext==s_ext_wrl()) return s_format_wrl();
   if(a_ext==s_ext_exsg()) return s_format_exsg();
   if(a_ext==s_ext_bsg()) return s_format_bsg();
   if(a_ext==s_ext_scenarios()) return s_format_scenarios();

@@ -44,9 +44,17 @@ class G4VNtupleManager : public G4BaseAnalysisManager
   // its messenger
   friend class G4VAnalysisManager;
 
-  protected:
-    G4VNtupleManager(const G4AnalysisManagerState& state);
+  public:
+    explicit G4VNtupleManager(const G4AnalysisManagerState& state);
     virtual ~G4VNtupleManager();
+
+    // deleted copy constructor & assignment operator
+    G4VNtupleManager(const G4VNtupleManager& rhs) = delete;
+    G4VNtupleManager& operator=(const G4VNtupleManager& rhs) =delete;
+
+  protected:
+    //G4VNtupleManager(const G4AnalysisManagerState& state);
+    //virtual ~G4VNtupleManager();
    
     // Methods for handling ntuples
     virtual G4int CreateNtuple(const G4String& name, const G4String& title) = 0;
@@ -89,6 +97,11 @@ class G4VNtupleManager : public G4BaseAnalysisManager
     virtual G4bool FillNtupleSColumn(G4int ntupleId, G4int columnId, 
                                      const G4String& value) = 0;
     virtual G4bool AddNtupleRow(G4int ntupleId) = 0;
+
+    // Activation option
+    virtual void  SetActivation(G4bool activation) = 0;
+    virtual void  SetActivation(G4int id, G4bool activation) = 0;
+    virtual G4bool  GetActivation(G4int id) const = 0;
 
     // Access methods
     virtual G4int GetNofNtuples() const = 0;

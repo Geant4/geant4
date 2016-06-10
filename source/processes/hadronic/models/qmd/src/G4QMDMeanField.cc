@@ -35,7 +35,8 @@
 
 #include "G4QMDMeanField.hh"
 #include "G4QMDParameters.hh"
-
+#include "G4Exp.hh"
+#include "G4Pow.hh"
 #include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 
@@ -188,8 +189,8 @@ void G4QMDMeanField::Cal2BodyQuantities()
          rbij[j][i] = - rbij[i][j];
 
          pp2[i][j] = pij2
-                   + irelcr * ( - std::pow ( p4i.e() - p4j.e() , 2 )
-                   + gamma2_ij * std::pow ( ( ( p4i.m2() - p4j.m2() ) / eij ) , 2 ) );
+                   + irelcr * ( - G4Pow::GetInstance()->powN ( p4i.e() - p4j.e() , 2 )
+                   + gamma2_ij * G4Pow::GetInstance()->powN ( ( ( p4i.m2() - p4j.m2() ) / eij ) , 2 ) );
 
 
          pp2[j][i] = pp2[i][j];
@@ -201,7 +202,7 @@ void G4QMDMeanField::Cal2BodyQuantities()
          G4double rh1;
          if ( expa1 > epsx )
          {
-            rh1 = std::exp( expa1 );
+            rh1 = G4Exp( expa1 );
          }
          else
          {
@@ -321,8 +322,8 @@ void G4QMDMeanField::Cal2BodyQuantities( G4int i )
       rbij[j][i] = - rbij[i][j];
       
       pp2[i][j] = pij2
-                + irelcr * ( - std::pow ( p4i.e() - p4j.e() , 2 )
-                + gamma2_ij * std::pow ( ( ( p4i.m2() - p4j.m2() ) / eij ) , 2 ) );
+                + irelcr * ( - G4Pow::GetInstance()->powN ( p4i.e() - p4j.e() , 2 )
+                + gamma2_ij * G4Pow::GetInstance()->powN ( ( ( p4i.m2() - p4j.m2() ) / eij ) , 2 ) );
 
       pp2[j][i] = pp2[i][j];
 
@@ -333,7 +334,7 @@ void G4QMDMeanField::Cal2BodyQuantities( G4int i )
       G4double rh1;
       if ( expa1 > epsx ) 
       {
-         rh1 = std::exp( expa1 );
+         rh1 = G4Exp( expa1 );
       }
       else 
       {
@@ -402,7 +403,7 @@ void G4QMDMeanField::CalGraduate()
       {
          rho3 += rha[j][i]; 
       }
-      rh3d[i] = std::pow ( rho3 , pag ); 
+      rh3d[i] = G4Pow::GetInstance()->powA ( rho3 , pag ); 
    }
 
 
@@ -510,7 +511,7 @@ G4double G4QMDMeanField::GetPotential( G4int i )
                 * ( 1 - 2 * std::abs ( jcharge - icharge ) );
    }
 
-   rho3 = std::pow ( rhoa , gamm );
+   rho3 = G4Pow::GetInstance()->powA ( rhoa , gamm );
 
    G4double potential = c0 * rhoa
                       + c3 * rho3
@@ -549,7 +550,7 @@ G4double G4QMDMeanField::GetTotalPotential()
                    * ( 1 - 2 * std::abs ( jcharge - icharge ) );
       }
 
-      rho3[i] = std::pow ( rhoa[i] , gamm );
+      rho3[i] = G4Pow::GetInstance()->powA ( rhoa[i] , gamm );
    }
 
    G4double potential = c0 * std::accumulate( rhoa.begin() , rhoa.end() , 0.0 ) 
@@ -599,7 +600,7 @@ G4double G4QMDMeanField::calPauliBlockingFactor( G4int i )
             if ( expa > epsx ) 
             { 
 //   std::cout << "Pauli phase " <<  pf  << std::endl;
-               pf = pf + std::exp ( expa );
+               pf = pf + G4Exp ( expa );
             }
          }
       }
@@ -702,10 +703,7 @@ std::vector< G4QMDNucleus* > G4QMDMeanField::DoClusterJudgment()
 
    Cal2BodyQuantities(); 
 
-   G4double cpf2 = std::pow ( 1.5 * pi*pi * std::pow ( 4.0 * pi * wl , -1.5 ) 
-                              , 
-                              2./3. )
-                 * hbc * hbc;
+   G4double cpf2 = G4Pow::GetInstance()->A23 ( 1.5 * pi*pi * G4Pow::GetInstance()->powA ( 4.0 * pi * wl , -1.5 ) ) * hbc * hbc;
    G4double rcc2 = rclds*rclds;
 
    G4int n = system->GetTotalNumberOfParticipant();
@@ -725,7 +723,7 @@ std::vector< G4QMDNucleus* > G4QMDMeanField::DoClusterJudgment()
       }
       }
 
-      rhoa[i] = std::pow ( rhoa[i] + 1 , 1.0/3.0 );
+      rhoa[i] = G4Pow::GetInstance()->A13 ( rhoa[i] + 1 );
 
    }
 

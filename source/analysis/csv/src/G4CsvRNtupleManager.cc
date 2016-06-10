@@ -64,7 +64,7 @@ G4CsvRNtupleDescription* G4CsvRNtupleManager::GetNtupleInFunction(G4int id,
       description << "      " << "ntuple " << id << " does not exist.";
       G4Exception(inFunction, "Analysis_WR011", JustWarning, description);
     }
-    return 0;         
+    return nullptr;         
   }
   
   return fNtupleVector[index];
@@ -107,7 +107,7 @@ tools::rcsv::ntuple* G4CsvRNtupleManager::GetNtuple(G4int ntupleId) const
   G4CsvRNtupleDescription* rntupleDescription
     = GetNtupleInFunction(ntupleId, "GetNtuple");
 
-  if ( ! rntupleDescription ) return 0; 
+  if ( ! rntupleDescription ) return nullptr; 
 
   return rntupleDescription->fNtuple;  
 }  

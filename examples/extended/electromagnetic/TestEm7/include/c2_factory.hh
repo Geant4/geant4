@@ -34,7 +34,7 @@
  *         \version c2_factory.hh,v 1.13 2008/05/22 12:45:19 marcus Exp
  */
 //
-// $Id: c2_factory.hh 68263 2013-03-20 10:16:46Z maire $
+// $Id: c2_factory.hh 91266 2015-06-29 06:48:42Z gcosmo $
 
 #ifndef __has_c2_factory_hh
 #define __has_c2_factory_hh 1
@@ -111,13 +111,13 @@ static c2_connector_function_p<float_type> &connector_function(
         float_type x0, const c2_function<float_type> &f0, float_type x2,
         const c2_function<float_type> &f2,  bool auto_center, float_type y1)
         {return *new c2_connector_function_p<float_type>(x0, f0, x2, f2,
-	                                                 auto_center, y1); }
+                                                         auto_center, y1); }
 /// make a *new object
 static c2_connector_function_p<float_type> &connector_function(
         const c2_fblock<float_type> &fb0, const c2_fblock<float_type> &fb2, 
         bool auto_center, float_type y1)
         { return *new c2_connector_function_p<float_type>(fb0, fb2,
-	                                                  auto_center, y1); }
+                                                          auto_center, y1); }
 /// make a *new object
 static c2_connector_function_p<float_type> &connector_function(
         float_type x0, float_type y0, float_type yp0, float_type ypp0,  
@@ -184,7 +184,7 @@ template <template <typename f_t> class Final >
                 throw(c2_exception) 
       {
         return ::inverse_integrated_density_function<float_type,
-	                                             Final<float_type> >
+                                                     Final<float_type> >
                         (bincenters, binheights);
       }
 #endif

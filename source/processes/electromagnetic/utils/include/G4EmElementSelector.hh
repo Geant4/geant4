@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmElementSelector.hh 71484 2013-06-17 08:12:51Z gcosmo $
+// $Id: G4EmElementSelector.hh 92921 2015-09-21 15:06:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -66,8 +66,8 @@ class G4EmElementSelector
 public:
 
   G4EmElementSelector(G4VEmModel*, const G4Material*, G4int bins, 
-		      G4double emin, G4double emax, 
-		      G4bool spline = true);
+                      G4double emin, G4double emax, 
+                      G4bool spline = true);
 
   ~G4EmElementSelector();
 
@@ -110,8 +110,8 @@ inline const G4Element* G4EmElementSelector::SelectRandomAtom(G4double e) const
     G4double x = G4UniformRand();
     for(G4int i=0; i<nElmMinusOne; ++i) {
       if (x <= (xSections[i])->Value(e)) {
-	element = (*theElementVector)[i];
-	break;
+        element = (*theElementVector)[i];
+        break;
       }
     }
   }

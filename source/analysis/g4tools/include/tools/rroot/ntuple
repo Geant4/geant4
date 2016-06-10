@@ -206,7 +206,6 @@ public:
     ,m_be(0)
     ,m_user_var(a_user_var) //not owner
     {
-      //WIN32 : cl.exe wants inlib:: in the below.
       m_be = safe_cast<branch,branch_element>(m_leaf.branch());
     }
     virtual ~column_element(){}

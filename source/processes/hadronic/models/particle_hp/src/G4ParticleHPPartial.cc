@@ -137,7 +137,7 @@ G4ParticleHPVector * G4ParticleHPPartial::GetY(G4double e1)
       G4int i1=0, i2=0, ii=0;
       x1 = X[low];
       x2 = X[high];
-      while(i1<GetNEntries(low)||i2<GetNEntries(high))
+      while(i1<GetNEntries(low)||i2<GetNEntries(high)) // Loop checking, 11.05.2015, T. Koi
       {
 	if(   (GetX(low,i1)<GetX(high,i2) && i1<GetNEntries(low))
             ||(i2==GetNEntries(high)) )

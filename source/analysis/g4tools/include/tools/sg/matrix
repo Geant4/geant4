@@ -1,0 +1,143 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_matrix
+#define tools_sg_matrix
+
+#include "node"
+#include "sf_mat4f"
+#include "../lina/mat4f"
+#include "render_action"
+#include "pick_action"
+#include "bbox_action"
+#include "event_action"
+#include "visible_action"
+
+namespace tools {
+namespace sg {
+
+class matrix : public node {
+  TOOLS_NODE(matrix,tools::sg::matrix,node)
+public:
+  sf_mat4f mtx;
+public:
+  virtual const std::vector<field_desc>& node_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::matrix)
+    static std::vector<field_desc> s_v;
+    if(s_v.empty()) {
+      s_v = parent::node_fields();
+      TOOLS_ADD_FIELD_DESC(mtx)
+    }
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&mtx);
+  }
+public:
+  virtual void render(render_action& a_action) {
+    a_action.model_matrix().mul_mtx(mtx.value(),m_tmp);
+    a_action.state().m_model = a_action.model_matrix();
+    a_action.load_model_matrix(a_action.model_matrix());
+  }
+  virtual void pick(pick_action& a_action) {
+    a_action.model_matrix().mul_mtx(mtx.value(),m_tmp);
+    a_action.state().m_model = a_action.model_matrix();
+  }
+  virtual void bbox(bbox_action& a_action) {
+    a_action.model_matrix().mul_mtx(mtx.value(),m_tmp);
+    a_action.state().m_model = a_action.model_matrix();
+  }
+  virtual void event(event_action& a_action) {
+    a_action.model_matrix().mul_mtx(mtx.value(),m_tmp);
+    a_action.state().m_model = a_action.model_matrix();
+  }
+  virtual void get_matrix(get_matrix_action& a_action) {
+    a_action.model_matrix().mul_mtx(mtx.value(),m_tmp);
+  }
+  virtual void is_visible(visible_action& a_action) {
+    a_action.model_matrix().mul_mtx(mtx.value(),m_tmp);
+  }
+public:
+  matrix():parent(),mtx(tools::mat4f()) {
+#ifdef TOOLS_MEM
+    tools::mem::increment(s_class().c_str());
+#endif
+    add_fields();
+    mtx.set_identity();
+  }
+  virtual ~matrix(){
+#ifdef TOOLS_MEM
+    tools::mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  matrix(const matrix& a_from):parent(a_from),mtx(a_from.mtx) {
+#ifdef TOOLS_MEM
+    tools::mem::increment(s_class().c_str());
+#endif
+    add_fields();
+  }
+  matrix& operator=(const matrix& a_from){
+    parent::operator=(a_from);
+    mtx = a_from.mtx;
+    return *this;
+  }
+public:
+  // shortcuts :
+  void set_identity() {mtx.set_identity();}
+
+  void set_translate(float a_x,float a_y,float a_z) {
+    mtx.set_translate(a_x,a_y,a_z);
+  }
+  void set_translate(const vec3f& a_v) {mtx.set_translate(a_v);}
+
+  void set_scale(float a_x,float a_y,float a_z) {mtx.set_scale(a_x,a_y,a_z);}
+  void set_scale(float a_s) {mtx.set_scale(a_s);}
+
+  void set_rotate(float a_x,float a_y,float a_z,float a_angle) {
+    mtx.set_rotate(a_x,a_y,a_z,a_angle);
+  }
+  void set_rotate(const vec3f& a_v,float a_angle) {
+    mtx.set_rotate(a_v,a_angle);
+  }
+
+  void mul_mtx(const mat4f& a_m) {mtx.mul_mtx(a_m,m_tmp);}
+
+  void mul_translate(float a_x,float a_y,float a_z) {
+    mtx.mul_translate(a_x,a_y,a_z);
+  }
+  void mul_translate(const vec3f& a_v) {mtx.mul_translate(a_v);}
+  void mul_scale(float a_x,float a_y,float a_z) {mtx.mul_scale(a_x,a_y,a_z);}
+  void mul_scale(float a_s) {mtx.mul_scale(a_s);}
+
+  void mul_rotate(float a_x,float a_y,float a_z,float a_angle) {
+    mtx.mul_rotate(a_x,a_y,a_z,a_angle);
+  }
+
+  void mul_rotate(const vec3f& a_v,float a_angle) {mtx.mul_rotate(a_v,a_angle);}
+
+  void left_mul_rotate(float a_x,float a_y,float a_z,float a_angle) {
+    mtx.left_mul_rotate(a_x,a_y,a_z,a_angle);
+  }
+
+  void left_mul_scale(float a_x,float a_y,float a_z) {
+    mtx.left_mul_scale(a_x,a_y,a_z);
+  }
+
+  void left_mul_translate(float a_x,float a_y,float a_z) {
+    mtx.left_mul_translate(a_x,a_y,a_z);
+  }
+
+  void left_mul_translate(const vec3f& a_v) {mtx.left_mul_translate(a_v);}
+
+  bool mul_rotate(const vec3f& a_from,const vec3f& a_to) {
+    return mtx.mul_rotate(a_from,a_to,m_tmp);
+  }
+protected:
+  float m_tmp[16]; //OPTIMIZATION
+};
+
+}}
+
+#endif

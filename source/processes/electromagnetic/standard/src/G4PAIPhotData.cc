@@ -149,19 +149,7 @@ void G4PAIPhotData::Initialise(const G4MaterialCutsCouple* couple,
 
   // if( deltaCutInKineticEnergyNow != cut ) deltaCutInKineticEnergyNow = cut; // exception??
 
-  const G4Material* mat = couple->GetMaterial();     
-  fSandia.Initialize(const_cast<G4Material*>(mat));
-
-  G4PhysicsTable* PAItransferTable = new G4PhysicsTable(fTotBin+1);
-  G4PhysicsTable* PAIphotonTable = new G4PhysicsTable(fTotBin+1);
-  G4PhysicsTable* PAIplasmonTable = new G4PhysicsTable(fTotBin+1);
-
-  G4PhysicsTable* PAIdEdxTable = new G4PhysicsTable(fTotBin+1);
   G4PhysicsLogVector* dEdxCutVector =
-    new G4PhysicsLogVector(fLowestKineticEnergy,
-			   fHighestKineticEnergy,
-			   fTotBin);
-  G4PhysicsLogVector* dEdxMeanVector =
     new G4PhysicsLogVector(fLowestKineticEnergy,
 			   fHighestKineticEnergy,
 			   fTotBin);
@@ -175,6 +163,19 @@ void G4PAIPhotData::Initialise(const G4MaterialCutsCouple* couple,
 			   fHighestKineticEnergy,
 			   fTotBin);
   G4PhysicsLogVector* dNdxCutPlasmonVector = 
+    new G4PhysicsLogVector(fLowestKineticEnergy,
+			   fHighestKineticEnergy,
+			   fTotBin);
+
+  const G4Material* mat = couple->GetMaterial();     
+  fSandia.Initialize(const_cast<G4Material*>(mat));
+
+  G4PhysicsTable* PAItransferTable = new G4PhysicsTable(fTotBin+1);
+  G4PhysicsTable* PAIphotonTable = new G4PhysicsTable(fTotBin+1);
+  G4PhysicsTable* PAIplasmonTable = new G4PhysicsTable(fTotBin+1);
+
+  G4PhysicsTable* PAIdEdxTable = new G4PhysicsTable(fTotBin+1);
+  G4PhysicsLogVector* dEdxMeanVector =
     new G4PhysicsLogVector(fLowestKineticEnergy,
 			   fHighestKineticEnergy,
 			   fTotBin);

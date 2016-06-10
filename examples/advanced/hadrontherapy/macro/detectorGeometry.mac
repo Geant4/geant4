@@ -159,7 +159,7 @@
 
 
 /changePhantom/size 40 40 40 cm
-changePhantom/position 20 0 0 cm
+/changePhantom/position 20 0 0 cm
 
 
 /changeDetector/size 4 4 4 cm

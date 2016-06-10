@@ -1,0 +1,87 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_dummy_freetype
+#define tools_sg_dummy_freetype
+
+#include "base_freetype"
+#include "render_action"
+#include "bbox_action"
+#include "pick_action"
+
+namespace tools {
+namespace sg {
+
+class dummy_freetype : public base_freetype {
+public:
+  TOOLS_NODE(dummy_freetype,tools::sg::dummy_freetype,base_freetype)
+protected: //gstos
+  virtual unsigned int create_gsto(std::ostream& a_out,gl_manager&) {
+    a_out << "tools::sg::dummy_freetype::create_gsto : dummy" << std::endl;
+    return 0;
+  }
+public:
+  virtual void render(render_action& a_action) {
+    a_action.out() << "tools::sg::dummy_freetype::render : dummy" << std::endl;
+    if(touched()) {
+      update_sg(a_action.out());
+      reset_touched();
+    }
+  }
+  virtual void pick(pick_action& a_action) {
+    a_action.out() << "tools::sg::dummy_freetype::pick : dummy" << std::endl;
+    if(touched()) {
+      update_sg(a_action.out());
+      reset_touched();
+    }
+  }
+
+  virtual void bbox(bbox_action& a_action) {
+    a_action.out() << "tools::sg::dummy_freetype::bbox : dummy" << std::endl;
+    if(touched()) {
+      update_sg(a_action.out());
+      reset_touched();
+    }
+  }
+
+public:
+  dummy_freetype():base_freetype() {}
+  virtual ~dummy_freetype(){}
+public:
+  dummy_freetype(const dummy_freetype& a_from):base_freetype(a_from) {}
+
+  dummy_freetype& operator=(const dummy_freetype& a_from){
+    base_freetype::operator=(a_from);
+    return *this;
+  }
+
+public: //base_text :
+  virtual float ascent(float) const {return 0;}
+  virtual float descent(float) const {return 0;}
+  virtual float y_advance(float) const {return 0;}
+
+  virtual void get_bounds(float a_height,
+                          float& a_mn_x,float& a_mn_y,float& a_mn_z,
+                          float& a_mx_x,float& a_mx_y,float& a_mx_z) const {
+    (void)a_height;
+    a_mn_x = 0;
+    a_mn_y = 0;
+    a_mn_z = 0;
+    a_mx_x = 0;
+    a_mx_y = 0;
+    a_mx_z = 0;
+  }
+
+  virtual bool truncate(const std::string&,
+                        float,float,
+                        std::string& a_out) const {
+    a_out.clear();
+    return false;
+  }
+protected:
+  void update_sg(std::ostream&) {}
+};
+
+}}
+
+#endif

@@ -1,3 +1,213 @@
+ 1.26.2 :
+ - test/cpp/viewplot.cpp : more tests to check the sg::plotter nodes reset when producing more pages and files with
+   the same viewer.
+ - test/cpp/viewplot.cpp : regions_style() : have a a_plotter_scale argument to have space between plotters.
+ - test/cpp/viewplot.cpp : HD_style() : set also line_width on title, axis texts to handle properly hershey font
+   if using on large (batch) window.
+ - test/cpp/viewplot.cpp : use tools/xml/wrap_viewplot_style include-embeded style file.
+ - test/cpp/viewplot.cpp : use set_current_plotter_style() instead of style_from_res().
+
+ - tools/xml/viewplot.style, wrap_viewplot_style : a style file (and include-embeded version) for viewplot.cpp.
+ - tools/viewplot : deprecate style_from_res() and replace it with the more explicit set_current_plotter_style().
+ - tools/sg/plots : init_sg() "public" and doing more initializations.
+ - tools/sg/plots : plotter_scale field, to let space between sg::plotter nodes in a grid of plots.
+ - tools/sg/back_area, plotter : border_line_width field, to customize border line width of plotter::infos_box.
+ - tools/sg/style_color : use "parent" typedef.
+
+ 1.26.1 :
+ - test/cpp/viewplot.cpp : regions_style() function to adjust per plotter parameters (as margins)
+   in case of multiple regions.
+ - tools/viewplot : set_from_res() : add a verbose arg.
+
+ 1.26.0 : prepare freetype2 + modifs and fixes coming from dev in inlib/exlib.
+ - zfunc,wroot/file, ifile, rroot/file, ifile, key : zfunc -> press_func,
+   zip_func -> compress_func, unzip_func -> decompress_func.
+ - vdata : handle (__GNUC__ == 4 && __GNUC_MINOR__ <= 0).
+ - zlib : return Z_DATA_ERROR -> return false.
+ - aida_ntuple, sg/action, xml/loader, styles : std::ostream& out() now const.
+ - lina/box3, box3f : for Windows : avoid the max() in std::numeric_limits<T_t>::max().
+ - rtausmed, rtausmef : use typedef parent.
+ graphics :
+ - test/cpp/use_freetype : supress TOOLS_USE_NATIVE_FREETYPE usage.
+ - test/cpp/viewplot.cpp : have view.style "embedded" (encapsulated in the style_viewplot #include).
+ - sg/text_freetype : #ifndef TOOLS_USE_OUREX_FREETYPE -> #ifndef TOOLS_USE_OUREX_FREETYPE.
+ - sg/bmf : optimize setValues().
+ - sg/* : TOOLS_FIELD_DESC_NODE_CLASS logic.
+ - img : check_gl_limit().
+
+ 1.25.0 : material for using freetype rendering in plotting.
+ - test/cpp/viewplot.style, arialbd.ttf, helvetica.ttf : material to render "a la CERN-ROOT".
+ - tools/sg/text_freetype : the sg/node handling freetype.
+ - tools/fmanip, nostream, sep, system : used by sg/text_freetype.
+ - tools/glutess : a pure header version of the tessel code found in mesa/glu. Used by sg/text_freetype.
+
+ 1.24.2 :
+ - tools/wcsv_ntuple, tools/wroot/ntuple : have class icol public.
+ - test/cpp/build, use_expat : put expat things common to raxml,viewplot.cpp in use_expat.
+ - tools/mpi/wrmpi :
+     #ifdef TOOLS_USE_MPI_PACK_NOT_CONST
+        char* buffer() {return m_buffer;}
+     #else
+        const char* buffer() const {return m_buffer;}
+     #endif
+ - doc/g4tools_user_api.xml : file ready to go in g4 docbook documentation.
+ - test/cpp/histo.cpp : example code to get all infos of a bin.
+ - tools/sg/render_zb, tools/zb/buffer : handle line width to have thick lines in case of
+   rendering in a high resolution viewport (needed if rendering text with freetype).
+ - test/cpp/viewplot.cpp, use_freetype : prepare the ground for freetype (but not yet ready).
+
+ 1.24.1 :
+ - test/cpp/build_f77 : src_dir/close.f -> ./close.f (Ivana request).
+ - src/close.f -> tests/cpp/close.f.
+ - test/cpp/histo.cpp : have profile_[x,y] example code.
+ - tools/histo/slice, sliced : add profile_[x,y] functions.
+ - tools/histo/slice : improve readability, have :
+     template <class H2,class H1> 
+   instead of :
+     template <class TC,class TO,class TN,class TW,class TH>
+
+ 1.24.0 :
+ - wrmpi : have :
+     #ifdef TOOLS_USE_MPI_PACK_NOT_CONST
+   to be able to handle old MPI_[Pack,UnPack] signature without const in the first argument.
+   Not tested since we have not an old MPI at hand!
+ - tools/axis : modification to quiet Coverity.
+ - rroot/key : ifdef TOOLS_USE_CSZ : csz decompression code (coming from old CERN-ROOT) is used in inlib
+   to read very old root file, but this functionality is not needed within g4tools. Then we "ifdef" the related
+   code with TOOLS_USE_CSZ to avoid the csz dependancy by default.
+ Modifications to be in sync with inlib developments but not (yet) fully used in g4tools :
+ - tools/sg/visible_action,base_camera,group,matrix,node,noderef,render_action,separator : handle visible action.
+ - lina/box3, box3f : have the template base box3 class.
+ - fileis, file_format : handle wrl extension.
+ - img : various optimizations in image concatenation.
+
+ 1.23.1 :
+ - tools/mpi directory with an implementation of the toos/impi_world and tools/histo/hmpi interfaces.
+ - test/cpp/dummy_mpi.h, hmpi, mpi_world, wrmpi moved under tools/mpi.
+ - tools/histo/hmpi : comm_rank(), comm_size() methods to quiet Ivana :-).
+ - tools/hplot, sg/cube, sg/primitive_visitor, sg/text_hershey : minor corrections to quiet Coverity.
+
+ 1.23.0 :
+ - tools/impi_world : interface to the mpi toolkit and global functions (MPI_Init, MPI_Comm_rank, etc...).
+ - test/cpp/mpi_world : implementation of the upper.
+ - test/cpp/mpi.cpp : example of usage of mpi_world and the interface.
+ - tools/histp/hmpi : rank() getter.
+ - tools/smatch, vpair, xml/styles, xml_style, test/cpp/viewplot.cpp : prepare the ground for plot style files.
+ - tools/lina/geom3, line, plane, mat, MATCOM, vec3, vec2f : modifs coming from inlib/exlib developments that
+   should have, in principle, no impact on the rest of g4tools.
+
+ 1.22.1 :
+ - viewplot : open_file(), write_pate(), close_file() methods. To write multiple pages in a file.
+   See test/cpp/viewplot.cpp for an example.
+ - viewplot : plot(p1d). See test/cpp/viewplot.cpp for an example.
+
+ 1.22.0 : revisit structure for plotting related code.
+ - Have tools/[sg,lina,io,zb] directories to contain this code (instead of tools/plot/...).
+   Extra lite files related to plotting and put under tools :
+     HEADER, axis, cmemT, colorf, cstr, glprims, hershey, hls, hplot, img
+     mathf, out_error, viewplot, wps.
+ - tools/gzip_buffer renamed tools/zlib. Method gzip_buffer renamed compress_buffer and
+   gunzip_buffer renamed decompress_buffer. In fact we had nothing of gzip in the
+   previous gzip_buffer file ! (I had learn since that in fact gzip is zlib deflate/inflate
+   plus a special header added when writing/reading in for a .gz file. As this header is not used
+   for the root format compression, then it is better to rename things).
+
+ 1.21.0 : tools/plot. Revisit #include paths to avoid too much -I when compiling.
+
+ 1.20.0 : tools/plot, test/cpp/viewplot.cpp. Add "batch plotting" facility.
+
+ 1.19.2 :
+ - wcs_ntuple : constructor with ntuple_booking, rm typedef uint and use uint32.
+ - rcs_ntuple : rm typedef uint which is error-prone and use uint32.
+
+ 1.19.1 :
+ - wcs_ntuple : handle vector column if using the ntuple_booking way.
+
+ csv handle vector columns. Windows #ifdef WIN32 -> #ifdef _MSC_VER (more clean).
+ 1.19.0 : csv handle vector columns. Windows #ifdef WIN32 -> #ifdef _MSC_VER (more clean).
+ - wcsv_ntuple, rcsv_ntuple, test/cpp/wcsv,rcsv : handle vector columns.
+ - test/cpp/waxml.cpp, wroot.cpp : use num2s.
+ - waxml/histos : handle a global ostringstream to convert numbers; huge optimization.
+ - waxml/ntuple : s_value(string&), instead of returning a string; faster code.
+ - typedefs, vdata, snpf, wroot/date, file, rroot/file : WIN32 -> _MSC_VER.
+ - histo/base_histo : restore the extra_entries() method.
+ - histo/base_cloud, base_histo, dps, xml/element, tree : remove std::string title() method which is inefficient
+   and error prone. Stay only with the "const" one.
+ - histo/h1,h2,h3 : get_histo_data() : use *this instead of parent::base_get_data().
+ - words : have an extra bool a_clear arguments to have the possibility to append words to the output vector.
+ - args : add() : revisit strip logic. Remove some functions (that was only used in OpenScientist).
+ - wroot/file : synchronize() : __MINGW32__ case. 
+ - wroot/ifile, rroot/ifile : add const to the out() method.
+ - wroot/wbuf : char_p2s -> charp_out.
+ - wroot/buffer : remove sout()
+ - wroot/directory : long2s -> long_out. Remove sout().
+ - wroot/element, rroot/info : fullName(string&) instead returning a string.
+ - sout : use an object.
+ - raxml : const for cls,path,name() string getters.
+ - pointer : handle the case of machines on which a pointer does not match a long.
+ - cids : ids for vector of basic types.
+ - file : revisit the is_hippo() logic.
+ - hbook/ntuple : to<> -> numas.
+ - b2s, num2s, snum : revisit string to number conversion to have faster code.
+
+ 1.18.2 : revisit mpi code related code :
+ - test/cpp/wrmpi, hmpi : concrete implementation of abstract tools/impi, histo/hmpi.
+ - test/cpp/dummy_mpi.h : in case of not having an mpi implementation. 
+ - tools/histo/hmpi to abstract the send/receive of a bunch of histos.
+ - tools/histo/hd2mpi : to pack/unpack histo_data, profile_data by using impi..
+ - tools/impi abstract class to abstrac MPI pack/unpacking.
+ - remote tools/mpi directory.
+
+ 1.18.1 :
+ - test/cpp/use_mpi : have -DTOOLS_USE_NATIVE_MPI in case we have a MPI around.
+ - tools/mpi/hd2mpi : have :
+     #ifdef TOOLS_USE_NATIVE_MPI
+     #include <mpi.h>
+     #else
+     #include "dummy/mpi.h"
+     #endif
+   to use dummy/mpi.h in case there is MPI implementation around.
+ - tools/mpi/dummy/mpi.h : a dummy mpi.h to compile (and link test/cpp/mpi.cpp) in case there is no MPI around.
+ - tools/mpi/hs2mpi : std::cout -> a_out.
+ - test/cpp/mpi.cc : test the return of MPI_Init().
+ - test/cpp/rroot.cpp : delete dir when finished with it.
+
+ 1.18.0 : have code to send/recv histos through MPI. Have histo_data inheritance protected in base_histo. Fix some root streamers.
+ - wcsv_histo, rcsv_histo : handle #plane_Sxyw for h2,h3.
+ - wcsv_histo : revisit due to the fact that hist_data is no more publicly inherited by histos.
+
+ - test/cpp/rcsv.C renamed read_wcsv_csv.C.
+ - test/cpp/wcsv.cpp : produce now a wcsv.csv file (instead of out.csv).
+ - test/cpp/rroot.C renamed read_wroot_root.C.
+ - test/cpp/wroot.cpp : out.root -> wroot.root : to help knowing from which program a .root comes from.
+
+ - rroot/streamers : h2, h3 : read fTsumxy,xz,yz and put on m_in_range_plane_Sxyw.
+ - wroot/streamers : p1, p2 : revisit to save m_bin_Svw at the right place.
+ - wroot/streamers : h2, h3 : save fTsumxy,xz,yz.
+ - wroot/streamers : revisit due to the fact that hist_data is no more publicly inherited by histos.
+ - wroot/to : write_histos() : to write a vector of histos at once in a directory.
+ - wroot/element, infos : classes streamer_[short,uint,int,float,double,stat_t,bool] : for a better handling of the offsets.
+
+ - histo/base_histo : public -> protected for hist_data inheritance.
+ - histo/slice : set m_in_range_plane_Sxyw to zero.
+ - histo/h1,h2,h3,p1,p2 : in fill() handle m_in_range_plane_Sxyw.
+ - histo/histo_data, base_histo, b1, b2, b3 : handle m_in_range_plane_Sxyw to save "fTsumxy,xz,xy" for H2, H3 at the root format.
+
+ - tools/histo/histos : to clear a std::vector of histos.
+ - test/cpp/mpi.cpp, build, use_mpi : to test histo send/recv through mpi.
+ - tools/mpi directory.
+
+ - other modifs due to cosmetic or to modifs in inlib/exlib but not used in tools.
+
+ 1.17.1 : revisit the usage of std::vector::resize(), have assign() if needed (for exa in histo::reset()) :
+  - tools/array, tools/histo/[base_histo,histo_data,p1,p2,profile_data], tools/rroot/streamers : revisit reset(). 
+
+ 1.17.0 :
+ - tools/wroot/infos : fixes in the streamer infos in order to read .root files with CERN-ROOT/6.02.03 :
+   In TTree fScaleFactor -> fScalefactor.
+   Replace the streamer_basic_type(OBJECT_ANY) to streamer_object_any(...).
+ - rm CVS directories (no more needed since g4tools handled in git).
+
  1.16.3 :
  - tools/rroot/ntuple : add also "id casting" in tools::rroot::ntuple::column<T> and column_element<T>.
  - tools/rcsv_ntuple : Windows : rcsv.cpp crashed. It came from a lack of "id casting" in the

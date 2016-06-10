@@ -32,52 +32,61 @@
 #include "G4LivermorePolarizedGammaConversionModel.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
+#include "G4ParticleChangeForGamma.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
+#include "G4ProductionCutsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
 
+
+G4int G4LivermorePolarizedGammaConversionModel::maxZ = 99;
+G4LPhysicsFreeVector* G4LivermorePolarizedGammaConversionModel::data[] = {0};
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LivermorePolarizedGammaConversionModel::G4LivermorePolarizedGammaConversionModel(
-   const G4ParticleDefinition*, const G4String& nam)
-  :G4VEmModel(nam),fParticleChange(0),
-   isInitialised(false),meanFreePathTable(0),crossSectionHandler(0)
+										       const G4ParticleDefinition*, const G4String& nam)
+  :G4VEmModel(nam), isInitialised(false),smallEnergy(2.*MeV)
 {
+  fParticleChange = 0;
   lowEnergyLimit = 2*electron_mass_c2;
-  highEnergyLimit = 100 * GeV;
-  SetLowEnergyLimit(lowEnergyLimit);
-  SetHighEnergyLimit(highEnergyLimit);
-  smallEnergy = 2.*MeV;
-
+  //highEnergyLimit = 100 * GeV;
+  //SetLowEnergyLimit(lowEnergyLimit);
+  //SetHighEnergyLimit(highEnergyLimit);
+  
   Phi=0.;
   Psi=0.;
   
   verboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing 
-  // 1 = warning for energy non-conservation 
-  // 2 = details of energy budget
-  // 3 = calculation of cross sections, file openings, samping of atoms
-  // 4 = entering in methods
-
+  // 1 = calculation of cross sections, file openings, samping of atoms
+  // 2 = entering in methods
+  
   if(verboseLevel > 0) {
-    G4cout << "Livermore Polarized GammaConversion is constructed " << G4endl
-	   << "Energy range: "
-	   << lowEnergyLimit / keV << " keV - "
-	   << highEnergyLimit / GeV << " GeV"
+    G4cout << "Livermore Polarized GammaConversion is constructed " 
 	   << G4endl;
   }
-
-  crossSectionHandler = new G4CrossSectionHandler();
-  crossSectionHandler->Initialise(0,lowEnergyLimit,highEnergyLimit,400);
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LivermorePolarizedGammaConversionModel::~G4LivermorePolarizedGammaConversionModel()
 {  
-  delete crossSectionHandler;
+  if(IsMaster()) {
+    for(G4int i=0; i<maxZ; ++i) {
+      if(data[i]) { 
+	delete data[i];
+	data[i] = 0;
+      }
+    }
+  }  
 }
 
 
@@ -87,61 +96,136 @@ G4LivermorePolarizedGammaConversionModel::~G4LivermorePolarizedGammaConversionMo
 void G4LivermorePolarizedGammaConversionModel::Initialise(const G4ParticleDefinition* particle,
                                        const G4DataVector& cuts)
 {
-  if (verboseLevel > 3)
-    G4cout << "Calling G4LivermorePolarizedGammaConversionModel::Initialise()" << G4endl;
-
-  if (crossSectionHandler)
-  {
-    crossSectionHandler->Clear();
-    delete crossSectionHandler;
-  }
-
-  // Energy limits
-  /*
-  // V.Ivanchenko: this was meanless check  
-  if (LowEnergyLimit() < lowEnergyLimit)
+  if (verboseLevel > 1)
     {
-      G4cout << "G4LivermorePolarizedGammaConversionModel: low energy limit increased from " << 
-	LowEnergyLimit()/eV << " eV to " << lowEnergyLimit << " eV" << G4endl;
-      //      SetLowEnergyLimit(lowEnergyLimit);
+      G4cout << "Calling1 G4LivermorePolarizedGammaConversionModel::Initialise()" 
+	     << G4endl
+             << "Energy range: "
+	     << LowEnergyLimit() / MeV << " MeV - "
+             << HighEnergyLimit() / GeV << " GeV"
+             << G4endl;
     }
-  */
-  if (HighEnergyLimit() > highEnergyLimit)
-    {
-      G4cout << "G4LivermorePolarizedGammaConversionModel: high energy limit decreased from " << 
-	HighEnergyLimit()/GeV << " GeV to " << highEnergyLimit << " GeV" << G4endl;
-      // V.Ivanchenko: this is forbidden 
-     // SetHighEnergyLimit(highEnergyLimit);
-    }
-
-  // Reading of data files - all materials are read
   
-  crossSectionHandler = new G4CrossSectionHandler;
-  crossSectionHandler->Clear();
-  G4String crossSectionFile = "pair/pp-cs-";
-  crossSectionHandler->LoadData(crossSectionFile);
-
-  //
-  if (verboseLevel > 2) {
-    G4cout << "Loaded cross section files for Livermore Polarized GammaConversion model" 
-	   << G4endl;
-  }
-  InitialiseElementSelectors(particle,cuts);
-
-  if(verboseLevel > 0) {
-    G4cout << "Livermore Polarized GammaConversion model is initialized " << G4endl
-	   << "Energy range: "
-	   << LowEnergyLimit() / keV << " keV - "
-	   << HighEnergyLimit() / GeV << " GeV"
-	   << G4endl;
-  }
-
-  //    
-  if(!isInitialised) { 
-    isInitialised = true;
-    fParticleChange = GetParticleChangeForGamma();
-  }
+    
+  if(IsMaster()) 
+    {
+      
+      // Initialise element selector
+      
+      InitialiseElementSelectors(particle, cuts);
+      
+      // Access to elements
+      
+      char* path = getenv("G4LEDATA");
+      
+      G4ProductionCutsTable* theCoupleTable =
+	G4ProductionCutsTable::GetProductionCutsTable();
+      
+      G4int numOfCouples = theCoupleTable->GetTableSize();
+      
+      for(G4int i=0; i<numOfCouples; ++i) 
+	{
+	  const G4Material* material = 
+	    theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
+	  const G4ElementVector* theElementVector = material->GetElementVector();
+	  G4int nelm = material->GetNumberOfElements();
+	  
+	  for (G4int j=0; j<nelm; ++j) 
+	    {
+	      G4int Z = (G4int)(*theElementVector)[j]->GetZ();
+	      if(Z < 1)          { Z = 1; }
+	      else if(Z > maxZ)  { Z = maxZ; }
+	      if(!data[Z]) { ReadData(Z, path); }
+	    }
+	}
+    }
+  if(isInitialised) { return; }
+  fParticleChange = GetParticleChangeForGamma();
+  isInitialised = true;
+  
 }
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4LivermorePolarizedGammaConversionModel::InitialiseLocal(
+								 const G4ParticleDefinition*, G4VEmModel* masterModel)
+{
+  SetElementSelectors(masterModel->GetElementSelectors());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4LivermorePolarizedGammaConversionModel::MinPrimaryEnergy(const G4Material*,
+								      const G4ParticleDefinition*,
+								       G4double)
+{
+  return lowEnergyLimit;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4LivermorePolarizedGammaConversionModel::ReadData(size_t Z, const char* path)
+{
+  if (verboseLevel > 1) 
+    {
+      G4cout << "Calling ReadData() of G4LivermorePolarizedGammaConversionModel" 
+	     << G4endl;
+    }
+  
+  if(data[Z]) { return; }
+  
+  const char* datadir = path;
+  
+  if(!datadir) 
+    {
+      datadir = getenv("G4LEDATA");
+      if(!datadir) 
+	{
+	  G4Exception("G4LivermorePolarizedGammaConversionModel::ReadData()",
+		      "em0006",FatalException,
+		      "Environment variable G4LEDATA not defined");
+	  return;
+	}
+    }
+  
+  //
+  
+  data[Z] = new G4LPhysicsFreeVector();
+  
+  //
+  
+  std::ostringstream ost;
+  ost << datadir << "/livermore/pair/pp-cs-" << Z <<".dat";
+  std::ifstream fin(ost.str().c_str());
+  
+  if( !fin.is_open()) 
+    {
+      G4ExceptionDescription ed;
+      ed << "G4LivermorePolarizedGammaConversionModel data file <" << ost.str().c_str()
+	 << "> is not opened!" << G4endl;
+      G4Exception("G4LivermorePolarizedGammaConversionModel::ReadData()",
+		  "em0003",FatalException,
+		  ed,"G4LEDATA version should be G4EMLOW6.27 or later.");
+      return;
+    } 
+  else 
+    {
+      
+      if(verboseLevel > 3) { G4cout << "File " << ost.str() 
+				    << " is opened by G4LivermorePolarizedGammaConversionModel" << G4endl;}
+      
+      data[Z]->Retrieve(fin, true);
+    } 
+  
+  // Activation of spline interpolation
+  data[Z] ->SetSpline(true);  
+  
+}
+
+
+
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -151,13 +235,43 @@ G4double G4LivermorePolarizedGammaConversionModel::ComputeCrossSectionPerAtom(
 				       G4double Z, G4double,
 				       G4double, G4double)
 {
-  if (verboseLevel > 3) {
+  if (verboseLevel > 1) {
     G4cout << "G4LivermorePolarizedGammaConversionModel::ComputeCrossSectionPerAtom()" 
 	   << G4endl;
   }
-  if(Z < 0.9 || GammaEnergy <= lowEnergyLimit) { return 0.0; }
-  G4double cs = crossSectionHandler->FindValue(G4int(Z), GammaEnergy);
-  return cs;
+  if (GammaEnergy < lowEnergyLimit) { return 0.0; } 
+  
+  G4double xs = 0.0;
+  
+  G4int intZ=G4int(Z);
+  
+  if(intZ < 1 || intZ > maxZ) { return xs; }
+  
+  G4LPhysicsFreeVector* pv = data[intZ];
+  
+  // if element was not initialised
+  // do initialisation safely for MT mode
+  if(!pv) 
+    {
+      InitialiseForElement(0, intZ);
+      pv = data[intZ];
+      if(!pv) { return xs; }
+    }
+  // x-section is taken from the table
+  xs = pv->Value(GammaEnergy); 
+  
+  if(verboseLevel > 0)
+    {
+      G4int n = pv->GetVectorLength() - 1;
+      G4cout  <<  "****** DEBUG: tcs value for Z=" << Z << " at energy (MeV)=" 
+	      << GammaEnergy/MeV << G4endl;
+      G4cout  <<  "  cs (Geant4 internal unit)=" << xs << G4endl;
+      G4cout  <<  "    -> first cs value in EADL data file (iu) =" << (*pv)[0] << G4endl;
+      G4cout  <<  "    -> last  cs value in EADL data file (iu) =" << (*pv)[n] << G4endl;
+      G4cout  <<  "*********************************************************" << G4endl;
+    }
+  
+  return xs;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -222,31 +336,27 @@ G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4Dynami
   else
     {
 
- // Select randomly one element in the current material
-
-      //     G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy);
-      //const G4Element* element = crossSectionHandler->SelectRandomElement(couple,photonEnergy);
-
+      // Select randomly one element in the current material
+      
       const G4ParticleDefinition* particle =  aDynamicGamma->GetDefinition();
       const G4Element* element = SelectRandomAtom(couple,particle,photonEnergy);
-
-      /*
+      
+      
       if (element == 0)
         {
-          G4cout << "G4LivermorePolarizedGammaConversionModel::PostStepDoIt - element = 0" << G4endl;
+          G4cout << "G4LivermorePolarizedGammaConversionModel::SampleSecondaries - element = 0" << G4endl;
+	  return;
         }
-      */
+      
       
       G4IonisParamElm* ionisation = element->GetIonisation();
       
-      /*
       if (ionisation == 0)
         {
-          G4cout << "G4LivermorePolarizedGammaConversionModel::PostStepDoIt - ionisation = 0" << G4endl;
+          G4cout << "G4LivermorePolarizedGammaConversionModel::SampleSecondaries - ionisation = 0" << G4endl;
+	  return;
         }
-      */
-
-
+      
       // Extract Coulomb factor for this Element
 
       G4double fZ = 8. * (ionisation->GetlogZ3());
@@ -296,7 +406,8 @@ G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4Dynami
   G4double positronTotEnergy;
 
 
-  if (G4int(2*G4UniformRand()))  
+  //  if (G4int(2*G4UniformRand()))  
+  if (G4UniformRand() > 0.5)  
     {
       electronTotEnergy = (1. - epsilon) * photonEnergy;
       positronTotEnergy = epsilon * photonEnergy;
@@ -306,7 +417,7 @@ G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4Dynami
       positronTotEnergy = (1. - epsilon) * photonEnergy;
       electronTotEnergy = epsilon * photonEnergy;
     }
-
+  
   // Scattered electron (positron) angles. ( Z - axis along the parent photon)
   // Universal distribution suggested by L. Urban (Geant3 manual (1993) Phys211),
   // derived from Tsai distribution (Rev. Mod. Phys. 49, 421 (1977)
@@ -357,8 +468,20 @@ G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4Dynami
   //G4cout << "PSI " << psi << G4endl;
 
   G4double phie, phip; 
-  G4double choice;
+  G4double choice, choice2;
   choice = G4UniformRand();
+  choice2 = G4UniformRand();
+
+  if (choice2 <= 0.5)
+    {
+      // do nothing 
+      //  phi = phi;
+    }
+  else
+    {
+      phi = -phi;
+    }
+  
   if (choice <= 0.5)
     {
       phie = psi; //azimuthal angle for the electron
@@ -712,7 +835,8 @@ G4double G4LivermorePolarizedGammaConversionModel::SetPsi(G4double Energy, G4dou
     {
       r1 = G4UniformRand();
       r2 = G4UniformRand();
-      value = r2*pi;
+      //value = r2*pi;
+      value = 2.*r2*pi;
       r3 = nr*(a*cos(value)*cos(value) + b*sin(value)*sin(value));
     }while(r1>r3);
 
@@ -977,5 +1101,18 @@ void G4LivermorePolarizedGammaConversionModel::SystemOfRefChange
 }
 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4AutoLock.hh"
+namespace { G4Mutex LivermorePolarizedGammaConversionModelMutex = G4MUTEX_INITIALIZER; }
 
+void G4LivermorePolarizedGammaConversionModel::InitialiseForElement(
+								      const G4ParticleDefinition*, 
+								      G4int Z)
+{
+  G4AutoLock l(&LivermorePolarizedGammaConversionModelMutex);
+  //  G4cout << "G4LivermorePolarizedGammaConversionModel::InitialiseForElement Z= " 
+  //   << Z << G4endl;
+  if(!data[Z]) { ReadData(Z); }
+  l.unlock();
+}

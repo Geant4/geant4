@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4VViewer.cc 90651 2015-06-05 13:30:54Z gcosmo $
 //
 // 
 // John Allison  27th March 1996
@@ -130,6 +130,35 @@ void G4VViewer::ProcessView ()
 void G4VViewer::SetViewParameters (const G4ViewParameters& vp) {
   fVP = vp;
 }
+
+
+#ifdef G4MULTITHREADED
+
+void G4VViewer::DoneWithMasterThread () {
+  // G4cout << "G4VViewer::DoneWithMasterThread" << G4endl;
+}
+
+void G4VViewer::MovingToMasterThread () {
+  // G4cout << "G4VViewer::MovingToMasterThread" << G4endl;
+}
+
+void G4VViewer::SwitchToVisSubThread () {
+  // G4cout << "G4VViewer::SwitchToVisSubThread" << G4endl;
+}
+
+void G4VViewer::DoneWithVisSubThread () {
+  // G4cout << "G4VViewer::DoneWithVisSubThread" << G4endl;
+}
+
+void G4VViewer::MovingToVisSubThread () {
+  // G4cout << "G4VViewer::MovingToVisSubThread" << G4endl;
+}
+
+void G4VViewer::SwitchToMasterThread () {
+  // G4cout << "G4VViewer::SwitchToMasterThread" << G4endl;
+}
+
+#endif
 
 std::ostream& operator << (std::ostream& os, const G4VViewer& v) {
   os << "View " << v.fName << ":\n";

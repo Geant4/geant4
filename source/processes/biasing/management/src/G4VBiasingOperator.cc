@@ -26,8 +26,6 @@
 #include "G4VBiasingOperator.hh"
 #include "G4VBiasingOperation.hh"
 #include "G4VParticleChange.hh"
-#include "G4BiasingTrackData.hh"
-#include "G4BiasingTrackDataStore.hh"
 
 
 G4MapCache< const G4LogicalVolume*, G4VBiasingOperator* > G4VBiasingOperator::fLogicalToSetupMap;
@@ -93,14 +91,6 @@ G4VBiasingOperation* G4VBiasingOperator::GetProposedNonPhysicsBiasingOperation(c
   return fNonPhysicsBiasingOperation;
 }
 
-const G4VBiasingOperation* G4VBiasingOperator::GetBirthOperation( const G4Track* track )
-{
-  const G4BiasingTrackData* biasingData = G4BiasingTrackDataStore::GetInstance()->GetBiasingTrackData(track);
-  if ( biasingData != 0 ) return biasingData->GetBirthOperation();
-  else return 0;
-}
-
-
 void G4VBiasingOperator::ReportOperationApplied( const G4BiasingProcessInterface*  callingProcess,
 						 G4BiasingAppliedCase                 biasingCase,
 						 G4VBiasingOperation*             operationApplied,
@@ -117,7 +107,7 @@ void G4VBiasingOperator::ReportOperationApplied( const G4BiasingProcessInterface
     case BAC_NonPhysics:
       fPreviousAppliedNonPhysicsBiasingOperation = operationApplied ;
       break;
-    case BAC_DenyInteraction:
+    case BAC_DenyInteraction: // -- §§ will b deprecated
       fPreviousAppliedOccurenceBiasingOperation  = operationApplied;
       break;
     case BAC_FinalState:
@@ -170,24 +160,6 @@ void G4VBiasingOperator::ExitingBiasing( const G4Track* track, const G4BiasingPr
 }
 
 
-void G4VBiasingOperator::RememberSecondaries( const G4BiasingProcessInterface*         callingProcess,
-					      const G4VBiasingOperation*             operationApplied,
-					      const G4VParticleChange*         particleChangeProduced)
-{
-  for (G4int i2nd = 0; i2nd < particleChangeProduced->GetNumberOfSecondaries (); i2nd++)
-    new G4BiasingTrackData( particleChangeProduced->GetSecondary (i2nd),
-			    operationApplied,
-			    this,
-			    callingProcess);
-}
-
-void G4VBiasingOperator::ForgetTrack( const G4Track* track )
-{
-  G4BiasingTrackData* biasingData = G4BiasingTrackDataStore::GetInstance()->GetBiasingTrackData(track);
-  if ( biasingData != 0 ) delete biasingData;
-}
-
-
 // -- dummy empty implementations to allow letting arguments visible in the .hh
 // -- but avoiding annoying warning messages about unused variables
 // -- methods to inform operator that its biasing control is over:
@@ -195,11 +167,13 @@ void G4VBiasingOperator::ExitBiasing( const G4Track*, const G4BiasingProcessInte
 {}
 void G4VBiasingOperator::OperationApplied( const G4BiasingProcessInterface*, G4BiasingAppliedCase,
 					   G4VBiasingOperation*, const G4VParticleChange* )
-{}
+{
+}
 void G4VBiasingOperator::OperationApplied( const G4BiasingProcessInterface*, G4BiasingAppliedCase,
 					   G4VBiasingOperation*,  G4double,
 					   G4VBiasingOperation*, const G4VParticleChange* )
-{}
+{
+}
 
 
 // ----------------------------------------------------------------------------

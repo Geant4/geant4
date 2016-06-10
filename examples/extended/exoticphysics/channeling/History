@@ -14,6 +14,32 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+June 16, 2015 E. Bagli (channelingExample-V10-01-05)
+- bug fix passing arguments
+
+June 11, 2015 E. Bagli (channelingExample-V10-01-04)
+- bug fix on analysis macro
+
+June 11, 2015 E. Bagli (channelingExample-V10-01-03)
+- further protection against zero division
+
+June 3, 2015  E. Bagli (channelingExample-V10-01-02)
+- prevent division by zero in ProcessChanneling and Wrappers classes
+
+May 27, 2015 E. Bagli (channeling-Example-V10-01-01)
+- added full integration of particle trajectory into the channeling process
+- added beampipe and detector box to the detector construction
+- modified the wrapper classes to correct bugs in energy loss calculation under channeling
+- added to the wrapper class the InCrystal parameter in order to be completely transparent if the particle is outside a volume with a lattice
+- added the InCrystal parameter to the user info to switch between single and multiple scattering
+- single and multiple scattering are enabled/disabled if the volume has or not a lattice
+- added data files for Si110 and Si111 planar nuclei density, planar electron density and planar electric field
+- minor modification to XPhysicalLattice
+- minor modification to the macro to analyze the output data
+
+Mar 6, 2015 A. Dotti (channelingExample-V10-01-00)
+- Initialization of GPS defaults moved to master
+
 October 16, 2014 E. Bagli (channelingExample-V10-00-15)
 - minor modification to condition for vr
 - minor modification to computation of channeling outgoing angle

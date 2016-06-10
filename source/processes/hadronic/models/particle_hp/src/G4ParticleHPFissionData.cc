@@ -36,11 +36,13 @@
 //
 #include "G4ParticleHPFissionData.hh"
 #include "G4ParticleHPManager.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
 #include "G4ParticleHPData.hh"
 #include "G4ParticleHPManager.hh"
+#include "G4Pow.hh"
 
 G4ParticleHPFissionData::G4ParticleHPFissionData()
 :G4VCrossSectionDataSet("NeutronHPFissionXS")
@@ -48,12 +50,8 @@ G4ParticleHPFissionData::G4ParticleHPFissionData()
    SetMinKinEnergy( 0*MeV );                                   
    SetMaxKinEnergy( 20*MeV );                                   
 
-   ke_cache = 0.0;
-   xs_cache = 0.0;
-   element_cache = NULL;
-   material_cache = NULL;
-
    theCrossSections = 0;
+   onFlightDB = true;
    //BuildPhysicsTable(*G4Neutron::Neutron());
 }
    
@@ -85,13 +83,7 @@ G4double G4ParticleHPFissionData::GetIsoCrossSection( const G4DynamicParticle* d
                                    const G4Element* element ,
                                    const G4Material* material )
 {
-   if ( dp->GetKineticEnergy() == ke_cache && element == element_cache &&  material == material_cache ) return xs_cache;
-
-   ke_cache = dp->GetKineticEnergy();
-   element_cache = element;
-   material_cache = material;
    G4double xs = GetCrossSection( dp , element , material->GetTemperature() );
-   xs_cache = xs;
    return xs;
 }
 
@@ -107,8 +99,21 @@ G4bool G4ParticleHPFissionData::IsApplicable(const G4DynamicParticle*aP, const G
 
 void G4ParticleHPFissionData::BuildPhysicsTable(const G4ParticleDefinition& aP)
 {
+
+   if ( G4ParticleHPManager::GetInstance()->GetNeglectDoppler() ) {
+      G4cout << "Find a flag of \"G4NEUTRONHP_NEGLECT_DOPPLER\"." << G4endl;
+      G4cout << "On the fly Doppler broadening will be neglect in the cross section calculation of fission reaction of neutrons (<20MeV)." << G4endl;
+      onFlightDB = false;
+   } 
+
   if(&aP!=G4Neutron::Neutron()) 
      throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
+
+   if ( G4Threading::IsWorkerThread() ) {
+      theCrossSections = G4ParticleHPManager::GetInstance()->GetFissionCrossSections();
+      return;
+   }
+
   size_t numberOfElements = G4Element::GetNumberOfElements();
   //theCrossSections = new G4PhysicsTable( numberOfElements );
    // TKDB
@@ -127,6 +132,8 @@ void G4ParticleHPFissionData::BuildPhysicsTable(const G4ParticleDefinition& aP)
       Instance(G4Neutron::Neutron())->MakePhysicsVector((*theElementTable)[i], this);
     theCrossSections->push_back(physVec);
   }
+
+   G4ParticleHPManager::GetInstance()->RegisterFissionCrossSections( theCrossSections );
 }
 
 void G4ParticleHPFissionData::DumpPhysicsTable(const G4ParticleDefinition& aP)
@@ -169,7 +176,7 @@ void G4ParticleHPFissionData::DumpPhysicsTable(const G4ParticleDefinition& aP)
 
       for ( ie = 0 ; ie < 130 ; ie++ )
       {
-         G4double eKinetic = 1.0e-5 * std::pow ( 10.0 , ie/10.0 ) *eV;
+         G4double eKinetic = 1.0e-5 * G4Pow::GetInstance()->powA ( 10.0 , ie/10.0 ) *eV;
          G4bool outOfRange = false;
 
          if ( eKinetic < 20*MeV )
@@ -191,7 +198,7 @@ G4double G4ParticleHPFissionData::
 GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
 {
   G4double result = 0;
-  if(anE->GetZ()<90) return result;
+  if(anE->GetZ()<88) return result;
   G4bool outOfRange;
   G4int index = anE->GetIndex();
 
@@ -203,6 +210,18 @@ if ( ( ( *theCrossSections )( index ) )->GetVectorLength() == 0 ) return result;
   G4ReactionProduct theNeutronRP( aP->GetDefinition() );
   theNeutronRP.SetMomentum( aP->GetMomentum() );
   theNeutronRP.SetKineticEnergy( eKinetic );
+
+  if ( !onFlightDB ) {
+     //NEGLECT_DOPPLER
+     G4double factor = 1.0;
+     if ( eKinetic < aT * k_Boltzmann ) {
+        // below 0.1 eV neutrons 
+        // Have to do some, but now just igonre.   
+        // Will take care after performance check.  
+        // factor = factor * targetV;
+     }
+     return ( (*((*theCrossSections)(index))).GetValue(eKinetic, outOfRange) )* factor; 
+  }
 
   // prepare thermal nucleus
   G4Nucleus aNuc;
@@ -223,10 +242,10 @@ if ( ( ( *theCrossSections )( index ) )->GetVectorLength() == 0 ) return result;
   G4ThreeVector neutronVelocity = 1./G4Neutron::Neutron()->GetPDGMass()*theNeutronRP.GetMomentum();
   G4double neutronVMag = neutronVelocity.mag();
 
-  while(counter == 0 || std::abs(buffer-result/std::max(1,counter)) > 0.01*buffer)
+  while(counter == 0 || std::abs(buffer-result/std::max(1,counter)) > 0.01*buffer) // Loop checking, 11.05.2015, T. Koi
   {
     if(counter) buffer = result/counter;
-    while (counter<size)
+    while (counter<size) // Loop checking, 11.05.2015, T. Koi
     {
       counter ++;
       G4ReactionProduct aThermalNuc = aNuc.GetThermalNucleus(eleMass, aT);
@@ -251,4 +270,8 @@ G4int G4ParticleHPFissionData::GetVerboseLevel() const
 void G4ParticleHPFissionData::SetVerboseLevel( G4int newValue ) 
 {
    G4ParticleHPManager::GetInstance()->SetVerboseLevel(newValue);
+}
+void G4ParticleHPFissionData::CrossSectionDescription(std::ostream& outFile) const
+{
+   outFile << "High Precision cross data based on Evaluated Nuclear Data Files (ENDF) for induced fission reaction of neutrons below 20MeV\n" ;
 }

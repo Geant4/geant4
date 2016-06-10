@@ -30,6 +30,8 @@
 
 class ExExChPhysicsList;
 class G4UIcmdWithAString;
+class G4UIcmdWithABool;
+class G4UIcmdWithADoubleAndUnit;
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
@@ -47,6 +49,8 @@ class ExExChPhysicsListMessenger: public G4UImessenger
     ExExChPhysicsList* fTarget;
 
     G4UIcmdWithAString* fFilePotentialNameCmd;
+    G4UIcmdWithADoubleAndUnit* fTransverseVariationMaxCmd;
+    G4UIcmdWithADoubleAndUnit* fTimeStepMinCmd;
 
     G4UIdirectory* fMyDirectory;
 };

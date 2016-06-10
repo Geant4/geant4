@@ -29,6 +29,9 @@
 
 #include <cmath>
 #include <iostream>
+#include "G4Exp.hh"
+#include "G4Log.hh"
+#include "G4Pow.hh"
 
 // Implements Physical Review C61, 034607 (2000)
 // Rewrite starting from EPAX Version 2
@@ -75,25 +78,25 @@ class G4ProjectileFragmentCrossSection
   inline G4double doit(G4double Ap, G4double Zp, G4double At, G4double Zt, G4double A, G4double Z)
   {
 //  calculate mass yield
-        G4double Ap13 = std::pow(Ap, 1./3.);
-        G4double At13 = std::pow(At, 1./3.);
+        G4double Ap13 = G4Pow::GetInstance()->powA(Ap, 1./3.);
+        G4double At13 = G4Pow::GetInstance()->powA(At, 1./3.);
         G4double S = p_S[2] * (At13 + Ap13 + p_S[1]);
 //  cout << "debug0 "<<S<<" "<<At13<<" "<<Ap13<<" "<<p_S[1]<<" "<<p_S[2]<<endl;
-        G4double p    = std::exp(p_P[2]*Ap + p_P[1]);
-        G4double yield_a = p * S * std::exp(-p * (Ap - A));
+        G4double p    = G4Exp(p_P[2]*Ap + p_P[1]);
+        G4double yield_a = p * S * G4Exp(-p * (Ap - A));
   cout << "debug1 "<<yield_a<<endl;
 //   modification close to projectile
         G4double f_mod_y=1.0;
         if (A/Ap > corr_y[2])
 	{
-          f_mod_y=corr_y[1]*std::pow(A/Ap-corr_y[2], 2) + 1.0;
+          f_mod_y=corr_y[1]*G4Pow::GetInstance()->powN(A/Ap-corr_y[2], 2) + 1.0;
         }
         yield_a= yield_a * f_mod_y;
   cout << "debug1 "<<yield_a<<endl;
 
 //   calculate maximum of charge dispersion zprob
-        G4double zbeta = A/(1.98+0.0155*std::pow(A, (2./3.)));
-        G4double zbeta_p = Ap/(1.98+0.0155*std::pow(Ap, (2./3.)));
+        G4double zbeta = A/(1.98+0.0155*G4Pow::GetInstance()->powA(A, (2./3.)));
+        G4double zbeta_p = Ap/(1.98+0.0155*G4Pow::GetInstance()->powA(Ap, (2./3.)));
         G4double delta;
 	if(A > p_Delta[4]) 
 	{
@@ -108,7 +111,7 @@ class G4ProjectileFragmentCrossSection
         G4double f_mod=1.0;
         if(A/Ap > corr_d[2]) 
 	{
-          f_mod = corr_d[1]*std::pow(A/Ap-corr_d[2], 2) + 1.0;
+          f_mod = corr_d[1]*G4Pow::GetInstance()->powN(A/Ap-corr_d[2], 2) + 1.0;
         }
         delta = delta*f_mod;
         G4double zprob = zbeta+delta;
@@ -117,13 +120,13 @@ class G4ProjectileFragmentCrossSection
         G4double  dq;
 	if((Zp-zbeta_p)>0) 
 	{
-          dq = std::exp(p_mp[1] + G4double(A)/G4double(Ap)*p_mp[2]);
+          dq = G4Exp(p_mp[1] + G4double(A)/G4double(Ap)*p_mp[2]);
 	  cout << "dq "<<A<<" "<<Ap<<" "<<p_mp[1]
 	  <<" "<<p_mp[2]<<" "<<dq<<" "<<p_mp[1] + A/Ap*p_mp[2]<<endl;
 	}
         else                       
         {
-	  dq = p_mn[1]*std::pow(A/Ap, 2.0) + p_mn[2]*std::pow(A/Ap, 4.0);
+	  dq = p_mn[1]*G4Pow::GetInstance()->powN(A/Ap, 2) + p_mn[2]*G4Pow::GetInstance()->powN(A/Ap, 4);
         }
         zprob = zprob + dq * (Zp-zbeta_p);
 
@@ -133,13 +136,13 @@ class G4ProjectileFragmentCrossSection
 	     <<" "<<zbeta<<" "<<delta<<endl;
 
 //  calculate width parameter R
-        G4double r = std::exp(p_R[1] + p_R[2]*A);
+        G4double r = G4Exp(p_R[1] + p_R[2]*A);
 
 //  modification close to projectile
         f_mod=1.0;
         if (A/Ap > corr_r[2]) 
 	{
-          f_mod = corr_r[1]*Ap*std::pow(A/Ap-corr_r[2], 4.0)+1.0;
+          f_mod = corr_r[1]*Ap*G4Pow::GetInstance()->powN(A/Ap-corr_r[2], 4)+1.0;
         }
         r = r*f_mod;
 
@@ -158,23 +161,23 @@ class G4ProjectileFragmentCrossSection
 	if((zprob-Z) > 0) 
 	{
 //     neutron-rich
-          expo = -r*std::pow(std::abs(zprob-Z), u_n);
-          fract   =  std::exp(expo)*std::sqrt(r/3.14159);
+          expo = -r*G4Pow::GetInstance()->powA(std::abs(zprob-Z), u_n);
+          fract   =  G4Exp(expo)*std::sqrt(r/3.14159);
         }
 	else
 	{
 //     proton-rich
-          expo = -r*std::pow(std::abs(zprob-Z), u_p);
-          fract   =  std::exp(expo)*std::sqrt(r/3.14159);
+          expo = -r*G4Pow::GetInstance()->powA(std::abs(zprob-Z), u_p);
+          fract   =  G4Exp(expo)*std::sqrt(r/3.14159);
  cout << "1 "<<expo<<" "<<r<<" "<<zprob<<" "<<Z<<" "<<u_p<<endl;
 //     go to exponential slope
-          G4double dfdz = 1.2 + 0.647*std::pow(A/2.,0.3);
-          G4double z_exp = zprob + dfdz * std::log(10.) / (2.*r);
+          G4double dfdz = 1.2 + 0.647*G4Pow::GetInstance()->powA(A/2.,0.3);
+          G4double z_exp = zprob + dfdz * G4Log(10.) / (2.*r);
           if( Z>z_exp ) 
 	  {
-            expo = -r*std::pow(std::abs(zprob-z_exp), u_p);
-            fract   =  std::exp(expo)*std::sqrt(r/3.14159)
-                      / std::pow(std::pow(10, dfdz), Z-z_exp);
+            expo = -r*G4Pow::GetInstance()->powA(std::abs(zprob-z_exp), u_p);
+            fract   =  G4Exp(expo)*std::sqrt(r/3.14159)
+                      / G4Pow::GetInstance()->powA(G4Pow::GetInstance()->powA(10, dfdz), Z-z_exp);
           }
         }
 

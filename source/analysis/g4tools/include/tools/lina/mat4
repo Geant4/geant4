@@ -1,0 +1,476 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_mat4
+#define tools_mat4
+
+#include "mat"
+
+#include <cmath>
+
+namespace tools {
+
+template <class T>
+class mat4 : public mat<T,4> {
+  typedef mat<T,4> parent;
+  typedef mat<T,4> pr;
+public:
+  mat4():parent() {}
+  mat4(const mat<T,4>& a_from):parent(a_from){}
+  virtual ~mat4() {}
+public:
+  mat4(const mat4& a_from):parent(a_from){}
+  mat4& operator=(const mat4& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+public:
+  mat4(const T& a_00,const T& a_01,const T& a_02,const T& a_03, //first  row
+       const T& a_10,const T& a_11,const T& a_12,const T& a_13, //second row
+       const T& a_20,const T& a_21,const T& a_22,const T& a_23, //third  row
+       const T& a_30,const T& a_31,const T& a_32,const T& a_33) //fourth row
+  {
+    set_matrix(a_00,a_01,a_02,a_03,
+               a_10,a_11,a_12,a_13,
+               a_20,a_21,a_22,a_23,
+               a_30,a_31,a_32,a_33);
+  }
+public:
+  void set_matrix(const mat4<T>& a_m){
+    parent::set_matrix(a_m);
+  }
+  void set_matrix(
+    const T& a_00,const T& a_01,const T& a_02,const T& a_03, //1 row
+    const T& a_10,const T& a_11,const T& a_12,const T& a_13, //2 row
+    const T& a_20,const T& a_21,const T& a_22,const T& a_23, //3 row
+    const T& a_30,const T& a_31,const T& a_32,const T& a_33) //4 row
+  {
+    //a_<R><C>
+    //pr::m_vec[R + C * 4];
+    pr::m_vec[0] = a_00;pr::m_vec[4] = a_01;pr::m_vec[ 8] = a_02;pr::m_vec[12] = a_03;
+    pr::m_vec[1] = a_10;pr::m_vec[5] = a_11;pr::m_vec[ 9] = a_12;pr::m_vec[13] = a_13;
+    pr::m_vec[2] = a_20;pr::m_vec[6] = a_21;pr::m_vec[10] = a_22;pr::m_vec[14] = a_23;
+    pr::m_vec[3] = a_30;pr::m_vec[7] = a_31;pr::m_vec[11] = a_32;pr::m_vec[15] = a_33;
+  }
+
+  void set_scale(const T& a_s) {
+    _set_scale(a_s,a_s,a_s,pr::m_vec);
+  }
+  void set_scale(const T& a_1,const T& a_2,const T& a_3) {
+    _set_scale(a_1,a_2,a_3,pr::m_vec);
+  }
+  void set_translate(const T& a_x,const T& a_y,const T& a_z) {
+    _set_translate(a_x,a_y,a_z,pr::m_vec);
+  }
+  void set_rotate(const T& a_x,const T& a_y,const T& a_z,const T& a_angle) {
+    _set_rotate(a_x,a_y,a_z,a_angle,pr::m_vec);
+  }
+  void set_ortho(const T& a_l,const T& a_r,   //left,right
+                 const T& a_b,const T& a_t,   //bottom,top
+                 const T& a_n,const T& a_f) { //znear,zfar
+    // from man glOrtho.
+    T tx = -(a_r+a_l)/(a_r-a_l);
+    T ty = -(a_t+a_b)/(a_t-a_b);
+    T tz = -(a_f+a_n)/(a_f-a_n);
+
+    T a_00,a_01,a_02,a_03;
+    T a_10,a_11,a_12,a_13;
+    T a_20,a_21,a_22,a_23;
+    T a_30,a_31,a_32,a_33;
+    a_00 = 2/(a_r-a_l);a_01 =           0;a_02 =            0;a_03 = tx;
+    a_10 =           0;a_11 = 2/(a_t-a_b);a_12 =            0;a_13 = ty;
+    a_20 =           0;a_21 =           0;a_22 = -2/(a_f-a_n);a_23 = tz;
+    a_30 =           0;a_31 =           0;a_32 =            0;a_33 =  1;
+    set_matrix(a_00,a_01,a_02,a_03,  //1 row
+               a_10,a_11,a_12,a_13,  //2 row
+               a_20,a_21,a_22,a_23,  //3 row
+               a_30,a_31,a_32,a_33); //4 row
+
+    //NOTE : Z(x,y, z,1) = -2z/(f-n)+tz = [-2z-f-n]/(f-n)
+    //       W(x,y, z,1) =  1 -> Z/W = Z
+    //       Z(x,y,-n,1) = -1 
+    //       Z(x,y,-f,1) =  1 
+
+    //       Z(x,y,-(f+n)/2,1) = 0
+
+    //       X(x,0, z,1) = 2x/(r-l)+tx = [2x-r-l]/(r-l) 
+    //       X(r,0, z,1) = 1
+
+    // the view direction is then (0,0,1) in the final projection.
+  }
+  void set_frustum(const T& a_l,const T& a_r,   //left,right
+                   const T& a_b,const T& a_t,   //bottom,top
+                   const T& a_n,const T& a_f) { //znear,zfar
+    // from man glFrustum.
+    T A = (a_r+a_l)/(a_r-a_l);
+    T B = (a_t+a_b)/(a_t-a_b);
+    T C = -(a_f+a_n)/(a_f-a_n);
+    T D = -(2*a_f*a_n)/(a_f-a_n);
+
+    T a_00,a_01,a_02,a_03;
+    T a_10,a_11,a_12,a_13;
+    T a_20,a_21,a_22,a_23;
+    T a_30,a_31,a_32,a_33;
+    a_00 = (2*a_n)/(a_r-a_l);a_01 =                 0;a_02 =  A;a_03 = 0;
+    a_10 =                 0;a_11 = (2*a_n)/(a_t-a_b);a_12 =  B;a_13 = 0;
+    a_20 =                 0;a_21 =                 0;a_22 =  C;a_23 = D;
+    a_30 =                 0;a_31 =                 0;a_32 = -1;a_33 = 0;
+    set_matrix(a_00,a_01,a_02,a_03,  //1 row
+               a_10,a_11,a_12,a_13,  //2 row
+               a_20,a_21,a_22,a_23,  //3 row
+               a_30,a_31,a_32,a_33); //4 row
+
+    //NOTE : Z(x,y, z,1) = C*z+D = -[(f+n)*z+2*f*n]/(f-n)
+
+    //       Z(x,y,-n,1) = -[-fn-nn+2fn]/(f-n) = -[fn-nn]/(f-n) = -n
+    //       W(x,y,-n,1) =  n
+    // ->  Z/W(x,y,-n,1) = -1
+
+    //       Z(x,y,-2fn/(f+n),1) = 0
+    // ->  Z/W                   = 0
+ 
+    //       Z(x,y,-f,1) = -[-ff-fn+2fn]/(f-n) = -[fn-ff]/(f-n) = f
+    //       W(x,y,-f,1) = f
+    // ->  Z/W(x,y,-f,1) = 1
+
+    //       X(x,0, z,1) = 2nx/(r-l)+z(r+l)/(r-l) = [2nx+zr+zl]/(r-l)
+    //       X(r,0,-n,1) = [nr-nl]/(r-l) = n
+    //       W(r,0,-n,1) = n
+    // ->  X/W(r,0,-n,1) = 1
+
+    //       X(l,0,-n,1) = (2nl-n(r+l))/(r-l) = -n
+    //       W(l,0,-n,1) = n
+    // ->  X/W(l,0,-n,1) = -1
+
+    // lrbt corners are in plane z=-1 at xy=+/-1.
+
+    // eye ?
+    // eye before ? (0,0,z,1) -> (zA,zB,zC+D,-z)  /W -> (-A,-B,-(C+D/z),1)
+    //  z=0 -> (0,0,D=-2fn(f-n),0)
+
+  }
+
+  void get_translate(T& a_x,T& a_y,T& a_z) const {
+    a_x = pr::m_vec[12];
+    a_y = pr::m_vec[13];
+    a_z = pr::m_vec[14];
+  }
+public:
+  void mul_4(T& a_x,T& a_y,T& a_z,T& a_p) const {
+    // a_[x,y,z,p] = this * a_[x,y,z,p]
+    //pr::m_vec[R + C * 4];
+    //pr::m_vec[0]= 00;pr::m_vec[4] = 01;pr::m_vec[ 8] = 02;pr::m_vec[12] = 03;
+    //pr::m_vec[1]= 10;pr::m_vec[5] = 11;pr::m_vec[ 9] = 12;pr::m_vec[13] = 13;
+    //pr::m_vec[2]= 20;pr::m_vec[6] = 21;pr::m_vec[10] = 22;pr::m_vec[14] = 23;
+    //pr::m_vec[3]= 30;pr::m_vec[7] = 31;pr::m_vec[11] = 32;pr::m_vec[15] = 33;
+    T x= pr::m_vec[0]*a_x+pr::m_vec[4]*a_y+pr::m_vec[ 8]*a_z+pr::m_vec[12]*a_p;
+    T y= pr::m_vec[1]*a_x+pr::m_vec[5]*a_y+pr::m_vec[ 9]*a_z+pr::m_vec[13]*a_p;
+    T z= pr::m_vec[2]*a_x+pr::m_vec[6]*a_y+pr::m_vec[10]*a_z+pr::m_vec[14]*a_p;
+    T p= pr::m_vec[3]*a_x+pr::m_vec[7]*a_y+pr::m_vec[11]*a_z+pr::m_vec[15]*a_p;
+    a_x = x;
+    a_y = y;
+    a_z = z;
+    a_p = p;
+  }
+  void mul_3(T& a_x,T& a_y,T& a_z) const {
+    // a_[x,y,z] = this * a_[x,y,z]
+    //pr::m_vec[R + C * 4];
+    //pr::m_vec[0]= 00;pr::m_vec[4] = 01;pr::m_vec[ 8] = 02;pr::m_vec[12] = 03;
+    //pr::m_vec[1]= 10;pr::m_vec[5] = 11;pr::m_vec[ 9] = 12;pr::m_vec[13] = 13;
+    //pr::m_vec[2]= 20;pr::m_vec[6] = 21;pr::m_vec[10] = 22;pr::m_vec[14] = 23;
+    //pr::m_vec[3]= 30;pr::m_vec[7] = 31;pr::m_vec[11] = 32;pr::m_vec[15] = 33;
+    T x = pr::m_vec[0]*a_x+pr::m_vec[4]*a_y+pr::m_vec[ 8]*a_z+pr::m_vec[12];
+    T y = pr::m_vec[1]*a_x+pr::m_vec[5]*a_y+pr::m_vec[ 9]*a_z+pr::m_vec[13];
+    T z = pr::m_vec[2]*a_x+pr::m_vec[6]*a_y+pr::m_vec[10]*a_z+pr::m_vec[14];
+    a_x = x;
+    a_y = y;
+    a_z = z;
+  }
+  void mul_2(T& a_x,T& a_y) const {
+    // a_[x,y] = this * a_[x,y]
+    //pr::m_vec[R + C * 4];
+    //pr::m_vec[0]= 00;pr::m_vec[4] = 01;pr::m_vec[ 8] = 02;pr::m_vec[12] = 03;
+    //pr::m_vec[1]= 10;pr::m_vec[5] = 11;pr::m_vec[ 9] = 12;pr::m_vec[13] = 13;
+    //pr::m_vec[2]= 20;pr::m_vec[6] = 21;pr::m_vec[10] = 22;pr::m_vec[14] = 23;
+    //pr::m_vec[3]= 30;pr::m_vec[7] = 31;pr::m_vec[11] = 32;pr::m_vec[15] = 33;
+    T x = pr::m_vec[0]*a_x+pr::m_vec[4]*a_y+pr::m_vec[12];
+    T y = pr::m_vec[1]*a_x+pr::m_vec[5]*a_y+pr::m_vec[13];
+    a_x = x;
+    a_y = y;
+  }
+
+  void mul_dir_3(T& a_x,T& a_y,T& a_z) const {
+    // used to multiply normals.
+    // a_[x,y,z] = rot_part(this) * a_[x,y,z]
+
+    T x = pr::m_vec[0]*a_x+pr::m_vec[4]*a_y+pr::m_vec[ 8]*a_z;
+    T y = pr::m_vec[1]*a_x+pr::m_vec[5]*a_y+pr::m_vec[ 9]*a_z;
+    T z = pr::m_vec[2]*a_x+pr::m_vec[6]*a_y+pr::m_vec[10]*a_z;
+    a_x = x;
+    a_y = y;
+    a_z = z;
+  }
+
+  template <class VEC>
+  void mul_dir_3(VEC& a_dir) const {
+    mul_dir_3(a_dir[0],a_dir[1],a_dir[2]);
+  }
+
+  void mul_scale(const T& a_sx,const T& a_sy,const T& a_sz) {
+    // this = this * mat4_scale(a_s[x,y,z]
+    //pr::m_vec[R + C * 4];
+    //pr::m_vec[0]= 00;pr::m_vec[4] = 01;pr::m_vec[ 8] = 02;pr::m_vec[12] = 03;
+    //pr::m_vec[1]= 10;pr::m_vec[5] = 11;pr::m_vec[ 9] = 12;pr::m_vec[13] = 13;
+    //pr::m_vec[2]= 20;pr::m_vec[6] = 21;pr::m_vec[10] = 22;pr::m_vec[14] = 23;
+    //pr::m_vec[3]= 30;pr::m_vec[7] = 31;pr::m_vec[11] = 32;pr::m_vec[15] = 33;
+    pr::m_vec[0] *= a_sx;
+    pr::m_vec[1] *= a_sx;
+    pr::m_vec[2] *= a_sx;
+    pr::m_vec[3] *= a_sx;
+
+    pr::m_vec[4] *= a_sy;
+    pr::m_vec[5] *= a_sy;
+    pr::m_vec[6] *= a_sy;
+    pr::m_vec[7] *= a_sy;
+
+    pr::m_vec[ 8] *= a_sz;
+    pr::m_vec[ 9] *= a_sz;
+    pr::m_vec[10] *= a_sz;
+    pr::m_vec[11] *= a_sz;
+  }
+  void mul_scale(const T& a_s) {
+    pr::m_vec[0] *= a_s;
+    pr::m_vec[1] *= a_s;
+    pr::m_vec[2] *= a_s;
+    pr::m_vec[3] *= a_s;
+
+    pr::m_vec[4] *= a_s;
+    pr::m_vec[5] *= a_s;
+    pr::m_vec[6] *= a_s;
+    pr::m_vec[7] *= a_s;
+
+    pr::m_vec[ 8] *= a_s;
+    pr::m_vec[ 9] *= a_s;
+    pr::m_vec[10] *= a_s;
+    pr::m_vec[11] *= a_s;
+  }
+  void mul_translate(const T& a_x,const T& a_y,const T& a_z) {
+    pr::m_vec[12] = pr::m_vec[0]*a_x+pr::m_vec[4]*a_y+pr::m_vec[ 8]*a_z+pr::m_vec[12];
+    pr::m_vec[13] = pr::m_vec[1]*a_x+pr::m_vec[5]*a_y+pr::m_vec[ 9]*a_z+pr::m_vec[13];
+    pr::m_vec[14] = pr::m_vec[2]*a_x+pr::m_vec[6]*a_y+pr::m_vec[10]*a_z+pr::m_vec[14];
+    pr::m_vec[15] = pr::m_vec[3]*a_x+pr::m_vec[7]*a_y+pr::m_vec[11]*a_z+pr::m_vec[15];
+  }
+
+  void mul_rotate(const T& a_x,const T& a_y,const T& a_z,const T& a_angle) {
+    T rot[16];
+    _set_rotate(a_x,a_y,a_z,a_angle,rot);
+    parent::_mul_mtx(rot);
+  }
+
+  void left_mul_rotate(const T& a_x,const T& a_y,const T& a_z,
+                       const T& a_angle) {
+    T _m[16];
+    _set_rotate(a_x,a_y,a_z,a_angle,_m);
+    parent::_left_mul_mtx(_m);
+  }
+
+  void left_mul_scale(const T& a_x,const T& a_y,const T& a_z) {
+    T _m[16];
+    _set_scale(a_x,a_y,a_z,_m);
+    parent::_left_mul_mtx(_m);
+  }
+
+  void left_mul_translate(const T& a_x,const T& a_y,const T& a_z) {
+    T _m[16];
+    _set_translate(a_x,a_y,a_z,_m);
+    parent::_left_mul_mtx(_m);
+  }
+
+  void v00(const T& a_value){pr::m_vec[0+0*4] = a_value;}
+  void v10(const T& a_value){pr::m_vec[1+0*4] = a_value;}
+  void v20(const T& a_value){pr::m_vec[2+0*4] = a_value;}
+  void v30(const T& a_value){pr::m_vec[3+0*4] = a_value;}
+
+  void v01(const T& a_value){pr::m_vec[0+1*4] = a_value;}
+  void v11(const T& a_value){pr::m_vec[1+1*4] = a_value;}
+  void v21(const T& a_value){pr::m_vec[2+1*4] = a_value;}
+  void v31(const T& a_value){pr::m_vec[3+1*4] = a_value;}
+
+  void v02(const T& a_value){pr::m_vec[0+2*4] = a_value;}
+  void v12(const T& a_value){pr::m_vec[1+2*4] = a_value;}
+  void v22(const T& a_value){pr::m_vec[2+2*4] = a_value;}
+  void v32(const T& a_value){pr::m_vec[3+2*4] = a_value;}
+
+  void v03(const T& a_value){pr::m_vec[0+3*4] = a_value;}
+  void v13(const T& a_value){pr::m_vec[1+3*4] = a_value;}
+  void v23(const T& a_value){pr::m_vec[2+3*4] = a_value;}
+  void v33(const T& a_value){pr::m_vec[3+3*4] = a_value;}
+
+  const T& v00() const {return pr::m_vec[0+0*4];}
+  const T& v10() const {return pr::m_vec[1+0*4];}
+  const T& v20() const {return pr::m_vec[2+0*4];}
+  const T& v30() const {return pr::m_vec[3+0*4];}
+
+  const T& v01() const {return pr::m_vec[0+1*4];}
+  const T& v11() const {return pr::m_vec[1+1*4];}
+  const T& v21() const {return pr::m_vec[2+1*4];}
+  const T& v31() const {return pr::m_vec[3+1*4];}
+
+  const T& v02() const {return pr::m_vec[0+2*4];}
+  const T& v12() const {return pr::m_vec[1+2*4];}
+  const T& v22() const {return pr::m_vec[2+2*4];}
+  const T& v32() const {return pr::m_vec[3+2*4];}
+
+  const T& v03() const {return pr::m_vec[0+3*4];}
+  const T& v13() const {return pr::m_vec[1+3*4];}
+  const T& v23() const {return pr::m_vec[2+3*4];}
+  const T& v33() const {return pr::m_vec[3+3*4];}
+
+protected:
+  static void _set_translate(const T& a_x,const T& a_y,const T& a_z,T v[]) {
+    v[0] = T(1);v[4] =    0;v[ 8] =    0;v[12] = a_x;
+    v[1] =    0;v[5] = T(1);v[ 9] =    0;v[13] = a_y;
+    v[2] =    0;v[6] =    0;v[10] = T(1);v[14] = a_z;
+    v[3] =    0;v[7] =    0;v[11] =    0;v[15] = T(1);
+  }
+
+  static void _set_scale(const T& a_1,const T& a_2,const T& a_3,T v[]) {
+    v[0] = a_1;v[4] =   0;v[ 8] =   0;v[12] = 0;
+    v[1] =   0;v[5] = a_2;v[ 9] =   0;v[13] = 0;
+    v[2] =   0;v[6] =   0;v[10] = a_3;v[14] = 0;
+    v[3] =   0;v[7] =   0;v[11] =   0;v[15] = T(1);
+  }
+  static void _set_rotate(const T& a_x,const T& a_y,const T& a_z,
+                          const T& a_angle,T v[]) {
+    //WARNING : (a_x,a_y,a_z) must be a normalized vector.
+    T co = (T)::cos(a_angle);    
+    T si = (T)::sin(a_angle);    
+    T x = a_x;
+    T y = a_y;
+    T z = a_z;
+    T x2 = x*x;
+    T y2 = y*y;
+    T z2 = z*z;
+    T xy = x*y;
+    T xz = x*z;
+    T yz = y*z;
+    v[0] = x2+(1-x2)*co;v[4] = xy*(1-co)-z*si;v[ 8] = xz*(1-co)+y*si;v[12] = 0;
+    v[1] = xy*(1-co)+z*si;v[5] = y2+(1-y2)*co;v[ 9] = yz*(1-co)-x*si;v[13] = 0;
+    v[2] = xz*(1-co)-y*si;v[6] = yz*(1-co)+x*si;v[10] = z2+(1-z2)*co;v[14] = 0;
+    v[3] =            0;v[7] =            0;v[11] =            0;v[15] = 1;
+
+    // If :
+    //     n =(x,y,z)
+    //    n2 = x2+y2+z2 = 1
+    //   n.E = x*E1+y*E2+z*E3
+    // with :
+    //   E1            E2             E3
+    //    0  0  0       0  0 -1        0  1  0
+    //    0  0  1       0  0  0       -1  0  0
+    //    0 -1  0       1  0  0        0  0  0
+    //
+    // R(r,c) = cos(theta)*Id(r,c)+(1-cos(theta))*nr*nc-sin(theta)*(n.E)(r,c)
+    //
+    // R = exp(-theta*(n.E))
+
+  }
+
+public:
+  void mul_mtx_rot_root(const T& a_00,const T& a_01,const T& a_02, //1 row
+                        const T& a_10,const T& a_11,const T& a_12, //2 row
+                        const T& a_20,const T& a_21,const T& a_22) //3 row
+  {
+    T* tv = pr::m_vec;
+    //pr::m_vec[0] = 00;pr::m_vec[4] = 01;pr::m_vec[ 8] = 02;pr::m_vec[12] = 03;
+    //pr::m_vec[1] = 10;pr::m_vec[5] = 11;pr::m_vec[ 9] = 12;pr::m_vec[13] = 13;
+    //pr::m_vec[2] = 20;pr::m_vec[6] = 21;pr::m_vec[10] = 22;pr::m_vec[14] = 23;
+    //pr::m_vec[3] = 30;pr::m_vec[7] = 31;pr::m_vec[11] = 32;pr::m_vec[15] = 33;
+    
+    T tv_0  = tv[0];
+    T tv_1  = tv[1];
+    T tv_2  = tv[2];
+    T tv_3  = tv[3];
+    T tv_4  = tv[4];
+    T tv_5  = tv[5];
+    T tv_6  = tv[6];
+    T tv_7  = tv[7];
+    T tv_8  = tv[8];
+    T tv_9  = tv[9];
+    T tv_10 = tv[10];
+    T tv_11 = tv[11];
+    T tv_12 = tv[12];
+    T tv_13 = tv[13];
+    T tv_14 = tv[14];
+    T tv_15 = tv[15];
+
+    T fv_0  = a_00;
+    T fv_1  = a_10;
+    T fv_2  = a_20;
+    //T fv_3  =    0;
+
+    T fv_4  = a_01;
+    T fv_5  = a_11;
+    T fv_6  = a_21;
+    //T fv_7  =    0;
+
+    T fv_8  = a_02;
+    T fv_9  = a_12;
+    T fv_10 = a_22;
+    //T fv_11 =    0;
+
+    //T fv_12 = 0;
+    //T fv_13 = 0;
+    //T fv_14 = 0;
+    //T fv_15 = 1;
+
+    tv[0] = tv_0*fv_0+tv_4*fv_1+ tv_8*fv_2;
+    tv[1] = tv_1*fv_0+tv_5*fv_1+ tv_9*fv_2;
+    tv[2] = tv_2*fv_0+tv_6*fv_1+tv_10*fv_2;
+    tv[3] = tv_3*fv_0+tv_7*fv_1+tv_11*fv_2;
+
+    tv[4] = tv_0*fv_4+tv_4*fv_5+ tv_8*fv_6;
+    tv[5] = tv_1*fv_4+tv_5*fv_5+ tv_9*fv_6;
+    tv[6] = tv_2*fv_4+tv_6*fv_5+tv_10*fv_6;
+    tv[7] = tv_3*fv_4+tv_7*fv_5+tv_11*fv_6;
+
+    tv[8]  = tv_0*fv_8+tv_4*fv_9+ tv_8*fv_10;
+    tv[9]  = tv_1*fv_8+tv_5*fv_9+ tv_9*fv_10;
+    tv[10] = tv_2*fv_8+tv_6*fv_9+tv_10*fv_10;
+    tv[11] = tv_3*fv_8+tv_7*fv_9+tv_11*fv_10;
+
+    tv[12] = tv_12;
+    tv[13] = tv_13;
+    tv[14] = tv_14;
+    tv[15] = tv_15;
+  }
+
+private:static void check_instantiation() {mat4<float> dummy;}
+};
+
+//for sf, mf :
+template <class T>
+inline const T* get_data(const mat4<T>& a_v) {return a_v.data();}
+
+}
+
+#include <ostream>
+
+namespace tools {
+
+template <class T>
+inline std::ostream& operator<<(std::ostream& a_out,const mat4<T>& a_mtx){
+  const T* v = a_mtx.data();
+  a_out << v[0] << "," << v[4] << "," << v[ 8] << "," << v[12]
+        << std::endl
+        << v[1] << "," << v[5] << "," << v[ 9] << "," << v[13]
+        << std::endl
+        << v[2] << "," << v[6] << "," << v[10] << "," << v[14]
+        << std::endl
+        << v[3] << "," << v[7] << "," << v[11] << "," << v[15]
+        << std::endl;
+  return a_out;
+}
+
+}
+
+#endif

@@ -91,12 +91,13 @@ public:
   G4double GetElasticHadronNucleonXsc()  { return fElasticXsc;   }; 
   G4double GetInelasticHadronNucleonXsc(){ return fInelasticXsc; }; 
 
+  /*
   void InitialiseKaonNucleonTotXsc();
-
   G4double GetKpProtonTotXscVector(G4double logEnergy){ return fKpProtonTotXscVector.Value(logEnergy); };
   G4double GetKpNeutronTotXscVector(G4double logEnergy){ return fKpNeutronTotXscVector.Value(logEnergy); };
   G4double GetKmProtonTotXscVector(G4double logEnergy){ return fKmProtonTotXscVector.Value(logEnergy); };
   G4double GetKmNeutronTotXscVector(G4double logEnergy){ return fKmNeutronTotXscVector.Value(logEnergy); };
+  */
 
 private:
 
@@ -105,7 +106,7 @@ private:
 
   G4double fTotalXsc, fElasticXsc, fInelasticXsc;
 //  G4double fHadronNucleonXsc;
-
+  /*
   // K-nucleon tot xsc (mb) fit data, std::log(Tkin(MeV))
 
   static const G4double fKpProtonTotXsc[66];
@@ -124,7 +125,7 @@ private:
   G4LPhysicsFreeVector fKpNeutronTotXscVector;
   G4LPhysicsFreeVector fKmProtonTotXscVector;
   G4LPhysicsFreeVector fKmNeutronTotXscVector;
- 
+  */ 
   G4ParticleDefinition* theGamma;
   G4ParticleDefinition* theProton;
   G4ParticleDefinition* theNeutron;

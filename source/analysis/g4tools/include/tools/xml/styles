@@ -1,0 +1,316 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_xml_styles
+#define tools_xml_styles
+
+#include "../vpair"
+#include "../sg/style_colormap"
+#include "../smatch"
+#include "../sout"
+#include "../forit"
+
+namespace tools {
+namespace xml {
+
+class styles {
+public:
+  styles(std::ostream& a_out):m_out(a_out){}
+  virtual ~styles(){}
+public:
+  styles(const styles& a_from)
+  :m_out(a_from.m_out)
+  ,m_named_styles(a_from.m_named_styles)
+  ,m_aliases(a_from.m_aliases)
+  ,m_cmaps(a_from.m_cmaps)
+  {}
+  styles& operator=(const styles& a_from){
+    m_named_styles = a_from.m_named_styles;
+    m_aliases = a_from.m_aliases;
+    m_cmaps = a_from.m_cmaps;
+    return *this;
+  }
+public:
+  std::ostream& out() const {return m_out;}
+
+  typedef std::pair<std::string,std::string> style_item_t;
+  typedef std::vector<style_item_t> style_t;
+  typedef std::pair<std::string,style_t> named_style_t;
+
+  const std::vector<named_style_t>& named_styles() const {return m_named_styles;}
+  std::vector<named_style_t>& named_styles() {return m_named_styles;}
+
+  typedef std::pair<std::string,std::string> alias_t;
+  const std::vector<alias_t>& aliases() const {return m_aliases;}
+  std::vector<alias_t>& aliases() {return m_aliases;}
+
+  const style_t* find_style(const std::string& a_name) const {
+    tools_vforcit(named_style_t,m_named_styles,it){
+      if((*it).first==a_name) return &((*it).second);
+    }
+    return 0;
+  }
+
+  void find_styles(const std::string& a_pattern,std::vector<std::string>& a_v) const {
+    a_v.clear();
+    tools_vforcit(named_style_t,m_named_styles,it){
+      if(match((*it).first,a_pattern)) a_v.push_back((*it).first);
+    }
+  }
+
+  void add_style(const std::string& a_name,const style_t& a_style) {
+    tools_vforit(named_style_t,m_named_styles,it){
+      if((*it).first==a_name) { //override
+        (*it).second = a_style;
+        return;
+      }
+    }
+    m_named_styles.push_back(named_style_t(a_name,a_style));
+  }
+
+  void remove_styles(const std::string& a_pattern) {
+    std::vector<named_style_t>::iterator it;
+    for(it=m_named_styles.begin();it!=m_named_styles.end();) {
+      if(match((*it).first,a_pattern)) {
+        it = m_named_styles.erase(it);
+      } else {
+        it++;
+      }
+    }
+  }
+
+  void append(const styles& a_from) {
+    tools_vforcit(named_style_t,a_from.m_named_styles,it) {
+      m_named_styles.push_back(*it);
+    }
+  }
+
+  bool is_alias(const std::string& a_wanted,std::string& a_style) const {
+    if(find(m_aliases,a_wanted,a_style)) return true;
+    a_style = a_wanted;
+    return false;
+  }
+
+/*
+  bool res_string(const std::string& a_style,
+                         const std::string& a_key,
+                         std::string& a_v) const {
+    std::map<std::string,style_t>::const_iterator it = m_styles.find(a_style);
+    if(it==m_styles.end()) {a_v.clear();return false;}
+    const style_t& sty = (*it).second;
+    if(!find(sty,a_key,a_v)) {a_v.clear();return false;}   
+    return true;
+  }
+*/
+  template <class T>
+  bool res_value(const style_t& a_sty,const std::string& a_key,T& a_v,const std::string& a_msg) const {
+    //NOTE : if ret false, we do not set a_v to something.
+
+    std::string _s;
+    if(!find(a_sty,a_key,_s)) {
+      if(a_msg.size()) {
+        m_out << "tools::xml::styles::res_value :"
+              << " key " << sout(a_key) << " not found"
+              << " in style " << sout(a_msg) << "."
+              << std::endl;
+      }
+      return false;
+    }
+    T v;
+    if(!to(_s,v)) {
+      m_out << "tools::xml::styles::res_value :"
+            << " for key " << sout(a_key) << " not found"
+            << " in style " << sout(a_msg) << "."
+            << " can't convert " << sout(_s) << " to value."
+            << std::endl;
+      return false;   
+    }
+    a_v = v;
+    return true;
+  }
+
+  template <class T>
+  bool res_value(const std::string& a_style,const std::string& a_key,T& a_v) const {
+    //NOTE : if ret false, we do not set a_v to something.
+
+    //look if a_style is an alias :
+    std::string style;
+    is_alias(a_style,style);
+
+    const style_t* sty = find_style(style);
+    if(!sty) {
+      //m_out << "tools::xml::styles::res_value :"
+      //      << " style " << sout(style) << " not found."
+      //      << std::endl;
+      return false;
+    }
+    T v;
+    if(!res_value<T>(*sty,a_key,v,style)) return false;
+    a_v = v;
+    return true;
+  }
+
+  bool res_color(const style_t& a_sty,const std::string& a_key,colorf& a_color,const std::string& a_msg) const {
+    //NOTE : if ret false, we do not set a_color to something.
+    std::string s;
+    if(!find(a_sty,a_key,s)) {
+      if(a_msg.size()) {
+        m_out << "tools::xml::styles::res_color :"
+              << " key " << sout(a_key) << " not found"
+              << " in style " << sout(a_msg) << "."
+              << std::endl;
+      }
+      return false;
+    }
+    if(!sg::find_color(m_cmaps,s,a_color)) {
+      m_out << "tools::xml::styles::res_color :"
+            << " key " << sout(a_key) << " is not a color"
+            << " in style " << sout(a_msg) << "."
+            << std::endl;
+      return false;
+    }
+    return true;
+  }
+
+  bool res_color(const std::string& a_style,const std::string& a_key,colorf& a_color) const {
+    //NOTE : if ret false, we do not set a_color to something.
+
+    //look if a_style is an alias :
+    std::string style;
+    is_alias(a_style,style);
+
+    const style_t* sty = find_style(style);
+    if(!sty) {
+      //m_out << "tools::xml::styles::res_color :"
+      //      << " style " << sout(style) << " not found."
+      //      << std::endl;
+      return false;
+    }
+
+    return res_color(*sty,a_key,a_color,style);
+  }
+
+  bool res_bool(const style_t& a_sty,const std::string& a_key,bool& a_v,const std::string& a_msg) const {
+    //NOTE : if ret false, we do not set a_v to something.
+    std::string s;
+    if(!find(a_sty,a_key,s)) {
+      if(a_msg.size()) {
+        m_out << "tools::xml::styles::res_bool :"
+              << " key " << sout(a_key) << " not found"
+              << " in style " << sout(a_msg) << "."
+              << std::endl;
+      }
+      return false;
+    }
+    bool v;
+    if(!to(s,v)) {
+      m_out << "tools::xml::styles::res_bool :"
+            << " for key " << sout(a_key) << " not found"
+            << " in style " << sout(a_msg) << "."
+            << " can't convert " << sout(s) << " to bool."
+            << std::endl;
+      return false;   
+    }
+    a_v = v;
+    return true;
+  }
+
+  bool res_bool(const std::string& a_style,const std::string& a_key,bool& a_v) const {
+    //NOTE : if ret false, we do not set a_color to something.
+
+    //look if a_style is an alias :
+    std::string style;
+    is_alias(a_style,style);
+
+    const style_t* sty = find_style(style);
+    if(!sty) {
+      //m_out << "tools::xml::styles::res_color :"
+      //      << " style " << sout(style) << " not found."
+      //      << std::endl;
+      return false;
+    }
+
+    return res_bool(*sty,a_key,a_v,style);
+  }
+
+  // for plotter :
+  template <class T> //T = [style,text_style,line_style]
+  bool res_sg_style(const std::string& a_style,T& a_sg_style) const {   
+    //NOTE : a_sg_style is changed according to what is found.
+    //       Then it is not fully reset by this method.
+    const style_t* sty = find_style(a_style);
+    if(!sty) {
+      //could be ok to not find a plotter sub style.
+      //m_out << "tools::sg::gui_viewer::res_sg_style :"
+      //      << " style " << sout(a_style) << " not found."
+      //      << std::endl;
+      return false;
+    }
+
+    std::string _s;
+    tools_vforcit(style_item_t,*sty,vit) {
+      if(vit!=(*sty).begin()) _s += "\n";
+      _s += (*vit).first;
+      _s += " ";
+      _s += (*vit).second;
+    }
+    return a_sg_style.from_string(m_out,m_cmaps,_s);
+  }
+
+  typedef sg::style_colormap cmap_t;
+  bool find_colormap(const std::string& a_name,cmap_t& a_cmap) const {
+    std::map<std::string,cmap_t>::const_iterator it = m_cmaps.find(a_name);
+    if(it==m_cmaps.end()) return false;
+    a_cmap = (*it).second;
+    return true;
+  }
+  void add_colormap(const std::string& a_name,const cmap_t& a_cmap) {
+    m_cmaps[a_name] = a_cmap;
+  }
+  //void clear_colormaps() {m_cmaps.clear();/*add default*/}
+
+public:
+  static bool is_plotter_style(const style_t& a_sty) {
+    tools_vforcit(style_item_t,a_sty,it) {
+      const std::string& key = (*it).first;
+      const std::string& sv = (*it).second;
+      if((key=="tag")&&(sv=="plotter_style")) return true;
+    }
+    return false;
+  }
+
+public:
+  void find_plotter_styles(std::vector<std::string>& a_v) const {
+    a_v.clear();
+    tools_vforcit(named_style_t,m_named_styles,it) {
+      if(is_plotter_style((*it).second)) a_v.push_back((*it).first);
+    }
+  }
+
+  void dump() {
+    tools_vforcit(named_style_t,m_named_styles,it) {
+
+      m_out << "/////////////////////////////////////" << std::endl;
+      m_out << "/// " << (*it).first << std::endl;
+      m_out << "/////////////////////////////////////" << std::endl;
+
+      const style_t& sty = (*it).second;
+
+      tools_vforcit(style_item_t,sty,vit) {
+        m_out << " " << (*vit).first << " " << (*vit).second << std::endl;
+      }
+
+    }
+  }
+protected:
+  std::ostream& m_out;
+  //styles :
+  std::vector<named_style_t> m_named_styles;
+  std::vector<alias_t> m_aliases;
+  //cmaps :
+  sg::cmaps_t m_cmaps;
+};
+
+}}
+
+#endif

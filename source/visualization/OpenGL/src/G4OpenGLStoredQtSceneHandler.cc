@@ -141,9 +141,6 @@ void G4OpenGLStoredQtSceneHandler::ClearStore () {
   // Should recreate the tree
   G4OpenGLQtViewer* pGLQtViewer = dynamic_cast<G4OpenGLQtViewer*>(fpViewer);
   if ( pGLQtViewer ) {
-#ifdef G4DEBUG_VIS_OGL
-    printf("G4OpenGLStoredQtSceneHandler::ClearStore_________________________________\n" );
-#endif
     pGLQtViewer->clearTreeWidget();
   }
 }
@@ -155,13 +152,6 @@ void G4OpenGLStoredQtSceneHandler::ClearTransientStore () {
   G4OpenGLStoredSceneHandler::ClearTransientStore ();
 
   // Should recreate the tree
-  G4OpenGLQtViewer* pGLQtViewer = dynamic_cast<G4OpenGLQtViewer*>(fpViewer);
-  if ( pGLQtViewer ) {
-#ifdef G4DEBUG_VIS_OGL
-    printf("G4OpenGLStoredQtSceneHandler::ClearTransient_________________________________\n" );
-#endif
-    //    pGLQtViewer->clearTreeWidget();
-  }
   // Make sure screen corresponds to graphical database...
   // FIXME : L.Garnier April 2012 : Could cause a infinite loop ?
   if (fpViewer) {

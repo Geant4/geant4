@@ -27,10 +27,10 @@
 /// \brief Implementation of the PrimaryGeneratorAction1 class
 //
 //
-// $Id: PrimaryGeneratorAction1.cc 68024 2013-03-13 13:42:01Z gcosmo $
+// $Id: PrimaryGeneratorAction1.cc 89707 2015-04-28 07:38:57Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PrimaryGeneratorAction1.hh"
 #include "PrimaryGeneratorAction.hh"
@@ -89,15 +89,25 @@ void PrimaryGeneratorAction1::GeneratePrimaries(G4Event* anEvent)
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(ux,uy,0));    
   fParticleGun->SetParticleEnergy(1*keV);
   fParticleGun->GeneratePrimaryVertex(anEvent);
-  
-  //particle 3 at vertex 2
+   
+  //particle 3 at vertex 3 (same as vertex 2)
   //
   ux = std::cos(alpha - dalpha);
   uy = std::sin(alpha - dalpha);        
   
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(ux,uy,0));    
   fParticleGun->SetParticleEnergy(1*GeV);
-  fParticleGun->GeneratePrimaryVertex(anEvent);    
+  fParticleGun->GeneratePrimaryVertex(anEvent);
+  
+  // randomize time zero of anEvent
+  //
+  G4double tmin = 0*s, tmax = 10*s;
+  G4double t0 = tmin + (tmax - tmin)*G4UniformRand();
+  G4PrimaryVertex* aVertex = anEvent->GetPrimaryVertex();
+  while (aVertex) {
+    aVertex->SetT0(t0);
+    aVertex = aVertex->GetNext();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

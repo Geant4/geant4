@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMF.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4StatMF.cc 91834 2015-08-07 07:24:22Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -33,7 +33,6 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Pow.hh"
-
 
 // Default constructor
 G4StatMF::G4StatMF() : _theEnsemble(0) {}
@@ -63,13 +62,12 @@ G4FragmentVector * G4StatMF::BreakItUp(const G4Fragment &theFragment)
     // We'll use two kinds of ensembles
   G4StatMFMicroCanonical * theMicrocanonicalEnsemble = 0;
   G4StatMFMacroCanonical * theMacrocanonicalEnsemble = 0;
-
 	
-	//-------------------------------------------------------
-	// Direct simulation part (Microcanonical ensemble)
-	//-------------------------------------------------------
+  //-------------------------------------------------------
+  // Direct simulation part (Microcanonical ensemble)
+  //-------------------------------------------------------
   
-	// Microcanonical ensemble initialization 
+  // Microcanonical ensemble initialization 
   theMicrocanonicalEnsemble = new G4StatMFMicroCanonical(theFragment);
 
   G4int Iterations = 0;
@@ -108,6 +106,7 @@ G4FragmentVector * G4StatMF::BreakItUp(const G4Fragment &theFragment)
       ChannelOk = theChannel->CheckFragments();
       if (!ChannelOk) delete theChannel; 
       
+      // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
     } while (!ChannelOk);
     
     
@@ -137,6 +136,7 @@ G4FragmentVector * G4StatMF::BreakItUp(const G4Fragment &theFragment)
 
     delete theChannel;    
 
+    // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
   } while (Iterations++ < IterationsLimit );
   
  
@@ -173,6 +173,7 @@ G4FragmentVector * G4StatMF::BreakItUp(const G4Fragment &theFragment)
       NewMomentum.setE(std::sqrt(ScaledMomentum.mag2()+Mass*Mass));
       (*j)->SetMomentum(NewMomentum);		
     }
+    // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
   } while (ScaleFactor > 1.0+1.e-5 && std::abs(ScaleFactor-SavedScaleFactor)/ScaleFactor > 1.e-10);
   // ~~~~~~ End of patch !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   
@@ -182,9 +183,6 @@ G4FragmentVector * G4StatMF::BreakItUp(const G4Fragment &theFragment)
     G4LorentzVector FourMom = (*i)->GetMomentum();
     FourMom.boost(theFragment.GetMomentum().boostVector());
     (*i)->SetMomentum(FourMom);
-#ifdef PRECOMPOUND_TEST
-    (*i)->SetCreatorModel(G4String("G4StatMF"));
-#endif
   }
   
   // garbage collection
@@ -205,12 +203,8 @@ G4bool G4StatMF::FindTemperatureOfBreakingChannel(const G4Fragment & theFragment
   G4int Z = theFragment.GetZ_asInt();
   G4double U = theFragment.GetExcitationEnergy();
   
-  G4double T = std::max(Temperature,0.0012*MeV);
-  
+  G4double T = std::max(Temperature,0.0012*MeV);  
   G4double Ta = T;
-  G4double Tb = T;
-  
-  
   G4double TotalEnergy = CalcEnergy(A,Z,aChannel,T);
   
   G4double Da = (U - TotalEnergy)/U;
@@ -222,32 +216,32 @@ G4bool G4StatMF::FindTemperatureOfBreakingChannel(const G4Fragment & theFragment
     return true;
   } else if (Da < 0.0) {
     do {
-      Tb -= 0.5 * std::fabs(Tb);
-      T = Tb;
-      if (Tb < 0.001*MeV) return false;
+      T *= 0.5;
+      if (T < 0.001*MeV) return false;
       
       TotalEnergy = CalcEnergy(A,Z,aChannel,T);
       
       Db = (U - TotalEnergy)/U;
+      // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
     } while (Db < 0.0);
     
   } else {
     do {
-      Tb += 0.5 * std::fabs(Tb);
-      T = Tb;
+      T *= 1.5;
       
       TotalEnergy = CalcEnergy(A,Z,aChannel,T);
       
       Db = (U - TotalEnergy)/U;
+      // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
     } while (Db > 0.0); 
   }
   
-  G4double eps = 1.0e-14 * std::abs(Tb-Ta);
+  G4double eps = 1.0e-14 * std::abs(T-Ta);
   //G4double eps = 1.0e-3 ;
   
   // Start the bisection method
   for (G4int j = 0; j < 1000; j++) {
-    G4double Tc =  (Ta+Tb)/2.0;
+    G4double Tc =  (Ta+T)*0.5;
     if (std::abs(Ta-Tc) <= eps) {
       Temperature = Tc;
       return true;
@@ -265,7 +259,7 @@ G4bool G4StatMF::FindTemperatureOfBreakingChannel(const G4Fragment & theFragment
     }
     
     if (Da*Dc < 0.0) {
-      Tb = Tc;
+      T  = Tc;
       Db = Dc;
     } else {
       Ta = Tc;
@@ -273,23 +267,16 @@ G4bool G4StatMF::FindTemperatureOfBreakingChannel(const G4Fragment & theFragment
     }
   }
   
-  Temperature  = (Ta+Tb)/2.0;
+  Temperature  = (Ta+T)*0.5;
   return false;
 }
 
 G4double G4StatMF::CalcEnergy(G4int A, G4int Z, const G4StatMFChannel * aChannel,
 			      G4double T)
 {
-    G4double MassExcess0 = G4NucleiProperties::GetMassExcess(A,Z);
-	
-    G4double Coulomb = (3./5.)*(elm_coupling*Z*Z)
-      *std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.)/
-      (G4StatMFParameters::Getr0()*G4Pow::GetInstance()->Z13(A));
-
-    G4double ChannelEnergy = aChannel->GetFragmentsEnergy(T);
-	
-    return -MassExcess0 + Coulomb + ChannelEnergy;
-
+  G4double MassExcess0 = G4NucleiProperties::GetMassExcess(A,Z);
+  G4double ChannelEnergy = aChannel->GetFragmentsEnergy(T);
+  return -MassExcess0 + G4StatMFParameters::GetCoulomb() + ChannelEnergy;
 }
 
 

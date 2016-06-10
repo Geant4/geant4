@@ -48,14 +48,11 @@
 #include "G4Nucleon.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4VDecayChannel.hh"
+#include "G4Log.hh"
 
 // #include "G4Allocator.hh"
 
 class G4KineticTrackVector;
-
-
-
-
 
 class G4KineticTrack : public G4VKineticNucleon
 {
@@ -220,8 +217,6 @@ inline void G4KineticTrack::SetDefinition(const G4ParticleDefinition* aDefinitio
   theDefinition = aDefinition;
 }
 
-
-
 inline G4double G4KineticTrack::GetFormationTime() const
 {
   return theFormationTime;
@@ -232,8 +227,6 @@ inline void G4KineticTrack::SetFormationTime(G4double aFormationTime)
   theFormationTime = aFormationTime;
 }
 
-
-
 inline const G4ThreeVector& G4KineticTrack::GetPosition() const
 {
   return thePosition;
@@ -243,7 +236,6 @@ inline void G4KineticTrack::SetPosition(const G4ThreeVector aPosition)
 {
   thePosition = aPosition;
 }
-
 
 inline const G4LorentzVector& G4KineticTrack::Get4Momentum() const
 {
@@ -324,15 +316,10 @@ inline void G4KineticTrack::UpdateTrackingMomentum(const G4ThreeVector & aMoment
   SetTrackingMomentum(G4LorentzVector(aMomentum, newE));
 }
 
-
-
-
 inline G4double G4KineticTrack::GetActualMass() const
 {
   return std::sqrt(std::abs(the4Momentum.mag2()));
 }
-
-
 
 inline G4int G4KineticTrack::GetnChannels() const
 {
@@ -343,8 +330,6 @@ inline void G4KineticTrack::SetnChannels(const G4int numberOfChannels)
 {
   nChannels = numberOfChannels;
 }
-
-
 
 inline G4double* G4KineticTrack::GetActualWidth() const
 {
@@ -369,17 +354,13 @@ inline G4double G4KineticTrack::EvaluateTotalActualWidth()
  return theTotalActualWidth;
 }
 
-
-
 inline G4double G4KineticTrack::SampleResidualLifetime()
 {
  G4double theTotalActualWidth = this->EvaluateTotalActualWidth();
  G4double tau = CLHEP::hbar_Planck * (-1.0 / theTotalActualWidth);
- G4double theResidualLifetime = tau * std::log(G4UniformRand());
+ G4double theResidualLifetime = tau * G4Log(G4UniformRand());
  return theResidualLifetime*the4Momentum.gamma();
 }
-
-
 
 inline G4double G4KineticTrack::EvaluateCMMomentum(const G4double mass, 
                                                  const G4double* m_ij) const

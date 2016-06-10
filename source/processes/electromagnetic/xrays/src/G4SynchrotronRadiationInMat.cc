@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiationInMat.cc 68037 2013-03-13 14:15:08Z gcosmo $
+// $Id: G4SynchrotronRadiationInMat.cc 91871 2015-08-07 15:22:30Z gcosmo $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -338,6 +338,7 @@ G4SynchrotronRadiationInMat::PostStepDoIt(const G4Track& trackData,
     cosTheta = 1. - 2.*G4UniformRand();
     fcos     = (1 + cosTheta*cosTheta)*0.5;
   }
+  // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
   while( fcos < G4UniformRand() );
 
   beta = std::sqrt(1. - 1./(gamma*gamma));

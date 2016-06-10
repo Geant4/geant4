@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.cc 74581 2013-10-15 12:03:25Z gcosmo $
+// $Id: G4IonFluctuations.cc 93567 2015-10-26 14:51:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -150,22 +150,24 @@ G4IonFluctuations::SampleFluctuations(const G4MaterialCutsCouple* couple,
   G4double twomeanLoss = meanLoss + meanLoss;
   //  G4cout << "siga= " << siga << "  sn= " << sn << G4endl;
   
+  CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();
   // thick target case  
   if (sn >= 2.0) {
 
     do {
-      loss = G4RandGauss::shoot(meanLoss,siga);
+      loss = G4RandGauss::shoot(rndmEngine,meanLoss,siga);
+      // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
     } while (0.0 > loss || twomeanLoss < loss);
 
     // Gamma distribution
   } else if(sn > 0.1) {
 
     G4double neff = sn*sn;
-    loss = meanLoss*G4RandGamma::shoot(neff,1.0)/neff;
+    loss = meanLoss*G4RandGamma::shoot(rndmEngine,neff,1.0)/neff;
 
     // uniform distribution for very small steps
   } else {
-    loss = twomeanLoss*G4UniformRand();
+    loss = twomeanLoss*rndmEngine->flat();
   }
 
   //G4cout << "meanLoss= " << meanLoss << " loss= " << loss << G4endl;
@@ -197,16 +199,16 @@ G4double G4IonFluctuations::Dispersion(const G4Material* material,
   // Q.Yang et al., NIM B61(1991)149-155.
   //G4cout << "sigE= " << sqrt(siga) << " charge= " << charge <<G4endl;
 
-  G4double Z = electronDensity/material->GetTotNbOfAtomsPerVolume();
+  G4double Z = material->GetIonisation()->GetZeffective();
  
   G4double fac = Factor(material, Z);
 
   // heavy ion correction
-//  G4double f1 = 1.065e-4*chargeSquare;
-//  if(beta2 > theBohrBeta2)  f1/= beta2;
-//  else                      f1/= theBohrBeta2;
-//  if(f1 > 2.5) f1 = 2.5;
-//  fac *= (1.0 + f1);
+  //  G4double f1 = 1.065e-4*chargeSquare;
+  //  if(beta2 > theBohrBeta2)  f1/= beta2;
+  //  else                      f1/= theBohrBeta2;
+  //  if(f1 > 2.5) f1 = 2.5;
+  //  fac *= (1.0 + f1);
 
   // taking into account the cut
   G4double fac_cut = 1.0 + (fac - 1.0)*2.0*electron_mass_c2*beta2

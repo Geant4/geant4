@@ -92,7 +92,7 @@ namespace G4INCL {
       const G4double energyCM2 = KinematicsUtils::squareTotalEnergyInCM(particle1, particle2);
       // Below a certain cut value we don't do anything:
       if(energyCM2 < cutNNSquared) {
-        INCL_DEBUG("CM energy = sqrt(" << energyCM2 << ") MeV < sqrt(" << cutNNSquared
+        INCL_DEBUG("CM energy = sqrt(" << energyCM2 << ") MeV < std::sqrt(" << cutNNSquared
             << ") MeV = cutNN" << "; returning a NULL channel" << '\n');
         InteractionAvatar::restoreParticles();
         return NULL;
@@ -172,9 +172,32 @@ namespace G4INCL {
         INCL_DEBUG("NN interaction: four Pions channel chosen" << '\n');
         return new NNToMultiPionsChannel(4,particle1, particle2);
       } else {
-        INCL_WARN("inconsistency with NN Cross Sections: returning an elastic channel" << '\n');
-        isElastic = true;
-        return new ElasticChannel(particle1, particle2);
+        INCL_WARN("inconsistency within the NN Cross Sections (sum!=inelastic)" << '\n');
+        if(fourPiProductionCX>0.) {
+          INCL_WARN("Returning a 4pi channel" << '\n');
+          isElastic = false;
+          return new NNToMultiPionsChannel(4,particle1, particle2);
+        } else if(threePiProductionCX>0.) {
+          INCL_WARN("Returning a 3pi channel" << '\n');
+          isElastic = false;
+          return new NNToMultiPionsChannel(3,particle1, particle2);
+        } else if(twoPiProductionCX>0.) {
+          INCL_WARN("Returning a 2pi channel" << '\n');
+          isElastic = false;
+          return new NNToMultiPionsChannel(2,particle1, particle2);
+        } else if(onePiProductionCX>0.) {
+          INCL_WARN("Returning a 1pi channel" << '\n');
+          isElastic = false;
+          return new NNToMultiPionsChannel(1,particle1, particle2);
+        } else if(deltaProductionCX>0.) {
+          INCL_WARN("Returning a delta-production channel" << '\n');
+          isElastic = false;
+          return new DeltaProductionChannel(particle1, particle2);
+        } else {
+          INCL_WARN("Returning an elastic channel" << '\n');
+          isElastic = true;
+          return new ElasticChannel(particle1, particle2);
+        }
       }
 
 //// NDelta
@@ -242,9 +265,28 @@ namespace G4INCL {
         INCL_DEBUG("PiN interaction: three Pions channel chosen" << '\n');
         return new PiNToMultiPionsChannel(4,particle1, particle2);
       } else {
-        INCL_WARN("inconsistency with PiN Cross Sections: returning an elastic channel" << '\n');
-        isElastic = true;
-        return new PiNElasticChannel(particle1, particle2);
+        INCL_WARN("inconsistency within the PiN Cross Sections (sum!=inelastic)" << '\n');
+        if(threePiProductionCX>0.) {
+          INCL_WARN("Returning a 3pi channel" << '\n');
+          isElastic = false;
+          return new PiNToMultiPionsChannel(4,particle1, particle2);
+        } else if(twoPiProductionCX>0.) {
+          INCL_WARN("Returning a 2pi channel" << '\n');
+          isElastic = false;
+          return new PiNToMultiPionsChannel(3,particle1, particle2);
+        } else if(onePiProductionCX>0.) {
+          INCL_WARN("Returning a 1pi channel" << '\n');
+          isElastic = false;
+          return new PiNToMultiPionsChannel(2,particle1, particle2);
+        } else if(deltaProductionCX>0.) {
+          INCL_WARN("Returning a delta-production channel" << '\n');
+          isElastic = false;
+          return new PiNToDeltaChannel(particle1, particle2);
+        } else {
+          INCL_WARN("Returning an elastic channel" << '\n');
+          isElastic = true;
+          return new PiNElasticChannel(particle1, particle2);
+        }
       }
     } else {
       INCL_DEBUG("BinaryCollisionAvatar can only handle nucleons (for the moment)."

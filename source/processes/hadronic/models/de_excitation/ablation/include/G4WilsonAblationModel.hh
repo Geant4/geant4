@@ -85,7 +85,7 @@ class G4WilsonAblationModel : public G4VEvaporation
 {
   public:
     G4WilsonAblationModel();
-    ~G4WilsonAblationModel();
+    virtual ~G4WilsonAblationModel();
     
     typedef std::vector<G4ParticleDefinition*> VectorOfFragmentTypes;
 
@@ -108,7 +108,7 @@ class G4WilsonAblationModel : public G4VEvaporation
     G4ParticleDefinition  *fragType[6];
     G4FragmentVector      *fragmentVector;
     VectorOfFragmentTypes  evapType;
-
+    G4double               fSig[200];
 };
 ////////////////////////////////////////////////////////////////////////////////
 //

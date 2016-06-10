@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.cc 74581 2013-10-15 12:03:25Z gcosmo $
+// $Id: G4BetheHeitlerModel.cc 91726 2015-08-03 15:41:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -187,9 +187,11 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   // select randomly one element constituing the material
   const G4Element* anElement = SelectRandomAtom(aMaterial, theGamma, GammaEnergy);
 
+  CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();
+
   if (GammaEnergy < Egsmall) {
 
-    epsil = epsil0 + (0.5-epsil0)*G4UniformRand();
+    epsil = epsil0 + (0.5-epsil0)*rndmEngine->flat();
 
   } else {
     // now comes the case with GammaEnergy >= 2. MeV
@@ -219,18 +221,19 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
     G4double NormF2 = max(1.5*F20,0.);
 
     do {
-      if ( NormF1/(NormF1+NormF2) > G4UniformRand() ) {
-	epsil = 0.5 - epsilrange*g4pow->A13(G4UniformRand());
+      if ( NormF1/(NormF1+NormF2) > rndmEngine->flat()) {
+	epsil = 0.5 - epsilrange*g4pow->A13(rndmEngine->flat());
 	screenvar = screenfac/(epsil*(1-epsil));
 	greject = (ScreenFunction1(screenvar) - FZ)/F10;
               
       } else { 
-	epsil = epsilmin + epsilrange*G4UniformRand();
+	epsil = epsilmin + epsilrange*rndmEngine->flat();
 	screenvar = screenfac/(epsil*(1-epsil));
 	greject = (ScreenFunction2(screenvar) - FZ)/F20;
       }
 
-    } while( greject < G4UniformRand() );
+      // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
+    } while( greject < rndmEngine->flat());
 
   }   //  end of epsil sampling
    
@@ -239,7 +242,7 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   //
 
   G4double ElectTotEnergy, PositTotEnergy;
-  if (G4UniformRand() > 0.5) {
+  if (rndmEngine->flat() > 0.5) {
 
     ElectTotEnergy = (1.-epsil)*GammaEnergy;
     PositTotEnergy = epsil*GammaEnergy;
@@ -257,17 +260,14 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   // (Geant3 manual (1993) Phys211),
   //  derived from Tsai distribution (Rev Mod Phys 49,421(1977))
 
-  G4double u;
-  static const G4double aa1 = 0.625; 
-  static const G4double aa2 = 1.875;
-  static const G4double d = 27. ;
+  G4double u= - G4Log(rndmEngine->flat()*rndmEngine->flat());
 
-  if (9./(9.+d) >G4UniformRand()) u= - G4Log(G4UniformRand()*G4UniformRand())/aa1;
-  else                            u= - G4Log(G4UniformRand()*G4UniformRand())/aa2;
+  if (9. > 36.*rndmEngine->flat()) { u *= 1.6; }
+  else                             { u *= 0.53333; } 
 
   G4double TetEl = u*electron_mass_c2/ElectTotEnergy;
   G4double TetPo = u*electron_mass_c2/PositTotEnergy;
-  G4double Phi  = twopi * G4UniformRand();
+  G4double Phi  = twopi * rndmEngine->flat();
   G4double dxEl= sin(TetEl)*cos(Phi),dyEl= sin(TetEl)*sin(Phi),dzEl=cos(TetEl);
   G4double dxPo=-sin(TetPo)*cos(Phi),dyPo=-sin(TetPo)*sin(Phi),dzPo=cos(TetPo);
    

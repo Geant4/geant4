@@ -43,6 +43,9 @@
 #define G4ORB_HH
 
 #include "G4USolid.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+
 #include "UOrb.hh"
 #include "G4Polyhedron.hh"
 
@@ -96,5 +99,7 @@ inline void G4UOrb::SetRadius(G4double newRmax)
   GetShape()->SetRadius(newRmax);
   fRebuildPolyhedron = true;
 }
+
+#endif  // G4GEOM_USE_USOLIDS
 
 #endif

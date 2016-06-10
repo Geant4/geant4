@@ -41,8 +41,6 @@ class BrachyActionInitialization: public G4VUserActionInitialization
     virtual void BuildForMaster() const;
     virtual void Build() const;
 
- private:
- G4GeneralParticleSource* masterGPS;
 };
 
 #endif

@@ -1,0 +1,321 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_group
+#define tools_sg_group
+
+//#define TOOLS_SG_GROUP_DEBUG
+
+#include "node"
+
+#include "pick_action"
+#include "event_action"
+
+#ifdef TOOLS_SG_GROUP_DEBUG
+#include "render_action"
+#endif
+
+namespace tools {
+namespace sg {
+
+class group : public node {
+  TOOLS_NODE(group,tools::sg::group,node)
+public:
+  virtual void render(render_action& a_action) {
+#ifdef TOOLS_SG_GROUP_DEBUG
+    std::ostream& out = a_action.out();
+    tools_vforcit(node*,m_children,it) {
+      out << "debug : tools::sg::group::render : children : " << (*it)->s_cls() << " begin : " << std::endl;   
+      (*it)->render(a_action);
+      out << "debug : tools::sg::group::render : children : " << (*it)->s_cls() << " end," << std::endl;   
+    }
+#else
+    tools_vforcit(node*,m_children,it) (*it)->render(a_action);
+#endif
+  }
+  virtual void pick(pick_action& a_action) {
+    tools_vforcit(node*,m_children,it) {
+      (*it)->pick(a_action);
+      if(a_action.done()) break;
+    }    
+  }
+  virtual void bbox(bbox_action& a_action) {
+    tools_vforcit(node*,m_children,it) (*it)->bbox(a_action);
+  }
+  virtual void event(event_action& a_action) {
+    tools_vforcit(node*,m_children,it) {
+      (*it)->event(a_action);
+      if(a_action.done()) break;
+    }
+  }
+  virtual void search(search_action& a_action) {
+    if(a_action.do_path()) a_action.path_push(this);
+    tools_vforcit(node*,m_children,it) {
+      (*it)->search(a_action);
+      if(a_action.done()) return;
+    }
+    if(a_action.do_path()) a_action.path_pop();
+  }
+  virtual void get_matrix(get_matrix_action& a_action) {
+    tools_vforcit(node*,m_children,it) {
+      (*it)->get_matrix(a_action);
+      if(a_action.done()) return;
+    }
+  }
+  virtual bool write(write_action& a_action) {
+    if(!a_action.beg_node(*this)) return false;
+    if(!write_fields(a_action)) return false;
+    if(!write_children(a_action)) return false;
+    if(!a_action.end_node(*this)) return false;
+    return true;
+  }
+  virtual void is_visible(visible_action& a_action) {
+    tools_vforcit(node*,m_children,it) {
+      (*it)->is_visible(a_action);
+    }
+  }
+public:
+  group():node(){}
+  virtual ~group(){clear();}
+public:
+  group(const group& a_from)
+  :node(a_from)
+  {
+    tools_vforcit(node*,a_from.m_children,it) m_children.push_back((*it)->copy());
+  }
+  group& operator=(const group& a_from){
+    node::operator=(a_from);
+    if(&a_from==this) return *this;
+    clear();
+    tools_vforcit(node*,a_from.m_children,it) m_children.push_back((*it)->copy());
+    return *this;
+  }
+public:
+  void add(node* a_node) {
+    //WARNING :  take ownership of a_node.
+    m_children.push_back(a_node);
+  }
+  void add_front(node* a_node) {
+    //WARNING :  take ownership of a_node.
+    m_children.insert(m_children.begin(),a_node);
+  }
+  void set(unsigned int a_index,node* a_node) {
+    //WARNING :  take ownership of a_node.
+    //WARNING : no check is done on a_index.
+    m_children[a_index] = a_node;
+  }
+
+  bool replace(const node* a_from,node* a_to,bool a_del){
+    tools_vforit(node*,m_children,it) {
+      if((*it)==a_from) {
+        node* old = *it;
+        (*it) = a_to; 
+        if(a_del) delete old; 
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void swap(unsigned int a_1,unsigned int a_2){
+    // WARNING : no check is done on a_1,a_2.
+    node* tmp = m_children[a_1];
+    m_children[a_1] = m_children[a_2];
+    m_children[a_2] = tmp;
+  }
+
+  template <class T>
+  T* search() const {
+    tools_vforcit(node*,m_children,it) {
+      T* o = safe_cast<node,T>(*(*it));
+      if(o) return o;
+    }
+    return 0;
+  }
+
+/*
+  template <class T>
+  T* rsearch_from(const node* a_node) const {
+    bool found = false;
+    std::vector<node*>::const_reverse_iterator it;
+    for(it=m_children.rbegin();it!=m_children.rend();++it) {
+      // the below logic permits to test a_node.
+      if(!found) {if(*it==a_node) found = true;}
+      if(found) {
+        T* o = safe_cast<node,T>(*(*it));
+        if(o) return o;
+      }
+    }
+    return 0;
+  }
+*/
+
+  void* rsearch_from(const node* a_node,
+                     const std::string& a_class,
+                     bool a_inc_a_node = true) const {
+    bool found = false;
+    std::vector<node*>::const_reverse_iterator it;
+    for(it=m_children.rbegin();it!=m_children.rend();++it) {
+      // the below logic permits to test a_node.
+      if(!found) {
+        if(*it==a_node) {
+          found = true;
+          if(!a_inc_a_node) continue; //skip a_node
+        }
+      }
+      if(found) {
+        void* p = (*it)->cast(a_class);
+        if(p) return p;
+      }
+    }
+    return 0;
+  }
+
+  bool remove(const node* a_node){
+    //NOTE : no delete on a_node is performed.
+    tools_vforit(node*,m_children,it) {
+      if(a_node==(*it)) {
+        m_children.erase(it);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool remove_index(unsigned int a_index){
+    //NOTE : no delete on node at a_index is performed.
+    std::vector<node*>::iterator it = m_children.begin();
+    it += a_index; 
+    if(it>=m_children.end()) return false;
+    m_children.erase(it);
+    return true;
+  }
+
+  bool delete_from(const node* a_node,bool a_inc_a_node = true){
+    bool found = false;
+    std::vector<node*>::iterator it;    
+    for(it=m_children.begin();it!=m_children.end();) {
+      if(!found) {
+        if(*it==a_node) {
+          found = true;
+          if(!a_inc_a_node) {it++;continue;} //skip a_node
+        }
+      }
+      if(found) {
+        node* old = *it;
+        it = m_children.erase(it);
+        delete old;
+      } else {
+        it++;
+      }
+    }
+    return found;
+  }
+
+  void transfer(group& a_from) {
+    if(&a_from==this) return;
+    clear();
+    m_children.resize(a_from.size());        
+    std::vector<node*>::iterator it  = m_children.begin();
+    std::vector<node*>::iterator fit = a_from.m_children.begin();
+    for(;fit!=a_from.m_children.end();++it,++fit) {
+      *it = *fit;
+      *fit = 0;
+    }
+    a_from.m_children.clear();
+  }
+
+  void transfer(std::vector<node*>& a_to) {
+    a_to = m_children;
+    m_children.clear();
+    //touch();
+  }
+
+  void clear() {tools::clear<node>(m_children);}
+
+  void raw_clear(){ //used for sg coming from exlib/rroot/vis_volume.
+    tools::raw_clear<node>(m_children);
+  }
+  unsigned int size() const {return m_children.size();}
+  bool empty() const {return m_children.size()?false:true;}
+  node* operator[](unsigned int a_index) const{
+    //WARNING : no check is done on a_index.
+    return m_children[a_index];    
+  }
+  const std::vector<node*>& children() const {return m_children;}
+  std::vector<node*>& children() {return m_children;}
+
+  bool insert(unsigned int a_index,node* a_new){ //iv2sg    
+    if(a_index==m_children.size()) {
+      m_children.push_back(a_new);
+      return true;
+    }
+    unsigned int index = 0;
+    std::vector<node*>::iterator it;
+    for(it=m_children.begin();it!=m_children.end();++it,index++) {
+      if(index==a_index) {
+        m_children.insert(it,a_new);
+        return true;
+      }
+    }
+    return false;
+  }
+/*
+  bool insert(const node* a_from,node* a_new){
+    tools_vforit(node*,m_children,it) {
+      if((*it)==a_from) {
+        m_children.insert(it,a_new);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  template <class T>
+  T* rsearch() const {
+    std::vector<node*>::const_reverse_iterator it;
+    for(it=m_children.rbegin();it!=m_children.rend();++it) {
+      T* o = safe_cast<node,T>(*(*it));
+      if(o) return o;
+    }
+    return 0;
+  }
+
+*/
+  bool position(const node* a_node,unsigned int& a_index) const {
+    a_index = 0;
+    tools_vforcit(node*,m_children,it) {
+      if(a_node==(*it)) return true;
+      a_index++;
+    }
+    return false;
+  }
+
+  node* node_at(unsigned int a_index) const {
+    if(a_index>=m_children.size()) return 0;
+    return m_children[a_index];
+  }
+
+  template <class T>
+  T* child(unsigned int a_index) const {
+    if(a_index>=m_children.size()) return 0;
+    node* _node = m_children[a_index];
+    if(!_node) return 0;
+    return safe_cast<node,T>(*_node);
+  }
+
+
+protected:
+  bool write_children(write_action& a_action) {
+    tools_vforcit(node*,m_children,it) {
+      if(!(*it)->write(a_action)) return false;
+    }
+    return true;
+  }
+protected:
+  std::vector<node*> m_children;
+};
+
+}}
+
+#endif

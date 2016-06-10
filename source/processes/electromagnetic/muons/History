@@ -1,4 +1,4 @@
-$Id: History 87062 2014-11-24 11:45:21Z gcosmo $
+$Id: History 91743 2015-08-04 11:49:58Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03 August 15: V.Ivant (emmuons-V10-01-01)
+- Technical tag: substitute tabs by spaces,
+    add comments to do/while and while loops
+
+04 March 15: V.Ivanchenko (emmuons-V10-01-00)
+- G4MuMultipleScattering - do not redefine step limit type 
 
 21 November 14: V.Ivanchenko (emmuons-V10-00-04)
 - G4EnergyLossForExtrapolator - fixed problem of thread safe 

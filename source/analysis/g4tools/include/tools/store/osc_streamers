@@ -14,6 +14,7 @@
 #include "../histo/p2d"
 #include "../vmanip"
 #include "../sto"
+#include "../num2s"
 #include "../S_STRING"
 #include "../scast"
 
@@ -216,9 +217,11 @@ protected:
     unsigned int number = m_vec.size();
     if(!a_v.visit("fSize",number)) return false;
 
+    std::string stmp;
     for(unsigned int index=0;index<number;index++) {
       const T& elem = m_vec[index];
-      if(!a_v.visit(to<int>(index),elem)) return false;
+      if(!num2s(index,stmp)) return false;
+      if(!a_v.visit(stmp,elem)) return false;
     }
 
     if(!a_v.end(*this)) return false;
@@ -321,9 +324,10 @@ inline void map2vec(const std::map<std::string,std::string>& a_in,std::vector<It
 
 typedef histo::histo_data<double,unsigned int,unsigned int,double> hd_data;
 
+template <class HIST>
 class BaseHistogram : public virtual istorable {
 public:
-  TOOLS_SCLASS(tools::osc::BaseHistogram)
+  TOOLS_T_SCLASS(HIST,tools::osc::BaseHistogram)
 protected:
   virtual void* cast(const std::string& a_class) const {
     if(void* p = cmp_cast<BaseHistogram>(this,a_class)) return p;
@@ -338,7 +342,7 @@ public:
     if(!a_v.visit("fVersion",version)) return false;
 
     Annotation ano;
-    map2vec(m_data.m_annotations,ano.m_items);
+    map2vec(m_hist.annotations(),ano.m_items);
     if(!a_v.visit("fAnnotation",ano)) return false;
 
     if(!a_v.end(*this)) return false;
@@ -352,15 +356,15 @@ protected:
     return local->BaseHistogram::visit(a_v); //IMPORTANT : have BaseHistogram::
   }
 public:
-  BaseHistogram(const hd_data& a_data):m_data(a_data){}
+  BaseHistogram(const HIST& a_hist):m_hist(a_hist){}
   virtual ~BaseHistogram(){}
 private:
   BaseHistogram(const BaseHistogram& a_from)
-  :istorable(a_from),m_data(a_from.m_data)
+  :istorable(a_from),m_hist(a_from.m_hist)
   {}
   BaseHistogram& operator=(const BaseHistogram&){return *this;}
 protected:
-  const hd_data& m_data;
+  const HIST& m_hist;
 };
 
 inline bool BaseHistogram_read(iobj_visitor& a_visitor){
@@ -375,21 +379,23 @@ inline bool BaseHistogram_read(iobj_visitor& a_visitor){
   return true;
 }
 
-inline bool visitHistogram(const hd_data& aData,iobj_const_visitor& a_visitor){
-  if(!a_visitor.visit("fTitle",aData.m_title)) return false;
-  if(!a_visitor.visit("fDimension",(int)aData.m_dimension)) return false;
-  if(!a_visitor.visit("fBinNumber",(int)aData.m_bin_number)) return false;
+template <class HIST>
+inline bool visitHistogram(const HIST& a_hist,iobj_const_visitor& a_visitor){
+  if(!a_visitor.visit("fTitle",a_hist.title())) return false;
+  if(!a_visitor.visit("fDimension",(int)a_hist.dimension())) return false;
+  if(!a_visitor.visit("fBinNumber",(int)a_hist.get_bins())) return false;
 
-  if(!a_visitor.visit("fBinEntries",
-    convert<unsigned int,int>(aData.m_bin_entries))) return false;
+  if(!a_visitor.visit("fBinEntries",convert<unsigned int,int>(a_hist.bins_entries()))) return false;
 
-  if(!a_visitor.visit("fBinSw",aData.m_bin_Sw)) return false;
-  if(!a_visitor.visit("fBinSw2",aData.m_bin_Sw2)) return false;
-  if(!a_visitor.visit("fBinSxw",aData.m_bin_Sxw)) return false;
-  if(!a_visitor.visit("fBinSx2w",aData.m_bin_Sx2w)) return false;
- {for(unsigned int iaxis=0;iaxis<aData.m_dimension;iaxis++) {
-    std::string name = "fAxes_" + to<int>(iaxis);   
-    Axis axis(aData.m_axes[iaxis]);
+  if(!a_visitor.visit("fBinSw",a_hist.bins_sum_w())) return false;
+  if(!a_visitor.visit("fBinSw2",a_hist.bins_sum_w2())) return false;
+  if(!a_visitor.visit("fBinSxw",a_hist.bins_sum_xw())) return false;
+  if(!a_visitor.visit("fBinSx2w",a_hist.bins_sum_x2w())) return false;
+ {std::string name;
+  for(unsigned int iaxis=0;iaxis<a_hist.dimension();iaxis++) {
+    if(!num2s(iaxis,name)) return false;
+    name = "fAxes_"+name;
+    Axis axis(a_hist.get_axis(iaxis));
     if(!a_visitor.visit(name,axis)) return false;
   }}
  {int dummy = 0;
@@ -403,8 +409,8 @@ inline bool visitHistogram(const hd_data& aData,iobj_const_visitor& a_visitor){
   if(!a_visitor.visit("fMinV",dummy)) return false;
   if(!a_visitor.visit("fMaxV",dummy)) return false;}
   // Not written :
-  //aData.fDoubles
-  //aData.fInts
+  //a_hist.fDoubles
+  //a_hist.fInts
   return true;
 }
 
@@ -461,10 +467,10 @@ inline bool readHistogram(hd_data& aData,iobj_visitor& a_visitor){
   return true;
 }
 
-
+template <class HIST>
 class Histogram : public virtual istorable {
 public:
-  TOOLS_SCLASS(tools::osc::Histogram)
+  TOOLS_T_SCLASS(HIST,tools::osc::Histogram)
 protected:
   virtual void* cast(const std::string& a_class) const {
     if(void* p = cmp_cast<Histogram>(this,a_class)) return p;
@@ -478,10 +484,10 @@ public:
     int version = 1;
     if(!a_v.visit("fVersion",version)) return false;
 
-    BaseHistogram bh(m_data);
+    BaseHistogram<HIST> bh(m_hist);
     if(!bh.visit(a_v)) return false;
 
-    if(!visitHistogram(m_data,a_v)) return false;
+    if(!visitHistogram(m_hist,a_v)) return false;
 
     if(!a_v.end(*this)) return false;
     return true;
@@ -493,13 +499,13 @@ protected:
     return local->Histogram::visit(a_v); //IMPORTANT : have Histogram::
   }
 public:
-  Histogram(const hd_data& a_data,const std::string& a_cls)
-  :m_data(a_data),m_cls(a_cls){}
+  Histogram(const HIST& a_hist,const std::string& a_cls)
+  :m_hist(a_hist),m_cls(a_cls){}
   virtual ~Histogram(){}
 public:
   Histogram(const Histogram& a_from)
   :istorable(a_from)
-  ,m_data(a_from.m_data)
+  ,m_hist(a_from.m_hist)
   ,m_cls(a_from.m_cls)
   {}
   Histogram& operator=(const Histogram& a_from){
@@ -507,12 +513,12 @@ public:
     return *this;
   }
 protected:
-  const hd_data& m_data;
+  const HIST& m_hist;
   std::string m_cls;
 };
 
 inline bool visit(iobj_const_visitor& a_v,const histo::h1d& a_histo) {
-  Histogram h(a_histo,s_h1d());
+  Histogram<histo::h1d> h(a_histo,s_h1d());
   return h.visit(a_v);
 }
 
@@ -546,7 +552,7 @@ inline bool read(iobj_visitor& a_visitor,histo::h1d& a_histo){
 }
 
 inline bool visit(iobj_const_visitor& a_v,const histo::h2d& a_histo) {
-  Histogram h(a_histo,s_h2d());
+  Histogram<histo::h2d> h(a_histo,s_h2d());
   return h.visit(a_v);
 }
 
@@ -581,7 +587,7 @@ inline bool read(iobj_visitor& a_visitor,histo::h2d& a_histo){
 }
 
 inline bool visit(iobj_const_visitor& a_v,const histo::h3d& a_histo) {
-  Histogram h(a_histo,s_h3d());
+  Histogram<histo::h3d> h(a_histo,s_h3d());
   return h.visit(a_v);
 }
 
@@ -617,40 +623,43 @@ inline bool read(iobj_visitor& a_visitor,histo::h3d& a_histo){
 
 typedef histo::profile_data<double,unsigned int,unsigned int,double,double> pd_data;
 
-inline bool visitProfile(const pd_data& aData,iobj_const_visitor& a_visitor){
-  if(!a_visitor.visit("fTitle",aData.m_title)) return false;
-  if(!a_visitor.visit("fDimension",(int)aData.m_dimension)) return false;
-  if(!a_visitor.visit("fBinNumber",(int)aData.m_bin_number)) return false;
+template <class PROF>
+inline bool visitProfile(const PROF& a_prof,iobj_const_visitor& a_visitor){
+  if(!a_visitor.visit("fTitle",a_prof.title())) return false;
+  if(!a_visitor.visit("fDimension",(int)a_prof.dimension())) return false;
+  if(!a_visitor.visit("fBinNumber",(int)a_prof.get_bins())) return false;
 
-  if(!a_visitor.visit("fBinEntries",
-    convert<unsigned int,int>(aData.m_bin_entries))) return false;
+  if(!a_visitor.visit("fBinEntries",convert<unsigned int,int>(a_prof.bins_entries()))) return false;
 
-  if(!a_visitor.visit("fBinSw",aData.m_bin_Sw)) return false;
-  if(!a_visitor.visit("fBinSw2",aData.m_bin_Sw2)) return false;
-  if(!a_visitor.visit("fBinSxw",aData.m_bin_Sxw)) return false;
-  if(!a_visitor.visit("fBinSx2w",aData.m_bin_Sx2w)) return false;
-  for(unsigned int iaxis=0;iaxis<aData.m_dimension;iaxis++) {
-    std::string name = "fAxes_" + to<int>(iaxis);   
-    Axis axis(aData.m_axes[iaxis]);
+  if(!a_visitor.visit("fBinSw",a_prof.bins_sum_w())) return false;
+  if(!a_visitor.visit("fBinSw2",a_prof.bins_sum_w2())) return false;
+  if(!a_visitor.visit("fBinSxw",a_prof.bins_sum_xw())) return false;
+  if(!a_visitor.visit("fBinSx2w",a_prof.bins_sum_x2w())) return false;
+  std::string name;
+  for(unsigned int iaxis=0;iaxis<a_prof.dimension();iaxis++) {
+    if(!num2s(iaxis,name)) return false;
+    name = "fAxes_"+name;
+    Axis axis(a_prof.get_axis(iaxis));
     if(!a_visitor.visit(name,axis)) return false;
   }
  {int dummy = 0;
   if(!a_visitor.visit("fMode",dummy)) return false;} //m_mode
   if(!a_visitor.visit("fProfile",true)) return false;
-  if(!a_visitor.visit("fBinSvw",aData.m_bin_Svw)) return false;
-  if(!a_visitor.visit("fBinSv2w",aData.m_bin_Sv2w)) return false;
-  if(!a_visitor.visit("fCutV",aData.m_cut_v)) return false;
-  if(!a_visitor.visit("fMinV",aData.m_min_v)) return false;
-  if(!a_visitor.visit("fMaxV",aData.m_max_v)) return false;
+  if(!a_visitor.visit("fBinSvw",a_prof.bins_sum_vw())) return false;
+  if(!a_visitor.visit("fBinSv2w",a_prof.bins_sum_v2w())) return false;
+  if(!a_visitor.visit("fCutV",a_prof.cut_v())) return false;
+  if(!a_visitor.visit("fMinV",a_prof.min_v())) return false;
+  if(!a_visitor.visit("fMaxV",a_prof.max_v())) return false;
   // Not written :
-  //aData.fDoubles
-  //aData.fInts
+  //a_prof.fDoubles
+  //a_prof.fInts
   return true;
 }
 
+template <class PROF>
 class Profile : public virtual istorable {
 public:
-  TOOLS_SCLASS(tools::osc::Profile)
+  TOOLS_T_SCLASS(PROF,tools::osc::Profile)
 protected:
   virtual void* cast(const std::string& a_class) const {
     if(void* p = cmp_cast<Profile>(this,a_class)) return p;
@@ -664,10 +673,10 @@ public:
     int version = 1;
     if(!a_v.visit("fVersion",version)) return false;
 
-    BaseHistogram bh(m_data);
+    BaseHistogram<PROF> bh(m_hist);
     if(!bh.visit(a_v)) return false;
 
-    if(!visitProfile(m_data,a_v)) return false;
+    if(!visitProfile(m_hist,a_v)) return false;
 
     if(!a_v.end(*this)) return false;
     return true;
@@ -679,13 +688,13 @@ protected:
     return local->Profile::visit(a_v); //IMPORTANT : have Profile::
   }
 public:
-  Profile(const pd_data& a_data,const std::string& a_cls)
-  :m_data(a_data),m_cls(a_cls){}
+  Profile(const PROF& a_hist,const std::string& a_cls)
+  :m_hist(a_hist),m_cls(a_cls){}
   virtual ~Profile(){}
 public:
   Profile(const Profile& a_from)
   :istorable(a_from)
-  ,m_data(a_from.m_data)
+  ,m_hist(a_from.m_hist)
   ,m_cls(a_from.m_cls)
   {}
   Profile& operator=(const Profile& a_from){
@@ -693,7 +702,7 @@ public:
     return *this;
   }
 protected:
-  const pd_data& m_data;
+  const PROF& m_hist;
   std::string m_cls;
 };
 
@@ -741,8 +750,7 @@ inline bool readProfile(pd_data& aData,iobj_visitor& a_visitor){
 }
 
 inline bool visit(iobj_const_visitor& a_v,const histo::p1d& a_histo) {
-  pd_data d = a_histo.get_histo_data();
-  Profile h(d,s_p1d());
+  Profile<histo::p1d> h(a_histo,s_p1d());
   return h.visit(a_v);
 }
 
@@ -776,8 +784,7 @@ inline bool read(iobj_visitor& a_visitor,histo::p1d& a_histo){
 }
 
 inline bool visit(iobj_const_visitor& a_v,const histo::p2d& a_histo) {
-  pd_data d = a_histo.get_histo_data();
-  Profile h(d,s_p2d());
+  Profile<histo::p2d> h(a_histo,s_p2d());
   return h.visit(a_v);
 }
 
@@ -811,11 +818,13 @@ inline bool read(iobj_visitor& a_visitor,histo::p2d& a_histo){
   return true;
 }
 
-class Histogram_cp : public Histogram {
+template <class HIST>
+class Histogram_cp : public Histogram<HIST> {
+  typedef Histogram<HIST> parent;
 public:
-  Histogram_cp(const hd_data& a_data,const std::string& a_cls)
-  :Histogram(m_cp,a_cls) //give ref of m_cp to Histogram.
-  ,m_cp(a_data)   //do a local copy.
+  Histogram_cp(const HIST& a_h,const std::string& a_cls)
+  :parent(m_cp,a_cls) //give ref of m_cp to Histogram.
+  ,m_cp(a_h)   //do a local copy.
   //WARNING : the upper is ok as long as Histogram constructor does nothing
   //          else than keeping the ref to m_cp. Else it would do
   //          something on an empty histo (and not on a copy of the
@@ -825,23 +834,25 @@ public:
 public:
   Histogram_cp(const Histogram_cp& a_from)
   :istorable(a_from)
-  ,Histogram(m_cp,a_from.m_cls)
+  ,parent(m_cp,a_from.m_cls)
   ,m_cp(a_from.m_cp)
   {}  
   Histogram_cp& operator=(const Histogram_cp& a_from){
-    Histogram::operator=(a_from);    
+    parent::operator=(a_from);    
     m_cp = a_from.m_cp;
     return *this;
   }
 protected:
-  hd_data m_cp;
+  HIST m_cp;
 };
 
-class Profile_cp : public Profile {
+template <class PROF>
+class Profile_cp : public Profile<PROF> {
+  typedef Profile<PROF> parent;
 public:
-  Profile_cp(const pd_data& a_data,const std::string& a_cls)
-  :Profile(m_cp,a_cls) //give ref of m_cp to Profile.
-  ,m_cp(a_data)   //do a local copy.
+  Profile_cp(const PROF& a_p,const std::string& a_cls)
+  :parent(m_cp,a_cls) //give ref of m_cp to Profile.
+  ,m_cp(a_p)   //do a local copy.
   //WARNING : the upper is ok as long as Profile constructor does nothing
   //          else than keeping the ref to m_cp. Else it would do
   //          something on an empty histo (and not on a copy of the
@@ -851,16 +862,16 @@ public:
 public:
   Profile_cp(const Profile_cp& a_from)
   :istorable(a_from)
-  ,Profile(m_cp,a_from.m_cls)
+  ,parent(m_cp,a_from.m_cls)
   ,m_cp(a_from.m_cp)
   {}  
   Profile_cp& operator=(const Profile_cp& a_from){
-    Profile::operator=(a_from);    
+    parent::operator=(a_from);    
     m_cp = a_from.m_cp;
     return *this;
   }
 protected:
-  pd_data m_cp;
+  PROF m_cp;
 };
 
 }}

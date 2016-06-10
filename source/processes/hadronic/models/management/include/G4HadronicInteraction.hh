@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronicInteraction.hh 83773 2014-09-15 07:19:09Z gcosmo $
+// $Id: G4HadronicInteraction.hh 88839 2015-03-12 10:30:07Z gcosmo $
 //
 // Hadronic Interaction  abstract base class
 // This class is the base class for the model classes.
@@ -58,6 +58,8 @@
 #include "G4Nucleus.hh"
 #include "G4Track.hh"
 #include "G4HadProjectile.hh"
+
+class G4HadronicInteractionRegistry;
 
 class G4HadronicInteraction
 {
@@ -194,9 +196,10 @@ protected:
 
   G4bool isBlocked;
 
-
 private:       
     
+  G4HadronicInteractionRegistry* registry;
+
   G4double recoilEnergyThreshold;
 
   G4String theModelName;

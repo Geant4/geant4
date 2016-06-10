@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXm.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4OpenGLImmediateXm.cc 91686 2015-07-31 09:40:08Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -43,10 +43,10 @@
 #include "G4OpenGLImmediateSceneHandler.hh"
 
 G4OpenGLImmediateXm::G4OpenGLImmediateXm ():
-  G4VGraphicsSystem ("OpenGLImmediateXm",
-		     "OGLIXm",
-		     G4VisFeaturesOfOpenGLIXm (),
-		     G4VGraphicsSystem::threeD)
+  G4OpenGLXm ("OpenGLImmediateXm",
+              "OGLIXm",
+              G4VisFeaturesOfOpenGLIXm (),
+              G4VGraphicsSystem::threeD)
 {
   G4OpenGLViewerMessenger::GetInstance();
   G4OpenGLXmViewerMessenger::GetInstance();

@@ -57,147 +57,172 @@
 #include <vector>
 #include <map>
 #include "G4VMolecularDissociationDisplacer.hh"
-#include "G4MoleculeHandleManager.hh"
 
-// ######################################################################
-// ###                  MolecularDecayChannel                         ###
-// ######################################################################
+// -----------------------------------------------------------------------------
+// ###                       MolecularDecayChannel                           ###
+// -----------------------------------------------------------------------------
 
 class G4Molecule;
+class G4MolecularConfiguration;
 
 struct CompMoleculePointer;
 
+/* Stored data for one dissociation channel :
+ * products, energy, time of decay and probability.
+ */
 class G4MolecularDissociationChannel
 {
-    // Class Description
-    // This is where are stored and can be retrieved data of one decay channel
-    // of excited or ionized molecules: products. energy and probability.
-
-public: //With Description
-
-    G4MolecularDissociationChannel();
-    G4MolecularDissociationChannel(G4String);
-    ~G4MolecularDissociationChannel();
-    G4MolecularDissociationChannel(const G4MolecularDissociationChannel&);
-    G4MolecularDissociationChannel & operator=(const G4MolecularDissociationChannel &right);
+public:
+  G4MolecularDissociationChannel();
+  G4MolecularDissociationChannel(G4String);
+  ~G4MolecularDissociationChannel();
+  G4MolecularDissociationChannel(const G4MolecularDissociationChannel&);
+  G4MolecularDissociationChannel&
+    operator=(const G4MolecularDissociationChannel &right);
 
 public:
+  //____________________________________________________________________________
+  // Construct
 
-    //Root Mean Square radial distance thermalisation of a product
-    G4double GetRMSRadialDisplacementOfProduct(const G4Molecule*);
+  void AddProduct(const G4Molecule*, G4double = 0);
+  void AddProduct(G4MolecularConfiguration*, G4double = 0);
+  void AddProduct(const G4String& molecule, G4double displacement = 0);
 
-    // methods to construct decay channels "interactively"
+  //____________________________________________________________________________
 
-    void AddProduct(const G4Molecule*,G4double = 0);
-    void AddProduct(const G4String& molecule, G4double displacement = 0);
+  inline void SetName(const G4String&);
+  inline void SetEnergy(G4double);
+  inline void SetProbability(G4double);
+  inline void SetDecayTime(G4double);
+  inline void SetRMSMotherMoleculeDisplacement(G4double);
+  inline void SetDisplacementType(DisplacementType);
 
-    inline void  SetName(const G4String&);
-    inline void  SetEnergy(G4double);
-    inline void  SetProbability(G4double);
-    inline void  SetDecayTime(G4double);
-    inline void  SetRMSMotherMoleculeDisplacement(G4double);
-    inline void  SetDisplacementType(DisplacementType);
+  //____________________________________________________________________________
 
-    // get methods to retrieve data
+  inline const G4String& GetName() const;
+  G4int GetNbProducts() const;
+  G4MolecularConfiguration* GetProduct(int) const;
+  inline const std::vector<G4double>& GetRMSProductsDisplacement() const;
+  inline G4double GetEnergy() const;
+  inline G4double GetProbability() const;
+  inline G4double GetDecayTime() const;
+  inline G4double GetRMSMotherMoleculeDisplacement() const;
+  inline DisplacementType GetDisplacementType() const;
 
-    inline const G4String& GetName() const;
-    G4int GetNbProducts() const;
-    const G4Molecule* GetProduct(int) const;
-    inline const std::vector<G4double>& GetRMSProductsDisplacement() const;
-    inline G4double GetEnergy() const;
-    inline G4double GetProbability() const;
-    inline G4double GetDecayTime() const;
-    inline G4double GetRMSMotherMoleculeDisplacement() const;
-    inline DisplacementType GetDisplacementType() const;
+  //____________________________________________________________________________
+  //Root Mean Square radial distance thermalisation of a product
+  G4double GetRMSRadialDisplacementOfProduct(const G4Molecule*);
 
 private:
 
-    DisplacementType fDisplacementType;
-    G4String fName;
-//    std::vector<G4MoleculeHandle>* fProductsVector;
-    std::vector<const G4Molecule*>* fProductsVector;
-    G4double fReleasedEnergy;
-    G4double fProbability;
-    G4double fDecayTime; // To be taken into account in the next releases
+  DisplacementType fDisplacementType;
+  G4String fName;
+//  std::vector<const G4Molecule*>* fProductsVector;
+  std::vector<G4MolecularConfiguration*>* fProductsVector;
+  G4double fReleasedEnergy;
+  G4double fProbability;
+  G4double fDecayTime; // To be taken into account in the next releases
 
-    //Root Mean Square radial distance jump of a excited/ionised MotherMolecule molecule
-    G4double fRMSMotherMoleculeDisplacement;
-    std::vector<G4double> fRMSProductsDisplacementVector;
+  //Root Mean Square radial distance jump of the MotherMolecule molecule
+  G4double fRMSMotherMoleculeDisplacement;
+  std::vector<G4double> fRMSProductsDisplacementVector;
 };
+
+//______________________________________________________________________________
 
 inline void G4MolecularDissociationChannel::SetName(const G4String& value)
 {
-    fName = value;
+  fName = value;
 }
+
+//______________________________________________________________________________
 
 inline void G4MolecularDissociationChannel::SetEnergy(G4double value)
 {
-    fReleasedEnergy = value;
+  fReleasedEnergy = value;
 }
 
+//______________________________________________________________________________
 
 inline void G4MolecularDissociationChannel::SetProbability(G4double value)
 {
-    fProbability = value;
+  fProbability = value;
 }
+
+//______________________________________________________________________________
 
 inline void G4MolecularDissociationChannel::SetDecayTime(G4double value)
 {
 
-    fDecayTime = value;
+  fDecayTime = value;
 }
 
-inline void G4MolecularDissociationChannel::SetRMSMotherMoleculeDisplacement(G4double value)
+//______________________________________________________________________________
+
+inline void G4MolecularDissociationChannel::
+  SetRMSMotherMoleculeDisplacement(G4double value)
 {
-    fRMSMotherMoleculeDisplacement = value;
+  fRMSMotherMoleculeDisplacement = value;
 }
+
+//______________________________________________________________________________
 
 inline const G4String& G4MolecularDissociationChannel::GetName() const
 {
-    return fName;
+  return fName;
 }
 
-inline const std::vector<G4double>& G4MolecularDissociationChannel::GetRMSProductsDisplacement() const
+//______________________________________________________________________________
+
+inline const std::vector<G4double>&
+  G4MolecularDissociationChannel::GetRMSProductsDisplacement() const
 {
-    return fRMSProductsDisplacementVector;
+  return fRMSProductsDisplacementVector;
 }
+
+//______________________________________________________________________________
 
 inline G4double G4MolecularDissociationChannel::GetEnergy() const
 {
-
-    return fReleasedEnergy;
+  return fReleasedEnergy;
 }
+
+//______________________________________________________________________________
 
 inline G4double G4MolecularDissociationChannel::GetProbability() const
 {
-    return fProbability;
+  return fProbability;
 }
+
+//______________________________________________________________________________
 
 inline G4double G4MolecularDissociationChannel::GetDecayTime() const
 {
-    return fDecayTime;
+  return fDecayTime;
 }
 
-inline G4double G4MolecularDissociationChannel::GetRMSMotherMoleculeDisplacement() const
+//______________________________________________________________________________
+
+inline G4double G4MolecularDissociationChannel::
+  GetRMSMotherMoleculeDisplacement() const
 {
-    return fRMSMotherMoleculeDisplacement;
+  return fRMSMotherMoleculeDisplacement;
 }
 
-inline void G4MolecularDissociationChannel::SetDisplacementType(DisplacementType aDisplacementType)
+//______________________________________________________________________________
+
+inline void G4MolecularDissociationChannel::
+  SetDisplacementType(DisplacementType aDisplacementType)
 {
-    fDisplacementType = aDisplacementType;
+  fDisplacementType = aDisplacementType;
 }
 
-inline DisplacementType G4MolecularDissociationChannel::GetDisplacementType() const
+//______________________________________________________________________________
+
+inline DisplacementType G4MolecularDissociationChannel::
+  GetDisplacementType() const
 {
-    return fDisplacementType;
+  return fDisplacementType;
 }
 #endif
-
-
-
-
-
-
-
 

@@ -25,37 +25,6 @@
 //
 /*
 # <<BEGIN-copyright>>
-# Copyright (c) 2010, Lawrence Livermore National Security, LLC. 
-# Produced at the Lawrence Livermore National Laboratory 
-# Written by Bret R. Beck, beck6@llnl.gov. 
-# CODE-461393
-# All rights reserved. 
-#  
-# This file is part of GIDI. For details, see nuclear.llnl.gov. 
-# Please also read the "Additional BSD Notice" at nuclear.llnl.gov. 
-# 
-# Redistribution and use in source and binary forms, with or without modification, 
-# are permitted provided that the following conditions are met: 
-#
-#      1) Redistributions of source code must retain the above copyright notice, 
-#         this list of conditions and the disclaimer below.
-#      2) Redistributions in binary form must reproduce the above copyright notice, 
-#         this list of conditions and the disclaimer (as noted below) in the 
-#          documentation and/or other materials provided with the distribution.
-#      3) Neither the name of the LLNS/LLNL nor the names of its contributors may be 
-#         used to endorse or promote products derived from this software without 
-#         specific prior written permission. 
-#
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY 
-# EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT 
-# SHALL LAWRENCE LIVERMORE NATIONAL SECURITY, LLC, THE U.S. DEPARTMENT OF ENERGY OR 
-# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
-# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS 
-# OR SERVICES;  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED 
-# AND ON  ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
-# EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 # <<END-copyright>>
 */
 #ifndef G4GIDI_target_h_included
@@ -64,10 +33,13 @@
 #include <vector>
 #include <string>
 
-#include <tpia_target.h>
+//using namespace std;
+
+#include <statusMessageReporting.h>
+
+#include <MCGIDI.h>
 
 typedef struct crossSectionData_s crossSectionData;
-typedef struct channelID_s channelID;
 typedef struct G4GIDI_Product_s G4GIDI_Product;
 
 struct crossSectionData_s {
@@ -75,11 +47,8 @@ struct crossSectionData_s {
     std::vector<double> crossSection;
 };
 
-struct channelID_s {
-    std::string ID;
-};
+#define channelID std::string
 
-//typedef struct G4GIDI_Product_s {
 struct G4GIDI_Product_s {
     int A, Z, m;
     double kineticEnergy, px, py, pz;
@@ -95,13 +64,14 @@ class G4GIDI_target {
 
     public:
         GIDI::statusMessageReporting smr;
+        int projectilesPOPID;
         std::string name;
         std::string sourceFilename;
         double mass;
-        GIDI::tpia_target *target;
+        GIDI::MCGIDI_target *target;
 
-        G4GIDI_target( const char *fileName );       
-        G4GIDI_target( std::string &fileName );       
+        G4GIDI_target( const char *fileName );
+        G4GIDI_target( std::string const &fileName );       
         ~G4GIDI_target( );
 
         std::string *getName( void );
@@ -117,9 +87,9 @@ class G4GIDI_target {
 
         int getNumberOfChannels( void );
         int getNumberOfProductionChannels( void );
+        channelID getChannelsID( int channelIndex );
         std::vector<channelID> *getChannelIDs( void );
         std::vector<channelID> *getProductionChannelIDs( void );
-        std::vector<channelID> *getChannelIDs2( GIDI::tpia_channel **channels, int n );
 
         std::vector<double> *getEnergyGridAtTIndex( int index );
 
@@ -136,6 +106,9 @@ class G4GIDI_target {
         std::vector<G4GIDI_Product> *getFissionFinalState( double e_in, double temperature, double (*rng)( void * ), void *rngState );
         std::vector<G4GIDI_Product> *getOthersFinalState( double e_in, double temperature, double (*rng)( void * ), void *rngState );
         std::vector<G4GIDI_Product> *getFinalState( int nIndices, int *indices, double e_in, double temperature, double (*rng)( void * ), void *rngState );
+
+        double getReactionsThreshold( int index );
+        double getReactionsDomain( int index, double *EMin, double *EMax );
 };
 
 #endif      // End of G4GIDI_target_h_included

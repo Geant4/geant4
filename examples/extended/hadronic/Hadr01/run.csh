@@ -1,6 +1,6 @@
 #/bin/csh
 
-setenv HISTODIR 20101011
+setenv HISTODIR 20140131
 mkdir -p $HISTODIR
 
 setenv PHYSLIST QGSP_BERT_EMV

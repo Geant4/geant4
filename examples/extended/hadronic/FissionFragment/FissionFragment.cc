@@ -96,6 +96,12 @@ int main(int argc, char* argv[])
     
     char makeFissionFragments[] = "G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS";
     char useWendtFission[] = "G4NEUTRON_HP_USE_WENDT_FISSION_MODEL";
+
+    char Force[] = "G4FORCENUMBEROFTHREADS";
+    if(getenv(Force) != NULL) {
+       char doNotForce[]="G4FORCENUMBEROFTHREADS=1";
+       putenv(doNotForce);
+    }
     
     // Indicate the example is starting
     G4cout << "####   Starting: " << argv[0] << "    ####" << G4endl;

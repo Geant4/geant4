@@ -1,0 +1,98 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_ortho
+#define tools_sg_ortho
+
+#include "base_camera"
+
+namespace tools {
+namespace sg {
+
+class ortho : public base_camera {
+  TOOLS_NODE(ortho,tools::sg::ortho,base_camera)
+public:
+  virtual float near_height() const {return height.value();}
+  virtual void zoom(float a_fac) {
+    //for exa :
+    //  a_fac = 0.99f is a zoom in
+    //  a_fac = 1.01f is a zoom out
+    height.value(height.value()*a_fac);
+  }
+  virtual camera_type type() const {return camera_ortho;}
+public:
+  sf<float> height;
+public:
+  virtual const std::vector<field_desc>& node_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::ortho)
+    static std::vector<field_desc> s_v;
+    if(s_v.empty()) {
+      s_v = parent::node_fields();
+      TOOLS_ADD_FIELD_DESC(height)
+    }
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&height);
+  }
+public:
+  ortho()
+  :parent()
+  ,height(2)
+  {
+#ifdef TOOLS_MEM
+    tools::mem::increment(s_class().c_str());
+#endif
+    add_fields();
+  }
+  virtual ~ortho(){
+#ifdef TOOLS_MEM
+    tools::mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  ortho(const ortho& a_from)
+  :parent(a_from)
+  ,height(a_from.height)
+  {
+#ifdef TOOLS_MEM
+    tools::mem::increment(s_class().c_str());
+#endif
+    add_fields();
+  }
+  ortho& operator=(const ortho& a_from){
+    parent::operator=(a_from);
+    height = a_from.height;
+    return *this;
+  }
+public: //operators:
+  bool operator==(const ortho& a_from) const{
+    if(!parent::operator==(a_from)) return false;
+    if(height!=a_from.height) return false;
+    return true;
+  }
+  bool operator!=(const ortho& a_from) const {
+    return !operator==(a_from);
+  }
+public:
+  void dump(std::ostream& a_out) {
+    parent::dump(a_out);
+    a_out << " height " << height.value() << std::endl;
+  }
+protected:
+  virtual void get_lrbt(unsigned int a_ww,unsigned int a_wh,
+                        float& a_l,float& a_r,float& a_b,float& a_t) {
+    float aspect = float(a_ww)/float(a_wh);
+    //landscape : float aspect = float(a_action.wh())/float(a_action.ww());
+    float hh = height.value()*0.5f;
+    a_l = -aspect*hh;
+    a_r = aspect*hh;
+    a_b = -hh;
+    a_t = hh;
+  }
+};
+
+}}
+
+#endif

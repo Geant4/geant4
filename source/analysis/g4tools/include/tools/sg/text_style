@@ -1,0 +1,249 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_text_style
+#define tools_sg_text_style
+
+#include "../lina/vec3f"
+
+#include "sf_vec"
+#include "sf_string"
+#include "sf_enum"
+#include "node"
+#include "enums"
+#include "style_parser"
+
+namespace tools {
+namespace sg {
+
+class text_style : public node {
+  TOOLS_NODE(text_style,tools::sg::text_style,node)
+public:
+  sf<bool> visible;
+  sf_vec<colorf,float> color;
+  sf_vec<colorf,float> back_color;
+  sf<float> back_shadow;
+
+  sf_string modeling; 
+  sf_string font;
+  sf<float> font_size;
+  sf_string encoding; 
+  sf<bool> smoothing;
+  sf<bool> hinting;
+  sf_enum<sg::hjust> hjust;
+  sf_enum<sg::vjust> vjust;
+  sf<float> scale;
+  // For 3D text :
+  sf_vec<vec3f,float> x_orientation;
+  sf_vec<vec3f,float> y_orientation;
+  // For bitmap text :
+  sf<bool> rotated;
+
+  // for text_hershey :
+  sf<float> line_width;
+  sf<lpat> line_pattern;
+  sf<bool> enforced;
+  sf_vec<vec3f,float> translation;
+
+  // for text_freetype tessellation :
+  sf_enum<winding_type> front_face;
+public:
+  virtual const std::vector<field_desc>& node_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::text_style)
+    static std::vector<field_desc> s_v;
+    if(s_v.empty()) {
+      s_v = parent::node_fields();
+      TOOLS_ADD_FIELD_DESC(visible)
+      TOOLS_ADD_FIELD_DESC(color)
+
+      TOOLS_ADD_FIELD_DESC(modeling);
+      TOOLS_ADD_FIELD_DESC(font)
+      TOOLS_ADD_FIELD_DESC(font_size)
+      TOOLS_ADD_FIELD_DESC(encoding);
+      TOOLS_ADD_FIELD_DESC(smoothing)
+      TOOLS_ADD_FIELD_DESC(hinting)
+      TOOLS_ADD_FIELD_DESC(hjust)
+      TOOLS_ADD_FIELD_DESC(vjust)
+      TOOLS_ADD_FIELD_DESC(scale)
+      TOOLS_ADD_FIELD_DESC(x_orientation)
+      TOOLS_ADD_FIELD_DESC(y_orientation)
+      TOOLS_ADD_FIELD_DESC(rotated)
+
+      TOOLS_ADD_FIELD_DESC(line_width)
+      TOOLS_ADD_FIELD_DESC(line_pattern)
+      TOOLS_ADD_FIELD_DESC(enforced)
+      TOOLS_ADD_FIELD_DESC(translation)
+
+      TOOLS_ADD_FIELD_DESC(front_face)
+    }
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&visible);
+    add_field(&color);
+
+    add_field(&modeling); 
+    add_field(&font);
+    add_field(&font_size);
+    add_field(&encoding); 
+    add_field(&smoothing);
+    add_field(&hinting);
+    add_field(&hjust);
+    add_field(&vjust);
+    add_field(&scale);
+    add_field(&x_orientation);
+    add_field(&y_orientation);
+    add_field(&rotated);
+
+    add_field(&line_width);
+    add_field(&line_pattern);
+    add_field(&enforced);
+    add_field(&translation);
+
+    add_field(&front_face);
+  }
+public:
+  text_style()
+  :parent()
+  ,visible(true)
+  ,color(colorf::black())
+  ,back_color(colorf::white())
+  ,back_shadow(0)
+  ,modeling()
+  ,font(font_hershey())
+  ,font_size(10)
+  ,encoding(encoding_none())
+  ,smoothing(false)
+  ,hinting(false)
+  ,hjust(left)
+  ,vjust(bottom)
+  ,scale(1)
+  ,x_orientation(vec3f(1,0,0))
+  ,y_orientation(vec3f(0,1,0))
+  ,rotated(false)
+  ,line_width(1)
+  ,line_pattern(line_solid)
+  ,enforced(false)
+  ,translation(vec3f(0,0,0))
+  ,front_face(winding_ccw)
+  {
+    add_fields();
+  }
+  virtual ~text_style(){}
+public:
+  text_style(const text_style& a_from)
+  :parent(a_from),visible(a_from.visible)
+  ,color(a_from.color)
+  ,back_color(a_from.back_color)
+  ,back_shadow(a_from.back_shadow)
+  ,modeling(a_from.modeling)
+  ,font(a_from.font)
+  ,font_size(a_from.font_size)
+  ,encoding(a_from.encoding)
+  ,smoothing(a_from.smoothing)
+  ,hinting(a_from.hinting)
+  ,hjust(a_from.hjust)
+  ,vjust(a_from.vjust)
+  ,scale(a_from.scale)
+  ,x_orientation(a_from.x_orientation)
+  ,y_orientation(a_from.y_orientation)
+  ,rotated(a_from.rotated)
+  ,line_width(a_from.line_width)
+  ,line_pattern(a_from.line_pattern)
+  ,enforced(a_from.enforced)
+  ,translation(a_from.translation)
+  ,front_face(a_from.front_face)
+  {
+    add_fields();
+  }
+  text_style& operator=(const text_style& a_from){
+    parent::operator=(a_from);
+    visible = a_from.visible;
+    color = a_from.color;
+    back_color = a_from.back_color;
+    back_shadow = a_from.back_shadow;
+    modeling = a_from.modeling;
+    font = a_from.font;
+    font_size = a_from.font_size;
+    encoding = a_from.encoding;
+    smoothing = a_from.smoothing;
+    hinting = a_from.hinting;
+    hjust = a_from.hjust;
+    vjust = a_from.vjust;
+    scale = a_from.scale;
+    x_orientation = a_from.x_orientation;
+    y_orientation = a_from.y_orientation;
+    rotated = a_from.rotated;
+    line_width = a_from.line_width;
+    line_pattern = a_from.line_pattern;
+    enforced = a_from.enforced;
+    translation = a_from.translation;
+    front_face = a_from.front_face;
+    return *this;
+  }
+public:
+  bool from_string(std::ostream& a_out,const cmaps_t& a_cmaps,
+                          const std::string& a_s){
+    style_parser sp;
+
+    sp.visible(visible.value());
+    sp.color(color.value());
+  //sp.transparency(transparency.value());
+    sp.back_color(back_color.value());
+  //sp.back_transparency(back_transparency.value());
+    sp.back_shadow(back_shadow.value());
+    sp.modeling(modeling.value());
+    sp.font(font.value());
+    sp.font_size(font_size.value());
+    sp.encoding(encoding.value());
+    sp.smoothing(smoothing.value());
+    sp.hinting(hinting.value());
+    sp.scale(scale.value());
+    //sp.angle(angle.value());
+    //sp.x_orientation(x_orientation.value());
+    //sp.y_orientation(y_orientation.value());
+    //sp.rotated(rotated.value());
+    sp.line_width(line_width.value());
+    sp.line_pattern(line_pattern.value());
+    sp.enforced(enforced.value());
+    sp.translation(translation.value());
+    sp.front_face(front_face.value());
+
+    if(!sp.parse(a_out,a_cmaps,a_s)) {
+      a_out << "tools::sg::text_style::from_string :"
+            << " parse failed."
+            << std::endl;
+      return false;    
+    }
+
+    visible.value(sp.visible());
+    color.value(sp.color());
+  //transparency.value(sp.transparency());
+    back_color.value(sp.back_color());
+  //back_transparency.value(sp.back_transparency());
+    back_shadow.value(sp.back_shadow());
+    modeling.value(sp.modeling());
+    font.value(sp.font());
+    font_size.value(sp.font_size());
+    encoding.value(sp.encoding());
+    smoothing.value(sp.smoothing());
+    hinting.value(sp.hinting());
+    scale.value(sp.scale());
+    //angle.value(sp.angle());
+    //x_orientation.value(sp.x_orientation());
+    //y_orientation.value(sp.y_orientation());
+    //rotated.value(sp.rotated());
+    line_width.value(sp.line_width());
+    line_pattern.value(sp.line_pattern());
+    enforced.value(sp.enforced());
+    translation.value(sp.translation());
+    front_face = sp.front_face();
+
+    return true;
+  }
+};
+
+}}
+
+#endif

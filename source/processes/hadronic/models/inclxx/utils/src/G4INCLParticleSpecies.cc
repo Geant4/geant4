@@ -53,58 +53,56 @@ namespace G4INCL {
 
   ParticleSpecies::ParticleSpecies(std::string const &pS) {
     // Normalise the string to lower case
-    std::string pSNorm = pS;
-    std::transform(pSNorm.begin(), pSNorm.end(), pSNorm.begin(), ::tolower);
-    if(pSNorm=="p" || pSNorm=="proton") {
+    if(pS=="p" || pS=="proton") {
       theA = 1;
       theZ = 1;
       theType = G4INCL::Proton;
-    } else if(pSNorm=="n" || pSNorm=="neutron") {
+    } else if(pS=="n" || pS=="neutron") {
       theA = 1;
       theZ = 0;
       theType = G4INCL::Neutron;
-    } else if(pSNorm=="delta++" || pSNorm=="deltaplusplus") {
+    } else if(pS=="delta++" || pS=="deltaplusplus") {
       theA = 1;
       theZ = 2;
       theType = G4INCL::DeltaPlusPlus;
-    } else if(pSNorm=="delta+" || pSNorm=="deltaplus") {
+    } else if(pS=="delta+" || pS=="deltaplus") {
       theA = 1;
       theZ = 1;
       theType = G4INCL::DeltaPlus;
-    } else if(pSNorm=="delta0" || pSNorm=="deltazero") {
+    } else if(pS=="delta0" || pS=="deltazero") {
       theA = 1;
       theZ = 0;
       theType = G4INCL::DeltaZero;
-    } else if(pSNorm=="delta-" || pSNorm=="deltaminus") {
+    } else if(pS=="delta-" || pS=="deltaminus") {
       theA = 1;
       theZ = -1;
       theType = G4INCL::DeltaMinus;
-    } else if(pSNorm=="pi+" || pSNorm=="pion+" || pSNorm=="piplus" || pSNorm=="pionplus") {
+    } else if(pS=="pi+" || pS=="pion+" || pS=="piplus" || pS=="pionplus") {
       theA = 0;
       theZ = 1;
       theType = G4INCL::PiPlus;
-    } else if(pSNorm=="pi0" || pSNorm=="pion0" || pSNorm=="pizero" || pSNorm=="pionzero") {
+    } else if(pS=="pi0" || pS=="pion0" || pS=="pizero" || pS=="pionzero") {
       theA = 0;
       theZ = 0;
       theType = G4INCL::PiZero;
-    } else if(pSNorm=="pi-" || pSNorm=="pion-" || pSNorm=="piminus" || pSNorm=="pionminus") {
+    } else if(pS=="pi-" || pS=="pion-" || pS=="piminus" || pS=="pionminus") {
       theA = 0;
       theZ = -1;
       theType = G4INCL::PiMinus;
-    } else if(pSNorm=="d" || pSNorm=="deuteron") {
+    } else if(pS=="d" || pS=="deuteron") {
       theA = 2;
       theZ = 1;
       theType = G4INCL::Composite;
-    } else if(pSNorm=="t" || pSNorm=="triton") {
+    } else if(pS=="t" || pS=="triton") {
       theA = 3;
       theZ = 1;
       theType = G4INCL::Composite;
-    } else if(pSNorm=="a" || pSNorm=="alpha") {
+    } else if(pS=="a" || pS=="alpha") {
       theA = 4;
       theZ = 2;
       theType = G4INCL::Composite;
     } else
-      parseNuclide(pSNorm);
+      parseNuclide(pS);
   }
 
   ParticleSpecies::ParticleSpecies(ParticleType const t) :
@@ -124,7 +122,7 @@ namespace G4INCL {
 
     // Allowed characters
     const std::string separators("-_");
-    std::string allowed("0123456789abcdefghijklmnopqrstuvwxyz");
+    std::string allowed("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
     allowed += separators;
 
     // There must be at least one character

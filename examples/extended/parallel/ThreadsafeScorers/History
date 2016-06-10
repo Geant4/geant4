@@ -1,0 +1,47 @@
+$Id: History 93110 2015-11-05 08:37:42Z jmadsen $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                ThreadsafeScorers History file
+                ---------------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+17/11/15 J. Madsen
+- Removed preprocessor checks for C++11
+- Removed _HAS_ATOMICS_ preprocessor definition/conditions
+- Changed G4atomic to only be defined if G4MULTITHREADED,
+  otherwise, G4atomic<_Tp> is aliased to _Tp 
+- Included *.in files in macros to be copied to build directory
+  
+05/11/15 J. Madsen
+- Prefixed classes with "TS" for "Thread-safe"
+- Renamed all data members with f + uppercase
+- Redeclared all virtual functions
+- Removed empty messenger classes
+- Removed custom separators with G4 separators
+- Added license and description for all classes
+- Cleaned up code
+- Removed deprecated folder in atomics/
+- Moved remaining classes in atomics/ to include/
+- Renamed project "ThreadsafeScorers"
+- Added .README.txt
+
+09/10/15 J. Madsen
+- Updated problem following Geant4's full commitment to using
+  C++11.
+- Removed SteppingAction
+- Simplified atomic class and renamed to G4atomic
+- Moved files pertaining to pre-C++11 to deprecated folder
+- Removed "Atom" prefix from all file names
+- Created G4TAtomicHitsMap and G4TAtomicHitsCollection
+
+29/01/15 J. Madsen
+- Created.

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.icc 79342 2014-02-24 11:42:42Z gcosmo $
+// $Id: G4ParticleDefinition.icc 92918 2015-09-21 15:04:01Z gcosmo $
 //
 
 inline 
@@ -44,12 +44,23 @@ inline
 
 inline
  G4double G4ParticleDefinition::GetPDGLifeTime() const
-{
-  if(IsGeneralIon())
-  { return GetIonLifeTime(); }
-  else
-  { return thePDGLifeTime; }
-}
+{ return thePDGLifeTime; }
+
+inline 
+ G4double G4ParticleDefinition::GetIonLifeTime() const
+{ return thePDGLifeTime; }
+
+//-- No longer needed to access to G4IonTable.
+//-- Method GetIonLifeTime() itself is kept for compatibility
+//-- but moved to icc file as an inlined method.
+//inline
+// G4double G4ParticleDefinition::GetPDGLifeTime() const
+//{
+//  if(IsGeneralIon())
+//  { return GetIonLifeTime(); }
+//  else
+//  { return thePDGLifeTime; }
+//}
 
 inline 
  G4ParticleTable* G4ParticleDefinition::GetParticleTable() const

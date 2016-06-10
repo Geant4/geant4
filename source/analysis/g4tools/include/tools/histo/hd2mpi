@@ -1,0 +1,208 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_histo_hd2mpi
+#define tools_histo_hd2mpi
+
+// code to MPI_Pack, MPI_Unpack histos without having to include mpi.h.
+
+#include "../impi"
+
+#include "histo_data"
+
+#include "../forit"
+
+namespace tools {
+namespace histo {
+
+/////////////////////////////////////////////////////////////////////////////
+/// hist_data to mpi ////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+inline bool axis_dui_pack(impi& a_mpi,const axis<double,unsigned int>& a_axis) {
+  //typedef double TC;
+  //typedef unsigned int TO;
+  //typedef unsigned int bn_t;
+  if(!a_mpi.pack(a_axis.m_offset)) return false; //TO
+  if(!a_mpi.pack(a_axis.m_number_of_bins)) return false; //bn_t
+  if(!a_mpi.pack(a_axis.m_minimum_value)) return false; //TC
+  if(!a_mpi.pack(a_axis.m_maximum_value)) return false; //TC
+  if(!a_mpi.bpack(a_axis.m_fixed)) return false;
+  if(!a_mpi.pack(a_axis.m_bin_width)) return false; //TC
+  if(!a_mpi.vpack(a_axis.m_edges)) return false; //TC
+  return true;
+}
+
+inline bool histo_data_duiuid_pack(impi& a_mpi,const histo_data<double,unsigned int,unsigned int,double>& a_hd) {
+  //typedef double TC;
+  //typedef unsigned int TO;
+  //typedef unsigned int TN;
+  //typedef double TW;
+  //typedef unsigned int dim_t;
+  typedef unsigned int num_t;
+
+  if(!a_mpi.spack(a_hd.m_title)) return false;
+  if(!a_mpi.pack(a_hd.m_dimension)) return false; //dim_t
+  if(!a_mpi.pack(a_hd.m_bin_number)) return false; //TO
+  if(!a_mpi.vpack(a_hd.m_bin_entries)) return false; //TN
+  if(!a_mpi.vpack(a_hd.m_bin_Sw)) return false;  //TW
+  if(!a_mpi.vpack(a_hd.m_bin_Sw2)) return false; //TW
+
+ {for(unsigned int ibin=0;ibin<a_hd.m_bin_number;ibin++) {
+    if(!a_mpi.vpack(a_hd.m_bin_Sxw[ibin])) return false;
+  }}
+ {for(unsigned int ibin=0;ibin<a_hd.m_bin_number;ibin++) {
+    if(!a_mpi.vpack(a_hd.m_bin_Sx2w[ibin])) return false;
+  }}
+
+  // Axes :
+ {for(unsigned int iaxis=0;iaxis<a_hd.m_dimension;iaxis++) {
+    if(!axis_dui_pack(a_mpi,a_hd.m_axes[iaxis])) return false;
+  }}
+
+  // etc :
+  if(!a_mpi.vpack(a_hd.m_in_range_plane_Sxyw)) return false; //TC
+
+  // Annotations :
+ {if(!a_mpi.pack((num_t)a_hd.m_annotations.size())) return false; //num_t
+  tools_mforcit(std::string,std::string,a_hd.m_annotations,it) {
+    if(!a_mpi.spack((*it).first)) return false;
+    if(!a_mpi.spack((*it).second)) return false;
+  }}
+
+  // fast getters :
+  if(!a_mpi.pack(a_hd.m_all_entries)) return false; //TN
+  if(!a_mpi.pack(a_hd.m_in_range_entries)) return false; //TN
+  if(!a_mpi.pack(a_hd.m_in_range_Sw)) return false; //TW
+  if(!a_mpi.pack(a_hd.m_in_range_Sw2)) return false; //TW
+  if(!a_mpi.vpack(a_hd.m_in_range_Sxw)) return false; //TC
+  if(!a_mpi.vpack(a_hd.m_in_range_Sx2w)) return false; //TC
+
+  return true;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+/// mpi to hist_data ////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+inline bool axis_dui_unpack(impi& a_mpi,axis<double,unsigned int>& a_axis) {
+  //typedef double TC;
+  //typedef unsigned int TO;
+  //typedef unsigned int bn_t;
+
+  if(!a_mpi.unpack(a_axis.m_offset)) return false; //TO
+  if(!a_mpi.unpack(a_axis.m_number_of_bins)) return false; //bn_t
+  if(!a_mpi.unpack(a_axis.m_minimum_value)) return false; //TC
+  if(!a_mpi.unpack(a_axis.m_maximum_value)) return false; //TC
+  if(!a_mpi.bunpack(a_axis.m_fixed)) return false;
+  if(!a_mpi.unpack(a_axis.m_bin_width)) return false; //TC
+  if(!a_mpi.vunpack(a_axis.m_edges)) return false; //TC
+
+  return true;
+}
+
+inline bool histo_data_duiuid_unpack(impi& a_mpi,histo_data<double,unsigned int,unsigned int,double>& a_hd) {
+  //typedef double TC;
+  //typedef unsigned int TO;
+  //typedef unsigned int TN;
+  //typedef double TW;
+  //typedef unsigned int dim_t;
+  typedef unsigned int num_t;
+
+  if(!a_mpi.sunpack(a_hd.m_title)) return false;
+  if(!a_mpi.unpack(a_hd.m_dimension)) return false; //dim_t
+  if(!a_mpi.unpack(a_hd.m_bin_number)) return false; //TO
+  if(!a_mpi.vunpack(a_hd.m_bin_entries)) return false; //TN
+  if(!a_mpi.vunpack(a_hd.m_bin_Sw)) return false; //TW
+  if(!a_mpi.vunpack(a_hd.m_bin_Sw2)) return false; //TW
+
+ {a_hd.m_bin_Sxw.resize(a_hd.m_bin_number);
+  for(unsigned int ibin=0;ibin<a_hd.m_bin_number;ibin++) {
+    if(!a_mpi.vunpack(a_hd.m_bin_Sxw[ibin])) return false;
+  }}
+ {a_hd.m_bin_Sx2w.resize(a_hd.m_bin_number);
+  for(unsigned int ibin=0;ibin<a_hd.m_bin_number;ibin++) {
+    if(!a_mpi.vunpack(a_hd.m_bin_Sx2w[ibin])) return false;
+  }}
+
+  // Axes :
+ {a_hd.m_axes.resize(a_hd.m_dimension);
+  for(unsigned int iaxis=0;iaxis<a_hd.m_dimension;iaxis++) {
+    if(!axis_dui_unpack(a_mpi,a_hd.m_axes[iaxis])) return false;
+  }}
+
+  // etc :
+  if(!a_mpi.vunpack(a_hd.m_in_range_plane_Sxyw)) return false; //TC
+
+  // Annotations :
+ {a_hd.m_annotations.clear();
+  num_t num;
+  if(!a_mpi.unpack(num)) return false;
+  for(unsigned int index=0;index<num;index++) {
+    std::string k,v;
+    if(!a_mpi.sunpack(k)) return false;
+    if(!a_mpi.sunpack(v)) return false;
+    a_hd.m_annotations[k] = v;
+  }}
+
+  // fast getters :
+  if(!a_mpi.unpack(a_hd.m_all_entries)) return false; //TN
+  if(!a_mpi.unpack(a_hd.m_in_range_entries)) return false; //TN
+  if(!a_mpi.unpack(a_hd.m_in_range_Sw)) return false; //TW
+  if(!a_mpi.unpack(a_hd.m_in_range_Sw2)) return false; //TW
+  if(!a_mpi.vunpack(a_hd.m_in_range_Sxw)) return false; //TC
+  if(!a_mpi.vunpack(a_hd.m_in_range_Sx2w)) return false; //TC
+
+  return true;
+}
+
+}}
+
+#include "profile_data"
+
+namespace tools {
+namespace histo {
+
+/////////////////////////////////////////////////////////////////////////////
+/// profile_data to C struct ////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+inline bool profile_data_duiuidd_pack(impi& a_mpi,const profile_data<double,unsigned int,unsigned int,double,double>& a_pd) {
+
+  if(!histo_data_duiuid_pack(a_mpi,a_pd)) return false;
+
+  //typedef double TV;
+
+  if(!a_mpi.bpack(a_pd.m_is_profile)) return false;
+  if(!a_mpi.vpack(a_pd.m_bin_Svw)) return false; //TV
+  if(!a_mpi.vpack(a_pd.m_bin_Sv2w)) return false; //TV
+  if(!a_mpi.bpack(a_pd.m_cut_v)) return false;
+  if(!a_mpi.pack(a_pd.m_min_v)) return false; //TV
+  if(!a_mpi.pack(a_pd.m_max_v)) return false; //TV
+
+  return true;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+/// mpi to profile_data /////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+inline bool profile_data_duiuidd_unpack(impi& a_mpi,profile_data<double,unsigned int,unsigned int,double,double>& a_pd) {
+
+  if(!histo_data_duiuid_unpack(a_mpi,a_pd)) return false;
+
+  //typedef double TV;
+
+  if(!a_mpi.bunpack(a_pd.m_is_profile)) return false;
+  if(!a_mpi.vunpack(a_pd.m_bin_Svw)) return false; //TV
+  if(!a_mpi.vunpack(a_pd.m_bin_Sv2w)) return false; //TV
+  if(!a_mpi.bunpack(a_pd.m_cut_v)) return false;
+  if(!a_mpi.unpack(a_pd.m_min_v)) return false; //TV
+  if(!a_mpi.unpack(a_pd.m_max_v)) return false; //TV
+
+  return true;
+}
+
+}}
+
+#endif

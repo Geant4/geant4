@@ -231,7 +231,7 @@ inline G4float G4Expf(G4float initial_x)
 {
     G4float x = initial_x;
 
-    G4float z = G4ExpConsts::fpfloor( G4ExpConsts::LOG2EF * x +0.5f ); /* floor() truncates toward -infinity. */
+    G4float z = G4ExpConsts::fpfloor( G4ExpConsts::LOG2EF * x +0.5f ); /* std::floor() truncates toward -infinity. */
 
     x -= z * G4ExpConsts::C1F;
     x -= z * G4ExpConsts::C2F;

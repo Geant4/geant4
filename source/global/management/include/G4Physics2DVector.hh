@@ -64,7 +64,7 @@ class G4Physics2DVector
 public:  // with description
 
   G4Physics2DVector();
-  G4Physics2DVector(size_t nx, size_t ny);
+  explicit G4Physics2DVector(size_t nx, size_t ny);
   // constructors
 
   G4Physics2DVector(const G4Physics2DVector&);

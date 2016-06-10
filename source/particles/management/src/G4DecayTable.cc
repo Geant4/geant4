@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayTable.cc 69015 2013-04-15 09:46:48Z gcosmo $
+// $Id: G4DecayTable.cc 92057 2015-08-14 13:34:55Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -78,24 +78,26 @@ void G4DecayTable::Insert( G4VDecayChannel * aChannel){
   }
 }
 
-G4VDecayChannel *G4DecayTable::SelectADecayChannel()
+G4VDecayChannel *G4DecayTable::SelectADecayChannel(G4double parentMass)
 {
   // check if contents exist
   if (channels->size()<1) return 0;
 
-  while (1) {
+  if(parentMass<0.) parentMass=parent->GetPDGMass(); 
+  const size_t MAX_LOOP = 10000;
+  for (size_t loop_counter=0; loop_counter <MAX_LOOP; ++loop_counter){
     G4double sumBR = 0.0;
     G4double r= G4UniformRand();
     // select decay channel
     G4VDecayChannelVector::iterator i;
     for (i = channels->begin(); i!= channels->end(); ++i) {
       sumBR += (*i)->GetBR();
-      if (r < sumBR) {
-	return (*i);
-      }
+      if ( !((*i)->IsOKWithParentMass(parentMass)) ) continue;
+      if (r < sumBR) return (*i);
     }
   }
-  return 0;
+  G4VDecayChannelVector::iterator i = channels->begin();
+  return (*i);
 }
 
 void G4DecayTable::DumpInfo() const

@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Hadrontherapy advanced example for Geant4
+// See more at: https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamplesHadrontherapy
 
 #include "HadrontherapyElectricTabulatedField3D.hh"
 #include "G4SystemOfUnits.hh"
@@ -136,8 +138,6 @@ HadrontherapyElectricTabulatedField3D::HadrontherapyElectricTabulatedField3D( co
 void HadrontherapyElectricTabulatedField3D::GetFieldValue(const G4double Epoint[4],
 				      G4double *Efield ) const
 {
-  //G4cout<<"sono dentro getfieldvalue (elctric)"<<G4endl;
-
   G4double x1 = Epoint[0] + feXoffset;
   G4double y1 = Epoint[1] + feYoffset;
   G4double z1 = Epoint[2] + feZoffset;

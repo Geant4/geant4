@@ -1,9 +1,9 @@
-# $Id: GNUmakefile 66241 2012-12-13 18:34:42Z gunter $
+# $Id: GNUmakefile 94302 2015-11-11 12:58:04Z gcosmo $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
-#### name := DirectAccess
+##name := DirectAccess
 name := TestEm0
 G4TARGET := $(name)
 

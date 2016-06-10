@@ -1,0 +1,159 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_holder
+#define tools_sg_holder
+
+// class to manage an object.
+// Only one holder owns the object. In case
+// of holder copy(), the new holder receives a null object.
+
+#include "node"
+#include "sf_string"
+
+namespace tools {
+namespace sg {
+
+template <class T>
+class holder : public node {
+  typedef node parent;
+public:
+  //WARNING : we do not put the T class name in the name of this class.
+  //          We put it in the class_name field.
+  //          We do that because of the bsg file format in order to be able
+  //          to read back the object without having the T class around.
+  TOOLS_T_SCLASS(T,tools::sg::holder)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast< holder<T> >(this,a_class)) {return p;}
+    return parent::cast(a_class);
+  }
+  virtual node* copy() const {return new holder(*this);}
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  sf_string class_name;
+public:
+  virtual const std::vector<field_desc>& node_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::holder)
+    static std::vector<field_desc> s_v;
+    if(s_v.empty()) {
+      s_v = parent::node_fields();
+      TOOLS_ADD_FIELD_DESC(class_name)
+    }
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&class_name);
+  }
+public:  
+  holder(T* a_obj = 0,const std::string& a_name = "")
+  :parent()
+  ,class_name(T::s_class())
+  ,m_obj(a_obj) //it takes a_obj ownership.
+  ,m_name(a_name)
+  {
+    add_fields();
+  }
+
+  virtual ~holder(){delete m_obj;}
+public:
+  //any copy of a holder does NOT own any object (and we empty the name).
+  holder(const holder& a_from)
+  :parent(a_from)
+  ,class_name(std::string())
+  ,m_obj(0)
+  ,m_name()
+  {
+    add_fields();
+  }
+  holder& operator=(const holder& a_from){
+    parent::operator=(a_from);
+    class_name.value().clear();
+    m_obj = 0;
+    m_name.clear();
+    return *this;
+  }
+public:  
+  const T* object() const {return m_obj;}
+  T* object() {return m_obj;}
+  const std::string& name() const {return m_name;}
+protected:
+  T* m_obj;
+  std::string m_name;
+};
+
+
+template <class T>
+inline holder<T>* cast_holder(node& a_node) {
+  typedef holder<T> h_t;
+  h_t* _h = (h_t*)a_node.cast(h_t::s_class());
+  if(!_h) return 0;
+  return (_h->class_name.value()==T::s_class()?_h:0);
+}
+
+template <class T>
+inline void remove_holders(std::vector<node*>& a_vec){
+  typedef holder<T> h_t;
+
+  std::vector<node*>::iterator it;
+  for(it=a_vec.begin();it!=a_vec.end();) {
+    if(h_t* h = cast_holder<T>(*(*it))){
+      it = a_vec.erase(it);
+      delete h;                          
+      continue;
+    }
+
+    ++it;
+  }
+}
+
+template <class T>
+inline void remove_holders(std::vector<node*>& a_vec,const std::string& a_name){
+  typedef holder<T> h_t;
+
+  std::vector<node*>::iterator it;
+  for(it=a_vec.begin();it!=a_vec.end();) {
+    if(h_t* h = cast_holder<T>(*(*it))){
+      if(h->name()==a_name) {
+        it = a_vec.erase(it);
+        delete h;                          
+        continue;
+      }
+    }
+
+    ++it;
+  }
+}
+
+template <class T>
+inline T* find_holder(std::vector<node*>& a_vec,const std::string& a_name) {
+  //return the first named found.
+
+  typedef holder<T> h_t;
+  std::vector<node*>::iterator it;
+  for(it=a_vec.begin();it!=a_vec.end();++it) {
+    if(h_t* h = cast_holder<T>(*(*it))){
+      if(h->name()==a_name) return h->object();
+    }
+  }
+  return 0;
+}
+
+template <class T>
+inline T* find_first_holder(std::vector<node*>& a_vec){
+  //return the first T found.
+
+  typedef holder<T> h_t;
+  std::vector<node*>::iterator it;
+  for(it=a_vec.begin();it!=a_vec.end();++it) {
+    if(h_t* h = cast_holder<T>(*(*it))) return h->object();
+  }
+
+
+  return 0;
+}
+
+}}
+
+#endif

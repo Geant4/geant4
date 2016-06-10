@@ -1,0 +1,28 @@
+//$Id$
+
+///\file "parameterisations/.README.txt"
+///\brief Examples parameterisations README page
+
+/*! \page Examples_parameterisations Category "parameterisations"
+
+ Examples in this directory demonstrate use of parameterisation libraries. 
+ Currently, two examples are provided:
+
+\link ExamplePar01 Par01 \endlink
+
+This example demonstrates the use of parameterisation facilities.
+It was moved in extended examples from novice/N05 with removal of
+novice examples. 
+
+\link ExamplePar02 Par02 \endlink
+
+This example shows how to do "track and energy smearing" in Geant4,
+in order to have a very fast simulation based on assumed detector
+resolutions.
+
+\link Examplegflash gflash \endlink
+
+This example demonstrates the use of the GFLASH parameterisation library.
+
+*/
+

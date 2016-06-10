@@ -215,14 +215,15 @@ void ExUCNDetectorConstruction::ConstructSDandField()
      fField = new G4UniformGravityField();
 
      G4RepleteEofM* equation = new G4RepleteEofM(fField);
+//     G4RepleteEofM* equation = new G4RepleteEofM(fField,12);
 //     G4EqGravityField* equation = new G4EqGravityField(fField);
 
      G4FieldManager* fieldManager
       = G4TransportationManager::GetTransportationManager()->GetFieldManager();
      fieldManager->SetDetectorField(fField);
 
-//     G4MagIntegratorStepper* stepper = new G4ClassicalRK4(equation,12);
      G4MagIntegratorStepper* stepper = new G4ClassicalRK4(equation,8);
+//     G4MagIntegratorStepper* stepper = new G4ClassicalRK4(equation,12);
 
      G4double minStep           = 0.01*mm;
 

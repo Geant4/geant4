@@ -19,6 +19,7 @@ inline double two_pi()  {return 6.2831853071795862320E0;}
 inline double half_pi() {return 1.5707963267948965580E0;}
 
 inline double deg2rad() {return pi()/180.0;}
+inline double rad2deg() {return 180.0/pi();}
 
 // for Lib/ExpFunc.
 inline bool in_domain_all(double){return true;}

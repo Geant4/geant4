@@ -32,14 +32,41 @@
 #include "ExExChEventAction.hh"
 #include "ExExChRunAction.hh"
 #include "G4GeneralParticleSource.hh"
+#include "G4ParticleTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExExChUserActionInitialization::ExExChUserActionInitialization() {
-    //AND->3June2014, temporary to take into account new GPS
-    //Create an instance of GPS in master so shared resources and messenger
-    //exist in master.
+    //GPS is special: it is thread-private,
+    //but underlying parameters and objects governing
+    //the distributions are shared among threads.
+    //We need to be sure that the defaults are set only once by master
     masterGPS = new G4GeneralParticleSource();
-    //AND<-3June2014
+    masterGPS->SetParticleDefinition(G4ParticleTable::
+                        GetParticleTable()->FindParticle("proton"));
+
+    // Position distribution
+    G4SPSPosDistribution *vPosDist =
+        masterGPS->GetCurrentSource()->GetPosDist();
+    vPosDist->SetPosDisType("Beam");
+    vPosDist->SetPosDisShape("Circle");
+    vPosDist->SetCentreCoords(G4ThreeVector(0.,0.,-1.05 * CLHEP::meter));
+    vPosDist->SetBeamSigmaInR(0.0 * CLHEP::mm);
+
+    // Angular distribution
+    G4SPSAngDistribution *vAngDist =
+        masterGPS->GetCurrentSource()->GetAngDist();
+    vAngDist->DefineAngRefAxes("angref1",G4ThreeVector(1.,0.,0));
+    vAngDist->DefineAngRefAxes("angref2",G4ThreeVector(0.,-1.,0));
+    vAngDist->SetAngDistType("beam2d");
+    vAngDist->SetBeamSigmaInAngX(13.36E-6 * CLHEP::rad);
+    vAngDist->SetBeamSigmaInAngY(11.25E-6 * CLHEP::rad);
+
+    // Energy distribution
+    G4SPSEneDistribution *vEneDist =
+        masterGPS->GetCurrentSource()->GetEneDist();
+    vEneDist->SetEnergyDisType("Mono");
+    vEneDist->SetMonoEnergy(400. * CLHEP::GeV);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

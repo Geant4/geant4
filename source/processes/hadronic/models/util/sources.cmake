@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 69574 2013-05-08 13:40:26Z gcosmo $
+# $Id: sources.cmake 90916 2015-06-11 13:56:26Z gcosmo $
 #
 # 20110727  M. Kelsey -- Add G4DecayKineticTracks
 #------------------------------------------------------------------------------
@@ -45,6 +45,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4had_mod_util
     HEADERS
+        G4Clebsch.hh
 	G4DecayKineticTracks.hh
         G4DecayStrongResonances.hh
         G4ExcitedString.hh
@@ -61,16 +62,19 @@ GEANT4_DEFINE_MODULE(NAME G4had_mod_util
 	G4HadPhaseSpaceNBodyAsai.hh
         G4KineticTrack.hh
         G4KineticTrackVector.hh
+        G4LegendrePolynomial.hh
         G4NuclearFermiDensity.hh
         G4NuclearShellModelDensity.hh
         G4Nucleon.hh
         G4Parton.hh
         G4PartonVector.hh
+        G4PolynomialPDF.hh
         G4SampleResonance.hh
 	G4VHadDecayAlgorithm.hh
 	G4VHadPhaseSpaceAlgorithm.hh
         G4WilsonRadius.hh
     SOURCES
+        G4Clebsch.cc
 	G4DecayKineticTracks.cc
         G4DecayStrongResonances.cc
         G4ExcitedString.cc
@@ -84,10 +88,12 @@ GEANT4_DEFINE_MODULE(NAME G4had_mod_util
 	G4HadPhaseSpaceNBodyAsai.cc
         G4KineticTrack.cc
         G4KineticTrackVector.cc
+        G4LegendrePolynomial.cc
         G4NuclearFermiDensity.cc
         G4NuclearShellModelDensity.cc
         G4Nucleon.cc
         G4Parton.cc
+        G4PolynomialPDF.cc
         G4SampleResonance.cc
 	G4VHadDecayAlgorithm.cc
 	G4VHadPhaseSpaceAlgorithm.cc

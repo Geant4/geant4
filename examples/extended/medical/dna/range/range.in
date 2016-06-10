@@ -1,0 +1,129 @@
+#
+/run/numberOfThreads 2
+#
+/range/det/setMat G4_WATER
+/range/det/setRadius 1 m
+#
+/range/det/setTrackingCut 10 eV
+#
+# Register physics constructor
+/range/phys/addPhysics  G4EmDNAPhysics
+#
+/run/initialize
+#
+/gun/particle e-
+#
+/gun/energy 12 eV
+/run/beamOn 1000
+#
+/gun/energy 14 eV
+/run/beamOn 1000
+#
+/gun/energy 16 eV
+/run/beamOn 1000
+#
+/gun/energy 18 eV
+/run/beamOn 1000
+#
+/gun/energy 20 eV
+/run/beamOn 1000
+#
+/gun/energy 25 eV
+/run/beamOn 1000
+#
+/gun/energy 30 eV
+/run/beamOn 1000
+#
+/gun/energy 35 eV
+/run/beamOn 1000
+#
+/gun/energy 40 eV
+/run/beamOn 1000
+#
+/gun/energy 45 eV
+/run/beamOn 1000
+#
+/gun/energy 50 eV
+/run/beamOn 1000
+#
+/gun/energy 60 eV
+/run/beamOn 1000
+#
+/gun/energy 70 eV
+/run/beamOn 1000
+#
+/gun/energy 80 eV
+/run/beamOn 1000
+#
+/gun/energy 90 eV
+/run/beamOn 1000
+#
+/gun/energy 100 eV
+/run/beamOn 1000
+#
+/gun/energy 150 eV
+/run/beamOn 1000
+#
+/gun/energy 200 eV
+/run/beamOn 1000
+#
+/gun/energy 250 eV
+/run/beamOn 1000
+#
+/gun/energy 300 eV
+/run/beamOn 1000
+#
+/gun/energy 350 eV
+/run/beamOn 1000
+#
+/gun/energy 400 eV
+/run/beamOn 1000
+#
+/gun/energy 450 eV
+/run/beamOn 1000
+#
+/gun/energy 500 eV
+/run/beamOn 1000
+#
+/gun/energy 600 eV
+/run/beamOn 1000
+#
+/gun/energy 700 eV
+/run/beamOn 1000
+#
+/gun/energy 800 eV
+/run/beamOn 1000
+#
+/gun/energy 900 eV
+/run/beamOn 1000
+#
+/gun/energy 1000 eV
+/run/beamOn 1000
+#
+/gun/energy 2000 eV
+/run/beamOn 1000
+#
+/gun/energy 3000 eV
+/run/beamOn 1000
+#
+/gun/energy 4000 eV
+/run/beamOn 1000
+#
+/gun/energy 5000 eV
+/run/beamOn 1000
+#
+/gun/energy 6000 eV
+/run/beamOn 1000
+#
+/gun/energy 7000 eV
+/run/beamOn 1000
+#
+/gun/energy 8000 eV
+/run/beamOn 1000
+#
+/gun/energy 9000 eV
+/run/beamOn 1000
+#
+/gun/energy 9999.9 eV
+/run/beamOn 1000
+

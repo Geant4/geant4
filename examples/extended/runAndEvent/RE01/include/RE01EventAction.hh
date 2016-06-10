@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/include/RE01EventAction.hh
 /// \brief Definition of the RE01EventAction class
 //
-// $Id: RE01EventAction.hh 75295 2013-10-30 09:32:52Z gcosmo $
+// $Id: RE01EventAction.hh 90679 2015-06-08 07:58:19Z gcosmo $
 //
 
 #ifndef RE01EventAction_h
@@ -50,7 +50,6 @@ public:
 private:
   G4int fTrackerCollID;
   G4int fCalorimeterCollID;
-  G4int fMuonCollID;
   
   void PrintPrimary(G4PrimaryParticle* pp,G4int ind);
 };

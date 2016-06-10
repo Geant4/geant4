@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChargeDecrease.cc 70171 2013-05-24 13:34:18Z gcosmo $
+// $Id: G4DNAChargeDecrease.cc 91992 2015-08-13 07:20:24Z gcosmo $
 
 #include "G4DNAChargeDecrease.hh"
 #include "G4SystemOfUnits.hh"
@@ -33,72 +33,72 @@
 using namespace std;
 
 G4DNAChargeDecrease::G4DNAChargeDecrease(const G4String& processName,
-  G4ProcessType type):G4VEmProcess (processName, type),
-    isInitialised(false)
+                                         G4ProcessType type) :
+    G4VEmProcess(processName, type), isInitialised(false)
 {
   SetProcessSubType(56);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 G4DNAChargeDecrease::~G4DNAChargeDecrease()
-{}
+{
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
- 
+
 G4bool G4DNAChargeDecrease::IsApplicable(const G4ParticleDefinition& p)
 {
 
   G4DNAGenericIonsManager *instance;
   instance = G4DNAGenericIonsManager::Instance();
 
-  return 
-    (
-       &p == G4Proton::ProtonDefinition()
-    || &p == instance->GetIon("alpha++")
-    || &p == instance->GetIon("alpha+")
-    );
+  return (&p == G4Proton::ProtonDefinition()
+      || &p == instance->GetIon("alpha++") || &p == instance->GetIon("alpha+"));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4DNAChargeDecrease::InitialiseProcess(const G4ParticleDefinition* p)
 {
-  if(!isInitialised) 
+  if(!isInitialised)
   {
     isInitialised = true;
     SetBuildTableFlag(false);
-    
+
     G4String name = p->GetParticleName();
 
-    if( name == "proton" )
+    if(name == "proton")
     {
-      if(!EmModel()) SetEmModel(new G4DNADingfelderChargeDecreaseModel);
-      EmModel()->SetLowEnergyLimit(100*eV);
-      EmModel()->SetHighEnergyLimit(100*MeV);
-
-      AddEmModel(1, EmModel());   
+      if(!EmModel())
+      {
+        SetEmModel(new G4DNADingfelderChargeDecreaseModel);
+        EmModel()->SetLowEnergyLimit(100 * eV);
+        EmModel()->SetHighEnergyLimit(100 * MeV);
+      }
+      AddEmModel(1, EmModel());
     }
-    
-    if( name == "alpha" || name == "alpha+" )
+
+    if(name == "alpha" || name == "alpha+")
     {
-      if(!EmModel()) SetEmModel(new G4DNADingfelderChargeDecreaseModel);
-      EmModel()->SetLowEnergyLimit(1*keV);
-      EmModel()->SetHighEnergyLimit(400*MeV);
-
-      AddEmModel(1, EmModel());   
+      if(!EmModel())
+      {
+        SetEmModel(new G4DNADingfelderChargeDecreaseModel);
+        EmModel()->SetLowEnergyLimit(1 * keV);
+        EmModel()->SetHighEnergyLimit(400 * MeV);
+      }
+      AddEmModel(1, EmModel());
     }
-    
-  } 
+
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4DNAChargeDecrease::PrintInfo()
 {
-  G4cout
-    << " Total cross sections computed from " << EmModel()->GetName() << " model"
-    << G4endl;
-}         
+  G4cout << " Total cross sections computed from " << EmModel()->GetName()
+         << " model" << G4endl;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

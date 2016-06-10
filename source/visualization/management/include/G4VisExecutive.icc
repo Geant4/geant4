@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.icc 75567 2013-11-04 11:35:11Z gcosmo $
+// $Id: G4VisExecutive.icc 91686 2015-07-31 09:40:08Z gcosmo $
 //
 // 
 // John Allison 24th January 1998.
@@ -102,11 +102,6 @@
 #include "G4VRML2.hh"
 #endif
 
-inline
-G4VisExecutive::G4VisExecutive (const G4String& verbosityString):
-  G4VisManager(verbosityString)	
-{}
-
 // The inline keyword prevents the compiler making an external
 // reference even though they cannot actually be inlined since they
 // are virtual functions.  This prevents a "multiple definition" error
@@ -115,10 +110,16 @@ G4VisExecutive::G4VisExecutive (const G4String& verbosityString):
 // necessary to #include "G4VisExecutive.hh" in more than one file
 // since after instantiation the object can be treated as a
 // G4VisManager.
+
+inline
+G4VisExecutive::G4VisExecutive (const G4String& verbosityString):
+G4VisManager(verbosityString)
+{}
+
 inline void
 G4VisExecutive::RegisterGraphicsSystems () {
 
-  // Graphics Systems not needing external packages or libraries...
+ // Graphics Systems not needing external packages or libraries...
   RegisterGraphicsSystem (new G4ASCIITree);
   RegisterGraphicsSystem (new G4DAWNFILE);
   RegisterGraphicsSystem (new G4HepRep);
@@ -127,161 +128,103 @@ G4VisExecutive::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4VRML1File);
   RegisterGraphicsSystem (new G4VRML2File);
   RegisterGraphicsSystem (new G4GMocrenFile);
-  // Graphics systems needing external packages or libraries...
+
+// Graphics systems needing external packages or libraries...
 
 #ifdef G4VIS_USE_DAWN
   RegisterGraphicsSystem (new G4FukuiRenderer);
 #endif
 
-// Register OGL graphics system with generic nicknames.
-// Note: Any graphics system can be used with any UI session except
-// OPENGLQT - this must have a UI Qt session unless in batch mode.  This
-// is handled in /vis/sceneHandler/create but a potential fallback is
-// defined here.
-#ifdef G4VIS_USE_OPENGL
-  G4VGraphicsSystem* ogl  = 0;
-  G4VGraphicsSystem* ogli = 0;
-  G4VGraphicsSystem* ogls = 0;
-  G4VGraphicsSystem* ogl_fallback = 0;
-  G4VGraphicsSystem* ogli_fallback = 0;
-  G4VGraphicsSystem* ogls_fallback = 0;
+#ifdef G4VIS_USE_VRML
+  RegisterGraphicsSystem (new G4VRML1);
+  RegisterGraphicsSystem (new G4VRML2);
+#endif
+
+// Register OGL family of drivers with their normal names,
+// super-abbreviated names and fallback names where approproiate.
+
 #ifdef G4VIS_USE_OPENGLQT
-  ogl  = new G4OpenGLStoredQt;
-  ogli = new G4OpenGLImmediateQt;
-  ogls = new G4OpenGLStoredQt;
-#if defined G4VIS_USE_OPENGLXM
-  ogl_fallback  = new G4OpenGLStoredXm;
-  ogli_fallback = new G4OpenGLImmediateXm;
-  ogls_fallback = new G4OpenGLStoredXm;
-#elif defined G4VIS_USE_OPENGLX
-  ogl_fallback  = new G4OpenGLStoredX;
-  ogli_fallback = new G4OpenGLImmediateX;
-  ogls_fallback = new G4OpenGLStoredX;
-#elif defined G4VIS_USE_OPENGLWIN32
-  ogl_fallback  = new G4OpenGLStoredWin32;
-  ogli_fallback = new G4OpenGLImmediateWin32;
-  ogls_fallback = new G4OpenGLStoredWin32;
-#endif
-#elif defined G4VIS_USE_OPENGLWT
-  ogl  = new G4OpenGLImmediateWt;
-  ogli = new G4OpenGLImmediateWt;
-  ogls = new G4OpenGLImmediateWt;
-#elif defined G4VIS_USE_OPENGLXM
-  ogl  = new G4OpenGLStoredXm;
-  ogli = new G4OpenGLImmediateXm;
-  ogls = new G4OpenGLStoredXm;
-#elif defined G4VIS_USE_OPENGLWIN32
-  ogl  = new G4OpenGLStoredWin32;
-  ogli = new G4OpenGLImmediateWin32;
-  ogls = new G4OpenGLStoredWin32;
-#elif defined G4VIS_USE_OPENGLX
-  ogl  = new G4OpenGLStoredX;
-  ogli = new G4OpenGLImmediateX;
-  ogls = new G4OpenGLStoredX;
-#endif
-  if (ogl) {
-    ogl->SetNickname("OGL");
-    RegisterGraphicsSystem (ogl);
-  }
-  if (ogli) {
-    ogli->SetNickname("OGLI");
-    RegisterGraphicsSystem (ogli);
-  }
-  if (ogls) {
-    ogls->SetNickname("OGLS");
-    RegisterGraphicsSystem (ogls);
-  }
-  if (ogl_fallback) {
-    ogl_fallback->SetNickname("OGL_FALLBACK");
-    RegisterGraphicsSystem (ogl_fallback);
-  }
-  if (ogli_fallback) {
-    ogli_fallback->SetNickname("OGLI_FALLBACK");
-    RegisterGraphicsSystem (ogli_fallback);
-  }
-  if (ogls_fallback) {
-    ogls_fallback->SetNickname("OGLS_FALLBACK");
-    RegisterGraphicsSystem (ogls_fallback);
-  }
-#endif
-
-#ifdef G4VIS_USE_OPENGLX
-  RegisterGraphicsSystem (new G4OpenGLImmediateX);
-  RegisterGraphicsSystem (new G4OpenGLStoredX);
-#endif
-
-#ifdef G4VIS_USE_OPENGLWIN32
-  RegisterGraphicsSystem (new G4OpenGLImmediateWin32);
-  RegisterGraphicsSystem (new G4OpenGLStoredWin32);
+  G4VGraphicsSystem* ogliqt = new G4OpenGLImmediateQt;
+  G4VGraphicsSystem* oglsqt = new G4OpenGLStoredQt;
+  RegisterGraphicsSystem (ogliqt);
+  RegisterGraphicsSystem (oglsqt);
+  ogliqt->AddNickname("OGLI");
+  oglsqt->AddNickname("OGL");
+  oglsqt->AddNickname("OGLS");
 #endif
 
 #ifdef G4VIS_USE_OPENGLXM
-  RegisterGraphicsSystem (new G4OpenGLImmediateXm);
-  RegisterGraphicsSystem (new G4OpenGLStoredXm);
+  G4VGraphicsSystem* oglixm = new G4OpenGLImmediateXm;
+  G4VGraphicsSystem* oglsxm = new G4OpenGLStoredXm;
+  RegisterGraphicsSystem (oglixm);
+  RegisterGraphicsSystem (oglsxm);
+#ifdef G4VIS_USE_OPENGLQT
+  oglixm->AddNickname("OGLIQt_FALLBACK");
+  oglsxm->AddNickname("OGLSQt_FALLBACK");
+#else
+  oglixm->AddNickname("OGLI");
+  oglsxm->AddNickname("OGL");
+  oglsxm->AddNickname("OGLS");
+#endif
 #endif
 
+#ifdef G4VIS_USE_OPENGLX
+  G4VGraphicsSystem* oglix = new G4OpenGLImmediateX;
+  G4VGraphicsSystem* oglsx = new G4OpenGLStoredX;
+  RegisterGraphicsSystem (oglix);
+  RegisterGraphicsSystem (oglsx);
 #ifdef G4VIS_USE_OPENGLQT
-  G4VGraphicsSystem* gsi = new G4OpenGLImmediateQt;
-  G4VGraphicsSystem* gss = new G4OpenGLStoredQt;
-  RegisterGraphicsSystem (gsi);
-  RegisterGraphicsSystem (gss);
-  G4VGraphicsSystem* gsi_fallback = 0;
-  G4VGraphicsSystem* gss_fallback = 0;
-#if defined G4VIS_USE_OPENGLXM
-  gsi_fallback = new G4OpenGLImmediateXm;
-  gss_fallback = new G4OpenGLStoredXm;
-#elif defined G4VIS_USE_OPENGLX
-  gsi_fallback = new G4OpenGLImmediateX;
-  gss_fallback = new G4OpenGLStoredX;
-#elif defined G4VIS_USE_OPENGLWIN32
-  gsi_fallback = new G4OpenGLImmediateWin32;
-  gss_fallback = new G4OpenGLStoredWin32;
+  oglix->AddNickname("OGLIQt_FALLBACK");
+  oglsx->AddNickname("OGLSQt_FALLBACK");
 #endif
-  if (gsi_fallback) {
-    gsi_fallback->SetNickname(gsi->GetNickname()+"_FALLBACK");
-    RegisterGraphicsSystem (gsi_fallback);
-  }
-  if (gss_fallback) {
-    gss_fallback->SetNickname(gss->GetNickname()+"_FALLBACK");
-    RegisterGraphicsSystem (gss_fallback);
-  }
+#ifdef G4VIS_USE_OPENGLXM
+  oglix->AddNickname("OGLIXm_FALLBACK");
+  oglsx->AddNickname("OGLSXm_FALLBACK");
+#endif
+#if defined (G4VIS_USE_OPENGLQT) || (G4VIS_USE_OPENGLXM)
+#else
+  oglix->AddNickname("OGLI");
+  oglsx->AddNickname("OGL");
+  oglsx->AddNickname("OGLS");
+#endif
+#endif
+
+#ifdef G4VIS_USE_OPENGLWIN32
+  G4VGraphicsSystem* ogliwin32 = new G4OpenGLImmediateWin32;
+  G4VGraphicsSystem* oglswin32 = new G4OpenGLStoredWin32;
+  RegisterGraphicsSystem (ogliwin32);
+  RegisterGraphicsSystem (oglswin32);
+#ifdef G4VIS_USE_OPENGLQT
+  ogliwin32->AddNickname("OGLIQt_FALLBACK");
+  oglswin32->AddNickname("OGLSQt_FALLBACK");
+#endif
 #endif
 
 #ifdef G4VIS_USE_OPENGLWT
   RegisterGraphicsSystem (new G4OpenGLImmediateWt);
 #endif
 
-// Register OI graphics system with generic nickname
+// Register OI graphics system with super-abbreviated nickname
 #ifdef G4VIS_USE_OI
   G4VGraphicsSystem* oi  = 0;
 #ifdef G4VIS_USE_OIX
   oi = new G4OpenInventorX;
-#endif
-#ifdef G4VIS_USE_OIWIN32
+#elif G4VIS_USE_OIWIN32
   oi = new G4OpenInventorWin32;
 #endif
   if (oi) {
-    oi->SetNickname("OI");
     RegisterGraphicsSystem (oi);
+    oi->AddNickname("OI");
   }
 #endif
 
+// The new, extended OI is registered separately for now.
 #ifdef G4VIS_USE_OIX
-  RegisterGraphicsSystem (new G4OpenInventorX);
   RegisterGraphicsSystem (new G4OpenInventorXtExtended);
-#endif
-
-#ifdef G4VIS_USE_OIWIN32
-  RegisterGraphicsSystem (new G4OpenInventorWin32);
 #endif
 
 #ifdef G4VIS_USE_RAYTRACERX
   RegisterGraphicsSystem (new G4RayTracerX);
-#endif
-
-#ifdef G4VIS_USE_VRML
-  RegisterGraphicsSystem (new G4VRML1);
-  RegisterGraphicsSystem (new G4VRML2);
 #endif
 
 }

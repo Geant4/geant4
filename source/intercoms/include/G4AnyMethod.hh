@@ -56,12 +56,25 @@ public:
   }
 };
 
+#if defined(G4USE_STD11) || defined(G4USE_STD14)
+  #include <type_traits>
+  using std::remove_reference;
+// original usage below in G4AnyMethod (pre C++11) was without namespace std::
+// so if compiler has them, make them available without the namespace
+#else
+// these are the reference "possible implementations" of a C++11 feature
+//   c.f. http://en.cppreference.com/w/cpp/types/remove_reference
+// but they clash badly with C++11 definitions supplied by the compiler
+// so use them only if C++11 is not enabled or there is no possibility 
+// of clashing with the ones defined in std:: namespace
+// (i.e. avoid "using namespace std")
 template<typename T> struct remove_reference {typedef T type;};
 template<typename T> struct remove_reference<T&> {typedef T type;};
 template<typename T> struct remove_reference<const T&> {typedef T type;};
+#endif
 
 /**
- * @class G4AnyMethod G4AnyMothod.hh
+ * @class G4AnyMethod G4AnyMethod.hh
  * This class represents any object method. The class only holds a member pointer.
  */
 class G4AnyMethod {

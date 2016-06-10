@@ -1,0 +1,183 @@
+//$Id$
+
+///\file "medical/electronScattering2/.README.txt"
+///\brief Example electronScattering2 README page
+
+/*! \page ExampleelectronScattering2 Example electronScattering2
+
+ Electron scattering benchmark variant 2 (Joseph Perl)
+
+The two examples, electronScattering and electronScattering2 demonstrate how two alternate
+approaches can be taken to simulating the same electron scattering benchmark experiment.
+
+ElectronScattering2 simulates the experiment with a minimum of user code, whereas the other
+version of this example shows how to do more of the work directly as the user.
+
+In ElectronScattering2:
+- Primary generation relies on the G4GeneralParticleSource.
+- Material definitions are taken from the NIST database.
+- Visualization uses the standard G4VisExective.
+- Scoring is handled by the ready-made Geant4 scorer, G4PSCellFlux.
+
+Both electronScattering and electronScattering2 simulate a precision electron scattering benchmark
+experiment performed at NRCC Canada and published as:
+"Measurement of multiple scattering of 13 and 20 MeV electrons by thin foils,"
+by C. K. Ross, M. R. McEwen, A. F. McDonald, C. D. Cojocaru and B. A. Faddegon,
+Med. Phys. Volume 35, Issue 9, pp. 4121-4131 (September 2008), DOI: 10.1118/1.2968095
+
+The experiment represents the most accurate benchmark of its type.
+
+A schematic of the experimental setup is shown in NRCC_electron_scat.pdf
+
+The experimental data was itself published, as document number E-MPHYA6-35-034809 at http://www.aip.org/pubservs/epaps.html
+
+The testing of three Monte Carlo simulation codes against this experimental benchmark has been
+publshed as:
+"The accuracy of EGSnrc, Geant4 and PENELOPE Monte Carlo systems for the simulation of electron 
+scatter in external beam radiotherapy,"
+by Bruce A Faddegon, Iwan Kawrakow, Yuri Kubyshin, Joseph Perl, Josep Sempau and Laszlo Urban,
+Phys. Med. Biol. 54 (2009) 6151Ð6163, DOI:10.1088/0031-9155/54/20/008 
+
+This present example, electronScattering2, was the Geant4 code used for this publication.
+
+	
+\section electronScattering2_s1 GEOMETRY DEFINITION
+ 
+ The geometry is described in the enclosed documument: NRCC_electron_scat.pdf
+ - A "World" volume contains an Exit Window, Primary Foil, Monitor Chamber and Helium Bag.
+ - The Helium Bag contains a Gas volume, which in turn contains 2 aluminium Rings
+ - A scoring cylinder is defined near the end of the World.
+ 	
+ The default geometry is constructed in the DetectorConstruction class.
+ The parameters of the Primary Foil (material and thickness) are defined from macro commands.
+ 
+
+\section electronScattering2_s2 PHYSICS LIST
+
+ Physics lists are based on modular design. Several modules are instantiated:
+ 1. Transportation
+ 2. EM physics
+ 3. Decays
+ 4. StepMax - for step limitation
+
+ EM physics builders are from the G4 kernel physics_lists subdirectory.
+  - "emstandard_opt0" recommended standard EM physics for LHC
+  - "emstandard_opt1" best CPU performance standard physics for LHC
+  - "emstandard_opt2" similar fast simulation
+  - "emstandard_opt3" best standard EM options - analog to "local" above
+  - "emstandard_opt4" best current advanced EM options standard + lowenergy
+  - "emstandardSS"  standard EM physics and single scattering model
+  - "emstandardWVI" standard EM physics and WentzelVI multiple scattering
+  - "emstandardGS"  standard EM physics and Goudsmit-Saunderson multiple scatt.
+  - "emlivermore"  low-energy EM physics using Livermore data
+  - "empenelope"   low-energy EM physics implementing Penelope models
+  - "emlowenergy"  low-energy EM physics implementing experimental
+                   low-energy models
+
+ Physics lists and options can be (re)set with UI commands
+
+ Note that options set through G4EmProcessOptions are global, eg for all particle types.
+ In G4 builders, it is shown how to set options per particle type.
+ 
+       	
+\section electronScattering2_s3 PRIMARY GENERATOR
+ 
+ All of the work of the primary event generation is deferred to the G4GeneralParticleSource.
+ The specific characteristics of the source are configured from the macro file, using
+ /gps commands.
+ - Energy is set to either 13 or 20 MeV.
+ - Particle type is set to electron.
+ - Direction is set exactly orthogonal to the scattering foil.
+ - Source type is set to beam.
+ - Spatial distribution of the beam is set as a circle gassian sigma_r of 0.042 cm
+
+ 
+\section electronScattering2_s4 VISUALIZATION
+ 
+ Visualization is controlled by the standard G4VisExecutive.
+ The standard set of visualization options is supported.
+ Example macros use HepRepFile. 	
+  	
+
+\section electronScattering2_s5 SCORING
+  	
+ All of the work of the scoring is done by the standard Geant4 scorers, G4PSCellFlux and G4PSPopulation.
+ - Flux and population are scored in concentric rings at the scoring surface.
+ - Flux is corrected for ring area just before output (as PSCellFlux assumes the area is the complete
+ area of the face of the cylinder, not the area of the one ring).
+
+ Because the geometry may need to be updated after various /primfoil commands,
+ ElectronBenchmarkDetector is written in such a way that the sensitive detector can have its scorer ring
+ logical volume updated after geometry changes. After any geometry change, ConstructSDandField is again
+ called, setting the sensitive detector to use the logical volume of the updated scorer ring.
+ The same sensitive detector is reused, but the manner in which the sensitive detector pointer
+ is stored for this reuse is complicated by the fact that this example may be run in multi-threaded mode
+ (in which each worker thread has its own sensitive detector).
+ We therefore store the sensitive detector pointer in a G4Cache rather than in a direct pointer.
+
+\section electronScattering2_s6 MACROS
+
+ Macros are provided for all of the 37 different combinations of scattering foils and beam energies
+ that were used in the actual experiment.
+ Separate directories of these macros are provided for the different EM Physics options, Opt0, 1, 2 and 3.
+
+ 	
+\section electronScattering2_s7 HOW TO START
+ 
+ - Execute electornScattering2 in 'batch' mode from macro files:
+\verbatim
+% electronScattering2 <macro_file> <starting_seed> <output_file>
+\endverbatim
+
+   for example, to run the Al1_13MeV case with physics option 2 and a starting random seed of 1:
+\verbatim
+% electronScattering2 macros/Opt2/Al1_13MeV.mac 1  output/Opt2/Al1_13MeV_1
+\endverbatim
+
+ - If macro_file is not specfied, the job starts and then just waits for interactive commands
+ 
+ - If starting_seed is not specified, it defaults to 1.
+   Precision benchmark studies often involve running multiple long batch jobs and then combining the results.
+   If you plan to combine more than one job with the same primary foil and energy, be sure to use different
+   random seeds for each of the jobs.
+
+ - If output_file is not specified, it defaults to output.csv in the current directory
+
+ - To simplify batch submission of large numbers of jobs, a shell script is given called run.csh.
+   The above submission could be done, for example, by:
+\verbatim
+run.csh Opt2/Al1_13MeV 1
+\endverbatim
+
+ - To run a basic visualization job, producing output to a HepRep file, use vis.mac, as in:
+\verbatim
+% electronScattering2 macros/vis.mac
+\endverbatim
+
+\section electronScattering2_s8 OUTPUT
+	
+  Results are given as comma-separated values (csv) files.
+  - The first column gives the CellFlux for all particles.
+  - The second column gives the CellFlux counting only electrons.
+  - The third column gives the population for all particles.
+  - The fourth column gives the populatin counting only electrons.
+
+\section electronScattering2_s9 MULTITHREADING
+
+  This example supports multi-threading.
+  To run in multi-threaded mode, build your Geant4 with the cmake option: <br>
+  -DGEANT4_BUILD_MULTITHREADED=ON
+  and then set the desired number of threads by inserting the /run/numberOfThreads command
+  into your macro file just before /run/initialize, as in:
+\verbatim
+/run/numberOfThreads 8
+\endverbatim
+  You may also find the output more readable if you use the following command to make output from
+  each thread be collected together:
+\verbatim
+/control/cout/useBuffer
+\endverbatim
+  The visualization macro, /macros/vis.mac demonstrates use of the above two commands.
+  Output from the multiple worker threads is merged by the Merge method at the end of ElectronRun.cc
+
+*/

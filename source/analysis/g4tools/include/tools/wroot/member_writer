@@ -13,9 +13,7 @@ namespace wroot {
 
 class member_writer : public virtual iobj_const_visitor {
 public:
-  virtual bool begin(const istorable&,
-                     const std::string&,
-                     local_func) {return true;}
+  virtual bool begin(const istorable&,const std::string&,local_func) {return true;}
   virtual bool end(const istorable&){return true;}
 
   virtual bool visit(const std::string&,bool a_v){return m_buf.write(a_v);}

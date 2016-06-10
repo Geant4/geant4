@@ -7,6 +7,10 @@ carlo.casarino@polooncologicocefalu.it
              History file of the IORT application
          ====================================================
 
+22.09.2015 - L.Pandola: tag iort_therapy-V10-01-00
+	     Migraeted to g4tools
+	     Left a minimal dependency to ROOT (due to TGraph)
+             The dependency is optional
 16.10.2014 - C.Casarino: tag iort_therapy-V10-00-00
              Updated README
 30.07.2013 - A.Dotti: tag iort_therapy-V09-06-05

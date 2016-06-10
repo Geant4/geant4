@@ -27,7 +27,7 @@
 #include "G4LEPTSDistribution.hh"
 
 
-G4LEPTSElossDistr::G4LEPTSElossDistr(string file) {
+G4LEPTSElossDistr::G4LEPTSElossDistr(std::string file) {
   fileName = file;
 
   ReadFile();

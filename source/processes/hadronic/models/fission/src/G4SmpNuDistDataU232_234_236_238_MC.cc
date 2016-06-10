@@ -117,6 +117,7 @@ G4int G4fissionEvent::G4SmpNuDistDataU232_234_236_238_MC(G4double nubar) {
 */
      engind = 1;
      while (nubar > U238nubar[engind]){ engind++;}
+     // Loop checking, 11.03.2015, T. Koi
      fraction = (nubar-U238nubar[engind-1])/(U238nubar[engind]-U238nubar[engind-1]);
      if(fisslibrng() > fraction) engind--;
 
@@ -124,6 +125,7 @@ G4int G4fissionEvent::G4SmpNuDistDataU232_234_236_238_MC(G4double nubar) {
      nu = 0;
      cum = U238nu[engind][0];
      while (r > cum && nu < 8){ 
+     // Loop checking, 11.03.2015, T. Koi
        nu++;
        cum += U238nu[engind][nu];
      }

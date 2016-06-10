@@ -60,7 +60,8 @@ public:
   virtual void ConstructProcess();
 
 private:
-
+  G4HadronElasticPhysicsPHP(const G4HadronElasticPhysicsPHP&);
+  G4HadronElasticPhysicsPHP& operator=(const G4HadronElasticPhysicsPHP&);
   G4int    verbose;
   G4bool   wasActivated;
   G4HadronElasticPhysics* mainElasticBuilder;

@@ -33,43 +33,48 @@
 #define G4XmlFileManager_h 1
 
 #include "G4VFileManager.hh"
-#include "G4XmlNtupleDescription.hh"
+#include "G4TNtupleDescription.hh"
 #include "globals.hh"
 
-#include <tools/raxml>
+#include "tools/waxml/ntuple"
 
 #include <fstream>
+#include <memory>
 
 class G4AnalysisManagerState;
 
 class G4XmlFileManager : public G4VFileManager
 {
   public:
-    G4XmlFileManager(const G4AnalysisManagerState& state);
+    explicit G4XmlFileManager(const G4AnalysisManagerState& state);
     ~G4XmlFileManager();
 
+    // Type aliases
+    using NtupleType = tools::waxml::ntuple;
+    using NtupleDescriptionType = G4TNtupleDescription<NtupleType>;
+
     // Methods to manipulate output files
-    virtual G4bool OpenFile(const G4String& fileName);
-    virtual G4bool WriteFile();
-    virtual G4bool CloseFile(); 
+    virtual G4bool OpenFile(const G4String& fileName) final;
+    virtual G4bool WriteFile() final;
+    virtual G4bool CloseFile() final; 
 
     // Specific methods for files per objects
     G4bool CreateHnFile();
     G4bool CloseHnFile(); 
-    G4bool CreateNtupleFile(G4XmlNtupleDescription* ntupleDescription);
-    G4bool CloseNtupleFile(G4XmlNtupleDescription* ntupleDescription); 
+    G4bool CreateNtupleFile(NtupleDescriptionType* ntupleDescription);
+    G4bool CloseNtupleFile(NtupleDescriptionType* ntupleDescription); 
     
     // Get methods
-    std::ofstream* GetHnFile() const;
+    std::shared_ptr<std::ofstream> GetHnFile() const;
     
    private:
     // data members
-    std::ofstream* fHnFile;
+    std::shared_ptr<std::ofstream> fHnFile;
 };
 
 // inline functions
 
-inline std::ofstream* G4XmlFileManager::GetHnFile() const
+inline std::shared_ptr<std::ofstream> G4XmlFileManager::GetHnFile() const
 { return fHnFile; }
 
 #endif

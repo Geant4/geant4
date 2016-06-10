@@ -1,0 +1,51 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_box_3f
+#define tools_box_3f
+
+#include "../mnmx"
+
+#include <cfloat> // FLT_MAX
+
+namespace tools {
+
+// optimization (used in exlib/sg/text_hershey) :
+
+inline void box_3f_make_empty(float& a_mn_x,float& a_mn_y,float& a_mn_z,
+                             float& a_mx_x,float& a_mx_y,float& a_mx_z){
+  a_mn_x = FLT_MAX;
+  a_mn_y = FLT_MAX;
+  a_mn_z = FLT_MAX;
+  a_mx_x = -FLT_MAX;
+  a_mx_y = -FLT_MAX;
+  a_mx_z = -FLT_MAX;
+}
+inline void box_3f_extend_by(float& a_mn_x,float& a_mn_y,float& a_mn_z,
+                            float& a_mx_x,float& a_mx_y,float& a_mx_z,
+                            float a_x,float a_y,float a_z){
+  if(a_mx_x<a_mn_x){ //is empty.
+    a_mn_x = a_x;
+    a_mn_y = a_y;
+    a_mn_z = a_z;
+
+    a_mx_x = a_x;
+    a_mx_y = a_y;
+    a_mx_z = a_z;
+  } else {
+    a_mn_x = mn<float>(a_x,a_mn_x);
+    a_mn_y = mn<float>(a_y,a_mn_y);
+    a_mn_z = mn<float>(a_z,a_mn_z);
+
+    a_mx_x = mx<float>(a_x,a_mx_x);
+    a_mx_y = mx<float>(a_y,a_mx_y);
+    a_mx_z = mx<float>(a_z,a_mx_z);
+  }
+}
+inline bool box_3f_is_empty(float a_mn_x,float a_mx_x) {
+  return a_mx_x < a_mn_x;
+}
+
+}
+
+#endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.hh 71043 2013-06-10 09:29:56Z gcosmo $
+// $Id: G4HadronInelasticQBBC.hh 93617 2015-10-27 09:00:41Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -43,6 +43,7 @@
 #include "G4VHadronPhysics.hh"
 
 class G4ComponentAntiNuclNuclearXS;
+class G4ComponentGGHadronNucleusXsc;
 
 class G4HadronInelasticQBBC : public G4VHadronPhysics
 {
@@ -70,6 +71,7 @@ private:
   G4HadronInelasticQBBC & operator=(const G4HadronInelasticQBBC &right);
 
   static G4ThreadLocal G4ComponentAntiNuclNuclearXS* theAntiNuclXS;
+  static G4ThreadLocal G4ComponentGGHadronNucleusXsc* theKaonXS;
 
   G4String htype;
   G4int    verbose;

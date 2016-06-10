@@ -66,13 +66,18 @@ GenerateMultiBody(G4double initialMass,
 
   Initialize(initialMass, masses);
 
+  const G4int maxNumberOfLoops = 10000;
   nTrials = 0;
   do {				// Apply accept/reject to get distribution
     ++nTrials;
     FillRandomBuffer();
     FillEnergySteps(initialMass, masses);
-  } while (!AcceptEvent());	// FIXME:  Do we need a limit on nTrials?
-
+  } while ( (!AcceptEvent()) && nTrials < maxNumberOfLoops );  /* Loop checking, 02.11.2015, A.Ribon */
+  if ( nTrials >= maxNumberOfLoops ) {
+    G4ExceptionDescription ed;
+    ed << " Failed sampling after maxNumberOfLoops attempts : forced exit" << G4endl;
+    G4Exception( " G4HadPhaseSpaceGenbod::GenerateMultiBody ", "HAD_GENBOD_001", FatalException, ed );
+  }
   GenerateMomenta(masses, finalState);
 }
 

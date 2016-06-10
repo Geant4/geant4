@@ -1,4 +1,4 @@
-$Id: README 83919 2014-09-23 08:40:35Z gcosmo $
+$Id: README 89707 2015-04-28 07:38:57Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -52,7 +52,8 @@ $Id: README 83919 2014-09-23 08:40:35Z gcosmo $
       -------------------------------------------------
 
  particle 1 : a geantino uniformly randomized on a cylinder surface.
- particle 2 and 3 : on opposite side of the cylinder surface to particle 1
+ particle 2 and 3 : symetric to particle 1.
+ In addition, time_zero of each event is randomized.
 
  3.2- Show how to sample a tabulated function (energy spectrum)
       ---------------------------------------------------------

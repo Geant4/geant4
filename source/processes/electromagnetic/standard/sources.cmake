@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 83008 2014-07-24 14:49:52Z gcosmo $
+# $Id: sources.cmake 90443 2015-05-29 07:35:14Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -80,11 +80,11 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4PAIModelData.hh
         G4PAIPhotData.hh
         G4PAIPhotModel.hh
-        G4PAIPhotonModel.hh
         G4PAIxSection.hh
         G4PAIySection.hh
         G4PEEffectFluoModel.hh
         G4PSTARStopping.hh
+        G4PWATotalXsecTable.hh
         G4PairProductionRelModel.hh
         G4PhotoElectricEffect.hh
         G4SauterGavrilaAngularDistribution.hh
@@ -147,11 +147,11 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4PAIModelData.cc
         G4PAIPhotData.cc
         G4PAIPhotModel.cc
-        G4PAIPhotonModel.cc
         G4PAIxSection.cc
         G4PAIySection.cc
         G4PEEffectFluoModel.cc
         G4PSTARStopping.cc
+        G4PWATotalXsecTable.cc
         G4PairProductionRelModel.cc
         G4PhotoElectricEffect.cc
         G4SauterGavrilaAngularDistribution.cc

@@ -543,7 +543,6 @@ void DetectorConstruction::BarycenterView(G4LogicalVolume* worldLV,
   }//end of while (moleculeListTemp)
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 //////////////////////////////////////////////////
@@ -939,4 +938,3 @@ void DetectorConstruction::DrawResiduesWithBounding_()
   }
   else G4cout<<"PDB file not found!"<<G4endl<<G4endl;
 }
-

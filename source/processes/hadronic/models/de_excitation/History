@@ -14,6 +14,355 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20 Nov 2015 Vladimir Ivanchenko (hadr-deex-V10-01-63)
+----------------------------------------------------------
+- G4NuclearLevelData - protect G4MUTEXLOCK by ifdef statement,
+    so the lock is not used in sequential mode 
+
+18 Nov 2015 Vladimir Ivanchenko (hadr-deex-V10-01-62)
+----------------------------------------------------------
+- G4PhotonEvaporation - fixed non-reproducibility from previous tag
+
+18 Nov 2015 Vladimir Ivanchenko (hadr-deex-V10-01-61)
+----------------------------------------------------------
+- G4PhotonEvaporation - computation of probability of gamma emission
+    does not use level data information (and not require upload files);
+    this reduce CPU used by de-excitation module, should not
+    affect results 
+
+13 Nov 2015 Vladimir Ivanchenko (hadr-deex-V10-01-60)
+----------------------------------------------------------
+- G4PhotonEvaporation, G4LevelReader, G4LevelManager - more
+    accurate use of G4float, make explicit conversion to G4double
+    when needed, use float const for initialisation of float
+
+13 Nov 2015 Vladimir Ivanchenko (hadr-deex-V10-01-59)
+----------------------------------------------------------
+- G4ExcitationHandler - increase limit for MultiFragmentation
+    model from 4 to 400 GeV, so rare cases when a fragment with
+    very high excitation is sent to the de-excitation module do
+    not treated with this model
+
+12 Nov 2015 Vladimir Ivanchenko (hadr-deex-V10-01-58)
+----------------------------------------------------------
+- G4PhotonEvaporation - fixed relatively rare non-reproducibility
+    in due to problem in sampling of continues transitions
+
+11 Nov 2015 Vladimir Ivanchenko (hadr-deex-V10-01-57)
+----------------------------------------------------------
+- G4GammaTransition, G4PolarizedGammaTransition added protection 
+    against wrong shell index
+
+10 Nov 2015 Vladimir Ivanchenko (hadr-deex-V10-01-56)
+----------------------------------------------------------
+- G4PhotonEvaporation, G4GammaTransition, G4PolarizedGammaTransition 
+    added protection against fragments with Z > 100
+
+06 Nov 2015 Vladimir Ivanchenko (hadr-deex-V10-01-55)
+----------------------------------------------------------
+- G4PhotonEvaporation - added prototype of gamma transition
+    class with correlated gamma emission 
+
+05 Nov 2015 Gabriele Cosmo (hadr-deex-V10-01-54)
+----------------------------------------------------------
+- Replaced use of variable 'L' in G4LevelReader.cc and
+  G4PolarizationTransition to avoid shadowing of new volumetric units.
+
+05 Nov 2015 Vladimir Ivanchenko (hadr-deex-V10-01-53)
+----------------------------------------------------------
+- G4LevelReader, G4PhotonEvaporation, G4GammaTransition - fixed 
+    level probabilities
+
+04 Nov 2015 Vladimir Ivanchenko (hadr-deex-V10-01-52)
+----------------------------------------------------------
+- G4NuclearLevelData, G4LevelReader, G4LevelManager, G4NucLevel -
+    fixed non-reproducibility and several other problems in these classes
+
+03 Nov 2015 Vladimir Ivanchenko (hadr-deex-V10-01-51)
+----------------------------------------------------------
+- G4NuclearLevelData, G4LevelReader - cleanup reading of the data;
+    implement lazy initialisation per isotope (before data for all
+    isotopes for a given Z were uploaded); this should reduce
+    run time memory 
+
+27 Oct 2015 Vladimir Ivanchenko (hadr-deex-V10-01-50)
+----------------------------------------------------------
+- G4LevelManager, G4PhotonEvaporation - fix non-reproducibility
+
+22 Oct 2015 Vladimir Ivanchenko (hadr-deex-V10-01-44)
+----------------------------------------------------------
+- G4PhotonEvaporation is renamed to G4PhotonEvaporationOLD, 
+  G4PromptPhotonEvaporation renamed to G4PhotonEvaporation
+- G4PromptPhotonEvaporation - fixed gamma emission probability
+- G4Evaporation - enable G4PromptPhotonEvaporation by default
+- G4PolarizationTransition - removed all static class members and method
+    making the code thread safe
+
+18 Oct 2015 Vladimir Ivanchenko (hadr-deex-V10-01-43)
+----------------------------------------------------------
+- G4PolarizationTransition - new class for correlated gamma emission
+    provided by Jason Detwiler
+- G4WilsonAblationModel - fixed Coverity report
+- G4VEvaporationChannel, G4VEvaporationChannel, G4LevelManager -
+    provide extra method GetMaxLevelEnergy() needed for decay channels
+    to distingwish continues and discrete excitation states
+- G4PromptPhotonEvaporation - code cleanup
+
+02 Sept 2015 Vladimir Ivanchenko (hadr-deex-V10-01-42)
+----------------------------------------------------------
+- G4NeutronRadCapture, G4Evaporation - use old G4PhotonEvaporation
+    by default
+
+01 Sept 2015 Vladimir Ivanchenko (hadr-deex-V10-01-41)
+----------------------------------------------------------
+- G4NuclearLevelData - fixed lazy initialisation in MT mode
+
+01 Sept 2015 Vladimir Ivanchenko (hadr-deex-V10-01-40)
+----------------------------------------------------------
+- G4VEvaporationChannel, G4LevelManager, G4EvaporationFactory,
+  G4EvaporationDefaultGEMFactory, G4EvaporationGEMFactory - added
+    new method GetNearestLevel() providing an access to the nuclear 
+    level data from any nuclear decay channel
+- G4PromptPhotonEvaporation - providing an implementation of
+    GetNearestLevel(), several fixes on top of previous tags 
+
+31 Aug 2015 Vladimir Ivanchenko (hadr-deex-V10-01-39)
+----------------------------------------------------------
+- G4WilsonAblationModel, G4NeutronRadCapture - complete migration
+    to G4PromptPhotonEvaporation
+
+31 Aug 2015 Vladimir Ivanchenko (hadr-deex-V10-01-38)
+----------------------------------------------------------
+- G4Evaporation - use G4PromptPhotonEvaporation by default, old
+    G4PhotonEvaporation class is enabled via the environment 
+    variable G4UsePhotonEvaporation
+- G4NuclearLevelData - removed debug cout
+
+19 Aug 2015 Vladimir Ivanchenko (hadr-deex-V10-01-37)
+----------------------------------------------------------
+- G4EvaporationProbability, G4StatMFChannel, G4StatMFMicroPartition
+    added header Randomize.hh
+
+17 Aug 2015 Vladimir Ivanchenko (hadr-deex-V10-01-36)
+----------------------------------------------------------
+- G4Evaporation - access random engine before the loop
+- G4FermiPhaseSpaceDecay - removed obsolete method to sample N-body 
+  decay and left only Kopylov one
+- G4PromptPhotonEvaporation - add extra methods to compute probability
+  and to sample final states for continium gamma emission 
+
+13 Aug 2015 Gabriele Cosmo (hadr-deex-V10-01-35)
+----------------------------------------------------------
+- Fixed compilation on Windows; added inclusion of <functional>
+  to G4FermiPhaseSpaceDecay.cc for definition of std::bind2nd().
+
+07 Aug 2015 Vladimir Ivanchenko (hadr-deex-V10-01-34)
+----------------------------------------------------------
+- G4VGammaDeexcitation, G4PhotonEvaporation, G4E1Probability,
+  G4DiscreteGammaTransition, G4DiscreteGammaDeexcitation,
+  G4ContinuumGammaTransition, G4ContinuumGammaDeexcitation
+    in all classes tolerance is reduced to 0.1 keV (was from 
+    1 to 10 keV), this is needed to fix problem #1760
+
+06 Aug 2015 Vladimir Ivanchenko (hadr-deex-V10-01-33)
+----------------------------------------------------------
+- Fixed compillation
+
+06 Aug 2015 Vladimir Ivanchenko (hadr-deex-V10-01-32)
+----------------------------------------------------------
+- Technical modeifications: finelized migration to G4Log, G4Exp, G4Pow;
+    check do/while loops; code cleanup; fixed Coverity warning
+
+06 Aug 2015 Alberto Ribon       (hadr-deex-V10-01-31)
+----------------------------------------------------------
+- G4WilsonAblationModel : replaced std::exp and std::pow with the
+  faster G4Exp and G4Pow.
+
+22 May 2015 Vladimir Ivanchenko (hadr-deex-V10-01-30)
+----------------------------------------------------------
+- G4EvaporationChannel, G4EvaporationProbability - optimisation of
+    sampling of final state
+
+23 Apr 2015 Vladimir Ivanchenko (hadr-deex-V10-01-29)
+----------------------------------------------------------
+- G4ChatterjeeCrossSection, G4KalbachCrossSection - J.M. Quesada
+    verified/fixed cross sections parameterisations and add comments
+
+16 Apr 2015 Vladimir Ivanchenko (hadr-deex-V10-01-28)
+----------------------------------------------------------
+- G4NeutronRadCapture - proper initialisation of G4LorentzVector
+    in class constructor
+
+16 Apr 2015 Vladimir Ivanchenko (hadr-deex-V10-01-27)
+----------------------------------------------------------
+- G4FissionParameters, G4CompetitiveFission - fixed kinematics; cleanup
+
+14 Apr 2015 Vladimir Ivanchenko (hadr-deex-V10-01-26)
+----------------------------------------------------------
+- G4ChatterjeeCrossSection, G4KalbachCrossSection - new cross section 
+    classes used for all evaporation fragments
+- G4AlphaEvaporationProbability, G4DeuteronEvaporationProbability,
+  G4EvaporationProbability, G4He3EvaporationProbability,
+  G4NeutronEvaporationProbability, G4ProtonEvaporationProbability,
+  G4TritonEvaporationProbability - use these new classes, reduced
+    number of virtual calls, reduce number of computation in the loop 
+    of integration
+
+10 Apr 2015 Vladimir Ivanchenko (hadr-deex-V10-01-25)
+----------------------------------------------------------
+- G4NeutronRadCapture, G4WilsonAblationModel - fixed Coverity reports
+
+27 Mar 2015 Gabriele Cosmo (hadr-deex-V10-01-24)
+----------------------------------------------------------
+- Corrected GNUmakefile in handler module.
+
+26 Mar 2015 Vladimir Ivanchenko (hadr-deex-V10-01-23)
+----------------------------------------------------------
+26 Mar 2015 Vladimir Ivanchenko (hadr-deex-V10-01-22)
+----------------------------------------------------------
+- G4NeutronRadCapture - changed back usage of photon evaporation
+    instead of G4Excitation handler; implemented choice 
+    between G4PhotonEvaporation and G4PromptPhotonEvaporation;
+    cleanup the code
+
+21 Mar 2015 Vladimir Ivanchenko (hadr-deex-V10-01-21)
+----------------------------------------------------------
+- G4VEvaporationChannel, G4PhotonEvaporation - removed "timeType" 
+    which is not used anymore; removed name of channel
+- G4PromptPhotonEvaporation - moved virtual methods to source
+
+16 Mar 2015 Vladimir Ivanchenko (hadr-deex-V10-01-20)
+----------------------------------------------------------
+- G4WilsonAblationModel, G4EvaporationFactory, G4EvaporationFactory,
+  G4ExcitationHandler - use default constructor of G4Evaporation
+    and access photon evaporation class from G4Evaporation
+- G4Evaporation - use environment variable "G4UsePromptPhotonEvaporation"
+    to select gamma de-excitation model; if the variable is defined
+    the new G4PromptPhotonEvaporation class is used, in not - the
+    old G4PhotonEvaporation
+  
+13 Mar 2015 Vladimir Ivanchenko (hadr-deex-V10-01-19)
+----------------------------------------------------------
+- G4NeutronRadCapture - fixed typo 
+
+13 Mar 2015 Vladimir Ivanchenko (hadr-deex-V10-01-18)
+----------------------------------------------------------
+- G4NeutronRadCapture - restore special treatment of nuclear 
+    capture in hydrogen (do not use G4ExcitationHandler in that case) 
+    to avoid rare unrecovable kinematic problem; added check on
+    initial kinematics for all isotopes 
+
+12 Mar 2015 Vladimir Ivanchenko (hadr-deex-V10-01-17)
+----------------------------------------------------------
+- G4NeutronRadCapture - fixed kinematics (bug was introduced in the 
+    previous tag)
+
+11 Mar 2015 Vladimir Ivanchenko (hadr-deex-V10-01-16)
+----------------------------------------------------------
+- G4NeutronRadCapture - moved to handler sub-directory; use 
+    G4ExcitationHandler instead of G4PhotonEvaporation allowing
+    to have not only gamma de-excitation but fission or FermiBreakUp;
+- G4VEvaporationChannel, G4VEvaporation, G4VEvaporationChannel - moved 
+    Set methods from G4PhotonEvaporation allowing to reduce number of 
+    new/delete at initialisation  
+- removed unused dependences from sources.cmake
+
+06 Mar 2015 Vladimir Ivanchenko (hadr-deex-V10-01-15)
+----------------------------------------------------------
+- disable  G4PromptPhotonEvaporation due to complicate bug in MT mode
+
+06 Mar 2015 Vladimir Ivanchenko (hadr-deex-V10-01-14)
+----------------------------------------------------------
+- G4LevelManager - fixed wrong assert 
+
+06 Mar 2015 Vladimir Ivanchenko (hadr-deex-V10-01-13)
+----------------------------------------------------------
+- G4NeutronRadCapture, G4ExcitationHandler - use G4PromptPhotonEvaporation
+
+05 Mar 2015 Vladimir Ivanchenko (hadr-deex-V10-01-12)
+----------------------------------------------------------
+- G4PromptPhotonEvaporation - attempt to fix clang build problem
+
+05 Mar 2015 Vladimir Ivanchenko (hadr-deex-V10-01-11)
+----------------------------------------------------------
+- G4PromptPhotonEvaporation, G4LevelReader, G4NucLevel - cleanup
+
+27 Feb 2015 Vladimir Ivanchenko (hadr-deex-V10-01-10)
+----------------------------------------------------------
+- new nuclear data structure classes are moved to management
+    sub-directory; fixed Coverity warnings;
+- removed obsolete G4E1SingleProbability1, G4VPhotonEvaporation
+
+18 Feb 2015 Vladimir Ivanchenko (hadr-deex-V10-01-09)
+18 Feb 2015 Vladimir Ivanchenko (hadr-deex-V10-01-08)
+----------------------------------------------------------
+- G4LevelReader - correctly defined max G4float value to avoid
+    numerical problems
+
+17 Feb 2015 Vladimir Ivanchenko (hadr-deex-V10-01-07)
+----------------------------------------------------------
+- cleanup all GNUmakefile and source.cmake removing unused
+    granula dependencies
+- G4LevelReader - add factor to transform half life time into life time
+
+16 Feb 2015 Vladimir Ivanchenko (hadr-deex-V10-01-06)
+----------------------------------------------------------
+- G4NuclearLevelStore - take out access to G4LavelManager
+- G4NuclearLevelData - new data class for nuclear levels and
+    gamma transitions; it is pure singleton with data shared
+    between threads
+- G4LevelReader, G4LevelManager, G4NucLevel - implemented
+    data nuclear level management using  G4NuclearLevelData
+    class 
+- removed dependency on hadronic/processes sub-library
+
+13 Feb 2015 Vladimir Ivanchenko (hadr-deex-V10-01-05)
+----------------------------------------------------------
+- G4GEMProbability - revert to -03 tag
+
+12 Feb 2015 Vladimir Ivanchenko (hadr-deex-V10-01-04)
+----------------------------------------------------------
+- G4GEMProbability - make protection to be more strong - setup
+                     upper limit for excitation of a fragment 8*A*MeV
+
+02 Feb 2015 Vladimir Ivanchenko (hadr-deex-V10-01-03)
+----------------------------------------------------------
+- G4GEMProbability - due to change of history a very rare bug appeares
+    in FTF_BIC Physics List where a nucleus get excited to 8 GeV;
+    protection is added to avoid numerical problem
+
+02 Feb 2015 Vladimir Ivanchenko (hadr-deex-V10-01-02)
+----------------------------------------------------------
+- G4VGammaDeexcitation, G4DiscreteGammaDeexcitation, G4PhotonEvaporation,
+    changed default set of parameters: ICM disabled;
+    time limit for isomere production is set to DBL_MAX; sampling of
+    gamma decay of long-lived isomere levels is performed as it was in 
+    Geant4 9.6 assuming decay at rest and making correction for energy
+    balance (in that case momentum balance is not guranteed); binding
+    energy is taken into account in the case of ICM enabled. These
+    modifications should provide correct sampling of the decay time for
+    all type of levels, energy balance in hadronic interactions, and
+    reproducibility of hadronic transport
+- G4NeutronRadCapture - enable ICM by default
+
+06 Jan 2015 Laurent Desorgher (hadr-deex-V10-01-01)
+----------------------------------------------------------
+- G4VGammaDeexcitation::GenerateGamma() take into account atomic bond energy 
+  for computation of transition energy and kinematics in the case of internal 
+  conversion. 
+
+10 Dec 2014 Vladimir Ivanchenko (hadr-deex-V10-01-00)
+----------------------------------------------------------
+- G4DiscreteGammaTransition return back correction on shell number
+     to avoid assert fail in simplified calorimeter
+- G4ContinuumGammaDeexcitation - fixed Coverity report
+
+01 Dec 2014 Vladimir Ivanchenko (hadr-deex-V10-00-29)
+----------------------------------------------------------
+- G4VGammaDeexcitation, G4PhotonEvaporation - propagate vacant
+    shell number after internal convertion allowing to enable 
+    atomic de-excitation in radioactive decay 
+
 28 Nov 2014 Vladimir Ivanchenko (hadr-deex-V10-00-28)
 ----------------------------------------------------------
 - G4FermiBreakUp - fixed value of const coefficient to probability

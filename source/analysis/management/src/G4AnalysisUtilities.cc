@@ -38,7 +38,7 @@ namespace {
 G4bool GetToken(const G4String& line, G4String& token, 
                 std::string::size_type begIdx, std::string::size_type& endIdx)
 {
-  while ( line[begIdx] == ' ') ++begIdx;
+  while ( line[begIdx] == ' ') ++begIdx; // Loop checking, 23.06.2015, I. Hrivnacova
   if ( line[begIdx] == '"' ) {
     endIdx = line.find('"', begIdx+1);
     if ( endIdx == std::string::npos ) endIdx = line.length();
@@ -78,7 +78,7 @@ G4bool CheckNbins(G4int nbins)
 G4bool CheckMinMax(G4double xmin, G4double xmax, 
                    const G4String& fcnName, const G4String& binSchemeName)
 {
-  G4bool result = true;
+  auto result = true;
   
   if ( xmax <= xmin ) {
     G4ExceptionDescription description;
@@ -101,7 +101,7 @@ G4bool CheckMinMax(G4double xmin, G4double xmax,
     result = false;
   }
   
-  if ( ( GetBinScheme(binSchemeName) == kLogBinScheme ||
+  if ( ( GetBinScheme(binSchemeName) == G4BinScheme::kLog ||
          fcnName == "log" || fcnName == "log10" ) && ( xmin == 0 ) ) {
     G4ExceptionDescription description;
     description 
@@ -185,7 +185,50 @@ void  Tokenize(const G4String& line, std::vector<G4String>& tokens)
     }  
     begIdx = endIdx + 1;
   }
-  while ( endIdx != line.length() );
+  while ( endIdx < line.length() ); // Loop checking, 23.06.2015, I. Hrivnacova
+}
+
+//_____________________________________________________________________________
+G4AnalysisOutput GetOutput(const G4String& outputName) {
+  if      ( outputName == "csv"  )  { return G4AnalysisOutput::kCsv;  }
+  else if ( outputName == "root" )  { return G4AnalysisOutput::kRoot; }
+  else if ( outputName == "xml"  )  { return G4AnalysisOutput::kXml;  }
+  else if ( outputName == "none" )  { return G4AnalysisOutput::kNone; }
+  else {
+    G4ExceptionDescription description;
+    description 
+      << "    \"" << outputName << "\" output type is not supported." << G4endl
+      << "    " << "Root type will be used.";
+    G4Exception("G4Analysis::GetOutputType",
+                "Analysis_W013", JustWarning, description);
+    return G4AnalysisOutput::kNone; 
+  }
+}
+
+//_____________________________________________________________________________
+G4String GetOutputName(G4AnalysisOutput output) {
+  switch ( output ) {
+    case G4AnalysisOutput::kCsv:
+      return "csv";
+      break;
+    case G4AnalysisOutput::kRoot: 
+      return "root";
+      break;
+    case G4AnalysisOutput::kXml:
+      return "xml";
+      break;
+    case G4AnalysisOutput::kNone:
+      return "none";
+      break;
+  }
+  // should never reach this line
+  G4ExceptionDescription description;
+  description
+    << "    \"" << static_cast<int>(output) << "\" is not handled." << G4endl
+    << "    " << "none type will be used.";
+  G4Exception("G4Analysis::GetOutputName",
+              "Analysis_W013", JustWarning, description);
+  return "none";
 }
 
 }

@@ -58,7 +58,7 @@ G4UPiNuclearCrossSection::G4UPiNuclearCrossSection()
   elowest = MeV;
   G4NistManager* nist = G4NistManager::Instance();
   for(G4int i=1; i<93; ++i) {
-    APower[i] = std::pow(nist->GetAtomicMassAmu(i),aPower);
+    APower[i] = G4Pow::GetInstance()->powA(nist->GetAtomicMassAmu(i),aPower);
   }
 }
 

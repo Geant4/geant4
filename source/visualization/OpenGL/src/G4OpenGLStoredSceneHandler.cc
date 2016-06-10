@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc 87164 2014-11-26 08:48:31Z gcosmo $
+// $Id: G4OpenGLStoredSceneHandler.cc 87695 2014-12-17 09:35:24Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -427,7 +427,9 @@ end_of_display_list_reuse_test:
     glMatrixMode (GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-    glOrtho (-1., 1., -1., 1., -G4OPENGL_FLT_BIG, G4OPENGL_FLT_BIG);
+    if (pViewer) {
+      pViewer->g4GlOrtho (-1., 1., -1., 1., -G4OPENGL_FLT_BIG, G4OPENGL_FLT_BIG);
+    }
     glMatrixMode (GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();

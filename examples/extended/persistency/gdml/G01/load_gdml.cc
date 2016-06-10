@@ -27,7 +27,7 @@
 /// \brief Main program of the persistency/gdml/G01 example
 //
 //
-// $Id: load_gdml.cc 82284 2014-06-13 14:50:49Z gcosmo $
+// $Id: load_gdml.cc 89264 2015-03-30 08:18:11Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -56,6 +56,23 @@
 #endif
 
 #include "G4GDMLParser.hh"
+
+void print_aux(const G4GDMLAuxListType* auxInfoList, G4String prepend="|")
+{  
+  for(std::vector<G4GDMLAuxStructType>::const_iterator iaux = auxInfoList->begin();
+      iaux != auxInfoList->end(); iaux++ )
+    {
+      G4String str=iaux->type;
+      G4String val=iaux->value;
+      G4String unit=iaux->unit;
+      
+      G4cout << prepend << str << " : " << val  << " " << unit << G4endl;
+
+      if (iaux->auxList) print_aux(iaux->auxList, prepend + "|");
+    }
+  return;
+}
+
 
 int main(int argc,char **argv)
 {
@@ -94,38 +111,67 @@ int main(int argc,char **argv)
 
    runManager->Initialize();
 
-   if (argc>=3)
-   {
-      parser.Write(argv[2], G4TransportationManager::GetTransportationManager()
-      ->GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume());
-   }
-
    G4UImanager* UImanager = G4UImanager::GetUIpointer();
  
    ///////////////////////////////////////////////////////////////////////
    //
    // Example how to retrieve Auxiliary Information
    //
+
+   std::cout << std::endl;
+   
    const G4LogicalVolumeStore* lvs = G4LogicalVolumeStore::GetInstance();
    std::vector<G4LogicalVolume*>::const_iterator lvciter;
    for( lvciter = lvs->begin(); lvciter != lvs->end(); lvciter++ )
    {
      G4GDMLAuxListType auxInfo = parser.GetVolumeAuxiliaryInformation(*lvciter);
-     std::vector<G4GDMLAuxPairType>::const_iterator ipair = auxInfo.begin();
-     for( ipair = auxInfo.begin(); ipair != auxInfo.end(); ipair++ )
-     {
-       G4String str=ipair->type;
-       G4String val=ipair->value;
-       G4cout << " Auxiliary Information is found for Logical Volume :  "
+
+     if (auxInfo.size()>0)
+       G4cout << "Auxiliary Information is found for Logical Volume :  "
               << (*lvciter)->GetName() << G4endl;
-       G4cout << " Name of Auxiliary type is     :  " << str << G4endl;
-       G4cout << " Associated Auxiliary value is :  " << val << G4endl;
-     }
+     
+     print_aux(&auxInfo);
    }
+
+   // now the 'global' auxiliary info
+   std::cout << std::endl;
+   std::cout << "Global auxiliary info:" << std::endl;
+   std::cout << std::endl;
+
+   print_aux(parser.GetAuxList());   
+
+   std::cout << std::endl;
+   
    //
    // End of Auxiliary Information block
    //
    ////////////////////////////////////////////////////////////////////////
+
+   // example of writing out
+   
+   if (argc>=3)
+   {
+/*
+     G4GDMLAuxStructType mysubaux = {"mysubtype", "mysubvalue", "mysubunit", 0};
+     G4GDMLAuxListType* myauxlist = new G4GDMLAuxListType();
+     myauxlist->push_back(mysubaux);
+     
+     G4GDMLAuxStructType myaux = {"mytype", "myvalue", "myunit", myauxlist};
+     parser.AddAuxiliary(myaux);
+
+
+     // example of setting auxiliary info for world volume (can be set for any volume)
+     
+     G4GDMLAuxStructType mylocalaux = {"sometype", "somevalue", "someunit", 0};
+
+     parser.AddVolumeAuxiliary(mylocalaux, G4TransportationManager::GetTransportationManager()
+                               ->GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume());
+*/
+     parser.SetRegionExport(true);
+     parser.Write(argv[2], G4TransportationManager::GetTransportationManager()
+      ->GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume());
+   }
+   
 
    if (argc==4)   // batch mode  
    {
@@ -154,3 +200,5 @@ int main(int argc,char **argv)
 
    return 0;
 }
+
+   

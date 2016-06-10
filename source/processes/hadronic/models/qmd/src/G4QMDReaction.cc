@@ -37,7 +37,7 @@
 #include "G4QMDReaction.hh"
 #include "G4QMDNucleus.hh"
 #include "G4QMDGroundStateNucleus.hh"
-
+#include "G4Pow.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4NistManager.hh"
@@ -65,6 +65,19 @@ G4QMDReaction::G4QMDReaction()
    evaporation = new G4Evaporation;
    excitationHandler->SetEvaporation( evaporation );
    setEvaporationCh();
+
+   coulomb_collision_gamma_proj = 0.0;
+   coulomb_collision_rx_proj = 0.0;
+   coulomb_collision_rz_proj = 0.0;
+   coulomb_collision_px_proj = 0.0;
+   coulomb_collision_pz_proj = 0.0;
+
+   coulomb_collision_gamma_targ = 0.0;
+   coulomb_collision_rx_targ = 0.0;
+   coulomb_collision_rz_targ = 0.0;
+   coulomb_collision_px_targ = 0.0;
+   coulomb_collision_pz_targ = 0.0;
+
 }
 
 
@@ -161,8 +174,15 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 
    delete proj_dp; 
 
-   while ( elastic ) 
+   G4int icounter = 0;
+   G4int icounter_max = 1024;
+   while ( elastic ) // Loop checking, 11.03.2015, T. Koi
    {
+      icounter++;
+      if ( icounter > icounter_max ) { 
+	 G4cout << "Loop-counter exceeded the threshold value at " << __LINE__ << "th line of " << __FILE__ << "." << G4endl;
+         break;
+      }
 
 // impact parameter 
       //G4double bmax = 1.05*(bmax_0/fermi);  // 10% for Peripheral reactions
@@ -444,6 +464,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
          }
          nucleuses.clear();
       }
+
    } 
 
 
@@ -483,7 +504,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
          continue;  
       }
 
-      G4double nucleus_e = std::sqrt ( std::pow ( (*it)->GetNuclearMass()/GeV , 2 ) + std::pow ( (*it)->Get4Momentum().vect().mag() , 2 ) );
+      G4double nucleus_e = std::sqrt ( G4Pow::GetInstance()->powN ( (*it)->GetNuclearMass()/GeV , 2 ) + G4Pow::GetInstance()->powN ( (*it)->Get4Momentum().vect().mag() , 2 ) );
       G4LorentzVector nucleus_p4CM ( (*it)->Get4Momentum().vect() , nucleus_e ); 
 
 //      std::cout << "G4QMDRESULT nucleus deltaQ " << deltaQ << std::endl;
@@ -524,7 +545,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
              G4ThreeVector randomized_direction( G4UniformRand() , G4UniformRand() , G4UniformRand() );
              randomized_direction = randomized_direction.unit();
              G4double q_decay = (*itt)->GetMass() - 2*G4Alpha::Alpha()->GetPDGMass();
-             G4double p_decay = std::sqrt ( std::pow(G4Alpha::Alpha()->GetPDGMass()+q_decay/2,2) - std::pow(G4Alpha::Alpha()->GetPDGMass() , 2 ) ); 
+             G4double p_decay = std::sqrt ( G4Pow::GetInstance()->powN(G4Alpha::Alpha()->GetPDGMass()+q_decay/2,2) - G4Pow::GetInstance()->powN(G4Alpha::Alpha()->GetPDGMass() , 2 ) ); 
              G4LorentzVector p4_a1 ( p_decay*randomized_direction , G4Alpha::Alpha()->GetPDGMass()+q_decay/2 );  //in Be8 rest system
              
              G4LorentzVector p4_a1_Be8 = CLHEP::boostOf ( p4_a1/GeV , -p4.findBoostToCM() );
@@ -786,4 +807,9 @@ void G4QMDReaction::setEvaporationCh()
    else
       evaporation->SetDefaultChannel();
 
+}
+
+void G4QMDReaction::ModelDescription(std::ostream& outFile) const
+{
+   outFile << "Lorentz covarianted Quantum Molecular Dynamics model for nucleus (particle) vs nucleus reactions\n";
 }

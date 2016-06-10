@@ -39,12 +39,20 @@
     G4double result;
     G4double random, cut, max;
     max = std::sinh(std::sqrt(b*15.*a));
+
+    G4int icounter=0;
+    G4int icounter_max=1024;
     do
     {
+      icounter++;
+      if ( icounter > icounter_max ) {
+	 G4cout << "Loop-counter exceeded the threshold value at " << __LINE__ << "th line of " << __FILE__ << "." << G4endl;
+         break;
+      }
       random = G4UniformRand();
-      result = -a*std::log(random);
+      result = -a*G4Log(random);
       cut = G4UniformRand();
     }
-    while(cut>std::sinh(std::sqrt(b*result))/max);
+    while(cut>std::sinh(std::sqrt(b*result))/max); // Loop checking, 11.05.2015, T. Koi
     return result;
   }

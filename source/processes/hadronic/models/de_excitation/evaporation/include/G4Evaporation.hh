@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Evaporation.hh 85443 2014-10-29 14:35:57Z gcosmo $
+// $Id: G4Evaporation.hh 88841 2015-03-12 10:34:14Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -66,7 +66,7 @@ public:
 	 
   virtual ~G4Evaporation();
 
-  virtual void Initialise();
+  virtual void InitialiseChannels();
 
   // primary fragment is copied, the copy is deleted 
   // or is added to the list of products 
@@ -81,11 +81,7 @@ public:
   void SetGEMChannel();
   void SetCombinedChannel();
 
-  virtual void SetPhotonEvaporation(G4VEvaporationChannel* ptr);
-
 private:
-
-  void CleanChannels();
 
   void SetParameters();
 

@@ -1,0 +1,8 @@
+#
+/control/verbose 2
+/run/verbose 1
+#
+/run/initialize
+#
+/run/printProgress 10000
+/run/beamOn 100000

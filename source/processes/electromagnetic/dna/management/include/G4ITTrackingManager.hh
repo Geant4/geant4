@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITTrackingManager.hh 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id: G4ITTrackingManager.hh 91584 2015-07-27 13:01:48Z gcosmo $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
@@ -60,19 +60,24 @@ class G4ITTrackingInteractivity;
 class G4ITTrackingManager
 {
 protected:
-    G4ITTrackingInteractivity* fpTrackingInteractivity;
+  G4ITTrackingInteractivity* fpTrackingInteractivity;
 
 public:
-    G4ITTrackingManager();
-    virtual ~G4ITTrackingManager();
+  G4ITTrackingManager();
+  ~G4ITTrackingManager();
 
-    //void Initialize();
+  //void Initialize();
 
-    virtual void StartTracking(G4Track*);
-    virtual void AppendStep(G4Track* track, G4Step* step);
-    virtual void EndTracking(G4Track*);
+  void StartTracking(G4Track*);
+  void AppendStep(G4Track* track, G4Step* step);
+  void EndTracking(G4Track*);
+  void EndTrackingWOKill(G4Track*);
 
-    void SetInteractivity(G4ITTrackingInteractivity*);
+  void SetInteractivity(G4ITTrackingInteractivity*);
+  inline G4ITTrackingInteractivity* GetInteractivity()
+  {
+    return fpTrackingInteractivity;
+  }
 };
 
 #endif // G4ITTRACKINGMANAGER_HH

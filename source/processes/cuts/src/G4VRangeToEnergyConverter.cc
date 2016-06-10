@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.cc 81295 2014-05-26 09:36:06Z gcosmo $
+// $Id: G4VRangeToEnergyConverter.cc 93090 2015-10-05 13:14:43Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -116,18 +116,18 @@ G4VRangeToEnergyConverter & G4VRangeToEnergyConverter::operator=(const G4VRangeT
 
 G4VRangeToEnergyConverter::~G4VRangeToEnergyConverter()
 { 
-  // Reset();
+  Reset();
   // Comment out Reset() for MT application  
 
-  // delete loss table without deleteing vectors  
-  if (theLossTable) {  
-    delete theLossTable;
-  }
-  theLossTable=0;
-  NumberOfElements=0;
-  
-  //clear RangeVectorStore without deleteing vectors
-  fRangeVectorStore.clear();
+/////MA  // delete loss table without deleteing vectors  
+/////MA  if (theLossTable) {  
+/////MA    delete theLossTable;
+/////MA  }
+/////MA  theLossTable=0;
+/////MA  NumberOfElements=0;
+/////MA  
+/////MA  //clear RangeVectorStore without deleteing vectors
+/////MA  fRangeVectorStore.clear();
 
 }
 
@@ -431,7 +431,9 @@ G4double G4VRangeToEnergyConverter::ConvertCutToKineticEnergy(
   // convert range to energy
   G4double T3 = std::sqrt(T1*T2);
   G4double r3 = rangeVector->Value(T3);
-  while ( std::fabs(1.-r3/theCutInLength)>epsilon ) {
+  const size_t MAX_LOOP = 1000; 
+  for (size_t loop_count=0; loop_count<MAX_LOOP; ++loop_count){
+    if (std::fabs(1.-r3/theCutInLength)<epsilon ) break;
     if ( theCutInLength <= r3 ) {
       T2 = T3;
     } else {

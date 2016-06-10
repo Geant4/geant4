@@ -25,10 +25,14 @@
 //
 
 #include "G4LENDElastic.hh"
+#include "G4Pow.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Nucleus.hh"
 #include "G4IonTable.hh"
+
+//extern "C" double MyRNG(void*) { return drand48(); }
+//extern "C" double MyRNG(void*) { return  CLHEP::HepRandom::getTheEngine()->flat(); }
 
 G4HadFinalState * G4LENDElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTarg )
 {
@@ -52,7 +56,8 @@ G4HadFinalState * G4LENDElastic::ApplyYourself(const G4HadProjectile& aTrack, G4
    theResult->Clear();
 
    G4GIDI_target* aTarget = usedTarget_map.find( lend_manager->GetNucleusEncoding( iZ , iA , iM ) )->second->GetTarget();
-   G4double aMu = aTarget->getElasticFinalState( ke*MeV, temp, NULL, NULL );
+   //G4double aMu = aTarget->getElasticFinalState( ke*MeV, temp, NULL, NULL );
+   G4double aMu = aTarget->getElasticFinalState( ke*MeV, temp, MyRNG , NULL );
 
    G4double phi = twopi*G4UniformRand();
    G4double theta = std::acos( aMu );
@@ -117,13 +122,13 @@ G4HadFinalState * G4LENDElastic::ApplyYourself(const G4HadProjectile& aTrack, G4
 //110913 Add Protection for very low energy (1e-6eV) scattering 
       if ( theNeutron.GetKineticEnergy() <= 0 )
       {
-         theNeutron.SetTotalEnergy ( theNeutron.GetMass() * ( 1 + std::pow( 10 , -15.65 ) ) );
+         theNeutron.SetTotalEnergy ( theNeutron.GetMass() * ( 1 + G4Pow::GetInstance()->powA( 10 , -15.65 ) ) );
       }
 
       theTarget.Lorentz(theTarget, -1.*theCMS);
       if ( theTarget.GetKineticEnergy() < 0 )
       {
-         theTarget.SetTotalEnergy ( theTarget.GetMass() * ( 1 + std::pow( 10 , -15.65 ) ) );
+         theTarget.SetTotalEnergy ( theTarget.GetMass() * ( 1 + G4Pow::GetInstance()->powA( 10 , -15.65 ) ) );
       }
 //110913 END
 

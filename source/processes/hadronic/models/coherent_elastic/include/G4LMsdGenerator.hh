@@ -82,7 +82,7 @@ class G4LMsdGenerator : public G4HadronicInteraction
 
   G4double SampleMx(const G4HadProjectile* aParticle );
 
-  G4double SampleT( G4double Mx );
+  G4double SampleT( const G4HadProjectile* aParticle, G4double Mx );
 
   void ModelDescription(std::ostream& outFile) const;
 

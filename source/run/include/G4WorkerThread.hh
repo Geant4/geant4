@@ -52,6 +52,9 @@ public:
     static void DestroyGeometryAndPhysicsVector();
     static void UpdateGeometryAndPhysicsVectorFromMaster();
 
+    //Setting Pin Affinity
+    void SetPinAffinity(G4int aff) const;
+
 private:
     G4int threadId;
     G4int numThreads;

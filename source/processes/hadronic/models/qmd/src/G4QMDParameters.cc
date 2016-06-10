@@ -28,12 +28,14 @@
 // Niita et al., JAERI-Data/Code 99-042
 
 #include "G4QMDParameters.hh"
+#include "G4Pow.hh"
 #include "G4PhysicalConstants.hh"
 
 G4ThreadLocal G4QMDParameters* G4QMDParameters::parameters = NULL;
 
 G4QMDParameters::G4QMDParameters()
 {
+   G4Pow* pow=G4Pow::GetInstance();
 
    wl = 2.0; // width of wave packet [fm]
    hbc = 0.1973;      //   h-bar c in GeVfm
@@ -55,29 +57,29 @@ G4QMDParameters::G4QMDParameters()
    G4double ebinm = -16.0; // bounding energy [MeV] 
    G4double ebin = ebinm * 0.001;
 
-   G4double pfer  = hbc * std::pow ( 3./2. *pi*pi * rho0 , 1./3. );
+   G4double pfer  = hbc * pow->A13 ( 3./2. *pi*pi * rho0 );
 
    G4double rmass = 0.938; 
 
    G4double efer  = pfer*pfer / 2. / rmass;
 
-   G4double t3 = 8. / 3. / rpot / std::pow( rho0 , ( 1.+rpot ) ) * ( efer / 5. - ebin );
+   G4double t3 = 8. / 3. / rpot / pow->powA( rho0 , ( 1.+rpot ) ) * ( efer / 5. - ebin );
 
-   G4double t0 = -16./15. * efer / rho0 - ( 1.+rpot ) * t3 * std::pow( rho0 , rpot );
+   G4double t0 = -16./15. * efer / rho0 - ( 1.+rpot ) * t3 * pow->powA( rho0 , rpot );
   
 
    G4double aaa = 3./4. * t0 * rho0;
-   G4double bbb = 3./8. * t3 * ( 2.+rpot ) * std::pow( rho0 , ( 1.+rpot ) );
+   G4double bbb = 3./8. * t3 * ( 2.+rpot ) * pow->powA( rho0 , ( 1.+rpot ) );
    G4double esymm = 25 * 0.001; // symetric potential 25 [MeV] -> GeV
 
    gamm = rpot + 1.0;
 
 // Local Potenials
-   c0 = aaa / ( rho0 * std::pow( 4 * pi * wl , 1.5 ) * 2.0 );
+   c0 = aaa / ( rho0 * pow->powA( 4 * pi * wl , 1.5 ) * 2.0 );
 
-   c3 = bbb / ( std::pow( rho0 , gamm ) * std::pow ( (4.0*pi*wl) , (1.5*gamm) ) * ( gamm+1.0) );
+   c3 = bbb / ( pow->powA( rho0 , gamm ) * pow->powA ( (4.0*pi*wl) , (1.5*gamm) ) * ( gamm+1.0) );
 
-   cs = esymm / ( rho0 * std::pow( (4.0*pi*wl) , 1.5 ) * 2.0 );
+   cs = esymm / ( rho0 * pow->powA( (4.0*pi*wl) , 1.5 ) * 2.0 );
 
    G4double ccoul = 0.001439767;
    cl = ccoul/2.0 * 1;  // Include Coulomb interaction
@@ -86,7 +88,7 @@ G4QMDParameters::G4QMDParameters()
 
 
 // GroundStateNucleus
-   cdp = 1.0 / std::pow ( ( 4.0 * pi * wl ) , 1.5 );
+   cdp = 1.0 / pow->powA ( ( 4.0 * pi * wl ) , 1.5 );
    c0p = c0 * 2.0;
    c3p = c3 * ( gamm + 1.0 );
    csp = cs * 2.0;

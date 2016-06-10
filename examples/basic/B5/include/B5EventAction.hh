@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5EventAction.hh 76474 2013-11-11 10:36:34Z gcosmo $
+// $Id: B5EventAction.hh 94486 2015-11-19 08:33:37Z gcosmo $
 //
 /// \file B5EventAction.hh
 /// \brief Definition of the B5EventAction class
@@ -35,6 +35,8 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
+#include <vector>
+
 /// Event action
 
 class B5EventAction : public G4UserEventAction
@@ -45,6 +47,9 @@ public:
     
     virtual void BeginOfEventAction(const G4Event*);
     virtual void EndOfEventAction(const G4Event*);
+
+    std::vector<G4double>& GetEmCalEdep() { return fEmCalEdep; }
+    std::vector<G4double>& GetHadCalEdep() { return fEmCalEdep; }
     
 private:
     G4int fHHC1ID;
@@ -53,6 +58,8 @@ private:
     G4int fDHC2ID;
     G4int fECHCID;
     G4int fHCHCID;
+    std::vector<G4double> fEmCalEdep;
+    std::vector<G4double> fHadCalEdep;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsSystem.hh 78838 2014-01-28 08:46:17Z gcosmo $
+// $Id: G4VGraphicsSystem.hh 91686 2015-07-31 09:40:08Z gcosmo $
 //
 // 
 // John Allison  27th March 1996
@@ -37,6 +37,8 @@
 #define G4VGRAPHICSSYSTEM_HH
 
 #include "globals.hh"
+
+#include <vector>
 
 class G4VSceneHandler;
 class G4VViewer;
@@ -75,25 +77,21 @@ public: // With description
   virtual G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& name) = 0;
 
   // Access functions.
-  const G4String& GetName          () const;
-  const G4String& GetNickname      () const;
-  const G4String& GetDescription   () const;
-  Functionality   GetFunctionality () const;
-  virtual G4bool IsUISessionCompatible () const;
-  void SetName          (const G4String&);
-  void SetNickname      (const G4String&);
-  void SetDescription   (const G4String&);
-  void SetFunctionality (Functionality);
+  const G4String& GetName                   () const {return fName;}
+  const G4String& GetNickname               () const {return fNicknames[0];}
+  const std::vector<G4String>& GetNicknames () const {return fNicknames;}
+  const G4String& GetDescription            () const {return fDescription;}
+  Functionality   GetFunctionality          () const {return fFunctionality;}
+  virtual G4bool  IsUISessionCompatible     () const;
+  void AddNickname (const G4String& nickname) {fNicknames.push_back(nickname);}
 
 protected:
   G4String fName;
-  G4String fNickname;
+  std::vector<G4String> fNicknames;
   G4String fDescription;
   Functionality  fFunctionality;
 };
 
 std::ostream& operator << (std::ostream& os, const G4VGraphicsSystem& gs);
-
-#include "G4VGraphicsSystem.icc"
 
 #endif

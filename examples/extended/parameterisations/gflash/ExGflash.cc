@@ -23,20 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExGflash.cc 72372 2013-07-16 14:30:39Z gcosmo $
+// $Id: ExGflash.cc 94396 2015-11-13 13:37:16Z gcosmo $
 //
 /// \file parameterisations/gflash/ExGflash.cc
 /// \brief Main program of the parameterisations/gflash example
 //
 // Created by Joanna Weng 26.11.2004
 
-//std includes 
-#include <algorithm>
-#include <iostream>
-#include "G4Timer.hh"
 // G4 includes 
+#include "G4Timer.hh"
 #include "G4ios.hh"
-#include "G4GlobalFastSimulationManager.hh"
 #include "G4Timer.hh"
 #include "G4UImanager.hh"
 
@@ -45,19 +41,14 @@
 #else
 #include "G4RunManager.hh"
 #endif
-#include "ExGflashActionInitialization.hh"
 
 // my project 
 #include "ExGflashDetectorConstruction.hh"
-#include "ExGflashPhysicsList.hh"
-#include "ExGflashPrimaryGeneratorAction.hh"
-#include "ExGflashEventAction.hh"
-#include "ExGflashRunAction.hh"
+#include "ExGflashPhysics.hh"
+#include "ExGflashActionInitialization.hh"
 
-#include "QBBC.hh"
-
-
-using namespace std;
+#include "FTFP_BERT.hh"
+#include "G4VModularPhysicsList.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -67,20 +58,13 @@ using namespace std;
 #include "G4UIExecutive.hh"
 #endif
 
-#ifdef G4_SOLVE_TEMPLATES
-#ifdef G4VIS_USE
-#define G4_SOLVE_VIS_TEMPLATES
-#endif
-#endif
-
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
 {   
-  // Timer to see GFlash performance
-  G4Timer Timer;
-  Timer.Start();
+  // timer to see GFlash performance
+  G4Timer timer;
+  timer.Start();
   
   G4cout<<"+-------------------------------------------------------+"<<G4endl;
   G4cout<<"|                                                       |"<<G4endl;
@@ -106,13 +90,15 @@ int main(int argc,char** argv)
   // UserInitialization classes (mandatory)
   G4cout<<"# GFlash Example: Detector Construction"<<G4endl;    
   runManager->SetUserInitialization(new ExGflashDetectorConstruction);
-  G4cout<<"# GFlash Example: Physics list"<<G4endl;
-  runManager->SetUserInitialization(new ExGflashPhysicsList);
-  // runManager->SetUserInitialization(new QBBC);
+
+  // G4cout<<"# GFlash Example: Physics "<<G4endl;
+  G4VModularPhysicsList* physicsList = new FTFP_BERT();
+  physicsList->RegisterPhysics(new ExGflashPhysics());
+  runManager->SetUserInitialization(physicsList);
+
   // Action initialization:
   runManager->SetUserInitialization(new ExGflashActionInitialization);
 
-  
 #ifdef G4VIS_USE
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
@@ -145,15 +131,15 @@ int main(int argc,char** argv)
   #endif  
   delete runManager;
   
-  Timer.Stop();
+  timer.Stop();
   G4cout << G4endl;
   G4cout << "******************************************";
   G4cout << G4endl;
-  G4cout << "Total Real Elapsed Time is: "<< Timer.GetRealElapsed();
+  G4cout << "Total Real Elapsed Time is: "<< timer.GetRealElapsed();
   G4cout << G4endl;
-  G4cout << "Total System Elapsed Time: " << Timer.GetSystemElapsed();
+  G4cout << "Total System Elapsed Time: " << timer.GetSystemElapsed();
   G4cout << G4endl;
-  G4cout << "Total GetUserElapsed Time: " << Timer.GetUserElapsed();
+  G4cout << "Total GetUserElapsed Time: " << timer.GetUserElapsed();
   G4cout << G4endl;
   G4cout << "******************************************";
   G4cout << G4endl;
@@ -162,6 +148,3 @@ int main(int argc,char** argv)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
-

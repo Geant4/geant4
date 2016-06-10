@@ -1,14 +1,13 @@
-# $Id: GNUmakefile 77519 2013-11-25 10:54:57Z gcosmo $
+# $Id: GNUmakefile 88154 2015-02-02 12:25:20Z gcosmo $
 # GEANT4 tag $Name: 
 # --------------------------------------------------------------
-# GNUmakefile for examples module with DPMJET interface
+# GNUmakefile for examples module with DPMJET interface 
 # --------------------------------------------------------------
 
 name := Hadr02
 G4TARGET := $(name)
 G4EXLIB := true
 
-DPMJDIR = dpmjet2_5
 URQMDDIR= urqmd1_3
 HIJINGDIR= hijing1_383
 
@@ -19,21 +18,7 @@ endif
 include $(G4INSTALL)/config/architecture.gmk
 
 .PHONY: all
-all: dpm urqmd hijing lib bin
-
-dpm:
-ifdef G4_USE_DPMJET
-	(cd ${DPMJDIR} && $(MAKE));
-	(mv ${DPMJDIR}/*.o ${G4TMPDIR});
-endif
-
-ifdef G4_USE_DPMJET
-  CPPFLAGS += -DG4_USE_DPMJET \
-              -DG4DPMJET25GDSHDEBUG
-
-  EXTRALIBS = -lgfortran -lgmp -lmpfr \
-              -L${CERNLIB}/lib -lmathlib -lkernlib -lpacklib 
-endif
+all: urqmd hijing lib bin
 
 
 urqmd:
@@ -60,12 +45,14 @@ endif
 ifdef G4_USE_HIJING
   CPPFLAGS += -DG4_USE_HIJING
   EXTRALIBS = -lgfortran 
-#-lgmp -lmpfr \
-#		-L${CERNROOT}/cernlib -lmathlib -lkernlib -lpacklib -lpawlib
+              -lgmp -lmpfr \
+	      -L${CERNROOT}/cernlib -lmathlib -lkernlib -lpacklib -lpawlib
 endif
 
-
 include $(G4INSTALL)/config/binmake.gmk
+
+dclean:
+	@rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/G4DPMJET2_5Model.o
 
 histclean:
 	@rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/Histo.o

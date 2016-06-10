@@ -38,13 +38,13 @@
 #ifndef G4MuonVDNuclearModel_h
 #define G4MuonVDNuclearModel_h 1 
 
-#include "G4KokoulinMuonNuclearXS.hh"
 #include "G4HadronicInteraction.hh"
 
 class G4CascadeInterface;
 class G4TheoFSGenerator; 
 class G4LundStringFragmentation;
 class G4ExcitedStringDecay;
+class G4KokoulinMuonNuclearXS;
 
 class G4MuonVDNuclearModel : public G4HadronicInteraction
 {
@@ -72,7 +72,7 @@ class G4MuonVDNuclearModel : public G4HadronicInteraction
     G4double proba[5][8][1001];
     G4double ya[1001];
 
-    G4KokoulinMuonNuclearXS muNucXS;
+    G4KokoulinMuonNuclearXS* muNucXS;
 
     G4TheoFSGenerator* ftfp;
     G4LundStringFragmentation* theFragmentation;

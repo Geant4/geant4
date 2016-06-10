@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc 83851 2014-09-19 10:12:12Z gcosmo $
+// $Id: G4ExtrudedSolid.cc 92024 2015-08-13 14:16:00Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -338,6 +338,7 @@ G4TwoVector G4ExtrudedSolid::ProjectPoint(const G4ThreeVector& point) const
   //
   G4int iz = 0;
   while ( point.z() > fZSections[iz+1].fZ && iz < fNz-2 ) { ++iz; }
+      // Loop checking, 13.08.2015, G.Cosmo
   
   G4double z0 = ( fZSections[iz+1].fZ + fZSections[iz].fZ )/2.0;
   G4TwoVector p2(point.x(), point.y());
@@ -548,20 +549,24 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
   std::vector< Vertex >::iterator c1 = verticesToBeDone.begin();
   std::vector< Vertex >::iterator c2 = c1+1;  
   std::vector< Vertex >::iterator c3 = c1+2;  
-  while ( verticesToBeDone.size()>2 )
+  while ( verticesToBeDone.size()>2 )    // Loop checking, 13.08.2015, G.Cosmo
   {
 
     // G4cout << "Looking at triangle : "
-    //        << c1->second << "  " << c2->second
+    //         << c1->second << "  " << c2->second
     //        << "  " << c3->second << G4endl;  
+    //G4cout << "Looking at triangle : "
+    //        << c1->first << "  " << c2->first
+    //        << "  " << c3->first << G4endl;  
 
     // skip concave vertices
     //
     G4double angle = GetAngle(c2->first, c3->first, c1->first);
+   
     //G4cout << "angle " << angle  << G4endl;
 
     G4int counter = 0;
-    while ( angle > pi )
+    while ( angle >= pi )    // Loop checking, 13.08.2015, G.Cosmo
     {
       // G4cout << "Skipping concave vertex " << c2->second << G4endl;
 
@@ -572,9 +577,9 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
       ++c3; 
       if ( c3 == verticesToBeDone.end() ) { c3 = verticesToBeDone.begin(); }
 
-      // G4cout << "Looking at triangle : "
-      //        << c1->second << "  " << c2->second
-      //        << "  " << c3->second << G4endl; 
+      //G4cout << "Looking at triangle : "
+      //      << c1->first << "  " << c2->first
+      //        << "  " << c3->first << G4endl; 
       
       angle = GetAngle(c2->first, c3->first, c1->first); 
       //G4cout << "angle " << angle  << G4endl;
@@ -801,7 +806,7 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
   //
   std::vector< std::vector<G4int> >::const_iterator it = fTriangles.begin();
   G4bool inside = false;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     if ( IsPointInside(fPolygon[(*it)[0]], fPolygon[(*it)[1]],
                        fPolygon[(*it)[2]], pscaled) )  { inside = true; }

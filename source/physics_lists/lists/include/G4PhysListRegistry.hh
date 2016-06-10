@@ -68,6 +68,8 @@ public:
   // mapping from extension name to actual physics contructor process name
 
   G4VModularPhysicsList* GetModularPhysicsList(const G4String& name);
+  G4VModularPhysicsList* GetModularPhysicsListFromEnv();
+
 
   G4bool IsReferencePhysList(G4String nam) const;
 
@@ -85,6 +87,16 @@ public:
   inline void  SetVerbose(G4int val) { verbose = val; }
   inline G4int GetVerbose() const { return verbose; }
 
+  inline void  SetUnknownFatal(G4int val) { unknownFatal = val; }
+  inline G4int GetUnknownFatal() const { return unknownFatal; }
+
+         void      SetUserDefaultPhysList(const G4String& name="");
+  inline G4String  GetUserDefaultPhysList() const { return userDefault; }
+  // set a prefered list in case where $PHYSLIST isn't defined
+  // if not set (or called with "") this falls back to system default
+
+  inline G4String  GetSystemDefaultPhysList() const { return systemDefault; }
+
 private:
 
   G4PhysListRegistry();
@@ -94,8 +106,11 @@ private:
   std::map <G4String, G4VBasePhysListStamper*> factories;
   std::map <G4String, G4String> physicsExtensions;
 
-  G4int verbose;
-  G4int unknownFatal;
+  G4int    verbose;
+  G4int    unknownFatal;  /// throw an exception if unsatisfiable?
+  G4String userDefault;   /// use this if $PHYSLIST isn't set
+  G4String systemDefault; /// use this if user hasn't set userDefault
+                          /// or attempts to set the userDefault=""
 
   // Make these mutable and update them on each request because the map might 
   // have been updated by the addition of new entries

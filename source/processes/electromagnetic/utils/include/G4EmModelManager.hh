@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.hh 72944 2013-08-14 13:43:07Z gcosmo $
+// $Id: G4EmModelManager.hh 91745 2015-08-04 11:51:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -89,7 +89,7 @@ public:
 private:
 
   G4RegionModels(G4int nMod, std::vector<G4int>& indx, 
-		 G4DataVector& lowE, const G4Region* reg);
+                 G4DataVector& lowE, const G4Region* reg);
 
   ~G4RegionModels();
 
@@ -97,6 +97,7 @@ private:
     G4int idx = 0;
     if (nModelsForRegion>1) {
       idx = nModelsForRegion;
+      // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
       do {--idx;} while (idx > 0 && e <= lowKineticEnergy[idx]);
     }
     return theListOfModelIndexes[idx];
@@ -151,15 +152,15 @@ public:
 
   const G4DataVector* Initialise(const G4ParticleDefinition* part,
                                  const G4ParticleDefinition* secPart,
-				 G4double minSubRange,
-				 G4int verb);
+                                 G4double minSubRange,
+                                 G4int verb);
 
   void FillDEDXVector(G4PhysicsVector*, const G4MaterialCutsCouple*, 
-		      G4EmTableType t = fRestricted);
+                      G4EmTableType t = fRestricted);
 
   void FillLambdaVector(G4PhysicsVector*, const G4MaterialCutsCouple*, 
                         G4bool startFromNull = true, 
-			G4EmTableType t = fRestricted);
+                        G4EmTableType t = fRestricted);
 
   G4VEmModel* GetModel(G4int, G4bool ver = false);
 
@@ -182,10 +183,10 @@ public:
 private:
 
   inline G4double ComputeDEDX(G4VEmModel* model,
-			      const G4MaterialCutsCouple*,
-			      G4double kinEnergy,
-			      G4double cutEnergy,
-			      G4double minEnergy);
+                              const G4MaterialCutsCouple*,
+                              G4double kinEnergy,
+                              G4double cutEnergy,
+                              G4double minEnergy);
 
   // hide  assignment operator
 
@@ -229,7 +230,7 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4VEmModel* G4EmModelManager::SelectModel(G4double& kinEnergy, 
-						 size_t& index)
+                                                 size_t& index)
 {
   if(severalModels) {
     if(nRegions > 1) {
@@ -272,10 +273,10 @@ inline G4int G4EmModelManager::NumberOfModels() const
 
 inline G4double 
 G4EmModelManager::ComputeDEDX(G4VEmModel* model,
-			      const G4MaterialCutsCouple* couple,
-			      G4double e,
-			      G4double cut,
-			      G4double emin)
+                              const G4MaterialCutsCouple* couple,
+                              G4double e,
+                              G4double cut,
+                              G4double emin)
 {
   G4double dedx = 0.0;
   if(model && cut > emin) {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABrownianTransportation.cc 87375 2014-12-02 08:17:28Z gcosmo $
+// $Id: G4DNABrownianTransportation.cc 94218 2015-11-09 08:24:48Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -43,7 +43,7 @@
 
 #include "G4DNABrownianTransportation.hh"
 
-#include <G4VScheduler.hh>
+#include <G4Scheduler.hh>
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
@@ -57,6 +57,7 @@
 #include "G4DNAMolecularMaterial.hh"
 #include "G4ITNavigator.hh"
 #include "G4ITSafetyHelper.hh" // Not used yet
+#include "G4TrackingInformation.hh"
 
 using namespace std;
 
@@ -109,7 +110,7 @@ static double InvErfc(double x)
 
 static double Erfc(double x)
 {
-  return 1-CLHEP::HepStat::erf(1. - x);
+  return 1 - CLHEP::HepStat::erf(1. - x);
 }
 
 #ifndef State
@@ -161,7 +162,7 @@ G4DNABrownianTransportation::G4DNABrownianTransportation(const G4DNABrownianTran
 
 G4DNABrownianTransportation& G4DNABrownianTransportation::operator=(const G4DNABrownianTransportation& rhs)
 {
-  if (this == &rhs) return *this; // handle self assignment
+  if(this == &rhs) return *this; // handle self assignment
   //assignment operator
   return *this;
 }
@@ -186,7 +187,7 @@ void G4DNABrownianTransportation::StartTracking(G4Track* track)
 
 void G4DNABrownianTransportation::BuildPhysicsTable(const G4ParticleDefinition& particle)
 {
-  if (verboseLevel > 0)
+  if(verboseLevel > 0)
   {
     G4cout << G4endl<< GetProcessName() << ":   for  "
     << setw(24) << particle.GetParticleName()
@@ -218,20 +219,20 @@ void G4DNABrownianTransportation::ComputeStep(const G4Track& track,
    * is on. Meaning : this track has the minimum
    * interaction length over all others.
    */
-  if (GetIT(track)->GetTrackingInfo()->IsLeadingStep())
+  if(GetIT(track)->GetTrackingInfo()->IsLeadingStep())
   {
     const G4VITProcess* ITProc = ((const G4VITProcess*) step.GetPostStepPoint()
         ->GetProcessDefinedStep());
     bool makeException = true;
 
-    if (ITProc && ITProc->ProposesTimeStep()) makeException = false;
+    if(ITProc && ITProc->ProposesTimeStep()) makeException = false;
 
-    if (makeException)
+    if(makeException)
     {
 
       G4ExceptionDescription exceptionDescription;
       exceptionDescription << "ComputeStep is called while the track has"
-                           "the minimum interaction time";
+                              "the minimum interaction time";
       exceptionDescription << " so it should not recompute a timeStep ";
       G4Exception("G4DNABrownianTransportation::ComputeStep",
                   "G4DNABrownianTransportation001", FatalErrorInArgument,
@@ -243,13 +244,13 @@ void G4DNABrownianTransportation::ComputeStep(const G4Track& track,
 
   G4Molecule* molecule = GetMolecule(track);
 
-  if (timeStep > 0)
+  if(timeStep > 0)
   {
     spaceStep = DBL_MAX;
 
-    // TODO : generalize this process to all kind of brownian objects
-    // G4double diffCoeff = molecule->GetDiffusionCoefficient(track.GetMaterial());
-    G4double diffCoeff = molecule->GetDiffusionCoefficient();
+    // TODO : generalize this process to all kind of Brownian objects
+    G4double diffCoeff = molecule->GetDiffusionCoefficient(track.GetMaterial(),
+                                                           track.GetMaterial()->GetTemperature());
 
     static double sqrt_2 = sqrt(2.);
     double sqrt_Dt = sqrt(diffCoeff*timeStep);

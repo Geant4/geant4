@@ -1,10 +1,11 @@
 #
-# ------ GNU/LINUX ------         Intel icc 11.0
+# ------ GNU/LINUX ------         Intel icc 15.x.x and higher
 #
 ifeq ($(G4SYSTEM),Linux-icc)
   CXX       := icc
-  CXXFLAGS  := -ansi -fp-model precise -no-gcc -w1
+  CXXFLAGS  := -ansi -fp-model precise -w1
   ifdef G4USE_STD11
+    CPPFLAGS  += -std=c++11 
     CXXFLAGS  += -std=c++11
   endif
   ifdef G4MULTITHREADED
@@ -30,7 +31,6 @@ ifeq ($(G4SYSTEM),Linux-icc)
     CXXFLAGS  += -fPIC
     FCFLAGS   += -fPIC
     CCFLAGS   += -fPIC
-    LDFLAGS   += -i-dynamic
   endif
   G4RUNPATHOPTION := -Wl,-rpath -Wl,
   G4STATIC_MODE += -Wl,--whole-archive
@@ -42,7 +42,7 @@ ifeq ($(G4SYSTEM),Linux-icc)
   AR := ar r
   ECHO    := /bin/echo -e
   SHEXT   := so
-  LOADLIBS += -lstdc++
+#  LOADLIBS += -lstdc++
   ifndef X11FLAGS
     X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
   endif

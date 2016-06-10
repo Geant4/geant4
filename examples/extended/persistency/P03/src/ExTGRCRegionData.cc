@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGRCRegionData.cc 76943 2013-11-19 09:57:34Z gcosmo $
+// $Id: ExTGRCRegionData.cc 92819 2015-09-17 15:21:25Z gcosmo $
 //
 /// \file persistency/P03/src/ExTGRCRegionData.cc
 /// \brief Implementation of the ExTGRCRegionData class
-
 
 #include "ExTGRCRegionData.hh"
 #include "G4tgrUtils.hh"

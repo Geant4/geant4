@@ -1,0 +1,34 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_nostream
+#define tools_nostream
+
+// dummy ostream class in case we need
+// to pass a std::ostream as argument
+// but having no concrete implementation
+// at hand.
+
+#include <ostream>
+
+namespace tools {
+
+class nostream : public std::ostream {
+public:
+  nostream()
+  :std::ostream(0)
+  {}
+  virtual ~nostream(){}
+private:
+  nostream(const nostream&)
+  :std::basic_ios<char, std::char_traits<char> >()
+#ifdef TOOLS_STL
+  ,std::basic_streambuf<char, std::char_traits<char> >()
+#endif
+  ,std::ostream(0){}
+  nostream& operator=(const nostream&){return *this;}
+};
+
+}
+
+#endif

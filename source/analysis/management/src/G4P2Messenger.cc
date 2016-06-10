@@ -39,57 +39,41 @@
 
 using namespace G4Analysis;
 
-namespace {
-
-void Exception(G4UIcommand* command, G4int nofParameters)
-{
-  G4ExceptionDescription description;
-  description 
-    << "Got wrong number of \"" << command->GetCommandName() 
-    << "\" parameters: " << nofParameters
-    << " instead of " << command->GetParameterEntries() 
-    << " expected" << G4endl;
-  G4Exception("G4P2Messenger::SetNewValue",
-              "Analysis_W013", JustWarning, description);
-}
-
-}                  
-
-
 //_____________________________________________________________________________
 G4P2Messenger::G4P2Messenger(G4VAnalysisManager* manager)
   : G4UImessenger(),
     fManager(manager),
-    fP2Dir(0),  
-    fCreateP2Cmd(0),
-    fSetP2Cmd(0),
-    fSetP2TitleCmd(0), 
-    fSetP2XAxisCmd(0), 
-    fSetP2YAxisCmd(0)
+    fHelper(nullptr),
+    fDirectory(nullptr),
+    fCreateP2Cmd(nullptr),
+    fSetP2Cmd(nullptr),
+    fSetP2XCmd(nullptr),
+    fSetP2YCmd(nullptr),
+    fSetP2ZCmd(nullptr),
+    fSetP2TitleCmd(nullptr), 
+    fSetP2XAxisCmd(nullptr), 
+    fSetP2YAxisCmd(nullptr)
 {  
-  fP2Dir = new G4UIdirectory("/analysis/p2/");
-  fP2Dir->SetGuidance("2D profiles control");
+  fHelper = G4Analysis::make_unique<G4AnalysisMessengerHelper>("p2");
+
+  fDirectory = fHelper->CreateHnDirectory();
 
   CreateP2Cmd();
+
   SetP2Cmd();
-  
-  SetP2TitleCmd();
-  SetP2XAxisCmd();
-  SetP2YAxisCmd();
-  SetP2ZAxisCmd();
+  fSetP2XCmd = fHelper->CreateSetBinsCommand("x", this);
+  fSetP2YCmd = fHelper->CreateSetBinsCommand("y", this);
+  fSetP2YCmd = fHelper->CreateSetValuesCommand("z", this);
+
+  fSetP2TitleCmd = fHelper->CreateSetTitleCommand(this);
+  fSetP2XAxisCmd = fHelper->CreateSetAxisCommand("x", this);
+  fSetP2YAxisCmd = fHelper->CreateSetAxisCommand("y", this);
+  fSetP2ZAxisCmd = fHelper->CreateSetAxisCommand("z", this);
 }
 
 //_____________________________________________________________________________
 G4P2Messenger::~G4P2Messenger()
-{
-  delete fCreateP2Cmd;
-  delete fSetP2Cmd;
-  delete fSetP2TitleCmd;  
-  delete fSetP2XAxisCmd;  
-  delete fSetP2YAxisCmd;  
-  delete fSetP2ZAxisCmd;  
-  delete fP2Dir;
-}
+{}
 
 //
 // private functions
@@ -98,94 +82,94 @@ G4P2Messenger::~G4P2Messenger()
 //_____________________________________________________________________________
 void G4P2Messenger::CreateP2Cmd()
 {
-  G4UIparameter* p2Name = new G4UIparameter("name", 's', false);
+  auto p2Name = new G4UIparameter("name", 's', false);
   p2Name->SetGuidance("Profile name (label)");
   
-  G4UIparameter* p2Title = new G4UIparameter("title", 's', false);
+  auto p2Title = new G4UIparameter("title", 's', false);
   p2Title->SetGuidance("Profile title");
 
-  G4UIparameter* p2xNbins0 = new G4UIparameter("xnbins0", 'i', true);
+  auto p2xNbins0 = new G4UIparameter("xnbins0", 'i', true);
   p2xNbins0->SetGuidance("Number of x-bins (default = 100)");
   p2xNbins0->SetGuidance("Can be reset with /analysis/p2/set command");
   p2xNbins0->SetDefaultValue(100);
   
-  G4UIparameter* p2xValMin0 = new G4UIparameter("xvalMin0", 'd', true);
+  auto p2xValMin0 = new G4UIparameter("xvalMin0", 'd', true);
   p2xValMin0->SetGuidance("Minimum x-value, expressed in unit (default = 0.)");
   p2xValMin0->SetGuidance("Can be reset with /analysis/p2/set command");
   p2xValMin0->SetDefaultValue(0.);
   
-  G4UIparameter* p2xValMax0 = new G4UIparameter("xvalMax0", 'd', true);
+  auto p2xValMax0 = new G4UIparameter("xvalMax0", 'd', true);
   p2xValMax0->SetGuidance("Maximum x-value, expressed in unit (default = 1.)");
   p2xValMax0->SetGuidance("Can be reset with /analysis/p2/set command");
   p2xValMax0->SetDefaultValue(1.);
 
-  G4UIparameter* p2xValUnit0 = new G4UIparameter("xvalUnit0", 's', true);
+  auto p2xValUnit0 = new G4UIparameter("xvalUnit0", 's', true);
   p2xValUnit0->SetGuidance("The unit applied to filled x-values and xvalMin0, xvalMax0");
   p2xValUnit0->SetDefaultValue("none");
   
-  G4UIparameter* p2xValFcn0 = new G4UIparameter("xvalFcn0", 's', true);
+  auto p2xValFcn0 = new G4UIparameter("xvalFcn0", 's', true);
   G4String fcnxGuidance = "The function applied to filled x-values (log, log10, exp, none).";
   p2xValFcn0->SetGuidance(fcnxGuidance);
   p2xValFcn0->SetParameterCandidates("log log10 exp none");
   p2xValFcn0->SetDefaultValue("none");
     
-  G4UIparameter* p2xValBinScheme0 = new G4UIparameter("xvalBinScheme0", 's', true);
+  auto p2xValBinScheme0 = new G4UIparameter("xvalBinScheme0", 's', true);
   G4String binSchemeGuidance = "The binning scheme (linear, log).";
   p2xValBinScheme0->SetParameterCandidates("linear log");
   p2xValBinScheme0->SetGuidance(binSchemeGuidance);
   p2xValBinScheme0->SetDefaultValue("linear");
   
-  G4UIparameter* p2yNbins0 = new G4UIparameter("ynbins0", 'i', true);
+  auto p2yNbins0 = new G4UIparameter("ynbins0", 'i', true);
   p2yNbins0->SetGuidance("Number of y-bins (default = 100)");
   p2yNbins0->SetGuidance("Can be reset with /analysis/p2/set command");
   p2yNbins0->SetDefaultValue(100);
   
-  G4UIparameter* p2yValMin0 = new G4UIparameter("yvalMin0", 'd', true);
+  auto p2yValMin0 = new G4UIparameter("yvalMin0", 'd', true);
   p2yValMin0->SetGuidance("Minimum y-value, expressed in unit (default = 0.)");
   p2yValMin0->SetGuidance("Can be reset with /analysis/p2/set command");
   p2yValMin0->SetDefaultValue(0.);
   
-  G4UIparameter* p2yValMax0 = new G4UIparameter("yvalMax0", 'd', true);
+  auto p2yValMax0 = new G4UIparameter("yvalMax0", 'd', true);
   p2yValMax0->SetGuidance("Maximum y-value, expressed in unit (default = 1.)");
   p2yValMax0->SetGuidance("Can be reset with /analysis/p2/set command");
   p2yValMax0->SetDefaultValue(1.);
 
-  G4UIparameter* p2yValUnit0 = new G4UIparameter("yvalUnit0", 's', true);
+  auto p2yValUnit0 = new G4UIparameter("yvalUnit0", 's', true);
   p2yValUnit0->SetGuidance("The unit applied to filled y-values and yvalMin0, yvalMax0");
   p2yValUnit0->SetDefaultValue("none");
   
-  G4UIparameter* p2yValFcn0 = new G4UIparameter("yvalFcn0", 's', true);
+  auto p2yValFcn0 = new G4UIparameter("yvalFcn0", 's', true);
   G4String fcnyGuidance = "The function applied to filled y-values (log, log10, exp, none).";
   p2yValFcn0->SetGuidance(fcnyGuidance);
   p2yValFcn0->SetParameterCandidates("log log10 exp none");
   p2yValFcn0->SetDefaultValue("none");
     
-  G4UIparameter* p2yValBinScheme0 = new G4UIparameter("yvalBinScheme0", 's', true);
+  auto p2yValBinScheme0 = new G4UIparameter("yvalBinScheme0", 's', true);
   p2yValBinScheme0->SetParameterCandidates("linear log");
   p2yValBinScheme0->SetGuidance(binSchemeGuidance);
   p2yValBinScheme0->SetDefaultValue("linear");
   
-  G4UIparameter* p2zValMin0 = new G4UIparameter("zvalMin0", 'd', true);
+  auto p2zValMin0 = new G4UIparameter("zvalMin0", 'd', true);
   p2zValMin0->SetGuidance("Minimum z-value, expressed in unit (default = 0.)");
   p2zValMin0->SetGuidance("Can be reset with /analysis/p2/set command");
   p2zValMin0->SetDefaultValue(0.);
   
-  G4UIparameter* p2zValMax0 = new G4UIparameter("zvalMax0", 'd', true);
+  auto p2zValMax0 = new G4UIparameter("zvalMax0", 'd', true);
   p2zValMax0->SetGuidance("Maximum z-value, expressed in unit (default = 1.)");
   p2zValMax0->SetGuidance("Can be reset with /analysis/p2/set command");
   p2zValMax0->SetDefaultValue(1.);
 
-  G4UIparameter* p2zValUnit0 = new G4UIparameter("zvalUnit0", 's', true);
+  auto p2zValUnit0 = new G4UIparameter("zvalUnit0", 's', true);
   p2zValUnit0->SetGuidance("The unit applied to filled z-values and zvalMin0, zvalMax0");
   p2zValUnit0->SetDefaultValue("none");
   
-  G4UIparameter* p2zValFcn0 = new G4UIparameter("zvalFcn0", 's', true);
+  auto p2zValFcn0 = new G4UIparameter("zvalFcn0", 's', true);
   G4String fcnzGuidance = "The function applied to filled z-values (log, log10, exp, none).";
   p2zValFcn0->SetGuidance(fcnzGuidance);
   p2zValFcn0->SetParameterCandidates("log log10 exp none");
   p2zValFcn0->SetDefaultValue("none");
   
-  fCreateP2Cmd = new G4UIcommand("/analysis/p2/create", this);
+  fCreateP2Cmd = G4Analysis::make_unique<G4UIcommand>("/analysis/p2/create", this);
   fCreateP2Cmd->SetGuidance("Create 2D profile");
   fCreateP2Cmd->SetParameter(p2Name);
   fCreateP2Cmd->SetParameter(p2Title);
@@ -212,77 +196,77 @@ void G4P2Messenger::CreateP2Cmd()
 //_____________________________________________________________________________
 void G4P2Messenger::SetP2Cmd()
 {
-  G4UIparameter* p2Id = new G4UIparameter("id", 'i', false);
+  auto p2Id = new G4UIparameter("id", 'i', false);
   p2Id->SetGuidance("Profile id");
   p2Id->SetParameterRange("id>=0");
   
-  G4UIparameter* p2xNbins = new G4UIparameter("xnbins", 'i', false);
+  auto p2xNbins = new G4UIparameter("xnbins", 'i', false);
   p2xNbins->SetGuidance("Number of x-bins");
   
-  G4UIparameter* p2xValMin = new G4UIparameter("xvalMin", 'd', false);
+  auto p2xValMin = new G4UIparameter("xvalMin", 'd', false);
   p2xValMin->SetGuidance("Minimum x-value, expressed in unit");
   
-  G4UIparameter* p2xValMax = new G4UIparameter("xvalMax", 'd', false);
+  auto p2xValMax = new G4UIparameter("xvalMax", 'd', false);
   p2xValMax->SetGuidance("Maximum x-value, expressed in unit");
   
-  G4UIparameter* p2xValUnit = new G4UIparameter("xvalUnit", 's', false);
+  auto p2xValUnit = new G4UIparameter("xvalUnit", 's', false);
   p2xValUnit->SetGuidance("The unit applied to filled x-values and xvalMin0, xvalMax0");
   p2xValUnit->SetDefaultValue("none");
  
-  G4UIparameter* p2xValFcn = new G4UIparameter("xvalFcn", 's', false);
+  auto p2xValFcn = new G4UIparameter("xvalFcn", 's', false);
   p2xValFcn->SetParameterCandidates("log log10 exp none");
   G4String fcnxGuidance = "The function applied to filled x-values (log, log10, exp, none).";
   p2xValFcn->SetGuidance(fcnxGuidance);
   p2xValFcn->SetDefaultValue("none");
     
-  G4UIparameter* p2xValBinScheme = new G4UIparameter("xvalBinScheme", 's', true);
+  auto p2xValBinScheme = new G4UIparameter("xvalBinScheme", 's', true);
   G4String binSchemeGuidance = "The binning scheme (linear, log).";
   p2xValBinScheme->SetParameterCandidates("linear log");
   p2xValBinScheme->SetGuidance(binSchemeGuidance);
   p2xValBinScheme->SetDefaultValue("linear");
  
-  G4UIparameter* p2yNbins = new G4UIparameter("nybins", 'i', false);
+  auto p2yNbins = new G4UIparameter("nybins", 'i', false);
   p2yNbins->SetGuidance("Number of y-bins");
   
-  G4UIparameter* p2yValMin = new G4UIparameter("yvalMin", 'd', false);
+  auto p2yValMin = new G4UIparameter("yvalMin", 'd', false);
   p2yValMin->SetGuidance("Minimum y-value, expressed in unit");
   
-  G4UIparameter* p2yValMax = new G4UIparameter("yvalMax", 'd', false);
+  auto p2yValMax = new G4UIparameter("yvalMax", 'd', false);
   p2yValMax->SetGuidance("Maximum y-value, expressed in unit");
   
-  G4UIparameter* p2yValUnit = new G4UIparameter("yvalUnit", 's', true);
+  auto p2yValUnit = new G4UIparameter("yvalUnit", 's', true);
   p2yValUnit->SetGuidance("The unit applied to filled y-values and yvalMin0, yvalMax0");
   p2yValUnit->SetDefaultValue("none");
  
-  G4UIparameter* p2yValFcn = new G4UIparameter("yvalFcn", 's', false);
+  auto p2yValFcn = new G4UIparameter("yvalFcn", 's', false);
   p2yValFcn->SetParameterCandidates("log log10 exp none");
   G4String fcnyGuidance = "The function applied to filled y-values (log, log10, exp, none).";
   p2yValFcn->SetGuidance(fcnyGuidance);
   p2yValFcn->SetDefaultValue("none");
     
-  G4UIparameter* p2yValBinScheme = new G4UIparameter("yvalBinScheme", 's', true);
+  auto p2yValBinScheme = new G4UIparameter("yvalBinScheme", 's', true);
   p2yValBinScheme->SetParameterCandidates("linear log");
   p2yValBinScheme->SetGuidance(binSchemeGuidance);
   p2yValBinScheme->SetDefaultValue("linear");
  
-  G4UIparameter* p2zValMin = new G4UIparameter("zvalMin", 'd', false);
+  auto p2zValMin = new G4UIparameter("zvalMin", 'd', false);
   p2zValMin->SetGuidance("Minimum z-value, expressed in unit");
   
-  G4UIparameter* p2zValMax = new G4UIparameter("zvalMax", 'd', false);
+  auto p2zValMax = new G4UIparameter("zvalMax", 'd', false);
   p2zValMax->SetGuidance("Maximum z-value, expressed in unit");
   
-  G4UIparameter* p2zValUnit = new G4UIparameter("zvalUnit", 's', true);
+  auto p2zValUnit = new G4UIparameter("zvalUnit", 's', true);
   p2zValUnit->SetGuidance("The unit applied to filled z-values and zvalMin0, zvalMax0");
   p2zValUnit->SetDefaultValue("none");
  
-  G4UIparameter* p2zValFcn = new G4UIparameter("zvalFcn", 's', false);
+  auto p2zValFcn = new G4UIparameter("zvalFcn", 's', false);
   p2zValFcn->SetParameterCandidates("log log10 exp none");
   G4String fcnzGuidance = "The function applied to filled z-values (log, log10, exp, none).";
   p2zValFcn->SetGuidance(fcnzGuidance);
   p2zValFcn->SetDefaultValue("none");
  
-  fSetP2Cmd = new G4UIcommand("/analysis/p2/set", this);
-  fSetP2Cmd->SetGuidance("Set parameters for the 2D profile of #Id :");
+  fSetP2Cmd = G4Analysis::make_unique<G4UIcommand>("/analysis/p2/set", this);
+  fSetP2Cmd->SetGuidance("Set parameters for the 2D profile of given id:");
   fSetP2Cmd->SetGuidance("  nxbins; xvalMin; xvalMax; xunit; xbinScheme");
   fSetP2Cmd->SetGuidance("  nybins; yvalMin; yvalMax; yunit; ybinScheme");
   fSetP2Cmd->SetGuidance("  zvalMin; zvalMax; zunit; zfunction");
@@ -306,76 +290,6 @@ void G4P2Messenger::SetP2Cmd()
   fSetP2Cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }  
 
-//_____________________________________________________________________________
-void G4P2Messenger::SetP2TitleCmd()
-{
-  G4UIparameter* p2Id = new G4UIparameter("idTitle", 'i', false);
-  p2Id->SetGuidance("Profile id");
-  p2Id->SetParameterRange("idTitle>=0");
-
-  G4UIparameter* p2Title = new G4UIparameter("p2Title", 's', true);
-  p2Title->SetGuidance("Profile title");
-  p2Title->SetDefaultValue("none");
-
-  fSetP2TitleCmd = new G4UIcommand("/analysis/p2/setTitle", this);
-  fSetP2TitleCmd->SetGuidance("Set title for the 2D profile of #Id");
-  fSetP2TitleCmd->SetParameter(p2Id);
-  fSetP2TitleCmd->SetParameter(p2Title);
-  fSetP2TitleCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-}  
-
-//_____________________________________________________________________________
-void G4P2Messenger::SetP2XAxisCmd()
-{
-  G4UIparameter* p2Id = new G4UIparameter("idXaxis", 'i', false);
-  p2Id->SetGuidance("Profile id");
-  p2Id->SetParameterRange("idXaxis>=0");
-
-  G4UIparameter* p2XAxis = new G4UIparameter("p2Xaxis", 's', true);
-  p2XAxis->SetGuidance("Profile x-axis title");
-  p2XAxis->SetDefaultValue("none");
-
-  fSetP2XAxisCmd = new G4UIcommand("/analysis/p2/setXaxis", this);
-  fSetP2XAxisCmd->SetGuidance("Set x-axis title for the 2D profile of #Id");
-  fSetP2XAxisCmd->SetParameter(p2Id);
-  fSetP2XAxisCmd->SetParameter(p2XAxis);
-  fSetP2XAxisCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-}  
-
-//_____________________________________________________________________________
-void G4P2Messenger::SetP2YAxisCmd()
-{
-  G4UIparameter* p2Id = new G4UIparameter("idYaxis", 'i', false);
-  p2Id->SetGuidance("Profile id");
-  p2Id->SetParameterRange("idYaxis>=0");
-
-  G4UIparameter* p2YAxis = new G4UIparameter("p2Yaxis", 's', true);
-  p2YAxis->SetGuidance("Profile y-axis title");
-  p2YAxis->SetDefaultValue("none");
-
-  fSetP2YAxisCmd = new G4UIcommand("/analysis/p2/setYaxis", this);
-  fSetP2YAxisCmd->SetGuidance("Set y-axis title for the 2D profile of #Id");
-  fSetP2YAxisCmd->SetParameter(p2Id);
-  fSetP2YAxisCmd->SetParameter(p2YAxis);
-  fSetP2YAxisCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-}  
-
-//_____________________________________________________________________________
-void G4P2Messenger::SetP2ZAxisCmd()
-{
-  G4UIparameter* p2Id = new G4UIparameter("idZaxis", 'i', false);
-  p2Id->SetGuidance("Profile id");
-  p2Id->SetParameterRange("idZaxis>=0");
-
-  G4UIparameter* p2ZAxis = new G4UIparameter("p2Zaxis", 's', true);
-  p2ZAxis->SetGuidance("Profile z-axis title");
-  p2ZAxis->SetDefaultValue("none");
-
-  fSetP2ZAxisCmd = new G4UIcommand("/analysis/p2/setZaxis", this);
-  fSetP2ZAxisCmd->SetParameter(p2Id);
-  fSetP2ZAxisCmd->SetParameter(p2ZAxis);
-  fSetP2ZAxisCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-}  
 
 //
 // public functions
@@ -390,91 +304,109 @@ void G4P2Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
   // check consistency
   if ( G4int(parameters.size()) != command->GetParameterEntries() ) {
     // Should never happen but let's check anyway for consistency
-    Exception(command, parameters.size());
+    fHelper->WarnAboutParameters(command, parameters.size());
     return;
   }  
 
-  if ( command == fCreateP2Cmd ) { 
-    G4int counter = 0;
-    G4String name = parameters[counter++];
-    G4String title = parameters[counter++];
-    G4int xnbins = G4UIcommand::ConvertToInt(parameters[counter++]); 
-    G4double xvmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
-    G4double xvmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ; 
-    G4String xsunit = parameters[counter++];
-    G4String xsfcn = parameters[counter++];
-    G4String xsbinScheme = parameters[counter++];
-    G4double xunit = GetUnitValue(xsunit);
-    G4int ynbins = G4UIcommand::ConvertToInt(parameters[counter++]); 
-    G4double yvmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
-    G4double yvmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ; 
-    G4String ysunit = parameters[counter++];
-    G4String ysfcn = parameters[counter++];
-    G4String ysbinScheme = parameters[counter++];
-    G4double yunit = GetUnitValue(ysunit);
-    G4double zvmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
-    G4double zvmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ; 
-    G4String zsunit = parameters[counter++];
-    G4String zsfcn = parameters[counter++];
-    G4double zunit = GetUnitValue(zsunit);
+  if ( command == fCreateP2Cmd.get() ) {  
+    auto counter = 0;
+    auto name = parameters[counter++];
+    auto title = parameters[counter++];
+    G4AnalysisMessengerHelper::BinData xdata;
+    fHelper->GetBinData(xdata, parameters, counter);
+    auto xunit = GetUnitValue(xdata.fSunit);
+    G4AnalysisMessengerHelper::BinData ydata;
+    fHelper->GetBinData(ydata, parameters, counter);
+    auto yunit = GetUnitValue(ydata.fSunit);
+    G4AnalysisMessengerHelper::ValueData zdata;
+    fHelper->GetValueData(zdata, parameters, counter);
+    auto zunit = GetUnitValue(zdata.fSunit);
     fManager->CreateP2(name, title, 
-                       xnbins, xvmin*xunit, xvmax*xunit,
-                       ynbins, yvmin*yunit, yvmax*yunit, 
-                       zvmin*zunit, zvmax*zunit, 
-                       xsunit, ysunit, zsunit, xsfcn, ysfcn, zsfcn,
-                       xsbinScheme, ysbinScheme);     
+                       xdata.fNbins, xdata.fVmin*xunit, xdata.fVmax*xunit, 
+                       ydata.fNbins, ydata.fVmin*yunit, ydata.fVmax*yunit, 
+                       zdata.fVmin*zunit, zdata.fVmax*zunit, 
+                       xdata.fSunit, ydata.fSunit, zdata.fSunit,
+                       xdata.fSfcn, ydata.fSfcn, zdata.fSfcn,
+                       xdata.fSbinScheme, ydata.fSbinScheme);     
   }
-  else if ( command == fSetP2Cmd ) {
-    G4int counter = 0;
-    G4int id = G4UIcommand::ConvertToInt(parameters[counter++]);
-    G4int xnbins = G4UIcommand::ConvertToInt(parameters[counter++]); 
-    G4double xvmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
-    G4double xvmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ; 
-    G4String xsunit = parameters[counter++];
-    G4String xsfcn = parameters[counter++];
-    G4String xsbinScheme = parameters[counter++];
-    G4double xunit = GetUnitValue(xsunit);
-    G4int ynbins = G4UIcommand::ConvertToInt(parameters[counter++]); 
-    G4double yvmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
-    G4double yvmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ; 
-    G4String ysunit = parameters[counter++];
-    G4String ysfcn = parameters[counter++];
-    G4String ysbinScheme = parameters[counter++];
-    G4double yunit = GetUnitValue(ysunit);
-    G4double zvmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
-    G4double zvmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ; 
-    G4String zsunit = parameters[counter++];
-    G4String zsfcn = parameters[counter++];
-    G4double zunit = GetUnitValue(zsunit);
+  else if ( command == fSetP2Cmd.get() ) { 
+    auto counter = 0;
+    auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+    G4AnalysisMessengerHelper::BinData xdata;
+    fHelper->GetBinData(xdata, parameters, counter);
+    auto xunit = GetUnitValue(xdata.fSunit);
+    G4AnalysisMessengerHelper::BinData ydata;
+    fHelper->GetBinData(ydata, parameters, counter);
+    auto yunit = GetUnitValue(ydata.fSunit);
+    G4AnalysisMessengerHelper::ValueData zdata;
+    fHelper->GetValueData(zdata, parameters, counter);
+    auto zunit = GetUnitValue(zdata.fSunit);
     fManager->SetP2(id, 
-                    xnbins, xvmin*xunit, xvmax*xunit,
-                    ynbins, yvmin*yunit, yvmax*yunit, 
-                    zvmin*zunit, zvmax*zunit, 
-                    xsunit, ysunit, zsunit, xsfcn, ysfcn, zsfcn,     
-                    xsbinScheme, ysbinScheme);     
+                    xdata.fNbins, xdata.fVmin*xunit, xdata.fVmax*xunit, 
+                    ydata.fNbins, ydata.fVmin*yunit, ydata.fVmax*yunit, 
+                    zdata.fVmin*zunit, zdata.fVmax*zunit, 
+                    xdata.fSunit, ydata.fSunit, zdata.fSunit,
+                    xdata.fSfcn, ydata.fSfcn, zdata.fSfcn,
+                    xdata.fSbinScheme, ydata.fSbinScheme);     
   }
-  else if ( command == fSetP2TitleCmd ) {
-    G4int counter = 0;
-    G4int id = G4UIcommand::ConvertToInt(parameters[counter++]); 
-    G4String title = parameters[counter++];
+  else if ( command == fSetP2XCmd.get() ) { 
+    // Only save values
+    auto counter = 0;
+    fXId = G4UIcommand::ConvertToInt(parameters[counter++]);
+    fHelper->GetBinData(fXData, parameters, counter);
+  }
+  else if ( command == fSetP2YCmd.get() ) { 
+    // Only save values
+    auto counter = 0;
+    fYId = G4UIcommand::ConvertToInt(parameters[counter++]);
+    fHelper->GetBinData(fYData, parameters, counter);
+  }
+  else if ( command == fSetP2ZCmd.get() ) { 
+    auto counter = 0;
+    auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+    // Check if setX and setY command was called
+    if ( fXId == -1 || fXId != id || 
+         fYId == -1 || fYId != id ) {
+      fHelper->WarnAboutSetCommands();
+      return;
+    }
+    auto xunit = GetUnitValue(fXData.fSunit);
+    auto yunit = GetUnitValue(fYData.fSunit);
+    G4AnalysisMessengerHelper::ValueData zdata;
+    fHelper->GetValueData(zdata, parameters, counter);
+    auto zunit = GetUnitValue(zdata.fSunit);
+    fManager->SetP2(id, 
+                    fXData.fNbins, fXData.fVmin*xunit, fXData.fVmax*xunit,
+                    fYData.fNbins, fYData.fVmin*yunit, fYData.fVmax*yunit,
+                    zdata.fVmin*zunit, zdata.fVmax*zunit, 
+                    fXData.fSunit, fYData.fSunit, zdata.fSunit,
+                    fXData.fSfcn, fYData.fSfcn, zdata.fSfcn,
+                    fXData.fSbinScheme, fYData.fSbinScheme);     
+    fXId = -1;                        
+    fYId = -1;                        
+  }
+  else if ( command == fSetP2TitleCmd.get() ) { 
+    auto counter = 0;
+    auto id = G4UIcommand::ConvertToInt(parameters[counter++]); 
+    auto title = parameters[counter++];
     fManager->SetP2Title(id, title);     
   }
-  else if ( command == fSetP2XAxisCmd ) {
-    G4int counter = 0;
-    G4int id = G4UIcommand::ConvertToInt(parameters[counter++]); 
-    G4String xaxis = parameters[counter++];
+  else if ( command == fSetP2XAxisCmd.get() ) { 
+    auto counter = 0;
+    auto id = G4UIcommand::ConvertToInt(parameters[counter++]); 
+    auto xaxis = parameters[counter++];
     fManager->SetP2XAxisTitle(id, xaxis);     
   }
-  else if ( command == fSetP2YAxisCmd ) {
-    G4int counter = 0;
-    G4int id = G4UIcommand::ConvertToInt(parameters[counter++]); 
-    G4String yaxis = parameters[counter++];
+  else if ( command == fSetP2YAxisCmd.get() ) { 
+    auto counter = 0;
+    auto id = G4UIcommand::ConvertToInt(parameters[counter++]); 
+    auto yaxis = parameters[counter++];
     fManager->SetP2YAxisTitle(id, yaxis);     
   }
-  else if ( command == fSetP2ZAxisCmd ) {
-    G4int counter = 0;
-    G4int id = G4UIcommand::ConvertToInt(parameters[counter++]); 
-    G4String zaxis = parameters[counter++];
+  else if ( command == fSetP2ZAxisCmd.get() ) { 
+    auto counter = 0;
+    auto id = G4UIcommand::ConvertToInt(parameters[counter++]); 
+    auto zaxis = parameters[counter++];
     fManager->SetP2ZAxisTitle(id, zaxis);     
   }
 }  

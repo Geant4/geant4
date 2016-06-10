@@ -1,0 +1,20 @@
+/run/numberOfThreads 4
+#/run/numberOfThreads 8
+
+/run/initialize
+
+#/gun/particle e-
+/gun/particle proton
+#/gun/particle hydrogen
+#/gun/particle alpha
+#/gun/particle alpha+
+#/gun/particle helium
+#/gun/particle ion
+#/gun/ion 14 28
+
+/gun/energy 62 MeV
+
+/process/em/auger false
+
+/run/beamOn 1
+#/run/beamOn 80

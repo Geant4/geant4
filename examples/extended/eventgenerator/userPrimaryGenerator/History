@@ -1,0 +1,23 @@
+$Id: History 89704 2015-04-27 17:12:44Z maire $
+-----------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    userPrimaryGenerator History file
+                    ---------------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+	 
+04-11-15 I.Hrivnacova (userPrimaryGenerator-V10-01-02)
+- renaming example to userPrimaryGenerator
+
+02-11-15 mma (basicPrimary-V10-01-01)
+- add class PrimaryGenerator.
+
+02-05-15 Michel Maire (basicPrimary-V10-01-00)
+- Created.

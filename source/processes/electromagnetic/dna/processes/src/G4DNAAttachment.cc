@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAAttachment.cc 85423 2014-10-29 08:22:38Z gcosmo $
+// $Id: G4DNAAttachment.cc 91992 2015-08-13 07:20:24Z gcosmo $
 // GEANT4 tag $Name:  $
 
 #include "G4DNAAttachment.hh"
@@ -68,15 +68,22 @@ void G4DNAAttachment::InitialiseProcess(const G4ParticleDefinition* p)
 
     if(name == "e-" )
     {
-      if(!EmModel()) SetEmModel(new G4DNAMeltonAttachmentModel);
-      EmModel()->SetLowEnergyLimit(4.*eV);
-      EmModel()->SetHighEnergyLimit(13.*eV);
+      if(!EmModel())
+      {
+        SetEmModel(new G4DNAMeltonAttachmentModel);
+        EmModel()->SetLowEnergyLimit(4.*eV);
+        EmModel()->SetHighEnergyLimit(13.*eV);
+      }
       AddEmModel(1, EmModel());   
-    } else if(name == "e+" )
+    }
+    else if(name == "e+" )
     {
-      if(!EmModel()) SetEmModel(new G4LEPTSAttachmentModel);
-      EmModel()->SetLowEnergyLimit(1.*eV);
-      EmModel()->SetHighEnergyLimit(1.*MeV);
+      if(!EmModel())
+      {
+        SetEmModel(new G4LEPTSAttachmentModel);
+        EmModel()->SetLowEnergyLimit(1.*eV);
+        EmModel()->SetHighEnergyLimit(1.*MeV);
+      }
       AddEmModel(1, EmModel());   
     }
   } 
@@ -86,10 +93,9 @@ void G4DNAAttachment::InitialiseProcess(const G4ParticleDefinition* p)
 
 void G4DNAAttachment::PrintInfo()
 {
-     G4cout
-      << " Total cross sections computed from " 
-      << EmModel()->GetName() 
-      << G4endl;
+  G4cout << " Total cross sections computed from "
+         << EmModel()->GetName()
+         << G4endl;
 }         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

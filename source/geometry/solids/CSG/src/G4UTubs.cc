@@ -32,6 +32,9 @@
 
 #include "G4Tubs.hh"
 #include "G4UTubs.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+
 #include "G4VPVParameterisation.hh"
 
 /////////////////////////////////////////////////////////////////////////
@@ -111,3 +114,5 @@ G4VSolid* G4UTubs::Clone() const
 {
   return new G4UTubs(*this);
 }
+
+#endif  // G4GEOM_USE_USOLIDS

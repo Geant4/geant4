@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 14, 2015 P.Gumplinger - (fieldex04-V10-01-00 & fieldex04-V10-01-01)
+- remove obsolete /event/drawTrack and /event/printModulo
+
 November 5, 2014 A.Dotti -  (fieldex04-V10-00-11)
 - Bug fixing for shared process
 

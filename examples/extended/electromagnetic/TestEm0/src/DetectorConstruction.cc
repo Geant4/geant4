@@ -28,7 +28,7 @@
 //
 
 //
-// $Id: DetectorConstruction.cc 68165 2013-03-15 21:10:27Z maire $
+// $Id: DetectorConstruction.cc 93512 2015-10-23 13:45:07Z gcosmo $
 //
 // 
 
@@ -147,7 +147,7 @@ void DetectorConstruction::DefineMaterials()
   G4Material* argonGas =   
   new G4Material("ArgonGas", z=18, a=39.948*g/mole, density= 1.782*mg/cm3,
                  kStateGas, 273.15*kelvin, 1*atmosphere);
-		       
+
  G4Material* butane =
  new G4Material("Isobutane",density= 2.42*mg/cm3, ncomponents=2,
                  kStateGas,273.15*kelvin, 1*atmosphere);

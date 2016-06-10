@@ -26,6 +26,7 @@
 // hpw: done, but low quality at present.
 
 #include "globals.hh"
+#include "G4Log.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4AngularDistribution.hh"
 #include "Randomize.hh"
@@ -312,20 +313,20 @@ G4double G4AngularDistribution::Cross(G4double tpPion,
 {
   G4double cross = 0;
      //  Pion
-    cross += ((cPion_3 * tpPion  + cPion_2)  * tpPion  + cPion_1)  * tpPion  + cPion_m/tmPion   + cPion_0  +  cPion_L * std::log(tpPion*tmPion);
+    cross += ((cPion_3 * tpPion  + cPion_2)  * tpPion  + cPion_1)  * tpPion  + cPion_m/tmPion   + cPion_0  +  cPion_L * G4Log(tpPion*tmPion);
 //    G4cout << "cross1 "<< cross<<G4endl;
     //  Sigma
-    cross += ((cSigma_3 * tpSigma + cSigma_2) * tpSigma + cSigma_1) * tpSigma + cSigma_m/tmSigma + cSigma_0 + cSigma_L * std::log(tpSigma*tmSigma);
+    cross += ((cSigma_3 * tpSigma + cSigma_2) * tpSigma + cSigma_1) * tpSigma + cSigma_m/tmSigma + cSigma_0 + cSigma_L * G4Log(tpSigma*tmSigma);
 //    G4cout << "cross2 "<< cross<<G4endl;
     // Omega
-    cross += ((bOmega_3 * tpOmega + bOmega_2) * tpOmega + bOmega_1) * tpOmega + bOmega_m/tmOmega + bOmega_0 + bOmega_L * std::log(tpOmega*tmOmega)
+    cross += ((bOmega_3 * tpOmega + bOmega_2) * tpOmega + bOmega_1) * tpOmega + bOmega_m/tmOmega + bOmega_0 + bOmega_L * G4Log(tpOmega*tmOmega)
     // Mix
     +  bMix_o1 * (tpOmega - 1.)
     +  bMix_s1 * (tpSigma - 1.)
-    +  bMix_Omega * std::log(tmOmega)
-    +  bMix_sm * std::log(tmSigma)
-    +  bMix_oL * std::log(tpOmega)
-    +  bMix_sL * std::log(tpSigma);
+    +  bMix_Omega * G4Log(tmOmega)
+    +  bMix_sm * G4Log(tmSigma)
+    +  bMix_oL * G4Log(tpOmega)
+    +  bMix_sL * G4Log(tpSigma);
 /*      G4cout << "cross3 "<< cross<<" "
              <<bMix_o1<<" "
              <<bMix_s1<<" "

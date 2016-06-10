@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysicsList class
 //
 //
-// $Id: PhysicsList.cc 85311 2014-10-27 14:23:25Z gcosmo $
+// $Id: PhysicsList.cc 94383 2015-11-13 10:20:27Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,15 +65,15 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList(),
   SetVerboseLevel(1);
   fMessenger = new PhysicsListMessenger(this);
 
+  // EM physics
+  fEmName = G4String("emstandard_opt0");
+  fEmPhysicsList = new G4EmStandardPhysics();
+
   //extend energy range of PhysicsTables
   //
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetMinEnergy(100*eV);  
   param->SetMaxEnergy(1000*PeV);
-
-  // EM physics
-  fEmName = G4String("emstandard_opt0");
-  fEmPhysicsList = new G4EmStandardPhysics();
 
   fMuNuclPhysicsList = 0;
 }

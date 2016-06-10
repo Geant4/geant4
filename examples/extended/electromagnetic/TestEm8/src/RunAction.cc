@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 85243 2014-10-27 08:22:42Z gcosmo $
+// $Id: RunAction.cc 92047 2015-08-14 07:23:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -52,8 +52,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction()
-  : G4UserRunAction(), fAnalysisManager(0), fRun(0), fHistName("testem8")
-{}
+  : G4UserRunAction(), fAnalysisManager(0), fRun(0)
+{
+  TestParameters::GetPointer();
+  fAnalysisManager = G4AnalysisManager::Instance();
+  fAnalysisManager->SetFileName("testem8");
+  fAnalysisManager->SetVerboseLevel(1);
+  fAnalysisManager->SetActivation(true);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -65,27 +71,25 @@ RunAction::~RunAction()
 void RunAction::Book()
 {
   // Always creating analysis manager
-  fAnalysisManager = G4AnalysisManager::Instance();
-  fAnalysisManager->SetActivation(true);
-  fAnalysisManager->SetVerboseLevel(1);
-
-  // Open file histogram file
-  fAnalysisManager->OpenFile(fHistName);
-  fAnalysisManager->SetFirstHistoId(1);
-
   TestParameters* param = TestParameters::GetPointer();
   G4int nBinsE = param->GetNumberBins();
   G4int nBinsCluster = param->GetNumberBinsCluster();
+  G4int nMaxCluster = param->GetMaxCluster();
   G4double maxEnergy = param->GetMaxEnergy();
   G4double factorALICE = param->GetFactorALICE();
 
+  //G4cout << "### maxenergy(keV)= " << maxEnergy/keV 
+  //         << "  factorALICE= " <<  factorALICE << G4endl;
+
   // Creating an 1-dimensional histograms in the root directory of the tree
+  fAnalysisManager->SetFirstHistoId(1);   
   fAnalysisManager->CreateH1("h1","Energy deposition in detector (keV)",
-                             nBinsE,0.0,maxEnergy/keV);
+                                  nBinsE,0.0,maxEnergy/keV);
   fAnalysisManager->CreateH1("h2","Number of primary clusters",
-                             nBinsE,-0.5,G4double(nBinsCluster)-0.5);
+                                  nBinsCluster,0.0,G4double(nMaxCluster));
   fAnalysisManager->CreateH1("h3","Energy deposition in detector (ADC)",
-                             nBinsE,0.0,maxEnergy* factorALICE/keV);
+                                  nBinsE,0.0,maxEnergy*factorALICE);
+  fAnalysisManager->OpenFile(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -101,23 +105,13 @@ G4Run* RunAction::GenerateRun()
 void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4int id = aRun->GetRunID();
-  G4cout << "### Run " << id << " start" << G4endl;
+  G4cout << "### Run " << id << " start analysis activation: " 
+         << G4endl;
 
   fRun->BeginOfRun();
+
   //histograms
-  //
   Book();
-
-#ifdef G4VIS_USE
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-
-  if(pVVisManager)
-    {
-      UI->ApplyCommand("/vis/scene/notifyHandlers");
-    }
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -132,12 +126,11 @@ void RunAction::EndOfRunAction(const G4Run*)
     fRun->EndOfRun(); 
   }
   // save histos and close analysis
-
-  if(fAnalysisManager->IsActive()) {
+  if (fAnalysisManager->IsActive()) { 
     fAnalysisManager->Write();
     fAnalysisManager->CloseFile();
-    delete fAnalysisManager;
   }
+  //delete fAnalysisManager;
 
 #ifdef G4VIS_USE
   if (G4VVisManager::GetConcreteInstance()) {

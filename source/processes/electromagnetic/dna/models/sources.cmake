@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 85423 2014-10-29 08:22:38Z gcosmo $
+# $Id: sources.cmake 93936 2015-11-04 09:37:59Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -51,11 +51,19 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-models
     HEADERS
         G4DNABornAngle.hh
         G4DNABornExcitationModel.hh
+        G4DNABornExcitationModel1.hh
+        G4DNABornExcitationModel2.hh
         G4DNABornIonisationModel.hh
+        G4DNABornIonisationModel1.hh
+        G4DNABornIonisationModel2.hh
         G4DNAChampionElasticModel.hh
+        G4DNASmoluchowskiDiffusion.hh
         G4DNASmoluchowskiReactionModel.hh
         G4DNADingfelderChargeDecreaseModel.hh
         G4DNADingfelderChargeIncreaseModel.hh
+        G4DNAEmfietzoglouExcitationModel.hh
+        G4DNAEmfietzoglouIonisationModel.hh
+        G4DNAIonElasticModel.hh
         G4DNAMeltonAttachmentModel.hh
         G4DNAMillerGreenExcitationModel.hh
         G4DNAMolecularReaction.hh
@@ -65,9 +73,10 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-models
         G4DNARuddIonisationExtendedModel.hh
         G4DNARuddIonisationModel.hh
         G4DNASancheExcitationModel.hh
-        G4DNAOneStepSolvatationModel.hh
+        G4DNAOneStepThermalizationModel.hh
         G4DNAScreenedRutherfordElasticModel.hh
         G4DNATransformElectronModel.hh
+        G4DNAUeharaScreenedRutherfordElasticModel.hh
         G4LEPTSAttachmentModel.hh
         G4LEPTSDissociationModel.hh
         G4LEPTSElasticModel.hh
@@ -80,14 +89,21 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-models
         G4LEPTSDistribution.hh
         G4LEPTSElossDistr.hh
         G4LEPTSExcitationModel.hh
+        G4VDNAPTBModel.hh
     SOURCES
         G4DNABornAngle.cc
-        G4DNABornExcitationModel.cc
-        G4DNABornIonisationModel.cc
+        G4DNABornExcitationModel1.cc
+        G4DNABornExcitationModel2.cc
+        G4DNABornIonisationModel1.cc
+        G4DNABornIonisationModel2.cc
         G4DNAChampionElasticModel.cc
+        G4DNASmoluchowskiDiffusion.cc
         G4DNASmoluchowskiReactionModel.cc
         G4DNADingfelderChargeDecreaseModel.cc
         G4DNADingfelderChargeIncreaseModel.cc
+        G4DNAEmfietzoglouExcitationModel.cc
+        G4DNAEmfietzoglouIonisationModel.cc
+        G4DNAIonElasticModel.cc
         G4DNAMeltonAttachmentModel.cc
         G4DNAMillerGreenExcitationModel.cc
         G4DNAMolecularReaction.cc
@@ -97,9 +113,10 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-models
         G4DNARuddIonisationExtendedModel.cc
         G4DNARuddIonisationModel.cc
         G4DNASancheExcitationModel.cc
-        G4DNAOneStepSolvatationModel.cc
+        G4DNAOneStepThermalizationModel.cc
         G4DNAScreenedRutherfordElasticModel.cc
         G4DNATransformElectronModel.cc
+        G4DNAUeharaScreenedRutherfordElasticModel.cc
         G4LEPTSElossDistr.cc
         G4LEPTSAttachmentModel.cc
         G4LEPTSDissociationModel.cc
@@ -112,7 +129,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-models
         G4VLEPTSModel.cc
         G4LEPTSExcitationModel.cc
         G4LEPTSDiffXS.cc
-
+        G4VDNAPTBModel.cc
      GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

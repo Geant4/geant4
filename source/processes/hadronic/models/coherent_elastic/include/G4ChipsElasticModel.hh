@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChipsElasticModel.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4ChipsElasticModel.hh 90228 2015-05-21 08:49:57Z gcosmo $
 //
 // Geant4 Header : G4ChipsElasticModel
 //
@@ -61,7 +61,7 @@ public:
   virtual G4double SampleInvariantT(const G4ParticleDefinition* p, 
 				    G4double plab,
 				    G4int Z, G4int A);
-  virtual void Description() const;
+  virtual void ModelDescription(std::ostream&) const;
 
 private:
 

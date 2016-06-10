@@ -1,0 +1,18 @@
+#  examplePar02.in
+#
+#/tracking/verbose 1
+#
+###/gun/particle mu-
+###/gun/energy 100 GeV
+###/run/beamOn 1000
+#
+/gun/particle e-
+/gun/energy 50 GeV
+/run/beamOn 1000
+#
+###/gun/particle pi-
+###/gun/energy 20 GeV
+###/run/beamOn 1000
+#
+exit
+

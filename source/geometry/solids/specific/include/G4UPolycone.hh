@@ -44,6 +44,9 @@
 #define G4UPOLYCONE_HH
 
 #include "G4USolid.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+
 #include "UPolycone.hh"
 #include "G4PolyconeSide.hh"
 #include "G4PolyconeHistorical.hh"
@@ -168,5 +171,7 @@ inline G4bool G4UPolycone::Reset()
   GetShape()->Reset();
   return 0;
 }
+
+#endif  // G4GEOM_USE_USOLIDS
 
 #endif

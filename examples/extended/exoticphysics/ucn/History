@@ -15,6 +15,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 26, 2015 P. Gumplinger (ExUCN-V10-01-03)
+- add NumberOfVariables in G4RepleteEofM constructor
+
+June 10, 2015 P. Gumplinger (ExUCN-V10-01-02)
+- remove AddBetaDecay method
+
+April 30, 2015 P. Gumplinger (ExUCN-V10-01-01)
+- use the correct way to access G4Transportation::EnableUseMagneticMoment()
+
+January 23, 2015 I. Hrivnacova (ExUCN-V10-01-00)
+- fixed files description for Doxygen
+
 September 16, 2014 I. Hrivnacova (ExUCN-V10-00-04)
 - improved formatting in .README
 

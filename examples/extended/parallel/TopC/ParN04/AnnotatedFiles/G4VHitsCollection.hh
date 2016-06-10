@@ -27,7 +27,7 @@
 /// \brief Definition of the G4VHitsCollection class
 //
 //
-// $Id: G4VHitsCollection.hh 76296 2013-11-08 13:17:47Z gcosmo $
+// $Id: G4VHitsCollection.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 
 #ifndef G4VHitsCollection_h

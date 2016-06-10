@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.hh 66872 2013-01-15 01:25:57Z japost $
+// $Id: G4VDivisionParameterisation.hh 92625 2015-09-09 12:34:07Z gcosmo $
 //
 // class G4VDivisionParameterisation
 //
@@ -45,6 +45,7 @@
 #include "G4Types.hh"
 #include "geomdefs.hh"
 #include "G4VPVParameterisation.hh"
+#include "G4RotationMatrix.hh"
 
 enum DivisionType { DivNDIVandWIDTH, DivNDIV, DivWIDTH };
 
@@ -103,8 +104,10 @@ class G4VDivisionParameterisation : public G4VPVParameterisation
     G4VSolid* fmotherSolid;
     G4bool fReflectedSolid;
     G4bool fDeleteSolid;
-  
-    static G4ThreadLocal G4int verbose;
+
+    static G4ThreadLocal G4RotationMatrix* fRot;
+
+    static const G4int verbose;
     G4int theVoluFirstCopyNo;
 
     G4double kCarTolerance;

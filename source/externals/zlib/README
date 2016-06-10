@@ -1,3 +1,9 @@
+Gunter Folger - 17 June 2015 
+============================
+-  Update to zlib-1.2.8, keeping Geant4 specific structure of files. 
+    Compare files to new zlib, and transfer changes, keeping local
+	 modifications, like function declarationss, and removed register keyword.
+	  
 
 Gunter Folger - 27-March 2013
 =============================

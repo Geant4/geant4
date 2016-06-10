@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLMessenger.cc 86446 2014-11-12 09:45:58Z gcosmo $
+// $Id: G4GDMLMessenger.cc 89381 2015-04-08 15:32:47Z gcosmo $
 //
 //
 // class G4GDMLMessenger Implementation
@@ -38,6 +38,7 @@
 #include "G4RunManager.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4GeometryManager.hh"
 #include "G4LogicalVolumeStore.hh"
@@ -67,6 +68,23 @@ G4GDMLMessenger::G4GDMLMessenger(G4GDMLParser* myPars)
   WriterCmd->SetParameterName("filename",false);
   WriterCmd->AvailableForStates(G4State_Idle);
 
+  RegionCmd = new G4UIcmdWithABool("/persistency/gdml/export_regions",this);
+  RegionCmd->SetGuidance("Enable export of geometrical regions");
+  RegionCmd->SetGuidance("for storing production cuts.");
+  RegionCmd->SetParameterName("export_regions",false);
+  RegionCmd->SetDefaultValue(false);
+  RegionCmd->AvailableForStates(G4State_Idle);
+
+  EcutsCmd = new G4UIcmdWithABool("/persistency/gdml/export_Ecuts",this);
+  EcutsCmd->SetGuidance("Enable export of energy cuts associated");
+  EcutsCmd->SetGuidance("to logical volumes.");
+  EcutsCmd->SetGuidance("NOTE: may increase considerably the size of the");
+  EcutsCmd->SetGuidance("      GDML file!  Information is anyhow not used");
+  EcutsCmd->SetGuidance("      for import.");
+  EcutsCmd->SetParameterName("export_Ecuts",false);
+  EcutsCmd->SetDefaultValue(false);
+  EcutsCmd->AvailableForStates(G4State_Idle);
+
   ClearCmd = new G4UIcmdWithoutParameter("/persistency/gdml/clear",this);
   ClearCmd->SetGuidance("Clear geometry (before reading a new one from GDML).");
   ClearCmd->AvailableForStates(G4State_Idle);
@@ -78,6 +96,8 @@ G4GDMLMessenger::~G4GDMLMessenger()
   delete WriterCmd;
   delete ClearCmd;
   delete TopVolCmd;
+  delete RegionCmd;
+  delete EcutsCmd;
   delete persistencyDir;
   delete gdmlDir;
 }
@@ -91,6 +111,18 @@ void G4GDMLMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     G4RunManager::GetRunManager()->DefineWorldVolume(myParser->GetWorldVolume());
   }
 
+  if( command == RegionCmd )
+  {
+    G4bool mode = RegionCmd->GetNewBoolValue(newValue);
+    myParser->SetRegionExport(mode);
+  }
+
+  if( command == EcutsCmd )
+  {
+    G4bool mode = EcutsCmd->GetNewBoolValue(newValue);
+    myParser->SetEnergyCutsExport(mode);
+  }
+   
   if( command == TopVolCmd )
   {
     topvol = G4LogicalVolumeStore::GetInstance()->GetVolume(newValue);

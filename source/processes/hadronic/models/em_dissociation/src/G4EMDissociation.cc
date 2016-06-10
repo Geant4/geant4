@@ -71,7 +71,6 @@
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 #include "G4IonTable.hh"
-#include "G4GeneralPhaseSpaceDecay.hh"
 #include "G4DecayProducts.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Fragment.hh"
@@ -405,6 +404,9 @@ G4HadFinalState *G4EMDissociation::ApplyYourself
     theParticleChange.AddSecondary (secondary);
   }
   delete products;
+
+  delete crossSectionP;
+  delete crossSectionT;
 
   if (verboseLevel >= 2)
     G4cout <<"########################################"

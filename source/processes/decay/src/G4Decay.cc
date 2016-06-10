@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc 79343 2014-02-24 11:44:06Z gcosmo $
+// $Id: G4Decay.cc 92056 2015-08-14 13:33:43Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -233,19 +233,33 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
     // decay according to external decayer
     products = pExtDecayer->ImportDecayProducts(aTrack);
   } else {
-    // decay acoording to decay table
-    // choose a decay channel
-    G4VDecayChannel *decaychannel = decaytable->SelectADecayChannel();
-    if (decaychannel == 0 ){
+    // Decay according to decay table.
+    // Keep trying to choose a candidate decay channel if the dynamic mass
+    // of the decaying particle is below the sum of the PDG masses of the
+    // candidate daughter particles.
+    // This is needed because the decay table used in Geant4 is based on
+    // the assumption of nominal PDG masses, but a wide resonance can have
+    // a dynamic masses well below its nominal PDG masses, and therefore
+    // some of its decay channels can be below the kinematical threshold. 
+    // Note that, for simplicity, we ignore here the possibility that
+    // one or more of the candidate daughter particles can be, in turn,
+    // wide resonance. However, if this is the case, and the channel is
+    // accepted, then the masses of the resonance daughter particles will
+    // be sampled by taking into account their widths.
+    G4VDecayChannel* decaychannel = 0;
+    G4double massParent = aParticle->GetMass();
+    decaychannel = decaytable->SelectADecayChannel(massParent);
+    if ( decaychannel ==0) {
       // decay channel not found
       G4Exception("G4Decay::DoIt", "DECAY003", FatalException,
-                  " can not determine decay channel ");
+		  " can not determine decay channel ");
     } else {
       // execute DecayIt() 
 #ifdef G4VERBOSE
       G4int temp = decaychannel->GetVerboseLevel();
       if (GetVerboseLevel()>1) {
-	G4cout << "G4Decay::DoIt  : selected decay channel  addr:" << decaychannel <<G4endl;
+	G4cout << "G4Decay::DoIt  : selected decay channel  addr:" 
+	       << decaychannel <<G4endl;
 	decaychannel->SetVerboseLevel(GetVerboseLevel());
       }
 #endif

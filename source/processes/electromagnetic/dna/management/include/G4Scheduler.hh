@@ -44,6 +44,8 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
+
+
 #ifndef G4Scheduler_h
 #define G4Scheduler_h
 
@@ -58,6 +60,8 @@
 #include "G4ITStepStatus.hh"
 #include "G4ITTrackHolder.hh"
 #include "G4VStateDependent.hh"
+#include "G4ITReaction.hh"
+
 
 class G4ITTrackingManager;
 class G4ITModelProcessor;
@@ -67,6 +71,21 @@ class G4UserTimeStepAction;
 class G4SchedulerMessenger;
 class G4ITTrackingInteractivity;
 class G4ITGun;
+
+
+
+
+#ifndef compTrackPerID__
+#define compTrackPerID__
+  struct compTrackPerID
+  {
+    bool operator()(G4Track* rhs, G4Track* lhs) const
+    {
+      return rhs->GetTrackID() < lhs->GetTrackID();
+    }
+  };
+#endif
+
 
 /**
  * G4ITStepManager enables to synchronize in time
@@ -95,10 +114,10 @@ public:
   inline bool IsRunning(){return fRunning;}
   void Reset();
   void Process();
-  virtual void PushTrack(G4Track*);
   void ClearList();
 
   inline void SetGun(G4ITGun*);
+  inline G4ITGun* GetGun();
 
   inline void Stop();
   void Clear();
@@ -119,7 +138,9 @@ public:
   inline void SetMaxZeroTimeAllowed(int);
   inline int GetMaxZeroTimeAllowed() const;
 
+  //==
   inline G4ITModelHandler* GetModelHandler();
+
   inline void SetTimeSteps(std::map<double, double>*);
   inline void AddTimeStep(double, double);
   inline void SetDefaultTimeStep(double);
@@ -139,8 +160,6 @@ public:
   inline void UseDefaultTimeSteps(G4bool);
   inline G4bool AreDefaultTimeStepsUsed();
 
-  inline G4bool GetComputeTimeStepFlag() const;
-
   inline G4ITStepStatus GetStatus() const;
 
   inline void SetVerbose(int);
@@ -159,6 +178,24 @@ public:
 
   void GetCollisionType(G4String& interactionType);
 
+  void AddWatchedTime(double time)
+  {
+    fWatchedTimes.insert(time);
+  }
+
+  double GetNextWatchedTime() const;
+
+  inline void SetMaxTimeStep(double maxTimeStep)
+  {
+    fMaxTimeStep = maxTimeStep;
+  }
+
+
+  inline double GetMaxTimeStep() const
+  {
+    return fMaxTimeStep;
+  }
+
 protected:
 
   void DoProcess();
@@ -166,26 +203,10 @@ protected:
   void Stepping();
 
   void FindUserPreDefinedTimeStep();
-  void CalculateMinTimeStep();
-  void ComputeInteractionLength();
-  void DoIt();
-  void ComputeTrackReaction();
-//  void MergeSecondariesWithMainList();
 
-  void PushSecondaries(G4ITStepProcessor*);
-//  void _PushTrack(G4Track*);
-  void PushDelayed(G4Track*, const G4double&);
+  bool CanICarryOn();
 
-  void EndTracking(G4Track*);
-  void KillTracks();
-
-  void ExtractTimeStepperData(G4ITModelProcessor*);
-  void ExtractILData(G4ITStepProcessor*);
-  void ExtractDoItData(G4ITStepProcessor*);
-
-  void AddTrackID(G4Track*);
-
-  void ResetLeadingTracks();
+  void PrintWhyDoYouStop();
 
 private:
   G4Scheduler();
@@ -193,37 +214,34 @@ private:
   G4Scheduler(const G4Scheduler&);
   G4Scheduler& operator=(const G4Scheduler&);
 
-  G4SchedulerMessenger* fSteppingMsg;
+  G4SchedulerMessenger* fpMessenger;
 
   static G4ThreadLocal G4Scheduler* fgScheduler;
   int fVerbose;
   bool fWhyDoYouStop;
   bool fInitialized;
   bool fRunning;
+  G4bool fContinue;
 
-  int fNbTracks;
   int fNbSteps;
   int fMaxSteps;
 
   G4ITStepStatus fITStepStatus;
 
   // Time members
+  G4bool fUseDefaultTimeSteps;
   double fTimeTolerance;
   double fGlobalTime;
   double fTmpGlobalTime;
   double fStartTime;
+  double fStopTime;
   double fEndTime;
-  double fTmpEndTime;
-  // fTmpEndTime : Stores the biggest end time here (for synchronizing tracks)
   double fPreviousTimeStep;
   int fZeroTimeCount;
   int fMaxNZeroTimeStepsAllowed;
 
-  // Flags
-  bool fComputeTimeStep;
-  bool fComputeReaction;
-
   double fTimeStep; // The selected minimum time step
+  double fMaxTimeStep;
 
   // User steps
   bool fUsePreDefinedTimeSteps;
@@ -235,33 +253,36 @@ private:
   // selected user time step in respect to the global time
   bool fReachedUserTimeLimit; // if fMinTimeStep == the user time step
 
+  std::set<double> fWatchedTimes;
+
+  G4UserTimeStepAction* fpUserTimeStepAction;
+
+  // ==========================================
+  // TO BE REMOVED
+  G4ITStepProcessor* fpStepProcessor;
+  G4ITModelProcessor* fpModelProcessor;
+  G4ITTrackingManager* fpTrackingManager;
+  G4ITTrackingInteractivity* fpTrackingInteractivity;
+  G4ITReactionSet* fReactionSet;
+  G4ITTrackHolder& fTrackContainer;
+  G4ITModelHandler* fpModelHandler;
+  // ==========================================
+
   double fTSTimeStep;
   // Time calculated by the time stepper in CalculateMinTimeStep()
   double fILTimeStep;
   // Time calculated by the interaction length methods
   // in ComputeInteractionLength()
 
-  std::map<G4Track*, G4TrackVectorHandle> fReactingTracks;
-  std::vector<G4Track*> fLeadingTracks;
-
   bool fInteractionStep;
   // Flag : if the step is driven by the interaction with the matter and
   // NOT by the reaction between tracks
 
-  G4ITTrackHolder& fTrackContainer;
-
-  G4ITStepProcessor* fpStepProcessor;
-  G4ITModelProcessor* fpModelProcessor;
-
-  G4ITModelHandler* fpModelHandler;
-
-  G4ITTrackingManager* fpTrackingManager;
-  G4UserTimeStepAction* fpUserTimeStepAction;
-  G4ITTrackingInteractivity* fpTrackingInteractivity;
-
   G4ITGun* fpGun;
-  G4bool fContinue;
-  G4bool fUseDefaultTimeSteps;
+
+  // ==========================================
+  //
+
 };
 
 inline bool G4Scheduler::IsInitialized()
@@ -404,9 +425,9 @@ inline void G4Scheduler::SetGun(G4ITGun* gun)
   fpGun = gun;
 }
 
-inline G4bool G4Scheduler::GetComputeTimeStepFlag() const
+inline G4ITGun* G4Scheduler::GetGun()
 {
-  return fComputeTimeStep;
+  return fpGun;
 }
 
 inline void G4Scheduler::WhyDoYouStop()

@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/include/SteppingAction.hh
 /// \brief Definition of the SteppingAction class
 //
-// $Id: SteppingAction.hh 86064 2014-11-07 08:49:32Z gcosmo $
+// $Id: SteppingAction.hh 90848 2015-06-10 13:44:30Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,7 +39,7 @@
 #include "G4ThreeVector.hh"
 
 class DetectorConstruction;
-class RunAction;
+
 class TrackingAction;
 
 class G4VPhysicalVolume;
@@ -49,14 +49,13 @@ class G4VPhysicalVolume;
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-    SteppingAction(DetectorConstruction*,RunAction*,TrackingAction*);
+    SteppingAction(DetectorConstruction*,TrackingAction*);
    ~SteppingAction();
 
     virtual void UserSteppingAction(const G4Step*);
     
   private:
     DetectorConstruction* fDetector;
-    RunAction*            fRunAction;
     TrackingAction*       fTrackAction;        
     
     G4VPhysicalVolume*    fWall;

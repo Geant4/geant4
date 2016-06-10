@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh 81056 2014-05-20 09:02:16Z gcosmo $
+// $Id: G4PhysicalVolumeModel.hh 88763 2015-03-09 12:26:23Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -169,6 +169,9 @@ public: // With description
 
   G4Material* GetCurrentMaterial() const {return fpCurrentMaterial;}
   // Current material.
+
+  G4Transform3D* GetCurrentTransform() const {return fpCurrentTransform;}
+  // Current transform.
 
   const std::vector<G4PhysicalVolumeNodeID>& GetFullPVPath() const
   {return fFullPVPath;}

@@ -23,14 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
-// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
-//
-// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
-// the *COMPLETE* version of this program, together with its documentation;
-// Hadrontherapy (both basic and full version) are supported by the Italian INFN
-// Institute in the framework of the MC-INFN Group
-//
+// Hadrontherapy advanced example for Geant4
+// See more at: https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamplesHadrontherapy
 
 #ifndef PassiveProtonBeamLineMessenger_h
 #define PassiveProtonBeamLineMessenger_h 1
@@ -81,7 +75,7 @@ private:
   G4UIcmdWithADoubleAndUnit* modulatorAngleCmd;
   // UI command to rotate the modulator wheel
 
-  G4UIcmdWithAString*   rangeShifterMatCmd;
+  G4UIcmdWithAString* rangeShifterMatCmd;
   // UI command to set the material of the rangeShifter component of 
   // the beam line 
 

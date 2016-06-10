@@ -1,4 +1,4 @@
-$Id: History 87128 2014-11-25 09:00:59Z gcosmo $
+$Id: History 94420 2015-11-16 08:18:40Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,63 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 14th, 2015 M.Asai (run-V10-01-16)
+- Co-working with particles-V10-01-17. Destructor of G4WorkerRunManagerKernel
+  invokes G4ParticleTable::DestroyWorkerG4ParticleTable() to cleanly delete
+  thread-local particle dictionaries.
+
+Nov 11th, 2015 A.Dotti (run-V10-01-15)
+- Implementing suggestions on improving documentation for new UI
+  command for strong reproducibility.
+
+Nov 9th, 2015  G.Cosmo (run-V10-01-14)
+- Added MixMaxRng to the list of possible engines to use in
+  G4UserWorkerThreadInitialization::SetupRNGEngine().
+- Requires installation of CLHEP version 2.3.1.0.
+
+Nov 6th, 2015  A.Dotti (run-V10-01-13)
+- Bug fixing for RNG strong-reproducibility 
+  in MT mode  
+
+Oct 23rd, 2015 A.Dotti (run-V10-01-12)
+- Fixing typo in exception warning output
+
+Sept 4th, 2015 A.Dotti (run-V10-01-11)
+- Fixing bug for G4MultiSensitiveDetector functionality
+
+Aug 14th, 2015 A.Dotti   (run-V10-01-10)
+- Added new G4MultiSensitiveDetector functionality
+  Requires digits_hits-V10-01-00
+
+May 16th, 2015 J.Allison (run-V10-01-09)
+- Replaced !G4Threading::IsWorkerThread() by G4Threading::IsMasterThread().
+
+May 7th, 2015 A.Dotti (run-V10-01-06)
+- G4MTRunManager: Remove explicit initialization of Bertini cascade
+  (done in Bertini module), requires hadr-casc-V10-01-04 
+
+March 27th, 2015 G. Cosmo (run-V10-01-05)
+- G4VUserPhysicsList: lookup for default-world-region in G4RegionStore
+  instead of accessing the store at index 0. It's not always guaranteed the
+  default world region is the first element in the store!
+
+March 4th, 2015 A. Dotti (run-V10-01-03, run-V10-01-04)
+- Correct handling of deletion of workerRMvector static
+
+February 10th, 2015 A.Dotti (run-V10-01-02)
+- Removing sporious MKL engine reference
+
+February 6th, 2015 A.Dotti (run-V10-01-01)
+- Move setting of pin affinity from G4MTRunManagerKernel::StartThread 
+  to G4WorkerThread
+- New method G4WorkerRunManager::DoWork(), called by 
+  G4MTRunManagerKernel::StartThread to process requests of new runs
+  from kernel 
+
+December 5th, 2014 M.Asai (run-V10-01-00)
+- Print deleting message of G4NavigationHistoryPool only if the
+  verbose level is set to 2.
 
 November 24th, 2014 M.Asai (run-V10-00-43)
 - Fix G4VUserPhysicsList.cc to alternate the cut value for the

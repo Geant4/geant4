@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.hh 68053 2013-03-13 14:39:51Z gcosmo $
+// $Id: G4GDMLEvaluator.hh 89243 2015-03-27 16:24:39Z gcosmo $
 //
 //
 // class G4GDMLEvaluator
@@ -62,6 +62,8 @@ class G4GDMLEvaluator
    G4int EvaluateInteger(const G4String&);
    G4double GetConstant(const G4String&);
    G4double GetVariable(const G4String&);
+   G4String ConvertToString(G4int ival);
+   G4String ConvertToString(G4double dval);
 
  private:
 

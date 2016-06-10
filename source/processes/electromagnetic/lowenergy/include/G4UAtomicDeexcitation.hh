@@ -127,6 +127,12 @@ private:
   // Generates a particle from a non-radiative transition and returns it
   G4DynamicParticle* GenerateAuger(G4int Z, G4int shellId);
 
+  //SI
+  //Auger cascade by Burkhant Suerfu on March 24 2015 (Bugzilla 1727)
+  //Generates auger electron cascade.
+  G4DynamicParticle* GenerateAuger(G4int Z, G4int shellId, G4int& newAugerShellId);
+  //ENDSI
+  
   // copy constructor and hide assignment operator
   G4UAtomicDeexcitation(G4UAtomicDeexcitation &);
   G4UAtomicDeexcitation & operator=(const G4UAtomicDeexcitation &right);
@@ -153,6 +159,12 @@ private:
 
   const G4ParticleDefinition* theElectron;
   const G4ParticleDefinition* thePositron;
+
+  //SI
+  //Auger cascade by Burkhant Suerfu on March 24 2015 (Bugzilla 1727)
+  //Data member to keep track of cascading vacancies.
+  std::vector<int> vacancyArray;
+  //ENDSI
 };
 
 #endif

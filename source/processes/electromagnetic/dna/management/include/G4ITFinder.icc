@@ -37,7 +37,7 @@
 // -------------------------------------------------------------------
 
 TEMPLATE
-G4ThreadLocal G4ITMANAGER * G4ITMANAGER::fInstance(0);
+G4ThreadLocal G4ITMANAGER * G4ITMANAGER::fInstance = 0;
 
 TEMPLATE
 G4ITMANAGER * G4ITMANAGER::Instance()
@@ -117,9 +117,9 @@ void G4ITMANAGER::Push(G4Track* track)
 
 TEMPLATE
 G4KDTreeResultHandle G4ITMANAGER::FindNearest(const G4ThreeVector& position,
-    const T* key)
+                                              int key)
 {
-   TreeMap::iterator it = fTree.find(key->GetMoleculeID());
+   TreeMap::iterator it = fTree.find(key);
   if (it != fTree.end()) return it->second->Nearest(position);
   else
   {
@@ -130,9 +130,9 @@ G4KDTreeResultHandle G4ITMANAGER::FindNearest(const G4ThreeVector& position,
 
 TEMPLATE
 G4KDTreeResultHandle G4ITMANAGER::FindNearest(const T* point0,
-    const T* key)
+                                              int key)
 {
-  if (*point0 == *key)
+  if (int(*point0) == key)
   {
     // DEBUG
     // G4cout << "Equal keys !"<< G4endl;
@@ -148,7 +148,7 @@ G4KDTreeResultHandle G4ITMANAGER::FindNearest(const T* point0,
       return 0; // coverity
     }
 
-    TreeMap::iterator it = fTree.find(key->GetMoleculeID());
+    TreeMap::iterator it = fTree.find(key);
     if (it != fTree.end())
     {
       G4KDTreeResultHandle output(it->second->Nearest(node0));
@@ -178,7 +178,7 @@ G4KDTreeResultHandle G4ITMANAGER::FindNearest(const T* point0,
     // DEBUG
     // G4cout << "Not equal keys !"<< G4endl;
     // const G4ThreeVector& position = point0->GetTrack()->GetPosition() ;
-    TreeMap::iterator it = fTree.find(key->GetMoleculeID());
+    TreeMap::iterator it = fTree.find(key);
 
     if (it != fTree.end())
     {
@@ -204,11 +204,21 @@ G4KDTreeResultHandle G4ITMANAGER::FindNearest(const T* point0,
 
 TEMPLATE
 G4KDTreeResultHandle
-G4ITMANAGER::FindNearestInRange(const G4ThreeVector& position,
-    const T* key,
-    G4double R)
+G4ITMANAGER::FindNearest(const T* source,
+                         const T* type)
 {
-  TreeMap::iterator it = fTree.find(key->GetMoleculeID());
+  return FindNearest(source,
+                     int(*type));
+}
+
+
+TEMPLATE
+G4KDTreeResultHandle
+G4ITMANAGER::FindNearestInRange(const G4ThreeVector& position,
+                                int key,
+                                G4double R)
+{
+  TreeMap::iterator it = fTree.find(key);
   if (it != fTree.end()) return it->second->NearestInRange(position, R);
   else
   {
@@ -219,13 +229,13 @@ G4ITMANAGER::FindNearestInRange(const G4ThreeVector& position,
 
 TEMPLATE
 G4KDTreeResultHandle G4ITMANAGER::FindNearestInRange(const T* point0,
-    const T* key,
-    G4double R)
+                                                     int key,
+                                                     G4double R)
 {
-  if (*point0 == *key)
+  if (point0->GetMoleculeID() == key)
   {
     G4KDNode_Base* node0 = point0->GetNode();
-    TreeMap::iterator it = fTree.find(key->GetMoleculeID());
+    TreeMap::iterator it = fTree.find(key);
     if (it != fTree.end()) return it->second->NearestInRange(node0, R);
     else
     {
@@ -234,7 +244,7 @@ G4KDTreeResultHandle G4ITMANAGER::FindNearestInRange(const T* point0,
   }
   else
   {
-    TreeMap::iterator it = fTree.find(key->GetMoleculeID());
+    TreeMap::iterator it = fTree.find(key);
     if (it != fTree.end()) return it->second->NearestInRange(*point0, R);
     else
     {

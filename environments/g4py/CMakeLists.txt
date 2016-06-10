@@ -1,6 +1,6 @@
 # - Top-level CMakeLists.txt for Geant4Py
 
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 
 #------------------------------------------------------------------------------
 project(Geant4Py)
@@ -14,6 +14,8 @@ set(DEBUG FALSE CACHE BOOL "Debug Mode (Debug On)")
 #------------------------------------------------------------------------------
 # Do not edit below
 #------------------------------------------------------------------------------
+set(CMAKE_CXX_STANDARD 11)
+
 # cmake modules
 set(CMAKE_MODULE_PATH
     ${PROJECT_SOURCE_DIR}/cmake/Modules
@@ -65,4 +67,3 @@ add_subdirectory(examples)
 
 # tests
 add_subdirectory(tests EXCLUDE_FROM_ALL)
-

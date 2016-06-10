@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomPartialDetectorConstruction.hh 84604 2014-10-17 07:48:13Z gcosmo $
+// $Id: DicomPartialDetectorConstruction.hh 92820 2015-09-17 15:22:14Z gcosmo $
 //
 /// \file medical/DICOM/include/DicomPartialDetectorConstruction.hh
 /// \brief Definition of the DicomPartialDetectorConstruction class
@@ -77,7 +77,6 @@ private:
 
   G4Material* BuildMaterialChangingDensity( const G4Material* origMate, 
                                             float density, G4String mateName );
-
 
 private:
   G4PartialPhantomParameterisation* fPartialPhantomParam;

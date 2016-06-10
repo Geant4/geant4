@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/monopole.cc
 /// \brief Main program of the exoticphysics/monopole example
 //
-// $Id: monopole.cc 66817 2013-01-12 16:16:08Z gcosmo $
+// $Id: monopole.cc 92500 2015-09-02 07:26:32Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,7 +43,6 @@
 #include "PrimaryGeneratorAction.hh"
 
 #include "RunAction.hh"
-#include "EventAction.hh"
 #include "TrackingAction.hh"
 #include "SteppingAction.hh"
 
@@ -103,7 +102,6 @@ int main(int argc,char** argv) {
   RunAction* run;
 
   runManager->SetUserAction(run = new RunAction(det, kin));
-  runManager->SetUserAction(new EventAction);
   runManager->SetUserAction(new TrackingAction(run));
   runManager->SetUserAction(new SteppingAction(run));
 
@@ -137,4 +135,4 @@ int main(int argc,char** argv) {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

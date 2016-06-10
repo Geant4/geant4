@@ -16,7 +16,6 @@ std::string RandExpZiggurat::name() const {return "RandExpZiggurat";}
 HepRandomEngine & RandExpZiggurat::engine() {return *localEngine;}
 
 RandExpZiggurat::~RandExpZiggurat() {
-  if ( deleteEngine ) delete localEngine;
 }
 
 RandExpZiggurat::RandExpZiggurat(const RandExpZiggurat& right) : HepRandom(right),defaultMean(right.defaultMean)

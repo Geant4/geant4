@@ -249,11 +249,11 @@ GetZandACrossSection(const G4DynamicParticle* aParticle,
     nucleusSquare = cofTotal*pi*( pR*pR + tR*tR );   // basically 2piRR
 
     ratio      = sigma/nucleusSquare;
-    xsection   = nucleusSquare*std::log( 1. + ratio );
+    xsection   = nucleusSquare*G4Log( 1. + ratio );
     fTotalXsc  = xsection;
     fTotalXsc *= cB;
 
-    fInelasticXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
+    fInelasticXsc = nucleusSquare*G4Log( 1. + cofInelastic*ratio )/cofInelastic;
 
     fInelasticXsc *= cB;
     fElasticXsc   = fTotalXsc - fInelasticXsc;
@@ -262,7 +262,7 @@ GetZandACrossSection(const G4DynamicParticle* aParticle,
     /*    
     G4double difratio = ratio/(1.+ratio);
 
-    fDiffractionXsc = 0.5*nucleusSquare*( difratio - std::log( 1. + difratio ) );
+    fDiffractionXsc = 0.5*nucleusSquare*( difratio - G4Log( 1. + difratio ) );
     */
     // production to be checked !!! edit MK xsc
 
@@ -272,7 +272,7 @@ GetZandACrossSection(const G4DynamicParticle* aParticle,
     sigma = (pZ*tZ+pN*tN)*ppInXsc + (pZ*tN+pN*tZ)*npInXsc;
  
     ratio = sigma/nucleusSquare;
-    fProductionXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
+    fProductionXsc = nucleusSquare*G4Log( 1. + cofInelastic*ratio )/cofInelastic;
 
     if (fElasticXsc < 0.) fElasticXsc = 0.;
   }
@@ -355,10 +355,10 @@ GetRatioSD(const G4DynamicParticle* aParticle, G4double tA, G4double tZ)
 
   nucleusSquare = cofTotal*pi*( pR*pR + tR*tR );   // basically 2piRR
   ratio = sigma/nucleusSquare;
-  fInelasticXsc = nucleusSquare*std::log(1. + cofInelastic*ratio)/cofInelastic;
+  fInelasticXsc = nucleusSquare*G4Log(1. + cofInelastic*ratio)/cofInelastic;
   G4double difratio = ratio/(1.+ratio);
 
-  fDiffractionXsc = 0.5*nucleusSquare*( difratio - std::log( 1. + difratio ) );
+  fDiffractionXsc = 0.5*nucleusSquare*( difratio - G4Log( 1. + difratio ) );
 
   if (fInelasticXsc > 0.) ratio = fDiffractionXsc/fInelasticXsc;
   else                    ratio = 0.;
@@ -395,11 +395,11 @@ GetRatioQE(const G4DynamicParticle* aParticle, G4double tA, G4double tZ)
 
   nucleusSquare = cofTotal*pi*( pR*pR + tR*tR );   // basically 2piRR
   ratio = sigma/nucleusSquare;
-  fInelasticXsc = nucleusSquare*std::log(1. + cofInelastic*ratio)/cofInelastic;
+  fInelasticXsc = nucleusSquare*G4Log(1. + cofInelastic*ratio)/cofInelastic;
 
   //  sigma = GetHNinelasticXsc(aParticle, tA, tZ);
   ratio = sigma/nucleusSquare;
-  fProductionXsc = nucleusSquare*std::log(1. + cofInelastic*ratio)/cofInelastic;
+  fProductionXsc = nucleusSquare*G4Log(1. + cofInelastic*ratio)/cofInelastic;
 
   if (fInelasticXsc > fProductionXsc) ratio = (fInelasticXsc-fProductionXsc)/fInelasticXsc;
   else                                ratio = 0.;
@@ -454,11 +454,11 @@ G4ComponentGGNuclNuclXsc::GetHadronNucleonXsc(const G4DynamicParticle* aParticle
 
   if(pParticle == theNeutron) // as proton ??? 
   {
-    xsection = G4double(At)*(21.70*std::pow(sMand,0.0808) + 56.08*std::pow(sMand,-0.4525));
+    xsection = G4double(At)*(21.70*G4Pow::GetInstance()->powA(sMand,0.0808) + 56.08*G4Pow::GetInstance()->powA(sMand,-0.4525));
   } 
   else if(pParticle == theProton) 
   {
-    xsection = G4double(At)*(21.70*std::pow(sMand,0.0808) + 56.08*std::pow(sMand,-0.4525));
+    xsection = G4double(At)*(21.70*G4Pow::GetInstance()->powA(sMand,0.0808) + 56.08*G4Pow::GetInstance()->powA(sMand,-0.4525));
   } 
  
   xsection *= millibarn;
@@ -496,27 +496,27 @@ G4ComponentGGNuclNuclXsc::GetHadronNucleonXscPDG(const G4ParticleDefinition* pPa
   {
     if ( proton )
     {
-      xsection = ( 35.80 + B*std::pow(std::log(sMand/s0),2.) 
-                  + 40.15*std::pow(sMand,-eta1) - 30.*std::pow(sMand,-eta2));
+      xsection = ( 35.80 + B*G4Pow::GetInstance()->powA(G4Log(sMand/s0),2.) 
+                  + 40.15*G4Pow::GetInstance()->powA(sMand,-eta1) - 30.*G4Pow::GetInstance()->powA(sMand,-eta2));
     }
     if ( neutron )
     {
-      xsection = (35.45 + B*std::pow(std::log(sMand/s0),2.) 
-	     + 42.53*std::pow(sMand,-eta1) - 33.34*std::pow(sMand,-eta2)); // pp for nn
+      xsection = (35.45 + B*G4Pow::GetInstance()->powA(G4Log(sMand/s0),2.) 
+	     + 42.53*G4Pow::GetInstance()->powA(sMand,-eta1) - 33.34*G4Pow::GetInstance()->powA(sMand,-eta2)); // pp for nn
     }
   } 
   else if(pParticle == theProton) 
   {
     if ( proton )
     {
-      xsection = (35.45 + B*std::pow(std::log(sMand/s0),2.) 
-                + 42.53*std::pow(sMand,-eta1) - 33.34*std::pow(sMand,-eta2));
+      xsection = (35.45 + B*G4Pow::GetInstance()->powA(G4Log(sMand/s0),2.) 
+                + 42.53*G4Pow::GetInstance()->powA(sMand,-eta1) - 33.34*G4Pow::GetInstance()->powA(sMand,-eta2));
 
     }
     if ( neutron )
     {
-      xsection = (35.80 + B*std::pow(std::log(sMand/s0),2.) 
-                  + 40.15*std::pow(sMand,-eta1) - 30.*std::pow(sMand,-eta2));
+      xsection = (35.80 + B*G4Pow::GetInstance()->powA(G4Log(sMand/s0),2.) 
+                  + 40.15*G4Pow::GetInstance()->powA(sMand,-eta1) - 30.*G4Pow::GetInstance()->powA(sMand,-eta2));
     }
   } 
   xsection *= millibarn; // parametrised in mb
@@ -573,10 +573,10 @@ G4ComponentGGNuclNuclXsc::GetHadronNucleonXscNS(const G4ParticleDefinition* pPar
 
     if (proj_momentum >= 10.) {
       B0 = 7.5;
-      A0 = 100. - B0*std::log(3.0e7);
+      A0 = 100. - B0*G4Log(3.0e7);
 
-      xsection = A0 + B0*std::log(proj_energy) - 11
-                + 103*std::pow(2*0.93827*proj_energy + proj_mass*proj_mass+
+      xsection = A0 + B0*G4Log(proj_energy) - 11
+                + 103*G4Pow::GetInstance()->powA(2*0.93827*proj_energy + proj_mass*proj_mass+
                   0.93827*0.93827,-0.165);        //  mb
     }
   }
@@ -586,17 +586,17 @@ G4ComponentGGNuclNuclXsc::GetHadronNucleonXscNS(const G4ParticleDefinition* pPar
       {
         if( proj_momentum < 0.73 )
         {
-          hnXscv = 23 + 50*( std::pow( std::log(0.73/proj_momentum), 3.5 ) );
+          hnXscv = 23 + 50*( G4Pow::GetInstance()->powA( G4Log(0.73/proj_momentum), 3.5 ) );
         }
         else if( proj_momentum < 1.05  )
         {
-          hnXscv = 23 + 40*(std::log(proj_momentum/0.73))*
-                         (std::log(proj_momentum/0.73));
+          hnXscv = 23 + 40*(G4Log(proj_momentum/0.73))*
+                         (G4Log(proj_momentum/0.73));
         }
         else  // if( proj_momentum < 10.  )
         {
           hnXscv = 39.0 + 
-              75*(proj_momentum - 1.2)/(std::pow(proj_momentum,3.0) + 0.15);
+              75*(proj_momentum - 1.2)/(G4Pow::GetInstance()->powA(proj_momentum,3.0) + 0.15);
         }
         xsection = hnXscv;
       }
@@ -604,17 +604,17 @@ G4ComponentGGNuclNuclXsc::GetHadronNucleonXscNS(const G4ParticleDefinition* pPar
       {
         if( proj_momentum < 0.8 )
         {
-          hpXscv = 33+30*std::pow(std::log(proj_momentum/1.3),4.0);
+          hpXscv = 33+30*G4Pow::GetInstance()->powA(G4Log(proj_momentum/1.3),4.0);
         }      
         else if( proj_momentum < 1.4 )
         {
-          hpXscv = 33+30*std::pow(std::log(proj_momentum/0.95),2.0);
+          hpXscv = 33+30*G4Pow::GetInstance()->powA(G4Log(proj_momentum/0.95),2.0);
         }
         else    // if( proj_momentum < 10.  )
         {
           hpXscv = 33.3+
-              20.8*(std::pow(proj_momentum,2.0)-1.35)/
-                 (std::pow(proj_momentum,2.50)+0.95);
+              20.8*(G4Pow::GetInstance()->powA(proj_momentum,2.0)-1.35)/
+                 (G4Pow::GetInstance()->powA(proj_momentum,2.50)+0.95);
         }
         xsection = hpXscv;
       }
@@ -641,7 +641,7 @@ G4ComponentGGNuclNuclXsc::GetHNinelasticXscVU(const G4DynamicParticle* aParticle
   Elab /= GeV;
   Plab /= GeV;
 
-  G4double LogPlab    = std::log( Plab );
+  G4double LogPlab    = G4Log( Plab );
   G4double sqrLogPlab = LogPlab * LogPlab;
 
   //G4cout<<"Plab = "<<Plab<<G4endl;
@@ -656,16 +656,16 @@ G4ComponentGGNuclNuclXsc::GetHNinelasticXscVU(const G4DynamicParticle* aParticle
 
   if( absPDGcode > 1000 )  //------Projectile is baryon --------
   {
-       G4double XtotPP = 48.0 +  0. *std::pow(Plab, 0.  ) +
+       G4double XtotPP = 48.0 +  0. *G4Pow::GetInstance()->powA(Plab, 0.  ) +
                          0.522*sqrLogPlab - 4.51*LogPlab;
 
-       G4double XtotPN = 47.3 +  0. *std::pow(Plab, 0.  ) +
+       G4double XtotPN = 47.3 +  0. *G4Pow::GetInstance()->powA(Plab, 0.  ) +
                          0.513*sqrLogPlab - 4.27*LogPlab;
 
-       G4double XelPP  = 11.9 + 26.9*std::pow(Plab,-1.21) +
+       G4double XelPP  = 11.9 + 26.9*G4Pow::GetInstance()->powA(Plab,-1.21) +
                          0.169*sqrLogPlab - 1.85*LogPlab;
 
-       G4double XelPN  = 11.9 + 26.9*std::pow(Plab,-1.21) +
+       G4double XelPN  = 11.9 + 26.9*G4Pow::GetInstance()->powA(Plab,-1.21) +
                          0.169*sqrLogPlab - 1.85*LogPlab;
 
        Xtotal          = ( NumberOfTargetProtons  * XtotPP +
@@ -691,7 +691,7 @@ G4ComponentGGNuclNuclXsc::GetNucleusRadius(const G4DynamicParticle* ,
 {
   G4double At = anElement->GetN();
   G4double oneThird = 1.0/3.0;
-  G4double cubicrAt = std::pow (At, oneThird); 
+  G4double cubicrAt = G4Pow::GetInstance()->powA (At, oneThird); 
 
   G4double R;  // = fRadiusConst*cubicrAt;
   R = fRadiusConst*cubicrAt;
@@ -709,15 +709,15 @@ G4ComponentGGNuclNuclXsc::GetNucleusRadius(const G4DynamicParticle* ,
 
   if (At > 20.)   // 20.
   {
-    R *= ( a1 + b1*std::exp( -(At - meanA)/tauA1) ); 
+    R *= ( a1 + b1*G4Exp( -(At - meanA)/tauA1) ); 
   }
   else if (At > 3.5)
   {
-    R *= ( 1.0 + b2*( 1. - std::exp( (At - meanA)/tauA2) ) ); 
+    R *= ( 1.0 + b2*( 1. - G4Exp( (At - meanA)/tauA2) ) ); 
   }
   else 
   {
-    R *= ( 1.0 + b3*( 1. - std::exp( (At - meanA)/tauA3) ) ); 
+    R *= ( 1.0 + b3*( 1. - G4Exp( (At - meanA)/tauA3) ) ); 
   }
 
   return R;
@@ -743,7 +743,7 @@ G4double
 G4ComponentGGNuclNuclXsc::GetNucleusRadiusGG(G4double At)
 {
   G4double oneThird = 1.0/3.0;
-  G4double cubicrAt = std::pow (At, oneThird); 
+  G4double cubicrAt = G4Pow::GetInstance()->powA (At, oneThird); 
 
   G4double R;  // = fRadiusConst*cubicrAt;  
   R = fRadiusConst*cubicrAt;
@@ -753,11 +753,11 @@ G4ComponentGGNuclNuclXsc::GetNucleusRadiusGG(G4double At)
 
   if ( At > 20.)   // 20.
   {
-    R *= ( 0.8 + 0.2*std::exp( -(At - meanA)/tauA) ); 
+    R *= ( 0.8 + 0.2*G4Exp( -(At - meanA)/tauA) ); 
   }
   else
   {
-    R *= ( 1.0 + 0.1*( 1. - std::exp( (At - meanA)/tauA) ) ); 
+    R *= ( 1.0 + 0.1*( 1. - G4Exp( (At - meanA)/tauA) ) ); 
   }
 
   return R;
@@ -794,18 +794,18 @@ G4ComponentGGNuclNuclXsc::GetNucleusRadiusDE(G4double Z, G4double A)
     else if(std::abs(Z-3.) < 0.5)                         return 2.40*fermi; // Li7
     else if(std::abs(Z-4.) < 0.5)                         return 2.51*fermi; // Be9
 
-    else if( 10.  < A && A <= 16. ) r0  = a11*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
-    else if( 15.  < A && A <= 20. ) r0  = a12*( 1 - std::pow(A, -2./3.) )*fermi;
-    else if( 20.  < A && A <= 30. ) r0  = a13*( 1 - std::pow(A, -2./3.) )*fermi;
+    else if( 10.  < A && A <= 16. ) r0  = a11*( 1 - G4Pow::GetInstance()->powA(A, -2./3.) )*fermi;   // 1.08*fermi;
+    else if( 15.  < A && A <= 20. ) r0  = a12*( 1 - G4Pow::GetInstance()->powA(A, -2./3.) )*fermi;
+    else if( 20.  < A && A <= 30. ) r0  = a13*( 1 - G4Pow::GetInstance()->powA(A, -2./3.) )*fermi;
     else                            r0  = a2*fermi;
 
-    R = r0*std::pow( A, 1./3. );
+    R = r0*G4Pow::GetInstance()->powA( A, 1./3. );
   }
   else
   {
     r0 = a3*fermi;
 
-    R  = r0*std::pow(A, 0.27);
+    R  = r0*G4Pow::GetInstance()->powA(A, 0.27);
   }
   return R;
 }
@@ -829,7 +829,7 @@ G4ComponentGGNuclNuclXsc::GetNucleusRadiusRMS(G4double Z, G4double A)
   else if(std::abs(Z-3.) < 0.5)                         return 2.40*fermi; // Li7
   else if(std::abs(Z-4.) < 0.5)                         return 2.51*fermi; // Be9
 
-  else                               return 1.24*std::pow(A, 0.28 )*fermi; // A > 9
+  else                               return 1.24*G4Pow::GetInstance()->powA(A, 0.28 )*fermi; // A > 9
 }
 
 

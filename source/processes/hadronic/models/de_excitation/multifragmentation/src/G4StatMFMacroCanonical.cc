@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroCanonical.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4StatMFMacroCanonical.cc 91834 2015-08-07 07:24:22Z gcosmo $
 //
 // by V. Lara
 // --------------------------------------------------------------------
@@ -77,15 +77,13 @@ void G4StatMFMacroCanonical::Initialize(const G4Fragment & theFragment)
   G4Pow* g4pow = G4Pow::GetInstance();
   
   // Free Internal energy at T = 0
-  __FreeInternalE0 = A*( -G4StatMFParameters::GetE0() +          // Volume term (for T = 0)
-			 G4StatMFParameters::GetGamma0()*x*x)       // Symmetry term
-			 +
-    G4StatMFParameters::GetBeta0()*g4pow->Z23(A) +              // Surface term (for T = 0)
-    (3.0/5.0)*elm_coupling*Z*Z/(G4StatMFParameters::Getr0()*     // Coulomb term 
-				g4pow->Z13(A));
+  __FreeInternalE0 = A*( -G4StatMFParameters::GetE0() +     // Volume term (for T = 0)
+			 G4StatMFParameters::GetGamma0()*x*x) // Symmetry term
+    + G4StatMFParameters::GetBeta0()*g4pow->Z23(A) +   // Surface term (for T = 0)
+    0.6*elm_coupling*Z*Z/(G4StatMFParameters::Getr0()*     // Coulomb term 
+			  g4pow->Z13(A));
   
   CalculateTemperature(theFragment);
-  
   return;
 }
 
@@ -100,12 +98,11 @@ void G4StatMFMacroCanonical::CalculateTemperature(const G4Fragment & theFragment
   // Fragment Multiplicity
   G4double FragMult = std::max((1.0+(2.31/MeV)*(U/A - 3.5*MeV))*A/100.0, 2.0);
 
-
   // Parameter Kappa
-  _Kappa = (1.0+elm_coupling*(std::pow(FragMult,1./3.)-1)/
-	    (G4StatMFParameters::Getr0()*G4Pow::GetInstance()->Z13(A)));
+  G4Pow* g4pow = G4Pow::GetInstance();
+  _Kappa = (1.0+elm_coupling*(g4pow->A13(FragMult)-1)/
+	    (G4StatMFParameters::Getr0()*g4pow->Z13(A)));
   _Kappa = _Kappa*_Kappa*_Kappa - 1.0;
-
 	
   G4StatMFMacroTemperature * theTemp = new	
     G4StatMFMacroTemperature(A,Z,U,__FreeInternalE0,_Kappa,&_theClusters);
@@ -121,11 +118,10 @@ void G4StatMFMacroCanonical::CalculateTemperature(const G4Fragment & theFragment
   return;
 }
 
-
 // --------------------------------------------------------------------------
 
 G4StatMFChannel * G4StatMFMacroCanonical::ChooseAandZ(const G4Fragment &theFragment)
-    // Calculate total fragments multiplicity, fragment atomic numbers and charges
+// Calculate total fragments multiplicity, fragment atomic numbers and charges
 {
   G4int A = theFragment.GetA_asInt();
   G4int Z = theFragment.GetZ_asInt();
@@ -137,37 +133,34 @@ G4StatMFChannel * G4StatMFMacroCanonical::ChooseAandZ(const G4Fragment &theFragm
   std::vector<G4int> FragmentsA;
   
   G4int i = 0;  
-    for (i = 0; i < A; i++) 
-      {
-	for (G4int j = 0; j < ANumbers[i]; j++) FragmentsA.push_back(i+1);
-      }
-    
-    // Sort fragments in decreasing order
-    G4int im = 0;
-    for (G4int j = 0; j < Multiplicity; j++) 
-      {
-	G4int FragmentsAMax = 0;
-	im = j;
-	for (i = j; i < Multiplicity; i++) 
-	  {
-	    if (FragmentsA[i] <= FragmentsAMax) { continue; }
-	    else 
-	      {
-		im = i;
-		FragmentsAMax = FragmentsA[im];
-	      }
-	  }
-	
-	if (im != j) 
-	  {
-	    FragmentsA[im] = FragmentsA[j];
-	    FragmentsA[j]  = FragmentsAMax;
-	  }
-      }
-    
-    return ChooseZ(Z,FragmentsA);
+  for (i = 0; i < A; i++) 
+    {
+      for (G4int j = 0; j < ANumbers[i]; j++) FragmentsA.push_back(i+1);
+    }
+  
+  // Sort fragments in decreasing order
+  G4int im = 0;
+  for (G4int j = 0; j < Multiplicity; j++) 
+    {
+      G4int FragmentsAMax = 0;
+      im = j;
+      for (i = j; i < Multiplicity; i++) 
+	{
+	  if (FragmentsA[i] <= FragmentsAMax) { continue; }
+	  else 
+	    {
+	      im = i;
+	      FragmentsAMax = FragmentsA[im];
+	    }
+	}	
+      if (im != j) 
+	{
+	  FragmentsA[im] = FragmentsA[j];
+	  FragmentsA[j]  = FragmentsAMax;
+	}
+    }
+  return ChooseZ(Z,FragmentsA);
 }
-
 
 G4double G4StatMFMacroCanonical::ChooseA(G4int A, std::vector<G4int> & ANumbers)
   // Determines fragments multiplicities and compute total fragment multiplicity
@@ -205,13 +198,14 @@ G4double G4StatMFMacroCanonical::ChooseA(G4int A, std::vector<G4int> & ANumbers)
       SumA += ThisOne+1;
       CheckA = A - SumA;
       
+      // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
     } while (CheckA > 0);
     
-  } while (CheckA < 0 || std::abs(__MeanMultiplicity - multiplicity) > std::sqrt(__MeanMultiplicity) + 1./2.);
+    // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
+  } while (CheckA < 0 || std::abs(__MeanMultiplicity - multiplicity) > std::sqrt(__MeanMultiplicity) + 0.5);
   
   return multiplicity;
 }
-
 
 G4StatMFChannel * G4StatMFMacroCanonical::ChooseZ(G4int & Z, 
 						  std::vector<G4int> & FragmentsA)
@@ -221,49 +215,51 @@ G4StatMFChannel * G4StatMFMacroCanonical::ChooseZ(G4int & Z,
   std::vector<G4int> FragmentsZ;
   
   G4int DeltaZ = 0;
-  G4double CP = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
-    (1.0 - 1.0/std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
-  
+  G4double CP =  G4StatMFParameters::GetCoulomb();
   G4int multiplicity = FragmentsA.size();
   
-  do 
-    {
-      FragmentsZ.clear();
-      G4int SumZ = 0;
-      for (G4int i = 0; i < multiplicity; i++) 
-	{
-	  G4int A = FragmentsA[i];
-	  if (A <= 1) 
-	    {
-	      G4double RandNumber = G4UniformRand();
-	      if (RandNumber < (*_theClusters.begin())->GetZARatio()) 
-		{
-		  FragmentsZ.push_back(1);
-		  SumZ += FragmentsZ[i];
-		} 
-	      else FragmentsZ.push_back(0);
-	    } 
-	  else 
-	    {
-	      G4double RandZ;
-	      G4double CC = 8.0*G4StatMFParameters::GetGamma0()+2.0*CP*g4pow->Z23(FragmentsA[i]);
-	      G4double ZMean;
-	      if (FragmentsA[i] > 1 && FragmentsA[i] < 5) { ZMean = 0.5*FragmentsA[i]; }
-	      else ZMean = FragmentsA[i]*(4.0*G4StatMFParameters::GetGamma0()+_ChemPotentialNu)/CC;
-	      G4double ZDispersion = std::sqrt(FragmentsA[i]*__MeanTemperature/CC);
-	      G4int z;
-	      do 
-		{
-		  RandZ = G4RandGauss::shoot(ZMean,ZDispersion);
-		  z = static_cast<G4int>(RandZ+0.5);
-		} while (z < 0 || z > A);
-	      FragmentsZ.push_back(z);
-	      SumZ += z;
+  do {
+    FragmentsZ.clear();
+    G4int SumZ = 0;
+    for (G4int i = 0; i < multiplicity; i++) 
+      {
+	G4int A = FragmentsA[i];
+	if (A <= 1) 
+	  {
+	    G4double RandNumber = G4UniformRand();
+	    if (RandNumber < (*_theClusters.begin())->GetZARatio()) 
+	      {
+		FragmentsZ.push_back(1);
+		SumZ += FragmentsZ[i];
+	      } 
+	    else FragmentsZ.push_back(0);
+	  } 
+	else 
+	  {
+	    G4double RandZ;
+	    G4double CC = 8.0*G4StatMFParameters::GetGamma0()
+	      + 2*CP*g4pow->Z23(FragmentsA[i]);
+	    G4double ZMean;
+	    if (FragmentsA[i] > 1 && FragmentsA[i] < 5) { ZMean = 0.5*FragmentsA[i]; }
+	    else {
+	      ZMean = FragmentsA[i]*(4.0*G4StatMFParameters::GetGamma0()
+				     + _ChemPotentialNu)/CC; 
 	    }
-	}
-      DeltaZ = Z - SumZ;
-    }
-  while (std::abs(DeltaZ) > 1);
+	    G4double ZDispersion = std::sqrt(FragmentsA[i]*__MeanTemperature/CC);
+	    G4int z;
+	    do 
+	      {
+		RandZ = G4RandGauss::shoot(ZMean,ZDispersion);
+		z = G4lrint(RandZ+0.5);
+		// Loop checking, 05-Aug-2015, Vladimir Ivanchenko
+	      } while (z < 0 || z > A);
+	    FragmentsZ.push_back(z);
+	    SumZ += z;
+	  }
+      }
+    DeltaZ = Z - SumZ;
+  // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
+  } while (std::abs(DeltaZ) > 1);
     
   // DeltaZ can be 0, 1 or -1
   G4int idx = 0;

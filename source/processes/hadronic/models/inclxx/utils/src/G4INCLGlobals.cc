@@ -118,7 +118,7 @@ namespace G4INCL {
     void wrap(std::string &str, const size_t lineLength, const std::string &separators) {
       const size_t len = str.size();
       size_t startPos = 0;
-      while(len-startPos > lineLength) {
+      while(len-startPos > lineLength) { /* Loop checking, 10.07.2015, D.Mancusi */
         const size_t nextNewline = str.find('\n', startPos);
         if(nextNewline!=std::string::npos && nextNewline-startPos<=lineLength)
           startPos = nextNewline+1;
@@ -138,7 +138,7 @@ namespace G4INCL {
       size_t cur_max_pos = maxPosition;
       const size_t from_len = from.length();
       const size_t to_len = to.length();
-      while((start_pos = str.find(from, start_pos)) != std::string::npos
+      while((start_pos = str.find(from, start_pos)) != std::string::npos /* Loop checking, 10.07.2015, D.Mancusi */
             && (cur_max_pos==std::string::npos || start_pos<cur_max_pos)) {
         str.replace(start_pos, from_len, to);
         start_pos += to_len; // In case 'to' contains 'from', like replacing 'x' with 'yx'
@@ -155,7 +155,7 @@ namespace G4INCL {
         std::string token = str.substr(startPos, endPos-startPos);
         tokens.push_back(token);
         startPos = str.find_first_not_of(delimiters, endPos);
-      } while(endPos!=std::string::npos);
+      } while(endPos!=std::string::npos); /* Loop checking, 10.07.2015, D.Mancusi */
 
       return tokens;
     }

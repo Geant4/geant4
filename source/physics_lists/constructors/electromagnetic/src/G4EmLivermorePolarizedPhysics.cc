@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmLivermorePolarizedPhysics.cc 86233 2014-11-07 17:21:03Z gcosmo $
+// $Id: G4EmLivermorePolarizedPhysics.cc 92821 2015-09-17 15:23:49Z gcosmo $
 
 #include "G4EmLivermorePolarizedPhysics.hh"
 #include "G4ParticleDefinition.hh"
@@ -114,6 +114,7 @@
 //
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
+#include "G4EmModelActivator.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -127,11 +128,14 @@ G4EmLivermorePolarizedPhysics::G4EmLivermorePolarizedPhysics(G4int ver)
   : G4VPhysicsConstructor("G4EmLivermorePolarizedPhysics"), verbose(ver)
 {
   G4EmParameters* param = G4EmParameters::Instance();
+  param->SetDefaults();
   param->SetVerbose(verbose);
   param->SetMinEnergy(100*eV);
   param->SetMaxEnergy(10*TeV);
+  param->SetLowestElectronEnergy(100*eV);
   param->SetNumberOfBinsPerDecade(20);
   param->ActivateAngularGeneratorForIonisation(true);
+  param->SetFluo(true);
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -141,11 +145,13 @@ G4EmLivermorePolarizedPhysics::G4EmLivermorePolarizedPhysics(G4int ver, const G4
   : G4VPhysicsConstructor("G4EmLivermorePolarizedPhysics"), verbose(ver)
 {
   G4EmParameters* param = G4EmParameters::Instance();
+  param->SetDefaults();
   param->SetVerbose(verbose);
   param->SetMinEnergy(100*eV);
   param->SetMaxEnergy(10*TeV);
   param->SetNumberOfBinsPerDecade(20);
   param->ActivateAngularGeneratorForIonisation(true);
+  param->SetFluo(true);
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -158,31 +164,35 @@ G4EmLivermorePolarizedPhysics::~G4EmLivermorePolarizedPhysics()
 
 void G4EmLivermorePolarizedPhysics::ConstructParticle()
 {
-// gamma
+  // gamma
   G4Gamma::Gamma();
 
-// leptons
+  // leptons
   G4Electron::Electron();
   G4Positron::Positron();
   G4MuonPlus::MuonPlus();
   G4MuonMinus::MuonMinus();
 
-// mesons
+  // mesons
   G4PionPlus::PionPlusDefinition();
   G4PionMinus::PionMinusDefinition();
   G4KaonPlus::KaonPlusDefinition();
   G4KaonMinus::KaonMinusDefinition();
 
-// baryons
+  // baryons
   G4Proton::Proton();
   G4AntiProton::AntiProton();
 
-// ions
+  // ions
   G4Deuteron::Deuteron();
   G4Triton::Triton();
   G4He3::He3();
   G4Alpha::Alpha();
   G4GenericIon::GenericIonDefinition();
+
+  // dna
+  G4EmModelActivator mact;
+  mact.ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -445,7 +455,9 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
   //
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
-  de->SetFluo(true);
+
+  G4EmModelActivator mact;
+  mact.ConstructProcess();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

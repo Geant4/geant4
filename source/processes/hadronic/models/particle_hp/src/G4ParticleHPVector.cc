@@ -34,6 +34,7 @@
 //
 #include "G4ParticleHPVector.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Threading.hh"
 
   // if the ranges do not match, constant extrapolation is used.
   G4ParticleHPVector & operator + (G4ParticleHPVector & left, G4ParticleHPVector & right)
@@ -45,7 +46,7 @@
     G4int running = 0;
     for(G4int i=0; i<left.GetVectorLength(); i++)
     {
-      while(j<right.GetVectorLength())
+      while(j<right.GetVectorLength()) // Loop checking, 11.05.2015, T. Koi
       {
         if(right.GetX(j)<left.GetX(i)*1.001)
         {
@@ -148,7 +149,14 @@
   G4double G4ParticleHPVector::GetXsec(G4double e) 
   {
     if(nEntries == 0) return 0;
-    if(!theHash.Prepared()) Hash();
+    //if(!theHash.Prepared()) Hash();
+    if ( !theHash.Prepared() ) {
+       if ( G4Threading::IsWorkerThread() ) {
+          ;
+       } else {
+          Hash();
+       }
+    }
     G4int min = theHash.GetMinIndex(e);
     G4int i;
     for(i=min ; i<nEntries; i++)
@@ -232,7 +240,7 @@
     G4int s_tmp = 0, n=0, m_tmp=0;
     G4ParticleHPVector * tmp;
     G4int a = s_tmp, p = n, t;
-    while ( a<active->GetVectorLength() )
+    while ( a<active->GetVectorLength() ) // Loop checking, 11.05.2015, T. Koi
     {
       if(active->GetEnergy(a) <= passive->GetEnergy(p))
       {
@@ -262,7 +270,7 @@
     }
     
     G4double deltaX = passive->GetXsec(GetEnergy(m_tmp-1)) - GetXsec(m_tmp-1);
-    while (p!=passive->GetVectorLength()&&passive->GetEnergy(p)<=aValue)
+    while (p!=passive->GetVectorLength()&&passive->GetEnergy(p)<=aValue) // Loop checking, 11.05.2015, T. Koi
     {
       G4double anX;
       anX = passive->GetXsec(p)-deltaX;
@@ -298,7 +306,7 @@
     aBuff[0] = theData[0];
     
     // Find the rest
-    while(current < GetVectorLength())
+    while(current < GetVectorLength()) // Loop checking, 11.05.2015, T. Koi
     {
       x1=aBuff[count].GetX();
       y1=aBuff[count].GetY();
@@ -370,8 +378,15 @@
     else
     {
       if(theIntegral==0) { IntegrateAndNormalise(); }
+      G4int icounter=0;
+      G4int icounter_max=1024;
       do
       {
+        icounter++;
+        if ( icounter > icounter_max ) {
+	   G4cout << "Loop-counter exceeded the threshold value at " << __LINE__ << "th line of " << __FILE__ << "." << G4endl;
+           break;
+        }
 //080808
 /*
         G4double rand;
@@ -390,8 +405,15 @@
 */
         G4double rand;
         G4double value, test;
+        G4int jcounter=0;
+        G4int jcounter_max=1024;
         do 
         {
+           jcounter++;
+           if ( jcounter > jcounter_max ) {
+	      G4cout << "Loop-counter exceeded the threshold value at " << __LINE__ << "th line of " << __FILE__ << "." << G4endl;
+              break;
+           }
            rand = G4UniformRand();
            G4int ibin = -1;
            for ( G4int i = 0 ; i < GetVectorLength() ; i++ )
@@ -432,11 +454,11 @@
 	   test =(mval*value+bval)/std::max ( GetY( ibin-1 ) , GetY ( ibin ) ); 
 	   //***********************************************************************
         }
-        while ( G4UniformRand() > test );
+        while ( G4UniformRand() > test ); // Loop checking, 11.05.2015, T. Koi
         result = value;
 //080807
       }
-      while(IsBlocked(result));
+      while(IsBlocked(result)); // Loop checking, 11.05.2015, T. Koi
     }
     return result;
   }

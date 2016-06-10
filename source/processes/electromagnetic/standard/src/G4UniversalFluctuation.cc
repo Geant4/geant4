@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc 81365 2014-05-27 12:56:32Z gcosmo $
+// $Id: G4UniversalFluctuation.cc 91726 2015-08-03 15:41:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -128,10 +128,10 @@ void G4UniversalFluctuation::InitialiseMe(const G4ParticleDefinition* part)
 
 G4double 
 G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
-					   const G4DynamicParticle* dp,
-					   G4double tmax,
-					   G4double length,
-					   G4double averageLoss)
+                                           const G4DynamicParticle* dp,
+                                           G4double tmax,
+                                           G4double length,
+                                           G4double averageLoss)
 {
   // Calculate actual loss from the mean loss.
   // The model used to get the fluctuations is essentially the same
@@ -147,6 +147,8 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
   if (meanLoss < minLoss) { return meanLoss; }
 
   if(dp->GetDefinition() != particle) { InitialiseMe(dp->GetDefinition()); }
+
+  CLHEP::HepRandomEngine* rndmEngineF = G4Random::getTheEngine();
   
   G4double tau   = tkin * m_Inv_particleMass;            
   G4double gam   = tau + 1.0;
@@ -170,23 +172,24 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
     {
       electronDensity = material->GetElectronDensity();
       siga = sqrt((1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
-		  * electronDensity * chargeSquare);
+                  * electronDensity * chargeSquare);
 
       G4double sn = meanLoss/siga;
   
       // thick target case 
       if (sn >= 2.0) {
 
-	G4double twomeanLoss = meanLoss + meanLoss;
-    	do {
-	  loss = G4RandGauss::shoot(rndmEngineF,meanLoss,siga);
-    	} while  (0.0 > loss || twomeanLoss < loss);
+        G4double twomeanLoss = meanLoss + meanLoss;
+        do {
+          loss = G4RandGauss::shoot(rndmEngineF,meanLoss,siga);
+          // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
+        } while  (0.0 > loss || twomeanLoss < loss);
 
-	// Gamma distribution
+        // Gamma distribution
       } else {
 
-	G4double neff = sn*sn;
-	loss = meanLoss*G4RandGamma::shoot(rndmEngineF,neff,1.0)/neff;
+        G4double neff = sn*sn;
+        loss = meanLoss*G4RandGamma::shoot(rndmEngineF,neff,1.0)/neff;
       }
       //G4cout << "Gauss: " << loss << G4endl;
       return loss;
@@ -217,12 +220,12 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
   if(meanLoss < 25.*ipotFluct)
     {
       if(rndmEngineF->flat()*ipotFluct< 0.04*meanLoss)          
-	{ nstep = 1; }
+        { nstep = 1; }
       else
-	{ 
-	  nstep = 2;
-	  meanLoss *= 0.5; 
-	}
+        { 
+          nstep = 2;
+          meanLoss *= 0.5; 
+        }
     }
 
   for (G4int istep=0; istep < nstep; ++istep) {
@@ -235,35 +238,35 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
       G4double w2 = G4Log(2.*electron_mass_c2*beta2*gam2)-beta2;
 
       if(w2 > ipotLogFluct)  {
-	G4double C = meanLoss*(1.-rate)/(w2-ipotLogFluct);
-	a1 = C*f1Fluct*(w2-e1LogFluct)/e1Fluct;
-	if(w2 > e2LogFluct) {
-	  a2 = C*f2Fluct*(w2-e2LogFluct)/e2Fluct;
-	}
-	if(a1 < nmaxCont) { 
-	  //small energy loss
-	  G4double sa1 = sqrt(a1);
-	  if(rndmEngineF->flat() < G4Exp(-sa1))
-	    {
-	      e1 = esmall;
-	      a1 = meanLoss*(1.-rate)/e1;
-	      a2 = 0.;
-	      e2 = e2Fluct;
-	    } 
-	  else
-	    {
-	      a1 = sa1 ;    
-	      e1 = sa1*e1Fluct;
-	      e2 = e2Fluct;
-	    }
+        G4double C = meanLoss*(1.-rate)/(w2-ipotLogFluct);
+        a1 = C*f1Fluct*(w2-e1LogFluct)/e1Fluct;
+        if(w2 > e2LogFluct) {
+          a2 = C*f2Fluct*(w2-e2LogFluct)/e2Fluct;
+        }
+        if(a1 < nmaxCont) { 
+          //small energy loss
+          G4double sa1 = sqrt(a1);
+          if(rndmEngineF->flat() < G4Exp(-sa1))
+            {
+              e1 = esmall;
+              a1 = meanLoss*(1.-rate)/e1;
+              a2 = 0.;
+              e2 = e2Fluct;
+            } 
+          else
+            {
+              a1 = sa1 ;    
+              e1 = sa1*e1Fluct;
+              e2 = e2Fluct;
+            }
 
-	} else {
-	  //not small energy loss
-	  //correction to get better fwhm value
-	  a1 /= fw;
-	  e1 = fw*e1Fluct;
-	  e2 = e2Fluct;
-	}
+        } else {
+          //not small energy loss
+          //correction to get better fwhm value
+          a1 /= fw;
+          e1 = fw*e1Fluct;
+          e2 = e2Fluct;
+        }
       }   
     }
 
@@ -271,7 +274,7 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
     if(tmax > e0) {
       a3 = rate*meanLoss*(tmax-e0)/(e0*tmax*G4Log(w1));
       if(a1+a2 <= 0.) { 
-	a3 /= rate; 
+        a3 /= rate; 
       }
     }
     //'nearly' Gaussian fluctuation if a1>nmaxCont&&a2>nmaxCont&&a3>nmaxCont  
@@ -282,35 +285,35 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
     // excitation of type 1
     if(a1 > nmaxCont)
       {
-	emean += a1*e1;
-	sig2e += a1*e1*e1;
+        emean += a1*e1;
+        sig2e += a1*e1*e1;
       }
     else if(a1 > 0.)
       {
-	p1 = G4double(G4Poisson(a1));
-	loss += p1*e1;
-	if(p1 > 0.) {
-	  loss += (1.-2.*rndmEngineF->flat())*e1;
-	}
+        p1 = G4double(G4Poisson(a1));
+        loss += p1*e1;
+        if(p1 > 0.) {
+          loss += (1.-2.*rndmEngineF->flat())*e1;
+        }
       }
 
     // excitation of type 2
     if(a2 > nmaxCont)
       {
-	emean += a2*e2;
-	sig2e += a2*e2*e2;
+        emean += a2*e2;
+        sig2e += a2*e2*e2;
       }
     else if(a2 > 0.)
       {
-	p2 = G4double(G4Poisson(a2));
-	loss += p2*e2;
-	if(p2 > 0.) 
-	  loss += (1.-2.*rndmEngineF->flat())*e2;
+        p2 = G4double(G4Poisson(a2));
+        loss += p2*e2;
+        if(p2 > 0.) 
+          loss += (1.-2.*rndmEngineF->flat())*e2;
       }
     if(emean > 0.)
       {
-	sige   = sqrt(sig2e);
-	loss += max(0.,G4RandGauss::shoot(rndmEngineF,emean,sige));
+        sige   = sqrt(sig2e);
+        loss += max(0.,G4RandGauss::shoot(rndmEngineF,emean,sige));
       }
 
     // ionisation 
@@ -322,32 +325,32 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
       p3 = a3;
       G4double alfa = 1.;
       if(a3 > nmaxCont)
-	{
-	  alfa            = w1*(nmaxCont+a3)/(w1*nmaxCont+a3);
-	  G4double alfa1  = alfa*G4Log(alfa)/(alfa-1.);
-	  G4double namean = a3*w1*(alfa-1.)/((w1-1.)*alfa);
-	  emean          += namean*e0*alfa1;
-	  sig2e          += e0*e0*namean*(alfa-alfa1*alfa1);
-	  p3              = a3-namean;
-	}
+        {
+          alfa            = w1*(nmaxCont+a3)/(w1*nmaxCont+a3);
+          G4double alfa1  = alfa*G4Log(alfa)/(alfa-1.);
+          G4double namean = a3*w1*(alfa-1.)/((w1-1.)*alfa);
+          emean          += namean*e0*alfa1;
+          sig2e          += e0*e0*namean*(alfa-alfa1*alfa1);
+          p3              = a3-namean;
+        }
 
       G4double w2 = alfa*e0;
       G4double w  = (tmax-w2)/tmax;
       const G4int nb = G4Poisson(p3);
       if(nb > 0) {
         if(nb > sizearray) {
-	  sizearray = nb;
-	  delete [] rndmarray;
-	  rndmarray = new G4double[nb];
-	}
-	rndmEngineF->flatArray(nb, rndmarray);
-	for (G4int k=0; k<nb; ++k) { lossc += w2/(1.-w*rndmarray[k]); }
+          sizearray = nb;
+          delete [] rndmarray;
+          rndmarray = new G4double[nb];
+        }
+        rndmEngineF->flatArray(nb, rndmarray);
+        for (G4int k=0; k<nb; ++k) { lossc += w2/(1.-w*rndmarray[k]); }
       }
 
     if(emean > 0.)
       {
-	sige   = sqrt(sig2e);
-	lossc += max(0.,G4RandGauss::shoot(rndmEngineF,emean,sige));
+        sige   = sqrt(sig2e);
+        lossc += max(0.,G4RandGauss::shoot(rndmEngineF,emean,sige));
       }
     }
 
@@ -367,8 +370,8 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
 G4double G4UniversalFluctuation::Dispersion(
                           const G4Material* material,
                           const G4DynamicParticle* dp,
- 				G4double tmax,
-			        G4double length)
+                                G4double tmax,
+                                G4double length)
 {
   if(dp->GetDefinition() != particle) { InitialiseMe(dp->GetDefinition()); }
 
@@ -387,7 +390,7 @@ G4double G4UniversalFluctuation::Dispersion(
 
 void 
 G4UniversalFluctuation::SetParticleAndCharge(const G4ParticleDefinition* part,
-					     G4double q2)
+                                             G4double q2)
 {
   if(part != particle) {
     particle       = part;

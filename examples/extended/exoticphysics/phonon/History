@@ -1,4 +1,4 @@
-$Id: History 84271 2014-10-13 07:12:23Z gcosmo $
+$Id: History 92176 2015-08-20 13:07:22Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19 August 2015: M. Kelsey   (phononExample-V10-01-01)
+- XAluminumElectrodeHit.hh:  Make simple container with public data members
+- XAluminumElectrodeSensitivity:  Improve MT robustness, make HC local, make
+  file streams shared-static, with protective mutexes.
+
+NOTE:  MT output from clang, icc is different from gcc.  Change below means
+       test jobs still failing on those compilers.
+
+13 August 2015: G. Folger   (phononExample-V10-01-00)
+- Update caustic.out-MT to file created on slc6, gcc49, MT
 
 12 October 2014:  M. Kelsey (phononExample-V10-00-03)
 - caustic.out-MT-*, timing.out-MT-*:  Remove platform-specific reference files.

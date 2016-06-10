@@ -74,11 +74,11 @@ vis_libs="-lG4Tree \
 #-----------------------------------------------------------------------
 # Core setup...
 #
-cflags="@CMAKE_CXX_FLAGS@"
+cflags="@CMAKE_CXX_FLAGS@ @GEANT4_CXXSTD_FLAGS@"
 feature_list=""
 
 # - CXX Standard
-geant4_cxx_std="@GEANT4_BUILD_CXXSTD@"
+geant4_cxx_std="c++@GEANT4_BUILD_CXXSTD@"
 
 # - static libs
 have_staticlibs="@G4_BUILTWITH_STATICLIBS@"
@@ -132,7 +132,7 @@ feature_list="${feature_list} clhep[${have_clhep}]"
 
 if test "x${have_clhep}" = "xno" ; then
   cflags="${cflags} `${clhep_config_exe} --include`"
-  libs="${libs} `${clhep_config_exe} --libs`"
+  libs="${libs} @G4_SYSTEM_CLHEP_LIBRARIES@"
 fi
 if test "x${have_clhep}" = "xyes" ; then
   libs="${libs} -lG4clhep"
@@ -164,14 +164,14 @@ fi
 
 # - USolids
 have_usolids="@G4_BUILTWITH_USOLIDS@"
-have_internal_usolids="@G4_BUILTWITH_BUILTIN_USOLIDS@"
 feature_list="${feature_list} usolids[${have_usolids}]"
 if test "x${have_usolids}" = "xyes" ; then
-  cflags="-DG4GEOM_USE_USOLIDS ${cflags}"
+  cflags="${cflags} @G4_USOLIDS_CFLAGS@"
 fi
-if test "x${have_internal_usolids}" = "xyes" ; then
-  libs="${libs} -lG4geomUSolids"
-fi
+
+# - Freetype
+have_freetype="@G4_BUILTWITH_FREETYPE@"
+feature_list="${feature_list} freetype[${have_freetype}]"
 
 # - G3toG4
 have_g3tog4="@G4_BUILTWITH_G3TOG4@"
@@ -562,6 +562,9 @@ while test $# -gt 0 ; do
           ;;
         usolids)
           echo ${have_usolids}
+          ;;
+        freetype)
+          echo ${have_freetype}
           ;;
         g3tog4)
           echo ${have_g3tog4}

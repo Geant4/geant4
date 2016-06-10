@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Par01CalorimeterSD.hh 70911 2013-06-07 11:05:37Z mverderi $
+// $Id: Par01CalorimeterSD.hh 90093 2015-05-13 11:59:54Z gcosmo $
 //
 
 #ifndef Par01CalorimeterSD_h

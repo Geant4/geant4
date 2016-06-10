@@ -38,6 +38,7 @@
 #include "G4VParticleHPEnergyAngular.hh"
 #include "G4ParticleHPContAngularPar.hh"
 #include "G4InterpolationManager.hh"
+#include "G4Cache.hh"
 class G4ParticleDefinition;
 
 // we will need one of these per product.
@@ -50,7 +51,7 @@ class G4ParticleHPContEnergyAngular : public G4VParticleHPEnergyAngular
     : theProjectile(proj)
   {
     theAngular = 0;
-    currentMeanEnergy = -2;
+    currentMeanEnergy.Put( -2 );
   }
   
   ~G4ParticleHPContEnergyAngular()
@@ -93,7 +94,7 @@ G4ReactionProduct * Sample(G4double anEnergy, G4double massCode, G4double mass);
   G4InterpolationManager theManager; // knows the interpolation between stores
   G4ParticleHPContAngularPar * theAngular;
   
-  G4double currentMeanEnergy;
+  G4Cache<G4double> currentMeanEnergy;
 
   G4ParticleDefinition* theProjectile;
 

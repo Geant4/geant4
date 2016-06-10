@@ -1,0 +1,33 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_impi
+#define tools_impi
+
+#include <string>
+#include <vector>
+
+namespace tools {
+
+class impi {
+public:
+  virtual ~impi(){}
+public:
+  virtual bool pack(unsigned int) = 0;
+  virtual bool pack(double)  = 0;
+  virtual bool bpack(bool) = 0;
+  virtual bool spack(const std::string&) = 0;
+  virtual bool vpack(const std::vector<unsigned int>&) = 0;
+  virtual bool vpack(const std::vector<double>&) = 0;
+
+  virtual bool unpack(unsigned int&) = 0;
+  virtual bool unpack(double&)  = 0;
+  virtual bool bunpack(bool&) = 0;
+  virtual bool sunpack(std::string&) = 0;
+  virtual bool vunpack(std::vector<unsigned int>&) = 0;
+  virtual bool vunpack(std::vector<double>&) = 0;
+};
+
+}
+
+#endif

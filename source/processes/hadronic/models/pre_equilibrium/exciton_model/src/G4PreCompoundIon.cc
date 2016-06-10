@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundIon.cc 82765 2014-07-08 14:25:39Z gcosmo $
+// $Id: G4PreCompoundIon.cc 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -43,6 +43,8 @@
 #include "G4PreCompoundIon.hh"
 #include "G4PhysicalConstants.hh"
 
+const G4double sixoverpi2 = 6.0/CLHEP::pi2;
+
 G4PreCompoundIon::
 G4PreCompoundIon(const G4ParticleDefinition* part,
 		 G4VCoulombBarrier* aCoulombBarrier)
@@ -59,8 +61,7 @@ G4double G4PreCompoundIon::
 ProbabilityDistributionFunction(G4double eKin, 
 				const G4Fragment& aFragment)
 {
-  if ( !IsItPossible(aFragment) ) { return 0.0; }
-  G4double efinal = eKin + GetBindingEnergy();
+  G4double efinal = eKin + theBindingEnergy;
   if(efinal <= 0.0 ) { return 0.0; } 
 
   G4double U = aFragment.GetExcitationEnergy();
@@ -69,11 +70,8 @@ ProbabilityDistributionFunction(G4double eKin,
   G4int A = GetA();
   G4int N = P + H;
 
-  G4double g0 = (6.0/pi2)*aFragment.GetA_asInt()*theParameters->GetLevelDensity();
-  G4double g1 = (6.0/pi2)*GetRestA()*theParameters->GetLevelDensity();
-
-  // G4double gj = (6.0/pi2)*GetA() *
-  //   G4PreCompoundParameters::GetAddress()->GetLevelDensity();
+  G4double g0 = sixoverpi2*theFragA*theParameters->GetLevelDensity();
+  G4double g1 = sixoverpi2*theResA*theParameters->GetLevelDensity();
 
   G4double gj = g1;
 
@@ -83,7 +81,7 @@ ProbabilityDistributionFunction(G4double eKin,
   G4double E0 = U - A0;
   if (E0 <= 0.0) { return 0.0; }
 
-  G4double E1 = (std::max(0.0,GetMaximalKineticEnergy() - eKin - A1)); 
+  G4double E1 = std::max(0.0,theMaxKinEnergy - eKin - A1); 
 
   G4double Aj = A*(A+1)/(4.0*gj); 
   G4double Ej = std::max(0.0,efinal - Aj); 
@@ -92,10 +90,15 @@ ProbabilityDistributionFunction(G4double eKin,
   G4double xs = CrossSection(eKin);
   
   G4double pA = fact*eKin*xs*rj 
-    * CoalescenceFactor(aFragment.GetA_asInt()) * FactorialFactor(N,P)
-    * std::sqrt(2.0/(GetReducedMass()*efinal)) 
+    * CoalescenceFactor(theFragA) * FactorialFactor(N,P)
+    * std::sqrt(2.0/(theReducedMass*efinal)) 
     * g4pow->powN(g1*E1/(g0*E0), N-A-1)
-    * g4pow->powN(gj*Ej/(g0*E0), A-1)*gj*g1/(g0*g0*E0*GetRestA()); 
+    * g4pow->powN(gj*Ej/(g0*E0), A-1)*gj*g1/(g0*g0*E0*theResA); 
    
   return pA;
+}
+
+G4double G4PreCompoundIon::GetBeta() const
+{
+  return -theCoulombBarrier;
 }

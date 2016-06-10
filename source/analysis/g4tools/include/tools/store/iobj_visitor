@@ -16,7 +16,7 @@ class iobj_visitor {
 public:
   virtual ~iobj_visitor() {}
 public:
-  virtual std::ostream& out() = 0;
+  virtual std::ostream& out() const = 0;
 
   //virtual bool begin(IStorable&) = 0;
   //virtual bool end(IStorable&) = 0;

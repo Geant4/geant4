@@ -7,7 +7,7 @@
 #include "rbuf"
 #include "ifac"
 #include "iro"
-#include "../tos"
+#include "../sout"
 #ifdef TOOLS_MEM
 #include "../mem"
 #endif
@@ -110,7 +110,7 @@ public:
   void set_offset(unsigned int a_off) {m_pos = m_buffer+a_off;}
 
   //char* buffer() const {return m_buffer;}
-  uint32 length() const {return m_pos-m_buffer;}
+  uint32 length() const {return uint32(m_pos-m_buffer);}
   uint32 size() const {return m_size;}
 
   void set_map_objs(bool a_value) {m_map_objs = a_value;}
@@ -129,7 +129,6 @@ protected:
 
     uint32 tag;
     if(!rbuf::read(tag)) return false;
-    //m_out << "tag " << tag << " " << tosx(tag) << std::endl;
 
     if(tag==kNewClassTag()) {
       char s[80];
@@ -166,10 +165,12 @@ protected:
 
     } else {
 
+      std::ios::fmtflags old_flags = m_out.flags();
       m_out << "tools::rroot::read_class_tag :"
             << " tag unknown case ! "  
-            << tag << " hex " << tosx(tag)
+            << tag << " hex " << std::hex << tag
             << std::endl;             
+      m_out.flags(old_flags);
 
       return false;
     }
@@ -188,9 +189,11 @@ protected:
     if(!rbuf::read(first_int)) return false;
 
     if(m_verbose) {
+      std::ios::fmtflags old_flags = m_out.flags();
       m_out << "tools::rroot::read_class :"
-            << " first_int " << tosx(first_int)
+            << " first_int " << std::hex << first_int
             << std::endl;
+      m_out.flags(old_flags);
     }
 
     if(first_int==kNullTag()) { //GB
@@ -219,7 +222,7 @@ protected:
               << std::endl;
       }
 
-      uint32 bef_tag = m_pos-m_buffer;
+      uint32 bef_tag = uint32(m_pos-m_buffer);
       //fVersion = 1;
 
       std::string scls;
@@ -246,10 +249,12 @@ protected:
             
     } else {
       if(m_verbose) {
+        std::ios::fmtflags old_flags = m_out.flags();
         m_out << "tools::rroot::read_class :"
-             << " first_int " << tosx(first_int)
+             << " first_int " << std::hex << first_int
              << ". first_int is position toward object."
              << std::endl;
+        m_out.flags(old_flags);
       }
       a_bcnt = first_int; //pos toward object.
       a_is_ref = true;
@@ -525,9 +530,9 @@ public:
                         const std::string& a_store_cls){
     if(!a_byte_count) return true;
 
-    unsigned long len = a_start_pos + a_byte_count + sizeof(unsigned int);
+    size_t len = a_start_pos + a_byte_count + sizeof(unsigned int);
 
-    unsigned long diff = m_pos-m_buffer;  
+    size_t diff = size_t(m_pos-m_buffer);  
 
     if(diff==len) return true;
 
@@ -535,14 +540,14 @@ public:
       m_out << "tools::rroot::buffer::check_byte_count :"
             << " object of class " << sout(a_store_cls)
             << " read too few bytes (" 
-            << long2s(len-diff) << " missing)."
+            << long_out(long(len-diff)) << " missing)."
             << std::endl;
     }
     if(diff>len) {
       m_out << "tools::rroot::buffer::check_byte_count :"
             << " object of class " << sout(a_store_cls)
             << " read too many bytes (" 
-            << long2s(diff-len) << " in excess)." << std::endl;
+            << long_out(long(diff-len)) << " in excess)." << std::endl;
     }
 
     m_out << "tools::rroot::buffer::check_byte_count :"
@@ -574,9 +579,6 @@ protected:
   // buffer objects cannot be copied or assigned
   //void checkCount(unsigned int);
   //unsigned int checkObject(unsigned int,const IClass*,bool = false);
-  static std::string sout(const std::string& a_string) {
-    return std::string("\"")+a_string+"\"";
-  }
 protected:
   bool m_byte_swap;
   bool m_verbose;

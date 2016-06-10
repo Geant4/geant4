@@ -52,7 +52,7 @@ G4TouchableDumpScene::G4TouchableDumpScene
 
 G4TouchableDumpScene::~G4TouchableDumpScene () {}
 
-void G4TouchableDumpScene::ProcessVolume (const G4VSolid&) {
+void G4TouchableDumpScene::ProcessVolume (const G4VSolid& solid) {
 
   const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>&
   fullPVPath = fpPVModel->GetFullPVPath();
@@ -84,10 +84,18 @@ void G4TouchableDumpScene::ProcessVolume (const G4VSolid&) {
     if (iNameCopyNo == fRequiredTouchable.end()) {
 //      G4cout << "Match found" << G4endl;
       fFound = true;
+
       const std::map<G4String,G4AttDef>* attDefs = fpPVModel->GetAttDefs();
       std::vector<G4AttValue>* attValues = fpPVModel->CreateCurrentAttValues();
       fos << G4AttCheck(attValues, attDefs);
       delete attValues;
+
+      G4Polyhedron* polyhedron = solid.GetPolyhedron();
+      fos << "\nLocal polyhedron coordinates:\n" << *polyhedron;
+      G4Transform3D* transform = fpPVModel->GetCurrentTransform();
+      polyhedron->Transform(*transform);
+      fos << "\nGlobal polyhedron coordinates:\n" << *polyhedron;
+
       fpPVModel->Abort();  // No need to look further.
     }
   }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.hh 75573 2013-11-04 11:48:15Z gcosmo $
+// $Id: G4PenelopeIonisationModel.hh 91228 2015-06-26 10:37:01Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -34,6 +34,7 @@
 // 09 Mar 2012   L. Pandola   Moved the management and calculation of 
 //                            cross sections to a separate class
 // 07 Oct 2013   L. Pandola   Migration to MT
+// 23 Jun 2015   L. Pandola   Added private member to store the PIXE flag
 //
 // -------------------------------------------------------------------
 //
@@ -87,7 +88,8 @@ public:
                                               G4double);
 
   virtual G4double CrossSectionPerVolume(const G4Material* material,
-                                         const G4ParticleDefinition* theParticle,
+                                         const G4ParticleDefinition* 
+					 theParticle,
                                          G4double kineticEnergy,
                                          G4double cutEnergy,
                                          G4double maxEnergy = DBL_MAX);
@@ -121,8 +123,12 @@ private:
 
   void SetParticle(const G4ParticleDefinition*);
 
-  void SampleFinalStateElectron(const G4Material*,G4double cutEnergy,G4double kineticEnergy);
-  void SampleFinalStatePositron(const G4Material*,G4double cutEnergy,G4double kineticEnergy);
+  void SampleFinalStateElectron(const G4Material*,
+				G4double cutEnergy,
+				G4double kineticEnergy);
+  void SampleFinalStatePositron(const G4Material*,
+				G4double cutEnergy,
+				G4double kineticEnergy);
 
   //Intrinsic energy limits of the model: cannot be extended by the parent process
   G4double fIntrinsicLowEnergyLimit;
@@ -132,6 +138,7 @@ private:
 
   G4bool isInitialised;
   G4VAtomDeexcitation* fAtomDeexcitation;
+  G4bool fPIXEflag;
 
 
   G4double kineticEnergy1;

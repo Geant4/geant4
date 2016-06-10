@@ -1,4 +1,4 @@
-$Id: History 86964 2014-11-21 11:47:44Z gcosmo $
+$Id: History 87829 2015-01-14 17:19:59Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -12,11 +12,26 @@ to briefly summarize all major modifications introduced in the code
 and keep track of all category-tags.
 It DOES NOT substitute the  CVS log-message one should put at every
 committal in the CVS repository !
-`
+
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+January 10th 2014, M.Kelsey transport-V10-01-01
+---------------------------
+- G4Transportation.cc, G4CoupledTransportation: In
+  AlongStepGetPhysicalInteractionLength(), initialize restMass data member
+  using G4DynamicParticle (as is used in DoIt), not G4ParticleDefinition.
+  Resolves inconsistent kinematics when dynamic mass is measurably different
+  from "PDG" mass.
+
+December 17th 2014, J.Apostolakis transport-V10-01-00
+--------------------------------- 
+- G4Transportation: Added ability to identify last step in volume for the case of
+   propagation in field.       
+   Requires use of tags in navigation (geomnav-V10-01-02) and track (track-V10-01-00) .
+   Addresses Bugzilla issue #1032.
+    
 November 21st 2014, J.Apostolakis transport-V10-00-06
 --------------------------------- (corrected version of transport-V10-00-04)
 - Added initialization of G4CoupledTransportation data members (fixes Coverity issue 15280)

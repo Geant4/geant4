@@ -46,4 +46,18 @@ static const std::string& s_class() {\
 }\
 static void check_class_name() {a_name<a_T>::s_class();}
 
+#define TOOLS_T2_SCLASS(a_T1,a_T2,a_name)\
+static const std::string& s_class() {\
+  static const std::string s_v(#a_name);\
+  return s_v;\
+}\
+static void check_class_name() {a_name<a_T1,a_T2>::s_class();}
+
+#define TOOLS_T3_SCLASS(a_T1,a_T2,a_T3,a_name)\
+static const std::string& s_class() {\
+  static const std::string s_v(#a_name);\
+  return s_v;\
+}\
+static void check_class_name() {a_name<a_T1,a_T2,a_T3>::s_class();}
+
 #endif

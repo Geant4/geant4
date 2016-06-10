@@ -54,6 +54,7 @@ class G4ParticleDefinition;
 #include <vector>
 #include <map>
 #include "G4ThreeVector.hh"
+class G4BOptrForceCollisionTrackData;
 
 class G4BOptrForceCollision : public G4VBiasingOperator {
 public:
@@ -63,33 +64,36 @@ public:
   
 private:
   // -- Mandatory from base class :
-  virtual G4VBiasingOperation* ProposeNonPhysicsBiasingOperation(const G4Track* track, const G4BiasingProcessInterface* callingProcess);
-  virtual G4VBiasingOperation*  ProposeOccurenceBiasingOperation(const G4Track* track, const G4BiasingProcessInterface* callingProcess);
-  virtual G4VBiasingOperation* ProposeFinalStateBiasingOperation(const G4Track* track, const G4BiasingProcessInterface* callingProcess);
+  virtual G4VBiasingOperation* ProposeNonPhysicsBiasingOperation(const G4Track* track, const G4BiasingProcessInterface* callingProcess) final;
+  virtual G4VBiasingOperation*  ProposeOccurenceBiasingOperation(const G4Track* track, const G4BiasingProcessInterface* callingProcess) final;
+  virtual G4VBiasingOperation* ProposeFinalStateBiasingOperation(const G4Track* track, const G4BiasingProcessInterface* callingProcess) final;
   // -- optional methods from base class:
 public:
-  virtual void      StartRun();
-  virtual void StartTracking( const G4Track* track );
-  virtual void   ExitBiasing( const G4Track*, const G4BiasingProcessInterface* );
+  virtual void           Configure() final;
+  virtual void  ConfigureForWorker() final;
+  virtual void            StartRun() final;
+  virtual void       StartTracking( const G4Track* track ) final;
+  virtual void         ExitBiasing( const G4Track*, const G4BiasingProcessInterface* ) final {};
+  virtual void         EndTracking() final;
 
-  using G4VBiasingOperator::OperationApplied; // -- informs compiler of multiple OperationApplied symbols
-                                              // -- in base class, to avoid warning messages for hidden functions
-                                              // -- in case only one function if overloaded.
-  // -- single operation applied (whatever operation):
-  virtual void OperationApplied( const G4BiasingProcessInterface*            callingProcess, G4BiasingAppliedCase                      biasingCase,
-				 G4VBiasingOperation*                      operationApplied, const G4VParticleChange*        particleChangeProduced );
+  // -- operation applied:
+  void OperationApplied( const G4BiasingProcessInterface*            callingProcess, G4BiasingAppliedCase                      biasingCase,
+			 G4VBiasingOperation*                      operationApplied, const G4VParticleChange*        particleChangeProduced ) final;
+  void OperationApplied( const G4BiasingProcessInterface*            callingProcess, G4BiasingAppliedCase                      biasingCase,
+  			 G4VBiasingOperation*             occurenceOperationApplied, G4double                 weightForOccurenceInteraction,
+  			 G4VBiasingOperation*            finalStateOperationApplied, const G4VParticleChange*        particleChangeProduced ) final;
+  
 
 private:
+  G4int                                      fForceCollisionModelID;
+  const G4Track*                                      fCurrentTrack;
+  G4BOptrForceCollisionTrackData*                 fCurrentTrackData;
   std::map< const G4BiasingProcessInterface*, G4BOptnForceFreeFlight* > fFreeFlightOperations;
   G4BOptnForceCommonTruncatedExp*  fSharedForceInteractionOperation;
   G4BOptnCloning*                                 fCloningOperation;
   G4double                                      fInitialTrackWeight;
   G4bool                                                     fSetup;
   const G4ParticleDefinition*                       fParticleToBias;
-  G4VBiasingOperation*                    fPreviousOperationApplied;
-  G4ThreeVector                                   fPreviousMomentum;
-
-
 };
 
 #endif

@@ -32,6 +32,9 @@
 
 #include "G4Trap.hh"
 #include "G4UTrap.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+
 #include "G4VPVParameterisation.hh"
 #include "G4Polyhedron.hh"
 
@@ -170,3 +173,5 @@ G4Polyhedron* G4UTrap::CreatePolyhedron() const
                               GetYHalfLength2(),
                               GetXHalfLength3(), GetXHalfLength4(), alpha2);
 }
+
+#endif  // G4GEOM_USE_USOLIDS

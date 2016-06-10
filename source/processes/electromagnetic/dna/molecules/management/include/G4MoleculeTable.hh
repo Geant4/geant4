@@ -45,12 +45,15 @@
 #ifndef G4MOLECULETABLE_HH_
 #define G4MOLECULETABLE_HH_
 
-#include "G4MoleculeDefinition.hh"
-#include "G4Molecule.hh"
+#include "globals.hh"
 #include "G4MoleculeIterator.hh"
+#include "G4ElectronOccupancy.hh"
+
+class G4MoleculeDefinition;
+class G4MolecularConfiguration;
 
 typedef G4MoleculeIterator<G4MoleculeDefinition> G4MoleculeDefinitionIterator;
-typedef G4MoleculeIterator<G4Molecule> G4MoleculeModelIterator;
+typedef G4MoleculeIterator<G4MolecularConfiguration> G4ConfigurationIterator;
 
 class G4MoleculeTable
 {
@@ -59,43 +62,75 @@ public:
   static G4MoleculeTable* GetMoleculeTable();
   virtual ~G4MoleculeTable();
 
-  G4MoleculeDefinition* CreateMoleculeDefinition(const G4String&,
+  //____________________________________________________________________________
+  // The methods below enable to create G4MoleculeDefinition &
+  // G4MolecularConfiguration with a user identifier so that they can be retrieved
+  // from this molecule table
+  //
+
+  //____________________________________________________________________________
+
+  G4MoleculeDefinition* CreateMoleculeDefinition(const G4String& userIdentifier,
                                                  double diffusion_coefficient);
-  G4Molecule* CreateMoleculeModel(const G4String&,
-                                  G4MoleculeDefinition*,
-                                  int charge,
-                                  double diffusion_coefficient = -1);
-  G4Molecule* CreateMoleculeModel(const G4String&, G4MoleculeDefinition*);
 
-  void RecordMoleculeModel(const G4String& name, G4Molecule*);
+  //____________________________________________________________________________
 
-  G4MoleculeDefinition* GetMoleculeDefinition(const G4String&, bool mustExist = true);
-  G4Molecule* GetMoleculeModel(const G4String&, bool mustExist = true);
-  G4Molecule* GetMoleculeModel(G4int id);
+  G4MolecularConfiguration*
+  CreateConfiguration(const G4String& userIdentifier,
+                      const G4MoleculeDefinition* molDef,
+                      const G4String& configurationLabel,
+                      const G4ElectronOccupancy& eOcc);
+
+  G4MolecularConfiguration*
+  CreateConfiguration(const G4String& userIdentifier,
+                      G4MoleculeDefinition*,
+                      int charge,
+                      double diffusion_coefficient = -1);
+
+  G4MolecularConfiguration*
+  CreateConfiguration(const G4String& userIdentifier,
+                      G4MoleculeDefinition*);
+
+  G4MolecularConfiguration*
+  CreateConfiguration(const G4String& userIdentifier,
+                      G4MoleculeDefinition*,
+                      const G4String& configurationLabel,
+                      int charge = 0);
+
+  //____________________________________________________________________________
+
+  G4MoleculeDefinition* GetMoleculeDefinition(const G4String&,
+                                              bool mustExist = true);
+
+  G4MolecularConfiguration* GetConfiguration(const G4String&,
+                                             bool mustExist = true);
+  G4MolecularConfiguration* GetConfiguration(G4int id);
+
+  //____________________________________________________________________________
 
   void Insert(G4MoleculeDefinition*);
+  void Finalize(G4MoleculeDefinition*){}
+  void Finalize();
+  //____________________________________________________________________________
+
   G4MoleculeDefinitionIterator GetDefintionIterator()
   {
     return G4MoleculeDefinitionIterator(this->fMoleculeDefTable);
   }
 
-  G4MoleculeModelIterator GetModelIterator()
-  {
-    return G4MoleculeModelIterator(this->fMoleculeTable);
-  }
+  G4ConfigurationIterator GetConfigurationIterator();
+
+  void PrepareMolecularConfiguration();
+
+  int GetNumberOfDefinedSpecies();
 
 protected:
   G4MoleculeTable();
 
   static G4MoleculeTable* fpgMoleculeTable;
   typedef std::map<G4String, G4MoleculeDefinition*> MoleculeDefTable;
-  typedef std::map<G4String, G4Molecule*> MoleculeTable;
-  typedef std::map<G4int, G4Molecule*> MoleculeTablePerID;
-  // TODO: replace with sets
 
   MoleculeDefTable fMoleculeDefTable;
-  MoleculeTable fMoleculeTable;
-  MoleculeTablePerID fMoleculeTablePerID;
 };
 
 #endif /* G4MOLECULETABLE_HH_ */

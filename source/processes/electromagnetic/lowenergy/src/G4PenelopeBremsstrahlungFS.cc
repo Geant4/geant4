@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungFS.cc 76988 2013-11-20 09:54:40Z gcosmo $
+// $Id: G4PenelopeBremsstrahlungFS.cc 93359 2015-10-19 13:42:18Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -704,9 +704,11 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
   G4double pCumulative = (*theTempVec)[nBinsX-1]; //last value  
  
   G4double eGamma = 0;
+  G4int nIterations = 0;
   do
     {    
       G4double pt = pbcut + G4UniformRand()*(pCumulative - pbcut);
+      nIterations++;
 
       //find where it is
       size_t ibin = 0;
@@ -805,6 +807,8 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
 	    loopAgain = true;	
 	}while(loopAgain);     
       eGamma *= energy;
+      if (nIterations > 100) //protection against infinite loops
+	return eGamma;
     }while(eGamma < cut); //repeat if sampled sub-cut!  
 
   return eGamma;

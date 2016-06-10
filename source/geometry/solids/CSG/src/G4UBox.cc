@@ -32,6 +32,9 @@
 
 #include "G4Box.hh"
 #include "G4UBox.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+
 #include "G4VPVParameterisation.hh"
 
 ////////////////////////////////////////////////////////////////////////
@@ -111,3 +114,5 @@ G4VSolid* G4UBox::Clone() const
 {
   return new G4UBox(*this);
 }
+
+#endif  // G4GEOM_USE_USOLIDS

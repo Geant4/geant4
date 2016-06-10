@@ -32,7 +32,7 @@ A schematic of the experimental setup is shown in NRCC_electron_scat.pdf
 The experimental data was itself published, as document number E-MPHYA6-35-034809 at http://www.aip.org/pubservs/epaps.html
 
 The testing of three Monte Carlo simulation codes against this experimental benchmark has been
-publshed as:
+published as:
 "The accuracy of EGSnrc, Geant4 and PENELOPE Monte Carlo systems for the simulation of electron 
 scatter in external beam radiotherapy,"
 by Bruce A Faddegon, Iwan Kawrakow, Yuri Kubyshin, Joseph Perl, Josep Sempau and Laszlo Urban,
@@ -53,17 +53,30 @@ This present example, electronScattering2, was the Geant4 code used for this pub
  
 
  2- PHYSICS LIST
- 
- Physics lists can be any of four options given in the G4 kernel
- physics_lists subdirectory, geant4/source/physics_lists/builders:	 
- - "emstandard_opt0"  recommended standard EM physics for HEP such as Large Hadron Collider
- - "emstandard_opt1"  best CPU performance standard physics for Large Hadron Collider
- - "emstandard_opt2"  latest experimental EM physics
- - "emstandard_opt3"  recommended for precision medical electron accelerator studies    
-    
+
+  Physics lists are based on modular design. Several modules are instantiated:
+  1. Transportation
+  2. EM physics
+  3. Decays
+  4. StepMax - for step limitation
+
+  EM physics builders are from the G4 kernel physics_lists subdirectory.
+   - "emstandard_opt0" recommended standard EM physics for LHC
+   - "emstandard_opt1" best CPU performance standard physics for LHC
+   - "emstandard_opt2" similar fast simulation
+   - "emstandard_opt3" best standard EM options - analog to "local" above
+   - "emstandard_opt4" best current advanced EM options standard + lowenergy
+   - "emstandardSS"  standard EM physics and single scattering model
+   - "emstandardWVI" standard EM physics and WentzelVI multiple scattering
+   - "emstandardGS"  standard EM physics and Goudsmit-Saunderson multiple scatt.
+   - "emlivermore"  low-energy EM physics using Livermore data
+   - "empenelope"   low-energy EM physics implementing Penelope models
+   - "emlowenergy"  low-energy EM physics implementing experimental
+                    low-energy models
+   
  Physics lists and options can be (re)set with UI commands
     
- Note that options set through G4EmProcessOPtions are global, eg for all particle types.
+ Note that options set through G4EmProcessOptions are global, eg for all particle types.
  In G4 builders, it is shown how to set options per particle type.
 
        	
@@ -132,7 +145,9 @@ This present example, electronScattering2, was the Geant4 code used for this pub
 	run.csh Opt2/Al1_13MeV 1
 
  - to run a basic visualization job, producing output to a HepRep file, use vis.mac, as in:
- 	% electronScattering2 macros/vis.mac
+ 	% electronScattering2 
+  then:
+  PreInit> /control/execute macros/vis.mac
 
 
  8- OUTPUT

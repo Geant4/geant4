@@ -11,12 +11,13 @@
 #
 # Generated on : 15/07/2013
 #
-# $Id: sources.cmake 83748 2014-09-12 12:13:37Z gcosmo $
+# $Id: sources.cmake 93451 2015-10-22 14:53:57Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
 # List external includes needed.
 include_directories(${CLHEP_INCLUDE_DIRS})
+include_directories(${FREETYPE_INCLUDE_DIRS})
 
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
@@ -37,15 +38,25 @@ GEANT4_DEFINE_MODULE(NAME G4analysismng
         G4BaseFileManager.hh
         G4BinScheme.hh
         G4Fcn.hh
+        G4AnalysisMessengerHelper.hh
         G4FileMessenger.hh
         G4H1Messenger.hh
         G4H2Messenger.hh
         G4H3Messenger.hh
         G4P1Messenger.hh
         G4P2Messenger.hh
+        G4NtupleMessenger.hh
         G4HnInformation.hh
         G4HnManager.hh
         G4HnMessenger.hh
+        G4PlotManager.hh
+        G4PlotMessenger.hh
+        G4PlotParameters.hh
+        G4THnManager.hh
+        G4THnManager.icc
+        G4TNtupleDescription.hh
+        G4TNtupleManager.hh
+        G4TNtupleManager.icc
         G4VAnalysisManager.hh
         G4VAnalysisManager.icc
         G4VAnalysisReader.hh
@@ -68,23 +79,23 @@ GEANT4_DEFINE_MODULE(NAME G4analysismng
         G4AnalysisUtilities.cc
         G4BinScheme.cc
         G4Fcn.cc
+        G4AnalysisMessengerHelper.cc
         G4FileMessenger.cc
         G4H1Messenger.cc
         G4H2Messenger.cc
         G4H3Messenger.cc
         G4P1Messenger.cc
         G4P2Messenger.cc
+        G4NtupleMessenger.cc
         G4HnManager.cc
         G4HnMessenger.cc
+        G4PlotManager.cc
+        G4PlotMessenger.cc
+        G4PlotParameters.cc
         G4VAnalysisManager.cc
         G4VAnalysisReader.cc
         G4VFileManager.cc
-        G4VH1Manager.cc
-        G4VH2Manager.cc
-        G4VH3Manager.cc
         G4VNtupleManager.cc
-        G4VP1Manager.cc
-        G4VP2Manager.cc
     GRANULAR_DEPENDENCIES
         G4globman
         G4intercoms
@@ -92,6 +103,7 @@ GEANT4_DEFINE_MODULE(NAME G4analysismng
         G4global
         G4intercoms
     LINK_LIBRARIES
+        ${FREETYPE_LIBRARIES}
 )
 
 # List any source specific properties here

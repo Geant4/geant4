@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmPenelopePhysics.cc 86233 2014-11-07 17:21:03Z gcosmo $
+// $Id: G4EmPenelopePhysics.cc 92821 2015-09-17 15:23:49Z gcosmo $
 
 #include "G4EmPenelopePhysics.hh"
 #include "G4ParticleDefinition.hh"
@@ -121,6 +121,7 @@
 //
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
+#include "G4EmModelActivator.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -133,10 +134,16 @@ G4EmPenelopePhysics::G4EmPenelopePhysics(G4int ver)
   : G4VPhysicsConstructor("G4EmPenelopePhysics"), verbose(ver)
 {
   G4EmParameters* param = G4EmParameters::Instance();
+  param->SetDefaults();
   param->SetVerbose(verbose);
   param->SetMinEnergy(100*eV);
   param->SetMaxEnergy(10*TeV);
+  param->SetLowestElectronEnergy(100*eV);
   param->SetNumberOfBinsPerDecade(20);
+  param->SetMscRangeFactor(0.02);
+  param->SetMscStepLimitType(fUseDistanceToBoundary);
+  param->SetFluo(true);
+  param->SetPIXEElectronCrossSectionModel("Penelope");
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -146,10 +153,16 @@ G4EmPenelopePhysics::G4EmPenelopePhysics(G4int ver, const G4String&)
   : G4VPhysicsConstructor("G4EmPenelopePhysics"), verbose(ver)
 {
   G4EmParameters* param = G4EmParameters::Instance();
+  param->SetDefaults();
   param->SetVerbose(verbose);
   param->SetMinEnergy(100*eV);
   param->SetMaxEnergy(10*TeV);
+  param->SetLowestElectronEnergy(100*eV);
   param->SetNumberOfBinsPerDecade(20);
+  param->SetMscRangeFactor(0.02);
+  param->SetMscStepLimitType(fUseDistanceToBoundary);
+  param->SetFluo(true);
+  param->SetPIXEElectronCrossSectionModel("Penelope");
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -162,31 +175,35 @@ G4EmPenelopePhysics::~G4EmPenelopePhysics()
 
 void G4EmPenelopePhysics::ConstructParticle()
 {
-// gamma
+  // gamma
   G4Gamma::Gamma();
 
-// leptons
+  // leptons
   G4Electron::Electron();
   G4Positron::Positron();
   G4MuonPlus::MuonPlus();
   G4MuonMinus::MuonMinus();
 
-// mesons
+  // mesons
   G4PionPlus::PionPlusDefinition();
   G4PionMinus::PionMinusDefinition();
   G4KaonPlus::KaonPlusDefinition();
   G4KaonMinus::KaonMinusDefinition();
 
-// baryons
+  // baryons
   G4Proton::Proton();
   G4AntiProton::AntiProton();
 
-// ions
+  // ions
   G4Deuteron::Deuteron();
   G4Triton::Triton();
   G4He3::He3();
   G4Alpha::Alpha();
   G4GenericIon::GenericIonDefinition();
+
+  // dna
+  G4EmModelActivator mact;
+  mact.ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -274,12 +291,10 @@ void G4EmPenelopePhysics::ConstructProcess()
 
       // multiple scattering
       G4eMultipleScattering* msc = new G4eMultipleScattering;
-      msc->SetStepLimitType(fUseDistanceToBoundary);
       G4UrbanMscModel* msc1 = new G4UrbanMscModel();
       G4WentzelVIModel* msc2 = new G4WentzelVIModel();
       msc1->SetHighEnergyLimit(highEnergyLimit);
       msc2->SetLowEnergyLimit(highEnergyLimit);
-      msc->SetRangeFactor(0.01);
       msc->AddEmModel(0, msc1);
       msc->AddEmModel(0, msc2);
 
@@ -315,12 +330,10 @@ void G4EmPenelopePhysics::ConstructProcess()
     
       // multiple scattering
       G4eMultipleScattering* msc = new G4eMultipleScattering;
-      msc->SetStepLimitType(fUseDistanceToBoundary);
       G4UrbanMscModel* msc1 = new G4UrbanMscModel();
       G4WentzelVIModel* msc2 = new G4WentzelVIModel();
       msc1->SetHighEnergyLimit(highEnergyLimit);
       msc2->SetLowEnergyLimit(highEnergyLimit);
-      msc->SetRangeFactor(0.01);
       msc->AddEmModel(0, msc1);
       msc->AddEmModel(0, msc2);
 
@@ -473,7 +486,9 @@ void G4EmPenelopePhysics::ConstructProcess()
   //
   G4VAtomDeexcitation* deexcitation = new G4UAtomicDeexcitation();
   G4LossTableManager::Instance()->SetAtomDeexcitation(deexcitation);
-  deexcitation->SetFluo(true); 
+
+  G4EmModelActivator mact;
+  mact.ConstructProcess();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

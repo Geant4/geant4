@@ -44,6 +44,13 @@
 
 #include "G4UMultiUnion.hh"
 
+#if defined(G4GEOM_USE_USOLIDS)
+
 typedef G4UMultiUnion G4MultiUnion;
 
+#else
+
+typedef void G4MultiUnion;
+
+#endif
 #endif

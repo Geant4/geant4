@@ -72,8 +72,8 @@ G4DeltaAngle::~G4DeltaAngle()
 
 G4ThreeVector& 
 G4DeltaAngle::SampleDirectionForShell(const G4DynamicParticle* dp,
-			      G4double kinEnergyFinal, G4int Z, G4int idx, 
-			      const G4Material* mat)
+                              G4double kinEnergyFinal, G4int Z, G4int idx, 
+                              const G4Material* mat)
 {
   fShellIdx = idx;
   return SampleDirection(dp, kinEnergyFinal,Z, mat);
@@ -81,8 +81,8 @@ G4DeltaAngle::SampleDirectionForShell(const G4DynamicParticle* dp,
 
 G4ThreeVector& 
 G4DeltaAngle::SampleDirection(const G4DynamicParticle* dp,
-			      G4double kinEnergyFinal, G4int Z, 
-			      const G4Material*)
+                              G4double kinEnergyFinal, G4int Z, 
+                              const G4Material*)
 {
   G4int nShells = G4AtomicShells::GetNumberOfShells(Z);
   G4int idx = fShellIdx;
@@ -96,7 +96,7 @@ G4DeltaAngle::SampleDirection(const G4DynamicParticle* dp,
     G4double sum = 0.0;
     for(idx=0; idx<nShells; ++idx) {
       sum += G4AtomicShells::GetNumberOfElectrons(Z, idx)
-	/G4AtomicShells::GetBindingEnergy(Z, idx);
+        /G4AtomicShells::GetBindingEnergy(Z, idx);
       prob[idx] = sum;
     }
     sum *= G4UniformRand();
@@ -108,8 +108,8 @@ G4DeltaAngle::SampleDirection(const G4DynamicParticle* dp,
   G4double cost;
   /*
   G4cout << "E(keV)= " << kinEnergyFinal/keV 
-	 << " Ebind(keV)= " << bindingEnergy
-	 << " idx= " << idx << " nShells= " << nShells << G4endl;
+         << " Ebind(keV)= " << bindingEnergy
+         << " idx= " << idx << " nShells= " << nShells << G4endl;
   */
   G4int n = 0;
   G4bool isOK = false;
@@ -128,7 +128,7 @@ G4DeltaAngle::SampleDirection(const G4DynamicParticle* dp,
     if(dp->GetParticleDefinition() == fElectron) {
       totEnergy += ePotEnergy;
       totMomentum = sqrt((totEnergy + electron_mass_c2)
-			 *(totEnergy - electron_mass_c2));
+                         *(totEnergy - electron_mass_c2));
     }
  
     G4double eTotEnergy = eKinEnergy + electron_mass_c2;
@@ -141,11 +141,11 @@ G4DeltaAngle::SampleDirection(const G4DynamicParticle* dp,
       /*
       G4ExceptionDescription ed;
       ed << "### G4DeltaAngle Warning: " << n 
-	 << " iterations - stop the loop with cost= 1.0 " 
-	 << " for " << dp->GetDefinition()->GetParticleName() << "\n" 
-	 << " Ekin(MeV)= " << dp->GetKineticEnergy()/MeV 
-	 << " Efinal(MeV)= " << kinEnergyFinal/MeV 
-	 << " Ebinding(MeV)= " << bindingEnergy/MeV; 
+         << " iterations - stop the loop with cost= 1.0 " 
+         << " for " << dp->GetDefinition()->GetParticleName() << "\n" 
+         << " Ekin(MeV)= " << dp->GetKineticEnergy()/MeV 
+         << " Efinal(MeV)= " << kinEnergyFinal/MeV 
+         << " Ebinding(MeV)= " << bindingEnergy/MeV; 
       G4Exception("G4DeltaAngle::SampleDirection","em0044",
                   JustWarning, ed,"");
       */
@@ -156,31 +156,32 @@ G4DeltaAngle::SampleDirection(const G4DynamicParticle* dp,
     G4double x0 = p*(totMomentum + eTotMomentum*costet);
     /*
     G4cout << " x0= " << x0 << " p= " << p 
-	   << "  ptot= " << totMomentum << " pe= " <<  eTotMomentum
-	   << " e= " << e << " totMom= " <<  totMomentum
-	   << G4endl;
+           << "  ptot= " << totMomentum << " pe= " <<  eTotMomentum
+           << " e= " << e << " totMom= " <<  totMomentum
+           << G4endl;
     */
     if(x0 > 0.0) {
       G4double x1 = p*eTotMomentum*sintet;
       G4double x2 = totEnergy*(eTotEnergy - e) - e*eTotEnergy 
-	- totMomentum*eTotMomentum*costet + electron_mass_c2*electron_mass_c2;
+        - totMomentum*eTotMomentum*costet + electron_mass_c2*electron_mass_c2;
       G4double y = -x2/x0;
       if(std::fabs(y) <= 1.0) { 
-	cost = -(x2 + x1*sqrt(1. - y*y))/x0; 
-	if(std::fabs(cost) <= 1.0) { isOK = true; }
+        cost = -(x2 + x1*sqrt(1. - y*y))/x0; 
+        if(std::fabs(cost) <= 1.0) { isOK = true; }
         else { cost = 1.0; }
       }
 
       /*
       G4cout << " Ekin(MeV)= " << dp->GetKineticEnergy() 
-	     << " e1(keV)= " <<  eKinEnergy/keV 
-	     << " e2(keV)= " << (e - electron_mass_c2)/keV 
-	     << " 1-cost= " << 1-cost 
-	     << " x0= " << x0 << " x1= " << x1 << " x2= " << x2 
-	     << G4endl; 
+             << " e1(keV)= " <<  eKinEnergy/keV 
+             << " e2(keV)= " << (e - electron_mass_c2)/keV 
+             << " 1-cost= " << 1-cost 
+             << " x0= " << x0 << " x1= " << x1 << " x2= " << x2 
+             << G4endl; 
       */
     }
 
+    // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
   } while(!isOK);
 
   G4double sint = sqrt((1 - cost)*(1 + cost));

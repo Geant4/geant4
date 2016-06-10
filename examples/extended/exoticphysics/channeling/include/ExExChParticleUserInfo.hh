@@ -71,6 +71,8 @@ public:
     G4int GetNumberOfDechanneling();
     void IncreaseNumberOfDechanneling();
     
+    G4int GetInTheCrystal() {return fInTheCrystal;};
+    void SetInTheCrystal(G4int aInt) {fInTheCrystal = aInt;};
 
 private:
     
@@ -96,7 +98,7 @@ private:
     //Last projection fof the particle momentum in the crystal reference system
     
     G4int fNumberOfDechanneling;
-    
+    G4int fInTheCrystal;
 
 };
 

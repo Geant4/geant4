@@ -32,24 +32,28 @@
 #ifndef G4VP1Manager_h
 #define G4VP1Manager_h 1
 
-#include "G4BaseAnalysisManager.hh"
 #include "globals.hh"
 
 #include <vector>
+#include <memory>
 
 class G4HnManager;
-class G4AnalysisManagerState;
 
-class G4VP1Manager : public G4BaseAnalysisManager
+class G4VP1Manager
 {
   // Disable using the object managers outside 
   friend class G4VAnalysisManager;
   friend class G4VAnalysisReader;
 
+  public:
+    G4VP1Manager() {}
+    virtual ~G4VP1Manager() {}
+
+    // deleted copy constructor & assignment operator
+    G4VP1Manager(const G4VP1Manager& rhs) = delete;
+    G4VP1Manager& operator=(const G4VP1Manager& rhs) = delete;
+
   protected:
-    G4VP1Manager(const G4AnalysisManagerState& state);
-    virtual ~G4VP1Manager();
-   
     // Methods for handling profiles
     virtual G4int CreateP1(const G4String& name, const G4String& title,
                            G4int nbins, G4double xmin, G4double xmax,
@@ -112,15 +116,9 @@ class G4VP1Manager : public G4BaseAnalysisManager
 
     // Methods to manipulate profiles
     // virtual G4bool WriteOnAscii(std::ofstream& output) = 0;
-   
-   // data members
-    G4HnManager* fHnManager;
 
-  private:    
-    // Not implemented copy constructor
-    G4VP1Manager(const G4VP1Manager& rhs);
-    // Not implemented assignment operator
-    G4VP1Manager& operator=(const G4VP1Manager& rhs);
+    // Access to Hn manager
+    virtual std::shared_ptr<G4HnManager> GetHnManager() = 0;
 };
 
 #endif

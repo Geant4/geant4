@@ -1,0 +1,142 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_num2s
+#define tools_num2s
+
+// write numerics in a string as if done with a std::ostringstream::operator<<(<num>).
+
+#include "sprintf"
+#include "typedefs"
+
+namespace tools {
+
+/*
+inline bool num2s(unsigned char a_value,std::string& a_s){
+  return print2s(a_s,32,"%c",a_value);
+}
+
+inline bool num2s(char a_value,std::string& a_s){
+  return print2s(a_s,32,"%c",a_value);
+}
+*/
+
+inline bool num2s(unsigned short a_value,std::string& a_s) { //used in value
+  return print2s(a_s,32,"%u",a_value);
+}
+
+inline bool num2s(short a_value,std::string& a_s){ //used in value
+  return print2s(a_s,32,"%d",a_value);
+}
+
+inline bool num2s(unsigned int a_value,std::string& a_s) {
+  return print2s(a_s,32,"%u",a_value);
+}
+
+/*
+inline bool num2sx(unsigned int a_value,std::string& a_s) {
+  return print2s(a_s,32,"%x",a_value);
+}
+*/
+
+inline bool num2s(int a_value,std::string& a_s){
+  return print2s(a_s,32,"%d",a_value);
+}
+
+inline bool num2s(uint64 a_value,std::string& a_s) {
+  return print2s(a_s,32,uint64_format(),a_value);
+}
+
+inline bool num2s(int64 a_value,std::string& a_s){
+  return print2s(a_s,32,int64_format(),a_value);
+}
+
+inline bool num2s(float a_value,std::string& a_s){
+  return print2s(a_s,32,"%g",a_value);
+}
+
+inline bool num2s(double a_value,std::string& a_s){
+  return print2s(a_s,32,"%g",a_value);
+}
+
+/*
+inline bool num2s(bool a_value,std::string& a_s){
+  //a_s = a_value?"true":"false";
+  a_s = a_value?"1":"0";
+  return true;
+}
+*/
+
+template <class T>
+inline bool numas(const T& a_value,std::string& a_s){
+  std::string stmp;
+  if(!num2s(a_value,stmp)) return false;
+  a_s += stmp;
+  return true;
+}
+
+/*
+inline bool num2s(unsigned int a_linen,const char* a_lines[],std::string& a_s) {
+  a_s.clear();
+  for(unsigned int index=0;index<a_linen;index++) {
+    a_s += a_lines[index];
+    a_s += "\n";
+  }
+  return true;
+}
+*/
+
+// for the below std::vector num2s in cast T=std::string :
+inline bool num2s(const std::string& a_value,std::string& a_s){a_s = a_value;return true;}
+
+template <class T>
+class num_out : public std::string {
+  typedef std::string parent;
+private:
+  //typedef typename std::enable_if<std::is_floating_point<T>::value, T>::type type_t;
+  //typedef typename std::enable_if<std::is_integral<T>::value, T>::type type_t;
+  //typedef typename std::enable_if<std::is_arithmetic<T>::value, T>::type type_t;
+public:
+  num_out(const T& a_value) {
+    parent::operator+=("\"");
+    if(!numas(a_value,*this)) {} //throw
+    parent::operator+=("\"");
+  }
+public:
+  num_out(const num_out& a_from):parent(a_from){}
+  num_out& operator=(const num_out& a_from){parent::operator=(a_from);return *this;}
+};
+
+}
+
+#include <vector>
+
+namespace tools {
+
+template <class VEC>  
+inline bool nums2s(const VEC& a_vals,std::string& a_s,const std::string& a_sep = "\n",bool a_sep_at_end = false) {
+  a_s.clear();
+  typename VEC::size_type number = a_vals.size();
+  if(number<=0) return true; //it is ok.
+  number--;
+  std::string stmp;
+  bool status = true;
+  for(typename VEC::size_type index=0;index<number;index++) {
+    if(!num2s(a_vals[index],stmp)) status = false; //continue.
+    a_s += stmp;
+    a_s += a_sep;
+  }
+  if(!num2s(a_vals[number],stmp)) status = false;
+  a_s += stmp;
+  if(a_sep_at_end) a_s += a_sep;
+  return status;
+}
+
+template <class T>  
+inline bool nums2s(const std::vector<T>& a_vals,std::string& a_s,const std::string& a_sep = "\n",bool a_sep_at_end = false) {
+  return nums2s< std::vector<T> >(a_vals,a_s,a_sep,a_sep_at_end);
+}
+
+}
+
+#endif

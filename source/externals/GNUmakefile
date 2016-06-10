@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 86463 2014-11-12 13:48:31Z gcosmo $
+# $Id: GNUmakefile 93155 2015-10-08 12:00:14Z gcosmo $
 # -----------------------------------------------------------------------
 # GNUmakefile for Geant4 external packages
 # Gunter Folger 26-April-2011 
@@ -22,10 +22,6 @@ endif
 SUBDIRS :=
 SUBLIBS :=
 
-ifdef G4LIB_USE_USOLIDS
-  SUBDIRS += usolids
-  SUBLIBS += G4geomUSolids
-endif
 ifdef G4LIB_USE_CLHEP
   SUBDIRS += clhep
   SUBLIBS += G4clhep

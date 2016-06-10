@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGInelastic.cc 79869 2014-03-19 09:59:40Z gcosmo $
+// $Id: G4RPGInelastic.cc 94214 2015-11-09 08:18:05Z gcosmo $
 //
 
 #include "G4RPGInelastic.hh"
+#include "G4Log.hh"
 #include "Randomize.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -74,12 +75,12 @@ G4double G4RPGInelastic::Pmltpc(G4int np, G4int nneg, G4int nz,
   G4double nmf = 0.0;
   G4double nzf = 0.0;
   G4int i;
-  for( i=2; i<=np; i++ )npf += std::log((double)i);
-  for( i=2; i<=nneg; i++ )nmf += std::log((double)i);
-  for( i=2; i<=nz; i++ )nzf += std::log((double)i);
+  for( i=2; i<=np; i++ )npf += G4Log((double)i);
+  for( i=2; i<=nneg; i++ )nmf += G4Log((double)i);
+  for( i=2; i<=nz; i++ )nzf += G4Log((double)i);
   G4double r;
   r = std::min( expxu, std::max( expxl, -(np-nneg+nz+b)*(np-nneg+nz+b)/(2*c*c*n*n)-npf-nmf-nzf ) );
-  return std::exp(r);
+  return G4Exp(r);
 }
 
 
@@ -177,7 +178,7 @@ G4bool G4RPGInelastic::MarkLeadingStrangeParticle(
     //
     // number of total particles vs. centre of mass Energy - 2*proton mass
     //
-    G4double aleab = std::log(en/GeV);
+    G4double aleab = G4Log(en/GeV);
     n = 3.62567 + aleab*(0.665843 + aleab*(0.336514 + aleab*(0.117712 + 0.0136912*aleab)));
     n -= 2.0;
     //
@@ -188,7 +189,7 @@ G4bool G4RPGInelastic::MarkLeadingStrangeParticle(
     for( G4int i=iBegin; i<=numSec; ++i )
     {
       temp = pi*i/(2.0*n*n);
-      test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(i*i)/(n*n) ) ) );
+      test = G4Exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(i*i)/(n*n) ) ) );
       if( temp < 1.0 )
       {
         if( test >= 1.0e-10 )anpn += temp*test;

@@ -1,0 +1,23 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_impi_world
+#define tools_impi_world
+
+#include <string>
+
+namespace tools {
+
+class impi_world {
+public:
+  virtual ~impi_world(){}
+public:
+  virtual bool init(int*,char***) = 0;
+  virtual bool rank(int& a_rank) const = 0;
+  virtual bool size(int& a_size) const = 0;
+  virtual bool processor_name(std::string&) const = 0;
+};
+
+}
+
+#endif

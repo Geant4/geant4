@@ -1,4 +1,4 @@
-$Id: History 86064 2014-11-07 08:49:32Z gcosmo $
+$Id: History 93258 2015-10-14 08:34:50Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+12-10-15 J.Jacquemier (fano-V10-01-03)
+- Remove EventActionMessenger class
+- Replace printModulo by /run/printProgress
+
+27-07-15 V.Ivant (fano-V10-01-02)
+- Use G4EmParameters instead of G4EmProcessOptions
+
+10-06-15 J.Jacquemier (fano-V10-01-01)
+- Change preprocessor directive by G4Threading::IsMultithreadedApplication() 
+
+10-06-15 J.Jacquemier (fano-V10-01-00)
+- Migrated to multi-threading
 
 13-08-14 mma (fano-V10-00-02)
 - update Readme again

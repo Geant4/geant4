@@ -1,0 +1,146 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id$
+
+//
+// public functions
+//
+
+//_____________________________________________________________________________
+template <typename T> 
+G4Parameter<T>::G4Parameter(const G4String& name, T initValue, G4MergeMode mergeMode)
+ : G4VParameter(name, mergeMode),
+   fValue(initValue),
+   fInitValue(initValue)
+{}
+
+//_____________________________________________________________________________
+template <typename T> 
+G4Parameter<T>::G4Parameter(const G4Parameter& rhs)
+  : G4VParameter(rhs),
+    fValue(rhs.fValue),
+    fInitValue(rhs.fInitValue)
+{}
+
+//_____________________________________________________________________________
+template <typename T> 
+G4Parameter<T>::~G4Parameter()
+{}
+
+//_____________________________________________________________________________
+template <typename T> 
+G4Parameter<T>&
+G4Parameter<T>::operator=(const G4Parameter<T>& rhs)
+{
+  // check assignment to self
+  if (this == &rhs) return *this;
+
+  // base class assignment
+  G4VParameter::operator=(rhs);
+
+  // this class data assignment
+  fValue = rhs.fValue;
+  fInitValue = rhs.fInitValue;
+
+  return *this;
+}
+
+//_____________________________________________________________________________
+template <typename T> 
+G4Parameter<T>&
+G4Parameter<T>::operator+=(const G4Parameter<T>& rhs)
+{
+  // only update the value from rhs
+  fValue += rhs.fValue;
+  return *this;
+}
+
+//_____________________________________________________________________________
+template <typename T> 
+G4Parameter<T>&
+G4Parameter<T>::operator*=(const G4Parameter<T>& rhs)
+{
+  // only update the value from rhs
+  fValue *= rhs.fValue;
+  return *this;
+}
+
+//_____________________________________________________________________________
+template <typename T> 
+G4Parameter<T>&
+G4Parameter<T>::operator=(const T& value)
+{
+  // only update the value
+  fValue = value;
+  return *this;
+}
+
+//_____________________________________________________________________________
+template <typename T> 
+G4Parameter<T>&
+G4Parameter<T>::operator+=(const T& value)
+{
+  // only update the value
+  fValue += value;
+  return *this;
+}
+
+//_____________________________________________________________________________
+template <typename T> 
+G4Parameter<T>&
+G4Parameter<T>::operator*=(const T& value)
+{
+  // only update the value from rhs
+  fValue *= value;
+  return *this;
+}
+
+//_____________________________________________________________________________
+template <typename T> 
+void G4Parameter<T>::Merge(const G4VParameter& other)
+{
+  if ( fMergeMode == G4MergeMode::kAddition ) {
+    fValue += static_cast<const G4Parameter<T>&>(other).fValue;
+  } 
+  else if ( fMergeMode == G4MergeMode::kMultiplication ) {
+    fValue *= static_cast<const G4Parameter<T>&>(other).fValue;
+  }
+  // no operation is performed if User merge mode
+}
+
+//_____________________________________________________________________________
+template <typename T> 
+void G4Parameter<T>::Reset()
+{
+  fValue = fInitValue;
+}
+
+//_____________________________________________________________________________
+template <typename T> 
+T  G4Parameter<T>::GetValue() const
+{
+  return fValue;
+}

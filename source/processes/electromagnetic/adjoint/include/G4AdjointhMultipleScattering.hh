@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointhMultipleScattering.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4AdjointhMultipleScattering.hh 90259 2015-05-22 08:57:37Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class:		G4AdjointhMultipleScattering
@@ -85,26 +85,6 @@ public:    // with description
   // PrG4int few lines of informations about the process: validity range,
   void PrintInfo();
 
-  // geom. step length distribution should be sampled or not
-  void Setsamplez(G4bool value) { samplez = value;};
-
-  // to reduce the energy/step dependence
-  void Setdtrl(G4double value) { dtrl = value;};
-
-  // 'soften' step limitation above lambdalimit
-  void SetLambdalimit(G4double value) { lambdalimit = value;};
-
- /* // The function overloads the corresponding function of the base
-  // class.It limits the step near to boundaries only
-  // and invokes the method GetMscContinuousStepLimit at every step.
-  G4double AlongStepGetPhysicalInteractionLength(
-                                            const G4Track&,
-					    G4double  previousStepSize,
-					    G4double  currentMinimalStep,
-					    G4double& currentSafety,
-					    G4GPILSelection* selection);
-	*/				    
-
 protected:
 
   // This function initialise models
@@ -112,15 +92,7 @@ protected:
 
 private:        // data members
 
-  G4VMscModel* mscUrban;
-
-  G4double lambdalimit;
-  G4double dtrl;
-
-  G4bool   samplez;
   G4bool   isInitialized;
-  G4bool   isIon;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

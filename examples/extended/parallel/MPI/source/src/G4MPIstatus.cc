@@ -63,7 +63,7 @@ void G4MPIstatus::SetStatus(G4int arank, G4int runid, G4int noe, G4int evtid,
   nevent_to_be_processed_ = noe;
   event_id_ = evtid;
   g4state_ = state;
-  if ( timer_-> IsValid() ) cputime_= timer_-> GetUserElapsed();
+  if ( timer_-> IsValid() ) cputime_= timer_-> GetRealElapsed();
   else cputime_ = 0.;
 }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc 79394 2014-02-27 08:51:38Z gcosmo $
+// $Id: G4ionEffectiveCharge.cc 92921 2015-09-21 15:06:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -88,7 +88,7 @@ G4ionEffectiveCharge::~G4ionEffectiveCharge()
 
 G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
                                                const G4Material* material,
-					       G4double kineticEnergy)
+                                               G4double kineticEnergy)
 {
   if(p == lastPart && material == lastMat && kineticEnergy == lastKinEnergy)
     return effCharge;
@@ -196,7 +196,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
   }
   //  G4cout << "G4ionEffectiveCharge: charge= " << charge << " q= " << q 
   //         << " chargeCor= " << chargeCorrection 
-  //	   << " e(MeV)= " << kineticEnergy/MeV << G4endl;
+  //           << " e(MeV)= " << kineticEnergy/MeV << G4endl;
   return effCharge;
 }
 

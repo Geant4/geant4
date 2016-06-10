@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IT.cc 87061 2014-11-24 11:43:34Z gcosmo $
+// $Id: G4IT.cc 94218 2015-11-09 08:24:48Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
@@ -38,14 +38,14 @@
 #include "G4ITBox.hh"
 #include "G4Track.hh"
 #include "G4TrackList.hh"
+#include "G4TrackingInformation.hh"
 
 using namespace std;
 
-G4ThreadLocal G4Allocator<G4IT> *aITAllocator = 0;
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-///
+//------------------------------------------------------------------------------
+//
 // Static functions
-///
+//
 G4IT* GetIT(const G4Track* track)
 {
   return (dynamic_cast<G4IT*>(track->GetUserInformation()));
@@ -55,19 +55,18 @@ G4IT* GetIT(const G4Track& track)
 {
   return (dynamic_cast<G4IT*>(track.GetUserInformation()));
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-///
+
+//------------------------------------------------------------------------------
+//
 // Constructors / Destructors
-///
+//
 G4IT::G4IT() :
     G4VUserTrackInformation("G4IT"),
     fpTrack(0),
     fpPreviousIT(0),
     fpNextIT(0),
-    fTrackingInformation()
-//    fpTrackingInformation(new G4TrackingInformation())
+    fpTrackingInformation(new G4TrackingInformation())
 {
-  if (!aITAllocator) aITAllocator = new G4Allocator<G4IT>;
   fpITBox = 0;
   fpKDNode = 0;
   fpTrackNode = 0;
@@ -81,8 +80,7 @@ G4IT::G4IT(const G4IT& /*right*/) :
     fpTrack(0),
     fpPreviousIT(0),
     fpNextIT(0),
-    fTrackingInformation()
-//    fpTrackingInformation(new G4TrackingInformation())
+    fpTrackingInformation(new G4TrackingInformation())
 {
   fpITBox = 0;
   fpKDNode = 0;
@@ -96,9 +94,12 @@ G4IT& G4IT::operator=(const G4IT& right)
 {
   G4ExceptionDescription exceptionDescription;
   exceptionDescription
-      << "The assignment operator of G4IT should not be used, this feature is not supported."
+      << "The assignment operator of G4IT should not be used, "
+          "this feature is not supported."
       << "If really needed, please contact the developers.";
-  G4Exception("G4IT::operator=(const G4IT& right)", "G4IT001", FatalException,
+  G4Exception("G4IT::operator=(const G4IT& right)",
+              "G4IT001",
+              FatalException,
               exceptionDescription);
 
   if (this == &right) return *this;
@@ -110,7 +111,7 @@ G4IT& G4IT::operator=(const G4IT& right)
   fpKDNode = 0;
   fParentID_A = 0;
   fParentID_B = 0;
-//    fpTrackingInformation = 0;
+  fpTrackingInformation = 0;
   fpTrackNode = 0;
 
   return *this;
@@ -120,10 +121,8 @@ G4IT::G4IT(G4Track * aTrack) :
     G4VUserTrackInformation("G4IT"),
     fpPreviousIT(0),
     fpNextIT(0),
-    fTrackingInformation()
-//    fpTrackingInformation(new G4TrackingInformation())
+    fpTrackingInformation(new G4TrackingInformation())
 {
-  if (!aITAllocator) aITAllocator = new G4Allocator<G4IT>;
   fpITBox = 0;
   fpTrack = aTrack;
   fpKDNode = 0;
@@ -157,27 +156,21 @@ G4IT::~G4IT()
 {
   TakeOutBox();
 
-//    if(fpTrackingInformation)
-//    {
-//        delete fpTrackingInformation;
-//        fpTrackingInformation = 0;
-//    }
+  if(fpTrackingInformation)
+  {
+    delete fpTrackingInformation;
+    fpTrackingInformation = 0;
+  }
 
 // Note :
 // G4ITTrackingManager will delete fTrackNode.
 // fKDNode will be deleted when the KDTree is rebuilt
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+//------------------------------------------------------------------------------
 ///
 // Methods
 ///
-void G4IT::RecordCurrentPositionNTime()
-{
-  if (fpTrack)
-  {
-    fTrackingInformation.RecordCurrentPositionNTime(fpTrack);
-  }
-}
 
 G4bool G4IT::operator<(const G4IT& right) const
 {
@@ -206,13 +199,41 @@ G4bool G4IT::operator!=(const G4IT& right) const
   return !(this->operator==(right));
 }
 
+
+
+double G4IT::operator[](int i) const
+{
+  return fpTrack->GetPosition()[i];
+}
+
+//------------------------------------------------------------------------------
+
 const G4ThreeVector& G4IT::GetPosition() const
 {
   if (fpTrack) return GetTrack()->GetPosition();
   return *(new G4ThreeVector());
 }
 
-const double& G4IT::operator[](int i) const
+void G4IT::RecordCurrentPositionNTime()
 {
-  return const_cast<G4ThreeVector&>(GetTrack()->GetPosition())[i];
+  if (fpTrack)
+  {
+    fpTrackingInformation->RecordCurrentPositionNTime(fpTrack);
+  }
 }
+
+G4double G4IT::GetPreStepGlobalTime() const
+{
+  return fpTrackingInformation->GetPreStepGlobalTime();
+}
+
+G4double G4IT::GetPreStepLocalTime() const
+{
+  return fpTrackingInformation->GetPreStepLocalTime();
+}
+
+const G4ThreeVector& G4IT::GetPreStepPosition() const
+{
+  return fpTrackingInformation->GetPreStepPosition();
+}
+

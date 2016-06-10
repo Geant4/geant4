@@ -1,6 +1,6 @@
 #
 # ------ MacOS-X ------
-#                                 MacOS 10.8, 10.9 gcc-4.2
+#                                 MacOS 10.8/9/10/11, gcc-4.8 and higher
 #
 # Original author: Helmut Burkhardt - CERN
 #       Revisions: Guy Barrand - LAL
@@ -52,29 +52,29 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   SHEXT   := dylib
   LOADLIBS += -lm
   ifndef X11FLAGS
-    X11FLAGS  := -I/usr/X11R6/include
+    X11FLAGS  := -I/usr/X11/include
   endif
   ifndef X11LIBS
-    X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lXi -lSM -lICE
+    X11LIBS   := -L/usr/X11/lib  -lXmu -lXt -lXext -lX11 -lXi -lSM -lICE
   endif
   ifndef XMFLAGS
     XMFLAGS   := -I/sw/include
-#   XMFLAGS   := -I/usr/X11R6/include          ##### some installations.
+#   XMFLAGS   := -I/usr/X11/include          ##### some installations.
   endif
   ifndef XMLIBS
     XMLIBS    := -L/sw/lib -lXm -lXpm
-#   XMLIBS    := -L/usr/X11R6/lib -lXm -lXpm   ##### some installations.
+#   XMLIBS    := -L/usr/X11/lib -lXm -lXpm   ##### some installations.
   endif
   ifndef XAWFLAGS
     XAWFLAGS   := -I/sw/include
-#   XAWFLAGS   := -I/usr/X11R6/include         ##### some installations.
+#   XAWFLAGS   := -I/usr/X11/include         ##### some installations.
   endif
   ifndef XAWLIBS
     XAWLIBS    := -lXaw
   endif
   DLDLIBS   := -ldl
   ifndef OGLHOME
-    OGLHOME  := /usr/X11R6
+    OGLHOME  := /usr/X11
 #   OGLHOME  := /System/Library/Frameworks/OpenGL.framework
   endif
   ifndef OGLFLAGS

@@ -65,7 +65,8 @@ public:
 			G4double kinEnergy, 
 			G4int Z, G4int A);
 
-
+  void SetEnergyThreshold(G4double e){fDDthreshold=e;};
+  G4double GetEnergyThreshold(){return fDDthreshold;};
 
 private:
 
@@ -73,6 +74,7 @@ private:
   G4DiffElasticRatio(const G4DiffElasticRatio&);
 
   G4ComponentGGHadronNucleusXsc* fGGXsc;
+  G4double fDDthreshold;
 };
 
 #endif

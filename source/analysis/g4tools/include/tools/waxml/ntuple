@@ -36,7 +36,7 @@ protected:
     virtual cid id_cls() const = 0;
   public:
     virtual const std::string& name() const = 0;
-    virtual std::string aida_type() const = 0;
+    virtual const std::string& aida_type() const = 0;
   };
 
   class leaf : public virtual iobj {
@@ -49,8 +49,8 @@ protected:
     }
     virtual cid id_cls() const {return id_class();}
   public:
-    virtual std::string s_def() const = 0;
-    virtual std::string s_value() const = 0;
+    virtual const std::string& s_def() const = 0;
+    virtual void s_value(std::string&) const = 0;
   public:
     leaf(){}
     virtual ~leaf(){}
@@ -75,6 +75,11 @@ protected:
     return s_v;
   }
 
+  static const std::string& s_aida_type_ituple() {
+    static const std::string s_v("ITuple");
+    return s_v;
+  }
+
 public:
   template <class T>
   class column : public leaf {
@@ -88,13 +93,13 @@ public:
     virtual cid id_cls() const {return id_class();}
   public:
     virtual const std::string& name() const {return m_name;}
-    virtual std::string aida_type() const {return s_aida_type(T());}
+    virtual const std::string& aida_type() const {return s_aida_type(T());}
   public: //leaf
-    virtual std::string s_def() const {return tos(m_def);}
-    virtual std::string s_value() const {return tos(m_tmp);}
+    virtual const std::string& s_def() const {return m_def;}
+    virtual void s_value(std::string& a_s) const {a_s = tos(m_tmp);}
   public:
     column(const std::string& a_name,const T& a_def)
-    :m_name(a_name),m_def(a_def),m_tmp(a_def)
+    :m_name(a_name),m_def(tos(a_def)),m_tmp(a_def)
     {}
     virtual ~column(){}
   protected:
@@ -114,7 +119,7 @@ public:
     bool fill(const T& a_value) {m_tmp = a_value;return true;}
   protected:
     std::string m_name;
-    T m_def;
+    std::string m_def;
     T m_tmp;
   };
 
@@ -130,7 +135,7 @@ public:
     virtual cid id_cls() const {return id_class();}
   public:
     virtual const std::string& name() const {return m_name;}
-    virtual std::string aida_type() const {return "ITuple";}
+    virtual const std::string& aida_type() const {return s_aida_type_ituple();}
   public:
     sub_ntuple(const std::string& a_name,const std::string& a_spaces)
     :m_name(a_name),m_spaces(a_spaces){}
@@ -181,8 +186,10 @@ public:
           sout << m_spaces << "  </entryITuple>" << std::endl;
           sub->reset();
         } else if(leaf* lf = id_cast<iobj,leaf>(*(*it))){
+          std::string _sv;
+          lf->s_value(_sv);
           sout << m_spaces << "  <entry" 
-               << " value=\"" << lf->s_value().c_str()
+               << " value=\"" << _sv
                << "\"/>" << std::endl;
         }
       }
@@ -211,10 +218,10 @@ public:
     virtual cid id_cls() const {return id_class();}
   public:
     virtual const std::string& name() const {return m_name;}
-    virtual std::string aida_type() const {return s_aida_type(T());}
+    virtual const std::string& aida_type() const {return s_aida_type(T());}
   public: //leaf
-    virtual std::string s_def() const {return "";} //not used.
-    virtual std::string s_value() const {
+    virtual const std::string& s_def() const {return m_def;} //not used.
+    virtual void s_value(std::string& a_s) const {
       std::ostringstream sout;
       sout << m_spaces << "<entryITuple>" << std::endl;
       typedef typename std::vector<T>::const_iterator it_t;
@@ -222,7 +229,7 @@ public:
         sout << m_spaces << "  <row><entry" << " value=\"" << tos(*it) << "\"/></row>" << std::endl;
       }
       sout << m_spaces << "</entryITuple>" << std::endl;
-      return sout.str();
+      a_s = sout.str();
     }
   public:
     std_vector_column(const std::string& a_name,std::vector<T>& a_user_vec,const std::string& a_spaces)
@@ -245,6 +252,7 @@ public:
     }
   protected:
     std::string m_name;
+    std::string m_def; //not used;
     std::vector<T>& m_user_vec;
     std::string m_spaces;
   };
@@ -380,9 +388,7 @@ public:
     return col;
   }
 
-  void write_header(const std::string& a_path,
-                           const std::string& a_name,
-                           const std::string& a_title){
+  void write_header(const std::string& a_path,const std::string& a_name,const std::string& a_title){
 
     // <tuple> :
     m_writer << m_spaces << "  <tuple"
@@ -428,15 +434,19 @@ public:
     m_writer << m_spaces << "      <row>" << std::endl;
     tools_vforcit(iobj*,m_cols,it) {
       if(leaf* vlf = is_std_vector_column(*(*it))) {
-        m_writer << vlf->s_value();
+        std::string _sv;
+        vlf->s_value(_sv);
+        m_writer << _sv;
       } else if(sub_ntuple* sub = id_cast<iobj,sub_ntuple>(*(*it))){
         m_writer << m_spaces << "        <entryITuple>" << std::endl;
         m_writer << sub->value();
         m_writer << m_spaces << "        </entryITuple>" << std::endl;
         sub->reset();
       } else if(leaf* lf = id_cast<iobj,leaf>(*(*it))){
+        std::string _sv;
+        lf->s_value(_sv);
         m_writer << m_spaces << "        <entry" 
-                 << " value=" << sout(lf->s_value())
+                 << " value=" << sout(_sv)
                  << "/>" << std::endl;
       }
     }
@@ -482,9 +492,9 @@ protected:
 
 protected:
   std::ostream& m_writer;
-  std::string m_path;
-  std::string m_name;
-  std::string m_title;
+  //std::string m_path;
+  //std::string m_name;
+  //std::string m_title;
   std::string m_spaces;
   std::vector<iobj*> m_cols;
 };

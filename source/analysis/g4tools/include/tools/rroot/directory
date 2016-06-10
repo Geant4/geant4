@@ -178,10 +178,6 @@ public:
     clear<key>(m_keys);
   }
 protected:
-  static std::string sout(const std::string& a_string) {
-    return std::string("\"")+a_string+"\"";
-  }
-protected:
   ifile& m_file;
   std::vector<key*> m_keys;
   // Record (stored in file):

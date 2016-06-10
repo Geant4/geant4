@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ChipsElasticModel.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4ChipsElasticModel.cc 90228 2015-05-21 08:49:57Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -59,29 +59,13 @@ G4ChipsElasticModel::G4ChipsElasticModel() : G4HadronElastic("hElasticCHIPS")
 G4ChipsElasticModel::~G4ChipsElasticModel()
 {}
 
-void G4ChipsElasticModel::Description() const
+void G4ChipsElasticModel::ModelDescription(std::ostream& outFile) const
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetModelName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of G4ChipsElasticModel</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
 
     outFile << "The G4ChipsElasticModel model performs hadron-nucleus elastic\n"
             << "scattering using the parameterized elastic cross sections\n"
             << "of M. Kossov\n";
 
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
 }
 
 

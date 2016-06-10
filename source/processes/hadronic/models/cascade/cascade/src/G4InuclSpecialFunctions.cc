@@ -32,16 +32,20 @@
 // 20130308  M. Kelsey -- New function to compute INUCL-style random value
 // 20130314  M. Kelsey -- Restore null initializer and if-block for _TLS_.
 // 20130924  M. Kelsey -- Use G4Log, G4Exp, G4Pow for CPU speedup
+// 20150619  M. Kelsey -- Define G4cbrt(int) to use G4Pow::Z13, rearrange
+//		FermiEnergy() to use G4Pow::Z23.
+// 20150622  M. Kelsey -- Use G4AutoDelete for _TLS_ buffers.
 
 #include <cmath>
 
 #include "G4InuclSpecialFunctions.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4LorentzVector.hh"
-#include "G4ThreeVector.hh"
-#include "G4Log.hh"
+#include "G4AutoDelete.hh"
 #include "G4Exp.hh"
+#include "G4Log.hh"
+#include "G4LorentzVector.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4Pow.hh"
+#include "G4ThreeVector.hh"
 #include "Randomize.hh"
 
 
@@ -103,14 +107,19 @@ G4double G4InuclSpecialFunctions::csPN(G4double e) {
 // calculates the nuclei Fermi energy for 0 - neutron and 1 - proton
 
 G4double G4InuclSpecialFunctions::FermiEnergy(G4int A, G4int Z, G4int ntype) {
-  const G4double C = 55.4;
-  G4double arg = (ntype==0) ? G4double(A-Z)/A : G4double(Z)/A;
+  G4Pow* g4pow = G4Pow::GetInstance();
+  const G4double C = 55.4 / g4pow->Z23(A);
+  G4double arg = (ntype==0) ? g4pow->Z23(A-Z) : g4pow->Z23(Z);
 
-  return C * G4cbrt(arg*arg);	// 2/3 power
+  return C * arg;
 }
 
 G4double G4InuclSpecialFunctions::G4cbrt(G4double x) {
   return x==0 ? 0. : (x<0?-1.:1.)*G4Exp(G4Log(std::fabs(x))/3.);
+}
+
+G4double G4InuclSpecialFunctions::G4cbrt(G4int n) {
+  return n==0 ? 0. : (n<0?-1.:1.)*G4Pow::GetInstance()->Z13(std::abs(n));
 }
 
 G4double G4InuclSpecialFunctions::inuclRndm() { 
@@ -146,11 +155,17 @@ G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct, G4double p,
 
   // Buffers to avoid memory thrashing
   static G4ThreadLocal G4ThreeVector *pvec_G4MT_TLS_ = 0;
-  if (!pvec_G4MT_TLS_) pvec_G4MT_TLS_ = new G4ThreeVector;
+  if (!pvec_G4MT_TLS_) {
+    pvec_G4MT_TLS_ = new G4ThreeVector;
+    G4AutoDelete::Register(pvec_G4MT_TLS_);
+  }
   G4ThreeVector &pvec = *pvec_G4MT_TLS_;
 
   static G4ThreadLocal G4LorentzVector *momr_G4MT_TLS_ = 0;
-  if (!momr_G4MT_TLS_) momr_G4MT_TLS_ = new G4LorentzVector;
+  if (!momr_G4MT_TLS_) {
+    momr_G4MT_TLS_ = new G4LorentzVector;
+    G4AutoDelete::Register(momr_G4MT_TLS_);
+  }
   G4LorentzVector &momr = *momr_G4MT_TLS_;
 
   pvec.set(pt*std::cos(phi), pt*std::sin(phi), p*ct);
@@ -167,11 +182,17 @@ G4InuclSpecialFunctions::generateWithRandomAngles(G4double p, G4double mass) {
 
   // Buffers to avoid memory thrashing  
   static G4ThreadLocal G4ThreeVector *pvec_G4MT_TLS_ = 0;
-  if (!pvec_G4MT_TLS_) pvec_G4MT_TLS_ = new G4ThreeVector;
+  if (!pvec_G4MT_TLS_) {
+    pvec_G4MT_TLS_ = new G4ThreeVector;
+    G4AutoDelete::Register(pvec_G4MT_TLS_);
+  }
   G4ThreeVector &pvec = *pvec_G4MT_TLS_;
 
   static G4ThreadLocal G4LorentzVector *momr_G4MT_TLS_ = 0;
-  if (!momr_G4MT_TLS_) momr_G4MT_TLS_ = new G4LorentzVector;
+  if (!momr_G4MT_TLS_) {
+    momr_G4MT_TLS_ = new G4LorentzVector;
+    G4AutoDelete::Register(momr_G4MT_TLS_);
+  }
   G4LorentzVector &momr = *momr_G4MT_TLS_;
 
   pvec.set(pt*std::cos(phi), pt*std::sin(phi), p*COS_SIN.first);

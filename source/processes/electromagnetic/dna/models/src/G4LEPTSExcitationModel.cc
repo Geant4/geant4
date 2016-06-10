@@ -102,7 +102,7 @@ void G4LEPTSExcitationModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
 
   G4double eMin = 0.0;
   const G4Material* aMaterial = mateCuts->GetMaterial();
-  G4double eMax = min(theIonisPot[aMaterial], P0KinEn);
+  G4double eMax = std::min(theIonisPot[aMaterial], P0KinEn);
   Energylost = SampleEnergyLoss(aMaterial, eMin, eMax);
 
   Edep = Energylost;

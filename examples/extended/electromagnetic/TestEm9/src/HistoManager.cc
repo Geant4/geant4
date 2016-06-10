@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm9/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
-// $Id: HistoManager.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id: HistoManager.cc 92690 2015-09-14 07:03:58Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -165,7 +165,7 @@ void HistoManager::BeginOfRun()
 
     if(fVerbose > 0) {
       G4cout << "HistoManager: Histograms are booked and run has been started"
-	     << G4endl;
+             << G4endl;
     }
   }
 }

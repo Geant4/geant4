@@ -63,20 +63,34 @@ namespace tools {
 inline bool cid2s(cid a_id,std::string& a_s) {
   // NOTE : the returned string must not contain space.
 
-       if(a_id==_cid(char(0))) {a_s = "char";return true;}
-  else if(a_id==_cid(short(0))) {a_s = "short";return true;}
-  else if(a_id==_cid(int(0))) {a_s = "int";return true;}
-  else if(a_id==_cid(float(0))) {a_s = "float";return true;}
-  else if(a_id==_cid(double(0))) {a_s = "double";return true;}
+       if(a_id==_cid(char(0)))       {a_s = "char";return true;}
+  else if(a_id==_cid(short(0)))      {a_s = "short";return true;}
+  else if(a_id==_cid(int(0)))        {a_s = "int";return true;}
+  else if(a_id==_cid(float(0)))      {a_s = "float";return true;}
+  else if(a_id==_cid(double(0)))     {a_s = "double";return true;}
   else if(a_id==_cid(std::string())) {a_s = "string";return true;}
 
   // NOTE : the below do not follow the AIDA convention.
-  else if(a_id==_cid((unsigned char)0)) {a_s = "uchar";return true;}    //AIDA=byte
+  else if(a_id==_cid((unsigned char)0))  {a_s = "uchar";return true;}   //AIDA=byte
   else if(a_id==_cid((unsigned short)0)) {a_s = "ushort";return true;}  //AIDA not defined
-  else if(a_id==_cid((unsigned int)0)) {a_s = "uint";return true;}      //AIDA not defined
-  else if(a_id==_cid(bool(true))) {a_s = "bool";return true;}           //AIDA=boolean
-  else if(a_id==_cid(int64(0))) {a_s = "int64";return true;}            //AIDA=long
-  else if(a_id==_cid(uint64(0))) {a_s = "uint64";return true;}          //AIDA=not defined
+  else if(a_id==_cid((unsigned int)0))   {a_s = "uint";return true;}    //AIDA not defined
+  else if(a_id==_cid(bool(true)))        {a_s = "bool";return true;}    //AIDA=boolean
+  else if(a_id==_cid(int64(0)))          {a_s = "int64";return true;}   //AIDA=long
+  else if(a_id==_cid(uint64(0)))         {a_s = "uint64";return true;}  //AIDA=not defined
+
+  else if(a_id==_cid_std_vector<char>())        {a_s = "char[]";return true;}
+  else if(a_id==_cid_std_vector<short>())       {a_s = "short[]";return true;}
+  else if(a_id==_cid_std_vector<int>())         {a_s = "int[]";return true;}
+  else if(a_id==_cid_std_vector<float>())       {a_s = "float[]";return true;}
+  else if(a_id==_cid_std_vector<double>())      {a_s = "double[]";return true;}
+  else if(a_id==_cid_std_vector<std::string>()) {a_s = "string[]";return true;}
+
+  else if(a_id==_cid_std_vector<unsigned char>())        {a_s = "uchar[]";return true;}
+  else if(a_id==_cid_std_vector<unsigned short>())       {a_s = "ushort[]";return true;}
+  else if(a_id==_cid_std_vector<unsigned int>())         {a_s = "uint[]";return true;}
+  else if(a_id==_cid_std_vector<bool>())                 {a_s = "bool[]";return true;}
+  else if(a_id==_cid_std_vector<int64>())                {a_s = "int64[]";return true;}
+  else if(a_id==_cid_std_vector<uint64>())               {a_s = "uint64[]";return true;}
 
   a_s.clear();
   return false;

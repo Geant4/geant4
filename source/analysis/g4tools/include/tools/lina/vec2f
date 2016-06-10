@@ -1,0 +1,95 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_vec2f
+#define tools_vec2f
+
+#include "vec2"
+#include "../S_STRING"
+
+namespace tools {
+
+class vec2f : public vec2<float> {
+  typedef vec2<float> parent;
+public:
+  TOOLS_SCLASS(tools::vec2f) //for stype()
+public:
+  vec2f():parent(){}
+  vec2f(const float a_vec[2]):parent(a_vec){}
+  vec2f(float a0,float a1):parent(a0,a1){}
+  virtual ~vec2f() {}
+public:
+  vec2f(const vec2f& a_from): parent(a_from){}
+  vec2f& operator=(const vec2f& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+
+  vec2f(const parent& a_from):parent(a_from){}
+
+public: //operators
+  vec2f operator*(float a_v) const {
+    return vec2f(m_data[0]*a_v,
+                 m_data[1]*a_v);
+  }    
+  vec2f operator+(const vec2f& a_v) const {
+    return vec2f(m_data[0]+a_v.m_data[0],
+                 m_data[1]+a_v.m_data[1]);
+  }    
+  vec2f operator-(const vec2f& a_v) const {
+    return vec2f(m_data[0]-a_v.m_data[0],
+                 m_data[1]-a_v.m_data[1]);
+  }    
+  vec2f& operator+=(const vec2f& a_v) {   
+    m_data[0] += a_v.m_data[0];
+    m_data[1] += a_v.m_data[1];
+    return *this;
+  }    
+  vec2f& operator*=(float a_v) {   
+    m_data[0] *= a_v;
+    m_data[1] *= a_v;
+    return *this;
+  }    
+  vec2f operator-() const {
+    return vec2f(-m_data[0],-m_data[1]);
+  }
+public: //iv2sg
+  bool equals(const vec2f& a_v,const float a_epsil) const {
+    //if(a_epsil<0.0f))
+    float d0 = m_data[0]-a_v.m_data[0];
+    float d1 = m_data[1]-a_v.m_data[1];
+    return ((d0*d0+d1*d1)<=a_epsil);
+  }
+  void negate() {
+    m_data[0] = -m_data[0];
+    m_data[1] = -m_data[1];
+  }    
+
+private:static void check_instantiation() {vec2f v(0,0);v.set_value(1,1);}
+};
+
+inline vec2f operator*(float a_f,const vec2f& a_v) {
+  vec2f res(a_v);
+  res *= a_f;
+  return res;
+}
+
+}
+
+#include <vector>
+
+namespace tools {
+
+#ifndef SWIG
+//for sf, mf :
+inline bool set_from_vec(vec2f& a_v,const std::vector<float>& a_sv) {
+  if(a_sv.size()!=2) return false;
+  a_v[0] = a_sv[0];
+  a_v[1] = a_sv[1];
+  return true;
+}
+#endif
+
+}
+
+#endif

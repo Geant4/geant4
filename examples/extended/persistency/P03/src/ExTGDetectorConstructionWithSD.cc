@@ -24,12 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: ExTGDetectorConstructionWithSD.cc 76943 2013-11-19 09:57:34Z gcosmo $
+// $Id: ExTGDetectorConstructionWithSD.cc 92819 2015-09-17 15:21:25Z gcosmo $
 //
 /// \file persistency/P03/src/ExTGDetectorConstructionWithSD.cc
 /// \brief Implementation of the ExTGDetectorConstructionWithSD class
 
- 
 #include "ExTGDetectorConstructionWithSD.hh"
 #include "ExTGTrackerSD.hh"
 
@@ -89,6 +88,5 @@ void ExTGDetectorConstructionWithSD::ConstructSDandField()
                 "InvalidGeometry", JustWarning,
                 "Volume does not exists in geometry: Chamber");
   }
-
 
 }

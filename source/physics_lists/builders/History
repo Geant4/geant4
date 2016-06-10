@@ -14,6 +14,33 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19-Nov-2015, Alberto Ribon          (phys-builders-V10-01-05)
+- G4NeutronHPBuilder : kept only the header file, with a 
+  typedef to G4NeutronPHPBuilder
+
+05-Nov-2015, Alberto Ribon          (phys-builders-V10-01-04)
+- Removed neutron_hp/ .
+
+03-Nov-2015, Alberto Ribon          (phys-builders-V10-01-03)
+- G4NeutronHPBuilder : migrated to ParticleHP. Now it is equivalent
+  to G4NeutronPHPBuilder, so G4NeutronHPBuilder will be deleted soon.
+
+06-April-2015, Andrea Dotti         (phys-builders-V10-01-02)
+- Coverity fixes
+
+17-March-2015, Vladimir Ivanchenko  (phys-builders-V10-01-01)
+- G4AlphaBuilder, G4AlphaPHPBuilder, G4DeuteronBuilder, 
+  G4DeuteronPHPBuilder, G4He3Builder, G4He3PHPBuilder,
+  G4NeutronHPBuilder, G4NeutronLENDBuilder, G4NeutronPHPBuilder,
+  G4ProtonPHPBuilder, G4TritonBuilder, G4TritonPHPBuilder
+    removed deletion of cross section at exit to avoid double
+    deletion
+
+13-March-2015, Vladimir Ivanchenko  (phys-builders-V10-01-00)
+- G4INCLXXNeutronBuilder, G4INCLXXProtonBuilder, G4INCLXXPionBuilder
+    do not delete model and x-section at exit
+- G4INCLXXPionBuilder - fixed pion cross section for pi-
+
 12-Nov-2014, G.Folger               (phys-builders-V10-00-07)
 - remove reference to G4INCLXXPiKBuilder.{hh,cc} from sources.cmake
  

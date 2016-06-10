@@ -23,85 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornExcitationModel.hh 70171 2013-05-24 13:34:18Z gcosmo $
-//
+/*
+ * G4DNABornExcitationModel.hh
+ *
+ *  Created on: 12 mai 2015
+ *      Author: matkara
+ */
 
-#ifndef G4DNABornExcitationModel_h
-#define G4DNABornExcitationModel_h 1
+#ifndef SOURCE_PROCESSES_ELECTROMAGNETIC_DNA_MODELS_INCLUDE_G4DNABORNEXCITATIONMODEL_HH_
+#define SOURCE_PROCESSES_ELECTROMAGNETIC_DNA_MODELS_INCLUDE_G4DNABORNEXCITATIONMODEL_HH_
 
-#include "G4VEmModel.hh"
-#include "G4ParticleChangeForGamma.hh"
-#include "G4ProductionCutsTable.hh"
+#include "G4DNABornExcitationModel1.hh"
+#include "G4DNABornExcitationModel2.hh"
 
-#include "G4DNACrossSectionDataSet.hh"
-#include "G4LogLogInterpolation.hh"
-#include "G4Electron.hh"
-#include "G4Proton.hh"
-#include "G4DNAWaterExcitationStructure.hh"
-#include "G4NistManager.hh"
-
-class G4DNABornExcitationModel : public G4VEmModel
-{
-
-public:
-
-  G4DNABornExcitationModel(const G4ParticleDefinition* p = 0, 
-		          const G4String& nam = "DNABornExcitationModel");
-
-  virtual ~G4DNABornExcitationModel();
-
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector& = *(new G4DataVector()) );
-
-  virtual G4double CrossSectionPerVolume(const G4Material* material,
-					   const G4ParticleDefinition* p,
-					   G4double ekin,
-					   G4double emin,
-					   G4double emax);
-
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy);
-
-protected:
-
-  G4ParticleChangeForGamma* fParticleChangeForGamma;
-
-private:
-
-  // Water density table
-  const std::vector<G4double>* fpMolWaterDensity;
-
-  std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
-  std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
-
-  G4bool isInitialised;
-  G4int verboseLevel;
-  
-  // Cross section
-
-  typedef std::map<G4String,G4String,std::less<G4String> > MapFile;
-  MapFile tableFile;
-
-  typedef std::map<G4String,G4DNACrossSectionDataSet*,std::less<G4String> > MapData;
-  MapData tableData;
-
-  // Partial cross section
-  
-  G4int RandomSelect(G4double energy,const G4String& particle );
-  
-  // Final state
-
-  G4DNAWaterExcitationStructure waterStructure;
-   
-  //
-  
-  G4DNABornExcitationModel & operator=(const  G4DNABornExcitationModel &right);
-  G4DNABornExcitationModel(const  G4DNABornExcitationModel&);
-
-};
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+#ifndef G4DNABornExcitationModel
+typedef G4DNABornExcitationModel1 G4DNABornExcitationModel;
+//typedef G4DNABornExcitationModel2 G4DNABornExcitationModel;
 #endif
+
+#endif /* SOURCE_PROCESSES_ELECTROMAGNETIC_DNA_MODELS_INCLUDE_G4DNABORNEXCITATIONMODEL_HH_ */

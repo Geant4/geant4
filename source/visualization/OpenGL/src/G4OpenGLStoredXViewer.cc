@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXViewer.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4OpenGLStoredXViewer.cc 87695 2014-12-17 09:35:24Z gcosmo $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -37,6 +37,7 @@
 
 #include "G4OpenGLStoredSceneHandler.hh"
 #include "G4ios.hh"
+#include "G4Threading.hh"
 
 G4OpenGLStoredXViewer::
 G4OpenGLStoredXViewer (G4OpenGLStoredSceneHandler& sceneHandler,
@@ -77,8 +78,18 @@ void G4OpenGLStoredXViewer::DrawView () {
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredXViewer::DrawView\n");
 #endif
-  //Make sure current viewer is attached and clean...
-  glXMakeCurrent (dpy, win, cx);
+//  //Make sure current viewer is attached and clean...
+//#ifdef G4MULTITHREADED
+//  G4int thread_id = G4Threading::G4GetThreadId();
+//  G4cout << "G4OpenGLStoredXViewer::DrawView: thread " << thread_id << G4endl;
+//  if (thread_id < 0) {
+//    glXMakeCurrent (dpy, win, cxMaster);
+//  } else {
+//    glXMakeCurrent (dpy, win, cxVisSubThread);
+//  }
+//#else
+//  glXMakeCurrent (dpy, win, cxMaster);
+//#endif
 
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
 

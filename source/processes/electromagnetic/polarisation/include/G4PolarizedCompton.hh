@@ -75,12 +75,12 @@ class G4PolarizedCompton : public G4VEmProcess
 public:  // with description
 
   G4PolarizedCompton(const G4String& processName ="pol-compt",
-		      G4ProcessType type = fElectromagnetic);
+		     G4ProcessType type = fElectromagnetic);
 
   virtual ~G4PolarizedCompton();
 
   // true for Gamma only.  
-  G4bool IsApplicable(const G4ParticleDefinition&);
+  virtual G4bool IsApplicable(const G4ParticleDefinition&);
 
   // Print few lines of informations about the process: validity range,
   virtual void PrintInfo();
@@ -93,27 +93,29 @@ protected:
 
   // added for polarization treatment of polarized media:
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
-  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
+
+  virtual G4double GetMeanFreePath(const G4Track& aTrack,     
+				   G4double   previousStepSize,
+				   G4ForceCondition* condition);
+
+  virtual G4double PostStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double   previousStepSize,
+                             G4ForceCondition* condition);
+
+private:
+
+  void CleanTable();
+
   void BuildAsymmetryTable(const G4ParticleDefinition& part);
+
   G4double ComputeAsymmetry(G4double energy,
 			    const G4MaterialCutsCouple* couple,
 			    const G4ParticleDefinition& particle,
 			    G4double cut,
 			    G4double & tAsymmetry);
 
-  virtual G4double GetMeanFreePath(const G4Track& aTrack,     
-				   G4double   previousStepSize,
-				   G4ForceCondition* condition);
-  virtual G4double PostStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-                             G4double   previousStepSize,
-                             G4ForceCondition* condition
-                            );
-
-  // can be removed as soon as G4PolarizationChangeForGamma is fixed!
-  //  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
-
-private:
+  G4double ComputeSaturationFactor(const G4Track& aTrack);
   
   G4PolarizedCompton& operator=(const G4PolarizedCompton &right);
   G4PolarizedCompton(const G4PolarizedCompton& );
@@ -129,14 +131,6 @@ private:
   static G4PhysicsTable* theAsymmetryTable;  // table for crosssection assymmetry
   G4ThreeVector targetPolarization;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4bool G4PolarizedCompton::IsApplicable(const G4ParticleDefinition& p)
-{
-  return (&p == G4Gamma::Gamma());
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   

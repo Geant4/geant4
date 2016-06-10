@@ -1,4 +1,4 @@
-$Id: History 79343 2014-02-24 11:44:06Z gcosmo $
+$Id: History 93027 2015-09-30 16:07:56Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,27 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Sep. 29, 15 Hisaya Kurashige  (decay-V10-01-04)
+- fix problem #1783 of spin treatment for in-filght decay 
+  (co-work tags: track-V10-01-10, particles-V10-01-10)
+
+- Aug. 14, 15 Hisaya Kurashige  (decay-V10-01-03)
+- Checking of parent mass enough for decay products is moved to 
+  G4VDecayChannel::IsOKWithParentMass 
+  (i.e. No check in G4Decay::DecayIt)
+-- co work with particles-V10-01-05
+ 
+- June 22, 15 A.Ribon       (decay-V10-01-01)
+- Add a safety margin of 1 keV when checking that the parent mass is
+  enough for decay products in G4Decay::DecayIt
+
+G4Decay::DecayIt to check 
+  that the parent mass is enough for decay products  
+
+- June 19, 15 H.Kurashige   (decay-V10-01-00)
+- Fix a problem of G4Decay::DecayIt to check 
+  that the parent mass is enough for decay products  
+
 - Feb. 22, 14 H.Kurashige   (decay-V10-00-02)
 - Fix the bug of assigning DBL_MAX for stable particle life time
   (Bug #1569)

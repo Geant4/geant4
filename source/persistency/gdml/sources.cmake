@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 85532 2014-10-30 16:19:11Z gcosmo $
+# $Id: sources.cmake 89398 2015-04-09 09:56:29Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -41,6 +41,10 @@ include_directories(${CMAKE_SOURCE_DIR}/source/graphics_reps/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/materials/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/particles/bosons/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/barions/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/run/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
@@ -52,6 +56,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/tracking/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4gdml
     HEADERS
+        G4GDMLAuxStructType.hh
         G4GDMLEvaluator.hh
         G4GDMLMessenger.hh
         G4GDMLParameterisation.hh
@@ -107,7 +112,12 @@ GEANT4_DEFINE_MODULE(NAME G4gdml
         G4materials
         G4navigation
         G4partman
+        G4baryons
+        G4bosons
+        G4leptons
         G4procman
+        G4cuts
+        G4emutils
         G4run
         G4specsolids
         G4track

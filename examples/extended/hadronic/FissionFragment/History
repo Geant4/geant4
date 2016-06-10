@@ -14,6 +14,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26-10-15    T. Koi		(exExtHadFissFrag-V10-01-01)
+- Fix Waring message in prvious tag
+
+25-10-15    T. Koi		(exExtHadFissFrag-V10-01-00)
+- Limit number of worker threads of one
+
 03-11-14    B. Wendt            (exExtHadFissFrag-V10-00-13)
 - Fixed duplicate plate addition of -x when x=0.0 in
   FFDetectorConstruction.cc

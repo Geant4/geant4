@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedMollerBhabhaModel.cc 68046 2013-03-13 14:31:38Z gcosmo $
+// $Id: G4PolarizedMollerBhabhaModel.cc 91742 2015-08-04 11:48:51Z gcosmo $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -220,7 +220,8 @@ void G4PolarizedMollerBhabhaModel::SampleSecondaries(std::vector<G4DynamicPartic
       } else {
 	G4cout<<"No calculator in Moller scattering"<<G4endl;
       }
-       } while(grej * G4UniformRand() > z);
+      // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
+    } while(grej * G4UniformRand() > z);
     //Bhabha (e+e-) scattering
   } else {
     // *** dice according to polarized cross section
@@ -256,6 +257,7 @@ void G4PolarizedMollerBhabhaModel::SampleSecondaries(std::vector<G4DynamicPartic
                << " e+e- (Bhabha) scattering"<<" at KinEnergy "<<kineticEnergy<<G4endl;
 	G4cout<<"&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"<<G4endl;
       }
+      // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
     } while(grej * G4UniformRand() > z);
   }
   //
@@ -287,6 +289,7 @@ void G4PolarizedMollerBhabhaModel::SampleSecondaries(std::vector<G4DynamicPartic
 		 <<"PHI DICING"<<G4endl;
 	}
       }
+      // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
     } while(grej * G4UniformRand() > xs);
   }
 

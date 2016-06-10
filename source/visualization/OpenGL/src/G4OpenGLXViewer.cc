@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc 83403 2014-08-21 15:07:30Z gcosmo $
+// $Id: G4OpenGLXViewer.cc 92942 2015-09-22 07:31:39Z gcosmo $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -34,12 +34,9 @@
 #ifdef G4VIS_BUILD_OPENGLX_DRIVER
 
 #include "G4OpenGLXViewer.hh"
-#include "G4VViewer.hh"
+
 #include "G4OpenGLSceneHandler.hh"
-
 #include "G4OpenGLFontBaseStore.hh"
-
-#include <sstream>
 
 #include "G4VisExtent.hh"
 #include "G4LogicalVolume.hh"
@@ -49,12 +46,16 @@
 #include "G4StateManager.hh"
 #include "G4VisManager.hh"
 #include "G4Text.hh"
+#include "G4Threading.hh"
 
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
 #include <X11/Xmu/StdCmap.h>
 
 #include <assert.h>
+#include <sstream>
+#include <chrono>
+#include <thread>
 
 int G4OpenGLXViewer::snglBuf_RGBA[12] =
 { GLX_RGBA,
@@ -91,36 +92,14 @@ extern "C" {
 }
 
 void G4OpenGLXViewer::SetView () {
-  Bool success = glXMakeCurrent (dpy, win, cx);
-  if (!success) {
-    fViewId = -1;  // This flags an error.
-    G4cerr << "G4OpenGLXViewer::G4OpenGLXViewer failed to attach a GLX context."
-           << G4endl;
-    GLint error = GL_NO_ERROR;
-    while ((error = glGetError()) != GL_NO_ERROR) {
-      switch (error) {
-      case GL_INVALID_ENUM :
-	G4cout << "GL Error: GL_INVALID_ENUM" << G4endl;break;
-      case GL_INVALID_VALUE :
-	G4cout << "GL Error: GL_INVALID_VALUE" << G4endl;break;
-      case GL_INVALID_OPERATION :
-	G4cout << "GL Error: GL_INVALID_OPERATION" << G4endl;break;
-      case GL_OUT_OF_MEMORY :
-	G4cout << "GL Error: GL_OUT_OF_MEMORY" << G4endl;break;
-      case GL_STACK_UNDERFLOW :
-	G4cout << "GL Error: GL_STACK_UNDERFLOW" << G4endl;break;
-      case GL_STACK_OVERFLOW :
-	G4cout << "GL Error: GL_STACK_OVERFLOW" << G4endl;break;
-      default :
-	G4cout << "GL Error: " << error << G4endl;break;
-      }
-    }
-    return;
-  }
-  G4OpenGLViewer::SetView ();  
+  G4OpenGLViewer::SetView ();
 }
 
 void G4OpenGLXViewer::ShowView () {
+#ifdef G4MULTITHREADED
+//  G4int thread_id = G4Threading::G4GetThreadId();
+//  G4cout << "G4OpenGLXViewer::ShowView: thread " << thread_id << G4endl;
+#endif
   glXWaitGL (); //Wait for effects of all previous OpenGL commands to
                 //be propagated before progressing.
   glFlush ();
@@ -137,13 +116,33 @@ void G4OpenGLXViewer::ShowView () {
 	}
 	else if (event.type == ButtonPress && event.xbutton.button == 2) break;
       }
+      std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
   }
 }
 
+#ifdef G4MULTITHREADED
+
+void G4OpenGLXViewer::SwitchToVisSubThread()
+{
+//  G4cout << "G4OpenGLXViewer::SwitchToVisSubThread" << G4endl;
+  cxVisSubThread = glXCreateContext (dpy, vi, cxMaster, true);
+  glXMakeCurrent (dpy, win, cxVisSubThread);
+}
+
+void G4OpenGLXViewer::SwitchToMasterThread()
+{
+//  G4cout << "G4OpenGLXViewer::SwitchToMasterThread" << G4endl;
+  glXMakeCurrent (dpy, win, cxMaster);
+  // and destroy sub-thread context
+  glXDestroyContext (dpy, cxVisSubThread);
+}
+
+#endif
+
 void G4OpenGLXViewer::GetXConnection () {
 // get a connection.
-  dpy = XOpenDisplay (0);
+  dpy = XOpenDisplay (0);  // Uses DISPLAY environment variable.
   if (!dpy) {
     fViewId = -1;  // This flags an error.
     G4cerr << "G4OpenGLXViewer::G4OpenGLXViewer couldn't open display." << G4endl;
@@ -171,9 +170,9 @@ void G4OpenGLXViewer::CreateGLXContext (XVisualInfo* v) {
     return;
   }
   
-// create a GLX context
-  cx = glXCreateContext (dpy, vi, 0, true);
-  if (!cx) {
+// create the master GLX context
+  cxMaster = glXCreateContext (dpy, vi, 0, true);
+  if (!cxMaster) {
     fViewId = -1;  // This flags an error.
     G4cerr << "G4OpenGLXViewer::G4OpenGLXViewer couldn't create context."
 	 << G4endl;
@@ -305,7 +304,7 @@ void G4OpenGLXViewer::CreateMainWindow () {
   XIfEvent (dpy, &event, G4OpenGLXViewerWaitForNotify, (char*) win);
 
 // connect the context to a window
-  Bool success = glXMakeCurrent (dpy, win, cx);
+  Bool success = glXMakeCurrent (dpy, win, cxMaster);
   if (!success) {
     fViewId = -1;  // This flags an error.
     G4cerr << "G4OpenGLXViewer::G4OpenGLXViewer failed to attach a GLX context."
@@ -331,7 +330,6 @@ void G4OpenGLXViewer::CreateMainWindow () {
     }
     return;
   }
-
 }
 
 void G4OpenGLXViewer::CreateFontLists()
@@ -522,7 +520,7 @@ G4OpenGLXViewer::~G4OpenGLXViewer () {
   if (fViewId >= 0) {
     //Close a window from here
     glXMakeCurrent (dpy, None, NULL);
-    glXDestroyContext (dpy, cx);
+    glXDestroyContext (dpy, cxMaster);
     if (win) XDestroyWindow (dpy, win); // ...if already deleted in
     // sub-class G4OpenGLXmViewer.
     XFlush (dpy);

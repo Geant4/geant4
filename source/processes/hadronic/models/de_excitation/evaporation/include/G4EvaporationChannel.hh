@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationChannel.hh 85841 2014-11-05 15:35:06Z gcosmo $
+// $Id: G4EvaporationChannel.hh 90273 2015-05-22 10:20:32Z gcosmo $
 //
 //
 //J.M. Quesada (August2008). Based on:
@@ -56,24 +56,15 @@ public:
   virtual ~G4EvaporationChannel();
 
   void Initialise();
-  
-  inline void SetEmissionStrategy(G4EvaporationProbability * aEmissionStrategy)
-  {theEvaporationProbabilityPtr = aEmissionStrategy;}
 
-  inline void SetCoulombBarrierStrategy(G4VCoulombBarrier * aCoulombBarrier)
-  {theCoulombBarrierPtr = aCoulombBarrier;} 
-    
   virtual G4double GetEmissionProbability(G4Fragment* fragment); 
-
+  
   virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
 
   virtual G4FragmentVector * BreakUp(const G4Fragment & theNucleus);
   
 private: 
   
- // Samples fragment kinetic energy.
-  G4double  SampleKineticEnergy(const G4Fragment & aFragment);
-
   // This has to be removed and put in Random Generator
   G4ThreeVector IsotropicVector(G4double Magnitude  = 1.0);
 
@@ -97,13 +88,13 @@ private:
   G4double ResidualMass;
 
   // For evaporation probability calcualation
-  G4EvaporationProbability * theEvaporationProbabilityPtr;
+  G4EvaporationProbability * theProbability;
 
   // For Level Density calculation
   G4VLevelDensityParameter * theLevelDensityPtr;
 
   // For Coulomb Barrier calculation
-  G4VCoulombBarrier * theCoulombBarrierPtr;
+  G4VCoulombBarrier * theCoulombBarrier;
   G4double CoulombBarrier;
 
   G4PairingCorrection* pairingCorrection;
@@ -111,7 +102,8 @@ private:
   //---------------------------------------------------
 
   // These values depend on the nucleus that is being evaporated.
-  // They are calculated through the Initialize method which takes as parameters 
+  // They are calculated through the Initialize method which 
+  // takes as parameters 
   // the atomic number, charge and excitation energy of nucleus.
 
   // Residual Mass Number

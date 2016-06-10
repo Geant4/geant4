@@ -24,43 +24,32 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionParameters.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4FissionParameters.hh 89550 2015-04-17 08:38:15Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) 
 //
-
-
 
 #ifndef G4FissionParameters_h
 #define G4FissionParameters_h 1
 
 #include "globals.hh"
 
-
 class G4FissionParameters 
 {
 public:
-  // Only available constructor
-  G4FissionParameters(G4int A, G4int Z, G4double ExEnergy, G4double FissionBarrier);
+
+  G4FissionParameters();
 
   ~G4FissionParameters();  
 
-private:  
-  // Default constructor
-  G4FissionParameters();
-
-  // Copy constructor
-  G4FissionParameters(const G4FissionParameters &right);
-
-  const G4FissionParameters & operator=(const G4FissionParameters &right);
-  G4bool operator==(const G4FissionParameters &right) const;
-  G4bool operator!=(const G4FissionParameters &right) const;
+  void DefineParameters(G4int A, G4int Z, G4double ExEnergy, 
+			G4double FissionBarrier);
   
 public:
 
-  inline G4double GetA1(void) const { return A1; }
-  inline G4double GetA2(void) const { return A2; }
+  inline G4int GetA1(void) const { return A1; }
+  inline G4int GetA2(void) const { return A2; }
 
   inline G4double GetAs(void) const { return As; }
   inline G4double GetSigma1(void) const { return Sigma1; }
@@ -70,10 +59,16 @@ public:
 
 private:
 
+  G4FissionParameters(const G4FissionParameters &right);
+  const G4FissionParameters & operator=(const G4FissionParameters &right);
+  G4bool operator==(const G4FissionParameters &right) const;
+  G4bool operator!=(const G4FissionParameters &right) const;
+
   // Mean numbers of the corresponding Gaussians for assymmetric
   // fission
-  static const G4double A1;
-  static const G4double A2;
+  G4int A1;
+  G4int A2;
+  G4double A3;
 
   // Mean number for symmetric fission
   G4double As;
@@ -89,8 +84,6 @@ private:
   // Weight which determines the relative contribution of symmetric
   // and assymmetric components
   G4double w;
-
-
 };
 
 

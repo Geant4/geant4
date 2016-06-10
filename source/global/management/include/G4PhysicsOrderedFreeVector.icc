@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsOrderedFreeVector.icc 67970 2013-03-13 10:10:06Z gcosmo $
+// $Id: G4PhysicsOrderedFreeVector.icc 93409 2015-10-21 13:26:27Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // PhysicsOrderedFreeVector Class Inline Functions Definitions
@@ -68,11 +68,3 @@ G4double G4PhysicsOrderedFreeVector::GetMinLowEdgeEnergy()
 	return binVector.front();
 }
 
-inline
-void G4PhysicsOrderedFreeVector::DumpValues()
-{
-   for (size_t i = 0; i < numberOfNodes; i++)
-   {
-      G4cout << binVector[i] << "\t" << dataVector[i] << G4endl;
-   }
-}

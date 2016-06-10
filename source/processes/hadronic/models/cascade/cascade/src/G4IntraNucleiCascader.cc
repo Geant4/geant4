@@ -115,6 +115,10 @@
 // 20130304  M. Kelsey -- Use new G4CascadeHistory to dump cascade structure
 // 20140310  M. Kelsey -- (Bug #1584) Release memory allocated by DecayIt()
 // 20140409  M. Kelsey -- Use const G4ParticleDefinition* everywhere
+// 20141204  M. Kelsey -- Add function to test for non-interacting particles,
+//		move those directly to output without propagating
+// 20150608  M. Kelsey -- Label all while loops as terminating.
+// 20150619  M. Kelsey -- Replace std::exp with G4Exp
 
 #include <algorithm>
 
@@ -131,6 +135,7 @@
 #include "G4DecayTable.hh"
 #include "G4ElementaryParticleCollider.hh"
 #include "G4ExitonConfiguration.hh"
+#include "G4Exp.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
@@ -205,7 +210,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
   if (!initialize(bullet, target)) return;	// Load buffers and drivers
 
   G4int itry = 0;
-  do {
+  do {				/* Loop checking 08.06.2015 MHK */
     newCascade(++itry);
     setupCascade();
     generateCascade();
@@ -231,7 +236,7 @@ void G4IntraNucleiCascader::rescatter(G4InuclParticle* bullet,
   if (!initialize(bullet, target)) return;	// Load buffers and drivers
 
   G4int itry = 0;
-  do {
+  do {				/* Loop checking 08.06.2015 MHK */
     newCascade(++itry);
     preloadCascade(theNucleus, theSecondaries);
     generateCascade();
@@ -357,6 +362,7 @@ void G4IntraNucleiCascader::setupCascade() {
 void G4IntraNucleiCascader::generateCascade() {
   if (verboseLevel>1) G4cout << " generateCascade " << G4endl;
 
+  /* Loop checking 08.06.2015 MHK */
   G4int iloop = 0;
   while (!cascad_particles.empty() && !model->empty()) {
     iloop++;
@@ -376,6 +382,17 @@ void G4IntraNucleiCascader::generateCascade() {
       }
     }
 
+    // If non-interacting particle, move directly to output
+    if (!particleCanInteract(cascad_particles.back())) {
+      if (verboseLevel > 2)
+	G4cout << " particle is non-interacting; moving to output" << G4endl;
+
+      output.addOutgoingParticle(cascad_particles.back().getParticle());
+      cascad_particles.pop_back();
+      continue;
+    }
+
+    // Generate interaction with nucleon
     model->generateParticleFate(cascad_particles.back(),
 				theElementaryParticleCollider,
 				new_cascad_particles);
@@ -428,9 +445,9 @@ void G4IntraNucleiCascader::generateCascade() {
 	  
 	  // if (KE > 0.0001) CBP = std::exp(-0.00126*tnuclei->getZ()*0.25*
 	  //   (1./KE - 1./coulombBarrier));
-	  if (KE > 0.0001) CBP = std::exp(-0.0181*0.5*tnuclei->getZ()*
-					  (1./KE - 1./coulombBarrier)*
-					  std::sqrt(mass*(coulombBarrier-KE)) );
+	  if (KE > 0.0001) CBP = G4Exp(-0.0181*0.5*tnuclei->getZ()*
+				       (1./KE - 1./coulombBarrier)*
+				       std::sqrt(mass*(coulombBarrier-KE)) );
 	  
 	  if (G4UniformRand() < CBP) {
 	    if (verboseLevel > 3) 
@@ -698,6 +715,7 @@ void G4IntraNucleiCascader::copyWoundedNucleus(G4V3DNucleus* theNucleus) {
   if (theNucleus->StartLoop()) {
     G4Nucleon* nucl = 0;
     G4int nuclType = 0;
+    /* Loop checking 08.06.2015 MHK */
     while ((nucl = theNucleus->GetNextNucleon())) {
       if (nucl->AreYouHit()) {	// Found previously interacted nucleon
 	nuclType = G4InuclElementaryParticle::type(nucl->GetParticleType());
@@ -904,4 +922,13 @@ decayTrappedParticle(const G4CascadParticle& trapped) {
   }
 
   delete daughters;		// Clean up memory created by DecayIt()
+}
+
+
+// Test if particle is able to interact in nucleus
+
+G4bool G4IntraNucleiCascader::
+particleCanInteract(const G4CascadParticle& cpart) const {
+  // If we have a lookup table for particle type on proton, it interacts
+  return (0 != G4CascadeChannelTables::GetTable(cpart.getParticle().type()));
 }

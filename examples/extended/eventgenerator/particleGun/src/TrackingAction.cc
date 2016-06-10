@@ -27,7 +27,7 @@
 /// \brief Implementation of the TrackingAction class
 //
 //
-// $Id: TrackingAction.cc 83919 2014-09-23 08:40:35Z gcosmo $
+// $Id: TrackingAction.cc 89707 2015-04-28 07:38:57Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,7 +55,7 @@ TrackingAction::TrackingAction(PrimaryGeneratorAction* prim)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackingAction::PreUserTrackingAction(const G4Track* track)
-{
+{ 
  G4int selectedGeneratorAction = fPrimary->GetSelectedAction();
  G4AnalysisManager* analysis = G4AnalysisManager::Instance(); 
  G4int id = 0;

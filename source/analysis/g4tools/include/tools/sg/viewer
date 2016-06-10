@@ -1,0 +1,169 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_viewer
+#define tools_sg_viewer
+
+#include "group"
+
+#ifdef TOOLS_MEM
+#include "../mem"
+#endif
+
+namespace tools {
+namespace sg {
+
+enum cursor_shape {
+  cursor_default = 0,
+  cursor_target
+};  
+
+class viewer {
+public:
+  TOOLS_SCLASS(tools::sg::viewer)
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<viewer>(this,a_class)) {return p;}
+    else return 0;
+  }
+public:
+  virtual void set_size(unsigned int a_w,unsigned int a_h) {
+    //m_out << "debug : tools::sg::viewer::set_size :"
+    //      << " ww " << a_w
+    //      << " wh " << a_h
+    //      << std::endl;
+    size_event e(m_ww,m_wh,a_w,a_h);
+    m_ww = a_w;
+    m_wh = a_h;
+    event_action action(m_out,m_ww,m_wh,e);
+    action.set_do_switch_children(true); //Android : rot device : GUI & scene.
+    m_sg.event(action); //used by m_plots in plots_viewer.
+  }
+
+  virtual bool set_cursor_shape(cursor_shape) {return false;}
+public:
+  viewer(std::ostream& a_out,unsigned int a_width,unsigned int a_height)
+  :m_out(a_out)
+  ,m_clear_color(1,1,1)
+  ,m_ww(a_width)
+  ,m_wh(a_height)
+  ,m_use_gsto(false)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~viewer(){
+    m_sg.clear(); //we must delete node before m_zb_mgr (and any gl_manager).
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  viewer(const viewer& a_from)
+  :m_out(a_from.m_out)
+  ,m_clear_color(a_from.m_clear_color)
+  ,m_ww(a_from.m_ww)
+  ,m_wh(a_from.m_wh)
+  ,m_sg(a_from.m_sg)
+  ,m_use_gsto(a_from.m_use_gsto)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  viewer& operator=(const viewer& a_from){
+    m_clear_color = a_from.m_clear_color;
+    m_ww = a_from.m_ww;
+    m_wh = a_from.m_wh;
+    m_sg = a_from.m_sg;
+    m_use_gsto = a_from.m_use_gsto;
+    return *this;
+  }
+public:  
+  bool set_default_cursor_shape() {return set_cursor_shape(cursor_default);}
+
+  group& sg() {return m_sg;}
+  const group& sg() const {return m_sg;}
+
+  unsigned int width() const {return m_ww;}
+  unsigned int height() const {return m_wh;}
+
+  bool screen2aspect(int a_x,int a_y,float& a_wx,float& a_wy) const {
+    // convert screen point in [aspect,1] coordinates.
+    //if(!m_ww) {a_wx = a_wy = 0;return false;}
+    //if(!m_wh) {a_wx = a_wy = 0;return false;}
+    float aspect = float(m_ww)/float(m_wh);
+    float wch = 1;
+    float wcw = wch*aspect;
+    a_wx = float(a_x) * wcw/float(m_ww);
+    a_wy = float(a_y) * wch/float(m_wh);
+    return true;
+  }
+
+  void set_clear_color(float a_r,float a_g,float a_b,float a_a = 1) {
+    m_clear_color = colorf(a_r,a_g,a_b,a_a);
+  }
+  void set_clear_color(const colorf& a_color) {
+    m_clear_color = a_color;
+  }
+
+  const colorf& background() const {return m_clear_color;}
+
+  std::ostream& out() const {return m_out;}
+
+  const std::string& out_dir() const {return m_out_dir;}
+
+protected:
+  // iPod : 320 x 480
+  // iPad : 768 x 1024
+  // SGS : API-1 : 320 x 533, API-5 : 480 x 800
+  // SGT : 1024 x 600 ?
+
+  // LRI WILD : borders w = 100 x h = 120. 4x8 screens with 2560x1600 pixels.
+  // LAL ARTS : borders 88x100. 2x4 screens of 1920 x 1080
+
+  //bool is_iPad() const {
+  //  if( (m_ww==768) && (m_wh==1024) ) return true;
+  //  if( (m_wh==768) && (m_ww==1024) ) return true;
+  //  return false;
+  //}
+  //bool is_SGS() const {
+  //  //API : 1
+  //  //if( (m_ww==320) && (m_wh==533) ) return true;
+  //  //if( (m_wh==320) && (m_ww==533) ) return true;
+  //
+  //  //API : 5
+  //  if( (m_ww==480) && (m_wh==800) ) return true;
+  //  if( (m_wh==480) && (m_ww==800) ) return true;
+  //  return false;
+  //}
+
+protected:
+  std::ostream& m_out;
+  colorf m_clear_color;
+  unsigned int m_ww;
+  unsigned int m_wh;
+  group m_sg;
+  std::string m_out_dir;
+  bool m_use_gsto;
+};
+
+}}
+
+#include "../pointer"
+
+namespace tools {
+namespace sg {
+
+// used with Python and lua :
+inline viewer* cast_viewer(const std::string& a_s) {
+  void* p;
+  // Read with %lx and, if failure, with %lu.
+  if(!to_pointer(a_s,p)) return 0;
+  return (viewer*)p;
+}
+
+}}
+
+#endif
+

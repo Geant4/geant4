@@ -57,6 +57,38 @@ protected:
   rtausmed m_flat;
 };
 
+class rdir2d : public rdir2<rtausmed,double> {
+  typedef rdir2<rtausmed,double> parent;
+public:
+  rdir2d():parent(m_flat),m_flat(){}
+  virtual ~rdir2d(){}
+public:
+  rdir2d(const rdir2d& a_from):parent(m_flat),m_flat(a_from.m_flat){}
+  rdir2d& operator=(const rdir2d& a_from) {
+    parent::operator=(a_from);
+    m_flat = a_from.m_flat;
+    return *this;
+  }
+protected:
+  rtausmed m_flat;
+};
+
+class rdir3d : public rdir3<rtausmed,double> {
+  typedef rdir3<rtausmed,double> parent;
+public:
+  rdir3d():parent(m_flat),m_flat(){}
+  virtual ~rdir3d(){}
+public:
+  rdir3d(const rdir3d& a_from):parent(m_flat),m_flat(a_from.m_flat){}
+  rdir3d& operator=(const rdir3d& a_from) {
+    parent::operator=(a_from);
+    m_flat = a_from.m_flat;
+    return *this;
+  }
+protected:
+  rtausmed m_flat;
+};
+
 }
 
 #endif

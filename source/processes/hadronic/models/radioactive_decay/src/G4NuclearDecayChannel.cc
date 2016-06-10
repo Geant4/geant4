@@ -72,7 +72,6 @@
 #include "G4PhysicsLogVector.hh"
 #include "G4ParticleChangeForRadDecay.hh"
 #include "G4IonTable.hh"
-#include "G4BetaFermiFunction.hh"
 #include "G4PhotonEvaporation.hh"
 
 #include "G4VAtomDeexcitation.hh"
@@ -302,6 +301,7 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
         daughterMomentum.setE(daughterMomentum.e() + exe);
       }
       G4Fragment nucleus(daughterA, daughterZ, daughterMomentum);
+
       G4PhotonEvaporation* deexcitation = new G4PhotonEvaporation;
       deexcitation->SetVerboseLevel(GetVerboseLevel());
 
@@ -333,6 +333,7 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
 
       if (decayMode != 0) {
         daughterIon = theIonTable->GetIon(daughterZ, daughterA, daughterExcitation);
+
       } else {
         // The fragment vector from photon evaporation contains the list of
         // evaporated gammas, some of which may have been replaced by conversion
@@ -372,13 +373,13 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
         daughterMomentum.setE(daughterMomentum.e() - eOrGammaEnergy);
 
         // Delete/reset variables associated with the gammas.
-        while (!gammas->empty() ) {
+        while (!gammas->empty() ) {  /* Loop checking, 01.09.2015, D.Wright */
           delete *(gammas->end()-1);
           gammas->pop_back();
         }
         delete gammas;
       } // end if decayMode == 0
- 
+
       G4ThreeVector const daughterMomentum1(static_cast<const G4LorentzVector> (daughterMomentum));
       dynamicDaughter = new G4DynamicParticle(daughterIon, daughterMomentum1);  
       products->PushProducts(dynamicDaughter);
@@ -439,7 +440,14 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
           G4AtomicShellEnumerator as = G4AtomicShellEnumerator(eShell);
           const G4AtomicShell* shell = atomDeex->GetAtomicShell(aZ, as);    
           std::vector<G4DynamicParticle*> armProducts;
-          const G4double deexLimit = 0.1*keV;
+
+          // VI, SI
+          // Allows fixing of Bugzilla 1727
+          //const G4double deexLimit = 0.1*keV;
+          G4double deexLimit = 0.1*keV;
+          if (G4EmParameters::Instance()->DeexcitationIgnoreCut())  deexLimit =0.;
+          //
+
           atomDeex->GenerateParticles(&armProducts, shell, aZ, deexLimit, deexLimit);
           size_t narm = armProducts.size();
           if (narm > 0) {

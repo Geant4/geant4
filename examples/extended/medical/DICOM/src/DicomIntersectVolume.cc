@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomIntersectVolume.cc 84839 2014-10-21 13:44:55Z gcosmo $
+// $Id: DicomIntersectVolume.cc 92820 2015-09-17 15:22:14Z gcosmo $
 //
 /// \file medical/DICOM/src/DicomIntersectVolume.cc
 /// \brief Implementation of the DicomIntersectVolume class
@@ -501,4 +501,3 @@ std::vector<G4String> DicomIntersectVolume::GetWordsInString(
 
   return wordlist;
 }
-

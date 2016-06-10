@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.hh 80747 2014-05-09 12:53:43Z gcosmo $
+// $Id: G4Element.hh 87870 2015-01-16 08:27:07Z gcosmo $
 //
 
 //---------------------------------------------------------------------------
@@ -199,8 +199,8 @@ public:  // with description
     
   // printing methods
   //    
-  friend std::ostream& operator<<(std::ostream&, G4Element*);    
-  friend std::ostream& operator<<(std::ostream&, G4Element&);    
+  friend std::ostream& operator<<(std::ostream&, const G4Element*);
+  friend std::ostream& operator<<(std::ostream&, const G4Element&);
   friend std::ostream& operator<<(std::ostream&, G4ElementTable);
 
 public:  // without description

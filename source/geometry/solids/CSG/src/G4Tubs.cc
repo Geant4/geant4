@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4Tubs.cc 88373 2015-02-16 09:45:10Z gcosmo $
 //
 // 
 // class G4Tubs
@@ -148,8 +148,8 @@ G4Tubs::G4Tubs(const G4Tubs& rhs)
     kRadTolerance(rhs.kRadTolerance), kAngTolerance(rhs.kAngTolerance),
     fRMin(rhs.fRMin), fRMax(rhs.fRMax), fDz(rhs.fDz),
     fSPhi(rhs.fSPhi), fDPhi(rhs.fDPhi),
-    sinCPhi(rhs.sinCPhi), cosCPhi(rhs.sinCPhi),
-    cosHDPhiOT(rhs.cosHDPhiOT), cosHDPhiIT(rhs.cosHDPhiOT),
+    sinCPhi(rhs.sinCPhi), cosCPhi(rhs.cosCPhi),
+    cosHDPhiOT(rhs.cosHDPhiOT), cosHDPhiIT(rhs.cosHDPhiIT),
     sinSPhi(rhs.sinSPhi), cosSPhi(rhs.cosSPhi),
     sinEPhi(rhs.sinEPhi), cosEPhi(rhs.cosEPhi), fPhiFullTube(rhs.fPhiFullTube),
     halfCarTolerance(rhs.halfCarTolerance),
@@ -177,8 +177,8 @@ G4Tubs& G4Tubs::operator = (const G4Tubs& rhs)
    kRadTolerance = rhs.kRadTolerance; kAngTolerance = rhs.kAngTolerance;
    fRMin = rhs.fRMin; fRMax = rhs.fRMax; fDz = rhs.fDz;
    fSPhi = rhs.fSPhi; fDPhi = rhs.fDPhi;
-   sinCPhi = rhs.sinCPhi; cosCPhi = rhs.sinCPhi;
-   cosHDPhiOT = rhs.cosHDPhiOT; cosHDPhiIT = rhs.cosHDPhiOT;
+   sinCPhi = rhs.sinCPhi; cosCPhi = rhs.cosCPhi;
+   cosHDPhiOT = rhs.cosHDPhiOT; cosHDPhiIT = rhs.cosHDPhiIT;
    sinSPhi = rhs.sinSPhi; cosSPhi = rhs.cosSPhi;
    sinEPhi = rhs.sinEPhi; cosEPhi = rhs.cosEPhi;
    fPhiFullTube = rhs.fPhiFullTube;

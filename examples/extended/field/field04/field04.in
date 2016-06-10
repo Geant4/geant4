@@ -66,8 +66,8 @@
 /run/beamOn 1000
 #
 #/event/setverbose 1
-#/event/drawTracks all
-#/event/printModulo 1
+#/run/printProgress 1
+#
 #/gun/xvertex 0. cm
 #/gun/yvertex 0. cm
 #/gun/zvertex 0. cm

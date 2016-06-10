@@ -1,0 +1,22 @@
+/control/alias endTime 0.01
+
+/vis/modeling/trajectories/drawByParticleID-0/default/setDrawStepPts true
+
+/vis/ogl/set/fade 0
+/vis/ogl/set/displayHeadTime true -0.1 -0.8 24 1.0 0.0 0.0
+
+/vis/ogl/set/startTime 0 ps
+
+/control/divide timeStep {endTime} 100.
+/control/loop movie_physics.loop startTime 0.0 {endTime} {timeStep}
+
+/control/loop zoom.loop theZoom 1.7 4 0.1
+/control/loop zoom.loop theZoom 4.05 6.95 0.05
+/control/loop zoom.loop theZoom 7 8 0.01
+
+/control/loop movie_physics.loop startTime 0.0 {endTime} {timeStep}
+
+/control/loop zoom.loop theZoom 8 7 -0.01
+/control/loop zoom.loop theZoom 7 1.7 -0.1
+
+

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsFTFP_BERT_TRV.hh 73040 2013-08-15 09:36:57Z gcosmo $
+// $Id: G4HadronPhysicsFTFP_BERT_TRV.hh 93617 2015-10-27 09:00:41Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -64,6 +64,9 @@
 #include "G4AntiBarionBuilder.hh"
 #include "G4FTFPAntiBarionBuilder.hh"
 
+class G4ComponentGGHadronNucleusXsc;
+
+
 class G4HadronPhysicsFTFP_BERT_TRV : public G4VPhysicsConstructor
 {
   public: 
@@ -96,9 +99,7 @@ class G4HadronPhysicsFTFP_BERT_TRV : public G4VPhysicsConstructor
       G4AntiBarionBuilder * theAntiBaryon;
       G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
 
-      G4VCrossSectionDataSet * ChipsKaonMinus;
-      G4VCrossSectionDataSet * ChipsKaonPlus;
-      G4VCrossSectionDataSet * ChipsKaonZero;
+      G4ComponentGGHadronNucleusXsc * xsKaon;
       G4VCrossSectionDataSet * xsNeutronInelasticXS;
       G4VCrossSectionDataSet * xsNeutronCaptureXS;
     };

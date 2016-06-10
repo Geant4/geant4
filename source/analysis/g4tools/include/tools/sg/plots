@@ -1,0 +1,710 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_plots
+#define tools_sg_plots
+
+#include "_switch"
+#include "head_light"
+#include "matrix"
+
+#include "plotter"
+
+namespace tools {
+namespace sg {
+
+class plots : public node {
+  TOOLS_NODE(plots,tools::sg::plots,node)
+public:
+  sf<float> width;
+  sf<float> height;
+  sf<unsigned int> cols; //must never be 0.
+  sf<unsigned int> rows; //must never be 0.
+  sf<bool> view_border; //current plotter border
+  sf<float> plotter_scale; //scale factor applied to each plotter.
+
+  sf<bool> border_visible;
+  sf<float> border_width;
+  sf<float> border_height;
+  sf_vec<colorf,float> border_color;
+public:
+  virtual const std::vector<field_desc>& node_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::plots)
+    static std::vector<field_desc> s_v;
+    if(s_v.empty()) {
+      s_v = parent::node_fields();
+      TOOLS_ADD_FIELD_DESC(width)
+      TOOLS_ADD_FIELD_DESC(height)
+      TOOLS_ADD_FIELD_DESC(cols)
+      TOOLS_ADD_FIELD_DESC(rows)
+      TOOLS_ADD_FIELD_DESC(view_border)
+      TOOLS_ADD_FIELD_DESC(plotter_scale)
+      TOOLS_ADD_FIELD_DESC(border_visible)
+      TOOLS_ADD_FIELD_DESC(border_width)
+      TOOLS_ADD_FIELD_DESC(border_height)
+      TOOLS_ADD_FIELD_DESC(border_color)
+    }
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&width);
+    add_field(&height);
+    add_field(&cols);
+    add_field(&rows);
+    add_field(&view_border);
+    add_field(&plotter_scale);
+    add_field(&border_visible);
+    add_field(&border_width);
+    add_field(&border_height);
+    add_field(&border_color);
+  }
+private:
+  static unsigned int MATRIX()  {return 0;}
+  static unsigned int LIGHT()   {return 1;}
+  static unsigned int BORDER()  {return 2;}
+  //static unsigned int TSF()     {return 3;}
+  static unsigned int PLOTTER() {return 3;}
+
+  typedef std::vector<plottable*> ptbs_t;
+  typedef std::vector<node*> todels_t;
+public:
+  class updater { 
+  public:
+    virtual void update(plots&,unsigned int) = 0;
+    virtual updater* copy() const = 0;
+  public:
+    virtual ~updater(){}
+  };
+
+public:
+  virtual void render(render_action& a_action) {
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+    m_group.render(a_action);
+  }
+  virtual void pick(pick_action& a_action) {
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+    nodekit_pick(a_action,m_group,this);
+    //m_group.pick(a_action);
+  }
+  virtual void search(search_action& a_action) {
+    parent::search(a_action);
+    if(a_action.done()) return;
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+    if(a_action.do_path()) a_action.path_push(this);
+    m_group.search(a_action);
+    if(a_action.done()) return;
+    if(a_action.do_path()) a_action.path_pop();
+  }
+  virtual void bbox(bbox_action& a_action) {
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+    m_group.bbox(a_action);
+  }
+
+  virtual void event(event_action& a_action) {
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+    m_group.event(a_action);
+    if(a_action.done()) return;
+  }
+  virtual bool write(write_action& a_action) {
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+    return m_group.write(a_action);
+  }
+public:
+  plots(const base_freetype& a_ttf)
+  :parent()
+  ,width(1)
+  ,height(1)
+  ,cols(1)
+  ,rows(1)
+  ,view_border(true)
+  ,plotter_scale(1)
+  ,border_visible(false)
+  ,border_width(0)
+  ,border_height(0)
+  ,border_color(colorf::grey())
+
+  ,m_ttf(a_ttf)
+  ,m_current(0)
+  ,m_updater(0)
+  ,m_old_cols(0)
+  ,m_old_rows(0)
+  {
+    add_fields();
+    init_sg();
+  }
+  virtual ~plots() {
+    delete m_updater;
+  }
+public:
+  plots(const plots& a_from)
+  :parent(a_from)
+  ,width(a_from.width)
+  ,height(a_from.height)
+  ,cols(a_from.cols)
+  ,rows(a_from.rows)
+  ,view_border(a_from.view_border)
+  ,plotter_scale(a_from.plotter_scale)
+  ,border_visible(a_from.border_visible)
+  ,border_width(a_from.border_width)
+  ,border_height(a_from.border_height)
+  ,border_color(a_from.border_color)
+
+  ,m_ttf(a_from.m_ttf)
+  ,m_current(a_from.m_current)
+  ,m_updater(0)
+  ,m_old_cols(0)
+  ,m_old_rows(0)
+  {
+    add_fields();
+    init_sg();
+
+    m_updater = a_from.m_updater?a_from.m_updater->copy():0;
+  }
+  plots& operator=(const plots& a_from){    
+    parent::operator=(a_from);
+    if(&a_from==this) return *this;
+
+    width = a_from.width;
+    height = a_from.height;
+
+    cols = a_from.cols;
+    rows = a_from.rows;
+    view_border = a_from.view_border;
+    plotter_scale = a_from.plotter_scale;
+
+    border_visible = a_from.border_visible;
+    border_width = a_from.border_width;
+    border_height = a_from.border_height;
+    border_color = a_from.border_color;
+
+    m_old_cols = 0;
+    m_old_rows = 0;
+
+    m_current = a_from.m_current;
+
+    return *this;
+  }
+public:
+  unsigned int number() const {return cols*rows;}
+  unsigned int current_index() const {return m_current;}
+  
+  void adjust_size(unsigned int a_ww,unsigned int a_wh) {
+    if(!a_ww||!a_wh) return;
+    float aspect = float(a_ww)/float(a_wh);
+    width = height * aspect;
+
+    //wps : cooking to avoid seeing a line for left border.
+    width = width * 1.001f;
+
+    update_sg();
+    reset_touched();
+  }  
+
+public:
+  void set_updater(updater* a_updater) {
+    //WARNING : we take ownership of a_updater
+    delete m_updater;
+    m_updater = a_updater;
+  }
+
+  void clear() {
+    if(m_sep.empty()) update_sg();
+    unsigned int _number = m_sep.size();    
+    for(unsigned int index=0;index<_number;index++) {
+      reg_t* sep = (reg_t*)m_sep[index];
+      plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
+      _plotter->clear();
+    }    
+  }
+
+  bool has_data() {
+    if(m_sep.empty()) update_sg();
+    unsigned int _number = m_sep.size();    
+    for(unsigned int index=0;index<_number;index++) {
+      reg_t* sep = (reg_t*)m_sep[index];
+      plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
+      if(_plotter->plottables().size()) return true;
+    }    
+    return false;
+  }
+
+  void touch_plotters() { //used in exlib/geant4/session.
+    if(m_sep.empty()) update_sg();
+    unsigned int _number = m_sep.size();    
+    for(unsigned int index=0;index<_number;index++) {
+      reg_t* sep = (reg_t*)m_sep[index];
+      plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
+      _plotter->touch();
+    }    
+  }
+
+  void next() {
+    if(m_sep.empty()) update_sg();
+    unsigned int _number = m_sep.size();    
+    if(m_current>=(_number-1)) {
+      m_current = 0;
+    } else {
+      m_current++;
+    }
+    update_current_border();
+  }
+
+  bool set_current_plotter(unsigned int a_index) {
+    if(m_sep.empty()) update_sg();
+    if(a_index>=m_sep.size()) return false;
+    m_current = a_index;
+    update_current_border();
+    return true;
+  }
+
+  bool set_current(plotter* a_plotter) { //for popup.
+    if(m_sep.empty()) update_sg();
+    unsigned int _number = m_sep.size();    
+    for(unsigned int index=0;index<_number;index++) {
+      reg_t* sep = (reg_t*)m_sep[index];
+      plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
+      if(_plotter==a_plotter) {
+        m_current = index;
+        update_current_border();
+        return true;
+      }
+    }    
+    return false;
+  }
+
+  torche* current_torche() {
+    if(m_sep.empty()) update_sg();
+    reg_t* sep = (reg_t*)m_sep[m_current];
+    return safe_cast<node,torche>(*((*sep)[LIGHT()]));
+  }
+
+/*
+  matrix* current_tsf() {
+    plotter& _plotter = current_plotter();
+    if(_plotter.shape.value()==plotter::xyz) {
+      return &(_plotter.tsf());
+    } else {
+      if(m_sep.empty()) update_sg();
+      reg_t* sep = (reg_t*)m_sep[m_current];
+      return safe_cast<node,matrix>(*((*sep)[TSF()]));
+    }
+  }
+*/
+
+  plotter& current_plotter() {
+    if(m_sep.empty()) update_sg();
+    reg_t* sep = (reg_t*)m_sep[m_current];
+    return *((plotter*)(*sep)[PLOTTER()]);
+  }
+  plotter* find_plotter(unsigned int a_index) {
+    if(m_sep.empty()) update_sg();
+    if(a_index>=m_sep.size()) return 0;
+    reg_t* sep = (reg_t*)m_sep[a_index];
+    return (plotter*)(*sep)[PLOTTER()];
+  }
+
+/*
+  bool find_plotter(unsigned int a_ww,unsigned int a_wh,
+                    float a_x,float a_y,
+                    unsigned int& a_index) {
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+    if(m_sep.empty()) update_sg();
+
+    a_index = 0;
+
+    if(!a_ww) return false;
+    if(!a_wh) return false;
+
+    float aspect = float(a_ww)/float(a_wh);
+
+    // one region in pixels :
+    unsigned int rw = (unsigned int)(float(a_ww)/float(cols.value()));
+    unsigned int rh = (unsigned int)(float(a_wh)/float(rows.value()));
+    float ra = float(rw)/float(rh);
+
+    // all window wc :
+    float wh_wc = 1;
+    float ww_wc = wh_wc * aspect;
+
+    // region size in window wc :
+    float rh_wc = wh_wc/rows;
+    float rw_wc = rh_wc*ra;
+
+    unsigned int _number = m_sep.size();    
+    for(unsigned int index=0;index<_number;index++) {
+      unsigned int row = index/cols;
+      unsigned int col = index-cols*row;
+
+      float x = -ww_wc*0.5f + col * rw_wc + rw_wc * 0.5f;
+      float y =  wh_wc*0.5f - row * rh_wc - rh_wc * 0.5f;
+
+      if( ((x-rw_wc*0.5f)<a_x)&&(a_x<(x+rw_wc*0.5f)) &&
+          ((y-rh_wc*0.5f)<a_y)&&(a_y<(y+rh_wc*0.5f)) ){
+        a_index = index;
+        return true;
+      }
+    }    
+
+    return false;
+  }  
+*/
+
+  void set_regions(unsigned int a_cols = 1,
+                   unsigned int a_rows = 1,
+                   bool a_transfer = false) {
+    unsigned int oldn = cols*rows;
+
+    std::vector<ptbs_t> ptbss;
+    std::vector<todels_t> tdlss;
+
+    std::vector< plotter > pls;
+    if(a_transfer) {   
+      ptbss.resize(oldn);
+      tdlss.resize(oldn);
+      pls.resize(oldn,plotter(m_ttf));
+      for(unsigned int index=0;index<oldn;index++) {
+        plotter* p = find_plotter(index);
+        p->transfer_plottables(ptbss[index]);
+        p->transfer_todels(tdlss[index]);
+        pls[index] = *p; //have a copy (of styles).
+      }
+    }
+
+    cols = a_cols?a_cols:1;
+    rows = a_rows?a_rows:1;
+    touch();
+    update_sg();
+    set_current_plotter(0);
+    clear();
+    if(view_border.value()) {
+      view_border = (number()==1?false:true); 
+    }
+    if(a_transfer) {   
+      //fill new plotters with old data :
+      unsigned int num = tools::mn(oldn,cols*rows);
+      for(unsigned int index=0;index<num;index++) {
+        plotter* p = find_plotter(index);
+        *p = pls[index];
+
+       {const ptbs_t& ptbs = ptbss[index];
+        ptbs_t::const_iterator it;
+        for(it=ptbs.begin();it!=ptbs.end();++it) p->add_plottable(*it);}
+
+       {const todels_t& todels = tdlss[index];
+        todels_t::const_iterator it;
+        for(it=todels.begin();it!=todels.end();++it) p->add_node_todel(*it);}
+      }
+    }
+
+  }
+
+  void current_to_one() {
+    ptbs_t ptbs;
+    current_plotter().transfer_plottables(ptbs);
+    todels_t tdls;
+    current_plotter().transfer_todels(tdls);
+    plotter pl = current_plotter(); //have a copy (of styles).
+
+    set_regions(1,1,false);
+
+    plotter& p = current_plotter();
+    p = pl; //copy styles.
+
+   {ptbs_t::const_iterator it;
+    for(it=ptbs.begin();it!=ptbs.end();++it) p.add_plottable(*it);}
+   {todels_t::const_iterator it;
+    for(it=tdls.begin();it!=tdls.end();++it) p.add_node_todel(*it);}
+  }
+
+  void plotters(std::vector<plotter*>& a_vec) { //a_vec do NOT get ownership of sg::plotter objects.
+    a_vec.clear();
+    if(m_sep.empty()) update_sg();
+    unsigned int _number = m_sep.size();    
+    for(unsigned int index=0;index<_number;index++) {
+      reg_t* sep = (reg_t*)m_sep[index];
+      plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
+      a_vec.push_back(_plotter);
+    }    
+  }
+
+public:
+  void init_sg() {
+    m_group.clear();
+    m_sep.clear();
+    m_border_sep.clear();
+    m_group.add(new noderef(m_sep)); 
+    m_group.add(new noderef(m_border_sep)); 
+  }
+protected:
+  typedef separator reg_t;
+  void update_sg(){
+
+    if(m_sep.empty()||(cols.value()!=m_old_cols)||(rows.value()!=m_old_rows)){
+
+      m_old_cols = cols;
+      m_old_rows = rows;
+
+      m_sep.clear();
+
+      unsigned int index = 0;
+      for(unsigned int irow=0;irow<rows;irow++) {
+        for(unsigned int icol=0;icol<cols;icol++) {
+          reg_t* sep = new reg_t;
+          m_sep.add(sep);
+
+          sep->add(new sg::matrix); //MATRIX()
+
+          head_light* light = new head_light;
+          light->direction = vec3f(1,-1,-10);
+          light->on = false;
+          sep->add(light); //LIGHT()
+
+          _switch* border = new _switch;
+          sep->add(border); //BORDER()
+
+          //matrix* tsf = new matrix;
+          //sep->add(tsf); //TSF()
+
+          sep->add(new plotter(m_ttf)); //PLOTTER()
+
+          index++;
+        } 
+      } 
+
+      if(m_current>=m_sep.size()) m_current = 0;
+    }
+
+    update_current_border();
+    update_border();
+
+    if((width.value()>0)&&(height.value()>0)) {
+
+      // all window wc :
+      float ww_wc = width;
+      float wh_wc = height;
+  
+      // region size in window wc :
+      float rw_wc = ww_wc/cols;
+      float rh_wc = wh_wc/rows;
+  
+      unsigned int _number = m_sep.size();    
+      for(unsigned int index=0;index<_number;index++) {
+        unsigned int row = index/cols;
+        unsigned int col = index-cols*row;
+  
+        reg_t* sep = (reg_t*)m_sep[index];
+  
+        matrix* _matrix = (matrix*)(*sep)[MATRIX()];
+        float x = -ww_wc*0.5f + col * rw_wc + rw_wc * 0.5f;
+        float y =  wh_wc*0.5f - row * rh_wc - rh_wc * 0.5f;
+        _matrix->set_translate(x,y,0);
+        _matrix->mul_scale(plotter_scale.value(),plotter_scale.value(),1); //applied first.
+  
+       {_switch* _border = (_switch*)(*sep)[BORDER()];
+        create_plotter_border(*_border,rw_wc,rh_wc);
+        _border->which = view_border.value()?(index==m_current?0:1):1;}
+        
+        plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
+        
+        if(_plotter->shape.value()==plotter::xy) {
+          _plotter->width = rw_wc;
+          _plotter->height = rh_wc;
+          _plotter->depth = tools::mn(rw_wc,rh_wc);
+        } else {
+          if((rw_wc/rh_wc)>=1.0f) {
+            _plotter->width = rh_wc;
+            _plotter->height = rh_wc;
+            _plotter->depth = rh_wc;
+          } else {
+            _plotter->width = rw_wc;
+            _plotter->height = rw_wc;
+            _plotter->depth = rh_wc;
+          }
+        }
+  
+      }    
+
+    }    
+  }  
+
+  void create_plotter_border(_switch& a_parent,float a_w,float a_h) {
+    a_parent.clear();
+
+    group* sep = new group;
+    a_parent.add(sep);
+
+    a_parent.add(new group()); //empty
+
+    rgba* mat = new rgba();
+    mat->color = colorf::red();
+    sep->add(mat);
+
+    draw_style* ds = new draw_style;
+    ds->style = draw_style::lines;
+    ds->line_width = 4;
+    sep->add(ds);
+
+    vertices* vtxs = new vertices;
+    vtxs->mode = gl::line_strip();
+    sep->add(vtxs);
+
+    float dw = a_w*0.5f;
+    float dh = a_h*0.5f;
+    vtxs->add(-dw,-dh,0);
+    vtxs->add( dw,-dh,0);
+    vtxs->add( dw, dh,0);
+    vtxs->add(-dw, dh,0);
+    vtxs->add(-dw,-dh,0);
+  }
+
+  void update_current_border() {
+    unsigned int _number = m_sep.size();    
+    for(unsigned int index=0;index<_number;index++) {
+      reg_t* sep = (reg_t*)m_sep[index];
+      _switch* _border = (_switch*)(*sep)[BORDER()];
+      if(index==m_current) {  
+        _border->which = view_border.value()?0:1;
+        if(m_updater) m_updater->update(*this,index);
+      } else {
+        _border->which = 1;
+      }
+    }    
+  }  
+
+  void update_border() {
+    m_border_sep.clear();
+
+    if(!border_visible.value()) return;
+
+    if(width.value()<=0) return;
+    if(height.value()<=0) return;
+    if(border_width.value()<=0) return;
+    if(border_height.value()<=0) return;
+
+    float bw = border_width;
+    float bh = border_height;
+
+    // do it with four externals back_area.
+
+    float zz = 0;
+
+    // top :
+   {separator* sep = new separator;
+    m_border_sep.add(sep);
+
+    float wba = width+2*bw;
+    float hba = bh;
+    float x = 0;
+    float y = height*0.5f+bh*0.5f;
+
+    matrix* _m = new matrix;
+    _m->set_translate(x,y,zz);
+    sep->add(_m);
+
+    back_area* b = new back_area;
+    b->border_visible = false;
+    b->color = border_color;      
+    b->width = wba;
+    b->height = hba;
+    sep->add(b);}
+
+    // bottom :
+   {separator* sep = new separator;
+    m_border_sep.add(sep);
+
+    float wba = width+2*bw;
+    float hba = bh;
+    float x = 0;
+    float y = -height*0.5f-bh*0.5f;
+
+    matrix* _m = new matrix;
+    _m->set_translate(x,y,zz);
+    sep->add(_m);
+
+    back_area* b = new back_area;
+    b->border_visible = false;
+    b->color = border_color;      
+    b->width = wba;
+    b->height = hba;
+    sep->add(b);}
+
+    // left :
+   {separator* sep = new separator;
+    m_border_sep.add(sep);
+
+    float wba = bw;
+    float hba = height+2*bh;
+    float x = -width*0.5f-bw*0.5f;
+    float y = 0;
+
+    matrix* _m = new matrix;
+    _m->set_translate(x,y,zz);
+    sep->add(_m);
+
+    back_area* b = new back_area;
+    b->border_visible = false;
+    b->color = border_color;      
+    b->width = wba;
+    b->height = hba;
+    sep->add(b);}
+
+    // right :
+   {separator* sep = new separator;
+    m_border_sep.add(sep);
+
+    float wba = bw;
+    float hba = height+2*bh;
+    float x = width*0.5f+bw*0.5f;
+    float y = 0;
+
+    matrix* _m = new matrix;
+    _m->set_translate(x,y,zz);
+    sep->add(_m);
+
+    back_area* b = new back_area;
+    b->border_visible = false;
+    b->color = border_color;      
+    b->width = wba;
+    b->height = hba;
+    sep->add(b);}
+
+  }
+    
+protected:
+  const base_freetype& m_ttf;
+
+  group m_group;
+  separator m_sep;
+  separator m_border_sep;
+  unsigned int m_current;
+  updater* m_updater;
+  
+  unsigned int m_old_cols;
+  unsigned int m_old_rows;
+};
+
+}}
+
+#endif

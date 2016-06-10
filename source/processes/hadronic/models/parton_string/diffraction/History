@@ -1,4 +1,4 @@
-$Id: History 87254 2014-11-28 07:49:23Z gcosmo $
+$Id: History 92048 2015-08-14 07:24:57Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,77 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+13-Aug-2015 A. Ribon    (hadr-string-diff-V10-01-14)
+- G4FTFModel and G4DiffractiveExcitation : Coverity fixes.
+
+10-Aug-2015 A. Ribon    (hadr-string-diff-V10-01-13)
+- G4FTFModel, G4FTFParticipants, G4FTFAnnihilation, G4ElasticHNScattering,
+  G4DiffractiveExcitation and G4DiffractiveSplitableHadron : checking of
+ 'while' loops.
+
+05-Aug-2015 A. Ribon    (hadr-string-diff-V10-01-12)
+- G4FTFParameters, G4FTFModel, G4FTFAnnihilation, G4DiffractiveExcitation
+  and G4ElasticHNScattering: replaced std::exp, std::log and std::pow
+  with the faster G4Exp, G4Log and G4Pow, respectively.
+  This changes the random number sequence.
+
+13-Jul-2015 A. Dotti    (hadr-string-diff-V10-01-11)
+- Fixing coverity issues #14434, 20328
+
+25-Jun-2015 A. Ribon    (hadr-string-diff-V10-01-10) 
+- G4FTFParameters : fixed Valgrind error of uninitialized variables.
+
+29-May-2015 V. Uzhinsky (hadr-string-diff-V10-01-09) 
+- G4FTFModel : Elastic hN scattering is protected.
+
+28-May-2015 A. Ribon    (hadr-string-diff-V10-01-08) 
+- G4FTFModel : fixed energy non-conservation in nucleus-nucleus interactions
+  in the method SamplingNucleonKinematics.
+
+25-May-2015 V. Uzhinsky (hadr-string-diff-V10-01-07)
+  A correct coupling of FTF and BIC is created. Energy-momentum is conserved.
+
+24-May-2015 V. Uzhinsky (hadr-string-diff-V10-01-06)
+  Bug is fixed in G4FTFModel::SamplingNucleonKinematics for
+  hadron-nucleon interactions.
+
+22-May-2015 V. Uzhinsky (hadr-string-diff-V10-01-05)
+  Sampling of nucleon momenta after the reggeon cascading is improved in
+  G4bool G4FTFModel::SamplingNucleonKinematics.
+
+20-May-2015 V. Uzhinsky (hadr-string-diff-V10-01-04)
+  G4FTFModel.cc A model description was added.
+
+18-May-2015 V. Uzhinsky (hadr-string-diff-V10-01-03)
+  G4FTFModel.cc
+    LowEnergyLimit = 2000.0*MeV -> LowEnergyLimit = 1000.0*MeV;
+
+  G4FTFParameters.cc 
+    A bug at Xnn calculations found by Alberto is fixed. The bug gives Xin=0 for projectile
+    nucleons in Nucl-Nucl interactions.
+    New methods - Set/Get CofNuclearDestructionPr(), for projectile nucleus were introduced,
+    according to last studies that Reggeon cascading depends on nuclear mass number.
+
+22-Apr-2015 A. Ribon       (hadr-string-diff-V10-01-02)
+- G4FTFParticipants : added a new method to clean up the member vector.
+- G4FTFModel : using the above new method to release the memory allocated
+               in GetStrings().
+
+7-April-2015 V. Uzhinsky   (hadr-string-diff-V10-01-01)
+  G4FTFModel.cc
+    LowEnergyLimit = 2000.0*MeV -> LowEnergyLimit = 1000.0*MeV;
+
+    A smearing of the excitation energy associated with an involved nucleon is introduced. 
+    Look for // Uzhi April 2015
+
+  G4FTFParameters.cc 
+    Evarage e* per wounded nucleon was to set 40 MeV for all interactions after analysis of
+    ITEP and Leray exp. data.
+
+27-Mar-2015 A. Ribon       (hadr-string-diff-V10-01-00)
+- G4FTFParameters : tuning to improve the description of evaporated neutrons
+
 27-Nov-2014 V. Uzhinsky    (hadr-string-diff-V10-00-15)
 - Charge non-conservation is erased for meson-nucleus interactions
   in G4Diffractive Excitation. It was caused by quark exchange.

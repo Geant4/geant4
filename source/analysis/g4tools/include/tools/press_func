@@ -1,0 +1,17 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_press_func
+#define tools_press_func
+
+#include <ostream>
+
+namespace tools {
+
+typedef bool (*compress_func)(std::ostream&,unsigned int,unsigned int,const char*,unsigned int,char*,unsigned int&);
+
+typedef bool (*decompress_func)(std::ostream&,unsigned int,const char*,unsigned int,char*,unsigned int&);
+
+}
+
+#endif

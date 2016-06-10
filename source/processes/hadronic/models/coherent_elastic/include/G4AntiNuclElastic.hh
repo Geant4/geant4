@@ -41,8 +41,6 @@
 #include "globals.hh"
 #include "G4Nucleus.hh"
 #include "G4ComponentAntiNuclNuclearXS.hh"
-
-using namespace std;
 	
 class G4ParticleDefinition;
 

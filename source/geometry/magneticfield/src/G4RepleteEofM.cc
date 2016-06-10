@@ -37,12 +37,13 @@
 #include "G4Field.hh"
 #include "G4ThreeVector.hh"
 #include "globals.hh"
+
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
 
-G4RepleteEofM::G4RepleteEofM( G4Field* field )
-          : G4EquationOfMotion( field ),
+G4RepleteEofM::G4RepleteEofM( G4Field* field, G4int nvar )
+          : G4EquationOfMotion( field ), fNvar(nvar),
             fBfield(false), fEfield(false), fGfield(false), 
             fgradB(false), fSpin(false),
             charge(0.), mass(0.), magMoment(0.), spin(0.),
@@ -240,17 +241,25 @@ G4RepleteEofM::EvaluateRhsGivenB(const G4double y[],
    // Lab Time of flight
    dydx[7] = inverse_velocity;
 
+   if (fNvar == 12) {
+      dydx[ 8] = 0.; //not used
+
+      dydx[ 9] = 0.;
+      dydx[10] = 0.;
+      dydx[11] = 0.;
+   }
+
    if (fSpin) {
 //      G4cout << "y[9,10,11]  " << y[9] << " " << y[10] << " " << y[11] << G4endl;
       G4ThreeVector BField(0.,0.,0.);
       if (fBfield) {
-         G4ThreeVector F(Field[0],Field[1],Field[2]);
+         G4ThreeVector F(field[0],field[1],field[2]);
          BField = F;
       }
 
       G4ThreeVector EField(0.,0.,0.);
       if (fEfield) {
-         G4ThreeVector F(Field[3],Field[4],Field[5]);
+         G4ThreeVector F(field[3],field[4],field[5]);
          EField = F;
       }
 

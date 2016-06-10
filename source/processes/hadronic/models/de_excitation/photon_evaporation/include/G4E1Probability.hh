@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4E1Probability.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4E1Probability.hh 88709 2015-03-06 15:33:12Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -72,9 +72,13 @@ private:
 
   // members
   G4Pow*   fG4pow;
-  G4double theLevelDensityParameter;
+  G4double theLevelDensityPerNucleon;
   G4double normC;
-
+  G4double aLevelDensityParam;
+  G4double sigma0;
+  G4double Egdp;
+  G4double GammaR;
+  G4int    Afrag;
 };
 
 #endif

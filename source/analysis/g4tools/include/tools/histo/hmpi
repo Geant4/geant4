@@ -1,0 +1,44 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_histo_hmpi
+#define tools_histo_hmpi
+
+namespace tools {
+namespace histo {
+class h1d;
+class h2d;
+class h3d;
+class p1d;
+class p2d;
+}}
+
+#include <string>
+#include <vector>
+
+namespace tools {
+namespace histo {
+
+class hmpi {
+public:
+  virtual ~hmpi(){}
+public:
+  virtual bool pack(const h1d&) = 0;
+  virtual bool pack(const h2d&) = 0;
+  virtual bool pack(const h3d&) = 0;
+  virtual bool pack(const p1d&) = 0;
+  virtual bool pack(const p2d&) = 0;
+
+  virtual bool beg_send(unsigned int /*a_nhist*/) = 0;
+  virtual bool send(int /*a_dest*/) = 0;
+
+  virtual bool wait_histos(int /*a_src*/,std::vector< std::pair<std::string,void*> >& /*a_hists*/) = 0;
+
+  virtual int rank() const = 0;
+  virtual bool comm_rank(int&) const = 0;
+  virtual bool comm_size(int&) const = 0;
+};
+
+}}
+
+#endif

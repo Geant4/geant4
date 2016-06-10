@@ -563,15 +563,15 @@ template<class T> TLBE<T>::~TLBE()
 #include "G4CrossSectionDataSetRegistry.hh"
 #include "G4BGGNucleonInelasticXS.hh"
 #include "G4ComponentAntiNuclNuclearXS.hh"
-#include "G4GGNuclNuclCrossSection.hh"
+#include "G4ComponentGGNuclNuclXsc.hh"
 
 // Neutron high-precision models: <20 MeV
-#include "G4NeutronHPElastic.hh"
-#include "G4NeutronHPElasticData.hh"
-#include "G4NeutronHPCapture.hh"
-#include "G4NeutronHPCaptureData.hh"
-#include "G4NeutronHPInelastic.hh"
-#include "G4NeutronHPInelasticData.hh"
+#include "G4ParticleHPElastic.hh"
+#include "G4ParticleHPElasticData.hh"
+#include "G4ParticleHPCapture.hh"
+#include "G4ParticleHPCaptureData.hh"
+#include "G4ParticleHPInelastic.hh"
+#include "G4ParticleHPInelasticData.hh"
 #include "G4NeutronCaptureXS.hh"
 #include "G4NeutronRadCapture.hh"
 
@@ -643,7 +643,8 @@ template<class T> TLBE<T>::~TLBE()
 
   G4VCrossSectionDataSet * thePiData = new G4CrossSectionPairGG( (G4PiNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4PiNuclearCrossSection::Default_Name()), 91*GeV );
   G4VCrossSectionDataSet * theAntiNucleonData = new G4CrossSectionInelastic( new G4ComponentAntiNuclNuclearXS );
-  G4VCrossSectionDataSet * theGGNuclNuclData = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4GGNuclNuclCrossSection::Default_Name());
+  G4ComponentGGNuclNuclXsc * ggNuclNuclXsec = new G4ComponentGGNuclNuclXsc();
+  G4VCrossSectionDataSet * theGGNuclNuclData = new G4CrossSectionInelastic(ggNuclNuclXsec);
 
   theParticleIterator->reset();
   while ((*(theParticleIterator))()) 
@@ -783,33 +784,33 @@ template<class T> TLBE<T>::~TLBE()
         G4HadronElastic* elastic_neutronChipsModel = new G4ChipsElasticModel();
 	elastic_neutronChipsModel->SetMinEnergy( 19.0*CLHEP::MeV );
         theElasticProcess->RegisterMe( elastic_neutronChipsModel );
-	G4NeutronHPElastic * theElasticNeutronHP = new G4NeutronHPElastic;
+	G4ParticleHPElastic * theElasticNeutronHP = new G4ParticleHPElastic;
         theElasticNeutronHP->SetMinEnergy( theHPMin );
         theElasticNeutronHP->SetMaxEnergy( theHPMax );
 	theElasticProcess->RegisterMe( theElasticNeutronHP );
-	theElasticProcess->AddDataSet( new G4NeutronHPElasticData );
+	theElasticProcess->AddDataSet( new G4ParticleHPElasticData );
 	pmanager->AddDiscreteProcess( theElasticProcess );
 	// inelastic scattering
 	G4NeutronInelasticProcess* theInelasticProcess = new G4NeutronInelasticProcess("inelastic");
         theInelasticProcess->AddDataSet( new G4BGGNucleonInelasticXS( G4Neutron::Neutron() ) );
 	theInelasticProcess->RegisterMe( theFTFModel1 );
         theInelasticProcess->RegisterMe( theBERTModel1 );
-	G4NeutronHPInelastic * theNeutronInelasticHPModel = new G4NeutronHPInelastic;
+	G4ParticleHPInelastic * theNeutronInelasticHPModel = new G4ParticleHPInelastic;
         theNeutronInelasticHPModel->SetMinEnergy( theHPMin );
         theNeutronInelasticHPModel->SetMaxEnergy( theHPMax );
 	theInelasticProcess->RegisterMe( theNeutronInelasticHPModel );
-	theInelasticProcess->AddDataSet( new G4NeutronHPInelasticData );
+	theInelasticProcess->AddDataSet( new G4ParticleHPInelasticData );
 	pmanager->AddDiscreteProcess(theInelasticProcess);
 	// capture
 	G4HadronCaptureProcess* theCaptureProcess = new G4HadronCaptureProcess;
-	G4NeutronHPCapture * theNeutronCaptureHPModel = new G4NeutronHPCapture;
+	G4ParticleHPCapture * theNeutronCaptureHPModel = new G4ParticleHPCapture;
         theNeutronCaptureHPModel->SetMinEnergy( theHPMin );
         theNeutronCaptureHPModel->SetMaxEnergy( theHPMax );
 	G4NeutronRadCapture* theNeutronRadCapture = new G4NeutronRadCapture(); 
  	theNeutronRadCapture->SetMinEnergy(theHPMax*0.99); 
 	theCaptureProcess->RegisterMe( theNeutronCaptureHPModel );
 	theCaptureProcess->RegisterMe( theNeutronRadCapture);
-	theCaptureProcess->AddDataSet( new G4NeutronHPCaptureData );
+	theCaptureProcess->AddDataSet( new G4ParticleHPCaptureData );
 	theCaptureProcess->AddDataSet((G4NeutronCaptureXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronCaptureXS::Default_Name()));
 	pmanager->AddDiscreteProcess(theCaptureProcess);
       }

@@ -1,4 +1,4 @@
-$Id: README 77288 2013-11-22 10:52:58Z gcosmo $
+$Id: README 94269 2015-11-10 07:55:24Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -32,51 +32,62 @@ $Id: README 77288 2013-11-22 10:52:58Z gcosmo $
  the commands defined in the DetectorMessenger class.
  	
  2- PHYSICS LIST
- 
- Physics lists can be local (eg. in this example) or from G4 kernel
- physics_lists subdirectory.
-     
- Local physics lists:	 
- - "local"	standard EM physics with current 'best' options setting.
-                these options are explicited in PhysListEmStandard
-			
- From geant4/source/physics_lists/builders:	 
-  - "emstandard_opt0" recommended standard EM physics for LHC
-  - "emstandard_opt1" best CPU performance standard physics for LHC
-  - "emstandard_opt2"     
-  - "emstandard_opt3" best current advanced EM options. 
-                      analog to "local" above  
-  - "emlivermore"  low-energy EM physics using Livermore data
-  - "empenelope"   low-energy EM physics implementing Penelope models
+
+ Physics Lists are based on modular design. Several modules are instantiated:
+ 1. Transportation
+ 2. EM physics
+ 3. Decays
+ 4. StepMax - for step limitation
+
+ The following options for EM physics using builders from physics_lists
+ sub-package are available:
+ - "emstandard_opt0" recommended standard EM physics for LHC
+ - "emstandard_opt1" best CPU performance standard physics for LHC
+ - "emstandard_opt2" similar fast simulation
+ - "emstandard_opt3" best standard EM options - analog to "local" above
+ - "emstandard_opt4" best current advanced EM options standard + lowenergy
+ - "emstandardWVI" standard EM physics and WentzelVI multiple scattering
+ - "emstandardSS"  standard EM physics and single scattering model
+ - "emstandardGS"  standard EM physics and Goudsmit-Saunderson multiple scatt.
+ - "emlivermore"  low-energy EM physics using Livermore data
+ - "empenelope"   low-energy EM physics implementing Penelope models
+ - "emlowenergy"  low-energy EM physics implementing experimental
+                  low-energy models
+ - "emstandardMP" standard EM physics where for e- a new model
+                  G4DiscreteScatteringModel is applied; for this model 
+                  a data set G4GBFPDATA should be requested from EM group
+
+ A local builder, PhysListEmStandard "local" (similar to opt0) is also
+ available.
       
  Physics lists and options can be (re)set with UI commands
     
- Please, notice that options set through G4EmProcessOPtions are global, eg
+ Please, notice that options set through G4EmProcessOptions are global, eg
  for all particle types. In G4 builders, it is shown how to set options per
  particle type.
  	 
-3- ACTION INITALIZATION
+ 3- ACTION INITIALIZATION
 
  A newly introduced class, ActionInitialization, instantiates and registers 
  to Geant4 kernel all user action classes.
 
- While in sequential mode the action classes are instatiated just once,
+ While in sequential mode the action classes are instantiated just once,
  via invoking the method:
     ActionInitialization::Build() 
  in multi-threading mode the same method is invoked for each thread worker
  and so all user action classes are defined thread-local.
 
  A run action class (if present) has to be instantiated both thread-local 
- and global that's why its instance has to be created also in the method
+ and global, which is why its instance has to be created also in the method
     ActionInitialization::BuildForMaster() 
  which is invoked only in multi-threading mode.
   	 
-3- AN EVENT : THE PRIMARY GENERATOR
+ 4- AN EVENT : THE PRIMARY GENERATOR
  
  The primary kinematic consists of a single particle starting at the
  left face of the box. The type of the particle and its energy are set 
  in the PrimaryGeneratorAction class, and can be changed via the G4 
- build-in commands of ParticleGun class (see the macros provided with 
+ build-in commands of G4ParticleGun class (see the macros provided with 
  this example).
 	
  In addition one can choose randomly the impact point of the incident
@@ -85,8 +96,7 @@ $Id: README 77288 2013-11-22 10:52:58Z gcosmo $
 	 	
  A RUN is a set of events.
  	
- 				
- 4- VISUALIZATION
+ 5- VISUALIZATION
  
  The Visualization Manager is set in the main().
  The initialisation of the drawing is done via the commands
@@ -96,11 +106,10 @@ $Id: README 77288 2013-11-22 10:52:58Z gcosmo $
  The detector has a default view which is a longitudinal view of the box.
  	
  The tracks are drawn at the end of event, and erased at the end of run.
- Optionaly one can choose to draw all particles, only the charged one,
+ Optionally one can choose to draw all particles, only the charged one,
  or none. This command is defined in EventActionMessenger class.
  	
- 	
- 5- HOW TO START ?
+ 6- HOW TO START ?
  
  - Execute TestEm11 in 'batch' mode from macro files
  	% TestEm11   run01.mac
@@ -112,10 +121,9 @@ $Id: README 77288 2013-11-22 10:52:58Z gcosmo $
  	....
  	Idle> exit
 	
-
- 6- TRACKING  and STEP MAX
+ 7- TRACKING and STEP MAX
  
- Testem11 computes the distribution of energy deposited along the trajectory of 
+ TestEm11 computes the distribution of energy deposited along the trajectory of 
  the incident particle : the so-called longitudinal energy profile,
  or depth dose distribution.
  The energy deposited (edep) is randomly distribued along the step (see
@@ -131,12 +139,12 @@ $Id: README 77288 2013-11-22 10:52:58Z gcosmo $
      
  StepMax is evaluated at RunAction::BeginOfRun(),
  and passed to the StepMax process. 
- A boolean UI command allows to desactivate this mechanism.
+ A boolean UI command allows to deactivate this mechanism.
  Another UI command allows to define directly a stepMax value.
      	
- 7- HISTOGRAMS
+ 8- HISTOGRAMS
  
-   Testem11 has several predefined 1D histograms : 
+   TestEm11 has several predefined 1D histograms : 
   
       1 : longitudinal energy profile (in MeV/mm and per event)
       2 : total energy deposited in the absorber

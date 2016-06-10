@@ -1,0 +1,120 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_draw_style
+#define tools_sg_draw_style
+
+#include "node"
+
+#include "lpat"
+#include "sf_enum"
+#include "render_action"
+
+namespace tools {
+namespace sg {
+
+class draw_style : public node {
+  TOOLS_NODE(draw_style,tools::sg::draw_style,node)
+public:
+  enum e_style {
+    filled,
+    lines,
+    points,
+    invisible
+  };
+
+  sf_enum<e_style> style;
+  sf<float> line_width;
+  sf<lpat> line_pattern;
+  sf<float> point_size;
+  sf<bool> cull_face;
+  sf<bool> winding_ccw;
+
+public:
+  virtual const std::vector<field_desc>& node_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::draw_style)
+    static std::vector<field_desc> s_v;
+    if(s_v.empty()) {
+      s_v = parent::node_fields();
+      TOOLS_ADD_FIELD_DESC(style)
+      TOOLS_ADD_FIELD_DESC(line_width)
+      TOOLS_ADD_FIELD_DESC(line_pattern)
+      TOOLS_ADD_FIELD_DESC(point_size)
+      TOOLS_ADD_FIELD_DESC(cull_face)
+      TOOLS_ADD_FIELD_DESC(winding_ccw)
+    }
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&style);
+    add_field(&line_width);
+    add_field(&line_pattern);
+    add_field(&point_size);
+    add_field(&cull_face);
+    add_field(&winding_ccw);
+  }
+public:
+  virtual void render(render_action& a_action) {
+    state& state = a_action.state();
+    state.m_line_width = line_width;
+    state.m_line_pattern = line_pattern;
+    state.m_point_size = point_size;
+    state.m_GL_CULL_FACE = cull_face;
+    state.m_winding =
+      winding_ccw.value()?tools::sg::winding_ccw:tools::sg::winding_cw;
+
+    if(style.value()==lines) {
+      //no LINE_STIPPLE in GLES.
+      //::glEnable(GL_LINE_STIPPLE); //done in viewer::render()
+      //::glLineStipple(1,line_pattern.value());
+      a_action.line_width(state.m_line_width);
+    } else if(style.value()==points) {
+      a_action.point_size(state.m_point_size);
+    } else if(style.value()==filled) {
+      a_action.set_cull_face(state.m_GL_CULL_FACE);
+      a_action.set_winding(state.m_winding);
+    }
+  }
+public:
+  draw_style()
+  :parent()
+  ,style(filled)
+  ,line_width(1) //NOTE : 0 induces a 501 gl error.
+  ,line_pattern(line_solid)
+  ,point_size(1)
+  ,cull_face(true)
+  ,winding_ccw(true)
+  {
+    add_fields();
+  }
+  virtual ~draw_style(){}
+public:
+  draw_style(const draw_style& a_from)
+  :parent(a_from)
+  ,style(a_from.style)
+  ,line_width(a_from.line_width)
+  ,line_pattern(a_from.line_pattern)
+  ,point_size(a_from.point_size)
+  ,cull_face(a_from.cull_face)
+  ,winding_ccw(a_from.winding_ccw)
+  {
+    add_fields();
+  }
+  draw_style& operator=(const draw_style& a_from){
+    parent::operator=(a_from);
+
+    style = a_from.style;
+    line_width = a_from.line_width;
+    line_pattern = a_from.line_pattern;
+    point_size = a_from.point_size;
+    cull_face = a_from.cull_face;
+    winding_ccw = a_from.winding_ccw;
+
+    return *this;
+  }
+};
+
+}}
+
+#endif

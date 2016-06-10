@@ -1,4 +1,4 @@
-$Id: History 87013 2014-11-21 16:22:53Z gcosmo $
+$Id: History 92046 2015-08-14 07:22:07Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13 Aug 14: V.Ivanchenko, P. Gumplinger (xrays-V10-01-01/02)
+- G4Cerenkov, G4Scintillation, G4SynchrotronRadiationMat - checked while
+    loops
+
+29 Apr 15: P.Gumplinger (xrays-V10-01-00)
+- calculate deltaTime more accurately in G4Scintillation and G4Cerenkov
 
 21 Nov 14: V.Ivanchenko (xrays-V10-00-07)
 - G4ForwardXrayTR - fixed Coverity report (V.Grichine)

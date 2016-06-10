@@ -147,7 +147,7 @@
     G4int s_tmp = 0, n=0, m_tmp=0;
     G4ParticleHPVector * theMerge = new G4ParticleHPVector(theStore->GetVectorLength());
 //    G4cout << "Harmonise 1: "<<theStore->GetEnergy(s_tmp)<<" "<<theNew->GetEnergy(0)<<G4endl;
-    while ( theStore->GetEnergy(s_tmp)<theNew->GetEnergy(0)&&s_tmp<theStore->GetVectorLength() )
+    while ( theStore->GetEnergy(s_tmp)<theNew->GetEnergy(0)&&s_tmp<theStore->GetVectorLength() ) // Loop checking, 11.05.2015, T. Koi
     {
       theMerge->SetData(m_tmp++, theStore->GetEnergy(s_tmp), theStore->GetXsec(s_tmp));
       s_tmp++;
@@ -157,7 +157,7 @@
     G4ParticleHPVector * tmp;
     G4int a = s_tmp, p = n, t;
 //    G4cout << "Harmonise 2: "<<active->GetVectorLength()<<" "<<passive->GetVectorLength()<<G4endl;
-    while (a<active->GetVectorLength()&&p<passive->GetVectorLength())
+    while (a<active->GetVectorLength()&&p<passive->GetVectorLength()) // Loop checking, 11.05.2015, T. Koi
     {
       if(active->GetEnergy(a) <= passive->GetEnergy(p))
       {
@@ -175,13 +175,13 @@
       }
     }
 //    G4cout << "Harmonise 3: "<< a <<" "<<active->GetVectorLength()<<" "<<m<<G4endl;
-    while (a!=active->GetVectorLength())
+    while (a!=active->GetVectorLength()) // Loop checking, 11.05.2015, T. Koi
     {
       theMerge->SetData(m_tmp++, active->GetEnergy(a), active->GetXsec(a));
       a++;
     }
 //    G4cout << "Harmonise 4: "<< p <<" "<<passive->GetVectorLength()<<" "<<m<<G4endl;
-    while (p!=passive->GetVectorLength())
+    while (p!=passive->GetVectorLength()) // Loop checking, 11.05.2015, T. Koi
     {
       // Modified by T. KOI
       //theMerge->SetData(m++, passive->GetEnergy(p), passive->GetXsec(p));

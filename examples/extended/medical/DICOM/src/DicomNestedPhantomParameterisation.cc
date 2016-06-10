@@ -26,7 +26,7 @@
 /// \file medical/DICOM/src/DicomNestedPhantomParameterisation.cc
 /// \brief Implementation of the DicomNestedPhantomParameterisation class
 //
-// $Id: DicomNestedPhantomParameterisation.cc 76689 2013-11-14 08:43:45Z gcosmo $
+// $Id: DicomNestedPhantomParameterisation.cc 92820 2015-09-17 15:22:14Z gcosmo $
 //
 
 #include "DicomNestedPhantomParameterisation.hh"
@@ -138,7 +138,6 @@ ComputeMaterial(G4VPhysicalVolume* physVol, const G4int iz,
     unsigned int matIndex = GetMaterialIndex(copyID);
     static G4Material* mate = 0;
     mate = fMaterials[matIndex];
-
 
     if(false && physVol && G4VVisManager::GetConcreteInstance()) {
         G4String mateName = fMaterials.at(matIndex)->GetName();

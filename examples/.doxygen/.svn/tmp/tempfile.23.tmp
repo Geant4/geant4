@@ -1,62 +1,209 @@
-#!/bin/sh
+// $Id$
+// The example class categories definitions for Doxygen
 
-# Script to generate standalone Doxygen documentation 
-# for the examples with non unique class names.
+/// \file Doxymodules_basic.h
+/// \brief The page that defines the basic examples modules 
 
-CURDIR=`pwd`
 
-BACK_PATH2="../../../.doxygen/doc"
-BACK_PATH3="../../../../.doxygen/doc"
-BACK_PATH4="../../../../../.doxygen/doc"
+/** @defgroup basic basic
+ *  Basic examples classes
+ *  @{
+ */
+/** @} */
 
-# generate documentation 
-# {1} example directory
-# {2} relative path from the example to the doc directory
-generate() { 
-  echo "processing ${1}"
-  cd ../extended/${1}
-  EXAMPLE_NAME=${PWD##*/}
-  # add directory if shared
-  if [ "${EXAMPLE_NAME}" = "shared" ]; then
-    cd ..
-    DIR_NAME=${PWD##*/}
-    EXAMPLE_NAME=${DIR_NAME}"_shared"
-    cd shared
-  fi  
-  # detect use of classes from shared
-  ADD_SHARED=""
-  if [ -f SharedFilesList.txt ]; then
-    if [ "`grep  SHARED_CLASSES_LIST SharedFilesList.txt`" = "SHARED_CLASSES_LIST" ]; then
-      ADD_SHARED="../shared"
-    fi
-  fi    
-  # detect use of classes from common
-  ADD_COMMON=""
-  if [ -f SharedFilesList.txt ]; then
-    if [ "`grep  COMMON_CLASSES_LIST SharedFilesList.txt`" = "COMMON_CLASSES_LIST" ]; then
-      ADD_COMMON="../../common ../../../common"
-    fi
-  fi    
-  #echo "Generating Doxyfile for example: ${EXAMPLE_NAME}"
-  cat $CURDIR/Doxyfile_standalone | sed s/"EXAMPLE_NAME"/"${EXAMPLE_NAME}"/g | sed sY"BACK_PATH"Y"${2}"Yg | sed sY"ADD_SHARED"Y"${ADD_SHARED}"Yg | sed sY"ADD_COMMON"Y"${ADD_COMMON}"Yg > Doxyfile
-  doxygen >& $CURDIR/doxygen_${EXAMPLE_NAME}.out
-  rm Doxyfile
-  cd $CURDIR
-}
+/** @defgroup B1 B1
+ *  Example B1 
+ *  @ingroup basic
+ *  @{
+ */
 
-# process examples in second level directory in extended
-for DIR in analysis/shared analysis/AnaEx01 analysis/AnaEx02 analysis/AnaEx03 electromagnetic/TestEm0 electromagnetic/TestEm1 electromagnetic/TestEm2 electromagnetic/TestEm3 electromagnetic/TestEm4 electromagnetic/TestEm5 electromagnetic/TestEm6 electromagnetic/TestEm7 electromagnetic/TestEm8 electromagnetic/TestEm9 electromagnetic/TestEm10 electromagnetic/TestEm11 electromagnetic/TestEm12 electromagnetic/TestEm13 electromagnetic/TestEm14 electromagnetic/TestEm15 electromagnetic/TestEm16 electromagnetic/TestEm17 electromagnetic/TestEm18 eventgenerator/particleGun exoticphysics/monopole geometry/transforms hadronic/Hadr00 hadronic/Hadr01 hadronic/Hadr02 hadronic/Hadr03 medical/electronScattering medical/electronScattering2 medical/fanoCavity medical/fanoCavity2 medical/GammaTherapy polarisation/Pol01 radioactivedecay/rdecay01 radioactivedecay/rdecay02; do
-  generate ${DIR} ${BACK_PATH2}
-done  
+  class B1ActionInitialization{};
+  class B1DetectorConstruction{};
+  class B1EventAction{};
+  class B1PrimaryGeneratorAction{};
+  class B1Run{};
+  class B1RunAction{};
+  class B1SteppingAction{};
 
-# process examples in third level directory in extended
-for DIR in parallel/TopC/ParN02  parallel/TopC/ParN04; do
-  generate ${DIR} ${BACK_PATH3}
-done  
+/** @} */
 
-# process examples in fourth level directory in extended
-for DIR in  parallel/MPI/examples/exMPI01 parallel/MPI/examples/exMPI02; do
-  generate ${DIR} ${BACK_PATH4}
-done  
- 
-cd $CURDIR
+/** @defgroup B2 B2
+ *  Example B2 
+ *  @ingroup basic
+ *  @{
+ */
+
+/** @defgroup B2a B2a
+ *  Example B2a 
+ *  @ingroup B2
+ *  @{
+ */
+
+  class B2ActionInitialization{};
+  class B2aDetectorConstruction{};
+  class B2aDetectorMessenger{};
+  class B2EventAction{};
+  class B2PrimaryGeneratorAction{};
+  class B2RunAction{};
+  class B2TrackerHit{};
+  class B2TrackerSD{};
+
+/** @} */
+
+/** @defgroup B2b B2b
+ *  Example B2b 
+ *  @ingroup B2
+ *  @{
+ */
+
+  class B2ActionInitialization{};
+  class B2bChamberParameterisation{};
+  class B2bDetectorConstruction{};
+  class B2bDetectorMessenger{};
+  class B2EventAction{};
+  class B2PrimaryGeneratorAction{};
+  class B2RunAction{};
+  class B2TrackerHit{};
+  class B2TrackerSD{};
+
+/** @} */
+
+/** @} */
+
+/** @defgroup B3 B3
+ *  Example B3 
+ *  @ingroup basic
+ *  @{
+ */
+
+/** @defgroup B3a B3a
+ *  Example B3a 
+ *  @ingroup B3
+ *  @{
+ */
+
+  class B3aActionInitialization{};
+  class B3aEventAction{};
+  class B3aRunAction{};
+  class B3DetectorConstruction{};
+  class B3PhysicsList{};
+  class B3PrimaryGeneratorAction{};
+  class B3StackingAction{};
+
+/** @} */
+
+/** @defgroup B3b B3b
+ *  Example B3b
+ *  @ingroup B3
+ *  @{
+ */
+
+  class B3bActionInitialization{};
+  class B3bRun{};
+  class B3bRunAction{};
+  class B3DetectorConstruction{};
+  class B3PhysicsList{};
+  class B3PrimaryGeneratorAction{};
+  class B3StackingAction{};
+
+/** @} */
+
+/** @} */
+
+/** @defgroup B4 B4
+ *  Example B4 
+ *  @ingroup basic
+ *  @{
+ */
+/** @} */
+
+/** @defgroup B4a B4a
+ *  Example B4a 
+ *  @ingroup B4
+ *  @{
+ */
+
+  class B4aActionInitialization{};
+  class B4aEventAction{};
+  class B4aSteppingAction{};
+  class B4DetectorConstruction{};
+  class B4PrimaryGeneratorAction{};
+  class B4RunAction{};
+
+/** @} */
+
+/** @} */
+/** @defgroup B4b B4b
+ *  Example B4b 
+ *  @ingroup B4
+ *  @{
+ */
+
+  class B4bActionInitialization{};
+  class B4bEventAction{};
+  class B4bRunAction{};
+  class B4bRunData{};
+  class B4bSteppingAction{};
+  class B4DetectorConstruction{};
+  class B4PrimaryGeneratorAction{};
+
+/** @} */
+
+/** @defgroup B4c B4c
+ *  Example B4c 
+ *  @ingroup B4
+ *  @{
+ */
+
+  class B4cActionInitialization{};
+  class B4cCalorHit{};
+  class B4cCalorimeterSD{};
+  class B4cDetectorConstruction{};
+  class B4cEventAction{};
+  class B4PrimaryGeneratorAction{};
+  class B4RunAction{};
+
+/** @} */
+
+/** @} */
+/** @defgroup B4d B4d
+ *  Example B4d 
+ *  @ingroup B4
+ *  @{
+ */
+
+  class B4dActionInitialization{};
+  class B4dDetectorConstruction{};
+  class B4dEventAction{};
+  class B4PrimaryGeneratorAction{};
+  class B4RunAction{};
+
+/** @} */
+
+/** @} */
+
+/** @defgroup B5 B5
+ *  Example B5 
+ *  @ingroup basic
+ *  @{
+ */
+
+  class B5ActionInitialization{};
+  class B5CellParameterisation{};
+  class B5DetectorConstruction{};
+  class B5DriftChamberHit{};
+  class B5DriftChamberSD{};
+  class B5EmCalorimeterHit{};
+  class B5EmCalorimeterSD{};
+  class B5EventAction{};
+  class B5HadCalorimeterHit{};
+  class B5HadCalorimeterSD{};
+  class B5HodoscopeHit{};
+  class B5HodoscopeSD{};
+  class B5MagneticField{};
+  class B5PrimaryGeneratorAction{};
+  class B5RunAction{};
+
+/** @} */
+
+/** @} */

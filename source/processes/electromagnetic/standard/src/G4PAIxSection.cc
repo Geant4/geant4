@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.cc 83662 2014-09-08 10:00:20Z gcosmo $
+// $Id: G4PAIxSection.cc 91726 2015-08-03 15:41:36Z gcosmo $
 // GEANT4 tag $Name: geant4-09-03-ref-06 $
 //
 // 
@@ -143,7 +143,7 @@ G4PAIxSection::G4PAIxSection(G4MaterialCutsCouple* matCC)
   for (i = 0; i < fSandia->GetMaxInterval()-1; i++)
   {
      fMatSandiaMatrix->push_back(new G4DataVector(5,0.));
-  }	         	
+  }                         
   for (i = 0; i < fSandia->GetMaxInterval()-1; i++)
   {
     (*(*fMatSandiaMatrix)[i])[0] = fSandia->GetSandiaMatTable(i,0);
@@ -153,14 +153,14 @@ G4PAIxSection::G4PAIxSection(G4MaterialCutsCouple* matCC)
       (*(*fMatSandiaMatrix)[i])[j] = fSandia->GetSandiaMatTable(i,j)*fDensity;
     }     
   }
-  ComputeLowEnergyCof();      	         	
+  ComputeLowEnergyCof();                               
   //  fEnergyInterval = fA1 = fA2 = fA3 = fA4 = 0;
 }
 
 ////////////////////////////////////////////////////////////////
 
 G4PAIxSection::G4PAIxSection(G4int materialIndex,
-			     G4double maxEnergyTransfer)
+                             G4double maxEnergyTransfer)
 {
   fSandia = 0;
   fMatSandiaMatrix = 0;
@@ -188,23 +188,23 @@ G4PAIxSection::G4PAIxSection(G4int materialIndex,
       if(((*theMaterialTable)[materialIndex]->
     GetSandiaTable()->GetSandiaCofForMaterial(i-1,0) >= maxEnergyTransfer) ||
               i > fIntervalNumber               )
-	{
-	  fEnergyInterval[i] = maxEnergyTransfer;
-	  fIntervalNumber = i;
-	  break;
-	}
+        {
+          fEnergyInterval[i] = maxEnergyTransfer;
+          fIntervalNumber = i;
+          break;
+        }
          fEnergyInterval[i] = (*theMaterialTable)[materialIndex]->
-	                      GetSandiaTable()->GetSandiaCofForMaterial(i-1,0);
+                              GetSandiaTable()->GetSandiaCofForMaterial(i-1,0);
          fA1[i]             = (*theMaterialTable)[materialIndex]->
-	                      GetSandiaTable()->GetSandiaCofForMaterial(i-1,1);
+                              GetSandiaTable()->GetSandiaCofForMaterial(i-1,1);
          fA2[i]             = (*theMaterialTable)[materialIndex]->
-	                      GetSandiaTable()->GetSandiaCofForMaterial(i-1,2);
+                              GetSandiaTable()->GetSandiaCofForMaterial(i-1,2);
          fA3[i]             = (*theMaterialTable)[materialIndex]->
-	                      GetSandiaTable()->GetSandiaCofForMaterial(i-1,3);
+                              GetSandiaTable()->GetSandiaCofForMaterial(i-1,3);
          fA4[i]             = (*theMaterialTable)[materialIndex]->
-	                      GetSandiaTable()->GetSandiaCofForMaterial(i-1,4);
-	 // G4cout<<i<<"\t"<<fEnergyInterval[i]<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
-	 //                               <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl;
+                              GetSandiaTable()->GetSandiaCofForMaterial(i-1,4);
+         // G4cout<<i<<"\t"<<fEnergyInterval[i]<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
+         //                               <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl;
     }   
   if(fEnergyInterval[fIntervalNumber] != maxEnergyTransfer)
     {
@@ -218,22 +218,22 @@ G4PAIxSection::G4PAIxSection(G4int materialIndex,
     {
         if(fEnergyInterval[i+1]-fEnergyInterval[i] >
            1.5*fDelta*(fEnergyInterval[i+1]+fEnergyInterval[i]))
-	{
+        {
           continue;
-	}
+        }
         else
-	{
+        {
           for(j=i;j<fIntervalNumber;j++)
-	  {
+          {
             fEnergyInterval[j] = fEnergyInterval[j+1];
                         fA1[j] = fA1[j+1];
                         fA2[j] = fA2[j+1];
                         fA3[j] = fA3[j+1];
                         fA4[j] = fA4[j+1];
-	  }
+          }
           fIntervalNumber--;
           i--;
-	}
+        }
     }
 
 
@@ -272,8 +272,8 @@ G4PAIxSection::G4PAIxSection(G4int materialIndex,
 // Constructor called from G4PAIPhotonModel !!!
 
 G4PAIxSection::G4PAIxSection( G4int materialIndex,
-			      G4double maxEnergyTransfer,
-			      G4double betaGammaSq,
+                              G4double maxEnergyTransfer,
+                              G4double betaGammaSq,
                               G4double** photoAbsCof, 
                               G4int intNumber                   )
 {
@@ -336,16 +336,16 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
              i > fIntervalNumber )
          {
             fEnergyInterval[i] = maxEnergyTransfer;
-	    fIntervalNumber = i;
-	    break;
+            fIntervalNumber = i;
+            break;
          }
          fEnergyInterval[i] = photoAbsCof[i-1][0];
          fA1[i]             = photoAbsCof[i-1][1];
          fA2[i]             = photoAbsCof[i-1][2];
          fA3[i]             = photoAbsCof[i-1][3];
          fA4[i]             = photoAbsCof[i-1][4];
-	 // G4cout<<i<<"\t"<<fEnergyInterval[i]/keV<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
-	 //      <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl;
+         // G4cout<<i<<"\t"<<fEnergyInterval[i]/keV<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
+         //      <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl;
     }
       // G4cout<<"i last = "<<i<<"; "<<"fIntervalNumber = "<<fIntervalNumber<<G4endl; 
   
@@ -358,8 +358,8 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
 
   for( i = 1; i <= fIntervalNumber; i++ )
     {
-	// G4cout<<i<<"\t"<<fEnergyInterval[i]/keV<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
-	//   <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl;
+        // G4cout<<i<<"\t"<<fEnergyInterval[i]/keV<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
+        //   <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl;
     }
       // Now checking, if two borders are too close together
 
@@ -367,29 +367,29 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
     {
         if(fEnergyInterval[i+1]-fEnergyInterval[i] >
            1.5*fDelta*(fEnergyInterval[i+1]+fEnergyInterval[i]))
-	{
+        {
           continue;
-	}
+        }
         else
-	{
+        {
           for(j=i;j<fIntervalNumber;j++)
-	  {
+          {
             fEnergyInterval[j] = fEnergyInterval[j+1];
                         fA1[j] = fA1[j+1];
                         fA2[j] = fA2[j+1];
                         fA3[j] = fA3[j+1];
                         fA4[j] = fA4[j+1];
-	  }
+          }
           fIntervalNumber--;
           i--;
-	}
+        }
     }
   // G4cout<<"after check of close borders"<<G4endl;
 
   for( i = 1; i <= fIntervalNumber; i++ )
     {
-	// G4cout<<i<<"\t"<<fEnergyInterval[i]/keV<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
-	//  <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl;
+        // G4cout<<i<<"\t"<<fEnergyInterval[i]/keV<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
+        //  <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl;
     }
 
   // Preparation of fSplineEnergy array corresponding to min ionisation, G~4
@@ -411,8 +411,8 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
          fdNdxResonance[i]  = PAIdNdxResonance(i,betaGammaSq);
          fDifPAIxSection[i] = DifPAIxSection(i,betaGammaSq);
 
-	 // G4cout<<i<<"; dNdxC = "<<fdNdxCerenkov[i]<<"; dNdxP = "<<fdNdxPlasmon[i]
-	 //    <<"; dNdxPAI = "<<fDifPAIxSection[i]<<G4endl;
+         // G4cout<<i<<"; dNdxC = "<<fdNdxCerenkov[i]<<"; dNdxP = "<<fdNdxPlasmon[i]
+         //    <<"; dNdxPAI = "<<fDifPAIxSection[i]<<G4endl;
     }
   IntegralCerenkov();
   IntegralMM();
@@ -433,8 +433,8 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
 // Test Constructor with beta*gamma square value
 
 G4PAIxSection::G4PAIxSection( G4int materialIndex,
-			      G4double maxEnergyTransfer,
-			      G4double betaGammaSq          )
+                              G4double maxEnergyTransfer,
+                              G4double betaGammaSq          )
 {
   fSandia = 0;
   fMatSandiaMatrix = 0;
@@ -459,11 +459,11 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
   fSandia = (*theMaterialTable)[materialIndex]->GetSandiaTable();
   G4SandiaTable     thisMaterialSandiaTable(materialIndex);
   fIntervalNumber = thisMaterialSandiaTable.SandiaIntervals(thisMaterialZ,
-							    numberOfElements);
+                                                            numberOfElements);
   fIntervalNumber = thisMaterialSandiaTable.SandiaMixing
                            ( thisMaterialZ ,
                       (*theMaterialTable)[materialIndex]->GetFractionVector() ,
-        		     numberOfElements,fIntervalNumber);
+                             numberOfElements,fIntervalNumber);
 
   fIntervalNumber--;
 
@@ -486,8 +486,8 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
           i > fIntervalNumber)
          {
             fEnergyInterval[i] = maxEnergyTransfer;
-	    fIntervalNumber = i;
-	    break;
+            fIntervalNumber = i;
+            break;
          }
    fEnergyInterval[i] = thisMaterialSandiaTable.GetPhotoAbsorpCof(i,0);
    fA1[i]             = thisMaterialSandiaTable.GetPhotoAbsorpCof(i,1)*fDensity;
@@ -507,8 +507,8 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
     }
   for(i=1;i<=fIntervalNumber;i++)
     {
-	// G4cout<<fEnergyInterval[i]<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
-	//   <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl;
+        // G4cout<<fEnergyInterval[i]<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
+        //   <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl;
     }
   // Now checking, if two borders are too close together
 
@@ -516,22 +516,22 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
     {
         if(fEnergyInterval[i+1]-fEnergyInterval[i] >
            1.5*fDelta*(fEnergyInterval[i+1]+fEnergyInterval[i]))
-	{
+        {
           continue;
-	}
+        }
         else
-	{
+        {
           for( j = i; j < fIntervalNumber; j++ )
-	  {
+          {
             fEnergyInterval[j] = fEnergyInterval[j+1];
                         fA1[j] = fA1[j+1];
                         fA2[j] = fA2[j+1];
                         fA3[j] = fA3[j+1];
                         fA4[j] = fA4[j+1];
-	  }
+          }
           fIntervalNumber--;
           i--;
-	}
+        }
     }
 
       /* *********************************
@@ -604,9 +604,9 @@ G4PAIxSection::~G4PAIxSection()
 // Constructor with beta*gamma square value called from G4PAIPhotModel/Data
 
 void G4PAIxSection::Initialize( const G4Material* material,
-				G4double maxEnergyTransfer,
-				G4double betaGammaSq, 
-				G4SandiaTable* sandia)
+                                G4double maxEnergyTransfer,
+                                G4double betaGammaSq, 
+                                G4SandiaTable* sandia)
 {
   if(fVerbose > 0)
   {
@@ -678,18 +678,18 @@ void G4PAIxSection::Initialize( const G4Material* material,
   for( i = 1; i < fIntervalNumber; i++ )
   {
     if( fEnergyInterval[i+1]-fEnergyInterval[i] >
-	 1.5*fDelta*(fEnergyInterval[i+1]+fEnergyInterval[i]) && fEnergyInterval[i] > 0.) continue;
+         1.5*fDelta*(fEnergyInterval[i+1]+fEnergyInterval[i]) && fEnergyInterval[i] > 0.) continue;
     else
     {
       if( fVerbose > 0 )  G4cout<<i<<"\t"<<fEnergyInterval[i]/keV<<"\t"<<fEnergyInterval[i+1]/keV;
 
       for( j = i; j < fIntervalNumber; j++ )
       {
-	      fEnergyInterval[j] = fEnergyInterval[j+1];
-	      fA1[j]             = fA1[j+1];
-	      fA2[j]             = fA2[j+1];
-	      fA3[j]             = fA3[j+1];
-	      fA4[j]             = fA4[j+1];
+              fEnergyInterval[j] = fEnergyInterval[j+1];
+              fA1[j]             = fA1[j+1];
+              fA2[j]             = fA2[j+1];
+              fA3[j]             = fA3[j+1];
+              fA4[j]             = fA4[j+1];
       }
       fIntervalNumber--;
       i--;
@@ -832,7 +832,7 @@ void G4PAIxSection::InitPAI()
       fPAItable[i][fRefGammaNumber] = fIntegralPAIxSection[i];
       if(i != 0) 
       {
-	 fPAItable[i][0] = fSplineEnergy[i];
+         fPAItable[i][0] = fSplineEnergy[i];
       }
    }
    fPAItable[0][0] = fSplineNumber;
@@ -897,7 +897,7 @@ void G4PAIxSection::NormShift(G4double betaGammaSq)
     if( fSplineEnergy[i]<fEnergyInterval[j+1] )
     {
          fIntegralTerm[i] = fIntegralTerm[i-1] + 
-	                    RutherfordIntegral(j,fSplineEnergy[i-1],
+                            RutherfordIntegral(j,fSplineEnergy[i-1],
                                                  fSplineEnergy[i]   );
     }
     else
@@ -906,7 +906,7 @@ void G4PAIxSection::NormShift(G4double betaGammaSq)
                                            fEnergyInterval[j+1]   );
          j++;
          fIntegralTerm[i] = fIntegralTerm[i-1] + x + 
-	                    RutherfordIntegral(j,fEnergyInterval[j],
+                            RutherfordIntegral(j,fEnergyInterval[j],
                                                  fSplineEnergy[i]    );
     }
    if(fVerbose>0)  G4cout<<i<<"  Shift: w = "<<fSplineEnergy[i]/keV<<" keV \t"<<fIntegralTerm[i]<<"\n"<<G4endl;
@@ -916,8 +916,8 @@ void G4PAIxSection::NormShift(G4double betaGammaSq)
 
   // G4cout<<"fNormalizationCof = "<<fNormalizationCof<<G4endl;
 
-	  // Calculation of PAI differrential cross-section (1/(keV*cm))
-	  // in the energy points near borders of energy intervals
+          // Calculation of PAI differrential cross-section (1/(keV*cm))
+          // in the energy points near borders of energy intervals
 
    for(G4int k = 1; k <= fIntervalNumber-1; k++ )
    {
@@ -925,9 +925,9 @@ void G4PAIxSection::NormShift(G4double betaGammaSq)
       {
          i = (k-1)*2 + j;
          fImPartDielectricConst[i] = fNormalizationCof*
-	                             ImPartDielectricConst(k,fSplineEnergy[i]);
+                                     ImPartDielectricConst(k,fSplineEnergy[i]);
          fRePartDielectricConst[i] = fNormalizationCof*
-	                             RePartDielectricConst(fSplineEnergy[i]);
+                                     RePartDielectricConst(fSplineEnergy[i]);
          fIntegralTerm[i] *= fNormalizationCof;
 
          fDifPAIxSection[i] = DifPAIxSection(i,betaGammaSq);
@@ -959,24 +959,24 @@ void G4PAIxSection::SplainPAI(G4double betaGammaSq)
      if( fSplineEnergy[i+1] > fEnergyInterval[k+1] )
      {
           k++;   // Here next energy point is in next energy interval
-	  i++;
-	  if(fVerbose>0) G4cout<<"                     in if: i = "<<i<<"; k = "<<k<<G4endl;
+          i++;
+          if(fVerbose>0) G4cout<<"                     in if: i = "<<i<<"; k = "<<k<<G4endl;
           continue;
      }
      if(fVerbose>0) G4cout<<"       out if: i = "<<i<<"; k = "<<k<<G4endl;
 
- 	               // Shifting of arrayes for inserting the geometrical 
-		       // average of 'i' and 'i+1' energy points to 'i+1' place
+                        // Shifting of arrayes for inserting the geometrical 
+                       // average of 'i' and 'i+1' energy points to 'i+1' place
      fSplineNumber++;
 
      for( j = fSplineNumber; j >= i+2; j-- )
      {
          fSplineEnergy[j]          = fSplineEnergy[j-1];
          fImPartDielectricConst[j] = fImPartDielectricConst[j-1];
-	 fRePartDielectricConst[j] = fRePartDielectricConst[j-1];
-	 fIntegralTerm[j]          = fIntegralTerm[j-1];
+         fRePartDielectricConst[j] = fRePartDielectricConst[j-1];
+         fIntegralTerm[j]          = fIntegralTerm[j-1];
 
-	 fDifPAIxSection[j] = fDifPAIxSection[j-1];
+         fDifPAIxSection[j] = fDifPAIxSection[j-1];
          fdNdxCerenkov[j]   = fdNdxCerenkov[j-1];
          fdNdxMM[j]         = fdNdxMM[j-1];
          fdNdxPlasmon[j]    = fdNdxPlasmon[j-1];
@@ -996,8 +996,8 @@ void G4PAIxSection::SplainPAI(G4double betaGammaSq)
 
       fSplineEnergy[i+1] = en1;
 
-		 // Calculation of logarithmic linear approximation
-		 // in this (enr) energy point, which number is 'i+1' now
+                 // Calculation of logarithmic linear approximation
+                 // in this (enr) energy point, which number is 'i+1' now
 
       G4double a = log10(y2/yy1)/log10(x2/x1);
       G4double b = log10(yy1) - a*log10(x1);
@@ -1005,14 +1005,14 @@ void G4PAIxSection::SplainPAI(G4double betaGammaSq)
 
       y = pow(10.,y);
 
-		 // Calculation of the PAI dif. cross-section at this point
+                 // Calculation of the PAI dif. cross-section at this point
 
       fImPartDielectricConst[i+1] = fNormalizationCof*
-	                            ImPartDielectricConst(k,fSplineEnergy[i+1]);
+                                    ImPartDielectricConst(k,fSplineEnergy[i+1]);
       fRePartDielectricConst[i+1] = fNormalizationCof*
-	                            RePartDielectricConst(fSplineEnergy[i+1]);
+                                    RePartDielectricConst(fSplineEnergy[i+1]);
       fIntegralTerm[i+1] = fIntegralTerm[i] + fNormalizationCof*
-	                   RutherfordIntegral(k,fSplineEnergy[i],
+                           RutherfordIntegral(k,fSplineEnergy[i],
                                                 fSplineEnergy[i+1]);
 
       fDifPAIxSection[i+1] = DifPAIxSection(i+1,betaGammaSq);
@@ -1021,11 +1021,11 @@ void G4PAIxSection::SplainPAI(G4double betaGammaSq)
       fdNdxPlasmon[i+1]    = PAIdNdxPlasmon(i+1,betaGammaSq);
       fdNdxResonance[i+1]  = PAIdNdxResonance(i+1,betaGammaSq);
 
-		  // Condition for next division of this segment or to pass
+                  // Condition for next division of this segment or to pass
 
     if(fVerbose>0) G4cout<<"Spline, a = "<<a<<"; b = "<<b<<"; new xsc = "<<y<<"; compxsc = "<<fDifPAIxSection[i+1]<<G4endl;
 
-		  // to higher energies
+                  // to higher energies
 
       G4double x = 2*(fDifPAIxSection[i+1] - y)/(fDifPAIxSection[i+1] + y);
 
@@ -1033,14 +1033,15 @@ void G4PAIxSection::SplainPAI(G4double betaGammaSq)
 
       if( x < 0 ) 
       {
-	 x = -x;
+         x = -x;
       }
       if( x > fError && fSplineNumber < fMaxSplineSize-1 && delta > 2.*fDelta )
       {
-	 continue;  // next division
+         continue;  // next division
       }
       i += 2;  // pass to next segment
 
+      // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
   }   // close 'while'
 
 }  // end of SplainPAI 
@@ -1052,8 +1053,8 @@ void G4PAIxSection::SplainPAI(G4double betaGammaSq)
 // quasi-free at energy transfer of interest
 
 G4double G4PAIxSection::RutherfordIntegral( G4int k,
-				            G4double x1,
-			  	            G4double x2   )
+                                            G4double x1,
+                                              G4double x2   )
 {
    G4double  c1, c2, c3;
    // G4cout<<"RI: x1 = "<<x1<<"; "<<"x2 = "<<x2<<G4endl;   
@@ -1073,7 +1074,7 @@ G4double G4PAIxSection::RutherfordIntegral( G4int k,
 // (G4int k - interval number, G4double en1 - energy point)
 
 G4double G4PAIxSection::ImPartDielectricConst( G4int    k ,
-			                       G4double energy1 )
+                                               G4double energy1 )
 {
    G4double energy2,energy3,energy4,result;
 
@@ -1185,7 +1186,7 @@ G4double G4PAIxSection::RePartDielectricConst(G4double enb)
       
       if(xx12<0)
       {
-	 xx12 = -xx12;
+         xx12 = -xx12;
       }
       xln1 = log(x2/x1);
       xln2 = log(xx12);
@@ -1241,8 +1242,8 @@ G4double G4PAIxSection::DifPAIxSection( G4int              i ,
    else
    {
      x2 = -log( (1/betaGammaSq - fRePartDielectricConst[i])*
-	        (1/betaGammaSq - fRePartDielectricConst[i]) + 
-	        fImPartDielectricConst[i]*fImPartDielectricConst[i] )/2;
+                (1/betaGammaSq - fRePartDielectricConst[i]) + 
+                fImPartDielectricConst[i]*fImPartDielectricConst[i] )/2;
    }
    if( fImPartDielectricConst[i] == 0.0 ||betaGammaSq < 0.01 )
    {
@@ -1253,7 +1254,7 @@ G4double G4PAIxSection::DifPAIxSection( G4int              i ,
      x3 = -fRePartDielectricConst[i] + 1/betaGammaSq;
      x5 = -1 - fRePartDielectricConst[i] +
           be2*((1 +fRePartDielectricConst[i])*(1 + fRePartDielectricConst[i]) +
-	  fImPartDielectricConst[i]*fImPartDielectricConst[i]);
+          fImPartDielectricConst[i]*fImPartDielectricConst[i]);
 
      x7 = atan2(fImPartDielectricConst[i],x3);
      x6 = x5 * x7;
@@ -1315,8 +1316,8 @@ G4double G4PAIxSection::PAIdNdxCerenkov( G4int    i ,
    else
    {
      logarithm  = -log( (1/betaGammaSq - fRePartDielectricConst[i])*
-	                (1/betaGammaSq - fRePartDielectricConst[i]) + 
-	                fImPartDielectricConst[i]*fImPartDielectricConst[i] )*0.5;
+                        (1/betaGammaSq - fRePartDielectricConst[i]) + 
+                        fImPartDielectricConst[i]*fImPartDielectricConst[i] )*0.5;
      logarithm += log(1+1.0/betaGammaSq);
    }
 
@@ -1329,7 +1330,7 @@ G4double G4PAIxSection::PAIdNdxCerenkov( G4int    i ,
      x3 = -fRePartDielectricConst[i] + 1.0/betaGammaSq;
      x5 = -1.0 - fRePartDielectricConst[i] +
           be2*((1.0 +fRePartDielectricConst[i])*(1.0 + fRePartDielectricConst[i]) +
-	  fImPartDielectricConst[i]*fImPartDielectricConst[i]);
+          fImPartDielectricConst[i]*fImPartDielectricConst[i]);
      if( x3 == 0.0 ) argument = 0.5*pi;
      else            argument = atan2(fImPartDielectricConst[i],x3);
      argument *= x5 ;
@@ -1373,8 +1374,8 @@ G4double G4PAIxSection::PAIdNdxMM( G4int    i ,
    else
    {
      logarithm  = -log( (1/betaGammaSq - fRePartDielectricConst[i])*
-	                (1/betaGammaSq - fRePartDielectricConst[i]) + 
-	                fImPartDielectricConst[i]*fImPartDielectricConst[i] )*0.5;
+                        (1/betaGammaSq - fRePartDielectricConst[i]) + 
+                        fImPartDielectricConst[i]*fImPartDielectricConst[i] )*0.5;
      logarithm += log(1+1.0/betaGammaSq);
    }
 
@@ -1503,9 +1504,9 @@ void G4PAIxSection::IntegralPAIxSection()
     else
     {
       fIntegralPAIxSection[i] = fIntegralPAIxSection[i+1] + 
-	                           SumOverBorder(i+1,fEnergyInterval[k]);
+                                   SumOverBorder(i+1,fEnergyInterval[k]);
       fIntegralPAIdEdx[i] = fIntegralPAIdEdx[i+1] + 
-	                           SumOverBorderdEdx(i+1,fEnergyInterval[k]);
+                                   SumOverBorderdEdx(i+1,fEnergyInterval[k]);
       k--;
     }
     if(fVerbose>0) G4cout<<"i = "<<i<<"; k = "<<k<<"; intPAIxsc[i] = "<<fIntegralPAIxSection[i]<<G4endl;
@@ -1530,14 +1531,14 @@ void G4PAIxSection::IntegralCerenkov()
       if(fSplineEnergy[i] >= fEnergyInterval[k])
       {
         fIntegralCerenkov[i] = fIntegralCerenkov[i+1] + SumOverInterCerenkov(i);
-	// G4cout<<"int: i = "<<i<<"; sumC = "<<fIntegralCerenkov[i]<<G4endl;
+        // G4cout<<"int: i = "<<i<<"; sumC = "<<fIntegralCerenkov[i]<<G4endl;
       }
       else
       {
         fIntegralCerenkov[i] = fIntegralCerenkov[i+1] + 
-	                           SumOverBordCerenkov(i+1,fEnergyInterval[k]);
-	k--;
-	// G4cout<<"bord: i = "<<i<<"; sumC = "<<fIntegralCerenkov[i]<<G4endl;
+                                   SumOverBordCerenkov(i+1,fEnergyInterval[k]);
+        k--;
+        // G4cout<<"bord: i = "<<i<<"; sumC = "<<fIntegralCerenkov[i]<<G4endl;
       }
    }
 
@@ -1561,14 +1562,14 @@ void G4PAIxSection::IntegralMM()
       if(fSplineEnergy[i] >= fEnergyInterval[k])
       {
         fIntegralMM[i] = fIntegralMM[i+1] + SumOverInterMM(i);
-	// G4cout<<"int: i = "<<i<<"; sumC = "<<fIntegralMM[i]<<G4endl;
+        // G4cout<<"int: i = "<<i<<"; sumC = "<<fIntegralMM[i]<<G4endl;
       }
       else
       {
         fIntegralMM[i] = fIntegralMM[i+1] + 
-	                           SumOverBordMM(i+1,fEnergyInterval[k]);
-	k--;
-	// G4cout<<"bord: i = "<<i<<"; sumC = "<<fIntegralMM[i]<<G4endl;
+                                   SumOverBordMM(i+1,fEnergyInterval[k]);
+        k--;
+        // G4cout<<"bord: i = "<<i<<"; sumC = "<<fIntegralMM[i]<<G4endl;
       }
    }
 
@@ -1594,8 +1595,8 @@ void G4PAIxSection::IntegralPlasmon()
       else
       {
         fIntegralPlasmon[i] = fIntegralPlasmon[i+1] + 
-	                           SumOverBordPlasmon(i+1,fEnergyInterval[k]);
-	k--;
+                                   SumOverBordPlasmon(i+1,fEnergyInterval[k]);
+        k--;
       }
    }
 
@@ -1621,8 +1622,8 @@ void G4PAIxSection::IntegralResonance()
       else
       {
         fIntegralResonance[i] = fIntegralResonance[i+1] + 
-	                           SumOverBordResonance(i+1,fEnergyInterval[k]);
-	k--;
+                                   SumOverBordResonance(i+1,fEnergyInterval[k]);
+        k--;
       }
    }
 
@@ -2237,8 +2238,9 @@ G4double G4PAIxSection::GetStepEnergyLoss( G4double step )
 
   while(numOfCollisions)
   {
-   loss += GetEnergyTransfer();
-   numOfCollisions--;
+    loss += GetEnergyTransfer();
+    numOfCollisions--;
+    // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
   }
   // G4cout<<"PAI energy loss = "<<loss/keV<<" keV"<<G4endl; 
 
@@ -2292,6 +2294,7 @@ G4double G4PAIxSection::GetStepCerenkovLoss( G4double step )
   {
     loss += GetCerenkovEnergyTransfer();
     numOfCollisions--;
+    // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
   }
   // G4cout<<"PAI Cerenkov loss = "<<loss/keV<<" keV"<<G4endl; 
 
@@ -2318,6 +2321,7 @@ G4double G4PAIxSection::GetStepMMLoss( G4double step )
   {
     loss += GetMMEnergyTransfer();
     numOfCollisions--;
+    // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
   }
   // G4cout<<"PAI MM-Cerenkov loss = "<<loss/keV<<" keV"<<G4endl; 
 
@@ -2398,6 +2402,7 @@ G4double G4PAIxSection::GetStepPlasmonLoss( G4double step )
   {
     loss += GetPlasmonEnergyTransfer();
     numOfCollisions--;
+    // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
   }
   // G4cout<<"PAI Plasmon loss = "<<loss/keV<<" keV"<<G4endl; 
 
@@ -2451,6 +2456,7 @@ G4double G4PAIxSection::GetStepResonanceLoss( G4double step )
   {
     loss += GetResonanceEnergyTransfer();
     numOfCollisions--;
+    // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
   }
   // G4cout<<"PAI resonance loss = "<<loss/keV<<" keV"<<G4endl; 
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KDTreeResult.cc 80151 2014-04-03 09:42:22Z gcosmo $
+// $Id: G4KDTreeResult.cc 91584 2015-07-27 13:01:48Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -65,6 +65,8 @@ private:
     ResNode& operator=(const ResNode& rhs)
     {
         if(this == &rhs) return *this;
+        fNode = rhs.fNode;
+        fDistanceSqr= rhs.fDistanceSqr;
         return *this;
     }
 };
@@ -85,9 +87,9 @@ G4KDTreeResult::~G4KDTreeResult()
     std::list<ResNode>::erase(begin(),end());
 }
 
-void G4KDTreeResult::Insert(double pos, G4KDNode_Base* node)
+void G4KDTreeResult::Insert(double dis_sq, G4KDNode_Base* node)
 {
-    std::list<ResNode>::push_back(ResNode(pos,node));
+    std::list<ResNode>::push_back(ResNode(dis_sq,node));
 }
 
 void G4KDTreeResult::Clear()

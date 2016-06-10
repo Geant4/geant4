@@ -8,9 +8,18 @@ $Id: README,v 1.16 2010-11-29 10:34:36 gcosmo Exp $
         Tips how to run an example in multi-threading mode
         --------------------------------------------------
 
+ Only migrated examples or user applications can be run in multi-threading (MT) mode. 
+ The instructions for migrating user applications can be found in Geant4 documentation guides 
+ and a short howto is available here:
+ 
+ https://twiki.cern.ch/twiki/bin/view/Geant4/QuickMigrationGuideForGeant4V10 
+
+ In this file, we give just useful tips for running already migrated examples
+ (or user applications).
+
  1) RUN EXAMPLE IN MULTI-THREADING MODE
 
- No special steps are needed to build an example in multi-threading (MT) mode.
+ No special steps are needed to build an example in multi-threading mode.
  The examples which has been migrated to multi-threading will automatically 
  run in MT when they are built against the Geant4 libraries built with MT mode
  activated, otherwise they will run in sequential mode.

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Pow.hh 83383 2014-08-21 14:20:37Z gcosmo $
+// $Id: G4Pow.hh 93311 2015-10-16 10:16:37Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -131,19 +131,22 @@ inline G4double G4Pow::Z13(G4int Z) const
 
 inline G4double G4Pow::A13(G4double A) const
 {
-  G4double res;
-  G4double a = A;
-  if(1.0 > A) { a = 1.0/A; }
-  if(a <= maxA)
+  G4double res = 0.0;
+  if(A > 0.0) 
   {
-    G4int i = G4int(a + 0.5);
-    G4double x = (a/G4double(i) - 1.0)*onethird;
-    res = pz13[i]*(1.0 + x - x*x*(1.0 - 1.66666666*x));
-    if(1.0 > A) { res = 1.0/res; }
-  }
-  else
-  {
-    res = std::pow(A, onethird); 
+    G4double a = (1.0 <= A) ? A : 1.0/A;
+    if(1.0 > A) { a = 1.0/A; }
+    if(a <= maxA)
+    {
+      G4int i = G4int(a + 0.5);
+      G4double x = (a/G4double(i) - 1.0)*onethird;
+      res = pz13[i]*(1.0 + x - x*x*(1.0 - 1.66666666*x));
+      if(1.0 > A) { res = 1.0/res; }
+    }
+    else
+    {
+      res = std::pow(A, onethird); 
+    }
   }
   return res;
 }
@@ -190,17 +193,13 @@ inline G4double G4Pow::logBase(G4double a) const
 
 inline G4double G4Pow::logA(G4double A) const
 {
-  G4double res;
-  if(1.0 <= A) { res = logBase(A); }
-  else         { res = -logBase(1./A); }
-  return res;
+  return (1.0 <= A ? logBase(A) : -logBase(1./A));
 }
 
 inline G4double G4Pow::logX(G4double x) const
 {
   G4double res = 0.0;
-  G4double a = x;
-  if(1.0 > x) { a = 1.0/x; }
+  G4double a = (1.0 <= x) ? x : 1.0/x;
 
   if(a <= maxA) 
   {
@@ -236,8 +235,7 @@ inline G4double G4Pow::log10A(G4double A) const
 inline G4double G4Pow::expA(G4double A) const
 {
   G4double res;
-  G4double a = A;
-  if(0.0 > A) { a = -A; }
+  G4double a = (0.0 <= A) ? A : -A;
 
   if(a <= maxAexp)
   {
@@ -260,7 +258,7 @@ inline G4double G4Pow::powZ(G4int Z, G4double y) const
 
 inline G4double G4Pow::powA(G4double A, G4double y) const
 {
-  return expA(y*logX(A));
+  return (0.0 == A ? 0.0 : expA(y*logX(A)));
 }
 
 inline G4double G4Pow::factorial(G4int Z) const

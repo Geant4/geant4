@@ -1,0 +1,64 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_style_color
+#define tools_sg_style_color
+
+#include "../colorf"
+
+#ifdef TOOLS_MEM
+#include "../mem"
+#include "../S_STRING"
+#endif
+
+namespace tools {
+namespace sg {
+
+class style_color : public std::pair<std::string,colorf> {
+  typedef std::pair<std::string,colorf> parent;
+#ifdef TOOLS_MEM
+  TOOLS_SCLASS(tools::sg::style_color)
+#endif
+public:
+  style_color():parent("",colorf()) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  style_color(const std::string& a_name,const colorf& a_color):parent(a_name,a_color) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  style_color(const std::string& a_name,float a_r,float a_g,float a_b):parent(a_name,colorf(a_r,a_g,a_b)) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~style_color(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  style_color(const style_color& a_from):parent(a_from.first,a_from.second) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  style_color& operator=(const style_color& a_from){
+    first = a_from.first;
+    second = a_from.second;
+    return *this;
+  }
+public:
+  void set_name(const std::string& a_name) {first = a_name;}
+  void set_value(float a_r,float a_g,float a_b,float a_a) {second.set_value(a_r,a_g,a_b,a_a);}
+};
+
+}}
+
+#endif
+
+
+

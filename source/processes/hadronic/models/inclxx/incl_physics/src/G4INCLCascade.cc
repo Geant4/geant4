@@ -127,7 +127,7 @@ namespace G4INCL {
     // should allow us to "easily" experiment with different avatar
     // finding schemes and even to support things like curved
     // trajectories in the future.
-    propagationModel = new StandardPropagationModel(theConfig->getLocalEnergyBBType(),theConfig->getLocalEnergyPiType());
+    propagationModel = new StandardPropagationModel(theConfig->getLocalEnergyBBType(),theConfig->getLocalEnergyPiType(),theConfig->getHadronizationTime());
     if(theConfig->getCascadeActionType() == AvatarDumpActionType)
       cascadeAction = new AvatarDumpAction();
     else
@@ -315,6 +315,8 @@ namespace G4INCL {
   void INCL::cascade() {
     FinalState *finalState = new FinalState;
 
+    unsigned long loopCounter = 0;
+    const unsigned long maxLoopCounter = 10000000;
     do {
       // Run book keeping actions that should take place before propagation:
       cascadeAction->beforePropagationAction(propagationModel);
@@ -350,7 +352,9 @@ namespace G4INCL {
       // and now we are ready to process the next avatar!
 
       delete avatar;
-    } while(continueCascade());
+
+      ++loopCounter;
+    } while(continueCascade() && loopCounter<maxLoopCounter); /* Loop checking, 10.07.2015, D.Mancusi */
 
     delete finalState;
   }

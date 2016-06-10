@@ -28,13 +28,12 @@
 
 
 #include <string>
-using namespace std;
 
 class G4LEPTSDiffXS {
 
 public:
 
-  G4LEPTSDiffXS( string);   // Constructor
+  G4LEPTSDiffXS(std::string);   // Constructor
 
   void readDXS();    // Read file
   void BuildCDXS();
@@ -51,7 +50,7 @@ public:
   }
 
 private:
-  string fileName;
+  std::string fileName;
   int NumAng;
   int INumAng;
   int NumEn;

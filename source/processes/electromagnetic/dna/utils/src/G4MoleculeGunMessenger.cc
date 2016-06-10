@@ -43,126 +43,171 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIdirectory.hh"
 
-G4MoleculeGunMessenger::G4MoleculeGunMessenger()
+//------------------------------------------------------------------------------
+
+G4MoleculeGunMessenger::G4MoleculeGunMessenger(G4MoleculeGun* gun) :
+  G4UImessenger("/chem/gun/", "")
 {
-  fpGunDir = new G4UIdirectory("/process/em/dna/chem/gun/");
-  fpGunNewGunType = new G4UIcmdWithAString("/process/em/dna/chem/gun/newType",
+  fpGunNewGunType = new G4UIcmdWithAString("/chem/gun/newShoot",
                                            this);
+  fpMoleculeGun = gun;
 }
+
+//------------------------------------------------------------------------------
 
 G4MoleculeGunMessenger::~G4MoleculeGunMessenger()
 {
-  if (fpGunDir) delete fpGunDir;
   if (fpGunNewGunType) delete fpGunNewGunType;
 }
+
+//------------------------------------------------------------------------------
 
 G4String G4MoleculeGunMessenger::GetCurrentValue(G4UIcommand* /*command*/)
 {
   return "";
 }
 
-G4MoleculeGunMessenger::MultipleGun* G4MoleculeGunMessenger::CreateNewType(const G4String& name)
-{
-  MultipleGun* multiGun = new MultipleGun(name, this);
-  fMultipleGun.push_back(multiGun);
-  return multiGun;
-}
+//------------------------------------------------------------------------------
 
 void G4MoleculeGunMessenger::SetNewValue(G4UIcommand* command,
                                          G4String newValue)
 {
   if (command == fpGunNewGunType)
   {
-    CreateNewType(newValue);
+    std::istringstream iss (newValue);
+    
+    G4String shootName;
+    iss >> shootName;
+    
+    G4String shootType;
+    iss >> shootType;
+        
+    if(shootType == "" || shootType.empty())
+    {
+      CreateNewType<G4Track>(shootName);
+    }
+    else
+    {      
+      CreateNewType<G4ContinuousMedium>(shootName);
+    }
   }
 }
 
-G4MoleculeGunMessenger::MultipleGun::MultipleGun(const G4String& name,
-                                                 G4MoleculeGunMessenger*)
+//------------------------------------------------------------------------------
+
+G4MoleculeShootMessenger::G4MoleculeShootMessenger(const G4String& name,
+                                                   G4MoleculeGunMessenger*,
+                                                   G4shared_ptr<G4MoleculeShoot>
+                                                      shoot) :
+    G4UImessenger(), fpShoot(shoot)
 {
-  G4String dir("/process/em/dna/chem/gun/");
+  G4String dir("/chem/gun/");
   dir += name;
-  fpGunType = new G4UIdirectory(name);
+  CreateDirectory(dir, "");
 
   G4String tmp = dir;
-  tmp += "/moleculeModel";
-  fpGunMoleculeModel = new G4UIcmdWithAString(tmp, this);
+  tmp += "/species";
+  fpGunSpecies = new G4UIcmdWithAString(tmp, this);
+
   tmp = dir;
   tmp += "/position";
   fpGunPosition = new G4UIcmdWith3VectorAndUnit(tmp, this);
+
   tmp = dir;
   tmp += "/time";
   fpGunTime = new G4UIcmdWithADoubleAndUnit(tmp, this);
+
   tmp = dir;
   tmp += "/number";
   fpGunN = new G4UIcmdWithAnInteger(tmp, this);
 
-  fMoleculeName = "";
-  fTime = 0;
-  fNumber = 0;
+  tmp = dir;
+  tmp += "/rndmPosition";
+  fpGunRdnmPosition = new G4UIcmdWith3VectorAndUnit(tmp, this);
+
+  tmp = dir;
+  tmp += "/type";
+  fpGunType = new G4UIcmdWithAString(tmp, this);
+
+//  fpShoot.reset(new TG4MoleculeShoot<G4Track>());
 }
 
-G4MoleculeGunMessenger::MultipleGun::~MultipleGun()
+//------------------------------------------------------------------------------
+
+G4MoleculeShootMessenger::~G4MoleculeShootMessenger()
 {
-  if (fpGunMoleculeModel) delete fpGunMoleculeModel;
+  if (fpGunSpecies) delete fpGunSpecies;
   if (fpGunPosition) delete fpGunPosition;
   if (fpGunTime) delete fpGunTime;
   if (fpGunN) delete fpGunN;
 }
 
-void G4MoleculeGunMessenger::MultipleGun::SetNewValue(G4UIcommand* command,
-                                                      G4String newValue)
-{
+//------------------------------------------------------------------------------
 
-  if (command == fpGunMoleculeModel)
+void G4MoleculeShootMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+  if (command == fpGunSpecies)
   {
-    fMoleculeName = newValue;
+    fpShoot->fMoleculeName = newValue;
   }
   else if (command == fpGunPosition)
   {
-    fPosition = fpGunPosition->GetNew3VectorValue(newValue);
+    fpShoot->fPosition = fpGunPosition->GetNew3VectorValue(newValue);
+  }
+  else if(command == fpGunRdnmPosition)
+  {
+    fpShoot->fBoxSize = new G4ThreeVector(fpGunRdnmPosition->GetNew3VectorValue(newValue));
   }
   else if (command == fpGunTime)
   {
-    fTime = fpGunTime->GetNewDoubleValue(newValue);
+    fpShoot->fTime = fpGunTime->GetNewDoubleValue(newValue);
   }
   else if (command == fpGunN)
   {
-    fNumber = fpGunN->GetNewIntValue(newValue);
+    fpShoot->fNumber = fpGunN->GetNewIntValue(newValue);
+  }
+  else if (command == fpGunType)
+  {
+    if(newValue == "CM")
+    {
+//      G4cout << "**** Change type" << G4endl;
+//      TG4MoleculeShoot<G4ContinuousMedium>* casted = reinterpret_cast<TG4MoleculeShoot<G4ContinuousMedium>*>(fpShoot.get());
+//      fpShoot.reset(casted);
+      fpShoot = fpShoot.get()->ChangeType<G4ContinuousMedium>();
+    }
   }
 }
 
-G4String G4MoleculeGunMessenger::MultipleGun::GetCurrentValue(G4UIcommand* command)
-{
+//------------------------------------------------------------------------------
 
-  if (command == fpGunMoleculeModel)
+G4String G4MoleculeShootMessenger::GetCurrentValue(G4UIcommand* command)
+{
+  if (command == fpGunSpecies)
   {
-    return fMoleculeName;
+    return fpShoot->fMoleculeName;
   }
   else if (command == fpGunPosition)
   {
-    return fpGunPosition->ConvertToStringWithBestUnit(fPosition);
+    return fpGunPosition->ConvertToStringWithBestUnit(fpShoot->fPosition);
+  }
+  else if (command == fpGunRdnmPosition)
+  {
+    if(fpShoot->fBoxSize)
+    {
+      return fpGunRdnmPosition->ConvertToStringWithBestUnit(*fpShoot->fBoxSize);
+    }
+    return fpGunRdnmPosition->ConvertToStringWithBestUnit(G4ThreeVector());
   }
   else if (command == fpGunTime)
   {
-    return fpGunTime->ConvertToStringWithBestUnit(fTime);
+    return fpGunTime->ConvertToStringWithBestUnit(fpShoot->fTime);
   }
   else if (command == fpGunN)
   {
-    return fpGunN->ConvertToString(fNumber);
+    return fpGunN->ConvertToString(fpShoot->fNumber);
   }
   return "";
 }
 
-void G4MoleculeGunMessenger::DefineTracks(G4MoleculeGun* gun)
-{
-  for (size_t i = 0; i < fMultipleGun.size(); i++)
-  {
-    fMultipleGun[i]->DefineTracks(gun);
-  }
-}
+//------------------------------------------------------------------------------
 
-void G4MoleculeGunMessenger::MultipleGun::DefineTracks(G4MoleculeGun* gun)
-{
-  gun->AddNMolecules(fNumber, fMoleculeName, fPosition, fTime);
-}

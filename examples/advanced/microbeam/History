@@ -9,6 +9,19 @@ $Id: History 70524 2013-05-31 16:36:26Z gcosmo $
                        Package History file
                        --------------------
 
+28 Aug 2015 - S.Incerti - tag microbeam-V10-01-03
+- added stronger constraints on SetMinimumEpsilonStep
+and SetMaximumEpsilonStep
+
+18 Aug 2015 - S.Incerti - tag microbeam-V10-01-02
+- switched to G4UIExecutive
+
+17 Aug 2015 - S.Incerti - tag microbeam-V10-01-01
+- switched to OGLIXm in vis.mac
+
+16 Jan 2015 - S.Incerti - tag microbeam-V10-01-00
+- added protection against loops 
+
 14 Oct 2014 - S.Incerti - tag microbeam-V10-00-06
 - warnings fix for Windows
 

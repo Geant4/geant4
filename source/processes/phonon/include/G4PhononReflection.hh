@@ -26,7 +26,7 @@
 /// \file processes/phonon/include/G4PhononReflection.hh
 /// \brief Definition of the G4PhononReflection class
 //
-// $Id: G4PhononReflection.hh 75844 2013-11-06 17:35:56Z gcosmo $
+// $Id: G4PhononReflection.hh 75725 2013-11-05 16:52:30Z mkelsey $
 //
 #ifndef G4PhononReflection_h
 #define G4PhononReflection_h 1

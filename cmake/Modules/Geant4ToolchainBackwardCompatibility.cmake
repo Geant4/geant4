@@ -314,19 +314,50 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY SCRIPT_NAME)
     set(GEANT4_TC_DATASETS "${GEANT4_TC_DATASETS}${_dssetenvcmd}\n")
   endforeach()
 
+  set(GEANT4_TC_TOOLS_FONT_PATH "# FREETYPE SUPPORT NOT AVAILABLE")
+  if(GEANT4_USE_FREETYPE)
+    _g4tc_prepend_path(GEANT4_TC_TOOLS_FONT_PATH
+      ${SHELL_FAMILY}
+      TOOLS_FONT_PATH
+      "${TOOLS_FONT_PATH}"
+      )
+  endif()
+
 
   # - CLHEP...
   if(GEANT4_USE_SYSTEM_CLHEP)
     # Have to use detected CLHEP paths to set base dir and others
     get_filename_component(_CLHEP_BASE_DIR ${CLHEP_INCLUDE_DIR} PATH)
-    get_filename_component(_CLHEP_LIB_DIR ${CLHEP_LIBRARY} PATH)
+
+    # Handle granular vs singular cases
+    if(GEANT4_USE_SYSTEM_CLHEP_GRANULAR)
+      get_filename_component(_CLHEP_LIB_DIR ${CLHEP_Vector_LIBRARY} PATH)
+    else()
+      get_filename_component(_CLHEP_LIB_DIR ${CLHEP_LIBRARY} PATH)
+    endif()
 
     set(GEANT4_TC_G4LIB_USE_CLHEP "# USING SYSTEM CLHEP")
     _g4tc_setenv_command(GEANT4_TC_CLHEP_BASE_DIR ${SHELL_FAMILY} CLHEP_BASE_DIR ${_CLHEP_BASE_DIR})
 
     _g4tc_setenv_command(GEANT4_TC_CLHEP_INCLUDE_DIR ${SHELL_FAMILY} CLHEP_INCLUDE_DIR ${CLHEP_INCLUDE_DIR})
 
+    # Only need to handle CLHEP_LIB for granular case
+    if(GEANT4_USE_SYSTEM_CLHEP_GRANULAR)
+      set(G4_SYSTEM_CLHEP_LIBRARIES )
+      foreach(_clhep_lib ${CLHEP_LIBRARIES})
+        get_filename_component(_curlib "${_clhep_lib}" NAME)
+        string(REGEX REPLACE "^lib(.*)\\.(so|a|dylib|lib|dll)$" "\\1" _curlib "${_curlib}")
+        set(G4_SYSTEM_CLHEP_LIBRARIES "${G4_SYSTEM_CLHEP_LIBRARIES} -l${_curlib}")
+      endforeach()
+
+      # Strip first "-l" as that's prepended by Geant4Make
+      string(REGEX REPLACE "^ *\\-l" "" G4_SYSTEM_CLHEP_LIBRARIES "${G4_SYSTEM_CLHEP_LIBRARIES}")
+
+      _g4tc_setenv_command(GEANT4_TC_CLHEP_LIB ${SHELL_FAMILY} CLHEP_LIB "\"${G4_SYSTEM_CLHEP_LIBRARIES}\"")
+    endif()
+
     _g4tc_setenv_command(GEANT4_TC_CLHEP_LIB_DIR ${SHELL_FAMILY} CLHEP_LIB_DIR ${_CLHEP_LIB_DIR})
+
 
     if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
       _g4tc_prepend_path(GEANT4_TC_CLHEP_LIB_PATH_SETUP ${SHELL_FAMILY} DYLD_LIBRARY_PATH \${CLHEP_LIB_DIR})
@@ -531,18 +562,20 @@ set(G4SYSTEM  "${GEANT4_SYSTEM}-${GEANT4_COMPILER}")
 set(G4INSTALL ${PROJECT_SOURCE_DIR})
 set(G4INCLUDE ${PROJECT_SOURCE_DIR}/this_is_a_deliberate_dummy_path)
 set(G4BIN_DIR ${PROJECT_BINARY_DIR})
-set(G4LIB ${PROJECT_BINARY_DIR}/outputs/library)
+set(G4LIB ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 set(G4LIB_DIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 set(G4WORKDIR_DEFAULT "\$HOME/geant4_workdir")
 
+# Resource files
 # - Data
 geant4_get_datasetnames(GEANT4_EXPORTED_DATASETS)
-list(REMOVE_ITEM GEANT4_EXPORTED_DATASETS "G4ENSDFSTATE")
 foreach(_ds ${GEANT4_EXPORTED_DATASETS})
   geant4_get_dataset_property(${_ds} ENVVAR ${_ds}_ENVVAR)
   geant4_get_dataset_property(${_ds} BUILD_DIR ${_ds}_PATH)
 endforeach()
 
+# - Fonts
+set(TOOLS_FONT_PATH "${PROJECT_SOURCE_DIR}/source/analysis/fonts")
 
 # - Configure the shell scripts for the BUILD TREE
 _g4tc_configure_build_tree_scripts(geant4make)
@@ -558,7 +591,7 @@ _g4tc_configure_build_tree_scripts(geant4make)
 #    +- LIBDIR/Geant4-VERSION (G4LIB)
 #    +- INCLUDEDIR/Geant4     (G4INCLUDE)
 #    +- DATAROOTDIR/Geant4-VERSION/
-#       +- geant4make              (G4INSTALL!)
+#       +- geant4make              (THIS IS G4INSTALL!)
 #          +- geant4make.(c)sh
 #          +- config/
 
@@ -594,9 +627,9 @@ set(G4LIB_DIR "\"`cd \$geant4make_root/${G4MAKE_TO_LIBDIR} > /dev/null \; pwd`\"
 
 set(G4WORKDIR_DEFAULT "\$HOME/geant4_workdir")
 
+# Resource files
 # - Data
 geant4_get_datasetnames(GEANT4_EXPORTED_DATASETS)
-list(REMOVE_ITEM GEANT4_EXPORTED_DATASETS "G4ENSDFSTATE")
 foreach(_ds ${GEANT4_EXPORTED_DATASETS})
   geant4_get_dataset_property(${_ds} ENVVAR ${_ds}_ENVVAR)
   geant4_get_dataset_property(${_ds} INSTALL_DIR ${_ds}_PATH)
@@ -608,6 +641,9 @@ foreach(_ds ${GEANT4_EXPORTED_DATASETS})
     )
   set(${_ds}_PATH "\"`cd \$geant4make_root/${G4MAKE_TO_DATADIR} > /dev/null \; pwd`\"")
 endforeach()
+
+# - Fonts
+set(TOOLS_FONT_PATH "\"`cd \$geant4make_root/../fonts > /dev/null ; pwd`\"")
 
 # - Configure the shell scripts for the INSTALL TREE
 _g4tc_configure_install_tree_scripts(
@@ -656,9 +692,9 @@ file(RELATIVE_PATH
   ${CMAKE_INSTALL_FULL_LIBDIR}
   )
 
+# Resource Files
 # - Data
 geant4_get_datasetnames(GEANT4_EXPORTED_DATASETS)
-list(REMOVE_ITEM GEANT4_EXPORTED_DATASETS "G4ENSDFSTATE")
 foreach(_ds ${GEANT4_EXPORTED_DATASETS})
   geant4_get_dataset_property(${_ds} ENVVAR ${_ds}_ENVVAR)
   geant4_get_dataset_property(${_ds} INSTALL_DIR ${_ds}_PATH)
@@ -670,6 +706,14 @@ foreach(_ds ${GEANT4_EXPORTED_DATASETS})
     )
   set(${_ds}_PATH "\"`cd \$geant4_envbindir/${G4ENV_BINDIR_TO_DATADIR} > /dev/null \; pwd`\"")
 endforeach()
+
+# - Fonts
+file(RELATIVE_PATH
+  G4ENV_BINDIR_TO_DATAROOTDIR
+  "${CMAKE_INSTALL_FULL_BINDIR}"
+  "${CMAKE_INSTALL_FULL_DATAROOTDIR}/Geant4-${Geant4_VERSION}"
+  )
+set(TOOLS_FONT_PATH "\"`cd \$geant4_envbindir/${G4ENV_BINDIR_TO_DATAROOTDIR}/fonts > /dev/null ; pwd`\"")
 
 
 # - Configure for each shell
@@ -707,12 +751,40 @@ foreach(_shell bourne;cshell)
     "\"`cd $geant4_envbindir/${G4ENV_BINDIR_TO_LIBDIR} > /dev/null ; pwd`\""
     )
 
+  # Third party lib paths
+  # - CLHEP, if system
+  set(GEANT4_TC_CLHEP_LIB_PATH_SETUP "# - Builtin CLHEP used")
+  if(GEANT4_USE_SYSTEM_CLHEP)
+    # Handle granular vs singular cases
+    if(GEANT4_USE_SYSTEM_CLHEP_GRANULAR)
+      get_filename_component(_CLHEP_LIB_DIR ${CLHEP_Vector_LIBRARY} PATH)
+    else()
+      get_filename_component(_CLHEP_LIB_DIR ${CLHEP_LIBRARY} PATH)
+    endif()
+
+    _g4tc_prepend_path(GEANT4_TC_CLHEP_LIB_PATH_SETUP
+      ${_shell}
+      ${_libpathname}
+      "${_CLHEP_LIB_DIR}"
+      )
+  endif()
+
   # - Set data paths
   set(GEANT4_ENV_DATASETS )
   foreach(_ds ${GEANT4_EXPORTED_DATASETS})
     _g4tc_setenv_command(_dssetenvcmd ${_shell} ${${_ds}_ENVVAR} ${${_ds}_PATH})
     set(GEANT4_ENV_DATASETS "${GEANT4_ENV_DATASETS}${_dssetenvcmd}\n")
   endforeach()
+
+  # - Set Font Path
+  set(GEANT4_ENV_TOOLS_FONT_PATH "# FREETYPE SUPPORT NOT AVAILABLE")
+  if(GEANT4_USE_FREETYPE)
+    _g4tc_prepend_path(GEANT4_ENV_TOOLS_FONT_PATH
+      ${_shell}
+      TOOLS_FONT_PATH
+      "${TOOLS_FONT_PATH}"
+      )
+  endif()
 
   # Configure the file
   configure_file(

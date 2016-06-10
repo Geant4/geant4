@@ -123,6 +123,6 @@ tools::raxml* G4XmlRFileManager::GetRFile(const G4String& fileName) const
   if  ( it != fRFiles.end() )
     return it->second;
   else {
-    return 0;
+    return nullptr;
   }     
 }

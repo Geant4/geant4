@@ -27,7 +27,7 @@
 /// \brief Implementation of the SteppingAction class
 //
 //
-// $Id: SteppingAction.cc 85906 2014-11-06 08:52:54Z gcosmo $
+// $Id: SteppingAction.cc 67226 2013-02-08 12:07:18Z ihrivnac $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

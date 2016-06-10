@@ -37,11 +37,12 @@ ExExChParticleUserInfo::ExExChParticleUserInfo(){
     
     fNumberOfDechanneling = 0;
     
-    fMomentumInChanneling = G4ThreeVector(0.,0.,0.);
-    fPositionInChanneling = G4ThreeVector(0.,0.,0.);
+    fMomentumInChanneling = G4ThreeVector(DBL_MAX,DBL_MAX,DBL_MAX);
+    fPositionInChanneling = G4ThreeVector(DBL_MAX,DBL_MAX,DBL_MAX);
     
     fMomentumInChannelingInitial = G4ThreeVector(DBL_MAX,DBL_MAX,DBL_MAX);
     fPositionInChannelingInitial = G4ThreeVector(DBL_MAX,DBL_MAX,DBL_MAX);
+    fInTheCrystal = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

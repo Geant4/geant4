@@ -58,24 +58,24 @@ class G4ParticleHPElastic : public G4HadronicInteraction
   virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
 
   //G4int GetNiso() {return theElastic[0].GetNiso();}
-  G4int GetNiso() {return (*theElastic[0]).GetNiso();}
+  G4int GetNiso() {return ((*theElastic)[0])->GetNiso();};
 
   void DoNotSuspend() {overrideSuspension = true;}
 
    public:
       G4int GetVerboseLevel() const;
       void SetVerboseLevel( G4int );
+      void BuildPhysicsTable(const G4ParticleDefinition&);
+      virtual void ModelDescription(std::ostream& outFile) const;
 
   private:
+      std::vector<G4ParticleHPChannel*>* theElastic;
   
   G4double * xSec;
-  //G4ParticleHPChannel * theElastic;
-  std::vector<G4ParticleHPChannel*> theElastic;
   G4String dirName;
   G4int numEle;
   G4bool overrideSuspension;
 
-      void addChannelForNewElement();
 };
 
 #endif

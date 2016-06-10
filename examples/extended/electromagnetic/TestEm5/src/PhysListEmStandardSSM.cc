@@ -26,10 +26,10 @@
 /// \file electromagnetic/TestEm5/src/PhysListEmStandardSSM.cc
 /// \brief Implementation of the PhysListEmStandardSSM class
 //
-// $Id: PhysListEmStandardSSM.cc 68585 2013-04-01 23:35:07Z adotti $
+// $Id: PhysListEmStandardSSM.cc 91972 2015-08-12 13:48:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandardSSM.hh"
 
@@ -42,6 +42,7 @@
 
 #include "G4CoulombScattering.hh"
 #include "G4eCoulombScatteringModel.hh"
+#include "G4hCoulombScatteringModel.hh"
 #include "G4eSingleCoulombScatteringModel.hh"
 #include "G4IonCoulombScatteringModel.hh"
 
@@ -123,7 +124,7 @@ void PhysListEmStandardSSM::ConstructProcess()
       pmanager->AddProcess(new G4MuBremsstrahlung,   -1, 2, 2);
       pmanager->AddProcess(new G4MuPairProduction,   -1, 3, 3);
       G4CoulombScattering* cs = new G4CoulombScattering();
-      G4eCoulombScatteringModel* model = new G4eCoulombScatteringModel();
+      G4hCoulombScatteringModel* model = new G4hCoulombScatteringModel();
       model->SetPolarAngleLimit(0.0);
       cs->AddEmModel(0, model);
       pmanager->AddDiscreteProcess(cs);            

@@ -65,7 +65,7 @@ class G4ParticleHPNames
       result=theDigits[digit]+result;
       current/=10;
     }
-    while(current!=0);
+    while(current!=0); // Loop checking, 11.05.2015, T. Koi
     return result;
   }
 };

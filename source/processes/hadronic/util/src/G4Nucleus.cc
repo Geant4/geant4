@@ -38,6 +38,7 @@
  // HPW added utilities for low energy neutron transport. (12.04.1998)
  // M.G. Pia, 2 Oct 1998: modified GetFermiMomentum to avoid memory leaks
  // G.Folger, spring 2010:  add integer A/Z interface
+ // A. Ribon, 6 August 2015: migrated to G4Exp and G4Log.
  
 #include "G4Nucleus.hh"
 #include "G4NucleiProperties.hh"
@@ -45,6 +46,10 @@
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4HadronicException.hh"
+
+#include "G4Exp.hh"
+#include "G4Log.hh"
+
  
 G4Nucleus::G4Nucleus()
   : theA(0), theZ(0), aEff(0.0), zEff(0)
@@ -116,12 +121,20 @@ GetBiasedThermalNucleus(G4double aMass, G4ThreeVector aVelocity, G4double temp) 
   norm *= 5.;
   norm += velMag;
   norm /= velMag;
-  while(value/norm<random)
+  const G4int maxNumberOfLoops = 10000;
+  G4int loopCounter = -1;
+  while ( (value/norm<random) && ++loopCounter < maxNumberOfLoops )  /* Loop checking, 02.11.2015, A.Ribon */
   {
      result = GetThermalNucleus(aMass, temp);
      G4ThreeVector targetVelocity = 1./result.GetMass()*result.GetMomentum();
      value = (targetVelocity+aVelocity).mag()/velMag;
      random = G4UniformRand();
+  }
+  if ( loopCounter >= maxNumberOfLoops ) {
+    G4ExceptionDescription ed;
+    ed << " Failed sampling after maxNumberOfLoops attempts : forced exit! " << G4endl;
+    G4Exception( " G4Nucleus::GetBiasedThermalNucleus ", "HAD_NUCLEUS_001", JustWarning, ed );
+    result = GetThermalNucleus(aMass, temp);    
   }
   return result;
 }
@@ -176,7 +189,7 @@ G4Nucleus::ChooseParameters(const G4Material* aMaterial)
     G4double randomAbundance = G4UniformRand();
     G4double sumAbundance = element->GetRelativeAbundanceVector()[0];
     unsigned int iso=0;
-    while (iso < element->GetNumberOfIsotopes() &&
+    while (iso < element->GetNumberOfIsotopes() &&  /* Loop checking, 02.11.2015, A.Ribon */
            sumAbundance < randomAbundance) {
       ++iso;
       sumAbundance += element->GetRelativeAbundanceVector()[iso];
@@ -278,14 +291,14 @@ G4Nucleus::SetParameters(G4int A, const G4int Z )
     G4double ek = kineticEnergy/GeV;
     G4float ekin = std::min( 4.0, std::max( 0.1, ek ) );
     const G4float atno = std::min( 120., aEff ); 
-    const G4float gfa = 2.0*((aEff-1.0)/70.)*std::exp(-(aEff-1.0)/70.);
+    const G4float gfa = 2.0*((aEff-1.0)/70.)*G4Exp(-(aEff-1.0)/70.);
     //
     // 0.35 value at 1 GeV
     // 0.05 value at 0.1 GeV
     //
-    G4float cfa = std::max( 0.15, 0.35 + ((0.35-0.05)/2.3)*std::log(ekin) );
-    G4float exnu = 7.716 * cfa * std::exp(-cfa)
-      * ((atno-1.0)/120.)*std::exp(-(atno-1.0)/120.);
+    G4float cfa = std::max( 0.15, 0.35 + ((0.35-0.05)/2.3)*G4Log(ekin) );
+    G4float exnu = 7.716 * cfa * G4Exp(-cfa)
+      * ((atno-1.0)/120.)*G4Exp(-(atno-1.0)/120.);
     G4float fpdiv = std::max( 0.5, 1.0-0.25*ekin*ekin );
     //
     // pnBlackTrackEnergy  is the kinetic energy (in GeV) available for
@@ -310,7 +323,7 @@ G4Nucleus::SetParameters(G4int A, const G4int Z )
     }
     pnBlackTrackEnergy = std::max( 0.0, pnBlackTrackEnergy );
     dtaBlackTrackEnergy = std::max( 0.0, dtaBlackTrackEnergy );
-    while( pnBlackTrackEnergy+dtaBlackTrackEnergy >= ek )
+    while( pnBlackTrackEnergy+dtaBlackTrackEnergy >= ek )  /* Loop checking, 02.11.2015, A.Ribon */
     {
       pnBlackTrackEnergy *= 1.0 - 0.5*G4UniformRand();
       dtaBlackTrackEnergy *= 1.0 - 0.5*G4UniformRand();
@@ -334,11 +347,11 @@ G4Nucleus::SetParameters(G4int A, const G4int Z )
     G4double ek = kineticEnergy/GeV;
     G4float ekin = std::min( 4.0, std::max( 0.1, ek ) );
     const G4float atno = std::min( 120., aEff ); 
-    const G4float gfa = 2.0*((aEff-1.0)/70.)*std::exp(-(aEff-1.0)/70.);
+    const G4float gfa = 2.0*((aEff-1.0)/70.)*G4Exp(-(aEff-1.0)/70.);
 
-    G4float cfa = std::max( 0.15, 0.35 + ((0.35-0.05)/2.3)*std::log(ekin) );
-    G4float exnu = 7.716 * cfa * std::exp(-cfa)
-      * ((atno-1.0)/120.)*std::exp(-(atno-1.0)/120.);
+    G4float cfa = std::max( 0.15, 0.35 + ((0.35-0.05)/2.3)*G4Log(ekin) );
+    G4float exnu = 7.716 * cfa * G4Exp(-cfa)
+      * ((atno-1.0)/120.)*G4Exp(-(atno-1.0)/120.);
     G4float fpdiv = std::max( 0.5, 1.0-0.25*ekin*ekin );
 
     pnBlackTrackEnergyfromAnnihilation = exnu*fpdiv;
@@ -376,11 +389,11 @@ G4Nucleus::SetParameters(G4int A, const G4int Z )
     static const G4double expxl = -expxu;         // lower bound for arg. of exp
     
     G4double ek = kineticEnergy/GeV;
-    G4double ekLog = std::log( ek );
-    G4double aLog = std::log( aEff );
+    G4double ekLog = G4Log( ek );
+    G4double aLog = G4Log( aEff );
     G4double em = std::min( 1.0, 0.2390 + 0.0408*aLog*aLog );
     G4double temp1 = -ek * std::min( 0.15, 0.0019*aLog*aLog*aLog );
-    G4double temp2 = std::exp( std::max( expxl, std::min( expxu, -(ekLog-em)*(ekLog-em)*2.0 ) ) );
+    G4double temp2 = G4Exp( std::max( expxl, std::min( expxu, -(ekLog-em)*(ekLog-em)*2.0 ) ) );
     G4double result = 0.0;
     if( std::abs( temp1 ) < 1.0 )
     {

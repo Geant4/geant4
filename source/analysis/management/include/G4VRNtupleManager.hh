@@ -44,11 +44,16 @@ class G4VRNtupleManager : public G4BaseAnalysisManager
   // its messenger
   friend class G4VAnalysisReader;
 
-  protected:
-    G4VRNtupleManager(const G4AnalysisManagerState& state) 
+  public:
+    explicit G4VRNtupleManager(const G4AnalysisManagerState& state) 
       : G4BaseAnalysisManager(state) {}
     virtual ~G4VRNtupleManager(){}
-   
+
+    // deleted copy constructor & assignment operator
+    G4VRNtupleManager(const G4VRNtupleManager& rhs) = delete;
+    G4VRNtupleManager& operator=(const G4VRNtupleManager& rhs) = delete;
+
+  protected:   
     // Methods to read ntuple from a file
     // Methods for ntuple with id = FirstNtupleId                     
     virtual G4bool SetNtupleIColumn(const G4String& columnName, 
@@ -57,8 +62,8 @@ class G4VRNtupleManager : public G4BaseAnalysisManager
                             G4float& value)= 0;
     virtual G4bool SetNtupleDColumn(const G4String& columnName, 
                             G4double& value)= 0;
-    virtual G4bool SetNtupleSColumn(const G4String& /*columnName*/, 
-                            G4String& /*value*/) { return false; }
+    virtual G4bool SetNtupleSColumn(const G4String& columnName, 
+                            G4String& value) = 0;
     // Bind the ntuple columns of vector type
     virtual G4bool SetNtupleIColumn(const G4String& columnName, 
                             std::vector<G4int>& vector) = 0;
@@ -73,8 +78,8 @@ class G4VRNtupleManager : public G4BaseAnalysisManager
                             const G4String& columnName, G4float& value)= 0;
     virtual G4bool SetNtupleDColumn(G4int ntupleId, 
                             const G4String& columnName, G4double& value)= 0;
-    virtual G4bool SetNtupleSColumn(G4int /*ntupleId*/, 
-                            const G4String& /*columnName*/, G4String& /*value*/) { return false; }
+    virtual G4bool SetNtupleSColumn(G4int ntupleId, 
+                            const G4String& columnName, G4String& value)= 0;
     // Bind the ntuple columns of vector type
     virtual G4bool SetNtupleIColumn(G4int ntupleId, const G4String& columnName, 
                             std::vector<G4int>& vector) = 0;

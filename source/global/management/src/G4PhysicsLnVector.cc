@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLnVector.cc 74256 2013-10-02 14:24:02Z gcosmo $
+// $Id: G4PhysicsLnVector.cc 93409 2015-10-21 13:26:27Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -56,7 +56,7 @@ G4PhysicsLnVector::G4PhysicsLnVector(size_t theNbin)
   dataVector.reserve(numberOfNodes);
   binVector.reserve(numberOfNodes);      
 
-  for (size_t i=0; i<numberOfNodes; i++)
+  for (size_t i=0; i<numberOfNodes; ++i)
   {
      binVector.push_back(0.0);
      dataVector.push_back(0.0);
@@ -78,7 +78,7 @@ G4PhysicsLnVector::G4PhysicsLnVector(G4double theEmin,
   binVector.push_back(theEmin);
   dataVector.push_back(0.0);
 
-  for (size_t i=1; i<numberOfNodes-1; i++)
+  for (size_t i=1; i<numberOfNodes-1; ++i)
     {
       binVector.push_back(G4Exp((baseBin+i)*dBin));
       dataVector.push_back(0.0);

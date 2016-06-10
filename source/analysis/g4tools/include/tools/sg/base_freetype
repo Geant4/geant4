@@ -1,0 +1,107 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_base_freetype
+#define tools_sg_base_freetype
+
+#include "base_text"
+#include "gstos"
+#include "sf_string"
+
+// abstract class to handle freetype text.
+
+namespace tools {
+namespace sg {
+
+class base_freetype : public base_text, public gstos {
+  TOOLS_HEADER(base_freetype,tools::sg::base_freetype,base_text)
+public:
+  sf_string font;
+  sf_enum<winding_type> front_face; //default is ccw.
+  sf_enum<font_modeling> modeling;
+  typedef unsigned int unichar;
+  typedef std::vector<unichar> uniline;  
+  mf_std_vec<unichar> unitext;
+public:
+  virtual const std::vector<field_desc>& node_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::base_freetype)
+    static std::vector<tools::sg::field_desc> s_v;
+    if(s_v.empty()) {
+      s_v = parent::node_fields();
+      TOOLS_ADD_FIELD_DESC(font)
+      TOOLS_ADD_FIELD_DESC(front_face)
+      TOOLS_ADD_FIELD_DESC(modeling)
+      TOOLS_ADD_FIELD_DESC(unitext)
+    }
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&font);
+    add_field(&front_face);
+    add_field(&modeling);
+    add_field(&unitext);
+  }
+public:
+  base_freetype()
+  :parent()
+  ,gstos()
+
+  ,font("")
+  ,front_face(winding_ccw)
+  ,modeling(font_filled) //font_outline
+  //,modeling(font_outline)
+  ,unitext()
+  {
+    add_fields();
+  }
+  virtual ~base_freetype(){}
+public:
+  base_freetype(const base_freetype& a_from)
+  :parent(a_from)
+  ,gstos(a_from)
+
+  ,font(a_from.font)
+  ,front_face(a_from.front_face)
+  ,modeling(a_from.modeling)
+  ,unitext(a_from.unitext)
+  {
+    add_fields();
+  }
+
+  base_freetype& operator=(const base_freetype& a_from){
+    parent::operator=(a_from);
+    gstos::operator=(a_from);
+    font = a_from.font;
+    front_face = a_from.front_face;
+    modeling = a_from.modeling;
+    unitext = a_from.unitext;
+    return *this;
+  }
+
+public:
+  void dump_unitext(std::ostream& a_out) {
+    //unitext.values().size()
+    a_out << "unitext size : " << unitext.values().size() << std::endl;
+    std::vector<uniline>::const_iterator vit;
+    for(vit=unitext.values().begin();vit!=unitext.values().end();++vit) {
+      const uniline& line = *vit;
+      a_out << "beg line :" << std::endl;
+      //a_out << line << std::endl;
+      std::vector<unichar>::const_iterator it;
+      for(it=line.begin();it!=line.end();++it) {
+        a_out << ((unsigned int)*it) << std::endl;
+      }  
+      a_out << "end line." << std::endl;
+    }
+  }
+public:
+  static base_freetype* create(const base_freetype& a_ttf) {
+    return safe_cast<node,base_freetype>(*(a_ttf.copy()));
+  }
+
+};
+
+}}
+
+#endif

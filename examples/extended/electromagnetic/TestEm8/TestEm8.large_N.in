@@ -9,14 +9,15 @@
 #
 #  select EM PhysicsList
 #
-/testem/phys/addPhysics  pai
-#/testem/phys/addPhysics  standard
+/testem/phys/addPhysics  emstandard
+/process/em/AddPAIRegion all GasDetector pai
 #
 /testem/phys/setNbinsE 20
 /testem/phys/setMaxE 0.060  MeV  
 #
 /run/initialize
 #
+/process/em/verbose 1
 /run/setCut  1 mm
 /run/setCutForRegion GasDetector 0.2 mm
 #/run/particle/dumpCutValues

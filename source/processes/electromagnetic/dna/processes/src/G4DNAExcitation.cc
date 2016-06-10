@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAExcitation.cc 85423 2014-10-29 08:22:38Z gcosmo $
+// $Id: G4DNAExcitation.cc 91992 2015-08-13 07:20:24Z gcosmo $
 
 #include "G4DNAExcitation.hh"
 #include "G4LEPTSExcitationModel.hh"
@@ -35,16 +35,17 @@
 using namespace std;
 
 G4DNAExcitation::G4DNAExcitation(const G4String& processName,
-  G4ProcessType type):G4VEmProcess (processName, type),
-    isInitialised(false)
+                                 G4ProcessType type) :
+    G4VEmProcess(processName, type), isInitialised(false)
 {
   SetProcessSubType(52);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 G4DNAExcitation::~G4DNAExcitation()
-{}
+{
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -54,113 +55,120 @@ G4bool G4DNAExcitation::IsApplicable(const G4ParticleDefinition& p)
   G4DNAGenericIonsManager *instance;
   instance = G4DNAGenericIonsManager::Instance();
 
-  return 
-    (
-       &p == G4Electron::Electron() 
-    || &p == G4Positron::Positron()
-    || &p == G4Proton::ProtonDefinition()
-    || &p == instance->GetIon("hydrogen")
-    || &p == instance->GetIon("alpha++")
-    || &p == instance->GetIon("alpha+")
-    || &p == instance->GetIon("helium")
-    );
+  return (&p == G4Electron::Electron() || &p == G4Positron::Positron()
+          || &p == G4Proton::ProtonDefinition()
+          || &p == instance->GetIon("hydrogen")
+          || &p == instance->GetIon("alpha++")
+          || &p == instance->GetIon("alpha+")
+          || &p == instance->GetIon("helium"));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4DNAExcitation::InitialiseProcess(const G4ParticleDefinition* p)
 {
-  if(!isInitialised) 
+  if(!isInitialised)
   {
     isInitialised = true;
     SetBuildTableFlag(false);
-    
+
     G4String name = p->GetParticleName();
 
     if(name == "e-")
     {
 
       // Emfietzoglou model
-/*
-      if(!EmModel()) SetEmModel(new G4DNAEmfietzoglouExcitationModel);
-      EmModel()->SetLowEnergyLimit(8.23*eV);
-      EmModel()->SetHighEnergyLimit(10*MeV);
-*/
+      /*
+       if(!EmModel()) SetEmModel(new G4DNAEmfietzoglouExcitationModel);
+       EmModel()->SetLowEnergyLimit(8.23*eV);
+       EmModel()->SetHighEnergyLimit(10*MeV);
+       */
       // Born model
-
-      if(!EmModel()) SetEmModel(new G4DNABornExcitationModel);
-      EmModel()->SetLowEnergyLimit(9*eV);
-      EmModel()->SetHighEnergyLimit(1*MeV);
-
-      AddEmModel(1, EmModel());   
+      if(!EmModel())
+      {
+        G4DNABornExcitationModel* born = new G4DNABornExcitationModel();
+        SetEmModel(born);
+        born->SetLowEnergyLimit(9 * eV);
+        born->SetHighEnergyLimit(1 * MeV);
+      }
+      AddEmModel(1, EmModel());
     }
 
-    if(name == "e+")
+    else if(name == "e+")
     {
-      if(!EmModel()) SetEmModel(new G4LEPTSExcitationModel);
-      EmModel()->SetLowEnergyLimit(1*eV);
-      EmModel()->SetHighEnergyLimit(1*MeV);
-
-      AddEmModel(1, EmModel());   
+      if(!EmModel())
+      {
+        G4LEPTSExcitationModel* lepts = new G4LEPTSExcitationModel();
+        SetEmModel(lepts);
+        lepts->SetLowEnergyLimit(1 * eV);
+        lepts->SetHighEnergyLimit(1 * MeV);
+      }
+      AddEmModel(1, EmModel());
     }
-    
-    if(name == "proton")
+
+    else if(name == "proton")
     {
-      if(!EmModel(1)) SetEmModel(new G4DNAMillerGreenExcitationModel,1);
-      EmModel(1)->SetLowEnergyLimit(10*eV);
-      EmModel(1)->SetHighEnergyLimit(500*keV);
+      if(!EmModel(1)) // MK: Is this a correct test ?
+      {
+        G4DNAMillerGreenExcitationModel* miller =
+            new G4DNAMillerGreenExcitationModel();
+        SetEmModel(miller, 1);
+        miller->SetLowEnergyLimit(10 * eV);
+        miller->SetHighEnergyLimit(500 * keV);
 
-      if(!EmModel(2)) SetEmModel(new G4DNABornExcitationModel,2);
-      EmModel(2)->SetLowEnergyLimit(500*keV);
-      EmModel(2)->SetHighEnergyLimit(100*MeV);
-    
-      AddEmModel(1, EmModel(1));   
-      AddEmModel(2, EmModel(2));   
+        G4DNABornExcitationModel* born = new G4DNABornExcitationModel();
+        SetEmModel(born, 2);
+        born->SetLowEnergyLimit(500 * keV);
+        born->SetHighEnergyLimit(100 * MeV);
+      }
+
+      AddEmModel(1, EmModel(1));
+      if(EmModel(2)) AddEmModel(2, EmModel(2));
     }
 
-    if(name == "hydrogen")
+    else if(name == "hydrogen")
     {
-      if(!EmModel()) SetEmModel(new G4DNAMillerGreenExcitationModel);
-      EmModel()->SetLowEnergyLimit(10*eV);
-      EmModel()->SetHighEnergyLimit(500*keV);
-   
-      AddEmModel(1, EmModel());   
+      if(!EmModel())
+      {
+        G4DNAMillerGreenExcitationModel* miller =
+            new G4DNAMillerGreenExcitationModel;
+        SetEmModel(miller);
+        miller->SetLowEnergyLimit(10 * eV);
+        miller->SetHighEnergyLimit(500 * keV);
+      }
+      AddEmModel(1, EmModel());
     }
 
-
-    if( name == "alpha" || name == "alpha+" || name == "helium" )
+    else if(name == "alpha" || name == "alpha+" || name == "helium")
     {
-      if(!EmModel()) SetEmModel(new G4DNAMillerGreenExcitationModel);
-      EmModel()->SetLowEnergyLimit(1*keV);
-      EmModel()->SetHighEnergyLimit(400*MeV);
-
-      AddEmModel(1, EmModel());   
+      if(!EmModel())
+      {
+        G4DNAMillerGreenExcitationModel* miller =
+            new G4DNAMillerGreenExcitationModel;
+        SetEmModel(miller);
+        miller->SetLowEnergyLimit(1 * keV);
+        miller->SetHighEnergyLimit(400 * MeV);
+      }
+      AddEmModel(1, EmModel());
     }
-
-  } 
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4DNAExcitation::PrintInfo()
 {
-  if (EmModel(2))
+  if(EmModel(2))
   {
-    G4cout
-      << " Total cross sections computed from " 
-      << EmModel(1)->GetName() 
-      << " and "
-      << EmModel(2)->GetName() 
-      << " models"
-      << G4endl;
-  } 
+    G4cout << " Total cross sections computed from " << EmModel(1)->GetName()
+           << " and " << EmModel(2)->GetName() << " models" << G4endl;
+  }
   else
   {
-    G4cout
-      << " Total cross sections computed from " 
-      << EmModel()->GetName() 
-      << G4endl;
+    G4cout << " Total cross sections computed from "
+           << EmModel()->GetName()
+           << G4endl;
   }
-}         
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

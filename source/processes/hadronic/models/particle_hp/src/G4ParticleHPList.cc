@@ -91,6 +91,9 @@
 
 void G4ParticleHPList::Dump()
 {
-  G4cout << std::setprecision(7) << std::setw(9) << theLabel << " " << theData[0] << " " << theData[1] << G4endl;
-
+   //store orginal precision
+   std::ios::fmtflags oldform = G4cout.flags();
+   G4cout << std::setprecision(7) << std::setw(9) << theLabel << " " << theData[0] << " " << theData[1] << G4endl;
+   //restore orginal precision
+   G4cout.flags( oldform );
 }

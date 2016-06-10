@@ -36,7 +36,8 @@
 //_____________________________________________________________________________
 ExG4HbookP2DummyManager::ExG4HbookP2DummyManager(
                              const G4AnalysisManagerState& state)
- : G4VP2Manager(state),
+ : G4VP2Manager(),
+   G4THnManager<G4int>(state, "H3"),
    fWarn(true)
 {
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonisParamMat.cc 83992 2014-09-26 09:26:06Z gcosmo $
+// $Id: G4IonisParamMat.cc 93568 2015-10-26 14:52:36Z gcosmo $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -48,8 +48,6 @@
 #include "G4Pow.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4Log.hh"
-#include "G4Exp.hh"
 
 G4DensityEffectData* G4IonisParamMat::fDensityData = 0;
 
@@ -188,8 +186,29 @@ void G4IonisParamMat::ComputeDensityEffect()
   G4int idx = fDensityData->GetIndex(fMaterial->GetName());
   G4int nelm= fMaterial->GetNumberOfElements();
   G4int Z0  = G4lrint((*(fMaterial->GetElementVector()))[0]->GetZ());
+
+  // for simple non-NIST materials 
+  G4double corr = 0.0;
   if(idx < 0 && 1 == nelm) {
     idx = fDensityData->GetElementIndex(Z0, fMaterial->GetState());
+
+    // Correction for base material or for non-nominal density
+    // Except cases of very different density defined in user code
+    if(idx >= 0) {
+      const G4Material* bmat = fMaterial->GetBaseMaterial();
+      if(bmat) {
+	corr = G4Log(bmat->GetDensity()/fMaterial->GetDensity());
+      } else {
+	G4double dens = G4NistManager::Instance()->GetNominalDensity(Z0);
+	if(dens <= 0.0) { idx = -1; }
+	else {
+	  corr = G4Log(dens/fMaterial->GetDensity());
+	}
+      }
+      // 1.0 is an arbitrary empirical limit 
+      // parameterisation with very different density is not applicable
+      if(std::abs(corr) > 1.0) { idx = -1; }
+    }
   }
 
   //G4cout<<"DensityEffect for "<<fMaterial->GetName()<<"  "<< idx << G4endl; 
@@ -210,14 +229,10 @@ void G4IonisParamMat::ComputeDensityEffect()
     fPlasmaEnergy = fDensityData->GetPlasmaEnergy(idx);
     fAdjustmentFactor = fDensityData->GetAdjustmentFactor(idx);
 
-    // Correction for base material
-    const G4Material* bmat = fMaterial->GetBaseMaterial();
-    if(bmat) {
-      G4double corr = G4Log(bmat->GetDensity()/fMaterial->GetDensity());
-      fCdensity  += corr;
-      fX0density += corr/twoln10;
-      fX1density += corr/twoln10;
-    }
+    // correction on nominal density
+    fCdensity  += corr;
+    fX0density += corr/twoln10;
+    fX1density += corr/twoln10;
 
   } else {
 
@@ -298,7 +313,7 @@ void G4IonisParamMat::ComputeDensityEffect()
     G4double Pressure = fMaterial->GetPressure();
     G4double Temp     = fMaterial->GetTemperature();
       
-    G4double DensitySTP = Density*STP_Pressure*Temp/(Pressure*STP_Temperature);
+    G4double DensitySTP = Density*STP_Pressure*Temp/(Pressure*NTP_Temperature);
 
     G4double ParCorr = G4Log(Density/DensitySTP);
   
@@ -366,12 +381,13 @@ void G4IonisParamMat::ComputeIonParameters()
   //  to find out average values Z, vF, lF
   G4double z(0.0), vF(0.0), lF(0.0), norm(0.0), a23(0.0);
 
+  G4Pow* g4pow = G4Pow::GetInstance();
   if( 1 == NumberOfElements ) {
     const G4Element* element = (*theElementVector)[0];
     z = element->GetZ();
     vF= element->GetIonisation()->GetFermiVelocity();
     lF= element->GetIonisation()->GetLFactor();
-    a23 = 1.0/G4Pow::GetInstance()->Z23(G4int(element->GetN()));
+    a23 = 1.0/g4pow->A23(element->GetN());
 
   } else {
     for (G4int iel=0; iel<NumberOfElements; iel++)
@@ -382,7 +398,7 @@ void G4IonisParamMat::ComputeIonParameters()
         z    += element->GetZ() * weight;
         vF   += element->GetIonisation()->GetFermiVelocity() * weight;
         lF   += element->GetIonisation()->GetLFactor() * weight;
-	a23  += weight/G4Pow::GetInstance()->Z23(G4int(element->GetN()));
+	a23  += weight/g4pow->A23(element->GetN());
       }
     z  /= norm;
     vF /= norm;
@@ -492,71 +508,6 @@ G4double G4IonisParamMat::FindMeanExcitationEnergy(const G4String& chFormula)
     }
   }
   return x;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-/*
-G4IonisParamMat::G4IonisParamMat(const G4IonisParamMat& right)
-{
-  fShellCorrectionVector = 0;
-  fMaterial = 0;
-  *this = right;
-}
-*/
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
-G4IonisParamMat& G4IonisParamMat::operator=(const G4IonisParamMat& right)
-{
-  if (this != &right)
-    {
-      fMaterial                 = right.fMaterial;
-      fMeanExcitationEnergy     = right.fMeanExcitationEnergy;
-      fLogMeanExcEnergy         = right.fLogMeanExcEnergy;
-      if(fShellCorrectionVector){ delete [] fShellCorrectionVector; }      
-      fShellCorrectionVector    = new G4double[3];             
-      fShellCorrectionVector[0] = right.fShellCorrectionVector[0];
-      fShellCorrectionVector[1] = right.fShellCorrectionVector[1];
-      fShellCorrectionVector[2] = right.fShellCorrectionVector[2];
-      fTaul                     = right.fTaul;
-      fCdensity                 = right.fCdensity;
-      fMdensity                 = right.fMdensity;
-      fAdensity                 = right.fAdensity;
-      fX0density                = right.fX0density;
-      fX1density                = right.fX1density;
-      fD0density                = right.fD0density;
-      fPlasmaEnergy             = right.fPlasmaEnergy;
-      fAdjustmentFactor         = right.fAdjustmentFactor;
-      fF1fluct                  = right.fF1fluct;
-      fF2fluct                  = right.fF2fluct;
-      fEnergy1fluct             = right.fEnergy1fluct;
-      fLogEnergy1fluct          = right.fLogEnergy1fluct;      
-      fEnergy2fluct             = right.fEnergy2fluct;
-      fLogEnergy2fluct          = right.fLogEnergy2fluct;      
-      fEnergy0fluct             = right.fEnergy0fluct;
-      fRateionexcfluct          = right.fRateionexcfluct;
-      fZeff                     = right.fZeff;
-      fFermiEnergy              = right.fFermiEnergy;
-      fLfactor                  = right.fLfactor;
-      fInvA23                   = right.fInvA23;
-      fBirks                    = right.fBirks;
-      fMeanEnergyPerIon         = right.fMeanEnergyPerIon;
-      twoln10                   = right.twoln10;
-    } 
-  return *this;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
-G4int G4IonisParamMat::operator==(const G4IonisParamMat& right) const
-{
-  return (this == (G4IonisParamMat*) &right);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
-G4int G4IonisParamMat::operator!=(const G4IonisParamMat& right) const
-{
-  return (this != (G4IonisParamMat*) &right);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

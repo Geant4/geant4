@@ -1,0 +1,51 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_sf_string
+#define tools_sg_sf_string
+
+#include "sf"
+
+#include "../cstr"
+#include "../HEADER"
+
+namespace tools {
+namespace sg {
+
+class sf_string : public bsf<std::string> {
+  TOOLS_HEADER(sf_string,tools::sg::sf_string,bsf<std::string>)
+public:
+  virtual bool write(io::iwbuf& a_buffer) {
+    return a_buffer.write_cstr(m_value.c_str());
+  }
+  virtual bool read(io::irbuf& a_buffer) {
+    char* cstr = 0;
+    if(!a_buffer.read_cstr(cstr)) return false;
+    m_value = cstr;
+    str_del(cstr);
+    return true;
+  }
+  virtual bool dump(std::ostream&) {
+    //a_out << parent::m_value << std::endl;
+    return true;
+  }
+public:
+  sf_string():parent(){}
+  sf_string(const std::string& a_value):parent(a_value){}
+  virtual ~sf_string(){}
+public:
+  sf_string(const sf_string& a_from):parent(a_from){}
+  sf_string& operator=(const sf_string& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+public:
+  sf_string& operator=(const std::string& a_value){
+    parent::operator=(a_value);
+    return *this;
+  }
+};
+
+}}
+
+#endif

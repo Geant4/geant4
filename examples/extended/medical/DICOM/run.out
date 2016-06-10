@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -107,19 +107,21 @@ Registering graphics systems...
 
 You have successfully registered the following graphics systems.
 Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  G4HepRep (HepRepXML)
-  G4HepRepFile (HepRepFile)
-  OpenGLImmediateX (OGLIX)
-  OpenGLImmediateXm (OGLI, OGLIXm)
-  OpenGLStoredX (OGLSX)
-  OpenGLStoredXm (OGL, OGLS, OGLSXm)
-  RayTracer (RayTracer)
-  RayTracerX (RayTracerX)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-  gMocrenFile (gMocrenFile)
+ASCIITree (ATree)
+DAWNFILE (DAWNFILE)
+G4HepRep (HepRepXML)
+G4HepRepFile (HepRepFile)
+RayTracer (RayTracer)
+VRML1FILE (VRML1FILE)
+VRML2FILE (VRML2FILE)
+gMocrenFile (gMocrenFile)
+OpenGLImmediateQt (OGLIQt, OGLI)
+OpenGLStoredQt (OGLSQt, OGL, OGLS)
+OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
+RayTracerX (RayTracerX)
 
 Registering model factories...
 
@@ -328,70 +330,56 @@ EV: 99
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.03s Real=0.04s Sys=0s
+  User=0.02s Real=0.03s Sys=0s
 
 --------------------End of Global Run----------------------- 
  The run was 200 events 
 LOCAL TOTAL DOSE : 	0 Gy
-      TOTAL DOSE : 	1.11401e-06 Gy
+      TOTAL DOSE : 	1.11642e-06 Gy
  ###### EndOfRunAction ###### 
 =============================================================
  Number of event processed : 200
 =============================================================
  opened file dicom.out for dose output
      Voxel |   DoseDeposit  |
-    6702     5.49138e-09 Gy
-    6703     3.64619e-09 Gy
-    6704     1.08766e-09 Gy
-    6819     8.67972e-10 Gy
-    6820     1.03074e-08 Gy
-    6821     5.74241e-09 Gy
-    6822     8.60808e-10 Gy
-    6826     1.17682e-09 Gy
-    6827     3.52693e-09 Gy
-    6828     2.80786e-09 Gy
-    6829     3.64946e-09 Gy
-    6830     3.86338e-10 Gy
-    6946     1.21983e-09 Gy
-    6947     5.17063e-09 Gy
-    6950     5.31138e-09 Gy
-    6951     1.65707e-08 Gy
-    6952     3.8687e-09 Gy
-    6953     1.04387e-08 Gy
-    6954     6.49691e-10 Gy
-    7874     8.88067e-10 Gy
-    7875     3.09267e-09 Gy
-    8130     6.65493e-08 Gy
-    8131     8.19306e-08 Gy
-    8258     7.27743e-08 Gy
-    8259     1.37656e-07 Gy
-    24389     8.90613e-09 Gy
-    24390     7.99569e-11 Gy
-    24514     4.29335e-08 Gy
-    24515     1.07849e-07 Gy
-    24516     9.2521e-09 Gy
-    24517     6.16815e-09 Gy
-    24642     5.58718e-08 Gy
-    24643     9.75497e-08 Gy
-    40643     3.67752e-09 Gy
-    40644     4.74726e-11 Gy
-    40772     6.8948e-09 Gy
-    40773     8.12695e-10 Gy
-    40898     5.51489e-08 Gy
-    40899     9.56246e-08 Gy
-    41026     6.18694e-08 Gy
-    41027     1.0894e-07 Gy
-    41028     2.40894e-09 Gy
-    41029     3.91219e-09 Gy
-    41674     3.91287e-10 Gy
+    8002     8.48299e-11 Gy
+    8003     2.23508e-08 Gy
+    8127     1.00446e-08 Gy
+    8130     1.10366e-07 Gy
+    8131     1.00286e-07 Gy
+    8254     8.46714e-11 Gy
+    8255     1.83198e-08 Gy
+    8256     6.01932e-09 Gy
+    8257     4.61277e-09 Gy
+    8258     8.0558e-08 Gy
+    8259     7.9113e-08 Gy
+    24002     1.45868e-09 Gy
+    24130     2.58639e-09 Gy
+    24258     1.57292e-09 Gy
+    24508     1.93428e-08 Gy
+    24509     1.06297e-10 Gy
+    24514     7.50494e-08 Gy
+    24515     9.30203e-08 Gy
+    24637     2.48446e-08 Gy
+    24638     2.11817e-08 Gy
+    24642     5.36576e-08 Gy
+    24643     7.58565e-08 Gy
+    40642     2.9554e-10 Gy
+    40770     4.64633e-09 Gy
+    40898     7.78397e-08 Gy
+    40899     8.49878e-08 Gy
+    41026     6.61027e-08 Gy
+    41027     7.62014e-08 Gy
+    41154     1.38578e-09 Gy
+    41282     2.41042e-09 Gy
+    41410     2.03699e-09 Gy
 =============================================
  closed file dicom.out for dose output
 Finished : End of Run Action 0
 G4 kernel has come to Quit state.
-Total navigation history collections cleaned: 9
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.022 Mb
+Dynamic pools deleted: 11 / Total memory freed: 0.036 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)
 Graphics systems deleted.

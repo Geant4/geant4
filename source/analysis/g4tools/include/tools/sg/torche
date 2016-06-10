@@ -1,0 +1,90 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_torche
+#define tools_sg_torche
+
+// directional light
+
+#include "node"
+#include "sf_vec"
+#include "render_action"
+
+#include "../colorf"
+
+namespace tools {
+namespace sg {
+
+class torche : public node {
+  TOOLS_NODE(torche,tools::sg::torche,node)
+public:
+  sf_vec<tools::colorf,float> color;
+  sf_vec<tools::vec3f,float> direction;
+  sf<bool> on;
+public:
+  virtual const std::vector<field_desc>& node_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::torche)
+    static std::vector<field_desc> s_v;
+    if(s_v.empty()) {
+      s_v = parent::node_fields();
+      TOOLS_ADD_FIELD_DESC(color)
+      TOOLS_ADD_FIELD_DESC(direction)
+      TOOLS_ADD_FIELD_DESC(on)
+    }
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&color);
+    add_field(&direction);
+    add_field(&on);
+  }
+public:
+  virtual void render(render_action& a_action) {
+    if(!on.value()) return;
+
+    state& state = a_action.state();
+
+    if((state.m_light+1)>=a_action.max_lights()) {
+      a_action.out() 
+        << "GL_MAX_LIGHTS (" << a_action.max_lights() << ") reached."
+        << std::endl;
+      return;
+    }
+
+    state.m_GL_LIGHTING = true; //for separator
+
+    a_action.enable_light(state.m_light,direction.value(),color.value());
+    state.m_light++;
+  }
+public:
+  torche()
+  :parent()
+  ,color(tools::colorf::white())
+  ,direction(tools::vec3f(0,0,-1))
+  ,on(true)
+  {
+    add_fields();
+  }
+  virtual ~torche(){}
+public:
+  torche(const torche& a_from)
+  :parent(a_from)
+  ,color(a_from.color)
+  ,direction(a_from.direction)
+  ,on(a_from.on)
+  {
+    add_fields();
+  }
+  torche& operator=(const torche& a_from){
+    parent::operator=(a_from);
+    color = a_from.color;
+    direction = a_from.direction;
+    on = a_from.on;
+    return *this;
+  }
+};
+
+}}
+
+#endif

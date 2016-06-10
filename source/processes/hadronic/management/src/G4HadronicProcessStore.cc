@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.cc 86515 2014-11-13 09:11:45Z gcosmo $
+// $Id: G4HadronicProcessStore.cc 92691 2015-09-14 07:04:52Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -59,13 +59,20 @@
 #include "G4HadronicInteractionRegistry.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
 #include "G4HadronicEPTestMessenger.hh"
-
+#ifdef G4USE_STD11
+  #include <algorithm>   //transform
+#endif
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4ThreadLocal G4HadronicProcessStore* G4HadronicProcessStore::instance = 0;
 
 G4HadronicProcessStore* G4HadronicProcessStore::Instance()
 {
-  static G4ThreadLocalSingleton<G4HadronicProcessStore> instance;
-  return instance.Instance();
+  if(!instance) {
+    static G4ThreadLocalSingleton<G4HadronicProcessStore> inst;
+    instance = inst.Instance();
+  }
+  return instance;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -73,8 +80,6 @@ G4HadronicProcessStore* G4HadronicProcessStore::Instance()
 G4HadronicProcessStore::~G4HadronicProcessStore()
 {
   Clean();
-  G4HadronicInteractionRegistry::Instance()->Clean();
-  G4CrossSectionDataSetRegistry::Instance()->Clean();
   delete theEPTestMessenger;
 }
 
@@ -83,15 +88,13 @@ G4HadronicProcessStore::~G4HadronicProcessStore()
 void G4HadronicProcessStore::Clean()
 {
   G4int i;
-  //G4cout << "G4HadronicProcessStore::Clean() Nproc= " << n_proc
-  //	 << "  Nextra= " << n_extra << G4endl;
+  //std::cout << "G4HadronicProcessStore::Clean() Nproc= " << n_proc
+  //	    << "  Nextra= " << n_extra << std::endl;
   for (i=0; i<n_proc; ++i) {
     if( process[i] ) {
       //G4cout << "G4HadronicProcessStore::Clean() delete hadronic "
       //  << i << "  " <<  process[i]->GetProcessName() << G4endl;
-      G4HadronicProcess* p = process[i];
-      DeRegister(p);
-      delete p;
+      delete process[i];
     }
   }
   for(i=0; i<n_extra; ++i) {
@@ -102,7 +105,7 @@ void G4HadronicProcessStore::Clean()
         extraProcess[i] = 0;
     }
   }
-  //G4cout << "G4HadronicProcessStore::Clean() done" << G4endl;
+  //std::cout << "G4HadronicProcessStore::Clean() done" << std::endl;
   n_extra = 0;
   n_proc = 0;
 }
@@ -404,10 +407,8 @@ G4double G4HadronicProcessStore::GetChargeExchangeCrossSectionPerIsotope(
 
 void G4HadronicProcessStore::Register(G4HadronicProcess* proc) 
 { 
-  if(0 < n_proc) {
-    for(G4int i=0; i<n_proc; ++i) {
-      if(process[i] == proc) { return; }
-    }
+  for(G4int i=0; i<n_proc; ++i) {
+    if(process[i] == proc) { return; }
   }
   if(1 < verbose) {
     G4cout << "G4HadronicProcessStore::Register hadronic " << n_proc
@@ -488,10 +489,8 @@ void G4HadronicProcessStore::DeRegister(G4HadronicProcess* proc)
 
 void G4HadronicProcessStore::RegisterExtraProcess(G4VProcess* proc)
 {
-  if(0 < n_extra) {
-    for(G4int i=0; i<n_extra; ++i) {
-      if(extraProcess[i] == proc) { return; }
-    }
+  for(G4int i=0; i<n_extra; ++i) {
+    if(extraProcess[i] == proc) { return; }
   }
   G4HadronicProcess* hproc = reinterpret_cast<G4HadronicProcess*>(proc);
   if(hproc) {
@@ -651,10 +650,12 @@ void G4HadronicProcessStore::PrintHtml(const G4ParticleDefinition* theParticle,
     std::pair<HPHImap::iterator, HPHImap::iterator> itmod =
                         m_map.equal_range(theProcess);
 
-    outFile << "    <ul>\n"; 
+    outFile << "    <ul>\n";
+	 G4String physListName(getenv("G4PhysListName"));
+
     for (HPHImap::iterator jt = itmod.first; jt != itmod.second; ++jt) {
-      outFile << "    <li><b><a href=\"" << (*jt).second->GetModelName() 
-	      << ".html\"> "
+      outFile << "    <li><b><a href=\"" << physListName << "_" 
+		        << HtmlFileName((*jt).second->GetModelName()) << "\"> "
               << (*jt).second->GetModelName() << "</a>" 
               << " from " << (*jt).second->GetMinEnergy()/GeV
               << " GeV to " << (*jt).second->GetMaxEnergy()/GeV
@@ -685,7 +686,8 @@ void
 G4HadronicProcessStore::PrintModelHtml(const G4HadronicInteraction * mod) const
 {
 	G4String dirName(getenv("G4PhysListDocDir"));
-	G4String pathName = dirName + "/" + mod->GetModelName() + ".html";
+	G4String physListName(getenv("G4PhysListName"));
+	G4String pathName = dirName + "/" + physListName + "_" + HtmlFileName(mod->GetModelName());
 	std::ofstream outModel;
 	outModel.open(pathName);
 	outModel << "<html>\n";
@@ -700,6 +702,26 @@ G4HadronicProcessStore::PrintModelHtml(const G4HadronicInteraction * mod) const
 	outModel << "</body>\n";
 	outModel << "</html>\n";
 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//private 
+G4String G4HadronicProcessStore::HtmlFileName(const G4String & in) const
+{
+   G4String str(in);
+    // replace blanks by _  C++11 version:
+#ifdef G4USE_STD11
+	std::transform(str.begin(), str.end(), str.begin(), [](char ch) {
+     return ch == ' ' ? '_' : ch;
+   });
+#else	
+	  // and now in ancient language
+	   for(std::string::iterator it = str.begin(); it != str.end(); ++it) {
+        if(*it == ' ') *it = '_';
+      }
+#endif
+   str=str + ".html";		
+   return str;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -790,7 +812,16 @@ void G4HadronicProcessStore::Print(G4int idxProc, G4int idxPart)
     wasPrinted[idxPart] = 1;	   
   }
   
-  G4cout << "\n  Process: " << proc->GetProcessName();    
+  G4cout << "\n  Process: " << proc->GetProcessName();
+
+  // Append the string "/n" (i.e. "per nucleon") on the kinetic energy of ions.
+  G4String stringEnergyPerNucleon = "";
+  if ( part &&
+       ( part == G4GenericIon::Definition() || 
+         std::abs( part->GetBaryonNumber() ) > 1 ) ) {
+    stringEnergyPerNucleon = "/n";
+  }
+
   HI hi = 0;
   std::multimap<HP,HI,std::less<HP> >::iterator ih;
   for(ih=m_map.lower_bound(proc); ih!=m_map.upper_bound(proc); ++ih) {
@@ -801,9 +832,9 @@ void G4HadronicProcessStore::Print(G4int idxProc, G4int idxPart)
 	if(model[i] == hi) { break; }
       }
       G4cout << "\n        Model: " << std::setw(25) << modelName[i] << ": "  
-	     << G4BestUnit(hi->GetMinEnergy(), "Energy")
+	     << G4BestUnit(hi->GetMinEnergy(), "Energy") << stringEnergyPerNucleon
 	     << " ---> " 
-	     << G4BestUnit(hi->GetMaxEnergy(), "Energy");
+	     << G4BestUnit(hi->GetMaxEnergy(), "Energy") << stringEnergyPerNucleon;
     }
   }
   G4cout << G4endl;

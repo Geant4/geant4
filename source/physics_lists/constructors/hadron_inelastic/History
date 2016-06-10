@@ -1,4 +1,4 @@
-$Id: History 86520 2014-11-13 09:21:11Z gcosmo $
+$Id: History 94087 2015-11-05 15:10:09Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,32 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-07-Nov-2014, P. Arce          (phys-ctor-hinelastic-V10-00-08)
+05-Nov-2015, A. Ribon                   (phys-ctor-hinelastic-V10-01-05)
+- Removed neutron_hp/
+
+03-Nov-2015, A. Ribon                   (phys-ctor-hinelastic-V10-01-04)
+- Migrated to ParticleHP
+
+26-Oct-2015, A. Ribon                   (phys-ctor-hinelastic-V10-01-03)
+- Fixed mistake in the previous tag: now using the correct class
+  G4ComponentGGHadronNucleusXsc instead of the old one
+  G4GlauberGribovCrossSection
+
+22-Oct-2015, A. Ribon                   (phys-ctor-hinelastic-V10-01-02)
+- Use G4ComponentGGHadronNucleusXsc for the kaon inelastic cross sections
+  consistently everywhere (instead of either Chips or Gheisha).
+  According to LHCb, this class describes well the charged kaon cross
+  section asymmetry.
+
+12-Jun-2015, V.Ivanchenko               (phys-ctor-hinelastic-V10-01-01)
+- G4HadronInelasticQBBC - reduced upper limit of Bertini from 12 to 4 GeV;
+    use BGG inelastic cross section for pions 
+
+30-Mar-2015, A. Ribon                   (phys-ctor-hinelastic-V10-01-00)
+- G4HadronPhysicsFTFP_BERT_TRV: changed the transition region between
+  BERT and FTF from [3, 12] GeV to [2, 4] GeV.
+
+07-Nov-2014, P. Arce                    (phys-ctor-hinelastic-V10-00-08)
 - Add G4HadronPhysicsQGSP_BIC_AllHP for particle_hp physics list
 
 30-Oct-2014, Andrea Dotti               (phys-ctor-hinelastic-V10-00-07)

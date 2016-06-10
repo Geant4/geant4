@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 85423 2014-10-29 08:22:38Z gcosmo $
+# $Id: sources.cmake 91584 2015-07-27 13:01:48Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -59,6 +59,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-processes
         G4DNADissociation.hh
         G4DNAElastic.hh
         G4DNAElectronSolvatation.hh
+        G4DNAElectronHoleRecombination.hh
         G4DNAExcitation.hh
         G4DNAIonisation.hh
         G4DNAWaterDissociationDisplacer.hh
@@ -75,6 +76,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-processes
         G4DNADissociation.cc
         G4DNAElastic.cc
         G4DNAElectronSolvatation.cc
+        G4DNAElectronHoleRecombination.cc
         G4DNAExcitation.cc
         G4DNAIonisation.cc
         G4DNAMolecularDissociation.cc

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointCSManager.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4AdjointCSManager.hh 93569 2015-10-26 14:53:21Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class:		G4AdjointCSManager
@@ -53,7 +53,7 @@
 #include"globals.hh"
 #include<vector>
 #include"G4AdjointCSMatrix.hh"
-
+#include "G4ThreadLocalSingleton.hh"
 
 class G4VEmAdjointModel;
 class G4MaterialCutsCouple;
@@ -68,6 +68,8 @@ class G4PhysicsTable;
 //
 class G4AdjointCSManager
 {
+
+  friend class G4ThreadLocalSingleton<G4AdjointCSManager>;
 	
   public:
         ~G4AdjointCSManager();
@@ -172,7 +174,7 @@ class G4AdjointCSManager
 	
   private:
         static G4ThreadLocal 	G4AdjointCSManager* theInstance;
-  	std::vector< std::vector<G4AdjointCSMatrix*> > theAdjointCSMatricesForScatProjToProj; //x dim is for G4VAdjointEM* while y dim is for elements
+  	std::vector< std::vector<G4AdjointCSMatrix*> > theAdjointCSMatricesForScatProjToProj; //x dim is for G4VAdjointEM*, y dim is for elements
 	std::vector< std::vector<G4AdjointCSMatrix*> > theAdjointCSMatricesForProdToProj;
 	std::vector< G4VEmAdjointModel*> listOfAdjointEMModel;
 		
@@ -211,10 +213,7 @@ class G4AdjointCSManager
 	//Sigma tavle for each G4VAdjointEMModel 
 	std::vector<G4PhysicsTable*>        listSigmaTableForAdjointModelScatProjToProj;
 	std::vector<G4PhysicsTable*>        listSigmaTableForAdjointModelProdToProj;
-	
-
-	
-	 
+		 
 	//list of forward G4VEMLossProcess and of G4VEMProcess for the different adjoint particle
 	//--------------------------------------------------------------
 	std::vector< std::vector<G4VEmProcess*>* >		listOfForwardEmProcess;
@@ -223,11 +222,9 @@ class G4AdjointCSManager
 	//list of adjoint particles considered
 	//--------------------------------------------------------------
 	std::vector< G4ParticleDefinition*> theListOfAdjointParticlesInAction;
-	
-	
+		
 	G4double Tmin,Tmax;
 	G4int nbins;
-	
 	
 	//Current material
 	//----------------
@@ -235,10 +232,7 @@ class G4AdjointCSManager
 	G4Material* currentMaterial;
 	size_t  currentMatIndex;
 	
-	G4int verbose;
-	
-	
-	
+	G4int verbose;	
 	
 	//Two CS mode are possible :forward_CS_mode = false the Adjoint CS are used as it is implying a AlongStep Weight Correction.
 	// 			   :forward_CS_mode = true the Adjoint CS are scaled to have the total adjoint CS eual to the fwd one implying a PostStep Weight Correction.
@@ -263,9 +257,6 @@ class G4AdjointCSManager
 	G4ParticleDefinition* theFwdIon;
 	G4double massRatio;
 	
-	
-	
-
   private:
         G4AdjointCSManager();  
 	void DefineCurrentMaterial(const G4MaterialCutsCouple* couple);

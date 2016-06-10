@@ -1,0 +1,94 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_fmanip
+#define tools_fmanip
+
+#include "file"
+#include "sep"
+#include "sout"
+#include <ostream>
+
+namespace tools {
+
+inline bool find_with_dirs(std::ostream& a_out,
+                           const std::vector<std::string>& a_dirs,
+                           const std::string& a_file,
+                           std::string& a_path,
+                           bool a_verbose = false ) {
+  std::vector<std::string>::const_iterator it;
+  for(it=a_dirs.begin();it!=a_dirs.end();++it) {
+    if((*it).empty()) {
+      // with a "" in dirs, this case could solve :
+      // - a_file in the current directory.
+      // - a_file with an absolute path name.
+      a_path = a_file; //may be an absolute file name.
+    } else {
+      a_path = *it;
+      a_path += sep();
+      a_path += a_file;
+    }
+
+    if(a_verbose) {
+      a_out << "find_with_dirs :"
+            << " look for " << tools::sout(a_path) << " ..."
+            << std::endl;
+    }
+
+    if(tools::file::exists(a_path)) {
+      if(a_verbose) {
+        a_out << "find_with_dirs :"
+              << " found " << tools::sout(a_path) << "."
+              << std::endl;
+      }
+      return true;
+    }
+  }
+  a_path.clear();
+
+  if(a_verbose) {
+    a_out << "find_with_dirs :"
+          << " " << tools::sout(a_file) << " not found."
+          << std::endl;
+  }
+
+  return false;   
+}
+
+}
+
+#include "system"
+
+namespace tools {
+
+inline bool find_with_path(std::ostream& a_out,
+                           const std::string& a_env,
+                           const std::string& a_file,
+                           std::string& a_path,
+                           bool a_verbose = false ) {
+  std::string PATH;
+  if(!tools::getenv(a_env,PATH)) {
+    //look for a a_file in current directory.
+    a_path = a_file;
+    if(tools::file::exists(a_path)) return true;
+    a_out << "tools::find_with_path :"
+          << " env variable " << sout(a_env) << " not defined."
+          << std::endl;
+    a_path.clear();
+    return false;
+  }
+  if(a_verbose) {
+    a_out << "find_with_path :"
+          << " PATH is " << tools::sout(PATH)
+          << std::endl;
+  }
+
+  std::vector<std::string> dirs;
+  tools::words(PATH,psep(),false,dirs); //or true ?
+
+  return find_with_dirs(a_out,dirs,a_file,a_path,a_verbose);
+}
+
+}
+
+#endif

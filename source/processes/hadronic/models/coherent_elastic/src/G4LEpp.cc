@@ -261,7 +261,7 @@ G4double G4LEpp::SampleInvariantT(const G4ParticleDefinition* p,
     if (ek < elab[midBin]) je2 = midBin;
     else                   je1 = midBin;
   } 
-  while (je2 - je1 > 1); 
+  while (je2 - je1 > 1);  /* Loop checking, 10.08.2015, A.Ribon */
 
   G4double delab = elab[je2] - elab[je1];
 
@@ -298,7 +298,7 @@ G4double G4LEpp::SampleInvariantT(const G4ParticleDefinition* p,
         sigint1 = sigint;
       }
   } 
-  while (ke2 - ke1 > 1); 
+  while (ke2 - ke1 > 1);  /* Loop checking, 10.08.2015, A.Ribon */ 
 
   dsig = sigint2 - sigint1;
   rc = 1./dsig;

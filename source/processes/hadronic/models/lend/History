@@ -1,4 +1,4 @@
-# $Id: History 83387 2014-08-21 14:28:10Z gcosmo $
+# $Id: History 94484 2015-11-19 08:29:12Z gcosmo $
 # -----------------------------------------------------------
 
           ==================================================
@@ -15,7 +15,74 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+18 November 2015 Tatsumi Koi (hadr-lend-V10-01-14)
+-----------------------------------------------
+-Fix of problem introduced at hadr-lend-V10-01-12
+
+16 November 2015 Tatsumi Koi (hadr-lend-V10-01-13)
+-----------------------------------------------
+-Fix of problem on GNUmake system 
+
+14 November 2015 Tatsumi Koi (hadr-lend-V10-01-12)
+-----------------------------------------------
+-Fix for frequent issue of warning of Bad energy non-conservation in Inelastic
+
+13 November 2015 Tatsumi Koi (hadr-lend-V10-01-11)
+-----------------------------------------------
+-Fix for frequent issue of warning of Bad energy non-conservation in Capture
+
+6 November 2015 Tatsumi Koi (hadr-lend-V10-01-10)
+-----------------------------------------------
+-Loop checking
+
+6 November 2015 Tatsumi Koi (hadr-lend-V10-01-09)
+-----------------------------------------------
+-Fix error and warning messages from compiler(VC12)
+-Extension for charger particles (p, d, t, He3 and A)
+
+6 November 2015 Tatsumi Koi (hadr-lend-V10-01-08)
+-----------------------------------------------
+-Migration to fast-math functions
+-Fix warning messages from compiler(gcc-4.8)
+
+2 November 2015 Tatsumi Koi (hadr-lend-V10-01-07)
+-----------------------------------------------
+-Fix warning messages from compiler(gcc-4.9.3 and gcc-4.8)
+
+1 November 2015 Tatsumi Koi (hadr-lend-V10-01-06)
+-----------------------------------------------
+-Fix error and warning messages from compiler(VC12)
+
+1 November 2015 Tatsumi Koi (hadr-lend-V10-01-05)
+-----------------------------------------------
+-Fix warning messages from compiler(gcc-4.9.3)
+
+31 October 2015 Tatsumi Koi (hadr-lend-V10-01-04)
+-----------------------------------------------
+-Fix warning messages from compiler(clang)
+
+30 October 2015 Tatsumi Koi (hadr-lend-V10-01-03)
+-----------------------------------------------
+-Update to LEND v1.3
+
+5 August 2015 Tatsumi Koi (hadr-lend-V10-01-02)
+-----------------------------------------------
+-Fix for problem on intel compiler with c++11 flag
+        src/tpia_mass.cc
+        src/G4GIDI_mass.cc
+
+8 April 2015 Tatsumi Koi (hadr-lend-V10-01-01)
+-----------------------------------------------
+-Fix for Coverity #56237
+	include/G4GIDI_map.hh
+
+16 March 2015 Tatsumi Koi (hadr-lend-V10-01-00)
+-----------------------------------------------
+-Fix for Coverity #56243 and 56237
+	include/G4GIDI_map.hh
+
 19 August 2014 Tatsumi Koi (hadr-lend-V10-00-06)
+-----------------------------------------------
 -Turn off license banner
 	src/G4LENDManager.cc
 -Fix bug FindIon -> GetIon
@@ -24,8 +91,8 @@ code and to keep track of all tags.
 	src/G4LENDInelastic.cc
 	src/G4LENDElastic.cc
 
-
 2 June 2014 Tatsumi Koi (hadr-lend-V10-00-05)
+-----------------------------------------------
 -Protect divide overflow 
        src/tpia_misc.cc
        src/tpia_kinetics.cc

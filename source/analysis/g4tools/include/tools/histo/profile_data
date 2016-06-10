@@ -13,6 +13,8 @@ template <class TC,class TO,class TN,class TW,class TV>
 class profile_data : public histo_data<TC,TO,TN,TW> {
   typedef histo_data<TC,TO,TN,TW> parent;
 public:
+  typedef std::vector<TV> vs_t;
+public:
   profile_data()
   :parent()
   ,m_is_profile(true)

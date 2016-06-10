@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TritonEvaporationProbability.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4TritonEvaporationProbability.hh 89518 2015-04-15 14:43:30Z gcosmo $
 //
 // J.M. Quesada (August2008). Based on:
 //
@@ -44,47 +44,26 @@
 class G4TritonEvaporationProbability : public G4EvaporationProbability
 {
 public:
-  // Only available constructor
+
   G4TritonEvaporationProbability();
 
   virtual ~G4TritonEvaporationProbability();
 
+protected:
+
+  virtual G4double CalcAlphaParam(const G4Fragment & fragment);
+ 
+  virtual G4double CalcBetaParam(const G4Fragment & fragment);
+
 private:  
-  // Copy constructor
+
   G4TritonEvaporationProbability(const G4TritonEvaporationProbability &right);
 
   const G4TritonEvaporationProbability & operator=(const G4TritonEvaporationProbability &right);
   G4bool operator==(const G4TritonEvaporationProbability &right) const;
   G4bool operator!=(const G4TritonEvaporationProbability &right) const;
 
-
-private:
-
-  virtual G4double CrossSection(const G4Fragment & fragment, G4double K);
-
-  G4double GetOpt0(G4double K);
-  G4double GetOpt12(G4double K);
-  G4double GetOpt34(G4double K);
-
-  
-  virtual G4double CalcAlphaParam(const G4Fragment & fragment)  ;
- 
-  virtual G4double CalcBetaParam(const G4Fragment & fragment)  ;
- 
-  G4double CCoeficient(G4int aZ) ;
-  
-  //data members
-      
   G4TritonCoulombBarrier theCoulombBarrier;
-
-  G4int ResidualA;
-  G4int ResidualZ; 
-  G4int theA;
-  G4int theZ;
-  G4double ResidualAthrd;
-  G4int FragmentA;
-  G4double FragmentAthrd;
-
 };
 
 #endif

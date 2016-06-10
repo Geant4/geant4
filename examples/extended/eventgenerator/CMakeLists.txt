@@ -7,8 +7,9 @@ include(${Geant4_USE_FILE})
 
 #----------------------------------------------------------------------------
 
-add_subdirectory(exgps)
 add_subdirectory(particleGun)
+add_subdirectory(exgps)
+add_subdirectory(userPrimaryGenerator)
 
 #----------------------------------------------------------------------------
 # HepMC examples require HepMC

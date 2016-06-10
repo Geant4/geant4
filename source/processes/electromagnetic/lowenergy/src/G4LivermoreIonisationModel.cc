@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreIonisationModel.cc 87443 2014-12-04 12:26:31Z gunter $
+// $Id: G4LivermoreIonisationModel.cc 93810 2015-11-02 11:27:56Z gcosmo $
 //
 // Author: Luciano Pandola
 //         on base of G4LowEnergyIonisation developed by A.Forti and V.Ivanchenko
@@ -80,7 +80,7 @@ G4LivermoreIonisationModel::G4LivermoreIonisationModel(const G4ParticleDefinitio
   isInitialised(false),
   crossSectionHandler(0), energySpectrum(0)
 {
-  fIntrinsicLowEnergyLimit = 10.0*eV;
+  fIntrinsicLowEnergyLimit = 12.*eV;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
 
   verboseLevel = 0;

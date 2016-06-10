@@ -14,6 +14,20 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+02 November 2015 Alberto Ribon     (hadr-util-V10-01-02)
+--------------------------------------------------------
+- G4Nucleus : checking of 'while' loops.
+
+17 August 2015 Vladimir Ivanchenko (hadr-util-V10-01-01)
+--------------------------------------------------------
+- G4NuclearPolarization - new container class keeping nuclear
+    polarisation tensor (author Jason Detwiler)
+
+06 August 2015 Alberto Ribon         (hadr-util-V10-01-00)
+----------------------------------------------------------
+- G4Nucleus, G4Bessel and G4LightMedia : replaced std::exp, std::log
+  and std::pow with the faster G4Exp, G4Log and G4Pow, respectively.
+
 07 November 2014 Vladimir Ivanchenko (hadr-util-V10-00-08)
 --------------------------------------------------------
 - G4HadSecondary - added creator

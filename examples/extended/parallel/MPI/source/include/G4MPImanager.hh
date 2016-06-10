@@ -51,7 +51,10 @@ public:
     kTAG_G4COMMAND = 100,
     kTAG_G4STATUS = 200,
     kTAG_G4SEED = 300,
-    kTAG_DATA = 1000
+    kTAG_DATA = 1000,
+    kTAG_HISTO = 1001,
+    kTAG_RUN = 1002,
+    kTAG_CMDSCR = 1003
   };
 
   G4MPImanager();
@@ -104,6 +107,7 @@ public:
   // misc
   void ShowHelp() const;
 
+  //MPI::Intracomm* GetComm() const { return &COMM_G4COMMAND_; }
 private:
   DISALLOW_COPY_AND_ASSIGN(G4MPImanager);
 

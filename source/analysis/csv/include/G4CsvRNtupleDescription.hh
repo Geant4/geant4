@@ -53,15 +53,14 @@ struct G4CsvRNtupleDescription
         delete fNtuple;   // CHECK
       }
 
+  // deleted copy constructor
+  G4CsvRNtupleDescription(const G4CsvRNtupleDescription& rhs) = delete;
+  // deleted assignement operator
+  G4CsvRNtupleDescription& operator=(G4CsvRNtupleDescription& rhs) = delete;
+
   tools::rcsv::ntuple* fNtuple; 
   tools::ntuple_binding* fNtupleBinding;
   G4bool fIsInitialized;
-  
-  private:
-    // disabled (not implemented) copy constructor
-    G4CsvRNtupleDescription(const G4CsvRNtupleDescription& rhs);
-    // disabled (not implemented) assignement operator
-    G4CsvRNtupleDescription& operator=(G4CsvRNtupleDescription& rhs);
 };
 
 #endif  

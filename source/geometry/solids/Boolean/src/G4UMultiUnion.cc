@@ -31,6 +31,9 @@
 // --------------------------------------------------------------------
 
 #include "G4UMultiUnion.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+
 #include "G4Polyhedron.hh"
 #include "G4DisplacedSolid.hh"
 #include "G4RotationMatrix.hh"
@@ -123,3 +126,5 @@ G4Polyhedron* G4UMultiUnion::CreatePolyhedron() const
   if (processor.execute(*top)) { return top; }
   else { return 0; } 
 }
+
+#endif  // G4GEOM_USE_USOLIDS

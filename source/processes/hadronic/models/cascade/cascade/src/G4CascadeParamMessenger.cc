@@ -31,6 +31,7 @@
 //		flag to use three-body momentum parametrizations
 // 20130703  M. Kelsey -- Add flag for USE_PHASESPACE
 // 20141030  M. Kelsey -- Add flag to enable direct pi-N absorption
+// 20141211  M. Kelsey -- Change PIN_ABSORPTION flag to double, for energy cut
 
 #include "G4CascadeParamMessenger.hh"
 #include "G4CascadeParameters.hh"
@@ -62,8 +63,8 @@ G4CascadeParamMessenger::G4CascadeParamMessenger(G4CascadeParameters* params)
 			"Use PreCompoundModel for nuclear de-excitation");
   doCoalCmd = CreateCommand<G4UIcmdWithABool>("doCoalescence",
 			"Apply final-state nucleon clustering");
-  piNAbsCmd = CreateCommand<G4UIcmdWithABool>("piNAbsorption",
-			"Allow pion absorption on single nucleon");
+  piNAbsCmd = CreateCommand<G4UIcmdWithADouble>("piNAbsorption",
+			"Probability for pion absorption on single nucleon");
   historyCmd = CreateCommand<G4UIcmdWithABool>("showHistory",
 		        "Collect and report full structure of cascade");
   use3BodyCmd = CreateCommand<G4UIcmdWithABool>("use3BodyMom",
@@ -167,7 +168,7 @@ void G4CascadeParamMessenger::SetNewValue(G4UIcommand* cmd, G4String arg) {
     theParams->G4CASCADE_DO_COALESCENCE = StoB(arg) ? strdup(arg.c_str()) : 0;
 
   if (cmd == piNAbsCmd) 
-    theParams->G4CASCADE_PIN_ABSORPTION = StoB(arg) ? strdup(arg.c_str()) : 0;
+    theParams->G4CASCADE_PIN_ABSORPTION = strdup(arg.c_str());
 
   if (cmd == historyCmd) 
     theParams->G4CASCADE_SHOW_HISTORY = StoB(arg) ? strdup(arg.c_str()) : 0;

@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 85263 2014-10-27 08:58:31Z gcosmo $
+# $Id: sources.cmake 91686 2015-07-31 09:40:08Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -127,6 +127,7 @@ if(GEANT4_USE_XM)
         G4OpenGLImmediateXmViewer.hh
         G4OpenGLStoredXm.hh
         G4OpenGLStoredXmViewer.hh
+        G4OpenGLXm.hh
         G4OpenGLXmBox.hh
         G4OpenGLXmFourArrowButtons.hh
         G4OpenGLXmFramedBox.hh
@@ -150,6 +151,7 @@ if(GEANT4_USE_XM)
         G4OpenGLImmediateXmViewer.cc
         G4OpenGLStoredXm.cc
         G4OpenGLStoredXmViewer.cc
+        G4OpenGLXm.cc
         G4OpenGLXmBox.cc
         G4OpenGLXmConvenienceRoutines.cc
         G4OpenGLXmFourArrowButtons.cc

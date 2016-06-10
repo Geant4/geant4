@@ -29,19 +29,21 @@
 // 20100510  M. Kelsey -- Add initial "31" template arg.  Add G4CascSampler
 //		to template for channel typedef
 // 20100514  M. Kelsey -- Replace G4CascadeSampler with G4KaonHypSampler.
+// 20150713  M. Kelsey -- Replace G4KaonHypSampler with G4KaonSampler, new
+//		template args up to 9-body final states.
 
 #ifndef G4_CASCADE_KPLUSP_CHANNEL_HH
 #define G4_CASCADE_KPLUSP_CHANNEL_HH
 
 #include "G4CascadeData.hh"
 #include "G4CascadeFunctions.hh"
-#include "G4KaonHypSampler.hh"
+#include "G4KaonSampler.hh"
 
 struct G4CascadeKplusPChannelData {
-  typedef G4CascadeData<31,1,4,10,19,28,38> data_t;
+  typedef G4CascadeData<30,1,6,16,29,42,54,41,47> data_t;
   static const data_t data;
 };
 
-typedef G4CascadeFunctions<G4CascadeKplusPChannelData,G4KaonHypSampler> G4CascadeKplusPChannel;
+typedef G4CascadeFunctions<G4CascadeKplusPChannelData,G4KaonSampler> G4CascadeKplusPChannel;
 
 #endif

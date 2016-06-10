@@ -36,7 +36,10 @@
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
+#include <memory>
+
 class G4HnManager;
+class G4AnalysisMessengerHelper;
 class G4UIcommand;
 class G4UIcmdWithABool;
 class G4UIcmdWithAnInteger;
@@ -44,24 +47,27 @@ class G4UIcmdWithAnInteger;
 class G4HnMessenger : public G4UImessenger
 {
   public:
-    G4HnMessenger(G4HnManager* manager);
+    explicit G4HnMessenger(G4HnManager& manager);
     virtual ~G4HnMessenger();
    
     // methods
-    virtual void SetNewValue(G4UIcommand* command, G4String value);
+    virtual void SetNewValue(G4UIcommand* command, G4String value) final;
     
   private:
-    G4String  GetCmdDirectoryName() const;
-    G4String  GetHnDescription() const;
     void SetHnAsciiCmd();
     void SetHnActivationCmd();
     void SetHnActivationToAllCmd();
+    void SetHnPlottingCmd();
+    void SetHnPlottingToAllCmd();
  
-    G4HnManager*  fManager; ///< Associated class
-    
-    G4UIcmdWithAnInteger*  fSetHnAsciiCmd;   
-    G4UIcommand*           fSetHnActivationCmd;   
-    G4UIcmdWithABool*      fSetHnActivationAllCmd;   
+    G4HnManager&  fManager; ///< Associated class
+    std::unique_ptr<G4AnalysisMessengerHelper>   fHelper;
+
+    std::unique_ptr<G4UIcmdWithAnInteger>  fSetHnAsciiCmd;   
+    std::unique_ptr<G4UIcommand>       fSetHnActivationCmd;   
+    std::unique_ptr<G4UIcmdWithABool>  fSetHnActivationAllCmd;   
+    std::unique_ptr<G4UIcommand>       fSetHnPlottingCmd;   
+    std::unique_ptr<G4UIcmdWithABool>  fSetHnPlottingAllCmd;   
 };
   
 #endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronElasticXS.hh 83697 2014-09-10 07:15:29Z gcosmo $
+// $Id: G4NeutronElasticXS.hh 93682 2015-10-28 10:09:49Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -55,7 +55,7 @@ class G4DynamicParticle;
 class G4ParticleDefinition;
 class G4Element;
 class G4PhysicsVector;
-class G4GlauberGribovCrossSection;
+class G4ComponentGGHadronNucleusXsc;
 class G4HadronNucleonXsc;
 
 class G4NeutronElasticXS : public G4VCrossSectionDataSet
@@ -88,7 +88,7 @@ private:
   G4NeutronElasticXS & operator=(const G4NeutronElasticXS &right);
   G4NeutronElasticXS(const G4NeutronElasticXS&);
   
-  G4GlauberGribovCrossSection* ggXsection;
+  G4ComponentGGHadronNucleusXsc* ggXsection;
   G4HadronNucleonXsc* fNucleon;
 
   const G4ParticleDefinition* proton;

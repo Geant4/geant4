@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchangeProcess.cc 83427 2014-08-21 15:44:43Z gcosmo $
+// $Id: G4ChargeExchangeProcess.cc 91806 2015-08-06 12:20:45Z gcosmo $
 //
 //
 // Geant4 Hadron Charge Exchange Process -- source file
@@ -38,6 +38,7 @@
 // 23-Jan-07 V.Ivanchenko add cross section interfaces with Z and A
 //                        and do not use CHIPS for cross sections
 // 14-Sep-12 M.Kelsey -- Pass subType code to base ctor
+// 06-Aug-15 A.Ribon migrating to G4Pow
 
 #include "G4ChargeExchangeProcess.hh"
 #include "globals.hh"
@@ -50,6 +51,9 @@
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
 #include "G4PhysicsLinearVector.hh"
+
+#include "G4Pow.hh"
+
 
 G4ChargeExchangeProcess::G4ChargeExchangeProcess(const G4String& procName)
   : G4HadronicProcess(procName,fChargeExchange), first(true)
@@ -157,7 +161,7 @@ G4double G4ChargeExchangeProcess::GetElementCrossSection(
   G4bool b;
   G4double A = elm->GetN();
   G4double ptot = dp->GetTotalMomentum();
-  x *= factors->GetValue(ptot, b)/std::pow(A, 0.42);
+  x *= factors->GetValue(ptot, b)/G4Pow::GetInstance()->powA(A, 0.42);
   if(theParticle == thePiPlus || theParticle == theProton ||
      theParticle == theKPlus  || theParticle == theANeutron)
     { x *= (1.0 - Z/A); }

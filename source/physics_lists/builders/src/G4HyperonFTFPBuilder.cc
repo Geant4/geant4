@@ -97,6 +97,7 @@ G4HyperonFTFPBuilder::~G4HyperonFTFPBuilder()
   //delete HyperonFTFP;
   delete theStringModel;
   delete theStringDecay;
+  delete theLund;
   //delete AntiHyperonFTFP;
   /*  
   if (wasActivated) {

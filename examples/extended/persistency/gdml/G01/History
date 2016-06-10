@@ -1,4 +1,4 @@
-$Id: History 82923 2014-07-18 15:58:22Z gcosmo $
+$Id: History 89264 2015-03-30 08:18:11Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 30th, 2014 Gabriele Cosmo G01-V10-01-01
+- Activate flag in parser for enabling export of geometrical regions.
+
+March 27th, 2014 Witold Pokorski G01-V10-01-00
+- Added example code showing how to import and export auxiliary information.
 
 July 18th, 2014 Gabriele Cosmo G01-V10-00-04
 - Added multiUnion.gdml sample demonstrating import and export of a

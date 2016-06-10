@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomDetectorConstruction.hh 74809 2013-10-22 09:49:26Z gcosmo $
+// $Id: DicomDetectorConstruction.hh 92820 2015-09-17 15:22:14Z gcosmo $
 //
 /// \file medical/DICOM/include/DicomDetectorConstruction.hh
 /// \brief Definition of the DicomDetectorConstruction class
@@ -123,9 +123,9 @@ protected:
     G4int fNVoxelX, fNVoxelY, fNVoxelZ;
     G4double fVoxelHalfDimX, fVoxelHalfDimY, fVoxelHalfDimZ;
 
-    DicomPhantomZSliceMerged* mergedSlices;
+    DicomPhantomZSliceMerged* fMergedSlices;
 
-    std::set<G4LogicalVolume*> scorers;
+    std::set<G4LogicalVolume*> fScorers;
     
   G4bool fConstructed;
 };

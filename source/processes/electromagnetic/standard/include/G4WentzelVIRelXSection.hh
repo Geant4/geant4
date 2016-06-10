@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIRelXSection.hh 79067 2014-02-14 09:48:52Z gcosmo $
+// $Id: G4WentzelVIRelXSection.hh 94676 2015-12-02 09:51:20Z gunter $
 //
 // -------------------------------------------------------------------
 //
@@ -83,13 +83,13 @@ public:
 
   // return cos(ThetaMax) for msc and cos(thetaMin) for single scattering
   // cut = DBL_MAX means no scattering off electrons 
-  G4double SetupTarget(G4int Z, G4double cut = DBL_MAX);
+  G4double SetupTarget(G4int Z, G4double cut);
 
   G4double ComputeTransportCrossSectionPerAtom(G4double CosThetaMax);
  
-  G4ThreeVector SampleSingleScattering(G4double CosThetaMin,
-				       G4double CosThetaMax,
-				       G4double elecRatio = 0.0);
+  G4ThreeVector& SampleSingleScattering(G4double CosThetaMin,
+					G4double CosThetaMax,
+					G4double elecRatio);
 
   inline G4double ComputeNuclearCrossSection(G4double CosThetaMin,
 					     G4double CosThetaMax);
@@ -97,9 +97,10 @@ public:
   inline G4double ComputeElectronCrossSection(G4double CosThetaMin,
 					      G4double CosThetaMax);
  
-  inline G4double SetupKinematic(G4double kinEnergy, const G4Material* mat);
-  
-  inline void SetTargetMass(G4double value);
+  inline G4double SetupKinematic(G4double kinEnergy,
+				 const G4Material* mat,
+				 G4double cut,
+				 G4double tmass);
 
   inline G4double GetMomentumSquare() const;
 
@@ -123,9 +124,9 @@ private:
   G4NistManager*  fNistManager;
   G4Pow*          fG4pow;
 
-  G4double numlimit;
+  G4ThreeVector   temp;
 
-  G4double elecXSRatio;
+  G4double numlimit;
 
   // integer parameters
   G4int    nwarnings;
@@ -175,28 +176,45 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double 
-G4WentzelVIRelXSection::SetupKinematic(G4double ekin, const G4Material* mat)
+G4WentzelVIRelXSection::SetupKinematic(G4double kinEnergy,
+				       const G4Material* mat,
+				       G4double cut,
+				       G4double tmass)
 {
-  if(ekin != tkin || mat != currentMaterial) { 
+  if(kinEnergy != tkin || mat != currentMaterial ||
+     ecut != cut || tmass != targetMass) { 
+
     currentMaterial = mat;
-    tkin  = ekin;
-    mom2  = tkin*(tkin + 2.0*mass);
-    invbeta2 = 1.0 +  mass*mass/mom2;
+    ecut = cut;
+    tkin  = kinEnergy;
+    G4double momLab2  = tkin*(tkin + 2.0*mass);
+	
+    G4double etot = tkin + mass;
+    G4double ptot = std::sqrt(momLab2);
+    G4double m12  = mass*mass;
+
+    targetMass = tmass;
+
+    // relativistic reduced mass from publucation
+    // A.P. Martynenko, R.N. Faustov, Teoret. mat. Fiz. 64 (1985) 179
+        
+    //incident particle & target nucleus
+    G4double Ecm = std::sqrt(m12 + targetMass*targetMass + 2.0*etot*targetMass);
+    G4double mu_rel = mass*targetMass/Ecm;
+    G4double momCM  = ptot*targetMass/Ecm;
+    // relative system
+    mom2 = momCM*momCM;
+    invbeta2 = 1.0 +  mu_rel*mu_rel/mom2;
+
     factB = spin/invbeta2;
+    factD = std::sqrt(mom2)/tmass;
     if(isCombined) {
       G4double cost = 1.-factorA2*mat->GetIonisation()->GetInvA23()/mom2;
       if(cost > cosTetMaxNuc) { cosTetMaxNuc = cost; }
     }
   } 
   return cosTetMaxNuc;
-}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline void G4WentzelVIRelXSection::SetTargetMass(G4double value)
-{
-  targetMass = value;
-  factD = std::sqrt(mom2)/value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -224,7 +242,7 @@ inline G4double G4WentzelVIRelXSection::GetCosThetaElec() const
 
 inline G4double 
 G4WentzelVIRelXSection::ComputeNuclearCrossSection(G4double cosTMin,
-						     G4double cosTMax)
+						   G4double cosTMax)
 {
   G4double xsec = 0.0;
   if(cosTMax < cosTMin) {
@@ -238,7 +256,7 @@ G4WentzelVIRelXSection::ComputeNuclearCrossSection(G4double cosTMin,
 
 inline G4double 
 G4WentzelVIRelXSection::ComputeElectronCrossSection(G4double cosTMin,
-						      G4double cosTMax)
+						    G4double cosTMax)
 {
   G4double xsec = 0.0;
   G4double cost1 = std::max(cosTMin,cosTetMaxElec);

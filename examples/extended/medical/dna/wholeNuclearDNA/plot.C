@@ -12,15 +12,16 @@ Double_t scale;
 	
 c1 = new TCanvas ("c1","",20,20,1000,500);
 
-system ("rm -rf wholeNuclearDNA.root");
-system ("hadd wholeNuclearDNA.root wholeNuclearDNA_*.root");
+// The command below stands for:
+// IF 1 THEN 2
+system ("ls wholeNuclearDNA_* 2> /dev/null && hadd -f wholeNuclearDNA.root wholeNuclearDNA_*.root");
 
 TFile f("wholeNuclearDNA.root"); 
 
 TNtuple* ntuple;
-ntuple = (TNtuple*)f->Get("ntuple"); 
+ntuple = (TNtuple*)f.Get("ntuple"); 
      
-c1.cd(1);
+c1->cd(1);
 gStyle->SetOptStat(000000);
   
 ntuple->SetMarkerColor(2);

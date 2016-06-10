@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFParameters.cc 68724 2013-04-05 09:26:32Z gcosmo $
+// $Id: G4StatMFParameters.cc 91834 2015-08-07 07:24:22Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -32,6 +32,7 @@
 
 #include "G4StatMFParameters.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 
 const G4double G4StatMFParameters::fKappa = 1.0; // dimensionless
 
@@ -51,6 +52,9 @@ const G4double G4StatMFParameters::fCriticalTemp = 18.0*MeV;
 
 // Nuclear radius
 const G4double G4StatMFParameters::fr0 = 1.17*fermi;
+
+const G4double G4StatMFParameters::fCoulomb = 0.6*(CLHEP::elm_coupling/fr0)*
+  (1.0 - 1.0/std::pow(1.0+fKappaCoulomb,1./3.));
 
 G4StatMFParameters::G4StatMFParameters()
 {}
@@ -96,6 +100,11 @@ G4double G4StatMFParameters::GetCriticalTemp()
 G4double G4StatMFParameters::Getr0() 
 { 
   return fr0; 
+}
+
+G4double G4StatMFParameters::GetCoulomb() 
+{ 
+  return fCoulomb; 
 }
 
 G4double G4StatMFParameters::Beta(G4double T) 

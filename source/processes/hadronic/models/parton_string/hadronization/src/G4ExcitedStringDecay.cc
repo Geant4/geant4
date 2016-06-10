@@ -174,10 +174,12 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings(const G4ExcitedStrin
 	     generatedKineticTracks->push_back(aTrack);
 	  }    
 
-	  if (generatedKineticTracks == NULL) 
+//	  if (generatedKineticTracks == NULL)                // Uzhi 02.06.2015
+	  if (generatedKineticTracks->size() == 0)           // Uzhi 02.06.2015
 	  {
-	     G4cerr << "G4VPartonStringModel:No KineticTracks produced" << G4endl;
-	     continue;
+//	     G4cerr << "G4VPartonStringModel:No KineticTracks produced" << G4endl; // Uzhi 02.06.2015
+//	     continue;                                                             // Uzhi 02.06.2015
+             success=false; NeedEnergyCorrector=false; break;                      // Uzhi 02.06.2015
 	  }
 
           G4LorentzVector KTsum1(0.,0.,0.,0.);
@@ -210,12 +212,13 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings(const G4ExcitedStrin
 
 //        clean up
 	  delete generatedKineticTracks;
+	  success=true;                          // Uzhi 02.06.2015
 	}
 
-        success=true;
-//NeedEnergyCorrector=false;                                                                  // Vova
+//        success=true;                          // Uzhi 02.06.2015
+
 	if ( NeedEnergyCorrector ) success=EnergyAndMomentumCorrector(theResult, KTsum);
-  } while(!success && (attempts < 10));   // It was 100 !!! Uzhi
+  } while(!success && (attempts < 10));  /* Loop checking, 07.08.2015, A.Ribon */
 
   for ( unsigned int aTrack=0; aTrack<theResult->size();aTrack++)       // Uzhi 22 June 2014
   {

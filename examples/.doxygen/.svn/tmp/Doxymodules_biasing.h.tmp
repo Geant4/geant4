@@ -47,6 +47,23 @@
 
 /** @} */
 
+/** @defgroup extended_biasing_B03 B03
+ *  Biasing example B03
+ *  @ingroup extended_biasing
+ *  @{
+ */
+
+  class B03ActionInitialization {};
+  class B03DetectorConstruction {};
+  class B03ImportanceDetectorConstruction {};
+  class B03PhysicsList {};
+  class B03PrimaryGeneratorAction {};
+  class B03PVolumeStore {};
+  class B03RunAction {};
+  class B03Run {};
+
+/** @} */
+
 /** @defgroup extended_biasing_GB01 GB01
  *  Biasing example GB01
  *  @ingroup extended_biasing
@@ -71,6 +88,35 @@
   class GB02BOptrMultiParticleForceCollision {};
   class GB02DetectorConstruction {};
   class GB02PrimaryGeneratorAction {};
+
+/** @} */
+
+/** @defgroup extended_biasing_GB03 GB03
+ *  Biasing example GB03
+ *  @ingroup extended_biasing
+ *  @{
+ */
+
+  class GB03ActionInitialization {};
+  class GB03BOptnSplitOrKillOnBoundary{};
+  class GB03BOptrGeometryBasedBiasing{};
+  class GB03DetectorConstruction {};
+  class GB03DetectorMessenger{};
+  class GB03PrimaryGeneratorAction {};
+
+/** @} */
+
+/** @defgroup extended_biasing_GB04 GB04
+ *  Biasing example GB04
+ *  @ingroup extended_biasing
+ *  @{
+ */
+
+  class GB04ActionInitialization {};
+  class GB04BOptnBremSplitting {};
+  class GB04BOptrBremSplitting {};
+  class GB04DetectorConstruction {};
+  class GB04PrimaryGeneratorAction {};
 
 /** @} */
 

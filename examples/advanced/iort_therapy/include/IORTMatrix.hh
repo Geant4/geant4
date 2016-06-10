@@ -115,9 +115,7 @@ public:
   // Store all data (except the total dose) to ONE filename
   void StoreDoseFluenceAscii(G4String filename = "");
 
-#ifdef G4ANALYSIS_USE_ROOT
   void StoreDoseFluenceRoot();
-#endif
 
   inline G4int Index(G4int i, G4int j, G4int k) { return (i * numberOfVoxelAlongY + j) * numberOfVoxelAlongZ + k; } 
   // Get a unique index from  a three dimensional one 

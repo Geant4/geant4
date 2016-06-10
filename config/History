@@ -1,4 +1,4 @@
-svn log $Id: History 85534 2014-10-30 16:19:42Z gcosmo $
+svn log $Id: History 94578 2015-11-25 08:11:03Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,40 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24th November 2015  Gabriele Cosmo  (config-V10-01-08)
+- binmake.gmk: added "analysis/parameters/include" to INCFLAGS.
+
+6th November 2015  Gabriele Cosmo  (config-V10-01-07)
+- Removed module 'neutron_hp', now merged in 'particle_hp'.
+  Updated binmake.gmk script.
+
+7th October 2015   Gabriele Cosmo  (config-V10-01-06)
+- Use USolids/VecGeom as external package installation only.
+  If $G4GEOM_USE_USOLIDS is set, it is mandatory setting the path to
+  the external USolids/VecGeom installation with $USOLIDS_BASE_DIR.
+
+6th October 2015   Gabriele Cosmo  (config-V10-01-05)
+- Updated X11 ssettings in Darwin-clang.gmk and Darwin-g++.gmk for new
+  MacOSX El Capitan; replaced X11R6 with X11.
+
+31st August 2015   Gabriele Cosmo  (config-V10-01-04)
+- Added G4Torus and G4Paraboloid for USolids/VecGeom use as external library.
+
+12th August 2015   Gabriele Cosmo  (config-V10-01-03)
+- Linux-icc.gmk: removed -gcc-sys option, no longer necessary.
+  Removed -i-dynamic from LDFLAGS, no longer supported.
+  Removed -lstdc++ from LOADLIBS, no longer necessary.
+
+7th August 2015   Gabriele Cosmo  (config-V10-01-02)
+- Replaced -no-gcc with -gcc-sys in Linux-icc.gmk, to allow for GNU macros
+  to be defined when compiling system headers.
+
+6th August 2015   Gabriele Cosmo  (config-V10-01-01)
+- Set C++11 as default build option for gcc, icc and clang.
+
+28th May 2015   Gabriele Cosmo  (config-V10-01-00)
+- Updated CPPFLAGS for Linux-icc and WIN32-g++ configurations.
 
 29th October 2014   Gabriele Cosmo  (config-V10-00-11/10)
 - Moved geometry/solids/usolids module to externals.

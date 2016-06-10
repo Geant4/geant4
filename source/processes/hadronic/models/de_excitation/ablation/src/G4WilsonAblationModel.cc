@@ -73,6 +73,9 @@
 // to avoid this quirk.  Bug found in SelectSecondariesByDefault: *type is now
 // equated to evapType[i] whereas previously it was equated to fragType[i].
 // 
+// 06 August 2015, A. Ribon, CERN
+// Migrated std::exp and std::pow to the faster G4Exp and G4Pow.
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -97,8 +100,13 @@
 #include "G4DeuteronEvaporationChannel.hh"
 #include "G4ProtonEvaporationChannel.hh"
 #include "G4NeutronEvaporationChannel.hh"
+#include "G4PhotonEvaporation.hh"
 #include "G4LorentzVector.hh"
 #include "G4VEvaporationChannel.hh"
+
+#include "G4Exp.hh"
+#include "G4Pow.hh"
+
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -138,12 +146,13 @@ G4WilsonAblationModel::G4WilsonAblationModel()
   fragType[3] = G4Deuteron::Deuteron();
   fragType[4] = G4Proton::Proton();
   fragType[5] = G4Neutron::Neutron();
+  for(G4int i=0; i<200; ++i) { fSig[i] = 0.0; }
 //
 //
 // Set verboseLevel default to no output.
 //
   verboseLevel = 0;
-  theChannelFactory = new G4EvaporationFactory();
+  theChannelFactory = new G4EvaporationFactory(new G4PhotonEvaporation());
   theChannels = theChannelFactory->GetChannel();
 //
 //
@@ -157,10 +166,8 @@ G4WilsonAblationModel::G4WilsonAblationModel()
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4WilsonAblationModel::~G4WilsonAblationModel()
-{
-  if (theChannels != 0) theChannels = 0;
-  if (theChannelFactory != 0) delete theChannelFactory;
-}
+{}
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4FragmentVector *G4WilsonAblationModel::BreakItUp
@@ -251,40 +258,33 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
 //
   G4int AF = A - DAabl;
   G4int ZF = 0;
+  
   if (AF > 0)
   {
+    G4Pow* g4pow = G4Pow::GetInstance(); 
     G4double AFd = (G4double) AF;
-    G4double R = 11.8 / std::pow(AFd, 0.45);
-    G4int minZ = Z - DAabl;
-    if (minZ <= 0) minZ = 1;
+    G4double R = 11.8 / g4pow->powZ(AF, 0.45);
+    G4int minZ = std::max(1, Z - DAabl);
 //
 //
 // Here we define an integral probability distribution based on the Rudstam
 // equation assuming a constant AF.
 //    
-    G4double sig[100];
+    G4int zmax = std::min(199, Z);
     G4double sum = 0.0;
-    for (G4int ii=minZ; ii<= Z; ii++)
+    for (ZF=minZ; ZF<=zmax; ++ZF)
     {
-      sum   += std::exp(-R*std::pow(std::abs(ii - 0.486*AFd + 3.8E-04*AFd*AFd),1.5));
-      sig[ii] = sum;
+      sum += G4Exp(-R*g4pow->powA(std::abs(ZF - 0.486*AFd + 3.8E-04*AFd*AFd),1.5));
+      fSig[ZF] = sum;
     }
 //
 //
 // Now sample that distribution to determine a value for ZF.
 //
-    G4double xi  = G4UniformRand();
-    G4int iz     = minZ;
-    G4bool found = false;
-    while (iz <= Z && !found)
-    {
-      found = (xi <= sig[iz]/sum);
-      if (!found) iz++;
-    }
-    if (iz > Z)
-      ZF = Z;
-    else
-      ZF = iz;
+    sum *= G4UniformRand();
+    for (ZF=minZ; ZF<=zmax; ++ZF) {
+      if(sum <= fSig[ZF]) { break; }
+    } 
   }
   G4int DZabl = Z - ZF;
 //
@@ -433,6 +433,7 @@ void G4WilsonAblationModel::SelectSecondariesByEvaporation
 {
   G4Fragment theResidualNucleus = *intermediateNucleus;
   G4bool evaporate = true;
+  // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
   while (evaporate && evapType.size() != 0)
   {
 //

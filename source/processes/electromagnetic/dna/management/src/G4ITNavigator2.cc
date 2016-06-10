@@ -52,6 +52,8 @@
 
 //#define G4DEBUG_NAVIGATION 1
 #include "G4VoxelSafety.hh"
+#include "Randomize.hh"
+#include "G4VoxelLimits.hh"
 
 #define fHistory fpNavigatorState->fHistory
 #define fLastTriedStepComputation fpNavigatorState->fLastTriedStepComputation
@@ -80,6 +82,17 @@
 #define fPreviousSftOrigin fpNavigatorState->fPreviousSftOrigin
 #define fPreviousSafety fpNavigatorState->fPreviousSafety
 
+//------------------------------------------------------------------------------
+
+namespace BoundingBox
+{
+enum Boundary
+{
+  kMin,
+  kMax
+};
+}
+
 // ********************************************************************
 // Constructor
 // ********************************************************************
@@ -90,8 +103,8 @@ G4ITNavigator2::G4ITNavigator2()
     fWarnPush(true)
 {
   fActive= false; 
-  fActionThreshold_NoZeroSteps  = 10; 
-  fAbandonThreshold_NoZeroSteps = 25; 
+  fActionThreshold_NoZeroSteps  = 1000;
+  fAbandonThreshold_NoZeroSteps = 2500;
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
   fregularNav.SetNormalNavigation( &fnormalNav );
 
@@ -1341,9 +1354,9 @@ G4double G4ITNavigator2::ComputeStep( const G4ThreeVector &pGlobalpoint,
 // ********************************************************************
 //
 G4double G4ITNavigator2::CheckNextStep( const G4ThreeVector& pGlobalpoint,
-                                     const G4ThreeVector& pDirection,
-                                     const G4double pCurrentProposedStepLength,
-                                           G4double& pNewSafety)
+                                        const G4ThreeVector& pDirection,
+                                        const G4double pCurrentProposedStepLength,
+                                              G4double& pNewSafety)
 {
   CheckNavigatorStateIsValid();
   G4double step;
@@ -1351,7 +1364,8 @@ G4double G4ITNavigator2::CheckNextStep( const G4ThreeVector& pGlobalpoint,
   // Save the state, for this parasitic call
   //
   //SetSavedState();
-  G4SaveNavigatorState savedState(fpNavigatorState);
+//  G4SaveNavigatorState savedState(fpNavigatorState);
+  G4NavigatorState savedState(*fpNavigatorState);
 
   step = ComputeStep ( pGlobalpoint, 
                        pDirection,
@@ -2450,3 +2464,58 @@ std::ostream& operator << (std::ostream &os,const G4ITNavigator2 &n)
   os.precision(oldcoutPrec);
   return os;
 }
+
+//------------------------------------------------------------------------------
+
+EInside
+G4ITNavigator2::InsideCurrentVolume(const G4ThreeVector& globalPoint) const
+{
+  const G4AffineTransform& transform = GetGlobalToLocalTransform();
+  G4ThreeVector localPoint(transform.TransformPoint(globalPoint));
+
+  G4VSolid* solid = fHistory.GetTopVolume()->GetLogicalVolume()->GetSolid();
+
+  return solid->Inside(localPoint);
+}
+
+//------------------------------------------------------------------------------
+
+void G4ITNavigator2::GetRandomInCurrentVolume(G4ThreeVector& _rndmPoint) const
+{
+  const G4AffineTransform& local2Global = GetLocalToGlobalTransform();
+  G4VSolid* solid = fHistory.GetTopVolume()->GetLogicalVolume()->GetSolid();
+
+  G4VoxelLimits voxelLimits;  // Defaults to "infinite" limits.
+  G4double vmin, vmax;
+  G4AffineTransform dummy;
+  std::vector<std::vector<double> > fExtend;
+
+  solid->CalculateExtent(kXAxis,voxelLimits,dummy,vmin,vmax);
+  fExtend[kXAxis][BoundingBox::kMin] = vmin;
+  fExtend[kXAxis][BoundingBox::kMax] = vmax;
+
+  solid->CalculateExtent(kYAxis,voxelLimits,dummy,vmin,vmax);
+  fExtend[kYAxis][BoundingBox::kMin] = vmin;
+  fExtend[kYAxis][BoundingBox::kMax] = vmax;
+
+  solid->CalculateExtent(kZAxis,voxelLimits,dummy,vmin,vmax);
+  fExtend[kZAxis][BoundingBox::kMin] = vmin;
+  fExtend[kZAxis][BoundingBox::kMax] = vmax;
+
+  G4ThreeVector rndmPos;
+
+  while(1)
+  {
+    for(size_t i = 0 ; i < 3 ; ++i)
+    {
+      double min = fExtend[i][BoundingBox::kMin];
+      double max = fExtend[i][BoundingBox::kMax];
+      rndmPos[i] = G4UniformRand()*(max-min)+min;
+    }
+
+    if(solid->Inside(rndmPos) == kInside) break;
+  }
+
+  _rndmPoint = local2Global.TransformPoint(rndmPos);
+}
+

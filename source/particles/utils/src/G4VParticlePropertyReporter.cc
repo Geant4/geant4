@@ -29,7 +29,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VParticlePropertyReporter.cc 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4VParticlePropertyReporter.cc 91885 2015-08-10 07:05:56Z gcosmo $
 //
 // 
 // ---------------------------------------------------------------
@@ -67,7 +67,7 @@ G4bool G4VParticlePropertyReporter::FillList(G4String name)
     
     // loop over all particles in G4ParticleTable 
     theParticleIterator->reset();
-    while( (*theParticleIterator)() ){
+    while( (*theParticleIterator)() ){ // Loop checking, 09.08.2015, K.Kurashige
       G4ParticleDefinition* particle = theParticleIterator->value();
       G4String type = particle->GetParticleType();
       pData =pPropertyTable->GetParticleProperty(particle);

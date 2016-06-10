@@ -68,5 +68,5 @@ G4HadFinalState * G4ParticleHPAInelasticFS::ApplyYourself(const G4HadProjectile 
    G4ParticleHPInelasticCompFS::CompositeApply(theTrack, G4Alpha::Alpha());
              
 // return the result
-   return &theResult;
+   return theResult.Get();
 }

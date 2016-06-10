@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Analysis.cc 78126 2013-12-03 17:43:56Z gcosmo $
+// $Id: Analysis.cc 88353 2015-02-16 08:54:08Z gcosmo $
 //
 /// @file Analysis.cc
 /// @brief Define histograms
@@ -34,19 +34,24 @@
 #include "TROOT.h"
 #include "G4SystemOfUnits.hh"
 #include "Analysis.hh"
+#include "G4AutoLock.hh"
 
 G4ThreadLocal G4int Analysis::fincidentFlag = false;
+G4ThreadLocal Analysis* the_analysis = 0;
+
+G4Mutex rootm = G4MUTEX_INITIALIZER;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 Analysis* Analysis::GetAnalysis()
 {
-  static Analysis the_analysis;
-  return &the_analysis;
+   if ( ! the_analysis ) the_analysis = new Analysis;
+   return the_analysis;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 Analysis::Analysis()
 {
+  G4AutoLock l(&rootm);
   // define histograms
   fincident_map = new TH2D("incident map", "Incident Distributuon",
                             50, -5., 5.,
@@ -102,6 +107,7 @@ void Analysis::Clear()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void Analysis::Save(const G4String& fname)
 {
+  G4AutoLock l(&rootm);
   TFile* file = new TFile(fname.c_str(), "RECREATE", "Geant4 ROOT analysis");
 
   fincident_map-> Write();

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.cc 83685 2014-09-09 12:39:00Z gcosmo $
+// $Id: G4eBremsstrahlungRelModel.cc 91726 2015-08-03 15:41:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -512,8 +512,10 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
   G4double xmax = G4Log(emax*emax  + densityCorr);
   G4double gammaEnergy, f, x; 
 
+  CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();
+
   do {
-    x = G4Exp(xmin + G4UniformRand()*(xmax - xmin)) - densityCorr;
+    x = G4Exp(xmin + rndmEngine->flat()*(xmax - xmin)) - densityCorr;
     if(x < 0.0) { x = 0.0; }
     gammaEnergy = sqrt(x);
     if(highe) { f = ComputeRelDXSectionPerAtom(gammaEnergy); }
@@ -528,7 +530,8 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
 	     << G4endl;
     }
 
-  } while (f < fMax*G4UniformRand());
+    // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
+  } while (f < fMax*rndmEngine->flat());
 
   //
   // angles of the emitted gamma. ( Z - axis along the parent particle)

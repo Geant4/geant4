@@ -46,6 +46,8 @@
 #include "G4HadronicInteraction.hh"
 #include "globals.hh"
 
+extern "C" double MyRNG(void*); 
+
 class G4LENDModel : public G4HadronicInteraction
 {
 

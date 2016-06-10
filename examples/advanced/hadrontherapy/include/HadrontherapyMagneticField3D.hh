@@ -23,17 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Code developed by:
-//  S.Larsson and J. Generowicz.
-//
-//    *************************************
-//    *                                   *
-//    *    HadrontherapyMagneticField3D.hh     *
-//    *                                   *
-//    *************************************
-//
-// $Id$
-//
+// Hadrontherapy advanced example for Geant4
+// See more at: https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamplesHadrontherapy
+// (This class was adapted from the purging magnet example, by S.Larsson and J. Generowicz.)
 
 #include "globals.hh"
 #include "G4MagneticField.hh"

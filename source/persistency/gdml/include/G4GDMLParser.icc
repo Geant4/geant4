@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.icc 68053 2013-03-13 14:39:51Z gcosmo $
+// $Id: G4GDMLParser.icc 89698 2015-04-27 13:25:23Z gcosmo $
 //
 //
 // class G4GDMLParser inline methods
@@ -35,12 +35,14 @@ inline
 void G4GDMLParser::Read(const G4String& filename, G4bool validate)
 {   
   reader->Read(filename,validate,false,strip);
+  ImportRegions();
 }
 
 inline 
 void G4GDMLParser::ReadModule(const G4String& filename, G4bool validate)
 {   
   reader->Read(filename,validate,true);
+  ImportRegions();
 }
 
 inline
@@ -62,6 +64,7 @@ void G4GDMLParser::Write(const G4String& filename,
     lvol = pvol->GetLogicalVolume();
   }
 
+  if (rexp) { ExportRegions(refs); }
   writer->Write(filename,lvol,schemaLocation,depth,refs);
 }
 
@@ -78,6 +81,7 @@ void G4GDMLParser::Write(const G4String& filename,
     lvol = G4TransportationManager::GetTransportationManager()->
            GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume();
   }
+  if (rexp) { ExportRegions(refs); }
   writer->Write(filename,lvol,schemaLocation,depth,refs);
 }
 
@@ -167,6 +171,18 @@ const G4GDMLAuxMapType* G4GDMLParser::GetAuxMap() const
 }
 
 inline
+const G4GDMLAuxListType* G4GDMLParser::GetAuxList() const
+{
+  return reader->GetAuxList();
+}
+
+inline
+void G4GDMLParser::AddAuxiliary(G4GDMLAuxStructType myaux)
+{
+  return writer->AddAuxiliary(myaux);
+}
+
+inline
 void G4GDMLParser::StripNamePointers() const
 {
   reader->StripNames();
@@ -180,6 +196,16 @@ inline void G4GDMLParser::SetStripFlag(G4bool flag)
 inline void G4GDMLParser::SetOverlapCheck(G4bool flag)
 {
   reader->OverlapCheck(flag);
+}
+
+inline void G4GDMLParser::SetRegionExport(G4bool flag)
+{
+  rexp = flag;
+}
+
+inline void G4GDMLParser::SetEnergyCutsExport(G4bool flag)
+{
+  writer->SetEnergyCutsExport(flag);
 }
 
 inline void G4GDMLParser::Clear()
@@ -207,4 +233,11 @@ inline
 void G4GDMLParser::SetAddPointerToName(G4bool set)
 {
   writer->SetAddPointerToName(set);
+}
+
+inline
+void G4GDMLParser::AddVolumeAuxiliary(G4GDMLAuxStructType myaux,
+                                      const G4LogicalVolume* const lvol)
+{
+  writer->AddVolumeAuxiliary(myaux, lvol);
 }

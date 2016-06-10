@@ -4,7 +4,7 @@
 
                                                               14 March 2014
 
-List of fixes included in this public patch since the public release 9.6.p01:
+List of fixes included in this public patch since the public release 9.6.p02:
 
   o Configuration:
     -------------

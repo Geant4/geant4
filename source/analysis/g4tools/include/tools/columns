@@ -8,6 +8,7 @@
 #include <ostream>
 
 #include "forit"
+#include "sout"
 
 #ifdef TOOLS_MEM
 #include "mem"
@@ -55,18 +56,9 @@ public:
     tools_vforit(tree,m_sub,it) (*it).clear();
   }
   void dump_tree(std::ostream& a_out,const std::string& a_margin) {
-#ifdef WIN32
-    if(m_dcl.size()) a_out << a_margin.c_str() << m_dcl.c_str() << std::endl;
-#else
     if(m_dcl.size()) a_out << a_margin << m_dcl << std::endl;
-#endif
    {tools_vforit(tree,m_sub,it) {
-#ifdef WIN32
-      std::string s = a_margin;s += "  ";
-      (*it).dump_tree(a_out,s);
-#else
       (*it).dump_tree(a_out,a_margin+"  ");
-#endif
     }}
   }
 public:
@@ -194,8 +186,7 @@ inline void dump_columns(std::ostream& a_out,
       a_out << a_margin
             << "ITuple : " << (*it).label() << " : begin "
             << std::endl;
-      std::vector<value>* vars = 
-        (std::vector<value>*)(*it).get_void_star();
+      std::vector<value>* vars = (std::vector<value>*)(*it).get_void_star();
       dump_columns(a_out,*vars,a_margin+"  ");
       //a_out << a_margin
       //      << "ITuple : " << (*it).label() << " : end "
@@ -253,7 +244,6 @@ public:
   }
 /*
   const std::string& script() const { return m_script;}
-  std::string script() { return m_script;}
   //bool isSuccess() const { return fSuccess;}
   std::ostream& out() const {return m_out;}
 */
@@ -433,8 +423,7 @@ protected:
     }
   }
 protected:
-  static bool s2type(const std::string& a_s,
-                            value::e_type& a_type){
+  static bool s2type(const std::string& a_s,value::e_type& a_type){
            if(a_s=="float") {
       a_type = value::FLOAT;    
     } else if(a_s=="double") {

@@ -26,7 +26,7 @@
     <field name="fMassFractionVector" comment="[fNumberOfElements]" />
     <field name="fAtomsVector" comment="[fNumberOfElements]" />
     <field name="VecNbOfAtomsPerVolume" comment="[fNumberOfElements]" />
-    <field name="fSandiaTable" transient="true"/>
+<!--    <field name="fSandiaTable" transient="true"/> -->
 </class>
 
 <class name="G4IonisParamElm">
@@ -39,11 +39,11 @@
       <field name="fShellCorrectionVector" transient="true"/>
 </class>
 
-<!--
+ 
 <class name="G4SandiaTable"> 
-    <field name="fPhotoAbsorptionCof" transient="true"/>
+    <field name="fPhotoAbsorptionCof" transient="true"/> 
 </class>
--->
+
 
 <class name="G4MaterialPropertyVector"/>
 <class name="G4MaterialPropertiesTable"/>
@@ -150,9 +150,9 @@
 <class name="G4MaterialCutsCouple"/>
 
 <class name="G4ProductionCuts">
-      <field name="gammaDef" transient="true"/>
+ <!--     <field name="gammaDef" transient="true"/>
       <field name="electDef" transient="true"/>
-      <field name="positDef" transient="true"/>
+      <field name="positDef" transient="true"/> -->
 </class>
 
 <class name="G4VUserRegionInformation"/>
@@ -168,6 +168,33 @@
 <class name="G4VPVParameterisation"/>
 <class name="std::vector<G4VPhysicalVolume*>"/>
 
+<class name="G4LVData">
+      <field name="fFieldManager" transient="true"/>
+      <field name="fSensitiveDetector" transient="true"/>
+</class>
+<class name="G4PVData"/>
+
+<class name="G4GeomSplitter<G4LVData>"/>
+
 <class name="std::map<G4Material*,G4double>" />
+
+<ioread sourceClass="G4LogicalVolume"
+           version="[1-]"
+           targetClass="G4LogicalVolume"
+           source="G4LVData* lvdata;"
+	   target=""
+           >
+      <![CDATA[newObj->SetSolid(onfile.lvdata->fSolid);newObj->SetMaterial(onfile.lvdata->fMaterial);]]>
+</ioread>
+
+
+<ioread sourceClass="G4VPhysicalVolume"
+           version="[1-]"
+           targetClass="G4VPhysicalVolume"
+           source="G4PVData* pvdata;"
+	   target=""
+           >
+      <![CDATA[newObj->SetRotation(onfile.pvdata->frot);newObj->SetTranslation(onfile.pvdata->ftrans);]]>
+</ioread>
 
 </lcgdict>

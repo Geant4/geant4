@@ -1,0 +1,88 @@
+//$Id$
+
+///\file "dna/microyz/.README.txt"
+///\brief Example microyz README page
+
+/*! \page Examplemicroyz Example microyz
+
+Author: S. Incerti et al.
+Date: 17 Apr. 2015
+Email: incerti@cenbg.in2p3.fr
+
+****************************************************************
+WARNING: This is a beta example, still buggy and under testing !
+****************************************************************
+
+(c) The Geant4-DNA collaboration.
+
+This examples shows how to compute microdosimetry 
+distributions in liquid water using exclusively Geant4-DNA
+physics processes and models.
+
+\section Examplemicroyz_s1 Geometry
+
+A box of liquid water.
+
+\section Examplemicroyz_s2 Incident particles
+
+Particles can be selected from the mycroyz.in macro
+as well as their incident energy.
+They are shot from the center of the box.
+
+\section Examplemicroyz_s3 Physics
+
+The default Geant4-DNA physics constructor 2 is used in
+the PhysicsList class.
+
+\section Examplemicroyz_s4 Scoring of enery deposition
+
+Energy depositions are scored in spheres randomly
+along the incident particle track.
+
+The user can select in the TrackerSD class:
+
+- the number of samplings (100 by default)
+- the radius of the sphere (1.5 um by default)
+
+\section Examplemicroyz_s5 Run
+
+The code can be run using:
+\verbatim
+./microyz microyz.in
+\endverbatim
+
+\section Examplemicroyz_s6 Results
+
+Results can be analyzed after the run using:
+\verbatim
+root plot.C
+\endverbatim
+
+The following microdosimetry quantities are plotted
+
+- f(y) 
+
+- yf(y)
+
+- d(y)
+
+- yd(y)
+
+y is expressed in keV/um
+
+Plots are shown in lin-lin and log-lin coordinates.
+
+The following quantities are calculated:
+
+- Integral of f(y)dy
+
+- yF (in keV/um)
+
+- Integral of d(y)dy
+
+- yD (in keV/um)
+
+for linear lin-lin and log-lin plots, including normalization in the latter case.
+
+*/
+

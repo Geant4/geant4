@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc 68053 2013-03-13 14:39:51Z gcosmo $
+// $Id: G4GDMLWriteStructure.cc 91789 2015-08-06 08:14:46Z gcosmo $
 //
 // class G4GDMLWriteStructure Implementation
 //
@@ -33,21 +33,32 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLWriteStructure.hh"
+#include "G4GDMLEvaluator.hh"
 
 #include "G4Material.hh"
 #include "G4ReflectedSolid.hh"
 #include "G4DisplacedSolid.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4PhysicalVolumeStore.hh"
+#include "G4ReflectionFactory.hh"
 #include "G4PVDivision.hh"
 #include "G4PVReplica.hh"
+#include "G4Region.hh"
 #include "G4OpticalSurface.hh"
 #include "G4LogicalSkinSurface.hh"
 #include "G4LogicalBorderSurface.hh"
 
+#include "G4ProductionCuts.hh"
+#include "G4ProductionCutsTable.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
+#include "G4Proton.hh"
+
 G4GDMLWriteStructure::G4GDMLWriteStructure()
-  : G4GDMLWriteParamvol()
+  : G4GDMLWriteParamvol(), cexport(false)
 {
+  reflFactory = G4ReflectionFactory::Instance();
 }
 
 G4GDMLWriteStructure::~G4GDMLWriteStructure()
@@ -109,14 +120,26 @@ void G4GDMLWriteStructure::PhysvolWrite(xercesc::DOMElement* volumeElement,
    const G4ThreeVector pos = T.getTranslation();
 
    const G4String name = GenerateName(physvol->GetName(),physvol);
+   const G4int copynumber = physvol->GetCopyNo();
 
    xercesc::DOMElement* physvolElement = NewElement("physvol");
    physvolElement->setAttributeNode(NewAttribute("name",name));
+   if (copynumber) physvolElement->setAttributeNode(NewAttribute("copynumber", copynumber));
+
    volumeElement->appendChild(physvolElement);
 
-   const G4String volumeref
-         = GenerateName(physvol->GetLogicalVolume()->GetName(),
-                        physvol->GetLogicalVolume());
+   G4LogicalVolume* lv;
+   // Is it reflected?
+   if (reflFactory->IsReflected(physvol->GetLogicalVolume()))
+     {
+       lv = reflFactory->GetConstituentLV(physvol->GetLogicalVolume());
+     }
+   else
+     {
+       lv = physvol->GetLogicalVolume();
+     }
+   
+   const G4String volumeref = GenerateName(lv->GetName(), lv);
 
    if (ModuleName.empty())
    {
@@ -363,10 +386,12 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
    {
      return VolumeMap()[volumePtr]; // Volume is already processed
    }
-
+   
    G4VSolid* solidPtr = volumePtr->GetSolid();
    G4Transform3D R,invR;
    G4int trans=0;
+
+   std::map<const G4LogicalVolume*, G4GDMLAuxListType>::iterator auxiter; 
 
    while (true) // Solve possible displacement/reflection
    {            // of the referenced solid!
@@ -399,12 +424,24 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
       break;
    }
 
+   //check if it is a reflected volume
+   G4LogicalVolume* tmplv = const_cast<G4LogicalVolume*>(volumePtr);
+  
+   if (reflFactory->IsReflected(tmplv))
+     {
+       tmplv = reflFactory->GetConstituentLV(tmplv);
+       if (VolumeMap().find(tmplv) != VolumeMap().end())
+	 {
+	   return R; // Volume is already processed
+	 }    
+     }
+   
    // Only compute the inverse when necessary!
    //
    if (trans>0) { invR = R.inverse(); }
 
    const G4String name
-         = GenerateName(volumePtr->GetName(),volumePtr);
+     = GenerateName(tmplv->GetName(), tmplv);
    const G4String materialref
          = GenerateName(volumePtr->GetMaterial()->GetName(),
                         volumePtr->GetMaterial());
@@ -421,91 +458,152 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
    volumeElement->appendChild(solidrefElement);
 
    const G4int daughterCount = volumePtr->GetNoDaughters();
-
+       
    for (G4int i=0;i<daughterCount;i++)   // Traverse all the children!
-   {
-      const G4VPhysicalVolume* const physvol = volumePtr->GetDaughter(i);
-      const G4String ModuleName = Modularize(physvol,depth);
+     {
+       const G4VPhysicalVolume* const physvol = volumePtr->GetDaughter(i);
+       const G4String ModuleName = Modularize(physvol,depth);
+	   
+       G4Transform3D daughterR;
+	   
+       if (ModuleName.empty())   // Check if subtree requested to be 
+	 {                         // a separate module!
+	   daughterR = TraverseVolumeTree(physvol->GetLogicalVolume(),depth+1);
+	 }
+       else
+	 {   
+	   G4GDMLWriteStructure writer;
+	   daughterR = writer.Write(ModuleName,physvol->GetLogicalVolume(),
+				    SchemaLocation,depth+1);
+	 }	   
+	   
+       if (const G4PVDivision* const divisionvol
+	   = dynamic_cast<const G4PVDivision*>(physvol)) // Is it division?
+	 {
+	   if (!G4Transform3D::Identity.isNear(invR*daughterR,kRelativePrecision))
+	     {
+	       G4String ErrorMessage = "Division volume in '" + name
+		 + "' can not be related to reflected solid!";
+	       G4Exception("G4GDMLWriteStructure::TraverseVolumeTree()",
+			   "InvalidSetup", FatalException, ErrorMessage);
+	     }
+	   DivisionvolWrite(volumeElement,divisionvol); 
+	 } else 
+	 if (physvol->IsParameterised())   // Is it a paramvol?
+	   {
+	     if (!G4Transform3D::Identity.isNear(invR*daughterR,kRelativePrecision))
+	       {
+		 G4String ErrorMessage = "Parameterised volume in '" + name
+		   + "' can not be related to reflected solid!";
+		 G4Exception("G4GDMLWriteStructure::TraverseVolumeTree()",
+			     "InvalidSetup", FatalException, ErrorMessage);
+	       }
+	     ParamvolWrite(volumeElement,physvol);
+	   } else
+	   if (physvol->IsReplicated())   // Is it a replicavol?
+	     {
+	       if (!G4Transform3D::Identity.isNear(invR*daughterR,kRelativePrecision))
+		 {
+		   G4String ErrorMessage = "Replica volume in '" + name
+		     + "' can not be related to reflected solid!";
+		   G4Exception("G4GDMLWriteStructure::TraverseVolumeTree()",
+			       "InvalidSetup", FatalException, ErrorMessage);
+		 }
+	       ReplicavolWrite(volumeElement,physvol); 
+	     }
+	   else   // Is it a physvol?
+	     {
+	       G4RotationMatrix rot;
+	       if (physvol->GetFrameRotation() != 0)
+		 {
+		   rot = *(physvol->GetFrameRotation());
+		 }
+	       G4Transform3D P(rot,physvol->GetObjectTranslation());
+                   
+	       PhysvolWrite(volumeElement,physvol,invR*P*daughterR,ModuleName);
+	     }
+       BorderSurfaceCache(GetBorderSurface(physvol));
+     }
 
-      G4Transform3D daughterR;
-
-      if (ModuleName.empty())   // Check if subtree requested to be 
-      {                         // a separate module!
-         daughterR = TraverseVolumeTree(physvol->GetLogicalVolume(),depth+1);
-      }
-      else
-      {   
-         G4GDMLWriteStructure writer;
-         daughterR = writer.Write(ModuleName,physvol->GetLogicalVolume(),
-                                  SchemaLocation,depth+1);
-      }
-
-      if (const G4PVDivision* const divisionvol
-         = dynamic_cast<const G4PVDivision*>(physvol)) // Is it division?
-      {
-         if (!G4Transform3D::Identity.isNear(invR*daughterR,kRelativePrecision))
-         {
-            G4String ErrorMessage = "Division volume in '"
-                                  + name
-                                  + "' can not be related to reflected solid!";
-            G4Exception("G4GDMLWriteStructure::TraverseVolumeTree()",
-                        "InvalidSetup", FatalException, ErrorMessage);
-         }
-         DivisionvolWrite(volumeElement,divisionvol); 
-      } else 
-      if (physvol->IsParameterised())   // Is it a paramvol?
-      {
-         if (!G4Transform3D::Identity.isNear(invR*daughterR,kRelativePrecision))
-         {
-            G4String ErrorMessage = "Parameterised volume in '"
-                                  + name
-                                  + "' can not be related to reflected solid!";
-            G4Exception("G4GDMLWriteStructure::TraverseVolumeTree()",
-                        "InvalidSetup", FatalException, ErrorMessage);
-         }
-         ParamvolWrite(volumeElement,physvol);
-      } else
-      if (physvol->IsReplicated())   // Is it a replicavol?
-      {
-         if (!G4Transform3D::Identity.isNear(invR*daughterR,kRelativePrecision))
-         {
-            G4String ErrorMessage = "Replica volume in '"
-                                  + name
-                                  + "' can not be related to reflected solid!";
-            G4Exception("G4GDMLWriteStructure::TraverseVolumeTree()",
-                        "InvalidSetup", FatalException, ErrorMessage);
-         }
-         ReplicavolWrite(volumeElement,physvol); 
-      }
-      else   // Is it a physvol?
-      {
-         G4RotationMatrix rot;
-
-         if (physvol->GetFrameRotation() != 0)
-         {
-           rot = *(physvol->GetFrameRotation());
-         }
-         G4Transform3D P(rot,physvol->GetObjectTranslation());
-         PhysvolWrite(volumeElement,physvol,invR*P*daughterR,ModuleName);
-      }
-      BorderSurfaceCache(GetBorderSurface(physvol));
-   }
+   if (cexport)  { ExportEnergyCuts(volumePtr); }
+   // Add optional energy cuts
+       
+   // Here write the auxiliary info
+   //
+   auxiter = auxmap.find(volumePtr);  
+   if (auxiter != auxmap.end())
+     {
+       AddAuxInfo(&(auxiter->second), volumeElement);
+     }
 
    structureElement->appendChild(volumeElement);
-     // Append the volume AFTER traversing the children so that
-     // the order of volumes will be correct!
-
-   VolumeMap()[volumePtr] = R;
-
+   // Append the volume AFTER traversing the children so that
+   // the order of volumes will be correct!
+       
+   VolumeMap()[tmplv] = R;
+       
    AddExtension(volumeElement, volumePtr);
-     // Add any possible user defined extension attached to a volume
-
+   // Add any possible user defined extension attached to a volume
+       
    AddMaterial(volumePtr->GetMaterial());
-     // Add the involved materials and solids!
-
+   // Add the involved materials and solids!
+       
    AddSolid(solidPtr);
-
+       
    SkinSurfaceCache(GetSkinSurface(volumePtr));
-
+       
    return R;
+}
+
+void
+G4GDMLWriteStructure::AddVolumeAuxiliary(G4GDMLAuxStructType myaux,
+                                         const G4LogicalVolume* const lvol)
+{
+  std::map<const G4LogicalVolume*,
+           G4GDMLAuxListType>::iterator pos = auxmap.find(lvol);
+
+  if (pos == auxmap.end())  { auxmap[lvol] = G4GDMLAuxListType(); }
+  
+  auxmap[lvol].push_back(myaux);
+}
+
+void
+G4GDMLWriteStructure::SetEnergyCutsExport(G4bool fcuts)
+{
+  cexport = fcuts;
+}
+
+void
+G4GDMLWriteStructure::ExportEnergyCuts(const G4LogicalVolume* const lvol)
+{
+  G4GDMLEvaluator eval;
+  G4ProductionCuts* pcuts = lvol->GetRegion()->GetProductionCuts();
+  G4ProductionCutsTable* ctab = G4ProductionCutsTable::GetProductionCutsTable();
+  G4Gamma* gamma = G4Gamma::Gamma();
+  G4Electron* eminus = G4Electron::Electron();
+  G4Positron* eplus = G4Positron::Positron();
+  G4Proton* proton = G4Proton::Proton();
+
+  G4double gamma_cut = ctab->ConvertRangeToEnergy(gamma, lvol->GetMaterial(),
+                                            pcuts->GetProductionCut("gamma"));
+  G4double eminus_cut = ctab->ConvertRangeToEnergy(eminus, lvol->GetMaterial(),
+                                            pcuts->GetProductionCut("e-"));
+  G4double eplus_cut = ctab->ConvertRangeToEnergy(eplus, lvol->GetMaterial(),
+                                            pcuts->GetProductionCut("e+"));
+  G4double proton_cut = ctab->ConvertRangeToEnergy(proton, lvol->GetMaterial(),
+                                            pcuts->GetProductionCut("proton"));
+
+  G4GDMLAuxStructType gammainfo = {"gammaECut",
+                                   eval.ConvertToString(gamma_cut), "MeV", 0};
+  G4GDMLAuxStructType eminusinfo = {"electronECut",
+                                  eval.ConvertToString(eminus_cut), "MeV", 0};
+  G4GDMLAuxStructType eplusinfo = {"positronECut",
+                                  eval.ConvertToString(eplus_cut), "MeV", 0};
+  G4GDMLAuxStructType protinfo = {"protonECut",
+                                  eval.ConvertToString(proton_cut), "MeV", 0};
+
+  AddVolumeAuxiliary(gammainfo, lvol);
+  AddVolumeAuxiliary(eminusinfo, lvol);
+  AddVolumeAuxiliary(eplusinfo, lvol);
+  AddVolumeAuxiliary(protinfo, lvol);
 }

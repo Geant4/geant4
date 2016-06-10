@@ -17,6 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 6, 2015 G.Cosmo (hadr-V10-01-01)
+- Added missing tags: hadr-cross-V10-01-33, hadr-hpp-V10-01-29.
+
+November 6, 2015 G.Cosmo (hadr-V10-01-00)
+- Including tags on top of tag "geant4-10-01-ref-10":
+  hadr-cross-V10-01-33, hadr-man-V10-01-06, hadr-abla-V10-01-01,
+  hadr-cohe-V10-01-16, hadr-deex-V10-01-54, hadr-fission-V10-01-07,
+  had-im_r-V10-01-03, hadr-lend-V10-01-07, hadr-modman-V10-01-07,
+  hadr-hpp-V10-01-29, hadr-qmd-V10-01-09, hadr-qelastic-V10-01-03,
+  radioactive_decay-V10-01-21, hadr-mod-util-V10-01-10, hadr-util-V10-01-02.
+- Removed module 'neutron_hp', now merged in 'particle_hp'.
+
 November 8, 2013 G.Cosmo (hadr-V09-06-00)
 - Including tags on top of tag "geant4-09-06-ref-10":
   hadr-gmk-V09-06-04, hadr-proc-mod-cmk-V09-06-00, hadr-proc-mod-gmk-V09-06-00,

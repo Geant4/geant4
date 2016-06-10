@@ -1,0 +1,73 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_sf_rotf
+#define tools_sg_sf_rotf
+
+#include "sf"
+
+#include "../lina/rotf"
+
+#include "../HEADER"
+
+namespace tools {
+namespace sg {
+
+class sf_rotf : public bsf<rotf> {
+  TOOLS_HEADER(sf_rotf,tools::sg::sf_rotf,bsf<rotf>)
+public:
+  virtual bool write(io::iwbuf& a_buffer) {
+    const vec4<float>& vec = m_value.quat();
+    const float* d = get_data(vec);
+    return a_buffer.write_vec(vec.size(),d);
+  }
+  virtual bool read(io::irbuf& a_buffer) {
+    vec4<float>& vec = m_value.quat();
+    uint32 n;
+    float* v;
+    if(!a_buffer.read_vec(n,v)) return false;
+    if(n!=vec.size()) {
+      delete [] v;
+#ifdef TOOLS_MEM
+      mem::decrement(s_new().c_str());
+#endif
+      return false;
+    }
+    for(uint32 index=0;index<n;index++) vec[index] = v[index];
+    delete [] v;
+#ifdef TOOLS_MEM
+    mem::decrement(s_new().c_str());
+#endif
+    return true;
+  }
+  virtual bool dump(std::ostream&) {
+    //a_out << parent::m_value << std::endl;
+    return true;
+  }
+public:
+  sf_rotf():parent(){}
+  sf_rotf(const rotf& a_value):parent(a_value){}
+  virtual ~sf_rotf(){}
+public:
+  sf_rotf(const sf_rotf& a_from):parent(a_from){}
+  sf_rotf& operator=(const sf_rotf& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+public:
+  sf_rotf& operator=(const rotf& a_value){
+    parent::operator=(a_value);
+    return *this;
+  }
+public: //iv2ps
+  void setValue(const vec3f& a_axis,float a_angle) {
+    value(rotf(a_axis,a_angle));
+  }
+  void setValue(const rotf& a_value) {
+    value(a_value);
+  }
+};
+
+}}
+
+#endif

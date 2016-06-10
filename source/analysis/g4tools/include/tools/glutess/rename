@@ -1,0 +1,79 @@
+#ifndef tools_glutess_rename
+#define tools_glutess_rename
+
+/* G.Barrand : namespace protection : */
+#define gluTessBeginContour inlib_gluTessBeginContour
+#define gluTessBeginPolygon inlib_gluTessBeginPolygon
+#define gluTessCallback     inlib_gluTessCallback
+#define gluTessEndContour   inlib_gluTessEndContour
+#define gluTessEndPolygon   inlib_gluTessEndPolygon
+#define gluTessNormal       inlib_gluTessNormal
+#define gluTessProperty     inlib_gluTessProperty
+#define gluTessVertex       inlib_gluTessVertex
+
+/* internal */
+#define gluBeginPolygon     inlib_gluBeginPolygon
+#define gluDeleteTess       inlib_gluDeleteTess
+#define gluEndPolygon       inlib_gluEndPolygon
+#define gluGetTessProperty  inlib_gluGetTessProperty
+#define gluNewTess          inlib_gluNewTess
+#define gluNextContour      inlib_gluNextContour
+
+#define __gl_computeInterior      inlib__gl_computeInterior
+#define __gl_dictListDelete       inlib__gl_dictListDelete
+#define __gl_dictListDeleteDict   inlib__gl_dictListDeleteDict
+#define __gl_dictListInsertBefore inlib__gl_dictListInsertBefore
+#define __gl_dictListNewDict      inlib__gl_dictListNewDict
+#define __gl_dictListSearch       inlib__gl_dictListSearch
+
+#define __gl_edgeEval      inlib__gl_edgeEval
+#define __gl_edgeIntersect inlib__gl_edgeIntersect
+#define __gl_edgeSign      inlib__gl_edgeSign
+/* done in memalloc.h :
+#define __gl_memInit       inlib__gl_memInit
+*/
+#define __gl_meshAddEdgeVertex        inlib__gl_meshAddEdgeVertex
+#define __gl_meshCheckMesh            inlib__gl_meshCheckMesh
+#define __gl_meshConnect              inlib__gl_meshConnect
+#define __gl_meshDelete               inlib__gl_meshDelete
+#define __gl_meshDeleteMesh           inlib__gl_meshDeleteMesh
+#define __gl_meshDiscardExterior      inlib__gl_meshDiscardExterior
+#define __gl_meshMakeEdge             inlib__gl_meshMakeEdge
+#define __gl_meshNewMesh              inlib__gl_meshNewMesh
+#define __gl_meshSetWindingNumber     inlib__gl_meshSetWindingNumber
+#define __gl_meshSplice               inlib__gl_meshSplice
+#define __gl_meshSplitEdge            inlib__gl_meshSplitEdge
+#define __gl_meshTessellateInterior   inlib__gl_meshTessellateInterior
+#define __gl_meshTessellateMonoRegion inlib__gl_meshTessellateMonoRegion
+#define __gl_meshUnion                inlib__gl_meshUnion
+#define __gl_meshZapFace              inlib__gl_meshZapFace
+#define __gl_noBeginData              inlib__gl_noBeginData
+#define __gl_noCombineData            inlib__gl_noCombineData
+#define __gl_noEdgeFlagData           inlib__gl_noEdgeFlagData
+#define __gl_noEndData                inlib__gl_noEndData
+#define __gl_noErrorData              inlib__gl_noErrorData
+#define __gl_noVertexData             inlib__gl_noVertexData
+#define __gl_pqHeapDelete             inlib__gl_pqHeapDelete
+#define __gl_pqHeapDeletePriorityQ    inlib__gl_pqHeapDeletePriorityQ
+#define __gl_pqHeapExtractMin         inlib__gl_pqHeapExtractMin
+#define __gl_pqHeapInit               inlib__gl_pqHeapInit
+#define __gl_pqHeapInsert             inlib__gl_pqHeapInsert
+#define __gl_pqHeapNewPriorityQ       inlib__gl_pqHeapNewPriorityQ
+#define __gl_pqSortDelete             inlib__gl_pqSortDelete
+#define __gl_pqSortDeletePriorityQ    inlib__gl_pqSortDeletePriorityQ
+#define __gl_pqSortExtractMin         inlib__gl_pqSortExtractMin
+#define __gl_pqSortInit               inlib__gl_pqSortInit
+#define __gl_pqSortInsert             inlib__gl_pqSortInsert
+#define __gl_pqSortIsEmpty            inlib__gl_pqSortIsEmpty
+#define __gl_pqSortMinimum            inlib__gl_pqSortMinimum
+#define __gl_pqSortNewPriorityQ       inlib__gl_pqSortNewPriorityQ
+#define __gl_projectPolygon           inlib__gl_projectPolygon
+#define __gl_renderBoundary           inlib__gl_renderBoundary
+#define __gl_renderCache              inlib__gl_renderCache
+#define __gl_renderMesh               inlib__gl_renderMesh
+#define __gl_transEval                inlib__gl_transEval
+#define __gl_transSign                inlib__gl_transSign
+#define __gl_vertCCW                  inlib__gl_vertCCW
+#define __gl_vertLeq                  inlib__gl_vertLeq
+   
+#endif

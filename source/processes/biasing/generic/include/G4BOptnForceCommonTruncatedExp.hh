@@ -99,14 +99,13 @@ public:
   void                        UpdateForStep( const G4Step*  );
   void                               Sample();
   const G4ThreeVector&   GetInitialMomentum() const { return fInitialMomentum; }
-  G4double               GetMaximumDistance() const { return fMaximumDistance;}
+  G4double               GetMaximumDistance() const { return fMaximumDistance; }
   void                 ChooseProcessToApply();
   const G4VProcess*       GetProcessToApply() const { return fProcessToApply; }
   void                      AddCrossSection( const G4VProcess*, G4double );
   size_t                 GetNumberOfSharing() const { return fNumberOfSharing;}
-  void           PostStepInteractionOccured( const G4VProcess* );
-  void                SetInteractionOccured( G4bool b ) { fInteractionOccured = b; }
-  G4bool              GetInteractionOccured() const   { return fInteractionOccured; }
+  void                SetInteractionOccured( G4bool b )       { fInteractionOccured = b;    }
+  G4bool              GetInteractionOccured()           const { return fInteractionOccured; }
   
 private:
   G4ILawCommonTruncatedExp*                fCommonTruncatedExpLaw;

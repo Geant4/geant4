@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AnalysisVerbose.hh 72292 2013-07-15 12:01:43Z ihrivnac $
+// $Id: G4AnalysisVerbose.hh 92688 2015-09-14 07:01:13Z gcosmo $
 
 // Utility class for analysis category messages.
 
@@ -38,7 +38,7 @@ class G4AnalysisVerbose
 {
   public:
     G4AnalysisVerbose(const G4String& type, G4int verboseLevel);
-    virtual ~G4AnalysisVerbose();
+    ~G4AnalysisVerbose();
 
     void Message(const G4String& action, 
                  const G4String& object, 

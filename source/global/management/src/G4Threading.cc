@@ -80,6 +80,7 @@ G4int G4Threading::G4GetNumberOfCores()
 void G4Threading::G4SetThreadId(G4int value ) { G4ThreadID = value; }
 G4int G4Threading::G4GetThreadId() { return G4ThreadID; }
 G4bool G4Threading::IsWorkerThread() { return (G4ThreadID>=0); }
+G4bool G4Threading::IsMasterThread() { return (G4ThreadID==MASTER_ID); }
 
 #if defined(WIN32)  // WIN32 stuff needed for MT
 DWORD /*WINAPI*/ G4WaitForSingleObjectInf( __in G4Mutex m )
@@ -126,6 +127,7 @@ G4Pid_t G4Threading::G4GetPidId()
 G4int G4Threading::G4GetNumberOfCores() { return 1; }
 G4int G4Threading::G4GetThreadId() { return G4Threading::SEQUENTIAL_ID; }
 G4bool G4Threading::IsWorkerThread() { return false; }
+G4bool G4Threading::IsMasterThread() { return true; }
 void G4Threading::G4SetThreadId(G4int) {}
 
 G4bool G4Threading::G4SetPinAffinity(G4int,G4Thread&) { return true;}

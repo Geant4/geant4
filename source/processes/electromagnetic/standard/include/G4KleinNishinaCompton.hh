@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaCompton.hh 82754 2014-07-08 14:06:13Z gcosmo $
+// $Id: G4KleinNishinaCompton.hh 93362 2015-10-19 13:45:19Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -60,7 +60,7 @@ class G4KleinNishinaCompton : public G4VEmModel
 
 public:
 
-  G4KleinNishinaCompton(const G4ParticleDefinition* p = 0, 
+  G4KleinNishinaCompton(const G4ParticleDefinition* p = nullptr, 
 			const G4String& nam = "Klein-Nishina");
 
   virtual ~G4KleinNishinaCompton();

@@ -1,0 +1,84 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_raxml_out
+#define tools_raxml_out
+
+#include "handle"
+
+namespace tools {
+
+class raxml_out {
+public:
+  raxml_out():m_hdl(0){}
+  raxml_out(base_handle* a_hdl,const std::string& a_class,const std::string& a_path,const std::string& a_name)
+  :m_hdl(a_hdl) //take ownership of a_hdl
+  ,m_class(a_class)
+  ,m_path(a_path),m_name(a_name)
+  {}
+  virtual ~raxml_out(){delete m_hdl;}
+public:
+  raxml_out(const raxml_out& a_from)
+  :m_hdl(a_from.m_hdl?a_from.m_hdl->copy():0)
+  ,m_class(a_from.m_class)
+  ,m_path(a_from.m_path),m_name(a_from.m_name)
+  {}
+  raxml_out& operator=(const raxml_out& a_from){
+    if(&a_from==this) return *this;
+
+    delete m_hdl;
+    m_hdl = a_from.m_hdl?a_from.m_hdl->copy():0;
+
+    m_class = a_from.m_class;
+    m_path = a_from.m_path;
+    m_name = a_from.m_name;
+
+    return *this;
+  } 
+public:
+  void* object() const {
+    if(!m_hdl) return 0;
+    return m_hdl->object();
+  }
+  const std::string& cls() const {return m_class;}
+  const std::string& path() const {return m_path;}
+  const std::string& name() const {return m_name;}
+  void disown() {if(m_hdl) m_hdl->disown();}
+protected:
+  base_handle* m_hdl;
+  std::string m_class;
+  std::string m_path;
+  std::string m_name;
+};
+
+}
+
+#include <vector>
+
+namespace tools {
+
+//for inlib::holder<raxml_outs>
+class raxml_outs : public std::vector<raxml_out> {
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::raxml_outs");
+    return s_v;
+  }
+public:
+  raxml_outs(){}
+  raxml_outs(const std::vector<raxml_out>& a_v)
+  :std::vector<raxml_out>(a_v)
+  {}
+public:
+  raxml_outs(const raxml_outs& a_from)
+  :std::vector<raxml_out>(a_from)
+  {}
+  raxml_outs& operator=(const raxml_outs& a_from){
+    std::vector<raxml_out>::operator=(a_from);
+    return *this;
+  }
+};
+
+}
+
+#endif

@@ -1,4 +1,4 @@
-$Id: README 86064 2014-11-07 08:49:32Z gcosmo $
+$Id: README 93258 2015-10-14 08:34:50Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -82,7 +82,7 @@ $Id: README 86064 2014-11-07 08:49:32Z gcosmo $
           wall during the run. 
  
     The program needs high statistic to reach precision on the computed dose.
-    The UI command /testem/event/printModulo allows to survey the convergence of
+    The UI command /run/printProgress allows to survey the convergence of
     the kineticEnergy and dose calculations.
     
     In addition, to increase the program efficiency, the secondary particles

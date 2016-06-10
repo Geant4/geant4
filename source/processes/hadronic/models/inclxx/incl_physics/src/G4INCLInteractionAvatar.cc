@@ -145,7 +145,7 @@ namespace G4INCL {
 
     if(pos2 < r*r) return true;
 
-    while( pos2 >= r*r && iterations<maxIterations )
+    while( pos2 >= r*r && iterations<maxIterations ) /* Loop checking, 10.07.2015, D.Mancusi */
     {
       pos *= std::sqrt(r*r*0.9801/pos2); // 0.9801 == 0.99*0.99
       pos2 = pos.mag2();

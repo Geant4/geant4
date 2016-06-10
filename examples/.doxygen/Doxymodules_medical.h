@@ -1,4 +1,4 @@
-// $Id: Doxymodules_medical.h 86514 2014-11-13 09:10:24Z gcosmo $
+// $Id: Doxymodules_medical.h 94561 2015-11-24 09:17:12Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_medical.h
@@ -129,6 +129,15 @@
 
 /** @} */
 
+/** @defgroup extended_medical_dna_microyz microyz
+ *  Medical dna microyz example has its
+ *  <a href="../html_microyz/html/index.html">standalone documentation </a>
+ *  @ingroup extended_medical_dna
+ *  @{
+ */
+
+/** @} */
+
 /** @defgroup extended_medical_dna_pdb4dna pdb4dna
  *  Medical dna pdb4dna example has its
  *  <a href="../html_pdb4dna/html/index.html">standalone documentation </a>
@@ -138,9 +147,27 @@
 
 /** @} */
 
+/** @defgroup extended_medical_dna_svalue svalue
+ *  Medical dna svalue example has its
+ *  <a href="../html_svalue/html/index.html">standalone documentation </a>
+ *  @ingroup extended_medical_dna
+ *  @{
+ */
+
+/** @} */
+
 /** @defgroup extended_medical_dna_wholeNuclearDNA wholeNuclearDNA
  *  Medical dna wholeNuclearDNA example has its
  *  <a href="../html_wholeNuclearDNA/html/index.html">standalone documentation </a>
+ *  @ingroup extended_medical_dna
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_medical_dna_wvalue wvalue
+ *  Medical dna wvalue example has its
+ *  <a href="../html_wvalue/html/index.html">standalone documentation </a>
  *  @ingroup extended_medical_dna
  *  @{
  */

@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr03/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 80190 2014-04-07 10:18:04Z gcosmo $
+// $Id: SteppingAction.cc 94619 2015-11-26 13:57:32Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,7 +60,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   // count processes
   // 
   const G4StepPoint* endPoint = aStep->GetPostStepPoint();
-  const G4VProcess* process   = endPoint->GetProcessDefinedStep();
+  G4VProcess* process   = 
+                   const_cast<G4VProcess*>(endPoint->GetProcessDefinedStep());
   run->CountProcesses(process);
   
   // check that an real interaction occured (eg. not a transportation)
@@ -84,8 +85,9 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4ParticleDefinition* particle = aStep->GetTrack()->GetDefinition();
   G4String partName = particle->GetParticleName();
   G4String nuclearChannel = partName;
-  G4HadronicProcess* hproc = (G4HadronicProcess*) process;
-  const G4Isotope* target = hproc->GetTargetIsotope();
+  G4HadronicProcess* hproc = dynamic_cast<G4HadronicProcess*>(process);
+  const G4Isotope* target = NULL;
+  if (hproc) target = hproc->GetTargetIsotope();
   G4String targetName = "XXXX";  
   if (target) targetName = target->GetName();
   nuclearChannel += " + " + targetName + " --> ";

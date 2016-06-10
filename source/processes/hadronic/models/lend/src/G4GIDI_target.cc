@@ -25,42 +25,11 @@
 //
 /*
 # <<BEGIN-copyright>>
-# Copyright (c) 2010, Lawrence Livermore National Security, LLC. 
-# Produced at the Lawrence Livermore National Laboratory 
-# Written by Bret R. Beck, beck6@llnl.gov. 
-# CODE-461393
-# All rights reserved. 
-#  
-# This file is part of GIDI. For details, see nuclear.llnl.gov. 
-# Please also read the "Additional BSD Notice" at nuclear.llnl.gov. 
-# 
-# Redistribution and use in source and binary forms, with or without modification, 
-# are permitted provided that the following conditions are met: 
-#
-#      1) Redistributions of source code must retain the above copyright notice, 
-#         this list of conditions and the disclaimer below.
-#      2) Redistributions in binary form must reproduce the above copyright notice, 
-#         this list of conditions and the disclaimer (as noted below) in the 
-#          documentation and/or other materials provided with the distribution.
-#      3) Neither the name of the LLNS/LLNL nor the names of its contributors may be 
-#         used to endorse or promote products derived from this software without 
-#         specific prior written permission. 
-#
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY 
-# EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT 
-# SHALL LAWRENCE LIVERMORE NATIONAL SECURITY, LLC, THE U.S. DEPARTMENT OF ENERGY OR 
-# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
-# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS 
-# OR SERVICES;  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED 
-# AND ON  ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
-# EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 # <<END-copyright>>
 */
-
 #include <iostream>
 #include <stdlib.h>
+#include <cmath>
 
 #include "G4GIDI_target.hh"
 #include "G4GIDI_mass.hh"
@@ -72,51 +41,55 @@ using namespace GIDI;
 /*
 ***************************************************************
 */
-G4GIDI_target::G4GIDI_target( const char *fileName ) {
+G4GIDI_target::G4GIDI_target( char const *fileName ) {
 
     init( fileName );
 }
 /*
 ***************************************************************
 */
-G4GIDI_target::G4GIDI_target( string &fileName ) {
+G4GIDI_target::G4GIDI_target( string const &fileName ) {
 
     init( fileName.c_str( ) );
 }
 /*
 ***************************************************************
 */
-void G4GIDI_target::init( const char *fileName ) {
+void G4GIDI_target::init( char const *fileName ) {
 
-    int i, j, n, *p, *q;
-    tpia_channel *channel;
+    int i, j, n, *p, *q, ir;
+    MCGIDI_reaction *reaction;
 
-    smr_initialize( &smr );
+    smr_initialize( &smr, smr_status_Ok, 1 );
     sourceFilename = fileName;
-    target = tpia_target_createRead( &smr, fileName );
+    target = MCGIDI_target_newRead( &smr, fileName );
     if( !smr_isOk( &smr ) ) {
-        smr_print( &smr, stderr, 1 );
+        smr_print( &smr, 1 );
         throw 1;
     }
-    name = target->targetID->name;
-    mass = G4GIDI_targetMass( target->targetID->name );
+    projectilesPOPID = target->projectilePOP->globalPoPsIndex;
+    name = target->targetPOP->name;
+    mass = G4GIDI_targetMass( target->targetPOP->name );
     equalProbableBinSampleMethod = "constant";
     elasticIndices = NULL;
     nElasticIndices = nCaptureIndices = nFissionIndices = nOthersIndices = 0;
 
-    if( ( n = tpia_target_numberOfChannels( &smr, target ) ) > 0 ) {
-        p = elasticIndices = (int *) xData_malloc2( NULL, n * sizeof( double ), 1, "elasticIndices" );
+    if( ( n = MCGIDI_target_numberOfReactions( &smr, target ) ) > 0 ) {
+        if( ( p = elasticIndices = (int *) smr_malloc2( &smr, n * sizeof( double ), 1, "elasticIndices" ) ) == NULL ) {
+            smr_print( &smr, 1 );
+            throw 1;
+        }
         for( i = 0; i < n; i++ ) {      /* Find elastic channel(s). */
-            channel = tpia_target_heated_getChannelAtIndex( target->baseHeatedTarget, i );
-            if( channel->ENDL_C == 10 ) {
+            reaction = MCGIDI_target_heated_getReactionAtIndex( target->baseHeatedTarget, i );
+            if( MCGIDI_reaction_getENDF_MTNumber( reaction ) == 2 ) {
                 *(p++) = i;
                 nElasticIndices++;
             }
         }
         captureIndices = p;
         for( i = 0; i < n; i++ ) {      /* Find capture channel(s). */
-            channel = tpia_target_heated_getChannelAtIndex( target->baseHeatedTarget, i );
-            if( channel->ENDL_C == 46 ) {
+            reaction = MCGIDI_target_heated_getReactionAtIndex( target->baseHeatedTarget, i );
+            if( MCGIDI_reaction_getENDF_MTNumber( reaction ) == 102 ) {
                 *(p++) = i;
                 nCaptureIndices++;
             }
@@ -124,11 +97,11 @@ void G4GIDI_target::init( const char *fileName ) {
 
         fissionIndices = p;
         for( i = 0; i < n; i++ ) {      /* Find fission channel(s). */
-            channel = tpia_target_heated_getChannelAtIndex( target->baseHeatedTarget, i );
-            if( channel->fission != NULL ) {
-                *(p++) = i;
-                nFissionIndices++;
-            }
+            reaction = MCGIDI_target_heated_getReactionAtIndex( target->baseHeatedTarget, i );
+            ir = MCGIDI_reaction_getENDF_MTNumber( reaction );
+            if( ( ir != 18 ) && ( ir != 19 ) && ( ir != 20 ) && ( ir != 21 ) && ( ir != 38 ) ) continue;
+            *(p++) = i;
+            nFissionIndices++;
         }
         othersIndices = p;
         for( i = 0; i < n; i++ ) {      /* Find other channel(s). */
@@ -142,6 +115,17 @@ void G4GIDI_target::init( const char *fileName ) {
             p++;
             nOthersIndices++;
         }
+#if 0
+printf( "elastic %d: ", nElasticIndices );
+for( i = 0; i < nElasticIndices; i++ ) printf( " %d", elasticIndices[i] );
+printf( "\ncapture %d: ", nCaptureIndices );
+for( i = 0; i < nCaptureIndices; i++ ) printf( " %d", captureIndices[i] );
+printf( "\nfission %d: ", nFissionIndices );
+for( i = 0; i < nFissionIndices; i++ ) printf( " %d", fissionIndices[i] );
+printf( "\nothers %d: ", nOthersIndices );
+for( i = 0; i < nOthersIndices; i++ ) printf( " %d", othersIndices[i] );
+printf( "\n" );
+#endif
     }
 }
 /*
@@ -149,8 +133,8 @@ void G4GIDI_target::init( const char *fileName ) {
 */
 G4GIDI_target::~G4GIDI_target( ) {
 
-    tpia_target_free( &smr, target );
-    xData_free( &smr, elasticIndices );
+    MCGIDI_target_free( &smr, target );
+    smr_freeMemory( (void **) &elasticIndices );
     smr_release( &smr );
 }
 /*
@@ -166,21 +150,21 @@ string *G4GIDI_target::getFilename( void ) { return( &sourceFilename ); }
 */
 int G4GIDI_target::getZ( void ) {
    
-    return( target->targetID->Z );
+    return( target->targetPOP->Z );
 }
 /*
 ***************************************************************
 */
 int G4GIDI_target::getA( void ) {
    
-    return( target->targetID->A );
+    return( target->targetPOP->A );
 }
 /*
 ***************************************************************
 */
 int G4GIDI_target::getM( void ) {
    
-    return( target->targetID->m );
+    return( target->targetPOP->m );
 }
 /*
 ***************************************************************
@@ -194,14 +178,14 @@ double G4GIDI_target::getMass( void ) {
 */
 int G4GIDI_target::getTemperatures( double *temperatures ) {
 
-    return( tpia_target_getTemperatures( &smr, target, temperatures ) );
+    return( MCGIDI_target_getTemperatures( &smr, target, temperatures ) );
 }
 /*
 ***************************************************************
 */
 int G4GIDI_target::readTemperature( int index ) {
 
-    return( tpia_target_readHeatedTarget( &smr, target, index, 0 ) );
+    return( MCGIDI_target_readHeatedTarget( &smr, target, index ) );
 }
 /*
 ***************************************************************
@@ -229,63 +213,63 @@ int G4GIDI_target::setEqualProbableBinSampleMethod( string method ) {
 */
 int G4GIDI_target::getNumberOfChannels( void ) {
 
-    return( tpia_target_numberOfChannels( &smr, target ) );
+    return( MCGIDI_target_numberOfReactions( &smr, target ) );
 }
 /*
 ***************************************************************
 */
 int G4GIDI_target::getNumberOfProductionChannels( void ) {
 
-    return( tpia_target_numberOfProductionChannels( &smr, target ) );
+    return( MCGIDI_target_numberOfProductionReactions( &smr, target ) );
+}
+/*
+***************************************************************
+*/
+channelID G4GIDI_target::getChannelsID( int channelIndex ) { 
+
+    MCGIDI_reaction *reaction;
+
+    if( ( reaction = MCGIDI_target_heated_getReactionAtIndex_smr( &smr, target->baseHeatedTarget, channelIndex ) ) == NULL ) {
+        smr_print( &smr, 1 );
+        throw 1;
+    }
+    return( string( reaction->outputChannelStr ) );    /* Only works because channelID is defined to be string. */
 }
 /*
 ***************************************************************
 */
 vector<channelID> *G4GIDI_target::getChannelIDs( void ) { 
 
-    return( getChannelIDs2( target->baseHeatedTarget->channels, tpia_target_numberOfChannels( &smr, target ) ) );
+    int i, n = MCGIDI_target_numberOfReactions( &smr, target );
+    MCGIDI_reaction *reaction;
+    vector<channelID> *listOfChannels;
+
+    listOfChannels = new vector<channelID>( n );
+    for( i = 0; i < n; i++ ) {
+        reaction = MCGIDI_target_heated_getReactionAtIndex( target->baseHeatedTarget, i );
+        (*listOfChannels)[i] = reaction->outputChannelStr;
+    }
+    return( listOfChannels );
 }
 /*
 ***************************************************************
 */
 vector<channelID> *G4GIDI_target::getProductionChannelIDs( void ) {
 
-    return( getChannelIDs2( target->baseHeatedTarget->productionChannels, tpia_target_numberOfProductionChannels( &smr, target ) ) );
-}
-/*
-***************************************************************
-*/
-vector<channelID> *G4GIDI_target::getChannelIDs2( tpia_channel **channels, int n ) {
-
-    int i = 0;
-    vector<channelID> *listOfChannels;
-
-    listOfChannels = new vector<channelID>( n );
-    for( i = 0; i < n; i++ ) (*listOfChannels)[i].ID = channels[i]->outputChannel;
-    return( listOfChannels );
-}
-/*
-***************************************************************
-*/
-vector<double> *G4GIDI_target::getEnergyGridAtTIndex( int index ) {
-
-    xData_Int i, n;
-    double *dEnergyGrid;
-    vector<double> *energyGrid;
-    vector<double>::iterator iter;
-
-    n = tpia_target_getEnergyGridAtTIndex( &smr, target, index, &dEnergyGrid );
-    if( n < 0 ) return( NULL );
-    energyGrid = new vector<double>( n );
-    for( i = 0, iter = energyGrid->begin( ); i < n; i++, iter++ ) *iter = dEnergyGrid[i];
-    return( energyGrid );
+    return( NULL );
 }
 /*
 ***************************************************************
 */
 double G4GIDI_target::getTotalCrossSectionAtE( double e_in, double temperature ) {
 
-    return( tpia_target_getTotalCrossSectionAtTAndE( NULL, target, temperature, -1, e_in, tpia_crossSectionType_pointwise ) );
+    MCGIDI_quantitiesLookupModes mode( projectilesPOPID );
+
+    mode.setProjectileEnergy( e_in );
+    mode.setCrossSectionMode( MCGIDI_quantityLookupMode_pointwise );
+    mode.setTemperature( temperature );
+
+    return( MCGIDI_target_getTotalCrossSectionAtTAndE( NULL, target, mode, true ) );
 }
 /*
 ***************************************************************
@@ -322,9 +306,14 @@ double G4GIDI_target::sumChannelCrossSectionAtE( int nIndices, int *indices, dou
 
     int i;
     double xsec = 0.;
+    MCGIDI_quantitiesLookupModes mode( projectilesPOPID );
+
+    mode.setProjectileEnergy( e_in );
+    mode.setCrossSectionMode( MCGIDI_quantityLookupMode_pointwise );
+    mode.setTemperature( temperature );
 
     for( i = 0; i < nIndices; i++ ) 
-        xsec += tpia_target_getIndexChannelCrossSectionAtE( &smr, target, indices[i], temperature, -1, e_in, tpia_crossSectionType_pointwise );
+        xsec += MCGIDI_target_getIndexReactionCrossSectionAtE( &smr, target, indices[i], mode, true );
     return( xsec );
 }
 /*
@@ -334,10 +323,15 @@ int G4GIDI_target::sampleChannelCrossSectionAtE( int nIndices, int *indices, dou
         double (*rng)( void * ), void *rngState ) {
 
     int i;
-    double xsec = 0., rxsec = sumChannelCrossSectionAtE( nIndices, indices, e_in, temperature ) * tpia_misc_drng( rng, rngState );
+    double xsec = 0., rxsec = sumChannelCrossSectionAtE( nIndices, indices, e_in, temperature ) * rng( rngState );
+    MCGIDI_quantitiesLookupModes mode( projectilesPOPID );
+
+    mode.setProjectileEnergy( e_in );
+    mode.setCrossSectionMode( MCGIDI_quantityLookupMode_pointwise );
+    mode.setTemperature( temperature );
 
     for( i = 0; i < nIndices - 1; i++ ) {
-        xsec += tpia_target_getIndexChannelCrossSectionAtE( &smr, target, indices[i], temperature, -1, e_in, tpia_crossSectionType_pointwise );
+        xsec += MCGIDI_target_getIndexReactionCrossSectionAtE( &smr, target, indices[i], mode, true );
         if( xsec >= rxsec ) break;
     }
     return( indices[i] );
@@ -345,21 +339,29 @@ int G4GIDI_target::sampleChannelCrossSectionAtE( int nIndices, int *indices, dou
 /*
 ***************************************************************
 */
-//double G4GIDI_target::getElasticFinalState( double e_in, double temperature, double (*rng)( void * ), void *rngState ) {
-double G4GIDI_target::getElasticFinalState( double e_in, double , double (*rng)( void * ), void *rngState ) {
+double G4GIDI_target::getElasticFinalState( double e_in, double temperature, double (*rng)( void * ), void *rngState ) {
 
-    tpia_decaySamplingInfo decaySamplingInfo;
-    tpia_channel *channel = tpia_target_heated_getChannelAtIndex_smr( &smr, target->baseHeatedTarget, elasticIndices[0] );
-    tpia_product *product;
+    MCGIDI_decaySamplingInfo decaySamplingInfo;
+    MCGIDI_reaction *reaction = MCGIDI_target_heated_getReactionAtIndex_smr( &smr, target->baseHeatedTarget, elasticIndices[0] );
+    MCGIDI_product *product;
+    MCGIDI_quantitiesLookupModes mode( projectilesPOPID );
 
-    decaySamplingInfo.e_in = e_in;
+    if( ( product = MCGIDI_outputChannel_getProductAtIndex( &smr, &(reaction->outputChannel), 0 ) ) == NULL ) {
+        smr_print( &smr, 1 );
+        throw 1;
+    }
+
+    mode.setProjectileEnergy( e_in );
+    mode.setCrossSectionMode( MCGIDI_quantityLookupMode_pointwise );
+    mode.setTemperature( temperature );
+
     decaySamplingInfo.isVelocity = 0;
-    tpia_frame_setColumn( &smr, &(decaySamplingInfo.frame), 0, tpia_referenceFrame_lab );
-    decaySamplingInfo.samplingMethods = &(target->samplingMethods);
     decaySamplingInfo.rng = rng;
     decaySamplingInfo.rngState = rngState;
-    product = tpia_decayChannel_getFirstProduct( &(channel->decayChannel) );
-    tpia_angular_SampleMu( &smr, &(product->angular), &decaySamplingInfo );
+    if( MCGIDI_product_sampleMu( &smr, product, mode, &decaySamplingInfo ) ) {
+        smr_print( &smr, 1 );
+        throw 1;
+    }
 
     return( decaySamplingInfo.mu );
 }
@@ -387,18 +389,17 @@ vector<G4GIDI_Product> *G4GIDI_target::getOthersFinalState( double e_in, double 
 /*
 ***************************************************************
 */
-vector<G4GIDI_Product> *G4GIDI_target::getFinalState( int nIndices, int *indices, double e_in, double temperature, double (*rng)( void * ), void *rngState ) {
+vector<G4GIDI_Product> *G4GIDI_target::getFinalState( int nIndices, int *indices, double e_in, double temperature, 
+    double (*rng)( void * ), void *rngState ) {
 
-#define nProductsMax 50
     int index = 0, i, n;
     vector<G4GIDI_Product> *products = NULL;
-    tpia_decaySamplingInfo decaySamplingInfo;
-    tpia_productOutgoingData productDatas[nProductsMax], *productData;
+    MCGIDI_decaySamplingInfo decaySamplingInfo;
+    MCGIDI_sampledProductsDatas sampledProductsDatas;
+    MCGIDI_sampledProductsData *productData;
+    MCGIDI_quantitiesLookupModes mode( projectilesPOPID );
 
-    decaySamplingInfo.e_in = e_in;
-    decaySamplingInfo.samplingMethods = &(target->samplingMethods);
     decaySamplingInfo.isVelocity = 0;
-    tpia_frame_setColumn( &smr, &(decaySamplingInfo.frame), 0, tpia_referenceFrame_lab );
     decaySamplingInfo.rng = rng;
     decaySamplingInfo.rngState = rngState;
 
@@ -411,14 +412,30 @@ vector<G4GIDI_Product> *G4GIDI_target::getFinalState( int nIndices, int *indices
             index = sampleChannelCrossSectionAtE( nIndices, indices, e_in, temperature, rng, rngState );
         }
     }
-    n = tpia_target_heated_sampleIndexChannelProductsAtE( &smr, target->baseHeatedTarget, index, &decaySamplingInfo, nProductsMax, productDatas );
+
+    MCGIDI_sampledProducts_initialize( &smr, &sampledProductsDatas, 1000 );
+    if( !smr_isOk( &smr ) ) {
+        smr_print( &smr, 1 );
+        throw 1;
+    }
+
+    mode.setProjectileEnergy( e_in );
+    mode.setCrossSectionMode( MCGIDI_quantityLookupMode_pointwise );
+    mode.setTemperature( temperature );
+
+    n = MCGIDI_target_heated_sampleIndexReactionProductsAtE( &smr, target->baseHeatedTarget, index, mode,
+            &decaySamplingInfo, &sampledProductsDatas );
+    if( !smr_isOk( &smr ) ) {
+        smr_print( &smr, 1 );
+        throw 1;
+    }
     if( n > 0 ) {
         if( ( products = new vector<G4GIDI_Product>( n ) ) != NULL ) {
             for( i = 0; i < n; i++ ) {
-                productData = &(productDatas[i]);
-                (*products)[i].A = productData->productID->A;
-                (*products)[i].Z = productData->productID->Z;
-                (*products)[i].m = productData->productID->m;
+                productData = &(sampledProductsDatas.products[i]);
+                (*products)[i].A = productData->pop->A;
+                (*products)[i].Z = productData->pop->Z;
+                (*products)[i].m = productData->pop->m;
                 (*products)[i].kineticEnergy = productData->kineticEnergy;
                 (*products)[i].px = productData->px_vx;
                 (*products)[i].py = productData->py_vy;
@@ -426,7 +443,21 @@ vector<G4GIDI_Product> *G4GIDI_target::getFinalState( int nIndices, int *indices
             }
         }
     }
+    MCGIDI_sampledProducts_release( &smr, &sampledProductsDatas );
 
     return( products );
-#undef nProductsMax
+}
+/*
+***************************************************************
+*/
+double G4GIDI_target::getReactionsThreshold( int index ) {
+
+    return( MCGIDI_target_heated_getReactionsThreshold( &smr, target->baseHeatedTarget, index ) );
+}
+/*
+***************************************************************
+*/
+double G4GIDI_target::getReactionsDomain( int index, double *EMin, double *EMax ) {
+
+    return( MCGIDI_target_heated_getReactionsDomain( &smr, target->baseHeatedTarget, index, EMin, EMax ) );
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AffineTransform.icc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4AffineTransform.icc 93152 2015-10-08 11:53:57Z gcosmo $
 //
 //
 // G4AffineTransformation Inline implementation
@@ -60,7 +60,7 @@ inline G4AffineTransform::G4AffineTransform( const G4RotationMatrix& rot,
    tx(tlate.x()),ty(tlate.y()),tz(tlate.z())
 {}
 
-inline G4AffineTransform::G4AffineTransform( const G4RotationMatrix *rot,
+inline G4AffineTransform::G4AffineTransform( const G4RotationMatrix* rot,
                                              const G4ThreeVector& tlate)
  : tx(tlate.x()),ty(tlate.y()),tz(tlate.z())
 {
@@ -361,7 +361,8 @@ G4bool G4AffineTransform::IsTranslated() const
         return (tx || ty || tz) ? true:false;
 }
 
-inline G4RotationMatrix G4AffineTransform::NetRotation() const {
+inline G4RotationMatrix G4AffineTransform::NetRotation() const
+{
   G4RotationMatrix mat;
   return mat.rotateAxes(G4ThreeVector(rxx,ryx,rzx),
                         G4ThreeVector(rxy,ryy,rzy),
@@ -394,4 +395,58 @@ void G4AffineTransform::SetNetTranslation(const G4ThreeVector& tlate)
         tx=tlate.x();
         ty=tlate.y();
         tz=tlate.z();
+}
+
+inline
+std::ostream& operator << (std::ostream& os, const G4AffineTransform& transf)
+{
+  std::streamsize oldPrec = os.precision(6); 
+  G4double DeviationTolerance = 1.0e-05;
+
+  G4double diagDeviation = 0.0; 
+  G4double offdDeviationUL = 0.0;
+  G4double offdDeviationDR = 0.0;
+  G4double offdDeviation = 0.0; 
+
+  os << "  Transformation: " << G4endl; 
+
+  // double  a = std::max ( 1, 2, 3 ) ; 
+  
+  G4bool UnitTr = ! transf.IsRotated(); 
+  diagDeviation = std::max( std::fabs( transf[0] - 1.0 ) ,   //  |rxx - 1|
+                            std::fabs( transf[5] - 1.0 ) );  //  |ryy - 1|
+  diagDeviation = std::max( diagDeviation, 
+                            std::fabs( transf[10] - 1.0 ) ); //  |rzz - 1|
+  
+  offdDeviationUL = std::max( std::fabs( transf[1] ) ,       //  |rxy|
+                              std::fabs( transf[2] ) );      //  |rxz|
+  offdDeviationUL = std::max( offdDeviationUL, 
+                              std::fabs( transf[4] ) );      //  |ryx|
+  
+  offdDeviationDR = std::max( std::fabs( transf[6] ) ,       //  |ryz|
+                              std::fabs( transf[8] ) );      //  |rzx|
+  offdDeviationDR = std::max( offdDeviationDR, 
+                              std::fabs( transf[9] ) );      //  |rzy|
+  offdDeviation = std::max( offdDeviationUL, offdDeviationDR ); 
+
+  if( UnitTr || std::max(diagDeviation, offdDeviation) < DeviationTolerance )
+  {
+     os << "    UNIT  Rotation " << G4endl;
+  }
+  else
+  {
+     os << "rx/x,y,z: "
+        << transf[0]  << " " << transf[1] << " " << transf[2] << G4endl
+        << "ry/x,y,z: "
+        << transf[4]  << " " << transf[5] << " " << transf[6] << G4endl
+        << "rz/x,y,z: "
+        << transf[8]  << " " << transf[9] << " " << transf[10] << G4endl;
+  }
+
+  os << "tr/x,y,z: " << transf[12]  << " " << transf[13] << " " << transf[14]
+     << G4endl;
+  
+  os.precision(oldPrec); 
+
+  return os; 
 }

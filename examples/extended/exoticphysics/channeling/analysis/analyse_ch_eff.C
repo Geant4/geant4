@@ -18,7 +18,7 @@ Double_t ComputeEfficiency(TH1D *h1,Double_t *fPar){
 }
 
 // Function for the computation of channeling efficiency at various incoming angle
-Int_t AnalyseChannelingEfficiency(TTree *fTree = G4CH,Float_t fChannelingMinimum = 35., Float_t fChannelingMaximum = 70.){
+Int_t AnalyseChannelingEfficiency(TTree *fTree,Float_t fChannelingMinimum = 35., Float_t fChannelingMaximum = 70.){
     //**//Channeling Gaussian Fit Function
     TF1 *vChanneling = new TF1("vChanneling","gaus",fChannelingMinimum,fChannelingMaximum);
     vChanneling->SetParNames("Const","Mean","Sigma");
@@ -47,7 +47,6 @@ Int_t AnalyseChannelingEfficiency(TTree *fTree = G4CH,Float_t fChannelingMinimum
     hChannelingEfficiency->SetFillStyle(0);
     hChannelingEfficiency->SetMarkerStyle(20);
     hChannelingEfficiency->Draw("PL");
-    c1->Update();
 
     TGraph* gRoughExperimentalData = new TGraph(11);
     gRoughExperimentalData->SetPoint(	0	,	-10	,	20	);
@@ -61,7 +60,7 @@ Int_t AnalyseChannelingEfficiency(TTree *fTree = G4CH,Float_t fChannelingMinimum
     gRoughExperimentalData->SetPoint(	8	,	6	,	66	);
     gRoughExperimentalData->SetPoint(	9	,	8	,	52	);
     gRoughExperimentalData->SetPoint(	10	,	10	,	37	);
-    
+
     gRoughExperimentalData->SetLineColor(4);
     gRoughExperimentalData->SetLineStyle(3);
     gRoughExperimentalData->SetFillStyle(0);
@@ -71,16 +70,13 @@ Int_t AnalyseChannelingEfficiency(TTree *fTree = G4CH,Float_t fChannelingMinimum
     gRoughExperimentalData->SetTitle("Phys. Lett. B 680, 129");
 
     gRoughExperimentalData->Draw("sameCP");
-    c1->Update();
-    
+
     TLegend *aLegend = new TLegend(0.30,0.15,0.55,0.3);
     aLegend->AddEntry(hChannelingEfficiency);
     aLegend->AddEntry(gRoughExperimentalData);
     aLegend->SetFillStyle(0);
     aLegend->SetLineColor(0);
     aLegend->Draw();
-    
-    c1->Update();
 
     return 0;
 }

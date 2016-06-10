@@ -1,0 +1,49 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_histo_histos
+#define tools_histo_histos
+
+#include "h1d"
+#include "h2d"
+#include "h3d"
+#include "p1d"
+#include "p2d"
+
+#include "../forit"
+
+namespace tools {
+namespace histo {
+
+inline void delete_histos(std::vector< std::pair<std::string,void*> >& a_hists) {
+  typedef std::pair<std::string,void*> class_pointer;
+
+  tools_vforit(class_pointer,a_hists,it) {
+    const std::string& scls = (*it).first;
+    if(scls==h1d::s_class()) {
+      h1d* h = (h1d*)(*it).second;
+      delete h;
+
+    } else if(scls==h2d::s_class()) {
+      h2d* h = (h2d*)(*it).second;
+      delete h;
+
+    } else if(scls==h3d::s_class()) {
+      h3d* h = (h3d*)(*it).second;
+      delete h;
+
+    } else if(scls==p1d::s_class()) {
+      p1d* h = (p1d*)(*it).second;
+      delete h;
+
+    } else if(scls==p2d::s_class()) {
+      p2d* h = (p2d*)(*it).second;
+      delete h;
+    }
+  }
+  a_hists.clear();
+}
+
+}}
+
+#endif

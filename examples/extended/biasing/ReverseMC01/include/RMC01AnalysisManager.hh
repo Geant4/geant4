@@ -26,7 +26,7 @@
 /// \file biasing/ReverseMC01/include/RMC01AnalysisManager.hh
 /// \brief Definition of the RMC01AnalysisManager class
 //
-// $Id: RMC01AnalysisManager.hh 76461 2013-11-11 10:15:51Z gcosmo $
+// $Id: RMC01AnalysisManager.hh 90260 2015-05-22 08:59:31Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
 //  Class Name:            RMC01AnalysisManager
@@ -137,6 +137,7 @@ private:
   //---------------------------------------------------------
   G4double fAccumulated_edep;
   G4double fAccumulated_edep2;
+  G4double fNentry;
   G4double fMean_edep;
   G4double fError_mean_edep;
   G4double fRelative_error;

@@ -1,4 +1,4 @@
-# $Id: run01.mac 68999 2013-04-15 09:23:17Z gcosmo $
+# $Id: run01.mac 93259 2015-10-14 08:35:22Z gcosmo $
 #
 /control/verbose 2
 /run/verbose 2
@@ -25,6 +25,6 @@
 /analysis/h1/set 10 100  0  3 mm	#step size in cavity
 /analysis/h1/set 11 100  0  3000 eV	#edep in cavity
 #
-/testem/event/printModulo 100000
+/run/printProgress 100000
 #
 /run/beamOn 1000000

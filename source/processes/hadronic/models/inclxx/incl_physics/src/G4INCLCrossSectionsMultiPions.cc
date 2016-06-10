@@ -54,6 +54,9 @@ namespace G4INCL {
       }
     };
 
+  const G4int CrossSectionsMultiPions::nMaxPiNN = 4;
+  const G4int CrossSectionsMultiPions::nMaxPiPiN = 4;
+
   const G4double CrossSectionsMultiPions::s11pzOOT = 0.0035761542037692665889;
   const G4double CrossSectionsMultiPions::s01ppOOT = 0.003421025623481919853;
   const G4double CrossSectionsMultiPions::s01pzOOT = 0.0035739814152966403123;
@@ -524,7 +527,7 @@ namespace G4INCL {
       //
       //     Nucleon-Nucleon producing xpi pions cross sections
       //
-// assert(xpi>0 && xpi<5);
+// assert(xpi>0 && xpi<=nMaxPiNN);
 // assert(particle1->isNucleon() && particle2->isNucleon());
 
       if (xpi == 1)
@@ -533,8 +536,10 @@ namespace G4INCL {
         return NNTwoPi(particle1, particle2);
       else if (xpi == 3)
         return NNThreePi(particle1, particle2);
-      else // if (xpi == 4)
+      else if (xpi == 4)
         return NNFourPi(particle1, particle2);
+      else // should never reach this point
+        return 0.;
     }
 
 
@@ -845,7 +850,8 @@ namespace G4INCL {
         //
         //     pion-Nucleon producing xpi pions cross sections
         //
-// assert(xpi>1 && xpi<5);
+// assert(xpi>1 && xpi<=nMaxPiPiN);
+// assert((particle1->isNucleon() && particle2->isPion()) || (particle1->isPion() && particle2->isNucleon()));
         if (xpi == 2)
             return piNOnePi(particle1,particle2);
         else if (xpi == 3)
@@ -853,8 +859,8 @@ namespace G4INCL {
         else if (xpi == 4) {
             const G4double piNThreePi = piNIne(particle1,particle2) - piNOnePi(particle1,particle2) - piNTwoPi(particle1,particle2);
             return piNThreePi;
-        }
-        return 0.0; // Should never reach this point
+        } else // should never reach this point
+          return 0.0;
     }
 
     G4double CrossSectionsMultiPions::piNOnePi(Particle const * const particle1, Particle const * const particle2) {

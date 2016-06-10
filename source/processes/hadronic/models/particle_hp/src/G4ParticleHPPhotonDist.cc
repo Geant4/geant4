@@ -66,7 +66,7 @@ G4bool G4ParticleHPPhotonDist::InitMean(std::istream & aDataFile)
       aDataFile >> nDiscrete;
       disType = new G4int[nDiscrete];
       energy = new G4double[nDiscrete];
-      actualMult = new G4int[nDiscrete];
+      //actualMult = new G4int[nDiscrete];
       theYield = new G4ParticleHPVector[nDiscrete];
       for (G4int i=0; i<nDiscrete; i++)
       {
@@ -284,6 +284,9 @@ G4ReactionProductVector * G4ParticleHPPhotonDist::GetPhotons(G4double anEnergy)
 
   //G4cout << "G4ParticleHPPhotonDist::GetPhotons repFlag " << repFlag << G4endl;
   // the partial cross-section case is not in this yet. @@@@  << 070601 TK add partial 
+  if ( actualMult.Get() == NULL ) {
+     actualMult.Get() = new std::vector<G4int>( nDiscrete );
+  }
   G4int i, ii, iii;
   G4int nSecondaries = 0;
   G4ReactionProductVector * thePhotons = new G4ReactionProductVector;
@@ -293,17 +296,17 @@ G4ReactionProductVector * G4ParticleHPPhotonDist::GetPhotons(G4double anEnergy)
     for(i=0; i<nDiscrete; i++)
     {
       current = theYield[i].GetY(anEnergy);
-      actualMult[i] = G4Poisson(current); // max cut-off still missing @@@
+      actualMult.Get()->at(i) = G4Poisson(current); // max cut-off still missing @@@
       if(nDiscrete==1&&current<1.0001) 
       {
-        actualMult[i] = static_cast<G4int>(current);
+        actualMult.Get()->at(i) = static_cast<G4int>(current);
         if(current<1) 
         {
-          actualMult[i] = 0;
-          if(G4UniformRand()<current) actualMult[i] = 1;
+          actualMult.Get()->at(i) = 0;
+          if(G4UniformRand()<current) actualMult.Get()->at(i) = 1;
         }
       }
-      nSecondaries += actualMult[i];
+      nSecondaries += actualMult.Get()->at(i);
     }
     //G4cout << "nSecondaries " << nSecondaries  << " anEnergy " << anEnergy/eV << G4endl;
     for(i=0;i<nSecondaries;i++)
@@ -324,7 +327,7 @@ G4int maxEnergyIndex = 0;
 //3456
       if ( nDiscrete == 1 && nPartials == 1 )  
       {
-         if ( actualMult[ 0 ] > 0 ) 
+         if ( actualMult.Get()->at(0) > 0 ) 
          {
 	    if ( disType[0] == 1 ) // continuum
             {
@@ -368,12 +371,12 @@ G4int maxEnergyIndex = 0;
 
                //G4cout << "start " << actualMult[ 0 ] << " maximumE " << maximumE/eV << G4endl;
 
-               std::vector< G4double > photons_e_best( actualMult[ 0 ] , 0.0 );
+               std::vector< G4double > photons_e_best( actualMult.Get()->at(0) , 0.0 );
                G4double best = DBL_MAX;
                G4int maxTry = 1000; 
                for ( G4int j = 0 ; j < maxTry ; j++ )
                {
-                  std::vector< G4double > photons_e( actualMult[ 0 ] , 0.0 );
+                  std::vector< G4double > photons_e( actualMult.Get()->at(0) , 0.0 );
                   for ( std::vector< G4double >::iterator 
                       it = photons_e.begin() ; it < photons_e.end() ; it++ ) 
                  {
@@ -398,7 +401,7 @@ G4int maxEnergyIndex = 0;
                     
                     break;
                  }
-                 G4cout << "NeutronHPPhotonDist could not find fitted energy set for multiplicity of " <<  actualMult[0] << "." << G4endl; 
+                 G4cout << "NeutronHPPhotonDist could not find fitted energy set for multiplicity of " <<  actualMult.Get()->at(0) << "." << G4endl; 
                  G4cout << "NeutronHPPhotonDist will use the best set." << G4endl; 
                  for ( std::vector< G4double >::iterator 
                      it = photons_e_best.begin() ; it < photons_e_best.end() ; it++ ) 
@@ -425,7 +428,7 @@ G4int maxEnergyIndex = 0;
       {
     for(i=0; i<nDiscrete; i++)
     { 
-      for(ii=0; ii< actualMult[i]; ii++)
+      for(ii=0; ii< actualMult.Get()->at(i); ii++)
       {   
 	if(disType[i]==1) // continuum
 	{
@@ -484,7 +487,11 @@ G4int maxEnergyIndex = 0;
 	if(ii<nIso)
 	{
           // isotropic distribution
-          G4double theta = pi*G4UniformRand();
+          //
+          //Fix Bugzilla report #1745
+          //G4double theta = pi*G4UniformRand();
+	  G4double costheta = 2.*G4UniformRand()-1;
+	  G4double theta = std::acos(costheta);
           G4double phi = twopi*G4UniformRand();
           G4double sinth = std::sin(theta);
           G4double en = thePhotons->operator[](i)->GetTotalEnergy();

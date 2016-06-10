@@ -49,7 +49,7 @@
 
 #include "globals.hh"
 #include "G4ReferenceCountedHandle.hh"
-#include <CLHEP/Utility/memory.h>
+#include <G4memory.hh>
 #include <vector>
 #include <set>
 //#include "G4ManyFastLists.hh"
@@ -66,6 +66,8 @@ template<typename OBJECT>
   class G4ManyFastLists;
 template<typename OBJECT>
   struct G4ManyFastLists_iterator;
+template<class OBJECT>
+  struct sortWatcher;
 
 
 /** Comments :
@@ -87,7 +89,8 @@ template<class LIST>
   struct _ListRef
   {
     typedef type_wrapper<LIST> traits_type;
-    typedef type_wrapper<G4ManyFastLists_iterator<typename LIST::object> > mli_traits_type;
+    typedef type_wrapper<G4ManyFastLists_iterator<typename LIST::object>>
+            mli_traits_type;
 
 //#ifdef WIN32
 //    friend typename traits_type::type;
@@ -201,7 +204,7 @@ template<class OBJECT>
     void DetachYourSelf();
     
     bool fAttachedToList;
-    CLHEP::shared_ptr<_ListRef<G4FastList<OBJECT> > > fListRef;
+    G4shared_ptr<_ListRef<G4FastList<OBJECT> > > fListRef;
     OBJECT* fpObject;
     G4FastListNode<OBJECT>* fpPrevious;
     G4FastListNode<OBJECT>* fpNext;
@@ -220,7 +223,7 @@ template<class OBJECT>
     G4int fNbObjects;
 //    G4FastListNode<OBJECT> * fpStart;
 //    G4FastListNode<OBJECT> * fpFinish;
-    CLHEP::shared_ptr<_ListRef<G4FastList<OBJECT> > > fListRef;
+    G4shared_ptr<_ListRef<G4FastList<OBJECT> > > fListRef;
 
     G4FastListNode<OBJECT> fBoundary;
     // Must be empty and link to the last non-empty node of the list
@@ -231,8 +234,22 @@ template<class OBJECT>
     class Watcher
     {
     public:
+      enum Priority
+      {
+        eExtreme,
+        eHigh,
+        eNormal,
+        eLow,
+        eVeryLow
+      };
+
       typedef G4FastList<OBJECT> list;
-      Watcher(){;}
+
+      Watcher()
+      {
+        fPriority = Priority::eVeryLow;
+      }
+
       virtual ~Watcher()
       {
         typename std::set<G4FastList<OBJECT>*>::iterator it = fWatching.begin();
@@ -243,10 +260,24 @@ template<class OBJECT>
         }
       }
 
+      virtual G4String GetWatcherName(){
+        return "";
+      }
+
+      Priority GetPriority() const{
+        return fPriority;
+      }
+
+      // ===============================
+      // NOTIFICATIONS
       void NotifyDeletingList(G4FastList<OBJECT>*){;}
-      void NotifyNewObject(OBJECT*, G4FastList<OBJECT>*){;}
-      void NotifyRemoveObject(OBJECT*, G4FastList<OBJECT>*){;}
-      void NotifyEmpty(OBJECT*, G4FastList<OBJECT>*){;}
+      // used by PriorityList & ManyFastLists
+
+      virtual void NotifyAddObject(OBJECT*, G4FastList<OBJECT>*){;}
+      virtual void NotifyRemoveObject(OBJECT*, G4FastList<OBJECT>*){;}
+//      void NotifyEmpty(OBJECT*, G4FastList<OBJECT>*){;}
+
+      // ===============================
 
       void Watch(G4FastList<OBJECT>* fastList)
       {
@@ -262,12 +293,29 @@ template<class OBJECT>
         if(removeWatcher) fastList->RemoveWatcher(this);
       }
 
+    protected:
+      Priority fPriority;
+
     private:
       std::set<G4FastList<OBJECT>*> fWatching;
     };
 
+    template<typename WATCHER_TYPE>
+    class TWatcher : public Watcher
+    {
+      public:
+      TWatcher() : Watcher(){;}
+      virtual ~TWatcher(){}
+      virtual G4String GetWatcherName()
+      {
+        return typeid(WATCHER_TYPE).name();
+      }
+    };
+
   protected:
-    std::set<Watcher*> fWatchers;
+    typedef std::set<typename G4FastList<OBJECT>::Watcher*,
+                    sortWatcher<OBJECT>> WatcherSet;
+    WatcherSet   fWatchers;
     G4FastListNode<G4FastList<OBJECT> >* fpNodeInManyLists;
 
   public:
@@ -296,7 +344,7 @@ template<class OBJECT>
 
     void RemoveWatcher(Watcher* watcher)
     {
-      typename std::set<Watcher*>::iterator it = fWatchers.find(watcher);
+      typename WatcherSet::iterator it = fWatchers.find(watcher);
       if(it == fWatchers.end()) return; //TODO: exception?
       fWatchers.erase(it);
     }
@@ -380,6 +428,25 @@ template<class OBJECT>
     G4FastList<OBJECT> & operator=(const G4FastList<OBJECT> &right);
     G4int operator==(const G4FastList<OBJECT> &right) const;
     G4int operator!=(const G4FastList<OBJECT> &right) const;
+  };
+
+
+template<class OBJECT>
+  struct sortWatcher
+  {
+    bool operator()(const typename G4FastList<OBJECT>::Watcher* left,
+                    const typename G4FastList<OBJECT>::Watcher* right) const
+    {
+      if(left && right)
+      {
+        if(left->GetPriority() != right->GetPriority())
+        {
+          return left->GetPriority() < right->GetPriority();
+        }
+        return left < right;
+      }
+      return false;
+    }
   };
 
 

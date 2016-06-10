@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4PrimaryParticle.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: pyG4PrimaryParticle.cc 94509 2015-11-20 10:14:44Z gcosmo $
 // ====================================================================
 //   pyG4PrimaryParticle.cc
 //
@@ -42,6 +42,7 @@ void export_G4PrimaryParticle()
 {
   class_<G4PrimaryParticle, G4PrimaryParticle*>
     ("G4PrimaryParticle", "primary particle")
+    .def(init<G4int>())
     // ---
     .add_property("Px", &G4PrimaryParticle::GetPx)
     .add_property("Py", &G4PrimaryParticle::GetPy)
@@ -50,19 +51,24 @@ void export_G4PrimaryParticle()
     .def("Print",       &G4PrimaryParticle::Print)
     .def("GetPDGcode",  &G4PrimaryParticle::GetPDGcode)
     .def("GetG4code",   &G4PrimaryParticle::GetG4code,
-         return_internal_reference<>())	 
+         return_internal_reference<>())
     .def("GetMomentun", &G4PrimaryParticle::GetMomentum,
          return_value_policy<return_by_value>())
     .def("GetPx",       &G4PrimaryParticle::GetPx)
     .def("GetPy",       &G4PrimaryParticle::GetPy)
     .def("GetPz",       &G4PrimaryParticle::GetPz)
+    .def("Set4Momentum",         &G4PrimaryParticle::Set4Momentum)
+    .def("SetMomentumDirection", &G4PrimaryParticle::SetMomentumDirection)
+
     .def("GetNext",     &G4PrimaryParticle::GetNext,
          return_internal_reference<>())
     .def("GetDaughter", &G4PrimaryParticle::GetNext,
          return_internal_reference<>())
     .def("GetTrackID",  &G4PrimaryParticle::GetTrackID)
     .def("GetMass",     &G4PrimaryParticle::GetMass)
+    .def("SetMass",     &G4PrimaryParticle::SetMass)
     .def("GetCharge",   &G4PrimaryParticle::GetCharge)
+    .def("SetCharge",   &G4PrimaryParticle::SetCharge)
     .def("GetPolarization", &G4PrimaryParticle::GetPolarization,
          return_value_policy<return_by_value>())
     .def("GetPolX",     &G4PrimaryParticle::GetPolX)
@@ -73,4 +79,3 @@ void export_G4PrimaryParticle()
     .def("GetProperTime", &G4PrimaryParticle::GetProperTime)
     ;
 }
-

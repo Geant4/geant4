@@ -1,0 +1,78 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_sf_enum
+#define tools_sg_sf_enum
+
+#include "sf"
+
+#include "enums" //hjust,vjust
+
+namespace tools {
+namespace sg {
+
+class bsf_enum {
+public:
+  TOOLS_SCLASS(tools::sg::bsf_enum);
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<bsf_enum>(this,a_class)) {return p;}
+    return 0;
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  virtual void set_value(int) = 0;
+public:
+  bsf_enum(){}
+  virtual ~bsf_enum(){}
+public:
+  bsf_enum(const bsf_enum&){}
+  bsf_enum& operator=(const bsf_enum&){return *this;}
+};
+
+template <class T>
+class sf_enum : public bsf<T>, public bsf_enum {
+  typedef bsf<T> parent;
+public:
+  TOOLS_T_SCLASS(T,tools::sg::sf_enum);
+  virtual void* cast(const std::string& a_class) const {
+   {if(void* p = cmp_cast< sf_enum<T> >(this,a_class)) {return p;}}
+   {if(void* p = bsf_enum::cast(a_class)) {return p;}}
+    return parent::cast(a_class);
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  virtual bool write(io::iwbuf& a_buffer) {
+    return a_buffer.write((int16)parent::m_value);
+  }
+  virtual bool read(io::irbuf& a_buffer) {
+    int16 v;
+    if(!a_buffer.read(v)) return false;
+    parent::m_value = (T)v;
+    return true;
+  }
+  virtual bool dump(std::ostream&) {
+    //a_out << parent::m_value << std::endl;
+    return true;
+  }
+public:
+  virtual void set_value(int a_value) {parent::value(T(a_value));}
+public:
+  sf_enum():parent(),bsf_enum(){}
+  sf_enum(const T& a_value):parent(a_value),bsf_enum(){}
+  virtual ~sf_enum(){}
+public:
+  sf_enum(const sf_enum& a_from):parent(a_from),bsf_enum(a_from){}
+  sf_enum& operator=(const sf_enum& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+public:
+  sf_enum& operator=(const T& a_value){
+    parent::operator=(a_value);
+    return *this;
+  }
+};
+
+}}
+
+#endif

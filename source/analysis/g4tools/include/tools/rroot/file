@@ -14,7 +14,7 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#ifdef WIN32
+#ifdef _MSC_VER
 #include <io.h>
 #include <sys/stat.h>
 // disable the warning about the usage of "this" in the constructor.
@@ -35,10 +35,9 @@ public:
   }
 public: //ifile
   virtual const std::string& path() const {return m_path;}
-  virtual std::string path() {return m_path;}
 
   virtual bool verbose() const {return m_verbose;}
-  virtual std::ostream& out() {return m_out;}
+  virtual std::ostream& out() const {return m_out;}
 
   virtual bool byte_swap() const {return is_little_endian();}
   virtual bool set_pos(seek a_offset = 0,from a_from = begin){
@@ -57,7 +56,7 @@ public: //ifile
 
 #if defined(__linux__) && (__GLIBC__ == 2) && (__GLIBC_MINOR__ >= 2)
     if (::lseek64(m_file, a_offset, whence) < 0) {
-#elif defined(WIN32)
+#elif defined(_MSC_VER)
     if (::_lseeki64(m_file, a_offset, whence) < 0) {
 #else
     if (::lseek(m_file, a_offset, whence) < 0) {
@@ -73,7 +72,7 @@ public: //ifile
   virtual bool read_buffer(char* a_buffer,uint32 a_length) {
     // Read a buffer from the file.
     // This is the basic low level read operation.
-#ifdef WIN32
+#ifdef _MSC_VER
     typedef int ssize_t;
 #endif
     ssize_t siz;
@@ -88,7 +87,7 @@ public: //ifile
     if (siz != ssize_t(a_length)) {
       m_out << "tools::rroot::file::read_buffer :"
             << " error reading all requested bytes from file " 
-            << sout(m_path) << ", got " << long2s(siz)
+            << sout(m_path) << ", got " << long_out(siz)
             << " of " << a_length
             << std::endl;
       return false;
@@ -96,8 +95,8 @@ public: //ifile
     m_bytes_read += siz;
     return true;
   }
-  virtual bool unziper(char a_key,unzip_func& a_func) const {
-    std::map<char,unzip_func>::const_iterator it = m_unzipers.find(a_key);
+  virtual bool unziper(char a_key,decompress_func& a_func) const {
+    std::map<char,decompress_func>::const_iterator it = m_unzipers.find(a_key);
     if(it==m_unzipers.end()) {
       a_func = 0;
       return false;
@@ -132,7 +131,7 @@ public:
 #endif
 
     m_file = _open(a_path.c_str(),
-#ifdef WIN32
+#ifdef _MSC_VER
                                O_RDONLY | O_BINARY,S_IREAD | S_IWRITE
 #else
                                O_RDONLY,0644
@@ -180,8 +179,8 @@ public:
   directory& dir() {return m_root_directory;}
   const directory& dir() const {return m_root_directory;}
 
-  bool add_unziper(char a_key,unzip_func a_func){
-    std::map<char,unzip_func>::const_iterator it = m_unzipers.find(a_key);
+  bool add_unziper(char a_key,decompress_func a_func){
+    std::map<char,decompress_func>::const_iterator it = m_unzipers.find(a_key);
     if(it!=m_unzipers.end()) {
       //(*it).second = a_func; //override ?
       return false;
@@ -199,9 +198,7 @@ protected:
      return ::open(a_name,a_flags,a_mode);
 #endif
   }
-  static std::string sout(const std::string& a_string) {
-    return std::string("\"")+a_string+"\"";
-  }
+  static std::string sout(const std::string& a_string) {return "\""+a_string+"\"";}
   bool initialize() {
     if(!read_header()) {
       m_out << "tools::rroot::file::initialize :"
@@ -355,7 +352,7 @@ protected:
     // make sure this is a root file
     if(::strncmp(header, "root", 4)) {
       m_out << "tools::rroot::file::read_header :"
-            << " " << sout(m_path) << " not a ROOT file."
+            << " " << sout(m_path) << " not a file at the CERN-ROOT format."
             << std::endl;
       return false;
     }
@@ -450,7 +447,7 @@ protected:
   tools::uint64 m_bytes_read; //Number of bytes read from this file
   directory m_root_directory;
   key m_streamer_info_key;
-  std::map<char,unzip_func> m_unzipers;
+  std::map<char,decompress_func> m_unzipers;
   std::string m_title;
   // begin of record :
   uint32 m_version;       //File format version

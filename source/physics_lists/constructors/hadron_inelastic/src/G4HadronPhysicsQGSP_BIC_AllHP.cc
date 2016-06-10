@@ -55,11 +55,17 @@
 #include "G4ShortLivedConstructor.hh"
 #include "G4IonConstructor.hh"
 
+#include "G4ComponentGGHadronNucleusXsc.hh"
+#include "G4CrossSectionInelastic.hh"
 #include "G4HadronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
 #include "G4NeutronCaptureXS.hh"
-#include "G4NeutronHPCaptureData.hh"
+#include "G4ParticleHPCaptureData.hh"
 #include "G4LFission.hh"
+
+#include "G4CrossSectionDataSetRegistry.hh"
+
+#include "G4PhysListUtil.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -71,7 +77,7 @@ G4HadronPhysicsQGSP_BIC_AllHP::tpdata = 0;
 
 G4HadronPhysicsQGSP_BIC_AllHP::G4HadronPhysicsQGSP_BIC_AllHP(G4int)
     :  G4VPhysicsConstructor("hInelastic QGSP_BIC_HP")
-/*    , theNeutrons(0)
+/*  , theNeutrons(0)
     , theFTFPNeutron(0)
     , theQGSPNeutron(0)
     , theBinaryNeutron(0)
@@ -87,13 +93,14 @@ G4HadronPhysicsQGSP_BIC_AllHP::G4HadronPhysicsQGSP_BIC_AllHP(G4int)
     , theHyperon(0)
     , theAntiBaryon(0)
     , theFTFPAntiBaryon(0)
+    , xsKaon(0)
     , xsNeutronCaptureXS(0)*/
 //    , QuasiElastic(true)
 {}
 
 G4HadronPhysicsQGSP_BIC_AllHP::G4HadronPhysicsQGSP_BIC_AllHP(const G4String& name, G4bool /* quasiElastic */)
     :  G4VPhysicsConstructor(name)  
-/*    , theNeutrons(0)
+/*  , theNeutrons(0)
     , theFTFPNeutron(0)
     , theQGSPNeutron(0)
     , theBinaryNeutron(0)
@@ -109,6 +116,7 @@ G4HadronPhysicsQGSP_BIC_AllHP::G4HadronPhysicsQGSP_BIC_AllHP(const G4String& nam
     , theHyperon(0)
     , theAntiBaryon(0)
     , theFTFPAntiBaryon(0)
+    , xsKaon(0)
     , xsNeutronCaptureXS(0)*/
 //    , QuasiElastic(quasiElastic)
 {}
@@ -201,6 +209,8 @@ void G4HadronPhysicsQGSP_BIC_AllHP::CreateModels()
 
 G4HadronPhysicsQGSP_BIC_AllHP::~G4HadronPhysicsQGSP_BIC_AllHP() 
 {
+  if (!tpdata) return;
+
   //ParticleHP
    delete tpdata->thePHPNeutron;
    delete tpdata->thePHPProton;
@@ -250,6 +260,15 @@ void G4HadronPhysicsQGSP_BIC_AllHP::ConstructProcess()
   tpdata->theNeutronB->Build();
   tpdata->theProtonB->Build();
   tpdata->thePiKB->Build();
+
+  // --- Kaons ---
+  tpdata->xsKaon = new G4ComponentGGHadronNucleusXsc();
+  G4VCrossSectionDataSet * kaonxs = new G4CrossSectionInelastic(tpdata->xsKaon);
+  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(kaonxs);
+  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(kaonxs);
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(kaonxs);
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(kaonxs);
+
   tpdata->theHyperon->Build();
   tpdata->theAntiBaryon->Build();
 
@@ -271,7 +290,7 @@ void G4HadronPhysicsQGSP_BIC_AllHP::ConstructProcess()
   }
   tpdata->xsNeutronCaptureXS = new G4NeutronCaptureXS();
   capture->AddDataSet(tpdata->xsNeutronCaptureXS);
-  capture->AddDataSet( new G4NeutronHPCaptureData );
+  capture->AddDataSet( new G4ParticleHPCaptureData );
   G4NeutronRadCapture* theNeutronRadCapture = new G4NeutronRadCapture(); 
   theNeutronRadCapture->SetMinEnergy( 19.9*MeV ); 
   capture->RegisterMe( theNeutronRadCapture );

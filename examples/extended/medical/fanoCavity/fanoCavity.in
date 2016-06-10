@@ -1,12 +1,13 @@
-# $Id: fanoCavity.in 86064 2014-11-07 08:49:32Z gcosmo $
+# $Id: fanoCavity.in 93258 2015-10-14 08:34:50Z gcosmo $
 #
 /control/verbose 2
+/control/cout/ignoreThreadsExcept 0
 /run/verbose 2
 #
 /testem/phys/addPhysics standard_opt3
 #
 /run/initialize
 #
-/testem/event/printModulo 1000
+/run/printProgress 1000
 #
 /run/beamOn 4000

@@ -48,7 +48,8 @@
 
 #include "G4HadronElasticProcess.hh"
 #include "G4NuclNuclDiffuseElastic.hh"
-#include "G4GGNuclNuclCrossSection.hh"
+#include "G4ComponentGGNuclNuclXsc.hh"
+#include "G4CrossSectionElastic.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -96,9 +97,10 @@ void G4IonElasticPhysics::ConstructProcess()
    ionElasticProcess->RegisterMe(ionElastic);
 
    //Cross Section
-   G4GGNuclNuclCrossSection* ionElasticXS = new G4GGNuclNuclCrossSection;
-   ionElasticXS->SetMinKinEnergy(0.0);
-   ionElasticProcess->AddDataSet(ionElasticXS);
+   G4ComponentGGNuclNuclXsc* ionElasticXS = new G4ComponentGGNuclNuclXsc;
+   G4VCrossSectionDataSet* ionElasticXSDataSet = new G4CrossSectionElastic(ionElasticXS);
+   ionElasticXSDataSet->SetMinKinEnergy(0.0);
+   ionElasticProcess->AddDataSet(ionElasticXSDataSet);
 
    G4ProcessManager* ionManager = G4GenericIon::GenericIon()->GetProcessManager();
                      ionManager->AddDiscreteProcess( ionElasticProcess );

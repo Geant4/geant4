@@ -40,7 +40,7 @@ target_link_libraries(Hadr02 ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(Hadr02_SCRIPTS
-    dpmjet.in hadr02.in hadr02.out urqmd.in vis.mac
+    hadr02.in hadr02.out urqmd.in vis.mac
   )
 
 foreach(_script ${Hadr02_SCRIPTS})

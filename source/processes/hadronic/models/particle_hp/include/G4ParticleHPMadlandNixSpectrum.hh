@@ -36,6 +36,9 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "Randomize.hh"
+#include "G4Exp.hh"
+#include "G4Log.hh"
+#include "G4Pow.hh"
 #include "G4ParticleHPVector.hh"
 #include "G4VParticleHPEDis.hh"
 
@@ -50,7 +53,7 @@ class G4ParticleHPMadlandNixSpectrum : public G4VParticleHPEDis
   public:
   G4ParticleHPMadlandNixSpectrum()
   {
-    expm1 = std::exp(-1.);
+    expm1 = G4Exp(-1.);
   }
   ~G4ParticleHPMadlandNixSpectrum()
   {
@@ -91,7 +94,7 @@ class G4ParticleHPMadlandNixSpectrum : public G4VParticleHPEDis
     // gamma(1.2,x*X) = std::sqrt(CLHEP::pi)*Erf(x)
     G4double x = std::sqrt(aValue);
     G4double t = 1./(1+0.47047*x);
-    result = 1- (0.3480242*t - 0.0958798*t*t + 0.7478556*t*t*t)*std::exp(-aValue); // @ check
+    result = 1- (0.3480242*t - 0.0958798*t*t + 0.7478556*t*t*t)*G4Exp(-aValue); // @ check
     result *= std::sqrt(CLHEP::pi);
     return result;
   }
@@ -100,14 +103,14 @@ class G4ParticleHPMadlandNixSpectrum : public G4VParticleHPEDis
   {
     G4double result;
     // gamma(a+1, x) = a*gamma(a,x)-x**a*std::exp(-x)
-    result = 0.5*Gamma05(aValue) - std::sqrt(aValue)*std::exp(-aValue); // @ check
+    result = 0.5*Gamma05(aValue) - std::sqrt(aValue)*G4Exp(-aValue); // @ check
     return result;
   }
   
   inline G4double Gamma25(G4double aValue)
   {
     G4double result;
-    result = 1.5*Gamma15(aValue) - std::pow(aValue,1.5)*std::exp(aValue); // @ check
+    result = 1.5*Gamma15(aValue) - G4Pow::GetInstance()->powA(aValue,1.5)*G4Exp(aValue); // @ check
     return result;
   }
   
@@ -117,7 +120,7 @@ class G4ParticleHPMadlandNixSpectrum : public G4VParticleHPEDis
   // exponential integral. (<5 seems ok.
     G4double gamma = 0.577216;
     G4double precision = 0.000001;
-    G4double result =-gamma - std::log(aValue);
+    G4double result =-gamma - G4Log(aValue);
     G4double term = -aValue;
     //110527TKDB  Unnessary codes, Detected by gcc4.6 compiler 
     //G4double last;

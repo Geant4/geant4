@@ -27,7 +27,7 @@
 /// \brief Definition of the F01EventAction class
 //
 //
-// $Id: F01EventAction.hh 76248 2013-11-08 11:19:52Z gcosmo $
+// $Id: F01EventAction.hh 92496 2015-09-02 07:22:25Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,7 +40,6 @@
 #include "G4UserEventAction.hh"
 
 class F01RunAction;
-class F01EventActionMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,17 +53,8 @@ class F01EventAction : public G4UserEventAction
     virtual void BeginOfEventAction(const G4Event*);
     virtual void EndOfEventAction(const G4Event*);
 
-    void SetEventVerbose(G4int level) {fVerboseLevel = level;}
-    void SetPrintModulo(G4int val)    {fPrintModulo = val;}
-
   private:
-    G4int    fCalorimeterCollID;
-
-    F01EventActionMessenger*  fEventMessenger;
     F01RunAction* fRunAction;
-
-    G4int fVerboseLevel;
-    G4int fPrintModulo;
 };
 
 #endif

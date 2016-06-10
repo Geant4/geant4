@@ -56,7 +56,7 @@
     if(i==(nEntries/10))
     {
       i=10*i;
-      while (i<nEntries)
+      while (i<nEntries) // Loop checking, 11.05.2015, T. Koi
       {
         if(theData[i++].GetX()>e) break;
       } 

@@ -1,0 +1,28 @@
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2
+
+/run/initialize
+
+/gps/particle gamma
+/gps/pos/type Point
+/gps/pos/centre 0 0 0 cm
+
+/gps/ang/type iso 
+/gps/ang/minphi     231     deg 
+/gps/ang/maxphi     309     deg 
+/gps/ang/mintheta   267.5   deg 
+/gps/ang/maxtheta   272.5   deg 
+
+/gps/ene/type Arb 
+/gps/hist/type arb
+/gps/hist/file x-ray-spectrum-geant4-180kV.dat
+/gps/hist/inter Lin
+
+/analysis/setFileName exgps
+/analysis/h1/set 1 100 200 800 MeV
+/analysis/h2/set 2 100 -10 10 cm none linear 100 -10 10 cm none linear #y-z
+
+/run/eventModulo 0 1
+/run/printProgress 100000
+/run/beamOn 1000000

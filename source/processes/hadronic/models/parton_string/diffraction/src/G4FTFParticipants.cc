@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.cc 87254 2014-11-28 07:49:23Z gcosmo $
+// $Id: G4FTFParticipants.cc 91914 2015-08-11 07:00:39Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -110,8 +110,10 @@ void G4FTFParticipants::GetList( const G4ReactionProduct& thePrimary,
 
     G4double xyradius;                          
     xyradius = theNucleus->GetOuterRadius() + deltaxy; // Range of impact parameter sampling
-                                                  
-    do {  // while ( theInteractions.size() == 0 )
+
+    const G4int maxNumberOfLoops = 1000;
+    G4int loopCounter = 0;                                          
+    do {
 
       std::pair< G4double, G4double > theImpactParameter;
       theImpactParameter = theNucleus->ChooseImpactXandY( xyradius );
@@ -133,7 +135,7 @@ void G4FTFParticipants::GetList( const G4ReactionProduct& thePrimary,
       G4int TrN( 0 );
       #endif
 
-      while ( ( nucleon = theNucleus->GetNextNucleon() ) )  {
+      while ( ( nucleon = theNucleus->GetNextNucleon() ) ) {  /* Loop checking, 10.08.2015, A.Ribon */
 
         G4double impact2 = sqr( impactX - nucleon->GetPosition().x() ) +
                            sqr( impactY - nucleon->GetPosition().y() );
@@ -170,7 +172,14 @@ void G4FTFParticipants::GetList( const G4ReactionProduct& thePrimary,
 
       } 
 
-    } while ( theInteractions.size() == 0 );
+    } while ( ( theInteractions.size() == 0 ) && 
+              ++loopCounter < maxNumberOfLoops );  /* Loop checking, 10.08.2015, A.Ribon */
+    if ( loopCounter >= maxNumberOfLoops ) {
+      #ifdef debugFTFparticipant
+      G4cout << "BAD situation: forced exit from the while loop!" << G4endl;
+      #endif
+      return;
+    }
 
     #ifdef debugFTFparticipant
     G4cout << "Number of Hit nucleons " << theInteractions.size() << "\t Bx " << impactX/fermi
@@ -190,13 +199,17 @@ void G4FTFParticipants::GetList( const G4ReactionProduct& thePrimary,
   G4cout << "Projectile and target are nuclei" << G4endl;
   #endif
 
+//G4cout<<theProjectileNucleus->GetOuterRadius()/fermi<<" "<<theNucleus->GetOuterRadius()/fermi<<" "<<deltaxy/fermi<<G4endl;
+
   G4double xyradius;                          
   xyradius = theProjectileNucleus->GetOuterRadius() +  // Range of impact parameter sampling
              theNucleus->GetOuterRadius() + deltaxy;
 
   G4double impactX( 0.0 ), impactY( 0.0 );
 
-  do {  // while ( theInteractions.size() == 0 )
+  const G4int maxNumberOfLoops = 1000;
+  G4int loopCounter = 0;
+  do {
 
     std::pair< G4double, G4double > theImpactParameter;
     theImpactParameter = theNucleus->ChooseImpactXandY( xyradius );
@@ -217,7 +230,7 @@ void G4FTFParticipants::GetList( const G4ReactionProduct& thePrimary,
     G4int PrNuclN( 0 );
     #endif
 
-    while ( ( ProjectileNucleon = theProjectileNucleus->GetNextNucleon() ) )  {
+    while ( ( ProjectileNucleon = theProjectileNucleus->GetNextNucleon() ) ) {  /* Loop checking, 10.08.2015, A.Ribon */
  
       G4VSplitableHadron* ProjectileSplitable = 0;
       theNucleus->StartLoop();
@@ -227,7 +240,7 @@ void G4FTFParticipants::GetList( const G4ReactionProduct& thePrimary,
       G4int TrNuclN( 0 );
       #endif
 
-      while ( ( TargetNucleon = theNucleus->GetNextNucleon() ) ) {
+      while ( ( TargetNucleon = theNucleus->GetNextNucleon() ) ) {  /* Loop checking, 10.08.2015, A.Ribon */
 
         G4double impact2 = sqr( impactX + ProjectileNucleon->GetPosition().x() - 
                                 TargetNucleon->GetPosition().x() ) +
@@ -297,7 +310,14 @@ void G4FTFParticipants::GetList( const G4ReactionProduct& thePrimary,
 
     if ( theInteractions.size() != 0 ) theProjectileNucleus->DoTranslation( theBeamPosition );
 
-  } while ( theInteractions.size() == 0 );
+  } while ( ( theInteractions.size() == 0 ) &&
+            ++loopCounter < maxNumberOfLoops );  /* Loop checking, 10.08.2015, A.Ribon */
+  if ( loopCounter >= maxNumberOfLoops ) {
+    #ifdef debugFTFparticipant
+    G4cout << "BAD situation: forced exit from the while loop!" << G4endl;
+    #endif
+    return;
+  }
 
   SortInteractionsIncT();
   ShiftInteractionTime();
@@ -308,7 +328,6 @@ void G4FTFParticipants::GetList( const G4ReactionProduct& thePrimary,
          << "\t B " << std::sqrt( sqr( impactX ) + sqr( impactY ) )/fermi << G4endl
          << "FTF participant End. #######################" << G4endl << G4endl;
   #endif
-
   return;
 }
 
@@ -347,3 +366,18 @@ void G4FTFParticipants::ShiftInteractionTime() {
   }
   return;
 }
+
+
+//============================================================================
+
+void G4FTFParticipants::Clean() {
+  for ( size_t i = 0; i < theInteractions.size(); i++ ) {
+    if ( theInteractions[ i ] ) {
+      delete theInteractions[ i ];
+      theInteractions[ i ] = 0;
+    }
+  }
+  theInteractions.clear();
+  currentInteraction = -1;
+}
+

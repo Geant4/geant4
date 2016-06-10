@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedRayleighModel.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4LivermorePolarizedRayleighModel.cc 93810 2015-11-02 11:27:56Z gcosmo $
 //
 // Author: Sebastien Incerti
 //         30 October 2008
@@ -43,6 +43,8 @@
 #include "G4LivermorePolarizedRayleighModel.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4LogLogInterpolation.hh"
+#include "G4CompositeEMDataSet.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -50,16 +52,18 @@ using namespace std;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4int G4LivermorePolarizedRayleighModel::maxZ = 100;
+G4LPhysicsFreeVector* G4LivermorePolarizedRayleighModel::dataCS[] = {0};
+G4VEMDataSet* G4LivermorePolarizedRayleighModel::formFactorData = 0;
+
 G4LivermorePolarizedRayleighModel::G4LivermorePolarizedRayleighModel(const G4ParticleDefinition*,
-                                             const G4String& nam)
-  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),
-   crossSectionHandler(0),formFactorData(0)
+									 const G4String& nam)
+  :G4VEmModel(nam),fParticleChange(0),isInitialised(false)
 {
+  fParticleChange =0;
   lowEnergyLimit = 250 * eV; 
-  highEnergyLimit = 100 * GeV;
-  
   //SetLowEnergyLimit(lowEnergyLimit);
-  SetHighEnergyLimit(highEnergyLimit);
+  //SetHighEnergyLimit(highEnergyLimit);
   //
   verboseLevel= 0;
   // Verbosity scale:
@@ -72,8 +76,8 @@ G4LivermorePolarizedRayleighModel::G4LivermorePolarizedRayleighModel(const G4Par
   if(verboseLevel > 0) {
     G4cout << "Livermore Polarized Rayleigh is constructed " << G4endl
          << "Energy range: "
-         << lowEnergyLimit / eV << " eV - "
-         << highEnergyLimit / GeV << " GeV"
+	   << LowEnergyLimit() / eV << " eV - "
+	   << HighEnergyLimit() / GeV << " GeV"
          << G4endl;
   }
 }
@@ -82,8 +86,17 @@ G4LivermorePolarizedRayleighModel::G4LivermorePolarizedRayleighModel(const G4Par
 
 G4LivermorePolarizedRayleighModel::~G4LivermorePolarizedRayleighModel()
 {  
-  if (crossSectionHandler) delete crossSectionHandler;
-  if (formFactorData) delete formFactorData;
+ if(IsMaster()) {
+   for(G4int i=0; i<maxZ; ++i) {
+     if(dataCS[i]) { 
+       delete dataCS[i];
+       dataCS[i] = 0;
+     }
+   }
+   delete formFactorData;
+   formFactorData = 0; 
+   
+ }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -101,61 +114,170 @@ void G4LivermorePolarizedRayleighModel::Initialise(const G4ParticleDefinition* p
   if (verboseLevel > 3)
     G4cout << "Calling G4LivermorePolarizedRayleighModel::Initialise()" << G4endl;
 
-  if (crossSectionHandler)
-  {
-    crossSectionHandler->Clear();
-    delete crossSectionHandler;
+
+  if(IsMaster()) {
+    
+    // Form Factor 
+    
+    G4VDataSetAlgorithm* ffInterpolation = new G4LogLogInterpolation;
+    G4String formFactorFile = "rayl/re-ff-";
+    formFactorData = new G4CompositeEMDataSet(ffInterpolation,1.,1.);
+    formFactorData->LoadData(formFactorFile);
+    
+    // Initialise element selector
+    InitialiseElementSelectors(particle, cuts);
+    
+    // Access to elements
+    char* path = getenv("G4LEDATA");
+    G4ProductionCutsTable* theCoupleTable =
+      G4ProductionCutsTable::GetProductionCutsTable();
+    G4int numOfCouples = theCoupleTable->GetTableSize();
+   
+     for(G4int i=0; i<numOfCouples; ++i) 
+       {
+	 const G4MaterialCutsCouple* couple = 
+	   theCoupleTable->GetMaterialCutsCouple(i);
+	 const G4Material* material = couple->GetMaterial();
+	 const G4ElementVector* theElementVector = material->GetElementVector();
+	 G4int nelm = material->GetNumberOfElements();
+	 
+	 for (G4int j=0; j<nelm; ++j) 
+	   {
+	     G4int Z = G4lrint((*theElementVector)[j]->GetZ());
+	     if(Z < 1)          { Z = 1; }
+	     else if(Z > maxZ)  { Z = maxZ; }
+	     if( (!dataCS[Z]) ) { ReadData(Z, path); }
+	   }
+       }
   }
   
-  // Read data files for all materials
-
-  crossSectionHandler = new G4CrossSectionHandler;
-  crossSectionHandler->Clear();
-  G4String crossSectionFile = "rayl/re-cs-";
-  crossSectionHandler->LoadData(crossSectionFile);
-
-  G4VDataSetAlgorithm* ffInterpolation = new G4LogLogInterpolation;
-  G4String formFactorFile = "rayl/re-ff-";
-  formFactorData = new G4CompositeEMDataSet(ffInterpolation,1.,1.);
-  formFactorData->LoadData(formFactorFile);
-
-  InitialiseElementSelectors(particle,cuts);
-
-  //
-  if (verboseLevel > 2) 
-    G4cout << "Loaded cross section files for Livermore Polarized Rayleigh model" << G4endl;
-
-  InitialiseElementSelectors(particle,cuts);
-
-  if (verboseLevel > 0) { 
-    G4cout << "Livermore Polarized Rayleigh model is initialized " << G4endl
-         << "Energy range: "
-         << LowEnergyLimit() / eV << " eV - "
-         << HighEnergyLimit() / GeV << " GeV"
-         << G4endl;
-	 }
-
-  if(isInitialised) return;
+  if(isInitialised) { return; }
   fParticleChange = GetParticleChangeForGamma();
   isInitialised = true;
+  
+}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4LivermorePolarizedRayleighModel::InitialiseLocal(const G4ParticleDefinition*,
+							  G4VEmModel* masterModel)
+{
+  SetElementSelectors(masterModel->GetElementSelectors());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4LivermorePolarizedRayleighModel::ComputeCrossSectionPerAtom(
-                                       const G4ParticleDefinition*,
-                                             G4double GammaEnergy,
-                                             G4double Z, G4double,
-                                             G4double, G4double)
+void G4LivermorePolarizedRayleighModel::ReadData(size_t Z, const char* path)
 {
-  if (verboseLevel > 3)
-    G4cout << "Calling CrossSectionPerAtom() of G4LivermorePolarizedRayleighModel" << G4endl;
-
-  if (GammaEnergy < lowEnergyLimit || GammaEnergy > highEnergyLimit) return 0.0;
-
-  G4double cs = crossSectionHandler->FindValue(G4int(Z), GammaEnergy);
-  return cs;
-}
+  if (verboseLevel > 1) 
+    {
+      G4cout << "Calling ReadData() of G4LivermoreRayleighModel" 
+	     << G4endl;
+    }
+  
+  if(dataCS[Z]) { return; }
+  
+  const char* datadir = path;
+  
+  if(!datadir) 
+    {
+      datadir = getenv("G4LEDATA");
+      if(!datadir) 
+	{
+	  G4Exception("G4LivermoreRayleighModelModel::ReadData()","em0006",
+		      FatalException,
+		      "Environment variable G4LEDATA not defined");
+	  return;
+	}
+    }
+  
+  //
+  
+  dataCS[Z] = new G4LPhysicsFreeVector();
+  
+  // Activation of spline interpolation
+  //dataCS[Z] ->SetSpline(true);
+  
+  std::ostringstream ostCS;
+  ostCS << datadir << "/livermore/rayl/re-cs-" << Z <<".dat";
+  std::ifstream finCS(ostCS.str().c_str());
+  
+  if( !finCS .is_open() ) 
+    {
+     G4ExceptionDescription ed;
+     ed << "G4LivermorePolarizedRayleighModel data file <" << ostCS.str().c_str()
+        << "> is not opened!" << G4endl;
+     G4Exception("G4LivermorePolarizedRayleighModel::ReadData()","em0003",FatalException,
+		 ed,"G4LEDATA version should be G4EMLOW6.27 or later.");
+     return;
+   } 
+   else 
+   {
+     if(verboseLevel > 3) { 
+       G4cout << "File " << ostCS.str() 
+        << " is opened by G4LivermoreRayleighModel" << G4endl;
+     }
+     dataCS[Z]->Retrieve(finCS, true);
+   } 
+ }
+ 
+ //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+ 
+ G4double G4LivermorePolarizedRayleighModel::ComputeCrossSectionPerAtom(
+                                        const G4ParticleDefinition*,
+					G4double GammaEnergy,
+					G4double Z, G4double,
+					G4double, G4double)
+ {
+   if (verboseLevel > 1) 
+     {
+       G4cout << "G4LivermoreRayleighModel::ComputeCrossSectionPerAtom()" 
+	      << G4endl;
+     }
+ 
+   if(GammaEnergy < lowEnergyLimit) { return 0.0; }
+   
+   G4double xs = 0.0;
+   
+   G4int intZ = G4lrint(Z);
+   
+   if(intZ < 1 || intZ > maxZ) { return xs; }
+   
+   G4LPhysicsFreeVector* pv = dataCS[intZ];
+ 
+   // if element was not initialised
+   // do initialisation safely for MT mode
+   if(!pv) { 
+     InitialiseForElement(0, intZ);
+     pv = dataCS[intZ];
+     if(!pv) { return xs; }
+   }
+ 
+   G4int n = pv->GetVectorLength() - 1;
+   G4double e = GammaEnergy/MeV;
+   if(e >= pv->Energy(n)) {
+     xs = (*pv)[n]/(e*e);  
+   } else if(e >= pv->Energy(0)) {
+     xs = pv->Value(e)/(e*e);  
+   }
+ 
+   /*   if(verboseLevel > 0)
+	{
+	G4cout  <<  "****** DEBUG: tcs value for Z=" << Z << " at energy (MeV)=" 
+     << e << G4endl;
+       G4cout  <<  "  cs (Geant4 internal unit)=" << xs << G4endl;
+     G4cout  <<  "    -> first E*E*cs value in CS data file (iu) =" << (*pv)[0] 
+     << G4endl;
+       G4cout  <<  "    -> last  E*E*cs value in CS data file (iu) =" << (*pv)[n] 
+     << G4endl;
+       G4cout  <<  "*********************************************************" 
+     << G4endl;
+       }
+   */
+   
+   return xs;
+ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -364,3 +486,17 @@ G4ThreeVector G4LivermorePolarizedRayleighModel::GetPhotonPolarization(const G4D
   return photonPolarization.unit();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
+ #include "G4AutoLock.hh"
+ namespace { G4Mutex LivermorePolarizedRayleighModelMutex = G4MUTEX_INITIALIZER; }
+ 
+void  G4LivermorePolarizedRayleighModel::InitialiseForElement(const G4ParticleDefinition*, 
+                  G4int Z)
+ {
+   G4AutoLock l(&LivermorePolarizedRayleighModelMutex);
+   //  G4cout << "G4LivermoreRayleighModel::InitialiseForElement Z= " 
+   //   << Z << G4endl;
+   if(!dataCS[Z]) { ReadData(Z); }
+   l.unlock();
+ }

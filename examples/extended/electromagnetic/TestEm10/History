@@ -1,4 +1,4 @@
-$Id: History 73034 2013-08-15 09:25:35Z gcosmo $
+$Id: History 90463 2015-06-01 09:33:38Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30-05-15 V.Ivanchenko (testem10-V10-01-00)
+- Em10PhysicsList - removed obsolete header
 
 24-07-13 P.Gumplinger (testem10-V09-06-01)
 - remove or comment out unused class fields in Em10DetectorConstruction,

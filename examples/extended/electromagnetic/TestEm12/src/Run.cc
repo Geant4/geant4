@@ -235,7 +235,8 @@ void Run::EndOfRun()
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   G4int ih = 1;
-  G4double binWidth = analysisManager->GetH1Width(ih);
+  G4double binWidth = analysisManager->GetH1Width(ih)
+                     *analysisManager->GetH1Unit(ih);
   G4double fac = (1./(numberOfEvent*binWidth))*(mm/MeV);
   analysisManager->ScaleH1(ih,fac);
     

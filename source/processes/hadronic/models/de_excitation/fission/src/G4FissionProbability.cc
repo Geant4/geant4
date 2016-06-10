@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionProbability.cc 84396 2014-10-15 07:18:24Z gcosmo $
+// $Id: G4FissionProbability.cc 91834 2015-08-07 07:24:22Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -38,6 +38,7 @@
 #include "G4PairingCorrection.hh"
 #include "G4EvaporationLevelDensityParameter.hh"
 #include "G4FissionLevelDensityParameter.hh"
+#include "G4Exp.hh"
 
 G4FissionProbability::G4FissionProbability() :
   theEvapLDP(new G4EvaporationLevelDensityParameter),
@@ -76,15 +77,15 @@ G4FissionProbability::EmissionProbability(const G4Fragment & fragment,
 
   G4double Cf = 2.0*std::sqrt(afission*MaximalKineticEnergy);
 
-  //    G4double Q1 = 1.0 + (Cf - 1.0)*std::exp(Cf);
-  //    G4double Q2 = 4.0*pi*afission*std::exp(SystemEntropy);
+  //    G4double Q1 = 1.0 + (Cf - 1.0)*G4Exp(Cf);
+  //    G4double Q2 = 4.0*pi*afission*G4Exp(SystemEntropy);
   
   //    G4double probability = Q1/Q2;
    
   G4double Exp1 = 0.0;
-  if (SystemEntropy <= 160.0) { Exp1 = std::exp(-SystemEntropy); }
+  if (SystemEntropy <= 160.0) { Exp1 = G4Exp(-SystemEntropy); }
   // @@@@@@@@@@@@@@@@@ hpw changed max to min - cannot notify vicente now
-  G4double Exp2 = std::exp( std::min(700.0,Cf-SystemEntropy) ); 
+  G4double Exp2 = G4Exp( std::min(300.0,Cf-SystemEntropy) ); 
 
   // JMQ 14/02/09 BUG fixed in fission probability (missing parenthesis 
   // at denominator)

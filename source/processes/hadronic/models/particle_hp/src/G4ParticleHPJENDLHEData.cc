@@ -36,6 +36,7 @@
 #include "G4LPhysicsFreeVector.hh"
 #include "G4ElementTable.hh"
 #include "G4ParticleHPData.hh"
+#include "G4Pow.hh"
 
 G4bool G4ParticleHPJENDLHEData::IsApplicable(const G4DynamicParticle*aP, const G4Element* anE)
 {
@@ -401,7 +402,8 @@ G4double G4ParticleHPJENDLHEData::getXSfromThisIsotope( G4int Z , G4int A , G4do
 
       aXSection = aPhysVec->GetValue( ek , outOfRange );
       // X^(2/3) factor
-      aXSection *= std::pow ( 1.0*A/ A1 , 2.0 / 3.0 );
+      //aXSection *= std::pow ( 1.0*A/ A1 , 2.0 / 3.0 );
+      aXSection *= G4Pow::GetInstance()->A23( 1.0*A/ A1 );
 
    }
 

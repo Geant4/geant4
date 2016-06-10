@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.hh 83991 2014-09-26 09:22:26Z gcosmo $
+// $Id: G4VPhysicalVolume.hh 93287 2015-10-15 09:50:22Z gcosmo $
 //
 //
 // class G4VPhysicalVolume
@@ -239,11 +239,13 @@ class G4VPhysicalVolume
 
   private:
 
-    G4LogicalVolume *flogical;   // The logical volume representing the
+    G4LogicalVolume* flogical;   // The logical volume representing the
                                  // physical and tracking attributes of
                                  // the volume
     G4String fname;              // The name of the volume
-    G4LogicalVolume   *flmother; // The current mother logical volume
+    G4LogicalVolume* flmother;   // The current mother logical volume
+
+    G4PVData* pvdata;  // Shadow pointer for use of object persistency
 };
 
 // NOTE: 

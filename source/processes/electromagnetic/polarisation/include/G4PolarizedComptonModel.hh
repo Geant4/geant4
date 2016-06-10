@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedComptonModel.hh 68046 2013-03-13 14:31:38Z gcosmo $
+// $Id: G4PolarizedComptonModel.hh 93113 2015-10-07 07:49:04Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -90,6 +90,9 @@ public:
   inline const G4ThreeVector & GetFinalGammaPolarization() const;
   inline const G4ThreeVector & GetFinalElectronPolarization() const;
 private:
+
+  void PrintWarning(const G4DynamicParticle*, G4int, G4double grej, 
+		    G4double onecos, G4double phi, const G4String) const;
 
   // hide assignment operator
   G4PolarizedComptonModel & operator=(const  G4PolarizedComptonModel &right);

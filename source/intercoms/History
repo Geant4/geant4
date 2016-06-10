@@ -1,4 +1,4 @@
-$Id: History 85912 2014-11-06 08:57:43Z gcosmo $
+$Id: History 94366 2015-11-13 08:15:49Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,23 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 November, 2015 Laurent Garnier (intercoms-V10-01-03)
+- G4UImanager : Coverity fixes
+
+26 May, 2015 Robert Hatcher (intercoms-V10-01-02)
+- clang 3.4 doesn't have <type_traits> but 3.5 does; as does vc12.
+  So can't rely on anything other than std:: namespace to avoid a clash;
+  track down "using namespace std" issues in various processes packages
+
+22 May, 2015 Robert Hatcher (intercoms-V10-01-01)
+- Deal with implementation of remove_reference in G4AnyMethod for cases 
+  where one is compiling with the C++11 standard or clang and a
+  "using namespace std" causes a clash
+
+05 May, 2015 Andrea Dotti (intercoms-V10-01-00)
+- Using new IsMasterThread() function as suggested by J.Allison
+
 05 November, 2014  Robert Hatcher  (intercoms-V10-00-15)
 - Rename a few inline method parameter names from 's' to 's0' 
   to avoid a clash with CLHEP global 's'

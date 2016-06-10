@@ -1,0 +1,19 @@
+$Id: History 85260 2014-10-27 08:53:35Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    clustering History file
+                    --------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+	 
+22-10-15 SI (clustering-V10-01-00)
+- created

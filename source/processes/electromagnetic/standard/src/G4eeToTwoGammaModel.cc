@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoGammaModel.cc 74581 2013-10-15 12:03:25Z gcosmo $
+// $Id: G4eeToTwoGammaModel.cc 91726 2015-08-03 15:41:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -170,14 +170,16 @@ void G4eeToTwoGammaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 {
   G4double PositKinEnergy = dp->GetKineticEnergy();
   G4DynamicParticle *aGamma1, *aGamma2;
+
+  CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();
    
   // Case at rest
   if(PositKinEnergy == 0.0) {
-    G4double cost = 2.*G4UniformRand()-1.;
+    G4double cost = 2.*rndmEngine->flat()-1.;
     G4double sint = sqrt((1. - cost)*(1. + cost));
     G4double phi  = twopi * G4UniformRand();
     G4ThreeVector dir(sint*cos(phi), sint*sin(phi), cost);
-    phi = twopi * G4UniformRand();
+    phi = twopi * rndmEngine->flat();
     G4ThreeVector pol(cos(phi), sin(phi), 0.0);
     pol.rotateUz(dir);
     aGamma1 = new G4DynamicParticle(theGamma, dir, electron_mass_c2);
@@ -206,9 +208,10 @@ void G4eeToTwoGammaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
     G4double epsil, greject;
 
     do {
-      epsil = epsilmin*G4Exp(G4Log(epsilqot)*G4UniformRand());
+      epsil = epsilmin*G4Exp(G4Log(epsilqot)*rndmEngine->flat());
       greject = 1. - epsil + (2.*gam*epsil-1.)/(epsil*tau2*tau2);
-    } while( greject < G4UniformRand() );
+      // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
+    } while( greject < rndmEngine->flat());
 
     //
     // scattered Gamma angles. ( Z - axis along the parent positron)
@@ -224,7 +227,7 @@ void G4eeToTwoGammaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
       else cost = -1.0; 
     }
     G4double sint = sqrt((1.+cost)*(1.-cost));
-    G4double phi  = twopi * G4UniformRand();
+    G4double phi  = twopi * rndmEngine->flat();
 
     //
     // kinematic of the created pair

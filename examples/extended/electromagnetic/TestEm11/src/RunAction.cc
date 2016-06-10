@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm11/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 78560 2014-01-07 10:06:52Z gcosmo $
+// $Id: RunAction.cc 93562 2015-10-26 14:44:24Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -103,7 +103,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
   G4double stepMax = DBL_MAX;
   G4int ih = 1;
   if (analysisManager->GetH1Activation(ih)) {
-    stepMax = analysisManager->GetH1Width(ih);
+    stepMax = analysisManager->GetH1Width(ih)
+             *analysisManager->GetH1Unit(ih);
   }  
   
   ih = 8;

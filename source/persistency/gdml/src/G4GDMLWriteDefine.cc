@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteDefine.cc 68053 2013-03-13 14:39:51Z gcosmo $
+// $Id: G4GDMLWriteDefine.cc 93077 2015-10-02 14:38:25Z gcosmo $
 //
 // class G4GDMLWriteDefine Implementation
 //
@@ -48,22 +48,27 @@ G4GDMLWriteDefine::~G4GDMLWriteDefine()
 {
 }
 
-G4ThreeVector G4GDMLWriteDefine::GetAngles(const G4RotationMatrix& mat)
+G4ThreeVector G4GDMLWriteDefine::GetAngles(const G4RotationMatrix& mtx)
 {
    G4double x,y,z;
+   G4RotationMatrix mat = mtx;
+   mat.rectify();   // Rectify matrix from possible roundoff errors
 
-   const G4double cosb = std::sqrt(mat.xx()*mat.xx()+mat.yx()*mat.yx());
+   // Direction of rotation given by left-hand rule; clockwise rotation
 
-   if (cosb > kRelativePrecision)
+   static const G4double kMatrixPrecision = 10E-10;
+   const G4double cosb = std::sqrt(mtx.xx()*mtx.xx()+mtx.yx()*mtx.yx());
+
+   if (cosb > kMatrixPrecision)
    {
-      x = std::atan2(mat.zy(),mat.zz());
-      y = std::atan2(-mat.zx(),cosb);
-      z = std::atan2(mat.yx(),mat.xx());
+      x = std::atan2(mtx.zy(),mtx.zz());
+      y = std::atan2(-mtx.zx(),cosb);
+      z = std::atan2(mtx.yx(),mtx.xx());
    }
    else
    {
-      x = std::atan2(-mat.yz(),mat.yy());
-      y = std::atan2(-mat.zx(),cosb);
+      x = std::atan2(-mtx.yz(),mtx.yy());
+      y = std::atan2(-mtx.zx(),cosb);
       z = 0.0;
    }
 

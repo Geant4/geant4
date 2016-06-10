@@ -28,4 +28,8 @@
 
 #include "G4GIDI.hh"
 
+//typedef GIDI4GEANT G4GIDI;
+//typedef GIDI4GEANT_target G4GIDI_target;
+//typedef GIDI4GEANT_Product G4GIDI_Product;
+
 #endif

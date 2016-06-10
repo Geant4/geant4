@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh 86753 2014-11-17 15:12:36Z gcosmo $
+// $Id: G4RunManager.hh 94222 2015-11-09 08:28:49Z gcosmo $
 //
 // 
 
@@ -579,6 +579,10 @@ public: // with description
     static G4bool fGeometryHasBeenDestroyed;
   public:
     static G4bool IfGeometryHasBeenDestroyed();
+    //This is used only by workers thread to reset RNG engines from files
+    //that are event specific. Not implemented for sequential since run seed
+    //defines event seeds
+    virtual void RestoreRndmEachEvent(G4bool) { /*No effect in SEQ */ }
 };
 
 #endif

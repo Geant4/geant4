@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExGflashRunAction.hh 70923 2013-06-07 13:10:39Z gcosmo $
+// $Id: ExGflashRunAction.hh 94396 2015-11-13 13:37:16Z gcosmo $
 //
 /// \file parameterisations/gflash/include/ExGflashRunAction.hh
 /// \brief Definition of the ExGflashRunAction class
@@ -34,7 +34,6 @@
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 
-
 class G4Run;
 
 class ExGflashRunAction : public G4UserRunAction
@@ -42,13 +41,12 @@ class ExGflashRunAction : public G4UserRunAction
 public:
   ExGflashRunAction();
   ~ExGflashRunAction();
-  void BeginOfRunAction(const G4Run* aRun);
-  void EndOfRunAction(const G4Run* aRun);
-  void setRunID (int i) {fRunID=i;};
-  
+
+  virtual void BeginOfRunAction(const G4Run* aRun);
+  virtual void EndOfRunAction(const G4Run* aRun);
+
 private:
   G4int fRunID;
 };
-
 
 #endif

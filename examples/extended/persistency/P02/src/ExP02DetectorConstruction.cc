@@ -26,7 +26,7 @@
 /// \file persistency/P02/src/ExP02DetectorConstruction.cc
 /// \brief Implementation of the ExP02DetectorConstruction class
 //
-// $Id: ExP02DetectorConstruction.cc 71727 2013-06-21 07:55:45Z gcosmo $
+// $Id: ExP02DetectorConstruction.cc 93306 2015-10-16 07:38:07Z gcosmo $
 //
 //
 #include "ExP02DetectorConstruction.hh"
@@ -44,7 +44,6 @@
 #include "TROOT.h"
 #include "TFile.h"
 #include "TSystem.h"
-#include "Cintex/Cintex.h"
 
 #include "ExP02GeoTree.hh"
 
@@ -161,8 +160,6 @@ G4VPhysicalVolume* ExP02DetectorConstruction::Construct()
 
   gSystem->Load("libExP02ClassesDict");
   
-  //  ROOT::Cintex::Cintex::SetDebug(2);
-  ROOT::Cintex::Cintex::Enable();
   //  gDebug = 1;
 
   const G4ElementTable* eltab = G4Element::GetElementTable();

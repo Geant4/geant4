@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.hh 83009 2014-07-24 14:51:29Z gcosmo $
+// $Id: G4PhysicsVector.hh 93409 2015-10-21 13:26:27Z gcosmo $
 //
 // 
 //---------------------------------------------------------------
@@ -68,7 +68,6 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-//#include "G4Allocator.hh"
 #include "G4PhysicsVectorType.hh"
 #include "G4Log.hh"
 
@@ -90,9 +89,6 @@ class G4PhysicsVector
 
     virtual ~G4PhysicsVector();
          // destructor
-
-  //inline void* operator new(size_t);
-  //  inline void  operator delete(void*);
 
     G4double Value(G4double theEnergy, size_t& lastidx) const; 
          // Get the cross-section/energy-loss value corresponding to the

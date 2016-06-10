@@ -63,7 +63,7 @@
     // here it comes
     G4int infoType, dataType;
     hasFSData = false; 
-    while (theData >> infoType)
+    while (theData >> infoType) // Loop checking, 11.05.2015, T. Koi
     {
       hasFSData = true; 
       theData >> dataType;
@@ -106,7 +106,7 @@
     G4int i;
     G4DynamicParticleVector * aResult = new G4DynamicParticleVector;
     G4ReactionProduct boosted;
-    boosted.Lorentz(theNeutronRP, theTarget);
+    boosted.Lorentz( *(fCache.Get().theNeutronRP) , *(fCache.Get().theTarget) );
     G4double eKinetic = boosted.GetKineticEnergy();
     
 // Build neutrons
@@ -180,7 +180,7 @@ G4DynamicParticleVector * G4ParticleHPFSFissionFS::GetPhotons()
    G4ReactionProductVector * temp;
    G4ReactionProduct boosted;
 // the photon distributions are in the Nucleus rest frame.
-   boosted.Lorentz(theNeutronRP, theTarget);
+   boosted.Lorentz( *(fCache.Get().theNeutronRP) , *(fCache.Get().theTarget) );
    G4double anEnergy = boosted.GetKineticEnergy();
    temp = theFinalStatePhotons.GetPhotons(anEnergy);
    if(temp == 0) { return 0; }
@@ -191,7 +191,7 @@ G4DynamicParticleVector * G4ParticleHPFSFissionFS::GetPhotons()
    for(i=0; i<temp->size(); i++)
    {
      // back to lab
-     temp->operator[](i)->Lorentz(*(temp->operator[](i)), -1.*theTarget);
+     temp->operator[](i)->Lorentz(*(temp->operator[](i)), -1.* (*(fCache.Get().theTarget)) );
      G4DynamicParticle * theOne = new G4DynamicParticle;
      theOne->SetDefinition(temp->operator[](i)->GetDefinition());
      theOne->SetMomentum(temp->operator[](i)->GetMomentum());

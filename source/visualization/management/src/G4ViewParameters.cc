@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc 85021 2014-10-23 09:53:47Z gcosmo $
+// $Id: G4ViewParameters.cc 91686 2015-07-31 09:40:08Z gcosmo $
 //
 // 
 // John Allison  19th July 1996
@@ -475,12 +475,12 @@ G4String G4ViewParameters::TouchableCommands() const
     return oss.str();
   }
   
+  G4ModelingParameters::PVNameCopyNoPath lastPath;
   std::vector<G4ModelingParameters::VisAttributesModifier>::const_iterator
     iModifier;
   for (iModifier = vams.begin();
        iModifier != vams.end();
        ++iModifier) {
-    static G4ModelingParameters::PVNameCopyNoPath lastPath;
     const G4ModelingParameters::PVNameCopyNoPath& vamPath =
       iModifier->GetPVNameCopyNoPath();
     if (vamPath != lastPath) {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmConfigurator.cc 86129 2014-11-07 11:16:37Z gcosmo $
+// $Id: G4EmConfigurator.cc 91745 2015-08-04 11:51:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -75,21 +75,21 @@ G4EmConfigurator::~G4EmConfigurator()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4EmConfigurator::SetExtraEmModel(const G4String& particleName,
-				       const G4String& processName,
-				       G4VEmModel* mod,
-				       const G4String& regionName,
-				       G4double emin,
-				       G4double emax,
-				       G4VEmFluctuationModel* fm)
+                                       const G4String& processName,
+                                       G4VEmModel* mod,
+                                       const G4String& regionName,
+                                       G4double emin,
+                                       G4double emax,
+                                       G4VEmFluctuationModel* fm)
 {
   if(1 < verbose) {
     G4cout << " G4EmConfigurator::SetExtraEmModel " << mod->GetName()
-	   << " for " << particleName 
-	   << " and " << processName 
-	   << " in the region <" << regionName
-	   << "> Emin(MeV)= " << emin/MeV
-	   << " Emax(MeV)= " << emax/MeV
-	   << G4endl;
+           << " for " << particleName 
+           << " and " << processName 
+           << " in the region <" << regionName
+           << "> Emin(MeV)= " << emin/MeV
+           << " Emax(MeV)= " << emax/MeV
+           << G4endl;
   }
   if(mod) {
     models.push_back(mod);
@@ -121,11 +121,11 @@ void G4EmConfigurator::AddModels()
       if(models[i]) {
         G4Region* reg = FindRegion(regions[i]);
         if(reg) {
-	  --index;
-	  SetModelForRegion(models[i],flucModels[i],reg,
-			    particles[i],processes[i],
-			    lowEnergy[i],highEnergy[i]);
-	}
+          --index;
+          SetModelForRegion(models[i],flucModels[i],reg,
+                            particles[i],processes[i],
+                            lowEnergy[i],highEnergy[i]);
+        }
       }
     }
   }
@@ -135,26 +135,27 @@ void G4EmConfigurator::AddModels()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4EmConfigurator::SetModelForRegion(G4VEmModel* mod,
-					 G4VEmFluctuationModel* fm,
+                                         G4VEmFluctuationModel* fm,
                                          G4Region* reg,
-					 const G4String& particleName,
-					 const G4String& processName,
-					 G4double emin, G4double emax)
+                                         const G4String& particleName,
+                                         const G4String& processName,
+                                         G4double emin, G4double emax)
 {
   if(1 < verbose) {
     G4cout << " G4EmConfigurator::SetModelForRegion: " << mod->GetName() 
-	   << G4endl;
+           << G4endl;
     G4cout << " For " << particleName 
-	   << " and " << processName 
-	   << " in the region <" << reg->GetName()
-	   << " Emin(MeV)= " << emin/MeV
-	   << " Emax(MeV)= " << emax/MeV;
+           << " and " << processName 
+           << " in the region <" << reg->GetName()
+           << " Emin(MeV)= " << emin/MeV
+           << " Emax(MeV)= " << emax/MeV;
     if(fm) { G4cout << " FLmodel " << fm->GetName(); }
     G4cout << G4endl;
   }
   G4ParticleTable::G4PTblDicIterator* theParticleIterator = 
     G4ParticleTable::GetParticleTable()->GetIterator(); 
 
+  // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
   theParticleIterator->reset();
   while( (*theParticleIterator)() ) {
     const G4ParticleDefinition* part = theParticleIterator->value();
@@ -174,52 +175,52 @@ void G4EmConfigurator::SetModelForRegion(G4VEmModel* mod,
 
       G4VProcess* proc = 0;
       for(G4int i=0; i<np; ++i) {
-	if(processName == (*plist)[i]->GetProcessName()) {
-	  proc = (*plist)[i];
-	  break;
-	}
+        if(processName == (*plist)[i]->GetProcessName()) {
+          proc = (*plist)[i];
+          break;
+        }
       }
       if(!proc) {
-	G4cout << "### G4EmConfigurator WARNING: fails to find a process <"
-	       << processName << "> for " << particleName << G4endl;
-        return;	
+        G4cout << "### G4EmConfigurator WARNING: fails to find a process <"
+               << processName << "> for " << particleName << G4endl;
+        return;        
       } 
 
       if(mod) {
-	if(!UpdateModelEnergyRange(mod, emin, emax)) { return; }
+        if(!UpdateModelEnergyRange(mod, emin, emax)) { return; }
       }
       // classify process
       G4int ii = proc->GetProcessSubType();
       if(10 == ii && mod) {
-	G4VMultipleScattering* p = static_cast<G4VMultipleScattering*>(proc);
-	p->AddEmModel(index,mod,reg);
-	if(1 < verbose) {
-	  G4cout << "### Added msc model order= " << index << " for " 
-		 << particleName << " and " << processName << G4endl;
-	}
-	return;
+        G4VMultipleScattering* p = static_cast<G4VMultipleScattering*>(proc);
+        p->AddEmModel(index,mod,reg);
+        if(1 < verbose) {
+          G4cout << "### Added msc model order= " << index << " for " 
+                 << particleName << " and " << processName << G4endl;
+        }
+        return;
       } else if(2 <= ii && 4 >= ii) {
-	G4VEnergyLossProcess* p = static_cast<G4VEnergyLossProcess*>(proc);
+        G4VEnergyLossProcess* p = static_cast<G4VEnergyLossProcess*>(proc);
         if(!mod && fm) {
-	  p->SetFluctModel(fm);
-	} else { 
-	  p->AddEmModel(index,mod,fm,reg);
-	  if(1 < verbose) {
-	    G4cout << "### Added eloss model order= " << index << " for " 
-		   << particleName << " and " << processName << G4endl;
-	  }
-	}
-	return;
+          p->SetFluctModel(fm);
+        } else { 
+          p->AddEmModel(index,mod,fm,reg);
+          if(1 < verbose) {
+            G4cout << "### Added eloss model order= " << index << " for " 
+                   << particleName << " and " << processName << G4endl;
+          }
+        }
+        return;
       } else if(mod) {
-	G4VEmProcess* p = static_cast<G4VEmProcess*>(proc);
-	p->AddEmModel(index,mod,reg);
-	if(1 < verbose) {
-	  G4cout << "### Added em model order= " << index << " for " 
-		 << particleName << " and " << processName << G4endl;
-	}
-	return;
+        G4VEmProcess* p = static_cast<G4VEmProcess*>(proc);
+        p->AddEmModel(index,mod,reg);
+        if(1 < verbose) {
+          G4cout << "### Added em model order= " << index << " for " 
+                 << particleName << " and " << processName << G4endl;
+        }
+        return;
       } else {
-	return;
+        return;
       }
     }
   }
@@ -229,12 +230,12 @@ void G4EmConfigurator::SetModelForRegion(G4VEmModel* mod,
 
 void 
 G4EmConfigurator::PrepareModels(const G4ParticleDefinition* aParticle,
-				G4VEnergyLossProcess* p)
+                                G4VEnergyLossProcess* p)
 {
   size_t n = particles.size();
   if(1 < verbose) {
     G4cout << " G4EmConfigurator::PrepareModels for EnergyLoss n= " 
-	   << n << G4endl;
+           << n << G4endl;
   }
   if(n > 0) {
     G4String particleName = aParticle->GetParticleName(); 
@@ -244,27 +245,27 @@ G4EmConfigurator::PrepareModels(const G4ParticleDefinition* aParticle,
       //G4cout <<  particles[i] << "  " <<  processes[i] << G4endl;
       if(processName == processes[i]) {
         if((particleName == particles[i]) ||
-	   (particles[i] == "all") ||
-	   (particles[i] == "charged" && aParticle->GetPDGCharge() != 0.0)) {
-	  G4Region* reg = FindRegion(regions[i]);
-	  //G4cout << "Region " << reg << G4endl;
-	  if(reg) {
-	    --index;
-	    G4VEmModel* mod = models[i];
-	    G4VEmFluctuationModel* fm = flucModels[i];
-	    if(mod) {
-	      if(UpdateModelEnergyRange(mod, lowEnergy[i], highEnergy[i])) {
-		p->AddEmModel(index,mod,fm,reg);
-		if(1 < verbose) {
-		  G4cout << "### Added eloss model order= " << index << " for " 
-			 << particleName << " and " << processName << G4endl;
-		}
-	      }
+           (particles[i] == "all") ||
+           (particles[i] == "charged" && aParticle->GetPDGCharge() != 0.0)) {
+          G4Region* reg = FindRegion(regions[i]);
+          //G4cout << "Region " << reg << G4endl;
+          if(reg) {
+            --index;
+            G4VEmModel* mod = models[i];
+            G4VEmFluctuationModel* fm = flucModels[i];
+            if(mod) {
+              if(UpdateModelEnergyRange(mod, lowEnergy[i], highEnergy[i])) {
+                p->AddEmModel(index,mod,fm,reg);
+                if(1 < verbose) {
+                  G4cout << "### Added eloss model order= " << index << " for " 
+                         << particleName << " and " << processName << G4endl;
+                }
+              }
             } else if(fm) {
-	      p->SetFluctModel(fm);
-	    }
-	  }
-	}
+              p->SetFluctModel(fm);
+            }
+          }
+        }
       }
     }
   }
@@ -274,12 +275,12 @@ G4EmConfigurator::PrepareModels(const G4ParticleDefinition* aParticle,
 
 void 
 G4EmConfigurator::PrepareModels(const G4ParticleDefinition* aParticle,
-				G4VEmProcess* p)
+                                G4VEmProcess* p)
 {
   size_t n = particles.size();
   if(1 < verbose) {
     G4cout << " G4EmConfigurator::PrepareModels for EM process n= " 
-	   << n << G4endl;
+           << n << G4endl;
   }
   if(n > 0) {
     G4String particleName = aParticle->GetParticleName(); 
@@ -288,24 +289,24 @@ G4EmConfigurator::PrepareModels(const G4ParticleDefinition* aParticle,
     for(size_t i=0; i<n; ++i) {
       if(processName == processes[i]) {
         if((particleName == particles[i]) ||
-	   (particles[i] == "all") ||
-	   (particles[i] == "charged" && aParticle->GetPDGCharge() != 0.0)) {
-	  G4Region* reg = FindRegion(regions[i]);
-	  //G4cout << "Region " << reg << G4endl;
-	  if(reg) {
-	    --index;
-	    G4VEmModel* mod = models[i];
-	    if(mod) {
-	      if(UpdateModelEnergyRange(mod, lowEnergy[i], highEnergy[i])) { 
-		p->AddEmModel(index,mod,reg);
-		if(1 < verbose) {
-		  G4cout << "### Added em model order= " << index << " for " 
-			 << particleName << " and " << processName << G4endl;
-		}
-	      }
-	    }
-	  }
-	}
+           (particles[i] == "all") ||
+           (particles[i] == "charged" && aParticle->GetPDGCharge() != 0.0)) {
+          G4Region* reg = FindRegion(regions[i]);
+          //G4cout << "Region " << reg << G4endl;
+          if(reg) {
+            --index;
+            G4VEmModel* mod = models[i];
+            if(mod) {
+              if(UpdateModelEnergyRange(mod, lowEnergy[i], highEnergy[i])) { 
+                p->AddEmModel(index,mod,reg);
+                if(1 < verbose) {
+                  G4cout << "### Added em model order= " << index << " for " 
+                         << particleName << " and " << processName << G4endl;
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -315,12 +316,12 @@ G4EmConfigurator::PrepareModels(const G4ParticleDefinition* aParticle,
 
 void 
 G4EmConfigurator::PrepareModels(const G4ParticleDefinition* aParticle,
-				G4VMultipleScattering* p)
+                                G4VMultipleScattering* p)
 {
   size_t n = particles.size();
   if(1 < verbose) {
     G4cout << " G4EmConfigurator::PrepareModels for MSC process n= " 
-	   << n << G4endl;
+           << n << G4endl;
   }
 
   if(n > 0) {
@@ -329,21 +330,21 @@ G4EmConfigurator::PrepareModels(const G4ParticleDefinition* aParticle,
     for(size_t i=0; i<n; ++i) {
       if(processName == processes[i]) {
         if((particleName == particles[i]) ||
-	   (particles[i] == "all") ||
-	   (particles[i] == "charged" && aParticle->GetPDGCharge() != 0.0)) {
-	  G4Region* reg = FindRegion(regions[i]);
-	  if(reg) {
-	    --index;
-	    G4VEmModel* mod = models[i];
-	    if(mod) {
-	      if(UpdateModelEnergyRange(mod, lowEnergy[i], highEnergy[i])) { 
-		p->AddEmModel(index,mod,reg);
-		G4cout << "### Added msc model order= " << index << " for " 
-		       << particleName << " and " << processName << G4endl;
-	      }
-	    }
-	  }
-	}
+           (particles[i] == "all") ||
+           (particles[i] == "charged" && aParticle->GetPDGCharge() != 0.0)) {
+          G4Region* reg = FindRegion(regions[i]);
+          if(reg) {
+            --index;
+            G4VEmModel* mod = models[i];
+            if(mod) {
+              if(UpdateModelEnergyRange(mod, lowEnergy[i], highEnergy[i])) { 
+                p->AddEmModel(index,mod,reg);
+                //G4cout << "### Added msc model order= " << index << " for " 
+                //     << particleName << " and " << processName << G4endl;
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -376,10 +377,10 @@ G4Region* G4EmConfigurator::FindRegion(const G4String& regionName)
   reg = regStore->GetRegion(r, true); 
   if(!reg) {
     G4cout << "### G4EmConfigurator WARNING: fails to find a region <"
-	   << r << G4endl;
+           << r << G4endl;
   } else if(verbose > 1) {
     G4cout << "### G4EmConfigurator finds out G4Region <" << r << ">" 
-	   << G4endl;
+           << G4endl;
   } 
   return reg;  
 }
@@ -387,25 +388,25 @@ G4Region* G4EmConfigurator::FindRegion(const G4String& regionName)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool G4EmConfigurator::UpdateModelEnergyRange(G4VEmModel* mod, 
-						G4double emin, G4double emax)
+                                                G4double emin, G4double emax)
 {
   // energy limits
   G4double e1 = std::max(emin,mod->LowEnergyLimit());
   G4double e2 = std::min(emax,mod->HighEnergyLimit());
   if(e2 <= e1) {
     G4cout << "### G4EmConfigurator WARNING: empty energy interval"
-	   << " for <" << mod->GetName() 
-	   << ">  Emin(MeV)= " << e1/CLHEP::MeV 
-	   << ">  Emax(MeV)= " << e2/CLHEP::MeV 
-	   << G4endl;
-    return false;	
+           << " for <" << mod->GetName() 
+           << ">  Emin(MeV)= " << e1/CLHEP::MeV 
+           << ">  Emax(MeV)= " << e2/CLHEP::MeV 
+           << G4endl;
+    return false;        
   }
   mod->SetLowEnergyLimit(e1);
   mod->SetHighEnergyLimit(e2);
   if(verbose > 1) {
     G4cout << "### G4EmConfigurator for " << mod->GetName() 
-	   << " Emin(MeV)= " << e1/MeV << " Emax(MeV)= " << e2/MeV 
-	   << G4endl;
+           << " Emin(MeV)= " << e1/MeV << " Emax(MeV)= " << e2/MeV 
+           << G4endl;
   } 
   return true;
 }

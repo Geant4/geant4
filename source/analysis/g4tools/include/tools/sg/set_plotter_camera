@@ -1,0 +1,99 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_set_plotter_camera
+#define tools_sg_set_plotter_camera
+
+#include "plotter"
+#include "ortho"
+
+namespace tools {
+namespace sg {
+
+inline void set_plotter_camera(plotter& a_plotter,tools::sg::ortho& a_camera,unsigned int a_ww,unsigned int a_wh) {
+  if(!a_ww || !a_wh) return;
+
+  //PAW logic :
+ {float xfac = 1.0F/20.0F; //0.05
+  float yfac = 1.0F/20.0F; //0.05
+  float XSIZ = 20 * xfac;    //1     //page width
+  float YSIZ = 20 * yfac;    //1     //page height
+  float zfac = 1.0F/20.0F; //0.05
+  float ZSIZ = 20 * zfac;    //1     //page depth
+  a_plotter.width.value(XSIZ);
+  a_plotter.height.value(YSIZ);
+  a_plotter.depth.value(ZSIZ);}
+
+  enum plotter_viewport_mapping {
+    pvp_adjust_viewport,
+    pvp_leave_alone
+  };
+
+  plotter_viewport_mapping pvp = pvp_adjust_viewport;
+  //plotter_viewport_mapping pvp = pvp_leave_alone;
+
+  typedef plotter::shape_type st_t;
+  st_t plotter_shape = plotter::xy;
+
+  float aspect = float(a_ww)/float(a_wh);
+
+ {float XSIZ = a_plotter.width.value();
+  float YSIZ = a_plotter.height.value();
+  if((plotter_shape==plotter::xy) &&
+     (pvp==pvp_adjust_viewport)) {
+    // Adjust the plotter XSIZ and YSIZ so that YSIZ matches viewport height
+    // and plotter XSIZ matches viewport width.
+    // It it the CERN-ROOT and osc-plot logic.
+    if(aspect>=1) { //w>h
+      //Camera must match in height YSIZ. Adjust XSIZ.
+      a_plotter.width.value(YSIZ * aspect);
+    } else { 
+      //Camera must match in width XSIZ. Adjust YSIZ.
+      a_plotter.height.value(XSIZ / aspect);
+    }
+  }}
+
+ {float camera_znear = 0;
+  float camera_zfar = 0;
+  float camera_z_pos = 0;
+  // if camera ortho :
+  float camera_height = 0;
+
+  float XSIZ = a_plotter.width.value();
+  float YSIZ = a_plotter.height.value();
+  float z = 4 * a_plotter.depth.value();
+  camera_z_pos = z;
+  camera_znear = 0.01F*z;
+  camera_zfar = 100*z;
+  //cam ortho :
+  if(plotter_shape==plotter::xyz) {
+    camera_height = YSIZ;
+  } else {
+    if(pvp==pvp_leave_alone) {
+      // Adjust camera so that plotter XSIZ/YSIZ be not distorded.
+      // If viewport aspect ratio > plotter aspect ratio
+      // the plotter YSIZ matches the viewport height. If not
+      // it is the plotter XSIZ that will match the viewport width.
+      // It is the PAW logic for one region.
+      float plotterAspect = XSIZ/YSIZ;
+      if(aspect<plotterAspect) {
+        camera_height =  XSIZ / aspect;
+      } else {
+        camera_height =  YSIZ;    
+      }
+    } else if(pvp==pvp_adjust_viewport) {
+      camera_height =  YSIZ;    
+    } 
+  }
+
+  a_camera.height.value(camera_height);    
+  a_camera.znear.value(camera_znear);
+  a_camera.zfar.value(camera_zfar);
+
+  a_camera.position.value(tools::vec3f(0,0,camera_z_pos));
+  a_camera.orientation.value(tools::rotf(tools::vec3f(0,0,1),0));}
+}
+
+}}
+
+#endif

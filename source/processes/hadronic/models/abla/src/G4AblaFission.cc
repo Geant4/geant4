@@ -383,6 +383,8 @@ void G4AblaFission::fissionDistri(G4double &a,G4double &z,G4double &e,
   G4double Basym_1 = 0.0;
   G4double Basym_2 = 0.0;
   //     I_MODE = 0;
+  G4int count;
+  const G4int maxCount = 500;
 
   //     /* average Z of asymmetric and symmetric components: */
   n = a - z;  /* neutron number of the fissioning nucleus */
@@ -622,7 +624,6 @@ void G4AblaFission::fissionDistri(G4double &a,G4double &z,G4double &e,
       } else {
 	wzasymm2_scission = 0.0;
       }
-      wzasymm2_scission = (std::sqrt (max( (70.0-28.0)/3.0*(z*z/a-35.0)+28.,0.0 )) ) * z/a;
     } else {
       wzasymm1_scission = wzasymm1_saddle;
       wzasymm2_scission = wzasymm2_saddle;
@@ -809,7 +810,8 @@ void G4AblaFission::fissionDistri(G4double &a,G4double &z,G4double &e,
     z1 = 1.0;
     z2 = 1.0;
 
-    while  ( (z1<5.0) || (z2<5.0) ) {
+    count = 0;
+    while  ( (z1<5.0) || (z2<5.0) ) { /* Loop checking, 28.10.2015, D.Mancusi */
       //         Z1 = dble(GAUSSHAZ(K,sngl(Z1mean),sngl(Z1width)));
       //	 z1 = rnd.gaus(z1mean,z1width);
       //      z1 = 48.26; // gausshaz(k, z1mean, z1width);
@@ -817,6 +819,8 @@ void G4AblaFission::fissionDistri(G4double &a,G4double &z,G4double &e,
       even_odd(z1, r_e_o, i_help);
       z1 = double(i_help);
       z2 = z - z1;
+      if(++count>maxCount)
+        break;
     }
 
     if (itest == 1) {
@@ -852,13 +856,16 @@ void G4AblaFission::fissionDistri(G4double &a,G4double &z,G4double &e,
 // random decision: N1R and N2R at scission, before evaporation
     n1r = 1.0;
     n2r = 1.0;
-    while (n1r < 5 || n2r < 5) {
+    count = 0;
+    while (n1r < 5 || n2r < 5) { /* Loop checking, 28.10.2015, D.Mancusi */
       //      n1r = 76.93; gausshaz(kkk,n1mean,n1width);
       n1r = gausshaz(kkk,n1mean,n1width);
       // modification to have n1r as integer, and n=n1r+n2r rigorously a.b. 19/4/2001
       i_inter = int(n1r + 0.5);
       n1r = double(i_inter);
       n2r = n - n1r;
+      if(++count>maxCount)
+        break;
     }
 
     // neutron evaporation from fragments
@@ -946,12 +953,15 @@ void G4AblaFission::fissionDistri(G4double &a,G4double &z,G4double &e,
       // random decision: Z1 and Z2 at scission: */
       z1 = 1.0;
       z2 = 1.0;
-      while  ( (z1 < 5.0) || (z2 < 5.0) ) {
+      count = 0;
+      while  ( (z1 < 5.0) || (z2 < 5.0) ) { /* Loop checking, 28.10.2015, D.Mancusi */
 	//           z1 = dble(gausshaz(kkk,sngl(z1mean),sngl(z1width)));
 	//	   z1 = rnd.gaus(z1mean,z1width);
 	//	z1 = 24.8205585; //gausshaz(kkk, z1mean, z1width);
 	z1 = gausshaz(kkk, z1mean, z1width);
 	z2 = z - z1;
+      if(++count>maxCount)
+        break;
       }
 
       if (itest == 1) {
@@ -1082,11 +1092,14 @@ G4double G4AblaFission::gausshaz(int k, double xmoy, double sig)
   static G4ThreadLocal G4double v1,v2,r,fac,gset,fgausshaz;
 
   if(iset == 0) { //then                                              
+    G4int count = 0, maxCount = 500;
     do {
       v1 = 2.0*haz(k) - 1.0;
       v2 = 2.0*haz(k) - 1.0;
       r = std::pow(v1,2) + std::pow(v2,2);
-    } while(r >= 1);
+      if(++count>maxCount)
+        break;
+    } while(r >= 1); /* Loop checking, 28.10.2015, D.Mancusi */
 
     fac = std::sqrt(-2.*std::log(r)/r);
     gset = v1*fac;

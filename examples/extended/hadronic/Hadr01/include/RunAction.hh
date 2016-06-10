@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr01/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: RunAction.hh 92421 2015-09-01 07:38:57Z gcosmo $
 //
 
 #ifndef RunAction_h
@@ -49,6 +49,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+class G4Timer;
+
 class RunAction : public G4UserRunAction
 {
 public: // Without description
@@ -64,6 +66,8 @@ public: // With description
   virtual void EndOfRunAction(const G4Run*);
   // In this method bookHisto method is called in which histogramms are filled
 
+private:
+  G4Timer* timer;
 };
 
 #endif

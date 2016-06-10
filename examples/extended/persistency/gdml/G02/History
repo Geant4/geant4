@@ -1,4 +1,4 @@
-$Id: History 73394 2013-08-27 09:23:26Z gcosmo $
+$Id: History 92201 2015-08-21 10:04:19Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+August 20th, 2015  John Allison G02-V10-01-00
+- CMakeLists.txt: Added mbb.geom mbb.tree to G02_SCRIPTS.
 
 August 27th, 2013  Gabriele Cosmo G02-V09-06-00
 - Added G4Ellipsoid among solids for parameterisation.

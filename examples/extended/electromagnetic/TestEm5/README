@@ -1,4 +1,4 @@
-$Id: README 85031 2014-10-23 10:03:11Z gcosmo $
+$Id: README 93738 2015-10-30 11:03:07Z gcosmo $
 -----------------------------------------------------
 
      =========================================================
@@ -7,9 +7,9 @@ $Id: README 85031 2014-10-23 10:03:11Z gcosmo $
 
                             TestEm5   
                             -------
- How to study the transmission, absorption and reflexion of particles through
+ How to study the transmission, absorption and reflection of particles through
  a single, thin or thick, layer of material.
- In particular, the effects of the multiple scattering can be ploted.  
+ In particular, the effects of the multiple scattering can be plotted.  
 	
  1- GEOMETRY DEFINITION
  
@@ -30,11 +30,17 @@ $Id: README 85031 2014-10-23 10:03:11Z gcosmo $
  is not set to vacuum, the plots 10->43 below may be not pertinent.
  
  2- PHYSICS LIST
- 
- Physics lists can be local (eg. in this example) or from G4 kernel
+
+ Physics lists are based on modular design. Several modules are instantiated:
+ 1. Transportation
+ 2. EM physics
+ 3. Decays
+ 4. StepMax - for step limitation
+
+ EM physics builders can be local (eg. in this example) or from G4 kernel
  physics_lists subdirectory.
      
- Local physics lists:	 
+ Local physics builders:	 
  - "local"	 standard EM physics with current 'best' options setting
                  these options are explicited in PhysListEmStandard
  - "standardSSM" standard EM physics with alternative single Coulomb 
@@ -51,15 +57,14 @@ $Id: README 85031 2014-10-23 10:03:11Z gcosmo $
  - "emlivermore"  low-energy EM physics using Livermore data
  - "empenelope"   low-energy EM physics implementing Penelope models
  - "emlowenergy"  low-energy EM physics implementing experimental 
-                  low-energy models low-enegry WentzelVI model
+                  low-energy models
            
  Physics lists and options can be (re)set with UI commands
     
- Please, notice that options set through G4EmProcessOPtions are global, eg
+ Please, notice that options set through G4EmProcessOptions are global, eg
  for all particle types. In G4 builders, it is shown how to set options per
  particle type.
 
-         	
  3- AN EVENT : THE PRIMARY GENERATOR
  
  The primary kinematic consists of a single particle which hits the absorber 
@@ -81,7 +86,7 @@ $Id: README 85031 2014-10-23 10:03:11Z gcosmo $
  The example has a default view which is a longitudinal view of the detector.
  	
  The tracks are drawn at the end of event, and erased at the end of run.
- Optionaly one can choose to draw all particles, only the charged, or none.
+ Optionally one can choose to draw all particles, only the charged, or none.
  This command is defined in EventActionMessenger class.
  
  5- TRACKING
@@ -120,15 +125,15 @@ $Id: README 85031 2014-10-23 10:03:11Z gcosmo $
 	6       "x_vertex of charged secondaries (all)"
 	7       "x_vertex of charged secondaries (not absorbed)"
 	10	"(transmit, charged) : kinetic energy at exit of world"
-        11	"(transmit, charged) : ener fluence: dE(MeV)/dOmega"	
+  11	"(transmit, charged) : ener fluence: dE(MeV)/dOmega"	
 	12	"(transmit, charged) : space angle dN/dOmega"
 	13	"(transmit, charged) : projected angle at exit of world"
 	14	"(transmit, charged) : projected position at exit of world"
 	15	"(transmit, charged) : radius at exit of world"	
-        16      "energy of Auger e- at creation"
-        17      "energy of fluorescence gamma at creation"
-        18      "energy of Auger e- at creation (log scale)"
-        19      "energy of fluorescence gamma at creation (log scale)"
+  16      "energy of Auger e- at creation"
+  17      "energy of fluorescence gamma at creation"
+  18      "energy of Auger e- at creation (log scale)"
+  19      "energy of fluorescence gamma at creation (log scale)"
 	20	"(transmit, neutral) : kinetic energy at exit of world"
 	21	"(transmit, neutral) : ener fluence: dE(MeV)/dOmega"	
 	22	"(transmit, neutral) : space angle dN/dOmega"
@@ -141,10 +146,10 @@ $Id: README 85031 2014-10-23 10:03:11Z gcosmo $
 	41	"(reflect , neutral) : ener fluence: dE(MeV)/dOmega"	
 	42	"(reflect , neutral) : space angle dN/dOmega"
 	43	"(reflect , neutral) : projected angle at exit of world"
-        44      "energy of PIXE Auger e- at creation"
-        45      "energy of PIXE gamma at creation"
-        46      "energy of PIXE Auger e- at creation (log scale)"
-        47      "energy of PIXE gamma at creation (log scale)"
+  44      "energy of PIXE Auger e- at creation"
+  45      "energy of PIXE gamma at creation"
+  46      "energy of PIXE Auger e- at creation (log scale)"
+  47      "energy of PIXE gamma at creation (log scale)"
 
  The histograms can be viewed using ROOT or PAW.
  

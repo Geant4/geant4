@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPartonStringModel.cc 83684 2014-09-09 12:37:39Z gcosmo $
+// $Id: G4VPartonStringModel.cc 91858 2015-08-07 13:57:22Z gcosmo $
 //
 //// ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -35,6 +35,7 @@
 // ------------------------------------------------------------
 // debug switch
 //#define debug_PartonStringModel
+// ------------------------------------------------------------
 
 #include "G4VPartonStringModel.hh"
 #include "G4ios.hh"
@@ -72,6 +73,16 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
   G4cout<<"           Momentum  "<<thePrimary.Get4Momentum()<<G4endl;
   G4cout<<"Target nucleus   A Z "<<theNucleus.GetA_asInt()<<" "
                                  <<theNucleus.GetZ_asInt()<<G4endl<<G4endl;	
+  G4int Bsum=thePrimary.GetDefinition()->GetBaryonNumber() + theNucleus.GetA_asInt();
+  G4int Qsum=thePrimary.GetDefinition()->GetPDGCharge() + theNucleus.GetZ_asInt();
+  G4cout<<"Initial baryon number "<<Bsum<<G4endl;
+  G4cout<<"Initial charge        "<<Qsum<<G4endl;
+
+  Bsum -= theNucleus.GetA_asInt();  Qsum -= theNucleus.GetZ_asInt();
+  if(theThis->GetProjectileNucleus()) {
+    Bsum -= thePrimary.GetDefinition()->GetBaryonNumber();
+    Qsum -= thePrimary.GetDefinition()->GetPDGCharge();
+  }
 #endif
 
   G4LorentzRotation toZ;
@@ -82,7 +93,7 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
   G4LorentzRotation toLab(toZ.inverse());
 
   G4int attempts = 0, maxAttempts=20;
-  while ( strings  == NULL )
+  while ( strings  == NULL )  /* Loop checking, 07.08.2015, A.Ribon */
   {
   	if (attempts++ > maxAttempts ) 
   	{
@@ -112,7 +123,9 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
      SumStringMom+=(*strings)[astring]->Get4Momentum();
 #ifdef debug_PartonStringModel
 G4cout<<"String No "<<astring+1<<" "<<(*strings)[astring]->Get4Momentum()<<" "
-                                    <<(*strings)[astring]->Get4Momentum().mag()<<G4endl;
+                                    <<(*strings)[astring]->Get4Momentum().mag()
+     <<" Partons   "<<(*strings)[astring]->GetLeftParton()->GetDefinition()->GetPDGEncoding()
+     <<"          "<<(*strings)[astring]->GetRightParton()->GetDefinition()->GetPDGEncoding()<<G4endl;
 #endif
     }
     else
@@ -121,102 +134,104 @@ G4cout<<"String No "<<astring+1<<" "<<(*strings)[astring]->Get4Momentum()<<" "
      (*strings)[astring]->LorentzRotate(toLab);
      SumStringMom+=(*strings)[astring]->GetKineticTrack()->Get4Momentum();
 #ifdef debug_PartonStringModel
-G4cout<<"A track No "<<astring+1<<" "
-                     <<(*strings)[astring]->GetKineticTrack()->Get4Momentum()<<" "
-                     <<(*strings)[astring]->GetKineticTrack()->Get4Momentum().mag()<<G4endl;
+     G4cout<<"A track No "<<astring+1<<" "
+           <<(*strings)[astring]->GetKineticTrack()->Get4Momentum()<<" "
+           <<(*strings)[astring]->GetKineticTrack()->Get4Momentum().mag()<<" "
+           <<(*strings)[astring]->GetKineticTrack()->GetDefinition()->GetParticleName()<<G4endl;
 #endif
     }
   }
+#ifdef debug_PartonStringModel
+  G4cout<<G4endl<<"SumString4Mom "<<SumStringMom<<G4endl;
 
-  G4double InvMass=SumStringMom.mag();   
-  G4V3DNucleus * ResNucleus=theThis->GetWoundedNucleus(); 
-
-   // loop over wounded nucleus
-  G4Nucleon * theNuclNucleon = ResNucleus->StartLoop() ?
-                                ResNucleus->GetNextNucleon() : NULL;
-  while( theNuclNucleon )
-  {
-     if(theNuclNucleon->AreYouHit())
-     {
-      G4LorentzVector tmp=toLab*theNuclNucleon->Get4Momentum();
-      theNuclNucleon->SetMomentum(tmp);
-     }
-     theNuclNucleon = ResNucleus->GetNextNucleon();
-  }
+  G4LorentzVector TargetResidual4Momentum(0.,0.,0.,0.);
+  G4LorentzVector ProjectileResidual4Momentum(0.,0.,0.,0.);
+  G4int hitsT(0), charged_hitsT(0);
+  G4int hitsP(0), charged_hitsP(0);
+  G4double ExcitationEt(0.), ExcitationEp(0.);
+#endif
 
   G4V3DNucleus * ProjResNucleus=theThis->GetProjectileNucleus();
-
-#ifdef debug_PartonStringModel
-  G4ThreeVector hitNucleonMomentum(0.,0.,0.);
-#endif
+  G4Nucleon * theNuclNucleon(0);
 
   if(ProjResNucleus != 0)
   {
     theNuclNucleon = ProjResNucleus->StartLoop() ?
                      ProjResNucleus->GetNextNucleon() : NULL;
-    while( theNuclNucleon )
+    while( theNuclNucleon )  /* Loop checking, 07.08.2015, A.Ribon */
     {
      if(theNuclNucleon->AreYouHit())
      {
       G4LorentzVector tmp=toLab*theNuclNucleon->Get4Momentum();
       #ifdef debug_PartonStringModel
-         hitNucleonMomentum += tmp.vect();
+         ProjectileResidual4Momentum += tmp;
+         hitsP++;
+         if ( theNuclNucleon->GetDefinition() == G4Proton::Proton() )  ++charged_hitsP;
+         ExcitationEp +=theNuclNucleon->GetBindingEnergy();
       #endif
       theNuclNucleon->SetMomentum(tmp);
      }
      theNuclNucleon = ProjResNucleus->GetNextNucleon();
     }
+#ifdef debug_PartonStringModel
+    G4cout<<"Projectile residual A, Z and E* "
+          <<thePrimary.GetDefinition()->GetBaryonNumber() - hitsP<<" "
+          <<thePrimary.GetDefinition()->GetPDGCharge()    - charged_hitsP<<" "
+          <<ExcitationEp<<G4endl;
+    G4cout<<"Projectile residual 4 momentum  "<<ProjectileResidual4Momentum<<G4endl;
+#endif
   }
 
-#ifdef debug_PartonStringModel
-  G4cout<<"Parton-String model: SumStringMom "<<SumStringMom<<G4endl;
+  G4V3DNucleus * ResNucleus=theThis->GetWoundedNucleus(); 
 
-     G4V3DNucleus * fancynucleus=theThis->GetWoundedNucleus();
-
-       // loop over wounded nucleus
-     G4int hits(0), charged_hits(0);
-//     G4ThreeVector hitNucleonMomentum(0.,0.,0.);                 // Uzhi Feb. 2014
-     G4Nucleon * theCurrentNucleon = fancynucleus->StartLoop() ? 
-                                     fancynucleus->GetNextNucleon() : NULL;
-     while( theCurrentNucleon )
+   // loop over wounded nucleus
+  theNuclNucleon = ResNucleus->StartLoop() ?
+                   ResNucleus->GetNextNucleon() : NULL;
+  while( theNuclNucleon )  /* Loop checking, 07.08.2015, A.Ribon */
+  {
+     if(theNuclNucleon->AreYouHit())
      {
-       if(theCurrentNucleon->AreYouHit()) 
-       {
-         hits++;
-         hitNucleonMomentum += theCurrentNucleon->Get4Momentum().vect();
-         if ( theCurrentNucleon->GetDefinition() == G4Proton::Proton() )  ++charged_hits;
-       }
-       theCurrentNucleon = fancynucleus->GetNextNucleon();
+      G4LorentzVector tmp=toLab*theNuclNucleon->Get4Momentum();
+      #ifdef debug_PartonStringModel
+         TargetResidual4Momentum += tmp;
+         hitsT++;
+         if ( theNuclNucleon->GetDefinition() == G4Proton::Proton() )  ++charged_hitsT;
+         ExcitationEt +=theNuclNucleon->GetBindingEnergy();
+      #endif
+      theNuclNucleon->SetMomentum(tmp);
      }
-     
-     G4int initialZ=fancynucleus->GetCharge();
-     G4int initialA=fancynucleus->GetMassNumber();
-     G4double initial_mass=
-     G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(initialZ,initialA);
-     G4double final_mass(0.);
-     if(initialA-hits != 0) final_mass =
-       G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(
-                                   initialZ-charged_hits, initialA-hits);
-     G4cout << "G4VPSM:               "                   <<G4endl
-            << "strE                  "<<stringEnergy     <<G4endl
-            << "Hit targeet nucleons  "<<hits             <<G4endl
-            << "Primary               "<<Ptmp.e()         <<G4endl
-            << "SumStringE            "<<SumStringMom.e() <<G4endl
-            << "Target nucleus intial "<<initial_mass     <<G4endl
-            << "Target nucleus final  "<<final_mass       <<G4endl
-            << "Excitation estimate   "
-            <<Ptmp.e() + initial_mass - final_mass - stringEnergy  << G4endl;
-     G4cout << "momentum balance    " 
-            <<  thePrimary.GetMomentum() + hitNucleonMomentum - 
-                 SumStringMom.vect()<< G4endl;
+     theNuclNucleon = ResNucleus->GetNextNucleon();
+  }
+#ifdef debug_PartonStringModel
+   G4cout<<"Target residual A, Z and E* "
+         <<theNucleus.GetA_asInt() - hitsT<<" "
+         <<theNucleus.GetZ_asInt() - charged_hitsT<<" "
+         <<ExcitationEt<<G4endl;
+   G4cout<<"Target residual 4 momentum "<<TargetResidual4Momentum<<G4endl;
+
+   Bsum+=(        hitsT +         hitsP);
+   Qsum+=(charged_hitsT + charged_hitsP);
+
+   G4cout<<"Hitted # of nucleons of projectile and target "<<hitsP<<" "<<hitsT<<G4endl;
+   G4cout<<"Hitted # of protons of projectile and target  "
+         <<charged_hitsP<<" "<<charged_hitsT<<G4endl<<G4endl;
+G4cout<<"Bsum Qsum "<<Bsum<<" "<<Qsum<<G4endl;
 #endif
 
+//=========================================================================================
 //  Fragment strings
 
   G4KineticTrackVector * theResult = 0;
+  G4double InvMass=SumStringMom.mag();
   G4double SumMass(0.); 
   attempts = 0; 
   maxAttempts=100;
+
+  #ifdef debug_PartonStringModel
+     G4LorentzVector SumPsecondr(0.,0.,0.,0.);
+     G4int QsumSec(0), BsumSec(0);
+  #endif
+
   do 
   {	    
    attempts++;   
@@ -230,35 +245,51 @@ G4cout<<"A track No "<<astring+1<<" "
 
    if(attempts > maxAttempts ) break;
 
-#ifdef debug_PartonStringModel
-   G4cout<<"Parton-String model: Number of produced particles "<<theResult->size()<<G4endl;
-   G4LorentzVector SumPsecondr(0.,0.,0.,0.);
-#endif
+   #ifdef debug_PartonStringModel
+      G4cout<<"Attempt to fragment the strings "<<attempts<<G4endl;
+      G4cout<<"Parton-String model: Number of produced particles "<<theResult->size()<<G4endl;
+      SumPsecondr = G4LorentzVector(0.,0.,0.,0.);
+      QsumSec = 0; BsumSec = 0;
+   #endif
 
    SumMass=0.;
 
    for ( unsigned int i=0; i < theResult->size(); i++)
    {
-    SumMass+=(*theResult)[i]->GetDefinition()->GetPDGMass();
-     //SumP+=(*theResult)[i]->Get4Momentum();
-#ifdef debug_PartonStringModel
-  G4cout<<i<<" : "<<(*theResult)[i]->GetDefinition()->GetParticleName()<<" "
-                  <<(*theResult)[i]->Get4Momentum()<<" "
-                  <<(*theResult)[i]->Get4Momentum().mag()<<G4endl;
-  SumPsecondr+=(*theResult)[i]->Get4Momentum();
-#endif
+    SumMass+=(*theResult)[i]->Get4Momentum().mag();
+    #ifdef debug_PartonStringModel
+       G4cout<<i<<" : "<<(*theResult)[i]->GetDefinition()->GetParticleName()<<" "
+                       <<(*theResult)[i]->Get4Momentum()<<" "
+                       <<(*theResult)[i]->Get4Momentum().mag()<<" "
+                       <<(*theResult)[i]->GetDefinition()->GetPDGMass()<<G4endl;
+       SumPsecondr+=(*theResult)[i]->Get4Momentum();
+       BsumSec += (*theResult)[i]->GetDefinition()->GetBaryonNumber();
+       QsumSec += (*theResult)[i]->GetDefinition()->GetPDGCharge();
+    #endif
    }
+
 #ifdef debug_PartonStringModel
-  G4cout<<"SumP secondaries "<<SumPsecondr<<G4endl;
+   if(Qsum != QsumSec) {
+     G4cout<<"Charge is not conserved!!! ----"<<G4endl; 
+     G4cout<<" Qsum != QsumSec "<<Qsum<<" "<<QsumSec<<G4endl;
+   }
+   if(Bsum != BsumSec) {
+     G4cout<<"Baryon number is not conserved!!!"<<G4endl;
+     G4cout<<" Bsum != BsumSec "<<Bsum<<" "<<BsumSec<<G4endl;
+   }
 #endif
-  } while(SumMass > InvMass);
+  } while(SumMass > InvMass);  /* Loop checking, 07.08.2015, A.Ribon */
 
   std::for_each(strings->begin(), strings->end(), DeleteString() );
   delete strings;
 
 #ifdef debug_PartonStringModel
+  G4cout<<G4endl<<"Baryon number balance "<<Bsum-BsumSec<<G4endl;
+  G4cout        <<"Charge balance        "<<Qsum-QsumSec<<G4endl;
+  G4cout        <<"4 momentum balance    "<<SumStringMom-SumPsecondr<<G4endl; 
   G4cout<<"End of string model work ------------"<<G4endl<<G4endl;
 #endif
+
   return theResult;
 }
 

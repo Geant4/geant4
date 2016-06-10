@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4MollerBhabhaModel.hh 93362 2015-10-19 13:45:19Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -65,7 +65,7 @@ class G4MollerBhabhaModel : public G4VEmModel
 
 public:
 
-  G4MollerBhabhaModel(const G4ParticleDefinition* p = 0, 
+  G4MollerBhabhaModel(const G4ParticleDefinition* p = nullptr, 
 		      const G4String& nam = "MollerBhabha");
 
   virtual ~G4MollerBhabhaModel();

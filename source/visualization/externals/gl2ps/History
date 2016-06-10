@@ -1,4 +1,4 @@
-$Id: History 85582 2014-10-31 09:07:30Z gcosmo $
+$Id: History 88206 2015-02-03 13:01:27Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3 February 2015  John Allison  (visexternal-V10-01-02)
+- Corrected cast to GLint in G4OpenGLAction for compilation on Windows.
+
+19 December 2014  John Allison  (visexternal-V10-01-01)
+- Tagged.
+
+18 December 2014  Frederick Jones
+- G4OpenGL2PSAction: added method setBufferSize()
 
 30th October 2014 Laurent Garnier  (visexternal-V10-00-03)
 - Tagged
@@ -38,7 +47,7 @@ committal in the CVS repository !
 - add #ifdef statement in in gl2ps.h to prevent having gl2ps AND Wt driver
 
 3rd June 2013  John Allison (visexternal-V09-06-04)
-- G4OpenGL2PSAction.cc: One more try at compiling on Windows…
+- G4OpenGL2PSAction.cc: One more try at compiling on WindowsâŠ
   o Added brackets to prevent possible macro expansion of "max":
       fBufferSizeLimit = (std::numeric_limits<GLint>::max)();
 

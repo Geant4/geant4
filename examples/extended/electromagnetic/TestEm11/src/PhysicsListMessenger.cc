@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm11/src/PhysicsListMessenger.cc
 /// \brief Implementation of the PhysicsListMessenger class
 //
-// $Id: PhysicsListMessenger.cc 82462 2014-06-23 10:45:28Z gcosmo $
+// $Id: PhysicsListMessenger.cc 94269 2015-11-10 07:55:24Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,12 +36,12 @@
 #include "PhysicsList.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithAnInteger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
-:G4UImessenger(),fPhysicsList(pPhys),
- fPhysDir(0), fListCmd(0)
+  : G4UImessenger(),fPhysicsList(pPhys)
 {
   fPhysDir = new G4UIdirectory("/testem/phys/");
   fPhysDir->SetGuidance("physics list commands");
@@ -50,7 +50,13 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
   fListCmd->SetGuidance("Add modula physics list.");
   fListCmd->SetParameterName("PList",false);
   fListCmd->AvailableForStates(G4State_PreInit);
-  fListCmd->SetToBeBroadcasted(false);    
+  fListCmd->SetToBeBroadcasted(false);
+
+  fNumAngs = new G4UIcmdWithAnInteger("/testem/phys/setNumberOfAngles",this);  
+  fNumAngs->SetGuidance("Set the Number of Discrete Angles.");
+  fNumAngs->SetParameterName("numAngles",false);
+  fNumAngs->AvailableForStates(G4State_PreInit);
+  fNumAngs->SetToBeBroadcasted(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,7 +64,8 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
 PhysicsListMessenger::~PhysicsListMessenger()
 {
   delete fListCmd;
-  delete fPhysDir;    
+  delete fPhysDir;
+  delete fNumAngs;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,9 +73,10 @@ PhysicsListMessenger::~PhysicsListMessenger()
 void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
 {
-
   if( command == fListCmd )
    { fPhysicsList->AddPhysicsList(newValue);}
+  if( command == fNumAngs )
+   { fPhysicsList->SetNumAngles(fNumAngs->GetNewIntValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

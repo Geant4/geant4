@@ -33,14 +33,11 @@
 #ifndef G4RootNtupleManager_h
 #define G4RootNtupleManager_h 1
 
-#include "G4VNtupleManager.hh"
+#include "G4TNtupleManager.hh"
 #include "globals.hh"
 
 #include "tools/wroot/ntuple"
 
-#include <vector>
-
-struct G4RootNtupleDescription;
 
 namespace tools {
 namespace wroot {
@@ -48,126 +45,128 @@ class directory;
 }
 }
 
-class G4RootNtupleManager : public G4VNtupleManager
+// template specializations used by this class defined below
+
+template <>
+template <>
+void G4TNtupleManager<tools::wroot::ntuple>::CreateTColumnInNtuple(
+  G4TNtupleDescription<tools::wroot::ntuple>* ntupleDescription,
+  const G4String& name, std::vector<std::string>* vector);
+
+template <>
+template <>
+G4bool G4TNtupleManager<tools::wroot::ntuple>::FillNtupleTColumn(
+  G4int ntupleId, G4int columnId, const std::string& value);
+
+
+class G4RootNtupleManager : public G4TNtupleManager<tools::wroot::ntuple> 
 {
   friend class G4RootAnalysisManager;
 
-  protected:
-    G4RootNtupleManager(const G4AnalysisManagerState& state);
+  public:
+    explicit G4RootNtupleManager(const G4AnalysisManagerState& state);
     virtual ~G4RootNtupleManager();
 
+   private:
+    // Types alias
+    using NtupleType = tools::wroot::ntuple;
+    using NtupleDescriptionType = G4TNtupleDescription<NtupleType>;
+
     // Functions specific to the output type
-    //
 
-    // Methods to manipulate ntuples  
-    void CreateNtuplesFromBooking();
-    G4bool IsEmpty() const;
-    G4bool Reset();
-
-    // Set methods
     void SetNtupleDirectory(tools::wroot::directory* directory);
     
-    // Access methods
-    tools::wroot::ntuple* GetNtuple() const;
-    tools::wroot::ntuple* GetNtuple(G4int ntupleId) const;
-
-    // Iterators
-    std::vector<tools::wroot::ntuple*>::iterator BeginNtuple();
-    std::vector<tools::wroot::ntuple*>::iterator EndNtuple();
-    std::vector<tools::wroot::ntuple*>::const_iterator BeginConstNtuple() const;
-    std::vector<tools::wroot::ntuple*>::const_iterator EndConstNtuple() const;
-    
-    // Functions independent from the output type 
+    // Methods from the templated base class
     //
+    virtual void CreateTNtuple(
+                    NtupleDescriptionType*  ntupleDescription,
+                    const G4String& name, const G4String& title) final;
+    virtual void CreateTNtupleFromBooking(
+                    NtupleDescriptionType*  ntupleDescription) final;
 
-    // Methods to create ntuples
-    virtual G4int CreateNtuple(const G4String& name, const G4String& title);
-    // Create columns in the last created ntuple
-    virtual G4int CreateNtupleIColumn(
-                    const G4String& name, std::vector<int>* vector);
-    virtual G4int CreateNtupleFColumn(
-                    const G4String& name, std::vector<float>* vector);
-    virtual G4int CreateNtupleDColumn(
-                    const G4String& name, std::vector<double>* vector);
-    virtual G4int CreateNtupleSColumn(const G4String& name);
-    virtual void  FinishNtuple();   
-    // Create columns in the ntuple with given id
-    virtual G4int CreateNtupleIColumn(G4int ntupleId, 
-                    const G4String& name, std::vector<int>* vector);
-    virtual G4int CreateNtupleFColumn(G4int ntupleId, 
-                    const G4String& name, std::vector<float>* vector);
-    virtual G4int CreateNtupleDColumn(G4int ntupleId, 
-                    const G4String& name, std::vector<double>* vector);
-    virtual G4int CreateNtupleSColumn(G4int ntupleId, const G4String& name);
-    virtual void  FinishNtuple(G4int ntupleId);   
-
-    // Methods to fill ntuples
-    // Methods for ntuple with id = FirstNtupleId                     
-    virtual G4bool FillNtupleIColumn(G4int columnId, G4int value);
-    virtual G4bool FillNtupleFColumn(G4int columnId, G4float value);
-    virtual G4bool FillNtupleDColumn(G4int columnId, G4double value);
-    virtual G4bool FillNtupleSColumn(G4int columnId, const G4String& value);
-    virtual G4bool AddNtupleRow();
-    // Methods for ntuple with id > FirstNtupleId (when more ntuples exist)                      
-    virtual G4bool FillNtupleIColumn(G4int ntupleId, G4int columnId, G4int value);
-    virtual G4bool FillNtupleFColumn(G4int ntupleId, G4int columnId, G4float value);
-    virtual G4bool FillNtupleDColumn(G4int ntupleId, G4int columnId, G4double value);
-    virtual G4bool FillNtupleSColumn(G4int ntupleId, G4int columnId, 
-                                     const G4String& value);
-    virtual G4bool AddNtupleRow(G4int ntupleId);
-    
-    // Access methods
-    virtual G4int GetNofNtuples() const;
-   
-  private:
-    // methods
-    //
-    tools::wroot::ntuple::column<int>*    
-      GetNtupleIColumn(G4int ntupleId, G4int columnId) const;
-    tools::wroot::ntuple::column<float>*  
-      GetNtupleFColumn(G4int ntupleId, G4int columnId) const;
-    tools::wroot::ntuple::column<double>* 
-      GetNtupleDColumn(G4int ntupleId, G4int columnId) const;
-    tools::wroot::ntuple::column_string* 
-      GetNtupleSColumn(G4int ntupleId, G4int columnId) const;
-
-    virtual G4RootNtupleDescription*  GetNtupleInFunction(G4int id, 
-                                        G4String function,
-                                        G4bool warn = true,
-                                        G4bool onlyIfActive = true) const;
+    virtual void FinishTNtuple(
+                    NtupleDescriptionType*  ntupleDescription) final;
 
     // data members
     //
     tools::wroot::directory*  fNtupleDirectory;
-    std::vector<G4RootNtupleDescription*> fNtupleDescriptionVector;
-    std::vector<tools::wroot::ntuple*>   fNtupleVector;
 };    
 
 // inline functions
 
-inline void G4RootNtupleManager::SetNtupleDirectory(
-                                    tools::wroot::directory* directory) 
-{ fNtupleDirectory = directory; }    
+inline void 
+G4RootNtupleManager::SetNtupleDirectory(tools::wroot::directory* directory) 
+{ fNtupleDirectory = directory; }
 
-inline std::vector<tools::wroot::ntuple*>::iterator 
-G4RootNtupleManager::BeginNtuple()
-{ return fNtupleVector.begin(); }
+//_____________________________________________________________________________
+template <>
+template <>
+inline void G4TNtupleManager<tools::wroot::ntuple>::CreateTColumnInNtuple(
+  G4TNtupleDescription<tools::wroot::ntuple>* ntupleDescription,
+  const G4String& name, std::vector<std::string>* vector)
+{
+  if ( ntupleDescription->fNtuple ) {
+    if ( vector  == nullptr ) {
+      ntupleDescription->fNtuple->create_column_string(name);
+    }  
+    else {
+      G4ExceptionDescription description;
+      description << "Column of vector<std::string> type is not supported";
+      G4Exception("G4RootNtupleManager::CreateTColumnInNtuple()",
+                  "Analysis_W001", JustWarning, description);
+    } 
+  }  
+}
 
-inline std::vector<tools::wroot::ntuple*>::iterator 
-G4RootNtupleManager::EndNtuple()
-{ return fNtupleVector.end(); }
+//_____________________________________________________________________________
+template <>
+template <>
+inline G4bool G4TNtupleManager<tools::wroot::ntuple>::FillNtupleTColumn(
+  G4int ntupleId, G4int columnId, const std::string& value)
+{
+  if ( fState.GetIsActivation() && ( ! GetActivation(ntupleId) ) ) {
+    //G4cout << "Skipping FillNtupleIColumn for " << ntupleId << G4endl; 
+    return false; 
+  }  
 
-inline std::vector<tools::wroot::ntuple*>::const_iterator 
-G4RootNtupleManager::BeginConstNtuple() const
-{ return fNtupleVector.begin(); }
+  auto ntuple = GetNtupleInFunction(ntupleId, "FillNtupleTColumn");
+  if ( ! ntuple ) return false;
 
-inline  std::vector<tools::wroot::ntuple*>::const_iterator 
-G4RootNtupleManager::EndConstNtuple() const
-{ return fNtupleVector.end(); }
+  auto index = columnId - fFirstNtupleColumnId;
+  if ( index < 0 || index >= G4int(ntuple->columns().size()) ) {
+    G4ExceptionDescription description;
+    description << "      "  << "ntupleId " << ntupleId
+                << " columnId " << columnId << " does not exist.";
+    G4Exception("G4RootNtupleManager::FillNtupleTColumn()",
+                "Analysis_W011", JustWarning, description);
+    return false;
+  }
 
-inline G4int G4RootNtupleManager::GetNofNtuples() const
-{ return fNtupleVector.size(); }
+  auto icolumn =  ntuple->columns()[index];
+  auto column = dynamic_cast<tools::wroot::ntuple::column_string* >(icolumn);
+  if ( ! column ) {
+    G4ExceptionDescription description;
+    description << " Column type does not match: "
+                << " ntupleId " << ntupleId  
+                << " columnId " << columnId << " value " << value;
+    G4Exception("G4RootNtupleManager:FillNtupleColumn",
+                "Analysis_W011", JustWarning, description);
+    return false;
+  } 
 
+  column->fill(value);
+
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL4() ) {
+    G4ExceptionDescription description;
+    description << " ntupleId " << ntupleId  
+                << " columnId " << columnId << " value " << value;
+    fState.GetVerboseL4()->Message("fill", "ntuple T column", description);
+  }  
+#endif
+  return true;  
+}
 
 #endif
+
 

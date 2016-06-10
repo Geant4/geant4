@@ -1,0 +1,145 @@
+
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example ThreadsafeScorers
+                    ----------------------------
+
+ This example demonstrates a very simple application where an energy
+ deposit and # of steps is accounted in thread-local (i.e. one instance per 
+ thread) hits maps with underlying types of plain-old data (POD) and global
+ (i.e. one instance) hits maps with underlying types of atomics.
+ The example uses a coarse mesh, extensive physics, and step limiters
+ to ensure that there is a higher degree of conflict between threads
+ when updating the scorers to test the robustness of the atomics
+ classes and maximize the compounding of thread-local round-off error.
+    At the end of the simulation, the scorers are printed to
+ "mfd_<DATA_TYPE>_<SCORER_TYPE>.out", where DATA_TYPE is either 
+ "tl" (thread-local) or "tg" (thread-global) and SCORER_TYPE is "EnergyDeposit"
+ or "NumberOfSteps". These values are then compared to a thread-global
+ sum of these scorers that were updated via mutex locking. If round-off
+ errors in thread-local EnergyDeposit are present, they can be viewed
+ in "mfd_diff.out" at the end of the simulation
+
+ 1- ATOMICS and the ATOMIC SCORERS
+
+   atomics can ONLY handle plain-old data (POD) types, e.g. int, double, etc.
+   The implementation of atomics in compiler-dependent. At the very worst,
+   the performance of an atomic is the same mutex locking.
+   Atomics, in general, are not copy-constructable. This has to do with
+   thread safety (e.g. making a copy while another thread tries to update)
+   This is why atomics cannot be used in STL containers. The implementation
+   in atomic.hh has limited copy-construction and still cannot be used in
+   STL containers. Use these copy-constructors with extreme caution. See
+   opening comments of G4atomic.hh for more details.
+   
+   The newly provided classes in this example (G4atomic, G4TAtomicHitsMap, and
+   G4TAtomicHitsCollection) are intended for applications where memory is a 
+   greater concern than performance. While atomics generally perform better than
+   mutex locking, the synchronization is not without a cost. However, since
+   the memory consumed by thread-local hits maps scales roughly linearly
+   with the number of threads, simulations with a large number of scoring
+   volumes can decrease simulation time by increasing the number of threads 
+   beyond what was previously allowed due to the increase in memory consumption.
+   ***************************************************************************
+   *** These classes are intended to be included in the Geant4 source code ***
+   *** release next year                                                   ***
+   ***************************************************************************
+   
+   The G4TAtomicHitsMap and G4TAtomicHitsCollection work exactly the same way
+   as the standard G4THitsMap and G4THitsCollection, respectively, with the
+   exception(s) that you should only implement one instance and provide a 
+   pointer/reference of that instance to the threads instead of having the
+   threads create them. Additionally, there is no need to include them
+   in the G4Run::Merge().
+    
+ 2- GEOMETRY DEFINITION
+  
+   The geometry is constructed in the TSDetectorConstruction class.
+   The setup consists of a box filling the world. The volume is divided into
+   subregions, where the outermost boxes are a different material. The materials
+   by default are water and boron as these have large scattering cross-sections 
+   for neutrons (the default particle). 
+    
+ 3- PHYSICS LIST
+ 
+   The particle's type and the physic processes which will be available
+   in this example are set are built from a variety of physics constructors.
+   The chosen physics lists are extensive, primarily
+   The constructors are:
+
+      G4EmStandardPhysics_option4
+      G4DecayPhysics
+      G4RadioactiveDecayPhysics
+      G4HadronPhysicsQGSP_BERT_HP
+      G4HadronElasticPhysicsHP
+      G4StepLimiterPhysics
+      G4IonElasticPhysics
+      G4IonBinaryCascadePhysics
+
+ 4- ACTION INITALIZATION
+
+   TSActionInitialization, instantiates and registers to Geant4 kernel
+    all user action classes.
+
+   While in sequential mode the action classes are instatiated just once,
+   via invoking the method:
+      TSActionInitialization::Build()
+   in multi-threading mode the same method is invoked for each thread worker
+   and so all user action classes are defined thread-local.
+
+   A run action class is instantiated both thread-local 
+   and global that's why its instance is created also in the method
+      TSActionInitialization::BuildForMaster() 
+   which is invoked only in multi-threading mode.
+     
+ 5- PRIMARY GENERATOR
+  
+   The primary generator is defined in the TSPrimaryGeneratorAction class.
+   The default kinematics is a 1 MeV neutron, randomly distributed in front
+   of the target across 100% of the transverse (X,Y) target size.
+   This default setting can be changed via the Geant4 built-in commands 
+   of the G4ParticleGun class.
+     
+ 6- DETECTOR RESPONSE
+
+   This example demonstrates a scoring implemented
+   in the user action classes and TSRun object.
+   
+   The energy deposited is collected per event in the PrimitiveScorer
+   G4PSEnergyDeposit (as part of a MultiFunctionalDetector)
+   and the thread-local version are merged at the end of the run.
+   
+   The number of steps is collected per event in the PrimativeScorer
+   G4PSNoOfSteps and the thread-local version are merged at the end of the run.
+
+   When the MFD is recording an event i.e. TSRun::RecordEvent(const G4Event*),
+   the global atomic hits map adds the same hits collections
+
+   In multi-threading mode the energy accumulated in TSRun MFD object per
+   workers is merged to the master in TSRun::Merge().
+
+  7- HOW TO RUN
+
+    - Execute ts_scorers in the 'interactive mode' with visualization:
+        % ./ts_scorers
+      and type in the commands from run.mac line by line:
+        Idle> /control/verbose 2
+        Idle> /tracking/verbose 1
+        Idle> /run/beamOn 10 
+        Idle> ...
+        Idle> exit
+      or
+        Idle> /control/execute run.mac
+        ....
+        Idle> exit
+
+    - Execute ts_scorers in the 'batch' mode from macro files
+      (without visualization)
+        % ./ts_scorers run.mac
+        % ./ts_scorers run.mac > run.out
+
+  

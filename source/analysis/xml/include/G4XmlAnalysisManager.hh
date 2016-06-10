@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4XmlAnalysisManager.hh 83748 2014-09-12 12:13:37Z gcosmo $
+// $Id: G4XmlAnalysisManager.hh 92972 2015-09-23 14:36:03Z gcosmo $
 
 // The main manager for Xml analysis.
 // It delegates most of functions to the object specific managers. 
@@ -33,75 +33,31 @@
 #ifndef G4XmlAnalysisManager_h
 #define G4XmlAnalysisManager_h 1
 
-#include "G4VAnalysisManager.hh"
+#include "G4ToolsAnalysisManager.hh"
 #include "globals.hh"
 
-#include "tools/histo/h1d" 
-#include "tools/histo/h2d" 
-#include "tools/histo/h3d" 
-#include "tools/histo/p1d" 
-#include "tools/histo/p2d" 
 #include "tools/waxml/ntuple"
 
+#include <memory>
 
 class G4XmlFileManager;
-class G4H1ToolsManager;
-class G4H2ToolsManager;
-class G4H3ToolsManager;
-class G4P1ToolsManager;
-class G4P2ToolsManager;
 class G4XmlNtupleManager;
 
-class G4XmlAnalysisManager : public G4VAnalysisManager
+class G4XmlAnalysisManager : public G4ToolsAnalysisManager
 {
   public:
-    G4XmlAnalysisManager(G4bool isMaster = true);
+    explicit G4XmlAnalysisManager(G4bool isMaster = true);
     ~G4XmlAnalysisManager();
     
     // static methods
     static G4XmlAnalysisManager* Instance();
+    static G4bool IsInstance();
 
     // Access methods
-    tools::histo::h1d* GetH1(G4int id, G4bool warn = true,
-                             G4bool onlyIfActive = true) const;
-    tools::histo::h2d* GetH2(G4int id, G4bool warn = true,
-                             G4bool onlyIfActive = true) const;
-    tools::histo::h3d*  GetH3(G4int id, G4bool warn = true,
-                              G4bool onlyIfActive = true) const;
-    tools::histo::p1d*  GetP1(G4int id, G4bool warn = true,
-                              G4bool onlyIfActive = true) const;
-    tools::histo::p2d*  GetP2(G4int id, G4bool warn = true,
-                              G4bool onlyIfActive = true) const;
-
     tools::waxml::ntuple* GetNtuple() const;
     tools::waxml::ntuple* GetNtuple(G4int ntupleId) const;
 
     // Iterators
-    std::vector<tools::histo::h1d*>::iterator BeginH1();
-    std::vector<tools::histo::h1d*>::iterator EndH1();
-    std::vector<tools::histo::h1d*>::const_iterator BeginConstH1() const;
-    std::vector<tools::histo::h1d*>::const_iterator EndConstH1() const;
-    
-    std::vector<tools::histo::h2d*>::iterator BeginH2();
-    std::vector<tools::histo::h2d*>::iterator EndH2();
-    std::vector<tools::histo::h2d*>::const_iterator BeginConstH2() const;
-    std::vector<tools::histo::h2d*>::const_iterator EndConstH2() const;
-    
-    std::vector<tools::histo::h3d*>::iterator BeginH3();
-    std::vector<tools::histo::h3d*>::iterator EndH3();
-    std::vector<tools::histo::h3d*>::const_iterator BeginConstH3() const;
-    std::vector<tools::histo::h3d*>::const_iterator EndConstH3() const;
-
-    std::vector<tools::histo::p1d*>::iterator BeginP1();
-    std::vector<tools::histo::p1d*>::iterator EndP1();
-    std::vector<tools::histo::p1d*>::const_iterator BeginConstP1() const;
-    std::vector<tools::histo::p1d*>::const_iterator EndConstP1() const;
-    
-    std::vector<tools::histo::p2d*>::iterator BeginP2();
-    std::vector<tools::histo::p2d*>::iterator EndP2();
-    std::vector<tools::histo::p2d*>::const_iterator BeginConstP2() const;
-    std::vector<tools::histo::p2d*>::const_iterator EndConstP2() const;
-
     std::vector<tools::waxml::ntuple*>::iterator BeginNtuple();
     std::vector<tools::waxml::ntuple*>::iterator EndNtuple();
     std::vector<tools::waxml::ntuple*>::const_iterator BeginConstNtuple() const;
@@ -109,9 +65,10 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
     
   protected:
     // virtual methods from base class
-    virtual G4bool OpenFileImpl(const G4String& fileName);
-    virtual G4bool WriteImpl();
-    virtual G4bool CloseFileImpl(); 
+    virtual G4bool OpenFileImpl(const G4String& fileName) final;
+    virtual G4bool WriteImpl() final;
+    virtual G4bool CloseFileImpl() final; 
+    virtual G4bool IsOpenFileImpl() const final;
 
   private:
     // static data members
@@ -119,6 +76,11 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
     static G4ThreadLocal G4XmlAnalysisManager* fgInstance;
 
     // methods
+    template <typename T>
+    G4bool WriteT(const std::vector<T*>& htVector,
+                  const std::vector<G4HnInformation*>& hnVector,
+                  const G4String& directoryName,
+                  const G4String& hnType);
     G4bool WriteH1();
     G4bool WriteH2();
     G4bool WriteH3();
@@ -129,14 +91,8 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
     G4bool Reset();
 
     // data members
-    G4H1ToolsManager*    fH1Manager;
-    G4H2ToolsManager*    fH2Manager;
-    G4H3ToolsManager*    fH3Manager;
-    G4P1ToolsManager*    fP1Manager;
-    G4P2ToolsManager*    fP2Manager;
     G4XmlNtupleManager*  fNtupleManager;
-    G4XmlFileManager*    fFileManager;
-
+    std::shared_ptr<G4XmlFileManager>  fFileManager;
 };
 
 #include "G4XmlAnalysisManager.icc"

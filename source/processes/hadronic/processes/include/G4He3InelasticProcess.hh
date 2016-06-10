@@ -23,12 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Hadronic Process: Triton Inelastic Process
-// J.L. Chuma, TRIUMF, 25-Feb-1997
+// Hadronic Process: 3He Inelastic Process
 //
 
 // Class Description
-// Process for Triton Inelastic scattering; 
+// Process for 3He Inelastic scattering; 
 // to be used in your physics list in case you need this physics.
 // Class Description - End
 
@@ -42,7 +41,7 @@ class G4He3InelasticProcess : public G4HadronInelasticProcess
 {
   public:
     
-    G4He3InelasticProcess(const G4String& processName = "tInelastic");
+    G4He3InelasticProcess(const G4String& processName = "he3Inelastic");
         
     ~G4He3InelasticProcess() {}
 

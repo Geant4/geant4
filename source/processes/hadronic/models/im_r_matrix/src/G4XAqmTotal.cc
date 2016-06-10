@@ -44,6 +44,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
+#include "G4Pow.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4XAqmTotal.hh"
 #include "G4KineticTrack.hh"
@@ -115,7 +116,7 @@ G4double G4XAqmTotal::CrossSection(const G4KineticTrack& trk1, const G4KineticTr
   if (nQ2 == 2) nMesons++;
 
   // Cross-section (units to be checked!)
-  sigma = 40. * std::pow((2.0/3.0),nMesons) * (1. - 0.4 * sRatio1) * (1. - 0.4 * sRatio2) * millibarn;
+  sigma = 40. * G4Pow::GetInstance()->powN((2.0/3.0),nMesons) * (1. - 0.4 * sRatio1) * (1. - 0.4 * sRatio2) * millibarn;
 
   return sigma;
 }

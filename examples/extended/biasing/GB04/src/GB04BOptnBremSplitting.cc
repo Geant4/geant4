@@ -103,6 +103,10 @@ ApplyFinalStateBiasing( const G4BiasingProcessInterface* callingProcess,
   // -- inform we will have fSplittingFactor gamma's:
   fParticleChange.SetNumberOfSecondaries( fSplittingFactor );
 
+  // -- inform we take care of secondaries weight (otherwise these
+  // -- secondaries are by default given the primary weight).
+  fParticleChange.SetSecondaryWeightByProcess(true);
+
   // -- Store first gamma:
   G4Track* gammaTrack = actualParticleChange->GetSecondary(0);
   gammaTrack->SetWeight( gammaWeight );

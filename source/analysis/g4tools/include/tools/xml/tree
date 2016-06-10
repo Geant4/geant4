@@ -922,7 +922,7 @@ public:
   void set_save_flag(bool a_value) {m_save = a_value;}
   bool save_flag() const {return m_save;}
   void set_file(const std::string& a_file) {m_file = a_file;}
-  std::string file() const {return m_file;}
+  const std::string& file() const {return m_file;}
   
 protected:
   void clear(){

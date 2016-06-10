@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
+# $Id: sources.cmake 92076 2015-08-17 07:05:45Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -53,6 +53,7 @@ GEANT4_DEFINE_MODULE(NAME G4detector
         G4VReadOutGeometry.hh
         G4VSDFilter.hh
         G4VSensitiveDetector.hh
+	G4MultiSensitiveDetector.hh
     SOURCES
         G4CellScoreComposer.cc
         G4HCtable.cc
@@ -66,6 +67,7 @@ GEANT4_DEFINE_MODULE(NAME G4detector
         G4VReadOutGeometry.cc
         G4VSDFilter.cc
         G4VSensitiveDetector.cc
+	G4MultiSensitiveDetector.cc
     GRANULAR_DEPENDENCIES
         G4geombias
         G4geometrymng

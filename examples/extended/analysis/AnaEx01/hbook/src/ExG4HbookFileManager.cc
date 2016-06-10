@@ -88,7 +88,7 @@ G4bool ExG4HbookFileManager::OpenFile(const G4String& fileName)
   //   - created a //PAWC/LUN1 in memory
   //   - be in the directory //PAWC/LUN1.
 
-  // create an "histo" HBOOK directory both in memory and in the file :
+  // create a "histo" HBOOK directory both in memory and in the file :
   if ( fHistoDirectoryName != "" ) {
     tools::hbook::CHCDIR("//PAWC/LUN1"," ");
     tools::hbook::CHMDIR(fHistoDirectoryName.data()," ");

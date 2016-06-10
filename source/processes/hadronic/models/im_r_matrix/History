@@ -14,6 +14,32 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+13-November 2015 Gunter Folger            had-im_r-V10-01-05
+- Revert back to G4float, add 'f' for initialisation.
+
+13-November 2015 Gunter Folger            had-im_r-V10-01-04
+- Replace G4float by G4double
+
+30-October 2015, Gunter Folger            had-im_r-V10-01-03
+- while loop checking: 
+    - src/G4MesonAbsorption.cc  finite loop.
+    - src/G4AngularDistribution{PP,NP}.cc: couter in each while, 
+	     with an G4Exception is case the loop terminates due to counter, 
+		  with properly ordered data, this cannot happen.
+    - several files with 'while' in comment have words slightly changed ;)		  
+	  
+28-October 2015, Gunter Folger            had-im_r-V10-01-02
+-  replace std::{exp,log} with G4{Exp,Log} and std::pow with the 
+     proper G4Pow method
+	  
+13-May 2015, Vladimir Ivanchenko         had-im_r-V10-01-01
+- G4Clebsch is moved to util 
+
+27-April 2015, Gunter Folger             had-im_r-V10-01-00
+- Fix for compiler warning (clang 3.6) on expression with side effects
+  - G4CollisionManager::Print() use const & as argument to typeid()
+  - G4CollisionInitialState::BCAction(): return pointer to const object.
+  
 16-October-2014 Andrea Dotti	         had-im_r-V10-00-09
 - Bug fixing for DRD: correctly destroy mutex after initialization
 

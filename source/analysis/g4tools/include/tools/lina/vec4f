@@ -1,0 +1,85 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_vec4f
+#define tools_vec4f
+
+#include "vec4"
+#include "../S_STRING"
+
+namespace tools {
+
+class vec4f : public vec4<float> {
+public:
+  TOOLS_SCLASS(tools::vec4f) //for stype()
+public:
+  vec4f():vec4<float>() {}
+  vec4f(const float a_vec[4]):vec4<float>(a_vec) {}
+  vec4f(const float& a0,const float& a1,const float& a2,const float& a3)
+  :vec4<float>(a0,a1,a2,a3){}
+  virtual ~vec4f() {}
+public:
+  vec4f(const vec4f& a_from):vec4<float>(a_from){}
+  vec4f& operator=(const vec4f& a_from){
+    vec4<float>::operator=(a_from);
+    return *this;
+  }
+public: //operators
+  vec4f operator*(float a_v) const {
+    return vec4f(m_data[0]*a_v,
+                 m_data[1]*a_v,
+                 m_data[2]*a_v,
+                 m_data[3]*a_v);
+  }    
+  vec4f operator+(const vec4f& a_v) const {
+    return vec4f(m_data[0]+a_v.m_data[0],
+                 m_data[1]+a_v.m_data[1],
+                 m_data[2]+a_v.m_data[2],
+                 m_data[3]+a_v.m_data[3]);
+  }    
+  vec4f operator-(const vec4f& a_v) const {
+    return vec4f(m_data[0]-a_v.m_data[0],
+                 m_data[1]-a_v.m_data[1],
+                 m_data[2]-a_v.m_data[2],
+                 m_data[3]-a_v.m_data[3]);
+  }    
+  vec4f& operator+=(const vec4f& a_v) {   
+    m_data[0] += a_v.m_data[0];
+    m_data[1] += a_v.m_data[1];
+    m_data[2] += a_v.m_data[2];
+    m_data[3] += a_v.m_data[3];
+    return *this;
+  }    
+  vec4f& operator*=(float a_v) {   
+    m_data[0] *= a_v;
+    m_data[1] *= a_v;
+    m_data[2] *= a_v;
+    m_data[3] *= a_v;
+    return *this;
+  }    
+  vec4f operator-() const {
+    return vec4f(-m_data[0],-m_data[1],-m_data[2],-m_data[3]);
+  }
+};
+
+}
+
+#include <vector>
+
+namespace tools {
+
+#ifndef SWIG
+//for sf, mf :
+inline bool set_from_vec(vec4f& a_v,const std::vector<float>& a_sv) {
+  if(a_sv.size()!=4) return false;
+  a_v[0] = a_sv[0];
+  a_v[1] = a_sv[1];
+  a_v[2] = a_sv[2];
+  a_v[3] = a_sv[3];
+  return true;
+}
+#endif
+
+}
+
+#endif

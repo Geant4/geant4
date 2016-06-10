@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B1EventAction.hh 75216 2013-10-29 16:08:11Z gcosmo $
+// $Id: B1EventAction.hh 93886 2015-11-03 08:28:26Z gcosmo $
 //
 /// \file B1EventAction.hh
 /// \brief Definition of the B1EventAction class
@@ -34,22 +34,25 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
+class B1RunAction;
+
 /// Event action class
 ///
 
 class B1EventAction : public G4UserEventAction
 {
   public:
-    B1EventAction();
+    B1EventAction(B1RunAction* runAction);
     virtual ~B1EventAction();
-    
+
     virtual void BeginOfEventAction(const G4Event* event);
     virtual void EndOfEventAction(const G4Event* event);
 
     void AddEdep(G4double edep) { fEdep += edep; }
 
   private:
-    G4double  fEdep;
+    B1RunAction* fRunAction;
+    G4double     fEdep;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

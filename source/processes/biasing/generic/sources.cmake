@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 86197 2014-11-07 15:09:00Z gcosmo $
+# $Id: sources.cmake 94220 2015-11-09 08:26:57Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -52,6 +52,7 @@ GEANT4_DEFINE_MODULE(NAME G4biasing_gen
         G4BOptnForceCommonTruncatedExp.hh
         G4BOptnForceFreeFlight.hh
         G4BOptrForceCollision.hh
+        G4BOptrForceCollisionTrackData.hh
         G4ILawCommonTruncatedExp.hh
         G4ILawForceFreeFlight.hh
         G4ILawTruncatedExp.hh
@@ -66,6 +67,7 @@ GEANT4_DEFINE_MODULE(NAME G4biasing_gen
         G4BOptnForceCommonTruncatedExp.cc
         G4BOptnForceFreeFlight.cc
         G4BOptrForceCollision.cc
+	G4BOptrForceCollisionTrackData.cc
         G4ILawCommonTruncatedExp.cc
         G4ILawForceFreeFlight.cc
         G4ILawTruncatedExp.cc

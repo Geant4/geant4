@@ -2,7 +2,6 @@
 # This file permits to customize, with commands,
 # the menu bar of the G4UIXm, G4UIWin32 sessions.
 # It has no effect with G4UIterminal.
-#
 
 # File :
 /gui/addMenu file File
@@ -12,6 +11,8 @@
 # Run menu :
 /gui/addMenu run Run
 /gui/addButton run "beamOn 1" "/run/beamOn 1"
+/gui/addButton run "beamOn 10" "/run/beamOn 10"
+/gui/addButton run "beamOn 100" "/run/beamOn 100"
 /gui/addButton run run1 "/control/execute defaultMacro.mac"
 #
 # Gps menu :
@@ -19,6 +20,8 @@
 /gui/addButton gps "Proton"  "/gps/particle proton"
 
 /gui/addMenu gps Energy
+/gui/addButton gps "15 MeV" "/gps/energy 15 MeV"
+/gui/addButton gps "30 MeV" "/gps/energy 30 MeV"
 /gui/addButton gps "60 MeV" "/gps/energy 60 MeV"
 #
 

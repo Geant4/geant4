@@ -39,6 +39,9 @@
 #define G4USolid_HH
 
 #include "G4VSolid.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+
 #include "VUSolid.hh"
 
 class G4VPVParameterisation;
@@ -183,5 +186,7 @@ class G4USolid : public G4VSolid
     mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fPolyhedron;
 };
+
+#endif  // G4GEOM_USE_USOLIDS
 
 #endif

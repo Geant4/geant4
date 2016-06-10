@@ -1,4 +1,4 @@
-$Id: README 69108 2013-04-18 13:10:10Z gcosmo $
+$Id: README 93666 2015-10-28 09:52:00Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -29,45 +29,53 @@ $Id: README 69108 2013-04-18 13:10:10Z gcosmo $
  	the commands defined in the DetectorMessenger class.
  	
  2- PHYSICS LIST
+
+  Physics Lists are based on modular design. Several modules are instantiated:
+  1. Transportation
+  2. EM physics
+  3. Decays
+  4. StepMax - for step limitation
  
- Physics lists can be local (eg. in this example) or from G4 kernel
- physics_lists subdirectory.
-     
- Local physics lists:	 
- - "local"	standard EM physics with current 'best' options setting.
-			
- From geant4/source/physics_lists/builders:	 
+  The following options for EM physics using builders from physics_lists
+  sub-package are available:
   - "emstandard_opt0" recommended standard EM physics for LHC
   - "emstandard_opt1" best CPU performance standard physics for LHC
-  - "emstandard_opt2"     
-  - "emstandard_opt3" best current advanced EM options. 
-                      analog to "local" above  
+  - "emstandard_opt2" similar fast simulation
+  - "emstandard_opt3" best standard EM options - analog to "local" above
+  - "emstandard_opt4" best current advanced EM options standard + lowenergy
+  - "emstandardWVI" standard EM physics and WentzelVI multiple scattering
+  - "emstandardSS"  standard EM physics and single scattering model
+  - "emstandardGS"  standard EM physics and Goudsmit-Saunderson multiple scatt.
   - "emlivermore"  low-energy EM physics using Livermore data
   - "empenelope"   low-energy EM physics implementing Penelope models
-  - "dna"          em physics for DNA simulation
-      
- Physics lists and options can be (re)set with UI commands
-    
- Please, notice that options set through G4EmProcessOPtions are global, eg
- for all particle types. In G4 builders, it is shown how to set options per
- particle type.
-
- 	 
+  - "emlowenergy"  low-energy EM physics implementing experimental
+                   low-energy models
+  - "dna"          process and models for Geant4-DNA
+  - "dna_opt1"     process and models for Geant4-DNA
+ 
+  A local builder, PhysListEmStandard "local" (similar to opt0) is also
+  available.
+ 
+  Physics lists and options can be (re)set with UI commands
+ 
+  Please, notice that options set through G4EmProcessOptions are global, eg
+  for all particle types. In G4 builders, it is shown how to set options per
+  particle type.
+ 
  3- AN EVENT : THE PRIMARY GENERATOR
  
- 	The primary kinematic consists of a single particle randomly shooted at
+ 	The primary kinematic consists of a single particle randomly shot at
 	the centre of the sphere. The type of the particle and its energy are set 
  	in the PrimaryGeneratorAction class, and can be changed via the G4 
- 	build-in commands of ParticleGun class (see the macros provided with 
+ 	built-in commands of ParticleGun class (see the macros provided with 
  	this example).
 	
- 	In addition one can desactivate the randomness of the direction of the 
+ 	In addition one can deactivate the randomness of the direction of the 
 	incident particle. The corresponding interactive command is built in
  	PrimaryGeneratorMessenger class.
 	 	
  	A RUN is a set of events.
  	
- 				
  4- VISUALIZATION
  
  	The Visualization Manager is set in the main().
@@ -79,9 +87,8 @@ $Id: README 69108 2013-04-18 13:10:10Z gcosmo $
  	box.
  	
  	The tracks are drawn at the end of event, and erased at the end of run.
- 	Optionaly one can choose to draw all particles, only the charged one,
+ 	Optionally one can choose to draw all particles, only the charged ones,
  	or none. This command is defined in EventActionMessenger class.
- 	
  	
  5- HOW TO START ?
  
@@ -95,15 +102,15 @@ $Id: README 69108 2013-04-18 13:10:10Z gcosmo $
  		....
  		Idle> exit
 		
- 6- TRACKING  and STEP MAX
+ 6- TRACKING and STEP MAX
  
-     Testem12 computes the total energy deposited along the trajectory of 
+     TestDm12 computes the total energy deposited along the trajectory of 
      the incident particle : the so-called longitudinal energy profile,
      or depth dose distribution.
-     The energy deposited (edep) is randomly distribued along the step (see
+     The energy deposited (edep) is randomly distributed along the step (see
      SteppingAction).
      
-     In order to control the accuracy of the deposition, the maximum  step size 
+     In order to control the accuracy of the deposition, the maximum step size 
      of charged particles is computed automatically from the binning of 
      histograms 1 and 8 (see RunAction).
      
@@ -113,7 +120,7 @@ $Id: README 69108 2013-04-18 13:10:10Z gcosmo $
      
      StepMax is evaluated in RunAction::BeginOfRun() and passed 
      to the StepMax process. 
-     A boolean UI command allows to desactivate this mechanism.
+     A boolean UI command allows to deactivate this mechanism.
      Another UI command allows to define directly a stepMax value.
       	
  7- HISTOGRAMS

@@ -12,6 +12,8 @@
 #include <tools/sto>
 #include <tools/scast>
 #include <tools/stype>
+#include <tools/sout>
+#include <tools/num2s>
 #include <tools/ntuple_booking>
 
 #include "CHBOOK"
@@ -144,7 +146,7 @@ public:
     if(tools::find_named<icol>(m_cols,a_name)) return 0;
 
     std::string block("blk"); //8 chars max.
-    block += tools::to<unsigned int>(m_cols.size());
+    if(!tools::numas<unsigned int>(m_cols.size(),block)){}
     if(block.size()>8) return 0;
 
     column<T>* col = new column<T>(a_name);

@@ -42,7 +42,7 @@
 // Contact : Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
 // WARNING : This class is released as a prototype.
-// It might strongly evolve or even disapear in the next releases.
+// It might strongly evolve or even disappear in the next releases.
 //
 // We would be very happy hearing from you, send us your feedback! :)
 //
@@ -78,6 +78,7 @@
 
 #include <iostream>
 #include "G4TrackState.hh"
+#include <memory>
 
 class G4VPhysicalVolume;
 
@@ -123,6 +124,9 @@ public:
   G4VPhysicalVolume* NewNavigatorStateAndLocate(const G4ThreeVector &p,
                                                 const G4ThreeVector &direction);
   void CheckNavigatorState() const;
+
+  inline std::shared_ptr<G4ITNavigatorState_Lock2> GetSnapshotOfState();
+  inline void ResetFromSnapshot(std::shared_ptr<G4ITNavigatorState_Lock2>);
   // <!
 
   virtual G4double ComputeStep(const G4ThreeVector &pGlobalPoint,
@@ -181,6 +185,12 @@ public:
     //     more volumes.  (This is state information.)
     // 
     // Important Note: In order to call this the geometry MUST be closed.
+
+  //----------------------------------------------------------------------------
+  EInside InsideCurrentVolume(const G4ThreeVector& globalPoint) const;
+
+  void GetRandomInCurrentVolume(G4ThreeVector& rndmPoint) const;
+  //----------------------------------------------------------------------------
 
   virtual
   void LocateGlobalPointWithinVolume(const G4ThreeVector& position);
@@ -589,7 +599,7 @@ public:
   G4VoxelSafety *fpVoxelSafety;
 };
 
-RegisterTrackState(G4ITNavigator2, G4ITNavigator2::G4NavigatorState)
+RegisterTrackState(G4ITNavigator2, G4NavigatorState)
 
 #define CheckNavigatorStateIsValid() \
 if(fpNavigatorState == 0) \

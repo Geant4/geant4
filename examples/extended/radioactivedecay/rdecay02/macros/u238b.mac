@@ -1,0 +1,39 @@
+# $Id$
+# 									
+# Decays of U238 in VR mode   
+#
+#                                                                         
+/control/verbose 2
+/run/verbose 1
+#
+# set the target/detector geometry
+/rdecay02/det/setTargetRadius 1e10 pc
+/rdecay02/det/setTargetLength 1e10 pc
+/rdecay02/det/setDetectorThickness 1e10 pc
+/rdecay02/det/setDetectorLength 1e10 pc
+#
+/run/initialize
+#
+/process/list
+#
+# rdm is applied only to the target volume
+/grdm/noVolumes
+/grdm/selectVolume Target
+
+#
+# place the isotopes in the middle of the target, at rest. 
+/gun/particle ion
+/gun/ion 92 238 0 100. keV
+#
+# complete chain decays in VR mode
+/grdm/sourceTimeProfile beam.data
+/grdm/decayBiasProfile measures.data
+#/grdm/nucleusLimits 238 238 90 92
+/grdm/hlThreshold 1e-6 s
+/grdm/analogueMC 0
+#
+/analysis/setFileName u238b
+/analysis/h1/set 6 100 0. 15. MeV
+#
+/run/printProgress 100
+/run/beamOn 1000

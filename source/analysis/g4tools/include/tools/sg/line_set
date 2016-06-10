@@ -1,0 +1,97 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_line_set
+#define tools_sg_line_set
+
+#include "node"
+
+#include "mf"
+#include "../stype"
+#include "render_action"
+#include "pick_action"
+
+namespace tools {
+namespace sg {
+
+class line_set : public node {
+  TOOLS_NODE(line_set,tools::sg::line_set,node)
+public:
+  mf_std_vec<float> lines;
+public:
+  virtual const std::vector<field_desc>& node_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::line_set)
+    static std::vector<field_desc> s_v;
+    if(s_v.empty()) {
+      s_v = parent::node_fields();
+      TOOLS_ADD_FIELD_DESC(lines)
+    }
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&lines);
+  }
+public:
+  typedef std::vector<float> line_t;
+
+  virtual void render(render_action& a_action) {
+    tools_vforcit(line_t,lines.values(),it) {
+      a_action.draw_vertex_array(tools::gl::line_strip(),*it);
+    }
+  }
+
+  virtual void pick(pick_action& a_action) {
+    tools_vforcit(line_t,lines.values(),it) {
+      a_action.add_line_strip(*it,true);
+      if(a_action.done()) {
+        a_action.set_node(this);
+        return;
+      }
+    }
+
+  }
+
+public:
+  line_set()
+  :parent() 
+  ,lines()
+  {
+#ifdef TOOLS_MEM
+    tools::mem::increment(s_class().c_str());
+#endif
+    add_fields();
+  }
+  virtual ~line_set(){
+#ifdef TOOLS_MEM
+    tools::mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  line_set(const line_set& a_from)
+  :parent(a_from)
+  ,lines(a_from.lines)
+  {
+#ifdef TOOLS_MEM
+    tools::mem::increment(s_class().c_str());
+#endif
+    add_fields();
+  }
+  line_set& operator=(const line_set& a_from){
+    parent::operator=(a_from);
+    lines = a_from.lines;
+    return *this;
+  }
+public:
+  bool add(const line_t& a_line) { 
+    unsigned int npoint = a_line.size()/3;
+    if(npoint*3!=a_line.size()) return false;
+    lines.add(a_line);
+    return true;
+  }
+  void clear() {lines.clear();}
+};
+
+}}
+
+#endif

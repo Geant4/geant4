@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.cc 71484 2013-06-17 08:12:51Z gcosmo $
+// $Id: G4VMscModel.cc 92921 2015-09-21 15:06:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -57,8 +57,8 @@
 
 G4VMscModel::G4VMscModel(const G4String& nam):
   G4VEmModel(nam), 
-  safetyHelper(0),
-  ionisation(0),
+  safetyHelper(nullptr),
+  ionisation(nullptr),
   facrange(0.04),
   facgeom(2.5),
   facsafety(0.3),
@@ -67,6 +67,7 @@ G4VMscModel::G4VMscModel(const G4String& nam):
   lambdalimit(mm),
   geomMin(1.e-6*CLHEP::mm),
   geomMax(1.e50*CLHEP::mm),
+  fDisplacement(0.,0.,0.),
   steppingAlgorithm(fUseSafety),
   samplez(false),
   latDisplasment(true)
@@ -94,7 +95,7 @@ G4VMscModel::GetParticleChangeForMSC(const G4ParticleDefinition* p)
       ->GetSafetyHelper();
     safetyHelper->InitialiseHelper();
   }
-  G4ParticleChangeForMSC* change = 0;
+  G4ParticleChangeForMSC* change = nullptr;
   if (pParticleChange) {
     change = static_cast<G4ParticleChangeForMSC*>(pParticleChange);
   } else {
@@ -105,9 +106,9 @@ G4VMscModel::GetParticleChangeForMSC(const G4ParticleDefinition* p)
     // table is never built for GenericIon 
     if(p->GetParticleName() == "GenericIon") {
       if(xSectionTable) {
-	xSectionTable->clearAndDestroy();
-	delete xSectionTable;
-	xSectionTable = 0;
+        xSectionTable->clearAndDestroy();
+        delete xSectionTable;
+        xSectionTable = nullptr;
       }
 
       // table is always built for low mass particles 
@@ -116,14 +117,14 @@ G4VMscModel::GetParticleChangeForMSC(const G4ParticleDefinition* p)
       idxTable = 0;
       G4LossTableBuilder* builder = man->GetTableBuilder();
       if(IsMaster()) {
-	G4double emin = std::max(LowEnergyLimit(), LowEnergyActivationLimit());
-	G4double emax = std::min(HighEnergyLimit(), HighEnergyActivationLimit());
-	emin = std::max(emin, man->MinKinEnergy());
-	emax = std::min(emax, man->MaxKinEnergy());
-	if(emin < emax) {
-	  xSectionTable = builder->BuildTableForModel(xSectionTable, this, p, 
-						      emin, emax, true);
-	}
+        G4double emin = std::max(LowEnergyLimit(), LowEnergyActivationLimit());
+        G4double emax = std::min(HighEnergyLimit(), HighEnergyActivationLimit());
+        emin = std::max(emin, man->MinKinEnergy());
+        emax = std::min(emax, man->MaxKinEnergy());
+        if(emin < emax) {
+          xSectionTable = builder->BuildTableForModel(xSectionTable, this, p, 
+                                                      emin, emax, true);
+        }
       }
       theDensityFactor = builder->GetDensityFactors();
       theDensityIdx = builder->GetCoupleIndexes();
@@ -164,9 +165,9 @@ G4double G4VMscModel::ComputeTrueStepLength(G4double geomPathLength)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4VMscModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				    const G4MaterialCutsCouple*,
-				    const G4DynamicParticle*,
-				    G4double, G4double)
+                                    const G4MaterialCutsCouple*,
+                                    const G4DynamicParticle*,
+                                    G4double, G4double)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

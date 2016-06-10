@@ -36,11 +36,11 @@
 G4ParticleHPFFFissionFS::~G4ParticleHPFFFissionFS()
 {
     std::map<G4int,std::map<G4double,std::map<G4int,G4double >* >* >::iterator it = FissionProductYieldData.begin();
-    while ( it != FissionProductYieldData.end() ) {
+    while ( it != FissionProductYieldData.end() ) { // Loop checking, 11.05.2015, T. Koi
         std::map<G4double,std::map<G4int,G4double>* >* firstLevel = it->second;
         if ( firstLevel ) {
             std::map<G4double,std::map<G4int,G4double>*>::iterator it2 = firstLevel->begin();
-            while ( it2 != firstLevel->end() ) {
+            while ( it2 != firstLevel->end() ) { // Loop checking, 11.05.2015, T. Koi
                 delete it2->second;
                 it2->second = 0;
                 firstLevel->erase(it2);
@@ -54,7 +54,7 @@ G4ParticleHPFFFissionFS::~G4ParticleHPFFFissionFS()
     }
     
     std::map< G4int , std::map< G4double , G4int >* >::iterator ii = mMTInterpolation.begin();
-    while ( ii != mMTInterpolation.end() ) {
+    while ( ii != mMTInterpolation.end() ) { // Loop checking, 11.05.2015, T. Koi
         delete ii->second;
         mMTInterpolation.erase(ii);
         ii = mMTInterpolation.begin();
@@ -98,7 +98,7 @@ void G4ParticleHPFFFissionFS::Init (G4double A, G4double Z, G4int M, G4String & 
    hasFSData = true; 
       //          MT              Energy            FPS    Yield
       //std::map< int , std::map< double , std::map< int , double >* >* > FisionProductYieldData; 
-   while ( theData.good() )
+   while ( theData.good() ) // Loop checking, 11.05.2015, T. Koi
    {
       G4int iMT, iMF;
       G4int imax;

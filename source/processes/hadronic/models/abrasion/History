@@ -13,6 +13,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+07-Aug-2015  Alberto Ribon  (had-abrasion-V10-01-01)
+----------------------------------------------------
+- G4WilsonAbrasionModel : checking of 'while' loops.
+
+04-Aug-2015  Alberto Ribon  (had-abrasion-V10-01-00)
+----------------------------------------------------
+- G4NuclearAbrasionGeometry and G4WilsonAbrasionModel : replaced
+  std::exp and std::pow with the faster G4Exp and G4Pow.
+
 30-Oct-2014  Vladimir Ivanchenko (had-abrasion-V10-00-00)
 ----------------------------------------------------
 - G4WilsonAbrasionModel - use GetZ_asInt() and GetA_asInt()

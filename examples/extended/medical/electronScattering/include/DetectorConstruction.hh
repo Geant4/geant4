@@ -26,7 +26,7 @@
 /// \file medical/electronScattering/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 86064 2014-11-07 08:49:32Z gcosmo $
+// $Id: DetectorConstruction.hh 88035 2015-01-26 10:22:08Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,6 +70,10 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   
      G4Material* GetMaterialScatter()        {return fMaterial_ScatterFoil;};
      G4double    GetThicknessScatter()       {return fThickness_ScatterFoil;};
+
+     G4double    GetZdist_foil_detector() 
+                                   {return fThickness_Frame-fZfront_ScatterFoil
+                                         -0.5*fThickness_ScatterFoil;};
           
      const G4VPhysicalVolume* GetpvolWorld() {return fPvol_World;};
      const G4VPhysicalVolume* GetpvolFrame() {return fPvol_Frame;};

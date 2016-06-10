@@ -1,4 +1,4 @@
-$Id: History 69570 2013-05-08 13:23:39Z gcosmo $
+$Id: History 93563 2015-10-26 14:46:09Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -13,8 +13,99 @@ code and to keep track of all tags.
 
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
 
+26 October 2015 Alberto Ribon            (hadr-qgsm-V10-01-16)
+   After bringing the QGS string formation as it was in G4 10.1 (and before)
+   in the previous tag, check of 'while' loops and deploy the
+   fast math functions (G4Exp, G4Log and G4Pow).
 
+23 October 2015 Alberto Ribon            (hadr-qgsm-V10-01-15)
+   Reversed (temporarily, just for the coming release G4 10.2) the
+   improvements made after 10.1.ref05, in such a way to leave the
+   QGS string formation as it was in G4 10.1 (and before).
+   The files that are changed are: G4QGSDiffractiveExcitation.hh,
+   G4QGSMSplitableHadron.hh, G4QGSModel.icc, G4QGSParticipants.hh,
+   G4QGSMSplitableHadron.cc, G4GammaParticipants.cc, G4QGSParticipants.cc,
+   G4SingleDiffractiveExcitation.cc, G4QGSDiffractiveExcitation.cc and
+   G4SPBaryon.cc .
+   After the release G4 10.2, the tag hadr-qgsm-V10-01-14 will be resumed.
+
+13 August 2015 Alberto Ribon             (hadr-qgsm-V10-01-14)
+   G4GammaParticipants, G4QGSParticipants : Coverity fixes.
+
+07 August 2015 Alberto Ribon             (hadr-qgsm-V10-01-13)
+   G4QGSModel, G4QGSMSplitableHadron, G4GammaParticipants, G4QGSParticipants,
+   G4SingleDiffractiveExcitation and G4QGSDiffractiveExcitation :
+   checking of 'while' loops.
+
+05 August 2015 Alberto Ribon             (hadr-qgsm-V10-01-12)
+   G4ASCCrossSection, G4QGSMSplitableHadron, G4QGSParticipants, 
+   G4SingleDiffractiveExcitation and G4QGSDiffractiveExcitation:
+   replaced std::exp, std::log and std::pow with the faster
+   G4Exp, G4Log and G4Pow, respectively.
+   This changes the random number sequence.
+
+12 June 2015 Alberto Ribon               (hadr-qgsm-V10-01-11)
+   G4QGSParticipants: fixed a memory leak.
+
+10 June 2015 Alberto Ribon               (hadr-qgsm-V10-01-10)
+   G4QGSParticipants: commented one forgotten debugging print out statement.
+
+ 4 June 2015 V. Uzhinsky                 (hadr-qgsm-V10-01-09)
+   G4QGSMSplitableHadron - iterator deque used as data member is
+   replaced by "unsigned int" data member. I hope it avoid segmentation
+   fault.
+
+28 May 2015 Alberto Ribon                (hadr-qgsm-V10-01-08)
+   G4QGSParticipants : improved the kinematics treatment in the method
+   SamplingNucleonKinematics.
+
+27 May 2015 Vladimir Uzhinsky            (hadr-qgsm-V10-01-07)
+   A bug lead to Segmentation fault is erased. It was connected with G4Nucleus -> GetNextNucleon()
+   used at gamma projectile which gave pointer outside nucleon vector.
+   After that wrong counting of see parton pairs was obtained, and at iteration of the partons
+   GetNextParton went out of the parton vector.
+   The changes are:
+   G4VSplitableHadron* G4GammaParticipants::SelectInteractions
+
+   theNucleus->StartLoop();
+   G4Nucleon * pNucleon =0; // theNucleus->GetNextNucleon();   // Uzhi 27.05.2015
+
+   while( (pNucleon = theNucleus->GetNextNucleon()) ) 
+   ....
+
+22 May 2015 Vladimir Uzhinsky            (hadr-qgsm-V10-01-06)
+   A bug is fixed for gamma projectile. In G4QGSParticipants::BuildInteractions
+   for gamma instead of GetList SelectInteractions(theProjectile) is called.
+
+21 May 2015 Vladimir Uzhinsky            (hadr-qgsm-V10-01-05)
+   Class G4GammaParticipants is adjusted to new QGSM.
+
+20 May 2015 Vladimir Uzhinsky            (hadr-qgsm-V10-01-04)
+   A bug is fixed in G4QGSParticipants for gamma projectile.
+
+19 May 2015 Vladimir Uzhinsky            (hadr-qgsm-V10-01-03)
+   To avoid double deletion erasing of TheInvolvedNucleonsOfTarget and 
+   TheInvolvedNucleonsOfProjectile was closed in G4QGSParticipants::~G4QGSParticipants(). 
+
+15 May 2015 Vladimir Uzhinsky            (hadr-qgsm-V10-01-02)
+   A bug was erased in G4SPBaryon.cc: setting of Delta0 isobar splitting
+   into quark and diquark was wring.
+
+   Energy-momentum conservation was improved, especially in the case when
+   diffraction interactions happend.
+
+12 May 2015 Vladimir Uzhinsky            (hadr-qgsm-V10-01-01)
+   Bug is erased with double delition of splitable hadrons.
+
+30 April 2015 Vladimir Uzhinsky           (hadr-qgsm-V10-01-00)
+-  Essential improvement of QGSM:
+     Reggeon cascading was implemented.
+     "Fermi motion" connected with the reggeon cascading was implemented.
+     New algorithm of parton kinematical properties determination was implemented.
+     Calculation of residual nucleus properties was implemented.
+   Most of the changes were made in G4QGSParticipants.cc
 
 02 May 2013 Alberto Ribon       (hadr-qgsm-V09-06-00)
 --------------------------------------------------

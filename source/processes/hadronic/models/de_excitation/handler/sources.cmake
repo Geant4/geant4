@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
+# $Id: sources.cmake 89246 2015-03-27 16:35:10Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -19,6 +19,8 @@
 include_directories(${CLHEP_INCLUDE_DIRS})
 
 # List internal includes needed.
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPNumerics/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
@@ -30,10 +32,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/ions/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/mesons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/shortlived/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/lowenergy/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/evaporation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/fermi_breakup/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/management/include)
@@ -57,7 +55,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_handler
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
-        G4emlowenergy
+        G4geometrymng
         G4globman
         G4had_mod_util
         G4hadronic_deex_evaporation
@@ -66,9 +64,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_handler
         G4hadronic_deex_multifragmentation
         G4hadronic_deex_photon_evaporation
         G4hadronic_deex_util
-        G4hadronic_mgt
         G4hadronic_util
-        G4hadronic_xsect
         G4hepnumerics
         G4ions
         G4leptons
@@ -76,9 +72,10 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_handler
         G4mesons
         G4partman
         G4procman
-        G4shortlived
         G4track
+        G4volumes
     GLOBAL_DEPENDENCIES
+        G4geometry
         G4global
         G4materials
         G4particles

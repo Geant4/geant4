@@ -1,0 +1,89 @@
+//$Id$
+
+///\file "eventgenerator/GunGPS/.README.txt"
+///\brief Example GunGPS README page
+
+/*! \page GunGPS Example GunGPS
+   
+ This example compares G4particleGun and G4GeneralParticleSource (GPS) in 2 simple situations. 
+  1) point source, isotropic radiation, monoenergetic
+  2) spherical surface source, isotropic radiation within the cavity, monoenergetic 
+ 	
+ \section GunGPS_s1 Geometry construction
+
+ It is a simple box which represents an 'infinite' homogeneous medium.
+  
+ \section GunGPS_s2 Physics list
+
+ PhysicsList.cc defines only geantino and transportation process.
+         	
+ \section GunGPS_s3 Primary generators
+
+ There are 3 concrete primary generator action classes :
+ PrimaryGeneratorGPS, PrimaryGeneratorGun1, PrimaryGeneratorGun2
+ In main GunGPS.cc, select one of them before to compile.
+ Each concrete generator action shoots geantinoes in a distribution decribed below.
+
+ \subsection GunGPS_sub_s31 1. Point source, isotropic radiation
+
+ Use PrimaryGeneratorGun1 with gun1.mac, or PrimaryGeneratorGPS with gps1.mac
+  
+ \subsection GunGPS_sub_s32 2. Spherical surface source, isotropic radiation within the cavity
+
+ Use PrimaryGeneratorGun2 with gun2.mac, or PrimaryGeneratorGPS with gps2.mac
+
+ One wants to limit particle direction uniformly within (alphaMin, alphaMax).
+ First, one generates momentum direction in the master frame (eg. World).
+ Then, one rotates momentum in vertex_position frame, using rotateUz() function.
+ RotateUz() transforms uz to ur. It is composition of two elementary rotations:
+ theta around oy, then phi around oz (non commutative).
+ Histograms 4,5 show particle direction in vertex_position frame.
+
+ \section GunGPS_s4 Visualisation
+ 
+ Visualization Manager is set in the main().
+ Initialisation of the drawing is done via the commands
+ /vis/.. in the macro vis.mac. This macro is automatically read from the main 
+ in case of interactive running mode.
+ 
+ \section GunGPS_s5 How to start ?
+ 
+  - execute GunGPS in 'batch' mode from macro files
+  \verbatim
+ 	% GunGPS   gun1.mac
+  \endverbatim
+  		
+  - execute GunGPS in 'interactive mode' with visualization
+  \verbatim
+ 	% GunGPS
+ 	....
+ 	Idle>      ---> type your commands. For instance:
+    Idle> /control/execute gps0.mac
+	Idle> /run/beamOn 10
+	....
+ 	Idle> exit
+  \endverbatim
+  	
+ \section GunGPS_s6 Histograms
+ 
+  GunGPS produces several 1D histograms which are saved as GunGPS.root by default.
+      1: vertex posi: dN = f(radius)
+      2: vertex posi: dN = f(costheta)
+      3: vertex posi: dN = f(phi)
+      4: particle dir in vertex frame: dN = f(cosalpha)
+      5: particle dir in vertex frame: dN = f(psi)
+      6: particle dir in master frame: dN = f(cosalphaM)
+      7: particle dir in master frame: dN = f(psiM)
+	  
+  The histograms are managed by the HistoManager class and its Messenger. 
+  The histos can be individually activated with the command :
+  \verbatim
+  /analysis/h1/set id nbBins  valMin valMax unit
+  \endverbatim 
+  where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+   
+  One can control the name of the histograms file with the command:
+  \verbatim
+  /analysis/setFileName  name  (default GunGPS)
+  \endverbatim
+*/  

@@ -34,6 +34,8 @@
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 
+class B5EventAction;
+
 class G4Run;
 
 /// Run action class
@@ -41,14 +43,16 @@ class G4Run;
 class B5RunAction : public G4UserRunAction
 {
   public:
-    B5RunAction();
+    B5RunAction(B5EventAction* eventAction);
     virtual ~B5RunAction();
 
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
+
+  private:
+    B5EventAction* fEventAction;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

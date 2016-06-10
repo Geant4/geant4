@@ -179,8 +179,7 @@ inline T sum(const std::vector<T>& a_vec) {
 }
 
 template <class T>  
-inline void filter(std::vector<T>& a_vec,
-                   unsigned int a_mn,unsigned int a_mx){
+inline void filter(std::vector<T>& a_vec,unsigned int a_mn,unsigned int a_mx){
   unsigned int imx = a_vec.size()-1;
   unsigned int mx = a_mx<imx?a_mx:imx;
   unsigned int i = 0;

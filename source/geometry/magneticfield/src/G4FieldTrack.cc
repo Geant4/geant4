@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.cc 81175 2014-05-22 07:39:10Z gcosmo $
+// $Id: G4FieldTrack.cc 93806 2015-11-02 11:21:01Z gcosmo $
 //
 // -------------------------------------------------------------------
 
@@ -33,20 +33,39 @@
 std::ostream& operator<<( std::ostream& os, const G4FieldTrack& SixVec)
 {
      const G4double *SixV = SixVec.SixVector;
+     const int precPos= 9;   // For position
+     const int precEp=  9;   // For Energy / momentum
+     const int precLen= 12;  // For Length along track
+     const int precSpin= 9;  // For polarisation
+     const int precTime= 6;  // For time of flight
+     const int oldpr= os.precision(precPos);
      os << " ( ";
      os << " X= " << SixV[0] << " " << SixV[1] << " "
                   << SixV[2] << " ";  // Position
+     os.precision(precEp);     
      os << " P= " << SixV[3] << " " << SixV[4] << " "
                   << SixV[5] << " ";  // Momentum
      os << " Pmag= "
         << G4ThreeVector(SixV[3], SixV[4], SixV[5]).mag(); // mom magnitude
      os << " Ekin= " << SixVec.fKineticEnergy ;
+     os.precision(precLen);
+     os << " l= " << SixVec.GetCurveLength();
+     os.precision(6);
      os << " m0= " <<   SixVec.fRestMass_c2;
-     os << " Pdir= " <<  SixVec.fMomentumDir.mag(); 
-     os << " l= " <<    SixVec.GetCurveLength();
-     os << " t_lab= " << SixVec.fLabTimeOfFlight; 
-     os << " t_proper= " << SixVec.fProperTimeOfFlight ; 
+     os << " (Pdir-1)= " <<  SixVec.fMomentumDir.mag()-1.0;
+     if( SixVec.fLabTimeOfFlight > 0.0 )   os.precision(precTime);
+     else                                  os.precision(3); 
+     os << " t_lab= "    << SixVec.fLabTimeOfFlight; 
+     os << " t_proper= " << SixVec.fProperTimeOfFlight ;
+     G4ThreeVector pol= SixVec.GetPolarization();
+     if( pol.mag2() > 0.0 ){
+        os.precision(precSpin);
+        os << " PolV= " << pol; // SixVec.GetPolarization();
+     }else{
+        os << " PolV= (0,0,0) "; 
+     }
      os << " ) ";
+     os.precision(oldpr);
      return os;
 }
 

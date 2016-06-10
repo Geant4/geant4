@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04EventActionMessenger.hh 68021 2013-03-13 13:36:07Z gcosmo $
+// $Id: F04EventActionMessenger.hh 90239 2015-05-21 09:07:05Z gcosmo $
 //
 /// \file field/field04/include/F04EventActionMessenger.hh
 /// \brief Definition of the F04EventActionMessenger class
@@ -54,8 +54,6 @@ class F04EventActionMessenger: public G4UImessenger
     F04EventAction* fEventAction;
 
     G4UIcmdWithAnInteger* fSetVerboseCmd;
-    G4UIcmdWithAString*   fDrawCmd;
-    G4UIcmdWithAnInteger* fPrintCmd;
 };
 
 #endif

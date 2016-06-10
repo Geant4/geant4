@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
-// $Id: HistoManager.cc 81932 2014-06-06 15:39:45Z gcosmo $
+// $Id: HistoManager.cc 88154 2015-02-02 12:25:20Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -71,17 +71,16 @@
 #include "globals.hh"
 #include "G4VModularPhysicsList.hh"
 #include "G4VPhysicsConstructor.hh"
-#include "IonDPMJETPhysics.hh"
-#include "G4IonPhysics.hh"
 #include "G4RunManager.hh"
 #include "DetectorConstruction.hh"
 #include "G4NistManager.hh"
 #include "G4Material.hh"
 #include "G4BuilderType.hh"
 #include "G4SystemOfUnits.hh"
-//#ifdef G4_USE_URQMD
+
 #include "IonUrQMDPhysics.hh"
-//#endif
+#include "IonHIJINGPhysics.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 HistoManager* HistoManager::fManager = 0;
@@ -456,18 +455,17 @@ void HistoManager::SetIonPhysics(const G4String& nam)
   if(fIonPhysics) {
     G4cout << "### HistoManager WARNING: Ion Physics is already defined: <"
            << nam << "> is ignored!" << G4endl;
-  } else if(nam == "DPMJET") {
-    fIonPhysics = new IonDPMJETPhysics(false);
-    fPhysList->ReplacePhysics(fIonPhysics);
-    G4RunManager::GetRunManager()->PhysicsHasBeenModified();
-    G4cout << "### SetIonPhysics: Ion Physics DPMJET/Binary is added"
-           << G4endl;
-  } else if(nam == "FTF") {
-    fIonPhysics = new G4IonPhysics();
+  } else if(nam == "HIJING") {
+#ifdef G4_USE_HIJING
+    fIonPhysics = new IonHIJINGPhysics();
     fPhysList->ReplacePhysics(fIonPhysics);
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
     G4cout << "### SetIonPhysics: Ion Physics FTFP/Binary is added"
            << G4endl;
+#else
+    G4cout << "Error: Ion Physics HIJING is requested but is not available"
+           <<G4endl;
+#endif
   } else if(nam == "UrQMD") {
 #ifdef G4_USE_URQMD
     fIonPhysics = new IonUrQMDPhysics(1);

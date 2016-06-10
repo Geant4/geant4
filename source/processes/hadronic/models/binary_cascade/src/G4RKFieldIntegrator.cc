@@ -32,6 +32,9 @@
 #include "G4NuclearFermiDensity.hh"
 #include "G4NuclearShellModelDensity.hh"
 #include "G4Nucleon.hh"
+#include "G4Exp.hh"
+#include "G4Log.hh"
+#include "G4Pow.hh"
 
 // Class G4RKFieldIntegrator
 //*************************************************************************************************************************************
@@ -69,12 +72,12 @@ G4double G4RKFieldIntegrator::CalculateTotalEnergy(const G4KineticTrackVector& B
          G4double r12 = (p1->GetPosition() - p2->GetPosition()).mag()*fermi;
 
          //  Esk2
-         Etot += t1*std::pow(Alpha/pi, 3/2)*std::exp(-Alpha*r12*r12);
+         Etot += t1*G4Pow::GetInstance()->A23(Alpha/pi)*G4Exp(-Alpha*r12*r12);
 
          // Eyuk
-         Etot += Vo*0.5/r12*std::exp(1/(4*Alpha*GammaY*GammaY))*
-            (std::exp(-r12/GammaY)*(1 - Erf(0.5/GammaY/std::sqrt(Alpha) - std::sqrt(Alpha)*r12)) -
-             std::exp( r12/GammaY)*(1 - Erf(0.5/GammaY/std::sqrt(Alpha) + std::sqrt(Alpha)*r12)));
+         Etot += Vo*0.5/r12*G4Exp(1/(4*Alpha*GammaY*GammaY))*
+            (G4Exp(-r12/GammaY)*(1 - Erf(0.5/GammaY/std::sqrt(Alpha) - std::sqrt(Alpha)*r12)) -
+             G4Exp( r12/GammaY)*(1 - Erf(0.5/GammaY/std::sqrt(Alpha) + std::sqrt(Alpha)*r12)));
 
          // Ecoul
          Etot += 1.44*p1->GetDefinition()->GetPDGCharge()*p2->GetDefinition()->GetPDGCharge()/r12*Erf(std::sqrt(Alpha)*r12);
@@ -88,7 +91,7 @@ G4double G4RKFieldIntegrator::CalculateTotalEnergy(const G4KineticTrackVector& B
             G4double r13 = (p1->GetPosition() - p3->GetPosition()).mag()*fermi;
 
             // Esk3
-            Etot  = tGamma*std::pow(4*Alpha*Alpha/3/pi/pi, 1.5)*std::exp(-Alpha*(r12*r12 + r13*r13));
+            Etot  = tGamma*G4Pow::GetInstance()->powA(4*Alpha*Alpha/3/pi/pi, 1.5)*G4Exp(-Alpha*(r12*r12 + r13*r13));
             }
          }
       }
@@ -137,12 +140,12 @@ G4double G4RKFieldIntegrator::Erf(G4double X)
             AP = P2[c1] + V*AP;
             AQ = Q2[c1] + V*AQ;
             }
-	 H = 1 - std::exp(-V*V)*AP/AQ;
+	 H = 1 - G4Exp(-V*V)*AP/AQ;
 	 }
       else
         {
         Y = 1./V*V;
-        H = 1 - std::exp(-V*V)*(C1+Y*(P30 + P31*Y)/(Q30 + Y))/V;
+        H = 1 - G4Exp(-V*V)*(C1+Y*(P30 + P31*Y)/(Q30 + Y))/V;
         }
      if (X < 0)
         H = -H;
@@ -185,7 +188,7 @@ G4double G4RKFieldIntegrator::GetExcitationEnergy(G4int nHitNucleons, const G4Ki
    G4double Sum = 0;
    for(G4int c1 = 0; c1 < nHitNucleons; c1++)
        {
-       Sum += -MeanE*std::log(G4UniformRand());
+       Sum += -MeanE*G4Log(G4UniformRand());
        }
    return Sum;
 }
@@ -264,7 +267,7 @@ G4double G4RKFieldIntegrator::GetProtonPotential(G4double )
 {
    /*
    // calculate Coulomb barrier value
-   G4double theCoulombBarrier = coulomb * theZ/(1. + std::pow(theA, 1./3.));
+   G4double theCoulombBarrier = coulomb * theZ/(1. + G4Pow::GetInstance()->Z13(theA));
    const G4double Mp  = 938.27231 * MeV; // mass of proton
 
    G4VNuclearDensity *theDencity;

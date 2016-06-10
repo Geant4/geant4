@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsShielding.cc 83699 2014-09-10 07:18:25Z gcosmo $
+// $Id: G4HadronPhysicsShielding.cc 93878 2015-11-03 08:18:00Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -54,22 +54,25 @@
 #include "G4ShortLivedConstructor.hh"
 #include "G4IonConstructor.hh"
 
-#include "G4BGGNucleonInelasticXS.hh"
-#include "G4NeutronHPBGGNucleonInelasticXS.hh"
-#include "G4NeutronHPJENDLHEInelasticData.hh"
-#include "G4NeutronHPInelasticData.hh"
+#include "G4ParticleHPBGGNucleonInelasticXS.hh"
+#include "G4ParticleHPJENDLHEInelasticData.hh"
+#include "G4ParticleHPInelasticData.hh"
 
-#include "G4ChipsKaonMinusInelasticXS.hh"
-#include "G4ChipsKaonPlusInelasticXS.hh"
-#include "G4ChipsKaonZeroInelasticXS.hh"
+#include "G4BGGNucleonInelasticXS.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
 #include "G4PhysListUtil.hh"
 
+#include "G4ComponentGGHadronNucleusXsc.hh"
+#include "G4CrossSectionInelastic.hh"
 #include "G4HadronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
 #include "G4NeutronCaptureXS.hh"
-#include "G4NeutronHPCaptureData.hh"
+#include "G4ParticleHPCaptureData.hh"
 #include "G4LFission.hh"
+
+#include "G4CrossSectionDataSetRegistry.hh"
+
+#include "G4PhysListUtil.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -119,10 +122,10 @@ void G4HadronPhysicsShielding::CreateModels()
   tpdata->theNeutrons->RegisterMe(tpdata->theBertiniNeutron=new G4BertiniNeutronBuilder);
   tpdata->theBertiniNeutron->SetMinEnergy(minNonHPNeutronEnergy_);
   tpdata->theBertiniNeutron->SetMaxEnergy(maxBertiniEnergy_);
-  //tpdata->theNeutrons->RegisterMe(tpdata->theHPNeutron=new G4NeutronHPBuilder);
+  //tpdata->theNeutrons->RegisterMe(tpdata->theHPNeutron=new G4NeutronPHPBuilder);
 
   if ( useLEND_ != true )
-     tpdata->theNeutrons->RegisterMe(tpdata->theLENeutron=new G4NeutronHPBuilder);
+     tpdata->theNeutrons->RegisterMe(tpdata->theLENeutron=new G4NeutronPHPBuilder);
   else
   {
      tpdata->theNeutrons->RegisterMe(tpdata->theLENeutron=new G4NeutronLENDBuilder(evaluation_));
@@ -203,30 +206,28 @@ void G4HadronPhysicsShielding::ConstructProcess()
   tpdata->theNeutrons->Build();
     
   tpdata->theBGGxsNeutron = 0; //set explictly to zero or destructor may fail
-//  tpdata->theBGGxsNeutron=new  G4NeutronHPBGGNucleonInelasticXS(G4Neutron::Neutron());
+//  tpdata->theBGGxsNeutron=new  G4ParticleHPBGGNucleonInelasticXS(G4Neutron::Neutron());
 //  FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(tpdata->theBGGxsNeutron);
 //
 
   G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(new  G4BGGNucleonInelasticXS(G4Neutron::Neutron()));
-  tpdata->theNeutronHPJENDLHEInelastic=new G4NeutronHPJENDLHEInelasticData;
+  tpdata->theNeutronHPJENDLHEInelastic=new G4ParticleHPJENDLHEInelasticData;
   G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(tpdata->theNeutronHPJENDLHEInelastic);
-  G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(new G4NeutronHPInelasticData);
+  G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(new G4ParticleHPInelasticData);
     
   tpdata->theBGGxsProton=0;
 //  tpdata->theBGGxsProton=new G4BGGNucleonInelasticXS(G4Proton::Proton());
 //  G4PhysListUtil::FindInelasticProcess(G4Proton::Proton())->AddDataSet(tpdata->theBGGxsProton);
 
   tpdata->thePiK->Build();
-  // use CHIPS cross sections also for Kaons
 
-  tpdata->theChipsKaonMinus = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusInelasticXS::Default_Name());
-  tpdata->theChipsKaonPlus = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name());
-  tpdata->theChipsKaonZero = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name());
-    
-  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(tpdata->theChipsKaonMinus);
-  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(tpdata->theChipsKaonPlus);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(tpdata->theChipsKaonZero );
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(tpdata->theChipsKaonZero );
+  // --- Kaons ---
+  tpdata->xsKaon = new G4ComponentGGHadronNucleusXsc();
+  G4VCrossSectionDataSet * kaonxs = new G4CrossSectionInelastic(tpdata->xsKaon);
+  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(kaonxs);
+  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(kaonxs);
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(kaonxs);
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(kaonxs);
 
   tpdata->theHyperon->Build();
   tpdata->theAntiBaryon->Build();
@@ -249,7 +250,7 @@ void G4HadronPhysicsShielding::ConstructProcess()
   }
   tpdata->xsNeutronCaptureXS = (G4NeutronCaptureXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronCaptureXS::Default_Name());
   capture->AddDataSet(tpdata->xsNeutronCaptureXS);
-  capture->AddDataSet( new G4NeutronHPCaptureData );
+  capture->AddDataSet( new G4ParticleHPCaptureData );
   G4NeutronRadCapture* theNeutronRadCapture = new G4NeutronRadCapture(); 
   theNeutronRadCapture->SetMinEnergy( minNonHPNeutronEnergy_ ); 
   capture->RegisterMe( theNeutronRadCapture );

@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
+# $Id: sources.cmake 88406 2015-02-18 09:13:29Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -33,8 +33,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/ions/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/mesons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/shortlived/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/evaporation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/fermi_breakup/include)
@@ -48,7 +46,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/managem
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/pre_equilibrium/exciton_model/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 
 #
@@ -78,7 +75,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_ablation
         G4hadronic_deex_util
         G4hadronic_mgt
         G4hadronic_util
-        G4hadronic_xsect
         G4hepnumerics
         G4ions
         G4leptons
@@ -87,7 +83,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_ablation
         G4mesons
         G4partman
         G4procman
-        G4shortlived
         G4track
         G4volumes
     GLOBAL_DEPENDENCIES

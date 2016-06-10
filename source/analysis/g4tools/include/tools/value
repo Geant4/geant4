@@ -6,7 +6,8 @@
 
 #include "array"
 #include "typedefs"
-#include "tos" //for tos
+#include "num2s"
+#include "b2s"
 
 #ifdef TOOLS_MEM
 #include "mem"
@@ -395,12 +396,17 @@ public:
     return s;
   }
 */
+private:
+  static const std::string& s_empty() {
+    static const std::string s_v("");
+    return s_v;
+  }
 public:
   void set_label(const std::string& a_s) {
     delete m_label;
     m_label = new std::string(a_s);
   }
-  std::string label() const {return m_label?(*m_label):"";}
+  const std::string& label() const {return m_label?(*m_label):s_empty();}
 
   e_type type() const {return m_type;}
   void set_type(e_type a_type) {
@@ -541,8 +547,8 @@ public:
     u.m_int_star = a_value;
   }
 
-  unsigned char get_unsigned_char() const {return u.m_unsigned_char;}
-  char get_char() const {return u.m_char;}
+  //unsigned char get_unsigned_char() const {return u.m_unsigned_char;}
+  //char get_char() const {return u.m_char;}
   unsigned int get_unsigned_int() const {return u.m_unsigned_int;}
   int get_int() const {return u.m_int;}
 
@@ -560,7 +566,6 @@ public:
   bool get_bool() const {return u.m_bool;}
 
   const std::string& get_string() const {return *u.m_string;}
-  std::string get_string() {return *u.m_string;}
 
 #define TOOLS_VALUE_SET(a_what,a_m_what,a_type) \
   void set(const std::vector<unsigned int>& a_orders,\
@@ -735,38 +740,29 @@ public:
     //  return true;
   
     case ARRAY_UNSIGNED_SHORT:
-      a_s = tools::tos<unsigned short>(a_v.u.m_array_unsigned_short->vector());
-      return true;
+      return tools::nums2s<unsigned short>(a_v.u.m_array_unsigned_short->vector(),a_s);
     case ARRAY_SHORT:
-      a_s = tools::tos<short>(a_v.u.m_array_short->vector());
-      return true;
+      return tools::nums2s<short>(a_v.u.m_array_short->vector(),a_s);
   
     case ARRAY_UNSIGNED_INT:
-      a_s = tools::tos<unsigned int>(a_v.u.m_array_unsigned_int->vector());
-      return true;
+      return tools::nums2s<unsigned int>(a_v.u.m_array_unsigned_int->vector(),a_s);
     case ARRAY_INT:
-      a_s = tools::tos<int>(a_v.u.m_array_int->vector());
-      return true;
+      return tools::nums2s<int>(a_v.u.m_array_int->vector(),a_s);
   
     case ARRAY_UNSIGNED_INT64:
-      a_s = tools::tos<uint64>(a_v.u.m_array_unsigned_int64->vector());
-      return true;
+      return tools::nums2s<uint64>(a_v.u.m_array_unsigned_int64->vector(),a_s);
     case ARRAY_INT64:
-      a_s = tools::tos<int64>(a_v.u.m_array_int64->vector());
-      return true;
+      return tools::nums2s<int64>(a_v.u.m_array_int64->vector(),a_s);
   
     case ARRAY_FLOAT:
-      a_s = tools::tos<float>(a_v.u.m_array_float->vector());
-      return true;
+      return tools::nums2s<float>(a_v.u.m_array_float->vector(),a_s);
     case ARRAY_DOUBLE:
-      a_s = tools::tos<double>(a_v.u.m_array_double->vector());
-      return true;
+      return tools::nums2s<double>(a_v.u.m_array_double->vector(),a_s);
     case ARRAY_BOOL:
-      a_s = tools::tos<bool>(a_v.u.m_array_bool->vector());
+      tools::b2s(a_v.u.m_array_bool->vector(),a_s);
       return true;
     case ARRAY_STRING:
-      a_s = tools::tos<std::string>(a_v.u.m_array_string->vector());
-      return true;
+      return tools::nums2s<std::string>(a_v.u.m_array_string->vector(),a_s);
     default:
       a_s.clear();  
       return false;
@@ -1059,13 +1055,13 @@ protected:
   e_type m_type;
   union {
     bool m_bool;
-    char m_char;
+    //char m_char;
     int m_int;
     short m_short;
     int64 m_int64;
     float m_float;
     double m_double;
-    unsigned char m_unsigned_char;
+    //unsigned char m_unsigned_char;
     unsigned short m_unsigned_short;
     unsigned int m_unsigned_int;
     uint64 m_unsigned_int64;

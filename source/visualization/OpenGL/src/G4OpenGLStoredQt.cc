@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQt.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4OpenGLStoredQt.cc 91686 2015-07-31 09:40:08Z gcosmo $
 //
 // 
 // OpenGLStoredQt graphics system factory.
@@ -57,9 +57,6 @@ G4VSceneHandler* G4OpenGLStoredQt::CreateSceneHandler
 
 G4VViewer* G4OpenGLStoredQt::CreateViewer
 (G4VSceneHandler& scene, const G4String& name) {
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLStoredQt::CreateViewer \n");
-#endif
   G4VViewer* pView = 0;
   pView = new G4OpenGLStoredQtViewer
     ((G4OpenGLStoredSceneHandler&) scene, name);
@@ -76,9 +73,6 @@ G4VViewer* G4OpenGLStoredQt::CreateViewer
     G4cerr << "G4OpenGLStoredQt::CreateViewer: null pointer on"
       " new G4OpenGLStoredQtViewer." << G4endl;
   }
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLStoredQt::CreateViewer END \n");
-#endif
   return pView;
 }
 

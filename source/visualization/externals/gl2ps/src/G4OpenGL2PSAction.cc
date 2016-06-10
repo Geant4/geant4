@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGL2PSAction.cc 82763 2014-07-08 14:22:48Z gcosmo $
+// $Id: G4OpenGL2PSAction.cc 88206 2015-02-03 13:01:27Z gcosmo $
 //
 // 
 
@@ -156,7 +156,16 @@ bool G4OpenGL2PSAction::extendBufferSize(
   }
   return false;
 }
-//////////////////////////////////////////////////////////////////////////////
+
+
+// FWJ
+void G4OpenGL2PSAction::setBufferSize(int newSize)
+{
+  fBufferSize = (newSize < int(fBufferSizeLimit))
+              ? GLint(newSize) : fBufferSizeLimit;
+}
+
+
 bool G4OpenGL2PSAction::fileWritingEnabled(
 ) const
 //////////////////////////////////////////////////////////////////////////////

@@ -158,6 +158,28 @@ EVolume G4ITNavigator2::CharacteriseDaughters(const G4LogicalVolume *pLog) const
   return pLog->CharacteriseDaughters();
 }
 
+inline std::shared_ptr<G4ITNavigatorState_Lock2> G4ITNavigator2::GetSnapshotOfState()
+{
+  if(fpNavigatorState)
+  {
+    std::shared_ptr<G4ITNavigatorState_Lock2>
+      snapShot(new G4NavigatorState(*fpNavigatorState));
+   return snapShot;
+  }
+  else
+  {
+    return std::shared_ptr<G4ITNavigatorState_Lock2>(0);
+  }
+}
+
+inline void G4ITNavigator2::ResetFromSnapshot(std::shared_ptr<G4ITNavigatorState_Lock2> snapShot)
+{
+  if(fpNavigatorState && snapShot)
+  {
+    *fpNavigatorState = *((G4NavigatorState*) snapShot.get());
+  }
+}
+
 // ********************************************************************
 // GetDaughtersRegularStructureId
 // ********************************************************************

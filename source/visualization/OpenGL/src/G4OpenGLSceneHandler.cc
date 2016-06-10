@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc 85263 2014-10-27 08:58:31Z gcosmo $
+// $Id: G4OpenGLSceneHandler.cc 91686 2015-07-31 09:40:08Z gcosmo $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -348,9 +348,6 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
         G4Vector3D r = start; r.rotate(phi, viewpointDirection);
         G4Vector3D p = polymarker[iPoint] + r;
 
-#ifdef G4DEBUG_VIS_OGL
-        printf(".....G4OpenGLSceneHandler::AddPrimitive polyhedron QUADS VBO 5\n");
-#endif
         fOglVertex.push_back(p.x());
         fOglVertex.push_back(p.y());
         fOglVertex.push_back(p.z());
@@ -747,9 +744,6 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
                     vertex[edgeCount].y(),
                     vertex[edgeCount].z());
 #else
-#ifdef G4DEBUG_VIS_OGL
-        printf(".....G4OpenGLSceneHandler::AddPrimitive polyhedron QUADS VBO 2\n");
-#endif
 				fOglVertex.push_back(vertex[edgeCount].x());
         fOglVertex.push_back(vertex[edgeCount].y());
         fOglVertex.push_back(vertex[edgeCount].z());
@@ -817,9 +811,6 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
                     vertex[edgeCount].y(),
                     vertex[edgeCount].z());
 #else
-#ifdef G4DEBUG_VIS_OGL
-        printf(".....G4OpenGLSceneHandler::AddPrimitive polyhedron QUADS VBO 3\n");
-#endif
 				fOglVertex.push_back(vertex[edgeCount].x());
         fOglVertex.push_back(vertex[edgeCount].y());
         fOglVertex.push_back(vertex[edgeCount].z());
@@ -993,9 +984,6 @@ void G4OpenGLSceneHandler::OptimizeVBOForCons(G4int aNoFaces){
 
 void G4OpenGLSceneHandler::glBeginVBO(GLenum type)  {
   fDrawArrayType = type;
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLSceneHandler::glBeginVBO %d\n",type);
-#endif
 #ifndef G4VIS_BUILD_OPENGLWT_DRIVER
   glGenBuffers(1,&fVertexBufferObject);
   glGenBuffers(1,&fIndicesBufferObject);
@@ -1105,11 +1093,7 @@ void G4OpenGLSceneHandler::glEndVBO()  {
     //----------------------------
     glBindBuffer(GL_ARRAY_BUFFER, fVertexBufferObject);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, fIndicesBufferObject);
-    
-#ifdef G4DEBUG_VIS_OGL
-    printf("G4OpenGLSceneHandler::glEndVBO() To DrawElements:%d vertex and %d indices\n",fOglVertex.size()/6,fOglIndices.size());
-#endif
-    
+        
     // the fVertexPositionAttribute is inside the G4OpenGLViewer
     G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
     if (pGLViewer) {

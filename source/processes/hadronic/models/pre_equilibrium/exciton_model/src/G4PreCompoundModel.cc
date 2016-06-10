@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundModel.cc 80062 2014-03-31 13:41:30Z gcosmo $
+// $Id: G4PreCompoundModel.cc 91837 2015-08-07 07:27:08Z gcosmo $
 //
 // by V. Lara
 //
@@ -39,7 +39,8 @@
 //                      - CEM transition probabilities (useCEMtr=true)  
 // 20.08.2010 V.Ivanchenko Cleanup of the code: 
 //                      - integer Z and A;
-//                      - emission and transition classes created at initialisation
+//                      - emission and transition classes created at 
+//                        initialisation
 //                      - options are set at initialisation
 //                      - do not use copy-constructors for G4Fragment  
 // 03.01.2012 V.Ivanchenko Added pointer to G4ExcitationHandler to the 
@@ -64,15 +65,18 @@
 #include "G4LorentzVector.hh"
 #include "G4Exp.hh"
 
+////////////////////////////////////////////////////////////////////////////////
+
 G4PreCompoundModel::G4PreCompoundModel(G4ExcitationHandler* ptr) 
   : G4VPreCompoundModel(ptr,"PRECO"), useHETCEmission(false), 
     useGNASHTransition(false), OPTxs(3), useSICB(false), 
     useNGB(false), useSCO(false), useCEMtr(true), maxZ(3), maxA(5) 
-				      //maxZ(9), maxA(17)
 {
   if(!ptr) { SetExcitationHandler(new G4ExcitationHandler()); }
   G4PreCompoundParameters param;
-  fLevelDensity = param.GetLevelDensity();
+
+  // 12/pi2 factor is used in real computation
+  fLevelDensity = param.GetLevelDensity()*12.0/CLHEP::pi2;
 
   theEmission = new G4PreCompoundEmission();
   if(useHETCEmission) { theEmission->SetHETCModel(); }
@@ -89,6 +93,8 @@ G4PreCompoundModel::G4PreCompoundModel(G4ExcitationHandler* ptr)
   neutron = G4Neutron::Neutron();
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
 G4PreCompoundModel::~G4PreCompoundModel() 
 {
   delete theEmission;
@@ -96,44 +102,20 @@ G4PreCompoundModel::~G4PreCompoundModel()
   delete GetExcitationHandler();
 }
 
-void G4PreCompoundModel::ModelDescription(std::ostream& outFile) const
-{
-	outFile << "The GEANT4 precompound model is considered as an extension of the\n"
-		<<	"hadron kinetic model. It gives a possibility to extend the low energy range\n"
-		<<	"of the hadron kinetic model for nucleon-nucleus inelastic collision and it \n"
-		<<	"provides a ”smooth” transition from kinetic stage of reaction described by the\n"
-		<<	"hadron kinetic model to the equilibrium stage of reaction described by the\n"
-		<<	"equilibrium deexcitation models.\n"
-		<<	"The initial information for calculation of pre-compound nuclear stage\n"
-		<<	"consists of the atomic mass number A, charge Z of residual nucleus, its\n"
-		<<	"four momentum P0 , excitation energy U and number of excitons n, which equals\n"
-		<<	"the sum of the number of particles p (from them p_Z are charged) and the number of\n"
-		<<	"holes h.\n"
-		<<	"At the preequilibrium stage of reaction, we follow the exciton model approach in ref. [1],\n"
-		<<	"taking into account the competition among all possible nuclear transitions\n"
-		<<	"with ∆n = +2, −2, 0 (which are deﬁned by their associated transition probabilities) and\n"
-		<<	"the emission of neutrons, protons, deutrons, thritium and helium nuclei (also defined by\n"
-		<<	"their associated emission  probabilities according to exciton model)\n"
-		<<	"\n"
-		<<	"[1] K.K. Gudima, S.G. Mashnik, V.D. Toneev, Nucl. Phys. A401 329 (1983)\n"
-		<< "\n";
-}
-void G4PreCompoundModel::DeExciteModelDescription(std::ostream& outFile) const
-{
-   outFile << "description of precompound model as used with DeExcite()"
-           << "\n";
-}
-/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-G4HadFinalState* G4PreCompoundModel::ApplyYourself(const G4HadProjectile & thePrimary,
-						   G4Nucleus & theNucleus)
+G4HadFinalState* 
+G4PreCompoundModel::ApplyYourself(const G4HadProjectile & thePrimary,
+				  G4Nucleus & theNucleus)
 {  
   const G4ParticleDefinition* primary = thePrimary.GetDefinition();
   if(primary != neutron && primary != proton) {
-    std::ostringstream errOs;
-    errOs << "BAD primary type in G4PreCompoundModel: " 
-	  << primary->GetParticleName() <<G4endl;
-    throw G4HadronicException(__FILE__, __LINE__, errOs.str());
+    G4ExceptionDescription ed;
+    ed << "G4PreCompoundModel is used for ";
+    if(primary) { ed << primary->GetParticleName(); }
+    G4Exception("G4PreCompoundModel::ApplyYourself()","had0033",FatalException,
+                ed,"");
+    return 0;
   }
 
   G4int Zp = 0;
@@ -153,16 +135,8 @@ G4HadFinalState* G4PreCompoundModel::ApplyYourself(const G4HadProjectile & thePr
 
   // prepare fragment
   G4Fragment anInitialState(A + Ap, Z + Zp, p);
-
-  // projectile and target nucleons
-  // Add nucleon on which interaction happens
-  //++Ap;
-  //if(A*G4UniformRand() <= G4double(Z)) { Zp += 1; }
   anInitialState.SetNumberOfExcitedParticle(2, 1);
   anInitialState.SetNumberOfHoles(1,0);
-  //  anInitialState.SetNumberOfExcitedParticle(Ap, Zp);
-  // anInitialState.SetNumberOfHoles(Ap,Zp);
-
   anInitialState.SetCreationTime(thePrimary.GetGlobalTime());
   
   // call excitation handler
@@ -171,7 +145,8 @@ G4HadFinalState* G4PreCompoundModel::ApplyYourself(const G4HadProjectile & thePr
   // fill particle change
   theResult.Clear();
   theResult.SetStatusChange(stopAndKill);
-  for(G4ReactionProductVector::iterator i= result->begin(); i != result->end(); ++i)
+  for(G4ReactionProductVector::iterator i= result->begin(); 
+      i != result->end(); ++i)
     {
       G4DynamicParticle * aNew = 
 	new G4DynamicParticle((*i)->GetDefinition(),
@@ -186,7 +161,7 @@ G4HadFinalState* G4PreCompoundModel::ApplyYourself(const G4HadProjectile & thePr
   return &theResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
 {
@@ -205,22 +180,14 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
   }
   
   // main loop  
+  G4int count = 0;
+  const G4int countmax = 1000;
   for (;;) {
-    
-    //fragment++;
-    //G4cout<<"-------------------------------------------------------------------"<<G4endl;
-    //G4cout<<"Fragment number .. "<<fragment<<G4endl;
-    
-    // Initialize fragment according with the nucleus parameters
-    //G4cout << "### Loop over fragment" << G4endl;
+    //G4cout << "### PreCompound loop over fragment" << G4endl;
     //G4cout << aFragment << G4endl;
-
-    theEmission->Initialize(aFragment);
-    
-    G4double gg = (6.0/pi2)*aFragment.GetA_asInt()*fLevelDensity;
-    
     G4int EquilibriumExcitonNumber = 
-      G4lrint(std::sqrt(2*gg*aFragment.GetExcitationEnergy()));
+      G4lrint(std::sqrt(aFragment.GetExcitationEnergy()
+			*aFragment.GetA_asInt()*fLevelDensity));
     //   
     //    G4cout<<"Neq="<<EquilibriumExcitonNumber<<G4endl;
     //
@@ -237,11 +204,10 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
     //        G4double NE=aFragment.GetNumberOfExcitons();
     //        G4cout<<" Ex. Energy="<<aFragment.GetExcitationEnergy()<<G4endl;
     //   G4cout<<"N. excitons="<<NE<<"  N. Part="<<NP<<"N. Holes ="<<NH<<G4endl;
-    //G4int transition=0;
     do {
-      //transition++;
-      //G4cout<<"transition number .."<<transition<<G4endl;
-      //G4cout<<" n ="<<aFragment.GetNumberOfExcitons()<<G4endl;
+      ++count;
+      //G4cout<<"transition number .."<<count
+      //      <<" n ="<<aFragment.GetNumberOfExcitons()<<G4endl;
       G4bool go_ahead = false;
       // soft cutoff criterium as an "ad-hoc" solution to force 
       // increase in  evaporation  
@@ -255,7 +221,7 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
 	  if( G4UniformRand() < 1.0 -  G4Exp(-x*x/0.32) ) { go_ahead = false; }
 	} 
         
-      // JMQ: WARNING:  CalculateProbability MUST be called prior to Get methods !! 
+      // JMQ: WARNING:  CalculateProbability MUST be called prior to Get!! 
       // (O values would be returned otherwise)
       G4double TotalTransitionProbability = 
 	theTransition->CalculateProbability(aFragment);
@@ -269,7 +235,7 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
       //V.Ivanchenko (May 2011) added check on number of nucleons
       //                        to send a fragment to FermiBreakUp
       if(!go_ahead || P1 <= P2+P3 || 
-	 (aFragment.GetZ_asInt() < maxZ && aFragment.GetA_asInt() < maxA) )        
+	 (aFragment.GetZ_asInt() < maxZ && aFragment.GetA_asInt() < maxA) )
 	{
 	  //G4cout<<"#4 EquilibriumEmission"<<G4endl; 
 	  PerformEquilibriumEmission(aFragment,Result);
@@ -277,11 +243,6 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
 	}
       else 
 	{
-	  G4double TotalEmissionProbability = 
-	    theEmission->GetTotalProbability(aFragment);
-	  //
-	  //G4cout<<"#1 TotalEmissionProbability="<<TotalEmissionProbability
-	  // <<" Nex= " <<aFragment.GetNumberOfExcitons()<<G4endl;
 	  //
 	  // Check if number of excitons is greater than 0
 	  // else perform equilibrium emission
@@ -291,6 +252,11 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
 	      return Result;
 	    }
 	    
+	  G4double TotalEmissionProbability = 
+	    theEmission->GetTotalProbability(aFragment);
+	  //
+	  //G4cout<<"#1 TotalEmissionProbability="<<TotalEmissionProbability
+	  // <<" Nex= " <<aFragment.GetNumberOfExcitons()<<G4endl;
 	  //J.M.Quesada (May 08) this has already been done in order to decide  
 	  //                     what to do (preeq-eq) 
 	  // Sum of all probabilities
@@ -314,14 +280,26 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
 	      Result->push_back(theEmission->PerformEmission(aFragment));
 	    }
 	}
+      // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
     } while (ThereIsTransition);   // end of do loop
+
+    // stop if too many iterations
+    if(count >= countmax) {
+      G4ExceptionDescription ed;
+      ed << "G4PreCompoundModel loop over " << countmax << " iterations; "
+	 << "current G4Fragment: \n" << aFragment;
+      G4Exception("G4PreCompoundModel::DeExcite()","had0034",JustWarning,
+		  ed,"");
+      PerformEquilibriumEmission(aFragment, Result);
+      return Result;
+    }
   } // end of for (;;) loop
   return Result;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //       Initialisation
-/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 void G4PreCompoundModel::UseHETCEmission() 
 { 
@@ -376,6 +354,39 @@ void G4PreCompoundModel::UseSCO()
 void G4PreCompoundModel::UseCEMtr() 
 { 
   useCEMtr = true; 
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//       Documentation
+////////////////////////////////////////////////////////////////////////////////
+
+void G4PreCompoundModel::ModelDescription(std::ostream& outFile) const
+{
+	outFile << "The GEANT4 precompound model is considered as an extension of the\n"
+		<<	"hadron kinetic model. It gives a possibility to extend the low energy range\n"
+		<<	"of the hadron kinetic model for nucleon-nucleus inelastic collision and it \n"
+		<<	"provides a ”smooth” transition from kinetic stage of reaction described by the\n"
+		<<	"hadron kinetic model to the equilibrium stage of reaction described by the\n"
+		<<	"equilibrium deexcitation models.\n"
+		<<	"The initial information for calculation of pre-compound nuclear stage\n"
+		<<	"consists of the atomic mass number A, charge Z of residual nucleus, its\n"
+		<<	"four momentum P0 , excitation energy U and number of excitons n, which equals\n"
+		<<	"the sum of the number of particles p (from them p_Z are charged) and the number of\n"
+		<<	"holes h.\n"
+		<<	"At the preequilibrium stage of reaction, we follow the exciton model approach in ref. [1],\n"
+		<<	"taking into account the competition among all possible nuclear transitions\n"
+		<<	"with ∆n = +2, −2, 0 (which are deﬁned by their associated transition probabilities) and\n"
+		<<	"the emission of neutrons, protons, deutrons, thritium and helium nuclei (also defined by\n"
+		<<	"their associated emission  probabilities according to exciton model)\n"
+		<<	"\n"
+		<<	"[1] K.K. Gudima, S.G. Mashnik, V.D. Toneev, Nucl. Phys. A401 329 (1983)\n"
+		<< "\n";
+}
+
+void G4PreCompoundModel::DeExciteModelDescription(std::ostream& outFile) const
+{
+   outFile << "description of precompound model as used with DeExcite()"
+           << "\n";
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

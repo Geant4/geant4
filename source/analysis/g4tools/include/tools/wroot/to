@@ -119,6 +119,42 @@ inline bool to(directory& a_dir,const histo::p2d& a_histo,const std::string& a_n
   return true;
 }
 
+inline bool write_histos(directory& a_dir,const std::vector< std::pair<std::string,void*> >& a_hists) {
+  typedef std::pair<std::string,void*> class_pointer;
+
+  tools_vforcit(class_pointer,a_hists,it) {
+    const std::string& scls = (*it).first;
+    void* p = (*it).second;
+    if(scls==histo::h1d::s_class()) {
+      histo::h1d& h = *((histo::h1d*)p);
+      if(!to(a_dir,h,h.title())) return false;
+
+    } else if(scls==histo::h2d::s_class()) {
+      histo::h2d& h = *((histo::h2d*)p);
+      if(!to(a_dir,h,h.title())) return false;
+
+    } else if(scls==histo::h3d::s_class()) {
+      histo::h3d& h = *((histo::h3d*)p);
+      if(!to(a_dir,h,h.title())) return false;
+
+    } else if(scls==histo::p1d::s_class()) {
+      histo::p1d& h = *((histo::p1d*)p);
+      if(!to(a_dir,h,h.title())) return false;
+
+    } else if(scls==histo::p2d::s_class()) {
+      histo::p2d& h = *((histo::p2d*)p);
+      if(!to(a_dir,h,h.title())) return false;
+
+    } else {
+      a_dir.file().out() << "tools::wroot::write_histos :"
+                         << " WARNING : class " << scls << " not handled."
+                         << std::endl;
+    }
+ 
+  }
+  return true;
+}
+
 }}
 
 #include "member_writer"

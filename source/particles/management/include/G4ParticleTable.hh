@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.hh 84274 2014-10-13 07:15:37Z gcosmo $
+// $Id: G4ParticleTable.hh 94421 2015-11-16 08:22:56Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -94,7 +94,9 @@ class G4ParticleTable
    // thread to achieve the partial effect as that of the master thread.
 
    virtual ~G4ParticleTable();
-   // Do we need DestroySlaveG4ParticleTable()?
+   void DestroyWorkerG4ParticleTable();
+   // This method is similar to the destructor. It is used by each worker
+   // thread to achieve the partial effect as that of the master thread.
   
  public: // With Description
    static G4ParticleTable* GetParticleTable();
@@ -194,8 +196,8 @@ class G4ParticleTable
    // "G4ThreadLocal".
  
    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-   //Phase I changes this member to be thread local while each thread holds
-   //its own copy of particles.
+   //Phase I changes this member to be thread local 
+   //,while each thread holds its own copy of particles.
    //Phase II changes this member back in order to share particles.
    static G4ParticleTable*  fgParticleTable;
 

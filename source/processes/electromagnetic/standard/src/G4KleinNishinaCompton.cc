@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaCompton.cc 82754 2014-07-08 14:06:13Z gcosmo $
+// $Id: G4KleinNishinaCompton.cc 93362 2015-10-19 13:45:19Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -78,7 +78,7 @@ G4KleinNishinaCompton::G4KleinNishinaCompton(const G4ParticleDefinition*,
   theGamma = G4Gamma::Gamma();
   theElectron = G4Electron::Electron();
   lowestSecondaryEnergy = 100.0*eV;
-  fParticleChange = 0;
+  fParticleChange = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -92,13 +92,15 @@ void G4KleinNishinaCompton::Initialise(const G4ParticleDefinition* p,
                                        const G4DataVector& cuts)
 {
   if(IsMaster()) { InitialiseElementSelectors(p, cuts); }
-  if(!fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
+  if(nullptr == fParticleChange) { 
+    fParticleChange = GetParticleChangeForGamma(); 
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4KleinNishinaCompton::InitialiseLocal(const G4ParticleDefinition*,
-					    G4VEmModel* masterModel)
+                                            G4VEmModel* masterModel)
 {
   SetElementSelectors(masterModel->GetElementSelectors());
 }
@@ -125,7 +127,7 @@ G4double G4KleinNishinaCompton::ComputeCrossSectionPerAtom(
   G4double X   = max(GammaEnergy, T0) / electron_mass_c2;
   xSection = p1Z*G4Log(1.+2.*X)/X
                + (p2Z + p3Z*X + p4Z*X*X)/(1. + a*X + b*X*X + c*X*X*X);
-		
+                
   //  modification for low energy. (special case for Hydrogen)
   if (GammaEnergy < T0) {
     static const G4double dT0 = keV;
@@ -146,10 +148,10 @@ G4double G4KleinNishinaCompton::ComputeCrossSectionPerAtom(
 
 void G4KleinNishinaCompton::SampleSecondaries(
                             std::vector<G4DynamicParticle*>* fvect,
-			    const G4MaterialCutsCouple*,
-			    const G4DynamicParticle* aDynamicGamma,
-			    G4double,
-			    G4double)
+                            const G4MaterialCutsCouple*,
+                            const G4DynamicParticle* aDynamicGamma,
+                            G4double,
+                            G4double)
 {
   // The scattered gamma energy is sampled according to Klein - Nishina formula.
   // The random number techniques of Butcher & Messel are used 
@@ -174,7 +176,10 @@ void G4KleinNishinaCompton::SampleSecondaries(
   G4double eps0       = 1./(1. + 2.*E0_m);
   G4double epsilon0sq = eps0*eps0;
   G4double alpha1     = - G4Log(eps0);
-  G4double alpha2     = 0.5*(1.- epsilon0sq);
+  G4double alpha2     = alpha1 + 0.5*(1.- epsilon0sq);
+
+  CLHEP::HepRandomEngine* rndmEngineMod = G4Random::getTheEngine();
+  G4double rndm[3];
 
   G4int nloop = 0;
   do {
@@ -182,12 +187,15 @@ void G4KleinNishinaCompton::SampleSecondaries(
     // false interaction if too many iterations
     if(nloop > nlooplim) { return; }
 
-    if ( alpha1/(alpha1+alpha2) > rndmEngineMod->flat() ) {
-      epsilon   = G4Exp(-alpha1*rndmEngineMod->flat());   // eps0**r
+    // 3 random numbers to sample scattering
+    rndmEngineMod->flatArray(3, rndm);
+
+    if ( alpha1 > alpha2*rndm[0] ) {
+      epsilon   = G4Exp(-alpha1*rndm[1]);   // eps0**r
       epsilonsq = epsilon*epsilon; 
 
     } else {
-      epsilonsq = epsilon0sq + (1.- epsilon0sq)*rndmEngineMod->flat();
+      epsilonsq = epsilon0sq + (1.- epsilon0sq)*rndm[1];
       epsilon   = sqrt(epsilonsq);
     };
 
@@ -195,7 +203,8 @@ void G4KleinNishinaCompton::SampleSecondaries(
     sint2   = onecost*(2.-onecost);
     greject = 1. - epsilon*sint2/(1.+ epsilonsq);
 
-  } while (greject < rndmEngineMod->flat());
+    // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
+  } while (greject < rndm[2]);
  
   //
   // scattered gamma angles. ( Z - axis along the parent gamma)

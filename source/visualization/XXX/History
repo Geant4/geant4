@@ -1,4 +1,4 @@
-$Id: History 85582 2014-10-31 09:07:30Z gcosmo $
+$Id: History 88190 2015-02-02 17:24:54Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
+
+2nd February 2015  Gabriele Cosmo (visXXX-V10-01-00)
+- Fix to sources.cmake script to include missing dependency on external library.
 
 7th October 2014  Laurent Garnier  (visXXX-V10-00-01)
 - Change a message from G4cout to G4cerr

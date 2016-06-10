@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc 85355 2014-10-28 09:58:59Z gcosmo $
+// $Id: G4Scintillation.cc 91871 2015-08-07 15:22:30Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Scintillation Light Class Implementation
@@ -441,9 +441,9 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                 }
 
                 G4double delta = rand * aStep.GetStepLength();
-		G4double deltaTime = delta /
-                       ((pPreStepPoint->GetVelocity()+
-                         pPostStepPoint->GetVelocity())/2.);
+                G4double deltaTime = delta / (pPreStepPoint->GetVelocity()+
+                                      rand*(pPostStepPoint->GetVelocity()-
+                                            pPreStepPoint->GetVelocity())/2.);
 
                 // emission time distribution
                 if (ScintillationRiseTime==0.0) {
@@ -712,6 +712,7 @@ G4double G4Scintillation::sample_time(G4double tau1, G4double tau2)
 {
 // tau1: rise time and tau2: decay time
 
+	// Loop checking, 07-Aug-2015, Vladimir Ivanchenko
         while(1) {
           // two random numbers
           G4double ran1 = G4UniformRand();

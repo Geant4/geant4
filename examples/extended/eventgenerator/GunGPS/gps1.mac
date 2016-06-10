@@ -1,0 +1,13 @@
+# for PrimaryGeneratorGPS
+#
+/gps/particle geantino
+/gps/energy 1 eV
+#
+/gps/position 0. 0. 0. cm
+/gps/ang/type iso
+#
+/analysis/setFileName gps1
+/analysis/h1/set 4  110  -1.1  1.1 none   #cosalpha
+/analysis/h1/set 5  130  -15.  375. deg   #psi
+# 
+/run/beamOn 100000

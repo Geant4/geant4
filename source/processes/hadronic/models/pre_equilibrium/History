@@ -14,6 +14,46 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+10-Nov-2015 V.Ivanchenko  hadr-pre-V10-01-06
+-------------------------------------------------
+- G4PreCompoundFragment - an attempt to fix icc compillation problem
+
+19-Aug-2015 V.Ivanchenko  hadr-pre-V10-01-05
+-------------------------------------------------
+- G4PreCompoundFragment, G4GNASHTransitions - added header Randomize.hh
+
+06-Aug-2015 V.Ivanchenko  hadr-pre-V10-01-04
+-------------------------------------------------
+- G4PreCompoundFragment do/while loop replaced by linit for loop
+- G4PreCompoundModel - if number of iteractions exceed 1000 switch
+    to de-excitation
+
+23-May-2015 V.Ivanchenko  hadr-pre-V10-01-03
+-------------------------------------------------
+- G4PreCompoundFragment - use G4KalbachCrossSection and G4ChatterjeeCrossSection
+    cross sections classes; removed doublicate computations of these cross
+    sections; fixed sampling of kinetic energy of emitted fragment
+
+15-April-2015 V.Ivanchenko  hadr-pre-V10-01-02
+-------------------------------------------------
+- G4PreCompoundTransition - extended protection against numerical 
+    problem; use G4Log and G4Exp instead of G4Pow; cleanup sampling of
+    number of charged excitons
+- G4PreCompoundModel - cleanup
+
+15-April-2015 V.Ivanchenko  hadr-pre-V10-01-01
+-------------------------------------------------
+- G4PreCompoundTransition - added protection against numerical problem
+    due too high excitation energy; code cleanup
+
+18-March-2015 V.Ivanchenko  hadr-pre-V10-01-00
+-------------------------------------------------
+- G4PreCompoundAlpha, G4PreCompoundDeuteron, G4PreCompoundHe3,
+  G4PreCompoundModel, G4PreCompoundNeutron, G4PreCompoundProton,
+  G4PreCompoundTransitions, G4PreCompoundTriton - fixed minor
+    Coverity report, cleanup local constants, minor cleanup of the
+    code, should not affect any result
+
 07-July-2014 V.Ivanchenko+J.M.Juesada  hadr-pre-V10-00-02
 ---------------------------------------------------------
 - G4PreCompoundIon - cleanup transition probability computation

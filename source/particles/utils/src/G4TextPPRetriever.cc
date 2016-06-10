@@ -29,7 +29,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TextPPRetriever.cc 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4TextPPRetriever.cc 91885 2015-08-10 07:05:56Z gcosmo $
 //
 // 
 // ---------------------------------------------------------------
@@ -67,7 +67,7 @@ void G4TextPPRetriever::Retrieve(const G4String& option)
     
   // loop over all particles in G4ParticleTable 
   theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
+  while( (*theParticleIterator)() ){ // Loop checking, 09.08.2015, K.Kurashige
     G4ParticleDefinition* particle = theParticleIterator->value();
     ModifyPropertyTable(particle);
   }
@@ -151,7 +151,7 @@ G4bool  G4TextPPRetriever::ModifyPropertyTable(const G4ParticleDefinition* parti
   if (dcyTable == 0) return true;
   
   G4int idx =0;
-  while (!inFile.eof() ) {
+  while (!inFile.eof() ) { // Loop checking, 09.08.2015, K.Kurashige
     G4double br;
     G4int    n_daughters;
     inFile >> br >> n_daughters;

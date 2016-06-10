@@ -86,9 +86,21 @@ public: // Without description
 
   G4int GetNumberBinsCluster() const;
 
+  void SetMaxCluster(G4int value);
+
+  G4int GetMaxCluster() const;
+
   void SetEnergyPerChannel(G4double value);
 
   G4double GetFactorALICE() const;
+
+  void SetNormFactor(G4double value);
+
+  G4double GetNormFactor() const;
+
+  void SetEnergySmear(G4double value);
+
+  G4double GetEnergySmear() const;
 
   void SetPositionZ(G4double val);
 
@@ -99,15 +111,15 @@ private:
   // MEMBERS
   static TestParameters* fManager;
 
-  //  G4int fNHisto;
-  //  G4int fVerbose;
-
   G4double fMaxEnergy;
   G4double fFactorALICE;
+  G4double fNormFactor;
+  G4double fEnergySmear;
   G4double fPositionZ;
 
   G4int fBinsE; 
   G4int fBinsCluster;
+  G4int fMaxCluster;
 };
 
 #endif

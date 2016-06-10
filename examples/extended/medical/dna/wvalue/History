@@ -1,0 +1,28 @@
+$Id: History 85260 2014-10-27 08:53:35Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    wvalue History file
+                    --------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+	 
+22-10-15 SI (wvalue-V10-01-03)
+- upgraded plot.C to ROOT 6
+
+17-09-15 SI (wvalue-V10-01-02)
+- applied coding guidelines
+
+20-08-15 SI (wvalue-V10-01-01)
+- updated GNUmakefile
+
+18-08-15 SI (wvalue-V10-01-00)
+- created and adapted from svalue

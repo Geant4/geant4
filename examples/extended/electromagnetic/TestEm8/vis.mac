@@ -33,10 +33,10 @@
 /vis/drawVolume
 #
 # Specify view angle:
-/vis/viewer/set/viewpointThetaPhi 45. 45.
+/vis/viewer/set/viewpointThetaPhi -90. 0.
 #
 # Specify zoom value:
-/vis/viewer/zoom 1.4
+/vis/viewer/zoom 0.5
 #
 # Specify style (surface or wireframe):
 #/vis/viewer/set/style wireframe
@@ -69,7 +69,7 @@
 #/vis/modeling/trajectories/drawByParticleID-0/set e- blue
 #
 # To superimpose all of the events from a given run:
-/vis/scene/endOfEventAction accumulate
+/vis/scene/endOfEventAction accumulate 10000
 #
 # Re-establish auto refreshing and verbosity:
 /vis/viewer/set/autoRefresh true

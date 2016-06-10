@@ -118,7 +118,9 @@ G4VSplitableHadron* G4QGSParticipants::SelectInteractions(const G4ReactionProduc
 		G4LorentzVector intNuclMom;
 	#endif
 
-	while(theInteractions.size() == 0)
+        const G4int maxNumberOfLoops = 1000;
+        G4int loopCounter = -1;
+	while ( (theInteractions.size() == 0) && ++loopCounter < maxNumberOfLoops )  /* Loop checking, 26.10.2015, A.Ribon */
 	{
 		// choose random impact parameter HPW
 		std::pair<G4double, G4double> theImpactParameter;
@@ -133,7 +135,7 @@ G4VSplitableHadron* G4QGSParticipants::SelectInteractions(const G4ReactionProduc
 		#ifdef debug_G4QGSParticipants
 			intNuclMom=aPrimaryMomentum;
 		#endif
-		while( (pNucleon = theNucleus->GetNextNucleon()) )
+		while( (pNucleon = theNucleus->GetNextNucleon()) )  /* Loop checking, 26.10.2015, A.Ribon */
 		{
 			if(totalCuts>1.5*thePrimary.GetKineticEnergy()/GeV)
 			{
@@ -218,6 +220,11 @@ G4VSplitableHadron* G4QGSParticipants::SelectInteractions(const G4ReactionProduc
 			G4cout << " Interact 4-Vect " << intNuclMom << G4endl;
 	#endif
 	}
+        if ( loopCounter >= maxNumberOfLoops ) {
+          G4ExceptionDescription ed;
+          ed << " loopCounter exceeds maxNumberOfLoops : forced exit! " << G4endl;
+          G4Exception( "G4QGSParticipants::SelectInteractions ", "HAD_QGS_001", JustWarning, ed );
+        }
 	#ifdef debug_G4QGSParticipants
 		G4cout << G4endl<<"CUTDEBUG "<< totalCuts <<G4endl;
 		G4cout << "Impact Parameter used = "<<impactUsed<<G4endl;
@@ -277,7 +284,7 @@ void G4QGSParticipants::PerformSoftCollisions()
 	std::vector<G4InteractionContent*>::iterator i;
 	G4LorentzVector str4Mom;
 	i = theInteractions.begin();
-	while ( i != theInteractions.end() )
+	while ( i != theInteractions.end() )  /* Loop checking, 10.08.2015, A.Ribon */
 	{
 		G4InteractionContent* anIniteraction = *i;
 		G4PartonPair * aPair = NULL;

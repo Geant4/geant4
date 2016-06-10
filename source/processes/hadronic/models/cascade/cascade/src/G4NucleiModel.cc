@@ -156,10 +156,11 @@
 // 20131001  M. Kelsey -- Move QDinterp object to data member, thread local
 // 20140116  M. Kelsey -- Move all envvar parameters to const data members
 // 20141001  M. Kelsey -- Change sign of "dv" in boundaryTransition
+// 20150608  M. Kelsey -- Label all while loops as terminating.
+// 20150622  M. Kelsey -- Use G4AutoDelete for _TLS_ buffers.
 
 #include "G4NucleiModel.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
+#include "G4AutoDelete.hh"
 #include "G4CascadeChannel.hh"
 #include "G4CascadeChannelTables.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -167,17 +168,20 @@
 #include "G4CascadeParameters.hh"
 #include "G4CollisionOutput.hh"
 #include "G4ElementaryParticleCollider.hh"
+#include "G4Exp.hh"
+#include "Randomize.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclParticleNames.hh"
 #include "G4InuclSpecialFunctions.hh"
+#include "G4Log.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4Neutron.hh"
-#include "G4ParticleLargerBeta.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4ParticleLargerBeta.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4Proton.hh"
-#include "G4Log.hh"
-#include "G4Exp.hh"
+#include "G4SystemOfUnits.hh"
 #include <vector>
 #include <algorithm>
 #include <functional>
@@ -518,7 +522,7 @@ G4double G4NucleiModel::zoneIntegralWoodsSaxon(G4double r1, G4double r2,
   G4double dr1 = dr;
   G4int itry = 0;
 
-  while (itry < itry_max) {
+  while (itry < itry_max) {	/* Loop checking 08.06.2015 MHK */
     dr /= 2.;
     itry++;
 
@@ -570,7 +574,7 @@ G4double G4NucleiModel::zoneIntegralGaussian(G4double r1, G4double r2,
   G4double dr1 = dr;
   G4int itry = 0;
 
-  while (itry < itry_max) {
+  while (itry < itry_max) {	/* Loop checking 08.06.2015 MHK */
     dr /= 2.;
     itry++;
     G4double r = r1 - dr;
@@ -1014,8 +1018,10 @@ generateParticleFate(G4CascadParticle& cparticle,
     
     // For conservation checking (below), get particle before updating
     static G4ThreadLocal G4InuclElementaryParticle *prescatCP_G4MT_TLS_ = 0;
-    if (!prescatCP_G4MT_TLS_)
+    if (!prescatCP_G4MT_TLS_) {
       prescatCP_G4MT_TLS_ = new G4InuclElementaryParticle;
+      G4AutoDelete::Register(prescatCP_G4MT_TLS_);
+    }
     G4InuclElementaryParticle &prescatCP = *prescatCP_G4MT_TLS_;	// Avoid memory churn
     prescatCP = cparticle.getParticle();
     
@@ -1447,6 +1453,7 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
     if (bullet->getKineticEnergy()/ab > ekin_cut*ben) {
       G4int itryg = 0;
 
+	/* Loop checking 08.06.2015 MHK */
       while (casparticles.size() == 0 && itryg < itry_max) {      
 	itryg++;
 	particles.clear();
@@ -1465,7 +1472,7 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	  G4bool bad = true;
 	  G4int itry = 0;
 
-	  while (bad && itry < itry_max) {
+	  while (bad && itry < itry_max) {  /* Loop checking 08.06.2015 MHK */
 	    itry++;
 	    p = 456.0 * inuclRndm();
 
@@ -1497,7 +1504,7 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	  G4int itry = 0;
         
 	  if (ab == 3) {
-	    while (badco && itry < itry_max) {
+	    while (badco && itry < itry_max) {/* Loop checking 08.06.2015 MHK */
 	      if (itry > 0) coordinates.clear();
 	      itry++;	
 	      G4int i(0);    
@@ -1507,7 +1514,7 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 		G4double ss, u, rho; 
 		G4double fmax = G4Exp(-0.5) / std::sqrt(0.5);
 
-		while (itry1 < itry_max) {
+		while (itry1 < itry_max) {  /* Loop checking 08.06.2015 MHK */
 		  itry1++;
 		  ss = -G4Log(inuclRndm());
 		  u = fmax * inuclRndm();
@@ -1569,7 +1576,7 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	    G4double u = b1 + std::sqrt(b1 * b1 + b);
 	    G4double fmax = (1.0 + u/b) * u * G4Exp(-u);
 	  
-	    while (badco && itry < itry_max) {
+	    while (badco && itry < itry_max) {/* Loop checking 08.06.2015 MHK */
 
 	      if (itry > 0) coordinates.clear();
 	      itry++;
@@ -1579,7 +1586,7 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 		G4int itry1 = 0;
 		G4double ss; 
 
-		while (itry1 < itry_max) {
+		while (itry1 < itry_max) {  /* Loop checking 08.06.2015 MHK */
 		  itry1++;
 		  ss = -G4Log(inuclRndm());
 		  u = fmax * inuclRndm();
@@ -1655,7 +1662,7 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	    for (G4int i = 0; i < ab - 1; i++) {
 	      G4int itry2 = 0;
 
-	      while(itry2 < itry_max) {
+	      while(itry2 < itry_max) {	/* Loop checking 08.06.2015 MHK */
 		itry2++;
 		u = -G4Log(0.879853 - 0.8798502 * inuclRndm());
 		x = u * G4Exp(-u);

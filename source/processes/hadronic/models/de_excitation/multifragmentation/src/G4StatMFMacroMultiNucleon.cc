@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroMultiNucleon.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4StatMFMacroMultiNucleon.cc 91834 2015-08-07 07:24:22Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -38,6 +38,9 @@
 #include "G4StatMFMacroMultiNucleon.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
+#include "G4Pow.hh"
 
 // Default constructor
 G4StatMFMacroMultiNucleon::
@@ -64,113 +67,94 @@ operator=(const G4StatMFMacroMultiNucleon & )
     return *this;
 }
 
-
 G4bool G4StatMFMacroMultiNucleon::operator==(const G4StatMFMacroMultiNucleon & ) const
 {
     throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiNucleon::operator== meant to not be accessable");
     return false;
 }
  
-
 G4bool G4StatMFMacroMultiNucleon::operator!=(const G4StatMFMacroMultiNucleon & ) const
 {
     throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiNucleon::operator!= meant to not be accessable");
     return true;
 }
 
-
-
-G4double G4StatMFMacroMultiNucleon::CalcMeanMultiplicity(const G4double FreeVol, const G4double mu,
-							 const G4double nu, const G4double T)
+G4double G4StatMFMacroMultiNucleon::CalcMeanMultiplicity(const G4double FreeVol, 
+							 const G4double mu,
+							 const G4double nu, 
+							 const G4double T)
 {
-    const G4double ThermalWaveLenght = 16.15*fermi/std::sqrt(T);
+  G4double ThermalWaveLenght = 16.15*fermi/std::sqrt(T);	
+  G4double lambda3 = ThermalWaveLenght*ThermalWaveLenght*ThermalWaveLenght;
+  G4Pow* g4pow = G4Pow::GetInstance();
+  G4double A23 = g4pow->Z23(theA);
 	
-    const G4double lambda3 = ThermalWaveLenght*ThermalWaveLenght*ThermalWaveLenght;
+  G4double exponent = (mu + nu*theZARatio+ G4StatMFParameters::GetE0() 
+		       + T*T/_InvLevelDensity 
+		       - G4StatMFParameters::GetGamma0()*(1.0 - 2.0*theZARatio)*
+		       (1.0 - 2.0*theZARatio))*theA
+    - G4StatMFParameters::Beta(T)*A23 
+    - G4StatMFParameters::GetCoulomb()*theZARatio*theZARatio*A23*theA;
 	
-    const G4double A23 = std::pow(static_cast<G4double>(theA),2./3.);
+  exponent /= T;
 	
-    const G4double Coulomb = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
-	(1.0 - 1.0/std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
+  if (exponent > 30.0) exponent = 30.0;
 	
-    G4double exponent = (mu + nu*theZARatio+ G4StatMFParameters::GetE0() + T*T/_InvLevelDensity 
-			 - G4StatMFParameters::GetGamma0()*(1.0 - 2.0*theZARatio)*
-			 (1.0 - 2.0*theZARatio))*theA
-	- G4StatMFParameters::Beta(T)*A23 - Coulomb*theZARatio*theZARatio*A23*theA;
-	
-    exponent /= T;
-	
-    if (exponent > 30.0) exponent = 30.0;
-	
-    _MeanMultiplicity = std::max((FreeVol * static_cast<G4double>(theA) * 
-				    std::sqrt(static_cast<G4double>(theA))/lambda3) *
-				   std::exp(exponent),1.0e-30);
-    return _MeanMultiplicity;	
+  _MeanMultiplicity = std::max((FreeVol * theA * std::sqrt((G4double)theA)/lambda3) *
+			       G4Exp(exponent),1.0e-30);
+  return _MeanMultiplicity;	
 }
-
 
 G4double G4StatMFMacroMultiNucleon::CalcZARatio(const G4double nu)
 {
-    const G4double Coulomb = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
-	(1.0 - 1.0/std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
-
-    G4double den = 8.0*G4StatMFParameters::GetGamma0()+2.0*Coulomb*std::pow(static_cast<G4double>(theA),2./3.);
-    G4double num = 4.0*G4StatMFParameters::GetGamma0()+nu;
-	
-    return theZARatio = num/den;
-	
-
+  G4double den = 8*G4StatMFParameters::GetGamma0() 
+    + 2*G4StatMFParameters::GetCoulomb()*G4Pow::GetInstance()->Z23(theA);
+  theZARatio = (4.0*G4StatMFParameters::GetGamma0()+nu)/den;
+  return theZARatio;
 }
-
-
 
 G4double G4StatMFMacroMultiNucleon::CalcEnergy(const G4double T)
 {
-    const G4double Coulomb = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
-	(1.0 - 1.0/std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
-	
-    const G4double A23 = std::pow(static_cast<G4double>(theA),2./3.);
+  G4Pow* g4pow = G4Pow::GetInstance();
+  G4double A23 = g4pow->Z23(theA);
 
-    // Volume term 
-    G4double EVol = static_cast<G4double>(theA) * (T*T/_InvLevelDensity - G4StatMFParameters::GetE0());
+  // Volume term 
+  G4double EVol = theA * (T*T/_InvLevelDensity - G4StatMFParameters::GetE0());
 	
-    // Symmetry term
-    G4double ESym = static_cast<G4double>(theA) * G4StatMFParameters::GetGamma0() *(1. - 2.* theZARatio) * (1. - 2.* theZARatio);
+  // Symmetry term
+  G4double ESym = theA * G4StatMFParameters::GetGamma0() 
+    *(1. - 2.* theZARatio) * (1. - 2.* theZARatio);
 	
-    // Surface term
-    G4double ESurf = A23*(G4StatMFParameters::Beta(T) - T*G4StatMFParameters::DBetaDT(T));
+  // Surface term
+  G4double ESurf = A23*(G4StatMFParameters::Beta(T) - T*G4StatMFParameters::DBetaDT(T));
  
-    // Coulomb term
-    G4double ECoul = Coulomb*A23*static_cast<G4double>(theA)*theZARatio*theZARatio;
+  // Coulomb term
+  G4double ECoul = G4StatMFParameters::GetCoulomb()*A23*theA*theZARatio*theZARatio;
 	
-    // Translational term
-    G4double ETrans = (3./2.)*T;
-	
-       
-    return _Energy = EVol + ESurf + ECoul + ETrans + ESym;
+  // Translational term
+  G4double ETrans = 1.5*T;
+  return _Energy = EVol + ESurf + ECoul + ETrans + ESym;
 }
 
-
-G4double G4StatMFMacroMultiNucleon::CalcEntropy(const G4double T, const G4double FreeVol)
+G4double G4StatMFMacroMultiNucleon::CalcEntropy(const G4double T, 
+						const G4double FreeVol)
 {
-    const G4double ThermalWaveLenght = 16.15*fermi/std::sqrt(T);
-    const G4double lambda3 = ThermalWaveLenght*ThermalWaveLenght*ThermalWaveLenght;
+  G4double Entropy = 0.0;
+  if (_MeanMultiplicity > 0.0) {
 
-    G4double Entropy = 0.0;
-    if (_MeanMultiplicity > 0.0) {
-	// Volume term
-	G4double SV = 2.0*static_cast<G4double>(theA)*T/_InvLevelDensity;
+    G4double ThermalWaveLenght = 16.15*fermi/std::sqrt(T);
+    G4double lambda3 = ThermalWaveLenght*ThermalWaveLenght*ThermalWaveLenght;
+    // Volume term
+    G4double SV = 2.0*theA*T/_InvLevelDensity;
 		
-	// Surface term
-	G4double SS = -G4StatMFParameters::DBetaDT(T)*std::pow(static_cast<G4double>(theA),2./3.);
+    // Surface term
+    G4double SS = -G4StatMFParameters::DBetaDT(T)*G4Pow::GetInstance()->Z23(theA);
 		
-	// Translational term
-	G4double ST = (5./2.)+std::log(FreeVol * std::sqrt(static_cast<G4double>(theA)) * 
-				  static_cast<G4double>(theA)/(lambda3*_MeanMultiplicity));
-		
-		
-	Entropy = _MeanMultiplicity*(SV + SS + ST);
-    }
-								
-								
-    return Entropy;
+    // Translational term
+    G4double ST = 2.5 + G4Log(FreeVol * std::sqrt((G4double)theA) * theA
+			      /(lambda3*_MeanMultiplicity));
+				
+    Entropy = _MeanMultiplicity*(SV + SS + ST);
+  }								
+  return Entropy;
 }

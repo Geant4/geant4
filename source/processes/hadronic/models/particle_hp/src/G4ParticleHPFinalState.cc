@@ -42,15 +42,14 @@
 #include "G4Triton.hh"
 #include "G4Alpha.hh"
 
-
 void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
 {
 
    G4double minimum_energy = 1*keV;
 
-   if ( adjustResult != true ) return;
+   if ( G4ParticleHPManager::GetInstance()->GetDoNotAdjustFinalState() ) return;
 
-   G4int nSecondaries = theResult.GetNumberOfSecondaries();
+   G4int nSecondaries = theResult.Get()->GetNumberOfSecondaries();
 
    G4int sum_Z = 0;
    G4int sum_A = 0;
@@ -59,13 +58,13 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
    G4int imaxA = -1;
    for ( int i = 0 ; i < nSecondaries ; i++ )
    {
-      sum_Z += theResult.GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicNumber();
-      max_SecZ = std::max ( max_SecZ , theResult.GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicNumber() );
-      sum_A += theResult.GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicMass();
-      max_SecA = std::max ( max_SecA , theResult.GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicMass() );
-      if ( theResult.GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicMass() == max_SecA ) imaxA = i;
+      sum_Z += theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicNumber();
+      max_SecZ = std::max ( max_SecZ , theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicNumber() );
+      sum_A += theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicMass();
+      max_SecA = std::max ( max_SecA , theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicMass() );
+      if ( theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicMass() == max_SecA ) imaxA = i;
 #ifdef G4PHPDEBUG
-      if( getenv("G4ParticleHPDebug"))    G4cout << "G4ParticleHPFinalState::adjust_final_stat SECO " << i << " " <<theResult.GetSecondary( i )->GetParticle()->GetDefinition()->GetParticleName() << G4endl;
+      if( getenv("G4ParticleHPDebug"))    G4cout << "G4ParticleHPFinalState::adjust_final_stat SECO " << i << " " <<theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetParticleName() << G4endl;
 #endif
 
    }
@@ -99,14 +98,14 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
    if ( (int)(baseZNew - sum_Z) == 0 && (int)(baseANew - sum_A) == 0 )
    {
       //All secondaries are already created;
-      resi_pd = theResult.GetSecondary( imaxA )->GetParticle()->GetDefinition(); 
+      resi_pd = theResult.Get()->GetSecondary( imaxA )->GetParticle()->GetDefinition(); 
    }
    else
    {
       if ( max_SecA > int(baseANew - sum_A) ) 
       {
          //Most heavy secondary is interpreted as residual
-         resi_pd = theResult.GetSecondary( imaxA )->GetParticle()->GetDefinition(); 
+         resi_pd = theResult.Get()->GetSecondary( imaxA )->GetParticle()->GetDefinition(); 
          needOneMoreSec = true;
       }
       else 
@@ -176,13 +175,13 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
 
            for ( int i = 0 ; i < nSecondaries ; i++ )
            {
-              if ( theResult.GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicNumber() == max_SecZ  
-                && theResult.GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicMass() == max_SecA )
+              if ( theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicNumber() == max_SecZ  
+                && theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicMass() == max_SecA )
               {
-                 G4ThreeVector p = theResult.GetSecondary( i )->GetParticle()->GetMomentum();
+                 G4ThreeVector p = theResult.Get()->GetSecondary( i )->GetParticle()->GetMomentum();
                  p = p * resi_pd->GetPDGMass()/ G4IonTable::GetIonTable()->GetIon ( max_SecZ , max_SecA , 0.0 )->GetPDGMass(); 
-                 theResult.GetSecondary( i )->GetParticle()->SetDefinition( resi_pd );
-                 theResult.GetSecondary( i )->GetParticle()->SetMomentum( p );
+                 theResult.Get()->GetSecondary( i )->GetParticle()->SetDefinition( resi_pd );
+                 theResult.Get()->GetSecondary( i )->GetParticle()->SetMomentum( p );
               } 
            }
         }
@@ -192,7 +191,7 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
 
    G4LorentzVector secs_4p_lab( 0.0 );
 
-   G4int n_sec = theResult.GetNumberOfSecondaries();
+   G4int n_sec = theResult.Get()->GetNumberOfSecondaries();
    G4double fast = 0;
    G4double slow = 1;
    G4int ifast = 0;
@@ -208,19 +207,19 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
       //       << " ke " << theResult.GetSecondary( i )->GetParticle()->Get4Momentum().e() - theResult.GetSecondary( i )->GetParticle()->GetDefinition()->GetPDGMass() 
       //       << G4endl;
 
-      secs_4p_lab += theResult.GetSecondary( i )->GetParticle()->Get4Momentum();
+      secs_4p_lab += theResult.Get()->GetSecondary( i )->GetParticle()->Get4Momentum();
 
       G4double beta = 0;
-      if ( theResult.GetSecondary( i )->GetParticle()->GetDefinition() != G4Gamma::Gamma() )
+      if ( theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition() != G4Gamma::Gamma() )
       {
-         beta = theResult.GetSecondary( i )->GetParticle()->Get4Momentum().beta(); 
+         beta = theResult.Get()->GetSecondary( i )->GetParticle()->Get4Momentum().beta(); 
       }
       else
       {
          beta = 1;
       }
 
-      if ( theResult.GetSecondary( i )->GetParticle()->GetDefinition() == resi_pd ) ires = i; 
+      if ( theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition() == resi_pd ) ires = i; 
 
       if ( slow > beta && beta != 0 ) 
       {
@@ -238,8 +237,8 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
          else
          {
 //          fast is already photon then check E
-            G4double e = theResult.GetSecondary( i )->GetParticle()->Get4Momentum().e();
-            if ( e > theResult.GetSecondary( ifast )->GetParticle()->Get4Momentum().e() )   
+            G4double e = theResult.Get()->GetSecondary( i )->GetParticle()->Get4Momentum().e();
+            if ( e > theResult.Get()->GetSecondary( ifast )->GetParticle()->Get4Momentum().e() )   
             {
 //             among photons, the highest E becomes the fastest 
                ifast = i; 
@@ -263,7 +262,7 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
       nSecondaries += 1;
 
       G4DynamicParticle* res = new G4DynamicParticle ( resi_pd , dif_4p.v() );    
-      theResult.AddSecondary ( res );    
+      theResult.Get()->AddSecondary ( res );    
 
       p4 = res->Get4Momentum(); 
       if ( slow > p4.beta() ) 
@@ -284,7 +283,7 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
    {
       nSecondaries += 1;
       G4DynamicParticle* one = new G4DynamicParticle ( oneMoreSec_pd , dif_4p.v() );    
-      theResult.AddSecondary ( one );    
+      theResult.Get()->AddSecondary ( one );    
       p4 = one->Get4Momentum(); 
       if ( slow > p4.beta() ) 
       {
@@ -305,7 +304,7 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
       {
 
          nSecondaries += 1;
-         theResult.AddSecondary ( new G4DynamicParticle ( G4Gamma::Gamma() , dif_4p.v() ) );    
+         theResult.Get()->AddSecondary ( new G4DynamicParticle ( G4Gamma::Gamma() , dif_4p.v() ) );    
 
       }
       else
@@ -321,9 +320,9 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
       // at first momentum 
       // Move residual momentum
 
-      p4 = theResult.GetSecondary( ires )->GetParticle()->Get4Momentum();
-      theResult.GetSecondary( ires )->GetParticle()->SetMomentum( p4.v() + dif_4p.v() ); 
-      dif_4p = init_4p_lab - ( secs_4p_lab - p4 + theResult.GetSecondary( ires )->GetParticle()->Get4Momentum()  );  
+      p4 = theResult.Get()->GetSecondary( ires )->GetParticle()->Get4Momentum();
+      theResult.Get()->GetSecondary( ires )->GetParticle()->SetMomentum( p4.v() + dif_4p.v() ); 
+      dif_4p = init_4p_lab - ( secs_4p_lab - p4 + theResult.Get()->GetSecondary( ires )->GetParticle()->Get4Momentum()  );  
 
       //G4cout << "HP_DB new residual kinetic energy " << theResult.GetSecondary( ires )->GetParticle()->GetKineticEnergy() << G4endl;
 
@@ -347,8 +346,8 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
          G4ThreeVector dir( std::sin(std::acos(costh))*std::cos(phi), 
                             std::sin(std::acos(costh))*std::sin(phi),
                             costh);
-         theResult.AddSecondary ( new G4DynamicParticle ( G4Gamma::Gamma() , e1*dir ) );    
-         theResult.AddSecondary ( new G4DynamicParticle ( G4Gamma::Gamma() , -e1*dir ) );    
+         theResult.Get()->AddSecondary ( new G4DynamicParticle ( G4Gamma::Gamma() , e1*dir ) );    
+         theResult.Get()->AddSecondary ( new G4DynamicParticle ( G4Gamma::Gamma() , -e1*dir ) );    
       }
       else
       {
@@ -360,20 +359,20 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
    {
 
 //    At first reduce KE of the fastest secondary;
-      G4double ke0 = theResult.GetSecondary( ifast )->GetParticle()->GetKineticEnergy();
-      G4ThreeVector p0 = theResult.GetSecondary( ifast )->GetParticle()->GetMomentum();
-      G4ThreeVector dir = ( theResult.GetSecondary( ifast )->GetParticle()->GetMomentum() ).unit();
+      G4double ke0 = theResult.Get()->GetSecondary( ifast )->GetParticle()->GetKineticEnergy();
+      G4ThreeVector p0 = theResult.Get()->GetSecondary( ifast )->GetParticle()->GetMomentum();
+      G4ThreeVector dir = ( theResult.Get()->GetSecondary( ifast )->GetParticle()->GetMomentum() ).unit();
 
       //G4cout << "HP_DB ifast " << ifast << " ke0 " << ke0 << G4endl;
 
       if ( ke0 + dif_e > 0 )
       {
-         theResult.GetSecondary( ifast )->GetParticle()->SetKineticEnergy( ke0 + dif_e ); 
-         G4ThreeVector dp = p0 - theResult.GetSecondary( ifast )->GetParticle()->GetMomentum();  
+         theResult.Get()->GetSecondary( ifast )->GetParticle()->SetKineticEnergy( ke0 + dif_e ); 
+         G4ThreeVector dp = p0 - theResult.Get()->GetSecondary( ifast )->GetParticle()->GetMomentum();  
 
-         G4ThreeVector p = theResult.GetSecondary( islow )->GetParticle()->GetMomentum();
+         G4ThreeVector p = theResult.Get()->GetSecondary( islow )->GetParticle()->GetMomentum();
          //theResult.GetSecondary( islow )->GetParticle()->SetMomentum( p - dif_e*dir ); 
-         theResult.GetSecondary( islow )->GetParticle()->SetMomentum( p + dp ); 
+         theResult.Get()->GetSecondary( islow )->GetParticle()->SetMomentum( p + dp ); 
       }
       else
       {

@@ -26,48 +26,44 @@
 /// \file exoticphysics/phonon/include/XAluminumElectrodeSensitivity.hh
 /// \brief Definition of the XAluminumElectrodeSensitivity class
 //
-// $Id: XAluminumElectrodeSensitivity.hh 76246 2013-11-08 11:17:29Z gcosmo $
+// $Id: XAluminumElectrodeSensitivity.hh 92176 2015-08-20 13:07:22Z gcosmo $
 //
+// 20150818  Improve MT compatibility; hits collection should not be static
+
 #ifndef XAluminumElectrodeSensitivity_h
 #define XAluminumElectrodeSensitivity_h 1
 
 #include "G4VSensitiveDetector.hh"
 #include "XAluminumElectrodeHit.hh"
-
-#include <iostream>
-#include <fstream>
+#include <iosfwd>
 
 class G4Step;
 class G4HCofThisEvent;
 class G4TouchableHistory;
 
-using namespace std;
 
-
-class XAluminumElectrodeSensitivity : public G4VSensitiveDetector
-{
-
-  public:
-      XAluminumElectrodeSensitivity(G4String);
-      virtual ~XAluminumElectrodeSensitivity();
-
-      virtual void Initialize(G4HCofThisEvent*);
-      virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-      virtual void EndOfEvent(G4HCofThisEvent*);
-
+class XAluminumElectrodeSensitivity : public G4VSensitiveDetector {
+public:
+  XAluminumElectrodeSensitivity(const G4String&);
+  virtual ~XAluminumElectrodeSensitivity();
+  
+  virtual void Initialize(G4HCofThisEvent*);
+  virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
+  virtual void EndOfEvent(G4HCofThisEvent*);
+  
   XAluminumElectrodeHitsCollection* GetHitsCollection();
-  static XAluminumElectrodeHitsCollection* fHitsCollection;
 
-  private:
-  //XAluminumElectrodeHitsCollection * hitsCollection;
-  ofstream fWriter; //writing hit posn to file. Temporary fix.
-  ofstream fWriter2; //writing timing information to file. Temporary fix.
+protected:
+  void WriteHitInfo(const XAluminumElectrodeHit* aHit);
 
-      G4int fHCID;
+private:
+  XAluminumElectrodeHitsCollection* fHitsCollection;
+
+  static std::fstream* fWriter;         // For hit position output (temporary)
+  static std::fstream* fWriter2;        // For hit timing/energy (temporary)
+  
+  G4int fHCID;                // Index of collection in event
 };
-
-
-
 
 #endif
 

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 83921 2014-09-23 09:14:40Z gcosmo $
+// $Id: SteppingAction.cc 91972 2015-08-12 13:48:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,30 +45,30 @@
 SteppingAction::SteppingAction(DetectorConstruction* DET,
                                EventAction* EA)
 :G4UserSteppingAction(),fDetector(DET), fEventAction(EA)
-{ }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::~SteppingAction()
-{ }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
- if (aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume() 
-     != fDetector->GetAbsorber()) return;
+  if (aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume() 
+    != fDetector->GetAbsorber()) return;
     
- fEventAction->AddEnergy (aStep->GetTotalEnergyDeposit());
+  fEventAction->AddEnergy (aStep->GetTotalEnergyDeposit());
    
- G4double charge = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
- if (charge != 0.) { 
-   fEventAction->AddTrakLenCharg(aStep->GetStepLength());
-   fEventAction->CountStepsCharg();
- } else {
-   fEventAction->AddTrakLenNeutr(aStep->GetStepLength());
-   fEventAction->CountStepsNeutr();
- }
+  G4double charge = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
+  if (charge != 0.) { 
+    fEventAction->AddTrakLenCharg(aStep->GetStepLength());
+    fEventAction->CountStepsCharg();
+  } else {
+    fEventAction->AddTrakLenNeutr(aStep->GetStepLength());
+    fEventAction->CountStepsNeutr();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

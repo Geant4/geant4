@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGTwoBody.cc 79697 2014-03-12 13:10:09Z gcosmo $
+// $Id: G4RPGTwoBody.cc 94214 2015-11-09 08:18:05Z gcosmo $
 //
 
 #include <iostream>
 #include <signal.h>
 
 #include "G4RPGTwoBody.hh"
+#include "G4Log.hh"
 #include "Randomize.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -134,14 +135,14 @@ ReactionStage(const G4HadProjectile* /*originalIncident*/,
     const G4double cb = 0.01;
     const G4double b1 = 4.225;
     const G4double b2 = 1.795;
-    G4double b = std::max( cb, b1+b2*std::log(pOriginal) );
+    G4double b = std::max( cb, b1+b2*G4Log(pOriginal) );
      
     //
     // Get cm scattering angle by sampling t from tmin to tmax
     //
     G4double btrang = b * 4.0 * pf * pseudoParticle[0].GetMomentum().mag()/GeV;
-    G4double exindt = std::exp(-btrang) - 1.0;
-    G4double costheta = 1.0 + 2*std::log( 1.0+G4UniformRand()*exindt ) /btrang;
+    G4double exindt = G4Exp(-btrang) - 1.0;
+    G4double costheta = 1.0 + 2*G4Log( 1.0+G4UniformRand()*exindt ) /btrang;
     costheta = std::max(-1., std::min(1., costheta) );
     G4double sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
     G4double phi = twopi * G4UniformRand();
@@ -178,7 +179,7 @@ ReactionStage(const G4HadProjectile* /*originalIncident*/,
     G4double pp, pp1, ekin;
     if( atomicWeight >= 1.5 )
     {
-      const G4double cfa = 0.025*((atomicWeight-1.)/120.)*std::exp(-(atomicWeight-1.)/120.);
+      const G4double cfa = 0.025*((atomicWeight-1.)/120.)*G4Exp(-(atomicWeight-1.)/120.);
       pp1 = currentParticle.GetMomentum().mag()/MeV;
       if( pp1 >= 1.0 )
       {
@@ -241,7 +242,7 @@ ReactionStage(const G4HadProjectile* /*originalIncident*/,
     }
     if( edta >= dtaCutOff )
     {
-      ndta = G4int(2.0 * std::log(atomicWeight));
+      ndta = G4int(2.0 * G4Log(atomicWeight));
       ndta = std::min( ndta, 127-vecLen );
     }
 
@@ -256,7 +257,7 @@ ReactionStage(const G4HadProjectile* /*originalIncident*/,
   //  calculate time delay for nuclear reactions
   //
   if( (atomicWeight >= 1.5) && (atomicWeight <= 230.0) && (ekOriginal <= 0.2) )
-    currentParticle.SetTOF( 1.0-500.0*std::exp(-ekOriginal/0.04)*std::log(G4UniformRand()) );
+    currentParticle.SetTOF( 1.0-500.0*G4Exp(-ekOriginal/0.04)*G4Log(G4UniformRand()) );
   else
     currentParticle.SetTOF( 1.0 );
 

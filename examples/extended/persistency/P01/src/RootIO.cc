@@ -26,7 +26,7 @@
 /// \file persistency/P01/src/RootIO.cc
 /// \brief Implementation of the RootIO class
 //
-// $Id: RootIO.cc 82130 2014-06-11 09:26:44Z gcosmo $
+// $Id: RootIO.cc 93305 2015-10-16 07:34:53Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,7 +35,6 @@
 
 #include "RootIO.hh"
 //
-#include "Cintex/Cintex.h"
 #include "G4SDManager.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4EventManager.hh"
@@ -54,8 +53,6 @@ RootIO::RootIO():fNevents(0)
   TSystem ts;
   gSystem->Load("libExP01ClassesDict");
 
-  ROOT::Cintex::Cintex::SetDebug(0);
-  ROOT::Cintex::Cintex::Enable();
   //gDebug = 1;
 
   fFile = new TFile("hits.root","RECREATE");

@@ -1,0 +1,20 @@
+/control/verbose 2
+/run/verbose 1
+#
+/gun/particle ion
+/gun/ion 54 131 0 341.14
+#
+/rdecay01/fullChain true
+#
+/tracking/verbose 2
+/run/beamOn 1
+#
+/analysis/setFileName it2
+/analysis/h1/set 1  100  0. 200. keV	#e+ e-
+/analysis/h1/set 3  100  0. 200. keV	#gamma
+/analysis/h1/set 8  100  0. 200. d		#time of life
+#
+/tracking/verbose 0
+/run/printProgress 10000
+#  
+/run/beamOn 100000

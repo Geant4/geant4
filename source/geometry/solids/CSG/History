@@ -1,4 +1,4 @@
-$Id: History 83851 2014-09-19 10:12:12Z gcosmo $
+$Id: History 93494 2015-10-23 10:05:09Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,55 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 23, 2015 G.Cosmo                 geom-csg-V10-01-10
+- Fixed Coverity defect in G4CutTubs::GetMaxMinZ().
+
+October 22, 2015 G.Cosmo                 geom-csg-V10-01-09
+- Reintroduced check, now corrected, in G4Sphere::DistanceToIn(p,v) for
+  concave Theta and point located on the origin. Also make proper use of
+  radial tolerance in DistanceToOut(p,v).
+
+October 7, 2015 G.Cosmo                  geom-csg-V10-01-08
+- Protected compilation of USolid wrappers with G4GEOM_USE_USOLIDS flag.
+- Restored G4Sphere code to tag "geom-csg-V10-01-06".
+
+September 3, 2015  T.Nikitina            geom-csg-V10-01-07
+- Fix in DistanceToIn(p,v) and DistanceToOut(p,v) for G4Sphere with concave
+  Theta. Follow-up of fix previously introduced to G4Sphere for point (0,0,0).
+- Updated unit test for sphere.
+
+September 1, 2015  G.Cosmo               geom-csg-V10-01-06
+- Corrected conditional compilation flag in G4UTorus.cc.
+
+August 31, 2015  G.Cosmo                 geom-csg-V10-01-05
+- Added USolids/VecGeom wrapper for G4Torus (G.Lima/FNAL).
+  Activated only for external USolids/VecGeom installation.
+
+May 20, 2015  T.Nikitina                 geom-csg-V10-01-04
+- Fixed DistanceToOut(p) and Inside(p) in G4Sphere for sphere cut in theta
+  for point (0,0,0) and for cases when Start/End angle have not to be taken
+  in account (STheta==0 || eTheta==pi).
+  Added corresponding test cases to unit test for testG4Sphere.
+  Fix triggered by analysing setup provided in problem report #1702.
+
+May 5, 2015  G.Cosmo
+- Fixed Coverity defect for unused variable quantity in G4Cons.
+
+April 28, 2015  T.Nikitina               geom-csg-V10-01-03
+- Fixed calculation of Normal in G4Para for kPX and kMX sides in
+  DistanceToOut(p,v) and ApproxSurfaceNormal(p).
+  Addressing problem report #1736. 
+
+March 3, 2015  G.Cosmo                   geom-csg-V10-01-02
+- Use accessors x(), y() and z() from UVector3, instead of directly accessing
+  its data-members. Co-work with tag "geom-usolids-V10-01-09".
+
+February 16, 2015  G.Cosmo               geom-csg-V10-01-01
+- Fixed typo in copy-ctor and assignment operator for G4Tubs and G4OTubs.
+
+December 5, 2014  G.Cosmo                geom-csg-V10-01-00
+- Fix in temporary class G4OTubs to include symbol in library in any case.
 
 September 17, 2014  G.Cosmo              geom-csg-V10-00-06
 - Added wrapper for UTrap shape; adapted switch to original G4Trap accordingly.

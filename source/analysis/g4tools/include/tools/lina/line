@@ -1,0 +1,135 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_line
+#define tools_line
+
+#include "vec3"
+
+namespace tools {
+
+// Parametric description:
+//  l(t) = pos + t * dir
+
+template <class T>
+class line {
+public:
+  line(){}
+  line(const vec3<T>& a_p0,const vec3<T>& a_p1) {
+    // Construct a line from two points lying on the line.  If you
+    // want to construct a line from a position and a direction, use
+    // line(p, p + d).
+    // line is directed from p0 to p1.
+    m_pos = a_p0;
+    //m_dir = a_p1-a_p0;
+    m_dir = a_p0;
+    m_dir.multiply(-1);
+    m_dir.add(a_p1);
+    m_dir.normalize();
+  }
+  line(const T& a_0_x,const T& a_0_y,const T& a_0_z,
+       const T& a_1_x,const T& a_1_y,const T& a_1_z) {
+    m_pos.set_value(a_0_x,a_0_y,a_0_z);
+    m_dir.set_value(a_1_x-a_0_x,a_1_y-a_0_y,a_1_z-a_0_z);
+    m_dir.normalize();
+  }
+  virtual ~line() {}
+public:
+  line(const line& a_from)
+  :m_pos(a_from.m_pos)
+  ,m_dir(a_from.m_dir)
+  {}
+  line& operator=(const line& a_from) {
+    m_pos = a_from.m_pos;
+    m_dir = a_from.m_dir;
+    return *this;
+  }
+public:
+  void set_value(const vec3<T>& a_p0,const vec3<T>& a_p1) {
+    m_pos = a_p0;
+    m_dir = a_p0;
+    m_dir.multiply(-1);
+    m_dir.add(a_p1);
+    m_dir.normalize();
+  }
+  void set_value(const T& a_0_x,const T& a_0_y,const T& a_0_z,
+                 const T& a_1_x,const T& a_1_y,const T& a_1_z) {
+    m_pos.set_value(a_0_x,a_0_y,a_0_z);
+    m_dir.set_value(a_1_x-a_0_x,a_1_y-a_0_y,a_1_z-a_0_z);
+    m_dir.normalize();
+  }
+
+  const vec3<T>& position() const {return m_pos;}
+  const vec3<T>& direction() const {return m_dir;}
+
+/* not tested :
+  vec3<T> closest_point(const vec3<T>& a_point) const {
+    //from coin3d/SbLine.cpp.
+
+    //
+    //           a_out
+    // m_pos x-----x-------> m_dir
+    //        \    |
+    //         \   |
+    //          \  |
+    //           \ |
+    //            \|
+    //             x a_point
+
+    return m_pos + m_dir * ((a_point - m_pos).dot(m_dir));
+  }
+
+
+  bool closest_points(const line<T>& a_line,
+                      vec3<T>& a_on_this,vec3<T>& a_on_line) const {
+    //from coin3d/SbLine.cpp.
+
+    //WARNING : if ret false, a_on_this, a_on_line not set.
+
+    // Check if the lines are parallel.
+    // FIXME: should probably use equals() here.
+    if(a_line.m_dir == m_dir) return false;
+    if(a_line.m_dir == T(-1)*m_dir) return false;
+
+    vec3<T> P0 = m_pos;
+    vec3<T> P1 = a_line.m_pos;
+    vec3<T> D0 = m_dir;
+    vec3<T> D1 = a_line.m_dir;
+    vec3<T> D0N = D0;
+  
+    T c[3], d[3];
+  
+    for(unsigned int i=0;i<3;i++) {
+      d[i] =
+        D1[i] - D0N[i]*(D0[0]*D1[0] + D0[1]*D1[1] + D0[2]*D1[2]);
+      c[i] =
+        P1[i] - P0[i] + D0N[i]*(D0[0]*P0[0] + D0[1]*P0[1] + D0[2]*P0[2]);
+    }
+  
+    T den = d[0]*d[0]+d[1]*d[1]+d[2]*d[2];
+    if(den==T()) return false;
+
+    T t = -(c[0]*d[0]+c[1]*d[1]+c[2]*d[2]) / den;
+  
+    a_on_line = a_line.m_pos + a_line.m_dir * t;
+    a_on_this = closest_point(a_on_line);
+    return true;
+  }
+  
+  bool intersect(const line<T>& a_line,vec3<T>& a_out,const T& a_prec) const {
+    vec3<T> p,q;
+    if(!closest_points(a_line,p,q)) return false;
+    if((q-p).length()>a_prec) return false;
+    a_out = p;
+    return true;
+  }
+*/
+  
+protected:
+  vec3<T> m_pos;
+  vec3<T> m_dir; //normalized.
+};
+
+}
+
+#endif

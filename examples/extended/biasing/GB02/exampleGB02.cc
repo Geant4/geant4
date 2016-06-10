@@ -116,8 +116,6 @@ int main(int argc,char** argv)
     {
       biasingPhysics->Bias("gamma");
       biasingPhysics->Bias("neutron");
-      biasingPhysics->Bias("kaon0L");
-      biasingPhysics->Bias("kaon0S");
       physicsList->RegisterPhysics(biasingPhysics);
       G4cout << "      ********************************************************* " << G4endl;
       G4cout << "      ********** processes are wrapped for biasing ************ " << G4endl;
@@ -132,9 +130,6 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(physicsList);
   // -- Action initialization:
   runManager->SetUserInitialization(new GB02ActionInitialization);
-
-  //  runManager->SetUserAction(new SteppingAction);
-  //  runManager->SetUserAction(new RunAction(output));
 
   // Initialize G4 kernel
   runManager->Initialize();

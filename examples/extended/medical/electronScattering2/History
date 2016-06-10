@@ -1,4 +1,4 @@
-$Id: History 82042 2014-06-10 08:02:58Z gcosmo $
+$Id: History 93734 2015-10-30 10:59:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,30 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28 October 2015 Daren Sawkey       (exampleES2-V10-01-05)
+- Remove local physics lists
+- only instantiate VisManager if no macro file specified on command line
+
+19 October 2015 Daren Sawkey       (exampleES2-V10-01-04)
+- Modify primary foil parameters by setting class variables and calling
+  G4RunManager [Physics/Geometry]HasBeenModified. 
+
+21 July 2015 Daren Sawkey          (exampleES2-V10-01-03)
+- add physics list G4EmStandardGS to PhysicsList.cc
+- set verbosity of physics lists to 1
+
+06 March 2015 Andrea Dotti         (exampleES2-V10-01-02)
+- Removing from master unnecessary instance of GPS
+
+17 February 2015 Daren Sawkey      (exampleES2-V10-01-01)
+- updated History file from previous tag
+
+13 February 2015 Daren Sawkey      (exampleES2-V10-01-00)
+- Add macro commands to use more physics list constructors in Geant4 source
+- Rename local physics lists 
+- Add G4LossTableManager 
+  
 06 June 2014   Daren Sawkey        (exampleES2-V10-00-02)
 - extended example coding guidelines:
   - set cuts using G4UserPhysicsListMessenger command

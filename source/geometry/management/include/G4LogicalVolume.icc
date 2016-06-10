@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.icc 78050 2013-12-03 08:17:33Z gcosmo $
+// $Id: G4LogicalVolume.icc 91010 2015-06-15 09:55:26Z gcosmo $
 //
 // 
 // class G4LogicalVolume Inline Implementation file
@@ -56,7 +56,7 @@
 // ********************************************************************
 //
 inline
-G4String G4LogicalVolume::GetName() const
+const G4String& G4LogicalVolume::GetName() const
 {
   return fName;
 }
@@ -94,7 +94,7 @@ G4FieldManager* G4LogicalVolume::GetFieldManager() const
 inline void G4LogicalVolume::AssignFieldManager( G4FieldManager *fldMgr)
 {
   G4MT_fmanager= fldMgr;
-  if(!G4Threading::IsWorkerThread()) fFieldManager = fldMgr;
+  if(G4Threading::IsMasterThread())  fFieldManager = fldMgr;
 }
 
 
@@ -266,7 +266,6 @@ inline
 void G4LogicalVolume::ResetMass()
 {
   G4MT_mass= 0.0;
-  // Do not fChangedState= 1; 
 }
 
 // ********************************************************************
@@ -381,7 +380,7 @@ inline
 void G4LogicalVolume::SetSensitiveDetector(G4VSensitiveDetector* pSDetector)
 {
   G4MT_sdetector = pSDetector;
-  if(!G4Threading::IsWorkerThread()) fSensitiveDetector = pSDetector;
+  if(G4Threading::IsMasterThread()) fSensitiveDetector = pSDetector;
 }
 
 // ********************************************************************

@@ -111,15 +111,17 @@ public:
   static void iUpdatePositionMap();
 
   G4KDTreeResultHandle FindNearestInRange(const T* point /*from this point*/,
-                                          const T* key /*for this type*/,
+                                          int key /*for this type*/,
                                           G4double /*range*/);
   G4KDTreeResultHandle FindNearest(const G4ThreeVector&,
-                                   const T* /*for this type*/);
+                                   int key /*for this type*/);
+  G4KDTreeResultHandle FindNearest(const T* /*from this point*/,
+                                   int key /*for this type*/);
+  G4KDTreeResultHandle FindNearestInRange(const G4ThreeVector& /*from this point*/,
+                                          int key /*for this type*/,
+                                          G4double /*range*/);
   G4KDTreeResultHandle FindNearest(const T* /*from this point*/,
                                    const T* /*for this type*/);
-  G4KDTreeResultHandle FindNearestInRange(const G4ThreeVector& /*from this point*/,
-                                          const T* /*for this type*/,
-                                          G4double /*range*/);
 };
 
 #ifdef TEMPLATE

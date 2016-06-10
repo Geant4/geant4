@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc 83616 2014-09-04 13:30:16Z gcosmo $
+// $Id: G4HadronElasticPhysics.cc 88356 2015-02-16 09:00:15Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -69,7 +69,8 @@
 #include "G4CrossSectionDataSetRegistry.hh"
 
 #include "G4ChipsProtonElasticXS.hh"
-#include "G4ChipsNeutronElasticXS.hh"
+
+#include "G4NeutronElasticXS.hh"
 
 #include "G4CrossSectionElastic.hh"
 
@@ -188,8 +189,7 @@ void G4HadronElasticPhysics::ConstructProcess()
     } else if(pname == "neutron") {   
 
       neutronProcess = new G4HadronElasticProcess();
-      //neutronProcess->AddDataSet(new G4BGGNucleonElasticXS(particle));
-      neutronProcess->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsNeutronElasticXS::Default_Name()));
+      neutronProcess->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronElasticXS::Default_Name()));
       neutronProcess->RegisterMe(neutronModel);
       pmanager->AddDiscreteProcess(neutronProcess);
       if(verbose > 1) {

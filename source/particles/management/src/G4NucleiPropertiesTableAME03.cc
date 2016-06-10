@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTableAME03.cc 72955 2013-08-14 14:23:14Z gcosmo $
+// $Id: G4NucleiPropertiesTableAME03.cc 91885 2015-08-10 07:05:56Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -77,13 +77,8 @@ G4int G4NucleiPropertiesTableAME03::GetIndex(G4int Z, G4int A)
     return -1;
   }
    
-  G4int i = shortTable[A-1];
-  while ( i < shortTable[A] ) {
-    if (indexArray[0][i] != Z ) {
-      i++;
-    } else {
-      return i;
-    }
+  for (G4int i = shortTable[A-1]; i < shortTable[A] ; i++) {
+    if (indexArray[0][i] == Z ) return i;
   }
   return -1;
 }

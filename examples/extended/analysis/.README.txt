@@ -1,0 +1,28 @@
+//$Id$
+
+///\file "analysis/.README.txt"
+///\brief Examples analysis README page
+
+/*! \page Examples_analysis Category "analysis"
+
+ Examples in this directory demonstrate how to make histograms and ntuples
+
+\link ExampleAnaEx01 AnaEx01 \endlink
+
+ Simple example showing use of g4tools.
+
+\link ExampleAnaEx02 AnaEx02 \endlink
+
+ As AnaEx01, but direct interface to ROOT.
+  
+\link ExampleAnaEx03 AnaEx03 \endlink
+
+ As AnaEx01, showing basic features common to all AIDA implementations.
+
+\link ExampleB1Con B1Con \endlink
+
+ B1Con shows how to use the statistical tool G4ConvergenceTester.
+ It does not make histograms.
+ It has the same geometry as B1.
+
+*/

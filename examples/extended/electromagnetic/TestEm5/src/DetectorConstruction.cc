@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 77600 2013-11-26 17:07:41Z gcosmo $
+// $Id: DetectorConstruction.cc 91972 2015-08-12 13:48:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -239,10 +239,13 @@ void DetectorConstruction::DefineMaterials()
   steam->AddMaterial(H2O, fractionmass=1.);
   steam->GetIonisation()->SetMeanExcitationEnergy(71.6*eV);  
 
+  G4Material* rock1 = new G4Material("StandardRock",
+                                     2.65*CLHEP::g/CLHEP::cm3, 1, kStateSolid);
+  rock1->AddElement(Na, 1);
+
   //
   // example of vacuum
   //
-
   density     = universe_mean_density;    //from PhysicalConstants.h
   pressure    = 3.e-18*pascal;
   temperature = 2.73*kelvin;
@@ -257,39 +260,38 @@ void DetectorConstruction::ComputeCalorParameters()
   // Compute derived parameters of the calorimeter
   fXstartAbs = fXposAbs-0.5*fAbsorberThickness; 
   fXendAbs   = fXposAbs+0.5*fAbsorberThickness;
+
+  G4double xmax = std::max(std::abs(fXstartAbs), std::abs(fXendAbs));
      
-  if (fDefaultWorld) {
-     fWorldSizeX = 1.5*fAbsorberThickness; fWorldSizeYZ= 1.2*fAbsorberSizeYZ;
-  }         
+  // change world size by the flag or if the absorber is large 
+  if (fDefaultWorld || 2*xmax >=  fWorldSizeX ||
+      fAbsorberSizeYZ >= fWorldSizeYZ) 
+    {
+      fWorldSizeX = 3*xmax; 
+      fWorldSizeYZ= 1.2*fAbsorberSizeYZ;
+    }         
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 { 
-  // Cleanup old geometry
-  //
-  G4GeometryManager::GetInstance()->OpenGeometry();
-  G4PhysicalVolumeStore::GetInstance()->Clean();
-  G4LogicalVolumeStore::GetInstance()->Clean();
-  G4SolidStore::GetInstance()->Clean();
-  
   // World
   //
   fSolidWorld = new G4Box("World",                                //its name
-                   fWorldSizeX/2,fWorldSizeYZ/2,fWorldSizeYZ/2);   //its size
+                   fWorldSizeX/2,fWorldSizeYZ/2,fWorldSizeYZ/2);  //its size
                          
   fLogicWorld = new G4LogicalVolume(fSolidWorld,          //its solid
                                    fWorldMaterial,        //its material
                                    "World");              //its name
                                    
   fPhysiWorld = new G4PVPlacement(0,                      //no rotation
-                                   G4ThreeVector(),       //at (0,0,0)
+                                 G4ThreeVector(0.,0.,0.), //at (0,0,0)
                                  fLogicWorld,             //its logical volume
                                  "World",                 //its name
                                  0,                       //its mother  volume
                                  false,                   //no boolean operation
-                                 0);                        //copy number
+                                 0);                      //copy number
                                  
   // Absorber
   // 
@@ -297,16 +299,16 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
                       fAbsorberThickness/2,fAbsorberSizeYZ/2,fAbsorberSizeYZ/2);
                           
   fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber,    //its solid
-                                            fAbsorberMaterial, //its material
-                                          "Absorber");       //its name
+                                       fAbsorberMaterial, //its material
+                                       "Absorber");       //its name
                                                 
   fPhysiAbsorber = new G4PVPlacement(0,                   //no rotation
                         G4ThreeVector(fXposAbs,0.,0.),    //its position
                                 fLogicAbsorber,     //its logical volume
                                 "Absorber",         //its name
                                 fLogicWorld,        //its mother
-                                false,             //no boulean operat
-                                0);                //copy number
+                                false,              //no boulean operat
+                                0);                 //copy number
                                         
   PrintCalorParameters();         
   
@@ -346,7 +348,7 @@ void DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
 
   if (pttoMaterial && fAbsorberMaterial != pttoMaterial) {
     fAbsorberMaterial = pttoMaterial;                  
-    if(fLogicAbsorber) fLogicAbsorber->SetMaterial(fAbsorberMaterial);
+    if(fLogicAbsorber) { fLogicAbsorber->SetMaterial(fAbsorberMaterial); }
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
   }
 }
@@ -360,8 +362,8 @@ void DetectorConstruction::SetWorldMaterial(G4String materialChoice)
     G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
 
   if (pttoMaterial && fWorldMaterial != pttoMaterial) {
-    fWorldMaterial = pttoMaterial;                  
-    if(fLogicWorld) fLogicWorld->SetMaterial(fWorldMaterial);
+    fWorldMaterial = pttoMaterial; 
+    if(fLogicWorld) { fLogicWorld->SetMaterial(fWorldMaterial); }
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
   }
 }
@@ -372,7 +374,7 @@ void DetectorConstruction::SetAbsorberThickness(G4double val)
 {
   fAbsorberThickness = val;
   ComputeCalorParameters();
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if(fPhysiWorld) { ChangeGeometry(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -381,7 +383,7 @@ void DetectorConstruction::SetAbsorberSizeYZ(G4double val)
 {
   fAbsorberSizeYZ = val;
   ComputeCalorParameters();
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if(fPhysiWorld) { ChangeGeometry(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -391,7 +393,7 @@ void DetectorConstruction::SetWorldSizeX(G4double val)
   fWorldSizeX = val;
   fDefaultWorld = false;
   ComputeCalorParameters();
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if(fPhysiWorld) { ChangeGeometry(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -401,35 +403,44 @@ void DetectorConstruction::SetWorldSizeYZ(G4double val)
   fWorldSizeYZ = val;
   fDefaultWorld = false;
   ComputeCalorParameters();
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if(fPhysiWorld) { ChangeGeometry(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::SetAbsorberXpos(G4double val)
 {
-  fXposAbs  = val;
-  ComputeCalorParameters();
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if(!fPhysiWorld) { fXposAbs = val; }
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-
 void DetectorConstruction::ConstructSDandField()
 {
-    if ( fFieldMessenger.Get() == 0 ) {
-        // Create global magnetic field messenger.
-        // Uniform magnetic field is then created automatically if
-        // the field value is not zero.
-        G4ThreeVector fieldValue = G4ThreeVector();
-        G4GlobalMagFieldMessenger* msg =
-        new G4GlobalMagFieldMessenger(fieldValue);
-        //msg->SetVerboseLevel(1);
-        G4AutoDelete::Register(msg);
-        fFieldMessenger.Put( msg );
-        
-    }
+  if ( fFieldMessenger.Get() == 0 ) {
+    // Create global magnetic field messenger.
+    // Uniform magnetic field is then created automatically if
+    // the field value is not zero.
+    G4ThreeVector fieldValue = G4ThreeVector();
+    G4GlobalMagFieldMessenger* msg =
+      new G4GlobalMagFieldMessenger(fieldValue);
+    //msg->SetVerboseLevel(1);
+    G4AutoDelete::Register(msg);
+    fFieldMessenger.Put( msg );        
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::ChangeGeometry()
+{
+  fSolidWorld->SetXHalfLength(fWorldSizeX*0.5);
+  fSolidWorld->SetYHalfLength(fWorldSizeYZ*0.5);
+  fSolidWorld->SetZHalfLength(fWorldSizeYZ*0.5);
+
+  fSolidAbsorber->SetXHalfLength(fAbsorberThickness*0.5);
+  fSolidAbsorber->SetYHalfLength(fAbsorberSizeYZ*0.5);
+  fSolidAbsorber->SetZHalfLength(fAbsorberSizeYZ*0.5);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

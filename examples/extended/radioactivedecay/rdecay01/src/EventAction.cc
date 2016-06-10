@@ -26,38 +26,41 @@
 /// \file radioactivedecay/rdecay01/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id: EventAction.cc 68030 2013-03-13 13:51:27Z gcosmo $
+// $Id: EventAction.cc 93256 2015-10-14 08:15:10Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "EventAction.hh"
-#include "EventMessenger.hh"
+#include "HistoManager.hh"
+#include "Run.hh"
 
 #include "G4Event.hh"
+#include "G4RunManager.hh"
+
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction()
 :G4UserEventAction(),
- fPrintModulo(10000),fDecayChain(),fEventMessenger(0)
+ fDecayChain(),fEvisTot(0.)
 {
-  fEventMessenger = new EventMessenger(this);
+  // Set default print level 
+  G4RunManager::GetRunManager()->SetPrintProgress(10000);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
-{
-  delete fEventMessenger;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::BeginOfEventAction(const G4Event*)
 {
  fDecayChain = " ";
+ fEvisTot = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,11 +68,18 @@ void EventAction::BeginOfEventAction(const G4Event*)
 void EventAction::EndOfEventAction(const G4Event* evt)
 {
  G4int evtNb = evt->GetEventID(); 
+ G4int printProgress = G4RunManager::GetRunManager()->GetPrintProgress();
  //printing survey
  //
- if (evtNb%fPrintModulo == 0) 
-   G4cout << "\n end of event " << std::setw(6) << evtNb 
-          << " :" + fDecayChain << G4endl;
+ if (evtNb%printProgress == 0) 
+   G4cout << "    End of event. Decay chain:" << fDecayChain 
+          << G4endl << G4endl;
+ 
+ //total visible energy
+ G4AnalysisManager::Instance()->FillH1(9, fEvisTot);
+ Run* run 
+  = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+ run->EvisEvent(fEvisTot);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

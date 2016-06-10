@@ -88,47 +88,37 @@ G4_DECLARE_PHYSLIST_FACTORY(QGSP_INCLXX_HP);
 #include "Shielding.hh"
 G4_DECLARE_PHYSLIST_FACTORY(Shielding);
 
-/***********************************************************************
-// rhatcher 2014-11-07 
-// investigating why this is problematic for  mac/clang & linux/icc
-// so for now don't support ShieldingLEND and ShieldingM
-
 // some extra hoops because the physlist factory expects to be able
-// to construct a list using no args (or just a verbosity)
+// to construct a list using just a verbosity argument
 // but 
 //   "ShieldingLEND" is Shielding(verbose,"LEND");
 //   "ShieldingM"    is Shielding(verbose,"HP","M");
-template<class T>
-class TShieldingLEND : public Shielding
+
+class ShieldingLEND : public Shielding
 {
 public:
-  explicit TShieldingLEND(G4int verbose = 1) : TShielding(verbose,"LEND") { ; }
-  virtual ~TShieldingLEND() { ; }
+  explicit ShieldingLEND(G4int verbose = 1) : Shielding(verbose,"LEND","") { ; }
+  virtual ~ShieldingLEND() { ; }
 };
-typedef TShieldingLEND<G4VModularPhysicsList> ShieldingLEND;
 G4_DECLARE_PHYSLIST_FACTORY(ShieldingLEND);
 
-template<class T>
-class TShieldingM : public Shielding
+class ShieldingM : public Shielding
 {
 public:
-  explicit TShieldingM(G4int verbose = 1) : TShielding(verbose,"HP","M") { ; }
-  virtual ~TShieldingM() { ; }
+  explicit ShieldingM(G4int verbose = 1) : Shielding(verbose,"HP","M") { ; }
+  virtual ~ShieldingM() { ; }
 };
-typedef TShieldingM<G4VModularPhysicsList> ShieldingM;
 G4_DECLARE_PHYSLIST_FACTORY(ShieldingM);
-
-***********************************************************************/
 
 #include "NuBeam.hh"
 G4_DECLARE_PHYSLIST_FACTORY(NuBeam);
 
-/***********************************************************************
-// rhatcher 2014-11-07 
-// investigating why this is problematic for  mac/clang ( & linux/icc ? )
-
+// for __clang__ this this needs intercoms/include/G4AnyMethod.hh
+// to not attempt to defined remove_reference templates, but use std C++11
 #include "G4GenericPhysicsList.hh"
 G4_DECLARE_PHYSLIST_FACTORY(G4GenericPhysicsList);
 
-***********************************************************************/
+#include "QGSP_BIC_AllHP.hh"
+G4_DECLARE_PHYSLIST_FACTORY(QGSP_BIC_AllHP);
 
+// 

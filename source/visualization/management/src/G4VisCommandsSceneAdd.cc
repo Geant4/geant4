@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc 87360 2014-12-01 16:07:16Z gcosmo $
+// $Id: G4VisCommandsSceneAdd.cc 93069 2015-10-02 09:54:27Z gcosmo $
 // /vis/scene/add commands - John Allison  9th August 1998
 
 #include "G4VisCommandsSceneAdd.hh"
@@ -642,21 +642,32 @@ void G4VisCommandSceneAddEventID::EventID::operator()
       oss << "Run " << runID << " Event " << eventID;
     } else {
       G4int nEvents = 0;
+#ifdef G4MULTITHREADED
+      if (G4Threading::G4GetThreadId() != G4Threading::MASTER_ID) {
+        // Vis sub-thread - run in progress
+#else
       G4StateManager* stateManager = G4StateManager::GetStateManager();
       G4ApplicationState state = stateManager->GetCurrentState();
       if (state == G4State_EventProc) {
-	nEvents = currentRun->GetNumberOfEventToBeProcessed();
+        // Run in progress
+#endif
+        nEvents = currentRun->GetNumberOfEventToBeProcessed();
       } else {
-	const std::vector<const G4Event*>* events =
-	  currentRun->GetEventVector();
-	if (events) nEvents = events->size();
+        // Rebuilding from kept events
+        const std::vector<const G4Event*>* events =
+        currentRun->GetEventVector();
+        if (events) nEvents = events->size();
       }
+#ifndef G4MULTITHREADED
+      // In sequential mode we can recognise the last event and avoid
+      // drawing the event ID.  But for MT mode there is no way of
+      // knowing so we have to accept that the event ID will be drawn
+      // at each event, the same characters over and over - but hey!
       if (eventID < nEvents - 1) return;  // Not last event.
-      else {
-	oss << "Run " << runID << " (" << nEvents << " event";
-	if (nEvents != 1) oss << 's';
-	oss << ')';
-      }
+#endif
+      oss << "Run " << runID << " (" << nEvents << " event";
+      if (nEvents != 1) oss << 's';
+      oss << ')';
     }
     G4Text text(oss.str(), G4Point3D(fX, fY, 0.));
     text.SetScreenSize(fSize);
@@ -675,9 +686,14 @@ G4VisCommandSceneAddExtent::G4VisCommandSceneAddExtent () {
   fpCommand = new G4UIcommand("/vis/scene/add/extent", this);
   fpCommand -> SetGuidance
   ("Adds a dummy model with given extent to the current scene."
+   "\nRequires the limits: xmin, xmax, ymin, ymax, zmin, zmax unit."
    "\nThis can be used to provide an extent to the scene even if"
    "\nno other models with extent are available. For example,"
-   "\neven if there is no geometry.");
+   "\neven if there is no geometry.  In that case, for example:"
+   "\n  /vis/open OGL"
+   "\n  /vis/scene/create"
+   "\n  /vis/scene/add/extent -300 300 -300 300 -300 300 cm"
+   "\n  /vis/sceneHandler/attach");
   G4bool omitable;
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("xmin", 'd', omitable = true);
@@ -1702,14 +1718,12 @@ void G4VisCommandSceneAddLogo2D::Logo2D::operator()
 ////////////// /vis/scene/add/magneticField ///////////////////////////////////////
 
 G4VisCommandSceneAddMagneticField::G4VisCommandSceneAddMagneticField () {
-  G4bool ommitable;
-  fpCommand = new G4UIcmdWithAnInteger ("/vis/scene/add/magneticField", this);
-  fpCommand->SetParameterName("nDataPointsPerHalfScene",ommitable=true);
-  fpCommand->SetDefaultValue(10);
+  G4bool omitable;
+  fpCommand = new G4UIcommand ("/vis/scene/add/magneticField", this);
   fpCommand -> SetGuidance
   ("Adds magnetic field representation to current scene.");
   fpCommand -> SetGuidance
-  ("The parameter is no. of data points per half scene.  So, possibly, at"
+  ("The first parameter is no. of data points per half scene.  So, possibly, at"
    "\nmaximum, the number of data points sampled is (2*n+1)^3, which can grow"
    "\nlarge--be warned!"
    "\nYou might find that your scene is cluttered by thousands of arrows for"
@@ -1721,6 +1735,14 @@ G4VisCommandSceneAddMagneticField::G4VisCommandSceneAddMagneticField () {
   ("In the arrow representation, the length of the arrow is proportional"
    "\nto the magnitude of the field and the colour is mapped onto the range"
    "\nas a fraction of the maximum magnitude: 0->0.5->1 is blue->green->red.");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("nDataPointsPerHalfScene", 'i', omitable = true);
+  parameter -> SetDefaultValue (10);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("representation", 's', omitable = true);
+  parameter -> SetParameterCandidates("fullArrow lightArrow");
+  parameter -> SetDefaultValue ("fullArrow");
+  fpCommand -> SetParameter (parameter);
 }
 
 G4VisCommandSceneAddMagneticField::~G4VisCommandSceneAddMagneticField () {
@@ -1745,10 +1767,17 @@ void G4VisCommandSceneAddMagneticField::SetNewValue
     return;
   }
 
-  G4int nDataPointsPerHalfScene = fpCommand->GetNewIntValue(newValue);
-  
+  G4int nDataPointsPerHalfScene;
+  G4String representation;
+  std::istringstream iss(newValue);
+  iss >> nDataPointsPerHalfScene >> representation;
+  G4MagneticFieldModel::Representation
+  modelRepresentation = G4MagneticFieldModel::fullArrow;
+  if (representation == "lightArrow") {
+    modelRepresentation = G4MagneticFieldModel::lightArrow;
+  }
   G4MagneticFieldModel* model =
-  new G4MagneticFieldModel(nDataPointsPerHalfScene);
+  new G4MagneticFieldModel(nDataPointsPerHalfScene,modelRepresentation);
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
   if (successful) {
@@ -1756,7 +1785,10 @@ void G4VisCommandSceneAddMagneticField::SetNewValue
       G4cout << "Magnetic field, if any, will be drawn in scene \""
       << currentSceneName
       << "\"\n  with "
-      << nDataPointsPerHalfScene << " data points per half scene."
+      << nDataPointsPerHalfScene
+      << " data points per half scene and with representation \""
+      << representation
+      << '\"'
       << G4endl;
     }
   }
@@ -2675,8 +2707,9 @@ G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
   fpCommand -> SetGuidance
     ("If clip-volume-type is specified, the subsequent parameters are used to"
      "\nto define a clipping volume.  For example,"
-     "\n\"vis/scene/add/volume ! ! ! -box km 0 1 0 1 0 1\" will draw the world"
-     "\nwith the positive octant cut away."); 
+     "\n\"/vis/scene/add/volume ! ! ! -box km 0 1 0 1 0 1\" will draw the world"
+     "\nwith the positive octant cut away.  (If the Boolean Processor issues"
+     "\nwarnings try replacing 0 by 0.000000001 or something.)");
   fpCommand -> SetGuidance
     ("If clip-volume-type is prepended with '-', the clip-volume is subtracted"
      "\n(cutaway). (This is the default if there is no prepended character.)"

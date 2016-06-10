@@ -29,29 +29,32 @@
 
 #include "G4FileMessenger.hh"
 #include "G4VAnalysisManager.hh"
+#include "G4AnalysisUtilities.hh"
 
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
+
+using namespace G4Analysis;
 
 //_____________________________________________________________________________
 G4FileMessenger::G4FileMessenger(G4VAnalysisManager* manager)
   : G4UImessenger(),
     fManager(manager),
-    fSetFileNameCmd(0),
-    fSetHistoDirNameCmd(0),
-    fSetNtupleDirNameCmd(0)
+    fSetFileNameCmd(nullptr),
+    fSetHistoDirNameCmd(nullptr),
+    fSetNtupleDirNameCmd(nullptr)
 {  
-  fSetFileNameCmd = new G4UIcmdWithAString("/analysis/setFileName",this);
+  fSetFileNameCmd = G4Analysis::make_unique<G4UIcmdWithAString>("/analysis/setFileName",this);
   fSetFileNameCmd->SetGuidance("Set name for the histograms & ntuple file");
   fSetFileNameCmd->SetParameterName("Filename", false);
   fSetFileNameCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   
-  fSetHistoDirNameCmd = new G4UIcmdWithAString("/analysis/setHistoDirName",this);
+  fSetHistoDirNameCmd = G4Analysis::make_unique<G4UIcmdWithAString>("/analysis/setHistoDirName",this);
   fSetHistoDirNameCmd->SetGuidance("Set name for the histograms directory");
   fSetHistoDirNameCmd->SetParameterName("HistoDirName", false);
   fSetHistoDirNameCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   
-  fSetNtupleDirNameCmd = new G4UIcmdWithAString("/analysis/setNtupleDirName",this);
+  fSetNtupleDirNameCmd = G4Analysis::make_unique<G4UIcmdWithAString>("/analysis/setNtupleDirName",this);
   fSetNtupleDirNameCmd->SetGuidance("Set name for the ntuple directory");
   fSetNtupleDirNameCmd->SetParameterName("NtupleDirName", false);
   fSetNtupleDirNameCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
@@ -59,11 +62,7 @@ G4FileMessenger::G4FileMessenger(G4VAnalysisManager* manager)
 
 //_____________________________________________________________________________
 G4FileMessenger::~G4FileMessenger()
-{
-  delete fSetFileNameCmd;
-  delete fSetHistoDirNameCmd;
-  delete fSetNtupleDirNameCmd;
-}
+{}
 
 //
 // public functions
@@ -71,14 +70,14 @@ G4FileMessenger::~G4FileMessenger()
 //_____________________________________________________________________________
 void G4FileMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
 {
-  if ( command == fSetFileNameCmd ) {
+  if ( command == fSetFileNameCmd.get() ) {
     G4cout << "Set file name: " << newValues << G4endl;
     fManager->SetFileName(newValues);
   }  
-  else if ( command == fSetHistoDirNameCmd ) {
+  else if ( command == fSetHistoDirNameCmd.get() ) {
     fManager->SetHistoDirectoryName(newValues);
   }  
-  else if ( command == fSetNtupleDirNameCmd ) {
+  else if ( command == fSetNtupleDirNameCmd.get() ) {
     fManager->SetNtupleDirectoryName(newValues);
   }  
 }  

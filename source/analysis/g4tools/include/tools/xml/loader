@@ -109,7 +109,7 @@ public:
   }
 
 public:
-  std::ostream& out() {return m_out;}
+  std::ostream& out() const {return m_out;}
   void set_compressed_reader(tools::file::reader* aReader){
     delete m_compressed_reader;
     m_compressed_reader = aReader; //take ownership.
@@ -199,10 +199,8 @@ protected:
 
     XML_SetUserData(_parser,a_tag);
     XML_SetElementHandler(_parser,a_start,a_end);
-    XML_SetCharacterDataHandler(_parser,
-                (XML_CharacterDataHandler)character_data_handler);
-    //XML_SetProcessingInstructionHandler(_parser,
-    //      processingInstructionHandler);
+    XML_SetCharacterDataHandler(_parser,(XML_CharacterDataHandler)character_data_handler);
+  //XML_SetProcessingInstructionHandler(_parser,processingInstructionHandler);
     char* buf = (char*)aBuffer;
     unsigned int l = aSize;
     int done = 0;
@@ -370,11 +368,7 @@ protected:
     }
   }
 
-  static void start_element(
-   void* aUserData
-  ,const XML_Char* a_name
-  ,const XML_Char** a_atbs
-  ){
+  static void start_element(void* aUserData,const XML_Char* a_name,const XML_Char** a_atbs){
     loader* This = (loader*)aUserData;
     if(This->m_abort) return; //Do nothing.
   

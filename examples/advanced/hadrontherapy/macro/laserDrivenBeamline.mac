@@ -64,8 +64,8 @@
 ###/gps/ene/ezero 2.272727273
 
 ######################################################################
-#/vis/scene/create 
-#/vis/open OGL 
+###/vis/scene/create 
+###/vis/open OGL 
 /vis/viewer/set/background white
 /vis/viewer/set/viewpointThetaPhi 60 130
 /vis/viewer/zoom 1.0

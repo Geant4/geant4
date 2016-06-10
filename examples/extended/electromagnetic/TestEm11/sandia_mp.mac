@@ -1,0 +1,34 @@
+# $Id: sandia.mac 76008 2013-11-07 16:00:44Z maire $
+#
+# limit the step size from histo 8
+#
+# G.J.Lockwood et al.
+#     Sandia report SAND79-0414.UC-34a, February 1987
+# O.Kadri et al. NIM B 258 (2007) 381
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setNbOfAbsor  1
+###/testem/det/setAbsor 1 G4_Al  1 cm
+###/testem/det/setAbsor 1 G4_Mo  1 cm
+/testem/det/setAbsor 1 G4_Ta  1 cm
+/testem/det/setSizeYZ 1 cm
+#
+/testem/phys/addPhysics  emstandardMP	
+###/testem/phys/addPhysics  local	
+#
+/run/initialize
+#
+/run/setCut 1 mm	# will set cut for proton
+#
+/gun/particle e-
+/gun/energy 1000 keV
+#
+/analysis/setFileName sandia/Ta_1000keV_mp
+###/analysis/h1/set 8 100 0.  1.0 none	#normalized Edep profile
+/analysis/h1/set 8 100 0.  0.5 none	#for Ta
+#
+/run/printProgress 10000
+#
+/run/beamOn 100000

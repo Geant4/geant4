@@ -27,77 +27,48 @@
 /// \brief Implementation of the F01EventAction class
 //
 //
-// $Id: F01EventAction.cc 76248 2013-11-08 11:19:52Z gcosmo $
+// $Id: F01EventAction.cc 92496 2015-09-02 07:22:25Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "F01EventAction.hh"
-
 #include "F01RunAction.hh"
 
-#include "F01CalorHit.hh"
-#include "F01EventActionMessenger.hh"
-
 #include "G4Event.hh"
-#include "G4EventManager.hh"
-#include "G4HCofThisEvent.hh"
-#include "G4VHitsCollection.hh"
-#include "G4SDManager.hh"
+#include "G4RunManager.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F01EventAction::F01EventAction(F01RunAction* action)
  : G4UserEventAction(),
-   fCalorimeterCollID(-1),
-   fEventMessenger(0),
-   fRunAction(action),
-   fVerboseLevel(0),
-   fPrintModulo(10000)
-{
-  fEventMessenger = new F01EventActionMessenger(this);
-}
+   fRunAction(action)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F01EventAction::~F01EventAction()
-{
-  delete fEventMessenger;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F01EventAction::BeginOfEventAction(const G4Event* evt)
-{
-  G4int evtNb = evt->GetEventID();
-  if (evtNb%fPrintModulo == 0)
-    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-
-  if (fVerboseLevel>1)
-    G4cout << "<<< Event  " << evtNb << " started." << G4endl;
-
-  if (fCalorimeterCollID==-1)
-    {
-     G4SDManager * sdManager = G4SDManager::GetSDMpointer();
-     fCalorimeterCollID = sdManager->GetCollectionID("CalCollection");
-    }
-}
+void F01EventAction::BeginOfEventAction(const G4Event*)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F01EventAction::EndOfEventAction(const G4Event* evt)
 {
-  if (fVerboseLevel>0)
-    G4cout << "<<< Event  " << evt->GetEventID() << " ended." << G4endl;
-
   // save rndm status
   if (fRunAction->GetRndmFreq() == 2)
     {
      G4Random::saveEngineStatus("endOfEvent.rndm");
+     
      G4int evtNb = evt->GetEventID();
-     if (evtNb%fPrintModulo == 0)
+     G4int printProgress = G4RunManager::GetRunManager()->GetPrintProgress();
+     if (evtNb%printProgress == 0)
        {
          G4cout << "\n---> End of Event: " << evtNb << G4endl;
          G4Random::showEngineStatus();

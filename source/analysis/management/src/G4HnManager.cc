@@ -28,6 +28,9 @@
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
 #include "G4HnManager.hh"
+#include "G4AnalysisUtilities.hh"
+
+using namespace G4Analysis;
 
 //_____________________________________________________________________________
 G4HnManager::G4HnManager(const G4String& hnType,
@@ -36,6 +39,7 @@ G4HnManager::G4HnManager(const G4String& hnType,
     fHnType(hnType),
     fNofActiveObjects(0),
     fNofAsciiObjects(0),
+    fNofPlottingObjects(0),
     fHnVector()
 {
 }
@@ -43,10 +47,9 @@ G4HnManager::G4HnManager(const G4String& hnType,
 //_____________________________________________________________________________
 G4HnManager::~G4HnManager()
 {
-  std::vector<G4HnInformation*>::iterator it;
-  for (it = fHnVector.begin(); it != fHnVector.end(); it++ ) {
-    delete (*it);
-  }  
+  for ( auto hnInformation : fHnVector ) {
+    delete hnInformation;
+  }
 }
 
 // 
@@ -54,69 +57,13 @@ G4HnManager::~G4HnManager()
 //
 
 //_____________________________________________________________________________
-void G4HnManager::AddH1Information(const G4String& name,
-                                   const G4String& unitName,
-                                   const G4String& fcnName,
-                                   G4double unit, G4Fcn fcn,
-                                   G4BinScheme binScheme)
+G4HnInformation*  G4HnManager::AddHnInformation(const G4String& name, G4int nofDimensions)
 {
-  G4HnInformation* hnInformation = new G4HnInformation(name, 1);
-  hnInformation
-    ->AddHnDimensionInformation(
-         G4HnDimensionInformation(unitName, fcnName, unit,  fcn, binScheme));
-
+  auto hnInformation = new G4HnInformation(name, nofDimensions);
   fHnVector.push_back(hnInformation);
   ++fNofActiveObjects;
-}  
 
-//_____________________________________________________________________________
-void  G4HnManager::AddH2Information(const G4String& name,
-                                    const G4String& xunitName, 
-                                    const G4String& yunitName,
-                                    const G4String& xfcnName,
-                                    const G4String& yfcnName,
-                                    G4double xunit, G4double yunit,
-                                    G4Fcn xfcn, G4Fcn yfcn, 
-                                    G4BinScheme xbinScheme, G4BinScheme ybinScheme)
-{
-  G4HnInformation* hnInformation = new G4HnInformation(name, 2);
-  hnInformation
-    ->AddHnDimensionInformation(
-         G4HnDimensionInformation(xunitName, xfcnName, xunit,  xfcn, xbinScheme));
-  hnInformation
-    ->AddHnDimensionInformation(
-         G4HnDimensionInformation(yunitName, yfcnName, yunit,  yfcn, ybinScheme));
-
-  fHnVector.push_back(hnInformation);
-  ++fNofActiveObjects;
-}  
-
-//_____________________________________________________________________________
-void  G4HnManager::AddH3Information(const G4String& name,
-                                    const G4String& xunitName, 
-                                    const G4String& yunitName,
-                                    const G4String& zunitName,
-                                    const G4String& xfcnName,
-                                    const G4String& yfcnName,
-                                    const G4String& zfcnName,
-                                    G4double xunit, G4double yunit, G4double zunit,
-                                    G4Fcn xfcn, G4Fcn yfcn, G4Fcn zfcn, 
-                                    G4BinScheme xbinScheme, G4BinScheme ybinScheme,
-                                    G4BinScheme zbinScheme)
-{
-  G4HnInformation* hnInformation = new G4HnInformation(name, 3);
-  hnInformation
-    ->AddHnDimensionInformation(
-         G4HnDimensionInformation(xunitName, xfcnName, xunit,  xfcn, xbinScheme));
-  hnInformation
-    ->AddHnDimensionInformation(
-         G4HnDimensionInformation(yunitName, yfcnName, yunit,  yfcn, ybinScheme));
-  hnInformation
-    ->AddHnDimensionInformation(
-         G4HnDimensionInformation(zunitName, zfcnName, zunit,  zfcn, zbinScheme));
-
-  fHnVector.push_back(hnInformation);
-  ++fNofActiveObjects;
+  return hnInformation;
 }  
 
 //_____________________________________________________________________________
@@ -146,7 +93,7 @@ G4HnDimensionInformation* G4HnManager::GetHnDimensionInformation(G4int id,
                                 G4int dimension,
                                 G4String functionName, G4bool warn) const
 {
-  G4HnInformation* hnInformation = GetHnInformation(id, functionName, warn);
+  auto hnInformation = GetHnInformation(id, functionName, warn);
   if ( ! hnInformation ) return 0; 
 
   return hnInformation->GetHnDimensionInformation(dimension);
@@ -165,11 +112,17 @@ G4bool G4HnManager::IsAscii() const
 }  
 
 //_____________________________________________________________________________
+G4bool G4HnManager::IsPlotting() const
+{
+  return ( fNofPlottingObjects > 0 );
+}  
+
+//_____________________________________________________________________________
 void  G4HnManager::SetActivation(G4int id, G4bool activation)
 {
 // Set activation to a given object
 
-  G4HnInformation* info = GetHnInformation(id, "SetActivation");
+  auto info = GetHnInformation(id, "SetActivation");
 
   if ( ! info ) return;
 
@@ -189,9 +142,11 @@ void  G4HnManager::SetActivation(G4bool activation)
 {
 // Set activation to all objects of the given type
 
-  std::vector<G4HnInformation*>::iterator it;
-  for ( it = fHnVector.begin(); it != fHnVector.end(); it++ ) {
-    G4HnInformation* info = *it;
+  //std::vector<G4HnInformation*>::iterator it;
+  //for ( it = fHnVector.begin(); it != fHnVector.end(); it++ ) {
+  //   G4HnInformation* info = *it;
+
+  for ( auto info : fHnVector )  {
 
     // Do nothing if activation does not change
     if ( info->GetActivation() == activation ) continue;
@@ -208,7 +163,7 @@ void  G4HnManager::SetActivation(G4bool activation)
 //_____________________________________________________________________________
 void  G4HnManager::SetAscii(G4int id, G4bool ascii)
 {
-  G4HnInformation* info = GetHnInformation(id, "SetAscii");
+  auto info = GetHnInformation(id, "SetAscii");
 
   if ( ! info ) return;
 
@@ -224,9 +179,46 @@ void  G4HnManager::SetAscii(G4int id, G4bool ascii)
 }    
 
 //_____________________________________________________________________________
+void  G4HnManager::SetPlotting(G4int id, G4bool plotting)
+{
+  auto info = GetHnInformation(id, "SetPlotting");
+
+  if ( ! info ) return;
+
+  // Do nothing if ascii does not change
+  if ( info->GetPlotting() == plotting ) return;
+  
+  // Change Plotting and account it in fNofPlottingObjects
+  info->SetPlotting(plotting);
+  if ( plotting ) 
+    fNofPlottingObjects++;
+  else
+    fNofPlottingObjects--;   
+}    
+
+//_____________________________________________________________________________
+void  G4HnManager::SetPlotting(G4bool plotting)
+{
+// Set plotting to all objects of the given type
+
+  for ( auto info : fHnVector )  {
+
+    // Do nothing if plotting does not change
+    if ( info->GetPlotting() == plotting ) continue;
+  
+    // Change plotting and account it in fNofActiveObjects
+    info->SetPlotting(plotting);
+    if ( plotting ) 
+      fNofPlottingObjects++;
+    else
+      fNofPlottingObjects--; 
+  }     
+}    
+
+//_____________________________________________________________________________
 G4String G4HnManager::GetName(G4int id) const
 {
-  G4HnInformation* info = GetHnInformation(id, "GetName");
+  auto info = GetHnInformation(id, "GetName");
 
   if ( ! info ) return "";
     
@@ -236,8 +228,7 @@ G4String G4HnManager::GetName(G4int id) const
 //_____________________________________________________________________________
 G4double G4HnManager::GetXUnit(G4int id) const
 {
-  G4HnDimensionInformation* info 
-    = GetHnDimensionInformation(id, G4HnInformation::kX, "GetXUnit");
+  auto info = GetHnDimensionInformation(id, kX, "GetXUnit");
 
   if ( ! info ) return 1.0;
   
@@ -247,8 +238,7 @@ G4double G4HnManager::GetXUnit(G4int id) const
 //_____________________________________________________________________________
 G4double G4HnManager::GetYUnit(G4int id) const
 {
-  G4HnDimensionInformation* info 
-    = GetHnDimensionInformation(id, G4HnInformation::kY, "GetYUnit");
+  auto info = GetHnDimensionInformation(id, kY, "GetYUnit");
 
   if ( ! info ) return 1.0;
   
@@ -258,8 +248,7 @@ G4double G4HnManager::GetYUnit(G4int id) const
 //_____________________________________________________________________________
 G4double G4HnManager::GetZUnit(G4int id) const
 {
-  G4HnDimensionInformation* info 
-    = GetHnDimensionInformation(id, G4HnInformation::kZ, "GetZUnit");
+  auto info = GetHnDimensionInformation(id, kZ, "GetZUnit");
 
   if ( ! info ) return 1.0;
   
@@ -269,7 +258,7 @@ G4double G4HnManager::GetZUnit(G4int id) const
 //_____________________________________________________________________________
 G4bool G4HnManager::GetActivation(G4int id) const
 {
-  G4HnInformation* info = GetHnInformation(id, "GetActivation");
+  auto info = GetHnInformation(id, "GetActivation");
 
   if ( ! info ) return true;
   
@@ -279,9 +268,19 @@ G4bool G4HnManager::GetActivation(G4int id) const
 //_____________________________________________________________________________
 G4bool G4HnManager::GetAscii(G4int id) const
 {
-  G4HnInformation* info = GetHnInformation(id, "GetAscii");
+  auto info = GetHnInformation(id, "GetAscii");
 
   if ( ! info ) return false;
   
   return info->GetAscii();
+}    
+
+//_____________________________________________________________________________
+G4bool G4HnManager::GetPlotting(G4int id) const
+{
+  auto info = GetHnInformation(id, "GetPlotting");
+
+  if ( ! info ) return false;
+  
+  return info->GetPlotting();
 }    

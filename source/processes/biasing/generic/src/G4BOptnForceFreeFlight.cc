@@ -31,7 +31,8 @@
 
 
 G4BOptnForceFreeFlight::G4BOptnForceFreeFlight(G4String name)
-  : G4VBiasingOperation(name)
+: G4VBiasingOperation(name),
+  fOperationComplete(true)
 {
   fForceFreeFlightInteractionLaw = new G4ILawForceFreeFlight("LawForOperation"+name);
 }
@@ -43,6 +44,7 @@ G4BOptnForceFreeFlight::~G4BOptnForceFreeFlight()
 
 const G4VBiasingInteractionLaw* G4BOptnForceFreeFlight::ProvideOccurenceBiasingInteractionLaw( const G4BiasingProcessInterface*, G4ForceCondition& proposeForceCondition )
 {
+  fOperationComplete = false;
   proposeForceCondition = Forced;
   return fForceFreeFlightInteractionLaw;
 }
@@ -88,9 +90,9 @@ G4VParticleChange* G4BOptnForceFreeFlight::ApplyFinalStateBiasing( const G4Biasi
   // -- ApplyFinalStateBiasing operation called, and the weight for force free flight is applied
   // -- is applied by each operation.
   // -- If the track is not reaching the volume boundary, it zero weight flight continues.
-  
+
   fParticleChange.Initialize( *track );
-  forceFinalState = true;
+  forceFinalState    = true;
   if ( step->GetPostStepPoint()->GetStepStatus() == fGeomBoundary )
     {
       // -- Sanity checks:
@@ -117,6 +119,7 @@ G4VParticleChange* G4BOptnForceFreeFlight::ApplyFinalStateBiasing( const G4Biasi
       if ( callingProcess->GetIsFirstPostStepDoItInterface() ) proposedWeight  = fCumulatedWeightChange * fInitialTrackWeight;
       else                                                     proposedWeight *= fCumulatedWeightChange;
       fParticleChange.ProposeWeight(proposedWeight);
+      fOperationComplete = true;
     }
   
   return &fParticleChange;

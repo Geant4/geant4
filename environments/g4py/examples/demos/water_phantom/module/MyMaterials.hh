@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: MyMaterials.hh 86749 2014-11-17 15:03:05Z gcosmo $
+// $Id: MyMaterials.hh 66241 2012-12-13 18:34:42Z gunter $
 // ====================================================================
 //   MyMaterials.hh
 //

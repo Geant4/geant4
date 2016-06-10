@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABrownianTransportation.hh 87375 2014-12-02 08:17:28Z gcosmo $
+// $Id: G4DNABrownianTransportation.hh 90232 2015-05-21 08:54:54Z gcosmo $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
@@ -56,11 +56,11 @@ class G4Molecule;
 class G4BrownianAction
 {
 public:
-  G4BrownianAction();
-  virtual ~G4BrownianAction();
+  G4BrownianAction(){;}
+  virtual ~G4BrownianAction(){;}
 
-  virtual G4double GetDiffusionCoefficient(G4Material*,
-                                           G4Molecule*) { return 0;}
+//  virtual G4double GetDiffusionCoefficient(G4Material*,
+//                                           G4Molecule*) { return 0;}
 
   // If returns true: track is killed
   virtual void Transport(const G4Track&,
@@ -110,12 +110,14 @@ class G4DNABrownianTransportation : public G4ITTransportation
 {
 public:
   G4DNABrownianTransportation(const G4String& aName =
-      "DNABrownianTransportation",
+                              "DNABrownianTransportation",
                               G4int verbosityLevel = 0);
   G4IT_ADD_CLONE(G4VITProcess,G4DNABrownianTransportation)
   virtual ~G4DNABrownianTransportation();
   G4DNABrownianTransportation(const G4DNABrownianTransportation& other);
   G4DNABrownianTransportation& operator=(const G4DNABrownianTransportation& other);
+
+  inline void SetBrownianAction(G4BrownianAction*);
 
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
 
@@ -234,5 +236,11 @@ protected:
 
   G4BrownianAction* fpBrownianAction;
 };
+
+
+inline void G4DNABrownianTransportation::SetBrownianAction(G4BrownianAction* brownianAction)
+{
+  fpBrownianAction = brownianAction;
+}
 
 #endif // G4ITBROWNIANTRANSPORTATION_H

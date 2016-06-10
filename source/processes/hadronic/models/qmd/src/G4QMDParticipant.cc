@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 #include "G4QMDParticipant.hh"
+#include "G4Pow.hh"
 #include "G4SystemOfUnits.hh"
 
 G4QMDParticipant::G4QMDParticipant( const G4ParticleDefinition* pd , G4ThreeVector p , G4ThreeVector r )
@@ -48,6 +49,6 @@ G4QMDParticipant::~G4QMDParticipant()
 
 G4LorentzVector G4QMDParticipant::Get4Momentum()
 {
-   G4LorentzVector p4 ( momentum , std::sqrt ( std::pow ( definition->GetPDGMass()/GeV , 2 ) + momentum*momentum ) );
+   G4LorentzVector p4 ( momentum , std::sqrt ( G4Pow::GetInstance()->powN ( definition->GetPDGMass()/GeV , 2 ) + momentum*momentum ) );
    return p4;
 }

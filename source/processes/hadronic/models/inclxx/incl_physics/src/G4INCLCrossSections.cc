@@ -41,6 +41,7 @@
 #include "G4INCLLogger.hh"
 #include "G4INCLCrossSectionsINCL46.hh"
 #include "G4INCLCrossSectionsMultiPions.hh"
+#include "G4INCLCrossSectionsTruncatedMultiPions.hh"
 // #include <cassert>
 
 namespace G4INCL {
@@ -161,6 +162,16 @@ namespace G4INCL {
         setCrossSections(new CrossSectionsINCL46);
       else if(crossSections == MultiPionsCrossSections)
         setCrossSections(new CrossSectionsMultiPions);
+      else if(crossSections == TruncatedMultiPionsCrossSections) {
+        const G4int nMaxPi = theConfig->getMaxNumberMultipions();
+        if(nMaxPi>0)
+          setCrossSections(new CrossSectionsTruncatedMultiPions(nMaxPi));
+        else {
+          INCL_WARN("Truncated multipion cross sections were requested, but the specified maximum\n"
+                    << "number of pions is <=0. Falling back to standard multipion cross-sections.\n");
+          setCrossSections(new CrossSectionsMultiPions);
+        }
+      }
     }
   }
 }

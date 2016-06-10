@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQt.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4OpenGLImmediateQt.cc 91686 2015-07-31 09:40:08Z gcosmo $
 //
 // 
 // OpenGLImmediateQt graphics system factory.
@@ -57,9 +57,6 @@ G4VSceneHandler* G4OpenGLImmediateQt::CreateSceneHandler
 
 G4VViewer* G4OpenGLImmediateQt::CreateViewer
 (G4VSceneHandler& scene, const G4String& name) {
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLImmediateQt::CreateViewer \n");
-#endif
   G4VViewer* pView = 0;
   pView = new G4OpenGLImmediateQtViewer
     ((G4OpenGLImmediateSceneHandler&) scene, name);
@@ -77,9 +74,6 @@ G4VViewer* G4OpenGLImmediateQt::CreateViewer
     G4cerr << "G4OpenGLImmediateQt::CreateViewer: null pointer on"
       " new G4OpenGLImmediateQtViewer." << G4endl;
   }
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLImmediateQt::CreateViewer END \n");
-#endif
   return pView;
 }
 

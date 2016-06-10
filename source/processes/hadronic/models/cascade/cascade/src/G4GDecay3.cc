@@ -34,6 +34,7 @@
 //
 // 20130620  Address Coverity #51433, initializing all data members
 // 20141201  Fix error message text to show correct class name
+// 20150608  M. Kelsey -- Label all while loops as terminating.
 
 #include "G4GDecay3.hh"
 #include "G4PhysicalConstants.hh"
@@ -59,7 +60,7 @@ G4bool G4GDecay3::CalculateMomentumMagnitudes()
   G4double energy;
 
   G4double availableE = parentMass - mDaughter0 - mDaughter1 - mDaughter2;
-  do {
+  do {				/* Loop checking 08.06.2015 MHK */
     rndm1 = G4UniformRand();
     rndm2 = G4UniformRand();
     if (rndm2 > rndm1) {

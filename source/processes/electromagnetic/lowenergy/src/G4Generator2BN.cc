@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Generator2BN.cc 68038 2013-03-13 14:16:11Z gcosmo $
+// $Id: G4Generator2BN.cc 94083 2015-11-05 15:06:58Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -294,7 +294,7 @@ G4double G4Generator2BN::Calculatedsdkdt(G4double kout, G4double theta, G4double
 
      G4double p0 = std::sqrt(E0*E0-1);
      G4double p = std::sqrt(E*E-1);
-     G4double L = std::log((E*E0-1+p*p0)/(E*E0-1-p*p0));
+     G4double LL = std::log((E*E0-1+p*p0)/(E*E0-1-p*p0));
      G4double delta0 = E0 - p0*std::cos(theta);
      G4double epsilon = std::log((E+p)/(E-p));
      G4double Z2 = Z*Z;
@@ -315,7 +315,7 @@ G4double G4Generator2BN::Calculatedsdkdt(G4double kout, G4double theta, G4double
          ((2*(5*E02+2*E*E0+3))/(p02 * delta02)) -
          ((2*(p02-k2))/((Q2*delta02))) +
          ((4*E)/(p02*delta0)) +
-         (L/(p*p0))*(
+         (LL/(p*p0))*(
                  ((4*E0*sintheta2*(3*k-p02*E))/(p02*delta04)) +
                  ((4*E02*(E02+E2))/(p02*delta02)) +
                  ((2-2*(7*E02-3*E*E0+E2))/(p02*delta02)) +

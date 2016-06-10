@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PSTARStopping.cc 83008 2014-07-24 14:49:52Z gcosmo $
+// $Id: G4PSTARStopping.cc 91612 2015-07-29 08:51:51Z gcosmo $
 
 //---------------------------------------------------------------------------
 //
@@ -365,6 +365,7 @@ void G4PSTARStopping::AddData(const G4double* stop, const G4Material* mat)
     new G4LPhysicsFreeVector(60, T0[0]*CLHEP::MeV, T0[59]*CLHEP::MeV);
   for(size_t i=0; i<60; ++i) { v->PutValues(i, T0[i]*CLHEP::MeV, stop[i]*fac); }
   v->SetSpline(true);
+  v->FillSecondDerivatives();
   materials.push_back(mat);
   sdata.push_back(v);
   ++nvectors;

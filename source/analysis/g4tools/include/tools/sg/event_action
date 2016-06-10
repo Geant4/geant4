@@ -1,0 +1,63 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_event_action
+#define tools_sg_event_action
+
+#include "matrix_action"
+
+#include "event"
+
+namespace tools {
+namespace sg {
+
+class event_action : public matrix_action {
+public:
+  event_action(std::ostream& a_out,
+               unsigned int a_ww,unsigned int a_wh,
+               event& a_event)
+  :matrix_action(a_out,a_ww,a_wh)
+  ,m_event(a_event)
+  ,m_do_switch_children(false)
+
+  ,m_done(false)
+  {}
+  virtual ~event_action(){}
+public:
+  event_action(const event_action& a_from)
+  :matrix_action(a_from)
+  ,m_event(a_from.m_event)
+  ,m_do_switch_children(a_from.m_do_switch_children)
+
+  ,m_done(false)
+  {}
+  event_action& operator=(const event_action& a_from){
+    matrix_action::operator=(a_from);
+    m_do_switch_children = a_from.m_do_switch_children;
+
+    m_done = false;
+    return *this;
+  }
+public:
+  void reset() {
+    matrix_action::reset();
+    m_done = false;
+  }
+
+  const event& get_event() const {return m_event;}
+  event& get_event() {return m_event;}
+
+  void set_done(bool a_value) {m_done = a_value;}
+  bool done() const {return m_done;}
+
+  void set_do_switch_children(bool a_value) {m_do_switch_children = a_value;}
+  bool do_switch_children() const {return m_do_switch_children;}
+protected:
+  event& m_event;
+  bool m_do_switch_children;
+  bool m_done;
+};
+
+}}
+
+#endif

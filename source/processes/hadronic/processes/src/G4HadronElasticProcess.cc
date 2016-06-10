@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticProcess.cc 86393 2014-11-10 16:34:27Z gcosmo $
+// $Id: G4HadronElasticProcess.cc 92396 2015-08-31 14:12:40Z gcosmo $
 //
 // Geant4 Hadron Elastic Scattering Process 
 // 
@@ -58,29 +58,13 @@ G4HadronElasticProcess::G4HadronElasticProcess(const G4String& pName)
 G4HadronElasticProcess::~G4HadronElasticProcess()
 {}
 
-void G4HadronElasticProcess::Description() const
+void G4HadronElasticProcess::ProcessDescription(std::ostream& outFile) const
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetProcessName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
 
-    outFile << "<title>Description of G4HadronElasticProcess</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
+    outFile << "G4HadronElasticProcess handles the elastic scattering of \n"
+            << "hadrons by invoking the following hadronic model(s) and \n"
+            << "hadronic cross section(s).\n";
 
-    outFile << "G4HadronElasticProcess handles the elastic scattering of\n"
-            << "hadrons by invoking one or more hadronic models and one or\n"
-            << "more hadronic cross sections.\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
 }
 
 G4VParticleChange* 
@@ -129,15 +113,20 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
   G4HadronicInteraction* hadi = 0;
   G4HadFinalState* result = 0;
 
-  if(fDiffraction) {
+  if(fDiffraction) 
+  {
     G4double ratio = 
       fDiffractionRatio->ComputeRatio(part, kineticEnergy,
 				      targNucleus->GetZ_asInt(),
 				      targNucleus->GetA_asInt());
     // diffraction is chosen
-    if(ratio > 0.0 && G4UniformRand() < ratio) {
+    if(ratio > 0.0 && G4UniformRand() < ratio) 
+    {
       try
 	{
+//   if(part->GetParticleName() == "pi-")
+// G4cout<<part->GetParticleName()<<"; "<<kineticEnergy/CLHEP::GeV<<" GeV; r = "<<ratio<<G4endl;
+
 	  result = fDiffraction->ApplyYourself(theProj, *targNucleus);
 	}
       catch(G4HadronicException aR)

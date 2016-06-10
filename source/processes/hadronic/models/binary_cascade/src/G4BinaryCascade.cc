@@ -293,8 +293,8 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
     thePrimaryEscape = false;
 
     // try until an interaction will happen
-    G4ReactionProductVector * products = 0;
-    G4int interactionCounter = 0;
+    G4ReactionProductVector * products=0;
+    G4int interactionCounter = 0,collisionLoopMaxCount;
     do
     {
         // reset status that could be changed in previous loop event
@@ -310,8 +310,8 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
         G4int massNumber=aNucleus.GetA_asInt();
         the3DNucleus->Init(massNumber, aNucleus.GetZ_asInt());
         thePropagator->Init(the3DNucleus);
-        //      GF Leak on kt??? but where to delete?
-        G4KineticTrack * kt;// = new G4KineticTrack(definition, 0., initialPosition, initial4Momentum);
+        G4KineticTrack * kt;
+		  collisionLoopMaxCount = 200;
         do                  // sample impact parameter until collisions are found
         {
             theCurrentTime=0;
@@ -328,12 +328,14 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
             } else {
                 products = Propagate1H1(secondaries,the3DNucleus);
             }
-        } while(! products );  // until we FIND a collision...
+				    // until we FIND a collision ... or give up
+        } while(! products && --collisionLoopMaxCount>0);   /* Loop checking, 31.08.2015, G.Folger */
 
         if(++interactionCounter>99) break;
-    } while(products->size() == 0);  // ...until we find an ALLOWED collision
+		    // ...until we find an ALLOWED collision ... or give up
+    } while(products && products->size() == 0);   /* Loop checking, 31.08.2015, G.Folger */
 
-    if(products->size()>0)
+    if(products && products->size()>0)
     {
         //  G4cout << "BIC Applyyourself: number of products " << products->size() << G4endl;
 
@@ -360,9 +362,12 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
         theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
     }
 
-    ClearAndDestroy(products);
-    delete products;
-
+    if ( products ) 
+	 {
+	    ClearAndDestroy(products);
+       delete products;
+    }
+	 
     delete the3DNucleus;
     the3DNucleus = NULL;
 
@@ -446,7 +451,8 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 
     G4bool haveProducts = false;
     G4int collisionCount=0;
-    while(theCollisionMgr->Entries() > 0 && currentZ)
+	 G4int collisionLoopMaxCount=1000000;
+    while(theCollisionMgr->Entries() > 0 && currentZ && --collisionLoopMaxCount>0)  /* Loop checking, 31.08.2015, G.Folger */  
     {
       if(Absorb()) {  // absorb secondaries, pions only
             haveProducts = true;
@@ -494,7 +500,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
         }
     }
 
-    //--------- end of while on Collisions
+    //--------- end of on Collisions
     //G4cout << "currentZ @ end loop " << currentZ << G4endl;
     G4int nProtons(0);
     for(iter = theTargetList.begin(); iter != theTargetList.end(); ++iter)
@@ -565,7 +571,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
         theSecondaryList.clear();
 
     }
-    while ( theCollisionMgr->Entries() > 0 )
+    while ( theCollisionMgr->Entries() > 0 )                /* Loop checking, 31.08.2015, G.Folger */
     {
 #ifdef debug_G4BinaryCascade
         G4cerr << " Warning: remove left over collision(s) " << G4endl;
@@ -605,7 +611,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
         do {
             CorrectFinalPandE();
             ExcitationEnergy=GetExcitationEnergy();
-        } while ( ++ntry < maxtry && ExcitationEnergy < 0 );
+        } while ( ++ntry < maxtry && ExcitationEnergy < 0 );       /* Loop checking, 31.08.2015, G.Folger */
     }
     _DebugEpConservation("corrected");
 
@@ -781,7 +787,7 @@ void G4BinaryCascade::BuildTargetList()
     theInitial4Mom = G4LorentzVector(0,0,0,initial_nuclear_mass);
     currentA=0;
     currentZ=0;
-    while((nucleon = the3DNucleus->GetNextNucleon()) != NULL)
+    while((nucleon = the3DNucleus->GetNextNucleon()) != NULL)       /* Loop checking, 31.08.2015, G.Folger */
     {
         // check if nucleon is hit by higher energy model.
         if ( ! nucleon->AreYouHit() )
@@ -876,8 +882,8 @@ G4bool  G4BinaryCascade::BuildLateParticleCollisions(G4KineticTrackVector * seco
       }
    }
    //theCollisionMgr->Print();
-
    const G4HadProjectile * primary = GetPrimaryProjectile();  // check for primary from TheoHE model
+
    if (primary){
       G4LorentzVector mom=primary->Get4Momentum();
       theProjectile4Momentum += mom;
@@ -1147,7 +1153,6 @@ void  G4BinaryCascade::FindCollisions(G4KineticTrackVector * secondaries)
     for(std::vector<G4KineticTrack *>::iterator i = secondaries->begin();
             i != secondaries->end(); ++i)
     {
-
         for(std::vector<G4BCAction *>::iterator j = theImR.begin();
                 j!=theImR.end(); j++)
         {
@@ -1485,21 +1490,17 @@ G4bool G4BinaryCascade::Absorb()
             throw G4HadronicException(__FILE__, __LINE__, "G4BinaryCascade::Absorb(): Cannot absorb a particle.");
 
         G4KineticTrackVector * products = absorber.GetProducts();
-        // ------ debug
-        G4int count = 0;
-        // ------ end debug
-        while(!CheckPauliPrinciple(products))
+        G4int maxLoopCount = 1000;
+        while(!CheckPauliPrinciple(products) && --maxLoopCount>0)   /* Loop checking, 31.08.2015, G.Folger */
         {
-            // ------ debug
-            count++;
-            // ------ end debug
             ClearAndDestroy(products);
             if(!absorber.FindProducts(*kt))
                 throw G4HadronicException(__FILE__, __LINE__,
                         "G4BinaryCascade::Absorb(): Cannot absorb a particle.");
         }
+		  if ( --maxLoopCount < 0 ) throw G4HadronicException(__FILE__, __LINE__, "G4BinaryCascade::Absorb(): Cannot absorb a particle."); 
         // ------ debug
-        //    G4cerr << "Absorb CheckPauliPrinciple count= " <<  count << G4endl;
+        //    G4cerr << "Absorb CheckPauliPrinciple count= " <<  maxLoopCount << G4endl;
         // ------ end debug
         G4KineticTrackVector toRemove;  // build a vector for UpdateTrack...
         toRemove.push_back(kt);
@@ -1675,11 +1676,12 @@ void G4BinaryCascade::StepParticlesOut()
     G4int countreset=0;
     //G4cout << " nucl. Radius " << radius << G4endl;
     // G4cerr <<"pre-while- theSecondaryList "<<G4endl;
-    while( theSecondaryList.size() > 0 )
+    while( theSecondaryList.size() > 0 )               /* Loop checking, 31.08.2015, G.Folger */
+	                                                    // if countreset reaches limit, there is a break from while, see below.
     {
         G4int nsec=0;
         G4double minTimeStep = 1.e-12*ns;   // about 30*fermi/(0.1*c_light);1.e-12*ns
-        // i.e. a big step
+                                            // i.e. a big step
         std::vector<G4KineticTrack *>::iterator i;
         for(i = theSecondaryList.begin(); i != theSecondaryList.end(); ++i)
         {
@@ -1778,7 +1780,7 @@ void G4BinaryCascade::StepParticlesOut()
             G4cout << "Capture sucess " << G4endl;
 #endif
         }
-        if ( counter > 100 && theCollisionMgr->Entries() == 0)   // no collision, and stepping a while....
+        if ( counter > 100 && theCollisionMgr->Entries() == 0)   // no collision, and stepping for some time....
         {
 #ifdef debug_BIC_StepParticlesOut
             PrintKTVector(&theSecondaryList,std::string("stepping 100 steps"));
@@ -2653,7 +2655,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate1H1(
     //G4cout << " start 1H1 for " << (*secondaries).front()->GetDefinition()->GetParticleName()
     //       << " on " << aHTarg->GetParticleName() << G4endl;
     G4int tryCount(0);
-    while(!done && tryCount++ <200)
+    while(!done && tryCount++ <200)                                 /* Loop checking, 31.08.2015, G.Folger */
     {
         if(secs)
         {
@@ -2749,7 +2751,7 @@ G4ThreeVector G4BinaryCascade::GetSpherePoint(
     {
         x1=(G4UniformRand()-.5)*2;
         x2=(G4UniformRand()-.5)*2;
-    } while (sqr(x1) +sqr(x2) > 1.);
+    } while (sqr(x1) +sqr(x2) > 1.);                      /* Loop checking, 31.08.2015, G.Folger */ // or random is badly broken.....
 
     return G4ThreeVector(r*(x1*o1.unit() + x2*o2.unit() - 1.5* mom.unit()));
 
@@ -2891,7 +2893,7 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
 
     // pull out late particles from collisions
     //theCollisionMgr->Print();
-    while(theCollisionMgr->Entries() > 0)
+    while(theCollisionMgr->Entries() > 0)        /* Loop checking, 31.08.2015, G.Folger */
     {
         G4CollisionInitialState *
         collision = theCollisionMgr->GetNextCollision();
@@ -3026,8 +3028,9 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
     G4int loopcount(0);
 
     std::vector<G4ReactionProduct *>::reverse_iterator reverse;  // start to correct last added first
-    while ( SumMom.mag() > 0.1*MeV && loopcount++ < 10){
-    	G4int index=products->size();
+    while ( SumMom.mag() > 0.1*MeV && loopcount++ < 10)           /* Loop checking, 31.08.2015, G.Folger */
+    {
+	 	G4int index=products->size();
 		for (reverse=products->rbegin(); reverse!=products->rend(); ++reverse, --index){
 			SumMom=initial4Mom.vect();
 			for (rpiter=products->begin(); rpiter!=products->end(); ++rpiter){
@@ -3104,7 +3107,8 @@ void G4BinaryCascade::DebugApplyCollisionFail(G4CollisionInitialState * collisio
    }
    if ( !products  || havePion)
    {
-      G4cout << " Collision " << collision << ", type: "<< typeid(*collision->GetGenerator()).name()
+		const G4BCAction &action= *collision->GetGenerator();
+      G4cout << " Collision " << collision << ", type: "<< typeid(action).name()
 							                    << ", with NO products! " <<G4endl;
       G4cout << G4endl<<"Initial condition are these:"<<G4endl;
       G4cout << "proj: "<<collision->GetPrimary()->GetDefinition()->GetParticleName()<<G4endl;

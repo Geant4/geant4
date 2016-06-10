@@ -1,0 +1,191 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_geom3
+#define tools_geom3
+
+#include "line"
+#include "plane"
+
+namespace tools {
+
+template <class T>
+class cubic {
+public:
+  cubic(const vec3<T>& a_p0,const vec3<T>& a_v0,
+        const vec3<T>& a_p1,const vec3<T>& a_v1) {
+    // Construct a cubic given 2 points and their tangents.
+    initialize(a_p0.x(),a_p0.y(),a_p0.z(),
+               a_v0.x(),a_v0.y(),a_v0.z(),
+               a_p1.x(),a_p1.y(),a_p1.z(),
+               a_v1.x(),a_v1.y(),a_v1.z());
+  }
+  cubic(const T& a_p0_x,const T& a_p0_y,const T& a_p0_z,
+        const T& a_v0_x,const T& a_v0_y,const T& a_v0_z,
+        const T& a_p1_x,const T& a_p1_y,const T& a_p1_z,
+        const T& a_v1_x,const T& a_v1_y,const T& a_v1_z){
+    initialize(a_p0_x,a_p0_y,a_p0_z,
+               a_v0_x,a_v0_y,a_v0_z,
+               a_p1_x,a_p1_y,a_p1_z,
+               a_v1_x,a_v1_y,a_v1_z);
+  }
+
+  virtual ~cubic() {}
+public:
+  cubic(const cubic& a_from)
+  :m_a(a_from.m_a)
+  ,m_b(a_from.m_b)
+  ,m_c(a_from.m_c)
+  ,m_d(a_from.m_d)
+  {}
+  cubic& operator=(const cubic& a_from) {
+    m_a = a_from.m_a;
+    m_b = a_from.m_b;
+    m_c = a_from.m_c;
+    m_d = a_from.m_d;
+    return *this;
+  }
+public:
+  void get_point(unsigned int a_index,unsigned int a_num,vec3<T>& a_p){
+    //a_index = 0        is a_p0
+    //a_index = a_num-1  is a_p1
+    T s = T(a_index)/T(a_num-1);
+    T s2 = s*s;
+    T s3 = s2*s;
+    a_p = m_a*s3 + m_b*s2 + m_c*s + m_d;
+  }
+  void get_point(unsigned int a_index,unsigned int a_num,T& a_x,T& a_y,T& a_z){
+    //a_index = 0        is a_p0
+    //a_index = a_num-1  is a_p1
+    T s = T(a_index)/T(a_num-1);
+    T s2 = s*s;
+    T s3 = s2*s;
+    a_x = m_a.x()*s3 + m_b.x()*s2 + m_c.x()*s + m_d.x();
+    a_y = m_a.y()*s3 + m_b.y()*s2 + m_c.y()*s + m_d.y();
+    a_z = m_a.z()*s3 + m_b.z()*s2 + m_c.z()*s + m_d.z();
+  }
+protected:
+  void initialize(const T& a_p0_x,const T& a_p0_y,const T& a_p0_z,
+                  const T& a_v0_x,const T& a_v0_y,const T& a_v0_z,
+                  const T& a_p1_x,const T& a_p1_y,const T& a_p1_z,
+                  const T& a_v1_x,const T& a_v1_y,const T& a_v1_z){
+    // Construct a cubic given 2 points and their tangents.
+
+    //  f(s) = a s**3 + b s**2 + c s + d
+    // f'(s) = 3 a s**2 + 2 b s + c
+
+    //  f(0) = d = p0 
+    // f'(0) = c = v0 
+
+    //  f(1) =   a +   b + v0 + p0 = p1
+    // f'(1) = 3 a + 2 b + v0 = v1
+
+    //  f(1) =   a +   b = p1 - v0 - p0
+    // f'(1) = 3 a + 2 b = v1 - v0
+
+    // b = 3(p1-v0-p0)-(v1-v0)
+    // a = p1-v0-p0 - b = p1-v0-p0-3(p1-v0-p0)+(v1-v0)
+    // a = -2p1 + v0 + 2p0 + v1
+
+    T a_x = -2*a_p1_x + a_v0_x + 2*a_p0_x + a_v1_x;
+    T a_y = -2*a_p1_y + a_v0_y + 2*a_p0_y + a_v1_y;
+    T a_z = -2*a_p1_z + a_v0_z + 2*a_p0_z + a_v1_z;
+    m_a.set_value(a_x,a_y,a_z); 
+
+    T b_x = 3*(a_p1_x - a_v0_x - a_p0_x) - (a_v1_x - a_v0_x);
+    T b_y = 3*(a_p1_y - a_v0_y - a_p0_y) - (a_v1_y - a_v0_y);
+    T b_z = 3*(a_p1_z - a_v0_z - a_p0_z) - (a_v1_z - a_v0_z);
+    m_b.set_value(b_x,b_y,b_z);
+
+    m_c.set_value(a_v0_x,a_v0_y,a_v0_z);
+    m_d.set_value(a_p0_x,a_p0_y,a_p0_z);
+
+  }
+
+protected:
+  vec3<T> m_a;
+  vec3<T> m_b;
+  vec3<T> m_c;
+  vec3<T> m_d;
+};
+
+}
+
+#include <vector>
+
+namespace tools {
+
+// not tested yet.
+template <class T>
+class clip {
+public:
+  clip():m_cur(0){}
+  virtual ~clip() {}
+private:
+  clip(const clip&):m_cur(0){}
+  clip& operator=(const clip&){return *this;}
+public:
+  void reset() {
+    m_data[0].clear();
+    m_data[1].clear();
+    m_cur = 0;
+  }
+
+  void add(const vec3<T>& a_point) {m_data[m_cur].push_back(a_point);}
+
+  void execute(const plane<T>& plane) {
+    //Clip polygon against plane. This might change the number of
+    //vertices in the polygon.
+
+    unsigned int n = m_data[m_cur].size();
+    if (n == 0) return;
+
+    // create a loop :
+    vec3<T> dummy = m_data[m_cur][0];
+    m_data[m_cur].push_back(dummy);
+
+    const vec3<T>& planeN = plane.normal();
+
+    for(unsigned int i = 0; i < n; i++) {
+      vec3<T> v0 = m_data[m_cur][i];
+      vec3<T> v1 = m_data[m_cur][i+1];
+  
+      T d0 = plane.distance(v0);
+      T d1 = plane.distance(v1);
+  
+      if (d0 >= 0.0f && d1 < 0.0f) { // exit plane
+        vec3<T> dir = v1-v0;
+        // we know that v0 != v1 since we got here
+        dir.normalize();
+        T dot = dir.dot(planeN);
+        vec3<T> newvertex = v0 - dir * (d0/dot);
+        out_point(newvertex);
+      } else if (d0 < 0.0f && d1 >= 0.0f) { // enter plane
+        vec3<T> dir = v1-v0;
+        // we know that v0 != v1 since we got here
+        dir.normalize();
+        T dot = dir.dot(planeN);
+        vec3<T> newvertex = v0 - dir * (d0/dot);
+        out_point(newvertex);
+        out_point(v1);
+      } else if (d0 >= 0.0f && d1 >= 0.0f) { // in plane
+        out_point(v1);
+      }
+    }
+    m_data[m_cur].clear();
+    m_cur ^= 1;
+  }
+
+  const std::vector< vec3<T> >& result() const {return m_data[m_cur];}
+
+protected:
+  void out_point(const vec3<T>& a_p) {m_data[m_cur ^ 1].push_back(a_p);}
+  
+protected:
+  std::vector< vec3<T> > m_data[2];
+  unsigned int m_cur;
+};
+
+}
+
+#endif

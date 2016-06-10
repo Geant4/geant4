@@ -289,8 +289,8 @@ public:
     if(m_file.verbose()) {
       m_file.out() << "tools::wroot::directory::write :"
                    << " " << sout(m_name)
-                   << " : " << long2s(m_dirs.size())
-                   << " : " << long2s(m_objs.size())
+                   << " : " << long_out(m_dirs.size())
+                   << " : " << long_out(m_objs.size())
                    << " objects."
                    << std::endl;
     }
@@ -546,10 +546,6 @@ protected:
     return key->write_file(a_nbytes);
   }
 
-protected:
-  static std::string sout(const std::string& a_string) {
-    return std::string("\"")+a_string+"\"";
-  }
 protected:
   ifile& m_file;
   directory* m_parent;

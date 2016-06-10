@@ -14,6 +14,15 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+13 August 2015 - Alberto Ribon  (hadr-emd-V10-01-01)
+-----------------------------------------------------
+- G4EMDissociation.cc : fix of Coverity memory leaks.
+
+13 August 2015 - Alberto Ribon  (hadr-emd-V10-01-00)
+-----------------------------------------------------
+- G4EMDissociation.cc : removed useless header file dependency
+  on G4GeneralPhaseSpaceDecay.
+
 08 October 2014 - Alberto Ribon  (hadr-emd-V10-00-01)
 -----------------------------------------------------
 - G4EMDissociation.cc : replaced  G4ParticleTable::GetIon()  with

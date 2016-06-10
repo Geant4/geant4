@@ -10,7 +10,7 @@ gROOT->SetStyle("Plain");
 Double_t scale;
 	
 c1 = new TCanvas ("c1","",20,20,1000,500);
-c1.Divide(2,1);
+c1->Divide(2,1);
 
 system ("rm -rf microdosimetry.root");
 system ("hadd microdosimetry.root microdosimetry_*.root");
@@ -18,9 +18,9 @@ system ("hadd microdosimetry.root microdosimetry_*.root");
 TFile f("microdosimetry.root"); 
 
 TNtuple* ntuple;
-ntuple = (TNtuple*)f->Get("microdosimetry"); 
+ntuple = (TNtuple*)f.Get("microdosimetry"); 
      
-c1.cd(1);
+c1->cd(1);
   gStyle->SetOptStat(000000);
   
   // All
@@ -49,7 +49,7 @@ c1.cd(1);
   
   gPad->SetLogy();
 
-c1.cd(2);
+c1->cd(2);
 
   // Electrons
   ntuple->SetMarkerColor(2);

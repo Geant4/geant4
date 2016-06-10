@@ -252,7 +252,7 @@ namespace G4INCL {
 
     G4int readA = 0;
     G4int readZ = 0;
-    while(1) {
+    while(1) { /* Loop checking, 10.07.2015, D.Mancusi */
       in >> ID >> type >> isParticipant >> x >> y >> z >> px >> py >> pz >> E >> v;
       if(!in.good()) break;
       ParticleType t;

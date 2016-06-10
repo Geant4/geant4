@@ -1,5 +1,5 @@
 
-$Id: History 86201 2014-11-07 15:22:50Z gcosmo $
+$Id: History 93153 2015-10-08 11:54:58Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ October 7, 2015 G.Cosmo                 geom-bool-V10-01-02
+ - Protected compilation of USolid wrappers with G4GEOM_USE_USOLIDS flag.
+
+ August 13, 2015  G.Cosmo                geom-bool-V10-01-01
+ - Checked for potential never-ending loops. Replaced while-do loop with
+   bounded for-loop in G4IntersectionSolid::DistanceToIn(p,v).
+
+ March 3, 2015  G.Cosmo                  geom-bool-V10-01-00
+ - Use accessors x(), y() and z() from UVector3, instead of directly accessing
+   its data-members. Co-work with tag "geom-usolids-V10-01-09".
 
  November 7, 2014  G.Cosmo               geom-bool-V10-00-09
  - Fixed Coverity defects in G4UMultiUnion::CreatePolyhedron() for

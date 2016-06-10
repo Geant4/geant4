@@ -124,9 +124,9 @@
 // Class Description - End
 
 #include "globals.hh"
-#include "G4NeutronHPChannel.hh"
+#include "G4ParticleHPChannel.hh"
 #include "G4HadronicInteraction.hh"
-#include "G4NeutronHPThermalBoost.hh"
+#include "G4ParticleHPThermalBoost.hh"
 #include "G4FissionLibrary.hh"
 // #include "G4FissLib.hh"
 
@@ -145,7 +145,7 @@ class G4FissLib : public G4HadronicInteraction
   
   private:
     G4double* xSec;
-    G4NeutronHPChannel* theFission;
+    G4ParticleHPChannel* theFission;
     G4String dirName;
     G4int numEle;
 };

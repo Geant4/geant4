@@ -7,6 +7,6 @@
 ###/gun/ion 25 53
 ###/gun/ion 55 131
 #
-/rdecay01/event/printModulo 1
+/run/printProgress 1
 #   
 /run/beamOn 5

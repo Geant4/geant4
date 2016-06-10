@@ -49,6 +49,9 @@
 #include "G4DecayTable.hh"
 
 #include <vector>
+#include <cmath>
+
+class G4NuclideTableMessenger;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -83,10 +86,13 @@ public:
   //
   void GenerateNuclide();
 
-  void SetThresholdOfHalfLife( G4double t ) { threshold_of_half_life=t;};
+  void SetThresholdOfHalfLife( G4double );
   G4double GetThresholdOfHalfLife() { return threshold_of_half_life; };
 
-  void AddState(G4int,G4int,G4double,G4double,G4int,G4double);
+  void SetLevelTolerance( G4double x ) { flevelTolerance=x;};
+  G4double GetLevelTolerance() { return flevelTolerance; };
+
+  void AddState(G4int,G4int,G4double,G4double,G4int ionJ=0,G4double ionMu=0.0);
 
    
   //G4bool Exists(G4double,G4double,G4double);
@@ -117,29 +123,30 @@ public:
 public:
   // utility methods
   static inline G4double GetTrancationError( G4double eex )
-  { return eex - (G4long)(eex/levelTolerance)*levelTolerance; }
+  { G4double tolerance= G4NuclideTable::GetInstance()->GetLevelTolerance();
+  return eex - (G4long)(eex/tolerance)*tolerance; }
   static inline G4double Round( G4double eex )
-  { return (G4long)(eex/levelTolerance)*levelTolerance; }
+  { G4double tolerance= G4NuclideTable::GetInstance()->GetLevelTolerance();
+    return round(eex/tolerance)*tolerance; }
   static inline G4long Trancate( G4double eex )
-  { return (G4long)(eex/levelTolerance); }
+  { G4double tolerance= G4NuclideTable::GetInstance()->GetLevelTolerance();
+    return (G4long)(eex/tolerance); }
   static inline G4double Tolerance()
-  { return levelTolerance; }
+  { return G4NuclideTable::GetInstance()->GetLevelTolerance(); }
 
 private:
 
-  G4double threshold_of_half_life;
+  G4double threshold_of_half_life;         //threshold values of half-life of current run
+  G4double minimum_threshold_of_half_life; //The minimum value of threshold values of half-life during entire runs
   G4IsotopeList*        fUserDefinedList;
 
+  //Design Change on v10.02
+  //pre_load_list: Having state data for current run defined by threshold_of_half_life
+  //full_list:Keeping all state data during  running application defined by minimum_threshold_of_half_life
+  //       ionCode                Ex. Energy
   std::map< G4int , std::multimap< G4double , G4IsotopeProperty* > > map_pre_load_list;
-  std::map< G4int , std::multimap< G4double , G4IsotopeProperty* > > map_hard_code_list;
   std::map< G4int , std::multimap< G4double , G4IsotopeProperty* > > map_full_list;
 
-  //enum {nEntries=3075,MaxA=260, MinZ=2, MaxZ=100};
-  enum {nEntries_ground_state=2910};
-  enum {nEntries_excite_state=3898};
-  //static const G4double isomerTable[nEntries][5];
-  static const G4double groundStateTable[nEntries_ground_state][6];
-  static const G4double exciteStateTable[nEntries_excite_state][6];
   // Table of Nuclide Property
   //  0: Z
   //  1: A 
@@ -150,7 +157,8 @@ private:
   enum {idxZ=0, idxA,idxEnergy, idxLife, idxSpin, idxMu };
 
   G4IsotopeList*        fIsotopeList;
-  static const G4double levelTolerance;
+  G4double flevelTolerance;
+  G4NuclideTableMessenger* fMessenger;
 };
 
 

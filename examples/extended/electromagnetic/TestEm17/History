@@ -1,4 +1,4 @@
-$Id: History 86746 2014-11-17 15:00:13Z gcosmo $
+$Id: History 94383 2015-11-13 10:20:27Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13-11-14 V.Ivant (testem17-V10-01-01)
+- PhysicsList, PhysListEmStandard - fixed upper energy for
+    physics tables (A.Bogdanov)
+
+26-10-15 D.Sawkey (testem17-V10-01-00)
+- Set default EmParameters in PhysListEmStandard
 
 16-11-14 V.Ivant (testem17-V10-00-01)
 - fixed ROOT macro and README

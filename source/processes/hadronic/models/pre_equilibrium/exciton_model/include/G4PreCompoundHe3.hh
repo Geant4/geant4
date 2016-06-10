@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundHe3.hh 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4PreCompoundHe3.hh 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // by V. Lara
 //
@@ -47,22 +47,14 @@ public:
 
   virtual ~G4PreCompoundHe3();
 
-protected:
+  virtual G4double GetRj(G4int NumberParticles, G4int NumberCharged) const;
 
-  virtual G4double GetRj(G4int NumberParticles, G4int NumberCharged);
+  virtual G4double FactorialFactor(G4int N, G4int P) const;
 
-  virtual G4double CrossSection(G4double ekin) ; 
+  virtual G4double CoalescenceFactor(G4int A) const;
 
-  virtual G4double FactorialFactor(G4int N, G4int P);
-
-  virtual G4double CoalescenceFactor(G4int A);
-
-  virtual G4double GetAlpha();
+  virtual G4double GetAlpha() const;
   
-  G4double GetOpt12(G4double K);
-
-  G4double GetOpt34(G4double K);
-
 private:
 
   // operators
@@ -73,13 +65,6 @@ private:
   G4int operator!=(const G4PreCompoundHe3 &right) const;    
 
   G4He3CoulombBarrier theHe3CoulombBarrier;
-  G4double ResidualAthrd;
-  G4double FragmentAthrd;
-  G4int FragmentA;
-  G4int ResidualA;
-  G4int ResidualZ;
-  G4int theA;
-  G4int theZ;
 };
 
 #endif

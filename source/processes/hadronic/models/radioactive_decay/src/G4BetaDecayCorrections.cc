@@ -108,9 +108,18 @@ G4double G4BetaDecayCorrections::Gamma(const G4double& arg)
   // Use recursion relation to get argument < 1
   G4double fac = 1.0;
   G4double x = arg - 1.;
-  while (x > 1.0) {
+
+  G4int loop = 0;
+  G4ExceptionDescription ed;
+  ed << " While count exceeded " << G4endl; 
+  while (x > 1.0) { /* Loop checking, 01.09.2015, D.Wright */
     fac *= x;
     x -= 1.0;
+    loop++;
+    if (loop > 1000) {
+      G4Exception("G4BetaDecayCorrections::Gamma()", "HAD_RDM_100", JustWarning, ed);
+      break;
+    }
   }
 
   // Calculation of Gamma function with real argument

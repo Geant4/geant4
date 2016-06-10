@@ -51,6 +51,8 @@ public:
 
   static const char* Default_Name() {return "ChipsAntiBaryonInelasticXS";}
 
+  virtual void CrossSectionDescription(std::ostream&) const;
+
   virtual G4bool IsIsoApplicable(const G4DynamicParticle* Pt, G4int Z, G4int A,    
 				 const G4Element* elm,
 				 const G4Material* mat );

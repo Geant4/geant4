@@ -293,6 +293,9 @@ public:
     return sw;
   }
 
+  TC Sxyw() const {return parent::m_in_range_plane_Sxyw[0];}
+  TC Syzw() const {return parent::m_in_range_plane_Sxyw[1];}
+  TC Szxw() const {return parent::m_in_range_plane_Sxyw[2];}
 public:
   //NOTE : print is a Python keyword.
   void hprint(std::ostream& a_out) {

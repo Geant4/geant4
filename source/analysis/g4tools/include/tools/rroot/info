@@ -49,9 +49,11 @@ public: //iro
   }
 public:
   virtual void out(std::ostream& aOut) const {
+    std::string _fname;
+    fullName(_fname);
     char s[128];
     snpf(s,sizeof(s),"  %-14s%-15s offset=%3d type=%2d %-20s",
-      fTypeName.c_str(),fullName().c_str(),fOffset,fType,fTitle.c_str());
+      fTypeName.c_str(),_fname.c_str(),fOffset,fType,fTitle.c_str());
     aOut << s << std::endl;
   }
 public:
@@ -95,14 +97,13 @@ protected:
     return *this;
   }
 public:
-  virtual std::string fullName() const {
-    std::string s = fName;
+  virtual void fullName(std::string& a_s) const {
+    a_s = fName;
     for (int i=0;i<fArrayDim;i++) {
       char cdim[32];
       snpf(cdim,sizeof(cdim),"[%d]",fMaxIndex[i]);
-      s += cdim;
+      a_s += cdim;
     }
-    return s;
   }
 protected: //Named
   std::string fName;

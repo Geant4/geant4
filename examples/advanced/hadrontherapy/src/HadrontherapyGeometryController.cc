@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Hadrontherapy development is supported by the
-// Italian Institute for Nuclear Physics (INFN)
-// in the framework of the MC-INFN Project
+// Hadrontherapy advanced example for Geant4
+// See more at: https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamplesHadrontherapy
 
 #include "HadrontherapyGeometryController.hh"
 #include "HadrontherapyDetectorConstruction.hh"

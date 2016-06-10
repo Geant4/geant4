@@ -27,7 +27,7 @@
 /// \brief Main program of the electromagnetic/TestEm0 example
 //
 //
-// $Id: DirectAccess.cc 74920 2013-10-24 14:21:59Z gcosmo $
+// $Id: DirectAccess.cc 94302 2015-11-11 12:58:04Z gcosmo $
 // 
 // ------------------------------------------------------------
 //
@@ -61,29 +61,51 @@
 #include "G4Proton.hh"
 #include "G4MuonPlus.hh"
 
+#include "G4DataVector.hh"
+#include "G4NistManager.hh"
+#include "G4ParticleTable.hh"
+
 int main() {
 
   G4UnitDefinition::BuildUnitsTable();
 
+  G4ParticleDefinition* gamma = G4Gamma::Gamma();
+  G4ParticleDefinition* posit = G4Positron::Positron();
+  G4ParticleDefinition* elec = G4Electron::Electron();
+  G4ParticleDefinition* prot = G4Proton::Proton();
+  G4ParticleDefinition* muon = G4MuonPlus::MuonPlus();
+  G4ParticleTable* partTable = G4ParticleTable::GetParticleTable();
+  partTable->SetReadiness();
+
+  G4DataVector cuts;
+  cuts.push_back(1*keV);
+
   // define materials
   //
-  G4double Z, A;
-
-  G4Material* material =
-  new G4Material("Iodine", Z=53., A=126.90*g/mole, 4.93*g/cm3);
+  G4Material* material = 
+    G4NistManager::Instance()->FindOrBuildMaterial("G4_Fe");
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+  G4MaterialCutsCouple* couple = new G4MaterialCutsCouple(material);
+  couple->SetIndex(0);
+
+  // work only for simple materials
+  G4double Z = material->GetZ();
+  G4double A = material->GetA();
 
   // initialise gamma processes (models)
-  //
-  G4ParticleDefinition* gamma = G4Gamma::Gamma();
-  
+  //  
   G4VEmModel* phot = new G4PEEffectFluoModel();
   G4VEmModel* comp = new G4KleinNishinaCompton();
   G4VEmModel* conv = new G4BetheHeitlerModel(); 
-  
+  phot->Initialise(gamma, cuts);
+  comp->Initialise(gamma, cuts);
+  conv->Initialise(gamma, cuts);
+
+  // valid pointer to a couple is needed for this model
+  phot->SetCurrentCouple(couple);
+
   // compute CrossSection per atom and MeanFreePath
   //
   G4double Emin = 1.01*MeV, Emax = 2.01*MeV, dE = 100*keV;
@@ -111,13 +133,10 @@ int main() {
 
   G4cout << G4endl;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
   // initialise positron annihilation (model)
-  // 
-  G4ParticleDefinition* posit = G4Positron::Positron();
-   
+  //    
   G4VEmModel* anni = new G4eeToTwoGammaModel();
+  anni->Initialise(posit, cuts);
   
   // compute CrossSection per atom and MeanFreePath
   //
@@ -138,14 +157,12 @@ int main() {
 
   G4cout << G4endl;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
   // initialise electron processes (models)
-  // 
-  G4ParticleDefinition* elec = G4Electron::Electron();
-   
+  //    
   G4VEmModel* ioni = new G4MollerBhabhaModel();
   G4VEmModel* brem = new G4SeltzerBergerModel();
+  ioni->Initialise(elec, cuts);
+  brem->Initialise(elec, cuts);
   
   // compute CrossSection per atom and MeanFreePath
   //
@@ -184,14 +201,10 @@ int main() {
   
   G4cout << G4endl;
   
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
   // initialise proton processes (models)
-  // 
-  G4ParticleDefinition* prot = G4Proton::Proton();
-   
-  ioni = new G4BetheBlochModel(prot);
+  //    
+  ioni = new G4BetheBlochModel();
+  ioni->Initialise(prot, cuts);
   
   // compute CrossSection per atom and MeanFreePath
   //
@@ -222,8 +235,8 @@ int main() {
   G4cout << G4endl;
   
   // low energy : Bragg Model
-  
   ioni = new G4BraggModel(prot);
+  ioni->Initialise(prot, cuts);
   
   // compute CrossSection per atom and MeanFreePath
   //
@@ -251,16 +264,15 @@ int main() {
   }
   
   G4cout << G4endl;
-    
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
   // initialise muon processes (models)
-  // 
-  G4ParticleDefinition* muon = G4MuonPlus::MuonPlus();
-   
-              ioni = new G4MuBetheBlochModel(muon);
-              brem = new G4MuBremsstrahlungModel(muon);
-  G4VEmModel* pair = new G4MuPairProductionModel(muon);
+  //  
+  ioni = new G4MuBetheBlochModel();
+  brem = new G4MuBremsstrahlungModel();
+  G4VEmModel* pair = new G4MuPairProductionModel();
+  ioni->Initialise(muon, cuts);
+  brem->Initialise(muon, cuts);
+  pair->Initialise(muon, cuts);
    
   // compute CrossSection per atom and MeanFreePath
   //
@@ -317,9 +329,8 @@ int main() {
                    "Energy/Length");
   }
   
-  G4cout << G4endl;
-    
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-                                 
-return EXIT_SUCCESS;
+  G4cout << G4endl;                                   
+  return EXIT_SUCCESS;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -3,14 +3,14 @@
                      Text version of the Hadrontherapy README file
              =========================================================
 
-Last revision: F.Romano, 7 November 2013;
-Released with the Geant4 10.0 version (December 2013)
+Last revision: F.Romano, 5 November 2015;
+Released with the Geant4 10.2 version (December 2015)
 
 ------------------------------------------------------------------------------------------------
 ADVERTISEMENT: this is the text version of the README file of the 'basic' hadrontherapy, 
 as it has been released in the official Geant4 9.6 release
 
-Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
+Visit the Hadrontherapy web site (https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamplesHadrontherapy) to request 
 the complete version of this program, together with its documentation;
 'hadrontherapy' (both basic and full version) is supported by the Italian INFN
 Institute in the framework of the MC-INFN Group
@@ -22,18 +22,18 @@ Institute in the framework of the MC-INFN Group
              =========================================================
 ==========>    MAIN AUTHORS <==========
 
-   G.A.P. Cirrone(a)*, F.Romano(a), G.Cuttone(a), L. Pandola(a), A. Tramontana (a,f)
+   G.A.P. Cirrone(a)*, F.Romano(a), G.Cuttone(a), L. Pandola(a), G.Milluzzo(a), J.Pipek(a)
 
 
 ==========>   PAST AUTHORS  <==========
 
 R. Calcagno(a), G.Danielsen (b), F.Di Rosa(a), S.Guatelli(c), A.Heikkinen(b), P.Kaitaniemi(b),
-A.Lechner(d), S.E.Mazzaglia(a),  M.G.Pia(e), G.Russo(a), M.Russo(a), A.Varisano(a)
+A.Lechner(d), S.E.Mazzaglia(a),  M.G.Pia(e), G.Russo(a), M.Russo(a), A.Varisano(a), A. Tramontana (a,f)
 
 
 (a) Laboratori Nazionali del Sud of the INFN, Catania, Italy
 (b) Helsinki Institute of Physics, Helsinki, Finland
-(c) University of Wallongong, Australia
+(c) University of Wollongong, Australia
 (d) CERN, (CH)
 (e) INFN Section of Genova, genova, Italy
 (f) Physics and Astronomy Department, Universituy of Catania, Catania, Italy
@@ -45,9 +45,9 @@ WHAT IT IS, WHAT IT DOES AND WHAT IT WILL PROVIDE
 'hadrontherapy' is a Geant4-based application specifically developed to address typical needs related to the proton and ion therapy. 
 Its first release was in 2004. At that time 'hadrontherapy' was only capable to simulate a well specified proton therapy facility: the passive transport beam line installed at Laboratori Nazionali del Sud (INFN) in Catania, Italy.
 
-Today Hadrontontherapy, except that it is in continuous development, is more flexible and show many additional capabilities as respect the past.
+Today Hadrontontherapy, except that it is in continuous development, is more flexible and shows many additional capabilities with respect to the past.
 Its geometrical set-up, for example, is now completely interchangeable permitting a simple switch between different geometrical configurations, which all share the same phantom (sensible detector) with the related features.
-It is possible to do a simulation of a generic proton/ion transport beam line and laser-driven beam line. In this new release, a module for dose average LET computations has been also included.
+It is possible to do a simulation of a generic proton/ion transport beam line and laser-driven beam line. In this release, a module for dose average LET computations has been also included.
 Deprecated ReadOutGeometry has been replaced by the use of Parallel World.
 
 The configurations are:
@@ -58,8 +58,8 @@ The configurations are:
 
 	- Laser-driven beam line, which is the simulation of a beam line for the focusing, the handling and the transport of a laser-driven beam, a Faraday Cup is the eligible detector for this class. It is simulated in LaserDrivenBeamLine.cc;
 	
-	in PassiveProtonBeamLine.cc, in PassiveCarbonBeamLine.cc and in LaserDrivenBeamLine.cc the user can change the geometrical characteristics of beam line elements.
-	Alternatively the user can use the macro file.
+	in PassiveProtonBeamLine.cc, in PassiveCarbonBeamLine.cc and in LaserDrivenBeamLine.cc, the user can change the geometrical characteristics of beam line elements.
+	Alternatively, the user can use the macro file.
 
 
 Folder structure of 'hadrontherapy'
@@ -75,32 +75,32 @@ Folder structure of 'hadrontherapy'
 
 \field: where a set of ready-to-use .TABLE files are provided. These files are generated from OPERA & COMSOL codes for the laser-driven beam line.
 
-\experimentalData: in this director a set of reference (both experimental and analithycal) data are stored. These data are then used to perform a direct comparison with simulation results that are stored in the simulationResults folder. Data stored are better described in the README file contained inside.
+\experimentalData: in this directory, a set of reference (both experimental and analythical) data are stored. These data are then used to perform a direct comparison with simulation results that are stored in the simulationResults folder. Data stored are better described in the README file contained inside.
 
 \SimulationOutputs: when one of the .mac file contained in the macro folder is used, simulation results are directly stored in this directory.
 
-\RootScripts: if the ROOT program is installed the User can use the scripts contained in this directory to compare directly results from the his/her simulation with reference data provided inside the experimentalData folder.
+\RootScripts: if the ROOT program is installed the User can use scripts contained in this directory to compare directly results from the his/her simulation with reference data provided inside the experimentalData folder.
 
-Currently this folders structure is in development and reference data as well as ROOT scripts will be added in the meanwhile new features and capabilities will be added. Moreover some ROOT script can be missed. Apologize for this and contact author if you need more information, clarification or useful discussion. 
+Currently this folders structure is in development and reference data as well as ROOT scripts alongside the newly implemented features. Moreover some ROOT script can be missed. We apologize for this; please contact the authors if you need more information, clarification or useful discussion. 
 
 Description of the \macro folder
 
-In the example directory, inside the "macro" folder different macro files are provided. In particular three macro files are related to the different beam lines: hadron_therapy.mac, carbon_beamline.mac and laserDrivenBeamline.mac.
+Inside the "macro" folder, different macro files are provided. In particular, three macro files are related to the different beam lines: hadron_therapy.mac, carbon_beamline.mac and laserDrivenBeamline.mac.
 The hadron_therapy.mac permits to run a simulation with the whole proton passive beam line installed in Catania.
-The carbon_beamline.mac excludes all the elements (moving the origin of the ion beam close to the water phantom) and reproduce a simple passive beam line for the use with carbon beams.
-The laserDrivenBeamline.mac simulates a tipycal laser-driven proton spectrum as input for a beam line made of a quadrupoles system and an energy selector. 
+The carbon_beamline.mac excludes all the elements (moving the origin of the ion beam close to the water phantom) and reproduce a simple passive beam line for the use with carbon ion beams.
+The laserDrivenBeamline.mac simulates a typical laser-driven proton spectrum as input for a beam line made of a quadrupole system and an energy selector. 
 
 DOWNLOAD AND INSTALLATION
 
 'hadrontherapy' source code is actually released inside the official distribution of the Geant4 toolkit in the $G4INSTALL/examples/advanced folder.
 
-To run 'hadrontherapy' you must first install the Geant4 package. Once Geant4 is installed the example must be first compiled. When compilation is completed the program can be executed.
+To run 'hadrontherapy' you must first install the Geant4 package. Once Geant4 is installed, the example must be first compiled. When compilation is completed the program can be executed.
 
 A complete guide for the Geant4 installation in different operating systems can be found inside the official installation Geant4 pages.
 
 If you have troubles with the Geant4 installation please send an e-mail to us.
 
-A CMakeLists.txt file is provided together with a standard GNUmakefile for compilation.                                                         
+A CMakeLists.txt file (preferred) is provided together with a standard GNUmakefile for compilation.                                                         
 
 
 GEOMETRICAL SET-UP
@@ -113,20 +113,21 @@ At the moment the 'hadrontherapy' example includes the simulation of passive bea
 In the next future an ActiveProtonBeamLine.cc will be provided for the simulation of the active scanning treatment modality.
 Moreover the possibility to add a very simple set-up (a beam, a phantom where collect the informations and some simple component) will be also provided.
 
-All these configuration will be setted by macro commands.
+All these configuration will be set using macro commands.
 
-There is also a facility that allows the user to make a choice between alternative geometry set-ups. This can be done by using command:
+There is also a feature that allows the user to make a choice between alternative geometry set-ups. This can be done by using command:
 /geometrySetup/selectGeometry <name>
 where <name> is either "default" for the standard 'hadrontherapy' geometry or "Carbon" for INFN-LNS transport beam line, 
 normally used for interdisciplinary researches at LNS-INFN in Catania with carbon and other ion beams or "LaserDriven" for the laser-driven beam line.
 
-At the end of the beam line a phantom (a box of uniform material) is reproduced. Inside it, a user-defined region is divided (via the ROGeomtry classes of Geant4) in cubic and identical voxels. The voxels size can be varied as well as the voxelized region.
+At the end of the beam line a phantom (a box of uniform material) is reproduced. Inside it, a user-defined region is divided 
+in cubic and identical voxels. The voxels size can be varied as well as the voxelized region.
 At the end of a simulation run, the dose deposited by primaries and secondaries in each voxel is collected. This information is available as an .out file or as a .root (if activated). 
 
-The default sizes of the active voxelized region are 40x40x40 mm and actually the default voxel configuration is 200 x 1 x 1, which means 200 slices with 0.2 mm of thickness.
+The default size of the active voxelized region is 40x40x40 mm and actually the default voxel configuration is 200 x 1 x 1, which means 200 slices with 0.2 mm of thickness.
 Of course this default can be modified in order to obtain, for example, a matrix of 80x80x80 cubic voxels each with a lateral dimension of 0.5 mm.
 
-As concern the cut and stepMax values, the default configuration implies a cut value of 1 mm in the whole  world (use the command /run/setCut <length>  in order to set the cut for all, and the command /run/setCutForRegion <name> <length> to set the cut for the desired volume (<name>) only)  and a stepMax of 0.01 mm just in the phantom and in other volumes of the laser-driven beam line (use the command /Step/waterPhantomStepMax 0.01 mm).
+Concerning the cut and stepMax values, the default configuration implies a cut value of 1 mm in the whole  world (use the command /run/setCut <length>  in order to set the cut for all, and the command /run/setCutForRegion <name> <length> to set the cut for the desired volume (<name>) only)  and a stepMax of 0.01 mm just in the phantom and in other volumes of the laser-driven beam line (use the command /Step/waterPhantomStepMax 0.01 mm).
 In any case it is strongly recommended to use a stepMax value not bigger than 5% of the dose slice thickness.
 
 THE PROTON PASSIVE LINE CLASS FILE
@@ -280,7 +281,7 @@ Parameters are respectively:
 The material (NIST) name (something like G4_..., the complete list of elements and materials is available into the G4NistMaterialBuilder class and can be printed  to the terminal screen via the macro command: /parameter/nist )
 Kinetic energy range in MeV and the number of data points to be retrieved (in a logarithmically uniform space)
 The particle name (proton, e+, e-, He3, neutron,... a full list can be gotten via the macro command: /particle/list).
- Only for ions, user must firstly select the particles (Z and A).
+Currently, it does not work with ions.
 The output filename: if users leave this blank then the standard output is used.
 
 Below is an example in order to calculate the stopping power for alphas into Hydrogen between 1 keV to 150 MeV for 15 points:
@@ -290,7 +291,7 @@ Below is an example in order to calculate the stopping power for alphas into Hyd
 
 GEANT4 GENERAL PARTICLE SOURCE
 
-The General Particle Source (GPS, G4 class name: G4GeneralParticleSource) is used since this version of 'hadrontherapy': it enables the user to use standard energy, angular and spatial distributions. The GPS includes also methods to bias the sampling distribution.
+The General Particle Source (GPS, G4 class name: G4GeneralParticleSource) is in the current version of 'hadrontherapy': it enables the user to use standard energy, angular and spatial distributions. The GPS includes also methods to bias the sampling distribution.
 
 The G4GeneralParticleSource can be utilized by typing commands from the /gps command directory, or include the /gps commands in a g4macro file.
 
@@ -350,7 +351,8 @@ It is possible to use ROOT data analysis package directly for the production of 
 In the last version, anyway, this functionality must be implemented by User. This can be accomplished by setting an ad-hoc environment variable (i.e. G4ANALYSIS_USE_ROOT) to 1, adding in the code lines to create outputs with the ROOT libraries and recompiling the application.
 In this case you must have the ROOT framework installed in your machine.
 
-
+Warning: If you plan to use ROOT analysis, please avoid compiling in the multi-threaded mode as the the ROOT library is not thread-safe.
+In the next release, we plan to base the whole analysis on g4tools which will solve this issue an MT will be safe to use.
 
 LASER DRIVEN PROTON BEAMLINE
 
@@ -369,31 +371,30 @@ The main elements are:
    
 The user has the possibility to vary, via messenger, many characteristics of the beam line elements (i.e. their position along the beam line, their thickness, etc.).
 
- - LaserDriven/EnergySelector/Disable -> to disable the Energy Selector 
+ - /LaserDriven/EnergySelector/Disable -> to disable the Energy Selector 
 
- - LaserDriven/EnergySelector/FirstCollimator/Radius <value> -> to set the Radius of the first collimator
- - LaserDriven/EnergySelector/FirstCollimator/thickness <value> -> to set the Thickness of the first collimator
- - LaserDriven/EnergySelector/FirstCollimator/zPosizion <value> -> to set the position of the first collimator hole along the radial plane
+ - /LaserDriven/EnergySelector/FirstCollimator/Radius <value> -> to set the Radius of the first collimator
+ - /LaserDriven/EnergySelector/FirstCollimator/thickness <value> -> to set the Thickness of the first collimator
+ - /LaserDriven/EnergySelector/FirstCollimator/zPosizion <value> -> to set the position of the first collimator hole along the radial plane
 
- - LaserDriven/EnergySelector/SecondCollimator/Radius <value> -> to set the Radius of the second collimator
- - LaserDriven/EnergySelector/SecondCollimator/thickness <value> -> to set the Thickness of the second collimator
- - LaserDriven/EnergySelector/SecondCollimator/zPosizion <value> -> to set the position of the second collimator hole along the radial plane
+ - /LaserDriven/EnergySelector/SecondCollimator/Radius <value> -> to set the Radius of the second collimator
+ - /LaserDriven/EnergySelector/SecondCollimator/thickness <value> -> to set the Thickness of the second collimator
+ - /LaserDriven/EnergySelector/SecondCollimator/zPosizion <value> -> to set the position of the second collimator hole along the radial plane
 
- - LaserDriven/EnergySelector/Slit/thickness <value> -> to set the Thickness of the slit, maximum value 10mm for geometric constrain
- - LaserDriven/EnergySelector/Slit/HoleDimensionY <value> -> to set the Y dimension of the Slit Hole
- - LaserDriven/EnergySelector/Slit/HoleDimensionZ <value> -> to set the Z dimension of the Slit Hole
- - LaserDriven/EnergySelector/Slit/HolePositionZ <value> -> to set the Slit hole position in the Z direction as respect the Slit body center
+ - /LaserDriven/EnergySelector/Slit/thickness <value> -> to set the Thickness of the slit, maximum value 10mm for geometric constrain
+ - /LaserDriven/EnergySelector/Slit/HoleDimensionY <value> -> to set the Y dimension of the Slit Hole
+ - /LaserDriven/EnergySelector/Slit/HoleDimensionZ <value> -> to set the Z dimension of the Slit Hole
+ - /LaserDriven/EnergySelector/Slit/HolePositionZ <value> -> to set the Slit hole position in the Z direction as respect the Slit body center
 
  - /LaserDriven/Quadrupoles/DisableQuad -> to disable the Quadrupole system
 
 
 FUTURE CHALLENGES AND USERS' REQUESTS
 
-This is a list of future components that will be added in 'hadrontherapy' and of main Users requests that we hope to fulfill in the next future.
-
-- A module for the simulation of an active beam line will be provided.
-The Korean Group of the Proton therapy center, National Cancer Center is developing this.
+This is a list of future components and feature that will be added in 'hadrontherapy' and of main Users requests that we hope to fulfill in the next future.
 
 - A module for the RBE (Relative Biological Effectiveness) calculation will be also delivered. The Catania Group in Collaboration with the Turin one is working on this. This module is already implemented (in a preliminary version) in an internal version of 'hadrontherapy' and can be provided, if requested. Please, contact us.
+
+- A g4tools-compatible ROOT output from HadrontherapyAnalysisManager.
 
 Please contact cirrone@lns.infn.it or francesco.romano@lns.infn.it for more details or suggestions and feedbacks on this document.

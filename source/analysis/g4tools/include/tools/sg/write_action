@@ -1,0 +1,45 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_write_action
+#define tools_sg_write_action
+
+#include "action"
+
+namespace tools {
+namespace sg {
+  class node;
+}}
+namespace tools {
+namespace io {
+  class iwbuf;
+}}
+
+namespace tools {
+namespace sg {
+
+class write_action : public action {
+public:
+  virtual io::iwbuf& buffer() = 0;
+  virtual bool beg_node(const node&) = 0;
+  virtual bool end_node(const node&) = 0;
+
+  virtual bool switch_do_all_children() {return true;}
+  virtual unsigned int protocol() const = 0;
+public:
+  write_action(std::ostream& a_out)
+  :action(a_out){}
+  virtual ~write_action(){}
+protected:
+  write_action(const write_action& a_from)
+  :action(a_from)
+  {}
+  write_action& operator=(const write_action& a_from){
+    action::operator=(a_from);
+    return *this;
+  }
+};
+
+}}
+
+#endif

@@ -5,7 +5,7 @@
 #define tools_wroot_ifile
 
 #include "seek"
-#include "../zfunc"
+#include "../press_func"
 
 namespace tools {
 namespace wroot {
@@ -20,7 +20,7 @@ public:
   virtual ~ifile(){}
 public:
   virtual bool verbose() const = 0;
-  virtual std::ostream& out() = 0;
+  virtual std::ostream& out() const = 0;
   virtual bool byte_swap() const = 0;
   enum from {
     begin,
@@ -38,7 +38,7 @@ public:
 
   virtual bool synchronize() = 0;
 
-  virtual bool ziper(char,zip_func&) const = 0;
+  virtual bool ziper(char,compress_func&) const = 0;
 
   virtual uint32 compression() const = 0;
 

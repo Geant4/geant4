@@ -70,6 +70,8 @@
 #include "G4AntiBarionBuilder.hh"
 #include "G4FTFPAntiBarionBuilder.hh"
 
+class G4ComponentGGHadronNucleusXsc;
+
 
 class G4HadronPhysicsQGSP_BIC_AllHP : public G4VPhysicsConstructor
 {
@@ -124,6 +126,7 @@ class G4HadronPhysicsQGSP_BIC_AllHP : public G4VPhysicsConstructor
       G4AntiBarionBuilder * theAntiBaryon;
       G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
 
+      G4ComponentGGHadronNucleusXsc * xsKaon;
       G4VCrossSectionDataSet * xsNeutronCaptureXS;
     };
     static G4ThreadLocal ThreadPrivate* tpdata;

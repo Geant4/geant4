@@ -27,7 +27,7 @@
 /// \brief Definition of the F03EventAction class
 //
 //
-// $Id: F03EventAction.hh 76602 2013-11-13 08:33:35Z gcosmo $
+// $Id: F03EventAction.hh 92498 2015-09-02 07:24:12Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,17 +54,8 @@ class F03EventAction : public G4UserEventAction
     virtual void BeginOfEventAction(const G4Event*);
     virtual void EndOfEventAction(const G4Event*);
 
-    void SetEventVerbose(G4int level) {fVerboseLevel = level;}
-    void SetPrintModulo(G4int val)    {fPrintModulo = val;}
-
   private:
-    G4int    fCalorimeterCollID;
-
-    F03EventActionMessenger*  fEventMessenger;
     F03RunAction* fRunAction;
-
-    G4int fVerboseLevel;
-    G4int fPrintModulo;
 };
 
 #endif

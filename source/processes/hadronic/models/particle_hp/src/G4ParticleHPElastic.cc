@@ -36,11 +36,15 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleHPElasticFS.hh"
 #include "G4ParticleHPManager.hh"
+#include "G4Threading.hh"
 
   G4ParticleHPElastic::G4ParticleHPElastic()
     :G4HadronicInteraction("NeutronHPElastic")
+  ,theElastic(NULL)
+  ,numEle(0)
   {
     overrideSuspension = false;
+/*
     G4ParticleHPElasticFS * theFS = new G4ParticleHPElasticFS;
     if(!getenv("G4NEUTRONHPDATA")) 
        throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
@@ -62,6 +66,7 @@
        while(!(*theElastic[i]).Register(theFS)) ;
     }
     delete theFS;
+*/
     SetMinEnergy(0.*eV);
     SetMaxEnergy(20.*MeV);
   }
@@ -69,12 +74,14 @@
   G4ParticleHPElastic::~G4ParticleHPElastic()
   {
      //delete [] theElastic;
+     /*
      for ( std::vector<G4ParticleHPChannel*>::iterator 
            it = theElastic.begin() ; it != theElastic.end() ; it++ )
      {
         delete *it;
      }
-     theElastic.clear();
+     */
+     theElastic->clear();
   }
   
   #include "G4ParticleHPThermalBoost.hh"
@@ -82,7 +89,7 @@
   G4HadFinalState * G4ParticleHPElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aNucleus )
   {
 
-    if ( numEle < (G4int)G4Element::GetNumberOfElements() ) addChannelForNewElement();
+   //if ( numEle < (G4int)G4Element::GetNumberOfElements() ) addChannelForNewElement();
 
     G4ParticleHPManager::GetInstance()->OpenReactionWhiteBoard();
     const G4Material * theMaterial = aTrack.GetMaterial();
@@ -101,7 +108,7 @@
         index = theMaterial->GetElement(i)->GetIndex();
         rWeight = NumAtomsPerVolume[i];
         //xSec[i] = theElastic[index].GetXsec(aThermalE.GetThermalEnergy(aTrack,
-        xSec[i] = (*theElastic[index]).GetXsec(aThermalE.GetThermalEnergy(aTrack,
+        xSec[i] = ((*theElastic)[index])->GetXsec(aThermalE.GetThermalEnergy(aTrack,
   		                                                     theMaterial->GetElement(i),
   								     theMaterial->GetTemperature()));
         xSec[i] *= rWeight;
@@ -120,7 +127,7 @@
       // it is element-wise initialised.
     }
     //G4HadFinalState* finalState = theElastic[index].ApplyYourself(aTrack);
-    G4HadFinalState* finalState = (*theElastic[index]).ApplyYourself(aTrack);
+    G4HadFinalState* finalState = ((*theElastic)[index])->ApplyYourself(aTrack);
     if (overrideSuspension) finalState->SetStatusChange(isAlive);
 
     //Overwrite target parameters
@@ -147,6 +154,7 @@ const std::pair<G4double, G4double> G4ParticleHPElastic::GetFatalEnergyCheckLeve
    return std::pair<G4double, G4double>(10*perCent,DBL_MAX);
 }
 
+/*
 void G4ParticleHPElastic::addChannelForNewElement()
 {
    G4ParticleHPElasticFS* theFS = new G4ParticleHPElasticFS;
@@ -160,6 +168,7 @@ void G4ParticleHPElastic::addChannelForNewElement()
    delete theFS;
    numEle = (G4int)G4Element::GetNumberOfElements();
 }
+*/
 
 G4int G4ParticleHPElastic::GetVerboseLevel() const 
 {
@@ -168,4 +177,44 @@ G4int G4ParticleHPElastic::GetVerboseLevel() const
 void G4ParticleHPElastic::SetVerboseLevel( G4int newValue ) 
 {
    G4ParticleHPManager::GetInstance()->SetVerboseLevel(newValue);
+}
+void G4ParticleHPElastic::BuildPhysicsTable(const G4ParticleDefinition&)
+{
+
+   G4ParticleHPManager* hpmanager = G4ParticleHPManager::GetInstance();
+
+   theElastic = hpmanager->GetElasticFinalStates();
+
+   if ( G4Threading::IsMasterThread() ) {
+
+      if ( theElastic == NULL ) theElastic = new std::vector<G4ParticleHPChannel*>;
+
+      if ( numEle == (G4int)G4Element::GetNumberOfElements() ) return;
+
+      if ( theElastic->size() == G4Element::GetNumberOfElements() ) {
+         numEle = G4Element::GetNumberOfElements();
+         return;
+      }
+
+      G4ParticleHPElasticFS * theFS = new G4ParticleHPElasticFS;
+      if(!getenv("G4NEUTRONHPDATA")) 
+         throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
+      dirName = getenv("G4NEUTRONHPDATA");
+      G4String tString = "/Elastic";
+      dirName = dirName + tString;
+      for ( G4int i = numEle ; i < (G4int)G4Element::GetNumberOfElements() ; i++ ) {
+         theElastic->push_back( new G4ParticleHPChannel );
+         ((*theElastic)[i])->Init((*(G4Element::GetElementTable()))[i], dirName);
+         //while(!((*theElastic)[i])->Register(theFS)) ;
+         ((*theElastic)[i])->Register(theFS) ;
+      }
+      delete theFS;
+      hpmanager->RegisterElasticFinalStates( theElastic );
+
+   }
+   numEle = G4Element::GetNumberOfElements();
+}
+void G4ParticleHPElastic::ModelDescription(std::ostream& outFile) const
+{
+   outFile << "High Precision model based on Evaluated Nuclear Data Files (ENDF) for inelastic reaction of neutrons below 20MeV\n";
 }

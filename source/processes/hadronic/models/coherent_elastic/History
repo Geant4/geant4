@@ -14,6 +14,113 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+13 November 2015 Gunter Folger     (hadr-cohe-V10-01-19)
+--------------------------------------------------------
+- Revert back to G4float, add "f" for initialisation.
+
+13 November 2015 Gunter Folger     (hadr-cohe-V10-01-18)
+--------------------------------------------------------
+- Replace G4float by G4double
+
+09 November 2015 - V.Ivanchenko  (hadr-cohe-V10-01-17)
+-----------------------------------------------------------------
+- G4ElasticHadrNucleusHE - fixed long standing Coverity report
+
+05 November 2015 - A.Ribon  (hadr-cohe-V10-01-16)
+-----------------------------------------------------------------
+- Removed not needed dependency on neutron_hp/ .
+
+22 October 2015 - A.Ribon   (hadr-cohe-V10-01-15)
+-----------------------------------------------------------------
+- G4DiffuseElastic : bug-fix made by V.Grichine in BuildAngleTable
+  to improve the angle bin accuracy at high energies.
+
+08 September 2015 - A.Ribon (hadr-cohe-V10-01-14)
+-----------------------------------------------------------------
+- G4LMsdGenerator : fixed uninitialized variable which caused 
+  non-reproducibility.
+
+13 August 2015 - A.Ribon    (hadr-cohe-V10-01-13)
+-----------------------------------------------------------------
+- G4LMsdGenerator : Grichine included in diffraction dissociation the
+  resonances recommended by the COMPASS experiment.
+
+10 August 2015 - A.Ribon    (hadr-cohe-V10-01-12)
+-----------------------------------------------------------------
+- G4ElasticHadrNucleusHE, G4AntiNuclElastic, G4ChargeExchange, G4LEnp and
+  G4LEpp : checking of 'while' loops.
+
+06 August 2015 - A.Ribon    (hadr-cohe-V10-01-11)
+-----------------------------------------------------------------
+- G4HadronElastic, G4AntiNuclElastic, G4hhElastic, G4LEHadronProtonElastic,
+  G4DiffuseElastic, G4NuclNuclDiffuseElastic, G4LMsdGenerator,
+  G4ChargeExchangeProcess and G4ChargeExchange : replaced std::exp,
+  std::log and std::pow with the faster G4Exp, G4Log and G4Pow.
+  This changes the random number sequence.
+
+13 July 2015 - A.Ribon      (hadr-cohe-V10-01-10)
+-----------------------------------------------------------------
+- G4LMsdGenerator : Grichine has improved the resonance masses,
+  taking them from G4ParticleTable.
+
+17 June 2015 - A.Ribon      (hadr-cohe-V10-01-09)
+-----------------------------------------------------------------
+- G4LMsdGenerator : Grichine has disactivated the internal elastic
+  scattering of dissociated hadron.
+
+08 June 2015 - V.Ivanchenko (hadr-cohe-V10-01-08)
+-----------------------------------------------------------------
+- G4ElasticHadrNucleusHE - fixed Coverity defect; substitute std
+    log, exp, pow by G4Exp and G4Log; added check on max Z
+- G4NuclNuclDiffuseElastic - fixed trivial Coverity reports
+
+26 May 2015 - R.Hatcher    (hadr-cohe-V10-01-07)
+-----------------------------------------------------------------
+- Remove unnecessary "using namespace std" from various headers
+  that causes problems w/ G4AnyMethod & G4GenericPhysicsList
+  when using clang and/or vc12
+
+20 May 2015 - V.Grichine
+-----------------------------------------------------------------
+- G4LMsdGenerator : the final state for pi+- DD was changed according
+  to recent COMPASS data.
+
+19 May 2015 - G.Folger     (hadr-cohe-V10-01-06)
+-----------------------------------------------------------------
+- Migrate Description() to ModelDescription(std::ostream&) for
+   G4ChipsElasticModel, G4ElasticHadrNucleusHE, and G4HadronElastic
+
+21 April 2015 - A.Ribon    (hadr-cohe-V10-01-05)
+-----------------------------------------------------------------
+- G4LMsdGenerator : V. Grichine modification in angle distribution
+                    to reduce angles at high energies
+
+25 February 2015 - A.Dotti (hadr-cohe-V10-01-04)
+-----------------------------------------------------------------
+- G4ElasticHadrNucleusHE : Share cross-section tables among threads
+
+06 February 2015 - V.Ivanchenko (hadr-cohe-V10-01-03)
+-----------------------------------------------------------------
+- G4DiffuseElastic : V.Grichine fixed rare numerical bug (sqrt of 
+                     negative argument)
+
+08 January 2015 - A.Ribon (hadr-cohe-V10-01-02)
+-----------------------------------------------------------------
+- G4DiffuseElastic : V.Grichine bug-fix in theta_cms momentum transfer
+                     transformation
+
+05 December 2014 - G.Cosmo (hadr-cohe-V10-01-01)
+-----------------------------------------------------------------
+- Corrected sources.cmake to include missing files:
+    G4LEHadronProtonElastic.hh
+    G4LEHadronProtonElastic.cc
+
+05 December 2014 - V.Ivanchenko (hadr-cohe-V10-01-00)
+-----------------------------------------------------------------
+- G4DiffuseElastic - V.Grichine fixed low-energy neutrons
+- G4NuclNuclDiffuseElastic - V.Grichine fixed problem #1691 for 
+    700 MeV Be-ions scattering in Be
+
 24 November 2014 - V.Ivanchenko (hadr-cohe-V10-00-24)
 -----------------------------------------------------------------
 - G4hhElastic - cleanup constructors

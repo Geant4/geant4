@@ -40,6 +40,7 @@
 #include "G4VNuclearDensity.hh"
 
 #include "G4PhysicalConstants.hh"
+#include "G4Pow.hh"
 
 G4KM_NucleonEqRhs::G4KM_NucleonEqRhs(G4KM_DummyField *field,
 				     G4V3DNucleus * nucleus) :
@@ -47,7 +48,7 @@ G4KM_NucleonEqRhs::G4KM_NucleonEqRhs(G4KM_DummyField *field,
 {
   theMass = 0.;
   A = theNucleus->GetMassNumber();
-  factor = hbarc*hbarc*std::pow(3.*pi2*A,2./3.)/3.;
+  factor = hbarc*hbarc*G4Pow::GetInstance()->A23(3.*pi2*A)/3.;
 }
 
 
@@ -87,8 +88,8 @@ void G4KM_NucleonEqRhs::EvaluateRhsGivenB(const G4double y[],
 
   G4double density=  nuclearDensity->GetDensity(pos);
   G4double deriv(0);
-  if (density > 0 ) deriv = (factor/theMass)*
-			std::pow(density, -1./3.)*nuclearDensity->GetDeriv(pos);
+  if (density > 0 ) deriv = (factor/theMass)/
+			G4Pow::GetInstance()->A13(density)*nuclearDensity->GetDeriv(pos);
 
 //  dydx[3] = yMod == 0 ? 0 : -deriv*y[0]/yMod;
 //  dydx[4] = yMod == 0 ? 0 : -deriv*y[1]/yMod;

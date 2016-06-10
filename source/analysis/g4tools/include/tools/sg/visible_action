@@ -1,0 +1,40 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_visible_action
+#define tools_sg_visible_action
+
+#include "matrix_action"
+
+namespace tools {
+namespace sg {
+
+class visible_action : public matrix_action {
+public:
+  visible_action(std::ostream& a_out,unsigned int a_ww,unsigned int a_wh)
+  :matrix_action(a_out,a_ww,a_wh)
+  ,m_count(0)
+  {}
+  virtual ~visible_action(){}
+public:
+  visible_action(const visible_action& a_from)
+  :matrix_action(a_from)
+  ,m_count(0)
+  {}
+  visible_action& operator=(const visible_action& a_from){
+    matrix_action::operator=(a_from);
+    m_count = 0;
+    return *this;
+  }
+public:
+  void reset() {m_count = 0;}
+
+  void increment() {m_count++;}
+  unsigned int count() const {return m_count;}
+protected:
+  unsigned int m_count;
+};
+
+}}
+
+#endif

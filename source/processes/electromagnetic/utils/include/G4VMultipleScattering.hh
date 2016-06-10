@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh 84827 2014-10-21 12:31:50Z gcosmo $
+// $Id: G4VMultipleScattering.hh 93264 2015-10-14 09:30:04Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -94,7 +94,7 @@ class G4VMultipleScattering : public G4VContinuousDiscreteProcess
 public:
 
   G4VMultipleScattering(const G4String& name = "msc",
-			G4ProcessType type = fElectromagnetic);
+                        G4ProcessType type = fElectromagnetic);
 
   virtual ~G4VMultipleScattering();
 
@@ -105,6 +105,8 @@ public:
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
 
   virtual void PrintInfo() = 0;
+
+  virtual void ProcessDescription(std::ostream& outFile) const; // = 0;
 
 protected:
 
@@ -129,7 +131,7 @@ public:
   // Return false in case of failure at I/O
   G4bool StorePhysicsTable(const G4ParticleDefinition*,
                            const G4String& directory,
-			   G4bool ascii = false);
+                           G4bool ascii = false);
 
   // Retrieve Physics from a file.
   // (return true if the Physics Table can be build by using file)
@@ -138,7 +140,7 @@ public:
   // should be placed under the directory specifed by the argument.
   G4bool RetrievePhysicsTable(const G4ParticleDefinition*,
                               const G4String& directory,
-			      G4bool ascii);
+                              G4bool ascii);
 
   // This is called in the beginning of tracking for a new track
   void StartTracking(G4Track*);
@@ -148,17 +150,17 @@ public:
   // and invokes the method GetMscContinuousStepLimit at every step.
   G4double AlongStepGetPhysicalInteractionLength(
                                             const G4Track&,
-					    G4double  previousStepSize,
-					    G4double  currentMinimalStep,
-					    G4double& currentSafety,
-					    G4GPILSelection* selection);
+                                            G4double  previousStepSize,
+                                            G4double  currentMinimalStep,
+                                            G4double& currentSafety,
+                                            G4GPILSelection* selection);
 
   // The function overloads the corresponding function of the base
   // class.
   G4double PostStepGetPhysicalInteractionLength(
                                             const G4Track&,
-					    G4double  previousStepSize,
-					    G4ForceCondition* condition);
+                                            G4double  previousStepSize,
+                                            G4ForceCondition* condition);
 
   // Along step actions
   G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
@@ -168,9 +170,9 @@ public:
 
   // This method does not used for tracking, it is intended only for tests
   G4double ContinuousStepLimit(const G4Track& track,
-			       G4double previousStepSize,
-			       G4double currentMinimalStep,
-			       G4double& currentSafety);
+                               G4double previousStepSize,
+                               G4double currentMinimalStep,
+                               G4double& currentSafety);
 
   //------------------------------------------------------------------------
   // Specific methods to set, access, modify models
@@ -223,8 +225,6 @@ public:
 
   inline const G4ParticleDefinition* FirstParticle() const;
 
-  //inline void SetDisplacementBeyondSafety(G4bool val);
-
   //------------------------------------------------------------------------
   // Run time methods
   //------------------------------------------------------------------------
@@ -233,14 +233,14 @@ protected:
 
   // This method is not used for tracking, it returns mean free path value
   G4double GetMeanFreePath(const G4Track& track,
-			   G4double,
-			   G4ForceCondition* condition);
+                           G4double,
+                           G4ForceCondition* condition);
 
   // This method is not used for tracking, it returns step limit
   G4double GetContinuousStepLimit(const G4Track& track,
-				  G4double previousStepSize,
-				  G4double currentMinimalStep,
-				  G4double& currentSafety);
+                                  G4double previousStepSize,
+                                  G4double currentMinimalStep,
+                                  G4double& currentSafety);
 
 private:
 
@@ -271,11 +271,9 @@ private:
 
   G4bool                      latDisplacement;
   G4bool                      isIon;
-  G4bool                      actStepLimit;
-  G4bool                      actFacRange;
-  G4bool                      actLatDisp;
+  G4bool                      fDispBeyondSafety;
 
-  // ======== Cashed values - may be state dependent ================
+  // ======== Cached values - may be state dependent ================
 
 protected:
 
@@ -294,7 +292,6 @@ private:
   G4ThreeVector               fNewPosition;
   G4ThreeVector               fNewDirection;
   G4bool                      fPositionChanged;
-  G4bool                      fDispBeyondSafety;
   G4bool                      isActive;
 };
 
@@ -320,7 +317,6 @@ inline  G4bool G4VMultipleScattering::LateralDisplasmentFlag() const
 inline  void G4VMultipleScattering::SetLateralDisplasmentFlag(G4bool val)
 {
   latDisplacement = val;
-  actLatDisp = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -348,9 +344,9 @@ inline  G4double G4VMultipleScattering::RangeFactor() const
 
 inline  void G4VMultipleScattering::SetRangeFactor(G4double val)
 {
-  if(val > 0.0 && val < 1.0) {
+  if(val > 0.0 && val < 1.0) { 
     facrange = val;
-    actFacRange = true;
+    theParameters->SetMscRangeFactor(val);
   }
 }
 
@@ -380,11 +376,8 @@ inline G4MscStepLimitType G4VMultipleScattering::StepLimitType() const
 inline void G4VMultipleScattering::SetStepLimitType(G4MscStepLimitType val) 
 {
   stepLimit = val;
-  if(val == fMinimal) { 
-    facrange = 0.2; 
-    actFacRange = true;
-  }
-  actStepLimit = true;
+  if(val == fMinimal) { SetRangeFactor(0.2); }
+  theParameters->SetMscStepLimitType(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

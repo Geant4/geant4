@@ -27,7 +27,7 @@
 /// \brief Implementation of the TrackingAction class
 //
 //
-// $Id: TrackingAction.cc 78307 2013-12-11 10:55:57Z gcosmo $
+// $Id: TrackingAction.cc 87827 2015-01-14 17:17:27Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -141,19 +141,24 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
     //there are secondaries --> it is a decay
     //
     //balance    
-    G4double EkinTot = 0.;
+    G4double EkinTot = 0., EkinVis = 0.;
     G4ThreeVector Pbalance = - track->GetMomentum();
     for (size_t itr=0; itr<nbtrk; itr++) {
        const G4Track* trk = (*secondaries)[itr];
-       EkinTot += trk->GetKineticEnergy();
+       G4ParticleDefinition* particle = trk->GetDefinition();
+       G4double Ekin = trk->GetKineticEnergy();
+       EkinTot += Ekin;
+       G4bool visible = !((particle == G4NeutrinoE::NeutrinoE())||
+                          (particle == G4AntiNeutrinoE::AntiNeutrinoE()));
+       if (visible) EkinVis += Ekin; 
        //exclude gamma desexcitation from momentum balance
-       if (trk->GetDefinition() != G4Gamma::Gamma())         
-         Pbalance += trk->GetMomentum();                 
+       if (particle != G4Gamma::Gamma()) Pbalance += trk->GetMomentum();
     }
     G4double Pbal = Pbalance.mag();  
     run->Balance(EkinTot,Pbal);  
     analysis->FillH1(6,EkinTot);
     analysis->FillH1(7,Pbal);
+    fEvent->AddEvisible(EkinVis);
   }
   
   //no secondaries --> end of chain    

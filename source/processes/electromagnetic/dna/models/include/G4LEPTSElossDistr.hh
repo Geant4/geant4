@@ -33,7 +33,7 @@
 #include <string>
 #include <iostream>
 #include <map> 
-using namespace std;
+
 class G4LEPTSDistribution;
 typedef std::map<G4double, G4LEPTSDistribution*> mddist;
 typedef std::map<G4double, mddist > mdmddist;
@@ -43,7 +43,7 @@ class G4LEPTSElossDistr {
 
 public:
 
-  G4LEPTSElossDistr( string);    // Constructor
+  G4LEPTSElossDistr(std::string);    // Constructor
   void ReadFile();          // Read file
   G4double Sample( G4double, G4double);
 
@@ -54,7 +54,7 @@ public:
 private:
   mdmddist theDistributions; // Energy , angle , distribution
   G4int theNDistributions;
-  string fileName;
+  std::string fileName;
   int    NoBins;
 #define NMAX 20000
   G4bool bFileFound;

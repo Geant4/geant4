@@ -69,7 +69,6 @@ void RunAction::BeginOfRunAction(const G4Run* run)
   // Please note, in the example provided with the Geant4 X beta version,
   // this RunAction class were not used by the master thread.
 
-
   bool sequential = (G4RunManager::GetRunManager()->GetRunManagerType() == 
                      G4RunManager::sequentialRM);
 
@@ -280,7 +279,7 @@ void RunAction::WriteHistogram()
   // print histogram statistics
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-//  if(!analysisManager->IsActive()) {return; }
+  // if(!analysisManager->IsActive()) {return; }
 
   // save histograms
   //

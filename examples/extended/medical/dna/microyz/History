@@ -1,0 +1,24 @@
+     =========================================================
+ 		      Geant4 - microyz example
+     =========================================================
+
+                       Package History file
+                       --------------------
+
+19/11/2015 - tag microyz-V10-01-05 - S.Incerti
+updated plot.C and microyz.in
+
+30/04/2015 - tag microyz-V10-01-04 - S.Incerti
+updated README & .README files
+
+17/04/2015 - tag microyz-V10-01-03 - S.Incerti
+adapted to use case
+
+05/03/2015 - tag microyz-V10-01-02 - S.Incerti
+fix of conversion warnings
+
+04/03/2015 - tag microyz-V10-01-01 - S.Incerti
+fix of conversion warnings
+
+02/03/2015 - tag microyz-V10-01-00 - S.Incerti
+created

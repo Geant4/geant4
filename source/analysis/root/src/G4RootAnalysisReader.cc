@@ -29,11 +29,6 @@
 
 #include "G4RootAnalysisReader.hh"
 #include "G4RootRFileManager.hh"
-#include "G4H1ToolsManager.hh"
-#include "G4H2ToolsManager.hh"
-#include "G4H3ToolsManager.hh"
-#include "G4P1ToolsManager.hh"
-#include "G4P2ToolsManager.hh"
 #include "G4RootRNtupleManager.hh"
 #include "G4RootRNtupleDescription.hh"
 #include "G4AnalysisVerbose.hh"
@@ -51,13 +46,13 @@
 
 using namespace G4Analysis;
 
-G4RootAnalysisReader* G4RootAnalysisReader::fgMasterInstance = 0;
-G4ThreadLocal G4RootAnalysisReader* G4RootAnalysisReader::fgInstance = 0;
+G4RootAnalysisReader* G4RootAnalysisReader::fgMasterInstance = nullptr;
+G4ThreadLocal G4RootAnalysisReader* G4RootAnalysisReader::fgInstance = nullptr;
 
 //_____________________________________________________________________________
 G4RootAnalysisReader* G4RootAnalysisReader::Instance()
 {
-  if ( fgInstance == 0 ) {
+  if ( fgInstance == nullptr ) {
     G4bool isMaster = ! G4Threading::IsWorkerThread();
     fgInstance = new G4RootAnalysisReader(isMaster);
   }
@@ -67,14 +62,9 @@ G4RootAnalysisReader* G4RootAnalysisReader::Instance()
 
 //_____________________________________________________________________________
 G4RootAnalysisReader::G4RootAnalysisReader(G4bool isMaster)
- : G4VAnalysisReader("Root", isMaster),
-   fH1Manager(0),
-   fH2Manager(0),
-   fH3Manager(0),
-   fP1Manager(0),
-   fP2Manager(0),
-   fNtupleManager(0),
-   fFileManager(0)
+ : G4ToolsAnalysisReader("Root", isMaster),
+   fNtupleManager(nullptr),
+   fFileManager(nullptr)
 {
   if ( ( isMaster && fgMasterInstance ) || ( fgInstance ) ) {
     G4ExceptionDescription description;
@@ -89,21 +79,11 @@ G4RootAnalysisReader::G4RootAnalysisReader(G4bool isMaster)
   fgInstance = this;
 
   // Create managers
-  fH1Manager = new G4H1ToolsManager(fState);
-  fH2Manager = new G4H2ToolsManager(fState);
-  fH3Manager = new G4H3ToolsManager(fState);
-  fP1Manager = new G4P1ToolsManager(fState);
-  fP2Manager = new G4P2ToolsManager(fState);
   fNtupleManager = new G4RootRNtupleManager(fState);
   fFileManager = new G4RootRFileManager(fState);
       // The managers will be deleted by the base class
   
   // Set managers to base class
-  SetH1Manager(fH1Manager);
-  SetH2Manager(fH2Manager);
-  SetH3Manager(fH3Manager);
-  SetP1Manager(fP1Manager);
-  SetP2Manager(fP2Manager);
   SetNtupleManager(fNtupleManager);
   SetFileManager(fFileManager);
 }
@@ -111,8 +91,8 @@ G4RootAnalysisReader::G4RootAnalysisReader(G4bool isMaster)
 //_____________________________________________________________________________
 G4RootAnalysisReader::~G4RootAnalysisReader()
 {
-  if ( fState.GetIsMaster() ) fgMasterInstance = 0;
-  fgInstance = 0;
+  if ( fState.GetIsMaster() ) fgMasterInstance = nullptr;
+  fgInstance = nullptr;
 }
 
 // 
@@ -133,15 +113,14 @@ tools::rroot::buffer* G4RootAnalysisReader::GetBuffer(
   G4bool isPerThread = false;
   
   // Get or open a file
-  tools::rroot::file* rfile
-    = fFileManager->GetRFile(fileName, isPerThread);
+  auto rfile = fFileManager->GetRFile(fileName, isPerThread);
   if ( ! rfile ) {
-    if ( ! fFileManager->OpenRFile(fileName, isPerThread) ) return 0;
+    if ( ! fFileManager->OpenRFile(fileName, isPerThread) ) return nullptr;
     rfile = fFileManager->GetRFile(fileName, isPerThread);
   } 
   
-  tools::rroot::key* key 
-    = ( ! rfile ) ? 0 : rfile->dir().find_key(objectName);
+  auto key 
+    = ( ! rfile ) ? nullptr : rfile->dir().find_key(objectName);
  
   unsigned int size;
   //char* charBuffer 
@@ -155,10 +134,10 @@ tools::rroot::buffer* G4RootAnalysisReader::GetBuffer(
       << "      " 
       << "Cannot get " << objectName << " in file " << fileName; 
     G4Exception(inFunction, "Analysis_WR011", JustWarning, description);
-    return 0;
+    return nullptr;
   }  
 
-  G4bool verbose = false;
+  auto verbose = false;
   return new tools::rroot::buffer(G4cout, rfile->byte_swap(), size, charBuffer, 
                                   key->key_length(), verbose);
 }
@@ -168,23 +147,11 @@ G4bool G4RootAnalysisReader::Reset()
 {
 // Reset histograms and ntuple
 
-  G4bool finalResult = true;
+  auto finalResult = true;
   
-  G4bool result = fH1Manager->Reset();
+  auto result = G4ToolsAnalysisReader::Reset();
   finalResult = finalResult && result;
 
-  result = fH2Manager->Reset();
-  finalResult = finalResult && result;
-  
-  result = fH3Manager->Reset();
-  finalResult = finalResult && result;
-  
-  result = fP1Manager->Reset();
-  finalResult = finalResult && result;
-  
-  result = fP2Manager->Reset();
-  finalResult = finalResult && result;
-  
   result = fNtupleManager->Reset();
   finalResult = finalResult && result;
   
@@ -205,11 +172,10 @@ G4int G4RootAnalysisReader::ReadH1Impl(const G4String& h1Name,
     fState.GetVerboseL4()->Message("read", "h1", h1Name);
 #endif
 
-  tools::rroot::buffer* buffer 
-    = GetBuffer(fileName, h1Name, "ReadH1Impl");
+  auto buffer = GetBuffer(fileName, h1Name, "ReadH1Impl");
   if ( ! buffer ) return kInvalidId;
   
-  tools::histo::h1d* h1 = tools::rroot::TH1D_stream(*buffer);
+  auto h1 = tools::rroot::TH1D_stream(*buffer);
   delete buffer;
   
   if ( ! h1 ) {
@@ -222,7 +188,7 @@ G4int G4RootAnalysisReader::ReadH1Impl(const G4String& h1Name,
     return kInvalidId;
   }  
   
-  G4int id = fH1Manager->AddH1(h1Name, h1);
+  auto id = fH1Manager->AddH1(h1Name, h1);
 
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) 
@@ -242,7 +208,7 @@ G4int G4RootAnalysisReader::ReadH2Impl(const G4String& h2Name,
     fState.GetVerboseL4()->Message("read", "h2", h2Name);
 #endif
 
-  tools::rroot::buffer* buffer = GetBuffer(fileName, h2Name, "ReadH2Impl");
+  auto buffer = GetBuffer(fileName, h2Name, "ReadH2Impl");
   if ( ! buffer ) return kInvalidId;
   
   // if h2Name represents H1, then we get !!
@@ -250,7 +216,7 @@ G4int G4RootAnalysisReader::ReadH2Impl(const G4String& h2Name,
   // tools::rroot::buffer::check_byte_count : "TNamed" streamer not in sync with data on file, fix streamer.
   // Segmentation fault (core dumped)
   
-  tools::histo::h2d* h2 = tools::rroot::TH2D_stream(*buffer);
+  auto h2 = tools::rroot::TH2D_stream(*buffer);
   delete buffer;
   
   if ( ! h2 ) {
@@ -263,7 +229,7 @@ G4int G4RootAnalysisReader::ReadH2Impl(const G4String& h2Name,
     return kInvalidId;
   }  
   
-  G4int id = fH2Manager->AddH2(h2Name, h2);
+  auto id = fH2Manager->AddH2(h2Name, h2);
   
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) 
@@ -284,10 +250,10 @@ G4int G4RootAnalysisReader::ReadH3Impl(const G4String& h3Name,
     fState.GetVerboseL4()->Message("read", "h3", h3Name);
 #endif
 
-  tools::rroot::buffer* buffer = GetBuffer(fileName, h3Name, "ReadH3Impl");
+  auto buffer = GetBuffer(fileName, h3Name, "ReadH3Impl");
   if ( ! buffer ) return kInvalidId;
   
-  tools::histo::h3d* h3 = tools::rroot::TH3D_stream(*buffer);
+  auto h3 = tools::rroot::TH3D_stream(*buffer);
   delete buffer;
   
   if ( ! h3 ) {
@@ -300,7 +266,7 @@ G4int G4RootAnalysisReader::ReadH3Impl(const G4String& h3Name,
     return kInvalidId;
   }  
   
-  G4int id = fH3Manager->AddH3(h3Name, h3);
+  auto id = fH3Manager->AddH3(h3Name, h3);
   
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) 
@@ -324,10 +290,10 @@ G4int G4RootAnalysisReader::ReadP1Impl(const G4String& p1Name,
     fState.GetVerboseL4()->Message("read", "p1", p1Name);
 #endif
 
-  tools::rroot::buffer* buffer = GetBuffer(fileName, p1Name, "ReadP1Impl");
+  auto buffer = GetBuffer(fileName, p1Name, "ReadP1Impl");
   if ( ! buffer ) return kInvalidId;
   
-  tools::histo::p1d* p1 = tools::rroot::TProfile_stream(*buffer);
+  auto p1 = tools::rroot::TProfile_stream(*buffer);
   delete buffer;
   
   if ( ! p1 ) {
@@ -340,7 +306,7 @@ G4int G4RootAnalysisReader::ReadP1Impl(const G4String& p1Name,
     return kInvalidId;
   }  
   
-  G4int id = fP1Manager->AddP1(p1Name, p1);
+  auto id = fP1Manager->AddP1(p1Name, p1);
 
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) 
@@ -361,10 +327,10 @@ G4int G4RootAnalysisReader::ReadP2Impl(const G4String& p2Name,
     fState.GetVerboseL4()->Message("read", "p2", p2Name);
 #endif
 
-  tools::rroot::buffer* buffer = GetBuffer(fileName, p2Name, "ReadP2Impl");
+  auto buffer = GetBuffer(fileName, p2Name, "ReadP2Impl");
   if ( ! buffer ) return kInvalidId;
   
-  tools::histo::p2d* p2 = tools::rroot::TProfile2D_stream(*buffer);
+  auto p2 = tools::rroot::TProfile2D_stream(*buffer);
   delete buffer;
   
   if ( ! p2 ) {
@@ -377,7 +343,7 @@ G4int G4RootAnalysisReader::ReadP2Impl(const G4String& p2Name,
     return kInvalidId;
   }  
   
-  G4int id = fP2Manager->AddP2(p2Name, p2);
+  auto id = fP2Manager->AddP2(p2Name, p2);
   
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) 
@@ -399,18 +365,17 @@ G4int G4RootAnalysisReader::ReadNtupleImpl(const G4String& ntupleName,
 
   // Ntuples are saved per thread
   // but do not apply the thread suffix if fileName is provided explicitly
-  G4bool isPerThread = true;
+  auto isPerThread = true;
   if ( isUserFileName ) isPerThread = false; 
   
   // Get or open a file
-  tools::rroot::file* rfile
-    = fFileManager->GetRFile(fileName, isPerThread);
+  auto rfile = fFileManager->GetRFile(fileName, isPerThread);
   if ( ! rfile ) {
     if ( ! fFileManager->OpenRFile(fileName, isPerThread) ) return kInvalidId;
     rfile = fFileManager->GetRFile(fileName, isPerThread);
   } 
   
-  tools::rroot::key* key = rfile->dir().find_key(ntupleName);
+  auto key = rfile->dir().find_key(ntupleName);
   if ( ! key ) {
     G4ExceptionDescription description;
     description 
@@ -433,15 +398,13 @@ G4int G4RootAnalysisReader::ReadNtupleImpl(const G4String& ntupleName,
     return kInvalidId;
   }
   
-  G4bool verbose = false;
-  tools::rroot::buffer* buffer
+  auto verbose = false;
+  auto buffer
     = new tools::rroot::buffer(G4cout, rfile->byte_swap(), size, charBuffer, 
                                key->key_length(), verbose);
-  tools::rroot::fac* fac 
-    = new tools::rroot::fac(*rfile);
+  auto fac = new tools::rroot::fac(*rfile);
 
-  tools::rroot::tree* tree 
-    = new tools::rroot::tree(*rfile, *fac);
+  auto tree = new tools::rroot::tree(*rfile, *fac);
   if ( ! tree->stream(*buffer) ) {
     G4ExceptionDescription description;
     description 
@@ -455,12 +418,12 @@ G4int G4RootAnalysisReader::ReadNtupleImpl(const G4String& ntupleName,
     return kInvalidId;
   }
   
-  tools::rroot::ntuple* rntuple 
+  auto rntuple 
     = new tools::rroot::ntuple(*tree); //use the flat ntuple API.
-  G4RootRNtupleDescription* rntupleDescription
+  auto rntupleDescription
     = new G4RootRNtupleDescription(rntuple, buffer, fac, tree);
 
-  G4int id = fNtupleManager->SetNtuple(rntupleDescription); 
+  auto id = fNtupleManager->SetNtuple(rntupleDescription); 
   
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) 

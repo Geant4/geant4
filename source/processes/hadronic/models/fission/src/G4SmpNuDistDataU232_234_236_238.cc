@@ -57,6 +57,7 @@
 //
 
 #include <cmath>
+#include "G4Pow.hh"
 #include "G4fissionEvent.hh"
 
 G4int G4fissionEvent::G4SmpNuDistDataU232_234_236_238(G4double nubar) {
@@ -88,15 +89,16 @@ G4int G4fissionEvent::G4SmpNuDistDataU232_234_236_238(G4double nubar) {
 /*
      Use Zucker and Holden Data
 */
-     pnu[0]=-7.705432e-3*std::pow(nubar,3)+8.904671e-2*std::pow(nubar,2)-3.488123e-1*nubar+4.627291e-1;
-     pnu[1]=-2.879938e-2*std::pow(nubar,3)+3.629189e-1*std::pow(nubar,2)-1.545284*nubar+2.229503;
-     pnu[2]=6.543684e-2*std::pow(nubar,3)-6.673117e-1*std::pow(nubar,2)+2.087358*nubar-1.771396;
-     pnu[3]=1.412971e-2*std::pow(nubar,3)-2.309842e-1*std::pow(nubar,2)+1.022451*nubar-1.032235;
-     pnu[4]=-5.163167e-2*std::pow(nubar,3)+4.457516e-1*std::pow(nubar,2)-1.114981*nubar+9.484241e-1;
-     pnu[5]=8.758841e-4*std::pow(nubar,3)+3.707461e-2*std::pow(nubar,2)-1.565149e-1*nubar+1.851039e-1;
-     pnu[6]=-3.871089e-5*std::pow(nubar,3)+1.936524e-2*std::pow(nubar,2)-8.091057e-2*nubar+9.019871e-2;
-     pnu[7]=3.945995e-3*std::pow(nubar,3)-2.697509e-2*std::pow(nubar,2)+6.237296e-2*nubar-4.820745e-2;
-     pnu[8]=1.708054e-3*std::pow(nubar,4)-1.706039e-2*std::pow(nubar,3)+6.550213e-2*std::pow(nubar,2)-1.135e-1*nubar+7.443828e-2;
+     G4Pow* Pow=G4Pow::GetInstance();
+     pnu[0]=-7.705432e-3*Pow->powN(nubar,3)+8.904671e-2*Pow->powN(nubar,2)-3.488123e-1*nubar+4.627291e-1;
+     pnu[1]=-2.879938e-2*Pow->powN(nubar,3)+3.629189e-1*Pow->powN(nubar,2)-1.545284*nubar+2.229503;
+     pnu[2]=6.543684e-2*Pow->powN(nubar,3)-6.673117e-1*Pow->powN(nubar,2)+2.087358*nubar-1.771396;
+     pnu[3]=1.412971e-2*Pow->powN(nubar,3)-2.309842e-1*Pow->powN(nubar,2)+1.022451*nubar-1.032235;
+     pnu[4]=-5.163167e-2*Pow->powN(nubar,3)+4.457516e-1*Pow->powN(nubar,2)-1.114981*nubar+9.484241e-1;
+     pnu[5]=8.758841e-4*Pow->powN(nubar,3)+3.707461e-2*Pow->powN(nubar,2)-1.565149e-1*nubar+1.851039e-1;
+     pnu[6]=-3.871089e-5*Pow->powN(nubar,3)+1.936524e-2*Pow->powN(nubar,2)-8.091057e-2*nubar+9.019871e-2;
+     pnu[7]=3.945995e-3*Pow->powN(nubar,3)-2.697509e-2*Pow->powN(nubar,2)+6.237296e-2*nubar-4.820745e-2;
+     pnu[8]=1.708054e-3*Pow->powN(nubar,4)-1.706039e-2*Pow->powN(nubar,3)+6.550213e-2*Pow->powN(nubar,2)-1.135e-1*nubar+7.443828e-2;
 
      sum=pnu[0]+pnu[1]+pnu[2]+pnu[3]+pnu[4]+pnu[5]+pnu[6]+pnu[7]+pnu[8];
 

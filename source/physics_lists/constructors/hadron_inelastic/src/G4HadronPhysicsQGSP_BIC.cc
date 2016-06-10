@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsQGSP_BIC.cc 83699 2014-09-10 07:18:25Z gcosmo $
+// $Id: G4HadronPhysicsQGSP_BIC.cc 93617 2015-10-27 09:00:41Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -55,13 +55,16 @@
 #include "G4ShortLivedConstructor.hh"
 #include "G4IonConstructor.hh"
 
+#include "G4ComponentGGHadronNucleusXsc.hh"
+#include "G4CrossSectionInelastic.hh"
 #include "G4HadronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
 #include "G4NeutronInelasticXS.hh"
 #include "G4NeutronCaptureXS.hh"
 
-#include "G4PhysListUtil.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
+
+#include "G4PhysListUtil.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -73,7 +76,7 @@ G4HadronPhysicsQGSP_BIC::tpdata = 0;
 
 G4HadronPhysicsQGSP_BIC::G4HadronPhysicsQGSP_BIC(G4int)
     :  G4VPhysicsConstructor("hInelastic QGSP_BIC")
-/*    , theNeutrons(0)
+/*  , theNeutrons(0)
     , theFTFPNeutron(0)
     , theQGSPNeutron(0)
     , theBinaryNeutron(0)
@@ -88,6 +91,7 @@ G4HadronPhysicsQGSP_BIC::G4HadronPhysicsQGSP_BIC(G4int)
     , theHyperon(0)
     , theAntiBaryon(0)
     , theFTFPAntiBaryon(0)
+    , xsKaon(0)
     , xsNeutronInelasticXS(0)
     , xsNeutronCaptureXS(0)*/
 //    , QuasiElastic(true)
@@ -110,6 +114,7 @@ G4HadronPhysicsQGSP_BIC::G4HadronPhysicsQGSP_BIC(const G4String& name, G4bool /*
     , theHyperon(0)
     , theAntiBaryon(0)
     , theFTFPAntiBaryon(0)
+    , xsKaon(0)
     , xsNeutronInelasticXS(0)
     , xsNeutronCaptureXS(0)*/
 //    , QuasiElastic(quasiElastic)
@@ -202,6 +207,15 @@ void G4HadronPhysicsQGSP_BIC::ConstructProcess()
   tpdata->theNeutrons->Build();
   tpdata->thePro->Build();
   tpdata->thePiK->Build();
+
+  // --- Kaons ---
+  tpdata->xsKaon = new G4ComponentGGHadronNucleusXsc();
+  G4VCrossSectionDataSet * kaonxs = new G4CrossSectionInelastic(tpdata->xsKaon);
+  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(kaonxs);
+  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(kaonxs);
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(kaonxs);
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(kaonxs);
+
   tpdata->theHyperon->Build();
   tpdata->theAntiBaryon->Build();
 

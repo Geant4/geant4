@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsGeometry.cc 82799 2014-07-10 13:18:29Z gcosmo $
+// $Id: G4VisCommandsGeometry.cc 88762 2015-03-09 12:25:11Z gcosmo $
 
 // /vis/geometry commands - John Allison  31st January 2006
 
@@ -75,9 +75,13 @@ void G4VisCommandGeometryList::SetNewValue(G4UIcommand*, G4String newValue)
     const G4String& logVolName = pLV->GetName();
     if (newValue == "all" || logVolName == newValue) {
       const G4VisAttributes* visAtts = pLV->GetVisAttributes();
-      G4cout << "\nLogical Volume \"" << pLV->GetName()
-	     << "\": vis attributes:\n" << *visAtts
-	     << G4endl;
+      G4cout << "\nLogical Volume \"" << pLV->GetName() << "\":";
+      if (visAtts) {
+        G4cout << '\n' << *visAtts;
+      } else {
+        G4cout << " no vis attributes";
+      }
+      G4cout << G4endl;
     }
     if (logVolName == newValue) found = true;
   }

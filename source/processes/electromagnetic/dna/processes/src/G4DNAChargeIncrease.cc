@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChargeIncrease.cc 70171 2013-05-24 13:34:18Z gcosmo $
+// $Id: G4DNAChargeIncrease.cc 91584 2015-07-27 13:01:48Z gcosmo $
 
 #include "G4DNAChargeIncrease.hh"
 #include "G4SystemOfUnits.hh"
@@ -33,16 +33,17 @@
 using namespace std;
 
 G4DNAChargeIncrease::G4DNAChargeIncrease(const G4String& processName,
-  G4ProcessType type):G4VEmProcess (processName, type),
-    isInitialised(false)
+                                         G4ProcessType type) :
+    G4VEmProcess(processName, type), isInitialised(false)
 {
   SetProcessSubType(57);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 G4DNAChargeIncrease::~G4DNAChargeIncrease()
-{}
+{
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -52,54 +53,51 @@ G4bool G4DNAChargeIncrease::IsApplicable(const G4ParticleDefinition& p)
   G4DNAGenericIonsManager *instance;
   instance = G4DNAGenericIonsManager::Instance();
 
-  return 
-    (
-       &p == instance->GetIon("hydrogen")
-    || &p == instance->GetIon("alpha+")
-    || &p == instance->GetIon("helium")
-    );
+  return (&p == instance->GetIon("hydrogen") || &p == instance->GetIon("alpha+")
+          || &p == instance->GetIon("helium"));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4DNAChargeIncrease::InitialiseProcess(const G4ParticleDefinition* p)
 {
-  if(!isInitialised) 
+  if(!isInitialised)
   {
     isInitialised = true;
     SetBuildTableFlag(false);
 
     G4String name = p->GetParticleName();
 
-    if( name == "hydrogen" )
+    if(name == "hydrogen")
     {
-      if(!EmModel()) SetEmModel(new G4DNADingfelderChargeIncreaseModel);
-      EmModel()->SetLowEnergyLimit(100*eV);
-      EmModel()->SetHighEnergyLimit(100*MeV);
-
-      AddEmModel(1, EmModel());   
-    }
-    
-    if( name =="alpha+" || name =="helium" )
-    {
-      if(!EmModel()) SetEmModel(new G4DNADingfelderChargeIncreaseModel);
-      EmModel()->SetLowEnergyLimit(1*keV);
-      EmModel()->SetHighEnergyLimit(400*MeV);
-
-      AddEmModel(1, EmModel());   
+      if(!EmModel())
+      {
+        SetEmModel(new G4DNADingfelderChargeIncreaseModel);
+        EmModel()->SetLowEnergyLimit(100 * eV);
+        EmModel()->SetHighEnergyLimit(100 * MeV);
+      }
+      AddEmModel(1, EmModel());
     }
 
-    
-  } 
+    if(name == "alpha+" || name == "helium")
+    {
+      if(!EmModel())
+      {
+        SetEmModel(new G4DNADingfelderChargeIncreaseModel);
+        EmModel()->SetLowEnergyLimit(1 * keV);
+        EmModel()->SetHighEnergyLimit(400 * MeV);
+      }
+      AddEmModel(1, EmModel());
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4DNAChargeIncrease::PrintInfo()
 {
-  G4cout
-    << " Total cross sections computed from " << EmModel()->GetName() << " model"
-    << G4endl;
-}         
+  G4cout << " Total cross sections computed from " << EmModel()->GetName()
+         << " model" << G4endl;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

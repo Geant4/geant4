@@ -1,0 +1,129 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_system
+#define tools_system
+
+#include <cstdlib>
+
+#include "cstr"
+#include "sout"
+#include "num2s"
+#include "sto"
+#include "words"
+#include "sep"
+#include "vmanip"
+
+namespace tools {
+
+inline bool isenv(const std::string& a_string){
+  const char* env = ::getenv(a_string.c_str());
+  return (env?true:false);
+}
+
+inline bool getenv(const std::string& a_string,std::string& a_value){
+  const char* env = ::getenv(a_string.c_str());
+  if(env) {
+    a_value = std::string(env?env:"");
+    return true;
+  } else {
+    a_value.clear();
+    return false;
+  }
+}
+
+template <class T>
+inline bool get_env(const std::string& a_string,T& a_v){
+  std::string s;
+  if(!getenv(a_string,s)) return false;
+  return to<T>(s,a_v);
+}
+
+inline bool get_env_bool(const std::string& a_string,bool& a_v){
+  std::string s;
+  if(!getenv(a_string,s)) return false;
+  return to(s,a_v);
+}
+
+inline bool putenv(const std::string& a_env,const std::string& a_value){
+  std::string value = a_env+"="+a_value;
+  if(::putenv(tools::str_dup(value.c_str(),false))) return false;
+  //check:
+  std::string s;
+  if(!getenv(a_env,s)) return false;
+  if(s!=a_value) return false;
+  return true;
+}
+
+inline bool rmenv(const std::string& a_env){
+#ifdef _MSC_VER
+  std::string value = a_env+"=";
+  if(::putenv(tools::str_dup(value.c_str(),false))) return false;
+#else
+  ::unsetenv(a_env.c_str());
+#endif
+  return true;
+}
+
+inline bool check_getenv(std::ostream& a_out,
+                         const std::string& a_new,const std::string& a_old,
+                         std::string& a_env){
+  if(tools::getenv(a_new,a_env)) return true;
+  if(tools::getenv(a_old,a_env)) {
+    a_out << "Environment variable " << sout(a_old) << " is deprecated."
+          << " Use " << sout(a_new) << " instead."
+          << std::endl;
+    return true;
+  }
+  return false;
+}
+
+inline int execute(const std::string& a_string) {
+  return ::system(a_string.c_str());
+}
+
+inline bool env_append(const std::string& a_env,
+                       const std::string& a_sep,
+                       const std::vector<std::string>& a_vals){
+  std::string env_value;
+  if(tools::isenv(a_env)) {
+    if(!tools::getenv(a_env,env_value)) return false;
+  }
+
+ {std::vector<std::string>::const_iterator it;
+  for(it=a_vals.begin();it!=a_vals.end();++it) {
+    const std::string& value = *it;
+    if(value.empty()) continue;
+
+    if(env_value.size()) {
+      std::vector<std::string> ws;
+      tools::words(env_value,a_sep,false,ws);
+      // Remove existing one, so that value be put at end.
+      tools::remove(ws,value);
+      if(!tools::nums2s<std::string>(ws,env_value,a_sep)) {}
+    }
+
+    if(env_value.size()) env_value += a_sep;
+    env_value += value;
+  }}
+
+  if(!putenv(a_env,env_value)) return false;
+
+  return true;
+}
+
+inline bool env_path_append(const std::string& a_env,
+                            const std::vector<std::string>& a_paths){
+  return env_append(a_env,psep(),a_paths);
+}
+
+inline bool env_append_path(const std::string& a_env,
+                            const std::string& a_path){
+  std::vector<std::string> v;
+  v.push_back(a_path);
+  return env_append(a_env,psep(),v);
+}
+
+}
+
+#endif

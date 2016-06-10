@@ -28,8 +28,8 @@
 // Author: Ivana Hrivnacova, 24/07/2014  (ivana@ipno.in2p3.fr)
 
 #include "G4P2ToolsManager.hh"
-#include "G4HnManager.hh"
 #include "G4AnalysisManagerState.hh"
+#include "G4BaseHistoUtilities.hh"
 #include "G4AnalysisUtilities.hh"
 
 #include "tools/histo/p2d"
@@ -38,23 +38,18 @@
 
 using namespace G4Analysis;
 
+// static definitions
+const G4int G4P2ToolsManager::kDimension = 2;
+
 //_____________________________________________________________________________
 G4P2ToolsManager::G4P2ToolsManager(const G4AnalysisManagerState& state)
- : G4VP2Manager(state),
-   fBaseToolsManager("P2"),
-   fP2Vector(), 
-   fP2NameIdMap()
-{
-}
+ : G4VP2Manager(),
+   G4THnManager<tools::histo::p2d>(state, "P2")
+{}
 
 //_____________________________________________________________________________
 G4P2ToolsManager::~G4P2ToolsManager()
-{  
-  std::vector<tools::histo::p2d*>::iterator it;
-  for (it = fP2Vector.begin(); it != fP2Vector.end(); it++ ) {
-    delete (*it);
-  }  
-}
+{}
 
 //
 // Utility functions
@@ -73,36 +68,9 @@ void UpdateP2Information(G4HnInformation* hnInformation,
                           G4BinScheme xbinScheme,
                           G4BinScheme ybinScheme)
 {
-  G4double xunit = GetUnitValue(xunitName);
-  G4double yunit = GetUnitValue(yunitName);
-  G4double zunit = GetUnitValue(zunitName);
-  G4Fcn xfcn = GetFunction(xfcnName);
-  G4Fcn yfcn = GetFunction(yfcnName);
-  G4Fcn zfcn = GetFunction(zfcnName);
-
-  G4HnDimensionInformation* xInformation 
-    = hnInformation->GetHnDimensionInformation(G4HnInformation::kX);
-  xInformation->fUnitName = xunitName;
-  xInformation->fFcnName = xfcnName;
-  xInformation->fUnit = xunit;
-  xInformation->fFcn = xfcn;
-  xInformation->fBinScheme = xbinScheme;
-
-  G4HnDimensionInformation* yInformation 
-    = hnInformation->GetHnDimensionInformation(G4HnInformation::kY);
-  yInformation->fUnitName = yunitName;
-  yInformation->fFcnName = yfcnName;
-  yInformation->fUnit = yunit;
-  yInformation->fFcn = yfcn;
-  yInformation->fBinScheme = ybinScheme;
-
-  G4HnDimensionInformation* zInformation 
-    = hnInformation->GetHnDimensionInformation(G4HnInformation::kZ);
-  zInformation->fUnitName = zunitName;
-  zInformation->fFcnName = zfcnName;
-  zInformation->fUnit = zunit;
-  zInformation->fFcn = zfcn;
-  zInformation->fBinScheme = kLinearBinScheme;
+  hnInformation->SetDimension(kX, xunitName, xfcnName, xbinScheme);
+  hnInformation->SetDimension(kY, yunitName, yfcnName, ybinScheme);
+  hnInformation->SetDimension(kZ, zunitName, zfcnName, G4BinScheme::kLinear);
 }  
                            
 //_____________________________________________________________________________
@@ -140,17 +108,17 @@ tools::histo::p2d* CreateToolsP2(
                          const G4String& xbinSchemeName,
                          const G4String& ybinSchemeName)
 {
-  G4double xunit = GetUnitValue(xunitName);
-  G4double yunit = GetUnitValue(yunitName);
-  G4double zunit = GetUnitValue(zunitName);
-  G4Fcn xfcn = GetFunction(xfcnName);
-  G4Fcn yfcn = GetFunction(yfcnName);
-  G4Fcn zfcn = GetFunction(zfcnName);
-  G4BinScheme xbinScheme = GetBinScheme(xbinSchemeName);
-  G4BinScheme ybinScheme = GetBinScheme(ybinSchemeName);
+  auto xunit = GetUnitValue(xunitName);
+  auto yunit = GetUnitValue(yunitName);
+  auto zunit = GetUnitValue(zunitName);
+  auto xfcn = GetFunction(xfcnName);
+  auto yfcn = GetFunction(yfcnName);
+  auto zfcn = GetFunction(zfcnName);
+  auto xbinScheme = GetBinScheme(xbinSchemeName);
+  auto ybinScheme = GetBinScheme(ybinSchemeName);
   
-  if ( xbinScheme != kLogBinScheme && ybinScheme !=  kLogBinScheme) {
-    if ( xbinScheme == kUserBinScheme || ybinScheme == kUserBinScheme ) {
+  if ( xbinScheme != G4BinScheme::kLog && ybinScheme !=  G4BinScheme::kLog) {
+    if ( xbinScheme == G4BinScheme::kUser || ybinScheme == G4BinScheme::kUser ) {
       // This should never happen, but let's make sure about it
       // by issuing a warning
       G4ExceptionDescription description;
@@ -191,12 +159,12 @@ tools::histo::p2d* CreateToolsP2(
                          const G4String& yfcnName,
                          const G4String& zfcnName)
 {                          
-  G4double xunit = GetUnitValue(xunitName);
-  G4double yunit = GetUnitValue(yunitName);
-  G4double zunit = GetUnitValue(zunitName);
-  G4Fcn xfcn = GetFunction(xfcnName);
-  G4Fcn yfcn = GetFunction(yfcnName);
-  G4Fcn zfcn = GetFunction(zfcnName);
+  auto xunit = GetUnitValue(xunitName);
+  auto yunit = GetUnitValue(yunitName);
+  auto zunit = GetUnitValue(zunitName);
+  auto xfcn = GetFunction(xfcnName);
+  auto yfcn = GetFunction(yfcnName);
+  auto zfcn = GetFunction(zfcnName);
 
   // Apply function 
   std::vector<G4double> xnewEdges;
@@ -224,17 +192,17 @@ void  ConfigureToolsP2(tools::histo::p2d* p2d,
                        const G4String& xbinSchemeName,
                        const G4String& ybinSchemeName)
 {
-  G4double xunit = GetUnitValue(xunitName);
-  G4double yunit = GetUnitValue(yunitName);
-  G4double zunit = GetUnitValue(zunitName);
-  G4Fcn xfcn = GetFunction(xfcnName);
-  G4Fcn yfcn = GetFunction(yfcnName);
-  G4Fcn zfcn = GetFunction(zfcnName);
-  G4BinScheme xbinScheme = GetBinScheme(xbinSchemeName);
-  G4BinScheme ybinScheme = GetBinScheme(ybinSchemeName);
+  auto xunit = GetUnitValue(xunitName);
+  auto yunit = GetUnitValue(yunitName);
+  auto zunit = GetUnitValue(zunitName);
+  auto xfcn = GetFunction(xfcnName);
+  auto yfcn = GetFunction(yfcnName);
+  auto zfcn = GetFunction(zfcnName);
+  auto xbinScheme = GetBinScheme(xbinSchemeName);
+  auto ybinScheme = GetBinScheme(ybinSchemeName);
   
-  if ( xbinScheme != kLogBinScheme && ybinScheme !=  kLogBinScheme) {
-    if ( xbinScheme == kUserBinScheme || ybinScheme == kUserBinScheme) {
+  if ( xbinScheme != G4BinScheme::kLog && ybinScheme !=  G4BinScheme::kLog) {
+    if ( xbinScheme == G4BinScheme::kUser || ybinScheme == G4BinScheme::kUser) {
       // This should never happen, but let's make sure about it
       // by issuing a warning
       G4ExceptionDescription description;
@@ -271,18 +239,18 @@ void  ConfigureToolsP2(tools::histo::p2d* p2d,
                        const G4String& zfcnName)
 {
   // Apply function to edges
-  G4double xunit = GetUnitValue(xunitName);
-  G4Fcn xfcn = GetFunction(xfcnName);
+  auto xunit = GetUnitValue(xunitName);
+  auto xfcn = GetFunction(xfcnName);
   std::vector<G4double> xnewEdges;
   ComputeEdges(xedges, xunit, xfcn, xnewEdges);
 
-  G4double yunit = GetUnitValue(yunitName);
-  G4Fcn yfcn = GetFunction(yfcnName);
+  auto yunit = GetUnitValue(yunitName);
+  auto yfcn = GetFunction(yfcnName);
   std::vector<G4double> ynewEdges;
   ComputeEdges(yedges, yunit, yfcn, ynewEdges);
 
-  G4double zunit = GetUnitValue(zunitName);
-  G4Fcn zfcn = GetFunction(zfcnName);
+  auto zunit = GetUnitValue(zunitName);
+  auto zfcn = GetFunction(zfcnName);
   p2d->configure(xnewEdges, ynewEdges, zfcn(zmin/zunit), zfcn(zmax/zunit));
 }
 
@@ -292,33 +260,6 @@ void  ConfigureToolsP2(tools::histo::p2d* p2d,
 //
 // private methods
 //
-
-//_____________________________________________________________________________
-tools::histo::p2d*  G4P2ToolsManager::GetP2InFunction(G4int id, 
-                                      G4String functionName, G4bool warn,
-                                      G4bool onlyIfActive) const
-{                                      
-  G4int index = id - fFirstId;
-  if ( index < 0 || index >= G4int(fP2Vector.size()) ) {
-    if ( warn) {
-      G4String inFunction = "G4P2ToolsManager::";
-      inFunction += functionName;
-      G4ExceptionDescription description;
-      description << "      " << "profile " << id << " does not exist.";
-      G4Exception(inFunction, "Analysis_W011", JustWarning, description);
-    }
-    return 0;         
-  }
-
-  // Do not return profile if inactive 
-  if ( fState.GetIsActivation()  && onlyIfActive && 
-       ( ! fHnManager->GetActivation(id) ) ) {
-    return 0; 
-  }  
-  
-  return fP2Vector[index];
-}
-  
 
 //_____________________________________________________________________________
 void G4P2ToolsManager::AddP2Information(const G4String& name,  
@@ -331,30 +272,11 @@ void G4P2ToolsManager::AddP2Information(const G4String& name,
                           G4BinScheme xbinScheme,
                           G4BinScheme ybinScheme) const
 {
-  G4double xunit = GetUnitValue(xunitName);
-  G4double yunit = GetUnitValue(yunitName);
-  G4double zunit = GetUnitValue(zunitName);
-  G4Fcn xfcn = GetFunction(xfcnName);
-  G4Fcn yfcn = GetFunction(yfcnName);
-  G4Fcn zfcn = GetFunction(zfcnName);
-  fHnManager
-    ->AddH3Information(name, xunitName, yunitName, zunitName,
-                       xfcnName, yfcnName, zfcnName,
-                       xunit, yunit, zunit, xfcn, yfcn, zfcn,
-                       xbinScheme, ybinScheme, kLinearBinScheme);
+  auto hnInformation = fHnManager->AddHnInformation(name, 3);
+  hnInformation->AddDimension(xunitName, xfcnName, xbinScheme);
+  hnInformation->AddDimension(yunitName, yfcnName, ybinScheme);
+  hnInformation->AddDimension(zunitName, zfcnName, G4BinScheme::kLinear);
 }  
-
-//_____________________________________________________________________________
-G4int G4P2ToolsManager::RegisterToolsP2(tools::histo::p2d* p2d, 
-                          const G4String& name)
-{
-  G4int index = fP2Vector.size();
-  fP2Vector.push_back(p2d);
-  
-  fLockFirstId = true;
-  fP2NameIdMap[name] = index + fFirstId;
-  return index + fFirstId;
-}                                         
 
 // 
 // protected methods
@@ -389,14 +311,14 @@ G4int G4P2ToolsManager::CreateP2(const G4String& name,  const G4String& title,
                   xfcnName, yfcnName, zfcnName);        
     
   // Save P2 information
-  G4BinScheme xbinScheme = GetBinScheme(xbinSchemeName);
-  G4BinScheme ybinScheme = GetBinScheme(ybinSchemeName);
+  auto xbinScheme = GetBinScheme(xbinSchemeName);
+  auto ybinScheme = GetBinScheme(ybinSchemeName);
   AddP2Information(
     name, xunitName, yunitName, zunitName, xfcnName, yfcnName, zfcnName, 
     xbinScheme, ybinScheme);
     
   // Register profile 
-  G4int id = RegisterToolsP2(p2d, name); 
+  G4int id = RegisterT(p2d, name); 
 
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) 
@@ -432,10 +354,10 @@ G4int G4P2ToolsManager::CreateP2(const G4String& name,  const G4String& title,
   // Save P2 information
   AddP2Information(
     name, xunitName, yunitName, zunitName, xfcnName, yfcnName, zfcnName, 
-    kUserBinScheme, kUserBinScheme);
+    G4BinScheme::kUser, G4BinScheme::kUser);
     
   // Register profile 
-  G4int id = RegisterToolsP2(p2d, name); 
+  G4int id = RegisterT(p2d, name); 
 
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) 
@@ -457,10 +379,10 @@ G4bool G4P2ToolsManager::SetP2(G4int id,
                             const G4String& xbinSchemeName, 
                             const G4String& ybinSchemeName)
 {                                
-  tools::histo::p2d* p2d = GetP2InFunction(id, "SetP2", false, false);
+  auto p2d = GetTInFunction(id, "SetP2", false, false);
   if ( ! p2d ) return false;
 
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "SetP2");
+  auto info = fHnManager->GetHnInformation(id, "SetP2");
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) 
     fState.GetVerboseL4()->Message("configure", "P2", info->GetName());
@@ -477,8 +399,8 @@ G4bool G4P2ToolsManager::SetP2(G4int id,
                   xfcnName, yfcnName, zfcnName);        
     
   // Update information
-  G4BinScheme xbinScheme = GetBinScheme(xbinSchemeName);
-  G4BinScheme ybinScheme = GetBinScheme(ybinSchemeName);
+  auto xbinScheme = GetBinScheme(xbinSchemeName);
+  auto ybinScheme = GetBinScheme(ybinSchemeName);
   UpdateP2Information(
     info, xunitName, yunitName, zunitName, xfcnName, yfcnName, zfcnName,
     xbinScheme, ybinScheme);
@@ -499,10 +421,10 @@ G4bool G4P2ToolsManager::SetP2(G4int id,
                             const G4String& xfcnName, const G4String& yfcnName,
                             const G4String& zfcnName)
 {                                
-  tools::histo::p2d* p2d = GetP2InFunction(id, "SetP2", false, false);
+  auto p2d = GetTInFunction(id, "SetP2", false, false);
   if ( ! p2d ) return false;
 
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "SetP2");
+  auto info = fHnManager->GetHnInformation(id, "SetP2");
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) 
     fState.GetVerboseL4()->Message("configure", "P2", info->GetName());
@@ -519,7 +441,7 @@ G4bool G4P2ToolsManager::SetP2(G4int id,
   // Update information
   UpdateP2Information(
     info, xunitName, yunitName, zunitName, xfcnName, yfcnName, zfcnName,
-    kUserBinScheme, kUserBinScheme);
+    G4BinScheme::kUser, G4BinScheme::kUser);
 
   // Set activation
   fHnManager->SetActivation(id, true); 
@@ -530,7 +452,7 @@ G4bool G4P2ToolsManager::SetP2(G4int id,
 //_____________________________________________________________________________
 G4bool G4P2ToolsManager::ScaleP2(G4int id, G4double factor)
 {
-  tools::histo::p2d* p2d = GetP2InFunction(id, "ScaleP2", false, false);
+  auto p2d = GetTInFunction(id, "ScaleP2", false, false);
   if ( ! p2d ) return false;
 
   return p2d->scale(factor);
@@ -541,19 +463,19 @@ G4bool G4P2ToolsManager::FillP2(G4int id,
                              G4double xvalue, G4double yvalue, G4double zvalue,
                              G4double weight)
 {
-  tools::histo::p2d* p2d = GetP2InFunction(id, "FillP2", true, false);
+  auto p2d = GetTInFunction(id, "FillP2", true, false);
   if ( ! p2d ) return false;
 
   if ( fState.GetIsActivation() && ( ! fHnManager->GetActivation(id) ) ) {
     return false; 
   }  
 
-  G4HnDimensionInformation* xInfo 
-    = fHnManager->GetHnDimensionInformation(id, G4HnInformation::kX, "FillP2");
-  G4HnDimensionInformation* yInfo 
-    = fHnManager->GetHnDimensionInformation(id, G4HnInformation::kY, "FillP2");
-  G4HnDimensionInformation* zInfo 
-    = fHnManager->GetHnDimensionInformation(id, G4HnInformation::kZ, "FillP2");
+  auto xInfo 
+    = fHnManager->GetHnDimensionInformation(id, kX, "FillP2");
+  auto yInfo 
+    = fHnManager->GetHnDimensionInformation(id, kY, "FillP2");
+  auto zInfo 
+    = fHnManager->GetHnDimensionInformation(id, kZ, "FillP2");
 
   p2d->fill(xInfo->fFcn(xvalue/xInfo->fUnit), 
             yInfo->fFcn(yvalue/yInfo->fUnit), 
@@ -580,26 +502,16 @@ G4bool G4P2ToolsManager::FillP2(G4int id,
 //_____________________________________________________________________________
 G4int  G4P2ToolsManager::GetP2Id(const G4String& name, G4bool warn) const
 {
-  std::map<G4String, G4int>::const_iterator it = fP2NameIdMap.find(name);
-  if ( it ==  fP2NameIdMap.end() ) {  
-    if ( warn) {
-      G4String inFunction = "G4P2ToolsManager::GetP2Id";
-      G4ExceptionDescription description;
-      description << "      " << "profile " << name << " does not exist.";
-      G4Exception(inFunction, "Analysis_W011", JustWarning, description);
-    }
-    return kInvalidId;         
-  }
-  return it->second;
+  return GetTId(name, warn);
 }  
                                       
 //_____________________________________________________________________________
 G4int G4P2ToolsManager::GetP2Nxbins(G4int id) const
 {
-  tools::histo::p2d* p2d = GetP2InFunction(id, "GetP2NXbins");
+  auto p2d = GetTInFunction(id, "GetP2NXbins");
   if ( ! p2d ) return 0;
   
-  return fBaseToolsManager.GetNbins(*p2d, G4BaseToolsManager::kX);
+  return GetNbins(*p2d, kX);
 }  
 
 //_____________________________________________________________________________
@@ -607,37 +519,37 @@ G4double G4P2ToolsManager::GetP2Xmin(G4int id) const
 {
 // Returns xmin value with applied unit and profile function
 
-  tools::histo::p2d* p2d = GetP2InFunction(id, "GetP2Xmin");
+  auto p2d = GetTInFunction(id, "GetP2Xmin");
   if ( ! p2d ) return 0;
-  
-  return fBaseToolsManager.GetMin(*p2d, G4BaseToolsManager::kX);
+
+  return GetMin(*p2d, kX);
 }  
 
 //_____________________________________________________________________________
 G4double G4P2ToolsManager::GetP2Xmax(G4int id) const
 {
-  tools::histo::p2d* p2d = GetP2InFunction(id, "GetP2Xmax");
+  auto p2d = GetTInFunction(id, "GetP2Xmax");
   if ( ! p2d ) return 0;
   
-  return fBaseToolsManager.GetMax(*p2d, G4BaseToolsManager::kX);
+  return GetMax(*p2d, kX);
 }  
 
 //_____________________________________________________________________________
 G4double G4P2ToolsManager::GetP2XWidth(G4int id) const
 {
-  tools::histo::p2d* p2d = GetP2InFunction(id, "GetP2XWidth", true, false);
+  auto p2d = GetTInFunction(id, "GetP2XWidth", true, false);
   if ( ! p2d ) return 0;
   
-  return fBaseToolsManager.GetWidth(*p2d, G4BaseToolsManager::kX);
+  return GetWidth(*p2d, kX, fHnManager->GetHnType());
 }  
 
 //_____________________________________________________________________________
 G4int G4P2ToolsManager::GetP2Nybins(G4int id) const
 {
-  tools::histo::p2d* p2d = GetP2InFunction(id, "GetP2NYbins");
+  auto p2d = GetTInFunction(id, "GetP2NYbins");
   if ( ! p2d ) return 0;
   
-  return fBaseToolsManager.GetNbins(*p2d, G4BaseToolsManager::kY);
+  return GetNbins(*p2d, kY);
 }  
 
 //_____________________________________________________________________________
@@ -645,28 +557,28 @@ G4double G4P2ToolsManager::GetP2Ymin(G4int id) const
 {
 // Returns xmin value with applied unit and profile function
 
-  tools::histo::p2d* p2d = GetP2InFunction(id, "GetP2Ymin");
+  auto p2d = GetTInFunction(id, "GetP2Ymin");
   if ( ! p2d ) return 0;
   
-  return fBaseToolsManager.GetMin(*p2d, G4BaseToolsManager::kY);
+  return GetMin(*p2d, kY);
 }  
 
 //_____________________________________________________________________________
 G4double G4P2ToolsManager::GetP2Ymax(G4int id) const
 {
-  tools::histo::p2d* p2d = GetP2InFunction(id, "GetP2Ymax");
+  auto p2d = GetTInFunction(id, "GetP2Ymax");
   if ( ! p2d ) return 0;
   
-  return fBaseToolsManager.GetMax(*p2d, G4BaseToolsManager::kY);
+  return GetMax(*p2d, kY);
 }  
 
 //_____________________________________________________________________________
 G4double G4P2ToolsManager::GetP2YWidth(G4int id) const
 {
-  tools::histo::p2d* p2d = GetP2InFunction(id, "GetP2YWidth", true, false);
+  auto p2d = GetTInFunction(id, "GetP2YWidth", true, false);
   if ( ! p2d ) return 0;
   
-  return fBaseToolsManager.GetWidth(*p2d, G4BaseToolsManager::kY);
+  return GetWidth(*p2d, kY, fHnManager->GetHnType());
 }  
 
 //_____________________________________________________________________________
@@ -674,91 +586,91 @@ G4double G4P2ToolsManager::GetP2Zmin(G4int id) const
 {
 // Returns xmin value with applied unit and profile function
 
-  tools::histo::p2d* p2d = GetP2InFunction(id, "GetP2Zmin");
+  auto p2d = GetTInFunction(id, "GetP2Zmin");
   if ( ! p2d ) return 0;
   
-  return fBaseToolsManager.GetMin(*p2d, G4BaseToolsManager::kZ);
+  return GetMin(*p2d, kZ);
 }  
 
 //_____________________________________________________________________________
 G4double G4P2ToolsManager::GetP2Zmax(G4int id) const
 {
-  tools::histo::p2d* p2d = GetP2InFunction(id, "GetP2Zmax");
+  auto p2d = GetTInFunction(id, "GetP2Zmax");
   if ( ! p2d ) return 0;
   
-  return fBaseToolsManager.GetMax(*p2d, G4BaseToolsManager::kZ);
+  return GetMax(*p2d, kZ);
 }  
 
 //_____________________________________________________________________________
 G4bool G4P2ToolsManager::SetP2Title(G4int id, const G4String& title)
 {
-  tools::histo::p2d* p2d = GetP2InFunction(id, "SetP2Title");
+  auto p2d = GetTInFunction(id, "SetP2Title");
   if ( ! p2d ) return false;
   
-  return fBaseToolsManager.SetTitle(*p2d, title);
+  return SetTitle(*p2d, title);
 }  
 
 //_____________________________________________________________________________
 G4bool G4P2ToolsManager::SetP2XAxisTitle(G4int id, const G4String& title)
 {
-  tools::histo::p2d* p2d = GetP2InFunction(id, "SetP2XAxisTitle");
+  auto p2d = GetTInFunction(id, "SetP2XAxisTitle");
   if ( ! p2d ) return false;
   
-  return fBaseToolsManager.SetAxisTitle(*p2d, G4BaseToolsManager::kX, title);
+  return SetAxisTitle(*p2d, kX, title);
 }  
 
 //_____________________________________________________________________________
 G4bool G4P2ToolsManager::SetP2YAxisTitle(G4int id, const G4String& title)
 {
-  tools::histo::p2d* p2d = GetP2InFunction(id, "SetP2YAxisTitle");
+  auto p2d = GetTInFunction(id, "SetP2YAxisTitle");
   if ( ! p2d ) return false;
   
-  return fBaseToolsManager.SetAxisTitle(*p2d, G4BaseToolsManager::kY, title);
+  return SetAxisTitle(*p2d, kY, title);
 }  
 
 //_____________________________________________________________________________
 G4bool G4P2ToolsManager::SetP2ZAxisTitle(G4int id, const G4String& title)
 {
-  tools::histo::p2d* p2d = GetP2InFunction(id, "SetP2ZAxisTitle");
+  auto p2d = GetTInFunction(id, "SetP2ZAxisTitle");
   if ( ! p2d ) return false;
   
-  return fBaseToolsManager.SetAxisTitle(*p2d, G4BaseToolsManager::kZ, title);
+  return SetAxisTitle(*p2d, kZ, title);
 }  
 
 //_____________________________________________________________________________
 G4String G4P2ToolsManager::GetP2Title(G4int id) const
 {
-  tools::histo::p2d* p2d = GetP2InFunction(id, "GetP2Title");
+  auto p2d = GetTInFunction(id, "GetP2Title");
   if ( ! p2d ) return "";
   
-  return fBaseToolsManager.GetTitle(*p2d);
+  return GetTitle(*p2d);
 }  
 
 //_____________________________________________________________________________
 G4String G4P2ToolsManager::GetP2XAxisTitle(G4int id) const 
 {
-  tools::histo::p2d* p2d = GetP2InFunction(id, "GetP2XAxisTitle");
+  auto p2d = GetTInFunction(id, "GetP2XAxisTitle");
   if ( ! p2d ) return "";
   
-  return fBaseToolsManager.GetAxisTitle(*p2d, G4BaseToolsManager::kX);
+  return GetAxisTitle(*p2d, kX, fHnManager->GetHnType());
 } 
 
 //_____________________________________________________________________________
 G4String G4P2ToolsManager::GetP2YAxisTitle(G4int id) const 
 {
-  tools::histo::p2d* p2d = GetP2InFunction(id, "GetP2YAxisTitle");
+  auto p2d = GetTInFunction(id, "GetP2YAxisTitle");
   if ( ! p2d ) return "";
   
-  return fBaseToolsManager.GetAxisTitle(*p2d, G4BaseToolsManager::kY);
+  return GetAxisTitle(*p2d, kY, fHnManager->GetHnType());
 }  
 
 //_____________________________________________________________________________
 G4String G4P2ToolsManager::GetP2ZAxisTitle(G4int id) const 
 {
-  tools::histo::p2d* p2d = GetP2InFunction(id, "GetP2ZAxisTitle");
+  auto p2d = GetTInFunction(id, "GetP2ZAxisTitle");
   if ( ! p2d ) return "";
   
-  return fBaseToolsManager.GetAxisTitle(*p2d, G4BaseToolsManager::kZ);
+  return GetAxisTitle(*p2d, kZ, fHnManager->GetHnType());
 }  
 
 //_____________________________________________________________________________
@@ -788,10 +700,10 @@ G4int G4P2ToolsManager::AddP2(const G4String& name, tools::histo::p2d* p2d)
   AddP2Annotation(p2d, "none", "none", "none", "none", "none", "none");        
   // Add information
   AddP2Information(name, "none", "none", "none", "none", "none", "none", 
-                   kLinearBinScheme, kLinearBinScheme);
+                   G4BinScheme::kLinear, G4BinScheme::kLinear);
     
   // Register profile 
-  G4int id = RegisterToolsP2(p2d, name); 
+  G4int id = RegisterT(p2d, name); 
   
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) 
@@ -804,47 +716,13 @@ G4int G4P2ToolsManager::AddP2(const G4String& name, tools::histo::p2d* p2d)
 void G4P2ToolsManager::AddP2Vector(
                           const std::vector<tools::histo::p2d*>& p2Vector)
 {
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL4() ) 
-      fState.GetVerboseL4()->Message("merge", "all p2", "");
-#endif
-  std::vector<tools::histo::p2d*>::const_iterator itw = p2Vector.begin();
-  std::vector<tools::histo::p2d*>::iterator it;
-  for (it = fP2Vector.begin(); it != fP2Vector.end(); it++ ) {
-    (*it)->add(*(*itw++));
-  }  
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL1() ) 
-      fState.GetVerboseL1()->Message("merge", "all p2", "");
-#endif
+  AddTVector(p2Vector);
 }  
 
-//_____________________________________________________________________________
-G4bool G4P2ToolsManager::Reset()
-{
-// Reset profiles and ntuple
-
-  G4bool finalResult = true;
-
-  std::vector<tools::histo::p2d*>::iterator it;
-  for (it = fP2Vector.begin(); it != fP2Vector.end(); it++ ) {
-    G4bool result = (*it)->reset();
-    if ( ! result ) finalResult = false;
-  }  
-
-  return finalResult;
-}  
-
-//_____________________________________________________________________________
-G4bool G4P2ToolsManager::IsEmpty() const
-{
-  return ! fP2Vector.size();
-}  
- 
 //_____________________________________________________________________________
 tools::histo::p2d*  G4P2ToolsManager::GetP2(G4int id, G4bool warn,
                                                  G4bool onlyIfActive) const 
 {
-  return GetP2InFunction(id, "GetP2", warn, onlyIfActive);
+  return GetTInFunction(id, "GetP2", warn, onlyIfActive);
 }
 

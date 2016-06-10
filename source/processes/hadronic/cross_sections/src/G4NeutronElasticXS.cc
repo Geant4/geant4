@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronElasticXS.cc 83697 2014-09-10 07:15:29Z gcosmo $
+// $Id: G4NeutronElasticXS.cc 93682 2015-10-28 10:09:49Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -44,7 +44,7 @@
 #include "G4ElementTable.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsVector.hh"
-#include "G4GlauberGribovCrossSection.hh"
+#include "G4ComponentGGHadronNucleusXsc.hh"
 #include "G4HadronNucleonXsc.hh"
 #include "G4NistManager.hh"
 #include "G4Proton.hh"
@@ -72,7 +72,7 @@ G4NeutronElasticXS::G4NeutronElasticXS()
     G4cout  << "G4NeutronElasticXS::G4NeutronElasticXS Initialise for Z < " 
 	    << MAXZEL << G4endl;
   }
-  ggXsection = new G4GlauberGribovCrossSection();
+  ggXsection = new G4ComponentGGHadronNucleusXsc();
   fNucleon = new G4HadronNucleonXsc();
   isMaster = false;
 }

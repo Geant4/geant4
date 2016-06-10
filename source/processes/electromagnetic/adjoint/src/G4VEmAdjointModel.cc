@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmAdjointModel.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4VEmAdjointModel.cc 93358 2015-10-19 13:41:21Z gcosmo $
 //
 #include "G4VEmAdjointModel.hh"
 #include "G4AdjointCSManager.hh"
@@ -265,6 +265,7 @@ std::vector< std::vector<G4double>* > G4VEmAdjointModel::ComputeAdjointCrossSect
   
   if (std::pow(fE,5.)>(maxEProj/minEProj)) fE = std::pow(maxEProj/minEProj,0.2);
   
+  // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
   while (E1 <maxEProj*0.9999999){
   	//G4cout<<E1<<'\t'<<E2<<G4endl;
 	
@@ -322,6 +323,7 @@ std::vector< std::vector<G4double>* > G4VEmAdjointModel::ComputeAdjointCrossSect
   
   G4double int_cross_section=0.;
   
+  // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
   while (dE1 <dEmax*0.9999999999999){
   	dE2=dE1*fE;
   	int_cross_section +=integral.Simpson(this,
@@ -371,6 +373,7 @@ std::vector< std::vector<G4double>* > G4VEmAdjointModel::ComputeAdjointCrossSect
   
   if (std::pow(fE,5.)>(maxEProj/minEProj)) fE = std::pow(maxEProj/minEProj,0.2);
   
+  // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
   while (E1 <maxEProj*0.9999999){
   	
   	int_cross_section +=integral.Simpson(this,
@@ -426,6 +429,7 @@ std::vector< std::vector<G4double>* > G4VEmAdjointModel::ComputeAdjointCrossSect
   
   G4double int_cross_section=0.;
   
+  // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
   while (dE1 <dEmax*0.9999999999999){
   	dE2=dE1*fE;
   	int_cross_section +=integral.Simpson(this,
@@ -578,6 +582,7 @@ G4double G4VEmAdjointModel::SampleAdjSecEnergyFromDiffCrossSectionPerAtom(G4doub
   // here we try to use the rejection method 
   //-----------------------------------------
   
+  const G4int iimax = 1000;
   G4double E=0;
   G4double x,xmin,greject,q;
   if ( IsScatProjToProjCase){
@@ -586,14 +591,16 @@ G4double G4VEmAdjointModel::SampleAdjSecEnergyFromDiffCrossSectionPerAtom(G4doub
 	xmin=Emin/Emax;
 	G4double grejmax = DiffCrossSectionPerAtomPrimToScatPrim(Emin,prim_energy,1)*prim_energy; 
 
+        G4int ii =0;
 	do {
         	q = G4UniformRand();
         	x = 1./(q*(1./xmin -1.) +1.);
 		E=x*Emax;
 		greject = DiffCrossSectionPerAtomPrimToScatPrim( E,prim_energy ,1)*prim_energy; 
-		
+		++ii;
+                if(ii >= iimax) { break; }
 	}	
-        
+	// Loop checking, 07-Aug-2015, Vladimir Ivanchenko
 	while( greject < G4UniformRand()*grejmax );	
 	
   }
@@ -602,14 +609,16 @@ G4double G4VEmAdjointModel::SampleAdjSecEnergyFromDiffCrossSectionPerAtom(G4doub
         G4double Emin=  GetSecondAdjEnergyMinForProdToProjCase(prim_energy);;
 	xmin=Emin/Emax;
 	G4double grejmax = DiffCrossSectionPerAtomPrimToSecond(Emin,prim_energy,1); 
+        G4int ii =0;
 	do {
         	q = G4UniformRand();
         	x = std::pow(xmin, q);
 		E=x*Emax;
 		greject = DiffCrossSectionPerAtomPrimToSecond( E,prim_energy ,1); 
-		
+		++ii;
+                if(ii >= iimax) { break; }		
 	}	
-        
+	// Loop checking, 07-Aug-2015, Vladimir Ivanchenko
 	while( greject < G4UniformRand()*grejmax );
   
   

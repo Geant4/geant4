@@ -29,6 +29,7 @@
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4ios.hh"
 
 ExExChPhysicsListMessenger::ExExChPhysicsListMessenger(
@@ -40,13 +41,29 @@ ExExChPhysicsListMessenger::ExExChPhysicsListMessenger(
     fFilePotentialNameCmd->SetGuidance("Filename for input potential vector.");
     fFilePotentialNameCmd->SetParameterName("potfilename",true);
     fFilePotentialNameCmd->SetDefaultValue("");
-}
+    fTransverseVariationMaxCmd =
+        new G4UIcmdWithADoubleAndUnit("/xtal/setTransVarMax",this);
+    fTransverseVariationMaxCmd->SetGuidance("Integration - transverse variation max");
+    fTransverseVariationMaxCmd->SetParameterName("trvarmax",true);
+    fTransverseVariationMaxCmd->SetDefaultValue(2.E-2);
+    fTransverseVariationMaxCmd->SetDefaultUnit("angstrom");
+    fTransverseVariationMaxCmd->SetRange("trvarmax>=0.0");
+
+
+    fTimeStepMinCmd =
+        new G4UIcmdWithADoubleAndUnit("/xtal/setTimeStepMin",this);
+    fTimeStepMinCmd->SetGuidance("Integration - time step min");
+    fTimeStepMinCmd->SetParameterName("timestmin",true);
+    fTimeStepMinCmd->SetDefaultValue(2.E0);
+    fTimeStepMinCmd->SetDefaultUnit("angstrom");
+    fTimeStepMinCmd->SetRange("timestmin>=0.0");}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 ExExChPhysicsListMessenger::~ExExChPhysicsListMessenger(){
     delete fFilePotentialNameCmd;
-}
+    delete fTransverseVariationMaxCmd;
+    delete fTimeStepMinCmd;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -54,6 +71,12 @@ void ExExChPhysicsListMessenger::SetNewValue(G4UIcommand * command,
                                                    G4String newValue){
     if( command==fFilePotentialNameCmd ){
         fTarget->SetFilePotentialName(newValue);
+    }
+    if(command==fTransverseVariationMaxCmd ){
+        fTarget->SetTransverseVariationMax(fTransverseVariationMaxCmd->GetNewDoubleValue(newValue));
+    }
+    if(command==fTimeStepMinCmd ){
+        fTarget->SetTimeStepMin(fTimeStepMinCmd->GetNewDoubleValue(newValue));
     }
 }
 
@@ -65,7 +88,12 @@ G4String ExExChPhysicsListMessenger::GetCurrentValue(
     if( command==fFilePotentialNameCmd ){
         cv = fTarget->GetFilePotentialName();
     }
-    
+    if(command==fTransverseVariationMaxCmd ){
+        cv = fTransverseVariationMaxCmd->ConvertToString(fTarget->GetTransverseVariationMax());
+    }
+    if(command==fTimeStepMinCmd ){
+        cv = fTimeStepMinCmd->ConvertToString(fTarget->GetTimeStepMin());
+    }
     return cv;
 }
 

@@ -1,4 +1,4 @@
-# $Id: storeTables.mac 66241 2012-12-13 18:34:42Z gunter $
+# $Id: storeTables.mac 90969 2015-06-12 08:12:57Z gcosmo $
 #
 # Macro file for "testEm3.cc"
 # 
@@ -9,11 +9,13 @@
 #
 /testem/phys/addPhysics  emstandard_opt0
 #
-/run/initialize
+#/run/initialize
 /process/eLoss/verbose 1
 /process/eLoss/CSDARange true
+/run/initialize
 /run/beamOn 3
 #
+/run/particle/dumpCutValues
 /run/particle/storePhysicsTable physdata
 #
 /gun/particle e-
@@ -23,6 +25,6 @@
 #
 /run/particle/retrievePhysicsTable physdata
 #
-/random/resetEngineFrom currentRun.rndm
+#/random/resetEngineFrom currentRun.rndm
 /run/beamOn 3
 #

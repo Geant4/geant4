@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationDefaultGEMFactory.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4EvaporationDefaultGEMFactory.cc 92431 2015-09-01 09:11:46Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by J. M. Quesada (July 2009) on base of V. Lara code
@@ -197,8 +197,11 @@ std::vector<G4VEvaporationChannel*>* G4EvaporationDefaultGEMFactory::GetChannel(
   theChannel->push_back( new G4Mg27GEMChannel() );     // Mg27
   theChannel->push_back( new G4Mg28GEMChannel() );     // Mg28
 
+  size_t nn = theChannel->size();
+  for(size_t i=2; i<nn; ++i) { 
+    (*theChannel)[i]->SetPhotonEvaporation(thePhotonEvaporation);
+  }
   return theChannel;
-
 }
 
 

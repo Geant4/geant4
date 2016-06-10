@@ -82,7 +82,6 @@ namespace {
 }
 
 #include "globals.hh"
-
 void G4UserWorkerThreadInitialization::SetupRNGEngine(const CLHEP::HepRandomEngine* aNewRNG) const
 {
     G4AutoLock l(&rngCreateMutex);
@@ -95,6 +94,9 @@ void G4UserWorkerThreadInitialization::SetupRNGEngine(const CLHEP::HepRandomEngi
     // Need to make these calls thread safe
     if ( dynamic_cast<const CLHEP::HepJamesRandom*>(aNewRNG) ) {
        retRNG= new CLHEP::HepJamesRandom;
+    }
+    if ( dynamic_cast<const CLHEP::MixMaxRng*>(aNewRNG) ) {
+       retRNG= new CLHEP::MixMaxRng;
     }
     if ( dynamic_cast<const CLHEP::RanecuEngine*>(aNewRNG) ) {
        retRNG= new CLHEP::RanecuEngine;
@@ -114,14 +116,14 @@ void G4UserWorkerThreadInitialization::SetupRNGEngine(const CLHEP::HepRandomEngi
     if ( dynamic_cast<const CLHEP::RanshiEngine*>(aNewRNG) ) {
        retRNG= new CLHEP::RanshiEngine;
     }
-  
+    
     if( retRNG != 0 ) {
        G4Random::setTheEngine( retRNG );
     }else{
         // Does a new method, such as aNewRng->newEngine() exist to clone it ?
         G4ExceptionDescription msg;
         msg<< " Unknown type of RNG Engine - " << G4endl
-           << " Can cope only with HepJamesRandom, Ranecu, Ranlux64, MTwistEngine, DualRand, Ranlux or Ranshi."
+           << " Can cope only with HepJamesRandom, MixMaxRng, Ranecu, Ranlux64, MTwistEngine, DualRand, Ranlux or Ranshi."
            << G4endl
            << " Cannot clone this type of RNG engine, as required for this thread" << G4endl
            << " Aborting " << G4endl;

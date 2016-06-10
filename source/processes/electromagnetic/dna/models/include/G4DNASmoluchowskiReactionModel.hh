@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNASmoluchowskiReactionModel.hh 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id: G4DNASmoluchowskiReactionModel.hh 91584 2015-07-27 13:01:48Z gcosmo $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
@@ -74,9 +74,10 @@ public :
 
     G4IT_ADD_CLONE(G4VDNAReactionModel, G4DNASmoluchowskiReactionModel)
 
-    virtual void Initialise(const G4Molecule*, const G4Track&) ;
-    virtual void InitialiseToPrint(const G4Molecule*) ;
-    virtual G4double GetReactionRadius(const G4Molecule*, const G4Molecule*);
+    virtual void Initialise(G4MolecularConfiguration*, const G4Track&) ;
+    virtual void InitialiseToPrint(G4MolecularConfiguration*) ;
+    virtual G4double GetReactionRadius(G4MolecularConfiguration*,
+                                       G4MolecularConfiguration*);
     virtual G4double GetReactionRadius(const G4int);
 
     virtual G4bool FindReaction(const G4Track&,

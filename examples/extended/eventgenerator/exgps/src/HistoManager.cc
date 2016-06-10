@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr03/src/HistoManager.cc
+/// \file eventgenerator/exgps/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
 // $Id: HistoManager.cc 83882 2014-09-22 11:09:30Z maire $
@@ -118,7 +118,9 @@ void HistoManager::Book()
   analysis->CreateNtupleDColumn("dirTheta");      //column 5
   analysis->CreateNtupleDColumn("dirPhi");        //column 6
   analysis->CreateNtupleDColumn("weight");        //column 7
-  analysis->FinishNtuple(); 
+  analysis->FinishNtuple();
+  
+  analysis->SetNtupleActivation(false);             
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

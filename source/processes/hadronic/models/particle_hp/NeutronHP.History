@@ -1,0 +1,1734 @@
+-------------------------------------------------------------------
+
+          ==================================================
+          Geant4 - an Object-Oriented Toolkit for Simulation
+          ==================================================
+
+            History file for High Precision Neutron model
+            ---------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+3 November 2015 Tatsumi Koi	(hadr-hpn-V10-01-24)
+Delete files in src
+Move files in include to particle_hp directory
+	sources.cmake
+Add dummy file of G4NeutronHP.cc at src avoiding error in GNU system
+
+
+28 October 2015 Tatsumi Koi	(hadr-hpn-V10-01-23)
+Re tag for testing 
+
+
+25 October 2015 Tatsumi Koi	(hadr-hpn-V10-01-22)
+Re tag for testing 
+
+
+19 October 2015 Tatsumi Koi	(hadr-hpn-V10-01-21)
+Test for merging NeutronHP and ParticleHP
+	sources.cmake
+        include/G4NeutronHPBGGNucleonInelasticXS.hh
+        include/G4NeutronHPCapture.hh
+        include/G4NeutronHPCaptureData.hh
+        include/G4NeutronHPElastic.hh
+        include/G4NeutronHPElasticData.hh
+        include/G4NeutronHPFission.hh
+        include/G4NeutronHPFissionData.hh
+        include/G4NeutronHPJENDLHEElasticData.hh
+        include/G4NeutronHPJENDLHEInelasticData.hh
+        include/G4NeutronHPThermalScattering.hh
+        include/G4NeutronHPThermalScatteringData.hh
+
+
+8 October 2015 Tatsumi Koi	(hadr-hpn-V10-01-20)
+Fix circular dependency, co-working with hadr-hpp-V10-01-22
+
+
+6 October 2015 Tatsumi Koi	(hadr-hpn-V10-01-19)
+Fix problem on previous tag.
+	Instead of comment out delete corresponding lines 
+	sources.cmake
+
+
+5 October 2015 Tatsumi Koi	(hadr-hpn-V10-01-18)
+Test for merging NeutronHP and ParticleHP
+	sources.cmake
+       	include/G4NeutronHPInelastic.hh
+       	include/G4NeutronHPInelasticData.hh
+
+
+15 July 2015 Tatsumi Koi	(hadr-hpn-V10-01-17)
+Code clean up
+       include/G4NeutronHPInelasticData.hh
+       include/G4NeutronHPElasticData.hh
+       include/G4NeutronHPCaptureData.hh
+       include/G4NeutronHPFissionData.hh
+       src/G4NeutronHPCaptureData.cc
+       src/G4NeutronHPFissionData.cc
+       src/G4NeutronHPInelasticData.cc
+       src/G4NeutronHPElasticData.cc
+
+
+1 July 2015 Tatsumi Koi		(hadr-hpn-V10-01-16)
+Adding UI command for changing verbose level 
+	include/G4NeutronHPMessenger.hh
+       	src/G4NeutronHPMessenger.cc
+
+
+29 June 2015 Tatsumi Koi	(hadr-hpn-V10-01-15)
+Fix reproducibility on multithreading mode
+	include/G4NeutronHPFissionBaseFS.hh
+	include/G4NeutronHPFSFissionFS.hh
+	src/G4NeutronHPFissionBaseFS.cc
+	src/G4NeutronHPFSFissionFS.cc
+
+
+24 June 2015 Tatsumi Koi	(hadr-hpn-V10-01-14)
+Fix problem at deletion in multithreading mode
+       include/G4NeutronHPFission.hh
+       include/G4NeutronHPInelastic.hh
+       src/G4NeutronHPFission.cc
+       src/G4NeutronHPInelastic.cc
+
+
+8 June 2015 Tatsumi Koi	(hadr-hpn-V10-01-13)
+Fix problem on photon distribution Bugzilla #1745
+src/G4NeutronHPPhotonDist.cc
+
+
+4 June 2015 Tatsumi Koi	(hadr-hpn-V10-01-12)
+Add model and cross section description
+
+
+27 May 2015 Gabriele Cosmo	(hadr-hpn-V10-01-11)
+Corrected GNUmakefile for inclusion of internal zlib.
+
+
+24 May 2015 Tatsumi Koi		(hadr-hpn-V10-01-10)
+Making not to use the cache of cross section
+Since the same feature is offered in CrossSectionDataStore
+Co-working with global-V10-01-08
+        src/G4NeutronHPCaptureData.cc
+        src/G4NeutronHPFissionData.cc
+        src/G4NeutronHPInelasticData.cc
+        src/G4NeutronHPThermalScatteringData.cc
+        src/G4NeutronHPElasticData.cc
+
+
+18 May 2015 Tatsumi Koi		(hadr-hpn-V10-01-09)
+Changing to use G4Threading::IsMasterThread() instera of !G4Threading::IsWorkerThread()
+Co-working with global-V10-01-08
+        src/G4NeutronHPCapture.cc
+        src/G4NeutronHPFission.cc
+        src/G4NeutronHPInelastic.cc
+        src/G4NeutronHPThermalScatteringData.cc
+        src/G4NeutronHPThermalScattering.cc
+        src/G4NeutronHPElastic.cc
+
+
+24 April 2015 Tatsumi Koi	(hadr-hpn-V10-01-08)
+Fix coverity issue #60888&60889
+	src/G4NeutronHPInterpolator.cc
+
+
+13 April 2015 Tatsumi Koi	(hadr-hpn-V10-01-07)
+Fix coverity issue #14992
+	src/G4NeutronHPEnAngCorrelation.cc 
+
+
+27 March 2015 Tatsumi Koi	(hadr-hpn-V10-01-06)
+Fix warning from compiler 
+	src/G4NeutronHPFission.cc 
+
+
+20 March 2015 Tatsumi Koi	(hadr-hpn-V10-01-05)
+Fix problem of Wendt-Fission-Fragment model in multi thread library 
+	include/G4NeutronHPChannel.hh 
+	include/G4WendtFissionFragmentGenerator.hh 
+	src/G4FPYSamplingOps.cc
+	src/G4NeutronHPChannel.cc 
+	src/G4NeutronHPFission.cc 
+	src/G4WendtFissionFragmentGenerator.cc 
+
+
+09 Febrary 2015 Tatsumi Koi	(hadr-hpn-V10-01-04)
+Delete unnecessary codes: Bugzilla#1710
+	src/G4NeutronHPInelasticCompFS.cc
+
+
+15 January 2015 Tatsumi Koi	(hadr-hpn-V10-01-03)
+Fix coverity issue #43437
+	src/G4NeutronHPElasticFS.cc
+
+
+13 January 2015 Tatsumi Koi	(hadr-hpn-V10-01-02)
+Fix coverity issue #43442
+	src/G4NeutronHPChannelList.cc
+
+
+8 January 2015 Tatsumi Koi   (hadr-hpn-V10-01-01)
+Fix coverity issue #53411
+	include/G4FissionProductYieldDist.hh
+	src/G4FissionProductYieldDist.cc
+
+
+11 December 2014 Gabriele Cosmo (hadr-hpn-V10-01-00)
+Removed commented header in sources.cmake script to allow for proper
+validation of sources in system testing.
+
+
+17 November 2014 Tatsumi Koi   (hadr-hpn-V10-00-36)
+Fix potential overwritten problem Bugzilla#1689
+	include/G4NeutronHPInterpolator.hh
+
+
+17 November 2014 Tatsumi Koi   (hadr-hpn-V10-00-35)
+Fix problem caused by QNAN on Windows 
+	src/G4FPYSamplingOps.cc
+
+
+12 November 2014 Tatsumi Koi   (hadr-hpn-V10-00-34)
+Fix for boundary-checking error
+       include/G4NeutronHPProduct.hh
+       include/G4NeutronHPContAngularPar.hh
+
+
+11 November 2014 Tatsumi Koi   (hadr-hpn-V10-00-33)
+Fix for Bugzilla #1686
+	src/G4NeutronHPElasticFS.cc
+
+
+11 November 2014 Tatsumi Koi   (hadr-hpn-V10-00-32)
+Fix warning message in gcc4.1 compiler 
+	include/G4NeutronHPEnAngCorrelation.hh
+
+
+8 November 2014 Tatsumi Koi   (hadr-hpn-V10-00-31)
+Fix problem on single threading mode
+	include/G4NeutronHPEnAngCorrelation.hh
+	include/G4NeutronHPProduct.hh
+	include/G4NeutronHPAngular.hh
+	include/G4VNeutronHPEnergyAngular.hh
+Fix missing "ifndef/define/endif"
+	include/G4WendtFissionFragmentGenerator.hh
+
+
+31 October 2014 Tatsumi Koi   (hadr-hpn-V10-00-30)
+Fix reproducibility on multithreading mode
+	include/G4NeutronHPEnAngCorrelation.hh
+	include/G4NeutronHPProduct.hh
+	include/G4NeutronHPAngular.hh
+	include/G4VNeutronHPEnergyAngular.hh
+	src/G4NeutronHPAngular.cc
+	src/G4NeutronHPEnAngCorrelation.cc
+	src/G4NeutronHPProduct.cc
+
+
+27 October 2014 Tatsumi Koi   (hadr-hpn-V10-00-29)
+Additional fix for problem on prvious tag on non multi thread library
+	include/G4NeutronHPPhotonDist.hh
+	src/G4NeutronHPPhotonDist.cc
+
+
+26 October 2014 Tatsumi Koi   (hadr-hpn-V10-00-28)
+Additional fix for problem on prvious tag on gcc4.4.7 compilers 
+
+
+23 October 2014 Tatsumi Koi   (hadr-hpn-V10-00-27)
+Avoid issuing Hash of NeutronHPVector from worker threads
+	include/G4NeutronHPProduct.hh
+	include/G4NeutronHPPartial.hh
+	src/G4NeutronHPElasticFS.cc
+Fix problem on prvious tag
+	include/G4NeutronHPManager.hh
+
+
+19 October 2014 Tatsumi Koi   (hadr-hpn-V10-00-26)
+Migration of sharing final state data among worker threads
+        include/G4NeutronHPArbitaryTab.hh
+	include/G4NeutronHPContAngularPar.hh
+	include/G4NeutronHPContEnergyAngular.hh
+	include/G4NeutronHPIsoData.hh
+	include/G4NeutronHPPartial.hh
+	include/G4NeutronHPPhotonDist.hh
+	include/G4NeutronHPVector.hh
+	src/G4NeutronHPContAngularPar.cc
+	src/G4NeutronHPContEnergyAngular.cc
+	src/G4NeutronHPPhotonDist.cc
+	src/G4NeutronHPVector.cc
+
+
+17 October 2014 Tatsumi Koi   (hadr-hpn-V10-00-25)
+Adjust A and Z in the case of miss much between selected data and target nucleus
+	src/G4NeutronHPInelasticBaseFS.cc
+	src/G4NeutronHPInelasticCompFS.cc
+
+
+18 September 2014 Tatsumi Koi   (hadr-hpn-V10-00-24)
+Final state data is shared among worker threads.
+	include/G4NeutronHPFinalState.hh
+	include/G4NeutronHPManager.hh
+	src/G4NeutronHPCapture.cc
+	src/G4NeutronHPChannel.cc
+	src/G4NeutronHPElastic.cc
+	src/G4NeutronHPFinalState.cc
+	src/G4NeutronHPFission.cc
+	src/G4NeutronHPInelastic.cc
+	src/G4NeutronHPManager.cc
+
+
+16 September 2014 Tatsumi Koi   (hadr-hpn-V10-00-23)
+Use BuildPhysicsTable
+Co-working with hadr-modman-V10-00-05 and hadr-man-V10-00-11
+	include/G4NeutronHPCapture.hh
+	include/G4NeutronHPElastic.hh
+	include/G4NeutronHPFission.hh
+	include/G4NeutronHPInelastic.hh
+	src/G4NeutronHPCapture.cc
+	src/G4NeutronHPFission.cc
+	src/G4NeutronHPInelastic.cc
+	src/G4NeutronHPThermalScattering.cc
+	src/G4NeutronHPElastic.cc
+
+
+
+15 September 2014 Tatsumi Koi   (hadr-hpn-V10-00-22)
+Use BuildPhysicsTable
+Co-working with hadr-modman-V10-00-05 and hadr-man-V10-00-11
+	include/G4NeutronHPThermalScattering.hh
+	src/G4NeutronHPThermalScattering.cc
+
+
+12 September 2014 Tatsumi Koi   (hadr-hpn-V10-00-21)
+Thermal scattering final state data is shared among worker threads.
+	include/G4NeutronHPThermalScattering.hh
+	include/G4NeutronHPManager.hh
+	src/G4NeutronHPManager.cc
+	src/G4NeutronHPThermalScattering.cc
+
+
+10 September 2014 Tatsumi Koi   (hadr-hpn-V10-00-20)
+Thermal scattering cross section data is shared among worker threads.
+	include/G4NeutronHPThermalScatteringData.hh
+	include/G4NeutronHPManager.hh
+	src/G4NeutronHPManager.cc
+	src/G4NeutronHPThermalScatteringData.cc
+
+
+5 September 2014 Tatsumi Koi   (hadr-hpn-V10-00-19)
+Cross section data is shared among worker threads.
+	include/G4NeutronHPManager.hh
+	src/G4NeutronHPCaptureData.cc
+	src/G4NeutronHPFissionData.cc
+	src/G4NeutronHPInelasticData.cc
+	src/G4NeutronHPManager.cc
+	src/G4NeutronHPElasticData.cc
+
+
+25 August 2014 Tatsumi Koi   (hadr-hpn-V10-00-18)
+-Delete unnecessary issue of BuildPhysicTable 
+	src/G4NeutronHPThermalScattering.cc
+-Introducing ThreadLocalManager 
+for storing information related to each individual reactions
+        sources.cmake
+        include/G4NeutronHPThreadLocalManager.hh
+        include/G4NeutronHPManager.hh
+        src/G4NeutronHPThreadLocalManager.cc
+        src/G4NeutronHPManager.cc
+
+
+18 August 2014 Tatsumi Koi   (hadr-hpn-V10-00-17)
+-Adding UI commands for controlling options of HP package
+	include/G4NeutronHPFinalState.hh
+	include/G4NeutronHPFissionData.hh
+	include/G4NeutronHPManager.hh
+	src/G4NeutronHPCaptureData.cc
+	src/G4NeutronHPNames.cc
+	src/G4NeutronHPFinalState.cc
+	src/G4NeutronHPFissionFS.cc
+	src/G4NeutronHPFissionData.cc
+	src/G4NeutronHPInelasticData.cc
+	src/G4NeutronHPCaptureFS.cc
+	src/G4NeutronHPManager.cc
+	src/G4NeutronHPElasticData.cc
+-Adding G4NeutronHPMessenger class
+	sources.cmake 
+	include/G4NeutronHPMessenger.hh  
+	src/G4NeutronHPMessenger.cc
+
+
+14 August 2014 Tatsumi Koi   (hadr-hpn-V10-00-16)
+-Adding information of data source to each data file 
+	G4NDL4.5
+- Migrate G4NDL4.5 
+  Reading and storing source information
+	include/G4NeutronHPManager.hh
+	src/G4NeutronHPNames.cc
+	src/G4NeutronHPManager.cc
+
+
+6 August 2014 Tatsumi Koi   (hadr-hpn-V10-00-15)
+-Fix rare core dump caused by angular parameter being all zero.
+ The angular parameters of the first and last seoncondary energy 
+in ThermalScattering/Inelastic/FS have all zero elements
+	include/G4NeutronHPThermalScattering.hh
+       	src/G4NeutronHPThermalScattering.cc
+-Uncomment out para and ortho hydrogen and liquid and solid methane
+       	src/G4NeutronHPThermalScatteringNames.cc
+
+
+30 July 2014 Alberto Ribon   (hadr-hpn-V10-00-14)
+- G4NeutronHPElasticData, G4NeutronHPInelasticData, G4NeutronHPCaptureData,
+  G4NeutronHPFissionData, G4NeutronHPJENDLHEData: proper deletion of
+  physics vectors.
+
+
+25 July 2014 Tatsumi Koi     (hadr-hpn-V10-00-13)
+- Delete unused (and also uncompilable) header file.
+	G4NeutronHPPhotonXSection.hh
+
+
+21 May 2014 Andrea Dotti     (hadr-hpn-V10-00-12)
+- Change deleting of maps in G4NeutronHPFFFissionFS destructor.
+
+
+21 May 2014 Andrea Dotti     (hadr-hpn-V10-00-11)
+- Do not call G4PhysicsTable::clearAndDestroy() in destructors of 
+  G4NeutronHPCaptureData, G4NeutronHPElasticData, G4NeutronHPFissionData
+  G4NeutronHPInelasticData. Because G4PhysicsTable content are manged by
+  allocators
+
+
+20 May 2014 Tatsumi Koi      (hadr-hpn-V10-00-10)
+-Fix bug in kinematics of residual nucleus 
+       src/G4NeutronHPCaptureFS.cc
+
+
+19 May 2014 Tatsumi Koi      (hadr-hpn-V10-00-09)
+-Defeating warning message from clang3.4 compiler
+       include/G4NeutronHPThermalScattering.hh
+
+
+19 May 2014 Tatsumi Koi      (hadr-hpn-V10-00-08)
+-Defeating warning message from gcc4.9.0 compiler
+       include/G4NeutronHPThermalScattering.hh
+
+
+14 May 2014 Tatsumi Koi for Federico Carminati (hadr-hpn-V10-00-07)
+-Fix memory leaks and simplify function for better stability
+       include/G4NeutronHPHash.hh
+       include/G4NeutronHPFFFissionFS.hh
+       src/G4NeutronHPFinalState.cc
+       src/G4NeutronHPVector.cc
+       src/G4NeutronHPFFFissionFS.cc
+       src/G4NeutronHPInterpolator.cc
+
+
+12 May 2014 Tatsumi Koi      (hadr-hpn-V10-00-06)
+-Defeating warning message from gcc4.9.0 compiler
+       src/G4NeutronHPThermalScattering.cc
+
+
+4 May 2014 Tatsumi Koi       (hadr-hpn-V10-00-05)
+-Fix problem on single temperature data file 
+       src/G4NeutronHPThermalScattering.cc
+
+
+23 April 2014 Tatsumi Koi    (hadr-hpn-V10-00-04)
+-Reset isotope pointer to the target G4Nucleus object of reaction
+       src/G4NeutronHPCapture.cc
+       src/G4NeutronHPElastic.cc
+       src/G4NeutronHPFission.cc
+       src/G4NeutronHPInelastic.cc
+
+
+14 March 2014 Tatsumi Koi    (hadr-hpn-V10-00-03)
+-Remove const_cast now that pointer to G4ParticleDefinition is const
+       include/G4NeutronHPThermalBoost.hh
+       src/G4NeutronHPInelasticBaseFS.cc
+       src/G4NeutronHPFissionFS.cc
+       src/G4NeutronHPCaptureFS.cc
+       src/G4NeutronHPInelasticCompFS.cc
+       src/G4NeutronHPElasticFS.cc
+       src/G4NeutronHPThermalScattering.cc
+
+
+14 March 2014 Tatsumi Koi    (hadr-hpn-V10-00-02)
+Fix compilation warnings detected by clang compiler on MacOS-10.9.
+	src/G4NeutronHPInelasticCompFS.cc
+
+
+29 Jan 2014 Gunter Folger    (hadr-hpn-V10-00-01)
+Removed low_energy from sources.cmake
+
+
+16 December 2013 Tatsumi Koi (hadr-hpn-V10-00-00)
+Fix problem reading zlibed data files 
+	src/G4NeutronHPThermalScatteringData.cc
+
+
+21 November 2013 John Apostolakis (hadr-hpn-V09-06-24)
+Made the data arrays 'const' in place of G4ThreadLocal.
+    in G4NeutronHPFastLegendre (and its subfiles)
+
+
+12 November 2013 Tatsumi Koi (hadr-hpn-V09-06-23)
+Fix compiler warnings: 
+       include/G4ENDFTapeRead.hh
+       src/G4WendtFissionFragmentGenerator.cc
+       src/G4ENDFTapeRead.cc
+
+
+10 November 2013 Tatsumi Koi (hadr-hpn-V09-06-22)
+Fix compiler warnings: 
+       src/G4WendtFissionFragmentGenerator.cc
+       src/G4FPYBiasedLightFragmentDist.cc
+       src/G4FPYSamplingOps.cc
+       src/G4FissionProductYieldDist.cc
+Fix on problems on gnumake
+       GNUmakefile
+
+
+8 November 2013 Tatsumi Koi (hadr-hpn-V09-06-21)
+Fix problem on Wendt model
+       src/G4FPYSamplingOps.cc
+       src/G4FissionProductYieldDist.cc
+       src/G4FissionFragmentGenerator.cc
+       src/G4WendtFissionFragmentGenerator.cc
+       src/G4NeutronHPChannel.cc
+       src/G4NeutronHPFission.cc
+
+
+8 November 2013 Tatsumi Koi (hadr-hpn-V09-06-20)
+Merging branch of "FissFragGen" for update of fix for windows platform and reading data file in Wendt model
+-%svn merge --dry-run -r 75913:76341 svn+ssh://svn.cern.ch/reps/geant4/branches/geant4/source/processes/hadronic/models/neutron_hp/_symbols/FissFragGen
+
+
+7 November 2013 Tatsumi Koi (hadr-hpn-V09-06-19)
+Merging branch of "FissFragGen" where fission fragments generator is developed
+-%svn merge -r 69414:75913 svn+ssh://svn.cern.ch/reps/geant4/branches/geant4/source/processes/hadronic/models/neutron_hp/_symbols/FissFragGen
+Please read FissFragGen.History for detail information
+
+
+31 October 2013 Tatsumi Koi (hadr-hpn-V09-06-18)
+-Fix problem on Windows platform to echo environment variable
+	src/G4NeutronHPInelasticBaseFS.cc
+
+
+15 October 2013 Tatsumi Koi (hadr-hpn-V09-06-17)
+-Change G4ParticleTable::GetParticleTable()->GetIon(,,) 
+     to G4IonTable::GetIonTable()->GetIon(,,);
+	src/G4NeutronHPFinalState.cc
+	src/G4NeutronHPInelasticBaseFS.cc
+	src/G4NeutronHPFissionFS.cc
+	src/G4NeutronHPIsotropic.cc
+	src/G4NeutronHPCaptureFS.cc
+	src/G4NeutronHPChannelList.cc
+	src/G4NeutronHPInelasticCompFS.cc
+	src/G4NeutronHPElasticFS.cc
+	src/G4NeutronHPContAngularPar.cc
+
+
+12 Jun 2013 Tatsumi Koi (hadr-hpn-V09-06-16)
+-Fix for warning message
+	src/G4NeutronHPThermalScatteringData.cc
+
+
+10 Jun 2013 Tatsumi Koi (hadr-hpn-V09-06-15)
+-Fix "UNINIT", "FORWARD_NULL"
+	src/G4NeutronHPThermalScattering.cc
+-Replace "abs" to "fabs"
+	src/G4NeutronHPThermalScatteringData.cc
+
+
+7 Jun 2013 Tatsumi Koi (hadr-hpn-V09-06-14)
+-Fix for hadr-hpn-V09-06-13
+	src/G4NeutronHPThermalScattering.cc
+-Fix for "INVALIDATE_ITERATOR"
+-Enable to use single temperature data file
+	src/G4NeutronHPThermalScatteringData.cc
+-Fix for extrapolation problem reported by CIEMAT group
+	src/G4NeutronHPThermalScattering.cc
+-Add trick for fixing problem in dynamically generated materials
+	include/G4NeutronHPThermalScattering.hh
+	src/G4NeutronHPThermalScattering.cc
+
+
+29 May 2013 Tatsumi Koi (hadr-hpn-V09-06-13)
+-Adding a capability register user prepared thermal scattering file
+	include/G4NeutronHPThermalScatteringNames.hh
+	include/G4NeutronHPThermalScatteringData.hh
+	include/G4NeutronHPThermalScattering.hh
+	src/G4NeutronHPThermalScatteringData.cc
+	src/G4NeutronHPThermalScattering.cc
+	src/G4NeutronHPThermalScatteringNames.cc
+
+
+28 May 2013 Tatsumi Koi (hadr-hpn-V09-06-12)
+-Adding a capability to disable adjustment of final state photons in capture 
+Fix for Bugzilla #1279
+	include/G4NeutronHPFinalState.hh
+	src/G4NeutronHPCaptureFS.cc
+
+
+17 May 2013 Tatsumi Koi (hadr-hpn-V09-06-11)
+- Activate capability of reading zlibed data file
+	src/G4NeutronHPManager.cc
+
+
+7 May 2013 Tatsumi Koi (hadr-hpn-V09-06-10)
+- Making GetVerboseLevel into const member function 
+
+
+2 May 2013 Tatsumi Koi (hadr-hpn-V09-06-09)
+Add package-wide verbose level control 
+Sharing one value on entire package 
+	include/G4NeutronHPManager.hh
+	include/G4NeutronHPCapture.hh
+	include/G4NeutronHPCaptureData.hh
+	include/G4NeutronHPElastic.hh
+	include/G4NeutronHPElasticData.hh
+	include/G4NeutronHPFission.hh
+	include/G4NeutronHPFissionData.hh
+	include/G4NeutronHPInelastic.hh
+	include/G4NeutronHPInelasticData.hh
+	src/G4NeutronHPManager.cc
+	src/G4NeutronHPCapture.cc
+	src/G4NeutronHPCaptureData.cc
+	src/G4NeutronHPElastic.cc
+	src/G4NeutronHPElasticData.cc
+	src/G4NeutronHPFission.cc
+	src/G4NeutronHPFissionData.cc
+	src/G4NeutronHPInelastic.cc
+	src/G4NeutronHPInelasticData.cc
+Delete (Comment out) BuildPhysicsTable from constructor 
+	src/G4NeutronHPCaptureData.cc
+	src/G4NeutronHPElasticData.cc
+	src/G4NeutronHPFissionData.cc
+	src/G4NeutronHPInelasticData.cc
+Construction for UR-14 
+	src/G4NeutronHPName.cc
+	
+
+30 April 2013 Tatsumi Koi (hadr-hpn-V09-06-08)
+Fix UNINIT_CTOR "theBuffer"
+	src/G4NeutronHPElementData.cc
+Replace std::cout to G4cout
+	src/G4NeutronHPThermalScattering.cc
+
+
+16 April 2013 Tatsumi Koi (hadr-hpn-V09-06-07)
+Deactivate capability of reading zlibed G4NEUTRONHPDATA library 
+	src/G4NeutronHPManager.cc
+
+
+16 April 2013 Tatsumi Koi (hadr-hpn-V09-06-06)
+Merging branch of "hpz" which enable to read zlibed data files 
+Step 1 merge trunk to the branch
+svn merge -r 67425:68410 svn+ssh://svn.cern.ch/reps/geant4/trunk/geant4/source/processes/hadronic/models/neutron_hp
+Step 2 merge the branch to trunk
+g4svn merge --branch hpz
+Step 3 restore test before commit
+svn update --force test
+Step 4 
+svn commit
+
+
+26 March 2013  Ben Morgan (hadr-hpn-V09-06-05)
+- sources.cmake : Use new ZLIB variables for include paths and library
+  links to allow transparent use of internal/external zlib.
+  NB: The code does not use ZLIB at present, but this patch allows
+  usage from now on as you require.
+
+
+12 March 2013  Dennis Wright (hadr-hpn-V09-06-04)
+- fix MacOS Clang compiler warnings: 
+  G4NeutronHPCapture.hh : remove unused private variable "it"
+  G4NeutronHPCaptureFS.hh : remove unused private variables "theCurrentA"
+                            and "theCurrentZ"  
+  G4NeutronHPThermalScattering.hh : remove unused private variable "xSec" 
+                            and "numEle"  
+
+
+9 January  2013  Tatsumi Koi (hadr-hpn-V09-06-03)
+Fixed improper use of abort() 
+	src/G4NeutronHPThermalScattering.cc
+
+
+11 December 2012  Tatsumi Koi (hadr-hpn-V09-06-02)
+Delete HP or Low Energy Parameterization Models and data sets from sources.cmake
+
+
+6 December 2012  Tatsumi Koi (hadr-hpn-V09-06-01)
+Delete HP or Low Energy Parameterization Models and data sets from repository
+
+
+6 December 2012  Tatsumi Koi (hadr-hpn-V09-06-00)
+Delete legacy lines for cvs
+
+
+29 November 2012 Alberto Ribon (hadr-hpn-V09-05-26)
+Added protection against negative argument in square root
+	src/G4NeutronHPInelasticCompFS.cc
+
+
+7 November 2012 Tatsumi Koi (hadr-hpn-V09-05-25)
+Fix compiler warning of potential usage of uninitialized variable
+	src/G4NeutronHPContAngularPar.cc
+
+
+6 November 2012 Tatsumi Koi (hadr-hpn-V09-05-24)
+Fix compilation warnings for shadowed variables
+	src/G4NeutronHPCapture.cc
+Bug fix in returing unchaged final states
+        src/G4NeutronHPChannelList.cc
+Fix potential floating point error 
+	src/G4NeutronHPContAngularPar.cc
+
+
+6 November 2012 Gabriele Cosmo (hadr-hpn-V09-05-23)
+Fix for porting on AIX in G4NeutronHPVector header.
+
+
+2 November 2012 Tatsumi Koi (hadr-hpn-V09-05-22)
+Fix Bugzilla report #1366
+	src/G4NeutronHPContAngularPar.cc
+
+
+2 November 2012 Tatsumi Koi (hadr-hpn-V09-05-21)
+Enhance functionality of ReactionWhiteBoard
+	include/G4NeutronHPReactionWhiteBoard.hh
+	src/G4NeutronHPReasctionWhiteBoard.cc
+- Modified sources.cmake for 09-05-21(18)
+	sources.cmake
+
+
+2 November 2012 Tatsumi Koi (hadr-hpn-V09-05-20)
+Enable to handle final states of dynamically generated G4Elements 
+	include/G4NeutronHPCapture.hh
+	include/G4NeutronHPElastic.hh
+	include/G4NeutronHPFission.hh
+	include/G4NeutronHPInelastic.hh
+	src/G4NeutronHPCapture.cc
+	src/G4NeutronHPElastic.cc
+	src/G4NeutronHPFission.cc
+	src/G4NeutronHPInelastic.cc
+
+
+1 November 2012 Tatsumi Koi (hadr-hpn-V09-05-19)
+Enable to handle cross sections of dynamically generated G4Elements 
+	include/G4NeutronHPData.hh
+	src/G4NeutronHPData.cc
+	include/G4NeutronHPCaptureData.hh
+	include/G4NeutronHPElasticData.hh
+	include/G4NeutronHPFissionData.hh
+	include/G4NeutronHPInelastic.hh
+	src/G4NeutronHPCaptureData.cc
+	src/G4NeutronHPElasticData.cc
+	src/G4NeutronHPFissionData.cc
+	src/G4NeutronHPInelasticData.cc
+
+
+31 October 2012 Tatsumi Koi (hadr-hpn-V09-05-18)
+Add NeutronHPManager and NeutronHPReactionWhiteBoard
+	include/G4NeutronHPManager.hh
+	include/G4NeutronHPReactionWhiteBoard.hh
+	src/G4NeutronHPManager.cc
+	src/G4NeutronHPReasctionWhiteBoard.cc
+Set A and Z of the reaction into "targetNucleus" from HadronicProcess
+	src/G4NeutronHPChannel.cc
+	src/G4NeutronHPCapture.cc
+	src/G4NeutronHPFission.cc
+	src/G4NeutronHPInelastic.cc
+	src/G4NeutronHPElastic.cc
+
+
+26 September 2012 Gabriele Cosmo (hadr-hpn-V09-05-17)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+
+13 August 2012 Alberto Ribon (hadr-hpn-V09-05-16)
+- Fixed compilation error in G4NeutronHPCaptureFS.cc when the constructor
+  of the Lorentz vector is made explicit.
+
+
+31 July 2012  Tatsumi Koi (hadr-hpn-V09-05-15)
+- Add name 
+	G4NeutronHPJENDLHEData.cc
+
+
+14 June 2012  Tatsumi Koi (hadr-hpn-V09-05-14)
+- Bug fix which introduced in the fix compilation warnings for shadowed variables
+	src/G4NeutronHPThermalScattering.cc
+
+
+13 June 2012  Tatsumi Koi (hadr-hpn-V09-05-13)
+- Delete unnecessary outputs
+	src/G4NeutronHPCapture.cc
+- Fix compilation warnings for shadowed variables
+
+
+13 June 2012  Tatsumi Koi (hadr-hpn-V09-05-12)
+- Set DBL_MAX for the upper limit of Energy Check Levels
+
+
+12 June 2012  Tatsumi Koi (hadr-hpn-V09-05-11)
+- Bug fix related compilation error on WIN32-VC
+	include/G4NeutronHPVector.hh
+
+
+11 June 2012  Tatsumi Koi (hadr-hpn-V09-05-10)
+- Increase upper limit of Energy Check Levels
+Allow the difference caused by miss much in target isotope selections
+	include/G4NeutronHPElastic.hh
+	include/G4NeutronHPCapture.hh
+	src/G4NeutronHPCapture.cc
+	src/G4NeutronHPInelastic.cc
+	src/G4NeutronHPElastic.cc
+
+
+8 June 2012  Tatsumi Koi (hadr-hpn-V09-05-09)
+- Fix compilation error on WIN32-VC
+	include/G4NeutronHPVector.hh
+
+
+7 June 2012  Tatsumi Koi (hadr-hpn-V09-05-08)
+- Protection of huge Ep breakdown caused by a miss match between cross section data set and model
+	include/G4NeutronHPChannelList.hh
+        src/G4NeutronHPChannelList.cc
+- Add final momentum check which expected to be
+	src/G4NeutronHPInelasticBaseFS.cc
+- Add method to loosen check for bad energy violation 
+and allow huge differences when "G4NEUTRONHP_DO_NOT_ADJUST_FINAL_STATE" was set
+	include/G4NeutronHPInelastic.hh
+	src/G4NeutronHPInelastic.cc
+
+
+6 June 2012  Tatsumi Koi for E.Mendoza (hadr-hpn-V09-05-07)
+- Use QI values for limiting the products energies
+	src/G4NeutronHPInelasticCompFS.cc
+- Add Isotropic emission in CM system
+	src/G4NeutronHPAngular.cc
+- Add non LIN-LIN interpolation 
+	include/G4NeutronHPVector.hh
+	src/G4NeutronHPVector.cc
+- Bug fix
+	include/G4InterpolationManager.hh
+- Add 2D interpolation
+	include/G4NeutronHPArbitaryTab.hh
+	src/G4NeutronHPArbitaryTab.cc
+- Protection for Zero devided
+	src/G4NeutronHPInterpolator.cc
+- Bug fix 
+	src/G4NeutronHPCaptureFS.cc
+- Modified sources.cmake for 09-05-06
+	sources.cmake
+
+
+1 June 2012  Tatsumi Koi (hadr-hpn-V09-05-06)
+- Add Capability to produce fission fragments those currently neglected, based on ENDF nfy data 
+  Enable by setting enviroment varibale for "G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS"
+	include/G4NeutronHPFFFissionFS.hh
+	include/G4NeutronHPFissionFS.hh
+	src/G4NeutronHPFissionFS.cc
+	src/G4NeutronHPFFFissionFS.cc
+- Set proper excited isomer index and methods
+	src/G4NeutronHPChannel.cc
+- Bug fix (introduced in 09-05-05)
+	include/G4NeutronHPDataUsed.hh
+
+
+31 May 2012  Tatsumi Koi (hadr-hpn-V09-05-05)
+- Add excited isomer index and methods
+	include/G4NeutronHPFinalState.hh
+	include/G4NeutronHPDataUsed.hh
+- Set proper excited isomer index and methods
+	src/G4NeutronHPElasticFS.cc
+	src/G4NeutronHPNames.cc
+	src/G4NeutronHPInelasticCompFS.cc
+	src/G4NeutronHPCaptureFS.cc
+	src/G4NeutronHPFSFissionFS.cc
+	src/G4NeutronHPFissionBaseFS.cc
+	src/G4NeutronHPInelasticBaseFS.cc
+
+
+25 May 2012  Tatsumi Koi (hadr-hpn-V09-05-04)
+- Migrate frameFlag (MF6 LCT) = 3, which is used several ENDF/B-VII.1 files
+(This had been used in previous but the energies were beyond 20MeV.)
+	include/G4NeutronHPProduct.hh
+	src/G4NeutronHPEnAngCorrelation.cc
+
+
+11 May 2012 Gunter Folger  (hadr-hpn-V09-05-03)
+- In G4NeutronHPFission add method to loosen check for bad energy violation 
+   to allow for a violation of order of nuclear mass (250GeV)
+   
+
+24 April 2012  Tatsumi Koi (hadr-hpn-V09-05-02)
+- Add NeutronHPBGGNucleonInelasticXS to avoid problem in Shielding Physics List
+	include/G4NeutronHPBGGNucleonInelasticXS.hh
+	src/G4NeutronHPBGGNucleonInelasticXS.cc
+	sources.cmake
+
+
+19 March 2012  Tatsumi Koi (hadr-hpn-V09-05-01)
+- Protect emission of unphysical ultra-low energy photons
+
+
+16 January 2012  Tatsumi Koi (hadr-hpn-V09-05-00)
+- Avoid warning messages
+	src/G4NeutronHPInelastic.cc
+
+
+28 November 2011  Tatsumi Koi (hadr-hpn-V09-04-32)
+-Temporal fix for Bug report 1264
+ Permanent fix should be done in Photon Evaporation Model
+	src/G4NeutronHPCaptureFS.cc
+
+
+9 November 2011  Gabriele Cosmo (hadr-hpn-V09-04-31)
+- Workaround fixes to allow compilation on Windows/VC++10
+	src/G4NeutronHPThermalScattering.cc
+	src/G4NeutronHPThermalScatteringData.cc
+
+
+3 November 2011  Tatsumi Koi (hadr-hpn-V09-04-30)
+- Fix Bug which introduced previous tag and add several administrations
+	src/G4NeutronHPNames.cc
+- Fix memory leak 
+	src/G4NeutronHPThermalScatteringData.cc
+- Fix FPE error
+	src/G4NeutronHPThermalScattering.cc
+
+
+31 October 2011  Tatsumi Koi (hadr-hpn-V09-04-29)
+- Cosmetic fix
+	src/G4NeutronHPNames.cc
+	src/G4NeutronHPCapture.cc
+	src/G4NeutronHPChannel.cc
+	src/G4NeutronHPFission.cc
+	src/G4NeutronHPInelastic.cc
+	src/G4NeutronHPIsoData.cc
+	src/G4NeutronHPCaptureFS.cc
+	src/G4NeutronHPElasticFS.cc
+	src/G4NeutronHPElastic.cc
+- Add ENDF/B-VII Thermal Scattering Materials 
+Excluding para (ortho) H and D, liquid (solid) methane and benzene
+	src/G4NeutronHPThermalScatteringNames.cc
+
+
+17 October 2011  Tatsumi Koi (hadr-hpn-V09-04-28)
+- Enable to handle excited isomer nuclie as targets 
+	include/G4NeutronHP4NInelasticFS.hh
+	include/G4NeutronHPND2AInelasticFS.hh
+	include/G4NeutronHPElasticFS.hh
+	include/G4NeutronHPLCFissionFS.hh
+	include/G4NeutronHPNAInelasticFS.hh
+	include/G4NeutronHPIsoData.hh
+	include/G4NeutronHPPDInelasticFS.hh
+	include/G4NeutronHPNT2AInelasticFS.hh
+	include/G4NeutronHPFinalState.hh
+	include/G4NeutronHPTCFissionFS.hh
+	include/G4NeutronHPNames.hh
+	include/G4NeutronHPHe3InelasticFS.hh
+	include/G4NeutronHP3NInelasticFS.hh
+	include/G4NeutronHPPTInelasticFS.hh
+	include/G4NeutronHPDInelasticFS.hh
+	include/G4NeutronHP2NDInelasticFS.hh
+	include/G4NeutronHPNInelasticFS.hh
+	include/G4NeutronHPInelasticCompFS.hh
+	include/G4NeutronHPPInelasticFS.hh
+	include/G4NeutronHP2NPInelasticFS.hh
+	include/G4NeutronHPN2PInelasticFS.hh
+	include/G4NeutronHP3NPInelasticFS.hh
+	include/G4NeutronHPTInelasticFS.hh
+	include/G4NeutronHPFissionFS.hh
+	include/G4NeutronHPNPAInelasticFS.hh
+	include/G4NeutronHP2NInelasticFS.hh
+	include/G4NeutronHP2PInelasticFS.hh
+	include/G4NeutronHPN3AInelasticFS.hh
+	include/G4NeutronHPDAInelasticFS.hh
+	include/G4NeutronHPFCFissionFS.hh
+	include/G4NeutronHPNHe3InelasticFS.hh
+	include/G4NeutronHPElementData.hh
+	include/G4NeutronHPPAInelasticFS.hh
+	include/G4NeutronHPNDInelasticFS.hh
+	include/G4NeutronHP3AInelasticFS.hh
+	include/G4NeutronHPD2AInelasticFS.hh
+	include/G4NeutronHPFSFissionFS.hh
+	include/G4NeutronHPCaptureFS.hh
+	include/G4NeutronHPNPInelasticFS.hh
+	include/G4NeutronHP2NAInelasticFS.hh
+	include/G4NeutronHPN2AInelasticFS.hh
+	include/G4NeutronHPAInelasticFS.hh
+	include/G4NeutronHP3NAInelasticFS.hh
+	include/G4NeutronHPNTInelasticFS.hh
+	include/G4NeutronHPChannel.hh
+	include/G4NeutronHPNXInelasticFS.hh
+	include/G4NeutronHPT2AInelasticFS.hh
+	include/G4NeutronHP2N2AInelasticFS.hh
+	include/G4NeutronHP2AInelasticFS.hh
+	include/G4NeutronHPSCFissionFS.hh
+	include/G4NeutronHPFissionBaseFS.hh
+	include/G4NeutronHPInelasticBaseFS.hh
+	src/G4NeutronHP4NInelasticFS.cc
+	src/G4NeutronHPND2AInelasticFS.cc
+	src/G4NeutronHPElasticFS.cc
+	src/G4NeutronHPLCFissionFS.cc
+	src/G4NeutronHPNAInelasticFS.cc
+	src/G4NeutronHPIsoData.cc
+	src/G4NeutronHPPDInelasticFS.cc
+	src/G4NeutronHPNT2AInelasticFS.cc
+	src/G4NeutronHPTCFissionFS.cc
+	src/G4NeutronHPNames.cc
+	src/G4NeutronHPHe3InelasticFS.cc
+	src/G4NeutronHP3NInelasticFS.cc
+	src/G4NeutronHP2NDInelasticFS.cc
+	src/G4NeutronHPPTInelasticFS.cc
+	src/G4NeutronHPDInelasticFS.cc
+	src/G4NeutronHPNInelasticFS.cc
+	src/G4NeutronHPInelasticCompFS.cc
+	src/G4NeutronHPN2PInelasticFS.cc
+	src/G4NeutronHP2NPInelasticFS.cc
+	src/G4NeutronHPPInelasticFS.cc
+	src/G4NeutronHP3NPInelasticFS.cc
+	src/G4NeutronHPTInelasticFS.cc
+	src/G4NeutronHPNPAInelasticFS.cc
+	src/G4NeutronHPFissionFS.cc
+	src/G4NeutronHP2NInelasticFS.cc
+	src/G4NeutronHP2PInelasticFS.cc
+	src/G4NeutronHPN3AInelasticFS.cc
+	src/G4NeutronHPDAInelasticFS.cc
+	src/G4NeutronHPFCFissionFS.cc
+	src/G4NeutronHPNHe3InelasticFS.cc
+	src/G4NeutronHPElementData.cc
+	src/G4NeutronHPPAInelasticFS.cc
+	src/G4NeutronHPNDInelasticFS.cc
+	src/G4NeutronHP3AInelasticFS.cc
+	src/G4NeutronHPD2AInelasticFS.cc
+	src/G4NeutronHPCaptureFS.cc
+	src/G4NeutronHPFSFissionFS.cc
+	src/G4NeutronHPNPInelasticFS.cc
+	src/G4NeutronHPAInelasticFS.cc
+	src/G4NeutronHP2NAInelasticFS.cc
+	src/G4NeutronHPN2AInelasticFS.cc
+	src/G4NeutronHPNTInelasticFS.cc
+	src/G4NeutronHP3NAInelasticFS.cc
+	src/G4NeutronHPChannel.cc
+	src/G4NeutronHPNXInelasticFS.cc
+	src/G4NeutronHPT2AInelasticFS.cc
+	src/G4NeutronHP2N2AInelasticFS.cc
+	src/G4NeutronHP2AInelasticFS.cc
+	src/G4NeutronHPSCFissionFS.cc
+	src/G4NeutronHPFissionBaseFS.cc
+	src/G4NeutronHPInelasticBaseFS.cc
+
+11 October 2011  Tatsumi Koi (hadr-hpn-V09-04-27)
+- Migrate to high order (>30) Legendre polynominal
+	include/G4NeutronHPFastLegendre.hh
+	src/G4NeutronHPFastLegendre.cc
+
+7 October 2011  Tatsumi Koi (hadr-hpn-V09-04-26)
+- Enable to use Thermal Scattering Model and Data with G4Nist Materials
+	src/G4NeutronHPThermalScatteringData.cc
+	src/G4NeutronHPThermalScattering.cc
+	src/G4NeutronHPThermalScatteringNames.cc
+	include/G4NeutronHPThermalScatteringData.hh
+	include/G4NeutronHPThermalScattering.hh
+	include/G4NeutronHPThermalScatteringNames.hh
+
+5 October 2011  Tatsumi Koi (hadr-hpn-V09-04-25)
+- Protection for producing 0 kinetic energy neutron
+	src/G4NeutronHPElasticFS.cc
+
+25 September 2011  Tatsumi Koi (hadr-hpn-V09-04-24)
+- Migrate to integer A and Z 
+	src/G4NeutronHPorLCaptureModel.cc
+	src/G4NeutronHPorLFissionModel.cc
+	src/G4NeutronHPorLElasticModel.cc
+	src/G4NeutronHPorLEInelasticModel.cc
+	src/G4NeutronHPThermalScattering.cc
+
+9 September 2011  Michael Kelsey (hadr-hpn-V09-04-23)
+- Migrate to new interface of G4HadFinalState (hadr-util-V09-04-02)
+	src/G4NeutronHPFissionFS.cc
+
+29 August 2011  Tatsumi Koi (hadr-hpn-V09-04-22)
+- Migrate new interface of VCrossSectionDataSet (hadr-cross-V09-04-14)
+- Add Cache for kinetic energy, element, material and cross section
+	src/G4NeutronHPThermalScatteringData.cc
+	src/G4NeutronHPElasticData.cc
+	src/G4NeutronHPCaptureData.cc
+	src/G4NeutronHPFissionData.cc
+	src/G4NeutronHPInelasticData.cc
+	src/G4NeutronHPorLCaptureData.cc
+	src/G4NeutronHPorLEInelasticData.cc
+	src/G4NeutronHPorLElasticData.cc
+	src/G4NeutronHPorLFissionData.cc
+	include/G4NeutronHPThermalScatteringData.hh
+	include/G4NeutronHPCaptureData.hh
+	include/G4NeutronHPElasticData.hh
+	include/G4NeutronHPFissionData.hh
+	include/G4NeutronHPInelasticData.hh
+	include/G4NeutronHPorLCaptureData.hh
+	include/G4NeutronHPorLElasticData.hh
+	include/G4NeutronHPorLEInelasticData.hh
+	include/G4NeutronHPorLFissionData.hh
+
+22 August 2011  Tatsumi Koi (hadr-hpn-V09-04-21)
+- Protection for not producing 0 kinetic energy neutron
+	src/G4NeutronHPElasticFS.cc
+
+20 June 2011  Tatsumi Koi (hadr-hpn-V09-04-20)
+- Reasonably relax the checking condition of inconsistency in repFlag3 
+	src/G4NeutronHPElasticFS.cc
+
+11 June 2011  Tatsumi Koi (hadr-hpn-V09-04-19)
+- Protection for very low "remaining_energy"
+        Unexpected edge value 
+        src/G4NeutronHPContAngularPar.cc
+
+11 June 2011  Tatsumi Koi (hadr-hpn-V09-04-18)
+- Protection for very low "remaining_energy"
+        Unexpected edge value
+        Additional general protection about this issue
+        src/G4NeutronHPContAngularPar.cc
+
+10 June 2011  Tatsumi Koi (hadr-hpn-V09-04-17)
+- Protection for very low "remaining_energy"
+        src/G4NeutronHPContAngularPar.cc
+
+10 June 2011  Tatsumi Koi (hadr-hpn-V09-04-16)
+- Update for more collaborated work with other and previous version.
+        src/G4NeutronHPContAngularPar.cc
+
+10 June 2011  Tatsumi Koi (hadr-hpn-V09-04-15)
+- Update for more collaborated work with other and previous version.
+	src/G4NeutronHPInelasticCompFS.cc
+- Change contact information
+        src/G4NeutronHPNames.cc
+
+9 June 2011  Tatsumi Koi (hadr-hpn-V09-04-14)
+- Instead of internal level schemes as a function of mt value, 
+use QI value for calculating excitation energy of residual.
+Request from E.Mendoza and D.Cano (CIEMAT)
+	src/G4NeutronHPInelasticCompFS.cc
+
+9 June 2011  Tatsumi Koi (hadr-hpn-V09-04-13)
+- Fix for wrong interpretation and use of "interpolE" 
+Pointed out by E.Mendoza and D.Cano (CIEMAT)
+        src/G4NeutronHPContAngularPar.cc
+
+9 June 2011  Tatsumi Koi (hadr-hpn-V09-04-12)
+-Fix for migration to G4NDL3.15(ENDF-VII.r0)
+	src/G4NeutronHPIsotropic.cc
+-Set Cross section Name in costructor 
+	src/G4NeutronHPCaptureData.cc
+	src/G4NeutronHPFissionData.cc
+	src/G4NeutronHPInelasticData.cc
+	src/G4NeutronHPElasticData.cc
+
+5 June 2011  Tatsumi Koi (hadr-hpn-V09-04-11)
+-Use vector for keeping QI and LR values 
+	include/G4NeutronHPInelasticCompFS.hh
+	src/G4NeutronHPInelasticCompFS.cc
+
+2 June 2011  Tatsumi Koi for E.Mendoza and D.Cano (CIEMAT) (hadr-hpn-V09-04-10)
+-Bug corrected 
+	src/G4NeutronHPPartial.cc
+
+27 May 2011  Tatsumi Koi (hadr-hpn-V09-04-09)
+-Fix gcc4.6 compiler warning: variable XXX set but not used
+	include/G4NeutronHPMadlandNixSpectrum.hh
+	src/G4NeutronHPFissionFS.cc
+	src/G4NeutronHPCaptureFS.cc
+	src/G4NeutronHPChannelList.cc
+-Fix real bug found with the help of the warning
+	src/G4NeutronHPThermalScattering.cc
+
+12 May 2011  Tatsumi Koi (hadr-hpn-V09-04-08)
+-Bug fix setting an index of the last element of an array
+	src/G4NeutronHPFinalState.cc
+-Protection ENDF-VII.0 21Sc45 has trouble in MF4MT22 (n,np) targetMass is not properly recorded, 
+and similar situation
+	src/G4NeutronHPInelasticBaseFS.cc
+-Bug fix for calling an element with negative index 
+	src/G4NeutronHPPhotonDist.cc
+
+10 May 2011  Tatsumi Koi (hadr-hpn-V09-04-07)
+-Modifed for ENDF-VII
+	src/G4NeutronHPFission.cc
+	src/G4NeutronHPorLFission.cc
+- delete above the protection which introduced in (adr-hpn-V09-04-05)  with more coordinated work to other classes 
+	include/G4NeutronHPAngular.hh
+	src/G4NeutronHPAngular.cc
+
+6 May 2011  Tatsumi Koi (hadr-hpn-V09-04-06)
+-Bug fix for unexpected baryon balance
+	src/G4NeutronHPFinalState.cc
+-Modifed for ENDF-VII
+	src/G4NeutronHPIsoData.cc
+
+5 May 2011  Tatsumi Koi (hadr-hpn-V09-04-05)
+-Protection for the case that object is created but not initialized
+	include/G4NeutronHPAngular.hh
+	src/G4NeutronHPAngular.cc
+
+5 May 2011  Tatsumi Koi (hadr-hpn-V09-04-04)
+-Enable FSMF6 in Capture final state 
+	include/G4NeutronHPCaptureFS.hh
+	src/G4NeutronHPCaptureFS.cc
+-Add Reaction Q value and break up flag (MF3::QI and LR)
+	include/G4NeutronHPInelasticCompFS.hh
+	src/G4NeutronHPInelasticCompFS.cc
+-Temporary solution in the case of having 31 or more of the Maximum order Legendre polynomials
+	include/G4NeutronHPFastLegendre.hh
+
+12 April 2011  Tatsumi Koi (hadr-hpn-V09-04-03)
+-Add "Fermium" 
+	include/G4NeutronHPNames.hh
+
+11 April 2011  Tatsumi Koi (hadr-hpn-V09-04-02)
+-Add "Fermium" and fix bug in "Actinium"
+	src/G4NeutronHPNames.cc
+
+30 March 2011  Tatsumi Koi (hadr-hpn-V09-04-01)
+-Add message when the environment variable of "G4NEUTRONHP_NEGLECT_DOPPLER" is found
+        G4NeutronHPElasticData.cc
+        G4NeutronHPInelasticData.cc
+        G4NeutronHPCaptureData.cc
+
+24 March 2011  Tatsumi Koi (hadr-hpn-V09-04-00)
+-Bug fix in MF=6, LAW=2 case; contribution from E. Mendoza, D. Cano-Ott (CIEMAT) 
+	G4NeutronHPDiscreteTwoBody.cc
+	G4NeutronHPDiscreteTwoBody.hh
+
+3 December 2010  Tatsumi Koi (hadr-hpn-V09-03-12)
+-Bug fix Bugzilla/Geant4 Problem 1155
+        G4NeutronHPCaptureFS.cc
+
+2 December 2010  Tatsumi Koi (hadr-hpn-V09-03-11)
+-Delete Unnecessary warnings
+        G4NeutronHPInelasticBaseFS.cc
+
+11 November 2010  Tatsumi Koi (hadr-hpn-V09-03-10)
+-Change warning message for "repFlag == 2 && isoFlag != 1" case
+	G4NeutronHPPhotonDist.cc
+
+11 November 2010  Tatsumi Koi (hadr-hpn-V09-03-09)
+-Add Special treatment in Be9(n,2n)Be8(2a) case
+        G4NeutronHPInelasticBaseFS.cc
+-Add Safty for _nat_ data 
+	G4NeutronHPInelasticCompFS.cc
+
+10 November 2010  Tatsumi Koi (hadr-hpn-V09-03-08)
+-Set lower limit for gamma energy 
+	G4NeutronHPFinalState.cc
+
+10 November 2010  Tatsumi Koi (hadr-hpn-V09-03-07)
+-Bug fix in MF=6, LAW=2 case; contribution from E. Mendoza, D. Cano-Ott (CIEMAT) 
+	G4NeutronHPDiscreteTwoBody.cc
+
+9 September 2010  Tatsumi Koi (hadr-hpn-V09-03-06)
+- Add safty for negative value
+	G4NeutronHPInelasticCompFS.cc
+
+29 July 2010  Tatsumi Koi (hadr-hpn-V09-03-05)
+- Add safty for zero lenght cross section table Problem #1118
+        G4NeutronHPFissionData.cc
+
+29 July 2010  Tatsumi Koi (hadr-hpn-V09-03-04)
+- Add model name in constructor Problem #1116
+	G4NeutronHPThermalScattering.cc
+
+25 April 2010  Tatsumi Koi (hadr-hpn-V09-03-03)
+- Fix compiler warning
+	G4NeutronHPInelasticCompFS.cc
+
+13 April 2010  Tatsumi Koi (hadr-hpn-V09-03-02)
+- Fix bug about incidence energy
+	G4NeutronHPEnAngCorrelation.cc
+
+6 April 2010  Tatsumi Koi (hadr-hpn-V09-03-01)
+- "nothingWasKnownOnHadron=1" then sample mu isotropic in CM 
+   mu and p are correlated
+	G4NeutronHPInelasticCompFS.hh
+	G4NeutronHPInelasticCompFS.cc
+
+24 March 2010  Dennis Wright (hadr-hpn-V09-03-00)
+-------------------------------------------------
+- move all code in hadr-hpn-V09-02-01 to HEAD and tag as 
+  hadr-hpn-V09-03-00
+
+18 November 2009 Tatsumi Koi (hadr-hpn-V09-02-01)
+-------------------------------------------------
+- Add Ignore and Enable On Flight Doppler Broadening methods  
+	G4NeutronHPElasticData.cc
+	G4NeutronHPInelasticData.cc
+	G4NeutronHPCaptureData.cc
+
+22 September 2009  Tatsumi Koi  (hadr-hpn-V09-02-00)
+- Add safty for Floating Point Exception caused by 0 kinetic energy neutron
+        G4NeutronHPCaptureData.cc
+        G4NeutronHPElasticData.cc
+        G4NeutronHPInelasticData.cc
+        G4NeutronHPFissionData.cc
+        G4NeutronHPorLCaptureData.cc
+        G4NeutronHPorLEInelasticData.cc
+        G4NeutronHPorLElasticData.cc
+        G4NeutronHPorLFissionData.cc
+
+14 May 2009  Tatsumi Koi  (hadr-hpn-V09-01-29)
+- Fix bug in IC electron emissions: Contribution from Chao Zhang (Chao.Zhang@usd.edu) and Dongming Mei(Dongming.Mei@usd.edu)
+	G4NeutronHPPhotonDist.cc
+	G4NeutronHPInelasticCompFS.cc
+
+3 December 2008  Tatsumi Koi  (hadr-hpn-V09-01-28)
+- Fix bug in Register in G4NeutronHPChannel 
+  and add limitation of trial of creating final states and proctection for pure 1H case in G4NeutronHPInelastic
+	G4NeutronHPChannel.cc
+        G4NeutronHPInelastic.cc
+
+2 December 2008  Tatsumi Koi  (hadr-hpn-V09-01-27)
+- Remove unused variable
+        G4NeutronHPThermalScattering.cc
+
+1 December 2008  Tatsumi Koi  (hadr-hpn-V09-01-26)
+- Fix for Memory Leak 
+        G4NeutronHPThermalScattering.cc
+
+24 November 2008  Tatsumi Koi  (hadr-hpn-V09-01-25)
+- Protect invalid read which caused run time errors
+        G4NeutronHPFissionData.cc
+
+05 November 2008  Dennis Wright  (hadr-hpn-V09-01-24)
+  G4NeutronHPNames.cc: put parentheses around && in || (line 324) to 
+  satisfy gcc 4.3 compiler.
+
+27 October 2008 Tatsumi Koi (hadr-hpn-V09-01-23)
+  Z,A to A,Z for functions of NucleiProperties 
+	recommit and re tag hadr-hpn-V09-01-22 
+
+27 October 2008 Tatsumi Koi (hadr-hpn-V09-01-22)
+  Z,A to A,Z for functions of NucleiProperties 
+	G4NeutronHPThermalBoost.hh
+        G4NeutronHPCaptureData.cc
+        G4NeutronHPCaptureFS.cc
+        G4NeutronHPContAngularPar.cc
+        G4NeutronHPElasticData.cc
+        G4NeutronHPFissionData.cc
+        G4NeutronHPInelasticBaseFS.cc
+        G4NeutronHPInelasticCompFS.cc
+        G4NeutronHPInelasticData.cc
+        G4NeutronHPorLCaptureData.cc
+        G4NeutronHPorLEInelasticData.cc
+        G4NeutronHPorLElasticData.cc
+        G4NeutronHPorLFissionData.cc
+
+24 October 2008 Tatsumi Koi (hadr-hpn-V09-01-21)
+- Migarate to "particles-V09-01-09"
+	G4NeutronHPThermalBoost.hh
+        G4NeutronHPCaptureData.cc
+        G4NeutronHPCaptureFS.cc
+        G4NeutronHPContAngularPar.cc
+        G4NeutronHPElasticData.cc
+        G4NeutronHPFissionData.cc
+        G4NeutronHPInelasticBaseFS.cc
+        G4NeutronHPInelasticCompFS.cc
+        G4NeutronHPInelasticData.cc
+        G4NeutronHPorLCaptureData.cc
+        G4NeutronHPorLEInelasticData.cc
+        G4NeutronHPorLElasticData.cc
+        G4NeutronHPorLFissionData.cc
+
+4 September 2008 Tatsumi Koi (hadr-hpn-V09-01-20)
+---------------------------------------------
+- Delete output for debugging
+	G4NeutronHPProduct.cc
+
+4 September 2008 Tatsumi Koi (hadr-hpn-V09-01-19)
+---------------------------------------------
+- Add Protection for negative energy results in very low energy ( 1E-6 eV ) scattering 
+	G4NeutronHPElasticFS.cc
+
+1 September 2008 Tatsumi Koi (hadr-hpn-V09-01-18)
+---------------------------------------------
+- Bug fix of too many secondaries production in nd rections
+	G4NeutronHPProduct.cc
+- Set protection for selecting data in hydrogen and alpha
+	G4NeutronHPName.cc
+- Avoiding troubles which caused by G4PhysicsVecotor of length 0 
+	G4NeutronHPIsoData.cc
+
+11 August 2008 Tatsumi Koi (hadr-hpn-V09-01-17)
+---------------------------------------------
+- Bug fix G4NeutronHPLabAngularEnergy
+	G4NeutronHPLabAngularEnergy.cc
+  Change interpolation scheme for histogram  
+	G4NeutronHPInterpolator.hh
+  Bug fix in Sample and GetXsec in G4NeutronHpVector 
+	G4NeutronHPVector.hh
+	G4NeutronHPVector.cc
+  Prohibit level transition to oneself
+	G4NeutronHPDeExGammas.cc
+  Fix memory leak and Correcting data disorder which happened 
+      when both InitPartial and InitAnglurar methods 
+      was called in a same instance 
+	G4NeutronHPPhotonDist.cc
+
+1 August 2008 Tatsumi Koi (hadr-hpn-V09-01-16)
+---------------------------------------------
+- Introduce theNDLDataA,Z which has A and Z of used NDL data
+  residual reconstraction with theNDLDataA,Z
+  several fixes and protection for G4FPE_DEBUF and checking with valgrind 
+	G4NeutronHPFinalState.hh
+	G4NeutronHPFinalState.cc
+	G4NeutronHPInelasticCompFS.cc
+	G4NeutronHPInelasticBaseFS.cc
+	G4NeutronHPKallbachMannSyst.cc
+	G4NeutronHPContAngularPar.cc
+
+21 July 2008 Tatsumi Koi (hadr-hpn-V09-01-15)
+---------------------------------------------
+- Adjusting final states based on the energy and momentum conservation
+	G4NeutronHPFinalState.hh
+	G4NeutronHPFinalState.cc
+	G4NeutronHPInelasticCompFS.cc
+	G4NeutronHPInelasticBaseFS.cc
+
+21 July 2008 Tatsumi Koi (hadr-hpn-V09-01-14)
+---------------------------------------------
+- Limiting the sum of secondary energies
+	G4VNeutronHPEnergyAngular.hh
+	G4NeutronHPContEnergyAngular.hh
+	G4NeutronHPContAngularPar.hh
+	G4NeutronHPProduct.cc
+	G4NeutronHPEnAngCorrelation.cc
+	G4NeutronHPContEnergyAngular.cc
+	G4NeutronHPContAngularPar.cc
+
+17 July 2008 Tatsumi Koi (hadr-hpn-V09-01-13)
+---------------------------------------------
+- Fix of calculation of residual momentum
+	G4NeutronHPInelasticCompFS.cc
+	G4NeutronHPDiscreteTwoBody.cc
+
+26 June 2008 Tatsumi Koi (hadr-hpn-V09-01-12)
+---------------------------------------------
+- Fix for Memory Leak 
+	G4NeutronHPPhotonDist.hh
+
+18 June 2008 Tatsumi Koi (hadr-hpn-V09-01-11)
+---------------------------------------------
+- Fix for tag hadr-hpn-V09-01-09 and 10 
+	G4NeutronHPDiscreteTwoBody.cc
+
+13 June 2008 Tatsumi Koi (hadr-hpn-V09-01-10)
+---------------------------------------------
+- Bug fixes contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) 
+	G4NeutronHPContAngularPar.cc 
+
+12 June 2008 Tatsumi Koi (hadr-hpn-V09-01-09)
+---------------------------------------------
+- Bug fixes contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) 
+	G4NeutronHPLegendreStore.hh
+	G4NeutronHPAngular.cc
+	G4NeutronHPDiscreteTwoBody.cc
+	G4NeutronHPInelasticCompFS.cc
+	G4NeutronHPLegendreStore.cc
+
+
+03 June 2008 Tatsumi Koi (hadr-hpn-V09-01-08)
+---------------------------------------------
+- Bug fixe for codition jump by uninitialised value by T. Koi
+	G4NeutronHPInelasticData.cc
+	G4NeutronHPCaptureData.cc
+
+03 June 2008 Tatsumi Koi (hadr-hpn-V09-01-07)
+---------------------------------------------
+- Bug fixes for Hadron Hyper News #932 by T. Koi
+	G4NeutronHPInelasticCompFS.cc
+
+20 May 2008 Tatsumi Koi (hadr-hpn-V09-01-06)
+---------------------------------------------
+- Delete unnecessary dependencies by T. Koi
+	G4NeutronHPChannel.hh
+	G4NeutronHPElementData.hh
+
+28 April 2008 Tatsumi Koi (hadr-hpn-V09-01-05)
+---------------------------------------------
+- Change checking point of "neglecting doppler broadening" flag 
+  from GetCrossSection to BuildPhysicsTable by T. Koi
+	G4NeutronHPElasticData.hh
+	G4NeutronHPInelasticData.hh
+	G4NeutronHPCaptureData.hh
+	G4NeutronHPElasticData.cc
+	G4NeutronHPInelasticData.cc
+	G4NeutronHPCaptureData.cc
+
+22 April 2008 Tatsumi Koi (hadr-hpn-V09-01-04)
+---------------------------------------------
+- Add IsZAApplicable(,,) {return false;} by T. Koi
+	G4NeutronHPorLElasticData.cc
+	G4NeutronHPorLEInelasticData.cc
+	G4NeutronHPorLCaptureData.cc
+	G4NeutronHPorLFissionData.cc
+	G4NeutronHPJENDLHEData.cc
+
+17 April 2008 Tatsumi Koi (hadr-hpn-V09-01-03)
+---------------------------------------------
+- Add IsZAApplicable(,,) {return false;} by T. Koi
+	G4NeutronHPElasticData.cc
+	G4NeutronHPInelasticData.cc
+	G4NeutronHPCaptureData.cc
+	G4NeutronHPFissionData.cc
+        G4NeutronHPThermalScatteringData.cc
+
+9 April 2008 Tatsumi Koi (hadr-hpn-V09-01-02)
+---------------------------------------------
+- Bug fixes for G4FPE_DEBUG by T. Koi
+	G4NeutronHPContAngularPar.cc 
+
+9 April 2008 Tatsumi Koi (hadr-hpn-V09-01-01)
+---------------------------------------------
+- Bug fixes for G4FPE_DEBUG by T. Koi
+	G4NeutronHPContAngularPar.cc
+	G4NeutronHPVector.hh
+
+19 March 2008 Tatsumi Koi (hadr-hpn-V09-01-00)
+---------------------------------------------
+- Fix compilation warnings - gcc-4.3.0 by T. Koi
+  (This fix has a real effect to the code.) 
+	G4NeutronHPContAngularPar.cc
+- Also tagged "hadr-hpn-V09-00-05".
+
+19 March 2008 Tatsumi Koi (hadr-hpn-V09-00-04)
+---------------------------------------------
+- Fix compilation warnings - gcc-4.3.0 by T. Koi
+	G4NeutronHPElastic.cc
+	G4NeutronHPorLElastic.cc
+	G4NeutronHPorLCapture.cc
+	G4NeutronHPorLFission.cc
+
+31 Oct 2007 Tatsumi Koi (hadr-hpn-V09-00-03)
+---------------------------------------------
+- Bug fix which pointed out by A. Howard 
+	G4NeutronHPChannel.cc
+
+2 Oct 2007 Tatsumi Koi (hadr-hpn-V09-00-02)
+---------------------------------------------
+- Enalble element based cross-section dump
+	G4NeutronHPElasticData.cc
+	G4NeutronHPInelasticData.cc
+	G4NeutronHPCaptureData.cc
+	G4NeutronHPFissionData.cc
+
+9 Jul 2007 Tatsumi Koi (hadr-hpn-V09-00-01)
+---------------------------------------------
+- Allow _nat_ final state even for isotoped cross sections
+	G4NeutronHPNames.cc
+
+5 Jul 2007 Dennis Wright (hadr-hpn-V09-00-00)
+---------------------------------------------
+- G4NeutronHPThermalScattering.cc : remove duplicate declaration of dirName
+  (already a class member).
+
+25 Jun 2007 Tatsumi Koi (hadr-hpn-V08-03-07)
+--------------------------------------------
+- Changed logic of data selection when G4NEUTRONHP_SKIP_MISSING_ISOTOPES turn on
+  natural abandance data are allowed. 
+	G4NeutronHPDataUsed.hh
+	G4NeutronHPNames.cc
+
+25 Jun 2007 Tatsumi Koi (hadr-hpn-V08-03-06)
+--------------------------------------------
+- fixes for memory leaking 
+	G4NeutronHPFissionData.cc
+	G4NeutronHPThermalScattering.cc
+	G4NeutronHPThermalScatteringData.hh
+	G4NeutronHPThermalScatteringData.cc
+
+22 Jun 2007 Gabriele Cosmo (hadr-hpn-V08-03-05)
+-----------------------------------------------
+- Replaced following environment variables:
+  o NeutronHP_ALWAYS_USE_PHOTONEVAPORATION_FOR_CAPTURE_FS
+    with: G4NEUTRONHP_USE_ONLY_PHOTONEVAPORATION
+  o NeutronHP_USE_ONLY_EXACT_FILE
+    with: G4NEUTRONHP_SKIP_MISSING_ISOTOPES
+  o NeutronHPCrossSections
+    with: G4NEUTRONHPDATA
+  o NeutronHP_NEGLECT_DOPPLER_BROADENING
+    with: G4NEUTRONHP_NEGLECT_DOPPLER.
+- Replaced NULL with 0 everywhere and removed unnecessary check on zero
+  pointer when performing deletion.
+
+18 Jun 2007 Tatsumi Koi (hadr-hpn-V08-03-04)
+--------------------------------------------
+- fixes for memory leaking 
+	G4NeutronHPPartial.hh
+	G4NeutronHPPhotonDist.hh
+	G4NeutronHPPhotonDist.cc
+
+08 Jun 2007 Tatsumi Koi (hadr-hpn-V08-03-03)
+--------------------------------------------
+- fixes for memory leaking 
+	G4NeutronHPAngular.hh G4NeutronHPChannel.hh G4NeutronHPPhotonDist.hh
+        G4NeutronHPCaptureData.cc G4NeutronHPElasticData.cc G4NeutronHPInelasticData.cc 
+	G4NeutronHPNames.cc
+	
+
+08 Jun 2007 Tatsumi Koi (hadr-hpn-V08-03-02)
+--------------------------------------------
+- Bug fixes for valgrind & delete Unnecessary comment out from
+	G4NeutronHPFissionERelease.hh
+
+06 Jun 2007 Tatsumi Koi (hadr-hpn-V08-03-01)
+----------------------------------------------
+- Bug fixes for valgrind & related update
+	G4NeutronHPVector.hh
+	G4NeutronHPFissionERelease.hh
+	G4NeutronHPPhotonDist.hh
+	G4NeutronHPPhotonDist.cc
+	G4NeutronHPInelasticCompFS.cc
+   
+
+25 May 2007 Dennis Wright (hadr-hpn-V08-03-00)
+----------------------------------------------
+- retag for 9.0 release
+
+23 May 2007 Tatsumi Koi (hadr-hpn-V08-02-06)
+- Try to limit sum of secondary photons energy while keeping distributions
+	G4NeutronHPPhotonDist.cc
+
+23 May 2007 Tatsumi Koi (hadr-hpn-V08-02-05)
+- add neglecting doppler broadening mode for perfomance increase
+	G4NeutronHPElasticData.cc
+	G4NeutronHPInelasticData.cc
+	G4NeutronHPCaptureData.cc
+
+23 May 2007 Tatsumi Koi (hadr-hpn-V08-02-04)
+------------------------------------------------
+- Bug fixes for G4FPE_DEBUG on by A. Howard 
+	G4NeutronHPAngular.cc
+	G4NeutronHPCapture.cc
+	G4NeutronHPElastic.cc
+	G4NeutronHPFission.cc
+	G4NeutronHPInelastic.cc
+	G4NeutronHPChannel.cc
+	G4NeutronHPChannelList.cc
+	G4NeutronHPInelasticCompFS.cc
+	G4NeutronHPVector.cc
+
+22 May 2007 Tatsumi Koi (hadr-hpn-V08-02-02)
+------------------------------------------------
+- Enable to use only exact data file NeutronHP_USE_ONLY_EXACT_FILE
+  and add warnig when substitute file is used 
+  Modified method of searching substitute isotope data
+    G4NeutronHPNames.cc
+- added  NeutronHP_ALWAYS_USE_PHOTONEVAPORATION_FOR_CAPTURE_FS flag
+    G4NeutronHPCaptureFS.cc
+
+11 April 2007 Dennis Wright (hadr-hpn-V08-02-01)
+------------------------------------------------
+- added model names for hadronic whiteboard error reporting.  
+  Files affected:
+
+    G4NeutronHPCapture.cc
+    G4NeutronHPElastic.cc
+    G4NeutronHPFission.cc
+    G4NeutronHPInelastic.cc
+    G4NeutronHPorLCapture.cc
+    G4NeutronHPorLEInelastic.cc
+    G4NeutronHPorLElastic.cc
+    G4NeutronHPorLFission.cc
+
+20 February 2007 Dennis Wright (hadr-hpn-V08-02-00)
+---------------------------------------------------
+- fixed potential divide by zero in:
+
+    G4NeutronHPVector::IntegrateAndNormalise()
+    G4NeutronHPLevel::GetDecayGammas()
+    G4NeutronHPInterpolator::GetWeightedBinIntegral
+
+15 November 2006 Tatsumi Koi (hadr-hpn-V08-00-04)
+-------------------------------------------------
+- G4NeutronHPElasticFS.hh , cc : add new type final state generator
+- G4NeutronHPFission.cc : Bug Report[857]
+- 4NeutronHPElasticFS.cc : buf fix
+- new cross secton data set and models below 4eV based on 
+  Thermal neutron scattering files from the evaluated nuclear data files 
+  ENDF/B-VI, Release2
+   New files 
+      G4NeutronHPThermalScatteringNames.hh , cc 
+      G4NeutronHPThermalScattering.hh , cc 
+      G4NeutronHPThermalScatteringData.hh , cc 
+- new cross secton data set based on JENDL HE files 20MeV - 3GeV
+   New files 
+      G4NeutronHPJENDLHEData.hh , .cc 
+      G4NeutronHPJENDLHEElasticData.hh , .cc 
+      G4NeutronHPJENDLHEInelasticData.hh , .cc 
+
+02 June 2006 Dennis Wright for Tatsumi Koi (hadr-hpn-V08-00-03)
+---------------------------------------------------------------
+- retag of hard-hpn-v08-00-03 with History info added
+- G4NeutronHPCaptureFS.cc : change default status of PotonEvaporaton
+- G4NeutronHPContAngularPar.cc: bug fix
+- G4NeutronHPFissionFS.cc: bug fix
+
+05 May 2006 Dennis Wright (hadr-hpn-V08-00-02)
+----------------------------------------------
+- installed option to turn off neutron suspension in HPElastic models
+    added method DoNotSuspend() to 
+    G4NeutronHPElastic and G4NeutronHPorLElastic
+
+16 Jan 2006 Dennis Wright for Tatsumi Koi (hadr-hpn-V08-00-01)
+--------------------------------------------------------------
+- fixed problem seen in NeutronHP models: core dump when neutron energy
+    gets close to 20 MeV in some materials.  In 
+    G4NeutronHPPartial::Sample(G4double)  change look-up index from 
+    nData-1 to nData.
+
+22 Nov 2005 Dennis Wright (hadr-hpn-V07-01-03)
+----------------------------------------------
+- fix division NAN compiler warning in outer while loop for
+    G4NeutronHPorLEInelasticData.cc, G4NeutronHPorLElasticData.cc,
+    G4NeutronHPorLEFissionData.cc, G4NeutronHPorLFissionData.cc
+
+22 Nov 2005 Dennis Wright for Tatsumi Koi (hadr-hpn-V07-01-02)
+--------------------------------------------------------------
+- T. Koi implemented new process which switches from HP neutron model 
+  to Low Energy Parameterized model when HP neutron data are absent.
+
+  New files:
+    G4NeutronHPorLCapture.hh, .cc
+    G4NeutronHPorLCaptureData.hh, .cc
+    G4NeutronHPorLCaptureModel.hh, .cc
+    G4NeutronHPorLEInelastic.hh, .cc
+    G4NeutronHPorLEInelasticData.hh, .cc
+    G4NeutronHPorLEInelasticModel.hh, .cc
+    G4NeutronHPorLElastic.hh, .cc
+    G4NeutronHPorLElasticData.hh, .cc
+    G4NeutronHPorLElasticModel.hh, .cc
+    G4NeutronHPorLFission.hh, .cc
+    G4NeutronHPorLFissionData.hh, .cc
+    G4NeutronHPorLFissionModel.hh, .cc
+
+
+18 Nov 2005 Dennis Wright (hadr-hpn-V07-01-00)
+----------------------------------------------
+
+- <sstream> migration for
+         G4NeutronHPInelasticBaseFS.cc, G4NeutronHPInelasticCompFS.cc, 
+         G4NeutronHPNInelasticFS.cc, G4NeutronHPIsoData.hh, 
+         G4NeutronHPNames.hh 
+
+- fix division NAN compiler warning in outer while loop for
+         G4NeutronHPCaptureData.cc, G4NeutronHPElasticData.cc, 
+         G4NeutronHPInelasticData.cc, G4NeutronHPFissionData.cc
+

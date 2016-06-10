@@ -65,17 +65,18 @@ class G4QMDReaction : public G4HadronicInteraction
 
       std::vector< G4QMDSystem* > GetFinalStates(); 
 
-
       G4HadFinalState *ApplyYourself( const G4HadProjectile &aTrack, G4Nucleus & targetNucleus );
+
+      G4ExcitationHandler* GetExcitationHandler(){ return excitationHandler; };
 
       void UnUseGEM(){ gem = false; setEvaporationCh(); };
       void UseFRAG(){ frag = true; };
 
-      void EnableFermiG(){ heg = true; setHighEnergyModel(); };
-
       void SetTMAX( G4int i ){ maxTime = i; };
       void SetDT( G4double t ){ deltaT = t; };
       void SetEF( G4double x ){ envelopF = x; };
+
+      virtual void ModelDescription(std::ostream& outFile) const;
 
    private:
       //copy is unexpeced
@@ -127,7 +128,6 @@ class G4QMDReaction : public G4HadronicInteraction
 
       G4bool gem;
       G4bool frag;
-      G4bool heg;
 
 };
 

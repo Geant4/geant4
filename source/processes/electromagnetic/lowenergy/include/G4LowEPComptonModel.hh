@@ -41,7 +41,7 @@
 // |                                                                   |
 // | J. M. C. Brown, M. R. Dimmock, J. E. Gillam and D. M. Paganin,    |
 // | "A low energy bound atomic electron Compton scattering model      |
-// |  for Geant4", IEEE Transactions on Nuclear Science, submitted.    |
+// |  for Geant4", NIMB, Vol. 338, 77-88, 2014.                        |
 // |                                                                   |
 // | The author acknowledges the work of the Geant4 collaboration      |
 // | in developing the following algorithms that have been employed    |
@@ -60,6 +60,9 @@
 // | Nov. 2011 JMCB       - First version                              |
 // | Feb. 2012 JMCB       - Migration to Geant4 9.5                    |
 // | Sep. 2012 JMCB       - Final fixes for Geant4 9.6                 |
+// | Feb. 2013 JMCB       - Geant4 9.6 FPE fix for bug 1426            |
+// | Jan. 2015 JMCB       - Migration to MT (Based on Livermore        |
+// |                        implementation)                            |
 // |                                                                   |
 // *********************************************************************
 
@@ -67,13 +70,12 @@
 #define G4LowEPComptonModel_h 1
 
 #include "G4VEmModel.hh"
-#include "G4ShellData.hh"
-#include "G4DopplerProfile.hh"
+#include "G4LPhysicsFreeVector.hh"
 
 class G4ParticleChangeForGamma;
-class G4VCrossSectionHandler;
 class G4VAtomDeexcitation;
-class G4VEMDataSet;
+class G4ShellData;
+class G4DopplerProfile;
 
 class G4LowEPComptonModel : public G4VEmModel
 {
@@ -87,41 +89,48 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
+  virtual void InitialiseLocal(const G4ParticleDefinition*,
+                               G4VEmModel* masterModel);
+
+  virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
+
   virtual G4double ComputeCrossSectionPerAtom( const G4ParticleDefinition*,
-                                               G4double kinEnergy, 
-                                               G4double Z, 
-                                               G4double A=0, 
+                                               G4double kinEnergy,
+                                               G4double Z,
+                                               G4double A=0,
                                                G4double cut=0,
                                                G4double emax=DBL_MAX );
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy);
-
-protected:
-
-  G4ParticleChangeForGamma* fParticleChange;
+                                 const G4MaterialCutsCouple*,
+                                 const G4DynamicParticle*,
+                                 G4double tmin,
+                                 G4double maxEnergy);
 
 private:
 
-  G4double lowEnergyLimit;  
-  G4double highEnergyLimit; 
-  G4bool isInitialised;
-  G4int verboseLevel;
-  
-  G4VEMDataSet* scatterFunctionData;
-  G4VCrossSectionHandler* crossSectionHandler;
-  
-  G4VAtomDeexcitation*    fAtomDeexcitation;
+  void ReadData(size_t Z, const char* path = 0);
 
-  G4ShellData shellData;
-  G4DopplerProfile profileData;
+  G4double ComputeScatteringFunction(G4double x, G4int Z);
 
   G4LowEPComptonModel & operator=(const  G4LowEPComptonModel &right);
   G4LowEPComptonModel(const  G4LowEPComptonModel&);
 
+  G4bool isInitialised;
+  G4int verboseLevel;
+ 
+  //G4double lowestEnergy;
+ 
+  G4ParticleChangeForGamma* fParticleChange;
+  G4VAtomDeexcitation*      fAtomDeexcitation;
+
+  static G4ShellData*       shellData;
+  static G4DopplerProfile*  profileData;
+
+  static G4int maxZ;
+  static G4LPhysicsFreeVector* data[100];
+
+  static const G4double ScatFuncFitParam[101][9];
   
 };
 

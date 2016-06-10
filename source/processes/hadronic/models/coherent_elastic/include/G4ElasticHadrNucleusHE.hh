@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4ElasticHadrNucleusHE.hh 90756 2015-06-09 07:43:33Z gcosmo $
 //
 // G4ElasticHadrNucleusHe.hh
 
@@ -59,6 +59,7 @@ static const G4int  NHADRONS = 26;  //  Number of hadrons for which model is app
 static const G4int  ONQ0     = 5;   //  The initial number of steps on Q2
 static const G4int  ONQ2     = 100; //  The total number of steps on Q2
 static const G4int  NENERGY  = 30;  
+static const G4int  ZMAX     = 93;  
 static const G4int  NQTABLE  = NENERGY*ONQ2;  
 
 
@@ -95,7 +96,6 @@ public:
   G4double  massA2;
   G4int     dnkE[NENERGY];
   G4double  maxQ2[NENERGY];
-  //G4double  CrossSecMaxQ2[NENERGY];
 
   G4double  TableQ2[ONQ2];
   G4double  TableCrossSec[NQTABLE];
@@ -117,7 +117,7 @@ public:
 				    G4double plab, 
 				    G4int Z, G4int A);
 
-  virtual void Description() const;
+  virtual void ModelDescription(std::ostream&) const;
 
   G4double SampleT(const G4ParticleDefinition* p, 
 		   G4double plab, 
@@ -222,8 +222,9 @@ private:
 
   G4double        SetBinom[240][240];
 
-  G4ElasticData*  SetOfElasticData[NHADRONS][93];
+  static G4ElasticData*  SetOfElasticData[NHADRONS][ZMAX];
   G4NistManager*  nistManager;
+  static G4Mutex eldata_m[NHADRONS][ZMAX];
 
 };     //   The end of the class description
 

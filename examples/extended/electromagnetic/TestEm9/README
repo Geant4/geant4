@@ -1,4 +1,4 @@
-$Id: README 66241 2012-12-13 18:34:42Z gunter $
+$Id: README 93668 2015-10-28 09:54:03Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,18 +14,18 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
 
      The geometry consists of the vertex detector (VD), the electromagnetic
      calorimeter (EM), and the muon identifier (MU). Detector layout along
-     the axis Z.
+     the Z axis.
 
-     VD consisted of 3 layers of Si with pads structured along the axis X.
+     VD consisted of 3 layers of Si with pads structured along the X axis.
      Between VD and EM there are 2 active absorbers (scintillators).
      EM is the matrix 5x5 of heavy crystals. MU consist of 2 active absorbers
      (scintillators) and the iron plate between.
 
-     2 additional to the World regions are defined: VertexDetector and
+     2 regions additional to the World are defined: VertexDetector and
      MuonDetector. For testing purposes first absorber of MU is included in
      the region of VD.
 
-     Material of calorimiter and absorber can be choosen:
+     Material of calorimeter and absorber can be choosen:
           Air Water lAr Al Fe BGO PbWO4 Pb.
      eg: /testem/det/CalMat PbWO4
          /testem/det/AbsMat Al
@@ -38,25 +38,29 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
 
  2- PHYSICS LISTS
 
-    Physics Lists are based on modular design. Few modules are instantiated:
-    1. Transporatation
+    Physics Lists are based on modular design. Several modules are instantiated:
+    1. Transportation
     2. EM physics
     3. Decays
-    4. StepMax - for steplimitation
+    4. StepMax - for step limitation
 
     The following options for EM physics using builders from physics_lists
     sub-package are available:	 
-    - "emstandard"        (default)
-    - "emstandard_opt1"   (EMV)
-    - "emstandard_opt2"   (EMX)
-    - "emstandard_opt3"   (EMY) - best for standard models
-    - "emstandard_opt4"   recommended for medical and space applications
-                          the best combination of standard and low-energy 
-                          models
+    - "emstandard_opt0" recommended standard EM physics for LHC
+    - "emstandard_opt1" best CPU performance standard physics for LHC
+    - "emstandard_opt2" similar fast simulation
+    - "emstandard_opt3" best standard EM options - analog to "local" above
+    - "emstandard_opt4" best current advanced EM options standard + lowenergy
+    - "emstandardWVI" standard EM physics and WentzelVI multiple scattering
+    - "emstandardSS"  standard EM physics and single scattering model
+    - "emstandardGS"  standard EM physics and Goudsmit-Saunderson multiple scatt.
+    - "emlivermore"  low-energy EM physics using Livermore data
+    - "empenelope"   low-energy EM physics implementing Penelope models
+    - "emlowenergy"  low-energy EM physics implementing experimental
+                     low-energy models
 
-    There are local to this example variants of EM physics: 
-    - "emlivermore"       low-energy EM physics using Livermore data
-    - "empenelope"        low-energy EM physics implementing Penelope models
+    A local builder, PhysListEmStandard "local" (similar to opt0) is also 
+    available.
 
     Optional components can be added:
     - "elastic"       elastic scattering of hadrons

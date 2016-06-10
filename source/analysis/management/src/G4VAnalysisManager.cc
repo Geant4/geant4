@@ -46,88 +46,79 @@ using namespace G4Analysis;
 //_____________________________________________________________________________
 G4VAnalysisManager::G4VAnalysisManager(const G4String& type, G4bool isMaster)
  : fState(type, isMaster),
-   fMessenger(0),
-   fH1HnManager(0),
-   fH2HnManager(0),
-   fH3HnManager(0),
-   fP1HnManager(0),
-   fP2HnManager(0),
-   fVH1Manager(0),
-   fVH2Manager(0),
-   fVH3Manager(0),
-   fVP1Manager(0),
-   fVP2Manager(0),
-   fVNtupleManager(0),
-   fVFileManager(0)
+   fVFileManager(nullptr),
+   fMessenger(G4Analysis::make_unique<G4AnalysisMessenger>(this)),
+   fH1HnManager(nullptr),
+   fH2HnManager(nullptr),
+   fH3HnManager(nullptr),
+   fP1HnManager(nullptr),
+   fP2HnManager(nullptr),
+   fVH1Manager(nullptr),
+   fVH2Manager(nullptr),
+   fVH3Manager(nullptr),
+   fVP1Manager(nullptr),
+   fVP2Manager(nullptr),
+   fVNtupleManager(nullptr)
 {
-  fMessenger = new G4AnalysisMessenger(this);
+  //fMessenger = G4Analysis::make_unique<G4AnalysisMessenger>(this);
 }
 
 //_____________________________________________________________________________
 G4VAnalysisManager::~G4VAnalysisManager()
-{
-  delete fMessenger;
-  delete fVH1Manager;
-  delete fVH2Manager;
-  delete fVH3Manager;
-  delete fVP1Manager;
-  delete fVP2Manager;
-  delete fVNtupleManager;
-  delete fVFileManager;
-}
+{}
 
 // 
 // protected methods
 //
-    
+
 //_____________________________________________________________________________
 void G4VAnalysisManager::SetH1Manager(G4VH1Manager* h1Manager)
 {
-  fVH1Manager = h1Manager;
-  fH1HnManager = h1Manager->fHnManager;
-  fMessenger->SetH1HnManager(fH1HnManager);
+  fVH1Manager.reset(h1Manager);
+  fH1HnManager = h1Manager->GetHnManager();
+  fMessenger->SetH1HnManager(*fH1HnManager);
 } 
 
 //_____________________________________________________________________________
 void G4VAnalysisManager::SetH2Manager(G4VH2Manager* h2Manager)
 {
-  fVH2Manager = h2Manager;
-  fH2HnManager = h2Manager->fHnManager;
-  fMessenger->SetH2HnManager(fH2HnManager);
+  fVH2Manager.reset(h2Manager);
+  fH2HnManager = h2Manager->GetHnManager();
+  fMessenger->SetH2HnManager(*fH2HnManager);
 }  
 
 //_____________________________________________________________________________
 void G4VAnalysisManager::SetH3Manager(G4VH3Manager* h3Manager)
 {
-  fVH3Manager = h3Manager;
-  fH3HnManager = h3Manager->fHnManager;
-  fMessenger->SetH3HnManager(fH3HnManager);
+  fVH3Manager.reset(h3Manager);
+  fH3HnManager = h3Manager->GetHnManager();
+  fMessenger->SetH3HnManager(*fH3HnManager);
 }  
 
 //_____________________________________________________________________________
 void G4VAnalysisManager::SetP1Manager(G4VP1Manager* p1Manager)
 {
-  fVP1Manager = p1Manager;
-  fP1HnManager = p1Manager->fHnManager;
-  fMessenger->SetP1HnManager(fP1HnManager);
+  fVP1Manager.reset(p1Manager);
+  fP1HnManager = p1Manager->GetHnManager();
+  fMessenger->SetP1HnManager(*fP1HnManager);
 } 
 
 //_____________________________________________________________________________
 void G4VAnalysisManager::SetP2Manager(G4VP2Manager* p2Manager)
 {
-  fVP2Manager = p2Manager;
-  fP2HnManager = p2Manager->fHnManager;
-  fMessenger->SetP2HnManager(fP2HnManager);
+  fVP2Manager.reset(p2Manager);
+  fP2HnManager = p2Manager->GetHnManager();
+  fMessenger->SetP2HnManager(*fP2HnManager);
 } 
 
 //_____________________________________________________________________________
 void G4VAnalysisManager::SetNtupleManager(G4VNtupleManager* ntupleManager)
 {
-  fVNtupleManager = ntupleManager;
+  fVNtupleManager.reset(ntupleManager);
 }  
 
 //_____________________________________________________________________________
-void G4VAnalysisManager::SetFileManager(G4VFileManager* fileManager)
+void G4VAnalysisManager::SetFileManager(std::shared_ptr<G4VFileManager> fileManager)
 {
   fVFileManager = fileManager;
 }  
@@ -209,13 +200,41 @@ G4bool G4VAnalysisManager::OpenFile(const G4String& fileName)
 //_____________________________________________________________________________
 G4bool G4VAnalysisManager::Write()
 {
-  return WriteImpl();
+  G4bool finalResult = true;
+
+  G4bool result = WriteImpl();
+  finalResult = finalResult && result;
+ 
+  if ( IsPlotting() ) {
+    result = PlotImpl();
+    finalResult = finalResult && result;
+  }
+
+  return finalResult;
 }  
 
 //_____________________________________________________________________________
 G4bool G4VAnalysisManager::CloseFile()
 {
   return CloseFileImpl();
+}  
+
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::Merge(tools::histo::hmpi* hmpi)
+{
+  return MergeImpl(hmpi);
+}  
+
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::Plot()
+{
+  return PlotImpl();
+}  
+
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::IsOpenFile() const
+{
+  return IsOpenFileImpl();
 }  
 
 //_____________________________________________________________________________
@@ -237,6 +256,12 @@ G4bool G4VAnalysisManager::SetNtupleDirectoryName(const G4String& dirName)
 }
 
 //_____________________________________________________________________________
+void G4VAnalysisManager::SetCompressionLevel(G4int level)
+{
+  fState.SetCompressionLevel(level);
+}
+
+//_____________________________________________________________________________
 G4String G4VAnalysisManager::GetFileName() const 
 {  
   return fVFileManager->GetFileName(); 
@@ -252,6 +277,12 @@ G4String G4VAnalysisManager::GetHistoDirectoryName() const
 G4String G4VAnalysisManager::GetNtupleDirectoryName() const
 {
   return fVFileManager->GetNtupleDirectoryName(); 
+}
+
+//_____________________________________________________________________________
+G4int G4VAnalysisManager::GetCompressionLevel() const
+{
+  return fState.GetCompressionLevel();
 }
 
 //_____________________________________________________________________________
@@ -829,40 +860,19 @@ G4bool G4VAnalysisManager::SetFirstHistoId(G4int firstId)
 //_____________________________________________________________________________
 G4bool G4VAnalysisManager::SetFirstH1Id(G4int firstId) 
 {
-  G4bool finalResult = true;
-  G4bool result = fVH1Manager->SetFirstId(firstId);
-  finalResult = finalResult && result;
-  
-  result = fH1HnManager->SetFirstId(firstId);
-  finalResult = finalResult && result;
-  
-  return finalResult; 
+  return fH1HnManager->SetFirstId(firstId);
 }  
 
 //_____________________________________________________________________________
 G4bool G4VAnalysisManager::SetFirstH2Id(G4int firstId) 
 {
-  G4bool finalResult = true;
-  G4bool result = fVH2Manager->SetFirstId(firstId);
-  finalResult = finalResult && result;
-
-  result = fH2HnManager->SetFirstId(firstId);
-  finalResult = finalResult && result;
-   
-  return finalResult; 
+  return fH2HnManager->SetFirstId(firstId);
 }  
 
 //_____________________________________________________________________________
 G4bool G4VAnalysisManager::SetFirstH3Id(G4int firstId) 
 {
-  G4bool finalResult = true;
-  G4bool result = fVH3Manager->SetFirstId(firstId);
-  finalResult = finalResult && result;
-
-  result = fH3HnManager->SetFirstId(firstId);
-  finalResult = finalResult && result;
-   
-  return finalResult; 
+  return fH3HnManager->SetFirstId(firstId);
 }  
 
 //_____________________________________________________________________________
@@ -882,27 +892,13 @@ G4bool G4VAnalysisManager::SetFirstProfileId(G4int firstId)
 //_____________________________________________________________________________
 G4bool G4VAnalysisManager::SetFirstP1Id(G4int firstId) 
 {
-  G4bool finalResult = true;
-  G4bool result = fVP1Manager->SetFirstId(firstId);
-  finalResult = finalResult && result;
-  
-  result = fP1HnManager->SetFirstId(firstId);
-  finalResult = finalResult && result;
-  
-  return finalResult; 
+  return fP1HnManager->SetFirstId(firstId);
 }  
 
 //_____________________________________________________________________________
 G4bool G4VAnalysisManager::SetFirstP2Id(G4int firstId) 
 {
-  G4bool finalResult = true;
-  G4bool result = fVP2Manager->SetFirstId(firstId);
-  finalResult = finalResult && result;
-  
-  result = fP2HnManager->SetFirstId(firstId);
-  finalResult = finalResult && result;
-  
-  return finalResult; 
+  return fP2HnManager->SetFirstId(firstId);
 }  
 
 //_____________________________________________________________________________
@@ -934,16 +930,35 @@ G4bool G4VAnalysisManager::IsActive() const
 // an activated object.
 
   return fState.GetIsActivation() && 
-         ( fH1HnManager->IsActive() || fH2HnManager->IsActive() );
+         ( fH1HnManager->IsActive() || 
+           fH2HnManager->IsActive() || 
+           fH3HnManager->IsActive() || 
+           fP1HnManager->IsActive() || 
+           fP2HnManager->IsActive() );
 }  
-
 
 //_____________________________________________________________________________
 G4bool G4VAnalysisManager::IsAscii() const
 {
 // Return true any of managers has an object with activated ASCII option.
 
-  return ( fH1HnManager->IsAscii() || fH2HnManager->IsAscii() );
+  return ( fH1HnManager->IsAscii() || 
+           fH2HnManager->IsAscii() ||
+           fH3HnManager->IsAscii() ||
+           fP1HnManager->IsAscii() ||
+           fP2HnManager->IsAscii() );
+}  
+
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::IsPlotting() const
+{
+// Return true any of managers has an object with activated plotting option.
+
+  return ( fH1HnManager->IsPlotting() || 
+           fH2HnManager->IsPlotting() ||
+           fH3HnManager->IsPlotting() ||
+           fP1HnManager->IsPlotting() ||
+           fP2HnManager->IsPlotting() );
 }  
 
 //_____________________________________________________________________________
@@ -951,7 +966,7 @@ G4int G4VAnalysisManager::GetFirstH1Id() const
 {
 // Return first H1 id
 
-  return fVH1Manager->GetFirstId();
+  return fH1HnManager->GetFirstId();
 }  
 
 //_____________________________________________________________________________
@@ -959,7 +974,7 @@ G4int G4VAnalysisManager::GetFirstH2Id() const
 {
 // Return first H2 id
 
-  return fVH2Manager->GetFirstId();
+  return fH2HnManager->GetFirstId();
 }  
 
 //_____________________________________________________________________________
@@ -967,7 +982,7 @@ G4int G4VAnalysisManager::GetFirstH3Id() const
 {
 // Return first H3 id
 
-  return fVH3Manager->GetFirstId();
+  return fH3HnManager->GetFirstId();
 }  
 
 //_____________________________________________________________________________
@@ -975,7 +990,7 @@ G4int G4VAnalysisManager::GetFirstP1Id() const
 {
 // Return first P1 id
 
-  return fVP1Manager->GetFirstId();
+  return fP1HnManager->GetFirstId();
 }  
 
 //_____________________________________________________________________________
@@ -983,7 +998,7 @@ G4int G4VAnalysisManager::GetFirstP2Id() const
 {
 // Return first P2 id
 
-  return fVP2Manager->GetFirstId();
+  return fP2HnManager->GetFirstId();
 }  
 
 //_____________________________________________________________________________
@@ -1063,6 +1078,12 @@ void  G4VAnalysisManager::SetH1Ascii(G4int id, G4bool ascii)
 }    
 
 //_____________________________________________________________________________
+void  G4VAnalysisManager::SetH1Plotting(G4int id, G4bool plotting)
+{
+  fH1HnManager->SetPlotting(id, plotting);
+}    
+
+//_____________________________________________________________________________
 void  G4VAnalysisManager::SetH2Activation(G4int id, G4bool activation)
 {
 // Set activation to a given H2 object
@@ -1082,6 +1103,12 @@ void  G4VAnalysisManager::SetH2Activation(G4bool activation)
 void  G4VAnalysisManager::SetH2Ascii(G4int id, G4bool ascii)
 {
   fH2HnManager->SetAscii(id, ascii);
+}
+
+//_____________________________________________________________________________
+void  G4VAnalysisManager::SetH2Plotting(G4int id, G4bool plotting)
+{
+  fH2HnManager->SetPlotting(id, plotting);
 }    
 
 //_____________________________________________________________________________
@@ -1104,7 +1131,13 @@ void  G4VAnalysisManager::SetH3Activation(G4bool activation)
 void  G4VAnalysisManager::SetH3Ascii(G4int id, G4bool ascii)
 {
   fH3HnManager->SetAscii(id, ascii);
-}    
+}
+
+//_____________________________________________________________________________
+void  G4VAnalysisManager::SetH3Plotting(G4int id, G4bool plotting)
+{
+  fH3HnManager->SetPlotting(id, plotting);
+}
 
 //_____________________________________________________________________________
 void  G4VAnalysisManager::SetP1Activation(G4int id, G4bool activation)
@@ -1126,7 +1159,13 @@ void  G4VAnalysisManager::SetP1Activation(G4bool activation)
 void  G4VAnalysisManager::SetP1Ascii(G4int id, G4bool ascii)
 {
   fP1HnManager->SetAscii(id, ascii);
-}    
+}
+
+//_____________________________________________________________________________
+void  G4VAnalysisManager::SetP1Plotting(G4int id, G4bool plotting)
+{
+  fP1HnManager->SetPlotting(id, plotting);
+}  
 
 //_____________________________________________________________________________
 void  G4VAnalysisManager::SetP2Activation(G4int id, G4bool activation)
@@ -1148,6 +1187,28 @@ void  G4VAnalysisManager::SetP2Activation(G4bool activation)
 void  G4VAnalysisManager::SetP2Ascii(G4int id, G4bool ascii)
 {
   fP2HnManager->SetAscii(id, ascii);
+}
+
+//_____________________________________________________________________________
+void  G4VAnalysisManager::SetP2Plotting(G4int id, G4bool plotting)
+{
+  fP2HnManager->SetPlotting(id, plotting);
+} 
+
+//_____________________________________________________________________________
+void  G4VAnalysisManager::SetNtupleActivation(G4int id, G4bool activation)
+{
+// Set activation to a given P2 object
+
+  fVNtupleManager->SetActivation(id, activation);
+}    
+
+//_____________________________________________________________________________
+void  G4VAnalysisManager::SetNtupleActivation(G4bool activation)
+{
+// Set activation to all P2 objects
+
+  fVNtupleManager->SetActivation(activation);
 }    
 
 // Access methods in .icc

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularDissociation.hh 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id: G4DNAMolecularDissociation.hh 93936 2015-11-04 09:37:59Z gcosmo $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
@@ -49,6 +49,7 @@
 #define G4MOLECULARDECAYPROCESS_HH
 
 #include "G4VITRestProcess.hh"
+#include "G4VITRestDiscreteProcess.hh"
 #include <map>
 
 class G4ParticleChange;
@@ -62,7 +63,7 @@ class G4MoleculeDefinition;
   * it will place the products to the expected position.
   */
 
-class G4DNAMolecularDissociation: public G4VITRestProcess
+class G4DNAMolecularDissociation: public G4VITRestDiscreteProcess //G4VITRestProcess
 {
 public:
     G4DNAMolecularDissociation(const G4String& processName = "DNAMolecularDecay",
@@ -74,6 +75,12 @@ public:
 
     virtual G4bool IsApplicable(const G4ParticleDefinition&);
 
+
+    virtual G4double
+    PostStepGetPhysicalInteractionLength(const G4Track& track,
+                                         G4double previousStepSize,
+                                         G4ForceCondition* condition);
+
     inline G4double AtRestGetPhysicalInteractionLength(
         const G4Track& track,
         G4ForceCondition* condition
@@ -82,6 +89,14 @@ public:
         const G4Track& track,
         const G4Step& step
         );
+
+    inline G4VParticleChange* PostStepDoIt(
+        const G4Track& track,
+        const G4Step& step
+        )
+    {
+      return AtRestDoIt(track, step);
+    }
 
     inline void SetVerbose(G4int);
 
@@ -94,6 +109,12 @@ protected:
     // Make the decay
     virtual G4VParticleChange* DecayIt(const G4Track& ,const G4Step&);
     virtual G4double GetMeanLifeTime(const G4Track&,G4ForceCondition*);
+    virtual G4double GetMeanFreePath(const G4Track& ,
+                                     G4double ,
+                                     G4ForceCondition* )
+    {
+      return 0;
+    }
 
 private:
     G4DNAMolecularDissociation();
@@ -123,7 +144,8 @@ inline G4double G4DNAMolecularDissociation::AtRestGetPhysicalInteractionLength(
         return GetMeanLifeTime(track, condition);
     }
 
-    return G4VITRestProcess::AtRestGetPhysicalInteractionLength(track, condition);
+    return G4VITRestDiscreteProcess::AtRestGetPhysicalInteractionLength(track, condition);
+//    return G4VITRestProcess::AtRestGetPhysicalInteractionLength(track, condition);
 }
 
 inline G4VParticleChange* G4DNAMolecularDissociation::AtRestDoIt(

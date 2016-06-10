@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomRunAction.cc 84839 2014-10-21 13:44:55Z gcosmo $
+// $Id: DicomRunAction.cc 92820 2015-09-17 15:22:14Z gcosmo $
 //
 /// \file DicomRunAction.cc
 /// \brief Implementation of the DicomRunAction class
@@ -44,21 +44,21 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DicomRunAction* DicomRunAction::fgInstance = 0;
+DicomRunAction* DicomRunAction::fInstance = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DicomRunAction* DicomRunAction::Instance() { return fgInstance; }
+DicomRunAction* DicomRunAction::Instance() { return fInstance; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 /// Constructor
 DicomRunAction::DicomRunAction()
-:   G4UserRunAction(), dcmrun(0), fFieldValue(14)
+:   G4UserRunAction(), fDcmrun(0), fFieldValue(14)
 {
     // - Prepare data member for DicomRun.
     //   vector represents a list of MultiFunctionalDetector names.
     fSDName.push_back(G4String("phantomSD"));
-    fgInstance = this;
+    fInstance = this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,7 +66,7 @@ DicomRunAction::DicomRunAction()
 DicomRunAction::~DicomRunAction()
 {
   fSDName.clear();
-  fgInstance = 0;
+  fInstance = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -76,7 +76,7 @@ G4Run* DicomRunAction::GenerateRun()
   // dedicated for MultiFunctionalDetector scheme.
   //  Detail description can be found in DicomRun.hh/cc.
   //return new DicomRun(fSDName);
-  return dcmrun = new DicomRun(fSDName);
+  return fDcmrun = new DicomRun(fSDName);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -118,7 +118,7 @@ void DicomRunAction::EndOfRunAction(const G4Run* aRun)
         total_dose += *(itr->second);
       }
     }
-    
+
   }
   
   if (IsMaster())
@@ -171,7 +171,6 @@ void DicomRunAction::EndOfRunAction(const G4Run* aRun)
       G4String fname = "dicom.out";
       fileout.open(fname);
       G4cout << " opened file " << fname << " for dose output" << G4endl;
-      
       
       if( DoseDeposit && DoseDeposit->GetMap()->size() != 0 ) {
         std::ostream *myout = &G4cout;

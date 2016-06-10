@@ -1,4 +1,4 @@
-$Id: README 83394 2014-08-21 14:39:09Z gcosmo $
+$Id: README 93259 2015-10-14 08:35:22Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -68,7 +68,7 @@ $Id: README 83394 2014-08-21 14:39:09Z gcosmo $
     Dose/Beam_energy_fluence. This ratio must be 1.
  
     The program needs high statistic to reach precision on the computed dose.
-    The UI command /testem/event/printModulo allows to survey the convergence of
+    The UI command /run/printProgress allows to survey the convergence of
     the dose calculation.
     
     The simplest way to study the effect of e- tracking parameters on dose 

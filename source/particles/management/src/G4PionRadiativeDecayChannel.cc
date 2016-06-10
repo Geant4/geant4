@@ -167,9 +167,10 @@ G4DecayProducts *G4PionRadiativeDecayChannel::DecayIt(G4double)
   G4double EMPI = parentmass;
 
   //daughters'mass
-  G4double daughtermass[3]; 
+  const G4int N_DAUGHTER=3;
+  G4double daughtermass[N_DAUGHTER]; 
   G4double sumofdaughtermass = 0.0;
-  for (G4int index=0; index<3; index++){
+  for (G4int index=0; index<N_DAUGHTER; index++){
     daughtermass[index] = G4MT_daughters[index]->GetPDGMass();
     sumofdaughtermass += daughtermass[index];
   }
@@ -184,20 +185,19 @@ G4DecayProducts *G4PionRadiativeDecayChannel::DecayIt(G4double)
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
 
-  G4double x, y, d2w;
+  G4double x, y;
 
-  do {
+  const size_t MAX_LOOP=1000;
 
-     do {
-
-        x = xl + G4UniformRand()*(xu-xl);
-        y = yl + G4UniformRand()*(yu-yl);
-
-     } while (x+y <= 1.);
-
-     d2w = D2W(x,y);
-
-  } while (d2w <= G4UniformRand()*d2wmax);
+  for (size_t loop_counter1=0; loop_counter1<MAX_LOOP; ++loop_counter1){
+    for (size_t loop_counter2=0; loop_counter2<MAX_LOOP; ++loop_counter2){
+      x = xl + G4UniformRand()*(xu-xl);
+      y = yl + G4UniformRand()*(yu-yl);
+      if (x+y > 1.) break;
+    }
+    G4double d2w = D2W(x,y);
+    if (d2w > G4UniformRand()*d2wmax) break;
+  }
 
 //-----------------------------------------------------------------------
 //

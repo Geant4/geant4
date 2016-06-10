@@ -26,9 +26,10 @@
 /// \file exoticphysics/phonon/include/XAluminumElectrodeHit.hh
 /// \brief Definition of the XAluminumElectrodeHit class
 //
-// $Id: XAluminumElectrodeHit.hh 84197 2014-10-10 14:33:03Z gcosmo $
+// $Id: XAluminumElectrodeHit.hh 92176 2015-08-20 13:07:22Z gcosmo $
 //
 // 20141008  Allocators must be thread-local, and must be pointers
+// 20150818  Make hit a simple container, with public data members
 
 #ifndef XAluminumElectrodeHit_h
 #define XAluminumElectrodeHit_h 1
@@ -41,39 +42,27 @@
 class G4AttDef;
 class G4AttValue;
 
-class XAluminumElectrodeHit : public G4VHit
-{
-  public:
+class XAluminumElectrodeHit : public G4VHit {
+public:                // Treat hit as simple container class
+  G4double fTime;
+  G4double fEdep;
+  G4ThreeVector fLocalPos;
+  G4ThreeVector fWorldPos;
 
-      XAluminumElectrodeHit();
-      virtual ~XAluminumElectrodeHit();
-      XAluminumElectrodeHit(const XAluminumElectrodeHit &right);
-      const XAluminumElectrodeHit& operator=(const XAluminumElectrodeHit &right);
-      int operator==(const XAluminumElectrodeHit &right) const;
-
-      inline void *operator new(size_t);
-      inline void operator delete(void *aHit);
-
-      virtual void Draw();
-      virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
-      virtual std::vector<G4AttValue>* CreateAttValues() const;
-      virtual void Print();
-
-  private:
-      G4double fTime;
-      G4double fEdep;
-      G4ThreeVector fLocalPos;
-      G4ThreeVector fWorldPos;
-
-  public:
-      inline void SetTime(G4double t) { fTime = t; }
-      inline G4double GetTime() const { return fTime; }
-      inline void SetEDep(G4double e) { fEdep = e; }
-      inline G4double GetEDep() const { return fEdep; }
-      inline void SetLocalPos(G4ThreeVector xyz) { fLocalPos = xyz; }
-      inline G4ThreeVector GetLocalPos() const { return fLocalPos; }
-      inline void SetWorldPos(G4ThreeVector xyz) { fWorldPos = xyz; }
-      inline G4ThreeVector GetWorldPos() const { return fWorldPos; }
+public:
+  XAluminumElectrodeHit();
+  virtual ~XAluminumElectrodeHit();
+  XAluminumElectrodeHit(const XAluminumElectrodeHit &right);
+  const XAluminumElectrodeHit& operator=(const XAluminumElectrodeHit &right);
+  int operator==(const XAluminumElectrodeHit &right) const;
+  
+  inline void *operator new(size_t);
+  inline void operator delete(void *aHit);
+  
+  virtual void Draw();
+  virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
+  virtual std::vector<G4AttValue>* CreateAttValues() const;
+  virtual void Print();
 };
 
 typedef G4THitsCollection<XAluminumElectrodeHit> XAluminumElectrodeHitsCollection;

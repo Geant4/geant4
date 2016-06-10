@@ -27,7 +27,7 @@
 /// \brief Definition of the EventAction class
 //
 //
-// $Id: EventAction.hh 85901 2014-11-06 08:40:31Z gcosmo $
+// $Id: EventAction.hh 67226 2013-02-08 12:07:18Z ihrivnac $
 //
 // 
 

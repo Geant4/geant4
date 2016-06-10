@@ -82,9 +82,10 @@ void G4VIsotopeTable::DumpTable(G4int Zmin, G4int Zmax)
 {
   G4int Z, A;
   G4int lvl;
-  for ( Z =Zmin; Z<=Zmax; Z+=1){
-    for ( A= Z; A<=3*Z; A+=1){
-      for ( lvl=0; lvl<=9; lvl+=1){
+  const G4int MAX_LVL=9;
+  for ( Z =Zmin; Z<=Zmax; Z++){
+    for ( A= Z; A<=3*Z; A++){
+      for ( lvl=0; lvl<=MAX_LVL; lvl++){
 	G4IsotopeProperty* ptr = GetIsotope(Z,A,lvl);
 	if (ptr!=0) ptr->DumpInfo();
       }

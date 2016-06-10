@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMoleculeEncounterStepper.cc 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id: G4DNAMoleculeEncounterStepper.cc 93616 2015-10-27 08:59:17Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
 //
@@ -40,9 +40,10 @@
 #include "G4VDNAReactionModel.hh"
 #include "G4DNAMolecularReactionTable.hh"
 #include "G4H2O.hh"
-#include "CLHEP/Utility/memory.h"
+#include "G4memory.hh"
 #include "G4UnitsTable.hh"
 #include "G4MoleculeFinder.hh"
+#include "G4MolecularConfiguration.hh"
 
 using namespace std;
 using namespace CLHEP;
@@ -55,7 +56,7 @@ using namespace G4MemStat;
 #endif
 
 G4DNAMoleculeEncounterStepper::Utils::Utils(const G4Track& tA,
-                                            const G4Molecule* mB) :
+                                            G4MolecularConfiguration* mB) :
     trackA(tA), moleculeB(mB)
 {
   moleculeA = GetMolecule(tA);
@@ -138,8 +139,9 @@ template<typename T>
         && value == std::numeric_limits<T>::infinity();
   }
 
-G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA,
-                                                      const G4double& userMinTimeStep)
+G4double
+G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA,
+                                             const G4double& userMinTimeStep)
 {
   // DEBUG
 //      G4cout << "G4MoleculeEncounterStepper::CalculateStep, time :"
@@ -153,8 +155,8 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA,
   if (fVerbose)
   {
     G4cout
-        << "_______________________________________________________________________"
-        << G4endl;
+    << "_______________________________________________________________________"
+    << G4endl;
     G4cout << "G4DNAMoleculeEncounterStepper::CalculateStep" << G4endl;
     G4cout << "Check done for molecule : " << moleculeA->GetName()
            << " (" << trackA.GetTrackID() << ") "
@@ -164,8 +166,10 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA,
 
   //__________________________________________________________________
   // Retrieve general informations for making reactions
-  const vector<const G4Molecule*>* reactivesVector = fMolecularReactionTable
-      ->CanReactWith(moleculeA);
+  G4MolecularConfiguration* molConfA = moleculeA->GetMolecularConfiguration();
+
+  const vector<G4MolecularConfiguration*>* reactivesVector = fMolecularReactionTable
+      ->CanReactWith(molConfA);
 
   if (!reactivesVector)
   {
@@ -220,13 +224,13 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA,
 
 // fReactants = new vector<G4Track*>();
   fReactants.reset(new vector<G4Track*>());
-  fReactionModel->Initialise(moleculeA, trackA);
+  fReactionModel->Initialise(molConfA, trackA);
 
   //__________________________________________________________________
   // Start looping on possible reactants
   for (G4int i = 0; i < nbReactives; i++)
   {
-    const G4Molecule* moleculeB = (*reactivesVector)[i];
+    G4MolecularConfiguration* moleculeB = (*reactivesVector)[i];
 
     //______________________________________________________________
     // Retrieve reaction range
@@ -237,7 +241,8 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA,
     //______________________________________________________________
     // Use KdTree algorithm to find closest reactants
     G4KDTreeResultHandle resultsNearest(
-        G4MoleculeFinder::Instance()->FindNearest(moleculeA, moleculeB));
+        G4MoleculeFinder::Instance()->FindNearest(moleculeA,
+                                                  moleculeB->GetMoleculeID()));
 
     if (resultsNearest == 0) continue;
 
@@ -259,8 +264,8 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA,
 
       fSampledMinTimeStep = 0.;
       G4KDTreeResultHandle resultsInRange(
-//       G4ITManager<G4Molecule>::Instance()
-          G4MoleculeFinder::Instance()->FindNearestInRange(moleculeA, moleculeB,
+          G4MoleculeFinder::Instance()->FindNearestInRange(moleculeA,
+                                                           moleculeB->GetMoleculeID(),
                                                            R));
       CheckAndRecordResults(utils,
 #ifdef G4VERBOSE
@@ -294,9 +299,10 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA,
           G4double range = R + sqrt(fUserMinTimeStep*utils.Constant);
 
           G4KDTreeResultHandle resultsInRange (
-          G4MoleculeFinder::Instance()
-//         G4ITManager<G4Molecule>::Instance()
-          -> FindNearestInRange(moleculeA, moleculeB,range));
+                G4MoleculeFinder::Instance()->
+                  FindNearestInRange(moleculeA,
+                                     moleculeB->GetMoleculeID(),
+                                     range));
 
           CheckAndRecordResults(utils,
 #ifdef G4VERBOSE
@@ -328,15 +334,16 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA,
 //     G4cout << "Potential reactions :" << G4endl;
 //        G4cout << GetMolecule(trackA)->GetName()
 //    << " ("<< trackA.GetTrackID()<< ") " << " + ..." << G4endl;
-//    << " | " << trackB->GetTrackID() << G4endl;
+//    //<< " | " << trackB->GetTrackID() << G4endl;
 //
-//        for(int j = 0 ; j < fReactants->size() ; j++)
+//        for(int j = 0 ; j < (int) fReactants->size() ; j++)
 //        {
 //         G4cout << GetMolecule(fReactants->at(j) )->GetName()
 //    <<" ("<< fReactants->at(j)->GetTrackID() << ")" << G4endl;
 //        }
 //  }
-  }
+
+ }
 
 #ifdef G4VERBOSE
   //    DEBUG
@@ -381,7 +388,7 @@ void G4DNAMoleculeEncounterStepper::CheckAndRecordResults(const Utils& utils,
              << G4endl;
     }
 #endif
-             return;
+    return;
   }
 
   for (results->Rewind(); !results->End(); results->Next())
@@ -402,9 +409,9 @@ void G4DNAMoleculeEncounterStepper::CheckAndRecordResults(const Utils& utils,
     {
       G4ExceptionDescription exceptionDescription;
       exceptionDescription
-      <<"The reactant B found using the ITManager does not have a valid "
+      <<"The reactant B found using the MoleculeFinder does not have a valid "
       "track attached to it. If this is done on purpose, please do "
-      "not record this molecule in the ITManager."
+      "not record this molecule in the MoleculeFinder."
       << G4endl;
       G4Exception("G4DNAMoleculeEncounterStepper::RetrieveResults",
           "MoleculeEncounterStepper001", FatalErrorInArgument,
@@ -414,21 +421,21 @@ void G4DNAMoleculeEncounterStepper::CheckAndRecordResults(const Utils& utils,
 
     if (trackB->GetTrackStatus() != fAlive)
     {
-      G4ExceptionDescription exceptionDescription;
-      exceptionDescription
-          << "The track status of one of the nearby reactants is not fAlive"
-          << G4endl;
-      exceptionDescription << "The incomming trackID "
-          << "(trackA entering in G4DNAMoleculeEncounterStepper and "
-          << "for which you are looking reactant for) is : "
-          << utils.trackA.GetTrackID() << "("
-          << GetMolecule(utils.trackA)->GetName() << ")" << G4endl;
-      exceptionDescription << "And the trackID of the reactant (trackB) is: "
-          << trackB->GetTrackID() << "(" << GetMolecule(trackB)->GetName()
-          << ")" << G4endl;
-      G4Exception("G4DNAMoleculeEncounterStepper::RetrieveResults",
-          "MoleculeEncounterStepper002", FatalErrorInArgument,
-          exceptionDescription);
+//      G4ExceptionDescription exceptionDescription;
+//      exceptionDescription
+//          << "The track status of one of the nearby reactants is not fAlive"
+//          << G4endl;
+//      exceptionDescription << "The incomming trackID "
+//          << "(trackA entering in G4DNAMoleculeEncounterStepper and "
+//          << "for which you are looking reactant for) is : "
+//          << utils.trackA.GetTrackID() << "("
+//          << GetMolecule(utils.trackA)->GetName() << ")" << G4endl;
+//      exceptionDescription << "And the trackID of the reactant (trackB) is: "
+//          << trackB->GetTrackID() << "(" << GetMolecule(trackB)->GetName()
+//          << ")" << G4endl;
+//      G4Exception("G4DNAMoleculeEncounterStepper::RetrieveResults",
+//          "MoleculeEncounterStepper002", FatalErrorInArgument,
+//          exceptionDescription);
       continue;
     }
 

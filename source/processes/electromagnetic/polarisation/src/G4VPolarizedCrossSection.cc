@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPolarizedCrossSection.cc 68046 2013-03-13 14:31:38Z gcosmo $
+// $Id: G4VPolarizedCrossSection.cc 91742 2015-08-04 11:48:51Z gcosmo $
 // File name:     G4VPolarizedCrossSection
 //
 // Author:        Andreas Schaelicke
@@ -117,6 +117,7 @@ void G4VPolarizedCrossSection::DicePolarization()
 
   G4int k = 0;
   G4double disc = sigma[3]*G4UniformRand();
+  // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
   while (sigma[k]<disc && k<4) {
     ++k;
   }

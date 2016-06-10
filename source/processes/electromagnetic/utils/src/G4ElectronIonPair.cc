@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectronIonPair.cc 81058 2014-05-20 09:04:28Z gcosmo $
+// $Id: G4ElectronIonPair.cc 92921 2015-09-21 15:06:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -58,7 +58,7 @@
 G4ElectronIonPair::G4ElectronIonPair(G4int verb)
 {
   verbose = verb;
-  curMaterial = 0;
+  curMaterial = nullptr;
   curMeanEnergy = 0.0;
   nMaterials = 0;
   invFanoFactor = 1.0/0.2;

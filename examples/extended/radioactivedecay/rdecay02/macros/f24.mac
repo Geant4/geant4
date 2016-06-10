@@ -1,63 +1,49 @@
-###############################################################################
-#                                                                         #
-# THIS TEST GENERATES NUCLEI OF F-24 AT THE CENTRE OF THE TARGET 
-# WHICH IS THE ORIGIN. 
-#  
-################################################################################
+# $Id$
+# 									
+# Decays of F24 in analog and vr modes   
 #
-/histo/setHisto 0 50 0 1 MeV
-/histo/setHisto 1 50 0 15 MeV
-/histo/setHisto 2 50 0 15 MeV
-/histo/setHisto 3 50 0 15 MeV
-/histo/setHisto 4 50 0 1 MeV
-/histo/setHisto 5 50 0 15 MeV
-/histo/setHisto 6 50 0 15 MeV
-/exrdm/det/setTargetRadius 0.01 mm
-/exrdm/det/setTargetLength 0.01 mm
-/exrdm/det/setDetectorThickness 20 cm
-/exrdm/det/setDetectorLength 40 cm
+#                                                                         
+/control/verbose 2
+/run/verbose 1
+#
+# set the target/detector geometry
+/rdecay02/det/setTargetRadius 10 um
+/rdecay02/det/setTargetLength 10 um
+/rdecay02/det/setDetectorThickness 20 cm
+/rdecay02/det/setDetectorLength 40 cm
+#
 /run/initialize
-/run/setCutForRegion Target 10 cm
-/run/setCutForRegion Detector 50 cm
-/run/verbose 0
-/event/verbose 0
-/tracking/verbose 0
-/grdm/verbose 1
+#
+/process/list
+#
+# rdm is applied only to the target volume
 /grdm/noVolumes
 /grdm/selectVolume Target
-
 #
-#Next lines needed to have  atomic relaxation working 
+# place the isotopes in the middle of the target, at rest. 
+/gun/particle ion 
+/gun/ion 9 24
 #
-/process/em/fluo false
-/process/em/auger false
-
-
-
-#
-/gps/position 0 0 0
-/gps/energy 0 keV
-/gps/particle ion 
-/gps/ion 9 24 0  0
-#/grdm/nucleusLimits 24 24 9 9
+/analysis/h1/set 6 100 0. 15. MeV
 #
 # complete chain decays
-/histo/fileName f24c
-/tracking/verbose 0
+/analysis/setFileName f24c
+/run/printProgress 1000
 /run/beamOn 10000
 #
 # complete chain decays in VR mode
 /grdm/analogueMC 0
-/histo/fileName f24c-b
+/analysis/setFileName f24c-b
 #/run/beamOn 10000
 #
 # No daughter decays in analogue MC mode
-/histo/fileName f24
 /grdm/analogueMC 1
 /grdm/nucleusLimits 24 24 9 9
+/analysis/setFileName f24
 #/run/beamOn 10000
+
 # No daughter decays in VR MC mode
-/histo/fileName f24-b
 /grdm/analogueMC 0
 /grdm/BRbias 0
+/analysis/setFileName f24-b
 #/run/beamOn 10000

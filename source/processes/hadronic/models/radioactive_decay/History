@@ -14,6 +14,138 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+18 November 2015 Dennis Wright  radioactive_decay-V10-01-23
+-----------------------------------------------------------
+- use method proposed by Andreas Zoglauer to temporarily fix energy 
+  non-conservation in IT and EC modes due to incomplete atomic relaxation
+  model.  Fixes bug #1756.
+
+12 November 2015 Dennis Wright  radioactive_decay-V10-01-22
+-----------------------------------------------------------
+- G4RadioactiveDecay::DoDecay() : pass parent mass + 30 MeV to
+    G4DecayTable::SelectADecayChannel in order to account for difference in
+    mass defects between parent and daughter.  This fixes bug #1793.
+
+29 October 2015 Dennis Wright  radioactive_decay-V10-01-21
+----------------------------------------------------------
+- remove obsolete class G4BetaFermiFunction and references to it in 
+  sources.cmake, G4NuclearDecayChannel.  Addresses bug report 1785.
+ 
+21 October 2015 Luis Sarmiento radioactive_decay-V10-01-20
+----------------------------------------------------------
+- G4NeutronDecay added to work with the "Neutron" key in the radfiles
+
+9 October 2015 Dennis Wright  radioactive_decay-V10-01-19
+---------------------------------------------------------
+- G4ITDecay.cc: fix memory leak of G4Fragment* nucleus, G4Fragment* eOrGamma
+  from Bug Report #1787
+
+22 September 2015 Dennis Wright  radioactive_decay-V10-01-18
+------------------------------------------------------------
+- G4RIsotopeTable: add object name in ctor 
+- G4RadioactiveDecay:  remove G4RIsotopeTable (now redundant) and all associated
+  pointers
+ 
+8 September 2015 Luis Sarmiento radioactive_decay-V10-01-17
+-----------------------------------------------------------
+- G4ProtonDecay linking problem fixed.
+
+8 September 2015 Luis Sarmiento radioactive_decay-V10-01-16
+-----------------------------------------------------------
+- Changed G4ProtonDecayChannel by G4ProtonDecay
+
+1 September 2015 Dennis Wright  radioactive_decay-V10-01-15
+-----------------------------------------------------------
+- G4RIsotopeTable.cc, G4NuclearDecayChannel.cc, G4BetaDecayCorrections.cc,
+  G4RadioactiveDecay.cc: add temporary checks on while loops 
+
+30 July 2015 S Incerti, V Iv. radioactive_decay-V10-01-14
+---------------------------------------------------------
+- Fixing Bugzilla #1727
+
+13 July 2015 A Dotti     radioactive_decay-V10-01-13
+----------------------------------------------------
+- Fixing coverity issues #60965 #60966
+
+22 May 2015 L Desorgher  radioactive_decay-V10-01-12
+----------------------------------------------------
+- G4ECDecay use of daughter atom instead of parent atom when calling atomic relaxation 
+
+
+13 April 2015 Dennis Wright  radioactive_decay-V10-01-11
+--------------------------------------------------------
+- G4RadioactivedDecay::LoadDecayTable : implement Laurent's changes back to
+    level search using tolerance (now 0.1 keV)
+- G4RadioactivedDecay::AddDecayTable : bug fix in combination of branching 
+    ratios (brs[1] -> brs[2] in beta+ decay)
+
+10 March 2015 Dennis Wright  radioactive_decay-V10-01-10
+--------------------------------------------------------
+- re-enable setting of ARM on or off (default is on) in G4ITDecay and 
+  G4ECDecay
+- also include Michel Maire's change from 5 March
+
+05 March 2015 Michel Maire 
+--------------------------
+- G4RadioactiveDecay::BuildPhysicsTable() : add p->SetAuger(true)
+  
+27 February 2015 Dennis Wright  radioactive_decay-V10-01-09
+-----------------------------------------------------------
+- improved efficiency of neutrino energy sectrum calculation in 
+  G4BetaPlusDecay and G4BetaMinusDecay
+- use Q value and electron binding energy to calculate CM momentum
+  in G4ECDecay
+
+11 February 2015 Andrea Dotti   radioactive_decay-V10-01-08
+-----------------------------------------------------------
+- Temporary removing sharing of decay table map between 
+  threads to verify if failures in MT disappear
+
+29 January 2015  Dennis Wright  radioactive_decay-V10-01-07
+-----------------------------------------------------------
+- put autolock on new of master decay map
+
+27 January 2015  Dennis Wright  radioactive_decay-V10-01-06
+-----------------------------------------------------------
+-G4BetaMinusDecay::DecayIt: fix FPE error in sqrt
+-G4BetaPlusDecay::DecayIt: fix possible FPE error in sqrt
+
+22 January 2015  Dennis Wright  radioactive_decay-V10-01-05
+-----------------------------------------------------------
+- G4BetaMinusDecay.cc: fix divide by zero neutrino energy
+- G4BetaPlusDecay.cc: fix zero pointer for spectrumSampler
+ 
+16 January 2015  Gabriele Cosmo  radioactive_decay-V10-01-04
+------------------------------------------------------------
+- Corrected GNUmakefile and sources.cmake scripts to add missing dependency
+  on electromagnetic/lowenergy module.
+
+15 January 2015  Dennis Wright  radioactive_decay-V10-01-03
+-----------------------------------------------------------
+- G4RadioactiveDecay::BuildPhysicsTable: change code to create new atomic
+  deexcitation only if one doesn't already exist
+- G4ECDecay.cc: re-install check for zero pointer to atomic deexcitation 
+
+12 January 2015  Dennis Wright  radioactive_decay-V10-01-02
+-----------------------------------------------------------
+- G4RadioactiveDecay::BuildPhysicsTable : register G4UAtomicDeexcitation to
+  G4LossTableManager so that electron shells can be found.  Set Fluo and 
+  Auger flags to true, PIXE to false
+- G4ECDecay.cc:  re-arrange code to accommodate above change
+
+19 December 2014  Dennis Wright radioactive_decay-V10-01-01
+-----------------------------------------------------------
+- use G4NuclearDecay as the new base class for all the decay channels.  This
+  replaces G4NuclearDecayChannel
+- all decay channels (G4AlphaDecay, G4BetaMinusDecay, G4BetaPlusDecay,
+  G4ITDecay and G4ECDecay) modified to use new base class
+- G4NuclearDecayChannel removed from G4RadioactiveDecay
+
+08 December 2014  Dennis Wright radioactive_decay-V10-01-00
+----------------------------------------------------------
+- added new classes G4BetaMinusDecay, G4BetaPlusDecay, G4ECDecay and G4ITDecay
+  to streamline inheritance chain and reduce non-reproducibility
+
 06 November 2014 Dennis Wright radioactive_decay-V10-00-11
 ----------------------------------------------------------
 - G4NuclearDecayChannel: remove upper limit on number of gammas produced by

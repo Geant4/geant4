@@ -1,0 +1,262 @@
+//$Id$
+
+///\file "hadronic/Hadr02/.README.txt"
+///\brief Example Hadr02 README page
+
+/*! \page ExampleHadr02 Example Hadr02
+
+Example and DMJET: 
+\author V.Ivanchenko, A.Ivanchenko,  \n
+UrQMD: Kh Abdel-Waged et al, A. Dotti \n
+CERN, Geneva, Switzerland \n
+Geant4 Associate International \n
+University of Bordeaux, CENBG/IN2P3/CNRS \n
+(ESA contract 22712/09/NL/AT)
+
+This example application is providing simulation of ion beam interaction with different 
+targets. Hadronic aspects of beam target interaction are demonstrated in the example 
+including longitudinal profile of energy deposition, spectra of secondary  particles,
+isotope production spectra. The results are presenting in a form of average numbers 
+and histograms. All ion/ion models of Geant4 are available and also the interface to
+the FORTRAN code DPMJET-2.5 developed by J.Ranft for FLUKA. The interface was developed
+by P.Truscott (QinetiQ, UK) under European Space Agency (ESA) contract 19770/06/NL/JD.
+In addition an interface to the FORTRAN code UrQMD-1.3rc developed by Kh, Abdel-Waged et al
+for the KACST/NCMP. UrQMD model by S.A.Bass et al. Prog.Part.Nucl.Phys. 41 (1998) 225
+and M.Bleicher et al. J.Phys. G25 (1999) 1859.
+UrQMD can be used only for ion-ion physics or for all hadronic inelastic interactions.
+
+
+\section Hadr02_s1 INSTALLATION
+
+For simulation with Geant4 native models installation procedure is the same as for 
+other examples.
+
+\subsection Hadr02_sub_s11 ACTIVATION OF DPMJET INTERFACE
+
+In order to use DPMJET additional installation steps are required.
+It is recommended to use DPMJET with SLC5 64 bit PC with gcc4.3.2 or newer compiler. 
+
+Two environment variables should be defined:
+
+\verbatim
+G4DPMJET2_5DATA - path to Glauber data
+CERNLIB         - path to cernlib library
+G4_USE_DPMJET   - flag of DPMJET activation
+\endverbatim
+
+To run the example with DPMJET:
+
+\verbatim
+Hadr02 dpmjet.in QGSP_BIC
+\endverbatim
+
+The last parameter is optional. It is the name of Geant4 reference Physics List on
+top of which a new ion physics is added. Alternatively Physics List can be defined via 
+environment variable
+
+\verbatim
+setenv PHYSLIST QGSP_BIC
+\endverbatim
+
+\subsection Hadr02__sub_s12 ACTIVATION OF URQMD INTERFACE
+
+UrQMD 1.3 FORTRAN code is NOT provided with Geant4 code-base.
+You can get UrQMD code from UrQMD code website: http://urqmd.org
+The Geant4 interface has been developed and tested against urqmd-1.3cr
+Once the tarball urqmd-1.3cr.tar.gz has been downloaded copy it in the 
+urqmd1_3 directory of this example.
+To compile support for UrQMD interface in the example define the environment
+variable G4_USE_URQMD. i.e. by typing:
+
+\verbatim
+setenv G4_USE_URQMD 1
+\endverbatim
+
+Two possible uses of UrQMD interface are possible: use UrQMD code only for
+ion-ion interactions or use the provided UrQMD physics list (all hadron inelastic interactions
+use UrQMD).
+To run the example with UrQMD only for ion-ion physics:
+
+\verbatim
+Hadr02 urqmd.in QGSP_BIC
+\endverbatim
+
+The last parameter is optional. It is the name of Geant4 reference Physics List on
+top of which a new ion physics is added. Alternatively Physics List can be defined via 
+environment variable
+
+\verbatim
+setenv PHYSLIST QGSP_BIC
+\endverbatim
+
+To run the example with the full UrQMD physics:
+
+\verbatim
+Hadr02 default.in UrQMD
+\endverbatim
+or:
+\verbatim
+setenv PHYSLIST UrQMD
+Hadr02 default.in
+\endverbatim
+
+UrQMD physics list can be used in any application, releavant headers and source files (*UrQDM*)
+should be copied in your application source tree, together with the urqmd1_3 sub-directory.
+Your application makefile should also be modified following the example of the makefile for this 
+example.
+
+\section Hadr02_s2 GEOMETRY
+
+The Target volume is a cylinder placed inside Check cylindrical volume. The 
+Check volume is placed inside the World volume. The radius and the length of
+the Check volume are 1 mm larger than the radius and the length of the Target.
+The material of the Check volume is the same as the World material. The World
+volume has the sizes 10 mm larger than that of the Target volume. Any material
+from the Geant4 database can be defined. The default World  material is
+G4Galactic and the default  Target material is aluminum. The Target is
+subdivided on number of equal slices. Following UI commands are available to
+modify the geometry:
+
+\verbatim
+/testhadr/TargetMat     G4_Pb
+/testhadr/WorldMat      G4_AIR
+/testhadr/TargetRadius  10 mm
+/testhadr/TargetLength  20 cm
+/testhadr/NumberDivZ    200
+\endverbatim
+
+Beam direction coincides with the target axis and is Z axis in the global
+coordinate system. G4ParticleGun is used as a primary generator. The energy 
+and the type of the beam can be defined via standard UI commands
+
+\verbatim
+/gun/energy   150 GeV
+/gun/particle ion
+/gun/ion 6 12
+\endverbatim
+
+Default beam position is -(targetHalfLength + 5*mm) and direction along Z axis.
+Beam position and direction can be changed by gun UI commands:
+
+\verbatim
+/gun/position  1 10 3 mm
+/gun/direction 1 0 0
+\endverbatim
+
+however, position command is active only if before it the flag is set
+
+\verbatim
+/testhadr/DefaultBeamPosition false   
+\endverbatim
+ 
+\section Hadr02_s3 SCORING
+
+The scoring is performed with the help of UserStackingAction class and a
+sensitive detector class associated with a target slice. 
+Each secondary particle is scored by the StackingAction.  In
+the StackingAction it is also possible to kill all or only EM (e+, e-, gamma)
+secondary particles 
+
+\verbatim
+/testhadr/killAll     
+/testhadr/KillEM  
+\endverbatim
+
+To control running the following options are available:
+
+\verbatim
+/run/printProgress      10
+\endverbatim
+
+
+\section Hadr02_s4 PHYSICS
+
+PhysicsList of the application uses components, which are distributed with
+Geant4 in /geant4/physics_lists subdirectory. 
+
+Reference Physics Lists are used and the environment variable PHYSLIST should 
+be defined. 
+
+Additionally it is possible to add ion-ion interactions using UI command
+
+\verbatim
+/testhadr/ionPhysics   DPMJET
+/testhadr/ionPhysics   FTF
+\endverbatim
+
+
+\section Hadr02_s5 VISUALIZATION
+
+For interactive mode G4 visualization options and variables should be
+defined, then the example should be recompiled:
+
+\verbatim
+gmake visclean
+gmake
+\endverbatim
+
+The vis.mac file can be used an example of visualization. The following command can 
+be used:
+
+\verbatim
+/testhadr/DrawTracks  charged
+/testhadr/DrawTracks  charged+n
+/testhadr/DrawTracks  neutral
+/testhadr/DrawTracks  all
+\endverbatim
+
+
+\section Hadr02_s6 HISTOGRAMS
+
+To use histograms any of implementations of AIDA interfaces should
+be available (see http://aida.freehep.org).
+
+A package including AIDA and extended interfaces also using Python
+is PI, available from: http://cern.ch/pi .
+
+Once installed PI or PI-Lite in a specified local area $PI_DIR, it is
+required to add the installation path to $PATH, i.e. for example,
+for release 1.2.1 of PI:
+
+setenv PATH ${PATH}:$PI_DIR/1.3.12/app/releases/PI/PI_1_3_12/slc3_gcc323/bin
+
+CERN users can use the PATH to the LCG area on AFS.
+
+Before compilation of the example it is optimal to clean up old 
+files:
+
+\verbatim
+gmake histclean
+setenv G4ANALYSIS_USE 1
+gmake
+\endverbatim
+
+Before running the example the command should be issued:
+
+\verbatim
+eval `aida-config --runtime csh`
+\endverbatim
+
+It is possible to choose the format of the output file with 
+histograms using UI command:
+
+\verbatim
+/testhadr/HistoName   name
+/testhadr/HistoType   type
+\endverbatim
+
+The following types are available: hbook, root, aida. They will be 
+stored in the file "name.hbook", "name.root", or "name.aida". 
+If the environment variable HISTODIR is defined, files are stored in this 
+subdirectory.
+
+To show the content of a histogram ID=i the commands may be applied:
+
+\verbatim
+/testhadr/HistoPrint  i
+\endverbatim
+
+All histograms are normalized to the number of events.
+
+  
+*/

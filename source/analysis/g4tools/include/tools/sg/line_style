@@ -1,0 +1,104 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_line_style
+#define tools_sg_line_style
+
+#include "../lina/vec3f"
+
+#include "sf_vec"
+#include "node"
+#include "enums"
+#include "style_parser"
+
+namespace tools {
+namespace sg {
+
+class line_style : public node {
+  TOOLS_NODE(line_style,tools::sg::line_style,node)
+public:
+  sf<bool> visible;
+  sf_vec<colorf,float> color;
+  sf<float> width;
+  sf<lpat> pattern;
+public:
+  virtual const std::vector<field_desc>& node_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::line_style)
+    static std::vector<field_desc> s_v;
+    if(s_v.empty()) {
+      s_v = parent::node_fields();
+      TOOLS_ADD_FIELD_DESC(visible)
+      TOOLS_ADD_FIELD_DESC(color)
+      TOOLS_ADD_FIELD_DESC(width)
+      TOOLS_ADD_FIELD_DESC(pattern)
+    }
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&visible);
+    add_field(&color);
+    add_field(&width);
+    add_field(&pattern);
+  }
+public:
+  line_style()
+  :parent()
+  ,visible(true)
+  ,color(colorf::black())
+  ,width(1)
+  ,pattern(line_solid)
+  {
+    add_fields();
+  }
+  virtual ~line_style(){}
+public:
+  line_style(const line_style& a_from)
+  :parent(a_from)
+  ,visible(a_from.visible)
+  ,color(a_from.color)
+  ,width(a_from.width)
+  ,pattern(a_from.pattern)
+  {
+    add_fields();
+  }
+  line_style& operator=(const line_style& a_from){
+    parent::operator=(a_from);
+
+    visible = a_from.visible;
+    color = a_from.color;
+    width = a_from.width;
+    pattern = a_from.pattern;
+    return *this;
+  }
+public:
+  bool from_string(std::ostream& a_out,const cmaps_t& a_cmaps,const std::string& a_s){
+    style_parser sp;
+
+    sp.visible(visible.value());
+    sp.color(color.value());
+  //sp.transparency(transparency.value());
+    sp.line_width(width.value());
+    sp.line_pattern(pattern.value());
+
+    if(!sp.parse(a_out,a_cmaps,a_s)) {
+      a_out << "tools::sg::line_style::from_string :"
+            << " parse failed."
+            << std::endl;
+      return false;    
+    }
+
+    visible.value(sp.visible());
+    color.value(sp.color());
+  //transparency.value(sp.transparency());
+    width.value(sp.line_width());
+    pattern.value(sp.line_pattern());
+
+    return true;
+  }
+
+};
+
+}}
+
+#endif

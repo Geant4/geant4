@@ -14,6 +14,49 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+2 November 2015 - Tatsumi Koi (hadr-modman-V10-01-07)
+-----------------------------------------------------------
+- G4HadronicInteractionRegistry - adding same ad-hoc trick of NeutronHP to ParticleHP models to prevent problem at termination
+
+30 October 2015 - Gunter Folger (hadr-modman-V10-01-06)
+-----------------------------------------------------------
+- Loop checking: include/G4V3DNucleus.hh checked.
+
+2 July 2015 - Tatsumi Koi (hadr-modman-V10-01-05)
+-----------------------------------------------------------
+- G4HadronicInteractionRegistry - delete the ad-hoc tricks of NeutronHP and ParticleHP models to prevent problem at 
+termination
+
+16 June 2015 - Tatsumi Koi (hadr-modman-V10-01-04)
+-----------------------------------------------------------
+- G4HadronicInteractionRegistry - adding same ad-hoc trick of NeutronHP to ParticleHP models to prevent problem at 
+termination
+
+13 March 2015 - Vladimir Ivanchenko (hadr-modman-V10-01-03)
+-----------------------------------------------------------
+- G4HadronicInteractionRegistry - more accurate check on HP models
+
+11 March 2015 - Vladimir Ivanchenko (hadr-modman-V10-01-02)
+-----------------------------------------------------------
+- G4HadronicInteractionRegistry - temporary do not delete HP models 
+
+11 March 2015 - Vladimir Ivanchenko (hadr-modman-V10-01-01)
+-----------------------------------------------------------
+- G4HadronicInteractionRegistry, G4HadronicInteraction - fixed deletion of 
+    models at exit
+
+11 March 2015 - Vladimir Ivanchenko (hadr-modman-V10-01-00)
+-----------------------------------------------------------
+- G4HadronicInteractionRegistry - make it thread local singleton
+    for proper deletion of models end of run
+
+18 November 2014 - Vladimir Ivanchenko previous tag is restored to the trunk
+
+18 November 2014 - Vladimir Ivanchenko (hadr-modman-V10-00-06)
+---------------------------------------------------------
+- G4HadronicInteractionRegistry - make it thread local singleton
+    for proper deletion of models end of run
+
 12 September 2014 - Tatsumi Koi (hadr-modman-V10-00-05)
 ---------------------------------------------------------
 - Add BuildPhysics method for Initialisation before run

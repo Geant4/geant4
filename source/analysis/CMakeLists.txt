@@ -8,14 +8,20 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt 80313 2014-04-10 12:21:49Z gcosmo $
+# $Id: CMakeLists.txt 93451 2015-10-22 14:53:57Z gcosmo $
 #
 #------------------------------------------------------------------------------
+
+if (GEANT4_USE_FREETYPE)
+  add_definitions(-DTOOLS_USE_FREETYPE)
+  add_definitions(-DTOOLS_USE_EXPAT)
+endif()
 
 add_subdirectory(csv)
 add_subdirectory(g4tools)
 add_subdirectory(hntools)
 add_subdirectory(management)
+add_subdirectory(parameters)
 add_subdirectory(root)
 add_subdirectory(xml)
 
@@ -27,7 +33,21 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             g4tools/sources.cmake
             hntools/sources.cmake
             management/sources.cmake
+            parameters/sources.cmake
             root/sources.cmake
             xml/sources.cmake
 )
 endif()
+
+#-----------------------------------------------------------------------
+# Install fonts
+#
+if (GEANT4_USE_FREETYPE)
+  install(DIRECTORY fonts/
+    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/fonts
+    PATTERN ".svn" EXCLUDE
+  )
+endif()
+
+
+

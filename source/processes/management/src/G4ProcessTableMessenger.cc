@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTableMessenger.cc 71231 2013-06-12 13:06:28Z gcosmo $
+// $Id: G4ProcessTableMessenger.cc 92125 2015-08-18 14:35:23Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -92,7 +92,7 @@ G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
   }
   listCmd->SetCandidates((const char*)(candidates));
 
-  //Commnad   /particle/process/Verbose
+  //Commnad   /particle/process/verbose
   verboseCmd = new G4UIcmdWithAnInteger("/process/verbose",this);
   verboseCmd->SetGuidance("Set Verbose Level for Process Table");
   verboseCmd->SetGuidance("  verbose [level]");
@@ -350,59 +350,21 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
 //////////////////
 G4String G4ProcessTableMessenger::GetCurrentValue(G4UIcommand * command)
 {
-  G4ProcessTable::G4ProcNameVector* procNameVector 
-                         = theProcessTable->GetNameList(); 
-
-  G4String candidates;
-  G4String returnValue('\0');
-
-  std::ostringstream os;
-  G4UIparameter * param; 
-
-  G4int idx; 
-
   if( command==verboseCmd ){
     //Commnad   /process/verbose
-    os << theProcessTable->GetVerboseLevel();
-    returnValue = os.str();
+    return verboseCmd->ConvertToString(theProcessTable->GetVerboseLevel());
 
   } else if ( command==listCmd ){
     //Commnad   /process/list
-    candidates = "all";
-    for (idx = 0; idx < NumberOfProcessType ; idx ++ ) {
-      candidates += " " + 
-	       G4VProcess::GetProcessTypeName(G4ProcessType(idx));
-    }
-    listCmd->SetCandidates((const char*)(candidates));
-    returnValue =  currentProcessTypeName;
+    return currentProcessTypeName;
 
   } else {
     //Commnad   /process/dump, activate, inactivate
-    // process name 
-    param = command->GetParameter(0);
-    candidates = "";
-    G4ProcessTable::G4ProcNameVector::iterator itr; 
-    for (itr=procNameVector->begin(); itr!=procNameVector->end(); ++itr) {
-      candidates += " " + (*itr);
-    }
-    param->SetParameterCandidates((const char*)(candidates));
-    // particle name
-    param = command->GetParameter(1);
-    candidates = "all";
-    G4ParticleTable::G4PTblDicIterator *piter 
-                        = G4ParticleTable::GetParticleTable()->GetIterator();
-    piter -> reset();
-    while( (*piter)() ){
-      G4ParticleDefinition *particle = piter->value();
-      candidates += " " + particle->GetParticleName();
-    }
-    param->SetParameterCandidates((const char*)(candidates));
-
-    returnValue =  currentProcessName + " " + currentParticleName;
-
+    return   (currentProcessName + " " + currentParticleName);
+    
   }
 
-  return returnValue;
+  return "";
 }
 
 /////////////////

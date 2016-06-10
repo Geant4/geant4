@@ -687,14 +687,6 @@ void IORTDetectorConstruction::UpdateGeometry()
 	    numberOfVoxelsAlongZ,
 	    massOfVoxel);
 
-    // Initialize analysis
-/*
-    IORTAnalysisManager* analysis = IORTAnalysisManager::GetInstance();
-#ifdef G4ANALYSIS_USE_ROOT
-    analysis -> flush();     // Finalize the root file 
-    analysis -> book();
-#endif
-*/
     // Inform the kernel about the new geometry
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
     G4RunManager::GetRunManager() -> PhysicsHasBeenModified();

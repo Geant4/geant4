@@ -26,16 +26,17 @@
 /// \file medical/fanoCavity2/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 72961 2013-08-14 14:35:56Z gcosmo $
+// $Id: SteppingAction.cc 90829 2015-06-10 08:37:55Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
 #include "DetectorConstruction.hh"
-#include "RunAction.hh"
 #include "TrackingAction.hh"
 #include "HistoManager.hh"
+#include "G4RunManager.hh"
+#include "Run.hh"
 
 #include "G4SteppingManager.hh"
 #include "G4Gamma.hh"
@@ -43,9 +44,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* RuAct,
-                               TrackingAction* TrAct)
-:fDetector(det), fRunAction(RuAct), fTrackAction(TrAct),
+SteppingAction::SteppingAction(DetectorConstruction* det,
+    TrackingAction* TrAct)
+:fDetector(det), fTrackAction(TrAct),
  fWall(0), fCavity(0)
 { 
   first = true;
@@ -69,6 +70,10 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
    first  = false;
  }
 
+
+  Run* run = static_cast<Run*>(
+            G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+
   //histograms 
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
    
@@ -81,7 +86,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  //
  G4StepPoint* point2 = step->GetPostStepPoint(); 
  const G4VProcess* process = point2->GetProcessDefinedStep();
- if (process) fRunAction->CountProcesses(process->GetProcessName());
+ if (process) run->CountProcesses(process->GetProcessName());
  
  //energy deposit in fCavity
  //
@@ -98,8 +103,8 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  //
  G4int id;
  G4double steplen = step->GetStepLength();
- if (volume == fWall) {fRunAction->StepInWall  (steplen); id = 9;}
- else                {fRunAction->StepInCavity(steplen); id = 10;}
+ if (volume == fWall) {run->StepInWall  (steplen); id = 9;}
+ else                {run->StepInCavity(steplen); id = 10;}
  analysisManager->FillH1(id,steplen);
  
  //last step before hitting the fCavity
@@ -121,7 +126,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
    fTrackSegm = 0.;
    G4ThreeVector vertex = step->GetTrack()->GetVertexPosition();
    analysisManager->FillH1(4,vertex.z());          
-   fRunAction->FlowInCavity(0,ekin1);
+   run->FlowInCavity(0,ekin1);
    analysisManager->FillH1(5,ekin1);
    if (steplen>0.) {    
      G4ThreeVector directionOut = 
@@ -138,15 +143,15 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  if (step->GetTrack()->GetCurrentStepNumber() == 1) fTrackSegm = 0.;
  fTrackSegm += steplen;
  if (ekin2 <= 0.) {
-   fRunAction->AddTrakCavity(fTrackSegm);
+   run->AddTrakCavity(fTrackSegm);
    analysisManager->FillH1(8,fTrackSegm);      
  } 
  
  //exit cavity
  //
  if (point2->GetStepStatus() == fGeomBoundary) {
-   fRunAction->FlowInCavity(1,ekin2);
-   fRunAction->AddTrakCavity(fTrackSegm);
+   run->FlowInCavity(1,ekin2);
+   run->AddTrakCavity(fTrackSegm);
    analysisManager->FillH1(8,fTrackSegm);      
  }
 }

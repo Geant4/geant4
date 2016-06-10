@@ -14,17 +14,17 @@
 struct internal_state      {int dummy;}; /* for buggy compilers */
 #endif
 
-const char * const z_errmsg[10] = {
-"need dictionary",     /* Z_NEED_DICT       2  */
-"stream end",          /* Z_STREAM_END      1  */
-"",                    /* Z_OK              0  */
-"file error",          /* Z_ERRNO         (-1) */
-"stream error",        /* Z_STREAM_ERROR  (-2) */
-"data error",          /* Z_DATA_ERROR    (-3) */
-"insufficient memory", /* Z_MEM_ERROR     (-4) */
-"buffer error",        /* Z_BUF_ERROR     (-5) */
-"incompatible version",/* Z_VERSION_ERROR (-6) */
-""};
+z_const char * const z_errmsg[10] = {
+(z_const char* const)"need dictionary",	  /* Z_NEED_DICT  	  2  */
+(z_const char* const)"stream end",  		  /* Z_STREAM_END 	  1  */
+(z_const char* const)"",						  /* Z_OK				  0  */
+(z_const char* const)"file error",  		  /* Z_ERRNO			(-1) */
+(z_const char* const)"stream error",		  /* Z_STREAM_ERROR  (-2) */
+(z_const char* const)"data error",  		  /* Z_DATA_ERROR 	(-3) */
+(z_const char* const)"insufficient memory", /* Z_MEM_ERROR  	(-4) */
+(z_const char* const)"buffer error",		  /* Z_BUF_ERROR  	(-5) */
+(z_const char* const)"incompatible version",/* Z_VERSION_ERROR (-6) */
+(z_const char* const)""};
 
 
 const char * ZEXPORT zlibVersion()

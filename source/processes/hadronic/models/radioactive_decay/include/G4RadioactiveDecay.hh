@@ -265,7 +265,6 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     G4RadioactiveDecay & operator=(const G4RadioactiveDecay &right);
 
     G4RadioactiveDecaymessenger* theRadioactiveDecaymessenger;
-    G4RIsotopeTable* theIsotopeTable;
 
     G4NucleusLimits theNucleusLimits;
 

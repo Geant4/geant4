@@ -29,6 +29,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
+#include "G4Pow.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4XPDGTotal.hh"
 #include "G4KineticTrack.hh"
@@ -211,9 +212,9 @@ G4double G4XPDGTotal::CrossSection(const G4KineticTrack& trk1,
 	      
 	      G4double S = (sqrtS * sqrtS) / (GeV*GeV);
 	      
-	      sigma = ( (xFit * std::pow(S,epsilon)) + 
-			(y1Fit * std::pow(S,eta1)) + 
-			(coeff * y2Fit * std::pow(S,eta2)) ) * millibarn;
+	      sigma = ( (xFit * G4Pow::GetInstance()->powA(S,epsilon)) + 
+			(y1Fit * G4Pow::GetInstance()->powA(S,eta1)) + 
+			(coeff * y2Fit * G4Pow::GetInstance()->powA(S,eta2)) ) * millibarn;
 	      
 	      if (sigma < 0.)
 		{

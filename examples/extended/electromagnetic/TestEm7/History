@@ -1,4 +1,4 @@
-$Id: History 84270 2014-10-13 07:11:34Z gcosmo $
+$Id: History 93675 2015-10-28 09:59:23Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,10 +14,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+    
+27-10-15 D.Sawkey (testem7-V10-01-01)
+- Add more standard EM physics lists, update README
+
+28-06-15 M.Maire (testem7-V10-01-00)
+- G4ScreenedNuclearRecoil.hh : replace <CLHEP/Units/SystemOfUnits.h> 
 
 11-10-14 M.Asai (testem7-V10-00-02)
-- Replace obsolete G4particleTable::getIon() with 
-G4IonTable::GetIon().
+- Replace obsolete G4particleTable::getIon() with G4IonTable::GetIon().
 
 11-06-14 V.Ivant (testem7-V10-00-01)
 - removed SetCuts method and corresponding UI commands,

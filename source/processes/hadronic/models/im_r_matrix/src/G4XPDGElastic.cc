@@ -35,6 +35,8 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
+#include "G4Log.hh"
+#include "G4Pow.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4XPDGElastic.hh"
 #include "G4KineticTrack.hh"
@@ -222,8 +224,8 @@ G4double G4XPDGElastic::CrossSection(const G4KineticTrack& trk1, const G4Kinetic
 		  pLab /= GeV;
 		  if (pLab > 0.) 
 		    {
-		      G4double logP = std::log(pLab);
-		      sigma = aFit + bFit * std::pow(pLab, nFit) + cFit * logP*logP + dFit * logP;
+		      G4double logP = G4Log(pLab);
+		      sigma = aFit + bFit * G4Pow::GetInstance()->powA(pLab, nFit) + cFit * logP*logP + dFit * logP;
 		      sigma = sigma * millibarn;
 		    }
 		}

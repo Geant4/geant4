@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMillerGreenExcitationModel.cc 70171 2013-05-24 13:34:18Z gcosmo $
+// $Id: G4DNAMillerGreenExcitationModel.cc 92859 2015-09-18 07:58:30Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -64,6 +64,10 @@ G4DNAMillerGreenExcitationModel::G4DNAMillerGreenExcitationModel(const G4Particl
         G4cout << "Miller & Green excitation model is constructed " << G4endl;
     }
     fParticleChangeForGamma = 0;
+
+    // Selection of stationary mode
+
+    statCode = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -334,12 +338,12 @@ G4double G4DNAMillerGreenExcitationModel::CrossSectionPerVolume(const G4Material
         if (verboseLevel > 2)
         {
             G4cout << "__________________________________" << G4endl;
-            G4cout << "°°° G4DNAMillerGreenExcitationModel - XS INFO START" << G4endl;
-            G4cout << "°°° Kinetic energy(eV)=" << k/eV << " particle : " << particleDefinition->GetParticleName() << G4endl;
-            G4cout << "°°° Cross section per water molecule (cm^2)=" << crossSection/cm/cm << G4endl;
-            G4cout << "°°° Cross section per water molecule (cm^-1)=" << crossSection*waterDensity/(1./cm) << G4endl;
+            G4cout << "G4DNAMillerGreenExcitationModel - XS INFO START" << G4endl;
+            G4cout << "Kinetic energy(eV)=" << k/eV << " particle : " << particleDefinition->GetParticleName() << G4endl;
+            G4cout << "Cross section per water molecule (cm^2)=" << crossSection/cm/cm << G4endl;
+            G4cout << "Cross section per water molecule (cm^-1)=" << crossSection*waterDensity/(1./cm) << G4endl;
             //      G4cout << " - Cross section per water molecule (cm^-1)=" << sigma*material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
-            G4cout << "°°° G4DNAMillerGreenExcitationModel - XS INFO END" << G4endl;
+            G4cout << "G4DNAMillerGreenExcitationModel - XS INFO END" << G4endl;
         }
     }
     else
@@ -377,8 +381,12 @@ void G4DNAMillerGreenExcitationModel::SampleSecondaries(std::vector<G4DynamicPar
     const G4double excitation[]={ 8.17*eV, 10.13*eV, 11.31*eV, 12.91*eV, 14.50*eV};
     G4double excitationEnergy = excitation[level];
 
-    G4double newEnergy = particleEnergy0 - excitationEnergy;
+    G4double newEnergy = 0.;
+    
+    if (!statCode) newEnergy = particleEnergy0 - excitationEnergy;
 
+    else newEnergy = particleEnergy0;
+    
     if (newEnergy>0)
     {
         fParticleChangeForGamma->ProposeMomentumDirection(aDynamicParticle->GetMomentumDirection());
@@ -392,6 +400,16 @@ void G4DNAMillerGreenExcitationModel::SampleSecondaries(std::vector<G4DynamicPar
 
     }
 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4DNAMillerGreenExcitationModel::GetPartialCrossSection(const G4Material*,
+                                          G4int level,
+                                          const G4ParticleDefinition* particleDefinition,
+                                          G4double kineticEnergy)
+{
+  return PartialCrossSection(kineticEnergy, level, particleDefinition);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 86167 2014-11-07 14:04:12Z gcosmo $
+# $Id: sources.cmake 94008 2015-11-05 10:06:41Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -82,8 +82,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
 	G4EMDissociationCrossSection.hh
 	G4EMDissociationSpectrum.hh
 	G4GeneralSpaceNNCrossSection.hh
-	G4GGNuclNuclCrossSection.hh
-	G4GlauberGribovCrossSection.hh
 	G4HadronCaptureDataSet.hh
 	G4HadronCrossSections.hh
 	G4HadronElasticDataSet.hh
@@ -111,7 +109,9 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
 	G4VComponentCrossSection.hh
 	G4VCrossSectionDataSet.hh
 	G4VCrossSectionRatio.hh
+        G4ZeroXS.hh
 	G4CrossSectionFactoryRegistry.hh
+	G4FastPathHadronicCrossSection.hh
     SOURCES
 	G4BGGNucleonElasticXS.cc
 	G4BGGNucleonInelasticXS.cc
@@ -151,8 +151,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
 	G4EMDissociationCrossSection.cc
 	G4EMDissociationSpectrum.cc
 	G4GeneralSpaceNNCrossSection.cc
-	G4GGNuclNuclCrossSection.cc
-	G4GlauberGribovCrossSection.cc
 	G4HadronCaptureDataSet.cc
 	G4HadronCrossSections.cc
 	G4HadronElasticDataSet.cc
@@ -179,7 +177,9 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
 	G4VComponentCrossSection.cc
 	G4VCrossSectionDataSet.cc
 	G4VCrossSectionRatio.cc
+        G4ZeroXS.cc
 	G4CrossSectionFactoryRegistry.cc
+	G4FastPathHadronicCrossSection.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

@@ -36,7 +36,10 @@
 //
 //----------------------------------------------------------------------------
 //
-// This class provides construction of default EM standard physics
+// This class provides construction of EM standard physics
+// with combined WentzelVI multiple scattering and CoulombScattering 
+// single scattering for e+-
+// It is an experimental EM physics configuration
 //
 
 #ifndef G4EmStandardPhysicsWVI_h

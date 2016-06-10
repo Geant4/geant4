@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm7/src/G4ScreenedNuclearRecoil.cc
 /// \brief Implementation of the G4ScreenedNuclearRecoil class
 //
-// $Id: G4ScreenedNuclearRecoil.cc 84270 2014-10-13 07:11:34Z gcosmo $
+// $Id: G4ScreenedNuclearRecoil.cc 91266 2015-06-29 06:48:42Z gcosmo $
 //
 //
 // Class Description
@@ -117,8 +117,6 @@ const char* G4ScreenedCoulombCrossSectionInfo::CVSFileVers() { return
 #include "G4StableIsotopes.hh"
 #include "G4LindhardPartition.hh"
 
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 #include <iostream>
@@ -503,7 +501,7 @@ G4VParticleChange* G4ScreenedNuclearRecoil::PostStepDoIt(
                 G4double lattice=0.5/std::pow(numberDensity,1.0/3.0); 
                 // typical lattice half-spacing
                 G4double length=GetCurrentInteractionLength();
-                G4double sigopi=1.0/(CLHEP::pi*numberDensity*length);  
+                G4double sigopi=1.0/(pi*numberDensity*length);  
                 // this is sigma0/pi
                 
                 // compute the impact parameter very early, so if is rejected 
@@ -667,7 +665,7 @@ G4bool G4ScreenedCoulombClassicalKinematics::DoScreeningComputation(
         phifunc.unset_function(); 
         // throws an exception if used without setting again
 
-        G4double thetac1=CLHEP::pi*beta*alpha/xx1; 
+        G4double thetac1=pi*beta*alpha/xx1; 
         // complement of CM scattering angle
         G4double sintheta=std::sin(thetac1); //note sin(pi-theta)=sin(theta)
         G4double costheta=-std::cos(thetac1); // note cos(pi-theta)=-cos(theta)
@@ -763,7 +761,7 @@ void G4SingleScatter::DoCollisionStep(G4ScreenedNuclearRecoil *master,
         G4double incidentEnergy = incidentParticle->GetKineticEnergy();
         G4double eRecoil=kin.eRecoil;
         
-        G4double azimuth=G4UniformRand()*(2.0*CLHEP::pi);
+        G4double azimuth=G4UniformRand()*(2.0*pi);
         G4double sa=std::sin(azimuth);
         G4double ca=std::cos(azimuth);
 

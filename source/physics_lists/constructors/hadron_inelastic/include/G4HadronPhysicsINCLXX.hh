@@ -67,7 +67,7 @@
 #include "G4QGSPNeutronBuilder.hh"
 #include "G4FTFPNeutronBuilder.hh"
 #include "G4INCLXXNeutronBuilder.hh"
-#include "G4NeutronHPBuilder.hh"
+#include "G4NeutronPHPBuilder.hh"
 
 #include "G4HyperonFTFPBuilder.hh"
 #include "G4AntiBarionBuilder.hh"
@@ -82,6 +82,10 @@
  * @see G4INCLXXPionBuilder
  * @see G4IonINCLXXBuilder
  */
+
+class G4ComponentGGHadronNucleusXsc;
+
+
 class G4HadronPhysicsINCLXX : public G4VPhysicsConstructor
 {
   public: 
@@ -103,7 +107,7 @@ class G4HadronPhysicsINCLXX : public G4VPhysicsConstructor
       G4QGSPNeutronBuilder * theQGSPNeutron;
       G4FTFPNeutronBuilder * theFTFPNeutron;
       G4INCLXXNeutronBuilder * theINCLXXNeutron;
-      G4NeutronHPBuilder * theNeutronHP;
+      G4NeutronPHPBuilder * theNeutronHP;
     
       G4PionBuilder * thePion;
       G4QGSPPionBuilder * theQGSPPion;
@@ -125,6 +129,7 @@ class G4HadronPhysicsINCLXX : public G4VPhysicsConstructor
       G4AntiBarionBuilder * theAntiBaryon;
       G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
 
+      G4ComponentGGHadronNucleusXsc * xsKaon;
       G4VCrossSectionDataSet * xsNeutronCaptureXS;
     };
     static G4ThreadLocal ThreadPrivate *tpdata;

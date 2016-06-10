@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyPhiFace.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4PolyPhiFace.cc 92024 2015-08-13 14:16:00Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -114,7 +114,7 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz,
   G4PolyPhiFaceVertex *helper=corners;
 
   iterRZ.Begin();
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     corn->r = iterRZ.GetA();
     corn->z = iterRZ.GetB();
@@ -152,7 +152,7 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz,
   G4PolyPhiFaceVertex *prev = corners+numEdges-1,
                       *here = corners;
   G4PolyPhiFaceEdge   *edge = edges;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     G4ThreeVector sideNorm;
     
@@ -195,7 +195,7 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz,
   //
   G4PolyPhiFaceEdge *prevEdge = edges+numEdges-1;
   edge = edges;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     //
     // Calculate vertex 2D normals (on the phi surface)
@@ -272,7 +272,7 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz,
 void G4PolyPhiFace::Diagnose( G4VSolid *owner )
 {
   G4PolyPhiFaceVertex   *corner = corners;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     G4ThreeVector test(corner->x, corner->y, corner->z);
     test -= 1E-6*corner->norm3D;
@@ -359,7 +359,7 @@ void G4PolyPhiFace::CopyStuff( const G4PolyPhiFace &source )
   corners = new G4PolyPhiFaceVertex[numEdges];
   G4PolyPhiFaceVertex *corn = corners,
                       *sourceCorn = source.corners;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     *corn = *sourceCorn;
   } while( ++sourceCorn, ++corn < corners+numEdges );
@@ -373,7 +373,7 @@ void G4PolyPhiFace::CopyStuff( const G4PolyPhiFace &source )
                       *here = corners;
   G4PolyPhiFaceEdge   *edge = edges,
                       *sourceEdge = source.edges;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     *edge = *sourceEdge;
     edge->v0 = prev;
@@ -608,7 +608,7 @@ G4double G4PolyPhiFace::Extent( const G4ThreeVector axis )
   G4double max = -kInfinity;
   
   G4PolyPhiFaceVertex *corner = corners;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     G4double here = axis.x()*corner->r*radial.x()
             + axis.y()*corner->r*radial.y()
@@ -638,7 +638,7 @@ void G4PolyPhiFace::CalculateExtent( const EAxis axis,
   G4ClippablePolygon polygon;
   
   G4PolyPhiFaceVertex *corner = corners;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     G4ThreeVector point( 0, 0, corner->z );
     point += radial*corner->r;
@@ -708,7 +708,7 @@ G4bool G4PolyPhiFace::InsideEdgesExact( G4double r, G4double z,
   G4double cornZ, prevZ;
   
   prevZ = ExactZOrder( z, qx, qy, qz, v, normSign, prev );
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     //
     // Get z order of this vertex, and compare to previous vertex
@@ -742,7 +742,7 @@ G4bool G4PolyPhiFace::InsideEdgesExact( G4double r, G4double z,
       //
       G4PolyPhiFaceVertex *next = corn;
       G4double nextZ;
-      do
+      do    // Loop checking, 13.08.2015, G.Cosmo
       {
         next++;
         if (next == corners+numEdges) next = corners;
@@ -782,12 +782,6 @@ G4bool G4PolyPhiFace::InsideEdgesExact( G4double r, G4double z,
     }
   } while( prevZ = cornZ, prev=corn, ++corn < corners+numEdges );
   
-//  G4int fanswer = std::abs(answer);
-//  if (fanswer==1 || fanswer>2) {
-//    G4cerr << "G4PolyPhiFace::InsideEdgesExact: answer is "
-//           << answer << G4endl;
-//  }
-
   return answer!=0;
 }
   
@@ -850,7 +844,7 @@ G4bool G4PolyPhiFace::InsideEdges( G4double r, G4double z,
   G4bool   answer = 0;
   
   G4PolyPhiFaceEdge *edge = edges;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     G4PolyPhiFaceVertex *testMe;
     //
@@ -1067,7 +1061,7 @@ G4bool G4PolyPhiFace::Diagonalie( G4PolyPhiFaceVertex *a,
   G4PolyPhiFaceVertex   *corner_next=triangles;
 
   // For each Edge (corner,corner_next) 
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     corner_next=corner->next;
 
@@ -1135,7 +1129,7 @@ void G4PolyPhiFace::EarInit()
   G4PolyPhiFaceVertex   *corner = triangles;
   G4PolyPhiFaceVertex *c_prev,*c_next;
   
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
      // We need to determine three consecutive vertices
      //
@@ -1173,7 +1167,7 @@ void G4PolyPhiFace::Triangulate()
   //
   G4PolyPhiFaceVertex *helper = corners;
   G4PolyPhiFaceVertex *helper2 = corners;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     triang->r = helper->r;
     triang->z = helper->z;
@@ -1208,10 +1202,10 @@ void G4PolyPhiFace::Triangulate()
 
   // Each step of outer loop removes one ear
   //
-  while(n>3)  // Inner loop searches for one ear
-  {
+  while(n>3)      // Loop checking, 13.08.2015, G.Cosmo
+  {               // Inner loop searches for one ear
     v2=triangles; 
-    do
+    do    // Loop checking, 13.08.2015, G.Cosmo
     {
       if(v2->ear)  // Ear found. Fill variables
       {
@@ -1287,7 +1281,7 @@ void G4PolyPhiFace::Triangulate()
   G4double Achose1, Achose2;
   Achose1=0; Achose2=0.; 
   i=0;
-  do 
+  do     // Loop checking, 13.08.2015, G.Cosmo
   {
     Achose2+=areas[i];
     if(chose>=Achose1 && chose<Achose2)

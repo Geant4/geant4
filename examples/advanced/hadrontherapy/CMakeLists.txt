@@ -19,7 +19,7 @@ endif()
 #----------------------------------------------------------------------------
 # Find ROOT variables if the variable G4ANALYSIS_USE_ROOT is set
 #
-find_package(ROOT)
+find_package(ROOT QUIET)
 
 
 #----------------------------------------------------------------------------
@@ -79,17 +79,17 @@ set(EXAMPLEhadrontherapy_SCRIPTS
   macro/Taranis.mac
   macro/inputFC.mac
 
- field/Mappa32shift25Dip.TABLE
-  field/ElectricField-600V.TABLE
+ field/ESSMagneticField.TABLE
 
-#QUADRUPOLO 40mm
- field/MappaQuadNoF.TABLE
- field/MappaQuadNoF90deg.TABLE
+# Faraday Cup
+ field/ElectricFieldFC-600V.TABLE
+
+#QUADRUPOLE 40mm
+ field/Quad40MagneticField.TABLE
 
 
-#QUADRUPOLO 80mm
- field/MappaQuad80NoF.TABLE
- field/MappaQuad80NoF90deg.TABLE
+#QUADRUPOLE 80mm
+ field/Quad80MagneticField.TABLE
 
   )
 

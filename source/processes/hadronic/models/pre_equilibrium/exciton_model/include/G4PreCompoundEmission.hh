@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundEmission.hh 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4PreCompoundEmission.hh 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // Hadronic Process: Nuclear Preequilibrium
 // by V. Lara 
@@ -59,11 +59,9 @@ public:
 
   void SetHETCModel();
 
-  G4ReactionProduct * PerformEmission(G4Fragment & aFragment);
+  G4ReactionProduct* PerformEmission(G4Fragment & aFragment);
 
   inline G4double GetTotalProbability(const G4Fragment & aFragment);
-
-  inline void Initialize(const G4Fragment & aFragment);
 
   inline void SetOPTxs(G4int);
 
@@ -103,12 +101,6 @@ inline G4double
 G4PreCompoundEmission::GetTotalProbability(const G4Fragment& aFragment) 
 {
   return theFragmentsVector->CalculateProbabilities(aFragment);
-}
-
-inline void 
-G4PreCompoundEmission::Initialize(const G4Fragment& aFragment) 
-{
-  theFragmentsVector->Initialize(aFragment);
 }
 
 inline void G4PreCompoundEmission::SetOPTxs(G4int opt)

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChemistryManager.cc 87375 2014-12-02 08:17:28Z gcosmo $
+// $Id: G4DNAChemistryManager.cc 93883 2015-11-03 08:25:04Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
 //
@@ -52,10 +52,12 @@
 #include "G4VUserChemistryList.hh"
 #include "G4AutoLock.hh"
 #include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4GeometryManager.hh"
 #include "G4StateManager.hh"
 #include "G4MoleculeFinder.hh"
+#include "G4MoleculeTable.hh"
 
 using namespace std;
 
@@ -90,9 +92,16 @@ G4DNAChemistryManager::G4DNAChemistryManager() :
   fWriteFile = false;
   fpUserChemistryList = 0;
   fMasterInitialized = false;
-  fpChemDNADirectory = new G4UIdirectory("/process/em/dna/chem/");
-  fpActivateChem = new G4UIcmdWithABool("/process/em/dna/chem/activate", this);
-  fpRunChem = new G4UIcmdWithoutParameter("/process/em/dna/chem/run", this);
+  fpChemDNADirectory = new G4UIdirectory("/chem/");
+  fpActivateChem = new G4UIcmdWithABool("/chem/activate", this);
+  fpRunChem = new G4UIcmdWithoutParameter("/chem/run", this);
+  //fpGridSize = new G4UIcmdWithADoubleAndUnit("/chem/gridRes", this);
+  fpScaleForNewTemperature = new G4UIcmdWithADoubleAndUnit("/chem/temperature",
+                                                           this);
+  fpSkipReactionsFromChemList =
+      new G4UIcmdWithoutParameter("/chem/skipReactionsFromChemList", this);
+  fpInitChem = new G4UIcmdWithoutParameter("/chem/init", this);
+  //fDefaultGridResolution = -1;
   fBuildPhysicsTable = false;
   fGeometryClosed = false;
   fPhysicsTableBuilt = false;
@@ -100,6 +109,8 @@ G4DNAChemistryManager::G4DNAChemistryManager() :
   fFileInitialized = false;
   fVerbose = 0;
   fActiveChemistry = false;
+  fSkipReactions = false;
+  fResetCounterWhenRunEnds = true;
 }
 
 G4DNAChemistryManager*
@@ -163,7 +174,6 @@ void G4DNAChemistryManager::Clear()
 //    }
     fpUserChemistryList = 0;
   }
-
   if (fpChemDNADirectory)
   {
     delete fpChemDNADirectory;
@@ -174,11 +184,20 @@ void G4DNAChemistryManager::Clear()
     delete fpActivateChem;
     fpActivateChem = 0;
   }
-
   if(fpRunChem)
   {
     delete fpRunChem;
     fpRunChem = 0;
+  }
+  if(fpSkipReactionsFromChemList)
+  {
+    delete fpSkipReactionsFromChemList;
+    fpSkipReactionsFromChemList = 0;
+  }
+  if(fpInitChem)
+  {
+    delete fpInitChem;
+    fpInitChem = 0;
   }
 
   G4DNAMolecularReactionTable::DeleteInstance();
@@ -223,6 +242,11 @@ G4bool G4DNAChemistryManager::Notify(G4ApplicationState requestedState)
     fGeometryClosed = true;
   }
 
+  else if (requestedState == G4State_Idle)
+  {
+    G4MoleculeTable::Instance()->PrepareMolecularConfiguration();
+  }
+
   return true;
 }
 
@@ -236,6 +260,34 @@ void G4DNAChemistryManager::SetNewValue(G4UIcommand* command, G4String value)
   {
     Run();
   }
+  /*
+  else if(command == fpGridSize)
+  {
+    fDefaultGridResolution = fpGridSize->ConvertToDimensionedDouble(value);
+  }*/
+  else if (command == fpSkipReactionsFromChemList)
+  {
+    fSkipReactions = true;
+  }
+  else if(command == fpScaleForNewTemperature)
+  {
+    SetGlobalTemperature(fpScaleForNewTemperature->ConvertToDimensionedDouble(value));
+  }
+  else if(command == fpInitChem)
+  {
+    Initialize();
+    InitializeThread();
+  }
+}
+
+G4String G4DNAChemistryManager::GetCurrentValue(G4UIcommand* command)
+{
+  if (command == fpActivateChem)
+  {
+    return G4UIcmdWithABool::ConvertToString(fActiveChemistry);
+  }
+
+  return "";
 }
 
 void G4DNAChemistryManager::Run()
@@ -259,8 +311,13 @@ void G4DNAChemistryManager::Run()
       G4Exception("G4DNAChemistryManager::Run", "THREAD_INIT", FatalException,
                   description);
     }
-
+    
+    G4MoleculeTable::Instance()->Finalize();
     G4Scheduler::Instance()->Process();
+    if(fResetCounterWhenRunEnds)
+    {
+      G4MoleculeCounter::Instance()->ResetCounter();
+    }
     CloseFile();
   }
 }
@@ -323,8 +380,15 @@ void G4DNAChemistryManager::InitializeMaster()
     if (fpUserChemistryList)
     {
       fpUserChemistryList->ConstructDissociationChannels();
-      fpUserChemistryList->ConstructReactionTable(
-          G4DNAMolecularReactionTable::GetReactionTable());
+      if(fSkipReactions == false)
+      {
+        fpUserChemistryList->ConstructReactionTable(
+            G4DNAMolecularReactionTable::GetReactionTable());
+      }
+      else
+      {
+        G4DNAMolecularReactionTable::GetReactionTable(); // init pointer
+      }
       fMasterInitialized = true;
     }
     else
@@ -684,3 +748,10 @@ void G4DNAChemistryManager::PushMoleculeAtParentTimeAndPlace(G4Molecule*& molecu
     molecule = 0;
   }
 }
+
+void G4DNAChemistryManager::SetGlobalTemperature(double temp_K)
+{
+  G4MolecularConfiguration::SetGlobalTemperature(temp_K);
+  G4DNAMolecularReactionTable::Instance()->ScaleReactionRateForNewTemperature(temp_K);
+}
+

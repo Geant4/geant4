@@ -41,8 +41,17 @@
 #include "G4HadronicException.hh"
 
 #include "G4Neutron.hh"
+#include "G4Gamma.hh"
+#include "G4Proton.hh"
+#include "G4Deuteron.hh"
+#include "G4Triton.hh"
+#include "G4He3.hh"
+#include "G4Alpha.hh"
+
+#include <fstream>
 
 G4ThreadLocal G4LENDManager* G4LENDManager::lend_manager = NULL;
+
 
 G4LENDManager::G4LENDManager()
 :verboseLevel( 0 )
@@ -51,11 +60,30 @@ G4LENDManager::G4LENDManager()
    //printBanner();
 
    G4String xmcf;
+   G4String xmcf_gamma;
+   G4String xmcf_p;
+   G4String xmcf_d;
+   G4String xmcf_t;
+   G4String xmcf_he3;
+   G4String xmcf_a;
    if( getenv("G4LENDDATA") == NULL ) {
       throw G4HadronicException(__FILE__, __LINE__, " Please setenv G4LENDDATA to point to the LEND files." );
    } else {
       xmcf = getenv("G4LENDDATA");
-      xmcf += "/xmcf.n_1.map";
+      //xmcf += "/xmcf.n_1.map";
+      xmcf += "/neutrons.map";
+      xmcf_gamma = getenv("G4LENDDATA");
+      xmcf_gamma += "/gammas.map";
+      xmcf_p = getenv("G4LENDDATA");
+      xmcf_p += "/protons.map";
+      xmcf_d = getenv("G4LENDDATA");
+      xmcf_d += "/deuterons.map";
+      xmcf_t = getenv("G4LENDDATA");
+      xmcf_t += "/tritons.map";
+      xmcf_he3 = getenv("G4LENDDATA");
+      xmcf_he3 += "/He3s.map";
+      xmcf_a = getenv("G4LENDDATA");
+      xmcf_a += "/alphas.map";
    }
 
 //Example of xmcf.n_1.map
@@ -63,15 +91,56 @@ G4LENDManager::G4LENDManager()
 //<target schema="MonteCarlo" evaluation="ENDF.B-VII.0" projectile="n_1" target="H_1" path="000_n_1/xMC.000_n_1.001_H_1/xMC.000_n_1.001_H_1.xml"/>
 //</map>
 //
-// for neutron
+// for neutron                                                                                             "1" for neutron; see G4GIDI::init
    proj_lend_map.insert ( std::pair < G4ParticleDefinition* , G4GIDI* > ( G4Neutron::Neutron() , new G4GIDI( 1 , xmcf ) ) );
+// for gamma                                                                                            "0" for gamma; see G4GIDI::init
+   proj_lend_map.insert ( std::pair < G4ParticleDefinition* , G4GIDI* > ( G4Gamma::Gamma() , new G4GIDI( 0 , xmcf_gamma ) ) );
 //
-// for other particle 
+   std::ifstream aFile;
+   aFile.open( xmcf_p.c_str() );
+   if ( aFile.good() ) {
+      aFile.close(); 
+      proj_lend_map.insert ( std::pair < G4ParticleDefinition* , G4GIDI* > ( G4Proton::Proton() , new G4GIDI( 2 , xmcf_p ) ) );
+   } else  {
+      aFile.close(); 
+   }
+   aFile.open( xmcf_d.c_str() );
+   if ( aFile.good() ) {
+      aFile.close(); 
+      proj_lend_map.insert ( std::pair < G4ParticleDefinition* , G4GIDI* > ( G4Deuteron::Deuteron() , new G4GIDI( 3 , xmcf_d ) ) );
+   } else  {
+      aFile.close(); 
+   }
+   aFile.open( xmcf_t.c_str() );
+   if ( aFile.good() ) {
+      aFile.close(); 
+      proj_lend_map.insert ( std::pair < G4ParticleDefinition* , G4GIDI* > ( G4Triton::Triton() , new G4GIDI( 4 , xmcf_t ) ) );
+   } else  {
+      aFile.close(); 
+   }
+   aFile.open( xmcf_he3.c_str() );
+   if ( aFile.good() ) {
+      aFile.close(); 
+      proj_lend_map.insert ( std::pair < G4ParticleDefinition* , G4GIDI* > ( G4He3::He3() , new G4GIDI( 5 , xmcf_he3 ) ) );
+   } else  {
+      aFile.close(); 
+   }
+   aFile.open( xmcf_a.c_str() );
+   if ( aFile.good() ) {
+      aFile.close(); 
+      proj_lend_map.insert ( std::pair < G4ParticleDefinition* , G4GIDI* > ( G4Alpha::Alpha() , new G4GIDI( 6 , xmcf_a ) ) );
+   } else  {
+      aFile.close(); 
+   }
+
+
+
 // proj_lend_map.insert ( std::pair < G4ParticleDefinition* , G4GIDI* > ( xxx , new G4GIDI( xxx , xmcf ) ) );
 
    v_lend_target.clear();
 
-   ionTable = G4IonTable::GetIonTable();
+   //ionTable = new G4IonTable();
+   ionTable = G4ParticleTable::GetParticleTable()->GetIonTable();
    nistElementBuilder = new G4NistElementBuilder( 0 );
 
 }

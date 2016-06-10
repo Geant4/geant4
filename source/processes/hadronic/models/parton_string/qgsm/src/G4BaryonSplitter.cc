@@ -75,6 +75,7 @@ G4bool G4BaryonSplitter::
 SplitBarion(G4int PDGCode, G4int* q_or_qqbar, G4int* qbar_or_qq)
 {
 	const G4SPBaryon * aBaryon = theBaryons.GetBaryon(G4ParticleTable::GetParticleTable()->FindParticle(PDGCode));
+
 	if(aBaryon==NULL)
 	{
 		return FALSE;

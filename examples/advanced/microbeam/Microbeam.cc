@@ -39,8 +39,7 @@
 #endif
 
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
+#include "G4UIExecutive.hh"
 
 #ifdef G4VIS_USE
   #include "G4VisExecutive.hh"
@@ -51,6 +50,13 @@
 #include "PhysicsList.hh"
 
 int main(int argc,char** argv) {
+
+  // Detect interactive mode (if no arguments) and define UI session
+  //
+  G4UIExecutive* ui = 0;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
 
   // Choose the Random engine
   
@@ -87,25 +93,23 @@ int main(int argc,char** argv) {
 
   // Get the pointer to the User Interface manager 
   
-  G4UImanager* UImanager = G4UImanager::GetUIpointer(); 
+  // Get the pointer to the User Interface manager 
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
   
-  if (argc==1)   // Define UI session for interactive mode.
-  { 
-#ifdef _WIN32
-    G4UIsession * session = new G4UIterminal();
-#else
-    G4UIsession * session = new G4UIterminal(new G4UItcsh);
-#endif
-    UImanager->ApplyCommand("/control/execute microbeam.mac");    
-    session->SessionStart();
-    delete session;
-  }
-  else           // Batch mode
-  { 
+  // Process macro or start UI session
+  //
+  if ( ! ui ) { 
+    // batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command+fileName);
   }
+  else { 
+    // interactive mode
+    UImanager->ApplyCommand("/control/execute vis.mac");
+    ui->SessionStart();
+    delete ui;
+  }  
 
 #ifdef G4VIS_USE
   delete visManager;

@@ -43,9 +43,12 @@
 
 using namespace G4Analysis;
 
+const G4int ExG4HbookP1Manager::fgkDefaultP1HbookIdOffset = 201;
+
 //_____________________________________________________________________________
 ExG4HbookP1Manager::ExG4HbookP1Manager(const G4AnalysisManagerState& state)
- : G4VP1Manager(state),
+ : G4VP1Manager(),
+   G4THnManager<tools::hbook::p1>(state, "P1"),
    fBaseToolsManager("P1"),
    fFileManager(0),
    fP1HbookIdOffset(-1),
@@ -59,7 +62,7 @@ ExG4HbookP1Manager::ExG4HbookP1Manager(const G4AnalysisManagerState& state)
 ExG4HbookP1Manager::~ExG4HbookP1Manager()
 {  
   // Delete p1
-  Reset();
+  // Reset();
 
   // Delete p1 booking 
   std::vector<p1_booking*>::iterator it;
@@ -90,26 +93,8 @@ void UpdateP1Information(G4HnInformation* hnInformation,
                           const G4String& yfcnName,
                           G4BinScheme xbinScheme)
 {
-  G4double xunit = GetUnitValue(xunitName);
-  G4double yunit = GetUnitValue(yunitName);
-  G4Fcn xfcn = GetFunction(xfcnName);
-  G4Fcn yfcn = GetFunction(yfcnName);
-  
-  G4HnDimensionInformation* xInformation 
-    = hnInformation->GetHnDimensionInformation(G4HnInformation::kX);
-  xInformation->fUnitName = xunitName;
-  xInformation->fFcnName = xfcnName;
-  xInformation->fUnit = xunit;
-  xInformation->fFcn = xfcn;
-  xInformation->fBinScheme = xbinScheme;
-
-  G4HnDimensionInformation* yInformation 
-    = hnInformation->GetHnDimensionInformation(G4HnInformation::kY);
-  yInformation->fUnitName = yunitName;
-  yInformation->fFcnName = yfcnName;
-  yInformation->fUnit = yunit;
-  yInformation->fFcn = yfcn;
-  yInformation->fBinScheme = kLinearBinScheme;
+  hnInformation->SetDimension(kX, xunitName, xfcnName, xbinScheme);
+  hnInformation->SetDimension(kY, yunitName, yfcnName, G4BinScheme::kLinear);
 }  
 
 //_____________________________________________________________________________
@@ -128,8 +113,8 @@ p1_booking* CreateP1Booking(const G4String& title,
   G4Fcn yfcn = GetFunction(yfcnName);
 
   p1_booking* p1Booking = 0; 
-  if ( xbinScheme != kLogBinScheme ) {
-    if ( xbinScheme == kUserBinScheme ) {
+  if ( xbinScheme != G4BinScheme::kLog ) {
+    if ( xbinScheme == G4BinScheme::kUser ) {
       // This should never happen, but let's make sure about it
       // by issuing a warning
       G4ExceptionDescription description;
@@ -192,16 +177,15 @@ void UpdateP1Booking(p1_booking* p1Booking,
                      const G4String& yunitName,
                      const G4String& xfcnName,
                      const G4String& yfcnName,
-                     const G4String& xbinSchemeName)
+                     G4BinScheme xbinScheme)
 {
   G4double xunit = GetUnitValue(xunitName);
   G4double yunit = GetUnitValue(yunitName);
   G4Fcn xfcn = GetFunction(xfcnName);
   G4Fcn yfcn = GetFunction(yfcnName);
-  G4BinScheme xbinScheme = GetBinScheme(xbinSchemeName);
 
-  if ( xbinScheme != kLogBinScheme ) {
-    if ( xbinScheme == kUserBinScheme ) {
+  if ( xbinScheme != G4BinScheme::kLog ) {
+    if ( xbinScheme == G4BinScheme::kUser ) {
       // This should never happen, but let's make sure about it
       // by issuing a warning
       G4ExceptionDescription description;
@@ -264,8 +248,8 @@ void ConfigureHbookP1(tools::hbook::p1* p1,
   G4Fcn xfcn = GetFunction(xfcnName);
   G4Fcn yfcn = GetFunction(yfcnName);
 
-  if ( xbinScheme != kLogBinScheme ) {
-    if ( xbinScheme == kUserBinScheme ) {
+  if ( xbinScheme != G4BinScheme::kLog ) {
+    if ( xbinScheme == G4BinScheme::kUser ) {
       // This should never happen, but let's make sure about it
       // by issuing a warning
       G4ExceptionDescription description;
@@ -329,17 +313,15 @@ void ExG4HbookP1Manager::SetP1HbookIdOffset()
 // Set  fP1HbookIdOffset if needed
 
   if ( fP1HbookIdOffset == -1 ) {
-    if ( fFirstId > 0 ) 
-      fP1HbookIdOffset = 0;
+    if ( fHnManager->GetFirstId() > 0 ) 
+      fP1HbookIdOffset = fgkDefaultP1HbookIdOffset - 1;
     else
-      fP1HbookIdOffset = 1;
+      fP1HbookIdOffset = fgkDefaultP1HbookIdOffset;
         
-    if ( fP1HbookIdOffset > 0 ) {
-      G4ExceptionDescription description;
-      description << "P1 will be defined in HBOOK with ID = G4_firstProfileId + 1";
-      G4Exception("ExG4HbookP1Manager::SetP1HbookIdOffset()",
-                  "Analysis_W013", JustWarning, description);
-    }              
+    //G4ExceptionDescription description;
+    //  description << "P1 will be defined in HBOOK with ID = G4_firstProfileId + 201";
+    //  G4Exception("ExG4HbookP1Manager::SetP1HbookIdOffset",
+    //              "Analysis_W013", JustWarning, description);
   }
 }  
 
@@ -351,14 +333,9 @@ void ExG4HbookP1Manager::AddP1Information(const G4String& name,
                             const G4String& yfcnName,
                             G4BinScheme xbinScheme) const
 {
-  G4double xunit = GetUnitValue(xunitName);
-  G4double yunit = GetUnitValue(yunitName);
-  G4Fcn xfcn = GetFunction(xfcnName);
-  G4Fcn yfcn = GetFunction(yfcnName);
-  fHnManager
-    ->AddH2Information(name, xunitName, yunitName, xfcnName, yfcnName, 
-                       xunit, yunit, xfcn, yfcn, 
-                       xbinScheme, xbinScheme);
+  auto hnInformation = fHnManager->AddHnInformation(name, 2);
+  hnInformation->AddDimension(xunitName, xfcnName, xbinScheme);
+  hnInformation->AddDimension(yunitName, yfcnName, G4BinScheme::kLinear);
 }  
 
 //_____________________________________________________________________________
@@ -368,20 +345,20 @@ G4int ExG4HbookP1Manager::CreateP1FromBooking(p1_booking* p1Booking,
 // Create p1 from p1_booking.
 
   if ( chDir ) {
-    // Go to profiles directory if defined
-    if ( fFileManager->GetProfileDirectoryName() != "" ) {
-      G4String profilePath = "//PAWC/LUN1/";
-      profilePath.append(fFileManager->GetProfileDirectoryName().data());
-      tools::hbook::CHCDIR(profilePath.data()," ");
+    // Go to histograms directory if defined
+    if ( fFileManager->GetHistoDirectoryName() != "" ) {
+      G4String histoPath = "//PAWC/LUN1/";
+      histoPath.append(fFileManager->GetHistoDirectoryName().data());
+      tools::hbook::CHCDIR(histoPath.data()," ");
     }
   }    
 
   G4int index = fP1Vector.size();
-  G4int id = index + fFirstId;    
+  G4int id = index + fHnManager->GetFirstId();    
   G4HnInformation* 
     info = fHnManager->GetHnInformation(id, "CreateP1FromBooking");
   // Hbook index
-  G4int hbookIndex = fP1HbookIdOffset + index + fFirstId;
+  G4int hbookIndex = fP1HbookIdOffset + index + fHnManager->GetFirstId();
   
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) 
@@ -407,9 +384,13 @@ G4int ExG4HbookP1Manager::CreateP1FromBooking(p1_booking* p1Booking,
   }
                            
   fP1Vector.push_back(p1);
+
+  // Update axis titles
+  fBaseToolsManager.SetAxisTitle(*p1, ExG4HbookBaseHnManager::kX, p1Booking->fXAxisTitle);
+  fBaseToolsManager.SetAxisTitle(*p1, ExG4HbookBaseHnManager::kY, p1Booking->fYAxisTitle);
   
   if ( chDir ) {
-    if ( fFileManager->GetProfileDirectoryName() != "" ) {
+    if ( fFileManager->GetHistoDirectoryName() != "" ) {
       // Return to //PAWC/LUN1 :
       tools::hbook::CHCDIR("//PAWC/LUN1"," ");
     }  
@@ -433,12 +414,9 @@ G4int ExG4HbookP1Manager::RegisterP1Booking(const G4String& name,
   // Register p1
   G4int index = fP1BookingVector.size();  
   fP1BookingVector.push_back(p1Booking);
-  fP1NameIdMap[name] = index + fFirstId;
+  fP1NameIdMap[name] = index + fHnManager->GetFirstId();
 
-  // Lock id
-  fLockFirstId = true;
-
-  return index + fFirstId;
+  return index + fHnManager->GetFirstId();
 }  
 
 //_____________________________________________________________________________
@@ -486,30 +464,6 @@ G4int ExG4HbookP1Manager::FinishCreateP1(
 }                                         
 
 //_____________________________________________________________________________
-G4bool ExG4HbookP1Manager::BeginSetP1(
-                               G4int id,
-                               p1_booking* p1Booking,
-                               G4HnInformation* info)
-{                                
-  p1Booking = GetP1Booking(id, false);
-  if ( ! p1Booking ) {
-    G4ExceptionDescription description;
-    description << "      " << "profile " << id << " does not exist.";
-    G4Exception("G4HbookAnalysisManager::SetP1()",
-                "Analysis_W011", JustWarning, description);
-    return false;
-  }
-
-  info = fHnManager->GetHnInformation(id,"SetP1");
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("configure", "P1", info->GetName());
-#endif
-
-  return true;
-}
-  
-//_____________________________________________________________________________
 G4bool ExG4HbookP1Manager::FinishSetP1(
                                G4int id,
                                G4HnInformation* info,
@@ -538,11 +492,11 @@ void ExG4HbookP1Manager::CreateP1sFromBooking()
   // or no p1 profiles are booked
   if ( fP1Vector.size() || ( fP1BookingVector.size() == 0 ) ) return;       
 
-  // Go to profiles directory if defined
-  if ( fFileManager->GetProfileDirectoryName() != "" ) {
-    G4String profilePath = "//PAWC/LUN1/";
-    profilePath.append(fFileManager->GetProfileDirectoryName().data());
-    tools::hbook::CHCDIR(profilePath.data()," ");
+  // Go to histograms directory if defined
+  if ( fFileManager->GetHistoDirectoryName() != "" ) {
+    G4String histoPath = "//PAWC/LUN1/";
+    histoPath.append(fFileManager->GetHistoDirectoryName().data());
+    tools::hbook::CHCDIR(histoPath.data()," ");
   }  
 
   // Create profiles
@@ -551,8 +505,8 @@ void ExG4HbookP1Manager::CreateP1sFromBooking()
     CreateP1FromBooking(*it, false);
   }  
   
-  // Return backi from profiles directory if defined
-  if ( fFileManager->GetProfileDirectoryName() != "" ) {
+  // Return back from histograms directory if defined
+  if ( fFileManager->GetHistoDirectoryName() != "" ) {
     // Return to //PAWC/LUN1 :
     tools::hbook::CHCDIR("//PAWC/LUN1"," ");
   }  
@@ -563,11 +517,11 @@ void ExG4HbookP1Manager::Reset()
 {
 // Reset profiles and ntuple  
 
-  // Delete profiles
-  std::vector<tools::hbook::p1*>::iterator it;
-  for (it = fP1Vector.begin(); it != fP1Vector.end(); it++ ) {
-    delete *it;
-  }  
+  // Delete histograms (not needed as done by Hbook when closing file)
+  //std::vector<tools::hbook::p1*>::iterator it;
+  //for (it = fP1Vector.begin(); it != fP1Vector.end(); it++ ) {
+  //  delete *it;
+  //}  
 
   // Clear vectors
   fP1Vector.clear();
@@ -576,12 +530,12 @@ void ExG4HbookP1Manager::Reset()
 //_____________________________________________________________________________
 p1_booking*  ExG4HbookP1Manager::GetP1Booking(G4int id, G4bool warn) const 
 {
-  G4int index = id - fFirstId;
+  G4int index = id - fHnManager->GetFirstId();
   if ( index < 0 || index >= G4int(fP1BookingVector.size()) ) {
     if ( warn) {
       G4ExceptionDescription description;
       description << "      " << "profile " << id << " does not exist.";
-      G4Exception("G4HbookAnalysisManager::GetP1Booking()",
+      G4Exception("G4HbookP1Manager::GetP1Booking()",
                   "Analysis_W011", JustWarning, description);
     }
     return 0;         
@@ -604,7 +558,7 @@ G4bool ExG4HbookP1Manager::WriteOnAscii(std::ofstream& output)
 
   // p1 profiles
   for ( G4int i=0; i<G4int(fP1Vector.size()); ++i ) {
-    G4int id = i + fFirstId;
+    G4int id = i + fHnManager->GetFirstId();
     G4HnInformation* info 
       = fHnManager->GetHnInformation(id, "WriteOnAscii"); 
     // skip writing if activation is enabled and P1 is inactivated
@@ -634,7 +588,7 @@ tools::hbook::p1*  ExG4HbookP1Manager::GetP1InFunction(G4int id,
                                       G4String functionName, G4bool warn,
                                       G4bool onlyIfActive) const
 {
-  G4int index = id - fFirstId;
+  G4int index = id - fHnManager->GetFirstId();
   if ( index < 0 || index >= G4int(fP1Vector.size()) ) {
     if ( warn) {
       G4String inFunction = "ExG4HbookP1Manager::";
@@ -700,7 +654,7 @@ G4int ExG4HbookP1Manager::CreateP1(
                       xunitName, yunitName, xfcnName, yfcnName);
     
   return FinishCreateP1(name, p1Booking,
-                        xunitName, yunitName, xfcnName, yfcnName, kUserBinScheme); 
+                        xunitName, yunitName, xfcnName, yfcnName, G4BinScheme::kUser); 
 }                                         
 
 
@@ -712,10 +666,20 @@ G4bool ExG4HbookP1Manager::SetP1(G4int id,
                                const G4String& xfcnName, const G4String& yfcnName,
                                const G4String& xbinSchemeName)
 {                                
-  p1_booking* p1Booking = 0;
-  G4HnInformation* info = 0;
+  p1_booking*p1Booking = GetP1Booking(id, false);
+  if ( ! p1Booking ) {
+    G4ExceptionDescription description;
+    description << "      " << "profile " << id << " does not exist.";
+    G4Exception("G4HbookP1Manager::SetP1()",
+                "Analysis_W011", JustWarning, description);
+    return false;
+  }
 
-  if ( ! BeginSetP1(id, p1Booking, info) ) return false; 
+  G4HnInformation* info = fHnManager->GetHnInformation(id,"SetP1");
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL4() ) 
+    fState.GetVerboseL4()->Message("configure", "P1", info->GetName());
+#endif
 
   G4BinScheme xbinScheme = GetBinScheme(xbinSchemeName);
 
@@ -741,10 +705,20 @@ G4bool ExG4HbookP1Manager::SetP1(G4int id,
                                const G4String& xunitName, const G4String& yunitName,
                                const G4String& xfcnName, const G4String& yfcnName)
 {                                
-  p1_booking* p1Booking = 0;
-  G4HnInformation* info = 0;
+  p1_booking*p1Booking = GetP1Booking(id, false);
+  if ( ! p1Booking ) {
+    G4ExceptionDescription description;
+    description << "      " << "profile " << id << " does not exist.";
+    G4Exception("G4HbookP1Manager::SetP1()",
+                "Analysis_W011", JustWarning, description);
+    return false;
+  }
 
-  if ( ! BeginSetP1(id, p1Booking, info) ) return false; 
+  G4HnInformation* info = fHnManager->GetHnInformation(id,"SetP1");
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL4() ) 
+    fState.GetVerboseL4()->Message("configure", "P1", info->GetName());
+#endif
 
   // Update P1 booking
   UpdateP1Booking(p1Booking, edges, ymin, ymax, 
@@ -759,7 +733,7 @@ G4bool ExG4HbookP1Manager::SetP1(G4int id,
   
   return 
     FinishSetP1(id, info, 
-                xunitName, yunitName, xfcnName, yfcnName, kUserBinScheme);
+                xunitName, yunitName, xfcnName, yfcnName, G4BinScheme::kUser);
 }
   
 //_____________________________________________________________________________
@@ -784,9 +758,9 @@ G4bool ExG4HbookP1Manager::FillP1(G4int id, G4double xvalue, G4double yvalue,
   }  
 
   G4HnDimensionInformation* xInfo 
-    = fHnManager->GetHnDimensionInformation(id, G4HnInformation::kX, "FillP1");
+    = fHnManager->GetHnDimensionInformation(id, kX, "FillP1");
   G4HnDimensionInformation* yInfo 
-    = fHnManager->GetHnDimensionInformation(id, G4HnInformation::kY, "FillP1");
+    = fHnManager->GetHnDimensionInformation(id, kY, "FillP1");
 
   p1->fill(xInfo->fFcn(xvalue/xInfo->fUnit), 
            yInfo->fFcn(yvalue/yInfo->fUnit), weight);
@@ -916,7 +890,7 @@ G4bool ExG4HbookP1Manager::SetP1Title(G4int id, const G4String& title)
   if ( ! p1Booking ) {
     G4ExceptionDescription description;
     description << "      " << "profile " << id << " does not exist.";
-    G4Exception("G4HbookAnalysisManager::SetP1Title()",
+    G4Exception("G4HbookP1Manager::SetP1Title()",
                 "Analysis_W011", JustWarning, description);
     return false;
   }
@@ -928,21 +902,45 @@ G4bool ExG4HbookP1Manager::SetP1Title(G4int id, const G4String& title)
 //_____________________________________________________________________________
 G4bool ExG4HbookP1Manager::SetP1XAxisTitle(G4int id, const G4String& title)
 {
-  tools::hbook::p1* p1 = GetP1InFunction(id, "SetP1XAxisTitle");
-  if ( ! p1 ) return false;
+  p1_booking* p1Booking = GetP1Booking(id, false);
+  if ( ! p1Booking ) {
+    G4ExceptionDescription description;
+    description << "      " << "histogram " << id << " does not exist.";
+    G4Exception("G4HbookP1Manager::SetP1XAxisTitle()",
+                "Analysis_W011", JustWarning, description);
+    return false;
+  }
   
-  p1->add_annotation(tools::hbook::key_axis_x_title(), title);
-  return true;
+  // set value to booking
+  p1Booking->fXAxisTitle = title;
+
+  // update value in the histogram if it exists
+  tools::hbook::p1* p1 = GetP1InFunction(id, "SetP1XAxisTitle", false, false);
+  if ( ! p1 )  return true;
+  
+  return fBaseToolsManager.SetAxisTitle(*p1, ExG4HbookBaseHnManager::kX, title);
 }  
 
 //_____________________________________________________________________________
 G4bool ExG4HbookP1Manager::SetP1YAxisTitle(G4int id, const G4String& title)
 {
-  tools::hbook::p1* p1 = GetP1InFunction(id, "SetP1YAxisTitle");
-  if ( ! p1 ) return false;
+  p1_booking* p1Booking = GetP1Booking(id, false);
+  if ( ! p1Booking ) {
+    G4ExceptionDescription description;
+    description << "      " << "histogram " << id << " does not exist.";
+    G4Exception("G4Hbookp1Manager::SetP1YAxisTitle()",
+                "Analysis_W011", JustWarning, description);
+    return false;
+  }
   
-  p1->add_annotation(tools::hbook::key_axis_y_title(), title);
-  return true;
+  // set value to booking
+  p1Booking->fYAxisTitle = title;
+
+  // update value in the histogram if it exists
+  tools::hbook::p1* p1 = GetP1InFunction(id, "SetP1YAxisTitle", false, false);
+  if ( ! p1 )  return true;
+  
+  return fBaseToolsManager.SetAxisTitle(*p1, ExG4HbookBaseHnManager::kY, title);
 }  
 
 //_____________________________________________________________________________
@@ -952,7 +950,7 @@ G4String ExG4HbookP1Manager::GetP1Title(G4int id) const
   if ( ! p1Booking ) {
     G4ExceptionDescription description;
     description << "      " << "profile " << id << " does not exist.";
-    G4Exception("G4HbookAnalysisManager::GetP1Title()",
+    G4Exception("G4HbookP1Manager::GetP1Title()",
                 "Analysis_W011", JustWarning, description);
     return "";
   }
@@ -964,39 +962,31 @@ G4String ExG4HbookP1Manager::GetP1Title(G4int id) const
 //_____________________________________________________________________________
 G4String ExG4HbookP1Manager::GetP1XAxisTitle(G4int id) const 
 {
-  tools::hbook::p1* p1 = GetP1InFunction(id, "GetP1XAxisTitle");
-  if ( ! p1 ) return "";
-  
-  G4String title;
-  G4bool result = p1->annotation(tools::hbook::key_axis_x_title(), title);
-  if ( ! result ) {
+  p1_booking* p1Booking = GetP1Booking(id, false);
+  if ( ! p1Booking ) {
     G4ExceptionDescription description;
-    description << "    Failed to get x_axis title for p1 id = " << id << ").";
-    G4Exception("ExG4HbookP1Manager::GetP1XAxisTitle",
-                "Analysis_W014", JustWarning, description);
+    description << "      " << "histogram " << id << " does not exist.";
+    G4Exception("G4HbookP1Manager::GetP1XAxisTitle()",
+                "Analysis_W011", JustWarning, description);
     return "";
   }
   
-  return title;              
+  return p1Booking->fXAxisTitle;
 }  
 
 //_____________________________________________________________________________
 G4String ExG4HbookP1Manager::GetP1YAxisTitle(G4int id) const 
 {
-  tools::hbook::p1* p1 = GetP1InFunction(id, "GetP1YAxisTitle");
-  if ( ! p1 ) return "";
-  
-  G4String title;
-  G4bool result = p1->annotation(tools::hbook::key_axis_y_title(), title);
-  if ( ! result ) {
+  p1_booking* p1Booking = GetP1Booking(id, false);
+  if ( ! p1Booking ) {
     G4ExceptionDescription description;
-    description << "    Failed to get y_axis title for p1 id = " << id << ").";
-    G4Exception("ExG4HbookP1Manager::GetP1YAxisTitle",
-                "Analysis_W014", JustWarning, description);
+    description << "      " << "histogram " << id << " does not exist.";
+    G4Exception("G4HbookP1Manager::GetP1YAxisTitle()",
+                "Analysis_W011", JustWarning, description);
     return "";
   }
   
-  return title;              
+  return p1Booking->fYAxisTitle;
 }  
 
 //_____________________________________________________________________________
@@ -1006,15 +996,15 @@ G4bool ExG4HbookP1Manager::SetP1HbookIdOffset(G4int offset)
     G4ExceptionDescription description;
     description 
       << "Cannot set P1HbookIdOffset as some P1 profiles already exist.";
-    G4Exception("G4HbookAnalysisManager::SetP1HbookIdOffset()",
+    G4Exception("G4HbookP1Manager::SetP1HbookIdOffset()",
                  "Analysis_W013", JustWarning, description);
     return false;             
   }
   
-  if ( fFirstId + offset < 1 ) {
+  if ( fHnManager->GetFirstId() + offset < 1 ) {
     G4ExceptionDescription description;
     description << "The first profile HBOOK id must be >= 1.";
-    G4Exception("G4HbookAnalysisManager::SetP1HbookIdOffset()",
+    G4Exception("G4HbookP1Manager::SetP1HbookIdOffset()",
                  "Analysis_W013", JustWarning, description);
     return false;             
   }

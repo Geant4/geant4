@@ -1,0 +1,16 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_lpat
+#define tools_sg_lpat
+
+namespace tools {
+namespace sg {
+
+typedef unsigned short lpat;
+
+}}
+
+#endif
+
+

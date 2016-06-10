@@ -48,11 +48,13 @@ inline bool strip(std::string& a_string,what a_type = both,char a_char = ' '){
   return false; //nothing done.
 }
 
+#ifdef TOOLS_DEPRECATED
 inline std::string strp(const std::string& a_string,what a_type = both,char a_char = ' '){
   std::string s(a_string);
   strip(s,a_type,a_char);
   return s;
 }
+#endif //TOOLS_DEPRECATED
 
 inline bool strip(std::vector<std::string>& a_strings,what a_type = both,char a_char = ' ') {
   bool some_done = false;

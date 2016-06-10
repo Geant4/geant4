@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITTrackingInteractivity.hh 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id: G4ITTrackingInteractivity.hh 91584 2015-07-27 13:01:48Z gcosmo $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
@@ -44,7 +44,6 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
-
 #ifndef G4ITTRACKINGINTERACTIVITY_HH
 #define G4ITTRACKINGINTERACTIVITY_HH
 
@@ -54,32 +53,75 @@ class G4Track;
 class G4Step;
 class G4UserTrackingAction;
 class G4UserSteppingAction;
+class G4VITSteppingVerbose;
 
 class G4ITTrackingInteractivity
 {
-protected :
-    int fVerboseLevel;
+protected:
+  int fVerboseLevel;
 
 public:
-    G4ITTrackingInteractivity()
-	{
-    	fVerboseLevel = 0;
-	}
-    virtual ~G4ITTrackingInteractivity(){;}
+  G4ITTrackingInteractivity(G4VITSteppingVerbose* verbose = 0);
 
-    virtual void Initialize(){;}
-    virtual void StartTracking(G4Track*){;}
-    virtual void AppendStep(G4Track* /*track*/, G4Step* /*step*/){;}
-    virtual void EndTracking(G4Track*){;}
-    virtual void Finalize(){;}
+  virtual ~G4ITTrackingInteractivity()
+  {
+    ;
+  }
 
-    virtual void TrackBanner(G4Track* /*track*/, const G4String& message = "");
-    inline void SetVerbose(int);
-};
+  virtual void Initialize()
+  {
+    ;
+  }
 
-inline void G4ITTrackingInteractivity::SetVerbose(int flag)
-{
+  virtual void StartTracking(G4Track* /*track*/)
+  {
+
+  }
+
+  virtual void AppendStep(G4Track* /*track*/,
+                          G4Step* /*step*/)
+  {
+    ;
+  }
+
+  virtual void EndTracking(G4Track* /*track*/)
+  {
+
+  }
+
+  virtual void Finalize()
+  {
+    ;
+  }
+
+  virtual void TrackBanner(G4Track* /*track*/,
+                           const G4String& message = "");
+
+  inline void SetVerbose(int flag)
+  {
     fVerboseLevel = flag;
-}
+  }
+
+  inline G4int GetVerboseLevel() const
+  {
+    return fVerboseLevel;
+  }
+
+  void SetSteppingVerboseLevel(G4int level);
+  G4int GetSteppingVerboseLevel() const;
+
+  inline G4VITSteppingVerbose* GetSteppingVerbose()
+  {
+    return fpVerbose;
+  }
+
+  inline void SetSteppingVerbose(G4VITSteppingVerbose* verbose)
+  {
+    fpVerbose = verbose;
+  }
+
+private:
+  G4VITSteppingVerbose* fpVerbose;
+};
 
 #endif // G4ITTRACKINGINTERACTIVITY_HH

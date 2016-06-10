@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLRead.hh 68053 2013-03-13 14:39:51Z gcosmo $
+// $Id: G4GDMLRead.hh 89493 2015-04-14 09:22:54Z gcosmo $
 //
 // class G4GDMLRead
 //
@@ -48,6 +48,7 @@
 #include "G4Types.hh"
 
 #include "G4GDMLEvaluator.hh"
+#include "G4GDMLAuxStructType.hh"
 
 class G4LogicalVolume;
 class G4VPhysicalVolume;
@@ -108,6 +109,11 @@ class G4GDMLRead
      // inheriting from G4GDMLReadStructure and being registered
      // as argument to G4GDMLParser.
 
+   virtual void UserinfoRead(const xercesc::DOMElement* const);
+     //
+     // Customisable by user to handle "userinfo" extensions to the
+     // GDML schema, identified by the tag "userinfo".
+
    virtual G4LogicalVolume* GetVolume(const G4String&) const=0;
    virtual G4String GetSetup(const G4String&)=0;
      //
@@ -119,6 +125,7 @@ class G4GDMLRead
      // Main method for reading GDML files.
 
    void StripNames() const;
+   void StripName(G4String&) const;
      //
      // Strip off pointers from entity IDs.
 
@@ -126,6 +133,9 @@ class G4GDMLRead
      //
      // Activate/de-activate surface check for overlaps (default is off)
 
+   const G4GDMLAuxListType* GetAuxList() const;
+
+  
  protected:
 
    G4GDMLRead();
@@ -134,20 +144,23 @@ class G4GDMLRead
    G4String Transcode(const XMLCh* const);
    G4String GenerateName(const G4String& name, G4bool strip=false);
    G4String Strip(const G4String&) const;
-   void StripName(G4String&) const;
    void GeneratePhysvolName(const G4String&,G4VPhysicalVolume*);
    void LoopRead(const xercesc::DOMElement* const,
                  void(G4GDMLRead::*)(const xercesc::DOMElement* const));
+
+   G4GDMLAuxStructType AuxiliaryRead(const xercesc::DOMElement* const auxElem);
 
  protected:
 
    G4GDMLEvaluator eval;
    G4bool validate;
    G4bool check;
+   G4bool dostrip;
 
  private:
 
    G4int inLoop, loopCount;
+   G4GDMLAuxListType auxGlobalList;
 
 };
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExGflashHit.hh 72372 2013-07-16 14:30:39Z gcosmo $
+// $Id: ExGflashHit.hh 94396 2015-11-13 13:37:16Z gcosmo $
 //
 /// \file parameterisations/gflash/include/ExGflashHit.hh
 /// \brief Definition of the ExGflashHit class
@@ -35,9 +35,9 @@
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
-#include "G4LogicalVolume.hh"
-#include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"
+
+class G4LogicalVolume;
 
 class ExGflashHit : public G4VHit
 {
@@ -50,7 +50,6 @@ class ExGflashHit : public G4VHit
       const ExGflashHit& operator=(const ExGflashHit &right);
       int operator==(const ExGflashHit &right) const;
 
-
       inline void *operator new(size_t);
       inline void operator delete(void *aHit);
       void *operator new(size_t,void*p){return p;}
@@ -58,8 +57,8 @@ class ExGflashHit : public G4VHit
       void operator delete(void *,void*){}
 #endif
 
-      void Draw();
-      void Print();
+      virtual void Draw();
+      virtual void Print();
 
   private:
       G4double fEdep;
@@ -95,7 +94,6 @@ class ExGflashHit : public G4VHit
       { return fRot; };
       inline const G4LogicalVolume * GetLogV()
       { return fLogV; };
-
 };
 
 typedef G4THitsCollection<ExGflashHit> ExGflashHitsCollection;

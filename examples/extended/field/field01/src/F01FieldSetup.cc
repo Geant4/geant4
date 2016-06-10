@@ -27,7 +27,7 @@
 /// \brief Implementation of the F01FieldSetup class
 //
 //
-// $Id: F01FieldSetup.cc 77115 2013-11-21 15:06:37Z gcosmo $
+// $Id: F01FieldSetup.cc 90341 2015-05-26 08:38:36Z gcosmo $
 //
 //   User Field setup class implementation.
 //
@@ -56,6 +56,10 @@
 #include "G4HelixSimpleRunge.hh"
 #include "G4CashKarpRKF45.hh"
 #include "G4RKG3_Stepper.hh"
+#include "G4ConstRK4.hh"
+#include "G4NystromRK4.hh"
+#include "G4HelixMixedStepper.hh"
+#include "G4ExactHelixStepper.hh"
 
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -129,6 +133,9 @@ void F01FieldSetup::CreateStepperAndChordFinder()
 {
   // Update field
 
+  G4cout<< " F01FieldSetup::CreateStepperAndChordFinder() called "
+        << " to reset Stepper."  << G4endl;
+
   SetStepper();
   G4cout<<"The minimal step is equal to "<<fMinStep/mm<<" mm"<<G4endl;
 
@@ -153,45 +160,64 @@ void F01FieldSetup::SetStepper()
   {
     case 0:
       fStepper = new G4ExplicitEuler( fEquation );
-      G4cout<<"G4ExplicitEuler is calledS"<<G4endl;
+      G4cout<<"G4ExplicitEuler is chosen."<<G4endl;
       break;
     case 1:
       fStepper = new G4ImplicitEuler( fEquation );
-      G4cout<<"G4ImplicitEuler is called"<<G4endl;
+      G4cout<<"G4ImplicitEuler is chosen"<<G4endl;
       break;
     case 2:
       fStepper = new G4SimpleRunge( fEquation );
-      G4cout<<"G4SimpleRunge is called"<<G4endl;
+      G4cout<<"G4SimpleRunge is chosen"<<G4endl;
       break;
     case 3:
       fStepper = new G4SimpleHeum( fEquation );
-      G4cout<<"G4SimpleHeum is called"<<G4endl;
+      G4cout<<"G4SimpleHeum is chosen"<<G4endl;
       break;
     case 4:
       fStepper = new G4ClassicalRK4( fEquation );
-      G4cout<<"G4ClassicalRK4 (default) is called"<<G4endl;
+      G4cout<<"G4ClassicalRK4 (default) is chosen"<<G4endl;
       break;
     case 5:
       fStepper = new G4HelixExplicitEuler( fEquation );
-      G4cout<<"G4HelixExplicitEuler is called"<<G4endl;
+      G4cout<<"G4HelixExplicitEuler is chosen"<<G4endl;
       break;
     case 6:
       fStepper = new G4HelixImplicitEuler( fEquation );
-      G4cout<<"G4HelixImplicitEuler is called"<<G4endl;
+      G4cout<<"G4HelixImplicitEuler is chosen"<<G4endl;
       break;
     case 7:
       fStepper = new G4HelixSimpleRunge( fEquation );
-      G4cout<<"G4HelixSimpleRunge is called"<<G4endl;
+      G4cout<<"G4HelixSimpleRunge is chosen"<<G4endl;
       break;
     case 8:
       fStepper = new G4CashKarpRKF45( fEquation );
-      G4cout<<"G4CashKarpRKF45 is called"<<G4endl;
+      G4cout<<"G4CashKarpRKF45 is chosen"<<G4endl;
       break;
     case 9:
       fStepper = new G4RKG3_Stepper( fEquation );
-      G4cout<<"G4RKG3_Stepper is called"<<G4endl;
+      G4cout<<"G4RKG3_Stepper is chosen"<<G4endl;
       break;
-    default: fStepper = 0;
+    case 10: 
+       fStepper = new G4ExactHelixStepper( fEquation );   
+       G4cout<<"G4ExactHelixStepper is chosen"<<G4endl;
+       break;
+    case 11: 
+       fStepper = new G4HelixMixedStepper( fEquation );  
+       G4cout<<"G4HelixMixedStepper is chosen"<<G4endl;
+       break;
+    case 12: 
+       fStepper = new G4ConstRK4( fEquation ); 
+       G4cout<<"G4ConstRK4 Stepper is chosen"<<G4endl;
+       break;
+    case 13:
+      fStepper = new G4NystromRK4( fEquation );
+      G4cout<<" G4NystromRK4 Stepper is chosen"<<G4endl;
+      break;
+    default: // fStepper = 4;
+      fStepper = new G4ClassicalRK4( fEquation );
+      G4cout<<"G4ClassicalRK4 Stepper (default) is chosen"<<G4endl;
+      break;
   }
 }
 

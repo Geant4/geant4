@@ -106,9 +106,7 @@ public:
     return vec;
   }
 
-  bool add(const std::string& a_key,
-           const std::string& a_value = "",
-           bool a_override = true){
+  bool add(const std::string& a_key,const std::string& a_value = "",bool a_override = true){
     if(a_override) {
       tools_vforit(arg,m_args,it) {
         if((*it).first==a_key) {
@@ -118,7 +116,7 @@ public:
       }
     }
     if(a_key.empty()) return false;
-    m_args.push_back(arg(a_key,a_value)); 
+    m_args.push_back(arg(a_key,a_value));
     return true;
   }
 
@@ -127,17 +125,14 @@ public:
       std::vector<std::string> ws;
       words((*it),"=",false,ws);
       if(ws.size()==1) {
-        if(a_strip) {
-          m_args.push_back(arg(strp(ws[0]),"")); 
-        } else {
-          m_args.push_back(arg(ws[0],"")); 
-        }
+        if(a_strip) strip(ws[0],both,' ');
+        m_args.push_back(arg(ws[0],"")); 
       } else if(ws.size()>=2) {
         if(a_strip) {
-          m_args.push_back(arg(strp(ws[0]),strp(ws[1]))); 
-        } else {
-          m_args.push_back(arg(ws[0],ws[1])); 
+          strip(ws[0],both,' ');
+          strip(ws[1],both,' ');
         }
+        m_args.push_back(arg(ws[0],ws[1])); 
       }
     }
   }
@@ -146,10 +141,13 @@ public:
     //a_args must contain an even number of strings.
     unsigned int sz_half = a_args.size()/2;
     if((2*sz_half)!=a_args.size()) return;
-    for(std::vector<std::string>::const_iterator it = a_args.begin();
-        it!=a_args.end();it+=2) {
+    for(std::vector<std::string>::const_iterator it = a_args.begin();it!=a_args.end();it+=2) {
       if(a_strip) {
-        m_args.push_back(arg(strp(*it),strp(*(it+1))));
+        std::string key = *it;
+        strip(key,both,' ');
+        std::string val = *(it+1);
+        strip(val,both,' ');
+        m_args.push_back(arg(key,val));
       } else {
         m_args.push_back(arg(*it,*(it+1)));
       }
@@ -183,7 +181,7 @@ public:
     return true;
   }
   
-  bool prog_name(std::string& a_value){
+  bool prog_name(std::string& a_value) const {
     if(m_args.empty()) {a_value.clear();return false;}
     if(m_args[0].second.size()) {a_value.clear();return false;}
     a_value = m_args[0].first;
@@ -229,22 +227,17 @@ public:
     //   char** argv;
     //   args.argcv(argc,argv);  
     // you can delete with :
-    //   args.delete_argcv(argc,argv);
+    //   args::delete_argcv(argc,argv);
     if(m_args.empty()) {a_argc = 0;a_argv = 0;return true;}
     typedef char* _cstr_t;
-    _cstr_t* av = new _cstr_t[m_args.size()];
+    _cstr_t* av = new _cstr_t[m_args.size()+1];
     if(!av) {a_argc = 0;a_argv = 0;return false;}
     a_argv = av;
-    for(std::vector<arg>::const_iterator it = m_args.begin();
-        it!=m_args.end();++it,av++) {
+    for(std::vector<arg>::const_iterator it = m_args.begin();it!=m_args.end();++it,av++) {
       std::string::size_type lf = (*it).first.length();
       std::string::size_type ls = (*it).second.length();
-      std::string::size_type sz = 0;
-      if(ls) {
-        sz = lf + 1 + ls;
-      } else {
-        sz = lf;
-      }
+      std::string::size_type sz = lf;
+      if(ls) sz += 1 + ls;
       char* p = new char[sz+1];
       if(!p) {a_argc = 0;a_argv = 0;return false;} //some delete are lacking.
       *av = p;
@@ -256,6 +249,7 @@ public:
       for(std::string::size_type i=0;i<ls;i++,p++,ps++) {*p = *ps;}
       *p = 0;}
     }
+    *(a_argv+m_args.size()) = 0;
     a_argc = (int)m_args.size();
     return true;
   }
@@ -307,11 +301,10 @@ public:
   }
 
   //NOTE : print is a Python keyword.
-  void dump(std::ostream& a_out) const {
+  void dump(std::ostream& a_out,const std::string& a_comment = "",const std::string& a_prefix = "") const {
+    if(a_comment.size()) a_out << a_comment << std::endl;
     tools_vforcit(arg,m_args,it) {
-      a_out << "key = " << sout((*it).first)
-            << " value = " << sout((*it).second)
-            << std::endl;
+      a_out << a_prefix << "key = " << sout((*it).first) << ", value = " << sout((*it).second) << std::endl;
     }
   }
 
@@ -372,27 +365,6 @@ inline bool check_or_args(const std::vector<std::string>& aArgs,unsigned int a_1
         << " whilst " << a_1 << " or " << a_2 << " expected."
         << std::endl;
   return false;
-}
-
-template <class T>
-inline bool to(std::ostream& a_out,const std::string& a_string,T& a_value){
-  if(!to<T>(a_string,a_value)) {
-    a_out << "Passed value " << sout(a_string)
-          << " is of bad type."
-          << std::endl;
-    return false;
-  }
-  return true;
-}
-
-inline bool to(std::ostream& a_out,const std::string& a_string,bool& a_value){
-  if(!to(a_string,a_value)) {
-    a_out << "Passed value " << sout(a_string)
-          << " is not a boolean."
-          << std::endl;
-    return false;
-  }
-  return true;
 }
 
 inline std::string gui_toolkit(args& a_args,bool a_rm_in_args){
@@ -460,6 +432,11 @@ inline std::string gui_toolkit(args& a_args,bool a_rm_in_args){
       if(a_rm_in_args) {
         a_args.remove("-Net");
         a_args.remove("-net");
+      }
+    } else if(a_args.is_arg("-inex")) {
+      driver = "inex";
+      if(a_rm_in_args) {
+        a_args.remove("-inex");
       }
     }
   }

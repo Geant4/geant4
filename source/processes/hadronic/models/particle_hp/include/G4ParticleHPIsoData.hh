@@ -92,6 +92,7 @@ public:
     {
       theChannelData->SetPoint(i, aBuffer->GetPoint(i));
     }
+    theChannelData->Hash();
   }
   
   inline void ThinOut(G4double precision)

@@ -1,0 +1,219 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_cstr
+#define tools_cstr
+
+#include <cstring> // strcpy
+#include <cstdlib> // malloc,free
+
+#ifdef TOOLS_MEM
+#include "mem"
+#endif
+
+namespace tools {
+
+// NOTE : have str_ to avoid clashes with various strxxx cpp macro
+//        that may come from C or system headers.
+
+#ifdef TOOLS_MEM
+inline const std::string& s_cstr() {
+  static const std::string s_v("tools::cstr");
+  return s_v;
+}
+#endif
+
+inline char* str_dup(const char* a_cstr,bool a_inc = true) {
+#ifdef TOOLS_MEM
+  if(a_inc) mem::increment(s_cstr().c_str());
+#else
+  (void)a_inc;
+#endif
+  return ::strcpy((char*)::malloc(::strlen(a_cstr)+1),a_cstr);
+}
+
+inline void str_del(char*& a_cstr) {
+  if(a_cstr==NULL) return;
+  ::free(a_cstr);
+#ifdef TOOLS_MEM
+  mem::decrement(s_cstr().c_str());
+#endif
+  a_cstr = NULL;
+}
+
+inline char* str_new(size_t a_l = 0,char a_char = ' ') {
+  char* s = (char*)::malloc((a_l+1)*sizeof(char));
+  if(s==NULL) return NULL;
+#ifdef TOOLS_MEM
+  mem::increment(s_cstr().c_str());
+#endif
+  char* pos = s; 
+  for(size_t c=0;c<a_l;c++,pos++) *pos = a_char;
+  *(s+a_l) = 0;
+  return s;
+}
+
+inline bool str_cat(char*& a_1,const char a_c) {
+  size_t l1 = ::strlen(a_1);
+  char* s = (char*)::malloc(l1+1+1);
+  if(!s) return false;
+#ifdef TOOLS_MEM
+  mem::increment(s_cstr().c_str());
+#endif
+  ::memcpy(s,a_1,l1);
+  ::memcpy(s+l1,&a_c,1);
+  *(s+l1+1) = 0;
+  ::free(a_1);
+#ifdef TOOLS_MEM
+  mem::decrement(s_cstr().c_str());
+#endif
+  a_1 = s;
+  return true;
+}
+
+inline bool str_cat(char*& a_1,const char* a_2) {
+  size_t l1 = ::strlen(a_1);
+  size_t l2 = ::strlen(a_2);
+  char* s = (char*)::malloc(l1+l2+1);
+  if(!s) return false;
+#ifdef TOOLS_MEM
+  mem::increment(s_cstr().c_str());
+#endif
+  ::memcpy(s,a_1,l1);
+  ::memcpy(s+l1,a_2,l2);
+  *(s+l1+l2) = 0;
+  ::free(a_1);
+#ifdef TOOLS_MEM
+  mem::decrement(s_cstr().c_str());
+#endif
+  a_1 = s;
+  return true;
+}
+
+inline void str_rev(char* a_s) {
+  size_t l = ::strlen(a_s);
+  size_t hl = l/2;
+  char* beg = a_s;
+  char* end = a_s+l-1;
+  for(size_t i=0;i<hl;i++) {
+    char c = *end;
+    *end = *beg;      
+    *beg = c;
+    beg++;end--;  
+  }
+}
+
+inline char* str_sub(const char* a_s,
+                     unsigned int a_pos,
+                     unsigned int a_sz = 0) { //0 = take up end.
+  size_t l = ::strlen(a_s);
+  if(a_pos>=l) return 0; //throw std::out_of_range
+  size_t ls;
+  if(a_sz) {
+    ls = (a_sz<(l-a_pos)?a_sz:(l-a_pos)); //min(a_sz,l-a_pos)
+  } else {
+    ls = l-a_pos;
+  }
+  char* s = (char*)::malloc(ls+1);
+  if(!s) return 0;
+#ifdef TOOLS_MEM
+  mem::increment(s_cstr().c_str());
+#endif
+  //abcdefgh  l=8
+  //0123456789
+  ::memcpy(s,a_s+a_pos,ls);
+  *(s+ls) = 0;
+  return s;
+}
+
+inline char* str_rep(const char* a_s,unsigned int a_pos,unsigned int a_sz,const char* a_new) {
+  //not tested yet.
+  size_t las = ::strlen(a_s);
+  if(a_pos>=las) return 0; //throw std::out_of_range
+  if(a_pos+a_sz>las) return 0;
+  size_t lan = ::strlen(a_new);
+  unsigned int num = a_sz<lan?a_sz:(unsigned int)lan;
+  //abcdefghij : l = 10
+  //0123456789
+  //   p  
+  size_t le = las-(a_pos+a_sz);
+  size_t ls = a_pos+num+le;
+  char* s = (char*)::malloc(ls+1);
+  if(!s) return 0;
+#ifdef TOOLS_MEM
+  mem::increment(s_cstr().c_str());
+#endif
+  ::memcpy(s,a_s,a_pos);
+  ::memcpy(s+a_pos,a_new,num);
+  if(le) ::memcpy(s+a_pos+num,a_s+a_pos+a_sz,le);
+  *(s+ls) = 0;
+  return s;
+}
+
+inline void str_skip(char*& a_cstr,char a_c) {
+  while(true) {
+    if(*a_cstr!=a_c) break;
+    a_cstr++;
+  }
+}
+
+}
+
+#include <clocale>
+
+namespace tools {
+
+inline char* beg_LC_NUMERIC() {
+  char* _sl = ::setlocale(LC_NUMERIC,0);
+  char* old = _sl?str_dup(_sl):0;
+  ::setlocale(LC_NUMERIC,"C");
+  return old;
+}
+inline void end_LC_NUMERIC(char*& a_s) {
+  if(a_s) {
+    ::setlocale(LC_NUMERIC,a_s);
+    str_del(a_s);
+  }
+}
+
+inline bool str_2d(const char* a_s,double& a_v) {
+  char* olcn = beg_LC_NUMERIC();
+
+  char* end;
+  a_v = ::strtod(a_s,&end);
+  if(end==a_s) {
+    a_v = 0;
+    end_LC_NUMERIC(olcn);
+    return false;
+  }
+
+  end_LC_NUMERIC(olcn);
+  return true;
+}
+
+/*
+inline bool str_2d(const char* a_s,double& a_v) {
+  char* _sl = ::setlocale(LC_NUMERIC,0);
+  char* old = _sl?str_dup(_sl):0;
+  ::setlocale(LC_NUMERIC,"C");
+
+  char* end;
+  a_v = ::strtod(a_s,&end);
+  bool status = true;
+  if(end==a_s) {
+    status = false;
+    a_v = 0;
+  }
+
+  if(old) {
+    ::setlocale(LC_NUMERIC,old);
+    str_del(old);
+  }
+
+  return status;
+}
+*/
+
+}
+
+#endif

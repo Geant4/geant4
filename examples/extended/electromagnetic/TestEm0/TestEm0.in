@@ -1,11 +1,11 @@
-# $Id: TestEm0.in 68220 2013-03-19 15:15:02Z maire $
+# $Id: TestEm0.in 93512 2015-10-23 13:45:07Z gcosmo $
 #
 # Macro file for "TestEm0.cc"
 #
 /control/verbose 0
 /run/verbose 0
 #
-/testem/phys/addPhysics local
+#/testem/phys/addPhysics local
 ###/testem/phys/addPhysics emstandard_opt3
 #
 /run/initialize
@@ -19,5 +19,5 @@
 /testem/det/setMat Water
 /gun/particle e-
 /gun/energy 10 MeV
-/testem/phys/setCuts 100 um
+/run/setCut 100 um
 /run/beamOn 

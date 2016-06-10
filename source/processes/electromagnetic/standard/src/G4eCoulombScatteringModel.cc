@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc 81579 2014-06-03 10:15:54Z gcosmo $
+// $Id: G4eCoulombScatteringModel.cc 93567 2015-10-26 14:51:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -81,8 +81,7 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(G4bool combined)
   : G4VEmModel("eCoulombScattering"),
     cosThetaMin(1.0),
     cosThetaMax(-1.0),
-    isCombined(combined),
-    isInitialised(false)
+    isCombined(combined)
 {
   fParticleChange = 0;
   fNistManager = G4NistManager::Instance();
@@ -93,7 +92,6 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(G4bool combined)
 
   pCuts = 0;
 
-  lowEnergyThreshold = 1*keV;  // particle will be killed for lower energy
   recoilThreshold = 0.*keV; // by default does not work
 
   particle = 0;
@@ -142,8 +140,7 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* part,
   	 << "  cos(TetMax)= " << cosThetaMax <<G4endl;
   G4cout << "cut= " << (*pCuts)[0] << "  cut1= " << (*pCuts)[1] << G4endl;
   */
-  if(!isInitialised) {
-    isInitialised = true;
+  if(!fParticleChange) {
     fParticleChange = GetParticleChangeForGamma();
   }
   if(IsMaster() && mass < GeV && part->GetParticleName() != "GenericIon") {
@@ -179,14 +176,14 @@ G4eCoulombScatteringModel::MinPrimaryEnergy(const G4Material* material,
   // select lightest element
   G4int Z = 300;
   for (G4int j=0; j<nelm; ++j) {        
-    G4int iz = (G4int)(*theElementVector)[j]->GetZ();
+    G4int iz = G4lrint((*theElementVector)[j]->GetZ());
     if(iz < Z) { Z = iz; }
   }
   G4int A = G4lrint(fNistManager->GetAtomicMassAmu(Z));
   G4double targetMass = G4NucleiProperties::GetNuclearMass(A, Z);
   G4double t = std::max(cut, 0.5*(cut + sqrt(2*cut*targetMass)));
 
-  return std::max(lowEnergyThreshold, t);
+  return t;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -217,7 +214,7 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
       costmax = 0.0; 
     }
     if(costmin > costmax) {
-      cross  = wokvi->ComputeNuclearCrossSection(costmin, costmax)
+      cross = wokvi->ComputeNuclearCrossSection(costmin, costmax)
 	+ wokvi->ComputeElectronCrossSection(costmin, costmax);
     }
     /*  
@@ -242,15 +239,6 @@ void G4eCoulombScatteringModel::SampleSecondaries(
 		G4double)
 {
   G4double kinEnergy = dp->GetKineticEnergy();
-
-  // absorb particle below low-energy limit to avoid situation
-  // when a particle has no energy loss
-  if(kinEnergy < lowEnergyThreshold) { 
-    fParticleChange->SetProposedKineticEnergy(0.0);
-    fParticleChange->ProposeLocalEnergyDeposit(kinEnergy);
-    fParticleChange->ProposeNonIonizingEnergyDeposit(kinEnergy);
-    return; 
-  }
   SetupParticle(dp->GetDefinition());
   DefineMaterial(couple);
   /*
@@ -333,9 +321,10 @@ void G4eCoulombScatteringModel::SampleSecondaries(
     // finelize primary energy and energy balance
     // this threshold may be applied only because for low-enegry
     // e+e- msc model is applied
-    if(finalT <= lowEnergyThreshold) { 
+    if(finalT < 0.0) { 
       edep += finalT;  
       finalT = 0.0;
+      if(edep < 0.0) { edep = 0.0; }
     } 
     fParticleChange->SetProposedKineticEnergy(finalT);
     fParticleChange->ProposeLocalEnergyDeposit(edep);

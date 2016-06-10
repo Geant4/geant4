@@ -19,7 +19,7 @@
 #   For development of the toolkit. It adds debugging, and enables the use
 #   of library specific debugging via standardized definitions.
 #
-# Compiler flags specific to these build types are set in the cache, and 
+# Compiler flags specific to these build types are set in the cache, and
 # the  types are added to the CMAKE_BUILD_TYPE cache string and to
 # CMAKE_CONFIGURATION_TYPES if appropriate to the build tool being used.
 #
@@ -39,7 +39,7 @@ set(CMAKE_CXX_FLAGS_MAINTAINER "${CMAKE_CXX_FLAGS_MAINTAINER_INIT}"
   )
 
 #-----------------------------------------------------------------------
-# Mark all the additional mode flags as advanced because most users will 
+# Mark all the additional mode flags as advanced because most users will
 # never need to see them
 mark_as_advanced(
   CMAKE_CXX_FLAGS_TESTRELEASE
@@ -54,7 +54,7 @@ if(CMAKE_CONFIGURATION_TYPES)
   list(APPEND CMAKE_CONFIGURATION_TYPES TestRelease)
   list(APPEND CMAKE_CONFIGURATION_TYPES Maintainer)
   list(REMOVE_DUPLICATES CMAKE_CONFIGURATION_TYPES)
-  set(CMAKE_CONFIGURATION_TYPES "${CMAKE_CONFIGURATION_TYPES}" 
+  set(CMAKE_CONFIGURATION_TYPES "${CMAKE_CONFIGURATION_TYPES}"
     CACHE STRING "Geant4 configurations for multimode build tools"
     FORCE
     )
@@ -70,7 +70,7 @@ endif()
 if(NOT CMAKE_CONFIGURATION_TYPES)
   if(NOT CMAKE_BUILD_TYPE)
     # Default to a Release build if nothing else...
-    set(CMAKE_BUILD_TYPE Release
+    set(CMAKE_BUILD_TYPE RelWithDebInfo
       CACHE STRING "Choose the type of build, options are: None Release TestRelease MinSizeRel Debug RelWithDebInfo MinSizeRel Maintainer."
       FORCE
       )

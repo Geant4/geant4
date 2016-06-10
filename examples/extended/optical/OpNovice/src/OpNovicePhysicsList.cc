@@ -54,12 +54,20 @@
 
 #include "G4LossTableManager.hh"
 #include "G4EmSaturation.hh"
+
+G4ThreadLocal G4int OpNovicePhysicsList::fVerboseLevel = 1;
+G4ThreadLocal G4int OpNovicePhysicsList::fMaxNumPhotonStep = 20;
+G4ThreadLocal G4Cerenkov* OpNovicePhysicsList::fCerenkovProcess = 0;
+G4ThreadLocal G4Scintillation* OpNovicePhysicsList::fScintillationProcess = 0;
+G4ThreadLocal G4OpAbsorption* OpNovicePhysicsList::fAbsorptionProcess = 0;
+G4ThreadLocal G4OpRayleigh* OpNovicePhysicsList::fRayleighScatteringProcess = 0;
+G4ThreadLocal G4OpMieHG* OpNovicePhysicsList::fMieHGScatteringProcess = 0;
+G4ThreadLocal G4OpBoundaryProcess* OpNovicePhysicsList::fBoundaryProcess = 0;
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 OpNovicePhysicsList::OpNovicePhysicsList() 
- : G4VUserPhysicsList(),
-   fVerboseLebel(1), fMaxNumPhotonStep(20)
+ : G4VUserPhysicsList()
 {
   fMessenger = new OpNovicePhysicsListMessenger(this);
 }
@@ -204,31 +212,31 @@ void OpNovicePhysicsList::ConstructEM()
 
 void OpNovicePhysicsList::ConstructOp()
 {
-  G4Cerenkov* cerenkovProcess = new G4Cerenkov("Cerenkov");
-  cerenkovProcess->SetMaxNumPhotonsPerStep(fMaxNumPhotonStep);
-  cerenkovProcess->SetMaxBetaChangePerStep(10.0);
-  cerenkovProcess->SetTrackSecondariesFirst(true);
-  G4Scintillation* scintillationProcess = new G4Scintillation("Scintillation");
-  scintillationProcess->SetScintillationYieldFactor(1.);
-  scintillationProcess->SetTrackSecondariesFirst(true);
-  G4OpAbsorption* absorptionProcess = new G4OpAbsorption();
-  G4OpRayleigh* rayleighScatteringProcess = new G4OpRayleigh();
-  G4OpMieHG* mieHGScatteringProcess = new G4OpMieHG();
-  G4OpBoundaryProcess* boundaryProcess = new G4OpBoundaryProcess();
+  fCerenkovProcess = new G4Cerenkov("Cerenkov");
+  fCerenkovProcess->SetMaxNumPhotonsPerStep(fMaxNumPhotonStep);
+  fCerenkovProcess->SetMaxBetaChangePerStep(10.0);
+  fCerenkovProcess->SetTrackSecondariesFirst(true);
+  fScintillationProcess = new G4Scintillation("Scintillation");
+  fScintillationProcess->SetScintillationYieldFactor(1.);
+  fScintillationProcess->SetTrackSecondariesFirst(true);
+  fAbsorptionProcess = new G4OpAbsorption();
+  fRayleighScatteringProcess = new G4OpRayleigh();
+  fMieHGScatteringProcess = new G4OpMieHG();
+  fBoundaryProcess = new G4OpBoundaryProcess();
 
-  cerenkovProcess->SetVerboseLevel(fVerboseLebel);
-  scintillationProcess->SetVerboseLevel(fVerboseLebel);
-  absorptionProcess->SetVerboseLevel(fVerboseLebel);
-  rayleighScatteringProcess->SetVerboseLevel(fVerboseLebel);
-  mieHGScatteringProcess->SetVerboseLevel(fVerboseLebel);
-  boundaryProcess->SetVerboseLevel(fVerboseLebel);
+  fCerenkovProcess->SetVerboseLevel(fVerboseLevel);
+  fScintillationProcess->SetVerboseLevel(fVerboseLevel);
+  fAbsorptionProcess->SetVerboseLevel(fVerboseLevel);
+  fRayleighScatteringProcess->SetVerboseLevel(fVerboseLevel);
+  fMieHGScatteringProcess->SetVerboseLevel(fVerboseLevel);
+  fBoundaryProcess->SetVerboseLevel(fVerboseLevel);
   
   // Use Birks Correction in the Scintillation process
-  if(!G4Threading::IsWorkerThread())
+  if(G4Threading::IsMasterThread())
   {
     G4EmSaturation* emSaturation =
               G4LossTableManager::Instance()->EmSaturation();
-      scintillationProcess->AddSaturation(emSaturation);
+      fScintillationProcess->AddSaturation(emSaturation);
   }
 
   theParticleIterator->reset();
@@ -236,21 +244,21 @@ void OpNovicePhysicsList::ConstructOp()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
-    if (cerenkovProcess->IsApplicable(*particle)) {
-      pmanager->AddProcess(cerenkovProcess);
-      pmanager->SetProcessOrdering(cerenkovProcess,idxPostStep);
+    if (fCerenkovProcess->IsApplicable(*particle)) {
+      pmanager->AddProcess(fCerenkovProcess);
+      pmanager->SetProcessOrdering(fCerenkovProcess,idxPostStep);
     }
-    if (scintillationProcess->IsApplicable(*particle)) {
-      pmanager->AddProcess(scintillationProcess);
-      pmanager->SetProcessOrderingToLast(scintillationProcess, idxAtRest);
-      pmanager->SetProcessOrderingToLast(scintillationProcess, idxPostStep);
+    if (fScintillationProcess->IsApplicable(*particle)) {
+      pmanager->AddProcess(fScintillationProcess);
+      pmanager->SetProcessOrderingToLast(fScintillationProcess, idxAtRest);
+      pmanager->SetProcessOrderingToLast(fScintillationProcess, idxPostStep);
     }
     if (particleName == "opticalphoton") {
       G4cout << " AddDiscreteProcess to OpticalPhoton " << G4endl;
-      pmanager->AddDiscreteProcess(absorptionProcess);
-      pmanager->AddDiscreteProcess(rayleighScatteringProcess);
-      pmanager->AddDiscreteProcess(mieHGScatteringProcess);
-      pmanager->AddDiscreteProcess(boundaryProcess);
+      pmanager->AddDiscreteProcess(fAbsorptionProcess);
+      pmanager->AddDiscreteProcess(fRayleighScatteringProcess);
+      pmanager->AddDiscreteProcess(fMieHGScatteringProcess);
+      pmanager->AddDiscreteProcess(fBoundaryProcess);
     }
   }
 }
@@ -259,14 +267,23 @@ void OpNovicePhysicsList::ConstructOp()
 
 void OpNovicePhysicsList::SetVerbose(G4int verbose)
 {
-  fVerboseLebel = verbose;
+  fVerboseLevel = verbose;
+
+  fCerenkovProcess->SetVerboseLevel(fVerboseLevel);
+  fScintillationProcess->SetVerboseLevel(fVerboseLevel);
+  fAbsorptionProcess->SetVerboseLevel(fVerboseLevel);
+  fRayleighScatteringProcess->SetVerboseLevel(fVerboseLevel);
+  fMieHGScatteringProcess->SetVerboseLevel(fVerboseLevel);
+  fBoundaryProcess->SetVerboseLevel(fVerboseLevel);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void OpNovicePhysicsList::SetNbOfPhotonsCerenkov(G4int MaxNumber)
 {
-    fMaxNumPhotonStep = MaxNumber;
+  fMaxNumPhotonStep = MaxNumber;
+
+  fCerenkovProcess->SetMaxNumPhotonsPerStep(fMaxNumPhotonStep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

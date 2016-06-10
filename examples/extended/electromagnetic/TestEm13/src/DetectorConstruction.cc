@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm13/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 84207 2014-10-10 14:44:12Z gcosmo $
+// $Id: DetectorConstruction.cc 92997 2015-09-28 08:04:21Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,6 +35,7 @@
 #include "DetectorMessenger.hh"
 
 #include "G4Material.hh"
+#include "G4NistManager.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
@@ -194,8 +195,10 @@ void DetectorConstruction::PrintParameters()
 
 void DetectorConstruction::SetMaterial(G4String materialChoice)
 {
-  // search the material by its name
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
+  // search the material by its name, or build it from nist data base
+  G4Material* pttoMaterial = 
+     G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+  
   if (pttoMaterial) {
    fMaterial = pttoMaterial;
    G4RunManager::GetRunManager()->PhysicsHasBeenModified();

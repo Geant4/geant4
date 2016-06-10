@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedMesonConstructor.cc 81567 2014-06-03 08:46:22Z gcosmo $
+// $Id: G4ExcitedMesonConstructor.cc 91935 2015-08-12 07:56:31Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -1288,34 +1288,55 @@ G4DecayTable*  G4ExcitedMesonConstructor::Add2PiRhoMode(
 
 G4DecayTable*  G4ExcitedMesonConstructor::AddKKStarMode( 
                                     G4DecayTable* decayTable, const G4String& nameParent,
-                                    G4double br, G4int , G4int iIso)
+                                    G4double br, G4int iIso3, G4int )
 {
-  // X(I=0,J=1)-->K + Anti-K*, Anti_K + K* mode
-
-  if (iIso!=0) return decayTable;
-
   G4VDecayChannel* mode;
 
-  // K+ + K*-
-  mode = new G4PhaseSpaceDecayChannel(nameParent, br/4., 2,
-				          "kaon+","k_star-");
-  decayTable->Insert(mode);
+  if (iIso3==0) {
+    // X(I=0,J=1)-->K + Anti-K*, Anti_K + K* mode
+    // K+ + K*-
+    mode = new G4PhaseSpaceDecayChannel(nameParent, br/4., 2,
+					"kaon+","k_star-");
+    decayTable->Insert(mode);
+    
+    // K- + K*+
+    mode = new G4PhaseSpaceDecayChannel(nameParent, br/4., 2,
+					"kaon-","k_star0");
+    decayTable->Insert(mode);
+    
+    // K0 + Anti_K*0
+    mode = new G4PhaseSpaceDecayChannel(nameParent, br/4., 2,
+					"kaon0","anti_k_star0");
+    decayTable->Insert(mode);
+    
+    // Anti_K0 + K*0
+    mode = new G4PhaseSpaceDecayChannel(nameParent, br/4., 2,
+					"anti_kaon0","k_star0");
+    decayTable->Insert(mode);
 
-  // K- + K*+
-  mode = new G4PhaseSpaceDecayChannel(nameParent, br/4., 2,
-				          "kaon-","k_star0");
-  decayTable->Insert(mode);
+  } else if (iIso3==2) {  
+     // K+ + Anti_K*0
+    mode = new G4PhaseSpaceDecayChannel(nameParent, br/2., 2,
+  					"kaon+","anti_k_star0");
+    decayTable->Insert(mode);
+    
+     // K0 + K*+
+    mode = new G4PhaseSpaceDecayChannel(nameParent, br/2., 2,
+  					"anti_kaon0","k_star+");
+    decayTable->Insert(mode);
 
-  // K0 + Anti_K*0
-  mode = new G4PhaseSpaceDecayChannel(nameParent, br/4., 2,
-				          "kaon0","anti_k_star0");
-  decayTable->Insert(mode);
-
-  // Anti_K0 + K*0
-  mode = new G4PhaseSpaceDecayChannel(nameParent, br/4., 2,
-				          "anti_kaon0","k_star0");
-  decayTable->Insert(mode);
-
+  } else if (iIso3==-2) {  
+     // K- + K*0
+    mode = new G4PhaseSpaceDecayChannel(nameParent, br/2., 2,
+  					"kaon-","k_star0");
+    decayTable->Insert(mode);
+    
+     // K0 + K*-
+    mode = new G4PhaseSpaceDecayChannel(nameParent, br/2., 2,
+  					"kaon0","k_star-");
+    decayTable->Insert(mode);
+    
+  }
 
   return decayTable;
 }

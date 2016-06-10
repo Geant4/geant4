@@ -63,6 +63,7 @@
 // 20110919  M. Kelsey -- Add optional final-state clustering
 // 20130304  M. Kelsey -- Add new G4CascadeHistory for cacasde structure reporting
 // 20130620  Address Coverity complaint about missing copy actions
+// 20141204  M. Kelsey -- Add function to test for non-interacting particles
 
 #ifndef G4INTRA_NUCLEI_CASCADER_HH
 #define G4INTRA_NUCLEI_CASCADER_HH
@@ -130,6 +131,9 @@ protected:
   // Functions to handle, e.g., low-energy hyperons stuck inside potential
   void processTrappedParticle(const G4CascadParticle& trapped);
   void decayTrappedParticle(const G4CascadParticle& trapped);
+
+  // Test if particle is able to interact in nucleus
+  G4bool particleCanInteract(const G4CascadParticle& cpart) const;
 
 private: 
   G4NucleiModel* model;

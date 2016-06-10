@@ -50,10 +50,13 @@ namespace G4INCL {
     G4double Fmax = std::sqrt(std::pow(xN/(xN+1.),N)/(xN+1.));
 
     G4double F, chi;
+    unsigned long loopCounter = 0;
+    const unsigned long maxLoopCounter = 10000000;
     do {
       chi = Random::shoot();
       F = std::sqrt(std::pow(chi,N)*(1.-chi));
-    } while ( Fmax*Random::shoot() > F);
+      ++loopCounter;
+    } while (loopCounter<maxLoopCounter && Fmax*Random::shoot() > F); /* Loop checking, 10.07.2015, D.Mancusi */
     return chi;
   }
 

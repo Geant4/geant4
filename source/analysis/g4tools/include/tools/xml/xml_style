@@ -1,0 +1,237 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_xml_style
+#define tools_xml_style
+
+#include "loader"
+
+#include <tools/xml/styles>
+#include <tools/forit>
+#include <tools/vmanip>
+
+namespace tools {
+namespace xml {
+
+inline void load_style(tools::xml::styles& a_styles,const tools::xml::tree& a_tree) {
+  std::string name;
+  a_tree.attribute_value("name",name);
+  if(name.empty()) {
+    a_styles.out() << "tools::sg::gui_viewer::load_style :"
+          << " <style> without name."
+          << std::endl;
+    return;
+  }  
+
+  tools::xml::styles::style_t sty;
+
+ {tools::xml::looper _for(a_tree);
+  while(tools::xml::element* _elem = _for.next_element()) {
+
+      if(_elem->name()=="copy") {
+
+        std::string from;
+        _elem->attribute_value("from",from); //expect another style name.
+        if(from.empty()) {
+          a_styles.out() << "tools::sg::gui_viewer::load_style :"
+                         << " <copy> without from."
+                         << std::endl;
+          return;
+        } 
+
+        const tools::xml::styles::style_t* csty = a_styles.find_style(from);
+        if(!csty) {
+          a_styles.out() << "tools::sg::gui_viewer::load_style :"
+                     << " <copy> : from " << tools::sout(from) << " not found."
+                     << std::endl;
+          return;
+        }
+
+        tools::append(sty,*csty);
+
+      } else {
+        sty.push_back
+          (tools::xml::styles::style_item_t(_elem->name(),_elem->value()));
+      }
+
+  }}
+  
+  if(sty.size()) a_styles.add_style(name,sty);
+}
+
+inline void load_plotter_style(tools::xml::styles& a_styles,const tools::xml::tree& a_tree) {
+  std::string pname;
+  a_tree.attribute_value("name",pname);
+  if(pname.empty()) {
+    a_styles.out() << "tools::sg::gui_viewer::load_plotter_style :"
+          << " <plotter_style> without name."
+          << std::endl;
+    return;
+  }  
+
+ {tools::xml::styles::style_t sty;
+  sty.push_back(tools::xml::styles::style_item_t("tag","plotter_style"));
+
+ {tools::xml::looper _for(a_tree);
+  while(tools::xml::element* _elem = _for.next_element()) {
+
+      if(_elem->name()=="copy") {
+
+        std::string from;
+        _elem->attribute_value("from",from); //expect a plotter_style name.
+        if(from.empty()) {
+          a_styles.out() << "tools::sg::gui_viewer::load_plotter_style :"
+                << " <copy> without from."
+                << std::endl;
+          return;
+        } 
+
+        const tools::xml::styles::style_t* csty = a_styles.find_style(from);
+        if(!csty) {
+          a_styles.out() << "tools::sg::gui_viewer::load_plotter_style :"
+                << " <copy> : from " << tools::sout(from) << " not found."
+                << std::endl;
+          return;
+        }
+        if(csty->size()) a_styles.add_style(pname,*csty);
+
+        if(tools::xml::styles::is_plotter_style(*csty)) {
+          //search all <from>.<sub_style> styles :
+          std::string head = from+".";
+          std::string::size_type l = head.size();
+
+          tools::xml::styles sts(a_styles.out());
+
+          const std::vector<tools::xml::styles::named_style_t>& nss =
+            a_styles.named_styles();
+          tools_vforcit(tools::xml::styles::named_style_t,nss,it){
+            const std::string& name = (*it).first;
+            if(name.substr(0,l)==head) {
+              std::string tail = name.substr(l,name.size()-l);
+              const tools::xml::styles::style_t& ssty = (*it).second;
+              if(ssty.size()) {
+                sts.add_style(pname+"."+tail,ssty);
+              }
+            }
+          }
+
+          a_styles.append(sts);
+
+        }
+
+
+      } else {
+        sty.push_back
+          (tools::xml::styles::style_item_t(_elem->name(),_elem->value()));
+      }
+
+  }}
+
+  if(sty.size()) a_styles.add_style(pname,sty);}
+
+ {tools::xml::looper _for(a_tree);
+  while(tools::xml::tree* _tree = _for.next_tree()) {
+
+      const std::string& tag = _tree->tag_name();
+      if(tag=="style") {
+
+        std::string name;
+        _tree->attribute_value("name",name);
+        if(name.empty()) {
+          a_styles.out() << "tools::sg::gui_viewer::load_plotter_style :"
+                << " <style> without name."
+                << std::endl;
+          return;
+        }
+  
+       {tools::xml::styles::style_t sty;
+
+       {tools::xml::looper _for2(*_tree);
+        while(tools::xml::element* _elem = _for2.next_element()) {
+          sty.push_back
+            (tools::xml::styles::style_item_t(_elem->name(),_elem->value()));
+        }}
+
+        if(sty.size()) {
+          std::string path = pname+"."+name;
+          a_styles.add_style(path,sty);
+        }}
+
+      } else {
+        a_styles.out() << "tools::sg::gui_viewer::load_plotter_style :"
+              << " unexpected tag " << tools::sout(tag) << "."
+              << std::endl;
+      }
+
+  }}
+
+}
+
+inline bool scan_style_tree(tools::xml::styles& a_styles,const tools::xml::tree& a_tree) {
+
+  if(a_tree.tag_name()!="styles") return false;
+  
+  // look for aliases :
+ {tools::xml::looper _for(a_tree);
+  while(tools::xml::element* _elem = _for.next_element()) {
+
+      std::string name;
+      _elem->attribute_value("name",name);
+      if(name.empty()) {
+        a_styles.out() << "tools::sg::gui_viewer::load_style :"
+              << " <alias> without name."
+              << std::endl;
+        continue;
+      }
+      tools::add<std::string,std::string>(a_styles.aliases(),name,_elem->value());
+  }}
+
+  // scan children :
+ {tools::xml::looper _for(a_tree);
+  while(tools::xml::tree* _tree = _for.next_tree()) {
+
+      const std::string& tag = _tree->tag_name();
+      if(tag=="style") {   
+        load_style(a_styles,*_tree);
+      } else if(tag=="plotter_style") {   
+        load_plotter_style(a_styles,*_tree);
+      }
+
+  }}
+  
+  return true;
+}
+  
+inline bool load_style_file(tools::xml::styles& a_styles,const std::string& a_file) {
+  tools::xml::default_factory factory;
+  tools::xml::loader ml(factory,a_styles.out(),false);
+  std::vector<std::string> tags;
+  tags.push_back("styles");
+  tags.push_back("style");
+  tags.push_back("plotter_style");
+  ml.set_tags(tags);
+  if(!ml.load_file(a_file,false)) return false;
+  tools::xml::tree* top = ml.top_item();
+  if(!top) return true; //File could be empty.
+  return scan_style_tree(a_styles,*top);
+}
+
+inline bool load_style_string(tools::xml::styles& a_styles,const std::string& a_string) {
+  tools::xml::default_factory factory;
+  tools::xml::loader ml(factory,a_styles.out(),false);
+  std::vector<std::string> tags;
+  tags.push_back("styles");
+  tags.push_back("style");
+  tags.push_back("plotter_style");
+  ml.set_tags(tags);
+  if(!ml.load_string(a_string)) return false;
+  tools::xml::tree* top = ml.top_item();
+  if(!top) return true;
+  return scan_style_tree(a_styles,*top);
+}
+
+}}
+
+#endif
+
+//exlib_build_use inlib expat

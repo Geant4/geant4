@@ -27,7 +27,7 @@
 /// \brief Definition of the ExN02PrimaryGeneratorAction class
 //
 //
-// $Id: ExN02PrimaryGeneratorAction.hh 76296 2013-11-08 13:17:47Z gcosmo $
+// $Id: ExN02PrimaryGeneratorAction.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

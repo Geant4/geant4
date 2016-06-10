@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmMultiModel.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4EmMultiModel.cc 92921 2015-09-21 15:06:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -78,7 +78,7 @@ void G4EmMultiModel::Initialise(const G4ParticleDefinition* p,
 {
   if(nModels > 0) {
     G4cout << "### Initialisation of EM MultiModel " << GetName()
-	   << " including following list of models:" << G4endl;
+           << " including following list of models:" << G4endl;
     for(G4int i=0; i<nModels; ++i) {
       G4cout << "    " << (model[i])->GetName();
       (model[i])->SetParticleChange(pParticleChange, GetModelOfFluctuations());
@@ -92,8 +92,8 @@ void G4EmMultiModel::Initialise(const G4ParticleDefinition* p,
 
 G4double G4EmMultiModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
                                      const G4ParticleDefinition* p,
-				     G4double kineticEnergy,
-				     G4double cutEnergy)
+                                     G4double kineticEnergy,
+                                     G4double cutEnergy)
 {
   SetCurrentCouple(couple);
   G4double dedx = 0.0;
@@ -110,18 +110,18 @@ G4double G4EmMultiModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmMultiModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition* p,
-						    G4double kinEnergy,
-						    G4double Z,
-						    G4double A,
-						    G4double cutEnergy,
-						    G4double maxEnergy)
+                                                    G4double kinEnergy,
+                                                    G4double Z,
+                                                    G4double A,
+                                                    G4double cutEnergy,
+                                                    G4double maxEnergy)
 {
   G4double cross = 0.0;
   if(nModels>0) {
     for(G4int i=0; i<nModels; ++i) {
       (model[i])->SetCurrentCouple(CurrentCouple());
       cross += (model[i])->ComputeCrossSectionPerAtom(p, kinEnergy, Z, A, 
-						      cutEnergy, maxEnergy);
+                                                      cutEnergy, maxEnergy);
     }
   } 
   return cross;
@@ -130,10 +130,10 @@ G4double G4EmMultiModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition* 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmMultiModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
-				       const G4MaterialCutsCouple* couple,
-				       const G4DynamicParticle* dp,
-				       G4double minEnergy,
-				       G4double maxEnergy)
+                                       const G4MaterialCutsCouple* couple,
+                                       const G4DynamicParticle* dp,
+                                       G4double minEnergy,
+                                       G4double maxEnergy)
 {
   SetCurrentCouple(couple);
   if(nModels > 0) {

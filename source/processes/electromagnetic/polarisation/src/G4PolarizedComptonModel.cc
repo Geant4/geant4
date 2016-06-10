@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedComptonModel.cc 82755 2014-07-08 14:07:29Z gcosmo $
+// $Id: G4PolarizedComptonModel.cc 93316 2015-10-16 12:36:02Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -56,13 +56,18 @@
 #include "G4DataVector.hh"
 #include "G4ParticleChangeForGamma.hh"
 
-
 #include "G4StokesVector.hh"
 #include "G4PolarizationManager.hh"
 #include "G4PolarizationHelper.hh"
 #include "G4PolarizedComptonCrossSection.hh"
 
+#include "G4SystemOfUnits.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+static const G4int nlooplim = 10000;
 
 G4PolarizedComptonModel::G4PolarizedComptonModel(const G4ParticleDefinition*,
 						 const G4String& nam)
@@ -89,8 +94,8 @@ G4double G4PolarizedComptonModel::ComputeAsymmetryPerAtom
   G4double k1 = 1 + 2*k0 ;
 
   asymmetry = -k0;
-  asymmetry *= (k0 + 1.)*sqr(k1)*std::log(k1) - 2.*k0*(5.*sqr(k0) + 4.*k0 + 1.);
-  asymmetry /= ((k0 - 2.)*k0  -2.)*sqr(k1)*std::log(k1) + 2.*k0*(k0*(k0 + 1.)*(k0 + 8.) + 2.);		
+  asymmetry *= (k0 + 1.)*sqr(k1)*G4Log(k1) - 2.*k0*(5.*sqr(k0) + 4.*k0 + 1.);
+  asymmetry /= ((k0 - 2.)*k0  -2.)*sqr(k1)*G4Log(k1) + 2.*k0*(k0*(k0 + 1.)*(k0 + 8.) + 2.);		
 
   // G4cout<<"energy = "<<GammaEnergy<<"  asymmetry = "<<asymmetry<<"\t\t GAM = "<<k0<<G4endl;
   if (asymmetry>1.) G4cout<<"ERROR in G4PolarizedComptonModel::ComputeAsymmetryPerAtom"<<G4endl;
@@ -113,7 +118,7 @@ G4double G4PolarizedComptonModel::ComputeCrossSectionPerAtom(
   G4double polzz = theBeamPolarization.p3()*theTargetPolarization.z();
   if (polzz > 0.0) {
     G4double asym = ComputeAsymmetryPerAtom(kinEnergy, Z);  
-    xs*=(1.+polzz*asym);
+    xs *= (1.+polzz*asym);
   }
   return xs;
 }
@@ -173,90 +178,117 @@ void G4PolarizedComptonModel::SampleSecondaries(
   // sample the energy rate of the scattered gamma 
   //
 
-  G4double epsilon, epsilonsq, onecost, sint2, greject ;
+  G4double epsilon, sint2;
+  G4double onecost = 0.0;
+  G4double Phi     = 0.0;
+  G4double greject = 1.0;
+  G4double cosTeta = 1.0;
+  G4double sinTeta = 0.0;
 
   G4double eps0       = 1./(1. + 2.*E0_m);
   G4double epsilon0sq = eps0*eps0;
-  G4double alpha1     = - std::log(eps0);
-  G4double alpha2     = 0.5*(1.- epsilon0sq);
+  G4double alpha1     = - G4Log(eps0);
+  G4double alpha2     = alpha1 + 0.5*(1.- epsilon0sq);
 
   G4double polarization = 
     theBeamPolarization.p3()*theTargetPolarization.p3();
 
+  CLHEP::HepRandomEngine* rndmEngineMod = G4Random::getTheEngine();
   G4int nloop = 0;
+  G4bool end = false;
+
+  G4double rndm[3];
+
   do {
-    ++nloop;
-    // false interaction if too many iterations
-    if(nloop > 1000) { return; }
+    do {
+      ++nloop;
+      // false interaction if too many iterations
+      if(nloop > nlooplim) { 
+	PrintWarning(aDynamicGamma, nloop, greject, onecost, Phi, 
+		     "too many iterations"); 
+	return; 
+      }
 
-    if ( alpha1/(alpha1+alpha2) > G4UniformRand() ) {
-      epsilon   = std::exp(-alpha1*G4UniformRand());   // epsilon0**r
-      epsilonsq = epsilon*epsilon; 
+      // 3 random numbers to sample scattering
+      rndmEngineMod->flatArray(3, rndm);
 
-    } else {
-      epsilonsq = epsilon0sq + (1.- epsilon0sq)*G4UniformRand();
-      epsilon   = std::sqrt(epsilonsq);
-    }
+      if ( alpha1 > alpha2*rndm[0]) {
+	epsilon   = G4Exp(-alpha1*rndm[1]);   // epsilon0**r
+      } else {
+	epsilon = std::sqrt(epsilon0sq + (1.- epsilon0sq)*rndm[1]);
+      }
 
-    onecost = (1.- epsilon)/(epsilon*E0_m);
-    sint2   = onecost*(2.-onecost);
+      onecost = (1.- epsilon)/(epsilon*E0_m);
+      sint2   = onecost*(2.-onecost);
 
-    G4double gdiced = 2.*(1./epsilon+epsilon);
-    G4double gdist  = 1./epsilon + epsilon - sint2 
-      - polarization*(1./epsilon-epsilon)*(1.-onecost);
+      G4double gdiced = 2.*(1./epsilon+epsilon);
+      G4double gdist  = 1./epsilon + epsilon - sint2 
+	- polarization*(1./epsilon-epsilon)*(1.-onecost);
 
-    greject = gdist/gdiced;
+      greject = gdist/gdiced;
 
-    if (greject>1) {
-      G4cout<<"ERROR in PolarizedComptonScattering::PostStepDoIt\n"
-	    <<" costh rejection does not work properly: "<<greject
-	    <<G4endl;
-    }
-  } while (greject < G4UniformRand());
+      if (greject > 1.0) { 
+	PrintWarning(aDynamicGamma, nloop, greject, onecost, Phi, 
+		     "theta majoranta wrong"); 
+      }
+      // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
+    } while (greject < rndm[2]);
+
+    // assuming phi loop sucessful
+    end = true;
  
-  //
-  // scattered gamma angles. ( Z - axis along the parent gamma)
-  //
+    //
+    // scattered gamma angles. ( Z - axis along the parent gamma)
+    //
+    cosTeta = 1. - onecost; 
+    sinTeta = std::sqrt(sint2);
+    do {
+      ++nloop;
 
-  G4double cosTeta = 1. - onecost; 
-  G4double sinTeta = std::sqrt (sint2);
-  G4double Phi;
-  do {
-    ++nloop;
-    // false interaction if too many iterations
-    if(nloop > 1000) { return; }
+      // 2 random numbers to sample scattering
+      rndmEngineMod->flatArray(2, rndm);
 
-    Phi = twopi * G4UniformRand();
-    G4double gdiced = 1./epsilon + epsilon - sint2 
-       + std::abs(theBeamPolarization.p3())*
-       ( std::abs((1./epsilon-epsilon)*cosTeta*theTargetPolarization.p3())
-	+(1.-epsilon)*sinTeta*(std::sqrt(sqr(theTargetPolarization.p1()) 
-				    + sqr(theTargetPolarization.p2()))))
-       +sint2*(std::sqrt(sqr(theBeamPolarization.p1()) + 
-			 sqr(theBeamPolarization.p2())));
+      // false interaction if too many iterations
+      Phi = twopi * rndm[0];
+      if(nloop > nlooplim) { 
+	PrintWarning(aDynamicGamma, nloop, greject, onecost, Phi, 
+		     "too many iterations"); 
+	return; 
+      }
 
-    G4double gdist = 1./epsilon + epsilon - sint2 
-       + theBeamPolarization.p3()*
-       ((1./epsilon-epsilon)*cosTeta*theTargetPolarization.p3()
-	+(1.-epsilon)*sinTeta*(std::cos(Phi)*theTargetPolarization.p1()+
-			       std::sin(Phi)*theTargetPolarization.p2()))
-       -sint2*(std::cos(2.*Phi)*theBeamPolarization.p1()
-	       +std::sin(2.*Phi)*theBeamPolarization.p2());
-    greject = gdist/gdiced;
+      G4double gdiced = 1./epsilon + epsilon - sint2 
+	+ std::abs(theBeamPolarization.p3())*
+	( std::abs((1./epsilon-epsilon)*cosTeta*theTargetPolarization.p3())
+	  +(1.-epsilon)*sinTeta*(std::sqrt(sqr(theTargetPolarization.p1()) 
+					   + sqr(theTargetPolarization.p2()))))
+	+sint2*(std::sqrt(sqr(theBeamPolarization.p1()) + 
+			  sqr(theBeamPolarization.p2())));
 
-    if (greject>1.+1.e-10 || greject<0) {
-      G4cout<<"ERROR in PolarizedComptonScattering::PostStepDoIt\n"
-	    <<" phi rejection does not work properly: "<<greject<<G4endl;
-    }
-    if (greject<1.e-3) {
-      G4cout<<"ERROR in PolarizedComptonScattering::PostStepDoIt\n"
-	    <<" phi rejection does not work properly: "<<greject<<"\n";
-      G4cout<<" greject="<<greject<<"  phi="<<Phi<<"   cost="<<cosTeta<<"\n";
-      G4cout<<" gdiced="<<gdiced<<"   gdist="<<gdist<<"\n";
-      G4cout<<" eps="<<epsilon<<"    1/eps="<<1./epsilon<<"\n";
-    }
+      G4double gdist = 1./epsilon + epsilon - sint2 
+	+ theBeamPolarization.p3()*
+	((1./epsilon-epsilon)*cosTeta*theTargetPolarization.p3()
+	 +(1.-epsilon)*sinTeta*(std::cos(Phi)*theTargetPolarization.p1()+
+				std::sin(Phi)*theTargetPolarization.p2()))
+	-sint2*(std::cos(2.*Phi)*theBeamPolarization.p1()
+		+std::sin(2.*Phi)*theBeamPolarization.p2());
+      greject = gdist/gdiced;
+
+      if (greject > 1.0) {
+	PrintWarning(aDynamicGamma, nloop, greject, onecost, Phi, 
+		     "phi majoranta wrong"); 
+      }
+
+      if(greject < 1.e-3) {
+	PrintWarning(aDynamicGamma, nloop, greject, onecost, Phi, 
+		     "phi loop ineffective"); 
+	// restart theta loop
+        end = false;
+        break;
+      }
      
-  } while (greject < G4UniformRand());
+      // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
+    } while (greject < rndm[1]);
+  } while(!end);
   G4double dirx = sinTeta*std::cos(Phi), diry = sinTeta*std::sin(Phi), 
     dirz = cosTeta;
 
@@ -321,14 +353,14 @@ void G4PolarizedComptonModel::SampleSecondaries(
 
     // translate polarization into particle reference frame
     finalGammaPolarization.RotateAz(nInteractionFrame,gamDirection1);
-    //store polarization vector
-    fParticleChange->ProposePolarization(finalGammaPolarization);
     if (finalGammaPolarization.mag() > 1.+1.e-8){
       G4cout<<"ERROR in Polarizaed Compton Scattering !"<<G4endl;
       G4cout<<"Polarization of final photon more than 100%"<<G4endl;
       G4cout<<finalGammaPolarization<<" mag = "
 	    <<finalGammaPolarization.mag()<<G4endl;
     }
+    //store polarization vector
+    fParticleChange->ProposePolarization(finalGammaPolarization);
     if (verboseLevel>=1) {
       G4cout << " gammaPolarization1 = " <<finalGammaPolarization<<"\n";
       G4cout << " GammaDirection1 = " <<gamDirection1<<"\n";
@@ -380,6 +412,25 @@ void G4PolarizedComptonModel::SampleSecondaries(
   if(edep > 0.0) { 
     fParticleChange->ProposeLocalEnergyDeposit(edep);
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void 
+G4PolarizedComptonModel::PrintWarning(const G4DynamicParticle* dp, G4int nloop,
+				      G4double grej, G4double onecos, 
+				      G4double phi, const G4String sss) const
+{
+  G4ExceptionDescription ed;
+  ed << "Problem of scattering sampling: " << sss << "\n"
+     << "Niter= " << nloop << " grej= " << grej << " cos(theta)= " 
+     << 1.0-onecos << " phi= " << phi << "\n"
+     << "Gamma E(MeV)= " << dp->GetKineticEnergy()/MeV
+     << " dir= " << dp->GetMomentumDirection() 
+     << " pol= " << dp->GetPolarization();
+  G4Exception("G4PolarizedComptonModel::SampleSecondaries","em0044",
+	      JustWarning, ed, "");
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

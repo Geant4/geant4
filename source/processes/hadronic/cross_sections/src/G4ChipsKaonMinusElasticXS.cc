@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChipsKaonMinusElasticXS.cc 83409 2014-08-21 15:16:07Z gcosmo $
+// $Id: G4ChipsKaonMinusElasticXS.cc 93203 2015-10-12 07:42:34Z gcosmo $
 //
 //
 // G4 Physics class: G4ChipsKaonMinusElasticXS for pA elastic cross sections
@@ -155,13 +155,20 @@ G4ChipsKaonMinusElasticXS::~G4ChipsKaonMinusElasticXS()
   B4T.clear();
 }
 
-G4bool G4ChipsKaonMinusElasticXS::IsIsoApplicable(const G4DynamicParticle* Pt, G4int, G4int,    
+void
+G4ChipsKaonMinusElasticXS::CrossSectionDescription(std::ostream& outFile) const
+{
+    outFile << "G4ChipsKaonMinusElasticXS provides the elastic cross\n"
+            << "section for K- nucleus scattering as a function of incident\n"
+            << "momentum. The cross section is calculated using M. Kossov's\n"
+            << "CHIPS parameterization of cross section data.\n";
+}
+
+G4bool G4ChipsKaonMinusElasticXS::IsIsoApplicable(const G4DynamicParticle*, G4int, G4int,    
 						 const G4Element*,
 						 const G4Material*)
 {
-  const G4ParticleDefinition* particle = Pt->GetDefinition();
-  if (particle == G4KaonMinus::KaonMinus()      ) return true;
-  return false;
+  return true;
 }
 
 // The main member function giving the collision cross section (P is in IU, CS is in mb)

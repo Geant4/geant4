@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionDataSetRegistry.hh 68777 2013-04-05 12:52:17Z gcosmo $
+// $Id: G4CrossSectionDataSetRegistry.hh 89024 2015-03-18 08:17:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -48,13 +48,15 @@
 #include <vector>
 #include <map>
 #include "globals.hh"
-
+#include "G4ThreadLocalSingleton.hh"
 
 class G4VCrossSectionDataSet;
 //class G4VBaseXSFactory; //AND
 
 class G4CrossSectionDataSetRegistry
 {
+friend class G4ThreadLocalSingleton<G4CrossSectionDataSetRegistry>;
+
 public:
 
   static G4CrossSectionDataSetRegistry* Instance();
@@ -73,13 +75,14 @@ public:
   
   //void AddFactory(G4String, G4VBaseXSFactory*);//AND
 
-  G4VCrossSectionDataSet* GetCrossSectionDataSet(const G4String& name, G4bool warning=true);
+  G4VCrossSectionDataSet* GetCrossSectionDataSet(const G4String& name, 
+						 G4bool warning=true);
     
 private:
 
   G4CrossSectionDataSetRegistry();
 
-  static G4ThreadLocal G4CrossSectionDataSetRegistry* theInstance;
+  static G4ThreadLocal G4CrossSectionDataSetRegistry* instance;
   
   std::vector <G4VCrossSectionDataSet*> xSections;
 

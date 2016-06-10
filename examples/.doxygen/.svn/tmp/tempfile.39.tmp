@@ -1,185 +1,125 @@
 // $Id$
 // The example class categories definitions for Doxygen
 
-/// \file Doxymodules_basic.h
-/// \brief The page that defines the basic examples modules 
+/// \file Doxymodules_parallel.h
+/// \brief The page that defines the extended/parallel examples modules 
 
 
-/** @defgroup basic basic
- *  Basic examples classes
- *  @{
- */
-/** @} */
-
-/** @defgroup B1 B1
- *  Example B1 
- *  @ingroup basic
+/** @defgroup extended_parallel parallel
+ *  Extended examples parallel classes
  *  @{
  */
 
-  class B1ActionInitialization{};
-  class B1DetectorConstruction{};
-  class B1EventAction{};
-  class B1PrimaryGeneratorAction{};
-  class B1Run{};
-  class B1RunAction{};
-  class B1SteppingAction{};
 
-/** @} */
-
-/** @defgroup B2 B2
- *  Example B2 
- *  @ingroup basic
+/** @defgroup extended_parallel_MPI MPI
+ *  Extended examples parallel MPI classes
  *  @{
  */
 
-/** @defgroup B2a B2a
- *  Example B2a 
- *  @ingroup B2
+
+/** @defgroup extended_parallel_MPI_exMPI01 exMPI01
+ *  Parallel MPI exMPI01 example has its 
+ *  <a href="../html_exMPI01/html/index.html">standalone documentation </a>
+ *  @ingroup extended_parallel_MPI
  *  @{
  */
 
-  class B2ActionInitialization{};
-  class B2aDetectorConstruction{};
-  class B2aDetectorMessenger{};
-  class B2EventAction{};
-  class B2PrimaryGeneratorAction{};
-  class B2RunAction{};
-  class B2TrackerHit{};
-  class B2TrackerSD{};
-
 /** @} */
 
-/** @defgroup B2b B2b
- *  Example B2b 
- *  @ingroup B2
+/** @defgroup extended_parallel_MPI_exMPI02 exMPI02
+ *  Parallel MPI exMPI02 example has its 
+ *  <a href="../html_exMPI02/html/index.html">standalone documentation </a>
+ *  @ingroup extended_parallel_MPI
  *  @{
  */
 
-  class B2ActionInitialization{};
-  class B2bChamberParameterisation{};
-  class B2bDetectorConstruction{};
-  class B2bDetectorMessenger{};
-  class B2EventAction{};
-  class B2PrimaryGeneratorAction{};
-  class B2RunAction{};
-  class B2TrackerHit{};
-  class B2TrackerSD{};
-
 /** @} */
 
-/** @} */
-
-/** @defgroup B3 B3
- *  Example B3 
- *  @ingroup basic
+/** @defgroup extended_parallel_MPI_exMPI03 exMPI03
+ *  Parallel MPI exMPI03 example has its 
+ *  <a href="../html_exMPI03/html/index.html">standalone documentation </a>
+ *  @ingroup extended_parallel_MPI
  *  @{
  */
 
-  class B3ActionInitialization{};
-  class B3DetectorConstruction{};
-  class B3PhysicsList{};
-  class B3PrimaryGeneratorAction{};
-  class B3Run{};
-  class B3RunAction{};
-  class B3StackingAction{};
+/** @} */
 
 /** @} */
 
-/** @defgroup B4 B4
- *  Example B4 
- *  @ingroup basic
- *  @{
- */
-/** @} */
-
-/** @defgroup B4a B4a
- *  Example B4a 
- *  @ingroup B4
+/** @defgroup extended_parallel_TBB TBB
+ *  Extended examples parallel TBB classes
  *  @{
  */
 
-  class B4aActionInitialization{};
-  class B4aEventAction{};
-  class B4aSteppingAction{};
-  class B4DetectorConstruction{};
-  class B4PrimaryGeneratorAction{};
-  class B4RunAction{};
-
-/** @} */
-
-/** @} */
-/** @defgroup B4b B4b
- *  Example B4b 
- *  @ingroup B4
+/** @defgroup extended_parallel_TBB_B2b TBB B2b
+ *  Example TBB B2b 
+ *  @ingroup extended_parallel_TBB
  *  @{
  */
 
-  class B4bActionInitialization{};
-  class B4bEventAction{};
-  class B4bRunAction{};
-  class B4bRunData{};
-  class B4bSteppingAction{};
-  class B4DetectorConstruction{};
-  class B4PrimaryGeneratorAction{};
+  class B2ActionInitialization {};
+  class B2bChamberParameterisation {};
+  class B2bDetectorConstruction {};
+  class B2bDetectorMessenger {};
+  class B2EventAction {};
+  class B2PrimaryGeneratorAction {};
+  class B2RunAction {};
+  class B2TrackerHit {};
+  class B2TrackerSD {};
+  class tbbMasterRunManager {};
+  class tbbTask {};
+  class tbbUserWorkerInitialization {};
+  class tbbWorkerRunManager {};
 
 /** @} */
 
-/** @defgroup B4c B4c
- *  Example B4c 
- *  @ingroup B4
+/** @} */
+
+/** @defgroup extended_parallel_TopC TopC
+ *  Extended examples parallel TopC classes
  *  @{
  */
 
-  class B4cActionInitialization{};
-  class B4cCalorHit{};
-  class B4cCalorimeterSD{};
-  class B4cDetectorConstruction{};
-  class B4cEventAction{};
-  class B4PrimaryGeneratorAction{};
-  class B4RunAction{};
 
-/** @} */
-
-/** @} */
-/** @defgroup B4d B4d
- *  Example B4d 
- *  @ingroup B4
+/** @defgroup extended_parallel_ParN02 ParN02
+ *  Parallel ParN02 example has its 
+ *  <a href="../html_ParN02/html/index.html">standalone documentation </a>
+ *  @ingroup extended_parallel_TopC
  *  @{
  */
 
-  class B4dActionInitialization{};
-  class B4dDetectorConstruction{};
-  class B4dEventAction{};
-  class B4PrimaryGeneratorAction{};
-  class B4RunAction{};
-
 /** @} */
 
-/** @} */
-
-/** @defgroup B5 B5
- *  Example B5 
- *  @ingroup basic
+/** @defgroup extended_parallel_ParN04 ParN04
+ *  Parallel ParN04 example has its 
+ *  <a href="../html_ParN04/html/index.html">standalone documentation </a>
+ *  @ingroup extended_parallel_TopC
  *  @{
  */
 
-  class B5ActionInitialization{};
-  class B5CellParameterisation{};
-  class B5DetectorConstruction{};
-  class B5DriftChamberHit{};
-  class B5DriftChamberSD{};
-  class B5EmCalorimeterHit{};
-  class B5EmCalorimeterSD{};
-  class B5EventAction{};
-  class B5HadCalorimeterHit{};
-  class B5HadCalorimeterSD{};
-  class B5HodoscopeHit{};
-  class B5HodoscopeSD{};
-  class B5MagneticField{};
-  class B5PrimaryGeneratorAction{};
-  class B5RunAction{};
+/** @} */
 
 /** @} */
+
+/** @defgroup extended_parallel_ThreadsafeScorers ThreadsafeScorers
+ *  Example ThreadsafeScorers
+ *  @ingroup extended_parallel
+ *  @{
+ */
+
+  class G4TAtomicHitsCollection {};
+  class G4TAtomicHitsMap {};
+  class G4atomic {};
+  class G4atomic_defines {};
+  class TSActionInitialization {};
+  class TSDetectorConstruction {};
+  class TSPhysicsList {};
+  class TSPrimaryGeneratorAction {};
+  class TSRun {};
+  class TSRunAction {};
+
+/** @} */
+
+
 
 /** @} */

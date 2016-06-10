@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserDetectorConstruction.cc 77002 2013-11-20 11:22:35Z gcosmo $
+// $Id: G4VUserDetectorConstruction.cc 92599 2015-09-07 07:11:43Z gcosmo $
 //
 
 #include "G4VUserDetectorConstruction.hh"
@@ -35,6 +35,7 @@
 #include "G4VSensitiveDetector.hh"
 #include "G4FieldManager.hh"
 #include "G4SDManager.hh"
+#include "G4MultiSensitiveDetector.hh"
 #include <assert.h>
 
 G4VUserDetectorConstruction::G4VUserDetectorConstruction()
@@ -238,6 +239,29 @@ void G4VUserDetectorConstruction::SetSensitiveDetector
 void G4VUserDetectorConstruction::SetSensitiveDetector
 (G4LogicalVolume* logVol, G4VSensitiveDetector* aSD)
 { 
+  assert(logVol!=nullptr&&aSD!=nullptr);
+
   G4SDManager::GetSDMpointer()->AddNewDetector(aSD);
-  logVol->SetSensitiveDetector(aSD);
+
+  //New Logic: allow for "multiple" SDs being attached to a single LV.
+  //To do that we use a special proxy SD called G4MultiSensitiveDetector
+
+  //Get existing SD if already set and check if it is of the special type
+  G4VSensitiveDetector* originalSD = logVol->GetSensitiveDetector();
+  if ( originalSD == nullptr ) {
+      logVol->SetSensitiveDetector(aSD);
+  } else {
+      G4MultiSensitiveDetector* msd = dynamic_cast<G4MultiSensitiveDetector*>(originalSD);
+      if ( msd != nullptr ) {
+          msd->AddSD(aSD);
+      } else {
+          const G4String msdname = "/MultiSD_"+logVol->GetName();
+          msd = new G4MultiSensitiveDetector(msdname);
+          //We need to register the proxy to have correct handling of IDs
+          G4SDManager::GetSDMpointer()->AddNewDetector(msd);
+	  msd->AddSD(originalSD);
+          msd->AddSD(aSD);
+          logVol->SetSensitiveDetector(msd);
+      }
+  }
 }

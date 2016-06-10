@@ -39,18 +39,28 @@
 #include "G4ReactionProduct.hh"
 #include "G4ParticleHPInterpolator.hh"
 #include "G4InterpolationManager.hh"
+#include "G4Cache.hh"
 #include <set>
 class G4ParticleDefinition;
 
 class G4ParticleHPContAngularPar
 {
+
+   struct toBeCached {
+      G4bool fresh;
+      G4double currentMeanEnergy;
+      G4double remaining_energy; 
+      toBeCached():fresh(true),currentMeanEnergy(-2.0),remaining_energy(0.0){};
+   };
+
   public:
   
   G4ParticleHPContAngularPar()
   {
     theAngular = 0;
-    currentMeanEnergy = -2;
-    fresh = true;
+    //currentMeanEnergy = -2;
+    //fresh = true;
+    fCache.Put(NULL);
     theMinEner = DBL_MAX;
     theMaxEner = -DBL_MAX;
   }
@@ -97,16 +107,16 @@ class G4ParticleHPContAngularPar
   G4double MeanEnergyOfThisInteraction()
   {
     G4double result;
-    if(currentMeanEnergy<-1)
+    if(fCache.Get()->currentMeanEnergy<-1)
     {
       return 0;
       // throw G4HadronicException(__FILE__, __LINE__, "G4ParticleHPContAngularPar: Logical error in Product class");
     }
     else
     {
-      result = currentMeanEnergy;
+      result = fCache.Get()->currentMeanEnergy;
     }
-    currentMeanEnergy = -2;
+    fCache.Get()->currentMeanEnergy = -2;
     return result;
   }
   
@@ -164,16 +174,27 @@ private:
   G4ReactionProduct * theTarget;
   G4ReactionProduct * thePrimary;
   
-  G4double currentMeanEnergy;
+  //G4double currentMeanEnergy;
 
 //080718
    public:
-      void ClearHistories(){ fresh = true; };
+      //void ClearHistories(){ fresh = true; };
+      void ClearHistories(){ 
+         if ( fCache.Get() == NULL ) cacheInit();
+         fCache.Get()->fresh = true; };
 
   void Dump();
    private:
-      G4bool fresh; 
-      G4double remaining_energy; // represent energy rest of cascade chain
+      G4Cache< toBeCached* > fCache;
+      void cacheInit() {
+         toBeCached* val = new toBeCached;
+         val->currentMeanEnergy = -2;
+         val->remaining_energy = 0;
+         val->fresh=true;
+         fCache.Put( val );
+      };
+      /*G4bool fresh;*/ 
+      /*G4double remaining_energy;*/ // represent energy rest of cascade chain
 
    G4ParticleDefinition* theProjectile;
 

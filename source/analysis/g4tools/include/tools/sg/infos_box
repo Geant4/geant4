@@ -1,0 +1,445 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_infos_box
+#define tools_sg_infos_box
+
+//
+// In z the scene is within [0,0.5]
+//
+
+#include "back_area"
+#include "matrix"
+#include "text_hershey"
+#include "base_freetype"
+#include "enums"
+
+#include "../colorf"
+
+namespace tools {
+namespace sg {
+
+class infos_box : public back_area {
+  TOOLS_NODE(infos_box,tools::sg::infos_box,back_area)
+public:
+  mf_string lstrings;
+  mf_string rstrings;
+  sf<unsigned int> num_spaces; //in "number of one line height" unit.
+
+  sf_vec<colorf,float> color;
+  sf_string font;
+  sf_string encoding; 
+  sf<float> line_width; // for text_hershey.
+  sf_enum<winding_type> front_face; //no more used.
+
+  sf<bool> back_visible;  
+  sf<float> wmargin_factor;
+  sf<float> hmargin_factor;
+  sf_enum<hjust> lhjust;
+  sf_enum<hjust> rhjust;
+  sf<bool> confine;
+public:
+  virtual const std::vector<field_desc>& node_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::infos_box)
+    static std::vector<field_desc> s_v;
+    if(s_v.empty()) {
+      s_v = parent::node_fields();
+      TOOLS_ADD_FIELD_DESC(lstrings)
+      TOOLS_ADD_FIELD_DESC(rstrings)
+      TOOLS_ADD_FIELD_DESC(num_spaces)
+
+      TOOLS_ADD_FIELD_DESC(color)
+      TOOLS_ADD_FIELD_DESC(font)
+      TOOLS_ADD_FIELD_DESC(encoding);
+      TOOLS_ADD_FIELD_DESC(line_width)
+      TOOLS_ADD_FIELD_DESC(front_face)
+
+      TOOLS_ADD_FIELD_DESC(back_visible)
+      TOOLS_ADD_FIELD_DESC(wmargin_factor)
+      TOOLS_ADD_FIELD_DESC(hmargin_factor)
+      TOOLS_ADD_FIELD_DESC(lhjust)
+      TOOLS_ADD_FIELD_DESC(rhjust)
+      TOOLS_ADD_FIELD_DESC(confine)
+    }
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&lstrings);
+    add_field(&rstrings);
+    add_field(&num_spaces);
+
+    add_field(&color);
+    add_field(&font);
+    add_field(&encoding); 
+    add_field(&line_width);
+    add_field(&front_face);
+
+    add_field(&back_visible);
+    add_field(&wmargin_factor);
+    add_field(&hmargin_factor);
+    add_field(&lhjust);
+    add_field(&rhjust);
+    add_field(&confine);
+  }
+public:
+  virtual void render(render_action& a_action) {
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+    if(back_visible.value()) m_back_sep.render(a_action);
+    m_sep.render(a_action);
+  }
+  virtual void pick(pick_action& a_action) {
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+    if(back_visible.value()) {
+      m_back_sep.pick(a_action);
+      if(a_action.done()) return;
+    }
+  }
+  virtual void search(search_action& a_action) {
+    node::search(a_action);
+    if(a_action.done()) return;
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+    if(back_visible.value()) {
+      m_back_sep.search(a_action);
+      if(a_action.done()) return;
+    }
+    m_sep.search(a_action);
+    if(a_action.done()) return;
+  }
+  virtual bool write(write_action& a_action) {
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+    if(back_visible.value()) if(!m_back_sep.write(a_action)) return false;
+    return m_sep.write(a_action);
+  }
+  virtual void bbox(bbox_action& a_action) {
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+    if(back_visible.value()) m_back_sep.bbox(a_action);
+    m_sep.bbox(a_action);
+  }
+public:
+  infos_box(const base_freetype& a_ttf)
+  :parent()
+  ,lstrings()
+  ,rstrings()
+  ,num_spaces(4)
+
+  ,color(colorf::black())
+  ,font(font_hershey())
+  ,encoding(encoding_PAW())
+  ,line_width(1)
+  ,front_face(winding_ccw)
+
+  ,back_visible(true)
+  ,wmargin_factor(0.9f)
+  ,hmargin_factor(0.9f)
+  ,lhjust(left)
+  ,rhjust(right)
+
+  ,confine(false)
+
+  ,m_ttf(a_ttf)
+  {
+    add_fields();
+  }
+  virtual ~infos_box(){}
+public:
+  infos_box(const infos_box& a_from)
+  :parent(a_from)
+  ,lstrings(a_from.lstrings)
+  ,rstrings(a_from.rstrings)
+  ,num_spaces(a_from.num_spaces)
+
+  ,color(a_from.color)
+  ,font(a_from.font)
+  ,encoding(a_from.encoding)
+  ,line_width(a_from.line_width)
+  ,front_face(a_from.front_face)
+
+  ,back_visible(a_from.back_visible)
+  ,wmargin_factor(a_from.wmargin_factor)
+  ,hmargin_factor(a_from.hmargin_factor)
+  ,lhjust(a_from.lhjust)
+  ,rhjust(a_from.rhjust)
+
+  ,confine(a_from.confine)
+
+  ,m_ttf(a_from.m_ttf)
+  {
+    add_fields();
+  }
+  infos_box& operator=(const infos_box& a_from){
+    parent::operator=(a_from);
+    lstrings = a_from.lstrings;
+    rstrings = a_from.rstrings;
+    num_spaces = a_from.num_spaces;
+
+    color = a_from.color;
+    font = a_from.font;
+    encoding = a_from.encoding;
+    line_width = a_from.line_width;
+    front_face = a_from.front_face;
+
+    back_visible = a_from.back_visible;
+    wmargin_factor = a_from.wmargin_factor;
+    hmargin_factor = a_from.hmargin_factor;
+    lhjust = a_from.lhjust;
+    rhjust = a_from.rhjust;
+
+    confine = a_from.confine;
+
+    return *this;
+  }
+public:
+  void update_sg() {
+    // have this method public in order to use it in plotter.
+    // This is so because infos_box::height is an output field
+    // needed in plotter to place the box.
+
+    m_back_sep.clear(); //back_area::update_sg done last.
+
+    m_sep.clear();
+
+    if(width.value()<=0) return;
+    if(confine) {
+      if(height.value()<=0) return;
+    }
+
+   {bool empty = true;
+    std::vector<std::string>::const_iterator it;
+    for(it=lstrings.values().begin();it!=lstrings.values().end();++it) {
+      if((*it).size()) {empty = false;break;}
+    }
+    if(empty){
+      for(it=rstrings.values().begin();it!=rstrings.values().end();++it) {
+        if((*it).size()) {empty = false;break;}
+      }
+    }
+    if(empty) return;}
+
+    rgba* mat = new rgba();
+    mat->color = color;
+    m_sep.add(mat);
+
+    if(font==font_hershey()) {
+      draw_style* ds = new draw_style;
+      ds->style.value(draw_style::lines);
+      //ds->line_pattern = line_pattern;
+      ds->line_width = line_width;
+      m_sep.add(ds);
+    }
+
+    ////////////////////////////////////////////////////////////
+    /// left text //////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
+    base_text* ltext = 0;
+    matrix* ltsf = 0;
+
+   {separator* sep = new separator;
+    m_sep.add(sep);
+    ltsf = new matrix;
+    sep->add(ltsf);
+    if(font==font_hershey()) {
+      text_hershey* text = new text_hershey;
+      ltext = text;
+      text->encoding = encoding;
+      sep->add(text);
+    } else {
+      base_freetype* text = base_freetype::create(m_ttf);
+      //TTNODE* text = new TTNODE;
+      ltext = text;
+      text->font = font;
+      sep->add(text);
+    }
+    ltext->strings = lstrings;
+    ltext->hjust = lhjust;}
+
+    ////////////////////////////////////////////////////////////
+    /// right text /////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
+    base_text* rtext = 0;
+    matrix* rtsf = 0;
+
+   {separator* sep = new separator;
+    m_sep.add(sep);
+    rtsf = new matrix;
+    sep->add(rtsf);
+    if(font==font_hershey()) {
+      text_hershey* text = new text_hershey;
+      rtext = text;
+      text->encoding = encoding;
+      sep->add(text);
+    } else {
+      base_freetype* text = base_freetype::create(m_ttf);
+      //TTNODE* text = new TTNODE;
+      rtext = text;
+      text->font = font;
+      sep->add(text);
+    }
+    rtext->strings = rstrings;
+    rtext->hjust = rhjust;}
+
+    ////////////////////////////////////////////////////////////
+    /// middle spaces //////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
+    base_text* mtext = 0;
+   {std::string s(num_spaces,' ');
+    if(font==font_hershey()) {
+      text_hershey* text = new text_hershey;
+      mtext = text;
+      text->strings.add(s);
+      text->hjust = left;
+    } else {
+      base_freetype* text = base_freetype::create(m_ttf);
+      //TTNODE* text = new TTNODE;
+      mtext = text;
+      text->strings.add(s);
+      text->hjust = left;
+      text->font = font;
+    }}
+
+    //sf<float> zfront ?
+    float zz = back_visible.value()?0.01f:0;
+
+    float fw = width * wmargin_factor;
+
+    if(confine) {
+      // left right texts may overlap.
+
+      // adjust height :
+      float fh = height * hmargin_factor;
+      float th = fh;
+     {float mn_x,mn_y,mn_z;
+      float mx_x,mx_y,mx_z;
+      ltext->get_bounds(th,mn_x,mn_y,mn_z,mx_x,mx_y,mx_z);
+      float bxh = mx_y-mn_y;
+      // adjust box height :
+      // fh -> bxh then to have fh :
+      if(!bxh) {
+        m_sep.clear();
+        parent::update_sg();
+        delete mtext;
+        return;
+      }
+      th = fh*fh/bxh;}
+
+      ltext->height = th;
+      rtext->height = th;
+
+     {float mn_x,mn_y,mn_z;
+      float mx_x,mx_y,mx_z;
+      ltext->get_bounds(th,mn_x,mn_y,mn_z,mx_x,mx_y,mx_z);
+      float lw = mx_x-mn_x;
+      float xtrans = (fw-lw)*0.5f; //left justified
+      float xx = -(mn_x+mx_x)*0.5F-xtrans;
+      float yy = -(mn_y+mx_y)*0.5F;
+      ltsf->set_translate(xx,yy,zz);}
+
+     {float mn_x,mn_y,mn_z;
+      float mx_x,mx_y,mx_z;
+      rtext->get_bounds(th,mn_x,mn_y,mn_z,mx_x,mx_y,mx_z);
+      rtext->hjust = right;
+      float xx = fw*0.5f;
+      float yy = -(mn_y+mx_y)*0.5F;
+      rtsf->set_translate(xx,yy,zz);}
+
+      parent::update_sg();
+
+    } else {
+      // height of the info box is an output of the below.
+      // The input to compute the geometry is the width of the infos
+      // box, the left/right texts and the space between
+      // left/right texts.
+
+      // from a text height of th=1, and a left/right sep
+      // of num_spaces*th, get width of the box :
+  
+      float th = 1;
+
+      float lmn_x,lmn_y,lmn_z;
+      float lmx_x,lmx_y,lmx_z;
+      ltext->get_bounds(th,lmn_x,lmn_y,lmn_z,lmx_x,lmx_y,lmx_z);
+      float lw = (lmx_x<lmn_x)?0:lmx_x-lmn_x;
+
+      float rmn_x,rmn_y,rmn_z;
+      float rmx_x,rmx_y,rmx_z;
+      rtext->get_bounds(th,rmn_x,rmn_y,rmn_z,rmx_x,rmx_y,rmx_z);
+      float rw = (rmx_x<rmn_x)?0:rmx_x-rmn_x;
+
+      float mmn_x,mmn_y,mmn_z;
+      float mmx_x,mmx_y,mmx_z;
+      mtext->get_bounds(th,mmn_x,mmn_y,mmn_z,mmx_x,mmx_y,mmx_z);
+      float mw = (mmx_x<mmn_x)?0:mmx_x-mmn_x;
+
+      float winfos = lw+mw+rw;
+      if(!winfos) {
+        m_sep.clear();
+        height = 1;
+        parent::update_sg();
+        delete mtext;
+        return;
+      }
+
+      // assuming that text size is linear relative
+      // to th, we get the th needed to match infos_box.width :
+      // th -> winfos then to have fw :
+      th = fw*th/winfos;
+  
+      // place the left/right texts by rescaling them to
+      // the new th :
+      ltext->height = th;
+      ltext->get_bounds(th,lmn_x,lmn_y,lmn_z,lmx_x,lmx_y,lmx_z);
+      float hinfos = (lmx_x<lmn_x)?0:lmx_y-lmn_y;
+  
+      float xx = -fw*0.5F; //left justified.
+      float ty = -ltext->ascent(th)+hinfos*0.5f;
+      ltsf->set_translate(xx,ty,zz);
+  
+      rtext->height = th;
+      if(rtext->hjust==right) {
+        xx = fw*0.5F;
+      } else if(rtext->hjust==left) {
+        rtext->get_bounds(th,rmn_x,rmn_y,rmn_z,rmx_x,rmx_y,rmx_z);
+        rw = (rmx_x<rmn_x)?0:rmx_x-rmn_x;
+        xx = fw*0.5F-rw;
+      } else { //center
+        rtext->get_bounds(th,rmn_x,rmn_y,rmn_z,rmx_x,rmx_y,rmx_z);
+        rw = (rmx_x<rmn_x)?0:rmx_x-rmn_x;
+        xx = fw*0.5F-rw*0.5F;
+      }
+      rtsf->set_translate(xx,ty,zz);
+  
+      // set infos_box.height :
+      height = hinfos/hmargin_factor;
+  
+      //done last because of the upper height setup.
+      parent::update_sg();
+
+    }
+
+    delete mtext;
+  
+  }
+protected:
+  const base_freetype& m_ttf;
+
+  separator m_sep;
+};
+
+}}
+
+#endif

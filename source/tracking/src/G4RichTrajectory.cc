@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectory.cc 69003 2013-04-15 09:25:23Z gcosmo $
+// $Id: G4RichTrajectory.cc 91269 2015-06-29 07:05:59Z gcosmo $
 //
 // ---------------------------------------------------------------
 //
@@ -47,6 +47,7 @@
 #include "G4AttDefStore.hh"
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
+#include "G4UIcommand.hh"
 #include "G4UnitsTable.hh"
 #include "G4VProcess.hh"
 
@@ -62,6 +63,7 @@ G4ThreadLocal G4Allocator<G4RichTrajectory> *aRichTrajectoryAllocator = 0;
 G4RichTrajectory::G4RichTrajectory():
   fpRichPointsContainer(0),
   fpCreatorProcess(0),
+  fCreatorModelID(0),
   fpEndingProcess(0),
   fFinalKineticEnergy(0.)
 {
@@ -80,6 +82,7 @@ G4RichTrajectory::G4RichTrajectory(const G4Track* aTrack):
   fpInitialVolume = aTrack->GetTouchableHandle();
   fpInitialNextVolume = aTrack->GetNextTouchableHandle();
   fpCreatorProcess = aTrack->GetCreatorProcess();
+  fCreatorModelID = aTrack->GetCreatorModelID();
   // On construction, set final values to initial values.
   // Final values are updated at the addition of every step - see AppendStep.
   fpFinalVolume = aTrack->GetTouchableHandle();
@@ -97,6 +100,7 @@ G4RichTrajectory::G4RichTrajectory(G4RichTrajectory & right):
   fpInitialVolume = right.fpInitialVolume;
   fpInitialNextVolume = right.fpInitialNextVolume;
   fpCreatorProcess = right.fpCreatorProcess;
+  fCreatorModelID = right.fCreatorModelID;
   fpFinalVolume = right.fpFinalVolume;
   fpFinalNextVolume = right.fpFinalNextVolume;
   fpEndingProcess = right.fpEndingProcess;
@@ -191,11 +195,19 @@ const std::map<G4String,G4AttDef>* G4RichTrajectory::GetAttDefs() const
 
     ID = "CPN";
     (*store)[ID] = G4AttDef(ID,"Creator Process Name",
-			    "Physics","","G4String");
+                            "Physics","","G4String");
 
     ID = "CPTN";
     (*store)[ID] = G4AttDef(ID,"Creator Process Type Name",
-			    "Physics","","G4String");
+                            "Physics","","G4String");
+    
+    ID = "CMID";
+    (*store)[ID] = G4AttDef(ID,"Creator Model ID",
+                            "Physics","","G4int");
+
+    ID = "CMN";
+    (*store)[ID] = G4AttDef(ID,"Creator Model Name",
+                            "Physics","","G4String");
 
     ID = "FVPath";
     (*store)[ID] = G4AttDef(ID,"Final Volume Path",
@@ -252,12 +264,21 @@ std::vector<G4AttValue>* G4RichTrajectory::CreateAttValues() const
   }
 
   if (fpCreatorProcess) {
-    values->push_back(G4AttValue("CPN",fpCreatorProcess->GetProcessName(),""));
+    values->push_back
+    (G4AttValue("CPN",fpCreatorProcess->GetProcessName(),""));
     G4ProcessType type = fpCreatorProcess->GetProcessType();
-    values->push_back(G4AttValue("CPTN",G4VProcess::GetProcessTypeName(type),""));
+    values->push_back
+    (G4AttValue("CPTN",G4VProcess::GetProcessTypeName(type),""));
+    values->push_back
+    (G4AttValue("CMID",G4UIcommand::ConvertToString(fCreatorModelID),""));
+    const G4String& creatorModelName =
+    G4PhysicsModelCatalog::GetModelName(fCreatorModelID);
+    values->push_back(G4AttValue("CMN",creatorModelName,""));
   } else {
     values->push_back(G4AttValue("CPN","None",""));
     values->push_back(G4AttValue("CPTN","None",""));
+    values->push_back(G4AttValue("CMID","None",""));
+    values->push_back(G4AttValue("CMN","None",""));
   }
 
   if (fpFinalVolume && fpFinalVolume->GetVolume()) {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNADingfelderChargeDecreaseModel.hh 70171 2013-05-24 13:34:18Z gcosmo $
+// $Id: G4DNADingfelderChargeDecreaseModel.hh 92859 2015-09-18 07:58:30Z gcosmo $
 //
 
 #ifndef G4DNADingfelderChargeDecreaseModel_h
@@ -61,11 +61,16 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
+  inline void SelectStationary(G4bool input); 
+
 protected:
 
   G4ParticleChangeForGamma* fParticleChangeForGamma;
 
 private:
+
+  G4bool statCode;
+
   // Water density table
   const std::vector<G4double>* fpMolWaterDensity;
 
@@ -111,6 +116,13 @@ private:
   G4DNADingfelderChargeDecreaseModel(const  G4DNADingfelderChargeDecreaseModel&);
 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4DNADingfelderChargeDecreaseModel::SelectStationary (G4bool input)
+{ 
+    statCode = input; 
+}		 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

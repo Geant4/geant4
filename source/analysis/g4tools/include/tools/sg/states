@@ -1,0 +1,52 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_states
+#define tools_sg_states
+
+#include "state"
+
+namespace tools {
+namespace sg {
+
+class states {
+public:
+  states(unsigned int a_ww,unsigned int a_wh):m_states(8){
+    m_state.m_ww = a_ww;
+    m_state.m_wh = a_wh;
+  }
+  virtual ~states(){}
+protected:
+  states(const states& a_from)
+  :m_state(a_from.m_state)
+  ,m_states(a_from.m_states)
+  ,m_saved_state(a_from.m_saved_state)
+  {}
+  states& operator=(const states& a_from){
+    m_state = a_from.m_state;
+    m_states = a_from.m_states;
+    m_saved_state = a_from.m_saved_state;
+    return *this;
+  }
+public:
+  const sg::state& state() const {return m_state;}
+  sg::state& state() {return m_state;}
+  void pop_state() {
+    //if(!m_states.size()) return; //throw.
+    m_state = m_states.back();
+    m_states.pop_back();    
+  }
+  void push_state() {m_states.push_back(m_state);}
+
+  void save_state(const sg::state& a_state) {m_saved_state = a_state;}
+  const sg::state& saved_state() const {return m_saved_state;}
+  sg::state& saved_state() {return m_saved_state;}
+protected:
+  sg::state m_state;
+  std::vector<sg::state> m_states;
+  sg::state m_saved_state;
+};
+
+}}
+
+#endif

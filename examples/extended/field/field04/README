@@ -369,12 +369,10 @@
 
         F04EventActionMessenger:
                      /event/setverbose
-                     /event/drawTracks none/charged/all
-                     /event/printModulo
 
         F04EventAction(RunAction* RA):
-                     Customized BeginOfEvent printing (frequency: printModulo)
-                     EndofEvent: condition depending drawing of trajectories,
+                     Customized BeginOfEvent printing
+                     EndofEvent:
                      saveEngingStatus and showEngineStatus according to flag
                      in F04RunAction
 

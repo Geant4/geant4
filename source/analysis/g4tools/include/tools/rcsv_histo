@@ -8,6 +8,7 @@
 #include "chars"
 #include "words"
 #include "forit"
+#include "sout"
 
 #include "histo/h1d"
 #include "histo/h2d"
@@ -211,6 +212,21 @@ public:
                 << std::endl;
           return false;
         }
+
+      } else if(_words[0]=="#planes_Sxyw") {
+        std::vector<double> planes;
+        double value;
+        for(unsigned int index=1;index<_words.size();index++) {
+          if(!to(_words[index],value)) {
+            a_out << "tools::rcsv::histo::read :"
+                  << " syntax error in " << sout(line)
+                  << std::endl;
+            return false;
+          }
+          planes.push_back(value);
+        }
+        hdata.m_in_range_plane_Sxyw = planes;
+
       } else if(_words[0]=="#bin_number") {
         if(_words.size()!=2) {
           a_out << "tools::rcsv::histo::read :"

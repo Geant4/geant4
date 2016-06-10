@@ -105,6 +105,9 @@ public:
     inline value_type Pop();
     // Gets copy of cached value
     
+    G4Cache(const G4Cache& rhs);
+    G4Cache& operator=(const G4Cache& rhs);
+
 protected:
   const int& GetId() const { return id; }
 private:
@@ -119,9 +122,6 @@ private:
     return theCache.GetCache(id);
   }
 
-  //Disable copy constructor
-  G4Cache(const G4Cache& rhs);
-  G4Cache& operator=(const G4Cache& rhs);
 };
 
 
@@ -220,6 +220,35 @@ G4Cache<V>::G4Cache()
 #ifdef g4cdebug
     cout<<"G4Cache id: "<<id<<endl;
 #endif
+}
+
+template<class V>
+G4Cache<V>::G4Cache(const G4Cache<V>& rhs)
+{
+	//Copy is special, we need to copy the content
+	//of the cache, not the cache object
+	if ( this == &rhs ) return;
+	G4AutoLock l(&gMutex);
+	id = instancesctr++;
+	//Force copy of cached data
+	V aCopy = rhs.GetCache();
+	Put( aCopy );
+#ifdef g4cdebug
+	cout<<"Copy constructor with id: "<<id<<endl;
+#endif
+}
+
+template<class V>
+G4Cache<V>& G4Cache<V>::operator=(const G4Cache<V>& rhs)
+{
+	if (this == &rhs) return *this;
+	//Force copy of cached data
+	V aCopy = rhs.GetCache();
+	Put(aCopy);
+#ifdef g4cdebug
+	cout<<"Assignement operator with id: "<<id<<endl;
+#endif
+	return *this;
 }
 
 template<class V>

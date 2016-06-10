@@ -1,0 +1,25 @@
+$Id$
+
+///\file ".README.HowToNavigate.txt"
+///\brief Examples How To Navigate README page
+
+/*! \page README_HowToNavigate How to navigate in the examples documentation 
+
+The examples documentation is composed from a <b> "global" documentation </b> including all examples with classes which has unique names (eg. A01DetectorConstruction etc.) and from <b> "standalone" documentations </b>  for examples with classes which names are not not unique (DetectorConstruction etc.).
+
+\section HowToNavigate_sec1 Global documentation
+
+The lists of <a href="pages.html"> "Related Pages" </a> and <a href="modules.html"> "Modules"</a> in the global documentation include the README pages for all examples categories and examples with both unique class names and generic ones. The lists <a href="namespaces.html"> "Namespaces" </a>, <a href="classes.html"> "Classes" </a> and <a href="files.html"> "Files" </a>  include only the examples with unique class names.
+
+That's why the README pages for the examples with a standalone documentation generated in the global documentation do not contain links to their classes 
+(one cannot click on a class name here to get the class documentation). See eg. \ref ExampleTestEm1.
+
+\section HowToNavigate_sec2 Standalone documentations
+
+The links from "global" documentation to the examples "standalone" documentation are available in the list of <a href="modules.html"> "Modules"</a>. When selecting eg. "TestEm1" here, you will be directed to <a href="../html_TestEm1/html/index.html"> the main page </a> of its standalone documentation. When selecting then <a href="../html_TestEm1/html/ExampleTestEm1.html"> "Example TestEm1" </a> from the <a href="../html_TestEm1/html/pages.html"> "Related Pages" </a> list here (there is only one page in the list) you will get the example documentation with hyperlinks to the classes etc. 
+
+All the lists in the examples "standalone" documentation include only the concerned example and eventually the classes shared with another examples or the classes from <a href="Examples_common.html"> common </a> if they are used in the example.
+
+This organization was necessary as Doxygen does not support the classes with the same names in one system.
+
+*/

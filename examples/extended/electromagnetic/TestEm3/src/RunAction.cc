@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm3/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 85280 2014-10-27 09:20:14Z gcosmo $
+// $Id: RunAction.cc 90969 2015-06-12 08:12:57Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -85,8 +85,9 @@ void RunAction::BeginOfRunAction(const G4Run*)
   if (analysis->IsActive()) analysis->OpenFile();
 
   // save Rndm status and open the timer
+
   if (isMaster) {
-    G4Random::showEngineStatus();
+    //    G4Random::showEngineStatus();
     fTimer = new G4Timer();
     fTimer->Start();
   }
@@ -116,7 +117,7 @@ void RunAction::EndOfRunAction(const G4Run*)
   }    
 
   // show Rndm status
-  if (isMaster)  G4Random::showEngineStatus();   
+  //  if (isMaster)  G4Random::showEngineStatus();   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

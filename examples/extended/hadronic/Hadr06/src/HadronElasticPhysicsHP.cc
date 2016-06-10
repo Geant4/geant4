@@ -38,10 +38,10 @@
 #include "NeutronHPMessenger.hh"
 
 #include "G4HadronicProcess.hh"
-#include "G4NeutronHPElastic.hh"
-#include "G4NeutronHPElasticData.hh"
-#include "G4NeutronHPThermalScattering.hh"
-#include "G4NeutronHPThermalScatteringData.hh"
+#include "G4ParticleHPElastic.hh"
+#include "G4ParticleHPElasticData.hh"
+#include "G4ParticleHPThermalScattering.hh"
+#include "G4ParticleHPThermalScatteringData.hh"
 
 #include "G4SystemOfUnits.hh"
 
@@ -69,14 +69,14 @@ void HadronElasticPhysicsHP::ConstructProcess()
   GetNeutronModel()->SetMinEnergy(19.5*MeV);
 
   G4HadronicProcess* process = GetNeutronProcess();
-  G4NeutronHPElastic* model1 = new G4NeutronHPElastic();
+  G4ParticleHPElastic* model1 = new G4ParticleHPElastic();
   process->RegisterMe(model1);
-  process->AddDataSet(new G4NeutronHPElasticData());
+  process->AddDataSet(new G4ParticleHPElasticData());
 
   if (fThermal) {    
-    G4NeutronHPThermalScattering* model2 = new G4NeutronHPThermalScattering();
+    G4ParticleHPThermalScattering* model2 = new G4ParticleHPThermalScattering();
     process->RegisterMe(model2);
-    process->AddDataSet(new G4NeutronHPThermalScatteringData());  
+    process->AddDataSet(new G4ParticleHPThermalScatteringData());  
     model1->SetMinEnergy(4*eV);
   }      
 }

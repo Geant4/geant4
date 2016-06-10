@@ -27,7 +27,7 @@
 /// \brief Definition of the F01DetectorConstruction class
 //
 //
-// $Id: F01DetectorConstruction.hh 77483 2013-11-25 10:10:57Z gcosmo $
+// $Id: F01DetectorConstruction.hh 90341 2015-05-26 08:38:36Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -96,10 +96,10 @@ class F01DetectorConstruction : public G4VUserDetectorConstruction
      G4LogicalVolume* GetLogicalAbsorber()    {return fLogicAbsorber;}
 
   private:
+
      F01DetectorMessenger* fDetectorMessenger;  // pointer -> Messenger
      G4Cache<F01CalorimeterSD*> fCalorimeterSD; // pointer -> sensitive detector
      G4Cache<F01FieldSetup*>    fEmFieldSetup;
-
 
      G4Tubs*            fSolidWorld;     // pointer to the solid World
      G4LogicalVolume*   fLogicWorld;     // pointer to the logical World

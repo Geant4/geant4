@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HnInformation.hh 83599 2014-09-03 09:14:50Z gcosmo $
+// $Id: G4HnInformation.hh 92688 2015-09-14 07:01:13Z gcosmo $
 
 // Data class for the added Hn/Pn information (not available in g4tools). 
 //
@@ -35,11 +35,20 @@
 #include "globals.hh"
 #include "G4Fcn.hh" 
 #include "G4BinScheme.hh" 
+#include "G4AnalysisUtilities.hh" 
 
 // The additional Hn information per dimension
 
 struct G4HnDimensionInformation
 {
+  G4HnDimensionInformation()
+    : fUnitName(), 
+      fFcnName(),
+      fUnit(), 
+      fFcn(nullptr),
+      fBinScheme(G4BinScheme::kLinear)
+      {}
+      
   G4HnDimensionInformation( 
       const G4String& unitName,
       const G4String& fcnName,
@@ -86,40 +95,41 @@ struct G4HnDimensionInformation
 class G4HnInformation
 {
   public:
-    enum {
-      kX = 0,
-      kY = 1,
-      kZ = 2
-    };  
-
-  public:
     G4HnInformation(const G4String& name, G4int nofDimensions)
       : fName(name),
         fHnDimensionInformations(),
         fActivation(true),
-        fAscii(false) {fHnDimensionInformations.reserve(nofDimensions); }
+        fAscii(false),
+        fPlotting(false) { fHnDimensionInformations.reserve(nofDimensions); }
+
+    // Deleted default constructor
+    G4HnInformation() = delete; 
   
     // Set methods
     void AddHnDimensionInformation(
             const G4HnDimensionInformation& hnDimensionInformation);
+    void AddDimension(
+            const G4String& unitName, const G4String& fcnName, G4BinScheme binScheme);
+    void SetDimension(G4int dimension,
+            const G4String& unitName, const G4String& fcnName, G4BinScheme binScheme);
     void SetActivation(G4bool activation);
-    void SetAscii(G4bool ascii);  
+    void SetAscii(G4bool ascii);
+    void SetPlotting(G4bool plotting);
   
     // Get methods
     G4String GetName() const;
     G4HnDimensionInformation* GetHnDimensionInformation(G4int dimension);
     G4bool  GetActivation() const;
-    G4bool  GetAscii() const;  
+    G4bool  GetAscii() const;
+    G4bool  GetPlotting() const;
 
   private:
-    // Disabled default constructor
-    G4HnInformation(); 
-    
     // Data members
     G4String fName;
     std::vector<G4HnDimensionInformation> fHnDimensionInformations;
     G4bool   fActivation;
     G4bool   fAscii;  
+    G4bool   fPlotting;
 };
 
 // inline functions
@@ -128,11 +138,36 @@ inline void G4HnInformation::AddHnDimensionInformation(
                 const G4HnDimensionInformation& hnDimensionInformation)
 { fHnDimensionInformations.push_back(hnDimensionInformation); }
 
+inline void G4HnInformation::AddDimension(
+                const G4String& unitName, const G4String& fcnName, G4BinScheme binScheme)
+{
+  auto unit = G4Analysis::GetUnitValue(unitName);
+  auto fcn = G4Analysis::GetFunction(fcnName);
+  fHnDimensionInformations.push_back(
+    G4HnDimensionInformation(unitName, fcnName, unit, fcn, binScheme));
+}
+
+inline void G4HnInformation::SetDimension(G4int dimension,
+                const G4String& unitName, const G4String& fcnName, G4BinScheme binScheme)
+{
+  auto info = GetHnDimensionInformation(dimension);
+  auto unit = G4Analysis::GetUnitValue(unitName);
+  auto fcn = G4Analysis::GetFunction(fcnName);
+  info->fUnitName = unitName;
+  info->fFcnName = fcnName;
+  info->fUnit = unit;
+  info->fFcn = fcn;
+  info->fBinScheme = binScheme;
+}
+
 inline void G4HnInformation::SetActivation(G4bool activation)
 { fActivation = activation; }
 
 inline void G4HnInformation::SetAscii(G4bool ascii)
 { fAscii = ascii; }
+
+inline void G4HnInformation::SetPlotting(G4bool plotting)
+{ fPlotting = plotting; }
 
 inline G4String G4HnInformation::GetName() const
 { return fName; }
@@ -145,5 +180,8 @@ inline G4bool  G4HnInformation::GetActivation() const
 
 inline G4bool  G4HnInformation::GetAscii() const
 { return fAscii; }
+
+inline G4bool  G4HnInformation::GetPlotting() const
+{ return fPlotting; }
 
 #endif  

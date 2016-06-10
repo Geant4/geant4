@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundFragment.hh 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4PreCompoundFragment.hh 90337 2015-05-26 08:34:27Z gcosmo $
 //
 //  J. M. Quesada (August 2008).  
 //  Based  on previous work by V. Lara
@@ -58,9 +58,15 @@ public:
   // probability of a fragment
   G4double CalcEmissionProbability(const G4Fragment & aFragment);
   
-  G4double GetKineticEnergy(const G4Fragment & aFragment);
+  G4double SampleKineticEnergy(const G4Fragment & aFragment);
 
 protected:
+
+  virtual G4double GetAlpha() const = 0;
+
+  virtual G4double GetBeta() const = 0;
+
+  G4double CrossSection(G4double ekin) const;
 
   virtual G4double 
   ProbabilityDistributionFunction(G4double K, 
@@ -69,9 +75,10 @@ protected:
 private:	
   // This method performs integration for probability function over 
   // fragment kinetic energy
-  G4double IntegrateEmissionProbability(G4double Low, 
-					G4double Up, 
+  G4double IntegrateEmissionProbability(G4double Low, G4double Up, 
 					const G4Fragment & aFragment);	
+
+  G4double GetOpt0(G4double ekin) const;
 
   // default constructor
   G4PreCompoundFragment();
@@ -82,6 +89,11 @@ private:
   G4int operator==(const G4PreCompoundFragment &right) const;
   G4int operator!=(const G4PreCompoundFragment &right) const;
 
+  G4int index;
+
+  G4double muu;
+  G4double probability[12];
+  G4double probmax;
 };
 
 #endif

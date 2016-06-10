@@ -1,4 +1,4 @@
-$Id: History 86064 2014-11-07 08:49:32Z gcosmo $
+$Id: History 88035 2015-01-26 10:22:08Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+23-01-15 Laszlo Urban (electonScattering-V10-01-00)
+- plot 6 filling is corrected, the distance from scattering foil to detector
+  was wrong, it is corrected now
 
 13-09-14 mma (electonScattering-V10-00-02)
 - electronScttering.cc : SetNumberOfThreads(G4Threading::G4GetNumberOfCores())

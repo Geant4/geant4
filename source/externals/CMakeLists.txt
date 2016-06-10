@@ -14,13 +14,6 @@
 #------------------------------------------------------------------------------
 
 #----------------------------------------------------------------------------
-# We only need internal USolids if it was requested
-#
-if(NOT GEANT4_USE_SYSTEM_USOLIDS)
-    add_subdirectory(usolids)
-endif()
-
-#----------------------------------------------------------------------------
 # We only need internal CLHEP if it was requested
 #
 if(NOT GEANT4_USE_SYSTEM_CLHEP)

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorTrackLengthTarget.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4ErrorTrackLengthTarget.cc 91809 2015-08-06 13:00:09Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -56,7 +56,7 @@ G4ErrorTrackLengthTarget(const G4double maxTrkLength )
   // loop over all particles in G4ParticleTable
 
   theParticleIterator->reset();
-  while( (*theParticleIterator)() )
+  while( (*theParticleIterator)() )  // Loop checking, 06.08.2015, G.Cosmo
   {
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();

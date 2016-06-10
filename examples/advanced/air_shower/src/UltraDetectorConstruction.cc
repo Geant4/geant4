@@ -554,7 +554,7 @@ G4VPhysicalVolume* UltraDetectorConstruction::ConstructUVscope(G4VPhysicalVolume
   G4LogicalVolume *logicLensFrame = new G4LogicalVolume(solidLensFrame,Al,"LensFrameLV",0,0,0);
 
   G4ThreeVector LensFramePosition ;
-  LensFramePosition = LensPosition+G4ThreeVector(0.0*mm,0.0*mm,-((FresnelLens->GetThickness())/2.0+solidLensFrame->GetDz())) ;
+  LensFramePosition = LensPosition+G4ThreeVector(0.0*mm,0.0*mm,-((FresnelLens->GetThickness())/2.0+solidLensFrame->GetZHalfLength())) ;
 
   G4VPhysicalVolume *physicalLensFrame =
     new G4PVPlacement(0,LensFramePosition,"LensFramePV",logicLensFrame,World_phys,false,0);

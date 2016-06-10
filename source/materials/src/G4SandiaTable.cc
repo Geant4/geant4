@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SandiaTable.cc 84401 2014-10-15 07:23:36Z gcosmo $
+// $Id: G4SandiaTable.cc 91868 2015-08-07 15:19:52Z gcosmo $
 
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -149,6 +149,7 @@ G4SandiaTable::GetSandiaCofPerAtom(G4int Z, G4double energy,
   } else {   
     G4int interval = fNbOfIntervals[Z] - 1;
     row = fCumulInterval[Z-1] + interval;
+    // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
     while ((interval>0) && (energy<fSandiaTable[row][0]*keV)) {
       --interval;
       row = fCumulInterval[Z-1] + interval;
@@ -264,6 +265,7 @@ void G4SandiaTable::ComputeMatSandiaMatrix()
     {
       if (tmp1[j1] <= Emin) tmp1[j1] = DBL_MAX;      //eliminate from tmp1
     }
+    // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
   } while (Emin < DBL_MAX);
         	         	   	
   //create the sandia matrix for this material
@@ -520,10 +522,11 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
       fPhotoAbsorptionCof3[jj-1] = fPhotoAbsorptionCof3[jj];
       fPhotoAbsorptionCof4[jj-1] = fPhotoAbsorptionCof4[jj];
     }
-    fMaxInterval--;
-    // c--;
+    --fMaxInterval;
+    --c; 
   }
-  while( c < fMaxInterval - 1 ); // was <
+  // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
+  while( c < fMaxInterval - 1 ); 
 
   if( fPhotoAbsorptionCof0[fMaxInterval-1] == 0.0 ) fMaxInterval--; 
   	
@@ -618,6 +621,7 @@ G4SandiaTable::G4SandiaTable(G4int matIndex)
  
   fMaxInterval        = 0;
   fVerbose            = 0;  
+  fLowerI1 = false;
 
   fSandiaCofPerAtom.resize(4,0.0);
 
@@ -632,7 +636,7 @@ G4SandiaTable::G4SandiaTable(G4int matIndex)
   else
     {
       G4Exception("G4SandiaTable::G4SandiaTable(G4int matIndex)", "mat401",
-       FatalException, "wrong matIndex");
+		  FatalException, "wrong matIndex");
     }
 }
 
@@ -676,7 +680,7 @@ void G4SandiaTable::Initialize(G4int matIndex)
   else
   {
     G4Exception("G4SandiaTable::Initialize(G4int matIndex)", "mat401",
-    FatalException, "wrong matIndex");
+		FatalException, "wrong matIndex");
   }
 }
 
@@ -905,6 +909,7 @@ G4SandiaTable::SandiaMixing(         G4int Z[],
     mi--;
     c--;
   }
+  // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
   while( c < mi - 1 );
 
   if( fVerbose > 0 ) G4cout<<"end SanMix, mi = "<<mi<<G4endl;
@@ -960,6 +965,7 @@ G4SandiaTable::GetSandiaCofForMaterial(G4double energy) const
   G4int interval = 0;
   if (energy > (*(*fMatSandiaMatrix)[0])[0]) { 
     interval = fMatNbOfIntervals - 1;
+    // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
     while ((interval>0)&&(energy<(*(*fMatSandiaMatrix)[interval])[0])) 
       { --interval; }
   } 
@@ -995,6 +1001,7 @@ G4SandiaTable::GetSandiaCofForMaterialPAI(G4double energy) const
   if (energy >= (*(*fMatSandiaMatrixPAI)[0])[0]) {
    
     G4int interval = fMatNbOfIntervals - 1;
+    // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
     while ((interval>0)&&(energy<(*(*fMatSandiaMatrixPAI)[interval])[0])) 
       {interval--;} 
     x = &((*(*fMatSandiaMatrixPAI)[interval])[1]);
@@ -1192,6 +1199,7 @@ void G4SandiaTable::ComputeMatTable()
     --fMaxInterval;
     --c;
   }
+  // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
   while( c < fMaxInterval - 1 );
   	
   // create the sandia matrix for this material

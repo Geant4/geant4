@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh 86360 2014-11-10 08:34:16Z gcosmo $
+// $Id: G4OpenGLQtViewer.hh 91686 2015-07-31 09:40:08Z gcosmo $
 //
 // 
 // G4OpenGLQtViewer : Class to provide WindowsNT specific
@@ -91,8 +91,19 @@ public:
   G4OpenGLQtViewer (G4OpenGLSceneHandler& scene);
   virtual ~G4OpenGLQtViewer ();
 #ifdef G4MULTITHREADED
-  void SwitchToVisSubThread();
-  void SwitchToMasterThread();
+  // In MT mode these functions are called in the following order for each run:
+  // Called on the master thread before starting the vis sub-thread.
+  virtual void DoneWithMasterThread ();
+  // Called on the master thread after starting the vis sub-thread.
+  virtual void MovingToVisSubThread ();
+  // Called on the vis sub-thread when waiting for events.
+  virtual void SwitchToVisSubThread ();
+  // Called on the vis sub-thread when all events have been processed.
+  virtual void DoneWithVisSubThread ();
+  // Called on the vis sub-thread when all events have been processed.
+  // virtual void MovingToMasterThread ();  Not used in G4OpenGLQtViewer.
+  // Called on the master thread after the vis sub-thread has terminated.
+  virtual void SwitchToMasterThread ();
 #endif
 
 private:
@@ -201,9 +212,9 @@ private:
                                  unsigned int currentIndex,
                                  int currentPVPOIndex);
   void setCheckComponent(QTreeWidgetItem* item,bool check);
-  void initSceneTreeComponent();
-  void initViewerPropertiesComponent();
-  void initPickingComponent();
+  void createSceneTreeComponent();
+  void createViewerPropertiesComponent();
+  void createPickingComponent();
   bool parseAndCheckVisibility(QTreeWidgetItem * treeNode,int POindex);
   QTreeWidgetItem* createTreeWidgetItem(const PVPath& fullPath,
                                      const QString& name,
@@ -239,6 +250,15 @@ private:
   QString GetCommandParameterList (const G4UIcommand *aCommand);
   void changeColorAndTransparency(GLuint index, G4Color color);
 
+#ifdef G4MULTITHREADED
+  inline void SetQGLContextVisSubThread(QThread *th) {
+    fQGLContextVisSubThread = th;
+  }
+  inline void SetQGLContextMainThread(QThread *th) {
+    fQGLContextMainThread = th;
+  }
+#endif
+  
   QMenu *fContextMenu;
   QPoint fLastPos1;
   QPoint fLastPos2;
@@ -348,6 +368,11 @@ private:
   GLuint fLastHighlightName;
   bool fIsDeleting;
 
+#ifdef G4MULTITHREADED
+  QThread* fQGLContextVisSubThread;
+  QThread* fQGLContextMainThread;
+#endif
+  
 public Q_SLOTS :
   void startPauseVideo();
 

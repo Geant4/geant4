@@ -25,12 +25,13 @@ include(${Geant4_USE_FILE})
 #
 find_package(ROOT REQUIRED)
 
-#----------------------------------------------------------------------------
-# P01 requires GCCXML 
-#
-if(NOT GCCXML)
-   message(FATAL_ERROR "P01 requires GCCXML")
-endif() 
+# ROOT version 6 required
+if(ROOT_FOUND)
+  STRING(REGEX MATCH "6.*" VERSION6MATCH ${ROOT_VERSION})
+  if(NOT VERSION6MATCH) 
+    message(FATAL_ERROR "P01 requires ROOT 6")
+  endif()
+endif()
 
 #----------------------------------------------------------------------------
 # P01 requires shared libraries
@@ -51,20 +52,20 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 #----------------------------------------------------------------------------
 # Generate dictionaries, add ROOT libraries properties
 #
-REFLEX_GENERATE_DICTIONARY(ExP01Classes include/ExP01Classes.hh SELECTION xml/selection.xml) # OPTIONS --gccxmlopt="--gccxml-compiler g++")
+REFLEX_GENERATE_DICTIONARY(ExP01Classes include/ExP01Classes.hh SELECTION xml/selection.xml)
 add_library(ExP01ClassesDict SHARED ${sources} ExP01Classes.cpp)
 set(libsuffix .so)
 set(ROOT_LIBRARY_PROPERTIES ${ROOT_LIBRARY_PROPERTIES} SUFFIX ${libsuffix})
 set_target_properties(ExP01ClassesDict PROPERTIES ${ROOT_LIBRARY_PROPERTIES})
-target_link_libraries(ExP01ClassesDict  ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} Cintex Reflex)
+target_link_libraries(ExP01ClassesDict  ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(exampleP01 exampleP01.cc ${sources} ${headers})
-target_link_libraries(exampleP01 ExP01ClassesDict ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} Cintex)
+target_link_libraries(exampleP01 ExP01ClassesDict ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
 add_executable(readHits readHits.cc  ${sources} ${headers})
-target_link_libraries(readHits ExP01ClassesDict ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} Cintex)
+target_link_libraries(readHits ExP01ClassesDict ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
@@ -95,4 +96,4 @@ add_custom_target(P01 DEPENDS exampleP01 readHits )
 install(TARGETS exampleP01 DESTINATION bin)
 install(TARGETS readHits DESTINATION bin)
 install(TARGETS ExP01ClassesDict DESTINATION lib)
-
+install(FILES ${PROJECT_BINARY_DIR}/ExP01Classes_rdict.pcm DESTINATION lib)

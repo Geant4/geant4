@@ -47,7 +47,7 @@ class G4RootRNtupleManager : public G4VRNtupleManager
   friend class G4RootAnalysisReader;
 
   protected:
-    G4RootRNtupleManager(const G4AnalysisManagerState& state);
+    explicit G4RootRNtupleManager(const G4AnalysisManagerState& state);
     virtual ~G4RootRNtupleManager();
 
     // Methods to manipulate ntuples  

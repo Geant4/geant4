@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.hh 71534 2013-06-17 16:07:53Z gcosmo $
+// $Id: G4VViewer.hh 90651 2015-06-05 13:30:54Z gcosmo $
 //
 // 
 // John Allison  27th March 1996
@@ -97,6 +97,22 @@ public: // With description
   // end of scene drawing; be aware hits and digi drawing may Follow.
   // It is not yet the end of all drawing; that is signalled by
   // ShowView ().)
+
+#ifdef G4MULTITHREADED
+  // In MT mode these functions are called in the following order for each run:
+  // Called on the master thread before starting the vis sub-thread.
+  virtual void DoneWithMasterThread ();
+  // Called on the master thread after starting the vis sub-thread.
+  virtual void MovingToVisSubThread ();
+  // Called on the vis sub-thread when waiting for events.
+  virtual void SwitchToVisSubThread ();
+  // Called on the vis sub-thread when all events have been processed.
+  virtual void DoneWithVisSubThread ();
+  // Called on the vis sub-thread when all events have been processed.
+  virtual void MovingToMasterThread ();
+  // Called on the master thread after the vis sub-thread has terminated.
+  virtual void SwitchToMasterThread ();
+#endif
 
   //////////////////////////////////////////////////////////////
   // Access functions.

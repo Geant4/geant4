@@ -32,7 +32,7 @@ public:
   bool scale(TW a_factor) {return multiply(a_factor);}
 
   void copy_from_data(const hd_t& a_from) {parent::base_from_data(a_from);}
-  hd_t get_histo_data() const {return parent::base_get_data();}
+  hd_t get_histo_data() const {return *this;} //deprecated. Keep it for g4tools.
 
   bool reset() {
     parent::base_reset();
@@ -70,6 +70,9 @@ public:
   
     parent::m_all_entries++;
     if(inRange) {
+      parent::m_in_range_plane_Sxyw[0] += aX * aY * aWeight;
+
+      // fast getters :
       parent::m_in_range_entries++;
       parent::m_in_range_Sw += aWeight;
       parent::m_in_range_Sw2 += aWeight*aWeight;
@@ -121,6 +124,8 @@ public:
 
     parent::m_all_entries += a_entries;
     if(inRange) {
+      //parent::m_in_range_plane_Sxyw[0] ??? ill-defined.
+
       parent::m_in_range_entries += a_entries;
       parent::m_in_range_Sw += a_Sw;
       parent::m_in_range_Sw2 += a_Sw2;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ElectronBenchmarkDetector.hh 76691 2013-11-14 08:46:02Z gcosmo $
+// $Id: ElectronBenchmarkDetector.hh 93389 2015-10-20 07:04:35Z gcosmo $
 //
 /// \file medical/electronScattering2/include/ElectronBenchmarkDetector.hh
 /// \brief Definition of the ElectronBenchmarkDetector class
@@ -38,6 +38,7 @@
 
 class G4LogicalVolume;
 class G4VPhysicalVolume;
+class G4Tubs;
 class G4MultiFunctionalDetector;
 class G4Material;
 class G4VisAttributes;
@@ -68,7 +69,6 @@ public:
     void CreateHeliumBag(G4LogicalVolume* logicWorld);
     void CreateScorer(G4LogicalVolume* logicWorld);
     G4VPhysicalVolume* CreateGeometry();
-    void UpdateGeometry();
     
     // Command Interface
     void SetPrimFoilMaterial(G4String matname);
@@ -83,7 +83,9 @@ private:
     G4Material* fMaterialPrimFoil;
     G4double fHalfThicknessPrimFoil;
     G4double fPosPrimFoil;
-    
+    G4LogicalVolume* fLogPrimFoil;
+    G4Tubs* fSolidPrimFoil; 
+
     // Monitor Chambers
     G4double fPosMon0;
     G4double fPosMon1;

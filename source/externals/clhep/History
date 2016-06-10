@@ -17,6 +17,80 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09 November 2015 - G.Cosmo
+- Updated to CLHEP-2.3.1.1.
+- Added MixMaxRng to Randomize.h.
+
+30 October 2015 - G.Cosmo
+- Fixed default seeding in MixMaxRng::setSeeds().
+
+28 September 2015 - G.Cosmo
+- Fixed compilation warning on gcc in mixmax.h for signed/unsigned comparison.
+- Added reference to MixMaxRng.h.
+
+25 September 2015 - G.Cosmo
+- Added MixMaxRng to EngineFactory.
+- Added copy-constructor and assignment operator to MixMaxRng.
+- Replaced "#define N 256" with "static const unsigned int N = 256;"
+  in mixmax[.h.cc] and adapted code accordingly; commented out unused
+  cases for different values of N.
+  Fixes symbols clashes within CLHEP namespace.
+
+18 September 2015 - G.Cosmo
+- Disable thread_local and atomic c++11 features specific for Intel-icc
+  compiler in Utility module: thread_local.h, atomic_int.h.
+  Use settings related to gcc.
+
+15 September 2015 - G.Cosmo
+- Fixes by K.Savvidy to allow for porting on Intel-icc compiler and
+  Windows Visual Studio. Updated files: minmax[h.cc].
+
+14 September 2015 - G.Cosmo
+- Included changes by K.Savvidy to make MixMax support 32-bits platforms.
+  Updated files: minmax[h.cc], mixmax_skip_N256.icc.
+
+25 August 2015 - G.Cosmo
+- Added MixMax random engine classes implementing the "Matrix Generator of
+  Pseudorandom Numbers", as described in J. Compt. Phy. 97, 573 (1991).
+  Added files:
+  o MixMaxRng[h.cc]: CLHEP interface class to MixMax generator.
+  o minmax[h.cc]: C++ translation/adaptation of the MixMax generator.
+  o mixmax_skip_N256.icc: table of skipping coefficients for MixMax (N=256).
+
+19 August 2015 - M.Maire
+- Added liter and its sub units to SystemOfUnits.h: liter, L, dL, cL, mL.
+
+12 August 2015 - G.Cosmo
+- Use std::shared_ptr in random classes instead of internal Boost-derived
+  implementation.
+- Corrected RandExpZiggurat to use shared_ptr as for all other distributions.
+- Utility module: removed Boost derived implementation of shared_ptr and
+  weak_ptr, now typedefs to c++0x standard std::shared_ptr and std::weak_ptr
+  respectively. Removed no longer used type_traits.h header.
+
+7 August 2015 - G.Cosmo
+- Temporarly commented out assertion in memory.h, in view of full transition
+  to C++11 for use of shared_ptr et al..
+
+6 August 2015 - G.Cosmo
+- Enable thread_local and atomic c++11 features for Intel-icc compiler
+  in Utility module: thread_local.h, atomic_int.h.
+
+15 June 2015 - G.Cosmo
+- Updated to CLHEP-2.2.0.8. 
+- Switch off gcc-5 warning for unused variable in Randomize.h header.
+
+11 June 2015 - G.Cosmo
+- Moved static methods handling static data in G4RandGauss from inline
+  to source. Addressing problem report #1754.
+- Switch off gcc-5 warnings for deprecated calls to auto_ptr in Utility headers.
+
+9 April 2015 - G.Cosmo
+- Fixed usage of std::abs() in RandGaussZiggurat source...
+
+12 December 2014 - G.Cosmo
+- Fixed usage of std::abs() in RandGaussZiggurat header.
+
 24 November 2014 - G.Cosmo
 - Updated to CLHEP-2.2.0.4:
   * Utility (L.Garren <garren@fnal.gov>)

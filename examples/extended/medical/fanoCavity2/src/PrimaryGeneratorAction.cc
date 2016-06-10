@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity2/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
-// $Id: PrimaryGeneratorAction.cc 68999 2013-04-15 09:23:17Z gcosmo $
+// $Id: PrimaryGeneratorAction.cc 90829 2015-06-10 08:37:55Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,7 +48,7 @@
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
 :fParticleGun(0), fDetector(det)
 {
-  fParticleGun  = new G4ParticleGun(1);
+   fParticleGun  = new G4ParticleGun(1);
   G4ParticleDefinition* particle
            = G4ParticleTable::GetParticleTable()->FindParticle("e-");
   fParticleGun->SetParticleDefinition(particle);
@@ -68,10 +68,11 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 void PrimaryGeneratorAction::RunInitialisation(G4double effWall, G4double massR)
 {
   //this function is called at beginning of run
-  //
-  fCavityThickness = fDetector->GetCavityThickness();      
+
+
+  fCavityThickness = fDetector->GetCavityThickness();
   fEffWallThick = effWall;
-  fMassWallRatio  = massR;    
+  fMassWallRatio  = massR;
     
   fNwall = fNcavity = 0;
 }

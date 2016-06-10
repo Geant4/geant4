@@ -63,7 +63,6 @@ void Parse(int& argc, char** argv);
 int main(int argc,char** argv) 
 {
   // Choose the Random engine
-  
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
   //////////
@@ -281,5 +280,3 @@ void Parse(int& argc, char** argv)
     abort();
   }
 }
-
-

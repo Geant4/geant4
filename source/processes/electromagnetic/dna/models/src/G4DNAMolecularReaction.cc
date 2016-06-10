@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularReaction.cc 87061 2014-11-24 11:43:34Z gcosmo $
+// $Id: G4DNAMolecularReaction.cc 91584 2015-07-27 13:01:48Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
 //
@@ -41,6 +41,7 @@
 #include "G4VDNAReactionModel.hh"
 #include "G4MoleculeFinder.hh"
 #include "G4UnitsTable.hh"
+#include "G4MolecularConfiguration.hh"
 
 using namespace std;
 
@@ -94,8 +95,10 @@ G4bool G4DNAMolecularReaction::TestReactibility(const G4Track& trackA,
                                                 const double /*previousStepTime*/,
                                                 bool userStepTimeLimit) /*const*/
 {
-  G4Molecule* moleculeA = GetMolecule(trackA);
-  G4Molecule* moleculeB = GetMolecule(trackB);
+  G4MolecularConfiguration* moleculeA =
+      GetMolecule(trackA)->GetMolecularConfiguration();
+  G4MolecularConfiguration* moleculeB =
+      GetMolecule(trackB)->GetMolecularConfiguration();
 
   if (!fReactionModel)
   {
@@ -160,8 +163,10 @@ G4ITReactionChange* G4DNAMolecularReaction::MakeReaction(const G4Track& trackA,
   fpChanges = new G4ITReactionChange();
   fpChanges->Initialize(trackA, trackB);
 
-  G4Molecule* moleculeA = GetMolecule(trackA);
-  G4Molecule* moleculeB = GetMolecule(trackB);
+  G4MolecularConfiguration* moleculeA =
+      GetMolecule(trackA)->GetMolecularConfiguration();
+  G4MolecularConfiguration* moleculeB =
+      GetMolecule(trackB)->GetMolecularConfiguration();
 
 #ifdef G4VERBOSE
   // DEBUG
@@ -200,7 +205,7 @@ G4ITReactionChange* G4DNAMolecularReaction::MakeReaction(const G4Track& trackA,
 
     for (G4int j = 0; j < nbProducts; j++)
     {
-      G4Molecule* product = new G4Molecule(*reactionData->GetProduct(j));
+      G4Molecule* product = new G4Molecule(reactionData->GetProduct(j));
       G4Track* productTrack = product->BuildTrack(trackA.GetGlobalTime(),
                                                   reactionSite);
 
@@ -212,7 +217,6 @@ G4ITReactionChange* G4DNAMolecularReaction::MakeReaction(const G4Track& trackA,
 
       fpChanges->AddSecondary(productTrack);
       G4MoleculeFinder::Instance()->Push(productTrack);
-//            G4ITManager<G4Molecule>::Instance()->Push(productTrack);
     }
   }
 

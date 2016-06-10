@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGNucleonElasticXS.hh 76889 2013-11-18 13:01:55Z gcosmo $
+// $Id: G4BGGNucleonElasticXS.hh 93682 2015-10-28 10:09:49Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -54,7 +54,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4Element.hh"
 
-class G4GlauberGribovCrossSection;
+class G4ComponentGGHadronNucleusXsc;
 class G4NucleonNuclearCrossSection;
 class G4HadronNucleonXsc;
 class G4ComponentSAIDTotalXS;
@@ -115,7 +115,7 @@ private:
 
   const G4ParticleDefinition*     particle;
   const G4ParticleDefinition*     theProton;
-  G4GlauberGribovCrossSection*    fGlauber;
+  G4ComponentGGHadronNucleusXsc*  fGlauber;
   G4NucleonNuclearCrossSection*   fNucleon;
   G4HadronNucleonXsc*             fHadron;
   G4ComponentSAIDTotalXS*         fSAID;

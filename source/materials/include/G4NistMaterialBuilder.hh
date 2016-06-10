@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.hh 72057 2013-07-04 13:07:29Z gcosmo $
+// $Id: G4NistMaterialBuilder.hh 91920 2015-08-11 09:50:13Z gcosmo $
 
 #ifndef G4NistMaterialBuilder_h
 #define G4NistMaterialBuilder_h 1
@@ -80,6 +80,11 @@ public:
 				   G4bool isotopes=true,
 				   G4bool warning =true);
 					    
+
+  // Find or build a simple material via atomic number
+  //
+  G4Material* FindOrBuildSimpleMaterial(G4int Z, G4bool warning);
+
   // construct a G4Material from scratch by atome count
   // 
   G4Material* ConstructNewMaterial (const G4String& name,
@@ -88,7 +93,7 @@ public:
 				    G4double  dens, 
 				    G4bool    isotopes = true,
 				    G4State   state    = kStateSolid,     
-				    G4double  temp     = CLHEP::STP_Temperature,  
+				    G4double  temp     = NTP_Temperature,  
 				    G4double  pressure = CLHEP::STP_Pressure);
 
   // construct a G4Material from scratch by fraction mass
@@ -99,7 +104,7 @@ public:
 				    G4double  dens, 
 				    G4bool    isotopes = true,
 				    G4State   state    = kStateSolid,     
-				    G4double  temp     = CLHEP::STP_Temperature,  
+				    G4double  temp     = NTP_Temperature,  
 				    G4double  pressure = CLHEP::STP_Pressure); 
 
 
@@ -116,7 +121,7 @@ public:
                                            const std::vector<G4String>& elm,
                                            const std::vector<G4int>& nbAtoms,
                                            G4bool    isotopes = true,
-                                           G4double  temp     = CLHEP::STP_Temperature,
+                                           G4double  temp     = NTP_Temperature,
                                            G4double  pressure = CLHEP::STP_Pressure); 
 				      
   // verbosity level defined by G4NistManager
@@ -144,15 +149,17 @@ public:
   //
   const std::vector<G4String>& GetMaterialNames() const;
 
-  // access to the NIST mean ionisation potentials
+  // access to the NIST mean ionisation potentials and nominal densities
   //
   inline G4double GetMeanIonisationEnergy(G4int index) const;
+  inline G4double GetNominalDensity(G4int index) const;
 
 private:
 
   void Initialise();
   void NistSimpleMaterials();
   void NistCompoundMaterials();
+  void NistCompoundMaterials2();
   void HepAndNuclearMaterials();
   void SpaceMaterials();
   void BioChemicalMaterials();
@@ -164,7 +171,7 @@ private:
 		   G4double pot=0.0, G4int ncomp=1,
 		   G4State=kStateSolid, G4bool stp = true);
 
-  void AddGas(const G4String& nameMat, G4double t=CLHEP::STP_Temperature,
+  void AddGas(const G4String& nameMat, G4double t=NTP_Temperature,
                                        G4double p=CLHEP::STP_Pressure);
 
   void AddElementByWeightFraction(G4int Z, G4double);
@@ -225,6 +232,14 @@ G4NistMaterialBuilder::GetMeanIonisationEnergy(G4int index) const
 {
   G4double res = 10*index;
   if(index >= 0 && index < nMaterials) { res = ionPotentials[index]; }
+  return res;
+}
+
+inline G4double 
+G4NistMaterialBuilder::GetNominalDensity(G4int index) const
+{
+  G4double res = 0.0;
+  if(index >= 0 && index < nMaterials) { res = densities[index]; }
   return res;
 }
 

@@ -9,6 +9,10 @@ ifeq ($(G4SYSTEM),WIN32-g++)
   CXX       := g++
   CXXFLAGS  := -W -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long
   CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe
+  ifdef G4USE_STD11
+    CPPFLAGS  += -std=c++11
+    CXXFLAGS  += -std=c++11
+  endif
   ifdef G4OPTIMISE
     CXXFLAGS  += -O
     FCFLAGS   := -O

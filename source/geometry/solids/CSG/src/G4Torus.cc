@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4Torus.cc 92393 2015-08-31 14:07:30Z gcosmo $
 //
 // 
 // class G4Torus
@@ -55,6 +55,8 @@
 //
 
 #include "G4Torus.hh"
+
+#if !(defined(G4GEOM_USE_UTORUS) && defined(G4GEOM_USE_SYS_USOLIDS))
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -1786,3 +1788,5 @@ G4Polyhedron* G4Torus::CreatePolyhedron () const
 {
   return new G4PolyhedronTorus (fRmin, fRmax, fRtor, fSPhi, fDPhi);
 }
+
+#endif // !defined(G4GEOM_USE_TORUS) || !defined(G4GEOM_USE_SYS_USOLIDS)

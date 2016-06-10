@@ -61,6 +61,7 @@
 #define WATTEMAX 20.0
 
 #include <cmath>
+#include "G4Log.hh"
 #include "G4fissionEvent.hh"
 
 G4double G4fissionEvent::G4SmpWatt(G4double ePart, G4int iso) {
@@ -159,15 +160,23 @@ G4double G4fissionEvent::G4SmpWatt(G4double ePart, G4int iso) {
    y= (x + std::sqrt(x*x-1.))/a;
    z= a*y - 1.;
 
+   G4int icounter = 0;
+   G4int icounter_max = 1024;
    do {
 
-      rand1= -std::log(fisslibrng());
-      rand2= -std::log(fisslibrng());
+      rand1= -G4Log(fisslibrng());
+      rand2= -G4Log(fisslibrng());
       eSmp= y*rand1;
+
+      icounter++;
+      if ( icounter > icounter_max ) { 
+	 G4cout << "Loop-counter exceeded the threshold value at " << __LINE__ << "th line of " << __FILE__ << "." << G4endl;
+         break;
+      }
 
    } while ((rand2-z*(rand1+1.))*(rand2-z*(rand1+1.)) > b*y*rand1 ||
              eSmp < WATTEMIN || eSmp > WATTEMAX);
- 
+   // Loop checking, 11.03.2015, T. Koi
    
    return eSmp;
 }

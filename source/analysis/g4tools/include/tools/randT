@@ -95,6 +95,60 @@ protected:
   REAL m_rate;
 };
 
+template <class FLAT,class REAL>
+class rdir2 {
+public:
+  rdir2(FLAT& a_flat):m_flat(a_flat){}
+  virtual ~rdir2(){}
+public:
+  rdir2(const rdir2& a_from):m_flat(a_from.m_flat){}
+  rdir2& operator=(const rdir2&) {return *this;}
+public:
+  void shoot(REAL& a_x,REAL& a_y) const {
+    // from gsl_ran_dir_2d.
+    REAL u,v,s;
+    do {
+      u = REAL(2) * m_flat.shoot()-REAL(1);
+      v = REAL(2) * m_flat.shoot()-REAL(1);
+      s = u * u + v * v;
+    }
+    while ( (s > REAL(1)) || (s==REAL(0)) );
+    a_x = (u * u - v * v) / s;
+    a_y = REAL(2) * u * v / s;
+  }
+  FLAT& flat() {return m_flat;}
+protected:
+  FLAT& m_flat;
+};
+
+template <class FLAT,class REAL>
+class rdir3 {
+public:
+  rdir3(FLAT& a_flat):m_flat(a_flat){}
+  virtual ~rdir3(){}
+public:
+  rdir3(const rdir3& a_from):m_flat(a_from.m_flat){}
+  rdir3& operator=(const rdir3&) {return *this;}
+public:
+  void shoot(REAL& a_x,REAL& a_y,REAL& a_z) const {
+    // from gsl_ran_dir_3d.
+    REAL s;
+    do {
+      a_x = REAL(2) * m_flat.shoot() - REAL(1);
+      a_y = REAL(2) * m_flat.shoot() - REAL(1);
+      s = (a_x) * (a_x) + (a_y) * (a_y);
+    }
+    while (s > REAL(1));
+    a_z = REAL(2) * s - REAL(1);
+    REAL a = REAL(2) * _sqrt(REAL(1) - s);
+    a_x *= a;
+    a_y *= a;
+  }
+  FLAT& flat() {return m_flat;}
+protected:
+  FLAT& m_flat;
+};
+
 }
 
 #endif

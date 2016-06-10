@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTheoreticalTableA.cc 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4NucleiPropertiesTheoreticalTableA.cc 91885 2015-08-10 07:05:56Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -63,10 +63,8 @@ G4int G4NucleiPropertiesTheoreticalTable::GetIndex(G4int Z, G4int A)
 		EventMustBeAborted, "Nucleon number smaller than Z"); 
   }
   
-  G4int i = shortTable[Z-8];
-  while ( i < shortTable[Z-8+1] ) {
-    if (indexArray[1][i] != A ) i++;
-    else return i;
+  for (G4int i = shortTable[Z-8]; i < shortTable[Z-8+1]; i++ ) {
+    if (indexArray[1][i] == A ) return i;
   }
   
   return -1;

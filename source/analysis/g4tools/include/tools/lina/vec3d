@@ -1,0 +1,96 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_vec3d
+#define tools_vec3d
+
+#include "vec3"
+#include "../S_STRING"
+
+namespace tools {
+
+class vec3d : public vec3<double> {
+public:
+  TOOLS_SCLASS(tools::vec3d) //for stype()
+public:
+  vec3d():vec3<double>(){}
+  vec3d(const double a_vec[3]):vec3<double>(a_vec){}
+  vec3d(double a0,double a1,double a2):vec3<double>(a0,a1,a2){}
+  virtual ~vec3d() {}
+public:
+  vec3d(const vec3d& a_from):vec3<double>(a_from){}
+  vec3d& operator=(const vec3d& a_from){
+    vec3<double>::operator=(a_from);
+    return *this;
+  }
+
+  vec3d(const vec3<double>& a_from):vec3<double>(a_from){}
+
+public: //operators
+  vec3d operator*(double a_v) const {
+    return vec3d(m_data[0]*a_v,
+                 m_data[1]*a_v,
+                 m_data[2]*a_v);
+  }    
+  vec3d operator+(const vec3d& a_v) const {
+    return vec3d(m_data[0]+a_v.m_data[0],
+                 m_data[1]+a_v.m_data[1],
+                 m_data[2]+a_v.m_data[2]);
+  }    
+  vec3d operator-(const vec3d& a_v) const {
+    return vec3d(m_data[0]-a_v.m_data[0],
+                 m_data[1]-a_v.m_data[1],
+                 m_data[2]-a_v.m_data[2]);
+  }    
+  vec3d& operator+=(const vec3d& a_v) {   
+    m_data[0] += a_v.m_data[0];
+    m_data[1] += a_v.m_data[1];
+    m_data[2] += a_v.m_data[2];
+    return *this;
+  }    
+  vec3d& operator-=(const vec3d& a_v) {
+    m_data[0] -= a_v.m_data[0];
+    m_data[1] -= a_v.m_data[1];
+    m_data[2] -= a_v.m_data[2];
+    return *this;
+  }
+  vec3d& operator*=(double a_v) {   
+    m_data[0] *= a_v;
+    m_data[1] *= a_v;
+    m_data[2] *= a_v;
+    return *this;
+  }    
+  vec3d operator-() const {
+    return vec3d(-m_data[0],-m_data[1],-m_data[2]);
+  }
+
+private:static void check_instantiation() {vec3d v(0,0,0);v.set_value(1,1,1);}
+};
+
+inline vec3d operator*(double a_f,const vec3d& a_v) {
+  vec3d res(a_v);
+  res *= a_f;
+  return res;
+}
+
+}
+
+
+#include <vector>
+
+namespace tools {
+
+#ifndef SWIG
+//for sf, mf :
+inline bool set_from_vec(vec3d& a_v,const std::vector<double>& a_sv) {
+  if(a_sv.size()!=3) return false;
+  a_v[0] = a_sv[0];
+  a_v[1] = a_sv[1];
+  a_v[2] = a_sv[2];
+  return true;
+}
+#endif
+
+}
+
+#endif

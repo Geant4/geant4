@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsOrderedFreeVector.cc 74256 2013-10-02 14:24:02Z gcosmo $
+// $Id: G4PhysicsOrderedFreeVector.cc 93409 2015-10-21 13:26:27Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // PhysicsOrderedFreeVector Class Implementation
@@ -66,7 +66,7 @@ G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector(G4double *Energies,
 {
   type = T_G4PhysicsOrderedFreeVector;
 
-  for (size_t i = 0 ; i < VectorLength ; i++)
+  for (size_t i = 0 ; i < VectorLength ; ++i)
     {
       InsertValues(Energies[i], Values[i]);
     }
@@ -100,48 +100,48 @@ void G4PhysicsOrderedFreeVector::InsertValues(G4double energy, G4double value)
         binVector.insert(binLoc, energy);
         dataVector.insert(dataLoc, value);
 
-        numberOfNodes++;
+        ++numberOfNodes;
         edgeMin = binVector.front();
         edgeMax = binVector.back();
 }
 
-G4double  G4PhysicsOrderedFreeVector::GetEnergy(G4double aValue)
+G4double G4PhysicsOrderedFreeVector::GetEnergy(G4double aValue)
 {
-
+        G4double e;
         if (aValue <= GetMinValue()) {
-                return GetMinLowEdgeEnergy();
+          e = edgeMin;
         } else if (aValue >= GetMaxValue()) {
-                return GetMaxLowEdgeEnergy();
+          e = edgeMax;
         } else { 
-        size_t closestBin = FindValueBinLocation(aValue);
-        G4double theEnergy = LinearInterpolationOfEnergy(aValue, closestBin);
-
-        return theEnergy;
-        }
+          size_t closestBin = FindValueBinLocation(aValue);
+          e = LinearInterpolationOfEnergy(aValue, closestBin);
+	}
+        return e;
 }
 
 size_t G4PhysicsOrderedFreeVector::FindValueBinLocation(G4double aValue)
 {
-   G4int n1 = 0;
-   G4int n2 = numberOfNodes/2;
-   G4int n3 = numberOfNodes - 1;
-   while (n1 != n3 - 1) {
-      if (aValue > dataVector[n2])
-         { n1 = n2; }
-      else
-         { n3 = n2; }
-      n2 = n1 + (n3 - n1 + 1)/2;
-   }
-   return (size_t)n1;
+        size_t bin = std::lower_bound(dataVector.begin(), dataVector.end(), aValue)
+                   - dataVector.begin() - 1;
+        bin = std::min(bin, numberOfNodes-2);
+        return bin;
 }
 
 G4double G4PhysicsOrderedFreeVector::LinearInterpolationOfEnergy(G4double aValue,
-								 size_t theLocBin)
+								 size_t bin)
 {
-  G4double intplFactor = (aValue-dataVector[theLocBin])
-     / (dataVector[theLocBin+1]-dataVector[theLocBin]); // Interpolation factor
-
-  return binVector[theLocBin] +
-         ( binVector[theLocBin+1]-binVector[theLocBin] ) * intplFactor;
+        G4double res = binVector[bin];
+        G4double del = dataVector[bin+1] - dataVector[bin];
+        if(del > 0.0) { 
+          res += (aValue - dataVector[bin])*(binVector[bin+1] - res)/del;  
+        }
+        return res;
 }
 
+void G4PhysicsOrderedFreeVector::DumpValues()
+{
+        for (size_t i = 0; i < numberOfNodes; i++)
+        {
+          G4cout << binVector[i] << "\t" << dataVector[i] << G4endl;
+        }
+}

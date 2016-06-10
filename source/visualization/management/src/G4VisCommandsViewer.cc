@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc 83403 2014-08-21 15:07:30Z gcosmo $
+// $Id: G4VisCommandsViewer.cc 93303 2015-10-15 15:19:40Z gcosmo $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -1315,6 +1315,8 @@ G4VisCommandViewerSave::G4VisCommandViewerSave () {
   fpCommand = new G4UIcmdWithAString ("/vis/viewer/save", this);
   fpCommand -> SetGuidance
   ("Write commands that define the current view to file.");
+  fpCommand -> SetGuidance
+  ("Read them back into the same or any viewer with \"/control/execute <filename>\".");
   fpCommand -> SetParameterName ("file-name", omitable = true);
   fpCommand -> SetDefaultValue ("G4cout");
 }
@@ -1419,7 +1421,9 @@ void G4VisCommandViewerSave::SetNewValue (G4UIcommand*, G4String newValue) {
     if (newValue == "G4cout") {
       G4cout << "G4cout.";
     } else {
-      G4cout << "file \'" << newValue << "\".";
+      G4cout << "file \'" << newValue << "\"." <<
+      "\n  Read view parameters back into this or any viewer with"
+      "\n  \"/control/execute " << newValue << "\"";
     }
     G4cout << G4endl;
   }

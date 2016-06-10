@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SIunits.hh 67970 2013-03-13 10:10:06Z gcosmo $
+// $Id: G4SIunits.hh 92196 2015-08-21 09:55:47Z gcosmo $
 // 
 // ----------------------------------------------------------------------
 //
@@ -38,15 +38,15 @@
 // ------- 
 // The basic units are those of the International System:
 //
-//  		meter             
+//  	meter             
 // 		second             
 // 		kilogram      
 // 		ampere         
 // 		degree kelvin          
-//              the amount of substance (mole)
-//              luminous intensity      (candela)
+//      the amount of substance (mole)
+//      luminous intensity      (candela)
 // 		radian                  
-//              steradian              
+//      steradian              
 //
 //
 // The SI numerical value of the positron charge is defined here,
@@ -61,11 +61,20 @@
 // History:
 //
 // 10.03.99   created
-// 01.03.01   parsec      
+// 01.03.01   parsec
+// 11.06.15   upgrate. Equivalent to SystemOfUnits.h
+// 08.08.15   add decimeter, liter  (mma)      
 
-#ifndef G4UNITSTEST_HH
-#define G4UNITSTEST_HH
+#ifndef SI_SYSTEM_OF_UNITS_HH
+#define SI_SYSTEM_OF_UNITS_HH
 
+//
+//
+//
+static const double     pi  = 3.14159265358979323846;
+static const double  twopi  = 2*pi;
+static const double halfpi  = pi/2;
+static const double     pi2 = pi*pi;
 // 
 // Length [L]
 //
@@ -80,7 +89,7 @@ static const double millimeter3 = millimeter*millimeter*millimeter;
 static const double centimeter  = 10.*millimeter;   
 static const double centimeter2 = centimeter*centimeter;
 static const double centimeter3 = centimeter*centimeter*centimeter;
-
+  
 static const double kilometer = 1000.*meter;                   
 static const double kilometer2 = kilometer*kilometer;
 static const double kilometer3 = kilometer*kilometer*kilometer;
@@ -99,6 +108,9 @@ static const double  nanobarn = 1.e-9 *barn;
 static const double  picobarn = 1.e-12*barn;
 
 // symbols
+static const double nm  = nanometer;                        
+static const double um  = micrometer;                        
+
 static const double mm  = millimeter;                        
 static const double mm2 = millimeter2;
 static const double mm3 = millimeter3;
@@ -107,6 +119,12 @@ static const double cm  = centimeter;
 static const double cm2 = centimeter2;
 static const double cm3 = centimeter3;
 
+static const double liter = 1.e+3*cm3;
+static const double  L = liter;
+static const double dL = 1.e-1*liter;
+static const double cL = 1.e-2*liter;
+static const double mL = 1.e-3*liter;
+           
 static const double m  = meter;                  
 static const double m2 = meter2;
 static const double m3 = meter3;
@@ -122,7 +140,7 @@ static const double pc = parsec;
 //
 static const double radian      = 1.;                  
 static const double milliradian = 1.e-3*radian;
-static const double degree = (3.14159265358979323846/180.0)*radian;
+static const double degree = (pi/180.0)*radian;
 
 static const double   steradian = 1.;
 	
@@ -174,7 +192,7 @@ static const double  nanoampere = 1.e-9*ampere;
 // Electric charge [Q]
 //
 static const double coulomb = ampere*second;
-static const double e_SI  = 1.60217733e-19;	// positron charge in coulomb
+static const double e_SI  = 1.602176487e-19;	// positron charge in coulomb
 static const double eplus = e_SI*coulomb ;		// positron charge
 
 //
@@ -269,11 +287,26 @@ static const double mole = 1.;
 //
 static const double becquerel = 1./second ;
 static const double curie = 3.7e+10 * becquerel;
+static const double kilobecquerel = 1.e+3*becquerel;
+static const double megabecquerel = 1.e+6*becquerel;
+static const double gigabecquerel = 1.e+9*becquerel;
+static const double millicurie = 1.e-3*curie;
+static const double microcurie = 1.e-6*curie;
+static const double Bq = becquerel;
+static const double kBq = kilobecquerel;
+static const double MBq = megabecquerel;
+static const double GBq = gigabecquerel;
+static const double Ci = curie;
+static const double mCi = millicurie;
+static const double uCi = microcurie;
 
 //
 // Absorbed dose [L^2][T^-2]
 //
-static const double gray = joule/kilogram ;
+static const double      gray = joule/kilogram;
+static const double  kilogray = 1.e+3*gray;
+static const double milligray = 1.e-3*gray;
+static const double microgray = 1.e-6*gray;
 
 //
 // Luminous intensity [I]
@@ -297,4 +330,5 @@ static const double perCent     = 0.01 ;
 static const double perThousand = 0.001;
 static const double perMillion  = 0.000001;
 
-#endif /* G4UNITSTEST_HH */
+
+#endif /* SI_SYSTEM_OF_UNITS_HH */

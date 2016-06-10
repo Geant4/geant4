@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePhotoElectricModel.cc 83410 2014-08-21 15:17:53Z gcosmo $
+// $Id: G4LivermorePhotoElectricModel.cc 89826 2015-04-30 15:18:18Z gcosmo $
 //
 //
 // Author: Sebastien Incerti
@@ -394,14 +394,30 @@ G4LivermorePhotoElectricModel::SampleSecondaries(
   if(shell) {
     G4int index = couple->GetIndex();
     if(fAtomDeexcitation->CheckDeexcitationActiveRegion(index)) {
-      size_t nbefore = fvect->size();
+      G4int nbefore = fvect->size();
 
       fAtomDeexcitation->GenerateParticles(fvect, shell, Z, index);
-      size_t nafter = fvect->size();
+      G4int nafter = fvect->size();
       if(nafter > nbefore) {
-	for (size_t j=nbefore; j<nafter; ++j) {
-	  edep -= ((*fvect)[j])->GetKineticEnergy();
-	} 
+	G4double esec = 0.0;
+	for (G4int j=nbefore; j<nafter; ++j) {
+
+	  G4double e = ((*fvect)[j])->GetKineticEnergy();
+	  if(esec + e > edep) {
+	    // correct energy in order to have energy balance
+	    e = edep - esec;
+	    ((*fvect)[j])->SetKineticEnergy(e);
+	    esec += e;
+	    // delete the rest of secondaries (should not happens)
+	    for (G4int jj=nafter-1; jj>j; --jj) { 
+	      delete (*fvect)[jj]; 
+	      fvect->pop_back(); 
+	    }
+	    break;	      
+	  }
+	  esec += e; 
+	}
+        edep -= esec;
       }
     }
   }

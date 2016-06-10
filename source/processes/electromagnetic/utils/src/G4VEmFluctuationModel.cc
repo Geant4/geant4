@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmFluctuationModel.cc 81058 2014-05-20 09:04:28Z gcosmo $
+// $Id: G4VEmFluctuationModel.cc 92921 2015-09-21 15:06:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -48,31 +48,16 @@
 
 #include "G4VEmFluctuationModel.hh"
 #include "G4LossTableManager.hh"
-//#include "G4MTHepRandom.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#if __clang__
-  #if (defined(G4MULTITHREADED) && !defined(G4USE_STD11) && \
-      !__has_feature(cxx_thread_local))
-    #define CLANG_NOSTDTLS
-  #endif
-#endif
 
 G4VEmFluctuationModel::G4VEmFluctuationModel(const G4String& nam)
   : name(nam) 
 {
   fManager = G4LossTableManager::Instance();
   fManager->Register(this);
-
-#if (defined(G4MULTITHREADED) && !defined(G4USE_STD11)) || \
-    (defined(CLANG_NOSTDTLS))
-  rndmEngineF = G4MTHepRandom::getTheEngine(); 
-#else // Sequential mode or supporting C++11 standard
-  rndmEngineF = CLHEP::HepRandom::getTheEngine();
-#endif
 }
 
 G4VEmFluctuationModel::~G4VEmFluctuationModel() 
@@ -84,7 +69,7 @@ void G4VEmFluctuationModel::InitialiseMe(const G4ParticleDefinition*)
 {}
 
 void G4VEmFluctuationModel::SetParticleAndCharge(const G4ParticleDefinition*, 
-						 G4double)
+                                                 G4double)
 {}
 
 

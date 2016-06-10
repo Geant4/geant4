@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorldProcess.cc 86967 2014-11-21 11:51:28Z gcosmo $
+// $Id: G4ParallelWorldProcess.cc 88349 2015-02-16 08:47:16Z gcosmo $
 // GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 //
@@ -291,6 +291,23 @@ G4double G4ParallelWorldProcess::AlongStepGetPhysicalInteractionLength(
   else 
   {
     G4FieldTrackUpdator::Update(&fFieldTrack,&track);
+
+#ifdef G4DEBUG_PARALLEL_WORLD_PROCESS    
+    if( verboseLevel > 0 ){
+       int localVerb = verboseLevel-1; 
+
+       if( localVerb == 1 ) { 
+          G4cout << " Pll Wrl  proc::AlongStepGPIL " << this->GetProcessName() << G4endl;
+       }else if( localVerb > 1 ) { 
+          G4cout << "----------------------------------------------" << G4endl;
+          G4cout << " ParallelWorldProcess: field Track set to : " << G4endl;
+          G4cout << "----------------------------------------------" << G4endl;
+          G4cout << fFieldTrack << G4endl;
+          G4cout << "----------------------------------------------" << G4endl;
+       }
+    }
+#endif
+    
     returnedStep
       = fPathFinder->ComputeStep(fFieldTrack,currentMinimumStep,fNavigatorID,
                      track.GetCurrentStepNumber(),fGhostSafety,eLimited,
@@ -298,11 +315,12 @@ G4double G4ParallelWorldProcess::AlongStepGetPhysicalInteractionLength(
     if(eLimited == kDoNot)
     {
       fOnBoundary = false;
-      fGhostSafety = fGhostNavigator->ComputeSafety(endTrack.GetPosition());
+      fGhostSafety = fGhostNavigator->ComputeSafety(endTrack.GetPosition());      
     }
     else
     {
       fOnBoundary = true;
+      // fGhostSafetyEnd = 0.0;    // At end-point of expected step only
     }
     proposedSafety = fGhostSafety;
     if(eLimited == kUnique || eLimited == kSharedOther) {

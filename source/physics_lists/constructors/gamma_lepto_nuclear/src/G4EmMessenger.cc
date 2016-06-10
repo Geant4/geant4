@@ -52,41 +52,38 @@
 G4EmMessenger::G4EmMessenger(G4EmExtraPhysics* ab)
 {
   theB = ab;
-  aDir1 = new G4UIdirectory("/physics_engine/");
+  aDir1 = new G4UIdirectory("/physics_lists/");
   aDir1->SetGuidance("commands related to the physics simulation engine.");
 
   // general stuff.
-  aDir2 = new G4UIdirectory("/physics_engine/tailor/");
+  aDir2 = new G4UIdirectory("/physics_lists/em/");
   aDir2->SetGuidance("tailoring the processes");
 
   // command for synchrotron radiation.
-  theSynch = new G4UIcmdWithAString("/physics_engine/tailor/SyncRadiation",this);
+  theSynch = new G4UIcmdWithABool("/physics_lists/em/SyncRadiation",this);
   theSynch->SetGuidance("Switching on/off synchrotron radiation.");
-  theSynch->SetParameterName("status",false);
-  theSynch->SetCandidates("on off");
-  theSynch->SetDefaultValue("off");
-  theSynch->AvailableForStates(G4State_PreInit,G4State_Idle);
+  theSynch->AvailableForStates(G4State_PreInit);
+
+  // command for synchrotron radiation.
+  theSynchAll = new G4UIcmdWithABool("/physics_lists/em/SyncRadiationAll",this);
+  theSynchAll->SetGuidance("Switching on/off synchrotron radiation for all charged.");
+  theSynchAll->AvailableForStates(G4State_PreInit);
 
   // command for gamma nuclear physics.
-  theGN = new G4UIcmdWithAString("/physics_engine/tailor/GammaNuclear",this);
+  theGN = new G4UIcmdWithABool("/physics_lists/em/GammaNuclear",this);
   theGN->SetGuidance("Switching on gamma nuclear physics.");
-  theGN->SetParameterName("status",false);
-  theGN->SetCandidates("on off");
-  theGN->SetDefaultValue("on");
-  theGN->AvailableForStates(G4State_PreInit,G4State_Idle);
+  theGN->AvailableForStates(G4State_PreInit);
 
   // command for muon nuclear physics.
-  theMUN = new G4UIcmdWithAString("/physics_engine/tailor/MuonNuclear",this);
+  theMUN = new G4UIcmdWithABool("/physics_lists/em/MuonNuclear",this);
   theMUN->SetGuidance("Switching on muon nuclear physics.");
-  theMUN->SetParameterName("status",false);
-  theMUN->SetCandidates("on off");
-  theMUN->SetDefaultValue("off");
-  theMUN->AvailableForStates(G4State_PreInit,G4State_Idle);
+  theMUN->AvailableForStates(G4State_PreInit);
 }
 
 G4EmMessenger::~G4EmMessenger()
 {
   delete theSynch;
+  delete theSynchAll;
   delete theGN;
   delete theMUN;
   delete aDir1;
@@ -95,7 +92,8 @@ G4EmMessenger::~G4EmMessenger()
 
 void G4EmMessenger::SetNewValue(G4UIcommand* aComm, G4String aS)
 {
-  if(aComm==theSynch) theB->Synch(aS);
-  if(aComm==theGN)    theB->GammaNuclear(aS);
-  if(aComm==theMUN)   theB->MuonNuclear(aS);
+  if(aComm==theSynch)    theB->Synch(theSynch->GetNewBoolValue(aS));
+  if(aComm==theSynchAll) theB->SynchAll(theSynchAll->GetNewBoolValue(aS));
+  if(aComm==theGN)       theB->GammaNuclear(theGN->GetNewBoolValue(aS));
+  if(aComm==theMUN)      theB->MuonNuclear(theMUN->GetNewBoolValue(aS));
 }

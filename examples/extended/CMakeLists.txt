@@ -15,7 +15,7 @@ add_subdirectory(geometry)
 add_subdirectory(hadronic)
 add_subdirectory(medical)
 add_subdirectory(optical)
-#add_subdirectory(parallel
+add_subdirectory(parallel)
 add_subdirectory(parameterisations)
 add_subdirectory(persistency)
 add_subdirectory(polarisation)

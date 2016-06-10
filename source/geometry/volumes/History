@@ -1,4 +1,4 @@
-$Id: History 86527 2014-11-13 15:06:24Z gcosmo $
+$Id: History 93288 2015-10-15 09:51:02Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,30 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 15th, 2015 G.Cosmo                - geomvol-V10-01-05
+- Enable paramerisation by solid type in G4GeometryWorkspace.
+  Assumes solids being parameterised are declared thread-local in the
+  user's parameterisation class and allocated just once.
+
+April 15th, 2015 G.Cosmo                  - geomvol-V10-01-04
+- Simplified implementation in G4NavigationHistoryPool to make use of simple
+  stack of free entries. Pre-allocate size of vectors and inlined GetLevels().
+  Also addressing problem report #1730.
+
+April 8th, 2015 A.Dotti                   - geomvol-V10-01-03
+- Updated unit-tests to new G4Exception signature.
+
+December 12th, 2014 G.Cosmo               - geomvol-V10-01-02
+- Use canonical form for copy-ctor and operator=() in G4GRSSolid, G4GRSVolume,
+  G4LogicalBorderSurface and G4LogicalSkinSurface.
+
+December 11th, 2014 G.Cosmo               - geomvol-V10-01-01
+- Avoid post-increment in G4NavigationLevelRep::AddAReference().
+
+December 5th, 2014 M.Asai                 - geomvol-V10-01-00
+- G4NavigationHistoryPool - Move printout from the destructor to the
+  dedicated Print() method.
 
 November 13th, 2014 G.Cosmo               - geomvol-V10-00-08
 - Restored constructors/destructor for G4TouchableHistory - derived class

@@ -37,9 +37,17 @@
 #include "G4ParticleHPVector.hh"
 #include "G4ParticleHPEnergyDistribution.hh"
 #include "G4ParticleHPAngular.hh"
+#include "G4Cache.hh"
 
 class G4ParticleHPFissionBaseFS : public G4ParticleHPFinalState
 {
+
+   struct toBeCached {
+      const G4ReactionProduct* theNeutronRP;
+      const G4ReactionProduct* theTarget;
+      toBeCached() : theNeutronRP(NULL),theTarget(NULL){};
+   };
+
   public:
   
   G4ParticleHPFissionBaseFS()
@@ -64,13 +72,13 @@ class G4ParticleHPFissionBaseFS : public G4ParticleHPFinalState
 
   inline void SetNeutronRP(const G4ReactionProduct & aNeutron)
                         { 
-                          theNeutronRP = aNeutron;
+                          fCache.Get().theNeutronRP = &aNeutron;
                           theAngularDistribution.SetProjectileRP(aNeutron);
                         }
   
   inline void SetTarget(const G4ReactionProduct & aTarget)
                         { 
-                          theTarget = aTarget; 
+                          fCache.Get().theTarget = &aTarget; 
                           theAngularDistribution.SetTarget(aTarget);
                         }
   
@@ -82,8 +90,10 @@ class G4ParticleHPFissionBaseFS : public G4ParticleHPFinalState
   G4ParticleHPEnergyDistribution theEnergyDistribution;
   G4ParticleHPAngular theAngularDistribution;
   
-  G4ReactionProduct theNeutronRP;
-  G4ReactionProduct theTarget;
+  //G4ReactionProduct theNeutronRP;
+  //G4ReactionProduct theTarget;
+   private:
+      G4Cache<toBeCached> fCache;
 
   private:
   

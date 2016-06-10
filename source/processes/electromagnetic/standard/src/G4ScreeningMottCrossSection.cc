@@ -90,6 +90,7 @@ G4ScreeningMottCrossSection::G4ScreeningMottCrossSection():
   TotalCross=0;
 
   fNistManager = G4NistManager::Instance();
+  fG4pow = G4Pow::GetInstance();
   particle=0;
 
   spin = mass = mu_rel=0;
@@ -104,7 +105,7 @@ G4ScreeningMottCrossSection::G4ScreeningMottCrossSection():
   cosTetMinNuc=0;
   cosTetMaxNuc=0;
 
-  for(G4int i=0 ; i<5; i++){
+  for(G4int i=0 ; i<5;  ++i){
     for(G4int j=0; j< 6; j++){
       coeffb[i][j]=0;
     }
@@ -138,7 +139,7 @@ void G4ScreeningMottCrossSection::SetScreeningCoefficient()
   //Bohr radius 
   G4double a0=  Bohr_radius  ;//0.529e-8*cm;
   //Thomas-Fermi screening length
-  G4double aU=0.88534*a0/pow(targetZ,1./3.);
+  G4double aU=0.88534*a0/fG4pow->Z13(targetZ);
   G4double twoR2=aU*aU;
 
   G4double factor= 1.13 + 3.76*targetZ*targetZ*invbeta2*alpha2;
@@ -151,10 +152,6 @@ void G4ScreeningMottCrossSection::SetScreeningCoefficient()
 G4double G4ScreeningMottCrossSection::GetScreeningAngle()
 {
   SetScreeningCoefficient();
-
-  //cout<<" As "<<As<<endl;
-  if(As < 0.0) { As = 0.0; }
-  else if(As > 1.0) { As = 1.0; }
 
   G4double screenangle=2.*asin(sqrt(As));
   //	cout<<"  screenangle  "<<  screenangle <<endl;
@@ -208,27 +205,54 @@ void G4ScreeningMottCrossSection::SetupKinematic(G4double ekin, G4double Z )
 
   //.........................................................
 
-  G4double screenangle=GetScreeningAngle()/10.;
-  //cout<<" screenangle [rad] "<<screenangle/rad <<endl;
+  
+  SetScreeningCoefficient();
 
-  cosTetMinNuc =min( cosThetaMin ,cos(screenangle));
+  //Integration Angles definition
+
+  cosTetMinNuc =cosThetaMin;
   cosTetMaxNuc =cosThetaMax;
-	
-  //cout<<"ok..............mu_rel "<<mu_rel<<endl;
+
+
+  G4double anglemin = 1.e-9;
+  //G4double anglemax =std::acos(-1.); 
+  G4double loganglemin=log10(anglemin);
+  //G4double loganglemax=log10(anglemax);
+  G4double logdangle=0.01;
+  //G4int bins=(G4int)((loganglemax-loganglemin)/logdangle);
+
+  for(G4int i=0; i<DIM;  ++i ){
+    tet[i]=0;
+    dangle[i]=0;
+    angle[i]=G4Exp(G4Log(10.)*(loganglemin+logdangle*i));
+    cross[i]=0;
+  }
+  
+ 
+  for(G4int i=0; i<DIM; ++i){
+
+    if(i!=DIM-1){
+      dangle[i]=(angle[i+1]-angle[i]);
+      tet[i]=(angle[i+1]+angle[i])/2.;
+    }else if(i==DIM-1){
+      break;
+    }
+  }
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4ScreeningMottCrossSection::FormFactor2ExpHof(G4double angle)
+G4double G4ScreeningMottCrossSection::FormFactor2ExpHof(G4double angles)
 {
   G4double M=targetMass; 
   G4double E=tkinLab;
   G4double Etot=E+mass;
   G4double Tmax=2.*M*E*(E+2.*mass)/(mass*mass+M*M+2.*M*Etot);
-  G4double T=Tmax*pow(sin(angle/2.),2.);
+  G4double T=Tmax*G4Exp(G4Log(sin(angles/2.))*2.);
   G4double q2=T*(T+2.*M);
   q2/=htc2;//1/cm2
-  G4double RN=1.27e-13*pow(targetA,0.27)*cm;
+  G4double RN=1.27e-13*G4Exp(G4Log(targetA)*0.27)*cm;
   G4double xN= (RN*RN*q2);
   G4double den=(1.+xN/12.);
   G4double FN=1./(den*den);
@@ -241,21 +265,21 @@ G4double G4ScreeningMottCrossSection::FormFactor2ExpHof(G4double angle)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4ScreeningMottCrossSection::McFcorrection(G4double angle )
+G4double G4ScreeningMottCrossSection::McFcorrection(G4double angles )
 {
   G4double  beta2=1./invbeta2;
-  G4double sintmezzi=std::sin(angle/2.);
+  G4double sintmezzi=std::sin(angles/2.);
   G4double sin2tmezzi = sintmezzi*sintmezzi;
   G4double R=1.-beta2*sin2tmezzi + targetZ*alpha*beta*pi*sintmezzi*(1.-sintmezzi);
   return R;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-G4double G4ScreeningMottCrossSection::RatioMottRutherford(G4double angle)
+G4double G4ScreeningMottCrossSection::RatioMottRutherford(G4double angles)
 {
   G4double R=0;
-  G4double fcost=std::sqrt((1. -cos(angle)));
+  G4double fcost=std::sqrt((1. -cos(angles)));
   G4double a[5];
-  G4double shift=0.7181228;
+  const G4double shift=0.7181228;
   G4double beta0= beta -shift;
 
   for(G4int j=0 ;j<=4;j++){
@@ -264,12 +288,12 @@ G4double G4ScreeningMottCrossSection::RatioMottRutherford(G4double angle)
 
   for(G4int j=0 ;j<=4;j++){
     for(G4int k=0;k<=5;k++ ){  
-      a[j]+=coeffb[j][k]*pow(beta0,k);
+      a[j]+=coeffb[j][k]*G4Exp(G4Log(beta0)*k);
     }
   }
 
-  for(G4int j=0 ;j<=4 ;j++){
-    R+=a[j]* pow(fcost,j);
+  for(G4int j=0; j<=4; ++j){
+    R+=a[j]*G4Exp(G4Log(fcost)*j);
   }
   return R;
 }
@@ -282,47 +306,7 @@ G4double G4ScreeningMottCrossSection::NuclearCrossSection()
 
   TotalCross=0;
 
-  G4double anglemin =std::acos(cosTetMinNuc);
-  G4double anglemax =std::acos(cosTetMaxNuc); 
-
-  static const G4double limit = 1.e-9;
-  if(anglemin < limit) {
-    anglemin = GetScreeningAngle()/10.;
-    if(anglemin < limit) { anglemin = limit; }
-  }
-
-  //cout<<" anglemin  "<< anglemin <<endl;
-
-  G4double loganglemin=log10(anglemin);
-  G4double loganglemax=log10(anglemax);
-  G4double logdangle=0.01;
-
-  G4int bins=(G4int)((loganglemax-loganglemin)/logdangle);
-
-  vector<G4double> angle;
-  vector<G4double> tet;
-  vector<G4double> dangle;
-  vector<G4double> cross;
-
-  for(G4int i=0; i<=bins; i++ ){
-    tet.push_back(0);
-    dangle.push_back(0);
-    angle.push_back(pow(10.,loganglemin+logdangle*i));
-    cross.push_back(0);
-  }
-
-  G4int  dim = tet.size();
-  //cout<<"dim--- "<<dim<<endl;
-
-  for(G4int i=0; i<dim;i++){
-
-    if(i!=dim-1){
-      dangle[i]=(angle[i+1]-angle[i]);
-      tet[i]=(angle[i+1]+angle[i])/2.;
-    }else if(i==dim-1){
-      break;
-    }
-
+  for(G4int i=0; i<DIM; ++i){
     G4double R=0;
     G4double F2=FormFactor2ExpHof(tet[i]);
 			
@@ -338,13 +322,13 @@ G4double G4ScreeningMottCrossSection::NuclearCrossSection()
     //                cout<<"angle "<<tet[i] << " F2 "<<F2<<endl;
 
     G4double e4=e2*e2;
-    G4double den=2.*As+2.*pow(sin(tet[i]/2.),2.);
+    G4double den=2.*As+2.*G4Exp(G4Log(sin(tet[i]/2.))*2.);
     G4double func=1./(den*den);
 
     G4double fatt= targetZ/(mu_rel*gamma*beta*beta);
     G4double sigma=e4*fatt*fatt*func;
     cross[i]=F2*R*sigma;
-    G4double pi2sintet=2.*pi*sin(tet[i]);
+    G4double pi2sintet=twopi*sin(tet[i]);
 
     TotalCross+=pi2sintet*cross[i]*dangle[i];
   }//end integral
@@ -371,8 +355,8 @@ G4double G4ScreeningMottCrossSection::AngleDistribution(G4double anglein)
     R=McFcorrection(anglein);
   }
 
-  G4double y=2.*pi*sin(anglein)*R*FormFactor2ExpHof(anglein)/
-    ((2*As+2.*pow(sin(anglein/2.),2.))*(2.*As+2.*pow(sin(anglein/2.),2.) ));
+  G4double y=twopi*sin(anglein)*R*FormFactor2ExpHof(anglein)/
+    ( (2*As+2.*G4Exp(G4Log(sin(anglein*0.5))*2.))*(2.*As+2.*G4Exp(G4Log(sin(anglein*0.5))*2.)) );
 
   return y/total;
 }
@@ -381,53 +365,17 @@ G4double G4ScreeningMottCrossSection::AngleDistribution(G4double anglein)
 
 G4double G4ScreeningMottCrossSection::GetScatteringAngle()
 {
-  //cout<<" G4ScreeningMottCrossSection::SampleCosineTheta ............."<<endl;	
-  if(cosTetMaxNuc >= cosTetMinNuc) return 0.0;
-
-  G4double anglemin=std::acos(cosTetMinNuc);	
-  G4double anglemax= std::acos(cosTetMaxNuc);
-
-  static const G4double limit = 1.e-9;
-  if(anglemin < limit) {
-    anglemin = GetScreeningAngle()/10.;
-    if(anglemin < limit) { anglemin = limit; }
-  }
-
   //	cout<<"................ tkinLab  "<< G4BestUnit(tkinLab,"Energy") << " anglemin=  "<<anglemin<<endl;
   //cout<<"anglemax=  "<<anglemax<<endl;
   G4double r =G4UniformRand();
-
-  G4double loganglemin=log10(anglemin);
-  G4double loganglemax=log10(anglemax);
-  G4double logdangle=0.01;
-
-  G4int bins=(G4int)((loganglemax-loganglemin)/logdangle);
-
-  std::vector<G4double> angle;
-  std::vector<G4double> tet;
-  std::vector<G4double> dangle;
   
-  for(G4int i=0; i<=bins; i++ ){
-    tet.push_back(0);
-    dangle.push_back(0);
-    angle.push_back(pow(10.,loganglemin+logdangle*i));
-  }
-
-  G4int  dim = tet.size();
   G4double scattangle=0;
   G4double y=0;
   G4double dy=0;
   G4double area=0;
 
-  for(G4int i=0; i<dim;i++){
+  for(G4int i=0; i<DIM; ++i){
     
-    if(i!=dim-1){
-      dangle[i]=(angle[i+1]-angle[i]);
-      tet[i]=(angle[i+1]+angle[i])/2.;
-    }else if(i==dim-1){
-      break;
-    }
-
     y+=AngleDistribution(tet[i])*dangle[i];
     dy= y-area ;
     area=y;

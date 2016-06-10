@@ -32,6 +32,9 @@
 
 #include "G4GenericTrap.hh"
 #include "G4UGenericTrap.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+
 #include "G4Polyhedron.hh"
 #include "G4PolyhedronArbitrary.hh"
 
@@ -134,8 +137,8 @@ G4Polyhedron* G4UGenericTrap::CreatePolyhedron() const
       G4double Dx,Dy;
       UVector3 minBox = GetShape()->GetMinimumBBox();
       UVector3 maxBox = GetShape()->GetMaximumBBox();
-      G4ThreeVector minVec(minBox.x, minBox.y, minBox.z);
-      G4ThreeVector maxVec(maxBox.x, maxBox.y, maxBox.z);
+      G4ThreeVector minVec(minBox.x(), minBox.y(), minBox.z());
+      G4ThreeVector maxVec(maxBox.x(), maxBox.y(), maxBox.z());
       Dx = 0.5*(maxVec.x()- minVec.y());
       Dy = 0.5*(maxVec.y()- minVec.y());
       if (Dy > Dx)  { Dx=Dy; }
@@ -190,3 +193,5 @@ G4Polyhedron* G4UGenericTrap::CreatePolyhedron() const
 
   return (G4Polyhedron*) polyhedron;
 }
+
+#endif  // G4GEOM_USE_USOLIDS

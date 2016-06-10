@@ -58,6 +58,9 @@
 
 #include <cmath>
 #include "G4fissionEvent.hh"
+#include "G4Exp.hh"
+#include "G4Log.hh"
+#include "G4Pow.hh"
 
 #define nfissg 40
 #define alphanegbin 26
@@ -133,12 +136,13 @@ G4int G4fissionEvent::G4SmpNugDist(G4int isotope, G4double nubar) {
 */
   A = (G4int) (isotope-1000*((G4int)(isotope/1000)));
   Z = (G4int) ((isotope-A)/1000);
-  nubarg = ((2.51-1.13e-5*std::pow(G4double(Z),2.)*std::sqrt(G4double(A)))*nubar+4.0)
-           /(-1.33+119.6*std::pow(G4double(Z),1./3.)/G4double(A));
+  G4Pow* Pow = G4Pow::GetInstance();
+  nubarg = ((2.51-1.13e-5*Pow->powA(G4double(Z),2.)*std::sqrt(G4double(A)))*nubar+4.0)
+           /(-1.33+119.6*Pow->A13(G4double(Z))/G4double(A));
   p = 1.*alphanegbin/(alphanegbin+nubarg);
   q = 1.-p;
-  cpi[0] = std::exp(logcoeff[0]+26.*std::log(p));
-  for (i=1; i<=nfissg; i++) cpi[i] = cpi[i-1] + std::exp(logcoeff[i]+26.*std::log(p)+i*std::log(q));
+  cpi[0] = G4Exp(logcoeff[0]+26.*G4Log(p));
+  for (i=1; i<=nfissg; i++) cpi[i] = cpi[i-1] + G4Exp(logcoeff[i]+26.*G4Log(p)+i*G4Log(q));
   for (i=0; i<=nfissg; i++) cpi[i] = cpi[i]/cpi[nfissg-1];
 
   r=fisslibrng();

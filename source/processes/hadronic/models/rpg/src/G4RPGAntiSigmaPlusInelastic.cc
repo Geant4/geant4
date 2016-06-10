@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGAntiSigmaPlusInelastic.cc 79697 2014-03-12 13:10:09Z gcosmo $
+// $Id: G4RPGAntiSigmaPlusInelastic.cc 94214 2015-11-09 08:18:05Z gcosmo $
 //
  
 #include "G4RPGAntiSigmaPlusInelastic.hh"
+#include "G4Exp.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
@@ -307,7 +308,7 @@ void G4RPGAntiSigmaPlusInelastic::Cascade(
                 nt = np+nneg+nz;
                 if( (nt>0) && (nt<=numSec) )
                 {
-                  test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                  test = G4Exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                   dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
                   if( std::fabs(dum) < 1.0 )
                   {
@@ -368,7 +369,7 @@ void G4RPGAntiSigmaPlusInelastic::Cascade(
                 nt = np+nneg+nz;
                 if( (nt>0) && (nt<=numSec) )
                 {
-                  test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                  test = G4Exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                   dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
                   if( std::fabs(dum) < 1.0 )
                   {
@@ -456,7 +457,7 @@ void G4RPGAntiSigmaPlusInelastic::Cascade(
               nt = np+nneg+nz;
               if( nt>1 && nt<=numSec )
               {
-                test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                test = G4Exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                 dum = (pi/anpn)*nt*protmulA[counter]*protnormA[nt-1]/(2.0*n*n);
                 if( std::fabs(dum) < 1.0 )
                 {
@@ -488,7 +489,7 @@ void G4RPGAntiSigmaPlusInelastic::Cascade(
               nt = np+nneg+nz;
               if( nt>1 && nt<=numSec )
               {
-                test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                test = G4Exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                 dum = (pi/anpn)*nt*neutmulA[counter]*neutnormA[nt-1]/(2.0*n*n);
                 if( std::fabs(dum) < 1.0 )
                 {

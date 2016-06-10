@@ -44,6 +44,9 @@
 #define G4UGENERICPOLYCONE_hh
 
 #include "G4USolid.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+
 #include "UGenericPolycone.hh"
 #include "G4PolyconeSide.hh"
 
@@ -114,4 +117,6 @@ inline G4PolyconeSideRZ G4UGenericPolycone::GetCorner(G4int index) const
   return psiderz;
 }
   
+#endif  // G4GEOM_USE_USOLIDS
+
 #endif

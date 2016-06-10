@@ -10,12 +10,122 @@ $Id:$
 This file should be used by G4 developers and category coordinators
 to briefly summarize all major modifications introduced in the code
 and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+It DOES NOT substitute the SVN log-message one should put at every
+committal in the SVN repository !
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 5, 2015 G.Cosmo (global-V10-01-25)
+- Enabled units liter, L, dL, cL, mL in G4SystemOfUnits.hh and G4UnitsTable.
+  Requires new CLHEP version 2.3.1.0.
+- Updated dates and tag-ID for release 10.2.
+
+November 4, 2015 A.Dotti (global-V10-01-24)
+- Coverity fix in G4UniformRandPool.
+
+October 21, 2015 V.Ivantchenko (global-V10-01-23)
+- G4PhysicsVector, G4Physics2DVector, G4PhysicsOrderedFreeVector:
+  use std::lower_bound instead of old do/while loops according to 
+  proposal of K.Genser (FNAL); also minor cleanup of the code.
+
+October 16, 2015 V.Ivantchenko (global-V10-01-22)
+- G4Pow: added protections against zero value of argument of methods powN(),
+  powA() and A13(). Minor cleanup.
+
+September 18, 2015 J.Allison (global-V10-01-21)
+- Added string length check in G4String::operator==.
+
+August 28, 2015 G.Cosmo (global-V10-01-20)
+- Tune radial tolerance to same value as for Cartesian in G4GeometryTolerance.
+
+August 21, 2015 J.Allison
+- Added 'inline' specification to functions in G4String.icc.
+
+August 21, 2015 G.Cosmo (global-V10-01-19)
+- Temporarly commented out changes in G4SystemOfUnits.hh and G4UnitsTable,
+  pending new release of CLHEP for the added units.
+
+August 19, 2015 M.Maire (global-V10-01-18)
+- G4SystemOfUnits.hh : keep only liter, L, dL, cL, mL
+- Updated G4SIunits.hh and G4UnitsTable.
+     
+August 10, 2015 M.Maire
+- G4SystemOfUnits.hh : add dm, dm2, dm3, liter
+- Update G4SIunits.hh
+
+August 12, 2015 G.Cosmo (global-V10-01-17)
+- Explicit settings for Intel-icc compiler in tls.hh.
+- Added missing inclusion of <assert.h> in G4UniformRandPool header.
+
+August 10, 2015 G.Cosmo (global-V10-01-16)
+- Force use of G4MT wrappers for Intel-icc compiler for random numbers.
+  Temporary solution, pending full migration to C++11 for CLHEP classes.
+
+June 26, 2015 A.Dotti (global-V10-01-15)
+- Coverity fix in G4UniformRandPool and bug fixing
+ 
+June 12, 2015 A.Dotti (global-V10-01-14)
+- Fix bug in G4CacheReference::Destroy method
+- Modify behavior of G4Cache to identify internal 
+  inconsistencies. An exception is thrown
+ 
+May 27, 2015 J.Allison (global-V10-01-13)
+- Define G4THREADSLEEP(tick) macro in G4Threading.hh also for sequential
+  builds.
+
+May 26, 2015 G.Cosmo (global-V10-01-12)
+- Corrected logic for use of TLS on clang compiler for the Random module.
+
+May 22, 2015 G.Cosmo (global-V10-01-11)
+- Added inclusion of <unistd.h> in G4Threading.hh for self-consistency
+  with the call to sleep().
+
+May 18, 2015 A.Dotti (global-V10-01-10)
+- Adding copy constructor and assignement operator for G4Cache
+  Addressing issue #1739
+
+May 13, 2015 G.Cosmo (global-V10-01-09)
+- Added guard against potential loop in G4RandomTools::G4LambertianRand().
+
+May 5, 2015 A.Dotti (global-V10-01-08)
+- Introduced IsMasterThread() function as suggested by J. Allison.
+
+April 26, 2015 V.Ivantchenko
+- G4StatDouble: return RMS 0 instead of -1 in the case the number
+  of entries is below 2 (fixes arithmetic exceptions in examples for 
+  run with 1 event only).
+
+April 9, 2015 A.Dotti (global-V10-01-07)
+- Fix testRandPool for sequential builds 
+
+April 8, 2015 G.Cosmo (global-V10-01-06)
+- Some code cleanup/formatting in G4UniformRandPool.
+  Corrected signature of destroy_pool_align() for Windows to fix
+  compilation errors.
+- Corrected GNUmakefile in HepRandom unit tests.
+
+April 8, 2015 A.Dotti (global-V10-01-05)
+- Fixed compilation error on Windows. 
+
+April 8, 2015 A.Dotti (global-V10-01-04)
+- First implementation of G4UniformRandPool for serial generation of
+  uniform random numbers.
+  Note: feature not actived yet.
+
+March 27, 2015 G.Cosmo (global-V10-01-03)
+- Added "g/mole" Molar mass definition to G4UnitsTable.
+
+February 20, 2015 G.Cosmo (global-V10-01-02)
+- Added type-info information to G4Allocator to aid debugging.
+
+January 12, 2015 G.Cosmo (global-V10-01-01)
+- Define G4THREADSLEEP(tick) macro in G4Threading.hh.
+
+December 10, 2014 G.Cosmo (global-V10-01-00)
+- Define support for c++11 thread_local keyword on Intel-icc compiler
+  version 15.
 
 November 18, 2014 G.Cosmo (global-V10-00-44)
 - G4FPEDetection.hh: added call to 'sigfillset' to clear any signals

@@ -140,6 +140,10 @@
       }
     }
     G4bool result = HasDataInAnyFinalState();
+
+    //To avoid issuing hash by worker threads
+    if ( result ) theChannelData->Hash();
+
     return result;
   }
   
@@ -181,7 +185,7 @@
     G4ParticleHPVector * aPassive = theNew;
     G4ParticleHPVector * tmp;
     G4int a = s_tmp, p = n, t;
-    while (a<anActive->GetVectorLength()&&p<aPassive->GetVectorLength())
+    while (a<anActive->GetVectorLength()&&p<aPassive->GetVectorLength()) // Loop checking, 11.05.2015, T. Koi
     {
       if(anActive->GetEnergy(a) <= aPassive->GetEnergy(p))
       {
@@ -200,12 +204,12 @@
         aPassive = tmp; p=t;
       }
     }
-    while (a!=anActive->GetVectorLength())
+    while (a!=anActive->GetVectorLength()) // Loop checking, 11.05.2015, T. Koi
     {
       theMerge->SetData(m_tmp++, anActive->GetEnergy(a), anActive->GetXsec(a));
       a++;
     }
-    while (p!=aPassive->GetVectorLength())
+    while (p!=aPassive->GetVectorLength()) // Loop checking, 11.05.2015, T. Koi
     {
       if(std::abs(theMerge->GetEnergy(std::max(0,m_tmp-1))-aPassive->GetEnergy(p))/aPassive->GetEnergy(p)>0.001)
         theMerge->SetData(m_tmp++, aPassive->GetEnergy(p), aPassive->GetXsec(p));
@@ -290,8 +294,16 @@
     // Use the standard procedure if the G4FissionFragmentGenerator model fails
     if (!theFinalState)
     {
-       while(theFinalState==0)
+
+       G4int icounter=0;
+       G4int icounter_max=1024;
+       while(theFinalState==0) // Loop checking, 11.05.2015, T. Koi
        {
+          icounter++;
+          if ( icounter > icounter_max ) {
+	     G4cout << "Loop-counter exceeded the threshold value at " << __LINE__ << "th line of " << __FILE__ << "." << G4endl;
+             break;
+          }
 //	      G4cout << "TESTHP 24 it="<<it<<G4endl;
           theFinalState = theFinalStates[it]->ApplyYourself(theTrack);
        }

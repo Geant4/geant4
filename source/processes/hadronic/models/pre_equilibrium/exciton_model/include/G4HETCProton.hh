@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HETCProton.hh 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4HETCProton.hh 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // by V. Lara
 //
@@ -48,11 +48,11 @@ public:
 
 protected:
 
-  virtual G4double GetAlpha();
+  virtual G4double GetAlpha() const;
 
-  virtual G4double GetBeta();
+  virtual G4double GetBeta() const;
 
-  virtual G4double GetSpinFactor();
+  virtual G4double GetSpinFactor() const;
 
   virtual G4double K(const G4Fragment & aFragment);
 

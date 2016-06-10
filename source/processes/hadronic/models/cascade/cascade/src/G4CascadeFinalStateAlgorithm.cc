@@ -41,9 +41,12 @@
 // 20130702  M. Kelsey: Copy phase-space algorithm from Kopylov; use if
 //		runtime envvar G4CASCADE_USE_PHASESPACE is set
 // 20140627  BUG FIX:  Use ".c_str()" in diagnostics to avoid IBM XL error.
+// 20150608  M. Kelsey -- Label all while loops as terminating.
+// 20150619  M. Kelsey -- Replace std::exp with G4Exp
 
 #include "G4CascadeFinalStateAlgorithm.hh"
 #include "G4CascadeParameters.hh"
+#include "G4Exp.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4LorentzConvertor.hh"
@@ -214,7 +217,7 @@ GenerateMultiBody(G4double initialMass, const std::vector<G4double>& masses,
   if (multiplicity < 3) return;
   if (!momDist) return;
 
-  G4int itry = -1;
+  G4int itry = -1;		/* Loop checking 08.06.2015 MHK */
   while ((G4int)finalState.size() != multiplicity && ++itry < itry_max) {
     FillMagnitudes(initialMass, masses);
     FillDirections(initialMass, masses, finalState);
@@ -241,7 +244,7 @@ FillMagnitudes(G4double initialMass, const std::vector<G4double>& masses) {
   }
 
   G4int itry = -1;
-  while (++itry < itry_max) {
+  while (++itry < itry_max) {		/* Loop checking 08.06.2015 MHK */
     if (GetVerboseLevel() > 3) {
       G4cout << " itry in fillMagnitudes " << itry << G4endl;
     }
@@ -420,17 +423,17 @@ GenerateCosTheta(G4int ptype, G4double pmod) const {
 
   // Throw multi-body distribution
   G4double p0 = ptype<3 ? 0.36 : 0.25;	// Nucleon vs. everything else
-  G4double alf = 1.0 / p0 / (p0 - (pmod+p0)*std::exp(-pmod / p0));
+  G4double alf = 1.0 / p0 / (p0 - (pmod+p0)*G4Exp(-pmod / p0));
 
   G4double sinth = 2.0;
 
-  G4int itry1 = -1;
+  G4int itry1 = -1;		/* Loop checking 08.06.2015 MHK */
   while (std::fabs(sinth) > maxCosTheta && ++itry1 < itry_max) {
     G4double s1 = pmod * inuclRndm();
     G4double s2 = alf * oneOverE * p0 * inuclRndm();
-    G4double salf = s1 * alf * std::exp(-s1 / p0);
+    G4double salf = s1 * alf * G4Exp(-s1 / p0);
     if (GetVerboseLevel() > 3) {
-      G4cout << " s1 * alf * std::exp(-s1 / p0) " << salf
+      G4cout << " s1 * alf * G4Exp(-s1 / p0) " << salf
 	     << " s2 " << s2 << G4endl;
     }
     
@@ -510,9 +513,9 @@ G4double G4CascadeFinalStateAlgorithm::BetaKopylov(G4int K) const {
   G4double Fmax = std::sqrt(g4pow->powN(xN/(xN+1.),N)/(xN+1.)); 
 
   G4double F, chi;
-  do {
+  do {					/* Loop checking 08.06.2015 MHK */
     chi = G4UniformRand();
     F = std::sqrt(g4pow->powN(chi,N)*(1.-chi));      
-  } while ( Fmax*G4UniformRand() > F);  
+  } while ( Fmax*G4UniformRand() > F);
   return chi;
 }

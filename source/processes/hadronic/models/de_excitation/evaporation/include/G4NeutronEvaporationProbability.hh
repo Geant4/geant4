@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronEvaporationProbability.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4NeutronEvaporationProbability.hh 89518 2015-04-15 14:43:30Z gcosmo $
 //
 // J.M. Quesada (August2008). Based on:
 //
@@ -49,6 +49,12 @@ public:
 		
   virtual ~G4NeutronEvaporationProbability();
 
+protected:
+
+  virtual G4double CalcAlphaParam(const G4Fragment & fragment);
+ 
+  virtual G4double CalcBetaParam(const G4Fragment & fragment);
+
 private:  
   
   G4NeutronEvaporationProbability(const G4NeutronEvaporationProbability &right);
@@ -57,28 +63,7 @@ private:
   G4bool operator==(const G4NeutronEvaporationProbability &right) const;
   G4bool operator!=(const G4NeutronEvaporationProbability &right) const;
 
-private:
-
-  virtual G4double CrossSection(const  G4Fragment & fragment, G4double K);
-
-  G4double GetOpt12(G4double K);
-  G4double GetOpt34(G4double K);
-
-  virtual G4double CalcAlphaParam(const G4Fragment & fragment);
- 
-  virtual G4double CalcBetaParam(const G4Fragment & fragment);
- 
-  //data members
-
   G4NeutronCoulombBarrier theCoulombBarrier; 
-
-  G4int ResidualA;
-  G4int ResidualZ; 
-  G4int theA;
-  G4int theZ;
-  G4double ResidualAthrd;
-  G4int FragmentA;
-  G4double FragmentAthrd;
 };
 
 

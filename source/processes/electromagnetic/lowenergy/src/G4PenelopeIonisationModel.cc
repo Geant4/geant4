@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.cc 78631 2014-01-13 11:15:27Z gcosmo $
+// $Id: G4PenelopeIonisationModel.cc 93359 2015-10-19 13:42:18Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -40,7 +40,9 @@
 // 09 Mar 2012   L Pandola  Moved the management and calculation of
 //                          cross sections to a separate class. Use a different method to 
 //                          get normalized shell cross sections
-// 07 Oct 2013   L. Pandola Migration to MT                        
+// 07 Oct 2013   L. Pandola Migration to MT      
+// 23 Jun 2015   L. Pandola Keep track of the PIXE flag, to avoid double-production of 
+//                           atomic de-excitation (bug #1761)                  
 //
 
 #include "G4PenelopeIonisationModel.hh"
@@ -62,6 +64,7 @@
 #include "G4PhysicsLogVector.hh" 
 #include "G4LossTableManager.hh"
 #include "G4PenelopeIonisationXSHandler.hh"
+#include "G4EmParameters.hh"
 #include "G4AutoLock.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -70,7 +73,7 @@ namespace { G4Mutex  PenelopeIonisationModelMutex = G4MUTEX_INITIALIZER; }
 G4PenelopeIonisationModel::G4PenelopeIonisationModel(const G4ParticleDefinition* part,
 						     const G4String& nam)
   :G4VEmModel(nam),fParticleChange(0),fParticle(0),isInitialised(false),
-   fAtomDeexcitation(0),kineticEnergy1(0.*eV),
+   fAtomDeexcitation(0),fPIXEflag(false),kineticEnergy1(0.*eV),
    cosThetaPrimary(1.0),energySecondary(0.*eV),
    cosThetaSecondary(0.0),targetOscillator(-1),
    theCrossSectionHandler(0),fLocalTable(false)
@@ -129,6 +132,37 @@ void G4PenelopeIonisationModel::Initialise(const G4ParticleDefinition* particle,
       G4cout << "any fluorescence/Auger emission." << G4endl;
       G4cout << "Please make sure this is intended" << G4endl;
     }
+
+  if (fAtomDeexcitation)
+    fPIXEflag = fAtomDeexcitation->IsPIXEActive();
+
+  //If the PIXE flag is active, the PIXE interface will take care of the 
+  //atomic de-excitation. The model does not need to do that.
+  //Issue warnings here
+  if (fPIXEflag && IsMaster() && particle==G4Electron::Electron())
+    {
+      G4String theModel = G4EmParameters::Instance()->PIXEElectronCrossSectionModel();
+      G4cout << "======================================================================" << G4endl;
+      G4cout << "The G4PenelopeIonisationModel is being used with the PIXE flag ON." << G4endl;
+      G4cout << "Atomic de-excitation will be produced statistically by the PIXE " << G4endl;
+      G4cout << "interface by using the shell cross section --> " << theModel << G4endl;
+      G4cout << "The built-in model procedure for atomic de-excitation is disabled. " << G4endl;
+      G4cout << "*Please be sure this is intended*, or disable PIXE by" << G4endl;
+      G4cout << "/process/em/pixe false" << G4endl;
+      /*
+      if (theModel != "Penelope")
+	{
+	  ed << "To use the PIXE interface with the Penelope-based shell cross sections" << G4endl;
+	  ed << "/process/em/pixeElecXSmodel Penelope" << G4endl;
+	  
+	}
+      */
+      G4cout << "======================================================================" << G4endl;
+
+    }
+ 
+   
+
   SetParticle(particle);
 
   //Only the master model creates/manages the tables. All workers get the 
@@ -582,8 +616,11 @@ void G4PenelopeIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*
     }
 
   //Notice: shell might be NULL (invalid!) if shFlag=30. Must be protected
+  //Disable the built-in de-excitation of the PIXE flag is active. In this 
+  //case, the PIXE interface takes care (statistically) of producing the 
+  //de-excitation.
   //Now, take care of fluorescence, if required
-  if (fAtomDeexcitation && shell)
+  if (fAtomDeexcitation && !fPIXEflag && shell)
     {
       G4int index = couple->GetIndex();
       if (fAtomDeexcitation->CheckDeexcitationActiveRegion(index))

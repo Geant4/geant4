@@ -1,4 +1,4 @@
-$Id: History 86755 2014-11-17 15:15:09Z gcosmo $
+$Id: History 94083 2015-11-05 15:06:58Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,88 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05.11.2015 G.Cosmo, emlowen-V10-01-17
+	   - Replaced use of variable 'L' in G4Generator2BN.cc to avoid
+             shadowing of new volumetric units.
+
+01.11.2015 V.Ivanchenko, emlowen-V10-01-16
+	   - G4UAtomDeexcitation - comment out annoing G4Exceptions
+           - G4LivermoreIonisationModel - increase intrinsic low limit
+             from 10 eV to 12 eV 
+
+30.10.2015 Francesco Longo and LP, emlowen-V10-01-15
+	   - Fixed Coverity defects
+
+17.10.2015 Francesco Longo and LP, emlowen-V10-01-14
+           - Fixed problems in MT which caused rejection of emlowen-V10-01-13
+           - Needs G4EMLOW6.47
+
+09.10.2015 Luciano Pandola, emlowen-V10-01-13
+	   - Same code as before, needs G4EMLOW6.47
+
+08.10.2015 Francesco Longo, Gerardo Depaola, LP, emlowen-V10-01-12
+	   - replace G4Exception in G4PenelopeIonisationModel with G4cout
+           - double-safefy for a while/do loop in G4PenelopeBremsstrahlungFS
+           - Migrated MT-compliant Livermore polarized models for gammas 
+             (by FL and GD)
+           - Upgrade of the models for pair and triplet production.
+           - Needs G4EMLOW6.46
+
+18.09.2015 VI, tag emlowen-V10-01-11
+           - G4PenelopeIonisationModel - use G4EmParameters
+
+14.09.2015 VI, tag emlowen-V10-01-10
+           - G4UAtomicDeexcitation, G4AtomicTransitionManager 
+               initialisation of Bearden energy levels is done
+               thread safe way
+
+13.09.2015 VI, tag emlowen-V10-01-09
+           - G4UAtomicDeexcitation, G4empCrossSection, G4teoCrossSection
+               fixed cross section names
+
+13.09.2015 VI, tag emlowen-V10-01-08
+           - G4UAtomicDeexcitation - fixed cross section names
+
+04.09.2015 VI, tag emlowen-V10-01-07
+           - G4UAtomicDeexcitation - cleanup initialisation, use
+               only G4EmParameters
+
+03.09.2015 SI, tag emlowen-V10-01-06
+           - Updated G4UAtomicDeexcitation for Bearden UI command
+
+29.06.2015 Luciano Pandola, tag emlowen-V10-01-05
+           - Fix Coverity defects 61921 and 61923
+
+24.06.2015 Luciano Pandola, tag emlowen-V10-01-04
+           - Fix Bugzilla #1761 (PenelopeIonisation model overgenerates 
+             atomic deex when PIXE=on).
+
+03.06.2015 Jeremy Brown, Luciano Pandola, tag emlowen-V10-01-03
+	   - Migrate G4LowEPComptonModel to the MT
+           - New Monash Compton model G4LowEPPolarizedComptonModel which 
+             includes polarization.
+
+15.05.2015 VI, SI, tag emlowen-V10-01-02
+           - G4AtomicTransitionManager - improved Exception printout
+           - G4MicroElecElastic, G4MicroElecInelastic - fixed definition
+               of default models at initialisation, by default use 
+               G4DummyModel
+           - G4UAtomicDeexcitation (S.Incerti) - optional implementation 
+               of Auger cascade is added based on the proposal by
+               Burkhant Suerfu (see bugzilla report #1727) 
+           - G4LowECapture - added capture process needed for MicroElec 
+               and DNA applications
+
+30.04.2015 V. Ivanchenko, tag emlowen-V10-01-01
+           - G4EMDataSet - fixed Coverity warnings
+           - G4LivermorePhotoElectricModel - implement the same protection as in
+               standard model to avoid rare precision lost in de-excitation
+
+05.12.2014 G. Cosmo, tag emlowen-V10-01-00
+           - Corrected sources.cmake to include missing files:
+             G4hSRIM2000p.hh
+             G4hSRIM2000p.cc
 
 14.11.2014 G4MicroElecInelasticModel from M. Raine, tag emlowen-V10-00-22
            - fix of loop

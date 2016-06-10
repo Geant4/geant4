@@ -27,7 +27,7 @@
 /// \brief Implementation of the TrackingAction class
 //
 //
-// $Id: TrackingAction.cc 86064 2014-11-07 08:49:32Z gcosmo $
+// $Id: TrackingAction.cc 88035 2015-01-26 10:22:08Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -122,7 +122,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   //measured space angle at exit : dN/dOmega_meas
   //
   ih = 6;  
-  const G4double dist = fDetector->GetThicknessFrame();
+  const G4double dist = fDetector->GetZdist_foil_detector();
   G4double thetam = std::atan(r/dist);
   if (thetam > 0.) {
      G4double dtheta = analysisManager->GetH1Width(ih);

@@ -106,8 +106,14 @@ namespace G4INCL {
     randomNumberGenerator = "Ranecu";
     rngType = RanecuType;
     autosaveFrequency = 10000;
+    maxNumberMultipions = -1;
     crossSectionsString = "multipions";
     crossSectionsType = MultiPionsCrossSections;
+    hadronizationTime = 0.;
+#ifdef INCL_ROOT_USE
+    conciseROOTTree = false;
+#endif
+    inverseKinematics = false;
   }
 
   std::string Config::summary() {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcess.hh 86448 2014-11-12 09:48:41Z gcosmo $
+// $Id: G4HadronicProcess.hh 90237 2015-05-21 09:04:11Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -64,6 +64,7 @@ class G4Track;
 class G4Step;
 class G4Element;
 class G4ParticleChange;
+class G4HadronicProcessStore;
 
 class G4HadronicProcess : public G4VDiscreteProcess
 {
@@ -81,15 +82,9 @@ public:
   void RegisterMe(G4HadronicInteraction* a);
 
   // get cross section per element
-  inline
   G4double GetElementCrossSection(const G4DynamicParticle * part, 
 				  const G4Element * elm, 
-				  const G4Material* mat = 0)
-  {
-    G4double x = theCrossSectionDataStore->GetCrossSection(part, elm, mat);
-    if(x < 0.0) { x = 0.0; }
-    return x;
-  }
+				  const G4Material* mat = 0);
 
   // obsolete method to get cross section per element
   inline
@@ -208,6 +203,9 @@ private:
   // Set E/p conservation check levels from environment variables
   void GetEnergyMomentumCheckEnvvars();
 
+  // The Nist manager builds or finds a simple material from the Z of an element
+  G4Material* InitialiseMaterial(G4int Z);
+
 protected:
 
   G4HadProjectile thePro;
@@ -223,6 +221,8 @@ private:
   G4HadronicInteraction* theInteraction;
 
   G4CrossSectionDataStore* theCrossSectionDataStore;
+
+  G4HadronicProcessStore* theProcessStore;
      
   G4Nucleus targetNucleus;
 

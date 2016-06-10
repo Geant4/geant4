@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomNestedParamDetectorConstruction.cc 76689 2013-11-14 08:43:45Z gcosmo $
+// $Id: DicomNestedParamDetectorConstruction.cc 92820 2015-09-17 15:22:14Z gcosmo $
 //
 /// \file medical/DICOM/src/DicomNestedParamDetectorConstruction.cc
 /// \brief Implementation of the DicomNestedParamDetectorConstruction class
@@ -64,7 +64,6 @@ void DicomNestedParamDetectorConstruction::ConstructPhantom()
     G4cout << "DicomNestedParamDetectorConstruction::ConstructPhantom " 
     << G4endl;
 #endif
-
 
     //----- Replication of Water Phantom Volume.
     //--- Y Slice
@@ -114,9 +113,6 @@ void DicomNestedParamDetectorConstruction::ConstructPhantom()
                           fNVoxelZ,      // Number of cells
                           param);       // Parameterisation.
 
-
-     
-
     param->SetMaterialIndices( fMateIDs );
     param->SetNoVoxel( fNVoxelX, fNVoxelY, fNVoxelZ );
 
@@ -126,7 +122,3 @@ void DicomNestedParamDetectorConstruction::ConstructPhantom()
     SetScorer(logicVoxel);
 
 }
-
-
-
-

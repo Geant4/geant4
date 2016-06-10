@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/src/RE01PrimaryGeneratorAction.cc
 /// \brief Implementation of the RE01PrimaryGeneratorAction class
 //
-// $Id: RE01PrimaryGeneratorAction.cc 75295 2013-10-30 09:32:52Z gcosmo $
+// $Id: RE01PrimaryGeneratorAction.cc 90679 2015-06-08 07:58:19Z gcosmo $
 //
 
 #include "RE01PrimaryGeneratorAction.hh"
@@ -62,7 +62,6 @@ RE01PrimaryGeneratorAction::RE01PrimaryGeneratorAction()
   fMessenger = new RE01PrimaryGeneratorMessenger(this);
   fUseHEPEvt = true;
   
-  G4cout << "*********************************************2" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

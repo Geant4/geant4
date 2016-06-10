@@ -43,7 +43,11 @@ G4DiffractiveHHScatterer::G4DiffractiveHHScatterer() :
 
 //============================================================================
 
-G4DiffractiveHHScatterer::~G4DiffractiveHHScatterer() {}
+G4DiffractiveHHScatterer::~G4DiffractiveHHScatterer()
+{
+	delete theExcitation;
+	delete theStringFragmentation;
+}
 
 
 //============================================================================

@@ -60,7 +60,5 @@
 
  G4DeuteronBuilder::
  ~G4DeuteronBuilder() 
- {
-   delete theDeuteronInelastic;
- }
+ {}
 

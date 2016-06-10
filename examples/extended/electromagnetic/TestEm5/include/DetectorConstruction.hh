@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 77600 2013-11-26 17:07:41Z gcosmo $
+// $Id: DetectorConstruction.hh 91972 2015-08-12 13:48:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -87,13 +87,12 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
      G4Material* GetWorldMaterial()     {return fWorldMaterial;};
      G4double    GetWorldSizeX()        {return fWorldSizeX;};
-     G4double    GetWorldSizeYZ()       {return fWorldSizeYZ;};
 
-     const G4VPhysicalVolume* GetphysiWorld() {return fPhysiWorld;};
-     const G4VPhysicalVolume* GetAbsorber()   {return fPhysiAbsorber;};
-     const G4MaterialCutsCouple* GetAbsorbMaterialCut()  const
-                             {return fLogicAbsorber->GetMaterialCutsCouple();};
+     const G4VPhysicalVolume* GetAbsorber() {return fPhysiAbsorber;};
+
   private:
+
+     void ChangeGeometry();
 
      G4Material*        fAbsorberMaterial;
      G4double           fAbsorberThickness;

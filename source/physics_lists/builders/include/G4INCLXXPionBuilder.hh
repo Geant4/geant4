@@ -34,7 +34,6 @@
 #include "G4NeutronInelasticProcess.hh"
 #include "G4VPionBuilder.hh"
 
-#include "G4PiNuclearCrossSection.hh"
 #include "G4INCLXXInterface.hh"   
 #include "G4CascadeInterface.hh"
 
@@ -52,6 +51,9 @@
  * @see G4INCLXXProtonBuilder
  * @see G4INCLXXNeutronBuilder
  */
+
+class G4VCrossSectionDataSet;
+
 class G4INCLXXPionBuilder : public G4VPionBuilder
 {
   public: 
@@ -67,7 +69,7 @@ class G4INCLXXPionBuilder : public G4VPionBuilder
     void SetMaxEnergy(G4double aM) {theMax = aM;}
 
   private:
-    G4PiNuclearCrossSection thePiData;
+    G4VCrossSectionDataSet* thePiData;
     G4INCLXXInterface * theModel;    
     G4double theMin;
     G4double theMax;

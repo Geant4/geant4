@@ -1,4 +1,4 @@
-$Id: History 87209 2014-11-27 08:59:48Z gcosmo $
+$Id: History 88404 2015-02-18 09:09:38Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Feb 17, 2015 A. Dotti (exampleRE06-V10-01-00)
+- Adding new macro file for testing on Xeon Phi with 
+  limited statistics
 
 Nov 24, 2014 M. Asai (exampleRE06-V10-00-04)
 - Retagged with setting production cuts to be same as before

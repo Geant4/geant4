@@ -1,0 +1,25 @@
+$Id: History 85260 2014-10-27 08:53:35Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    range History file
+                    --------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+	 
+22-10-15 SI (range-V10-01-02)
+- updated plot.C to ROOT 6
+
+17-09-15 SI (range-V10-01-01)
+- applied coding guidelines
+
+26-08-15 SI (range-V10-01-00)
+- created and adapted from svalue

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTableIterator.hh 72999 2013-08-15 08:05:14Z gcosmo $
+// $Id: G4ParticleTableIterator.hh 91885 2015-08-10 07:05:56Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -60,20 +60,15 @@ template < class K, class V > class G4ParticleTableIterator
       
   G4bool operator()()
     {
-      if(!defined) 
-      {
+      if(!defined) {
         defined=true;
         it=mydict->begin();
-      }
-      else 
-      {
+      } else {
         it++;
       }
       if(it==mydict->end()) return false;
-      if(skipIons)
-      {
-        while((static_cast<G4ParticleDefinition*>((*it).second))->IsGeneralIon())
-        {
+      if(skipIons){
+        while((static_cast<G4ParticleDefinition*>((*it).second))->IsGeneralIon()){ // Loop checking, 09.08.2015, K.Kurashige
           it++;
           if(it==mydict->end()) return false;
         }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmLowEPPhysics.cc 86233 2014-11-07 17:21:03Z gcosmo $
+// $Id: G4EmLowEPPhysics.cc 92821 2015-09-17 15:23:49Z gcosmo $
 
 #include "G4EmLowEPPhysics.hh"
 #include "G4ParticleDefinition.hh"
@@ -64,11 +64,6 @@
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
-
-//#include "G4MuBremsstrahlungModel.hh"
-//#include "G4MuPairProductionModel.hh"
-//#include "G4hBremsstrahlungModel.hh"
-//#include "G4hPairProductionModel.hh"
 #include "G4SeltzerBergerModel.hh"
 
 // hadrons
@@ -119,6 +114,7 @@
 //
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
+#include "G4EmModelActivator.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -131,11 +127,14 @@ G4EmLowEPPhysics::G4EmLowEPPhysics(G4int ver)
   : G4VPhysicsConstructor("G4EmLowEPPhysics"), verbose(ver)
 {
   G4EmParameters* param = G4EmParameters::Instance();
+  param->SetDefaults();
   param->SetVerbose(verbose);
   param->SetMinEnergy(100*eV);
   param->SetMaxEnergy(10*TeV);
+  param->SetLowestElectronEnergy(100*eV);
   param->SetNumberOfBinsPerDecade(20);
   param->ActivateAngularGeneratorForIonisation(true);
+  param->SetFluo(true);
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -145,11 +144,14 @@ G4EmLowEPPhysics::G4EmLowEPPhysics(G4int ver, const G4String&)
   : G4VPhysicsConstructor("G4EmLowEPPhysics"), verbose(ver)
 {
   G4EmParameters* param = G4EmParameters::Instance();
+  param->SetDefaults();
   param->SetVerbose(verbose);
   param->SetMinEnergy(100*eV);
   param->SetMaxEnergy(10*TeV);
+  param->SetLowestElectronEnergy(100*eV);
   param->SetNumberOfBinsPerDecade(20);
   param->ActivateAngularGeneratorForIonisation(true);
+  param->SetFluo(true);
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -162,31 +164,35 @@ G4EmLowEPPhysics::~G4EmLowEPPhysics()
 
 void G4EmLowEPPhysics::ConstructParticle()
 {
-// gamma
+  // gamma
   G4Gamma::Gamma();
 
-// leptons
+  // leptons
   G4Electron::Electron();
   G4Positron::Positron();
   G4MuonPlus::MuonPlus();
   G4MuonMinus::MuonMinus();
 
-// mesons
+  // mesons
   G4PionPlus::PionPlusDefinition();
   G4PionMinus::PionMinusDefinition();
   G4KaonPlus::KaonPlusDefinition();
   G4KaonMinus::KaonMinusDefinition();
 
-// baryons
+  // baryons
   G4Proton::Proton();
   G4AntiProton::AntiProton();
 
-// ions
+  // ions
   G4Deuteron::Deuteron();
   G4Triton::Triton();
   G4He3::He3();
   G4Alpha::Alpha();
   G4GenericIon::GenericIonDefinition();
+
+  // dna
+  G4EmModelActivator mact;
+  mact.ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -209,10 +215,13 @@ void G4EmLowEPPhysics::ConstructProcess()
   G4MuMultipleScattering* mumsc = new G4MuMultipleScattering();
   mumsc->SetEmModel(new G4LowEWentzelVIModel());
   G4hMultipleScattering* hmsc = new G4hMultipleScattering();
+  hmsc->SetEmModel(new G4LowEWentzelVIModel());
   G4hMultipleScattering* pmsc = new G4hMultipleScattering();
   pmsc->SetEmModel(new G4LowEWentzelVIModel());
   G4hMultipleScattering* pimsc = new G4hMultipleScattering();
+  pimsc->SetEmModel(new G4LowEWentzelVIModel());
   G4hMultipleScattering* kmsc = new G4hMultipleScattering();
+  kmsc->SetEmModel(new G4LowEWentzelVIModel());
 
   // nuclear stopping
   G4NuclearStopping* ionnuc = new G4NuclearStopping();
@@ -259,7 +268,6 @@ void G4EmLowEPPhysics::ConstructProcess()
 
       // multiple scattering
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->SetRangeFactor(0.01);
       msc->SetEmModel(new G4LowEWentzelVIModel(), 1);
 
       // Ionisation - Livermore should be used only for low energies
@@ -286,7 +294,6 @@ void G4EmLowEPPhysics::ConstructProcess()
 
       // multiple scattering
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->SetRangeFactor(0.01);
       msc->SetEmModel(new G4LowEWentzelVIModel(), 1);
 
       // Standard ionisation 
@@ -415,7 +422,9 @@ void G4EmLowEPPhysics::ConstructProcess()
   //
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
-  de->SetFluo(true);
+
+  G4EmModelActivator mact;
+  mact.ConstructProcess();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -49,10 +49,15 @@
 #include "G4Log.hh"
 #include "G4Exp.hh"
 
+// factory
+#include "G4CrossSectionFactory.hh"
+//
+G4_DECLARE_XS_FACTORY(G4KokoulinMuonNuclearXS);
+
 G4PhysicsVector* G4KokoulinMuonNuclearXS::theCrossSection[] = {0};
 
 G4KokoulinMuonNuclearXS::G4KokoulinMuonNuclearXS()
- :G4VCrossSectionDataSet("KokoulinMuonNuclearXS"), 
+  :G4VCrossSectionDataSet(Default_Name()), 
   LowestKineticEnergy(1*GeV), HighestKineticEnergy(1*PeV),
   TotBin(60), CutFixed(0.2*GeV), isInitialized(false), isMaster(false)
 {}
@@ -67,6 +72,19 @@ G4KokoulinMuonNuclearXS::~G4KokoulinMuonNuclearXS()
   }
 }
 
+
+void
+G4KokoulinMuonNuclearXS::CrossSectionDescription(std::ostream& outFile) const
+{
+    outFile << "G4KokoulinMuonNuclearXS provides the total inelastic\n"
+    << "cross section for mu- and mu+ interactions with nuclei.\n"
+    << "R. Kokoulin's approximation of the Borog and Petrukhin double\n"
+    << "differential cross section at high energy and low Q**2 is integrated\n"
+    << "over the muon energy loss to get the total cross section as a\n"
+    << "function of muon kinetic energy\n" ;
+}
+
+
 G4bool 
 G4KokoulinMuonNuclearXS::IsElementApplicable(const G4DynamicParticle*, 
 					     G4int, const G4Material*)
@@ -78,8 +96,11 @@ void
 G4KokoulinMuonNuclearXS::BuildPhysicsTable(const G4ParticleDefinition&)
 {
   if(!isInitialized) { 
+    isInitialized = true; 
+    for(G4int i=0; i<MAXZMUN; ++i) {
+      if(theCrossSection[i]) { return; }
+    }
     isMaster = true; 
-    isInitialized = true;
   }
   if(isMaster) { BuildCrossSectionTable(); }
 }

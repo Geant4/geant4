@@ -29,21 +29,22 @@
 
 #include "G4XmlFileManager.hh"
 #include "G4AnalysisManagerState.hh"
+#include "G4AnalysisUtilities.hh"
 
 #include "tools/waxml/begend"
+
+using namespace G4Analysis;
 
 //_____________________________________________________________________________
 G4XmlFileManager::G4XmlFileManager(const G4AnalysisManagerState& state)
  : G4VFileManager(state),
-   fHnFile(0)
+   fHnFile(nullptr)
 {
 }
 
 //_____________________________________________________________________________
 G4XmlFileManager::~G4XmlFileManager()
-{  
-  delete fHnFile;  
-}
+{}
 
 // 
 // public methods
@@ -55,6 +56,7 @@ G4bool G4XmlFileManager::OpenFile(const G4String& fileName)
   // Keep and locks file name
   fFileName =  fileName;
   fLockFileName = true;
+  fIsOpenFile = true;
 
   return true;
 }  
@@ -72,6 +74,7 @@ G4bool G4XmlFileManager::CloseFile()
   // Unlock file name
   
   fLockFileName = false;
+  fIsOpenFile = false;
   return true; 
 } 
    
@@ -84,9 +87,9 @@ G4bool G4XmlFileManager::CreateHnFile()
 #endif
   
   // delete a previous file if it exists
-  if ( fHnFile ) delete fHnFile; 
+  //if ( fHnFile ) delete fHnFile; 
   
-  fHnFile = new std::ofstream(GetFullFileName());
+  fHnFile = std::make_shared<std::ofstream>(GetFullFileName());
   if ( fHnFile->fail() ) {
     G4ExceptionDescription description;
     description << "      " << "Cannot open file " << GetFullFileName();
@@ -109,7 +112,7 @@ G4bool G4XmlFileManager::CloseHnFile()
 {
   // No file may be open if no master manager is instantiated
   // and no histograms were booked
-  if ( ! fHnFile ) return true;
+  if ( ! fHnFile.get() ) return true;
 
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) 
@@ -131,9 +134,9 @@ G4bool G4XmlFileManager::CloseHnFile()
    
 //_____________________________________________________________________________
 G4bool G4XmlFileManager::CreateNtupleFile(
-                                    G4XmlNtupleDescription* ntupleDescription)
+  G4TNtupleDescription<tools::waxml::ntuple>* ntupleDescription)
 {
-  G4String ntupleName = ntupleDescription->fNtupleBooking->name();
+  G4String ntupleName = ntupleDescription->fNtupleBooking.name();
 
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) 
@@ -141,8 +144,7 @@ G4bool G4XmlFileManager::CreateNtupleFile(
       ->Message("create", "ntuple file", GetNtupleFileName(ntupleName));
 #endif
 
-  std::ofstream* ntupleFile 
-    = new std::ofstream(GetNtupleFileName(ntupleName));
+  auto ntupleFile = new std::ofstream(GetNtupleFileName(ntupleName));
   if ( ntupleFile->fail() ) {
     G4ExceptionDescription description;
     description << "      " << "Cannot open file " 
@@ -166,9 +168,9 @@ G4bool G4XmlFileManager::CreateNtupleFile(
 
 //_____________________________________________________________________________
 G4bool G4XmlFileManager::CloseNtupleFile(
-                                    G4XmlNtupleDescription* ntupleDescription)
+  G4TNtupleDescription<tools::waxml::ntuple>* ntupleDescription)
 {
-  G4String ntupleName = ntupleDescription->fNtupleBooking->name();
+  G4String ntupleName = ntupleDescription->fNtupleBooking.name();
 
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) 

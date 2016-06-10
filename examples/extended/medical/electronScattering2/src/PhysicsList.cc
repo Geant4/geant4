@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc 82042 2014-06-10 08:02:58Z gcosmo $
+// $Id: PhysicsList.cc 93734 2015-10-30 10:59:21Z gcosmo $
 //
 /// \file medical/electronScattering2/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
@@ -31,18 +31,19 @@
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
 
-#include "PhysListEmStandard.hh"
-#include "PhysListEmStandardSS.hh"
-#include "PhysListEmStandardGS.hh"
-#include "PhysListEmStandardWVI.hh"
-
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmStandardPhysics_option4.hh"
+#include "G4EmStandardPhysicsSS.hh"
+#include "G4EmStandardPhysicsWVI.hh"
+#include "G4EmStandardPhysicsGS.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmPenelopePhysics.hh"
 #include "G4EmLowEPPhysics.hh"
 
+#include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
 
 #include "G4ParticleDefinition.hh"
@@ -81,9 +82,14 @@ PhysicsList::PhysicsList()
     fMessenger = new PhysicsListMessenger(this);
     
     // EM physics
-    fEmName = G4String("local");
-    fEmPhysicsList = new PhysListEmStandard(fEmName);
-    
+    fEmName = G4String("emstandard_opt4");
+    fEmPhysicsList = new G4EmStandardPhysics_option4(1);
+    if (verboseLevel>-1) {
+        G4cout << "PhysicsList::Constructor with default list: <" 
+               << fEmName << ">" << G4endl;
+    }
+
+    G4LossTableManager::Instance();
     SetVerboseLevel(1);
 }
 
@@ -161,7 +167,8 @@ void PhysicsList::AddDecay()
         G4ParticleDefinition* particle = theParticleIterator->value();
         G4ProcessManager* pmanager = particle->GetProcessManager();
         
-        if (fDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) {
+        if (fDecayProcess->IsApplicable(*particle) && 
+              !particle->IsShortLived()) {
             
             pmanager ->AddProcess(fDecayProcess);
             
@@ -204,65 +211,66 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     
     if (name == fEmName) return;
     
-    if (name == "local") {
+    if (name == "emstandard_opt0") {
         
         fEmName = name;
         delete fEmPhysicsList;
-        fEmPhysicsList = new PhysListEmStandard(name);
-        
-    } else if (name == "emstandard_opt0") {
-        
-        fEmName = name;
-        delete fEmPhysicsList;
-        fEmPhysicsList = new G4EmStandardPhysics();
+        fEmPhysicsList = new G4EmStandardPhysics(1);
         
     } else if (name == "emstandard_opt1") {
         
         fEmName = name;
         delete fEmPhysicsList;
-        fEmPhysicsList = new G4EmStandardPhysics_option1();
+        fEmPhysicsList = new G4EmStandardPhysics_option1(1);
         
     } else if (name == "emstandard_opt2") {
         
         fEmName = name;
         delete fEmPhysicsList;
-        fEmPhysicsList = new G4EmStandardPhysics_option2();
+        fEmPhysicsList = new G4EmStandardPhysics_option2(1);
         
     } else if (name == "emstandard_opt3") {
         
         fEmName = name;
         delete fEmPhysicsList;
-        fEmPhysicsList = new G4EmStandardPhysics_option3();
+        fEmPhysicsList = new G4EmStandardPhysics_option3(1);
 
     } else if (name == "emstandard_opt4") {
         
         fEmName = name;
         delete fEmPhysicsList;
-        fEmPhysicsList = new G4EmStandardPhysics_option4();
+        fEmPhysicsList = new G4EmStandardPhysics_option4(1);
 
     } else if (name == "emlowenergy") {
         fEmName = name;
         delete fEmPhysicsList;
-        fEmPhysicsList = new G4EmLowEPPhysics();
+        fEmPhysicsList = new G4EmLowEPPhysics(1);
 
-    } else if (name == "standardSS") {
-        
+    } else if (name == "emstandardSS") {
         fEmName = name;
         delete fEmPhysicsList;
-        fEmPhysicsList = new PhysListEmStandardSS(name);
-        
-    } else if (name == "standardGS") {
-        
+        fEmPhysicsList = new G4EmStandardPhysicsSS(1);
+
+    } else if (name == "emstandardWVI") {
         fEmName = name;
         delete fEmPhysicsList;
-        fEmPhysicsList = new PhysListEmStandardGS(name);
-        
-    } else if (name == "standardWVI") {
-        
+        fEmPhysicsList = new G4EmStandardPhysicsWVI(1);
+
+    } else if (name == "emstandardGS") {
         fEmName = name;
         delete fEmPhysicsList;
-        fEmPhysicsList = new PhysListEmStandardWVI(name);
-        
+        fEmPhysicsList = new G4EmStandardPhysicsGS(1);
+
+    } else if (name == "emlivermore") {
+        fEmName = name;
+        delete fEmPhysicsList;
+        fEmPhysicsList = new G4EmLivermorePhysics(1);
+
+    } else if (name == "empenelope") {
+        fEmName = name;
+        delete fEmPhysicsList;
+        fEmPhysicsList = new G4EmPenelopePhysics(1);
+
     } else {
     
         G4ExceptionDescription description;

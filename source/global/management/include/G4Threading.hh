@@ -40,6 +40,15 @@
 
 #include "G4Types.hh"
 
+// Macro to put current thread to sleep
+//
+#if defined(WIN32)
+#define G4THREADSLEEP( tick ) { Sleep(tick); }
+#else
+#include <unistd.h>    // needed for sleep()
+#define G4THREADSLEEP( tick ) { sleep(tick); }
+#endif
+
 #if defined(G4MULTITHREADED)
   //===============================
   // Multi-threaded build
@@ -67,7 +76,8 @@
     #define G4MUTEXLOCK pthread_mutex_lock
     #define G4MUTEXUNLOCK pthread_mutex_unlock
 
-    // Macro to iniaizlie a Mutex
+    // Macro to initialize a Mutex
+    //
     #define G4MUTEXINIT(mutex) pthread_mutex_init( &mutex , NULL);
     #define G4MUTEXDESTROY(mutex) pthread_mutex_destroy( &mutex );
 
@@ -82,10 +92,12 @@
     }
 
     // Macro to join thread
+    //
     #define G4THREADJOIN( worker ) pthread_join( worker , NULL)
 
-   // Macro to retrieve caller thread
-   #define G4THREADSELF pthread_self
+    // Macro to retrieve caller thread
+    //
+    #define G4THREADSELF pthread_self
 
     // Some useful types
     //
@@ -193,6 +205,7 @@ namespace G4Threading
   G4int G4GetNumberOfCores();
   G4int G4GetThreadId();
   G4bool IsWorkerThread();
+  G4bool IsMasterThread();
   void G4SetThreadId( G4int aNewValue );
   G4bool G4SetPinAffinity( G4int idx , G4Thread& at);
   void SetMultithreadedApplication(G4bool value);

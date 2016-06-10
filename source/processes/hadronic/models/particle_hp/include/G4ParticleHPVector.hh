@@ -41,6 +41,9 @@
 #include "G4ios.hh"
 #include <fstream>
 #include "G4InterpolationManager.hh"
+#include "G4Exp.hh"
+#include "G4Log.hh"
+#include "G4Pow.hh"
 #include "G4ParticleHPInterpolator.hh"
 #include "G4ParticleHPHash.hh"
 #include <cmath>
@@ -273,7 +276,7 @@ class G4ParticleHPVector
     G4int s_tmp = 0, n=0, m_tmp=0;
     G4ParticleHPVector * tmp;
     G4int a = s_tmp, p = n, t;
-    while (a<active->GetVectorLength()&&p<passive->GetVectorLength())
+    while (a<active->GetVectorLength()&&p<passive->GetVectorLength()) // Loop checking, 11.05.2015, T. Koi
     {
       if(active->GetEnergy(a) <= passive->GetEnergy(p))
       {
@@ -297,13 +300,13 @@ class G4ParticleHPVector
         p=t;
       }
     }
-    while (a!=active->GetVectorLength())
+    while (a!=active->GetVectorLength()) // Loop checking, 11.05.2015, T. Koi
     {
       SetData(m_tmp, active->GetEnergy(a), active->GetXsec(a));
       theManager.AppendScheme(m_tmp++, active->GetScheme(a));
       a++;
     }
-    while (p!=passive->GetVectorLength())
+    while (p!=passive->GetVectorLength()) // Loop checking, 11.05.2015, T. Koi
     {
       if(std::abs(GetEnergy(m_tmp-1)-passive->GetEnergy(p))/passive->GetEnergy(p)>0.001)
       //if(std::abs(GetEnergy(m)-passive->GetEnergy(p))/passive->GetEnergy(p)>0.001)
@@ -442,14 +445,14 @@ class G4ParticleHPVector
         else if(aScheme==LINLOG||aScheme==CLINLOG||aScheme==ULINLOG)
         {
           G4double a = y1;
-          G4double b = (y2-y1)/(std::log(x2)-std::log(x1));
-          sum+= (a-b)*(x2-x1) + b*(x2*std::log(x2)-x1*std::log(x1));
+          G4double b = (y2-y1)/(G4Log(x2)-G4Log(x1));
+          sum+= (a-b)*(x2-x1) + b*(x2*G4Log(x2)-x1*G4Log(x1));
         }
         else if(aScheme==LOGLIN||aScheme==CLOGLIN||aScheme==ULOGLIN)
         {
-          G4double a = std::log(y1);
-          G4double b = (std::log(y2)-std::log(y1))/(x2-x1);
-          sum += (std::exp(a)/b)*(std::exp(b*x2)-std::exp(b*x1));
+          G4double a = G4Log(y1);
+          G4double b = (G4Log(y2)-G4Log(y1))/(x2-x1);
+          sum += (G4Exp(a)/b)*(G4Exp(b*x2)-G4Exp(b*x1));
         }
         else if(aScheme==HISTO||aScheme==CHISTO||aScheme==UHISTO)
         {
@@ -457,9 +460,9 @@ class G4ParticleHPVector
         }
         else if(aScheme==LOGLOG||aScheme==CLOGLOG||aScheme==ULOGLOG)
         {
-          G4double a = std::log(y1);
-          G4double b = (std::log(y2)-std::log(y1))/(std::log(x2)-std::log(x1));
-          sum += (std::exp(a)/(b+1))*(std::pow(x2,b+1)-std::pow(x1,b+1));
+          G4double a = G4Log(y1);
+          G4double b = (G4Log(y2)-G4Log(y1))/(G4Log(x2)-G4Log(x1));
+          sum += (G4Exp(a)/(b+1))*(G4Pow::GetInstance()->powA(x2,b+1)-G4Pow::GetInstance()->powA(x1,b+1));
         }
         else
         {

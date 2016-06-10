@@ -1,4 +1,4 @@
-$Id: History 73923 2013-09-17 07:52:09Z gcosmo $
+$Id: History 94007 2015-11-05 10:04:41Z gcosmo $
 -----------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4th November, 2015 I. Hrivnacova (exEventgenerator-V10-01-00)
+- Renaming basicPrimary example to userPrimaryGenerator
 
 16th September, 2013 I. Hrivnacova (exEventgenerator-V09-06-00)
 - Fixed handling required packages in CMake files

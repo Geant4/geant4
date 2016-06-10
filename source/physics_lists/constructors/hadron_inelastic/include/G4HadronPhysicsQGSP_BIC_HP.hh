@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsQGSP_BIC_HP.hh 73040 2013-08-15 09:36:57Z gcosmo $
+// $Id: G4HadronPhysicsQGSP_BIC_HP.hh 93878 2015-11-03 08:18:00Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -63,11 +63,13 @@
 #include "G4FTFPNeutronBuilder.hh"
 #include "G4QGSPNeutronBuilder.hh"
 #include "G4BinaryNeutronBuilder.hh"
-#include "G4NeutronHPBuilder.hh"
+#include "G4NeutronPHPBuilder.hh"
 
 #include "G4HyperonFTFPBuilder.hh"
 #include "G4AntiBarionBuilder.hh"
 #include "G4FTFPAntiBarionBuilder.hh"
+
+class G4ComponentGGHadronNucleusXsc;
 
 
 class G4HadronPhysicsQGSP_BIC_HP : public G4VPhysicsConstructor
@@ -89,7 +91,7 @@ class G4HadronPhysicsQGSP_BIC_HP : public G4VPhysicsConstructor
       G4FTFPNeutronBuilder * theFTFPNeutron;
       G4QGSPNeutronBuilder * theQGSPNeutron;
       G4BinaryNeutronBuilder * theBinaryNeutron;
-      G4NeutronHPBuilder * theHPNeutron;
+      G4NeutronPHPBuilder * theHPNeutron;
     
       G4PiKBuilder * thePiK;
       G4FTFPPiKBuilder * theFTFPPiK;
@@ -106,6 +108,7 @@ class G4HadronPhysicsQGSP_BIC_HP : public G4VPhysicsConstructor
       G4AntiBarionBuilder * theAntiBaryon;
       G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
 
+      G4ComponentGGHadronNucleusXsc * xsKaon;
       G4VCrossSectionDataSet * xsNeutronCaptureXS;
     };
     static G4ThreadLocal ThreadPrivate* tpdata;

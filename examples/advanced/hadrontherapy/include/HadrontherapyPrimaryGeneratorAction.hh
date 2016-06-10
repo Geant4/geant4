@@ -23,17 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// HadrontherapyPrimaryGeneratorAction.hh; May 2005
-// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+// Hadrontherapy advanced example for Geant4
+// See more at: https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamplesHadrontherapy
 
 #ifndef HadrontherapyPrimaryGeneratorAction_h
 #define HadrontherapyPrimaryGeneratorAction_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
-// ***** OLD CODE *****
-//class G4ParticleGun;
-// ********************
+
 class G4GeneralParticleSource;
 class G4Event;
 
@@ -59,9 +57,7 @@ public:
   void SetsigmaMomentumZ(G4double);
   G4double GetmeanKineticEnergy(void);
   G4double GetSigmaEnergy(void);
-  // ***** OLD CODE *****
-  // G4ParticleGun *GetParticleGun(void){return particleGun;}
-  // ********************
+
 private:
   void SetDefaultPrimaryParticle();
   G4double meanKineticEnergy;
@@ -75,14 +71,8 @@ private:
   G4double sigmaMomentumZ;
 
 private:
-  // ***** OLD CODE *****
-  //G4ParticleGun*    		          particleGun;
-  // HadrontherapyPrimaryGeneratorMessenger* gunMessenger; 
-
-  // ********************   
- G4GeneralParticleSource* particleGun;
-
-  G4double				  sigmaX;
+  G4GeneralParticleSource* particleGun;
+  G4double sigmaX;
 };
 
 #endif

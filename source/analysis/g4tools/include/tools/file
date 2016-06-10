@@ -6,13 +6,12 @@
 
 #include "gzip"
 #include "forit"
-
-#include <vector>
-#include <cstdlib>
-#include <cstring>
-
+#include "words" //is_hippo
 #include "path" //suffix
 #include "S_STRING"
+
+#include <cstdlib>
+#include <cstring>
 
 #ifdef TOOLS_MEM
 #include "mem"
@@ -138,8 +137,7 @@ inline bool read_num(const std::string& a_file,std::vector<std::string>::size_ty
   return true;
 }
 
-inline bool read_bytes(const std::string& a_file,
-                       char*& a_buffer,long& a_length){
+inline bool read_bytes(const std::string& a_file,char*& a_buffer,long& a_length){
   // Returned buffer should be deleted with delete [].
   FILE* file = ::fopen(a_file.c_str(),"rb");
   if(!file) {
@@ -214,8 +212,87 @@ inline bool is_aida(const std::string& a_file,bool& a_is){
   return true;
 }
 
-// NOTE : take care of the open in exlib/app/Wt/main_cpp which can't work
-//        by using suffix.
+inline bool num_csv_doubles(const std::string& a_string,char& a_sep,unsigned int& a_number){
+  if(a_string.empty()) {a_sep=0;a_number=0;return true;} //it is ok.
+
+  //guess sep :
+  char sep = 0;
+ {const char* buffer = a_string.c_str();
+  //::printf("debug : |%s|\n",buffer);
+  const char* pos = buffer;
+  const char* mx = buffer+a_string.size();
+  char* end;
+ {double d = ::strtod(pos,&end);(void)d;}
+  //::printf("debug : d first %g\n",d);
+  if(end==pos) {a_sep=0;a_number=0;return false;} //not starting with a number.
+  if(end==mx) {a_sep=0;a_number=1;return true;} //is ok, one number only.
+  sep = *end;}
+
+  //::printf("debug : %d\n",sep);
+
+  unsigned int number = 0;
+
+  const char* buffer = a_string.c_str();
+  //::printf("debug : |%s|\n",buffer);
+  const char* pos = buffer;
+  const char* mx = buffer+a_string.size();
+  while(true) {
+    char* end;
+   {double d = ::strtod(pos,&end);(void)d;}
+    if(end==pos) {
+      if(end>=mx) break;
+      a_sep = sep;
+      a_number = number;
+      return false; //since a number expected.
+    }
+    //::printf("debug : d %g\n",d);
+    number++;
+    if(*end!=sep) {
+      if(end>=mx) break;
+      a_sep = sep;
+      a_number = number;
+      return false; //since a sep is expected.
+    }
+    pos = end+1;
+    if(pos>mx) break;
+  }
+  
+  a_sep = sep;
+  a_number = number;
+  return true;
+}
+
+// NOTE : take care of the open in exlib/app/tntnet/main_cpp which can't work by using suffix.
+
+inline bool is_hippo(const std::string& a_file,bool& a_is){
+  //if((suffix(a_file)=="hiptxt")||(suffix(a_file)=="tnt")) {
+  //  a_is = true;
+  //  return true;
+  //}
+  // An hippo file as :
+  //  one line for title.
+  //  one line with n labels separated by \t
+  //  data lines with n numbers separated by a char sep (not necessary \t) (at least one data line expected).
+  std::vector<std::string> txt;
+  if(!file::read_num(a_file,3,txt)) {a_is=false;return false;}
+  if(txt.size()<3) {a_is=false;return true;}
+  char csep;
+  unsigned int number;
+  if(!num_csv_doubles(txt[2],csep,number)) {a_is=false;return true;}
+  std::vector<std::string> words;
+  tools::words(txt[1],"\t",false,words);
+  if(words.size()!=number) {a_is=false;return true;}
+  bool all_doubles = true;
+  tools_vforcit(std::string,words,it) {
+    const char* pos = (*it).c_str();
+    char* end;
+    double d = ::strtod(pos,&end);(void)d;
+    if(end==pos) {all_doubles=false;break;}
+  }
+  a_is = all_doubles?false:true; //all_double=false then we assume the second line is labels of columns.
+  return true;  
+}
+
 // NOTE : the below is_csv() does not take into account a column with strings.
 
 inline bool is_csv(const std::vector<std::string>& a_txt,bool& a_is){
@@ -277,19 +354,6 @@ inline bool is_csv(const std::string& a_file,bool& a_is){
   return is_csv(txt,a_is);
 }
 
-inline bool is_hippo(const std::string& a_file,bool& a_is){
-  //if((suffix(a_file)=="hiptxt")||(suffix(a_file)=="tnt")) {
-  //  a_is = true;
-  //  return true;
-  //}
-  std::vector<std::string> txt;
-  if(!file::read_num(a_file,5,txt)) return false;
-  //skip two first lines (title and labels).
-  std::vector<std::string> htxt;
-  for(unsigned int i=2;i<txt.size();i++) htxt.push_back(txt[i]);
-  return is_csv(htxt,a_is);
-}
-
 }}
 
 #include "fileis"
@@ -310,6 +374,12 @@ inline bool mime_type(const std::string& a_file,std::string& a_mime){
  {bool is;
   if(is_png(a_file,is)&&is) {
     a_mime = "image/png";
+    return true;
+  }}
+
+ {bool is;
+  if(is_ico(a_file,is)&&is) {
+    a_mime = "image/vnd.microsoft.icon";
     return true;
   }}
 
@@ -452,63 +522,18 @@ inline bool std_rename(const std::string& a_from,const std::string& a_to) {
   return (::rename(a_from.c_str(),a_to.c_str()) == 0 ? true : false);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/// by using C system ////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-
-inline std::string quote(const std::string& a_path) {
-  if(a_path.find(' ')==std::string::npos) return a_path;
-  // path with spaces :
-  if(a_path[0]=='"') return a_path; //Already in double quote.
-  return std::string("\"")+a_path+"\"";
-}
-
-// used in OnX/BaseUI.
-inline bool mv(const std::string& a_from,const std::string& a_to){
+inline bool copy_bytes(const std::string& a_from,const std::string& a_to) {
   if(a_to==a_from) return true;
-#ifdef WIN32
-  std::string cmd = "MOVE /Y";
-#else
-  std::string cmd = "/bin/mv";
+  char* buffer;
+  long length;
+  if(!read_bytes(a_from,buffer,length)) return false;
+  bool status = write_bytes(a_to,buffer,(size_t)length);
+  delete [] buffer;
+#ifdef TOOLS_MEM
+  mem::decrement(s_new().c_str());
 #endif
-  cmd += " ";
-  cmd += quote(a_from);
-  cmd += " ";
-  cmd += quote(a_to);
-  int ret = ::system(cmd.c_str());
-  return (ret==(-1)?false:true);
+  return status;
 }
-
-inline bool cp(const std::string& a_from,const std::string& a_to) {
-  if(a_to==a_from) return true;
-#ifdef WIN32
-  std::string cmd = "COPY /Y";
-#else
-  std::string cmd = "/bin/cp";
-#endif
-  cmd += " ";
-  cmd += quote(a_from);
-  cmd += " ";
-  cmd += quote(a_to);
-  int ret = ::system(cmd.c_str());
-  return (ret==(-1)?false:true);
-}
-
-inline bool rm(const std::string& a_file){
-  // WARNING : do not confuse with file::std_remove which is 
-  //           an encapsulation of the remove of stdio.h that
-  //           does not support wildcards.
-#ifdef WIN32
-  std::string cmd = "DEL /Q";
-#else
-  std::string cmd = "/bin/rm -f";
-#endif
-  cmd += " ";
-  cmd += quote(a_file);
-  int ret = ::system(cmd.c_str());
-  return (ret==(-1)?false:true);
-}
-
 
 /*
 class holder {

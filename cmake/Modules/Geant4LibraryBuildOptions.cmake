@@ -17,6 +17,7 @@
 # Load needed modules
 #
 include(CheckCXXSourceCompiles)
+include(IntelCompileFeatures)
 
 #-----------------------------------------------------------------------
 # Set up Build types or configurations
@@ -28,6 +29,88 @@ include(CheckCXXSourceCompiles)
 if(NOT WIN32)
   include(Geant4BuildModes)
 endif()
+
+#-----------------------------------------------------------------------
+# Provide optional file level parallelization with MSVC compiler
+# NB: This will only work if the build tool performs compilations
+# with multiple sources, e.g. "cl.exe a.cc b.cc c.cc"
+if(MSVC)
+  option(GEANT4_BUILD_MSVC_MP "Use /MP option with MSVC for file level parallel builds" OFF)
+  mark_as_advanced(GEANT4_BUILD_MSVC_MP)
+
+  if(GEANT4_BUILD_MSVC_MP)
+    set(CMAKE_CXX_FLAGS "/MP ${CMAKE_CXX_FLAGS}")
+  endif()
+endif()
+
+#-----------------------------------------------------------------------
+# Configure/Select C++ Standard
+# Require at least C++11 with no extensions and the following features
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(GEANT4_TARGET_COMPILE_FEATURES
+  cxx_alias_templates
+  cxx_auto_type
+  cxx_delegating_constructors
+  cxx_enum_forward_declarations
+  cxx_explicit_conversions
+  cxx_final
+  cxx_lambdas
+  cxx_nullptr
+  cxx_override
+  cxx_range_for
+  cxx_strong_enums
+  cxx_uniform_initialization
+  # Features that MSVC 18.0 cannot support but in list of Geant4 coding
+  # guidelines - to be required once support for that compiler is dropped.
+  # Version 10.2 is coded without these being required.
+  #cxx_deleted_functions
+  #cxx_generalized_initializers
+  #cxx_constexpr
+  #cxx_inheriting_constructors
+  )
+
+# - GEANT4_BUILD_CXXSTD
+# Choose C++ Standard to build against from supported list. Allow user
+# to supply it as a simple year or as 'c++XY'. If the latter, post process
+# to remove the 'c++'
+# Mark as advanced because most users will not need it
+enum_option(GEANT4_BUILD_CXXSTD
+  DOC "C++ Standard to compile against"
+  VALUES 11 14 c++11 c++14
+  CASE_INSENSITIVE
+  )
+
+string(REGEX REPLACE "^c\\+\\+" "" GEANT4_BUILD_CXXSTD "${GEANT4_BUILD_CXXSTD}")
+mark_as_advanced(GEANT4_BUILD_CXXSTD)
+geant4_add_feature(GEANT4_BUILD_CXXSTD "Compiling against C++ Standard '${GEANT4_BUILD_CXXSTD}'")
+
+# If a standard higher than 11 has been selected, check that compiler has
+# at least one feature from that standard and append these to the required
+# feature list
+if(GEANT4_BUILD_CXXSTD GREATER 11)
+  if(CMAKE_CXX${GEANT4_BUILD_CXXSTD}_COMPILE_FEATURES)
+    list(APPEND GEANT4_TARGET_COMPILE_FEATURES ${CMAKE_CXX${GEANT4_BUILD_CXXSTD}_COMPILE_FEATURES})
+  else()
+    message(FATAL_ERROR "Geant4 requested to be compiled against C++ standard '${GEANT4_BUILD_CXXSTD}'\nbut detected compiler '${CMAKE_CXX_COMPILER_ID}', version '${CMAKE_CXX_COMPILER_VERSION}'\ndoes not support any features of that standard")
+  endif()
+endif()
+
+# - Check for Standard Library Implementation Features
+# Smart pointers are a library implementation feature
+# Hashed containers are a library implementation feature
+# Random numbers are a library implementation feature?
+# - Thread local? Yes, though on AppleClang platforms, see this:
+  #http://stackoverflow.com/questions/28094794/why-does-apple-clang-disallow-c11-thread-local-when-official-clang-supports
+# An example of where a workaround is needed
+# Rest of concurrency a library implementation feature
+
+# Add Definition to flags for temporary back compatibility
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DG4USE_STD11")
+
+# Hold any appropriate compile flag(s) in variable for later export to
+# config files. Needed to support late CMake 2.8 where compile features
+# are not available.
+set(GEANT4_CXXSTD_FLAGS "${CMAKE_CXX${GEANT4_BUILD_CXXSTD}_STANDARD_COMPILE_OPTION}")
 
 #-----------------------------------------------------------------------
 # Optional compiler definitions which are applicable globally
@@ -108,33 +191,6 @@ if(GEANT4_BUILD_VERBOSE_CODE)
 endif()
 
 #-----------------------------------------------------------------------
-# Optional compiler flags
-#
-# - GEANT4_BUILD_CXXSTD
-# Choose C++ Standard to build against, if supported.
-# Mark as advanced because most users will not need it.
-if(CXXSTD_IS_AVAILABLE)
-  enum_option(GEANT4_BUILD_CXXSTD
-    DOC "C++ Standard to compile against"
-    VALUES ${CXXSTD_IS_AVAILABLE}
-    CASE_INSENSITIVE
-    )
-  mark_as_advanced(GEANT4_BUILD_CXXSTD)
-  geant4_add_feature(GEANT4_BUILD_CXXSTD "Compiling against C++ Standard '${GEANT4_BUILD_CXXSTD}'")
-
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${${GEANT4_BUILD_CXXSTD}_FLAGS}")
-
-  # Get needed defs for selected standard
-  # NB this needs refactoring because, for example, newer MSVC versions
-  # will just support c++11, and the selection above isn't needed, nor
-  # available, so we cannot check it in the if statement below.
-  # Add the def(s) to flags, because it may be *required*
-  if(GEANT4_BUILD_CXXSTD MATCHES "c\\+\\+11")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DG4USE_STD11")
-  endif()
-endif()
-
-#-----------------------------------------------------------------------
 # Setup Library Format Option.
 # Always build global libraries - always FATAL_ERROR if old
 # granular library switch is set, e.g. from command line
@@ -158,49 +214,6 @@ if(NOT BUILD_STATIC_LIBS AND NOT BUILD_SHARED_LIBS)
   message(FATAL_ERROR "Neither static nor shared libraries will be built")
 endif()
 
-# On MSVC, warn if both shared and static are built - this has duplicate
-# symbol issues on VS2010 Express.
-# TODO: Resolve and understand this issue...
-if(MSVC)
-  if(BUILD_SHARED_LIBS AND BUILD_STATIC_LIBS)
-    message(WARNING " Building shared AND static libraries on VS2010 may result in link errors.
- You are welcome to try building both, but please be aware of this warning.
- Problems can be reported to the Geant4 Bugzilla system:
-
- http://bugzilla-geant4.kek.jp
-    ")
-  endif()
-endif()
-
-#------------------------------------------------------------------------
-# Setup symbol visibility (library interface)
-# We need to define that we're building Geant4
-#
-
-#------------------------------------------------------------------------
-# Build options for building examples and tests
-option(GEANT4_BUILD_EXAMPLES "Build all the examples of the project" OFF)
-GEANT4_ADD_FEATURE(GEANT4_BUILD_EXAMPLES "Build all the examples of the project")
-mark_as_advanced(GEANT4_BUILD_EXAMPLES)
-
-option(GEANT4_BUILD_TESTS "Build all the tests of the project" OFF)
-GEANT4_ADD_FEATURE(GEANT4_BUILD_TESTS "Build all the tests of the project")
-mark_as_advanced(GEANT4_BUILD_TESTS)
-
-# - Testing system only functional on 2.8 and above
-if(NOT ${CMAKE_VERSION} VERSION_GREATER 2.7)
-  if(GEANT4_ENABLE_TESTING)
-    message(STATUS "WARNING: GEANT4_ENABLE_TESTING requires CMake >= 2.8 -- deactivating")
-  endif()
-  set(GEANT4_ENABLE_TESTING OFF CACHE INTERNAL "Testing NOT supported on CMake <2.8"
-    FORCE)
-else()
-  option(GEANT4_ENABLE_TESTING "Enable and define all the tests of the project" OFF)
-  GEANT4_ADD_FEATURE(GEANT4_ENABLE_TESTING "Enable and define all the tests of the project")
-  mark_as_advanced(GEANT4_ENABLE_TESTING)
-endif()
-
-
 # On WIN32, we need to build the genwindef application to create export
 # def files for building DLLs.
 # We only use it as a helper application at the moment so we exclude it from
@@ -209,7 +222,6 @@ endif()
 # if it can be protected so that the genwindef target wouldn't be defined
 # more than once... Put it here for now...
 if(WIN32)
-  add_definitions(-DG4LIB_BUILD_DLL)
   # Assume the sources are co-located
   get_filename_component(_genwindef_src_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
   add_executable(genwindef EXCLUDE_FROM_ALL
@@ -217,6 +229,31 @@ if(WIN32)
     ${_genwindef_src_dir}/genwindef/LibSymbolInfo.h
     ${_genwindef_src_dir}/genwindef/LibSymbolInfo.cpp)
 endif()
+
+#------------------------------------------------------------------------
+# Setup symbol visibility (library interface)
+# We need to define that we're building Geant4
+#
+
+#------------------------------------------------------------------------
+# Optional build of examples - only intended for testing
+#
+option(GEANT4_BUILD_EXAMPLES "Build all the examples of the project" OFF)
+GEANT4_ADD_FEATURE(GEANT4_BUILD_EXAMPLES "Build all the examples of the project")
+mark_as_advanced(GEANT4_BUILD_EXAMPLES)
+
+
+#-----------------------------------------------------------------------
+# Integration and unit tests
+# - "ENABLE_TESTING" means all tests under tests/
+option(GEANT4_ENABLE_TESTING "Enable and define all the tests of the project" OFF)
+GEANT4_ADD_FEATURE(GEANT4_ENABLE_TESTING "Enable and define all the tests of the project")
+mark_as_advanced(GEANT4_ENABLE_TESTING)
+
+# - "BUILD_TESTS" means all 'tests' in individual categories.
+option(GEANT4_BUILD_TESTS "Build all the tests of the project" OFF)
+GEANT4_ADD_FEATURE(GEANT4_BUILD_TESTS "Build all the tests of the project")
+mark_as_advanced(GEANT4_BUILD_TESTS)
 
 
 #------------------------------------------------------------------------
@@ -253,8 +290,14 @@ endif()
 # NB: At present Clang detection only works on CMake > 2.8.1
 if(CMAKE_COMPILER_IS_GNUCXX)
   set(GEANT4_COMPILER "g++")
-elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+elseif(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
   set(GEANT4_COMPILER "clang")
+
+  # - Newer g++ on OS X may identify as Clang
+  if(APPLE AND (CMAKE_CXX_COMPILER MATCHES ".*g\\+\\+"))
+    set(GEANT4_COMPILER "g++")
+  endif()
+
 elseif(MSVC)
   set(GEANT4_COMPILER "VC")
 elseif(CMAKE_CXX_COMPILER MATCHES "icpc.*|icc.*")
@@ -265,15 +308,59 @@ endif()
 
 #-----------------------------------------------------------------------
 # Set the output paths to be backward compatible on UNIX
-if(NOT UNIX)
-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/runtime)
-  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/library)
-  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/archive)
-else()
-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/runtime)
-  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY
-    ${PROJECT_BINARY_DIR}/outputs/library/${GEANT4_SYSTEM}-${GEANT4_COMPILER})
-  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+# - Check that install dirs have been defined as we want to match the
+#   output layout!
+if((NOT DEFINED CMAKE_INSTALL_BINDIR) OR (NOT DEFINED CMAKE_INSTALL_LIBDIR))
+  message(FATAL_ERROR "Cannot configure build output dirs as install directories have not yet been defined")
 endif()
 
+# - Single root dir of all products
+set(BASE_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/BuildProducts")
+
+# - Default outputs for different products, will be used by single mode
+#   generators. Creates the structure:
+#
+# BuildProducts/
+# +- bin/
+# +- lib/
+#    +- <GEANT4_SYSTEM>-<GEANT4_COMPILER> -> symlink -> .
+#
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${BASE_OUTPUT_DIRECTORY}/${CMAKE_INSTALL_BINDIR}")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${BASE_OUTPUT_DIRECTORY}/${CMAKE_INSTALL_LIBDIR}")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${BASE_OUTPUT_DIRECTORY}/${CMAKE_INSTALL_LIBDIR}")
+
+# - Create libdir/softlink to fool geant4make, but only for single mode case
+if(UNIX AND NOT CMAKE_CONFIGURATION_TYPES)
+  if(NOT EXISTS "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${GEANT4_SYSTEM}-${GEANT4_COMPILER}")
+    file(MAKE_DIRECTORY "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+    execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink . ${GEANT4_SYSTEM}-${GEANT4_COMPILER}
+      WORKING_DIRECTORY "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}"
+      )
+  endif()
+endif()
+
+# - For multiconfig generators, we create the same structure once for each
+#   mode. Results in the structure:
+#
+# BuildProducts/
+# +- Release/
+# |  +- bin/
+# |  +- lib/
+# +- Debug/
+# |  +- bin/
+# |  +- lib/
+# | ...
+#
+foreach(_conftype ${CMAKE_CONFIGURATION_TYPES})
+  string(TOUPPER ${_conftype} _conftype_uppercase)
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${_conftype_uppercase}
+    "${BASE_OUTPUT_DIRECTORY}/${_conftype}/${CMAKE_INSTALL_BINDIR}"
+    )
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${_conftype_uppercase}
+    "${BASE_OUTPUT_DIRECTORY}/${_conftype}/${CMAKE_INSTALL_LIBDIR}"
+    )
+  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${_conftype_uppercase}
+    "${BASE_OUTPUT_DIRECTORY}/${_conftype}/${CMAKE_INSTALL_LIBDIR}"
+    )
+endforeach()
 

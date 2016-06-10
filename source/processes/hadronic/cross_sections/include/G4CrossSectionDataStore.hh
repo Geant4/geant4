@@ -47,10 +47,13 @@
 
 #include "globals.hh"
 #include "G4VCrossSectionDataSet.hh"
+#include "G4FastPathHadronicCrossSection.hh"
+#include "G4DynamicParticle.hh"
+#include "G4PhysicsVector.hh"
 #include <vector>
+#include <iostream>
 
 class G4Nucleus;
-class G4DynamicParticle;
 class G4ParticleDefinition;
 class G4Isotope;
 class G4Element;
@@ -66,7 +69,7 @@ public:
   ~G4CrossSectionDataStore();
 
   // Cross section per unit volume is computed (inverse mean free path)
-  G4double GetCrossSection(const G4DynamicParticle*, const G4Material*);
+  inline G4double GetCrossSection(const G4DynamicParticle*, const G4Material*);
 
   // Cross section per element is computed
   G4double GetCrossSection(const G4DynamicParticle*, 
@@ -88,8 +91,9 @@ public:
   void DumpPhysicsTable(const G4ParticleDefinition&);
 
   // Dump store as html
-  void DumpHtml(const G4ParticleDefinition&, std::ofstream&);
-
+  void DumpHtml(const G4ParticleDefinition&, std::ofstream&) const;
+  void PrintCrossSectionHtml(const G4VCrossSectionDataSet *cs) const;
+  
   inline void AddDataSet(G4VCrossSectionDataSet*);
 
   inline void SetVerboseLevel(G4int value);
@@ -103,6 +107,8 @@ private:
 
   G4CrossSectionDataStore & operator=(const G4CrossSectionDataStore &right);
   G4CrossSectionDataStore(const G4CrossSectionDataStore&);
+
+  G4String HtmlFileName(const G4String & in) const;
 
   G4NistManager* nist;
 
@@ -123,7 +129,33 @@ private:
 
   G4int nDataSetList;
   G4int verboseLevel;
+  //Fast path: caching
+public:
+  inline const G4FastPathHadronicCrossSection::fastPathParameters&
+  GetFastPathParameters() const { return fastPathParams; }
+  inline const G4FastPathHadronicCrossSection::controlFlag&
+  GetFastPathControlFlags() const { return fastPathFlags; }
+  void DumpFastPath( const G4ParticleDefinition* , const G4Material* , std::ostream& os);
+  void ActivateFastPath( const G4ParticleDefinition*, const G4Material* , G4double);
+private:
+  friend struct G4FastPathHadronicCrossSection::fastPathEntry;
+  //The following method is called by the public one GetCrossSection(const G4DynamicParticle*, const G4Material*)
+  //The third parameter is used to force the calculation of cross-sections skipping the fast-path mechanism
+  G4double GetCrossSection(const G4DynamicParticle*, const G4Material*, G4bool requiresSlowPath);
+  G4FastPathHadronicCrossSection::controlFlag fastPathFlags;
+  G4FastPathHadronicCrossSection::fastPathParameters fastPathParams;
+  //Counters
+  G4FastPathHadronicCrossSection::getCrossSectionCount counters;
+  //TODO: share this among threads
+  G4FastPathHadronicCrossSection::G4CrossSectionDataStore_Cache fastPathCache;
+  G4FastPathHadronicCrossSection::timing timing;
+  G4FastPathHadronicCrossSection::G4CrossSectionDataStore_Requests requests;
 };
+
+inline G4double G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* particle , const G4Material* material ) {
+	//By default tries to use the fast-path mechanism
+	return GetCrossSection( particle , material , false);
+}
 
 inline void G4CrossSectionDataStore::AddDataSet(G4VCrossSectionDataSet* p)
 {

@@ -35,6 +35,7 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "Randomize.hh"
+#include "G4Exp.hh"
 #include "G4ParticleHPVector.hh"
 #include "G4VParticleHPEDis.hh"
 
@@ -45,7 +46,7 @@ class G4ParticleHPWattSpectrum : public G4VParticleHPEDis
   public:
   G4ParticleHPWattSpectrum()
   {
-    expm1 = std::exp(-1.);
+    expm1 = G4Exp(-1.);
   }
   ~G4ParticleHPWattSpectrum()
   {
@@ -70,7 +71,7 @@ class G4ParticleHPWattSpectrum : public G4VParticleHPEDis
   inline G4double Watt(G4double anEnergy, G4double a, G4double b)
   {
     G4double energy = anEnergy/CLHEP::eV;
-    G4double result = std::exp(-energy/a)*std::sinh(std::sqrt(b*energy));
+    G4double result = G4Exp(-energy/a)*std::sinh(std::sqrt(b*energy));
     return result;
   }
   

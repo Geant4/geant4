@@ -19,7 +19,7 @@
 /process/em/auger true
 /process/em/pixe true
 #Selecting Reis model for PIXE. Analytical PIXE will be used outsie 01-10 MeV energy Range
-/process/em/pixeXSmodel ecpssr_interpolated
+/process/em/pixeXSmodel ECPSSR_FormFactor
 #
 #/analysis/setPhysicProduction true
 #

@@ -1,0 +1,379 @@
+<styles>
+
+  <!-- //////////////////////////////////////////////// -->
+  <!-- /// scene : //////////////////////////////////// -->
+  <!-- //////////////////////////////////////////////// -->
+  <style name="scene">
+    <screen_color>white</screen_color>
+  </style>
+
+  <!-- //////////////////////////////////////////////// -->
+  <!-- /// plotter : ////////////////////////////////// -->
+  <!-- //////////////////////////////////////////////// -->
+  <plotter_style name="inlib_default">
+    <!-- Placeholder for default customization. -->
+    <style name="background_style"/>
+    <style name="title_style"/>
+    <style name="infos_style"/>
+    <style name="title_box_style"/>
+    <style name="inner_frame_style"/>
+    <style name="grid_style"/>
+  
+    <style name="x_axis.line_style"/>
+    <style name="x_axis.ticks_style"/>
+    <style name="x_axis.labels_style"/>
+    <style name="x_axis.mag_style"/>
+    <style name="x_axis.title_style"/>
+  
+    <style name="y_axis.line_style"/>
+    <style name="y_axis.ticks_style"/>
+    <style name="y_axis.labels_style"/>
+    <style name="y_axis.mag_style"/>
+    <style name="y_axis.title_style"/>
+  
+    <style name="z_axis.line_style"/>
+    <style name="z_axis.ticks_style"/>
+    <style name="z_axis.labels_style"/>
+    <style name="z_axis.mag_style"/>
+    <style name="z_axis.title_style"/>
+
+    <style name="colormap_axis">
+      <label_to_axis>0.01</label_to_axis>
+    </style>
+    <style name="colormap_axis.line_style"/>
+    <style name="colormap_axis.ticks_style"/>
+    <style name="colormap_axis.labels_style"/>
+    <style name="colormap_axis.mag_style"/>
+    <style name="colormap_axis.title_style"/>
+
+    <style name="bins_style.0"/>
+    <style name="errors_style.0"/>
+    <style name="points_style.0"/>
+    <style name="func_style.0"/>
+  </plotter_style>
+
+  <plotter_style name="ROOT_default">
+    <value_top_margin>0.05</value_top_margin>
+    <bottom_margin>0.1</bottom_margin>
+    <top_margin>0.1</top_margin>
+    <left_margin>0.1</left_margin>
+    <right_margin>0.1</right_margin>
+
+    <style name="background_style">
+      <visible>true</visible>
+<!--  <back_color>ROOT/grey19</back_color> -->
+      <!-- border : -->
+      <color>black</color>
+      <line_width>0.003</line_width> <!-- 0 = no border. In % of width -->
+    </style>
+
+<!-- <style name="wall_style"><visible>false</visible></style> -->
+    <style name="grid_style">
+      <visible>false</visible>
+<!--  <color>white</color> ???? --> 
+    </style>
+
+    <!-- plot title done with the title_box (and not plotter title). -->
+    <style name="title_style">
+      <visible>false</visible>
+    </style>
+    <style name="title_box_style">
+      <visible>true</visible>
+      <back_color>ROOT/grey19</back_color>
+      <back_shadow>0.015</back_shadow> <!-- % of width -->
+      <color>black</color>
+      <font>arialbd.ttf</font>
+      <front_face>cw</front_face>
+      <smoothing>true</smoothing>
+    </style>
+
+    <infos_width>0.35</infos_width>
+    <infos_x_margin>0.01</infos_x_margin> <!-- from right border. -->
+    <infos_y_margin>0.005</infos_y_margin> <!-- from top border. -->
+    <style name="infos_style">
+      <visible>true</visible>
+      <back_color>ROOT/grey19</back_color>
+      <back_shadow>0.015</back_shadow> <!-- % of width -->
+      <color>black</color>
+      <font>arialbd.ttf</font>
+      <front_face>cw</front_face>
+      <smoothing>true</smoothing>
+      <modeling>ROOT</modeling> <!-- to have histo name as info title. -->
+    </style>
+
+    <style name="inner_frame_style">
+      <visible>true</visible>
+      <color>black</color>
+      <line_width>1</line_width>
+ <!-- <line_pattern>solid</line_pattern> -->
+    </style>
+
+    <style name="x_axis">
+      <modeling>hplot</modeling>
+      <divisions>510</divisions>
+      <title_hjust>right</title_hjust>
+      <label_to_axis>0.005</label_to_axis>
+      <label_height>0.04</label_height>
+      <tick_length>0.03</tick_length>
+      <title_to_axis>0.05</title_to_axis> <!-- YLAB = 0.05 -->
+      <title_height>0.04</title_height>
+      <is_log>false</is_log>
+    </style>
+    <style name="x_axis.line_style">
+      <color>black</color>
+      <line_width>1</line_width>
+    </style>
+    <style name="x_axis.ticks_style">
+      <color>black</color>
+      <line_width>1</line_width>
+    </style>
+    <style name="x_axis.labels_style"> 
+      <color>black</color>
+      <scale>0.6</scale> <!-- To have a good matching with ROOT text size -->
+      <font>arialbd.ttf</font> <!-- ROOT_62 -->
+      <front_face>cw</front_face>
+      <smoothing>true</smoothing>
+    </style>
+    <style name="x_axis.title_style">
+      <visible>true</visible>
+      <color>black</color>
+      <scale>0.6</scale>
+      <font>arialbd.ttf</font> <!-- ROOT_62 -->
+      <front_face>cw</front_face>
+      <smoothing>true</smoothing>
+    </style>
+    <style name="x_axis.mag_style">
+      <color>black</color>
+      <scale>0.6</scale>
+      <font>arialbd.ttf</font> <!-- ROOT_62 -->
+      <front_face>cw</front_face>
+      <smoothing>true</smoothing>
+    </style>
+
+    <style name="y_axis">
+      <modeling>hplot</modeling>
+      <divisions>510</divisions>
+      <title_hjust>right</title_hjust>
+      <label_to_axis>0.005</label_to_axis>
+      <label_height>0.04</label_height>
+      <tick_length>0.03</tick_length>
+      <title_to_axis>0.07</title_to_axis> <!-- XLAB = 0.07 -->
+      <title_height>0.04</title_height>
+      <is_log>false</is_log>
+    </style>
+    <style name="y_axis.line_style">
+      <color>black</color>
+      <line_width>1</line_width>
+    </style>
+    <style name="y_axis.ticks_style">
+      <color>black</color>
+      <line_width>1</line_width>
+    </style>
+    <style name="y_axis.labels_style"> 
+      <color>black</color>
+      <scale>0.6</scale>
+      <font>arialbd.ttf</font> <!-- ROOT_62 -->
+      <front_face>cw</front_face>
+      <smoothing>true</smoothing>
+    </style>
+    <style name="y_axis.title_style">
+      <visible>true</visible>
+      <color>black</color>
+      <scale>0.6</scale>
+      <font>arialbd.ttf</font> <!-- ROOT_62 -->
+      <front_face>cw</front_face>
+      <smoothing>true</smoothing>
+    </style>
+    <style name="y_axis.mag_style">
+      <color>black</color>
+      <scale>0.6</scale>
+      <font>arialbd.ttf</font> <!-- ROOT_62 -->
+      <front_face>cw</front_face>
+      <smoothing>true</smoothing>
+    </style>
+
+    <style name="z_axis">
+      <modeling>hplot</modeling>
+      <is_log>false</is_log>
+    </style>
+    <style name="z_axis.line_style">
+      <color>black</color>
+      <line_width>1</line_width>
+    </style>
+    <style name="z_axis.ticks_style">
+      <color>black</color>
+      <line_width>1</line_width>
+    </style>
+    <style name="z_axis.labels_style"> 
+      <color>black</color>
+      <scale>0.6</scale>
+    </style>
+    <style name="z_axis.title_style">
+      <color>black</color>
+      <scale>0.6</scale>
+    </style>
+    <style name="z_axis.mag_style">
+      <color>black</color>
+      <scale>0.6</scale>
+    </style>
+
+    <style name="colormap_axis">
+      <modeling>hplot</modeling>
+      <divisions>510</divisions>
+      <title_hjust>right</title_hjust>
+      <label_to_axis>0.005</label_to_axis>
+      <label_height>0.04</label_height>
+      <tick_length>0.03</tick_length>
+      <title_to_axis>0.07</title_to_axis> <!-- XLAB = 0.07 -->
+      <title_height>0.04</title_height>
+      <is_log>false</is_log>
+    </style>
+    <style name="colormap_axis.line_style">
+      <color>black</color>
+      <line_width>1</line_width>
+    </style>
+    <style name="colormap_axis.ticks_style">
+      <color>black</color>
+      <line_width>1</line_width>
+    </style>
+    <style name="colormap_axis.labels_style"> 
+      <color>black</color>
+      <scale>0.6</scale>
+      <font>arialbd.ttf</font> <!-- ROOT_62 -->
+      <front_face>cw</front_face>
+      <smoothing>true</smoothing>
+    </style>
+    <style name="colormap_axis.title_style">
+      <visible>true</visible>
+      <color>black</color>
+      <scale>0.6</scale>
+      <font>arialbd.ttf</font> <!-- ROOT_62 -->
+      <front_face>cw</front_face>
+      <smoothing>true</smoothing>
+    </style>
+    <style name="colormap_axis.mag_style">
+      <color>black</color>
+      <scale>0.6</scale>
+      <font>arialbd.ttf</font> <!-- ROOT_62 -->
+      <front_face>cw</front_face>
+      <smoothing>true</smoothing>
+    </style>
+
+
+    <style name="bins_style.0">
+      <modeling>top_lines</modeling>
+      <color>black</color>
+      <line_width>1</line_width>
+ <!-- <line_pattern>solid</line_pattern> -->
+    </style>
+
+    <style name="func_style.0">
+      <modeling>top_lines</modeling>
+      <color>black</color>
+      <line_width>3</line_width>
+ <!-- <line_pattern>solid</line_pattern> -->
+    </style>
+  </plotter_style>
+
+  <plotter_style name="hippodraw">
+    <value_top_margin>0.05</value_top_margin>
+    <bottom_margin>0.12</bottom_margin>
+    <top_margin>0.16</top_margin>
+    <left_margin>0.16</left_margin>
+    <right_margin>0.16</right_margin>
+    <title_to_axis>0.1</title_to_axis>
+    <title_height>0.03</title_height>
+
+<!-- <style name="wall_style"><visible>false</visible></style> -->
+    <style name="grid_style">
+      <visible>false</visible>
+    </style>
+
+    <style name="inner_frame_style">
+      <visible>true</visible>
+    </style>
+
+    <style name="infos_style">
+      <visible>false</visible>
+    </style>
+
+    <style name="x_axis">
+      <title_hjust>center</title_hjust>
+      <title_to_axis>0.07</title_to_axis>
+      <title_height>0.035</title_height>
+      <label_to_axis>0.015</label_to_axis>
+      <label_height>0.02625</label_height> <!-- 0.0175F * 1.5F -->
+    </style>
+    <style name="y_axis">
+      <title_hjust>center</title_hjust>
+      <title_to_axis>0.2</title_to_axis>
+      <title_height>0.035</title_height>
+      <label_height>0.02625</label_height> <!-- 0.0175F * 1.5F -->
+    </style>
+
+    <style name="title_style">
+      <visible>true</visible>
+      <font>helvetica.ttf</font>
+      <front_face>cw</front_face>
+      <smoothing>true</smoothing>
+    </style>
+
+    <style name="x_axis.title_style">
+      <visible>true</visible>
+      <font>helvetica.ttf</font>
+      <front_face>cw</front_face>
+      <smoothing>true</smoothing>
+    </style>
+    <style name="x_axis.labels_style"> 
+      <color>black</color>
+      <font>helvetica.ttf</font>
+      <front_face>cw</front_face>
+      <smoothing>true</smoothing>
+    </style>
+
+    <style name="y_axis.title_style">
+      <visible>true</visible>
+      <font>helvetica.ttf</font>
+      <front_face>cw</front_face>
+      <smoothing>true</smoothing>
+    </style>
+    <style name="y_axis.labels_style"> 
+      <color>black</color>
+      <font>helvetica.ttf</font>
+      <front_face>cw</front_face>
+      <smoothing>true</smoothing>
+    </style>
+
+    <style name="z_axis.title_style">
+      <visible>true</visible>
+      <font>helvetica.ttf</font>
+      <front_face>cw</front_face>
+      <smoothing>true</smoothing>
+    </style>
+    <style name="z_axis.labels_style"> 
+      <color>black</color>
+      <font>helvetica.ttf</font>
+      <front_face>cw</front_face>
+      <smoothing>true</smoothing>
+    </style>
+
+    <style name="errors_style.0">
+      <visible>false</visible>
+    </style>
+
+    <style name="bins_style.0">
+      <modeling>top_lines</modeling>
+      <color>black</color>
+      <line_width>1</line_width>
+ <!-- <line_pattern>solid</line_pattern> -->
+    </style>
+
+    <style name="func_style.0">
+      <modeling>top_lines</modeling>
+      <color>black</color>
+      <line_width>1</line_width>
+ <!-- <line_pattern>solid</line_pattern> -->
+    </style>
+  </plotter_style>
+
+</styles>

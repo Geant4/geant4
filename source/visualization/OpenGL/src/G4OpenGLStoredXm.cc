@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXm.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4OpenGLStoredXm.cc 91686 2015-07-31 09:40:08Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -42,10 +42,10 @@
 #include "G4OpenGLXmViewerMessenger.hh"
 
 G4OpenGLStoredXm::G4OpenGLStoredXm ():
-  G4VGraphicsSystem ("OpenGLStoredXm",
-		     "OGLSXm",
-		     G4VisFeaturesOfOpenGLSXm (),
-		     G4VGraphicsSystem::threeD)
+  G4OpenGLXm ("OpenGLStoredXm",
+              "OGLSXm",
+              G4VisFeaturesOfOpenGLSXm (),
+              G4VGraphicsSystem::threeD)
 {
   G4OpenGLViewerMessenger::GetInstance();
   G4OpenGLXmViewerMessenger::GetInstance();

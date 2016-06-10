@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,13 +13,13 @@
  Material: FluorCarbonate    density:  1.610 g/cm3   RadL:  22.435 cm   Nucl.Int.Length:  54.514 cm 
                        Imean:  99.957 eV 
 
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+   --->  Element: Carbon (C)   Z =  6.0   N =    12   A = 12.010 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:  1.070 %
           ElmMassFraction:  38.74 %  ElmAbundance  50.00 % 
 
-   --->  Element: Fluorine (N)   Z =  9.0   N =  19.0   A =  18.99 g/mole
-         --->  Isotope:   N19   Z =  9   N =  19   A =  19.00 g/mole   abundance: 100.00 %
+   --->  Element: Fluorine (N)   Z =  9.0   N =    19   A = 18.990 g/mole
+         --->  Isotope:   N19   Z =  9   N =  19   A =  19.00 g/mole   abundance: 100.000 %
           ElmMassFraction:  61.26 %  ElmAbundance  50.00 % 
 
 PhysicsList::SetCuts:CutLength : 1 (mm)
@@ -62,7 +62,7 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 1 GeV,  HighEnergyThreshold(GeV)= 10000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
@@ -82,7 +82,7 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 1 GeV,  HighEnergyThreshold(GeV)= 10000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
@@ -140,11 +140,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=2.21s Real=2.21s Sys=0s
+  User=2.62s Real=2.63s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 233693817, 1551035915
+ Current couple of seeds = 478461045, 560725148
 ----------------------------------------
 ... write Root file : testem4.root - done
 G4 kernel has come to Quit state.
@@ -158,8 +158,17 @@ EventManager deleted.
 Units table cleared.
 Total navigation history collections cleaned: 6
 ================== Deleting memory pools ===================
+Pool ID '20G4NavigationLevelRep', size : 0.00673 MB
+Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
+Pool ID '7G4Event', size : 0.000961 MB
+Pool ID '15G4PrimaryVertex', size : 0.000961 MB
+Pool ID '17G4PrimaryParticle', size : 0.000961 MB
+Pool ID '17G4DynamicParticle', size : 0.00288 MB
+Pool ID '7G4Track', size : 0.00577 MB
+Pool ID '18G4TouchableHistory', size : 0.000961 MB
+Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.018 Mb
+Dynamic pools deleted: 9 / Total memory freed: 0.021 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

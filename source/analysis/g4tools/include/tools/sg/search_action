@@ -1,0 +1,130 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_search_action
+#define tools_sg_search_action
+
+#include "action"
+
+#include <vector>
+
+namespace tools {
+namespace sg {
+  class node;
+}}
+
+namespace tools {
+namespace sg {
+
+class search_action : public action {
+public:
+  search_action(std::ostream& a_out)
+  :action(a_out)
+  ,m_what(search_node_of_class)
+  ,m_stop_at_first(false)
+  ,m_node(0) //not owner
+
+  ,m_done(false)
+  {}
+  virtual ~search_action(){}
+public:
+  search_action(const search_action& a_from)
+  :action(a_from)
+  ,m_what(a_from.m_what)
+  ,m_stop_at_first(a_from.m_stop_at_first)
+  ,m_class(a_from.m_class)
+  ,m_node(a_from.m_node)
+
+  ,m_done(false)
+  {}
+  search_action& operator=(const search_action& a_from){
+    action::operator=(a_from);
+    if(&a_from==this) return *this;
+    m_what = a_from.m_what;
+    m_stop_at_first = a_from.m_stop_at_first;
+    m_class = a_from.m_class;
+    m_node = a_from.m_node;
+    reset();
+    return *this;
+  }
+public:
+  void reset() {
+    m_done = false;
+    m_objs.clear();
+    m_path.clear();
+    m_paths.clear();
+  }
+
+  enum search_what {
+    search_node_of_class = 0,
+    search_path_to_node = 1,
+    search_path_to_node_of_class = 2
+  };
+  search_what what() const {return m_what;}
+  void set_what(search_what a_v) {m_what = a_v;}
+ 
+  void set_done(bool a_value) {m_done = a_value;}
+  bool done() const {return m_done;}
+
+  bool stop_at_first() const {return m_stop_at_first;}
+  void set_stop_at_first(bool a_v) {m_stop_at_first = a_v;}
+
+  //////////////////////////////////////////////////////////
+  /// search_node_of_class : ///////////////////////////////
+  //////////////////////////////////////////////////////////
+  //NOTE : result of a search is not necessary a sg::node.
+  //       (For exa in ioda::main, could be a base_button).
+  void add_obj(void* a_obj) {m_objs.push_back(a_obj);}
+  const std::vector<void*>& objs() const {return m_objs;}
+
+  void set_class(const std::string& a_class) {m_class = a_class;}
+  const std::string& sclass() const {return m_class;}
+
+  //////////////////////////////////////////////////////////
+  /// search_path_to_node : ////////////////////////////////
+  //////////////////////////////////////////////////////////
+  void set_node(sg::node* a_v) {m_node = a_v;}
+  sg::node* node() const {return m_node;}
+
+  void path_push(sg::node* a_v) {m_path.push_back(a_v);}
+  void path_pop() {m_path.pop_back();}
+
+  typedef std::vector<sg::node*> path_t;
+  const path_t& path() const {return m_path;}
+  //path_t path() {return m_path;}
+  void clear_path() {m_path.clear();}
+
+  bool do_path() const {
+    if(m_what==search_action::search_path_to_node) return true;
+    if(m_what==search_action::search_path_to_node_of_class) return true;
+    return false;
+  }
+
+  //////////////////////////////////////////////////////////
+  /// search_path_to_node_of_class : ///////////////////////
+  //////////////////////////////////////////////////////////
+  void add_path(const path_t& a_p) {m_paths.push_back(a_p);}
+
+  typedef std::vector<path_t> paths_t;
+  const paths_t& paths() const {return m_paths;}
+protected:
+  search_what m_what;
+  bool m_stop_at_first;
+
+  //search_node_of_class :
+  std::string m_class;
+  std::vector<void*> m_objs;
+
+  //search_path_to_node :
+  sg::node* m_node; //not owner.
+  path_t m_path;
+
+  //search_path_to_node_of_class :
+  std::vector<path_t> m_paths;
+
+  bool m_done;
+};
+
+}}
+
+#endif

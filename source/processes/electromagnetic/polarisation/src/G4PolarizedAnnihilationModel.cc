@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedAnnihilationModel.cc 68046 2013-03-13 14:31:38Z gcosmo $
+// $Id: G4PolarizedAnnihilationModel.cc 91742 2015-08-04 11:48:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -252,6 +252,7 @@ void G4PolarizedAnnihilationModel::SampleSecondaries(std::vector<G4DynamicPartic
       break;
     }
 
+    // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
   } while( treject < gmax*G4UniformRand() );
 
   //
@@ -309,6 +310,7 @@ void G4PolarizedAnnihilationModel::SampleSecondaries(std::vector<G4DynamicPartic
        G4cout<<" epsil = "<<epsil<<G4endl;
      }
 
+    // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
   } while( treject < G4UniformRand() );
   //  G4cout<<"phi dicing END"<<G4endl;
 

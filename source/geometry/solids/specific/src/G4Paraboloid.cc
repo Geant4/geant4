@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Paraboloid.cc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4Paraboloid.cc 92392 2015-08-31 14:07:02Z gcosmo $
 //
 // class G4Paraboloid
 //
@@ -36,6 +36,8 @@
 #include "globals.hh"
 
 #include "G4Paraboloid.hh"
+
+#if !(defined(G4GEOM_USE_UPARABOLOID) && defined(G4GEOM_USE_SYS_USOLIDS))
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -1175,3 +1177,5 @@ G4Polyhedron* G4Paraboloid::GetPolyhedron () const
   }
   return fpPolyhedron;
 }
+
+#endif // !defined(G4GEOM_USE_UPARABOLOID) || !defined(G4GEOM_USE_SYS_USOLIDS)

@@ -50,8 +50,11 @@
   G4HadFinalState * G4ParticleHPCaptureFS::ApplyYourself(const G4HadProjectile & theTrack)
   {
 
+   if ( theResult.Get() == NULL ) theResult.Put( new G4HadFinalState );
+   theResult.Get()->Clear();
+
     G4int i;
-    theResult.Clear();
+
 // prepare neutron
     G4double eKinetic = theTrack.GetKineticEnergy();
     const G4HadProjectile *incidentParticle = &theTrack;
@@ -78,7 +81,7 @@
 // dice the photons
 
     G4ReactionProductVector * thePhotons = 0;
-    if ( HasFSData() && !getenv ( "G4NEUTRONHP_USE_ONLY_PHOTONEVAPORATION" ) ) 
+    if ( HasFSData() && !G4ParticleHPManager::GetInstance()->GetUseOnlyPhotoEvaporation() ) 
     { 
        //NDL has final state data
       if ( hasExactMF6 )
@@ -202,7 +205,7 @@
        //theOne->SetMomentum(theMomentum);
        
        theOne->SetMomentum(aMomentum);
-       theResult.AddSecondary(theOne);
+       theResult.Get()->AddSecondary(theOne);
     }
 
     // Now fill in the gammas.
@@ -212,7 +215,7 @@
       G4DynamicParticle * theOne = new G4DynamicParticle;
       theOne->SetDefinition(thePhotons->operator[](i)->GetDefinition());
       theOne->SetMomentum(thePhotons->operator[](i)->GetMomentum());
-      theResult.AddSecondary(theOne);
+      theResult.Get()->AddSecondary(theOne);
       delete thePhotons->operator[](i);
     }
     delete thePhotons; 
@@ -221,20 +224,20 @@
     G4bool residual = false;
     G4ParticleDefinition * aRecoil = G4IonTable::GetIonTable()
                                    ->GetIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0);
-    for ( G4int j = 0 ; j != theResult.GetNumberOfSecondaries() ; j++ )
+    for ( G4int j = 0 ; j != theResult.Get()->GetNumberOfSecondaries() ; j++ )
     {
-       if ( theResult.GetSecondary(j)->GetParticle()->GetDefinition() == aRecoil ) residual = true;
+       if ( theResult.Get()->GetSecondary(j)->GetParticle()->GetDefinition() == aRecoil ) residual = true;
     }
 
     if ( residual == false )
     {
        G4int nNonZero = 0;
        G4LorentzVector p_photons(0,0,0,0);
-       for ( G4int j = 0 ; j != theResult.GetNumberOfSecondaries() ; j++ )
+       for ( G4int j = 0 ; j != theResult.Get()->GetNumberOfSecondaries() ; j++ )
        {
-          p_photons += theResult.GetSecondary(j)->GetParticle()->Get4Momentum();
+          p_photons += theResult.Get()->GetSecondary(j)->GetParticle()->Get4Momentum();
           // To many 0 momentum photons -> Check PhotonDist 
-          if ( theResult.GetSecondary(j)->GetParticle()->Get4Momentum().e() > 0 ) nNonZero++;
+          if ( theResult.Get()->GetSecondary(j)->GetParticle()->Get4Momentum().e() > 0 ) nNonZero++;
        }
 
        // Can we include kinetic energy here?
@@ -274,7 +277,7 @@
              G4DynamicParticle * theOne = new G4DynamicParticle;
              theOne->SetDefinition( G4Gamma::Gamma() );
              theOne->SetMomentum( tempVector );
-             theResult.AddSecondary(theOne);
+             theResult.Get()->AddSecondary(theOne);
           }
 
 //        Add last photon 
@@ -284,7 +287,7 @@
           G4ThreeVector lastPhoton = -p_photons.vect().unit()*vEPhoton.back();
           p_photons += G4LorentzVector( lastPhoton , lastPhoton.mag() );
           theOne->SetMomentum( lastPhoton );
-          theResult.AddSecondary(theOne);
+          theResult.Get()->AddSecondary(theOne);
        }
 
 //Add residual 
@@ -293,14 +296,14 @@
 			       - p_photons.vect();
        theOne->SetDefinition(aRecoil);
        theOne->SetMomentum( aMomentum );
-       theResult.AddSecondary(theOne);
+       theResult.Get()->AddSecondary(theOne);
 
     }
 //101203TK END
 
 // clean up the primary neutron
-    theResult.SetStatusChange(stopAndKill);
-    return &theResult;
+    theResult.Get()->SetStatusChange(stopAndKill);
+    return theResult.Get();
   }
 
 #include <sstream> 

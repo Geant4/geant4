@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListFactory.cc 83413 2014-08-21 15:21:43Z gcosmo $
+// $Id: G4PhysListFactory.cc 92863 2015-09-18 12:44:13Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -52,6 +52,7 @@
 #include "QGSP_BERT_HP.hh"
 #include "QGSP_BIC.hh"
 #include "QGSP_BIC_HP.hh"
+#include "QGSP_BIC_AllHP.hh"
 #include "QGSP_FTFP_BERT.hh"
 #include "QGS_BIC.hh"
 #include "QGSP_INCLXX.hh"
@@ -64,25 +65,26 @@
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmStandardPhysics_option4.hh"
+#include "G4EmStandardPhysicsGS.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 
 G4PhysListFactory::G4PhysListFactory() 
   : defName("FTFP_BERT"),verbose(1)
 {
-  nlists_hadr = 20;
-  G4String ss[20] = {
+  nlists_hadr = 21;
+  G4String ss[21] = {
     "FTFP_BERT","FTFP_BERT_TRV","FTFP_BERT_HP","FTFP_INCLXX",
     "FTFP_INCLXX_HP","FTF_BIC", "LBE","QBBC",
-    "QGSP_BERT","QGSP_BERT_HP","QGSP_BIC","QGSP_BIC_HP",
+    "QGSP_BERT","QGSP_BERT_HP","QGSP_BIC","QGSP_BIC_HP","QGSP_BIC_AllHP",
     "QGSP_FTFP_BERT","QGSP_INCLXX","QGSP_INCLXX_HP","QGS_BIC",
     "Shielding","ShieldingLEND","ShieldingM","NuBeam"};
   for(size_t i=0; i<nlists_hadr; ++i) {
     listnames_hadr.push_back(ss[i]);
   }
 
-  nlists_em = 7;
-  G4String s1[7] = {"","_EMV","_EMX","_EMY","_EMZ","_LIV","_PEN"};
+  nlists_em = 8;
+  G4String s1[8] = {"","_EMV","_EMX","_EMY","_EMZ","_LIV","_PEN","__GS"};
   for(size_t i=0; i<nlists_em; ++i) {
     listnames_em.push_back(s1[i]);
   }
@@ -154,6 +156,7 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
   else if(had_name == "QGSP_BERT_HP")   {p = new QGSP_BERT_HP(verbose);}
   else if(had_name == "QGSP_BIC")       {p = new QGSP_BIC(verbose);}
   else if(had_name == "QGSP_BIC_HP")    {p = new QGSP_BIC_HP(verbose);}
+  else if(had_name == "QGSP_BIC_AllHP") {p = new QGSP_BIC_AllHP(verbose);}
   else if(had_name == "QGSP_FTFP_BERT") {p = new QGSP_FTFP_BERT(verbose);}
   else if(had_name == "QGSP_INCLXX")    {p = new QGSP_INCLXX(verbose);}
   else if(had_name == "QGSP_INCLXX_HP") {p = new QGSP_INCLXX_HP(verbose);}
@@ -185,6 +188,8 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
 	p->ReplacePhysics(new G4EmLivermorePhysics(verbose)); 
       } else if(6 == em_opt) {
 	p->ReplacePhysics(new G4EmPenelopePhysics(verbose)); 
+      } else if(7 == em_opt) {
+	p->ReplacePhysics(new G4EmStandardPhysicsGS(verbose)); 
       }
     }
     p->SetVerboseLevel(ver);

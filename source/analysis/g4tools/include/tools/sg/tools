@@ -1,0 +1,129 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_tools
+#define tools_sg_tools
+
+#include "enums"
+#include "strings"
+#include "separator"
+#include "matrix"
+#include "text_hershey"
+#include "base_freetype"
+
+#include "../lina/vec3f"
+
+namespace tools {
+namespace sg {
+
+inline void add_string(
+ separator& a_sep
+,const std::string& a_font
+,const std::string& a_encoding
+,bool //a_smoothing
+,const std::string& a_string  
+,float a_x,float a_y,float a_z
+,const vec3f& a_X
+,const vec3f& a_Y
+,float a_size    
+,hjust a_hjust
+,vjust a_vjust
+,const base_freetype& a_ttf
+){
+  if(a_string.empty()) return;
+
+  matrix* tsf = new matrix;
+ {tsf->mul_translate(a_x,a_y,a_z);
+
+  vec3f X = a_X;
+  vec3f Y = a_Y;
+  X.normalize();
+  Y.normalize();
+  vec3f Z = X.cross(Y);
+  Y = Z.cross (X);
+  mat4f r(X.v0(),Y.v0(),Z.v0(),0, //first row
+                 X.v1(),Y.v1(),Z.v1(),0,
+                 X.v2(),Y.v2(),Z.v2(),0,
+                 0,0,0,1);
+  tsf->mul_mtx(r);
+
+  tsf->mul_scale(a_size,a_size,1); //applied first on GL
+
+ }a_sep.add(tsf);
+
+  if(a_font==font_hershey()) {
+
+    text_hershey* text = new text_hershey;
+    text->encoding.value(a_encoding);
+    text->strings.add(a_string);
+    text->hjust.value(a_hjust);
+    text->vjust.value(a_vjust);
+    a_sep.add(text);
+
+  } else {
+
+    base_freetype* text = base_freetype::create(a_ttf);
+    //TTNODE* text = new TTNODE;
+    text->font.value(a_font);
+    //text->modeling.value(font_outline);
+    //text->encoding.value(a_encoding);
+    //text->smooting.value(a_smoothing);
+    text->strings.add(a_string);
+    text->hjust.value(a_hjust);
+    text->vjust.value(a_vjust);
+  //text->modeling = font_outline;
+    a_sep.add(text);
+
+  }
+
+}
+
+inline void add_string_opt(
+ separator& a_sep
+,const std::string& a_font
+,const std::string& a_encoding
+,bool //a_smoothing
+,const std::string& a_string  
+,float a_x,float a_y,float a_z
+,mat4f& a_scale_rot
+,hjust a_hjust
+,vjust a_vjust
+,const base_freetype& a_ttf
+){
+  //used in axis::update_sg()
+  if(a_string.empty()) return;
+
+  matrix* tsf = new matrix;
+  tsf->mul_translate(a_x,a_y,a_z);
+  tsf->mul_mtx(a_scale_rot);
+  a_sep.add(tsf);
+
+  if(a_font==font_hershey()) {
+
+    text_hershey* text = new text_hershey;
+    text->encoding.value(a_encoding);
+    text->strings.add(a_string);
+    text->hjust.value(a_hjust);
+    text->vjust.value(a_vjust);
+    a_sep.add(text);
+
+  } else {
+
+    base_freetype* text = base_freetype::create(a_ttf);
+    //TTNODE* text = new TTNODE;
+    text->font.value(a_font);
+    //text->modeling.value(font_outline);
+    //text->encoding.value(a_encoding);
+    //text->smooting.value(a_smoothing);
+    text->strings.add(a_string);
+    text->hjust.value(a_hjust);
+    text->vjust.value(a_vjust);
+    a_sep.add(text);
+
+  }
+
+}
+
+}}
+
+#endif

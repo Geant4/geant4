@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITTrackingInteractivity.cc 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id: G4ITTrackingInteractivity.cc 91584 2015-07-27 13:01:48Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
@@ -35,6 +35,7 @@
 //
 // -------------------------------------------------------------------
 
+#include <G4ITSteppingVerbose.hh>
 #include "G4ITTrackingInteractivity.hh"
 #include "G4Track.hh"
 #include "G4String.hh"
@@ -60,3 +61,35 @@ void G4ITTrackingInteractivity::TrackBanner(G4Track* track, const G4String& mess
   G4cout << G4endl;
 }
 
+G4ITTrackingInteractivity::G4ITTrackingInteractivity(G4VITSteppingVerbose* verbose)
+{
+  fVerboseLevel = 0;
+  if(verbose)
+  {
+    fpVerbose = verbose;
+  }
+  else
+  {
+    fpVerbose = new G4ITSteppingVerbose();
+  }
+}
+
+void G4ITTrackingInteractivity::SetSteppingVerboseLevel(G4int level)
+{
+  fpVerbose->SetVerbose(level);
+}
+
+//void G4ITTrackingInteractivity::StartTracking(G4Track* track)
+//{
+//  fpVerbose->TrackingStarted(track);
+//}
+//
+//void G4ITTrackingInteractivity::EndTracking(G4Track* track)
+//{
+//  fpVerbose->TrackingEnded(track);
+//}
+
+G4int G4ITTrackingInteractivity::GetSteppingVerboseLevel() const
+{
+  return fpVerbose->GetVerbose();
+}

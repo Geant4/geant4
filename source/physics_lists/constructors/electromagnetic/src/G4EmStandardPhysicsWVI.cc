@@ -47,19 +47,19 @@
 #include "G4ParticleDefinition.hh"
 #include "G4EmParameters.hh"
 #include "G4LossTableManager.hh"
-//#include "G4EmProcessOptions.hh"
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
+#include "G4RayleighScattering.hh"
 
+#include "G4KleinNishinaModel.hh"
+#include "G4LivermorePhotoElectricModel.hh"
 #include "G4eMultipleScattering.hh"
 #include "G4MuMultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
 #include "G4CoulombScattering.hh"
-//#include "G4eCoulombScatteringModel.hh"
 #include "G4WentzelVIModel.hh"
-//#include "G4UrbanMscModel.hh"
 
 #include "G4MuBremsstrahlungModel.hh"
 #include "G4MuPairProductionModel.hh"
@@ -100,6 +100,7 @@
 
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
+#include "G4EmModelActivator.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -112,10 +113,14 @@ G4EmStandardPhysicsWVI::G4EmStandardPhysicsWVI(G4int ver)
   : G4VPhysicsConstructor("G4EmStandardWVI"), verbose(ver)
 {
   G4EmParameters* param = G4EmParameters::Instance();
+  param->SetDefaults();
   param->SetVerbose(verbose);
-  param->SetLatDisplacementBeyondSafety(true);
+  param->SetLowestElectronEnergy(10*eV);
+  //  param->SetLatDisplacementBeyondSafety(true);
   param->SetMuHadLateralDisplacement(false);
   param->ActivateAngularGeneratorForIonisation(true);
+  param->SetMscThetaLimit(0.15);
+  param->SetFluo(true);
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -153,6 +158,10 @@ void G4EmStandardPhysicsWVI::ConstructParticle()
   G4He3::He3();
   G4Alpha::Alpha();
   G4GenericIon::GenericIonDefinition();
+
+  // dna
+  G4EmModelActivator mact;
+  mact.ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -201,9 +210,16 @@ void G4EmStandardPhysicsWVI::ConstructProcess()
 
     if (particleName == "gamma") {
 
-      ph->RegisterProcess(new G4PhotoElectricEffect(), particle);
-      ph->RegisterProcess(new G4ComptonScattering(), particle);
+      G4ComptonScattering* cs = new G4ComptonScattering;
+      cs->SetEmModel(new G4KleinNishinaModel(), 1);
+
+      G4PhotoElectricEffect* pee = new G4PhotoElectricEffect();
+      pee->SetEmModel(new G4LivermorePhotoElectricModel(), 1);
+
+      ph->RegisterProcess(cs, particle);
+      ph->RegisterProcess(pee, particle);
       ph->RegisterProcess(new G4GammaConversion(), particle);
+      ph->RegisterProcess(new G4RayleighScattering(), particle);
 
     } else if (particleName == "e-") {
 
@@ -319,6 +335,9 @@ void G4EmStandardPhysicsWVI::ConstructProcess()
   //
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
+
+  G4EmModelActivator mact;
+  mact.ConstructProcess();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

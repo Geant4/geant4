@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventor.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4OpenInventor.hh 91687 2015-07-31 09:44:16Z gcosmo $
 //
 // Guy Barrand 26 Mar 1998.
 // OpenInventor graphics system factory.
@@ -44,6 +44,7 @@ public:
   G4VInteractorManager* GetInteractorManager();
   G4VSceneHandler* CreateSceneHandler (const G4String& name);
   void InitNodes();
+  G4bool IsUISessionCompatible () const;
 private:
   virtual void Initialize() = 0;
 private:

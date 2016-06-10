@@ -38,6 +38,16 @@ namespace streamer_info {
     TOBJECT = 66,          // 12
     TNAMED = 67            // 28
   };
+
+  const int size_FLOAT = 4;
+  const int size_DOUBLE = 8;
+  const int size_INT = 4;
+  const int size_UINT = 4;
+  const int size_SHORT = 2;
+  const int size_BOOL = 4; //(Bool_t = 1 + 3 for alignement)
+  //uuu ? const int size_BOOL = 1;
+
+  const int size_TString = 8;
 }
 
 
@@ -68,9 +78,10 @@ public:
   virtual streamer_element* copy() const = 0;
 public:
   virtual void out(std::ostream& aOut) const {
-    char s[128];
-    snpf(s,sizeof(s),"  %-14s%-15s offset=%3d type=%2d %-20s",
-      fTypeName.c_str(),fullName().c_str(),fOffset,fType,fTitle.c_str());
+    std::string _fname;
+    fullName(_fname);
+    char s[256];
+    snpf(s,sizeof(s),"  %-14s%-15s offset=%3d type=%2d %-20s",fTypeName.c_str(),_fname.c_str(),fOffset,fType,fTitle.c_str());
     aOut << s << std::endl;
   }
 public:
@@ -128,14 +139,13 @@ public:
     else                    fArrayLength *= aMaximum;
   }
 
-  virtual std::string fullName() const {
-    std::string s = fName;
+  virtual void fullName(std::string& a_s) const {
+    a_s = fName;
     for (int i=0;i<fArrayDim;i++) {
       char cdim[32];
       snpf(cdim,sizeof(cdim),"[%d]",fMaxIndex[i]);
-      s += cdim;
+      a_s += cdim;
     }
-    return s;
   }
 protected: //Named
   std::string fName;
@@ -205,12 +215,10 @@ public: //ibo
     return true;
   }
 public: //streamer_element
-  virtual streamer_element* copy() const {
-    return new streamer_basic_type(*this);
-  }
+  virtual streamer_element* copy() const {return new streamer_basic_type(*this);}
 public:
   streamer_basic_type(const std::string& aName,const std::string& aTitle,
-                    int aOffset,int aType,const std::string& aTypeName)
+                      int aOffset,int aType,const std::string& aTypeName)
   :streamer_element(aName,aTitle,aOffset,aType,aTypeName)
   {}
   virtual ~streamer_basic_type(){}
@@ -222,6 +230,132 @@ public:
     streamer_element::operator=(a_from);
     return *this;
   }
+};
+
+class streamer_short : public streamer_basic_type {
+public: //streamer_element
+  virtual streamer_element* copy() const {return new streamer_short(*this);}
+public:
+  streamer_short(const std::string& aName,const std::string& aTitle,int aOffset)
+  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::SHORT,"Short_t")
+  {}
+  streamer_short(int& aOffset,const std::string& aName,const std::string& aTitle)
+  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::SHORT,"Short_t")
+  {
+    aOffset += streamer_info::size_SHORT;
+  }
+  virtual ~streamer_short(){}
+public:
+  streamer_short(const streamer_short& a_from):ibo(a_from),streamer_basic_type(a_from){}
+  streamer_short& operator=(const streamer_short& a_from){streamer_basic_type::operator=(a_from);return *this;}
+};
+
+class streamer_int : public streamer_basic_type {
+public: //streamer_element
+  virtual streamer_element* copy() const {return new streamer_int(*this);}
+public:
+  streamer_int(const std::string& aName,const std::string& aTitle,int aOffset)
+  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::INT,"Int_t")
+  {}
+  streamer_int(int& aOffset,const std::string& aName,const std::string& aTitle)
+  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::INT,"Int_t")
+  {
+    aOffset += streamer_info::size_INT;
+  }
+  virtual ~streamer_int(){}
+public:
+  streamer_int(const streamer_int& a_from):ibo(a_from),streamer_basic_type(a_from){}
+  streamer_int& operator=(const streamer_int& a_from){streamer_basic_type::operator=(a_from);return *this;}
+};
+
+class streamer_uint : public streamer_basic_type {
+public: //streamer_element
+  virtual streamer_element* copy() const {return new streamer_uint(*this);}
+public:
+  streamer_uint(const std::string& aName,const std::string& aTitle,int aOffset)
+  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::UNSIGNED_INT,"UInt_t")
+  {}
+  streamer_uint(int& aOffset,const std::string& aName,const std::string& aTitle)
+  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::UNSIGNED_INT,"UInt_t")
+  {
+    aOffset += streamer_info::size_UINT;
+  }
+  virtual ~streamer_uint(){}
+public:
+  streamer_uint(const streamer_uint& a_from):ibo(a_from),streamer_basic_type(a_from){}
+  streamer_uint& operator=(const streamer_uint& a_from){streamer_basic_type::operator=(a_from);return *this;}
+};
+
+class streamer_float : public streamer_basic_type {
+public: //streamer_element
+  virtual streamer_element* copy() const {return new streamer_float(*this);}
+public:
+  streamer_float(const std::string& aName,const std::string& aTitle,int aOffset)
+  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::FLOAT,"Float_t")
+  {}
+  streamer_float(int& aOffset,const std::string& aName,const std::string& aTitle)
+  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::FLOAT,"Float_t")
+  {
+    aOffset += streamer_info::size_FLOAT;
+  }
+  virtual ~streamer_float(){}
+public:
+  streamer_float(const streamer_float& a_from):ibo(a_from),streamer_basic_type(a_from){}
+  streamer_float& operator=(const streamer_float& a_from){streamer_basic_type::operator=(a_from);return *this;}
+};
+
+class streamer_double : public streamer_basic_type {
+public: //streamer_element
+  virtual streamer_element* copy() const {return new streamer_double(*this);}
+public:
+  streamer_double(const std::string& aName,const std::string& aTitle,int aOffset)
+  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::DOUBLE,"Double_t")
+  {}
+  streamer_double(int& aOffset,const std::string& aName,const std::string& aTitle)
+  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::DOUBLE,"Double_t")
+  {
+    aOffset += streamer_info::size_DOUBLE;
+  }
+  virtual ~streamer_double(){}
+public:
+  streamer_double(const streamer_double& a_from):ibo(a_from),streamer_basic_type(a_from){}
+  streamer_double& operator=(const streamer_double& a_from){streamer_basic_type::operator=(a_from);return *this;}
+};
+
+class streamer_stat_t : public streamer_basic_type {
+public: //streamer_element
+  virtual streamer_element* copy() const {return new streamer_stat_t(*this);}
+public:
+  streamer_stat_t(const std::string& aName,const std::string& aTitle,int aOffset)
+  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::DOUBLE,"Stat_t")
+  {}
+  streamer_stat_t(int& aOffset,const std::string& aName,const std::string& aTitle)
+  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::DOUBLE,"Stat_t")
+  {
+    aOffset += streamer_info::size_DOUBLE;
+  }
+  virtual ~streamer_stat_t(){}
+public:
+  streamer_stat_t(const streamer_stat_t& a_from):ibo(a_from),streamer_basic_type(a_from){}
+  streamer_stat_t& operator=(const streamer_stat_t& a_from){streamer_basic_type::operator=(a_from);return *this;}
+};
+
+class streamer_bool : public streamer_basic_type {
+public: //streamer_element
+  virtual streamer_element* copy() const {return new streamer_bool(*this);}
+public:
+  streamer_bool(const std::string& aName,const std::string& aTitle,int aOffset)
+  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::UNSIGNED_CHAR,"Bool_t")
+  {}
+  streamer_bool(int& aOffset,const std::string& aName,const std::string& aTitle)
+  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::UNSIGNED_CHAR,"Bool_t")
+  {
+    aOffset += streamer_info::size_BOOL;
+  }
+  virtual ~streamer_bool(){}
+public:
+  streamer_bool(const streamer_bool& a_from):ibo(a_from),streamer_basic_type(a_from){}
+  streamer_bool& operator=(const streamer_bool& a_from){streamer_basic_type::operator=(a_from);return *this;}
 };
 
 class streamer_basic_pointer : public streamer_element {
@@ -241,9 +375,7 @@ public: //ibo
     return true;
   }
 public: //streamer_element
-  virtual streamer_element* copy() const {
-    return new streamer_basic_pointer(*this);
-  }
+  virtual streamer_element* copy() const {return new streamer_basic_pointer(*this);}
 public:
   streamer_basic_pointer(const std::string& aName,const std::string& aTitle,
                        int aOffset,int aType,
@@ -292,23 +424,20 @@ public: //ibo
     return true;
   }
 public: //streamer_element
-  virtual streamer_element* copy() const {
-    return new streamer_string(*this);
-  }
+  virtual streamer_element* copy() const {return new streamer_string(*this);}
 public:
-  streamer_string(const std::string& aName,const std::string& aTitle,
-                 int aOffset)
+  streamer_string(const std::string& aName,const std::string& aTitle,int aOffset)
   :streamer_element(aName,aTitle,aOffset,streamer_info::TSTRING,"TString")
   {}
+  streamer_string(int& aOffset,const std::string& aName,const std::string& aTitle)
+  :streamer_element(aName,aTitle,aOffset,streamer_info::TSTRING,"TString")
+  {
+    aOffset += streamer_info::size_TString;
+  }
   virtual ~streamer_string(){}
 public:
-  streamer_string(const streamer_string& a_from)
-  :ibo(a_from),streamer_element(a_from)
-  {}
-  streamer_string& operator=(const streamer_string& a_from){
-    streamer_element::operator=(a_from);
-    return *this;
-  }
+  streamer_string(const streamer_string& a_from):ibo(a_from),streamer_element(a_from){}
+  streamer_string& operator=(const streamer_string& a_from){streamer_element::operator=(a_from);return *this;}
 };
  
 
@@ -326,9 +455,7 @@ public: //ibo
     return true;
   }
 public: //streamer_element
-  virtual streamer_element* copy() const {
-    return new streamer_object(*this);
-  }
+  virtual streamer_element* copy() const {return new streamer_object(*this);}
 public:
   streamer_object(const std::string& aName,const std::string& aTitle,
                  int aOffset,const std::string& aTypeName)
@@ -339,8 +466,7 @@ public:
   }
   virtual ~streamer_object(){}
 public:
-  streamer_object(const streamer_object& a_from)
-  :ibo(a_from),streamer_element(a_from){}
+  streamer_object(const streamer_object& a_from):ibo(a_from),streamer_element(a_from){}
   streamer_object& operator=(const streamer_object& a_from){
     streamer_element::operator=(a_from);
     return *this;
@@ -361,20 +487,16 @@ public: //ibo
     return true;
   }
 public: //streamer_element
-  virtual streamer_element* copy() const {
-    return new streamer_object_pointer(*this);
-  }
+  virtual streamer_element* copy() const {return new streamer_object_pointer(*this);}
 public:
   streamer_object_pointer(const std::string& aName,const std::string& aTitle,
-                        int aOffset,const std::string& aTypeName)
-  :streamer_element(aName,aTitle,aOffset,
-                   streamer_info::OBJECT_POINTER,aTypeName){
+                          int aOffset,const std::string& aTypeName)
+  :streamer_element(aName,aTitle,aOffset,streamer_info::OBJECT_POINTER,aTypeName){
     if(aTitle.substr(0,2)=="->") fType = streamer_info::OBJECT_ARROW;
   }
   virtual ~streamer_object_pointer(){}
 public:
-  streamer_object_pointer(const streamer_object_pointer& a_from)
-  :ibo(a_from),streamer_element(a_from){}
+  streamer_object_pointer(const streamer_object_pointer& a_from):ibo(a_from),streamer_element(a_from){}
   streamer_object_pointer& operator=(const streamer_object_pointer& a_from){
     streamer_element::operator=(a_from);
     return *this;
@@ -395,18 +517,15 @@ public: //ibo
     return true;
   }
 public: //streamer_element
-  virtual streamer_element* copy() const {
-    return new streamer_object_any(*this);
-  }
+  virtual streamer_element* copy() const {return new streamer_object_any(*this);}
 public:
   streamer_object_any(const std::string& aName,const std::string& aTitle,
-                    int aOffset,const std::string& aTypeName)
+                      int aOffset,const std::string& aTypeName)
   :streamer_element(aName,aTitle,aOffset,streamer_info::OBJECT_ANY,aTypeName)
   {}
   virtual ~streamer_object_any(){}
 public:
-  streamer_object_any(const streamer_object_any& a_from)
-  :ibo(a_from),streamer_element(a_from){}
+  streamer_object_any(const streamer_object_any& a_from):ibo(a_from),streamer_element(a_from){}
   streamer_object_any& operator=(const streamer_object_any& a_from){
     streamer_element::operator=(a_from);
     return *this;
@@ -430,9 +549,7 @@ public: //ibo
     return true;
   }
 public: //streamer_element
-  virtual streamer_element* copy() const {
-    return new streamer_STL(*this);
-  }
+  virtual streamer_element* copy() const {return new streamer_STL(*this);}
 protected:
   enum ESTLtype { kSTL       = 300, kSTLstring  =365,   kSTLvector = 1,
                   kSTLlist   =  2,  kSTLdeque   =  3,   kSTLmap    = 4,
@@ -446,9 +563,9 @@ protected:
   //};
 public:
   streamer_STL(const std::string& aName,const std::string& aTitle,
-              int aOffset,
-              streamer_info::Type aType, //Must match TDataType/EDataType
-              const std::string& aTypeName)
+               int aOffset,
+               streamer_info::Type aType, //Must match TDataType/EDataType
+               const std::string& aTypeName)
   :streamer_element(aName,aTitle,aOffset,kSTL,aTypeName){
     fSTLtype = kSTLvector;
     fCtype   = aType;

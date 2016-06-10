@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElasticProcess.hh 86393 2014-11-10 16:34:27Z gcosmo $
+// $Id: G4HadronElasticProcess.hh 90262 2015-05-22 09:03:22Z gcosmo $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
 // 
@@ -67,7 +67,7 @@ public:
   // obsolete method - will be removed
   virtual void SetLowestEnergyNeutron(G4double);
 
-  virtual void Description() const;
+  virtual void ProcessDescription(std::ostream& outFile) const;
 
   // enable sampling of low-mass diffraction process
   void SetDiffraction(G4HadronicInteraction*, G4VCrossSectionRatio*);

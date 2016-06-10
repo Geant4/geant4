@@ -42,42 +42,27 @@
 namespace g4alt {
 
 G4PhysListFactory::G4PhysListFactory() 
-  : defName("FTFP_BERT"), verbose(1)
 {
 }
 
 G4PhysListFactory::~G4PhysListFactory()
 {}
 
+void G4PhysListFactory::SetDefaultReferencePhysList(const G4String& name)
+{
+  return G4PhysListRegistry::Instance()->SetUserDefaultPhysList(name);
+}
+
 G4VModularPhysicsList* 
 G4PhysListFactory::ReferencePhysList()
 {
-  // instantiate PhysList by environment variable "PHYSLIST"
-  G4String name = "";
-  char* path = getenv("PHYSLIST");
-  if (path) {
-    name = G4String(path);
-  } else {
-    name = defName;
-    G4cout << "### g4alt::G4PhysListFactory WARNING: "
-	   << " environment variable PHYSLIST is not defined"
-	   << G4endl
-	   << "    Default Physics Lists " << name 
-	   << " is instantiated" 
-	   << G4endl;
-  }
-  return GetReferencePhysList(name);
+  return G4PhysListRegistry::Instance()->GetModularPhysicsListFromEnv();
 }
 
 G4VModularPhysicsList* 
 G4PhysListFactory::GetReferencePhysList(const G4String& name)
 {
-  G4PhysListRegistry* registry = G4PhysListRegistry::Instance();
-  G4int oldRegVerbose = registry->GetVerbose();
-  registry->SetVerbose(verbose);
-  G4VModularPhysicsList* pl = registry->GetModularPhysicsList(name);
-  registry->SetVerbose(oldRegVerbose);
-  return pl;
+  return G4PhysListRegistry::Instance()->GetModularPhysicsList(name);
 }
   
 G4bool G4PhysListFactory::IsReferencePhysList(const G4String& name)
@@ -97,9 +82,29 @@ G4PhysListFactory::AvailablePhysListsEM() const
   return G4PhysListRegistry::Instance()->AvailablePhysListsEM();
 }
 
- void G4PhysListFactory::PrintAvailablePhysLists() const
+void G4PhysListFactory::PrintAvailablePhysLists() const
 {
   G4PhysListRegistry::Instance()->PrintAvailablePhysLists();
+}
+
+void G4PhysListFactory::SetVerbose(G4int val)
+{
+  G4PhysListRegistry::Instance()->SetVerbose(val);
+}
+
+G4int G4PhysListFactory::GetVerbose() const
+{
+  return G4PhysListRegistry::Instance()->GetVerbose();
+}
+
+void G4PhysListFactory::SetUnknownFatal(G4int val)
+{
+  G4PhysListRegistry::Instance()->SetUnknownFatal(val);
+}
+
+G4int G4PhysListFactory::GetUnknownFatal() const
+{
+  return G4PhysListRegistry::Instance()->GetUnknownFatal();
 }
 
 } // end-of-space 'g4alt'

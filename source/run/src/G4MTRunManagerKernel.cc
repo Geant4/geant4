@@ -44,14 +44,17 @@ G4MTRunManagerKernel::G4MTRunManagerKernel() : G4RunManagerKernel(masterRMK)
     msg<<" This type of RunManager can only be used in mult-threaded applications.";
     G4Exception("G4RunManagerKernel::G4RunManagerKernel()","Run0035",FatalException,msg);
 #endif
+    G4AutoLock l(&workerRMMutex);
     if(!workerRMvector) workerRMvector = new std::vector<G4WorkerRunManager*>;
+    l.unlock();
     //Set flag that a MT-type kernel has been instantiated
     G4Threading::SetMultithreadedApplication(true);
 }
 
 G4MTRunManagerKernel::~G4MTRunManagerKernel()
 {
-    if(!workerRMvector)
+  G4AutoLock l(&workerRMMutex);
+    if(workerRMvector)
     {
       if(workerRMvector->size()>0)
       {
@@ -130,45 +133,11 @@ void* G4MTRunManagerKernel::StartThread(void* context)
   G4UImanager::GetUIpointer()->SetUpForAThread(thisID);
 
   //============================
-  //Optimization Step
+  //Optimization: optional
   //============================
   //Enforce thread affinity if requested
-#if !defined(WIN32)
-  if ( masterRM->GetPinAffinity() != 0 ) {
-	  G4cout<<"AFFINITY SET"<<G4endl;
-      //Assign this thread to cpus in a round robin way
-	  G4int offset = masterRM->GetPinAffinity();
-	  G4int cpuindex = 0;
-	  if ( std::abs(offset)>G4Threading::G4GetNumberOfCores() ) {
-		  G4Exception("G4MTRunManagerKernel::StarThread","Run0035",JustWarning,"Cannot set thread affinity, affinity parameter larger than number of cores");
-	  }
-	  if ( offset == 0 ) {
-		  offset = 1;
-		  G4Exception("G4MTRunManagerKernel::StarThread","Run0035",JustWarning,"Affinity parameter==0, using 1 instead.");
-	  }
-	  if (offset>0) { //Start assigning affinity to given CPU
-		  --offset;
-		  cpuindex = (thisID+offset) % G4Threading::G4GetNumberOfCores(); //Round robin
-	  } else {//Exclude the given CPU
-		  offset *= -1;
-		  --offset;
-		  G4int myidx = thisID%(G4Threading::G4GetNumberOfCores()-1);
-		  cpuindex = myidx + (myidx>=offset);
-	  }
-	  G4cout<<"AFFINITY:"<<cpuindex<<G4endl;
-      //Avoid compilation warning in C90 standard w/o MT
-#if defined(G4MULTITHREADED)
-      G4Thread t = G4THREADSELF();
-#else
-      G4Thread t;
-#endif
-      G4bool success = G4Threading::G4SetPinAffinity(cpuindex,t);
-      if ( ! success ) {
-          G4Exception("G4MTRunManagerKernel::StarThread","Run0035",JustWarning,"Cannot set thread affinity.");
-      }
-  }
-#endif
-    
+  wThreadContext->SetPinAffinity(masterRM->GetPinAffinity());
+
   //============================
   //Step-1: Random number engine
   //============================
@@ -216,55 +185,10 @@ void* G4MTRunManagerKernel::StartThread(void* context)
   //================================
   //Step5: Loop over requests from the master thread 
   //================================
-  G4MTRunManager::WorkerActionRequest nextAction = masterRM->ThisWorkerWaitForNextAction();
-  while( nextAction != G4MTRunManager::ENDWORKER )
-  {
-    if( nextAction == G4MTRunManager::NEXTITERATION ) // start the next run
-    {
-      //The following code deals with changing materials between runs
-      static G4ThreadLocal G4bool skipInitialization = true;
-      if(skipInitialization)
-      { 
-        // re-initialization is not necessary for the first run
-        skipInitialization = false;
-      }
-      else
-      {
-//        ReinitializeGeometry();
-          wThreadContext->UpdateGeometryAndPhysicsVectorFromMaster();          
-      }
-
-      // Execute UI commands stored in the masther UI manager
-      std::vector<G4String> cmds = masterRM->GetCommandStack();
-      G4UImanager* uimgr = G4UImanager::GetUIpointer(); //TLS instance
-      std::vector<G4String>::const_iterator it = cmds.begin();
-      for(;it!=cmds.end();it++)
-      { uimgr->ApplyCommand(*it); }
-      //Start this run
-      G4int numevents = masterRM->GetNumberOfEventsToBeProcessed();
-      G4String macroFile = masterRM->GetSelectMacro();
-      G4int numSelect = masterRM->GetNumberOfSelectEvents();
-      if ( macroFile == "" || macroFile == " " )
-      {
-          wrm->BeamOn(numevents);
-      }
-      else
-      {
-          wrm->BeamOn(numevents,macroFile,numSelect);
-      }
-    }
-    else
-    {
-      G4ExceptionDescription d;
-      d<<"Cannot continue, this worker has been requested an unknwon action: "
-       <<nextAction<<" expecting: ENDWORKER(=" <<G4MTRunManager::ENDWORKER
-       <<") or NEXTITERATION(="<<G4MTRunManager::NEXTITERATION<<")";
-      G4Exception("G4MTRunManagerKernel::StartThread","Run0035",FatalException,d);
-    }
-
-    //Now wait for master thread to signal new action to be performed
-    nextAction = masterRM->ThisWorkerWaitForNextAction();
-  } //No more actions to perform
+  //This function should enter a loop processing new runs and actions
+  //requests from master. It should block until thread is ready
+  //to terminate
+  wrm->DoWork();
 
   //===============================
   //Step-6: Terminate worker thread
@@ -284,84 +208,15 @@ void* G4MTRunManagerKernel::StartThread(void* context)
   }
   wrmm.unlock();
   delete wrm;
+
+  //===============================
+  //Step-7: Cleanup split classes
+  //===============================
   wThreadContext->DestroyGeometryAndPhysicsVector();
   wThreadContext = 0;
 
   return static_cast<void*>(0);
 }
-
-//Now moved to G4WorkerThread
-//void G4MTRunManagerKernel::ReinitializeGeometry()
-//{
-//  G4AutoLock wrmm(&workerRMMutex);
-//  //=================================================
-//  //Step-0: keep sensitive detector and field manager
-//  //=================================================
-//  typedef std::map<G4LogicalVolume*,std::pair<G4VSensitiveDetector*,G4FieldManager*> > LV2SDFM;
-//  LV2SDFM lvmap;
-//  G4PhysicalVolumeStore* mphysVolStore = G4PhysicalVolumeStore::GetInstance(); 
-//  for(size_t ip=0;ip<mphysVolStore->size();ip++)
-//  {
-//    G4VPhysicalVolume* pv = (*mphysVolStore)[ip];
-//    G4LogicalVolume *lv = pv->GetLogicalVolume();
-//    G4VSensitiveDetector* sd = lv->GetSensitiveDetector();
-//    G4FieldManager* fm = lv->GetFieldManager();
-//    if(sd||fm) lvmap[lv] = std::make_pair(sd,fm);
-//  }
-//
-//  //===========================
-//  //Step-1: Clean the instances
-//  //===========================
-//  const_cast<G4LVManager&>(G4LogicalVolume::GetSubInstanceManager()).FreeSlave();
-//  const_cast<G4PVManager&>(G4VPhysicalVolume::GetSubInstanceManager()).FreeSlave();
-//  const_cast<G4PVRManager&>(G4PVReplica::GetSubInstanceManager()).FreeSlave();
-//  const_cast<G4RegionManager&>(G4Region::GetSubInstanceManager()).FreeSlave();
-//  const_cast<G4PlSideManager&>(G4PolyconeSide::GetSubInstanceManager()).FreeSlave();
-//  const_cast<G4PhSideManager&>(G4PolyhedraSide::GetSubInstanceManager()).FreeSlave();
-//
-//  //===========================
-//  //Step-2: Re-create instances
-//  //===========================
-//  const_cast<G4LVManager&>(G4LogicalVolume::GetSubInstanceManager()).SlaveCopySubInstanceArray();
-//  const_cast<G4PVManager&>(G4VPhysicalVolume::GetSubInstanceManager()).SlaveCopySubInstanceArray();
-//  const_cast<G4PVRManager&>(G4PVReplica::GetSubInstanceManager()).SlaveCopySubInstanceArray();
-//  const_cast<G4RegionManager&>(G4Region::GetSubInstanceManager()).SlaveInitializeSubInstance();
-//  const_cast<G4PlSideManager&>(G4PolyconeSide::GetSubInstanceManager()).SlaveInitializeSubInstance();
-//  const_cast<G4PhSideManager&>(G4PolyhedraSide::GetSubInstanceManager()).SlaveInitializeSubInstance();
-//
-//  //===============================
-//  //Step-3: Re-initialize instances
-//  //===============================
-//  for(size_t ip=0;ip<mphysVolStore->size();ip++)
-//  {
-//    G4VPhysicalVolume* physVol = (*mphysVolStore)[ip];
-//    G4LogicalVolume* g4LogicalVolume = physVol->GetLogicalVolume();
-//    G4VSolid* g4VSolid = g4LogicalVolume->GetMasterSolid(); // shadow pointer
-//    G4PVReplica* g4PVReplica = 0;
-//    g4PVReplica =  dynamic_cast<G4PVReplica*>(physVol);
-//    if(g4PVReplica) // if the volume is a replica
-//    {
-//      G4VSolid *slaveg4VSolid = g4VSolid->Clone();
-//      g4LogicalVolume->InitialiseWorker(g4LogicalVolume,slaveg4VSolid,0);
-//    }
-//    else
-//    { g4LogicalVolume->InitialiseWorker(g4LogicalVolume,g4VSolid,0); }
-//  }
-//
-//  //===================================================
-//  //Step-4: Restore sensitive detector and field manaer
-//  //===================================================
-//  LV2SDFM::const_iterator it = lvmap.begin();
-//  for(; it!=lvmap.end() ; ++it )
-//  {
-//    G4LogicalVolume* lv = it->first;
-//    G4VSensitiveDetector* sd = (it->second).first;
-//    G4FieldManager* fm = (it->second).second;
-//    lv->SetFieldManager(fm, false);
-//    lv->SetSensitiveDetector(sd);
-//  }
-//  wrmm.unlock();
-//}
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"

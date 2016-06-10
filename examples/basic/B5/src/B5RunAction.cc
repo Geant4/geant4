@@ -29,6 +29,7 @@
 /// \brief Implementation of the B5RunAction class
 
 #include "B5RunAction.hh"
+#include "B5EventAction.hh"
 #include "B5Analysis.hh"
 
 #include "G4Run.hh"
@@ -37,8 +38,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B5RunAction::B5RunAction()
- : G4UserRunAction()
+B5RunAction::B5RunAction(B5EventAction* eventAction)
+ : G4UserRunAction(),
+   fEventAction(eventAction)
 { 
   // Create analysis manager
   // The choice of analysis technology is done via selectin of a namespace
@@ -69,14 +71,20 @@ B5RunAction::B5RunAction()
 
   // Creating ntuple
   //
-  analysisManager->CreateNtuple("B5", "Hits");
-  analysisManager->CreateNtupleIColumn("Dc1Hits");  // column Id = 0
-  analysisManager->CreateNtupleIColumn("Dc2Hits");  // column Id = 1
-  analysisManager->CreateNtupleDColumn("ECEnergy"); // column Id = 2
-  analysisManager->CreateNtupleDColumn("HCEnergy"); // column Id = 3
-  analysisManager->CreateNtupleDColumn("Time1");    // column Id = 4
-  analysisManager->CreateNtupleDColumn("Time2");    // column Id = 5
-  analysisManager->FinishNtuple();
+  if ( fEventAction ) {
+    analysisManager->CreateNtuple("B5", "Hits");
+    analysisManager->CreateNtupleIColumn("Dc1Hits");  // column Id = 0
+    analysisManager->CreateNtupleIColumn("Dc2Hits");  // column Id = 1
+    analysisManager->CreateNtupleDColumn("ECEnergy"); // column Id = 2
+    analysisManager->CreateNtupleDColumn("HCEnergy"); // column Id = 3
+    analysisManager->CreateNtupleDColumn("Time1");    // column Id = 4
+    analysisManager->CreateNtupleDColumn("Time2");    // column Id = 5
+    analysisManager                                   // column Id = 6
+      ->CreateNtupleDColumn("ECEnergyVector", fEventAction->GetEmCalEdep()); 
+    analysisManager                                   // column Id = 7
+      ->CreateNtupleDColumn("HCEnergyVector", fEventAction->GetHadCalEdep());
+    analysisManager->FinishNtuple();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

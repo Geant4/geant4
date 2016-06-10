@@ -46,6 +46,7 @@
 #include "G4HadronicInteraction.hh"
 #include "G4ParticleHPChannelList.hh"
 
+/*
 #include "G4ParticleHP2AInelasticFS.hh"
 #include "G4ParticleHP2N2AInelasticFS.hh"
 #include "G4ParticleHP2NAInelasticFS.hh"
@@ -82,6 +83,7 @@
 #include "G4ParticleHPPTInelasticFS.hh"
 #include "G4ParticleHPT2AInelasticFS.hh"
 #include "G4ParticleHPTInelasticFS.hh"
+*/
 #include "G4ParticleDefinition.hh"
 
 class G4ParticleHPInelastic : public G4HadronicInteraction
@@ -98,18 +100,19 @@ class G4ParticleHPInelastic : public G4HadronicInteraction
   public:
       G4int GetVerboseLevel() const;
       void SetVerboseLevel( G4int );
+      void BuildPhysicsTable(const G4ParticleDefinition&);
+      virtual void ModelDescription(std::ostream& outFile) const;
 
 protected:
   
   G4double * xSec;
   //G4ParticleHPChannelList * theInelastic; // one List per element
-  std::vector<G4ParticleHPChannelList*> theInelastic; // one List per element
+  std::vector<G4ParticleHPChannelList*>* theInelastic; // one List per element
   G4String dirName;
   G4int numEle;
-  void addChannelForNewElement();
 
   private:
-  
+ /* 
    G4ParticleHP2AInelasticFS the2AFS;
    G4ParticleHP2N2AInelasticFS the2N2AFS;
    G4ParticleHP2NAInelasticFS the2NAFS;
@@ -146,6 +149,7 @@ protected:
    G4ParticleHPPTInelasticFS thePTFS;
    G4ParticleHPT2AInelasticFS theT2AFS;
    G4ParticleHPTInelasticFS theTFS;
+*/
 
    G4ParticleDefinition* theProjectile;
 

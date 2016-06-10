@@ -46,6 +46,7 @@
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
+#include "G4Pow.hh"
 #include "G4HadronicException.hh"
 
 
@@ -267,7 +268,7 @@ void G4Fancy3DNucleus::ChooseNucleons()
 {
 	G4int protons=0,nucleons=0;
 	
-	while (nucleons < myA )
+	while (nucleons < myA )  /* Loop checking, 30-Oct-2015, G.Folger */
 	{
 	  if ( protons < myZ && G4UniformRand() < (G4double)(myZ-protons)/(G4double)(myA-nucleons) )
 	  {
@@ -297,8 +298,8 @@ void G4Fancy3DNucleus::ChoosePositions()
 	G4double *prand=arand;
 
 	places.clear();				// Reset data buffer
-
-	while ( i < myA )
+  G4int interationsLeft=1000*myA;
+  while ( (i < myA) && (--interationsLeft>0))  /* Loop checking, 30-Oct-2015, G.Folger */
 	{
 	   do
 	   {   	
@@ -311,7 +312,7 @@ void G4Fancy3DNucleus::ChoosePositions()
 		jx=--jr;
 		jy=--jr;
 		aPos.set((2*arand[jx]-1.), (2*arand[jy]-1.), (2*arand[--jr]-1.));
-	   } while (aPos.mag2() > 1. );
+	   } while (aPos.mag2() > 1. );  /* Loop checking, 30-Oct-2015, G.Folger */
 	   aPos *=maxR;
 	   G4double density=theDensity->GetRelativeDensity(aPos);
 	   if (G4UniformRand() < density)
@@ -346,6 +347,10 @@ void G4Fancy3DNucleus::ChoosePositions()
 	      }
 	   }
 	}
+	if (interationsLeft<=0) {
+	   G4Exception("model/util/G4Fancy3DNucleus.cc", "mod_util001", FatalException,
+             "Problem to place nucleons");
+	}
 
 }
 
@@ -373,7 +378,7 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
 	      {
 	          G4double pmax2= sqr(eMax) - sqr(theNucleons[i].GetDefinition()->GetPDGMass());
 		  fermiM[i] = std::sqrt(pmax2);
-		  while ( mom.mag2() > pmax2 )
+		  while ( mom.mag2() > pmax2 )  /* Loop checking, 30-Oct-2015, G.Folger */
 		  {
 		      mom=theFermi.GetMomentum(density, fermiM[i]);
 		  }
@@ -441,7 +446,7 @@ G4bool G4Fancy3DNucleus::ReduceSum()
 
 //    reduce Momentum Sum until the next would be allowed.
 	G4int index=testSums.size();
-	while ( (sum-testSums[--index].Vector).mag()>PFermi && index>0)
+	while ( (sum-testSums[--index].Vector).mag()>PFermi && index>0)  /* Loop checking, 30-Oct-2015, G.Folger */
 	{
 	  // Only take one which improve, ie. don't change sign and overshoot...
 	  if ( sum.mag() > (sum-testSums[index].Vector).mag() ) {
@@ -479,7 +484,7 @@ G4bool G4Fancy3DNucleus::ReduceSum()
 
 	// try to compensate momentum using another Nucleon....
 	G4int swapit=-1;
-	while (swapit<myA-1)
+	while (swapit<myA-1)  /* Loop checking, 30-Oct-2015, G.Folger */
 	{
 	  if ( fermiM[++swapit] > PFermi ) break;
 	}
@@ -495,6 +500,6 @@ G4bool G4Fancy3DNucleus::ReduceSum()
 
 G4double G4Fancy3DNucleus::CoulombBarrier()
 {
-  G4double coulombBarrier = (1.44/1.14) * MeV * myZ / (1.0 + std::pow(G4double(myA),1./3.));
-  return coulombBarrier;
+  static const G4double cfactor = (1.44/1.14) * MeV;
+  return cfactor*myZ/(1.0 + G4Pow::GetInstance()->Z13(myA));
 }

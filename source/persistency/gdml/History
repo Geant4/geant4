@@ -1,4 +1,4 @@
-$Id: History 87077 2014-11-24 15:29:00Z gcosmo $
+$Id: History 93171 2015-10-09 09:04:09Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,113 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07 October 2015 Gabriele Cosmo (gdml-V10-01-24)
+- Protected compilation of G4MultiUnion wrapper with G4GEOM_USE_USOLIDS flag.
+
+02 October 2015 Gabriele Cosmo (gdml-V10-01-23)
+- Restored left-hand rule in G4GDMLWriteDefine. Use more relaxed precision
+  constant for formula evaluation, to allow for proper treatment of
+  singularities.
+
+01 October 2015 Gabriele Cosmo (gdml-V10-01-22, 21)
+- Apply right-hand rule (counterclockwise rotation) for matrix-to-angles
+  conversion in G4GDMLWriteDefine.
+  Attempt to debug CMS dumped geometry.
+
+24 September 2015 Gabriele Cosmo (gdml-V10-01-20)
+- Rectify rotation matrices in reading and writing GDML files to get rid of
+  spurious roundoff errors in stored values. 
+
+06 August 2015 Gabriele Cosmo (gdml-V10-01-19)
+- Fixed typo in exported name for electron cuts in G4GDMLWriteStructure.
+
+30 July 2015 Witek Pokorski (gdml-V10-01-18)
+- Small modification to previous tag to avoid writing out 0 copy-number.
+
+30 July 2015 Witek Pokorski (gdml-V10-01-17)
+- Added support for writing and reading copy-numbers associated to placements.
+  New GDML schema version 3.1.3 (files: gdml.xsd).
+
+08 May 2015 Witek Pokorski (gdml-V10-01-16)
+- Modification in the import/export of the regions to deal with reflected
+  volumes.
+
+07 May 2015 Witek Pokorski (gdml-V10-01-15)
+- Fixing bug introduced in the previous tag V10-01-13.
+  
+30 April 2015 Gabriele Cosmo (gdml-V10-01-14)
+- Fixed non-initialised boolean flag in G4GDMLRead, reported by Coverity.
+
+28 April 2015 Witek Pokorski (gdml-V10-01-13)
+- One more fix for writing out reflected volumes to cover the case when _only_
+  the reflected volume is present.
+  
+27 April 2015 Gabriele Cosmo (gdml-V10-01-12)
+- Allow for optional stripping of references from regions names
+  when exporting.
+
+20 April 2015 Gabriele Cosmo (gdml-V10-01-11)
+- Corrected parsing of shape type-ID for MultiUnion in G4GDMLWriteSolids.
+
+16 April 2015 Gabriele Cosmo (gdml-V10-01-10)
+- Improved text in G4Exception for failed import of file in G4GDMLRead.
+
+14 April 2015 Gabriele Cosmo (gdml-V10-01-09)
+- Code cleanup and formatting.
+
+13 April 2015 Witek Pokorski (gdml-V10-01-08)
+- Fixed writing out of reflected volumes. No more redundant duplicated
+  logical volumes in the store after import of geometry.
+- Correction for optional stripping of world-volume.
+
+9 April 2015 Gabriele Cosmo (gdml-V10-01-07)
+- Added "dichroic" surface model for optical property, consistent with
+  addition done in release 10.0.
+
+9 April 2015 Gabriele Cosmo (gdml-V10-01-06)
+- Simplified retrivial of energy cuts by directly using G4ProductionCutsTable.
+
+8 April 2015 Gabriele Cosmo (gdml-V10-01-05)
+- Implemented ability to optionally export (export only!) energy cuts
+  associated to logical volumes (default is OFF). Export of energy cuts for
+  volumes can be activated/de-activated by means of a new UI command
+  "/persistency/gdml/export_Ecuts [true/false]".
+- Corrected signature for import/export of auxiliary information and
+  execute dump of the auxiliary information after all volume's content,
+  included daughters tree, to be consistent with schema definition.
+
+30 March 2015 Gabriele Cosmo (gdml-V10-01-04)
+- Enable also export of default world region, for consistency.
+
+27 March 2015 Gabriele Cosmo (gdml-V10-01-03)
+- Fixed compilation warnings on SLC5.
+
+27 March 2015 Gabriele Cosmo (gdml-V10-01-02)
+- Implemented import/export of geometrical regions associated to volumes
+  for importing and storing production cuts and user-limits, as global
+  auxiliary_info entity. NOTE: regions in parallel worlds not supported!
+  Updated G4GDMLParser to optionally activate export of regions (default
+  is OFF). Export of regions can be activated/de-activated by means of
+  the new UI command "/persistency/gdml/export_regions [true/false]".
+- Avoid use of standard evaluator for import of units; adopt G4UnitsTable
+  instead, in order to avoid loss of precision due to unit's conversion.
+
+19 March 2015 Gabriele Cosmo
+- Added missing file to headers list in sources.cmake.
+- Minor code cleanup...
+
+18 March 2015 Witek Pokorski (gdml-V10-01-01)
+- Added 'userinfo' to GDML schema to allow 'global' auxiliary fields.
+- Extended auxiliary field in the schema by 'auxunit' and pointer to
+  sub-auxiliary fields (no limit on the number of levels).
+  New GDML schema version 3.1.2 (files: gdml.xsd, gdml_core.xsd).
+- Added writer support for auxiliary info (global and volume-specific).
+
+3 February 2015 Gabriele Cosmo (gdml-V10-01-00)
+- Allow for return of NULL pointer in call to GetWorldVolume() in case
+  read command for importing a GDML file has not been yet issued.
+  Addressing enhancement request #1412.
 
 24 November 2014 Gabriele Cosmo (gdml-V10-00-11)
 - Fixed typo in G4GDMLWriteSolids::BooleanWrite() for the case of repeated

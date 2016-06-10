@@ -88,13 +88,20 @@ G4ChipsKaonMinusInelasticXS::~G4ChipsKaonMinusInelasticXS()
   delete HEN; 
 }
 
-G4bool G4ChipsKaonMinusInelasticXS::IsIsoApplicable(const G4DynamicParticle* Pt, G4int, G4int,    
+void
+G4ChipsKaonMinusInelasticXS::CrossSectionDescription(std::ostream& outFile) const
+{
+    outFile << "G4ChipsKaonMinusInelasticXS provides the inelastic cross\n"
+            << "section for K- nucleus scattering as a function of incident\n"
+            << "momentum. The cross section is calculated using M. Kossov's\n"
+            << "CHIPS parameterization of cross section data.\n";
+}
+
+G4bool G4ChipsKaonMinusInelasticXS::IsIsoApplicable(const G4DynamicParticle*, G4int, G4int,    
 				 const G4Element*,
 				 const G4Material*)
 {
-  const G4ParticleDefinition* particle = Pt->GetDefinition();
-  if (particle ==       G4KaonMinus::KaonMinus()      ) return true;
-  return false;
+  return true;
 }
 
 

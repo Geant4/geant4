@@ -75,13 +75,7 @@ public:  // With Description
 
   virtual G4DecayProducts *DecayIt(G4double);
 
-  void SetPolarization(G4ThreeVector);
-  const G4ThreeVector& GetPolarization() const;
-
 private:
-
-  G4ThreeVector parent_polarization;
-
 // Radiative Correction Factors
 
   G4double F_c(G4double x, G4double x0);
@@ -92,16 +86,6 @@ private:
   G4double EMASS;
 
 };
-
-inline void G4MuonDecayChannelWithSpin::SetPolarization(G4ThreeVector polar)
-{
-  parent_polarization = polar;
-}
-
-inline const G4ThreeVector& G4MuonDecayChannelWithSpin::GetPolarization() const
-{
-  return parent_polarization;
-}
 
 inline G4double G4MuonDecayChannelWithSpin::F_c(G4double x, G4double x0)
 {

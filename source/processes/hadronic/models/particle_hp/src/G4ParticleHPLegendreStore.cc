@@ -86,8 +86,15 @@ G4double G4ParticleHPLegendreStore::SampleDiscreteTwoBody (G4double anEnergy)
   
   G4double value, random;
   G4double v1, v2;
+  G4int icounter=0;
+  G4int icounter_max=1024;
   do
   {
+    icounter++;
+    if ( icounter > icounter_max ) {
+       G4cout << "Loop-counter exceeded the threshold value at " << __LINE__ << "th line of " << __FILE__ << "." << G4endl;
+       break;
+    }
     v1 = 0.5;
     v2 = 0.5;
     result = 2.*G4UniformRand()-1.;
@@ -109,7 +116,7 @@ G4double G4ParticleHPLegendreStore::SampleDiscreteTwoBody (G4double anEnergy)
     random = G4UniformRand();
     if(0>=theNorm) break; // Workaround for negative cross-section values. @@@@ 31 May 2000
   }
-  while(random>value/theNorm);
+  while(random>value/theNorm); // Loop checking, 11.05.2015, T. Koi
 
   return result;
 }
@@ -159,8 +166,15 @@ G4double G4ParticleHPLegendreStore::SampleMax (G4double anEnergy)
   
   G4double value, random;
   G4double v1, v2;
+  G4int icounter=0;
+  G4int icounter_max=1024;
   do
   {
+    icounter++;
+    if ( icounter > icounter_max ) {
+       G4cout << "Loop-counter exceeded the threshold value at " << __LINE__ << "th line of " << __FILE__ << "." << G4endl;
+       break;
+    }
     v1 = 0;
     v2 = 0;
     result = 2.*G4UniformRand()-1.;
@@ -180,8 +194,7 @@ G4double G4ParticleHPLegendreStore::SampleMax (G4double anEnergy)
     random = G4UniformRand();
     if(0>=theNorm) break; // Workaround for negative cross-section values. @@@@ 31 May 2000
   }
-  while(random>value/theNorm);
-  
+  while(random>value/theNorm); // Loop checking, 11.05.2015, T. Koi 
   return result;
 }
 
@@ -224,8 +237,15 @@ G4double G4ParticleHPLegendreStore::SampleElastic (G4double anEnergy)
   
   G4double value, random;
   G4double v1, v2;
+  G4int icounter=0;
+  G4int icounter_max=1024;
   do
   {
+    icounter++;
+    if ( icounter > icounter_max ) {
+       G4cout << "Loop-counter exceeded the threshold value at " << __LINE__ << "th line of " << __FILE__ << "." << G4endl;
+       break;
+    }
     v1 = 0;
     v2 = 0;
     result = 2.*G4UniformRand()-1.;
@@ -242,7 +262,7 @@ G4double G4ParticleHPLegendreStore::SampleElastic (G4double anEnergy)
     value = theInt.Interpolate(theManager.GetScheme(high), x, x1, x2, v1, v2);
     random = G4UniformRand();
   }
-  while(random>value/theNorm);
+  while(random>value/theNorm); // Loop checking, 11.05.2015, T. Koi
   
   return result;
 }

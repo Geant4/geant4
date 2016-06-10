@@ -3,21 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-/*G.Barrand :
-#ifdef WIN32
-#define __STDC__
-#endif
-#ifdef __MWERKS__
-#define __STDC__
-#endif
-
-#ifndef NULL
-#define NULL 0L
-#endif
-
-#define DEFLATE 8
-*/
-
 /*G.Barrand : static int qflag = 0; */
 
 /* inflate.c -- put in the public domain by Mark Adler

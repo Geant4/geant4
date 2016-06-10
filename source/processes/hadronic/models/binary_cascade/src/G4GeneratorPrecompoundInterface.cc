@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GeneratorPrecompoundInterface.cc 80152 2014-04-03 14:04:18Z gcosmo $
+// $Id: G4GeneratorPrecompoundInterface.cc 92692 2015-09-14 07:06:19Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class file
@@ -70,8 +70,14 @@
 #include "G4DecayKineticTracks.hh"
 #include "G4HadronicInteractionRegistry.hh"
 
+//---------------------------------------------------------------------
+#include "Randomize.hh"
+#include "G4Log.hh"
+
+//#define debugPrecoInt
+
 G4GeneratorPrecompoundInterface::G4GeneratorPrecompoundInterface(G4VPreCompoundModel* preModel)
-: CaptureThreshold(10*MeV)
+: CaptureThreshold(70*MeV)   // Uzhi 1.05.2015 10 ->70
 {
    proton = G4Proton::Proton();
    neutron = G4Neutron::Neutron();
@@ -103,36 +109,39 @@ G4GeneratorPrecompoundInterface::~G4GeneratorPrecompoundInterface()
 {
 }
 
-//---------------------------------------------------------------------
-// choose to calculate excitation energy from energy balance
-#define exactExcitationEnergy
-//#define debugPrecoInt
-//#define G4GPI_debug_excitation
-
 G4ReactionProductVector* G4GeneratorPrecompoundInterface::
 Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 {
+   #ifdef debugPrecoInt
+      G4cout<<G4endl<<"G4GeneratorPrecompoundInterface::Propagate"<<G4endl;
+      G4cout<<"Target A and Z "<<theNucleus->GetMassNumber()<<" "<<theNucleus->GetCharge()<<G4endl;
+      G4cout<<"Directly produced particles number "<<theSecondaries->size()<<G4endl;
+   #endif
+
    G4ReactionProductVector * theTotalResult = new G4ReactionProductVector;
 
    // decay the strong resonances
    G4DecayKineticTracks decay(theSecondaries);
+   #ifdef debugPrecoInt
+      G4cout<<"Final stable particles number "<<theSecondaries->size()<<G4endl;
+   #endif
 
    // prepare the fragment
    G4int anA=theNucleus->GetMassNumber();
    G4int aZ=theNucleus->GetCharge();
+// G4double TargetNucleusMass =  G4NucleiProperties::GetNuclearMass(anA, aZ);
+
    G4int numberOfEx = 0;
    G4int numberOfCh = 0;
    G4int numberOfHoles = 0;
-   G4double exEnergy = 0.0;
+
    G4double R = theNucleus->GetNuclearRadius();
-   G4ThreeVector exciton3Momentum(0.,0.,0.);
-   G4ThreeVector captured3Momentum(0.,0.,0.);
-   G4ThreeVector wounded3Momentum(0.,0.,0.);
+
+   G4LorentzVector captured4Momentum(0.,0.,0.,0.);
+   G4LorentzVector Residual4Momentum(0.,0.,0.,0.);  // TargetNucleusMass is not need at the moment 
+   G4LorentzVector Secondary4Momentum(0.,0.,0.,0.);
 
    // loop over secondaries
-#ifdef exactExcitationEnergy
-   G4LorentzVector secondary4Momemtum(0,0,0,0);
-#endif
    G4KineticTrackVector::iterator iter;
    for(iter=theSecondaries->begin(); iter !=theSecondaries->end(); ++iter)
    {
@@ -141,25 +150,41 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       G4double mass = (*iter)->Get4Momentum().mag();
       G4ThreeVector mom = (*iter)->Get4Momentum().vect();
       if((part != proton && part != neutron) ||
-            (e > mass + CaptureThreshold) ||
+// Uzhi 2.05.2015            (e > mass + CaptureThreshold) ||
             ((*iter)->GetPosition().mag() > R)) {
          G4ReactionProduct * theNew = new G4ReactionProduct(part);
          theNew->SetMomentum(mom);
          theNew->SetTotalEnergy(e);
          theTotalResult->push_back(theNew);
-#ifdef exactExcitationEnergy
-         secondary4Momemtum += (*iter)->Get4Momentum();
-#endif
+         Secondary4Momentum += (*iter)->Get4Momentum();                 // Uzhi 29 April
+         #ifdef debugPrecoInt
+            G4cout<<"Secondary 4Mom "<<part->GetParticleName()<<" "<<(*iter)->Get4Momentum()<<" "
+                  <<(*iter)->Get4Momentum().mag()<<G4endl;
+         #endif
       } else {
-         // within the nucleus, neutron or proton
-         // now calculate  A, Z of the fragment, momentum, number of exciton states
-         ++anA;
-         ++numberOfEx;
-         G4int Z = G4int(part->GetPDGCharge()/eplus + 0.1);
-         aZ += Z;
-         numberOfCh += Z;
-         captured3Momentum += mom;
-         exEnergy += (e - mass);
+         if( e-mass > -CaptureThreshold*G4Log( G4UniformRand()) ) {  // Added by Uzhi 2.05.2015
+            G4ReactionProduct * theNew = new G4ReactionProduct(part);
+            theNew->SetMomentum(mom);
+            theNew->SetTotalEnergy(e);
+            theTotalResult->push_back(theNew);
+            Secondary4Momentum += (*iter)->Get4Momentum();              // Uzhi 29 April
+            #ifdef debugPrecoInt
+               G4cout<<"Secondary 4Mom "<<part->GetParticleName()<<" "<<(*iter)->Get4Momentum()<<" "
+                     <<(*iter)->Get4Momentum().mag()<<G4endl;
+            #endif
+         } else {
+            // within the nucleus, neutron or proton
+            // now calculate  A, Z of the fragment, momentum, number of exciton states
+            ++anA;
+            ++numberOfEx;
+            G4int Z = G4int(part->GetPDGCharge()/eplus + 0.1);
+            aZ += Z;
+            numberOfCh += Z;
+            captured4Momentum += (*iter)->Get4Momentum();
+            #ifdef debugPrecoInt
+               G4cout<<"Captured  4Mom "<<part->GetParticleName()<<(*iter)->Get4Momentum()<<G4endl;
+            #endif
+         }
       }
       delete (*iter);
    }
@@ -168,81 +193,106 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
    // loop over wounded nucleus
    G4Nucleon * theCurrentNucleon =
          theNucleus->StartLoop() ? theNucleus->GetNextNucleon() : 0;
-   while(theCurrentNucleon) {
+   while(theCurrentNucleon)    /* Loop checking, 31.08.2015, G.Folger */
+	{
       if(theCurrentNucleon->AreYouHit()) {
          ++numberOfHoles;
          ++numberOfEx;
          --anA;
          aZ -= G4int(theCurrentNucleon->GetDefinition()->GetPDGCharge()/eplus + 0.1);
-         wounded3Momentum += theCurrentNucleon->Get4Momentum().vect();
-         //G4cout << "hit nucleon " << theCurrentNucleon->Get4Momentum() << G4endl;
-         exEnergy += theCurrentNucleon->GetBindingEnergy();
+
+         Residual4Momentum -= theCurrentNucleon->Get4Momentum();
       }
       theCurrentNucleon = theNucleus->GetNextNucleon();
    }
-   exciton3Momentum = captured3Momentum - wounded3Momentum;
+
+   #ifdef debugPrecoInt
+      G4cout<<G4endl;
+      G4cout<<"Secondary 4Mom "<<Secondary4Momentum<<G4endl;
+      G4cout<<"Captured  4Mom "<<captured4Momentum<<G4endl;
+      G4cout<<"Sec + Captured "<<Secondary4Momentum+captured4Momentum<<G4endl;
+      G4cout<<"Residual4Mom   "<<Residual4Momentum<<G4endl;
+      G4cout<<"Sum 4 momenta  "
+            <<Secondary4Momentum + captured4Momentum + Residual4Momentum <<G4endl;
+   #endif
+
+   // Check that we use QGS model; loop over wounded nucleus
+   G4bool QGSM(false);
+   theCurrentNucleon = theNucleus->StartLoop() ? theNucleus->GetNextNucleon() : 0;
+   while(theCurrentNucleon)   /* Loop checking, 31.08.2015, G.Folger */
+	{
+      if(theCurrentNucleon->AreYouHit()) 
+      {
+       if(theCurrentNucleon->Get4Momentum().mag() < 
+          theCurrentNucleon->GetDefinition()->GetPDGMass()) QGSM=true;
+      }
+      theCurrentNucleon = theNucleus->GetNextNucleon();
+   }
+
+   #ifdef debugPrecoInt
+      if(!QGSM){
+        G4cout<<G4endl;
+        G4cout<<"Residual A and Z "<<anA<<" "<<aZ<<G4endl;
+        G4cout<<"Residual  4Mom "<<Residual4Momentum<<G4endl;
+        if(numberOfEx == 0) 
+        {G4cout<<"Residual  4Mom = 0 means that there were not wounded and captured nucleons"<<G4endl;}
+      }
+   #endif
 
    if(anA == 0) return theTotalResult;
 
+   G4LorentzVector exciton4Momentum(0.,0.,0.,0.);                       // Uzhi 29 April
    if(anA >= aZ)
    {
+    if(!QGSM)
+    {          // FTF model was used  
       G4double fMass =  G4NucleiProperties::GetNuclearMass(anA, aZ);
 
-#ifdef exactExcitationEnergy
-      // recalculate exEnergy from Energy balance....
-      const G4HadProjectile * primary = GetPrimaryProjectile();
-      G4double Einitial= primary->Get4Momentum().e()
-            											            + G4NucleiProperties::GetNuclearMass(theNucleus->GetMassNumber(),
-            											                  theNucleus->GetCharge());
-      // Uzhi        G4double Efinal = fMass + secondary4Momemtum.e();
-      G4double Efinal = std::sqrt(exciton3Momentum.mag2() + fMass*fMass)
-      + secondary4Momemtum.e();
-      if ( (Einitial - Efinal) > 0 ) {
-         // G4cout << "G4GPI::Propagate() : positive exact excitation Energy "
-         //        << (Einitial - Efinal)/MeV << " MeV, exciton estimate "
-         //        << exEnergy/MeV << " MeV" << G4endl;
-
-         //          exEnergy=Einitial - Efinal;
-         G4LorentzVector PrimMom=primary->Get4Momentum(); PrimMom.setE(Einitial);
-
-         exEnergy=(PrimMom - secondary4Momemtum).mag() - fMass;
+//      G4LorentzVector exciton4Momentum = Residual4Momentum + captured4Momentum;
+      exciton4Momentum = Residual4Momentum + captured4Momentum;
+//exciton4Momentum.setE(std::sqrt(exciton4Momentum.vect().mag2()+sqr(fMass)));
+      G4double ActualMass = exciton4Momentum.mag();      
+      if(ActualMass <= fMass ) {                             //E*<=0,  Uzhi 5.05.2015
+        exciton4Momentum.setE(std::sqrt(exciton4Momentum.vect().mag2()+sqr(fMass))); // Uzhi 13.05.2015
       }
-      else {
-         //  G4cout << "G4GeneratorPrecompoundInterface::Propagate() : "
-         //         << "negative exact excitation Energy "
-         //         << (Einitial - Efinal)/MeV
-         //         << " MeV, setting  excitation to 0 MeV" << G4endl;
-         exEnergy=0.;
-      }
-#endif
 
-      if(exEnergy < 0.) exEnergy=0.;   // Uzhi 11 Dec. 2012
+      #ifdef debugPrecoInt
+         G4double exEnergy = 0.0;
+         if(ActualMass <= fMass ) {exEnergy = 0.;}                      // Uzhi 5.05.2015
+         else                     {exEnergy = ActualMass - fMass;}
+         G4cout<<"Ground state residual Mass "<<fMass<<" E* "<<exEnergy<<G4endl;
+      #endif
+    }
+    else
+    {          // QGS model was used 
+     G4double InitialTargetMass = 
+              G4NucleiProperties::GetNuclearMass(theNucleus->GetMassNumber(), theNucleus->GetCharge());
 
-      fMass += exEnergy;
+     exciton4Momentum = 
+              GetPrimaryProjectile()->Get4Momentum() + G4LorentzVector(0.,0.,0.,InitialTargetMass)
+             -Secondary4Momentum;
 
-      G4ThreeVector balance=primary->Get4Momentum().vect() -
-            secondary4Momemtum.vect() - exciton3Momentum;
+     G4double fMass =  G4NucleiProperties::GetNuclearMass(anA, aZ);
+     G4double ActualMass = exciton4Momentum.mag();
 
-#ifdef G4GPI_debug_excitation
-      G4cout << "momentum balance" << balance
-            << " value " << balance.mag()                   <<G4endl
-            << "primary         "<< primary->Get4Momentum() <<G4endl
-            << "secondary       "<< secondary4Momemtum      <<G4endl
-            << "captured        "<< captured3Momentum       <<G4endl
-            << "wounded         "<< wounded3Momentum        <<G4endl
-            << "exciton         "<< exciton3Momentum        <<G4endl
-            << "second + exciton"
-            << secondary4Momemtum.vect() + exciton3Momentum << G4endl;
-#endif
-      //#ifdef exactExcitationEnergy
-      //        G4LorentzVector exciton4Momentum(exciton3Momentum, fMass);
-      //        G4LorentzVector exciton4Momentum(exciton3Momentum,
-      //                std::sqrt(exciton3Momentum.mag2() + fMass*fMass));
-      //#else
-      G4LorentzVector exciton4Momentum(exciton3Momentum,
-            std::sqrt(exciton3Momentum.mag2() + fMass*fMass));
-      //#endif
-      //G4cout<<"exciton4Momentum "<<exciton4Momentum<<G4endl;
+     #ifdef debugPrecoInt
+        G4cout<<G4endl;
+        G4cout<<"Residual A and Z "<<anA<<" "<<aZ<<G4endl;
+        G4cout<<"Residual4Momentum "<<exciton4Momentum<<G4endl;
+        G4cout<<"ResidualMass, GroundStateMass and E* "<<ActualMass<<" "<<fMass<<" "
+              <<ActualMass - fMass<<G4endl;
+     #endif
+
+     if(ActualMass - fMass < 0.)
+     {
+      G4double ResE = std::sqrt(exciton4Momentum.vect().mag2() + sqr(fMass+10*MeV));
+      exciton4Momentum.setE(ResE);
+      #ifdef debugPrecoInt
+         G4cout<<"ActualMass - fMass < 0. "<<ActualMass<<" "<<fMass<<" "<<ActualMass - fMass<<G4endl;
+         G4int Uzhi; G4cin>>Uzhi;
+      #endif
+     }
+    }
       // Need to de-excite the remnant nucleus only if excitation energy > 0.
       G4Fragment anInitialState(anA, aZ, exciton4Momentum);
       anInitialState.SetNumberOfParticles(numberOfEx-numberOfHoles);
@@ -252,8 +302,20 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       G4ReactionProductVector * aPrecoResult =
             theDeExcitation->DeExcite(anInitialState);
       // fill pre-compound part into the result, and return
-      theTotalResult->insert(theTotalResult->end(),aPrecoResult->begin(),
-            aPrecoResult->end() );
+      #ifdef debugPrecoInt
+         G4cout<<"Target fragment number "<<aPrecoResult->size()<<G4endl;
+      #endif
+      for(unsigned int ll=0; ll<aPrecoResult->size(); ++ll)
+      {
+         theTotalResult->push_back(aPrecoResult->operator[](ll));
+         #ifdef debugPrecoInt
+            G4cout<<"Fragment "<<ll<<" "
+                  <<aPrecoResult->operator[](ll)->GetDefinition()->GetParticleName()<<" "
+                  <<aPrecoResult->operator[](ll)->GetMomentum()<<" "
+                  <<aPrecoResult->operator[](ll)->GetTotalEnergy()<<" "
+                  <<aPrecoResult->operator[](ll)->GetDefinition()->GetPDGMass()<<G4endl;
+         #endif
+      }
       delete aPrecoResult;
    }
 
@@ -289,10 +351,15 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
       G4V3DNucleus* theProjectileNucleus)
 {
 #ifdef debugPrecoInt
-   G4cout<<"G4GeneratorPrecompoundInterface::PropagateNuclNucl "<<G4endl;
+   G4cout<<G4endl<<"G4GeneratorPrecompoundInterface::PropagateNuclNucl "<<G4endl;
+   G4cout<<"Projectile A and Z "<<theProjectileNucleus->GetMassNumber()<<" "
+                                <<theProjectileNucleus->GetCharge()<<G4endl;
+   G4cout<<"Target     A and Z "<<theNucleus->GetMassNumber()<<" "
+                                <<theNucleus->GetCharge()<<G4endl;
+   G4cout<<"Directly produced particles number "<<theSecondaries->size()<<G4endl;
+   G4cout<<"Projectile 4Mom and mass "<<GetPrimaryProjectile()->Get4Momentum()<<" "
+                                      <<GetPrimaryProjectile()->Get4Momentum().mag()<<G4endl<<G4endl;
 #endif
-
-   G4ReactionProductVector * theTotalResult = new G4ReactionProductVector;
 
    // prepare the target residual
    G4int anA=theNucleus->GetMassNumber();
@@ -302,16 +369,13 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
    G4int numberOfHoles = 0;
    G4double exEnergy = 0.0;
    G4double R = theNucleus->GetNuclearRadius();
-   G4LorentzVector Target4Momentum(0,0,0,0);
-
-#ifdef debugPrecoInt
-   G4cout<<"Target A Z "<<anA<<" "<<aZ<<G4endl;
-#endif
+   G4LorentzVector Target4Momentum(0.,0.,0.,0.);
 
    // loop over wounded target nucleus
    G4Nucleon * theCurrentNucleon =
          theNucleus->StartLoop() ? theNucleus->GetNextNucleon() : 0;
-   while(theCurrentNucleon) {
+   while(theCurrentNucleon)   /* Loop checking, 31.08.2015, G.Folger */
+	{
       if(theCurrentNucleon->AreYouHit()) {
          ++numberOfHoles;
          ++numberOfEx;
@@ -330,10 +394,6 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
 #endif
 
    // prepare the projectile residual
-#ifdef debugPrecoInt
-   G4cout<<"Primary BaryonNumber "
-         <<GetPrimaryProjectile()->GetDefinition()->GetBaryonNumber()<<G4endl;
-#endif
 
    G4bool ProjectileIsAntiNucleus=
          GetPrimaryProjectile()->GetDefinition()->GetBaryonNumber() < -1;
@@ -347,16 +407,13 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
    G4int numberOfHolesB = 0;
    G4double exEnergyB = 0.0;
    G4double Rb = theProjectileNucleus->GetNuclearRadius();
-   G4LorentzVector Projectile4Momentum(0,0,0,0);
-
-#ifdef debugPrecoInt
-   G4cout<<"Projectile A Z "<<anAb<<" "<<aZb<<G4endl;
-#endif
+   G4LorentzVector Projectile4Momentum(0.,0.,0.,0.);
 
    // loop over wounded projectile nucleus
    theCurrentNucleon =
          theProjectileNucleus->StartLoop() ? theProjectileNucleus->GetNextNucleon() : 0;
-   while(theCurrentNucleon) {
+   while(theCurrentNucleon)    /* Loop checking, 31.08.2015, G.Folger */
+	{
       if(theCurrentNucleon->AreYouHit()) {
          ++numberOfHolesB;
          ++numberOfExB;
@@ -387,7 +444,11 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
 #endif
    //-----------------------------------------------------------------------------
    // decay the strong resonances
+   G4ReactionProductVector * theTotalResult = new G4ReactionProductVector;
    G4DecayKineticTracks decay(theSecondaries);
+   #ifdef debugPrecoInt
+      G4cout<<"Secondary stable particles number "<<theSecondaries->size()<<G4endl;
+   #endif
 
 #ifdef debugPrecoInt
    G4LorentzVector secondary4Momemtum(0,0,0,0);
@@ -414,7 +475,8 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
          secondary4Momemtum += (*iter)->Get4Momentum();
          G4cout<<"Secondary  "<<SecondrNum<<" "
                <<theNew->GetDefinition()->GetParticleName()<<" "
-               <<secondary4Momemtum<<G4endl;
+               <<theNew->GetMomentum()<<" "<<theNew->GetTotalEnergy()<<G4endl;
+
 #endif
          delete (*iter);
          continue;
@@ -424,14 +486,13 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
       if( part == proton || part == neutron)
       {
          CanBeCapturedByTarget = ExistTargetRemnant    &&
-               (CaptureThreshold >
-   (aTrack4Momentum       + Target4Momentum).mag() -
-   aTrack4Momentum.mag() - Target4Momentum.mag())   &&
-   ((*iter)->GetPosition().mag() < R);
+               (-CaptureThreshold*G4Log( G4UniformRand()) >
+              (aTrack4Momentum       + Target4Momentum).mag() -
+               aTrack4Momentum.mag() - Target4Momentum.mag())   &&
+                   ((*iter)->GetPosition().mag() < R);
       }
       // ---------------------------
-      G4LorentzVector Position((*iter)->GetPosition(),
-            (*iter)->GetFormationTime());
+      G4LorentzVector Position((*iter)->GetPosition(), (*iter)->GetFormationTime());
       Position.boost(bst);
 
       G4bool CanBeCapturedByProjectile = false;
@@ -440,20 +501,20 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
             ( part == proton || part == neutron))
       {
          CanBeCapturedByProjectile = ExistProjectileRemnant &&
-               (CaptureThreshold >
-         (aTrack4Momentum       + Projectile4Momentum).mag() -
-         aTrack4Momentum.mag() - Projectile4Momentum.mag())    &&
-         (Position.vect().mag() < Rb);
+               (-CaptureThreshold*G4Log( G4UniformRand()) >
+              (aTrack4Momentum       + Projectile4Momentum).mag() -
+               aTrack4Momentum.mag() - Projectile4Momentum.mag())    &&
+                   (Position.vect().mag() < Rb);
       }
 
       if( ProjectileIsAntiNucleus &&
             ( part == ANTIproton || part == ANTIneutron))
       {
          CanBeCapturedByProjectile = ExistProjectileRemnant &&
-               (CaptureThreshold >
-         (aTrack4Momentum       + Projectile4Momentum).mag() -
-         aTrack4Momentum.mag() - Projectile4Momentum.mag())    &&
-         (Position.vect().mag() < Rb);
+               (-CaptureThreshold*G4Log( G4UniformRand()) >
+              (aTrack4Momentum       + Projectile4Momentum).mag() -
+               aTrack4Momentum.mag() - Projectile4Momentum.mag())    &&
+                   (Position.vect().mag() < Rb);
       }
 
       if(CanBeCapturedByTarget && CanBeCapturedByProjectile)
@@ -470,7 +531,7 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
          // now calculate  A, Z of the fragment, momentum,
          // number of exciton states
 #ifdef debugPrecoInt
-         G4cout<<"Track is CapturedByTarget "<<" "
+         G4cout<<"Track is CapturedByTarget "<<" "<<part->GetParticleName()<<" "
                <<aTrack4Momentum<<" "<<aTrack4Momentum.mag()<<G4endl;
 #endif
          ++anA;
@@ -486,7 +547,7 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
          // now calculate  A, Z of the fragment, momentum,
          // number of exciton states
 #ifdef debugPrecoInt
-         G4cout<<"Track is CapturedByProjectile"<<" "
+         G4cout<<"Track is CapturedByProjectile"<<" "<<part->GetParticleName()<<" "
                <<aTrack4Momentum<<" "<<aTrack4Momentum.mag()<<G4endl;
 #endif
          ++anAb;
@@ -507,9 +568,11 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
 #ifdef debugPrecoInt
          SecondrNum++;
          secondary4Momemtum += (*iter)->Get4Momentum();
+/*
          G4cout<<"Secondary  "<<SecondrNum<<" "
                <<theNew->GetDefinition()->GetParticleName()<<" "
                <<secondary4Momemtum<<G4endl;
+*/
 #endif
          delete (*iter);
          continue;
@@ -518,10 +581,10 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
    delete theSecondaries;
    //-----------------------------------------------------
 
-#ifdef debugPrecoInt
-   G4cout<<"Final target residual A Z E* 4mom "<<anA<<" "<<aZ<<" "
-         <<exEnergy<<" "<<Target4Momentum<<G4endl;
-#endif
+   #ifdef debugPrecoInt
+      G4cout<<"Final target residual A Z E* 4mom "<<anA<<" "<<aZ<<" "
+           <<exEnergy<<" "<<Target4Momentum<<G4endl;
+   #endif
 
    if(0!=anA )
    {
@@ -531,6 +594,7 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
       {Target4Momentum.setE(fMass);}
 
       G4double RemnMass=Target4Momentum.mag();
+
       if(RemnMass < fMass)
       {
          RemnMass=fMass + exEnergy;
@@ -550,14 +614,21 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
       G4ReactionProductVector * aPrecoResult =
             theDeExcitation->DeExcite(anInitialState);
 
+      #ifdef debugPrecoInt
+         G4cout<<"Target fragment number "<<aPrecoResult->size()<<G4endl;
+      #endif
+
       // fill pre-compound part into the result, and return
       for(unsigned int ll=0; ll<aPrecoResult->size(); ++ll)
       {
          theTotalResult->push_back(aPrecoResult->operator[](ll));
-#ifdef debugPrecoInt
-         G4cout<<"Tr frag "<<aPrecoResult->operator[](ll)->GetDefinition()->GetParticleName()
-    										               <<" "<<aPrecoResult->operator[](ll)->GetMomentum()<<G4endl;
-#endif
+         #ifdef debugPrecoInt
+            G4cout<<"Target fragment "<<ll<<" "
+                  <<aPrecoResult->operator[](ll)->GetDefinition()->GetParticleName()<<" "
+                  <<aPrecoResult->operator[](ll)->GetMomentum()<<" "
+                  <<aPrecoResult->operator[](ll)->GetTotalEnergy()<<" "
+                  <<aPrecoResult->operator[](ll)->GetMass()<<G4endl;
+         #endif
       }
       delete aPrecoResult;
    }
@@ -566,25 +637,32 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
    if((anAb == theProjectileNucleus->GetMassNumber())&& (exEnergyB <= 0.))
    {Projectile4Momentum = GetPrimaryProjectile()->Get4Momentum();}
 
-#ifdef debugPrecoInt
-   G4cout<<"Final projectile residual A Z E* Pmom "<<anAb<<" "<<aZb<<" "
-         <<exEnergyB<<" "<<Projectile4Momentum<<G4endl;
-#endif
+   #ifdef debugPrecoInt
+      G4cout<<"Final projectile residual A Z E* Pmom Pmag2 "<<anAb<<" "<<aZb<<" "
+            <<exEnergyB<<" "<<Projectile4Momentum<<" "
+                            <<Projectile4Momentum.mag2()<<G4endl;
+   #endif
 
    if(0!=anAb)
    {
+  //    G4ThreeVector bstToCM =Projectile4Momentum.findBoostToCM();     // Uzhi Apr. 2015
+  //    Projectile4Momentum.boost(bstToCM);                             // Uzhi Apr. 2015
+
       G4double fMass =  G4NucleiProperties::GetNuclearMass(anAb, aZb);
       G4double RemnMass=Projectile4Momentum.mag();
 
       if(RemnMass < fMass)
       {
          RemnMass=fMass + exEnergyB;
-         Projectile4Momentum.setE(std::sqrt(Projectile4Momentum.vect().mag2() +
-               RemnMass*RemnMass));
+         Projectile4Momentum.setE(std::sqrt(Projectile4Momentum.vect().mag2() + // Uzhi 8.05.2015
+               RemnMass*RemnMass));                                             // Uzhi 8.05.2015
       } else
       { exEnergyB=RemnMass-fMass;}
 
       if( exEnergyB < 0.) exEnergyB=0.;
+
+      G4ThreeVector bstToCM =Projectile4Momentum.findBoostToCM();       // Uzhi Apr. 2015
+      Projectile4Momentum.boost(bstToCM);                               // Uzhi Apr. 2015
 
       // Need to de-excite the remnant nucleus
       G4Fragment anInitialState(anAb, aZb, Projectile4Momentum);
@@ -595,19 +673,21 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
       G4ReactionProductVector * aPrecoResult =
             theDeExcitation->DeExcite(anInitialState);
 
+      #ifdef debugPrecoInt
+         G4cout<<"Projectile fragment number "<<aPrecoResult->size()<<G4endl;
+      #endif
+
       // fill pre-compound part into the result, and return
       for(unsigned int ll=0; ll<aPrecoResult->size(); ++ll)
       {
+         G4LorentzVector tmp=G4LorentzVector(aPrecoResult->operator[](ll)->GetMomentum(),    // Uzhi 2015
+                                             aPrecoResult->operator[](ll)->GetTotalEnergy());// Uzhi 2015
+         tmp.boost(-bstToCM); // Transformation to the system of original remnant            // Uzhi 2015
+         aPrecoResult->operator[](ll)->SetMomentum(tmp.vect());                              // Uzhi 2015
+         aPrecoResult->operator[](ll)->SetTotalEnergy(tmp.e());                              // Uzhi 2015
+
          if(ProjectileIsAntiNucleus)
          {
-
-#ifdef debugPrecoInt
-            G4cout<<"aPrecoRes  "<<aPrecoResult->operator[](ll)->GetDefinition()->GetParticleName()
-        										            <<" "<<aPrecoResult->operator[](ll)->GetMomentum()
-        										            <<" "<<aPrecoResult->operator[](ll)->GetTotalEnergy()
-        										            <<" "<<aPrecoResult->operator[](ll)->GetMass()<<G4endl;
-#endif
-
             const G4ParticleDefinition * aFragment=aPrecoResult->operator[](ll)->GetDefinition();
             const G4ParticleDefinition * LastFragment=aFragment;
             if     (aFragment == proton)  {LastFragment=G4AntiProton::AntiProtonDefinition();}
@@ -621,12 +701,14 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
             aPrecoResult->operator[](ll)->SetDefinitionAndUpdateE(LastFragment);
          }
 
-#ifdef debugPrecoInt
-         G4cout<<"aPrecoResA "<<aPrecoResult->operator[](ll)->GetDefinition()->GetParticleName()
-        										            <<" "<<aPrecoResult->operator[](ll)->GetMomentum()
-        										            <<" "<<aPrecoResult->operator[](ll)->GetTotalEnergy()
-        										            <<" "<<aPrecoResult->operator[](ll)->GetMass()<<G4endl;
-#endif
+         #ifdef debugPrecoInt
+            G4cout<<"Projectile fragment "<<ll<<" "
+                  <<aPrecoResult->operator[](ll)->GetDefinition()->GetParticleName()<<" "
+                  <<aPrecoResult->operator[](ll)->GetMomentum()<<" "
+                  <<aPrecoResult->operator[](ll)->GetTotalEnergy()<<" "
+                  <<aPrecoResult->operator[](ll)->GetMass()<<G4endl;
+         #endif
+//Uzhi
          theTotalResult->push_back(aPrecoResult->operator[](ll));
       }
 
@@ -636,5 +718,4 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
    return theTotalResult;
 }
 
-// Uzhi Nov. 2012 ------------------------------------------------
 

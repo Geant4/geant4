@@ -105,7 +105,7 @@ namespace G4INCL {
           y0 = (*f)(x0);
           y1 = (*f)(x1);
           iterations++;
-        } while(Math::sign(y0)==Math::sign(y1));
+        } while(Math::sign(y0)==Math::sign(y1)); /* Loop checking, 10.07.2015, D.Mancusi */
 
         if(Math::sign(y1)==Math::sign(oldy1))
           return std::make_pair(x0,oldx0);

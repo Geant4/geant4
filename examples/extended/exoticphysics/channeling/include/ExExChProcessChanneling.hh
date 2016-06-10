@@ -65,8 +65,6 @@ private:
     
     G4double GetChannelingMeanFreePath(const G4Track&);
     
-    G4bool IsUnderCoherentEffect(const G4Track&);
-
 public:
     XVCrystalCharacteristic* GetPotential();
     void SetPotential(XVCrystalCharacteristic*);
@@ -83,6 +81,17 @@ public:
     XVCrystalCharacteristic* GetElectronDensity();
     void SetElectronDensity(XVCrystalCharacteristic*);
 
+    G4double GetTransverseVariationMax(){
+        return fTransverseVariationMax;
+        };
+        
+    void SetTransverseVariationMax(G4double aDouble){
+        fTransverseVariationMax = aDouble;
+        };
+
+    G4double GetTimeStepMin() {return fTimeStepMin;};
+    void SetTimeStepMin(G4double aDouble) {fTimeStepMin = aDouble;};
+
     void ReadFromFileCharacteristics(G4bool);
         
     void SetFileCharacteristicsName(const G4String& vFilename)
@@ -91,21 +100,15 @@ public:
     
 private:
     void UpdateParameters(const G4Track&);
-    void UpdatePosition(const G4Track&);
-    void UpdateMomentum(const G4Track&);
-    void UpdateDensity(const G4Track&);
+    G4bool UpdateInitialParameters(const G4Track&);
     void ResetDensity(const G4Track&);
 
     G4double ComputeCriticalEnergyBent(const G4Track&);
     G4double ComputeCriticalEnergyMinimumBent(const G4Track&);
     G4double ComputePotentialEnergyBent(const G4Track&);
     G4ThreeVector ComputeTransverseEnergyBent(const G4Track&);
-
-    G4ThreeVector ComputeChannelingOutgoingMomentum(const G4Track&);
-    G4ThreeVector ComputeVolumeReflectionOutgoingMomentum(const G4Track&);
     
     G4ThreeVector ComputePositionInTheCrystal(G4StepPoint*,const G4Track&);
-    G4double ComputeDistanceWhereParticleTangentToBentPlane(const G4Track&);
     G4StepPoint* CheckStepPointLatticeForVolume(G4StepPoint*,const G4Track&);
     G4StepPoint* CheckStepPointLatticeForPosition(G4StepPoint*,const G4Track&);
     
@@ -128,7 +131,6 @@ private:
     G4bool HasLatticeOnBoundaryPre(const G4Track&);
     G4bool HasLatticeOnBoundaryPost(const G4Track&);
 
-    G4bool ParticleIsTangentToBentPlane(const G4Track&);
     G4bool ParticleIsNegative(const G4Track&);
     G4bool ParticleIsNotOnBoundaryPre(const G4Track&);
     G4bool ParticleIsNotOnBoundaryPost(const G4Track&);
@@ -138,7 +140,7 @@ private:
 
 private:
     //binding methods
-    XPhysicalLattice* GetXPhysicalLattice(const G4Track&);
+    XPhysicalLattice* GetXPL(const G4Track&);
     G4VPhysicalVolume* GetVolume(const G4Track&);
     ExExChParticleUserInfo* GetInfo(const G4Track&);
     G4ParticleDefinition* GetParticleDefinition(const G4Track& aTrack);
@@ -160,6 +162,20 @@ private:
     XVCrystalCharacteristic* fElectronDensity;
 
     G4String fFileCharacteristicsName;
+    
+private:
+    G4bool UpdateIntegrationStep(const G4Track&,G4ThreeVector&);
+    G4double fTimeStep;
+    G4double fTimeStepMin;
+    G4double fTimeStepMax;
+    G4double fTimeStepTotal;
+
+    G4bool bHasToComputeTrajectory;
+    G4double bPointYPost;
+    G4double bPointYPre;
+    
+    G4double fTransverseVariationMax;
+    G4double fIntegrationPeriod;
 };
 
 #endif

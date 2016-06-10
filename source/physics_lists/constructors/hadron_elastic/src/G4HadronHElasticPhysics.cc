@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronHElasticPhysics.cc 87072 2014-11-24 14:06:09Z gcosmo $
+// $Id: G4HadronHElasticPhysics.cc 90757 2015-06-09 07:45:14Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -77,13 +77,14 @@
 
 #include "G4LMsdGenerator.hh"
 #include "G4DiffElasticRatio.hh"
+#include "G4AutoDelete.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
 G4_DECLARE_PHYSCONSTR_FACTORY( G4HadronHElasticPhysics );
 
-G4ThreadLocal G4bool G4HadronHElasticPhysics::wasActivated = false;
+G4ThreadLocal G4DiffElasticRatio* G4HadronHElasticPhysics::diffRatio = 0;
 
 G4HadronHElasticPhysics::G4HadronHElasticPhysics( G4int ver, G4bool diffraction)
   : G4VPhysicsConstructor( "hElastic_BEST" ), verbose( ver ), 
@@ -111,11 +112,7 @@ void G4HadronHElasticPhysics::ConstructParticle() {
   pConstructor.ConstructParticle();  
 }
 
-
 void G4HadronHElasticPhysics::ConstructProcess() {
-
-  if ( wasActivated ) return;
-  wasActivated = true;
 
   const G4double elimitDiffuse = 0.0;
   const G4double elimitAntiNuc = 100.0*MeV;
@@ -156,10 +153,10 @@ void G4HadronHElasticPhysics::ConstructProcess() {
     new G4CrossSectionElastic( new G4ComponentGGNuclNuclXsc() );
 
   G4LMsdGenerator* diffGen = 0;
-  G4DiffElasticRatio* diffRatio = 0;
   if(fDiffraction) {
     diffGen = new G4LMsdGenerator("LMsdDiffraction");
     diffRatio = new G4DiffElasticRatio();
+    G4AutoDelete::Register(diffRatio);    
   }
 
   aParticleIterator->reset();

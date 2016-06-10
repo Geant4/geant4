@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundProton.hh 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4PreCompoundProton.hh 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // by V. Lara
 //
@@ -47,21 +47,11 @@ public:
 
   virtual ~G4PreCompoundProton();
 
-protected:
+  virtual G4double GetRj(G4int NumberParticles, G4int NumberCharged) const;
 
-  virtual G4double GetRj(G4int NumberParticles, G4int NumberCharged);
+  virtual G4double GetAlpha() const;
 
-  virtual G4double CrossSection(G4double ekin) ; 
-
-  virtual G4double GetAlpha();
-
-  virtual G4double GetBeta();
-
-  G4double GetOpt1(G4double K);
-
-  G4double GetOpt2(G4double K);
-
-  G4double GetOpt3(G4double K);
+  virtual G4double GetBeta() const;
 
 private:
 
@@ -73,13 +63,7 @@ private:
   G4int operator!=(const G4PreCompoundProton &right) const;    
 
   G4ProtonCoulombBarrier theProtonCoulombBarrier;
-  G4double ResidualAthrd;
-  G4double FragmentAthrd;
-  G4int FragmentA;
-  G4int ResidualA;
-  G4int ResidualZ;
-  G4int theA;
-  G4int theZ;
 };
+
 #endif
  

@@ -175,7 +175,7 @@ G4CollisionInitialState * G4CollisionManager::GetNextCollision()
 void G4CollisionManager::Print()
 {
   std::vector<G4CollisionInitialState *>::iterator i;
-
+ 
   G4cout << "CollisionManager: " << theCollisionList->size()
 	 << " entries at " << theCollisionList << G4endl;
   G4CollisionInitialState * collision;
@@ -184,6 +184,7 @@ void G4CollisionManager::Print()
     collision = *i;
     G4int tgtPdg=collision->GetTarget() ?
 	   collision->GetTarget()->GetDefinition()->GetPDGEncoding() : 0;
+	 const G4BCAction &action= *collision->GetGenerator();
     G4cout << "  collision " << collision << " time: "
 	   << collision->GetCollisionTime()/second << " proj: "
 	   << collision->GetPrimary() << "/pdg="
@@ -191,7 +192,7 @@ void G4CollisionManager::Print()
 	   << " trgt: "
 	   << collision->GetTarget() << "/pdg="
 	   << tgtPdg
-	   << " Collision type: "<< typeid(*collision->GetGenerator()).name()
+	   << " Collision type: "<< typeid(action).name()
 	   << G4endl;
   }
 }

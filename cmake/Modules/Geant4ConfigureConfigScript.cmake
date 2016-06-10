@@ -94,6 +94,15 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
   # - CLHEP
   if(GEANT4_USE_SYSTEM_CLHEP)
     set(G4_BUILTWITH_CLHEP "no")
+    #libpath
+    list(GET CLHEP_LIBRARIES 0 _zeroth_clhep_lib)
+    get_filename_component(_system_clhep_libdir "${_zeroth_clhep_lib}" PATH)
+    set(G4_SYSTEM_CLHEP_LIBRARIES "-L${_system_clhep_libdir}")
+    foreach(_clhep_lib ${CLHEP_LIBRARIES})
+      get_filename_component(_curlib "${_clhep_lib}" NAME)
+      string(REGEX REPLACE "^lib(.*)\\.(so|a|dylib|lib|dll)$" "\\1" _curlib "${_curlib}")
+      set(G4_SYSTEM_CLHEP_LIBRARIES "${G4_SYSTEM_CLHEP_LIBRARIES} -l${_curlib}")
+    endforeach()
   else()
     set(G4_BUILTWITH_CLHEP "yes")
   endif()
@@ -137,14 +146,23 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
   # - USolids
   if(GEANT4_USE_USOLIDS)
     set(G4_BUILTWITH_USOLIDS "yes")
+    set(G4_USOLIDS_INCLUDE_DIRS ${USOLIDS_INCLUDE_DIRS})
+    list(REMOVE_DUPLICATES G4_USOLIDS_INCLUDE_DIRS)
+    list(REMOVE_ITEM G4_USOLIDS_INCLUDE_DIRS ${_cxx_compiler_dirs})
+
+    set(G4_USOLIDS_CFLAGS "-DG4GEOM_USE_USOLIDS")
+    foreach(_dir ${G4_USOLIDS_INCLUDE_DIRS})
+      set(G4_USOLIDS_CFLAGS "${G4_USOLIDS_CFLAGS} -I${_dir}")
+    endforeach()
   else()
     set(G4_BUILTWITH_USOLIDS "no")
   endif()
 
-  if(GEANT4_USE_SYSTEM_USOLIDS)
-    set(G4_BUILTWITH_BUILTIN_USOLIDS "no")
+  # - Freetype
+  if(GEANT4_USE_FREETYPE)
+    set(G4_BUILTWITH_FREETYPE "yes")
   else()
-    set(G4_BUILTWITH_BUILTIN_USOLIDS "yes")
+    set(G4_BUILTWITH_FREETYPE "no")
   endif()
 
   # - Qt
@@ -232,6 +250,8 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
   set(GEANT4_CONFIG_SELF_LOCATION "# BUILD TREE IS NON-RELOCATABLE")
   set(GEANT4_CONFIG_INSTALL_PREFIX "${PROJECT_BINARY_DIR}")
   set(GEANT4_CONFIG_INSTALL_EXECPREFIX \"\")
+  # NB: this only works for *single* mode generators. With multimode
+  # generators, which mode to use is not clear...
   set(GEANT4_CONFIG_LIBDIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
   get_property(__geant4_buildtree_include_dirs GLOBAL PROPERTY

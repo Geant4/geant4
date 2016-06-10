@@ -1,0 +1,40 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_snums
+#define tools_snums
+
+#include "words"
+#include "sto"
+#include "forit"
+
+namespace tools {
+
+template <class T> //T must be numbers (not std::string).
+inline bool snums(const std::string& a_string,
+                  std::istringstream& a_iss,std::vector<std::string>& a_tmp,
+                  const std::string& a_sep,
+                  std::vector<T>& a_values,bool a_clear = true) {
+  if(a_clear) a_values.clear();
+  words(a_string,a_sep,false,a_tmp);
+  T value;
+  tools_vforcit(std::string,a_tmp,it) {
+    a_iss.str(*it);    
+    a_iss.clear(); //IMPORTANT.
+    a_iss >> value;
+    if(a_iss.fail()) {a_values.clear();return false;}
+    a_values.push_back(value);
+  }
+  return true;
+}
+
+template <class T> //T must be numbers (not std::string).
+inline bool snums(const std::string& a_string,const std::string& a_sep,std::vector<T>& a_values,bool a_clear = true) {
+  std::istringstream iss;
+  std::vector<std::string> words;
+  return snums(a_string,iss,words,a_sep,a_values,a_clear);
+}
+
+}
+
+#endif

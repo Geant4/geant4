@@ -1,0 +1,509 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wps
+#define tools_wps
+
+#include <ctime>
+
+#include <string>
+#include <ostream>
+#include <cstring>
+#include "sprintf"
+
+namespace tools {
+
+class wps {
+  typedef unsigned char Uchar;
+  typedef unsigned int  Uint;
+
+public:
+  typedef float VCol;
+  typedef bool(*rgb_func)(void*,unsigned int,unsigned int,VCol&,VCol&,VCol&);
+public:
+  wps(std::ostream& a_out):m_out(a_out){
+    m_deviceWidth = (8.5f-1.f)*72*METAFILE_SCALE(); // 540 * METAFILE_SCALE
+    m_deviceHeight = 11*72*METAFILE_SCALE();        // 792 * METAFILE_SCALE
+    m_pageNumber = 0;
+  //m_pagePos = 0;
+  //m_markSize = 2;
+    m_file = 0;
+    m_fname.clear();
+    m_string.clear();
+    m_gsave = 0;
+    m_buffer = new Uchar[METAFILE_RECORD_LENGTH()+1];
+    m_number = 0;
+
+    //m_param.shade = shade_color;
+  }
+
+  virtual ~wps(){    
+    if(m_file) close_file();
+    m_string.clear();
+    if(m_gsave) {
+      m_out << "tools::wps::~wps :"
+            << " bad gsave/grestore balance : " << m_gsave
+            << std::endl;
+    }
+    m_gsave = 0;
+    delete [] m_buffer;
+  }
+//protected:
+private:
+  wps(const wps& a_from):m_out(a_from.m_out){}
+  wps& operator=(const wps&){return *this;}
+public:
+  //const std::string& file_name() const {return m_fname;}
+  //FILE* get_FILE() const {return m_file;}
+
+  bool open_file(const std::string& a_name){
+    if(m_file) return false;
+
+    m_file = ::fopen(a_name.c_str(),"wb");    
+    if(!m_file) return false;
+    m_fname = a_name;
+
+    m_number = 0;
+    m_buffer[METAFILE_RECORD_LENGTH()]= '\0';
+    m_pageNumber = 0;
+    // Header :
+    PrintFLN("%%!PS-Adobe-2.0");
+    PrintFLN("%%%%Creator: tools::wps.");
+    PrintFLN("%%%%CreationDate: %s",get_date());
+    PrintFLN("%%%%Title: %s",m_fname.c_str());
+    PrintFLN("%%%%Pages: (atend)");
+    PrintFLN("%%%%BoundingBox: 0 0 %d %d",(int)m_deviceWidth,(int)m_deviceHeight);
+    PrintFLN("%%%%DocumentFonts: Courier-Bold");
+    PrintFLN("%%%%DocumentPaperSizes: a4");
+    PrintFLN("%%%%EndComments");
+    // postscript :
+    PS_SAVE();
+/*
+    // General :
+    in_buffer("/n {newpath} def ");
+    in_buffer("/cl {closepath} def ");
+    in_buffer("/s {stroke} def ");
+    in_buffer("/f {fill} def ");
+    // Move :
+    in_buffer("/m  {moveto} def ");
+    in_buffer("/rm {rmoveto} def ");
+    in_buffer("/rl {rlineto} def ");
+    // Line :
+    in_buffer("/lc {setlinecap} def ");
+    in_buffer("/lw {setlinewidth} def ");
+    in_buffer("/rgb {setrgbcolor} def ");
+    in_buffer("/ss {[] 0 setdash} def ");     // style solid.
+    in_buffer("/sd {[12 6] 0 setdash} def "); // style dashed
+    in_buffer("/so {[6 12] 0 setdash} def "); // style dotted
+    in_buffer("/sdo {[18 12 6 12] 0 setdash} def "); // dash dotted
+    // Mark :
+    m_markSize = 2.;
+    in_buffer("/ms 2. def /msi .5 def ");        // mark size
+    in_buffer("/cross {ms ms scale -1. -1. rm  ");
+    in_buffer ("2. 2. rl 0. -2. rm -2. 2. rl msi msi scale} def ");
+    in_buffer("/plus  {ms ms scale -1. 0. rm 2. 0. rl ");
+    in_buffer("-1. 1. rm 0. -2. rl msi msi scale} def ");
+    in_buffer("/asterisk {ms ms scale -1. 0. rm 2. 0. rl -1. 1. rm ");
+    in_buffer("0. -2. rl 0. 1. rm -0.707 -0.707 rm 1.414 1.414 rl ");
+    in_buffer("0. -1.414 rm -1.414 1.414 rl msi msi scale} def ");
+    in_buffer("/star {ms ms scale 0. 1. rm -0.6 -1.5 rl ");
+    in_buffer("1.2 0. rl -0.6 1.5 rl msi msi scale} def ");
+    // Text :
+    in_buffer("/sh {show} def ");
+    in_buffer("/df {/Courier-Bold findfont} def ");
+    in_buffer("/mf {makefont setfont} def ");
+*/
+
+    PrintFLN("%%%%EndProlog");
+
+    return true;
+  }
+
+  bool close_file(){
+    if(!m_file) return false;
+    PS_RESTORE();
+    PrintFLN("%%%%Trailer");
+    PrintFLN("%%%%Pages: %d",m_pageNumber);
+    PrintFLN("%%%%EOF");
+    ::fclose(m_file);
+    m_file = 0;
+    m_fname.clear();
+    return true;
+  }
+
+  void PS_PAGE_SCALE(float a_width,float a_height,bool a_portrait = true){
+    //NOTE : no check done on [a_width,a_height]<=0
+
+    PS_SCALE(1/METAFILE_SCALE(),1/METAFILE_SCALE());
+    PS_TRANSLATE(m_deviceWidth/20,m_deviceHeight/30);
+  
+    float scale;
+    if(m_deviceWidth<=m_deviceHeight) {
+      scale =
+        (a_height<=a_width?m_deviceWidth/a_width:m_deviceWidth/a_height);
+    } else {
+      scale =
+        (a_height<=a_width?m_deviceHeight/a_width:m_deviceHeight/a_height);
+    }
+  
+   {float xtra,ytra;
+    if(a_portrait) {
+      xtra = (m_deviceWidth  - scale * a_width)/2;
+      ytra = (m_deviceHeight - scale * a_height)/2;
+    } else {
+      PS_TRANSLATE(m_deviceWidth,0);
+      PS_ROTATE(90);
+      xtra = (m_deviceHeight - scale * a_width)/2;
+      ytra = (m_deviceWidth  - scale * a_height)/2;
+    }
+    PS_TRANSLATE(xtra,ytra);}
+  
+    PS_SCALE(scale,scale);
+  }
+
+  void PS_SCALE(float a_x,float a_y) {
+    in_buffer("%.2f %.2f scale ",a_x,a_y);
+  }
+
+  void PS_TRANSLATE(float a_x,float a_y){
+    in_buffer("%.2f %.2f translate ",a_x,a_y);
+  }
+
+  void PS_ROTATE(float a_x){in_buffer("%.2f rotate ",a_x);}
+
+  void PS_SAVE(){in_buffer("gsave ");m_gsave++;}
+
+  void PS_RESTORE(){in_buffer("grestore ");m_gsave--;}
+
+  void PS_BEGIN_PAGE(){
+    m_pageNumber++;
+    PrintFLN("%%%%Page: %d %d",m_pageNumber,m_pageNumber);
+    PS_SAVE();
+  }
+
+  void PS_END_PAGE(){
+    in_buffer("showpage ");
+    PS_RESTORE();
+  }
+
+  enum rgb_nbit {
+    rgb_bw = 0,
+    rgb_2 = 2,
+    rgb_4 = 4,
+    rgb_8 = 8
+  };
+
+  void PS_IMAGE(Uint a_width,Uint a_height,rgb_nbit a_nbit,rgb_func a_proc,void* a_tag){
+    //NOTE : no check done on [a_width,a_height] being zero.
+
+    Uint   row,col;
+    VCol   dr,dg,db;
+    Uchar  red,green,blue,b;
+
+    PS_SAVE();
+    in_buffer("%d %d scale ", a_width, a_height ); 
+    bool status = true;
+    if(a_nbit==rgb_bw) { //grey or black_white
+      in_buffer   ("/picstr %d string def ",a_width); 
+      in_buffer   ("%d %d %d ",a_width,a_height,8); 
+      in_buffer   ("[ %d 0 0 -%d 0 %d ] ",a_width,a_height,a_height); 
+      in_buffer   ("{ currentfile picstr readhexstring pop } " );
+      PrintFLN ("image " );
+      for ( row = 0; row < a_height; row++ ) {
+        for ( col = 0; col < a_width; col++) {
+          status = a_proc(a_tag,col,row,dr,dg,db)?status:false;
+          VCol fgrey = rgb2grey(dr,dg,db);
+          Uchar grey = (Uchar) ( 255. * fgrey);
+          WriteByte(grey);
+        }
+      }
+      int nbhex = a_width * a_height * 2; 
+      PrintFLN ("%%%% nbhex digit          :%d ",nbhex); 
+      PrintFLN ("%%%% nbhex/record_length  :%d ",
+                nbhex/METAFILE_RECORD_LENGTH()); 
+      PrintFLN ("%%%% nbhex%%record_length :%d ",
+                nbhex%METAFILE_RECORD_LENGTH()); 
+
+    } else if(a_nbit==rgb_2) {
+      int nbyte2 = (a_width   *  3)/4;
+      nbyte2 /=3;
+      nbyte2 *=3;
+      Uint col_max = (nbyte2  *  4)/3;
+      // 2 bit for r and g and b.
+      // rgbs following each other.
+      in_buffer   ("/rgbstr %d string def ",nbyte2); 
+      in_buffer   ("%d %d %d ",col_max,a_height,2); 
+      in_buffer   ("[ %d 0 0 -%d 0 %d ] ",col_max,a_height,a_height); 
+      in_buffer   ("{ currentfile rgbstr readhexstring pop } " );
+      in_buffer   ("false 3 " );
+      PrintFLN ("colorimage " );
+      for ( row = 0; row < a_height; row++ ) {
+        for ( col = 0; col < col_max; col+=4) {
+          status  = a_proc(a_tag,col,row,dr,dg,db)?status:false;
+          red     = (Uchar) ( 3. * dr);
+          green   = (Uchar) ( 3. * dg);
+          blue    = (Uchar) ( 3. * db);
+          b       = red;
+          b       = (b<<2)+green;
+          b       = (b<<2)+blue;
+
+          status  = a_proc(a_tag,col+1,row,dr,dg,db)?status:false;
+          red     = (Uchar) ( 3. * dr);
+          green   = (Uchar) ( 3. * dg);
+          blue    = (Uchar) ( 3. * db);
+          b       = (b<<2)+red;
+          WriteByte(b);
+
+          b       = green;
+          b       = (b<<2)+blue;
+
+          status  = a_proc(a_tag,col+2,row,dr,dg,db)?status:false;
+          red     = (Uchar) ( 3. * dr);
+          green   = (Uchar) ( 3. * dg);
+          blue    = (Uchar) ( 3. * db);
+          b     = (b<<2)+red;
+          b     = (b<<2)+green;
+          WriteByte(b);
+          b       = blue;
+
+          status  = a_proc(a_tag,col+3,row,dr,dg,db)?status:false;
+          red     = (Uchar) ( 3. * dr);
+          green   = (Uchar) ( 3. * dg);
+          blue    = (Uchar) ( 3. * db);
+          b     = (b<<2)+red;
+          b     = (b<<2)+green;
+          b     = (b<<2)+blue;
+          WriteByte(b);
+        }
+      }
+
+    } else if(a_nbit==rgb_4) {
+      int nbyte4 = (a_width  * 3)/2;
+      nbyte4 /=3;
+      nbyte4 *=3;
+      Uint col_max = (nbyte4 * 2)/3;
+      // 4 bit for r and g and b.
+      // rgbs following each other.
+      in_buffer   ("/rgbstr %d string def ",nbyte4); 
+      in_buffer   ("%d %d %d ",col_max,a_height,4); 
+      in_buffer   ("[ %d 0 0 -%d 0 %d ] ",col_max,a_height,a_height); 
+      in_buffer   ("{ currentfile rgbstr readhexstring pop } " );
+      in_buffer   ("false 3 " );
+      PrintFLN ("colorimage " );
+      for ( row = 0; row < a_height; row++ ) {
+        for ( col = 0; col < col_max; col+=2) {
+          status  = a_proc(a_tag,col,row,dr,dg,db)?status:false;
+          red     = (Uchar) ( 15. * dr);
+          green   = (Uchar) ( 15. * dg);
+          in_buffer ("%x%x",red,green);
+          blue    = (Uchar) ( 15. * db);
+
+          status  = a_proc(a_tag,col+1,row,dr,dg,db)?status:false;
+          red     = (Uchar) ( 15. * dr);
+          in_buffer ("%x%x",blue,red);
+          green   = (Uchar) ( 15. * dg);
+          blue    = (Uchar) ( 15. * db);
+          in_buffer ("%x%x",green,blue);
+        }
+      }
+
+    } else if(a_nbit==rgb_8) {
+      int nbyte8 = a_width   * 3;
+      // 8 bit for r and g and b.
+      in_buffer   ("/rgbstr %d string def ",nbyte8); 
+      in_buffer   ("%d %d %d ",a_width,a_height,8); 
+      in_buffer   ("[ %d 0 0 -%d 0 %d ] ",a_width,a_height,a_height); 
+      in_buffer   ("{ currentfile rgbstr readhexstring pop } " );
+      in_buffer   ("false 3 " );
+      PrintFLN   ("colorimage " );
+      for ( row = 0; row < a_height; row++ ) {
+        for ( col = 0; col < a_width; col++) {
+          status     = a_proc(a_tag,col,row,dr,dg,db)?status:false;
+          red        = (Uchar) ( 255. * dr);
+          WriteByte (red);
+          green      = (Uchar) ( 255. * dg);
+          WriteByte (green);
+          blue       = (Uchar) ( 255. * db);
+          WriteByte (blue);
+        }
+      }
+    } else {
+      m_out << "PS_IMAGE :"
+            << " unknown rgb nbit " << a_nbit
+            << std::endl;
+    }
+    if(!status) {
+      m_out << "PS_IMAGE :"
+            << " problem to retreive some pixel rgb."
+            << std::endl;
+    }
+    PS_RESTORE();
+  }
+
+protected:  
+  static unsigned int METAFILE_RECORD_LENGTH() {return 80;}
+
+  static float METAFILE_SCALE() {return 1.0f;}
+
+  static char* get_date(){
+    char*  string;
+    time_t d;
+    ::time(&d);
+    string = ::ctime(&d);
+    string[24] = '\0';
+    return string;
+  }
+
+  static VCol rgb2grey(VCol a_red,VCol a_green,VCol a_blue){
+    return (0.30f * a_red + 0.59f * a_green + 0.11f * a_blue);
+  }
+
+  bool in_buffer(const char* a_format,...){
+    va_list args;
+    va_start(args,a_format);
+    bool status = vsprintf(m_string,2048,a_format,args);
+    va_end(args);
+    if(!status) {
+      m_out << "tools::wps::in_buffer : overflow." << std::endl;
+      return false;
+    }
+
+    unsigned int length = m_string.size();
+    if(length>METAFILE_RECORD_LENGTH()) {
+      m_out << "tools::wps::in_buffer : overflow." << std::endl;
+      return false;
+    }
+  
+    unsigned int nlength = m_number + length;
+    if(nlength>METAFILE_RECORD_LENGTH()) {
+      m_buffer[m_number] = '\0';
+      if(::fprintf(m_file,"%s\n",(char*)m_buffer)<0) {
+        m_out << "tools::wps::in_buffer : fprintf failed." << std::endl;
+      }
+      m_number = 0;
+      nlength = length;
+    }
+    Uchar* pointer = m_buffer + m_number;
+    ::strcpy((char*)pointer,m_string.c_str());
+    m_number = nlength;
+    return true;
+  }
+
+  bool PrintFLN(const char* a_format,...){
+    va_list args;
+    va_start(args,a_format);
+    bool status = vsprintf(m_string,2048,a_format,args);
+    va_end(args);
+    if(!status) {
+      m_out << "tools::wps::PrintFLN : overflow." << std::endl;
+      return false;
+    }
+
+    // put buffer in file :
+    if(m_number>0) {
+      m_buffer[m_number] = '\0';
+      if(::fprintf(m_file,"%s\n",(char*)m_buffer)<0) {
+        m_out << "tools::wps::PrintFLN : fprintf failed." << std::endl;
+      }
+      m_number = 0;
+    }
+    if(::fprintf(m_file,"%s\n",m_string.c_str())<0) {
+      m_out << "tools::wps::PrintFLN : fprintf failed." << std::endl;
+    }
+
+    return true;
+  }
+
+  void WriteByte(Uchar a_byte){
+    Uchar h = a_byte / 16;
+    Uchar l = a_byte % 16;
+    in_buffer("%x%x",h,l);
+  }
+
+protected:
+  std::ostream& m_out;
+  float         m_deviceWidth;
+  float         m_deviceHeight;
+  unsigned int  m_pageNumber;
+//double        m_markSize;
+  FILE*         m_file;
+  std::string   m_fname;
+  std::string   m_string;
+  int           m_gsave;
+  Uchar*        m_buffer;
+  unsigned int m_number;
+//struct {
+//  int shade;
+//  int nbit;
+//} m_param;
+};
+
+}
+
+#endif
+
+/*
+  enum {
+    shade_color = 0,
+    shade_grey = 1,
+    shade_black_white = 2
+  };
+
+  void PS_BACKGROUND(double a_r,double a_g,double a_b,
+                     double a_width,double a_height,
+                     bool a_do_back = true){
+    PS_NEWPATH(); 
+    PS_MOVE       (0.,0.);
+    PS_RLINETO    (a_width,0.);
+    PS_RLINETO    (0.,a_height);
+    PS_RLINETO    (-a_width,0.);
+    PS_RLINETO    (0.,-a_height);
+    PS_CLOSEPATH();
+    if(a_do_back) {
+      PS_SAVE();
+      PS_RGB(a_r,a_g,a_b);
+      PS_FILL();
+      PS_RESTORE();
+    }
+    in_buffer("clip ");
+  }
+
+  void PS_RGB(double a_r,double a_g,double a_b){
+    if(m_param.shade==shade_color)
+      in_buffer("%.2f %.2f %.2f rgb ",a_r,a_g,a_b);
+    else if(m_param.shade==shade_grey)
+      in_buffer("%.2f setgray ",rgb2grey(a_r,a_g,a_b));
+    else if(m_param.shade==shade_black_white)
+      in_buffer("0. setgray ",rgb2grey(a_r,a_g,a_b));
+  }
+
+  void PS_LINE_WIDTH(int a_width){in_buffer("%.1f lw ",float(a_width));}
+
+  void PS_NEWPATH() {in_buffer("n ");}
+  void PS_STROKE() {in_buffer("s ");}
+  void PS_FILL() {in_buffer("f ");}
+  void PS_CLOSEPATH() {in_buffer("cl ");}
+  void PS_CAP(double a_x) {in_buffer ("%1d lc ",a_x);}
+  void PS_RLINETO(double a_x,double a_y) {
+    in_buffer ("%.2f %.2f rl ",a_x,a_y);
+  }
+  void PS_MOVE(double a_x,double a_y) {
+    in_buffer ("%.2f %.2f m ",a_x,a_y);
+  }
+
+  void PS_FRAME(double a_r,double a_g,double a_b,
+                double a_width,double a_height){
+    PS_NEWPATH   ();
+    PS_MOVE      (0.,0.);
+    PS_RLINETO   (a_width,0.);
+    PS_RLINETO   (0.,a_height);
+    PS_RLINETO   (-a_width,0.);
+    PS_RLINETO   (0.,-a_height);
+    PS_CLOSEPATH ();
+    PS_RGB       (a_r,a_g,a_b);
+    PS_LINE_WIDTH(1);
+    PS_CAP       (1);
+    in_buffer    ("ss ");
+    PS_STROKE();
+  }
+*/

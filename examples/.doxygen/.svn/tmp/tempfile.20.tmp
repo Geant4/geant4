@@ -1,46 +1,100 @@
 // $Id$
 // The example class categories definitions for Doxygen
 
-/// \file Doxymodules_exoticphysics.h
-/// \brief The page that defines the extended/exoticphysics examples modules 
+/// \file Doxymodules_optical.h
+/// \brief The page that defines the extended/optical examples modules 
 
 
-/** @defgroup extended_exoticphysics exoticphysics
- *  Extended examples eventgenerator classes
+/** @defgroup extended_optical optical
+ *  Extended optical examples classes
  *  @{
  */
 
-/** @defgroup extended_exoticphysics_monopole monopole
- *  Exoticphysics monopole example has its
- *  <a href="../html_monopole/html/index.html">standalone documentation </a>
- *  @ingroup extended_exoticphysics
+/** @defgroup extended_optical_OpNovice OpNovice
+ *  Optical example OpNovice
+ *  @ingroup extended_optical
  *  @{
  */
+ 
+  class OpNoviceActionInitialization {};
+  class OpNoviceDetectorConstruction {};
+  class OpNovicePhysicsList {};
+  class OpNovicePhysicsListMessenger {};
+  class OpNovicePrimaryGeneratorAction {};
+  class OpNovicePrimaryGeneratorMessenger {};
+  class OpNoviceRunAction {};
+  class OpNoviceStackingAction {};
+  class OpNoviceSteppingVerbose {}; 
 
 /** @} */
 
-/** @defgroup extended_exoticphysics_phonon phonon
- *  Exotic physics example phonon
- *  @ingroup extended_exoticphysics
+
+/** @defgroup extended_optical_LXe LXe
+ *  Optical example LXe 
+ *  @ingroup extended_optical
  *  @{
  */
 
-  class XAlminumElectrodeHit {};
-  class XAlminumElectrodeSensitivity {};
-  class XDetectorConstruction {};
-  class XLatticeManager3 {};
-  class XLogicalLattice {};
-  class XLPhonon {};
-  class XPhononDownconversionProcess {};
-  class XPhononReflectionProcess {};
-  class XPhononScatteringProcess {};
-  class XPhononStackingAction {};
-  class XPhononTrackInformation {};
-  class XPhysicalLattice {};
-  class XPhysicsList {};
-  class XPrimaryGeneratorAction {};
-  class XTPhononFast {};
-  class XTPhononSlow {};
+  class LXeDetectorConstruction {};
+  class LXeDetectorMessenger {};
+  class LXeEMPhysics {};
+  class LXeEventAction {};
+  class LXeEventMessenger {};
+  class LXeGeneralPhysics {};
+  class LXeMainVolume {};
+  class LXeMuonPhysics {};
+  class LXePhysicsList {};
+  class LXePMTHit {};
+  class LXePMTSD {};
+  class LXePrimaryGeneratorAction {};
+  class LXeRunAction {};
+  class LXeScintHit {};
+  class LXeScintSD {};
+  class LXeStackingAction {};
+  class LXeSteppingAction {};
+  class LXeSteppingMessenger {};
+  class LXeSteppingVerbose {};
+  class LXeTrackingAction {};
+  class LXeTrajectory {};
+  class LXeUserEventInformation {};
+  class LXeUserTrackInformation {};
+  class LXeWLSFiber {};
+  class LXeWLSSlab {};
+  class RecorderBase {};
+
+/** @} */
+
+/** @defgroup extended_optical_wls wls
+ *  Optical example wls 
+ *  @ingroup extended_optical
+ *  @{
+ */
+
+  class WLSActionInitialization {};
+  class WLSDetectorConstruction {};
+  class WLSDetectorMessenger {};
+  class WLSEventAction {};
+  class WLSEventActionMessenger {};
+  class WLSExtraPhysics {};
+  class WLSMaterials {};
+  class WLSOpticalPhysics {};
+  class WLSPhotonDetHit {};
+  class WLSPhotonDetSD {};
+  class WLSPhysicsList {};
+  class WLSPhysicsListMessenger {};
+  class WLSPrimaryGeneratorAction {};
+  class WLSPrimaryGeneratorMessenger {};
+  class WLSRunAction {};
+  class WLSRunActionMessenger {};
+  class WLSStackingAction {};
+  class WLSStepMax {};
+  class WLSSteppingAction {};
+  class WLSSteppingActionMessenger {};
+  class WLSSteppingVerbose {};
+  class WLSTrackingAction {};
+  class WLSTrajectory {};
+  class WLSTrajectoryPoint {};
+  class WLSUserTrackInformation {};
 
 /** @} */
 

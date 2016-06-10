@@ -51,16 +51,14 @@
 #include "G4LorentzVector.hh"
 
 G4MuonRadiativeDecayChannelWithSpin::G4MuonRadiativeDecayChannelWithSpin()
-	     : G4VDecayChannel(),
-	       parent_polarization()
+	     : G4VDecayChannel()
 {
 }
 
 G4MuonRadiativeDecayChannelWithSpin::
            G4MuonRadiativeDecayChannelWithSpin(const G4String& theParentName,
                                                G4double        theBR)
-	     : G4VDecayChannel("Radiative Muon Decay",1),
-	       parent_polarization()
+	     : G4VDecayChannel("Radiative Muon Decay",1)
 {
   // set names for daughter particles
   if (theParentName == "mu+") {
@@ -97,7 +95,6 @@ G4MuonRadiativeDecayChannelWithSpin::~G4MuonRadiativeDecayChannelWithSpin()
 G4MuonRadiativeDecayChannelWithSpin::G4MuonRadiativeDecayChannelWithSpin(const G4MuonRadiativeDecayChannelWithSpin &right):
   G4VDecayChannel(right)
 {
-  parent_polarization = right.parent_polarization;
 }
 
 G4MuonRadiativeDecayChannelWithSpin & G4MuonRadiativeDecayChannelWithSpin::operator=(const G4MuonRadiativeDecayChannelWithSpin & right)
@@ -167,10 +164,11 @@ G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
 
   G4double eps = EMASS/EMMU;
 
-  G4double som0, Qsqr, x, y, xx, yy, zz;
+  G4double som0, x, y, xx, yy, zz;
   G4double cthetaE, cthetaG, cthetaGE, phiE, phiG;
+  const size_t MAX_LOOP=10000;
 
-  do {
+  for (size_t loop_counter1=0; loop_counter1 <MAX_LOOP; ++loop_counter1){
 
 //     leap1:
 
@@ -178,7 +176,7 @@ G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
 
 //     leap2:
 
-     do {
+     for (size_t loop_counter2=0; loop_counter2 <MAX_LOOP; ++loop_counter2){
 //
 //--------------------------------------------------------------------------
 //      Build two vectors of random length and random direction, for the
@@ -273,13 +271,14 @@ G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
         G4double term3 = y*(1.0-(eps*eps));
         G4double term6 = term1*delta*term3;
 
-        Qsqr  = (1.0-term1-term3+term0+0.5*term6)/((1.0-eps)*(1.0-eps));
+        G4double Qsqr = (1.0-term1-term3+term0+0.5*term6)/((1.0-eps)*(1.0-eps));
 //
 //-----------------------------------------------------------------------
 //
 //      Check the kinematics.
 //
-     } while ( Qsqr<0.0 || Qsqr>1.0 );
+	if  ( Qsqr>=0.0 && Qsqr<=1.0 ) break;
+     }
 //
 ////   G4cout << x << " " << y << " " <<  beta << " " << Qsqr << G4endl;
 //
@@ -311,7 +310,8 @@ G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
 //   Sample the decay rate
 //
 
-  } while (G4UniformRand()*177.0 > som0);
+     if (G4UniformRand()*177.0 <= som0) break;
+  }
 
 ///   if(i<10000000)goto leap1:
 //

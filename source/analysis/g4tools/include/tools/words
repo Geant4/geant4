@@ -9,12 +9,13 @@
 
 namespace tools {
 
-inline void words(const std::string& a_string,const std::string& a_sep,bool a_take_empty,std::vector<std::string>& a_words){
+inline void words(const std::string& a_string,const std::string& a_sep,bool a_take_empty,
+                  std::vector<std::string>& a_words,bool a_clear = true){
   //  If a_sep is for exa "|" and for "xxx||xxx" :
   //  - a_take_empty false : {"xxx","xxx"} will be created 
   //    (and NOT {"xxx","","xxx"}).
   //  - a_take_empty true : {"xxx","","xxx"} will be created.
-  a_words.clear();
+  if(a_clear) a_words.clear();
   if(a_string.empty()) return;
   std::string::size_type lim = (a_take_empty?0:1);
   if(a_sep.empty()) {
@@ -38,19 +39,21 @@ inline void words(const std::string& a_string,const std::string& a_sep,bool a_ta
   }
 }
 
+#ifdef TOOLS_DEPRECATED
 inline std::vector<std::string> words(const std::string& a_string,const std::string& a_limiter,bool a_take_empty = false){
   std::vector<std::string> v;
   words(a_string,a_limiter,a_take_empty,v);
   return v;
 }
+#endif //TOOLS_DEPRECATED
 
 inline void words(const std::string& a_string,
                   const std::string& a_sep,bool a_take_empty,
                   //output :
                   unsigned int& a_wn,
-                  std::string::size_type* a_wps,
-                  std::string::size_type* a_wls){
-  //used to optimize inlib::match().
+                  std::string::size_type a_wps[],
+                  std::string::size_type a_wls[]){
+  //used to optimize tools::match().
   a_wn = 0;
   if(a_string.empty()) return;
   std::string::size_type lim = (a_take_empty?0:1);

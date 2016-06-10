@@ -64,7 +64,7 @@ public: //ibo
   }
 public:
   ObjArray(){}
-  virtual ~ObjArray(){tools::clear<T>(*this);} //WIN32 wants inlib::
+  virtual ~ObjArray(){tools::clear<T>(*this);}
 public:
   ObjArray(const ObjArray& a_from): ibo(a_from),std::vector<T*>() {
     typedef typename std::vector<T*>::const_iterator it_t;
@@ -115,7 +115,7 @@ public: //ibo
   }
 public:
   List(){}
-  virtual ~List(){tools::clear<T>(*this);} //WIN32 wants inlib::
+  virtual ~List(){tools::clear<T>(*this);}
 protected:
   List(const List& a_from): ibo(a_from),std::vector<T*>(){}
   List& operator=(const List&){return *this;}

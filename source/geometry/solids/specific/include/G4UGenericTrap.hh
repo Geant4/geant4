@@ -44,6 +44,9 @@
 #define G4UGENERICTRAP_hh
 
 #include "G4USolid.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+
 #include "UGenericTrap.hh"
 #include "G4TwoVector.hh"
 
@@ -138,5 +141,7 @@ inline void G4UGenericTrap::SetZHalfLength(G4double halfZ)
 {
   GetShape()->SetZHalfLength(halfZ);
 }
+
+#endif  // G4GEOM_USE_USOLIDS
 
 #endif

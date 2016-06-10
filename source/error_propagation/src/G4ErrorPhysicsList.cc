@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorPhysicsList.cc 69014 2013-04-15 09:42:51Z gcosmo $
+// $Id: G4ErrorPhysicsList.cc 91809 2015-08-06 13:00:09Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -120,7 +120,7 @@ void G4ErrorPhysicsList::ConstructProcess()
 
   // loop over all particles in G4ParticleTable
   theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
+  while( (*theParticleIterator)() ) {  // Loop checking, 06.08.2015, G.Cosmo
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     if (!particle->IsShortLived()) {
@@ -173,7 +173,7 @@ void G4ErrorPhysicsList::ConstructEM()
   new G4ErrorMessenger( stepLengthLimitProcess, magFieldLimitProcess, eLossProcess );
 
   theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
+  while( (*theParticleIterator)() ) {  // Loop checking, 06.08.2015, G.Cosmo
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();

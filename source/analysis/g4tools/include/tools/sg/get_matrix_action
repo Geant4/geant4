@@ -1,0 +1,60 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_get_matrix_action
+#define tools_sg_get_matrix_action
+
+#include "matrix_action"
+
+namespace tools {
+namespace sg {
+  class node;
+}}
+
+namespace tools {
+namespace sg {
+
+class get_matrix_action : public matrix_action {
+public:
+  get_matrix_action(std::ostream& a_out,unsigned int a_ww,unsigned int a_wh)
+  :matrix_action(a_out,a_ww,a_wh)
+  ,m_node(0) //not owner
+  ,m_done(false)
+  {}
+  virtual ~get_matrix_action(){}
+public:
+  get_matrix_action(const get_matrix_action& a_from)
+  :matrix_action(a_from)
+  ,m_node(a_from.m_node)
+  ,m_done(false)
+  {}
+  get_matrix_action& operator=(const get_matrix_action& a_from){
+    matrix_action::operator=(a_from);
+    m_node = a_from.m_node;
+    reset();
+    return *this;
+  }
+public:
+  void reset() {
+    m_found_model.set_zero();
+    m_done = false;
+  }
+
+  void set_found_model(const mat4f& a_m) {m_found_model = a_m;}
+  const mat4f& found_model() const {return m_found_model;}
+
+  void set_done(bool a_value) {m_done = a_value;}
+  bool done() const {return m_done;}
+
+  void set_node(sg::node* a_v) {m_node = a_v;}
+  sg::node* node() const {return m_node;}
+
+protected:
+  sg::node* m_node; //not owner.
+  bool m_done;
+  mat4f m_found_model;
+};
+
+}}
+
+#endif

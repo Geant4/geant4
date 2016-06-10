@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSEventAction.cc 70603 2013-06-03 11:23:16Z gcosmo $
+// $Id: WLSEventAction.cc 90240 2015-05-21 09:08:13Z gcosmo $
 //
 /// \file optical/wls/src/WLSEventAction.cc
 /// \brief Implementation of the WLSEventAction class
@@ -46,23 +46,17 @@
 
 #include "Randomize.hh"
 
-// Purpose: Invoke visualization at the end
-//          Also can accumulate statistics regarding hits
+// Purpose: Accumulates statistics regarding hits
 //          in the PhotonDet detector
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSEventAction::WLSEventAction(WLSRunAction* runaction)
- : fRunAction(runaction), fVerboseLevel(0),
-   fPrintModulo(100), fDrawFlag("all")
+ : fRunAction(runaction), fVerboseLevel(0)
 {
   fMPPCCollID = 0;
 
   fEventMessenger = new WLSEventActionMessenger(this);
-
-  fForceDrawPhotons = false;
-  fForceNoPhotons   = false;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,8 +71,6 @@ WLSEventAction::~WLSEventAction()
 void WLSEventAction::BeginOfEventAction(const G4Event* evt)
 {
  G4int evtNb = evt->GetEventID();
- if (evtNb%fPrintModulo == 0)
-    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
 
  if(fVerboseLevel>0)
     G4cout << "<<< Event  " << evtNb << " started." << G4endl;
@@ -86,55 +78,19 @@ void WLSEventAction::BeginOfEventAction(const G4Event* evt)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4Threading.hh"
+
 void WLSEventAction::EndOfEventAction(const G4Event* evt)
 {
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-
-  // Visualization of Trajectory
-  if(pVVisManager)
-  {
-   G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
-
-   G4int n_trajectories = 0;
-   if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
-   G4cout << "n_trajectories: " << n_trajectories << G4endl;
-   if (fDrawFlag == "all") G4cout << "draw all trajectories" << G4endl;
-   if (fDrawFlag == "charged") G4cout << "draw only charged" << G4endl;
-
-   for(G4int i=0; i<n_trajectories; i++)
-      { WLSTrajectory* trj = 
-                      (WLSTrajectory *)((*(evt->GetTrajectoryContainer()))[i]);
-        if (fDrawFlag == "all") {
-           G4cout << "Now calling DrawTrajectory" << G4endl;
-           G4cout << "Particle Name: " << trj->GetParticleName() << G4endl;
-           trj->DrawTrajectory();
-        }
-        else if ((fDrawFlag == "charged")&&(trj->GetCharge() != 0.))
-                               trj->DrawTrajectory();
-        else if (trj->GetParticleName()=="opticalphoton")
-        {
-          G4cout << "We should be drawing an opticalphoton" << G4endl;
-          trj->SetForceDrawTrajectory(fForceDrawPhotons);
-          trj->SetForceNoDrawTrajectory(fForceNoPhotons);
-          trj->DrawTrajectory();
-        }
-      }
-  }
-
   if (fVerboseLevel>0)
      G4cout << "<<< Event  " << evt->GetEventID() << " ended." << G4endl;
  
-  // Save the Random Engine Status at the of event
   if (fRunAction->GetRndmFreq() == 2)
-  {
-     G4Random::saveEngineStatus("endOfEvent.rndm");
-     G4int evtNb = evt->GetEventID();
-     if (evtNb%fPrintModulo == 0)
-     {
-        G4cout << "\n---> End of Event: " << evtNb << G4endl;
-        G4Random::showEngineStatus();
-     }
-  }
+    {
+     std::ostringstream os;
+     os<<"endOfEvent_"<<G4Threading::G4GetThreadId()<<".rndm";
+     G4Random::saveEngineStatus(os.str().c_str());
+    }
 
   // Get Hits from the detector if any
   G4SDManager * SDman = G4SDManager::GetSDMpointer();

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.hh 86051 2014-11-07 08:30:30Z gcosmo $
+// $Id: G4RunMessenger.hh 94222 2015-11-09 08:28:49Z gcosmo $
 //
 // 
 //	GEANT 4 class header file 
@@ -110,6 +110,7 @@ class G4RunMessenger: public G4UImessenger
     G4UIcmdWithoutParameter *   saveThisEventCmd;
     G4UIcmdWithAString *        restoreRandCmd;
     G4UIcmdWithABool *          saveEachEventCmd;
+    G4UIcmdWithABool *	 	    restoreRandCmdMT;
     
     G4UIcmdWithoutParameter *   constScoreCmd;
 

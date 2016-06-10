@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.cc 69013 2013-04-15 09:41:13Z gcosmo $
+// $Id: G4GDMLWrite.cc 89243 2015-03-27 16:24:39Z gcosmo $
 //
 // class G4GDMLWrite Implementation
 //
@@ -85,6 +85,39 @@ void G4GDMLWrite::AddExtension(xercesc::DOMElement*,
 void G4GDMLWrite::ExtensionWrite(xercesc::DOMElement*)
 {
    // Empty implementation. To be overwritten by user for specific extensions
+}
+
+void G4GDMLWrite::AddAuxInfo(G4GDMLAuxListType* auxInfoList,
+                             xercesc::DOMElement* element)
+{
+  for(std::vector<G4GDMLAuxStructType>::const_iterator
+      iaux = auxInfoList->begin(); iaux != auxInfoList->end(); iaux++ )
+  {
+    xercesc::DOMElement* auxiliaryElement = NewElement("auxiliary");
+    element->appendChild(auxiliaryElement);
+      
+    auxiliaryElement->setAttributeNode(NewAttribute("auxtype", (*iaux).type));
+    auxiliaryElement->setAttributeNode(NewAttribute("auxvalue", (*iaux).value));
+    if (((*iaux).unit)!="")
+    {
+      auxiliaryElement->setAttributeNode(NewAttribute("auxunit", (*iaux).unit));
+    }
+
+    if (iaux->auxList)  { AddAuxInfo(iaux->auxList, auxiliaryElement); }
+  }
+  return;
+}
+
+void G4GDMLWrite::UserinfoWrite(xercesc::DOMElement* gdmlElement)
+{
+  if(auxList.size()>0)
+  {
+    G4cout << "G4GDML: Writing userinfo..." << G4endl;
+      
+    userinfoElement = NewElement("userinfo");
+    gdmlElement->appendChild(userinfoElement);
+    AddAuxInfo(&auxList, userinfoElement);
+  }
 }
 
 G4String G4GDMLWrite::GenerateName(const G4String& name, const void* const ptr)
@@ -189,6 +222,7 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,
    MaterialsWrite(gdml);
    SolidsWrite(gdml);
    StructureWrite(gdml);
+   UserinfoWrite(gdml);
    SetupWrite(gdml,logvol);
 
    G4Transform3D R = TraverseVolumeTree(logvol,depth);
@@ -310,6 +344,11 @@ G4String G4GDMLWrite::Modularize( const G4VPhysicalVolume* const physvol,
 
    return G4String(""); // Empty string for module name = no modularization
                         // was requested at that level/physvol!
+}
+
+void G4GDMLWrite::AddAuxiliary(G4GDMLAuxStructType myaux)
+{
+   auxList.push_back(myaux);
 }
 
 void G4GDMLWrite::SetAddPointerToName(G4bool set)

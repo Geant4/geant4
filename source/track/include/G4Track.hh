@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.hh 83388 2014-08-21 14:29:33Z gcosmo $
+// $Id: G4Track.hh 91231 2015-06-26 10:40:45Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -68,6 +68,9 @@
 class G4Step;                         // Forward declaration
 class G4MaterialCutsCouple;
 class G4VelocityTable;
+class G4VAuxiliaryTrackInformation;
+
+#include <map>
 
 //////////////
 class G4Track
@@ -323,6 +326,27 @@ public: // With description
    G4bool          useGivenVelocity;
       // do not calclulate velocity and just use current fVelocity
       // if this flag is set
+
+   mutable std::map<G4int,G4VAuxiliaryTrackInformation*>* fpAuxiliaryTrackInformationMap;
+
+//--------
+public: 
+//--------
+
+   void SetAuxiliaryTrackInformation(G4int idx, G4VAuxiliaryTrackInformation* info) const;
+   G4VAuxiliaryTrackInformation* GetAuxiliaryTrackInformation(G4int idx) const;
+   std::map<G4int,G4VAuxiliaryTrackInformation*>* GetAuxiliaryTrackInformationMap() const
+   { return fpAuxiliaryTrackInformationMap; }
+
+   void RemoveAuxiliaryTrackInformation(G4int idx);
+   void RemoveAuxiliaryTrackInformation(G4String& name);
+      // Note: G4VAuxiliaryTrackInformation object itself is *NOT* deleted
+
+//--------
+private:
+//--------
+
+  void ClearAuxiliaryTrackInformation();
 };
 
 #include "G4Track.icc"

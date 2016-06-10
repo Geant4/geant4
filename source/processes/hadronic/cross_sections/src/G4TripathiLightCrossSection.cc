@@ -184,15 +184,15 @@ G4TripathiLightCrossSection::GetElementCrossSection(const G4DynamicParticle* the
 
   if ((AT==1 && ZT==1) || (AP==1 && ZP==1)) {
     T1 = 23.0;
-    D  = 1.85 + 0.16/(1+std::exp((500.0-E)/200.0));
+    D  = 1.85 + 0.16/(1+G4Exp((500.0-E)/200.0));
 
   } else if ((AT==1 && ZT==0) || (AP==1 && ZP==0)) {
     T1 = 18.0;
-    D  = 1.85 + 0.16/(1+std::exp((500.0-E)/200.0));
+    D  = 1.85 + 0.16/(1+G4Exp((500.0-E)/200.0));
 
   } else if ((AT==2 && ZT==1) || (AP==2 && ZP==1)) {
     T1 = 23.0;
-    D  = 1.65 + 0.1/(1+std::exp((500.0-E)/200.0));
+    D  = 1.65 + 0.1/(1+G4Exp((500.0-E)/200.0));
 
   } else if ((AT==3 && ZT==2) || (AP==3 && ZP==2)) {
     T1 = 40.0;
@@ -205,7 +205,7 @@ G4TripathiLightCrossSection::GetElementCrossSection(const G4DynamicParticle* the
     else if (ZT==13)         {T1 = 25.0; G = 300.0;}
     else if (ZT==26)         {T1 = 40.0; G = 300.0;}
     else                     {T1 = 40.0; G = 75.0;}
-    D = 2.77 - 8.0E-3*AT + 1.8E-5*AT*AT-0.8/(1.0+std::exp((250.0-E)/G));
+    D = 2.77 - 8.0E-3*AT + 1.8E-5*AT*AT-0.8/(1.0+G4Exp((250.0-E)/G));
   }
   else if (AT==4 && ZT==2) {
     if      (AP==4 && ZP==2) {T1 = 40.0; G = 300.0;}
@@ -214,15 +214,15 @@ G4TripathiLightCrossSection::GetElementCrossSection(const G4DynamicParticle* the
     else if (ZP==13)         {T1 = 25.0; G = 300.0;}
     else if (ZP==26)         {T1 = 40.0; G = 300.0;}
     else                     {T1 = 40.0; G = 75.0;}
-    D = 2.77 - 8.0E-3*AP + 1.8E-5*AP*AP-0.8/(1.0+std::exp((250.0-E)/G));
+    D = 2.77 - 8.0E-3*AP + 1.8E-5*AP*AP-0.8/(1.0+G4Exp((250.0-E)/G));
   }
 
   // C_E, S, deltaE, X1, S_L and X_m correspond directly with the original
   // formulae of Tripathi et al in his report.
   //G4cout << "E= " << E << " T1= " << T1 << "  AP= " << AP << " ZP= " << ZP 
   //	 << " AT= " << AT << " ZT= " << ZT << G4endl;
-  G4double C_E = D*(1.0-std::exp(-E/T1)) -
-                 0.292*std::exp(-E/792.0)*std::cos(0.229*std::pow(E,0.453));
+  G4double C_E = D*(1.0-G4Exp(-E/T1)) -
+                 0.292*G4Exp(-E/792.0)*std::cos(0.229*G4Pow::GetInstance()->powA(E,0.453));
 
   G4double S = AP13*AT13/(AP13 + AT13);
 
@@ -238,9 +238,9 @@ G4TripathiLightCrossSection::GetElementCrossSection(const G4DynamicParticle* the
     deltaE = 1.85*S + 0.16*S/E_cm13 - C_E + 0.91*(AP-2*ZP)*ZT/(xAT*xAP);
     X1     = 2.83 - 3.1E-2*AP + 1.7E-4*AP*AP;
   }
-  G4double S_L = 1.2 + 1.6*(1.0-std::exp(-E/15.0));
+  G4double S_L = 1.2 + 1.6*(1.0-G4Exp(-E/15.0));
   //JMQ 241110 bug fixed 
-  G4double X_m = 1.0 - X1*std::exp(-E/(X1*S_L));
+  G4double X_m = 1.0 - X1*G4Exp(-E/(X1*S_L));
 
   //G4cout << "deltaE= " << deltaE << "  X1= " << X1 << " S_L= " << S_L << " X_m= " << X_m << G4endl;
 

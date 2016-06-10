@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FTFP_BERT_TRV.icc 81937 2014-06-06 15:44:09Z gcosmo $
+// $Id: FTFP_BERT_TRV.icc 92960 2015-09-23 08:41:04Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -39,6 +39,8 @@
 //                     at rest of anti-protons.
 // 27.07.2012 A.Ribon:  Use the new class G4BertiniAndFritiofStoppingPhysics
 // 16.10.2012 A.Ribon:  Renamed the physics classes used
+// 05.06.2014 A.Ribon:  Use (temporary) G4HadronHElasticPhysics
+// 08.01.2015 A.Ribon:  Switch on low-mass diffraction dissociation
 //
 //----------------------------------------------------------------------------
 //
@@ -56,6 +58,7 @@
 
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysicsGS.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
 #include "G4StoppingPhysics.hh"
@@ -81,7 +84,7 @@ template<class T> TFTFP_BERT_TRV<T>::TFTFP_BERT_TRV(G4int ver):  T()
   exp.Experimental("FTFP_BERT_TRV");
 
   // EM Physics
-  this->RegisterPhysics( new G4EmStandardPhysics(ver) );
+  this->RegisterPhysics( new G4EmStandardPhysicsGS(ver) );
 
   // Synchroton Radiation & GN Physics
   this->RegisterPhysics( new G4EmExtraPhysics(ver) );
@@ -90,7 +93,7 @@ template<class T> TFTFP_BERT_TRV<T>::TFTFP_BERT_TRV(G4int ver):  T()
   this->RegisterPhysics( new G4DecayPhysics(ver) );
 
    // Hadron Elastic scattering
-  this->RegisterPhysics( new G4HadronHElasticPhysics(ver) );
+  this->RegisterPhysics( new G4HadronHElasticPhysics(ver, false) );
 
    // Hadron Physics
   this->RegisterPhysics(  new G4HadronPhysicsFTFP_BERT_TRV(ver));

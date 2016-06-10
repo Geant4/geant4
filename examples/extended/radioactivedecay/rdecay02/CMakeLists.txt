@@ -21,28 +21,10 @@ endif()
 include(${Geant4_USE_FILE})
 
 #----------------------------------------------------------------------------
-# Find AIDA (optional package)
-#
-find_package(AIDA)
-if(AIDA_FOUND)
-  add_definitions(-DG4ANALYSIS_USE)   
-endif()
-
-#----------------------------------------------------------------------------
-# Find ROOT (optional package)
-#
-find_package(ROOT)
-if(ROOT_FOUND)
-  add_definitions(-DG4ANALYSIS_USE_ROOT)
-endif()
-
-#----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
 include_directories(${PROJECT_SOURCE_DIR}/include 
-                    ${Geant4_INCLUDE_DIR}
-                    ${AIDA_INCLUDE_DIR}
-                    ${ROOT_INCLUDE_DIR})
+                    ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
@@ -50,7 +32,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(rdecay02 rdecay02.cc ${sources} ${headers})
-target_link_libraries(rdecay02 ${Geant4_LIBRARIES} ${AIDA_LIBRARIES} ${ROOT_LIBRARIES} )
+target_link_libraries(rdecay02 ${Geant4_LIBRARIES} )
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
@@ -58,7 +40,10 @@ target_link_libraries(rdecay02 ${Geant4_LIBRARIES} ${AIDA_LIBRARIES} ${ROOT_LIBR
 # relies on these scripts being in the current working directory.
 #
 set(rdecay02_SCRIPTS
-    rdecay02.in rdecay02.out
+    debug.mac
+    plotHisto.C
+    rdecay02.in
+    vis.mac
   )
 
 foreach(_script ${rdecay02_SCRIPTS})

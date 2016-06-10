@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.hh 85263 2014-10-27 08:58:31Z gcosmo $
+// $Id: G4OpenGLStoredViewer.hh 91268 2015-06-29 07:04:24Z gcosmo $
 //
 //
 // Andrew Walkden  7th February 1997
@@ -61,7 +61,7 @@ protected:
   virtual G4bool POSelected(size_t) {return true;}
   virtual G4bool TOSelected(size_t) {return true;}
   
-  bool fDepthTestEnable;
+  G4bool fDepthTestEnable;
   G4Colour fOldDisplayListColor;
 };
 

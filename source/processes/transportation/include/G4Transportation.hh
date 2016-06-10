@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.hh 84478 2014-10-16 08:49:24Z gcosmo $
+// $Id: G4Transportation.hh 87829 2015-01-14 17:19:59Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -92,6 +92,8 @@ class G4Transportation : public G4VProcess
        // Forces the PostStepDoIt action to be called, 
        // but does not limit the step.
 
+     G4bool FieldExertedForce() { return fFieldExertedForce; }
+   
      G4PropagatorInField* GetPropagatorInField();
      void SetPropagatorInField( G4PropagatorInField* pFieldPropagator);
        // Access/set the assistant class that Propagate in a Field.
@@ -166,17 +168,16 @@ class G4Transportation : public G4VProcess
        // The particle's state after this Step, Store for DoIt
 
      G4bool               fParticleIsLooping;
+     G4bool               fNewTrack;            // Flag from StartTracking 
+     G4bool               fFirstStepInVolume;
+     G4bool               fLastStepInVolume;     // Last step - almost same as next flag
+                                                 //             (temporary redundancy for checking) 
+     G4bool               fGeometryLimitedStep;  // Flag to determine whether a boundary was reached.
+
+     G4bool               fFieldExertedForce;   // During current step
 
      G4TouchableHandle    fCurrentTouchableHandle;
      
-     // G4bool         fFieldExists;
-       // Whether a magnetic field exists ...
-       // A data member for this is problematic: it is useful only if it
-       // can be initialised and updated -- and a scheme is not yet possible.
-
-     G4bool fGeometryLimitedStep;
-       // Flag to determine whether a boundary was reached.
-
      G4ThreeVector  fPreviousSftOrigin;
      G4double       fPreviousSafety; 
        // Remember last safety origin & value.

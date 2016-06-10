@@ -29,7 +29,8 @@
 #
 /analysis/setFileName exgps
 /analysis/h1/set 1 100 200 800 MeV
-/analysis/h2/set 2 100 -10 10 cm none linear 100 -10 10 cm none linear #y-z
+/analysis/h2/setX 2 100 -10 10 cm  #y-z
+/analysis/h2/setY 2 100 -10 10 cm  #y-z
 #
 /run/printProgress 10000
 #

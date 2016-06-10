@@ -1,4 +1,4 @@
-$Id: History 87360 2014-12-01 16:07:16Z gcosmo $
+$Id: History 94206 2015-11-09 08:11:59Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,31 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+2nd October 2015  John Allison  (modeling-V10-01-05)
+- G4MagneticFieldModel.cc: Cosmetic improvements.
+
+1st October 2015  John Allison  (modeling-V10-01-04)
+- Co-works with visman-V10-01-18
+- Added "light" representation to G4MagneticFieldModel.
+
+30th July 2015  John Allison  (modeling-V10-01-03)
+- G4PhysicalVolumeSearchScene.cc: Minor improvement.
+  o Replaced an assignment by a reference.
+
+19th May 2015  Laurent Garnier  (modeling-V10-01-02)
+- G4PhysicalVolumeSearchScene: Optimize ProcessVolume() by 
+  o setting variables only if needed
+  o comparing string lenght before comparing all string
+
+7th March 2015  John Allison  (modeling-V10-01-01)
+- G4PhysicalVolumeModel: Add GetCurrentTransform().
+- G4PhysicalVolumeModel::CreateCurrentAttValues():
+  o Add local (and keep global) transformation.
+- G4TouchableDumpScene.cc: Add polyhedron dump.
+
+2nd February 2015  Gabriele Cosmo  (modeling-V10-01-00)
+- Fix to sources.cmake script to include missing dependency on external library.
 
 28th November 2014  John Allison  (modeling-V10-00-12)
 - G4TrajectoriesModel.cc: Tidied.

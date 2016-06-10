@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 85608 2014-10-31 11:23:30Z gcosmo $
+# $Id: sources.cmake 92392 2015-08-31 14:07:02Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -92,6 +92,7 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4UExtrudedSolid.hh
         G4UGenericPolycone.hh
         G4UGenericTrap.hh
+        G4UParaboloid.hh
         G4UPolycone.hh
         G4UPolyhedra.hh
         G4UTet.hh
@@ -145,6 +146,7 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4UExtrudedSolid.cc
         G4UGenericPolycone.cc
         G4UGenericTrap.cc
+        G4UParaboloid.cc
         G4UPolycone.cc
         G4UPolyhedra.cc
         G4UTet.cc

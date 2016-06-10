@@ -33,13 +33,11 @@
 //_____________________________________________________________________________
 G4CsvFileManager::G4CsvFileManager(const G4AnalysisManagerState& state)
  : G4VFileManager(state)
-{
-}
+{}
 
 //_____________________________________________________________________________
 G4CsvFileManager::~G4CsvFileManager()
-{  
-}
+{}
 
 // 
 // public methods
@@ -53,6 +51,7 @@ G4bool G4CsvFileManager::OpenFile(const G4String& fileName)
 
   fLockFileName = true;
   fLockNtupleDirectoryName = true;
+  fIsOpenFile = true;
   
   return true;
 }  
@@ -68,14 +67,15 @@ G4bool G4CsvFileManager::WriteFile()
 G4bool G4CsvFileManager::CloseFile()
 {
   fLockFileName = false;
+  fIsOpenFile = false;
   return true; 
 } 
    
 //_____________________________________________________________________________
 G4bool G4CsvFileManager::CreateNtupleFile(
-                                  G4CsvNtupleDescription* ntupleDescription)
+  G4TNtupleDescription<tools::wcsv::ntuple>* ntupleDescription)
 {
-  G4String ntupleName = ntupleDescription->fNtupleBooking->name();
+  G4String ntupleName = ntupleDescription->fNtupleBooking.name();
 
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) 
@@ -83,8 +83,7 @@ G4bool G4CsvFileManager::CreateNtupleFile(
       ->Message("create", "file", GetNtupleFileName(ntupleName));
 #endif
 
-  std::ofstream* ntupleFile 
-    = new std::ofstream(GetNtupleFileName(ntupleName));
+  auto ntupleFile = new std::ofstream(GetNtupleFileName(ntupleName));
   if ( ntupleFile->fail() ) {
     G4ExceptionDescription description;
     description << "      " << "Cannot open file " 
@@ -106,9 +105,9 @@ G4bool G4CsvFileManager::CreateNtupleFile(
 
 //_____________________________________________________________________________
 G4bool G4CsvFileManager::CloseNtupleFile(
-                                  G4CsvNtupleDescription* ntupleDescription)
+  G4TNtupleDescription<tools::wcsv::ntuple>* ntupleDescription)
 {
-  G4String ntupleName = ntupleDescription->fNtupleBooking->name();
+  G4String ntupleName = ntupleDescription->fNtupleBooking.name();
 
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) 

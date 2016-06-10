@@ -23,14 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//    $Id: G4AntiNeutronAnnihilationAtRest.cc 81369 2014-05-27 13:01:34Z gcosmo $
+//    $Id: G4AntiNeutronAnnihilationAtRest.cc 92627 2015-09-09 12:38:54Z gcosmo $
 //    G4AntiNeutronAnnihilationAtRest physics process
 //    Larry Felawka (TRIUMF), April 1998
 //---------------------------------------------------------------------
-
-//#include <string.h>
-//#include <cmath>
-//#include <stdio.h>
 
 #include "G4AntiNeutronAnnihilationAtRest.hh"
 #include "G4SystemOfUnits.hh"
@@ -38,7 +34,10 @@
 #include "G4ParticleTypes.hh"
 #include "G4HadronicProcessStore.hh"
 #include "G4HadronicDeprecate.hh"
-#include "Randomize.hh" 
+#include "Randomize.hh"
+#include "G4Exp.hh"
+#include "G4Log.hh"
+#include "G4Pow.hh"
  
 #define MAX_SECONDARIES 100
 
@@ -330,19 +329,19 @@ void G4AntiNeutronAnnihilationAtRest::Poisso(G4float xav, G4int *iran)
     fivex = G4int(xav * G4float(5.));
     *iran = 0;
     if (fivex > 0) {
-      r = std::exp(-G4double(xav));
+      r = G4Exp(-G4double(xav));
       ran1 = G4UniformRand();
       if (ran1 > r) {
 	rr = r;
 	for (i = 1; i <= fivex; ++i) {
 	  ++(*iran);
 	  if (i <= 5) {
-	    rrr = std::pow(xav, G4float(i)) / NFac(i);
+	    rrr = G4Pow::GetInstance()->powN(xav, i) / NFac(i);
 	  }
 	  // ** STIRLING' S FORMULA FOR LARGE NUMBERS
 	  if (i > 5) {
-	    rrr = std::exp(i * std::log(xav) -
-		      (i + G4float(.5)) * std::log(i * G4float(1.)) +
+	    rrr = G4Exp(i * G4Log(xav) -
+		      (i + G4float(.5)) * G4Log(i * G4float(1.)) +
 		      i - G4float(.9189385));
 	  }
 	  rr += r * rrr;
@@ -354,7 +353,7 @@ void G4AntiNeutronAnnihilationAtRest::Poisso(G4float xav, G4int *iran)
     }
     else {
       // ** FOR VERY SMALL XAV TRY IRAN=1,2,3
-      p1 = xav * std::exp(-G4double(xav));
+      p1 = xav * G4Exp(-G4double(xav));
       p2 = xav * p1 / G4float(2.);
       p3 = xav * p2 / G4float(3.);
       ran = G4UniformRand();
@@ -533,7 +532,7 @@ void G4AntiNeutronAnnihilationAtRest::AntiNeutronAnnihilation(G4int *nopt)
   nt = 3;
   if (targetAtomicMass >= G4float(1.5)) {
     cfa = (targetAtomicMass - G4float(1.)) / G4float(120.) *
-      G4float(.025) * std::exp(-G4double(targetAtomicMass - G4float(1.)) /
+      G4float(.025) * G4Exp(-G4double(targetAtomicMass - G4float(1.)) /
 			  G4float(120.));
     targ = G4float(1.);
     tex = evapEnergy1;
@@ -559,10 +558,10 @@ void G4AntiNeutronAnnihilationAtRest::AntiNeutronAnnihilation(G4int *nopt)
 	  }
 	  ran1 = G4UniformRand();
 	  Normal(&ran2);
-	  ekin1 = -G4double(ekin) * std::log(ran1) -
+	  ekin1 = -G4double(ekin) * G4Log(ran1) -
 	    cfa * (ran2 * G4float(.5) + G4float(1.));
 	  if (ekin1 < G4float(0.)) {
-	    ekin1 = std::log(ran1) * G4float(-.01);
+	    ekin1 = G4Log(ran1) * G4float(-.01);
 	  }
 	  ekin1 *= G4float(1.);
 	  ekin2 += ekin1;
@@ -634,10 +633,10 @@ void G4AntiNeutronAnnihilationAtRest::AntiNeutronAnnihilation(G4int *nopt)
 	  }
 	  ran1 = G4UniformRand();
 	  Normal(&ran2);
-	  ekin1 = -G4double(ekin) * std::log(ran1) -
+	  ekin1 = -G4double(ekin) * G4Log(ran1) -
 	    cfa * (ran2 * G4float(.5) + G4float(1.));
 	  if (ekin1 < G4float(0.)) {
-	    ekin1 = std::log(ran1) * G4float(-.01);
+	    ekin1 = G4Log(ran1) * G4float(-.01);
 	  }
 	  ekin1 *= G4float(1.);
 	  ekin2 += ekin1;
@@ -708,17 +707,17 @@ G4double G4AntiNeutronAnnihilationAtRest::ExNu(G4float ek1)
     // **   0.35 VALUE AT 1 GEV
     // **   0.05 VALUE AT 0.1 GEV
     cfa = G4float(.13043478260869565);
-    cfa = cfa * std::log(ekin1) + G4float(.35);
+    cfa = cfa * G4Log(ekin1) + G4float(.35);
     if (cfa < G4float(.15)) {
       cfa = G4float(.15);
     }
-    ret_val = cfa * G4float(7.716) * std::exp(-G4double(cfa));
+    ret_val = cfa * G4float(7.716) * G4Exp(-G4double(cfa));
     atno3 = targetAtomicMass;
     if (atno3 > G4float(120.)) {
       atno3 = G4float(120.);
     }
     cfa = (atno3 - G4float(1.)) /
-      G4float(120.) * std::exp(-G4double(atno3 - G4float(1.)) / G4float(120.));
+      G4float(120.) * G4Exp(-G4double(atno3 - G4float(1.)) / G4float(120.));
     ret_val *= cfa;
     r__1 = ekin1;
     fpdiv = G4float(1.) - r__1 * r__1 * G4float(.25);
@@ -727,7 +726,7 @@ G4double G4AntiNeutronAnnihilationAtRest::ExNu(G4float ek1)
     }
     gfa = (targetAtomicMass - G4float(1.)) /
       G4float(70.) * G4float(2.) *
-      std::exp(-G4double(targetAtomicMass - G4float(1.)) / G4float(70.));
+      G4Exp(-G4double(targetAtomicMass - G4float(1.)) / G4float(70.));
     evapEnergy1 = ret_val * fpdiv;
     evapEnergy3 = ret_val - evapEnergy1;
     Normal(&ran1);
@@ -744,6 +743,8 @@ G4double G4AntiNeutronAnnihilationAtRest::ExNu(G4float ek1)
     if (evapEnergy3 < G4float(0.)) {
       evapEnergy3 = G4float(0.);
     }
+
+    // Loop checking, 06-Aug-2015, Vladimir Ivanchenko
     while ((ret_val = evapEnergy1 + evapEnergy3) >= ek1) {
       evapEnergy1 *= G4float(1.) - G4UniformRand() * G4float(.5);
       evapEnergy3 *= G4float(1.) - G4UniformRand() * G4float(.5);

@@ -544,18 +544,18 @@ void DMXPhysicsList::ConstructOp()
 #include "G4CrossSectionPairGG.hh"
 #include "G4BGGNucleonInelasticXS.hh"
 #include "G4ComponentAntiNuclNuclearXS.hh"
-#include "G4GGNuclNuclCrossSection.hh"
+#include "G4ComponentGGNuclNuclXsc.hh"
 
 #include "G4HadronElastic.hh"
 #include "G4HadronCaptureProcess.hh"
 
 // Neutron high-precision models: <20 MeV
-#include "G4NeutronHPElastic.hh"
-#include "G4NeutronHPElasticData.hh"
-#include "G4NeutronHPCapture.hh"
-#include "G4NeutronHPCaptureData.hh"
-#include "G4NeutronHPInelastic.hh"
-#include "G4NeutronHPInelasticData.hh"
+#include "G4ParticleHPElastic.hh"
+#include "G4ParticleHPElasticData.hh"
+#include "G4ParticleHPCapture.hh"
+#include "G4ParticleHPCaptureData.hh"
+#include "G4ParticleHPInelastic.hh"
+#include "G4ParticleHPInelasticData.hh"
 
 // Stopping processes
 #include "G4PiMinusAbsorptionBertini.hh"
@@ -615,9 +615,8 @@ void DMXPhysicsList::ConstructHad()
 
   G4VCrossSectionDataSet * thePiData = new G4CrossSectionPairGG( new G4PiNuclearCrossSection, 91*GeV );
   G4VCrossSectionDataSet * theAntiNucleonData = new G4CrossSectionInelastic( new G4ComponentAntiNuclNuclearXS );
-  G4VCrossSectionDataSet * theGGNuclNuclData = G4CrossSectionDataSetRegistry::Instance()->
-    GetCrossSectionDataSet(G4GGNuclNuclCrossSection::Default_Name());
-
+  G4ComponentGGNuclNuclXsc * ggNuclNuclXsec = new G4ComponentGGNuclNuclXsc();
+  G4VCrossSectionDataSet * theGGNuclNuclData = new G4CrossSectionInelastic(ggNuclNuclXsec);
 
   theParticleIterator->reset();
   while ((*theParticleIterator)()) 
@@ -774,11 +773,11 @@ void DMXPhysicsList::ConstructHad()
         G4HadronElastic* elastic_neutronChipsModel = new G4ChipsElasticModel();
 	elastic_neutronChipsModel->SetMinEnergy( 19.0*MeV );
         theElasticProcess->RegisterMe( elastic_neutronChipsModel );
-	G4NeutronHPElastic * theElasticNeutronHP = new G4NeutronHPElastic;
+	G4ParticleHPElastic * theElasticNeutronHP = new G4ParticleHPElastic;
         theElasticNeutronHP->SetMinEnergy( theHPMin );
         theElasticNeutronHP->SetMaxEnergy( theHPMax );
 	theElasticProcess->RegisterMe( theElasticNeutronHP );
-	theElasticProcess->AddDataSet( new G4NeutronHPElasticData );
+	theElasticProcess->AddDataSet( new G4ParticleHPElasticData );
 	pmanager->AddDiscreteProcess( theElasticProcess );
 	// inelastic scattering		
 	G4NeutronInelasticProcess* theInelasticProcess =
@@ -786,20 +785,20 @@ void DMXPhysicsList::ConstructHad()
 	theInelasticProcess->AddDataSet( new G4BGGNucleonInelasticXS( G4Neutron::Neutron() ) );
 	theInelasticProcess->RegisterMe( theFTFModel1 );
         theInelasticProcess->RegisterMe( theBERTModel1 );
-	G4NeutronHPInelastic * theNeutronInelasticHPModel = new G4NeutronHPInelastic;
+	G4ParticleHPInelastic * theNeutronInelasticHPModel = new G4ParticleHPInelastic;
         theNeutronInelasticHPModel->SetMinEnergy( theHPMin );
         theNeutronInelasticHPModel->SetMaxEnergy( theHPMax );
 	theInelasticProcess->RegisterMe( theNeutronInelasticHPModel );
-	theInelasticProcess->AddDataSet( new G4NeutronHPInelasticData );
+	theInelasticProcess->AddDataSet( new G4ParticleHPInelasticData );
 	pmanager->AddDiscreteProcess(theInelasticProcess);
 	// capture
 	G4HadronCaptureProcess* theCaptureProcess =
 	  new G4HadronCaptureProcess;
-	G4NeutronHPCapture * theLENeutronCaptureModel = new G4NeutronHPCapture;
+	G4ParticleHPCapture * theLENeutronCaptureModel = new G4ParticleHPCapture;
 	theLENeutronCaptureModel->SetMinEnergy(theHPMin);
 	theLENeutronCaptureModel->SetMaxEnergy(theHPMax);
 	theCaptureProcess->RegisterMe(theLENeutronCaptureModel);
-	theCaptureProcess->AddDataSet( new G4NeutronHPCaptureData);
+	theCaptureProcess->AddDataSet( new G4ParticleHPCaptureData);
 	pmanager->AddDiscreteProcess(theCaptureProcess);
 
       }

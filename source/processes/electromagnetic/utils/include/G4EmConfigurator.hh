@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmConfigurator.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4EmConfigurator.hh 91566 2015-07-27 12:20:23Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -73,12 +73,12 @@ public:
   // The model will be added to the list 
   //
   void SetExtraEmModel(const G4String& particleName,
-		       const G4String& processName,
-		       G4VEmModel*,
-		       const G4String& regionName = "",
-		       G4double emin = 0.0,
-		       G4double emax = DBL_MAX,
-		       G4VEmFluctuationModel* fm = 0); 
+                       const G4String& processName,
+                       G4VEmModel*,
+                       const G4String& regionName = "",
+                       G4double emin = 0.0,
+                       G4double emax = DBL_MAX,
+                       G4VEmFluctuationModel* fm = 0); 
 
   // Add all previously declared models to corresponding processes
   // Can be called in ConstructPhysics
@@ -107,13 +107,13 @@ private:
   void SetModelForRegion(G4VEmModel* model,
                          G4VEmFluctuationModel* fm,
                          G4Region* reg,
-			 const G4String& particleName,
+                         const G4String& particleName,
                          const G4String& processName,
                          G4double emin,
                          G4double emax);
 
   G4bool UpdateModelEnergyRange(G4VEmModel* mod,
-				G4double emin, G4double emax);
+                                G4double emin, G4double emax);
 
   // hide assignment operator
   G4EmConfigurator & operator=(const G4EmConfigurator &right);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryVertex.cc 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4PrimaryVertex.cc 91885 2015-08-10 07:05:56Z gcosmo $
 //
 
 #include "G4PrimaryVertex.hh"
@@ -98,7 +98,7 @@ G4PrimaryVertex &  G4PrimaryVertex::operator=(const G4PrimaryVertex & right)
       numberOfParticle += 1;
       theTail = theParticle;
       G4PrimaryParticle * np = theParticle->GetNext();
-      while (np !=0) {
+      while (np !=0) { // Loop checking, 09.08.2015, K.Kurashige
 	numberOfParticle += 1;
 	theTail = np;
 	np = np->GetNext();
@@ -112,7 +112,7 @@ G4PrimaryVertex &  G4PrimaryVertex::operator=(const G4PrimaryVertex & right)
       nextVertex = new G4PrimaryVertex(*(right.nextVertex));
       tailVertex = nextVertex;
       G4PrimaryVertex* nv = nextVertex->GetNext();
-      while (nv !=0) {
+      while (nv !=0) { // Loop checking, 09.08.2015, K.Kurashige
 	tailVertex = nv;
 	nv = nv->GetNext();
       }

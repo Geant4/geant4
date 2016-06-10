@@ -1,5 +1,5 @@
 #
-# ------ GNU/LINUX ------ gcc 3.2 and higher
+# ------ GNU/LINUX ------ gcc 4.8 and higher
 #
 ifeq ($(G4SYSTEM),Linux-g++)
   CXX       := g++

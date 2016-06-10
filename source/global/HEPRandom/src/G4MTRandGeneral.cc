@@ -27,14 +27,14 @@
 // $Id:$
 //
 #if __clang__
-  #if (defined(G4MULTITHREADED) && !defined(G4USE_STD11) && \
+  #if ((defined(G4MULTITHREADED) && !defined(G4USE_STD11)) || \
       !__has_feature(cxx_thread_local))
     #define CLANG_NOSTDTLS
   #endif
 #endif
 
-#if (defined(G4MULTITHREADED) && !defined(G4USE_STD11)) || \
-    (defined(CLANG_NOSTDTLS))
+#if (defined(G4MULTITHREADED) && \
+    (!defined(G4USE_STD11) || (defined(CLANG_NOSTDTLS) || defined(__INTEL_COMPILER))))
 
 #include "G4MTRandGeneral.hh"
 

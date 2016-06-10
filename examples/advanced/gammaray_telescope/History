@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 85586 2014-10-31 09:10:31Z gcosmo $
+$Id: History 93678 2015-10-28 10:03:43Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History 85586 2014-10-31 09:10:31Z gcosmo $
 
                           History file
                           ------------
+
+27.10.2015 - A. Ribon, Tag gammaraytel-V10-01-00 
+             GammaRayTelIonPhysics: replaced old G4GGNuclNuclCrossSection
+             class with the new, recommended one, G4ComponentGGNuclNuclXsc .
 
 30.10.2014   V.Ivanchenko, Tag gammaraytel-V10-00-08
              Use correct mu- stopping process

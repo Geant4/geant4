@@ -1,0 +1,45 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_gl_manager
+#define tools_sg_gl_manager
+
+#include "enums"
+#include "senums"
+#include "../img"
+#include "../vdata"
+
+namespace tools {
+namespace sg {
+
+class gl_manager {
+public:
+  virtual void begin_render(unsigned int,unsigned int,    //drawing area size
+                            float,float,float,float) = 0; //back color
+  virtual void end_render() = 0;
+
+  virtual unsigned int create_texture(const tools::img_byte&) = 0;
+  virtual unsigned int create_gsto_from_data(unsigned int,const float*) = 0;
+
+  virtual bool is_gsto_id_valid(unsigned int) const = 0;
+  virtual void delete_gsto(unsigned int) = 0;
+
+  // since rm of <TMGR,TRENDER> :
+  virtual gsto_mode get_gsto_mode() const = 0;
+  virtual void set_gsto_mode(gsto_mode) = 0;
+  virtual void available_gsto_modes(std::vector<std::string>&) = 0;
+  virtual void available_not_memory_gsto_mode(std::string&) const = 0;
+  virtual unsigned int used_texture_memory() const = 0;
+  virtual unsigned int gstos_size() const = 0;
+public:
+  virtual ~gl_manager(){}
+public:
+  unsigned int create_gsto_from_data(const std::vector<float>& a_xyzs){
+    const float* _xyzs = vec_data<float>(a_xyzs);
+    return create_gsto_from_data(a_xyzs.size(),_xyzs);    
+  }
+};
+
+}}
+
+#endif

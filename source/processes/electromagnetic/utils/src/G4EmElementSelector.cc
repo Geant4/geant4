@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmElementSelector.cc 83007 2014-07-24 14:46:57Z gcosmo $
+// $Id: G4EmElementSelector.cc 92921 2015-09-21 15:06:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -53,18 +53,17 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmElementSelector::G4EmElementSelector(G4VEmModel* mod, 
-					 const G4Material* mat, 
-					 G4int bins, 
-					 G4double emin, 
-					 G4double emax,
-					 G4bool):
+                                         const G4Material* mat, 
+                                         G4int bins, 
+                                         G4double emin, 
+                                         G4double emax,
+                                         G4bool):
   model(mod), material(mat), nbins(bins), cutEnergy(-1.0), 
   lowEnergy(emin), highEnergy(emax)
 {
   G4int n = material->GetNumberOfElements();
   nElmMinusOne = n - 1;
   theElementVector = material->GetElementVector();
-  //  element = (*theElementVector)[0];
   if(nElmMinusOne > 0) {
     xSections.reserve(n);
     G4PhysicsLogVector* v0 = new G4PhysicsLogVector(lowEnergy,highEnergy,nbins);
@@ -77,8 +76,8 @@ G4EmElementSelector::G4EmElementSelector(G4VEmModel* mod,
   }
   /*  
   G4cout << "G4EmElementSelector for " << mat->GetName() << " n= " << n
-	 << " nbins= " << nbins << "  Emin= " << lowEnergy 
-	 << " Emax= " << highEnergy << G4endl;
+         << " nbins= " << nbins << "  Emin= " << lowEnergy 
+         << " Emax= " << highEnergy << G4endl;
   */
 }
 
@@ -94,7 +93,7 @@ G4EmElementSelector::~G4EmElementSelector()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4EmElementSelector::Initialise(const G4ParticleDefinition* part, 
-				     G4double cut)
+                                     G4double cut)
 {
   //G4cout << "G4EmElementSelector initialise for " << material->GetName()
   //  << G4endl;
@@ -115,8 +114,8 @@ void G4EmElementSelector::Initialise(const G4ParticleDefinition* part,
     //G4cout << "j= " << j << " e(MeV)= " << e/MeV << G4endl;
     for (G4int i=0; i<=nElmMinusOne; ++i) {
       cross += theAtomNumDensityVector[i]*      
-	model->ComputeCrossSectionPerAtom(part, (*theElementVector)[i], e, 
-					  cutEnergy, e);
+        model->ComputeCrossSectionPerAtom(part, (*theElementVector)[i], e, 
+                                          cutEnergy, e);
       xSections[i]->PutValue(j, cross);
     }
   }
@@ -140,7 +139,7 @@ void G4EmElementSelector::Initialise(const G4ParticleDefinition* part,
     if(cross > 0.0) {
       for (G4int i=0; i<nElmMinusOne; ++i) {
         G4double x = (*xSections[i])[j]/cross;
-	xSections[i]->PutValue(j, x);
+        xSections[i]->PutValue(j, x);
       }
     }
   }
@@ -162,8 +161,8 @@ void G4EmElementSelector::Dump(const G4ParticleDefinition* part)
     }
   }  
   G4cout << "Last Element in element vector " 
-	 << (*theElementVector)[nElmMinusOne]->GetName() 
-	 << G4endl;
+         << (*theElementVector)[nElmMinusOne]->GetName() 
+         << G4endl;
   G4cout << G4endl;
 }
 

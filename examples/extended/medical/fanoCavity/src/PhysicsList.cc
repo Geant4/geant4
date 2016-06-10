@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 86064 2014-11-07 08:49:32Z gcosmo $
+// $Id: PhysicsList.cc 90848 2015-06-10 13:44:30Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,12 +52,14 @@
 #include "G4Geantino.hh"
 #include "G4Gamma.hh"
 
+
 // leptons
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 
 // Hadrons
 #include "G4Proton.hh"
+#include "G4GenericIon.hh"
 
 #include "G4SystemOfUnits.hh"
 
@@ -91,6 +93,8 @@ PhysicsList::~PhysicsList()
 
 void PhysicsList::ConstructParticle()
 {
+
+  G4cout << "DEBUG" << G4endl;
   // pseudo-particles
   G4Geantino::GeantinoDefinition();
   G4ChargedGeantino::ChargedGeantinoDefinition();
@@ -104,6 +108,9 @@ void PhysicsList::ConstructParticle()
 
   // baryons
   G4Proton::ProtonDefinition();  
+
+  // Generic Ion
+  G4GenericIon::GenericIonDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

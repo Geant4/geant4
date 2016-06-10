@@ -1,4 +1,4 @@
-$Id: History 84401 2014-10-15 07:23:36Z gcosmo $
+$Id: History 94234 2015-11-09 10:58:13Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,82 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09-11-15 V.Ivanchenko (materials-V10-01-14)
+- fixed typo in comments (no code change)
+
+04-11-15 V.Ivanchenko (materials-V10-01-13)
+- G4AtomicShells - restored previous version of the class (rewritten
+    version can be deployed only after the release)
+- G4Material - rolled back equal operators from private to public 
+    in order do break user interface
+
+02-11-15 L.G.Sarmiento (materials-V10-01-12)
+- G4AtomicShells rewritten from EADL values used for BrICC calculation.
+    Also extended for elements up to Z=120.
+
+24-10-15 V.Ivanchenko (materials-V10-01-11)
+- G4Element - improved printout
+- G4Material - some cleanup, removed unused fImplicitElement flag
+- G4IonisParamMat - use G4Exp, G4Log, all operators moved to private
+
+23-10-15 V.Ivanchenko (materials-V10-01-10)
+- G4NistMaterialBuilder - fixed extra problem of gas density in the
+    ConstructNewGasMaterial method (P.Gumplinger)
+- G4Element - always define effective number of nucleons as 
+    fNeff = fAeff/(g/mole) (address concern of J. Leacock:
+    HyperNews/geant4/get/hadronprocess/1495.html); it is recommended
+    to use element->GetN() for average atomic mass, for number of 
+    nucleons to use G4lrint(element->GetN())
+- G4IonisParamMat - use double argument to compute A^2/3
+
+22-10-15 V.Ivanchenko (materials-V10-01-09)
+- G4NistMaterialBuilder - fixed computation of gas density in the
+    ConstructNewGasMaterial method (P.Gumplinger)
+
+12-08-15 V.Ivanchenko (materials-V10-01-08)
+11-08-15 V.Ivanchenko (materials-V10-01-07)
+- G4IonisParamMat - added protection on the new correction 
+    for the case of large diference between nominal density and
+    defined density of the material; for big difference 
+    Sternheimer-1971 parameterisation is used, while normally
+    Sternheimer-1984 is applied; important for vacuum and 
+    low-density gas
+
+11-08-15 V.Ivanchenko (materials-V10-01-06)
+- G4NistManager, G4NistMaterialBuilder - added method GetNominalDensity
+- G4IonisParamMat - density effect parameterisation is corrected if 
+    density of a simple (one component) material differs from the 
+    nominal value (problem #1765) 
+
+07-08-15 V.Ivanchenko (materials-V10-01-05)
+- Added checks on do/while loops
+
+28-05-15 V.Ivanchenko (materials-V10-01-04)
+- G4NistManager - fixed problem #1747 - correct printout of elements
+    and materials
+
+30-04-15 V.Ivanchenko (materials-V10-01-03)
+- G4NistMaterialBuilder, G4SandiaTable - fixed minor Coverity reports
+
+27-02-15 V.Ivanchenko (materials-V10-01-02)
+- G4NistManager - added method FindOrBuildSimpleMaterial(Z); 
+    removed GetLOGA (dublicated method with G4Pow)
+- G4NistMaterialBuilder - added FindOrBuildSimpleMaterial(Z);
+    splited the longest private method into two methods
+
+06-02-15 V.Ivanchenko (materials-V10-01-01)
+- G4Material, G4NistManager, G4NistMaterialBuilder, G4IonisParamMat 
+    introduced NTP_Temperature=20C; set this tempature default for 
+    all materials instead of STP_Temperature; this is needed,
+    because NIST materials are defined for NTP and not for STP 
+    conditions; addressed problem report #1704; no change in 
+    results of EM testing suite (densities of materials 
+    used in tests are not changed)
+
+15-01-15 V.Ivanchenko (materials-V10-01-00)
+- G4Material, G4Element, G4Isotope - make arguments of stream 
+    operator const (fix proposed by D. Mancusi)
 
 13-10-14 V.Ivanchenko (materials-V10-00-26)
 - G4SandiaData - optimized run time methods

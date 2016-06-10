@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VKinkyStringDecay.cc 69569 2013-05-08 13:19:50Z gcosmo $
+// $Id: G4VKinkyStringDecay.cc 91857 2015-08-07 13:55:49Z gcosmo $
 //  Maxim Komogorov
 //
 // -----------------------------------------------------------------------------
@@ -54,7 +54,7 @@ G4double G4VKinkyStringDecay::GetLightConeGluonZ(G4double zmin, G4double zmax)
        z = zmin + G4UniformRand()*(zmax-zmin);
        yf = z*z +sqr(1 - z);	
        } 
-    while (G4UniformRand() > yf); 
+    while (G4UniformRand() > yf);  /* Loop checking, 07.08.2015, A.Ribon */ 
     return z;
     }
 
@@ -91,7 +91,7 @@ G4KineticTrackVector* G4VKinkyStringDecay::FragmentString(const G4ExcitedString&
     G4KineticTrackVector* KTV2 = theLongitudinalStringDecay->FragmentString(Str2);
 
     if (KTV1 && KTV2)
-         while(!KTV2->empty())
+         while(!KTV2->empty())  /* Loop checking, 07.08.2015, A.Ribon */
 	 {
              KTV1->push_back(KTV2->back());
 	     KTV1->erase(KTV1->end()-1);

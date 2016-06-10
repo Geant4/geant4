@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronBetaDecayChannel.cc 78171 2013-12-04 13:22:18Z gunter $
+// $Id: G4NeutronBetaDecayChannel.cc 91896 2015-08-10 09:54:06Z gcosmo $
 // GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 // 
@@ -168,14 +168,15 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   G4double w;                    // cosine of e-nu angle
   G4double r;  
   G4double r0;
-  do {
+  const size_t MAX_LOOP=10000;
+  for (size_t loop_counter=0; loop_counter <MAX_LOOP; ++loop_counter){
       x = xmax*G4UniformRand();
       p = std::sqrt(x*(x+2.0*dm));
       w = 1.0-2.0*G4UniformRand();
       r = p*(x+dm)*(xmax-x)*(xmax-x)*(1.0+aENuCorr*p/(x+dm)*w);
       r0 = G4UniformRand()*(xmax+dm)*(xmax+dm)*xmax*xmax*(1.0+aENuCorr);
-  } while (r < r0);    
-
+      if  (r > r0) break;
+   }  
 
   //create daughter G4DynamicParticle 
   // rotation materix to lab frame

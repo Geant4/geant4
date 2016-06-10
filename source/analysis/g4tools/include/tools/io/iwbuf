@@ -1,0 +1,67 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_io_iwbuf
+#define tools_io_iwbuf
+
+#include "../typedefs"
+
+#include <vector>
+#include <string>
+
+namespace tools {
+namespace io {
+
+class iwbuf {
+public:
+  virtual ~iwbuf() {}
+public:
+  virtual bool write(uchar) = 0;
+  virtual bool write(char) = 0;
+  virtual bool write(uint16) = 0;
+  virtual bool write(int16) = 0;
+  virtual bool write(uint32) = 0;
+  virtual bool write(int32) = 0;
+  virtual bool write(uint64) = 0;
+  virtual bool write(int64) = 0;
+  virtual bool write(float) = 0;
+  virtual bool write(double) = 0;
+  virtual bool write(bool) = 0;
+
+  virtual bool write_vec(uint32,const uchar*) = 0;
+  virtual bool write_vec(uint32,const char*) = 0;
+  virtual bool write_vec(uint32,const uint16*) = 0;
+  virtual bool write_vec(uint32,const int16*) = 0;
+  virtual bool write_vec(uint32,const uint32*) = 0;
+  virtual bool write_vec(uint32,const int32*) = 0;
+  virtual bool write_vec(uint32,const uint64*) = 0;
+  virtual bool write_vec(uint32,const int64*) = 0;
+  virtual bool write_vec(uint32,const float*) = 0;
+  virtual bool write_vec(uint32,const double*) = 0;
+  virtual bool write_vec(uint32,const bool*) = 0;
+
+  virtual bool write_vec(const std::vector<std::string>&) = 0;
+
+  virtual bool write_cstr(const char* a_cstr) = 0;
+
+  virtual bool write_img(uint32,uint32,uint32,const uchar*) = 0;
+
+  typedef std::vector< std::vector<unsigned int> > std_vec_vec_uint_t;
+  virtual bool write_std_vec_vec(const std_vec_vec_uint_t&) = 0;
+
+  typedef std::vector< std::vector<float> > std_vec_vec_float_t;
+  virtual bool write_std_vec_vec(const std_vec_vec_float_t&) = 0;
+
+  typedef std::vector< std::vector<double> > std_vec_vec_double_t;
+  virtual bool write_std_vec_vec(const std_vec_vec_double_t&) = 0;
+
+  typedef std::vector< std::vector<std::string> > std_vec_vec_string_t;
+  virtual bool write_std_vec_vec(const std_vec_vec_string_t&) = 0;
+public:
+  virtual const char* buf() const = 0;
+  virtual uint32 length() const = 0;
+};
+
+}}
+
+#endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BohrFluctuations.cc 72048 2013-07-04 12:39:58Z gcosmo $
+// $Id: G4BohrFluctuations.cc 91726 2015-08-03 15:41:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -94,10 +94,10 @@ void G4BohrFluctuations::InitialiseMe(const G4ParticleDefinition* part)
 
 G4double 
 G4BohrFluctuations::SampleFluctuations(const G4MaterialCutsCouple* couple,
-				       const G4DynamicParticle* dp,
-				       G4double tmax,
-				       G4double length,
-				       G4double meanLoss)
+                                       const G4DynamicParticle* dp,
+                                       G4double tmax,
+                                       G4double length,
+                                       G4double meanLoss)
 {
   if(meanLoss <= minLoss) { return meanLoss; }
   const G4Material* material = couple->GetMaterial();
@@ -125,11 +125,13 @@ G4BohrFluctuations::SampleFluctuations(const G4MaterialCutsCouple* couple,
       G4double x;
       do {
         loss = twomeanLoss*G4UniformRand();
-	x = (loss - meanLoss)/siga;
+        x = (loss - meanLoss)/siga;
+        // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
       } while (1.0 - 0.5*x*x < G4UniformRand());
     } else {
       do {
         loss = G4RandGauss::shoot(meanLoss,siga);
+        // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
       } while (0.0 > loss || loss > twomeanLoss);
     }
 
@@ -146,9 +148,9 @@ G4BohrFluctuations::SampleFluctuations(const G4MaterialCutsCouple* couple,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4BohrFluctuations::Dispersion(const G4Material* material,
-					const G4DynamicParticle* dp,
-					G4double tmax,
-					G4double length)
+                                        const G4DynamicParticle* dp,
+                                        G4double tmax,
+                                        G4double length)
 {
   if(!particle) { InitialiseMe(dp->GetDefinition()); }
 

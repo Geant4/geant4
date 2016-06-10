@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InteractionContent.hh 83684 2014-09-09 12:37:39Z gcosmo $
+// $Id: G4InteractionContent.hh 89732 2015-04-29 09:00:48Z gcosmo $
 //
 
 #ifndef G4InteractionContent_h
@@ -188,8 +188,10 @@ inline void G4InteractionContent::SetNumberOfDiffractiveCollisions(int nCol)
 
 inline void G4InteractionContent::SplitHadrons()
 {
-	if ( theProjectile != NULL ) theProjectile->SplitUp();
-	if ( theTarget != NULL ) theTarget->SplitUp();
+//G4cout<<"InterContent Proj "<<theProjectile<<G4endl;
+	if ( theProjectile != NULL ) {theProjectile->SplitUp();}
+//G4cout<<"InterContent Targ "<<theTarget<<G4endl;
+	if ( theTarget != NULL )     {theTarget->SplitUp();}
         #ifdef G4DEBUG
 	//  Dump();
 	#endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc 72057 2013-07-04 13:07:29Z gcosmo $
+// $Id: G4NistElementBuilder.cc 94234 2015-11-09 10:58:13Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -38,7 +38,7 @@
 // Modifications:
 // 02.05.2006 Subtract mass of atomic electrons from NIST mass (VI) 
 // 11.05.2006 Do not subtract mass of atomic electrons from NIST mass (VI) 
-// 17.10.2006 Add natiral abandances flag to element and 
+// 17.10.2006 Add natiral abundances flag to element and 
 //            use G4 units for isotope mass vector (VI) 
 // 10.05.2007 Add protection agains Z>101 (VI)
 // 26.07.2007 Create one and only one Nist element with given Z and
@@ -83,6 +83,7 @@ G4NistElementBuilder::~G4NistElementBuilder()
 G4int G4NistElementBuilder::GetZ(const G4String& name) const
 {
   G4int Z = maxNumElements;
+  // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
   do {--Z;} while( Z>0 && elmSymbol[Z] != name);
   return Z;
 }
@@ -92,6 +93,7 @@ G4int G4NistElementBuilder::GetZ(const G4String& name) const
 G4double G4NistElementBuilder::GetAtomicMassAmu(const G4String& name) const
 {
   G4int Z = maxNumElements;
+  // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
   do {--Z;} while( Z>0 && elmSymbol[Z] != name);
   return GetAtomicMassAmu(Z);
 }

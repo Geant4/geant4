@@ -34,8 +34,6 @@
 #include "G4OpenGLViewer.hh"
 #ifdef G4OPENGL_VERSION_2
 
-#define G4DEBUG_VIS_OGL 1
-
 #include "G4OpenGLVboDrawer.hh"
 
 #ifdef G4VIS_BUILD_OPENGLWT_DRIVER

@@ -27,7 +27,7 @@
 /// \brief Implementation of the Em10PhysicsList class
 //
 //
-// $Id: Em10PhysicsList.cc 68585 2013-04-01 23:35:07Z adotti $
+// $Id: Em10PhysicsList.cc 90463 2015-06-01 09:33:38Z gcosmo $
 //
 
 #include "Em10PhysicsList.hh"
@@ -63,7 +63,7 @@
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
 #include "G4PAIModel.hh"
-#include "G4PAIPhotonModel.hh"
+#include "G4PAIPhotModel.hh"
 
 #include "G4SynchrotronRadiation.hh"
 
@@ -88,9 +88,8 @@
 
 #include "Em10StepCut.hh"
 
-/////////////////////////////////////////////////////////////
-//
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em10PhysicsList::Em10PhysicsList(Em10DetectorConstruction* p)
   :  G4VUserPhysicsList(),
@@ -122,9 +121,7 @@ Em10PhysicsList::~Em10PhysicsList()
   delete physicsListMessenger; 
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em10PhysicsList::ConstructParticle()
 {
@@ -139,15 +136,15 @@ void Em10PhysicsList::ConstructParticle()
   ConstructBarions();
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em10PhysicsList::ConstructBosons()
 {
   // gamma
   G4Gamma::GammaDefinition();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em10PhysicsList::ConstructLeptons()
 {
@@ -164,6 +161,8 @@ void Em10PhysicsList::ConstructLeptons()
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void Em10PhysicsList::ConstructMesons()
 {
  //  mesons
@@ -175,6 +174,7 @@ void Em10PhysicsList::ConstructMesons()
   G4KaonMinus::KaonMinusDefinition();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em10PhysicsList::ConstructBarions()
 {
@@ -184,10 +184,7 @@ void Em10PhysicsList::ConstructBarions()
   G4AntiProton::AntiProtonDefinition();
 }
 
-
-///////////////////////////////////////////////////////////////////////
-//
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em10PhysicsList::ConstructProcess()
 {
@@ -196,9 +193,7 @@ void Em10PhysicsList::ConstructProcess()
   ConstructGeneral();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em10PhysicsList::ConstructEM()
 {
@@ -240,7 +235,6 @@ void Em10PhysicsList::ConstructEM()
   }
   else if(fXTRModel == "strawR" ) 
   {
-
     // G4StrawTubeXTRadiator* 
     processXTR = new G4StrawTubeXTRadiator(pDet->GetLogicalRadiator(),
                                          pDet->GetFoilMaterial(),
@@ -404,6 +398,8 @@ void Em10PhysicsList::ConstructEM()
   opt.SetApplyCuts(true);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void Em10PhysicsList::ConstructGeneral()
 {
   // Add Decay Process
@@ -428,7 +424,7 @@ void Em10PhysicsList::ConstructGeneral()
   }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em10PhysicsList::SetCuts()
 {
@@ -460,21 +456,21 @@ void Em10PhysicsList::SetCuts()
   if (verboseLevel > 1)     DumpCutValuesTable();
 }
 
-///////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em10PhysicsList::SetGammaCut(G4double val)
 {
   cutForGamma = val;
 }
 
-///////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em10PhysicsList::SetElectronCut(G4double val)
 {
   cutForElectron = val;
 }
 
-////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em10PhysicsList::SetMaxStep(G4double step)
 {
@@ -483,7 +479,7 @@ void Em10PhysicsList::SetMaxStep(G4double step)
   G4cout << G4endl;
 }
 
-/////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em10PhysicsList::SetRadiatorCuts()
 {
@@ -498,7 +494,7 @@ void Em10PhysicsList::SetRadiatorCuts()
   G4cout<<"Radiator positron cut = "<<fPositronCut/mm<<" mm"<<G4endl;
 }
 
-/////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em10PhysicsList::SetDetectorCuts()
 {
@@ -513,3 +509,5 @@ void Em10PhysicsList::SetDetectorCuts()
   G4cout<<"Detector positron cut = "<<fPositronCut/mm<<" mm"<<G4endl;
 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

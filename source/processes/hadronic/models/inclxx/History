@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History 86862 2014-11-19 14:38:22Z gcosmo $
+$Id: History 94589 2015-11-25 11:11:05Z gcosmo $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -15,6 +15,45 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+25 November 2015 - Davide Mancusi (hadr-inclxx-V10-01-07)
+---------------------------------------------------------------
+- INCL++ v5.2.9.5
+  o Really fix nuclide name parsing.
+
+24 November 2015 - Davide Mancusi (hadr-inclxx-V10-01-06)
+---------------------------------------------------------------
+- INCL++ v5.2.9.4
+  o Omit use of real masses from incl42 physics option.
+  o Fix nuclide name parsing.
+
+24 November 2015 - Davide Mancusi (hadr-inclxx-V10-01-05)
+---------------------------------------------------------------
+- Fix GNUMake build.
+
+23 November 2015 - Davide Mancusi (hadr-inclxx-V10-01-03, -04)
+---------------------------------------------------------------
+- INCL++ v5.2.9.3
+    o Add some setters for Config members.
+    o Remove INCL_INVERSE_KINEMATICS compile-time symbol.
+    o Add UI commands to control the INCL physics and the coupled de-excitation model.
+
+10 July 2015 - Davide Mancusi (hadr-inclxx-V10-01-02)
+---------------------------------------------------------------
+- INCL++ v5.2.9.1
+  o Checked all the while loops in the code and added guards and comments.
+
+10 July 2015 - Davide Mancusi (hadr-inclxx-V10-01-01)
+---------------------------------------------------------------
+- INCL++ v5.2.9
+  o Introduces the possibility to perform calculations with a limited number of
+    outgoing pions in multipion collisions.
+
+26 May 2015 - Robert Hatcher (hadr-inclxx-V10-01-00)
+---------------------------------------------------------------
+- Remove unnecessary "using namespace std" from G4INCLXXInterface.hh
+  that causes problems w/ G4AnyMethod & G4GenericPhysicsList
+  when using clang and/or vc12
 
 19 November 2014 - Davide Mancusi (hadr-inclxx-V10-00-25)
 ---------------------------------------------------------------

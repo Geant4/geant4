@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.cc 83392 2014-08-21 14:36:35Z gcosmo $
+// $Id: HepPolyhedron.cc 89678 2015-04-27 09:03:18Z gcosmo $
 //
 // 
 //
@@ -35,7 +35,7 @@
 //
 // 30.09.96 E.Chernyaev
 // - added GetNextVertexIndex, GetVertex by Yasuhide Sawada
-// - added GetNextUnitNormal, GetNextEdgeIndeces, GetNextEdge
+// - added GetNextUnitNormal, GetNextEdgeIndices, GetNextEdge
 //
 // 15.12.96 E.Chernyaev
 // - added GetNumberOfRotationSteps, RotateEdge, RotateAroundZ, SetReferences
@@ -66,6 +66,7 @@
 
 #include <cstdlib>  // Required on some compilers for std::abs(int) ...
 #include <cmath>
+#include <cassert>
 
 using CLHEP::perMillion;
 using CLHEP::deg;
@@ -91,7 +92,7 @@ std::ostream & operator<<(std::ostream & ostr, const G4Facet & facet) {
 
 std::ostream & operator<<(std::ostream & ostr, const HepPolyhedron & ph) {
   ostr << std::endl;
-  ostr << "Nverteces=" << ph.nvert << ", Nfacets=" << ph.nface << std::endl;
+  ostr << "Nvertices=" << ph.nvert << ", Nfacets=" << ph.nface << std::endl;
   G4int i;
   for (i=1; i<=ph.nvert; i++) {
      ostr << "xyz(" << i << ")="
@@ -359,9 +360,9 @@ void HepPolyhedron::SetSideFacets(G4int ii[4], G4int vv[4],
  *                                                                     *
  * Function: Set side facets for the case of incomplete rotation       *
  *                                                                     *
- * Input: ii[4] - indeces of original verteces                         *
+ * Input: ii[4] - indices of original vertices                         *
  *        vv[4] - visibility of edges                                  *
- *        kk[]  - indeces of nodes                                     *
+ *        kk[]  - indices of nodes                                     *
  *        r[]   - radiuses                                             *
  *        dphi  - delta phi                                            *
  *        nds    - number of discrete steps                            *
@@ -964,14 +965,14 @@ G4bool HepPolyhedron::GetNextVertex(G4Point3D &vertex, G4int &edgeFlag,
   }
 }
 
-G4bool HepPolyhedron::GetNextEdgeIndeces(G4int &i1, G4int &i2, G4int &edgeFlag,
+G4bool HepPolyhedron::GetNextEdgeIndices(G4int &i1, G4int &i2, G4int &edgeFlag,
                                        G4int &iface1, G4int &iface2) const
 /***********************************************************************
  *                                                                     *
- * Name: HepPolyhedron::GetNextEdgeIndeces          Date:    30.09.96  *
+ * Name: HepPolyhedron::GetNextEdgeIndices          Date:    30.09.96  *
  * Author: E.Chernyaev                              Revised: 17.11.99  *
  *                                                                     *
- * Function: Get indeces of the next edge together with indeces of     *
+ * Function: Get indices of the next edge together with indices of     *
  *           of the faces which share the edge.                        *
  *           Returns false when the last edge.                         *
  *                                                                     *
@@ -1017,19 +1018,19 @@ G4bool HepPolyhedron::GetNextEdgeIndeces(G4int &i1, G4int &i2, G4int &edgeFlag,
 }
 
 G4bool
-HepPolyhedron::GetNextEdgeIndeces(G4int &i1, G4int &i2, G4int &edgeFlag) const
+HepPolyhedron::GetNextEdgeIndices(G4int &i1, G4int &i2, G4int &edgeFlag) const
 /***********************************************************************
  *                                                                     *
- * Name: HepPolyhedron::GetNextEdgeIndeces          Date:    17.11.99  *
+ * Name: HepPolyhedron::GetNextEdgeIndices          Date:    17.11.99  *
  * Author: E.Chernyaev                              Revised:           *
  *                                                                     *
- * Function: Get indeces of the next edge.                             *
+ * Function: Get indices of the next edge.                             *
  *           Returns false when the last edge.                         *
  *                                                                     *
  ***********************************************************************/
 {
   G4int kface1, kface2;
-  return GetNextEdgeIndeces(i1, i2, edgeFlag, kface1, kface2);
+  return GetNextEdgeIndices(i1, i2, edgeFlag, kface1, kface2);
 }
 
 G4bool
@@ -1047,7 +1048,7 @@ HepPolyhedron::GetNextEdge(G4Point3D &p1,
  ***********************************************************************/
 {
   G4int i1,i2;
-  G4bool rep = GetNextEdgeIndeces(i1,i2,edgeFlag);
+  G4bool rep = GetNextEdgeIndices(i1,i2,edgeFlag);
   p1 = pV[i1];
   p2 = pV[i2];
   return rep;
@@ -1061,14 +1062,14 @@ HepPolyhedron::GetNextEdge(G4Point3D &p1, G4Point3D &p2,
  * Name: HepPolyhedron::GetNextEdge                 Date:    17.11.99  *
  * Author: E.Chernyaev                              Revised:           *
  *                                                                     *
- * Function: Get next edge with indeces of the faces which share       *
+ * Function: Get next edge with indices of the faces which share       *
  *           the edge.                                                 *
  *           Returns false when the last edge.                         *
  *                                                                     *
  ***********************************************************************/
 {
   G4int i1,i2;
-  G4bool rep = GetNextEdgeIndeces(i1,i2,edgeFlag,iface1,iface2);
+  G4bool rep = GetNextEdgeIndices(i1,i2,edgeFlag,iface1,iface2);
   p1 = pV[i1];
   p2 = pV[i2];
   return rep;
@@ -2032,6 +2033,7 @@ HepPolyhedronTorus::HepPolyhedronTorus(G4double rmin,
   //   P R E P A R E   T W O   P O L Y L I N E S
 
   G4int np1 = GetNumberOfRotationSteps();
+  assert(np1>0);
   G4int np2 = rmin < spatialTolerance ? 1 : np1;
 
   G4double *zz, *rr;

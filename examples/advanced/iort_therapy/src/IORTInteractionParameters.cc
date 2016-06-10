@@ -84,110 +84,110 @@ IORTInteractionParameters::~IORTInteractionParameters()
 }
 
 G4double IORTInteractionParameters::GetStopping (G4double ene, 
-	                                                  const G4ParticleDefinition* pDef, 
-						          const G4Material* pMat,
-							  G4double dens)
+						 const G4ParticleDefinition* pDef, 
+						 const G4Material* pMat,
+						 G4double dens)
 {
     if (dens) return ComputeTotalDEDX(ene, pDef, pMat)/dens;
     return ComputeTotalDEDX(ene, pDef, pMat);
 }
 bool IORTInteractionParameters::GetStoppingTable(const G4String& vararg)
 {
-	// Check arguments
-	if ( !ParseArg(vararg)) return false;
-	// Clear previous energy & mass sp vectors
-        energy.clear(); 
-        massDedx.clear();
-	// log scale 
-	if (kinEmin != kinEmax && npoints >1)
+  // Check arguments
+  if ( !ParseArg(vararg)) return false;
+  // Clear previous energy & mass sp vectors
+  energy.clear(); 
+  massDedx.clear();
+  // log scale 
+  if (kinEmin != kinEmax && npoints >1)
+    {
+      G4double logmin = std::log10(kinEmin);
+      G4double logmax = std::log10(kinEmax); 
+      G4double en;
+      // uniform log space
+      for (G4double c = 0.; c < npoints; c++)
 	{
-	    G4double logmin = std::log10(kinEmin);
-	    G4double logmax = std::log10(kinEmax); 
-	    G4double en;
-	    // uniform log space
-            for (G4double c = 0.; c < npoints; c++)
-	       {
-		    en = std::pow(10., logmin + ( c*(logmax-logmin)  / (npoints - 1.)) );  
-		    energy.push_back(en/MeV);
-		    dedxtot =  ComputeTotalDEDX (en, particle, material);
-	            massDedx.push_back ( (dedxtot / density)/(MeV*cm2/g) );
-	       }
+	  en = std::pow(10., logmin + ( c*(logmax-logmin)  / (npoints - 1.)) );  
+	  energy.push_back(en/MeV);
+	  dedxtot =  ComputeTotalDEDX (en, particle, material);
+	  massDedx.push_back ( (dedxtot / density)/(MeV*cm2/g) );
 	}
-	else // one point only
-	{
-	    energy.push_back(kinEmin/MeV);
-	    dedxtot =  ComputeTotalDEDX (kinEmin, particle, material);
-	    massDedx.push_back ( (dedxtot / density)/(MeV*cm2/g) );
-	}
-
-    G4cout.precision(6);  
-    data <<  "MeV             " << "MeV*cm2/g      " << particle << " (into " << 
-	    material << ", density = " << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
-    data << G4endl;
-    data << std::left << std::setfill(' ');
-    for (size_t i=0; i<energy.size(); i++){
-		data << std::setw(16) << energy[i] << massDedx[i] << G4endl;
-	}
-    outfile.close();
-    // This will plot 
+    }
+  else // one point only
+    {
+      energy.push_back(kinEmin/MeV);
+      dedxtot =  ComputeTotalDEDX (kinEmin, particle, material);
+      massDedx.push_back ( (dedxtot / density)/(MeV*cm2/g) );
+    }
+  
+  G4cout.precision(6);  
+  data <<  "MeV             " << "MeV*cm2/g      " << particle << " (into " << 
+    material << ", density = " << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+  data << G4endl;
+  data << std::left << std::setfill(' ');
+  for (size_t i=0; i<energy.size(); i++){
+    data << std::setw(16) << energy[i] << massDedx[i] << G4endl;
+  }
+  outfile.close();
+  // This will plot 
 #ifdef G4ANALYSIS_USE_ROOT 
-    PlotStopping("pdf");
+  PlotStopping("pdf");
 #endif
 
-// Info to user
-    G4String ofName = (filename == "") ? "User terminal": filename;
-    G4cout << "User choice:\n";
-    G4cout << "Kinetic energy lower limit= "<< G4BestUnit(kinEmin,"Energy") << 
-	      ", Kinetic energy upper limit= " << G4BestUnit(kinEmax,"Energy") << 
-	         ", npoints= "<< npoints << ", particle= \"" << particle << 
-		 "\", material= \"" << material << "\", filename= \""<< 
-		 ofName << "\"" << G4endl;
-    return true;
+  // Info to user
+  G4String ofName = (filename == "") ? "User terminal": filename;
+  G4cout << "User choice:\n";
+  G4cout << "Kinetic energy lower limit= "<< G4BestUnit(kinEmin,"Energy") << 
+    ", Kinetic energy upper limit= " << G4BestUnit(kinEmax,"Energy") << 
+    ", npoints= "<< npoints << ", particle= \"" << particle << 
+    "\", material= \"" << material << "\", filename= \""<< 
+    ofName << "\"" << G4endl;
+  return true;
 }
 ///////////////////////////////////////////////////////////////////////////////////
 // Save Plot  
 #ifdef G4ANALYSIS_USE_ROOT 
 void IORTInteractionParameters::PlotStopping(const G4String& filetype)
 {
-    if (!theRootCanvas)
+  if (!theRootCanvas)
     {
-	gROOT->Reset(); 
-	gROOT->SetStyle("Plain");
-	theRootCanvas = new TCanvas("theRootCanvas","Interaction Parameters",200, 10, 600,400);
-	theRootCanvas -> SetFillColor(20);
-	theRootCanvas -> SetBorderMode(1);
-	theRootCanvas -> SetBorderSize(1);
-	theRootCanvas -> SetFrameBorderMode(0);
-	theRootCanvas -> SetGrid();
-	// Use global pad: root manual pgg 109,...
+      gROOT->Reset(); 
+      gROOT->SetStyle("Plain");
+      theRootCanvas = new TCanvas("theRootCanvas","Interaction Parameters",200, 10, 600,400);
+      theRootCanvas -> SetFillColor(20);
+      theRootCanvas -> SetBorderMode(1);
+      theRootCanvas -> SetBorderSize(1);
+      theRootCanvas -> SetFrameBorderMode(0);
+      theRootCanvas -> SetGrid();
+      // Use global pad: root manual pgg 109,...
     }
-
-    if (theRootGraph) delete theRootGraph;
-    theRootGraph = new TGraph(energy.size(), &energy[0], &massDedx[0]);
-    //theRootGraph = new TGraph();
-    axisX = theRootGraph -> GetXaxis(),
+  
+  if (theRootGraph) delete theRootGraph;
+  theRootGraph = new TGraph(energy.size(), &energy[0], &massDedx[0]);
+  //theRootGraph = new TGraph();
+  axisX = theRootGraph -> GetXaxis(),
     axisY = theRootGraph -> GetYaxis();
-    axisX -> SetTitle("MeV");
-    axisY -> SetTitle("Stopping Power (MeV cm2/g)");
-    //axisX -> SetNdivisions(500,kTRUE);
-    //axisX -> SetTickLength(0.03);
-    //axisX -> SetLabelOffset(2.005);
-    axisX -> SetAxisColor(2);
-    axisY -> SetAxisColor(2);
-    gPad -> SetLogx(1);
-    gPad -> SetLogy(1);
-    theRootGraph -> SetMarkerColor(4);
-    theRootGraph -> SetMarkerStyle(20);// circle
-    theRootGraph -> SetMarkerSize(.5);
-
-    G4String gName = particle.substr(0, particle.find("[") ); // cut excitation energy   
-    gName = gName + "_" + material;
-    G4String fName = "./referenceData/interaction/" + gName + "." + filetype;
-    theRootGraph -> SetTitle(gName);
-    theRootGraph -> Draw("AP");
-    //theRootCanvas -> Update();
-    //theRootCanvas -> Draw();
-    theRootCanvas -> SaveAs(fName);
+  axisX -> SetTitle("MeV");
+  axisY -> SetTitle("Stopping Power (MeV cm2/g)");
+  //axisX -> SetNdivisions(500,kTRUE);
+  //axisX -> SetTickLength(0.03);
+  //axisX -> SetLabelOffset(2.005);
+  axisX -> SetAxisColor(2);
+  axisY -> SetAxisColor(2);
+  gPad -> SetLogx(1);
+  gPad -> SetLogy(1);
+  theRootGraph -> SetMarkerColor(4);
+  theRootGraph -> SetMarkerStyle(20);// circle
+  theRootGraph -> SetMarkerSize(.5);
+  
+  G4String gName = particle.substr(0, particle.find("[") ); // cut excitation energy   
+  gName = gName + "_" + material;
+  G4String fName = "./referenceData/interaction/" + gName + "." + filetype;
+  theRootGraph -> SetTitle(gName);
+  theRootGraph -> Draw("AP");
+  //theRootCanvas -> Update();
+  //theRootCanvas -> Draw();
+  theRootCanvas -> SaveAs(fName);
 }
 #endif
 
@@ -275,20 +275,21 @@ void IORTInteractionParameters::ListOfNistMaterials(const G4String& vararg)
  You can also construct a new material by the ConstructNewMaterial method:
  see $G4INSTALL/source/materials/src/G4NistMaterialBuilder.cc
 */
-    // Get simplest full list
-     if (vararg =="list")
-	  {
-	    const std::vector<G4String>& vec =  nistMat -> GetMaterialNames(); 
-	    for (size_t i=0; i<vec.size(); i++)
-	     {
-	        G4cout << std::setw(12) << std::left << i+1 << vec[i] << G4endl;
-	     }
-	    G4cout << G4endl;
-          }
-    else if (vararg =="all" || vararg =="simple" || vararg =="compound" || vararg =="hep" )
+  // Get simplest full list
+  if (vararg =="list")
+    {
+      const std::vector<G4String>& vec =  nistMat -> GetMaterialNames(); 
+      for (size_t i=0; i<vec.size(); i++)
 	{
-		nistMat -> ListMaterials(vararg);
+	  G4cout << std::setw(12) << std::left << i+1 << vec[i] << G4endl;
 	}
+      G4cout << G4endl;
+    }
+  else if (vararg =="all" || vararg =="simple" || 
+	   vararg =="compound" || vararg =="hep" )
+    {
+      nistMat -> ListMaterials(vararg);
+    }
 }
 
 

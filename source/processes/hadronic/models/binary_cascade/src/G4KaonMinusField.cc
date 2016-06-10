@@ -44,6 +44,7 @@
 #include "G4FermiMomentum.hh"
 #include "G4KaonMinus.hh"
 #include "G4HadTmpUtil.hh"
+#include "G4Pow.hh"
 
 G4KaonMinusField::G4KaonMinusField(G4V3DNucleus * nucleus, G4double coeff)
   : G4VNuclearField(nucleus)
@@ -79,7 +80,7 @@ G4double G4KaonMinusField::GetBarrier()
 {
   G4int A = theNucleus->GetMassNumber();
   G4int Z = theNucleus->GetCharge();
-  G4double coulombBarrier = (1.44/1.14) * MeV * Z / (1.0 + std::pow(A,1./3.));
+  G4double coulombBarrier = (1.44/1.14) * MeV * Z / (1.0 + G4Pow::GetInstance()->Z13(A));
   return -coulombBarrier;
 }
 

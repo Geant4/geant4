@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisationModel.cc 85013 2014-10-23 09:45:07Z gcosmo $
+// $Id: G4mplIonisationModel.cc 91869 2015-08-07 15:21:02Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -246,10 +246,12 @@ G4double G4mplIonisationModel::SampleFluctuations(
     do {
       loss = twomeanLoss*G4UniformRand();
       x = (loss - meanLoss)/siga;
+      // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
     } while (1.0 - 0.5*x*x < G4UniformRand());
   } else {
     do {
       loss = G4RandGauss::shoot(meanLoss,siga);
+      // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
     } while (0.0 > loss || loss > twomeanLoss);
   }
   return loss;

@@ -1,4 +1,4 @@
-$Id: History 87015 2014-11-21 16:24:10Z gcosmo $
+$Id: History 94237 2015-11-09 11:01:24Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,204 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+
+09 October 15: V.Ivanchenko (emstand-V10-01-41)
+- G4ScreeningMottCrossSection - fixed Coverity report
+
+28 October 15: V.Ivanchenko (emstand-V10-01-40)
+- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable -
+    M. Novak revised GS model for new release, requires updated
+    data set G4EMLOW6.48  
+
+28 October 15: V.Ivanchenko (emstand-V10-01-39)
+- G4ScreeningMottCrossSection revision of the class, optimal usage
+    of vectors (Mauro Tacconi)
+- G4IonCoulombScatteringModel - minor cleanup (Mauro Tacconi)
+
+27 October 15: V.Ivanchenko (emstand-V10-01-38)
+- G4UrbanMscModel - facsafety parameter is set to 0.6 (was 0.3)
+    providing some CPU improvements for calorimeter simulation
+    not affecting calorimeter response (L.Urban)
+
+24 October 15: V.Ivanchenko (emstand-V10-01-37)
+- G4UrbanMscModel, G4IonFluctuations, G4MollerBhabhaModel - instead 
+    of computation take from material class the value of effective Z 
+    (fixed potantial source of non-reproducibility)
+- G4hCoulombScatteringModel, G4eCoulombScatteringModel, 
+  G4SeltzerBergerModel, G4ICRU73QOModel, G4ICRU49NuclearStoppingModel,
+  G4BraggModel, G4BraggIonModel, G4eBremsstrahlungRelModel - use
+    G4lrint to convert double Z into integer
+
+19 October 15: V.Ivanchenko (emstand-V10-01-36)
+- G4IonCoulombScatteringModel, G4hCoulombScatteringModel - fix on
+    recoil kinematics completed (problem report #1778)
+
+16 October 15: V.Ivanchenko (emstand-V10-01-35)
+- G4KleinNishinaCompton, G4KleinNishinaModel, G4BraggModel, 
+  G4BraggIonModel, G4BetheBlochModel, G4SeltzerBergerModel,
+  G4MollerBhabhaModel, G4PEEffectFluoModel - use nullptr,
+    use  rndmEngine->flatArray(n, rndm) in sampling algorithms
+- G4IonCoulombScatteringModel, G4hCoulombScatteringModel - fixed
+    recoil kinematics 
+- G4ScreeningMottCrossSection, G4eSingleCoulombScatteringModel 
+    (code update was provided by Mauro Tacconi) 
+
+15 September 15: L.Urban (emstand-V10-01-34)
+- G4UrbanMscModel - modification in new lateral algorithm
+
+03 September 15: V.Ivanchenko (emstand-V10-01-33)
+- G4GoudsmitSaundersonMscModel - Mihaly Novak has fixed problem
+    in GS model (increased number of no scattering for thin layers)
+
+03 September 15: L.Urban (emstand-V10-01-32)
+- G4UrbanMscModel - bugfix for the extreme small step case
+
+02 September 15:  V.Ivanchenko (emstand-V10-01-31)
+- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable,
+  G4PWATotalXsecTable - Mihaly Novak provided updated GS model
+
+03 August 15:  V.Ivanchenko (emstand-V10-01-30)
+- Technical tag: fixed Coverty warning, substitute tabs by spaces,
+    add comments to do/while and while loops
+
+28 July 15:  V.Ivanchenko (emstand-V10-01-29)
+- G4IonCoulombScatteringModel, G4eCoulombScatteringModel,
+  G4hCoulombScatteringModel - removed low-energy limits from 
+    scattering models, because it is now implemented inside ionisation
+- G4BraggIonModel - fixed non reproducibility problem #1771
+- G4ASTARStopping, G4ESTARStopping, G4PSTARStopping - build
+    spline at initialisation of a vector 
+
+13 July 15:  V.Ivanchenko (emstand-V10-01-28)
+- G4UrbanMscModel - (L.Urban) updated new lateral correlation 
+    algorithm; removed upper limit for computation of e+ correction
+- G4hCoulombScatteringModel, G4WentzelVIRelXSection - (K.Maksimov)
+    fully implemented scattring in CM rest frame of projectile/target
+- G4IonCoulombCrossSection - removed unused class members
+
+09 July 15:  V.Ivanchenko (emstand-V10-01-27)
+- G4GoudsmitSaundersonTable - M. Novak fixed problem #1767
+
+08 July 15:  V.Ivanchenko (emstand-V10-01-26)
+- G4IonCoulombScatteringModel, G4IonCoulombCrossSection - fixed 
+    problem #1763 (wrong kinematics for the recoil), removed
+    unused class members
+
+23 June 15:  V.Ivanchenko (emstand-V10-01-25)
+- G4UrbanMscModel - L.Urban introduce a fix of rare long running event
+
+10 June 15:  V.Ivanchenko (emstand-V10-01-22)
+- G4PWATotalXsecTable - attempt to fix compillation warning at Windows
+
+10 June 15:  V.Ivanchenko (emstand-V10-01-21)
+- G4UrbanMscModel - L.Urban revert back step limit algorithm, two 
+    methods are added for sampling of lateral displacement (one old 
+    from 10.1 and one new disabled by default), flags are added 
+    to switch between lateral displacement methods and to enable/disable 
+    special treatment of positrons below 1 MeV 
+- G4PWATotalXsecTable - M.Novak fix Coverity report
+
+02 June 15:  V.Ivanchenko (emstand-V10-01-20)
+- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable - (M. Novak)
+    fixed compillation warnings
+
+01 June 15:  V.Ivanchenko (emstand-V10-01-19)
+- G4PWATotalXsecTable - fixed compillation warning
+
+29 May 15:  V.Ivanchenko (emstand-V10-01-18)
+- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable - (M. Novak)
+    revised and improved implementation of GS model
+
+28 May 15:  V.Ivanchenko (emstand-V10-01-17)
+- G4PWATotalXsecTable - new class for GS model
+- G4PAIPhotonModel - removed as obsolete
+
+26 May 15:  R.Hatcher (emstand-V10-01-16)
+- G4IonCoulombScatteringModel, G4eSingleCoulombScatteringModel - remove 
+    unnecessary "using namespace std" from header files that causes 
+    problems w/ G4AnyMethod & G4GenericPhysicsList
+
+22 May 15:  V.Ivanchenko (emstand-V10-01-15)
+- G4UrbanMscModel - small change in initialisation of the new track
+
+18 May 15:  V.Ivanchenko (emstand-V10-01-14)
+- G4UrbanMscModel - ( L.Urban) bugfix in ComputeTruePathLengthLimit 
+    in order not to get many extreme small steps due to msc; use 
+    "distance" instead of "range" to compare with safety; code
+    optimisation (>5% speedup for EM shower simulation in calorimeters)
+
+06 May 15:  V.Ivanchenko (emstand-V10-01-13)
+06 May 15: L.Urban
+- G4UrbanMscModel - better optimization in ComputeTruePathLengthLimit
+
+01 May 15:  V.Ivanchenko (emstand-V10-01-12)
+- G4PAIModel, G4PAIPhotModel - fixed re-initilisation in MT mode
+
+30 April 15:  V.Ivanchenko (emstand-V10-01-11)
+- G4WentzelVIModel - repeat check on safety for each new step,
+    in SampleScattering optimized use of random engine
+- G4UrbanMscModel - repeat check on safety for each new step,
+    add extra limit for very small step regime
+- G4PAIModel, G4PAIModelData, G4PAIPhotModel, G4PAIPhotModelData - 
+    (V.Grichine) last part of fixes for the problem report #1731:
+    when next run is initialized old data class is deleted and
+    a new one is created
+
+28 April 15: V.Ivanchenko (emstand-V10-01-10)
+- G4WentzelOKandVIxSection - improved angular sampling
+
+27 April 15: V.Ivanchenko (emstand-V10-01-09)
+- G4UrbanMscModel, G4UniversalFluctuation, G4KleinNishinaCompton,
+  G4KleinNishinaModel - defined pointer to random engine locally
+
+24 April 15: V.Ivanchenko (emstand-V10-01-08)
+- G4PAIModel, G4PAIModelData - fixes of problem report #1731:
+    cuts are not used in Initialise method but only in run time methods;
+    added copy of vector of G4MaterialCutsCouple from master to worker
+    threads 
+- G4KleinNishinaModel, G4WentzelOKandVIxSection - accurate 
+    initialisation of G4ThreeVectors and G4LorentzVector in constructors
+
+14 April 15: V.Ivanchenko (emstand-V10-01-07)
+- G4UrbanMscModel - removed unused variable
+
+14 April 15: V.Ivanchenko (emstand-V10-01-06)
+- G4UrbanMscModel - (L.Urban) new lateral displacement,correlation and
+  positron correction; code cleanup - define some const members of the 
+  class and const static values
+
+04 March 15: V.Ivanchenko (emstand-V10-01-05)
+- G4hMultipleScattering - do not redefine step limit type 
+
+26 January 15: V.Ivanchenko (emstand-V10-01-04)
+- G4BraggModel, G4BraggIonModel, G4BetheBlochModel - more clean
+    definition of spin correction to ionisation 
+
+16 January 15: V.Ivanchenko (emstand-V10-01-03)
+- G4UniversalFluctuation - switch to use 
+  G4Random::getTheEngine() to have more clean code 
+
+15 January 15: V.Ivanchenko (emstand-V10-01-02)
+- G4GoudsmitSaundersonMscModel, G4UrbanMscModel,G4WentzelVIModel,
+  G4WentzelVIRelModel, G4UniversalFluctuation - redefine random 
+    engine pointer in StartTracking() method to address problem 
+    reported by CMS
+
+17 December 14: V.Ivanchenko (emstand-V10-01-01)
+- G4GoudsmitSaundersonMscModel - return back version of 10.0 with
+    two fixes: trivial Coverity report, added protection aginst precision
+    loss for small angle calculation. Keeping 10.0 version the same
+    backscattering result is obtained for 10.1 as for 10.0
+
+12 December 14: V.Ivanchenko (emstand-V10-01-00)
+- G4KleinNishinaModel - fixed very rare crash (reported by L.Urban) 
+    happens when de-excitation module is active and de-excitation energy
+    is slightly larger than available energy; now secondary
+    energy slightly modified to keep energy balance instead
+    of deletion of secondary particle
+- G4PEEffFluoModel - use the same pattern as G4KleinNishinaModel
+    for de-excitation products
+   
 
 21 November 14: V.Ivanchenko (emstand-V10-00-52)
 - G4PAIPhotonModel - fixed Coverity report (V.Grichine)

@@ -23,7 +23,7 @@ namespace histo {
 //TH is for a height.
 
 template <class TC,class TO,class TN,class TW,class TH>
-class base_histo : public histo_data<TC,TO,TN,TW> {
+class base_histo : protected histo_data<TC,TO,TN,TW> {
   typedef histo_data<TC,TO,TN,TW> parent;
 private:
   static const std::string& s_class() {
@@ -35,15 +35,24 @@ public:
   typedef axis<TC,TO> axis_t;
   typedef typename axis_t::bn_t bn_t;
   typedef unsigned int dim_t;
+  typedef TC coordinate_t;
+  typedef TO offset_t;
+  typedef TN num_entries_t;
+  typedef TW weight_t;
+  typedef TH height_t;
 protected:
   virtual TH get_bin_height(TO) const = 0;  //histo/profile
 protected:
   void base_from_data(const hd_t& a_from) {parent::operator=(a_from);}
+#ifdef tools_histo_base_histo //for backward compatibility with tools
   hd_t base_get_data() const {
     hd_t hd;
     hd = *this;
     return hd;
   }
+#endif
+public:
+  const hd_t& dac() const {return *this;} //data accessor.
 protected:
   base_histo():parent() {
 #ifdef TOOLS_MEM
@@ -70,27 +79,20 @@ protected:
 
 public:
   const std::string& title() const {return parent::m_title;}
-  std::string title() {return parent::m_title;}
   bool set_title(const std::string& a_title){parent::m_title = a_title;return true;}
   dim_t dimension() const {return parent::m_dimension;}
+  dim_t number_of_planes() const {return dim_planes(parent::m_dimension);}
 
   TN entries() const {
-    return parent::m_in_range_entries; //not set if reading a TH from a ROOT file.
+    return parent::m_in_range_entries; //not set if reading a TH from a CERN-ROOT file.
   }
   TN all_entries() const {
-    return parent::m_all_entries; //works also is reading histo from a ROOT file.
+    return parent::m_all_entries; //works also is reading histo from a CERN-ROOT file.
   }
-/*
+
   TN extra_entries() const {
-    TN number = 0;
-    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
-      if(histo::is_out(parent::m_axes,ibin)) {
-        number += parent::m_bin_entries[ibin];
-      }
-    }
-    return number;
+    return parent::m_all_entries-parent::m_in_range_entries; //works also is reading histo from a CERN-ROOT file.
   }
-*/
   TW equivalent_bin_entries() const {
     TW sw = 0;
     TW sw2 = 0;
@@ -163,6 +165,67 @@ public:
     }
     return value;
   }
+
+  bool has_entries_per_bin() const { //to detect histos coming from TH streaming out of a root file.
+    // it assumes that update_fast_getters() had been applied.
+    if(parent::m_in_range_entries) return true;
+    // may be a from-root histo :
+    if(parent::m_in_range_Sw) return false;
+    // no in range entries and weight :
+    return true; //for exa not filled = ok.
+  }
+
+public: //histo_data
+  bool get_ith_axis_Sxw(dim_t a_axis,TC& a_value) const {
+    a_value = 0;
+    if(a_axis>=parent::m_dimension) return false;
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      if(!histo::is_out(parent::m_axes,ibin)) {
+        a_value += parent::m_bin_Sxw[ibin][a_axis];
+      }
+    }
+    return true;
+  }
+
+  bool get_ith_axis_Sx2w(dim_t a_axis,TC& a_value) const {
+    a_value = 0;
+    if(a_axis>=parent::m_dimension) return false;
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      if(!histo::is_out(parent::m_axes,ibin)) {
+        a_value += parent::m_bin_Sx2w[ibin][a_axis];
+      }
+    }
+    return true;
+  }
+
+  TW get_in_range_Sw() const {return parent::m_in_range_Sw;}   //for CERN-ROOT file writing.
+  TW get_in_range_Sw2() const {return parent::m_in_range_Sw2;} //for CERN-ROOT file writing.
+
+/*
+  TW get_all_Sw() const {
+    TW sw = 0;
+    for(TO ibin=0;ibin<m_bin_number;ibin++) sw += m_bin_Sw[ibin];
+    return sw;
+  }
+  TN get_all_entries() const {
+    TN number = 0;
+    for(TO ibin=0;ibin<m_bin_number;ibin++) {
+      number += m_bin_entries[ibin];
+    }
+    return number;
+  }
+
+  // for inlib/wroot/streamers :
+  TN get_entries() const {
+    TN number = 0;
+    for(TO ibin=0;ibin<m_bin_number;ibin++) {
+      if(!histo::is_out(m_axes,ibin)) {
+        number += m_bin_entries[ibin];
+      }
+    }
+    return number;
+  }
+*/
 protected:
   enum {AxisX=0,AxisY=1,AxisZ=2};
 
@@ -176,10 +239,14 @@ protected:
     parent::m_bin_Sw2.clear();
     parent::m_bin_Sxw.clear();
     parent::m_bin_Sx2w.clear();
+    parent::m_in_range_Sxw.clear();
+    parent::m_in_range_Sx2w.clear();
     parent::m_axes.clear();
+    parent::m_in_range_plane_Sxyw.clear();
+    parent::m_annotations.clear();
+
     parent::m_bin_number = 0;
     parent::m_dimension = 0;
-    parent::m_annotations.clear();
     parent::m_all_entries = 0;
     parent::m_in_range_entries = 0;
     parent::m_in_range_Sw = 0;
@@ -217,10 +284,14 @@ protected:
     parent::m_bin_Sw2.clear();
     parent::m_bin_Sxw.clear();
     parent::m_bin_Sx2w.clear();
+    parent::m_in_range_Sxw.clear();
+    parent::m_in_range_Sx2w.clear();
     parent::m_axes.clear();
+    parent::m_in_range_plane_Sxyw.clear();
+    parent::m_annotations.clear();
+
     parent::m_bin_number = 0;
     parent::m_dimension = 0;
-    parent::m_annotations.clear();
     parent::m_all_entries = 0;
     parent::m_in_range_entries = 0;
     parent::m_in_range_Sw = 0;
@@ -257,6 +328,7 @@ protected:
         parent::m_bin_Sx2w[ibin][iaxis] = 0;
       }
     }
+    parent::m_in_range_plane_Sxyw.assign(dim_planes(parent::m_dimension),0);
     //profile not done here.
     parent::reset_fast_getters();
   }
@@ -286,6 +358,7 @@ protected:
       parent::m_axes[iaxis].m_offset = parent::m_axes[iaxis-1].m_offset * (parent::m_axes[iaxis-1].bins()+2);
     }
     
+    parent::m_in_range_plane_Sxyw.resize(dim_planes(parent::m_dimension),0);
   }
 
 public:
@@ -295,10 +368,11 @@ public:
   const std::vector<TW>& bins_sum_w2() const {return parent::m_bin_Sw2;}
   const std::vector< std::vector<TC> >& bins_sum_xw() const {return parent::m_bin_Sxw;}
   const std::vector< std::vector<TC> >& bins_sum_x2w() const {return parent::m_bin_Sx2w;}
+  const std::vector<TC>& in_range_planes_xyw() const {return parent::m_in_range_plane_Sxyw;}
 
 public:
   const axis_t& get_axis(int aIndex) const {return parent::m_axes[aIndex];}
-  TO get_bins() const {return parent::m_bin_number;}
+  offset_t get_bins() const {return parent::m_bin_number;}
   const std::string& get_title() const {return parent::m_title;}
   dim_t get_dimension() const {return parent::m_dimension;}
   bool is_valid() const {return (parent::m_dimension?true:false);}
@@ -338,6 +412,8 @@ protected:
         parent::m_bin_Sx2w[ibin][iaxis] += a_histo.m_bin_Sx2w[ibin][iaxis];
       }
     }
+   {dim_t nplane = parent::m_in_range_plane_Sxyw.size();
+    for(dim_t iplane=0;iplane<nplane;iplane++) parent::m_in_range_plane_Sxyw[iplane] += a_histo.m_in_range_plane_Sxyw[iplane];}
     parent::update_fast_getters();
   }
 
@@ -355,6 +431,9 @@ protected:
         parent::m_bin_Sx2w[ibin][iaxis] -= a_histo.m_bin_Sx2w[ibin][iaxis];
       }
     }
+
+ //{for(dim_t iplane=0;iplane<nplane;iplane++) parent::m_in_range_plane_Sxyw[iplane] ??? a_histo.m_in_range_plane_Sxyw[iplane];}
+
     parent::update_fast_getters();
   }
 
@@ -364,7 +443,7 @@ protected:
     // We build a new histo with one entry in each bin of weight : 
     //   this.w * a_histo.w
     // The current histo is overriden with this new histo.
-    // The m_bin_Sw2 computation is consistent with FreeHEP and ROOT.
+    // The m_bin_Sw2 computation is consistent with FreeHEP and CERN-ROOT.
   
     if(!is_compatible(a_histo)) return false;
 
@@ -385,6 +464,8 @@ protected:
         parent::m_bin_Sx2w[ibin][iaxis] = x * x * sw;
       }
     }
+
+ //{for(dim_t iplane=0;iplane<nplane;iplane++) parent::m_in_range_plane_Sxyw[iplane] ??? a_histo.m_in_range_plane_Sxyw[iplane];}
 
     parent::update_fast_getters();
     return true;
@@ -428,6 +509,9 @@ protected:
         }
       }
     }
+
+ //{for(dim_t iplane=0;iplane<nplane;iplane++) parent::m_in_range_plane_Sxyw[iplane] ??? a_histo.m_in_range_plane_Sxyw[iplane];}
+
     parent::update_fast_getters();
     return true;
   }
@@ -443,6 +527,8 @@ protected:
         parent::m_bin_Sx2w[ibin][iaxis] *= a_factor;
       }
     }
+   {dim_t nplane = parent::m_in_range_plane_Sxyw.size();
+    for(dim_t iplane=0;iplane<nplane;iplane++) parent::m_in_range_plane_Sxyw[iplane] *= a_factor;}
     parent::update_fast_getters();
     return true;
   }

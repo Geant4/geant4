@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc 87128 2014-11-25 09:00:59Z gcosmo $
+// $Id: G4VUserPhysicsList.cc 89244 2015-03-27 16:27:51Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -411,7 +411,7 @@ G4double G4VUserPhysicsList::GetCutValue(const G4String& name) const
 		"No Default Region");
     return -1.*mm;
   }
-  G4Region* region = (*(G4RegionStore::GetInstance()))[0];
+  G4Region* region = G4RegionStore::GetInstance()->GetRegion("DefaultRegionForTheWorld", false);
   return region->GetProductionCuts()->GetProductionCut(name);
 }
 
@@ -479,6 +479,7 @@ void G4VUserPhysicsList::SetParticleCuts( G4double cut, const G4String& particle
     return;
   }
 
+  G4Region* world_region = G4RegionStore::GetInstance()->GetRegion("DefaultRegionForTheWorld", false);
   if(!region){
     size_t nReg = (G4RegionStore::GetInstance())->size();
     if (nReg==0) {
@@ -493,7 +494,7 @@ void G4VUserPhysicsList::SetParticleCuts( G4double cut, const G4String& particle
 		"No Default Region");
       return;
     }
-    region = (*(G4RegionStore::GetInstance()))[0];
+    region = world_region;
   }
 
   if ( !isSetDefaultCutValue ){
@@ -501,7 +502,7 @@ void G4VUserPhysicsList::SetParticleCuts( G4double cut, const G4String& particle
   }
 
   G4ProductionCuts* pcuts = region->GetProductionCuts();
-  if(region!=(*(G4RegionStore::GetInstance()))[0] &&
+  if(region != world_region &&
      pcuts==G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts())
   { // This region had no unique cuts yet but shares the default cuts.
     // Need to create a new object before setting the value.

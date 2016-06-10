@@ -98,9 +98,17 @@ G4double G4HadPhaseSpaceKopylov::BetaKopylov(G4int K) const {
   G4double Fmax = std::sqrt(g4pow->powN(xN/(xN+1.),N)/(xN+1.)); 
 
   G4double F, chi;
+  const G4int maxNumberOfLoops = 10000;
+  G4int loopCounter = 0;
   do {
     chi = G4UniformRand();
     F = std::sqrt(g4pow->powN(chi,N)*(1.-chi));      
-  } while ( Fmax*G4UniformRand() > F);  
+  } while ( ( Fmax*G4UniformRand() > F ) && ++loopCounter < maxNumberOfLoops );  /* Loop checking, 02.11.2015, A.Ribon */ 
+  if ( loopCounter >= maxNumberOfLoops ) {
+    G4ExceptionDescription ed;
+    ed << " Failed sampling after maxNumberOfLoops attempts : forced exit" << G4endl;
+    G4Exception( " G4HadPhaseSpaceKopylov::BetaKopylov ", "HAD_KOPYLOV_001", JustWarning, ed );
+  }
+
   return chi;
 }

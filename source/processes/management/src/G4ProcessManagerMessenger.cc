@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManagerMessenger.cc 71231 2013-06-12 13:06:28Z gcosmo $
+// $Id: G4ProcessManagerMessenger.cc 92125 2015-08-18 14:35:23Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -80,7 +80,7 @@ G4ProcessManagerMessenger::G4ProcessManagerMessenger(G4ParticleTable* pTable)
   dumpCmd->SetParameterName("index", true);
   dumpCmd->SetDefaultValue(-1);
 
-  //Commnad   /particle/process/Verbose
+  //Commnad   /particle/process/verbose
   verboseCmd = new G4UIcommand("/particle/process/verbose",this);
   verboseCmd->SetGuidance("Set Verbose Level for Process or Process Manager");
   verboseCmd->SetGuidance("  Verbose [Verbose] [process index]");
@@ -93,7 +93,7 @@ G4ProcessManagerMessenger::G4ProcessManagerMessenger(G4ParticleTable* pTable)
   verboseCmd->SetParameter(param);
   verboseCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle,G4State_GeomClosed,G4State_EventProc);
 
-  //Commnad   /particle/process/Activate
+  //Commnad   /particle/process/activate
   activateCmd = new G4UIcmdWithAnInteger("/particle/process/activate",this);
   activateCmd->SetGuidance("Activate process  ");
   activateCmd->SetGuidance(" Activate [process index]");
@@ -202,20 +202,14 @@ void G4ProcessManagerMessenger::SetNewValue(G4UIcommand * command,G4String newVa
 
 G4String G4ProcessManagerMessenger::GetCurrentValue(G4UIcommand * command)
 {
-  G4String returnValue('\0');
-  if(SetCurrentParticle() == 0) {
-    // no particle is selected. return null strings
-    return returnValue;
-  }
+  if(SetCurrentParticle() == 0) return "";
 
-  std::ostringstream os;
-  
   if( command==verboseCmd ){
     //Commnad   /particle/process/Verbose
-    os << theManager->GetVerboseLevel();
-    returnValue = os.str();
-  } 
-  return returnValue;
+    return verboseCmd->ConvertToString(theManager->GetVerboseLevel());
+  } else {
+    return "";
+  }   
 }
 
 

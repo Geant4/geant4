@@ -23,64 +23,53 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotonEvaporation.hh 85841 2014-11-05 15:35:06Z gcosmo $
+// $Id: G4PhotonEvaporation.hh 94485 2015-11-19 08:32:53Z gcosmo $
 //
 // -------------------------------------------------------------------
-//      GEANT 4 class file
+//
+//      GEANT4 class file
 //
 //      CERN, Geneva, Switzerland
 //
 //      File name:     G4PhotonEvaporation
 //
-//      Author:        Maria Grazia Pia (pia@genova.infn.it)
+//      Author:        Vladimir Ivantchenko
 //
-//      Creation date: 23 October 1998
+//      Creation date: 22 October 2015 
 //
 //Modifications:
 //
-// 18 October 2002, Fan Lei (flei@space.qinetiq.com)
-//   
-//        Implementation of Internal Convertion process in discrete deexcitation
-//        The following public methods have been added. 
-//
-//            void SetICM (G4bool);
-//            void RDMForced(G4bool);
-//            void SetMaxHalfLife(G4double) ;
-//            void SetEOccupancy( G4ElectronOccupancy  eOccupancy) ;
-//            G4ElectronOccupancy GetEOccupancy () ;
-//            G4int GetVacantShellNumber () { return _vShellNumber;};
-//
-//        and the following priivate menbers
-//
-//            G4ElectronOccupancy _eOccupancy;
-//            G4int _vShellNumber;
-//
-// 11 May 2010, V.Ivanchenko added EmittedFragment and BreakUpFragment
-//                           methods
 // 
 // -------------------------------------------------------------------
+//
+// This is a new class which has different design and uses different data 
+// structure than the old one
+//
 
 #ifndef G4PHOTONEVAPORATION_HH
 #define G4PHOTONEVAPORATION_HH 1
 
 #include "globals.hh"
 #include "G4VEvaporationChannel.hh"
-#include "G4VEmissionProbability.hh"
-#include "G4VGammaDeexcitation.hh"
-#include "G4ElectronOccupancy.hh"
+#include "G4NuclearLevelData.hh"
+#include "G4LevelManager.hh"
+#include "G4Fragment.hh"
 
-class G4Fragment;
+const G4int MAXDEPOINT = 10;
+const G4int MAXGRDATA  = 300;
+
+class G4E1Probability;
+class G4GammaTransition;
 
 class G4PhotonEvaporation : public G4VEvaporationChannel {
 
 public:
 
-  G4PhotonEvaporation(const G4String & aName = "Anonymous",
-		      G4EvaporationChannelType timeType = fDelayedEmission);
+  G4PhotonEvaporation(G4GammaTransition* ptr=0);
 
   virtual ~G4PhotonEvaporation();
 
-  // returns one gamma or e-
+  // one photon or e- emission
   virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
 
   // returns "false", emitted gamma and e- are added to the results
@@ -91,54 +80,93 @@ public:
   virtual G4FragmentVector* BreakUpFragment(G4Fragment* theNucleus);
 
   // emitted gamma, e-, and residual fragment are added to the results
-  virtual G4FragmentVector * BreakItUp(const G4Fragment & nucleus);
+  virtual G4FragmentVector* BreakUp(const G4Fragment& theNucleus);
 
   // emitted gamma, e-, and residual fragment are added to the results
-  virtual G4FragmentVector * BreakUp(const G4Fragment & nucleus);
+  virtual G4FragmentVector* BreakItUp(const G4Fragment& theNucleus);
 
+  // compute emission probability for both continum and discrete cases
+  // must be called before any method above
   virtual G4double GetEmissionProbability(G4Fragment* theNucleus);
 
-  virtual void SetEmissionStrategy(G4VEmissionProbability * probAlgorithm);
+  virtual G4double GetFinalLevelEnergy(G4int Z, G4int A, G4double energy);
 
-  void SetVerboseLevel(G4int verbose);
+  virtual G4double GetUpperLevelEnergy(G4int Z, G4int A);
 
-  void SetICM (G4bool);
+  void SetGammaTransition(G4GammaTransition*);
 
-  void RDMForced (G4bool);
-  
   void SetMaxHalfLife(G4double);
 
-  void SetTimeLimit(G4double value);
+  virtual void SetICM(G4bool);
+
+  virtual void RDMForced (G4bool);
+  
+  inline void SetVerboseLevel(G4int verbose);
+
+  inline G4int GetVacantShellNumber() const;
  
-  void SetEOccupancy( G4ElectronOccupancy  eOccupancy) ;
-
-  inline G4ElectronOccupancy GetEOccupancy () { return eOccupancy;} ;
-   
-  inline G4int GetVacantShellNumber () { return vShellNumber;};
-
 private:
 
-  G4int verbose;
-  G4bool myOwnProbAlgorithm;
-  G4VEmissionProbability * probAlgorithm;
-  G4VGammaDeexcitation * discrDeexcitation;
-  G4VGammaDeexcitation * contDeexcitation;
+  G4Fragment* GenerateGamma(G4Fragment* nucleus);
 
-  G4ElectronOccupancy eOccupancy;
-  G4int vShellNumber;
-
-  G4Fragment* nucleus;
-  G4double gammaE;
+  inline void InitialiseLevelManager(G4int Z, G4int A);
 
   G4PhotonEvaporation(const G4PhotonEvaporation & right);
   const G4PhotonEvaporation & operator = (const G4PhotonEvaporation & right);
 
-  G4bool operator == (const G4PhotonEvaporation & right) const;
-  G4bool operator != (const G4PhotonEvaporation & right) const;
+  G4NuclearLevelData*   fNuclearLevelData;
+  const G4LevelManager* fLevelManager;
+  G4GammaTransition*    fTransition;
 
+  G4int    fVerbose;
+  G4int    theZ;
+  G4int    theA;
+  G4int    fPoints;
+  G4int    fCode;
+  G4int    vShellNumber;
+  size_t   fIndex;
+
+  static G4float GREnergy[MAXGRDATA];
+  static G4float GRWidth[MAXGRDATA];
+
+  G4double fCummProbability[MAXDEPOINT]; 
+
+  G4double fLevelEnergyMax;
+  G4double fExcEnergy;
+  G4double fFermiEnergy;
+  G4double fProbability;
+  G4double fStep;
+  G4double fTimeLimit;
+  G4double fMaxLifeTime;
+
+  G4bool   fICM;
+  G4bool   fRDM;
+  G4bool   fSampleTime;
 };
 
+inline void G4PhotonEvaporation::SetVerboseLevel(G4int verbose)
+{
+  fVerbose = verbose;
+}
+
+inline void 
+G4PhotonEvaporation::InitialiseLevelManager(G4int Z, G4int A)
+{
+  if(Z != theZ || A != theA) {
+    theZ = Z;
+    theA = A;
+    fIndex = 0;
+    fLevelManager = fNuclearLevelData->GetLevelManager(theZ, theA);
+    fLevelEnergyMax = 0.0;
+    if(fLevelManager) { 
+      fLevelEnergyMax = (G4double)fLevelManager->MaxLevelEnergy();
+    }
+  }
+}
+
+inline G4int G4PhotonEvaporation::GetVacantShellNumber() const 
+{ 
+  return vShellNumber;
+}
+
 #endif
-
-
-

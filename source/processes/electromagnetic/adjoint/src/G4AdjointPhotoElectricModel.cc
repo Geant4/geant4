@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointPhotoElectricModel.cc 75591 2013-11-04 12:33:11Z gcosmo $
+// $Id: G4AdjointPhotoElectricModel.cc 91870 2015-08-07 15:21:40Z gcosmo $
 //
 #include "G4AdjointPhotoElectricModel.hh"
 #include "G4AdjointCSManager.hh"
@@ -125,6 +125,7 @@ void G4AdjointPhotoElectricModel::SampleSecondaries(const G4Track& aTrack,
        	 	cos_theta = (rndm+beta)/(rndm*beta+1.);
        		term = 1.-beta*cos_theta;
        		greject = (1.-cos_theta*cos_theta)*(1.+b*term)/(term*term);
+          // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
   	} while(greject < G4UniformRand()*grejsup);
   }
 	

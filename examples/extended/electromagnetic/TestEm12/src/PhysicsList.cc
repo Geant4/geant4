@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm12/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 85260 2014-10-27 08:53:35Z gcosmo $
+// $Id: PhysicsList.cc 90967 2015-06-12 08:10:54Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,7 +36,6 @@
 
 #include "PhysListEmStandard.hh"
 #include "PhysListEmStandardSSM.hh"
-#include "PhysListEmStandardGS.hh"
 
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
@@ -44,6 +43,7 @@
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4EmStandardPhysicsWVI.hh"
+#include "G4EmStandardPhysicsGS.hh"
 #include "G4EmStandardPhysicsSS.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
@@ -223,7 +223,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new PhysListEmStandardGS(name);
+    fEmPhysicsList = new G4EmStandardPhysicsGS();
                     
   } else if (name == "emlivermore") {
     fEmName = name;

@@ -23,36 +23,51 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedPhotoElectricModel.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4LivermorePolarizedPhotoElectricModel.hh 93359 2015-10-19 13:42:18Z gcosmo $
 //
-// Authors: G.Depaola & F.Longo
+// Author: Sebastien Incerti
+//         30 October 2008
+//         on base of G4LowEnergyPhotoElectric developed by A.Forti and M.G.Pia
+//
+// 15 Mar 2010   L. Pandola, removed methods to set explicitely fluorescence cuts.
+//               Main cuts from G4ProductionCutsTable are always used
+// 30 May 2011   A Mantero & V Ivanchenko Migration to model design for deexcitation
+// 22 Oct 2012   A & V Ivanchenko Migration data structure to G4PhysicsVector
 //
 
-#ifndef G4LivermorePolarizedPhotoElectricModel_h
-#define G4LivermorePolarizedPhotoElectricModel_h 1
+
+#ifndef G4LivermorePhotoElectricModel_h
+#define G4LivermorePhotoElectricModel_h 1
 
 #include "G4VEmModel.hh"
-#include "G4Electron.hh"
-#include "G4ParticleChangeForGamma.hh"
-#include "G4CrossSectionHandler.hh"
+#include "G4ElementData.hh"
+#include <vector>
 
+class G4ParticleChangeForGamma;
 class G4VAtomDeexcitation;
+class G4LPhysicsFreeVector;
 
 class G4LivermorePolarizedPhotoElectricModel : public G4VEmModel
 {
 
 public:
 
-  G4LivermorePolarizedPhotoElectricModel( 
-	     const G4String& nam = "LivermorePolarizedPhotoElectric");
+  G4LivermorePolarizedPhotoElectricModel(
+					   const G4String& nam = "LivermorePolarizedPhotoElectric");
 
   virtual ~G4LivermorePolarizedPhotoElectricModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
+  virtual G4double CrossSectionPerVolume(const G4Material*,
+                                         const G4ParticleDefinition*,
+                                         G4double energy,
+                                         G4double cutEnergy = 0.0,
+                                         G4double maxEnergy = DBL_MAX);
+
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
-                                      G4double kinEnergy, 
+                                      G4double energy, 
                                       G4double Z, 
                                       G4double A=0, 
                                       G4double cut=0,
@@ -64,29 +79,51 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
+
+  virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
+
+  inline void SetLimitNumberOfShells(G4int);
+
 protected:
 
   G4ParticleChangeForGamma* fParticleChange;
 
 private:
-  
-  G4LivermorePolarizedPhotoElectricModel & operator=(const  G4LivermorePolarizedPhotoElectricModel &right);
-  G4LivermorePolarizedPhotoElectricModel(const  G4LivermorePolarizedPhotoElectricModel&);
+
+  void ReadData(G4int Z, const char* path = 0);
+
+  G4LivermorePolarizedPhotoElectricModel & operator=(const G4LivermorePolarizedPhotoElectricModel &right);
+  G4LivermorePolarizedPhotoElectricModel(const G4LivermorePolarizedPhotoElectricModel&);
 
   G4ParticleDefinition*   theGamma;
   G4ParticleDefinition*   theElectron;
 
-  G4double lowEnergyLimit;  
-  G4double highEnergyLimit; 
-  G4int    verboseLevel;
-  G4bool   fDeexcitationActive;
+  G4int                   verboseLevel;
+  G4int                   maxZ;
+  G4int                   nShellLimit;
+  G4bool                  fDeexcitationActive;
+  G4bool                  isInitialised;
 
-  G4VCrossSectionHandler* crossSectionHandler;
-  G4VCrossSectionHandler* shellCrossSectionHandler;
+  static G4LPhysicsFreeVector*   fCrossSection[99];
+  static G4LPhysicsFreeVector*   fCrossSectionLE[99];
+  static std::vector<G4double>*  fParam[99];
+  static G4int                   fNShells[99];
+  static G4int                   fNShellsUsed[99];
+  static G4ElementData*          fShellCrossSection;
+  static G4Material*             fWater;
+  static G4double                fWaterEnergyLimit;
 
   G4VAtomDeexcitation*    fAtomDeexcitation;
 
+  G4double                fCurrSection;
+  std::vector<G4double>   fSandiaCof;
 };
+
+inline 
+void G4LivermorePolarizedPhotoElectricModel::SetLimitNumberOfShells(G4int n)
+{
+  nShellLimit = n;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

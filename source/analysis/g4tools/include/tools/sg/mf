@@ -1,0 +1,302 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_mf
+#define tools_sg_mf
+
+// mf for multiple field.
+
+#include "bmf"
+
+#include "../stype"
+#include "../cstr"
+#include "../io/iwbuf"
+#include "../io/irbuf"
+#include "../HEADER"
+
+namespace tools {
+namespace sg {
+
+template <class T>
+class mf : public bmf<T> {
+  typedef bmf<T> parent;
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::sg::mf<"+stype(T())+">");
+    return s_v;
+  }
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast< mf<T> >(this,a_class)) {return p;}
+    return parent::cast(a_class);
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  virtual bool write(io::iwbuf& a_buffer) {
+    const std::vector<T>& vec = parent::m_values;
+    return a_buffer.write_vec(vec.size(),vec_data(vec));
+  }
+  virtual bool read(io::irbuf& a_buffer) {
+    std::vector<T>& vec = parent::m_values;
+    return a_buffer.read_std_vec(vec);
+  }
+  virtual bool dump(std::ostream& a_out) {
+    const std::vector<T>& vec = parent::m_values;
+    a_out << "size : " << vec.size() << std::endl;
+    typedef typename std::vector<T>::const_iterator cit_t;
+    for(cit_t it=vec.begin();it!=vec.end();++it) {
+      a_out << "  " << (*it) << std::endl;
+    }
+    return true;
+  }
+public:
+  mf(){}
+  virtual ~mf(){}
+public:
+  mf(const mf& a_from)
+  :parent(a_from)
+  {}
+  mf& operator=(const mf& a_from){
+    //typedef typename parent::iterator bmf_t;
+    parent::operator=(a_from);
+    return *this;
+  }
+public:
+  mf& operator=(const std::vector<T>& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+  mf& operator=(const T& a_v){
+    parent::operator=(a_v);
+    return *this;
+  }
+};
+
+class mf_string : public bmf<std::string> {
+  TOOLS_HEADER(mf_string,tools::sg::mf_string,bmf<std::string>)
+public:
+  virtual bool write(io::iwbuf& a_buffer) {
+    return a_buffer.write_vec(m_values);
+  }
+  virtual bool read(io::irbuf& a_buffer) {
+    std::vector<std::string>& vec = parent::m_values;
+    return a_buffer.read_vec(vec);
+  }
+  virtual bool dump(std::ostream& a_out) {
+    const std::vector<std::string>& vec = parent::m_values;
+    a_out << "size : " << vec.size() << std::endl;
+    std::vector<std::string>::const_iterator it;
+    for(it=vec.begin();it!=vec.end();++it) {
+      a_out << "  \"" << (*it) << "\"" << std::endl;
+    }
+    return true;
+  }
+public:
+  mf_string():parent(){}
+  virtual ~mf_string(){}
+public:
+  mf_string(const mf_string& a_from)
+  :parent(a_from){}
+  mf_string& operator=(const mf_string& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+public:
+  mf_string& operator=(const std::vector<std::string>& a_value){
+    parent::operator=(a_value);
+    return *this;
+  }
+};
+
+//exa exlib::sg::entries.mf_vec<entry_type>
+
+template <class T>
+class mf_enum : public bmf<T> {
+  typedef bmf<T> parent;
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::sg::mf_enum");
+    return s_v;
+  }
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast< mf_enum<T> >(this,a_class)) {return p;}
+    return parent::cast(a_class);
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  virtual bool write(io::iwbuf& a_buffer) {
+    const std::vector<T>& vec = parent::m_values;
+    std::vector<int16> v; //an enum can be negative.
+    typedef typename std::vector<T>::const_iterator cit_t;
+    for(cit_t it=vec.begin();it!=vec.end();++it) v.push_back(*it);
+    return a_buffer.write_vec(v.size(),vec_data(v));
+  }
+  virtual bool read(io::irbuf& a_buffer) {
+    std::vector<int16> v; //an enum can be negative.
+    if(!a_buffer.read_std_vec(v)) return false;
+    std::vector<T>& vec = parent::m_values;
+    vec.clear();
+    std::vector<int16>::const_iterator it;
+    for(it=v.begin();it!=v.end();++it) vec.push_back((T)(*it));
+    return true;
+  }
+  virtual bool dump(std::ostream& a_out) {
+    const std::vector<T>& vec = parent::m_values;
+    a_out << "size : " << vec.size() << std::endl;
+    typedef typename std::vector<T>::const_iterator cit_t;
+    for(cit_t it=vec.begin();it!=vec.end();++it) {
+      a_out << "  " << (*it) << std::endl;
+    }
+    return true;
+  }
+public:
+  mf_enum():parent(){}
+  virtual ~mf_enum(){}
+public:
+  mf_enum(const mf_enum& a_from)
+  :parent(a_from){}
+  mf_enum& operator=(const mf_enum& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+};
+
+//exa mf_vec<colorf,float>
+
+///////////////////////////////////////////////////////////
+//the three below funcs are for :
+//  mf_vec< std::vector<std::string> ,std::string> opts;
+///////////////////////////////////////////////////////////
+inline std::ostream& operator<<(std::ostream& a_out,const std::vector<std::string>&) {
+  //for mf_vec::dump.
+  return a_out;
+}
+
+inline bool set_from_vec(std::vector<std::string>&,const std::vector<std::string>&) {
+  //for mf_vec::read(io::irbuf&)
+  return false;
+}
+
+inline const std::string* get_data(const std::vector<std::string>& a_v) {
+  return vec_data(a_v);
+}
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+
+
+template <class T,class TT> 
+class mf_vec : public bmf<T> {
+  typedef bmf<T> parent;
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::sg::mf_vec<"+stype(T())+","+stype(TT())+">");
+    return s_v;
+  }
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast< mf_vec<T,TT> >(this,a_class)) {return p;}
+    return parent::cast(a_class);
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  virtual bool write(io::iwbuf& a_buffer) {
+    const std::vector<T>& vec = parent::m_values;
+    typedef typename std::vector<TT> vec_t;
+    std::vector<vec_t> vec_vec;
+    typedef typename std::vector<T>::const_iterator cit_t;
+    for(cit_t it=vec.begin();it!=vec.end();++it) {
+
+      const T& v = (*it);
+      unsigned int num = v.size();
+      const TT* d = get_data(v);
+
+      std::vector<TT> std_vec(num);
+      for(unsigned int i=0;i<num;i++) std_vec[i] = d[i];
+
+      vec_vec.push_back(std_vec);
+    }
+    return a_buffer.write_std_vec_vec(vec_vec);
+  }
+  virtual bool read(io::irbuf& a_buffer) {
+    std::vector<T>& vec = parent::m_values;
+    vec.clear();
+    typedef typename std::vector<TT> vec_t;
+    std::vector<vec_t> vec_vec;
+    if(!a_buffer.read_std_vec_vec(vec_vec)) return false;
+    typedef typename std::vector<vec_t>::iterator _it_t;
+    for(_it_t it=vec_vec.begin();it!=vec_vec.end();++it) {
+      T x;
+      // x colorf, *it = std::vector<float>
+      // x vecs, *it = std::vector<std::string>
+      if(!set_from_vec(x,*it)) {vec.clear();return false;}
+      vec.push_back(x);
+    }
+    return true;
+  }
+  virtual bool dump(std::ostream& a_out) {
+    const std::vector<T>& vec = parent::m_values;
+    a_out << "size : " << vec.size() << std::endl;
+    typedef typename std::vector<T>::const_iterator cit_t;
+    for(cit_t it=vec.begin();it!=vec.end();++it) {
+      a_out << "  " << (*it) << std::endl;
+    }
+    return true;
+  }
+public:
+  mf_vec():parent(){}
+  virtual ~mf_vec(){}
+public:
+  mf_vec(const mf_vec& a_from)
+  :parent(a_from){}
+  mf_vec& operator=(const mf_vec& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+};
+
+template <class T>
+class mf_std_vec : public bmf< std::vector<T> > {
+  typedef bmf< std::vector<T> > parent;
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::sg::mf_std_vec<"+stype(T())+">");
+    return s_v;
+  }
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast< mf_std_vec<T> >(this,a_class)) {return p;}
+    return parent::cast(a_class);
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  virtual bool write(io::iwbuf& a_buffer) {
+    //used in exlib/sg/text_freetype::unitext
+    const std::vector< std::vector<T> >& vec = parent::m_values;
+    return a_buffer.write_std_vec_vec(vec);
+  }
+  virtual bool read(io::irbuf& a_buffer) {
+    std::vector< std::vector<T> >& vec = parent::m_values;
+    return a_buffer.read_std_vec_vec(vec);
+  }
+  virtual bool dump(std::ostream& a_out) {
+    const std::vector< std::vector<T> >& vec = parent::m_values;
+    a_out << "size : " << vec.size() << std::endl;
+    typedef typename std::vector< std::vector<T> >::const_iterator cit_t;
+    for(cit_t it=vec.begin();it!=vec.end();++it) {
+      //a_out << "  " << (*it) << std::endl;
+    }
+    return true;
+  }
+public:
+  mf_std_vec():parent(){}
+  virtual ~mf_std_vec(){}
+public:
+  mf_std_vec(const mf_std_vec& a_from)
+  :parent(a_from){}
+  mf_std_vec& operator=(const mf_std_vec& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+};
+
+}}
+
+#endif

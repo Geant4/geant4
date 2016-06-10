@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.icc 83009 2014-07-24 14:51:29Z gcosmo $
+// $Id: G4PhysicsVector.icc 93409 2015-10-21 13:26:27Z gcosmo $
 //
 // 
 //---------------------------------------------------------------
@@ -39,27 +39,6 @@
 //    This class serves as the base class for a vector having various 
 //    energy scale, for example like 'log', 'linear', 'free', etc.
 //
-//---------------------------------------------------------------
-
-//extern G4GLOB_DLL G4ThreadLocal G4Allocator<G4PhysicsVector> *fpPVAllocator;
-
-//---------------------------------------------------------------
-/*
-inline
- void* G4PhysicsVector::operator new(size_t)
-{ 
-  if (!fpPVAllocator) fpPVAllocator = new G4Allocator<G4PhysicsVector>;
-  return (void*)fpPVAllocator->MallocSingle();
-}
-
-//---------------------------------------------------------------
-
-inline
- void G4PhysicsVector::operator delete(void* aVector)
-{
-  fpPVAllocator->FreeSingle((G4PhysicsVector*)aVector);
-}
-*/
 //---------------------------------------------------------------
 
 inline
@@ -231,36 +210,18 @@ size_t G4PhysicsVector::FindBinLocation(G4double theEnergy) const
    size_t bin;
    if(type == T_G4PhysicsLogVector) {
      bin = size_t(G4Log(theEnergy)/dBin - baseBin);
-     if(bin + 2 > numberOfNodes) { bin = numberOfNodes - 2; }
-     else if(bin > 0 && theEnergy < binVector[bin]) { --bin; }
-     else if(bin + 2 < numberOfNodes && theEnergy > binVector[bin+1]) 
-            { ++bin; }
+     if(bin > 0 && theEnergy < binVector[bin]) { --bin; }
+     else if(theEnergy > binVector[bin+1]) { ++bin; }
    } else if(type == T_G4PhysicsLinearVector) {
      bin = size_t( theEnergy/dBin - baseBin ); 
-     if(bin + 2 > numberOfNodes) { bin = numberOfNodes - 2; }   
-     else if(bin > 0 && theEnergy < binVector[bin]) { --bin; }
-     else if(bin + 2 < numberOfNodes && theEnergy > binVector[bin+1]) 
-            { ++bin; }
+     if(bin > 0 && theEnergy < binVector[bin]) { --bin; }
+     else if(theEnergy > binVector[bin+1]) { ++bin; }
    } else {
-     bin = 0;
-     size_t bin2;
-     size_t bin3 = numberOfNodes - 1;
-     while (bin != bin3 - 1) {
-       bin2 = bin + (bin3 - bin + 1)/2;
-       if (theEnergy > binVector[bin2]) { bin = bin2; }
-       else { bin3 = bin2; }
-     }
-/*
-// Bin location proposed by K.Genser (FNAL)
-// V.I. Usage of this algorithm provides identical results
-// no CPU advantage is observed in EM tests
-// if new validation information will be known this code may be used
-     G4PVDataVector::const_iterator it =
-       std::lower_bound(binVector.begin(), binVector.end(), theEnergy);
-     bin = it - binVector.begin() - 1;
-*/
+     // Bin location proposed by K.Genser (FNAL)
+     bin = std::lower_bound(binVector.begin(), binVector.end(), theEnergy)
+         - binVector.begin() - 1;
    }
-   return bin;
+   return std::min(bin, numberOfNodes-2);
 }
 
 //---------------------------------------------------------------

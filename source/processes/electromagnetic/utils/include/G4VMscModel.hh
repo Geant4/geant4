@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.hh 80189 2014-04-07 10:16:26Z gcosmo $
+// $Id: G4VMscModel.hh 93264 2015-10-14 09:30:04Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -196,42 +196,42 @@ protected:
 
 inline void G4VMscModel::SetLateralDisplasmentFlag(G4bool val)
 {
-  latDisplasment = val;
+  if(!IsLocked()) { latDisplasment = val; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void G4VMscModel::SetSkin(G4double val)
 {
-  skin = val;
+  if(!IsLocked()) { skin = val; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void G4VMscModel::SetRangeFactor(G4double val)
 {
-  facrange = val;
+  if(!IsLocked()) { facrange = val; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void G4VMscModel::SetGeomFactor(G4double val)
 {
-  facgeom = val;
+  if(!IsLocked()) { facgeom = val; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void G4VMscModel::SetStepLimitType(G4MscStepLimitType val)
 {
-  steppingAlgorithm = val;
+  if(!IsLocked()) { steppingAlgorithm = val; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void G4VMscModel::SetSampleZ(G4bool val)
 {
-  samplez = val;
+  if(!IsLocked()) { samplez = val; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -258,14 +258,20 @@ inline G4double G4VMscModel::ComputeGeomLimit(const G4Track& track,
 					      G4double& presafety, 
 					      G4double limit)
 {
+  /*
   G4double res = geomMax;
   if(track.GetVolume() != safetyHelper->GetWorldVolume()) {
-    res = safetyHelper->CheckNextStep(
+    G4double res = safetyHelper->CheckNextStep(
           track.GetStep()->GetPreStepPoint()->GetPosition(),
 	  track.GetMomentumDirection(),
 	  limit, presafety);
   }
   return res;
+  */
+  return safetyHelper->CheckNextStep(
+          track.GetStep()->GetPreStepPoint()->GetPosition(),
+	  track.GetMomentumDirection(),
+	  limit, presafety);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

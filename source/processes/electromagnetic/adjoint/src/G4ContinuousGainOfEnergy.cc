@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ContinuousGainOfEnergy.cc 75591 2013-11-04 12:33:11Z gcosmo $
+// $Id: G4ContinuousGainOfEnergy.cc 91870 2015-08-07 15:21:40Z gcosmo $
 //
 
 #include "G4ContinuousGainOfEnergy.hh"
@@ -170,12 +170,17 @@ G4VParticleChange* G4ContinuousGainOfEnergy::AlongStepDoIt(const G4Track& track,
 			chargeSqRatio =  currentModel->GetChargeSquareRatio(theDirectPartDef,currentMaterial,E);
 			theDirectEnergyLossProcess->SetDynamicMassCharge(massRatio,chargeSqRatio);
 			G4double x1= theDirectEnergyLossProcess->GetRange(E, currentCouple);
+
+                        // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
+                        G4int ii=0;
+                        const G4int iimax = 100;
 			while (std::abs(x-x1)>0.01*x) {
 				E = theDirectEnergyLossProcess->GetKineticEnergy(x,currentCouple);
 				chargeSqRatio =  currentModel->GetChargeSquareRatio(theDirectPartDef,currentMaterial,E);
 				theDirectEnergyLossProcess->SetDynamicMassCharge(massRatio,chargeSqRatio);
 				x1= theDirectEnergyLossProcess->GetRange(E, currentCouple);
-			
+				++ii;
+			        if(ii >= iimax) { break; }
 			} 
 		}
 		

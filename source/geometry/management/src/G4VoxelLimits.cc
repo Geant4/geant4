@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelLimits.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4VoxelLimits.cc 91803 2015-08-06 12:17:01Z gcosmo $
 //
 // class G4VoxelLimits
 // 
@@ -151,7 +151,7 @@ G4bool G4VoxelLimits::ClipToLimits( G4ThreeVector& pStart,
       G4cout<<"z1 = "<<z1<<"\t"<<"z2 = "<<z2<<G4endl; 
     } 
     */  
-    while ( sCode != eCode )
+    while ( sCode != eCode )  // Loop checking, 06.08.2015, G.Cosmo
     {
       // Copy vectors to work variables x1-z1,x2-z2
       // Ensure x1-z1 lies outside volume, swapping vectors and outcodes

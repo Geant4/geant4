@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.hh 85306 2014-10-27 14:17:47Z gcosmo $
+// $Id: G4WentzelVIModel.hh 89893 2015-05-04 07:29:17Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -158,7 +158,6 @@ protected:
   const G4ParticleDefinition* particle;
 
   // flags
-  G4bool   inside;
   G4bool   singleScatteringMode;
 
 private:

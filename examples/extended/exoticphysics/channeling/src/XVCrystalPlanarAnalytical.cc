@@ -76,15 +76,15 @@ ComputeEC(G4ThreeVector vPositionVector,
 G4ThreeVector XVCrystalPlanarAnalytical::
 ComputeECFromVector(G4ThreeVector vPosition){
     G4double vInterplanarPeriod = fPhysicalLattice->ComputeInterplanarPeriod();
-    if((vPosition.x() >= 0.) &&
-       (vPosition.x() < vInterplanarPeriod)){
-        return G4ThreeVector(fVectorEC->Value(vPosition.x()),0.,0.);
-    }
-    else{
-        G4double vPositionX = vPosition.x() -
-            std::fmod(vPosition.x(),vInterplanarPeriod) * vInterplanarPeriod;
-        return G4ThreeVector(fVectorEC->Value(vPositionX),0.,0.);
-    }
+    G4double vX = vPosition.x();
+        if (vX < 0.0) {
+            vX += ((int( - vX / vInterplanarPeriod) + 1.0 )
+                  * vInterplanarPeriod);
+        }
+        else if( vX > vInterplanarPeriod ){
+            vX -= ( int( vX / vInterplanarPeriod) * vInterplanarPeriod );
+        }
+        return G4ThreeVector(fVectorEC->Value(vX),0.,0.);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -209,7 +209,7 @@ void XVCrystalPlanarAnalytical::ReadFromFile(const G4String& filename,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XVCrystalPlanarAnalytical::ReadFromECHARM(const G4String& filename,
-                                               G4double){
+                                               G4double vConversion){
     std::ifstream vFileIn;
     vFileIn.open(filename);
     
@@ -222,7 +222,6 @@ void XVCrystalPlanarAnalytical::ReadFromECHARM(const G4String& filename,
     xmax *= CLHEP::meter;
     fMaximum = -DBL_MAX;
     fMinimum = +DBL_MAX;
-    std::cout << imax << " " << xmax << std::endl;
 
     fVectorEC = new G4PhysicsLinearVector(0,xmax,imax);
     
@@ -230,12 +229,16 @@ void XVCrystalPlanarAnalytical::ReadFromECHARM(const G4String& filename,
         double vTempX;
         vFileIn >> vTempX;
 
-        vTempX *= CLHEP::eV;
+        vTempX *= vConversion;
         if(vTempX > fMaximum) {fMaximum = vTempX;}
         if(vTempX < fMinimum) {fMinimum = vTempX;}
         fVectorEC->PutValue(i,vTempX);
     }
-    
+
+    G4cout << "XVCrystalPlanarAnalytical::ReadFromECHARM() - " <<
+     vConversion << " " << imax << " " << xmax << " " << 
+     fMinimum << " " << fMaximum << G4endl;
+   
     vFileIn.close();
     
 }

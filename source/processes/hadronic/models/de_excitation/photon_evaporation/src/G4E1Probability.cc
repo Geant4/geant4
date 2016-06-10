@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4E1Probability.cc 86783 2014-11-18 08:43:58Z gcosmo $
+// $Id: G4E1Probability.cc 92144 2015-08-19 14:25:18Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -45,14 +45,15 @@
 #include "G4Exp.hh"
 #include "G4SystemOfUnits.hh"
 
-// Constructors and operators
-//
+static const G4double tolerance = 0.1*CLHEP::keV;
 
 G4E1Probability::G4E1Probability():G4VEmissionProbability()
 {
   G4double x = CLHEP::pi*CLHEP::hbarc;
   normC = 1.0 / (x*x);
-  theLevelDensityParameter = 0.125/MeV;
+  theLevelDensityPerNucleon = 0.125/MeV;
+  aLevelDensityParam = sigma0 = Egdp = GammaR = 0.0;
+  Afrag = 0;
   fG4pow = G4Pow::GetInstance(); 
 }
 
@@ -72,56 +73,47 @@ G4double G4E1Probability::EmissionProbDensity(const G4Fragment& frag,
 
   G4double theProb = 0.0;
 
-  G4int Afrag = frag.GetA_asInt();
-  G4double Uexcite = frag.GetExcitationEnergy();
-  G4double U = Uexcite - gammaE;
+  if(gammaE > tolerance) {
 
-  if(U < 0.0) { return theProb; }
+    G4double Uexcite = frag.GetExcitationEnergy();
+    G4double U = std::max(0.0, Uexcite - gammaE);
 
-  // Need a level density parameter.
-  // For now, just use the constant approximation (not reliable near magic
-  // nuclei) - is equivalent to G4ConstantLevelDensityParameter class
+    // Need a level density parameter.
+    // For now, just use the constant approximation (not reliable near magic
+    // nuclei) - is equivalent to G4ConstantLevelDensityParameter class
 
-  G4double aLevelDensityParam = Afrag*theLevelDensityParameter;
+    if(Afrag != frag.GetA_asInt()) {
+      Afrag = frag.GetA_asInt();
+      aLevelDensityParam = Afrag*theLevelDensityPerNucleon;
 
-  // VI reduce number of calls to exp 
-  G4double levelDens = 
-    G4Exp(2*(std::sqrt(aLevelDensityParam*U)-std::sqrt(aLevelDensityParam*Uexcite)));
-  // Now form the probability density
-
-  // Define constants for the photoabsorption cross-section (the reverse
-  // process of our de-excitation)
-
-  G4double sigma0 = 2.5 * Afrag * millibarn;  // millibarns
-
-  G4double Egdp   = (40.3 / fG4pow->powZ(Afrag,0.2) )*MeV;
-  G4double GammaR = 0.30 * Egdp;
+      // Define constants for the photoabsorption cross-section (the reverse
+      // process of our de-excitation)
+      sigma0 = 2.5 * Afrag * millibarn;
+      Egdp   = (40.3 / fG4pow->powZ(Afrag,0.2) )*MeV;
+      GammaR = 0.30 * Egdp;
+    }
+    // VI reduce number of calls to exp 
+    G4double levelDens = 
+      G4Exp(2*(std::sqrt(aLevelDensityParam*U)-
+	       std::sqrt(aLevelDensityParam*Uexcite)));
  
-  // CD
-  //cout<<"  PROB TESTS "<<G4endl;
-  //cout<<" hbarc = "<<hbarc<<G4endl;
-  //cout<<" pi = "<<pi<<G4endl;
-  //cout<<" Uexcite, gammaE = "<<Uexcite<<"  "<<gammaE<<G4endl;
-  //cout<<" Uexcite, gammaE = "<<Uexcite*MeV<<"  "<<gammaE*MeV<<G4endl;
-  //cout<<" lev density param = "<<aLevelDensityParam<<G4endl;
-  //cout<<" level densities = "<<levelDensBef<<"  "<<levelDensAft<<G4endl;
-  //cout<<" sigma0 = "<<sigma0<<G4endl;
-  //cout<<" Egdp, GammaR = "<<Egdp<<"  "<<GammaR<<G4endl;
-  //cout<<" normC = "<<normC<<G4endl;
+    //G4cout<<" Uexcite, gammaE = "<<Uexcite<<"  "<<gammaE<<G4endl;
+    //cout<<" lev density param = "<<aLevelDensityParam<<G4endl;
+    //cout<<" level densities = "<<levelDensBef<<"  "<<levelDensAft<<G4endl;
+    //cout<<" sigma0 = "<<sigma0<<G4endl;
+    //cout<<" Egdp, GammaR = "<<Egdp<<"  "<<GammaR<<G4endl;
+    //cout<<" normC = "<<normC<<G4endl;
 
-  // VI implementation 18.05.2010
-  G4double gammaE2 = gammaE*gammaE;
-  G4double gammaR2 = gammaE2*GammaR*GammaR;
-  G4double egdp2   = gammaE2 - Egdp*Egdp;
-  G4double sigmaAbs = sigma0*gammaR2/(egdp2*egdp2 + gammaR2); 
-  theProb = normC * sigmaAbs * gammaE2 * levelDens;
+    // VI implementation 18.05.2010
+    G4double gammaE2 = gammaE*gammaE;
+    G4double gammaR2 = gammaE2*GammaR*GammaR;
+    G4double egdp2   = gammaE2 - Egdp*Egdp;
+    G4double sigmaAbs = sigma0*gammaR2/(egdp2*egdp2 + gammaR2); 
+    theProb = normC * sigmaAbs * gammaE2 * levelDens;
 
-  // CD
-  //cout<<" sigmaAbs = "<<sigmaAbs<<G4endl;
-  //cout<<" Probability = "<<theProb<<G4endl;
-
+    //G4cout<<" sigmaAbs = "<<sigmaAbs <<" Probability = "<<theProb<<G4endl;
+  }
   return theProb;
-
 }
 
 G4double G4E1Probability::EmissionProbability(const G4Fragment& frag, 
@@ -136,15 +128,13 @@ G4double G4E1Probability::EmissionProbability(const G4Fragment& frag,
 
   //G4cout << "G4E1Probability::EmissionProbability:  Emin= " << lowerLim
   //	 << " Emax= " << upperLim << G4endl;
-  if( upperLim - lowerLim <= CLHEP::keV ) { return 0.0; } 
+  if( upperLim - lowerLim <=  tolerance) { return 0.0; } 
 
   // Need to integrate EmissionProbDensity from lowerLim to upperLim 
   // and multiply by factor 3 (?!)
 
   G4double integ = EmissionIntegration(frag,lowerLim,upperLim);
-
   return integ;
-
 }
 
 G4double G4E1Probability::EmissionIntegration(const G4Fragment& frag, 

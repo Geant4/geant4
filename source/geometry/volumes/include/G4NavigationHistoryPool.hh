@@ -54,15 +54,18 @@ class G4NavigationHistoryPool
     inline std::vector<G4NavigationLevel> * GetNewLevels();
       // Return the pointer to a new collection of levels being allocated.
 
-    std::vector<G4NavigationLevel> * GetLevels();
+    inline std::vector<G4NavigationLevel> * GetLevels();
       // Return the pointer of the first available collection of levels
-      // If none are available (i.e. non active) allocate collection.
+      // If none are available (i.e. empty Free vector) allocate collection.
 
     inline void DeRegister(std::vector<G4NavigationLevel> * pLevels);
       // Deactivate levels collection in pool.
 
     void Clean();
       // Delete all levels stored in the pool.
+
+    void Print() const;
+      // Print number of entries.
 
    ~G4NavigationHistoryPool();
       // Destructor: takes care to delete allocated levels.
@@ -83,7 +86,7 @@ class G4NavigationHistoryPool
     static G4ThreadLocal G4NavigationHistoryPool* fgInstance;
 
     std::vector<std::vector<G4NavigationLevel> *> fPool;
-    std::vector<G4bool> fActive;
+    std::vector<std::vector<G4NavigationLevel> *> fFree;
 };
 
 // ***************************************************************************
@@ -94,7 +97,6 @@ inline void G4NavigationHistoryPool::
 Register(std::vector<G4NavigationLevel> * pLevels)
 {
   fPool.push_back(pLevels);
-  fActive.push_back(true);
 }
 
 // ***************************************************************************
@@ -104,9 +106,7 @@ Register(std::vector<G4NavigationLevel> * pLevels)
 inline void G4NavigationHistoryPool::
 DeRegister(std::vector<G4NavigationLevel> * pLevels)
 {
-  std::vector<std::vector<G4NavigationLevel> *>::iterator
-    pos = std::find(fPool.begin(), fPool.end(), pLevels);
-  fActive[pos-fPool.begin()]=false;
+  fFree.push_back(pLevels);
 }
 
 // ***************************************************************************
@@ -120,6 +120,28 @@ inline std::vector<G4NavigationLevel> * G4NavigationHistoryPool::GetNewLevels()
   Register(aLevelVec);
 
   return aLevelVec;
+}
+
+// ***************************************************************************
+// Return the pointer of the first available collection of levels
+// If none are available (i.e. non active) allocate collection
+// ***************************************************************************
+//
+inline std::vector<G4NavigationLevel> * G4NavigationHistoryPool::GetLevels()
+{
+  std::vector<G4NavigationLevel> * levels = 0;
+
+  if (fFree.size() !=0)
+  {
+    levels = fFree.back();
+    fFree.pop_back();
+  }
+  else
+  {
+    levels = GetNewLevels();
+  }
+
+  return levels;
 }
 
 #endif

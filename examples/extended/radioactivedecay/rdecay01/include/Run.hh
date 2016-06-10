@@ -54,6 +54,7 @@ class Run : public G4Run
     void Balance(G4double,G4double);
     void EventTiming(G4double);
     void PrimaryTiming(G4double);
+    void EvisEvent(G4double);
         
     void SetPrimary(G4ParticleDefinition* particle, G4double energy);
     void EndOfRun(); 
@@ -81,7 +82,8 @@ class Run : public G4Run
     G4double fEkinTot[3];
     G4double fPbalance[3];
     G4double fEventTime[3];
-    G4double fPrimaryTime;                        
+    G4double fPrimaryTime;
+    G4double fEvisEvent[3];
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

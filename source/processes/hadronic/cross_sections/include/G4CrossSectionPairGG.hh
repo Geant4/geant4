@@ -23,13 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionPairGG.hh 79981 2014-03-27 15:24:11Z gcosmo $
+// $Id: G4CrossSectionPairGG.hh 93682 2015-10-28 10:09:49Z gcosmo $
 // $ GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   Class G4CrossSectionPairGG
 //
 //     Extend a cross section to higher energies using
-//       G4GlauberGribovCrossSection at high energies.
+//       G4ComponentGGHadronNucleusXsc at high energies.
 //       Smoothly join cross section sets by scaling GG at a given 
 //       transition energy to match the given low energy cross section.
 //
@@ -42,11 +42,11 @@
 #include "globals.hh"
 #include "G4VCrossSectionDataSet.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4GlauberGribovCrossSection.hh"
 #include <valarray>
 #include <iostream>
 
 class G4NistManager;
+class G4ComponentGGHadronNucleusXsc;
 
 class G4CrossSectionPairGG : public G4VCrossSectionDataSet
 {
@@ -80,7 +80,7 @@ class G4CrossSectionPairGG : public G4VCrossSectionDataSet
 
     G4NistManager* NistMan;
     G4VCrossSectionDataSet * theLowX;   
-    G4GlauberGribovCrossSection * theHighX;
+    G4ComponentGGHadronNucleusXsc * theHighX;
     G4double ETransition;
     typedef std::valarray<G4double> XS_factors;
     typedef std::pair<const G4ParticleDefinition *, XS_factors > ParticleXScale;

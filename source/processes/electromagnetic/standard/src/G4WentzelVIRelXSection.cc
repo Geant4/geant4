@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIRelXSection.cc 85306 2014-10-27 14:17:47Z gcosmo $
+// $Id: G4WentzelVIRelXSection.cc 91726 2015-08-03 15:41:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -55,6 +55,7 @@
 #include "G4Proton.hh"
 #include "G4EmParameters.hh"
 #include "G4Log.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -64,6 +65,7 @@ G4double G4WentzelVIRelXSection::FormFactor[]    = {0.0};
 using namespace std;
 
 G4WentzelVIRelXSection::G4WentzelVIRelXSection(G4bool combined) :
+  temp(0.,0.,0.),
   numlimit(0.1),
   nwarnings(0),
   nwarnlimit(50),
@@ -97,13 +99,15 @@ G4WentzelVIRelXSection::G4WentzelVIRelXSection(G4bool combined) :
     } 
   }
   currentMaterial = 0;
-  elecXSRatio = factB = factD = formfactA = screenZ = 0.0;
+  factB = factD = formfactA = screenZ = 0.0;
   cosTetMaxElec = cosTetMaxNuc = invbeta2 = kinFactor = gam0pcmp = pcmp2 = 1.0;
   cosThetaMax = 1.0;
 
   factB1= 0.5*CLHEP::pi*fine_structure_const;
 
-  Initialise(theElectron, 1.0);
+  tkin = mom2 = momCM2 = factorA2 = mass = spin = chargeSquare = charge3 = 0.0;
+  ecut = etag = DBL_MAX;
+  targetZ = 0;
   targetMass = proton_mass_c2;
 }
 
@@ -156,30 +160,12 @@ G4WentzelVIRelXSection::SetupTarget(G4int Z, G4double cut)
   if(Z != targetZ || tkin != etag) {
     etag    = tkin; 
     targetZ = Z;
-    if(targetZ > 99) { targetZ = 99; }
-    SetTargetMass(fNistManager->GetAtomicMassAmu(targetZ)*CLHEP::amu_c2);
-    //G4double tmass2 = targetMass*targetMass;
-    //G4double etot = tkin + mass;
-    //G4double invmass2 = mass*mass + tmass2 + 2*etot*targetMass;
-    //momCM2 = mom2*tmass2/invmass2;
-    //gam0pcmp = (etot + targetMass)*targetMass/invmass2;
-    //pcmp2    = tmass2/invmass2;
 
     kinFactor = coeff*targetZ*chargeSquare*invbeta2/mom2;
 
     screenZ = ScreenRSquare[targetZ]/mom2;
     if(Z > 1) {
       screenZ *= std::min(Z*1.13,1.13 +3.76*Z*Z*invbeta2*alpha2*chargeSquare);
-      /*
-      if(mass > MeV) {
-	screenZ *= std::min(Z*1.13,1.13 +3.76*Z*Z*invbeta2*alpha2*chargeSquare);
-      } else {
-	G4double tau = tkin/mass;
-	//	screenZ *= std::min(Z*invbeta2,
-	screenZ *= std::min(Z*1.13,
-        (1.13 +3.76*Z*Z*invbeta2*alpha2*std::sqrt(tau/(tau + fG4pow->Z23(Z)))));
-      }
-      */
     }
     if(targetZ == 1 && cosTetMaxNuc2 < 0.0 && particle == theProton) {
       cosTetMaxNuc2 = 0.0;
@@ -291,35 +277,36 @@ G4WentzelVIRelXSection::ComputeTransportCrossSectionPerAtom(G4double cosTMax)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4ThreeVector
+G4ThreeVector&
 G4WentzelVIRelXSection::SampleSingleScattering(G4double cosTMin,
-						 G4double cosTMax,
-						 G4double elecRatio)
+					       G4double cosTMax,
+					       G4double elecRatio)
 {
-  G4ThreeVector v(0.0,0.0,1.0);
+  temp.set(0.0,0.0,1.0);
  
+  CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();
+
   G4double formf = formfactA;
   G4double cost1 = cosTMin;
   G4double cost2 = cosTMax;
   if(elecRatio > 0.0) {
-    if(G4UniformRand() <= elecRatio) {
+    if(rndmEngine->flat() <= elecRatio) {
       formf = 0.0;
       cost1 = std::max(cost1,cosTetMaxElec);
       cost2 = std::max(cost2,cosTetMaxElec);
     }
   }
-  if(cost1 < cost2) { return v; }
+  if(cost1 < cost2) { return temp; }
 
   G4double w1 = 1. - cost1 + screenZ;
   G4double w2 = 1. - cost2 + screenZ;
-  G4double z1 = w1*w2/(w1 + G4UniformRand()*(w2 - w1)) - screenZ;
+  G4double z1 = w1*w2/(w1 + rndmEngine->flat()*(w2 - w1)) - screenZ;
 
-  //G4double fm =  1.0 + formf*z1/(1.0 + (mass + tkin)*z1/targetMass);
   G4double fm =  1.0 + formf*z1;
-  //G4double grej = (1. - z1*factB)/( (1.0 + z1*factD)*fm*fm );
-  G4double grej = (1. - z1*factB + factB1*targetZ*sqrt(z1*factB)*(2 - z1))/( (1.0 + z1*factD)*fm*fm );
+  G4double grej = (1. - z1*factB + factB1*targetZ*sqrt(z1*factB)*(2 - z1))
+                 /( (1.0 + z1*factD)*fm*fm );
   // "false" scattering
-  if( G4UniformRand() > grej ) { return v; }
+  if(rndmEngine->flat() > grej ) { return temp; }
     // } 
   G4double cost = 1.0 - z1;
 
@@ -327,13 +314,13 @@ G4WentzelVIRelXSection::SampleSingleScattering(G4double cosTMin,
   else if(cost < -1.0) { cost =-1.0; }
   G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
   //G4cout << "sint= " << sint << G4endl;
-  G4double phi  = twopi*G4UniformRand();
+  G4double phi  = twopi*rndmEngine->flat();
   G4double vx1 = sint*cos(phi);
   G4double vy1 = sint*sin(phi);
 
   // only direction is changed
-  v.set(vx1,vy1,cost);
-  return v;
+  temp.set(vx1,vy1,cost);
+  return temp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

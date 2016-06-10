@@ -36,6 +36,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
+#include "G4Pow.hh"
 
 // Group 1: He, Be, C for 44 energies  
 
@@ -726,7 +727,7 @@ Interpolate(G4int Z1, G4int Z2, G4int Z, G4double x1, G4double x2)
   {
     for (G4int i=0; i<92; ++i)
     {
-      A75[i] = std::pow(A[i], alpha); // interpolate by square ~ A^(2/3)
+      A75[i] = G4Pow::GetInstance()->powA(A[i], alpha); // interpolate by square ~ A^(2/3)
     }
     NeedInit=false;
   }

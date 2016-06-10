@@ -1,0 +1,43 @@
+$Id:$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example Par02 History file
+                    ---------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+14-Oct-2015 J. Apostolakis                        (expar02-V10-01-07)
+- Simplified code to set Primary Particle Information (Par02FastSimModelHCal)
+
+14-Sep-2015 I. Hrivnacova                         (expar02-V10-01-06)
+- Fixed deleting of fast simulation models in multi-threaded mode
+
+11-Sep-2015  A. Ribon                             (expar02-V10-01-05)
+- Migrated to multi-threaded mode (thanks to Ivana help).
+
+27-Apr-2015  I. Hrivnacova                        (expar02-V10-01-04)
+- Fixed .README to get generated documentation correct.
+
+21-Apr-2015  A. Ribon                             (expar02-V10-01-03)
+- Fixed another two warnings in Windows platform.
+
+21-Apr-2015  A. Ribon                             (expar02-V10-01-02)
+- Fixed a problem in Windows platform.
+
+20-Apr-2015  A. Ribon                             (expar02-V10-01-01)
+- Fixed a few compilation warnings.
+
+17-Apr-2015  A. Ribon                             (expar02-V10-01-00)
+- Created and first commit.
+  Based on the Future Circular Collider (FCC) fast simulation application
+  developed by Anna Zaborowska.
+

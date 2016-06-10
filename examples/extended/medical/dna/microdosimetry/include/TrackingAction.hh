@@ -69,5 +69,4 @@ private:
     std::map<const G4ParticleDefinition*, int> fNParticleInWorld;
 };
 
-
 #endif

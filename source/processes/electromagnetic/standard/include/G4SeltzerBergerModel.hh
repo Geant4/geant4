@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SeltzerBergerModel.hh 74458 2013-10-07 15:23:13Z gcosmo $
+// $Id: G4SeltzerBergerModel.hh 93362 2015-10-19 13:45:19Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -63,7 +63,7 @@ class G4SeltzerBergerModel : public G4eBremsstrahlungRelModel
 
 public:
 
-  G4SeltzerBergerModel(const G4ParticleDefinition* p = 0, 
+  G4SeltzerBergerModel(const G4ParticleDefinition* p = nullptr, 
 		       const G4String& nam = "eBremSB");
 
   virtual ~G4SeltzerBergerModel();

@@ -1,0 +1,33 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_senums
+#define tools_sg_senums
+
+// string version of sg::enums.
+
+#include "../S_STRING"
+#include <string>
+
+namespace tools {
+namespace sg {
+
+TOOLS_GLOBAL_STRING(gsto_mode)
+// values :
+TOOLS_GLOBAL_STRING(gsto_gl_vbo)
+TOOLS_GLOBAL_STRING(gsto_gl_list)
+TOOLS_GLOBAL_STRING(gsto_memory)
+
+TOOLS_GLOBAL_STRING(camera_type)
+// values :
+TOOLS_GLOBAL_STRING(camera_ortho)
+TOOLS_GLOBAL_STRING(camera_perspective)
+
+//TOOLS_GLOBAL_STRING(layout_policy)
+// values :
+TOOLS_GLOBAL_STRING(layout_text_under_image)
+TOOLS_GLOBAL_STRING(layout_text_at_left_of_image)
+
+}}
+
+#endif

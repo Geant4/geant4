@@ -1,0 +1,90 @@
+$Id: History 89902 2015-05-04 09:30:08Z ihrivnac $
+--------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example B3 History file
+                    -----------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+04/05/15 I. Hrivnacova (exampleB3-V10-01-00)
+- Coding guidelines: removed empty lines
+     
+29/11/14 I. Hrivnacova
+- Use G4endl instead of \n in G4cout;
+  this makes each new line in the output on threads preceded with
+  G4WTN >
+
+06/11/14 I. Hrivnacova
+- Finalized modifications in previous tag (01):
+  - Removed G4UI_USE/G4VIS_USE tests and init.mac macro (not needed)
+  - Moved G4UIExecutive at the beginning of main() in all examples
+  - Perform run initialization in macros instead of main()
+
+04/11/14 L. Garnier (exampleB3-V10-00-01)
+- Remove old G4UI_USE/G4VIS_USE
+- Move G4UIExecutive at the beginning of main() 
+
+29/10/13 I. Hrivnacova (exampleB3-V09-06-06)
+- Removed SetNumberOfThreads(4) from main (use Geant4 default)
+- Updated README
+     
+09/09/13 M.Asai (exampleB3-V09-06-05)
+- B3PrimaryGeneratorAction.cc : Change G4ParticleTable::GetIon() to
+  G4IonTable::GetIon(), as the former method becomes obsolete.
+
+13/06/13 mma (exampleB3-V09-06-04)
+ Fixes for MT:
+- Set sensitive detector via SetSensitiveDetector(..)
+- Get hits collection IDs in B3Run::RecordEvent (and not B3Run constructor)
+- Add a test for primary generator action in B3RunAction::EndOfRunAction()
+  as it does not exist on master
+    
+05/06/13 mma (exampleB3-V09-06-03)
+- add section about ACTION INITALIZATION to README and .README
+     
+01/06/13 mma  (exampleB3-V09-06-02)
+- Migration for MT:
+  forgotten to add B3Run
+     
+31/05/13 mma  (exampleB3-V09-06-01)
+- Migration for MT:
+  Added B3ActionInitialization, B3Run
+  Removed B3EventAction
+  and updated actions classes accordingly.
+  README files still need to be updated.
+  
+28/02/13 I. Hrivnacova
+- When building materials with NistManager
+  do not set fromIsotopes argument (which was set to false), 
+  as since 9.6 all materials have to be built from isotopes.
+  Thanks to V. Ivantchenko for pointing at this.
+
+21/11/11 I. Hrivnacova 
+- Improved vis.mac
+- Removed alternative detector construction class  
+
+14/11/11 I. Hrivnacova
+- The first tagged version of the new B3 example
+  (tagged in basic).
+
+11-11-11 (mma)     
+- EventAction: printModulo 10000
+     
+01-11-11 (mma)     
+- DetectorConstruction2: - add an offset when replicate dPhi
+			     
+29-09-11 (mma)     
+- DetectorConstruction: - replace crystal shape Trd by Box
+                        - add a gap for wrapping
+    
+27-06-11 michel maire     
+- Created.

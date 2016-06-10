@@ -43,6 +43,9 @@
 #define G4USPHERE_HH
 
 #include "G4USolid.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+
 #include "USphere.hh"
 #include "G4Polyhedron.hh"
 
@@ -158,5 +161,7 @@ inline void G4USphere::SetDeltaThetaAngle(G4double newDTheta)
   GetShape()->SetDeltaThetaAngle(newDTheta);
   fRebuildPolyhedron = true;
 }
+
+#endif  // G4GEOM_USE_USOLIDS
 
 #endif

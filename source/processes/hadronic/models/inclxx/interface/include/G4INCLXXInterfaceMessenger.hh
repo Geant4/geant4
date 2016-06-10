@@ -48,6 +48,7 @@
 #include "G4INCLXXInterfaceStore.hh"
 #include "G4UImessenger.hh"
 #include "G4UIdirectory.hh"
+#include "G4UIcommand.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
@@ -73,6 +74,8 @@ class G4INCLXXInterfaceMessenger : public G4UImessenger
     G4UIcmdWithAString *accurateNucleusCmd;
     G4UIcmdWithAnInteger *maxClusterMassCmd;
     G4UIcmdWithADoubleAndUnit *cascadeMinEnergyPerNucleonCmd;
+    G4UIcmdWithAString *inclPhysicsCmd;
+    G4UIcommand *useAblaCmd;
 };
 
 #endif

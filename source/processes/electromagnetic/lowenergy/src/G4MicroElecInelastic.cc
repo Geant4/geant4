@@ -42,6 +42,7 @@
 
 
 #include "G4MicroElecInelastic.hh"
+#include "G4DummyModel.hh"
 #include "G4SystemOfUnits.hh"
 
 #include "G4GenericIon.hh"
@@ -81,32 +82,8 @@ void G4MicroElecInelastic::InitialiseProcess(const G4ParticleDefinition* p)
     SetBuildTableFlag(false);
     G4String name = p->GetParticleName();
 
-    if(name == "e-")
-    {
-      if(!EmModel()) SetEmModel(new G4MicroElecInelasticModel);
-      EmModel()->SetLowEnergyLimit(16.7*eV);
-      EmModel()->SetHighEnergyLimit(100*MeV);
-
-      AddEmModel(1, EmModel());   
-    }
-
-    else if(name == "proton")
-    {
-      if(!EmModel()) SetEmModel(new G4MicroElecInelasticModel);
-      EmModel()->SetLowEnergyLimit(50.*keV);
-      EmModel()->SetHighEnergyLimit(10*GeV);
-
-      AddEmModel(1, EmModel());   
-    }
-
-    else if(name == "GenericIon")
-    {
-      if(!EmModel()) SetEmModel(new G4MicroElecInelasticModel);
-      EmModel()->SetLowEnergyLimit(50.*keV);
-      EmModel()->SetHighEnergyLimit(p->GetAtomicMass()*10.*GeV);
-
-      AddEmModel(1, EmModel());   
-    }
+    if(!EmModel(1)) SetEmModel(new G4DummyModel(), 1);
+    AddEmModel(2, EmModel(1));   
   } 
 }
 
@@ -114,28 +91,9 @@ void G4MicroElecInelastic::InitialiseProcess(const G4ParticleDefinition* p)
 
 void G4MicroElecInelastic::PrintInfo()
 {
-  // V.I. printout of models is perfored by model manager
+  // V.I. printout of models is performed by model manager
   //      if this extra printout is needed it should be 
   //      protected by verbosity level
-  /*
-  if (EmModel(2))
-  {
-    G4cout
-      << " Total cross sections computed from " 
-      << EmModel(1)->GetName()
-      << " and "
-      << EmModel(2)->GetName() 
-      << " models"
-      << G4endl;
-  } 
-  else
-  {
-    G4cout
-      << " Total cross sections computed from " 
-      << EmModel()->GetName() 
-      << G4endl;
-  }
-  */
 }         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

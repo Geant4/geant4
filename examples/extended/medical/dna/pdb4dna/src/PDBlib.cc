@@ -48,11 +48,10 @@
 #include <fstream>
 #include <iostream>
 #include <limits>
-#include <math.h>
+#include <cmath>
 #include <sstream>
 #include <string>
 #include <stdlib.h>
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -646,7 +645,6 @@ Barycenter * PDBlib::ComputeNucleotideBarycenters(Molecule * moleculeListTemp)
 
     j_old+=j;
 
-
     ///molecs->push_back(*moleculeListTemp);
     moleculeListTemp=moleculeListTemp->GetNext();
   }//end of while sur moleculeListTemp
@@ -688,7 +686,6 @@ void PDBlib::ComputeBoundingVolumeParams(Molecule *moleculeListTemp,
   maxmaxY=numeric_limits<double>::min();
   maxmaxZ=numeric_limits<double>::min();
 #endif
-
 
   while (moleculeListTemp)
   {

@@ -1,0 +1,131 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_sf_mat4f
+#define tools_sg_sf_mat4f
+
+#include "sf_vec"
+
+#include "../lina/mat4f"
+#include "../lina/vec3f"
+#include "../lina/rotf"
+
+#include "../HEADER"
+
+namespace tools {
+namespace sg {
+
+class sf_mat4f : public sf_vec<mat4f,float> {
+  typedef sf_vec<mat4f,float> pr;
+  TOOLS_HEADER(sf_mat4f,tools::sg::sf_mat4f,pr)
+public:
+  sf_mat4f():parent(){}
+  sf_mat4f(const mat4f& a_value):parent(a_value){}
+  virtual ~sf_mat4f(){}
+public:
+  sf_mat4f(const sf_mat4f& a_from):parent(a_from){}
+  sf_mat4f& operator=(const sf_mat4f& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+public:
+  sf_mat4f& operator=(const mat4f& a_value){
+    parent::operator=(a_value);
+    return *this;
+  }
+public:
+  void set_identity() {
+    m_value.set_identity();
+    m_touched = true;
+  }
+  void set_translate(float a_x,float a_y,float a_z) {
+    m_value.set_translate(a_x,a_y,a_z);
+    m_touched = true; //FIXME : should check for a change !
+  }
+  void set_translate(const vec3f& a_v) {
+    m_value.set_translate(a_v.x(),a_v.y(),a_v.z());
+    m_touched = true; //FIXME : should check for a change !
+  }
+  void set_scale(float a_x,float a_y,float a_z) {
+    m_value.set_scale(a_x,a_y,a_z);
+    m_touched = true; //FIXME : should check for a change !
+  }
+  void set_scale(float a_s) {
+    m_value.set_scale(a_s);
+    m_touched = true; //FIXME : should check for a change !
+  }
+  void set_rotate(float a_x,float a_y,float a_z,float a_angle) {
+    m_value.set_rotate(a_x,a_y,a_z,a_angle);
+    m_touched = true; //FIXME : should check for a change !
+  }
+  void set_rotate(const vec3f& a_v,float a_angle) {
+    m_value.set_rotate(a_v.x(),a_v.y(),a_v.z(),a_angle);
+    m_touched = true; //FIXME : should check for a change !
+  }
+
+  void mul_mtx(const mat4f& a_m,float a_tmp[]) {
+    m_value.mul_mtx(a_m,a_tmp);
+    m_touched = true;
+  }
+
+  void mul_translate(float a_x,float a_y,float a_z) {
+    m_value.mul_translate(a_x,a_y,a_z);
+    m_touched = true;
+  }
+  void mul_translate(const vec3f& a_v) {
+    m_value.mul_translate(a_v.x(),a_v.y(),a_v.z());
+    m_touched = true;
+  }
+  void mul_scale(float a_x,float a_y,float a_z) {
+    m_value.mul_scale(a_x,a_y,a_z);
+    m_touched = true;
+  }
+  void mul_scale(float a_s) {
+    m_value.mul_scale(a_s);
+    m_touched = true;
+  }
+
+  void mul_rotate(float a_x,float a_y,float a_z,float a_angle) {
+    m_value.mul_rotate(a_x,a_y,a_z,a_angle);
+    m_touched = true;
+  }
+
+  void mul_rotate(const vec3f& a_axis,float a_angle) {
+    m_value.mul_rotate(a_axis.x(),a_axis.y(),a_axis.z(),a_angle);
+    m_touched = true;
+  }
+
+  void left_mul_rotate(float a_x,float a_y,float a_z,float a_angle) {
+    m_value.left_mul_rotate(a_x,a_y,a_z,a_angle);
+    m_touched = true;
+  }
+
+  void left_mul_scale(float a_x,float a_y,float a_z) {
+    m_value.left_mul_scale(a_x,a_y,a_z);
+    m_touched = true;
+  }
+
+  void left_mul_translate(float a_x,float a_y,float a_z) {
+    m_value.left_mul_translate(a_x,a_y,a_z);
+    m_touched = true;
+  }
+
+  void left_mul_translate(const vec3f& a_v) {
+    m_value.left_mul_translate(a_v.x(),a_v.y(),a_v.z());
+    m_touched = true;
+  }
+
+  bool mul_rotate(const vec3f& a_from,const vec3f& a_to,float a_tmp[]) {
+    rotf qr;
+    if(!qr.set_value(a_from,a_to)) return false;
+    mat4f rot;
+    qr.value(rot);
+    m_value.mul_mtx(rot,a_tmp);
+    m_touched = true;
+    return true;
+  }
+};
+
+}}
+
+#endif

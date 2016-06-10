@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 85608 2014-10-31 11:23:30Z gcosmo $
+# $Id: sources.cmake 92393 2015-08-31 14:07:30Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -62,6 +62,7 @@ GEANT4_DEFINE_MODULE(NAME G4csg
         G4UCons.hh
         G4UOrb.hh
         G4USphere.hh
+        G4UTorus.hh
         G4UTrap.hh
         G4UTrd.hh
         G4UTubs.hh
@@ -82,6 +83,7 @@ GEANT4_DEFINE_MODULE(NAME G4csg
         G4UCons.cc
         G4UOrb.cc
         G4USphere.cc
+        G4UTorus.cc
         G4UTrap.cc
         G4UTrd.cc
         G4UTubs.cc

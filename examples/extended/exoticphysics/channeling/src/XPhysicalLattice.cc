@@ -295,8 +295,8 @@ G4double XPhysicalLattice::GetThermalVibrationAmplitude(){
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4ThreeVector XPhysicalLattice::
-ProjectMomentumVectorFromWorldToLattice(G4ThreeVector vMomentum,
-                                        G4ThreeVector vPosition){
+ProjectMomentumVectorFromWorldToLattice(G4ThreeVector& vMomentum,
+                                        G4ThreeVector& vPosition){
     vMomentum.rotate(G4ThreeVector(1.,0.,0.),fOmega)
         .rotate(G4ThreeVector(0.,1.,0.), fTheta)
         .rotate(G4ThreeVector(0.,0.,1.), fPhi);
@@ -313,8 +313,8 @@ ProjectMomentumVectorFromWorldToLattice(G4ThreeVector vMomentum,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4ThreeVector XPhysicalLattice::
-ProjectMomentumVectorFromLatticeToWorld(G4ThreeVector vMomentum,
-                                        G4ThreeVector vPosition){
+ProjectMomentumVectorFromLatticeToWorld(G4ThreeVector& vMomentum,
+                                        G4ThreeVector& vPosition){
     vMomentum.rotate(G4ThreeVector(0.,0.,1.), -fPhi)
         .rotate(G4ThreeVector(0.,1.,0.), -fTheta)
         .rotate(G4ThreeVector(1.,0.,0.), fOmega);
@@ -330,8 +330,9 @@ ProjectMomentumVectorFromLatticeToWorld(G4ThreeVector vMomentum,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4ThreeVector XPhysicalLattice::GetLatticeDirection(G4ThreeVector vPosition){
-    return ProjectMomentumVectorFromLatticeToWorld(G4ThreeVector(0.,0.,1.),
+G4ThreeVector XPhysicalLattice::GetLatticeDirection(G4ThreeVector& vPosition){
+        G4ThreeVector dir = G4ThreeVector(0.,0.,1.);
+    return ProjectMomentumVectorFromLatticeToWorld(dir,
                                                    vPosition);
 }
 
@@ -372,7 +373,7 @@ G4bool XPhysicalLattice::IsBent(){
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4ThreeVector XPhysicalLattice::ComputeBendingAngle(G4ThreeVector vPosition){
+G4ThreeVector XPhysicalLattice::ComputeBendingAngle(G4ThreeVector& vPosition){
 
     G4double vAngleX = 0.;
     G4double vAngleY = 0.;

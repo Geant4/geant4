@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFFragment.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4StatMFFragment.cc 91834 2015-08-07 07:24:22Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -32,6 +32,7 @@
 #include "G4StatMFFragment.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4HadronicException.hh"
+#include "G4Pow.hh"
 
 // Copy constructor
 G4StatMFFragment::G4StatMFFragment(const G4StatMFFragment & )
@@ -48,105 +49,84 @@ operator=(const G4StatMFFragment & )
     return *this;
 }
 
-
 G4bool G4StatMFFragment::operator==(const G4StatMFFragment & ) const
 {
 //	throw G4HadronicException(__FILE__, __LINE__, "G4StatMFFragment::operator== meant to not be accessable");
     return false;
 }
  
-
 G4bool G4StatMFFragment::operator!=(const G4StatMFFragment & ) const
 {
 //	throw G4HadronicException(__FILE__, __LINE__, "G4StatMFFragment::operator!= meant to not be accessable");
     return true;
 }
 
-
-
 G4double G4StatMFFragment::GetCoulombEnergy(void) const
 {
-    if (theZ <= 0.1) return 0.0;
-    G4double Coulomb = (3./5.)*(elm_coupling*theZ*theZ)*
-	std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.)/
-	(G4StatMFParameters::Getr0()*std::pow(theA,1./3.));
-						
-    return Coulomb;
+  G4double res = 0.0;
+  if (theZ >= 1) {
+    res = G4StatMFParameters::GetCoulomb();
+  }
+  return res;
 }
-
 
 G4double G4StatMFFragment::GetEnergy(const G4double T) const
 {
-    if (theA < 1 || theZ < 0 || theZ > theA) {
-	G4cerr << "G4StatMFFragment::GetEnergy: A = " << theA 
-	       << ", Z = " << theZ << G4endl;
-	throw G4HadronicException(__FILE__, __LINE__, 
-	    "G4StatMFFragment::GetEnergy: Wrong values for A and Z!");
-    }
-    G4double BulkEnergy = G4NucleiProperties::GetMassExcess(static_cast<G4int>(theA),
-							    static_cast<G4int>(theZ));
+  if (theA < 1 || theZ < 0 || theZ > theA) {
+    G4cout << "G4StatMFFragment::GetEnergy: A = " << theA 
+	   << ", Z = " << theZ << G4endl;
+    throw G4HadronicException(__FILE__, __LINE__, 
+			      "G4StatMFFragment::GetEnergy: Wrong values for A and Z!");
+  }
+  G4double BulkEnergy = G4NucleiProperties::GetMassExcess(theA,theZ);
 	
-    if (theA < 4) return BulkEnergy - GetCoulombEnergy();
+  if (theA < 4) return BulkEnergy - GetCoulombEnergy();
 	
-    G4double SurfaceEnergy;
-    if (G4StatMFParameters::DBetaDT(T) == 0.0) SurfaceEnergy = 0.0;
-    else SurfaceEnergy = (5./2.)*std::pow(theA,2.0/3.0)*T*T*
-	     G4StatMFParameters::GetBeta0()/
-	     (G4StatMFParameters::GetCriticalTemp()*
-	      G4StatMFParameters::GetCriticalTemp());
-					 
-					 
-    G4double ExchangeEnergy = theA*T*T/GetInvLevelDensity();
-    if (theA != 4) ExchangeEnergy += SurfaceEnergy;		  
-	
-    return 	BulkEnergy + ExchangeEnergy - GetCoulombEnergy();		
-	
+  G4double SurfaceEnergy;
+  if (G4StatMFParameters::DBetaDT(T) == 0.0) SurfaceEnergy = 0.0;
+  else SurfaceEnergy = 2.5*G4Pow::GetInstance()->Z23(theA)*T*T*
+	 G4StatMFParameters::GetBeta0()/
+	 (G4StatMFParameters::GetCriticalTemp()*
+	  G4StatMFParameters::GetCriticalTemp());
+					 				 
+  G4double ExchangeEnergy = theA*T*T/GetInvLevelDensity();
+  if (theA != 4) ExchangeEnergy += SurfaceEnergy;		  
+  return BulkEnergy + ExchangeEnergy - GetCoulombEnergy();
 }
-
 
 G4double G4StatMFFragment::GetInvLevelDensity(void) const
 {
-    // Calculate Inverse Density Level
-    // Epsilon0*(1 + 3 /(Af - 1))
-    if (theA == 1) return 0.0;
-    else return
-	   G4StatMFParameters::GetEpsilon0()*(1.0+3.0/(theA - 1.0));
+  G4double res = 0.0;
+  if (theA > 1) {
+    res =  G4StatMFParameters::GetEpsilon0()*(1.0+3.0/(theA - 1.0));
+  }
+  return res;
 }
-
-
 
 G4Fragment * G4StatMFFragment::GetFragment(const G4double T)
 {
-    G4double U = CalcExcitationEnergy(T);
-	
-    G4double M = GetNuclearMass();
-
-    G4LorentzVector FourMomentum(_momentum,std::sqrt(_momentum.mag2()+(M+U)*(M+U)));
-
-    G4Fragment * theFragment = new G4Fragment(static_cast<G4int>(theA),static_cast<G4int>(theZ),FourMomentum);
-
-    return theFragment;
+  G4double U = CalcExcitationEnergy(T);
+  G4double M = GetNuclearMass();
+  G4LorentzVector FourMomentum(_momentum,std::sqrt(_momentum.mag2()+(M+U)*(M+U)));
+  G4Fragment * theFragment = new G4Fragment(theA, theZ, FourMomentum);
+  return theFragment;
 }
-
 
 G4double G4StatMFFragment::CalcExcitationEnergy(const G4double T)
 {
-    if (theA <= 3) return 0.0;
+  if (theA <= 3) return 0.0;
 	
-    G4double BulkEnergy = theA*T*T/GetInvLevelDensity();
+  G4double BulkEnergy = theA*T*T/GetInvLevelDensity();
 	
-    // if it is an alpha particle: done
-    if (theA == 4) return BulkEnergy;
-	
-    // Term connected with surface energy
-    G4double SurfaceEnergy = 0.0;
-    if (std::abs(G4StatMFParameters::DBetaDT(T)) > 1.0e-20) 
-// 		SurfaceEnergy = (5./2.)*std::pow(theA,2.0/3.0)*T*T*G4StatMFParameters::GetBeta0()/
-// 			(G4StatMFParameters::GetCriticalTemp()*G4StatMFParameters::GetCriticalTemp());
-	SurfaceEnergy = (5./2.)*std::pow(theA,2.0/3.0)*(G4StatMFParameters::Beta(T) - 
-						   T*G4StatMFParameters::DBetaDT(T) - G4StatMFParameters::GetBeta0());
-		
-    return BulkEnergy + SurfaceEnergy;
+  // if it is an alpha particle: done
+  if (theA == 4) return BulkEnergy;
+    
+  // Term connected with surface energy
+  G4double SurfaceEnergy = 0.0;
+  G4double q = G4StatMFParameters::DBetaDT(T);
+  if (std::abs(q) > 1.0e-20) { 
+    SurfaceEnergy = 2.5*G4Pow::GetInstance()->Z23(theA)
+      *(G4StatMFParameters::Beta(T) - T*q - G4StatMFParameters::GetBeta0());
+  }
+  return BulkEnergy + SurfaceEnergy;
 }
-
-

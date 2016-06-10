@@ -27,7 +27,7 @@
 /// \brief Main program of the radioactivedecay/rdecay01 example
 //
 //
-// $Id: rdecay01.cc 83857 2014-09-19 10:19:37Z gcosmo $
+// $Id: rdecay01.cc 94458 2015-11-18 14:36:25Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,11 +79,11 @@ int main(int argc,char** argv) {
       
   // set user action classes
   // 
-  runManager->SetUserInitialization(new ActionInitialization);  
+  runManager->SetUserInitialization(new ActionInitialization);
     
   //Initialize G4 kernel
   runManager->Initialize();
-    
+
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
 

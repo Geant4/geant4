@@ -1,0 +1,92 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_separator
+#define tools_sg_separator
+
+#include "group"
+#include "render_action"
+#include "bbox_action"
+#include "visible_action"
+
+namespace tools {
+namespace sg {
+
+class separator : public group {
+  TOOLS_NODE(separator,tools::sg::separator,group)
+public: //node
+  virtual void render(render_action& a_action) {
+    a_action.push_matrices();
+    a_action.push_state();
+
+    parent::render(a_action);
+
+    unsigned int ret_num_light = a_action.state().m_light;
+
+    a_action.pop_matrices();
+    a_action.pop_state();
+
+    a_action.restore_state(ret_num_light);
+  }
+  virtual void pick(pick_action& a_action) {
+    a_action.push_matrices();
+    a_action.push_state();
+    parent::pick(a_action);
+    a_action.pop_matrices();
+    a_action.pop_state();
+  }
+  virtual void bbox(bbox_action& a_action) {
+    a_action.push_matrices();
+    parent::bbox(a_action);
+    a_action.pop_matrices();
+  }
+  virtual void event(event_action& a_action) {
+    a_action.push_matrices();
+    a_action.push_state();
+    parent::event(a_action);
+    a_action.pop_matrices();
+    a_action.pop_state();
+  }
+  virtual void get_matrix(get_matrix_action& a_action) {
+    a_action.push_matrices();
+    parent::get_matrix(a_action);
+    a_action.pop_matrices();
+  }
+  virtual bool write(write_action& a_action) {
+    if(!a_action.beg_node(*this)) return false;
+    if(!write_fields(a_action)) return false;
+    if(!write_children(a_action)) return false;
+    if(!a_action.end_node(*this)) return false;
+    return true;
+  }
+  virtual void is_visible(visible_action& a_action) {
+    a_action.push_matrices();
+    parent::is_visible(a_action);
+    a_action.pop_matrices();
+  }
+public:
+  separator():parent(){
+#ifdef TOOLS_MEM
+    tools::mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~separator(){
+#ifdef TOOLS_MEM
+    tools::mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  separator(const separator& a_from):parent(a_from){
+#ifdef TOOLS_MEM
+    tools::mem::increment(s_class().c_str());
+#endif
+  }
+  separator& operator=(const separator& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+};
+
+}}
+
+#endif

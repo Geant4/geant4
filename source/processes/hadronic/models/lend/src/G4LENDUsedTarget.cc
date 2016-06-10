@@ -82,21 +82,21 @@ void G4LENDUsedTarget::searchTarget()
       // Loop Z
       G4int dZ = 0;
       G4int pZ = 1;
-      while ( dZ < max_Z - min_Z )
+      while ( dZ < max_Z - min_Z ) // Loop checking, 11.06.2015, T. Koi
       {
          iZ = wanted_Z + pZ*dZ; 
 
          // Loop A
          G4int dA = 0;
          G4int pA = 1;
-         while ( dA < max_A - min_A )
+         while ( dA < max_A - min_A ) // Loop checking, 11.06.2015, T. Koi
          {
             iA = wanted_A + pA*dA; 
 
             // Loop M
             G4int pM = 1;
             G4int dM = 0;
-            while ( dM < max_M - min_M )
+            while ( dM < max_M - min_M ) // Loop checking, 11.06.2015, T. Koi
             {
 
                iM = wanted_M + pM*dM;

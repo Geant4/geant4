@@ -36,6 +36,8 @@
 #define ExG4HbookP1Manager_h 1
 
 #include "G4VP1Manager.hh"
+#include "G4THnManager.hh"
+#include "G4HnManager.hh"
 #include "G4HnInformation.hh"
 #include "ExG4HbookBaseHnManager.hh"
 #include "globals.hh"
@@ -51,6 +53,9 @@ struct p1_booking {
   p1_booking(G4int nbins, G4double xmin, G4double xmax, 
              G4double ymin, G4double ymax)
     : fTitle(""),
+      fXAxisTitle(""),
+      fYAxisTitle(""),
+      fZAxisTitle(""),
       fNbins(nbins), 
       fXmin(xmin), 
       fXmax(xmax),
@@ -60,15 +65,21 @@ struct p1_booking {
   p1_booking(const std::vector<G4double>& edges,
              G4double ymin, G4double ymax)
     : fTitle(""),
+      fXAxisTitle(""),
+      fYAxisTitle(""),
+      fZAxisTitle(""),
       fNbins(0), 
       fXmin(0), 
       fXmax(0),
       fYmin(ymin), 
       fYmax(ymax),
       fEdges() {
-    for (G4int i=0; i<=G4int(edges.size()); ++i) fEdges.push_back(edges[i]);
+    for (G4int i=0; i<G4int(edges.size()); ++i) fEdges.push_back(edges[i]);
   }
   G4String fTitle;    
+  G4String fXAxisTitle;
+  G4String fYAxisTitle;
+  G4String fZAxisTitle;
   G4int fNbins;
   G4double fXmin;
   G4double fXmax;
@@ -83,7 +94,8 @@ struct p1_booking {
 /// It is provided separately from geant4/source/analysis in order
 /// to avoid a need of linking Geant4 kernel libraries with cerblib.
 
-class ExG4HbookP1Manager : public G4VP1Manager
+class ExG4HbookP1Manager : public G4VP1Manager,
+                           public G4THnManager<tools::hbook::p1>
 {
   friend class ExG4HbookAnalysisManager;
 
@@ -186,6 +198,9 @@ class ExG4HbookP1Manager : public G4VP1Manager
     // Write data on ASCII file
     // virtual G4bool WriteOnAscii(std::ofstream& output);
 
+    // Access to Hn manager
+    virtual std::shared_ptr<G4HnManager> GetHnManager();
+
   private:
     // methods
     //
@@ -210,9 +225,6 @@ class ExG4HbookP1Manager : public G4VP1Manager
                          const G4String& yfcnName,
                          G4BinScheme xbinScheme) ;
     
-    G4bool BeginSetP1(G4int id,
-                         p1_booking* p1Booking,
-                         G4HnInformation* info);
     G4bool FinishSetP1(G4int id,
                          G4HnInformation* info,
                          const G4String& xunitName, 
@@ -228,6 +240,10 @@ class ExG4HbookP1Manager : public G4VP1Manager
     virtual tools::hbook::p1*  GetP1InFunction(G4int id, G4String function,
                                       G4bool warn = true,
                                       G4bool onlyIfActive = true) const;
+
+    // static data members
+    //
+    static const G4int fgkDefaultP1HbookIdOffset;
 
     // data members
     //
@@ -248,18 +264,21 @@ inline G4int ExG4HbookP1Manager::GetP1HbookIdOffset() const
 { return fP1HbookIdOffset; }  
 
 inline  std::vector<tools::hbook::p1*>::iterator ExG4HbookP1Manager::BeginP1()
-{ return fP1Vector.begin(); }
+{ return BeginT(); }
 
 inline  std::vector<tools::hbook::p1*>::iterator ExG4HbookP1Manager::EndP1()
-{ return fP1Vector.end(); }
+{ return EndT(); }
 
 inline  std::vector<tools::hbook::p1*>::const_iterator 
 ExG4HbookP1Manager::BeginConstP1() const
-{ return fP1Vector.begin(); }
+{ return BeginConstT(); }
 
 inline  std::vector<tools::hbook::p1*>::const_iterator 
 ExG4HbookP1Manager::EndConstP1() const
-{ return fP1Vector.end(); }
+{ return EndConstT(); }
+
+inline std::shared_ptr<G4HnManager> ExG4HbookP1Manager::GetHnManager()
+{ return std::shared_ptr<G4HnManager>(fHnManager); }
 
 
 #endif 

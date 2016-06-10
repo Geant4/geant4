@@ -102,7 +102,7 @@ G4double G4StatDouble::mean(G4double ext_sum_w) const
 G4double G4StatDouble::rms(G4double ssum_wx, G4double ssum_wx2,
                            G4double ssum_w, G4int nn)
 {
-  G4double vrms;
+  G4double vrms = 0.0;
   if (nn > 1)
   {
     G4double vmean = ssum_wx / ssum_w;
@@ -133,10 +133,6 @@ G4double G4StatDouble::rms(G4double ssum_wx, G4double ssum_wx2,
 // 	   << "  ((m_sum_wx2 / m_sum_w) - (mean * mean)): "
 //         << ((m_sum_wx2 / m_sum_w) - (mean * mean)) 
 // 	   << G4endl;
-  }
-  else
-  {
-    vrms = -1.;
   }
   return vrms * m_scale;
 }

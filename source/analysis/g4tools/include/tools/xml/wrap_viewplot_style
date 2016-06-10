@@ -1,0 +1,775 @@
+#ifndef wrap_viewplot_style
+#define wrap_viewplot_style
+
+//
+//  This file had been produced automatically
+// by the inlib/wrap program from the file :
+//    viewplot.style
+//
+
+inline const char** viewplot_style(unsigned int& a_linen){
+  static const char _0[] = "<styles>";
+  static const char _1[] = "";
+  static const char _2[] = "  <!-- //////////////////////////////////////////////// -->";
+  static const char _3[] = "  <!-- /// scene : //////////////////////////////////// -->";
+  static const char _4[] = "  <!-- //////////////////////////////////////////////// -->";
+  static const char _5[] = "  <style name=@@double_quote@@scene@@double_quote@@>";
+  static const char _6[] = "    <screen_color>white</screen_color>";
+  static const char _7[] = "  </style>";
+  static const char _8[] = "";
+  static const char _9[] = "  <!-- //////////////////////////////////////////////// -->";
+  static const char _10[] = "  <!-- /// plotter : ////////////////////////////////// -->";
+  static const char _11[] = "  <!-- //////////////////////////////////////////////// -->";
+  static const char _12[] = "  <plotter_style name=@@double_quote@@inlib_default@@double_quote@@>";
+  static const char _13[] = "    <!-- Placeholder for default customization. -->";
+  static const char _14[] = "    <style name=@@double_quote@@background_style@@double_quote@@/>";
+  static const char _15[] = "    <style name=@@double_quote@@title_style@@double_quote@@/>";
+  static const char _16[] = "    <style name=@@double_quote@@infos_style@@double_quote@@/>";
+  static const char _17[] = "    <style name=@@double_quote@@title_box_style@@double_quote@@/>";
+  static const char _18[] = "    <style name=@@double_quote@@inner_frame_style@@double_quote@@/>";
+  static const char _19[] = "    <style name=@@double_quote@@grid_style@@double_quote@@/>";
+  static const char _20[] = "  ";
+  static const char _21[] = "    <style name=@@double_quote@@x_axis.line_style@@double_quote@@/>";
+  static const char _22[] = "    <style name=@@double_quote@@x_axis.ticks_style@@double_quote@@/>";
+  static const char _23[] = "    <style name=@@double_quote@@x_axis.labels_style@@double_quote@@/>";
+  static const char _24[] = "    <style name=@@double_quote@@x_axis.mag_style@@double_quote@@/>";
+  static const char _25[] = "    <style name=@@double_quote@@x_axis.title_style@@double_quote@@/>";
+  static const char _26[] = "  ";
+  static const char _27[] = "    <style name=@@double_quote@@y_axis.line_style@@double_quote@@/>";
+  static const char _28[] = "    <style name=@@double_quote@@y_axis.ticks_style@@double_quote@@/>";
+  static const char _29[] = "    <style name=@@double_quote@@y_axis.labels_style@@double_quote@@/>";
+  static const char _30[] = "    <style name=@@double_quote@@y_axis.mag_style@@double_quote@@/>";
+  static const char _31[] = "    <style name=@@double_quote@@y_axis.title_style@@double_quote@@/>";
+  static const char _32[] = "  ";
+  static const char _33[] = "    <style name=@@double_quote@@z_axis.line_style@@double_quote@@/>";
+  static const char _34[] = "    <style name=@@double_quote@@z_axis.ticks_style@@double_quote@@/>";
+  static const char _35[] = "    <style name=@@double_quote@@z_axis.labels_style@@double_quote@@/>";
+  static const char _36[] = "    <style name=@@double_quote@@z_axis.mag_style@@double_quote@@/>";
+  static const char _37[] = "    <style name=@@double_quote@@z_axis.title_style@@double_quote@@/>";
+  static const char _38[] = "";
+  static const char _39[] = "    <style name=@@double_quote@@colormap_axis@@double_quote@@>";
+  static const char _40[] = "      <label_to_axis>0.01</label_to_axis>";
+  static const char _41[] = "    </style>";
+  static const char _42[] = "    <style name=@@double_quote@@colormap_axis.line_style@@double_quote@@/>";
+  static const char _43[] = "    <style name=@@double_quote@@colormap_axis.ticks_style@@double_quote@@/>";
+  static const char _44[] = "    <style name=@@double_quote@@colormap_axis.labels_style@@double_quote@@/>";
+  static const char _45[] = "    <style name=@@double_quote@@colormap_axis.mag_style@@double_quote@@/>";
+  static const char _46[] = "    <style name=@@double_quote@@colormap_axis.title_style@@double_quote@@/>";
+  static const char _47[] = "";
+  static const char _48[] = "    <style name=@@double_quote@@bins_style.0@@double_quote@@/>";
+  static const char _49[] = "    <style name=@@double_quote@@errors_style.0@@double_quote@@/>";
+  static const char _50[] = "    <style name=@@double_quote@@points_style.0@@double_quote@@/>";
+  static const char _51[] = "    <style name=@@double_quote@@func_style.0@@double_quote@@/>";
+  static const char _52[] = "  </plotter_style>";
+  static const char _53[] = "";
+  static const char _54[] = "  <plotter_style name=@@double_quote@@ROOT_default@@double_quote@@>";
+  static const char _55[] = "    <value_top_margin>0.05</value_top_margin>";
+  static const char _56[] = "    <bottom_margin>0.1</bottom_margin>";
+  static const char _57[] = "    <top_margin>0.1</top_margin>";
+  static const char _58[] = "    <left_margin>0.1</left_margin>";
+  static const char _59[] = "    <right_margin>0.1</right_margin>";
+  static const char _60[] = "";
+  static const char _61[] = "    <style name=@@double_quote@@background_style@@double_quote@@>";
+  static const char _62[] = "      <visible>true</visible>";
+  static const char _63[] = "<!--  <back_color>ROOT/grey19</back_color> -->";
+  static const char _64[] = "      <!-- border : -->";
+  static const char _65[] = "      <color>black</color>";
+  static const char _66[] = "      <line_width>0.003</line_width> <!-- 0 = no border. In % of width -->";
+  static const char _67[] = "    </style>";
+  static const char _68[] = "";
+  static const char _69[] = "<!-- <style name=@@double_quote@@wall_style@@double_quote@@><visible>false</visible></style> -->";
+  static const char _70[] = "    <style name=@@double_quote@@grid_style@@double_quote@@>";
+  static const char _71[] = "      <visible>false</visible>";
+  static const char _72[] = "<!--  <color>white</color> ???? --> ";
+  static const char _73[] = "    </style>";
+  static const char _74[] = "";
+  static const char _75[] = "    <!-- plot title done with the title_box (and not plotter title). -->";
+  static const char _76[] = "    <style name=@@double_quote@@title_style@@double_quote@@>";
+  static const char _77[] = "      <visible>false</visible>";
+  static const char _78[] = "    </style>";
+  static const char _79[] = "    <style name=@@double_quote@@title_box_style@@double_quote@@>";
+  static const char _80[] = "      <visible>true</visible>";
+  static const char _81[] = "      <back_color>ROOT/grey19</back_color>";
+  static const char _82[] = "      <back_shadow>0.015</back_shadow> <!-- % of width -->";
+  static const char _83[] = "      <color>black</color>";
+  static const char _84[] = "      <font>arialbd.ttf</font>";
+  static const char _85[] = "      <front_face>cw</front_face>";
+  static const char _86[] = "      <smoothing>true</smoothing>";
+  static const char _87[] = "    </style>";
+  static const char _88[] = "";
+  static const char _89[] = "    <infos_width>0.35</infos_width>";
+  static const char _90[] = "    <infos_x_margin>0.01</infos_x_margin> <!-- from right border. -->";
+  static const char _91[] = "    <infos_y_margin>0.005</infos_y_margin> <!-- from top border. -->";
+  static const char _92[] = "    <style name=@@double_quote@@infos_style@@double_quote@@>";
+  static const char _93[] = "      <visible>true</visible>";
+  static const char _94[] = "      <back_color>ROOT/grey19</back_color>";
+  static const char _95[] = "      <back_shadow>0.015</back_shadow> <!-- % of width -->";
+  static const char _96[] = "      <color>black</color>";
+  static const char _97[] = "      <font>arialbd.ttf</font>";
+  static const char _98[] = "      <front_face>cw</front_face>";
+  static const char _99[] = "      <smoothing>true</smoothing>";
+  static const char _100[] = "      <modeling>ROOT</modeling> <!-- to have histo name as info title. -->";
+  static const char _101[] = "    </style>";
+  static const char _102[] = "";
+  static const char _103[] = "    <style name=@@double_quote@@inner_frame_style@@double_quote@@>";
+  static const char _104[] = "      <visible>true</visible>";
+  static const char _105[] = "      <color>black</color>";
+  static const char _106[] = "      <line_width>1</line_width>";
+  static const char _107[] = " <!-- <line_pattern>solid</line_pattern> -->";
+  static const char _108[] = "    </style>";
+  static const char _109[] = "";
+  static const char _110[] = "    <style name=@@double_quote@@x_axis@@double_quote@@>";
+  static const char _111[] = "      <modeling>hplot</modeling>";
+  static const char _112[] = "      <divisions>510</divisions>";
+  static const char _113[] = "      <title_hjust>right</title_hjust>";
+  static const char _114[] = "      <label_to_axis>0.005</label_to_axis>";
+  static const char _115[] = "      <label_height>0.04</label_height>";
+  static const char _116[] = "      <tick_length>0.03</tick_length>";
+  static const char _117[] = "      <title_to_axis>0.05</title_to_axis> <!-- YLAB = 0.05 -->";
+  static const char _118[] = "      <title_height>0.04</title_height>";
+  static const char _119[] = "      <is_log>false</is_log>";
+  static const char _120[] = "    </style>";
+  static const char _121[] = "    <style name=@@double_quote@@x_axis.line_style@@double_quote@@>";
+  static const char _122[] = "      <color>black</color>";
+  static const char _123[] = "      <line_width>1</line_width>";
+  static const char _124[] = "    </style>";
+  static const char _125[] = "    <style name=@@double_quote@@x_axis.ticks_style@@double_quote@@>";
+  static const char _126[] = "      <color>black</color>";
+  static const char _127[] = "      <line_width>1</line_width>";
+  static const char _128[] = "    </style>";
+  static const char _129[] = "    <style name=@@double_quote@@x_axis.labels_style@@double_quote@@> ";
+  static const char _130[] = "      <color>black</color>";
+  static const char _131[] = "      <scale>0.6</scale> <!-- To have a good matching with ROOT text size -->";
+  static const char _132[] = "      <font>arialbd.ttf</font> <!-- ROOT_62 -->";
+  static const char _133[] = "      <front_face>cw</front_face>";
+  static const char _134[] = "      <smoothing>true</smoothing>";
+  static const char _135[] = "    </style>";
+  static const char _136[] = "    <style name=@@double_quote@@x_axis.title_style@@double_quote@@>";
+  static const char _137[] = "      <visible>true</visible>";
+  static const char _138[] = "      <color>black</color>";
+  static const char _139[] = "      <scale>0.6</scale>";
+  static const char _140[] = "      <font>arialbd.ttf</font> <!-- ROOT_62 -->";
+  static const char _141[] = "      <front_face>cw</front_face>";
+  static const char _142[] = "      <smoothing>true</smoothing>";
+  static const char _143[] = "    </style>";
+  static const char _144[] = "    <style name=@@double_quote@@x_axis.mag_style@@double_quote@@>";
+  static const char _145[] = "      <color>black</color>";
+  static const char _146[] = "      <scale>0.6</scale>";
+  static const char _147[] = "      <font>arialbd.ttf</font> <!-- ROOT_62 -->";
+  static const char _148[] = "      <front_face>cw</front_face>";
+  static const char _149[] = "      <smoothing>true</smoothing>";
+  static const char _150[] = "    </style>";
+  static const char _151[] = "";
+  static const char _152[] = "    <style name=@@double_quote@@y_axis@@double_quote@@>";
+  static const char _153[] = "      <modeling>hplot</modeling>";
+  static const char _154[] = "      <divisions>510</divisions>";
+  static const char _155[] = "      <title_hjust>right</title_hjust>";
+  static const char _156[] = "      <label_to_axis>0.005</label_to_axis>";
+  static const char _157[] = "      <label_height>0.04</label_height>";
+  static const char _158[] = "      <tick_length>0.03</tick_length>";
+  static const char _159[] = "      <title_to_axis>0.07</title_to_axis> <!-- XLAB = 0.07 -->";
+  static const char _160[] = "      <title_height>0.04</title_height>";
+  static const char _161[] = "      <is_log>false</is_log>";
+  static const char _162[] = "    </style>";
+  static const char _163[] = "    <style name=@@double_quote@@y_axis.line_style@@double_quote@@>";
+  static const char _164[] = "      <color>black</color>";
+  static const char _165[] = "      <line_width>1</line_width>";
+  static const char _166[] = "    </style>";
+  static const char _167[] = "    <style name=@@double_quote@@y_axis.ticks_style@@double_quote@@>";
+  static const char _168[] = "      <color>black</color>";
+  static const char _169[] = "      <line_width>1</line_width>";
+  static const char _170[] = "    </style>";
+  static const char _171[] = "    <style name=@@double_quote@@y_axis.labels_style@@double_quote@@> ";
+  static const char _172[] = "      <color>black</color>";
+  static const char _173[] = "      <scale>0.6</scale>";
+  static const char _174[] = "      <font>arialbd.ttf</font> <!-- ROOT_62 -->";
+  static const char _175[] = "      <front_face>cw</front_face>";
+  static const char _176[] = "      <smoothing>true</smoothing>";
+  static const char _177[] = "    </style>";
+  static const char _178[] = "    <style name=@@double_quote@@y_axis.title_style@@double_quote@@>";
+  static const char _179[] = "      <visible>true</visible>";
+  static const char _180[] = "      <color>black</color>";
+  static const char _181[] = "      <scale>0.6</scale>";
+  static const char _182[] = "      <font>arialbd.ttf</font> <!-- ROOT_62 -->";
+  static const char _183[] = "      <front_face>cw</front_face>";
+  static const char _184[] = "      <smoothing>true</smoothing>";
+  static const char _185[] = "    </style>";
+  static const char _186[] = "    <style name=@@double_quote@@y_axis.mag_style@@double_quote@@>";
+  static const char _187[] = "      <color>black</color>";
+  static const char _188[] = "      <scale>0.6</scale>";
+  static const char _189[] = "      <font>arialbd.ttf</font> <!-- ROOT_62 -->";
+  static const char _190[] = "      <front_face>cw</front_face>";
+  static const char _191[] = "      <smoothing>true</smoothing>";
+  static const char _192[] = "    </style>";
+  static const char _193[] = "";
+  static const char _194[] = "    <style name=@@double_quote@@z_axis@@double_quote@@>";
+  static const char _195[] = "      <modeling>hplot</modeling>";
+  static const char _196[] = "      <is_log>false</is_log>";
+  static const char _197[] = "    </style>";
+  static const char _198[] = "    <style name=@@double_quote@@z_axis.line_style@@double_quote@@>";
+  static const char _199[] = "      <color>black</color>";
+  static const char _200[] = "      <line_width>1</line_width>";
+  static const char _201[] = "    </style>";
+  static const char _202[] = "    <style name=@@double_quote@@z_axis.ticks_style@@double_quote@@>";
+  static const char _203[] = "      <color>black</color>";
+  static const char _204[] = "      <line_width>1</line_width>";
+  static const char _205[] = "    </style>";
+  static const char _206[] = "    <style name=@@double_quote@@z_axis.labels_style@@double_quote@@> ";
+  static const char _207[] = "      <color>black</color>";
+  static const char _208[] = "      <scale>0.6</scale>";
+  static const char _209[] = "    </style>";
+  static const char _210[] = "    <style name=@@double_quote@@z_axis.title_style@@double_quote@@>";
+  static const char _211[] = "      <color>black</color>";
+  static const char _212[] = "      <scale>0.6</scale>";
+  static const char _213[] = "    </style>";
+  static const char _214[] = "    <style name=@@double_quote@@z_axis.mag_style@@double_quote@@>";
+  static const char _215[] = "      <color>black</color>";
+  static const char _216[] = "      <scale>0.6</scale>";
+  static const char _217[] = "    </style>";
+  static const char _218[] = "";
+  static const char _219[] = "    <style name=@@double_quote@@colormap_axis@@double_quote@@>";
+  static const char _220[] = "      <modeling>hplot</modeling>";
+  static const char _221[] = "      <divisions>510</divisions>";
+  static const char _222[] = "      <title_hjust>right</title_hjust>";
+  static const char _223[] = "      <label_to_axis>0.005</label_to_axis>";
+  static const char _224[] = "      <label_height>0.04</label_height>";
+  static const char _225[] = "      <tick_length>0.03</tick_length>";
+  static const char _226[] = "      <title_to_axis>0.07</title_to_axis> <!-- XLAB = 0.07 -->";
+  static const char _227[] = "      <title_height>0.04</title_height>";
+  static const char _228[] = "      <is_log>false</is_log>";
+  static const char _229[] = "    </style>";
+  static const char _230[] = "    <style name=@@double_quote@@colormap_axis.line_style@@double_quote@@>";
+  static const char _231[] = "      <color>black</color>";
+  static const char _232[] = "      <line_width>1</line_width>";
+  static const char _233[] = "    </style>";
+  static const char _234[] = "    <style name=@@double_quote@@colormap_axis.ticks_style@@double_quote@@>";
+  static const char _235[] = "      <color>black</color>";
+  static const char _236[] = "      <line_width>1</line_width>";
+  static const char _237[] = "    </style>";
+  static const char _238[] = "    <style name=@@double_quote@@colormap_axis.labels_style@@double_quote@@> ";
+  static const char _239[] = "      <color>black</color>";
+  static const char _240[] = "      <scale>0.6</scale>";
+  static const char _241[] = "      <font>arialbd.ttf</font> <!-- ROOT_62 -->";
+  static const char _242[] = "      <front_face>cw</front_face>";
+  static const char _243[] = "      <smoothing>true</smoothing>";
+  static const char _244[] = "    </style>";
+  static const char _245[] = "    <style name=@@double_quote@@colormap_axis.title_style@@double_quote@@>";
+  static const char _246[] = "      <visible>true</visible>";
+  static const char _247[] = "      <color>black</color>";
+  static const char _248[] = "      <scale>0.6</scale>";
+  static const char _249[] = "      <font>arialbd.ttf</font> <!-- ROOT_62 -->";
+  static const char _250[] = "      <front_face>cw</front_face>";
+  static const char _251[] = "      <smoothing>true</smoothing>";
+  static const char _252[] = "    </style>";
+  static const char _253[] = "    <style name=@@double_quote@@colormap_axis.mag_style@@double_quote@@>";
+  static const char _254[] = "      <color>black</color>";
+  static const char _255[] = "      <scale>0.6</scale>";
+  static const char _256[] = "      <font>arialbd.ttf</font> <!-- ROOT_62 -->";
+  static const char _257[] = "      <front_face>cw</front_face>";
+  static const char _258[] = "      <smoothing>true</smoothing>";
+  static const char _259[] = "    </style>";
+  static const char _260[] = "";
+  static const char _261[] = "";
+  static const char _262[] = "    <style name=@@double_quote@@bins_style.0@@double_quote@@>";
+  static const char _263[] = "      <modeling>top_lines</modeling>";
+  static const char _264[] = "      <color>black</color>";
+  static const char _265[] = "      <line_width>1</line_width>";
+  static const char _266[] = " <!-- <line_pattern>solid</line_pattern> -->";
+  static const char _267[] = "    </style>";
+  static const char _268[] = "";
+  static const char _269[] = "    <style name=@@double_quote@@func_style.0@@double_quote@@>";
+  static const char _270[] = "      <modeling>top_lines</modeling>";
+  static const char _271[] = "      <color>black</color>";
+  static const char _272[] = "      <line_width>3</line_width>";
+  static const char _273[] = " <!-- <line_pattern>solid</line_pattern> -->";
+  static const char _274[] = "    </style>";
+  static const char _275[] = "  </plotter_style>";
+  static const char _276[] = "";
+  static const char _277[] = "  <plotter_style name=@@double_quote@@hippodraw@@double_quote@@>";
+  static const char _278[] = "    <value_top_margin>0.05</value_top_margin>";
+  static const char _279[] = "    <bottom_margin>0.12</bottom_margin>";
+  static const char _280[] = "    <top_margin>0.16</top_margin>";
+  static const char _281[] = "    <left_margin>0.16</left_margin>";
+  static const char _282[] = "    <right_margin>0.16</right_margin>";
+  static const char _283[] = "    <title_to_axis>0.1</title_to_axis>";
+  static const char _284[] = "    <title_height>0.03</title_height>";
+  static const char _285[] = "";
+  static const char _286[] = "<!-- <style name=@@double_quote@@wall_style@@double_quote@@><visible>false</visible></style> -->";
+  static const char _287[] = "    <style name=@@double_quote@@grid_style@@double_quote@@>";
+  static const char _288[] = "      <visible>false</visible>";
+  static const char _289[] = "    </style>";
+  static const char _290[] = "";
+  static const char _291[] = "    <style name=@@double_quote@@inner_frame_style@@double_quote@@>";
+  static const char _292[] = "      <visible>true</visible>";
+  static const char _293[] = "    </style>";
+  static const char _294[] = "";
+  static const char _295[] = "    <style name=@@double_quote@@infos_style@@double_quote@@>";
+  static const char _296[] = "      <visible>false</visible>";
+  static const char _297[] = "    </style>";
+  static const char _298[] = "";
+  static const char _299[] = "    <style name=@@double_quote@@x_axis@@double_quote@@>";
+  static const char _300[] = "      <title_hjust>center</title_hjust>";
+  static const char _301[] = "      <title_to_axis>0.07</title_to_axis>";
+  static const char _302[] = "      <title_height>0.035</title_height>";
+  static const char _303[] = "      <label_to_axis>0.015</label_to_axis>";
+  static const char _304[] = "      <label_height>0.02625</label_height> <!-- 0.0175F * 1.5F -->";
+  static const char _305[] = "    </style>";
+  static const char _306[] = "    <style name=@@double_quote@@y_axis@@double_quote@@>";
+  static const char _307[] = "      <title_hjust>center</title_hjust>";
+  static const char _308[] = "      <title_to_axis>0.2</title_to_axis>";
+  static const char _309[] = "      <title_height>0.035</title_height>";
+  static const char _310[] = "      <label_height>0.02625</label_height> <!-- 0.0175F * 1.5F -->";
+  static const char _311[] = "    </style>";
+  static const char _312[] = "";
+  static const char _313[] = "    <style name=@@double_quote@@title_style@@double_quote@@>";
+  static const char _314[] = "      <visible>true</visible>";
+  static const char _315[] = "      <font>helvetica.ttf</font>";
+  static const char _316[] = "      <front_face>cw</front_face>";
+  static const char _317[] = "      <smoothing>true</smoothing>";
+  static const char _318[] = "    </style>";
+  static const char _319[] = "";
+  static const char _320[] = "    <style name=@@double_quote@@x_axis.title_style@@double_quote@@>";
+  static const char _321[] = "      <visible>true</visible>";
+  static const char _322[] = "      <font>helvetica.ttf</font>";
+  static const char _323[] = "      <front_face>cw</front_face>";
+  static const char _324[] = "      <smoothing>true</smoothing>";
+  static const char _325[] = "    </style>";
+  static const char _326[] = "    <style name=@@double_quote@@x_axis.labels_style@@double_quote@@> ";
+  static const char _327[] = "      <color>black</color>";
+  static const char _328[] = "      <font>helvetica.ttf</font>";
+  static const char _329[] = "      <front_face>cw</front_face>";
+  static const char _330[] = "      <smoothing>true</smoothing>";
+  static const char _331[] = "    </style>";
+  static const char _332[] = "";
+  static const char _333[] = "    <style name=@@double_quote@@y_axis.title_style@@double_quote@@>";
+  static const char _334[] = "      <visible>true</visible>";
+  static const char _335[] = "      <font>helvetica.ttf</font>";
+  static const char _336[] = "      <front_face>cw</front_face>";
+  static const char _337[] = "      <smoothing>true</smoothing>";
+  static const char _338[] = "    </style>";
+  static const char _339[] = "    <style name=@@double_quote@@y_axis.labels_style@@double_quote@@> ";
+  static const char _340[] = "      <color>black</color>";
+  static const char _341[] = "      <font>helvetica.ttf</font>";
+  static const char _342[] = "      <front_face>cw</front_face>";
+  static const char _343[] = "      <smoothing>true</smoothing>";
+  static const char _344[] = "    </style>";
+  static const char _345[] = "";
+  static const char _346[] = "    <style name=@@double_quote@@z_axis.title_style@@double_quote@@>";
+  static const char _347[] = "      <visible>true</visible>";
+  static const char _348[] = "      <font>helvetica.ttf</font>";
+  static const char _349[] = "      <front_face>cw</front_face>";
+  static const char _350[] = "      <smoothing>true</smoothing>";
+  static const char _351[] = "    </style>";
+  static const char _352[] = "    <style name=@@double_quote@@z_axis.labels_style@@double_quote@@> ";
+  static const char _353[] = "      <color>black</color>";
+  static const char _354[] = "      <font>helvetica.ttf</font>";
+  static const char _355[] = "      <front_face>cw</front_face>";
+  static const char _356[] = "      <smoothing>true</smoothing>";
+  static const char _357[] = "    </style>";
+  static const char _358[] = "";
+  static const char _359[] = "    <style name=@@double_quote@@errors_style.0@@double_quote@@>";
+  static const char _360[] = "      <visible>false</visible>";
+  static const char _361[] = "    </style>";
+  static const char _362[] = "";
+  static const char _363[] = "    <style name=@@double_quote@@bins_style.0@@double_quote@@>";
+  static const char _364[] = "      <modeling>top_lines</modeling>";
+  static const char _365[] = "      <color>black</color>";
+  static const char _366[] = "      <line_width>1</line_width>";
+  static const char _367[] = " <!-- <line_pattern>solid</line_pattern> -->";
+  static const char _368[] = "    </style>";
+  static const char _369[] = "";
+  static const char _370[] = "    <style name=@@double_quote@@func_style.0@@double_quote@@>";
+  static const char _371[] = "      <modeling>top_lines</modeling>";
+  static const char _372[] = "      <color>black</color>";
+  static const char _373[] = "      <line_width>1</line_width>";
+  static const char _374[] = " <!-- <line_pattern>solid</line_pattern> -->";
+  static const char _375[] = "    </style>";
+  static const char _376[] = "  </plotter_style>";
+  static const char _377[] = "";
+  static const char _378[] = "</styles>";
+  static const char* _lines[] = {
+_0
+,_1
+,_2
+,_3
+,_4
+,_5
+,_6
+,_7
+,_8
+,_9
+,_10
+,_11
+,_12
+,_13
+,_14
+,_15
+,_16
+,_17
+,_18
+,_19
+,_20
+,_21
+,_22
+,_23
+,_24
+,_25
+,_26
+,_27
+,_28
+,_29
+,_30
+,_31
+,_32
+,_33
+,_34
+,_35
+,_36
+,_37
+,_38
+,_39
+,_40
+,_41
+,_42
+,_43
+,_44
+,_45
+,_46
+,_47
+,_48
+,_49
+,_50
+,_51
+,_52
+,_53
+,_54
+,_55
+,_56
+,_57
+,_58
+,_59
+,_60
+,_61
+,_62
+,_63
+,_64
+,_65
+,_66
+,_67
+,_68
+,_69
+,_70
+,_71
+,_72
+,_73
+,_74
+,_75
+,_76
+,_77
+,_78
+,_79
+,_80
+,_81
+,_82
+,_83
+,_84
+,_85
+,_86
+,_87
+,_88
+,_89
+,_90
+,_91
+,_92
+,_93
+,_94
+,_95
+,_96
+,_97
+,_98
+,_99
+,_100
+,_101
+,_102
+,_103
+,_104
+,_105
+,_106
+,_107
+,_108
+,_109
+,_110
+,_111
+,_112
+,_113
+,_114
+,_115
+,_116
+,_117
+,_118
+,_119
+,_120
+,_121
+,_122
+,_123
+,_124
+,_125
+,_126
+,_127
+,_128
+,_129
+,_130
+,_131
+,_132
+,_133
+,_134
+,_135
+,_136
+,_137
+,_138
+,_139
+,_140
+,_141
+,_142
+,_143
+,_144
+,_145
+,_146
+,_147
+,_148
+,_149
+,_150
+,_151
+,_152
+,_153
+,_154
+,_155
+,_156
+,_157
+,_158
+,_159
+,_160
+,_161
+,_162
+,_163
+,_164
+,_165
+,_166
+,_167
+,_168
+,_169
+,_170
+,_171
+,_172
+,_173
+,_174
+,_175
+,_176
+,_177
+,_178
+,_179
+,_180
+,_181
+,_182
+,_183
+,_184
+,_185
+,_186
+,_187
+,_188
+,_189
+,_190
+,_191
+,_192
+,_193
+,_194
+,_195
+,_196
+,_197
+,_198
+,_199
+,_200
+,_201
+,_202
+,_203
+,_204
+,_205
+,_206
+,_207
+,_208
+,_209
+,_210
+,_211
+,_212
+,_213
+,_214
+,_215
+,_216
+,_217
+,_218
+,_219
+,_220
+,_221
+,_222
+,_223
+,_224
+,_225
+,_226
+,_227
+,_228
+,_229
+,_230
+,_231
+,_232
+,_233
+,_234
+,_235
+,_236
+,_237
+,_238
+,_239
+,_240
+,_241
+,_242
+,_243
+,_244
+,_245
+,_246
+,_247
+,_248
+,_249
+,_250
+,_251
+,_252
+,_253
+,_254
+,_255
+,_256
+,_257
+,_258
+,_259
+,_260
+,_261
+,_262
+,_263
+,_264
+,_265
+,_266
+,_267
+,_268
+,_269
+,_270
+,_271
+,_272
+,_273
+,_274
+,_275
+,_276
+,_277
+,_278
+,_279
+,_280
+,_281
+,_282
+,_283
+,_284
+,_285
+,_286
+,_287
+,_288
+,_289
+,_290
+,_291
+,_292
+,_293
+,_294
+,_295
+,_296
+,_297
+,_298
+,_299
+,_300
+,_301
+,_302
+,_303
+,_304
+,_305
+,_306
+,_307
+,_308
+,_309
+,_310
+,_311
+,_312
+,_313
+,_314
+,_315
+,_316
+,_317
+,_318
+,_319
+,_320
+,_321
+,_322
+,_323
+,_324
+,_325
+,_326
+,_327
+,_328
+,_329
+,_330
+,_331
+,_332
+,_333
+,_334
+,_335
+,_336
+,_337
+,_338
+,_339
+,_340
+,_341
+,_342
+,_343
+,_344
+,_345
+,_346
+,_347
+,_348
+,_349
+,_350
+,_351
+,_352
+,_353
+,_354
+,_355
+,_356
+,_357
+,_358
+,_359
+,_360
+,_361
+,_362
+,_363
+,_364
+,_365
+,_366
+,_367
+,_368
+,_369
+,_370
+,_371
+,_372
+,_373
+,_374
+,_375
+,_376
+,_377
+,_378
+};
+ a_linen = 379;
+ return _lines;
+}
+
+#endif

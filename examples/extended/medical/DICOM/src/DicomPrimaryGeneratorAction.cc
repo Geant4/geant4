@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomPrimaryGeneratorAction.cc 74809 2013-10-22 09:49:26Z gcosmo $
+// $Id: DicomPrimaryGeneratorAction.cc 92820 2015-09-17 15:22:14Z gcosmo $
 //
 /// \file medical/DICOM/src/DicomPrimaryGeneratorAction.cc
 /// \brief Implementation of the DicomPrimaryGeneratorAction class
@@ -42,7 +42,6 @@
 //
 // + Université Laval, Québec (QC) Canada
 //*******************************************************
-
 #include "DicomPrimaryGeneratorAction.hh"
 
 #include "G4Event.hh"
@@ -90,4 +89,3 @@ void DicomPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent)
   //fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-22.));
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
-

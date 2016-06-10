@@ -1,0 +1,45 @@
+$Id: History 85260 2014-10-27 08:53:35Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    svalue History file
+                    ---------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+	 
+17-09-15 SI (svalue-V10-01-08)
+- applied coding guidelines
+
+18-08-15 SI (svalue-V10-01-07)
+- updated README
+
+07-05-15 MK (svalue-V10-01-06)
+- rollback svalue.in
+
+07-05-15 MK (svalue-V10-01-05)
+- rollback physicslist
+
+06-05-15 MK (svalue-V10-01-04)
+- make PrimaryGeneratorAction g4 state dependent in order to enable
+generic physics list (empty modular physics list)
+	 
+05-05-15 MK (svalue-V10-01-03)
+- update PhysicsList
+- code cleaning
+
+05-05-15 MK (svalue-V10-01-02)
+- remplace HistoManager::Book : kMaxHisto=9 --> kMaxHisto=8
+
+04-05-15 SI (svalue-V10-01-01)
+- fix compilation warnings and crashes
+
+01-05-15 SI (svalue-V10-01-00)
+- created and adapted from TestEm12

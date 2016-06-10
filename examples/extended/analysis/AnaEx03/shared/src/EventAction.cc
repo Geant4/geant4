@@ -27,7 +27,7 @@
 /// \brief Implementation of the EventAction class
 //
 //
-// $Id: EventAction.cc 85906 2014-11-06 08:52:54Z gcosmo $
+// $Id: EventAction.cc 92321 2015-08-27 14:53:09Z gcosmo $
 //
 // 
 
@@ -80,10 +80,10 @@ void EventAction::EndOfEventAction(const G4Event*)
   
   //fill histograms
   //
-  fHistoManager->FillHisto(1, fEnergyAbs);
-  fHistoManager->FillHisto(2, fEnergyGap);
-  fHistoManager->FillHisto(3, fTrackLAbs);
-  fHistoManager->FillHisto(4, fTrackLGap);
+  fHistoManager->FillHisto(0, fEnergyAbs);
+  fHistoManager->FillHisto(1, fEnergyGap);
+  fHistoManager->FillHisto(2, fTrackLAbs);
+  fHistoManager->FillHisto(3, fTrackLGap);
   
   //fill ntuple
   //

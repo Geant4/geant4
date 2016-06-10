@@ -1,4 +1,4 @@
-$Id: History 83684 2014-09-09 12:37:39Z gcosmo $
+$Id: History 91858 2015-08-07 13:57:22Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,17 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+07-Aug-2015 A. Ribon      hadr-partonstring-mgt-V10-01-02
+-  G4VPartonStringModel : checking of 'while' loops.
+
+05-Aug-2015 A. Ribon      hadr-partonstring-mgt-V10-01-01
+-  G4PomeronCrossSection : replaced std::exp, std::log and std::pow
+   with the faster G4Exp, G4Log and G4Pow, respectively.
+
+28-April-2015 V. Uzhinsky hadr-partonstring-mgt-V10-01-00
+   Improved debug diagnostic.
+
  8-Sept-2014 V. Uzhinsky hadr-partonstring-mgt-V10-00-03
    Cosmetic cleaning of G4InteractionContent, G4VParticipants, G4VSplitableHadron
    Debuging option is added in G4VPartonStringModel.

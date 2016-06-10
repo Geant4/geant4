@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAVibExcitation.hh 70171 2013-05-24 13:34:18Z gcosmo $
+// $Id: G4DNAVibExcitation.hh 91584 2015-07-27 13:01:48Z gcosmo $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -51,6 +51,11 @@ public:
   virtual G4bool IsApplicable(const G4ParticleDefinition&);
   
   virtual void PrintInfo();
+
+  static int ProcessSubType()
+  {
+    return 54;
+  }
 
 protected:
 

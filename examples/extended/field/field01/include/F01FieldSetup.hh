@@ -27,7 +27,7 @@
 /// \brief Definition of the F01FieldSetup class
 //
 //
-// $Id: F01FieldSetup.hh 77115 2013-11-21 15:06:37Z gcosmo $
+// $Id: F01FieldSetup.hh 90341 2015-05-26 08:38:36Z gcosmo $
 //
 //
 //  A class for control of the Magnetic Field of the detector.
@@ -62,7 +62,8 @@ public:
 
   virtual ~F01FieldSetup();
 
-  void SetStepperType( G4int i ) { fStepperType = i; }
+  void SetStepperType( G4int i ) 
+     { fStepperType = i; CreateStepperAndChordFinder(); }
 
   void SetStepper();
 

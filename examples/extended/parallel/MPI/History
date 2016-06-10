@@ -9,6 +9,91 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18 Nov 2015 A.Dotti (MPI-V10-01-23) 
+- Support for both static and shared at the same time
+
+17 Nov 2015 A.Dotti (MPI-V10-01-22)
+- New cmake files cleaned up
+
+2 Nov 2015 A.Dotti (MPI-V10-01-21)
+- Tagging for release
+
+17 Sep 2015 A.Dotti
+- Check existance of exMPI02 when configuring both library and 
+  examples together
+
+2 Sep 2015 A.Dotti 
+- Implementing G4 convention on lib[64] for output
+- Adding advanced option G4MPI_OLD_MPI to set old MPI 
+  back-compatible flag for old MPI signatures 
+
+2 Sep 2015 A.Dotti (MPI-V10-01-20)
+- Fixing previus tag for ctest usage
+
+1 Sep 2015 A.Dotti (MPI-V10-01-19)
+- New optimized merging for G4Run and scorer
+
+31 Aug 2015 A. Dotti (MPI-V10-01-18)
+- Improving CMakeLists.txt for standalone use: allow for library
+  and examples to be built together
+
+28 Aug 2015 A. Dotti (MPI-V10-01-17)
+- Correcting CMakeLists.txt for standalone use
+
+20 Aug 2015 A. Dotti (MPI-V10-01-16)
+- Code cleanup
+
+20 Aug 2015 A. DOtti (MPI-V10-01-15)
+- Fixing race condition in exMPI03 for merging 
+
+19 Aug 2015 A. Dotti (MPI-V10-01-14)
+- Functionalities shown in exMPI03:
+  - New merging of command line scorers via MPI::Pack
+  - New merging of user data associated to Run
+
+25 July 2015 A. Dotti (MPI-V10-01-13)
+- Fix compilation error 
+
+24 July 2015 A. Dotti (MPI-V10-01-12)
+- Increasing verbosity during cmake phase to print out
+  location of mpi library and headers
+
+21 July 2015 A. Dotti (MPI-V10-01-10, -11)
+- Changing path for exacutables to new standard
+- Fixing check for examples to be built
+
+09 July 2015 A. Dotti (MPI-V10-01-08, -09)
+- Fixing macro names for ctests
+
+08 July 2015 A. Dotti (MPI-V10-01-07)
+- Added TOOLS_USE_NATIVE_MPI compilation flag into source/sources.cmake
+  for use with ctest
+
+04 July 2015 I. Hrivnacova (MPI-V10-01-06)
+- Added implementation of histo merger with use of g4analysis
+  and with use of g4tools; kept temporarily old merger class
+- Fixed exMPI03 Analysis class: separated Close() from Save() to
+  avoid resetting histogram before performing Merge.  
+
+17 Feb 2015 A.Dotti (MPI-V10-01-05)
+- Adding MPI examples for ctest/cdash
+
+16 Feb 2015 A.Dotti (MPI-V10-01-04)
+- Improving CMakeLists for integration with ctest
+
+10 Feb 2015 A.Dotti (MPI-V10-01-01,02,03)
+- Fix for sequential mode
+- Simplify cmake 
+- Fix for possible issues with allocation of axis
+
+6 Feb 2015 A.Dotti (MPI-V10-01-00)
+- Fix bug in exMPI02 using wrong RNG calls to generate primaries
+- Introduced new functionality in G4mpi library to merge
+  G4Run, scorerers and g4tools histograms/profiles across
+  MPI ranks
+- Introduced new example exMPI03, based on same geometry and
+  physics of exMPI02 to demonstrate merging capabilities
+
 21 July 2014 A. Dotti (MPI-V10-00-02)
 - Fixing bug for RNG seed distribution in MT compilations
   (Bug #1653)

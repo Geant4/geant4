@@ -1,0 +1,234 @@
+
+*************************************************************
+ Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  OpenGLImmediateX (OGLI, OGLIX)
+  OpenGLStoredX (OGL, OGLS, OGLSX)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+  drawByAttribute
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+  attributeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+Available colours:
+  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
+
+/run/verbose 1
+#
+/gun/particle ion
+/gun/ion 28 60 0 2505.7
+#
+/rdecay01/fullChain true
+#
+/tracking/verbose 2
+/run/beamOn 1
+
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
+          DefaultRegionForTheWorld
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_AIR
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = Ni60[2505.7],   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm      0 fm      0 eV      0 eV      0 fm      0 fm      World   initStep
+    1      0 fm      0 fm      0 fm      0 eV      0 eV      0 fm      0 fm      World   RadioactiveDecay
+
+    :----- List of secondaries ----------------
+    Ni60[1332.5]:  energy =     0 eV   time = 2.082 ps 
+           gamma:  energy = 1.173 MeV  time = 2.082 ps 
+    :------------------------------------------
+
+
+*********************************************************************************************************
+* G4Track Information:   Particle = Ni60[1332.5],   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm      0 fm      0 eV      0 eV      0 fm      0 fm      World   initStep
+    1      0 fm      0 fm      0 fm      0 eV      0 eV      0 fm      0 fm      World   RadioactiveDecay
+
+    :----- List of secondaries ----------------
+            Ni60:  energy =     0 eV   time = 2.737 ps 
+           gamma:  energy = 1.332 MeV  time = 2.737 ps 
+    :------------------------------------------
+
+
+*********************************************************************************************************
+* G4Track Information:   Particle = Ni60,   Track ID = 4,   Parent ID = 2
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm      0 fm      0 eV      0 eV      0 fm      0 fm      World   initStep
+    1      0 fm      0 fm      0 fm      0 eV      0 eV      0 fm      0 fm      World   RadioactiveDecay
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 5,   Parent ID = 2
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm      0 fm   1.33 MeV     0 eV      0 fm      0 fm      World   initStep
+    1    141 um      1 mm    925 um   1.33 MeV     0 eV   1.37 mm   1.37 mm      World   OutOfWorld
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm      0 fm   1.17 MeV     0 eV      0 fm      0 fm      World   initStep
+    1    385 um      1 mm  -55.6 um   1.17 MeV     0 eV   1.07 mm   1.07 mm      World   OutOfWorld
+
+ end of event      0 : Ni60[2505.7] ---> Ni60[1332.5] ---> Ni60
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+
+ ======================== run summary ======================
+ The run was 1 Ni60[2505.7] of 0 eV 
+ ===========================================================
+
+ Nb of generated particles: 
+
+           Ni60:       1  Emean =      0 eV 	( 0 eV  --> 0 eV )
+   Ni60[1332.5]:       1  Emean =      0 eV 	( 0 eV  --> 0 eV )
+          gamma:       2  Emean =  1.253 MeV	( 1.173 MeV --> 1.332 MeV)
+
+   Ekin Total (Q): mean =  1.253 MeV	( 1.173 MeV --> 1.332 MeV)
+
+   Momentum balance (excluding gamma desexcitation): mean =      0 eV 	( 0 eV  --> 0 eV )
+
+   Total time of life : mean =  2.737 ps   half-life =  1.897 ps    ( 2.737 ps  --> 2.737 ps )
+
+   Total visible energy : mean =  2.506 MeV   ( 2.506 MeV --> 2.506 MeV)
+
+   Activity of Ni60[2505.7] = 4.821e+33 Bq/g   (1.303e+23 Ci/g) 
+
+#
+/analysis/setFileName it1
+Set file name: it1
+/analysis/h1/set 3 100 0. 2000. keV
+/analysis/h1/set 8 100 0. 20. ps
+#
+/tracking/verbose 0
+/rdecay01/event/printModulo 10000
+#
+/run/beamOn 100000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_AIR
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+... open Root analysis file : it1.root - done
+Start Run processing.
+
+ end of event      0 : Ni60[2505.7] ---> Ni60[1332.5] ---> Ni60
+
+ end of event  10000 : Ni60[2505.7] ---> Ni60[1332.5] ---> Ni60
+
+ end of event  20000 : Ni60[2505.7] ---> Ni60[1332.5] ---> Ni60
+
+ end of event  30000 : Ni60[2505.7] ---> Ni60[1332.5] ---> Ni60
+
+ end of event  40000 : Ni60[2505.7] ---> Ni60[1332.5] ---> Ni60
+
+ end of event  50000 : Ni60[2505.7] ---> Ni60[1332.5] ---> Ni60
+
+ end of event  60000 : Ni60[2505.7] ---> Ni60[1332.5] ---> Ni60
+
+ end of event  70000 : Ni60[2505.7] ---> Ni60[1332.5] ---> Ni60
+
+ end of event  80000 : Ni60[2505.7] ---> Ni60[1332.5] ---> Ni60
+
+ end of event  90000 : Ni60[2505.7] ---> Ni60[1332.5] ---> Ni60
+Run terminated.
+Run Summary
+  Number of events processed : 100000
+  User=5.29s Real=5.29s Sys=0.01s
+
+ ======================== run summary ======================
+ The run was 100000 Ni60[2505.7] of 0 eV 
+ ===========================================================
+
+ Nb of generated particles: 
+
+           Ni60:  100000  Emean =      0 eV 	( 0 eV  --> 0 eV )
+   Ni60[1332.5]:  100000  Emean =      0 eV 	( 0 eV  --> 0 eV )
+   Ni60[2158.8]:       4  Emean =      0 eV 	( 0 eV  --> 0 eV )
+             e-:      17  Emean =  1.249 MeV	( 1.165 MeV --> 1.324 MeV)
+          gamma:  199987  Emean =  1.253 MeV	( 346.9 keV --> 1.332 MeV)
+
+   Ekin Total (Q): mean =  1.253 MeV	( 346.9 keV --> 1.332 MeV)
+
+   Momentum balance (excluding gamma desexcitation): mean =  143.2 eV 	( 0 eV  --> 1.763 MeV)
+
+   Total time of life : mean =  2.623 ps   half-life =  1.818 ps    ( 0.002947 ps  --> 17.86 ps )
+
+   Total visible energy : mean =  2.506 MeV   ( 2.497 MeV --> 2.506 MeV)
+
+   Activity of Ni60[2505.7] = 6.298e+33 Bq/g   (1.702e+23 Ci/g) 
+
+... write Root file : it1.root - done
+... close Root file : it1.root - done
+Graphics systems deleted.
+Visualization Manager deleting...
+G4 kernel has come to Quit state.
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager

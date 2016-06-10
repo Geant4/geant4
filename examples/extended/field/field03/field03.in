@@ -23,7 +23,7 @@
 /run/beamOn 1
 #
 /tracking/verbose 0
-/event/printModulo 50
+/run/printProgress 50
 /run/beamOn 100
 #
 /field/setFieldZ 1.0 kG

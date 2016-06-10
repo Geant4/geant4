@@ -70,7 +70,7 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
   if (aTrack->GetParentID() == 0 || !fKillSecondary) { return status; }
   
   Run* run
-    = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());  
+    = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
 
   // charged tracks are killed only inside sensitive volumes
   if(aTrack->GetVolume()->GetLogicalVolume()->GetSensitiveDetector() &&

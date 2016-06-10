@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -101,18 +101,10 @@ pol-eBrem:   for  e+    SubType= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              PolBrem :  Emin=        0 eV    Emax=       10 TeV   DipBustGen
 
-pol-annihil:   for  e+    SubType= 5  BuildTable= 1
-      Lambda table from 100 eV  to 100 TeV, 12 bins per decade, spline: 1
+pol-annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       Polarized model for annihilation into 2 photons
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-Polarized-Annihilation :  Emin=        0 eV    Emax=      100 TeV
- annih-numOfCouples=2
-annih- 0/2
-annih- 1
- building pol-annih ... 
-annih- 1/2
-annih- 1
- building pol-annih ... 
+Polarized-Annihilation :  Emin=        0 eV    Emax=       10 TeV
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
@@ -157,38 +149,38 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.27s Real=0.28s Sys=0.01s
+  User=1.78s Real=1.79s Sys=0s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
  Process calls frequency --->
-	Transportation = 31254
-	pol-compt = 300
-	pol-eBrem = 355
-	msc = 2513
-	pol-eIoni = 661
-	pol-conv = 222
-	pol-phot = 153
-	pol-annihil = 71
+	Transportation = 57532
+	pol-compt = 11819
+	msc = 46504
+	pol-eBrem = 10451
+	pol-phot = 4857
+	pol-eIoni = 16845
+	pol-conv = 62
+	pol-annihil = 32
  Gamma: 
-Mean Number per Event :1.0116
-Mean Energy :9.5397 MeV +- 1.991 MeV
-Mean Polarization :-0.96012 +- 0.19359
+Mean Number per Event :1.5441
+Mean Energy :2.2701 MeV +- 2.6731 MeV
+Mean Polarization :-0.42845 +- 0.4935
  Electron: 
-Mean Number per Event :0.036
-Mean Energy :5.1729 MeV +- 2.5672 MeV
-Mean Polarization :-0.71426 +- 0.30905
+Mean Number per Event :0.8294
+Mean Energy :4.8634 MeV +- 2.3614 MeV
+Mean Polarization :-0.82222 +- 0.25063
  Positron: 
-Mean Number per Event :0.0151
-Mean Energy :4.3332 MeV +- 1.9948 MeV
-Mean Polarization :-0.62052 +- 0.29724
+Mean Number per Event :0.0031
+Mean Energy :3.2484 MeV +- 1.8025 MeV
+Mean Polarization :-0.70748 +- 0.27491
 ... write Root file : pol01.root - done
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.784746 0.157031 0.881756 0.87597 0.815964 0.34493 0.585915 0.966517 0.344205 0.943876 0.807347 0.254181 0.938416 0.743521 0.639308 0.968436 0.268561 0.279301 0.147013 0.015922 0.590135 0.375176 0.423396 0.293763 
- i_lag = 3, j_lag = 13
- carry = 5.96046e-08, count24 = 13
+ float_seed_table[] = 0.175692 0.385647 0.861036 0.507748 0.269676 0.314197 0.610989 0.106925 0.553456 0.136075 0.80907 0.772456 0.556632 0.525917 0.667838 0.656322 0.0480373 0.802785 0.581367 0.841234 0.00786269 0.865653 0.343942 0.702005 
+ i_lag = 17, j_lag = 3
+ carry = 5.96046e-08, count24 = 10
  luxury = 3 nskip = 199
 ----------------------------------------
 #
@@ -202,8 +194,17 @@ EventManager deleted.
 Units table cleared.
 Total navigation history collections cleaned: 7
 ================== Deleting memory pools ===================
+Pool ID '20G4NavigationLevelRep', size : 0.00769 MB
+Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
+Pool ID '7G4Event', size : 0.000961 MB
+Pool ID '15G4PrimaryVertex', size : 0.000961 MB
+Pool ID '17G4PrimaryParticle', size : 0.000961 MB
+Pool ID '17G4DynamicParticle', size : 0.00192 MB
+Pool ID '7G4Track', size : 0.00385 MB
+Pool ID '18G4TouchableHistory', size : 0.000961 MB
+Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.012 Mb
+Dynamic pools deleted: 9 / Total memory freed: 0.019 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

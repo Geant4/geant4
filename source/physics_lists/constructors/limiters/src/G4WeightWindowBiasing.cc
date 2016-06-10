@@ -58,7 +58,7 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4WeightWindowBiasing);
 // //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4WeightWindowBiasing::G4WeightWindowBiasing(const G4String& name)
-:  G4VPhysicsConstructor(name), fGeomSampler(0), paraFlag(false)
+  :  G4VPhysicsConstructor(name), fGeomSampler(0), fWWalg(0), fPlaceOfAction(), paraFlag(false)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -102,10 +102,9 @@ namespace G4INCL {
         nCollisionAvatars(0),
         nDecayAvatars(0),
         nUnmergedSpectators(0),
-        nEnergyViolationInteraction(0)
-#ifdef INCL_INVERSE_KINEMATICS
+        nEnergyViolationInteraction(0),
+        event(0)
 
-#endif
       {
         std::fill_n(A, maxSizeParticles, 0);
         std::fill_n(Z, maxSizeParticles, 0);
@@ -130,11 +129,9 @@ namespace G4INCL {
         std::fill_n(jxRem, maxSizeRemnants, (Float_t)0.0);
         std::fill_n(jyRem, maxSizeRemnants, (Float_t)0.0);
         std::fill_n(jzRem, maxSizeRemnants, (Float_t)0.0);
-#ifdef INCL_INVERSE_KINEMATICS
         std::fill_n(EKinPrime, maxSizeParticles, (Float_t)0.0);
         std::fill_n(pzPrime, maxSizeParticles, (Float_t)0.0);
         std::fill_n(thetaPrime, maxSizeParticles, (Float_t)0.0);
-#endif
       }
 
       /** \brief Number of the event */
@@ -288,15 +285,14 @@ namespace G4INCL {
       Int_t nUnmergedSpectators;
       /** \brief Number of attempted collisions/decays for which the energy-conservation algorithm failed to find a solution. */
       Int_t nEnergyViolationInteraction;
-
-#ifdef INCL_INVERSE_KINEMATICS
+      /** \brief Sequential number of the event in the event loop */
+      Int_t event;
       /** \brief Particle kinetic energy, in inverse kinematics [MeV] */
       Float_t EKinPrime[maxSizeParticles];
       /** \brief Particle momentum, z component, in inverse kinematics [MeV/c] */
       Float_t pzPrime[maxSizeParticles];
       /** \brief Particle momentum polar angle, in inverse kinematics [radians] */
       Float_t thetaPrime[maxSizeParticles];
-#endif // INCL_INVERSE_KINEMATICS
 
       /** \brief Reset the EventInfo members */
       void reset() {
@@ -338,18 +334,15 @@ namespace G4INCL {
         nDecayAvatars = 0;
         nUnmergedSpectators = 0;
         nEnergyViolationInteraction = 0;
-#ifdef INCL_INVERSE_KINEMATICS
+        event = 0;
 
-#endif
       }
 
       /// \brief Move a remnant to the particle array
       void remnantToParticle(const G4int remnantIndex);
 
-#ifdef INCL_INVERSE_KINEMATICS
       /// \brief Fill the variables describing the reaction in inverse kinematics
       void fillInverseKinematics(const Double_t gamma);
-#endif // INCL_INVERSE_KINEMATICS
     };
 }
 

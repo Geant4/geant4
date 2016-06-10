@@ -26,7 +26,7 @@
 /// \file biasing/ReverseMC01/src/RMC01AnalysisManager.cc
 /// \brief Implementation of the RMC01AnalysisManager class
 //
-// $Id: RMC01AnalysisManager.cc 76461 2013-11-11 10:15:51Z gcosmo $
+// $Id: RMC01AnalysisManager.cc 90260 2015-05-22 08:59:31Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
 //      Class Name:        RMC01AnalysisManager
@@ -120,6 +120,7 @@ void RMC01AnalysisManager::BeginOfRun(const G4Run* aRun)
 
    fAccumulated_edep =0.;
    fAccumulated_edep2 =0.;
+   fNentry = 0.0;
    fRelative_error=1.;
    fMean_edep=0.;
    fError_mean_edep=0.;
@@ -253,7 +254,8 @@ void  RMC01AnalysisManager::EndOfEventForForwardSimulation(
    if (totEdep>0.){
            fAccumulated_edep +=totEdep ;
            fAccumulated_edep2 +=totEdep*totEdep;
-    G4PrimaryParticle* thePrimary=anEvent->GetPrimaryVertex()->GetPrimary();
+           fNentry += 1.0;
+           G4PrimaryParticle* thePrimary=anEvent->GetPrimaryVertex()->GetPrimary();
            G4double E0= thePrimary->GetG4code()->GetPDGMass();
            G4double P=thePrimary->GetMomentum().mag();
            G4double prim_ekin =std::sqrt(E0*E0+P*P)-E0;
@@ -378,7 +380,7 @@ void  RMC01AnalysisManager::EndOfEventForAdjointSimulation(
                 
       fAccumulated_edep +=edep;
       fAccumulated_edep2 +=edep*edep;
-                
+      fNentry += 1.0;
       ComputeMeanEdepAndError(anEvent,new_mean,new_error);
       G4double new_relative_error = 1.;
       if ( new_error >0) new_relative_error = new_error/ new_mean;
@@ -392,8 +394,9 @@ void  RMC01AnalysisManager::EndOfEventForAdjointSimulation(
          G4cout<<"new rejected relative error "<< new_relative_error
                                                               <<std::endl;
          fAccumulated_edep -=edep;
-                        fAccumulated_edep2 -=edep*edep;
-                        return; 
+         fAccumulated_edep2 -=edep*edep;
+         fNentry -= 1.0;
+         return; 
                 }
                 else { //accepted
                         fMean_edep = new_mean;
@@ -503,11 +506,17 @@ void RMC01AnalysisManager::ComputeMeanEdepAndError(
       factor=1.*G4AdjointSimManager::GetInstance()->GetNbEvtOfLastRun();
    }
    
-   //error computation
-   if (nb_event>1) {
-      mean = fAccumulated_edep/nb_event;
-      G4double mean_x2 =fAccumulated_edep2/nb_event;
-      error = factor*std::sqrt(mean_x2-mean*mean)/std::sqrt(G4double(nb_event));
+   // VI: error computation now is based on number of entries and not 
+   //     number of events
+   if (fNentry > 1.0) {
+      mean = fAccumulated_edep/fNentry;
+      G4double mean_x2 = fAccumulated_edep2/fNentry;
+      /*
+      G4cout << "Nevt= " << nb_event <<  " mean= " << mean 
+             << "  mean_x2= " <<  mean_x2 << " x2 - x*x= " 
+             << mean_x2-mean*mean << G4endl;
+      */
+      error = factor*std::sqrt(mean_x2-mean*mean)/std::sqrt(fNentry);
       mean *=factor;
    }
    else {

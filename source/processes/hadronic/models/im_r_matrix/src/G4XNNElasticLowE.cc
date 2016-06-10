@@ -25,6 +25,8 @@
 //
 #include "globals.hh"
 #include "G4ios.hh"
+#include "G4Exp.hh"
+#include "G4Log.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4XNNElasticLowE.hh"
 #include "G4KineticTrack.hh"
@@ -38,12 +40,12 @@ const G4double G4XNNElasticLowE::_lowLimit = 0.;
 const G4double G4XNNElasticLowE::_highLimit = 3.*GeV;
 
 // Low energy limit of the cross-section table (in GeV)
-// Units are assigned while filling the PhysicsVector
+// Units are assigned when filling the PhysicsVector
 const G4double G4XNNElasticLowE::_eMinTable = 1.8964808;
 const G4double G4XNNElasticLowE::_eStepLog = 0.01;
 
 // Cross-sections in mb
-// Units are assigned while filling the PhysicsVector
+// Units are assigned when filling the PhysicsVector
 
 const G4int G4XNNElasticLowE::tableSize = 101;
 
@@ -89,14 +91,14 @@ G4XNNElasticLowE::G4XNNElasticLowE()
   // Cross-sections are available in the range (_eMin,_eMax)
 
   _eMin = _eMinTable * GeV;
-  _eMax = std::exp(std::log(_eMinTable) + tableSize * _eStepLog) * GeV;
+  _eMax = G4Exp(G4Log(_eMinTable) + tableSize * _eStepLog) * GeV;
   if (_eMin < _lowLimit)
     throw G4HadronicException(__FILE__, __LINE__, "G4XNNElasticLowE::G4XNNElasticLowE - Low energy limit not valid");    
   if (_highLimit > _eMax)
     throw G4HadronicException(__FILE__, __LINE__, "G4XNNElasticLowE::G4XNNElasticLowE - High energy limit not valid");    
   G4PhysicsVector* pp = new G4PhysicsLnVector(_eMin,_eMax,tableSize);
 
-  _eMin = std::exp(std::log(_eMinTable)-_eStepLog)*GeV;
+  _eMin = G4Exp(G4Log(_eMinTable)-_eStepLog)*GeV;
   if (_eMin < _lowLimit)
     throw G4HadronicException(__FILE__, __LINE__, "G4XNNElasticLowE::G4XNNElasticLowE - Low energy limit not valid");
   G4PhysicsVector* np = new G4PhysicsLnVector(_eMin,_eMax,tableSize);

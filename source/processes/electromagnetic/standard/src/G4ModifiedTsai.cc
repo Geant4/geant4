@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ModifiedTsai.cc 74581 2013-10-15 12:03:25Z gcosmo $
+// $Id: G4ModifiedTsai.cc 91726 2015-08-03 15:41:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -70,7 +70,7 @@ G4ModifiedTsai::~G4ModifiedTsai()
 
 G4ThreeVector& 
 G4ModifiedTsai::SampleDirection(const G4DynamicParticle* dp,
-				G4double, G4int, const G4Material*)
+                                G4double, G4int, const G4Material*)
 {
   // Sample gamma angle (Z - axis along the parent particle).
   // Universal distribution suggested by L. Urban (Geant3 manual (1993) 
@@ -89,6 +89,7 @@ G4ModifiedTsai::SampleDirection(const G4DynamicParticle* dp,
     if ( border > G4UniformRand() ) { u /= a1; }
     else                            { u /= a2; }
     
+    // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
   } while(u > uMax);
 
   G4double cost = 1.0 - 2*u*u/(uMax*uMax);
@@ -106,7 +107,7 @@ void G4ModifiedTsai::PrintGeneratorInformation() const
   G4cout << "\n" << G4endl;
   G4cout << "Bremsstrahlung Angular Generator is Modified Tsai" << G4endl;
   G4cout << "Distribution suggested by L.Urban (Geant3 manual (1993) Phys211)" 
-	 << G4endl;
+         << G4endl;
   G4cout << "Derived from Tsai distribution (Rev Mod Phys 49,421(1977)) \n" 
-	 << G4endl;
+         << G4endl;
 } 

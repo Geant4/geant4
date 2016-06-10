@@ -48,8 +48,6 @@ class G4QMDCollision
 {
    public:
       G4QMDCollision();
-//      G4QMDCollision( const G4QMDCollision& );
-//      G4QMDCollision& operator= ( const G4QMDCollision& );
       ~G4QMDCollision();
 
       void CalKinematicsOfBinaryCollisions( G4double );
@@ -70,6 +68,10 @@ class G4QMDCollision
       G4double epse(){ return fepse; };
 
    private:
+      //copy is unexpeced
+      G4QMDCollision( const G4QMDCollision& ){;};
+      const G4QMDCollision& operator= ( const G4QMDCollision& );
+
       G4QMDSystem* theSystem;
       G4QMDMeanField* theMeanField;
 

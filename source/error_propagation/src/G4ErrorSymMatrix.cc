@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorSymMatrix.cc 78318 2013-12-11 15:02:40Z gcosmo $
+// $Id: G4ErrorSymMatrix.cc 91809 2015-08-06 13:00:09Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -302,8 +302,8 @@ G4ErrorMatrix operator*(const G4ErrorMatrix &mat1, const G4ErrorSymMatrix &mat2)
             sp=snp;
             snp+=step;
             temp=0;
-            while(sp<snp)
-            temp+=*(sp++)*(*(mit2++));
+            while(sp<snp)  // Loop checking, 06.08.2015, G.Cosmo
+            {  temp+=*(sp++)*(*(mit2++));  }
             if( step<mat2.num_row() ) {	// only if we aren't on the last row
                 sp+=step-1;
                 for(int stept=step+1;stept<=mat2.num_row();stept++)
@@ -333,7 +333,7 @@ G4ErrorMatrix operator*(const G4ErrorSymMatrix &mat1, const G4ErrorMatrix &mat2)
       mit2=mit1;
       sp=snp;
       temp=0;
-      while(sp<snp+step)
+      while(sp<snp+step)  // Loop checking, 06.08.2015, G.Cosmo
       {
         temp+=*mit2*(*(sp++));
         mit2+=mat2.num_col();
@@ -369,7 +369,7 @@ G4ErrorMatrix operator*(const G4ErrorSymMatrix &mat1, const G4ErrorSymMatrix &ma
       temp=0;
       if(step1<step2)
       {
-        while(sp1<snp1+step1)
+        while(sp1<snp1+step1)  // Loop checking, 06.08.2015, G.Cosmo
           { temp+=(*(sp1++))*(*(sp2++)); }
         sp1+=step1-1;
         for(stept1=step1+1;stept1!=step2+1;sp1+=stept1++)
@@ -380,7 +380,7 @@ G4ErrorMatrix operator*(const G4ErrorSymMatrix &mat1, const G4ErrorSymMatrix &ma
       }
       else
       {
-        while(sp2<snp2)
+        while(sp2<snp2)  // Loop checking, 06.08.2015, G.Cosmo
           { temp+=(*(sp1++))*(*(sp2++)); }
         sp2+=step2-1;
         for(stept2=++step2;stept2!=step1+1;sp2+=stept2++)

@@ -50,14 +50,14 @@ static const G4int    nL=105;            // A#of GDResonance points in E
 static const G4double Emin=THmin+(nL-1)*dE; // minE for the HighE part
 static const G4double Emax=50000.;       // maxE for the HighE part
 static const G4int    nH=224;            // A#of HResonance points in lnE
-static const G4double milE=std::log(Emin);  // Low logarithm energy for
+static const G4double milE=G4Log(Emin);  // Low logarithm energy for
 // the HighE part
-static const G4double malE=std::log(Emax);  // High logarithm energy
+static const G4double malE=G4Log(Emax);  // High logarithm energy
 // (each 2.75 percent)
 static const G4double dlE=(malE-milE)/(nH-1); // Step in logarithm energy
 // in the HighE part
 //
-//static const G4double shd=1.075-.0023*std::log(2.);  // HE PomShadowing(D)
+//static const G4double shd=1.075-.0023*G4Log(2.);  // HE PomShadowing(D)
 static const G4double shd=1.0734;                 // HE PomShadowing(D)
 static const G4double shc=0.072;                  // HE Shadowing constant
 static const G4double poc=0.0375;                 // HE Pomeron coefficient
@@ -1557,7 +1557,7 @@ G4PhotoNuclearCrossSection::GetElementCrossSection(const G4DynamicParticle* aPar
             G4double Aa = nistmngr->GetAtomicMassAmu(ZZ); // average A
             G4int N = (G4int)Aa - ZZ;
             
-            G4double lnA=std::log(Aa); // The nucleus is not found in DB. It is new.
+            G4double lnA=G4Log(Aa); // The nucleus is not found in DB. It is new.
             if(Aa==1.) lastSP=1.;      // The Reggeon shadowing (A=1)
             else lastSP=Aa*(1.-shc*lnA);      // The Reggeon shadowing
             lastTH=ThresholdEnergy(ZZ, N); // Energy Threshold
@@ -1592,13 +1592,13 @@ G4PhotoNuclearCrossSection::GetElementCrossSection(const G4DynamicParticle* aPar
     }
     else if (Energy<Emax)                     // High Energy region
     {
-        G4double lE=std::log(Energy);
+        G4double lE=G4Log(Energy);
         sigma=EquLinearFit(lE,nH,milE,dlE,lastHEN);
     }
     else               // UHE region (calculation, but not so frequent)
     {
-        G4double lE=std::log(Energy);
-        sigma=lastSP*(poc*(lE-pos)+shd*std::exp(-reg*lE));
+        G4double lE=G4Log(Energy);
+        sigma=lastSP*(poc*(lE-pos)+shd*G4Exp(-reg*lE));
     }
     // End of "sigma" calculation
     
@@ -1663,7 +1663,7 @@ G4PhotoNuclearCrossSection::EquLinearFit(G4double X, G4int N,
     return sigma;
 }
 
-// Calculate the functions for the std::log(A)
+// Calculate the functions for the G4Log(A)
 
 G4int
 G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double* z)

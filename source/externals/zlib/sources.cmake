@@ -92,35 +92,44 @@ include(Geant4MacroDefineModule)
 #   Private headers are in src!
 include_directories(src)
 include_directories(${ZLIB_INCLUDE_DIRS})
+set(ZLIB_PUBLIC_HDRS
+    ${CMAKE_CURRENT_BINARY_DIR}/zconf.h
+    zlib.h
+)
+set(ZLIB_PRIVATE_HDRS
+    crc32.h
+    deflate.h
+    gzguts.h
+    inffast.h
+    inffixed.h
+    inflate.h
+    inftrees.h
+    trees.h
+    zutil.h
+)
+set(ZLIB_SRCS
+    adler32.cc
+    compress.cc
+    crc32.cc
+    deflate.cc
+    gzclose.cc
+    gzlib.cc
+    gzread.cc
+    gzwrite.cc
+    inflate.cc
+    infback.cc
+    inftrees.cc
+    inffast.cc
+    trees.cc
+    uncompr.cc
+    zutil.cc
+)
 GEANT4_DEFINE_MODULE(NAME G4zlib
     HEADERS
-        ${CMAKE_CURRENT_BINARY_DIR}/zconf.h
-        zlib.h
+        ${ZLIB_PUBLIC_HDRS}
     SOURCES
-	crc32.h
-        deflate.h
-        gzguts.h
-        inffast.h
-        inffixed.h
-        inflate.h
-        inftrees.h
-        trees.h
-        zutil.h
-        adler32.cc
-        compress.cc
-        crc32.cc
-        deflate.cc
-        gzclose.cc
-        gzlib.cc
-        gzread.cc
-        gzwrite.cc
-        infback.cc
-        inffast.cc
-        inflate.cc
-        inftrees.cc
-        trees.cc
-        uncompr.cc
-        zutil.cc
+	     ${ZLIB_PRIVATE_HDRS}
+        ${ZLIB_SRCS}
     GRANULAR_DEPENDENCIES
     GLOBAL_DEPENDENCIES
     LINK_LIBRARIES

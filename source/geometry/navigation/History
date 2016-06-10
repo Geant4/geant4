@@ -1,4 +1,4 @@
-$Id: History 87208 2014-11-27 08:57:44Z gcosmo $
+$Id: History 94380 2015-11-13 10:14:39Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,302 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 13, 2015 - G.Cosmo (geomnav-V10-01-35)
+---------------------------
+- Code cleanup in G4MultiLevelLocator and G4PropagatorInField.
+
+October 30, 2015 - J.Apostolakis (geomnav-V10-01-34)
+--------------------------------
+- G4MultiLevelLocator::EstimateIntersectionPoint():
+  * Replaced fatal error for exceeding max steps with warning.
+    In addition it returns immediately, giving the current progress as the
+    'Recalculated End Point'. This signals 'looping' - ie too many steps.
+- G4PropagatorInField detects this condition, and identifies it as a 'Looping
+  Particle' which is then flagged.
+  The calling class (Transportation, PathFinder) is expected to stop the
+  tracking of this particle after this step (or potentially after a few of
+  these steps.) 
+  Note: Current way to identify looping (in PropagatorInField) is:
+        - if flag recalculated is set and the proposed end-point is short,
+          i.e. if it not as far along the curve as the original proposed
+          end-point (the one sent to the Locator).
+  TODO: Consider revising the interface of EstimateIntersectionPoint to add an
+        'unfinished' output value - to make this condition clearer.
+- Addresses issues seen by ALICE in trial productions.
+
+October 23, 2015 - G.Cosmo (geomnav-V10-01-33)
+--------------------------
+- Fixed Coverity defect in G4VIntersectionLocator. Some minor code cleanup...
+
+October 14, 2015 - J.Apostolakis (geomnav-V10-01-32)
+--------------------------------
+- G4MultiLevelLocator::EstimateIntersectionPoint():
+  * Ensure that splitting of step (new level / depth) advances the required
+    length by calling ChordFinder's AdvanceChordLimited method
+      ( instead of method AccurateAdvance of Driver.)
+       Used when adding a new level / depth.
+   Addresses issue seen by ALICE (non-finishing of step due to poor advances).
+- Added method in G4VIntersectionLocator to report Immediate Hit
+    - ie if the intersection point is within tolerance of the start point 
+- G4NavigationLogger: Added method to report issue with normal that 
+    is the result of applying a rotation (which prints the matrix.)
+- G4NormalNavigation, G4VoxelNavigation: Added check of rotated exit normal
+    
+October 11, 2015 - G.Cosmo (geomnav-V10-01-30, 31)
+-------------------------
+- Fix in G4MultiLevelLocator::EstimateIntersectionPoint(): revised condition
+  of 'while' loop which ensures that a new candidate intersection exists.
+  Corrected the resetting of 'first_section' flag: when the linear search is
+  progressing well, several (>1) iterations of the outer loop can be part of
+  the initial sections (i.e. before any bi-section = depth increase).
+  (J.Apostolakis)
+- Removed more debug printouts and conditions.
+- Fixed compilation warning in G4MultiLevelLocator. (tag -31)
+    
+September 5, 2015 - G.Cosmo (geomnav-V10-01-29)
+---------------------------	
+- Removed left-over debug statement introduced in tag "geomnav-V10-01-26";
+  fixing compilation warning on clang compiler.
+
+September 4, 2015 - G.Cosmo (geomnav-V10-01-28)
+---------------------------	
+- Removed 'tracing' mode in G4MultiLevelLocator.
+- Some code cleanup.
+
+September 2, 2015 - J.Apostolakis (geomnav-V10-01-27, 26)
+---------------------------------	
+- G4MultiLevelLocator::EstimateIntersectionPoint():
+  * Fix for logic error in keeping consistent candidate intersection.
+    Copes with case that a candidate intersection is not found in the next
+    segment (typically in the 'second half' part).
+    Correction was to examine additional segments until a chord is found that
+    intersects (changing 'if' to 'while') or all were exhausted (then no
+    intersection exists).
+  * Includes new flags and consistency check - in an assert.
+  * Added a 'tracing' mode, to report each call, and the path taken.
+    Off by default. Likely to be suppressed in a future tag.
+- G4VIntersectionLoator: new methods & revised interfaces.
+  Added new auxiliary methods: ReportReversedPoints(), ReportProgress() and
+  CheckAndReEstimateEndpoint().
+  Revised arguments of methods:
+  * ReEstimateEndpoint(): Ignore & recalculate redundant parameters.
+  * Made printStatus( with stream ) static, and added verbose argument.
+  * Changed ostringstream argument to ostream in PrintStatus (more flexible
+    as it can now be used directly with std::cout).
+
+August 4, 2015 - G.Cosmo (geomnav-V10-01-25)
+------------------------	
+- Withdrawn changes to G4GlobalFieldMessenger.cc introduced in the previous tag.
+- G4VIntersectionLocator: properly initialise 'fCheckMode'; fixing Coverity
+  defect.
+
+June 9, 2015 - J.Apostolakis (geomnav-V10-01-24)
+----------------------------	
+- G4GlobalFieldMessenger: Revised SetField() method to switch order of call
+  to 'CreateChordFinder()' before calling G4FieldManager::SetDetectorField().
+  Changed in order to co-work with fix of G4FieldManager::SetDetectorField().
+  Requires and co-works with  field-V10-01-05
+
+May 10, 2015 - J.Apostolakis (geomnav-V10-01-23)
+----------------------------	
+- G4NavigationLogger: Changes, refinements for ReportOutsideMotherVolume()
+  * Delegate printing details to new method 'ReportVolumeAndIntersection'.
+  * Print additional diagnostic information (to help with ATLAS issue.)
+  * New properties:
+     * fMinTriggerDistance: a larger error is fatal (def. DBL_MAX)
+     * fReportSoftWarnings: is set, report if small safety (abs<tolerance)
+                            is not rounded to zero.
+	
+June 3, 2015 - G.Cosmo (geomnav-V10-01-22)
+----------------------
+- Minor printout fix in G4NavigationLogger::ReportOutsideMother().
+
+May 29, 2015 - G.Cosmo (geomnav-V10-01-21)
+----------------------
+- Fixed compilation errors when compiling with G4DEBUG_FIELD turned on.
+  Addressing problem report #1748.
+
+May 11, 2015 - G.Cosmo (geomnav-V10-01-20)
+----------------------
+- Minor fixes and code cleanup/simplification.
+
+May 10, 2015 - J.Apostolakis (geomnav-V10-01-19)
+----------------------------
+- Navigation Helper classes (Normal, Voxel, Parameterised)
+  * Use return value of motherSolid DistanceToOut(p,v), each time
+    that it is called.  Correct 'invalid' to zero:
+      If it is  kInfinity, reset value to zero!
+      If it is  negative,  reset value to zero!
+  * Small cleanup - always use variables 'mother'ExitNormal.
+    'mother'ValidExitNormal.  Enables small simplification.
+  * Do not return motherExitNormal (valid=false), if outside mother.
+
+May 8, 2015 - G.Cosmo (geomnav-V10-01-18)
+---------------------
+- Fixed spurious compilation warnings.
+
+May 7, 2015 - G.Cosmo (geomnav-V10-01-17)
+---------------------
+- Protect all changes for extra checks made by navigators in ComputeStep()
+  introduced in the previous tags within 'check_mode' and G4VERBOSE, to
+  allow restoring original run-time performance penalised by more 8-10%.
+- Utilised changes from tag "geomnav-V10-01-16", in a private branch.
+- Code cleanup and various minor fixes.
+
+May 3, 2015 - J.Apostolakis (geomnav-V10-01-14 and -15)
+---------------------------
+- ComputeStep() methods of Normal/Voxel/Parameterised Navigation:
+  Protect stepping for case of being outside mother volume.
+  Always evaluate mother's DistanceToOut(p,v), in order to check whether
+  answer indicates invalid position (i.e. outside mother solid).
+  Created to address issue of tracking in ATLAS - (JIRA issue ATLAS-SIM 1815
+  and SIM-433, ie https://sft.its.cern.ch/jira/browse/SIM-433 )
+    
+  Detailed description:
+  ComputeStep() methods of the 'Navigation' helper methods changed to always
+  evaluate the mother DistanceToOut(p,v), in order to check whether the answer
+  is 
+      * valid, indicating that the point is inside / on surface), or
+      * invalid, indicating the point is outside (when the value is either
+        negative or equal to kInfinity).
+  Addresses / protects Navigation from the case that a point escapes a volume,
+  and never again encounters the volume boundary. 
+
+  Note: DistanceToOut(p,v,...) in some solids is able to return a value that
+        indicates that it has been called from Outside the solid (contrary to
+        its expectation / contract.)
+        But not all solids provide this diagnostic (it would be a very
+        invaluable improvement in the specification / implementation, and
+        likely simple to add and cheap to evaluate.)
+
+  Enabled ComputeStep() to recognise this response (invalid point - i.e.
+  outside mother). Before it was not recognised, but used instead as a numeric
+  value (kInfinity). In case it was kInfinity, this meant the volume could not
+  be chosen, and the track never exited the volume!
+
+  This invalid response now triggers an immediate exit from the volume
+  daughters do not need to be considered.
+    
+  'Behaviour' change: this modification changes the logic in ComputeStep(),
+  and always calls the mother solid's DistanceToOut() method.
+  (before it was called only if the currentStep was larger than the mother
+  Solid's safety. )
+
+  Expected performance impact:
+  The (mandatory) call to DistanceToOut(p,v) in ComputeStep is extra work,
+  as it was optional before.
+  Expect an overhead, proportional to the cost of the 'average' DistanceToOut()
+  method (in the geometry model).
+  The worst cases are expected to be geometries with one or more large 
+  complex volumes (e.g. Polycone.) which is either
+  - a leaf node (with above-average density material), or
+  - which has a large number of volumes placed directly inside it.
+
+  Potential alternative approach:
+  An invalid point must be recognised using some method of a solid.
+  There are three possibilities:
+  - the inside method is called for the mother volume at the start
+    of every step. This would be a new additional call;
+  - the safety method "DistanceToOut(p)" is used to recognise this condition.
+    This could be done if it returns a negative value for positions outside
+    the solid. This call already occurs, but would become more expensive;
+  - the intersection distance "DistanceToOut(p,v,..) is used, and must be
+    called at every step.   This is the choice that has now been made.
+    It is possible to consider the alternative choices, to evaluate their
+    computational cost, and the effort to review/improve the implementations.
+
+  The most realistic alternative is a) to rely on the Safety method(s) to
+  respond zero if the point is on the 'wrong' side of the volume boundary,
+  and b) to call DistanceToOut(p,v) only if (step < mother Safety).
+	
+May 02, 2015 - J.Apostolakis (geomnav-V10-01-13) 
+----------------------------
+- Withdraw change in "geomnav-V10-01-06":
+- Correction for roundoff issue in G4PropagatorInField
+    
+April 30, 2015 - J.Apostolakis (geomnav-V10-01-07,-08,-10) -12 fixed  
+------------------------------
+- NavigationLogger:
+  * Added method  for Reporting A Point is Outside the Mother volume.
+  * Added methods CheckAndReportBadNormal, CheckDaughterEntryPoint
+- G4AuxiliaryNavigationServices:
+  * Optimisation: Reuse dot product, rather than recomputing
+  * Added optional printout (protected by debug flag)
+  * Replaced the fake 'TestOne' non-inline method, with utility method
+    ReportTolerances.
+- G4VIntersectionLocator
+  * New PrintStatus method with additional ostringstream argument.
+- G4NormalNavigation:
+  * Moved Set/Get Verbose Level methods to source file (reduces dependency
+    on logger)
+- G4PathFinder:
+  * Reformatted warning/error message.
+    (Consolidation, include changes commited February 19, 2015, but not
+    tagged).
+
+April 30, 2015 - J.Apostolakis (geomnav-V10-01-06)
+------------------------------
+( Separate tag for the following fix committed on February 19, 2015 )
+- PropagatorInField:
+  * Fix for roundoff error in return value of ComputeStep, which reduces
+    apparent step, and leads to confusing SteppingManager.
+    ( In case no intersection is found, return the attempted step, not the
+      taken-step. )
+  * Added optional 'trace' verbosity in IntersectChord method which 
+      reports arguments and results of each call.
+    Note: this is protected with DEBUG_PROPAGATION flag.
+
+ [ Note: This tag was made on branch geomnav-V10-01-06-branch, in order to
+         modify this History file without overwriting the History file for
+         geomnave-V10-01-07, which was created earlier. ]
+     
+January  28, 2015 - J.Apostolakis (geomnav-V10-01-05)
+---------------------------------
+- G4PropagatorInField: Added new methods to report looping and stuck tracks.
+  Cleanup.
+- G4PathFinder: Fix to two calls to ComputeSafety - second argument is length,
+  not bool.
+    
+January  27, 2015 - J.Apostolakis (geomnav-V10-01-04)
+---------------------------------
+- G4PropagatorInField: Fix for issue found in microbeam. Reinstate old code
+  that worked.
+  G4PropagatorInField ComputeStep: Widthraw adjustment of 'step taken' 
+  in case it was just less than requested step (within tolerance.)
+  This change caused a step to appear to be fully taken, rather than 
+  stopping at the boundary just smaller the proposed step (from the physics).
+  As a consequence the trasnportation was not the chosen process, and 
+  other processes (multiple scattering) did not update parameters correctly.
+
+January  15, 2015 - J.Apostolakis (geomnav-V10-01-03)
+---------------------------------
+- G4PathFinder: Pass to equation of motion relevant properties of current
+    particle: latest charge state (electric, magnetic dipole moment),
+    PDG spin value, momentum and rest mass of current particle
+    Part of corrections needed for Bugzilla issue 1696.
+	
+- Increased maximum number of Navigators from 8 to 16.
+    
+December 15, 2014 - J.Apostolakis (geomnav-V10-01-02)
+---------------------------------
+- Improvements to enable identification of first and last step in a volume, when
+    tracking in a field. (Bugzilla issue 1032).
+  Revised G4PropagatorInField, adding new method PrepareNewTrack() and data members.
+  G4PropagatorInField ComputeStep: Adjust 'step taken' in case it was just less 
+     than requested/proposed (within tolerance) - in case accumulated numerical 
+     error might cause problem. [ Experimental - withdrawn in geomnav-V10-01-04.]
+  Note: Co-works with and is required tags in processes/transportation and track.  
+    
+December 15, 2014 - J.Apostolakis (geomnav-V10-01-01)
+---------------------------------
+- G4ErrorPropagationNavigator: revise implementation of ComputeStep, to
+  avoid calling G4Navigator::ComputeSafety (which has side effects.)
+  Addresses problem report #1679.
+
+December 8, 2014 - G.Cosmo (geomnav-V10-01-00)
+--------------------------
+- Removed unused leftover header file G4GeomTestVolPoint.hh.
 
 November 27, 2014 - G.Cosmo (geomnav-V10-00-19)
 ---------------------------

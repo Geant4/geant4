@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCaptureCascade.cc 69573 2013-05-08 13:35:53Z gcosmo $
+// $Id: G4EmCaptureCascade.cc 91836 2015-08-07 07:25:54Z gcosmo $
 //
 //-----------------------------------------------------------------------------
 //
@@ -161,6 +161,7 @@ G4EmCaptureCascade::ApplyYourself(const G4HadProjectile& projectile,
     }
     edep += deltaE;
 
+    // Loop checking, 06-Aug-2015, Vladimir Ivanchenko
   } while( nLevel > 0 );
 
   result.SetLocalEnergyDeposit(edep);

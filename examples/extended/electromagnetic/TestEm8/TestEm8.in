@@ -10,8 +10,9 @@
 #
 #  select EM PhysicsList
 #
-/testem/phys/addPhysics  pai
-#/testem/phys/addPhysics  pai_photon
+/testem/phys/addPhysics  emstandard_opt0
+/process/em/AddPAIRegion all GasDetector pai
+#/process/em/AddPAIRegion all GasDetector PAIphoton
 #
 #/testem/stepMax         10 mm
 #
@@ -22,6 +23,7 @@
 #
 /run/setCut  0.5 mm
 /run/setCutForRegion GasDetector 1.8 mm
+/process/em/verbose 1
 #/run/particle/dumpCutValues
 #
 #/process/eLoss/fluct false

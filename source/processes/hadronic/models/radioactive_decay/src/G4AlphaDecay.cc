@@ -45,26 +45,19 @@
 G4AlphaDecay::G4AlphaDecay(const G4ParticleDefinition* theParentNucleus,
                            const G4double& branch, const G4double& Qvalue,
                            const G4double& excitationE)
- : G4VDecayChannel("alpha decay"), transitionQ(Qvalue), daughterEx(excitationE),
-   halflifeThreshold(nanosecond)
+ : G4NuclearDecay("alpha decay", Alpha, excitationE), transitionQ(Qvalue)
 {
   SetParent(theParentNucleus);  // Store name of parent nucleus, delete G4MT_parent 
   SetBR(branch);
 
   SetNumberOfDaughters(2);
-  SetDaughter(0, "alpha");      // Store name of 1st daughter
   G4IonTable* theIonTable =
     (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
   G4int daughterZ = theParentNucleus->GetAtomicNumber() - 2;
   G4int daughterA = theParentNucleus->GetAtomicMass() - 4; 
-  SetDaughter(1, theIonTable->GetIon(daughterZ, daughterA, daughterEx) );
+  SetDaughter(0, theIonTable->GetIon(daughterZ, daughterA, excitationE) );
+  SetDaughter(1, "alpha");
 }
-
-
-G4AlphaDecay::G4AlphaDecay(const G4AlphaDecay& right)
- : G4VDecayChannel(right), transitionQ(right.transitionQ),
-   daughterEx(right.daughterEx), halflifeThreshold(right.halflifeThreshold)
-{}
 
 
 G4AlphaDecay::~G4AlphaDecay()
@@ -79,9 +72,9 @@ G4DecayProducts* G4AlphaDecay::DecayIt(G4double)
   // Fill G4MT_daughters with alpha and residual nucleus (stored by SetDaughter)  
   if (G4MT_daughters == 0) FillDaughters();
 
-  G4double alphaMass = G4MT_daughters[0]->GetPDGMass();
+  G4double alphaMass = G4MT_daughters[1]->GetPDGMass();
   // Excitation energy included in PDG mass
-  G4double nucleusMass = G4MT_daughters[1]->GetPDGMass();
+  G4double nucleusMass = G4MT_daughters[0]->GetPDGMass();
 
   // Q value was calculated from atomic masses.
   // Use it to get correct alpha energy.
@@ -105,23 +98,39 @@ G4DecayProducts* G4AlphaDecay::DecayIt(G4double)
   G4double KE = std::sqrt(cmMomentum*cmMomentum + alphaMass*alphaMass)
               - alphaMass;
   G4DynamicParticle* daughterparticle =
-    new G4DynamicParticle(G4MT_daughters[0], direction, KE, alphaMass);
+    new G4DynamicParticle(G4MT_daughters[1], direction, KE, alphaMass);
   products->PushProducts(daughterparticle);
 
   KE = std::sqrt(cmMomentum*cmMomentum + nucleusMass*nucleusMass) - nucleusMass;
   daughterparticle =
-    new G4DynamicParticle(G4MT_daughters[1], -1.0*direction, KE, nucleusMass);
+    new G4DynamicParticle(G4MT_daughters[0], -1.0*direction, KE, nucleusMass);
   products->PushProducts(daughterparticle);
 
+  // Energy conservation check
+  // For alpha decays, do final energy check against reaction Q value
+  // which is well-measured using atomic mass differences.  Nuclear masses
+  // should not be used since they are not usually directly measured and we
+  // always decay atoms and not fully stripped nuclei.
+  /*
+  G4int nProd = products->entries();
+  G4DynamicParticle* temp = 0;
+  G4double Esum = 0.0;
+  for (G4int i = 0; i < nProd; i++) {
+    temp = products->operator[](i);
+    Esum += temp->GetKineticEnergy();
+  }
+  G4double eCons = (transitionQ - Esum)/keV;
+  if (eCons > 1.e-07) G4cout << " Alpha decay check: Ediff (keV) = " << eCons << G4endl;
+  */
   return products;
 }
 
 
-void G4AlphaDecay::DumpInfo()
+void G4AlphaDecay::DumpNuclearInfo()
 {
   G4cout << " G4AlphaDecay for parent nucleus " << GetParentName() << G4endl;
   G4cout << " decays to " << GetDaughterName(0) << " + " << GetDaughterName(1)
-         << " with branching ratio " << GetBR() << " and Q value "
+         << " with branching ratio " << GetBR() << "% and Q value "
          << transitionQ << G4endl;
 }
 

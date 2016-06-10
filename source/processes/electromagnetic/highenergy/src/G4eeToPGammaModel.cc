@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToPGammaModel.cc 82961 2014-07-21 09:20:49Z gcosmo $
+// $Id: G4eeToPGammaModel.cc 91869 2015-08-07 15:21:02Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -119,6 +119,7 @@ void G4eeToPGammaModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp,
   G4double cost;
   do {
     cost = 2.0*G4UniformRand() - 1.0;
+    // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
   } while( 2.0*G4UniformRand() > 1.0 + cost*cost );
 
   G4double sint = sqrt(1.0 - cost*cost);

@@ -1,0 +1,38 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_HEADER
+#define tools_HEADER
+
+#include "S_STRING"
+#include "scast"
+
+#define TOOLS_HEADER(a__class,a__sclass,a__parent)\
+private:\
+  typedef a__parent parent;\
+public:\
+  TOOLS_SCLASS(a__sclass)\
+public:\
+  virtual void* cast(const std::string& a_class) const {\
+    if(void* p = tools::cmp_cast<a__class>(this,a_class)) return p;\
+    return parent::cast(a_class);\
+  }\
+  virtual const std::string& s_cls() const {return s_class();}
+
+#define TOOLS_HEADER_COPY(a__class,a__sclass,a__parent,a__to)\
+  TOOLS_HEADER(a__class,a__sclass,a__parent)\
+  virtual a__to* copy() const {return new a__class(*this);}
+
+#define TOOLS_T_HEADER(a__T,a__class,a__sclass,a__parent)\
+private:\
+  typedef a__parent parent;\
+public:\
+  TOOLS_T_SCLASS(a__T,a__sclass)\
+public:\
+  virtual void* cast(const std::string& a_class) const {\
+    if(void* p = tools::cmp_cast<a__class>(this,a_class)) return p;\
+    return parent::cast(a_class);\
+  }\
+  virtual const std::string& s_cls() const {return s_class();}
+
+#endif

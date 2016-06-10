@@ -28,10 +28,10 @@
 #include "G4QMDGroundStateNucleus.hh"
 
 #include "G4NucleiProperties.hh"
-
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
-
+#include "G4Exp.hh"
+#include "G4Pow.hh"
 #include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 
@@ -92,21 +92,23 @@ G4QMDGroundStateNucleus::G4QMDGroundStateNucleus( G4int z , G4int a )
 
    }
 
-   G4double radious = r00 * std::pow ( double ( GetMassNumber() ) , 1.0/3.0 ); 
+   G4double radious = r00 * G4Pow::GetInstance()->A13( double ( GetMassNumber() ) ); 
 
    rt00 = radious - r01; 
    radm = radious - rada * ( gamm - 1.0 ) + radb;
-   rmax = 1.0 / ( 1.0 + std::exp ( -rt00/saa ) );
+   rmax = 1.0 / ( 1.0 + G4Exp ( -rt00/saa ) );
 
    //maxTrial = 1000;
    
    //Nucleon primary or target case;
    if ( z == 1 && a == 1 ) {  // Hydrogen  Case or proton primary 
       SetParticipant( new G4QMDParticipant( G4Proton::Proton() , G4ThreeVector( 0.0 ) , G4ThreeVector( 0.0 ) ) );
+      ebini = 0.0; 
       return;
    }
    else if ( z == 0 && a == 1 ) { // Neutron primary 
       SetParticipant( new G4QMDParticipant( G4Neutron::Neutron() , G4ThreeVector( 0.0 ) , G4ThreeVector( 0.0 ) ) );
+      ebini = 0.0; 
       return;
    }
 
@@ -147,10 +149,9 @@ void G4QMDGroundStateNucleus::packNucleons()
       ebin1 = ( ebini + 1.5 ) * 0.001;
    }
 
-{
    G4int n0Try = 0; 
    G4bool isThisOK = false;
-   while ( n0Try < maxTrial )
+   while ( n0Try < maxTrial ) // Loop checking, 11.03.2015, T. Koi
    {
       n0Try++;
       //std::cout << "TKDB packNucleons n0Try " << n0Try << std::endl;
@@ -161,7 +162,7 @@ void G4QMDGroundStateNucleus::packNucleons()
 
       G4bool areThesePsOK = false;
       G4int npTry = 0;
-      while ( npTry < maxTrial )
+      while ( npTry < maxTrial ) // Loop checking, 11.03.2015, T. Koi
       {
       //std::cout << "TKDB Sampling Position npTry " << npTry << std::endl;
          npTry++; 
@@ -223,7 +224,7 @@ void G4QMDGroundStateNucleus::packNucleons()
       {
          rho_l[i] = cdp * ( rho_a[i] + 1.0 );     
          d_pot[i] = c0p * rho_a[i]
-                  + c3p * std::pow ( rho_a[i] , gamm )
+                  + c3p * G4Pow::GetInstance()->powA ( rho_a[i] , gamm )
                   + csp * rho_s[i]
                   + clp * rho_c[i];
 
@@ -241,7 +242,7 @@ void G4QMDGroundStateNucleus::packNucleons()
       //std::cout << "TKDB Sampling Momentum 1st " << std::endl;
       G4bool isThis1stMOK = false;
       G4int nmTry = 0; 
-      while ( nmTry < maxTrial )
+      while ( nmTry < maxTrial ) // Loop checking, 11.03.2015, T. Koi
       {
          nmTry++;
          G4int i = 0; 
@@ -257,7 +258,7 @@ void G4QMDGroundStateNucleus::packNucleons()
 
       G4bool areTheseMsOK = true;
       nmTry = 0; 
-      while ( nmTry < maxTrial )
+      while ( nmTry < maxTrial ) // Loop checking, 11.03.2015, T. Koi
       {
          nmTry++;
             G4int i = 0; 
@@ -341,7 +342,7 @@ void G4QMDGroundStateNucleus::packNucleons()
       G4int neaTry = 0;
 
       G4bool isThisEAOK = false;
-      while ( neaTry < maxTrial )
+      while ( neaTry < maxTrial )  // Loop checking, 11.03.2015, T. Koi
       {
          neaTry++;
 
@@ -424,233 +425,6 @@ void G4QMDGroundStateNucleus::packNucleons()
 
    //std::cout << "packNucleons End" << std::endl;
    return;
-
-}
-   
-
-
-
-
-// Start packing 
-// position
-
-   G4int n0Try = 0; 
-
-   while ( n0Try < maxTrial )
-   {
-      if ( samplingPosition( 0 ) ) 
-      {
-         G4int i = 0; 
-         for ( i = 1 ; i < GetMassNumber() ; i++ )
-         {
-            if ( !( samplingPosition( i ) ) ) 
-            {
-               break;
-            }
-         }
-         if ( i == GetMassNumber() ) break; 
-      }
-      n0Try++;
-   }
-
-   if ( n0Try > maxTrial )
-   {
-      G4cout << "GroundStateNucleus state cannot be created. Try again with another parameters." << G4endl;
-      return; 
-   }
-   
-   meanfield->Cal2BodyQuantities(); 
-   std::vector< G4double > rho_a ( GetMassNumber() , 0.0 );
-   std::vector< G4double > rho_s ( GetMassNumber() , 0.0 );
-   std::vector< G4double > rho_c ( GetMassNumber() , 0.0 );
-
-   rho_l.resize ( GetMassNumber() , 0.0 );
-   d_pot.resize ( GetMassNumber() , 0.0 );
-
-   for ( int i = 0 ; i < GetMassNumber() ; i++ )
-   {
-      for ( int j = 0 ; j < GetMassNumber() ; j++ )
-      {
-
-         rho_a[ i ] += meanfield->GetRHA( j , i ); 
-         G4int k = 0; 
-         if ( participants[i]->GetDefinition() != participants[j]->GetDefinition() )
-         {
-            k = 1;
-         } 
-
-         rho_s[ i ] += meanfield->GetRHA( j , i )*( 1.0 - 2.0 * k ); // OK?  
-
-         rho_c[ i ] += meanfield->GetRHE( j , i ); 
-      }
-   }
-
-   for ( int i = 0 ; i < GetMassNumber() ; i++ )
-   {
-      rho_l[i] = cdp * ( rho_a[i] + 1.0 );     
-      d_pot[i] = c0p * rho_a[i]
-               + c3p * std::pow ( rho_a[i] , gamm )
-               + csp * rho_s[i]
-               + clp * rho_c[i];
-   }
-
-
-    
-
-
-
-// momentum
-
-   phase_g.resize( GetMassNumber() , 0.0 );
-
-   //G4int i = 0; 
-   samplingMomentum( 0 );
-   
-   G4int n1Try = 0; 
-   //G4int maxTry = 1000; 
-
-   while ( n1Try < maxTrial )
-   {
-      if ( samplingPosition( 0 ) ) 
-      {
-         G4int i = 0; 
-         G4bool isThisOK = true;
-         for ( i = 1 ; i < GetMassNumber() ; i++ )
-         {
-            if ( !( samplingMomentum( i ) ) ) 
-            {
-               isThisOK = false;
-               break;
-            }
-         }
-         if ( isThisOK == true ) break;  
-         //if ( i == GetMassNumber() ) break; 
-      }
-      n1Try++;
-   }
-
-   if ( n1Try > maxTrial )
-   {
-      G4cout << "GroundStateNucleus state cannot be created. Try again with another parameters." << G4endl;
-      return; 
-   }
-   
-//
-
-// Shift nucleus to thier CM frame and kill angular momentum
-   killCMMotionAndAngularM();    
-
-// Check binding energy 
-
-   G4double ekinal = 0.0;
-   for ( int i = 0 ; i < GetMassNumber() ; i++ )
-   {
-      ekinal += participants[i]->GetKineticEnergy();
-   }
-
-   meanfield->Cal2BodyQuantities();
-   G4double totalPotentialE = meanfield->GetTotalPotential(); 
-   G4double ebinal = ( totalPotentialE + ekinal ) / double ( GetMassNumber() );
-
-   if ( ebinal < ebin0 || ebinal > ebin1 ) 
-   {
-   // Retry From Position  
-   }
-        
-
-// Adjust by frictional cooling or heating
-
-   G4double dtc = 1.0;
-   G4double frg = -0.1;
-   G4double rdf0 = 0.5;
-   
-   G4double edif0 = ebinal - ebin00;
-
-   G4double cfrc = 0.0;
-   if ( 0 < edif0 ) 
-   {
-      cfrc = frg;
-   }
-   else
-   {
-      cfrc = -frg;
-   }
-
-   G4int ifrc = 1;
-
-   G4int ntryACH = 0;
-
-   G4bool isThisOK = false;
-   while ( ntryACH < maxTrial )
-   {
-
-      G4double  edif = ebinal - ebin00; 
-      if ( std::abs ( edif ) < epse )
-      {
-         isThisOK = true;
-         break;
-      }
-
-      G4int jfrc = 0;
-      if ( edif < 0.0 ) 
-      {
-         jfrc = 1;
-      }
-      else
-      {
-         jfrc = -1;
-      }
-
-      if ( jfrc != ifrc ) 
-      {
-         cfrc = -rdf0 * cfrc;
-         dtc = rdf0 * dtc;
-      }
-
-      if ( jfrc == ifrc && std::abs( edif0 ) < std::abs( edif ) )
-      {
-         cfrc = -rdf0 * cfrc;
-         dtc = rdf0 * dtc;
-      }
-
-      ifrc = jfrc;
-      edif0 = edif;
-
-     meanfield->CalGraduate();
-
-     for ( int i = 0 ; i < GetMassNumber() ; i++ )
-     {
-        G4ThreeVector ri = participants[i]->GetPosition(); 
-        G4ThreeVector p_i = participants[i]->GetMomentum(); 
-
-        ri += dtc * ( meanfield->GetFFr(i) - cfrc * ( meanfield->GetFFp(i) ) );
-        p_i += dtc * ( meanfield->GetFFp(i) + cfrc * ( meanfield->GetFFr(i) ) );
-
-        participants[i]->SetPosition( ri ); 
-        participants[i]->SetMomentum( p_i ); 
-     }
-
-    ekinal = 0.0;     
-
-     for ( int i = 0 ; i < GetMassNumber() ; i++ )
-     {
-        ekinal += participants[i]->GetKineticEnergy(); 
-     }
-
-      meanfield->Cal2BodyQuantities(); 
-      totalPotentialE = meanfield->GetTotalPotential(); 
-
-      ebinal = ( totalPotentialE + ekinal ) / double ( GetMassNumber() );
-
-
-      ntryACH++;
-   }
-
-   if ( isThisOK )
-   {
-      return;
-   }
-   
 }
 
 
@@ -661,7 +435,7 @@ G4bool G4QMDGroundStateNucleus::samplingPosition( G4int i )
 
    G4int nTry = 0; 
    
-   while ( nTry < maxTrial )
+   while ( nTry < maxTrial )  // Loop checking, 11.03.2015, T. Koi
    {
 
       //std::cout << "samplingPosition i th particle, nTtry " << i << " " << nTry << std::endl;  
@@ -673,19 +447,33 @@ G4bool G4QMDGroundStateNucleus::samplingPosition( G4int i )
       G4double ry = 0.0;
       G4double rz = 0.0;
 
-      while ( G4UniformRand() * rmax > rwod )
+      G4int icounter = 0;
+      G4int icounter_max = 1024;
+      while ( G4UniformRand() * rmax > rwod ) // Loop checking, 11.03.2015, T. Koi
       {
+         icounter++;
+         if ( icounter > icounter_max ) {
+	    G4cout << "Loop-counter exceeded the threshold value at " << __LINE__ << "th line of " << __FILE__ << "." << G4endl;
+            break;
+         }
 
          G4double rsqr = 10.0; 
-         while ( rsqr > 1.0 )
+         G4int jcounter = 0;
+         G4int jcounter_max = 1024;
+         while ( rsqr > 1.0 ) // Loop checking, 11.03.2015, T. Koi
          {
+            jcounter++;
+            if ( jcounter > jcounter_max ) {
+	       G4cout << "Loop-counter exceeded the threshold value at " << __LINE__ << "th line of " << __FILE__ << "." << G4endl;
+               break;
+            }
             rx = 1.0 - 2.0 * G4UniformRand();
             ry = 1.0 - 2.0 * G4UniformRand();
             rz = 1.0 - 2.0 * G4UniformRand();
             rsqr = rx*rx + ry*ry + rz*rz; 
          }
          rrr = radm * std::sqrt ( rsqr );
-         rwod = 1.0 / ( 1.0 + std::exp ( ( rrr - rt00 ) / saa ) );
+         rwod = 1.0 / ( 1.0 + G4Exp ( ( rrr - rt00 ) / saa ) );
 
       } 
 
@@ -748,7 +536,7 @@ G4bool G4QMDGroundStateNucleus::samplingMomentum( G4int i )
    
    G4bool result = false;
 
-   G4double pfm = hbc * std::pow (  ( 3.0 / 2.0 * pi*pi * rho_l[i] ) , 1./3. );
+   G4double pfm = hbc * G4Pow::GetInstance()->A13 ( ( 3.0 / 2.0 * pi*pi * rho_l[i] ) );
 
    if ( 10 < GetMassNumber() &&  -5.5 < ebini ) 
    {
@@ -762,7 +550,7 @@ G4bool G4QMDGroundStateNucleus::samplingMomentum( G4int i )
 
    G4int ntry = 0;
 // 710 
-   while ( ntry < maxTrial )
+   while ( ntry < maxTrial )  // Loop checking, 11.03.2015, T. Koi
    {
 
       //std::cout << " TKDB ntry " << ntry << std::endl;
@@ -772,16 +560,30 @@ G4bool G4QMDGroundStateNucleus::samplingMomentum( G4int i )
 
       G4int tkdb_i =0;
 // 700
-      while ( ke + d_pot [i] > edepth )
+      G4int icounter = 0;
+      G4int icounter_max = 1024;
+      while ( ke + d_pot [i] > edepth ) // Loop checking, 11.03.2015, T. Koi
       {
+         icounter++;
+         if ( icounter > icounter_max ) {
+	    G4cout << "Loop-counter exceeded the threshold value at " << __LINE__ << "th line of " << __FILE__ << "." << G4endl;
+            break;
+         }
       
          G4double psqr = 10.0;
          G4double px = 0.0;
          G4double py = 0.0;
          G4double pz = 0.0;
 
-         while ( psqr > 1.0 ) 
+         G4int jcounter = 0;
+         G4int jcounter_max = 1024;
+         while ( psqr > 1.0 ) // Loop checking, 11.03.2015, T. Koi
          {
+            jcounter++;
+            if ( jcounter > jcounter_max ) {
+	       G4cout << "Loop-counter exceeded the threshold value at " << __LINE__ << "th line of " << __FILE__ << "." << G4endl;
+               break;
+            }
             px = 1.0 - 2.0*G4UniformRand();
             py = 1.0 - 2.0*G4UniformRand();
             pz = 1.0 - 2.0*G4UniformRand();
@@ -841,7 +643,7 @@ G4bool G4QMDGroundStateNucleus::samplingMomentum( G4int i )
                if ( expa > epsx ) 
                {
 
-                  phase[j] = std::exp ( expa );
+                  phase[j] = G4Exp ( expa );
 
                   if ( phase[j] * cpc > 0.2 ) 
                   { 

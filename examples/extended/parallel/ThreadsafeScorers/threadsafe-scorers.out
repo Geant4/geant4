@@ -1,0 +1,1542 @@
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+Checking overlaps for volume Target_0_0_0 ... OK! 
+Checking overlaps for volume Target_1_0_0 ... OK! 
+Checking overlaps for volume Target_2_0_0 ... OK! 
+Checking overlaps for volume Target_3_0_0 ... OK! 
+Checking overlaps for volume Target_4_0_0 ... OK! 
+Checking overlaps for volume Target_0_1_0 ... OK! 
+Checking overlaps for volume Target_1_1_0 ... OK! 
+Checking overlaps for volume Target_2_1_0 ... OK! 
+Checking overlaps for volume Target_3_1_0 ... OK! 
+Checking overlaps for volume Target_4_1_0 ... OK! 
+Checking overlaps for volume Target_0_2_0 ... OK! 
+Checking overlaps for volume Target_1_2_0 ... OK! 
+Checking overlaps for volume Target_2_2_0 ... OK! 
+Checking overlaps for volume Target_3_2_0 ... OK! 
+Checking overlaps for volume Target_4_2_0 ... OK! 
+Checking overlaps for volume Target_0_3_0 ... OK! 
+Checking overlaps for volume Target_1_3_0 ... OK! 
+Checking overlaps for volume Target_2_3_0 ... OK! 
+Checking overlaps for volume Target_3_3_0 ... OK! 
+Checking overlaps for volume Target_4_3_0 ... OK! 
+Checking overlaps for volume Target_0_4_0 ... OK! 
+Checking overlaps for volume Target_1_4_0 ... OK! 
+Checking overlaps for volume Target_2_4_0 ... OK! 
+Checking overlaps for volume Target_3_4_0 ... OK! 
+Checking overlaps for volume Target_4_4_0 ... OK! 
+Checking overlaps for volume Target_0_0_1 ... OK! 
+Checking overlaps for volume Target_1_0_1 ... OK! 
+Checking overlaps for volume Target_2_0_1 ... OK! 
+Checking overlaps for volume Target_3_0_1 ... OK! 
+Checking overlaps for volume Target_4_0_1 ... OK! 
+Checking overlaps for volume Target_0_1_1 ... OK! 
+Checking overlaps for volume Target_1_1_1 ... OK! 
+Checking overlaps for volume Target_2_1_1 ... OK! 
+Checking overlaps for volume Target_3_1_1 ... OK! 
+Checking overlaps for volume Target_4_1_1 ... OK! 
+Checking overlaps for volume Target_0_2_1 ... OK! 
+Checking overlaps for volume Target_1_2_1 ... OK! 
+Checking overlaps for volume Target_2_2_1 ... OK! 
+Checking overlaps for volume Target_3_2_1 ... OK! 
+Checking overlaps for volume Target_4_2_1 ... OK! 
+Checking overlaps for volume Target_0_3_1 ... OK! 
+Checking overlaps for volume Target_1_3_1 ... OK! 
+Checking overlaps for volume Target_2_3_1 ... OK! 
+Checking overlaps for volume Target_3_3_1 ... OK! 
+Checking overlaps for volume Target_4_3_1 ... OK! 
+Checking overlaps for volume Target_0_4_1 ... OK! 
+Checking overlaps for volume Target_1_4_1 ... OK! 
+Checking overlaps for volume Target_2_4_1 ... OK! 
+Checking overlaps for volume Target_3_4_1 ... OK! 
+Checking overlaps for volume Target_4_4_1 ... OK! 
+Checking overlaps for volume Target_0_0_2 ... OK! 
+Checking overlaps for volume Target_1_0_2 ... OK! 
+Checking overlaps for volume Target_2_0_2 ... OK! 
+Checking overlaps for volume Target_3_0_2 ... OK! 
+Checking overlaps for volume Target_4_0_2 ... OK! 
+Checking overlaps for volume Target_0_1_2 ... OK! 
+Checking overlaps for volume Target_1_1_2 ... OK! 
+Checking overlaps for volume Target_2_1_2 ... OK! 
+Checking overlaps for volume Target_3_1_2 ... OK! 
+Checking overlaps for volume Target_4_1_2 ... OK! 
+Checking overlaps for volume Target_0_2_2 ... OK! 
+Checking overlaps for volume Target_1_2_2 ... OK! 
+Checking overlaps for volume Target_2_2_2 ... OK! 
+Checking overlaps for volume Target_3_2_2 ... OK! 
+Checking overlaps for volume Target_4_2_2 ... OK! 
+Checking overlaps for volume Target_0_3_2 ... OK! 
+Checking overlaps for volume Target_1_3_2 ... OK! 
+Checking overlaps for volume Target_2_3_2 ... OK! 
+Checking overlaps for volume Target_3_3_2 ... OK! 
+Checking overlaps for volume Target_4_3_2 ... OK! 
+Checking overlaps for volume Target_0_4_2 ... OK! 
+Checking overlaps for volume Target_1_4_2 ... OK! 
+Checking overlaps for volume Target_2_4_2 ... OK! 
+Checking overlaps for volume Target_3_4_2 ... OK! 
+Checking overlaps for volume Target_4_4_2 ... OK! 
+Checking overlaps for volume Target_0_0_3 ... OK! 
+Checking overlaps for volume Target_1_0_3 ... OK! 
+Checking overlaps for volume Target_2_0_3 ... OK! 
+Checking overlaps for volume Target_3_0_3 ... OK! 
+Checking overlaps for volume Target_4_0_3 ... OK! 
+Checking overlaps for volume Target_0_1_3 ... OK! 
+Checking overlaps for volume Target_1_1_3 ... OK! 
+Checking overlaps for volume Target_2_1_3 ... OK! 
+Checking overlaps for volume Target_3_1_3 ... OK! 
+Checking overlaps for volume Target_4_1_3 ... OK! 
+Checking overlaps for volume Target_0_2_3 ... OK! 
+Checking overlaps for volume Target_1_2_3 ... OK! 
+Checking overlaps for volume Target_2_2_3 ... OK! 
+Checking overlaps for volume Target_3_2_3 ... OK! 
+Checking overlaps for volume Target_4_2_3 ... OK! 
+Checking overlaps for volume Target_0_3_3 ... OK! 
+Checking overlaps for volume Target_1_3_3 ... OK! 
+Checking overlaps for volume Target_2_3_3 ... OK! 
+Checking overlaps for volume Target_3_3_3 ... OK! 
+Checking overlaps for volume Target_4_3_3 ... OK! 
+Checking overlaps for volume Target_0_4_3 ... OK! 
+Checking overlaps for volume Target_1_4_3 ... OK! 
+Checking overlaps for volume Target_2_4_3 ... OK! 
+Checking overlaps for volume Target_3_4_3 ... OK! 
+Checking overlaps for volume Target_4_4_3 ... OK! 
+Checking overlaps for volume Target_0_0_4 ... OK! 
+Checking overlaps for volume Target_1_0_4 ... OK! 
+Checking overlaps for volume Target_2_0_4 ... OK! 
+Checking overlaps for volume Target_3_0_4 ... OK! 
+Checking overlaps for volume Target_4_0_4 ... OK! 
+Checking overlaps for volume Target_0_1_4 ... OK! 
+Checking overlaps for volume Target_1_1_4 ... OK! 
+Checking overlaps for volume Target_2_1_4 ... OK! 
+Checking overlaps for volume Target_3_1_4 ... OK! 
+Checking overlaps for volume Target_4_1_4 ... OK! 
+Checking overlaps for volume Target_0_2_4 ... OK! 
+Checking overlaps for volume Target_1_2_4 ... OK! 
+Checking overlaps for volume Target_2_2_4 ... OK! 
+Checking overlaps for volume Target_3_2_4 ... OK! 
+Checking overlaps for volume Target_4_2_4 ... OK! 
+Checking overlaps for volume Target_0_3_4 ... OK! 
+Checking overlaps for volume Target_1_3_4 ... OK! 
+Checking overlaps for volume Target_2_3_4 ... OK! 
+Checking overlaps for volume Target_3_3_4 ... OK! 
+Checking overlaps for volume Target_4_3_4 ... OK! 
+Checking overlaps for volume Target_0_4_4 ... OK! 
+Checking overlaps for volume Target_1_4_4 ... OK! 
+Checking overlaps for volume Target_2_4_4 ... OK! 
+Checking overlaps for volume Target_3_4_4 ... OK! 
+Checking overlaps for volume Target_4_4_4 ... OK! 
+/mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5
+@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5/Inelastic
+@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+ASCIITree (ATree)
+DAWNFILE (DAWNFILE)
+G4HepRep (HepRepXML)
+G4HepRepFile (HepRepFile)
+RayTracer (RayTracer)
+VRML1FILE (VRML1FILE)
+VRML2FILE (VRML2FILE)
+gMocrenFile (gMocrenFile)
+OpenGLImmediateQt (OGLIQt, OGLI)
+OpenGLStoredQt (OGLSQt, OGL, OGLS)
+OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
+RayTracerX (RayTracerX)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+  drawByAttribute
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+  attributeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+Available colours:
+  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
+
+/tracking/verbose 0
+/run/verbose 1
+/event/verbose 0
+/random/setDirectoryName run_random_seed_info
+/random/setSavingFlag 1
+/random/saveEachEventFlag 0
+/run/beamOn 10000
+
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
+          DefaultRegionForTheWorld
+
+phot:   for  gamma    SubType= 12  BuildTable= 0
+      LambdaPrime table from 200 keV to 10 TeV in 154 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermorePhElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
+
+compt:   for  gamma    SubType= 13  BuildTable= 1
+      Lambda table from 100 eV  to 1 MeV, 20 bins per decade, spline: 1
+      LambdaPrime table from 1 MeV to 10 TeV in 140 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LowEPComptonModel :  Emin=        0 eV    Emax=       20 MeV  FluoActive
+        KleinNishina :  Emin=       20 MeV   Emax=       10 TeV  FluoActive
+
+conv:   for  gamma    SubType= 14  BuildTable= 1
+      Lambda table from 1.022 MeV to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       PenConversion :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
+
+Rayl:   for  gamma    SubType= 11  BuildTable= 1
+      Lambda table from 100 eV  to 100 keV, 20 bins per decade, spline: 0
+      LambdaPrime table from 100 keV to 10 TeV in 160 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :  Emin=        0 eV    Emax=       10 TeV   CullenGenerator
+
+msc:   for e-    SubType= 10
+      RangeFactor= 0.02, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 120 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 100 bins Emin=    100 MeV   Emax=     10 TeV
+
+eIoni:   for  e-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             PenIoni :  Emin=        0 eV    Emax=        1 MeV
+        MollerBhabha :  Emin=        1 MeV   Emax=       10 TeV   deltaVI
+
+eBrem:   for  e-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  HighEnergyThreshold(GeV)= 10000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGen2BS
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGen2BS
+
+CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from 100 MeV to 10 TeV, 20 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
+
+msc:   for e+    SubType= 10
+      RangeFactor= 0.02, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 120 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 100 bins Emin=    100 MeV   Emax=     10 TeV
+
+eIoni:   for  e+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             PenIoni :  Emin=        0 eV    Emax=        1 MeV
+        MollerBhabha :  Emin=        1 MeV   Emax=       10 TeV   deltaVI
+
+eBrem:   for  e+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  HighEnergyThreshold(GeV)= 10000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGen2BS
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGen2BS
+
+annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  e+, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from 100 MeV to 10 TeV, 20 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
+
+msc:   for proton    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=        2 MeV   deltaVI
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
+
+hBrems:   for  proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  proton, integral: 1     SubType= 1  BuildTable= 1
+      Used Lambda table of anti_proton
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+nuclearStopping:   for  proton    SubType= 8  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
+
+msc:   for GenericIon    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
+
+ionIoni:   for  GenericIon    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+         ParamICRU73 :  Emin=        0 eV    Emax=       10 TeV   deltaVI
+
+nuclearStopping:   for  GenericIon    SubType= 8  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
+
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
+          DefaultRegionForTheWorld
+
+msc:   for alpha    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+ionIoni:   for  alpha    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV   deltaVI
+          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV   deltaVI
+
+nuclearStopping:   for  alpha    SubType= 8  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
+
+msc:   for anti_proton    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  anti_proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV   deltaVI
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
+
+hBrems:   for  anti_proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  anti_proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  anti_proton, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 20 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+nuclearStopping:   for  anti_proton    SubType= 8  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
+
+msc:   for kaon+    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  kaon+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV   deltaVI
+
+hBrems:   for  kaon+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  kaon+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  kaon+, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 20 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for kaon-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  kaon-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV   deltaVI
+
+hBrems:   for  kaon-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  kaon-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  kaon-, integral: 1     SubType= 1  BuildTable= 1
+      Used Lambda table of kaon+
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for mu+    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+muIoni:   for  mu+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=      200 keV   deltaVI
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
+
+muBrems:   for  mu+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+
+muPairProd:   for  mu+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  mu+, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 20 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for mu-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+muIoni:   for  mu-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=      200 keV   deltaVI
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
+
+muBrems:   for  mu-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+
+muPairProd:   for  mu-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  mu-, integral: 1     SubType= 1  BuildTable= 1
+      Used Lambda table of mu+
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+/mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5
+@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5/Inelastic
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
+
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  pi+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV   deltaVI
+
+hBrems:   for  pi+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  pi+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  pi+, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 20 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for pi-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  pi-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV   deltaVI
+
+hBrems:   for  pi-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  pi-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
+      Used Lambda table of pi+
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+====================================================================
+                  HADRONIC PROCESSES SUMMARY (verbose level 1)
+
+---------------------------------------------------
+                           Hadronic Processes for GenericIon
+
+  Process: ionElastic
+        Model:          NNDiffuseElastic: 0 eV /n ---> 1 TeV/n
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: ionInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
+        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for He3
+
+  Process: He3Inelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
+        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: alphaInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
+        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_He3
+
+  Process: anti_He3Inelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_alpha
+
+  Process: anti_alphaInelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_deuteron
+
+  Process: anti_deuteronInelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_neutron
+
+  Process: anti_neutronInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_proton
+
+  Process: anti_protonInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_triton
+
+  Process: anti_tritonInelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: dInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
+        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for kaon+
+
+  Process: kaon+Inelastic
+        Model:                      QGSP: 12 GeV ---> 100 TeV
+        Model:                      FTFP: 9.5 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 9.9 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:  ChipsKaonPlusInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for kaon-
+
+  Process: kaon-Inelastic
+        Model:                      QGSP: 12 GeV ---> 100 TeV
+        Model:                      FTFP: 9.5 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 9.9 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns: ChipsKaonMinusInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for lambda
+
+  Process: lambdaInelastic
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns:   ChipsHyperonInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for neutron
+
+  Process: neutronInelastic
+        Model:                      QGSP: 12 GeV ---> 100 TeV
+        Model:                      FTFP: 9.5 GeV ---> 25 GeV
+        Model:            BertiniCascade: 19.9 MeV ---> 9.9 GeV
+        Model:       ParticleHPInelastic: 0 eV  ---> 20 MeV
+     Cr_sctns:      NeutronHPInelasticXS: 0 eV  ---> 20 MeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: nCapture
+        Model:          NeutronHPCapture: 0 eV  ---> 20 MeV
+        Model:               nRadCapture: 19.9 MeV ---> 100 TeV
+     Cr_sctns:        NeutronHPCaptureXS: 0 eV  ---> 20 MeV
+     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
+     Cr_sctns:        NeutronHPCaptureXS: 0 eV  ---> 20 MeV
+     Cr_sctns:          GheishaCaptureXS: 0 eV  ---> 100 TeV
+
+  Process: nFission
+        Model:          NeutronHPFission: 0 eV  ---> 20 MeV
+        Model:                G4LFission: 19.9 MeV ---> 2.88022e+295 J  
+     Cr_sctns:        NeutronHPFissionXS: 0 eV  ---> 20 MeV
+     Cr_sctns:          GheishaFissionXS: 0 eV  ---> 100 TeV
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 19.5 MeV ---> 100 TeV
+        Model:          NeutronHPElastic: 0 eV  ---> 20 MeV
+     Cr_sctns:        NeutronHPElasticXS: 0 eV  ---> 20 MeV
+     Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for pi+
+
+  Process: pi+Inelastic
+        Model:                      QGSP: 12 GeV ---> 100 TeV
+        Model:                      FTFP: 9.5 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 9.9 GeV
+     Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
+                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
+                           below 91 GeV, Glauber-Gribov above 
+     Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
+                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
+                           below 91 GeV, Glauber-Gribov above 
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
+        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for pi-
+
+  Process: pi-Inelastic
+        Model:                      QGSP: 12 GeV ---> 100 TeV
+        Model:                      FTFP: 9.5 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 9.9 GeV
+     Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
+                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
+                           below 91 GeV, Glauber-Gribov above 
+     Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
+                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
+                           below 91 GeV, Glauber-Gribov above 
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
+        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for proton
+
+  Process: protonInelastic
+        Model:                      QGSP: 12 GeV ---> 100 TeV
+        Model:                      FTFP: 9.5 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 9.9 GeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:      ChipsProtonElasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: tInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
+        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+================================================================
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_WATER
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  2.94056 keV    e-  351.877 keV    e+  342.545 keV proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes
+ Material : G4_B
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  2.7587 keV    e-  570.85 keV    e+  548.291 keV proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+++ Target_MFD/EnergyDeposit id 0
+++ Target_MFD/NumberOfSteps id 1
+### Run 0 starts.
+--> Event 0 starts.
+--> Event 100 starts.
+--> Event 200 starts.
+--> Event 300 starts.
+--> Event 400 starts.
+--> Event 500 starts.
+--> Event 600 starts.
+--> Event 700 starts.
+--> Event 800 starts.
+--> Event 900 starts.
+--> Event 1000 starts.
+--> Event 1100 starts.
+--> Event 1200 starts.
+--> Event 1300 starts.
+--> Event 1400 starts.
+--> Event 1500 starts.
+--> Event 1600 starts.
+--> Event 1700 starts.
+--> Event 1800 starts.
+--> Event 1900 starts.
+--> Event 2000 starts.
+--> Event 2100 starts.
+--> Event 2200 starts.
+--> Event 2300 starts.
+--> Event 2400 starts.
+--> Event 2500 starts.
+--> Event 2600 starts.
+--> Event 2700 starts.
+--> Event 2800 starts.
+--> Event 2900 starts.
+--> Event 3000 starts.
+--> Event 3100 starts.
+--> Event 3200 starts.
+--> Event 3300 starts.
+--> Event 3400 starts.
+--> Event 3500 starts.
+--> Event 3600 starts.
+--> Event 3700 starts.
+--> Event 3800 starts.
+--> Event 3900 starts.
+--> Event 4000 starts.
+--> Event 4100 starts.
+--> Event 4200 starts.
+--> Event 4300 starts.
+--> Event 4400 starts.
+--> Event 4500 starts.
+--> Event 4600 starts.
+--> Event 4700 starts.
+--> Event 4800 starts.
+--> Event 4900 starts.
+--> Event 5000 starts.
+--> Event 5100 starts.
+--> Event 5200 starts.
+--> Event 5300 starts.
+--> Event 5400 starts.
+--> Event 5500 starts.
+--> Event 5600 starts.
+--> Event 5700 starts.
+--> Event 5800 starts.
+--> Event 5900 starts.
+--> Event 6000 starts.
+--> Event 6100 starts.
+--> Event 6200 starts.
+--> Event 6300 starts.
+--> Event 6400 starts.
+--> Event 6500 starts.
+--> Event 6600 starts.
+--> Event 6700 starts.
+--> Event 6800 starts.
+--> Event 6900 starts.
+--> Event 7000 starts.
+--> Event 7100 starts.
+--> Event 7200 starts.
+--> Event 7300 starts.
+--> Event 7400 starts.
+--> Event 7500 starts.
+--> Event 7600 starts.
+--> Event 7700 starts.
+--> Event 7800 starts.
+--> Event 7900 starts.
+--> Event 8000 starts.
+--> Event 8100 starts.
+--> Event 8200 starts.
+--> Event 8300 starts.
+--> Event 8400 starts.
+--> Event 8500 starts.
+--> Event 8600 starts.
+--> Event 8700 starts.
+--> Event 8800 starts.
+--> Event 8900 starts.
+--> Event 9000 starts.
+--> Event 9100 starts.
+--> Event 9200 starts.
+--> Event 9300 starts.
+--> Event 9400 starts.
+--> Event 9500 starts.
+--> Event 9600 starts.
+--> Event 9700 starts.
+--> Event 9800 starts.
+--> Event 9900 starts.
+ Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=105.86s Real=111.71s Sys=0.65s
+ ###### EndOfTSRunAction ###### 
+============================================================
+ opened file mfd_tl_EnergyDeposit.out for output
+============================================================
+             0         670.223331 keV
+             2         475.013749 keV
+             3         743.453040 keV
+             4         713.192314 keV
+             5         127.687425 keV
+             6         233.452919 keV
+             7          10.326920 keV
+             8         596.649094 keV
+             9         412.055277 keV
+            10         104.888836 keV
+            11        2604.416107 keV
+            12          22.790327 keV
+            13         559.522361 keV
+            14         576.747526 keV
+            15        1828.898730 keV
+            16         484.551181 keV
+            17         168.060885 keV
+            18        1671.188447 keV
+            19          46.921210 keV
+            20           3.104307 keV
+            21        1187.502551 keV
+            22          30.855690 keV
+            23          85.548855 keV
+            24          51.006143 keV
+            25        2225.201142 keV
+            26        1009.630394 keV
+            27        2394.804927 keV
+            28        6515.559609 keV
+            29        1246.486372 keV
+            30        1267.530178 keV
+            31        6133.822222 keV
+            32        4751.947640 keV
+            33         958.134139 keV
+            34        3029.512181 keV
+            35         393.154959 keV
+            36        2746.579029 keV
+            37        4613.164231 keV
+            38        5803.317277 keV
+            39         696.787563 keV
+            40        1324.285363 keV
+            41        4940.894149 keV
+            42        4304.387049 keV
+            43        6111.258339 keV
+            44         891.756649 keV
+            45        4060.209222 keV
+            46         377.969963 keV
+            47        3723.043598 keV
+            48        3282.049009 keV
+            49         989.269770 keV
+            50        2628.350850 keV
+            51        6104.241816 keV
+            52        8364.768741 keV
+            53       11289.696047 keV
+            54        5168.361034 keV
+            55        7873.498722 keV
+            56       19478.022618 keV
+            57        8962.510328 keV
+            58       15774.260277 keV
+            59        4515.988203 keV
+            60        2112.479262 keV
+            61       13273.279528 keV
+            62       14778.476415 keV
+            63       16208.921447 keV
+            64        7626.547551 keV
+            65        9695.813441 keV
+            66       18345.110314 keV
+            67       19108.791314 keV
+            68       12953.099563 keV
+            69        5048.988065 keV
+            70        4188.391852 keV
+            71        4318.937491 keV
+            72        7748.011731 keV
+            73        8772.674971 keV
+            74        7598.924770 keV
+            75       31279.850061 keV
+            76       26471.385845 keV
+            77       35173.918249 keV
+            78       35656.951712 keV
+            79       26400.568897 keV
+            80       25551.677006 keV
+            81      353113.888628 keV
+            82      290300.605612 keV
+            83      354601.906927 keV
+            84       34160.967960 keV
+            85       31317.768362 keV
+            86      308126.042778 keV
+            87      275377.149833 keV
+            88      297994.973781 keV
+            89       25246.491432 keV
+            90       41437.315034 keV
+            91      342331.126940 keV
+            92      290673.826590 keV
+            93      348396.404306 keV
+            94       23679.119893 keV
+            95       20057.663731 keV
+            96       24501.817591 keV
+            97       31836.259811 keV
+            98       34183.683234 keV
+            99       22491.028759 keV
+           100      326657.959246 keV
+           101      381609.748952 keV
+           102      332213.118753 keV
+           103      367327.968528 keV
+           104      336363.806935 keV
+           105      370305.375119 keV
+           106      403263.403869 keV
+           107      413126.459309 keV
+           108      390821.335900 keV
+           109      350209.929934 keV
+           110      364782.217987 keV
+           111      433530.333102 keV
+           112      384839.277664 keV
+           113      378203.255602 keV
+           114      331327.858436 keV
+           115      326682.730163 keV
+           116      392376.906386 keV
+           117      401783.657215 keV
+           118      372085.694633 keV
+           119      360120.933347 keV
+           120      343013.433985 keV
+           121      348446.535331 keV
+           122      330690.182100 keV
+           123      315711.225028 keV
+           124      319923.104801 keV
+============================================================
+ closed file mfd_tl_EnergyDeposit.out for output
+============================================================
+ opened file mfd_tg_EnergyDeposit.out for output
+============================================================
+             0         670.223331 keV
+             2         475.013749 keV
+             3         743.453040 keV
+             4         713.192314 keV
+             5         127.687425 keV
+             6         233.452919 keV
+             7          10.326920 keV
+             8         596.649094 keV
+             9         412.055277 keV
+            10         104.888836 keV
+            11        2604.416107 keV
+            12          22.790327 keV
+            13         559.522361 keV
+            14         576.747526 keV
+            15        1828.898730 keV
+            16         484.551181 keV
+            17         168.060885 keV
+            18        1671.188447 keV
+            19          46.921210 keV
+            20           3.104307 keV
+            21        1187.502551 keV
+            22          30.855690 keV
+            23          85.548855 keV
+            24          51.006143 keV
+            25        2225.201142 keV
+            26        1009.630394 keV
+            27        2394.804927 keV
+            28        6515.559609 keV
+            29        1246.486372 keV
+            30        1267.530178 keV
+            31        6133.822222 keV
+            32        4751.947640 keV
+            33         958.134139 keV
+            34        3029.512181 keV
+            35         393.154959 keV
+            36        2746.579029 keV
+            37        4613.164231 keV
+            38        5803.317277 keV
+            39         696.787563 keV
+            40        1324.285363 keV
+            41        4940.894149 keV
+            42        4304.387049 keV
+            43        6111.258339 keV
+            44         891.756649 keV
+            45        4060.209222 keV
+            46         377.969963 keV
+            47        3723.043598 keV
+            48        3282.049009 keV
+            49         989.269770 keV
+            50        2628.350850 keV
+            51        6104.241816 keV
+            52        8364.768741 keV
+            53       11289.696047 keV
+            54        5168.361034 keV
+            55        7873.498722 keV
+            56       19478.022618 keV
+            57        8962.510328 keV
+            58       15774.260277 keV
+            59        4515.988203 keV
+            60        2112.479262 keV
+            61       13273.279528 keV
+            62       14778.476415 keV
+            63       16208.921447 keV
+            64        7626.547551 keV
+            65        9695.813441 keV
+            66       18345.110314 keV
+            67       19108.791314 keV
+            68       12953.099563 keV
+            69        5048.988065 keV
+            70        4188.391852 keV
+            71        4318.937491 keV
+            72        7748.011731 keV
+            73        8772.674971 keV
+            74        7598.924770 keV
+            75       31279.850061 keV
+            76       26471.385845 keV
+            77       35173.918249 keV
+            78       35656.951712 keV
+            79       26400.568897 keV
+            80       25551.677006 keV
+            81      353113.888628 keV
+            82      290300.605612 keV
+            83      354601.906927 keV
+            84       34160.967960 keV
+            85       31317.768362 keV
+            86      308126.042778 keV
+            87      275377.149833 keV
+            88      297994.973781 keV
+            89       25246.491432 keV
+            90       41437.315034 keV
+            91      342331.126940 keV
+            92      290673.826590 keV
+            93      348396.404306 keV
+            94       23679.119893 keV
+            95       20057.663731 keV
+            96       24501.817591 keV
+            97       31836.259811 keV
+            98       34183.683234 keV
+            99       22491.028759 keV
+           100      326657.959246 keV
+           101      381609.748952 keV
+           102      332213.118753 keV
+           103      367327.968528 keV
+           104      336363.806935 keV
+           105      370305.375119 keV
+           106      403263.403869 keV
+           107      413126.459309 keV
+           108      390821.335900 keV
+           109      350209.929934 keV
+           110      364782.217987 keV
+           111      433530.333102 keV
+           112      384839.277664 keV
+           113      378203.255602 keV
+           114      331327.858436 keV
+           115      326682.730163 keV
+           116      392376.906386 keV
+           117      401783.657215 keV
+           118      372085.694633 keV
+           119      360120.933347 keV
+           120      343013.433985 keV
+           121      348446.535331 keV
+           122      330690.182100 keV
+           123      315711.225028 keV
+           124      319923.104801 keV
+============================================================
+ closed file mfd_tg_EnergyDeposit.out for output
+============================================================
+ opened file mfd_tl_NumberOfSteps.out for output
+============================================================
+             0          22.000000 steps
+             1           3.000000 steps
+             2          23.000000 steps
+             3          67.000000 steps
+             4          50.000000 steps
+             5          13.000000 steps
+             6          40.000000 steps
+             7          13.000000 steps
+             8          42.000000 steps
+             9          42.000000 steps
+            10          29.000000 steps
+            11         104.000000 steps
+            12          26.000000 steps
+            13          69.000000 steps
+            14          36.000000 steps
+            15          44.000000 steps
+            16          46.000000 steps
+            17          25.000000 steps
+            18          39.000000 steps
+            19           9.000000 steps
+            20           8.000000 steps
+            21          47.000000 steps
+            22          12.000000 steps
+            23          17.000000 steps
+            24           8.000000 steps
+            25          91.000000 steps
+            26          54.000000 steps
+            27         201.000000 steps
+            28         175.000000 steps
+            29         188.000000 steps
+            30          74.000000 steps
+            31         156.000000 steps
+            32         233.000000 steps
+            33         156.000000 steps
+            34          87.000000 steps
+            35          45.000000 steps
+            36         161.000000 steps
+            37         278.000000 steps
+            38         223.000000 steps
+            39         155.000000 steps
+            40          42.000000 steps
+            41         209.000000 steps
+            42         172.000000 steps
+            43         224.000000 steps
+            44         114.000000 steps
+            45          75.000000 steps
+            46          35.000000 steps
+            47          63.000000 steps
+            48         139.000000 steps
+            49          48.000000 steps
+            50         352.000000 steps
+            51         350.000000 steps
+            52         262.000000 steps
+            53         622.000000 steps
+            54         410.000000 steps
+            55         462.000000 steps
+            56         500.000000 steps
+            57         475.000000 steps
+            58         585.000000 steps
+            59         369.000000 steps
+            60         311.000000 steps
+            61         557.000000 steps
+            62         669.000000 steps
+            63         595.000000 steps
+            64         502.000000 steps
+            65         384.000000 steps
+            66         582.000000 steps
+            67         858.000000 steps
+            68         539.000000 steps
+            69         369.000000 steps
+            70         103.000000 steps
+            71         298.000000 steps
+            72         574.000000 steps
+            73         367.000000 steps
+            74         399.000000 steps
+            75        2754.000000 steps
+            76        2744.000000 steps
+            77        3062.000000 steps
+            78        3467.000000 steps
+            79        3282.000000 steps
+            80        3598.000000 steps
+            81        2712.000000 steps
+            82        2651.000000 steps
+            83        2507.000000 steps
+            84        3838.000000 steps
+            85        3598.000000 steps
+            86        2976.000000 steps
+            87        2969.000000 steps
+            88        2896.000000 steps
+            89        3295.000000 steps
+            90        3866.000000 steps
+            91        2737.000000 steps
+            92        3081.000000 steps
+            93        2404.000000 steps
+            94        3610.000000 steps
+            95        2453.000000 steps
+            96        2918.000000 steps
+            97        3134.000000 steps
+            98        3043.000000 steps
+            99        2690.000000 steps
+           100       14152.000000 steps
+           101       17517.000000 steps
+           102       16496.000000 steps
+           103       17798.000000 steps
+           104       14269.000000 steps
+           105       18539.000000 steps
+           106       23826.000000 steps
+           107       22663.000000 steps
+           108       21082.000000 steps
+           109       16520.000000 steps
+           110       19251.000000 steps
+           111       24086.000000 steps
+           112       22262.000000 steps
+           113       21595.000000 steps
+           114       18330.000000 steps
+           115       16488.000000 steps
+           116       21568.000000 steps
+           117       22503.000000 steps
+           118       19665.000000 steps
+           119       16882.000000 steps
+           120       14498.000000 steps
+           121       18150.000000 steps
+           122       17959.000000 steps
+           123       15368.000000 steps
+           124       13966.000000 steps
+============================================================
+ closed file mfd_tl_NumberOfSteps.out for output
+============================================================
+ opened file mfd_tg_NumberOfSteps.out for output
+============================================================
+             0          22.000000 steps
+             1           3.000000 steps
+             2          23.000000 steps
+             3          67.000000 steps
+             4          50.000000 steps
+             5          13.000000 steps
+             6          40.000000 steps
+             7          13.000000 steps
+             8          42.000000 steps
+             9          42.000000 steps
+            10          29.000000 steps
+            11         104.000000 steps
+            12          26.000000 steps
+            13          69.000000 steps
+            14          36.000000 steps
+            15          44.000000 steps
+            16          46.000000 steps
+            17          25.000000 steps
+            18          39.000000 steps
+            19           9.000000 steps
+            20           8.000000 steps
+            21          47.000000 steps
+            22          12.000000 steps
+            23          17.000000 steps
+            24           8.000000 steps
+            25          91.000000 steps
+            26          54.000000 steps
+            27         201.000000 steps
+            28         175.000000 steps
+            29         188.000000 steps
+            30          74.000000 steps
+            31         156.000000 steps
+            32         233.000000 steps
+            33         156.000000 steps
+            34          87.000000 steps
+            35          45.000000 steps
+            36         161.000000 steps
+            37         278.000000 steps
+            38         223.000000 steps
+            39         155.000000 steps
+            40          42.000000 steps
+            41         209.000000 steps
+            42         172.000000 steps
+            43         224.000000 steps
+            44         114.000000 steps
+            45          75.000000 steps
+            46          35.000000 steps
+            47          63.000000 steps
+            48         139.000000 steps
+            49          48.000000 steps
+            50         352.000000 steps
+            51         350.000000 steps
+            52         262.000000 steps
+            53         622.000000 steps
+            54         410.000000 steps
+            55         462.000000 steps
+            56         500.000000 steps
+            57         475.000000 steps
+            58         585.000000 steps
+            59         369.000000 steps
+            60         311.000000 steps
+            61         557.000000 steps
+            62         669.000000 steps
+            63         595.000000 steps
+            64         502.000000 steps
+            65         384.000000 steps
+            66         582.000000 steps
+            67         858.000000 steps
+            68         539.000000 steps
+            69         369.000000 steps
+            70         103.000000 steps
+            71         298.000000 steps
+            72         574.000000 steps
+            73         367.000000 steps
+            74         399.000000 steps
+            75        2754.000000 steps
+            76        2744.000000 steps
+            77        3062.000000 steps
+            78        3467.000000 steps
+            79        3282.000000 steps
+            80        3598.000000 steps
+            81        2712.000000 steps
+            82        2651.000000 steps
+            83        2507.000000 steps
+            84        3838.000000 steps
+            85        3598.000000 steps
+            86        2976.000000 steps
+            87        2969.000000 steps
+            88        2896.000000 steps
+            89        3295.000000 steps
+            90        3866.000000 steps
+            91        2737.000000 steps
+            92        3081.000000 steps
+            93        2404.000000 steps
+            94        3610.000000 steps
+            95        2453.000000 steps
+            96        2918.000000 steps
+            97        3134.000000 steps
+            98        3043.000000 steps
+            99        2690.000000 steps
+           100       14152.000000 steps
+           101       17517.000000 steps
+           102       16496.000000 steps
+           103       17798.000000 steps
+           104       14269.000000 steps
+           105       18539.000000 steps
+           106       23826.000000 steps
+           107       22663.000000 steps
+           108       21082.000000 steps
+           109       16520.000000 steps
+           110       19251.000000 steps
+           111       24086.000000 steps
+           112       22262.000000 steps
+           113       21595.000000 steps
+           114       18330.000000 steps
+           115       16488.000000 steps
+           116       21568.000000 steps
+           117       22503.000000 steps
+           118       19665.000000 steps
+           119       16882.000000 steps
+           120       14498.000000 steps
+           121       18150.000000 steps
+           122       17959.000000 steps
+           123       15368.000000 steps
+           124       13966.000000 steps
+============================================================
+ closed file mfd_tg_NumberOfSteps.out for output
+============================================================
+ opened file mfd_diff.out for difference output
+============================================================
+ closed file mfd_diff.out for difference output
+============================================================
+Graphics systems deleted.
+Visualization Manager deleting...
+G4 kernel has come to Quit state.
+================== Deleting memory pools ===================
+Number of memory pools allocated: 13 of which, static: 0
+Dynamic pools deleted: 13 / Total memory freed: 0.059 MB
+============================================================
+RunManagerKernel is deleted. Good bye :)

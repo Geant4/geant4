@@ -1,4 +1,4 @@
-$Id: History 86805 2014-11-18 13:25:55Z gcosmo $
+$Id: History 94233 2015-11-09 10:55:01Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,167 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09 November 15: V.Ivant (emutils-V10-01-40)
+- G4EmParameters - fixed typo in name of the new method
+
+06 November 15: V.Ivant (emutils-V10-01-39)
+- G4EmParametersMessenger - fixed typo in few commands; added command 
+    "/process/msc/UseMottCorrection"
+- G4EmParameters - add useMottCorrection parameter and Get/Set method
+
+05 November 15: V.Ivant (emutils-V10-01-38)
+- G4VMultipleScattering - added a protection in the algorithm of 
+    the displacement beyond to avoid crashes in geometry
+
+01 November 15: V.Ivant (emutils-V10-01-36)
+- G4EmParametersMessenger - fixed typo in command "/process/msc/StepLimit"
+
+24 October 15: V.Ivant (emutils-V10-01-35)
+- G4EmCorrections - use G4Exp, G4Log, G4pow, G4lrint
+- G4VMultipleScattering - fixed algorithm of displacement beyond 
+    the boundary
+
+16 October 15: V.Ivant (emutils-V10-01-34)
+- G4EmParametersMessenger - the command "/process/em/fluoBearden"
+    is active only PreInit
+
+14 October 15: V.Ivant (emutils-V10-01-33)
+- G4EmCalculator - fixed GetDEDX for ions and removed debug cout
+
+14 October 15: V.Ivant (emutils-V10-01-32)
+- G4EmCalculator - special computation of dEdx for ICRU'73 based
+    ion ionisation model (fixed problem #1792)
+- G4VEmProcess, G4VEnergyLossProcess, G4VMultipleScattering,
+  G4VEmModel - added new interfaces for automatic description
+    of processes/models to generate web pages
+- G4VEmModel added new feature: a flag allowing a user to "lock" model
+    parameters protecting from overwrite by default values. For today
+    needed for the new GS model  
+
+30 September 15: V.Ivant (emutils-V10-01-31)
+- G4VEmProcess, G4VEnegryLossProcess - do not destroy 
+    G4PhysicsModelCatalog end of run
+
+18 September 15: V.Ivant (emutils-V10-01-30)
+- G4EmParameters - disable Bearden files, removed debug cout
+- in all files use nullptr to initialise pointers
+- fixed Coveruty trivial warning
+
+14 September 15: V.Ivant (emutils-V10-01-29)
+- G4EmParameters - enable Bearden files  
+- G4EmParametersMessenger - fixed cross section names 
+
+04 September 15: V.Ivant (emutils-V10-01-26)
+- G4EmParameters, G4EmParametersMessenger - define allowed names
+    for PIXE cross sections and to msc step limits, set by 
+    default usage of Bearden files for level energies
+- G4VAtomDeexcitation, G4EmProcessOptions - use only G4EmParameters
+    for de-ecitation module parameters 
+
+03 September 2015: S. Incerti (emutils-V10-01-25)
+- added UI command for Bearden files in
+  G4VAtomicDeexcitation
+  G4EmParameters
+  G4EmParametersMessenger
+
+20 August 15: V.Ivant (emutils-V10-01-24)
+- G4VMscModel - compute distance to boundary even if a particle
+    is inside World volume (M. Novak identify use-case when 
+    the world volume is filled not by vacuum but some material)
+
+03 August 15: V.Ivant (emutils-V10-01-23)
+- Technical tag: fixed Coverty warning, substitute tabs by spaces,
+    add comments to do/while and while loops
+
+28 July 15: V.Ivant (emutils-V10-01-22)
+- G4VEnergyLossProcess - minor optimisation at the last step
+
+27 July 15: V.Ivant (emutils-V10-01-21)
+- G4VEnergyLossProcess - use lowest energy from G4EmParameters
+
+17 July 15: D. Sawkey (emutils-V10-01-19)
+- G4EmParameters - add SetDefaults() method, call in constructor
+
+12 July 15: V.Ivant (emutils-V10-01-18)
+- G4VEmProcess, G4VEnergyLossProcess, G4LossTableManager, 
+  G4EmConfigurator - removed tabs and improve code formatting
+
+12 July 15: V.Ivant (emutils-V10-01-17)
+- G4EmParameters, G4EmParametersMessenger - added extra parameters,
+    C++ access methods and UI commends: dump parameters, lowest
+    energy for e+- and muons/hadrons 
+
+25 May 15: V.Ivant (emutils-V10-01-16)
+- G4EmCalculator - added new methods: ComputeDEDXForCutInRange and
+     ComputeCrossSectionPerShell
+
+13 May 15: V.Ivant (emutils-V10-01-15)
+- G4EmParametersMessenger - added PreInit state for new commands 
+
+12 May 15: V.Ivant (emutils-V10-01-14)
+- G4EmParameters, G4EmParametersMessenger, G4VAtomDeexcitation 
+   S.Incerti added extra flag AugerCascade; 
+- G4VAtomDeexcitation, G4LossTableManager - change initialisation,
+   now happens before BuildPhysicsTable in each thread
+- G4EmParameters, G4EmParametersMessenger - added vector of regions 
+   for which PAI, MicroElec, or DNA models may be activated
+- G4VEmModel - added extra interface ComputeCrossSectionPerShell
+
+08 May 15: V.Ivant (emutils-V10-01-13)
+30 April 15: V.Ivant (emutils-V10-01-12)
+- G4VEnergyLossProcess - fixed minor Coverity warning
+
+27 April 15: V.Ivant (emutils-V10-01-11)
+- G4VEmModel, G4VEmFluctuationModel - removed pointers to random engine
+- G4VMultipleScattering, G4VMscModel, G4VEmAngularDistribution 
+    accurate initialisation of G4ThreeVectors and G4LorentzVector 
+    in constructors
+
+04 March 15: V.Ivant (emutils-V10-01-10)
+- G4EmParameters, G4EmParametersMessenger added new methods and UI 
+    commands for muon/hadron/ion multiple scattering : 
+      SetMscMuHadRangeFactor(), SetMscMuHadStepLimitType(),
+      /process/msc/RangeFactorMuHad,  /process/msc/StepLimitMuHad
+- G4VMultipleScattering - use new methods
+
+28 February 15: V.Ivant (emutils-V10-01-09)
+- G4EmCalculator - fixed compillation warning of previous tag
+
+27 February 15: V.Ivant (emutils-V10-01-08)
+- G4LossTableManager - moved run time methods to be inlined
+- G4EmCalculator moved simple methods to inline; added public
+    methods SetupMaterial(); for computation of cross section 
+    per atom add initialisation of material (problem reported
+    by D. Mancusi about bremsstrahlung cross section), 
+    minor fix of printout
+
+06 February 15: V.Ivant (emutils-V10-01-07)
+- G4VEmProcess - fixed crash in printout for verbose level > 2 
+                 (reported by D.Mancusi) 
+
+30 January 15: V.Ivant (emutils-V10-01-06)
+- G4EmCalculator - fixed minor defect reported by Coverity
+
+16 January 15: V.Ivant (emutils-V10-01-05)
+- G4VEmModel, G4VEmFluctuationModel - switch to use 
+  G4Random::getTheEngine() to have more clean code 
+
+15 January 15: V.Ivant (emutils-V10-01-04)
+- G4VEmModel - redefine random engine pointer in StartTracking() method
+    to address problem reported by CMS
+
+27 December 14: V.Ivant (emutils-V10-01-03)
+- G4VEnergyLossProcess - removed debug printout from previous tag 
+
+22 December 14: V.Ivant (emutils-V10-01-01)
+21 December 14: V.Ivant (emutils-V10-01-00)
+- G4EmParametersMessenger - allowed to set CSDA range flag only in 
+    the PreInit state to avoid crash in store/retrieve tables
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering - store
+    physics table only from master thread
+- G4VEmProcess - fixed printout at initialisation for the case when
+    process class is shared between different particles
 
 18 November 14: V.Ivant (emutils-V10-00-46)
 - G4VAtomDeexcitation - fixed printout at initialisation 

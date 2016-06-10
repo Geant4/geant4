@@ -32,6 +32,7 @@
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 
+#include "G4Exp.hh"
 #include "G4ParticleHPFissionFS.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4Nucleus.hh"
@@ -49,7 +50,7 @@
     theLC.Init(A, Z, M, dirName, aFSType, projectile);
 
     theFF.Init(A, Z, M, dirName, aFSType, projectile);
-    if ( getenv("G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS") && theFF.HasFSData() ) 
+    if ( G4ParticleHPManager::GetInstance()->GetProduceFissionFragments() && theFF.HasFSData() ) 
     {
        G4cout << "Activate Fission Fragments Production for the target isotope of " 
        << "Z = " << (G4int)Z
@@ -63,9 +64,15 @@
  }
  G4HadFinalState * G4ParticleHPFissionFS::ApplyYourself(const G4HadProjectile & theTrack)
  {  
+
+    //Because it may change by UI command 
+    produceFissionFragments=G4ParticleHPManager::GetInstance()->GetProduceFissionFragments(); 
+
  //G4cout << "G4ParticleHPFissionFS::ApplyYourself " << G4endl;
 // prepare neutron
-   theResult.Clear();
+
+   if ( theResult.Get() == NULL ) theResult.Put( new G4HadFinalState );
+   theResult.Get()->Clear();
    G4double eKinetic = theTrack.GetKineticEnergy();
    const G4HadProjectile *incidentParticle = &theTrack;
    G4ReactionProduct theNeutron( const_cast<G4ParticleDefinition *>(incidentParticle->GetDefinition()) );
@@ -183,7 +190,7 @@
      //if(thePhotons!=0) nPhotons = thePhotons->size();
      for(i=0; i<theNeutrons->size(); i++)
      {
-       theResult.AddSecondary(theNeutrons->operator[](i));
+       theResult.Get()->AddSecondary(theNeutrons->operator[](i));
      }
      delete theNeutrons;  
 
@@ -192,10 +199,10 @@
      theDelayed = theFS.ApplyYourself(0, delayed, theDecayConstants);
      for(i=0; i<theDelayed->size(); i++)
      {
-       G4double time = -std::log(G4UniformRand())/theDecayConstants[i];
+       G4double time = -G4Log(G4UniformRand())/theDecayConstants[i];
        time += theTrack.GetGlobalTime();
-       theResult.AddSecondary(theDelayed->operator[](i));
-       theResult.GetSecondary(theResult.GetNumberOfSecondaries()-1)->SetTime(time);
+       theResult.Get()->AddSecondary(theDelayed->operator[](i));
+       theResult.Get()->GetSecondary(theResult.Get()->GetNumberOfSecondaries()-1)->SetTime(time);
      }
      delete theDelayed;                  
    }
@@ -212,16 +219,16 @@
      G4int i0;
      for(i0=0; i0<Prompt; i0++)
      {
-       theResult.AddSecondary(theNeutrons->operator[](i0));
+       theResult.Get()->AddSecondary(theNeutrons->operator[](i0));
      }
 
 //G4cout << "delayed" << G4endl;
      for(i0=Prompt; i0<Prompt+delayed; i0++)
      {
-       G4double time = -std::log(G4UniformRand())/theDecayConstants[i0-Prompt];
+       G4double time = -G4Log(G4UniformRand())/theDecayConstants[i0-Prompt];
        time += theTrack.GetGlobalTime();        
-       theResult.AddSecondary(theNeutrons->operator[](i0));
-       theResult.GetSecondary(theResult.GetNumberOfSecondaries()-1)->SetTime(time);
+       theResult.Get()->AddSecondary(theNeutrons->operator[](i0));
+       theResult.Get()->GetSecondary(theResult.Get()->GetNumberOfSecondaries()-1)->SetTime(time);
      }
      delete theNeutrons;   
    }
@@ -233,7 +240,7 @@
      nPhotons = thePhotons->size();
      for(i=0; i<nPhotons; i++)
      {
-       theResult.AddSecondary(thePhotons->operator[](i));
+       theResult.Get()->AddSecondary(thePhotons->operator[](i));
      }
      delete thePhotons; 
    }
@@ -247,10 +254,10 @@
    G4ParticleHPFissionERelease * theERelease = theFS.GetEnergyRelease();
    G4double eDepByFragments = theERelease->GetFragmentKinetic();
    //theResult.SetLocalEnergyDeposit(eDepByFragments);
-   if ( !produceFissionFragments ) theResult.SetLocalEnergyDeposit(eDepByFragments);
+   if ( !produceFissionFragments ) theResult.Get()->SetLocalEnergyDeposit(eDepByFragments);
 //    cout << "local energy deposit" << eDepByFragments<<G4endl;
 // clean up the primary neutron
-   theResult.SetStatusChange(stopAndKill);
+   theResult.Get()->SetStatusChange(stopAndKill);
    //G4cout << "Prompt = " << Prompt << ", Delayed = " << delayed << ", All= " << all << G4endl;
    //G4cout << "local energy deposit " << eDepByFragments/MeV << "MeV " << G4endl;
 
@@ -288,10 +295,10 @@
       G4double EB = ER - EA;
       G4DynamicParticle* dpA = new G4DynamicParticle( pdA , direction , EA);
       G4DynamicParticle* dpB = new G4DynamicParticle( pdB , -direction , EB);
-      theResult.AddSecondary(dpA);
-      theResult.AddSecondary(dpB);
+      theResult.Get()->AddSecondary(dpA);
+      theResult.Get()->AddSecondary(dpB);
    }
    //TKWORK 120531 END
 
-   return &theResult;
+   return theResult.Get();
  }

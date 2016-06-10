@@ -27,7 +27,7 @@
 /// \brief Definition of the SteppingAction class
 //
 //
-// $Id: SteppingAction.hh 85906 2014-11-06 08:52:54Z gcosmo $
+// $Id: SteppingAction.hh 67226 2013-02-08 12:07:18Z ihrivnac $
 //
 // 
 

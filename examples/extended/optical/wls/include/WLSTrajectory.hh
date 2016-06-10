@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSTrajectory.hh 72065 2013-07-05 09:54:59Z gcosmo $
+// $Id: WLSTrajectory.hh 90240 2015-05-21 09:08:13Z gcosmo $
 //
 /// \file optical/wls/include/WLSTrajectory.hh
 /// \brief Definition of the WLSTrajectory class
@@ -84,7 +84,6 @@ class WLSTrajectory : public G4VTrajectory
 // Other member functions
 
      virtual void ShowTrajectory(std::ostream& os=G4cout) const;
-     virtual void DrawTrajectory() const;
      virtual void AppendStep(const G4Step* aStep);
      virtual void MergeTrajectory(G4VTrajectory* secondTrajectory);
 
@@ -97,11 +96,6 @@ class WLSTrajectory : public G4VTrajectory
 
     virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
     virtual std::vector<G4AttValue>* CreateAttValues() const;
-
-    void SetDrawTrajectory(G4bool b){fDrawIt=b;}
-    void WLS(){fWLS=true;}
-    void SetForceDrawTrajectory(G4bool b){fForceDraw=b;}
-    void SetForceNoDrawTrajectory(G4bool b){fForceNoDraw=b;}
 
 //---------
    private:
@@ -117,11 +111,6 @@ class WLSTrajectory : public G4VTrajectory
      G4int    fPDGEncoding;
      G4String fParticleName;
      G4ThreeVector fInitialMomentum;
-
-     G4bool fWLS;
-     G4bool fDrawIt;
-     G4bool fForceNoDraw;
-     G4bool fForceDraw;
 
      G4ParticleDefinition* fParticleDefinition;
 

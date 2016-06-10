@@ -6,7 +6,7 @@
 
 // We do not byteswap on intel (LE) (common platform).
 // We have then a better compression on these machines.
-// NOTE : this is the contrary to what is done in ROOT (and Rio).
+// NOTE : this is the contrary to what is done in CERN-ROOT (and Rio).
 
 namespace tools {
 
@@ -37,14 +37,14 @@ inline bool is_iOS() {return true;}
 inline bool is_iOS() {return false;}
 #endif
 
-#if ANDROID
+#ifdef ANDROID
 inline bool is_Android() {return true;}
 #else
 inline bool is_Android() {return false;}
 #endif
 
 
-#if ANDROID || TARGET_OS_IPHONE
+#if defined(ANDROID) || TARGET_OS_IPHONE
 inline bool small_screen()           {return true;}
 inline bool no_cursor()              {return true;}
 inline bool stop_app_button()        {return true;}

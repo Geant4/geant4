@@ -41,6 +41,7 @@
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4Pow.hh"
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -107,7 +108,7 @@ G4double G4ComponentAntiNuclNuclearXS::GetTotalElementCrossSection
      { fTotalXsc = sigmaTotal * millibarn;
         return fTotalXsc;  }
  
-   fRadiusEff = 1.34*std::pow(A,0.23)+1.35/std::pow(A,1./3.);   //fm
+   fRadiusEff = 1.34*G4Pow::GetInstance()->powA(A,0.23)+1.35/G4Pow::GetInstance()->powA(A,1./3.);   //fm
   
    if( (Z==1) && (A==2) ) fRadiusEff = 3.800;     //fm
    if( (Z==1) && (A==3) ) fRadiusEff = 3.300;  
@@ -117,7 +118,7 @@ G4double G4ComponentAntiNuclNuclearXS::GetTotalElementCrossSection
       
 //calculation of effective nuclear radius for AntiDeuteron interaction (can be changed)
   if (theParticle == theADeuteron) 
- { fRadiusEff = 1.46 * std::pow(A,0.21) + 1.45 / std::pow(A,1./3.);
+ { fRadiusEff = 1.46 * G4Pow::GetInstance()->powA(A,0.21) + 1.45 / G4Pow::GetInstance()->powA(A,1./3.);
 
     if( (Z==1) && (A==2) ) fRadiusEff = 3.238;     //fm
     if( (Z==1) && (A==3) ) fRadiusEff = 3.144;     
@@ -127,7 +128,7 @@ G4double G4ComponentAntiNuclNuclearXS::GetTotalElementCrossSection
 // calculation of effective nuclear radius for AntiHe3 interaction (can be changed)
 
   if( (theParticle ==theAHe3) || (theParticle ==theATriton) )
- { fRadiusEff = 1.40* std::pow(A,0.21)+1.63/std::pow(A,1./3.);
+ { fRadiusEff = 1.40* G4Pow::GetInstance()->powA(A,0.21)+1.63/G4Pow::GetInstance()->powA(A,1./3.);
 
     if( (Z==1) && (A==2) ) fRadiusEff = 3.144;     //fm
     if( (Z==1) && (A==3) ) fRadiusEff = 3.075;  
@@ -139,7 +140,7 @@ G4double G4ComponentAntiNuclNuclearXS::GetTotalElementCrossSection
 
   if (theParticle == theAAlpha) 
  {
-  fRadiusEff = 1.35* std::pow(A,0.21)+1.1/std::pow(A,1./3.);
+  fRadiusEff = 1.35* G4Pow::GetInstance()->powA(A,0.21)+1.1/G4Pow::GetInstance()->powA(A,1./3.);
   
     if( (Z==1) && (A==2) ) fRadiusEff = 2.544;     //fm
     if( (Z==1) && (A==3) ) fRadiusEff = 2.589;   
@@ -152,7 +153,7 @@ G4double G4ComponentAntiNuclNuclearXS::GetTotalElementCrossSection
    G4double REf2  = R2+fRadiusNN2;
    G4double ApAt = std::abs(theParticle->GetBaryonNumber())  *  A;
 
- xsection = 2*pi*REf2*10.*std::log(1+(ApAt*sigmaTotal/(2*pi*REf2*10.)));  //mb
+ xsection = 2*pi*REf2*10.*G4Log(1+(ApAt*sigmaTotal/(2*pi*REf2*10.)));  //mb
  xsection =xsection *millibarn; 
  fTotalXsc   = xsection;
 
@@ -196,7 +197,7 @@ G4double G4ComponentAntiNuclNuclearXS::GetInelasticElementCrossSection
       { fInelasticXsc = (sigmaTotal - sigmaElastic) * millibarn;
         return fInelasticXsc;  
       } 
- fRadiusEff = 1.31*std::pow(A, 0.22)+0.9/std::pow(A, 1./3.);  //fm
+ fRadiusEff = 1.31*G4Pow::GetInstance()->powA(A, 0.22)+0.9/G4Pow::GetInstance()->powA(A, 1./3.);  //fm
     
     if( (Z==1) && (A==2) ) fRadiusEff = 3.582;               //fm
     if( (Z==1) && (A==3) ) fRadiusEff = 3.105;               
@@ -208,7 +209,7 @@ G4double G4ComponentAntiNuclNuclearXS::GetInelasticElementCrossSection
 
   if (theParticle ==theADeuteron) 
 { 
- fRadiusEff = 1.38*std::pow(A, 0.21)+1.55/std::pow(A, 1./3.);
+ fRadiusEff = 1.38*G4Pow::GetInstance()->powA(A, 0.21)+1.55/G4Pow::GetInstance()->powA(A, 1./3.);
   
     if( (Z==1) && (A==2) ) fRadiusEff = 3.169;            //fm
     if( (Z==1) && (A==3) ) fRadiusEff = 3.066;
@@ -220,7 +221,7 @@ G4double G4ComponentAntiNuclNuclearXS::GetInelasticElementCrossSection
 
   if( (theParticle ==theAHe3) || (theParticle ==theATriton) )
  {
-  fRadiusEff = 1.34 * std::pow(A, 0.21)+1.51/std::pow(A, 1./3.);
+  fRadiusEff = 1.34 * G4Pow::GetInstance()->powA(A, 0.21)+1.51/G4Pow::GetInstance()->powA(A, 1./3.);
   
     if( (Z==1) && (A==2) ) fRadiusEff = 3.066;           //fm
     if( (Z==1) && (A==3) ) fRadiusEff = 2.973;
@@ -233,7 +234,7 @@ G4double G4ComponentAntiNuclNuclearXS::GetInelasticElementCrossSection
 
   if (theParticle == theAAlpha) 
  {
-  fRadiusEff = 1.3*std::pow(A, 0.21)+1.05/std::pow(A, 1./3.);
+  fRadiusEff = 1.3*G4Pow::GetInstance()->powA(A, 0.21)+1.05/G4Pow::GetInstance()->powA(A, 1./3.);
     
     if( (Z==1) && (A==2) ) fRadiusEff = 2.498;            //fm
     if( (Z==1) && (A==3) ) fRadiusEff = 2.508;
@@ -244,7 +245,7 @@ G4double G4ComponentAntiNuclNuclearXS::GetInelasticElementCrossSection
   G4double REf2  = R2+fRadiusNN2;
   G4double  ApAt= std::abs(theParticle->GetBaryonNumber())  *  A;
 
- inelxsection  = pi*REf2 *10* std::log(1+(ApAt*sigmaTotal/(pi*REf2*10.))); //mb
+ inelxsection  = pi*REf2 *10* G4Log(1+(ApAt*sigmaTotal/(pi*REf2*10.))); //mb
  inelxsection  = inelxsection * millibarn;  
    fInelasticXsc =  inelxsection; 
    return fInelasticXsc;
@@ -304,16 +305,16 @@ G4double G4ComponentAntiNuclNuclearXS::GetAntiHadronNucleonTotCrSc
  S        = 2.*Mn*Mn + 2. *Mn*Elab;         // GeV^2
  SqrtS    = std::sqrt(S);                   // GeV 
 
- B        = b0+b2*std::log(SqrtS/SqrtS0)*std::log(SqrtS/SqrtS0); //GeV^(-2)
- SigAss   = 36.04 +0.304*std::log(S/S0)*std::log(S/S0);          //mb 
+ B        = b0+b2*G4Log(SqrtS/SqrtS0)*G4Log(SqrtS/SqrtS0); //GeV^(-2)
+ SigAss   = 36.04 +0.304*G4Log(S/S0)*G4Log(S/S0);          //mb 
  R0       = std::sqrt(0.40874044*SigAss - B);                   //GeV^(-2)
  
  C        = 13.55;
  d1       = -4.47;
  d2       = 12.38;
  d3       = -12.43;
- xsection = SigAss*(1 + 1./(std::sqrt(S-4.*Mn*Mn)) / (std::pow(R0, 3.))
-  *C* (1+d1/SqrtS+d2/(std::pow(SqrtS,2.))+d3/(std::pow(SqrtS,3.)) ));  
+ xsection = SigAss*(1 + 1./(std::sqrt(S-4.*Mn*Mn)) / (G4Pow::GetInstance()->powA(R0, 3.))
+  *C* (1+d1/SqrtS+d2/(G4Pow::GetInstance()->powA(SqrtS,2.))+d3/(G4Pow::GetInstance()->powA(SqrtS,3.)) ));  
 
 //  xsection *= millibarn;
 
@@ -336,15 +337,15 @@ GetAntiHadronNucleonElCrSc(const G4ParticleDefinition* aParticle, G4double kinEn
 
  GetAntiHadronNucleonTotCrSc(aParticle,kinEnergy);
 
- SigAss   = 4.5 + 0.101*std::log(S/S0)*std::log(S/S0);            //mb
+ SigAss   = 4.5 + 0.101*G4Log(S/S0)*G4Log(S/S0);            //mb
   
  C        = 59.27;
  d1       = -6.95;
  d2       = 23.54;
  d3       = -25.34;
 
- xsection = SigAss* (1 + 1. / (std::sqrt(S-4.*Mn*Mn)) / (std::pow(R0, 3.))
-  *C* ( 1+d1/SqrtS+d2/(std::pow(SqrtS,2.))+d3/(std::pow(SqrtS,3.)) ));  
+ xsection = SigAss* (1 + 1. / (std::sqrt(S-4.*Mn*Mn)) / (G4Pow::GetInstance()->powA(R0, 3.))
+  *C* ( 1+d1/SqrtS+d2/(G4Pow::GetInstance()->powA(SqrtS,2.))+d3/(G4Pow::GetInstance()->powA(SqrtS,3.)) ));  
 
 //  xsection *= millibarn;
 

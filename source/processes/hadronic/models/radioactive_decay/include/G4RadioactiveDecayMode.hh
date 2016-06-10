@@ -53,7 +53,9 @@
 // 0.b.3 release.
 //
 // 13 April 2000, F Lei, DERA UK
-// 0.b.4 release. No change to this file     
+// 0.b.4 release. No change to this file
+//
+// 13 October 2015 L.G Sarmiento included different decay modes in the enum
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ////////////////////////////////////////////////////////////////////////////////
@@ -63,7 +65,7 @@
 //
 enum G4RadioactiveDecayMode
   {RDM_ERROR=-1, IT=0, BetaMinus=1, BetaPlus=2, KshellEC=3, LshellEC=4, MshellEC=5, Alpha=6,
-   Proton=7, Beta2Minus=8, Beta2Plus=9, Proton2=10, SpFission=11};
+   Proton=7, Neutron=8, BDProton=9, BDNeutron=10, Beta2Minus=11, Beta2Plus=12, Proton2=13, Neutron2=14, SpFission=15};
 
 std::istream &operator >> (std::istream &s, G4RadioactiveDecayMode &q);
 

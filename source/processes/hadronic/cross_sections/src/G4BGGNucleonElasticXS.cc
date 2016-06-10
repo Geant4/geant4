@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGNucleonElasticXS.cc 79981 2014-03-27 15:24:11Z gcosmo $
+// $Id: G4BGGNucleonElasticXS.cc 93682 2015-10-28 10:09:49Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -43,7 +43,7 @@
 
 #include "G4BGGNucleonElasticXS.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4GlauberGribovCrossSection.hh"
+#include "G4ComponentGGHadronNucleusXsc.hh"
 #include "G4NucleonNuclearCrossSection.hh"
 #include "G4HadronNucleonXsc.hh"
 #include "G4ComponentSAIDTotalXS.hh"
@@ -86,8 +86,10 @@ G4BGGNucleonElasticXS::G4BGGNucleonElasticXS(const G4ParticleDefinition* p)
 
 G4BGGNucleonElasticXS::~G4BGGNucleonElasticXS()
 {
-  delete fHadron;
   delete fSAID;
+  delete fHadron;
+  // The cross section registry will delete fNucleon
+  delete fGlauber;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -209,12 +211,13 @@ void G4BGGNucleonElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   isInitialized = true;
 
   fNucleon = (G4NucleonNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NucleonNuclearCrossSection::Default_Name());
-  fGlauber = (G4GlauberGribovCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4GlauberGribovCrossSection::Default_Name());
-    
+  fGlauber = new G4ComponentGGHadronNucleusXsc();
   fHadron  = new G4HadronNucleonXsc();
   fSAID    = new G4ComponentSAIDTotalXS();
+
   fNucleon->BuildPhysicsTable(*particle);
   fGlauber->BuildPhysicsTable(*particle);
+
   if(particle == theProton) { 
     isProton = true; 
     fSAIDHighEnergyLimit = 3*GeV;

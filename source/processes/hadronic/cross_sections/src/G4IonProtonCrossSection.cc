@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonProtonCrossSection.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4IonProtonCrossSection.cc 90447 2015-05-29 07:41:53Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -78,8 +78,8 @@ void
 G4IonProtonCrossSection::CrossSectionDescription(std::ostream& outFile) const
 {
   outFile << "G4IonProtonCrossSection calculates the inelastic cross section\n"
-          << "for ions scattering from protons using inverse kinematics and\n"
-          << "the Axen-Wellisch inelastic cross sections in the\n"
-          << "G4ProtonInelasticCrossSection class.\n"; 
+          << "for any ion projectile with Z >=2 only on hydrogen target.\n"
+          << "It uses the inverse kinematics and the Axen-Wellisch\n"
+          << "inelastic cross section (G4ProtonInelasticCrossSection).\n"; 
 }
 

@@ -105,7 +105,7 @@ private:
   static double genGamma( HepRandomEngine *anEngine, double k,
                                                         double lambda );
 
-  shared_ptr<HepRandomEngine> localEngine;
+  std::shared_ptr<HepRandomEngine> localEngine;
   double defaultK;
   double defaultLambda;
 

@@ -36,6 +36,7 @@
 // -------------------------------------------------------------------
 
 #include "G4AtomicTransitionManager.hh"
+#include "G4EmParameters.hh"
 #include "G4FluoData.hh"
 #include "G4AugerData.hh"
 
@@ -55,8 +56,7 @@ G4AtomicTransitionManager::G4AtomicTransitionManager()
    zMax(100),
    infTableLimit(6),
    supTableLimit(100),
-   isInitialized(false),
-   fluoDirectory("/fluor")
+   isInitialized(false)
 {}
 
 G4AtomicTransitionManager::~G4AtomicTransitionManager()
@@ -110,7 +110,7 @@ G4AtomicTransitionManager::Shell(G4int Z, size_t shellIndex) const
 	     << "  shellIndex= " << shellIndex
 	     << ">=  numberOfShells= " << lastShell;
 	  G4Exception("G4AtomicTransitionManager::Shell()","de0001",
-		      JustWarning,ed,"AtomicShell not found");
+		      JustWarning,ed," AtomicShell not found");
 	  if (lastShell > 0) { return v[lastShell - 1]; }
 	}
     }
@@ -118,9 +118,10 @@ G4AtomicTransitionManager::Shell(G4int Z, size_t shellIndex) const
     {
       G4ExceptionDescription ed;
       ed << "No de-excitation for Z= " << Z 
-	 << "  shellIndex= " << shellIndex;
+	 << "  shellIndex= " << shellIndex
+	 << ". AtomicShell not found - check if data are uploaded";
       G4Exception("G4AtomicTransitionManager::Shell()","de0001",
-		  FatalException,ed,"AtomicShell not found");
+		  FatalException,ed,"");
     } 
   return 0;
 }
@@ -277,11 +278,6 @@ G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(
   return prob;    
 }
 
-void G4AtomicTransitionManager::SetFluoDirectory(const G4String& ss)
-{
-  fluoDirectory = ss;
-}
-
 #include "G4AutoLock.hh"
 namespace { G4Mutex AtomicTransitionManagerMutex = G4MUTEX_INITIALIZER; }
 
@@ -293,6 +289,10 @@ void G4AtomicTransitionManager::Initialise()
   // << G4endl;
   if(isInitialized) { return; }
   isInitialized = true;
+
+  // Selection of fluorescence files
+  G4String fluoDirectory = (G4EmParameters::Instance()->BeardenFluoDir()?
+			    "/fluor_Bearden":"/fluor");
 
   // infTableLimit is initialized to 6 because EADL lacks data for Z<=5
   G4ShellData* shellManager = new G4ShellData;
@@ -309,6 +309,7 @@ void G4AtomicTransitionManager::Initialise()
       size_t shellIndex = 0; 
 
       size_t numberOfShells = shellManager->NumberOfShells(Z);
+      // G4cout << "For Z= " << Z << "  " << numberOfShells << " shells" << G4endl;
       for (shellIndex = 0; shellIndex<numberOfShells; ++shellIndex) 
 	{ 
 	  G4int shellId = shellManager->ShellId(Z,shellIndex);
@@ -367,9 +368,6 @@ void G4AtomicTransitionManager::Initialise()
     }
   delete shellManager;
 }
-
-
-
 
 
 

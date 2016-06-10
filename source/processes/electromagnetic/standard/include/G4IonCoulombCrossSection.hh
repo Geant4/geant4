@@ -80,7 +80,7 @@ public:
 
   G4double SampleCosineTheta();
 
-  void SetupKinematic(G4double kinEnergy, G4double cut, G4double tmass);
+  void SetupKinematic(G4double kinEnergy, G4double tmass);
 
   void SetupTarget(G4double Z, G4double kinEnergy, G4int heavycorr);
 
@@ -98,6 +98,7 @@ private:
   const G4ParticleDefinition* theProton;  
 
   G4NistManager*  fNistManager;		
+  G4Pow*          fG4pow;
 
   G4double                coeff;	  
 
@@ -111,8 +112,7 @@ private:
   //cross section
   G4double                nucXSection;    	
 
-  //energy cut
-  G4double                ecut;	    
+  //energy 
   G4double                etag;	    
 
   // projectile........................
@@ -139,7 +139,6 @@ private:
   G4double                alpha2;
   G4double 	   	  ScreenRSquare;  
 };
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

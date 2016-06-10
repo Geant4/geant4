@@ -1,4 +1,4 @@
-$Id: History 87360 2014-12-01 16:07:16Z gcosmo $
+$Id: History 94590 2015-11-25 11:12:46Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,169 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+25th November 2015  Laurent Garnier (vis-V10-01-19)
+- HepRep tagged : vis-HepRep-V10-01-02
+
+19th November 2015  Laurent Garnier (vis-V10-01-18)
+- HepRep tagged : vis-HepRep-V10-01-01
+
+8th November 2015  Laurent Garnier (vis-V10-01-17)
+- opengl-V10-01-12 : Fix the "SetVisible" problem on
+  * Linux/Windows
+  * Mac with Qt4 (or with Qt5)
+  but introduce another minor problem: when opening a new viewer, we have to update it by clic
+  into viewer, or issue "/vis/viewer/refresh"
+
+1st November 2015  John Allison
+- visman-V10-01-20:
+  o Introduced (again!) <chrono> for queue handling in MT mode.
+    Except for Xeon Phi, which is protected by #ifndef __MIC__
+
+15th October 2015  John Allison
+- visman-V10-01-19:
+  o Corrected end-of-run printing for the case of 
+  "/vis/multithreading/actionOnEventQueueFull discard".
+  o Improved guidance and confirmation printing for /vis/viewer/save.
+
+2nd October 2015  John Allison
+- modeling-V10-01-05: Cosmetic improvements.
+
+1st October 2015  John Allison (vis-V10-01-16)
+- visman-V10-01-18 and modeling-V10-01-04:
+  o Added "light" representation to /vis/scene/add/magneticField.
+
+1st October 2015  John Allison
+- visman-V10-01-17:
+  o Reverted (again!) to G4THREADSLEEP for queue handling in MT mode.
+
+30th September 2015  John Allison
+- visman-V10-01-16:
+  o Uses <chrono> for queue handling in MT mode.
+  o New commands for multithreading:
+    /vis/multithreading/actionOnEventQueueFull
+    /vis/multithreading/maxEventQueueSize
+
+29th September 2015  John Allison (vis-V10-01-15)
+- Tagged.
+
+21st September 2015  John Allison
+- opengl-V10-01-11: Use <chrono> for picking.  (Another attempt.)
+
+19th August 2015  John Allison
+- visman-V10-01-15: Improvements to help and verbosity printing.
+
+5th August 2015  John Allison (vis-V10-01-13)
+visman-V10-01-14: Reverted to G4THREADSLEEP for queue handling in MT mode.
+opengl-V10-01-10: Reverted to G4THREADSLEEP for picking.
+
+1st August 2015  John Allison (vis-V10-01-12)
+- visman-V10-01-13, opengl-V10-01-09:
+  o Uses <chrono>.
+
+1st August 2015  John Allison
+- visman-V10-01-12:
+  o Use auto&& (rather than auto or auto&).
+
+30th July 2015  John Allison (vis-V10-01-09)
+- visman-V10-01-11:
+  o Re-implemented graphics system fallback strategy.  A graphics system may
+    have more than one nickname.  This is used for finding a fallback graphics
+    systems when, for example, a Qt session is requested but the user has not
+    instantiated a Qt session, or when interactive graphics systems are
+    prohibited, as in batch mode.  This allows the user to run an application
+    that is fully configured with all available graphics systems, even under
+    circumstances for which the primary graphics system is inappropriate.  For
+    example, it allows one to make a image with these commands in a batch macro:
+      /vis/open OGL
+      /vis/drawVolume
+      /vis/ogl/export
+  o Other small changes - see management/History.
+- opengl-V10-01-08:
+  o Improved graphics system fallback strategy:
+    . Implemented IsUISessionCompatible in G4OpenGLQt and G4OpenGLXm.
+    . Qt not allowed unless a Qt session has been instantiated.
+    . Interactive graphics systems (Qt, Xm) are not allowed in batch.
+  o Several Qt developments (Laurent Garnier).
+- modeling-V10-01-03: Minor improvement.
+
+26th June 2015  John Allison
+- opengl-V10-01-07: Coverity fixes.
+
+3rd June 2015  John Allison (vis-V10-01-07)
+- Needs global-V10-01-13 for opengl-V10-01-06.
+- visman-V10-01-10: New interface in G4VViewer for MT.
+- opengl-V10-01-06
+  o Introduced sleep while waiting for pick action
+  o Migrate to new G4VViewer interface.
+- opengl-V10-01-05
+  o A bit of cleaning in managing OpenGL context (Qt)
+
+20th March 2015  John Allison
+- visman-V10-01-08: Very minor tidying.
+
+9th March 2015  John Allison (vis-V10-01-06)
+- Tagged.
+
+8th March 2015  John Allison
+- visman-V10-01-07: Tidying and protecting.
+- vistree-V10-01-04 (needs modeling-V10-01-01):
+  o G4ASCIITreeSceneHandler: Added polyhedron dump for verbosity >=7.
+
+7th March 2015  John Allison
+- modeling-V10-01-01:
+  o Augment G4PhysicalVolumeModel interface.
+  o G4PhysicalVolumeModel: Add local transformation attribute.
+  o G4TouchableDumpScene.cc: Add polyhedron dump for use with
+    /vis/touchable/dump.
+
+1st March 2015  John Allison
+- visman-V10-01-06:
+  o Limited the use of G4USE_STD11 to the clang compiler for now.
+
+28th February 2015  John Allison
+- vistree-V10-01-03: Tidied and cleaned up att values after use.
+
+24th February 2015  John Allison
+- vistree-V10-01-01:
+  o G4ASCIITreeSceneHandler: Added physical volume dump for verbosity >=6.
+
+7th February 2015  Akinori Kimura
+- gMocren-V10-01-01: fixed bugs of checking string lengths.
+
+3rd February 2015  John Allison
+- visman-V10-01-05: Introduced G4USE_STD11 and tidied.
+
+2nd February 2015  Gabriele Cosmo (vis-V10-01-05)
+- Fix to sources.cmake scripts in various modules to include missing
+  dependency on external USolids library.
+- openinventor-V10-01-01: G4OpenInventorViewer & G4OpenInventorXtExtendedViewer,
+  added viewer menu button and methods for PDF output (FJ).
+
+19th December 2014  John Allison
+- visexternal-V10-01-01: G4OpenGL2PSAction: added method setBufferSize() (FJ).
+
+19th December 2014  John Allison (vis-V10-01-04)
+- openinventor-V10-01-00: Corrected sources.cmake to include missing files.
+
+19th December 2014  John Allison (vis-V10-01-03)
+- visman-V10-01-02: Removed debug printing (MT mode).
+- opengl-V10-01-04: Removed debug printing (MT mode).
+
+16th December 2014  John Allison (vis-V10-01-02)
+- visman-V10-01-01: Fixed /vis/scene/add/eventID for MT mode.
+- opengl-V10-01-03: Fixed compiler warning.
+
+16th December 2014  John Allison (vis-V10-01-01)
+- Merged vis sub-thread branch.
+
+16th December 2014  John Allison  (vis-MT-branch-00-31)
+- Merged vis-V10-01-00.
+
+16th December 2014  John Allison (vis-V10-01-00)
+- visman-V10-01-00: Improved guidance for /vis/scene/add/extent.
+- opengl-V10-01-00/01/02: Fix a problem when zooming on small volumes.
+- openinventor-V10-01-00: Corrected sources.cmake to include missing files.
+
 28th November 2014  Laurent Garnier (vis-V10-00-15)
 - opengl-V10-00-28 :
   o Fix refresh problem due to a bad threading management
@@ -41,6 +204,32 @@ History file for visualization category
 - modeling-V10-00-12
 - visman-V10-00-30
 
+3rd December 2014  John Allison
+- Merged gMocren-V10-00-03.
+
+2nd December 2014  John Allison  (vis-MT-branch-00-30)
+- vis-MT-branch-00-man-18:
+  o G4VisManager.cc: Tidied and simplified EndOfRun.
+- vis-MT-branch-00-opengl-12)
+- G4OpenGLStoredQtViewer::DrawView(): Removed thread restriction.
+- G4OpenGLQtViewer.cc: Messy experimental version.
+
+1st December 2014  John Allison
+- vis-MT-branch-00-man-17:
+  o Moved KeepTheEvent from the vis sub-thread to EndOfEvent.
+- vis-MT-branch-00-man-16:
+  o Prevented vis sub-thread for runs with no events.
+
+30th November 2014  John Allison
+- vis-MT-branch-00-man-15:
+  o Introduced DoneWithMaster/VisSubThread.
+- vis-MT-branch-00-opengl-11:
+  o Introduced DoneWithMaster/VisSubThread.
+- vis-MT-branch-00-man-14:
+  o Rationalisation of vis sub-thread code and Begin/EndRun/Event.
+  o Elimination of (commented out) ShowView and extra refresh for
+    auto-refresh viewers.  See management/History.
+
 28th November 2014  John Allison  (vis-V10-00-14-JA-01)
 - modeling-V10-00-12: Tidied.
 - visman-V10-00-30: Get correct run manager in MT mode.
@@ -48,6 +237,18 @@ History file for visualization category
 
 26th November 2014  John Allison  (vis-V10-00-14-JA-00)
 - Private tag to assist merging wit MT vis-sub-thread version.
+
+26th November 2014  John Allison  (vis-MT-branch-00-29)
+- G4VisManager.cc: Bug fix:
+  o fEventRefreshing = false removed from EndOfEvent.
+- vis-MT-branch-00-opengl-10: Merged opengl-V10-00-28 into MT version.
+- Merged gMocren-V10-00-02 into MT version.
+
+22nd November 2014  John Allison  (vis-MT-branch-00-28)
+- vis-MT-branch-00-man-11: Merged visman-V10-00-28 into MT version.
+- vis-MT-branch-00-man-12: Minor tidying of #include’s.
+- vis-MT-branch-00-opengl-09: Merged opengl-V10-00-27 into MT version.
+- raytracer-V10-00-00: Copied into MT version.
 
 21st November 2014  John Allison
 - visman-V10-00-28: Fix bug affecting file-writing viewers.
@@ -69,8 +270,93 @@ History file for visualization category
   o Fixed spelling mistake in messages.
   o Fixed win7-vc12 compiler warnings.
 
+8th November 2014  John Allison
+- Activated debug print statements.
+
+8th November 2014  John Allison  (vis-MT-branch-00-27)
+- vis-MT-branch-00-man-10: Fixed (again) win7-vc12 compiler warnings.
+- vis-MT-branch-00-opengl-08: Merged trunk again.  (Just History.)
+- Merged vis-V10-00-13.
+
+7th November 2014  John Allison  (vis-MT-branch-00-26)
+- vis-MT-branch-00-opengl-07: Merged the trunk into this branch.
+
+7th November 2014  John Allison  (vis-MT-branch-00-25)
+- vis-MT-branch-00-opengl-05: Merged the trunk into this branch.
+
 7th November 2014  Laurent Garnier (vis-V10-00-12 - vis-V10-00-13)
 - opengl-V10-00-22 - opengl-V10-00-23
+
+7th November 2014  John Allison  (vis-MT-branch-00-24)
+- vis-MT-branch-00-man-09: delete mtVisSubThread at end of run.
+- vis-MT-branch-00-man-08: Protected event queue with mutex locks.
+
+6th November 2014  John Allison  (vis-MT-branch-00-23)
+- vis-MT-branch-00-man-07: Fixed compiler warning.
+
+6th November 2014  John Allison  (vis-MT-branch-00-22)
+- vis-MT-branch-00-man-06:
+  o Move event->PostProcessingFinished() into mutex protection.
+- vis-MT-branch-00-opengl-03:
+ o Rename fWindow by fGLWidget and avoid problems for users using an
+   external Qt Application (and external Main Window)
+ o Remove resizing GLwidget *before* it was attached in the ui. This
+   will prevent from a early repainting
+
+6th November 2014  Laurent Garnier
+- G4OpenGLQtViewer :
+ o Rename fWindow by fGLWidget and avoid problems for users using an
+   external Qt Application (and external Main Window)
+ o Remove resizing GLwidget *before* it was attached in the ui. This
+   will prevent from a early repainting
+ o Fix warnings
+- G4OpenGLViewer :
+  o Add ClearViewWithoutFlush() function
+- G4OpenGLStoredQtViewer/G4OpenGLImmediateQtViewer : 
+  o Add a protection in case vis is called in another thread than main thread
+- G4OpenGLStoredQtViewer:
+  o Fix ugly window at beginning
+
+G4OpenGLWtViewer
+  o Fix a problem with Wt include names on case sensitive systems
+
+5th November 2014  Laurent Garnier
+- G4OpenGLQtViewer: 
+ o Rename fWindow by fGLWidget and avoid problems for users using an external
+   Qt Application (and external Main Window)
+ o Remove resizing GLwidget *before* it was attached in the ui. This will prevent
+   from a early repainting
+
+30th October 2014  Laurent Garnier (opengl-V10-00-21)
+- Tagged
+
+5th November 2014  John Allison  (vis-MT-branch-00-21)
+- vis-MT-branch-00-man-05: Protections and spelling corrections.
+
+4th November 2014  John Allison
+- vis-MT-branch-00-man-04: Fix win7-vc12 compiler warnings.
+
+2nd November 2014  John Allison  (vis-MT-branch-00-20)
+- vis-MT-branch-00-man-03: Added /vis/set/maxEventQueueSize.
+  If, during a multithreaded run, the simulation gets ahead of the
+  visualisation by more than this maximum, the simulation is delayed
+  until the vis sub-thread has drawn a few more events.  You may
+  change this maximum number of events with
+  "/vis/set/maxEventQueueSize <N>", where N is the
+  maximum number you wish to allow.  N <= 0 means "unlimited".
+  To avoid visualisation altogether: "/vis/disable".
+
+1st November 2014  John Allison  (vis-MT-branch-00-18)
+- G4VisManager.cc: Limited the number of queued events.
+
+1st November 2014  John Allison  (vis-MT-branch-00-17)
+  o vis-MT-branch-00-opengl-02: Fixed mistake in merging.
+  o vis-MT-branch-00-man-01: Tidied.
+
+1st November 2014  John Allison  (vis-MT-branch-00-16)
+- Merged vis-V10-00-11 and tagged.  Includes:
+  o vis-MT-branch-00-opengl-01
+  o vis-MT-branch-00-man-00
 
 30th October 2014  Laurent Garnier (vis-V10-00-10 - vis-V10-00-11)
 - visexternal-V10-00-03
@@ -85,6 +371,81 @@ History file for visualization category
     This can be used to provide an extent to the scene even if
     no other models with extent are available. For example,
     even if there is no geometry.
+
+30th October 2014  John Allison  (vis-MT-branch-00-15)
+- G4VisManager.cc:
+  o Fix drawing of events in refresh mode at end of run.
+  o Fix shadowing of runManager pointer in MT mode.
+
+29th October 2014  John Allison  (vis-MT-branch-00-14)
+- Fixed event by event refreshing (/vis/scene/endOfEventAction refresh)
+  in MT mode.
+
+29th October 2014  John Allison  (vis-MT-branch-00-13)
+- Merged the trunk into the branch and tagged.
+
+29th October 2014  John Allison
+- visman-V10-00-20: Added /vis/scene/add/extent.
+  o Adds a dummy model with given extent to the current scene.
+    This can be used to provide an extent to the scene even if
+    no other models with extent are available. For example,
+    even if there is no geometry.
+
+28th October 2014  John Allison  (vis-MT-branch-00-12)
+- More changes to Qt.
+
+28th October 2014  John Allison  (vis-MT-branch-00-10)
+- Incorporating Laurent's changes:
+  o Prevent from calling redrawing scene inside a Vis Thread
+- Secured the vis manager against the possibility that someone
+  builds Geant4 in multithreaded mode but only instantiates the
+  normal run manager.
+#ifdef G4MULTITHREADED
+  /* There is a static method G4Threading::IsMultithreadedApplication()
+   that returns true only if G4MTRunManager is instantiated with MT
+   installation. Thus method returns false if G4RunManager base class is
+   instantiated even with the MT installation, or of course with sequential
+   installation.
+   */
+  if(G4Threading::IsMultithreadedApplication()) {
+    // Start vis sub-thread
+    mtRunInProgress = true;
+    mtVisSubThread = new G4Thread;
+    G4THREADCREATE(mtVisSubThread,G4VisSubThread,this);
+  }
+#endif
+
+28th October 2014  John Allison  (vis-MT-branch-00-09)
+- Merged in Laurent's and Makoto's changes.
+
+27th October 2014  John Allison  (vis-MT-branch-00-08)
+- Attempt at getting Qt to work in MT mode.
+- Fix some OpenGL issues - see OpenGL/History.
+- Merge developments from trunk.
+
+24th October 2014  John Allison  (vis-MT-branch-00-07)
+- Commented out intermediate checks on GLContext.
+
+24th October 2014  John Allison  (vis-MT-branch-00-06 needs co-tags)
+- Needs global-V10-00-38 and intercoms-V10-00-14.
+- Migrated to above tags.
+
+24th October 2014  John Allison  (vis-MT-branch-00-05)
+- Small fix and re-tag.
+
+24th October 2014  John Allison  (vis-MT-branch-00-04)
+- Event keeping moved to EndOfEvent.
+- Draw(const G4Event*) now longer needed; removed.
+
+24th October 2014  John Allison  (vis-MT-branch-00-03)
+- Merged in Laurent's changes and tagged.
+
+24th October 2014  John Allison  (vis-MT-branchpoint-00-02)
+- Moved event keeping to worker thread.
+
+22nd October 2014  John Allison  (vis-MT-branchpoint-00-01)
+- vis-MT-branch-00-visman-00: Sub-thread developments.
+- vis-MT-branch-00-opengl-00: Sub-thread developments.
 
 22nd October 2014  John Allison  (vis-MT-branchpoint-00)
 - A tag made on the trunk from which vis-MT-branch-00 has been made.

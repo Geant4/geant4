@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InteractionContent.cc 83684 2014-09-09 12:37:39Z gcosmo $
+// $Id: G4InteractionContent.cc 89732 2015-04-29 09:00:48Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -36,8 +36,8 @@
 
 #include "G4InteractionContent.hh"
 
-#include "G4PhysicalConstants.hh"       // Uzhi 8.09.2014
-#include "G4SystemOfUnits.hh"           // Uzhi 8.09.2014
+#include "G4PhysicalConstants.hh" 
+#include "G4SystemOfUnits.hh"
 
 G4InteractionContent::G4InteractionContent(G4VSplitableHadron *aPrimaryParticipant)
       : theNumberOfHard(0), theNumberOfSoft(0), theNumberOfDiffractive(0),
@@ -55,9 +55,7 @@ G4InteractionContent::~G4InteractionContent()
 
 G4bool G4InteractionContent::operator<(const G4InteractionContent &right) const
 {
-G4cout<<this->GetInteractionTime()/fermi<<" "<<right.GetInteractionTime()/fermi<<G4endl;
       return this->GetInteractionTime() < right.GetInteractionTime();
-//        return right.GetInteractionTime() < this->GetInteractionTime();
 }
 
 void  G4InteractionContent::SetInteractionTime(G4double aValue)

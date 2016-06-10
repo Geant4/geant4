@@ -25,6 +25,7 @@
 //
 
 #include "G4WorkerRunManagerKernel.hh"
+#include "G4ParticleTable.hh"
 
 G4WorkerRunManagerKernel::G4WorkerRunManagerKernel() : G4RunManagerKernel(workerRMK)
 {
@@ -40,6 +41,7 @@ G4WorkerRunManagerKernel::G4WorkerRunManagerKernel() : G4RunManagerKernel(worker
 
 G4WorkerRunManagerKernel::~G4WorkerRunManagerKernel()
 {
+  G4ParticleTable::GetParticleTable()->DestroyWorkerG4ParticleTable();
 }
 
 void G4WorkerRunManagerKernel::SetupShadowProcess() const

@@ -44,6 +44,10 @@
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Proton.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
+#include "G4Pow.hh"
+
 
 // factory
 #include "G4CrossSectionFactory.hh"
@@ -76,13 +80,20 @@ G4ChipsProtonInelasticXS::~G4ChipsProtonInelasticXS()
   delete HEN;
 }
 
-G4bool G4ChipsProtonInelasticXS::IsIsoApplicable(const G4DynamicParticle* Pt, G4int, G4int,    
+void
+G4ChipsProtonInelasticXS::CrossSectionDescription(std::ostream& outFile) const
+{
+    outFile << "G4ChipsProtonInelasticXS provides the inelastic cross\n"
+            << "section for proton nucleus scattering as a function of incident\n"
+            << "momentum. The cross section is calculated using M. Kossov's\n"
+            << "CHIPS parameterization of cross section data.\n";
+}
+
+G4bool G4ChipsProtonInelasticXS::IsIsoApplicable(const G4DynamicParticle*, G4int, G4int,    
 				 const G4Element*,
 				 const G4Material*)
 {
-  const G4ParticleDefinition* particle = Pt->GetDefinition();
-  if (particle == G4Proton::Proton()      ) return true;
-  return false;
+  return true;
 }
 
 
@@ -181,10 +192,10 @@ G4double G4ChipsProtonInelasticXS::CalculateCrossSection(G4int F, G4int I,
   static const G4double Pmin=THmin+(nL-1)*dP; // minP for the HighE part with safety
   static const G4double Pmax=227000.;  // maxP for the HEN (High ENergy) part 227 GeV
   static const G4int    nH=224;        // A#of HEN points in lnE
-  static const G4double milP=std::log(Pmin);// Low logarithm energy for the HEN part
-  static const G4double malP=std::log(Pmax);// High logarithm energy (each 2.75 percent)
+  static const G4double milP=G4Log(Pmin);// Low logarithm energy for the HEN part
+  static const G4double malP=G4Log(Pmax);// High logarithm energy (each 2.75 percent)
   static const G4double dlP=(malP-milP)/(nH-1); // Step in log energy in the HEN part
-  static const G4double milPG=std::log(.001*Pmin);// Low logarithmEnergy for HEN part GeV/c
+  static const G4double milPG=G4Log(.001*Pmin);// Low logarithmEnergy for HEN part GeV/c
   G4double sigma=0.;
   if(F&&I) sigma=0.;                   // @@ *!* Fake line *!* to use F & I !!!Temporary!!!
   //G4double A=targN+targZ;              // A of the target
@@ -235,13 +246,13 @@ G4double G4ChipsProtonInelasticXS::CalculateCrossSection(G4int F, G4int I,
   }
   else if (Momentum<Pmax)              // High Energy region
   {
-    G4double lP=std::log(Momentum);
+    G4double lP=G4Log(Momentum);
     sigma=EquLinearFit(lP,nH,milP,dlP,lastHEN);
   }
   else                                 // UHE region (calculation, not frequent)
   {
     G4double P=0.001*Momentum;         // Approximation formula is for P in GeV/c
-    sigma=CrossSectionFormula(targZ, targN, P, std::log(P));
+    sigma=CrossSectionFormula(targZ, targN, P, G4Log(P));
   }
   if(sigma<0.) return 0.;
   return sigma;
@@ -257,8 +268,8 @@ G4double G4ChipsProtonInelasticXS::ThresholdMomentum(G4int tZ, G4int tN)
   G4double tA=tZ+tN;
   if(tZ<.99 || tN<0.) return 0.;
   else if(tZ==1 && tN==0) return 800.;    // A threshold on the free proton
-  //G4double dE=1.263*tZ/(1.+std::pow(tA,third));
-  G4double dE=tZ/(1.+std::pow(tA,third)); // Safety for diffused edge of the nucleus (QE)
+  //G4double dE=1.263*tZ/(1.+G4Pow::GetInstance()->powA(tA,third));
+  G4double dE=tZ/(1.+G4Pow::GetInstance()->powA(tA,third)); // Safety for diffused edge of the nucleus (QE)
   G4double tM=931.5*tA;
   G4double T=dE+dE*(dE/2+pM)/tM;
   return std::sqrt(T*(tpM+T));
@@ -269,7 +280,7 @@ G4double G4ChipsProtonInelasticXS::CrossSectionLin(G4int tZ, G4int tN, G4double 
 {
   G4double sigma=0.;
   if(P<ThresholdMomentum(tZ,tN)*.001) return sigma;
-  G4double lP=std::log(P);
+  G4double lP=G4Log(P);
   if(tZ==1&&!tN){if(P>.35) sigma=CrossSectionFormula(tZ,tN,P,lP);}// s(pp)=0 below 350Mev/c
   else if(tZ<97 && tN<152)                // General solution
   {
@@ -325,7 +336,7 @@ G4double G4ChipsProtonInelasticXS::CrossSectionLin(G4int tZ, G4int tN, G4double 
     if(pex>0.)
     {
       G4double dp=P-pos;
-      sigma+=pex*std::exp(-dp*dp/wid);
+      sigma+=pex*G4Exp(-dp*dp/wid);
     }
   }
   else
@@ -340,7 +351,7 @@ G4double G4ChipsProtonInelasticXS::CrossSectionLin(G4int tZ, G4int tN, G4double 
 // Calculation formula for proton-nuclear inelastic cross-section (mb) log(P in GeV/c)
 G4double G4ChipsProtonInelasticXS::CrossSectionLog(G4int tZ, G4int tN, G4double lP)
 {
-  G4double P=std::exp(lP);
+  G4double P=G4Exp(lP);
   return CrossSectionFormula(tZ, tN, P, lP);
 }
 // Calculation formula for proton-nuclear inelastic cross-section (mb) log(P in GeV/c)
@@ -359,7 +370,7 @@ G4double G4ChipsProtonInelasticXS::CrossSectionFormula(G4int tZ, G4int tN,
     }
     else if(P>1000.)
     {
-      G4double lp=std::log(P)-3.5;
+      G4double lp=G4Log(P)-3.5;
       G4double lp2=lp*lp;
       El=0.0557*lp2+6.72;
       To=0.3*lp2+38.2;
@@ -368,7 +379,7 @@ G4double G4ChipsProtonInelasticXS::CrossSectionFormula(G4int tZ, G4int tN,
     {
       G4double p2=P*P;
       G4double LE=1./(0.00012+p2*0.2);
-      G4double lp=std::log(P)-3.5;
+      G4double lp=G4Log(P)-3.5;
       G4double lp2=lp*lp;
       G4double rp2=1./p2;
       El=LE+(0.0557*lp2+6.72+32.6/P)/(1.+rp2/P);
@@ -388,12 +399,12 @@ G4double G4ChipsProtonInelasticXS::CrossSectionFormula(G4int tZ, G4int tN,
   }
   else if(tZ<97 && tN<152)                // General solution
   {
-    //G4double lP=std::log(P);            // Already calculated
+    //G4double lP=G4Log(P);            // Already calculated
     G4double d=lP-4.2;
     G4double p2=P*P;
     G4double p4=p2*p2;
     G4double a=tN+tZ;                       // A of the target
-    G4double al=std::log(a);
+    G4double al=G4Log(a);
     G4double sa=std::sqrt(a);
     G4double a2=a*a;
     G4double a2s=a2*sa;
@@ -405,12 +416,12 @@ G4double G4ChipsProtonInelasticXS::CrossSectionFormula(G4int tZ, G4int tN,
     G4double dl=al-3.;
     G4double dl2=dl*dl;
     G4double r=.21+.62*dl2/(1.+.5*dl2);
-    G4double gg=40.*std::exp(al*0.712)/(1.+12.2/a)/(1.+34./a2);
-    G4double e=318.+a4/(1.+.0015*a4/std::exp(al*0.09))/(1.+4.e-28*a12)+
+    G4double gg=40.*G4Exp(al*0.712)/(1.+12.2/a)/(1.+34./a2);
+    G4double e=318.+a4/(1.+.0015*a4/G4Exp(al*0.09))/(1.+4.e-28*a12)+
                8.e-18/(1./a16+1.3e-20)/(1.+1.e-21*a12);
     G4double ss=3.57+.009*a2/(1.+.0001*a2*a);
     G4double h=(.01/a4+2.5e-6/a)*(1.+6.e-6*a2*a)/(1.+6.e7/a12/a2);
-    sigma=(c+d*d)/(1.+r/p4)+(gg+e*std::exp(-ss*P))/(1.+h/p4/p4);
+    sigma=(c+d*d)/(1.+r/p4)+(gg+e*G4Exp(-ss*P))/(1.+h/p4/p4);
   }
   else
   {

@@ -1,0 +1,98 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_bbox_action
+#define tools_sg_bbox_action
+
+#include "matrix_action"
+#include "primitive_visitor"
+
+#include "../lina/box3f"
+
+namespace tools {
+namespace sg {
+
+class bbox_action : public matrix_action,public primitive_visitor {
+protected:
+  virtual bool project(float& a_x,float& a_y,float& a_z,float& a_w) {
+    model_point(a_x,a_y,a_z,a_w);
+    return true;
+  }
+
+  virtual bool add_point(float a_x,float a_y,float a_z,float) {
+    m_box.extend_by(a_x,a_y,a_z);
+    return true;
+  }
+
+  virtual bool add_point(float a_x,float a_y,float a_z,float,
+                         float,float,float,float) {
+    m_box.extend_by(a_x,a_y,a_z);
+    return true;
+  }
+
+  virtual bool add_line(float a_bx,float a_by,float a_bz,float,
+                        float a_ex,float a_ey,float a_ez,float) {
+    m_box.extend_by(a_bx,a_by,a_bz);
+    m_box.extend_by(a_ex,a_ey,a_ez);
+    return true;
+  }
+
+  virtual bool add_line(float a_bx,float a_by,float a_bz,float a_bw,
+                        float,float,float,float,
+                        float a_ex,float a_ey,float a_ez,float a_ew,
+                        float,float,float,float) {
+    return add_line(a_bx,a_by,a_bz,a_bw,
+                    a_ex,a_ey,a_ez,a_ew);
+  }
+
+  virtual bool add_triangle(float a_p1x,float a_p1y,float a_p1z,float,
+                            float a_p2x,float a_p2y,float a_p2z,float,
+                            float a_p3x,float a_p3y,float a_p3z,float){
+    m_box.extend_by(a_p1x,a_p1y,a_p1z);
+    m_box.extend_by(a_p2x,a_p2y,a_p2z);
+    m_box.extend_by(a_p3x,a_p3y,a_p3z);
+    return true;
+  }
+
+  virtual bool add_triangle(float a_p1x,float a_p1y,float a_p1z,float a_p1w,
+                              float,float,float,float,
+                            float a_p2x,float a_p2y,float a_p2z,float a_p2w,
+                              float,float,float,float,
+                            float a_p3x,float a_p3y,float a_p3z,float a_p3w,
+                              float,float,float,float){
+    return bbox_action::add_triangle(a_p1x,a_p1y,a_p1z,a_p1w,
+                                     a_p2x,a_p2y,a_p2z,a_p2w,
+                                     a_p3x,a_p3y,a_p3z,a_p3w);
+  }
+
+public:
+  bbox_action(std::ostream& a_out)
+  :matrix_action(a_out,0,0)
+  {}
+  virtual ~bbox_action(){}
+public:
+  bbox_action(const bbox_action& a_from)
+  :matrix_action(a_from)
+  ,primitive_visitor(a_from)
+  {}
+  bbox_action& operator=(const bbox_action& a_from){
+    if(&a_from==this) return *this;
+    matrix_action::operator=(a_from);
+    primitive_visitor::operator=(a_from);
+    m_box.make_empty();
+    return *this;
+  }
+public:
+  void reset() {
+    matrix_action::reset();
+    m_box.make_empty();
+  }
+  const box3f& box() const {return m_box;}
+  box3f& box() {return m_box;}
+protected:
+  box3f m_box;  
+};
+
+}}
+
+#endif

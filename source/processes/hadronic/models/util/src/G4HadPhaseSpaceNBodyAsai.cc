@@ -133,7 +133,7 @@ GenerateMultiBody(G4double initialMass,
       }
       return;			// Error detection
     }
-  } while (weight > G4UniformRand());
+  } while (weight > G4UniformRand());  /* Loop checking, 02.11.2015, A.Ribon */
 
   if (GetVerboseLevel()>1) {
       G4cout << "Start calulation of daughters momentum vector "<<G4endl;

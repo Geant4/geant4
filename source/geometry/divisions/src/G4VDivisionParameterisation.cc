@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.cc 66872 2013-01-15 01:25:57Z japost $
+// $Id: G4VDivisionParameterisation.cc 92625 2015-09-09 12:34:07Z gcosmo $
 //
 // class G4VDivisionParameterisation Implementation file
 //
@@ -39,8 +39,10 @@
 #include "G4RotationMatrix.hh"
 #include "G4ReflectedSolid.hh"
 #include "G4GeometryTolerance.hh"
+#include "G4AutoDelete.hh"
 
-G4ThreadLocal G4int G4VDivisionParameterisation::verbose = 5;
+const G4int G4VDivisionParameterisation::verbose = 5;
+G4ThreadLocal G4RotationMatrix* G4VDivisionParameterisation::fRot = 0;
 
 //--------------------------------------------------------------------------
 G4VDivisionParameterisation::
@@ -66,7 +68,7 @@ G4VDivisionParameterisation( EAxis axis, G4int nDiv,
 //--------------------------------------------------------------------------
 G4VDivisionParameterisation::~G4VDivisionParameterisation()
 {
-  if (fDeleteSolid) delete fmotherSolid; 
+  if (fDeleteSolid) delete fmotherSolid;
 }
 
 //--------------------------------------------------------------------------
@@ -87,13 +89,13 @@ void
 G4VDivisionParameterisation::
 ChangeRotMatrix( G4VPhysicalVolume *physVol, G4double rotZ ) const
 {
-  G4RotationMatrix* rm = new G4RotationMatrix();
-  rm->rotateZ( rotZ );
-  //----- set rotation
-  //----- delete first old rotation matrix 
-  G4RotationMatrix* rmold = physVol->GetRotation();
-  delete rmold;
-  physVol->SetRotation(rm);
+  if (!fRot)
+  {
+    fRot = new G4RotationMatrix();
+    G4AutoDelete::Register(fRot);
+  }
+  fRot->rotateZ( rotZ );
+  physVol->SetRotation(fRot);
 }
 
 //--------------------------------------------------------------------------

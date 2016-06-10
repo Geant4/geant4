@@ -8,6 +8,7 @@
 #include "date"
 #include "ifile"
 #include "wbuf"
+#include "../sout"
 
 #ifdef TOOLS_MEM
 #include "../mem"
@@ -92,10 +93,7 @@ public:
   void set_cycle(uint16 a_cycle) {m_cycle = a_cycle;}
 
   const std::string& object_name() const {return m_object_name;}
-  std::string object_name() {return m_object_name;}
-
   const std::string& object_class() const {return m_object_class;}
-  std::string object_class() {return m_object_class;}
 
   bool write_self() {
     char* buffer = m_buffer;
@@ -188,10 +186,6 @@ public:
   }
 
 protected:
-  static std::string sout(const std::string& a_string) {
-    return std::string("\"")+a_string+"\"";
-  }
-protected:
   uint32 record_size(uint32 a_version) const {
     // Return the size in bytes of the key header structure.
     uint32 nbytes = sizeof(m_nbytes);
@@ -222,7 +216,7 @@ protected:
       m_seek_key = m_file.END();
       m_file.set_END(m_seek_key+nsize);
 
-      //NOTE : the free segment logic found in ROOT/TKey
+      //NOTE : the free segment logic found in CERN-ROOT/TKey
       //       is not yet needed right now for us, since
       //       we always write at end of file. The update
       //       of the eof free_seg is done in set_END.

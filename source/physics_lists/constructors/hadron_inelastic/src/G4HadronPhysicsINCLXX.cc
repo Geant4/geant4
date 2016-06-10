@@ -58,13 +58,18 @@
 #include "G4ShortLivedConstructor.hh"
 #include "G4IonConstructor.hh"
 
+#include "G4ComponentGGHadronNucleusXsc.hh"
+#include "G4CrossSectionInelastic.hh"
 #include "G4HadronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
 #include "G4NeutronCaptureXS.hh"
-#include "G4NeutronHPCaptureData.hh"
+#include "G4ParticleHPCaptureData.hh"
 #include "G4LFission.hh"
 
 #include "G4CrossSectionDataSetRegistry.hh"
+
+#include "G4PhysListUtil.hh"
+
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
@@ -118,7 +123,7 @@ void G4HadronPhysicsINCLXX::CreateModels()
   if(withNeutronHP) {
     tpdata->theINCLXXNeutron->UsePreCompound(false);
     tpdata->theINCLXXNeutron->SetMinEnergy(19.9*MeV);
-    tpdata->theNeutrons->RegisterMe(tpdata->theNeutronHP=new G4NeutronHPBuilder);
+    tpdata->theNeutrons->RegisterMe(tpdata->theNeutronHP=new G4NeutronPHPBuilder);
   } else {
     tpdata->theINCLXXNeutron->UsePreCompound(true);
     tpdata->theINCLXXNeutron->SetMinPreCompoundEnergy(0.0*MeV);
@@ -218,6 +223,15 @@ void G4HadronPhysicsINCLXX::ConstructProcess()
   tpdata->thePro->Build();
   tpdata->thePion->Build();
   tpdata->theKaon->Build();
+
+  // --- Kaons ---
+  tpdata->xsKaon = new G4ComponentGGHadronNucleusXsc();
+  G4VCrossSectionDataSet * kaonxs = new G4CrossSectionInelastic(tpdata->xsKaon);
+  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(kaonxs);
+  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(kaonxs);
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(kaonxs);
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(kaonxs);
+
   tpdata->theHyperon->Build();
   tpdata->theAntiBaryon->Build();
 
@@ -242,7 +256,7 @@ void G4HadronPhysicsINCLXX::ConstructProcess()
   G4NeutronRadCapture* theNeutronRadCapture = new G4NeutronRadCapture(); 
   capture->RegisterMe( theNeutronRadCapture );
   if ( withNeutronHP ) {
-    capture->AddDataSet( new G4NeutronHPCaptureData );
+    capture->AddDataSet( new G4ParticleHPCaptureData );
     theNeutronRadCapture->SetMinEnergy( 19.9*MeV ); 
     if ( ! fission ) {
       fission = new G4HadronFissionProcess("nFission");

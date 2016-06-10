@@ -65,6 +65,12 @@
 // 20140929  M. Kelsey -- Make PreCompound the default de-excitation
 // 20141111  M. Kelsey -- Revert default use of PreCompound; replace
 //		G4Fragment::GetA() call with GetA_asInt().
+// 20150205  M. Kelsey -- New photonuclearOkay() filter to reject events
+//		around giant dipole resonance with no hadronic secondaries.
+//		Addresses bug #1680.
+// 20150220  M. Kelsey -- Improve photonuclearOkay() filter by just checking
+//		final-state nucleus vs. target, rather than all secondaries.
+// 20150608  M. Kelsey -- Label all while loops as terminating.
 
 #include "G4InuclCollider.hh"
 #include "G4CascadeChannelTables.hh"
@@ -226,7 +232,7 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
     zbullet = new G4InuclNuclei(bmom, ab, zb);
 
   G4int itry = 0;
-  while (itry < itry_max) {
+  while (itry < itry_max) {	/* Loop checking 08.06.2015 MHK */
     itry++;
     if (verboseLevel > 2)
       G4cout << " InuclCollider itry " << itry << G4endl;
@@ -240,6 +246,10 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 
     deexcite(output.getRecoilFragment(), output);
     output.removeRecoilFragment();
+
+    //*** TEMPORARY, USE ENVVAR TO ENABLE/DISABLE THIS TEST ***
+    if (getenv("G4CASCADE_CHECK_PHOTONUCLEAR"))
+      if (!photonuclearOkay(output)) continue;
 
     if (verboseLevel > 2)
       G4cout << " itry " << itry << " finished, moving to lab frame" << G4endl;
@@ -314,7 +324,7 @@ void G4InuclCollider::deexcite(const G4Fragment& fragment,
 
   const G4int itry_max = 10;		// Maximum number of attempts
   G4int itry = 0;
-  do {
+  do {					/* Loop checking 08.06.2015 MHK */
     if (verboseLevel > 2) G4cout << " deexcite itry " << itry << G4endl;
 
     DEXoutput.reset();
@@ -323,4 +333,36 @@ void G4InuclCollider::deexcite(const G4Fragment& fragment,
 
   // Add de-excitation products to output buffer
   globalOutput.add(DEXoutput);
+}
+
+
+// Looks for non-gamma final state in photonuclear or leptonuclear
+
+G4bool G4InuclCollider::photonuclearOkay(G4CollisionOutput& checkOutput) const {
+  if (interCase.twoNuclei()) return true;	// A-A is not photonuclear
+
+  G4InuclElementaryParticle* bullet =
+    dynamic_cast<G4InuclElementaryParticle*>(interCase.getBullet());
+  if (!bullet || !(bullet->isPhoton() || bullet->isElectron())) return true;
+
+  if (verboseLevel>1)
+    G4cout << " >>> G4InuclCollider::photonuclearOkay" << G4endl;
+
+  if (bullet->getKineticEnergy() > 0.050) return true;
+
+  if (verboseLevel>2) {
+    G4cout << " comparing final nucleus with initial target:\n"
+	   << checkOutput.getOutgoingNuclei()[0] << G4endl
+	   << *(interCase.getTarget()) << G4endl;
+  }
+
+  // Hadron production changes target nucleus
+  G4double mfinalNuc  = checkOutput.getOutgoingNuclei()[0].getMass();
+  G4double mtargetNuc = interCase.getTarget()->getMass();
+  if (mfinalNuc != mtargetNuc) return true;	// Mass from G4Ions is fixed
+  
+  if (verboseLevel>2)
+    G4cout << " photonuclear produced only gammas.  Try again." << G4endl;
+
+  return false;		// Final state is entirely de-excitation photons
 }

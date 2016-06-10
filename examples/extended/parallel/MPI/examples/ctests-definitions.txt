@@ -1,0 +1,65 @@
+if(BASE_OUTPUT_DIRECTORY)
+  set(_bindir ${BASE_OUTPUT_DIRECTORY}/bin)
+else()
+  set(_bindir  ${CMAKE_BINARY_DIR}/outputs/runtime)
+endif()
+set(_srcdir ${CMAKE_SOURCE_DIR}/examples/extended/parallel/MPI/examples)
+
+#Workaround: rely on executables build by cmake since it does not compile
+#correctly because FindG4mpi.cmake is not found
+
+find_package(MPI QUIET)
+if(NOT MPI_CXX_FOUND)
+  message(STATUS "G4 Examples: MPI not found --> mpi based tests disabled")
+  return()
+endif()
+
+#Needed for exMPI02
+find_package(ROOT QUIET)
+MESSAGE(STATUS "G4 Examples: mpi examples will use mpi launcher: " ${MPIEXEC})
+if(NOT GEANT4_BUILD_EXAMPLES)
+  MESSAGE("G4 Examples: mpi tests requires GEANT4_BUILD_EXAMPLES=ON, disabling
+tests.")
+  return()
+endif()
+
+GEANT4_ADD_TEST(mpi-ex01-sequential
+  		COMMAND ${_bindir}/exMPI01
+    			${_srcdir}/exMPI01/run.mac
+		ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
+		LABELS MPI)
+GEANT4_ADD_TEST(mpi-ex01
+		COMMAND ${MPIEXEC} -n 2 ${_bindir}/exMPI01
+			${_srcdir}/exMPI01/run.mac
+		ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
+		DEPENDS mpi-ex01-sequential
+		LABELS MPI)
+
+if(ROOT_FOUND)
+     GEANT4_ADD_TEST(mpi-ex02-sequential
+		COMMAND ${_bindir}/exMPI02
+			${_srcdir}/exMPI02/run.mac
+		ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
+		LABELS MPI)
+     GEANT4_ADD_TEST(mpi-ex02
+		COMMAND ${MPIEXEC} -n 2 ${_bindir}/exMPI02
+			${_srcdir}/exMPI02/run.mac
+		ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
+		DEPENDS mpi-ex02-sequential
+		LABELS MPI)
+else()
+    MESSAGE(STATUS "G4 Examples: MPI example exMPI02 disabled: ROOT not found")
+endif()
+
+GEANT4_ADD_TEST(mpi-ex03-sequential
+		COMMAND ${_bindir}/exMPI03
+			${_srcdir}/exMPI03/run.mac
+		ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
+		LABELS MPI)
+GEANT4_ADD_TEST(mpi-ex03
+		COMMAND ${MPIEXEC} -n 2 ${_bindir}/exMPI03
+			${_srcdir}/exMPI03/run.mac
+		ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
+		DEPENDS mpi-ex03-sequential
+		LABELS MPI)
+

@@ -1,0 +1,78 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_noderef
+#define tools_sg_noderef
+
+#include "node"
+
+//#define TOOLS_SG_NODEREF_DEBUG
+
+namespace tools {
+namespace sg {
+
+class noderef : public node {
+public:
+  TOOLS_NODE(noderef,tools::sg::noderef,node)
+public:
+  virtual void render(render_action& a_action) {
+#ifdef TOOLS_SG_NODEREF_DEBUG
+    std::ostream& out = a_action.out();
+    out << "debug : tools::sg::noderef::render : " << m_node.s_cls() << " begin : " << std::endl;   
+    m_node.render(a_action);
+    out << "debug : tools::sg::noderef::render : " << m_node.s_cls() << " end," << std::endl;   
+#else
+    m_node.render(a_action);
+#endif
+  }
+  virtual void pick(pick_action& a_action) {m_node.pick(a_action);}
+  virtual void bbox(bbox_action& a_action) {m_node.bbox(a_action);}
+  virtual void event(event_action& a_action) {m_node.event(a_action);}
+  virtual void search(search_action& a_action) {
+    if(a_action.do_path()) a_action.path_push(this);
+    m_node.search(a_action);
+    if(a_action.done()) return;
+    if(a_action.do_path()) a_action.path_pop();
+  }
+  virtual void get_matrix(get_matrix_action& a_action) {m_node.get_matrix(a_action);}
+  virtual bool write(write_action& a_action) {return m_node.write(a_action);}
+  virtual void is_visible(visible_action& a_action) {m_node.is_visible(a_action);}
+public:
+  noderef(node& a_node):parent(),m_node(a_node){}
+  virtual ~noderef(){}
+public:
+  noderef(const noderef& a_from)
+  :parent(a_from)
+  ,m_node(a_from.m_node)
+  {}
+  noderef& operator=(const noderef& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+  const sg::node& node() const {return m_node;}
+  sg::node& node() {return m_node;}
+protected:
+  sg::node& m_node;
+};
+
+template <class NODE>
+class clrref : public noderef {
+public:
+  TOOLS_NODE_T(NODE,clrref,tools::sg::clrref,noderef)
+public:
+  clrref(NODE& a_node):parent(a_node){}
+  virtual ~clrref(){
+    NODE* _node = safe_cast<sg::node,NODE>(m_node);
+    if(_node) _node->clear();
+  }
+public:
+  clrref(const clrref& a_from):parent(a_from){}
+  clrref& operator=(const clrref& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+};
+
+}}
+
+#endif

@@ -33,6 +33,7 @@
 
   G4double G4ParticleHPMadlandNixSpectrum::Madland(G4double aSecEnergy, G4double tm)
   {
+    G4Pow* Pow=G4Pow::GetInstance();
     G4double result;
     G4double energy = aSecEnergy/eV;
     G4double EF;
@@ -45,8 +46,8 @@
     G4double lightTerm=0;
     if(theAvarageKineticPerNucleonForLightFragments>1*eV)
     {
-      lightTerm  = std::pow(lightU2, 1.5)*E1(lightU2);
-      lightTerm -= std::pow(lightU1, 1.5)*E1(lightU1);
+      lightTerm  = Pow->powA(lightU2, 1.5)*E1(lightU2);
+      lightTerm -= Pow->powA(lightU1, 1.5)*E1(lightU1);
       lightTerm += Gamma15(lightU2)-Gamma15(lightU1);
       lightTerm /= 3.*std::sqrt(tm*EF);
     }
@@ -59,8 +60,8 @@
     G4double heavyTerm=0	;
     if(theAvarageKineticPerNucleonForHeavyFragments> 1*eV)
     {
-      heavyTerm  = std::pow(heavyU2, 1.5)*E1(heavyU2);
-      heavyTerm -= std::pow(heavyU1, 1.5)*E1(heavyU1);
+      heavyTerm  = Pow->powA(heavyU2, 1.5)*E1(heavyU2);
+      heavyTerm -= Pow->powA(heavyU1, 1.5)*E1(heavyU1);
       heavyTerm += Gamma15(heavyU2)-Gamma15(heavyU1);
       heavyTerm /= 3.*std::sqrt(tm*EF);
     }
@@ -78,8 +79,15 @@
     G4double newValue = 0., oldValue=0.;
     G4double random = G4UniformRand();
     
+    G4int icounter=0;
+    G4int icounter_max=1024;
     do
     {
+      icounter++;
+      if ( icounter > icounter_max ) {
+	 G4cout << "Loop-counter exceeded the threshold value at " << __LINE__ << "th line of " << __FILE__ << "." << G4endl;
+         break;
+      }
       oldValue = newValue;
       newValue = FissionIntegral(tm, current);
       if(newValue < random) 
@@ -96,13 +104,14 @@
 	last = buff;
       }
     }
-    while (std::abs(oldValue-newValue)>precision*newValue);
+    while (std::abs(oldValue-newValue)>precision*newValue); // Loop checking, 11.05.2015, T. Koi
     return current;
   }
 
   G4double G4ParticleHPMadlandNixSpectrum::
   GIntegral(G4double tm, G4double anEnergy, G4double aMean)
   {
+    G4Pow* Pow=G4Pow::GetInstance();
     if(aMean<1*eV) return 0;
     G4double b = anEnergy/eV;
     G4double sb = std::sqrt(b);
@@ -122,13 +131,13 @@
     {
       result =
       (
-        (0.4*alpha2*std::pow(B,2.5) - 0.5*alphabeta*B*B)*E1(B) -  
-        (0.4*alpha2*std::pow(A,2.5) - 0.5*alphabeta*A*A)*E1(A) 
+        (0.4*alpha2*Pow->powA(B,2.5) - 0.5*alphabeta*B*B)*E1(B) -  
+        (0.4*alpha2*Pow->powA(A,2.5) - 0.5*alphabeta*A*A)*E1(A) 
       )
        -
       (
-        (0.4*alpha2*std::pow(Bp,2.5) + 0.5*alphabeta*Bp*Bp)*E1(Bp) -  
-        (0.4*alpha2*std::pow(Ap,2.5) + 0.5*alphabeta*Ap*Ap)*E1(Ap) 
+        (0.4*alpha2*Pow->powA(Bp,2.5) + 0.5*alphabeta*Bp*Bp)*E1(Bp) -  
+        (0.4*alpha2*Pow->powA(Ap,2.5) + 0.5*alphabeta*Ap*Ap)*E1(Ap) 
       )
       +
       (
@@ -141,19 +150,19 @@
         (alpha2*Ap-2*alphabeta*std::sqrt(Ap))*Gamma15(Ap)
       )
       - 0.6*alpha2*(Gamma25(B) - Gamma25(A) - Gamma25(Bp) + Gamma25(Ap))
-      - 1.5*alphabeta*(std::exp(-B)*(1+B) - std::exp(-A)*(1+A) + std::exp(-Bp)*(1+Bp) + std::exp(-Ap)*(1+Ap)) ;
+      - 1.5*alphabeta*(G4Exp(-B)*(1+B) - G4Exp(-A)*(1+A) + G4Exp(-Bp)*(1+Bp) + G4Exp(-Ap)*(1+Ap)) ;
     }
     else
     {
       result =
       (
-        (0.4*alpha2*std::pow(B,2.5) - 0.5*alphabeta*B*B)*E1(B) -  
-        (0.4*alpha2*std::pow(A,2.5) - 0.5*alphabeta*A*A)*E1(A) 
+        (0.4*alpha2*Pow->powA(B,2.5) - 0.5*alphabeta*B*B)*E1(B) -  
+        (0.4*alpha2*Pow->powA(A,2.5) - 0.5*alphabeta*A*A)*E1(A) 
       );
        result -=
       (
-        (0.4*alpha2*std::pow(Bp,2.5) + 0.5*alphabeta*Bp*Bp)*E1(Bp) -  
-        (0.4*alpha2*std::pow(Ap,2.5) + 0.5*alphabeta*Ap*Ap)*E1(Ap) 
+        (0.4*alpha2*Pow->powA(Bp,2.5) + 0.5*alphabeta*Bp*Bp)*E1(Bp) -  
+        (0.4*alpha2*Pow->powA(Ap,2.5) + 0.5*alphabeta*Ap*Ap)*E1(Ap) 
       );
       result +=
       (
@@ -166,7 +175,7 @@
         (alpha2*Ap+2*alphabeta*std::sqrt(Ap))*Gamma15(Ap)
       );
       result -= 0.6*alpha2*(Gamma25(B) - Gamma25(A) - Gamma25(Bp) + Gamma25(Ap));
-      result -= 1.5*alphabeta*(std::exp(-B)*(1+B) - std::exp(-A)*(1+A) + std::exp(-Bp)*(1+Bp) + std::exp(-Ap)*(1+Ap) - 2.) ;
+      result -= 1.5*alphabeta*(G4Exp(-B)*(1+B) - G4Exp(-A)*(1+A) + G4Exp(-Bp)*(1+Bp) + G4Exp(-Ap)*(1+Ap) - 2.) ;
     }
     result = result / (3.*std::sqrt(tm*EF));
     return result;

@@ -68,8 +68,8 @@ public:
   //
   // Return linear step for mass geometry
 
-  G4double ComputeSafety(const G4ThreeVector& pGlobalPoint, G4double maxRadius =
-      DBL_MAX); // Radius of interest
+  G4double ComputeSafety(const G4ThreeVector& pGlobalPoint,
+                         G4double maxRadius = DBL_MAX); // Radius of interest
   //
   // Return safety for all geometries.
   //
@@ -78,7 +78,7 @@ public:
   //  If the second argument is not given, this is the real isotropic safety
 
   void Locate(const G4ThreeVector& pGlobalPoint,
-      const G4ThreeVector& direction);
+              const G4ThreeVector& direction);
   //
   // Locate the point for all geometries
 
@@ -142,7 +142,7 @@ public:
   // End State (tracking)
 };
 
-RegisterTrackState(G4ITSafetyHelper, G4ITSafetyHelper::State)
+RegisterTrackState(G4ITSafetyHelper, State)
 
 // Inline definitions
 

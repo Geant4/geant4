@@ -44,6 +44,9 @@
 #define G4UCONS_HH
 
 #include "G4USolid.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+
 #include "UCons.hh"
 #include "G4Polyhedron.hh"
 
@@ -169,5 +172,7 @@ inline void G4UCons::SetDeltaPhiAngle(G4double newDPhi)
   GetShape()->SetDeltaPhiAngle(newDPhi);
   fRebuildPolyhedron = true;
 }
+
+#endif  // G4GEOM_USE_USOLIDS
 
 #endif

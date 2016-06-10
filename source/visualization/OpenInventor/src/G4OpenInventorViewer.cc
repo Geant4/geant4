@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenInventorViewer.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4OpenInventorViewer.cc 88190 2015-02-02 17:24:54Z gcosmo $
 
 #ifdef G4VIS_BUILD_OI_DRIVER
 
@@ -482,11 +482,29 @@ void G4OpenInventorViewer::Escape(){
 void G4OpenInventorViewer::WritePostScript(const G4String& aFile) {
   if(!fGL2PSAction) return;
   fGL2PSAction->setFileName(aFile.c_str());
+  fGL2PSAction->setExportImageFormat(GL2PS_EPS);
+  // Use gl2ps default buffer (2048*2048)
+  fGL2PSAction->setBufferSize(0);
   G4cout << "Produce " << aFile << "..." << G4endl;
   if (fGL2PSAction->enableFileWriting()) {
     ViewerRender();
     fGL2PSAction->disableFileWriting();
   }
+  fGL2PSAction->resetBufferSizeParameters();
+}
+
+void G4OpenInventorViewer::WritePDF(const G4String& aFile) {
+  if(!fGL2PSAction) return;
+  fGL2PSAction->setFileName(aFile.c_str());
+  fGL2PSAction->setExportImageFormat(GL2PS_PDF);
+  // Use gl2ps default buffer (2048*2048)
+  fGL2PSAction->setBufferSize(0);
+  G4cout << "Produce " << aFile << "..." << G4endl;
+  if (fGL2PSAction->enableFileWriting()) {
+    ViewerRender();
+    fGL2PSAction->disableFileWriting();
+  }
+  fGL2PSAction->resetBufferSizeParameters();
 }
 
 void G4OpenInventorViewer::WritePixmapPostScript(const G4String& aFile) {

@@ -38,6 +38,7 @@
 // 101118 Name modifications for release T. Koi (SLAC/PPA)
 
 #include "G4LENDCrossSection.hh"
+#include "G4Pow.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ElementTable.hh"
 #include "G4HadronicException.hh"
@@ -86,7 +87,8 @@ G4LENDCrossSection::G4LENDCrossSection( const G4String nam )
 
    proj = NULL; //will be set in an inherited class
    //default_evaluation = "endl99";
-   default_evaluation = "ENDF.B-VII.0";
+   //default_evaluation = "ENDF.B-VII.0";
+   default_evaluation = "ENDF/BVII.1";
 
    allow_nat = false;
    allow_any = false;
@@ -146,7 +148,7 @@ void G4LENDCrossSection::DumpPhysicsTable(const G4ParticleDefinition& aP)
       G4double aT = 300;
       for ( ie = 0 ; ie < 130 ; ie++ )
       {
-         G4double ke = 1.0e-5 * std::pow ( 10.0 , ie/10.0 ) *eV;
+         G4double ke = 1.0e-5 * G4Pow::GetInstance()->powA ( 10.0 , ie/10.0 ) *eV;
 
          if ( ke < 20*MeV )
          {
@@ -330,7 +332,8 @@ void G4LENDCrossSection::create_used_target_map()
    }
 
    G4cout << "Dump UsedTarget for " << GetName() << G4endl;
-   G4cout << "Requested Evaluation, Z , A -> Actual Evaluation, Z , A(0=Nat) , Pointer of Target" << G4endl;
+   //G4cout << "Requested Evaluation, Z , A -> Actual Evaluation, Z , A(0=Nat) , Pointer of Target" << G4endl;
+   G4cout << "Requested Evaluation, Z , A -> Actual Evaluation, Z , A(0=Nat) " << G4endl;
    for ( std::map< G4int , G4LENDUsedTarget* >::iterator 
          it = usedTarget_map.begin() ; it != usedTarget_map.end() ; it ++ )
    {
@@ -341,7 +344,7 @@ void G4LENDCrossSection::create_used_target_map()
          << " -> " << it->second->GetActualEvaluation() 
          << ", " << it->second->GetActualZ() 
          << ", " << it->second->GetActualA() 
-         << ", " << it->second->GetTarget() 
+         //<< ", " << it->second->GetTarget() 
          << G4endl; 
    } 
 

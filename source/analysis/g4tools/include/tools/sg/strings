@@ -1,0 +1,261 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_strings
+#define tools_sg_strings
+
+#include <string>
+
+namespace tools {
+namespace sg {
+
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+inline const std::string& tick_modeling_none() {
+  static const std::string s_v("none");
+  return s_v;
+}
+inline const std::string& tick_modeling_hippo() {
+  static const std::string s_v("hippo");
+  return s_v;
+}
+inline const std::string& tick_modeling_hplot() {
+  static const std::string s_v("hplot");
+  return s_v;
+}
+
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+inline const std::string& infos_modeling_ROOT() {
+  static const std::string s_v("ROOT");
+  return s_v;
+}
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+inline const std::string& encoding_none() {
+  static const std::string s_v("none");
+  return s_v;
+}
+inline const std::string& encoding_PAW() {
+  static const std::string s_v("PAW");
+  return s_v;
+}
+
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+inline const std::string& modeling_boxes() {
+  static const std::string s_v("boxes");
+  return s_v;
+}
+
+inline const std::string& modeling_wire_boxes() {
+  static const std::string s_v("wire_boxes");
+  return s_v;
+}
+inline const std::string& modeling_lines() {
+  static const std::string s_v("lines");
+  return s_v;
+}
+inline const std::string& modeling_segments() {
+  static const std::string s_v("segments");
+  return s_v;
+}
+inline const std::string& modeling_points() {
+  static const std::string s_v("points");
+  return s_v;
+}
+inline const std::string& modeling_top_lines() {
+  static const std::string s_v("top_lines");
+  return s_v;
+}
+inline const std::string& modeling_texts() {
+  static const std::string s_v("texts");
+  return s_v;
+}
+inline const std::string& modeling_curve() {
+  static const std::string s_v("curve");
+  return s_v;
+}
+inline const std::string& modeling_filled_curve() {
+  static const std::string s_v("filled_curve");
+  return s_v;
+}
+inline const std::string& modeling_bar_chart() {
+  static const std::string s_v("bar_chart");
+  return s_v;
+}
+inline const std::string& modeling_solid() {
+  static const std::string s_v("solid");
+  return s_v;
+}
+inline const std::string& modeling_wire_frame() {
+  static const std::string s_v("wire_frame");
+  return s_v;
+}
+inline const std::string& modeling_reduced_wire_frame() {
+  static const std::string s_v("reduced_wire_frame");
+  return s_v;
+}
+inline const std::string& modeling_polygon() {
+  static const std::string s_v("polygon");
+  return s_v;
+}
+inline const std::string& modeling_none() {
+  static const std::string s_v("none");
+  return s_v;
+}
+inline const std::string& modeling_I() {
+  static const std::string s_v("I");
+  return s_v;
+}
+inline const std::string& modeling_plus() {
+  static const std::string s_v("plus");
+  return s_v;
+}
+
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+inline const std::string& light_model_base_color() {
+  static const std::string s_v("base_color");
+  return s_v;
+}
+inline const std::string& light_model_phong() {
+  static const std::string s_v("phong");
+  return s_v;
+}
+
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+inline const std::string& font_hershey() {
+  static const std::string s_v("hershey");
+  return s_v;
+}
+inline const std::string& font_arial_ttf() {
+  static const std::string s_v("arial.ttf");
+  return s_v;
+}
+inline const std::string& font_arialbd_ttf() {
+  static const std::string s_v("arialbd.ttf");
+  return s_v;
+}
+inline const std::string& font_timesbd_ttf() {
+  static const std::string s_v("timesbd.ttf");
+  return s_v;
+}
+inline const std::string& font_symbol_ttf() {
+  static const std::string s_v("symbol.ttf");
+  return s_v;
+}
+inline const std::string& font_stixgeneral_otf() {
+  static const std::string s_v("stixgeneral.otf");
+  return s_v;
+}
+inline const std::string& font_helvetica_ttf() {
+  static const std::string s_v("helvetica.ttf");
+  return s_v;
+}
+inline const std::string& font_times_roman_ttf() {
+  static const std::string s_v("times_roman.ttf");
+  return s_v;
+}
+
+inline const std::string& gui_font() {
+  //static const std::string s_v("arial.ttf");
+  static const std::string s_v("arialbd.ttf");
+  return s_v;
+}
+
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+// From TAttText.cxx :
+//*-*      1 : times-medium-i-normal      "Times New Roman"      1           4
+//*-*      2 : times-bold-r-normal        "Times New Roman"      0           7
+//*-*      3 : times-bold-i-normal        "Times New Roman"      1           7
+//*-*      4 : helvetica-medium-r-normal  "Arial"                0           4
+//*-*      5 : helvetica-medium-o-normal  "Arial"                1           4
+//*-*      6 : helvetica-bold-r-normal    "Arial"                0           7
+//*-*      7 : helvetica-bold-o-normal    "Arial"                1           7
+//*-*      8 : courier-medium-r-normal    "Courier New"          0           4
+//*-*      9 : courier-medium-o-normal    "Courier New"          1           4
+//*-*     10 : courier-bold-r-normal      "Courier New"          0           7
+//*-*     11 : courier-bold-o-normal      "Courier New"          1           7
+//*-*     12 : symbol-medium-r-normal     "Symbol"               0           6
+//*-*     13 : times-medium-r-normal      "Times New Roman"      0           4
+//*-*     14 :                            "Wingdings"            0           4
+
+//#define SbFont_ROOT_12  "TTF/timesi"
+//#define SbFont_ROOT_22  "TTF/timesbd"
+//#define SbFont_ROOT_32  "TTF/timesbi"
+//#define SbFont_ROOT_42  "TTF/arial"
+//#define SbFont_ROOT_52  "TTF/ariali"
+//#define SbFont_ROOT_62  "TTF/arialbd"
+//#define SbFont_ROOT_72  "TTF/arialbi"
+//#define SbFont_ROOT_82  "TTF/cour"
+//#define SbFont_ROOT_92  "TTF/couri"
+//#define SbFont_ROOT_102 "TTF/courbd"
+//#define SbFont_ROOT_112 "TTF/courbi"
+//#define SbFont_ROOT_122 "TTF/symbol"
+//#define SbFont_ROOT_132 "TTF/times"
+//#define SbFont_ROOT_142 "TTF/wingding"
+
+inline const std::string& font_ROOT_62() {
+  static const std::string s_v("arialbd.ttf");
+  return s_v;
+}
+
+}}
+
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+
+#include "../S_STRING"
+
+namespace tools {
+namespace sg {
+TOOLS_GLOBAL_STRING(node_end) //for write_bsg, sg::rbsg
+//TOOLS_GLOBAL_STRING(clear_scene)
+//TOOLS_GLOBAL_STRING(no_hide_menu)
+//TOOLS_GLOBAL_STRING(back_color)
+//TOOLS_GLOBAL_STRING(adapt_camera)
+//TOOLS_GLOBAL_STRING(adapt_camera_sg_was_empty)
+TOOLS_GLOBAL_STRING(delete)
+TOOLS_GLOBAL_STRING(movable)
+
+TOOLS_GLOBAL_STRING(1D)
+TOOLS_GLOBAL_STRING(2D)
+
+//TOOLS_GLOBAL_STRING(whole)
+TOOLS_GLOBAL_STRING(col)
+TOOLS_GLOBAL_STRING(row)
+
+TOOLS_GLOBAL_STRING_VALUE(white_jpg,white.jpg)
+
+//slides :
+TOOLS_GLOBAL_STRING(pos_x_wcam)
+TOOLS_GLOBAL_STRING(pos_y_hcam)
+TOOLS_GLOBAL_STRING(scale)
+TOOLS_GLOBAL_STRING(rad_per_sec)
+//TOOLS_GLOBAL_STRING(kind)
+TOOLS_GLOBAL_STRING(axis)
+TOOLS_GLOBAL_STRING(time_interval)
+TOOLS_GLOBAL_STRING(pos_col)
+TOOLS_GLOBAL_STRING(pos_row)
+TOOLS_GLOBAL_STRING(repeat)
+TOOLS_GLOBAL_STRING(class)
+TOOLS_GLOBAL_STRING(camera_height)
+
+TOOLS_GLOBAL_STRING(none)
+
+}}
+
+#endif
+
+

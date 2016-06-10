@@ -80,6 +80,7 @@ void G4ElectronCapture::SetKinEnergyLimit(G4double val)
         << fKinEnergyThreshold/MeV << G4endl;
   }
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4ElectronCapture::BuildPhysicsTable(const G4ParticleDefinition&)
@@ -98,6 +99,8 @@ G4bool G4ElectronCapture::IsApplicable(const G4ParticleDefinition&)
 {
   return true;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double 
 G4ElectronCapture::PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
@@ -136,5 +139,3 @@ G4double G4ElectronCapture::GetMeanFreePath(const G4Track&,G4double,
 }    
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

@@ -1,4 +1,4 @@
-# $Id: essai.mac 68763 2013-04-05 12:36:20Z gcosmo $
+# $Id: essai.mac 93259 2015-10-14 08:35:22Z gcosmo $
 #
 /control/verbose 2
 /run/verbose 2
@@ -9,6 +9,6 @@
 #
 /gun/energy 1 MeV
 #
-/testem/event/printModulo 10000
+/run/printProgress 10000
 #
 /run/beamOn 100000

@@ -41,6 +41,9 @@
 
 #include "G4LENDModel.hh"
 
+#include "G4PreCompoundModel.hh"
+#include "G4HadronicInteractionRegistry.hh"
+
 class G4LENDInelastic : public G4LENDModel
 {
 
@@ -54,11 +57,21 @@ class G4LENDInelastic : public G4LENDModel
 //        theModelName = "LENDInelastic for "; 
 //        theModelName += proj->GetParticleName(); 
         create_used_target_map();
+
+        G4HadronicInteraction* p =
+	G4HadronicInteractionRegistry::Instance()->FindModel("PRECO");
+        G4VPreCompoundModel* pre = static_cast<G4VPreCompoundModel*>(p);
+        if(!pre) { pre = new G4PreCompoundModel(); }
+        preco = pre;
      };
   
      ~G4LENDInelastic(){;};
   
      G4HadFinalState* ApplyYourself( const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus );
+
+   private:
+      G4VPreCompoundModel* preco;
+
 };
 
 #endif

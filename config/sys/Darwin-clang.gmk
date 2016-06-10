@@ -1,6 +1,6 @@
 #
 # ------ MacOS-X ------
-#                                 MacOS 10.8, 10.9 clang-3.X
+#                                 MacOS 10.8/9/10/11, clang-3.6 and higher
 #
 # Original author: Gabriele Cosmo - CERN
 #
@@ -50,29 +50,29 @@ ifeq ($(G4SYSTEM),Darwin-clang)
   SHEXT   := dylib
   LOADLIBS += -lm
   ifndef X11FLAGS
-    X11FLAGS  := -I/usr/X11R6/include
+    X11FLAGS  := -I/usr/X11/include
   endif
   ifndef X11LIBS
-    X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lXi -lSM -lICE
+    X11LIBS   := -L/usr/X11/lib  -lXmu -lXt -lXext -lX11 -lXi -lSM -lICE
   endif
   ifndef XMFLAGS
     XMFLAGS   := -I/sw/include
-#   XMFLAGS   := -I/usr/X11R6/include          ##### some installations.
+#   XMFLAGS   := -I/usr/X11/include          ##### some installations.
   endif
   ifndef XMLIBS
     XMLIBS    := -L/sw/lib -lXm -lXpm
-#   XMLIBS    := -L/usr/X11R6/lib -lXm -lXpm   ##### some installations.
+#   XMLIBS    := -L/usr/X11/lib -lXm -lXpm   ##### some installations.
   endif
   ifndef XAWFLAGS
     XAWFLAGS   := -I/sw/include
-#   XAWFLAGS   := -I/usr/X11R6/include         ##### some installations.
+#   XAWFLAGS   := -I/usr/X11/include         ##### some installations.
   endif
   ifndef XAWLIBS
     XAWLIBS    := -lXaw
   endif
   DLDLIBS   := -ldl
   ifndef OGLHOME
-    OGLHOME  := /usr/X11R6
+    OGLHOME  := /usr/X11
   endif
   ifndef OGLFLAGS
     OGLFLAGS  := -I$(OGLHOME)/include 

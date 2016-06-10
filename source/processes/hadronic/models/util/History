@@ -1,4 +1,4 @@
-$Id: History 87168 2014-11-26 09:22:28Z gcosmo $
+$Id: History 94235 2015-11-09 10:59:16Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -15,7 +15,61 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-26 November 2014 Alberto Ribon  (hadr-mod-util-V10-00-16)
+09 October 2015 Vladimir Ivanchenko (hadr-mod-util-V10-01-11)
+- G4PolynomialPDF - fixed Coverity report
+
+02 November 2015 Alberto Ribon (hadr-mod-util-V10-01-10)
+- Checking of 'while' loops.
+
+18 October 2015 Vladimir Ivanchenko (hadr-mod-util-V10-01-09)
+- G4PolynomialPDF - modifications for correlated gamma emission
+
+17 October 2015 Vladimir Ivanchenko (hadr-mod-util-V10-01-08)
+- G4Clebsch, G4PolynomialPDF - fixed Coverity reports
+
+24 August 2015 Gabriele Cosmo (hadr-mod-util-V10-01-07)
+- G4Fragment - fixed leak in operator=(). Use initialisers in constructors.
+
+23 August 2015 Vladimir Ivanchenko (hadr-mod-util-V10-01-06)
+- G4Fragment - fixed copy constructor
+
+20 August 2015 Vladimir Ivanchenko (hadr-mod-util-V10-01-05)
+- G4Fragment - add usage of G4NuclearParameterization
+- G4KineticTrack - fixed final products list
+
+19 August 2015 Gabriele Cosmo    (hadr-mod-util-V10-01-04)
+- Temporarly withdrawn changes introduced in the last tag, as causing
+  error conditions from G4KineticTrack to cerr in the calorimeter benchmark:
+    Error condition encountered in G4KineticTrack::Decay()
+     phase-space decay failed.
+     particle was f2(1270)
+     channel index 2of 6channels
+     4 Daughter particles: pi+ pi- pi+
+  Note the 3 daughter particles printed instead of 4...
+
+13 August 2015 Alberto Ribon     (hadr-mod-util-V10-01-03)
+- G4GeneralPhaseSpaceDecay, G4KineticTrack : extension to deal with
+  decays with maximum 4 daughters (instead of 3). 
+  (Decided to keep using G4GeneralPhaseSpaceDecay instead of replacing
+   it with G4PhaseSpaceDecayChannel, as suggested by Hisaya, to preserve
+   the sophisticated treatment of 2-body resonance decays into resonance
+   daughters, which is essential for intra-nuclear cascade models.)
+
+11 June 2015 Vladimir Ivanchenko (hadr-mod-util-V10-01-02)
+- G4FermiMomentum, G4KineticTrack, G4NuclearFermiDensity,
+  G4NuclearShellModelDensity, G4SampleResonance, G4Fancy3DNucleus,
+  G4WilsonRadius - use G4Pow, G4Exp, G4Log
+
+11 June 2015 Vladimir Ivanchenko (hadr-mod-util-V10-01-01)
+- G4Clebsch, G4LegendrePolynomial, G4PolynomialPDF (Jason Detwiler
+    developed for correlated gamma nuclear de-excotation); 
+    G4Exp, G4Log are added and minor code cleaup of top of Jason's
+    original code 
+
+13 May 2015 Vladimir Ivanchenko  (hadr-mod-util-V10-01-00)
+- G4Clebsch is moved here without any change of the code
+
+26 November 2014 Alberto Ribon   (hadr-mod-util-V10-00-16)
 - G4ExcitedString : fixed a memory leak.
 
 04 October 2014 Vladimir Ivanchenko  (hadr-mod-util-V10-00-15)

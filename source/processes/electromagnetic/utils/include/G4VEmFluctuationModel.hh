@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmFluctuationModel.hh 81058 2014-05-20 09:04:28Z gcosmo $
+// $Id: G4VEmFluctuationModel.hh 89820 2015-04-30 14:54:53Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -103,10 +103,6 @@ public:
   //------------------------------------------------------------------------
 
   inline const G4String& GetName() const;
-
-protected:
-
-  CLHEP::HepRandomEngine* rndmEngineF;
 
 private:
 

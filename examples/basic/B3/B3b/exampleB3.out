@@ -1,0 +1,215 @@
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4MT version Name: geant4-09-06-ref-02    (18-January-2013)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume crystal ... OK! 
+Checking overlaps for volume ring ... OK! 
+Checking overlaps for volume ring ... OK! 
+Checking overlaps for volume ring ... OK! 
+Checking overlaps for volume ring ... OK! 
+Checking overlaps for volume ring ... OK! 
+Checking overlaps for volume ring ... OK! 
+Checking overlaps for volume ring ... OK! 
+Checking overlaps for volume ring ... OK! 
+Checking overlaps for volume ring ... OK! 
+Checking overlaps for volume Detector ... OK! 
+Checking overlaps for volume Patient ... OK! 
+
+***** Table : Nb of materials = 3 *****
+
+ Material:  Lu2SiO5    density:  7.400 g/cm3   RadL:   1.143 cm   Nucl.Int.Length:  20.922 cm   Imean: 418.807 eV 
+   --->  Element: Lu (Lu)   Z = 71.0   N = 175.0   A = 174.97 g/mole
+         --->  Isotope: Lu175   Z = 71   N = 175   A = 174.94 g/mole   abundance:  97.41 %
+         --->  Isotope: Lu176   Z = 71   N = 176   A = 175.94 g/mole   abundance:   2.59 %
+          ElmMassFraction:  76.40 %  ElmAbundance  25.00 % 
+
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+          ElmMassFraction:   6.13 %  ElmAbundance  12.50 % 
+
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  17.47 %  ElmAbundance  62.50 % 
+
+
+ Material:   G4_AIR    density:  1.205 mg/cm3  RadL: 303.921 m    Nucl.Int.Length: 710.261 m    Imean:  85.700 eV   temperature: 273.15 K  pressure:   1.00 atm
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.02 % 
+
+   --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+         --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+         --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
+          ElmMassFraction:  75.53 %  ElmAbundance  78.44 % 
+
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  23.18 %  ElmAbundance  21.07 % 
+
+   --->  Element: Ar (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole
+         --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
+         --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
+         --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %
+          ElmMassFraction:   1.28 %  ElmAbundance   0.47 % 
+
+
+ Material: G4_BRAIN_ICRP    density:  1.040 g/cm3   RadL:  35.403 cm   Nucl.Int.Length:  72.293 cm   Imean:  73.300 eV 
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:  10.70 %  ElmAbundance  64.44 % 
+
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:  14.50 %  ElmAbundance   7.33 % 
+
+   --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+         --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+         --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
+          ElmMassFraction:   2.20 %  ElmAbundance   0.95 % 
+
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  71.20 %  ElmAbundance  27.01 % 
+
+   --->  Element: Na (Na)   Z = 11.0   N =  23.0   A =  22.99 g/mole
+         --->  Isotope:  Na23   Z = 11   N =  23   A =  22.99 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.20 %  ElmAbundance   0.05 % 
+
+   --->  Element: P (P)   Z = 15.0   N =  31.0   A =  30.97 g/mole
+         --->  Isotope:   P31   Z = 15   N =  31   A =  30.97 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.40 %  ElmAbundance   0.08 % 
+
+   --->  Element: S (S)   Z = 16.0   N =  32.1   A =  32.07 g/mole
+         --->  Isotope:   S32   Z = 16   N =  32   A =  31.97 g/mole   abundance:  94.93 %
+         --->  Isotope:   S33   Z = 16   N =  33   A =  32.97 g/mole   abundance:   0.76 %
+         --->  Isotope:   S34   Z = 16   N =  34   A =  33.97 g/mole   abundance:   4.29 %
+         --->  Isotope:   S36   Z = 16   N =  36   A =  35.97 g/mole   abundance:   0.02 %
+          ElmMassFraction:   0.20 %  ElmAbundance   0.04 % 
+
+   --->  Element: Cl (Cl)   Z = 17.0   N =  35.5   A =  35.45 g/mole
+         --->  Isotope:  Cl35   Z = 17   N =  35   A =  34.97 g/mole   abundance:  75.78 %
+         --->  Isotope:  Cl37   Z = 17   N =  37   A =  36.97 g/mole   abundance:  24.22 %
+          ElmMassFraction:   0.30 %  ElmAbundance   0.05 % 
+
+   --->  Element: K (K)   Z = 19.0   N =  39.1   A =  39.10 g/mole
+         --->  Isotope:   K39   Z = 19   N =  39   A =  38.96 g/mole   abundance:  93.26 %
+         --->  Isotope:   K40   Z = 19   N =  40   A =  39.96 g/mole   abundance:   0.01 %
+         --->  Isotope:   K41   Z = 19   N =  41   A =  40.96 g/mole   abundance:   6.73 %
+          ElmMassFraction:   0.30 %  ElmAbundance   0.05 % 
+
+
+
+G4SDManager::AddNewCollection : the collection <crystal/edep> is registered at 1
+New sensitive detector <crystal> is registored at /
+G4SDManager::AddNewCollection : the collection <patient/dose> is registered at 2
+New sensitive detector <patient> is registored at /
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  OpenGLImmediateQt (OGLI, OGLIQt)
+  OpenGLImmediateX (OGLIX)
+  OpenGLImmediateXm (OGLIXm, OGLI_FALLBACK, OGLIQt_FALLBACK)
+  OpenGLStoredQt (OGL, OGLS, OGLSQt)
+  OpenGLStoredX (OGLSX)
+  OpenGLStoredXm (OGLSXm, OGL_FALLBACK, OGLS_FALLBACK, OGLSQt_FALLBACK)
+  RayTracer (RayTracer)
+  RayTracerX (RayTracerX)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+  drawByAttribute
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+  attributeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+Available colours:
+  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
+
+#
+/run/beamOn 10000
+### Run 0 start.
+
+---> Begin of event: 0
+
+--------------------End of Run------------------------------
+ The run was 10000 F18[0.0] Nb of 'good' e+ annihilations: 1266
+ Total dose in patient : 310.47 picoGy 
+------------------------------------------------------------
+
+Graphics systems deleted.
+Visualization Manager deleting...

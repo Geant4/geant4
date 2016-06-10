@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionPairGG.cc 79981 2014-03-27 15:24:11Z gcosmo $
+// $Id: G4CrossSectionPairGG.cc 93682 2015-10-28 10:09:49Z gcosmo $
 // $ GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   Class G4CrossSectionPairGG
@@ -44,20 +44,21 @@
 #include "G4NistManager.hh"
 #include "G4ThreeVector.hh"
 #include "G4NistManager.hh"
+#include "G4ComponentGGHadronNucleusXsc.hh"
+
 
 G4CrossSectionPairGG::G4CrossSectionPairGG(G4VCrossSectionDataSet* low,
       G4double Etransit) :
       G4VCrossSectionDataSet("G4CrossSectionPairGG"), theLowX(low), ETransition(
             Etransit) {
    NistMan = G4NistManager::Instance();
-   theHighX = new G4GlauberGribovCrossSection();
+   theHighX = new G4ComponentGGHadronNucleusXsc();
    verboseLevel = 0;
 }
 
 G4CrossSectionPairGG::~G4CrossSectionPairGG() {
-   //   The cross section registry wil delete these
-   //    delete theLowX;
-   //    delete theHighX;
+   delete theHighX;
+   // The cross section registry will delete theLowX
 }
 
 void G4CrossSectionPairGG::CrossSectionDescription(

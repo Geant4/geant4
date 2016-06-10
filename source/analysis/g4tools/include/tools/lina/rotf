@@ -1,0 +1,83 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rotf
+#define tools_rotf
+
+// rotation done with quaternion.
+
+#include "qrot"
+#include "vec3f"
+
+namespace tools {
+
+class rotf : public qrot<float> {
+  rotf(float a_q0,float a_q1,float a_q2,float a_q3)
+  :qrot<float>(a_q0,a_q1,a_q2,a_q3)
+  {}
+public:
+  rotf()
+  :qrot<float>()   //zero rotation around the positive Z axis.
+  {}
+  rotf(const vec3f& a_axis,float a_radians)
+  :qrot<float>(a_axis,a_radians)
+  {}
+  rotf(const vec3f& a_from,const vec3f& a_to)
+  :qrot<float>(a_from,a_to)
+  {}
+  virtual ~rotf(){}
+public:
+  rotf(const rotf& a_from)
+  :qrot<float>(a_from)
+  {}
+  rotf& operator=(const rotf& a_from){
+    qrot<float>::operator=(a_from);
+    return *this;
+  }
+public:
+  rotf& operator*=(const rotf& a_q) {
+    qrot<float>::operator*=(a_q);
+    return *this;
+  }
+  rotf operator*(const rotf& a_r) const {
+    rotf tmp(*this);
+    tmp *= a_r;
+    return tmp;
+  }
+public:
+  bool set_value(const vec3f& a_from,const vec3f& a_to){
+    return qrot<float>::set_value(a_from,a_to);
+  }
+  bool set_value(const vec3f& a_from,float a_a){
+    return qrot<float>::set_value(a_from,a_a);
+  }
+
+  //NOTE : don't handle a static object because of mem balance.
+  //static const rotf& identity() {
+  //  static const rotf s_v(0,0,0,1);
+  //  return s_v;
+  //}
+};
+
+}
+
+#include <sstream>
+
+namespace tools {
+
+inline bool tos(const rotf& a_v,std::string& a_s) {
+  vec3f axis;
+  float angle;
+  if(!a_v.value(axis,angle)) {a_s.clear();return false;}
+  std::ostringstream strm;
+  strm << axis[0] << " "
+       << axis[1] << " "
+       << axis[2] << " "
+       << angle;
+  a_s = strm.str();
+  return true;
+}
+
+}
+
+#endif

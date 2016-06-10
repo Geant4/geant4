@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointCSManager.cc 75591 2013-11-04 12:33:11Z gcosmo $
+// $Id: G4AdjointCSManager.cc 93569 2015-10-26 14:53:21Z gcosmo $
 //
 
 #include <fstream>
@@ -55,15 +55,16 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4ProductionCutsTable.hh"
 
-G4ThreadLocal G4AdjointCSManager* G4AdjointCSManager::theInstance = 0;
+G4ThreadLocal G4AdjointCSManager* G4AdjointCSManager::theInstance = nullptr;
 ///////////////////////////////////////////////////////
 //
 G4AdjointCSManager* G4AdjointCSManager::GetAdjointCSManager()
-{ if(theInstance == 0) {
-    static G4ThreadLocal G4AdjointCSManager *ins_G4MT_TLS_ = 0 ; if (!ins_G4MT_TLS_) ins_G4MT_TLS_ = new  G4AdjointCSManager  ;  G4AdjointCSManager &ins = *ins_G4MT_TLS_;
-     theInstance = &ins;
+{ 
+  if(theInstance == nullptr) {
+    static G4ThreadLocalSingleton<G4AdjointCSManager> inst;
+    theInstance = inst.Instance();
   }
- return theInstance; 
+  return theInstance; 
 }
 
 ///////////////////////////////////////////////////////
@@ -91,25 +92,26 @@ G4AdjointCSManager::G4AdjointCSManager()
   RegisterAdjointParticle(G4AdjointProton::AdjointProton());
   
   verbose  = 1;
+  currentParticleIndex = 0;
+  currentMatIndex = 0;
+  eindex = 0;
  
-  lastPartDefForCS =0;
-  LastEkinForCS =0;
-  LastCSCorrectionFactor =1.;
+  lastPartDefForCS = nullptr;
+  LastEkinForCS = lastPrimaryEnergy = lastTcut = 0.;
+  LastCSCorrectionFactor = massRatio = 1.;
   
+  forward_CS_is_used = true;
   forward_CS_mode = true;
   
-  currentParticleDef = 0;
-  currentCouple =0;
-  currentMaterial=0;
-  lastMaterial=0;
+  currentParticleDef = nullptr;
+  currentCouple =nullptr;
+  currentMaterial=nullptr;
+  lastMaterial=nullptr;
 
-  
-  theAdjIon = 0;
-  theFwdIon = 0;  
-
-
+  theAdjIon = nullptr;
+  theFwdIon = nullptr;
  
- 
+  PreadjCS = PostadjCS = PrefwdCS = PostfwdCS = 0.0;
 }
 ///////////////////////////////////////////////////////
 //
@@ -223,8 +225,8 @@ void G4AdjointCSManager::BuildCrossSectionMatrices()
 				else {		
 					for (size_t j=0; j<theElementTable->size();j++){
 						G4Element* anElement=(*theElementTable)[j];
-						G4int Z = int(anElement->GetZ());
-						G4int A = int(anElement->GetA());
+						G4int Z = G4lrint(anElement->GetZ());
+						G4int A = G4lrint(anElement->GetN());
 						std::vector<G4AdjointCSMatrix*>
 							two_matrices=BuildCrossSectionsMatricesForAGivenModelAndElement(aModel,Z, A, 40);
 						aListOfMat1->push_back(two_matrices[0]);
@@ -763,6 +765,7 @@ G4AdjointCSManager::BuildCrossSectionsMatricesForAGivenModelAndElement(G4VEmAdjo
    G4double fE=std::pow(10.,1./nbin_pro_decade);
    G4double E2=std::pow(10.,double( int(std::log10(EkinMin)*nbin_pro_decade)+1)/nbin_pro_decade)/fE;
    G4double E1=EkinMin;
+   // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
    while (E1 <EkinMaxForProd){
    	E1=std::max(EkinMin,E2);
 	E1=std::min(EkinMaxForProd,E1);
@@ -788,6 +791,7 @@ G4AdjointCSManager::BuildCrossSectionsMatricesForAGivenModelAndElement(G4VEmAdjo
    
    E2=std::pow(10.,double( int(std::log10(EkinMin)*nbin_pro_decade)+1)/nbin_pro_decade)/fE;
    E1=EkinMin;
+   // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
    while (E1 <EkinMaxForScat){
    	E1=std::max(EkinMin,E2);
 	E1=std::min(EkinMaxForScat,E1);
@@ -860,6 +864,7 @@ G4AdjointCSManager::BuildCrossSectionsMatricesForAGivenModelAndMaterial(G4VEmAdj
    G4double fE=std::pow(10.,1./nbin_pro_decade);
    G4double E2=std::pow(10.,double( int(std::log10(EkinMin)*nbin_pro_decade)+1)/nbin_pro_decade)/fE;
    G4double E1=EkinMin;
+   // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
    while (E1 <EkinMaxForProd){
    	E1=std::max(EkinMin,E2);
 	E1=std::min(EkinMaxForProd,E1);
@@ -891,6 +896,7 @@ G4AdjointCSManager::BuildCrossSectionsMatricesForAGivenModelAndMaterial(G4VEmAdj
    
    E2=std::pow(10.,double( int(std::log10(EkinMin)*nbin_pro_decade)+1)/nbin_pro_decade)/fE;
    E1=EkinMin;
+   // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
    while (E1 <EkinMaxForScat){
    	E1=std::max(EkinMin,E2);
 	E1=std::min(EkinMaxForScat,E1);

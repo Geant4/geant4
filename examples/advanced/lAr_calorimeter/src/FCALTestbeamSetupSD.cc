@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALTestbeamSetupSD.cc 84371 2014-10-14 12:51:18Z gcosmo $
+// $Id: FCALTestbeamSetupSD.cc 89572 2015-04-20 07:18:15Z gcosmo $
 //
 // 
 
@@ -66,8 +66,10 @@ void FCALTestbeamSetupSD::Initialize(G4HCofThisEvent*)
   EHoleScint = EBeamHole = 0.;
   EBeamDead = 0;
   G4int j;
-  for (j =0 ; j<8 ; j++) { ETailVis[j] = 0.;};
-  for (j =0 ; j<7 ; j++) { ETailDep[j] = 0.;};
+  for (j =0 ; j<NLENGTH ; j++) { 
+    ETailVis[j] = 0.;
+    ETailDep[j] = 0.;
+  }
   TailCatcherID = 0;
 }
 
@@ -77,48 +79,46 @@ G4bool FCALTestbeamSetupSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   
   G4double edep = aStep->GetTotalEnergyDeposit();
-  if (edep==0.) return false;
+  if (edep==0.) return true;
 
   G4TouchableHistory* theTouchable
     = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());  
   G4VPhysicalVolume* physVol = theTouchable->GetVolume();
 
+  G4String name = physVol->GetName();
+  TailCatcherID = physVol->GetCopyNo();
   
-  if(strcmp(physVol->GetName(),"ScintS1Physical")==0) { 
+  if(name == "ScintS1Physical") { 
     EBeamS1 = EBeamS1 + edep;}
   
-  if(strcmp(physVol->GetName(),"ScintS2Physical")==0) { 
+  else if(name == "ScintS2Physical") { 
     EBeamS2 = EBeamS2 + edep;}
   
-  if(strcmp(physVol->GetName(),"ScintS3Physical")==0) {  
+  else if(name == "ScintS3Physical") {  
     EBeamS3 = EBeamS3 + edep;}
 
-  if(strcmp(physVol->GetName(),"HoleScintPhysical")==0){ EHoleScint += edep;}
-  if(strcmp(physVol->GetName(),"HoleCntrScintPhysical")==0){
+  else if(name == "HoleScintPhysical"){ EHoleScint += edep;}
+  else if(name == "HoleCntrScintPhysical"){
     EBeamHole = EBeamHole + edep;}
 
-  if(strcmp(physVol->GetName(),"MWPCPhysical")==0) { EBeamDead += edep;};
-  if(strcmp(physVol->GetName(),"HoleCntrPbPhysical")==0) { EBeamDead += edep;};
-  if(strcmp(physVol->GetName(),"HoleCntrAlPhysical")==0) { EBeamDead += edep;};
-  if(strcmp(physVol->GetName(),"LeadWallPhysical")==0) { EBeamDead += edep;};
-  if(strcmp(physVol->GetName(),"IronWallPhysical")==0) { EBeamDead += edep;};
-
-  if(strcmp(physVol->GetName(),"BigScintPhysical")==0) {
-    TailCatcherID = physVol->GetCopyNo();
-    if(TailCatcherID > 0)  ETailVis[TailCatcherID] += edep;
-  }
-  if(strcmp(physVol->GetName(),"SmallScintPhysical")==0) {
-    TailCatcherID = physVol->GetCopyNo();
-    if(TailCatcherID > 0)  ETailVis[TailCatcherID + 3] += edep;
-  }
-  
-  if(strcmp(physVol->GetName(),"BigIronPhysical")==0) {
-    TailCatcherID = physVol->GetCopyNo();
-    if(TailCatcherID > 0)  ETailDep[TailCatcherID] += edep;
-  }
-  if(strcmp(physVol->GetName(),"SmallIronPhysical")==0) {
-    TailCatcherID = physVol->GetCopyNo();
-    if(TailCatcherID > 0)  ETailDep[TailCatcherID+2] += edep;
+  else if(name == "MWPCPhysical") { EBeamDead += edep;}
+  else if(name == "HoleCntrPbPhysical") { EBeamDead += edep;}
+  else if(name == "HoleCntrAlPhysical") { EBeamDead += edep;}
+  else if(name == "LeadWallPhysical") { EBeamDead += edep;}
+  else if(name == "IronWallPhysical") { EBeamDead += edep;}
+  else if(TailCatcherID >= 0 && TailCatcherID < NLENGTH) {
+    if(name == "BigScintPhysical") {
+      ETailVis[TailCatcherID] += edep;
+    }
+    else if(name == "SmallScintPhysical") {
+      if(TailCatcherID+3 < NLENGTH)  ETailVis[TailCatcherID + 3] += edep;
+    }
+    else if(name == "BigIronPhysical") {
+      ETailDep[TailCatcherID] += edep;
+    }
+    else if(name == "SmallIronPhysical") {
+      if(TailCatcherID+2 < NLENGTH)  ETailDep[TailCatcherID+2] += edep;
+    }
   }
 
   return true;

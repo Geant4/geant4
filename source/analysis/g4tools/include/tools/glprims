@@ -1,0 +1,355 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_glprims
+#define tools_glprims
+
+//same as OpenGL GL_[POINTS,etc...], but for the case we don't have OpenGL.
+
+namespace tools {
+namespace gl {
+
+typedef unsigned char mode_t;
+
+inline mode_t points()         {return 0x0000;}
+inline mode_t lines()          {return 0x0001;} //segments
+inline mode_t line_loop()      {return 0x0002;}
+inline mode_t line_strip()     {return 0x0003;} //polyline
+inline mode_t triangles()      {return 0x0004;}
+inline mode_t triangle_strip() {return 0x0005;}
+inline mode_t triangle_fan()   {return 0x0006;}
+//inline mode_t quads()          {return 0x0007;}
+//inline mode_t quad_strip()     {return 0x0008;}
+//inline mode_t polygon()        {return 0x0009;}
+
+inline bool is_mode(mode_t a_mode) {
+  return a_mode<=0x006?true:false;
+}
+
+inline bool is_line(mode_t a_mode) {
+  if(a_mode==points())     return true; //0 sz line !
+  if(a_mode==lines())      return true;
+  if(a_mode==line_loop())  return true;
+  if(a_mode==line_strip()) return true;
+  return false;
+}
+
+inline void cvt_2to3(unsigned int a_npt,const float* a_xys,float*& a_xyzs) {
+  const float* vpos = a_xys;
+  float x,y;
+  for(unsigned int i=0;i<a_npt;i++) {
+    x = *vpos;vpos++;
+    y = *vpos;vpos++;
+    *a_xyzs = x;a_xyzs++;
+    *a_xyzs = y;a_xyzs++;
+    *a_xyzs = 0;a_xyzs++;
+  }
+}
+
+
+inline void triangle_fan_to_triangles(unsigned int a_npt,
+                                      const float* a_fxyzs,
+                                      const float* a_fnms,
+                                      float*& a_xyzs,
+                                      float*& a_nms) {
+
+ {const float* vpos = a_fxyzs;
+
+  float x1 = *vpos;vpos++;
+  float y1 = *vpos;vpos++;
+  float z1 = *vpos;vpos++;
+
+  float x2 = *vpos;vpos++;
+  float y2 = *vpos;vpos++;
+  float z2 = *vpos;vpos++;
+
+  float x3,y3,z3;
+  for(unsigned int i=2;i<a_npt;i++) {
+    x3 = *vpos;vpos++;
+    y3 = *vpos;vpos++;
+    z3 = *vpos;vpos++;
+    *a_xyzs = x1;a_xyzs++;
+    *a_xyzs = y1;a_xyzs++;
+    *a_xyzs = z1;a_xyzs++;
+
+    *a_xyzs = x2;a_xyzs++;
+    *a_xyzs = y2;a_xyzs++;
+    *a_xyzs = z2;a_xyzs++;
+
+    *a_xyzs = x3;a_xyzs++;
+    *a_xyzs = y3;a_xyzs++;
+    *a_xyzs = z3;a_xyzs++;
+
+    x2 = x3;
+    y2 = y3;
+    z2 = z3;
+  }}
+
+ {const float* vpos = a_fnms;
+
+  float x1 = *vpos;vpos++;
+  float y1 = *vpos;vpos++;
+  float z1 = *vpos;vpos++;
+
+  float x2 = *vpos;vpos++;
+  float y2 = *vpos;vpos++;
+  float z2 = *vpos;vpos++;
+
+  float x3,y3,z3;
+  for(unsigned int i=2;i<a_npt;i++) {
+    x3 = *vpos;vpos++;
+    y3 = *vpos;vpos++;
+    z3 = *vpos;vpos++;
+    *a_nms = x1;a_nms++;
+    *a_nms = y1;a_nms++;
+    *a_nms = z1;a_nms++;
+
+    *a_nms = x2;a_nms++;
+    *a_nms = y2;a_nms++;
+    *a_nms = z2;a_nms++;
+
+    *a_nms = x3;a_nms++;
+    *a_nms = y3;a_nms++;
+    *a_nms = z3;a_nms++;
+
+    x2 = x3;
+    y2 = y3;
+    z2 = z3;
+  }}
+}
+
+inline void triangle_strip_to_triangles(unsigned int a_npt,
+                                        const float* a_fxyzs,
+                                        const float* a_fnms,
+                                        float*& a_xyzs,
+                                        float*& a_nms) {
+
+ {const float* vpos = a_fxyzs;
+
+  float x1 = *vpos;vpos++;
+  float y1 = *vpos;vpos++;
+  float z1 = *vpos;vpos++;
+
+  float x2 = *vpos;vpos++;
+  float y2 = *vpos;vpos++;
+  float z2 = *vpos;vpos++;
+
+  float x3,y3,z3;
+  bool flip = false;
+  for(unsigned int i=2;i<a_npt;i++) {
+    x3 = *vpos;vpos++;
+    y3 = *vpos;vpos++;
+    z3 = *vpos;vpos++;
+
+    if(flip) {
+      *a_xyzs = x1;a_xyzs++;
+      *a_xyzs = y1;a_xyzs++;
+      *a_xyzs = z1;a_xyzs++;
+
+      *a_xyzs = x3;a_xyzs++;
+      *a_xyzs = y3;a_xyzs++;
+      *a_xyzs = z3;a_xyzs++;
+
+      *a_xyzs = x2;a_xyzs++;
+      *a_xyzs = y2;a_xyzs++;
+      *a_xyzs = z2;a_xyzs++;
+    } else {
+      *a_xyzs = x1;a_xyzs++;
+      *a_xyzs = y1;a_xyzs++;
+      *a_xyzs = z1;a_xyzs++;
+
+      *a_xyzs = x2;a_xyzs++;
+      *a_xyzs = y2;a_xyzs++;
+      *a_xyzs = z2;a_xyzs++;
+
+      *a_xyzs = x3;a_xyzs++;
+      *a_xyzs = y3;a_xyzs++;
+      *a_xyzs = z3;a_xyzs++;
+    }
+
+    x1 = x2;
+    y1 = y2;
+    z1 = z2;
+
+    x2 = x3;
+    y2 = y3;
+    z2 = z3;
+
+    flip = flip?false:true;
+  }}
+
+ {const float* vpos = a_fnms;
+
+  float x1 = *vpos;vpos++;
+  float y1 = *vpos;vpos++;
+  float z1 = *vpos;vpos++;
+
+  float x2 = *vpos;vpos++;
+  float y2 = *vpos;vpos++;
+  float z2 = *vpos;vpos++;
+
+  float x3,y3,z3;
+  bool flip = false;
+  for(unsigned int i=2;i<a_npt;i++) {
+    x3 = *vpos;vpos++;
+    y3 = *vpos;vpos++;
+    z3 = *vpos;vpos++;
+
+    if(flip) {
+      *a_nms = x1;a_nms++;
+      *a_nms = y1;a_nms++;
+      *a_nms = z1;a_nms++;
+
+      *a_nms = x3;a_nms++;
+      *a_nms = y3;a_nms++;
+      *a_nms = z3;a_nms++;
+
+      *a_nms = x2;a_nms++;
+      *a_nms = y2;a_nms++;
+      *a_nms = z2;a_nms++;
+    } else {
+      *a_nms = x1;a_nms++;
+      *a_nms = y1;a_nms++;
+      *a_nms = z1;a_nms++;
+
+      *a_nms = x2;a_nms++;
+      *a_nms = y2;a_nms++;
+      *a_nms = z2;a_nms++;
+
+      *a_nms = x3;a_nms++;
+      *a_nms = y3;a_nms++;
+      *a_nms = z3;a_nms++;
+    }
+
+    x1 = x2;
+    y1 = y2;
+    z1 = z2;
+
+    x2 = x3;
+    y2 = y3;
+    z2 = z3;
+    flip = flip?false:true;
+  }}
+}
+
+inline void triangle_fan_to_triangles_2to3(unsigned int a_npt,
+                                           const float* a_xys,
+                                           float*& a_xyzs) {
+
+  const float* vpos = a_xys;
+
+  float x1 = *vpos;vpos++;
+  float y1 = *vpos;vpos++;
+
+  float x2 = *vpos;vpos++;
+  float y2 = *vpos;vpos++;
+
+  float x3,y3;
+  for(unsigned int i=2;i<a_npt;i++) {
+    x3 = *vpos;vpos++;
+    y3 = *vpos;vpos++;
+
+    *a_xyzs = x1;a_xyzs++;
+    *a_xyzs = y1;a_xyzs++;
+    *a_xyzs = 0;a_xyzs++;
+
+    *a_xyzs = x2;a_xyzs++;
+    *a_xyzs = y2;a_xyzs++;
+    *a_xyzs = 0;a_xyzs++;
+
+    *a_xyzs = x3;a_xyzs++;
+    *a_xyzs = y3;a_xyzs++;
+    *a_xyzs = 0;a_xyzs++;
+
+    x2 = x3;
+    y2 = y3;
+  }
+
+}
+
+inline void triangle_strip_to_triangles_2to3(unsigned int a_npt,
+                                             const float* a_xys,
+                                             float*& a_xyzs) {
+
+  const float* vpos = a_xys;
+
+  float x1 = *vpos;vpos++;
+  float y1 = *vpos;vpos++;
+
+  float x2 = *vpos;vpos++;
+  float y2 = *vpos;vpos++;
+
+  float x3,y3;
+  bool flip = false;
+  for(unsigned int i=2;i<a_npt;i++) {
+    x3 = *vpos;vpos++;
+    y3 = *vpos;vpos++;
+
+    if(flip) {
+      *a_xyzs = x1;a_xyzs++;
+      *a_xyzs = y1;a_xyzs++;
+      *a_xyzs = 0;a_xyzs++;
+
+      *a_xyzs = x3;a_xyzs++;
+      *a_xyzs = y3;a_xyzs++;
+      *a_xyzs = 0;a_xyzs++;
+
+      *a_xyzs = x2;a_xyzs++;
+      *a_xyzs = y2;a_xyzs++;
+      *a_xyzs = 0;a_xyzs++;
+    } else {
+      *a_xyzs = x1;a_xyzs++;
+      *a_xyzs = y1;a_xyzs++;
+      *a_xyzs = 0;a_xyzs++;
+
+      *a_xyzs = x2;a_xyzs++;
+      *a_xyzs = y2;a_xyzs++;
+      *a_xyzs = 0;a_xyzs++;
+
+      *a_xyzs = x3;a_xyzs++;
+      *a_xyzs = y3;a_xyzs++;
+      *a_xyzs = 0;a_xyzs++;
+    }
+
+    x1 = x2;
+    y1 = y2;
+
+    x2 = x3;
+    y2 = y3;
+
+    flip = flip?false:true;
+  }
+
+}
+
+inline void line_strip_to_lines_2to3(unsigned int a_npt,
+                                     const float* a_xys,
+                                     float*& a_xyzs) {
+
+  const float* vpos = a_xys;
+
+  float x1 = *vpos;vpos++;
+  float y1 = *vpos;vpos++;
+
+  float x2,y2;
+  for(unsigned int i=1;i<a_npt;i++) {
+    x2 = *vpos;vpos++;
+    y2 = *vpos;vpos++;
+
+    *a_xyzs = x1;a_xyzs++;
+    *a_xyzs = y1;a_xyzs++;
+    *a_xyzs = 0;a_xyzs++;
+
+    *a_xyzs = x2;a_xyzs++;
+    *a_xyzs = y2;a_xyzs++;
+    *a_xyzs = 0;a_xyzs++;
+
+    x1 = x2;
+    y1 = y2;
+  }
+
+}
+
+}}
+
+#endif

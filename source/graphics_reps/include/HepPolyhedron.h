@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.h 66872 2013-01-15 01:25:57Z japost $
+// $Id: HepPolyhedron.h 88771 2015-03-09 12:38:01Z gcosmo $
 //
 //
 // Class Description:
@@ -69,7 +69,7 @@
 //
 //   GetNoVertices ()       - returns number of vertices;
 //   GetNoFacets ()         - returns number of faces;
-//   GetNextVertexIndex (index,edgeFlag) - get vertex indeces of the
+//   GetNextVertexIndex (index,edgeFlag) - get vertex indices of the
 //                            quadrilaterals in order;
 //                            returns false when finished each face;
 //   GetVertex (index)      - returns vertex by index;
@@ -79,15 +79,15 @@
 //   GetNextVertex (vertex,edgeFlag,normal) - get vertices with edge
 //                            visibility and normal of the quadrilaterals
 //                            in order; returns false when finished each face;
-//   GetNextEdgeIndeces (i1,i2,edgeFlag) - get indeces of the next edge;
+//   GetNextEdgeIndices (i1,i2,edgeFlag) - get indices of the next edge;
 //                            returns false for the last edge;
-//   GetNextEdgeIndeces (i1,i2,edgeFlag,iface1,iface2) - get indeces of
-//                            the next edge with indeces of the faces
+//   GetNextEdgeIndices (i1,i2,edgeFlag,iface1,iface2) - get indices of
+//                            the next edge with indices of the faces
 //                            to which the edge belongs;
 //                            returns false for the last edge;
 //   GetNextEdge (p1,p2,edgeFlag) - get next edge;
 //                            returns false for the last edge;
-//   GetNextEdge (p1,p2,edgeFlag,iface1,iface2) - get next edge with indeces
+//   GetNextEdge (p1,p2,edgeFlag,iface1,iface2) - get next edge with indices
 //                            of the faces to which the edge belongs;
 //                            returns false for the last edge;
 //   GetFacet (index,n,nodes,edgeFlags=0,normals=0) - get face by index;
@@ -114,7 +114,7 @@
 //
 // 30.09.96 E.Chernyaev
 // - added GetNextVertexIndex, GetVertex by Yasuhide Sawada
-// - added GetNextUnitNormal, GetNextEdgeIndeces, GetNextEdge
+// - added GetNextUnitNormal, GetNextEdgeIndices, GetNextEdge
 // - improvements: angles now expected in radians
 //                 int -> G4int, double -> G4double  
 // - G4ThreeVector replaced by either G4Point3D or G4Normal3D
@@ -250,6 +250,7 @@ class HepPolyhedron {
 
   // Get number of vertices
   G4int GetNoVertices() const { return nvert; }
+  G4int GetNoVerteces() const { return nvert; }  // Old spelling.
 
   // Get number of facets
   G4int GetNoFacets() const { return nface; }
@@ -270,12 +271,17 @@ class HepPolyhedron {
   G4bool GetNextVertex(G4Point3D & vertex, G4int & edgeFlag,
                        G4Normal3D & normal) const;
 
-  // Get indeces of the next edge with indeces of the faces
+  // Get indices of the next edge with indices of the faces
+  G4bool GetNextEdgeIndices(G4int & i1, G4int & i2, G4int & edgeFlag,
+                            G4int & iface1, G4int & iface2) const;
   G4bool GetNextEdgeIndeces(G4int & i1, G4int & i2, G4int & edgeFlag,
-                          G4int & iface1, G4int & iface2) const;
+                            G4int & iface1, G4int & iface2) const
+  {return GetNextEdgeIndices(i1,i2,edgeFlag,iface1,iface2);}  // Old spelling
 
-  // Get indeces of the next edge
-  G4bool GetNextEdgeIndeces(G4int & i1, G4int & i2, G4int & edgeFlag) const;
+  // Get indices of the next edge
+  G4bool GetNextEdgeIndices(G4int & i1, G4int & i2, G4int & edgeFlag) const;
+  G4bool GetNextEdgeIndeces(G4int & i1, G4int & i2, G4int & edgeFlag) const
+  {return GetNextEdgeIndices(i1,i2,edgeFlag);}  // Old spelling.
 
   // Get next edge
   G4bool GetNextEdge(G4Point3D &p1, G4Point3D &p2, G4int &edgeFlag) const;

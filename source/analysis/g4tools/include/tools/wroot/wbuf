@@ -5,7 +5,8 @@
 #define tools_wroot_wbuf
 
 #include <ostream>
-#include "../pointer"
+#include "../long_out"
+#include "../charp_out"
 #include "../stype"
 
 #ifdef TOOLS_MEM
@@ -236,9 +237,9 @@ protected:
   bool check_eob(){
     if((m_pos+sizeof(T))>m_eob) {
       m_out << s_class() << " : " << stype(T()) << " : "
-           << " try to access out of buffer " << long2s(sizeof(T)) << " bytes"
-           << " (pos=" << char_p2s(m_pos)
-           << ", eob=" << char_p2s(m_eob) << ")." << std::endl;
+           << " try to access out of buffer " << long_out(sizeof(T)) << " bytes"
+           << " (pos=" << charp_out(m_pos)
+           << ", eob=" << charp_out(m_eob) << ")." << std::endl;
       return false;
     }
     return true;
@@ -246,13 +247,14 @@ protected:
   bool check_eob(size_t a_n,const char* a_cmt){
     if((m_pos+a_n)>m_eob) {
       m_out << s_class() << " : " << a_cmt << " : "
-           << " try to access out of buffer " << long2s(a_n) << " bytes"
-           << " (pos=" << char_p2s(m_pos)
-           << ", eob=" << char_p2s(m_eob) << ")." << std::endl;
+           << " try to access out of buffer " << long_out(a_n) << " bytes"
+           << " (pos=" << charp_out(m_pos)
+           << ", eob=" << charp_out(m_eob) << ")." << std::endl;
       return false;
     }
     return true;
   }
+
 protected:
   std::ostream& m_out;
   bool m_byte_swap;

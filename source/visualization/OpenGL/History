@@ -1,4 +1,4 @@
-$Id: History 87164 2014-11-26 08:48:31Z gcosmo $
+$Id: History 94428 2015-11-16 12:40:02Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,109 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+5th November 2015  Laurent Garnier (opengl-V10-01-13)
+- G4OpenGLViewer: Fix warning with VC14
+
+5th November 2015  Laurent Garnier (opengl-V10-01-12)
+- Fix the "SetVisible" problem on
+  * Linux/Windows
+  * Mac with Qt4 (or with Qt5)
+  but introduce another minor problem: when opening a new viewer, we have to update it by clic
+  into viewer, or issue "/vis/viewer/refresh"
+
+2nd November 2015  Laurent Garnier
+- G4OpenGLViewer.cc: Fix a small problem in picking list
+
+21st September 2015  John Allison  (opengl-V10-01-11)
+- G4OpenGLXViewer.cc: Uses <chrono> for picking.  (Another attempt.)
+
+5th August 2015  John Allison  (opengl-V10-01-10)
+- Reverted to G4THREADSLEEP for picking.
+
+1st August 2015  John Allison  (opengl-V10-01-09)
+- G4OpenGLXViewer.cc:
+  o Uses <chrono> for picking.
+
+30th July 2015  John Allison  (opengl-V10-01-08)
+- Improved graphics system fallback strategy:
+  o Implemented IsUISessionCompatible in G4OpenGLQt and G4OpenGLXm.
+  o Qt not allowed unless a Qt session has been instantiated.
+  o Interactive graphics systems (Qt, Xm) are not allowed in batch.
+- G4OpenGLStoredQtSceneHandler.cc: Removed unused variable.
+
+29th July 2015  Laurent Garnier
+- Fix a minor problem for Qt driver: open/close icons on scene tree/viewer properties and pick were not good at start
+- Minor improvements on the interface on scene tree/viewer properties and pick item menu
+
+28th July 2015  Laurent Garnier
+- Fix a bug when launching OGL driver from a macro file (in batch mode). Crash solved,
+  but an exception is still sent
+
+24th July 2015  Laurent Garnier
+- Clean debug statements
+- FIX DEV-86: extra ".eps" at the end of filename
+
+26th June 2015  John Allison (opengl-V10-01-07)
+- G4OpenGLStoredViewer: Coverity fix (uninitialised data member).
+- G4OpenGLViewer.cc: Fixed bug found by Coverity (=! instead of !=).
+
+3rd June 2015  John Allison (opengl-V10-01-06 co-works with visman-V10-01-10)
+- Needs global-V10-01-13 for G4OpenGLXViewer.cc.
+- Migrated to new G4VViewer interface - see visman-V10-01-10.
+- G4OpenGLXViewer.cc: Re-introduced sleep while waiting for pick action.
+
+27th May 2015  Laurent Garnier (opengl-V10-01-05 co-works with visman-V10-01-09)
+- A bit of cleaning in managing OpenGL context (Qt)
+
+26th May 2015  John Allison
+- G4OpenGLXViewer.cc: Removed sleep in pick action for now.  Wait for globals.
+
+26th May 2015  John Allison
+- G4OpenGLXViewer.cc: Added sleep while waiting for pick action.
+
+26th May 2015  Laurent Garnier
+- Add methods to manage QtGLContext (not finished yet!)
+
+19th December 2014  John Allison  (opengl-V10-01-04)
+- Removed debug printing (MT mode).
+
+16th December 2014  John Allison  (opengl-V10-01-03)
+- G4OpenGLQtViewer.cc: Fixed compiler warning.
+- Merged vis sub-thread developments.
+
+15th December 2014  Laurent Garnier  (opengl-V10-01-02)
+- G4OpenGLViewer.cc
+  o replace "far" and "near" by "zFar" and "zNear" to avoid windows errors
+
+15th December 2014  Laurent Garnier  (opengl-V10-01-01)
+- Same tag as opengl-V10-01-00. Try to understand why on a window machine :
+  "G4OpenGLViewer.cc(1445): error C2059: syntax error : ')' [D:\build\"
+
+15th December 2014  Laurent Garnier  (opengl-V10-01-00)
+- G4OpenGLViewer, 
+  G4OpenGLImmediateSceneHandler, 
+  G4OpenGLStoredSceneHandler, 
+  G4OpenGLStoredViewer,
+  G4OpenGLViewer.cc :
+  Fix a problem when zooming on small volumes. The glOrtho function has some problems with
+  small values. Calculate all by hand and call glMatrix seems to solve this.
+
+2nd December 2014  John Allison  (vis-MT-branch-00-opengl-12)
+- G4OpenGLStoredQtViewer::DrawView(): Removed thread restriction.
+- G4OpenGLQtViewer.cc:
+  o Messy experimental version - needs cleaning.  I think this
+    is not be necessary but leave it for now.
+namespace  {
+  const QGLContext* masterContext = 0;
+  const QGLContext* visSubThreadContext = 0;
+}
+
+30th November 2014  John Allison  (vis-MT-branch-00-opengl-11)
+- Introduced DoneWithMaster/VisSubThread.
+
+26th November 2014  John Allison  (vis-MT-branch-00-opengl-10)
+- Merged opengl-V10-00-28 into MT version.
+
 25th November 2014  Laurent Garnier  (opengl-V10-00-28)
 - G4OpenGLStoredQtViewer/G4OpenGLImmediatedQtViewer :
   Fix refresh problem due to a bad threading management
@@ -27,6 +130,9 @@ committal in the CVS repository !
 - G4OpenGLStoredSceneHandler.cc:
   o Fixes a bug whereby hidden markers are not respected if 2D objects
     are drawn.
+
+22nd November 2014  John Allison  (vis-MT-branch-00-opengl-09)
+- Merged opengl-V10-00-27 into MT version.
 
 21st November 2014  Laurent Garnier  (opengl-V10-00-27)
 - G4OpenGLStoredQtViewer/G4OpenGLImmediatedQtViewer :
@@ -46,6 +152,19 @@ committal in the CVS repository !
 
 18th November 2014  Laurent Garnier  (opengl-V10-00-24)
 - G4OpenGLQtViewer: Fix JIRA DEV-173 about using external application 
+
+8th November 2014  John Allison  (vis-MT-branch-00-opengl-08)
+- Merged trunk again.  (Just History.)
+
+7th November 2014  John Allison  (vis-MT-branch-00-opengl-07)
+- Merged trunk again.  (Some developments by Laurent.)
+
+7th November 2014  John Allison  (vis-MT-branch-00-opengl-06)
+- Merged trunk again.  (Some developments by Laurent.)
+
+7th November 2014  John Allison  (vis-MT-branch-00-opengl-05)
+- Merged the trunk into this branch, except:
+  o Re-introduced updateQWidget() in G4OpenGLStoredQtViewer::ClearView.
 
 7th November 2014  Laurent Garnier  (opengl-V10-00-22 - opengl-V10-00-23)
 - G4OpenGLQtViewer:
@@ -80,6 +199,29 @@ committal in the CVS repository !
 G4OpenGLWtViewer
   o Fix a problem with Wt include names on case sensitive systems
 
+7th November 2014  John Allison
+- G4OpenGLQtViewer.cc: Fixed compiler warning.
+
+6th November 2014  John Allison  (vis-MT-branch-00-opengl-03)
+- G4OpenGLQtViewer.cc:
+  o Fixed missing return value.
+  o Added a comment for possible future attention.
+- G4OpenGLXmWindowHandlingCallbacks.cc:
+  o Added a comment for possible future attention.
+
+5th November 2014  Laurent Garnier
+- G4OpenGLQtViewer: 
+ o Rename fWindow by fGLWidget and avoid problems for users using an external
+   Qt Application (and external Main Window)
+ o Remove resizing GLwidget *before* it was attached in the ui. This will prevent
+   from a early repainting
+
+1st November 2014  John Allison  (vis-MT-branch-00-opengl-02)
+- Fixed mistake in merging.
+
+1st November 2014  John Allison  (vis-MT-branch-00-opengl-01)
+- Merged vis-V10-00-11 and tagged.
+
 5th November 2014  Laurent Garnier
 - G4OpenGLQtViewer: 
  o Rename fWindow by fGLWidget and avoid problems for users using an external
@@ -101,6 +243,38 @@ G4OpenGLImmediateSceneHandler, G4OpenGLSceneHandler :
   o Improvements for OpenGL VBO
 G4OpenGLQtViewer:
   o Suppress sizeX, sizeY when calling AddTabWidget (needs interfaces-V10-00-15)
+
+31th October 2014  Laurent Garnier
+  o Fix a problem with Wt include names on case sensitive systems
+
+29th October 2014  Laurent Garnier
+- G4OpenGLViewer : 
+  o Add a ClearView without flush function
+- G4OpenGLStoreQtViewer : 
+  o Add a lock to prevent recursive updates
+  o Implements ClearView in order to force a redraw (updateGL())
+
+28th October 2014  Laurent Garnier
+- G4OpenGLStoredQtViewer/G4OpenGLImmediateQtViewer  : Prevent from calling redrawing 
+  scene inside a Vis Thread
+
+27th October 2014  Laurent Garnier
+- G4OpenGLStoredViewer
+  o Solve DEV-170 bug, introduced 4th september
+- G4OpenGLQtViewer
+  o Add SwitchToVisSubThread() and SwitchToMasterThread() functions
+
+22nd October 2014  John Allison  (vis-MT-branch-00-opengl-00)
+- Sub-thread developments.
+
+24th October 2014  Laurent Garnier (opengl-V10-00-20 require interfaces-V10-00-15)
+G4OpenGLImmediateSceneHandler, G4OpenGLSceneHandler :
+  o Improvements for OpenGL VBO
+G4OpenGLQtViewer:
+  o Suppress sizeX, sizeY when calling AddTabWidget (needs interfaces-V10-00-15)
+
+22nd October 2014  John Allison  (vis-MT-branch-00-opengl-00)
+- Sub-thread developments.
 
 22nd October 2014  John Allison  (opengl-V10-00-19)
 - Tagged.

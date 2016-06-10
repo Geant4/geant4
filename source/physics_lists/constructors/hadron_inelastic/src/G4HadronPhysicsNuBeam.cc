@@ -51,15 +51,14 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
-#include "G4ChipsKaonMinusInelasticXS.hh"
-#include "G4ChipsKaonPlusInelasticXS.hh"
-#include "G4ChipsKaonZeroInelasticXS.hh"
-#include "G4CrossSectionDataSetRegistry.hh"
-
+#include "G4ComponentGGHadronNucleusXsc.hh"
+#include "G4CrossSectionInelastic.hh"
 #include "G4HadronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
 #include "G4NeutronInelasticXS.hh"
 #include "G4NeutronCaptureXS.hh"
+
+#include "G4CrossSectionDataSetRegistry.hh"
 
 #include "G4PhysListUtil.hh"
 
@@ -72,7 +71,7 @@ G4ThreadLocal G4HadronPhysicsNuBeam::ThreadPrivate* G4HadronPhysicsNuBeam::tpdat
 
 G4HadronPhysicsNuBeam::G4HadronPhysicsNuBeam(G4int)
     :  G4VPhysicsConstructor("hInelasticNuBeam")
-/*    , theNeutrons(0)
+/*  , theNeutrons(0)
     , theBertiniNeutron(0)
     , theFTFPNeutron(0)
     , thePiK(0)
@@ -86,16 +85,14 @@ G4HadronPhysicsNuBeam::G4HadronPhysicsNuBeam(G4int)
     , theAntiBaryon(0)
     , theFTFPAntiBaryon(0) */
     , QuasiElastic(false)
-/*    , ChipsKaonMinus(0)
-    , ChipsKaonPlus(0)
-    , ChipsKaonZero(0)
+/*  , xsKaon(0)
     , xsNeutronInelasticXS(0)
     , xsNeutronCaptureXS(0) */
 {}
 
 G4HadronPhysicsNuBeam::G4HadronPhysicsNuBeam(const G4String& name, G4bool quasiElastic)
     :  G4VPhysicsConstructor(name) 
-/*    , theNeutrons(0)
+/*  , theNeutrons(0)
     , theBertiniNeutron(0)
     , theFTFPNeutron(0)
     , thePiK(0)
@@ -109,9 +106,7 @@ G4HadronPhysicsNuBeam::G4HadronPhysicsNuBeam(const G4String& name, G4bool quasiE
     , theAntiBaryon(0)
     , theFTFPAntiBaryon(0) */
     , QuasiElastic(quasiElastic)
-/*    , ChipsKaonMinus(0)
-    , ChipsKaonPlus(0)
-    , ChipsKaonZero(0)
+/*  , xsKaon(0)
     , xsNeutronInelasticXS(0)
     , xsNeutronCaptureXS(0) */
 {}
@@ -227,17 +222,14 @@ void G4HadronPhysicsNuBeam::ConstructProcess()
   tpdata->thePro->Build();
   tpdata->thePiK->Build();
 
-  // use CHIPS cross sections also for Kaons
-  tpdata->ChipsKaonMinus = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusInelasticXS::Default_Name());
-  tpdata->ChipsKaonPlus = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name());
-  tpdata->ChipsKaonZero = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name());
-  //
-    
-  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(tpdata->ChipsKaonMinus);
-  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(tpdata->ChipsKaonPlus);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(tpdata->ChipsKaonZero );
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(tpdata->ChipsKaonZero );
-    
+  // --- Kaons ---
+  tpdata->xsKaon = new G4ComponentGGHadronNucleusXsc();
+  G4VCrossSectionDataSet * kaonxs = new G4CrossSectionInelastic(tpdata->xsKaon);
+  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(kaonxs);
+  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(kaonxs);
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(kaonxs);
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(kaonxs);
+
   tpdata->theHyperon->Build();
   tpdata->theAntiBaryon->Build();
 

@@ -60,8 +60,9 @@
 
 #include "G4HadronNucleonXsc.hh"
 
-using namespace std;
+#include "G4Pow.hh"
 
+using namespace std;
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -580,7 +581,7 @@ void G4hhElastic::BuildTableTest( G4ParticleDefinition* target, G4ParticleDefini
   fBankT.push_back( fTableT );  // 0
 
   // for(jTransfer = 0; jTransfer < fBinT-1; jTransfer++) 
-  //   G4cout<<(*(*fTableT)(0))(jTransfer)/sum<<"\t\t"<<std::pow(2.,-G4double(jTransfer))<<G4endl;
+  //   G4cout<<(*(*fTableT)(0))(jTransfer)/sum<<"\t\t"<<G4Pow::GetInstance()->powN(2.,-jTransfer)<<G4endl;
   
   return;
 }

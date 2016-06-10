@@ -1,4 +1,4 @@
-$Id: History 85018 2014-10-23 09:51:37Z gcosmo $
+$Id: History 93316 2015-10-16 12:36:02Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16 October 15: V.Ivanchenko (empolar-V10-01-02)
+- G4PolarizedComptonModel - fixed Coverity warning, use vector of random
+    numbers in sampling of final state
+
+06 October 15: V.Ivanchenko (empolar-V10-01-01)
+- G4PolarizedCompton, G4ePolarizedIonisation, G4eplusPolarizedAnnihilation
+    - changed intialisation taking into account MT mode, added
+      method ComputeSaturationFactor used in mean free path and 
+      step limit corrections, removed PreparePhysicsTable method (use 
+      one from the base class), fixed computation of the value of number 
+      of interaction lengths left which is responsible for the 
+      problem #1698
+- G4PolarizedComptonModel - revised do/while loop in sampling of
+      gamma scattering angle
+
+03 August 15: V.Ivanchenko (empolar-V10-01-00)
+- Added comments to do/while and while loops
 
 22 October 13: V.Ivanchenko (empolar-V10-00-03)
 - G4PolarizedCompton, G4PolarizedGammaConversion, 

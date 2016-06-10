@@ -192,8 +192,12 @@
     <xs:annotation>
       <xs:documentation>Auxiliary information like sensitive detector declaration, etc.</xs:documentation>
     </xs:annotation>
+    <xs:sequence>
+      <xs:element name="auxiliary" maxOccurs="unbounded" minOccurs="0" type="AuxiliaryType"/>
+    </xs:sequence>
     <xs:attribute name="auxtype" type="xs:string" use="required"></xs:attribute>
     <xs:attribute name="auxvalue" type="xs:string" use="required"></xs:attribute>
+    <xs:attribute name="auxunit" type="xs:string" use="optional"></xs:attribute>
   </xs:complexType>
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 </xs:schema>

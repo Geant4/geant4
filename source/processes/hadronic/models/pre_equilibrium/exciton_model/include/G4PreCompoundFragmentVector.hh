@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundFragmentVector.hh 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4PreCompoundFragmentVector.hh 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // Hadronic Process: Nuclear Preequilibrium
 // by V. Lara
@@ -63,8 +63,6 @@ public:
 
   void UseSICB(G4bool);
 
-  inline void Initialize(const G4Fragment & aFragment);
-
   inline G4double CalculateProbabilities(const G4Fragment & aFragment);
 	
   inline G4VPreCompoundFragment * ChooseFragment();
@@ -84,21 +82,18 @@ private:
 
 };
 
-inline void 
-G4PreCompoundFragmentVector::Initialize(const G4Fragment & aFragment)
-{
-  for (G4int i=0; i< nChannels; ++i) { 
-    (*theChannels)[i]->Initialize(aFragment);
-  }
-}
-
 inline G4double 
 G4PreCompoundFragmentVector::CalculateProbabilities(const G4Fragment & aFragment)
 {
   //G4cout << "## G4PreCompoundFragmentVector::CalculateProbabilities" << G4endl;
   G4double probtot = 0.0; 
+  G4double prob; 
   for (G4int i=0; i< nChannels; ++i) { 
-    G4double prob = (*theChannels)[i]->CalcEmissionProbability(aFragment);
+    (*theChannels)[i]->Initialize(aFragment);
+    prob = 0.0;
+    if ((*theChannels)[i]->IsItPossible(aFragment)) {
+      prob = (*theChannels)[i]->CalcEmissionProbability(aFragment);
+    }
     probtot += prob;
     probabilities[i] = probtot;
     //G4cout<<" prob= "<<prob<<" for "<<(*theChannels)[i]->GetName()<<G4endl;

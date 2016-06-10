@@ -3148,28 +3148,38 @@ inline std::string value::to_string(const value& aThis){
   //case value::ARRAY_CHAR:
   //  return tools::tos<char>(aThis.u.m_array_char->vector());
   case value::ARRAY_UNSIGNED_SHORT:
-   return tools::tos<unsigned short>(aThis.u.m_array_unsigned_short->vector());
+    if(!tools::nums2s<unsigned short>(aThis.u.m_array_unsigned_short->vector(),s)) {}
+    return s;
   case value::ARRAY_SHORT:
-    return tools::tos<short>(aThis.u.m_array_short->vector());
+    if(!tools::nums2s<short>(aThis.u.m_array_short->vector(),s)) {}
+    return s;
 
   case value::ARRAY_UNSIGNED_INT:
-    return tools::tos<unsigned int>(aThis.u.m_array_unsigned_int->vector());
+    if(!tools::nums2s<unsigned int>(aThis.u.m_array_unsigned_int->vector(),s)) {}
+    return s;
   case value::ARRAY_INT:
-    return tools::tos<int>(aThis.u.m_array_int->vector());
+    if(!tools::nums2s<int>(aThis.u.m_array_int->vector(),s)) {}
+    return s;
 
   case value::ARRAY_UNSIGNED_INT64:
-    return tools::tos<uint64>(aThis.u.m_array_unsigned_int64->vector());
+    if(!tools::nums2s<uint64>(aThis.u.m_array_unsigned_int64->vector(),s)) {}
+    return s;
   case value::ARRAY_INT64:
-    return tools::tos<int64>(aThis.u.m_array_int64->vector());
+    if(!tools::nums2s<int64>(aThis.u.m_array_int64->vector(),s)) {}
+    return s;
 
   case value::ARRAY_FLOAT:
-    return tools::tos<float>(aThis.u.m_array_float->vector());
+    if(!tools::nums2s<float>(aThis.u.m_array_float->vector(),s)) {}
+    return s;
   case value::ARRAY_DOUBLE:
-    return tools::tos<double>(aThis.u.m_array_double->vector());
+    if(!tools::nums2s<double>(aThis.u.m_array_double->vector(),s)) {}
+    return s;
   case value::ARRAY_BOOL:
-    return tools::tos<bool>(aThis.u.m_array_bool->vector());
+    tools::b2s(aThis.u.m_array_bool->vector(),s);
+    return s;
   case value::ARRAY_STRING:
-    return tools::tos<std::string>(aThis.u.m_array_string->vector());
+    if(!tools::nums2s<std::string>(aThis.u.m_array_string->vector(),s)) {}
+    return s;
   default:
     return "unknow"; //it should not happen.
   }

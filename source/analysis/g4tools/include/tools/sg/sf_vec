@@ -1,0 +1,90 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_sf_vec
+#define tools_sg_sf_vec
+
+#include "sf"
+
+namespace tools {
+namespace sg {
+
+template <class T,class TT>  //exa sf_vec<colorf,float>
+class sf_vec : public bsf<T> {
+  typedef bsf<T> parent;
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::sg::sf_vec<"+stype(T())+","+stype(TT())+">");
+    return s_v;
+  }
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast< sf_vec<T,TT> >(this,a_class)) {return p;}
+    return parent::cast(a_class);
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  virtual bool write(io::iwbuf& a_buffer) {
+    const T& vec = parent::m_value;
+    const TT* d = get_data(vec);
+    return a_buffer.write_vec(vec.size(),d);
+  }
+  virtual bool read(io::irbuf& a_buffer) {
+    T& vec = parent::m_value;
+    uint32 n;
+    TT* v;
+    if(!a_buffer.read_vec(n,v)) {
+      //::printf("debug : sf_vec::read : failed(0).\n");
+      return false;
+    }
+    if(n!=vec.size()) {
+      delete [] v;
+#ifdef TOOLS_MEM
+      mem::decrement(s_new().c_str());
+#endif
+      //::printf("debug : sf_vec::read : failed(1) : %d (expected %d).\n",
+      //    n,vec.size());
+      return false;
+    }
+    for(uint32 index=0;index<n;index++) vec[index] = v[index];
+    delete [] v;
+#ifdef TOOLS_MEM
+    mem::decrement(s_new().c_str());
+#endif
+    return true;
+  }
+  virtual bool dump(std::ostream& a_out) {
+    a_out << parent::m_value << std::endl;
+    return true;
+  }
+public:
+  sf_vec():parent(){}
+  sf_vec(const T& a_value):parent(a_value){}
+  virtual ~sf_vec(){}
+public:
+  sf_vec(const sf_vec& a_from)
+  :parent(a_from){}
+  sf_vec& operator=(const sf_vec& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+public:
+  sf_vec& operator=(const T& a_value){
+    parent::operator=(a_value);
+    return *this;
+  }
+  virtual bool s_value(std::string& a_s) const {
+    const T& vec = parent::m_value;
+    typename T::size_type sz = vec.size();
+    std::ostringstream strm;
+    for(typename T::size_type index=0;index<sz;index++) {
+      if(index) strm << " ";
+      strm << vec[index];
+    }
+    a_s = strm.str();
+    return true;
+  }
+};
+
+}}
+
+#endif

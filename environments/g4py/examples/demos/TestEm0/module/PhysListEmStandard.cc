@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc 86749 2014-11-17 15:03:05Z gcosmo $
+// $Id: PhysListEmStandard.cc 86705 2014-11-15 19:21:53Z kmura $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

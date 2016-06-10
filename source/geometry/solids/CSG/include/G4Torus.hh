@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.hh 72938 2013-08-14 13:24:12Z gcosmo $
+// $Id: G4Torus.hh 92393 2015-08-31 14:07:30Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -89,11 +89,20 @@
 // 26.05.00 V.Grichine: added new SolveBiQuadratic/Cubic() developed
 //                      by O.Cremonesi 
 // 31.08.00 E.Medernach: added SolveNumeric functions, migrated to
-//                       numeric solutions 
+//                       numeric solutions
 // --------------------------------------------------------------------
 
-#ifndef G4Torus_HH
-#define G4Torus_HH
+#ifndef G4TORUS_HH
+#define G4TORUS_HH
+
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UTORUS 1
+#endif
+
+#if (defined(G4GEOM_USE_UTORUS) && defined(G4GEOM_USE_SYS_USOLIDS))
+  #define G4UTorus G4Torus
+  #include "G4UTorus.hh"
+#else
 
 #include <CLHEP/Units/PhysicalConstants.h>
 
@@ -209,4 +218,7 @@ class G4Torus : public G4CSGSolid
 
 #include "G4Torus.icc"
 
-#endif
+#endif  // defined(G4GEOM_USE_UTORUS) && defined(G4GEOM_USE_SYS_USOLIDS)
+
+
+#endif // G4TORUS_HH

@@ -57,7 +57,9 @@
 #define G4EmParameters_h 1
 
 #include "globals.hh"
+#include "G4ios.hh"
 #include "G4MscStepLimitType.hh"
+#include <vector>
 
 class G4EmParametersMessenger;
 
@@ -69,6 +71,14 @@ public:
 
   ~G4EmParameters();
 
+  void SetDefaults();
+
+  // printing
+  std::ostream& StreamInfo(std::ostream& os) const;
+  void Dump() const;
+  friend std::ostream& operator<< (std::ostream& os, const G4EmParameters&);
+
+  // boolean flags
   void SetLossFluctuations(G4bool val);
   G4bool LossFluctuation() const;
 
@@ -90,8 +100,14 @@ public:
   void SetFluo(G4bool val);
   G4bool Fluo() const;
 
+  void SetBeardenFluoDir(G4bool val);
+  G4bool BeardenFluoDir() const;
+
   void SetAuger(G4bool val);
   G4bool Auger() const;
+
+  void SetAugerCascade(G4bool val);
+  G4bool AugerCascade() const;
 
   void SetPixe(G4bool val);
   G4bool Pixe() const;
@@ -111,6 +127,10 @@ public:
   void ActivateAngularGeneratorForIonisation(G4bool val);
   G4bool UseAngularGeneratorForIonisation() const;
 
+  void SetUseMottCorrection(G4bool val);
+  G4bool UseMottCorrection() const;
+
+  // double parameters with values
   void SetMinSubRange(G4double val);
   G4double MinSubRange() const;
 
@@ -122,6 +142,12 @@ public:
 
   void SetMaxEnergyForCSDARange(G4double val);
   G4double MaxEnergyForCSDARange() const;
+
+  void SetLowestElectronEnergy(G4double val);
+  G4double LowestElectronEnergy() const;
+
+  void SetLowestMuHadEnergy(G4double val);
+  G4double LowestMuHadEnergy() const;
 
   void SetLinearLossLimit(G4double val);
   G4double LinearLossLimit() const;
@@ -141,12 +167,16 @@ public:
   void SetMscRangeFactor(G4double val);
   G4double MscRangeFactor() const;
 
+  void SetMscMuHadRangeFactor(G4double val);
+  G4double MscMuHadRangeFactor() const;
+
   void SetMscGeomFactor(G4double val);
   G4double MscGeomFactor() const;
 
   void SetMscSkin(G4double val);
   G4double MscSkin() const;
 
+  // integer parameters 
   void SetNumberOfBins(G4int val);
   G4int NumberOfBins() const;
 
@@ -161,6 +191,30 @@ public:
 
   void SetMscStepLimitType(G4MscStepLimitType val);
   G4MscStepLimitType MscStepLimitType() const;
+
+  void SetMscMuHadStepLimitType(G4MscStepLimitType val);
+  G4MscStepLimitType MscMuHadStepLimitType() const;
+
+  // string parameters 
+  void SetPIXECrossSectionModel(const G4String&);
+  const G4String& PIXECrossSectionModel();
+
+  void SetPIXEElectronCrossSectionModel(const G4String&);
+  const G4String& PIXEElectronCrossSectionModel();
+
+  void AddPAIModel(const G4String& particle,
+                   const G4String& region,
+                   const G4String& type);
+  const std::vector<G4String>& ParticlesPAI() const;
+  const std::vector<G4String>& RegionsPAI() const;
+  const std::vector<G4String>& TypesPAI() const;
+
+  void AddMicroElec(const G4String& region);
+  const std::vector<G4String>& RegionsMicroElec() const;
+
+  void AddDNA(const G4String& region, const G4String& type);
+  const std::vector<G4String>& RegionsDNA() const;
+  const std::vector<G4String>& TypesDNA() const;
 
 private:
 
@@ -179,24 +233,30 @@ private:
   G4bool finalRange;
   G4bool applyCuts;
   G4bool fluo;
+  G4bool beardenFluoDir;
   G4bool auger;
+  G4bool augerCascade;
   G4bool pixe;
   G4bool deexIgnoreCut;
   G4bool lateralDisplacement;
   G4bool muhadLateralDisplacement;
   G4bool latDisplacementBeyondSafety;
   G4bool useAngGeneratorForIonisation;
+  G4bool useMottCorrection;
 
   G4double minSubRange;
   G4double minKinEnergy;
   G4double maxKinEnergy;
   G4double maxKinEnergyCSDA;
+  G4double lowestElectronEnergy;
+  G4double lowestMuHadEnergy;
   G4double linLossLimit;
   G4double bremsTh;
   G4double lambdaFactor;
   G4double factorForAngleLimit;
   G4double thetaLimit;
   G4double rangeFactor;
+  G4double rangeFactorMuHad;
   G4double geomFactor;
   G4double skin;
 
@@ -206,6 +266,20 @@ private:
   G4int workerVerbose;
 
   G4MscStepLimitType mscStepLimit;
+  G4MscStepLimitType mscStepLimitMuHad;
+
+  G4String namePIXE;
+  G4String nameElectronPIXE;
+
+  std::vector<G4String>  m_particlesPAI;
+  std::vector<G4String>  m_regnamesPAI;
+  std::vector<G4String>  m_typesPAI;
+
+  std::vector<G4String>  m_regnamesME;
+
+  std::vector<G4String>  m_regnamesDNA;
+  std::vector<G4String>  m_typesDNA;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

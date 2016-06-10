@@ -34,82 +34,105 @@
 // -------------------------------------------------------------------
 
 //______________________________________________________________________
-template <typename PointT>
-G4KDNode<PointT>::G4KDNode(G4KDTree* tree, PointT* point,
-		G4KDNode_Base* parent) : G4KDNode_Base(tree, parent)
-{
-	fPoint = point;
-	fValid = true;
-}
+template<typename PointT>
+  G4KDNode<PointT>::G4KDNode(G4KDTree* tree,
+                             PointT* point,
+                             G4KDNode_Base* parent) :
+      G4KDNode_Base(tree, parent)
+  {
+    fPoint = point;
+    fValid = true;
+  }
 
 // Copy constructor should not be used
-template <typename PointT>
-G4KDNode<PointT>::G4KDNode(const G4KDNode<PointT>& right): G4KDNode_Base(right),
-    						fPoint(0)
-{
-	fValid = false;
-}
+template<typename PointT>
+  G4KDNode<PointT>::G4KDNode(const G4KDNode<PointT>& right) :
+      G4KDNode_Base(right), fPoint(0)
+  {
+    fValid = false;
+  }
 
 // Assignement should not be used
-template <typename PointT>
-G4KDNode<PointT>& G4KDNode<PointT>::operator=(const G4KDNode<PointT>& right)
-{
-	if (this == &right) return *this;
-	fPoint = right.fPoint;
-	fTree = right.fTree;
-	fLeft = right.fLeft;
-	fRight = right.fRight;
-	fParent = right.fParent;
-	fSide = right.fSide;
-	fAxis = right.fAxis;
-	return *this;
-}
+template<typename PointT>
+  G4KDNode<PointT>& G4KDNode<PointT>::operator=(const G4KDNode<PointT>& right)
+  {
+    if(this == &right) return *this;
+    fPoint = right.fPoint;
+    fTree = right.fTree;
+    fLeft = right.fLeft;
+    fRight = right.fRight;
+    fParent = right.fParent;
+    fSide = right.fSide;
+    fAxis = right.fAxis;
+    return *this;
+  }
 
-template <typename PointT>
-G4KDNode<PointT>::~G4KDNode()
-{
-}
+template<typename PointT>
+  G4KDNode<PointT>::~G4KDNode()
+  {
+  }
 
-template <typename Position>
-G4KDNode_Base* G4KDNode_Base::FindParent(const Position& x0)
-{
-	G4KDNode_Base* aParent = 0 ;
-	G4KDNode_Base* next = this ;
-	int split = -1 ;
-	while(next)
-	{
-		split = next->fAxis  ;
-		aParent = next ;
+template<typename Position>
+  G4KDNode_Base* G4KDNode_Base::FindParent(const Position& x0)
+  {
+    G4KDNode_Base* aParent = 0;
+    G4KDNode_Base* next = this;
+    int split = -1;
+    while(next)
+    {
+      split = next->fAxis;
+      aParent = next;
 
-		// works if node called "next" is valid
-		if(x0[split] > (*next)[split])
-			next = next->fRight ;
-		else
-			next = next->fLeft ;
-	}
-	return aParent ;
-}
+      // works if node called "next" is valid
+      if(x0[split] > (*next)[split]) next = next->fRight;
+      else next = next->fLeft;
+    }
+    return aParent;
+  }
 
-template <typename PointT>
-G4KDNode_Base* G4KDNode_Base::Insert(PointT* point)
-{
-	G4KDNode_Base* aParent = FindParent(*point);
-	// TODO check p == aParent->pos
-	// Exception
+template<typename PointT>
+  G4KDNode_Base* G4KDNode_Base::Insert(PointT* point)
+  {
+    G4KDNode_Base* aParent = FindParent(*point);
+    // TODO check p == aParent->pos
+    // Exception
 
-	G4KDNode_Base* newNode = new G4KDNode<PointT>(fTree, point, aParent);
+    G4KDNode_Base* newNode = new G4KDNode<PointT>(fTree, point, aParent);
 
-	if((*point)[aParent->fAxis] > (*aParent)[aParent->fAxis])
-	{
-		aParent->fRight = newNode ;
-		newNode->fSide = 1 ;
-	}
-	else
-	{
-		aParent->fLeft = newNode ;
-		newNode->fSide = -1 ;
-	}
+    if((*point)[aParent->fAxis] > (*aParent)[aParent->fAxis])
+    {
+      aParent->fRight = newNode;
+      newNode->fSide = 1;
+    }
+    else
+    {
+      aParent->fLeft = newNode;
+      newNode->fSide = -1;
+    }
 
-	return newNode ;
-}
+    return newNode;
+  }
+
+template<typename PointT>
+  G4KDNode_Base* G4KDNode_Base::Insert(const PointT& point)
+  {
+    G4KDNode_Base* aParent = FindParent(point);
+    // TODO check p == aParent->pos
+    // Exception
+
+    G4KDNode_Base* newNode = new G4KDNodeCopy<PointT>(fTree, point, aParent);
+
+    if(point[aParent->fAxis] > (*aParent)[aParent->fAxis])
+    {
+      aParent->fRight = newNode;
+      newNode->fSide = 1;
+    }
+    else
+    {
+      aParent->fLeft = newNode;
+      newNode->fSide = -1;
+    }
+
+    return newNode;
+  }
 

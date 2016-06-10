@@ -26,7 +26,7 @@
 /// \file radioactivedecay/rdecay01/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// $Id: EventAction.hh 68017 2013-03-13 13:29:53Z gcosmo $
+// $Id: EventAction.hh 92499 2015-09-02 07:25:02Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,8 +36,6 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
-
-class EventMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -51,13 +49,12 @@ class EventAction : public G4UserEventAction
     virtual void BeginOfEventAction(const G4Event*);
     virtual void   EndOfEventAction(const G4Event*);
     
-    void SetPrintModulo(G4int val)   {fPrintModulo = val;};
     void AddDecayChain(G4String val) {fDecayChain += val;};
-               
+    void AddEvisible(G4double val)   {fEvisTot    += val;};
+    
   private:
-    G4int           fPrintModulo;
     G4String        fDecayChain;                   
-    EventMessenger* fEventMessenger;
+    G4double        fEvisTot;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -45,26 +45,18 @@ using namespace G4Analysis;
 //_____________________________________________________________________________
 G4VAnalysisReader::G4VAnalysisReader(const G4String& type, G4bool isMaster)
  : fState(type, isMaster),
-   fVH1Manager(0),
-   fVH2Manager(0),
-   fVH3Manager(0),
-   fVP1Manager(0),
-   fVP2Manager(0),
-   fVNtupleManager(0),
-   fFileManager(0)
+   fVH1Manager(nullptr),
+   fVH2Manager(nullptr),
+   fVH3Manager(nullptr),
+   fVP1Manager(nullptr),
+   fVP2Manager(nullptr),
+   fVNtupleManager(nullptr),
+   fFileManager(nullptr)
 {}
 
 //_____________________________________________________________________________
 G4VAnalysisReader::~G4VAnalysisReader()
-{
-  delete fVH1Manager;
-  delete fVH2Manager;
-  delete fVH3Manager;
-  delete fVP1Manager;
-  delete fVP2Manager;
-  delete fVNtupleManager;
-  delete fFileManager;
-}
+{}
 
 // 
 // protected methods
@@ -73,43 +65,43 @@ G4VAnalysisReader::~G4VAnalysisReader()
 //_____________________________________________________________________________
 void G4VAnalysisReader::SetH1Manager(G4VH1Manager* h1Manager)
 {
-  fVH1Manager = h1Manager;
+  fVH1Manager.reset(h1Manager);
 } 
 
 //_____________________________________________________________________________
 void G4VAnalysisReader::SetH2Manager(G4VH2Manager* h2Manager)
 {
-  fVH2Manager = h2Manager;
+  fVH2Manager.reset(h2Manager);
 }  
 
 //_____________________________________________________________________________
 void G4VAnalysisReader::SetH3Manager(G4VH3Manager* h3Manager)
 {
-  fVH3Manager = h3Manager;
+  fVH3Manager.reset(h3Manager);
 }  
 
 //_____________________________________________________________________________
 void G4VAnalysisReader::SetP1Manager(G4VP1Manager* p1Manager)
 {
-  fVP1Manager = p1Manager;
+  fVP1Manager.reset(p1Manager);
 } 
 
 //_____________________________________________________________________________
 void G4VAnalysisReader::SetP2Manager(G4VP2Manager* p2Manager)
 {
-  fVP2Manager = p2Manager;
+  fVP2Manager.reset(p2Manager);
 }  
 
 //_____________________________________________________________________________
 void G4VAnalysisReader::SetNtupleManager(G4VRNtupleManager* ntupleManager)
 {
-  fVNtupleManager = ntupleManager;
+  fVNtupleManager.reset(ntupleManager);
 }  
 
 //_____________________________________________________________________________
 void G4VAnalysisReader::SetFileManager(G4BaseFileManager* fileManager)
 {
-  fFileManager = fileManager;
+  fFileManager.reset(fileManager);
 }  
 
 // 
@@ -248,40 +240,19 @@ G4bool G4VAnalysisReader::SetFirstHistoId(G4int firstId)
 //_____________________________________________________________________________
 G4bool G4VAnalysisReader::SetFirstH1Id(G4int firstId) 
 {
-  G4bool finalResult = true;
-  G4bool result = fVH1Manager->SetFirstId(firstId);
-  finalResult = finalResult && result;
-  
-  result = fVH1Manager->fHnManager->SetFirstId(firstId);
-  finalResult = finalResult && result;
-  
-  return finalResult; 
+  return fVH1Manager->GetHnManager()->SetFirstId(firstId);
 }  
 
 //_____________________________________________________________________________
 G4bool G4VAnalysisReader::SetFirstH2Id(G4int firstId) 
 {
-  G4bool finalResult = true;
-  G4bool result = fVH2Manager->SetFirstId(firstId);
-  finalResult = finalResult && result;
-
-  result = fVH2Manager->fHnManager->SetFirstId(firstId);
-  finalResult = finalResult && result;
-   
-  return finalResult; 
+  return fVH2Manager->GetHnManager()->SetFirstId(firstId);
 }  
 
 //_____________________________________________________________________________
 G4bool G4VAnalysisReader::SetFirstH3Id(G4int firstId) 
 {
-  G4bool finalResult = true;
-  G4bool result = fVH3Manager->SetFirstId(firstId);
-  finalResult = finalResult && result;
-
-  result = fVH3Manager->fHnManager->SetFirstId(firstId);
-  finalResult = finalResult && result;
-   
-  return finalResult; 
+  return fVH3Manager->GetHnManager()->SetFirstId(firstId);
 }  
 
 //_____________________________________________________________________________
@@ -301,27 +272,13 @@ G4bool G4VAnalysisReader::SetFirstProfileId(G4int firstId)
 //_____________________________________________________________________________
 G4bool G4VAnalysisReader::SetFirstP1Id(G4int firstId) 
 {
-  G4bool finalResult = true;
-  G4bool result = fVP1Manager->SetFirstId(firstId);
-  finalResult = finalResult && result;
-  
-  result = fVP1Manager->fHnManager->SetFirstId(firstId);
-  finalResult = finalResult && result;
-  
-  return finalResult; 
+  return fVP1Manager->GetHnManager()->SetFirstId(firstId);
 }  
 
 //_____________________________________________________________________________
 G4bool G4VAnalysisReader::SetFirstP2Id(G4int firstId) 
 {
-  G4bool finalResult = true;
-  G4bool result = fVP2Manager->SetFirstId(firstId);
-  finalResult = finalResult && result;
-
-  result = fVP2Manager->fHnManager->SetFirstId(firstId);
-  finalResult = finalResult && result;
-   
-  return finalResult; 
+  return fVP2Manager->GetHnManager()->SetFirstId(firstId);
 }  
 
 //_____________________________________________________________________________
@@ -471,31 +428,31 @@ G4bool G4VAnalysisReader::GetNtupleRow(G4int ntupleId)
 //_____________________________________________________________________________
 G4int G4VAnalysisReader::GetNofH1s() const
 {
-  return fVH1Manager->fHnManager->GetNofHns();
+  return fVH1Manager->GetHnManager()->GetNofHns();
 }  
 
 //_____________________________________________________________________________
 G4int G4VAnalysisReader::GetNofH2s() const
 {
-  return fVH2Manager->fHnManager->GetNofHns();
+  return fVH2Manager->GetHnManager()->GetNofHns();
 }  
 
 //_____________________________________________________________________________
 G4int G4VAnalysisReader::GetNofH3s() const
 {
-  return fVH3Manager->fHnManager->GetNofHns();
+  return fVH3Manager->GetHnManager()->GetNofHns();
 }  
 
 //_____________________________________________________________________________
 G4int G4VAnalysisReader::GetNofP1s() const
 {
-  return fVP1Manager->fHnManager->GetNofHns();
+  return fVP1Manager->GetHnManager()->GetNofHns();
 }  
 
 //_____________________________________________________________________________
 G4int G4VAnalysisReader::GetNofP2s() const
 {
-  return fVP2Manager->fHnManager->GetNofHns();
+  return fVP2Manager->GetHnManager()->GetNofHns();
 }  
 
 //_____________________________________________________________________________

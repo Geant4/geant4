@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh 85021 2014-10-23 09:53:47Z gcosmo $
+// $Id: G4VisManager.hh 93026 2015-09-30 16:07:07Z gcosmo $
 //
 // 
 
@@ -329,8 +329,13 @@ public: // With description
   G4bool FilterDigi(const G4VDigi&);
 
 #ifdef G4MULTITHREADED
+
   virtual void SetUpForAThread();
   // This method is invoked by G4WorkerRunManager
+
+  static G4ThreadFunReturnType G4VisSubThread(G4ThreadFunArgType);
+  // Vis sub-thread function.
+
 #endif
 
   ////////////////////////////////////////////////////////////////////////
@@ -354,8 +359,6 @@ private:
   // current scene at the end of event, as required.
 
   void EndOfRun ();
-
-  void DrawEvent (const G4Event*);
 
 public: // With description
 
@@ -394,6 +397,10 @@ public: // With description
   const G4Event*               GetRequestedEvent           () const;
   G4bool                       GetAbortReviewKeptEvents    () const;
   const G4ViewParameters&      GetDefaultViewParameters    () const;
+#ifdef G4MULTITHREADED
+  G4int                        GetMaxEventQueueSize        () const;
+  G4bool                       GetWaitOnEventQueueFull     () const;
+#endif
 
   void SetUserAction
   (G4VUserVisAction* pVisAction,
@@ -410,10 +417,16 @@ public: // With description
   void              SetVerboseLevel             (Verbosity);
   void              SetEventRefreshing          (G4bool);
   void              ResetTransientsDrawnFlags   ();
+  void              SetTransientsDrawnThisRun   (G4bool);
+  void              SetTransientsDrawnThisEvent (G4bool);
   // If non-zero, requested event is used in G4VSceneHandler::ProcessScene.
   void              SetRequestedEvent           (const G4Event*);
   void              SetAbortReviewKeptEvents    (G4bool);
   void              SetDefaultViewParameters    (const G4ViewParameters&);
+#ifdef G4MULTITHREADED
+  void              SetMaxEventQueueSize        (G4int);
+  void              SetWaitOnEventQueueFull     (G4bool);
+#endif
 
   /////////////////////////////////////////////////////////////////////
   // Utility functions.
@@ -456,7 +469,7 @@ protected:
   // available graphics systems.)  It is initialised to 1 in the
   // constructor and cannot be changed.
 
-  void PrintAvailableGraphicsSystems   () const;
+  void PrintAvailableGraphicsSystems   (Verbosity) const;
 
 private:
 
@@ -497,6 +510,7 @@ private:
   G4bool                fEventRefreshing;
   G4bool                fTransientsDrawnThisRun;
   G4bool                fTransientsDrawnThisEvent;
+  G4int                 fNoOfEventsDrawnThisRun;
   G4int                 fNKeepRequests;
   G4bool                fEventKeepingSuspended;
   G4bool                fKeptLastEvent;
@@ -506,6 +520,10 @@ private:
   G4bool                fIsDrawGroup;
   G4int                 fDrawGroupNestingDepth;
   G4bool                fIgnoreStateChanges;
+#ifdef G4MULTITHREADED
+  G4int                 fMaxEventQueueSize;
+  G4bool                fWaitOnEventQueueFull;
+#endif
 
   // Trajectory draw model manager
   G4VisModelManager<G4VTrajectoryModel>* fpTrajDrawModelMgr;

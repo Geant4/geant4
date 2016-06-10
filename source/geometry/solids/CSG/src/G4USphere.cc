@@ -32,6 +32,9 @@
 
 #include "G4Sphere.hh"
 #include "G4USphere.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+
 #include "G4VPVParameterisation.hh"
 
 ////////////////////////////////////////////////////////////////////////
@@ -112,3 +115,5 @@ G4VSolid* G4USphere::Clone() const
 {
   return new G4USphere(*this);
 }
+
+#endif  // G4GEOM_USE_USOLIDS

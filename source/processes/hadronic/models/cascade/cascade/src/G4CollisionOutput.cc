@@ -57,6 +57,7 @@
 //		Add optional stream argument to printCollisionOutput
 // 20121002  M. Kelsey -- Add strangeness calculation
 // 20130628  M. Kelsey -- Support multiple recoil fragments (for G4Fissioner)
+// 20141208  M. Kelsey -- Split function to do pair-wise "hard" tuning
 
 #include <algorithm>
 
@@ -418,8 +419,8 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
   }
 
   ini_mom += momt;
-  G4LorentzVector mom_non_cons = ini_mom - out_mom;
 
+  mom_non_cons = ini_mom - out_mom;
   G4double pnc = mom_non_cons.rho();
   G4double enc = mom_non_cons.e();
 
@@ -532,86 +533,62 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
   if (verboseLevel > 2)
     G4cout << " trying hard (particle-pair) tuning" << G4endl;
 
-  std::pair<std::pair<G4int, G4int>, G4int> tune_par = selectPairToTune(mom_non_cons.e());
-  std::pair<G4int, G4int> tune_particles = tune_par.first;
-  G4int mom_ind = tune_par.second;
-  
-  if(verboseLevel > 2) {
-    G4cout << " p1 " << tune_particles.first << " p2 " << tune_particles.second
-	   << " ind " << mom_ind << G4endl;
-  }
+  /*****
+  // Hard tuning of quasielastic particle against nucleus
+  if (npart == 1) {
+    if (verboseLevel > 2)
+      G4cout << " tuning particle 0 against recoil nucleus" << G4endl;
 
-  G4bool tuning_possible = 
-    (tune_particles.first >= 0 && tune_particles.second >= 0 &&
-     mom_ind >= G4LorentzVector::X);
+    G4LorentzVector mom1 = outgoingParticles[0].getMomentum();
+    G4LorentzVector mom2 = recoilFragments[0].GetMomentum()/GeV;
 
-  if (!tuning_possible) {
-    if (verboseLevel > 2) G4cout << " tuning impossible " << G4endl;
-    return;
-  }
+    // Preserve momentum direction of outgoing particle
+    G4ThreeVector pdir = mom1.vect().unit();
+
+    // Two-body kinematics (nucleon against nucleus) in overall CM system
+    G4double ecmsq = ini_mom.m2();
+    G4double a = 0.5 * (ecmsq - mom1.m2() - mom2.m2());
+    G4double pmod = std::sqrt((a*a - mom1.m2()*mom2.m2()) / ecmsq);
+
+    mom1.setVectM(pdir*pmod, mom1.m());
+    mom2.setVectM(-pdir*pmod, mom2.m());
+
+    // Boost CM momenta back into lab frame, assign back to particles
+    mom1.boost(-ini_mom.boostVector());
+    mom2.boost(-ini_mom.boostVector());
+
+    outgoingParticles[0].setMomentum(mom1);
+    recoilFragments[0].SetMomentum(mom2*GeV);
+  } else {	// Hard tuning using pair of outgoing particles
+  *****/
+    std::pair<std::pair<G4int, G4int>, G4int> tune_par = selectPairToTune(enc);
+    std::pair<G4int, G4int> tune_particles = tune_par.first;
+    G4int mom_ind = tune_par.second;
     
-  G4LorentzVector mom1 = outgoingParticles[tune_particles.first].getMomentum();
-  G4LorentzVector mom2 = outgoingParticles[tune_particles.second].getMomentum();
-  G4double newE12 = mom1.e() + mom2.e() + mom_non_cons.e();
-  G4double R = 0.5 * (newE12 * newE12 + mom2.e() * mom2.e() - mom1.e() * mom1.e()) / newE12;
-  G4double Q = -(mom1[mom_ind] + mom2[mom_ind]) / newE12;
-  G4double UDQ = 1.0 / (Q * Q - 1.0);
-  G4double W = (R * Q + mom2[mom_ind]) * UDQ;
-  G4double V = (mom2.e() * mom2.e() - R * R) * UDQ;
-  G4double DET = W * W + V;
-  
-  if (DET < 0.0) {
-    if (verboseLevel > 2) G4cout << " DET < 0 " << G4endl;
-    return;
-  }
+    G4bool tuning_possible = 
+      (tune_particles.first >= 0 && tune_particles.second >= 0 &&
+       mom_ind >= G4LorentzVector::X);
+    
+    if (!tuning_possible) {
+      if (verboseLevel > 2) G4cout << " tuning impossible " << G4endl;
+      return;
+    }
+    
+    if(verboseLevel > 2) {
+      G4cout << " p1 " << tune_particles.first << " p2 " << tune_particles.second
+	     << " ind " << mom_ind << G4endl;
+    }
+    
+    G4LorentzVector mom1 = outgoingParticles[tune_particles.first].getMomentum();
+    G4LorentzVector mom2 = outgoingParticles[tune_particles.second].getMomentum();
+    
+    if (tuneSelectedPair(mom1, mom2, mom_ind)) {
+      outgoingParticles[tune_particles.first ].setMomentum(mom1);
+      outgoingParticles[tune_particles.second].setMomentum(mom2);
+    }
+    else return;
+    //*****  }
 
-  // Tuning allowed only for non-negative determinant
-  G4double x1 = -(W + std::sqrt(DET));
-  G4double x2 = -(W - std::sqrt(DET));
-  
-  // choose the appropriate solution
-  G4bool xset = false;
-  G4double x = 0.0;
-  
-  if(mom_non_cons.e() > 0.0) { // x has to be > 0.0
-    if(x1 > 0.0) {
-      if(R + Q * x1 >= 0.0) {
-	x = x1;
-	xset = true;
-      };
-    };  
-    if(!xset && x2 > 0.0) {
-      if(R + Q * x2 >= 0.0) {
-	x = x2;
-	xset = true;
-      };
-    };
-  } else { 
-    if(x1 < 0.0) {
-      if(R + Q * x1 >= 0.) {
-	x = x1;
-	xset = true;
-      };
-    };  
-    if(!xset && x2 < 0.0) {
-      if(R + Q * x2 >= 0.0) {
-	x = x2;
-	xset = true;
-      };
-    };
-  }	// if(mom_non_cons.e() > 0.0)
-  
-  if(!xset) {
-    if(verboseLevel > 2)
-      G4cout << " no appropriate solution found " << G4endl;
-    return;
-  }	// if(xset)
-
-  // retune momentums
-  mom1[mom_ind] += x;
-  mom2[mom_ind] -= x;
-  outgoingParticles[tune_particles.first ].setMomentum(mom1);
-  outgoingParticles[tune_particles.second].setMomentum(mom2);
   out_mom = getTotalOutputMomentum();
   std::sort(outgoingParticles.begin(), outgoingParticles.end(), G4ParticleLargerEkin());
   mom_non_cons = ini_mom - out_mom;
@@ -668,7 +645,7 @@ G4CollisionOutput::selectPairToTune(G4double de) const {
 	  if (std::fabs(mom1[l])>pcut && std::fabs(mom2[l])>pcut) {
 	    G4double psum = std::fabs(mom1[l]) + std::fabs(mom2[l]);  
 	    
-	    if(psum > pbest) {
+	    if (psum > pbest) {
 	      ibest1 = i;
 	      ibest2 = j;
 	      i3 = l;
@@ -695,4 +672,70 @@ G4CollisionOutput::selectPairToTune(G4double de) const {
   }		 
   
   return tuner;
+}
+
+
+G4bool  G4CollisionOutput::tuneSelectedPair(G4LorentzVector& mom1,
+					    G4LorentzVector& mom2,
+					    G4int mom_ind) const {
+  if (verboseLevel > 2)
+    G4cout << " >>> G4CollisionOutput::tuneSelectedPair" << G4endl;
+
+  G4double newE12 = mom1.e() + mom2.e() + mom_non_cons.e();
+  G4double R = 0.5 * (newE12*newE12 + mom2.e()*mom2.e() - mom1.e()*mom1.e()) / newE12;
+  G4double Q = -(mom1[mom_ind] + mom2[mom_ind]) / newE12;
+  G4double UDQ = 1.0 / (Q*Q - 1.0);
+  G4double W = (R * Q + mom2[mom_ind]) * UDQ;
+  G4double V = (mom2.e()*mom2.e() - R*R) * UDQ;
+  G4double DET = W*W + V;
+  
+  if (DET < 0.0) {
+    if (verboseLevel > 2) G4cout << " DET < 0 : tuning failed" << G4endl;
+    return false;
+  }
+
+  // Tuning allowed only for non-negative determinant
+  G4double x1 = -(W + std::sqrt(DET));
+  G4double x2 = -(W - std::sqrt(DET));
+  
+  // choose the appropriate solution
+  G4bool xset = false;
+  G4double x = 0.0;
+  
+  if (mom_non_cons.e() > 0.0) { // x has to be > 0.0
+    if (x1 > 0.0) {
+      if (R + Q * x1 >= 0.0) {
+	x = x1;
+	xset = true;
+      }
+    }  
+    if (!xset && x2 > 0.0) {
+      if (R + Q * x2 >= 0.0) {
+	x = x2;
+	xset = true;
+      }
+    }
+  } else { 
+    if (x1 < 0.0) {
+      if (R + Q * x1 >= 0.) {
+	x = x1;
+	xset = true;
+      }
+    }  
+    if (!xset && x2 < 0.0) {
+      if (R + Q * x2 >= 0.0) {
+	x = x2;
+	xset = true;
+      }
+    }
+  }	// if(mom_non_cons.e() > 0.0)
+  
+  if (!xset) {
+    if (verboseLevel > 2) G4cout << " no appropriate solution found" << G4endl;
+    return false;
+  }
+
+  mom1[mom_ind] += x;		  // retune momentums
+  mom2[mom_ind] -= x;
+  return true;
 }

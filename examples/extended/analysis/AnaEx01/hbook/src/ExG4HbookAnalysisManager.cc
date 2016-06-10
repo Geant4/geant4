@@ -108,7 +108,7 @@ ExG4HbookAnalysisManager::ExG4HbookAnalysisManager()
   fP1Manager = new ExG4HbookP1Manager(fState);
   fP2Manager = new ExG4HbookP2DummyManager(fState);
   fNtupleManager = new ExG4HbookNtupleManager(fState);
-  fFileManager = new ExG4HbookFileManager(fState);
+  fFileManager = std::make_shared<ExG4HbookFileManager>(fState);
   
   // Set managers to base class
   SetH1Manager(fH1Manager);
@@ -120,10 +120,10 @@ ExG4HbookAnalysisManager::ExG4HbookAnalysisManager()
   SetFileManager(fFileManager);
   
   // Set file manager to component managers
-  fH1Manager->SetFileManager(fFileManager);
-  fH2Manager->SetFileManager(fFileManager);
-  fP1Manager->SetFileManager(fFileManager);
-  fNtupleManager->SetFileManager(fFileManager);
+  fH1Manager->SetFileManager(fFileManager.get());
+  fH2Manager->SetFileManager(fFileManager.get());
+  fP1Manager->SetFileManager(fFileManager.get());
+  fNtupleManager->SetFileManager(fFileManager.get());
   
   // Initialize HBOOK :
   tools::hbook::CHLIMIT(setpawc());
@@ -233,5 +233,29 @@ G4bool ExG4HbookAnalysisManager::CloseFileImpl()
 
   return finalResult;
 } 
-   
+
+//_____________________________________________________________________________
+G4bool ExG4HbookAnalysisManager::PlotImpl() 
+{
+  G4ExceptionDescription description;
+  description << "      " 
+    << "G4HbookAnalysisManager does not support batch plotting."; 
+  G4Exception("ExG4HbookAnalysisManager::ExG4HbookAnalysisManager()",
+              "Analysis_W041", JustWarning, description);
+  
+  return false;
+}
+
+//_____________________________________________________________________________
+G4bool ExG4HbookAnalysisManager::MergeImpl(tools::histo::hmpi* /*hmpi*/)
+{
+  G4ExceptionDescription description;
+  description << "      " 
+    << "G4HbookAnalysisManager does not support MPI."; 
+  G4Exception("ExG4HbookAnalysisManager::ExG4HbookAnalysisManager()",
+              "Analysis_W041", JustWarning, description);
+  
+  return false;
+}
+
 #endif

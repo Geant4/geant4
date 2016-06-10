@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.hh 85443 2014-10-29 14:35:57Z gcosmo $
+// $Id: G4ExcitationHandler.hh 88849 2015-03-12 16:19:38Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -68,30 +68,22 @@ public:
   G4ExcitationHandler(); 
   ~G4ExcitationHandler();
 
-private:
+  G4ReactionProductVector* BreakItUp(const G4Fragment &theInitialState);
 
-  G4ExcitationHandler(const G4ExcitationHandler &right);
-  const G4ExcitationHandler & operator=(const G4ExcitationHandler &right);
-  G4bool operator==(const G4ExcitationHandler &right) const;
-  G4bool operator!=(const G4ExcitationHandler &right) const;
-  
-public:
-
-  G4ReactionProductVector * BreakItUp(const G4Fragment &theInitialState);
-
+  // user defined sub-models
+  // deletion is responsibility of this handler
   void SetEvaporation(G4VEvaporation* ptr);
-
   void SetMultiFragmentation(G4VMultiFragmentation* ptr);
-
   void SetFermiModel(G4VFermiBreakUp* ptr);
-
   void SetPhotonEvaporation(G4VEvaporationChannel* ptr);
 
+  // parameters of sub-models
   void SetMaxZForFermiBreakUp(G4int aZ);
   void SetMaxAForFermiBreakUp(G4int anA);
   void SetMaxAandZForFermiBreakUp(G4int anA,G4int aZ);
   void SetMinEForMultiFrag(G4double anE);
 
+  // short model description used for automatic web documentation
   void ModelDescription(std::ostream& outFile) const;
 
   // access methods
@@ -108,13 +100,15 @@ public:
 private:
 
   void SetParameters();
+
+  G4ExcitationHandler(const G4ExcitationHandler &right);
+  const G4ExcitationHandler & operator=(const G4ExcitationHandler &right);
+  G4bool operator==(const G4ExcitationHandler &right) const;
+  G4bool operator!=(const G4ExcitationHandler &right) const;
   
-  G4VEvaporation* theEvaporation;
-  
+  G4VEvaporation* theEvaporation;  
   G4VMultiFragmentation* theMultiFragmentation;
-  
   G4VFermiBreakUp* theFermiModel;
- 
   G4VEvaporationChannel* thePhotonEvaporation;
 
   G4FermiFragmentsPool* thePool;
@@ -127,7 +121,7 @@ private:
   G4IonTable* theTableOfIons;
   G4NistManager* nist;
 
-  G4int OPTxs;
+  G4int  OPTxs;
   G4bool useSICB;
   G4bool isEvapLocal;
 

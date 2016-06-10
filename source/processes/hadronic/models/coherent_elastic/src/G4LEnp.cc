@@ -118,12 +118,12 @@ G4LEnp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
         je2 = midBin;
       else
         je1 = midBin;
-    } while (je2 - je1 > 1); 
+    } while (je2 - je1 > 1);  /* Loop checking, 10.08.2015, A.Ribon */
     G4double delab = elab[je2] - elab[je1];
 
     // Sample the angle
 
-    G4float sample = G4UniformRand();
+    G4double sample = G4UniformRand();
     G4int ke1 = 0;
     G4int ke2 = NANGLE - 1;
     G4double dsig = sig[je2][0] - sig[je1][0];
@@ -155,7 +155,7 @@ G4LEnp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
 	G4cout << ke1 << " " << ke2 << " " 
 	       << sigint1 << " " << sigint2 << G4endl;
       }
-    } while (ke2 - ke1 > 1); 
+    } while (ke2 - ke1 > 1);  /* Loop checking, 10.08.2015, A.Ribon */
 
     dsig = sigint2 - sigint1;
     rc = 1./dsig;
@@ -328,7 +328,7 @@ G4double G4LEnp::SampleInvariantT(const G4ParticleDefinition* p,
         je2 = midBin;
       else
         je1 = midBin;
-  } while (je2 - je1 > 1); 
+  } while (je2 - je1 > 1);  /* Loop checking, 10.08.2015, A.Ribon */ 
 
   G4double delab = elab[je2] - elab[je1];
 
@@ -361,7 +361,7 @@ G4double G4LEnp::SampleInvariantT(const G4ParticleDefinition* p,
         ke1 = midBin;
         sigint1 = sigint;
       }
-  } while (ke2 - ke1 > 1); 
+  } while (ke2 - ke1 > 1);  /* Loop checking, 10.08.2015, A.Ribon */
 
   dsig = sigint2 - sigint1;
   rc = 1./dsig;

@@ -49,7 +49,8 @@ B1ActionInitialization::~B1ActionInitialization()
 
 void B1ActionInitialization::BuildForMaster() const
 {
-  SetUserAction(new B1RunAction);
+  B1RunAction* runAction = new B1RunAction;
+  SetUserAction(runAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,9 +58,11 @@ void B1ActionInitialization::BuildForMaster() const
 void B1ActionInitialization::Build() const
 {
   SetUserAction(new B1PrimaryGeneratorAction);
-  SetUserAction(new B1RunAction);
+
+  B1RunAction* runAction = new B1RunAction;
+  SetUserAction(runAction);
   
-  B1EventAction* eventAction = new B1EventAction;
+  B1EventAction* eventAction = new B1EventAction(runAction);
   SetUserAction(eventAction);
   
   SetUserAction(new B1SteppingAction(eventAction));

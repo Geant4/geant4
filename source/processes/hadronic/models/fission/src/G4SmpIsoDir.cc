@@ -58,6 +58,7 @@
 
 #include <cmath>
 #include "G4fissionEvent.hh"
+#include "G4Pow.hh"
 #include "G4PhysicalConstants.hh"
 
 void G4fissionEvent::G4SmpIsoDir(G4double* cosdiru, G4double* cosdirv, G4double* cosdirw) {
@@ -80,8 +81,9 @@ void G4fissionEvent::G4SmpIsoDir(G4double* cosdiru, G4double* cosdirv, G4double*
    Choose emission angle isotropically.
    Select a polar angle direction cosine.
 */
+   G4Pow* Pow=G4Pow::GetInstance();
    cospolang = 1.-2.*fisslibrng();
-   sinpolang = std::sqrt(1.-std::pow(cospolang, 2.));
+   sinpolang = std::sqrt(1.-Pow->powA(cospolang, 2.));
 /*
    Select an azimuthal angle uniformly on (0,2*pi)
 */

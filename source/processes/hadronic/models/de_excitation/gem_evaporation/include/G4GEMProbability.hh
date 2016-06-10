@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GEMProbability.hh 86986 2014-11-21 13:00:05Z gcosmo $
+// $Id: G4GEMProbability.hh 91834 2015-08-07 07:24:22Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -49,6 +49,7 @@
 #include "G4VCoulombBarrier.hh"
 #include "G4PairingCorrection.hh"
 #include "G4Pow.hh"
+#include "G4Exp.hh"
 
 class G4GEMProbability : public G4VEmissionProbability
 {
@@ -228,12 +229,12 @@ G4GEMProbability::CalcBetaParam(const G4Fragment & fragment) const
 
 inline G4double G4GEMProbability::I0(G4double t)
 {
-  return std::exp(t) - 1.0;
+  return G4Exp(t) - 1.0;
 }
 
 inline G4double G4GEMProbability::I1(G4double t, G4double tx)
 {
-  return (t - tx + 1.0)*std::exp(tx) - t - 1.0;
+  return (t - tx + 1.0)*G4Exp(tx) - t - 1.0;
 }
 
 
@@ -243,7 +244,7 @@ inline G4double G4GEMProbability::I2(G4double s0, G4double sx)
   G4double Sx = 1.0/std::sqrt(sx);
   
   G4double p1 = S*S*S*( 1.0 + S*S*( 1.5 + 3.75*S*S) );
-  G4double p2 = Sx*Sx*Sx*( 1.0 + Sx*Sx*( 1.5 + 3.75*Sx*Sx) )*std::exp(sx-s0);
+  G4double p2 = Sx*Sx*Sx*( 1.0 + Sx*Sx*( 1.5 + 3.75*Sx*Sx) )*G4Exp(sx-s0);
   
   return p1-p2;
 }

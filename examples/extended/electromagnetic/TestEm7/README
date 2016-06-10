@@ -1,4 +1,4 @@
-$Id: README 66241 2012-12-13 18:34:42Z gunter $
+$Id: README 93675 2015-10-28 09:59:23Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,7 +20,7 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
      Three parameters define the geometry :
  	- the material of the box,
 	- the thickness of the box (sizeX),
-	- the  tranverse dimension of the box (sizeYZ).
+	- the transverse dimension of the box (sizeYZ).
 	
      The default is 20 cm of water.
      	 	
@@ -52,27 +52,34 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
                 In later Geant4 releases the process will be a part
                 of Geant4 source, currently it is released together
                 with its mathematical tool c2_functions in current 
-
     
  From geant4/source/physics_lists/builders:	 
  - "emstandard_opt0" recommended standard EM physics for LHC
  - "emstandard_opt1" best CPU performance standard physics for LHC
- - "emstandard_opt2"     
- - "emstandard_opt3" best current advanced EM options. 
-                     analog to "local" above  
+ - "emstandard_opt2" similar fast simulation
+ - "emstandard_opt3" best standard EM options - analog to "local" above
+ - "emstandard_opt4" best current advanced EM options standard + lowenergy
+ - "emstandardWVI" standard EM physics and WentzelVI multiple scattering
+ - "emstandardSS"  standard EM physics and single scattering model
+ - "emstandardGS"  standard EM physics and Goudsmit-Saunderson multiple scatt.
  - "emlivermore"  low-energy EM physics using Livermore data
  - "empenelope"   low-energy EM physics implementing Penelope models
-    
+ - "emlowenergy"  low-energy EM physics implementing experimental
+                  low-energy models
+  
+ Decay and StepMax processes are added to each list. 
+
  Optional components can be added:
  - "elastic"       elastic scattering of hadrons
  - "HElastic"
  - "QElastic"    
  - "binary"        QBBC configuration of hadron inelastic models
  - "binary_ion"    Binary ion inelastic models
+ - "ionIoni"       Ion gas models
      		        
  Physics lists and options can be (re)set with UI commands
     
- Please, notice that options set through G4EmProcessOPtions are global, eg
+ Please, notice that options set through G4EmProcessOptions are global, eg
  for all particle types. In G4 builders, it is shown how to set options per
  particle type.		
  	 
@@ -81,16 +88,15 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
      The primary kinematic consists of a single particle which hits the
      block perpendicular to the input face. The type of the particle
      and its energy are set in the PrimaryGeneratorAction class, and can
-     changed via the G4 build-in commands of ParticleGun class (see
+     changed via the G4 build-in commands of G4ParticleGun class (see
      the macros provided with this example).
-     The default is proton 160 MeV
+     The default is a 160 MeV proton.
      	
      In addition one can define randomly the impact point of the incident
      particle. The corresponding interactive command is built in
      PrimaryGeneratorMessenger class.
 	 	
      A RUN is a set of events.
- 	
 
  4- DOSE IN 'TEST-VOLUMES'
   
@@ -106,10 +112,9 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
      The detector has a default view which is a longitudinal view of the box.
  	
      The tracks are drawn at the end of event, and erased at the end of run.
-     Optionaly one can choose to draw all particles, only the charged one,
+     Optionally one can choose to draw all particles, only the charged one,
      or none. This command is defined in EventActionMessenger class.
      
-		  	
  6- HOW TO START ?
  
      - execute Test  in 'batch' mode from macro files
@@ -121,7 +126,6 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
  	Idle> type your commands
  		....
  	Idle> exit
-
 
  7- HISTOGRAM OF THE BRAGG PEAK
  
@@ -135,11 +139,11 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
      The result is a 1D histogram, which is the total energy deposited 
      along the trajectory of the incident particle.
      
-     The bin size is egal to stepMax. The number of bins is determined by 
+     The bin size is equal to stepMax. The number of bins is determined by 
      the thickness of the absorber (with a minimum of 100 bins).
      The total energy deposited is plotted in MeV/mm per incident particle.  
 
-     The next histogram allows to have a zoom around the Bragg peak. Its bining
+     The next histogram allows to have a zoom around the Bragg peak. Its binning
      should be defined via UI command: 
      /analysis/h1/set 2 nbins xmin xmax unit
 

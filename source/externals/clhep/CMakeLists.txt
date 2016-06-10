@@ -56,6 +56,9 @@ set(G4clhep_HEADERS
     include/CLHEP/Random/EngineFactory.h
     include/CLHEP/Random/engineIDulong.h
     include/CLHEP/Random/JamesRandom.h
+    include/CLHEP/Random/mixmax.h
+    include/CLHEP/Random/mixmax_skip_N256.icc
+    include/CLHEP/Random/MixMaxRng.h
     include/CLHEP/Random/MTwistEngine.h
     include/CLHEP/Random/NonRandomEngine.h
     include/CLHEP/Random/RandBinomial.h
@@ -106,7 +109,6 @@ set(G4clhep_HEADERS
     include/CLHEP/Utility/keywords.h
     include/CLHEP/Utility/memory.h
     include/CLHEP/Utility/noncopyable.h
-    include/CLHEP/Utility/type_traits.h
     include/CLHEP/Vector/AxisAngle.h
     include/CLHEP/Vector/AxisAngle.icc
     include/CLHEP/Vector/Boost.h
@@ -166,6 +168,8 @@ set(G4clhep_SOURCES
     src/LorentzVectorK.cc
     src/LorentzVectorL.cc
     src/LorentzVectorR.cc
+    src/mixmax.cc
+    src/MixMaxRng.cc
     src/MTwistEngine.cc
     src/NonRandomEngine.cc
     src/Normal3D.cc

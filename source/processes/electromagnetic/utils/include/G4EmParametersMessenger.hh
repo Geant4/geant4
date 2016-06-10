@@ -89,24 +89,30 @@ private:
   G4UIcmdWithABool*          rsCmd;
   G4UIcmdWithABool*          aplCmd;
   G4UIcmdWithABool*          deCmd;
+  G4UIcmdWithABool*          dirFluoCmd;
   G4UIcmdWithABool*          auCmd;
+  G4UIcmdWithABool*          auCascadeCmd;
   G4UIcmdWithABool*          pixeCmd;
   G4UIcmdWithABool*          dcutCmd;
   G4UIcmdWithABool*          latCmd;
   G4UIcmdWithABool*          mulatCmd;
   G4UIcmdWithABool*          catCmd;
   G4UIcmdWithABool*          delCmd;
+  G4UIcmdWithABool*          mottCmd;
 
   G4UIcmdWithADouble*        minSubSecCmd;
   G4UIcmdWithADoubleAndUnit* minEnCmd;
   G4UIcmdWithADoubleAndUnit* maxEnCmd;
   G4UIcmdWithADoubleAndUnit* cenCmd;
+  G4UIcmdWithADoubleAndUnit* lowEnCmd;
+  G4UIcmdWithADoubleAndUnit* lowhEnCmd;
   G4UIcmdWithADouble*        lllCmd;
   G4UIcmdWithADoubleAndUnit* brCmd;
   G4UIcmdWithADouble*        labCmd;
   G4UIcmdWithADouble*        mscfCmd;
   G4UIcmdWithADoubleAndUnit* angCmd;
   G4UIcmdWithADouble*        frCmd;
+  G4UIcmdWithADouble*        fr1Cmd;
   G4UIcmdWithADouble*        fgCmd;
   G4UIcmdWithADouble*        skinCmd;
 
@@ -118,6 +124,15 @@ private:
   G4UIcmdWithAnInteger*      ver2Cmd;
 
   G4UIcmdWithAString*        mscCmd;
+  G4UIcmdWithAString*        msc1Cmd;
+
+  G4UIcmdWithAString*        pixeXsCmd;
+  G4UIcmdWithAString*        pixeeXsCmd;
+
+  G4UIcommand*               paiCmd;
+  G4UIcmdWithAString*        meCmd;
+  G4UIcommand*               dnaCmd;
+  G4UIcommand*               dumpCmd;
 };
 
 #endif

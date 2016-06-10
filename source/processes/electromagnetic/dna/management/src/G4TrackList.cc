@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrackList.cc 87454 2014-12-04 14:54:12Z gcosmo $
+// $Id: G4TrackList.cc 93616 2015-10-27 08:59:17Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
@@ -180,7 +180,7 @@ G4FastList<G4Track>* G4FastList<G4Track>::GetList(G4Track* __track)
   G4FastListNode<G4Track>* __trackListNode = __IT->GetListNode();
 
   if(__trackListNode == 0) return 0;
-  if(__trackListNode->fListRef == 0) return 0;
+  if(__trackListNode->fListRef == nullptr) return 0;
 
   return __trackListNode->fListRef->fpList;
 }

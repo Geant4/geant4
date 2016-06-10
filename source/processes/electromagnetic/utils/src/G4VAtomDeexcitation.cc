@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAtomDeexcitation.cc 86805 2014-11-18 13:25:55Z gcosmo $
+// $Id: G4VAtomDeexcitation.cc 92921 2015-09-21 15:06:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -67,20 +67,19 @@
 G4int G4VAtomDeexcitation::pixeIDg = -1;
 G4int G4VAtomDeexcitation::pixeIDe = -1;
 
-G4VAtomDeexcitation::G4VAtomDeexcitation(const G4String& modname, 
-					 const G4String& pname) 
-  : lowestKinEnergy(keV), verbose(1), name(modname), namePIXE(pname), 
-    nameElectronPIXE(""), isActive(false), flagAuger(false), 
+G4VAtomDeexcitation::G4VAtomDeexcitation(const G4String& modname) 
+  : verbose(1), name(modname), isActive(false), 
+    flagAuger(false),flagAugerCascade(false), 
     flagPIXE(false), ignoreCuts(false)
 {
+  theParameters = G4EmParameters::Instance();
   vdyn.reserve(5);
-  theCoupleTable = 0;
+  theCoupleTable = nullptr;
   G4String gg = "gammaPIXE";
   G4String ee = "e-PIXE";
   if(pixeIDg < 0) { pixeIDg = G4PhysicsModelCatalog::Register(gg); }
   if(pixeIDe < 0) { pixeIDe = G4PhysicsModelCatalog::Register(ee); }
   gamma = G4Gamma::Gamma();
-  theParameters = G4EmParameters::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -103,6 +102,13 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
   activePIXEMedia.resize(nn, false);
   activeZ.resize(93, false);
 
+  // initialisation of flags and options
+  isActive   = theParameters->Fluo();
+  flagAuger  = theParameters->Auger();
+  flagAugerCascade = theParameters->AugerCascade();
+  flagPIXE   = theParameters->Pixe();
+  ignoreCuts = theParameters->DeexcitationIgnoreCut();
+
   // check if deexcitation is active for the given run
   if( !isActive ) { return; }
 
@@ -117,7 +123,7 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
   if(0 < verbose) {
     G4cout << G4endl;
     G4cout << "### ===  Deexcitation model " << name 
-	   << " is activated for " << nRegions;
+           << " is activated for " << nRegions;
     if(1 == nRegions) { G4cout << " region:" << G4endl; }
     else              { G4cout << " regions:" << G4endl;}
   }
@@ -129,16 +135,16 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
     if(reg && 0 < numOfCouples) {
       const G4ProductionCuts* rpcuts = reg->GetProductionCuts();
       if(0 < verbose) {
-	G4cout << "          " << activeRegions[j] << G4endl;  
+        G4cout << "          " << activeRegions[j] << G4endl;  
       }
       for(G4int i=0; i<numOfCouples; ++i) {
-	const G4MaterialCutsCouple* couple =
-	  theCoupleTable->GetMaterialCutsCouple(i);
-	if (couple->GetProductionCuts() == rpcuts) {
-	  activeDeexcitationMedia[i] = deRegions[j];
-	  activeAugerMedia[i] = AugerRegions[j];
-	  activePIXEMedia[i] = PIXERegions[j];
-	}
+        const G4MaterialCutsCouple* couple =
+          theCoupleTable->GetMaterialCutsCouple(i);
+        if (couple->GetProductionCuts() == rpcuts) {
+          activeDeexcitationMedia[i] = deRegions[j];
+          activeAugerMedia[i] = AugerRegions[j];
+          activePIXEMedia[i] = PIXERegions[j];
+        }
       }
     }
   }
@@ -156,12 +162,12 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
   InitialiseForNewRun();
 
   if(0 < verbose && flagPIXE) {
-    G4cout << "### ===  PIXE model for hadrons: " << namePIXE
-	   << "  " <<  IsPIXEActive()
-	   << G4endl;  
-    G4cout << "### ===  PIXE model for e+-:     " << nameElectronPIXE
-	   << "  " <<  IsPIXEActive()
-	   << G4endl;  
+    G4cout << "### ===  PIXE model for hadrons: " 
+           << theParameters->PIXECrossSectionModel()
+           << G4endl;  
+    G4cout << "### ===  PIXE model for e+-:     " 
+           << theParameters->PIXEElectronCrossSectionModel()
+           << G4endl;  
   }
 }
 
@@ -169,17 +175,17 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
 
 void 
 G4VAtomDeexcitation::SetDeexcitationActiveRegion(const G4String& rname,
-						 G4bool valDeexcitation,
-						 G4bool valAuger,
-						 G4bool valPIXE)
+                                                 G4bool valDeexcitation,
+                                                 G4bool valAuger,
+                                                 G4bool valPIXE)
 {
   // no PIXE in parallel world
   if(rname == "DefaultRegionForParallelWorld") { return; }
 
   G4String ss = rname;
   //G4cout << "### G4VAtomDeexcitation::SetDeexcitationActiveRegion " << ss 
-  //	 << "  " << valDeexcitation << "  " << valAuger
-  //	 << "  " << valPIXE << G4endl;
+  //         << "  " << valDeexcitation << "  " << valAuger
+  //         << "  " << valPIXE << G4endl;
   if(ss == "world" || ss == "World" || ss == "WORLD") {
     ss = "DefaultRegionForTheWorld";
   }
@@ -189,10 +195,10 @@ G4VAtomDeexcitation::SetDeexcitationActiveRegion(const G4String& rname,
  
       // Region already exist
       if(ss == activeRegions[i]) {
-	deRegions[i] = valDeexcitation;
-	AugerRegions[i] = valAuger;
-	PIXERegions[i] = valPIXE;
-	return; 
+        deRegions[i] = valDeexcitation;
+        AugerRegions[i] = valAuger;
+        PIXERegions[i] = valPIXE;
+        return; 
       } 
     }
   }
@@ -210,6 +216,7 @@ G4VAtomDeexcitation::SetDeexcitationActiveRegion(const G4String& rname,
     for(G4int i=0; i<nn; ++i) {
       SetDeexcitationActiveRegion((*regions)[i]->GetName(), valDeexcitation,
                                   valAuger, valPIXE);
+                                  
     }
   }
 }
@@ -218,8 +225,8 @@ G4VAtomDeexcitation::SetDeexcitationActiveRegion(const G4String& rname,
 
 void
 G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
-					   const G4Step& step, 
-					   G4double& eLossMax,
+                                           const G4Step& step, 
+                                           G4double& eLossMax,
                                            G4int coupleIndex)
 {
   G4double truelength = step.GetStepLength();
@@ -248,7 +255,7 @@ G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
   }
 
   //G4cout<<"!Sample PIXE gCut(MeV)= "<<gCut<<"  eCut(MeV)= "<<eCut
-  //	<<" Ekin(MeV)= " << ekin/MeV << G4endl;
+  //        <<" Ekin(MeV)= " << ekin/MeV << G4endl;
 
   const G4Material* material = preStep->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector();
@@ -261,61 +268,62 @@ G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
     G4int Z = G4lrint((*theElementVector)[i]->GetZ());
     if(activeZ[Z] && Z < 93) {  
       G4int nshells = 
-	std::min(9,(*theElementVector)[i]->GetNbOfAtomicShells());
+        std::min(9,(*theElementVector)[i]->GetNbOfAtomicShells());
       G4double rho = truelength*theAtomNumDensityVector[i];
       //G4cout<<"   Z "<< Z <<" is active  x(mm)= " << truelength/mm << G4endl;
       for(G4int ii=0; ii<nshells; ++ii) {
-	G4AtomicShellEnumerator as = G4AtomicShellEnumerator(ii);
-	const G4AtomicShell* shell = GetAtomicShell(Z, as);
-	G4double bindingEnergy = shell->BindingEnergy();
+        G4AtomicShellEnumerator as = G4AtomicShellEnumerator(ii);
+        const G4AtomicShell* shell = GetAtomicShell(Z, as);
+        G4double bindingEnergy = shell->BindingEnergy();
 
-	if(gCut > bindingEnergy) { break; }
+        if(gCut > bindingEnergy) { break; }
 
-	if(eLossMax > bindingEnergy) { 
-	  G4double sig = rho*
-	    GetShellIonisationCrossSectionPerAtom(part, Z, as, ekin, material);
+        if(eLossMax > bindingEnergy) { 
+          G4double sig = rho*
+            GetShellIonisationCrossSectionPerAtom(part, Z, as, ekin, material);
 
-	  // mfp is mean free path in units of step size
-	  if(sig > 0.0) {
-	    G4double mfp = 1.0/sig;
-	    G4double stot = 0.0;
-	    //G4cout << " Shell " << ii << " mfp(mm)= " << mfp/mm << G4endl;
-	    // sample ionisation points
-	    do {
-	      stot -= mfp*std::log(G4UniformRand());
-	      if( stot > 1.0 || eLossMax < bindingEnergy) { break; }
-	      // sample deexcitation
-	      vdyn.clear();
-	      GenerateParticles(&vdyn, shell, Z, gCut, eCut); 
-	      G4int nsec = vdyn.size();
-	      if(nsec > 0) {
-		G4ThreeVector r = prePos  + stot*delta;
-		G4double time   = preTime + stot*dt;
-		for(G4int j=0; j<nsec; ++j) {
-		  G4DynamicParticle* dp = vdyn[j];
-		  G4double e = dp->GetKineticEnergy();
+          // mfp is mean free path in units of step size
+          if(sig > 0.0) {
+            G4double mfp = 1.0/sig;
+            G4double stot = 0.0;
+            //G4cout << " Shell " << ii << " mfp(mm)= " << mfp/mm << G4endl;
+            // sample ionisation points
+            do {
+              stot -= mfp*std::log(G4UniformRand());
+              if( stot > 1.0 || eLossMax < bindingEnergy) { break; }
+              // sample deexcitation
+              vdyn.clear();
+              GenerateParticles(&vdyn, shell, Z, gCut, eCut); 
+              G4int nsec = vdyn.size();
+              if(nsec > 0) {
+                G4ThreeVector r = prePos  + stot*delta;
+                G4double time   = preTime + stot*dt;
+                for(G4int j=0; j<nsec; ++j) {
+                  G4DynamicParticle* dp = vdyn[j];
+                  G4double e = dp->GetKineticEnergy();
 
-		  // save new secondary if there is enough energy
-		  if(eLossMax >= e) {
-		    eLossMax -= e;		    
-		    G4Track* t = new G4Track(dp, time, r);
+                  // save new secondary if there is enough energy
+                  if(eLossMax >= e) {
+                    eLossMax -= e;                    
+                    G4Track* t = new G4Track(dp, time, r);
 
-		    // defined secondary type
+                    // defined secondary type
                     if(dp->GetDefinition() == gamma) { 
-		      t->SetCreatorModelIndex(pixeIDg);
-		    } else {
-		      t->SetCreatorModelIndex(pixeIDe);
-		    }
+                      t->SetCreatorModelIndex(pixeIDg);
+                    } else {
+                      t->SetCreatorModelIndex(pixeIDe);
+                    }
 
-		    tracks.push_back(t);
-		  } else {
-		    delete dp;
-		  }
-		}
-	      }
-	    } while (stot < 1.0);
-	  }
-	}
+                    tracks.push_back(t);
+                  } else {
+                    delete dp;
+                  }
+                }
+              }
+              // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
+            } while (stot < 1.0);
+          }
+        }
       }
     } 
   }

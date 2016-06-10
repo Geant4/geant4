@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysicsList class
 //
 //
-// $Id: PhysicsList.cc 78307 2013-12-11 10:55:57Z gcosmo $
+// $Id: PhysicsList.cc 94458 2015-11-18 14:36:25Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,9 +38,8 @@
 #include "G4IonConstructor.hh"
 #include "G4PhysicsListHelper.hh"
 #include "G4RadioactiveDecay.hh"
-#include "G4UAtomicDeexcitation.hh"
-#include "G4LossTableManager.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4NuclideTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -56,7 +55,7 @@ PhysicsList::PhysicsList()
   new G4UnitDefinition("minute", "min", "Time", minute);
   new G4UnitDefinition("hour",   "h",   "Time", hour);
   new G4UnitDefinition("day",    "d",   "Time", day);
-  new G4UnitDefinition("year",   "y",   "Time", year);        
+  new G4UnitDefinition("year",   "y",   "Time", year);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -95,22 +94,16 @@ void PhysicsList::ConstructParticle()
 void PhysicsList::ConstructProcess()
 {
   AddTransportation();
-  
+
   G4RadioactiveDecay* radioactiveDecay = new G4RadioactiveDecay();
 
-  radioactiveDecay->SetICM(true);                //Internal Conversion
   radioactiveDecay->SetARM(false);               //Atomic Rearangement
   
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();  
   ph->RegisterProcess(radioactiveDecay, G4GenericIon::GenericIon());
-      
-  // Deexcitation (in case of Atomic Rearangement)
-  //
-  G4UAtomicDeexcitation* de = new G4UAtomicDeexcitation();
-  de->SetFluo(true);
-  de->SetAuger(true);   
-  de->SetPIXE(false);  
-  G4LossTableManager::Instance()->SetAtomDeexcitation(de);  
+  
+  G4NuclideTable::GetInstance()->SetLevelTolerance(100*eV);
+  G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(0.0001*ns);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

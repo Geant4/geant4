@@ -14,6 +14,41 @@ code and to keep track of all tags.
     * Please list in reverse chronological order (last date on top)
     ---------------------------------------------------------------
 
+5 November 2015  Alberto Ribon (hadr-fission-V10-01-07)
+-------------------------------------------------------
+- Removed neutron_hp/
+
+3 November 2015  Tatsumi Koi (hadr-fission-V10-01-06)
+----------------------------------------------------
+- Loop checking
+
+16 October 2015  Tatsumi Koi (hadr-fission-V10-01-05)
+----------------------------------------------------
+- Fix problem on previous tag 
+
+13 October 2015  Tatsumi Koi (hadr-fission-V10-01-04)
+----------------------------------------------------
+- Migration to fast-math functions
+
+9 June 2015  Tatsumi Koi (hadr-fission-V10-01-03)
+----------------------------------------------------
+-Set A and Z of actual target of reaction to "targetNucleus" from HadronicProcess
+-Reset isotope pointer to the target G4Nucleus object of reaction
+-By this, warning message about ReactionWhiteBoard" disappeared 
+	src/G4FissLib.cc
+
+4 June 2015  Tatsumi Koi (hadr-fission-V10-01-02)
+----------------------------------------------------
+- Re-tag for testing 
+
+3 June 2015  Tatsumi Koi (hadr-fission-V10-01-01)
+----------------------------------------------------
+- src/G4FissionLibrary.cc: Interface change along with "hadr-hpp-V10-01-10"
+
+29 April 2015  Tatsumi Koi (hadr-fission-V10-01-00)
+----------------------------------------------------
+- Use ParticleHP instead of NeutronHP 
+
 9 November 2014  Tatsumi Koi (hadr-fission-V10-00-09)
 ----------------------------------------------------
 - Re-tag for testing 
@@ -24,7 +59,7 @@ code and to keep track of all tags.
 
 26 October 2014  Tatsumi Koi (hadr-fission-V10-00-07)
 ----------------------------------------------------
-- G4FissionLibrary.hh: Interface change along with "hadr-hpn-V10-00-28"
+- src/G4FissionLibrary.cc: Interface change along with "hadr-hpn-V10-00-28"
 
 8 July 2014  Jerome Verbeke (hadr-fission-V10-00-06)
 ----------------------------------------------------

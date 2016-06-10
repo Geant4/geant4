@@ -5,7 +5,7 @@
 #define tools_rroot_ifile
 
 #include "seek"
-#include "../zfunc"
+#include "../press_func"
 
 namespace tools {
 namespace rroot {
@@ -17,10 +17,9 @@ public:
   virtual ~ifile(){}
 public:
   virtual const std::string& path() const = 0;
-  virtual std::string path() = 0;
 
   virtual bool verbose() const = 0;
-  virtual std::ostream& out() = 0;
+  virtual std::ostream& out() const = 0;
   virtual bool byte_swap() const = 0;
   enum from {
     begin,
@@ -30,7 +29,7 @@ public:
   virtual bool set_pos(seek = 0,from = begin) = 0;
   virtual bool read_buffer(char*,uint32) = 0;
 
-  virtual bool unziper(char,unzip_func&) const = 0;
+  virtual bool unziper(char,decompress_func&) const = 0;
 
   virtual key& sinfos_key() = 0;
 };

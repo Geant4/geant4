@@ -38,12 +38,16 @@
 #include "G4ParticleHPDeExGammas.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
+#include "G4Threading.hh"
 
   G4ParticleHPCapture::G4ParticleHPCapture()
    :G4HadronicInteraction("NeutronHPCapture")
+  ,theCapture(NULL)
+  ,numEle(0)
   {
     SetMinEnergy( 0.0 );
     SetMaxEnergy( 20.*MeV );
+/*
 //    G4cout << "Capture : start of construction!!!!!!!!"<<G4endl;
     if(!getenv("G4NEUTRONHPDATA")) 
        throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
@@ -71,6 +75,7 @@
     delete theFS;
 //    G4cout << "-------------------------------------------------"<<G4endl;
 //    G4cout << "Leaving G4ParticleHPCapture::G4ParticleHPCapture"<<G4endl;
+*/
   }
   
   G4ParticleHPCapture::~G4ParticleHPCapture()
@@ -78,18 +83,18 @@
     //delete [] theCapture;
 //    G4cout << "Leaving G4ParticleHPCapture::~G4ParticleHPCapture"<<G4endl;
      for ( std::vector<G4ParticleHPChannel*>::iterator 
-           ite = theCapture.begin() ; ite != theCapture.end() ; ite++ )
+           ite = theCapture->begin() ; ite != theCapture->end() ; ite++ )
      {
         delete *ite;
      }
-     theCapture.clear();
+     theCapture->clear();
   }
   
   #include "G4ParticleHPThermalBoost.hh"
   G4HadFinalState * G4ParticleHPCapture::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aNucleus )
   {
 
-    if ( numEle < (G4int)G4Element::GetNumberOfElements() ) addChannelForNewElement();
+    //if ( numEle < (G4int)G4Element::GetNumberOfElements() ) addChannelForNewElement();
 
     G4ParticleHPManager::GetInstance()->OpenReactionWhiteBoard();
     if(getenv("NeutronHPCapture")) G4cout <<" ####### G4ParticleHPCapture called"<<G4endl;
@@ -109,7 +114,7 @@
         index = theMaterial->GetElement(i)->GetIndex();
         rWeight = NumAtomsPerVolume[i];
         //xSec[i] = theCapture[index].GetXsec(aThermalE.GetThermalEnergy(aTrack,
-        xSec[i] = (*theCapture[index]).GetXsec(aThermalE.GetThermalEnergy(aTrack,
+        xSec[i] = ((*theCapture)[index])->GetXsec(aThermalE.GetThermalEnergy(aTrack,
   		                                                     theMaterial->GetElement(i),
   								     theMaterial->GetTemperature()));
         xSec[i] *= rWeight;
@@ -130,7 +135,7 @@
 
     //return theCapture[index].ApplyYourself(aTrack);
     //G4HadFinalState* result = theCapture[index].ApplyYourself(aTrack);
-    G4HadFinalState* result = (*theCapture[index]).ApplyYourself(aTrack);
+    G4HadFinalState* result = ((*theCapture)[index])->ApplyYourself(aTrack);
 
     //Overwrite target parameters
     aNucleus.SetParameters(G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargA(),G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargZ());
@@ -156,6 +161,7 @@ const std::pair<G4double, G4double> G4ParticleHPCapture::GetFatalEnergyCheckLeve
    return std::pair<G4double, G4double>(10*perCent,DBL_MAX);
 }
 
+/*
 void G4ParticleHPCapture::addChannelForNewElement()
 {
    G4ParticleHPCaptureFS* theFS = new G4ParticleHPCaptureFS;
@@ -169,6 +175,7 @@ void G4ParticleHPCapture::addChannelForNewElement()
    delete theFS;
    numEle = (G4int)G4Element::GetNumberOfElements();
 }
+*/
 
 G4int G4ParticleHPCapture::GetVerboseLevel() const
 {
@@ -177,4 +184,46 @@ G4int G4ParticleHPCapture::GetVerboseLevel() const
 void G4ParticleHPCapture::SetVerboseLevel( G4int newValue ) 
 {
    G4ParticleHPManager::GetInstance()->SetVerboseLevel(newValue);
+}
+
+void G4ParticleHPCapture::BuildPhysicsTable(const G4ParticleDefinition&)
+{
+
+   G4ParticleHPManager* hpmanager = G4ParticleHPManager::GetInstance();
+
+   theCapture = hpmanager->GetCaptureFinalStates();
+
+   if ( G4Threading::IsMasterThread() ) {
+
+      if ( theCapture == NULL ) theCapture = new std::vector<G4ParticleHPChannel*>;
+
+      if ( numEle == (G4int)G4Element::GetNumberOfElements() ) return;
+
+      if ( theCapture->size() == G4Element::GetNumberOfElements() ) {
+         numEle = G4Element::GetNumberOfElements();
+         return;
+      }
+
+      if ( !getenv("G4NEUTRONHPDATA") ) 
+          throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
+      dirName = getenv("G4NEUTRONHPDATA");
+      G4String tString = "/Capture";
+      dirName = dirName + tString;
+
+      G4ParticleHPCaptureFS * theFS = new G4ParticleHPCaptureFS;
+      for ( G4int i = numEle ; i < (G4int)G4Element::GetNumberOfElements() ; i++ ) 
+      {
+         theCapture->push_back( new G4ParticleHPChannel );
+         ((*theCapture)[i])->Init((*(G4Element::GetElementTable()))[i], dirName);
+         ((*theCapture)[i])->Register(theFS);
+      }
+      delete theFS;
+      hpmanager->RegisterCaptureFinalStates( theCapture );
+   }
+   numEle = G4Element::GetNumberOfElements();
+}
+
+void G4ParticleHPCapture::ModelDescription(std::ostream& outFile) const
+{
+   outFile << "High Precision model based on Evaluated Nuclear Data Files (ENDF) for radiative capture reaction of neutrons below 20MeV\n";
 }

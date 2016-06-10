@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AnnihiToMuPair.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4AnnihiToMuPair.cc 91869 2015-08-07 15:21:02Z gcosmo $
 //
 //         ------------ G4AnnihiToMuPair physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, November 2002
@@ -198,7 +198,8 @@ G4VParticleChange* G4AnnihiToMuPair::PostStepDoIt(const G4Track& aTrack,
   // generate cost
   //
   G4double cost;
-  do cost = 2.*G4UniformRand()-1.;
+  do { cost = 2.*G4UniformRand()-1.; }
+  // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
   while (2.*G4UniformRand() > 1.+xi+cost*cost*(1.-xi) ); 
                                                        //1+cost**2 at high Epos
   G4double sint = sqrt(1.-cost*cost);

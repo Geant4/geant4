@@ -86,6 +86,12 @@ namespace G4INCL {
       virtual G4double calculateNNAngularSlope(G4double energyCM, G4int iso);
 
     protected:
+      /// \brief Maximum number of outgoing pions in NN collisions
+      static const G4int nMaxPiNN;
+
+      /// \brief Maximum number of outgoing pions in piN collisions
+      static const G4int nMaxPiPiN;
+
       /// \brief Horner coefficients for s11pz
       const HornerC7 s11pzHC;
       /// \brief Horner coefficients for s01pp

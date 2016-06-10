@@ -1,0 +1,61 @@
+//$Id$
+
+///\file "hadronic/.README.txt"
+///\brief Examples hadronic README page
+
+/*! \page Examples_hadronic Category "hadronic"
+
+ Examples in this directory demonstrate specific hadronic physics simulation 
+ with histogramming.
+
+\link ExampleHadr00 Hadr00 \endlink
+
+This example demonstrates a usage of G4PhysListFactory to build 
+Physics List and G4HadronicProcessStore to access cross sections.
+
+\link ExampleHadr01 Hadr01 \endlink
+
+This example application is based on the application IION developed for
+simulation of proton or ion beam interaction with a water target. Different 
+aspects of beam target interaction are demonstrating in the example including 
+longitudinal profile of energy deposition, spectra of secondary  particles,
+spectra of particles leaving the target. 
+
+\link ExampleHadr02 Hadr02 \endlink
+
+This example application is providing simulation of ion beam interaction with different 
+targets. Hadronic aspects of beam target interaction are demonstrated in the example 
+including longitudinal profile of energy deposition, spectra of secondary  particles,
+isotope production spectra. 
+
+\link ExampleHadr03 Hadr03 \endlink
+
+This example demonstrates how to compute total cross section from the direct evaluation of the 
+mean free path ( see below, item Physics), how to identify nuclear reactions, how to plot 
+energy spectrum of secondary particles.	
+
+\link ExampleHadr04 Hadr04 \endlink
+
+This example is focused on neutronHP physics, especially neutron transport,
+including thermal scattering.
+
+\link ExampleHadr05 Hadr05 \endlink
+
+This example demonstrates the usage of G4GenericPhysicsList to build 
+the concrete physics list at the run time.
+
+\link ExampleHadr06 Hadr06 \endlink
+
+This example demonstrates survey of energy deposition and particle's flux from 
+a hadronic cascade.
+
+\link ExampleFissionFragment FissionFragment \endlink
+
+This example demonstrates the Fission Fragment model as used within the
+neutron_hp model. It will demostrate the capability for fission product
+containmentby the cladding in a water moderated sub-critical assembly. It could
+also be further extended to calculate the effective multiplication factor of
+the subcritical assembly for various loading schemes.
+
+*/
+

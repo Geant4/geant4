@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 81945 2014-06-06 16:00:38Z gcosmo $
+# $Id: sources.cmake 92101 2015-08-18 09:06:50Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -57,6 +57,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_util
         G4HadronicWhiteBoard.hh
         G4IsoResult.hh
         G4LightMedia.hh
+        G4NuclearPolarization.hh
         G4Nucleus.hh
         G4Pair.hh
         G4ReactionProduct.hh
@@ -73,6 +74,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_util
         G4HadronicWhiteBoard.cc
         G4IsoResult.cc
         G4LightMedia.cc
+        G4NuclearPolarization.cc
         G4Nucleus.cc
         G4ReactionProduct.cc
         G4StableIsotopes.cc

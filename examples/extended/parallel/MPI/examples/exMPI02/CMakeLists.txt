@@ -52,7 +52,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(exMPI02 exMPI02.cc ${sources} ${headers})
-target_link_libraries(exMPI02 ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} ${G4mpi_LIBRARIES})
+target_link_libraries(exMPI02 ${G4mpi_LIBRARIES} ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we

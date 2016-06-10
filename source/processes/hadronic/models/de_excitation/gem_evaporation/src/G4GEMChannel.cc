@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GEMChannel.cc 86986 2014-11-21 13:00:05Z gcosmo $
+// $Id: G4GEMChannel.cc 91834 2015-08-07 07:24:22Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -230,7 +230,7 @@ G4double G4GEMChannel::SampleKineticEnergy(const G4Fragment & fragment)
   G4double KineticEnergy;
   G4double Probability;
 
-  do {
+  for(G4int i=0; i<100; ++i) {
     KineticEnergy =  CoulombBarrier + G4UniformRand()*(MaximalKineticEnergy);
     G4double edelta = theEnergy-KineticEnergy-delta0;
     Probability = ConstantFactor*(KineticEnergy + Beta);
@@ -240,14 +240,16 @@ G4double G4GEMChannel::SampleKineticEnergy(const G4Fragment & fragment)
     //JMQ fix in units
 	
     if (theEnergy - KineticEnergy < Ex) {
-      G4double E0 = Ex - T*(G4Log(T/MeV) - G4Log(a*MeV)/4.0 
-			    - 1.25*G4Log(Ux/MeV) + 2.0*std::sqrt(a*Ux));
+      G4double E0 = Ex - T*(G4Log(T) - G4Log(a)*0.25
+			    - 1.25*G4Log(Ux) + 2.0*std::sqrt(a*Ux));
       Probability *= G4Exp((theEnergy-KineticEnergy-E0)/T)/T;
     } else {
+      G4double e2 = edelta*edelta;
       Probability *= 
-	G4Exp(2*std::sqrt(a*edelta))/std::pow(a*fG4pow->powN(edelta,5), 0.25);
+	G4Exp(2*std::sqrt(a*edelta) - 0.25*G4Log(a*edelta*e2*e2));
     }
-  } while (EmissionProbability*G4UniformRand() > Probability);
+    if(EmissionProbability*G4UniformRand() <= Probability) { break; }
+  }
     
   return KineticEnergy;
 } 

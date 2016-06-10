@@ -38,13 +38,11 @@ G4BaseAnalysisManager::G4BaseAnalysisManager(
   : fState(state),
     fFirstId(0),
     fLockFirstId(false)
-{
-}
+{}
 
 //_____________________________________________________________________________
 G4BaseAnalysisManager::~G4BaseAnalysisManager()
-{
-}
+{}
 
 // 
 // public methods

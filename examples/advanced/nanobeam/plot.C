@@ -8,7 +8,7 @@
   gStyle->SetPalette(1);
 
   c1 = new TCanvas ("c1","",200,10,800,800);
-  c1.Divide(2,2);
+  c1->Divide(2,2);
 
   system ("rm -rf nanobeam.root");
   system ("hadd nanobeam.root nanobeam_*.root");
@@ -16,31 +16,31 @@
   TFile f("nanobeam.root"); 
 
   TNtuple* ntuple0;
-  ntuple0 = (TNtuple*)f->Get("ntuple0"); 
+  ntuple0 = (TNtuple*)f.Get("ntuple0"); 
   
-  c1.cd(1);
+  c1->cd(1);
   ntuple0->SetMarkerSize(.2);
   ntuple0->SetMarkerColor(2);
   ntuple0->SetMarkerStyle(20);
   ntuple0->Draw("xIn:yIn:zIn","");
  
-  c1.cd(2); 
+  c1->cd(2); 
   TNtuple* ntuple2;
-  ntuple2 = (TNtuple*)f->Get("ntuple2"); 
+  ntuple2 = (TNtuple*)f.Get("ntuple2"); 
   gStyle->SetPalette(1);
   ntuple2->SetMarkerColor(2);
   ntuple2->SetMarkerStyle(20);
   gPad->SetLogz();
   ntuple2->Draw("yIn:xIn","","hcolz");
  
-  c1.cd(3);
+  c1->cd(3);
   gStyle->SetPalette(1);
   ntuple2->SetMarkerColor(4);
   ntuple2->SetMarkerStyle(20);
   gPad->SetLogz();
   ntuple2->Draw("thetaIn:xIn","","hcolz");
 
-  c1.cd(4);
+  c1->cd(4);
   gStyle->SetPalette(1);
   ntuple2->SetMarkerColor(4);
   ntuple2->SetMarkerStyle(20);
@@ -49,7 +49,7 @@
    
 jump2:
 /*
-  c1.cd(1);
+  c1->cd(1);
   gStyle->SetPalette(1);
   TNtuple* ntuple1;
   ntuple1 = (TNtuple*)f->Get("ntuple1"); 

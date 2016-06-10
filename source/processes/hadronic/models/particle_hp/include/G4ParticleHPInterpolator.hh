@@ -36,6 +36,8 @@
 #include "G4InterpolationScheme.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
+#include "G4Exp.hh"
+#include "G4Log.hh"
 #include "G4HadronicException.hh"
 
 
@@ -183,7 +185,7 @@ LinearLogarithmic(G4double x, G4double x1, G4double x2, G4double y1, G4double y2
   if(x==0) result = y1+y2/2.;
   else if(x1==0) result = y1;
   else if(x2==0) result = y2;
-  else result = LinearLinear(std::log(x), std::log(x1), std::log(x2), y1, y2);
+  else result = LinearLinear(G4Log(x), G4Log(x1), G4Log(x2), y1, y2);
   return result;
 }
   
@@ -194,8 +196,8 @@ LogarithmicLinear(G4double x, G4double x1, G4double x2, G4double y1, G4double y2
   if(y1==0||y2==0) result = 0;
   else 
   {
-    result = LinearLinear(x, x1, x2, std::log(y1), std::log(y2));
-    result = std::exp(result);
+    result = LinearLinear(x, x1, x2, G4Log(y1), G4Log(y2));
+    result = G4Exp(result);
   }
   return result;
 }
@@ -203,15 +205,15 @@ LogarithmicLinear(G4double x, G4double x1, G4double x2, G4double y1, G4double y2
 inline G4double G4ParticleHPInterpolator::
 LogarithmicLogarithmic(G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const
 {
+  if(x==0) return y1+y2/2.;
+  else if(x1==0) return y1;
+  else if(x2==0) return y2;
   G4double result;
-  if(x==0) result = y1+y2/2.;
-  else if(x1==0) result = y1;
-  else if(x2==0) result = y2;
   if(y1==0||y2==0) result = 0;
   else 
   {
-    result = LinearLinear(std::log(x), std::log(x1), std::log(x2), std::log(y1), std::log(y2));
-    result = std::exp(result);
+    result = LinearLinear(G4Log(x), G4Log(x1), G4Log(x2), G4Log(y1), G4Log(y2));
+    result = G4Exp(result);
   }
   return result;
 }

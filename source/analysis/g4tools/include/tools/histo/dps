@@ -145,7 +145,6 @@ public:
 
 public:
   const std::string& title() const {return m_title;}
-  std::string title() {return m_title;}
 
   void set_title(const std::string& a_s) {m_title = a_s;}
 

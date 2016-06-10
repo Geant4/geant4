@@ -24,6 +24,7 @@ for generating random variables", Journ. Statistical Software.
 #define RandExpZiggurat_h 1
 
 #include "CLHEP/Random/Random.h"
+#include "CLHEP/Utility/memory.h"
 #include "CLHEP/Utility/thread_local.h"
 
 namespace CLHEP {
@@ -82,11 +83,11 @@ public:
   //  the static generator.
 
   inline float fire() {return fire(defaultMean);};
-  inline float fire( float mean ) {return ziggurat_REXP(localEngine)*mean;};
+  inline float fire( float mean ) {return ziggurat_REXP(localEngine.get())*mean;};
   
   /* ENGINE IS INTRINSIC FLOAT
   inline double fire() {return fire(defaultMean);};
-  inline double fire( double mean ) {return ziggurat_REXP(localEngine)*mean;};
+  inline double fire( double mean ) {return ziggurat_REXP(localEngine.get())*mean;};
   */
   
   void fireArray ( const int size, float* vect );
@@ -146,8 +147,7 @@ private:
   // Private copy constructor. Defining it here disallows use.
   RandExpZiggurat(const RandExpZiggurat& d);
 
-  HepRandomEngine* localEngine;
-  bool deleteEngine;
+  std::shared_ptr<HepRandomEngine> localEngine;
   double defaultMean;
 };
 
@@ -155,11 +155,11 @@ private:
 
 namespace CLHEP {
 
-inline RandExpZiggurat::RandExpZiggurat(HepRandomEngine & anEngine, double mean ) : localEngine(&anEngine), deleteEngine(false), defaultMean(mean) 
+inline RandExpZiggurat::RandExpZiggurat(HepRandomEngine & anEngine, double mean ) : localEngine(&anEngine, do_nothing_deleter()), defaultMean(mean) 
 {
 }
 
-inline RandExpZiggurat::RandExpZiggurat(HepRandomEngine * anEngine, double mean ) : localEngine(anEngine), deleteEngine(true), defaultMean(mean) 
+inline RandExpZiggurat::RandExpZiggurat(HepRandomEngine * anEngine, double mean ) : localEngine(anEngine), defaultMean(mean) 
 {
 }
 

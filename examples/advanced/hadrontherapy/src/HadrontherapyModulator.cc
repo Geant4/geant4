@@ -22,11 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
-// the *COMPLETE* version of this program, together with its documentation;
-// Hadrontherapy (both basic and full version) are supported by the Italian INFN
-// Institute in the framework of the MC-INFN Group
 //
+// Hadrontherapy advanced example for Geant4
+// See more at: https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamplesHadrontherapy
 
 #include <fstream>
 
@@ -196,7 +194,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
   
  
   //----------------------------------------------------------
-  // First modulator sclice
+  // First modulator slice
   //----------------------------------------------------------
  
   G4double startAngleOfTheTube1 = 54.267*deg;
@@ -249,7 +247,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  // 3th modulator slice
+  // 3rd modulator slice
   //----------------------------------------------------------
  
   G4double startAngleOfTheTube3 = 60.478*deg;
@@ -276,7 +274,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
  
   //----------------------------------------------------------
-  //
+  // 4th modulator slice
   //----------------------------------------------------------
  
   G4double startAngleOfTheTube4 = 62.668*deg;
@@ -302,7 +300,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  //Quinta fetta Modulatore
+  // 5th modulator slice
   //----------------------------------------------------------
  
   G4double startAngleOfTheTube5 = 64.814*deg;
@@ -328,7 +326,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
   
   //----------------------------------------------------------
-  //Sesta fetta Modulatore
+  // 6th modulator slice
   //----------------------------------------------------------
  
   G4double startAngleOfTheTube6 = 66.706*deg;
@@ -354,7 +352,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  //Settima fetta Modulatore
+  // 7th modulator slice
   //----------------------------------------------------------
  
   G4double startAngleOfTheTube7 = 68.648*deg;
@@ -382,7 +380,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  //Ottava fetta Modulatore
+  // 8th modulator slice
   //----------------------------------------------------------
    
   G4double startAngleOfTheTube8 = 70.472*deg;
@@ -410,7 +408,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  //Nona fetta Modulatore
+  // 9th modulator slice
   //----------------------------------------------------------
  
   G4double startAngleOfTheTube9 = 72.288*deg;
@@ -436,7 +434,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  //Decima fetta Modulatore
+  // 10th modulator slice
   //----------------------------------------------------------
  
   G4double startAngleOfTheTube10 = 74.061*deg;
@@ -461,7 +459,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 				 0);              // no particular field
 
   //----------------------------------------------------------
-  // Undicesima fetta Modulatore
+  // 11th modulator slice
   //----------------------------------------------------------
 
   G4double startAngleOfTheTube11 = 75.793*deg;
@@ -486,7 +484,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 				 0);              // no particular field
 
   //----------------------------------------------------------
-  //Dodicesima fetta Modulatore
+  // 12th modulator slice
   //----------------------------------------------------------
 
   G4double startAngleOfTheTube12 = 77.579*deg;
@@ -513,7 +511,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
   
 
   //----------------------------------------------------------
-  //Tredicesima fetta Modulatore
+  // 13th modulator slice
   //----------------------------------------------------------
  
   G4double startAngleOfTheTube13 = 79.273*deg;
@@ -538,7 +536,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 				 0);              // no particular field
 
   //----------------------------------------------------------
-  //Quat. fetta Modulatore
+  // 14th modulator slice
   //----------------------------------------------------------
  
   G4double startAngleOfTheTube14 = 81.014*deg;
@@ -564,7 +562,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
   
   //----------------------------------------------------------
-  //Quindicesima fetta Modulatore
+  // 15th modulator slice
   //----------------------------------------------------------
  
   G4double startAngleOfTheTube15 = 82.695*deg;
@@ -589,7 +587,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 				 0);              // no particular field
 
   //----------------------------------------------------------
-  //Sedic. fetta Modulatore
+  // 16th modulator slice
   //----------------------------------------------------------
  
   G4double startAngleOfTheTube16 = 84.425*deg;
@@ -614,7 +612,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 				 0);              // no particular field
 
   //----------------------------------------------------------
-  //Dicias. fetta Modulatore
+  // 17th modulator slice
   //----------------------------------------------------------
  
   G4double startAngleOfTheTube17 = 86.203*deg;
@@ -639,7 +637,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 				 false,           // no boolean operations
 				 0);              // no particular field
   //----------------------------------------------------------
-  //Diciot. fetta Modulatore
+  // 18th modulator slice
   //----------------------------------------------------------
  
   G4double startAngleOfTheTube18 = 87.910*deg;
@@ -792,7 +790,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  //Quinta fetta Modulatore 2
+  // 5th modulator slice 2
   //----------------------------------------------------------
  
    
@@ -817,7 +815,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
   
   //----------------------------------------------------------
-  //Sesta fetta Modulatore 2
+  // 6th modulator slice 2
   //----------------------------------------------------------
  
    
@@ -840,7 +838,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  //Settima fetta Modulatore 2
+  // 7th modulator slice 2
   //----------------------------------------------------------
  
       
@@ -865,7 +863,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  //Ottava fetta Modulatore 2
+  // 8th modulator slice 2
   //----------------------------------------------------------
    
   
@@ -892,7 +890,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  //Nona fetta Modulatore 3
+  // 9th modulator slice 2
   //----------------------------------------------------------
  
 
@@ -916,7 +914,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  //Decima fetta Modulatore 3
+  // 1Oth modulator slice 2
   //----------------------------------------------------------
  
    
@@ -938,7 +936,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 				 0);              // no particular field
 
   //----------------------------------------------------------
-  // Undicesima fetta Modulatore 3
+  //  11th modulator slice 2
   //----------------------------------------------------------
 
   G4ThreeVector positionMod31 = G4ThreeVector(0*cm,0*cm,-0.09*cm);
@@ -959,7 +957,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 				 0);              // no particular field
 
   //----------------------------------------------------------
-  //Dodicesima fetta Modulatore 3
+  // 12th modulator slice 2
   //----------------------------------------------------------
 
   G4ThreeVector positionMod32 = G4ThreeVector(0*cm,0*cm,-0.15*cm);
@@ -981,7 +979,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
   
 
   //----------------------------------------------------------
-  //Tredicesima fetta Modulatore 3
+  // 13th modulator slice 2
   //----------------------------------------------------------
  
   G4ThreeVector positionMod33 = G4ThreeVector(0*cm,0*cm,-0.21*cm);
@@ -1002,7 +1000,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 				 0);              // no particular field
 
   //----------------------------------------------------------
-  //Quat. fetta Modulatore 3
+  // 14th modulator slice 2
   //----------------------------------------------------------
  
        
@@ -1025,7 +1023,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
   
   //----------------------------------------------------------
-  //Quindicesima fetta Modulatore 2
+  // 15th modulator slice 2
   //----------------------------------------------------------
  
        
@@ -1047,7 +1045,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 				 0);              // no particular field
 
   //----------------------------------------------------------
-  //Sedic. fetta Modulatore 2
+  // 16th modulator slice 2
   //----------------------------------------------------------
  
    
@@ -1069,7 +1067,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 				 0);              // no particular field
 
   //----------------------------------------------------------
-  //Dicias. fetta Modulatore 2
+  // 17th modulator slice 2
   //----------------------------------------------------------
     
   G4ThreeVector positionMod37 = G4ThreeVector(0*cm,0*cm,-0.45*cm);
@@ -1089,7 +1087,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 				 false,           // no boolean operations
 				 0);              // no particular field
   //----------------------------------------------------------
-  //Diciot. fetta Modulatore 2
+  // 18th modulator slice 2
   //----------------------------------------------------------
     
    
@@ -1113,7 +1111,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  //Volume Madre  3/4 del Modulatore  Mod 40
+  //Mother volume of the 3/4 modulator  Mod 40
   //----------------------------------------------------------
   
     
@@ -1144,7 +1142,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  //Prima fetta Modulatore 3
+  // First modulator slice 3
   //----------------------------------------------------------
  
   G4ThreeVector positionMod41 = G4ThreeVector(0*cm,0*cm,0.51*cm);
@@ -1167,7 +1165,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
   
   
   //----------------------------------------------------------
-  //Seconda fetta Modulatore 3
+  // Second modulator slice 3
   //----------------------------------------------------------
   
   G4ThreeVector positionMod42 = G4ThreeVector(0*cm,0*cm,0.45*cm);
@@ -1191,7 +1189,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
   
   
   //----------------------------------------------------------
-  //Terza fetta Modulatore 3
+  // Third modulator slice 3
   //----------------------------------------------------------
  
   G4ThreeVector positionMod43 = G4ThreeVector(0*cm,0*cm,0.39*cm);
@@ -1214,7 +1212,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
  
   //----------------------------------------------------------
-  //Quarta fetta Modulatore 3
+  // 4th modulator slice 3
   //----------------------------------------------------------
    
    
@@ -1239,7 +1237,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  //Quinta fetta Modulatore 3
+  // 5th modulator slice 3
   //----------------------------------------------------------
  
    
@@ -1264,7 +1262,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
   
   //----------------------------------------------------------
-  //Sesta fetta Modulatore 3
+  // 6th modulator slice 3
   //----------------------------------------------------------
  
    
@@ -1287,7 +1285,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  //Settima fetta Modulatore 3
+  // 7th modulator slice 3
   //----------------------------------------------------------
  
       
@@ -1312,7 +1310,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  //Ottava fetta Modulatore 3
+  // 8th modulator slice 3
   //----------------------------------------------------------
    
      
@@ -1337,7 +1335,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  //Nona fetta Modulatore 2
+  // 9th modulator slice 2
   //----------------------------------------------------------
  
 
@@ -1361,7 +1359,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  //Decima fetta Modulatore 3
+  // 1Oth modulator slice 3
   //----------------------------------------------------------
  
    
@@ -1383,7 +1381,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 				 0);              // no particular field
 
   //----------------------------------------------------------
-  // Undicesima fetta Modulatore 3
+  //  11th modulator slice 3
   //----------------------------------------------------------
 
   G4ThreeVector positionMod51 = G4ThreeVector(0*cm,0*cm,-0.09*cm);
@@ -1404,7 +1402,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 				 0);              // no particular field
 
   //----------------------------------------------------------
-  //Dodicesima fetta Modulatore 3
+  // 12th modulator slice 3
   //----------------------------------------------------------
 
   G4ThreeVector positionMod52 = G4ThreeVector(0*cm,0*cm,-0.15*cm);
@@ -1426,7 +1424,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
   
 
   //----------------------------------------------------------
-  //Tredicesima fetta Modulatore 3
+  // 13th modulator slice 3
   //----------------------------------------------------------
  
   G4ThreeVector positionMod53 = G4ThreeVector(0*cm,0*cm,-0.21*cm);
@@ -1447,7 +1445,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 				 0);              // no particular field
 
   //----------------------------------------------------------
-  //Quat. fetta Modulatore 3
+  // 14th modulator slice 3
   //----------------------------------------------------------
  
        
@@ -1470,7 +1468,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
   
   //----------------------------------------------------------
-  //Quindicesima fetta Modulatore 3
+  // 15th modulator slice 3
   //----------------------------------------------------------
  
        
@@ -1492,7 +1490,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 				 0);              // no particular field
 
   //----------------------------------------------------------
-  //Sedic. fetta Modulatore 3
+  // 16th modulator slice 3
   //----------------------------------------------------------
  
    
@@ -1514,7 +1512,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 				 0);              // no particular field
 
   //----------------------------------------------------------
-  //Dicias. fetta Modulatore 3
+  // 17th modulator slice 3
   //----------------------------------------------------------
     
   G4ThreeVector positionMod57 = G4ThreeVector(0*cm,0*cm,-0.45*cm);
@@ -1535,7 +1533,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 				 0);              // no particular field
 
   //----------------------------------------------------------
-  //Diciot. fetta Modulatore 3
+  // 18th modulator slice 3
   //----------------------------------------------------------
     
    
@@ -1559,7 +1557,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  //Volume Madre  4/4 del Modulatore  Mod 60
+  //Mother volume of the 4/4 modulator  Mod 60
   //----------------------------------------------------------
   
     
@@ -1588,7 +1586,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  //Prima fetta Modulatore 4
+  // First modulator slice 4
   //----------------------------------------------------------
  
   G4ThreeVector positionMod61 = G4ThreeVector(0*cm,0*cm,0.51*cm);
@@ -1611,7 +1609,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
   
   
   //----------------------------------------------------------
-  //Seconda fetta Modulatore 4
+  // Second modulator slice 4
   //----------------------------------------------------------
   
   G4ThreeVector positionMod62 = G4ThreeVector(0*cm,0*cm,0.45*cm);
@@ -1635,7 +1633,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
   
   
   //----------------------------------------------------------
-  //Terza fetta Modulatore 4
+  // Third modulator slice 4
   //----------------------------------------------------------
  
   G4ThreeVector positionMod63 = G4ThreeVector(0*cm,0*cm,0.39*cm);
@@ -1658,7 +1656,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
  
   //----------------------------------------------------------
-  //Quarta fetta Modulatore 4
+  // 4th modulator slice 4
   //----------------------------------------------------------
    
    
@@ -1683,7 +1681,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  //Quinta fetta Modulatore 3
+  // 5th modulator slice 3
   //----------------------------------------------------------
  
    
@@ -1708,7 +1706,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
   
   //----------------------------------------------------------
-  //Sesta fetta Modulatore 4
+  // 6th modulator slice 4
   //----------------------------------------------------------
  
    
@@ -1731,7 +1729,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  //Settima fetta Modulatore 4
+  // 7th modulator slice 4
   //----------------------------------------------------------
  
       
@@ -1756,7 +1754,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  //Ottava fetta Modulatore 4
+  // 8th modulator slice 4
   //----------------------------------------------------------
    
      
@@ -1781,7 +1779,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  //Nona fetta Modulatore 4
+  // 9th modulator slice 4
   //----------------------------------------------------------
  
 
@@ -1805,7 +1803,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //----------------------------------------------------------
-  //Decima fetta Modulatore 4
+  // 1Oth modulator slice 4
   //----------------------------------------------------------
  
    
@@ -1827,7 +1825,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 				 0);              // no particular field
 
   //----------------------------------------------------------
-  // Undicesima fetta Modulatore 4
+  //  11th modulator slice 4
   //----------------------------------------------------------
 
   G4ThreeVector positionMod71 = G4ThreeVector(0*cm,0*cm,-0.09*cm);
@@ -1848,7 +1846,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 				 0);              // no particular field
 
   //----------------------------------------------------------
-  //Dodicesima fetta Modulatore 4
+  // 12th modulator slice 4
   //----------------------------------------------------------
 
   G4ThreeVector positionMod72 = G4ThreeVector(0*cm,0*cm,-0.15*cm);
@@ -1870,7 +1868,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
   
 
   //----------------------------------------------------------
-  //Tredicesima fetta Modulatore 4
+  // 13th modulator slice 4
   //----------------------------------------------------------
  
   G4ThreeVector positionMod73 = G4ThreeVector(0*cm,0*cm,-0.21*cm);
@@ -1891,7 +1889,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 				 0);              // no particular field
 
   //----------------------------------------------------------
-  //Quat. fetta Modulatore 4
+  // 14th modulator slice 4
   //----------------------------------------------------------
  
        
@@ -1914,7 +1912,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
   
   //----------------------------------------------------------
-  //Quindicesima fetta Modulatore 4
+  // 15th modulator slice 4
   //----------------------------------------------------------
  
        
@@ -1936,7 +1934,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 				 0);              // no particular field
 
   //----------------------------------------------------------
-  //Sedic. fetta Modulatore 4
+  // 16th modulator slice 4
   //----------------------------------------------------------
  
    
@@ -1958,7 +1956,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 				 0);              // no particular field
 
   //----------------------------------------------------------
-  //Dicias. fetta Modulatore 4
+  // 17th modulator slice 4
   //----------------------------------------------------------
     
   G4ThreeVector positionMod77 = G4ThreeVector(0*cm,0*cm,-0.45*cm);
@@ -1979,7 +1977,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 				 0);              // no particular field
 
   //----------------------------------------------------------
-  //Diciot. fetta Modulatore 3
+  // 18th modulator slice 3
   //----------------------------------------------------------
     
    
@@ -2089,7 +2087,7 @@ void HadrontherapyModulator::SetModulatorAngle(G4double angle)
   G4double rotationAngle = angle;
   rm -> rotateZ(rotationAngle);
   physiMotherMod -> SetRotation(rm);  
-  G4cout << "MODULATOR HAS BEEN ROTATED OF " << rotationAngle/deg 
+  G4cout << "MODULATOR HAS BEEN ROTATED BY " << rotationAngle/deg 
 	 << " deg" << G4endl;
   G4RunManager::GetRunManager() -> GeometryHasBeenModified(); 
 }

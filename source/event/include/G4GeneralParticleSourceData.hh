@@ -68,7 +68,6 @@ class G4GeneralParticleSourceData
         void AddASource(G4double intensity);
         void DeleteASource(G4int idx);
         void ClearSources();
-        void SetSourceVerbosity(G4int verb);
     
         void IntensityNormalise();
     
@@ -76,15 +75,23 @@ class G4GeneralParticleSourceData
     
         G4SingleParticleSource* GetCurrentSource(G4int idx);
         G4SingleParticleSource* GetCurrentSource() const {return currentSource;}
-    
+
         G4int GetSourceVectorSize() const {return G4int(sourceVector.size());}
         G4int GetIntensityVectorSize() const {return G4int(sourceIntensity.size());}
         G4double GetIntensity(G4int idx)const {return sourceIntensity.at(idx);}
         G4double GetSourceProbability(G4int idx) const {return sourceProbability.at(idx);}
     
         void SetCurrentSourceIntensity(G4double);
-        void SetFlatSampling(G4bool fSamp){flat_sampling = fSamp;}
 
+        void SetFlatSampling(G4bool fSamp){flat_sampling = fSamp;}
+        G4bool GetFlatSampling() const { return flat_sampling; }
+
+        void SetMultipleVertex(G4bool flag) { multiple_vertex = flag; }
+        G4bool GetMultipleVertex() const { return multiple_vertex; }
+
+        G4int GetCurrentSourceIdx() const { return currentSourceIdx; }
+
+        void SetVerbosityAllSources(G4int vl);
         //Lock/Unlock shared mutex
         void Lock();
         void Unlock();
@@ -96,12 +103,11 @@ class G4GeneralParticleSourceData
     
     private:
     
-        //static G4GeneralParticleSourceData* theInstance;
-    
         std::vector<G4SingleParticleSource*> sourceVector;
         std::vector <G4double> sourceIntensity;
         std::vector <G4double> sourceProbability;
     
+        G4bool multiple_vertex;
         G4bool flat_sampling;
         G4bool normalised;
     

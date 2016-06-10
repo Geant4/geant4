@@ -148,8 +148,9 @@ void G4OpenInventorXtExtendedViewer::Initialise() {
 
    {Widget menu = fViewer->getMenu();
    //{Widget menu = AddMenu(menuBar,"File","File");
-    AddButton(menu,"PS (gl2ps)",PostScriptCbk);
-    AddButton(menu,"PS (pixmap)",PixmapPostScriptCbk);
+    AddButton(menu,"Write PS (gl2ps)",PostScriptCbk);
+    AddButton(menu, "Write PDF (gl2ps)", PDFCbk);
+    AddButton(menu,"Write PS (pixmap)",PixmapPostScriptCbk);
     AddButton(menu,"Write IV",WriteInventorCbk);
     AddButton(menu,"Escape",EscapeCbk);}
 
@@ -324,6 +325,11 @@ void G4OpenInventorXtExtendedViewer::PostScriptCbk(
   Widget,XtPointer aData,XtPointer) {
   G4OpenInventorXtExtendedViewer* This = (G4OpenInventorXtExtendedViewer*)aData;
   This->WritePostScript();
+}
+void G4OpenInventorXtExtendedViewer::PDFCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtExtendedViewer* This = (G4OpenInventorXtExtendedViewer*)aData;
+  This->WritePDF();
 }
 
 void G4OpenInventorXtExtendedViewer::PixmapPostScriptCbk(

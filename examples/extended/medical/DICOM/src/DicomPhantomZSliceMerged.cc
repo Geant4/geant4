@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomPhantomZSliceMerged.cc 87449 2014-12-04 14:13:06Z gunter $
+// $Id: DicomPhantomZSliceMerged.cc 92820 2015-09-17 15:22:14Z gcosmo $
 //
 /// \file medical/DICOM/src/DicomPhantomZSliceMerged.cc
 /// \brief Implementation of the DicomPhantomZSliceMerged class
@@ -38,7 +38,6 @@
 //
 //*******************************************************
 
-
 #include "DicomPhantomZSliceMerged.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
@@ -46,7 +45,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DicomPhantomZSliceMerged::DicomPhantomZSliceMerged()
-
 {
 
 }
@@ -138,9 +136,5 @@ void DicomPhantomZSliceMerged::CheckSlices()
     ite->second->DumpToFile();
   }
   
-  
 }
-
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

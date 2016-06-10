@@ -49,6 +49,13 @@ private:
     ExExChPhysicsListMessenger *fMessenger;
     
 public:
+
+    G4double GetTransverseVariationMax() {return fTransverseVariationMax;};
+    void SetTransverseVariationMax(G4double aDouble) {fTransverseVariationMax = aDouble;};
+
+    G4double GetTimeStepMin() {return fTimeStepMin;};
+    void SetTimeStepMin(G4double aDouble) {fTimeStepMin = aDouble;};
+public:
     ExExChPhysicsList();
     ~ExExChPhysicsList();
     
@@ -63,6 +70,8 @@ public:
     
     void SetFilePotentialName(const G4String&);
     G4String GetFilePotentialName();
+    G4double fTimeStepMin;
+    G4double fTransverseVariationMax;
 };
 
 #endif

@@ -8,6 +8,7 @@
 #include "seek"
 #include "date"
 #include "ifile"
+#include "../sout"
 
 #ifdef TOOLS_MEM
 #include "../mem"
@@ -19,13 +20,16 @@
 
 //#include <zlib.h>
 
+#ifdef TOOLS_USE_CSZ
+// CSZ code where used as default compressor in old CERN-ROOT, then it may be needed
+// to read old file (as the pawdemo.root one).
 //FIXME : arrange to have csz coming from the "outside" (as zip).
-
 extern "C" {
   void csz__Init_Inflate(long,unsigned char*,long,unsigned char*);
   int csz__Inflate();
   unsigned char* csz__obufptr();
 }
+#endif
 
 namespace tools {
 namespace rroot {
@@ -176,13 +180,8 @@ public:
   uint32 object_size() const {return m_object_size;}
 
   const std::string& object_name() const {return m_object_name;}
-  std::string object_name() {return m_object_name;}
-
   const std::string& object_title() const {return m_object_title;}
-  std::string object_title() {return m_object_title;}
-
   const std::string& object_class() const {return m_object_class;}
-  std::string object_class() {return m_object_class;}
 
   bool read_file(){
     // Read the key structure from the file.
@@ -366,11 +365,9 @@ public:
       int nout = 0;
       uint32 noutot = 0;
       while(true) {
-        int nin  = 
-         9 + ((int)bufcur[3] | ((int)bufcur[4] << 8) | ((int)bufcur[5] << 16));
-        int nbuf = 
-          (int)bufcur[6] | ((int)bufcur[7] << 8) | ((int)bufcur[8] << 16);
-        if(!unzip(m_file.out(),nin,bufcur, nbuf,objbuf, nout)) break;
+        int nin = 9 + ((int)bufcur[3] | ((int)bufcur[4] << 8) | ((int)bufcur[5] << 16));
+        int nbuf = (int)bufcur[6] | ((int)bufcur[7] << 8) | ((int)bufcur[8] << 16);
+        if(!unzip(m_file.out(),nin,bufcur,nbuf,objbuf,nout)) break;
         if(!nout) break;
         noutot += nout;
         if(noutot >= m_object_size) break;
@@ -444,14 +441,8 @@ protected:
     //::printf("debug : record_size %d\n",_nbytes);   
     return _nbytes;
   }
-  static std::string sout(const std::string& a_string) {
-    return std::string("\"")+a_string+"\"";
-  }
 
-  bool unzip(std::ostream& a_out,
-                           int a_srcsize,unsigned char* a_src,
-                           int a_tgtsize,unsigned char* a_tgt,
-                           int& a_irep) {
+  bool unzip(std::ostream& a_out,int a_srcsize,unsigned char* a_src,int a_tgtsize,unsigned char* a_tgt,int& a_irep) {
 
     // Author: E.Chernyaev (IHEP/Protvino)
     // Input: scrsize - size of input buffer
@@ -481,10 +472,8 @@ protected:
       return false;
     }
 
-    long _ibufcnt = 
-      (long)a_src[3] | ((long)a_src[4] << 8) | ((long)a_src[5] << 16);
-    long isize = 
-      (long)a_src[6] | ((long)a_src[7] << 8) | ((long)a_src[8] << 16);
+    long _ibufcnt = (long)a_src[3] | ((long)a_src[4] << 8) | ((long)a_src[5] << 16);
+    long isize = (long)a_src[6] | ((long)a_src[7] << 8) | ((long)a_src[8] << 16);
 
     if(a_tgtsize<isize) {
       a_out << "tools::rroot::key::unzip : too small target." << std::endl;
@@ -500,7 +489,7 @@ protected:
     // D E C O M P R E S S   D A T A
 
     if (a_src[0] == 'Z' && a_src[1] == 'L') { //compressed with zlib.
-      tools::unzip_func func;
+      tools::decompress_func func;
       if(!m_file.unziper('Z',func)) {
         a_out << "tools::rroot::key::unzip : "
               << " zlib unziper not found." << std::endl;
@@ -519,6 +508,7 @@ protected:
       }
       a_irep = irep;
 
+#ifdef TOOLS_USE_CSZ
     } else if (a_src[0] == 'C' && a_src[1] == 'S') {
       //compressed with Chernyaev & Smirnov
       
@@ -540,14 +530,14 @@ protected:
               << " with initial size: " << (int)isize
               << ", tgtsize= " << a_tgtsize
               << std::endl;
-        a_irep = obufptr - a_tgt;
+        a_irep = int(obufptr - a_tgt);
         //return false;
       }
       a_irep = isize;
 
       //a_out << "tools::rroot::key::unzip : CS : ok "
       //        << a_irep << std::endl;
-
+#endif
     } else {
       a_out << "tools::rroot::key::_unzip : unknown a_src[0,1]."
             << " [0] = " << a_src[0] << ", [1] = " << a_src[1]

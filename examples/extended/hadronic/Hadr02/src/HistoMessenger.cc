@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/HistoMessenger.cc
 /// \brief Implementation of the HistoMessenger class
 //
-// $Id: HistoMessenger.cc 81932 2014-06-06 15:39:45Z gcosmo $
+// $Id: HistoMessenger.cc 88154 2015-02-02 12:25:20Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,7 +61,7 @@ HistoMessenger::HistoMessenger(Histo* hist)
   fFactoryCmd->SetGuidance("set name for the histograms file");
 
   fFileCmd = new G4UIcmdWithAString("/testhadr/histo/fileType",this);
-  fFileCmd->SetGuidance("set type (hbook, XML) for the histograms file");
+  fFileCmd->SetGuidance("set type (root, XML) for the histograms file");
 
   fHistoCmd = new G4UIcommand("/testhadr/histo/setHisto",this);
   fHistoCmd->SetGuidance("Set bining of the histo number ih :");

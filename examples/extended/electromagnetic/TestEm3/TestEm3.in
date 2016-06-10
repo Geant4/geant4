@@ -1,4 +1,4 @@
-# $Id: TestEm3.in 85425 2014-10-29 08:24:37Z gcosmo $
+# $Id: TestEm3.in 92914 2015-09-21 15:00:48Z gcosmo $
 #
 # Macro file for "exampleN03.cc"
 # (can be run in batch, without graphic)
@@ -8,7 +8,6 @@
 /control/verbose 2
 /control/cout/ignoreThreadsExcept 0
 /run/verbose 2
-/run/numberOfThreads 2
 #
 /testem/phys/addPhysics  emstandard_opt0
 #

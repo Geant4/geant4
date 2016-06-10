@@ -68,7 +68,6 @@ public:
     return fTotalEnergyDeposit;
   };
 
-
   void AddEdepToNucleotide(G4int numStrand,G4int numNucl,G4double edep)
   {
     if(numStrand==1)
@@ -79,11 +78,6 @@ public:
       fEdepStrand2[numNucl]+=edep;
     }
   }
-
-  void SetPrintModulo(G4int val)
-  {
-    fPrintModulo = val;
-  };
 
   void SetEnergyThresForSSB(G4double val)
   {
@@ -105,7 +99,6 @@ private:
   // Max distance to consider double strand break
   G4int fThresDistForDSB;
 
-  G4int                     fPrintModulo;
   EventActionMessenger*     fpEventMessenger;
 
   // Compute Strand breaks from energy deposits in DNA strands

@@ -14,6 +14,300 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+13-11-2015, MK, tag emdna-V10-01-55
+* G4MoleculeCounter::Use / InUse => move implementation to source
+file
+
+10-11-2015, MK, tag emdna-V10-01-54
+* remove unused variables
+
+10-11-2015, MK, tag emdna-V10-01-53
+* Coverity fixes
+
+06-11-2015, MK, tag emdna-V10-01-52
+* G4DNAWaterDissociationDisplacer: remove useless verbose
+
+06-11-2015, MK, tag emdna-V10-01-51
+* G4FastList.hh : use WatcherSet::iterator to avoid compilation errors
+on x86_64-slc6-gcc49-Seq-BoundsCheck-UseInternalCLHEP
+
+06-11-2015, MK, tag emdna-V10-01-50
+* Avoid indirect include of G4TrackState to G4physicslists category
+* Reorganize includes
+* Add G4ITStepProcessorState_Lock.hh
+
+06-11-2015, MK, tag emdna-V10-01-49
+* G4MoleculeCounter: do not initialize compDoubleWithPrecision::fPrecision
+to other value than 0 - causing compilation errors on windows
+* G4DNAOneStepThermalizationModel: do not include G4ITNavigator in the header
+but in the source file - causing crashes on windows
+
+04-11-2015, MK, tag emdna-V10-01-48
+* G4DNARevertProbability: added and used in G4DNAWaterDissociationDisplacer
+* utils/sources.cmake: G4DNARevertProbability.hh added
+* G4DNAWaterDissociationDisplacer: fix and speed up distributions
+* models/GNUmakefile: add missing dependency
+* G4DNAOneStepThermalizationModel: delete navigator state when model
+is deleted
+* G4FastList.icc: use typedef WatcherSet even when iterators are used
+* G4ITModelProcessor: add RegisterModel, GetComputeTimeStep +
+  fComputeTimeStep & fComputeReaction flags
+* G4DNAElectronHoleRecombination: enable using this model even when not 
+  all dissociation products have been defined (they will just not be taken
+  into account)
+* G4DNAMolecularReactionTable: delete reaction data when table is deleted
+
+03-11-2015, MK, tag emdna-V10-01-47
+* G4Scheduler: Update time before G4ITStepProcessor::DoIt
+* G4ITStepProcessor::DoIt : reset leading tracks at the end of 
+the call
+
+03-11-2015, MK, tag emdna-V10-01-46
+* G4MolecularDissociation
+* G4DNAOneStepSolvatationModel -> G4DNAOneStepThermalizationModel
+  Avoid placing products outside volume of the mother track
+  (causing navigator complains)
+   
+03-11-2015, MK, tag emdna-V10-01-45
+* G4Serialize: Add definition in header for G4String
+
+02-11-2015, MK, tag emdna-V10-01-44
+* G4Serialize: remove inline in front of template
+* molecules: fix unit tests
+* G4DNAElectronHoleRecombination: add missing check on G4MoleculeCounter::InUse
+* G4MoleculeCounter: add a flag to check or not against scheduler time
+* G4MoleculeTable: do not store G4MolecularConf anymore 
+  -> G4MolecularConfMan is taking care of this
+   
+30-10-2015, MK, tag emdna-V10-01-43
+* Bug solved in G4MoleculeCounter 
+  and made compatible wih G4DNAElectronHoleRecombination (temporary)
+* Unit tests corrected
+* G4VITDiscreteProcess added
+* G4ReactionTableMessenger added
+* Intermediate update for 10.2 release
+   
+27-10-2015, MK, tag emdna-V10-01-42
+* G4ITStepProcessor: clean dynamic_cast to G4VITProcess
+ 
+26-10-2015, MK, tag emdna-V10-01-41
+* Sanche model: try to solve std::vector out of bounds
+
+23-10-2015, MK, tag emdna-V10-01-40
+* remove all CLHEP::shared_ptr usage
+ 
+23-10-2015, CV, SM, tag emdna-V10-01-39
+* Addded base class G4VDNAPTBModel 
+
+28-09-2015, SI, tag emdna-V10-01-38
+* updated ion selection in G4DNARuddIonisationExtendedModel.cc for Z>2
+
+19-09-2015, MK, tag emdna-V10-01-37
+* added proton ionisation scaling in G4DNABornIonisationModel1*.cc
+* changed ion selection in G4DNARuddIonisationExtendedModel.cc for Z>2
+
+17-09-2015, MK, tag emdna-V10-01-36
+* G4MoleculeGun: Remove compilation warnings
+
+04-09-2015 MK, tag emdna-V10-01-35
+* Fix G4MoleculeGun compilation errors
+
+03-09-2015 SI, tag emdna-V10-01-34
+* Added stationary regime to all inelastic models
+
+19-08-2015, MK
+* Update G4MoleculeGun & G4MoleculeGunMessenger:
+  - compatible with both Smoluchowski & Gillespie models
+
+15-08-2015, S.Incerti, tag emdna-V10-01-33
+* Added easier handling of cumulative proba. in SR elastic models
+
+13-08-2015, G.Cosmo, tag emdna-V10-01-32, 31
+* Fixed compilation warning on clang for mismatch class/struct in
+  declaration of G4MoleculeShoot.
+
+13-08-2015, G.Cosmo, tag emdna-V10-01-30
+* Fixed compilation warning on clang for mismatch class/struct in
+  declaration of G4MoleculeShootMessenger.
+
+12-08-2015, MK, tag emdna-V10-01-29
+* Add G4Serialize in the build tree temporarily
+
+12-08-2015, MK, tag emdna-V10-01-28
+* G4Serialize added
+
+12-08-2015, MK
+* G4memory : quick removal of CLHEP::shared_ptr dependency
+
+24-07-2015, MK
+- G4MolecularReactionTable
+ * Add get methods
+- G4MoleculeGun, G4MoleculeGunMessenger
+ * Molecule gun : place randomly in a box
+
+15-07-2015, MK
+- G4DNAAttachment, G4DNAChargeDecrease, G4DNADissociation, 
+G4DNAExcitation, G4DNAIonisation
+ * processes & models initialisation again
+
+15-07-2015, MK, tag emdna-V10-01-26
+-G4ITModelProcessor & G4ITStepProcessor:
+ * add macro to prevent warnings in non-verbose mode
+
+11-07-2015, MK, tag emdna-V10-01-25
+- Add G4IosFlagsSaver.hh to sources.cmake
+- G4IosFlagsSaver.hh add an extra line of the end of the file
+
+10-07-2015, MK, tag emdna-V10-01-24
+- G4DNA Processes : correct setup of energy boundaries
+- G4DNAElectronHoleRecombination remove verbose
+- G4DNADingfelderChargeDecreaseModel: add hole creation
+- G4DNAEmfietzoglouXModel: specify energy boundaries in constructor
+
+08-07-2015, MK, tag emdna-V10-01-23
+- G4ITLeadingTracks added
+- G4ITSteppingVerbose added
+- G4IosFlagsSaver added
+- G4VITSteppingVerbose & G4ITSteppingVerbose added 
+  * new UI command /chem/tracking/verbose 1,2,3 ... 
+- G4MoleculeDefinition:
+  ::SetFormatedName added
+  ::NewConfiguration methods added
+  ::NewConfiguration added
+  ::AddDecayChannel per G4MolecularConfiguration or conf label added
+  And replace ::AddDecayChannel for a molecule model
+  ::Finalize added
+- G4MolecularConfiguration: 
+  * new configuration can be defined by labels
+  * Add Finalize method and add exception if attempt to modified
+  the G4MolecularConfiguration is done after finalization
+- G4MolecularDissociationChannel & G4DNAMolecularReactionTable & 
+G4DNAMolecularEncounterStepper use G4MolecularConfiguration rather 
+than molecule models
+- G4Molecule add constructor where only G4MolecularConfiguration is specified
+- G4Scheduler : remove entirely track specification from this class
+- G4ITXProcess : deal with tracks
+- G4ITTrackingManager is a "service" to start and end tracking
+- G4DNAElectronHoleRecombination added
+
+06-07-2015, Shogo Okada, SI, tag emdna-V10-01-22
+- G4DNAEmfietzoglouIonisationModel: removed condition for 
+fasterCode usage on shell selection.
+
+26-06-2015, MK
+- G4DNAIonElasticModel: modify "validated" to "activated" in 
+  warning message description
+
+16-06-205, MK
+- Add G4Scheduler::GetGun()
+
+16-06-2015, MK, tag emdna-V10-01-21
+- G4DNAElastic.cc : add elseif(name == ...
+- G4DNAIonElasticModel: clean and fix double free
+
+12-06-2015, MK, tag emdna-V10-01-20
+- remove virtual keyword from G4IT::GetPosition()
+
+04-06-2015, MK
+- just cosmetics
+- remove virtual keyword from G4IT::operator[]
+
+26-05-2015, Robert Hatcher, tag emdna-V10-01-19
+- Remove unnecessary "using namespace std" from various headers
+  that causes problems w/ G4AnyMethod & G4GenericPhysicsList
+  when using clang and/or vc12
+- Fully qualify std::string elsewhere as needed to adjust
+
+22-05-2015, John Allison, tag emdna-V10-01-18
+- G4ITTrackHolder.cc: Replaced "G4Threading::IsWorkerThread() == false" by
+  "G4Threading::IsMasterThread()".
+
+17-05-2015, MK, tag emdna-V10-01-17
+- G4DNABornIonisationModel1/2 & G4DNABornExcitationModel2: remove unused variables
+- Correct sources.cmake
+- Born headears: includes both model versions when proxy header is included 
+
+16-05-2015, MK, tag emdna-V10-01-16
+- Add G4DNAEmfietzoglouExcitationModel
+- Add G4DNAEmfietzoglouIonisationModel
+- Add G4DNAUeharaScreenedRutherfordElasticModel
+- Add G4DNABornIonisationModel2 (temporary)
+- Add G4DNABornExcitationModel2 (temporary)
+
+15-05-2015, MK, tag emdna-V10-01-15
+- Postpone G4DNASmoluchowskiDiffusion until c++11 is adopted
+
+14-05-2015, MK, tag emdna-V10-01-14
+- G4DNASmoluchowskiDiffusion: std::sqrt -> sqrt
+
+14-05-2015, MK, tag emdna-V10-01-13
+- G4DNASmoluchowskiDiffusion: try to solve compilation error
+- G4ITReaction: try to solve compilation error
+
+12-05-2015, MK, tag emdna-V10-01-12
+- G4DNASmoluchowskiDiffusion: try to solve compilation error
+
+12-05-2015, MK, tag emdna-V10-01-11
+- Add G4DNASmoluchowskiDiffusion to the build tree
+
+11-05-2015, MK, tag emdna-V10-01-10
+- G4DNABornExcitationModel:
+  +Add GetPartialCrossSection
+  +Code cleaning
+- G4DNAMillerGreenExcitationModel:
+  +Add GetPartialCrossSection
+- G4DNAChemistryManager::GetValue(...) added
+
+02-05-2015, MK
+- Update G4TrackState & related classes
+- G4DNABrownianTransportation: 
+  +Add constructor & destructor to G4BrownianAction 
+  +comment useless method
+- G4Scheduler: 
+  +Add fStopTime+Watched times+PrintWhyDoYouStop method (code was existing before) 
+  +remove fTmpEndTime 
+  +Add CanICarryOn
+- add G4DNASmoluchowskiDiffusion *PRELIMINARY*
+
+18-03-2015, MK, tag emdna-V10-01-08
+- Same as before, just add the missing History file
+
+18-03-2015, MK, tag emdna-V10-01-07
+- G4UserTimeStepAction::UserReactionAction : vector of products becomes a pointer
+instead of a reference
+
+12-02-2015, MK, tag emdna-V10-01-06
+- G4ITReaction: Remove "gAll" introduced for testing
+- G4ITModelProcessor: Remove "assert" introduced for testing
+- G4ITTransportation: Remove extra parenthesis in the undef of PrepareState 
+
+11-02-2015, MK, tag emdna-V10-01-05
+- Fix reproductibility of the chemistry module
+- Fix the "no reaction table found" bug: G4ITReaction class created
+- G4shared_ptr refers to std::shared_ptr when C++11 is activated
+
+16-01-2015, SI, tag emdna-V10-01-04
+- added Fe56 into G4DNARuddIonisationExtendedModel
+
+14-12-2014, MK,  tag emdna-V10-01-03
+- BornIonisation: correct array cleaning
+- ScreenRutherfordElastic: correct retrieval of water density 
+
+13-12-2014, SI,  tag emdna-V10-01-02
+- Added elastic model by H. Tran.
+
+12-12-2014, G.Cosmo,  tag emdna-V10-01-01
+- Explicitly initialise to zero TLS pointers in G4KDNode.hh and G4ITFinder.icc
+  to allow for compilation on Linux/clang-3.5.
+
+05-12-2014, G.Cosmo,  tag emdna-V10-01-00
+- Corrected sources.cmake in management and molecules/management, to
+  include missing files:
+    G4ITTransportationManager.icc
+    G4KDNode.icc
+    G4KDTree.icc
+    G4MoleculeFinder.hh
+
 01-12-2014, MK,  tag emdna-V10-00-63
 - Temporary fix for avoiding bad relocation of Brownian particles
 It slows the computation by forcing the Brownian particles to stop at the volumes' boundaries

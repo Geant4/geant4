@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeGeneralPhysics.hh 81557 2014-06-03 08:32:44Z gcosmo $
+// $Id: LXeGeneralPhysics.hh 90338 2015-05-26 08:35:43Z gcosmo $
 //
 /// \file optical/LXe/include/LXeGeneralPhysics.hh
 /// \brief Definition of the LXeGeneralPhysics class
@@ -36,8 +36,6 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-
-
 
 class LXeGeneralPhysics : public G4VPhysicsConstructor
 {

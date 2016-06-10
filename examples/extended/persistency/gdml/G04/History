@@ -1,4 +1,4 @@
-$Id: History 82285 2014-06-13 14:56:02Z gcosmo $
+$Id: History 93506 2015-10-23 12:30:58Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 23, 2015 I. Hrivnacova  (G04-V10-01-01)
+- Finished MT migration
+
+October 16, 2015 W. Pokorski  (G04-V10-01-00)
+- MT migration
 
 June 11, 2014 W. Pokorski  (G04-V10-00-00)
 - changes to comply with coding conventions

@@ -54,7 +54,6 @@ EventAction::EventAction():G4UserEventAction()
 {
   //default parameter values
   //
-  fPrintModulo=100;
   fThresEdepForSSB=8.22*eV;
   fThresDistForDSB=10;
   fTotalEnergyDeposit=0;
@@ -73,17 +72,8 @@ EventAction::~EventAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::BeginOfEventAction( const G4Event* evt)
+void EventAction::BeginOfEventAction( const G4Event*)
 {
-  G4int evtNb = evt->GetEventID();
-
-  //printing survey
-  //
-  if (evtNb%fPrintModulo == 0)
-  {
-    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-  }
-
   // Initialization of parameters
   //
   fTotalEnergyDeposit=0.;

@@ -26,7 +26,7 @@
 /// \file analysis/AnaEx03/include/HistoManager.hh
 /// \brief Definition of the HistoManager class
 //
-// $Id: HistoManager.hh 74272 2013-10-02 14:48:50Z gcosmo $
+// $Id: HistoManager.hh 92321 2015-08-27 14:53:09Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,19 +44,19 @@ namespace AIDA {
  class IHistogram1D;
  class ITuple;
 } 
-  const G4int MaxHisto = 5;
+
+const G4int MaxHisto = 4;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class HistoManager
 {
   public:
-  
     HistoManager();
    ~HistoManager();
    
-    void book();
-    void save();
+    void Book();
+    void Save();
 
     void FillHisto(G4int id, G4double bin, G4double weight = 1.0);
     void Normalize(G4int id, G4double fac);    
@@ -67,7 +67,6 @@ class HistoManager
     void PrintStatistic();
         
   private:
-  
     AIDA::IAnalysisFactory*  fAF;        
     AIDA::ITree*             fTree;
     

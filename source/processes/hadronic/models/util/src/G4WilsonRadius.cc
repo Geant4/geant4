@@ -61,6 +61,7 @@
 //
 #include "G4WilsonRadius.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Pow.hh"
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -81,7 +82,7 @@ G4double G4WilsonRadius::GetWilsonRMSRadius (G4double A)
 {
   G4double radius;
   if (A > 26.0)
-    radius = factor * (0.84*std::pow(A,third) + 0.55);
+    radius = factor * (0.84*G4Pow::GetInstance()->A13(A) + 0.55);
   else
   {
 	// this was changed from just G4double to static const G4double

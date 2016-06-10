@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: g4xml_defs.hh 83748 2014-09-12 12:13:37Z gcosmo $
+// $Id: g4xml_defs.hh 92688 2015-09-14 07:01:13Z gcosmo $
 
 // Author: Ivana Hrivnacova, 15/06/2011  (ivana@ipno.in2p3.fr)
 
@@ -42,43 +42,43 @@
 namespace G4Xml {
 
   // H1 types
-  typedef tools::histo::h1d  G4AnaH1; // keep for backward compatibility
-  typedef tools::histo::h1d  G4H1;
-  typedef std::vector<tools::histo::h1d*>::iterator  G4H1Iterator;
-  typedef std::vector<tools::histo::h1d*>::const_iterator  G4H1ConstIterator;
+  using G4AnaH1 = tools::histo::h1d; // keep for backward compatibility
+  using G4H1 = tools::histo::h1d;
+  using G4H1Iterator  = std::vector<tools::histo::h1d*>::iterator;
+  using G4H1ConstIterator = std::vector<tools::histo::h1d*>::const_iterator;
 
   // H2 types
-  typedef tools::histo::h2d  G4AnaH2; // keep for backward compatibility    
-  typedef tools::histo::h2d  G4H2;
-  typedef std::vector<tools::histo::h2d*>::iterator  G4H2Iterator;
-  typedef std::vector<tools::histo::h2d*>::const_iterator  G4H2ConstIterator;
+  using G4AnaH2 = tools::histo::h2d; // keep for backward compatibility    
+  using G4H2 = tools::histo::h2d;
+  using G4H2Iterator = std::vector<tools::histo::h2d*>::iterator;
+  using G4H2ConstIterator = std::vector<tools::histo::h2d*>::const_iterator;
 
   // H3 types
-  typedef tools::histo::h3d  G4H3;    
-  typedef std::vector<tools::histo::h3d*>::iterator  G4H3Iterator;
-  typedef std::vector<tools::histo::h3d*>::const_iterator  G4H3ConstIterator;
+  using G4H3 = tools::histo::h3d;    
+  using G4H3Iterator = std::vector<tools::histo::h3d*>::iterator;
+  using G4H3ConstIterator = std::vector<tools::histo::h3d*>::const_iterator;
 
   // P1 types
-  typedef tools::histo::p1d  G4P1;
-  typedef std::vector<tools::histo::p1d*>::iterator  G4P1Iterator;
-  typedef std::vector<tools::histo::p1d*>::const_iterator  G4P1ConstIterator;
+  using G4P1 = tools::histo::p1d;
+  using G4P1Iterator = std::vector<tools::histo::p1d*>::iterator;
+  using G4P1ConstIterator = std::vector<tools::histo::p1d*>::const_iterator;
 
   // P2 types
-  typedef tools::histo::p2d  G4P2;    
-  typedef std::vector<tools::histo::p2d*>::iterator  G4P2Iterator;
-  typedef std::vector<tools::histo::p2d*>::const_iterator  G4P2ConstIterator;
+  using G4P2 = tools::histo::p2d;    
+  using G4P2Iterator = std::vector<tools::histo::p2d*>::iterator;
+  using G4P2ConstIterator = std::vector<tools::histo::p2d*>::const_iterator;
 
   // Ntuple types
-  typedef tools::waxml::ntuple  G4Ntuple; 
-  typedef std::vector<tools::waxml::ntuple*>::iterator  G4NtupleIterator;
-  typedef std::vector<tools::waxml::ntuple*>::const_iterator  G4NtupleConstIterator;
+  using G4Ntuple = tools::waxml::ntuple; 
+  using G4NtupleIterator = std::vector<tools::waxml::ntuple*>::iterator;
+  using G4NtupleConstIterator = std::vector<tools::waxml::ntuple*>::const_iterator;
 
   // RNtuple types
-  typedef tools::aida::ntuple  G4RNtuple; 
+  using G4RNtuple = tools::aida::ntuple; 
 
   // Managers
-  typedef G4XmlAnalysisManager G4AnalysisManager; 
-  typedef G4XmlAnalysisReader  G4AnalysisReader; 
+  using G4AnalysisManager = G4XmlAnalysisManager; 
+  using G4AnalysisReader = G4XmlAnalysisReader; 
 }  
 
 #endif

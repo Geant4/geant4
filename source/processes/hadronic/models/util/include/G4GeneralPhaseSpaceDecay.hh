@@ -72,6 +72,16 @@ class G4GeneralPhaseSpaceDecay : public G4VDecayChannel
 			       const G4String& theDaughterName3 ,
 			       const G4double * masses);
 
+      G4GeneralPhaseSpaceDecay(const G4String& theParentName,
+                               G4double        theParentMass,
+			       G4double        theBR,
+			       G4int           theNumberOfDaughters,
+			       const G4String& theDaughterName1,
+			       const G4String& theDaughterName2 ,
+			       const G4String& theDaughterName3 ,
+			       const G4String& theDaughterName4 ,
+			       const G4double * masses);
+
     //  Destructor
       virtual ~G4GeneralPhaseSpaceDecay();
 

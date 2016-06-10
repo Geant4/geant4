@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcess.cc 86863 2014-11-19 14:39:31Z gcosmo $
+// $Id: G4HadronicProcess.cc 93817 2015-11-02 11:33:26Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -68,6 +68,9 @@
 #include "G4HadronicException.hh"
 #include "G4HadronicProcessStore.hh"
 
+#include "G4AutoLock.hh"
+#include "G4NistManager.hh"
+
 #include <typeinfo>
 #include <sstream>
 #include <iostream>
@@ -90,9 +93,12 @@ G4HadronicProcess::G4HadronicProcess(const G4String& processName,
   theTotalResult->SetSecondaryWeightByProcess(true);
   theInteraction = 0;
   theCrossSectionDataStore = new G4CrossSectionDataStore();
-  G4HadronicProcessStore::Instance()->Register(this);
+  theProcessStore = G4HadronicProcessStore::Instance();
+  theProcessStore->Register(this);
+  theInitialNumberOfInteractionLength = 0.0;
   aScaleFactor = 1;
   xBiasOn = false;
+  theLastCrossSection = 0.0;
   G4HadronicProcess_debug_flag = false;
   GetEnergyMomentumCheckEnvvars();
 }
@@ -109,9 +115,12 @@ G4HadronicProcess::G4HadronicProcess(const G4String& processName,
   theTotalResult->SetSecondaryWeightByProcess(true);
   theInteraction = 0;
   theCrossSectionDataStore = new G4CrossSectionDataStore();
-  G4HadronicProcessStore::Instance()->Register(this);
+  theProcessStore = G4HadronicProcessStore::Instance();
+  theProcessStore->Register(this);
+  theInitialNumberOfInteractionLength = 0.0;
   aScaleFactor = 1;
   xBiasOn = false;
+  theLastCrossSection = 0.0;
   G4HadronicProcess_debug_flag = false;
   GetEnergyMomentumCheckEnvvars();
 }
@@ -119,7 +128,7 @@ G4HadronicProcess::G4HadronicProcess(const G4String& processName,
 
 G4HadronicProcess::~G4HadronicProcess()
 {
-  G4HadronicProcessStore::Instance()->DeRegister(this);
+  theProcessStore->DeRegister(this);
   delete theTotalResult;
   delete theCrossSectionDataStore;
 }
@@ -153,12 +162,41 @@ void G4HadronicProcess::RegisterMe( G4HadronicInteraction *a )
   G4HadronicProcessStore::Instance()->RegisterInteraction(this, a);
 }
 
+G4double G4HadronicProcess::GetElementCrossSection(const G4DynamicParticle * part,
+				                   const G4Element * elm, 
+				                   const G4Material* mat)
+{
+  G4Material* aMaterial = const_cast<G4Material*>(mat);
+  if(! mat) 
+  {
+    // Because NeutronHP needs a material pointer (for instance to get the
+    // temperature), we ask the Nist manager to build or find a simple material
+    // from the (integer) Z of the element. 
+    // Note that repeated calls to this method are not producing multiple copies
+    // of the same material. But it needs to be protected against race conditions
+    // between different threads.
+    aMaterial = InitialiseMaterial(G4int(elm->GetZ()));
+  }
+  G4double x = theCrossSectionDataStore->GetCrossSection(part, elm, aMaterial);
+  if(x < 0.0) { x = 0.0; }
+  return x;
+}
+
+
+namespace { G4Mutex hadronicProcessMutex = G4MUTEX_INITIALIZER; }
+G4Material* G4HadronicProcess::InitialiseMaterial(G4int Z)
+{
+  G4AutoLock l(&hadronicProcessMutex);
+  return G4NistManager::Instance()->FindOrBuildSimpleMaterial(Z);
+}
+
+
 void G4HadronicProcess::PreparePhysicsTable(const G4ParticleDefinition& p)
 {
   if(getenv("G4HadronicProcess_debug")) {
     G4HadronicProcess_debug_flag = true;
   }
-  G4HadronicProcessStore::Instance()->RegisterParticle(this, &p);
+  theProcessStore->RegisterParticle(this, &p);
 }
 
 void G4HadronicProcess::BuildPhysicsTable(const G4ParticleDefinition& p)
@@ -329,7 +367,7 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 		  ed);
     }
   }
-  while(!result);
+  while(!result);  /* Loop checking, 30-Oct-2015, G.Folger */
 
   result->SetTrafoToLab(thePro.GetTrafoToLab());
 
@@ -477,22 +515,21 @@ void G4HadronicProcess::BiasCrossSectionByFactor(G4double aScale)
   xBiasOn = true;
   aScaleFactor = aScale;
   G4String it = GetProcessName();
-  if( (it != "PhotonInelastic") &&
-      (it != "ElectroNuclear") &&
-      (it != "PositronNuclear") )
-    {
-      G4ExceptionDescription ed;
-      G4Exception("G4HadronicProcess::BiasCrossSectionByFactor", "had009", 
-		  FatalException, ed,
-		  "Cross-section biasing available only for gamma and electro nuclear reactions.");
-    }
-  if(aScale<100)
-    {
-      G4ExceptionDescription ed;
-      G4Exception("G4HadronicProcess::BiasCrossSectionByFactor", "had010", JustWarning,ed,
-		  "Cross-section bias readjusted to be above safe limit. New value is 100");
-      aScaleFactor = 100.;
-    }
+  if ((it != "photonNuclear") &&
+      (it != "electronNuclear") &&
+      (it != "positronNuclear") ) {
+    G4ExceptionDescription ed;
+    G4Exception("G4HadronicProcess::BiasCrossSectionByFactor", "had009", 
+                FatalException, ed,
+                "Cross-section biasing available only for gamma and electro nuclear reactions.");
+  }
+
+  if (aScale < 100) {
+    G4ExceptionDescription ed;
+    G4Exception("G4HadronicProcess::BiasCrossSectionByFactor", "had010", JustWarning,ed,
+                "Cross-section bias readjusted to be above safe limit. New value is 100");
+    aScaleFactor = 100.;
+  }
 }
 
 G4HadFinalState* G4HadronicProcess::CheckResult(const G4HadProjectile & aPro,
@@ -748,13 +785,3 @@ void G4HadronicProcess::DumpState(const G4Track& aTrack,
        << ">" << G4endl;
   }
 }
-/* 
-G4ParticleDefinition* G4HadronicProcess::GetTargetDefinition()
-{
-  const G4Nucleus* nuc = GetTargetNucleus();
-  G4int Z = nuc->GetZ_asInt();
-  G4int A = nuc->GetA_asInt();
-  return G4ParticleTable::GetParticleTable()->GetIon(Z,A,0*eV);
-}
-*/
-/* end of file */

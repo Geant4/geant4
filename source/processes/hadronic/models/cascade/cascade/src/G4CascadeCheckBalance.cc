@@ -50,6 +50,7 @@
 // 20121002  M. Kelsey -- Add strangeness check (useful for Omega- beam)
 // 20130621  Add interface to take G4Fragment input instead of G4InuclNuclei.
 // 20140930  Change name from "const char*" to "const G4String"
+// 20150626  Fix logical condition for report relative or absolute violations.
 
 #include "G4CascadeCheckBalance.hh"
 #include "globals.hh"
@@ -246,7 +247,7 @@ G4bool G4CascadeCheckBalance::energyOkay() const {
   G4bool relokay = (std::abs(relativeE()) < relativeLimit);
   G4bool absokay = (std::abs(deltaE()) < absoluteLimit);
 
-  if (verboseLevel && !(relokay || absokay)) {
+  if (verboseLevel && (!relokay || !absokay)) {
     G4cerr << theName << ": Energy conservation: relative " << relativeE()
 	   << (relokay ? " conserved" : " VIOLATED")
 	   << " absolute " << deltaE()
@@ -263,7 +264,7 @@ G4bool G4CascadeCheckBalance::ekinOkay() const {
   G4bool relokay = (std::abs(relativeKE()) < relativeLimit);
   G4bool absokay = (std::abs(deltaKE()) < absoluteLimit);
 
-  if (verboseLevel && !(relokay || absokay)) {
+  if (verboseLevel && (!relokay || !absokay)) {
     G4cerr << theName << ": Kinetic energy balance: relative "
 	   << relativeKE() << (relokay ? " conserved" : " VIOLATED")
 	   << " absolute " << deltaKE()
@@ -281,7 +282,7 @@ G4bool G4CascadeCheckBalance::momentumOkay() const {
   G4bool relokay = (std::abs(relativeP()) < relativeLimit);
   G4bool absokay = (std::abs(deltaP()) < absoluteLimit);
 
-  if (verboseLevel && !(relokay || absokay)) {
+  if (verboseLevel && (!relokay || !absokay)) {
     G4cerr << theName << ": Momentum conservation: relative " << relativeP()
 	   << (relokay ? " conserved" : " VIOLATED")
 	   << " absolute " << deltaP()

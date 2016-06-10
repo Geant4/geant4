@@ -63,18 +63,17 @@ struct G4RootRNtupleDescription
           // fNtuple is owned by the file CHECK
       }
 
+  // deleted copy constructor
+  G4RootRNtupleDescription(const G4RootRNtupleDescription& rhs) = delete;
+  // deleted assignement operator
+  G4RootRNtupleDescription& operator=(G4RootRNtupleDescription& rhs) = delete;
+
   tools::rroot::ntuple* fNtuple; 
   tools::ntuple_binding* fNtupleBinding;
   tools::rroot::buffer* fBuffer;
   tools::rroot::fac* fFac;
   tools::rroot::tree* fTree;
   G4bool fIsInitialized;
-  
-  private:
-    // disabled (not implemented) copy constructor
-    G4RootRNtupleDescription(const G4RootRNtupleDescription& rhs);
-    // disabled (not implemented) assignement operator
-    G4RootRNtupleDescription& operator=(G4RootRNtupleDescription& rhs);
 };
 
 #endif  

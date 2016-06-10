@@ -34,6 +34,8 @@
 #define ExG4HbookP2DummyManager_h 1
 
 #include "G4VP2Manager.hh"
+#include "G4THnManager.hh"
+#include "G4HnManager.hh"
 
 namespace tools {
 namespace histo { 
@@ -45,7 +47,8 @@ class h3d;
 ///
 /// It will just issue warnings. 
 
-class ExG4HbookP2DummyManager : public G4VP2Manager
+class ExG4HbookP2DummyManager : public G4VP2Manager,
+                                public G4THnManager<G4int>
 {
   public:
     ExG4HbookP2DummyManager(const G4AnalysisManagerState& state);
@@ -146,6 +149,9 @@ class ExG4HbookP2DummyManager : public G4VP2Manager
  
      // Write data on ASCII file
     virtual G4bool WriteOnAscii(std::ofstream& output);
+
+    // Access to Hn manager
+    virtual std::shared_ptr<G4HnManager> GetHnManager();
     
   private:
     // methods
@@ -155,6 +161,10 @@ class ExG4HbookP2DummyManager : public G4VP2Manager
     // data members
     G4bool fWarn;    
 };
+// inline functions
+
+inline std::shared_ptr<G4HnManager> ExG4HbookP2DummyManager::GetHnManager() 
+{ return std::shared_ptr<G4HnManager>(fHnManager); }
 
 #endif
 

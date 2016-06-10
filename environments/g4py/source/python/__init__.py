@@ -7,9 +7,9 @@
 #  This package contains a set of Python interface with Geant4.
 # ==================================================================
 """
-# $Id: __init__.py 66892 2013-01-17 10:57:59Z gunter $
-__version__ ='9.5.0'
-__date__ = '02/December/2011'
+# $Id: __init__.py 94382 2015-11-13 10:18:01Z gcosmo $
+__version__ ='10.2'
+__date__ = 'November/2015'
 __author__ = 'K.Murakami (Koichi.Murakami@kek.jp)'
 
 # import submodules

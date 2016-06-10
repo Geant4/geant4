@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
-// shall cite the following Geant4-DNA collaboration publication:
-// Med. Phys. 37 (2010) 4692-4708
-// The Geant4-DNA web site is available at http://geant4-dna.org
-//
+// Hadrontherapy advanced example for Geant4
+// See more at: https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamplesHadrontherapy
 
 #include "HadrontherapyActionInitialization.hh"
 #include "HadrontherapyPrimaryGeneratorAction.hh"
@@ -45,13 +41,7 @@
 HadrontherapyActionInitialization::HadrontherapyActionInitialization(/*G4VUserDetectorConstruction* detConstruction*/)
 : G4VUserActionInitialization()//,
  // fDetectorConstruction(detConstruction)
-{
-//AND->3June2014, temporary to take into account new GPS
-   //Create an instance of GPS in master so shared resources and messenger
-   //exist in master.
-  // masterGPS = new G4GeneralParticleSource();
-   //AND<-3June2014
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

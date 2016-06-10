@@ -71,6 +71,8 @@
 // 20130628  Fissioner produces G4Fragment output directly in G4CollisionOutput
 // 20130808  M. Kelsey -- Use new object-version of paraMaker, for thread safety
 // 20130924  M. Kelsey -- Use G4Log, G4Exp for CPU speedup
+// 20150608  M. Kelsey -- Label all while loops as terminating.
+// 20150622  M. Kelsey -- For new G4cbrt(int), move powers of A outside.
 
 #include "G4EquilibriumEvaporator.hh"
 #include "G4SystemOfUnits.hh"
@@ -231,6 +233,7 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
   G4bool fission_open = true;
   G4int itry_global = 0;
     
+  /* Loop checking 08.06.2015 MHK */
   while (try_again && itry_global < itry_global_max) {
     itry_global++;
 
@@ -300,7 +303,8 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
     W[0] = 0.0;
     if (TM[0] > cut_off_energy) {
       G4double AL = getAL(A);
-      W[0] = BE * G4cbrt(A1[0]*A1[0]) * G[0] * AL;
+      G4double A13 = G4cbrt(A1[0]);
+      W[0] = BE * A13*A13 * G[0] * AL;
       G4double TM1 = 2.0 * std::sqrt(u[0] * TM[0]) - ue;
 
       if (TM1 > huge_num) TM1 = huge_num;
@@ -313,7 +317,8 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
     for (i = 1; i < 6; i++) {
       W[i] = 0.0;
       if (TM[i] > cut_off_energy) {
-	W[i] = BE * G4cbrt(A1[i]*A1[i]) * G[i] * (1.0 + CPA[i]);
+	G4double A13 = G4cbrt(A1[i]);
+	W[i] = BE * A13*A13 * G[i] * (1.0 + CPA[i]);
 	G4double TM1 = 2.0 * std::sqrt(u[i] * TM[i]) - ue;
 
 	if (TM1 > huge_num) TM1 = huge_num;
@@ -678,8 +683,8 @@ G4double G4EquilibriumEvaporator::getQF(G4double x,
   if (x < XMIN || x > XMAX) {
     G4double X1 = 1.0 - 0.02 * x2;
     G4double FX = (0.73 + (3.33 * X1 - 0.66) * X1) * (X1*X1*X1);
-
-    QFF = G0 * FX * G4cbrt(a*a);
+    G4double A13 = G4cbrt(a);
+    QFF = G0 * FX * A13*A13;
   } else {
     QFF = QFinterp.interpolate(x, QFREP);
   }

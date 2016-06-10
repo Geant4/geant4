@@ -86,11 +86,13 @@ public:
   }
   // -- initialization for weight:
   void ResetInitialTrackWeight(G4double w) {fInitialTrackWeight = w; fCumulatedWeightChange = 1.0;}
+  G4bool OperationComplete() const { return fOperationComplete; }
   
 private:
   G4ILawForceFreeFlight* fForceFreeFlightInteractionLaw;
   G4double fCumulatedWeightChange, fInitialTrackWeight;
   G4ParticleChange fParticleChange;
+  G4bool fOperationComplete;
 };
 
 #endif

@@ -23,13 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGTwoCluster.cc 79869 2014-03-19 09:59:40Z gcosmo $
+// $Id: G4RPGTwoCluster.cc 94214 2015-11-09 08:18:05Z gcosmo $
 //
 
 #include <iostream>
 #include <signal.h>
 
 #include "G4RPGTwoCluster.hh"
+#include "G4Log.hh"
+#include "G4Pow.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
@@ -138,14 +140,16 @@ ReactionStage(const G4HadProjectile* originalIncident,
   }
 
   // Add nucleons and some pions from intra-nuclear cascade
-  G4double term1 = std::log(centerofmassEnergy*centerofmassEnergy);
+  G4double term1 = G4Log(centerofmassEnergy*centerofmassEnergy);
   if(term1 < 0) term1 = 0.0001; // making sure xtarg<0;
-  const G4double afc = 0.312 + 0.2 * std::log(term1);
+  const G4double afc = 0.312 + 0.2 * G4Log(term1);
   G4double xtarg;
+  G4double a13 = G4Pow::GetInstance()->A13(atomicWeight);  // A**(1/3)
   if( centerofmassEnergy < 2.0+G4UniformRand() )        // added +2 below, JLC 4Jul97
-    xtarg = afc * (std::pow(atomicWeight,0.33)-1.0) * (2*backwardCount+vecLen+2)/2.0;
+    xtarg = afc * (a13-1.0) * (2*backwardCount+vecLen+2)/2.0;
   else
-    xtarg = afc * (std::pow(atomicWeight,0.33)-1.0) * (2*backwardCount);
+    xtarg = afc * (a13-1.0) * (2*backwardCount);
+
   if( xtarg <= 0.0 )xtarg = 0.01;
   G4int nuclearExcitationCount = G4Poisson( xtarg );
 
@@ -205,8 +209,17 @@ ReactionStage(const G4HadProjectile* originalIncident,
   G4bool secondaryDeleted;
   G4double pMass;
 
-  while( eAvailable <= 0.0 )   // must eliminate a particle
-  {
+  G4int loop = 0;
+  G4ExceptionDescription ed;
+  ed << " While count exceeded " << G4endl;
+ // must eliminate a particle
+  while( eAvailable <= 0.0 ) { /* Loop checking, 01.09.2015, D.Wright */
+    loop++;
+    if (loop > 1000) {
+      G4Exception("G4RPGTwoCluster::ReactionStage()", "HAD_RPG_100", JustWarning, ed);
+      break;
+    }
+
     secondaryDeleted = false;
     for( i=(vecLen-1); i>=0; --i )
     {
@@ -320,16 +333,24 @@ ReactionStage(const G4HadProjectile* originalIncident,
   G4double rmc = forwardMass;
   if (forwardCount > 1) {
     ntc = std::min(3,forwardCount-2);
-    rmc += std::pow(-std::log(1.0-G4UniformRand()),1./cpar[ntc])/gpar[ntc];
+    rmc += std::pow(-G4Log(1.0-G4UniformRand()),1./cpar[ntc])/gpar[ntc];
   }
   G4double rmd = backwardMass;
   if( backwardCount > 1 ) {
     ntc = std::min(3,backwardCount-2);
-    rmd += std::pow(-std::log(1.0-G4UniformRand()),1./cpar[ntc])/gpar[ntc];
+    rmd += std::pow(-G4Log(1.0-G4UniformRand()),1./cpar[ntc])/gpar[ntc];
   }
 
-  while( rmc+rmd > centerofmassEnergy )
-  {
+  loop = 0;
+  G4ExceptionDescription eda;
+  eda << " While count exceeded " << G4endl;
+  while( rmc+rmd > centerofmassEnergy ) { /* Loop checking, 01.09.2015, D.Wright */
+    loop++;
+    if (loop > 1000) {
+      G4Exception("G4RPGTwoCluster::ReactionStage()", "HAD_RPG_100", JustWarning, eda);
+      break;
+    }
+ 
     if( (rmc <= forwardMass) && (rmd <= backwardMass) )
     {
       G4double temp = 0.999*centerofmassEnergy/(rmc+rmd);
@@ -385,9 +406,9 @@ ReactionStage(const G4HadProjectile* originalIncident,
   const G4double b1 = 4.0;
   const G4double b2 = 1.6;
   G4double pin = pseudoParticle[1].GetMomentum().mag()/GeV;
-  G4double dtb = 4.0*pin*pf*std::max( bMin, b1+b2*std::log(pOriginal) );
-  G4double factor = 1.0 - std::exp(-dtb);
-  G4double costheta = 1.0 + 2.0*std::log(1.0 - G4UniformRand()*factor) / dtb;
+  G4double dtb = 4.0*pin*pf*std::max( bMin, b1+b2*G4Log(pOriginal) );
+  G4double factor = 1.0 - G4Exp(-dtb);
+  G4double costheta = 1.0 + 2.0*G4Log(1.0 - G4UniformRand()*factor) / dtb;
 
   costheta = std::max(-1.0, std::min(1.0, costheta));
   G4double sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
@@ -424,7 +445,7 @@ ReactionStage(const G4HadProjectile* originalIncident,
         G4double vMass = vec[i]->GetMass()/MeV;
         G4double totalE = kineticE*GeV + vMass;
         pp = std::sqrt( std::abs(totalE*totalE-vMass*vMass) );
-        G4double cost = std::min( 1.0, std::max( -1.0, std::log(2.23*G4UniformRand()+0.383)/0.96 ) );
+        G4double cost = std::min( 1.0, std::max( -1.0, G4Log(2.23*G4UniformRand()+0.383)/0.96 ) );
         G4double sint = std::sqrt(1.0-cost*cost);
         phi = twopi*G4UniformRand();
         vec[i]->SetMomentum( pp*sint*std::cos(phi)*MeV,
@@ -809,7 +830,7 @@ ReactionStage(const G4HadProjectile* originalIncident,
   //  calculate time delay for nuclear reactions
   //
   if( (atomicWeight >= 1.5) && (atomicWeight <= 230.0) && (ekOriginal <= 0.2) )
-    currentParticle.SetTOF( 1.0-500.0*std::exp(-ekOriginal/0.04)*std::log(G4UniformRand()) );
+    currentParticle.SetTOF( 1.0-500.0*G4Exp(-ekOriginal/0.04)*G4Log(G4UniformRand()) );
   else
     currentParticle.SetTOF( 1.0 );
 

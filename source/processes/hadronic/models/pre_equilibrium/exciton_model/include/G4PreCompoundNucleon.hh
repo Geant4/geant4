@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundNucleon.hh 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4PreCompoundNucleon.hh 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // J. M. Quesada (August 2008).  
 // Based  on previous work by V. Lara
@@ -53,38 +53,18 @@ protected:
   ProbabilityDistributionFunction(G4double eKin,
 				  const G4Fragment& aFragment);
 
-  virtual G4double CrossSection(G4double ekin) = 0; 
-
   virtual G4double 
-  GetRj(G4int NumberParticles, G4int NumberCharged) = 0; 
-
-  virtual G4double GetAlpha() = 0;
-
-  virtual G4double GetBeta() = 0;
-
-  inline G4double GetOpt0(G4double ekin);
+  GetRj(G4int NumberParticles, G4int NumberCharged) const = 0; 
 
 private:
 
-  // default constructor
   G4PreCompoundNucleon();
-  // operators
   G4PreCompoundNucleon(const G4PreCompoundNucleon &right);
   const G4PreCompoundNucleon& 
   operator= (const G4PreCompoundNucleon &right);
   G4int operator==(const G4PreCompoundNucleon &right) const;
   G4int operator!=(const G4PreCompoundNucleon &right) const;    
 
-  G4double fact;
 };
-
-// *********************** OPT=0 : Dostrovski's cross section  ***************
-inline G4double G4PreCompoundNucleon::GetOpt0(G4double K)
-{
-  G4double r0 = theParameters->Getr0()*ResidualA13();
-  // cross section is now given in mb (r0 is in mm) for the sake of consistency
-  //with the rest of the options
-  return 1.e+25*CLHEP::pi*r0*r0*ResidualA13()*GetAlpha()*(1.+GetBeta()/K);
-}
 
 #endif

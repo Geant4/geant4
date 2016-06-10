@@ -1,0 +1,219 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_vec2
+#define tools_vec2
+
+#include <cmath> //sqrt
+
+#ifdef TOOLS_MEM
+#include "mem"
+#endif
+
+namespace tools {
+
+template <class T>
+class vec2 {
+#ifdef TOOLS_MEM
+  static const std::string& s_class() {
+    static const std::string s_v("tools::vec2");
+    return s_v;
+  }
+#endif
+public:
+  unsigned int dimension() const {return 2;}
+public:
+  vec2(){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_data[0] = T();
+    m_data[1] = T();
+  }
+  vec2(const T a_vec[2]) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_data[0] = a_vec[0];
+    m_data[1] = a_vec[1];
+  }
+  vec2(const T& a0,const T& a1) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_data[0] = a0;
+    m_data[1] = a1;
+  }
+  virtual ~vec2() {
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  vec2(const vec2& a_from){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_data[0] = a_from.m_data[0];
+    m_data[1] = a_from.m_data[1];
+  }
+  vec2& operator=(const vec2& a_from) {
+    m_data[0] = a_from.m_data[0];
+    m_data[1] = a_from.m_data[1];
+    return *this;
+  }
+public:
+  T v0() const { return m_data[0];}
+  T v1() const { return m_data[1];}
+
+  void v0(const T& a_value) { m_data[0] = a_value;}
+  void v1(const T& a_value) { m_data[1] = a_value;}
+
+  T x() const {return m_data[0];}
+  T y() const {return m_data[1];}
+
+  void set_value(const T& a0,const T& a1) {
+    m_data[0] = a0;
+    m_data[1] = a1;
+  }
+  void set_value(const T aV[2]) {
+    m_data[0] = aV[0];
+    m_data[1] = aV[1];
+  }
+  void value(T& a0,T& a1) const {
+    a0 = m_data[0];
+    a1 = m_data[1];
+  }    
+
+  //bool set_value(unsigned int a_index,const T& a_value) { 
+  //  if(a_index>=2) return false;
+  //  m_[a_index] = a_value;
+  //  return true;
+  //}
+
+  T length() const {
+    return (T)::sqrt(m_data[0]*m_data[0]+m_data[1]*m_data[1]);
+  }
+
+  T normalize() {
+    T norme = length();
+    if(norme==T()) return T();
+    divide(norme);
+    return norme;
+  }
+
+  T dot(const vec2& aV) const {
+    return (m_data[0] * aV.m_data[0] + 
+            m_data[1] * aV.m_data[1]);
+  }   
+
+  T cross(const vec2& aV) const {
+    return (m_data[0] * aV.m_data[1] - m_data[1] * aV.m_data[0]);
+  }    
+
+  bool equal(const vec2& aV) const {
+    if(m_data[0]!=aV.m_data[0]) return false;
+    if(m_data[1]!=aV.m_data[1]) return false;
+    return true;
+  }
+
+  bool divide(const T& a_T) {
+    if(a_T==T()) return false;
+    m_data[0] /= a_T;
+    m_data[1] /= a_T;
+    return true;
+  }
+
+  void add(const vec2& a_v) {
+    m_data[0] += a_v.m_data[0];
+    m_data[1] += a_v.m_data[1];
+  }    
+
+  void add(const T& a0,const T& a1) {
+    m_data[0] += a0;
+    m_data[1] += a1;
+  }    
+
+  void subtract(const vec2& a_v) {
+    m_data[0] -= a_v.m_data[0];
+    m_data[1] -= a_v.m_data[1];
+  }    
+
+  void subtract(const T& a0,const T& a1) {
+    m_data[0] -= a0;
+    m_data[1] -= a1;
+  }    
+
+public: //operators
+  T& operator[](unsigned int a_index) {
+    //WARNING : no check on a_index.
+    return m_data[a_index];
+  }
+  const T& operator[](unsigned int a_index) const {
+    //WARNING : no check on a_index.
+    return m_data[a_index];
+  }
+
+  vec2 operator+(const vec2& a_v) const {
+    return vec2(m_data[0]+a_v.m_data[0],
+                m_data[1]+a_v.m_data[1]);
+  }    
+
+  vec2 operator-(const vec2& a_v) const {
+    return vec2(m_data[0]-a_v.m_data[0],
+                m_data[1]-a_v.m_data[1]);
+  }    
+
+  vec2 operator*(const T& a_v) const {
+    return vec2(m_data[0]*a_v,
+                m_data[1]*a_v);
+  }    
+
+  bool operator==(const vec2& a_v) const {return equal(a_v);}
+  bool operator!=(const vec2& a_v) const {return !operator==(a_v);}
+
+public: //for inlib/sg/sf_vec
+  typedef unsigned int size_type;
+  size_type size() const {return 2;}
+  const T* data() const {return m_data;}
+public: //for iv2sg
+  const T* getValue() const {return m_data;}
+  void getValue(T& a0,T& a1) const {
+    a0 = m_data[0];
+    a1 = m_data[1];
+  }    
+  void setValue(const T& a0,const T& a1) {
+    m_data[0] = a0;
+    m_data[1] = a1;
+  }
+  void setValue(const T aV[2]) {
+    m_data[0] = aV[0];
+    m_data[1] = aV[1];
+  }
+protected:
+  T m_data[2];
+
+private:static void check_instantiation() {vec2<float> v;}
+};
+
+//for sf, mf :
+template <class T>
+inline const T* get_data(const vec2<T>& a_v) {return a_v.data();}
+
+}
+
+#include <ostream>
+
+namespace tools {
+
+// for sf_vec::dump().
+template <class T>
+inline std::ostream& operator<<(std::ostream& a_out,const vec2<T>& a_this){
+  a_out << "x = " << a_this.v0()
+        << ",y = " << a_this.v1();
+  return a_out;
+}
+
+}
+
+#endif

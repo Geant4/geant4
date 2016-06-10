@@ -1,4 +1,4 @@
-// $Id: Doxymodules_parameterisations.h 78005 2013-12-02 08:29:57Z gcosmo $
+// $Id: Doxymodules_parameterisations.h 94561 2015-11-24 09:17:12Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_parameterisations.h
@@ -27,6 +27,29 @@ class Par01PiModel {};
 class Par01PionShowerModel {};
 class Par01PrimaryGeneratorAction {};
 
+
+/** @} */
+
+/** @defgroup extended_parameterisations_Par02 Par02
+ *  parameterisations example Par02
+ *  @{
+ */
+
+class Par02ActionInitialization {};
+class Par02DetectorConstruction {};
+class Par02DetectorParametrisation {};
+class Par02EventAction {};
+class Par02EventInformation {};
+class Par02FastSimModelEMCal {};
+class Par02FastSimModelHCal {};
+class Par02FastSimModelTracker {};
+class Par02Output {};
+class Par02PhysicsList {};
+class Par02PrimaryGeneratorAction {};
+class Par02PrimaryParticleInformation {};
+class Par02RunAction {};
+class Par02Smearer {};
+class Par02TrackingAction {};
 
 /** @} */
 

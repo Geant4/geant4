@@ -1,4 +1,4 @@
-$Id: exception_classification.txt 85317 2014-10-27 15:58:15Z gcosmo $
+$Id: exception_classification.txt 92099 2015-08-18 09:04:30Z gcosmo $
 
 Analysis_F001: Fatal exception when trying to create a singleton manager twice
 
@@ -19,6 +19,8 @@ Analysis_W021: Writing or closing a file has failed
 Analysis_W022: Writing an object on file has failed
 
 Analysis_W031: Merging data has failed
+
+Analysis_W041: Requested feature is not available with selected output.
 
 Analysis_WR001: Cannot open a file for reading
 

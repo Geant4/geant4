@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ICRU73QOModel.cc 81579 2014-06-03 10:15:54Z gcosmo $
+// $Id: G4ICRU73QOModel.cc 93567 2015-10-26 14:51:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -88,7 +88,7 @@ G4ICRU73QOModel::G4ICRU73QOModel(const G4ParticleDefinition* p, const G4String& 
   for(G4int i = 0; i < NQOELEM; ++i) 
     {
       if(ZElementAvailable[i] > 0) {
-	indexZ[ZElementAvailable[i]] = i;
+        indexZ[ZElementAvailable[i]] = i;
       }
     }
   fParticleChange = 0;
@@ -154,7 +154,7 @@ G4double G4ICRU73QOModel::ComputeCrossSectionPerElectron(
 G4double G4ICRU73QOModel::ComputeCrossSectionPerAtom(
                                            const G4ParticleDefinition* p,
                                                  G4double kineticEnergy,
-						 G4double Z, G4double,
+                                                 G4double Z, G4double,
                                                  G4double cutEnergy,
                                                  G4double maxEnergy)
 {
@@ -166,7 +166,7 @@ G4double G4ICRU73QOModel::ComputeCrossSectionPerAtom(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4ICRU73QOModel::CrossSectionPerVolume(
-					   const G4Material* material,
+                                           const G4Material* material,
                                            const G4ParticleDefinition* p,
                                                  G4double kineticEnergy,
                                                  G4double cutEnergy,
@@ -181,9 +181,9 @@ G4double G4ICRU73QOModel::CrossSectionPerVolume(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4ICRU73QOModel::ComputeDEDXPerVolume(const G4Material* material,
-					       const G4ParticleDefinition* p,
-					       G4double kineticEnergy,
-					       G4double cutEnergy)
+                                               const G4ParticleDefinition* p,
+                                               G4double kineticEnergy,
+                                               G4double cutEnergy)
 {
   SetParticle(p);
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
@@ -210,7 +210,7 @@ G4double G4ICRU73QOModel::ComputeDEDXPerVolume(const G4Material* material,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4ICRU73QOModel::DEDX(const G4Material* material,
-			       G4double kineticEnergy) 
+                               G4double kineticEnergy) 
 {
   G4double eloss = 0.0;
   const G4int numberOfElements = material->GetNumberOfElements();
@@ -225,8 +225,8 @@ G4double G4ICRU73QOModel::DEDX(const G4Material* material,
   for (G4int i=0; i<numberOfElements; ++i)
     {
       const G4Element* element = (*theElementVector)[i] ;
-      eloss   += DEDXPerElement(G4int(element->GetZ()), kineticEnergy)
-	                         * theAtomicNumDensityVector[i] * G4int(element->GetZ());
+      eloss   += DEDXPerElement(G4lrint(element->GetZ()), kineticEnergy)
+                                 * theAtomicNumDensityVector[i] * G4int(element->GetZ());
     }      
   return eloss;
 }
@@ -234,7 +234,7 @@ G4double G4ICRU73QOModel::DEDX(const G4Material* material,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4ICRU73QOModel::DEDXPerElement(G4int AtomicNumber,
-					 G4double kineticEnergy)
+                                         G4double kineticEnergy)
 {
   G4int Z = AtomicNumber;
   if(Z > 97) { Z = 97; }
@@ -279,7 +279,7 @@ G4double G4ICRU73QOModel::DEDXPerElement(G4int AtomicNumber,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4ICRU73QOModel::GetOscillatorEnergy(G4int Z,
-					      G4int nbOfTheShell) const
+                                              G4int nbOfTheShell) const
 { 
   G4int idx = denEffData->GetElementIndex(Z, kStateUndefined);
   if(idx == -1) { idx = denEffData->GetElementIndex(Z-1, kStateUndefined); }
@@ -362,19 +362,19 @@ G4double G4ICRU73QOModel::GetL2(G4double normEnergy) const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4ICRU73QOModel::CorrectionsAlongStep(const G4MaterialCutsCouple*,
-					   const G4DynamicParticle*,
-					   G4double&,
-					   G4double&,
-					   G4double)
+                                           const G4DynamicParticle*,
+                                           G4double&,
+                                           G4double&,
+                                           G4double)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4ICRU73QOModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
-					const G4MaterialCutsCouple* couple,
-					const G4DynamicParticle* dp,
-					G4double xmin,
-					G4double maxEnergy)
+                                        const G4MaterialCutsCouple* couple,
+                                        const G4DynamicParticle* dp,
+                                        G4double xmin,
+                                        G4double maxEnergy)
 {
   G4double tmax = MaxSecondaryKinEnergy(dp);
   G4double xmax = std::min(tmax, maxEnergy);
@@ -403,6 +403,7 @@ void G4ICRU73QOModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
                << G4endl;
     }
 
+    // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
   } while( grej*G4UniformRand() >= f );
 
   G4ThreeVector deltaDirection;
@@ -447,7 +448,7 @@ void G4ICRU73QOModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4ICRU73QOModel::MaxSecondaryEnergy(const G4ParticleDefinition* pd,
-					     G4double kinEnergy)
+                                             G4double kinEnergy)
 {
   if(pd != particle) { SetParticle(pd); }
   G4double tau  = kinEnergy/mass;
@@ -459,16 +460,16 @@ G4double G4ICRU73QOModel::MaxSecondaryEnergy(const G4ParticleDefinition* pd,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const G4int G4ICRU73QOModel::ZElementAvailable[NQOELEM] = {1,2,4,6,7,8,10,13,14,-18,
-						  22,26,28,29,32,36,42,47,
-						  50,54,73,74,78,79,82,92};
+                                                  22,26,28,29,32,36,42,47,
+                                                  50,54,73,74,78,79,82,92};
 
 const G4int G4ICRU73QOModel::nbofShellsForElement[NQOELEM] = {1,1,2,3,3,3,3,4,5,4,
-							 5,5,5,5,6,4,6,6,
-							 7,6,6,8,7,7,9,9};
+                                                         5,5,5,5,6,4,6,6,
+                                                         7,6,6,8,7,7,9,9};
 
 const G4int G4ICRU73QOModel::startElemIndex[NQOELEM] = {0,1,2,4,7,10,13,16,20,25,
-						  29,34,39,44,49,55,59,65,
-						  71,78,84,90,98,105,112,121};
+                                                  29,34,39,44,49,55,59,65,
+                                                  71,78,84,90,98,105,112,121};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -542,38 +543,38 @@ const G4double G4ICRU73QOModel::ShellEnergy[NQODATA] =
 const G4double G4ICRU73QOModel::L0[67][2] =
 {
   {0.00,        0.000001},
-  {0.10,	0.000001},
-  {0.12,	0.00001},
-  {0.14,	0.00005},
-  {0.16,	0.00014},
-  {0.18,	0.00030},
-  {0.20,	0.00057},
-  {0.25,	0.00189},
-  {0.30,	0.00429},
-  {0.35,	0.00784},
-  {0.40,	0.01248},
-  {0.45,	0.01811},
-  {0.50,	0.02462},
-  {0.60,	0.03980},
-  {0.70,	0.05731},
-  {0.80,	0.07662},
-  {0.90,	0.09733},
-  {1.00,	0.11916},
-  {1.20,	0.16532},
-  {1.40,	0.21376},
-  {1.60,	0.26362},
-  {1.80,	0.31428},
-  {2.00,	0.36532},
-  {2.50,	0.49272},
-  {3.00,	0.61765},
-  {3.50,	0.73863},
-  {4.00,	0.85496},
-  {4.50,	0.96634},
-  {5.00,	1.07272},
-  {6.00,	1.27086},
-  {7.00,	1.45075},
-  {8.00,	1.61412},
-  {9.00,	1.76277},
+  {0.10,        0.000001},
+  {0.12,        0.00001},
+  {0.14,        0.00005},
+  {0.16,        0.00014},
+  {0.18,        0.00030},
+  {0.20,        0.00057},
+  {0.25,        0.00189},
+  {0.30,        0.00429},
+  {0.35,        0.00784},
+  {0.40,        0.01248},
+  {0.45,        0.01811},
+  {0.50,        0.02462},
+  {0.60,        0.03980},
+  {0.70,        0.05731},
+  {0.80,        0.07662},
+  {0.90,        0.09733},
+  {1.00,        0.11916},
+  {1.20,        0.16532},
+  {1.40,        0.21376},
+  {1.60,        0.26362},
+  {1.80,        0.31428},
+  {2.00,        0.36532},
+  {2.50,        0.49272},
+  {3.00,        0.61765},
+  {3.50,        0.73863},
+  {4.00,        0.85496},
+  {4.50,        0.96634},
+  {5.00,        1.07272},
+  {6.00,        1.27086},
+  {7.00,        1.45075},
+  {8.00,        1.61412},
+  {9.00,        1.76277},
   {10.00,       1.89836},
   {12.00,       2.13625},
   {14.00,       2.33787},
@@ -618,24 +619,24 @@ const G4double G4ICRU73QOModel::L1[22][2] =
   {0.10,       -0.00001},
   {0.20,       -0.00049},
   {0.30,       -0.00084},
-  {0.40,	0.00085},
-  {0.50,	0.00519},
-  {0.60,	0.01198},
-  {0.70,	0.02074},
-  {0.80,	0.03133},
-  {0.90,	0.04369},
-  {1.00,	0.06035},
-  {2.00,	0.24023},
-  {3.00,	0.44284},
-  {4.00,	0.62012},
-  {5.00,	0.77031},
-  {6.00,	0.90390},
-  {7.00,	1.02705},
-  {8.00,	1.10867},
-  {9.00,	1.17546},
+  {0.40,        0.00085},
+  {0.50,        0.00519},
+  {0.60,        0.01198},
+  {0.70,        0.02074},
+  {0.80,        0.03133},
+  {0.90,        0.04369},
+  {1.00,        0.06035},
+  {2.00,        0.24023},
+  {3.00,        0.44284},
+  {4.00,        0.62012},
+  {5.00,        0.77031},
+  {6.00,        0.90390},
+  {7.00,        1.02705},
+  {8.00,        1.10867},
+  {9.00,        1.17546},
   {10.00,       1.21599},
-  {15.00,	1.24349},
-  {20.00,	1.16752}
+  {15.00,        1.24349},
+  {20.00,        1.16752}
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -643,19 +644,19 @@ const G4double G4ICRU73QOModel::L1[22][2] =
 // Data for L2 from: Mikkelsen H.H. Nucl. Instr. Meth. B58 (1991) 136-148
 const G4double G4ICRU73QOModel::L2[14][2] =
 {
-  {0.00,	0.000001},
-  {0.10,	0.00001},
-  {0.20,	0.00000},
+  {0.00,        0.000001},
+  {0.10,        0.00001},
+  {0.20,        0.00000},
   {0.40,       -0.00120},
   {0.60,       -0.00036},
-  {0.80,	0.00372},
-  {1.00,	0.01298},
-  {2.00,	0.08296},
-  {4.00,	0.21953},
-  {6.00,	0.23903},
-  {8.00,	0.20893},
-  {10.00,	0.10879},
-  {20.00,      -0.88409},	
+  {0.80,        0.00372},
+  {1.00,        0.01298},
+  {2.00,        0.08296},
+  {4.00,        0.21953},
+  {6.00,        0.23903},
+  {8.00,        0.20893},
+  {10.00,       0.10879},
+  {20.00,      -0.88409},          
   {40.00,      -1.13902}
 };
 

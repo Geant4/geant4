@@ -29,11 +29,6 @@
 
 #include "G4CsvAnalysisReader.hh"
 #include "G4CsvRFileManager.hh"
-#include "G4H1ToolsManager.hh"
-#include "G4H2ToolsManager.hh"
-#include "G4H3ToolsManager.hh"
-#include "G4P1ToolsManager.hh"
-#include "G4P2ToolsManager.hh"
 #include "G4CsvRNtupleManager.hh"
 #include "G4CsvRNtupleDescription.hh"
 #include "G4AnalysisVerbose.hh"
@@ -48,8 +43,8 @@
 
 using namespace G4Analysis;
 
-G4CsvAnalysisReader* G4CsvAnalysisReader::fgMasterInstance = 0;
-G4ThreadLocal G4CsvAnalysisReader* G4CsvAnalysisReader::fgInstance = 0;
+G4CsvAnalysisReader* G4CsvAnalysisReader::fgMasterInstance = nullptr;
+G4ThreadLocal G4CsvAnalysisReader* G4CsvAnalysisReader::fgInstance = nullptr;
 
 //
 // utility functions
@@ -66,7 +61,7 @@ void*  ReadObject(std::istream& hnFile,
   tools::rcsv::histo handler(hnFile);
   std::string objectTypeInFile;
   void* object;
-  G4bool verbose = false;
+  auto verbose = false;
   if ( ! handler.read(G4cout, objectTypeInFile, object, verbose) ) {
     G4ExceptionDescription description;
     description 
@@ -74,8 +69,8 @@ void*  ReadObject(std::istream& hnFile,
       << "Cannot get "<< objectType << " in file " << fileName; 
     G4String inFunctionFull = "G4CsvAnalysisReader::";
     inFunctionFull.append(inFunction);
-    G4Exception(inFunctionFull, "Analysis_WR011", JustWarning, description);
-    return 0;
+    G4Exception(inFunctionFull, "Analysis_WRnullptr11", JustWarning, description);
+    return nullptr;
   }
   if ( objectTypeInFile != objectType ) {
     G4ExceptionDescription description;
@@ -86,7 +81,7 @@ void*  ReadObject(std::istream& hnFile,
     G4String inFunctionFull = "G4CsvAnalysisReader::";
     inFunctionFull.append(inFunction);
     G4Exception(inFunctionFull, "Analysis_WR011", JustWarning, description);
-    return 0;
+    return nullptr;
   }
   
   return object;
@@ -97,7 +92,7 @@ void*  ReadObject(std::istream& hnFile,
 //_____________________________________________________________________________
 G4CsvAnalysisReader* G4CsvAnalysisReader::Instance()
 {
-  if ( fgInstance == 0 ) {
+  if ( fgInstance == nullptr ) {
     G4bool isMaster = ! G4Threading::IsWorkerThread();
     fgInstance = new G4CsvAnalysisReader(isMaster);
   }
@@ -107,14 +102,9 @@ G4CsvAnalysisReader* G4CsvAnalysisReader::Instance()
 
 //_____________________________________________________________________________
 G4CsvAnalysisReader::G4CsvAnalysisReader(G4bool isMaster)
- : G4VAnalysisReader("Csv", isMaster),
-   fH1Manager(0),
-   fH2Manager(0),
-   fH3Manager(0),
-   fP1Manager(0),
-   fP2Manager(0),
-   fNtupleManager(0),
-   fFileManager(0)
+ : G4ToolsAnalysisReader("Csv", isMaster),
+   fNtupleManager(nullptr),
+   fFileManager(nullptr)
 {
   if ( ( isMaster && fgMasterInstance ) || ( fgInstance ) ) {
     G4ExceptionDescription description;
@@ -129,21 +119,11 @@ G4CsvAnalysisReader::G4CsvAnalysisReader(G4bool isMaster)
   fgInstance = this;
 
   // Create managers
-  fH1Manager = new G4H1ToolsManager(fState);
-  fH2Manager = new G4H2ToolsManager(fState);
-  fH3Manager = new G4H3ToolsManager(fState);
-  fP1Manager = new G4P1ToolsManager(fState);
-  fP2Manager = new G4P2ToolsManager(fState);
   fNtupleManager = new G4CsvRNtupleManager(fState);
   fFileManager = new G4CsvRFileManager(fState);
       // The managers will be deleted by the base class
   
   // Set managers to base class
-  SetH1Manager(fH1Manager);
-  SetH2Manager(fH2Manager);
-  SetH3Manager(fH3Manager);
-  SetP1Manager(fP1Manager);
-  SetP2Manager(fP2Manager);
   SetNtupleManager(fNtupleManager);
   SetFileManager(fFileManager);
 }
@@ -151,8 +131,8 @@ G4CsvAnalysisReader::G4CsvAnalysisReader(G4bool isMaster)
 //_____________________________________________________________________________
 G4CsvAnalysisReader::~G4CsvAnalysisReader()
 {
-  if ( fState.GetIsMaster() ) fgMasterInstance = 0;
-  fgInstance = 0;
+  if ( fState.GetIsMaster() ) fgMasterInstance = nullptr;
+  fgInstance = nullptr;
 }
 
 // 
@@ -179,12 +159,9 @@ G4bool G4CsvAnalysisReader::Reset()
 {
 // Reset histograms and ntuple
 
-  G4bool finalResult = true;
+  auto finalResult = true;
   
-  G4bool result = fH1Manager->Reset();
-  finalResult = finalResult && result;
-
-  result = fH2Manager->Reset();
+  auto result = G4ToolsAnalysisReader::Reset();
   finalResult = finalResult && result;
   
   result = fNtupleManager->Reset();
@@ -208,7 +185,7 @@ G4int G4CsvAnalysisReader::ReadH1Impl(const G4String& h1Name,
 #endif
 
   // open file
-  G4String h1FileName = GetHnFileName("h1", h1Name, fileName, isUserFileName);
+  auto h1FileName = GetHnFileName("h1", h1Name, fileName, isUserFileName);
   std::ifstream hnFile(h1FileName);
   if ( ! hnFile.is_open() ) {
     G4ExceptionDescription description;
@@ -227,9 +204,8 @@ G4int G4CsvAnalysisReader::ReadH1Impl(const G4String& h1Name,
     = ReadObject(hnFile, tools::histo::h1d::s_class(), h1FileName, "ReadH1Impl");
   if ( ! object ) return kInvalidId;
         
-  tools::histo::h1d* h1 
-    = static_cast<tools::histo::h1d*>(object);
-  G4int id = fH1Manager->AddH1(h1Name, h1);
+  auto h1 = static_cast<tools::histo::h1d*>(object);
+  auto id = fH1Manager->AddH1(h1Name, h1);
 
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) 
@@ -250,7 +226,7 @@ G4int G4CsvAnalysisReader::ReadH2Impl(const G4String& h2Name,
 #endif
 
   // open file
-  G4String h2FileName = GetHnFileName("h2", h2Name, fileName, isUserFileName);
+  auto h2FileName = GetHnFileName("h2", h2Name, fileName, isUserFileName);
   std::ifstream hnFile(h2FileName);
   if ( ! hnFile.is_open() ) {
     G4ExceptionDescription description;
@@ -269,9 +245,8 @@ G4int G4CsvAnalysisReader::ReadH2Impl(const G4String& h2Name,
     = ReadObject(hnFile, tools::histo::h2d::s_class(), h2FileName, "ReadH2Impl");
   if ( ! object ) return kInvalidId;
         
-  tools::histo::h2d* h2 
-    = static_cast<tools::histo::h2d*>(object);
-  G4int id = fH2Manager->AddH2(h2Name, h2);
+  auto h2 = static_cast<tools::histo::h2d*>(object);
+  auto id = fH2Manager->AddH2(h2Name, h2);
 
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) 
@@ -292,7 +267,7 @@ G4int G4CsvAnalysisReader::ReadH3Impl(const G4String& h3Name,
 #endif
 
   // open file
-  G4String h3FileName = GetHnFileName("h3", h3Name, fileName, isUserFileName);
+  auto h3FileName = GetHnFileName("h3", h3Name, fileName, isUserFileName);
   std::ifstream hnFile(h3FileName);
   if ( ! hnFile.is_open() ) {
     G4ExceptionDescription description;
@@ -311,9 +286,8 @@ G4int G4CsvAnalysisReader::ReadH3Impl(const G4String& h3Name,
     = ReadObject(hnFile, tools::histo::h3d::s_class(), h3FileName, "ReadH3Impl");
   if ( ! object ) return kInvalidId;
         
-  tools::histo::h3d* h3 
-    = static_cast<tools::histo::h3d*>(object);
-  G4int id = fH3Manager->AddH3(h3Name, h3);
+  auto h3 = static_cast<tools::histo::h3d*>(object);
+  auto id = fH3Manager->AddH3(h3Name, h3);
 
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) 
@@ -353,9 +327,8 @@ G4int G4CsvAnalysisReader::ReadP1Impl(const G4String& p1Name,
     = ReadObject(hnFile, tools::histo::p1d::s_class(), fileName, "ReadP1Impl");
   if ( ! object ) return kInvalidId;
         
-  tools::histo::p1d* p1 
-    = static_cast<tools::histo::p1d*>(object);
-  G4int id = fP1Manager->AddP1(p1Name, p1);
+  auto p1 = static_cast<tools::histo::p1d*>(object);
+  auto id = fP1Manager->AddP1(p1Name, p1);
 
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) 
@@ -395,9 +368,8 @@ G4int G4CsvAnalysisReader::ReadP2Impl(const G4String& p2Name,
     = ReadObject(hnFile, tools::histo::p2d::s_class(), p2FileName, "ReadP2Impl");
   if ( ! object ) return kInvalidId;
         
-  tools::histo::p2d* p2 
-    = static_cast<tools::histo::p2d*>(object);
-  G4int id = fP2Manager->AddP2(p2Name, p2);
+  auto p2 = static_cast<tools::histo::p2d*>(object);
+  auto id = fP2Manager->AddP2(p2Name, p2);
 
 
 #ifdef G4VERBOSE
@@ -428,13 +400,11 @@ G4int G4CsvAnalysisReader::ReadNtupleImpl(const G4String& ntupleName,
 
   // Open file
   if ( ! fFileManager->OpenRFile(fullFileName) ) return kInvalidId;
-  std::ifstream* ntupleFile 
-    = fFileManager->GetRFile(fullFileName);
+  auto ntupleFile = fFileManager->GetRFile(fullFileName);
   
   // Create ntuple 
-  tools::rcsv::ntuple* rntuple = new tools::rcsv::ntuple(*ntupleFile);
-  G4int id 
-    = fNtupleManager->SetNtuple(new G4CsvRNtupleDescription(rntuple));
+  auto rntuple = new tools::rcsv::ntuple(*ntupleFile);
+  auto id = fNtupleManager->SetNtuple(new G4CsvRNtupleDescription(rntuple));
   
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) 

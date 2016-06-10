@@ -58,7 +58,63 @@ G4DecayWithSpin::G4DecayWithSpin(const G4String& processName):G4Decay(processNam
 
 G4DecayWithSpin::~G4DecayWithSpin(){}
 
-G4VParticleChange* G4DecayWithSpin::DecayIt(const G4Track& aTrack, const G4Step& aStep)
+G4VParticleChange* G4DecayWithSpin::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
+{
+  if ( (aTrack.GetTrackStatus() == fStopButAlive ) ||
+       (aTrack.GetTrackStatus() == fStopAndKill )   ){
+    fParticleChangeForDecay.Initialize(aTrack);
+    return &fParticleChangeForDecay;
+  }
+
+// get particle
+  const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
+  const G4ParticleDefinition* aParticleDef = aParticle->GetDefinition();
+
+// get parent_polarization
+  G4ThreeVector parent_polarization = aParticle->GetPolarization();
+
+  if(parent_polarization == G4ThreeVector(0,0,0))
+  {
+    // Generate random polarization direction
+
+    G4double cost = 1. - 2.*G4UniformRand();
+    G4double sint = std::sqrt((1.-cost)*(1.+cost));
+
+    G4double phi = twopi*G4UniformRand();
+    G4double sinp = std::sin(phi);
+    G4double cosp = std::cos(phi);
+
+    G4double px = sint*cosp;
+    G4double py = sint*sinp;
+    G4double pz = cost;
+
+    parent_polarization.setX(px);
+    parent_polarization.setY(py);
+    parent_polarization.setZ(pz);
+
+  }
+
+// decay table
+  G4DecayTable *decaytable = aParticleDef->GetDecayTable();
+  if (decaytable) {
+    for (G4int ip=0; ip<decaytable->entries(); ip++){
+      decaytable->GetDecayChannel(ip)->SetPolarization(parent_polarization);
+    }
+  } 
+
+  G4ParticleChangeForDecay* pParticleChangeForDecay;
+  pParticleChangeForDecay = (G4ParticleChangeForDecay*)G4Decay::DecayIt(aTrack,aStep);
+
+  pParticleChangeForDecay->ProposePolarization(parent_polarization);
+
+  //G4cout << parent_polarization.x() << ", "
+  //       << parent_polarization.y() << ", "
+  //       << parent_polarization.z() << G4endl;
+
+  return pParticleChangeForDecay;
+}
+  
+G4VParticleChange* G4DecayWithSpin::AtRestDoIt(const G4Track& aTrack, const G4Step& aStep)
 {
 
 // get particle
@@ -126,15 +182,13 @@ G4VParticleChange* G4DecayWithSpin::DecayIt(const G4Track& aTrack, const G4Step&
 
 // decay table
   G4DecayTable *decaytable = aParticleDef->GetDecayTable();
-
   if (decaytable) {
-     G4MuonDecayChannelWithSpin *decaychannel;
-     decaychannel = (G4MuonDecayChannelWithSpin*)decaytable->SelectADecayChannel();
-     if (decaychannel) decaychannel->SetPolarization(parent_polarization);
-  }
+    for (G4int ip=0; ip<decaytable->entries(); ip++){
+      decaytable->GetDecayChannel(ip)->SetPolarization(parent_polarization);
+    }
+  } 
 
   G4ParticleChangeForDecay* pParticleChangeForDecay;
-
   pParticleChangeForDecay = (G4ParticleChangeForDecay*)G4Decay::DecayIt(aTrack,aStep);
 
   pParticleChangeForDecay->ProposePolarization(parent_polarization);

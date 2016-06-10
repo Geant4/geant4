@@ -1,0 +1,20 @@
+/control/verbose 2
+/run/verbose 1
+#
+/gun/particle ion
+/gun/ion 9 18
+#
+/rdecay01/fullChain true
+#
+/tracking/verbose 2
+/run/beamOn 1
+#
+/analysis/setFileName beta+
+/analysis/h1/set 1  100  0. 1000. keV	#e+ e-
+/analysis/h1/set 2  100  0. 2000. keV	#neutrino
+/analysis/h1/set 6  100  0. 2000. keV	#EkinTot (Q)
+#
+/tracking/verbose 0
+/run/printProgress 10000
+#   
+/run/beamOn 100000

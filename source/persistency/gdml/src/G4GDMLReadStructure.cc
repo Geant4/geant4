@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc 68053 2013-03-13 14:39:51Z gcosmo $
+// $Id: G4GDMLReadStructure.cc 91689 2015-07-31 09:58:27Z gcosmo $
 //
 // class G4GDMLReadStructure Implementation
 //
@@ -33,6 +33,7 @@
 
 #include "G4GDMLReadStructure.hh"
 
+#include "G4UnitsTable.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
@@ -46,7 +47,7 @@
 #include "G4VisAttributes.hh"
 
 G4GDMLReadStructure::G4GDMLReadStructure()
-  : G4GDMLReadParamvol(), pMotherLogical(0)
+  : G4GDMLReadParamvol(), pMotherLogical(0), strip(false)
 {
 }
 
@@ -54,41 +55,6 @@ G4GDMLReadStructure::~G4GDMLReadStructure()
 {
 }
 
-G4GDMLAuxPairType G4GDMLReadStructure::
-AuxiliaryRead(const xercesc::DOMElement* const auxiliaryElement)
-{
-   G4GDMLAuxPairType auxpair = {"",""};
-
-   const xercesc::DOMNamedNodeMap* const attributes
-         = auxiliaryElement->getAttributes();
-   XMLSize_t attributeCount = attributes->getLength();
-
-   for (XMLSize_t attribute_index=0;
-        attribute_index<attributeCount; attribute_index++)
-   {
-      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
-
-      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE)
-        { continue; }
-
-      const xercesc::DOMAttr* const attribute
-            = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
-      if (!attribute)
-      {
-        G4Exception("G4GDMLReadStructure::AuxiliaryRead()",
-                    "InvalidRead", FatalException, "No attribute found!");
-        return auxpair;
-      }
-      const G4String attName = Transcode(attribute->getName());
-      const G4String attValue = Transcode(attribute->getValue());
-
-      if (attName=="auxtype") { auxpair.type = attValue; } else
-	//      if (attName=="auxvalue") { auxpair.value = eval.Evaluate(attValue); }
-      if (attName=="auxvalue") { auxpair.value = attValue; }
-   }
-
-   return auxpair;
-}
 
 void G4GDMLReadStructure::
 BorderSurfaceRead(const xercesc::DOMElement* const bordersurfaceElement)
@@ -190,7 +156,7 @@ DivisionvolRead(const xercesc::DOMElement* const divisionvolElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = attValue; } else
-      if (attName=="unit") { unit = eval.Evaluate(attValue); } else
+      if (attName=="unit") { unit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="width") { width = eval.Evaluate(attValue); } else
       if (attName=="offset") { offset = eval.Evaluate(attValue); } else
       if (attName=="number") { number = eval.EvaluateInteger(attValue); } else
@@ -322,6 +288,7 @@ PhysvolRead(const xercesc::DOMElement* const physvolElement,
    G4ThreeVector position(0.0,0.0,0.0);
    G4ThreeVector rotation(0.0,0.0,0.0);
    G4ThreeVector scale(1.0,1.0,1.0);
+   G4int copynumber = 0;
 
    const xercesc::DOMNamedNodeMap* const attributes
          = physvolElement->getAttributes();
@@ -347,6 +314,7 @@ PhysvolRead(const xercesc::DOMElement* const physvolElement,
      const G4String attValue = Transcode(attribute->getValue());
 
      if (attName=="name") { name = attValue; }
+     if (attName=="copynumber") { copynumber = eval.EvaluateInteger(attValue); }
    }
 
    for (xercesc::DOMNode* iter = physvolElement->getFirstChild();
@@ -412,7 +380,7 @@ PhysvolRead(const xercesc::DOMElement* const physvolElement,
        if (!logvol) { return; }
        G4String pv_name = logvol->GetName() + "_PV";
        G4PhysicalVolumesPair pair = G4ReflectionFactory::Instance()
-         ->Place(transform,pv_name,logvol,pMotherLogical,false,0,check);
+         ->Place(transform,pv_name,logvol,pMotherLogical,false,copynumber,check);
 
        if (pair.first != 0) { GeneratePhysvolName(name,pair.first); }
        if (pair.second != 0) { GeneratePhysvolName(name,pair.second); }
@@ -582,7 +550,7 @@ QuantityRead(const xercesc::DOMElement* const readElement)
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
-      if (attName=="unit") { unit = eval.Evaluate(attValue); } else
+      if (attName=="unit") { unit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="value"){ value= eval.Evaluate(attValue); } 
    }
 
@@ -893,16 +861,13 @@ GetVolumeAuxiliaryInformation(G4LogicalVolume* logvol) const
    else { return G4GDMLAuxListType(); }
 }
 
-const G4GDMLAuxMapType* G4GDMLReadStructure::
-GetAuxMap() const
-{
-   return &auxMap;
-}
-
 G4VPhysicalVolume* G4GDMLReadStructure::
 GetWorldVolume(const G4String& setupName)
-{    
-   G4LogicalVolume* volume = GetVolume(Strip(GetSetup(setupName)));
+{
+   G4String sname = GetSetup(setupName);
+   if (sname == "")  { return 0; }
+
+   G4LogicalVolume* volume = GetVolume(GenerateName(sname, dostrip));
    volume->SetVisAttributes(G4VisAttributes::Invisible);
 
    G4VPhysicalVolume* pvWorld = 0;

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -16,19 +16,21 @@ Registering graphics systems...
 
 You have successfully registered the following graphics systems.
 Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  G4HepRep (HepRepXML)
-  G4HepRepFile (HepRepFile)
-  OpenGLImmediateX (OGLIX)
-  OpenGLImmediateXm (OGLI, OGLIXm)
-  OpenGLStoredX (OGLSX)
-  OpenGLStoredXm (OGL, OGLS, OGLSXm)
-  RayTracer (RayTracer)
-  RayTracerX (RayTracerX)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-  gMocrenFile (gMocrenFile)
+ASCIITree (ATree)
+DAWNFILE (DAWNFILE)
+G4HepRep (HepRepXML)
+G4HepRepFile (HepRepFile)
+RayTracer (RayTracer)
+VRML1FILE (VRML1FILE)
+VRML2FILE (VRML2FILE)
+gMocrenFile (gMocrenFile)
+OpenGLImmediateQt (OGLIQt, OGLI)
+OpenGLStoredQt (OGLSQt, OGL, OGLS)
+OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
+RayTracerX (RayTracerX)
 
 Registering model factories...
 
@@ -80,6 +82,7 @@ Index : 0     used in the geometry : Yes
 ====================================================================
 
 ### Run 0 starts.
+--> Event 0 starts.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = Co60,   Track ID = 1,   Parent ID = 0
@@ -90,9 +93,9 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     1      0 fm      0 fm      0 fm      0 eV      0 eV      0 fm      0 fm      World   RadioactiveDecay
 
     :----- List of secondaries ----------------
-   Ni60[2505.766]:  energy =0.3487 eV   time = 9.982 y  
-       anti_nu_e:  energy = 188.7 keV  time = 9.982 y  
-              e-:  energy = 129.4 keV  time = 9.982 y  
+   Ni60[2505.800]:  energy = 1.818 eV   time = 9.982 y  
+       anti_nu_e:  energy = 188.1 keV  time = 9.982 y  
+              e-:  energy = 128.9 keV  time = 9.982 y  
     :------------------------------------------
 
 
@@ -109,21 +112,21 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0      0 fm      0 fm      0 fm    189 keV     0 eV      0 fm      0 fm      World   initStep
-    1    217 um   35.7 um     -1 mm    189 keV     0 eV   1.02 mm   1.02 mm      World   OutOfWorld
+    0      0 fm      0 fm      0 fm    188 keV     0 eV      0 fm      0 fm      World   initStep
+    1   -227 um     -1 mm   53.9 um    188 keV     0 eV   1.03 mm   1.03 mm      World   OutOfWorld
 
 *********************************************************************************************************
-* G4Track Information:   Particle = Ni60[2505.766],   Track ID = 2,   Parent ID = 1
+* G4Track Information:   Particle = Ni60[2505.800],   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0      0 fm      0 fm      0 fm  0.349 eV      0 eV      0 fm      0 fm      World   initStep
+    0      0 fm      0 fm      0 fm   1.82 eV      0 eV      0 fm      0 fm      World   initStep
+    End of event. Decay chain: Co60 ---> Ni60[2505.800]
 
- end of event      0 : Co60 ---> Ni60[2505.766]
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 
  ======================== run summary ======================
  The run was 1 Co60 of 0 eV 
@@ -131,21 +134,23 @@ Run Summary
 
  Nb of generated particles: 
 
-  Ni60[2505.766]:       1  Emean = 0.3487 eV 	( 0.3487 eV  --> 0.3487 eV )
-      anti_nu_e:       1  Emean =  188.7 keV	( 188.7 keV --> 188.7 keV)
-             e-:       1  Emean =  129.4 keV	( 129.4 keV --> 129.4 keV)
+  Ni60[2505.800]:       1  Emean =  1.818 eV 	( 1.818 eV  --> 1.818 eV )
+      anti_nu_e:       1  Emean =  188.1 keV	( 188.1 keV --> 188.1 keV)
+             e-:       1  Emean =  128.9 keV	( 128.9 keV --> 128.9 keV)
 
-   Ekin Total (Q): mean =  318.1 keV	( 318.1 keV --> 318.1 keV)
+   Ekin Total (Q): mean =  317.1 keV	( 317.1 keV --> 317.1 keV)
 
-   Momentum balance (excluding gamma desexcitation): mean = 0.02965 eV 	( 0.02965 eV  --> 0.02965 eV )
+   Momentum balance (excluding gamma desexcitation): mean = 0.3366 eV 	( 0.3366 eV  --> 0.3366 eV )
 
    Total time of life : mean =  9.982 y    half-life =  6.919 y     ( 9.982 y   --> 9.982 y  )
+
+   Total visible energy : mean =  128.9 keV   ( 128.9 keV --> 128.9 keV)
 
    Activity of Co60 = 3.188e+13 Bq/g   (861.7 Ci/g) 
 
 #
 /tracking/verbose 0
-/rdecay01/event/printModulo 10000
+/run/printProgress 10000
 #
 /run/beamOn 100000
 
@@ -161,30 +166,40 @@ Index : 0     used in the geometry : Yes
 ====================================================================
 
 ### Run 1 starts.
+--> Event 0 starts.
+    End of event. Decay chain: Co60 ---> Ni60[2505.800]
 
- end of event      0 : Co60 ---> Ni60[2505.766]
+--> Event 10000 starts.
+    End of event. Decay chain: Co60 ---> Ni60[2505.800]
 
- end of event  10000 : Co60 ---> Ni60[2505.766]
+--> Event 20000 starts.
+    End of event. Decay chain: Co60 ---> Ni60[2505.800]
 
- end of event  20000 : Co60 ---> Ni60[2505.766]
+--> Event 30000 starts.
+    End of event. Decay chain: Co60 ---> Ni60[2505.800]
 
- end of event  30000 : Co60 ---> Ni60[2505.766]
+--> Event 40000 starts.
+    End of event. Decay chain: Co60 ---> Ni60[2505.800]
 
- end of event  40000 : Co60 ---> Ni60[2505.766]
+--> Event 50000 starts.
+    End of event. Decay chain: Co60 ---> Ni60[2505.800]
 
- end of event  50000 : Co60 ---> Ni60[2505.766]
+--> Event 60000 starts.
+    End of event. Decay chain: Co60 ---> Ni60[2505.800]
 
- end of event  60000 : Co60 ---> Ni60[2505.766]
+--> Event 70000 starts.
+    End of event. Decay chain: Co60 ---> Ni60[2505.800]
 
- end of event  70000 : Co60 ---> Ni60[2505.766]
+--> Event 80000 starts.
+    End of event. Decay chain: Co60 ---> Ni60[2505.800]
 
- end of event  80000 : Co60 ---> Ni60[2505.766]
+--> Event 90000 starts.
+    End of event. Decay chain: Co60 ---> Ni60[2505.800]
 
- end of event  90000 : Co60 ---> Ni60[2505.766]
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=4.04s Real=4.06s Sys=0s
+  User=2.14s Real=2.14s Sys=0s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -192,16 +207,18 @@ Run Summary
 
  Nb of generated particles: 
 
-  Ni60[1332.518]:     118  Emean =  7.635 eV 	( 0.007552 eV  --> 24.89 eV )
-  Ni60[2505.766]:   99882  Emean =  0.433 eV 	( 0 eV  --> 3.716 eV )
-      anti_nu_e:  100000  Emean =  223.7 keV	( 3.919 keV --> 1.483 MeV)
-             e-:  100000  Emean =  95.86 keV	( 2.068 eV  --> 1.359 MeV)
+  Ni60[1332.500]:     118  Emean =  17.74 eV 	( 0.3673 eV  --> 32.55 eV )
+  Ni60[2505.800]:   99882  Emean =  1.469 eV 	( 0.0008295 eV  --> 3.757 eV )
+      anti_nu_e:  100000  Emean =    223 keV	( 3.89 keV --> 1.482 MeV)
+             e-:  100000  Emean =  95.49 keV	( 2.058 eV  --> 1.358 MeV)
 
-   Ekin Total (Q): mean =  319.5 keV	( 318.1 keV --> 1.491 MeV)
+   Ekin Total (Q): mean =  318.4 keV	( 317.1 keV --> 1.49 MeV)
 
-   Momentum balance (excluding gamma desexcitation): mean =  3.922 eV 	( 1.591e-05 eV  --> 840.3 eV )
+   Momentum balance (excluding gamma desexcitation): mean = 0.4295 eV 	( 1.739e-06 eV  --> 27.1 eV )
 
    Total time of life : mean =  7.607 y    half-life =  5.273 y     ( 15.92 min --> 94.63 y  )
+
+   Total visible energy : mean =  95.49 keV   ( 2.953 eV  --> 1.358 MeV)
 
    Activity of Co60 = 4.184e+13 Bq/g   (1131 Ci/g) 
 
@@ -222,30 +239,40 @@ Index : 0     used in the geometry : Yes
 ====================================================================
 
 ### Run 2 starts.
+--> Event 0 starts.
+    End of event. Decay chain: Co60 ---> Ni60[2505.800] ---> Ni60[1332.500] ---> Ni60
 
- end of event      0 : Co60 ---> Ni60[2505.766] ---> Ni60
+--> Event 10000 starts.
+    End of event. Decay chain: Co60 ---> Ni60[2505.800] ---> Ni60[1332.500] ---> Ni60
 
- end of event  10000 : Co60 ---> Ni60[2505.766] ---> Ni60
+--> Event 20000 starts.
+    End of event. Decay chain: Co60 ---> Ni60[2505.800] ---> Ni60[1332.500] ---> Ni60
 
- end of event  20000 : Co60 ---> Ni60[2505.766] ---> Ni60
+--> Event 30000 starts.
+    End of event. Decay chain: Co60 ---> Ni60[2505.800] ---> Ni60[1332.500] ---> Ni60
 
- end of event  30000 : Co60 ---> Ni60[2505.766] ---> Ni60
+--> Event 40000 starts.
+    End of event. Decay chain: Co60 ---> Ni60[2505.800] ---> Ni60[1332.500] ---> Ni60
 
- end of event  40000 : Co60 ---> Ni60[2505.766] ---> Ni60
+--> Event 50000 starts.
+    End of event. Decay chain: Co60 ---> Ni60[2505.800] ---> Ni60[1332.500] ---> Ni60
 
- end of event  50000 : Co60 ---> Ni60[2505.766] ---> Ni60
+--> Event 60000 starts.
+    End of event. Decay chain: Co60 ---> Ni60[2505.800] ---> Ni60[1332.500] ---> Ni60
 
- end of event  60000 : Co60 ---> Ni60[2505.766] ---> Ni60
+--> Event 70000 starts.
+    End of event. Decay chain: Co60 ---> Ni60[2505.800] ---> Ni60[1332.500] ---> Ni60
 
- end of event  70000 : Co60 ---> Ni60[2505.766] ---> Ni60
+--> Event 80000 starts.
+    End of event. Decay chain: Co60 ---> Ni60[2505.800] ---> Ni60[1332.500] ---> Ni60
 
- end of event  80000 : Co60 ---> Ni60[2505.766] ---> Ni60
+--> Event 90000 starts.
+    End of event. Decay chain: Co60 ---> Ni60[2505.800] ---> Ni60[1332.500] ---> Ni60
 
- end of event  90000 : Co60 ---> Ni60[2505.766] ---> Ni60
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=9.55s Real=9.59s Sys=0s
+  User=5.87s Real=7.26s Sys=0s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -253,27 +280,29 @@ Run Summary
 
  Nb of generated particles: 
 
-           Ni60:  100000  Emean = 0.4472 eV 	( 0 eV  --> 25.61 eV )
-  Ni60[1332.518]:     141  Emean =  7.495 eV 	( 0.0006112 eV  --> 25.62 eV )
-  Ni60[2505.766]:   99859  Emean = 0.4373 eV 	( 0 eV  --> 3.792 eV )
-      anti_nu_e:  100000  Emean =  223.4 keV	( 1.05 keV --> 1.461 MeV)
-             e-:  100032  Emean =  96.78 keV	( 6.009 eV  --> 1.371 MeV)
-          gamma:  199842  Emean =  1.253 MeV	( 8.333 keV --> 1.341 MeV)
+           Ni60:  100000  Emean =  29.75 eV 	( 0.001623 eV  --> 92.29 eV )
+  Ni60[1332.500]:   99999  Emean =  13.82 eV 	( 0.108 eV  --> 40.25 eV )
+  Ni60[2158.600]:       8  Emean =  2.528 eV 	( 0.6633 eV  --> 5.752 eV )
+  Ni60[2505.800]:   99868  Emean =   1.47 eV 	( 0.001884 eV  --> 3.791 eV )
+      anti_nu_e:  100000  Emean =  222.7 keV	( 1.032 keV --> 1.485 MeV)
+             e-:  100035  Emean =  96.27 keV	( 5.686 eV  --> 1.436 MeV)
+          gamma:  199840  Emean =  1.253 MeV	( 347.2 keV --> 2.159 MeV)
 
-   Ekin Total (Q): mean =  1.412 MeV	( 318.1 keV --> 2.506 MeV)
+   Ekin Total (Q): mean =  941.3 keV	( 317.1 keV --> 2.159 MeV)
 
-   Momentum balance (excluding gamma desexcitation): mean =    274 eV 	( 0 eV  --> 1.771 MeV)
+   Momentum balance (excluding gamma desexcitation): mean =  834.9 keV	( 1.733e-05 eV  --> 2.159 MeV)
 
-   Total time of life : mean =  7.612 y    half-life =  5.276 y     ( 21.98 min --> 87.74 y  )
+   Total time of life : mean =  7.602 y    half-life =  5.269 y     ( 1.164 h   --> 101.5 y  )
 
-   Activity of Co60 = 4.181e+13 Bq/g   (1130 Ci/g) 
+   Total visible energy : mean =    2.6 MeV   ( 1.338 MeV --> 2.822 MeV)
+
+   Activity of Co60 = 4.187e+13 Bq/g   (1132 Ci/g) 
 
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
-Total navigation history collections cleaned: 6
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.012 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.017 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

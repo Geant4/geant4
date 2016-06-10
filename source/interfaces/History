@@ -1,4 +1,4 @@
-$Id: History 86972 2014-11-21 11:56:23Z gcosmo $
+$Id: History 90762 2015-06-09 07:52:57Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+8nd June 2015  Laurent Garnier (interfaces-V10-01-01)
+- Tagged
+
+2nd March 2015  Laurent Garnier 
+- G4UIQt :
+ o Add a public method GetCoutDockWidget to return the Cout dock widget as a QDockWidget
+
+15th December 2014  Laurent Garnier (interfaces-V10-01-00)
+- G4UIQt.cc
+  o Fix a problem when displaying the first time the help tree. The guidance label
+    was not show
 
 20th November 2014  Laurent Garnier (interfaces-V10-00-23)
 - G4UIQt.cc

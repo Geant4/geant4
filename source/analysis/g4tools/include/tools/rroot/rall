@@ -53,9 +53,7 @@ inline tools::rroot::TDirectory* find_dir(tools::rroot::directory& a_dir,const s
   return tdir;
 }
 
-inline bool read_key(std::ostream& a_out,
-                     tools::rroot::key& a_key,
-                     bool a_dump){
+inline bool read_key(std::ostream& a_out,tools::rroot::key& a_key,bool a_dump){
   unsigned int sz;    
   char* buf = a_key.get_object_buffer(sz); //we don't have ownership of buf.
   if(!buf) {
@@ -69,8 +67,7 @@ inline bool read_key(std::ostream& a_out,
   //      << " get data buffer size " << sz << "."
   //      << std::endl;
 
-  tools::rroot::buffer b(a_out,a_key.file().byte_swap(),
-                         sz,buf,a_key.key_length(),false);
+  tools::rroot::buffer b(a_out,a_key.file().byte_swap(),sz,buf,a_key.key_length(),false);
 
   if(a_key.object_class()==tools::rroot::TH1F_cls()) {
     tools::histo::h1d* h = tools::rroot::TH1F_stream(b);
@@ -412,8 +409,7 @@ inline void read(std::ostream& a_out,
                << " can't get directory data buffer."
                << std::endl;
       } else {
-        tools::rroot::buffer b(a_out,a_file.byte_swap(),
-                               sz,buf,k.key_length(),false);
+        tools::rroot::buffer b(a_out,a_file.byte_swap(),sz,buf,k.key_length(),false);
         tools::rroot::TDirectory dir(a_file);
         if(!dir.stream(b)) {
           a_out << "read :"

@@ -62,6 +62,8 @@
 #include "globals.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Pow.hh"
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4EMDissociationSpectrum::G4EMDissociationSpectrum ()
@@ -100,7 +102,7 @@ G4double G4EMDissociationSpectrum::GetGeneralE2Spectrum
   G4double K0 = bessel->K0(xi);
   G4double K1 = bessel->K1(xi);
   G4double n  = 2.0 * fine_structure_const / pi / b4 / Eg *
-    (2.0*(1.0-b2)*K1*K1 + xi*std::pow((2.0-b2),2.0)*K0*K1 -
+    (2.0*(1.0-b2)*K1*K1 + xi*G4Pow::GetInstance()->powA((2.0-b2),2.0)*K0*K1 -
      xi*xi*b4/2.0*(K1*K1-K0*K0));
   return n;
 }
@@ -111,8 +113,8 @@ G4double G4EMDissociationSpectrum::GetClosestApproach
 {
   G4double bsq     = b * b;
   G4double gg       = 1.0/std::sqrt(1-bsq);
-  G4double AProot3 = std::pow(AP,1.0/3.0);
-  G4double ATroot3 = std::pow(AT,1.0/3.0);
+  G4double AProot3 = G4Pow::GetInstance()->powA(AP,1.0/3.0);
+  G4double ATroot3 = G4Pow::GetInstance()->powA(AT,1.0/3.0);
   G4double bc      = 1.34 * fermi * (AProot3+ATroot3 - 0.75 *(1.0/AProot3+1.0/ATroot3));
 //  G4double a0      = ZP * ZT * classic_electr_radius/bsq;
   G4double a0      = ZP * ZT * elm_coupling / (AT*AP*amu_c2/(AT+AP)) / bsq;

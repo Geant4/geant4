@@ -27,7 +27,7 @@
 /// \brief Definition of the G04DetectorConstruction class
 //
 //
-// $Id: G04DetectorConstruction.hh 69988 2013-05-21 12:36:24Z gcosmo $
+// $Id: G04DetectorConstruction.hh 93506 2015-10-23 12:30:58Z gcosmo $
 //
 //
 
@@ -36,25 +36,20 @@
 
 #include "G4VUserDetectorConstruction.hh"
 
+class G4GDMLParser;
+
 /// Detector construction for laoding GDML geometry
 
 class G04DetectorConstruction : public G4VUserDetectorConstruction
 {
-  public:
- 
-    G04DetectorConstruction(G4VPhysicalVolume *setWorld = 0)
-    {   
-      fWorld = setWorld;
-    }
+  public: 
+    G04DetectorConstruction(const G4GDMLParser& parser);
 
-    virtual G4VPhysicalVolume *Construct()
-    {
-      return fWorld;
-    }
-
+    virtual G4VPhysicalVolume *Construct();  
+    virtual void ConstructSDandField();
+  
   private:
-
-    G4VPhysicalVolume *fWorld;
+    const G4GDMLParser& fParser;
 };
 
 #endif

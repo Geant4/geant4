@@ -58,7 +58,28 @@ public:
   void Bias(const G4String& particleName);
   // ---- Put under biasing processes in processToBiasNames of given particleName:
   void Bias(const G4String& particleName, const std::vector< G4String >& processToBiasNames);
-  
+
+  // -- Bias groups of particles:
+  // --  - particles which have been setup by names with above methods are not affected
+  // --  - particles can be specified by PDG range
+  // --  - particles can be specified by the charged ou neutral nature
+  // --     - particles specified by name and PDG range are unaffected
+  // -- Add a PDG range for particle to bias, anti-particles are included by default:
+  void    PhysicsBiasAddPDGRange( G4int PDGlow, G4int PDGhigh, G4bool includeAntiParticle = true );
+  void NonPhysicsBiasAddPDGRange( G4int PDGlow, G4int PDGhigh, G4bool includeAntiParticle = true );
+  void           BiasAddPDGRange( G4int PDGlow, G4int PDGhigh, G4bool includeAntiParticle = true );
+  // -- Will bias all charged particles:
+  void    PhysicsBiasAllCharged( G4bool includeShortLived = false );
+  void NonPhysicsBiasAllCharged( G4bool includeShortLived = false );
+  void           BiasAllCharged( G4bool includeShortLived = false );
+  // -- Will bias all neutral particles:
+  void    PhysicsBiasAllNeutral( G4bool includeShortLived = false );
+  void NonPhysicsBiasAllNeutral( G4bool includeShortLived = false );
+  void           BiasAllNeutral( G4bool includeShortLived = false );
+
+
+  // -- Information about biased particles:
+  void BeVerbose() { fVerbose = true; }
   
 public:
   
@@ -83,6 +104,19 @@ private:
   std::vector< std::vector< G4String > > fBiasedProcesses;
   // -- non physics biased particles:
   std::vector< G4String > fNonPhysBiasedParticles;
+
+  // -- Group of particles under biasing:
+  std::vector< G4int >    fPhysBiasByPDGRangeLow,    fPhysBiasByPDGRangeHigh;
+  std::vector< G4int > fNonPhysBiasByPDGRangeLow, fNonPhysBiasByPDGRangeHigh;
+  G4bool fPhysBiasAllCharged, fNonPhysBiasAllCharged;
+  G4bool fPhysBiasAllChargedISL, fNonPhysBiasAllChargedISL;
+  G4bool fPhysBiasAllNeutral, fNonPhysBiasAllNeutral;
+  G4bool fPhysBiasAllNeutralISL, fNonPhysBiasAllNeutralISL;
+  
+  // -- Report:
+  G4bool fVerbose;
+
+
   
 };
 

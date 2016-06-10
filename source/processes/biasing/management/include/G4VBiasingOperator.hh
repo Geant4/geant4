@@ -105,7 +105,7 @@
 //                                                                   const G4BiasingProcessInterface* callingProcess ) = 0;
 //
 //   The operator can propose a biasing operation that will handle the
-//   physic procsse final state biasing. As in previous case a) the
+//   physic process final state biasing. As in previous case a) the
 //   G4BiasingProcessInterface process wraps an actual physics process
 //   which pointer can be obtained with:
 //                callingProcess->GetWrappedProcess() .
@@ -241,7 +241,7 @@ protected:
 protected:
   // -- optionnal methods for further information passed to the operator:
   // --------------------------------------------------------------------
-  // ---- report to operator about the operation applied, the biasingCase value provides what sort of biasing applied:
+  // ---- report to operator about the operation applied, the biasingCase value provides the case of biasing applied:
   virtual void OperationApplied( const G4BiasingProcessInterface* callingProcess, G4BiasingAppliedCase               biasingCase,
 				 G4VBiasingOperation*           operationApplied, const G4VParticleChange* particleChangeProduced );
   // ---- same as above, report about the operation applied, for the case an occurence biasing was applied, together or not with a final state biasing.
@@ -257,23 +257,18 @@ protected:
   virtual void ExitBiasing( const G4Track* track, const G4BiasingProcessInterface* callingProcess );
 
 
-protected:
-  // -- Utility:
-  // -----------
-  // ---- A utility method allowing to store secondaries produced by an operation.
-  // ---- The stored secondaries are the ones in the particle change
-  void RememberSecondaries( const G4BiasingProcessInterface*         callingProcess,
-			    const G4VBiasingOperation*             operationApplied,
-			    const G4VParticleChange*         particleChangeProduced );
-  // ---- Informations about track is erased:
-  void ForgetTrack( const G4Track* track );
-  
 public:
+  // ---- Configure() is called in sequential mode or for master thread in MT mode.
+  // ---- It is in particular aimed at registering ID's to physics model at run initialization.
+  virtual void            Configure() {}
+  // ---- ConfigureForWorker() is called in MT mode only, and only for worker threads.
+  // ---- It is not not to be used to register ID's to physics model catalog.
+  virtual void   ConfigureForWorker() {}
   // ---- inform the operator of the start of the run:
-  virtual void      StartRun() {}
+  virtual void              StartRun() {}
   // ---- inform the operator of the start (end) of the tracking of a new track:
-  virtual void StartTracking( const G4Track* /* track */ ) {}
-  virtual void   EndTracking() {}
+  virtual void         StartTracking( const G4Track* /* track */ ) {}
+  virtual void           EndTracking() {}
   
   
   
@@ -310,7 +305,6 @@ public:
   
 public:
   const G4VBiasingOperation* GetPreviousNonPhysicsAppliedOperation() {return  fPreviousAppliedNonPhysicsBiasingOperation;}
-  const G4VBiasingOperation* GetBirthOperation( const G4Track* );
   
   
 private:

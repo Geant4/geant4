@@ -1,4 +1,4 @@
-$Id: History 85425 2014-10-29 08:24:37Z gcosmo $
+$Id: History 93737 2015-10-30 11:01:43Z gcosmo $
 ----------------------------------------------------
 
      =========================================================
@@ -14,6 +14,22 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28-10-15 D.Sawkey (testem3-V10-01-04)
+- update description of physics lists in README, again
+
+26-10-15 D.Sawkey (testem3-V10-01-03)
+- update description of physics lists in README
+
+19-09-15 V.Ivant (testem3-V10-01-02)
+- TestEm3.cc - use default 4 threads, improve vis.mac
+- PhysListEmStandard - use G4EmParameters
+
+12-05-15 V.Ivant (testem3-V10-01-01)
+- PhysicsList - use G4EmStandardPhysicsGS from physics_list library
+
+23-01-15 I. Hrivnacova (testem3-V10-01-00)
+- fixed formatting in .README
 	 
 28-10-14 mma (testem3-V10-00-16)
 - in macros : /run/numberOfThreads 2

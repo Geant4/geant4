@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.hh 72057 2013-07-04 13:07:29Z gcosmo $
+// $Id: G4NistElementBuilder.hh 94234 2015-11-09 10:58:13Z gcosmo $
 
 #ifndef G4NistElementBuilder_h
 #define G4NistElementBuilder_h 1
@@ -105,7 +105,7 @@ public:
   // Get total ionisation energy of an atom
   inline G4double GetTotalElectronBindingEnergy(G4int Z) const;
 
-  // Get natural isotope abandance
+  // Get natural isotope abundance
   inline G4double GetIsotopeAbundance (G4int Z, G4int N) const;
 
   // Get N for the first natural isotope
@@ -125,7 +125,7 @@ private:
 
   // Add element parameters to internal G4 database: 
   // Z - atomic number, N - number of nucleons, A - atomic mass (amu),
-  // sigmaA - accuracy of mass in last digits, W - natural abandances (percent) 
+  // sigmaA - accuracy of mass in last digits, W - natural abundances (percent) 
   void AddElement(const G4String& symbol, G4int Z, G4int NumberOfIsotopes,
                   const G4int& N, const G4double& A, const G4double& sigmaA, 
 		  const G4double& W);

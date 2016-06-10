@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 #include "G4SoftStringBuilder.hh"
-
+//#define debug_G4SoftStringBuilder
 //***************************************************************************************************
 
 G4SoftStringBuilder::G4SoftStringBuilder()

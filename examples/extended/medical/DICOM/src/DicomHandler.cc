@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomHandler.cc 84839 2014-10-21 13:44:55Z gcosmo $
+// $Id: DicomHandler.cc 92820 2015-09-17 15:22:14Z gcosmo $
 //
 /// \file medical/DICOM/src/DicomHandler.cc
 /// \brief Implementation of the DicomHandler class
@@ -65,13 +65,13 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DicomHandler* DicomHandler::fgInstance = 0;
+DicomHandler* DicomHandler::fInstance = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DicomHandler* DicomHandler::Instance()
 {
-    return fgInstance;
+    return fInstance;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -84,13 +84,12 @@ DicomHandler::DicomHandler()
     fSliceThickness(0.), fSliceLocation(0.),
     fRescaleIntercept(0), fRescaleSlope(0),
     fLittleEndian(true), fImplicitEndian(false),
-    fPixelRepresentation(0), nbrequali(0),
-    valuedensity(NULL),valueCT(NULL),readCalibration(false),
-    mergedSlices(NULL),driverFile("Data.dat"),ct2densityFile("CT2Density.dat")
+    fPixelRepresentation(0), fNbrequali(0),
+    fValueDensity(NULL),fValueCT(NULL),fReadCalibration(false),
+    fMergedSlices(NULL),fDriverFile("Data.dat"),fCt2DensityFile("CT2Density.dat")
 {
-    mergedSlices = new DicomPhantomZSliceMerged;
+    fMergedSlices = new DicomPhantomZSliceMerged;
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -128,7 +127,6 @@ G4int DicomHandler::ReadFile(FILE* dicom, char* filename2)
     unsigned long elementLength4; // deal with element length in 4 bytes
 
     char * data = new char[DATABUFFSIZE];
-
 
     // Read information up to the pixel data
     while(true) {
@@ -195,7 +193,6 @@ G4int DicomHandler::ReadFile(FILE* dicom, char* filename2)
         // Reading the information with data
         rflag = std::fread(data, elementLength4,1,dicom);
       }
-      
       
       }  else {
 
@@ -281,7 +278,7 @@ G4int DicomHandler::ReadFile(FILE* dicom, char* filename2)
     // Dumped 2 file after DicomPhantomZSliceMerged has checked for consistency
     //zslice->DumpToFile();
 
-    mergedSlices->AddZSlice(zslice);
+    fMergedSlices->AddZSlice(zslice);
 
     //
     delete [] buffer;
@@ -796,22 +793,21 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
   return returnvalue;
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 // Separated out of Pixel2density
 // No need to read in same calibration EVERY time
 // Increases the speed of reading file by several orders of magnitude
 void DicomHandler::ReadCalibration()
 {
-  nbrequali = 0;
+  fNbrequali = 0;
   
   // CT2Density.dat contains the calibration curve to convert CT (Hounsfield)
   // number to physical density
-  std::ifstream calibration(ct2densityFile.c_str());
-  calibration >> nbrequali;
+  std::ifstream calibration(fCt2DensityFile.c_str());
+  calibration >> fNbrequali;
   
-  valuedensity = new G4double[nbrequali];
-  valueCT = new G4double[nbrequali];
+  fValueDensity = new G4double[fNbrequali];
+  fValueCT = new G4double[fNbrequali];
   
   if(!calibration) {
     G4Exception("DicomHandler::ReadFile",
@@ -820,35 +816,35 @@ void DicomHandler::ReadCalibration()
                 "@@@ No value to transform pixels in density!");
     
   } else { // calibration was successfully opened
-    for(G4int i = 0; i < nbrequali; i++) { // Loop to store all the 
+    for(G4int i = 0; i < fNbrequali; i++) { // Loop to store all the 
       //pts in CT2Density.dat
-      calibration >> valueCT[i] >> valuedensity[i];
+      calibration >> fValueCT[i] >> fValueDensity[i];
     }
   }
   calibration.close();
   
-  readCalibration = true;
+  fReadCalibration = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4float DicomHandler::Pixel2density(G4int pixel)
 {
-  if(!readCalibration) { ReadCalibration(); }
+  if(!fReadCalibration) { ReadCalibration(); }
   
   G4float density = -1.;
   G4double deltaCT = 0;
   G4double deltaDensity = 0;
   
   
-  for(G4int j = 1; j < nbrequali; j++) {
-    if( pixel >= valueCT[j-1] && pixel < valueCT[j]) {
+  for(G4int j = 1; j < fNbrequali; j++) {
+    if( pixel >= fValueCT[j-1] && pixel < fValueCT[j]) {
       
-      deltaCT = valueCT[j] - valueCT[j-1];
-      deltaDensity = valuedensity[j] - valuedensity[j-1];
+      deltaCT = fValueCT[j] - fValueCT[j-1];
+      deltaDensity = fValueDensity[j] - fValueDensity[j-1];
       
       // interpolating linearly
-      density = valuedensity[j] - ((valueCT[j] - pixel)*deltaDensity/deltaCT );
+      density = fValueDensity[j] - ((fValueCT[j] - pixel)*deltaDensity/deltaCT );
       break;
     }
   }
@@ -866,7 +862,7 @@ G4float DicomHandler::Pixel2density(G4int pixel)
 
 void DicomHandler::CheckFileFormat()
 {
-  std::ifstream checkData(driverFile.c_str());
+  std::ifstream checkData(fDriverFile.c_str());
   char * oneLine = new char[128];
   
   if(!(checkData.is_open())) { //Check existance of Data.dat
@@ -924,7 +920,7 @@ void DicomHandler::CheckFileFormat()
     char * inputFile = new char[FILENAMESIZE];
     G4int rflag;
     
-    lecturePref = std::fopen(driverFile.c_str(),"r");
+    lecturePref = std::fopen(fDriverFile.c_str(),"r");
     rflag = std::fscanf(lecturePref,"%s",fCompressionc);
     fCompression = atoi(fCompressionc);
     rflag = std::fscanf(lecturePref,"%s",maxc);
@@ -952,7 +948,7 @@ void DicomHandler::CheckFileFormat()
     rflag = std::fclose(lecturePref);
     
     // Checks the spacing is correct. Dumps to files
-    mergedSlices->CheckSlices();
+    fMergedSlices->CheckSlices();
     
     delete [] fCompressionc;
     delete [] maxc;
@@ -962,9 +958,9 @@ void DicomHandler::CheckFileFormat()
     
   }
   
-  if(valuedensity) { delete [] valuedensity; }
-  if(valueCT) { delete [] valueCT; }
-  if(mergedSlices) { delete mergedSlices; }
+  if(fValueDensity) { delete [] fValueDensity; }
+  if(fValueCT) { delete [] fValueCT; }
+  if(fMergedSlices) { delete fMergedSlices; }
   
 }
 
@@ -1095,4 +1091,4 @@ void DicomHandler::GetValue(char * _val, Type & _rval) {
   }
   
   //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-  
+

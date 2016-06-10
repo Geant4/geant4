@@ -240,11 +240,13 @@ void CommandLineParser::PrintHelp()
         toPrint += ", -h";
       }
 
-      if (command->GetDefaultOption() != "")
+      if(command->GetType() != Command::WithoutOption)
       {
-        toPrint += " \"" + command->GetDefaultOption() + "\"";
+        if (command->GetDefaultOption() != "")
+        {
+          toPrint += " \"" + command->GetDefaultOption() + "\"";
+        }
       }
-
       G4cout << toPrint;
 
       G4cout << command->GetDescription() << G4endl;

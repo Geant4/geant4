@@ -61,7 +61,6 @@ CommandLineParser* parser(0);
 
 void Parse(int& argc, char** argv);
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
@@ -228,7 +227,6 @@ void Parse(int& argc, char** argv)
                      "Select a visualization driver",
                      "OGL 600x600-0+0");
 
-
   parser->AddCommand("-novis",
                      Command::WithoutOption,
                      "Deactivate visualization when using GUI");
@@ -254,4 +252,3 @@ void Parse(int& argc, char** argv)
     abort();
   }
 }
-

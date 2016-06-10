@@ -28,8 +28,6 @@ endif()
 
 
 find_package(G4mpi REQUIRED)
-message(${G4mpi_INCLUDE_DIR})
-message(${G4mpi_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Setup Geant4 include directories and compile definitions
@@ -47,12 +45,11 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
 			      ${Geant4_INCLUDE_DIR}
 			      ${G4mpi_INCLUDE_DIR})
 
-
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(exMPI01 exMPI01.cc ${sources} ${headers})
-target_link_libraries(exMPI01 ${Geant4_LIBRARIES} ${G4mpi_LIBRARIES})
+target_link_libraries(exMPI01 ${G4mpi_LIBRARIES} ${Geant4_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we

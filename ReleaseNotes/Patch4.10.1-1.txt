@@ -1,0 +1,363 @@
+
+                 Geant4 10.1 - patch-01 Release Notes
+                 ------------------------------------
+
+                                                            27 March 2015
+
+List of fixes included in this public patch since the public release 10.1:
+
+  o Configuration:
+    -------------
+    + CMake:
+      o Added support for compiling against c++1y standard for GNU and Clang
+        compilers. Added support for compiling against c++11 standard for
+        Intel 15 compiler. 'c++0x' is used for compilers with partial support
+        (even if 'c++11' is allowed), reserving 'c++11' for fully supported
+        cases.
+      o Corrected search path for X11 libraries to ensure location of Xquartz
+        libs on MacOSX. Addressing problem report #1683.
+      o Added external USolids library to static linkage list.
+        Addressing problem report #1725.
+      o Ensure that system/compiler is correctly set for GNUMake compatibility
+        on MacOSX.
+
+  o Analysis:
+    --------
+    + Fixed G4AnalysisManager::IsActive(), now taken into all Hn & Pn managers.
+    + Fixes in the Root files output to be compatible with ROOT 6.02/x.
+    + Fixed reading XML ntuples with a column of a vector type; tools do not
+      support direct use of ntuple_bindings with a vector, use of a temporary
+      sub-ntuple is needed.
+    + Fixed resetting histograms.
+
+  o Digits & hits:
+    -------------
+    + Fix in CMake script of 'scorer' module for missing dependency on
+      external library.
+    + Added calls to G4VisManager::BeginDraw2D() and  G4VisManager::EndDraw()
+      in G4VScoreColorMap to speedup drawing of texts and color chart.
+      Revised Draw() DrawColumn() methods in G4ScoringBox and G4ScoringCylinder
+      to speed up drawing primitive scorers attached to the scoring meshes.
+
+  o Event:
+    -----
+    + Fix to reduce performance penalty in MT mode when using GPS with low
+      energy primaries. Addressing problem report #1706.
+
+  o Externals:
+    ---------
+    + USolids:
+      o UPolycone: fix in InsideSection() for points(0,0,z). Fix in
+        SetOriginalParameters(), in case of presence of 'rings' structures
+        constructed by (r,z) corners.
+        Use canonical form for operator=(). Code cleanup and formatting.
+      o Added special DistanceAway() method for Inside() in order to fix
+        precision problem in calculation of DistanceToSide() in UPolyconeSide.
+      o Fixed typo in copy-ctor and assignment operator for UTubs.
+      o Renamed ExceptionSeverity struct to UExceptionSeverity in UUtils to
+        avoid possible clashes with external libraries.
+      o UTrap: fix in SafetyToIn/SafetyToOut() for implementations which were
+        reverted.
+      o Fixed triangularisation method AddGeneralPOlygoneFacets() in
+        UExtrudedSolid by avoiding flat triangles.
+      o Added warning message to UTriangularFacet constructor if Area is 0;
+        i.e. case of flat triangle.
+
+  o G3toG4:
+    ------
+    + Fix to CMake script to include missing dependency on external library.
+
+  o Geometry:
+    --------
+    + biasing:
+      o Set G4IStore and G4WeightWindowStore as thread-local singletons to
+        avoid data races when accessing iterators.
+        Use const references for string in argument for constructor and
+        accessor.
+    + magneticfield:
+      o Small refinements in G4FieldTrack: added method to access rest mass
+        and avoid division by zero for unit direction.
+    + navigation:
+      o G4ErrorPropagationNavigator: revised implementation of ComputeStep(),
+        to avoid calling G4Navigator::ComputeSafety().
+        Addresses problem report #1679.
+      o G4PathFinder: pass to equation of motion relevant properties of current
+        particle: latest charge state, PDG spin value, momentum and rest mass
+        of current particle. Fix in calls to ComputeSafety() to correctly
+        use length as argument.
+        Increased maximum number of navigators from 8 to 16.
+        Addressing problem report #1696.
+    + solids/CSG:
+      o Fixed typo in copy-ctor and assignment operator for G4Tubs and G4OTubs.
+      o Fix in temporary class G4OTubs to include symbol in library in any case.
+    + solids/specific:
+      o Fixed triangularisation method AddGeneralPOlygoneFacets() in
+        G4ExtrudedSolid by avoiding flat triangles. Added warning message to
+        G4TriangularFacet constructor if Area is 0; i.e., case of flat triangle.
+        Addressing problem report #1703.
+      o Added special DistanceAway() method for Inside() in order to fix
+        precision problem in calculation of DistanceToSide() in G4PolyconeSide.
+      o Fix in SetOriginalParameters() for G4Polycone and G4Polyhedra, in case
+        of presence of 'rings' structures. Addressing problem report #1705.
+      o Use canonical form for operator=() in G4PolyconeHistorical and
+        G4PolyhedraHistorical.
+    + volumes:
+      o G4NavigationHistoryPool: moved printout from the destructor to
+        dedicated Print() method.
+      o Avoid post-increment in G4NavigationLevelRep::AddAReference().
+      o Use canonical form for copy-ctor and operator=() in G4GRSSolid,
+        G4GRSVolume, G4LogicalBorderSurface and G4LogicalSkinSurface.
+
+  o Generic Processes:
+    -----------------
+    + Biasing:
+      o G4ImportanceProcess, G4WeightCutOffProcess, G4WeightWindowProcess:
+        made static thread-local variables into simple class data members.
+        Use const reference for string in argument in SetParallelWorld().
+    + Management:
+      o Fixed logic in G4ProcessManager::SetProcessOrderingToSecond() to make
+        sure the process is always set before the process that has ordering
+        index 1.
+    + Transportation:
+      o G4Transportation, G4CoupledTransportation: in AlongStepGetPIL(),
+        initialize restMass with G4DynamicParticle (as is used in DoIt()),
+        not with G4ParticleDefinition. Resolves inconsistent kinematics
+        when dynamic mass is measurably different from "PDG" mass.
+
+  o Global:
+    ------
+    + Define support for c++11 thread_local keyword on Intel-icc compiler
+      version 15.
+    + Define G4THREADSLEEP(tick) macro in G4Threading header.
+    + Updated date and version for 10.1.p01.
+
+  o Graphics Representations:
+    ------------------------
+    + G4VisAttributes: removed unnecessary check in operator<<().
+      Fixing compilation warning on clang.
+
+  o Interfaces:
+    ----------
+    + G4UIQt: fixed problem when displaying the first time the help tree.
+      The guidance label was not shown.
+
+  o Materials:
+    ---------
+    + G4Material, G4NistManager, G4NistMaterialBuilder, G4IonisParamMat:
+      introduced NTP_Temperature=20C; set this temperature as default for 
+      all materials instead of STP_Temperature. No effects in results expected.
+      Addressing problem report #1704.
+    + G4Material, G4Element, G4Isotope: make arguments of stream operators const.
+
+  o Particles:
+    ---------
+    + Added missing gamma-gamma, omega-gamma modes to EtaPrime and updated
+      braching ratio. Addressing problem report #1713.
+
+  o Physics Lists:
+    -------------
+    + constructors/electromagnetic:
+      o G4EmStandardPhysics_option4, G4EmStandardPhysicsWVI: disable
+        'DisplacementBeyondSafety' option; result of electron scattering
+        benchmark demonstrate some degradation of accuracy with this option
+        enabled. Use step limitation option 'fUseDistanceToBoundary' instead.
+      o G4EmStandardPhysicsWVI: added angular limit to WentzelVI model
+        in order to provide correct backscattering.
+        Addressing problem report #1702. For more information see:
+        S. H. Kim et al., IEEE Trans. Nucl. Sci., vol. 62, no. 2, 2015.
+    + constructors/hadron_elastic:
+      o G4HadronElasticPhysics: replaced Chips neutron elastic cross-section
+        with default, according to fix in cross_sections module for Chips
+        neutron elastic cross-section.
+    + constructors/limiters:
+      o Fix in G4ParallelWorldProcess to correctly use method
+        SetProcessOrderingToSecond().
+    + lists:
+      o INCLXXPhysicsListHelper: avoid use of G4NeutronTrackingCut
+        for *_HP physics-lists.
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + dna:
+      o Explicitly initialise to zero TLS pointers in G4KDNode and G4ITFinder
+        to allow for compilation on Linux/clang-3.5.
+    + highenergy:
+      o G4eeToHadronsModel: fixed kinematics in ISR gamma emission; added
+        check on energy balance. Addressing problem report #1716.
+      o G4eeTo3PiModel: increased majoranta for sampling of 3-body final state;
+        fixed bug in sampling.
+    + standard:
+      o G4GoudsmitSaundersonMscModel, G4UrbanMscModel,G4WentzelVIModel,
+        G4WentzelVIRelModel, G4UniversalFluctuation: redefine random engine
+        pointer in StartTracking() method to address problem reported by CMS.
+        G4UniversalFluctuation: switch to use G4Random::GetTheEngine() to
+        simplify code.
+      o G4GoudsmitSaundersonMscModel: return back to version of 10.0 with two
+        fixes; trivial Coverity report, added protection against precision loss
+        for small angle calculation, to ensure same backscattering results.
+      o G4KleinNishinaModel: fixed very rare crash happening when de-excitation
+        module is active and de-excitation energy is slightly larger than
+        available energy; now secondary energy is slightly modified to keep
+        energy balance instead of deleting secondary particle.
+        G4PEEffFluoModel: use the same pattern as G4KleinNishinaModel for
+        de-excitation products.
+    + utils:
+      o G4EmParametersMessenger: allow to set CSDA range flag only in the
+        PreInit state to avoid crash in store/retrieve tables.
+      o G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering: allow for
+        storing of physics table only from master thread.
+      o G4VEmProcess: fixed printout at initialisation for the case when a
+        process is shared between different particles.
+        Fixed crash in printout for verbose level > 2.
+      o G4VEmModel, G4VEmFluctuationModel: switch to use
+        G4Random::GetTheEngine() to simplify code.
+        Redefine random engine pointer in G4VEmModel::StartTracking() method
+        to address problem reported by CMS.
+      o G4EmCalculator: fixed minor defect reported by Coverity.
+
+  o Processes - Hadronic:
+    --------------------
+    + cross_sections:
+      o Fix in G4ComponentGGHadronNucleusXsc to work for H target.
+      o Removed obsolete (wrong) checks for particle types in IsIsoApplicable()
+        in Chips cross sections.
+      o Workaround in G4CrossSectionFactory<T,2>::Instantiate() to allow for
+        compilation on clang-3.5 on Linux, for initialisation of TLS pointer.
+    + models/coherent_elastic:
+      o G4DiffuseElastic: fix for low-energy neutrons.
+        Fix in theta_cms momentum transfer transformation.
+        Fix for rare numerical error (sqrt of negative argument).
+      o G4NuclNuclDiffuseElastic: fix for 700 MeV Be-ions scattering in Be.
+        Addressing problem report #1691.
+    + models/de_excitation:
+      o G4VGammaDeexcitation::GenerateGamma(): take into account atomic bond
+        energy for computation of transition energy and kinematics in the case
+        of internal conversion. 
+      o G4VGammaDeexcitation, G4DiscreteGammaDeexcitation, G4PhotonEvaporation:
+        changed default set of parameters: ICM disabled; time limit for isomere
+        production is set to DBL_MAX; sampling of gamma decay of long-lived
+        isomere levels is performed as it was in Geant4 9.6 assuming decay at
+        rest and making correction for energy balance (in that case momentum
+        balance is not guaranteed); binding energy is taken into account in the
+        case of ICM enabled. These modifications should provide correct sampling
+        of the decay time for all type of levels, energy balance in hadronic
+        interactions, and event reproducibility of hadronic transport.
+      o G4VGammaDeexcitation, G4PhotonEvaporation: propagate vacant shell number
+        after internal convertion allowing to enable  atomic de-excitation in
+        radioactive decay.
+      o Enabled ICM by default in G4NeutronRadCapture.
+      o G4GEMProbability: added protection to avoid numerical problem seen
+        in FTF_BIC physics-list where a nucleus get excited to 8 GeV.
+      o G4DiscreteGammaTransition return back correction on shell number
+        to avoid assert failure in simplified calorimeter.
+      o G4ContinuumGammaDeexcitation: fixed Coverity report.
+    + models/lend:
+      o Fixed Coverity defect in G4GIDI_map.
+    + models/neutron_hp:
+      o Removed unnecessary code in G4NeutronHPInelasticCompFS.
+        Addressing problem report #1710.
+      o Fixed Coverity defects.
+      o Corrected CMake script.
+    + models/qmd:
+      o Fixed Coverity defects in G4QMDGroundStateNucleus and G4QMDNucleus.
+    + models/particles_hp:
+      o Enabled reading of data file that has a signature of evaluation name.
+      o Corrected CMake script.
+    + models/parton_string:
+      o Fix for rare crash in G4LundStringFragmentation in the case of
+        anti-sigma+ capture at rest on hydrogen.
+    + stopping:
+      o G4HadronStoppingProcess, G4MuonMinusBoundDecay: fixed time of muon 
+        nuclear capture secondaries. Addressing problem report #1695.
+      o Define index in the model cathalog inside PreparePhysicsTable() to
+        avoid bad interference with EM physics.
+
+  o Run
+    ---
+    + Print message for deletion of G4NavigationHistoryPool only if the
+      verbose level is set to 2.
+
+  o Track
+    -----
+    + Fixed FieldTrackUpdator to pass magnetic moment and PDG spin.
+      Addressing problem report #1696.
+
+  o Visualization:
+    -------------
+    + Fix in CMake scripts for missing dependency on external library.
+    + gMocren:
+      o Fixed bug in G4GMocrenFileSceneHandler for checking of string lengths.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + advanced/air_shower:
+      o Set defaults for GPS in master thread.
+    + advanced/brachytherapy:
+      o Removed unnecessary instantiation of GPS in master thread.
+    + advanced/ChargeExchangeMC:
+      o Bug fix for online histogram redrawing and easy online histogram
+        showing from a dedicated menu bar (in graphical mode).
+    + advanced/gammaknife:
+      o Moved GPS defaults to master thread.
+    + advanced/hadrontherapy:
+      o Corrected definition of steppers in LaserDrivenBeamLine
+        (nvar=8 only for Electric field).
+      o Removed/reduced size of maps files and updated README.
+    + advanced/human_phantom:
+      o Removed unnecessary instantiation of GPS in master thread.
+    + advanced/microbeam:
+      o Added protection against loops on very low-energy particles.
+    + advanced/radioprotection:
+    + advanced/xray_telescope:
+      o Removed unnecessary instantiation of GPS in master thread.
+    + basic/B4:
+      o Fixed accessing 'gapHit'. Addressing problem report #1714.
+      o Fixed documentation.
+    + extended/biasing/B03:
+      o B03PhysicsList: properly use SetProcessOrderingToSecond() method
+        for G4ParallelWorldProcess.
+    + extended/electromagnetic/TestEm3:
+      o Fixed formatting in .README.
+    + extended/electromagnetic/TestEm5:
+      o Run: added forgotten fill of projectile scattering angle
+        for printed output (printed value was zero).
+    + extended/electromagnetic/TestEm8:
+      o DetectorConstruction: removed local pointer to sensitive detector
+        in order to avoid race condition.
+    + extended/electromagnetic/TestEm16:
+      o Run: fixed computation of max gamma energy for MT mode.
+    + extended/eventgenerator/particleGun:
+      o Fixed formatting in .README.
+    + extended/exoticphysics/channeling:
+      o Moved GPS defaults to master thread.
+    + extended/exoticphysics/ucn:
+      o Fixed files description for Doxygen.
+    + extended/medical/electronScattering:
+      o Corrected plot 6 filling, the distance from scattering foil to
+        detector was wrong.
+    + extended/optical/wls:
+      o Added global mutex for primary generation as application modifies
+        GPS polarization/time
+    + extended/parameterisations/gflash:
+      o Removed unnecessary instantiation of GPS in master thread.
+    + extended/persistency/gdml/G03:
+      o Corrected visualization commands in read/write input macros.
+      o Updated README.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 10.1.
+  o  Technical notes distributed for release 10.1 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 10.1.p01 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

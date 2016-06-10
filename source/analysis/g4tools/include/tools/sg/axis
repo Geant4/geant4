@@ -1,0 +1,1092 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_axis
+#define tools_sg_axis
+
+#include "node"
+#include "line_style"
+#include "text_style"
+#include "enums"
+#include "noderef"
+#include "vertices"
+#include "draw_style"
+#include "rgba"
+#include "normal"
+#include "separator"
+#include "tools"
+
+#include "../lina/vec3f"
+#include "../mnmx"
+#include "../hplot"
+
+#include <cstdio> //sprintf
+#include <cstring> //strcpy
+
+namespace tools {
+namespace sg {
+
+class axis : public node {
+public:
+  TOOLS_NODE(axis,tools::sg::axis,node)
+public:
+  sf<float> width;
+  sf<float> minimum_value;
+  sf<float> maximum_value;
+  sf<unsigned int> divisions;
+  sf_string modeling; //hippo, hplot
+  sf<bool> is_log;
+  // If modeling is hippo or hplot, 
+  // labels_enforced true let labels be an input field.
+  sf<bool> labels_enforced;
+  sf<bool> tick_up;
+  sf<float> tick_length;
+
+  // NOTE : if modeling is none,the below are input fields.
+  //        If modeling is hippo or hplot, the below are output field
+  //        (filled by compute_ticks).
+  sf<unsigned int> tick_number; //output
+  mf_string labels;       //output
+  mf<float> values;       //output //in [minimumValue,maximumValue]
+  mf<float> coords;       //output //in [0,width]
+  mf<float> sub_coords;   //output
+  sf<int> magnitude;      //output
+
+  sf_string title;
+  sf<float> title_to_axis;
+  sf<float> title_height;
+  sf_enum<hjust> title_hjust;
+
+  sf<float> label_to_axis;
+  sf<float> label_height;
+
+  // time labels only in hplot modeling for the moment.
+  sf<bool> time_labels;
+  sf_string time_format;
+  sf<double> time_offset;
+  sf<bool> time_offset_is_GMT;
+public:
+  virtual const std::vector<field_desc>& node_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::axis)
+    static std::vector<field_desc> s_v;
+    if(s_v.empty()) {
+      s_v = parent::node_fields();
+      TOOLS_ADD_FIELD_DESC(width)
+      TOOLS_ADD_FIELD_DESC(minimum_value)
+      TOOLS_ADD_FIELD_DESC(maximum_value)
+      TOOLS_ADD_FIELD_DESC(divisions)
+      TOOLS_ADD_FIELD_DESC(modeling)
+      TOOLS_ADD_FIELD_DESC(is_log)
+      TOOLS_ADD_FIELD_DESC(labels_enforced)
+      TOOLS_ADD_FIELD_DESC(tick_up)
+      TOOLS_ADD_FIELD_DESC(tick_length)
+      TOOLS_ADD_FIELD_DESC(tick_number)
+      TOOLS_ADD_FIELD_DESC(labels)
+      TOOLS_ADD_FIELD_DESC(values)
+      TOOLS_ADD_FIELD_DESC(coords)
+      TOOLS_ADD_FIELD_DESC(sub_coords)
+      TOOLS_ADD_FIELD_DESC(magnitude)
+      TOOLS_ADD_FIELD_DESC(title)
+      TOOLS_ADD_FIELD_DESC(title_to_axis)
+      TOOLS_ADD_FIELD_DESC(title_height)
+      TOOLS_ADD_FIELD_DESC(title_hjust)
+      TOOLS_ADD_FIELD_DESC(label_to_axis)
+      TOOLS_ADD_FIELD_DESC(label_height)
+
+      TOOLS_ADD_FIELD_DESC(time_labels)
+      TOOLS_ADD_FIELD_DESC(time_format)
+      TOOLS_ADD_FIELD_DESC(time_offset)
+      TOOLS_ADD_FIELD_DESC(time_offset_is_GMT)
+    }
+    return s_v;
+  }
+private:
+  void add_fields(){
+    // if adding a field, look for reset_style() and set_from_style()
+    add_field(&width);
+    add_field(&minimum_value);
+    add_field(&maximum_value);
+    add_field(&divisions);
+    add_field(&modeling);
+    add_field(&is_log);
+    add_field(&labels_enforced);
+    add_field(&tick_up);
+    add_field(&tick_length);
+    add_field(&tick_number);
+    add_field(&labels);
+    add_field(&values);
+    add_field(&coords);
+    add_field(&sub_coords);
+    add_field(&magnitude);
+    add_field(&title);
+    add_field(&title_to_axis);
+    add_field(&title_height);
+    add_field(&title_hjust);
+    add_field(&label_to_axis);
+    add_field(&label_height);
+
+    add_field(&time_labels);
+    add_field(&time_format);
+    add_field(&time_offset);
+    add_field(&time_offset_is_GMT);
+  }
+  void init_sg(){
+    m_group.add(new noderef(m_line_sep));
+    m_group.add(new noderef(m_ticks_sep));
+    m_group.add(new noderef(m_labels_sep));
+    m_group.add(new noderef(m_mag_sep));
+    m_group.add(new noderef(m_title_sep));
+  }
+public:
+  virtual void render(render_action& a_action) {
+    if(touched()) {
+      update_sg(a_action.out());
+      reset_touched();
+    }
+    m_group.render(a_action);
+  }
+  virtual void pick(pick_action& a_action) {
+    if(touched()) {
+      update_sg(a_action.out());
+      reset_touched();
+    }
+    m_group.pick(a_action);
+  }
+  virtual void search(search_action& a_action) {
+    parent::search(a_action);
+    if(a_action.done()) return;
+    if(touched()) {
+      update_sg(a_action.out());
+      reset_touched();
+    }
+    m_group.search(a_action);
+  }
+  virtual void bbox(bbox_action& a_action) {
+    if(touched()) {
+      update_sg(a_action.out());
+      reset_touched();
+    }
+    m_group.bbox(a_action);
+  }
+
+  virtual bool write(write_action& a_action) {
+    //FIXME : this method should not be needed !
+    //        But m_[line,ticks,labels,mag,title]_style not written !
+
+    if(touched()) {
+      update_sg(a_action.out());
+      reset_touched();
+    }
+    //if(!write_fields(a_action)) return false;
+    return m_group.write(a_action);
+  }
+public:
+  axis(const base_freetype& a_ttf)
+  :parent()
+  ,width(1)
+  ,minimum_value(0)
+  ,maximum_value(1)
+  ,divisions(510)
+  ,modeling(tick_modeling_hippo())
+  ,is_log(false)
+  ,labels_enforced(false)
+  ,tick_up(true)
+  ,tick_length(0)
+
+  ,tick_number(0)
+  ,magnitude(0)
+
+  ,title("")
+  ,title_to_axis(0)   //inited below
+  ,title_height(0)    //inited below
+  ,title_hjust(right)
+
+  ,label_to_axis(0) //inited below
+  ,label_height(0)  //inited below
+
+  ,time_labels(false)
+  ,time_format("%H:%M:%S")
+  ,time_offset(0) //UTC_time_1970_01_01__00_00_00
+  ,time_offset_is_GMT(false)
+
+  ,m_ttf(a_ttf)
+  {
+    add_fields();
+
+    init_sg();
+
+    reset_style(true);
+  }
+  virtual ~axis(){}
+public:
+  axis(const axis& a_from)
+  :parent(a_from)
+  ,width(a_from.width)
+  ,minimum_value(a_from.minimum_value)
+  ,maximum_value(a_from.maximum_value)
+  ,divisions(a_from.divisions)
+  ,modeling(a_from.modeling)
+  ,is_log(a_from.is_log)
+  ,labels_enforced(a_from.labels_enforced)
+  ,tick_up(a_from.tick_up)
+  ,tick_length(a_from.tick_length)
+
+  ,tick_number(a_from.tick_number)
+  ,magnitude(a_from.magnitude)
+
+  ,title(a_from.title)
+  ,title_to_axis(a_from.title_to_axis)
+  ,title_height(a_from.title_height)
+  ,title_hjust(a_from.title_hjust)
+
+  ,label_to_axis(a_from.label_to_axis)
+  ,label_height(a_from.label_height)
+
+  ,time_labels(a_from.time_labels)
+  ,time_format(a_from.time_format)
+  ,time_offset(a_from.time_offset)
+  ,time_offset_is_GMT(a_from.time_offset_is_GMT)
+
+  ,m_ttf(a_from.m_ttf)
+
+  ,m_line_style(a_from.m_line_style)
+  ,m_ticks_style(a_from.m_ticks_style)
+  ,m_labels_style(a_from.m_labels_style)
+  ,m_mag_style(a_from.m_mag_style)
+  ,m_title_style(a_from.m_title_style)
+  {
+    add_fields();
+    init_sg();
+  }
+  axis& operator=(const axis& a_from){
+    parent::operator=(a_from);
+
+    width = a_from.width;
+    minimum_value = a_from.minimum_value;
+    maximum_value = a_from.maximum_value;
+    divisions = a_from.divisions;
+    modeling = a_from.modeling;
+    is_log = a_from.is_log;
+    labels_enforced = a_from.labels_enforced;
+    tick_up = a_from.tick_up;
+    tick_length = a_from.tick_length;
+
+    tick_number = a_from.tick_number;
+    magnitude = a_from.magnitude;
+
+    title = a_from.title;
+    title_to_axis = a_from.title_to_axis;
+    title_height = a_from.title_height;
+    title_hjust = a_from.title_hjust;
+
+    label_to_axis = a_from.label_to_axis;
+    label_height = a_from.label_height;
+
+    time_labels = a_from.time_labels;
+    time_format = a_from.time_format;
+    time_offset = a_from.time_offset;
+    time_offset_is_GMT = a_from.time_offset_is_GMT;
+
+    m_line_style = a_from.m_line_style;
+    m_ticks_style = a_from.m_ticks_style;
+    m_labels_style = a_from.m_labels_style;
+    m_mag_style = a_from.m_mag_style;
+    m_title_style = a_from.m_title_style;
+
+    return *this;
+  }
+public:
+  sg::line_style& line_style() {return m_line_style;}
+  sg::line_style& ticks_style() {return m_ticks_style;}
+  text_style& labels_style() {return m_labels_style;}
+  text_style& title_style() {return m_title_style;}
+  text_style& mag_style() {return m_mag_style;}
+
+  void update_sg(std::ostream& a_out) {
+    //a_out << "debug : tools::axis::update_sg :" << std::endl;
+
+    if(width<=0) {
+      m_line_sep.clear();
+      m_ticks_sep.clear();
+      m_labels_sep.clear();
+      m_mag_sep.clear();
+      m_title_sep.clear();
+      return;
+    }
+
+    // line scene graph :
+    m_line_sep.clear();
+    if(m_line_style.visible) {
+      rgba* mat = new rgba();
+      mat->color = m_line_style.color;
+      m_line_sep.add(mat);
+
+      draw_style* ds = new draw_style;
+      ds->style = draw_style::lines;
+      ds->line_pattern = m_line_style.pattern;
+      ds->line_width = m_line_style.width;
+      m_line_sep.add(ds);
+
+      vertices* so_line = new vertices;
+      so_line->mode = gl::line_strip();
+      so_line->add(0,0,0);
+      so_line->add(width,0,0);
+      m_line_sep.add(so_line);
+    }
+
+    // ticks scene graph :
+    if(modeling==tick_modeling_none()) {
+    } else if(modeling==tick_modeling_hplot()) {
+      compute_ticks_HPLOT(a_out);
+    } else {
+      compute_ticks_hippo();
+    }
+
+    m_ticks_sep.clear();
+    if(m_ticks_style.visible) {
+
+      vertices* so_lines = new vertices;
+      so_lines->mode = gl::lines();
+  
+      if(modeling==tick_modeling_hplot()) {
+  
+        unsigned int num = m_sub_ticks.size()/4;
+        unsigned int pos = 0;
+        for(unsigned int index=0;index<num;index++) {
+          float bx = m_sub_ticks[pos];pos++;
+          float by = m_sub_ticks[pos];pos++;
+          float ex = m_sub_ticks[pos];pos++;
+          float ey = m_sub_ticks[pos];pos++;
+          if(tick_up) {
+            so_lines->add(bx,by,0);
+            so_lines->add(ex,ey,0);
+          } else {
+            so_lines->add(bx,-by,0);
+            so_lines->add(ex,-ey,0);
+          }
+        }
+
+      } else {
+  
+        float yy = tick_up ? tick_length.value():-tick_length.value();
+        for(unsigned int index=0;index<tick_number;index++) {
+          float xx = coords.values()[index];
+          so_lines->add(xx,0,0);
+          so_lines->add(xx,yy,0);
+        }
+      }
+         
+      if(so_lines->number()) {
+  
+        rgba* mat = new rgba();
+        mat->color = m_ticks_style.color;
+        m_ticks_sep.add(mat);
+
+        draw_style* ds = new draw_style;
+        ds->style = draw_style::lines;
+        ds->line_pattern = m_ticks_style.pattern;
+        ds->line_width = m_ticks_style.width;
+        m_ticks_sep.add(ds);
+
+        m_ticks_sep.add(so_lines);
+      } else {
+        delete so_lines;
+      }
+  
+    }
+
+    // labels scene graph :
+    m_labels_sep.clear();
+    if(m_labels_style.visible && tick_number ) {
+      rgba* mat = new rgba();
+      mat->color = m_labels_style.color;
+      m_labels_sep.add(mat);
+
+      float text_size = label_height*m_labels_style.scale;
+      std::string font = m_labels_style.font.value();
+
+     /*FIXME  : adjust text_size to be sure that the labels do not overlap.
+     {int number = tick_number;
+      if(number>=2) {
+        float min_delta_tick = coords[number-1]-coords[0];
+        float xx_prev = coords[0];
+        for(unsigned int index=1;index<number;index++) {
+          float xx = coords[index];
+          min_delta_tick = SbMinimum(min_delta_tick,xx-xx_prev);
+          xx_prev = xx;
+        }
+        text_size = SbMinimum(text_size,min_delta_tick);
+      }}
+      */
+
+      if(font==font_hershey()) {
+        draw_style* ds = new draw_style;
+        ds->style = draw_style::lines;
+        ds->line_pattern = m_labels_style.line_pattern;
+        ds->line_width = m_labels_style.line_width;
+        m_labels_sep.add(ds);
+      } else { 
+        m_labels_sep.add(new normal);
+      }
+
+      vec3f X = m_labels_style.x_orientation.value();
+      vec3f Y = m_labels_style.y_orientation.value();
+      X.normalize();
+      Y.normalize();
+      vec3f Z = X.cross(Y);
+      Y = Z.cross (X);
+      mat4f scale_rot(X.v0(),Y.v0(),Z.v0(),0, //first row
+                             X.v1(),Y.v1(),Z.v1(),0,
+                             X.v2(),Y.v2(),Z.v2(),0,
+                             0,0,0,1);
+     //{mat4f scale;
+     // scale.set_scale(text_size,text_size,1);
+     // scale_rot *= scale;} //applied first on GL
+      scale_rot.mul_scale(text_size,text_size,1);
+
+      vec3f vec;
+     {unsigned int number = tick_number;
+      for(unsigned int index=0;index<number;index++) { 
+        float xx = coords.values()[index];
+        vec.set_value(xx,-label_to_axis,0);
+        vec += m_labels_style.translation.value();
+
+        separator* sep = new separator;
+        m_labels_sep.add(sep);
+
+        add_string_opt(*sep,
+                           font,
+                           m_labels_style.encoding.value(),
+                           m_labels_style.smoothing,
+                           labels.values()[index],
+                           vec[0],vec[1],vec[2],
+                           scale_rot,
+                           m_labels_style.hjust,
+                           m_labels_style.vjust,
+                           m_ttf);
+      }}
+    }
+
+    m_mag_sep.clear();
+    if( magnitude.value() && m_mag_style.visible) {
+      rgba* mat = new rgba();
+      mat->color = m_mag_style.color;
+      m_mag_sep.add(mat);
+
+      char string[64];
+      if(magnitude>=0)
+        snpf(string,sizeof(string),"x10+%d",magnitude.value());
+      else
+        snpf(string,sizeof(string),"x10-%d",::abs(magnitude));
+      
+      vec3f vec(width*1.03f,0,0);
+      vec += m_mag_style.translation.value();
+
+      float text_size = label_height*0.8f * m_mag_style.scale;
+      std::string font = m_mag_style.font.value();
+
+      if(font==font_hershey()) {
+        draw_style* ds = new draw_style;
+        ds->style = draw_style::lines;
+        ds->line_pattern = m_mag_style.line_pattern;
+        ds->line_width = m_mag_style.line_width;
+        m_mag_sep.add(ds);
+      }  
+
+      add_string(m_mag_sep,
+                         font,
+                         m_mag_style.encoding.value(),
+                         m_mag_style.smoothing,
+                         string,
+                         vec[0],vec[1],vec[2],
+                         m_mag_style.x_orientation.value(),
+                         m_mag_style.y_orientation.value(),
+                         text_size,
+                         m_mag_style.hjust,
+                         m_mag_style.vjust,
+                         m_ttf);
+    }
+
+    // title scene graph :if(update_title) {
+    m_title_sep.clear();
+    if(title.value().size() && m_title_style.visible) {
+      rgba* mat = new rgba();
+      mat->color = m_title_style.color;
+      m_title_sep.add(mat);
+
+      float text_size = title_height*m_title_style.scale;
+      std::string font = m_title_style.font.value();
+
+      if(font==font_hershey()) {
+        draw_style* ds = new draw_style;
+        ds->style = draw_style::lines;
+        ds->line_pattern = m_title_style.line_pattern;
+        ds->line_width = m_title_style.line_width;
+        m_title_sep.add(ds);
+      } else {
+        m_title_sep.add(new normal);
+      }
+
+      float xx = 0; //left
+      if(title_hjust==center) {
+         xx = width/2;
+      } else if(title_hjust==right) {
+         xx = width;
+      }
+  
+      vec3f vec(xx,-title_to_axis,0);
+      vec += m_title_style.translation.value();
+
+      //std::cout << "debug : axis : update_title :"
+      //          << " pos : " << vec[0] << " " << vec[1] << " " << vec[2]
+      //          << std::endl;
+  
+      add_string(m_title_sep,
+                         font,
+                         m_title_style.encoding.value(),
+                         m_title_style.smoothing,
+                         title.value(),
+                         vec[0],vec[1],vec[2],
+                         m_title_style.x_orientation.value(),
+                         m_title_style.y_orientation.value(),
+                         text_size,
+                         m_title_style.hjust,
+                         m_title_style.vjust,
+                         m_ttf);
+    }
+
+  }
+
+public: //style
+  void reset_style(bool a_geom = false) {
+    //reset fields that are considered as part of the style.
+
+    ////////////////////////////////////////////
+    // we do not touch :
+    ////////////////////////////////////////////
+    //width
+    //minimum_value
+    //maximum_value
+    //labels_enforced
+    //tick_number
+    //magnitude
+    //time_labels
+    //time_format
+    //time_offset
+    //time_offset_is_GMT
+    //labels
+    //values
+    //coords
+    //sub_coords
+
+    ////////////////////////////////////////////
+    divisions = 510;
+    modeling = tick_modeling_hippo();
+    tick_up = true;
+    is_log = false;
+    title.value().clear();
+
+    if(a_geom) {
+    ////////////////////////////////////////////
+    // Take PAW default : 
+    float YSIZ = 20; //page height
+    float YMGL = 2;  //low y margin (to data frame).
+    float YMGU = 2;  //up y margin (to data frame).
+    float VSIZ = 0.28F; //tick label character size.
+    float YVAL = 0.4F;  //y distance of x tick label to data frame.
+    float XTIC = 0.3F;  //y length of X axis ticks.
+    float YLAB = 0.8F; //y distance of x title to data frame.
+    float ASIZ = 0.28F; // axis title (label) character size.
+
+    float hData = YSIZ-YMGL-YMGU;
+
+    // To map data space to width :
+    float to1 = width/hData;
+
+    float vsiz = VSIZ * to1; //0.0175F
+    float yval = YVAL * to1; //0.025F
+    float xtic = XTIC * to1; //0.01875F
+    float ylab = YLAB * to1; //0.05F
+    float asiz = ASIZ * to1; //0.0175F
+
+    //sf
+    tick_length = xtic;
+    label_to_axis = yval;
+    label_height = vsiz;
+
+    // The axis title is the PAW axis label.
+    // It is right justified at the end of axis 
+    // (at end right for XY_X, at end top for XY_Y)
+    title_to_axis = ylab;
+    title_height = asiz;
+    }
+
+    title_hjust = right;
+
+    ////////////////////////////////////////////
+    // setup styles :
+    m_line_style = line_style();
+    m_ticks_style = line_style();
+    m_labels_style = text_style();
+    m_mag_style = text_style();
+    m_title_style = text_style();
+
+    m_line_style.color = colorf::black();
+    m_ticks_style.color = colorf::black();
+
+    m_labels_style.color = colorf::black();
+    m_labels_style.font = font_hershey();
+    m_labels_style.encoding = encoding_PAW();
+
+    m_mag_style.color = colorf::black();
+    m_mag_style.font = font_hershey();
+    m_mag_style.encoding = encoding_PAW();
+
+    m_title_style.color = colorf::black();
+    m_title_style.font = font_hershey();
+    m_title_style.encoding = encoding_PAW();
+  }
+
+  typedef std::pair<std::string,std::string> style_item_t;
+  typedef std::vector<style_item_t> style_t;
+  bool set_from_style(std::ostream& a_out,const style_t& a_style) {
+    style_t::const_iterator it;
+    for(it=a_style.begin();it!=a_style.end();++it) {
+      const std::string& key = (*it).first;
+      const std::string& sv = (*it).second;
+      //::printf("debug : axis::set_from_style : key \"%s\" \"%s\"\n",key.c_str(),sv.c_str());
+      //if(key=="reset") {}
+
+      // not part of style :
+      //width
+      //minimum_value
+      //maximum_value
+      //labels_enforced
+      //tick_number
+      //magnitude
+      //title
+      //time_labels
+      //time_format
+      //time_offset
+      //time_offset_is_GMT
+      //labels
+      //values
+      //coords
+      //sub_coords
+
+      if(key=="divisions") {
+        unsigned int v;
+        if(!to(sv,v)) {style_failed(a_out,key,sv);return false;}
+        divisions = v;
+      } else if(key=="modeling") {
+        modeling = sv;
+      } else if(key=="is_log") {
+        bool v;
+        if(!to(sv,v)) {style_failed(a_out,key,sv);return false;}
+        is_log = v;
+
+      } else if(key=="tick_up") {
+        bool v;
+        if(!to(sv,v)) {style_failed(a_out,key,sv);return false;}
+        tick_up = v;
+      } else if(key=="tick_length") {
+        float v;
+        if(!to(sv,v)) {style_failed(a_out,key,sv);return false;}
+        tick_length = v;
+
+      } else if(key=="title") {
+        title = sv;
+      } else if(key=="title_to_axis") {
+        float v;
+        if(!to(sv,v)) {style_failed(a_out,key,sv);return false;}
+        title_to_axis = v;
+      } else if(key=="title_height") {
+        float v;
+        if(!to(sv,v)) {style_failed(a_out,key,sv);return false;}
+        title_height = v;
+      } else if(key=="title_hjust") {
+        hjust v;
+        if(!style_parser::shjust(sv,v))
+          {style_failed(a_out,key,sv);return false;}
+        title_hjust = v;
+
+      } else if(key=="label_to_axis") {
+        float v;
+        if(!to(sv,v)) {style_failed(a_out,key,sv);return false;}
+        label_to_axis = v;
+      } else if(key=="label_height") {
+        float v;
+        if(!to(sv,v)) {style_failed(a_out,key,sv);return false;}
+        label_height = v;
+
+      } else {
+        a_out << "axis::set_from_style :"
+              << " unknown key " << key << "."
+              << std::endl;
+      }
+    }
+    return true;
+  }
+protected:
+  static void style_failed(std::ostream& a_out,
+                           const std::string& a_key,
+                           const std::string& a_value) {
+    a_out << "axis::set_from_style :"
+          << " failed for key " << sout(a_key)
+          << " and value " << sout(a_value) << "."
+          << std::endl;
+  }
+protected:
+  //////////////////////////////////////////////////////////////////////////
+  /// Hippodraw tick modeling //////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////
+  void compute_ticks_hippo() {
+    //  input fields :
+    //    minimum_value
+    //    maximum_value
+    //    is_log
+    //  output fields :
+    //    values
+    //    coords
+    //    sub_coords
+    //    labels (if labels_enforced is false)
+    //    tick_number
+
+
+    float mn = minimum_value;
+    float mx = maximum_value;
+
+    bool a_is_log = is_log;
+    if(a_is_log) {
+      if((mn<=0) || (mx<=0) ) a_is_log = false;
+    }
+
+    float magxxx,y,yr,startTick,tickSize;
+    float pmag;
+    char pstr[10] = "";
+    char tmp[10];
+
+    unsigned int tick_num = 0;
+    std::vector<float> tick_values;
+    std::vector<std::string> tick_labels;
+
+    // need include <float.h> which does not exist on some system
+    //NUM_FUZZ DBL_EPSILON*4
+    float NUM_FUZZ = 0.01f;
+
+    if (mn >= mx) {
+      if(tick_number) {
+        tick_number.value(0);
+        values.clear();
+        coords.clear();
+        sub_coords.clear();
+        labels.clear();
+      }
+      if(magnitude.value()) magnitude.value(0);
+      m_sub_ticks.clear();
+      return;
+    }
+
+    if (!a_is_log) {
+  
+      tickSize  = calculate_ticks_hippo(mx-mn,magxxx);
+      startTick = fceil( mn / tickSize) * tickSize;
+  
+      if (ffabs(magxxx) <= 3)
+        pmag = 0.0;
+      else 
+        pmag = startTick != 0.0 ? ffloor(flog10(ffabs(startTick))) : magxxx;
+      
+      snpf(pstr,sizeof(pstr),
+           "%%1.%df",(int)tools::mx<float>((pmag-magxxx),0.0));
+      
+      y = startTick;
+      while (y <= mx*(1.0+NUM_FUZZ)) {
+        
+        yr = ffloor(y/fpow(10,magxxx) + 0.5F);
+        
+        snpf(tmp,sizeof(tmp),pstr,yr*fpow(10,magxxx-pmag));
+  
+       {float val = yr * fpow(10.0,magxxx);
+        if((val>=mn)&&(val<=mx)) { //G.Barrand : add this test.
+          tick_values.push_back(val);
+          tick_labels.push_back(tmp);
+          tick_num++;
+        }}
+  
+        y += tickSize;
+      }
+      if (ffabs(magxxx) <= 3.0) magxxx = 0.0;
+  
+    }  else {
+  
+      if (mn <= 0) {
+        if(tick_number) {
+          tick_number.value(0);
+          values.clear();
+          coords.clear();
+          sub_coords.clear();
+          labels.clear();
+        }
+        if(magnitude.value()) magnitude.value(0);
+        m_sub_ticks.clear();
+        return;
+      }
+  
+      int nLogTicks;
+      float logTicks[5];
+      float magStep;
+  
+      float maghigh = fceil(flog10(mx));
+      float maglow  = ffloor(flog10(mn));
+      float magrng  = maghigh - maglow;
+      
+      if (magrng <=3) {
+        nLogTicks   = 3;
+        logTicks[0] = 1.0;
+        logTicks[1] = 2.0;
+        logTicks[2] = 5.0;
+        magStep     = 1.0;
+      } else {
+        nLogTicks   = 1;
+        logTicks[0] = 1.0;
+        magStep     = magrng <= 7 ? 1.0F : 2.0F;
+      }
+      
+      pmag = (nLogTicks == 3 && (ffabs(maglow)>3 || ffabs(maghigh)>3)) ? 
+        maglow : 0;
+      
+      magxxx = maglow;
+      int i = 0;
+      while ((y=logTicks[i]*fpow(10,magxxx)) < mx*(1+NUM_FUZZ)) {
+        if (y >= mn) {
+  
+          // be careful: there is a bug in the NeXT (s)printf 
+          //   routine when you do, eg. printf("%1.0g",0.01);
+          if ((magxxx-pmag) > 4 || (magxxx-pmag) < -3) {
+            ::strcpy(pstr,"%1.0e");
+          } else {
+            snpf(pstr,sizeof(pstr),
+                 "%%1.%df",(int)((magxxx-pmag)>0?0.:-(magxxx-pmag)));
+          }
+          snpf(tmp,sizeof(tmp),pstr,y*fpow(10.0,-pmag));
+  
+         {float val = flog10(y);
+          if((val>=flog10(mn))&&(val<=flog10(mx))) { //G.Barrand : add this if
+            tick_values.push_back(val);
+            tick_labels.push_back(tmp);
+            tick_num++;
+          }}
+  
+        }
+        
+        i++;
+        if (i>=nLogTicks)        {
+          i = 0;
+          magxxx += magStep;
+        }
+      }
+  
+      mn = flog10(mn);
+      mx = flog10(mx);
+    }
+  
+    float range = mx - mn;         
+  
+    // it is assumes that tick_values are ordered min to max.
+    tick_number.value(tick_num);
+    values.clear();
+    coords.clear();
+    for(unsigned int index=0;index<tick_num;index++) {
+      float val = tick_values[index];
+      float coord = width * (val-mn)/range;
+      values.add(val);
+      coords.add(coord);
+    }
+  
+    if(labels_enforced) {
+      unsigned int n = labels.size();
+      if(tick_num>n) {
+        for(unsigned int index=n;index<tick_num;index++) labels.add("");
+      }
+    } else {
+      labels = tick_labels;
+    }
+  
+    magnitude.value((int)pmag);
+  
+    sub_coords.clear();
+    m_sub_ticks.clear();
+  }
+
+  static float calculate_ticks_hippo(float aSize,float& a_mag) {
+    unsigned int MIN_TICKS = 4;
+
+    if (aSize <= 0.0) {
+      //printf ("CalculateTicks : bad value \n");
+      aSize = ffabs(aSize);
+      if (aSize == 0.0) aSize = 1.0;
+    }
+  
+    a_mag = ffloor(flog10(aSize));
+    if (aSize/fpow(10.0,a_mag) < MIN_TICKS) (a_mag)--;
+  
+    // now fit the max number of ticks into this range
+  
+    float  tickSize;
+    int tickIndex;
+    static float goodTicks[] = {10.0, 5.0, 4.0, 2.0, 1.0};
+    for(tickIndex = 0;
+       aSize/(tickSize=goodTicks[tickIndex]*fpow(10.0,a_mag))<MIN_TICKS;
+        tickIndex++){}
+  
+    if (tickIndex == 0) a_mag++;
+     
+    return tickSize;
+  }
+
+  ////////////////////////////////////////////////////////////////////////////
+  /// HPLOT tick modeling ////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////
+  void compute_ticks_HPLOT(std::ostream& a_out) {
+    //  Controlled by fields :
+    //    minimum_value
+    //    maximum_value
+    //    divisions
+    //    is_log
+    //  Set value on fields :
+    //    values
+    //    coords
+    //    labels (if labels_enforced is false)
+    //    tick_number
+  
+    float mn = minimum_value;
+    float mx = maximum_value;
+  
+    bool a_is_log = is_log;
+    if(a_is_log) {
+      if((mn<=0) || (mx<=0) ) a_is_log = false;
+    }
+       
+    // Use hplot::axis to get the ticks and subticks positions
+    // and the labels text.
+  
+    double xmin = 0;
+    double ymin = 0;
+    double xmax = width;
+    double ymax = 0;
+  
+    double gridlength = 0;
+    std::string chopt;
+    if(a_is_log) chopt += "G";
+  
+    std::vector<float> linesGrid;
+    std::vector<hplot::_text> texts;
+  
+    hplot::axis sbAxisHPLOT(a_out);
+  
+    chopt += "S";
+    sbAxisHPLOT.set_tick_size(tick_length/width.value());
+  
+    if(time_labels.value()) {
+      chopt += "t";
+      sbAxisHPLOT.set_time_format(time_format.value());
+      sbAxisHPLOT.set_time_offset(time_offset,
+                                  time_offset_is_GMT);
+    }
+  
+    // Get ticks :
+   {double wmin = mn;
+    double wmax = mx;
+    int ndiv = divisions;
+    sbAxisHPLOT.set_title("");
+    sbAxisHPLOT.paint(xmin,ymin,xmax,ymax,
+                      wmin,wmax,ndiv, //Modified
+                      chopt,gridlength,false,
+                      m_sub_ticks,linesGrid,texts);}
+  
+    if(a_is_log) {
+      mn = flog10(mn);
+      mx = flog10(mx);
+    }
+  
+    float range = mx - mn;         
+  
+    unsigned int tick_num = texts.size();
+  
+    // HPLOT stores the magnitude on the last label :
+    magnitude.value(0);
+    if(tick_num) {
+      int pmag;
+      if(::sscanf(texts[tick_num-1].fString.c_str(),"x10^%d!",&pmag)==1) {
+        magnitude.value(pmag);
+        tick_num--;
+      }
+    }
+  
+    tick_number.value(tick_num);
+    values.clear();
+    coords.clear();
+    for(unsigned int index=0;index<tick_num;index++) {
+      float coord = (float)texts[index].fX;
+      //NOTE : are we sure that val is in [mn,mx]
+      float val = (coord/width.value()) * range + mn;
+      coords.add(coord);
+      values.add(val);
+    }
+  
+    if(labels_enforced) {
+      unsigned int n = labels.size();
+      if(tick_num>n) {
+        for(unsigned int index=n;index<tick_num;index++) labels.add("");
+      }
+    } else {
+      labels.clear();
+      for(unsigned int index=0;index<tick_num;index++) {
+        labels.add(texts[index].fString);
+      }
+    }
+   
+   {sub_coords.clear();
+    unsigned int num = m_sub_ticks.size()/4;
+    unsigned int pos = 0;
+    for(unsigned int index=0;index<num;index++) {
+      float coord = m_sub_ticks[pos];
+      pos += 4;
+      bool found = false;
+      for(unsigned int i=0;i<tick_num;i++) {
+        if((float)texts[i].fX==coord) {
+          found = true;
+          break;
+        }
+      }
+      if(!found) { //not a main tick
+        sub_coords.add(coord);
+      }
+    }}
+  }
+  
+protected:
+  const base_freetype& m_ttf;
+
+  group m_group;
+
+  separator m_line_sep;
+  separator m_ticks_sep;
+  separator m_labels_sep;
+  separator m_mag_sep;
+  separator m_title_sep;
+
+  sg::line_style m_line_style;
+  sg::line_style m_ticks_style;
+  text_style m_labels_style;
+  text_style m_mag_style;
+  text_style m_title_style;
+
+  std::vector<float> m_sub_ticks; //n*(2+2)
+};
+
+}}
+
+#endif

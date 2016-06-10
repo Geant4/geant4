@@ -1,0 +1,363 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_base_camera
+#define tools_sg_base_camera
+
+#include "node"
+
+#include "sf_vec3f"
+#include "sf_vec4f"
+#include "sf_rotf"
+
+#include "render_action"
+#include "pick_action"
+#include "event_action"
+#include "visible_action"
+#include "enums"
+
+namespace tools {
+namespace sg {
+
+class base_camera : public node {
+  TOOLS_HEADER(base_camera,tools::sg::base_camera,node)
+public:
+  sf<float> znear;
+  sf<float> zfar;
+  sf_vec3f position;
+  //Camera orientation specified as a rotation value from the default
+  //orientation where the camera is pointing along the negative z-axis,
+  //with "up" along the positive y-axis.
+  sf_rotf orientation;
+
+  //for viewers :
+  sf<float> dx;
+  sf<float> da;
+  sf<float> ds;
+  sf<float> focal;
+public:
+  virtual const std::vector<field_desc>& node_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::base_camera)
+    static std::vector<field_desc> s_v;
+    if(s_v.empty()) {
+      s_v = parent::node_fields();
+      TOOLS_ADD_FIELD_DESC(znear)
+      TOOLS_ADD_FIELD_DESC(zfar)
+      TOOLS_ADD_FIELD_DESC(position)
+      TOOLS_ADD_FIELD_DESC(orientation)
+      TOOLS_ADD_FIELD_DESC(dx)
+      TOOLS_ADD_FIELD_DESC(da)
+      TOOLS_ADD_FIELD_DESC(ds)
+      TOOLS_ADD_FIELD_DESC(focal)
+    }
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&znear);
+    add_field(&zfar);
+    add_field(&position);
+    add_field(&orientation);
+
+    add_field(&dx);
+    add_field(&da);
+    add_field(&ds);
+    add_field(&focal);
+  }
+public:
+  virtual float near_height() const = 0;
+  virtual void zoom(float) = 0;
+  virtual camera_type type() const = 0;
+  virtual void get_lrbt(unsigned int,unsigned int,
+                        float&,float&,float&,float&) = 0;
+public:
+  virtual void render(render_action& a_action) {
+    _mult_matrix(a_action);
+    set_state(a_action);
+    a_action.load_proj_matrix(a_action.projection_matrix());
+    a_action.load_model_matrix(a_action.model_matrix());
+  }
+  virtual void pick(pick_action& a_action) {
+    _mult_matrix(a_action);
+    set_state(a_action);
+  }
+  virtual void event(event_action& a_action){
+    _mult_matrix(a_action);
+    set_state(a_action);
+  }
+  virtual void get_matrix(get_matrix_action& a_action){
+    _mult_matrix(a_action);
+  }
+  virtual void is_visible(visible_action& a_action){
+    _mult_matrix(a_action);
+  }
+protected:
+  base_camera()
+  :parent()
+  ,znear(1)
+  ,zfar(10)
+  ,position(vec3f(0,0,1))
+  ,orientation(rotf(vec3f(0,0,1),0)) //quat = vec4f(0,0,0,1)
+  ,dx(0.01f)
+  ,da(0.017f) //one degree.
+  ,ds(0.99f)
+  ,focal(1)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    add_fields();
+  }
+public:
+  virtual ~base_camera(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  base_camera(const base_camera& a_from)
+  :parent(a_from)
+  ,znear(a_from.znear)
+  ,zfar(a_from.zfar)
+  ,position(a_from.position)
+  ,orientation(a_from.orientation)
+  ,dx(a_from.dx)
+  ,da(a_from.da)
+  ,ds(a_from.ds)
+  ,focal(a_from.focal)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    add_fields();
+  }
+  base_camera& operator=(const base_camera& a_from){
+    parent::operator=(a_from);
+    znear = a_from.znear;
+    zfar = a_from.zfar;
+    position = a_from.position;
+    orientation = a_from.orientation;
+    dx = a_from.dx;
+    da = a_from.da;
+    ds = a_from.ds;
+    focal = a_from.focal;
+    m_lrbt.set_value(0,0,0,0);
+    return *this;
+  }
+protected: //operators:
+  bool operator==(const base_camera& a_from) const{
+    if(znear!=a_from.znear) return false;
+    if(zfar!=a_from.zfar) return false;
+    if(position!=a_from.position) return false;
+    if(orientation!=a_from.orientation) return false;
+    //we do not test dx,da,ds.
+    return true;
+  }
+  //bool operator!=(const base_camera& a_from) const {
+  //  return !operator==(a_from);
+  //}
+public:
+  void direction(vec3f& a_dir) const {
+    orientation.value().mul_vec(vec3f(0,0,-1),a_dir);
+  }
+
+  void rotate_around_direction(float a_delta){
+    vec3f dir;
+    orientation.value().mul_vec(vec3f(0,0,-1),dir);
+    //_MSC_VER : does not compile : orientation = rotf(dir,a_delta) * orientation;
+    orientation.value(rotf(dir,a_delta) * orientation.value());
+  }
+  void rotate_around_up(float a_delta){
+    vec3f up;
+    orientation.value().mul_vec(vec3f(0,1,0),up);
+    orientation.value(rotf(up,a_delta) * orientation.value());
+  }
+
+  void rotate_around_y_at_focal(float a_delta){
+    //from coin SoGuiExaminerViewerP::rotYWheelMotion.
+    vec3f dir;
+    orientation.value().mul_vec(vec3f(0,0,-1),dir);
+    vec3f focalpoint = position.value() + focal * dir;
+    orientation.value(rotf(vec3f(0,1,0),a_delta) * orientation.value());
+    orientation.value().mul_vec(vec3f(0,0,-1),dir);
+    position = focalpoint - focal * dir;
+  }
+
+  void rotate_around_x_at_focal(float a_delta){
+    //from coin SoGuiExaminerViewerP::rotXWheelMotion.
+    vec3f dir;
+    orientation.value().mul_vec(vec3f(0,0,-1),dir);
+    vec3f focalpoint = position.value() + focal * dir;
+    orientation.value(rotf(vec3f(1,0,0),a_delta) * orientation.value());
+    orientation.value().mul_vec(vec3f(0,0,-1),dir);
+    position = focalpoint - focal * dir;
+  }
+
+  void rotate_to_dir(const vec3f& a_dir) {
+    //rotate around up so that a_dir is in (dir,up) plane 
+
+    //NOTE : it is the invert of orientation which is used
+    //       in projection matrix.
+
+   {vec3f dir;
+    orientation.value().mul_vec(vec3f(0,0,-1),dir);
+    vec3f up;
+    orientation.value().mul_vec(vec3f(0,1,0),up);
+    vec3f side = dir.cross(up);
+    vec3f v = side * (side.dot(a_dir)) + dir * (dir.dot(a_dir));    
+    if(v.normalize())
+      orientation.value(orientation.value()*rotf(dir,v));}
+
+    //rotate around dir^up so that a_dir matches dir.
+   {vec3f dir;
+    orientation.value().mul_vec(vec3f(0,0,-1),dir);
+    orientation.value(orientation.value()*rotf(dir,a_dir));}
+
+/*
+    //check that dir is on a_dir :
+   {vec3f dir;
+    orientation.value().mul_vec(vec3f(0,0,-1),dir); 
+    float cos_angle; //it should be 1
+    if(!dir.cos_angle(a_dir,cos_angle)) {
+      ::printf("debug : can't get angle\n");
+      return;
+    }
+    ::printf("debug : cos_angle %g\n",cos_angle);}
+*/
+  }
+
+  void pane_to(float a_x,float a_y,float a_z){
+    //translate in view plane so that (a_x,a_y,a_z) is on direction.
+
+    vec3f dir;
+    orientation.value().mul_vec(vec3f(0,0,-1),dir);
+    vec3f up;
+    orientation.value().mul_vec(vec3f(0,1,0),up);
+    vec3f side = dir.cross(up);
+
+    vec3f d(a_x,a_y,a_z);
+    d.subtract(position.value());
+
+    vec3f pos = position.value() + side * (side.dot(d)) + up * (up.dot(d));
+    position.value(pos);
+  }
+
+  void translate_along_side(float a_delta){
+    vec3f dir;
+    orientation.value().mul_vec(vec3f(0,0,-1),dir);
+    vec3f up;
+    orientation.value().mul_vec(vec3f(0,1,0),up);
+    vec3f side = dir.cross(up);
+    vec3f pos = position.value() + side * a_delta;
+    position.value(pos);
+  }
+  void translate_along_up(float a_delta){
+    vec3f dir;
+    orientation.value().mul_vec(vec3f(0,0,-1),dir);
+    vec3f up;
+    orientation.value().mul_vec(vec3f(0,1,0),up);
+    vec3f pos = position.value() + up * a_delta;
+    position.value(pos);
+  }
+  void translate_along_dir(float a_delta){
+    vec3f dir;
+    orientation.value().mul_vec(vec3f(0,0,-1),dir);
+    vec3f pos = position.value() + dir * a_delta;
+    position.value(pos);
+  }
+
+  //NOTE : print is a Python keyword.
+  void dump(std::ostream& a_out) {
+    a_out << " znear " << znear.value() << std::endl;
+    a_out << " zfar " << zfar.value() << std::endl;
+    vec3f& pos = position.value();
+    a_out << " pos " << pos[0] << " " << pos[1] << " " << pos[2] << std::endl;
+    //FIXME : dump orientation.
+  }
+
+  bool is_type_ortho() const {return type()==camera_ortho?true:false;}
+
+  bool height_at_focal(float& a_h) const {
+    if(is_type_ortho()) {
+      a_h = near_height();
+    } else {
+      if(!znear.value()) {a_h = near_height();return false;}
+      a_h = focal.value()*near_height()/znear.value();
+    }
+    return true;
+  }
+
+protected:
+  void update_sg(std::ostream& a_out) {
+
+   {const vec4f& v = m_lrbt.value();
+    float l = v[0];
+    float r = v[1];
+    float b = v[2];
+    float t = v[3];
+    float n = znear.value();
+    float f = zfar.value();
+    if(is_type_ortho()) {
+      m_proj.set_ortho(l,r,b,t,n,f);
+    } else {
+      m_proj.set_frustum(l,r,b,t,n,f);
+    }}
+
+    if(orientation.value().quat()!=id_orientation()) //OPTIMIZATION
+   {rotf rinv;
+    if(orientation.value().inverse(rinv)) {
+      mat4f mtx;
+      rinv.value(mtx);
+      m_proj.mul_mtx(mtx,m_tmp);
+    } else {
+      a_out << "base_camera::update_sg :"
+            << " get orientation inverse failed."
+            << std::endl;
+    }}
+
+    m_proj.mul_translate(-position.value()[0],
+                         -position.value()[1],
+                         -position.value()[2]);
+  }
+
+  void _mult_matrix(matrix_action& a_action) {
+    float l,r,b,t;
+    get_lrbt(a_action.ww(),a_action.wh(),l,r,b,t);
+    m_lrbt.set_value(l,r,b,t);
+
+    if(touched()||m_lrbt.touched()) {
+      update_sg(a_action.out());
+      reset_touched();
+      m_lrbt.reset_touched(); 
+    }
+    
+    a_action.projection_matrix().mul_mtx(m_proj,m_tmp);
+  }
+
+  void set_state(matrix_action& a_action) {
+    state& _state = a_action.state();
+    _state.m_camera_ortho = is_type_ortho();
+    _state.m_camera_znear = znear;
+    _state.m_camera_zfar = zfar;
+    _state.m_camera_position = position.value();
+    _state.m_camera_orientation = orientation.value();
+    //_state.m_camera_near_height = near_height();
+    _state.m_camera_lrbt = m_lrbt.value();
+    _state.m_proj = a_action.projection_matrix();
+  }
+
+  static const vec4<float>& id_orientation() {
+    static const vec4<float> s_v(0,0,0,1,false);
+    return s_v;
+  }
+
+protected:
+  //OPTIMIZATION :
+  sf_vec4f m_lrbt;
+  mat4f m_proj;
+  float m_tmp[16];
+};
+
+}}
+
+#endif

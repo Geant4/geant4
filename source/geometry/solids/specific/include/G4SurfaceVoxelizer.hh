@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SurfaceVoxelizer.hh 72335 2013-07-16 09:01:49Z gcosmo $
+// $Id: G4SurfaceVoxelizer.hh 91755 2015-08-05 08:17:56Z gcosmo $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -50,8 +50,6 @@
 #include "G4Box.hh"
 #include "G4VFacet.hh"
 
-#include "Randomize.hh"
-
 struct G4VoxelBox
 {
   G4ThreeVector hlen; // half length of the box
@@ -67,8 +65,6 @@ struct G4VoxelInfo
 
 class G4SurfaceVoxelizer
 {
-  friend class G4VoxelCandidatesIterator;
-
   public:
 
     template <typename T> 
@@ -145,9 +141,6 @@ class G4SurfaceVoxelizer
 
     inline long long CountVoxels(std::vector<G4double> boundaries[]) const;
 
-    inline G4int GetCandidates(std::vector<G4int> &curVoxel,
-                               std::vector<G4int> *&candidates,
-                               std::vector<G4int> &space) const;
     inline const std::vector<G4int> &
                  GetCandidates(std::vector<G4int> &curVoxel) const;
 
@@ -156,6 +149,8 @@ class G4SurfaceVoxelizer
     inline const G4VoxelBox &GetVoxelBox(G4int i) const;
 
     inline const std::vector<G4int> &GetVoxelBoxCandidates(G4int i) const;
+
+    inline G4int GetTotalCandidates() const;
 
     static G4double MinDistanceToBox (const G4ThreeVector &aPoint,
                                       const G4ThreeVector &f);

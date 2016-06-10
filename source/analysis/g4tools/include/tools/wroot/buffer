@@ -31,9 +31,7 @@ class buffer {
     return s_v;
   }
 public:
-  buffer(std::ostream& a_out,
-                bool a_byte_swap,
-                uint32 a_size) // we expect a not zero value.
+  buffer(std::ostream& a_out,bool a_byte_swap,uint32 a_size) // we expect a not zero value for a_size.
   :m_out(a_out)
   ,m_byte_swap(a_byte_swap)
   ,m_size(0)
@@ -87,7 +85,7 @@ public:
 
   char* buf() {return m_buffer;}
   const char* buf() const {return m_buffer;}
-  uint32 length() const {return m_pos-m_buffer;}
+  uint32 length() const {return uint32(m_pos-m_buffer);}
   uint32 size() const {return m_size;}
 
   char*& pos() {return m_pos;}          //used in basket.
@@ -278,7 +276,7 @@ public:
   bool expand2(uint32 a_new_size) {return expand(mx<uint32>(2*m_size,a_new_size));} //CERN-ROOT logic.
 
   bool expand(uint32 a_new_size) {
-    unsigned long len = m_pos-m_buffer;
+    diff_pointer_t len = m_pos-m_buffer;
     if(!realloc<char>(m_buffer,a_new_size,m_size)) {
       m_out << "tools::wroot::buffer::expand :"
             << " can't realloc " << a_new_size << " bytes."
@@ -388,9 +386,6 @@ protected:
     return true;
   }
 
-  static std::string sout(const std::string& a_string) {
-    return std::string("\"")+a_string+"\"";
-  }
 protected:
   std::ostream& m_out;
   bool m_byte_swap;

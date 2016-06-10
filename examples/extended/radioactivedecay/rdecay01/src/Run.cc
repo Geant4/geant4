@@ -46,9 +46,9 @@ Run::Run()
   fParticle(0), fEkin(0.),
   fDecayCount(0), fTimeCount(0), fPrimaryTime(0.)
 {
-  fEkinTot[0] = fPbalance[0] = fEventTime[0] = 0. ;
-  fEkinTot[1] = fPbalance[1] = fEventTime[1] = DBL_MAX;
-  fEkinTot[2] = fPbalance[2] = fEventTime[2] = 0. ;     
+  fEkinTot[0] = fPbalance[0] = fEventTime[0] = fEvisEvent[0] = 0. ;
+  fEkinTot[1] = fPbalance[1] = fEventTime[1] = fEvisEvent[1] = DBL_MAX;
+  fEkinTot[2] = fPbalance[2] = fEventTime[2] = fEvisEvent[2] = 0. ;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -121,6 +121,16 @@ void Run::PrimaryTiming(G4double ptime)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void Run::EvisEvent(G4double Evis)
+{
+  fEvisEvent[0] += Evis;
+  if (fTimeCount == 1) fEvisEvent[1] = fEvisEvent[2] = Evis;  
+  if (Evis < fEvisEvent[1]) fEvisEvent[1] = Evis;
+  if (Evis > fEvisEvent[2]) fEvisEvent[2] = Evis;             
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void Run::Merge(const G4Run* run)
 {
   const Run* localRun = static_cast<const Run*>(run);
@@ -139,6 +149,7 @@ void Run::Merge(const G4Run* run)
   fEkinTot[0]   += localRun->fEkinTot[0];
   fPbalance[0]  += localRun->fPbalance[0];
   fEventTime[0] += localRun->fEventTime[0];
+  fEvisEvent[0] += localRun->fEvisEvent[0];  
   
   G4double min,max;  
   min = localRun->fEkinTot[1]; max = localRun->fEkinTot[2];
@@ -152,7 +163,11 @@ void Run::Merge(const G4Run* run)
   min = localRun->fEventTime[1]; max = localRun->fEventTime[2];
   if (fEventTime[1] > min) fEventTime[1] = min;
   if (fEventTime[2] < max) fEventTime[2] = max;
-                
+  //
+  min = localRun->fEvisEvent[1]; max = localRun->fEvisEvent[2];
+  if (fEvisEvent[1] > min) fEvisEvent[1] = min;
+  if (fEvisEvent[2] < max) fEvisEvent[2] = max;
+  
   //maps
   std::map<G4String,ParticleData>::const_iterator itn;
   for (itn = localRun->fParticleDataMap.begin(); 
@@ -252,7 +267,19 @@ void Run::EndOfRun()
            << " --> "  << G4BestUnit(fEventTime[2], "Time")
            << ")" << G4endl;
  }
-            
+
+ //total visible Energy
+ //
+ if (fTimeCount > 0) {
+    G4double Evmean = fEvisEvent[0]/fTimeCount;
+   
+    G4cout << "\n   Total visible energy : mean = "
+           << std::setw(wid) << G4BestUnit(Evmean,  "Energy")
+           << "   ( "  << G4BestUnit(fEvisEvent[1], "Energy")
+           << " --> "  << G4BestUnit(fEvisEvent[2], "Energy")
+           << ")" << G4endl;
+ }
+
  //activity of primary ion
  //
  G4double pTimeMean = fPrimaryTime/nbEvents;

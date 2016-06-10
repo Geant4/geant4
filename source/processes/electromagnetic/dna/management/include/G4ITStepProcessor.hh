@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITStepProcessor.hh 87375 2014-12-02 08:17:28Z gcosmo $
+// $Id: G4ITStepProcessor.hh 94218 2015-11-09 08:24:48Z gcosmo $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
@@ -66,9 +66,9 @@
 #include "G4TouchableHandle.hh"             // Include from 'geometry'
 #include "G4TouchableHistoryHandle.hh"      // Include from 'geometry'
 
-#include "G4TrackingInformation.hh"
+#include "G4ITStepProcessorState_Lock.hh"
+#include "G4ITLeadingTracks.hh"
 
-//class G4Navigator;
 class G4ITNavigator;
 class G4ParticleDefinition;
 class G4ITTrackingManager;
@@ -76,9 +76,74 @@ class G4IT;
 class G4TrackingInformation;
 class G4ITTransportation;
 class G4VITProcess;
+class G4VITSteppingVerbose;
+class G4ITTrackHolder;
 typedef class std::vector<int, std::allocator<int> > G4SelectedAtRestDoItVector;
 typedef class std::vector<int, std::allocator<int> > G4SelectedAlongStepDoItVector;
 typedef class std::vector<int, std::allocator<int> > G4SelectedPostStepDoItVector;
+
+//________________________________________________
+//
+// Members related to ParticleDefinition and not
+// proper to a track
+//________________________________________________
+struct ProcessGeneralInfo
+{
+  G4ProcessVector* fpAtRestDoItVector;
+  G4ProcessVector* fpAlongStepDoItVector;
+  G4ProcessVector* fpPostStepDoItVector;
+
+  G4ProcessVector* fpAtRestGetPhysIntVector;
+  G4ProcessVector* fpAlongStepGetPhysIntVector;
+  G4ProcessVector* fpPostStepGetPhysIntVector;
+  //
+  // Note: DoItVector has inverse order against GetPhysIntVector
+  //       and SelectedPostStepDoItVector.
+  //
+  // * Max number of processes
+  size_t MAXofAtRestLoops;
+  size_t MAXofAlongStepLoops;
+  size_t MAXofPostStepLoops;
+  // Maximum number of processes for each type of process
+  // These depend on the G4ParticleDefinition, so on the track
+
+  // * Transportation process
+  G4ITTransportation* fpTransportation;
+};
+
+//________________________________________________
+//
+//          Members proper to a track
+//________________________________________________
+class G4ITStepProcessorState : public G4ITStepProcessorState_Lock
+{
+public:
+  G4ITStepProcessorState();
+  virtual ~G4ITStepProcessorState();
+
+  G4ITStepProcessorState(const G4ITStepProcessorState&);
+  G4ITStepProcessorState& operator=(const G4ITStepProcessorState&);
+
+  // * Max Number of Process
+  G4SelectedAtRestDoItVector fSelectedAtRestDoItVector;
+  G4SelectedPostStepDoItVector fSelectedPostStepDoItVector;
+
+  G4double fPhysicalStep;
+  G4double fPreviousStepSize;
+  G4double fSafety;
+
+  G4StepStatus fStepStatus;
+
+  // * Safety
+  G4double fProposedSafety;
+  // This keeps the minimum safety value proposed by AlongStepGPILs.
+  G4ThreeVector fEndpointSafOrigin;
+  G4double fEndpointSafety;
+  // To get the true safety value at the PostStepPoint, you have
+  // to subtract the distance to 'endpointSafOrigin' from this value.
+
+  G4TouchableHandle fTouchableHandle;
+};
 
 /**
  * Its role is the same as G4StepManager :
@@ -88,7 +153,7 @@ typedef class std::vector<int, std::allocator<int> > G4SelectedPostStepDoItVecto
 
 class G4ITStepProcessor
 {
-
+friend class G4Scheduler;
 public:
   G4ITStepProcessor();
   virtual ~G4ITStepProcessor();
@@ -112,7 +177,7 @@ public:
     fpStep = val;
   }
 
-  inline G4TrackVector* GetSecondaries()
+  inline G4TrackVector* GetSecondaries() const
   {
     return fpSecondary;
   }
@@ -125,24 +190,108 @@ public:
     return fpTrackingManager;
   }
 
+  //___________________________________
+
   virtual void Initialize();
   void ForceReInitialization();
 
+  void ResetLeadingTracks();
+  void PrepareLeadingTracks();
+
+  //___________________________________
+  G4double ComputeInteractionLength(double previousTimeStep);
   void DefinePhysicalStepLength(G4Track*);
+  G4double GetILTimeStep()
+  {
+    return fILTimeStep;
+  }
+
+  //___________________________________
+  // DoIt
+  void DoIt(double timeStep);
+  void ExtractDoItData();
   void Stepping(G4Track*, const double&);
-  //void CalculateStep(G4Track*, const double&);
-  //void CalculateStep(G4Track*);
-
-  //void DoIt(G4Track*,double);
-
   void FindTransportationStep();
-  // void UpdateTrack(G4Track*);
+  //___________________________________
 
   inline double GetInteractionTime();
   inline const G4Track* GetTrack() const;
   inline void CleanProcessor();
 
+  size_t GetAtRestDoItProcTriggered() const
+  {
+    return fAtRestDoItProcTriggered;
+  }
+
+  G4GPILSelection GetGPILSelection() const
+  {
+    return fGPILSelection;
+  }
+
+  G4int GetN2ndariesAlongStepDoIt() const
+  {
+    return fN2ndariesAlongStepDoIt;
+  }
+
+  G4int GetN2ndariesAtRestDoIt() const
+  {
+    return fN2ndariesAtRestDoIt;
+  }
+
+  G4int GetN2ndariesPostStepDoIt() const
+  {
+    return fN2ndariesPostStepDoIt;
+  }
+
+  const G4VITProcess* GetCurrentProcess() const
+  {
+    return fpCurrentProcess;
+  }
+
+  G4double GetPhysIntLength() const
+  {
+    return fPhysIntLength;
+  }
+
+  size_t GetPostStepAtTimeDoItProcTriggered() const
+  {
+    return fPostStepAtTimeDoItProcTriggered;
+  }
+
+  size_t GetPostStepDoItProcTriggered() const
+  {
+    return fPostStepDoItProcTriggered;
+  }
+
+  const ProcessGeneralInfo* GetCurrentProcessInfo() const
+  {
+    return fpProcessInfo;
+  }
+
+  const G4ITStepProcessorState* GetProcessorState() const
+  {
+    return fpState;
+  }
+
+  const G4VParticleChange* GetParticleChange() const
+  {
+    return fpParticleChange;
+  }
+
+  const G4VPhysicalVolume* GetCurrentVolume() const
+  {
+    return fpCurrentVolume;
+  }
+
+  G4ForceCondition GetCondition() const
+  {
+    return fCondition;
+  }
+
 protected:
+
+  void ExtractILData();
+
   void SetupGeneralProcessInfo(G4ParticleDefinition*, G4ProcessManager*);
   void ClearProcessInfo();
   void SetTrack(G4Track*);
@@ -158,6 +307,7 @@ protected:
   void GetAtRestIL();
   void DoDefinePhysicalStepLength();
   void DoStepping();
+  void PushSecondaries();
 
   // void CalculateStep();
   // void DoCalculateStep();
@@ -190,15 +340,16 @@ private:
   G4bool fInitialized;
 
   G4ITTrackingManager* fpTrackingManager;
-  //  G4UserSteppingAction*   fpUserSteppingAction;
 
   G4double kCarTolerance;
   // Cached geometrical tolerance on surface
 
   G4ITNavigator* fpNavigator;
-  //    G4Navigator*            fpNavigator;
   G4int fStoreTrajectory;
-  G4int verboseLevel;
+  G4VITSteppingVerbose* fpVerbose;
+
+  G4ITTrackHolder* fpTrackContainer;
+  G4ITLeadingTracks fLeadingTracks;
 
   //________________________________________________
   //
@@ -206,6 +357,8 @@ private:
   //________________________________________________
 
   G4double fTimeStep; // not proper to a track
+  G4double fILTimeStep; // proper to a track ensemble
+
   G4double fPreviousTimeStep;
   G4TrackVector* fpSecondary; // get from fpStep at every configuration setup
   G4VParticleChange* fpParticleChange;
@@ -241,79 +394,22 @@ private:
   //    G4SteppingControl StepControlFlag;
   //    G4VSensitiveDetector*   fpSensitive;
 
-  G4VPhysicalVolume* fpCurrentVolume; // Get from fpStep or touchable, keep as member for user interface
+  G4VPhysicalVolume* fpCurrentVolume;
+  // Get from fpStep or touchable, keep as member for user interface
 
   //________________________________________________
   //
   // Members related to ParticleDefinition and not
   // proper to a track
   //________________________________________________
-  struct ProcessGeneralInfo
-  {
-    G4ProcessVector* fpAtRestDoItVector;
-    G4ProcessVector* fpAlongStepDoItVector;
-    G4ProcessVector* fpPostStepDoItVector;
-
-    G4ProcessVector* fpAtRestGetPhysIntVector;
-    G4ProcessVector* fpAlongStepGetPhysIntVector;
-    G4ProcessVector* fpPostStepGetPhysIntVector;
-    //
-    // Note: DoItVector has inverse order against GetPhysIntVector
-    //       and SelectedPostStepDoItVector.
-    //
-    // * Max Number of Process
-    size_t MAXofAtRestLoops;
-    size_t MAXofAlongStepLoops;
-    size_t MAXofPostStepLoops;
-    // Maximum number of processes for each type of process
-    // These depend on the G4ParticleDefinition, so on the track
-
-    // * Transportation process
-    G4ITTransportation* fpTransportation;
-  };
 
   std::map<const G4ParticleDefinition*, ProcessGeneralInfo*> fProcessGeneralInfoMap;
   ProcessGeneralInfo* fpProcessInfo;
-
   G4ITTransportation* fpTransportation;
 
   //________________________________________________
   //
-  //          Members proper to a track
-  //________________________________________________
-  class G4ITStepProcessorState : public G4ITStepProcessorState_Lock
-  {
-  public:
-    G4ITStepProcessorState();
-    virtual ~G4ITStepProcessorState();
-
-    // * Max Number of Process
-    G4SelectedAtRestDoItVector fSelectedAtRestDoItVector;
-    G4SelectedPostStepDoItVector fSelectedPostStepDoItVector;
-
-    G4double fPhysicalStep;
-    G4double fPreviousStepSize;
-    G4double fSafety;
-
-    G4StepStatus fStepStatus;
-
-    // * Safety
-    G4double proposedSafety;
-    // This keeps the minimum safety value proposed by AlongStepGPILs.
-    G4ThreeVector endpointSafOrigin;
-    G4double endpointSafety;
-    // To get the true safety value at the PostStepPoint, you have
-    // to subtract the distance to 'endpointSafOrigin' from this value.
-
-    G4TouchableHandle fTouchableHandle;
-  private:
-    G4ITStepProcessorState(const G4ITStepProcessorState&);
-    G4ITStepProcessorState& operator=(const G4ITStepProcessorState&);
-  };
-
-  //________________________________________________
-  //
-  // Members used for configurating the processor
+  // Members used for setting up the processor
   //________________________________________________
 
   G4Track* fpTrack; // Set track
@@ -327,28 +423,37 @@ private:
   G4StepPoint* fpPostStepPoint; // SetupMembers
 };
 
+//______________________________________________________________________________
+
 inline void G4ITStepProcessor::SetPreviousStepTime(G4double previousTimeStep)
 {
   fPreviousTimeStep = previousTimeStep;
 }
+
+//______________________________________________________________________________
 
 inline const G4Track* G4ITStepProcessor::GetTrack() const
 {
   return fpTrack;
 }
 
+//______________________________________________________________________________
+
 inline G4double G4ITStepProcessor::CalculateSafety()
 {
-  return std::max(
-      fpState->endpointSafety - (fpState->endpointSafOrigin
-          - fpPostStepPoint->GetPosition()).mag(),
-      kCarTolerance);
+  return std::max(fpState->fEndpointSafety - (fpState->fEndpointSafOrigin
+                      - fpPostStepPoint->GetPosition()).mag(),
+                  kCarTolerance);
 }
+
+//______________________________________________________________________________
 
 inline void G4ITStepProcessor::SetNavigator(G4ITNavigator *value)
 {
   fpNavigator = value;
 }
+
+//______________________________________________________________________________
 
 inline void G4ITStepProcessor::CleanProcessor()
 {
@@ -383,6 +488,7 @@ inline void G4ITStepProcessor::CleanProcessor()
 }
 
 //______________________________________________________________________________
+
 inline double G4ITStepProcessor::GetInteractionTime()
 {
   return fTimeStep;

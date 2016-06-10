@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMoleculeEncounterStepper.hh 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id: G4DNAMoleculeEncounterStepper.hh 91584 2015-07-27 13:01:48Z gcosmo $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
@@ -52,6 +52,7 @@
 
 class G4VDNAReactionModel;
 class G4DNAMolecularReactionTable;
+class G4MolecularConfiguration;
 
 class G4Molecule;
 
@@ -105,7 +106,7 @@ private:
   class Utils
   {
   public:
-    Utils(const G4Track& tA, const G4Molecule* mB);
+    Utils(const G4Track& tA, G4MolecularConfiguration* mB);
     ~Utils(){;}
 
     G4double GetConstant() const
@@ -114,7 +115,7 @@ private:
     }
 
     const G4Track& trackA;
-    const G4Molecule* moleculeB;
+    G4MolecularConfiguration* moleculeB;
     const G4Molecule* moleculeA;
     G4double DA;
     G4double DB;

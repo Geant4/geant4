@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.cc 68053 2013-03-13 14:39:51Z gcosmo $
+// $Id: G4GDMLEvaluator.cc 89243 2015-03-27 16:24:39Z gcosmo $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLEvaluator Implementation
@@ -280,4 +280,20 @@ G4double G4GDMLEvaluator::GetVariable(const G4String& name)
                  FatalException, error_msg);
    }
    return Evaluate(name);
+}
+
+G4String G4GDMLEvaluator::ConvertToString(G4int ival)
+{
+   std::ostringstream os;
+   os << ival;
+   G4String vl = os.str();
+   return vl;
+}
+
+G4String G4GDMLEvaluator::ConvertToString(G4double dval)
+{
+   std::ostringstream os;
+   os << dval;
+   G4String vl = os.str();
+   return vl;
 }

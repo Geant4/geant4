@@ -1,4 +1,4 @@
-$Id: History 86965 2014-11-21 11:48:22Z gcosmo $
+$Id: History 90754 2015-06-09 07:40:58Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,42 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 8th, 2015 A.Dotti (event-V10-01-08)
+- Fixing valgring report
+
+June 6th, 2015 A.Dotti (event-V10-01-07)
+- Protecting the command /gps/source/set in case
+  of out-of-bound index.
+
+June 5th, 2015 A.Dotti (event-V10-01-06)
+- Further refinement for bug #1744: address case in which 
+  /gps/source/clear is used  
+- Increase verbosity of error message for GPS in case 
+  no sources are defined
+
+May 28th, 2015 A.Dotti (event-V10-01-05)
+- Addressing bug #1744
+- Increased level of verbosity of /gps/verbose
+- /gps/verbose now acts globally on all sources in case of multiple ones
+  (no need to activate verbosity for each source)
+
+April 6th, 2015 A.Dotti (event-V10-01-04)
+- Coverity fixes
+
+February 20th, 2015 A.Dotti (event-V10-01-03)
+- Clean code and remove not needed thread-local data that 
+  need to be shared for UI commands to work properly 
+  (bug introduced in previous tag)
+
+February 20th, 2015 A.Dotti (event-V10-01-02)
+- Bug fixing: bringing back of sharing of random generator for SPSPosDistribution class, wrongly made thread-local
+ 
+February 19th, 2015 A.Dotti (event-V10-01-01)
+- Bug fixing for unused variable
+
+February 16th, 2015 A.Dotti (event-V10-01-00)
+- Attempting fixing bug #1706
 
 November 20th, 2014 A.Dotti (event-V10-00-19 and -20)
 - Coverity fixes for G4Adjoint* classes

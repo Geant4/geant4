@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.cc 83991 2014-09-26 09:22:26Z gcosmo $
+// $Id: G4VPhysicalVolume.cc 93287 2015-10-15 09:50:22Z gcosmo $
 //
 // 
 // class G4VPhysicalVolume Implementation
@@ -93,6 +93,12 @@ G4VPhysicalVolume::G4VPhysicalVolume( G4RotationMatrix *pRot,
 
   this->SetRotation( pRot );       // G4MT_rot = pRot;
   this->SetTranslation( tlate );   // G4MT_trans = tlate;
+
+  // Initialize 'Shadow' data structure - for use by object persistency
+  pvdata = new G4PVData();
+  pvdata->frot = pRot;
+  pvdata->ftrans = G4ThreeVector(tlate);
+
   G4PhysicalVolumeStore::Register(this);
 }
 
@@ -100,7 +106,7 @@ G4VPhysicalVolume::G4VPhysicalVolume( G4RotationMatrix *pRot,
 //                            for usage restricted to object persistency.
 //
 G4VPhysicalVolume::G4VPhysicalVolume( __void__& )
-  : flogical(0), fname(""), flmother(0)
+  : flogical(0), fname(""), flmother(0), pvdata(0)
 {
   // Register to store
   //
@@ -113,6 +119,7 @@ G4VPhysicalVolume::G4VPhysicalVolume( __void__& )
 //
 G4VPhysicalVolume::~G4VPhysicalVolume() 
 {
+  delete pvdata;
   G4PhysicalVolumeStore::DeRegister(this);
 }
 

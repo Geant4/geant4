@@ -70,6 +70,12 @@ G4VDiscreteProcess(aName){
     }
     
     fFileCharacteristicsName = "";
+    fTimeStepMax = 0.;
+    fTimeStepMin = 2.E2 * CLHEP::angstrom;
+    fTransverseVariationMax = 2.E-2 * CLHEP::angstrom;
+
+    bPointYPre = -1.;
+    bPointYPost = -1.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -153,146 +159,170 @@ SetElectronDensity(XVCrystalCharacteristic* vElectronDensity){
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4bool ExExChProcessChanneling::UpdateInitialParameters(const G4Track& aTrack){
+    
+    if(GetInfo(aTrack)->GetPositionChanneled().x() == DBL_MAX){
+        // when the particle enters the crystal the position in the channel
+        //is randomly generated using a uniform distribution
+        G4double vXposition = G4UniformRand() *
+        GetXPL(aTrack)->ComputeInterplanarPeriod();
+        
+        //vXposition = 1.0 * CLHEP::angstrom;
+    
+        //initial position in the channel is stored
+        GetInfo(aTrack)->SetPositionChanneled(G4ThreeVector(vXposition,
+                                                            0.,
+                                                            0.));
+        GetInfo(aTrack)->SetPositionChanneledInitial(G4ThreeVector(vXposition,
+                                                                   0.,
+                                                                   0.));
+    }
+    
+    if(GetInfo(aTrack)->GetMomentumChanneledInitial().x() == DBL_MAX){
+        // the first time it enter the crystal we take the momentum
+        // for the post step which is the only one in the crystal
+        G4ThreeVector vMomentum =
+        ComputeMomentum(aTrack,aTrack.GetStep()->GetPostStepPoint());
+        
+        GetInfo(aTrack)->SetMomentumChanneled(vMomentum);
+        GetInfo(aTrack)->SetMomentumChanneledInitial(vMomentum);
+        return true;
+    }
+    
+    return false;
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void ExExChProcessChanneling::UpdateParameters(const G4Track& aTrack){
     
-    if(fIntegratedDensity->HasBeenInitialized(GetXPhysicalLattice(aTrack))
+    if(fIntegratedDensity->HasBeenInitialized(GetXPL(aTrack))
        == false){
         ComputeCrystalCharacteristic(aTrack);
         G4cout << "ChannelingProcess::UpdatePositionMomentumDensity::";
         G4cout<<"fIntegratedDensity->Initialized" << G4endl;
     }
     
-    UpdatePosition(aTrack);
-    UpdateMomentum(aTrack);
-    UpdateDensity(aTrack);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void ExExChProcessChanneling::UpdatePosition(const G4Track& aTrack){
+    if(UpdateInitialParameters(aTrack) == false){
+        G4ThreeVector vMomentumNew = 
+                ComputeMomentum(aTrack,
+                                aTrack.GetStep()->GetPreStepPoint());
+        GetInfo(aTrack)->SetMomentumChanneled(vMomentumNew);
+    }
+    G4ThreeVector vPositionPost =
+    ComputePositionInTheCrystal(aTrack.GetStep()->GetPostStepPoint(),aTrack);
+    G4ThreeVector vPositionPre =
+    ComputePositionInTheCrystal(aTrack.GetStep()->GetPreStepPoint(),aTrack);
     
-    if(GetInfo(aTrack)->GetPositionChanneledInitial().x() == DBL_MAX ||
-       HasLatticeOnBoundaryPost(aTrack)){
-        // when the particle enters the crystal the position in the channel
-        //is randomly generated using a uniform distribution
-        G4double vXposition = G4UniformRand() *
-            GetXPhysicalLattice(aTrack)->ComputeInterplanarPeriod();
-        
-        //initial position in the channel is stored
-        GetInfo(aTrack)->SetPositionChanneledInitial(G4ThreeVector(vXposition,
-                                                                   0.,
-                                                                   0.));
-        
-        //initial position for the measurement of apparent centrifugal force
-        //is zero at crystal entrance
-        GetInfo(aTrack)->SetPositionChanneled(G4ThreeVector(0.,0.,0.));
+    bHasToComputeTrajectory = true;
+
+    if(vPositionPost.y() == bPointYPost &&
+       vPositionPre.y() == bPointYPre){
+        bHasToComputeTrajectory = false;
     }
     else{
-        G4double vPositionX = GetInfo(aTrack)->GetPositionChanneled().x();
-        
-        //if the particle has been under channeling the position
-        //for the measurement of the apparent centrifugal force is reset
-        if(GetInfo(aTrack)->HasBeenUnderCoherentEffect() == 1){
-            GetInfo(aTrack)->SetPositionChanneled(G4ThreeVector(0.,0.,0.));
+        if(GetXPL(aTrack)->IsBent()){
+                bPointYPre = vPositionPre.y();
+                bPointYPost = vPositionPost.y();
         }
         else{
-            //if the particle has not been under channeling the distance
-            //between the new and the old point is computed for the evaluation
-            //of the centrifugal potential acting on the particle
-            vPositionX += (ComputePositionInTheCrystal(
-                aTrack.GetStep()->GetPostStepPoint(),
-                aTrack).x() - ComputePositionInTheCrystal(
-                            aTrack.GetStep()->GetPreStepPoint(),
-                            aTrack).x());
-            GetInfo(aTrack)->SetPositionChanneled(G4ThreeVector(vPositionX,
-                                                                0.,
-                                                                0.));
+                bPointYPre = vPositionPre.z();
+                bPointYPost = vPositionPost.z();
         }
-    }
-    
-}
+        }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+    G4ThreeVector fMom = GetInfo(aTrack)->GetMomentumChanneled();
+    G4ThreeVector fPos = GetInfo(aTrack)->GetPositionChanneled();
+    G4ThreeVector fMomHalf = GetInfo(aTrack)->GetMomentumChanneled();
+    G4ThreeVector fPosHalf = GetInfo(aTrack)->GetPositionChanneled();
 
-void ExExChProcessChanneling::UpdateMomentum(const G4Track& aTrack){
-    if(GetInfo(aTrack)->GetMomentumChanneledInitial().x() == DBL_MAX){
-        // the first time it enter the crystal we take the momentum
-        // for the post step which is the only one in the crystal
-        G4ThreeVector vMomentum =
-            ComputeMomentum(aTrack,aTrack.GetStep()->GetPostStepPoint());
-        
-        GetInfo(aTrack)->SetMomentumChanneled(vMomentum);
-        
-        GetInfo(aTrack)->SetMomentumChanneledInitial(
-                            GetInfo(aTrack)->GetMomentumChanneled());
+    if(GetXPL(aTrack)->IsBent()){
+            fIntegrationPeriod = (vPositionPost.phi() - vPositionPre.phi())*
+                    GetXPL(aTrack)->GetCurvatureRadius().x();
+            fIntegrationPeriod = vPositionPost.y() - vPositionPre.y();
     }
     else{
-        // we take the PREVIOUS step point to compare,
-        // otherwise the momentum is not computed correctly
-        G4ThreeVector vMomentum =
-            G4ThreeVector(GetInfo(aTrack)->GetMomentumChanneled().x(),
-                          GetInfo(aTrack)->GetMomentumChanneled().y(),0.);
-        
-        vMomentum+=ComputeMomentum(aTrack,aTrack.GetStep()->GetPreStepPoint());
-        
-        GetInfo(aTrack)->SetMomentumChanneled(vMomentum);
+            fIntegrationPeriod = vPositionPost.z() - vPositionPre.z();
     }
-}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+    fTimeStepTotal = 0.;
 
-void ExExChProcessChanneling::UpdateDensity(const G4Track& aTrack){
-    
-    
-    if(GetInfo(aTrack)->HasBeenUnderCoherentEffect() == 1){
-        
-        G4double vTransverseEnergy = ComputeTransverseEnergy(aTrack).x();
-        
-        if(GetXPhysicalLattice(aTrack)->IsBent()){
-            if(GetInfo(aTrack)->HasBeenUnderCoherentEffect() == 1){
-                if(ParticleIsNegative(aTrack)){
-                    vTransverseEnergy -=
-                    ComputeCentrifugalEnergyMaximumVariation(aTrack).x();
-                }
-                else{
-                    vTransverseEnergy +=
-                    ComputeCentrifugalEnergyMaximumVariation(aTrack).x();
-                }
+    G4double vNucleiDensity=0.;
+    G4double vElectronDensity=0.;
+
+    if(fIntegrationPeriod>0. && bHasToComputeTrajectory==true){
+            G4double kBeta = 0.;
+            G4double kPos = 0.;
+            G4double kMom = 0.;
+            G4double kBR = 0.;
+            G4double Z = 0.;
+        do{
+            UpdateIntegrationStep(aTrack,fMom);
+
+            fPosHalf = fPos;
+            fMomHalf = fMom;
+
+            kBeta = aTrack.GetVelocity()/c_light;
+            if(fMom.z()!=0.){
+              kPos = fTimeStep / fMom.z();
             }
-        }
-        
-        G4double vCharge = GetParticleDefinition(aTrack)->GetPDGCharge();
-        G4double vNucleiDensity =
-            fIntegratedDensity->GetIntegratedDensityNuclei(vTransverseEnergy,
-                                            GetXPhysicalLattice(aTrack),
-                                            G4int(vCharge));
-        G4double vElectronDensity =
-            fIntegratedDensity->GetIntegratedDensityElectron(vTransverseEnergy,
-                                            GetXPhysicalLattice(aTrack),
-                                            G4int(vCharge));
-        
-        G4double vLowerBoundNegative = 1.;
-        G4double vLowerBoundPositive = 0.01;
-        
-        if(ParticleIsNegative(aTrack)){
-            if(vNucleiDensity < vLowerBoundNegative)
-            {vNucleiDensity = vLowerBoundNegative;}
-            if(vElectronDensity < vLowerBoundNegative)
-            {vElectronDensity = vLowerBoundNegative;}
-        }
-        else{
-            if(vNucleiDensity < vLowerBoundPositive)
-            {vNucleiDensity = vLowerBoundPositive;}
-            if(vElectronDensity < vLowerBoundPositive)
-            {vElectronDensity = vLowerBoundPositive;}
-        }
-        
+            else{
+              kPos = fTimeStep / 1.E-20;
+            }
+            kMom = fTimeStep / kBeta;
+            kBR = fTimeStep * (fMom.z() * kBeta);;
+            Z = GetParticleDefinition(aTrack)->GetPDGCharge();
+
+            fPosHalf += (fMom * kPos * 0.5);
+            fMomHalf += 
+                    (GetElectricField()->GetEC(fPos,GetXPL(aTrack))
+                    * Z  * kMom * 0.5);
+
+            if(GetXPL(aTrack)->IsBent()){
+                    G4double temp =
+                            fMomHalf.x() + kBR * 0.5 /
+                            (GetXPL(aTrack)->GetCurvatureRadius()).x();
+                fMomHalf.setX(temp);
+            }
+
+            fPos += (fMomHalf * kPos);
+            fMom += 
+                    (GetElectricField()->GetEC(fPosHalf,GetXPL(aTrack))
+                     * Z * kMom );
+
+            if(GetXPL(aTrack)->IsBent()){
+                    G4double temp = 
+                            fMom.x() + kBR / 
+                            (GetXPL(aTrack)->GetCurvatureRadius()).x();
+               fMom.setX(temp);
+            }
+
+            fTimeStepTotal += fTimeStep;
+
+            vNucleiDensity += 
+                 (fTimeStep * 
+                 (GetNucleiDensity()->GetEC(fPos,GetXPL(aTrack)).x()
+                 +GetNucleiDensity()->GetEC(fPos,GetXPL(aTrack)).x()
+                 ) * 0.5);
+            vElectronDensity +=
+                 (fTimeStep * (
+                 GetElectronDensity()->GetEC(fPos,GetXPL(aTrack)).x() + 
+                 GetElectronDensity()->GetEC(fPos,GetXPL(aTrack)).x()) * 0.5);
+
+
+        } while(fTimeStepTotal<fIntegrationPeriod);
+
+        vNucleiDensity /= fIntegrationPeriod;
+        vElectronDensity /= fIntegrationPeriod;
         GetInfo(aTrack)->SetNucleiDensity(vNucleiDensity);
         GetInfo(aTrack)->SetElectronDensity(vElectronDensity);
     }
     else{
         ResetDensity(aTrack);
     }
+    
+    GetInfo(aTrack)->SetMomentumChanneled(fMom);
+    GetInfo(aTrack)->SetPositionChanneled(fPos);
+    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -300,117 +330,6 @@ void ExExChProcessChanneling::UpdateDensity(const G4Track& aTrack){
 void ExExChProcessChanneling::ResetDensity(const G4Track& aTrack){
     GetInfo(aTrack)->SetNucleiDensity(1.);
     GetInfo(aTrack)->SetElectronDensity(1.);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4ThreeVector ExExChProcessChanneling::
-ComputeChannelingOutgoingMomentum(const G4Track& aTrack){
-    
-    G4StepPoint* vStepPre = aTrack.GetStep()->GetPreStepPoint();
-    G4StepPoint* vStepPost = aTrack.GetStep()->GetPostStepPoint();
-    
-    G4double vTotalEnergy = vStepPre->GetTotalEnergy();
-    
-    G4double vTransverseEnergyX = std::fabs(ComputeTransverseEnergy(aTrack).x());
-    G4double vTransverseEnergyY = std::fabs(ComputeTransverseEnergy(aTrack).y());
-    double vPotentialEnergyX = 0.;
-    double vPotentialEnergyY = 0.;
-    
-    bool bExit = false;
-    do{
-        G4double vXposition = G4UniformRand() *
-        GetXPhysicalLattice(aTrack)->ComputeInterplanarPeriod();
-        
-        GetInfo(aTrack)->SetPositionChanneledInitial(G4ThreeVector(vXposition,
-                                                                   0.,
-                                                                   0.));
-        
-        vPotentialEnergyX = ComputePotentialEnergy(aTrack).x();
-        vPotentialEnergyY = ComputePotentialEnergy(aTrack).y();
-        if(vPotentialEnergyX<=vTransverseEnergyX &&
-           vPotentialEnergyY<=vTransverseEnergyY){
-            bExit = true;
-        }
-    } while(bExit == false);
-
-    vTransverseEnergyX-=vPotentialEnergyX;
-    vTransverseEnergyY-=vPotentialEnergyY;
-
-    G4double vChAngleX = std::pow(+ 2. * std::fabs(vTransverseEnergyX)
-                             / vTotalEnergy , 0.5);
-    G4double vChAngleY = std::pow(+ 2. * std::fabs(vTransverseEnergyY)
-                             / vTotalEnergy , 0.5);
-    
-    G4double vPhi = 2. * ( G4UniformRand() - 0.5) * vChAngleX;
-    G4double vTheta = 2. * ( G4UniformRand() - 0.5) * vChAngleY;
-    
-    G4ThreeVector vNewMomentum =
-        G4ThreeVector(0.,0.,1.).rotate(G4ThreeVector(0,1,0),- vPhi)
-        .rotate(G4ThreeVector(1,0,0),- vTheta);
-    G4ThreeVector vPosition = ComputePositionInTheCrystal(vStepPost,aTrack);
-    
-    return GetXPhysicalLattice(aTrack)->
-        ProjectMomentumVectorFromLatticeToWorld(vNewMomentum,vPosition);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4ThreeVector ExExChProcessChanneling::
-ComputeVolumeReflectionOutgoingMomentum(const G4Track& aTrack){
-    
-    G4StepPoint* vStep = aTrack.GetStep()->GetPostStepPoint();
-    
-    G4double vVrAngle = 0.;
-    
-    if(GetXPhysicalLattice(aTrack)->IsBent()) {
-        G4double vRadiusX = GetXPhysicalLattice(aTrack)->
-            GetCurvatureRadius().x();
-        
-        G4double vTotalEnergy = vStep->GetTotalEnergy();
-        
-        G4double vEnergyMax =
-            std::fabs(ComputeCriticalEnergyMaximum(aTrack)
-                - ComputeCriticalEnergyMinimum(aTrack));
-        
-        G4double vEnergyRMS =
-            std::fabs(ComputeCentrifugalEnergyMaximumVariation(aTrack).x());
-        
-        G4double vTransverseEnergy =
-            vEnergyMax + (G4UniformRand() * std::fabs(vEnergyRMS) );
-        
-        vVrAngle = - std::fabs(vRadiusX)/vRadiusX *
-            std::pow(+ 2. * std::fabs(vTransverseEnergy) / vTotalEnergy , 0.5);
-        
-        if(ParticleIsNegative(aTrack)){
-            vVrAngle *= 0.8; // = see PLB 681 (2009) 233
-        }
-        else{
-            vVrAngle *= 1.4;
-        }
-        
-        G4ThreeVector vMomentumChanneled =
-            GetInfo(aTrack)->GetMomentumChanneled();
-        G4double vAngleRatio =
-            (vMomentumChanneled.x()/vTotalEnergy)/ComputeCriticalAngle(aTrack);
-        
-        if(std::fabs(vAngleRatio)<1.5){
-            vVrAngle *= (-(std::fabs(vAngleRatio) - 1.5)/3.);
-        }
-    }
-    
-    G4double vOmega = GetXPhysicalLattice(aTrack)->GetLatticeAngles().y();
-    G4double vPhi = vVrAngle * std::cos(vOmega);
-    G4double vTheta = vVrAngle * std::sin(vOmega);
-    
-    G4ThreeVector vNewMomentum =
-        aTrack.GetMomentum().unit()
-        .rotate(G4ThreeVector(0.,1.,0.), - vPhi)
-        .rotate(G4ThreeVector(1.,0.,0.), -vTheta);
-    
-    return vNewMomentum.unit();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -431,7 +350,7 @@ ComputePositionInTheCrystal(G4StepPoint* vStep,const G4Track& aTrack){
         theTouchable->GetHistory()->GetTopTransform().TransformPoint(vWorldPos);
     
     
-    if(GetXPhysicalLattice(aTrack)->IsBent() == false){
+    if(GetXPL(aTrack)->IsBent() == false){
         G4Box* vXtalSolid =
             (G4Box*) vStepVol->GetPhysicalVolume()
             ->GetLogicalVolume()->GetSolid();
@@ -446,29 +365,6 @@ ComputePositionInTheCrystal(G4StepPoint* vStep,const G4Track& aTrack){
         vLocalPos.rotateZ(-vXtalSolid->GetStartPhiAngle());
     }
     return vLocalPos;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double ExExChProcessChanneling::
-ComputeDistanceWhereParticleTangentToBentPlane(const G4Track& aTrack){
-    G4ThreeVector vPositionPre =
-        ComputePositionInTheCrystal(aTrack.GetStep()->GetPreStepPoint(),aTrack);
-    G4ThreeVector vMomentumPre =
-        GetXPhysicalLattice(aTrack)->
-            ProjectMomentumVectorFromWorldToLattice(
-                        aTrack.GetStep()->GetPreStepPoint()->GetMomentum(),
-                        vPositionPre);
-    
-    G4double vDeltaProportion = 1.;
-    
-    if((vMomentumPre.x())!=0.){
-        vDeltaProportion = std::fabs(vMomentumPre.unit().x());
-    }
-    G4double vDeltaPosition = vDeltaProportion*
-        GetXPhysicalLattice(aTrack)->GetCurvatureRadius().x();
-    
-    return std::abs(vDeltaPosition);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -536,84 +432,57 @@ CheckStepPointLatticeForPosition(G4StepPoint* vStep, const G4Track& aTrack){
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4bool ExExChProcessChanneling::
-IsUnderCoherentEffect(const G4Track& aTrack){
-    //----------------------------------------
-    // check if the particle momentum
-    // transverse to the (h,k,l) plane
-    // is small enough to permit channeling
-    //----------------------------------------
+UpdateIntegrationStep(const G4Track& aTrack,G4ThreeVector& vMom){
     
-    UpdateParameters(aTrack);
-    
-    G4double vEnergyMax = ComputeCriticalEnergyMaximum(aTrack);
-    
-    G4double vTransverseEnergy = ComputeTransverseEnergy(aTrack).x();
-    
-    if(GetXPhysicalLattice(aTrack)->IsBent() == false){
-        if(vTransverseEnergy <= vEnergyMax){
-            GetInfo(aTrack)->SetCoherentEffect(1);
-            // the particle is in channeling
-            return true;
-        }
-    }
-    else{
-        G4ThreeVector vPositionInTheCrystal =
-        GetInfo(aTrack)->GetPositionChanneled()
-            + GetInfo(aTrack)->GetPositionChanneledInitial();
-        vTransverseEnergy += std::fabs(ComputeCentrifugalEnergy(aTrack,
-                                                vPositionInTheCrystal).x());
-        if(vTransverseEnergy <= vEnergyMax){
-            // the particle is in channeling
-            GetInfo(aTrack)->SetCoherentEffect(1);
-            return true;
+    if(vMom.x() != 0.0 || vMom.y() != 0.0){
+        double xy2 = vMom.x() * vMom.x() + vMom.y()*vMom.y();
+        
+        if(xy2!=0.){
+            fTimeStep =
+                    std::fabs(fTransverseVariationMax * 
+                    aTrack.GetStep()->GetPreStepPoint()->GetTotalEnergy() /
+                    std::pow(xy2,0.5));
+            if(fTimeStep < fTimeStepMin) fTimeStep = fTimeStepMin;
+            else{
+                fTimeStepMax = std::sqrt( fTransverseVariationMax *
+                aTrack.GetStep()->GetPreStepPoint()->GetTotalEnergy() /
+                std::fabs(fElectricField->GetMaximum(GetXPL(aTrack))));
+                
+                if(fTimeStep > fTimeStepMax) fTimeStep = fTimeStepMax;
+            }
         }
         else{
-            G4bool bNotBoundary = ParticleIsNotOnBoundary(aTrack);
-            G4bool bTangentToPlane = ParticleIsTangentToBentPlane(aTrack);
-
-            if(bTangentToPlane == true &&
-               bNotBoundary == true &&
-               GetInfo(aTrack)->HasBeenUnderCoherentEffect() != 2){
-                    // the particle is in volume reflection
-                    GetInfo(aTrack)->SetCoherentEffect(2);
-                    return true;
-                }
-            }
+            fTimeStep = fTimeStepMin;
+        }
+        
+        if(fTimeStep + fTimeStepTotal > fIntegrationPeriod){
+            fTimeStep = fIntegrationPeriod - fTimeStepTotal;
+        }
+        
+        return true;
     }
-    
-    // the particle is not under coherent effect
-    GetInfo(aTrack)->SetCoherentEffect(0);
+    else{
+        fTimeStep = fTimeStepMin;
+    }
     return false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double ExExChProcessChanneling::
 GetChannelingMeanFreePath(const G4Track& aTrack){
     //----------------------------------------
     // return the channeling MFP
     //----------------------------------------
     
-    G4double vMFPosc = ComputeOscillationPeriod(aTrack);
     
-    if(GetInfo(aTrack)->GetNucleiDensity() < 1.){
-        vMFPosc /= GetInfo(aTrack)->GetNucleiDensity();
+    G4double vMFP = 0.1 * ComputeOscillationPeriod(aTrack);
+    
+    if(HasLatticeOnBoundaryPre(aTrack) == true){
+        vMFP = 0.001 * ComputeOscillationPeriod(aTrack);
     }
-    
-    G4double vMFP = vMFPosc * 2.;
-    
-    if(GetXPhysicalLattice(aTrack)->IsBent()){
-        G4double vMFPVR =
-            ComputeDistanceWhereParticleTangentToBentPlane(aTrack);
-        
-        if((std::fabs(vMFPVR) < vMFP) && (std::fabs(vMFPVR) > (0.5 * vMFPosc))){
-            vMFP = vMFPVR;
-        }
-    }
-    
     
     return vMFP;
 }
@@ -634,9 +503,11 @@ GetMeanFreePath(const G4Track& aTrack,
     *condition = Forced;
     
     if(HasLattice(aTrack)){
+        GetInfo(aTrack)->SetInTheCrystal(true);
         return GetChannelingMeanFreePath(aTrack);
     }
     else{
+        GetInfo(aTrack)->SetInTheCrystal(false);
         return DBL_MAX;
     }
 }
@@ -661,51 +532,33 @@ PostStepDoIt(const G4Track& aTrack,
     
     GetInfo(aTrack)->StoreDensityPreviousStep();
     
-    G4bool bIsUnderCoherentEffect = false;
-    
     if((HasLattice(aTrack) == true) &&
-       (ParticleIsNotOnBoundaryPost(aTrack) == true)){
-        bIsUnderCoherentEffect = IsUnderCoherentEffect(aTrack);
-        if(bIsUnderCoherentEffect){
-            if(GetInfo(aTrack)->HasBeenUnderCoherentEffect() == 1){
-                // if the particle is in channeling it gives the direction
-                // of the lattice to the particle momentum
-                G4ThreeVector vPosition =
-                    ComputePositionInTheCrystal(
-                            aTrack.GetStep()->GetPostStepPoint(),aTrack);
-                aParticleChange.ProposeMomentumDirection(
-                    GetXPhysicalLattice(aTrack)->
-                    GetLatticeDirection(vPosition).unit());
-            }
-            else if(GetInfo(aTrack)->HasBeenUnderCoherentEffect() == 2){
-                // if the particle is in VR it gives a kick
-                // to the opposite site of the bending to the particle
-                aParticleChange.ProposeMomentumDirection(
-                            ComputeVolumeReflectionOutgoingMomentum(aTrack));
-                GetInfo(aTrack)->SetCoherentEffect(0);
-                ResetDensity(aTrack);
-            }
-        }
+            (HasLatticeOnBoundaryPost(aTrack) == false)){
+        UpdateParameters(aTrack);
+        
+        G4ThreeVector vMomentum = 
+                GetInfo(aTrack)->GetMomentumChanneled().unit();
+
+        G4ThreeVector vPosition;
+        vPosition =
+             ComputePositionInTheCrystal(aTrack.GetStep()->GetPostStepPoint(),
+             aTrack);
+
+        GetXPL(aTrack)->ProjectMomentumVectorFromLatticeToWorld(vMomentum,
+                                                                vPosition);
+
+        aParticleChange.ProposeMomentumDirection(vMomentum.unit());
     }
     else{
         // if the volume has no lattice it resets the density factors
         ResetDensity(aTrack);
-    }
-    
-    if( (bIsUnderCoherentEffect == false && (HasLattice(aTrack) == true) )
-       || (HasLatticeOnBoundaryPre(aTrack) == true) ) {
-        // if has been under coherent effect but now it is not,
-        // the outgoing momentum is evaluated starting from the current position
-        if(GetInfo(aTrack)->HasBeenUnderCoherentEffect() == 1){
-            aParticleChange.ProposeMomentumDirection(
-                            ComputeChannelingOutgoingMomentum(aTrack));
-        }
-        
-        // If is not under coherent effect sets coherent effect to zero
-        // and resets the density factors after the outgoing angle
-        // has been evaluated
-        GetInfo(aTrack)->SetCoherentEffect(0);
-        ResetDensity(aTrack);
+        GetInfo(aTrack)->SetMomentumChanneled(G4ThreeVector(DBL_MAX,
+                                                            DBL_MAX,
+                                                            DBL_MAX));
+                                                            
+        GetInfo(aTrack)->SetPositionChanneled(G4ThreeVector(DBL_MAX,
+                                                            DBL_MAX,
+                                                            DBL_MAX));
     }
     
     return &aParticleChange;
@@ -724,10 +577,10 @@ ComputeTransverseEnergy(const G4Track& aTrack){
     
     G4ThreeVector vTransverseEnergy = ComputePotentialEnergy(aTrack)
         + ComputeKineticEnergy(aTrack);
-    //while(!getchar());
     return vTransverseEnergy;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4ThreeVector ExExChProcessChanneling::
 ComputeKineticEnergy(const G4Track& aTrack){
     //----------------------------------------
@@ -759,8 +612,8 @@ ComputePotentialEnergy(const G4Track& aTrack){
     
     
     G4ThreeVector vPotentialEnergy =
-        fPotentialEnergy->GetEC(GetInfo(aTrack)->GetPositionChanneledInitial(),
-                                GetXPhysicalLattice(aTrack));
+        fPotentialEnergy->GetEC(GetInfo(aTrack)->GetPositionChanneled(),
+                                GetXPL(aTrack));
     
     vPotentialEnergy *= GetParticleDefinition(aTrack)->GetPDGCharge();
     
@@ -781,11 +634,18 @@ ComputeCentrifugalEnergy(const G4Track& aTrack,G4ThreeVector vPosition){
     
     G4double vPositionX = vPosition.x();
     
-    G4ThreeVector vEnergyVariation =
+    if(ParticleIsNegative(aTrack) && false){
+        vPositionX -=
+        GetXPL(aTrack)->ComputeInterplanarPeriod() * 0.5;
+    }
+    G4ThreeVector vEnergyVariation = G4ThreeVector();;
+    if(GetXPL(aTrack)->IsBent()){ 
+    vEnergyVariation =
         G4ThreeVector(vTotalEnergy * vPositionX /
-                      GetXPhysicalLattice(aTrack)->GetCurvatureRadius().x(),
+                      GetXPL(aTrack)->GetCurvatureRadius().x(),
                       0.,
                       0.);
+    }
     
     return vEnergyVariation;
 }
@@ -801,11 +661,11 @@ ComputeMomentum(const G4Track& aTrack,G4StepPoint* vStep){
     
     G4ThreeVector vPosition = ComputePositionInTheCrystal(vStep,aTrack);
     
-    G4ThreeVector vMomentum =
-        GetXPhysicalLattice(aTrack)->
-            ProjectMomentumVectorFromWorldToLattice(aTrack.GetMomentum(),
-                                                    vPosition);
-    
+    G4ThreeVector vMomentum = aTrack.GetMomentum();
+
+    GetXPL(aTrack)->
+    ProjectMomentumVectorFromWorldToLattice(vMomentum,vPosition);
+
     return vMomentum;
 }
 
@@ -821,11 +681,14 @@ ComputeCentrifugalEnergyMaximumVariation(const G4Track& aTrack){
     G4double vTotalEnergy =
         aTrack.GetStep()->GetPreStepPoint()->GetTotalEnergy();
     
-    G4ThreeVector vEnergyVariation = G4ThreeVector(vTotalEnergy *
-                    GetXPhysicalLattice(aTrack)->ComputeInterplanarPeriod() /
-                    GetXPhysicalLattice(aTrack)->GetCurvatureRadius().x(),
+    G4ThreeVector vEnergyVariation = G4ThreeVector();
+    if(GetXPL(aTrack)->IsBent()){
+    vEnergyVariation = G4ThreeVector(vTotalEnergy *
+                    GetXPL(aTrack)->ComputeInterplanarPeriod() /
+                    GetXPL(aTrack)->GetCurvatureRadius().x(),
                     0.,
                     0.);
+    }
     
     return vEnergyVariation;
 }
@@ -846,11 +709,11 @@ ComputeCriticalEnergyMaximum(const G4Track& aTrack){
     
     if(ParticleIsNegative(aTrack)){
         vCriticalEnergy =
-            - fPotentialEnergy->GetMinimum(GetXPhysicalLattice(aTrack));
+            - fPotentialEnergy->GetMinimum(GetXPL(aTrack));
     }
     else{
         vCriticalEnergy =
-            + fPotentialEnergy->GetMaximum(GetXPhysicalLattice(aTrack));
+            + fPotentialEnergy->GetMaximum(GetXPL(aTrack));
     }
     
     vCriticalEnergy *= std::fabs(GetParticleDefinition(aTrack)->GetPDGCharge());
@@ -871,11 +734,11 @@ ComputeCriticalEnergyMinimum(const G4Track& aTrack){
     
     if(ParticleIsNegative(aTrack)){
         vCriticalEnergy =
-            - fPotentialEnergy->GetMaximum(GetXPhysicalLattice(aTrack));
+            - fPotentialEnergy->GetMaximum(GetXPL(aTrack));
     }
     else{
         vCriticalEnergy =
-            + fPotentialEnergy->GetMinimum(GetXPhysicalLattice(aTrack));
+            + fPotentialEnergy->GetMinimum(GetXPL(aTrack));
     }
     
     vCriticalEnergy *= std::fabs(GetParticleDefinition(aTrack)->GetPDGCharge());
@@ -911,7 +774,7 @@ ComputeOscillationPeriod(const G4Track& aTrack){
     //----------------------------------------
     
     G4double vInterplanarPeriod =
-        GetXPhysicalLattice(aTrack)->ComputeInterplanarPeriod();
+        GetXPL(aTrack)->ComputeInterplanarPeriod();
     G4double vOscillationPeriod =
         CLHEP::pi * vInterplanarPeriod / ComputeCriticalAngle(aTrack);
     return vOscillationPeriod;
@@ -928,8 +791,12 @@ ComputeCriticalRadius(const G4Track& aTrack){
     
     G4double vTotalEnergy =
         aTrack.GetStep()->GetPreStepPoint()->GetTotalEnergy();
-    G4double vCriticalRadius =
-        vTotalEnergy / fElectricField->GetMaximum(GetXPhysicalLattice(aTrack));
+    
+    G4double vCriticalRadius = 1.E-20;
+    if(fElectricField->GetMaximum(GetXPL(aTrack)) != 0.){
+        vCriticalRadius = vTotalEnergy 
+                        / fElectricField->GetMaximum(GetXPL(aTrack));
+    }
     return vCriticalRadius;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -942,11 +809,11 @@ ComputePotentialWellCentre(const G4Track& aTrack){
     //----------------------------------------
     
     G4double vInterplanarPeriodHalf =
-        0.5 * GetXPhysicalLattice(aTrack)->ComputeInterplanarPeriod();
+        0.5 * GetXPL(aTrack)->ComputeInterplanarPeriod();
     
     G4double vCentreX = vInterplanarPeriodHalf;
     
-    if(GetXPhysicalLattice(aTrack)->IsBent()){
+    if(GetXPL(aTrack)->IsBent()){
         G4double vTotalEnergy =
             aTrack.GetStep()->GetPreStepPoint()->GetTotalEnergy();
         
@@ -956,7 +823,7 @@ ComputePotentialWellCentre(const G4Track& aTrack){
         
         vCentreX *= (1. - 0.5 * vTotalEnergy /
                      vPotentialWellDepth /
-                     GetXPhysicalLattice(aTrack)->GetCurvatureRadius().x() *
+                     GetXPL(aTrack)->GetCurvatureRadius().x() *
                      vInterplanarPeriodHalf );
     }
     
@@ -986,7 +853,7 @@ BuildPhysicsTable(const G4ParticleDefinition&){
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XPhysicalLattice* ExExChProcessChanneling::
-GetXPhysicalLattice(const G4Track& aTrack){
+GetXPL(const G4Track& aTrack){
     if(fLatticeManager->HasLattice(
                 aTrack.GetStep()->GetPostStepPoint()->GetPhysicalVolume())){
         return fLatticeManager->GetXPhysicalLattice(aTrack.GetStep()
@@ -1035,7 +902,7 @@ G4bool ExExChProcessChanneling::
 HasLatticeOnBoundaryPre(const G4Track& aTrack){
     if(fLatticeManager->HasLattice(aTrack.GetStep()->GetPreStepPoint()->
                 GetPhysicalVolume()) &&
-       aTrack.GetStep()->GetPostStepPoint()->GetStepStatus() == fGeomBoundary) {
+       aTrack.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary) {
         return true;
     }
     else{
@@ -1049,7 +916,7 @@ G4bool ExExChProcessChanneling::
 HasLatticeOnBoundaryPost(const G4Track& aTrack){
     if(fLatticeManager->HasLattice(aTrack.GetStep()->
                     GetPostStepPoint()->GetPhysicalVolume()) &&
-       aTrack.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary) {
+       aTrack.GetStep()->GetPostStepPoint()->GetStepStatus() == fGeomBoundary) {
         return true;
     }
     else{
@@ -1069,36 +936,6 @@ G4bool ExExChProcessChanneling::ParticleIsNegative(const G4Track& aTrack){
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4bool ExExChProcessChanneling::
-ParticleIsTangentToBentPlane(const G4Track& aTrack){
-    G4ThreeVector vPositionPre =
-        ComputePositionInTheCrystal(aTrack.GetStep()->GetPreStepPoint(),aTrack);
-    G4ThreeVector vMomentumPre =
-        GetXPhysicalLattice(aTrack)->
-        ProjectMomentumVectorFromWorldToLattice(aTrack.GetStep()->
-                GetPreStepPoint()->GetMomentum(),vPositionPre);
-    
-    G4ThreeVector vPositionPost =
-        ComputePositionInTheCrystal(aTrack.GetStep()->
-                GetPostStepPoint(),aTrack);
-    G4ThreeVector vMomentumPost = GetXPhysicalLattice(aTrack)->
-        ProjectMomentumVectorFromWorldToLattice(aTrack.GetStep()->
-                GetPostStepPoint()->GetMomentum(),vPositionPost);
-    
-    if(vMomentumPost.x()<0. &&
-       vMomentumPre.x()>0. &&
-       GetXPhysicalLattice(aTrack)->GetCurvatureRadius().x() < 0.){
-        return true;
-    }
-    if(vMomentumPost.x()>0. &&
-       vMomentumPre.x()<0. &&
-       GetXPhysicalLattice(aTrack)->GetCurvatureRadius().x() > 0.){
-        return true;
-    }
-    
-    return false;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -1155,22 +992,39 @@ GetParticleDefinition(const G4Track& aTrack){
 
 void ExExChProcessChanneling::
 ComputeCrystalCharacteristic(const G4Track& aTrack){
-    fIntegratedDensity->SetXPhysicalLattice(GetXPhysicalLattice(aTrack));
+    fIntegratedDensity->SetXPhysicalLattice(GetXPL(aTrack));
     fIntegratedDensity->InitializeTables();
     
     if(fFileCharacteristicsName != ""){
         G4String filename;
-        
-        fPotentialEnergy->ReadFromECHARM(filename =
-                                         fFileCharacteristicsName + "_pot.txt");
-        //fElectricField->ReadFromECHARM("efx.txt");
-        fElectricField->InitializePhysicalLattice(GetXPhysicalLattice(aTrack));
+        fElectronDensity->InitializePhysicalLattice(GetXPL(aTrack));
+        fNucleiDensity->InitializePhysicalLattice(GetXPL(aTrack));
+        fPotentialEnergy->InitializePhysicalLattice(GetXPL(aTrack));
+        fElectricField->InitializePhysicalLattice(GetXPL(aTrack));
+
+        filename = fFileCharacteristicsName + "_pot.txt";
+        G4cout << filename << G4endl;
+        fPotentialEnergy->ReadFromECHARM(filename,CLHEP::eV);
+        fPotentialEnergy->PrintOnFile("temppot.dat",GetXPL(aTrack));
+
+        filename = fFileCharacteristicsName + "_efx.txt";
+        G4cout << filename << G4endl;
+        fElectricField->ReadFromECHARM(filename,CLHEP::eV/CLHEP::m);
+        fElectricField->PrintOnFile("tempefx.dat",GetXPL(aTrack));
+
+        filename = fFileCharacteristicsName + "_atd.txt";
+        G4cout << filename << G4endl;
+        fNucleiDensity->ReadFromECHARM(filename);
+
+        filename = fFileCharacteristicsName + "_eld.txt";
+        G4cout << filename << G4endl;
+        fElectronDensity->ReadFromECHARM(filename);
         fIntegratedDensity->ReadFromFiles(fFileCharacteristicsName);
     }
     else{
         fPotentialEnergy->InitializePhysicalLattice(
-                                                GetXPhysicalLattice(aTrack));
-        fElectricField->InitializePhysicalLattice(GetXPhysicalLattice(aTrack));
+                                                GetXPL(aTrack));
+        fElectricField->InitializePhysicalLattice(GetXPL(aTrack));
     }
 }
 

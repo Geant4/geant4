@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedGammaConversionModel.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4LivermorePolarizedGammaConversionModel.hh 93359 2015-10-19 13:42:18Z gcosmo $
 //
 // Authors: G.Depaola & F.Longo
 //
@@ -32,14 +32,12 @@
 #define G4LivermorePolarizedGammaConversionModel_h 1
 
 #include "G4VEmModel.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4ParticleChangeForGamma.hh"
-#include "G4CrossSectionHandler.hh"
-#include "G4LogLogInterpolation.hh"
-#include "G4CompositeEMDataSet.hh"
-#include "G4ProductionCutsTable.hh"
-#include "G4ForceCondition.hh"
+#include "G4LPhysicsFreeVector.hh"
+
+//#include "G4Electron.hh"
+//#include "G4Positron.hh"
+class G4ParticleChangeForGamma;
+
 
 
 class G4LivermorePolarizedGammaConversionModel : public G4VEmModel
@@ -48,44 +46,51 @@ class G4LivermorePolarizedGammaConversionModel : public G4VEmModel
 public:
 
   G4LivermorePolarizedGammaConversionModel(const G4ParticleDefinition* p = 0, 
-		                   const G4String& nam = "LivermorePolarizedGammaConversion");
-
+					     const G4String& nam = "LivermorePolarizedGammaConversion");
+  
   virtual ~G4LivermorePolarizedGammaConversionModel();
-
+  
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  virtual G4double ComputeCrossSectionPerAtom(
-                                const G4ParticleDefinition*,
-                                      G4double kinEnergy, 
-                                      G4double Z, 
-                                      G4double A=0, 
-                                      G4double cut=0,
-                                      G4double emax=DBL_MAX);
+  virtual void InitialiseLocal(const G4ParticleDefinition*, 
+			       G4VEmModel* masterModel);
+  
+  virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
 
+  virtual G4double ComputeCrossSectionPerAtom(
+					      const G4ParticleDefinition*,
+					      G4double kinEnergy, 
+					      G4double Z, 
+					      G4double A=0, 
+					      G4double cut=0,
+					      G4double emax=DBL_MAX);
+  
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
 				 G4double maxEnergy);
 
-protected:
-
+  virtual G4double MinPrimaryEnergy(const G4Material*,
+				    const G4ParticleDefinition*,
+				    G4double); 
+  
+private:
+  
   G4ParticleChangeForGamma* fParticleChange;
 
-  G4double GetMeanFreePath(const G4Track& aTrack, 
-			   G4double previousStepSize, 
-			   G4ForceCondition* condition);
-private:
-
   G4double lowEnergyLimit;  
-  G4double highEnergyLimit; 
+  
+  //  G4double highEnergyLimit; 
   G4bool isInitialised;
   G4int verboseLevel;
 
-  G4VEMDataSet* meanFreePathTable;
-  G4VCrossSectionHandler* crossSectionHandler;
 
-
+  void ReadData(size_t Z, const char* path = 0);
+  
+  G4double ScreenFunction1(G4double screenVariable);
+  G4double ScreenFunction2(G4double screenVariable);
+  
   // specific methods for polarization 
   
   G4ThreeVector GetRandomPolarization(G4ThreeVector& direction0); // Random Polarization
@@ -100,8 +105,6 @@ private:
   G4double SetPhi(G4double);
   G4double SetPsi(G4double, G4double); //
 
-  G4double ScreenFunction1(G4double screenVariable);
-  G4double ScreenFunction2(G4double screenVariable);
   void SetTheta(G4double*, G4double*, G4double);
 
   G4double Poli(G4double , G4double, G4double, G4double);
@@ -130,6 +133,9 @@ private:
   
   G4LivermorePolarizedGammaConversionModel & operator=(const  G4LivermorePolarizedGammaConversionModel &right);
   G4LivermorePolarizedGammaConversionModel(const  G4LivermorePolarizedGammaConversionModel&);
+
+  static G4int maxZ;
+  static G4LPhysicsFreeVector* data[100]; // 100 because Z range is 1-99
 
 };
 

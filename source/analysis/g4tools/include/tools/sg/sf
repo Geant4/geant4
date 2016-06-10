@@ -1,0 +1,101 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_sf
+#define tools_sg_sf
+
+// sf for simple field.
+
+#include "bsf"
+
+//#include "../sto"
+
+#include "../io/iwbuf"
+#include "../io/irbuf"
+#include "../stype"
+#include <sstream>
+
+namespace tools {
+namespace sg {
+
+template <class T>
+class sf : public bsf<T> {
+  typedef bsf<T> parent;
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::sg::sf<"+stype(T())+">");
+    return s_v;
+  }
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast< sf<T> >(this,a_class)) {return p;}
+    return parent::cast(a_class);
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  virtual bool write(io::iwbuf& a_buffer) {
+    return a_buffer.write(parent::m_value);
+  }
+  virtual bool read(io::irbuf& a_buffer) {
+    return a_buffer.read(parent::m_value);
+  }
+  virtual bool dump(std::ostream& a_out) {
+    a_out << parent::m_value << std::endl;
+    return true;
+  }
+  virtual bool s_value(std::string& a_s) const {
+    std::ostringstream strm;
+    strm << parent::m_value;
+    a_s = strm.str();
+    return true;
+  }
+public:
+  sf(){}
+  sf(const T& a_value):parent(a_value){}
+  virtual ~sf(){}
+public:
+  sf(const sf& a_from)
+  :parent(a_from)
+  {}
+  sf& operator=(const sf& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+public:
+  sf& operator=(const T& a_value){
+    parent::operator=(a_value);
+    return *this;
+  }
+};
+
+/*
+template <class T>
+class sf_no_io : public bsf<T> {
+public:
+  virtual bool write(io::iwbuf&) {return true;}
+  virtual bool read(io::irbuf&) {return true;}
+  virtual bool dump(std::ostream& a_out) {
+    a_out << parent::m_value << std::endl;
+    return true;
+  }
+public:
+  sf_no_io(){}
+  sf_no_io(const T& a_value):parent(a_value){}
+public:
+  sf_no_io(const sf_no_io& a_from)
+  :parent(a_from)
+  {}
+  sf_no_io& operator=(const sf_no_io& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+public:
+  sf_no_io& operator=(const T& a_value){
+    parent::operator=(a_value);
+    return *this;
+  }
+};
+*/
+
+}}
+
+#endif

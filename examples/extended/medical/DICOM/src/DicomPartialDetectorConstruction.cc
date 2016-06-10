@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomPartialDetectorConstruction.cc 84839 2014-10-21 13:44:55Z gcosmo $
+// $Id: DicomPartialDetectorConstruction.cc 92820 2015-09-17 15:22:14Z gcosmo $
 //
 /// \file medical/DICOM/src/DicomPartialDetectorConstruction.cc
 /// \brief Implementation of the DicomPartialDetectorConstruction class
@@ -143,7 +143,6 @@ void DicomPartialDetectorConstruction::ReadPhantomData()
     }
 
     finDF.close();
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -162,7 +161,7 @@ const G4String& fname)
                 FatalException,
                 G4String("File not found " + fname).c_str());
   }
- G4int nMaterials;
+  G4int nMaterials;
   fin >> nMaterials;
   G4String stemp;
   G4int nmate;
@@ -288,7 +287,6 @@ void DicomPartialDetectorConstruction::ReadVoxelDensitiesPartial( std::ifstream&
             }
         }
     }
-
   //  densityDiffs[0] = 0.0001; //fAir
 
   //--- Calculate the average material density for each material/density bin

@@ -13,6 +13,55 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+3 November 2015 Tatsumi Koi (hadr-qmd-V10-01-09)
+- Loop checking
+
+27 October 2015 Tatsumi Koi (hadr-qmd-V10-01-08)
+- Fix bug in handling forgiven decay
+       src/G4QMDCollision.cc
+
+18 October 2015 Tatsumi Koi (hadr-qmd-V10-01-07)
+- Re tag for testing 
+- Co working with global-V10-01-22
+
+13 October 2015 Tatsumi Koi (hadr-qmd-V10-01-06)
+- Migration to fast-math functions
+       src/G4QMDGroundStateNucleus.cc
+       src/G4QMDNucleus.cc
+       src/G4QMDParticipant.cc
+       src/G4QMDParameters.cc
+       src/G4QMDMeanField.cc
+       src/G4QMDReaction.cc
+       src/G4QMDCollision.cc
+
+4 June 2015 Tatsumi Koi (hadr-qmd-V10-01-05)
+- Add model and cross section description
+
+13 April 2015 Tatsumi Koi (hadr-qmd-V10-01-04)
+- Fix for Coverity #14955
+	src/G4QMDGroundStateNucleus.cc
+
+11 April 2015 Tatsumi Koi (hadr-qmd-V10-01-03)
+- Fix for Coverity #15221
+	src/G4QMDReaction.cc
+- Delete obsolete codes
+- Add a method of GetExcitationHandler
+	include/G4QMDReaction.hh
+- Fix for Coverity #37437 and 37279
+	include/G4QMDCollision.hh
+
+9 April 2015 Tatsumi Koi (hadr-qmd-V10-01-02)
+- Fix for Coverity #50582
+	src/G4QMDSystem.cc
+
+13 March 2015 Tatsumi Koi (hadr-qmd-V10-01-01)
+- Fix for Coverity #56310 and 56302
+	src/G4QMDNucleus.cc
+
+02 March 2015 Tatsumi Koi (hadr-qmd-V10-01-00)
+- Fix for Coverity #20339
+	src/G4QMDGroundStateNucleus.cc
+
 09 September 2014 Witek Pokorski (hadr-qmd-V10-00-03)
 - update to use G4CrossSectionDataSetRegistry
 

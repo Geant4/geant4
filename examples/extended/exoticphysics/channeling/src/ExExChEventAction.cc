@@ -103,11 +103,11 @@ void ExExChEventAction::EndOfEventAction(const G4Event* evt)
                 if(aHit->GetLayerID()==i2) {
                     SSDposition[i2] = aHit->GetWorldPos();
                     bTotalHits++;
-                }
+               }
             }
         }
-        
-        if(bTotalHits > 2){
+
+        if(bTotalHits == 3){
             double fAngXin = (SSDposition[1].x() - SSDposition[0].x());
             fAngXin /= (SSDposition[1].z() - SSDposition[0].z());
             double fAngYin = (SSDposition[1].y() - SSDposition[0].y());

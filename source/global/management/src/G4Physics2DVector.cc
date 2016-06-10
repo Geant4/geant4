@@ -361,17 +361,15 @@ size_t
 G4Physics2DVector::FindBinLocation(G4double z, 
 				   const G4PV2DDataVector& v) const
 {
-  size_t lowerBound = 0;
-  size_t upperBound = v.size() - 2;
+  size_t bin;
+  size_t binmax = v.size() - 2; 
 
-  while (lowerBound <= upperBound)
-  {
-    size_t midBin = (lowerBound + upperBound)/2;
-    if( z < v[midBin] ) { upperBound = midBin-1; }
-    else                { lowerBound = midBin+1; }
+  if(z <= v[0])           { bin = 0; }
+  else if(z >= v[binmax]) { bin = binmax; }
+  else {
+    bin = std::lower_bound(v.begin(), v.end(), z) - v.begin() - 1;
   }
-
-  return upperBound;
+  return bin;
 }
 
 // --------------------------------------------------------------

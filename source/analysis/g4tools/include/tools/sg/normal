@@ -1,0 +1,62 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_normal
+#define tools_sg_normal
+
+#include "node"
+#include "sf_vec"
+#include "render_action"
+
+#include <vector>
+
+namespace tools {
+namespace sg {
+
+class normal : public node {
+  TOOLS_NODE(normal,tools::sg::normal,node)
+public:
+  sf_vec<tools::vec3f,float> vec;
+public:
+  virtual const std::vector<field_desc>& node_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::normal)
+    static std::vector<field_desc> s_v;
+    if(s_v.empty()) {
+      s_v = parent::node_fields();
+      TOOLS_ADD_FIELD_DESC(vec)
+    }
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&vec);
+  }
+public:
+  virtual void render(render_action& a_action) {
+    a_action.normal(vec.value());
+  }
+public:
+  normal()
+  :parent()
+  ,vec(tools::vec3f(0,0,1))
+  {
+    add_fields();
+  }
+  virtual ~normal(){}
+public:
+  normal(const normal& a_from)
+  :parent(a_from)
+  ,vec(a_from.vec)
+  {
+    add_fields();
+  }
+  normal& operator=(const normal& a_from){
+    parent::operator=(a_from);
+    vec = a_from.vec;
+    return *this;
+  }
+};
+
+}}
+
+#endif

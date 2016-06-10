@@ -57,6 +57,10 @@ public:
   G4VModularPhysicsList* ReferencePhysList();
   // instantiate PhysList by environment variable "PHYSLIST"
 
+  void SetDefaultReferencePhysList(const G4String& name="");
+  // set a prefered list in case where $PHYSLIST isn't defined
+  // if not set (or called with "") this falls back to system default
+
   G4bool IsReferencePhysList(const G4String&);
   // check if the name is in the list of PhysLists names
 
@@ -69,13 +73,16 @@ public:
   void PrintAvailablePhysLists() const;
   // print what users can select
 
-  inline void  SetVerbose(G4int val) { verbose = val; }
-  inline G4int GetVerbose() { return verbose; }
+  void  SetVerbose(G4int val);
+  G4int GetVerbose() const;
+
+  void  SetUnknownFatal(G4int val);
+  G4int GetUnknownFatal() const;
+  // throw an exception if requested list is unsatisfiable?
 
 private:
 
-  G4String defName;  
-  G4int verbose;
+  // no data
 };
 
 }  // end-of-namespace 'g4alt'

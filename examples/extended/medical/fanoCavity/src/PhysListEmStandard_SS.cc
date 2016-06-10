@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/PhysListEmStandard_SS.cc
 /// \brief Implementation of the PhysListEmStandard_SS class
 //
-// $Id: PhysListEmStandard_SS.cc 86064 2014-11-07 08:49:32Z gcosmo $
+// $Id: PhysListEmStandard_SS.cc 91564 2015-07-27 12:17:17Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,9 +52,10 @@
 
 #include "G4hIonisation.hh"
 
-#include "G4EmProcessOptions.hh"
+#include "G4EmParameters.hh"
 #include "G4MscStepLimitType.hh"
 
+#include "G4BuilderType.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,7 +63,19 @@
 PhysListEmStandard_SS::PhysListEmStandard_SS(const G4String& name,
                                DetectorConstruction* det)
 : G4VPhysicsConstructor(name), fDetector(det)
-{}
+{
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetDefaults();
+  param->SetVerbose(1);
+  param->SetMinEnergy(100*eV);
+  param->SetMaxEnergy(10*GeV);
+  param->SetNumberOfBinsPerDecade(20);
+  param->SetLowestElectronEnergy(1*eV);
+  param->SetBuildCSDARange(true);
+  param->SetMaxEnergyForCSDARange(10*GeV);
+  param->SetMscThetaLimit(0.0);
+  SetPhysicsType(bElectromagnetic);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -100,14 +113,13 @@ void PhysListEmStandard_SS::ConstructProcess()
       
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetEmModel(new MyMollerBhabhaModel, 1);
+      eIoni->SetStepFunction(0.2, 10*um);
                          
       G4CoulombScattering* cs = new G4CoulombScattering();
       G4eCoulombScatteringModel* csmod = new G4eCoulombScatteringModel();
-      csmod->SetLowEnergyThreshold(1*eV);
       cs->SetEmModel(csmod, 1);
       pmanager->AddProcess(cs,     -1, -1, 1);
       pmanager->AddProcess(eIoni,  -1,  1, 2);
-///      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2, 3);
             
     } else if (particleName == "e+") {
       //positron
@@ -117,7 +129,6 @@ void PhysListEmStandard_SS::ConstructProcess()
                                
       pmanager->AddProcess(new G4CoulombScattering,  -1, -1, 1);
       pmanager->AddProcess(pIoni,                    -1,  1, 2);
-///      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2, 3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,- 1, 3);
              
     } else if( particleName == "proton" ) {
@@ -126,39 +137,6 @@ void PhysListEmStandard_SS::ConstructProcess()
       pmanager->AddProcess(new G4hIonisation,        -1,  1, 2);
     }
   }
-
-  // Em options
-  //
-  // Main options and setting parameters are shown here.
-  // Several of them have default values.
-  //
-  G4EmProcessOptions emOptions;
-  
-  //physics tables
-  //
-  emOptions.SetMinEnergy(100*eV);        //default    
-  emOptions.SetMaxEnergy(10*GeV);        //default  
-  emOptions.SetDEDXBinning(8*20);        //default=8*7
-  emOptions.SetLambdaBinning(8*20);      //default=8*7
-  emOptions.SetSplineFlag(true);         //default
-
-  //multiple coulomb scattering
-  //
-  emOptions.SetPolarAngleLimit(0.0);
-        
-  //energy loss
-  //
-  emOptions.SetStepFunction(0.2, 10*um); //default=(0.2, 1*mm)   
-           
-  //build CSDA range
-  //
-  emOptions.SetBuildCSDARange(true);          //default=false
-  emOptions.SetMaxEnergyForCSDARange(10*GeV); 
-  emOptions.SetDEDXBinningForCSDARange(8*20); //default=8*7
-          
-  //ionization
-  //
-  emOptions.SetSubCutoff(false);         //default
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

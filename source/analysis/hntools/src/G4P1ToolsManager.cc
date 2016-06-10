@@ -28,8 +28,8 @@
 // Author: Ivana Hrivnacova, 24/07/2014  (ivana@ipno.in2p3.fr)
 
 #include "G4P1ToolsManager.hh"
-#include "G4HnManager.hh"
 #include "G4AnalysisManagerState.hh"
+#include "G4BaseHistoUtilities.hh"
 #include "G4AnalysisUtilities.hh"
 
 #include "tools/histo/p1d"
@@ -38,27 +38,22 @@
 
 using namespace G4Analysis;
 
+// static definitions
+const G4int G4P1ToolsManager::kDimension = 1;
+
 //
 // Constructors, destructor
 //
 
 //_____________________________________________________________________________
 G4P1ToolsManager::G4P1ToolsManager(const G4AnalysisManagerState& state)
- : G4VP1Manager(state),
-   fBaseToolsManager("P1"),
-   fP1Vector(),
-   fP1NameIdMap()
-{
-}
+ : G4VP1Manager(),
+   G4THnManager<tools::histo::p1d>(state, "P1")
+{}
 
 //_____________________________________________________________________________
 G4P1ToolsManager::~G4P1ToolsManager()
-{  
-  std::vector<tools::histo::p1d*>::iterator it;
-  for (it = fP1Vector.begin(); it != fP1Vector.end(); it++ ) {
-    delete (*it);
-  }  
-}
+{}
 
 //
 // Utility functions
@@ -74,26 +69,8 @@ void UpdateP1Information(G4HnInformation* hnInformation,
                           const G4String& yfcnName,
                           G4BinScheme xbinScheme)
 {
-  G4double xunit = GetUnitValue(xunitName);
-  G4double yunit = GetUnitValue(yunitName);
-  G4Fcn xfcn = GetFunction(xfcnName);
-  G4Fcn yfcn = GetFunction(yfcnName);
-
-  G4HnDimensionInformation* xInformation 
-    = hnInformation->GetHnDimensionInformation(G4HnInformation::kX);
-  xInformation->fUnitName = xunitName;
-  xInformation->fFcnName = xfcnName;
-  xInformation->fUnit = xunit;
-  xInformation->fFcn = xfcn;
-  xInformation->fBinScheme = xbinScheme;
-
-  G4HnDimensionInformation* yInformation 
-    = hnInformation->GetHnDimensionInformation(G4HnInformation::kY);
-  yInformation->fUnitName = yunitName;
-  yInformation->fFcnName = yfcnName;
-  yInformation->fUnit = yunit;
-  yInformation->fFcn = yfcn;
-  yInformation->fBinScheme = kLinearBinScheme;
+  hnInformation->SetDimension(kX, xunitName, xfcnName, xbinScheme);
+  hnInformation->SetDimension(kY, yunitName, yfcnName, G4BinScheme::kLinear);
 }  
 
 //_____________________________________________________________________________
@@ -121,14 +98,14 @@ tools::histo::p1d* CreateToolsP1(const G4String& title,
                          const G4String& yfcnName,
                          const G4String& xbinSchemeName)
 {
-  G4double xunit = GetUnitValue(xunitName);
-  G4double yunit = GetUnitValue(yunitName);
-  G4Fcn xfcn = GetFunction(xfcnName);
-  G4Fcn yfcn = GetFunction(yfcnName);
-  G4BinScheme xbinScheme = GetBinScheme(xbinSchemeName);
+  auto xunit = GetUnitValue(xunitName);
+  auto yunit = GetUnitValue(yunitName);
+  auto xfcn = GetFunction(xfcnName);
+  auto yfcn = GetFunction(yfcnName);
+  auto xbinScheme = GetBinScheme(xbinSchemeName);
   
-  if ( xbinScheme != kLogBinScheme ) {
-    if ( xbinScheme == kUserBinScheme ) {
+  if ( xbinScheme != G4BinScheme::kLog ) {
+    if ( xbinScheme == G4BinScheme::kUser ) {
       // This should never happen, but let's make sure about it
       // by issuing a warning
       G4ExceptionDescription description;
@@ -159,10 +136,10 @@ tools::histo::p1d* CreateToolsP1(const G4String& title,
                          const G4String& xfcnName,
                          const G4String& yfcnName)
 {
-  G4double xunit = GetUnitValue(xunitName);
-  G4double yunit = GetUnitValue(yunitName);
-  G4Fcn xfcn = GetFunction(xfcnName);
-  G4Fcn yfcn = GetFunction(yfcnName);
+  auto xunit = GetUnitValue(xunitName);
+  auto yunit = GetUnitValue(yunitName);
+  auto xfcn = GetFunction(xfcnName);
+  auto yfcn = GetFunction(yfcnName);
 
   // Apply function 
   std::vector<G4double> newEdges;
@@ -181,14 +158,14 @@ void ConfigureToolsP1(tools::histo::p1d* p1d,
                        const G4String& yfcnName,
                        const G4String& xbinSchemeName)
 {
-  G4double xunit = GetUnitValue(xunitName);
-  G4double yunit = GetUnitValue(yunitName);
-  G4Fcn xfcn = GetFunction(xfcnName);
-  G4Fcn yfcn = GetFunction(yfcnName);
-  G4BinScheme xbinScheme = GetBinScheme(xbinSchemeName);
+  auto xunit = GetUnitValue(xunitName);
+  auto yunit = GetUnitValue(yunitName);
+  auto xfcn = GetFunction(xfcnName);
+  auto yfcn = GetFunction(yfcnName);
+  auto xbinScheme = GetBinScheme(xbinSchemeName);
 
-  if ( xbinScheme != kLogBinScheme ) {
-    if ( xbinScheme == kUserBinScheme ) {
+  if ( xbinScheme != G4BinScheme::kLog ) {
+    if ( xbinScheme == G4BinScheme::kUser ) {
       // This should never happen, but let's make sure about it
       // by issuing a warning
       G4ExceptionDescription description;
@@ -219,10 +196,10 @@ void ConfigureToolsP1(tools::histo::p1d* p1d,
                       const G4String& yfcnName)
 {
   // Apply function to edges
-  G4double xunit = GetUnitValue(xunitName);
-  G4double yunit = GetUnitValue(yunitName);
-  G4Fcn xfcn = GetFunction(xfcnName);
-  G4Fcn yfcn = GetFunction(yfcnName);
+  auto xunit = GetUnitValue(xunitName);
+  auto yunit = GetUnitValue(yunitName);
+  auto xfcn = GetFunction(xfcnName);
+  auto yfcn = GetFunction(yfcnName);
   std::vector<G4double> newEdges;
   ComputeEdges(edges, xunit, xfcn, newEdges);
 
@@ -235,31 +212,6 @@ void ConfigureToolsP1(tools::histo::p1d* p1d,
 //
 
 //_____________________________________________________________________________
-tools::histo::p1d*  G4P1ToolsManager::GetP1InFunction(G4int id, 
-                                         G4String functionName, G4bool warn,
-                                         G4bool onlyIfActive) const
-{
-  G4int index = id - fFirstId;
-  if ( index < 0 || index >= G4int(fP1Vector.size()) ) {
-    if ( warn) {
-      G4String inFunction = "G4P1ToolsManager::";
-      inFunction += functionName;
-      G4ExceptionDescription description;
-      description << "      " << "profile " << id << " does not exist.";
-      G4Exception(inFunction, "Analysis_W011", JustWarning, description);
-    }
-    return 0;         
-  }
-  
-  // Do not return profile if inactive 
-  if ( fState.GetIsActivation() && onlyIfActive && ( ! fHnManager->GetActivation(id) ) ) {
-    return 0; 
-  }  
-  
-  return fP1Vector[index];
-}  
-
-//_____________________________________________________________________________
 void G4P1ToolsManager::AddP1Information(const G4String& name,  
                           const G4String& xunitName, 
                           const G4String& yunitName, 
@@ -267,28 +219,11 @@ void G4P1ToolsManager::AddP1Information(const G4String& name,
                           const G4String& yfcnName,
                           G4BinScheme xbinScheme) const
 {
-  G4double xunit = GetUnitValue(xunitName);
-  G4double yunit = GetUnitValue(yunitName);
-  G4Fcn xfcn = GetFunction(xfcnName);
-  G4Fcn yfcn = GetFunction(yfcnName);
-  fHnManager
-    ->AddH2Information(name, xunitName, yunitName, xfcnName, yfcnName, 
-                       xunit, yunit, xfcn, yfcn, 
-                       xbinScheme, xbinScheme);
+  auto hnInformation = fHnManager->AddHnInformation(name, 2);
+  hnInformation->AddDimension(xunitName, xfcnName, xbinScheme);
+  hnInformation->AddDimension(yunitName, yfcnName, G4BinScheme::kLinear);
 }  
                                         
-//_____________________________________________________________________________
-G4int G4P1ToolsManager::RegisterToolsP1(tools::histo::p1d* p1d, 
-                                        const G4String& name)
-{
-  G4int index = fP1Vector.size();
-  fP1Vector.push_back(p1d);
-  
-  fLockFirstId = true;
-  fP1NameIdMap[name] = index + fFirstId;
-  return index + fFirstId;
-}                                         
-
 // 
 // protected methods
 //
@@ -314,12 +249,12 @@ G4int G4P1ToolsManager::CreateP1(const G4String& name,  const G4String& title,
   AddP1Annotation(p1d, xunitName, yunitName, xfcnName, yfcnName);        
     
   // Save P1 information
-  G4BinScheme xbinScheme = GetBinScheme(xbinSchemeName);
+  auto xbinScheme = GetBinScheme(xbinSchemeName);
   AddP1Information(
     name, xunitName, yunitName, xfcnName, yfcnName, xbinScheme);
     
   // Register profile 
-  G4int id = RegisterToolsP1(p1d, name); 
+  G4int id = RegisterT(p1d, name); 
   
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) 
@@ -348,10 +283,10 @@ G4int G4P1ToolsManager::CreateP1(const G4String& name,  const G4String& title,
     
   // Save P1 information
   AddP1Information(
-    name, xunitName, yunitName, xfcnName, yfcnName, kUserBinScheme);
+    name, xunitName, yunitName, xfcnName, yfcnName, G4BinScheme::kUser);
     
   // Register profile 
-  G4int id = RegisterToolsP1(p1d, name); 
+  G4int id = RegisterT(p1d, name); 
   
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) 
@@ -368,10 +303,10 @@ G4bool G4P1ToolsManager::SetP1(G4int id,
                             const G4String& xfcnName, const G4String& yfcnName,
                             const G4String& xbinSchemeName)
 {                                
-  tools::histo::p1d* p1d = GetP1InFunction(id, "SetP1", false, false);
+  auto p1d = GetTInFunction(id, "SetP1", false, false);
   if ( ! p1d ) return false;
 
-  G4HnInformation* info = fHnManager->GetHnInformation(id,"SetP1");
+  auto info = fHnManager->GetHnInformation(id,"SetP1");
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) 
     fState.GetVerboseL4()->Message("configure", "P1", info->GetName());
@@ -386,7 +321,7 @@ G4bool G4P1ToolsManager::SetP1(G4int id,
   AddP1Annotation(p1d, xunitName, yunitName, xfcnName, yfcnName);        
     
   // Update information
-  G4BinScheme xbinScheme = GetBinScheme(xbinSchemeName);
+  auto xbinScheme = GetBinScheme(xbinSchemeName);
   UpdateP1Information(
     info, xunitName, yunitName, xfcnName, yfcnName, xbinScheme);
 
@@ -403,10 +338,10 @@ G4bool G4P1ToolsManager::SetP1(G4int id,
                            const G4String& xunitName, const G4String& yunitName,
                            const G4String& xfcnName, const G4String& yfcnName)
 {
-  tools::histo::p1d* p1d = GetP1InFunction(id, "SetP1", false, false);
+  auto p1d = GetTInFunction(id, "SetP1", false, false);
   if ( ! p1d ) return false;
 
-  G4HnInformation* info = fHnManager->GetHnInformation(id,"SetP1");
+  auto info = fHnManager->GetHnInformation(id,"SetP1");
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) 
     fState.GetVerboseL4()->Message("configure", "P1", info->GetName());
@@ -421,7 +356,7 @@ G4bool G4P1ToolsManager::SetP1(G4int id,
 
   // Update information 
   UpdateP1Information(
-    info, xunitName, yunitName, xfcnName, yfcnName, kUserBinScheme);
+    info, xunitName, yunitName, xfcnName, yfcnName, G4BinScheme::kUser);
 
   // Set activation
   fHnManager->SetActivation(id, true); 
@@ -433,7 +368,7 @@ G4bool G4P1ToolsManager::SetP1(G4int id,
 //_____________________________________________________________________________
 G4bool G4P1ToolsManager::ScaleP1(G4int id, G4double factor)
 {
-  tools::histo::p1d* p1d = GetP1InFunction(id, "ScaleP1", false, false);
+  auto p1d = GetTInFunction(id, "ScaleP1", false, false);
   if ( ! p1d ) return false;
 
   return p1d->scale(factor);
@@ -443,7 +378,7 @@ G4bool G4P1ToolsManager::ScaleP1(G4int id, G4double factor)
 G4bool G4P1ToolsManager::FillP1(G4int id, G4double xvalue, G4double yvalue, 
                                 G4double weight)
 {
-  tools::histo::p1d* p1d = GetP1InFunction(id, "FillP1", true, false);
+  auto p1d = GetTInFunction(id, "FillP1", true, false);
   if ( ! p1d ) return false;
 
   if ( fState.GetIsActivation() && ( ! fHnManager->GetActivation(id) ) ) {
@@ -451,10 +386,10 @@ G4bool G4P1ToolsManager::FillP1(G4int id, G4double xvalue, G4double yvalue,
     return false; 
   }  
 
-  G4HnDimensionInformation* xInfo 
-    = fHnManager->GetHnDimensionInformation(id, G4HnInformation::kX, "FillP1");
-  G4HnDimensionInformation* yInfo 
-    = fHnManager->GetHnDimensionInformation(id, G4HnInformation::kY, "FillP1");
+  auto xInfo 
+    = fHnManager->GetHnDimensionInformation(id, kX, "FillP1");
+  auto yInfo 
+    = fHnManager->GetHnDimensionInformation(id, kY, "FillP1");
 
   p1d->fill(xInfo->fFcn(xvalue/xInfo->fUnit), 
             yInfo->fFcn(yvalue/yInfo->fUnit), weight);
@@ -477,26 +412,16 @@ G4bool G4P1ToolsManager::FillP1(G4int id, G4double xvalue, G4double yvalue,
 //_____________________________________________________________________________
 G4int  G4P1ToolsManager::GetP1Id(const G4String& name, G4bool warn) const
 {
-  std::map<G4String, G4int>::const_iterator it = fP1NameIdMap.find(name);
-  if ( it ==  fP1NameIdMap.end() ) {  
-    if ( warn) {
-      G4String inFunction = "G4P1ToolsManager::GetP1Id";
-      G4ExceptionDescription description;
-      description << "      " << "profile " << name << " does not exist.";
-      G4Exception(inFunction, "Analysis_W011", JustWarning, description);
-    }
-    return kInvalidId;         
-  }
-  return it->second;
+  return GetTId(name, warn);
 }  
 
 //_____________________________________________________________________________
 G4int G4P1ToolsManager::GetP1Nbins(G4int id) const
 {
-  tools::histo::p1d* p1d = GetP1InFunction(id, "GetP1Nbins");
+  auto p1d = GetTInFunction(id, "GetP1Nbins");
   if ( ! p1d ) return 0;
   
-  return fBaseToolsManager.GetNbins(*p1d, G4BaseToolsManager::kX);
+  return GetNbins(*p1d, kX);
 }  
 
 //_____________________________________________________________________________
@@ -504,28 +429,28 @@ G4double G4P1ToolsManager::GetP1Xmin(G4int id) const
 {
 // Returns xmin value with applied unit and profile function
 
-  tools::histo::p1d* p1d = GetP1InFunction(id, "GetP1Xmin");
+  auto p1d = GetTInFunction(id, "GetP1Xmin");
   if ( ! p1d ) return 0;
   
-  return fBaseToolsManager.GetMin(*p1d, G4BaseToolsManager::kX);
+  return GetMin(*p1d, kX);
 }  
 
 //_____________________________________________________________________________
 G4double G4P1ToolsManager::GetP1Xmax(G4int id) const
 {
-  tools::histo::p1d* p1d = GetP1InFunction(id, "GetP1Xmax");
+  auto p1d = GetTInFunction(id, "GetP1Xmax");
   if ( ! p1d ) return 0;
   
-  return fBaseToolsManager.GetMax(*p1d, G4BaseToolsManager::kX);
+  return GetMax(*p1d, kX);
 }  
 
 //_____________________________________________________________________________
 G4double G4P1ToolsManager::GetP1XWidth(G4int id) const
 {
-  tools::histo::p1d* p1d = GetP1InFunction(id, "GetP1XWidth", true, false);
+  auto p1d = GetTInFunction(id, "GetP1XWidth", true, false);
   if ( ! p1d ) return 0;
   
-  return fBaseToolsManager.GetWidth(*p1d, G4BaseToolsManager::kX);
+  return GetWidth(*p1d, kX, fHnManager->GetHnType());
 }  
 
 //_____________________________________________________________________________
@@ -533,7 +458,7 @@ G4double G4P1ToolsManager::GetP1Ymin(G4int id) const
 {
 // Returns xmin value with applied unit and profile function
 
-  tools::histo::p1d* p1d = GetP1InFunction(id, "GetP1Ymin");
+  auto p1d = GetTInFunction(id, "GetP1Ymin");
   if ( ! p1d ) return 0;
   
   return p1d->min_v();
@@ -542,7 +467,7 @@ G4double G4P1ToolsManager::GetP1Ymin(G4int id) const
 //_____________________________________________________________________________
 G4double G4P1ToolsManager::GetP1Ymax(G4int id) const
 {
-  tools::histo::p1d* p1d = GetP1InFunction(id, "GetP1Ymax");
+  auto p1d = GetTInFunction(id, "GetP1Ymax");
   if ( ! p1d ) return 0;
   
   return p1d->max_v();
@@ -551,56 +476,56 @@ G4double G4P1ToolsManager::GetP1Ymax(G4int id) const
 //_____________________________________________________________________________
 G4bool G4P1ToolsManager::SetP1Title(G4int id, const G4String& title)
 {
-  tools::histo::p1d* p1d = GetP1InFunction(id, "SetP1Title");
+  auto p1d = GetTInFunction(id, "SetP1Title");
   if ( ! p1d ) return false;
   
-  return fBaseToolsManager.SetTitle(*p1d, title);
+  return SetTitle(*p1d, title);
 }  
 
 //_____________________________________________________________________________
 G4bool G4P1ToolsManager::SetP1XAxisTitle(G4int id, const G4String& title)
 {
-  tools::histo::p1d* p1d = GetP1InFunction(id, "SetP1XAxisTitle");
+  auto p1d = GetTInFunction(id, "SetP1XAxisTitle");
   if ( ! p1d ) return false;
   
-  return fBaseToolsManager.SetAxisTitle(*p1d, G4BaseToolsManager::kX, title);
+  return SetAxisTitle(*p1d, kX, title);
 }  
 
 //_____________________________________________________________________________
 G4bool G4P1ToolsManager::SetP1YAxisTitle(G4int id, const G4String& title)
 {
-  tools::histo::p1d* p1d = GetP1InFunction(id, "SetP1YAxisTitle");
+  auto p1d = GetTInFunction(id, "SetP1YAxisTitle");
   if ( ! p1d ) return false;
   
-  return fBaseToolsManager.SetAxisTitle(*p1d, G4BaseToolsManager::kY, title);
+  return SetAxisTitle(*p1d, kY, title);
 }  
 
 //_____________________________________________________________________________
 G4String G4P1ToolsManager::GetP1Title(G4int id) const
 {
-  tools::histo::p1d* p1d = GetP1InFunction(id, "GetP1Title");
+  auto p1d = GetTInFunction(id, "GetP1Title");
   if ( ! p1d ) return "";
   
-  return fBaseToolsManager.GetTitle(*p1d);
+  return GetTitle(*p1d);
 }  
 
 
 //_____________________________________________________________________________
 G4String G4P1ToolsManager::GetP1XAxisTitle(G4int id) const 
 {
-  tools::histo::p1d* p1d = GetP1InFunction(id, "GetP1XAxisTitle");
+  auto p1d = GetTInFunction(id, "GetP1XAxisTitle");
   if ( ! p1d ) return "";
 
-  return fBaseToolsManager.GetAxisTitle(*p1d, G4BaseToolsManager::kX);
+  return GetAxisTitle(*p1d, kX, fHnManager->GetHnType());
 }  
 
 //_____________________________________________________________________________
 G4String G4P1ToolsManager::GetP1YAxisTitle(G4int id) const 
 {
-  tools::histo::p1d* p1d = GetP1InFunction(id, "GetP1YAxisTitle");
+  auto p1d = GetTInFunction(id, "GetP1YAxisTitle");
   if ( ! p1d ) return "";
   
-  return fBaseToolsManager.GetAxisTitle(*p1d, G4BaseToolsManager::kY);
+  return GetAxisTitle(*p1d, kY, fHnManager->GetHnType());
 }  
 
 // 
@@ -618,10 +543,10 @@ G4int G4P1ToolsManager::AddP1(const G4String& name, tools::histo::p1d* p1d)
   // Add annotation
   AddP1Annotation(p1d, "none", "none", "none", "none");        
   // Add information
-  AddP1Information(name, "none", "none", "none", "none", kLinearBinScheme);
+  AddP1Information(name, "none", "none", "none", "none", G4BinScheme::kLinear);
     
   // Register profile 
-  G4int id = RegisterToolsP1(p1d, name); 
+  auto id = RegisterT(p1d, name); 
   
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) 
@@ -634,47 +559,13 @@ G4int G4P1ToolsManager::AddP1(const G4String& name, tools::histo::p1d* p1d)
 void G4P1ToolsManager::AddP1Vector(
                           const std::vector<tools::histo::p1d*>& p1Vector)
 {
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL4() ) 
-      fState.GetVerboseL4()->Message("merge", "all p1", "");
-#endif
-  std::vector<tools::histo::p1d*>::const_iterator itw = p1Vector.begin();
-  std::vector<tools::histo::p1d*>::iterator it;
-  for (it = fP1Vector.begin(); it != fP1Vector.end(); it++ ) {
-    (*it)->add(*(*itw++));
-  }  
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL1() ) 
-      fState.GetVerboseL1()->Message("merge", "all p1", "");
-#endif
+  AddTVector(p1Vector);
 }  
 
-//_____________________________________________________________________________
-G4bool G4P1ToolsManager::Reset()
-{
-// Reset profiles and ntuple
-
-  G4bool finalResult = true;
-
-  std::vector<tools::histo::p1d*>::iterator it;
-  for (it = fP1Vector.begin(); it != fP1Vector.end(); it++ ) {
-    G4bool result = (*it)->reset();
-    if ( ! result ) finalResult = false;
-  }  
-  
-  return finalResult;
-}  
-
-//_____________________________________________________________________________
-G4bool G4P1ToolsManager::IsEmpty() const
-{
-  return ! fP1Vector.size();
-}  
- 
 //_____________________________________________________________________________
 tools::histo::p1d*  G4P1ToolsManager::GetP1(G4int id, G4bool warn,
                                             G4bool onlyIfActive) const 
 {
-  return GetP1InFunction(id, "GetP1", warn, onlyIfActive);
+  return GetTInFunction(id, "GetP1", warn, onlyIfActive);
 }
 

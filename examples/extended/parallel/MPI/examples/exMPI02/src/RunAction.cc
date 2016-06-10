@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc 82385 2014-06-18 09:25:07Z gcosmo $
+// $Id: RunAction.cc 88353 2015-02-16 08:54:08Z gcosmo $
 //
 /// @file RunAction.cc
 /// @brief Describe run actions
@@ -33,9 +33,6 @@
 #include "G4Threading.hh"
 #include "Analysis.hh"
 #include "RunAction.hh"
-
-#include "G4MPIRunMerger.hh"
-#include "G4MPIScorerMerger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RunAction::RunAction()
@@ -55,30 +52,12 @@ void RunAction::BeginOfRunAction(const G4Run*)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void RunAction::EndOfRunAction(const G4Run* arun)
+void RunAction::EndOfRunAction(const G4Run*)
 {
-  G4bool is_worker = G4Threading::IsWorkerThread();
-  if ( is_worker ) return;
-
   G4int rank = G4MPImanager::GetManager()-> GetRank();
   
-  G4cout<<"================================================"<<G4endl;
-  G4cout<<"My rank is: "<<rank<<G4endl;
-  G4cout<<"================================================"<<G4endl;
-  G4MPIRunMerger rm( arun );
-  //rm.SetVerbosity( 3 );
-  rm.Merge();
-  //G4cout<<"Num events: "<<arun->GetNumberOfEvent()<<G4endl;
-  if (  G4ScoringManager::GetScoringManagerIfExist() ) {
-    G4MPIScorerMerger sm( G4ScoringManager::GetScoringManagerIfExist() );
-    //sm.SetVerbosity(4);
-    sm.Merge();
-  }
-  G4cout<<"================================================"<<G4endl;
-  G4cout<<"================================================"<<G4endl;
-
   char str[64];
-  sprintf(str, "dose-%03d.root", rank);
+  sprintf(str, "dose-rank%03d.root", rank);
   G4String fname(str);
 
   Analysis* myana = Analysis::GetAnalysis();

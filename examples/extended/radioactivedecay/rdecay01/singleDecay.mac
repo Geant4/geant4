@@ -15,6 +15,6 @@
 /analysis/h1/set 7  100  0.    1 eV	#P balance
 /analysis/h1/set 8  100  0.   70 min	#time of life
 #
-/rdecay01/event/printModulo 10000
+/run/printProgress 10000
 #  
 /run/beamOn 100000

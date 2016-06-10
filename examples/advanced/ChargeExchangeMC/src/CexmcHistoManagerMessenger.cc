@@ -57,7 +57,8 @@ CexmcHistoManagerMessenger::CexmcHistoManagerMessenger(
     histoManager( histoManager ), setVerboseLevel( NULL ), listHistos( NULL ),
     printHisto( NULL )
 #ifdef CEXMC_USE_ROOTQT
-    , drawHisto( NULL )
+    , drawHisto( NULL ), addHistoMenu( NULL ), drawHistoOptions1D( NULL ),
+    drawHistoOptions2D( NULL ), drawHistoOptions3D( NULL )
 #endif
 {
     setVerboseLevel = new G4UIcmdWithAnInteger(
@@ -83,11 +84,44 @@ CexmcHistoManagerMessenger::CexmcHistoManagerMessenger(
     drawHisto = new G4UIcmdWithAString(
         ( CexmcMessenger::histoDirName + "draw" ).c_str(), this );
     drawHisto->SetGuidance( "Draw specified histogram. The first parameter is\n"
-                            "    the histogram name, the second is draw "
+                            "    the histogram name, the rest is draw "
                             "options.\n    Available only if the program was "
                             "launched\n    in graphical mode" );
     drawHisto->SetParameterName( "DrawHisto", false );
     drawHisto->AvailableForStates( G4State_Idle );
+
+    addHistoMenu = new G4UIcmdWithAString(
+        ( CexmcMessenger::histoDirName + "addHistoMenu" ).c_str(), this );
+    addHistoMenu->SetGuidance( "Add histogram menu in GUI menu bar. The first "
+                               "parameter is\n    the menu handle, the rest is "
+                               "the menu label.\n    The menu cannot be added "
+                               "or disabled in runtime" );
+    addHistoMenu->SetParameterName( "AddHistoMenu", true );
+    addHistoMenu->AvailableForStates( G4State_Idle );
+
+    drawHistoOptions1D = new G4UIcmdWithAString(
+        ( CexmcMessenger::histoDirName + "drawOptions1D" ).c_str(), this );
+    drawHistoOptions1D->SetGuidance( "Set draw options for 1D histograms drawn "
+                                     "from the menu.\n    The options cannot "
+                                     "be changed after the menu was built");
+    drawHistoOptions1D->SetParameterName( "DrawOptions1D", false );
+    drawHistoOptions1D->AvailableForStates( G4State_Idle );
+
+    drawHistoOptions2D = new G4UIcmdWithAString(
+        ( CexmcMessenger::histoDirName + "drawOptions2D" ).c_str(), this );
+    drawHistoOptions2D->SetGuidance( "Set draw options for 2D histograms drawn "
+                                     "from the menu.\n    The options cannot "
+                                     "be changed after the menu was built");
+    drawHistoOptions2D->SetParameterName( "DrawOptions2D", false );
+    drawHistoOptions2D->AvailableForStates( G4State_Idle );
+
+    drawHistoOptions3D = new G4UIcmdWithAString(
+        ( CexmcMessenger::histoDirName + "drawOptions3D" ).c_str(), this );
+    drawHistoOptions3D->SetGuidance( "Set draw options for 3D histograms drawn "
+                                     "from the menu.\n    The options cannot "
+                                     "be changed after the menu was built");
+    drawHistoOptions3D->SetParameterName( "DrawOptions3D", false );
+    drawHistoOptions3D->AvailableForStates( G4State_Idle );
 #endif
 }
 
@@ -99,6 +133,10 @@ CexmcHistoManagerMessenger::~CexmcHistoManagerMessenger()
     delete printHisto;
 #ifdef CEXMC_USE_ROOTQT
     delete drawHisto;
+    delete addHistoMenu;
+    delete drawHistoOptions1D;
+    delete drawHistoOptions2D;
+    delete drawHistoOptions3D;
 #endif
 }
 
@@ -134,6 +172,32 @@ void  CexmcHistoManagerMessenger::SetNewValue( G4UIcommand *  cmd,
             histoManager->Draw( std::string( value, 0, delimPos ),
                                 delimPosEnd == G4String::npos ? "" :
                                                 value.c_str() + delimPosEnd );
+            break;
+        }
+        if ( cmd == addHistoMenu )
+        {
+            size_t  delimPos( value.find_first_of( " \t" ) );
+            size_t  delimPosEnd( G4String::npos );
+            if ( delimPos != G4String::npos )
+                delimPosEnd = value.find_first_not_of( " \t", delimPos );
+            histoManager->AddHistoMenu( std::string( value, 0, delimPos ),
+                                        delimPosEnd == G4String::npos ? "" :
+                                                value.c_str() + delimPosEnd );
+            break;
+        }
+        if ( cmd == drawHistoOptions1D )
+        {
+            histoManager->SetDrawOptions1D( value );
+            break;
+        }
+        if ( cmd == drawHistoOptions2D )
+        {
+            histoManager->SetDrawOptions2D( value );
+            break;
+        }
+        if ( cmd == drawHistoOptions3D )
+        {
+            histoManager->SetDrawOptions3D( value );
             break;
         }
 #endif

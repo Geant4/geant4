@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysicsHP.cc 71037 2013-06-10 09:20:54Z gcosmo $
+// $Id: G4HadronElasticPhysicsHP.cc 93877 2015-11-03 08:17:08Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -45,8 +45,8 @@
 #include "G4Neutron.hh"
 #include "G4HadronicProcess.hh"
 #include "G4HadronElastic.hh"
-#include "G4NeutronHPElastic.hh"
-#include "G4NeutronHPElasticData.hh"
+#include "G4ParticleHPElastic.hh"
+#include "G4ParticleHPElasticData.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -88,9 +88,9 @@ void G4HadronElasticPhysicsHP::ConstructProcess()
   mainElasticBuilder->GetNeutronModel()->SetMinEnergy(19.5*MeV);
 
   G4HadronicProcess* hel = mainElasticBuilder->GetNeutronProcess();
-  G4NeutronHPElastic* hp = new G4NeutronHPElastic();
+  G4ParticleHPElastic* hp = new G4ParticleHPElastic();
   hel->RegisterMe(hp);
-  hel->AddDataSet(new G4NeutronHPElasticData());
+  hel->AddDataSet(new G4ParticleHPElasticData());
 
   if(verbose > 1) {
     G4cout << "### HadronElasticPhysicsHP is constructed " 

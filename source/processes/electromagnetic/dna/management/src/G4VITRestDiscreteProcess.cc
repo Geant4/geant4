@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VITRestDiscreteProcess.cc 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4VITRestDiscreteProcess.cc 93883 2015-11-03 08:25:04Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -52,7 +52,7 @@ G4VITRestDiscreteProcess::~G4VITRestDiscreteProcess()
 {
 }
 
-G4VITRestDiscreteProcess::G4VITRestDiscreteProcess(G4VITRestDiscreteProcess& right)
+G4VITRestDiscreteProcess::G4VITRestDiscreteProcess(const G4VITRestDiscreteProcess& right)
                   : G4VITProcess(right)
 {
 }

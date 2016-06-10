@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.cc 87443 2014-12-04 12:26:31Z gunter $
+// $Id: G4ExcitationHandler.cc 94381 2015-11-13 10:17:06Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -62,8 +62,6 @@
 //    objects, propagate G4PhotonEvaporation pointer to G4Evaporation class and 
 //    not delete it here 
 
-#include <list>
-
 #include "G4ExcitationHandler.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4LorentzVector.hh"
@@ -74,29 +72,26 @@
 
 #include "G4VMultiFragmentation.hh"
 #include "G4VFermiBreakUp.hh"
-#include "G4VFermiFragment.hh"
 
 #include "G4VEvaporation.hh"
 #include "G4VEvaporationChannel.hh"
-#include "G4VPhotonEvaporation.hh"
 #include "G4Evaporation.hh"
 #include "G4StatMF.hh"
-#include "G4PhotonEvaporation.hh"
 #include "G4FermiBreakUp.hh"
 #include "G4FermiFragmentsPool.hh"
 #include "G4Pow.hh"
 
 G4ExcitationHandler::G4ExcitationHandler():
-  maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(4*GeV),
-  minExcitation(keV),OPTxs(3),useSICB(false),isEvapLocal(true)
+  maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(400*GeV),
+  minExcitation(0.1*keV),OPTxs(3),useSICB(false),isEvapLocal(true)
 {                                                                          
   theTableOfIons = G4ParticleTable::GetParticleTable()->GetIonTable();
   nist = G4NistManager::Instance();
   
-  theMultiFragmentation = new G4StatMF;
-  theFermiModel = new G4FermiBreakUp;
-  thePhotonEvaporation = new G4PhotonEvaporation("ExcitationHandler",fDelayedEmission);
-  theEvaporation = new G4Evaporation(thePhotonEvaporation);
+  theMultiFragmentation = new G4StatMF();
+  theFermiModel = new G4FermiBreakUp();
+  theEvaporation = new G4Evaporation();
+  thePhotonEvaporation = theEvaporation->GetPhotonEvaporation();
   thePool = G4FermiFragmentsPool::Instance();
   SetParameters();
   G4Pow::GetInstance();
@@ -104,23 +99,15 @@ G4ExcitationHandler::G4ExcitationHandler():
   results.resize(30,0);
   theEvapList.resize(30,0);
   thePhotoEvapList.resize(10,0);
+  //G4cout << "### New handler " << this << G4endl;
 }
 
 G4ExcitationHandler::~G4ExcitationHandler()
 {
-  if(isEvapLocal) { delete theEvaporation; }
+  //G4cout << "### Delete handler " << this << G4endl;
   delete theMultiFragmentation;
   delete theFermiModel;
-}
-
-void G4ExcitationHandler::SetParameters()
-{
-  //for inverse cross section choice
-  theEvaporation->SetOPTxs(OPTxs);
-  //for the choice of superimposed Coulomb Barrier for inverse cross sections
-  theEvaporation->UseSICB(useSICB);
-  theEvaporation->Initialise();
-  thePhotonEvaporation->Initialise();
+  if(isEvapLocal) { delete theEvaporation; } 
 }
 
 G4ReactionProductVector * 
@@ -231,8 +218,11 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
 	theFermiModel->BreakFragment(&results, frag);
         size_t nsec = results.size();
 	//G4cout << "FermiBreakUp Nsec= " << nsec << G4endl;
+
 	// FBU takes care to delete input fragment or add it to the results
 	// results may be excited - photo-evaporation should be applied
+	// If no final products then the fragment should be de-excited 
+	// by evaporation
 	if(0 < nsec) {
           for(size_t j=0; j<nsec; ++j) {
 	    exEnergy = results[j]->GetExcitationEnergy();
@@ -322,8 +312,9 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
 
   G4int theFragmentA, theFragmentZ;
 
+  //G4cout << "### ExcitationHandler provides " << theResults.size() 
+  //	 << " evaporated products:" << G4endl;
   for (iList = theResults.begin(); iList != theResults.end(); ++iList) {
-    //G4cout << "Evaporated product #" << j << G4endl;
     //G4cout << (*iList) << G4endl;  
 
     theFragmentA = (*iList)->GetA_asInt();
@@ -384,9 +375,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
 	/*  
 	  G4cout << "### Find ion Z= " << theFragmentZ << " A= " << theFragmentA
 	  << " ground state, energy corrected  " << theKindOfFragment << G4endl;
-	*/
-      } else {
-	  /*	
+	} else {
 		G4cout << "### Find ion Z= " << theFragmentZ 
 		<< " A= " << theFragmentA << " failed  " << G4endl;
 	  */
@@ -395,6 +384,15 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
     delete (*iList);
   }
   return theReactionProductVector;
+}
+
+void G4ExcitationHandler::SetParameters()
+{
+  //for inverse cross section choice
+  theEvaporation->SetOPTxs(OPTxs);
+  //for the choice of superimposed Coulomb Barrier for inverse cross sections
+  theEvaporation->UseSICB(useSICB);
+  theEvaporation->InitialiseChannels();
 }
 
 void G4ExcitationHandler::SetEvaporation(G4VEvaporation* ptr)

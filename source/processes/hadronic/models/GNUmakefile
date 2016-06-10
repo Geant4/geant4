@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 82626 2014-07-01 09:32:09Z gcosmo $
+# $Id: GNUmakefile 94122 2015-11-06 09:38:11Z gcosmo $
 # --------------------------------------------------------------
 # GNUmakefile for hadronic models library. G.Folger 10-Dec-97
 # --------------------------------------------------------------
@@ -28,7 +28,6 @@ SUBDIRS += inclxx/incl_physics
 SUBDIRS += inclxx/interface
 SUBDIRS += lend
 SUBDIRS += management
-SUBDIRS += neutron_hp
 SUBDIRS += particle_hp
 SUBDIRS += lepto_nuclear
 SUBDIRS += parton_string/diffraction
@@ -52,7 +51,6 @@ SUBLIBS +=  G4had_im_r_matrix
 SUBLIBS +=  G4hadronic_RPG
 SUBLIBS +=  G4hadronic_qmd
 SUBLIBS +=  G4had_mod_man
-SUBLIBS +=  G4had_neu_hp
 SUBLIBS +=  G4had_part_hp
 SUBLIBS +=  G4had_lend
 SUBLIBS +=  G4hadronic_radioactivedecay

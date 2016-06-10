@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Par01DetectorConstruction.hh 77659 2013-11-27 08:57:46Z gcosmo $
+// $Id: Par01DetectorConstruction.hh 90093 2015-05-13 11:59:54Z gcosmo $
 //
 #ifndef Par01DetectorConstruction_h
 #define Par01DetectorConstruction_h 1

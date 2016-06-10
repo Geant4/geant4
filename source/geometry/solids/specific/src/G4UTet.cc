@@ -36,6 +36,8 @@
 #include "G4Tet.hh"
 #include "G4UTet.hh"
 
+#if defined(G4GEOM_USE_USOLIDS)
+
 ////////////////////////////////////////////////////////////////////////
 //
 // Constructor - create a tetrahedron
@@ -103,3 +105,5 @@ G4UTet& G4UTet::operator = (const G4UTet& rhs)
 
    return *this;
 }
+
+#endif  // G4GEOM_USE_USOLIDS

@@ -2,13 +2,18 @@
    See the file COPYING for copying permission.
 */
 
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#endif
+
 #include <stddef.h>
 
 #ifdef COMPILED_FROM_DSP
 #include "winconfig.h"
 #elif defined(MACOS_CLASSIC)
 #include "macconfig.h"
-#elif defined(__amigaos4__)
+#elif defined(__amigaos__)
 #include "amigaconfig.h"
 #elif defined(__WATCOMC__)
 #include "watcomconfig.h"
@@ -298,7 +303,7 @@ sb_charMatches(const ENCODING *enc, const char *p, int c)
 
 #define PREFIX(ident) normal_ ## ident
 #define XML_TOK_IMPL_C
-#include "xmltok_impl.c"
+#include "xmltok_impl.cc"
 #undef XML_TOK_IMPL_C
 
 #undef MINBPC
@@ -697,7 +702,7 @@ little2_isNmstrtMin(const ENCODING *enc, const char *p)
 #define IS_NMSTRT_CHAR_MINBPC(enc, p) LITTLE2_IS_NMSTRT_CHAR_MINBPC(enc, p)
 
 #define XML_TOK_IMPL_C
-#include "xmltok_impl.c"
+#include "xmltok_impl.cc"
 #undef XML_TOK_IMPL_C
 
 #undef MINBPC
@@ -838,7 +843,7 @@ big2_isNmstrtMin(const ENCODING *enc, const char *p)
 #define IS_NMSTRT_CHAR_MINBPC(enc, p) BIG2_IS_NMSTRT_CHAR_MINBPC(enc, p)
 
 #define XML_TOK_IMPL_C
-#include "xmltok_impl.c"
+#include "xmltok_impl.cc"
 #undef XML_TOK_IMPL_C
 
 #undef MINBPC
@@ -1345,7 +1350,7 @@ unknown_toUtf16(const ENCODING *enc,
 ENCODING *
 XmlInitUnknownEncoding(void *mem,
                        int *table,
-                       CONVERTER convert, 
+                       CONVERTER convert,
                        void *userData)
 {
   int i;
@@ -1619,7 +1624,7 @@ initScan(const ENCODING * const *encodingTable,
 #define NS(x) x
 #define ns(x) x
 #define XML_TOK_NS_C
-#include "xmltok_ns.c"
+#include "xmltok_ns.cc"
 #undef XML_TOK_NS_C
 #undef NS
 #undef ns
@@ -1630,7 +1635,7 @@ initScan(const ENCODING * const *encodingTable,
 #define ns(x) x ## _ns
 
 #define XML_TOK_NS_C
-#include "xmltok_ns.c"
+#include "xmltok_ns.cc"
 #undef XML_TOK_NS_C
 
 #undef NS
@@ -1639,7 +1644,7 @@ initScan(const ENCODING * const *encodingTable,
 ENCODING *
 XmlInitUnknownEncodingNS(void *mem,
                          int *table,
-                         CONVERTER convert, 
+                         CONVERTER convert,
                          void *userData)
 {
   ENCODING *enc = XmlInitUnknownEncoding(mem, table, convert, userData);

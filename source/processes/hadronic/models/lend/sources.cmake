@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 78904 2014-02-03 13:06:54Z gcosmo $
+# $Id: sources.cmake 94435 2015-11-17 14:24:19Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -37,6 +37,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/inc
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/photon_evaporation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/util/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/pre_equilibrium/exciton_model/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/processes/include)
@@ -69,17 +70,28 @@ GEANT4_DEFINE_MODULE(NAME G4had_lend
         G4LENDManager.hh
         G4LENDModel.hh
         G4LENDUsedTarget.hh
-        gString.h
+        GIDI_settings.hh
+        MCGIDI.h
+        MCGIDI_fromTOM.h
+        MCGIDI_map.h
+        MCGIDI_mass.h
+        MCGIDI_misc.h
+        MCGIDI_private.h
+        PoPs.h
+        PoPs_Bcast_private.h
+        PoPs_data.h
+        PoPs_mass.h
+        PoPs_private.h
+        nf_Legendre.h
+        nf_integration.h
+        nf_specialFunctions.h
+        nf_utilities.h
+        ptwX.h
+        ptwXY.h
         statusMessageReporting.h
-        tpi_IDs.h
-        tpia_defs.h
-        tpia_depot.h
-        tpia_map.h
-        tpia_mass.h
-        tpia_misc.h
-        tpia_target.h
-        xData.h
-        xDataExtras.h
+        xDataTOM.h
+        xDataTOM_importXML_private.h
+        xDataTOM_private.h
     SOURCES
         G4GIDI.cc
         G4GIDI_Misc.cc
@@ -98,34 +110,87 @@ GEANT4_DEFINE_MODULE(NAME G4had_lend
         G4LENDManager.cc
         G4LENDModel.cc
         G4LENDUsedTarget.cc
-        gString.cc
+        GIDI_settings.cc
+        GIDI_settings_flux.cc
+        GIDI_settings_group.cc
+        GIDI_settings_particle.cc
+        MCGIDI_KalbachMann.cc
+        MCGIDI_LLNLAngular_angularEnergy.cc
+        MCGIDI_angular.cc
+        MCGIDI_angularEnergy.cc
+        MCGIDI_distribution.cc
+        MCGIDI_energy.cc
+        MCGIDI_energyAngular.cc
+        MCGIDI_fromTOM.cc
+        MCGIDI_kinetics.cc
+        MCGIDI_map.cc
+        MCGIDI_mass.cc
+        MCGIDI_misc.cc
+        MCGIDI_outputChannel.cc
+        MCGIDI_particle.cc
+        MCGIDI_pop.cc
+        MCGIDI_product.cc
+        MCGIDI_quantitiesLookupMode.cc
+        MCGIDI_reaction.cc
+        MCGIDI_sampling.cc
+        MCGIDI_samplingSettings.cc
+        MCGIDI_target.cc
+        MCGIDI_target_heated.cc
+        MCGIDI_uncorrelated.cc
+        MCGIDI_version.cc
+        PoPs.cc
+        PoPs_Bcast.cc
+        PoPs_data.cc
+        PoPs_mass.cc
+        lPoPs.cc
+        nf_GnG_adaptiveQuadrature.cc
+        nf_Legendre.cc
+        nf_Legendre_GaussianQuadrature.cc
+        nf_angularMomentumCoupling.cc
+        nf_exponentialIntegral.cc
+        nf_gammaFunctions.cc
+        nf_incompleteGammaFunctions.cc
+        nf_polevl.cc
+        nf_stringToDoubles.cc
+        nf_stringToDoubles_main.cc
+        nf_utilities.cc
+        ptwXY_binaryOperators.cc
+        ptwXY_convenient.cc
+        ptwXY_core.cc
+        ptwXY_functions.cc
+        ptwXY_integration.cc
+        ptwXY_interpolation.cc
+        ptwXY_methods.cc
+        ptwXY_misc.cc
+        ptwXY_unitaryOperators.cc
+        ptwX_core.cc
+        ptwX_misc.cc
         statusMessageReporting.cc
-        tpi_IDs.cc
-        tpia_angular.cc
-        tpia_angularEnergy.cc
-        tpia_channel.cc
-        tpia_decayChannel.cc
-        tpia_depot.cc
-        tpia_frame.cc
-        tpia_kinetics.cc
-        tpia_Legendre.cc
-        tpia_map.cc
-        tpia_mass.cc
-        tpia_misc.cc
-        tpia_multiplicity.cc
-        tpia_particle.cc
-        tpia_product.cc
-        tpia_samplingMethods.cc
-        tpia_target.cc
-        tpia_target_heated.cc
-        xData.cc
-        xDataExtras.cc
-        xDataMisc.cc
-        xData_1d_x.cc
-        xData_2d_xindex_y.cc
-        xData_2d_xshared_yhistogram.cc
-        xData_2d_xy.cc
-        xData_matrix.cc
+        xDataTOM.cc
+        xDataTOM_KalbachMann.cc
+        xDataTOM_LegendreSeries.cc
+        xDataTOM_Misc.cc
+        xDataTOM_V_W_XYs.cc
+        xDataTOM_V_W_XYs_LegendreSeries.cc
+        xDataTOM_W_XYs.cc
+        xDataTOM_W_XYs_LegendreSeries.cc
+        xDataTOM_XYs.cc
+        xDataTOM_axes.cc
+        xDataTOM_importXML.cc
+        xDataTOM_importXML_KalbachMann.cc
+        xDataTOM_importXML_V_W_XYs.cc
+        xDataTOM_importXML_V_W_XYs_LegendreSeries.cc
+        xDataTOM_importXML_W_XYs.cc
+        xDataTOM_importXML_W_XYs_LegendreSeries.cc
+        xDataTOM_importXML_XYs.cc
+        xDataTOM_importXML_axes.cc
+        xDataTOM_importXML_polynomial.cc
+        xDataTOM_importXML_regionsW_XYs_LegendreSeries.cc
+        xDataTOM_importXML_regionsXYs.cc
+        xDataTOM_interpolation.cc
+        xDataTOM_polynomial.cc
+        xDataTOM_regionsW_XYs_LegendreSeries.cc
+        xDataTOM_regionsXYs.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

@@ -79,15 +79,13 @@ class G4ParticleHPFissionData : public G4VCrossSectionDataSet
    public:
       G4int GetVerboseLevel() const;
       void SetVerboseLevel( G4int );
+      virtual void CrossSectionDescription(std::ostream&) const;
 
    private:
    
       G4PhysicsTable * theCrossSections;
 
-      G4double ke_cache;
-      G4double xs_cache;
-      const G4Element* element_cache;
-      const G4Material* material_cache;
+      G4bool onFlightDB;
 };
 
 #endif

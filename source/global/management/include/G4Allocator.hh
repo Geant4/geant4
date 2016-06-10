@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Allocator.hh 71573 2013-06-18 10:26:21Z gcosmo $
+// $Id: G4Allocator.hh 88444 2015-02-20 13:43:16Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -46,6 +46,7 @@
 #define G4Allocator_h 1
 
 #include <cstddef>
+#include <typeinfo>
 
 #include "G4AllocatorPool.hh"
 
@@ -59,6 +60,7 @@ class G4AllocatorBase
     virtual int GetNoPages() const=0;
     virtual size_t GetPageSize() const=0;
     virtual void IncreasePageSize( unsigned int sz )=0;
+    virtual const char* GetPoolType() const=0;
 };
 
 template <class Type>
@@ -87,6 +89,9 @@ class G4Allocator : public G4AllocatorBase
       // Returns the current size of a page
     inline void IncreasePageSize( unsigned int sz );
       // Resets allocator and increases default page size of a given factor
+
+    inline const char* GetPoolType() const;
+      // Returns the type_info Id of the allocated type in the pool
 
   public:  // without description
 
@@ -154,6 +159,11 @@ class G4Allocator : public G4AllocatorBase
 
     G4AllocatorPool mem;
       // Pool of elements of sizeof(Type)
+
+  private:
+
+    const char* tname;
+      // Type name identifier
 };
 
 // ------------------------------------------------------------
@@ -172,6 +182,7 @@ template <class Type>
 G4Allocator<Type>::G4Allocator() throw()
   : mem(sizeof(Type))
 {
+  tname = typeid(Type).name();
 }
 
 // ************************************************************
@@ -256,6 +267,16 @@ void G4Allocator<Type>::IncreasePageSize( unsigned int sz )
 {
   ResetStorage();
   mem.GrowPageSize(sz); 
+}
+
+// ************************************************************
+// GetPoolType
+// ************************************************************
+//
+template <class Type>
+const char* G4Allocator<Type>::GetPoolType() const
+{
+  return tname;
 }
 
 // ************************************************************

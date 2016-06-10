@@ -197,7 +197,7 @@ private:
   static CLHEP_THREAD_LOCAL unsigned long staticRandomInt;
   static CLHEP_THREAD_LOCAL unsigned long staticFirstUnusedBit;
   
-  shared_ptr<HepRandomEngine> localEngine;
+  std::shared_ptr<HepRandomEngine> localEngine;
   double defaultWidth;
   double defaultA;
   double defaultB;

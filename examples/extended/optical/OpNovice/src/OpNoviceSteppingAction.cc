@@ -39,7 +39,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 OpNoviceSteppingAction::OpNoviceSteppingAction()
 : G4UserSteppingAction()
 { 
@@ -61,10 +60,6 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* step)
                                               GetCurrentEvent()->GetEventID();
 
   if (eventNumber != fEventNumber) {
-     G4cout << " Number of Scintillation Photons in previous event: "
-            << fScintillationCounter << G4endl;
-     G4cout << " Number of Cerenkov Photons in previous event: "
-            << fCerenkovCounter << G4endl;
      fEventNumber = eventNumber;
      fScintillationCounter = 0;
      fCerenkovCounter = 0;

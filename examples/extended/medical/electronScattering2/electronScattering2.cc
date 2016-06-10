@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: electronScattering2.cc 75702 2013-11-05 13:08:48Z gcosmo $
+// $Id: electronScattering2.cc 93734 2015-10-30 10:59:21Z gcosmo $
 //
 /// \file medical/electronScattering2/electronScattering2.cc
 /// \brief Main program of the medical/electronScattering2 example
@@ -88,26 +88,34 @@ int main(int argc,char** argv) {
     // Instantiate the geometry
     runManager->SetUserInitialization(new ElectronBenchmarkDetector);
     
-    // Instantiate the physics list (in turn calls one of four choices of physics list)
+    // Instantiate the physics list (in turn calls one of the choices of 
+    // physics list)
     runManager->SetUserInitialization(new PhysicsList);
     
     // set user action classes
-    runManager->SetUserInitialization(new ElectronActionInitialization(outputFile));
-    
-    // Instantiate the visualization System
-#ifdef G4VIS_USE
-    G4VisManager* visManager = new G4VisExecutive;
-    visManager->Initialize();
-#endif
+    runManager->SetUserInitialization(
+        new ElectronActionInitialization(outputFile));
     
     if (argc == 1)
     {
-        // Since no macro was specified, instantiate an interactive session (exact
-        // (session type depends on user preference expressed in environment variables).
+        // Since no macro was specified, instantiate an interactive session 
+        // (exact session type depends on user preference expressed in 
+        // environment variables).
+        //
+        // Instantiate the visualization System
+#ifdef G4VIS_USE
+        G4VisManager* visManager = new G4VisExecutive;
+        visManager->Initialize();
+#endif
+
 #ifdef G4UI_USE
         G4UIExecutive* ui = new G4UIExecutive(argc, argv);
         ui->SessionStart();
         delete ui;
+#endif
+
+#ifdef G4VIS_USE
+        delete visManager;
 #endif
     }
     else
@@ -118,9 +126,6 @@ int main(int argc,char** argv) {
         UImanager->ApplyCommand(command+macroFile);
     }
     
-#ifdef G4VIS_USE
-    delete visManager;
-#endif
     delete runManager;
     
     return 0;

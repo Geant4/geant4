@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSPrimaryGeneratorAction.cc 84718 2014-10-20 07:40:45Z gcosmo $
+// $Id: WLSPrimaryGeneratorAction.cc 88760 2015-03-09 12:21:59Z gcosmo $
 //
 /// \file optical/wls/src/WLSPrimaryGeneratorAction.cc
 /// \brief Implementation of the WLSPrimaryGeneratorAction class
@@ -50,6 +50,12 @@
 #include "WLSPrimaryGeneratorMessenger.hh"
 
 #include "G4SystemOfUnits.hh"
+
+#include "G4AutoLock.hh"
+
+namespace {
+  G4Mutex gen_mutex = G4MUTEX_INITIALIZER;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -189,6 +195,9 @@ void WLSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   //fParticleGun->SetParticleEnergy(sampledEnergy);
 #endif
 
+  //The code behing this line is not thread safe because polarization
+  //and time are randomly selected and GPS properties are global
+  G4AutoLock l(&gen_mutex);
   if(fParticleGun->GetParticleDefinition()->GetParticleName()=="opticalphoton"){
     SetOptPhotonPolar();
     SetOptPhotonTime();

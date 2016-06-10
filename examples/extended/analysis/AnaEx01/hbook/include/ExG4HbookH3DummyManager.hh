@@ -34,7 +34,7 @@
 #define ExG4HbookH3DummyManager_h 1
 
 #include "G4VH3Manager.hh"
-#include "G4BaseToolsManager.hh"
+#include "G4THnManager.hh"
 #include "G4HnManager.hh"
 #include "globals.hh"
 
@@ -51,7 +51,8 @@ class h3d;
 ///
 /// It will just issue warnings. 
 
-class ExG4HbookH3DummyManager : public G4VH3Manager
+class ExG4HbookH3DummyManager : public G4VH3Manager,
+                                public G4THnManager<G4int>
 {
   public:
     ExG4HbookH3DummyManager(const G4AnalysisManagerState& state);
@@ -156,6 +157,9 @@ class ExG4HbookH3DummyManager : public G4VH3Manager
  
      // Write data on ASCII file
     virtual G4bool WriteOnAscii(std::ofstream& output);
+
+    // Access to Hn manager
+    virtual std::shared_ptr<G4HnManager> GetHnManager();
     
   private:
     // methods
@@ -165,6 +169,11 @@ class ExG4HbookH3DummyManager : public G4VH3Manager
     // data members
     G4bool fWarn;    
 };
+
+// inline functions
+
+inline std::shared_ptr<G4HnManager> ExG4HbookH3DummyManager::GetHnManager() 
+{ return std::shared_ptr<G4HnManager>(fHnManager); }
 
 #endif
 

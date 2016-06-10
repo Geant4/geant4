@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroCanonical.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4StatMFMicroCanonical.cc 91834 2015-08-07 07:24:22Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -40,11 +40,9 @@
 // constructor
 G4StatMFMicroCanonical::G4StatMFMicroCanonical(G4Fragment const & theFragment) 
 {
-    // Perform class initialization
-    Initialize(theFragment);
-
+  // Perform class initialization
+  Initialize(theFragment);
 }
-
 
 // destructor
 G4StatMFMicroCanonical::~G4StatMFMicroCanonical() 
@@ -56,10 +54,6 @@ G4StatMFMicroCanonical::~G4StatMFMicroCanonical()
 		    DeleteFragment());
   }
 }
-
-
-
-// Initialization method
 
 void G4StatMFMicroCanonical::Initialize(const G4Fragment & theFragment) 
 {
@@ -87,11 +81,10 @@ void G4StatMFMicroCanonical::Initialize(const G4Fragment & theFragment)
     // Surface term (for T = 0)
     G4StatMFParameters::GetBeta0()*g4pow->Z23(A) + 
     // Coulomb term 
-    elm_coupling*(3.0/5.0)*Z*Z/(G4StatMFParameters::Getr0()*g4pow->Z13(A));
+    elm_coupling*0.6*Z*Z/(G4StatMFParameters::Getr0()*g4pow->Z13(A));
   
   // Statistical weight
   G4double W = 0.0;
-  
   
   // Mean breakup multiplicity
   __MeanMultiplicity = 0.0;
@@ -106,17 +99,13 @@ void G4StatMFMicroCanonical::Initialize(const G4Fragment & theFragment)
   G4double SCompoundNucleus = CalcEntropyOfCompoundNucleus(theFragment,TConfiguration);
   
   // Statistical weight of compound nucleus
-  _WCompoundNucleus = 1.0; // std::exp(SCompoundNucleus - SCompoundNucleus);
+  _WCompoundNucleus = 1.0; 
   
   W += _WCompoundNucleus;
-  
-  
-  
+    
   // Maximal fragment multiplicity allowed in direct simulation
   G4int MaxMult = G4StatMFMicroCanonical::MaxAllowedMultiplicity;
   if (A > 110) MaxMult -= 1;
-  
-  
   
   for (G4int im = 2; im <= MaxMult; im++) {
     G4StatMFMicroManager * aMicroManager = 
@@ -126,8 +115,8 @@ void G4StatMFMicroCanonical::Initialize(const G4Fragment & theFragment)
   
   // W is the total probability
   W = std::accumulate(_ThePartitionManagerVector.begin(),
-			_ThePartitionManagerVector.end(),
-			W,SumProbabilities());
+		      _ThePartitionManagerVector.end(),
+		      W, SumProbabilities());
   
   // Normalization of statistical weights
   for (it =  _ThePartitionManagerVector.begin(); it !=  _ThePartitionManagerVector.end(); ++it) 
@@ -141,7 +130,6 @@ void G4StatMFMicroCanonical::Initialize(const G4Fragment & theFragment)
   __MeanTemperature += TConfiguration * _WCompoundNucleus;
   __MeanEntropy += SCompoundNucleus * _WCompoundNucleus;
   
-
   for (it =  _ThePartitionManagerVector.begin(); it !=  _ThePartitionManagerVector.end(); ++it) 
     {
       __MeanMultiplicity += (*it)->GetMeanMultiplicity();
@@ -152,7 +140,6 @@ void G4StatMFMicroCanonical::Initialize(const G4Fragment & theFragment)
   return;
 }
 
-
 G4double G4StatMFMicroCanonical::CalcFreeInternalEnergy(const G4Fragment & theFragment, 
 							G4double T)
 {
@@ -160,15 +147,18 @@ G4double G4StatMFMicroCanonical::CalcFreeInternalEnergy(const G4Fragment & theFr
   G4int Z = theFragment.GetZ_asInt();
   G4double A13 = G4Pow::GetInstance()->Z13(A);
   
-  G4double InvLevelDensityPar = G4StatMFParameters::GetEpsilon0()*(1.0 + 3.0/G4double(A-1));
+  G4double InvLevelDensityPar = G4StatMFParameters::GetEpsilon0()
+    *(1.0 + 3.0/G4double(A-1));
   
   G4double VolumeTerm = (-G4StatMFParameters::GetE0()+T*T/InvLevelDensityPar)*A;
   
-  G4double SymmetryTerm = G4StatMFParameters::GetGamma0()*(A - 2*Z)*(A - 2*Z)/G4double(A);
+  G4double SymmetryTerm = G4StatMFParameters::GetGamma0()
+    *(A - 2*Z)*(A - 2*Z)/G4double(A);
   
-  G4double SurfaceTerm = (G4StatMFParameters::Beta(T)-T*G4StatMFParameters::DBetaDT(T))*A13*A13;
+  G4double SurfaceTerm = (G4StatMFParameters::Beta(T)
+			  - T*G4StatMFParameters::DBetaDT(T))*A13*A13;
   
-  G4double CoulombTerm = elm_coupling*(3.0/5.0)*Z*Z/(G4StatMFParameters::Getr0()*A13);
+  G4double CoulombTerm = elm_coupling*0.6*Z*Z/(G4StatMFParameters::Getr0()*A13);
   
   return VolumeTerm + SymmetryTerm + SurfaceTerm + CoulombTerm;
 }
@@ -179,7 +169,6 @@ G4StatMFMicroCanonical::CalcEntropyOfCompoundNucleus(const G4Fragment & theFragm
   // Calculates Temperature and Entropy of compound nucleus
 {
   G4int A = theFragment.GetA_asInt();
-  //    const G4double Z = theFragment.GetZ();
   G4double U = theFragment.GetExcitationEnergy();
   G4double A13 = G4Pow::GetInstance()->Z13(A);
   
@@ -190,7 +179,7 @@ G4StatMFMicroCanonical::CalcEntropyOfCompoundNucleus(const G4Fragment & theFragm
   G4double Da = (U+__FreeInternalE0-ECompoundNucleus)/U;
   G4double Db = 0.0;
     
-  G4double InvLevelDensity = CalcInvLevelDensity(static_cast<G4int>(A));
+  G4double InvLevelDensity = CalcInvLevelDensity(A);
   
   // bracketing the solution
   if (Da == 0.0) {
@@ -210,10 +199,10 @@ G4StatMFMicroCanonical::CalcEntropyOfCompoundNucleus(const G4Fragment & theFragm
     } while (Db > 0.0);
   }
   
-  G4double eps = 1.0e-14 * std::fabs(Tb-Ta);
+  G4double eps = 1.0e-14 * std::abs(Tb-Ta);
   
   for (G4int i = 0; i < 1000; i++) {
-    G4double Tc = (Ta+Tb)/2.0;
+    G4double Tc = (Ta+Tb)*0.5;
     if (std::abs(Ta-Tb) <= eps) {
       TConf = Tc;
       return 2*Tc*A/InvLevelDensity - G4StatMFParameters::DBetaDT(Tc)*A13*A13;
@@ -235,7 +224,7 @@ G4StatMFMicroCanonical::CalcEntropyOfCompoundNucleus(const G4Fragment & theFragm
     } 
   }
   
-  G4cerr << 
+  G4cout << 
     "G4StatMFMicrocanoncal::CalcEntropyOfCompoundNucleus: I can't calculate the temperature" 
 	 << G4endl;
   
@@ -245,36 +234,36 @@ G4StatMFMicroCanonical::CalcEntropyOfCompoundNucleus(const G4Fragment & theFragm
 G4StatMFChannel *  G4StatMFMicroCanonical::ChooseAandZ(const G4Fragment & theFragment)
   // Choice of fragment atomic numbers and charges 
 {
-    // We choose a multiplicity (1,2,3,...) and then a channel
-    G4double RandNumber = G4UniformRand();
+  // We choose a multiplicity (1,2,3,...) and then a channel
+  G4double RandNumber = G4UniformRand();
 
-    if (RandNumber < _WCompoundNucleus) { 
+  if (RandNumber < _WCompoundNucleus) { 
 	
-	G4StatMFChannel * aChannel = new G4StatMFChannel;
-	aChannel->CreateFragment(theFragment.GetA_asInt(),theFragment.GetZ_asInt());
-	return aChannel;
+    G4StatMFChannel * aChannel = new G4StatMFChannel;
+    aChannel->CreateFragment(theFragment.GetA_asInt(),theFragment.GetZ_asInt());
+    return aChannel;
 	
-    } else {
+  } else {
 	
-	G4double AccumWeight = _WCompoundNucleus;
-	std::vector<G4StatMFMicroManager*>::iterator it;
-	for (it = _ThePartitionManagerVector.begin(); it != _ThePartitionManagerVector.end(); ++it) {
-	    AccumWeight += (*it)->GetProbability();
-	    if (RandNumber < AccumWeight) {
-	      return (*it)->ChooseChannel(theFragment.GetA_asInt(),theFragment.GetZ_asInt(),__MeanTemperature);
-	    }
-	}
-	throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroCanonical::ChooseAandZ: wrong normalization!");
+    G4double AccumWeight = _WCompoundNucleus;
+    std::vector<G4StatMFMicroManager*>::iterator it;
+    for (it = _ThePartitionManagerVector.begin(); it != _ThePartitionManagerVector.end(); ++it) {
+      AccumWeight += (*it)->GetProbability();
+      if (RandNumber < AccumWeight) {
+	return (*it)->ChooseChannel(theFragment.GetA_asInt(),theFragment.GetZ_asInt(),__MeanTemperature);
+      }
     }
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroCanonical::ChooseAandZ: wrong normalization!");
+  }
 
-    return 0;	
+  return 0;	
 }
 
 G4double G4StatMFMicroCanonical::CalcInvLevelDensity(G4int anA)
 {
-    // Calculate Inverse Density Level
-    // Epsilon0*(1 + 3 /(Af - 1))
-    if (anA == 1) return 0.0;
-    else return
-	     G4StatMFParameters::GetEpsilon0()*(1.0+3.0/(anA - 1.0));
+  G4double res = 0.0;
+  if (anA > 1) {
+    res = G4StatMFParameters::GetEpsilon0()*(1.0+3.0/(anA - 1.0));
+  }
+  return res;
 }

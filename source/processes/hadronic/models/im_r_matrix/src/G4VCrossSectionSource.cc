@@ -30,6 +30,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4HadronicException.hh"
 #include "G4ios.hh"
+#include "G4Pow.hh"
 #include "G4VCrossSectionSource.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4KineticTrack.hh"
@@ -179,7 +180,7 @@ G4double G4VCrossSectionSource::FcrossX(G4double e, G4double e0,
   G4double denom = eParam*eParam + (e-e0)*(e-e0);
   if (denom > 0.) 
   {
-    G4double value = (2.* eParam * sigma * (e-e0) / denom) * std::pow(((e0 + eParam) / e), power);
+    G4double value = (2.* eParam * sigma * (e-e0) / denom) * G4Pow::GetInstance()->powA(((e0 + eParam) / e), power);
     result = std::max(0., value);
   }
   return result;

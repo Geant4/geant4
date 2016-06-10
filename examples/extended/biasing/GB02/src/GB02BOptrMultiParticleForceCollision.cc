@@ -31,7 +31,7 @@
 #include "G4ParticleTable.hh"
 
 GB02BOptrMultiParticleForceCollision::GB02BOptrMultiParticleForceCollision()
-  : G4VBiasingOperator("TestManyForceCollision")
+: G4VBiasingOperator("TestManyForceCollision")
 {
 }
 
@@ -39,7 +39,7 @@ void GB02BOptrMultiParticleForceCollision::AddParticle(G4String particleName)
 {
   const G4ParticleDefinition* particle =
     G4ParticleTable::GetParticleTable()->FindParticle( particleName );
-  
+
   if ( particle == 0 )
     {
       G4ExceptionDescription ed;
@@ -51,9 +51,11 @@ void GB02BOptrMultiParticleForceCollision::AddParticle(G4String particleName)
       return;
     }
   
-  G4BOptrForceCollision* optr = new G4BOptrForceCollision(particleName);
+  G4BOptrForceCollision* optr = new G4BOptrForceCollision(particleName,
+                                                          "ForceCollisionFor"+particleName);
   fParticlesToBias.push_back( particle );
   fBOptrForParticle[ particle ] = optr;
+
 }
 
 G4VBiasingOperation* 
@@ -108,6 +110,23 @@ OperationApplied( const G4BiasingProcessInterface*         callingProcess,
                                                                     operationApplied,
                                                                     particleChangeProduced );
   
+}
+
+void
+GB02BOptrMultiParticleForceCollision::
+OperationApplied( const G4BiasingProcessInterface*        callingProcess,
+                  G4BiasingAppliedCase                       biasingCase,
+                  G4VBiasingOperation*         occurenceOperationApplied,
+                  G4double                 weightForOccurenceInteraction,
+                  G4VBiasingOperation*        finalStateOperationApplied, 
+                  const G4VParticleChange*        particleChangeProduced )
+{
+  if ( fCurrentOperator ) fCurrentOperator->ReportOperationApplied( callingProcess,
+                                                                    biasingCase,
+                                                                    occurenceOperationApplied,
+                                                                    weightForOccurenceInteraction,
+                                                                    finalStateOperationApplied, 
+                                                                    particleChangeProduced );
 }
 
 void

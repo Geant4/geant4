@@ -43,6 +43,9 @@
 #define G4UTRD_HH
 
 #include "G4USolid.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+
 #include "UTrd.hh"
 #include "G4Polyhedron.hh"
 
@@ -156,5 +159,7 @@ inline void G4UTrd::SetAllParameters(G4double pdx1, G4double pdx2,
   GetShape()->SetAllParameters(pdx1, pdx2, pdy1, pdy2, pdz);
   fRebuildPolyhedron = true;
 }
+
+#endif  // G4GEOM_USE_USOLIDS
 
 #endif

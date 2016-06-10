@@ -1,4 +1,4 @@
-$Id: History 87361 2014-12-01 16:10:28Z gcosmo $
+$Id: History 92025 2015-08-13 14:17:05Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,57 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+13-Aug-2015 A. Ribon      (had-hadronization-V10-01-09)
+ - G4QGSMFragmentation, G4FragmentingString : Coverity fix.
+
+ 7-Aug-2015 A. Ribon      (had-hadronization-V10-01-08)
+ - G4LundStringFragmentation, G4QGSMFragmentation, G4ExcitedStringDecay
+   and G4VKinkyStringDecay : checking of 'while' loops.
+
+ 5-Aug-2015 A. Ribon      (had-hadronization-V10-01-07)
+ - G4VLongitudinalStringDecay, G4LundStringFragmentation, G4QGSMFragmentation:
+   replaced std::exp, std::log and std::pow with the faster 
+   G4Exp, G4Log and G4Pow, respectively.
+   This changes the random number sequence.
+
+ 5-June-2015 V. Uzhinsky  (had-hadronization-V10-01-06)
+ - A mistake was erased in G4QGSMFragmentation::SplitEandP.
+   FragmentationMass(NewString,&G4HadronBuilder::BuildLowSpin) ->
+   FragmentationMass(NewString,&G4HadronBuilder::Build)!
+
+ 4-June-2015 V. Uzhinsky  (had-hadronization-V10-01-05)
+ - G4QGSMFragmentation::SplitEandP a bug is fixed which led to energy-momentum
+   non-conservation quite rare. 
+   FragmentationMass(NewString,&G4HadronBuilder::BuildHighSpin);
+   was changed into 
+   FragmentationMass(NewString,&G4HadronBuilder::BuildLowSpin);
+   See Uzhi 03.06.2014
+
+ 2-June-2015 V. Uzhinsky  (had-hadronization-V10-01-04)
+ - G4ExcitedStringDecay.cc - a very serious bug was found. It led
+   to energy-momentum non-conservation at QGSM application.
+   I am afraid that it can have influence on FTF model hadronization.
+
+29-May-2015 V. Uzhinsky   (had-hadronization-V10-01-03)
+ - G4LundStringFragmentation - a bug led to FPE is erased. It was in
+           G4LundStringFragmentation::FragmentString -- 
+         if(!IsFragmentable(&aString)) // produce 1 hadron 
+   was applied to qq- anti_qq string with mass 1951 MeV, and there was an attempt
+   to produce 2 baryons without of a checking baryon masses. I am afraid
+                 that it was presented before.
+   Now it is: if(!aString.FourQuarkString() && !IsFragmentable(&aString)).
+
+25-May-2015 V. Uzhinsky   (had-hadronization-V10-01-02)
+ - G4LundStringFragmentation - Parameters are tuned for a description of NA49 data.
+
+26-Mar-2015 A. Ribon      (had-hadronization-V10-01-01)
+ - G4LundStringFragmentation - changes introduced by V. Uzhinsky to improve
+   the reaction cross sections of: Pbar + P -> Pi+Pi-, K+K-
+
+21-Jan-2015 A. Ribon      (had-hadronization-V10-01-00)
+ - G4LundStringFragmentation - re-introduced M.Novak's fix, replacing
+   "if(StringMass >= ...)" with "if(StringMass > ...)" in three places.
 
 28-Nov-2014 V. Uzhinsky   (had-hadronization-V10-00-13)
  - G4LundStringFragmentation - charged baryon number conservation is fixed

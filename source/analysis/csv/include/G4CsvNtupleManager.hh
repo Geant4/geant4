@@ -32,148 +32,65 @@
 #ifndef G4CsvNtupleManager_h
 #define G4CsvNtupleManager_h 1
 
-
-#include "G4VNtupleManager.hh"
+#include "G4TNtupleManager.hh"
 #include "globals.hh"
 
 #include "tools/wcsv_ntuple"
 
-#include <vector>
+#include <memory>
 
 class G4CsvFileManager;
-struct G4CsvNtupleDescription;
 
-class G4CsvNtupleManager : public G4VNtupleManager
+class G4CsvNtupleManager : public G4TNtupleManager<tools::wcsv::ntuple> 
 {
   friend class G4CsvAnalysisManager;
 
-  protected:
-    G4CsvNtupleManager(const G4AnalysisManagerState& state);
+  public:
+    explicit G4CsvNtupleManager(const G4AnalysisManagerState& state);
     ~G4CsvNtupleManager();
- 
+
+  private:
+    // Types alias
+    using NtupleType = tools::wcsv::ntuple;
+    using NtupleDescriptionType = G4TNtupleDescription<NtupleType>;
+
     // Functions specific to the output type
-    //
-    
-    // Methods to manipulate ntuples  
-    void CreateNtuplesFromBooking();
-    G4bool IsEmpty() const;
-    G4bool Reset();
 
     // Set methods
-    void SetFileManager(G4CsvFileManager* fileManager);
+    void SetFileManager(std::shared_ptr<G4CsvFileManager> fileManager);
 
-    // Access methods
-    tools::wcsv::ntuple* GetNtuple() const;
-    tools::wcsv::ntuple* GetNtuple(G4int ntupleId) const;
-
-    // Iterators
-    std::vector<tools::wcsv::ntuple*>::iterator BeginNtuple();
-    std::vector<tools::wcsv::ntuple*>::iterator EndNtuple();
-    std::vector<tools::wcsv::ntuple*>::const_iterator BeginConstNtuple() const;
-    std::vector<tools::wcsv::ntuple*>::const_iterator EndConstNtuple() const;
-    
     // Access to ntuple vector (needed for Write())
-    const std::vector<G4CsvNtupleDescription*>& GetNtupleDescriptionVector() const;
+    const std::vector<NtupleDescriptionType*>& GetNtupleDescriptionVector() const;
 
-    // Functions independent from the output type 
-    //
-
-    // Methods to create ntuples
-    virtual G4int CreateNtuple(const G4String& name, const G4String& title);
-    // Create columns in the last created ntuple
-    virtual G4int CreateNtupleIColumn(
-                    const G4String& name, std::vector<int>* vector);
-    virtual G4int CreateNtupleFColumn(
-                    const G4String& name, std::vector<float>* vector);
-    virtual G4int CreateNtupleDColumn(
-                    const G4String& name, std::vector<double>* vector);
-    virtual G4int CreateNtupleSColumn(const G4String& name);
-    virtual void  FinishNtuple();   
-    // Create columns in the ntuple with given id
-    virtual G4int CreateNtupleIColumn(G4int ntupleId, 
-                    const G4String& name, std::vector<int>* vector);
-    virtual G4int CreateNtupleFColumn(G4int ntupleId, 
-                    const G4String& name, std::vector<float>* vector);
-    virtual G4int CreateNtupleDColumn(G4int ntupleId, 
-                    const G4String& name, std::vector<double>* vector);
-    virtual G4int CreateNtupleSColumn(G4int ntupleId, const G4String& name);
-    virtual void  FinishNtuple(G4int ntupleId);   
-
-    // Methods to fill ntuples
-    // Methods for ntuple with id = FirstNtupleId                     
-    virtual G4bool FillNtupleIColumn(G4int columnId, G4int value);
-    virtual G4bool FillNtupleFColumn(G4int columnId, G4float value);
-    virtual G4bool FillNtupleDColumn(G4int columnId, G4double value);
-    virtual G4bool FillNtupleSColumn(G4int columnId, const G4String& value);
-    virtual G4bool AddNtupleRow();
-    // Methods for ntuple with id > FirstNtupleId (when more ntuples exist)                      
-    virtual G4bool FillNtupleIColumn(G4int ntupleId, G4int columnId, G4int value);
-    virtual G4bool FillNtupleFColumn(G4int ntupleId, G4int columnId, G4float value);
-    virtual G4bool FillNtupleDColumn(G4int ntupleId, G4int columnId, G4double value);
-    virtual G4bool FillNtupleSColumn(G4int ntupleId, G4int columnId, 
-                                     const G4String& value);
-    virtual G4bool AddNtupleRow(G4int ntupleId);
-
-    // Access methods
-    virtual G4int GetNofNtuples() const;
-
-    // Csv format specific option
     void SetIsCommentedHeader(G4bool isCommentedHeader);
     void SetIsHippoHeader(G4bool isHippoHeader);
     
-  private:
-    // methods
+    // Methods from the templated base class
     //
-    tools::wcsv::ntuple::column<int>*    
-      GetNtupleIColumn(G4int ntupleId, G4int columnId) const;
-    tools::wcsv::ntuple::column<float>*  
-      GetNtupleFColumn(G4int ntupleId, G4int columnId) const;
-    tools::wcsv::ntuple::column<double>* 
-      GetNtupleDColumn(G4int ntupleId, G4int columnId) const;
-    tools::wcsv::ntuple::column<std::string>* 
-      GetNtupleSColumn(G4int ntupleId, G4int columnId) const;
+    virtual void CreateTNtuple(
+                    NtupleDescriptionType*  ntupleDescription,
+                    const G4String& name, const G4String& title) final;
+    virtual void CreateTNtupleFromBooking(
+                    NtupleDescriptionType*  ntupleDescription) final;
 
-    virtual G4CsvNtupleDescription*  GetNtupleInFunction(G4int id, 
-                                        G4String function,
-                                        G4bool warn = true,
-                                        G4bool onlyIfActive = true) const;
-
-    G4bool WriteHeader(tools::wcsv::ntuple* ntuple) const;
+    virtual void FinishTNtuple(
+                    NtupleDescriptionType*  ntupleDescription) final;
+    
+    G4bool WriteHeader(NtupleType* ntuple) const;
 
     // data members
-    //
-    G4CsvFileManager*  fFileManager;
-    std::vector<G4CsvNtupleDescription*> fNtupleDescriptionVector;
-    std::vector<tools::wcsv::ntuple*> fNtupleVector;
+    std::shared_ptr<G4CsvFileManager>  fFileManager;
     G4bool  fIsCommentedHeader;
     G4bool  fIsHippoHeader;
 };
 
 // inline functions
 
-inline void G4CsvNtupleManager::SetFileManager(G4CsvFileManager* fileManager)
+inline void 
+G4CsvNtupleManager::SetFileManager(std::shared_ptr<G4CsvFileManager> fileManager)
 { fFileManager = fileManager; }
 
-inline std::vector<tools::wcsv::ntuple*>::iterator 
-G4CsvNtupleManager::BeginNtuple()
-{ return fNtupleVector.begin(); }
-
-inline std::vector<tools::wcsv::ntuple*>::iterator 
-G4CsvNtupleManager::EndNtuple()
-{ return fNtupleVector.end(); }
-
-inline std::vector<tools::wcsv::ntuple*>::const_iterator 
-G4CsvNtupleManager::BeginConstNtuple() const
-{ return fNtupleVector.begin(); }
-
-inline  std::vector<tools::wcsv::ntuple*>::const_iterator 
-G4CsvNtupleManager::EndConstNtuple() const
-{ return fNtupleVector.end(); }
-
-inline G4int G4CsvNtupleManager::GetNofNtuples() const
-{ return fNtupleDescriptionVector.size(); }
-
-inline const std::vector<G4CsvNtupleDescription*>& 
+inline const std::vector<G4TNtupleDescription<tools::wcsv::ntuple>*>& 
 G4CsvNtupleManager::GetNtupleDescriptionVector() const
 { return fNtupleDescriptionVector; }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4Para.cc 89721 2015-04-28 10:42:51Z gcosmo $
 //
 // class G4Para
 //
@@ -489,8 +489,7 @@ G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
   newpy  = p.y()-fTthetaSphi*p.z();
 
   calpha = 1/std::sqrt(1+fTalpha*fTalpha);
-  if (fTalpha) {salpha = -calpha*fTalpha;} // NOTE: using MINUS std::sin(alpha)
-  else         {salpha = 0.;}
+  salpha = -calpha*fTalpha; // NOTE: using MINUS std::sin(alpha)
   
   //  xshift = newpx*calpha+newpy*salpha;
   xshift = newpx - newpy*fTalpha;
@@ -562,15 +561,8 @@ G4ThreeVector G4Para::ApproxSurfaceNormal( const G4ThreeVector& p ) const
   newpy=p.y()-fTthetaSphi*p.z();
 
   calpha=1/std::sqrt(1+fTalpha*fTalpha);
-  if (fTalpha)
-  {
-    salpha=-calpha/fTalpha;  // NOTE: actually use MINUS std::sin(alpha)
-  }
-  else
-  {
-    salpha=0;
-  }
-
+  salpha=-calpha*fTalpha;  // NOTE: actually use MINUS std::sin(alpha)
+  
   xshift=newpx*calpha+newpy*salpha;
 
   distx=std::fabs(std::fabs(xshift)-fDx*calpha);
@@ -1000,14 +992,7 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
       {
         *validNorm=true; // Leaving via plus X
         calpha=1/std::sqrt(1+fTalpha*fTalpha);
-        if (fTalpha)
-        {
-          salpha=-calpha/fTalpha;  // NOTE: actually use MINUS std::sin(alpha)
-        }
-        else
-        {
-          salpha=0;
-        }
+        salpha=-calpha*fTalpha;  // NOTE: actually use MINUS std::sin(alpha)
         tntheta=fTthetaCphi*calpha+fTthetaSphi*salpha;
         cosntheta=1/std::sqrt(1+tntheta*tntheta);
         *n=G4ThreeVector(calpha*cosntheta,salpha*cosntheta,-tntheta*cosntheta);
@@ -1033,14 +1018,7 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
       {
         *validNorm=true; // Leaving via minus X
         calpha=1/std::sqrt(1+fTalpha*fTalpha);
-        if (fTalpha)
-        {
-          salpha=-calpha/fTalpha;  // NOTE: actually use MINUS std::sin(alpha)
-        }
-        else
-        {
-          salpha=0;
-        }
+        salpha=-calpha*fTalpha;  // NOTE: actually use MINUS std::sin(alpha)
         tntheta=fTthetaCphi*calpha+fTthetaSphi*salpha;
         cosntheta=-1/std::sqrt(1+tntheta*tntheta);
         *n=G4ThreeVector(calpha*cosntheta,salpha*cosntheta,-tntheta*cosntheta);
@@ -1070,28 +1048,14 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
         break;        
       case kMX:
         calpha=1/std::sqrt(1+fTalpha*fTalpha);
-        if (fTalpha)
-        {
-          salpha=-calpha/fTalpha;  // NOTE: actually use MINUS std::sin(alpha)
-        }
-        else
-        {
-          salpha=0;
-        }
+        salpha=-calpha*fTalpha;  // NOTE: actually use MINUS std::sin(alpha)
         tntheta=fTthetaCphi*calpha+fTthetaSphi*salpha;
         cosntheta=-1/std::sqrt(1+tntheta*tntheta);
         *n=G4ThreeVector(calpha*cosntheta,salpha*cosntheta,-tntheta*cosntheta);
         break;
       case kPX:
         calpha=1/std::sqrt(1+fTalpha*fTalpha);
-        if (fTalpha)
-        {
-          salpha=-calpha/fTalpha;  // NOTE: actually use MINUS std::sin(alpha)
-        }
-        else
-        {
-          salpha=0;
-        }
+        salpha=-calpha*fTalpha;  // NOTE: actually use MINUS std::sin(alpha)
         tntheta=fTthetaCphi*calpha+fTthetaSphi*salpha;
         cosntheta=1/std::sqrt(1+tntheta*tntheta);
         *n=G4ThreeVector(calpha*cosntheta,salpha*cosntheta,-tntheta*cosntheta);

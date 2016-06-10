@@ -1,0 +1,160 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_vertices
+#define tools_sg_vertices
+
+#include "node"
+#include "sf"
+#include "mf"
+#include "render_action"
+#include "pick_action"
+#include "bbox_action"
+
+namespace tools {
+namespace sg {
+
+class vertices : public node {
+  TOOLS_NODE(vertices,tools::sg::vertices,node)
+public:
+  sf<tools::gl::mode_t> mode;
+  mf<float> xyzs;
+public:
+  virtual const std::vector<field_desc>& node_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::vertices)
+    static std::vector<field_desc> s_v;
+    if(s_v.empty()) {
+      s_v = parent::node_fields();
+      TOOLS_ADD_FIELD_DESC(mode)
+      TOOLS_ADD_FIELD_DESC(xyzs)
+    }
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&mode);
+    add_field(&xyzs);
+  }
+public:
+  virtual void render(render_action& a_action) {
+    if(tools::gl::is_line(mode.value())) {
+      //Same logic as Inventor SoLightModel.model = BASE_COLOR.
+      const state& state = a_action.state();
+      a_action.set_lighting(false);
+      a_action.draw_vertex_array(mode.value(),xyzs.values());
+      a_action.set_lighting(state.m_GL_LIGHTING);
+    } else {
+      a_action.draw_vertex_array(mode.value(),xyzs.values());
+    }
+  }
+  virtual void pick(pick_action& a_action) {
+    a_action.add__primitive(*this,mode.value(),xyzs.values(),true);
+  }
+
+  virtual void bbox(bbox_action& a_action) {
+    a_action.add_points(xyzs.values());
+  }
+
+public:
+  vertices()
+  :parent()
+  ,mode(tools::gl::line_strip()){
+#ifdef TOOLS_MEM
+    tools::mem::increment(s_class().c_str());
+#endif
+    add_fields();
+  }
+  virtual ~vertices(){
+#ifdef TOOLS_MEM
+    tools::mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  vertices(const vertices& a_from)
+  :parent(a_from)
+  ,mode(a_from.mode)
+  ,xyzs(a_from.xyzs)
+  {
+#ifdef TOOLS_MEM
+    tools::mem::increment(s_class().c_str());
+#endif
+    add_fields();
+  }
+  vertices& operator=(const vertices& a_from){
+    parent::operator=(a_from);
+
+    mode = a_from.mode;
+    xyzs = a_from.xyzs;
+
+    return *this;
+  }
+public:
+  template <class VEC>
+  void add(const VEC& a_v) {
+    xyzs.add(a_v.x());
+    xyzs.add(a_v.y());
+    xyzs.add(a_v.z());
+  }
+  void add(float a_x,float a_y,float a_z) {
+    xyzs.add(a_x);
+    xyzs.add(a_y);
+    xyzs.add(a_z);
+  }
+  void add_allocated(unsigned int& a_pos,float a_x,float a_y,float a_z) {
+    std::vector<float>& v = xyzs.values();
+    v[a_pos] = a_x;a_pos++;
+    v[a_pos] = a_y;a_pos++;
+    v[a_pos] = a_z;a_pos++;
+    xyzs.touch();
+  }
+/*
+  bool add(const std::vector<float>& a_v) {
+    std::vector<float>::size_type number = a_v.size()/3;
+    if(3*number!=a_v.size()) return false;
+    std::vector<float>::const_iterator it;
+    for(it=a_v.begin();it!=a_v.end();it+=3) {
+      xyzs.add(*(it+0));
+      xyzs.add(*(it+1));
+      xyzs.add(*(it+2));
+    }
+    return true;
+  }
+*/
+  //unsigned int size() const {return xyzs.size();}
+  unsigned int number() const {return xyzs.size()/3;}
+  void clear() {xyzs.clear();}
+
+  bool add_dashed_line(float a_bx,float a_by,float a_bz,
+                       float a_ex,float a_ey,float a_ez,
+                       unsigned int a_num_dash) {
+    //optimized version.
+    if(!a_num_dash) return false;
+    // there is a dash at beg and end of line.
+
+    float fac = 1.0f/float(2*a_num_dash-1);
+    float sx = (a_ex-a_bx)*fac;
+    float sy = (a_ey-a_by)*fac;
+    float sz = (a_ez-a_bz)*fac;
+
+    float two_sx = sx*2.0f;
+    float two_sy = sy*2.0f;
+    float two_sz = sz*2.0f;
+
+    float px = a_bx;
+    float py = a_by;
+    float pz = a_bz;
+
+    for(unsigned int idash=0;idash<a_num_dash;idash++) { 
+      add(px,py,pz);
+      add(px+sx,py+sy,pz+sz);
+      px += two_sx;
+      py += two_sy;
+      pz += two_sz;
+    }
+    return false;
+  }
+};
+
+}}
+
+#endif

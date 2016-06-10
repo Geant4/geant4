@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrackingInformation.hh 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id: G4TrackingInformation.hh 94218 2015-11-09 08:24:48Z gcosmo $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
@@ -55,6 +55,7 @@
 #include "G4TouchableHandle.hh"
 #include "G4TrackState.hh"
 #include "G4memory.hh"
+#include "G4ITStepProcessorState_Lock.hh"
 
 class G4ITStepProcessor;
 
@@ -69,16 +70,6 @@ struct G4ProcessState_Lock;
 class G4TrackingInformation;
 class G4SaveNavigatorState_Lock;
 struct G4ITNavigatorState_Lock;
-
-class G4ITStepProcessorState_Lock
-{
-  friend class G4TrackingInformation;
-protected:
-  inline virtual ~G4ITStepProcessorState_Lock()
-  {
-    ;
-  }
-};
 
 /** The class G4TrackingInformation (hold by G4IT)
  *  emcompasses processes informations computed
@@ -111,9 +102,9 @@ public:
    * computed at the InteractionLegth stage in the track.
    */
 
-  G4::shared_ptr<G4ProcessState_Lock> GetProcessState(size_t index);
+  G4shared_ptr<G4ProcessState_Lock> GetProcessState(size_t index);
 
-  inline void RecordProcessState(G4::shared_ptr<G4ProcessState_Lock>,
+  inline void RecordProcessState(G4shared_ptr<G4ProcessState_Lock>,
                                  size_t index);
 
   //___________________________________________________
@@ -143,8 +134,6 @@ public:
    return fTrackStates[G4TrackStateID<T>::GetID()] ;
    }
    */
-
-  G4TrackStateManager fTrackStateManager;
 
   G4TrackStateManager& GetTrackStateManager()
   {
@@ -183,6 +172,8 @@ protected:
   //_______________________________________________________
   G4Trajectory_Lock* fpTrajectory_Lock;
 
+  G4TrackStateManager fTrackStateManager;
+
   //_______________________________________________________
   G4ThreeVector fRecordedTrackPosition;
   G4double fRecordedTrackLocalTime;
@@ -198,7 +189,7 @@ protected:
    * (cf. G4ITStepProcessor header)
    */
 //    std::vector<G4ProcessState_Lock*> fProcessState;
-  std::vector<G4::shared_ptr<G4ProcessState_Lock> > fProcessState;
+  std::vector<G4shared_ptr<G4ProcessState_Lock> > fProcessState;
 
   //_______________________________________________________
   G4ITStepProcessorState_Lock* fpStepProcessorState;
@@ -235,7 +226,7 @@ inline G4ITStepProcessorState_Lock* G4TrackingInformation::GetStepProcessorState
  }*/
 
 inline
-void G4TrackingInformation::RecordProcessState(G4::shared_ptr<G4ProcessState_Lock> state,
+void G4TrackingInformation::RecordProcessState(G4shared_ptr<G4ProcessState_Lock> state,
                                                size_t index)
 {
   // G4cout << "G4TrackingInformation::RecordProcessState" << G4endl;

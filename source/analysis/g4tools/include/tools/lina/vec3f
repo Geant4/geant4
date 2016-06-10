@@ -1,0 +1,109 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_vec3f
+#define tools_vec3f
+
+#include "vec3"
+#include "../S_STRING"
+
+namespace tools {
+
+class vec3f : public vec3<float> {
+public:
+  TOOLS_SCLASS(tools::vec3f) //for stype()
+public:
+  vec3f():vec3<float>(){}
+  vec3f(const float a_vec[3]):vec3<float>(a_vec){}
+  vec3f(float a0,float a1,float a2):vec3<float>(a0,a1,a2){}
+  virtual ~vec3f() {}
+public:
+  vec3f(const vec3f& a_from):vec3<float>(a_from){}
+  vec3f& operator=(const vec3f& a_from){
+    vec3<float>::operator=(a_from);
+    return *this;
+  }
+
+  vec3f(const vec3<float>& a_from):vec3<float>(a_from){}
+
+public: //operators
+  vec3f operator*(float a_v) const {
+    return vec3f(m_data[0]*a_v,
+                 m_data[1]*a_v,
+                 m_data[2]*a_v);
+  }    
+  vec3f operator+(const vec3f& a_v) const {
+    return vec3f(m_data[0]+a_v.m_data[0],
+                 m_data[1]+a_v.m_data[1],
+                 m_data[2]+a_v.m_data[2]);
+  }    
+  vec3f operator-(const vec3f& a_v) const {
+    return vec3f(m_data[0]-a_v.m_data[0],
+                 m_data[1]-a_v.m_data[1],
+                 m_data[2]-a_v.m_data[2]);
+  }    
+  vec3f& operator+=(const vec3f& a_v) {
+    m_data[0] += a_v.m_data[0];
+    m_data[1] += a_v.m_data[1];
+    m_data[2] += a_v.m_data[2];
+    return *this;
+  }
+  vec3f& operator-=(const vec3f& a_v) {
+    m_data[0] -= a_v.m_data[0];
+    m_data[1] -= a_v.m_data[1];
+    m_data[2] -= a_v.m_data[2];
+    return *this;
+  }
+  vec3f& operator*=(float a_v) {   
+    m_data[0] *= a_v;
+    m_data[1] *= a_v;
+    m_data[2] *= a_v;
+    return *this;
+  }    
+  vec3f operator-() const {
+    return vec3f(-m_data[0],-m_data[1],-m_data[2]);
+  }
+
+public: //iv2sg
+  bool equals(const vec3f& a_v,const float a_epsil) const {
+    //if(a_epsil<0.0f))
+    float d0 = m_data[0]-a_v.m_data[0];
+    float d1 = m_data[1]-a_v.m_data[1];
+    float d2 = m_data[2]-a_v.m_data[2];
+    return ((d0*d0+d1*d1+d2*d2)<=a_epsil);
+  }
+  void negate() {
+    m_data[0] = -m_data[0];
+    m_data[1] = -m_data[1];
+    m_data[2] = -m_data[2];
+  }    
+
+private:static void check_instantiation() {vec3f v(0,0,0);v.set_value(1,1,1);}
+};
+
+inline vec3f operator*(float a_f,const vec3f& a_v) {
+  vec3f res(a_v);
+  res *= a_f;
+  return res;
+}
+
+}
+
+#include <vector>
+
+namespace tools {
+
+#ifndef SWIG
+//for sf, mf :
+inline bool set_from_vec(vec3f& a_v,const std::vector<float>& a_sv) {
+  if(a_sv.size()!=3) return false;
+  a_v[0] = a_sv[0];
+  a_v[1] = a_sv[1];
+  a_v[2] = a_sv[2];
+  return true;
+}
+#endif
+
+}
+
+#endif

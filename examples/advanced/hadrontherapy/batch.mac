@@ -1,4 +1,4 @@
-#A Tramontana
+# A.Tramontana, G.A.P.Cirrone, J.Pipek
 # INFN-LNS
 #######################
 # Set of the verboses # 
@@ -15,36 +15,41 @@
 
 /Physics/addPhysics standard_opt4
 
-/geometrySetup/selectGeometry LaserDriven
-
 # Initialize geometry and physic 
 /run/initialize
 
-########################################################################################################## 
-
-/gps/particle proton
-
-
-/gps/pos/type Beam
+#########################
+# Set the primary particle type,
+# energy and position along the X direction
+#
+#---------------------------gps-----------------
 /gps/pos/shape Circle
+/gps/pos/centre -310. 0. 0. cm
+/gps/pos/radius 0. mm
+/gps/pos/sigma_r 2. mm
+/gps/particle proton
+/gps/pos/type Beam
 
-/gps/pos/centre -171.3 0.0 0.0 cm   
-/gps/pos/radius 0.0 mm   
-/gps/pos/sigma_r 0.1 mm  
+
+# the incident surface is in the y-z plane
+
+/gps/pos/rot1 0 1 0
+/gps/pos/rot2 0 0 1
+
+# the beam is travelling along the x-axis without any angular dispersion (angular despersion set to 0.0)
+#
 
 /gps/ang/rot1 0 0 1
-/gps/ang/rot2 0 1 0
-/gps/pos/rot1 0 0 1
-/gps/pos/rot2 0 1 0
+/gps/ang/rot2 0 1 0 
+/gps/ang/type beam1d 
+/gps/ang/sigma_r 0. deg
 
 
-################### the beam energy is uniform profile from 4.0 MeV to 12 MeV
-/gps/ene/type User
-/gps/ene/type User
-/gps/hist/type energy
-/gps/hist/point 4.000001 0
-/gps/hist/point 12. 1
-/gps/direction 1 0 0
+# the beam energy is in gaussian profile
+#
+/gps/ene/type Gauss
+/gps/ene/mono 62 MeV
+/gps/ene/sigma 0.3 MeV
 
 
 /Step/waterPhantomStepMax 1 mm 
@@ -52,8 +57,8 @@
 
 ##################################################				
 #	    DETECTOR DESCRIPTION
-/changePhantom/position 100 100 0 cm
 /changePhantom/size 40 40 40  cm
+/changePhantom/position 20 0 0 cm
 /changeDetector/size 4 4 4 cm
 /changeDetector/voxelSize 1 40 40 mm
 # Put the detector in the lower left corner of the phantom
@@ -62,4 +67,4 @@
 
 /event/printEventNumber 100
 
-/run/beamOn 500
+/run/beamOn 500 

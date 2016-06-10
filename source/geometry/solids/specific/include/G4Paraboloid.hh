@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Paraboloid.hh 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4Paraboloid.hh 92392 2015-08-31 14:07:02Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -53,9 +53,19 @@
 // History:
 // -------
 // 10.07.2007  L.Lindroos (CERN) - First implementation
+//
 // --------------------------------------------------------------------
 #ifndef G4Paraboloid_HH
 #define G4Paraboloid_HH
+
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UPARABOLOID 1
+#endif
+
+#if (defined(G4GEOM_USE_UPARABOLOID) && defined(G4GEOM_USE_SYS_USOLIDS))
+  #define G4UParaboloid G4Paraboloid
+  #include "G4UParaboloid.hh"
+#else
 
 #include <CLHEP/Units/PhysicalConstants.h>
 
@@ -67,7 +77,7 @@ class G4Paraboloid : public G4VSolid
   public:  // with description
 
     G4Paraboloid(const G4String& pName,
-		      G4double  pDz,
+              G4double  pDz,
                       G4double  pR1,
                       G4double  pR2);
 
@@ -157,4 +167,6 @@ class G4Paraboloid : public G4VSolid
 
 #include "G4Paraboloid.icc"
 
-#endif
+#endif  // defined(G4GEOM_USE_UPARABOLOID) && defined(G4GEOM_USE_SYS_USOLIDS)
+
+#endif // G4Paraboloid_HH

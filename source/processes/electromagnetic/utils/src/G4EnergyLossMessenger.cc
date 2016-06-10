@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossMessenger.cc 85424 2014-10-29 08:23:44Z gcosmo $
+// $Id: G4EnergyLossMessenger.cc 90095 2015-05-13 12:10:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -113,16 +113,6 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   IntegCmd->SetParameterName("integ",true);
   IntegCmd->SetDefaultValue(true);
   IntegCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  pixeXsCmd = new G4UIcmdWithAString("/process/em/pixeXSmodel",this);
-  pixeXsCmd->SetGuidance("The name of PIXE cross section");
-  pixeXsCmd->SetParameterName("pixeXS",true);
-  pixeXsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  pixeeXsCmd = new G4UIcmdWithAString("/process/em/pixeElecXSmodel",this);
-  pixeeXsCmd->SetGuidance("The name of PIXE cross section for electron");
-  pixeeXsCmd->SetParameterName("pixeEXS",true);
-  pixeeXsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   deexCmd = new G4UIcommand("/process/em/deexcitation",this);
   deexCmd->SetGuidance("Set deexcitation flags per G4Region.");
@@ -217,8 +207,6 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete SubSecCmd;
   delete StepFuncCmd;
   delete IntegCmd;
-  delete pixeXsCmd;
-  delete pixeeXsCmd;
   delete bfCmd;
   delete fiCmd;
   delete brCmd;
@@ -249,19 +237,6 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     if(s3 == "true") { b3 = true; }
     if(s4 == "true") { b4 = true; }
     opt->SetDeexcitationActiveRegion(s1,b2,b3,b4);
-    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-  } else if (command == pixeXsCmd) {
-    G4String name;
-    if (newValue == "ecpssr_analytical") 
-      {name = "ECPSSR_Analytical";}
-    else if (newValue == "ecpssr_interpolated") 
-      {name = "ECPSSR_FormFactor";}
-    else 
-      {name = newValue;}
-    opt->SetPIXECrossSectionModel(name);
-    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-  } else if (command == pixeeXsCmd) {
-    opt->SetPIXEElectronCrossSectionModel(newValue);
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   } else if (command == IntegCmd) {
     opt->SetIntegral(IntegCmd->GetNewBoolValue(newValue));

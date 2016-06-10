@@ -1,4 +1,4 @@
-$Id: History 86241 2014-11-07 17:27:00Z gcosmo $
+$Id: History 94278 2015-11-10 12:39:57Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,24 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-07-Nov-2014, Marc Verderi  (phys-ctor-limiters-V10-00-04)
+10-Nov-2015, M. Verderi (phys-ctor-limiters-V10-01-04)
+- Fix compilation warning in G4GenericBiasingPhysics
+
+09-Nov-2015, M. Verderi (phys-ctor-limiters-V10-01-03)
+- Add utility methods to G4GenericBiasingPhysics to
+  select particles to bias.
+
+05-Nov-2015, Alberto Ribon              (phys-ctor-limiters-V10-01-02)
+- Replaced neutron_hp/ with particle_hp/
+
+06-Apr-2015, Andrea Dotti               (phys-ctor-limiters-V10-01-01)
+- Coverity fix
+
+20-Jan-2015, Makoto Asai                (phys-ctor-limiters-V10-01-00)
+- Fix G4ParallelWorldProcess.cc to correctly use the new method
+  SetProcessOrderingToSecond().
+
+07-Nov-2014, Marc Verderi               (phys-ctor-limiters-V10-00-04)
 -  G4GenericBiasingPhysics : fix bug of PhysicsBias(...) which was not
    taking into account the vector of processes passed, but biasing all
    physics processes.

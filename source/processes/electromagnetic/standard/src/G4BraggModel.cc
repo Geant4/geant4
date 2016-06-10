@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc 83008 2014-07-24 14:49:52Z gcosmo $
+// $Id: G4BraggModel.cc 93567 2015-10-26 14:51:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -143,8 +143,8 @@ void G4BraggModel::Initialise(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4BraggModel::GetChargeSquareRatio(const G4ParticleDefinition* p,
-					    const G4Material* mat,
-					    G4double kineticEnergy)
+                                            const G4Material* mat,
+                                            G4double kineticEnergy)
 {
   // this method is called only for ions
   G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,kineticEnergy);
@@ -155,8 +155,8 @@ G4double G4BraggModel::GetChargeSquareRatio(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4BraggModel::GetParticleCharge(const G4ParticleDefinition* p,
-					 const G4Material* mat,
-					 G4double kineticEnergy)
+                                         const G4Material* mat,
+                                         G4double kineticEnergy)
 {
   // this method is called only for ions, so no check if it is an ion 
   return corr->GetParticleCharge(p,mat,kineticEnergy);
@@ -181,7 +181,7 @@ G4double G4BraggModel::ComputeCrossSectionPerElectron(
     cross = (maxEnergy - cutEnergy)/(cutEnergy*maxEnergy) 
       - beta2*G4Log(maxEnergy/cutEnergy)/tmax;
 
-    if( 0.5 == spin ) { cross += 0.5*(maxEnergy - cutEnergy)/energy2; }
+    if( 0.0 < spin ) { cross += 0.5*(maxEnergy - cutEnergy)/energy2; }
 
     cross *= twopi_mc2_rcl2*chargeSquare/beta2;
   }
@@ -196,7 +196,7 @@ G4double G4BraggModel::ComputeCrossSectionPerElectron(
 G4double G4BraggModel::ComputeCrossSectionPerAtom(
                                            const G4ParticleDefinition* p,
                                                  G4double kineticEnergy,
-						 G4double Z, G4double,
+                                                 G4double Z, G4double,
                                                  G4double cutEnergy,
                                                  G4double maxEnergy)
 {
@@ -208,7 +208,7 @@ G4double G4BraggModel::ComputeCrossSectionPerAtom(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4BraggModel::CrossSectionPerVolume(
-					   const G4Material* material,
+                                           const G4Material* material,
                                            const G4ParticleDefinition* p,
                                                  G4double kineticEnergy,
                                                  G4double cutEnergy,
@@ -223,9 +223,9 @@ G4double G4BraggModel::CrossSectionPerVolume(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4BraggModel::ComputeDEDXPerVolume(const G4Material* material,
-					    const G4ParticleDefinition* p,
-					    G4double kineticEnergy,
-					    G4double cutEnergy)
+                                            const G4ParticleDefinition* p,
+                                            G4double kineticEnergy,
+                                            G4double cutEnergy)
 {
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
   G4double tkin  = kineticEnergy/massRate;
@@ -256,7 +256,7 @@ G4double G4BraggModel::ComputeDEDXPerVolume(const G4Material* material,
   dedx *= chargeSquare;
 
   //G4cout << "E(MeV)= " << tkin/MeV << " dedx= " << dedx 
-  //	 << "  " << material->GetName() << G4endl;
+  //         << "  " << material->GetName() << G4endl;
 
   return dedx;
 }
@@ -264,10 +264,10 @@ G4double G4BraggModel::ComputeDEDXPerVolume(const G4Material* material,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4BraggModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
-				     const G4MaterialCutsCouple* couple,
-				     const G4DynamicParticle* dp,
-				     G4double xmin,
-				     G4double maxEnergy)
+                                     const G4MaterialCutsCouple* couple,
+                                     const G4DynamicParticle* dp,
+                                     G4double xmin,
+                                     G4double maxEnergy)
 {
   G4double tmax = MaxSecondaryKinEnergy(dp);
   G4double xmax = std::min(tmax, maxEnergy);
@@ -280,10 +280,13 @@ void G4BraggModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
   G4double grej    = 1.0;
   G4double deltaKinEnergy, f;
 
+  CLHEP::HepRandomEngine* rndmEngineMod = G4Random::getTheEngine();
+  G4double rndm[2];
+
   // sampling follows ...
   do {
-    G4double q = G4UniformRand();
-    deltaKinEnergy = xmin*xmax/(xmin*(1.0 - q) + xmax*q);
+    rndmEngineMod->flatArray(2, rndm);
+    deltaKinEnergy = xmin*xmax/(xmin*(1.0 - rndm[0]) + xmax*rndm[0]);
 
     f = 1.0 - beta2*deltaKinEnergy/tmax;
 
@@ -294,7 +297,8 @@ void G4BraggModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
                << G4endl;
     }
 
-  } while( grej*G4UniformRand() >= f );
+    // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
+  } while( grej*rndm[1] >= f );
 
   G4ThreeVector deltaDirection;
 
@@ -314,7 +318,7 @@ void G4BraggModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
     if(cost > 1.0) { cost = 1.0; }
     G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
 
-    G4double phi = twopi * G4UniformRand() ;
+    G4double phi = twopi*rndmEngineMod->flat();
 
     deltaDirection.set(sint*cos(phi),sint*sin(phi), cost) ;
     deltaDirection.rotateUz(dp->GetMomentumDirection());
@@ -338,7 +342,7 @@ void G4BraggModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4BraggModel::MaxSecondaryEnergy(const G4ParticleDefinition* pd,
-					  G4double kinEnergy)
+                                          G4double kinEnergy)
 {
   if(pd != particle) { SetParticle(pd); }
   G4double tau  = kinEnergy/mass;
@@ -420,13 +424,13 @@ G4double G4BraggModel::StoppingPower(const G4Material* material,
     if ( ionloss < 0.0) ionloss = 0.0 ;
     if ( 10 == iMolecula ) { 
       if (T < 100.0) {
-	ionloss *= (1.0+0.023+0.0066*G4Log(T)*invLog10);  
+        ionloss *= (1.0+0.023+0.0066*G4Log(T)*invLog10);  
       }
       else if (T < 700.0) {   
-	ionloss *=(1.0+0.089-0.0248*G4Log(T-99.)*invLog10);
+        ionloss *=(1.0+0.089-0.0248*G4Log(T-99.)*invLog10);
       } 
       else if (T < 10000.0) {    
-	ionloss *=(1.0+0.089-0.0248*G4Log(700.-99.)*invLog10);
+        ionloss *=(1.0+0.089-0.0248*G4Log(700.-99.)*invLog10);
       }
     }
     ionloss /= atomicWeight[iMolecula];
@@ -446,7 +450,7 @@ G4double G4BraggModel::ElectronicStoppingPower(G4double z,
                                                G4double kineticEnergy) const
 {
   G4double ionloss ;
-  G4int i = G4int(z)-1 ;  // index of atom
+  G4int i = G4lrint(z)-1 ;  // index of atom
   if(i < 0)  i = 0 ;
   if(i > 91) i = 91 ;
   
@@ -599,7 +603,7 @@ G4double G4BraggModel::DEDX(const G4Material* material, G4double kineticEnergy)
     if( !HasMaterial(material) ) { iPSTAR = fPSTAR->GetIndex(material); }
 
     //G4cout << "%%% " <<material->GetName() << "  iMolecula= " 
-    //	   << iMolecula << "  iPSTAR= " << iPSTAR << G4endl; 
+    //           << iMolecula << "  iPSTAR= " << iPSTAR << G4endl; 
 
   }
 
@@ -749,8 +753,8 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
     {
       if(chFormula == nameOfMol[i]) {
         G4double exp125 = expStopping[i] *
-	                  (material->GetTotNbOfAtomsPerVolume()) /
-	                  (expCharge[i] * numberOfAtomsPerMolecula[i]) ;
+                          (material->GetTotNbOfAtomsPerVolume()) /
+                          (expCharge[i] * numberOfAtomsPerMolecula[i]) ;
         SetExpStopPower125(exp125);
         return true;
       }

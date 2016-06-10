@@ -25,12 +25,13 @@ include(${Geant4_USE_FILE})
 #
 find_package(ROOT REQUIRED)
 
-#----------------------------------------------------------------------------
-# P01 requires GCCXML 
-#
-if(NOT GCCXML)
-   message(FATAL_ERROR "P02 requires GCCXML")
-endif() 
+# ROOT version 6 required
+if(ROOT_FOUND)
+  STRING(REGEX MATCH "6.*" VERSION6MATCH ${ROOT_VERSION})
+  if(NOT VERSION6MATCH) 
+    message(FATAL_ERROR "P02 requires ROOT 6")
+  endif()
+endif()
 
 #----------------------------------------------------------------------------
 # P01 requires shared libraries
@@ -57,13 +58,13 @@ add_library(ExP02ClassesDict SHARED ${sources} ExP02Classes.cpp)
 set(libsuffix .so)
 set(ROOT_LIBRARY_PROPERTIES ${ROOT_LIBRARY_PROPERTIES} SUFFIX ${libsuffix})
 set_target_properties(ExP02ClassesDict PROPERTIES ${ROOT_LIBRARY_PROPERTIES})
-target_link_libraries(ExP02ClassesDict  ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} Cintex Reflex)
+target_link_libraries(ExP02ClassesDict  ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(exampleP02 exampleP02.cc ${sources} ${headers})
-target_link_libraries(exampleP02 ExP02ClassesDict ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} Cintex )
+target_link_libraries(exampleP02 ExP02ClassesDict ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
@@ -92,4 +93,7 @@ add_custom_target(P02 DEPENDS exampleP02)
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
 install(TARGETS exampleP02 DESTINATION bin)
+install(TARGETS ExP02ClassesDict DESTINATION lib)
+install(FILES ${PROJECT_BINARY_DIR}/ExP02Classes_rdict.pcm DESTINATION lib)
+
 

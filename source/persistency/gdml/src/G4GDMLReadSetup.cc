@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSetup.cc 68053 2013-03-13 14:39:51Z gcosmo $
+// $Id: G4GDMLReadSetup.cc 88207 2015-02-03 13:47:36Z gcosmo $
 //
 // class G4GDMLReadSetup Implementation
 //
@@ -50,9 +50,13 @@ G4String G4GDMLReadSetup::GetSetup(const G4String& ref)
 
    if (setupMap.find(ref) == setupMap.end())
    {
-     G4String error_msg = "Referenced setup '" + ref + "' was not found!";
-     G4Exception("G4GDMLReadSetup::getSetup()", "ReadError",
-                 FatalException, error_msg);
+#ifdef G4VERBOSE
+     std::ostringstream message;
+     message << "Referenced setup '" << ref << "' was not found!";
+     G4Exception("G4GDMLReadSetup::getSetup()", "NullSetup",
+                 JustWarning, message, "Returning NULL pointer!");
+#endif
+     return "";
    }
 
    return setupMap[ref];

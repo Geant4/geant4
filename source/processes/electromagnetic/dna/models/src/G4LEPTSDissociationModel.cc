@@ -78,7 +78,7 @@ void G4LEPTSDissociationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
   G4ThreeVector P0Dir = aDynamicParticle->GetMomentumDirection();
 
   G4double eMin = 0.0;
-  G4double eMax = min(600.0*CLHEP::eV, P0KinEn);
+  G4double eMax = std::min(600.0*CLHEP::eV, P0KinEn);
   const G4Material* aMaterial = mateCuts->GetMaterial();
   Energylost = SampleEnergyLoss(aMaterial, eMin, eMax);
   G4ThreeVector P1Dir = SampleNewDirection(aMaterial, P0Dir, P0KinEn/CLHEP::eV, Energylost/CLHEP::eV);

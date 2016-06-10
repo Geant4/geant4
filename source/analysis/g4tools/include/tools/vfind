@@ -21,8 +21,7 @@ inline T* find_named(const std::vector<T*>& a_vec,const std::string& a_name) {
 
 /*
 template <class T>
-inline const T* find_named_(const std::vector<T>& a_vec,
-                            const std::string& a_name) {
+inline const T* find_named_(const std::vector<T>& a_vec,const std::string& a_name) {
   typedef typename std::vector<T>::const_iterator it_t;
   it_t it;
   for(it=a_vec.begin();it!=a_vec.end();++it) {

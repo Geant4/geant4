@@ -97,11 +97,11 @@ G4NeutronInelasticCrossSection::GetCrossSection(G4double anEnergy,
   G4double part2 = 1.+ A13 - p2*(1.-1./A13);
 
   G4double firstexp = -p4*(elog-p5);
-  G4double first    = 1. + std::exp(firstexp);
+  G4double first    = 1. + G4Exp(firstexp);
   G4double corr     = 1. + p3*(1.-1./first); 
 
   G4double secondexp= -p6*(elog-p7);
-  G4double secondv   = 1.+std::exp(secondexp);
+  G4double secondv   = 1.+G4Exp(secondexp);
   G4double corr2    = 1./secondv;
 
   G4double xsec = corr*corr2*part1*part2*10.*millibarn;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGPionInelasticXS.cc 79981 2014-03-27 15:24:11Z gcosmo $
+// $Id: G4BGGPionInelasticXS.cc 93682 2015-10-28 10:09:49Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -42,7 +42,7 @@
 
 #include "G4BGGPionInelasticXS.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4GlauberGribovCrossSection.hh"
+#include "G4ComponentGGHadronNucleusXsc.hh"
 #include "G4UPiNuclearCrossSection.hh"
 #include "G4HadronNucleonXsc.hh"
 #include "G4ComponentSAIDTotalXS.hh"
@@ -84,10 +84,10 @@ G4BGGPionInelasticXS::G4BGGPionInelasticXS(const G4ParticleDefinition* p)
 
 G4BGGPionInelasticXS::~G4BGGPionInelasticXS()
 {
-  delete fGlauber;
-  delete fPion;
-  delete fHadron;
   delete fSAID;
+  delete fHadron;
+  delete fPion;
+  delete fGlauber;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -198,12 +198,13 @@ void G4BGGPionInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   isInitialized = true;
 
   fPion    = new G4UPiNuclearCrossSection();
-  fGlauber = new G4GlauberGribovCrossSection();
+  fGlauber = new G4ComponentGGHadronNucleusXsc();
   fHadron  = new G4HadronNucleonXsc();
   fSAID    = new G4ComponentSAIDTotalXS();
 
   fPion->BuildPhysicsTable(*particle);
   fGlauber->BuildPhysicsTable(*particle);
+
   if(particle == G4PionPlus::PionPlus()) { isPiplus = true; }
 
   G4ThreeVector mom(0.0,0.0,1.0);

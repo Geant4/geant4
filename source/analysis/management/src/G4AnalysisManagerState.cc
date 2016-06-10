@@ -39,6 +39,7 @@ G4AnalysisManagerState::G4AnalysisManagerState(
    fIsMaster(isMaster),
    fIsActivation(false),
    fVerboseLevel(0),
+   fCompressionLevel(1),
    fVerboseL1(type,1),
    fVerboseL2(type,2),
    fVerboseL3(type,3),

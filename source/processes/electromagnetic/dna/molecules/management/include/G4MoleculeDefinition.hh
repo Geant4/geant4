@@ -65,22 +65,17 @@
 #include "G4MolecularDissociationChannel.hh"
 #include "G4FakeParticleID.hh"
 
-// ######################################################################
-// ###                          Molecule                              ###
-// ######################################################################
-
 class G4MolecularDissociationChannel;
 class G4MolecularDissociationTable;
 class G4MolecularConfiguration;
 
-class G4MoleculeDefinition : public G4ParticleDefinition
-{
-  // Class Description
-  //  This is the base class for all molecules
-  //  All molecules created are objects of this class.
+// -----------------------------------------------------------------------------
+// ###                          MoleculeDefinition                           ###
+// -----------------------------------------------------------------------------
 
+class G4MoleculeDefinition: public G4ParticleDefinition
+{
 public:
-  //With Description
   G4MoleculeDefinition(const G4String& name,
                        G4double mass,
                        G4double diffCoeff,
@@ -95,7 +90,8 @@ public:
   virtual ~G4MoleculeDefinition();
 
   // Set the electronic configuration at ground level
-  void SetLevelOccupation(G4int, G4int eNb = 2);
+  void SetLevelOccupation(G4int,
+                          G4int eNb = 2);
   // set the occupation(0(def), 1 or 2) of the level specified
   //(levels numbering starts from 0)
 
@@ -109,21 +105,48 @@ public:
   inline void SetVanDerVaalsRadius(G4double);
   inline G4double GetVanDerVaalsRadius() const;
 
-  //°°°°°°°°°°°°°°°°°°°°°°°°
+  //____________________________________________________________________________
+  // Create more molecular configurations for this molecule definition
+  // Other ways : through G4MolecularTable
+
+  // Note: the userID of the created molecule configuration will be:
+  //       MoleculeDefinationName_excitedStateLabel
+  G4MolecularConfiguration*
+  NewConfiguration(const G4String& excitedStateLabel);
+
+  G4MolecularConfiguration*
+  NewConfigurationWithElectronOccupancy(const G4String& excitedStateLabel,
+                                        const G4ElectronOccupancy&,
+                                        double decayTime = 0.);
+
+  G4MolecularConfiguration*
+  GetConfigurationWithLabel(const G4String& molecularConfLabel);
+
+  //____________________________________________________________________________
   // Build the decay table
-  void AddExcitedState(const G4String&);
-  const G4String& GetExcitedState(const G4ElectronOccupancy*) const;
-  void AddDecayChannel(const G4String&, const G4MolecularDissociationChannel*);
-  void AddeConfToExcitedState(const G4String&,
-                              const G4ElectronOccupancy&,
-                              double decayTime = 0.);
+  // Version 1
 
-  //°°°°°°°°°°°°°°°°°°°°°°°°
+  void AddDecayChannel(const G4MolecularConfiguration* molConf,
+                       const G4MolecularDissociationChannel* channel);
+
+  // Version 2
+
+  void AddDecayChannel(const G4String& molecularConfLabel,
+                       const G4MolecularDissociationChannel* channel);
+
+  //____________________________________________________________________________
   // "Get" methods related to decay
-  const std::vector<const G4MolecularDissociationChannel*>* GetDecayChannels(const G4ElectronOccupancy*) const;
-  const std::vector<const G4MolecularDissociationChannel*>* GetDecayChannels(const G4String&) const;
 
-  //°°°°°°°°°°°°°°°°°°°°°°°°
+  const std::vector<const G4MolecularDissociationChannel*>*
+    GetDecayChannels(const G4MolecularConfiguration*) const;
+  const std::vector<const G4MolecularDissociationChannel*>*
+    GetDecayChannels(const G4String&) const;
+
+  inline const G4MolecularDissociationTable* GetDecayTable() const;
+  inline G4MolecularDissociationTable* GetDecayTable();
+  inline G4double GetDecayTime() const;
+
+  //____________________________________________________________________________
   // General "Get" methods
   inline const G4ElectronOccupancy* GetGroundStateElectronOccupancy() const;
   inline G4int GetCharge() const;
@@ -132,19 +155,22 @@ public:
   inline const G4String& GetType() const;
   inline G4int GetNbElectrons() const;
   inline G4int GetNbMolecularShells() const;
-  inline const G4MolecularDissociationTable* GetDecayTable() const;
-  inline G4MolecularDissociationTable* GetDecayTable();
-  inline G4double GetDecayTime() const;
-
-  inline void SetFormatedName(const G4String& name)
-  {
-    fFormatedName = name;
-  }
 
   inline const G4String& GetFormatedName() const
   {
     return fFormatedName;
   }
+
+  //____________________________________________________________________________
+  inline void SetFormatedName(const G4String& name)
+  {
+    fFormatedName = name;
+  }
+
+  void Finalize();
+
+  static G4MoleculeDefinition* Load(std::istream&);
+  void Serialize(std::ostream&);
 
 protected:
   G4MoleculeDefinition();
@@ -160,7 +186,7 @@ private:
   // Note : For the time being, we will consider only one diffusion
   // coefficient for the all simulation => diffusion in one medium only
   // If the user needs to use the diffusion in different materials,
-  // she/he should contact the developpers/mainteners of this package
+  // she/he should contact the developers/maintainers of this package
   G4double fDiffusionCoefficient;
 
   G4int fAtomsNb;
@@ -230,7 +256,6 @@ inline G4double G4MoleculeDefinition::GetMass() const
 
 inline const G4String& G4MoleculeDefinition::GetType() const
 {
-
   return GetParticleSubType();
 }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HETCFragment.hh 69581 2013-05-08 14:02:06Z gcosmo $
+// $Id: G4HETCFragment.hh 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // by V. Lara
 //
@@ -52,18 +52,18 @@ protected:
 
   virtual G4double K(const G4Fragment & aFragment) = 0;
     
-  virtual G4double GetSpinFactor() = 0;
-  virtual G4double GetAlpha() = 0;
-  virtual G4double GetBeta() = 0;
+  virtual G4double GetSpinFactor() const = 0;
+  virtual G4double GetAlpha() const = 0;
+  virtual G4double GetBeta() const = 0;
 
-  inline G4double BetaRand(const G4int N, const G4int L) const;
+  inline G4double BetaRand(G4int N, G4int L) const;
   
 private:
 
   // This method performs integration for probability function over 
   // fragment kinetic energy
-  G4double IntegrateEmissionProbability(const G4double & Low, 
-					const G4double & Up, 
+  G4double IntegrateEmissionProbability(G4double & Low, 
+					G4double & Up, 
 					const G4Fragment & aFragment);	
 
   G4HETCFragment();
@@ -76,8 +76,7 @@ private:
   G4double r2norm;
 };
 
-inline G4double G4HETCFragment::
-BetaRand(const G4int N, const G4int L) const
+inline G4double G4HETCFragment::BetaRand(G4int N, G4int L) const
 {
   G4double Y1 = G4RandGamma::shoot(N,1);
   G4double Y2 = G4RandGamma::shoot(L,1);

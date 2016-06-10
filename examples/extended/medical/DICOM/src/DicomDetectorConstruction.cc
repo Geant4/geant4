@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomDetectorConstruction.cc 84839 2014-10-21 13:44:55Z gcosmo $
+// $Id: DicomDetectorConstruction.cc 92820 2015-09-17 15:22:14Z gcosmo $
 //
 /// \file  medical/DICOM/src/DicomDetectorConstruction.cc
 /// \brief Implementation of the DicomDetectorConstruction class
@@ -121,7 +121,6 @@ G4VPhysicalVolume* DicomDetectorConstruction::Construct()
   }
     return fWorld_phys;
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomDetectorConstruction::InitialisationOfMaterials()
@@ -312,7 +311,6 @@ void DicomDetectorConstruction::InitialisationOfMaterials()
 
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomDetectorConstruction::ReadPhantomData()
 {
@@ -454,7 +452,6 @@ void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
   
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomDetectorConstruction::MergeZSliceHeaders()
 {
@@ -538,7 +535,6 @@ void DicomDetectorConstruction::ConstructPhantomContainer()
   //fContainer_logic->SetVisAttributes(new G4VisAttributes(G4Colour(1.,0.,0.)));
 }
 
-
 #include "G4SDManager.hh"
 #include "G4MultiFunctionalDetector.hh"
 #include "G4PSDoseDeposit.hh"
@@ -551,7 +547,7 @@ void DicomDetectorConstruction::SetScorer(G4LogicalVolume* voxel_logic)
   G4cout << "\n\n\n\n\t SET SCORER : " << voxel_logic->GetName() 
          << " \n\n\n" << G4endl;
   
-  scorers.insert(voxel_logic);
+  fScorers.insert(voxel_logic);
   
 }
 
@@ -585,16 +581,13 @@ void DicomDetectorConstruction::ConstructSDandField()
     new G4PSDoseDeposit3D("DoseDeposit", fNVoxelX, fNVoxelY, fNVoxelZ);
   MFDet->RegisterPrimitive(dosedep);
   
-  for(std::set<G4LogicalVolume*>::iterator ite = scorers.begin(); 
-      ite != scorers.end(); ++ite) {
+  for(std::set<G4LogicalVolume*>::iterator ite = fScorers.begin(); 
+      ite != fScorers.end(); ++ite) {
     SetSensitiveDetector(*ite, MFDet);
   }
   
   /*if(DicomRunAction::Instance()->GetDicomRun()) {
       DicomRunAction::Instance()->GetDicomRun()->ConstructMFD(scorer_names);
       }*/
-  
-  
+ 
 }
-
-

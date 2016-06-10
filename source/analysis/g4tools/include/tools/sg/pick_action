@@ -1,0 +1,939 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_pick_action
+#define tools_sg_pick_action
+
+#include "matrix_action"
+#include "primitive_visitor"
+
+#include "../lina/plane"
+#include "../vmanip"
+
+#include "node"
+
+namespace tools {
+namespace sg {
+
+class pick_element {
+public:
+  pick_element(sg::node& a_node,const std::vector<float>& a_zs,const std::vector<float>& a_ws,const sg::state& a_state)
+  :m_node(a_node)
+  ,m_zs(a_zs)
+  ,m_ws(a_ws)
+  ,m_state(a_state)
+  {}
+  virtual ~pick_element(){}
+public:
+  pick_element(const pick_element& a_from)
+  :m_node(a_from.m_node)
+  ,m_zs(a_from.m_zs)
+  ,m_ws(a_from.m_ws)
+  ,m_state(a_from.m_state)
+  {}
+  pick_element& operator=(const pick_element& a_from){
+    m_zs = a_from.m_zs;
+    m_ws = a_from.m_ws;
+    m_state = a_from.m_state;
+    return *this;
+  }
+public:
+  const sg::node& node() const {return m_node;}
+  sg::node& node() {return m_node;}
+
+  const std::vector<float>& zs() const {return m_zs;}
+  std::vector<float>& zs() {return m_zs;}
+
+  const std::vector<float>& ws() const {return m_ws;}
+  std::vector<float>& ws() {return m_ws;}
+
+  const sg::state& state() const {return m_state;}
+  sg::state& state() {return m_state;}
+protected:
+  sg::node& m_node;
+  std::vector<float> m_zs;
+  std::vector<float> m_ws;
+  sg::state m_state;
+};
+
+class pick_action : public matrix_action, public primitive_visitor {
+protected:
+
+  virtual bool project(float& a_x,float& a_y,float& a_z,float& a_w) {
+    return project_point(a_x,a_y,a_z,a_w);
+  }
+
+  virtual bool add_point(float a_x,float a_y,float a_z,float a_w) {
+    if(is_inside(a_x,a_y,a_z,a_w)) { //we have a pick.
+      m_done = true;
+      return false; //to stop
+    }
+    return true; //continue.
+  }
+
+  virtual bool add_point(float a_x,float a_y,float a_z,float a_w,
+                         float,float,float,float) {
+    if(is_inside(a_x,a_y,a_z,a_w)) { //we have a pick.
+      m_done = true;
+      return false; //to stop
+    }
+    return true; //continue.
+  }
+
+  virtual bool add_line(float a_bx,float a_by,float a_bz,float a_bw,
+                        float a_ex,float a_ey,float a_ez,float a_ew) {
+
+    if(is_inside(a_bx,a_by,a_bz,a_bw)) {
+      m_done = true;
+      return false;
+    }
+    if(is_inside(a_ex,a_ey,a_ez,a_ew)) {
+      m_done = true;
+      return false;
+    }
+    if(intersect_line(a_bx,a_by,a_bz,a_bw,
+                      a_ex,a_ey,a_ez,a_ew)) {
+      m_done = true;
+      return false;
+    }
+    return true;
+  }
+
+  virtual bool add_line(float a_bx,float a_by,float a_bz,float a_bw,
+                        float,float,float,float,
+                        float a_ex,float a_ey,float a_ez,float a_ew,
+                        float,float,float,float){
+    return add_line(a_bx,a_by,a_bz,a_bw,
+                    a_ex,a_ey,a_ez,a_ew);
+  }
+
+  virtual bool add_triangle(float a_p1x,float a_p1y,float a_p1z,float a_p1w,
+                            float a_p2x,float a_p2y,float a_p2z,float a_p2w,
+                            float a_p3x,float a_p3y,float a_p3z,float a_p3w){
+    if(intersect_triangle(a_p1x,a_p1y,a_p1z,a_p1w,
+                          a_p2x,a_p2y,a_p2z,a_p2w,
+                          a_p3x,a_p3y,a_p3z,a_p3w)) {
+      m_done = true;
+      return false;
+    }
+    return true;
+  }
+
+  virtual bool add_triangle(float a_p1x,float a_p1y,float a_p1z,float a_p1w,
+                              float,float,float,float,
+                            float a_p2x,float a_p2y,float a_p2z,float a_p2w,
+                              float,float,float,float,
+                            float a_p3x,float a_p3y,float a_p3z,float a_p3w,
+                              float,float,float,float){
+    return pick_action::add_triangle(a_p1x,a_p1y,a_p1z,a_p1w,
+                                     a_p2x,a_p2y,a_p2z,a_p2w,
+                                     a_p3x,a_p3y,a_p3z,a_p3w);
+  }
+
+public:
+  pick_action(std::ostream& a_out,unsigned int a_ww,unsigned int a_wh,float a_l,float a_r,float a_b,float a_t)
+  :matrix_action(a_out,a_ww,a_wh)
+  ,m_l(a_l)
+  ,m_r(a_r)
+  ,m_b(a_b)
+  ,m_t(a_t)
+  ,m_stop_at_first(false) //same as selection
+  ,m_done(false)
+  ,m_node(0)
+  {
+    set_to_pick_ndc(); //OPTIMIZATION
+  }
+  virtual ~pick_action(){}
+public:
+  pick_action(const pick_action& a_from)
+  :matrix_action(a_from)
+  ,primitive_visitor(a_from)
+  ,m_l(a_from.m_l)
+  ,m_r(a_from.m_r)
+  ,m_b(a_from.m_b)
+  ,m_t(a_from.m_t)
+  ,m_stop_at_first(a_from.m_stop_at_first)
+  ,m_done(false)
+  ,m_node(0)
+  {
+    set_to_pick_ndc(); //OPTIMIZATION
+  }
+  pick_action& operator=(const pick_action& a_from){
+    matrix_action::operator=(a_from);
+    primitive_visitor::operator=(a_from);
+    m_l = a_from.m_l;
+    m_r = a_from.m_r;
+    m_b = a_from.m_b;
+    m_t = a_from.m_t;
+    m_stop_at_first = a_from.m_stop_at_first;
+    m_done = false;
+    m_node = 0;
+    m_zs.clear();
+    m_ws.clear();
+    m_picks.clear();
+    set_to_pick_ndc(); //OPTIMIZATION
+    return *this;
+  }
+public:
+  void reset() {
+    matrix_action::reset();
+    m_done = false;
+    m_node = 0;
+    m_zs.clear();
+    m_ws.clear();
+    m_picks.clear();
+  }
+
+  void set_win_size(unsigned a_ww,unsigned int a_wh) {
+    m_ww = a_ww;
+    m_wh = a_wh;
+    m_state.m_ww = a_ww;
+    m_state.m_wh = a_wh;
+    m_states.clear();
+    reset();
+  }
+
+  void set_area(float a_l,float a_r,float a_b,float a_t) {
+    // a_l,a_r,a_b,a_t are in window coordinates (pixels)
+    // but handled in floats for intersection computation precision.
+    // WARNING : we must have a_t>a_b and a_r>a_l. No check is done for that. 
+    m_l = a_l;
+    m_r = a_r;
+    m_b = a_b;
+    m_t = a_t;
+    set_to_pick_ndc(); //OPTIMIZATION
+  }
+
+  /////////////////////////////////////////////
+  /////////////////////////////////////////////
+  /////////////////////////////////////////////
+  void set_stop_at_first(bool a_value) {m_stop_at_first = a_value;}
+  bool stop_at_first() const {return m_stop_at_first;}
+
+  void set_done(bool a_value) {m_done = a_value;}
+  bool done() const {return m_done;}
+
+  void set_node(sg::node* a_node) {m_node = a_node;}
+  sg::node* node() const {return m_node;}
+
+  /////////////////////////////////////////////
+  /////////////////////////////////////////////
+  /////////////////////////////////////////////
+  typedef pick_element pick_t;
+
+  void add_pick(sg::node& a_node,
+                const std::vector<float>& a_zs,
+                const std::vector<float>& a_ws,
+                const sg::state& a_state) {
+    m_picks.push_back(pick_t(a_node,a_zs,a_ws,a_state));
+  }
+  const std::vector<pick_t>& picks() const {return m_picks;}
+
+  void dump_picks() {
+    m_out << "tools::sg::pick_action :"
+          << " number of picks " << m_picks.size()
+          << std::endl;
+    std::vector<pick_t>::const_iterator it;
+    for(it=m_picks.begin();it!=m_picks.end();++it) {
+      m_out << "  " << (*it).node().s_cls();
+
+      std::vector<float>::const_iterator itz;
+      for(itz=(*it).zs().begin();itz!=(*it).zs().end();++itz) {
+        m_out  << "  " << *itz;
+      }
+
+      m_out << std::endl;
+    }
+  }
+
+  pick_t* closest_pick() {
+    if(m_picks.empty()) return 0;
+    //closest point is minimum z !
+    //  near -> -1
+    //  far  ->  1
+
+    // find first pick_t with not empty zs :
+    pick_t* pck = 0;
+    float z;
+    std::vector<pick_t>::const_iterator it;
+    for(it=m_picks.begin();it!=m_picks.end();++it) {
+      if(tools::minimum((*it).zs(),z)) {
+        pck = (pick_t*)&(*it);
+        break;
+      }
+    }
+    if(!pck) return 0;
+    it++;
+    for(;it!=m_picks.end();++it) {
+      float zi;
+      if(tools::minimum((*it).zs(),zi)) {
+        if(zi<=z) {
+          pck = (pick_t*)&(*it);
+          z = zi;
+        }
+      }
+    }
+    return pck;
+  }
+
+  const std::vector<float>& zs() const {return m_zs;}
+  std::vector<float>& zs() {return m_zs;}
+
+  const std::vector<float>& ws() const {return m_ws;}
+  std::vector<float>& ws() {return m_ws;}
+
+  void set_matrices_to_identity() {
+    projection_matrix() = m_identity;
+    model_matrix() = m_identity;
+  }
+  void set_matrices_from_state() {
+    projection_matrix() = m_state.m_proj;
+    model_matrix() = m_state.m_model;
+  }
+public:
+  bool add__primitive_xy(sg::node& a_node,
+                         gl::mode_t a_mode,
+                         unsigned int a_floatn,const float* a_xys,
+                         bool a_stop = false,
+                         bool a_triangle_revert = false){
+    if(!a_floatn) return false;
+    if(m_stop_at_first){
+      add_primitive_xy(a_mode,a_floatn,a_xys,a_stop,a_triangle_revert);
+      if(m_done) {
+        m_node = &a_node;
+        return true;
+      }
+    } else {
+      m_done = false;
+      m_zs.clear();
+      add_primitive_xy(a_mode,a_floatn,a_xys,a_stop,a_triangle_revert);
+      if(m_done) {
+        add_pick(a_node,m_zs,m_ws,m_state);
+        m_done = false;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool add__primitive_xy(sg::node& a_node,
+                         gl::mode_t a_mode,
+                         const std::vector<float>& a_xys,
+                         bool a_stop = false,
+                         bool a_triangle_revert = false){
+    if(a_xys.empty()) return false;
+    if(m_stop_at_first){
+      add_primitive_xy(a_mode,a_xys,a_stop,a_triangle_revert);
+      if(m_done) {
+        m_node = &a_node;
+        return true;
+      }
+    } else {
+      m_done = false;
+      m_zs.clear();
+      add_primitive_xy(a_mode,a_xys,a_stop,a_triangle_revert);
+      if(m_done) {
+        add_pick(a_node,m_zs,m_ws,m_state);
+        m_done = false;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool add__line_strip_xy(sg::node& a_node,
+                          unsigned int a_floatn,const float* a_xys,
+                          bool a_stop = false){
+    if(!a_floatn) return false;
+    if(m_stop_at_first){
+      add_line_strip_xy(a_floatn,a_xys,a_stop);
+      if(m_done) {
+        m_node = &a_node;
+        return true;
+      }
+    } else {
+      m_done = false;
+      m_zs.clear();
+      add_line_strip_xy(a_floatn,a_xys,a_stop);
+      if(m_done) {
+        add_pick(a_node,m_zs,m_ws,m_state);
+        m_done = false;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool add__lines_xy(sg::node& a_node,
+                     const std::vector<float>& a_xys,
+                     bool a_stop = false) {
+    if(a_xys.empty()) return false;
+    if(m_stop_at_first){
+      add_lines_xy(a_xys,a_stop);
+      if(m_done) {
+        m_node = &a_node;
+        return true;
+      }
+    } else {
+      m_done = false;
+      m_zs.clear();
+      add_lines_xy(a_xys,a_stop);
+      if(m_done) {
+        add_pick(a_node,m_zs,m_ws,m_state);
+        m_done = false;
+        return true;
+      }
+    }
+    return false;
+  }
+
+public:
+  bool add__primitive(sg::node& a_node,
+                      gl::mode_t a_mode,
+                      unsigned int a_floatn,const float* a_xyzs,
+                      bool a_stop = false){
+    if(!a_floatn) return false;
+    if(m_stop_at_first){
+      add_primitive(a_mode,a_floatn,a_xyzs,a_stop);
+      if(m_done) {
+        m_node = &a_node;
+        return true;
+      }
+    } else {
+      m_done = false;
+      m_zs.clear();
+      add_primitive(a_mode,a_floatn,a_xyzs,a_stop);
+      if(m_done) {
+        add_pick(a_node,m_zs,m_ws,m_state);
+        m_done = false;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool add__primitive(sg::node& a_node,
+                      gl::mode_t a_mode,
+                      const std::vector<float>& a_xyzs,
+                      bool a_stop = false) {
+    if(a_xyzs.empty()) return false;
+    if(m_stop_at_first){
+      add_primitive(a_mode,a_xyzs,a_stop);
+      if(m_done) {
+        m_node = &a_node;
+        return true;
+      }
+    } else {
+      m_done = false;
+      m_zs.clear();
+      add_primitive(a_mode,a_xyzs,a_stop);
+      if(m_done) {
+        add_pick(a_node,m_zs,m_ws,m_state);
+        m_done = false;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool add__line_strip(sg::node& a_node,
+                       unsigned int a_floatn,const float* a_xyzs,
+                       bool a_stop = false){
+    if(!a_floatn) return false;
+    if(m_stop_at_first){
+      add_line_strip(a_floatn,a_xyzs,a_stop);
+      if(m_done) {
+        m_node = &a_node;
+        return true;
+      }
+    } else {
+      m_done = false;
+      m_zs.clear();
+      add_line_strip(a_floatn,a_xyzs,a_stop);
+      if(m_done) {
+        add_pick(a_node,m_zs,m_ws,m_state);
+        m_done = false;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool add__triangles(sg::node& a_node,
+                      unsigned int a_floatn,
+                      const float* a_xyzs,
+                      bool a_stop = false){
+    if(!a_floatn) return false;
+    if(m_stop_at_first){
+      add_triangles(a_floatn,a_xyzs,a_stop);
+      if(m_done) {
+        m_node = &a_node;
+        return true;
+      }
+    } else {
+      m_done = false;
+      m_zs.clear();
+      add_triangles(a_floatn,a_xyzs,a_stop);
+      if(m_done) {
+        add_pick(a_node,m_zs,m_ws,m_state);
+        m_done = false;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool add__lines(sg::node& a_node,
+                  const std::vector<float>& a_xyzs,
+                  bool a_stop = false){
+    if(a_xyzs.empty()) return false;
+    if(m_stop_at_first){
+      add_lines(a_xyzs,a_stop);
+      if(m_done) {
+        m_node = &a_node;
+        return true;
+      }
+    } else {
+      m_done = false;
+      m_zs.clear();
+      add_lines(a_xyzs,a_stop);
+      if(m_done) {
+        add_pick(a_node,m_zs,m_ws,m_state);
+        m_done = false;
+        return true;
+      }
+    }
+    return false;
+  }
+
+public: //for markers
+  bool is_inside(float a_x,float a_y,float a_z,float a_w) {
+    //std::cout << "debug : tools::sg::pick_action::is_inside :"
+    //      << " x " << a_x
+    //      << " y " << a_y
+    //      << std::endl;
+
+    // In principle we should receive (because of proj x model matrix
+    // mult of world coord points) point in [-1,1]x[-1,1].
+
+    float x,y;
+    to_pick_ndc(a_x,a_y,x,y);
+
+    if(x<-1) return false;
+    if(1<x) return false;
+    if(y<-1) return false;
+    if(1<y) return false;
+
+    //std::cout << "debug : tools::sg::pick_action::is_inside :"
+    //      << " inside !"
+    //      << std::endl;
+
+    m_zs.push_back(a_z);
+    m_ws.push_back(a_w);
+
+    return true;
+  }
+  bool intersect_line(float a_bx,float a_by,float a_bz,float a_bw,
+                      float a_ex,float a_ey,float a_ez,float a_ew) {
+
+    // a_bz, a_ez are used only to compute the intersection point.
+
+    float bx,by;
+    to_pick_ndc(a_bx,a_by,bx,by);
+    float ex,ey;
+    to_pick_ndc(a_ex,a_ey,ex,ey);
+
+    //no check on z is done.
+    float bz = a_bz;
+    float bw = a_bw;
+    float ez = a_ez;
+    float ew = a_ew;
+
+    bool toggle;
+    if(!ortho_clip_line(bx,by,bz,bw, ex,ey,ez,ew, toggle)) return false;
+
+    m_zs.push_back(bz);
+    m_ws.push_back(bw);
+
+    return true;
+  }
+
+protected:
+  bool intersect_triangle(float a_1x,float a_1y,float a_1z,float a_1w,
+                          float a_2x,float a_2y,float a_2z,float a_2w,
+                          float a_3x,float a_3y,float a_3z,float a_3w) {
+    //test a triangle.
+
+    if(is_inside(a_1x,a_1y,a_1z,a_1w)) return true;
+    if(is_inside(a_2x,a_2y,a_2z,a_2w)) return true;
+    if(is_inside(a_3x,a_3y,a_3z,a_3w)) return true;
+
+    // alll points are outside. 
+
+    float x1,y1;
+    to_pick_ndc(a_1x,a_1y,x1,y1);
+    float x2,y2;
+    to_pick_ndc(a_2x,a_2y,x2,y2);
+
+    bool toggle;
+    float bx,by,bz,bw,ex,ey,ez,ew;
+
+    bx = x1;
+    by = y1;
+    bz = a_1z;
+    bw = a_1w;
+
+    ex = x2;
+    ey = y2;
+    ez = a_2z;
+    ew = a_2w;
+    if(ortho_clip_line(bx,by,bz,bw, ex,ey,ez,ew, toggle)) {
+      m_zs.push_back(bz);
+      m_ws.push_back(bw);
+      return true;   
+    }
+
+    float x3,y3;
+    to_pick_ndc(a_3x,a_3y,x3,y3);
+
+    bx = x2;
+    by = y2;
+    bz = a_2z;
+    bw = a_2w;
+
+    ex = x3;
+    ey = y3;
+    ez = a_3z;
+    ew = a_3w;
+    if(ortho_clip_line(bx,by,bz,bw, ex,ey,ez,ew, toggle)) {
+      m_zs.push_back(bz);
+      m_ws.push_back(bw);
+      return true;   
+    }
+
+    bx = x1;
+    by = y1;
+    bz = a_1z;
+    bw = a_1w;
+
+    ex = x3;
+    ey = y3;
+    ez = a_3z;
+    ew = a_3w;
+    if(ortho_clip_line(bx,by,bz,bw, ex,ey,ez,ew, toggle)) {
+      m_zs.push_back(bz);
+      m_ws.push_back(bw);
+      return true;   
+    }
+
+    // no intersection with edges.
+    // but the triangle may surround [-1,1]x[-1,1] !
+
+    // test if O=(0,0) is inside the triangle :    
+
+    float xo = 0;
+    float yo = 0;
+    //float zo = 0;
+
+   {float cp2 = (x2-x1)*(y3-y1)-(y2-y1)*(x3-x1);  //(2-1).cross(3-1)
+    if(cp2==0) return false;       // (1,2,3) aligned points.
+    float cp1 = (x2-x1)*(yo-y1)-(y2-y1)*(xo-x1);
+    if(cp1==0) { // O on (1,2). We can't pass here.
+      //m_out << "pick_action::intersect_triangle : case 0." << std::endl;
+      //m_zs.push_back(???);
+      //m_ws.push_back(???);
+      return false;
+    }
+    if((cp1*cp2)<0) return false;} // O 3 not on same side than (1,2)
+
+   {float cp2 = (x3-x2)*(y1-y2)-(y3-y2)*(x1-x2); //(3-2).cross(1-2)
+    if(cp2==0) return false;       // (1,2,3) aligned points.
+    float cp1 = (x3-x2)*(yo-y2)-(y3-y2)*(xo-x2);
+    if(cp1==0) { // O on (2,3). We can't pass here.
+      //m_out << "pick_action::intersect_triangle : case 1." << std::endl;
+      //m_zs.push_back(???);
+      //m_ws.push_back(???);
+      return false;
+    }
+    if((cp1*cp2)<0) return false;} // O 1 not on same side than (2,3)
+
+   {float cp2 = (x1-x3)*(y2-y3)-(y1-y3)*(x2-x3); //(1-3).cross(2-3)
+    if(cp2==0) return false;       // (1,2,3) aligned points.
+    float cp1 = (x1-x3)*(yo-y3)-(y1-y3)*(xo-x3);
+    if(cp1==0) { // O on (3,1). We can't pass here.
+      //m_out << "pick_action::intersect_triangle : case 2." << std::endl;
+      //m_zs.push_back(???);
+      //m_ws.push_back(???);
+      return false;
+    }
+    if((cp1*cp2)<0) return false;} // O 2 not on same side than (3,1)
+
+    //std::cout << " (0,0) inside. " << std::endl;
+
+    //get z of O=(0,0) on the triangle :
+
+    //NOTE : optimize ?
+
+    vec3f O(0,0,0);
+    line<float> ln(O,O+vec3f(0,0,1));
+
+    vec3f pz;   
+   {vec3f p1(x1,y1,a_1z);
+    vec3f p2(x2,y2,a_2z);
+    vec3f p3(x3,y3,a_3z);
+    plane<float> pl(p1,p2,p3);
+    if(!pl.intersect(ln,pz)) {
+      m_out << "pick_action::intersect_triangle :"
+            << " z plane/line intersection failed."
+            << std::endl;      
+      return false;
+    }}
+
+    // we can get w by the same plane intersection by changing the zs to ws :
+    // (in the xy plane, 1,2,3 points have same projection, then the
+    //  z axis intersection with the triangle hits the same point done with zs
+    //  than with ws).
+    vec3f pw;   
+   {vec3f p1(x1,y1,a_1w);
+    vec3f p2(x2,y2,a_2w);
+    vec3f p3(x3,y3,a_3w);
+    plane<float> pl(p1,p2,p3);
+    if(!pl.intersect(ln,pw)) {
+      m_out << "pick_action::intersect_triangle :"
+            << " plane/line intersection failed."
+            << std::endl;      
+      return false;
+    }}
+    //::printf("debug : w plane %g\n",p[2]);
+
+    //m_out << "pick_action::intersect_triangle :"
+    //      << " p " << p[0] << " " << p[1] << " " << p[2]
+    //      << std::endl;      
+
+    m_zs.push_back(pz[2]);
+    m_ws.push_back(pw[2]);
+
+/*
+    // check by using interpolation :
+   {vec3f p1(x1,y1,a_1z);
+    vec3f p2(x2,y2,a_2z);
+    vec3f p3(x3,y3,a_3z);
+    line<float> l1p(p1,pz);
+    line<float> l23(p2,p3);
+    vec3f q; //on 23 side.
+    float prec = 1e10-8;
+    if(!l1p.intersect(l23,q,prec)) {
+      m_out << "pick_action::intersect_triangle :"
+            << " line/line intersection failed."
+            << std::endl;      
+      return false;
+    }
+    float dq2 = (q-p2).length();
+    float d32 = (p3-p2).length();
+    if(d32==0) {
+      m_out << "pick_action::intersect_triangle :"
+            << " zero d32."
+            << std::endl;      
+      return false;
+    }
+    float dp1 = (pz-p1).length();
+    float dq1 = (q-p1).length();
+    if(dq1==0) {
+      m_out << "pick_action::intersect_triangle :"
+            << " zero dq1."
+            << std::endl;      
+      return false;
+    }
+
+    float wq = a_2w + (a_3w-a_2w)*(dq2/d32);
+    float wp = a_1w + (wq-a_1w)*(dp1/dq1);
+
+    float zq = a_2z + (a_3z-a_2z)*(dq2/d32);
+    float zp = a_1z + (zq-a_1z)*(dp1/dq1);
+
+    ::printf("debug : pz[2] %g zp %g\n",pz[2],zp);
+    ::printf("debug : pw[2] %g wp %g\n",pw[2],wp);
+    }
+*/
+
+    return true;
+  }
+protected:
+  void set_to_pick_ndc() { //OPTIMIZATION
+    float cx = (m_l+m_r)/2;
+    cx /= float(m_ww);
+    cx *= 2;
+    float cy = (m_b+m_t)/2;
+    cy /= float(m_wh);
+    cy *= 2;
+
+    float sx = m_r-m_l;
+    sx /= float(m_ww);
+    sx *= 2;
+    float sy = m_t-m_b;
+    sy /= float(m_wh);
+    sy *= 2;
+
+    //then now cx,cy,sx,sw in [0,2]x[0,2] coords.
+    cx -= 1;
+    cy -= 1;
+    //then now cx,cy,sx,sw in [-1,1]x[-1,1] coords.
+    m_cx = cx;
+    m_cy = cy;
+    m_sx = sx;
+    m_sy = sy;
+  }
+  void to_pick_ndc(const float& a_fx,const float& a_fy,float& a_x,float& a_y) const {
+    a_x = 2*(a_fx-m_cx)/m_sx;
+    a_y = 2*(a_fy-m_cy)/m_sy;
+  }
+protected:
+  static bool ortho_clip_line(float& a_bx,float& a_by,float& a_bz,float& a_bw,
+                              float& a_ex,float& a_ey,float& a_ez,float& a_ew,
+                              /*bool a_doz,*/bool& a_toggle) {
+    // it tests against a [-1,1]x[-1,1] box.
+
+    // toggle means that at return begin contains end and end contains begin).
+    //
+    // begin out, end out
+    //   output : a_toggle = false, return false.
+    // begin in, end  in
+    //   output : a_toggle = false, return true.
+    // begin in, end out
+    //   output : a_toggle = true, begin = clipping point, return true.
+    // begin out, end  in
+    //   output : a_toggle = false, begin = clipping point, return true.
+
+    a_toggle = false;
+
+    const unsigned int FILTER__NOZ = 0xf;   //4 left right bits set to 1.
+    //const unsigned int FILTER__Z = 0x3f;  //6 left right bits set to 1.
+
+    bool accept = false;
+    bool done = false;
+    do {
+      unsigned int bout = ortho_out(a_bx,a_by/*,a_bz,a_doz*/);
+      unsigned int eout = ortho_out(a_ex,a_ey/*,a_ez,a_doz*/);
+      bool reject = ( (bout & eout & FILTER__NOZ) !=0  ? true : false);
+      if(reject) { //begin and end have a common "outside bit" raised.
+        done = true;
+      } else {
+        accept = !bout && !eout;
+        if(accept) { //begin and end have all outside-bits to zero.
+          done = true;
+        } else {
+          if(!bout) { // begin inside. toggle begin and end.
+            unsigned int tout = eout;
+            float tx = a_ex;
+            float ty = a_ey;
+            float tz = a_ez;
+            float tw = a_ew;
+
+            eout = bout;
+            a_ex = a_bx;
+            a_ey = a_by;
+            a_ez = a_bz;
+            a_ew = a_bw;
+
+            bout = tout;
+            a_bx = tx;
+            a_by = ty;
+            a_bz = tz;
+            a_bw = tw;
+
+            a_toggle = true;
+          }
+          if(bout & (1<<0)) { // by > 1
+            float t = a_ey - a_by;
+            //CHECK_DIV(t,"ClipLineParallel")
+            t = (1 - a_by)/t;
+            a_bx += (a_ex - a_bx) * t;
+            a_by  = 1;
+            a_bz += (a_ez - a_bz) * t;
+            a_bw += (a_ew - a_bw) * t;
+          } else if(bout & (1<<1)) { // by < -1
+            float t = a_ey-a_by;
+            //CHECK_DIV(t,"ClipLineParallel")
+            t = (-1 - a_by)/t;
+            a_bx += (a_ex - a_bx) * t;
+            a_by  = -1;
+            a_bz += (a_ez - a_bz) * t;
+            a_bw += (a_ew - a_bw) * t;
+          } else if(bout & (1<<2)) { // bx > 1
+            float t = a_ex-a_bx;
+            //CHECK_DIV    (t,"ClipLineParallel")
+            t = (1 - a_bx)/t;
+            a_bx  = 1;
+            a_by += (a_ey - a_by) * t;
+            a_bz += (a_ez - a_bz) * t;
+            a_bw += (a_ew - a_bw) * t;
+          } else if(bout & (1<<3)) { // bx < -1
+            float t = a_ex-a_bx;
+            //CHECK_DIV    (t,"ClipLineParallel")
+            t = (-1 - a_bx)/t;
+            a_bx  = -1;
+            a_by += (a_ey - a_by) * t;
+            a_bz += (a_ez - a_bz) * t;
+            a_bw += (a_ew - a_bw) * t;
+          }
+          // z = -1.
+          // z =  0.
+          // G.Barrand : do not do z clipping
+       /* else if(a_doz && (bout & (1<<4)) ) { //bz < -1 
+            float t = a_ez-a_bz;
+            //CHECK_DIV    (t,"ClipLineParallel")
+            t = (-1 - a_z)/t;
+            a_bx += (a_ex - a_bx) * t;
+            a_by += (a_ey - a_by) * t;
+            a_bz  = -1;
+            a_bw += (a_ew - a_bw) * t;
+          } else if(a_doz && (bout & (1<<5)) ) { //bz > 0
+            t = a_ez - a_bz;
+            //CHECK_DIV    (t,"ClipLineParallel")
+            t = (- a_bz)/t;
+            a_bx += (a_ex - a_bx) * t;
+            a_by += (a_ey - a_by) * t;
+            a_bz  = 0;
+            a_bw += (a_ew - a_bw) * t;
+          } */
+        }
+      }
+    } while (!done);
+    return accept;
+  }
+
+  static unsigned int ortho_out(float a_x,float a_y/*,float a_z,bool a_doz*/){
+    unsigned int out = 0;
+    if(a_y> 1) out |= (1<<0);
+    if(a_y<-1) out |= (1<<1);
+    if(a_x> 1) out |= (1<<2);
+    if(a_x<-1) out |= (1<<3);
+    //if(!a_doz) return out;
+    //if(a_z<-1) out |= (1<<4);
+    //if(a_z> 0) out |= (1<<5);
+    return out;
+  }
+
+protected:
+  // picking region (in window coordinates, (0,0) = bottom-left ) :
+  float m_l;
+  float m_r;
+  float m_b;
+  float m_t;
+  
+  bool m_stop_at_first;
+
+  bool m_done;
+  sg::node* m_node;
+
+  std::vector<float> m_zs;
+  std::vector<float> m_ws;
+  std::vector<pick_t> m_picks;
+
+  //OPTIMIZATION:
+  float m_cx,m_cy,m_sx,m_sy;
+};
+
+}}
+
+#endif

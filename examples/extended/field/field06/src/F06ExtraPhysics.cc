@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F06ExtraPhysics.cc 69762 2013-05-14 08:08:54Z gcosmo $
+// $Id: F06ExtraPhysics.cc 91270 2015-06-29 07:07:49Z gcosmo $
 //
 /// \file field/field06/src/F06ExtraPhysics.cc
 /// \brief Implementation of the F06ExtraPhysics class
@@ -78,46 +78,6 @@ void F06ExtraPhysics::ConstructProcess()
         pmanager->AddDiscreteProcess(new G4StepLimiter());
         pmanager->AddDiscreteProcess(new G4UserSpecialCuts());
     }
-
-    AddBetaDecay();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void F06ExtraPhysics::AddBetaDecay()
-{
-    aParticleIterator->reset();
-
-    while ((*aParticleIterator)()) {
-
-        G4ParticleDefinition* particle = aParticleIterator->value();
-        G4String particleName = particle->GetParticleName();
-
-        if (particleName == "neutron") {
-
-           particle->SetPDGLifeTime(885.7*second);
-           particle->SetPDGStable(false);
-
-           G4DecayTable * table = new G4DecayTable();
-           G4VDecayChannel* mode = 
-                                new G4NeutronBetaDecayChannel("neutron",1.00);
-           table->Insert(mode);
-           particle->SetDecayTable(table);
-
-           G4ProcessManager* pmanager = particle->GetProcessManager();
-           if (!pmanager) {
-               std::ostringstream o;
-               o << "Particle " << particleName << "without a Process Manager";
-               G4Exception("F06ExtraPhysics::ConstructProcess()","",
-                            FatalException,o.str().c_str());
-           }
-
-           G4Decay* theDecayProcess = new G4Decay();
-           pmanager->AddProcess(theDecayProcess);
-           pmanager->SetProcessOrdering(theDecayProcess,idxPostStep);
-           pmanager->SetProcessOrdering(theDecayProcess,idxAtRest);
-
-           break;
-        }
-    }
-}

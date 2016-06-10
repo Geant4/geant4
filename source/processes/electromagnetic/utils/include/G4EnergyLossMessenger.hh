@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossMessenger.hh 85424 2014-10-29 08:23:44Z gcosmo $
+// $Id: G4EnergyLossMessenger.hh 90095 2015-05-13 12:10:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -67,7 +67,6 @@ class G4UIcmdWithABool;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithAString;
 class G4EmProcessOptions;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -88,8 +87,6 @@ private:
   G4UIcommand*               StepFuncCmd;
   G4UIcommand*               deexCmd;
   G4UIcmdWithABool*          IntegCmd;
-  G4UIcmdWithAString*        pixeXsCmd;
-  G4UIcmdWithAString*        pixeeXsCmd;
   G4UIcommand*               bfCmd;
   G4UIcommand*               fiCmd;
   G4UIcommand*               brCmd;

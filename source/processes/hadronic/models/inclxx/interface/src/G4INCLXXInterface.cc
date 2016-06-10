@@ -446,7 +446,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
       }
     }
     nTries++;
-  } while(!eventIsOK && nTries < maxTries);
+  } while(!eventIsOK && nTries < maxTries); /* Loop checking, 10.07.2015, D.Mancusi */
 
   // Clean up the objects that we created for the inverse kinematics
   if(inverseKinematics) {
@@ -598,3 +598,6 @@ void G4INCLXXInterface::ModelDescription(std::ostream& outFile) const {
      << "Reference: D. Mancusi et al., Phys. Rev. C90 (2014) 054602\n\n";
 }
 
+G4String const &G4INCLXXInterface::GetDeExcitationModelName() const {
+  return theDeExcitation->GetModelName();
+}

@@ -38,6 +38,8 @@
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
+#include <memory>
+
 class G4VAnalysisManager;
 class G4HnManager;
 class G4FileMessenger;
@@ -46,6 +48,7 @@ class G4H2Messenger;
 class G4H3Messenger;
 class G4P1Messenger;
 class G4P2Messenger;
+class G4NtupleMessenger;
 class G4HnMessenger;
 
 class G4UIdirectory;
@@ -55,36 +58,39 @@ class G4UIcmdWithAnInteger;
 class G4AnalysisMessenger : public G4UImessenger
 {
   public:
-    G4AnalysisMessenger(G4VAnalysisManager* manager);
+    explicit G4AnalysisMessenger(G4VAnalysisManager* manager);
     virtual ~G4AnalysisMessenger();
    
     // methods
-    void SetH1HnManager(G4HnManager* h1HnManager);
-    void SetH2HnManager(G4HnManager* h2HnManager);
-    void SetH3HnManager(G4HnManager* h2HnManager);
-    void SetP1HnManager(G4HnManager* h1HnManager);
-    void SetP2HnManager(G4HnManager* h2HnManager);
+    void SetH1HnManager(G4HnManager& h1HnManager);
+    void SetH2HnManager(G4HnManager& h2HnManager);
+    void SetH3HnManager(G4HnManager& h2HnManager);
+    void SetP1HnManager(G4HnManager& h1HnManager);
+    void SetP2HnManager(G4HnManager& h2HnManager);
 
     // methods
-    virtual void SetNewValue(G4UIcommand* command, G4String value);
+    virtual void SetNewValue(G4UIcommand* command, G4String value) final;
 
+  private:
     // data members
-    G4VAnalysisManager*    fManager; ///< Associated class
-    G4FileMessenger*       fFileMessenger;
-    G4H1Messenger*         fH1Messenger;
-    G4H2Messenger*         fH2Messenger;
-    G4H3Messenger*         fH3Messenger;
-    G4P1Messenger*         fP1Messenger;
-    G4P2Messenger*         fP2Messenger;
-    G4HnMessenger*         fH1HnMessenger;
-    G4HnMessenger*         fH2HnMessenger;
-    G4HnMessenger*         fH3HnMessenger;
-    G4HnMessenger*         fP1HnMessenger;
-    G4HnMessenger*         fP2HnMessenger;
+    G4VAnalysisManager* fManager; ///< Associated class
+    std::unique_ptr<G4FileMessenger>  fFileMessenger;
+    std::unique_ptr<G4H1Messenger>  fH1Messenger;
+    std::unique_ptr<G4H2Messenger>  fH2Messenger;
+    std::unique_ptr<G4H3Messenger>  fH3Messenger;
+    std::unique_ptr<G4P1Messenger>  fP1Messenger;
+    std::unique_ptr<G4P2Messenger>  fP2Messenger;
+    std::unique_ptr<G4NtupleMessenger>  fNtupleMessenger;
+    std::unique_ptr<G4HnMessenger>  fH1HnMessenger;
+    std::unique_ptr<G4HnMessenger>  fH2HnMessenger;
+    std::unique_ptr<G4HnMessenger>  fH3HnMessenger;
+    std::unique_ptr<G4HnMessenger>  fP1HnMessenger;
+    std::unique_ptr<G4HnMessenger>  fP2HnMessenger;
     
-    G4UIdirectory*         fAnalysisDir;   
-    G4UIcmdWithABool*      fSetActivationCmd;   
-    G4UIcmdWithAnInteger*  fVerboseCmd;   
+    std::unique_ptr<G4UIdirectory>         fAnalysisDir;   
+    std::unique_ptr<G4UIcmdWithABool>      fSetActivationCmd;   
+    std::unique_ptr<G4UIcmdWithAnInteger>  fVerboseCmd;   
+    std::unique_ptr<G4UIcmdWithAnInteger>  fCompressionCmd;   
 };
   
 #endif

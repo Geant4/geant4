@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGPionInelasticXS.hh 70848 2013-06-06 12:00:02Z gcosmo $
+// $Id: G4BGGPionInelasticXS.hh 93682 2015-10-28 10:09:49Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -56,7 +56,7 @@
 #include "G4HadTmpUtil.hh"
 
 
-class G4GlauberGribovCrossSection;
+class G4ComponentGGHadronNucleusXsc;
 class G4UPiNuclearCrossSection;
 class G4HadronNucleonXsc;
 class G4Pow;
@@ -116,7 +116,7 @@ private:
 
   G4Pow*                          fG4pow;
 
-  G4GlauberGribovCrossSection*    fGlauber;
+  G4ComponentGGHadronNucleusXsc*  fGlauber;
   G4UPiNuclearCrossSection*       fPion;
   G4HadronNucleonXsc*             fHadron;
   G4ComponentSAIDTotalXS*         fSAID;

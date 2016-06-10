@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 80151 2014-04-03 09:42:22Z gcosmo $
+# $Id: sources.cmake 94010 2015-11-05 10:08:33Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -52,13 +52,17 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-utils
         G4DNACrossSectionDataSet.hh
         G4DNADamages.hh
         G4DNAGenericIonsManager.hh
-		G4DNAIons.hh
-	    G4DNAMolecularMaterial.hh
+        G4DNAIons.hh
+        G4DNAMolecularMaterial.hh
         G4DNAMolecularReactionTable.hh
+        G4DNAEmfietzoglouWaterExcitationStructure.hh
+        G4DNAEmfietzoglouWaterIonisationStructure.hh
+        G4DNARevertProbability.hh
         G4DNAWaterExcitationStructure.hh
         G4DNAWaterIonisationStructure.hh
         G4MoleculeGun.hh
         G4MoleculeGunMessenger.hh
+        G4ReactionTableMessenger.hh
         G4VDNAReactionModel.hh
         G4VUserChemistryList.hh
     SOURCES
@@ -66,13 +70,16 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-utils
         G4DNACrossSectionDataSet.cc
         G4DNADamages.cc
         G4DNAGenericIonsManager.cc
-		G4DNAIons.cc
-		G4DNAMolecularMaterial.cc
+        G4DNAIons.cc
+        G4DNAMolecularMaterial.cc
         G4DNAMolecularReactionTable.cc
+        G4DNAEmfietzoglouWaterExcitationStructure.cc
+        G4DNAEmfietzoglouWaterIonisationStructure.cc
         G4DNAWaterExcitationStructure.cc
         G4DNAWaterIonisationStructure.cc
         G4MoleculeGun.cc
         G4MoleculeGunMessenger.cc
+        G4ReactionTableMessenger.cc
         G4VDNAReactionModel.cc
         G4VUserChemistryList.cc
     GRANULAR_DEPENDENCIES

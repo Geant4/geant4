@@ -26,7 +26,7 @@
 #ifndef CCalDataSet_h
 #define CCalDataSet_h
 
-#include "G4NeutronHPInterpolator.hh"
+#include "G4ParticleHPInterpolator.hh"
 #include <vector>
 
 // by JPW, working, but to be cleaned up. @@@@
@@ -82,7 +82,7 @@ public:
 
 private:
 
-  G4NeutronHPInterpolator theInterpolator;
+  G4ParticleHPInterpolator theInterpolator;
   
 private:
 

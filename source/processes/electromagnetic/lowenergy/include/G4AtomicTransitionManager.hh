@@ -111,8 +111,6 @@ public:
   G4double 
   TotalNonRadiativeTransitionProbability(G4int Z, size_t shellIndex) const; 
 
-  void SetFluoDirectory(const G4String& ss);
-   
 private:
 
   G4AtomicTransitionManager();
@@ -148,7 +146,6 @@ private:
   G4int supTableLimit;
  
   G4bool   isInitialized;
-  G4String fluoDirectory;
 };
 
 #endif

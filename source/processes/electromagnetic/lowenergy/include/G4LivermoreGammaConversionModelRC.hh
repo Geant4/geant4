@@ -23,23 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreGammaConversionModelRC.hh 74822 2013-10-22 14:42:13Z gcosmo $
+// $Id: G4LivermoreGammaConversionModelRC.hh 93810 2015-11-02 11:27:56Z gcosmo $
 //
-// Author: Francesco Longo & Gerardo Depaola
-//         on base of G4LivermoreGammaConversionModel
+// Authors: G.Depaola & F.Longo
 //
 
 #ifndef G4LivermoreGammaConversionModelRC_h
 #define G4LivermoreGammaConversionModelRC_h 1
 
 #include "G4VEmModel.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4ParticleChangeForGamma.hh"
-#include "G4CrossSectionHandler.hh"
-#include "G4ForceCondition.hh"
-#include "G4CompositeEMDataSet.hh"
-#include "G4Gamma.hh"
+#include "G4LPhysicsFreeVector.hh"
+#include "G4ProductionCutsTable.hh"
+
+//#include "G4Electron.hh"
+//#include "G4Positron.hh"
+
+
+class G4ParticleChangeForGamma;
+
+
 
 class G4LivermoreGammaConversionModelRC : public G4VEmModel
 {
@@ -47,52 +49,65 @@ class G4LivermoreGammaConversionModelRC : public G4VEmModel
 public:
 
   G4LivermoreGammaConversionModelRC(const G4ParticleDefinition* p = 0, 
-		     const G4String& nam = "LivermoreConversion");
-
+					     const G4String& nam = "LivermoreGammaConversionRC_1");
+  
   virtual ~G4LivermoreGammaConversionModelRC();
-
+  
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  virtual G4double ComputeCrossSectionPerAtom(
-                                const G4ParticleDefinition*,
-                                      G4double kinEnergy, 
-                                      G4double Z, 
-                                      G4double A=0, 
-                                      G4double cut=0,
-                                      G4double emax=DBL_MAX);
+  virtual void InitialiseLocal(const G4ParticleDefinition*, 
+			       G4VEmModel* masterModel);
+  
+  virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
 
+  virtual G4double ComputeCrossSectionPerAtom(
+					      const G4ParticleDefinition*,
+					      G4double kinEnergy, 
+					      G4double Z, 
+					      G4double A=0, 
+					      G4double cut=0,
+					      G4double emax=DBL_MAX);
+  
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
 				 G4double maxEnergy);
 
-protected:
-
+  virtual G4double MinPrimaryEnergy(const G4Material*,
+				    const G4ParticleDefinition*,
+				    G4double); 
+  
+private:
+  
   G4ParticleChangeForGamma* fParticleChange;
 
-  G4double GetMeanFreePath(const G4Track& aTrack, 
-			   G4double previousStepSize, 
-			   G4ForceCondition* condition);
-private:
-
-  const G4double smallEnergy;
   G4double lowEnergyLimit;  
-  G4double highEnergyLimit;
-
-  G4int verboseLevel;
+  
+  //  G4double highEnergyLimit; 
   G4bool isInitialised;
+  G4int verboseLevel;
+
+
+  void ReadData(size_t Z, const char* path = 0);
   
   G4double ScreenFunction1(G4double screenVariable);
   G4double ScreenFunction2(G4double screenVariable);
-  G4VCrossSectionHandler* crossSectionHandler;
-  G4VEMDataSet* meanFreePathTable;
+  
+  G4double smallEnergy;
+  //  G4double Psi, Phi;
 
+  
   G4LivermoreGammaConversionModelRC & operator=(const  G4LivermoreGammaConversionModelRC &right);
   G4LivermoreGammaConversionModelRC(const  G4LivermoreGammaConversionModelRC&);
 
-  G4double fbeta (G4double x);
-  G4double Dilog (G4double x);
+  static G4int maxZ;
+  static G4LPhysicsFreeVector* data[100]; // 100 because Z range is 1-99
+
+
+ G4double fbeta (G4double x);
+ G4double Dilog (G4double x);
+
 
 
 };

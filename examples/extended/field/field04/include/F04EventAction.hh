@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04EventAction.hh 68021 2013-03-13 13:36:07Z gcosmo $
+// $Id: F04EventAction.hh 90239 2015-05-21 09:07:05Z gcosmo $
 //
 /// \file field/field04/include/F04EventAction.hh
 /// \brief Definition of the F04EventAction class
@@ -53,19 +53,12 @@ class F04EventAction : public G4UserEventAction
     G4int GetEventNo();
     void SetEventVerbose(G4int);
  
-    void SetDrawFlag(G4String val)  { fDrawFlag = val; };
-    void SetPrintModulo(G4int val)  { fPrintModulo = val; };
- 
   private:
 
     F04RunAction* fRunaction;
     F04EventActionMessenger* fEventMessenger;
 
-    G4int fVerboselevel;
-    G4int fPrintModulo;
-
-    G4String fDrawFlag;
-
+    G4int fVerboseLevel;
 };
 
 #endif

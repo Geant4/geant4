@@ -8,10 +8,7 @@
 
 namespace tools {
 
-inline std::string to(bool a_value){return a_value?"true":"false";}
-
-inline bool to(const std::string& a_string,bool& a_value,
-               bool a_def = false){
+inline bool to(const std::string& a_string,bool& a_value,bool a_def = false){
   if(  (a_string=="1")
      ||(a_string=="true")||(a_string=="TRUE")||(a_string=="True")
      ||(a_string=="yes")||(a_string=="YES")||(a_string=="Yes")
@@ -45,30 +42,6 @@ inline bool to(const std::string& a_s,T& a_v,const T& a_def = T()) {
   strm >> a_v;
   if(strm.fail()) {a_v = a_def;return false;}
   return strm.eof();
-}
-
-template <class T>
-inline std::string to(const T& a_v) {
-  std::ostringstream strm;
-  strm << a_v;
-  return strm.str();
-}
-
-inline std::string d2s(double a_value){
-  std::ostringstream strm;
-  strm.precision(25);
-  strm << a_value;
-  return strm.str();
-}
-
-inline std::string soutd(double a_value) {
-  return std::string("\"")+d2s(a_value)+"\"";
-}
-
-// for BatchLab/XML
-template <class T>
-inline std::string sout(const T& a_value) {
-  return std::string("\"")+to<T>(a_value)+"\"";
 }
 
 template <class T>

@@ -25,7 +25,8 @@
 //
 // This is the *BASIC* version of IORT, a Geant4-based application
 //
-// Main Authors: G.Russo(a,b), C.Casarino*(c), G.C. Candiano(c), G.A.P. Cirrone(d), F.Romano(d)
+// Main Authors: G.Russo(a,b), C.Casarino*(c), G.C. Candiano(c), 
+//  G.A.P. Cirrone(d), F.Romano(d)
 // Contributor Authors: S.Guatelli(e)
 // Past Authors: G.Arnetta(c), S.E.Mazzaglia(d)
 //    
@@ -47,12 +48,8 @@
 #include "IORTMatrix.hh"
 
 /////////////////////////////////////////////////////////////////////////////
-#ifdef G4ANALYSIS_USE_ROOT
-IORTAnalysisFileMessenger::IORTAnalysisFileMessenger(IORTAnalysisManager* amgr)
-:AnalysisManager(amgr)
-#else
-IORTAnalysisFileMessenger::IORTAnalysisFileMessenger()
-#endif
+IORTAnalysisFileMessenger::IORTAnalysisFileMessenger(IORTAnalysisManager* amgr) :
+  AnalysisManager(amgr)
 {  
   secondaryCmd = new G4UIcmdWithABool("/analysis/secondary",this);
   secondaryCmd -> SetParameterName("secondary", true);
@@ -69,13 +66,12 @@ IORTAnalysisFileMessenger::IORTAnalysisFileMessenger()
   // With this messenger you can:
   // give a name to the generated .root file
   // One can use this messenger to define a different .root file name other then the default one 
-#ifdef G4ANALYSIS_USE_ROOT
   FileNameCmd = new G4UIcmdWithAString("/analysis/setAnalysisFile",this);
   FileNameCmd->SetGuidance("Set the .root filename for the root-output");
   FileNameCmd->SetDefaultValue("default.root");
   FileNameCmd->SetParameterName("choice",true); ///<doc did not say what second boolean really does
   FileNameCmd->AvailableForStates(G4State_Idle,G4State_PreInit);
-#endif
+
 
 }
 
@@ -84,9 +80,7 @@ IORTAnalysisFileMessenger::~IORTAnalysisFileMessenger()
 {
   delete secondaryCmd; 
   delete DoseMatrixCmd; 
-#ifdef G4ANALYSIS_USE_ROOT
   delete FileNameCmd;
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -106,18 +100,15 @@ void IORTAnalysisFileMessenger::SetNewValue(G4UIcommand* command, G4String newVa
 	{
 	    pMatrix -> TotalEnergyDeposit(); 
 	    pMatrix -> StoreDoseFluenceAscii(newValue);
-#ifdef G4ANALYSIS_USE_ROOT
 	    pMatrix -> StoreDoseFluenceRoot();
-	    IORTAnalysisManager::GetInstance() -> flush();     // Finalize & write the root file 
-#endif
+	    // Finalize & write output file 
+	    IORTAnalysisManager::GetInstance() -> flush();     
 	}
     }
-#ifdef G4ANALYSIS_USE_ROOT
     else if (command == FileNameCmd)
-    {
+      {
 	AnalysisManager->SetAnalysisFileName(newValue);
-	IORTAnalysisManager::GetInstance() -> book(); // Book for a new ROOT TFile 
-    }
-#endif
+	IORTAnalysisManager::GetInstance() -> book(); // Book for a new output file 
+      }
 }
 

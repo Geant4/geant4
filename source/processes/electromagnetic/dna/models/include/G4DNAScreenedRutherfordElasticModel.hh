@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAScreenedRutherfordElasticModel.hh 70171 2013-05-24 13:34:18Z gcosmo $
+// $Id: G4DNAScreenedRutherfordElasticModel.hh 92074 2015-08-17 07:03:46Z gcosmo $
 //
 
 #ifndef G4DNAScreenedRutherfordElasticModel_h
@@ -63,11 +63,16 @@ public:
   inline void SetKillBelowThreshold (G4double threshold);		 
   G4double GetKillBelowThreshold () { return killBelowEnergy; }		 
 
+  inline void SelectFasterComputation(G4bool input); 
+
 protected:
 
   G4ParticleChangeForGamma* fParticleChangeForGamma;
 
 private:
+
+  G4bool fasterCode;
+
   // Water density table
   const std::vector<G4double>* fpWaterDensity;
 
@@ -110,6 +115,11 @@ inline void G4DNAScreenedRutherfordElasticModel::SetKillBelowThreshold (G4double
     killBelowEnergy = threshold; 
     if (threshold < 9*CLHEP::eV)
      G4Exception ("*** WARNING : the G4DNAScreenedRutherfordElasticModel class is not validated below 9 eV !","",JustWarning,"") ;   
+}		 
+
+inline void G4DNAScreenedRutherfordElasticModel::SelectFasterComputation (G4bool input)
+{ 
+    fasterCode = input; 
 }		 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

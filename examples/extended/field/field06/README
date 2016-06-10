@@ -8,7 +8,7 @@
                             field06 Example
                             ---------------
 
-     This example exercises the new (in 9.5) capability of tracking massive
+     This example exercises the capability of tracking massive
      particles in a gravity field.
 
      Credit goes to Erik Miller (Univ. of Northern British Columbia) and
@@ -47,9 +47,6 @@
     G4VModularPhysicsList::ConstructProcess();
 
     F06ExtraPhysics defines G4StepLimiter and G4UserSpecialCuts
-
-    F06ExtraPhysics::AddBetaDecay() to "neutron" as an example of how to set a decay-table with
-    decay-channel(s) to a G4ParticleDefinition.
 
  5- User Action Classes
 

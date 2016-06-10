@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonDecayChannel.cc 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4MuonDecayChannel.cc 94091 2015-11-05 15:13:52Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -33,11 +33,11 @@
 //      History: first implementation, based on object model of
 //      30 May  1997 H.Kurashige
 //
-//      Fix bug in calcuration of electron energy in DecayIt 28 Feb. 01 H.Kurashige 
-//2005
-// M. Melissas ( melissas AT cppm.in2p3.fr)
-// J. Brunner ( brunner AT cppm.in2p3.fr) 
-// Adding V-A fluxes for neutrinos using a new algortithm : 
+// - Fix bug in calculation of electron energy in DecayIt()
+//   28 Feb 01 H.Kurashige 
+// - Adding V-A fluxes for neutrinos using a new algorithm, 2005
+//   M. Melissas ( melissas AT cppm.in2p3.fr)
+//   J. Brunner ( brunner AT cppm.in2p3.fr) 
 // ------------------------------------------------------------
 
 #include "G4ParticleDefinition.hh"
@@ -136,11 +136,12 @@ G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double)
  
   // parent mass
   G4double parentmass = G4MT_parent->GetPDGMass();
+  const int N_DAUGHTER=3;
 
   //daughters'mass
-  G4double daughtermass[3]; 
+  G4double daughtermass[N_DAUGHTER]; 
   G4double sumofdaughtermass = 0.0;
-  for (G4int index=0; index<3; index++){
+  for (G4int index=0; index<N_DAUGHTER; index++){
     daughtermass[index] = G4MT_daughters[index]->GetPDGMass();
     sumofdaughtermass += daughtermass[index];
   }
@@ -153,7 +154,7 @@ G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double)
   delete parentparticle;
 
   // calculate daughter momentum
-  G4double daughtermomentum[3];
+  G4double daughtermomentum[N_DAUGHTER];
     // calcurate electron energy
   G4double xmax = (1.0+daughtermass[0]*daughtermass[0]/parentmass/parentmass);
   G4double x;
@@ -161,19 +162,23 @@ G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double)
   G4double Ee,Ene;
   
   G4double gam;
-   G4double EMax=parentmass/2-daughtermass[0];
-   
+  G4double EMax=parentmass/2-daughtermass[0];
   
+  const size_t MAX_LOOP=1000;
    //Generating Random Energy
-do {
-  Ee=G4UniformRand();
-    do{
+  for (size_t loop1=0; loop1 <MAX_LOOP; ++loop1){
+    Ee=G4UniformRand();
+    for (size_t loop2 =0; loop2<MAX_LOOP; ++loop2){
       x=xmax*G4UniformRand();
       gam=G4UniformRand();
-    }while (gam >x*(1.-x));
+      if (gam <= x*(1.-x)) break;
+      x = xmax;
+    }
     Ene=x;
-  } while ( Ene < (1.-Ee));
- G4double Enm=(2.-Ee-Ene);
+    if ( Ene >= (1.-Ee)) break;
+    Ene = 1.-Ee;
+  }
+  G4double Enm=(2.-Ee-Ene);
 
 
  //initialisation of rotation parameters
@@ -221,9 +226,6 @@ do {
 	 direction2 * daughtermomentum[2]);
   products->PushProducts(daughterparticle2);
 
-
-
-
  // output message
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
@@ -234,9 +236,3 @@ do {
 #endif
   return products;
 }
-
-
-
-
-
-

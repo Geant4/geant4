@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAWaterDissociationDisplacer.cc 84858 2014-10-21 16:08:22Z gcosmo $
+// $Id: G4DNAWaterDissociationDisplacer.cc 94289 2015-11-11 08:33:40Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -48,6 +48,8 @@
 #include "G4H2O2.hh"
 #include "Randomize.hh"
 #include "G4Molecule.hh"
+#include "G4MolecularConfiguration.hh"
+#include "G4RandomDirection.hh"
 
 using namespace std;
 
@@ -62,18 +64,56 @@ const DisplacementType G4DNAWaterDissociationDisplacer::AutoIonisation =
 const DisplacementType G4DNAWaterDissociationDisplacer::DissociativeAttachment =
     G4VMolecularDecayDisplacer::AddDisplacement();
 
-G4DNAWaterDissociationDisplacer::G4DNAWaterDissociationDisplacer() :
-    G4VMolecularDecayDisplacer()
+//------------------------------------------------------------------------------
+
+G4double G4DNAWaterDissociationDisplacer::ElectronProbaDistribution(G4double r)
 {
-  ;
+  return (2*r+1)*exp(-2*r);
 }
+
+//------------------------------------------------------------------------------
+
+G4DNAWaterDissociationDisplacer::G4DNAWaterDissociationDisplacer() :
+    G4VMolecularDecayDisplacer(),
+    fFastElectronDistrib(0, 10, 0.001)
+{
+  fProba1DFunction =
+      std::bind((G4double(*)(G4double))
+                &G4DNAWaterDissociationDisplacer::ElectronProbaDistribution,
+                std::placeholders::_1);
+
+  size_t nBins = 100;
+
+  fElectronThermalization.reserve(nBins);
+
+  double eps = 1./((int)nBins);
+
+  // G4cout << "eps = " << eps << G4endl;
+
+  double proba = eps;
+
+  fElectronThermalization.push_back(0.);
+
+  for(size_t i = 1 ; i < nBins ; ++i)
+  {
+    double r = fFastElectronDistrib.Revert(proba, fProba1DFunction);
+    fElectronThermalization.push_back(r);
+    proba+=eps;
+  }
+}
+
+//------------------------------------------------------------------------------
 
 G4DNAWaterDissociationDisplacer::~G4DNAWaterDissociationDisplacer()
 {
   ;
 }
 
-G4ThreeVector G4DNAWaterDissociationDisplacer::GetMotherMoleculeDisplacement(const G4MolecularDissociationChannel* theDecayChannel) const
+//------------------------------------------------------------------------------
+
+G4ThreeVector
+G4DNAWaterDissociationDisplacer::
+GetMotherMoleculeDisplacement(const G4MolecularDissociationChannel* theDecayChannel) const
 {
   G4int decayType = theDecayChannel->GetDisplacementType();
 
@@ -104,15 +144,17 @@ G4ThreeVector G4DNAWaterDissociationDisplacer::GetMotherMoleculeDisplacement(con
   {
     return G4ThreeVector(0, 0, 0);
   }
-  G4ThreeVector RandDirection = radialDistributionOfProducts(
+  auto RandDirection = radialDistributionOfProducts(
       RMSMotherMoleculeDisplacement);
 
   return RandDirection;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//------------------------------------------------------------------------------
 
-vector<G4ThreeVector> G4DNAWaterDissociationDisplacer::GetProductsDisplacement(const G4MolecularDissociationChannel* theDecayChannel) const
+vector<G4ThreeVector>
+G4DNAWaterDissociationDisplacer::
+GetProductsDisplacement(const G4MolecularDissociationChannel* theDecayChannel) const
 {
   G4int nbProducts = theDecayChannel->GetNbProducts();
   vector<G4ThreeVector> theProductDisplacementVector(nbProducts);
@@ -145,7 +187,7 @@ vector<G4ThreeVector> G4DNAWaterDissociationDisplacer::GetProductsDisplacement(c
     for(int i = 0; i < nbProducts; i++)
     {
       G4double theRMSDisplacement;
-      const G4Molecule* product = theDecayChannel->GetProduct(i);
+      G4MolecularConfiguration* product = theDecayChannel->GetProduct(i);
       theRMSDisplacement = theRMSmap[product->GetDefinition()];
 
       if(theRMSDisplacement==0)
@@ -154,7 +196,7 @@ vector<G4ThreeVector> G4DNAWaterDissociationDisplacer::GetProductsDisplacement(c
       }
       else
       {
-        G4ThreeVector RandDirection = radialDistributionOfProducts(theRMSDisplacement);
+        auto RandDirection = radialDistributionOfProducts(theRMSDisplacement);
         theProductDisplacementVector[i] = RandDirection;
       }
     }
@@ -162,13 +204,15 @@ vector<G4ThreeVector> G4DNAWaterDissociationDisplacer::GetProductsDisplacement(c
   else if(decayType == A1B1_DissociationDecay)
   {
     if(fVerbose)
-    G4cout<<"A1B1_DissociationDecay"<<G4endl;
+      G4cout<<"A1B1_DissociationDecay"<<G4endl;
     G4double theRMSDisplacement = 2.4 * nanometer;
-    G4ThreeVector RandDirection = radialDistributionOfProducts(theRMSDisplacement);
+    auto RandDirection =
+        radialDistributionOfProducts(theRMSDisplacement);
 
     for(G4int i =0; i < nbProducts; i++)
     {
-      const G4Molecule* product = theDecayChannel->GetProduct(i);
+      G4MolecularConfiguration* product = theDecayChannel->GetProduct(i);
+
       if(product->GetDefinition()== G4OH::Definition())
       {
         theProductDisplacementVector[i] = -1./18.*RandDirection;
@@ -182,14 +226,15 @@ vector<G4ThreeVector> G4DNAWaterDissociationDisplacer::GetProductsDisplacement(c
   else if(decayType == B1A1_DissociationDecay)
   {
     if(fVerbose)
-    G4cout<<"B1A1_DissociationDecay"<<G4endl;
+      G4cout<<"B1A1_DissociationDecay"<<G4endl;
     G4double theRMSDisplacement = 0.8 * nanometer;
-    G4ThreeVector RandDirection = radialDistributionOfProducts(theRMSDisplacement);
+    auto RandDirection =
+        radialDistributionOfProducts(theRMSDisplacement);
 
     G4int NbOfOH = 0;
     for(G4int i =0; i < nbProducts; i++)
     {
-      const G4Molecule* product = theDecayChannel->GetProduct(i);
+      G4MolecularConfiguration* product = theDecayChannel->GetProduct(i);
       if(product->GetDefinition() == G4H2::Definition())
       {
         theProductDisplacementVector[i] = -2./18.*RandDirection;
@@ -199,7 +244,8 @@ vector<G4ThreeVector> G4DNAWaterDissociationDisplacer::GetProductsDisplacement(c
         G4ThreeVector OxygenDisplacement = +16./18.*RandDirection;
         G4double OHRMSDisplacement = 1.1 * nanometer;
 
-        G4ThreeVector OHDisplacement = radialDistributionOfProducts(OHRMSDisplacement);
+        auto OHDisplacement =
+            radialDistributionOfProducts(OHRMSDisplacement);
 
         if(NbOfOH==0)
         {
@@ -210,7 +256,8 @@ vector<G4ThreeVector> G4DNAWaterDissociationDisplacer::GetProductsDisplacement(c
           OHDisplacement = -1./2.*OHDisplacement;
         }
 
-        theProductDisplacementVector[i] = OHDisplacement + OxygenDisplacement;
+        theProductDisplacementVector[i] =
+            OHDisplacement + OxygenDisplacement;
 
         NbOfOH ++;
       }
@@ -239,9 +286,8 @@ vector<G4ThreeVector> G4DNAWaterDissociationDisplacer::GetProductsDisplacement(c
 
     for(G4int i =0; i < nbProducts; i++)
     {
-      G4double theRMSDisplacement;
-      const G4Molecule* product = theDecayChannel->GetProduct(i);
-      theRMSDisplacement = theRMSmap[product->GetDefinition()];
+      G4MolecularConfiguration* product = theDecayChannel->GetProduct(i);
+      auto theRMSDisplacement = theRMSmap[product->GetDefinition()];
 
       if(theRMSDisplacement==0)
       {
@@ -249,7 +295,8 @@ vector<G4ThreeVector> G4DNAWaterDissociationDisplacer::GetProductsDisplacement(c
       }
       else
       {
-        G4ThreeVector RandDirection = radialDistributionOfProducts(theRMSDisplacement);
+        auto RandDirection =
+            radialDistributionOfProducts(theRMSDisplacement);
         theProductDisplacementVector[i] = RandDirection;
       }
       if(product->GetDefinition() == G4Electron_aq::Definition())
@@ -263,12 +310,13 @@ vector<G4ThreeVector> G4DNAWaterDissociationDisplacer::GetProductsDisplacement(c
     if(fVerbose)
     G4cout<<"DissociativeAttachment"<<G4endl;
     G4double theRMSDisplacement = 0.8 * nanometer;
-    G4ThreeVector RandDirection = radialDistributionOfProducts(theRMSDisplacement);
+    auto RandDirection =
+        radialDistributionOfProducts(theRMSDisplacement);
 
     G4int NbOfOH = 0;
     for(G4int i =0; i < nbProducts; i++)
     {
-      const G4Molecule* product = theDecayChannel->GetProduct(i);
+      G4MolecularConfiguration* product = theDecayChannel->GetProduct(i);
       if(product->GetDefinition() == G4H2::Definition())
       {
         theProductDisplacementVector[i] = -2./18.*RandDirection;
@@ -278,7 +326,8 @@ vector<G4ThreeVector> G4DNAWaterDissociationDisplacer::GetProductsDisplacement(c
         G4ThreeVector OxygenDisplacement = +16./18.*RandDirection;
         G4double OHRMSDisplacement = 1.1 * nanometer;
 
-        G4ThreeVector OHDisplacement = radialDistributionOfProducts(OHRMSDisplacement);
+        auto OHDisplacement =
+            radialDistributionOfProducts(OHRMSDisplacement);
 
         if(NbOfOH==0)
         {
@@ -299,103 +348,27 @@ vector<G4ThreeVector> G4DNAWaterDissociationDisplacer::GetProductsDisplacement(c
   return theProductDisplacementVector;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//------------------------------------------------------------------------------
 
-G4ThreeVector G4DNAWaterDissociationDisplacer::radialDistributionOfProducts(G4double Rrms) const
+G4ThreeVector
+G4DNAWaterDissociationDisplacer::
+radialDistributionOfProducts(G4double Rrms) const
 {
-  G4double sigma = Rrms / sqrt(3.);
-  G4double expectationValue = 2. * sqrt(2. / 3.14) * sigma;
-
-  G4double XValueForfMax = sqrt(2. * sigma * sigma);
-  G4double fMaxValue = sqrt(2. / 3.14) * 1. / (sigma * sigma * sigma)
-      * (XValueForfMax * XValueForfMax)
-      * exp(-1. / 2. * (XValueForfMax * XValueForfMax) / (sigma * sigma));
-
-  G4double R(-1.);
-
-  do
-  {
-    G4double aRandomfValue = fMaxValue * G4UniformRand();
-
-    G4double sign;
-    if(G4UniformRand() > 0.5)
-    {
-      sign = +1.;
-    }
-    else
-    {
-      sign = -1;
-    }
-
-    R = expectationValue + sign*3.*sigma* G4UniformRand();
-    G4double f = sqrt(2./3.14) * 1/pow(sigma, 3) * R*R * exp(-1./2. * R*R/(sigma*sigma));
-
-    if(aRandomfValue < f)
-    {
-      break;
-    }
-  }
-  while(1);
-
-  G4double costheta = (2. * G4UniformRand()-1.);
-  G4double theta = acos(costheta);
-  G4double phi = 2. * pi * G4UniformRand();
-
-  G4double xDirection = R * cos(phi) * sin(theta);
-  G4double yDirection = R * sin(theta) * sin(phi);
-  G4double zDirection = R * costheta;
-  G4ThreeVector RandDirection(xDirection, yDirection, zDirection);
-
-  return RandDirection;
+  static const double inverse_sqrt_3 = 1./sqrt(3.);
+  double sigma = Rrms*inverse_sqrt_3;
+  double x = G4RandGauss::shoot(0.,sigma);
+  double y = G4RandGauss::shoot(0.,sigma);
+  double z = G4RandGauss::shoot(0.,sigma);
+  return G4ThreeVector(x,y,z);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//------------------------------------------------------------------------------
 
-G4ThreeVector G4DNAWaterDissociationDisplacer::radialDistributionOfElectron() const
+G4ThreeVector
+G4DNAWaterDissociationDisplacer::radialDistributionOfElectron() const
 {
-
-  G4double sigma = 1. / 2.;
-  G4double expectationValue = 1.;
-
-  G4double XValueForfMax = 1. / 2.;
-  G4double fMaxValue = 4. * XValueForfMax * exp(-2. * XValueForfMax);
-
-  G4double R(-1.);
-
-  do
-  {
-    G4double aRandomfValue = fMaxValue * G4UniformRand();
-
-    G4double sign;
-    if(G4UniformRand() > 0.5)
-    {
-      sign = +1;
-    }
-    else
-    {
-      sign = -1;
-    }
-
-    R = (expectationValue * G4UniformRand() )+ sign*3*sigma* G4UniformRand();
-    G4double f = 4* R * exp(- 2. * R);
-
-    if(aRandomfValue < f)
-    {
-      break;
-    }
-  }
-  while(1);
-
-  G4double Rnano = R * 10 * nanometer;
-
-  G4double costheta = (2 * G4UniformRand()-1);
-  G4double theta = acos(costheta);
-  G4double phi = 2 * pi * G4UniformRand();
-
-  G4double xDirection = Rnano * cos(phi) * sin(theta);
-  G4double yDirection = Rnano * sin(theta) * sin(phi);
-  G4double zDirection = Rnano * costheta;
-  G4ThreeVector RandDirection(xDirection, yDirection, zDirection);
-
-  return RandDirection;
+  G4double rand_value = G4UniformRand();
+  size_t nBins = fElectronThermalization.size();
+  size_t bin = size_t(rand_value*nBins);
+  return fElectronThermalization[bin]*G4RandomDirection();
 }

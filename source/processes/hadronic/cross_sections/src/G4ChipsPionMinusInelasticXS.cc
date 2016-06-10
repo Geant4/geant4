@@ -44,6 +44,9 @@
 #include "G4ParticleDefinition.hh"
 #include "G4PionMinus.hh"
 
+#include "G4Log.hh"
+#include "G4Exp.hh"
+
 // factory
 #include "G4CrossSectionFactory.hh"
 //
@@ -74,14 +77,20 @@ G4ChipsPionMinusInelasticXS::~G4ChipsPionMinusInelasticXS()
   delete HEN;
 }
 
+void
+G4ChipsPionMinusInelasticXS::CrossSectionDescription(std::ostream& outFile) const
+{
+    outFile << "G4ChipsPionMinusInelasticXS provides the inelastic cross\n"
+            << "section for pion- nucleus scattering as a function of incident\n"
+            << "momentum. The cross section is calculated using M. Kossov's\n"
+            << "CHIPS parameterization of cross section data.\n";
+}
 
-G4bool G4ChipsPionMinusInelasticXS::IsIsoApplicable(const G4DynamicParticle* Pt, G4int, G4int,    
+G4bool G4ChipsPionMinusInelasticXS::IsIsoApplicable(const G4DynamicParticle*, G4int, G4int,    
 				 const G4Element*,
 				 const G4Material*)
 {
-  const G4ParticleDefinition* particle = Pt->GetDefinition();
-  if (particle == G4PionMinus::PionMinus()      ) return true;
-  return false;
+  return true;
 }
 
 // The main member function giving the collision cross section (P is in IU, CS is in mb)
@@ -179,10 +188,10 @@ G4double G4ChipsPionMinusInelasticXS::CalculateCrossSection(G4int F, G4int I,
   static const G4double Pmin=THmin+(nL-1)*dP; // minP for the HighE part with safety
   static const G4double Pmax=227000.;  // maxP for the HEN (High ENergy) part 227 GeV
   static const G4int    nH=224;        // A#of HEN points in lnE
-  static const G4double milP=std::log(Pmin);// Low logarithm energy for the HEN part
-  static const G4double malP=std::log(Pmax);// High logarithm energy (each 2.75 percent)
+  static const G4double milP=G4Log(Pmin);// Low logarithm energy for the HEN part
+  static const G4double malP=G4Log(Pmax);// High logarithm energy (each 2.75 percent)
   static const G4double dlP=(malP-milP)/(nH-1); // Step in log energy in the HEN part
-  static const G4double milPG=std::log(.001*Pmin);// Low logarithmEnergy for HEN part GeV/c
+  static const G4double milPG=G4Log(.001*Pmin);// Low logarithmEnergy for HEN part GeV/c
   G4double sigma=0.;
   if(F&&I) sigma=0.;                   // @@ *!* Fake line *!* to use F & I !!!Temporary!!!
   //G4double A=targN+targZ;              // A of the target
@@ -233,13 +242,13 @@ G4double G4ChipsPionMinusInelasticXS::CalculateCrossSection(G4int F, G4int I,
   }
   else if (Momentum<Pmax)              // High Energy region
   {
-    G4double lP=std::log(Momentum);
+    G4double lP=G4Log(Momentum);
     sigma=EquLinearFit(lP,nH,milP,dlP,lastHEN);
   }
   else                                 // UHE region (calculation, not frequent)
   {
     G4double P=0.001*Momentum;         // Approximation formula is for P in GeV/c
-    sigma=CrossSectionFormula(targZ, targN, P, std::log(P));
+    sigma=CrossSectionFormula(targZ, targN, P, G4Log(P));
   }
   if(sigma<0.) return 0.;
   return sigma;
@@ -248,14 +257,14 @@ G4double G4ChipsPionMinusInelasticXS::CalculateCrossSection(G4int F, G4int I,
 // Calculation formula for piMinus-nuclear inelastic cross-section (mb) (P in GeV/c)
 G4double G4ChipsPionMinusInelasticXS::CrossSectionLin(G4int tZ, G4int tN, G4double P)
 {
-  G4double lP=std::log(P);
+  G4double lP=G4Log(P);
   return CrossSectionFormula(tZ, tN, P, lP);
 }
 
 // Calculation formula for piMinus-nuclear inelastic cross-section (mb) log(P in GeV/c)
 G4double G4ChipsPionMinusInelasticXS::CrossSectionLog(G4int tZ, G4int tN, G4double lP)
 {
-  G4double P=std::exp(lP);
+  G4double P=G4Exp(lP);
   return CrossSectionFormula(tZ, tN, P, lP);
 }
 // Calculation formula for piMinus-nuclear inelastic cross-section (mb) log(P in GeV/c)
@@ -295,11 +304,11 @@ G4double G4ChipsPionMinusInelasticXS::CrossSectionFormula(G4int tZ, G4int tN,
     G4double p2=P*P;
     G4double p4=p2*p2;
     G4double a=tN+tZ;                     // A of the target
-    G4double al=std::log(a);
+    G4double al=G4Log(a);
     G4double sa=std::sqrt(a);
     G4double ssa=std::sqrt(sa);
     G4double a2=a*a;
-    G4double c=41.*std::exp(al*.68)*(1.+44./a2)/(1.+8./a)/(1.+200./a2/a2);
+    G4double c=41.*G4Exp(al*.68)*(1.+44./a2)/(1.+8./a)/(1.+200./a2/a2);
     G4double f=120*sa/(1.+24./a/ssa);
     G4double gg=-1.32-al*.043;
     G4double u=lP-gg;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularStepByStepModel.hh 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id: G4DNAMolecularStepByStepModel.hh 94218 2015-11-09 08:24:48Z gcosmo $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
@@ -48,11 +48,13 @@
 #ifndef G4MOLECULARSTEPBYSTEPMODEL_H
 #define G4MOLECULARSTEPBYSTEPMODEL_H
 
-#include "AddClone_def.hh"
-#include "G4VITStepModel.hh"
-#include "G4DNAMoleculeEncounterStepper.hh"
-#include "G4DNAMolecularReaction.hh"
-#include "G4DNAMolecularReactionTable.hh"
+#include <AddClone_def.hh>
+#include <G4String.hh>
+#include <G4VITStepModel.hh>
+
+class G4DNAMolecularReactionTable;
+class G4VDNAReactionModel;
+
 
 /**
   * G4DNAMolecularStepByStepModel :

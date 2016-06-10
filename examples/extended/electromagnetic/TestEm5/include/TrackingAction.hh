@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/include/TrackingAction.hh
 /// \brief Definition of the TrackingAction class
 //
-// $Id: TrackingAction.hh 76464 2013-11-11 10:22:56Z gcosmo $
+// $Id: TrackingAction.hh 91972 2015-08-12 13:48:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,6 +57,7 @@ class TrackingAction : public G4UserTrackingAction {
     
     G4double fXstartAbs, fXendAbs;
     G4double fPrimaryCharge;
+    G4double fDirX;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

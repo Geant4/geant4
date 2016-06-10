@@ -33,7 +33,7 @@
 #include "G4VNuclearDensity.hh"
 
 #include <CLHEP/Units/PhysicalConstants.h>	// pi, fermi,..
-#include <cmath>				// pow,..
+//#include <cmath>				// pow,..
 
 class G4NuclearShellModelDensity : public G4VNuclearDensity
 {

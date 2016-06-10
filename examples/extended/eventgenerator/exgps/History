@@ -12,6 +12,17 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+11-05-2015  mma  (exgps-V10-01-02)
+- HistoManager: SetNtupleActivation(false)
+- macros: new commands for H2
+
+18/02/2015 A. Dotti       (exgps-V10-01-01)
+- Addint addtional ctest with distribution from histogram for
+  PhysicsChecks
+
+23/01/2015 I. Hrivnacova  (exgps-V10-01-00)
+- fixed .README, files description for Doxygen
+    
 27/10/2014 mma  (exgps-V10-00-07)
 - put /run/initialize at begin of macro
      

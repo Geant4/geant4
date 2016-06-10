@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.cc 85023 2014-10-23 09:56:39Z gcosmo $
+// $Id: G4MuBremsstrahlungModel.cc 91743 2015-08-04 11:49:58Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -74,7 +74,6 @@
 #include "G4ElementVector.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleChangeForLoss.hh"
-//#include "G4LossTableManager.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
 
@@ -114,7 +113,7 @@ G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p,
       G4double dn = 1.54*nist->GetA27(i);
       fDN[i] = dn;
       if(1 < i) {
-	fDN[i] /= std::pow(dn, 1./G4double(i));
+        fDN[i] /= std::pow(dn, 1./G4double(i));
       }
     }
   }
@@ -130,7 +129,7 @@ G4MuBremsstrahlungModel::~G4MuBremsstrahlungModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MuBremsstrahlungModel::MinEnergyCut(const G4ParticleDefinition*,
-					       const G4MaterialCutsCouple*)
+                                               const G4MaterialCutsCouple*)
 {
   return minThreshold;
 }
@@ -138,8 +137,8 @@ G4double G4MuBremsstrahlungModel::MinEnergyCut(const G4ParticleDefinition*,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MuBremsstrahlungModel::MinPrimaryEnergy(const G4Material*,
-						   const G4ParticleDefinition*,
-						   G4double cut)
+                                                   const G4ParticleDefinition*,
+                                                   G4double cut)
 {
   return std::max(lowestKinEnergy,cut);
 }
@@ -162,7 +161,7 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4MuBremsstrahlungModel::InitialiseLocal(const G4ParticleDefinition* p,
-					      G4VEmModel* masterModel)
+                                              G4VEmModel* masterModel)
 {
   if(p == particle && lowestKinEnergy < HighEnergyLimit()) {
     SetElementSelectors(masterModel->GetElementSelectors());
@@ -172,7 +171,7 @@ void G4MuBremsstrahlungModel::InitialiseLocal(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MuBremsstrahlungModel::ComputeDEDXPerVolume(
-					      const G4Material* material,
+                                              const G4Material* material,
                                               const G4ParticleDefinition*,
                                                     G4double kineticEnergy,
                                                     G4double cutEnergy)
@@ -341,7 +340,7 @@ G4double G4MuBremsstrahlungModel::ComputeDMicroscopicCrossSection(
 G4double G4MuBremsstrahlungModel::ComputeCrossSectionPerAtom(
                                            const G4ParticleDefinition*,
                                                  G4double kineticEnergy,
-						 G4double Z, G4double,
+                                                 G4double Z, G4double,
                                                  G4double cutEnergy,
                                                  G4double maxEnergy)
 {
@@ -363,10 +362,10 @@ G4double G4MuBremsstrahlungModel::ComputeCrossSectionPerAtom(
 
 void G4MuBremsstrahlungModel::SampleSecondaries(
                               std::vector<G4DynamicParticle*>* vdp,
-			      const G4MaterialCutsCouple* couple,
-			      const G4DynamicParticle* dp,
-			      G4double minEnergy,
-			      G4double maxEnergy)
+                              const G4MaterialCutsCouple* couple,
+                              const G4DynamicParticle* dp,
+                              G4double minEnergy,
+                              G4double maxEnergy)
 {
   G4double kineticEnergy = dp->GetKineticEnergy();
   // check against insufficient energy
@@ -400,6 +399,7 @@ void G4MuBremsstrahlungModel::SampleSecondaries(
     epksi   = MeV*G4Exp(lnepksi);
     func2   = epksi*ComputeDMicroscopicCrossSection(kineticEnergy,Z,epksi);
 
+    // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
   } while(func2 < func1*G4UniformRand());
 
   G4double gEnergy = epksi;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc 87164 2014-11-26 08:48:31Z gcosmo $
+// $Id: G4OpenGLQtViewer.cc 91686 2015-07-31 09:40:08Z gcosmo $
 //
 // 
 // G4OpenGLQtViewer : Class to provide Qt specific
@@ -52,6 +52,7 @@
 #include "G4Text.hh"
 #include "G4UnitsTable.hh"
 #include "G4OpenGLStoredQtViewer.hh"
+#include "G4Threading.hh"
 
 #include <CLHEP/Units/SystemOfUnits.h>
 
@@ -91,6 +92,21 @@
 #include <qsplitter.h>
 #include <qcheckbox.h>
 #include <qcursor.h>
+#include <qthread.h>
+
+#ifdef G4MULTITHREADED
+#include "G4Threading.hh"
+#endif
+
+namespace
+{
+#ifdef G4MULTITHREADED
+  G4Mutex mWaitForVisSubThreadQtOpenGLContextMoved = G4MUTEX_INITIALIZER;
+  G4Mutex mWaitForVisSubThreadQtOpenGLContextInitialized = G4MUTEX_INITIALIZER;
+  G4Condition c1_VisSubThreadQtOpenGLContextInitialized = G4CONDITION_INITIALIZER;
+  G4Condition c2_VisSubThreadQtOpenGLContextMoved = G4CONDITION_INITIALIZER;
+#endif
+}
 
 //////////////////////////////////////////////////////////////////////////////
 void G4OpenGLQtViewer::CreateMainWindow (
@@ -158,29 +174,19 @@ void G4OpenGLQtViewer::CreateMainWindow (
       
       // not available for Immediate mode
       if (dynamic_cast<G4OpenGLStoredQtViewer*> (this)) {
-        initSceneTreeComponent();
-        toggleSceneTreeViewerInfos();
+        createSceneTreeComponent();
       }
       
-      initViewerPropertiesComponent();
-      initPickingComponent();
+      createViewerPropertiesComponent();
+      createPickingComponent();
       
       // activate them
-      toggleSceneTreeComponentTreeWidgetInfos();
     }
   }
-#ifdef G4DEBUG_VIS_OGL
-  else {
-    printf("G4OpenGLQtViewer::CreateMainWindow :: UIQt NOt found \n");
-  }
-#endif
 
   if (!isTabbedView) { // we have to do a dialog
 
     QWidget *glDialogWidget = getParentWidget();
-#ifdef G4DEBUG_VIS_OGL
-    printf("G4OpenGLQtViewer::CreateMainWindow :: getParent OK \n");
-#endif
     if (glDialogWidget != NULL) {
       glWidget->setParent(glDialogWidget);
     }
@@ -204,9 +210,6 @@ void G4OpenGLQtViewer::CreateMainWindow (
       YPos = offset;
     }
     glDialogWidget->resize(getWinWidth(), getWinHeight());
-#ifdef G4DEBUG_VIS_OGL
-    printf("G4OpenGLQtViewer::CreateMainWindow :: resizing to %d %d \n",getWinWidth(), getWinHeight());
-#endif
     glDialogWidget->move(fVP.GetWindowAbsoluteLocationHintX(QApplication::desktop()->width()),YPos);
     glDialogWidget->show();
   }
@@ -495,9 +498,6 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   fTreeIconOpen = new QPixmap(icon1);
   fTreeIconClosed = new QPixmap(icon2);
 
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLQtViewer::G4OpenGLQtViewer END\n");
-#endif
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1120,7 +1120,7 @@ void G4OpenGLQtViewer::actionSaveImage() {
     }
     fLastExportSliderValue = exportDialog->getSliderValue();
 
-    if (exportImage(filename + "." + fExportImageFormat)) {
+    if (exportImage(filename)) {
       // set the default format to current
       fDefaultExportImageFormat = format;
     }
@@ -1443,11 +1443,6 @@ void G4OpenGLQtViewer::G4MouseReleaseEvent(QMouseEvent *evnt)
           } else if (fAltKeyPress) {
             rotateQtSceneToggle(((float)delta.x())/correctionFactor,((float)delta.y())/correctionFactor);
           }
-#ifdef G4DEBUG_VIS_OGL
-          fNbRotation ++;
-          fTimeRotation += lastMoveTime.elapsed();
-          printf("G4OpenGLQtViewer %f \n",fTimeRotation/(float)fNbRotation);
-#endif
           
         } else if (move) {  // move
           moveScene(-((float)delta.x())/correctionFactor,-((float)delta.y())/correctionFactor,0,true);
@@ -1945,7 +1940,7 @@ QString G4OpenGLQtViewer::getEncoderPath() {
  */
 QString G4OpenGLQtViewer::setEncoderPath(QString path) {
   if (path == "") {
-    return "File does not exist";
+    return "ppmtompeg is needed to encode in video format. It is available here: http://netpbm.sourceforge.net ";
   }
 
   path =  QDir::cleanPath(path);
@@ -2527,19 +2522,10 @@ QWidget *G4OpenGLQtViewer::getParentWidget()
     }
     
     if (found==false) {
-#ifdef G4DEBUG_VIS_OGL
-      printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist, but not found\n");
-#endif
       dialog = new QDialog();
     }
   } else {
-#ifdef G4DEBUG_VIS_OGL
-    printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist\n");
-#endif
     dialog= new QDialog();
-#ifdef G4DEBUG_VIS_OGL
-    printf("G4OpenGLQtViewer::GetParentWidget fGLWidget\n");
-#endif
   }
   if (found) {
     return dialog;
@@ -2549,21 +2535,20 @@ QWidget *G4OpenGLQtViewer::getParentWidget()
 }
 
 
-void G4OpenGLQtViewer::initSceneTreeComponent(){
+void G4OpenGLQtViewer::createSceneTreeComponent(){
   
   QGroupBox *groupBox = new QGroupBox("");
   QVBoxLayout *vbox = new QVBoxLayout;
   
   fSceneTreeViewerButton = new QPushButton("Scene tree");
-  fSceneTreeViewerButton->setStyleSheet ("text-align: left; padding: 5px; border:0px; ");
-  fSceneTreeViewerButton->setIcon(*fTreeIconClosed);
+  fSceneTreeViewerButton->setStyleSheet ("text-align: left; padding: 2px; border:0px; background:#e0e5ef;");
+  fSceneTreeViewerButton->setIcon(*fTreeIconOpen);
   
   vbox->addWidget(fSceneTreeViewerButton);
   connect(fSceneTreeViewerButton,SIGNAL(clicked()),this, SLOT(toggleSceneTreeViewerInfos()));
   
   fSceneTreeViewerInfos = new QWidget();
   fSceneTreeViewerInfos->setStyleSheet ("padding: 0px ");
-  fSceneTreeViewerInfos->setVisible(false);
   fSceneTreeViewerInfos->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
   
   QVBoxLayout* vLayout = new QVBoxLayout();
@@ -2597,7 +2582,8 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
   vLayout->addWidget(coutButtonWidget);
   
   // reduce margins
-  vLayout->setContentsMargins(5,5,5,5);
+  vLayout->setContentsMargins(0,0,0,0);
+  vbox->setContentsMargins(1,1,1,1);
 
 
   fSceneTreeComponentTreeWidget = new QTreeWidget();
@@ -2669,23 +2655,24 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
 }
 
 
-void G4OpenGLQtViewer::initViewerPropertiesComponent() {
+void G4OpenGLQtViewer::createViewerPropertiesComponent() {
   
   // add properties
   QGroupBox *groupBox = new QGroupBox("");
   QVBoxLayout *vbox = new QVBoxLayout;
   fViewerPropertiesButton = new QPushButton("Viewer properties");
-  fViewerPropertiesButton->setStyleSheet ("text-align: left; padding: 5px; border:0px; ");
-  fViewerPropertiesButton->setIcon(*fTreeIconClosed);
+  fViewerPropertiesButton->setStyleSheet ("text-align: left; padding: 2px; border:0px; background:#e0e5ef;");
+
+  fViewerPropertiesButton->setIcon(*fTreeIconOpen);
   
   vbox->addWidget(fViewerPropertiesButton);
   connect(fViewerPropertiesButton,SIGNAL(clicked()),this, SLOT(toggleSceneTreeComponentTreeWidgetInfos()));
   
   // add properties content
   fSceneTreeComponentTreeWidgetInfos = new QTableWidget();
-  fSceneTreeComponentTreeWidgetInfos->setVisible(false);
   fSceneTreeComponentTreeWidgetInfos->setStyleSheet ("padding: 0px ");
   vbox->addWidget(fSceneTreeComponentTreeWidgetInfos);
+  vbox->setContentsMargins(1,1,1,1);
 
   groupBox->setLayout(vbox);
   fSceneTreeWidget->layout()->addWidget(groupBox);
@@ -2698,7 +2685,7 @@ void G4OpenGLQtViewer::initViewerPropertiesComponent() {
 }
 
 
-void G4OpenGLQtViewer::initPickingComponent(){
+void G4OpenGLQtViewer::createPickingComponent(){
   
   QGroupBox *groupBox = new QGroupBox("");
   QVBoxLayout *vbox = new QVBoxLayout;
@@ -2708,8 +2695,8 @@ void G4OpenGLQtViewer::initPickingComponent(){
   QHBoxLayout *pickingInfoLayout = new QHBoxLayout();
   
   fViewerPickingButton = new QPushButton("Picking informations");
-  fViewerPickingButton->setStyleSheet ("text-align: left; padding: 5px; border:0px; ");
-  fViewerPickingButton->setIcon(*fTreeIconClosed);
+  fViewerPickingButton->setStyleSheet ("text-align: left; padding: 2px; border:0px; background:#e0e5ef;");
+  fViewerPickingButton->setIcon(*fTreeIconOpen);
 
   // initialise picking infos
   
@@ -2739,8 +2726,6 @@ void G4OpenGLQtViewer::initPickingComponent(){
   
   fSceneTreeComponentPickingInfos = new QWidget();
   fSceneTreeComponentPickingInfos->setStyleSheet ("padding: 0px ");
-  fSceneTreeComponentPickingScrollArea->setVisible(false);
-  
   
   QVBoxLayout* vLayout = new QVBoxLayout();
   fSceneTreeComponentPickingInfos->setLayout (vLayout);
@@ -2749,6 +2734,9 @@ void G4OpenGLQtViewer::initPickingComponent(){
   QSizePolicy vPolicy = fSceneTreeComponentPickingInfos->sizePolicy();
   vPolicy.setVerticalStretch(4);
   vbox->addWidget(fSceneTreeComponentPickingScrollArea);
+  pickingInfoLayout->setContentsMargins(0,0,0,0);
+  vLayout->setContentsMargins(0,0,0,0);
+  vbox->setContentsMargins(1,1,1,1);
 
   groupBox->setLayout(vbox);
   fSceneTreeWidget->layout()->addWidget(groupBox);
@@ -2790,6 +2778,10 @@ void G4OpenGLQtViewer::DrawText(const G4Text& g4text)
 
     if (!fGLWidget) return;
 
+#ifdef G4MULTITHREADED
+    if (G4Threading::G4GetThreadId() != G4Threading::MASTER_ID) return;
+#endif
+
     G4VSceneHandler::MarkerSizeType sizeType;
     G4double size = fSceneHandler.GetMarkerSize(g4text,sizeType);
 
@@ -2826,7 +2818,7 @@ void G4OpenGLQtViewer::DrawText(const G4Text& g4text)
        position.z(),
        textCString,
        font);
-
+    
   }
 }
 
@@ -2849,7 +2841,7 @@ void G4OpenGLQtViewer::addPVSceneTreeElement(const G4String& model, G4PhysicalVo
   }
   // try to init it
   if (fSceneTreeComponentTreeWidget == NULL) {
-    initSceneTreeComponent();
+    createSceneTreeComponent();
   }
 
   // if no UI
@@ -3232,9 +3224,6 @@ void G4OpenGLQtViewer::changeOpenCloseVisibleHiddenSelectedColorSceneTreeElement
       } else {
         color = oldItem->data(2,Qt::UserRole).value<QColor>(); 
       }
-#ifdef G4DEBUG_VIS_OGL
-      printf("====color name:%s\n",color.name().toStdString().c_str());
-#endif
       changeQColorForTreeWidgetItem(subItem,color);
     }
   }
@@ -3336,7 +3325,7 @@ void G4OpenGLQtViewer::addNonPVSceneTreeElement(
   }
   // try to init it
   if (fSceneTreeComponentTreeWidget == NULL) {
-    initSceneTreeComponent();
+    createSceneTreeComponent();
   }
 
   // if no UI
@@ -4615,19 +4604,90 @@ QString G4OpenGLQtViewer::GetCommandParameterList (
 
 #ifdef G4MULTITHREADED
 
+void G4OpenGLQtViewer::DoneWithMasterThread()
+{
+  // Called by Main Thread !
+  
+  // Useful to avoid two vis thread at the same time
+  G4MUTEXLOCK(&mWaitForVisSubThreadQtOpenGLContextInitialized);
+}
+
 void G4OpenGLQtViewer::SwitchToVisSubThread()
 {
-  G4cout << "G4OpenGLQtViewer::SwitchToVisSubThread" << G4endl;
+  // Called by VisSub Thread !
+
   QGLWidget* qGLW = dynamic_cast<QGLWidget*> (fGLWidget) ;
   if (! qGLW) {
     return;
   }
+  
+  // Set the current QThread to its static variable
+  SetQGLContextVisSubThread(QThread::currentThread());
+  
+  // - Wait for the vis thread to set its QThread
+  G4CONDTIONBROADCAST(&c1_VisSubThreadQtOpenGLContextInitialized);
+  
+  // Unlock the vis thread if it is Qt Viewer
+  G4CONDITIONWAIT(&c2_VisSubThreadQtOpenGLContextMoved, &mWaitForVisSubThreadQtOpenGLContextMoved);
+
+  // make context current
   qGLW->makeCurrent();
+}
+
+void G4OpenGLQtViewer::DoneWithVisSubThread()
+{
+  // Called by vis sub thread
+  QGLWidget* qGLW = dynamic_cast<QGLWidget*> (fGLWidget) ;
+  if (! qGLW) {
+    return;
+  }
+
+  // finish with this vis sub thread context
+  qGLW->doneCurrent();
+
+#if QT_VERSION > 0x050000
+  // and move it back to the main thread
+  qGLW->context()->moveToThread(fQGLContextMainThread);
+#endif
 }
 
 void G4OpenGLQtViewer::SwitchToMasterThread()
 {
-  G4cout << "G4OpenGLQtViewer::SwitchToMasterThread" << G4endl;
+  // Called by VisSub Thread !
+
+  QGLWidget* qGLW = dynamic_cast<QGLWidget*> (fGLWidget) ;
+  if (! qGLW) {
+    return;
+  }
+
+  // Useful to avoid two vis thread at the same time
+  G4MUTEXUNLOCK(&mWaitForVisSubThreadQtOpenGLContextInitialized);
+  qGLW->makeCurrent();
+}
+
+
+void G4OpenGLQtViewer::MovingToVisSubThread(){
+  // Called by Main Thread !
+
+  QGLWidget* qGLW = dynamic_cast<QGLWidget*> (fGLWidget) ;
+  if (! qGLW) {
+    return;
+  }
+
+  // - Wait for the vis sub thread to set its QThread
+  G4CONDITIONWAIT( &c1_VisSubThreadQtOpenGLContextInitialized, &mWaitForVisSubThreadQtOpenGLContextInitialized);
+
+
+  // Set current QThread for the way back
+  SetQGLContextMainThread(QThread::currentThread());
+  
+  // finish with this main thread context
+  qGLW->doneCurrent();
+#if QT_VERSION > 0x050000
+  qGLW->context()->moveToThread(fQGLContextVisSubThread);
+#endif
+  
+  G4CONDTIONBROADCAST(&c2_VisSubThreadQtOpenGLContextMoved);
 }
 
 #endif

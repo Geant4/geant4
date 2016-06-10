@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AtomicShells.cc 66811 2013-01-12 16:04:23Z gcosmo $
+// $Id: G4AtomicShells.cc 94016 2015-11-05 10:14:49Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSTrackingAction.cc 69561 2013-05-08 12:25:56Z gcosmo $
+// $Id: WLSTrackingAction.cc 90240 2015-05-21 09:08:13Z gcosmo $
 //
 /// \file optical/wls/src/WLSTrackingAction.cc
 /// \brief Implementation of the WLSTrackingAction class
@@ -66,27 +66,4 @@ void WLSTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
      trackInformation->AddStatusFlag(InsideOfFiber);
 
   fpTrackingManager->SetUserTrackInformation(trackInformation);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void WLSTrackingAction::PostUserTrackingAction(const G4Track* aTrack)
-{
-  WLSTrajectory* trajectory =
-                      (WLSTrajectory*)fpTrackingManager->GimmeTrajectory();
-
-  if (aTrack->GetDefinition()==G4OpticalPhoton::OpticalPhotonDefinition())
-  {
-     if (aTrack->GetParentID()==0) trajectory->SetDrawTrajectory(true);
-     else {
-        const G4VProcess* creator = aTrack->GetCreatorProcess();
-        if (creator && creator->GetProcessName()=="OpWLS")
-        {
-           trajectory->WLS();
-           trajectory->SetDrawTrajectory(true);
-        }
-     }
-  }
-  else //draw all other trajectories
-    trajectory->SetDrawTrajectory(true);
 }

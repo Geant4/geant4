@@ -5,6 +5,21 @@
                        Package History file
                        --------------------
 
+13 November 2015 - tag dnaphysics-V10-01-04 - V. Ivanchenko
+- use G4EmModelActivator to define DNA physics
+
+22 October 2015 - tag dnaphysics-V10-01-03 - S. Incerti
+- adapted plot.C to ROOT 6.X
+
+07 October 2015 - tag dnaphysics-V10-01-02 - S. Incerti, P. Pater
+- added ignoreCut UI command in dnaphysics.in
+
+17 August 2015 - tag dnaphysics-V10-01-01 - S. Incerti
+- Switched to G4UIExecutive
+
+17 August 2015 - tag dnaphysics-V10-01-00 - S. Incerti
+- Switched to OGLIXm in vis.mac
+
 24 November 2014 - tag dnaphysics-V10-00-04 - M. Karamitros
 - Retag before release
 

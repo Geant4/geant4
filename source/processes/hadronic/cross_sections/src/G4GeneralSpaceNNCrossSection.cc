@@ -191,3 +191,31 @@ G4double G4GeneralSpaceNNCrossSection::GetElementCrossSection
   return result;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//
+
+void G4GeneralSpaceNNCrossSection::CrossSectionDescription(std::ostream& outFile) const
+{
+   outFile << "G4GeneralSpaceNNCrossSection calculates hadronic inelastic\n"
+           << "cross sections of interest in space science, by using the\n"
+           << "following cross sections:\n"
+           << "- G4ProtonInelasticCrossSection : for proton projectile\n"
+           << "  on targets with Z > 5;\n"
+           << "- G4TripathiLightCrossSection : for proton projectile\n"
+           << "  on targets with Z <= 5;\n"
+           << "  for targets with Z = 1 and projectile Z <= 5;\n"
+           << "  for neutron, or deuteron, or 3He, or alpha projectile\n"
+           << "  with kinetic energy less than 10 GeV per nucleon,\n"
+           << "  in any target;\n"
+           << "  for 3He and 4He targets, for any projectile with\n"
+           << "  kinetic energy less than 10 GeV per nucleon;\n"
+           << "- G4IonProtonCrossSection : for projectile with Z > 5\n"
+           << "  on hydrogen target;\n"
+           << "- G4TripathiCrossSection : for any projectile with A >=3\n"
+           << "  and kinetic energy less than 1 GeV per nucleon,\n"
+           << "  for any target, if the previous cross section is\n"
+           << "  not applicable;\n"
+           << "- G4IonsShenCrossSection : in all remaining cases, up to\n"
+           << "  projectile kinetic energy of 1 TeV per nucleon.\n";
+}
+

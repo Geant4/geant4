@@ -20,6 +20,15 @@ committal in the CVS repository !
 History file for G4 zlib package
 --------------------------------
 
+10 July 2015 Gunter Folger  (zlib-V10-01-01)
+-  Add type casts to fix windows compilations errors.
+
+8 July 2015 Gunter Folger   (zlib-V10-01-00)
+-  Update to zlib-1.2.8, keeping out structure. 
+    Compare files to new zlib, and transfer changes, keeping local
+	 modifications, like function declarationss, and removed register keyword.
+	 Note that test06 now contains the test code.
+	  
 10 April 2014 Gabriele Cosmo (zlib-V10-00-01)
 -  Get rid of deprecated 'register' storage class specifier in source files
    crc32.cc, deflate.cc and trees.cc.

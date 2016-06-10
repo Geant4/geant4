@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+  <define/>
+
+  <materials>
+    <material Z="13" name="Aluminum0x7ff5f9e42670" state="solid">
+      <MEE unit="eV" value="166"/>
+      <D unit="g/cm3" value="2.69999857937074"/>
+      <atom unit="g/mole" value="26.9814858034413"/>
+    </material>
+    <material Z="4" name="Beryllium0x7ff5f9e3baf0" state="solid">
+      <MEE unit="eV" value="63.7000000000001"/>
+      <D unit="g/cm3" value="1.84799902765819"/>
+      <atom unit="g/mole" value="9.01219525814998"/>
+    </material>
+    <isotope N="14" Z="7" name="N140x7ff5f9e3bbf0">
+      <atom unit="g/mole" value="14.0031"/>
+    </isotope>
+    <isotope N="15" Z="7" name="N150x7ff5f9e3e570">
+      <atom unit="g/mole" value="15.0001"/>
+    </isotope>
+    <element name="N0x7ff5f9e3e780">
+      <fraction n="0.99632" ref="N140x7ff5f9e3bbf0"/>
+      <fraction n="0.00368" ref="N150x7ff5f9e3e570"/>
+    </element>
+    <isotope N="16" Z="8" name="O160x7ff5f9e3f410">
+      <atom unit="g/mole" value="15.9949"/>
+    </isotope>
+    <isotope N="17" Z="8" name="O170x7ff5f9e3f450">
+      <atom unit="g/mole" value="16.9991"/>
+    </isotope>
+    <isotope N="18" Z="8" name="O180x7ff5f9e3f490">
+      <atom unit="g/mole" value="17.9992"/>
+    </isotope>
+    <element name="O0x7ff5f9e3f300">
+      <fraction n="0.99757" ref="O160x7ff5f9e3f410"/>
+      <fraction n="0.00038" ref="O170x7ff5f9e3f450"/>
+      <fraction n="0.00205" ref="O180x7ff5f9e3f490"/>
+    </element>
+    <isotope N="36" Z="18" name="Ar360x7ff5f9e45fb0">
+      <atom unit="g/mole" value="35.9675"/>
+    </isotope>
+    <isotope N="38" Z="18" name="Ar380x7ff5f9e45ff0">
+      <atom unit="g/mole" value="37.9627"/>
+    </isotope>
+    <isotope N="40" Z="18" name="Ar400x7ff5f9e46030">
+      <atom unit="g/mole" value="39.9624"/>
+    </isotope>
+    <element name="Ar0x7ff5f9e45e80">
+      <fraction n="0.003365" ref="Ar360x7ff5f9e45fb0"/>
+      <fraction n="0.000632" ref="Ar380x7ff5f9e45ff0"/>
+      <fraction n="0.996003" ref="Ar400x7ff5f9e46030"/>
+    </element>
+    <isotope N="1" Z="1" name="H10x7ff5f9e38e80">
+      <atom unit="g/mole" value="1.00782503081372"/>
+    </isotope>
+    <isotope N="2" Z="1" name="H20x7ff5f9e38c00">
+      <atom unit="g/mole" value="2.01410199966617"/>
+    </isotope>
+    <element name="H0x7ff5f9e38da0">
+      <fraction n="0.999885" ref="H10x7ff5f9e38e80"/>
+      <fraction n="0.000115" ref="H20x7ff5f9e38c00"/>
+    </element>
+    <material name="Air0x7ff5f9e72ea0" state="gas">
+      <MEE unit="eV" value="85.5378097493424"/>
+      <D unit="g/cm3" value="0.00121399936124299"/>
+      <fraction n="0.7494" ref="N0x7ff5f9e3e780"/>
+      <fraction n="0.2369" ref="O0x7ff5f9e3f300"/>
+      <fraction n="0.0129" ref="Ar0x7ff5f9e45e80"/>
+      <fraction n="0.0008" ref="H0x7ff5f9e38da0"/>
+    </material>
+  </materials>
+
+  <solids>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="TrackerBarrel" rmax="1490" rmin="500" startphi="0" z="6000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="ECalBarrel0x7ff5f9e7b300" rmax="2990" rmin="1500" startphi="0" z="6000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="ECalEndCap_10x7ff5f9e7b630" rmax="2990" rmin="1500" startphi="0" z="2000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="ECalEndCap_20x7ff5f9e7bc30" rmax="2990" rmin="1500" startphi="0" z="2000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="ECalForward_10x7ff5f9e7c050" rmax="3000" rmin="500" startphi="0" z="1000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="ECalForward_20x7ff5f9e7c330" rmax="3000" rmin="500" startphi="0" z="1000"/>
+
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="HCalBarrel0x7ff5f9e7cf80" rmax="8000" rmin="3000" startphi="0" z="6000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="HCalEndCap_10x7ff5f9e7d3d0" rmax="8000" rmin="3000" startphi="0" z="2000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="HCalEndCap_20x7ff5f9e7d6b0" rmax="8000" rmin="3000" startphi="0" z="2000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="HCalForward_10x7ff5f9e7b840" rmax="4000" rmin="500" startphi="0" z="2000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="HCalForward_20x7ff5f9e7dc40" rmax="4000" rmin="500" startphi="0" z="2000"/>
+
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="MuonEndCap_10x7ff5f9e7eec0" rmax="15500" rmin="3000" startphi="0" z="100"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="MuonEndCap_20x7ff5f9e7f1a0" rmax="15500" rmin="3000" startphi="0" z="100"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="MuonEndCap_30x7ff5f9e7f470" rmax="15500" rmin="3000" startphi="0" z="100"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="MuonEndCap_40x7ff5f9e7f740" rmax="15500" rmin="3000" startphi="0" z="100"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="MuonEndCap_50x7ff5f9e7fa10" rmax="15500" rmin="3000" startphi="0" z="100"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="MuonEndCap_60x7ff5f9e7fce0" rmax="15500" rmin="3000" startphi="0" z="100"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="MuonForward_10x7ff5f9e80120" rmax="5000" rmin="500" startphi="0" z="100"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="MuonForward_20x7ff5f9e80400" rmax="5000" rmin="500" startphi="0" z="100"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="MuonForward_30x7ff5f9e806d0" rmax="5000" rmin="500" startphi="0" z="100"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="MuonForward_40x7ff5f9e809a0" rmax="5000" rmin="500" startphi="0" z="100"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="MuonForward_50x7ff5f9e80c70" rmax="5000" rmin="500" startphi="0" z="100"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="MuonForward_60x7ff5f9e80f40" rmax="5000" rmin="500" startphi="0" z="100"/>
+
+    <box lunit="mm" name="world_volume0x7ff5f9e788a0" x="100000" y="100000" z="200000"/>
+  </solids>
+
+
+
+ <structure>
+
+<!-- Tracker -->
+
+    <volume name="TrackerBarrelLog">
+      <materialref ref="Beryllium0x7ff5f9e3baf0"/>
+      <solidref ref="TrackerBarrel"/>
+      <auxiliary auxtype="FastSimModel" auxvalue="TrackerBarrel"/>
+    </volume>
+
+<!-- EM Calorimeters -->
+
+    <volume name="ECalBarrel0x7ff5f9e7b420">
+      <materialref ref="Aluminum0x7ff5f9e42670"/>
+      <solidref ref="ECalBarrel0x7ff5f9e7b300"/>
+      <auxiliary auxtype="FastSimModel" auxvalue="ECalBarrel"/>
+    </volume>
+    <volume name="ECalEndCap_10x7ff5f9e7b710">
+      <materialref ref="Aluminum0x7ff5f9e42670"/>
+      <solidref ref="ECalEndCap_10x7ff5f9e7b630"/>
+      <auxiliary auxtype="FastSimModel" auxvalue="ECalEndCap1"/>
+    </volume>
+    <volume name="ECalEndCap_20x7ff5f9e7bd10">
+      <materialref ref="Aluminum0x7ff5f9e42670"/>
+      <solidref ref="ECalEndCap_20x7ff5f9e7bc30"/>
+      <auxiliary auxtype="FastSimModel" auxvalue="ECalEndCap2"/>
+    </volume>
+    <volume name="ECalForward_10x7ff5f9e7c130">
+      <materialref ref="Aluminum0x7ff5f9e42670"/>
+      <solidref ref="ECalForward_10x7ff5f9e7c050"/>
+      <auxiliary auxtype="FastSimModel" auxvalue="ECalForward1"/>
+    </volume>
+    <volume name="ECalForward_20x7ff5f9e7c490">
+      <materialref ref="Aluminum0x7ff5f9e42670"/>
+      <solidref ref="ECalForward_20x7ff5f9e7c330"/>
+      <auxiliary auxtype="FastSimModel" auxvalue="ECalForward2"/>
+    </volume>
+
+<!-- Hadron Calorimeters -->
+
+    <volume name="HCalBarrel0x7ff5f9e7d060">
+      <materialref ref="Aluminum0x7ff5f9e42670"/>
+      <solidref ref="HCalBarrel0x7ff5f9e7cf80"/>
+      <auxiliary auxtype="FastSimModel" auxvalue="HCalBarrel"/>
+    </volume>
+    <volume name="HCalEndCap_10x7ff5f9e7d4b0">
+      <materialref ref="Aluminum0x7ff5f9e42670"/>
+      <solidref ref="HCalEndCap_10x7ff5f9e7d3d0"/>
+      <auxiliary auxtype="FastSimModel" auxvalue="HCalEndCap1"/>
+    </volume>
+    <volume name="HCalEndCap_20x7ff5f9e7d790">
+      <materialref ref="Aluminum0x7ff5f9e42670"/>
+      <solidref ref="HCalEndCap_20x7ff5f9e7d6b0"/>
+      <auxiliary auxtype="FastSimModel" auxvalue="HCalEndCap2"/>
+    </volume>
+    <volume name="HCalForward_10x7ff5f9e7daf0">
+      <materialref ref="Aluminum0x7ff5f9e42670"/>
+      <solidref ref="HCalForward_10x7ff5f9e7b840"/>
+      <auxiliary auxtype="FastSimModel" auxvalue="HCalForward1"/>
+    </volume>
+    <volume name="HCalForward_20x7ff5f9e7b9d0">
+      <materialref ref="Aluminum0x7ff5f9e42670"/>
+      <solidref ref="HCalForward_20x7ff5f9e7dc40"/>
+      <auxiliary auxtype="FastSimModel" auxvalue="HCalForward2"/>
+    </volume>
+
+<!-- Muon Detectors -->
+
+    <volume name="MuonEndCap_10x7ff5f9e7efa0">
+      <materialref ref="Aluminum0x7ff5f9e42670"/>
+      <solidref ref="MuonEndCap_10x7ff5f9e7eec0"/>
+      <auxiliary auxtype="FastSimModel" auxvalue="MuonEndCap1"/>
+    </volume>
+    <volume name="MuonEndCap_20x7ff5f9e7f280">
+      <materialref ref="Aluminum0x7ff5f9e42670"/>
+      <solidref ref="MuonEndCap_20x7ff5f9e7f1a0"/>
+      <auxiliary auxtype="FastSimModel" auxvalue="MuonEndCap2"/>
+    </volume>
+    <volume name="MuonEndCap_30x7ff5f9e7f550">
+      <materialref ref="Aluminum0x7ff5f9e42670"/>
+      <solidref ref="MuonEndCap_30x7ff5f9e7f470"/>
+      <auxiliary auxtype="FastSimModel" auxvalue="MuonEndCap3"/>
+    </volume>
+    <volume name="MuonEndCap_40x7ff5f9e7f820">
+      <materialref ref="Aluminum0x7ff5f9e42670"/>
+      <solidref ref="MuonEndCap_40x7ff5f9e7f740"/>
+      <auxiliary auxtype="FastSimModel" auxvalue="MuonEndCap4"/>
+    </volume>
+    <volume name="MuonEndCap_50x7ff5f9e7faf0">
+      <materialref ref="Aluminum0x7ff5f9e42670"/>
+      <solidref ref="MuonEndCap_50x7ff5f9e7fa10"/>
+      <auxiliary auxtype="FastSimModel" auxvalue="MuonEndCap5"/>
+    </volume>
+    <volume name="MuonEndCap_60x7ff5f9e7fdc0">
+      <materialref ref="Aluminum0x7ff5f9e42670"/>
+      <solidref ref="MuonEndCap_60x7ff5f9e7fce0"/>
+      <auxiliary auxtype="FastSimModel" auxvalue="MuonEndCap6"/>
+    </volume>
+    <volume name="MuonForward_10x7ff5f9e80200">
+      <materialref ref="Aluminum0x7ff5f9e42670"/>
+      <solidref ref="MuonForward_10x7ff5f9e80120"/>
+      <auxiliary auxtype="FastSimModel" auxvalue="MuonForward1"/>
+    </volume>
+    <volume name="MuonForward_20x7ff5f9e804e0">
+      <materialref ref="Aluminum0x7ff5f9e42670"/>
+      <solidref ref="MuonForward_20x7ff5f9e80400"/>
+      <auxiliary auxtype="FastSimModel" auxvalue="MuonForward2"/>
+    </volume>
+    <volume name="MuonForward_30x7ff5f9e807b0">
+      <materialref ref="Aluminum0x7ff5f9e42670"/>
+      <solidref ref="MuonForward_30x7ff5f9e806d0"/>
+      <auxiliary auxtype="FastSimModel" auxvalue="MuonForward3"/>
+    </volume>
+    <volume name="MuonForward_40x7ff5f9e80a80">
+      <materialref ref="Aluminum0x7ff5f9e42670"/>
+      <solidref ref="MuonForward_40x7ff5f9e809a0"/>
+      <auxiliary auxtype="FastSimModel" auxvalue="MuonForward4"/>
+    </volume>
+    <volume name="MuonForward_50x7ff5f9e80d50">
+      <materialref ref="Aluminum0x7ff5f9e42670"/>
+      <solidref ref="MuonForward_50x7ff5f9e80c70"/>
+      <auxiliary auxtype="FastSimModel" auxvalue="MuonForward5"/>
+    </volume>
+    <volume name="MuonForward_60x7ff5f9e81020">
+      <materialref ref="Aluminum0x7ff5f9e42670"/>
+      <solidref ref="MuonForward_60x7ff5f9e80f40"/>
+      <auxiliary auxtype="FastSimModel" auxvalue="MuonForward6"/>
+    </volume>
+
+<!-- World and Physical Volumes -->
+
+    <volume name="world_volume0x7ff5f9e77ca0">
+      <materialref ref="Air0x7ff5f9e72ea0"/>
+      <solidref ref="world_volume0x7ff5f9e788a0"/>
+
+<!-- Tracker -->
+
+      <physvol name="TrackerBarrelVol">
+        <volumeref ref="TrackerBarrelLog"/>
+      </physvol>
+
+<!-- EM Calorimeters -->
+
+      <physvol name="ECalBarrel0x7ff5f9e7b560">
+        <volumeref ref="ECalBarrel0x7ff5f9e7b420"/>
+      </physvol>
+      <physvol name="ECalEndCap_10x7ff5f9e7bbb0">
+        <volumeref ref="ECalEndCap_10x7ff5f9e7b710"/>
+        <position name="ECalEndCap_10x7ff5f9e7bbb0_pos" unit="mm" x="0" y="0" z="8500"/>
+      </physvol>
+      <physvol name="ECalEndCap_20x7ff5f9e7be10">
+        <volumeref ref="ECalEndCap_20x7ff5f9e7bd10"/>
+        <rotation name="ECalEndCap_20x7ff5f9e7be10_rot" unit="deg" x="0" y="0" z="65.8741388002726"/>
+      </physvol>
+      <physvol name="ECalForward_10x7ff5f9e7c260">
+        <volumeref ref="ECalForward_10x7ff5f9e7c130"/>
+        <position name="ECalForward_10x7ff5f9e7c260_pos" unit="mm" x="0" y="0" z="23700"/>
+      </physvol>
+      <physvol name="ECalForward_20x7ff5f9e7c2e0">
+        <volumeref ref="ECalForward_20x7ff5f9e7c490"/>
+        <position name="ECalForward_20x7ff5f9e7c2e0_pos" unit="mm" x="0" y="0" z="-23700"/>
+      </physvol>
+
+<!-- Hadron Calorimeters -->
+
+      <physvol name="HCalBarrel0x7ff5f9e7d190">
+        <volumeref ref="HCalBarrel0x7ff5f9e7d060"/>
+      </physvol>
+      <physvol name="HCalEndCap_10x7ff5f9e7d5e0">
+        <volumeref ref="HCalEndCap_10x7ff5f9e7d4b0"/>
+        <position name="HCalEndCap_10x7ff5f9e7d5e0_pos" unit="mm" x="0" y="0" z="8500"/>
+      </physvol>
+      <physvol name="HCalEndCap_20x7ff5f9e7d8b0">
+        <volumeref ref="HCalEndCap_20x7ff5f9e7d790"/>
+        <position name="HCalEndCap_20x7ff5f9e7d8b0_pos" unit="mm" x="0" y="0" z="-8500"/>
+      </physvol>
+      <physvol name="HCalForward_10x7ff5f9e7b990">
+        <volumeref ref="HCalForward_10x7ff5f9e7daf0"/>
+        <position name="HCalForward_10x7ff5f9e7b990_pos" unit="mm" x="0" y="0" z="27000"/>
+      </physvol>
+      <physvol name="HCalForward_20x7ff5f9e7ba60">
+        <volumeref ref="HCalForward_20x7ff5f9e7b9d0"/>
+        <position name="HCalForward_20x7ff5f9e7ba60_pos" unit="mm" x="0" y="0" z="-27000"/>
+      </physvol>
+
+<!-- Muon Detectors -->
+
+      <physvol name="MuonEndCap_10x7ff5f9e7f0d0">
+        <volumeref ref="MuonEndCap_10x7ff5f9e7efa0"/>
+        <position name="MuonEndCap_10x7ff5f9e7f0d0_pos" unit="mm" x="0" y="0" z="13000"/>
+      </physvol>
+      <physvol name="MuonEndCap_20x7ff5f9e7f3a0">
+        <volumeref ref="MuonEndCap_20x7ff5f9e7f280"/>
+        <position name="MuonEndCap_20x7ff5f9e7f3a0_pos" unit="mm" x="0" y="0" z="-13000"/>
+      </physvol>
+      <physvol name="MuonEndCap_30x7ff5f9e7f670">
+        <volumeref ref="MuonEndCap_30x7ff5f9e7f550"/>
+        <position name="MuonEndCap_30x7ff5f9e7f670_pos" unit="mm" x="0" y="0" z="-15000"/>
+      </physvol>
+      <physvol name="MuonEndCap_40x7ff5f9e7f940">
+        <volumeref ref="MuonEndCap_40x7ff5f9e7f820"/>
+        <position name="MuonEndCap_40x7ff5f9e7f940_pos" unit="mm" x="0" y="0" z="15000"/>
+      </physvol>
+      <physvol name="MuonEndCap_50x7ff5f9e7fc10">
+        <volumeref ref="MuonEndCap_50x7ff5f9e7faf0"/>
+        <position name="MuonEndCap_50x7ff5f9e7fc10_pos" unit="mm" x="0" y="0" z="17000"/>
+      </physvol>
+      <physvol name="MuonEndCap_60x7ff5f9e7fee0">
+        <volumeref ref="MuonEndCap_60x7ff5f9e7fdc0"/>
+        <position name="MuonEndCap_60x7ff5f9e7fee0_pos" unit="mm" x="0" y="0" z="-17000"/>
+      </physvol>
+      <physvol name="MuonForward_10x7ff5f9e80330">
+        <volumeref ref="MuonForward_10x7ff5f9e80200"/>
+        <position name="MuonForward_10x7ff5f9e80330_pos" unit="mm" x="0" y="0" z="29500"/>
+      </physvol>
+      <physvol name="MuonForward_20x7ff5f9e80600">
+        <volumeref ref="MuonForward_20x7ff5f9e804e0"/>
+        <position name="MuonForward_20x7ff5f9e80600_pos" unit="mm" x="0" y="0" z="-29500"/>
+      </physvol>
+      <physvol name="MuonForward_30x7ff5f9e808d0">
+        <volumeref ref="MuonForward_30x7ff5f9e807b0"/>
+        <position name="MuonForward_30x7ff5f9e808d0_pos" unit="mm" x="0" y="0" z="30500"/>
+      </physvol>
+      <physvol name="MuonForward_40x7ff5f9e80ba0">
+        <volumeref ref="MuonForward_40x7ff5f9e80a80"/>
+        <position name="MuonForward_40x7ff5f9e80ba0_pos" unit="mm" x="0" y="0" z="-30500"/>
+      </physvol>
+      <physvol name="MuonForward_50x7ff5f9e80e70">
+        <volumeref ref="MuonForward_50x7ff5f9e80d50"/>
+        <position name="MuonForward_50x7ff5f9e80e70_pos" unit="mm" x="0" y="0" z="31500"/>
+      </physvol>
+      <physvol name="MuonForward_60x7ff5f9e81140">
+        <volumeref ref="MuonForward_60x7ff5f9e81020"/>
+        <position name="MuonForward_60x7ff5f9e81140_pos" unit="mm" x="0" y="0" z="-31500"/>
+      </physvol>
+
+
+    </volume>
+
+  </structure>
+
+
+  <setup name="Default" version="1.0">
+    <world ref="world_volume0x7ff5f9e77ca0"/>
+  </setup>
+
+</gdml>

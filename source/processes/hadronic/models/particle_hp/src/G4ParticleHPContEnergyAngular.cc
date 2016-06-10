@@ -56,7 +56,7 @@ G4ReactionProduct * G4ParticleHPContEnergyAngular::Sample(G4double anEnergy, G4d
      theAngular[0].SetPrimary(GetProjectileRP());
      result = theAngular[0].Sample(anEnergy, massCode, targetMass, 
                                   theAngularRep, theInterpolation);
-     currentMeanEnergy = theAngular[0].MeanEnergyOfThisInteraction();
+     currentMeanEnergy.Put( theAngular[0].MeanEnergyOfThisInteraction() );
    }
    else
    {
@@ -77,7 +77,7 @@ G4ReactionProduct * G4ParticleHPContEnergyAngular::Sample(G4double anEnergy, G4d
      theAngular[it].SetPrimary(GetProjectileRP());
      result = theAngular[it].Sample(anEnergy, massCode, targetMass, 
 				    theAngularRep, theInterpolation);
-     currentMeanEnergy = theAngular[it].MeanEnergyOfThisInteraction(); 
+     currentMeanEnergy.Put( theAngular[it].MeanEnergyOfThisInteraction() ); 
 #else
     if( getenv("G4PHPTEST") )     G4cout << i << " G4ParticleHPContEnergyAngular To BUILDBYINTERPOLATION " << it << " : " << theAngular[it].GetEnergy()<< " , " << theAngular[it].GetNEnergies() << " " << it-1 << " : " << theAngular[it-1].GetEnergy()<< " : " << theAngular[it-1].GetNEnergies() << G4endl; //GDEB
 
@@ -91,7 +91,7 @@ G4ReactionProduct * G4ParticleHPContEnergyAngular::Sample(G4double anEnergy, G4d
      angular->SetPrimary(GetProjectileRP());
      result = angular->Sample(anEnergy, massCode, targetMass, 
 			     theAngularRep, theInterpolation);
-     currentMeanEnergy = angular->MeanEnergyOfThisInteraction();
+     currentMeanEnergy.Put( angular->MeanEnergyOfThisInteraction() );
 
      delete angular;
 #endif
@@ -106,15 +106,15 @@ G4double G4ParticleHPContEnergyAngular::
 MeanEnergyOfThisInteraction()
 {
    G4double result(0);
-   if(currentMeanEnergy<-1)
+   if(currentMeanEnergy.Get()<-1)
    {
      throw G4HadronicException(__FILE__, __LINE__, "G4ParticleHPContEnergyAngular: Logical error in Product class");
    }
    else
    {
-     result = currentMeanEnergy;
+     result = currentMeanEnergy.Get();
    }
-   currentMeanEnergy = -2;
+   currentMeanEnergy.Put( -2 );
    return result;
 }
 

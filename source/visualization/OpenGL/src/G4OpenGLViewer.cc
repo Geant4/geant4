@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc 87443 2014-12-04 12:26:31Z gunter $
+// $Id: G4OpenGLViewer.cc 94428 2015-11-16 12:40:02Z gcosmo $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -60,8 +60,6 @@
 
 #include <sstream>
 #include <string>
-
-//#define G4DEBUG_VIS_OGL 1
 
 G4OpenGLViewer::G4OpenGLViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
@@ -119,9 +117,6 @@ fIsGettingPickInfos(false)
 ,fnMatrixUniform(0)
 #endif
 {
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLViewer:: Creation\n");
-#endif
   // Make changes to view parameters for OpenGL...
   fVP.SetAutoRefresh(true);
   fDefaultVP.SetAutoRefresh(true);
@@ -200,9 +195,6 @@ void G4OpenGLViewer::InitializeGLView ()
   }
 #endif
   
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLViewer::InitializeGLView\n");
-#endif
 
   fWinSize_x = fVP.GetWindowSizeHintX();
   fWinSize_y = fVP.GetWindowSizeHintY();
@@ -224,10 +216,7 @@ void G4OpenGLViewer::InitializeGLView ()
   glEnable (GL_BLEND);
   glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLViewer::InitializeGLView END\n");
-#endif
-}  
+}
 
 void G4OpenGLViewer::ClearView () {
   ClearViewWithoutFlush();
@@ -275,9 +264,6 @@ void G4OpenGLViewer::ResizeWindow(unsigned int aWidth, unsigned int aHeight) {
  */
 void G4OpenGLViewer::ResizeGLView()
 {
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLViewer::ResizeGLView %d %d %#lx\n",fWinSize_x,fWinSize_y,(unsigned long)this);
-#endif
   // Check size
   GLint dims[2];
   dims[0] = 0;
@@ -321,8 +307,8 @@ void G4OpenGLViewer::SetView () {
   lightPosition [2] = fVP.GetActualLightpointDirection().z();
   lightPosition [3] = 0.;
   // Light position is "true" light direction, so must come after gluLookAt.
-  GLfloat ambient [] = { 0.2, 0.2, 0.2, 1.};
-  GLfloat diffuse [] = { 0.8, 0.8, 0.8, 1.};
+  GLfloat ambient [] = { 0.2f, 0.2f, 0.2f, 1.f};
+  GLfloat diffuse [] = { 0.8f, 0.8f, 0.8f, 1.f};
   glEnable (GL_LIGHT0);
   glLightfv (GL_LIGHT0, GL_AMBIENT, ambient);
   glLightfv (GL_LIGHT0, GL_DIFFUSE, diffuse);
@@ -364,10 +350,10 @@ void G4OpenGLViewer::SetView () {
   glScaled(scaleFactor.x(),scaleFactor.y(),scaleFactor.z());
   
   if (fVP.GetFieldHalfAngle() == 0.) {
-    glOrtho (left, right, bottom, top, pnear, pfar);
+    g4GlOrtho (left, right, bottom, top, pnear, pfar);
   }
   else {
-    glFrustum (left, right, bottom, top, pnear, pfar);
+    g4GlFrustum (left, right, bottom, top, pnear, pfar);
   }  
 
   glMatrixMode (GL_MODELVIEW); // apply further transformations to scene.
@@ -554,6 +540,7 @@ std::vector < G4OpenGLViewerPickMap* > G4OpenGLViewer::GetPickDetails(GLdouble x
       p++;
       p++;
       for (GLuint j = 0; j < nnames; ++j) {
+        oss.clear();
         GLuint name = *p++;
         pickMap->setHitNumber(i);
         pickMap->setSubHitNumber(j);
@@ -634,9 +621,6 @@ GLubyte* G4OpenGLViewer::grabPixels
 
 bool G4OpenGLViewer::printEPS() {
   bool res;
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLViewer::printEPS file:%s Vec:%d Name:%s\n",getRealPrintFilename().c_str(),fVectoredPs,GetName().c_str());
-#endif
 
   // Change the LC_NUMERIC value in order to have "." separtor and not ","
   // This case is only useful for French, Canadien...
@@ -668,10 +652,6 @@ bool G4OpenGLViewer::printEPS() {
     }
   }
 
-
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLViewer::printEPS END\n");
-#endif
   return res;
 }
 
@@ -684,9 +664,6 @@ bool G4OpenGLViewer::printNonVectoredEPS () {
   int width = getRealExportWidth();
   int height = getRealExportHeight();
 
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLViewer::printNonVectoredEPS file:%s Vec:%d X:%d Y:%d col:%d fWinX:%d fWinY:%d\n",getRealPrintFilename().c_str(),fVectoredPs,width,height,fPrintColour,fWinSize_x,fWinSize_y);
-#endif
   FILE* fp;
   GLubyte* pixels;
   GLubyte* curpix;
@@ -856,7 +833,7 @@ bool G4OpenGLViewer::exportImage(std::string name, int width, int height) {
     return false;
   }
 
-  if ((width =! -1) && (height != -1)) {
+  if ((width != -1) && (height != -1)) {
     setExportSize(width, height);
   }
 
@@ -1255,10 +1232,6 @@ void G4OpenGLViewer::rotateSceneInViewDirection(G4double dx, G4double dy)
 
   //phi spin stuff here
   
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLViewer::rotateScene dx:%f dy:%f delta:%f\n",dx,dy, fRot_sens);
-#endif
-
   vp = fVP.GetViewpointDirection ().unit();
   up = fVP.GetUpVector ().unit();
 
@@ -1437,6 +1410,52 @@ void G4OpenGLViewer::g4GluLookAt( GLdouble eyex, GLdouble eyey, GLdouble eyez,
 	glTranslatef(-eyex, -eyey, -eyez);
 }
 
+void G4OpenGLViewer::g4GlOrtho (GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble zNear, GLdouble zFar) {
+  //  glOrtho (left, right, bottom, top, near, far);
+  
+  GLdouble a = 2.0 / (right - left);
+  GLdouble b = 2.0 / (top - bottom);
+  GLdouble c = -2.0 / (zFar - zNear);
+  
+  GLdouble tx = - (right + left)/(right - left);
+  GLdouble ty = - (top + bottom)/(top - bottom);
+  GLdouble tz = - (zFar + zNear)/(zFar - zNear);
+  
+  GLdouble ortho[16] = {
+    a, 0, 0, 0,
+    0, b, 0, 0,
+    0, 0, c, 0,
+    tx, ty, tz, 1
+  };
+  glMultMatrixd(ortho);
+  
+}
+
+
+void G4OpenGLViewer::g4GlFrustum (GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble zNear, GLdouble zFar) {
+  //  glFrustum (left, right, bottom, top, near, far);
+  
+  GLdouble deltaX = right - left;
+  GLdouble deltaY = top - bottom;
+  GLdouble deltaZ = zFar - zNear;
+  
+  GLdouble a = 2.0f * zNear / deltaX;
+  GLdouble b = 2.0f * zNear / deltaY;
+  GLdouble c = (right + left) / deltaX;
+  GLdouble d = (top + bottom) / deltaY;
+  GLdouble e = -(zFar + zNear) / (zFar - zNear);
+  GLdouble f = -2.0f * zFar * zNear / deltaZ;
+  
+  GLdouble proj[16] = {
+    a, 0, 0, 0,
+    0, b, 0, 0,
+    c, d, e, -1.0f,
+    0, 0, f, 0
+  };
+  
+  glMultMatrixd(proj);
+  
+}
 
 
 #ifdef G4OPENGL_VERSION_2

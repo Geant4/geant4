@@ -30,6 +30,318 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+
+25th November 2015 - Ben Morgan (cmake-V10-01-41)
+- Modules/Geant4InterfaceOptions.cmake : Move force Qt4 option
+  alongside use Qt option so that it can be set in Curses/GUI before
+  first-pass search for Qt.
+- Modules/Geant4BuildModes.cmake : Change default build mode for
+  single config generators to RelWithDebInfo to match testing
+  system and UNIX conventions.
+- Modules/Geant4LibraryBuildOptions.cmake : Add new MSVC only option
+  GEANT4_BUILD_MSVC_MP, defaulting to OFF. When ON, it prepends /MP
+  to CMAKE_CXX_FLAGS to enable file level parallel compilation when
+  using MSBuild.
+
+23rd November 2015 - Ben Morgan (cmake-V10-01-40)
+- Modules/FindROOT.cmake : Apply patch from Ivana Hrivnacova to provide
+  compatibility with ROOT6 and allow usage of ROOTConfig.cmake, if
+  available.
+- Modules/Geant4MakeRules_cxx.cmake : Correct checking of Intel compiler
+  to use better CMAKE_CXX_COMPILER_ID variable.
+- Modules/Geant4InterfaceOptions.cmake : Allow user to force search for
+  Qt4 only when GEANT4_USE_QT is selected. Requested on User Forum by
+  Jan Pipek (http://hypernews.slac.stanford.edu/HyperNews/geant4/get/installconfig/1766.html)
+
+18th November 2015 - Ben Morgan (cmake-V10-01-39)
+- Modules/IntelCompileFeatures.cmake : Fix logic error in conditionals
+  that resulted in only one branch being followed and a non-complete
+  set of compile features being set.
+
+17th November 2015 - Ben Morgan (cmake-V10-01-38)
+- Modules/Geant4LibraryBuildOptions.cmake : To provide backward 
+  compatibility, allow GEANT4_BUILD_CXXSTD to be supplied as either
+  an epoch like '11' or as 'c++<epoch>'. If the latter form is supplied
+  postprocess to remove the 'c++' so that standards can be dealt with in
+  a uniform numeric manner.
+
+17th November 2015 - Ben Morgan (cmake-V10-01-37)
+- Use CMake Compile Features to setup C++ Standard
+- Modules/Geant4MakeRules_cxx.cmake : Remove setup of standard selection
+  via compiler version checking.
+- Modules/Geant4LibraryBuildOptions.cmake : Create list of compile
+  features required by Geant4, per C++ Taskforce report. For 10.2, do
+  not include
+  - cxx_deleted_functions
+  - cxx_generalized_initializers
+  - cxx_constexpr
+  - cxx_inheriting_constructors
+  to provide backward compatibility with Visual Studio 2013 (MSVC 18).
+  Maintain GEANT4_BUILD_CXXSTD option to allow user to choose between
+  C++11 and C++14 standards. When newer standard is chosen, require that
+  compiler supports at least one feature from that standard, and add all
+  supported features of that standard to the required list.
+- Modules/IntelCompileFeatures.cmake : CMake does not currently provide
+  builtin compile features for ICC. Use info provide by Intel to support
+  compile features for this compiler.
+- Modules/Geant4MacroLibraryTargets.cmake : Use target_compile_features
+  to set the required features on all Geant4 targets.
+- Modules/Geant4BuildProjectConfig.cmake, 
+  Templates/Geant4Config.cmake.in, Templates/geant4-config.in: Update 
+  setting of flags and standard used to obtain information from
+  compile features.
+
+10th November 2015 - Gabriele Cosmo (cmake-V10-01-36)
+- Put CLHEP version 2.3.1.0 as the minimum required in script
+  Modules/Geant4OptionalComponents.cmake.
+
+9th November 2015 - Gunter Folger (cmake-V10-01-35)
+- Modules/Geant4DatasetDefinitions.cmake: Use new data sets 
+  PhotonEvaporation3.2 and RadioactiveDecay4.3.
+
+2nd November 2015 - Ben Morgan (cmake-V10-01-34)
+- Modules/Geant4CTest.cmake : Add TOOLS_FONT_PATH to test environment
+  when Freetype support enabled.
+
+28th October 2015 - Gunter Folger (cmake-V10-01-33)
+- Modules/Geant4DatasetDefinitions.cmake: Use new data set G4EMLOW6.48
+
+23th October 2015 - Gunter Folger (cmake-V10-01-32)
+- Modules/Geant4DatasetDefinitions.cmake: Use new data set G4ENSDFSTATE.1.2 
+22nd October 2015 - Ben Morgan (cmake-V10-01-31)
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Add export
+  of TOOLS_FONT_PATH to environment when Freetype support is enabled,
+  pointing to the fonts/ subdirectory of Geant4's share directory.
+  For the buildtree, point it to PROJECT_SOURCE_DIR/source/analysis/fonts
+  Treat TOOLS_FONT_PATH as a UNIX style PATH variable with normal
+  separators.
+- Templates/geant4-env-skeleton.in, Templates/geant4make-skeleton.in : 
+  Add export variables for configuring TOOLS_FONT_PATH variable.
+
+21st October 2015 - Ben Morgan (cmake-V10-01-30)
+- Modules/Geant4ConfigureConfigScript.cmake : Export value of 
+  GEANT4_USE_FREETYPE to geant4-config to allow this to report support 
+  status of freetype in G4analysis
+- Templates/geant4-config.in : Add freetype feature to report status of
+  freetype support in G4analysis
+- Templates/Geant4Config.cmake.in : Add freetype component to require
+  freetype support in G4analysis.
+
+19th October 2015 - Ben Morgan
+- Modules/Geant4OptionalComponents.cmake : Add new GEANT4_USE_FREETYPE
+  option, OFF by defaults, to allow user to enable Freetype support
+  in analysis library.
+
+12th October 2015 - Gunter Folger (cmake-V10-01-29)
+- Modules/Geant4DatasetDefinitions.cmake: Use new data set G4EMLOW.6.47
+
+8th October 2015 - Ben Morgan (cmake-V10-01-28)
+- Modules/Geant4OptionalComponents.cmake: Only allow use of system
+  USolids. Remove old "USE_SYSTEM_USOLIDS" option, and always call
+  find_package for USolids.
+- Modules/GeantBuildProjectConfig.cmake, Templates/Geant4Config.cmake.in:
+  Remove old system usolids settings as USolids is always system now
+- Modules/Geant4ConfigureConfigScript.cmake, Templates/geant4-config.in:
+  Remove old system Usolids settings as Usolids is alsways system now.
+  Ensure include paths exported.
+
+6th October 2015 - Ben Morgan (cmake-V10-01-27)
+- Modules/Geant4MakeRules_cxx.cmake: Update AppleClang detection to
+  for Xcode 7 and match to CMake 3's AppleClang rules. Provide
+  CXXSTD_IS_AVAILABLE for MSVC 19 so that appropriate standard selection
+  preprocessor symbols are defined.
+
+1st October 2015 - Gunter Folger (cmake-V10-01-26)
+- Modules/Geant4DatasetDefinitions.cmake: Use new data set G4EMLOW.6.46
+
+18th September 2015 - Ben Morgan (cmake-V10-01-25)
+- Modules/Geant4LibraryBuildOptions.cmake, Modules/Geant4MacroLibraryTargets, Modules/GeantBuildProjectConfig.cmake: Allow both static and shared libs
+  to be built on Windows. Remove G4LIB_BUILD_DLL preprocessor def from
+  global settings, only adding it to the public compile defs of the
+  resulting DLL. To create DLL, always compile dedicated archive library
+  separate from installed version. Compile the sources of this dedicated
+  archive library with G4LIB_BUILD_DLL set so that DLL relevant symbols
+  are used.
+
+16th September 2015 - Gunter Folger (cmake-V10-01-24)
+- Modules/Geant4DatasetDefinitions.cmake: Use new data set G4ENSDFSTATE.1.1
+
+14th September 2015 - Ben Morgan (cmake-V10-01-23)
+- Modules/Geant4CTest.cmake, Modules/Geant4InstallData.cmake, Modules/Geant4ToolchainBackwardCompatibility.cmake: Export and use G4ENSDFDATA dataset
+  and environment variable. It will become the default to use this dataset
+  so requires export.
+
+1st September 2015 - Gunter Folger (cmake-V10-01-22)
+- Modules/Geant4DatasetDefinitions.cmake: Use new data set G4EMLOW.6.45
+
+31st August 2015 - Gabriele Cosmo (cmake-V10-01-21)
+- Modules/Geant4OptionalComponents.cmake, GeantBuilsProjectConfig.cmake and
+  Templates/geant4-config.in: added specific compilation flag
+  "-DG4GEOM_USE_SYS_USOLIDS" to distinguish build with sys-installed
+  USolids/VecGeom module (temporary, until internal USolids module will be
+  removed).
+
+12th August 2015 - Gabriele Cosmo (cmake-V10-01-20)
+- Modules/Geant4MakeRules_cxx.cmake: removed -gcc-sys in CMAKE_CXX_FLAGS
+  for the Intel compiler, as no longer necessary.
+- Modules/Geant4LibraryBuildOptions.cmake: removed try-compile block for
+  atomics on Intel compiler, as no longer necessary.
+
+7th August 2015 - Gabriele Cosmo (cmake-V10-01-19)
+- Modules/Geant4MakeRules_cxx.cmake: replaced -no-gcc with -gcc-sys
+  in CMAKE_CXX_FLAGS when using Intel compiler, to allow for GNU macros
+  to be defined when compiling system headers.
+
+31st July 2015 - Ben Morgan (cmake-V10-01-18)
+- Modules/Geant4MacroLibraryTargets.cmake : Updates for migration to
+  CMake >= 2.8.12. Use generator expressions in setting of per-mode
+  compile definitions for Geant4 libs. Use INTERFACE_LINK_LIBRARIES
+  instead of LINK_INTERFACE_LIBRARIES on Windows. Replace use of
+  INSTALL_NAME_DIR with MACOSX_RPATH property for OS X libraries.
+
+29th July 2015 - Ben Morgan
+- Module/Geant4LibraryBuildOptions.cmake : Add try-compile for
+  atomics with Intel in C++1X mode and use Intel atomic if system
+  cannot support them. Reported by Andrea Dotti,
+  because Geant4 uses Intel's no-gcc flag to prevent thread local
+  issues, system atomic header will be used by default. If system
+  compiler does not support atomic, builds will fail.
+
+27th July 2015 - Ben Morgan (cmake-V10-01-17)
+- Modules/Geant4MakeRules_cxx.cmake : Always use libc++ with Apple
+  Clang so that std-supporting library is used for C++11 mode on
+  older Mac systems where libstdc++ is the default.
+
+23rd July 2015 - Ben Morgan (cmake-V10-01-16)
+- Modules/Geant4MacroLibraryTargets.cmake : Update rules for .def
+  file generation to use new output dirs and to separate .def files
+  for each build mode.
+- Modules/Geant4MakeRules_cxx.cmake : To permit transition to C++11
+  update std-flag setting rules to only allow C++11 builds with compiler
+  versions that are know to support the features in current use.
+
+22nd July 2015 - Ben Morgan (cmake-V10-01-15)
+- Modules/Geant4MakeRules_cxx.cmake : When compiler allows selection
+  of C++ standard and allows C++0x/11, default to using this standard.
+
+13th July 2015 - Ben Morgan (cmake-V10-01-14)
+- Modules/Geant4LibraryBuildOptions.cmake : Migrate output directories
+  for build products to use same layout as install tree. For single
+  mode generators (Makefiles/Ninja), products are output to a 
+  'BuildProducts' subdir of the main binary dir which holds bin/lib
+  directories as derived from requested install dirs. With multimode
+  generators (Xcode/VS), 'BuildProducts' holds an extra directory layer,
+  one per build mode, under which the same bin/lib structure is used.
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Update to use
+  correct output dirs.
+- Modules/Geant4ConfigureConfigScript.cmake : Note that this will not
+  work for multimode builds.
+
+8th June 2015 - Ben Morgan (cmake-V10-01-13)
+- Templates/Geant4Config.cmake.in : Always re-find Qt5 via find_package
+  if Geant4 was configured with Qt5 support. Qt5 libraries are in
+  public link interface of G4interfaces and G4OpenGL whether or not it
+  is activated for an application, so must always be linked. Without
+  refinding, dangling imported targets are left in the link interfaces 
+  of G4interfaces and G4OpenGL.
+
+26th May 2015 - Gunter Folger (cmake-V10-01-12)
+-  Modules/Geant4DatasetDefinitions.cmake: Use new data set G4EMLOW.6.44
+
+19th May 2015 - Gunter Folger (cmake-V10-01-11)
+-  Modules/Geant4DatasetDefinitions.cmake: Use new data set G4EMLOW.6.43
+
+5th May 2015 - Ben Morgan (cmake-V10-01-10)
+- Modules/Geant4ConfigureModulefile.cmake : Genarate a modulefile
+  for the build tree. Requested by developers, but otherwise unsupported.
+- Templates/geant4-modulefile.in : Update export variables to allow
+  transparent configuration of build/install tree versions.
+
+29th April 2015 - Ben Morgan (cmake-V10-01-09)
+- Modules/Geant4MakeRules_cxx.cmake: Add `-no-gcc` to CMAKE_CXX_FLAGS
+  when using Intel compiler. This is temporary fix to give
+  matching flags against old GNUmake build. It requires further checks
+  to understand full behaviour of this flag to tune code versus
+  Intel's `-gcc-sys` flag and `__INTEL_COMPILER` macro.
+
+22nd April 2015 - Ben Morgan (cmake-V10-01-08)
+- Modules/FindCLHEP.cmake: Add CLHEP_ROOT_DIR to CMake cache, allowing
+  it to be editted in the CMake curses/GUI. Use unset command to remove
+  LIBRARY and INCLUDE_DIR variables for CLHEP from the cache when
+  CLHEP_ROOT_DIR is changed.
+- Templates/geant4-env-skeleton.in: Add expansion entry for CLHEP library
+  path
+- Modules/Geant4ToolchainBackwardCompatibility.cmake: Export setting
+  of dynamic library path to prepend system CLHEP's library path in
+  geant4.(c)sh
+
+17th April 2015 - Ben Morgan (cmake-V10-01-07)
+- Fixes for JIRA DEV-185 (Allow use of system CLHEP granular libraries)
+- Modules/FindCLHEP.cmake: Allow component arguments to be supplied to
+  find_package, each component being a CLHEP granular library. Support
+  dependencies between components, and fail on REQUIRED if any requested
+  component or dependency is not found. Set cache variables for each requested
+  component library, and fill CLHEP_LIBRARIES with the requested libraries
+- Modules/Geant4OptionalComponents.cmake: Provide new advanced option 
+  GEANT4_USE_SYSTEM_CLHEP_GRANULAR, which can be set to enable use of CLHEP
+  granular libraries from the system. When activated, use new FindCLHEP 
+  interface to search for Geant4's required components. 
+- Templates/Geant4Config.cmake.in: Export and document a new variable, 
+  Geant4_system_clhep_ISGRANULAR that clients can query to check whether
+  the system CLHEP was linked in granular mode.
+- Modules/Geant4ConfigureConfigScript.cmake: Process and export system CLHEP
+  library list to support either singular or granular CLHEP libraries.
+- Templates/geant4-config.in: Support CLHEP granular library listing in
+  '--libs' argument.
+- Modules/Geant4ToolchainBackwardCompatibility.cmake: Export CLHEP_LIB env var
+  to support use of system CLHEP libraries in granular mode.
+- Templates/geant4make-skeleton.in: Export CLHEP_LIB env var to support
+  system CLHEP libs in granular mode.
+
+15th April 2015 - Ben Morgan (cmake-V10-01-06)
+- Modules/Geant4MakeRules_cxx.cmake: Update AppleClang version regex for
+  Xcode 6.1. This version adds the patch number to the "based on LLVM"
+  id. The full version number is now derived.
+
+20th March 2015 - Gabriele Cosmo (cmake-V10-01-05)
+- Modules/Geant4MacroLibraryTargets.cmake: Added external G4geomUSolids
+  library to static linkage list. Addressing problem report #1725.
+
+2nd February 2015 - Ben Morgan
+- Modules/Geant4CPackBase.cmake: Exclude directories named "test"
+  and "tests" from source package. Provide function to pad version
+  triplet entries to two digits (with zeros), and name source package
+  following convention of standatd release proceedure. CAVEATS: Patch
+  version still included with initial release, no use of beta/patch/rc
+  tags in patch numbering.
+
+29th January 2015 - Ben Morgan (cmake-V10-01-04)
+- Modules/Geant4MakeRules_cxx.cmake: Minor update to only use c++11
+  on Intel 15 compiler and better. Though this standard can be used
+  on slightly earlier versions, only 15 has full features (for Geant4's
+  needs). We would like to be consistent in standard use so that 'c++0x'
+  is always used for compilers with partial support (even if 'c++11' is
+  allowed), reserving 'c++11' for fully supported cases. This still
+  needs review for GNU and Clang.
+
+29th January 2015 - Ben Morgan (cmake-V10-01-03)
+- Modules/Geant4MakeRules_cxx.cmake: Add support for compiling against
+  c++1y standard for GNU and Clang compilers. Add support for compiling
+  against c++11 standard for Intel compiler.
+  
+17th December - Ben Morgan (cmake-V10-01-02)
+- Modules/Geant4InterfaceOptions.cmake: BUGFIX #1683. Correct search
+  path for X11 libraries to ensure location of Xquartz libs on OS X.
+
+15th December 2014 - Gunter Folger (cmake-V10-01-01)
+-  Modules/Geant4DatasetDefinitions.cmake: Use new data set G4EMLOW.6.42
+
+05th December 2014 - Ben Morgan (cmake-V10-01-00)
+- Modules/Geant4LibraryBuildOptions.cmake: When on OS X, check
+  whether compiler IDed as Clang is actually g++ via command
+  path. Ensures that "GEANT4_COMPILER" is correctly set for
+  GNUmake compatibility.
+
 01st December 2014 - Ben Morgan (cmake-V10-00-37)
 - Modules/Geant4BuildProjectConfig.cmake: Correct export of USolids
   system headers so that these are exported whether or not USolids

@@ -8,7 +8,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt 82626 2014-07-01 09:32:09Z gcosmo $
+# $Id: CMakeLists.txt 94124 2015-11-06 09:47:51Z gcosmo $
 #
 # 20130225  M. Kelsey -- Remove cascade/evaporation, cascade/utils
 #------------------------------------------------------------------------------
@@ -81,7 +81,6 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             hadronic/models/lend/sources.cmake
             hadronic/models/lepto_nuclear/sources.cmake
             hadronic/models/management/sources.cmake
-            hadronic/models/neutron_hp/sources.cmake
             hadronic/models/particle_hp/sources.cmake
             hadronic/models/parton_string/diffraction/sources.cmake
             hadronic/models/parton_string/hadronization/sources.cmake

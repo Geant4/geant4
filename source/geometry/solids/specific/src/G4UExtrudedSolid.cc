@@ -32,6 +32,9 @@
 
 #include "G4ExtrudedSolid.hh"
 #include "G4UExtrudedSolid.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+
 #include "G4Polyhedron.hh"
 
 ////////////////////////////////////////////////////////////////////////
@@ -120,3 +123,5 @@ G4UExtrudedSolid::operator=(const G4UExtrudedSolid &source)
   
   return *this;
 }
+
+#endif  // G4GEOM_USE_USOLIDS

@@ -64,6 +64,7 @@ G4INCLXXInterfaceMessenger::G4INCLXXInterfaceMessenger(G4INCLXXInterfaceStore *a
   accurateNucleusCmd->SetGuidance(" Default: projectile");
   accurateNucleusCmd->SetParameterName("AccurateNucleus",true);
   accurateNucleusCmd->SetDefaultValue("projectile");
+  accurateNucleusCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
   // This command selects the maximum mass number of clusters to be produced in
   // the INCL++ cascade
@@ -74,6 +75,7 @@ G4INCLXXInterfaceMessenger::G4INCLXXInterfaceMessenger(G4INCLXXInterfaceStore *a
   maxClusterMassCmd->SetParameterName("MaxClusterMass",true);
   maxClusterMassCmd->SetDefaultValue(8);
   maxClusterMassCmd->SetRange("MaxClusterMass>=2 && MaxClusterMass<=12");
+  maxClusterMassCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
   // This command sets the energy below which PreCoumpound will be used
   cascadeMinEnergyPerNucleonCmd = new G4UIcmdWithADoubleAndUnit((theUIDirectory + "cascadeMinEnergyPerNucleon").data(),this);
@@ -83,7 +85,21 @@ G4INCLXXInterfaceMessenger::G4INCLXXInterfaceMessenger(G4INCLXXInterfaceStore *a
   cascadeMinEnergyPerNucleonCmd->SetDefaultValue(1.*MeV);
   cascadeMinEnergyPerNucleonCmd->SetRange("cascadeMinEnergyPerNucleon>=0");
   cascadeMinEnergyPerNucleonCmd->SetUnitCategory("Energy");
+  cascadeMinEnergyPerNucleonCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
+  // This command allows the user to set several INCL++ internals in one shot
+  inclPhysicsCmd = new G4UIcmdWithAString((theUIDirectory + "setPhysics").data(),this);
+  inclPhysicsCmd->SetGuidance("Set a global configuration for INCL++.");
+  inclPhysicsCmd->SetGuidance(" default: default configuration, most recent options");
+  inclPhysicsCmd->SetGuidance(" incl42: try to mimick the behaviour from INCL4.2");
+  inclPhysicsCmd->SetParameterName("type", false);
+  inclPhysicsCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+  // This command allows the user to change the de-excitation model to be used
+  // with INCL++
+  useAblaCmd = new G4UIcommand((theUIDirectory + "useAbla").data(),this);
+  useAblaCmd->SetGuidance("Use ABLA V3 as de-excitation model after INCL++.");
+  useAblaCmd->AvailableForStates(G4State_Idle);
 }
 
 G4INCLXXInterfaceMessenger::~G4INCLXXInterfaceMessenger() {
@@ -91,6 +107,8 @@ G4INCLXXInterfaceMessenger::~G4INCLXXInterfaceMessenger() {
   delete accurateNucleusCmd;
   delete maxClusterMassCmd;
   delete cascadeMinEnergyPerNucleonCmd;
+  delete inclPhysicsCmd;
+  delete useAblaCmd;
 }
 
 void G4INCLXXInterfaceMessenger::SetNewValue(G4UIcommand *command, G4String newValues) {
@@ -107,5 +125,9 @@ void G4INCLXXInterfaceMessenger::SetNewValue(G4UIcommand *command, G4String newV
   } else if(command==cascadeMinEnergyPerNucleonCmd) {
     const G4double parameter = cascadeMinEnergyPerNucleonCmd->GetNewDoubleValue(newValues);
     theINCLXXInterfaceStore->SetCascadeMinEnergyPerNucleon(parameter);
+  } else if(command==inclPhysicsCmd) {
+    theINCLXXInterfaceStore->SetINCLPhysics(newValues);
+  } else if(command==useAblaCmd) {
+    theINCLXXInterfaceStore->UseAblaDeExcitation();
   }
 }

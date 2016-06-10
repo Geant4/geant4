@@ -1,4 +1,4 @@
-$Id: History 81295 2014-05-26 09:36:06Z gcosmo $
+$Id: History 93090 2015-10-05 13:14:43Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Oct. 4th, 2015  - M.Asai (procuts-V10-01-05)
+- G4VRangeToEnergyConverter: recover Reset() to its destructor.
+
+Aug. 10th, 2015   - H.Kurashige (procuts-V10-01-04)
+- Modify loop_counter for better performance 
+
+Aug. 9th, 2015   - H.Kurashige (procuts-V10-01-03)
+- Remove while loop from G4VRangeToEnergyConverter::ConvertCutToKineticEnergy
+
 May. 25th, 2014  - H.Kurashige (procuts-V10-00-02)
 - Fix Coverity defects in G4VRangeToEnergyConverter
 

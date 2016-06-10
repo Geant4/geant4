@@ -21,12 +21,16 @@
 #include "vfind"
 #include "vmanip"
 #include "words"
+#include "snums"
 #include "sto"
 #include "s2time"
 #include "chars"
 #include "strip"
 #include "cids"
 #include "ntuple_binding"
+#include "sout"
+#include "num2s"
+//#include "srep"
 
 #ifdef TOOLS_MEM
 #include "mem"
@@ -129,7 +133,6 @@ public:
     T* m_user_var;
   };
 
-
 #ifdef TOOLS_MEM
 public:
   static const std::string& s_class() {
@@ -142,6 +145,7 @@ public:
   :m_reader(a_reader)
   ,m_title()
   ,m_sep(0)
+  ,m_vec_sep(';')
   ,m_sz(0)
   ,m_hippo(false)
   {
@@ -161,6 +165,7 @@ protected:
   ,m_reader(a_from.m_reader)
   ,m_title(a_from.m_title)
   ,m_sep(a_from.m_sep)
+  ,m_vec_sep(a_from.m_vec_sep)
   ,m_sz(a_from.m_sz)
   ,m_hippo(a_from.m_hippo)
   {
@@ -171,14 +176,18 @@ protected:
   ntuple& operator=(const ntuple& a_from){
     m_title = a_from.m_title;
     m_sep = a_from.m_sep;
+    m_vec_sep = a_from.m_vec_sep;
     m_hippo = a_from.m_hippo;
     return *this;
   }
 public:
+  void set_vec_sep(char a_c) {m_vec_sep = a_c;}
+  void set_sep(char a_c) {m_sep = a_c;}
   void set_hippo(bool a_hippo) {m_hippo = a_hippo;}
 
   std::istream& istrm() {return m_reader;}
 
+/* use tools::file::is_hippo for that.
   static bool is_hippo(std::ostream& a_out,std::istream& a_reader) {
     // analyse two first data line.
 
@@ -198,14 +207,14 @@ public:
     std::string s;
     if(!read_line(a_reader,sz,s)) return false;
     if(s.find('\t')==std::string::npos) return false;
-/*
-    std::vector<std::string> labels;
-    tools::words(s,"\t",false,labels);
-    return labels.size()?true:false;
-*/
+
+    //std::vector<std::string> labels;
+    //tools::words(s,"\t",false,labels);
+    //return labels.size()?true:false;
+
     return true;
   }
-
+*/
   static bool find_sep(std::ostream& a_out,
                        std::istream& a_reader,bool a_hippo,
                        bool a_verbose,
@@ -311,10 +320,10 @@ public:
     std::vector<std::string> labels;
     if(m_hippo) { //skip first two lines :
       std::string title;
-      if(!read_line(m_reader,m_sz,title)) {a_sep = 0;return false;}
+      if(!read_line(m_reader,m_sz,title)) {m_sz = 0;return false;}
       std::string s;
-      if(!read_line(m_reader,m_sz,s)) {a_sep = 0;return false;}
-      tools::words(s,"\t",false,labels);
+      if(!read_line(m_reader,m_sz,s)) {m_sz = 0;return false;}
+      tools::words(s,"\t",false,labels); //false for glast.tnt that has a trailing \t.
     } else {
       while(skip_comment(m_reader,m_sz)){}
     }
@@ -353,8 +362,7 @@ public:
         m_sz = 0;
         return false;
       }
-      if(a_verbose) a_out << "first number " << d
-                          << " ending at pos " << pos << std::endl;
+      if(a_verbose) a_out << "first number " << d << " ending at pos " << pos << std::endl;
       if(pos>=(std::streampos)sfirst.size()) {
         a_out << "tools::rcsv::ntuple::initialize :"
               << " no separator found in first line."
@@ -373,7 +381,7 @@ public:
     std::vector<std::string> words;
    {std::string sep;
     sep += m_sep;
-    tools::words(sfirst,sep,true,words);}
+    tools::words(sfirst,sep,m_hippo?false:true,words);}
 
     // look if words are numbers :
     if(a_verbose) a_out << "words " << words.size() << std::endl;
@@ -381,6 +389,7 @@ public:
     std::vector<std::string>::iterator it;
     for(it=words.begin();it!=words.end();++it,index++) {
       if(a_verbose) a_out << "word " << sout(*it) << "" << std::endl;
+/* with glast.tnt there is trailing \t that will induce an extra empty column.
       if((*it).empty()) {
         // do not accept :
         //   <num><sep><num><sep><sep><num>...
@@ -398,7 +407,9 @@ public:
           return false;
         }      
       }      
-      std::string name(a_suffix+to<unsigned int>(m_cols.size()));
+*/
+      std::string name = a_suffix;
+      if(!numas<uint32>(m_cols.size(),name)){}
       if(m_hippo) {
         if(index>=labels.size()) {
           a_out << "tools::rcsv::ntuple::initialize :"
@@ -417,7 +428,13 @@ public:
         if(s2time(*it,time)) {
           create_column<csv_time>(name);
         } else {
-          create_column<std::string>(name);
+          std::vector<double> v;
+          std::string vec_sep;vec_sep += m_vec_sep;
+          if(snums<double>(*it,vec_sep,v)&&v.size()) {
+            create_column< std::vector<double> >(name);
+          } else {
+            create_column<std::string>(name);
+          }
         }
       }
     }
@@ -435,48 +452,64 @@ public:
   }
 
   static const std::string& s_cid(cid a_id) {
-    if(a_id==column<char>::id_class()) {
-      static const std::string s_v("char");
-      return s_v;
-    } else if(a_id==column<short>::id_class()) {
-      static const std::string s_v("short");
-      return s_v;
-    } else if(a_id==column<int>::id_class()) {
-      static const std::string s_v("int");
-      return s_v;
-    } else if(a_id==column<float>::id_class()) {
-      static const std::string s_v("float");
-      return s_v;
-    } else if(a_id==column<double>::id_class()) {
-      static const std::string s_v("double");
-      return s_v;
-    } else if(a_id==column<std::string>::id_class()) {
+
+#define TOOLS_RCSV_NTUPLE_IF_CID(a__name,a__type) \
+    if(a_id==column<a__type>::id_class()) {\
+      static const std::string s_v(#a__name);\
+      return s_v;\
+    }
+
+#define TOOLS_RCSV_NTUPLE_IF_VEC_CID(a__name,a__type) \
+    if(a_id==column< std::vector<a__type> >::id_class()) {\
+      static const std::string s_v(#a__name+std::string("[]"));\
+      return s_v;\
+    }
+
+         TOOLS_RCSV_NTUPLE_IF_CID(char,char)
+    else TOOLS_RCSV_NTUPLE_IF_CID(short,short)
+    else TOOLS_RCSV_NTUPLE_IF_CID(int,int)
+    else TOOLS_RCSV_NTUPLE_IF_CID(float,float)
+    else TOOLS_RCSV_NTUPLE_IF_CID(double,double)
+
+    else if(a_id==column<std::string>::id_class()) {
       static const std::string s_v("string");
       return s_v;
+    }
 
-    } else if(a_id==column<unsigned char>::id_class()) {
-      static const std::string s_v("uchar");
-      return s_v;
-    } else if(a_id==column<unsigned short>::id_class()) {
-      static const std::string s_v("ushort");
-      return s_v;
-    } else if(a_id==column<unsigned int>::id_class()) {
-      static const std::string s_v("uint");
-      return s_v;
-    } else if(a_id==column<bool>::id_class()) {
-      static const std::string s_v("bool");
-      return s_v;
-    } else if(a_id==column<int64>::id_class()) {
-      static const std::string s_v("int64");
-      return s_v;
-    } else if(a_id==column<uint64>::id_class()) {
-      static const std::string s_v("uint64");
-      return s_v;
-    } else if(a_id==column<csv_time>::id_class()) {
+    else TOOLS_RCSV_NTUPLE_IF_CID(uchar,uchar)
+    else TOOLS_RCSV_NTUPLE_IF_CID(ushort,ushort)
+    else TOOLS_RCSV_NTUPLE_IF_CID(uint,uint32)   //WARNING
+    else TOOLS_RCSV_NTUPLE_IF_CID(bool,bool)
+    else TOOLS_RCSV_NTUPLE_IF_CID(int64,int64)
+    else TOOLS_RCSV_NTUPLE_IF_CID(uint64,uint64)
+
+    else if(a_id==column<csv_time>::id_class()) {
       static const std::string s_v("time");
       return s_v;
+    }
 
-    } else {
+    else TOOLS_RCSV_NTUPLE_IF_VEC_CID(char,char)
+    else TOOLS_RCSV_NTUPLE_IF_VEC_CID(short,short)
+    else TOOLS_RCSV_NTUPLE_IF_VEC_CID(int,int)
+    else TOOLS_RCSV_NTUPLE_IF_VEC_CID(float,float)
+    else TOOLS_RCSV_NTUPLE_IF_VEC_CID(double,double)
+
+    else if(a_id==column< std::vector<std::string> >::id_class()) {
+      static const std::string s_v("string[]");
+      return s_v;
+    }
+
+    else TOOLS_RCSV_NTUPLE_IF_VEC_CID(uchar,uchar)
+    else TOOLS_RCSV_NTUPLE_IF_VEC_CID(ushort,ushort)
+    else TOOLS_RCSV_NTUPLE_IF_VEC_CID(uint,uint32)   //WARNING
+    else TOOLS_RCSV_NTUPLE_IF_VEC_CID(bool,bool)
+    else TOOLS_RCSV_NTUPLE_IF_VEC_CID(int64,int64)
+    else TOOLS_RCSV_NTUPLE_IF_VEC_CID(uint64,uint64)
+
+#undef TOOLS_RCSV_NTUPLE_IF_CID
+#undef TOOLS_RCSV_NTUPLE_IF_VEC_CID
+
+    else {
       static const std::string s_v("unknown");
       return s_v;
     }
@@ -488,9 +521,10 @@ public:
     } else {
       a_out << "separator is " << (unsigned int)m_sep << std::endl;
     }
+    a_out << "number of columns " << m_cols.size() << std::endl;
     std::vector<read::icol*>::const_iterator it;
     for(it=m_cols.begin();it!=m_cols.end();++it) {
-      a_out << (*it)->name()
+      a_out << sout((*it)->name())
             << " " << s_cid((*it)->id_cls())
             << std::endl;
     }
@@ -519,9 +553,9 @@ public:
     //if(a_verbose) a_out << "file size " << m_sz << std::endl;
 
     std::string _title;
-    char _sep;
+    char _sep,_vec_sep;
     std::vector<col_desc> _cols;
-    if(!read_commented_header(a_out,m_reader,_title,_sep,_cols)) return false;
+    if(!read_commented_header(a_out,m_reader,_title,_sep,_vec_sep,_cols)) return false;
 
     m_sep = _sep;
     m_title = _title;
@@ -529,6 +563,11 @@ public:
     tools_vforcit(col_desc,_cols,it) {
       const std::string& type = (*it).first;
       const std::string& name = (*it).second;
+
+#define TOOLS_RCSV_NTUPLE_CREATE_VEC_COL(a__name,a__type) \
+      if(type==(std::string(#a__name)+"[]")) {\
+        create_column< std::vector<a__type> >(name,a_bd.find_variable< std::vector<a__type> >(name));\
+      }
 
       // see cid2s() for string types.
 
@@ -541,10 +580,25 @@ public:
 
       else if(type=="uchar")  create_column<unsigned char>(name,a_bd.find_variable<unsigned char>(name));
       else if(type=="ushort") create_column<unsigned short>(name,a_bd.find_variable<unsigned short>(name));
-      else if(type=="uint")   create_column<unsigned int>(name,a_bd.find_variable<unsigned int>(name));
+      else if(type=="uint")   create_column<uint32>(name,a_bd.find_variable<uint32>(name)); //WARNING
       else if(type=="bool")   create_column<bool>(name,a_bd.find_variable<bool>(name));
       else if(type=="int64")  create_column<int64>(name,a_bd.find_variable<int64>(name));
       else if(type=="uint64") create_column<uint64>(name,a_bd.find_variable<uint64>(name));
+
+      else TOOLS_RCSV_NTUPLE_CREATE_VEC_COL(char,char)
+      else TOOLS_RCSV_NTUPLE_CREATE_VEC_COL(short,short)
+      else TOOLS_RCSV_NTUPLE_CREATE_VEC_COL(int,int)
+      else TOOLS_RCSV_NTUPLE_CREATE_VEC_COL(float,float)
+      else TOOLS_RCSV_NTUPLE_CREATE_VEC_COL(double,double)
+
+      else if(type=="string[]") create_column< std::vector<std::string> >(name,a_bd.find_variable< std::vector<std::string> >(name));
+
+      else TOOLS_RCSV_NTUPLE_CREATE_VEC_COL(uchar,uchar)
+      else TOOLS_RCSV_NTUPLE_CREATE_VEC_COL(ushort,ushort)
+      else TOOLS_RCSV_NTUPLE_CREATE_VEC_COL(uint,uint32)   //WARNING
+      else TOOLS_RCSV_NTUPLE_CREATE_VEC_COL(bool,bool)
+      else TOOLS_RCSV_NTUPLE_CREATE_VEC_COL(int64,int64)
+      else TOOLS_RCSV_NTUPLE_CREATE_VEC_COL(uint64,uint64)
 
       else {
         a_out << "tools::rcsv::ntuple::initialize(booking) :"
@@ -556,6 +610,8 @@ public:
         m_hippo = false;
         return false;
       }
+
+#undef TOOLS_RCSV_NTUPLE_CREATE_VEC_COL
 
     }
 
@@ -584,7 +640,7 @@ public:
 
 protected:
   bool read_commented_header(std::ostream& a_out,std::istream& a_reader,
-                             std::string& a_title,char& a_sep,std::vector<col_desc>& a_cols) {
+                             std::string& a_title,char& a_sep,char& a_vec_sep,std::vector<col_desc>& a_cols) {
     // analyse first lines starting with '#'.
     a_title.clear();
     a_sep = 0;
@@ -659,6 +715,21 @@ protected:
           return false;
         }
         a_sep = (char)uisep;
+      } else if((_words[0]=="#vector_separator")) {
+        if(_words.size()!=2) {
+          a_out << "tools::rcsv::ntuple::read_commented_header :"
+                << " syntax error in " << sout(line)
+                << std::endl;
+          return false;
+        }
+        unsigned int uisep;
+        if(!to(_words[1],uisep)) {
+          a_out << "tools::rcsv::ntuple::read_commented_header :"
+                << " syntax error in " << sout(line)
+                << std::endl;
+          return false;
+        }
+        a_vec_sep = (char)uisep;
       } else if((_words[0]=="#column")) {
         if(_words.size()<2) {
           a_out << "tools::rcsv::ntuple::read_commented_header :"
@@ -706,8 +777,7 @@ protected:
   }
 
 protected:
-  static bool read_line(std::istream& a_reader,std::streampos a_sz,
-                               std::string& a_s){
+  static bool read_line(std::istream& a_reader,std::streampos a_sz,std::string& a_s){
     a_s.clear();
     char c;
     while(true) {
@@ -746,13 +816,13 @@ protected:
   }
 
   template <class T>
-  static bool _read(std::istream& a_reader,char,std::streampos,T& a_v) {
+  static bool _read(std::istream& a_reader,std::streampos,char,T& a_v) {
     a_reader >> a_v;
     if(a_reader.tellg()==std::streampos(-1)) {a_v = 0;return false;}
     //std::cout << "debug : _read(double) " << a_v << std::endl;
     return true;
   }
-  static bool _read(std::istream& a_reader,char a_sep,std::streampos a_sz,time_t& a_v) {
+  static bool _read_time(std::istream& a_reader,std::streampos a_sz,char a_sep,time_t& a_v) {
     std::string s;
     char c;
     while(true){
@@ -767,7 +837,7 @@ protected:
     if(!s2time(s,a_v)) return false;
     return true;
   }
-  static bool _read(std::istream& a_reader,char a_sep,std::streampos a_sz,std::string& a_v) {
+  static bool _read(std::istream& a_reader,std::streampos a_sz,char a_sep,std::string& a_v) {
     a_v.clear();
     char c;
     while(true){
@@ -782,6 +852,29 @@ protected:
     return true;
   }
 
+  static bool _vec_read(std::istream& a_reader,std::streampos a_sz,
+                        std::istringstream&,std::vector<std::string>&,
+                        char a_sep,const std::string& a_vec_sep,
+                        std::vector<std::string>& a_v) {
+    std::string _s;
+    if(!_read(a_reader,a_sz,a_sep,_s)) return false;    
+    //replace(_s,"\\"+a_vec_sep,"@@");
+    words(_s,a_vec_sep,true,a_v);
+    //tools_vforit(std::string,a_v,it) replace(*it,"@@",a_vec_sep);
+    return true;
+  }
+
+  template <class T>
+  static bool _vec_read(std::istream& a_reader,std::streampos a_sz,
+                        std::istringstream& a_iss,std::vector<std::string>& a_tmp,
+                        char a_sep,const std::string& a_vec_sep,
+                        std::vector<T>& a_v) {
+    std::string _s;
+    if(!_read(a_reader,a_sz,a_sep,_s)) return false;    
+    if(!snums<T>(_s,a_iss,a_tmp,a_vec_sep,a_v)) return false;
+    return true;
+  }
+
 protected:
   bool _read_line() {
     // have to loop on all columns !
@@ -792,84 +885,98 @@ protected:
     typedef ntuple::column<int> col_int;
     typedef ntuple::column<float> col_float;
     typedef ntuple::column<double> col_double;
-    typedef ntuple::column<std::string> col_string;
+    typedef std::string string_t;
+    typedef ntuple::column<string_t> col_string_t;
 
-    typedef ntuple::column<unsigned char> col_uchar;
-    typedef ntuple::column<unsigned short> col_ushort;
-    typedef ntuple::column<unsigned int> col_uint;
+    typedef ntuple::column<uchar> col_uchar;
+    typedef ntuple::column<ushort> col_ushort;
+    typedef ntuple::column<uint32> col_uint32;
     typedef ntuple::column<bool> col_bool;
     typedef ntuple::column<int64> col_int64;
     typedef ntuple::column<uint64> col_uint64;
 
     typedef ntuple::column<csv_time> col_time;
 
+    typedef ntuple::column< std::vector<char> > col_vec_char;
+    typedef ntuple::column< std::vector<short> > col_vec_short;
+    typedef ntuple::column< std::vector<int32> > col_vec_int;
+    typedef ntuple::column< std::vector<float> > col_vec_float;
+    typedef ntuple::column< std::vector<double> > col_vec_double;
+    typedef ntuple::column< std::vector<std::string> > col_vec_string_t;
+
+    typedef ntuple::column< std::vector<uchar> > col_vec_uchar;
+    typedef ntuple::column< std::vector<ushort> > col_vec_ushort;
+    typedef ntuple::column< std::vector<uint32> > col_vec_uint32;
+    typedef ntuple::column< std::vector<bool> > col_vec_bool;
+    typedef ntuple::column< std::vector<int64> > col_vec_int64;
+    typedef ntuple::column< std::vector<uint64> > col_vec_uint64;
+
+    std::string vec_sep;vec_sep += m_vec_sep;
+    std::istringstream iss;
+    std::vector<std::string> tmp;
+
     unsigned int index = 0;
     unsigned int num = m_cols.size();
     std::vector<icol_t*>::const_iterator it;
     for(it=m_cols.begin();it!=m_cols.end();++it,index++) {
 
-      if(col_char* _col_char = tools::id_cast<icol_t,col_char>(*(*it))) {
-        char v;
-        if(!_read(m_reader,m_sep,m_sz,v)) return false;
-        _col_char->set_value(v);
-      } else if(col_short* _col_short = tools::id_cast<icol_t,col_short>(*(*it))) {
-        short v;
-        if(!_read(m_reader,m_sep,m_sz,v)) return false;
-        _col_short->set_value(v);
-      } else if(col_int* _col_int = tools::id_cast<icol_t,col_int>(*(*it))) {
-        int v;
-        if(!_read(m_reader,m_sep,m_sz,v)) return false;
-        _col_int->set_value(v);
+#define TOOLS_RCSV_NTUPLE_IF_COL(a__type) \
+      if(col_##a__type* _col_##a__type = tools::id_cast<icol_t,col_##a__type>(*(*it))) {\
+        a__type v;\
+        if(!_read(m_reader,m_sz,m_sep,v)) return false;\
+        _col_##a__type->set_value(v);\
+      }
 
-      } else if(col_float* _col_float = tools::id_cast<icol_t,col_float>(*(*it))) {
-        float v;
-        if(!_read(m_reader,m_sep,m_sz,v)) return false;
-        _col_float->set_value(v);
-      } else if(col_double* _col_double = tools::id_cast<icol_t,col_double>(*(*it))) {
-        double v;
-        if(!_read(m_reader,m_sep,m_sz,v)) return false;
-        _col_double->set_value(v);
-      } else if(col_string* _col_string = tools::id_cast<icol_t,col_string>(*(*it))) {
-        std::string v;
-        if(!_read(m_reader,m_sep,m_sz,v)) return false;
-        _col_string->set_value(v);
+#define TOOLS_RCSV_NTUPLE_IF_VEC_COL(a__type) \
+      if(col_vec_##a__type* _col_vec_##a__type = tools::id_cast<icol_t,col_vec_##a__type>(*(*it))) {\
+        std::vector<a__type> v;\
+        if(!_vec_read(m_reader,m_sz,iss,tmp,m_sep,vec_sep,v)) return false;\
+        _col_vec_##a__type->set_value(v);\
+      }
 
-      } else if(col_uchar* _col_uchar = tools::id_cast<icol_t,col_uchar>(*(*it))) {
-        unsigned char v;
-        if(!_read(m_reader,m_sep,m_sz,v)) return false;
-        _col_uchar->set_value(v);
-      } else if(col_ushort* _col_ushort = tools::id_cast<icol_t,col_ushort>(*(*it))) {
-        ushort v;
-        if(!_read(m_reader,m_sep,m_sz,v)) return false;
-        _col_ushort->set_value(v);
-      } else if(col_uint* _col_uint = tools::id_cast<icol_t,col_uint>(*(*it))) {
-        unsigned int v;
-        if(!_read(m_reader,m_sep,m_sz,v)) return false;
-        _col_uint->set_value(v);
-      } else if(col_bool* _col_bool = tools::id_cast<icol_t,col_bool>(*(*it))) {
-        bool v;
-        if(!_read(m_reader,m_sep,m_sz,v)) return false;
-        _col_bool->set_value(v);
+           TOOLS_RCSV_NTUPLE_IF_COL(char)
+      else TOOLS_RCSV_NTUPLE_IF_COL(short)
+      else TOOLS_RCSV_NTUPLE_IF_COL(int)
+      else TOOLS_RCSV_NTUPLE_IF_COL(float)
+      else TOOLS_RCSV_NTUPLE_IF_COL(double)
+      else TOOLS_RCSV_NTUPLE_IF_COL(string_t)
 
-      } else if(col_int64* _col_int64 = tools::id_cast<icol_t,col_int64>(*(*it))) {
-        int64 v;
-        if(!_read(m_reader,m_sep,m_sz,v)) return false;
-        _col_int64->set_value(v);
-      } else if(col_uint64* _col_uint64 = tools::id_cast<icol_t,col_uint64>(*(*it))) {
-        uint64 v;
-        if(!_read(m_reader,m_sep,m_sz,v)) return false;
-        _col_uint64->set_value(v);
+      else TOOLS_RCSV_NTUPLE_IF_COL(uchar)
+      else TOOLS_RCSV_NTUPLE_IF_COL(ushort)
+      else TOOLS_RCSV_NTUPLE_IF_COL(uint32)
+      else TOOLS_RCSV_NTUPLE_IF_COL(bool)
+      else TOOLS_RCSV_NTUPLE_IF_COL(int64)
+      else TOOLS_RCSV_NTUPLE_IF_COL(uint64)
 
-      } else if(col_time* _col_time = tools::id_cast<icol_t,col_time>(*(*it))) {
+      else if(col_time* _col_time = tools::id_cast<icol_t,col_time>(*(*it))) {
         time_t v;
-        if(!_read(m_reader,m_sep,m_sz,v)) return false;
+        if(!_read_time(m_reader,m_sz,m_sep,v)) return false;
         csv_time ct;ct.m_l = long(v);
         _col_time->set_value(ct);
+      }
 
-      } else {
+      else TOOLS_RCSV_NTUPLE_IF_VEC_COL(char)
+      else TOOLS_RCSV_NTUPLE_IF_VEC_COL(short)
+      else TOOLS_RCSV_NTUPLE_IF_VEC_COL(int)
+      else TOOLS_RCSV_NTUPLE_IF_VEC_COL(float)
+      else TOOLS_RCSV_NTUPLE_IF_VEC_COL(double)
+      else TOOLS_RCSV_NTUPLE_IF_VEC_COL(string_t)
+
+      else TOOLS_RCSV_NTUPLE_IF_VEC_COL(uchar)
+      else TOOLS_RCSV_NTUPLE_IF_VEC_COL(ushort)
+      else TOOLS_RCSV_NTUPLE_IF_VEC_COL(uint32)
+      else TOOLS_RCSV_NTUPLE_IF_VEC_COL(bool)
+      else TOOLS_RCSV_NTUPLE_IF_VEC_COL(int64)
+      else TOOLS_RCSV_NTUPLE_IF_VEC_COL(uint64)
+
+#undef TOOLS_RCSV_NTUPLE_IF_COL
+#undef TOOLS_RCSV_NTUPLE_IF_VEC_COL
+
+      else {
         //std::cout << "column cast failed." << std::endl;
         return false; 
       }
+
       if(index==(num-1)) { //read up to LF()
         char c;
         while(true){
@@ -888,6 +995,7 @@ protected:
   std::istream& m_reader;
   std::string m_title;
   char m_sep;
+  char m_vec_sep;
   std::vector<read::icol*> m_cols;
   std::streampos m_sz;
   bool m_hippo;
@@ -902,6 +1010,7 @@ namespace tools {
 namespace rcsv {
 
 class fntuple : public ntuple {
+  typedef ntuple parent;
 public:
   static const std::string& s_class() {
     static const std::string s_v("tools::rcsv::fntuple");
@@ -909,16 +1018,18 @@ public:
   }
 public:
   fntuple(const std::string& a_file)
-  :ntuple(m_freader)
+  :parent(m_freader)
   ,m_file(a_file)
   {}
   virtual ~fntuple() {m_freader.close();}
 protected:
   fntuple(const fntuple& a_from)
-  :read::intuple(a_from),ntuple(a_from)
+  :read::intuple(a_from)
+  ,parent(a_from)
   ,m_file(a_from.m_file)
   {}
   fntuple& operator=(const fntuple& a_from){
+    parent::operator=(a_from);
     m_file = a_from.m_file;
     return *this;
   }
@@ -934,13 +1045,13 @@ public:
     if(!m_freader.is_open()) {
       m_freader.open(m_file.c_str());
       if(m_freader.fail()) {
-        a_out << "tools::rcsv::ntuple::initialize :"
+        a_out << "tools::rcsv::fntuple::initialize :"
               << " can't open " << m_file << "."
               << std::endl;
         return false;
       }
     }
-    return ntuple::initialize(a_out,a_sep,a_suffix,a_verbose);
+    return parent::initialize(a_out,a_sep,a_suffix,a_verbose);
   }
 protected:
   std::string m_file;

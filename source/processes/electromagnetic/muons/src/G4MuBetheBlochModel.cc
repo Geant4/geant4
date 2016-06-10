@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.cc 85023 2014-10-23 09:56:39Z gcosmo $
+// $Id: G4MuBetheBlochModel.cc 91743 2015-08-04 11:49:58Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -68,7 +68,7 @@
 
 G4double G4MuBetheBlochModel::xgi[]={ 0.0199, 0.1017, 0.2372, 0.4083, 0.5917,
                                       0.7628, 0.8983, 0.9801 };
-				      
+                                      
 G4double G4MuBetheBlochModel::wgi[]={ 0.0506, 0.1112, 0.1569, 0.1813, 0.1813,
                                       0.1569, 0.1112, 0.0506 };
 
@@ -114,7 +114,7 @@ G4double G4MuBetheBlochModel::MinEnergyCut(const G4ParticleDefinition*,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4double G4MuBetheBlochModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
-						 G4double kinEnergy) 
+                                                 G4double kinEnergy) 
 {
   G4double tau  = kinEnergy/mass;
   G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
@@ -185,7 +185,7 @@ G4double G4MuBetheBlochModel::ComputeCrossSectionPerElectron(
 G4double G4MuBetheBlochModel::ComputeCrossSectionPerAtom(
                                            const G4ParticleDefinition* p,
                                                  G4double kineticEnergy,
-						 G4double Z, G4double,
+                                                 G4double Z, G4double,
                                                  G4double cutEnergy,
                                                  G4double maxEnergy)
 {
@@ -197,7 +197,7 @@ G4double G4MuBetheBlochModel::ComputeCrossSectionPerAtom(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MuBetheBlochModel::CrossSectionPerVolume(
-					   const G4Material* material,
+                                           const G4Material* material,
                                            const G4ParticleDefinition* p,
                                                  G4double kineticEnergy,
                                                  G4double cutEnergy,
@@ -212,9 +212,9 @@ G4double G4MuBetheBlochModel::CrossSectionPerVolume(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MuBetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
-						  const G4ParticleDefinition* p,
-						  G4double kineticEnergy,
-						  G4double cut)
+                                                  const G4ParticleDefinition* p,
+                                                  G4double kineticEnergy,
+                                                  G4double cut)
 {
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
   G4double tau   = kineticEnergy/mass;
@@ -275,10 +275,10 @@ G4double G4MuBetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MuBetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
-					    const G4MaterialCutsCouple*,
-					    const G4DynamicParticle* dp,
-					    G4double minKinEnergy,
-					    G4double maxEnergy)
+                                            const G4MaterialCutsCouple*,
+                                            const G4DynamicParticle* dp,
+                                            G4double minKinEnergy,
+                                            G4double maxEnergy)
 {
   G4double tmax = MaxSecondaryKinEnergy(dp);
   G4double maxKinEnergy = min(maxEnergy,tmax);
@@ -320,8 +320,7 @@ void G4MuBetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
                << " tmin= " << minKinEnergy << " max= " << maxKinEnergy
                << G4endl;
     }
-
-
+    // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
   } while( grej*G4UniformRand() > f );
 
   G4double deltaMomentum =

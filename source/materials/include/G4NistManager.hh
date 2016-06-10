@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh 72057 2013-07-04 13:07:29Z gcosmo $
+// $Id: G4NistManager.hh 94234 2015-11-09 10:58:13Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -139,7 +139,7 @@ public:
   //
   inline G4int GetNumberOfNistIsotopes(G4int Z) const;
 
-  // Get natural isotope abandance
+  // Get natural isotope abundance
   //
   inline G4double GetIsotopeAbundance(G4int Z, G4int N) const;
 
@@ -163,6 +163,11 @@ public:
   //
   inline G4double GetMeanIonisationEnergy(G4int Z) const;
 
+  // Access nominal density by atomic number for simple materials and 
+  // by the index for other NIST materials 
+  //
+  inline G4double GetNominalDensity(G4int Z) const;
+
   // Get G4Material by index 
   //
   inline G4Material* GetMaterial(size_t index);
@@ -172,6 +177,11 @@ public:
   inline G4Material* FindOrBuildMaterial(const G4String& name, 
 					 G4bool isotopes=true,
 					 G4bool warning=false);
+
+  // Find or build a simple material via atomic number
+  //
+  inline G4Material* FindOrBuildSimpleMaterial(G4int Z, 
+					       G4bool warning=false);
   
   // Build G4Material with user defined name and density on base
   // of a material from Geant4 dataBase
@@ -179,7 +189,7 @@ public:
   G4Material* BuildMaterialWithNewDensity(const G4String& name,
                                           const G4String& basename, 
 					  G4double density = 0.0,
-					  G4double temp = CLHEP::STP_Temperature,  
+					  G4double temp = NTP_Temperature,  
 					  G4double pres = CLHEP::STP_Pressure);  
 
   // Construct a G4Material from scratch by atome count
@@ -191,7 +201,7 @@ public:
 				  G4double dens, 
 				  G4bool isotopes=true,
 				  G4State   state    = kStateSolid,     
-				  G4double  temp     = CLHEP::STP_Temperature,  
+				  G4double  temp     = NTP_Temperature,  
 				  G4double  pressure = CLHEP::STP_Pressure); 
 
   // Construct a G4Material from scratch by fraction mass
@@ -203,7 +213,7 @@ public:
 				  G4double dens, 
 				  G4bool isotopes=true,
 				  G4State   state    = kStateSolid,     
-				  G4double  temp     = CLHEP::STP_Temperature,  
+				  G4double  temp     = NTP_Temperature,  
 				  G4double  pressure = CLHEP::STP_Pressure); 
 
   // Construct a gas G4Material from scratch by atome count
@@ -221,7 +231,7 @@ public:
                                   const std::vector<G4String>& elm,
                                   const std::vector<G4int>& nbAtoms,
                                   G4bool isotopes    = true,
-                                  G4double  temp     = CLHEP::STP_Temperature,
+                                  G4double  temp     = NTP_Temperature,
                                   G4double  pressure = CLHEP::STP_Pressure);
 				      
   // Get number of G4Materials
@@ -254,18 +264,13 @@ public:
   inline G4double GetZ13(G4double Z);
   inline G4double GetZ13(G4int Z);
 
-  // Fast computation of A^0.27 for natuaral abandances
+  // Fast computation of A^0.27 for natuaral abundances
   //
   inline G4double GetA27(G4int Z);
 
   // Fast computation of log(A)
   //
-  inline G4double GetLOGA(G4double A);
   inline G4double GetLOGZ(G4int Z);
-
-  // Fast computation of log(A) for natuaral abandances
-  //
-  inline G4double GetLOGA(G4int Z);
 
 private:
 
@@ -418,6 +423,13 @@ inline G4double G4NistManager::GetMeanIonisationEnergy(G4int Z) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+inline G4double G4NistManager::GetNominalDensity(G4int Z) const
+{
+  return matBuilder->GetNominalDensity(Z-1);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline void G4NistManager::PrintElement(G4int Z)
 {
   elmBuilder->PrintElement(Z);
@@ -429,7 +441,7 @@ inline G4Material* G4NistManager::GetMaterial(size_t index)
 {
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   G4Material* mat = 0;
-  if(index < theMaterialTable->size()) mat = (*theMaterialTable)[index];
+  if(index < theMaterialTable->size()) { mat = (*theMaterialTable)[index]; }
   return mat;
 }
 
@@ -448,6 +460,14 @@ G4Material* G4NistManager::FindOrBuildMaterial(const G4String& name,
 					       G4bool warning)
 {
   return matBuilder->FindOrBuildMaterial(name, isotopes, warning);  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
+G4Material* G4NistManager::FindOrBuildSimpleMaterial(G4int Z, G4bool warning)
+{
+  return matBuilder->FindOrBuildSimpleMaterial(Z, warning);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -551,22 +571,6 @@ inline G4double G4NistManager::GetA27(G4int Z)
 inline G4double G4NistManager::GetLOGZ(G4int Z)
 {
   return g4pow->logZ(Z);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double G4NistManager::GetLOGA(G4double A)
-{
-  return g4pow->logA(A);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double G4NistManager::GetLOGA(G4int Z)
-{
-  G4double res = 0.0;
-  if(Z < 101) { res = LOGAZ[Z]; } 
-  return res;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

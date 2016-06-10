@@ -100,6 +100,8 @@
 // 20140116  M. Kelsey -- Move statics to const data members to avoid weird
 //		interactions with MT.
 // 20140929  M. Kelsey -- Explicitly call useCascadeDeexcitation() in ctor
+// 20150506  M. Kelsey -- Call Initialize() in ctor for master thread only
+// 20150608  M. Kelsey -- Label all while loops as terminating.
 
 #include <cmath>
 #include <iostream>
@@ -126,6 +128,7 @@
 #include "G4Nucleus.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ReactionProductVector.hh"
+#include "G4Threading.hh"
 #include "G4Track.hh"
 #include "G4V3DNucleus.hh"
 #include "G4UnboundPN.hh"
@@ -146,6 +149,9 @@ G4CascadeInterface::G4CascadeInterface(const G4String& name)
     maximumTries(20), numberOfTries(0),
     collider(new G4InuclCollider), balance(new G4CascadeCheckBalance(name)),
     bullet(0), target(0), output(new G4CollisionOutput) {
+  // Set up global objects for master thread or sequential build
+  if (G4Threading::IsMasterThread()) Initialize();
+
   SetEnergyMomentumCheckLevels(5*perCent, 10*MeV);
   balance->setLimits(5*perCent, 10*MeV/GeV);	// Bertini internal units
   this->SetVerboseLevel(G4CascadeParameters::verbose());
@@ -297,6 +303,7 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
     balance->collide(bullet, target, *output);
     
     numberOfTries++;
+    /* Loop checking 08.06.2015 MHK */
   } while ( isHydrogen ? retryInelasticProton() : retryInelasticNucleus() );
 
   // Null event if unsuccessful
@@ -392,7 +399,7 @@ G4CascadeInterface::Propagate(G4KineticTrackVector* theSecondaries,
 
     numberOfTries++;
     // FIXME:  retry checks will SEGFAULT until we can define the bullet!
-  } while (retryInelasticNucleus());
+  } while (retryInelasticNucleus());	/* Loop checking 08.06.2015 MHK */
 
   // Check whether repeated attempts have all failed; report and exit
   if (numberOfTries >= maximumTries && !balance->okay()) {

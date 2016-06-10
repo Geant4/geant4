@@ -36,7 +36,6 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DicomPhantomParameterisationColour::DicomPhantomParameterisationColour()
 : G4PhantomParameterisation()
@@ -99,4 +98,3 @@ ComputeMaterial(const G4int copyNo, G4VPhysicalVolume * physVol, const G4VToucha
     
     return mate;
 }
-

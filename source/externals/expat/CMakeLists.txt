@@ -20,3 +20,9 @@ else()
     GEANT4_GLOBAL_LIBRARY_TARGET(COMPONENTS sources.cmake)
 endif()
 
+# - Ensure clients of the static expat library use the XML_STATIC
+# preprocessor def
+if(TARGET G4expat-static)
+  target_compile_definitions(G4expat-static PUBLIC XML_STATIC)
+endif()
+

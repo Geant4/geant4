@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc 83007 2014-07-24 14:46:57Z gcosmo $
+// $Id: G4EmCorrections.cc 93566 2015-10-26 14:50:09Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -72,6 +72,8 @@
 #include "G4AtomicShells.hh"
 #include "G4LPhysicsFreeVector.hh"
 #include "G4Log.hh"
+#include "G4Exp.hh"
+#include "G4Pow.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -80,14 +82,14 @@ static const G4double twoln10 = 2.0*G4Log(10.0);
 
 G4EmCorrections::G4EmCorrections(G4int verb)
 {
-  particle   = 0;
-  curParticle= 0;
-  material   = 0;
-  curMaterial= 0;
-  curVector  = 0;
+  particle   = nullptr;
+  curParticle= nullptr;
+  material   = nullptr;
+  curMaterial= nullptr;
+  curVector  = nullptr;
   kinEnergy  = 0.0;
-  ionLEModel = 0;
-  ionHEModel = 0;
+  ionLEModel = nullptr;
+  ionHEModel = nullptr;
   nIons      = 0;
   verbose    = verb;
   ncouples   = 0;
@@ -116,7 +118,7 @@ G4EmCorrections::~G4EmCorrections()
 
 G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
                                                const G4Material* mat,
-					       G4double e, G4double)
+                                               G4double e, G4double)
 {
   // . Z^3 Barkas effect in the stopping power of matter for charged particles
   //   J.C Ashley and R.H.Ritchie
@@ -136,12 +138,12 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
 
   if(verbose > 1) {
     G4cout << "EmCorrections: E(MeV)= " << e/MeV << " Barkas= " << Barkas
-	   << " Bloch= " << Bloch << " Mott= " << Mott 
-	   << " Sum= " << sum << " q2= " << q2 << G4endl; 
+           << " Bloch= " << Bloch << " Mott= " << Mott 
+           << " Sum= " << sum << " q2= " << q2 << G4endl; 
     G4cout << " ShellCorrection: " << ShellCorrection(p, mat, e) 
-	   << " Kshell= " << KShellCorrection(p, mat, e)
-	   << " Lshell= " << LShellCorrection(p, mat, e)
-	   << "   " << mat->GetName() << G4endl;
+           << " Kshell= " << KShellCorrection(p, mat, e)
+           << " Lshell= " << LShellCorrection(p, mat, e)
+           << "   " << mat->GetName() << G4endl;
   }
   sum *= material->GetElectronDensity() * q2 *  twopi_mc2_rcl2 /beta2;
   return sum;
@@ -150,8 +152,8 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections::IonBarkasCorrection(const G4ParticleDefinition* p,
-					      const G4Material* mat,
-					      G4double e)
+                                              const G4Material* mat,
+                                              G4double e)
 {
   // . Z^3 Barkas effect in the stopping power of matter for charged particles
   //   J.C Ashley and R.H.Ritchie
@@ -170,8 +172,8 @@ G4double G4EmCorrections::IonBarkasCorrection(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections::ComputeIonCorrections(const G4ParticleDefinition* p,
-						const G4Material* mat,
-						G4double e)
+                                                const G4Material* mat,
+                                                G4double e)
 {
   // . Z^3 Barkas effect in the stopping power of matter for charged particles
   //   J.C Ashley and R.H.Ritchie
@@ -190,8 +192,8 @@ G4double G4EmCorrections::ComputeIonCorrections(const G4ParticleDefinition* p,
 
   if(verbose > 1) {
     G4cout << "EmCorrections: E(MeV)= " << e/MeV << " Barkas= " << Barkas
-	   << " Bloch= " << Bloch << " Mott= " << Mott 
-	   << " Sum= " << sum << G4endl; 
+           << " Bloch= " << Bloch << " Mott= " << Mott 
+           << " Sum= " << sum << G4endl; 
   }
   sum *= material->GetElectronDensity() * q2 *  twopi_mc2_rcl2 /beta2;
 
@@ -202,8 +204,8 @@ G4double G4EmCorrections::ComputeIonCorrections(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
-						  const G4MaterialCutsCouple* couple,
-						  G4double e)
+                                                  const G4MaterialCutsCouple* couple,
+                                                  G4double e)
 {
 // . Z^3 Barkas effect in the stopping power of matter for charged particles
 //   J.C Ashley and R.H.Ritchie
@@ -215,7 +217,7 @@ G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
   G4double sum = 0.0;
 
   if(ionHEModel) {
-    G4int Z = G4int(p->GetPDGCharge()*inveplus + 0.5);
+    G4int Z = G4lrint(p->GetPDGCharge()*inveplus);
     if(Z >= 100)   Z = 99;
     else if(Z < 1) Z = 1;
 
@@ -224,7 +226,7 @@ G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
     if(thcorr.find(ionPDG)==thcorr.end()) {  // Not found: fill the map
       std::vector<G4double> v;
       for(size_t i=0; i<ncouples; ++i){
-	v.push_back(ethscaled*ComputeIonCorrections(p,currmat[i],ethscaled));
+        v.push_back(ethscaled*ComputeIonCorrections(p,currmat[i],ethscaled));
       }
       thcorr.insert(std::pair< G4int, std::vector<G4double> >(ionPDG,v)); 
     }
@@ -252,8 +254,8 @@ G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections::Bethe(const G4ParticleDefinition* p,
-				const G4Material* mat, 
-				G4double e)
+                                const G4Material* mat, 
+                                G4double e)
 {
   SetupKinematics(p, mat, e);
   G4double eexc  = material->GetIonisation()->GetMeanExcitationEnergy();
@@ -265,8 +267,8 @@ G4double G4EmCorrections::Bethe(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections::SpinCorrection(const G4ParticleDefinition* p,
-					 const G4Material* mat,
-					 G4double e)
+                                         const G4Material* mat,
+                                         G4double e)
 {
   SetupKinematics(p, mat, e);
   G4double dedx  = 0.5*tmax/(kinEnergy + mass);
@@ -276,15 +278,15 @@ G4double G4EmCorrections::SpinCorrection(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections:: KShellCorrection(const G4ParticleDefinition* p,
-					    const G4Material* mat, 
-					    G4double e)
+                                            const G4Material* mat, 
+                                            G4double e)
 {
   SetupKinematics(p, mat, e);
   G4double term = 0.0;
   for (G4int i = 0; i<numberOfElements; ++i) {
 
     G4double Z = (*theElementVector)[i]->GetZ();
-    G4int   iz = G4int(Z);
+    G4int   iz = G4lrint(Z);
     G4double f = 1.0;
     G4double Z2= (Z-0.3)*(Z-0.3);
     if(1 == iz) {
@@ -305,15 +307,15 @@ G4double G4EmCorrections:: KShellCorrection(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections:: LShellCorrection(const G4ParticleDefinition* p,
-					    const G4Material* mat, 
-					    G4double e)
+                                            const G4Material* mat, 
+                                            G4double e)
 {
   SetupKinematics(p, mat, e);
   G4double term = 0.0;
   for (G4int i = 0; i<numberOfElements; ++i) {
 
     G4double Z = (*theElementVector)[i]->GetZ();
-    G4int   iz = G4int(Z);
+    G4int   iz = G4lrint(Z);
     if(2 < iz) {
       G4double Zeff = Z - ZD[10];
       if(iz < 10) { Zeff = Z - ZD[iz]; }
@@ -324,12 +326,12 @@ G4double G4EmCorrections:: LShellCorrection(const G4ParticleDefinition* p,
       G4int nmax = std::min(4,G4AtomicShells::GetNumberOfShells(iz));
       for(G4int j=1; j<nmax; ++j) {
         G4int ne = G4AtomicShells::GetNumberOfElectrons(iz,j);
-	if(15 >= iz) {
-	  if(3 > j) { tet = 0.25*Z2*(1.0 + 5*Z2*alpha2/16.); }
-	  else      { tet = 0.25*Z2*(1.0 + Z2*alpha2/16.); }
-	}
-	//G4cout << " LShell: j= " << j << " ne= " << ne << " e(eV)= " << e/eV
-	//       << " ThetaL= " << tet << G4endl;
+        if(15 >= iz) {
+          if(3 > j) { tet = 0.25*Z2*(1.0 + 5*Z2*alpha2/16.); }
+          else      { tet = 0.25*Z2*(1.0 + Z2*alpha2/16.); }
+        }
+        //G4cout << " LShell: j= " << j << " ne= " << ne << " e(eV)= " << e/eV
+        //       << " ThetaL= " << tet << G4endl;
         term += f*ne*atomDensity[i]*LShell(tet,eta)/Z;
       }
     }
@@ -372,14 +374,14 @@ G4double G4EmCorrections::KShell(G4double tet, G4double eta)
     }
     corr = Value2(x, y, TheK[itet], TheK[itet+1], Eta[ieta], Eta[ieta+1],
                   CK[itet][ieta], CK[itet+1][ieta], 
-		  CK[itet][ieta+1], CK[itet+1][ieta+1]);
+                  CK[itet][ieta+1], CK[itet+1][ieta+1]);
     //G4cout << "   x= " <<x<<" y= "<<y<<" tet= " <<TheK[itet]
-    //	   <<" "<< TheK[itet+1]<<" eta= "<< Eta[ieta]<<" "<< Eta[ieta+1]
-    //	   <<" CK= " << CK[itet][ieta]<<" "<< CK[itet+1][ieta]
-    //	   <<" "<< CK[itet][ieta+1]<<" "<< CK[itet+1][ieta+1]<<G4endl;
+    //           <<" "<< TheK[itet+1]<<" eta= "<< Eta[ieta]<<" "<< Eta[ieta+1]
+    //           <<" CK= " << CK[itet][ieta]<<" "<< CK[itet+1][ieta]
+    //           <<" "<< CK[itet][ieta+1]<<" "<< CK[itet+1][ieta+1]<<G4endl;
   }
   //G4cout << "Kshell:  tet= " << tet << " eta= " << eta << "  C= " << corr
-  //	 << " itet= " << itet << "  ieta= " << ieta <<G4endl;
+  //         << " itet= " << itet << "  ieta= " << ieta <<G4endl;
   return corr;
 }
 
@@ -404,8 +406,8 @@ G4double G4EmCorrections::LShell(G4double tet, G4double eta)
   // assimptotic case
   if(eta >= Eta[nEtaL-1]) {
     corr = (Value(x, TheL[itet], TheL[itet+1], UL[itet], UL[itet+1])
-    	  + Value(x, TheL[itet], TheL[itet+1], VL[itet], VL[itet+1])/eta
-	    )/eta;
+              + Value(x, TheL[itet], TheL[itet+1], VL[itet], VL[itet+1])/eta
+            )/eta;
   } else {
     G4double y = eta;
     if(eta < Eta[0]) { 
@@ -414,23 +416,23 @@ G4double G4EmCorrections::LShell(G4double tet, G4double eta)
       ieta = Index(y, Eta, nEtaL);
     }
     corr = Value2(x, y, TheL[itet], TheL[itet+1], Eta[ieta], Eta[ieta+1],
-		  CL[itet][ieta], CL[itet+1][ieta], 
-		  CL[itet][ieta+1], CL[itet+1][ieta+1]);
+                  CL[itet][ieta], CL[itet+1][ieta], 
+                  CL[itet][ieta+1], CL[itet+1][ieta+1]);
     //G4cout << "   x= " <<x<<" y= "<<y<<" tet= " <<TheL[itet]
-    //	   <<" "<< TheL[itet+1]<<" eta= "<< Eta[ieta]<<" "<< Eta[ieta+1]
-    //	   <<" CL= " << CL[itet][ieta]<<" "<< CL[itet+1][ieta]
-    //	   <<" "<< CL[itet][ieta+1]<<" "<< CL[itet+1][ieta+1]<<G4endl;
+    //           <<" "<< TheL[itet+1]<<" eta= "<< Eta[ieta]<<" "<< Eta[ieta+1]
+    //           <<" CL= " << CL[itet][ieta]<<" "<< CL[itet+1][ieta]
+    //           <<" "<< CL[itet][ieta+1]<<" "<< CL[itet+1][ieta+1]<<G4endl;
   }
   //G4cout<<"Lshell:  tet= "<<tet<<" eta= "<<eta<<" itet= "<<itet
-  //	<<" ieta= "<<ieta<<"  Corr= "<<corr<<G4endl;
+  //        <<" ieta= "<<ieta<<"  Corr= "<<corr<<G4endl;
   return corr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections::ShellCorrectionSTD(const G4ParticleDefinition* p,
-					     const G4Material* mat, 
-					     G4double e)
+                                             const G4Material* mat, 
+                                             G4double e)
 {
   SetupKinematics(p, mat, e);
   G4double taulim= 8.0*MeV/mass;
@@ -463,14 +465,14 @@ G4double G4EmCorrections::ShellCorrectionSTD(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections::ShellCorrection(const G4ParticleDefinition* p,
-					  const G4Material* mat,
-					  G4double ekin)
+                                          const G4Material* mat,
+                                          G4double ekin)
 {
   SetupKinematics(p, mat, ekin);
 
   G4double term = 0.0;
   //G4cout << "### G4EmCorrections::ShellCorrection " << mat->GetName()
-  //	 << "   " << ekin/MeV << " MeV " << G4endl;
+  //         << "   " << ekin/MeV << " MeV " << G4endl;
   for (G4int i = 0; i<numberOfElements; ++i) {
 
     G4double res = 0.0;
@@ -503,42 +505,42 @@ G4double G4EmCorrections::ShellCorrection(const G4ParticleDefinition* p,
       G4double eshell = 0.0;
       for(G4int j=1; j<nmax; ++j) {
         G4int ne = G4AtomicShells::GetNumberOfElectrons(iz,j);
-	if(15 >= iz) {
-	  if(3 > j) { tet = 0.25*Z2*(1.0 + 5*Z2*alpha2/16.); }
-	  else      { tet = 0.25*Z2*(1.0 + Z2*alpha2/16.); }
-	}
-	norm   += ne;
-	eshell += tet*ne;
+        if(15 >= iz) {
+          if(3 > j) { tet = 0.25*Z2*(1.0 + 5*Z2*alpha2/16.); }
+          else      { tet = 0.25*Z2*(1.0 + Z2*alpha2/16.); }
+        }
+        norm   += ne;
+        eshell += tet*ne;
         res0 = f*ne*LShell(tet,eta);
         res += res0;
-	//G4cout << " Z= " << iz << " Shell " << j << " Ne= " << ne
-	//       << " tet= " << tet << " eta= " << eta 
-	//       << "  resL= " << res0 << G4endl;
+        //G4cout << " Z= " << iz << " Shell " << j << " Ne= " << ne
+        //       << " tet= " << tet << " eta= " << eta 
+        //       << "  resL= " << res0 << G4endl;
       }
       if(ntot > nmax) {
-	eshell /= norm;
-	// Add M-shell
+        eshell /= norm;
+        // Add M-shell
         if(28 > iz) {
           res += f*(iz - 10)*LShell(eshell,HM[iz-11]*eta);
-	} else if(63 > iz) { 
+        } else if(63 > iz) { 
           res += f*18*LShell(eshell,HM[iz-11]*eta);
-	} else {
+        } else {
           res += f*18*LShell(eshell,HM[52]*eta);
-	}
-	// Add N-shell
+        }
+        // Add N-shell
         if(32 < iz) {
           if(60 > iz) {
-	    res += f*(iz - 28)*LShell(eshell,HN[iz-33]*eta);
-	  } else if(63 > iz) {
-	    res += 4*LShell(eshell,HN[iz-33]*eta);
-	  } else {
-	    res += 4*LShell(eshell,HN[30]*eta);
-	  }
-	  // Add O-P-shells
-	  if(60 < iz) {
-	    res += f*(iz - 60)*LShell(eshell,150*eta);
+            res += f*(iz - 28)*LShell(eshell,HN[iz-33]*eta);
+          } else if(63 > iz) {
+            res += 4*LShell(eshell,HN[iz-33]*eta);
+          } else {
+            res += 4*LShell(eshell,HN[30]*eta);
           }
-	}
+          // Add O-P-shells
+          if(60 < iz) {
+            res += f*(iz - 60)*LShell(eshell,150*eta);
+          }
+        }
       }
     }
     term += res*atomDensity[i]/Z;
@@ -552,8 +554,8 @@ G4double G4EmCorrections::ShellCorrection(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections::DensityCorrection(const G4ParticleDefinition* p,
-					    const G4Material* mat,
-					    G4double e)
+                                            const G4Material* mat,
+                                            G4double e)
 {
   SetupKinematics(p, mat, e);
 
@@ -569,7 +571,7 @@ G4double G4EmCorrections::DensityCorrection(const G4ParticleDefinition* p,
   G4double x = G4Log(bg2)/twoln10;
   if ( x >= x0den ) {
     dedx = twoln10*x - cden ;
-    if ( x < x1den ) dedx += aden*std::pow((x1den-x),mden) ;
+    if ( x < x1den ) dedx += aden*G4Exp(G4Log(x1den-x)*mden) ;
   }
 
   return dedx;
@@ -578,8 +580,8 @@ G4double G4EmCorrections::DensityCorrection(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections::BarkasCorrection(const G4ParticleDefinition* p,
-					   const G4Material* mat, 
-					   G4double e)
+                                           const G4Material* mat, 
+                                           G4double e)
 {
   // . Z^3 Barkas effect in the stopping power of matter for charged particles
   //   J.C Ashley and R.H.Ritchie
@@ -592,18 +594,18 @@ G4double G4EmCorrections::BarkasCorrection(const G4ParticleDefinition* p,
   for (G4int i = 0; i<numberOfElements; ++i) {
 
     G4double Z = (*theElementVector)[i]->GetZ();
-    G4int iz = G4int(Z);
+    G4int iz = G4lrint(Z);
     if(iz == 47) {
-      BarkasTerm += atomDensity[i]*0.006812*std::pow(beta,-0.9);
+      BarkasTerm += atomDensity[i]*0.006812*G4Exp(-G4Log(beta)*0.9);
     } else if(iz >= 64) {
-      BarkasTerm += atomDensity[i]*0.002833*std::pow(beta,-1.2);
+      BarkasTerm += atomDensity[i]*0.002833*G4Exp(-G4Log(beta)*1.2);
     } else {    
 
       G4double X = ba2 / Z;
       G4double b = 1.3;
       if(1 == iz) {
-	if(material->GetName() == "G4_lH2") { b = 0.6; }
-	else                                { b = 1.8; }
+        if(material->GetName() == "G4_lH2") { b = 0.6; }
+        else                                { b = 1.8; }
       }
       else if(2 == iz)  { b = 0.6; }
       else if(10 >= iz) { b = 1.8; }
@@ -616,7 +618,7 @@ G4double G4EmCorrections::BarkasCorrection(const G4ParticleDefinition* p,
 
       G4double val = BarkasCorr->Value(W);
       if(W > BarkasCorr->Energy(46)) { 
-	val *= BarkasCorr->Energy(46)/W; 
+        val *= BarkasCorr->Energy(46)/W; 
       } 
       //    G4cout << "i= " << i << " b= " << b << " W= " << W 
       // << " Z= " << Z << " X= " << X << " val= " << val<< G4endl;
@@ -635,8 +637,8 @@ G4double G4EmCorrections::BarkasCorrection(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections::BlochCorrection(const G4ParticleDefinition* p,
-					  const G4Material* mat,
-					  G4double e)
+                                          const G4Material* mat,
+                                          G4double e)
 {
   SetupKinematics(p, mat, e);
 
@@ -649,6 +651,7 @@ G4double G4EmCorrections::BlochCorrection(const G4ParticleDefinition* p,
     j += 1.0;
     del = 1.0/(j* (j*j + y2));
     term += del;
+    // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
   } while (del > 0.01*term);
 
   G4double res = -y2*term;
@@ -661,8 +664,8 @@ G4double G4EmCorrections::BlochCorrection(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections::MottCorrection(const G4ParticleDefinition* p,
-					 const G4Material* mat, 
-					 G4double e)
+                                         const G4Material* mat, 
+                                         G4double e)
 {
   SetupKinematics(p, mat, e);
   G4double mterm = CLHEP::pi*fine_structure_const*beta*charge;
@@ -672,9 +675,9 @@ G4double G4EmCorrections::MottCorrection(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections::NuclearDEDX(const G4ParticleDefinition* p,
-				      const G4Material* mat,
-				      G4double e,
-				      G4bool fluct)
+                                      const G4Material* mat,
+                                      G4double e,
+                                      G4bool fluct)
 {
   G4double nloss = 0.0;
   if(e <= 0.0) return nloss; 
@@ -690,7 +693,7 @@ G4double G4EmCorrections::NuclearDEDX(const G4ParticleDefinition* p,
   for (G4int iel=0; iel<numberOfElements; iel++) {
     const G4Element* element = (*theElementVector)[iel] ;
     G4double z2 = element->GetZ();
-    G4double mass2 = element->GetA()*mole/g ;
+    G4double mass2 = element->GetN();
     nloss += (NuclearStoppingPower(kinEnergy, z1, z2, mass1, mass2))
            * atomDensity[iel] ;
   }
@@ -708,8 +711,8 @@ G4double G4EmCorrections::NuclearStoppingPower(G4double kineticEnergy,
   G4double nloss = 0.0;
   
   G4double rm;
-  if(z1 > 1.5) rm = (mass1 + mass2) * ( Z23[G4int(z1)] + Z23[G4int(z2)] ) ;
-  else         rm = (mass1 + mass2) * nist->GetZ13(G4int(z2));
+  if(z1 > 1.5) rm = (mass1 + mass2) * ( Z23[G4lrint(z1)] + Z23[G4lrint(z2)] ) ;
+  else         rm = (mass1 + mass2) * nist->GetZ13(G4lrint(z2));
 
   G4double er = 32.536 * mass2 * energy / ( z1 * z2 * rm ) ;  // reduced energy
 
@@ -718,8 +721,8 @@ G4double G4EmCorrections::NuclearStoppingPower(G4double kineticEnergy,
     // the table is inverse in energy
     for (G4int i=102; i>=0; --i) {
       if (er <= ed[i]) {
-	nloss = (a[i] - a[i+1])*(er - ed[i+1])/(ed[i] - ed[i+1]) + a[i+1];
-	break;
+        nloss = (a[i] - a[i+1])*(er - ed[i+1])/(ed[i] - ed[i+1]) + a[i+1];
+        break;
       }
     }
   }
@@ -727,7 +730,7 @@ G4double G4EmCorrections::NuclearStoppingPower(G4double kineticEnergy,
   // Stragling
   if(lossFlucFlag) {
     G4double sig = 4.0 * mass1 * mass2 / ((mass1 + mass2)*(mass1 + mass2)*
-				    (4.0 + 0.197/(er*er) + 6.584/er));
+                                    (4.0 + 0.197/(er*er) + 6.584/er));
 
     nloss *= G4RandGauss::shoot(1.0,sig) ;
   }
@@ -743,15 +746,15 @@ G4double G4EmCorrections::NuclearStoppingPower(G4double kineticEnergy,
 
 G4double 
 G4EmCorrections::EffectiveChargeCorrection(const G4ParticleDefinition* p,
-					   const G4Material* mat,
-					   G4double ekin)
+                                           const G4Material* mat,
+                                           G4double ekin)
 {
   G4double factor = 1.0;
   if(p->GetPDGCharge() <= 2.5*CLHEP::eplus || nIons <= 0) { return factor; }
   /*
   if(verbose > 1) {
     G4cout << "EffectiveChargeCorrection: " << p->GetParticleName() 
-	   << " in " << mat->GetName()
+           << " in " << mat->GetName()
            << " ekin(MeV)= " << ekin/MeV << G4endl;
   }
   */
@@ -762,7 +765,7 @@ G4EmCorrections::EffectiveChargeCorrection(const G4ParticleDefinition* p,
     currentZ = p->GetAtomicNumber();
     if(verbose > 1) {
       G4cout << "G4EmCorrections::EffectiveChargeCorrection: Zion= " 
-	     << currentZ << " Aion= " << p->GetPDGMass()/amu_c2 << G4endl;
+             << currentZ << " Aion= " << p->GetPDGMass()/amu_c2 << G4endl;
     }
     massFactor = proton_mass_c2/p->GetPDGMass();
     idx = -1;
@@ -783,7 +786,7 @@ G4EmCorrections::EffectiveChargeCorrection(const G4ParticleDefinition* p,
     factor = curVector->Value(ekin*massFactor);
     if(verbose > 1) {
       G4cout << "E= " << ekin << " factor= " << factor << " massfactor= " 
-	     << massFactor << G4endl;
+             << massFactor << G4endl;
     }
   }
   return factor;
@@ -792,8 +795,8 @@ G4EmCorrections::EffectiveChargeCorrection(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmCorrections::AddStoppingData(G4int Z, G4int A,
-				      const G4String& mname,
-				      G4PhysicsVector* dVector)
+                                      const G4String& mname,
+                                      G4PhysicsVector* dVector)
 {
   G4int i = 0;
   for(; i<nIons; ++i) {
@@ -809,7 +812,7 @@ void G4EmCorrections::AddStoppingData(G4int Z, G4int A,
     nIons++;
     if(verbose>1) {
       G4cout << "AddStoppingData Z= " << Z << " A= " << A << " " << mname
-	     << "  idx= " << i << G4endl;
+             << "  idx= " << i << G4endl;
     }
   }
 }
@@ -828,7 +831,7 @@ void G4EmCorrections::BuildCorrectionVector()
     ion = ionTable->GetIon(Z, Aion[idx], 0);
   }
   //G4cout << "BuildCorrectionVector: idx= " << idx << " Z= " << Z 
-  //	 << " curZ= " << currentZ << G4endl;
+  //         << " curZ= " << currentZ << G4endl;
 
   // G4double A = nist->GetAtomicMassAmu(Z);
   G4double A = G4double(ion->GetBaryonNumber());
@@ -839,9 +842,9 @@ void G4EmCorrections::BuildCorrectionVector()
 
   if(verbose>1) {
     G4cout << "BuildCorrectionVector: Stopping for "
-	   << curParticle->GetParticleName() << " in " 
-	   << materialName[idx] << " Ion Z= " << Z << " A= " << A
-	   << " massRatio= " << massRatio << G4endl;
+           << curParticle->GetParticleName() << " in " 
+           << materialName[idx] << " Ion Z= " << Z << " A= " << A
+           << " massRatio= " << massRatio << G4endl;
   }
 
   G4PhysicsLogVector* vv = 
@@ -859,7 +862,7 @@ void G4EmCorrections::BuildCorrectionVector()
     + ComputeIonCorrections(curParticle, curMaterial, escal);
   G4double rest = escal*(dedxt - dedx1t);
   //G4cout << "Escal(MeV)= "<<escal<<" dedxt0= " <<dedxt 
-  //	 << " dedxt1= " << dedx1t << G4endl;   
+  //         << " dedxt1= " << dedx1t << G4endl;   
 
   for(G4int i=0; i<=nbinCorr; ++i) {
     e = vv->Energy(i);
@@ -875,13 +878,13 @@ void G4EmCorrections::BuildCorrectionVector()
       dedx1 = ionLEModel->ComputeDEDXPerVolume(curMaterial, p, e, e)*qe;
     } else {
       dedx1 = ionHEModel->ComputeDEDXPerVolume(curMaterial, p, e, e)*qe +
-	ComputeIonCorrections(curParticle, curMaterial, escal) + rest/escal;
+        ComputeIonCorrections(curParticle, curMaterial, escal) + rest/escal;
     }
     vv->PutValue(i, dedx/dedx1);
     if(verbose>1) {
       G4cout << "  E(meV)= " << e/MeV << "   Correction= " << dedx/dedx1
-	     << "   "  << dedx << " " << dedx1 
-	     << "  massF= " << massFactor << G4endl;
+             << "   "  << dedx << " " << dedx1 
+             << "  massF= " << massFactor << G4endl;
     }
   }
   delete v;
@@ -907,7 +910,7 @@ void G4EmCorrections::InitialiseForNewRun()
       currmat[i] = tb->GetMaterialCutsCouple(i)->GetMaterial();
       G4String nam = currmat[i]->GetName();
       for(G4int j=0; j<nIons; ++j) {
-	if(nam == materialName[j]) { materialList[j] = currmat[i]; }
+        if(nam == materialName[j]) { materialList[j] = currmat[i]; }
       }
     }
   }
@@ -1149,7 +1152,7 @@ void G4EmCorrections::Initialise()
      0.58, 0.60, 0.62, 0.64, 0.65,   0.66};
   const G4double sl[26] = {15.3343, 13.9389, 12.7909, 11.8343, 11.0283,
                            10.3424, 10.0371,  9.7537,  9.2443,  8.8005,
-			   8.4114,  8.0683,   7.9117, 7.7641, 7.4931,
+                           8.4114,  8.0683,   7.9117, 7.7641, 7.4931,
                            7.2506,  7.0327,   6.8362, 6.7452, 6.6584,
                            6.4969,  6.3498,   6.2154, 6.0923, 6.0345, 5.9792};
   const G4double tl[26] = {35.0669, 33.4344, 32.0073, 30.7466, 29.6226,
@@ -1170,10 +1173,10 @@ void G4EmCorrections::Initialise()
   }
 
   const G4double eta[29] = {0.005, 0.007, 0.01, 0.015, 0.02,
-			    0.03,  0.04,  0.05, 0.06,  0.08,
-			    0.1,   0.15,  0.2,  0.3,   0.4,
-			    0.5,   0.6,   0.7,  0.8,   1.0,
-			    1.2,   1.4,   1.5,  1.7,   2.0, 3.0, 5.0, 7.0, 10.};
+                            0.03,  0.04,  0.05, 0.06,  0.08,
+                            0.1,   0.15,  0.2,  0.3,   0.4,
+                            0.5,   0.6,   0.7,  0.8,   1.0,
+                            1.2,   1.4,   1.5,  1.7,   2.0, 3.0, 5.0, 7.0, 10.};
 
   const G4double bk1[29][11] = { 
   {0.005, 1.34782E-8, 1.46132E-8, 1.72179E-8, 2.03521E-8, 2.41370E-8, 2.87247E-8, 3.13778E-8, 3.43072E-8, 4.11274E-8, 4.94946E-8}, 
@@ -1441,10 +1444,10 @@ void G4EmCorrections::Initialise()
       CK[j][i] = SK[j]*loget + TK[j] - b;
 
       if(i == nEtaK-1) { 
-	ZK[j] = et*(et*et*CK[j][i] - et*UK[j] - VK[j]); 
-	//G4cout << "i= " << i << " j= " << j 
-	//       << " CK[j][i]= " <<  CK[j][i]
-	//       << " ZK[j]= " << ZK[j] << "  b= " << b << G4endl;  
+        ZK[j] = et*(et*et*CK[j][i] - et*UK[j] - VK[j]); 
+        //G4cout << "i= " << i << " j= " << j 
+        //       << " CK[j][i]= " <<  CK[j][i]
+        //       << " ZK[j]= " << ZK[j] << "  b= " << b << G4endl;  
       } 
     }
     //G4cout << G4endl;
@@ -1461,17 +1464,17 @@ void G4EmCorrections::Initialise()
         } else {
           bs = bls1[i][26-j];
           b  = bll1[i][26-j];
-	}
-	G4double c = SL[j]*loget + TL[j]; 
+        }
+        G4double c = SL[j]*loget + TL[j]; 
         CL[j][i] = c - bs - 3.0*b;
         if(i == nEtaL-1) { 
-	  VL[j] = et*(et*CL[j][i] - UL[j]); 
-	  //G4cout << "i= " << i << " j= " << j 
-	  //	 << " CL[j][i]= " <<  CL[j][i]
-	  //	 << " VL[j]= " << VL[j] << " b= " << b << " bs= " << bs 
-	  //	 << " et= " << et << G4endl; 
-	  //" UL= " << UL[j] << " TL= " << TL[j] << " SL= " << SL[j] <<G4endl;  
-	}
+          VL[j] = et*(et*CL[j][i] - UL[j]); 
+          //G4cout << "i= " << i << " j= " << j 
+          //         << " CL[j][i]= " <<  CL[j][i]
+          //         << " VL[j]= " << VL[j] << " b= " << b << " bs= " << bs 
+          //         << " et= " << et << G4endl; 
+          //" UL= " << UL[j] << " TL= " << TL[j] << " SL= " << SL[j] <<G4endl;  
+        }
       }
       //G4cout << G4endl;
     }
@@ -1496,23 +1499,23 @@ void G4EmCorrections::Initialise()
     13.3669, 15.5762, 17.1715, 18.7667, 20.8523, 23.0606, 24.901, 26.9861, 29.4394, 31.77,
     34.3457, 37.4119, 40.3555, 42.3177, 44.7705, 47.2234, 50.78, 53.8458, 56.4214, 58.3834,
     60.9586, 63.6567, 66.5998, 68.807, 71.8728, 74.5706, 77.3911, 81.8056, 85.7297, 89.8988,
-			     93.4549, 96.2753, 99.709};
+                             93.4549, 96.2753, 99.709};
   const G4double yzk[34] = { 0.70663,
     0.72033, 0.73651, 0.74647, 0.75518, 0.76388, 0.77258, 0.78129, 0.78625, 0.7937, 0.79991,
     0.80611, 0.8123, 0.8185, 0.82097, 0.82467, 0.82838, 0.83457, 0.83702, 0.84198, 0.8432,
     0.84565, 0.84936, 0.85181, 0.85303, 0.85548, 0.85794, 0.8604, 0.86283, 0.86527, 0.86646,
-			     0.86891, 0.87011, 0.87381};
+                             0.86891, 0.87011, 0.87381};
 
   const G4double xzl[36] = { 15.5102,
     16.7347, 17.9592, 19.551, 21.0204, 22.6122, 24.9388, 27.3878, 29.5918, 31.3061, 32.898,
     34.4898, 36.2041, 38.4082, 40.3674, 42.5714, 44.898, 47.4694, 49.9184, 52.7347, 55.9184,
     59.3469, 61.9184, 64.6122, 67.4286, 71.4694, 75.2653, 78.3265, 81.2653, 85.551, 88.7347,
-			     91.551, 94.2449, 96.449, 98.4082, 99.7551};
+                             91.551, 94.2449, 96.449, 98.4082, 99.7551};
   const G4double yzl[36] = { 0.29875,
     0.31746, 0.33368, 0.35239, 0.36985, 0.38732, 0.41102, 0.43472, 0.45343, 0.4659, 0.47713,
     0.4896, 0.50083, 0.51331, 0.52328, 0.53077, 0.54075, 0.54823, 0.55572, 0.56445, 0.57193,
     0.58191, 0.5869, 0.59189, 0.60062, 0.60686, 0.61435, 0.61809, 0.62183, 0.62931, 0.6343,
-			     0.6368, 0.64054, 0.64304, 0.64428, 0.64678};
+                              0.6368, 0.64054, 0.64304, 0.64428, 0.64678};
 
   ThetaK = new G4LPhysicsFreeVector(34, xzk[0], xzk[33]);
   ThetaL = new G4LPhysicsFreeVector(36, xzl[0], xzl[35]);
@@ -1531,8 +1534,9 @@ void G4EmCorrections::Initialise()
     COSXI[i] = cosxi[i];
   }
 
+  G4Pow* g4pow = G4Pow::GetInstance();
   for(i=1; i<100; ++i) {
-    Z23[i] = std::pow(G4double(i),0.23);
+    Z23[i] = G4Exp(g4pow->logZ(i)*0.23);
   }
 }
 

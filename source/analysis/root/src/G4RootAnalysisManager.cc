@@ -23,25 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RootAnalysisManager.cc 85317 2014-10-27 15:58:15Z gcosmo $
+// $Id: G4RootAnalysisManager.cc 93815 2015-11-02 11:32:20Z gcosmo $
 
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
 #include "G4RootAnalysisManager.hh"
 #include "G4RootFileManager.hh"
-#include "G4H1ToolsManager.hh"
-#include "G4H2ToolsManager.hh"
-#include "G4H3ToolsManager.hh"
-#include "G4P1ToolsManager.hh"
-#include "G4P2ToolsManager.hh"
 #include "G4RootNtupleManager.hh"
 #include "G4AnalysisVerbose.hh"
 #include "G4AnalysisManagerState.hh"
 #include "G4Threading.hh"
 #include "G4AutoLock.hh"
-
-#include "tools/wroot/to"
-#include "tools/wroot/file"
 
 #include <iostream>
 #include <cstdio>
@@ -61,13 +53,13 @@ namespace {
   G4Mutex mergeP2Mutex = G4MUTEX_INITIALIZER;
 }  
 
-G4RootAnalysisManager* G4RootAnalysisManager::fgMasterInstance = 0;
-G4ThreadLocal G4RootAnalysisManager* G4RootAnalysisManager::fgInstance = 0;
+G4RootAnalysisManager* G4RootAnalysisManager::fgMasterInstance = nullptr;
+G4ThreadLocal G4RootAnalysisManager* G4RootAnalysisManager::fgInstance = nullptr;
 
 //_____________________________________________________________________________
 G4RootAnalysisManager* G4RootAnalysisManager::Instance()
 {
-  if ( fgInstance == 0 ) {
+  if ( fgInstance == nullptr ) {
     G4bool isMaster = ! G4Threading::IsWorkerThread();
     fgInstance = new G4RootAnalysisManager(isMaster);
   }
@@ -76,15 +68,16 @@ G4RootAnalysisManager* G4RootAnalysisManager::Instance()
 }    
 
 //_____________________________________________________________________________
+G4bool G4RootAnalysisManager::IsInstance()
+{
+  return ( fgInstance != 0 );
+}    
+
+//_____________________________________________________________________________
 G4RootAnalysisManager::G4RootAnalysisManager(G4bool isMaster)
- : G4VAnalysisManager("Root", isMaster),
-   fH1Manager(0),
-   fH2Manager(0),
-   fH3Manager(0),
-   fP1Manager(0),
-   fP2Manager(0),
-   fNtupleManager(0),
-   fFileManager(0)
+ : G4ToolsAnalysisManager("Root", isMaster),
+   fNtupleManager(nullptr),
+   fFileManager(nullptr)
 {
   if ( ( isMaster && fgMasterInstance ) || ( fgInstance ) ) {
     G4ExceptionDescription description;
@@ -99,21 +92,11 @@ G4RootAnalysisManager::G4RootAnalysisManager(G4bool isMaster)
   fgInstance = this;
 
   // Create managers
-  fH1Manager = new G4H1ToolsManager(fState);
-  fH2Manager = new G4H2ToolsManager(fState);
-  fH3Manager = new G4H3ToolsManager(fState);
-  fP1Manager = new G4P1ToolsManager(fState);
-  fP2Manager = new G4P2ToolsManager(fState);
   fNtupleManager = new G4RootNtupleManager(fState);
-  fFileManager = new G4RootFileManager(fState);
+  fFileManager = std::make_shared<G4RootFileManager>(fState);
       // The managers will be deleted by the base class
   
-  // Set managers to base class
-  SetH1Manager(fH1Manager);
-  SetH2Manager(fH2Manager);
-  SetH3Manager(fH3Manager);
-  SetP1Manager(fP1Manager);
-  SetP2Manager(fP2Manager);
+  // Set managers to base class which takes then their ownership
   SetNtupleManager(fNtupleManager);
   SetFileManager(fFileManager);
 }
@@ -121,8 +104,8 @@ G4RootAnalysisManager::G4RootAnalysisManager(G4bool isMaster)
 //_____________________________________________________________________________
 G4RootAnalysisManager::~G4RootAnalysisManager()
 {
-  if ( fState.GetIsMaster() ) fgMasterInstance = 0;
-  fgInstance = 0;
+  if ( fState.GetIsMaster() ) fgMasterInstance = nullptr;
+  fgInstance = nullptr;
 }
 
 // 
@@ -132,39 +115,17 @@ G4RootAnalysisManager::~G4RootAnalysisManager()
 //_____________________________________________________________________________
 G4bool G4RootAnalysisManager::WriteH1()
 {
-  const std::vector<tools::histo::h1d*>& h1Vector
-    = fH1Manager->GetH1Vector();
-  const std::vector<G4HnInformation*>& hnVector
-    = fH1Manager->GetHnVector();
+  auto h1Vector = fH1Manager->GetH1Vector();
+  auto hnVector = fH1Manager->GetHnVector();
 
   if ( ! h1Vector.size() ) return true;
 
+  auto result = true;
+
   if ( ! G4Threading::IsWorkerThread() )  {
-  
-    for ( G4int i=0; i<G4int(h1Vector.size()); ++i ) {
-      G4HnInformation* info = hnVector[i];
-      G4bool activation = info->GetActivation();
-      G4String name = info->GetName();
-      // skip writing if activation is enabled and H1 is inactivated
-      if ( fState.GetIsActivation() && ( ! activation ) ) continue; 
-      tools::histo::h1d* h1 = h1Vector[i];
-#ifdef G4VERBOSE
-      if ( fState.GetVerboseL3() ) 
-        fState.GetVerboseL3()->Message("write", "h1d", name);
-#endif
-      tools::wroot::directory* histoDirectory
-        = fFileManager->GetHistoDirectory(); 
-      G4bool result
-        = to(*histoDirectory, *h1, name);
-      if ( ! result ) {
-        G4ExceptionDescription description;
-        description << "      " << "saving histogram " <<  name << " failed";
-        G4Exception("G4RootAnalysisManager::Write()",
-                  "Analysis_W022", JustWarning, description);
-        return false;       
-      } 
-    }
-  }
+    auto directory = fFileManager->GetHistoDirectory(); 
+    result = WriteT(h1Vector, hnVector, directory, "h1");
+  }  
   else {
     // The worker manager just adds its histograms to the master
     // This operation needs a lock
@@ -173,45 +134,23 @@ G4bool G4RootAnalysisManager::WriteH1()
     lH1.unlock();
   }  
   
-  return true;
+  return result;
 }
     
 //_____________________________________________________________________________
 G4bool G4RootAnalysisManager::WriteH2()
 {
-  const std::vector<tools::histo::h2d*>& h2Vector
-    = fH2Manager->GetH2Vector();
-  const std::vector<G4HnInformation*>& hnVector
-    = fH2Manager->GetHnVector();
+  auto h2Vector = fH2Manager->GetH2Vector();
+  auto hnVector = fH2Manager->GetHnVector();
 
   if ( ! h2Vector.size() ) return true;
 
-  if ( ! G4Threading::IsWorkerThread() )  {
+  auto result = true;
   
-    for ( G4int i=0; i<G4int(h2Vector.size()); ++i ) {
-      G4HnInformation* info = hnVector[i];
-      G4bool activation = info->GetActivation();
-      G4String name = info->GetName();
-      // skip writing if inactivated
-      if ( fState.GetIsActivation() && ( ! activation  ) ) continue;
-      tools::histo::h2d* h2 = h2Vector[i];
-#ifdef G4VERBOSE
-      if ( fState.GetVerboseL3() ) 
-        fState.GetVerboseL3()->Message("write", "h2d", name);
-#endif
-      tools::wroot::directory* histoDirectory
-        = fFileManager->GetHistoDirectory(); 
-      G4bool result
-        = to(*histoDirectory, *h2, name);
-      if ( ! result ) {
-        G4ExceptionDescription description;
-        description << "      " << "saving histogram " << name << " failed";
-        G4Exception("G4RootAnalysisManager::Write()",
-                  "Analysis_W022", JustWarning, description);
-        return false;       
-      } 
-    }
-  }
+  if ( ! G4Threading::IsWorkerThread() )  {
+    auto directory = fFileManager->GetHistoDirectory(); 
+    result = WriteT(h2Vector, hnVector, directory, "h2");
+  }  
   else {
     // The worker manager just adds its histograms to the master
     // This operation needs a lock
@@ -220,45 +159,23 @@ G4bool G4RootAnalysisManager::WriteH2()
     lH2.unlock();
   }
   
-  return true;  
+  return result;  
 }  
 
 //_____________________________________________________________________________
 G4bool G4RootAnalysisManager::WriteH3()
 {
-  const std::vector<tools::histo::h3d*>& h3Vector
-    = fH3Manager->GetH3Vector();
-  const std::vector<G4HnInformation*>& hnVector
-    = fH3Manager->GetHnVector();
+  auto h3Vector = fH3Manager->GetH3Vector();
+  auto hnVector = fH3Manager->GetHnVector();
 
   if ( ! h3Vector.size() ) return true;
 
-  if ( ! G4Threading::IsWorkerThread() )  {
+  auto result = true;
   
-    for ( G4int i=0; i<G4int(h3Vector.size()); ++i ) {
-      G4HnInformation* info = hnVector[i];
-      G4bool activation = info->GetActivation();
-      G4String name = info->GetName();
-      // skip writing if inactivated
-      if ( fState.GetIsActivation() && ( ! activation  ) ) continue;
-      tools::histo::h3d* h3 = h3Vector[i];
-#ifdef G4VERBOSE
-      if ( fState.GetVerboseL3() ) 
-        fState.GetVerboseL3()->Message("write", "h3d", name);
-#endif
-      tools::wroot::directory* histoDirectory
-        = fFileManager->GetHistoDirectory(); 
-      G4bool result
-        = to(*histoDirectory, *h3, name);
-      if ( ! result ) {
-        G4ExceptionDescription description;
-        description << "      " << "saving histogram " << name << " failed";
-        G4Exception("G4RootAnalysisManager::Write()",
-                  "Analysis_W022", JustWarning, description);
-        return false;       
-      } 
-    }
-  }
+  if ( ! G4Threading::IsWorkerThread() )  {
+    auto directory = fFileManager->GetHistoDirectory(); 
+    result = WriteT(h3Vector, hnVector, directory, "h3");
+  }  
   else {
     // The worker manager just adds its histograms to the master
     // This operation needs a lock
@@ -267,45 +184,23 @@ G4bool G4RootAnalysisManager::WriteH3()
     lH3.unlock();
   }
   
-  return true;  
+  return result;  
 }  
 
 //_____________________________________________________________________________
 G4bool G4RootAnalysisManager::WriteP1()
 {
-  const std::vector<tools::histo::p1d*>& p1Vector
-    = fP1Manager->GetP1Vector();
-  const std::vector<G4HnInformation*>& hnVector
-    = fP1Manager->GetHnVector();
+  auto p1Vector = fP1Manager->GetP1Vector();
+  auto hnVector = fP1Manager->GetHnVector();
 
   if ( ! p1Vector.size() ) return true;
 
-  if ( ! G4Threading::IsWorkerThread() )  {
+  auto result = true;
   
-    for ( G4int i=0; i<G4int(p1Vector.size()); ++i ) {
-      G4HnInformation* info = hnVector[i];
-      G4bool activation = info->GetActivation();
-      G4String name = info->GetName();
-      // skip writing if activation is enabled and P1 is inactivated
-      if ( fState.GetIsActivation() && ( ! activation ) ) continue; 
-      tools::histo::p1d* p1 = p1Vector[i];
-#ifdef G4VERBOSE
-      if ( fState.GetVerboseL3() ) 
-        fState.GetVerboseL3()->Message("write", "p1d", name);
-#endif
-      tools::wroot::directory* profileDirectory
-        = fFileManager->GetProfileDirectory(); 
-      G4bool result
-        = to(*profileDirectory, *p1, name);
-      if ( ! result ) {
-        G4ExceptionDescription description;
-        description << "      " << "saving profile " <<  name << " failed";
-        G4Exception("G4RootAnalysisManager::Write()",
-                  "Analysis_W022", JustWarning, description);
-        return false;       
-      } 
-    }
-  }
+  if ( ! G4Threading::IsWorkerThread() )  {
+    auto directory = fFileManager->GetHistoDirectory(); 
+    result = WriteT(p1Vector, hnVector, directory, "p1");
+  }  
   else {
     // The worker manager just adds its histograms to the master
     // This operation needs a lock
@@ -314,45 +209,23 @@ G4bool G4RootAnalysisManager::WriteP1()
     lP1.unlock();
   }  
   
-  return true;
+  return result;
 }
     
 //_____________________________________________________________________________
 G4bool G4RootAnalysisManager::WriteP2()
 {
-  const std::vector<tools::histo::p2d*>& p2Vector
-    = fP2Manager->GetP2Vector();
-  const std::vector<G4HnInformation*>& hnVector
-    = fP2Manager->GetHnVector();
+  auto p2Vector = fP2Manager->GetP2Vector();
+  auto hnVector = fP2Manager->GetHnVector();
 
   if ( ! p2Vector.size() ) return true;
 
-  if ( ! G4Threading::IsWorkerThread() )  {
+  auto result = true;
   
-    for ( G4int i=0; i<G4int(p2Vector.size()); ++i ) {
-      G4HnInformation* info = hnVector[i];
-      G4bool activation = info->GetActivation();
-      G4String name = info->GetName();
-      // skip writing if activation is enabled and P2 is inactivated
-      if ( fState.GetIsActivation() && ( ! activation ) ) continue; 
-      tools::histo::p2d* p2 = p2Vector[i];
-#ifdef G4VERBOSE
-      if ( fState.GetVerboseL3() ) 
-        fState.GetVerboseL3()->Message("write", "p2d", name);
-#endif
-      tools::wroot::directory* profileDirectory
-        = fFileManager->GetProfileDirectory(); 
-      G4bool result
-        = to(*profileDirectory, *p2, name);
-      if ( ! result ) {
-        G4ExceptionDescription description;
-        description << "      " << "saving profile " <<  name << " failed";
-        G4Exception("G4RootAnalysisManager::Write()",
-                  "Analysis_W022", JustWarning, description);
-        return false;       
-      } 
-    }
-  }
+  if ( ! G4Threading::IsWorkerThread() )  {
+    auto directory = fFileManager->GetHistoDirectory(); 
+    result = WriteT(p2Vector, hnVector, directory, "p2");
+  }  
   else {
     // The worker manager just adds its histograms to the master
     // This operation needs a lock
@@ -361,7 +234,7 @@ G4bool G4RootAnalysisManager::WriteP2()
     lP2.unlock();
   }  
   
-  return true;
+  return result;
 }
     
 //_____________________________________________________________________________
@@ -369,24 +242,12 @@ G4bool G4RootAnalysisManager::Reset()
 {
 // Reset histograms and ntuple
 
-  G4bool finalResult = true;
+  auto finalResult = true;
   
-  G4bool result = fH1Manager->Reset();
-  finalResult = finalResult && result;
-
-  result = fH2Manager->Reset();
+  auto result = G4ToolsAnalysisManager::Reset();
   finalResult = finalResult && result;
   
-  result = fH3Manager->Reset();
-  finalResult = finalResult && result;
-  
-  result = fP1Manager->Reset();
-  finalResult = finalResult && result;
-  
-  result = fP2Manager->Reset();
-  finalResult = finalResult && result;
-  
-  result = fNtupleManager->Reset();
+  result = fNtupleManager->Reset(false);
   finalResult = finalResult && result;
   
   return finalResult;
@@ -399,8 +260,8 @@ G4bool G4RootAnalysisManager::Reset()
 //_____________________________________________________________________________
 G4bool G4RootAnalysisManager::OpenFileImpl(const G4String& fileName)
 {
-  G4bool finalResult = true;
-  G4bool result = fFileManager->SetFileName(fileName);
+  auto finalResult = true;
+  auto result = fFileManager->SetFileName(fileName);
   finalResult = finalResult && result;
 
 #ifdef G4VERBOSE
@@ -427,7 +288,7 @@ G4bool G4RootAnalysisManager::OpenFileImpl(const G4String& fileName)
 G4bool G4RootAnalysisManager::WriteImpl() 
 {
 
-  G4bool finalResult = true;
+  auto finalResult = true;
 
   if ( ! fgMasterInstance && 
        ( ( ! fH1Manager->IsEmpty() ) || ( ! fH2Manager->IsEmpty() ) || 
@@ -443,7 +304,7 @@ G4bool G4RootAnalysisManager::WriteImpl()
   }
   
   // H1
-  G4bool result = WriteH1();
+  auto result = WriteH1();
   finalResult = finalResult && result;
 
   // H2
@@ -478,7 +339,7 @@ G4bool G4RootAnalysisManager::WriteImpl()
 //_____________________________________________________________________________
 G4bool G4RootAnalysisManager::CloseFileImpl()
 {
-  G4bool finalResult = true;
+  auto finalResult = true;
 
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) 
@@ -487,7 +348,7 @@ G4bool G4RootAnalysisManager::CloseFileImpl()
 #endif
 
   // reset data
-  G4bool result = Reset();
+  auto result = Reset();
   if ( ! result ) {
       G4ExceptionDescription description;
       description << "      " << "Resetting data failed";
@@ -505,7 +366,7 @@ G4bool G4RootAnalysisManager::CloseFileImpl()
   // Delete files if empty in MT mode
   if ( ( fState.GetIsMaster() && 
          fH1Manager->IsEmpty() && fH2Manager->IsEmpty() && fH3Manager->IsEmpty() &&
-         fP1Manager->IsEmpty() && fP2Manager->IsEmpty() ) || 
+         fP1Manager->IsEmpty() && fP2Manager->IsEmpty() && fNtupleManager->IsEmpty() ) || 
        ( ( ! fState.GetIsMaster() ) && fNtupleManager->IsEmpty() ) ) {
     result = ! std::remove(fFileManager->GetFullFileName());
     //  std::remove returns 0 when success
@@ -533,4 +394,3 @@ G4bool G4RootAnalysisManager::CloseFileImpl()
 
   return finalResult;
 } 
-  

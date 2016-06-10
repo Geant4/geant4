@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAVibExcitation.cc 85423 2014-10-29 08:22:38Z gcosmo $
+// $Id: G4DNAVibExcitation.cc 91584 2015-07-27 13:01:48Z gcosmo $
 
 #include "G4DNAVibExcitation.hh"
 #include "G4LEPTSVibExcitationModel.hh"
@@ -66,17 +66,21 @@ void G4DNAVibExcitation::InitialiseProcess(const G4ParticleDefinition* p)
 
     if(name == "e-" )
     { 
-      if(!EmModel()) SetEmModel(new G4DNASancheExcitationModel);
-      EmModel()->SetLowEnergyLimit(2*eV);
-      EmModel()->SetHighEnergyLimit(100*eV);
-
+      if(!EmModel())
+      {
+        SetEmModel(new G4DNASancheExcitationModel);
+        EmModel()->SetLowEnergyLimit(2*eV);
+        EmModel()->SetHighEnergyLimit(100*eV);
+      }
       AddEmModel(1, EmModel());
     } else if(name == "e+")
     { 
-      if(!EmModel()) SetEmModel(new G4LEPTSVibExcitationModel);
-      EmModel()->SetLowEnergyLimit(2*eV);
-      EmModel()->SetHighEnergyLimit(100*eV);
-
+      if(!EmModel())
+      {
+        SetEmModel(new G4LEPTSVibExcitationModel);
+        EmModel()->SetLowEnergyLimit(2*eV);
+        EmModel()->SetHighEnergyLimit(100*eV);
+      }
       AddEmModel(1, EmModel());
     }
   } 

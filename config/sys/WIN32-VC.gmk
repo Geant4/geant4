@@ -99,7 +99,6 @@ ifeq ($(G4SYSTEM),WIN32-VC)
     link.exe /nologo /dll /out:$(G4LIBDIR)/$(name).dll \
              $(G4LIBDIR)/lib$(name).exp $(G4LIBDIR)/lib$(name).a \
              $(LIB_PATH)$(G4LIBDIR) $(GLOBLIBS) \
-             $(LIB_PATH)$(USOLIDS_LIB_DIR) $(USOLIDS_LIB) \
              $(LIB_PATH)$(CLHEP_LIB_DIR) $(CLHEP_LIB) \
              $(INTYLIBS) $(GDMLLIBS) $(ANALYSISLIBS) $(UI32LIBS)
   endef
@@ -119,7 +118,6 @@ ifeq ($(G4SYSTEM),WIN32-VC)
     link.exe /nologo /dll /out:$(G4LIBDIR)/$(name).dll \
              $(G4LIBDIR)/lib$(name).exp $(G4LIBDIR)/lib$(name).a \
              $(LIB_PATH)$(G4LIBDIR) $(GLOBLIBS) \
-             $(LIB_PATH)$(USOLIDS_LIB_DIR) $(USOLIDS_LIB) \
              $(LIB_PATH)$(CLHEP_LIB_DIR) $(CLHEP_LIB) \
              $(INTYLIBS) $(GDMLLIBS) $(ANALYSISLIBS) $(UI32LIBS)
   endef

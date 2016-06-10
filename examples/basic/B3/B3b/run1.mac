@@ -1,0 +1,17 @@
+# $Id: run1.mac 85993 2014-11-06 16:34:10Z ihrivnac $
+#
+# Macro file of "exampleB3.cc"
+#
+# Change the default number of workers (in multi-threading mode) 
+#/run/numberOfWorkers 4
+#
+# Initialize kernel
+/run/initialize
+#
+/control/verbose 2
+/tracking/verbose 2
+#
+/run/beamOn 1
+#
+/tracking/verbose 0
+/run/beamOn 20

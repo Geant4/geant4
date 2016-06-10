@@ -79,7 +79,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 void DetectorConstruction::DefineMaterials()
 {
   // specific element name for thermal neutronHP
-  // (see G4NeutronHPThermalScatteringNames.cc)
+  // (see G4ParticleHPThermalScatteringNames.cc)
   G4Element* H  = new G4Element("TS_H_of_Water" ,"H" , 1., 1.0079*g/mole);
   G4Element* O  = new G4Element("Oxygen"        ,"O" , 8., 16.00*g/mole);
   

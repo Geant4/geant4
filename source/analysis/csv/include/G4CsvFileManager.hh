@@ -32,27 +32,30 @@
 #ifndef G4CsvFileManager_h
 #define G4CsvFileManager_h 1
 
-
 #include "G4VFileManager.hh"
-#include "G4CsvNtupleDescription.hh"
+#include "G4TNtupleDescription.hh"
 #include "globals.hh"
 
-#include <fstream>
+#include "tools/wcsv_ntuple"
 
 class G4CsvFileManager : public G4VFileManager
 {
   public:
-    G4CsvFileManager(const G4AnalysisManagerState& state);
+    explicit G4CsvFileManager(const G4AnalysisManagerState& state);
     ~G4CsvFileManager();
+
+    // Type aliases
+    using NtupleType = tools::wcsv::ntuple;
+    using NtupleDescriptionType = G4TNtupleDescription<NtupleType>;
     
     // Methods to manipulate files
-    virtual G4bool OpenFile(const G4String& fileName);
-    virtual G4bool WriteFile();
-    virtual G4bool CloseFile(); 
+    virtual G4bool OpenFile(const G4String& fileName) final;
+    virtual G4bool WriteFile() final;
+    virtual G4bool CloseFile() final; 
 
     // Specific methods for files per objects
-    G4bool CreateNtupleFile(G4CsvNtupleDescription* ntupleDescription);
-    G4bool CloseNtupleFile(G4CsvNtupleDescription* ntupleDescription); 
+    G4bool CreateNtupleFile(NtupleDescriptionType* ntupleDescription);
+    G4bool CloseNtupleFile(NtupleDescriptionType* ntupleDescription); 
 };
 
 #endif

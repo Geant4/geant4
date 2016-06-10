@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.hh 72939 2013-08-14 13:25:36Z gcosmo $
+// $Id: G4BetheBlochModel.hh 93362 2015-10-19 13:45:19Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -74,7 +74,7 @@ class G4BetheBlochModel : public G4VEmModel
 
 public:
 
-  G4BetheBlochModel(const G4ParticleDefinition* p = 0,
+  G4BetheBlochModel(const G4ParticleDefinition* p = nullptr,
                     const G4String& nam = "BetheBloch");
 
   virtual ~G4BetheBlochModel();

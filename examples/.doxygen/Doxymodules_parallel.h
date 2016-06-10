@@ -1,4 +1,4 @@
-// $Id: Doxymodules_parallel.h 78005 2013-12-02 08:29:57Z gcosmo $
+// $Id: Doxymodules_parallel.h 94627 2015-11-30 08:17:35Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_parallel.h
@@ -33,6 +33,38 @@
  *  @{
  */
 
+/** @} */
+
+/** @defgroup extended_parallel_MPI_exMPI03 exMPI03
+ *  Parallel MPI exMPI03 example has its 
+ *  <a href="../html_exMPI03/html/index.html">standalone documentation </a>
+ *  @ingroup extended_parallel_MPI
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_parallel_MPI_libG4mpi libG4mpi
+ *  Library libG4mpi
+ *  @ingroup extended_parallel_MPI
+ *  @{
+ */
+
+  class G4MPIbatch {};
+  class G4MPIhistoMerger {};
+  class G4MPImanager {};
+  class G4MPImessenger {};
+  class G4MPIrandomSeedGenerator {};
+  class G4MPIrunMerger {};
+  class G4MPIscorerMerger {};
+  class G4MPIsession {};
+  class G4MPIstatus {};
+  class G4MPIutils {};
+  class G4UImpish {};
+  class G4VMPIseedGenerator {};
+  class G4VMPIsession {};
+  class G4VUserMPIrunMerger {};
+ 
 /** @} */
 
 /** @} */
@@ -91,5 +123,26 @@
 /** @} */
 
 /** @} */
+
+/** @defgroup extended_parallel_ThreadsafeScorers ThreadsafeScorers
+ *  Example ThreadsafeScorers
+ *  @ingroup extended_parallel
+ *  @{
+ */
+
+  class G4TAtomicHitsCollection {};
+  class G4TAtomicHitsMap {};
+  class G4atomic {};
+  class G4atomic_defines {};
+  class TSActionInitialization {};
+  class TSDetectorConstruction {};
+  class TSPhysicsList {};
+  class TSPrimaryGeneratorAction {};
+  class TSRun {};
+  class TSRunAction {};
+
+/** @} */
+
+
 
 /** @} */

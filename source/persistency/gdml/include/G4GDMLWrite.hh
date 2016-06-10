@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.hh 69013 2013-04-15 09:41:13Z gcosmo $
+// $Id: G4GDMLWrite.hh 89243 2015-03-27 16:24:39Z gcosmo $
 //
 //
 // class G4GDMLWrite
@@ -49,6 +49,8 @@
 
 #include "G4Transform3D.hh"
 
+#include "G4GDMLAuxStructType.hh"
+
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 
@@ -72,6 +74,10 @@ class G4GDMLWrite
       //
       // Split geometry structure in modules, by volume subtree or level
 
+    void AddAuxiliary(G4GDMLAuxStructType myaux);
+      //
+      // Import auxiliary structure
+
     static void SetAddPointerToName(G4bool);
       //
       // Specify if to add or not memory addresses to IDs.
@@ -89,6 +95,7 @@ class G4GDMLWrite
       // Pure virtual methods implemented in concrete writer plugin's classes
 
     virtual void ExtensionWrite(xercesc::DOMElement*);
+    virtual void UserinfoWrite(xercesc::DOMElement*);
     virtual void AddExtension(xercesc::DOMElement*,
                               const G4LogicalVolume* const);
       //
@@ -98,6 +105,8 @@ class G4GDMLWrite
       // inheriting from G4GDMLWriteStructure and being registered
       // as argument to G4GDMLParser.
 
+    G4String GenerateName(const G4String&,const void* const);
+
   protected:
 
     G4GDMLWrite();
@@ -105,12 +114,13 @@ class G4GDMLWrite
 
     VolumeMapType& VolumeMap();
 
-    G4String GenerateName(const G4String&,const void* const);
     xercesc::DOMAttr* NewAttribute(const G4String&, const G4String&);
     xercesc::DOMAttr* NewAttribute(const G4String&, const G4double&);
     xercesc::DOMElement* NewElement(const G4String&);
     G4String Modularize(const G4VPhysicalVolume* const topvol,
                         const G4int depth);
+
+    void AddAuxInfo(G4GDMLAuxListType* auxInfoList, xercesc::DOMElement* element);
 
     G4bool FileExists(const G4String&) const;
     PhysVolumeMapType& PvolumeMap();
@@ -122,8 +132,9 @@ class G4GDMLWrite
     static G4bool addPointerToName;
     xercesc::DOMDocument* doc;
     xercesc::DOMElement* extElement;
+    xercesc::DOMElement* userinfoElement;
     XMLCh tempStr[10000];
-
+    G4GDMLAuxListType auxList;
 };
 
 #endif

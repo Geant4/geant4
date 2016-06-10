@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc 66870 2013-01-14 23:38:59Z adotti $
+// $Id: G4ASCIITreeSceneHandler.cc 88761 2015-03-09 12:23:46Z gcosmo $
 //
 // 
 // John Allison  5th April 2001
@@ -49,6 +49,8 @@
 #include "G4VSensitiveDetector.hh"
 #include "G4VReadOutGeometry.hh"
 #include "G4TransportationManager.hh"
+#include "G4AttCheck.hh"
+#include "G4AttValue.hh"
 
 G4ASCIITreeSceneHandler::G4ASCIITreeSceneHandler
 (G4VGraphicsSystem& system,
@@ -105,6 +107,8 @@ void G4ASCIITreeSceneHandler::WriteHeader (std::ostream& os)
   if (detail >= 2) os << " / Solid(type)";
   if (detail >= 3) os << ", volume, density";
   if (detail >= 5) os << ", daughter-subtracted volume and mass";
+  if (detail >= 6) os << ", physical volume dump";
+  if (detail >= 7) os << ", polyhedron dump";
   os <<
     "\n#  Abbreviations: PV = Physical Volume,     LV = Logical Volume,"
     "\n#                 SD = Sensitive Detector,  RO = Read Out Geometry.";
@@ -389,6 +393,21 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
 		  << ", "
 		  << G4BestUnit(daughter_subtracted_mass,"Mass");
     }
+  }
+
+  if (detail >= 6) {
+    std::vector<G4AttValue>* attValues = pPVModel->CreateCurrentAttValues();
+    const std::map<G4String,G4AttDef>* attDefs = pPVModel->GetAttDefs();
+    fRestOfLine << '\n' << G4AttCheck(attValues, attDefs);
+    delete attValues;
+  }
+
+  if (detail >= 7) {
+    G4Polyhedron* polyhedron = solid.GetPolyhedron();
+    fRestOfLine << "\nLocal polyhedron coordinates:\n" << *polyhedron;
+    G4Transform3D* transform = pPVModel->GetCurrentTransform();
+    polyhedron->Transform(*transform);
+    fRestOfLine << "\nGlobal polyhedron coordinates:\n" << *polyhedron;
   }
 
   if (fLVSet.find(pCurrentLV) == fLVSet.end()) {

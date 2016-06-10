@@ -37,6 +37,7 @@
 // 20130808  M. Kelsey -- Convert paraMaker[Truncated] to class object, to
 //		allow thread isolation
 // 20130829  M. Kelsey -- Address Coverity #52158, 52161 for copy actions.
+// 20150619  M. Kelsey -- Overload G4cbrt for case of integer arguments
 
 #ifndef G4INUCL_SPECIAL_FUNC_HH
 #define G4INUCL_SPECIAL_FUNC_HH
@@ -64,6 +65,7 @@ namespace G4InuclSpecialFunctions {
   G4double csPN(G4double e);
 
   G4double G4cbrt(G4double x);	// Can't use "cbrt" name, clashes with <math.h>
+  G4double G4cbrt(G4int n);	// Use G4Pow::powN() here for speedup
 
   G4double inuclRndm();				// Wrapper for G4UniformRand()
 

@@ -50,7 +50,6 @@ void ExTGActionInitialization::BuildForMaster() const
  SetUserAction(new ExTGRunAction);
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExTGActionInitialization::Build() const

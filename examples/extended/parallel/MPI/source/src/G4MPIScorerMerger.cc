@@ -23,215 +23,416 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#include "G4MPIScorerMerger.hh"
+#include "G4MPIscorerMerger.hh"
 #include <map>
-#include <strstream>
+#include <ostream>
+#include <algorithm>
+#include <assert.h>
+#include <functional>
+#include "G4MPIutils.hh"
 
-G4MPIScorerMerger::G4MPIScorerMerger( G4ScoringManager* mgr, 
-                                      G4int destination,
-                                      G4int verbosity ) : 
-scoringManager(mgr),commSize(0),destinationRank(destination),verbose(verbosity)
+G4MPIscorerMerger::G4MPIscorerMerger() :
+  outputBuffer(nullptr),outputBufferSize(0),outputBufferPosition(0),bytesSent(0),
+  ownsBuffer(false),scoringManager(nullptr),commSize(0),
+  destinationRank(G4MPImanager::kRANK_MASTER),verbose(0)
 {}
+
+G4MPIscorerMerger::G4MPIscorerMerger(G4ScoringManager* mgr,
+    G4int destination,
+    G4int verbosity) :
+    outputBuffer(nullptr),outputBufferSize(0),outputBufferPosition(0),bytesSent(0),
+    ownsBuffer(false),
+  scoringManager(mgr), commSize(0), destinationRank(destination),
+      verbose(verbosity)
+{
+}
+
+G4MPIscorerMerger::~G4MPIscorerMerger() {
+  if ( ownsBuffer ) delete[] outputBuffer;
+}
 
 #define DMSG( LVL , MSG ) { if ( verbose > LVL ) { G4cout << MSG << G4endl; } }
 
-std::ostream& operator<<(std::ostream& os , 
-                         const G4MPIScorerMerger::convMap_t& cnv ) {
-  static const G4int maxelems = 10;
-  os<<" Name: "<<cnv.name<<" with : "<<cnv.numElems<<" elements\n";
-  os<<"\tIndexes :";
-  for ( G4int i = 0 ;
-        i < ((cnv.numElems<maxelems) ? cnv.numElems : maxelems) ;
-          ++i ) os<<" "<<(cnv.indexes)[i];
-  if ( cnv.numElems>maxelems ) os<<" ...";
-  for ( G4int i = ( (cnv.numElems-maxelems > 0) ? cnv.numElems-maxelems : cnv.numElems );
-        i < cnv.numElems ; ++i ) os<<" "<<(cnv.indexes)[i];
-  os<<"\n\tValues :";
-  for ( G4int i = 0 ;
-        i < ((cnv.numElems<maxelems) ? cnv.numElems : maxelems) ;
-          ++i ) os<<" "<<(cnv.values)[i];
-  if ( cnv.numElems>maxelems ) os<<" ...";
-  for ( G4int i = ( (cnv.numElems-maxelems > 0) ? cnv.numElems-maxelems : cnv.numElems );
-        i < cnv.numElems ; ++i ) os<<" "<<(cnv.values)[i];
-  return os;
-}
 
-std::ostream& operator<<(std::ostream& os, 
-                         G4THitsMap<double>& map) 
-{
-  os<<map.GetName()<<" "<<map.GetSDname()<<" "<<map.GetSize()<<"\n";
-  for ( std::map<G4int,G4double*>::const_iterator it =
-        map.GetMap()->begin(); it != map.GetMap()->end() ;
-        ++it)
-    os<<it->first<<" "<<*(it->second)<<"\n";
-  return os;
-}
+/* Format of the message.
+ *
+ * Input:
+ * A vector of G4VScoringMesh, each of that is a
+ * std::map<name:G4String,G4THitsMap<G4double>*> where
+ * G4THitsMap<T> = std::map<int,T*>
+ *
+ * Output:
+ * A buffer:
+ *      [0] : numMesh : int             (**Begin Message**)
+ *      [1] : meshID : int                (** Begin Mesh**)
+ *      [2] : numMaps : int
+ *      [3] : sizeName : int             (** Begin Map **)
+ *      [4] : name[0] : char
+ *      ...
+ *      [...] : name[sizeName-1] : chare
+ *      [...] : mapSize : int
+ *      [...] : THitsMap.keys()[0] : int
+ *      ...
+ *      [...] : THitsMap.keys()[mapSize-1] : int
+ *      [...] : THitsMap.values()[0] : double
+ *      ...
+ *      [...] : THitsMap.values()[mapSize-1] : double  (**End Map**)
+ *      [...] : Next Map : repeat from (**Begin Map**)
+ *      ...
+ *      [...] : Next Mesh : repeat from (**Begin Mesh**)
+ *
+ *
+ */
 
-G4MPIScorerMerger::convMap_t*
-G4MPIScorerMerger::convertMap( const G4String& mapName ,
-                               G4THitsMap<double>* map ) const 
-{
-  DMSG( 2 , "Converting G4THitsMap<double> "<<map<<
-       " with name "<<mapName);
-  convMap_t* converted = new convMap_t;
-  converted->name = mapName;
-  DMSG(2,converted->name);
-  converted->numElems = map->GetSize();
-  DMSG(2,converted->numElems);
-  converted->indexes = new G4int[converted->numElems];
-  converted->values = new G4double[converted->numElems];
-  std::map<G4int,double*>* mm = map->GetMap();
-  G4int counter=0;
-  for ( std::map<G4int,G4double*>::const_iterator it = mm->begin();
-        it != mm->end() ; ++it ) {
-    //DMSG(2,it->first<<" "<<*(it->second)<<" "<<counter);
-    (converted->indexes)[counter] = it->first;
-    (converted->values)[counter++] = *(it->second);
-    }
-  DMSG( 2 , "Converted to: "<<*converted );
-  return converted;
-}
-
-void
-G4MPIScorerMerger::convertMesh( const G4VScoringMesh* mesh )
-{
-  DMSG(2,"Coverting G4VScoringMesh: "<<mesh);
-  clear();
-  const MeshScoreMap& map = mesh->GetScoreMap();
-  DMSG(2,"Converting "<<map.size()<<" score maps");
-  for ( MeshScoreMap::const_iterator it = map.begin() ;
-        it != map.end() ; ++it ) 
-    {
-      convertedMesh.push_back( convertMap(it->first,it->second) );
-    }
-  DMSG(2,"Conversion of G4VScoringMesh: "<<mesh<<" done");
-}
-
-void 
-G4MPIScorerMerger::clear() 
-{
-  for ( std::vector<convMap_t*>::iterator it = convertedMesh.begin() ;
-        it != convertedMesh.end() ; ++it )
-    {
-      delete[] (*it)->indexes;
-      delete[] (*it)->values;
-      delete *it;
-      *it = 0;
-    }
-  convertedMesh.erase(convertedMesh.begin(),convertedMesh.end());
-}
-
-
-void G4MPIScorerMerger::Merge()
-{
-  DMSG(0,"G4MPIScorerMerger::Merge() called");
-  G4int myrank =  MPI::COMM_WORLD.Get_rank();
+void G4MPIscorerMerger::Merge() {
+  DMSG(0, "G4MPIscorerMerger::Merge called");
+  const unsigned int myrank = MPI::COMM_WORLD.Get_rank();
   commSize = MPI::COMM_WORLD.Get_size();
-  COMM_G4COMMAND_ = MPI::COMM_WORLD.Dup();
-  DMSG(0,"Comm world size: "<<commSize<<" this rank is: "
-       <<myrank<<" sending to rank "<<destinationRank
-       <<" Number of mesh: "<< scoringManager->GetNumberOfMesh() );
-  for ( size_t i = 0 ; i < scoringManager->GetNumberOfMesh() ; ++i )
-    {
-      if ( myrank != destinationRank ) {
-        meshID = static_cast<G4int>(i);
-        SendOneMesh();
-      } else { 
-        ReceiveOneMesh();
+  if ( commSize == 1 ) {
+      DMSG(1,"Comm world size is 1, nothing to do");
+      return;
+  }
+  comm = MPI::COMM_WORLD.Dup();
+  DestroyBuffer();
+
+  //ANDREA:->
+//  G4cout<<"Before sending: "<<G4endl;
+//  scoringManager->GetMesh(0)->Dump();
+//  for ( int i = 0 ; i < scoringManager->GetNumberOfMesh() ; ++i )  {
+//  for ( auto e : scoringManager->GetMesh(i)->GetScoreMap() )
+//    {
+//      G4cout<<e.first<<" : "<<e.second<<G4endl;
+//      for ( auto c: *(e.second->GetMap()) ) {
+//          G4cout<<c.first<<"="<<*c.second<<G4endl;
+//
+//     }
+//    }
+//  }
+  //ANDREA:<-
+
+  bytesSent=0;
+  const G4double sttime = MPI::Wtime();
+
+  //Use G4MPIutils to optimize communications between ranks
+  typedef std::function<void(unsigned int)> handler_t;
+  using std::placeholders::_1;
+  handler_t sender = std::bind(&G4MPIscorerMerger::Send , this , _1);
+  handler_t receiver = std::bind(&G4MPIscorerMerger::Receive, this, _1);
+  std::function<void(void)> barrier = std::bind(&MPI::Intracomm::Barrier,&comm);
+  G4mpi::Merge( sender , receiver , barrier , commSize , myrank );
+
+  //OLD Style p2p communications
+  /*
+  if ( myrank != destinationRank ) {
+      DMSG(1,"Comm world size: "<<commSize<<" this rank is: "
+          <<myrank<<" sending to rank "<<destinationRank
+          <<" Number of mesh: "<< scoringManager->GetNumberOfMesh() );
+      Send(destinationRank);
+  } else {
+      DMSG(1,"Comm world size: "<<commSize<<" this rank is: "
+          <<myrank<<" receiving "
+          <<" Number of mesh: "<< scoringManager->GetNumberOfMesh() );
+      for ( unsigned int i = 0 ; i < commSize ; ++i ) {
+          if ( i != myrank ) Receive(i);
       }
-    }
-  DMSG(0,"G4MPIScorerMerger::Merge done");
-}
-
-void G4MPIScorerMerger::SendOneMesh() 
-{
-  DMSG(1,"Sending mesh with ID: "<<meshID);
-  G4VScoringMesh* mesh = scoringManager->GetMesh(meshID);
-  convertMesh( mesh );
-  COMM_G4COMMAND_.Send(&meshID,1,MPI::INT,
-                       destinationRank,G4MPImanager::kTAG_DATA);
-  G4int numelems=convertedMesh.size();
-  DMSG(2,"Sending "<<numelems<<" maps");
-  COMM_G4COMMAND_.Send(&numelems,1,MPI::INT,
-                       destinationRank,G4MPImanager::kTAG_DATA);
-  for ( std::vector<convMap_t*>::const_iterator it = convertedMesh.begin() ;
-        it != convertedMesh.end() ; ++it ) {
-    const convMap_t* elem = *it;
-    DMSG(2,"Sending map: "<<elem);
-    COMM_G4COMMAND_.Send(elem->name.c_str(),elem->name.length(),MPI::CHAR,
-                         destinationRank,G4MPImanager::kTAG_DATA);
-    COMM_G4COMMAND_.Send(&(elem->numElems),1,MPI::INT,
-                         destinationRank,G4MPImanager::kTAG_DATA);
-    COMM_G4COMMAND_.Send(elem->indexes,elem->numElems,MPI::INT,
-                         destinationRank,G4MPImanager::kTAG_DATA);
-    COMM_G4COMMAND_.Send(elem->values,elem->numElems,MPI::DOUBLE,
-                         destinationRank,G4MPImanager::kTAG_DATA);
   }
-  DMSG(1,"Sending of mesh with ID: "<<meshID<<" Done.");
+*/
+  const G4double elapsed = MPI::Wtime() - sttime;
+  long total=0;
+  comm.Reduce(&bytesSent,&total,1,MPI::LONG,MPI::SUM,destinationRank);
+  if ( verbose > 0 && myrank == destinationRank ) {
+      //Collect from ranks how much data was sent around
+      G4cout<<"G4MPIscorerMerger::Merge() -data transfer performances: "
+                  <<double(total)/1000./elapsed<<" kB/s"
+                  <<" (Total Data Transfer= "<<double(total)/1000.<<" kB in "
+                  <<elapsed<<" s)."<<G4endl;
+  }
+  //ANDREA:->
+//  G4cout<<"After Receiving: "<<G4endl;
+//  scoringManager->GetMesh(0)->Dump();
+//  for ( int i = 0 ; i < scoringManager->GetNumberOfMesh() ; ++i )  {
+//  for ( auto e : scoringManager->GetMesh(i)->GetScoreMap() )
+//    {
+//      G4cout<<e.first<<" : "<<e.second<<G4endl;
+//      for ( auto c: *(e.second->GetMap()) ) {
+//          G4cout<<c.first<<"="<<*c.second<<" (=2x"<<.5*(*c.second)<<")"<<G4endl;
+//
+//     }
+//    }
+//  }
+  //ANDREA:<-
+  comm.Free();
+  DMSG(0,"G4MPIscorerMerger::Merge done.");
 }
 
-void G4MPIScorerMerger::ReceiveOneMesh() 
-{
-  DMSG(1,"Receiving of mesh");
-  clear();
-  for ( G4int rank = 0 ; rank<commSize; ++rank ) {
-    if ( rank == destinationRank ) continue; // Do not receive from myself
-    COMM_G4COMMAND_.Recv(&meshID,1,MPI::INT,rank,G4MPImanager::kTAG_DATA);
-    G4int numElems = 0;
-    COMM_G4COMMAND_.Recv(&numElems,1,MPI::INT,rank,G4MPImanager::kTAG_DATA);
-    for ( G4int i = 0 ; i<numElems ; ++i ) {
-      convMap_t* elem = new convMap_t;
-      //G4int strlen = 0;
+void G4MPIscorerMerger::Receive(const unsigned int source) {
+  DMSG(1,"Receiving scorers");
+ // DestroyBuffer();
+      DMSG(2,"Receiving from: "<<source);
       MPI::Status status;
-      COMM_G4COMMAND_.Probe(rank,G4MPImanager::kTAG_DATA,status);
-      G4int strlen = status.Get_count(MPI::CHAR);
-      char* buf = new char[strlen];
-      COMM_G4COMMAND_.Recv(buf,strlen,MPI::CHAR,rank,
-                           G4MPImanager::kTAG_DATA,status);
-      elem->name = G4String(buf,strlen);
-      delete[] buf;
-      COMM_G4COMMAND_.Recv(&(elem->numElems),1,MPI::INT,rank,
-                           G4MPImanager::kTAG_DATA);
-      elem->indexes = new G4int[elem->numElems];
-      elem->values = new G4double[elem->numElems];
-      COMM_G4COMMAND_.Recv(elem->indexes,elem->numElems,MPI::INT,rank,
-                           G4MPImanager::kTAG_DATA);
-      COMM_G4COMMAND_.Recv(elem->values,elem->numElems,MPI::DOUBLE,rank,
-                           G4MPImanager::kTAG_DATA);
-      convertedMesh.push_back(elem);
-      DMSG(2,"Received one mesh map: "<<*elem);
-    }
-    DMSG(2,"Received one mesh, with "<<convertedMesh.size()<<" maps");
-    //Received from Rank number rank
-    MergeOneMesh();
-  }
-  DMSG(1,"Receiving of mesh done");
+      comm.Probe(source, G4MPImanager::kTAG_CMDSCR, status);
+      const G4int newbuffsize = status.Get_count(MPI::PACKED);
+      DMSG(2,"Preparing to receive buffer of size: "<<newbuffsize);
+      char* buffer = outputBuffer;
+      if ( newbuffsize > outputBufferSize ) {
+          DMSG(3,"New larger buffer expected, resize");
+          //New larger buffer incoming, recreate buffer
+          //TODO: use realloc?
+          delete[] outputBuffer;
+          buffer = new char[newbuffsize];
+          //Avoid complains from valgrind (i'm not really sure why this is needed, but, beside the
+          //small cpu penalty, we can live with that).)
+          std::fill( buffer , buffer + newbuffsize , 0 );
+          ownsBuffer = true;
+      }
+      SetupOutputBuffer(buffer,newbuffsize,0);
+      comm.Recv(buffer, newbuffsize, MPI::PACKED, source,
+          G4MPImanager::kTAG_CMDSCR, status);
+      DMSG(3,"Buffer Size: "<<outputBufferSize<< " bytes at: "<<(void*)outputBuffer);
+      UnPackAndMerge(scoringManager);
+  DMSG(1,"Receiving of comamnd line scorers done");
 }
 
-void G4MPIScorerMerger::MergeOneMesh()
-{
-  DMSG(2,"Merging one mesh");
-  G4VScoringMesh* mesh = scoringManager->GetMesh(meshID);
-  if ( ! mesh ) {
-    G4ExceptionDescription msg;
-    msg<<"Cannot find mesh with id: "<<meshID;
-    G4Exception("G4MPIScorerMerger::MergeOneMesh()","G4MPI001",FatalException,
-                 msg);
+void G4MPIscorerMerger::Send(const unsigned int destination) {
+  DMSG(1,"Sending scorers "<<this);
+  //Step 1: Setup buffer to pack/unpack data
+  const G4int newbuffsize = CalculatePackSize(scoringManager);
+  //DestroyBuffer();
+  char* buffer = outputBuffer;
+  if ( newbuffsize > outputBufferSize ) {
+      delete[] outputBuffer;
+      buffer = new char[newbuffsize];
+      //Avoid complains from valgrind (i'm not really sure why this is needed, but, beside the
+      //small cpu penalty, we can live with that).)
+      std::fill( buffer , buffer+newbuffsize,0);
+      ownsBuffer = true;
   }
-  for ( std::vector<convMap_t*>::const_iterator it = convertedMesh.begin() ; 
-        it != convertedMesh.end() ; ++it ) 
-  {
-    //Create a hits-collection from this convMap_t object
-    const convMap_t* const elem = *it;
-    G4THitsMap<G4double> hc(mesh->GetWorldName(),elem->name);
-    for ( G4int i = 0 ; i < elem->numElems; ++i )
-      hc.set( elem->indexes[i] , elem->values[i] );
-    DMSG(3,"Original mesh: "<<*(mesh->GetScoreMap().find(elem->name)->second));
-    DMSG(3,"Received mesh: "<<hc);
-    mesh->Accumulate(&hc);
-    DMSG(3,"Original mesh after accumulation: "
-         <<*(mesh->GetScoreMap().find(elem->name)->second));
-  }
-  DMSG(2,"Merging one mesh done");
+  SetupOutputBuffer(buffer,newbuffsize,0);
+  DMSG(3,"Buffer Size: "<<newbuffsize<< " bytes at: "<<(void*)outputBuffer);
+  Pack(scoringManager);
+  assert(outputBufferSize==outputBufferPosition);
+
+  //Version 1: p2p communication
+  comm.Send( outputBuffer , outputBufferSize , MPI::PACKED ,
+                                                 destination , G4MPImanager::kTAG_CMDSCR);
+  bytesSent += newbuffsize;
+  //Receiver should use probe to get size of the package being sent
+  DMSG(1,"Sending done");
 }
+
+void G4MPIscorerMerger::Pack(const G4ScoringManager* sm) {
+  assert(sm!=nullptr);
+  if ( outputBuffer == nullptr || outputBufferPosition>=outputBufferSize) {
+      G4Exception("G4MPIscorerMerger::Pack(const G4ScoringManager*)",
+                "MPI001",FatalException,
+                "Call SetOututBuffer before trying to pack");
+      return;
+  }
+  DMSG(2,"Starting packing of meshes, # meshes: "<<sm->GetNumberOfMesh());
+  /*const*/ size_t numMeshes=sm->GetNumberOfMesh();//TODO: OLD MPI interface
+  MPI_Pack(&numMeshes,1,MPI::UNSIGNED,
+                outputBuffer,outputBufferSize,
+                &outputBufferPosition,
+                comm);
+  for (size_t i = 0; i <numMeshes; ++i)
+    {
+      MPI_Pack(&i,1,MPI::UNSIGNED,
+          outputBuffer,outputBufferSize,
+          &outputBufferPosition,comm);
+      Pack(sm->GetMesh(i));
+    }
+}
+
+void G4MPIscorerMerger::UnPackAndMerge(const G4ScoringManager* sm) {
+  assert(sm!=nullptr);
+  if ( outputBuffer == nullptr || outputBufferPosition>=outputBufferSize) {
+      G4Exception("G4MPIscorerMerger::UnPack(const G4ScroingManager*)",
+                "MPI001",FatalException,
+                "Call SetOututBuffer before trying to un-pack");
+      return;
+  }
+  size_t numMeshes=0;
+  MPI_Unpack(outputBuffer,outputBufferSize,&outputBufferPosition,
+      &numMeshes,1,MPI::UNSIGNED,comm);
+  if ( numMeshes != sm->GetNumberOfMesh() ) {
+      G4ExceptionDescription msg;
+      msg << "Number of meshes to unpack ("<<numMeshes;
+      msg <<") does not correspond to expected number ("<<sm->GetNumberOfMesh();
+      msg<<")";
+      G4Exception("G4MPIscorerMerger::UnPack(const G4ScroingManager*)",
+                "MPI001",FatalException,msg);
+      return;
+  }
+
+  size_t meshid=0;
+  for ( size_t i = 0 ; i < numMeshes ; ++i ) {
+      MPI_Unpack(outputBuffer,outputBufferSize,&outputBufferPosition,
+          &meshid,1,MPI::UNSIGNED,comm);
+      if ( meshid != i )  {
+          G4ExceptionDescription msg;
+          msg<<"Cannot unpack: expecting mesh "<<i<<" and found "<<meshid;
+          msg<<" during unpack.";
+          G4Exception("G4MPIscorerMerger::UnPack(const G4ScroingManager*)",
+                    "MPI001",FatalException,msg);
+          return;
+      }
+      G4VScoringMesh* original = sm->GetMesh(i);
+      UnPackAndMerge(original);
+  }
+}
+
+void G4MPIscorerMerger::Pack(const G4VScoringMesh* mesh) {
+  assert(mesh!=nullptr);
+  assert(outputBuffer!=nullptr);
+  assert(outputBufferPosition<=outputBufferSize);
+  DMSG(3,"Packing mesh: "<<mesh);
+
+  const MeshScoreMap& map = mesh->GetScoreMap();
+  /*const*/ size_t nummaps = map.size();//TODO: old MPI interface
+  MPI_Pack(&nummaps,1,MPI::UNSIGNED,
+      outputBuffer,outputBufferSize,
+      &outputBufferPosition,comm);
+  for ( const auto& ele: map ) {
+      const G4String& name = ele.first;
+      /*const*/ size_t ss = name.size();
+      MPI_Pack(&ss,1,MPI::UNSIGNED,
+          outputBuffer,outputBufferSize,
+          &outputBufferPosition,comm);
+#ifdef G4MPI_USE_MPI_PACK_NOT_CONST
+      char* nn = new char[name.length()];
+      std::copy(name.begin(),name.end(),nn); 
+#else
+      const char* nn = name.c_str();
+#endif
+      MPI_Pack(nn,ss,MPI::CHAR,
+          outputBuffer,outputBufferSize,
+          &outputBufferPosition,comm);
+      Pack(ele.second);
+#ifdef G4MPI_USE_MPI_PACK_NOT_CONST
+      delete[] nn;
+#endif
+  }
+}
+
+void G4MPIscorerMerger::UnPackAndMerge(G4VScoringMesh* inmesh) {
+  assert(outputBuffer!=nullptr);
+  assert(outputBufferPosition<=outputBufferSize);
+  assert(inmesh!=nullptr);
+  DMSG(3,"Preparing to unpack a mesh and merge into: "<<inmesh);
+  const G4String& detName = inmesh->GetWorldName();
+  size_t nummaps = 0;
+  MPI_Unpack(outputBuffer,outputBufferSize,&outputBufferPosition,
+      &nummaps,1,MPI::UNSIGNED,comm);
+  for ( size_t i = 0 ; i < nummaps ; ++i ) {
+      size_t nameSize = 0;
+      MPI_Unpack(outputBuffer,outputBufferSize,&outputBufferPosition,
+          &nameSize,1,MPI::UNSIGNED,comm);
+      //Create a null-terminated c-string: needed later when converting this to a G4String
+      //(Not sure: but issue reported by valgrind with the use of MPI_Unpack)
+      char* name = new char[nameSize+1];
+      std::fill(name,name+nameSize+1,0);
+      MPI_Unpack(outputBuffer,outputBufferSize,&outputBufferPosition,
+          name,nameSize,MPI::CHAR,comm);
+      const G4String colname(name,nameSize);
+      delete[] name;
+      //This memory churn is very inefficient, but we cannot reuse the HitMap
+      //because we cannot change the names
+      //TODO: Evaluate change in HitMap class to allow for change of names
+      HitMap* hm = UnPackHitMap(detName,colname);
+      inmesh->Accumulate(hm);
+      delete hm;
+  }
+}
+
+void G4MPIscorerMerger::Pack(const HitMap* sm) {
+  assert(sm!=nullptr);
+  assert(outputBuffer!=nullptr);
+  assert(outputBufferPosition<=outputBufferSize);
+  DMSG(3,"Packing hitmap: "<<sm<<" with: "<<sm->GetSize()<<" elements.");
+  /*const*/ size_t numEl = sm->GetSize();//TODO: old MPI implementation
+  MPI_Pack(&numEl,1,MPI::UNSIGNED,
+      outputBuffer,outputBufferSize,
+      &outputBufferPosition,comm);
+  const auto& theMap = *sm->GetMap();
+  std::vector<G4int> ids;
+  std::vector<G4double> vals;
+  std::transform(theMap.begin(),theMap.end(),std::back_inserter(ids),
+      [](decltype(*theMap.begin())& e){ return e.first;});
+  std::transform(theMap.begin(),theMap.end(),std::back_inserter(vals),
+      [](decltype(*theMap.begin())& e){ return *e.second;});
+  assert(ids.size()==vals.size()&&ids.size()==numEl);
+  MPI_Pack(ids.data(),ids.size(),MPI::INT,
+      outputBuffer,outputBufferSize,
+      &outputBufferPosition,comm);
+  MPI_Pack(vals.data(),vals.size(),MPI::DOUBLE,
+      outputBuffer,outputBufferSize,
+      &outputBufferPosition,comm);
+}
+
+HitMap* G4MPIscorerMerger::UnPackHitMap(const G4String& detName,
+                                                                const G4String& colName) {
+  assert(outputBuffer!=nullptr);
+  assert(outputBufferPosition<=outputBufferSize);
+  DMSG(3,"Preparing to unpack a hit map for: "<<detName<<","<<colName);
+  size_t numEl =0 ;
+  MPI_Unpack(outputBuffer,outputBufferSize,&outputBufferPosition,
+      &numEl,1,MPI::UNSIGNED,comm);
+  G4int* ids = new G4int[numEl];
+  MPI_Unpack(outputBuffer,outputBufferSize,&outputBufferPosition,
+      ids,numEl,MPI::INT,comm);
+  G4double* vals = new G4double[numEl];
+  MPI_Unpack(outputBuffer,outputBufferSize,&outputBufferPosition,
+      vals,numEl,MPI::DOUBLE,comm);
+  HitMap* result = new HitMap(detName,colName);
+  for ( unsigned int i = 0; i<numEl;++i) result->set(ids[i],vals[i]);
+  delete[] ids;
+  delete[] vals;
+  return result;
+}
+
+G4int G4MPIscorerMerger::CalculatePackSize(const G4ScoringManager* sm) const
+{
+  DMSG(3,"Calculating dimension of data to send");
+  if ( sm == nullptr ) return 0;
+  //Calcualte how much data each call to Pack* appends to the buffer
+  //e.g. sizeof(data)
+  //The number of sizeof here should match the number of calls to MPI_Pack
+
+  //Pack(ScoringMgr)
+  G4int size = sizeof(unsigned int);
+  DMSG(3,"There are "<<sm->GetNumberOfMesh()<<" meshes.");
+  //Loop on mesh
+  for ( size_t i = 0 ; i<sm->GetNumberOfMesh() ; ++i ) {
+      size += sizeof(unsigned int);//ID
+      size += CalculatePackSize(sm->GetMesh(i));
+  }
+  return size;
+}
+
+G4int G4MPIscorerMerger::CalculatePackSize(const G4VScoringMesh* mesh) const
+{
+  DMSG(3,"Calculating size for mesh: "<<mesh);
+  //PackSingleMesh(Mesh)
+  G4int size = sizeof(unsigned int);//num maps
+  const MeshScoreMap& map = mesh->GetScoreMap();
+  for (const auto& ele : map ) {
+      //PackHitsMap
+      size += sizeof(unsigned int);//name size
+      const G4String& name = ele.first;
+      size += sizeof(char)*name.size();//name
+      size += CalculatePackSize(ele.second);
+  }
+  DMSG(3,"mesh "<<mesh<<" size: "<<size);
+  return size;
+}
+
+G4int G4MPIscorerMerger::CalculatePackSize(const HitMap* map) const {
+  const G4int numEls = map->GetSize();
+  G4int size = sizeof(unsigned int);
+  size += sizeof(G4int)*numEls;
+  size += sizeof(G4double)*numEls;
+  DMSG(3,"HitMap "<<map<<" size: "<<size<<" in "<<numEls<<" elements.");
+  return size;
+}
+
 

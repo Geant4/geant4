@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity2/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id: EventAction.cc 68999 2013-04-15 09:23:17Z gcosmo $
+// $Id: EventAction.cc 93259 2015-10-14 08:35:22Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,34 +34,42 @@
 #include "EventAction.hh"
 
 #include "RunAction.hh"
-#include "EventActionMessenger.hh"
 
+#include "Run.hh"
 #include "G4Event.hh"
+#include "G4RunManager.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(RunAction* run)
-:fRunAct(run), fDrawFlag("none"), fPrintModulo(10000), fEventMessenger(0)
+EventAction::EventAction():fEventNumber(0)
 {
-  fEventMessenger = new EventActionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
 {
-  delete fEventMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::BeginOfEventAction(const G4Event* evt)
+void EventAction::BeginOfEventAction(const G4Event* )
 {
- G4int evtNb = evt->GetEventID();
+ //G4int evtNb = evt->GetEventID();
+
 
  //survey convergence
  //
- if (evtNb%fPrintModulo == 0) fRunAct->SurveyConvergence(evtNb);
+ Run* run = static_cast<Run*>(
+            G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+ G4int printProgress = G4RunManager::GetRunManager()->GetPrintProgress();
+ if (fEventNumber%printProgress == 0)
+   {
+     run->SurveyConvergence(fEventNumber);
+   }
+
+ fEventNumber++;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -3,7 +3,7 @@
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
-/* @(#) $Id: uncompr.cc 69560 2013-05-08 12:23:51Z gcosmo $ */
+/* @(#) $Id: uncompr.cc 93155 2015-10-08 12:00:14Z gcosmo $ */
 
 #define ZLIB_INTERNAL
 #include "zlib.h"
@@ -26,7 +26,7 @@ int ZEXPORT uncompress (Bytef *dest, uLongf *destLen, const Bytef *source, uLong
     z_stream stream;
     int err;
 
-    stream.next_in = (Bytef*)source;
+    stream.next_in = (z_const Bytef*)source;
     stream.avail_in = (uInt)sourceLen;
     /* Check for source > 64K on 16-bit machine: */
     if ((uLong)stream.avail_in != sourceLen) return Z_BUF_ERROR;

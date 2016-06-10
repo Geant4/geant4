@@ -1,5 +1,5 @@
 Hi-------------------------------------------------------------------
-$Id: History 85605 2014-10-31 11:18:19Z gcosmo $
+$Id: History 89572 2015-04-20 07:18:15Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History 85605 2014-10-31 11:18:19Z gcosmo $
 
                       Category History file
                       ---------------------
+
+20.04.2015 - V.Ivanhenko Tag (lAr_calorimeter-V10-01-00)
+             Fixed internal array overflow in FCALTestSetupSD, which
+             provides crashes in MT mode, which are  difficult to explain
 
 31.10.2014 - L.Pandola Tag (lAr_calorimeter-V10-00-04)
              Changed interface of FCALMaterialConsultant to avoid multiple 

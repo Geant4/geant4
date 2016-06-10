@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc 85263 2014-10-27 08:58:31Z gcosmo $
+// $Id: G4OpenGLImmediateSceneHandler.cc 87695 2014-12-17 09:35:24Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -248,9 +248,10 @@ void G4OpenGLImmediateSceneHandler::BeginPrimitives2D
   glMatrixMode (GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity();
-#ifndef G4OPENGL_VERSION_2
-  glOrtho (-1., 1., -1., 1., -G4OPENGL_FLT_BIG, G4OPENGL_FLT_BIG);
-#endif
+  G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+  if (pViewer) {
+    pViewer->g4GlOrtho (-1., 1., -1., 1., -G4OPENGL_FLT_BIG, G4OPENGL_FLT_BIG);
+  }
   glMatrixMode (GL_MODELVIEW);
   glPushMatrix();
   glLoadIdentity();

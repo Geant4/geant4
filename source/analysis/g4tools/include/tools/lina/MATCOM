@@ -1,0 +1,657 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_MATCOM
+#define tools_MATCOM
+
+/* NOTE : bof, no big improvement.
+#include <cstring> //memcpy
+inline void vec_copy(double* a_to,const double* a_from,unsigned int a_number) {
+  ::memcpy(a_to,a_from,a_number*sizeof(double));
+}
+
+template <class T>
+inline void vec_copy(T* a_to,const T* a_from,unsigned int a_number) {
+  T* pto = (T*)a_to;
+  T* pfm = (T*)a_from;
+  for(unsigned int i=0;i<a_number;i++,pto++,pfm++) *pto = *pfm;
+}
+*/
+
+/*NOTE : bof, no big improvement.
+#include <Accelerate/Accelerate.h>
+
+inline void vec_add(const float* a_1,const float* a_2,float* a_res,unsigned int a_number) {
+  ::vDSP_vadd(a_1,1,a_2,1,a_res,1,a_number);
+}
+inline void vec_sub(const float* a_1,const float* a_2,float* a_res,unsigned int a_number) {
+  ::vDSP_vsub(a_1,1,a_2,1,a_res,1,a_number);
+}
+*/
+
+/*
+template <class T>
+inline void vec_add(const T* a_1,const T* a_2,T* a_res,unsigned int a_number) {
+  T* p1 = (T*)a_1;
+  T* p2 = (T*)a_2;
+  T* pr = (T*)a_res;
+  for(unsigned int i=0;i<a_number;i++,p1++,p2++,pr++) *pr = *p1+*p2;
+}
+
+template <class T>
+inline void vec_sub(const T* a_1,const T* a_2,T* a_res,unsigned int a_number) {
+  T* p1 = (T*)a_1;
+  T* p2 = (T*)a_2;
+  T* pr = (T*)a_res;
+  for(unsigned int i=0;i<a_number;i++,p1++,p2++,pr++) *pr = *p1-*p2;
+}
+*/
+
+// common code to class mat and nmat.
+
+#define TOOLS_MATCOM \
+protected:\
+  static T zero() {return T();}\
+  static T one() {return T(1);}\
+  static T minus_one() {return T(-1);}\
+  static T two() {return T(2);}\
+public:\
+  typedef T elem_t;\
+  typedef unsigned int size_type;\
+public:\
+  unsigned int rows() const {return dimension();}\
+  unsigned int cols() const {return dimension();}\
+\
+  void set_value(unsigned int aR,unsigned int aC,const T& a_value) { \
+    m_vec[aR + aC * dimension()] = a_value;\
+  }\
+\
+  const T& value(unsigned int aR,unsigned int aC) const { \
+    return m_vec[aR + aC * dimension()];\
+  }\
+\
+  T value(unsigned int aR,unsigned int aC) { \
+    return m_vec[aR + aC * dimension()];\
+  }\
+\
+  void set_matrix(const TOOLS_MAT_CLASS& a_m){ /*optimization.*/\
+    _copy(a_m.m_vec);\
+  }\
+\
+  void set_constant(const T& a_v){\
+    for(unsigned int i=0;i<dim2();i++) m_vec[i] = a_v;\
+  }\
+  void set_zero(){\
+    set_constant(zero());\
+  }\
+  void set_identity() {\
+    set_zero();\
+    for(unsigned int i=0;i<dimension();i++) m_vec[i+i*dimension()] = one();\
+  }\
+  void set_diagonal(const T& a_s) {\
+    set_zero();\
+    for(unsigned int i=0;i<dimension();i++) m_vec[i+i*dimension()] = a_s;\
+  }\
+  typedef T (*func)(const T&);\
+  void apply_func(func a_func) {\
+    T* pos = m_vec;\
+    for(unsigned int i=0;i<dim2();i++,pos++) *pos = a_func(*pos);\
+  }\
+  template <class RANDOM>\
+  void set_random(RANDOM& a_random) {\
+    for(unsigned int i=0;i<dim2();i++) m_vec[i] = a_random.shoot();\
+  }\
+public:\
+  template <class VEC>\
+  bool mul_vec(VEC& a_vec,T a_tmp[]) const {\
+    /* a_vec = this *= a_vec */\
+    unsigned int _dim = dimension();\
+    if(a_vec.dimension()!=_dim) return false;\
+    T* pos = a_tmp;\
+    for(unsigned int r=0;r<_dim;r++,pos++) {\
+      *pos = T();\
+      for(unsigned int c=0;c<_dim;c++) *pos += m_vec[r+c*_dim]*a_vec[c];\
+    }\
+   {for(unsigned int i=0;i<_dim;i++) a_vec[i] = a_tmp[i];}\
+    return true;\
+  }\
+  template <class VEC>\
+  bool mul_vec(VEC& a_vec) const {\
+    T* res = new T[dimension()];\
+    bool status = mul_vec(a_vec,res);\
+    delete [] res;\
+    return status;\
+  }\
+  void mul_mtx(const TOOLS_MAT_CLASS& a_m) {\
+    _mul_mtx(a_m.m_vec);\
+  }\
+  void mul_mtx(const TOOLS_MAT_CLASS& a_m,T a_tmp[]) {\
+    _mul_mtx(a_m.m_vec,a_tmp);\
+  }\
+  void left_mul_mtx(const TOOLS_MAT_CLASS& a_m) {    \
+    /* this = a_m * this :*/\
+    _left_mul_mtx(a_m.m_vec);\
+  }\
+  bool equal(const TOOLS_MAT_CLASS& a_m) const {\
+    if(&a_m==this) return true;\
+    for(unsigned int i=0;i<dim2();i++) {\
+      if(m_vec[i]!=a_m.m_vec[i]) return false;\
+    }\
+    return true;\
+  }\
+\
+  bool equal(const TOOLS_MAT_CLASS& a_m,const T& a_prec) const {\
+    if(&a_m==this) return true;\
+    T* tp = (T*)m_vec;\
+    T* mp = (T*)a_m.m_vec;\
+    for(unsigned int i=0;i<dim2();i++,tp++,mp++) {\
+      T diff = (*tp) - (*mp);\
+      if(diff<zero()) diff *= minus_one();\
+      if(diff>=a_prec) return false;\
+    }\
+    return true;\
+  }\
+\
+  void mx_diff(const TOOLS_MAT_CLASS& a_m,T& a_mx_diff) const {\
+    T* tp = (T*)m_vec;\
+    T* mp = (T*)a_m.m_vec;\
+    a_mx_diff = (*tp) - (*mp);\
+    if(a_mx_diff<zero()) a_mx_diff *= minus_one();\
+    for(unsigned int i=0;i<dim2();i++,tp++,mp++) {\
+      T diff = (*tp) - (*mp);\
+      if(diff<zero()) diff *= minus_one();\
+      a_mx_diff = (diff>a_mx_diff?diff:a_mx_diff);\
+    }\
+  }\
+\
+  bool is_proportional(const TOOLS_MAT_CLASS& a_m,const T& a_prec,T& a_factor) const {\
+    if(&a_m==this) {a_factor=one();return true;}\
+    /* If true, then : a_m = a_factor * this.*/\
+    a_factor = zero();\
+    T* tp = (T*)m_vec;\
+    T* mp = (T*)a_m.m_vec;\
+    bool first = true;\
+    for(unsigned int i=0;i<dim2();i++,tp++,mp++) {\
+             if( ((*tp)==zero()) && ((*mp)==zero())) {\
+        continue;\
+      } else if( ((*tp)!=zero()) && ((*mp)==zero())) {\
+        return false;\
+      } else if( ((*tp)==zero()) && ((*mp)!=zero())) {\
+        return false;\
+      } else {\
+        if(first) {\
+          a_factor = (*mp)/(*tp);\
+          first = false;\
+        } else {\
+          T diff = (*tp)*a_factor - (*mp);\
+          if(diff<zero()) diff *= minus_one();\
+          if(diff>=a_prec) return false;\
+        }\
+      }\
+    }\
+    return true;\
+  }\
+\
+  const T* data() const {return m_vec;}\
+  unsigned int size() const {return dim2();}\
+  unsigned int data_size() const {return dim2();} /*for mathz*/\
+\
+  T trace() const {\
+    T _value = zero();\
+    unsigned int _D = dimension();\
+    for(unsigned int c=0;c<_D;c++) _value += m_vec[c+c*_D];\
+    return _value;\
+  }\
+\
+  void transpose() {\
+    unsigned int _D = dimension();\
+    for(unsigned int r=0;r<_D;r++) {\
+      for(unsigned int c=(r+1);c<_D;c++) {\
+        T vrc = value(r,c);\
+        T vcr = value(c,r);\
+        set_value(r,c,vcr);\
+        set_value(c,r,vrc);\
+      }\
+    }\
+  }\
+\
+  void multiply(const T& a_T) {\
+    for(unsigned int i=0;i<dim2();i++) m_vec[i] *= a_T;\
+  }\
+\
+  bool is_symmetric() const {\
+    unsigned int _D = dimension();\
+    for(unsigned int r=0;r<_D;r++) {\
+      for(unsigned int c=(r+1);c<_D;c++) {\
+        if(value(r,c)!=value(c,r)) return false;\
+      }\
+    }\
+    return true;\
+  }\
+\
+  bool is_antisymmetric() const {\
+    unsigned int _D = dimension();\
+   {for(unsigned int r=0;r<_D;r++) {\
+      if(value(r,r)!=zero()) return false;\
+    }}\
+    for(unsigned int r=0;r<_D;r++) {\
+      for(unsigned int c=(r+1);c<_D;c++) {\
+        if(value(r,c)!=minus_one()*value(c,r)) return false;\
+      }\
+    }\
+    return true;\
+  }\
+\
+  void symmetric_part(TOOLS_MAT_CLASS& a_res) const {\
+    a_res = *this;\
+    a_res.transpose();\
+    a_res += *this;\
+    a_res.multiply(one()/two());\
+  }\
+\
+  void antisymmetric_part(TOOLS_MAT_CLASS& a_res) const {\
+    a_res = *this;\
+    a_res.transpose();\
+    a_res.multiply(minus_one());\
+    a_res += *this;\
+    a_res.multiply(one()/two());\
+  }\
+\
+  T determinant(unsigned int a_tmp_rs[],unsigned int a_tmp_cs[]) const { /*[rord=dim-1]*/ \
+    unsigned int ord = dimension();\
+    if(ord==0) {\
+      return zero();\
+    } else if(ord==1) {\
+      return *m_vec;\
+    } else if(ord==2) {\
+      T v00 = *m_vec;\
+      T v01 = *(m_vec+ord);\
+      T v10 = *(m_vec+1);\
+      T v11 = *(m_vec+1+ord);\
+      return (v00 * v11 - v10 * v01);\
+    } else if(ord==3) {\
+      /*   00 01 02 \
+           10 11 12 \
+           20 21 22 \
+      */\
+      T v01 = *(m_vec+ord);\
+      T v02 = *(m_vec+2*ord);\
+      T v11 = *(m_vec+1+ord);\
+      T v12 = *(m_vec+1+2*ord);\
+      T v21 = *(m_vec+2+ord);\
+      T v22 = *(m_vec+2+2*ord);\
+      T cof_00 = v11 * v22 - v21 * v12;\
+      T cof_10 = v01 * v22 - v21 * v02;\
+      T cof_20 = v01 * v12 - v11 * v02;\
+      T v00 = *m_vec;\
+      T v10 = *(m_vec+1);\
+      T v20 = *(m_vec+2);\
+      return (v00*cof_00-v10*cof_10+v20*cof_20);\
+    }\
+\
+    unsigned int rord = ord-1;\
+\
+    T v_rc;\
+\
+    T det = zero();\
+   {for(unsigned int i=0;i<rord;i++) {a_tmp_cs[i] = i+1;}}\
+    unsigned int c = 0;\
+\
+   {for(unsigned int i=0;i<rord;i++) {a_tmp_rs[i] = i+1;}}\
+    bool sg = true; /*c=0+r=0*/\
+    for(unsigned int r=0;r<ord;r++) {\
+      if(r>=1) a_tmp_rs[r-1] = r-1;\
+      v_rc = value(r,c);\
+      if(v_rc!=zero()) {\
+        T subdet = sub_determinant(rord,a_tmp_rs,a_tmp_cs);\
+        if(sg) \
+          det += v_rc * subdet;\
+        else\
+          det -= v_rc * subdet;\
+      }\
+      sg = sg?false:true;\
+    }\
+\
+    return det;\
+  }\
+\
+  T determinant() const {\
+    unsigned int ord = dimension();\
+    if(ord==0) {\
+      return zero();\
+    } else if(ord==1) {\
+      return *m_vec;\
+    } else if(ord==2) {\
+      T v00 = *m_vec;\
+      T v01 = *(m_vec+ord);\
+      T v10 = *(m_vec+1);\
+      T v11 = *(m_vec+1+ord);\
+      return (v00 * v11 - v10 * v01);\
+    } else if(ord==3) {\
+      T v01 = *(m_vec+ord);\
+      T v02 = *(m_vec+2*ord);\
+      T v11 = *(m_vec+1+ord);\
+      T v12 = *(m_vec+1+2*ord);\
+      T v21 = *(m_vec+2+ord);\
+      T v22 = *(m_vec+2+2*ord);\
+      T cof_00 = v11 * v22 - v21 * v12;\
+      T cof_10 = v01 * v22 - v21 * v02;\
+      T cof_20 = v01 * v12 - v11 * v02;\
+      T v00 = *m_vec;\
+      T v10 = *(m_vec+1);\
+      T v20 = *(m_vec+2);\
+      return (v00*cof_00-v10*cof_10+v20*cof_20);\
+    }\
+    unsigned int rord = ord-1;\
+    unsigned int* rs = new unsigned int[rord];\
+    unsigned int* cs = new unsigned int[rord];\
+    T det = determinant(rs,cs);\
+    delete [] rs;\
+    delete [] cs;\
+    return det;\
+  }\
+\
+  bool invert(TOOLS_MAT_CLASS& a_res) const {\
+    /*Generic invertion method.*/\
+    unsigned int ord = dimension();\
+    if(ord==0) return true;\
+\
+    if(ord==1) {\
+      T v = value(0,0);\
+      if(v==zero()) return false;\
+      a_res.set_value(0,0,one()/v);\
+      return true;\
+    }\
+  \
+    unsigned int rord = ord-1;\
+    unsigned int* cs = new unsigned int[rord];\
+    unsigned int* rs = new unsigned int[rord];\
+  \
+    /* Get det with r = 0;*/\
+    T det = zero();\
+   {\
+   {for(unsigned int i=0;i<rord;i++) {rs[i] = i+1;}}\
+    unsigned int r = 0;\
+    /*if(r>=1) rs[r-1] = r-1;*/\
+  \
+   {for(unsigned int i=0;i<rord;i++) {cs[i] = i+1;}}\
+    bool sg = true; /*r=0+c=0*/\
+    for(unsigned int c=0;c<ord;c++) {\
+      if(c>=1) cs[c-1] = c-1;\
+      T subdet = sub_determinant(rord,rs,cs);\
+      T sgn = sg ? one() : minus_one();\
+      det += value(r,c) * subdet * sgn;\
+      T _value = subdet * sgn;\
+      a_res.set_value(c,r,_value);\
+      sg = sg?false:true;\
+    }}\
+  \
+    if(det==zero()) {\
+      delete [] cs;\
+      delete [] rs;\
+      return false;\
+    }  \
+\
+   {for(unsigned int c=0;c<ord;c++) {\
+      a_res.set_value(c,0,a_res.value(c,0)/det);\
+    }}\
+  \
+   {for(unsigned int i=0;i<rord;i++) {rs[i] = i+1;}}\
+    bool sgr = false; /*r=1+c=0*/\
+    for(unsigned int r=1;r<ord;r++) {\
+      if(r>=1) rs[r-1] = r-1;\
+     {for(unsigned int i=0;i<rord;i++) {cs[i] = i+1;}}\
+      bool sg = sgr;\
+      for(unsigned int c=0;c<ord;c++) {\
+        if(c>=1) cs[c-1] = c-1;\
+        T subdet = sub_determinant(rord,rs,cs);\
+        T sgn = sg ? one() : minus_one();\
+        T _value = (subdet * sgn)/det;\
+        a_res.set_value(c,r,_value);\
+        sg = sg?false:true;\
+      }\
+      sgr = sgr?false:true;\
+    }\
+  \
+    delete [] cs;\
+    delete [] rs;\
+\
+    return true;\
+  }\
+\
+  void power(unsigned int a_n,TOOLS_MAT_CLASS& a_res) const {\
+    a_res.set_identity();\
+    for(unsigned int i=0;i<a_n;i++) {\
+      a_res._mul_mtx(m_vec);\
+    }\
+  }\
+\
+  void exp(unsigned int a_le,TOOLS_MAT_CLASS& a_res) const {\
+    /* result = I + M + M**2/2! + M**3/3! + .... */\
+    a_res.set_identity();\
+    TOOLS_MAT_CLASS tmp(*this);\
+    tmp.set_identity();\
+    for(unsigned int i=1;i<=a_le;i++) {\
+      tmp._mul_mtx(m_vec);\
+      tmp.multiply(one()/T(i)); \
+      a_res += tmp;\
+    }\
+  }\
+\
+  void log(unsigned int a_le,TOOLS_MAT_CLASS& a_res) const {\
+    /* result = (M-I) - (M-I)**2/2 + (M-I)**3/3 +... */\
+    /* WARNING : touchy, it may not converge ! */\
+    a_res.set_zero();\
+\
+    TOOLS_MAT_CLASS M_I;\
+    M_I.set_identity();\
+    M_I.multiply(minus_one());\
+    M_I._add_mtx(m_vec);\
+\
+    TOOLS_MAT_CLASS M_Ip(M_I);\
+    T fact = -1;\
+\
+    TOOLS_MAT_CLASS tmp;\
+\
+    for(unsigned int i=0;i<=a_le;i++) {\
+      fact *= minus_one();      \
+      tmp = M_Ip;\
+      tmp.multiply(fact/T(i+1)); \
+      a_res += tmp;\
+      M_Ip._mul_mtx(M_I.m_vec);\
+    }\
+  }\
+  template <class MAT>\
+  bool copy(const MAT& a_from) {\
+    /*for exa from a double matrix to a symbol matrix*/\
+    unsigned int _D = dimension();\
+    if(a_from.dimension()!=_D) return false;\
+    for(unsigned int r=0;r<_D;r++) {\
+      for(unsigned int c=0;c<_D;c++) {\
+        set_value(r,c,a_from.value(r,c));\
+      }\
+    }\
+    return true;\
+  }\
+public: /*operators*/\
+  T operator()(unsigned int a_r,unsigned int a_c) const {\
+    /*WARNING : no check on a_r,a_c.*/\
+    return m_vec[a_r + a_c * dimension()];\
+  }\
+\
+  T& operator[](unsigned int a_index) { /*for inlib/sg/sf_vec*/\
+    /*WARNING : no check on a_index.*/\
+    return m_vec[a_index];\
+  }\
+  const T& operator[](unsigned int a_index) const {\
+    /*WARNING : no check on a_index.*/\
+    return m_vec[a_index];\
+  }\
+  bool operator==(const TOOLS_MAT_CLASS& a_array) const {\
+    return equal(a_array);\
+  }\
+  bool operator!=(const TOOLS_MAT_CLASS& a_array) const {\
+    return !operator==(a_array);\
+  }\
+  TOOLS_MAT_CLASS& operator*=(const TOOLS_MAT_CLASS& a_m) {\
+    _mul_mtx(a_m.m_vec);\
+    return *this;\
+  }\
+  TOOLS_MAT_CLASS& operator+=(const TOOLS_MAT_CLASS& a_m) {\
+    _add_mtx(a_m.m_vec);\
+    return *this;\
+  }\
+  TOOLS_MAT_CLASS& operator-=(const TOOLS_MAT_CLASS& a_m) {\
+    _sub_mtx(a_m.m_vec);\
+    return *this;\
+  }\
+  TOOLS_MAT_CLASS& operator*=(const T& a_fac) {\
+    for(unsigned int i=0;i<dim2();i++) m_vec[i] *= a_fac;\
+    return *this;\
+  }\
+\
+  TOOLS_MAT_CLASS operator*(const T& a_fac) {\
+    TOOLS_MAT_CLASS res;\
+    res.operator*=(a_fac);\
+    return res;\
+  }\
+protected:\
+  void _copy(const T a_m[]) {\
+   {T* tp = (T*)m_vec;T* ap = (T*)a_m;\
+    for(unsigned int i=0;i<dim2();i++,tp++,ap++) *tp = *ap;}\
+   /*{for(unsigned int i=0;i<dim2();i++) m_vec[i] = a_m[i];}*/\
+   /* memcpy does not work with std::complex<> and mat<symbol,4> see inlib/tests/symbolic.cpp */\
+    /*vec_copy(m_vec,a_m,dim2());*/\
+  }\
+\
+  void _add_mtx(const T a_m[]) {  /* this = this + a_m, */\
+   {T* tp = (T*)m_vec;T* ap = (T*)a_m;\
+    for(unsigned int i=0;i<dim2();i++,tp++,ap++) *tp += *ap;}\
+    /*for(unsigned int i=0;i<dim2();i++) m_vec[i] += a_m[i];*/\
+    /*vec_add(m_vec,a_m,m_vec,dim2());*/\
+  }\
+  void _sub_mtx(const T a_m[]) {  /* this = this - a_m, */\
+   {T* tp = (T*)m_vec;T* ap = (T*)a_m;\
+    for(unsigned int i=0;i<dim2();i++,tp++,ap++) *tp -= *ap;}\
+    /*for(unsigned int i=0;i<dim2();i++) m_vec[i] -= a_m[i];*/\
+    /*vec_sub(m_vec,a_m,m_vec,dim2());*/\
+  }\
+\
+/*\
+  void _mul_mtx(const T a_m[],T a_tmp[]) {\
+    unsigned int ord = dimension();\
+    for(unsigned int r=0;r<ord;r++) {\
+      for(unsigned int c=0;c<ord;c++) {\
+        T _value = zero();\
+        for(unsigned int i=0;i<ord;i++) {\
+          _value += (*(m_vec+r+i*ord)) * (*(a_m+i+c*ord)); //optimize.\
+        }\
+        *(a_tmp+r+c*ord) = _value;\
+      }\
+    }\
+    _copy(a_tmp);\
+  }\
+*/\
+  void _mul_mtx(const T a_m[],T a_tmp[]) { /*OPTIMIZATION*/\
+    /* this = this * a_m */\
+    typedef T* Tp;\
+    Tp tpos,ttpos,rpos,apos,mpos,aapos;\
+    T _value;\
+    unsigned int r,c,i;\
+\
+    unsigned int _D = dimension();\
+\
+    tpos = a_tmp;\
+    for(r=0;r<_D;r++,tpos++) {\
+      ttpos = tpos;\
+      rpos = m_vec+r;\
+      apos = (T*)a_m;\
+      for(c=0;c<_D;c++,ttpos+=_D,apos+=_D) {\
+        _value = zero();\
+        mpos = rpos;\
+        aapos = apos;\
+        for(i=0;i<_D;i++,mpos+=_D,aapos++) _value += (*mpos) * (*aapos);\
+        *ttpos = _value;\
+      }\
+    }\
+    _copy(a_tmp);\
+  }\
+\
+  void _mul_mtx(const T a_m[]) {\
+    T* res = new T[dim2()];\
+    _mul_mtx(a_m,res);\
+    delete [] res;\
+  }\
+\
+  void _left_mul_mtx(const T a_m[]) {\
+    /* this = a_m * this */\
+    unsigned int _D = dimension();\
+    T* res = new T[dim2()];\
+    for(unsigned int r=0;r<_D;r++) {\
+      for(unsigned int c=0;c<_D;c++) {\
+        T _value = zero();\
+        for(unsigned int i=0;i<_D;i++) {\
+          _value += (*(a_m+r+i*_D)) * (*(m_vec+i+c*_D)); /*optimize.*/\
+        }\
+        *(res+r+c*_D) = _value;\
+      }\
+    }\
+    _copy(res);\
+    delete [] res;\
+  }\
+\
+  T sub_determinant(unsigned int a_ord,unsigned int aRs[],unsigned int aCs[]) const {\
+    /*WARNING : to optimize, we do not check the content of aRs, aCs.*/\
+    unsigned int ord = a_ord;\
+    if(ord==0) return zero();\
+    else if(ord==1) return value(aRs[0],aCs[0]);\
+    else if(ord==2) {\
+      /*return (value(aRs[0],aCs[0]) * value(aRs[1],aCs[1]) -\
+               value(aRs[1],aCs[0]) * value(aRs[0],aCs[1])); \
+      Optimize the upper :*/\
+\
+      unsigned int r_0 = aRs[0];\
+      unsigned int r_1 = aRs[1];\
+      unsigned int c_0 = aCs[0];\
+      unsigned int c_1 = aCs[1];\
+\
+      unsigned int _ord = dimension();\
+      const T* p = m_vec;\
+\
+      return ( (*(p+r_0+c_0*_ord)) * (*(p+r_1+c_1*_ord)) -\
+               (*(p+r_1+c_0*_ord)) * (*(p+r_0+c_1*_ord)) );\
+    }\
+\
+    unsigned int rord = ord-1;\
+    unsigned int* cs = new unsigned int[rord];\
+    unsigned int* rs = new unsigned int[rord];\
+\
+    T v_rc;\
+\
+    T det = zero();\
+   {for(unsigned int i=0;i<rord;i++) {cs[i] = aCs[i+1];}}\
+    unsigned int c = 0;\
+    /*if(c>=1) cs[c-1] = c-1;*/\
+\
+   {for(unsigned int i=0;i<rord;i++) {rs[i] = aRs[i+1];}}\
+    bool sg = true; /*c=0+r=0*/\
+    for(unsigned int r=0;r<ord;r++) {\
+      if(r>=1) rs[r-1] = aRs[r-1];\
+      v_rc = value(aRs[r],aCs[c]);\
+      if(v_rc!=zero()) {\
+        T subdet = sub_determinant(rord,rs,cs);\
+        if(sg)\
+          det += v_rc * subdet;\
+        else\
+          det -= v_rc * subdet;\
+      }\
+      sg = sg?false:true;\
+    }\
+\
+    delete [] cs;\
+    delete [] rs;\
+\
+    return det;\
+  }
+
+#endif

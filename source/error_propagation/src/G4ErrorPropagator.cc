@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorPropagator.cc 78318 2013-12-11 15:02:40Z gcosmo $
+// $Id: G4ErrorPropagator.cc 91809 2015-08-06 13:00:09Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -350,7 +350,7 @@ G4int G4ErrorPropagator::MakeSteps( G4ErrorFreeTrajState* currentTS_FREE )
     {
       break;
     }
-  }
+  }  // Loop checking, 06.08.2015, G.Cosmo
   return ierr;
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc 82050 2014-06-10 08:24:52Z gcosmo $
+// $Id: G4VisCommandsCompound.cc 91686 2015-07-31 09:40:08Z gcosmo $
 
 // Compound /vis/ commands - John Allison  15th May 2000
 
@@ -238,22 +238,6 @@ G4VisCommandOpen::G4VisCommandOpen() {
     ("The scene handler becomes current (the name is auto-generated).");
   G4UIparameter* parameter;
   parameter = new G4UIparameter("graphics-system-name", 's', omitable = false);
-   const G4GraphicsSystemList& gslist =
-    fpVisManager->GetAvailableGraphicsSystems();
-  G4String candidates;
-  for (size_t igslist = 0; igslist < gslist.size(); igslist++) {
-    const G4String& name = gslist[igslist]->GetName();
-    const G4String& nickname = gslist[igslist]->GetNickname();
-    if (nickname.isNull()) {
-      candidates += name;
-    }
-    else {
-      candidates += nickname;
-    }
-    candidates += " ";
-  }
-  candidates = candidates.strip();
-  parameter->SetParameterCandidates(candidates);
   fpCommand->SetParameter(parameter);
   parameter = new G4UIparameter("window-size-hint", 's', omitable = true);
   parameter->SetGuidance

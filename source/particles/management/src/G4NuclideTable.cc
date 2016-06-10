@@ -37,6 +37,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
 #include "G4NuclideTable.hh"
+#include "G4NuclideTableMessenger.hh"
 
 #include "G4ios.hh"
 #include "globals.hh"
@@ -46,8 +47,7 @@
 #include <fstream>
 #include <sstream>
 
-const G4double G4NuclideTable::levelTolerance = 1.0*eV;
-// const G4double G4NuclideTable::levelTolerance = 1.0e-3*eV;
+// const G4double G4NuclideTable::levelTolerance = 
 //  torelance for excitation energy
   
  
@@ -61,24 +61,21 @@ G4NuclideTable* G4NuclideTable::GetInstance() {
 G4NuclideTable::G4NuclideTable()
   :G4VIsotopeTable("Isomer"),
    threshold_of_half_life(1000.0*ns),
+   minimum_threshold_of_half_life(DBL_MAX),
    fUserDefinedList(NULL), 
-   fIsotopeList(0) 
+   fIsotopeList(NULL),
+   flevelTolerance(1.0e-3*eV)
 {
   //SetVerboseLevel(G4ParticleTable::GetParticleTable()->GetVerboseLevel());
-  FillHardCodeList();
+  //FillHardCodeList();
+  fMessenger = new G4NuclideTableMessenger(this);
+  fIsotopeList = new G4IsotopeList();
+  GenerateNuclide();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 G4NuclideTable::~G4NuclideTable()
 {
-  if (fIsotopeList!=0) {
-    for (size_t i = 0 ; i<fIsotopeList->size(); i++) {
-      delete (*fIsotopeList)[i];
-    }
-    fIsotopeList->clear();
-    delete fIsotopeList;
-    fIsotopeList = 0;
-  }
 
   for ( std::map< G4int , std::multimap< G4double , G4IsotopeProperty* > >::iterator 
      it = map_pre_load_list.begin(); it != map_pre_load_list.end(); it++ ) {
@@ -86,25 +83,23 @@ G4NuclideTable::~G4NuclideTable()
   }
   map_pre_load_list.clear();
 
-  for ( std::map< G4int , std::multimap< G4double , G4IsotopeProperty* > >::iterator 
-     it = map_hard_code_list.begin(); it != map_hard_code_list.end(); it++ ) {
-     for ( std::multimap< G4double , G4IsotopeProperty* >::iterator 
-        itt = it->second.begin(); itt != it->second.end(); itt++ ) {
-        delete itt->second;
-     }
-     it->second.clear();
-  }
-  map_hard_code_list.clear();
 
   for ( std::map< G4int , std::multimap< G4double , G4IsotopeProperty* > >::iterator 
      it = map_full_list.begin(); it != map_full_list.end(); it++ ) {
-     for ( std::multimap< G4double , G4IsotopeProperty* >::iterator 
-        itt = it->second.begin(); itt != it->second.end(); itt++ ) {
-        delete itt->second;
-     }
      it->second.clear();
   }
   map_full_list.clear();
+
+  if (fIsotopeList!=0) {
+    for (size_t i = 0 ; i<fIsotopeList->size(); i++) {
+       //G4IsotopeProperty* fProperty = (*fIsotopeList)[i]; std::cout << fProperty->GetAtomicNumber() << " " << fProperty->GetAtomicMass() << " " << fProperty->GetEnergy() << std::endl;
+      delete (*fIsotopeList)[i];
+    }
+    fIsotopeList->clear();
+    delete fIsotopeList;
+    fIsotopeList = 0;
+  }
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -112,122 +107,36 @@ G4NuclideTable::~G4NuclideTable()
 G4IsotopeProperty* G4NuclideTable::GetIsotope(G4int Z, G4int A, G4double E)
 {
 
-   G4IsotopeProperty* fProperty = 0;
-   G4int ionCode = 1000*Z + A;
+   G4IsotopeProperty* fProperty = NULL;
+
+   // At first searching UserDefined
+   if ( fUserDefinedList != NULL ) {
+      for ( G4IsotopeList::iterator it = fUserDefinedList->begin() ; it != fUserDefinedList->end() ; it++ ) {
+        
+         if ( Z == (*it)->GetAtomicNumber() && A == (*it)->GetAtomicMass() ) {
+            G4double levelE = (*it)->GetEnergy();         
+            if ( levelE - flevelTolerance/2 <= E && E < levelE + flevelTolerance/2 ) {
+               return *it; //found
+            }
+         }
+
+      }
+   } 
 
    //Serching pre-load
    //Note: isomer level is properly set only for pre_load_list.
-   if ( map_pre_load_list.find( ionCode ) !=  map_pre_load_list.end() ) {
+   //
+   G4int ionCode = 1000*Z + A;
+   std::map< G4int , std::multimap< G4double , G4IsotopeProperty* > >::iterator itf = map_pre_load_list.find( ionCode );
 
-     std::multimap< G4double , G4IsotopeProperty* >::iterator lower_bound_itr = 
-       map_pre_load_list.find( ionCode ) -> second.lower_bound ( E - levelTolerance/2 );
-     
-     //std::multimap< G4double , G4IsotopeProperty* >::iterator upper_bound_itr = 
-     //map_pre_load_list.find( ionCode ) -> second.upper_bound ( E );
-     
-     G4double levelE = DBL_MAX;
-     if ( lower_bound_itr !=  map_pre_load_list.find( ionCode ) -> second.end() ) {
-       levelE = lower_bound_itr->first;
-       if ( levelE - levelTolerance/2 <= E && E < levelE + levelTolerance/2 ) {
-         return lower_bound_itr->second; // found
-       } 
-     }
-   }
-     
-   //Searching hard-code
-   if ( map_hard_code_list.find( ionCode ) !=  map_hard_code_list.end() ) {
-      std::multimap< G4double , G4IsotopeProperty* >::iterator lower_bound_itr = 
-      map_hard_code_list.find( ionCode ) -> second.lower_bound ( E - levelTolerance/2 );
-
-      //std::multimap< G4double , G4IsotopeProperty* >::iterator upper_bound_itr = 
-      //map_pre_load_list.find( ionCode ) -> second.upper_bound ( E );
-      
+   if ( itf !=  map_pre_load_list.end() ) {
+      std::multimap< G4double , G4IsotopeProperty* >::iterator lower_bound_itr = itf -> second.lower_bound ( E - flevelTolerance/2 );
       G4double levelE = DBL_MAX;
-      if ( lower_bound_itr !=  map_hard_code_list.find( ionCode ) -> second.end() ) {
+      if ( lower_bound_itr !=  itf -> second.end() ) {
          levelE = lower_bound_itr->first;
-	 if ( levelE - levelTolerance/2 <= E && E < levelE + levelTolerance/2 ) {
-	   return lower_bound_itr->second; // found
-	 }
-      }
-   }
-
-   //Searching big-list 
-   char* path = getenv("G4ENSDFSTATEDATA");
-
-   if ( !path ) {
-      return fProperty; // not found;
-   }
-
-   if ( map_full_list.find( ionCode ) ==  map_full_list.end() ) {
-
-      std::multimap<G4double, G4IsotopeProperty*> aMultiMap;
-      map_full_list.insert( std::pair< G4int , std::multimap< G4double , G4IsotopeProperty* > > ( ionCode , aMultiMap ) );
-
-      std::fstream ifs;
-      G4String filename(path);
-      filename += "/ENSDFSTATE.dat";
-      ifs.open( filename.c_str() );
-
-      G4bool reading_target = false; 
-
-      G4int ionZ;
-      G4int ionA;
-      G4double ionE;
-      G4double ionLife;
-      G4int ionJ;
-      G4double ionMu;
-      
-      ifs >> ionZ >> ionA >> ionE >> ionLife >> ionJ >> ionMu;
-
-      while ( ifs.good() ) {
-
-         if ( ionZ == Z && ionA == A ) {
-
-            reading_target = true;
-
-            ionE *= keV;
-            ionLife *= ns;
-            ionMu *= (joule/tesla);
-
-            G4IsotopeProperty* property = new G4IsotopeProperty(); 
-
-            G4int iLevel=9;
-            property->SetAtomicNumber(ionZ);
-            property->SetAtomicMass(ionA);
-            property->SetIsomerLevel(iLevel);
-            property->SetEnergy(ionE);
-            property->SetiSpin(ionJ);
-            property->SetLifeTime(ionLife);
-            property->SetMagneticMoment(ionMu);
-       
-            map_full_list.find ( ionCode ) -> second.insert( std::pair< G4double, G4IsotopeProperty* >( ionE , property ) );
-
-         } else if ( reading_target == true ) {
-            ifs.close();
-            break;
+         if ( levelE - flevelTolerance/2 <= E && E < levelE + flevelTolerance/2 ) {
+            return lower_bound_itr->second; // found
          }
-         
-         ifs >> ionZ >> ionA >> ionE >> ionLife >> ionJ >> ionMu;
-      }
-
-      ifs.close();
-   }
-
-
-   if ( map_full_list.find( ionCode ) !=  map_full_list.end() ) {
-
-      std::multimap< G4double , G4IsotopeProperty* >::iterator lower_bound_itr = 
-      map_full_list.find( ionCode ) -> second.lower_bound ( E - levelTolerance/2 );
-
-      //std::multimap< G4double , G4IsotopeProperty* >::iterator upper_bound_itr = 
-      //map_full_list.find( ionCode ) -> second.upper_bound ( E - levelTolerance/2 );
-      
-      G4double levelE = DBL_MAX;
-      if ( lower_bound_itr !=  map_full_list.find( ionCode ) -> second.end() ) {
-         levelE = lower_bound_itr->first;
-	 if ( levelE - levelTolerance/2 < E && E < levelE + levelTolerance/2 ) {
-	   return lower_bound_itr->second; // found
-	 }
       }
    }
 
@@ -245,186 +154,37 @@ G4IsotopeProperty*
 ///////////////////////////////////////////////////////////////////////////////
 void G4NuclideTable::FillHardCodeList()
 {
-   for (size_t i=0; i<nEntries_ground_state; i++) {
-
-      G4int    ionZ     = (G4int)groundStateTable[i][idxZ];
-      G4int    ionA     = (G4int)groundStateTable[i][idxA];
-      G4int    lvl      = 0; // ground state
-      G4double ionE     = groundStateTable[i][idxEnergy]*keV;
-      G4double ionLife  = groundStateTable[i][idxLife]*ns;
-      G4int    ionJ     = (G4int)(groundStateTable[i][idxSpin]);
-      G4double ionMu    = groundStateTable[i][idxMu]*(joule/tesla);
-
-      G4int ionCode = 1000*ionZ + ionA;
-
-      G4IsotopeProperty* fProperty = new G4IsotopeProperty(); 
-
-      // Set Isotope Property
-      fProperty->SetAtomicNumber(ionZ);
-      fProperty->SetAtomicMass(ionA);
-      fProperty->SetIsomerLevel(lvl);
-      fProperty->SetEnergy(ionE);
-      fProperty->SetiSpin(ionJ);
-      fProperty->SetLifeTime(ionLife);
-      fProperty->SetDecayTable(0);
-      fProperty->SetMagneticMoment(ionMu);
-
-      if ( map_hard_code_list.find ( ionCode ) == map_hard_code_list.end() ) {
-         std::multimap<G4double, G4IsotopeProperty*> aMultiMap;
-         map_hard_code_list.insert( std::pair< G4int , std::multimap< G4double , G4IsotopeProperty* > > ( ionCode , aMultiMap ) );
-      }
-      map_hard_code_list.find ( ionCode ) -> second.insert( std::pair< G4double, G4IsotopeProperty* >( ionE , fProperty ) );
-
-   }
-
-   for (size_t i=0; i<nEntries_excite_state; i++) {
-
-      G4int    ionZ     = (G4int)exciteStateTable[i][idxZ];
-      G4int    ionA     = (G4int)exciteStateTable[i][idxA];
-      G4double ionE     = exciteStateTable[i][idxEnergy]*keV;
-      G4double ionLife  = exciteStateTable[i][idxLife]*ns;
-      G4int    ionJ     = (G4int)(exciteStateTable[i][idxSpin]);
-      G4double ionMu    = exciteStateTable[i][idxMu]*(joule/tesla);
-
-      G4int ionCode = 1000*ionZ + ionA;
-
-      G4IsotopeProperty* fProperty = new G4IsotopeProperty(); 
-
-      // Set Isotope Property
-      fProperty->SetAtomicNumber(ionZ);
-      fProperty->SetAtomicMass(ionA);
-      fProperty->SetIsomerLevel(9);
-      fProperty->SetEnergy(ionE);
-      fProperty->SetiSpin(ionJ);
-      fProperty->SetLifeTime(ionLife);
-      fProperty->SetDecayTable(0);
-      fProperty->SetMagneticMoment(ionMu);
-
-      if ( map_hard_code_list.find ( ionCode ) == map_hard_code_list.end() ) {
-         std::multimap<G4double, G4IsotopeProperty*> aMultiMap;
-         map_hard_code_list.insert( std::pair< G4int , std::multimap< G4double , G4IsotopeProperty* > > ( ionCode , aMultiMap ) );
-      }
-      map_hard_code_list.find ( ionCode ) -> second.insert( std::pair< G4double, G4IsotopeProperty* >( ionE , fProperty ) );
-
-   }
+   ;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 void G4NuclideTable::GenerateNuclide()
 {
 
-   if( fIsotopeList !=0 ) return;
-   fIsotopeList = new G4IsotopeList();
+   if ( threshold_of_half_life < minimum_threshold_of_half_life ) {
 
-   for (size_t i=0; i<nEntries_ground_state; i++) {
-
-      G4int    ionZ     = (G4int)groundStateTable[i][idxZ];
-      G4int    ionA     = (G4int)groundStateTable[i][idxA];
-      G4int    lvl      = 0; // ground state
-      G4double ionE     = groundStateTable[i][idxEnergy]*keV;
-      G4double ionLife  = groundStateTable[i][idxLife]*ns;
-      G4int    ionJ     = (G4int)(groundStateTable[i][idxSpin]);
-      G4double ionMu    = groundStateTable[i][idxMu]*(joule/tesla);
-
-      if ( ionLife < 0.0 || ionLife*std::log(2.0) > threshold_of_half_life ) {
-
-         G4IsotopeProperty* fProperty = new G4IsotopeProperty(); 
-
-         // Set Isotope Property
-         fProperty->SetAtomicNumber(ionZ);
-         fProperty->SetAtomicMass(ionA);
-         fProperty->SetIsomerLevel(lvl);
-         fProperty->SetEnergy(ionE);
-         fProperty->SetiSpin(ionJ);
-         fProperty->SetLifeTime(ionLife);
-         fProperty->SetDecayTable(0);
-         fProperty->SetMagneticMoment(ionMu);
-    
-         //G4cout << ionZ << " " << ionA << " " << lvl << " " << ionE/keV << " [keV]" << G4endl;
-         fIsotopeList->push_back(fProperty);
-
-         G4int ionCode = 1000*ionZ + ionA;
-         if ( map_pre_load_list.find ( ionCode ) == map_pre_load_list.end() ) {
-            std::multimap<G4double, G4IsotopeProperty*> aMultiMap;
-            map_pre_load_list.insert( std::pair< G4int , std::multimap< G4double , G4IsotopeProperty* > > ( ionCode , aMultiMap ) );
-         }
-         map_pre_load_list.find ( ionCode ) -> second.insert( std::pair< G4double, G4IsotopeProperty* >( ionE , fProperty ) );
-
-      }
-   }
-
-   if ( threshold_of_half_life >= 1.0*ns ) {
-
-      G4int ionCode=0;
-      G4int iLevel=0;
-      G4double previousE=0.0;
-      
-      for (size_t i=0; i<nEntries_excite_state; i++) {
-
-         G4int    ionZ     = (G4int)exciteStateTable[i][idxZ];
-         G4int    ionA     = (G4int)exciteStateTable[i][idxA];
-         if ( ionCode != 1000*ionZ + ionA ) {
-            previousE=0.0;
-            iLevel = 0;
-            ionCode = 1000*ionZ + ionA;
-         } 
-
-         G4double ionE     = exciteStateTable[i][idxEnergy]*keV;
-         G4double ionLife  = exciteStateTable[i][idxLife]*ns;
-         G4int    ionJ     = (G4int)(exciteStateTable[i][idxSpin]);
-         G4double ionMu    = exciteStateTable[i][idxMu]*(joule/tesla);
-
-         if (( ionLife < 0.0 || ionLife*ionLife*std::log(2.0) > threshold_of_half_life )
-           && (ionE > levelTolerance+previousE)) {
-            previousE = ionE;
-            iLevel++;
-            if ( iLevel > 9 ) iLevel=9;
-         //G4cout << ionZ << " " << ionA << " " << iLevel << " " << ionE/keV << " [keV]" << G4endl;
-
-            G4IsotopeProperty* fProperty = new G4IsotopeProperty(); 
-
-            // Set Isotope Property
-            fProperty->SetAtomicNumber(ionZ);
-            fProperty->SetAtomicMass(ionA);
-            fProperty->SetIsomerLevel(iLevel);
-            fProperty->SetEnergy(ionE);
-            fProperty->SetiSpin(ionJ);
-            fProperty->SetLifeTime(ionLife);
-            fProperty->SetDecayTable(0);
-            fProperty->SetMagneticMoment(ionMu);
-       
-            fIsotopeList->push_back(fProperty);
-
-            if ( map_pre_load_list.find ( ionCode ) == map_pre_load_list.end() ) {
-               std::multimap<G4double, G4IsotopeProperty*> aMultiMap;
-               map_pre_load_list.insert( std::pair< G4int , std::multimap< G4double , G4IsotopeProperty* > > ( ionCode , aMultiMap ) );
-            }
-            map_pre_load_list.find ( ionCode ) -> second.insert( std::pair< G4double, G4IsotopeProperty* >( ionE , fProperty ) );
-
-         }
-      }
-   } else {
+      // Need to update full list
 
       char* path = getenv("G4ENSDFSTATEDATA");
 
       if ( !path ) {
          G4Exception("G4NuclideTable", "PART70000",
-                  FatalException, "G4ENSDFSTATEDATA environment variable must be set");
-	 return;
+                     FatalException, "G4ENSDFSTATEDATA environment variable must be set");
+         return;
       }
-   
-      std::fstream ifs;
+
+      std::ifstream ifs;
       G4String filename(path);
       filename += "/ENSDFSTATE.dat";
 
       ifs.open( filename.c_str() );
-     
+
       if ( !ifs.good() ) {
          G4Exception("G4NuclideTable", "PART70001",
-                  FatalException, "ENSDFSTATE.dat is not found.");
-	 return;
+                     FatalException, "ENSDFSTATE.dat is not found.");
+         return;
       }
-     
+
 
       G4int ionCode=0;
       G4int iLevel=0;
@@ -435,28 +195,27 @@ void G4NuclideTable::GenerateNuclide()
       G4double ionLife;
       G4int ionJ;
       G4double ionMu;
-      
+
       ifs >> ionZ >> ionA >> ionE >> ionLife >> ionJ >> ionMu;
 
-      while ( ifs.good() ) {
+      while ( ifs.good() ) {// Loop checking, 09.08.2015, K.Kurashige
 
          if ( ionCode != 1000*ionZ + ionA ) {
-            iLevel = 0;
-            ionCode = 1000*ionZ + ionA;
-         } 
+              iLevel = 0;
+              ionCode = 1000*ionZ + ionA;
+         }
 
          ionE *= keV;
          ionLife *= ns;
          ionMu *= (joule/tesla);
 
-         //if ( ionLife == -1 || ionLife > threshold_of_half_life ) {
-         if ( ionLife*std::log(2.0) > threshold_of_half_life && ionE != 0 ) {
+         if ( ( ionE == 0 && minimum_threshold_of_half_life == DBL_MAX ) // ground state is alwyas build in very first attempt
+           || ( threshold_of_half_life <= ionLife*std::log(2.0) && ionLife*std::log(2.0) < minimum_threshold_of_half_life && ionE != 0 ) ) {
 
-            iLevel++;
+            if ( ionE > 0 ) iLevel++;
             if ( iLevel > 9 ) iLevel=9;
-            //G4cout << ionZ << " " << ionA << " " << iLevel << " " << ionE/keV << " [keV]" << G4endl;
 
-            G4IsotopeProperty* fProperty = new G4IsotopeProperty(); 
+            G4IsotopeProperty* fProperty = new G4IsotopeProperty();
 
             // Set Isotope Property
             fProperty->SetAtomicNumber(ionZ);
@@ -467,47 +226,93 @@ void G4NuclideTable::GenerateNuclide()
             fProperty->SetLifeTime(ionLife);
             fProperty->SetDecayTable(0);
             fProperty->SetMagneticMoment(ionMu);
-       
+
             fIsotopeList->push_back(fProperty);
 
-            if ( map_pre_load_list.find ( ionCode ) == map_pre_load_list.end() ) {
+            std::map< G4int , std::multimap< G4double , G4IsotopeProperty* > >::iterator itf = map_full_list.find( ionCode );
+            if ( itf == map_full_list.end() ) {
                std::multimap<G4double, G4IsotopeProperty*> aMultiMap;
-               map_pre_load_list.insert( std::pair< G4int , std::multimap< G4double , G4IsotopeProperty* > > ( ionCode , aMultiMap ) );
-            }
-            map_pre_load_list.find ( ionCode ) -> second.insert( std::pair< G4double, G4IsotopeProperty* >( ionE , fProperty ) );
-
+               //itf = map_full_list.insert( std::pair< G4int , std::multimap< G4double , G4IsotopeProperty* > > ( ionCode , aMultiMap ) );
+               itf = ( map_full_list.insert( std::pair< G4int , std::multimap< G4double , G4IsotopeProperty* > > ( ionCode , aMultiMap ) ) ).first;
+            } 
+            itf -> second.insert( std::pair< G4double, G4IsotopeProperty* >( ionE , fProperty ) );
          }
 
          ifs >> ionZ >> ionA >> ionE >> ionLife >> ionJ >> ionMu;
       }
 
+      minimum_threshold_of_half_life = threshold_of_half_life;
+
    }
 
-   if ( fUserDefinedList != NULL ) {
-      for ( G4IsotopeList::iterator it = fUserDefinedList->begin() ; it != fUserDefinedList->end() ; it++ ) {
-         fIsotopeList->push_back( *it );
+
+   // Clear current map
+   for ( std::map< G4int , std::multimap< G4double , G4IsotopeProperty* > >::iterator
+      it = map_pre_load_list.begin(); it != map_pre_load_list.end(); it++ ) {
+      it->second.clear();
+   }
+   map_pre_load_list.clear();
+
+   // Build map based on current threshold value 
+   for ( std::map< G4int , std::multimap< G4double , G4IsotopeProperty* > >::iterator
+      it = map_full_list.begin(); it != map_full_list.end(); it++ ) {
+
+      G4int ionCode = it->first;
+      std::map< G4int , std::multimap< G4double , G4IsotopeProperty* > >::iterator itf = map_pre_load_list.find( ionCode );
+      if ( itf == map_pre_load_list.end() ) {
+         std::multimap<G4double, G4IsotopeProperty*> aMultiMap;
+         itf = ( map_pre_load_list.insert( std::pair< G4int , std::multimap< G4double , G4IsotopeProperty* > > ( ionCode , aMultiMap ) ) ).first;
+      }
+      G4int iLevel = 0;
+      for ( std::multimap< G4double , G4IsotopeProperty* >::iterator
+         itt = it->second.begin(); itt != it->second.end(); itt++ ) {
+
+         G4double exEnergy = itt->first;
+         G4double meanLife = itt->second->GetLifeTime();
+
+         if ( exEnergy == 0.0
+           || meanLife*std::log(2.0) > threshold_of_half_life ) {
+
+            if ( itt->first != 0.0 ) iLevel++;
+            if ( iLevel > 9 ) iLevel=9;
+            itt->second->SetIsomerLevel( iLevel );
+
+            itf -> second.insert( std::pair< G4double, G4IsotopeProperty* >( exEnergy , itt->second ) );
+         }
       }
    }
 
 }
 
-void G4NuclideTable::AddState( G4int ionZ, G4int ionA, G4double ionE, G4double ionLife, G4int ionJ=0, G4double ionMu=0.0)
+void G4NuclideTable::AddState( G4int ionZ, G4int ionA, G4double ionE, G4double ionLife, G4int ionJ, G4double ionMu )
 {
+   if ( G4Threading::IsMasterThread() ) {
+
    if ( fUserDefinedList == NULL ) fUserDefinedList = new G4IsotopeList();
 
-            G4IsotopeProperty* fProperty = new G4IsotopeProperty(); 
+   G4IsotopeProperty* fProperty = new G4IsotopeProperty(); 
 
-            // Set Isotope Property
-            fProperty->SetAtomicNumber(ionZ);
-            fProperty->SetAtomicMass(ionA);
-            fProperty->SetIsomerLevel(9);
-            fProperty->SetEnergy(ionE);
-            fProperty->SetiSpin(ionJ);
-            fProperty->SetLifeTime(ionLife);
-            fProperty->SetDecayTable(0);
-            fProperty->SetMagneticMoment(ionMu);
-       
-            fUserDefinedList->push_back(fProperty);
+   // Set Isotope Property
+   fProperty->SetAtomicNumber(ionZ);
+   fProperty->SetAtomicMass(ionA);
+   fProperty->SetIsomerLevel(9);
+   fProperty->SetEnergy(ionE);
+   fProperty->SetiSpin(ionJ);
+   fProperty->SetLifeTime(ionLife);
+   fProperty->SetDecayTable(0);
+   fProperty->SetMagneticMoment(ionMu);
 
+   fUserDefinedList->push_back(fProperty);
+   fIsotopeList->push_back(fProperty);
+
+   }
 }
 
+#include "G4Threading.hh"
+void G4NuclideTable::SetThresholdOfHalfLife( G4double t )
+{
+   if ( G4Threading::IsMasterThread() ) {
+      threshold_of_half_life=t; 
+      GenerateNuclide();
+   }
+}

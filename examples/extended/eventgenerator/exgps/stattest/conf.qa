@@ -21,12 +21,12 @@ UnBinned = {
     'DefaultTestName':'KolmogorovSmirnovTest',
     'DefaultThresholds':[0.05,0.1],
     'DataSet' : [
-    {'Name':'/ntuple/MyTuple:Ekin','Type':'DOUBLE','Size':1},
+    {'Name':'/ntuple/101:Ekin','Type':'DOUBLE','Size':1},
     #{'Name':'/ntuple/MyTuple:PosX','Type':'DOUBLE','Size':1},
-    {'Name':'/ntuple/MyTuple:posY','Type':'DOUBLE','Size':1},
-    {'Name':'/ntuple/MyTuple:posZ','Type':'DOUBLE','Size':1},
-    {'Name':'/ntuple/MyTuple:dirTheta','Type':'DOUBLE','Size':1},
-    {'Name':'/ntuple/MyTuple:dirPhi','Type':'DOUBLE','Size':1},
+    #{'Name':'/ntuple/101:posY','Type':'DOUBLE','Size':1},
+    #{'Name':'/ntuple/101:posZ','Type':'DOUBLE','Size':1},
+    {'Name':'/ntuple/101:dirTheta','Type':'DOUBLE','Size':1},
+    {'Name':'/ntuple/101:dirPhi','Type':'DOUBLE','Size':1},
     #{'Name':'/ntuple/MyTuple:weight','Type':'DOUBLE','Size':1},
     ]
     } 

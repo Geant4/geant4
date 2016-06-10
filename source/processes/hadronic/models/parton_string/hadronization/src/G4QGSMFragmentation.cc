@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QGSMFragmentation.cc 84707 2014-10-20 07:15:31Z gcosmo $
+// $Id: G4QGSMFragmentation.cc 92025 2015-08-13 14:17:05Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -38,6 +38,8 @@
 #include "G4FragmentingString.hh"
 #include "G4DiQuarks.hh"
 #include "G4Quarks.hh"
+
+#include "G4Pow.hh"
 
 //#define debug_QGSMfragmentation                       // Uzhi Oct. 2014
 
@@ -99,7 +101,7 @@ G4KineticTrackVector* G4QGSMFragmentation::FragmentString(const G4ExcitedString&
 
 	G4bool success=false, inner_sucess=true;
 	G4int attempt=0;
-	while ( !success && attempt++ < StringLoopInterrupt )
+	while ( !success && attempt++ < StringLoopInterrupt )  /* Loop checking, 07.08.2015, A.Ribon */
 	{
 #ifdef debug_QGSMfragmentation                          // Uzhi Oct. 2014
   G4cout<<"Loop_toFrag "<<theStringInCMS->GetLeftParton()->GetPDGcode()<<" "
@@ -115,8 +117,9 @@ G4KineticTrackVector* G4QGSMFragmentation::FragmentString(const G4ExcitedString&
 		RightVector->clear();
 		
 		inner_sucess=true;  // set false on failure..
-
-		while (! StopFragmenting(currentString) )
+                const G4int maxNumberOfLoops = 1000;
+                G4int loopCounter = -1;
+		while (! StopFragmenting(currentString) && ++loopCounter < maxNumberOfLoops )   /* Loop checking, 07.08.2015, A.Ribon */
 		{  // Split current string into hadron + new string
 
 #ifdef debug_QGSMfragmentation                          // Uzhi Oct. 2014
@@ -146,11 +149,14 @@ G4KineticTrackVector* G4QGSMFragmentation::FragmentString(const G4ExcitedString&
 
 			 // abandon ... start from the beginning
 			   if (newString) delete newString;
-			   if (Hadron)    delete Hadron;
 			   inner_sucess=false;
 			   break;
 			}
-		} 
+		}
+                if ( loopCounter >= maxNumberOfLoops ) {
+                  inner_sucess=false;
+                }
+
 		// Split current string into 2 final Hadrons
 #ifdef debug_QGSMfragmentation                          // Uzhi Oct. 2014
   G4cout<<"Split remaining string into 2 final hadrons."<<G4endl;
@@ -176,7 +182,7 @@ G4KineticTrackVector* G4QGSMFragmentation::FragmentString(const G4ExcitedString&
 	}
 		
 	// Join Left- and RightVector into LeftVector in correct order.
-	while(!RightVector->empty())
+	while(!RightVector->empty())  /* Loop checking, 07.08.2015, A.Ribon */
 	{
 	    LeftVector->push_back(RightVector->back());
 	    RightVector->erase(RightVector->end()-1);
@@ -254,13 +260,18 @@ G4double G4QGSMFragmentation::GetLightConeZ(G4double zmin, G4double zmax, G4int 
 
     invD1=1./d1; invD2=1./d2;
 
+    const G4int maxNumberOfLoops = 10000;
+    G4int loopCounter = 0;
     do
     {
-     r1=std::pow(G4UniformRand(),invD1);
-     r2=std::pow(G4UniformRand(),invD2);
+     r1=G4Pow::GetInstance()->powA(G4UniformRand(),invD1);
+     r2=G4Pow::GetInstance()->powA(G4UniformRand(),invD2);
      r12=r1+r2;
      z=r1/r12;
-    } while( (r12 > 1.0) || !((zmin <= z)&&(z <= zmax)));
+    } while( ( (r12 > 1.0) || !((zmin <= z)&&(z <= zmax))) && ++loopCounter < maxNumberOfLoops );  /* Loop checking, 07.08.2015, A.Ribon */
+    if ( loopCounter >= maxNumberOfLoops ) {
+      z = 0.5*(zmin + zmax);  // Just a value between zmin and zmax, no physics considerations at all! 
+    }
 
     return z;
   }
@@ -286,13 +297,18 @@ G4double G4QGSMFragmentation::GetLightConeZ(G4double zmin, G4double zmax, G4int 
      d1+=1.0; d2+=1.0;
      invD1=1./d1; invD2=1./d2;
 
+     const G4int maxNumberOfLoops = 10000;
+     G4int loopCounter = 0;
      do
      {
-      r1=std::pow(G4UniformRand(),invD1);
-      r2=std::pow(G4UniformRand(),invD2);
+      r1=G4Pow::GetInstance()->powA(G4UniformRand(),invD1);
+      r2=G4Pow::GetInstance()->powA(G4UniformRand(),invD2);
       r12=r1+r2;
       z=r1/r12;
-     } while( (r12 > 1.0) || !((zmin <= z)&&(z <= zmax)));
+     } while( ( (r12 > 1.0) || !((zmin <= z)&&(z <= zmax))) && ++loopCounter < maxNumberOfLoops );  /* Loop checking, 07.08.2015, A.Ribon */ 
+     if ( loopCounter >= maxNumberOfLoops ) {
+       z = 0.5*(zmin + zmax);  // Just a value between zmin and zmax, no physics considerations at all! 
+     }
 
      return z;
     }
@@ -307,13 +323,15 @@ G4double G4QGSMFragmentation::GetLightConeZ(G4double zmin, G4double zmax, G4int 
       d2 =  (alft - (2.*aksi - arho));
     }
 
+    const G4int maxNumberOfLoops = 1000;
+    G4int loopCounter = 0;
     do  
     {
       z = zmin + G4UniformRand() * (zmax - zmin);
       d1 =  (1. - z);
-      yf = std::pow(d1, d2);
+      yf = G4Pow::GetInstance()->powA(d1, d2);
     } 
-    while (G4UniformRand() > yf); 
+    while( (G4UniformRand() > yf) && ++loopCounter < maxNumberOfLoops );  /* Loop checking, 07.08.2015, A.Ribon */   
   }
 
   return z;
@@ -326,8 +344,11 @@ G4LorentzVector * G4QGSMFragmentation::SplitEandP(G4ParticleDefinition * pHadron
 {
        G4double HadronMass = pHadron->GetPDGMass();
 
-       G4double MinimalStringMass= FragmentationMass(NewString,&G4HadronBuilder::BuildHighSpin);
-
+//       G4double MinimalStringMass= FragmentationMass(NewString,&G4HadronBuilder::BuildHighSpin);
+       G4double MinimalStringMass= 
+       FragmentationMass(NewString,&G4HadronBuilder::Build); // Uzhi 03.06.2015
+//       FragmentationMass(NewString,&G4HadronBuilder::BuildLowSpin); // Uzhi 03.06.2015
+// Uzhi 03.06.2015 It would be well to sample randomly HighSpin
 #ifdef debug_QGSMfragmentation                          // Uzhi Oct. 2014
   G4cout<<"G4QGSMFragmentation::SplitEandP "<<pHadron->GetParticleName()<<G4endl;
   G4cout<<"String 4 mom, String M "<<string->Get4Momentum()<<" "<<string->Mass()<<G4endl;
@@ -367,7 +388,7 @@ G4LorentzVector * G4QGSMFragmentation::SplitEandP(G4ParticleDefinition * pHadron
         HadronMassT2 = sqr(HadronMass) + HadronPt.mag2();
         ResidualMassT2=sqr(MinimalStringMass) + RemSysPt.mag2();
 
-       } while(std::sqrt(HadronMassT2) + std::sqrt(ResidualMassT2) > StringMT);
+       } while(std::sqrt(HadronMassT2) + std::sqrt(ResidualMassT2) > StringMT);  /* Loop checking, 07.08.2015, A.Ribon */
 
        //...  sample z to define hadron longitudinal momentum and energy
        //... but first check the available phase space
@@ -446,6 +467,8 @@ G4bool G4QGSMFragmentation::SplitLast(G4FragmentingString * string,
     G4double ClusterMassCut = ClusterMass;            // Taken from G4VLongitudinalStringDecay
     G4int cClusterInterrupt = 0;
     G4ParticleDefinition * LeftHadron, * RightHadron;
+    const G4int maxNumberOfLoops = 1000;
+    G4int loopCounter = 0;
     do
     {
         if (cClusterInterrupt++ >= ClusterLoopInterrupt)
@@ -481,7 +504,12 @@ G4bool G4QGSMFragmentation::SplitLast(G4FragmentingString * string,
 	if ( quark->GetParticleSubType()== "quark" ) {ClusterMassCut = 0.;}
 	else {ClusterMassCut = ClusterMass;}
     } 
-    while (ResidualMass <= LeftHadron->GetPDGMass() + RightHadron->GetPDGMass()  + ClusterMassCut);
+    while ( (ResidualMass <= LeftHadron->GetPDGMass() + RightHadron->GetPDGMass() + ClusterMassCut)
+            && ++loopCounter < maxNumberOfLoops );  /* Loop checking, 07.08.2015, A.Ribon */
+
+    if ( loopCounter >= maxNumberOfLoops ) {
+      return false;
+    }
 
     //... compute hadron momenta and energies   
     G4LorentzVector  LeftMom, RightMom;

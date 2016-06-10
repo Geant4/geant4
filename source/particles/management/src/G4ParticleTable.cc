@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc 86781 2014-11-18 08:40:18Z gcosmo $
+// $Id: G4ParticleTable.cc 94421 2015-11-16 08:22:56Z gcosmo $
 //
 // class G4ParticleTable
 //
@@ -176,8 +176,7 @@ void G4ParticleTable::WorkerG4ParticleTable()
   }
 
   fIteratorShadow->reset(false);
-  while( (*fIteratorShadow)() )
-  {
+  while( (*fIteratorShadow)() ) { // Loop checking, 09.08.2015, K.Kurashige
     G4ParticleDefinition* particle = fIteratorShadow->value();
     fDictionary->insert( std::pair<G4String, G4ParticleDefinition*>(GetKey(particle), particle) );
     G4int code = particle->GetPDGEncoding();
@@ -195,8 +194,6 @@ void G4ParticleTable::WorkerG4ParticleTable()
 
 }
 
-// Do we need DestroySlaveG4ParticleTable()? 
-//
 ////////////////////
 G4ParticleTable::~G4ParticleTable()
 {
@@ -216,7 +213,6 @@ G4ParticleTable::~G4ParticleTable()
     fEncodingDictionary =0;
   }
 
-
   if(fDictionary){
     if (fIterator!=0 )delete fIterator;
     fIterator =0;
@@ -231,6 +227,32 @@ G4ParticleTable::~G4ParticleTable()
 
   fgParticleTable =0;
 
+}
+
+////////////////////
+void G4ParticleTable::DestroyWorkerG4ParticleTable()
+{
+  //delete Ion Table in worker thread
+  if (fIonTable!=0) fIonTable->DestroyWorkerG4IonTable();
+
+  // delete dictionary for encoding
+  if (fEncodingDictionary!=0){
+    fEncodingDictionary -> clear();
+    delete fEncodingDictionary;
+    fEncodingDictionary =0;
+  }
+
+  if(fDictionary){
+    if (fIterator!=0 )delete fIterator;
+    fIterator =0;
+
+    fDictionary->clear();
+    delete fDictionary;
+    fDictionary =0;
+  }
+
+  if (fParticleMessenger!=0) delete fParticleMessenger;  
+  fParticleMessenger =0;
 }
 
 ////////////////////
@@ -297,7 +319,7 @@ void G4ParticleTable::DeleteAllParticles()
   // delete all particles 
   G4PTblDicIterator *piter = fIterator; 
   piter -> reset(false);
-  while( (*piter)() ){
+  while( (*piter)() ){// Loop checking, 09.08.2015, K.Kurashige
 #ifdef G4VERBOSE
     if (verboseLevel>2){
       G4cout << "Delete " << (piter->value())->GetParticleName() 
@@ -478,7 +500,7 @@ G4ParticleDefinition* G4ParticleTable::GetParticle(G4int index) const
     G4PTblDicIterator *piter = fIterator; 
     piter -> reset(false);
     G4int counter = 0;
-    while( (*piter)() ){
+    while( (*piter)() ){ // Loop checking, 09.08.2015, K.Kurashige
       if ( counter == index ) return piter->value();
       counter++;
     }
@@ -594,7 +616,7 @@ void G4ParticleTable::DumpTable(const G4String &particle_name)
     // dump all particles 
     G4PTblDicIterator *piter = fIterator; 
     piter -> reset();
-    while( (*piter)() ){
+    while( (*piter)() ){// Loop checking, 09.08.2015, K.Kurashige
       (piter->value())->DumpTable();
     }
   } else {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh 86360 2014-11-10 08:34:16Z gcosmo $
+// $Id: G4OpenGLViewer.hh 87695 2014-12-17 09:35:24Z gcosmo $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -189,6 +189,14 @@ protected:
                    centerz,
                    GLdouble upx, GLdouble upy, GLdouble upz );
   // MESA implementation of gluLookAt
+  void g4GlOrtho (GLdouble left, GLdouble right,
+                  GLdouble bottom, GLdouble top,
+                  GLdouble near, GLdouble far);
+  // Redefinition on glOrtho to solve precision issues
+  void g4GlFrustum (GLdouble left, GLdouble right,
+                  GLdouble bottom, GLdouble top,
+                  GLdouble near, GLdouble far);
+  // Redefinition on glFrustum to solve precision issues
 
   G4bool                            fPrintColour;
   G4bool                            fVectoredPs;

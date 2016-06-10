@@ -42,7 +42,7 @@ class G4AnalysisManagerState;
 class G4BaseAnalysisManager
 {
   public:
-    G4BaseAnalysisManager(const G4AnalysisManagerState& state);
+    explicit G4BaseAnalysisManager(const G4AnalysisManagerState& state);
     virtual ~G4BaseAnalysisManager();
     
     // methods
@@ -51,18 +51,23 @@ class G4BaseAnalysisManager
     // starting from 0; with the following function it is possible to
     // change the first Id to start from other value
     G4bool SetFirstId(G4int firstId);
+    void  SetLockFirstId(G4bool lockFirstId);
 
     // Access method
     G4int GetFirstId() const;
-    
+
   protected:
     // data members
     const G4AnalysisManagerState& fState;
     G4int    fFirstId;
-    G4bool   fLockFirstId; 
+    G4bool   fLockFirstId;
 };
 
 // inline functions
+
+inline void G4BaseAnalysisManager::SetLockFirstId(G4bool lockFirstId) {
+  fLockFirstId = lockFirstId;
+}  
 
 inline G4int G4BaseAnalysisManager::GetFirstId() const {
   return fFirstId;

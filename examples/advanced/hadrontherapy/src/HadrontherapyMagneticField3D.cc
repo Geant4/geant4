@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//    *************************************
-//    *                                   *
-//    *    HadrontherapyMagneticField3D.cc     *
-//    *                                   *
-//    *************************************
-//
-//
+// Hadrontherapy advanced example for Geant4
+// See more at: https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamplesHadrontherapy
 
 #include "HadrontherapyMagneticField3D.hh"
 #include "G4SystemOfUnits.hh"
@@ -88,11 +83,10 @@ HadrontherapyMagneticField3D::HadrontherapyMagneticField3D( const char* filename
   G4double bx=0.;
   G4double by=0.;
   G4double bz=0.;
-  double permeability=0.; // Not used in this example.
   for (ix=0; ix<nx; ix++) {
     for (iy=0; iy<ny; iy++) {
       for (iz=0; iz<nz; iz++) {
-        file >> xval >> yval >> zval >> bx >> by >> bz >> permeability;
+        file >> xval >> yval >> zval >> bx >> by >> bz ;
         if ( ix==0 && iy==0 && iz==0 ) {
           minx = xval * lenUnit;
           miny = yval * lenUnit;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXm.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4OpenGLStoredXm.hh 91686 2015-07-31 09:40:08Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -33,9 +33,9 @@
 #ifndef G4OPENGLSTOREDXM_HH
 #define G4OPENGLSTOREDXM_HH
 
-#include "G4VGraphicsSystem.hh"
+#include "G4OpenGLXm.hh"
 
-class G4OpenGLStoredXm: public G4VGraphicsSystem {
+class G4OpenGLStoredXm: public G4OpenGLXm {
 public:
   G4OpenGLStoredXm ();
   G4VSceneHandler* CreateSceneHandler (const G4String& name = "");

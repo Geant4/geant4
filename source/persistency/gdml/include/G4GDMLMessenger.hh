@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLMessenger.hh 68053 2013-03-13 14:39:51Z gcosmo $
+// $Id: G4GDMLMessenger.hh 89381 2015-04-08 15:32:47Z gcosmo $
 //
 //
 // class G4GDMLMessenger
@@ -49,6 +49,7 @@ class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
+class G4UIcmdWithABool;
 
 class G4GDMLMessenger : public G4UImessenger
 {
@@ -69,7 +70,9 @@ class G4GDMLMessenger : public G4UImessenger
     G4UIcmdWithAString*        ReaderCmd;
     G4UIcmdWithAString*        WriterCmd;    
     G4UIcmdWithAString*        TopVolCmd;    
-    G4UIcmdWithoutParameter*   ClearCmd;    
+    G4UIcmdWithoutParameter*   ClearCmd;
+    G4UIcmdWithABool*          RegionCmd;    
+    G4UIcmdWithABool*          EcutsCmd;    
 };
 
 #endif

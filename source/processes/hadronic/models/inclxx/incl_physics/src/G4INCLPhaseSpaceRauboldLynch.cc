@@ -221,7 +221,7 @@ namespace G4INCL {
       maxGeneratedWeight = std::max(weight, maxGeneratedWeight);
 // assert(weight<=weightMax);
       r = Random::shoot();
-    } while(++iter<maxIter && r*weightMax>weight);
+    } while(++iter<maxIter && r*weightMax>weight); /* Loop checking, 10.07.2015, D.Mancusi */
 
 #ifndef INCLXX_IN_GEANT4_MODE
     if(iter>=maxIter) {

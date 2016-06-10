@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomPhantomZSliceHeader.cc 84839 2014-10-21 13:44:55Z gcosmo $
+// $Id: DicomPhantomZSliceHeader.cc 92820 2015-09-17 15:22:14Z gcosmo $
 //
 /// \file DicomPhantomZSliceHeader.cc
 /// \brief Implementation of the DicomPhantomZSliceHeader class
@@ -36,7 +36,6 @@
 #include "G4GeometryTolerance.hh"
 
 #include "DicomPhantomZSliceHeader.hh"
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DicomPhantomZSliceHeader::DicomPhantomZSliceHeader(const G4String& fname)
@@ -239,7 +238,6 @@ void DicomPhantomZSliceHeader::DumpToFile()
     G4Exception(descript.c_str(),"", FatalException, "");
   }
   
-  
   out << fMaterialNames.size() << std::endl;
   for(unsigned int i = 0; i < fMaterialNames.size(); ++i) {
     out << i << " " << fMaterialNames.at(i) << std::endl;
@@ -250,8 +248,8 @@ void DicomPhantomZSliceHeader::DumpToFile()
   out << fMinY << " " << fMaxY << std::endl;
   out << fMinZ << " " << fMaxZ << std::endl;
   
-  for(unsigned int i = 0; i < fMateIDs.size(); ++i) { print(out,fMateIDs.at(i)," "); }
-  for(unsigned int i = 0; i < fValues.size(); ++i) { print(out,fValues.at(i)," ",6); }
+  for(unsigned int i = 0; i < fMateIDs.size(); ++i) { Print(out,fMateIDs.at(i)," "); }
+  for(unsigned int i = 0; i < fValues.size(); ++i) { Print(out,fValues.at(i)," ",6); }
   
   out.close();
   
@@ -281,7 +279,7 @@ void DicomPhantomZSliceHeader::ReadDataFromFile()
       G4Exception("DicomPhantomZSliceHeader::ReadDataFromFile - error in \
        formatting: missing material index","", FatalException,descript.c_str());
     }
-    G4int index = g4s2n<G4int>(str1);
+    G4int index = G4s2n<G4int>(str1);
     if(index > nMaterials || index < 0) {
       G4String descript = "Index : " + str1;
       G4Exception("DicomPhantomZSliceHeader::ReadDataFromFile - error:\
@@ -340,11 +338,6 @@ void DicomPhantomZSliceHeader::ReadDataFromFile()
     }
   }
   
-  
   in.close();
 }
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
-

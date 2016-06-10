@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronHElasticPhysics.hh 87072 2014-11-24 14:06:09Z gcosmo $
+// $Id: G4HadronHElasticPhysics.hh 90757 2015-06-09 07:45:14Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -41,6 +41,8 @@
 
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
+
+class G4DiffElasticRatio;
 
 class G4HadronHElasticPhysics : public G4VPhysicsConstructor
 {
@@ -69,7 +71,8 @@ private:
   G4int  verbose;
   G4bool fDiffraction;
 
-  static G4ThreadLocal G4bool wasActivated;
+  static G4ThreadLocal G4DiffElasticRatio* diffRatio;
+
 };
 
 

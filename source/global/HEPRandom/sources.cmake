@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 72346 2013-07-16 12:11:02Z gcosmo $
+# $Id: sources.cmake 89393 2015-04-09 07:45:40Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -55,7 +55,7 @@ if(GEANT4_BUILD_MULTITHREADED)
 	G4MTRandGamma.cc
 	G4MTRandGauss.cc
 	G4MTRandGaussQ.cc
-	G4MTRandGeneral.cc)
+	G4MTRandGeneral.cc )
 endif()
 
 include(Geant4MacroDefineModule)
@@ -65,10 +65,12 @@ GEANT4_DEFINE_MODULE(NAME G4heprandom
         G4RandomDirection.hh
         G4RandomTools.hh
         Randomize.hh
+	G4UniformRandPool.hh
 	${_mtheaders}
     SOURCES
 	${_mtsrcs}
         G4Poisson.cc
+	G4UniformRandPool.cc
     GRANULAR_DEPENDENCIES
     GLOBAL_DEPENDENCIES
     LINK_LIBRARIES

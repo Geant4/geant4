@@ -38,6 +38,7 @@
 #include "G4MuonVDNuclearModel.hh"
 
 #include "Randomize.hh"
+#include "G4Log.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4CascadeInterface.hh"
@@ -49,10 +50,15 @@
 #include "G4ExcitedStringDecay.hh"
 #include "G4FTFModel.hh"
 #include "G4HadronicInteractionRegistry.hh"
+#include "G4KokoulinMuonNuclearXS.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
 
 G4MuonVDNuclearModel::G4MuonVDNuclearModel()
  : G4HadronicInteraction("G4MuonVDNuclearModel")
 {
+  muNucXS = (G4KokoulinMuonNuclearXS*)G4CrossSectionDataSetRegistry::Instance()->
+    GetCrossSectionDataSet(G4KokoulinMuonNuclearXS::Default_Name());
+
   SetMinEnergy(0.0);
   SetMaxEnergy(1*PeV);
   CutFixed = 0.2*GeV;
@@ -131,7 +137,7 @@ G4MuonVDNuclearModel::CalculateEMVertex(const G4HadProjectile& aTrack,
   G4double KineticEnergy = aTrack.GetKineticEnergy();
   G4double TotalEnergy = aTrack.GetTotalEnergy();
   G4double Mass = G4MuonMinus::MuonMinus()->GetPDGMass();
-  G4double lnZ = std::log(G4double(targetNucleus.GetZ_asInt() ) );
+  G4double lnZ = G4Log(G4double(targetNucleus.GetZ_asInt() ) );
 
   G4double epmin = CutFixed;
   G4double epmax = TotalEnergy - 0.5*proton_mass_c2;
@@ -146,7 +152,7 @@ G4MuonVDNuclearModel::CalculateEMVertex(const G4HadProjectile& aTrack,
   G4int nzdat = 5;
   G4double zdat[] = {1.,4.,13.,29.,92.};
   for (G4int iz = 0; iz < nzdat; iz++) {
-    del = std::abs(lnZ-std::log(zdat[iz]));
+    del = std::abs(lnZ-G4Log(zdat[iz]));
     if (del < delmin) {
       delmin = del;
       izz = iz;
@@ -157,7 +163,7 @@ G4MuonVDNuclearModel::CalculateEMVertex(const G4HadProjectile& aTrack,
   G4double tdat[] = {1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,1.e9,1.e10};
   delmin = 1.e10;
   for (G4int it = 0; it < ntdat; it++) {
-    del = std::abs(std::log(KineticEnergy)-std::log(tdat[it]) );
+    del = std::abs(G4Log(KineticEnergy)-G4Log(tdat[it]) );
     if (del < delmin) {
       delmin = del;
       itt = it;
@@ -168,9 +174,16 @@ G4MuonVDNuclearModel::CalculateEMVertex(const G4HadProjectile& aTrack,
   G4double r = G4UniformRand();
 
   G4int iy = -1;
+  G4ExceptionDescription ed;
+  ed << " While count exceeded " << G4endl;
+ 
   do {
        iy += 1 ;
-     } while (((proba[izz][itt][iy]) < r)&&(iy < NBINminus1)) ;
+       if (iy > 10000) {
+         G4Exception("G4RPGAntiProtonInelastic::Cascade()", "HAD_RPG_100", JustWarning, ed);
+         break;
+       }
+     } while (((proba[izz][itt][iy]) < r)&&(iy < NBINminus1)) ;  /* Loop checking, 01.09.2015, D.Wright */
 
   // Sampling is done uniformly in y in the bin
 
@@ -180,8 +193,8 @@ G4MuonVDNuclearModel::CalculateEMVertex(const G4HadProjectile& aTrack,
   else
     y = ya[iy];
 
-  G4double x = std::exp(y);
-  G4double ep = epmin*std::exp(x*std::log(epmax/epmin) );
+  G4double x = G4Exp(y);
+  G4double ep = epmin*G4Exp(x*G4Log(epmax/epmin) );
 
   // Sample scattering angle of mu, but first t should be sampled.
   G4double yy = ep/TotalEnergy;
@@ -209,12 +222,20 @@ G4MuonVDNuclearModel::CalculateEMVertex(const G4HadProjectile& aTrack,
 
   // Now sample t
   G4int ntry = 0;
+  G4ExceptionDescription eda;
+  eda << " While count exceeded " << G4endl;
+ 
   do
   {
     ntry += 1;
-    t = w1/(w2*std::exp(G4UniformRand()*std::log(w3))-tmax);
+    if (ntry > 10000) {
+      G4Exception("G4MuonVDNuclearModel::CalculateEMVertex()", "HAD_RPG_100", JustWarning, eda);
+      break;
+    }
+  
+    t = w1/(w2*G4Exp(G4UniformRand()*G4Log(w3))-tmax);
     rej = (1.-t/tmax)*(y1*(1.-tmin/t)+y2)/(y3*(1.-t/t2)); 
-  } while (G4UniformRand() > rej) ;
+  } while (G4UniformRand() > rej) ;   /* Loop checking, 01.09.2015, D.Wright */
 
   // compute angle from t
   G4double sinth2 =
@@ -319,7 +340,7 @@ void G4MuonVDNuclearModel::MakeSamplingTable()
 
       // Calculate the differential cross section
       // numerical integration in log .........
-      c = std::log(Maxep/CutFixed);
+      c = G4Log(Maxep/CutFixed);
       ymin = -5.0;
       ymax = 0.0;
       dy = (ymax-ymin)/NBIN; 
@@ -330,16 +351,16 @@ void G4MuonVDNuclearModel::MakeSamplingTable()
       yy = ymin - dy;
       for (G4int i = 0; i < NBIN; i++) {
         y += dy;
-        x = std::exp(y);
+        x = G4Exp(y);
         yy += dy;
-        dx = std::exp(yy+dy)-std::exp(yy);
+        dx = G4Exp(yy+dy)-G4Exp(yy);
       
-        ep = CutFixed*std::exp(c*x);
+        ep = CutFixed*G4Exp(c*x);
 
         CrossSection +=
-           ep*dx*muNucXS.ComputeDDMicroscopicCrossSection(KineticEnergy,
-                                                          AtomicNumber,
-                                                          AtomicWeight, ep);
+           ep*dx*muNucXS->ComputeDDMicroscopicCrossSection(KineticEnergy,
+							   AtomicNumber,
+							   AtomicWeight, ep);
         if (nbin < NBIN) {
           nbin += 1;
           ya[nbin] = y;
@@ -355,7 +376,8 @@ void G4MuonVDNuclearModel::MakeSamplingTable()
   } // loop on iz
 
   // G4cout << " Kokoulin XS = "
-  //       << muNucXS.ComputeDDMicroscopicCrossSection(1*GeV, 20.0, 40.0*g/mole, 0.3*GeV)/millibarn
+  //       << muNucXS->ComputeDDMicroscopicCrossSection(1*GeV, 20.0, 
+  //         40.0*g/mole, 0.3*GeV)/millibarn
   //       << G4endl; 
 }
 

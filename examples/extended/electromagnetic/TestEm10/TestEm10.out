@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -82,7 +82,7 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 1 GeV,  HighEnergyThreshold(GeV)= 10000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
@@ -140,7 +140,7 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.149
 9.283e+04	3.149
 
-total time for build X-ray TR energy loss tables = 0.08 s
+total time for build X-ray TR energy loss tables = 0.06 s
 
 SynRad:  Incoherent Synchrotron Radiation
       good description for long magnets at all energies
@@ -162,7 +162,7 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 1 GeV,  HighEnergyThreshold(GeV)= 10000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
@@ -224,10 +224,10 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.149
 9.283e+04	3.149
 
-total time for build X-ray TR energy loss tables = 0.08 s
+total time for build X-ray TR energy loss tables = 0.06 s
 
 msc:   for proton    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
@@ -242,7 +242,7 @@ hIoni:   for  proton    SubType= 2
             PAIModel :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 msc:   for kaon+    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
@@ -257,7 +257,7 @@ hIoni:   for  kaon+    SubType= 2
             PAIModel :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 msc:   for kaon-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
@@ -272,7 +272,7 @@ hIoni:   for  kaon-    SubType= 2
             PAIModel :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 msc:   for mu+    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
@@ -301,7 +301,7 @@ muPairProd:   for  mu+    SubType= 4
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for mu-    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
@@ -330,7 +330,7 @@ muPairProd:   for  mu-    SubType= 4
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for pi+    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
@@ -345,7 +345,7 @@ hIoni:   for  pi+    SubType= 2
             PAIModel :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
@@ -396,26 +396,26 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.92s Real=0.92s Sys=0s
+  User=0.85s Real=0.85s Sys=0s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=45.2012 +- 0.667544  mm  
+    mean charged track length   in absorber=44.6123 +- 0.615106  mm  
 
-            mean energy deposit in absorber=0.054333 +- 0.000915753  MeV 
+            mean energy deposit in absorber=0.0523117 +- 0.000856792  MeV 
 
- mean number of steps in absorber (charged) =8.886 +- 0.24323      
- mean number of steps in absorber (neutral) =2.903 +- 0.0533628      
+ mean number of steps in absorber (charged) =8.081 +- 0.200705      
+ mean number of steps in absorber (neutral) =2.794 +- 0.0514545      
 
-   mean number of charged secondaries = 3.521 +- 0.071983
+   mean number of charged secondaries = 3.372 +- 0.0687431
 
-   mean number of neutral secondaries = 0.035 +- 0.00598122
+   mean number of neutral secondaries = 0.042 +- 0.00634319
 
-   mean number of e-s =3.521  and e+s =0
+   mean number of e-s =3.372  and e+s =0
 
-(number) transmission coeff=0.224  reflection coeff=0
+(number) transmission coeff=0.233  reflection coeff=0
 
  energy deposit distribution 
-#entries=1000    #underflows=0    #overflows=57
+#entries=1000    #underflows=0    #overflows=59
  bin nb      Elow      entries     normalized 
     0         0           0           0
     1   1.53846           0           0
@@ -425,70 +425,70 @@ Run Summary
     5   7.69231           0           0
     6   9.23077           0           0
     7   10.7692           0           0
-    8   12.3077           3       0.003
-    9   13.8462           6       0.006
-   10   15.3846           9       0.009
-   11   16.9231           7       0.007
-   12   18.4615          20        0.02
-   13        20          22       0.022
-   14   21.5385          15       0.015
-   15   23.0769          13       0.013
-   16   24.6154          22       0.022
-   17   26.1538          22       0.022
-   18   27.6923          19       0.019
-   19   29.2308          18       0.018
-   20   30.7692          23       0.023
-   21   32.3077          23       0.023
-   22   33.8462          30        0.03
-   23   35.3846          20        0.02
-   24   36.9231          29       0.029
-   25   38.4615          31       0.031
-   26        40          31       0.031
-   27   41.5385          25       0.025
-   28   43.0769          35       0.035
-   29   44.6154          25       0.025
-   30   46.1538          25       0.025
-   31   47.6923          34       0.034
-   32   49.2308          33       0.033
-   33   50.7692          21       0.021
-   34   52.3077          26       0.026
-   35   53.8462          28       0.028
-   36   55.3846          15       0.015
-   37   56.9231          22       0.022
-   38   58.4615          24       0.024
-   39        60          25       0.025
-   40   61.5385          16       0.016
-   41   63.0769          13       0.013
-   42   64.6154          12       0.012
-   43   66.1538          18       0.018
-   44   67.6923           7       0.007
-   45   69.2308          18       0.018
-   46   70.7692          13       0.013
-   47   72.3077          16       0.016
-   48   73.8462          10        0.01
-   49   75.3846          12       0.012
-   50   76.9231          14       0.014
-   51   78.4615           6       0.006
-   52        80          11       0.011
-   53   81.5385           7       0.007
-   54   83.0769           7       0.007
-   55   84.6154          10        0.01
-   56   86.1538           9       0.009
+    8   12.3077           0           0
+    9   13.8462           4       0.004
+   10   15.3846           7       0.007
+   11   16.9231          11       0.011
+   12   18.4615          21       0.021
+   13        20          16       0.016
+   14   21.5385          12       0.012
+   15   23.0769          17       0.017
+   16   24.6154          20        0.02
+   17   26.1538          27       0.027
+   18   27.6923          27       0.027
+   19   29.2308          29       0.029
+   20   30.7692          34       0.034
+   21   32.3077          27       0.027
+   22   33.8462          29       0.029
+   23   35.3846          32       0.032
+   24   36.9231          25       0.025
+   25   38.4615          34       0.034
+   26        40          35       0.035
+   27   41.5385          30        0.03
+   28   43.0769          36       0.036
+   29   44.6154          27       0.027
+   30   46.1538          35       0.035
+   31   47.6923          26       0.026
+   32   49.2308          27       0.027
+   33   50.7692          19       0.019
+   34   52.3077          22       0.022
+   35   53.8462          19       0.019
+   36   55.3846          27       0.027
+   37   56.9231          19       0.019
+   38   58.4615          19       0.019
+   39        60          17       0.017
+   40   61.5385          11       0.011
+   41   63.0769          12       0.012
+   42   64.6154          19       0.019
+   43   66.1538          12       0.012
+   44   67.6923          13       0.013
+   45   69.2308          15       0.015
+   46   70.7692          17       0.017
+   47   72.3077           5       0.005
+   48   73.8462           8       0.008
+   49   75.3846          11       0.011
+   50   76.9231           6       0.006
+   51   78.4615           8       0.008
+   52        80          10        0.01
+   53   81.5385          16       0.016
+   54   83.0769           4       0.004
+   55   84.6154           2       0.002
+   56   86.1538           7       0.007
    57   87.6923           6       0.006
-   58   89.2308           6       0.006
-   59   90.7692           4       0.004
-   60   92.3077           6       0.006
-   61   93.8462           6       0.006
-   62   95.3846           8       0.008
-   63   96.9231           4       0.004
-   64   98.4615           3       0.003
+   58   89.2308           4       0.004
+   59   90.7692           3       0.003
+   60   92.3077           7       0.007
+   61   93.8462           4       0.004
+   62   95.3846           1       0.001
+   63   96.9231           5       0.005
+   64   98.4615           5       0.005
 
- Emp =       0.0430769   width=      0.0507692  MeV 
+ Emp =       0.0430769   width=      0.0461538  MeV 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 821884987, 1714530142
+ Current couple of seeds = 2102791090, 1435182547
 ----------------------------------------
 
 ========= Table of registered couples ==============================
@@ -517,9 +517,8 @@ Index : 2     used in the geometry : Yes
 ====================================================================
 
 G4 kernel has come to Quit state.
-Total navigation history collections cleaned: 13
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 1
-Dynamic pools deleted: 11 / Total memory freed: 0.034 Mb
+Dynamic pools deleted: 11 / Total memory freed: 0.05 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

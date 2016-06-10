@@ -48,32 +48,9 @@ class G4HnManager : public G4BaseAnalysisManager
     virtual ~G4HnManager();
 
     // Methods to manipulate additional information
-     
-    void AddH1Information(const G4String& name, 
-                          const G4String& unitName,
-                          const G4String& fcnName,
-                          G4double unit, 
-                          G4Fcn fx,
-                          G4BinScheme binScheme);
-    void AddH2Information(const G4String& name,
-                          const G4String& xunitName, 
-                          const G4String& yunitName,
-                          const G4String& xfcnName,
-                          const G4String& yfcnName,
-                          G4double xunit, G4double yunit, 
-                          G4Fcn fx, G4Fcn fy,
-                          G4BinScheme xBinScheme, G4BinScheme yBinScheme); 
-    void AddH3Information(const G4String& name,
-                          const G4String& xunitName, 
-                          const G4String& yunitName,
-                          const G4String& zunitName,
-                          const G4String& xfcnName,
-                          const G4String& yfcnName,
-                          const G4String& zfcnName,
-                          G4double xunit, G4double yunit, G4double zunit, 
-                          G4Fcn fx, G4Fcn fy, G4Fcn fz,
-                          G4BinScheme xBinScheme, G4BinScheme yBinScheme,
-                          G4BinScheme zBinScheme); 
+
+    G4HnInformation* AddHnInformation(const G4String& name, G4int nofDimensions);
+
     // Access methofd    
     G4HnInformation* GetHnInformation(G4int id,
                           G4String functionName = "",
@@ -100,12 +77,20 @@ class G4HnManager : public G4BaseAnalysisManager
     // return true otherwise
     G4bool IsAscii() const;
     
-    // Function implementing public analsi manager interface
+    // Plotting option
+
+    // Return false if there is no object selected for plotting,
+    // return true otherwise
+    G4bool IsPlotting() const;
+
+    // Function implementing public analysis manager interface
     //
     
     void  SetActivation(G4bool activation);
     void  SetActivation(G4int id, G4bool activation);
     void  SetAscii(G4int id, G4bool ascii);
+    void  SetPlotting(G4bool plotting);
+    void  SetPlotting(G4int id, G4bool plotting);
 
     // Access to Hn additional information
     G4String GetName(G4int id) const;
@@ -114,12 +99,14 @@ class G4HnManager : public G4BaseAnalysisManager
     G4double GetZUnit(G4int id) const;
     G4bool   GetActivation(G4int id) const;
     G4bool   GetAscii(G4int id) const;
+    G4bool   GetPlotting(G4int id) const;
 
   private:
     // Data members
     G4String  fHnType;
     G4int     fNofActiveObjects;
     G4int     fNofAsciiObjects;
+    G4int     fNofPlottingObjects;
 
     // Additional histograms/ntuple properties not included in tools
     std::vector<G4HnInformation*> fHnVector;
@@ -127,7 +114,7 @@ class G4HnManager : public G4BaseAnalysisManager
 
 inline G4int G4HnManager::GetNofHns() const
 { return fHnVector.size(); }
-  
+
 inline G4String G4HnManager::GetHnType() const
 { return fHnType; }
 

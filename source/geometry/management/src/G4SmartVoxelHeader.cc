@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4SmartVoxelHeader.cc 91803 2015-08-06 12:17:01Z gcosmo $
 //
 // 
 // class G4SmartVoxelHeader
@@ -493,7 +493,7 @@ G4SmartVoxelHeader::BuildVoxelsWithinLimits(G4LogicalVolume* pVolume,
           delete (*pTestSlices)[node]->GetNode();
         }
         G4SmartVoxelProxy* tmpProx;
-        while (pTestSlices->size()>0)
+        while (pTestSlices->size()>0)  // Loop checking, 06.08.2015, G.Cosmo
         {
           tmpProx = pTestSlices->back();
           pTestSlices->pop_back();

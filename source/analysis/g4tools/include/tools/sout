@@ -8,9 +8,24 @@
 
 namespace tools {
 
+/*
 inline std::string sout(const std::string& a_string) {
-  return std::string("\"")+a_string+"\"";
+  return "\""+a_string+"\"";
 }
+*/
+
+class sout : public std::string {
+  typedef std::string parent;
+public:
+  sout(const std::string& a_value) {
+    parent::operator+=("\"");
+    parent::operator+=(a_value);
+    parent::operator+=("\"");
+  }
+public:
+  sout(const sout& a_from):parent(a_from){}
+  sout& operator=(const sout& a_from){parent::operator=(a_from);return *this;}
+};
 
 }
 

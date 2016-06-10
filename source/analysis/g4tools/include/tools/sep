@@ -1,0 +1,36 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sep
+#define tools_sep
+
+#include <string>
+
+namespace tools {
+
+inline const std::string& sep() {
+#ifdef _WIN32
+  static const std::string s_v("\\");
+#else
+  static const std::string s_v("/");
+#endif
+  return s_v;
+}
+
+inline const std::string& psep() {
+#ifdef _WIN32
+  static const std::string s_v(";");
+#else
+  static const std::string s_v(":");
+#endif
+  return s_v;
+}
+
+inline const std::string& res_sep() {
+  static const std::string s_v(".");
+  return s_v;
+}
+
+}
+
+#endif

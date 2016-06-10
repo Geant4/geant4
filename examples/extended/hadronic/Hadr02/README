@@ -17,9 +17,8 @@ This example application is providing simulation of ion beam interaction with di
 targets. Hadronic aspects of beam target interaction are demonstrated in the example 
 including longitudinal profile of energy deposition, spectra of secondary  particles,
 isotope production spectra. The results are presenting in a form of average numbers 
-and histograms. All ion/ion models of Geant4 are available and also the interface to
-the FORTRAN code DPMJET-2.5 developed by J.Ranft for FLUKA. The interface was developed
-by P.Truscott (QinetiQ, UK) under European Space Agency (ESA) contract 19770/06/NL/JD.
+and histograms. All ion/ion models of Geant4 are available. 
+
 In addition an interface to the FORTRAN code UrQMD-1.3rc developed by Kh, Abdel-Waged et al
 for the KACST/NCMP. UrQMD model by S.A.Bass et al. Prog.Part.Nucl.Phys. 41 (1998) 225
 and M.Bleicher et al. J.Phys. G25 (1999) 1859.
@@ -31,24 +30,14 @@ UrQMD can be used only for ion-ion physics or for all hadronic inelastic interac
 For simulation with Geant4 native models installation procedure is the same as for 
 other examples.
 
-			  ACTIVATION OF DPMJET INTERFACE
+			  HOW TO RUN
 
-In order to use DPMJET additional installation steps are required.
-It is recommended to use DPMJET with SLC5 64 bit PC with gcc4.3.2 or newer compiler. 
+To run the example:
 
-Two environment variables should be defined:
+  	Hadr02 <yourmacro> QGSP_BIC
 
-        G4DPMJET2_5DATA - path to Glauber data
-        CERNLIB         - path to cernlib library
-        G4_USE_DPMJET   - flag of DPMJET activation
-
-To run the example with DPMJET:
-
-  	Hadr02 dpmjet.in QGSP_BIC
-
-The last parameter is optional. It is the name of Geant4 reference Physics List on
-top of which a new ion physics is added. Alternatively Physics List can be defined via 
-environment variable
+The last parameter is optional. It is the name of Geant4 reference Physics List, 
+alternatively Physics List can be defined via environment variable
 
         setenv PHYSLIST QGSP_BIC
 
@@ -77,7 +66,7 @@ environment variable
 
         setenv PHYSLIST QGSP_BIC
 
-To run the examplw with the full UrQMD physics:
+To run the example with the full UrQMD physics:
 
 	Hadr02 default.in UrQMD
 or:
@@ -151,8 +140,8 @@ be defined.
 
 Additionally it is possible to add ion-ion interactions using UI command
 
-/testhadr/ionPhysics   DPMJET
-/testhadr/ionPhysics   FTF
+/testhadr/ionPhysics   HIJING
+/testhadr/ionPhysics   QrQMD
 
 
                           VISUALIZATION
@@ -173,46 +162,6 @@ be used:
 
 
                           HISTOGRAMS
-
-To use histograms any of implementations of AIDA interfaces should
-be available (see http://aida.freehep.org).
-
-A package including AIDA and extended interfaces also using Python
-is PI, available from: http://cern.ch/pi .
-
-Once installed PI or PI-Lite in a specified local area $PI_DIR, it is
-required to add the installation path to $PATH, i.e. for example,
-for release 1.2.1 of PI:
-
-setenv PATH ${PATH}:$PI_DIR/1.3.12/app/releases/PI/PI_1_3_12/slc3_gcc323/bin
-
-CERN users can use the PATH to the LCG area on AFS.
-
-Before compilation of the example it is optimal to clean up old 
-files:
-
-gmake histclean
-setenv G4ANALYSIS_USE 1
-gmake
-
-Before running the example the command should be issued:
-
-eval `aida-config --runtime csh`
-
-It is possible to choose the format of the output file with 
-histograms using UI command:
-
-/testhadr/HistoName   name
-/testhadr/HistoType   type
-
-The following types are available: hbook, root, aida. They will be 
-stored in the file "name.hbook", "name.root", or "name.aida". 
-If the environment variable HISTODIR is defined, files are stored in this 
-subdirectory.
-
-To show the content of a histogram ID=i the commands may be applied:
-
-/testhadr/HistoPrint  i
 
 All histograms are normalized to the number of events.
 

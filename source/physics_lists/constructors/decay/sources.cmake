@@ -11,7 +11,7 @@
 #
 # Generated on : 10/01/2013
 #
-# $Id: sources.cmake 78918 2014-02-03 15:09:18Z gcosmo $
+# $Id: sources.cmake 94090 2015-11-05 15:13:10Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -68,7 +68,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/interface/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lend/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lepto_nuclear/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/neutron_hp/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/particle_hp/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/diffraction/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/hadronization/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/management/include)
@@ -85,9 +85,11 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4phys_ctor_decay
     HEADERS
         G4DecayPhysics.hh
+        G4SpinDecayPhysics.hh
         G4RadioactiveDecayPhysics.hh
     SOURCES
         G4DecayPhysics.cc
+        G4SpinDecayPhysics.cc
         G4RadioactiveDecayPhysics.cc
     GRANULAR_DEPENDENCIES
         G4baryons

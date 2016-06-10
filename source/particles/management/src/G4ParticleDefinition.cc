@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc 79342 2014-02-24 11:42:42Z gcosmo $
+// $Id: G4ParticleDefinition.cc 92918 2015-09-21 15:04:01Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -309,13 +309,16 @@ G4int G4ParticleDefinition::FillQuarkContents()
   return temp;
 }
 
-G4double G4ParticleDefinition::GetIonLifeTime() const
-{
-  if(!isGeneralIon) return thePDGLifeTime;
-
-  G4IonTable* ionTable =  G4IonTable::GetIonTable();
-  return ionTable->GetLifeTime(this);
-}
+//-- No longer needed to access to G4IonTable.
+//-- Method GetIonLifeTime() itself is kept for compatibility
+//-- but moved to icc file as an inlined method.
+//G4double G4ParticleDefinition::GetIonLifeTime() const
+//{
+//  if(!isGeneralIon) return thePDGLifeTime;
+//
+//  G4IonTable* ionTable =  G4IonTable::GetIonTable();
+//  return ionTable->GetLifeTime(this);
+//}
 
 void G4ParticleDefinition::DumpTable() const
 {

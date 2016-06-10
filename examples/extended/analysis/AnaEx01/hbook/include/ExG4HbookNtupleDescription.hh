@@ -49,7 +49,8 @@ struct ExG4HbookNtupleDescription
        fNtupleBooking(0),
        fNtupleIColumnMap(),
        fNtupleFColumnMap(),
-       fNtupleDColumnMap() {}
+       fNtupleDColumnMap(),
+       fActivation(true) {}
  
   ~ExG4HbookNtupleDescription() 
      { delete fNtupleBooking; } 
@@ -59,6 +60,7 @@ struct ExG4HbookNtupleDescription
   std::map<G4int, tools::hbook::wntuple::column<int>* >    fNtupleIColumnMap;           
   std::map<G4int, tools::hbook::wntuple::column<float>* >  fNtupleFColumnMap;           
   std::map<G4int, tools::hbook::wntuple::column<double>* > fNtupleDColumnMap;           
+  G4bool fActivation;
 };
 
 #endif  

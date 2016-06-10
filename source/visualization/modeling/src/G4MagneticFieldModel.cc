@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagneticFieldModel.cc 74097 2013-09-22 16:03:59Z gcosmo $
+// $Id: G4MagneticFieldModel.cc 94206 2015-11-09 08:11:59Z gcosmo $
 //
 // 
 // John Allison  17th August 2013
@@ -39,18 +39,21 @@
 #include "G4Colour.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4ArrowModel.hh"
+#include "G4Polyline.hh"
+#include "G4VisAttributes.hh"
 #include "G4SystemOfUnits.hh"
 
 #include <sstream>
 #include <limits>
 #include <vector>
 
-G4MagneticFieldModel::~G4MagneticFieldModel ()
-{
-}
+G4MagneticFieldModel::~G4MagneticFieldModel () {}
 
-G4MagneticFieldModel::G4MagneticFieldModel (G4int nDataPointsPerMaxHalfScene)
+G4MagneticFieldModel::G4MagneticFieldModel
+(G4int nDataPointsPerMaxHalfScene,
+ Representation representation)
 : fNDataPointsPerMaxHalfScene(nDataPointsPerMaxHalfScene)
+, fRepresentation(representation)
 {
   fType = "G4MagneticFieldModel";
   fGlobalTag = fType;
@@ -73,9 +76,9 @@ void G4MagneticFieldModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
   const G4double xHalfScene = 0.5 * (xMax - xMin);
   const G4double yHalfScene = 0.5 * (yMax - yMin);
   const G4double zHalfScene = 0.5 * (zMax - zMin);
-//  const G4double xSceneCentre = 0.5 * (xMax + xMin);
-//  const G4double ySceneCentre = 0.5 * (yMax + yMin);
-//  const G4double zSceneCentre = 0.5 * (zMax + zMin);
+  const G4double xSceneCentre = 0.5 * (xMax + xMin);
+  const G4double ySceneCentre = 0.5 * (yMax + yMin);
+  const G4double zSceneCentre = 0.5 * (zMax + zMin);
   const G4double maxHalfScene =
   std::max(xHalfScene,std::max(yHalfScene,zHalfScene));
   if (maxHalfScene <= 0.) {
@@ -93,23 +96,36 @@ void G4MagneticFieldModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
 
   G4FieldManager* globalFieldMgr = tMgr->GetFieldManager();
   const G4Field* globalField = 0;
+  const G4String intro = "G4MagneticFieldModel::DescribeYourselfTo: ";
   if (globalFieldMgr) {
     if (globalFieldMgr->DoesFieldExist()) {
       globalField = globalFieldMgr->GetDetectorField();
       if (!globalField) {
-        G4cout
-        << "Null global field pointer."
-        << G4endl;
+        static G4bool warned = false;
+        if (!warned) {
+          G4cout  << intro
+          << "Null global field pointer."
+          << G4endl;
+          warned = true;
+        }
       }
     } else {
-      G4cout
-      << "No global field exists."
-      << G4endl;
+      static G4bool warned = false;
+      if (!warned) {
+        G4cout  << intro
+        << "No global field exists."
+        << G4endl;
+        warned = true;
+      }
     }
   } else {
-    G4cout
-    << "No global field manager."
-    << G4endl;
+    static G4bool warned = false;
+    if (!warned) {
+      G4cout  << intro
+      << "No global field manager."
+      << G4endl;
+      warned = true;
+    }
   }
 
   // Constants
@@ -137,13 +153,13 @@ void G4MagneticFieldModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
   // Get field values and ascertain maximum field.
   G4double BFieldMagnitudeMax = -std::numeric_limits<G4double>::max();
   for (G4int i = 0; i < nXSamples; i++) {
-    G4double x = (i - nDataPointsPerXHalfScene) * interval;
+    G4double x = xSceneCentre + (i - nDataPointsPerXHalfScene) * interval;
     position_time[0] = x;
     for (G4int j = 0; j < nYSamples; j++) {
-      G4double y = (j - nDataPointsPerYHalfScene) * interval;
+      G4double y = ySceneCentre + (j - nDataPointsPerYHalfScene) * interval;
       position_time[1] = y;
       for (G4int k = 0; k < nZSamples; k++) {
-        G4double z = (k - nDataPointsPerZHalfScene) * interval;
+        G4double z = zSceneCentre + (k - nDataPointsPerZHalfScene) * interval;
         position_time[2] = z;
         // Calculate indices into working vectors
         const G4int ijk = i * nYSamples * nZSamples + j * nZSamples + k;
@@ -212,9 +228,14 @@ void G4MagneticFieldModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
     return;
   }
 
+  if (fRepresentation == Representation::lightArrow) sceneHandler.BeginPrimitives();
   for (G4int i = 0; i < nSamples; i++) {
     if (BFieldMagnitude[i] > 0) {
       const G4int i3 = i * 3;
+      // Field (Bx,By,Bz) at (x,y,z).
+      const G4double Bx = BField[i3];
+      const G4double By = BField[i3 + 1];
+      const G4double Bz = BField[i3 + 2];
       const G4double x = xyz[i3];
       const G4double y = xyz[i3 + 1];
       const G4double z = xyz[i3 + 2];
@@ -224,29 +245,43 @@ void G4MagneticFieldModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
 //      << ' ' << x/mm
 //      << ' ' << y/mm
 //      << ' ' << z/mm
-//      << " " << BField[i3]/tesla
-//      << " " << BField[i3 + 1]/tesla
-//      << " " << BField[i3 + 2]/tesla
+//      << " " << Bx/tesla
+//      << " " << By/tesla
+//      << " " << Bz/tesla
 //      << G4endl;
-      const G4double f = B / BFieldMagnitudeMax;
-      const G4double arrowLength = arrowLengthMax * f;
-      G4double red = 0., green = 0., blue = 0., alpha = 1.;
-      if (f < 0.5) {  // Linear colour scale: 0->0.5->1 is blue->green->red.
-        green = 2. * f;
-        blue = 2. * (0.5 - f);
-      } else {
-        red = 2. * (f - 0.5);
-        green = 2. * (1.0 - f);
+      if (B > 0.) {
+        const G4double f = B / BFieldMagnitudeMax;
+        G4double red = 0., green = 0., blue = 0., alpha = 1.;
+        if (f < 0.5) {  // Linear colour scale: 0->0.5->1 is blue->green->red.
+          green = 2. * f;
+          blue = 2. * (0.5 - f);
+        } else {
+          red = 2. * (f - 0.5);
+          green = 2. * (1.0 - f);
+        }
+        const G4Colour arrowColour(red,green,blue,alpha);
+        const G4double arrowLength = arrowLengthMax * f;
+        // Base of arrow is at (x,y,z).
+        const G4double& x1 = x;
+        const G4double& y1 = y;
+        const G4double& z1 = z;
+        // Head of arrow depends on field direction and strength.
+        const G4double x2 = x1 + arrowLength * Bx / B;
+        const G4double y2 = y1 + arrowLength * By / B;
+        const G4double z2 = z1 + arrowLength * Bz / B;
+        if (fRepresentation == Representation::fullArrow) {
+          G4ArrowModel BArrow(x1,y1,z1,x2,y2,z2,arrowLength/5,arrowColour);
+          BArrow.DescribeYourselfTo(sceneHandler);
+        } else if (fRepresentation == Representation::lightArrow) {
+          G4Polyline BArrowLite;
+          G4VisAttributes va(arrowColour);
+          BArrowLite.SetVisAttributes(va);
+          BArrowLite.push_back(G4Point3D(x1,y1,z1));
+          BArrowLite.push_back(G4Point3D(x2,y2,z2));
+          sceneHandler.AddPrimitive(BArrowLite);
+        }
       }
-      const G4Colour arrowColour(red,green,blue,alpha);
-      G4ArrowModel BArrow
-      (x,y,z,
-       x + arrowLength * BField[i3] / B,
-       y + arrowLength * BField[i3 + 1] / B,
-       z + arrowLength * BField[i3 + 2] / B,
-       arrowLength/5,
-       arrowColour);
-      BArrow.DescribeYourselfTo(sceneHandler);
     }
   }
+  if (fRepresentation == Representation::lightArrow) sceneHandler.EndPrimitives();
 }

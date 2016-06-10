@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAElectronSolvatation.hh 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id: G4DNAElectronSolvatation.hh 93936 2015-11-04 09:37:59Z gcosmo $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
@@ -44,31 +44,41 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
-
 #ifndef G4DNAElectronSolvatation_h
 #define G4DNAElectronSolvatation_h 1
 
 #include "G4VEmProcess.hh"
 
 // Available models
-#include "G4DNAOneStepSolvatationModel.hh"
+#include "G4DNAOneStepThermalizationModel.hh"
 #include "G4DNATransformElectronModel.hh"
 
 class G4DNAElectronSolvatation : public G4VEmProcess
 {
-public :
-    G4DNAElectronSolvatation(const G4String& processName ="DNAElectronSolvatation",
-                             G4ProcessType type = fElectromagnetic);
-    virtual ~G4DNAElectronSolvatation();
+public:
+  G4DNAElectronSolvatation(const G4String& processName =
+                            "DNAElectronSolvatation",
+                           G4ProcessType type = fElectromagnetic);
+  virtual ~G4DNAElectronSolvatation();
 
-    virtual G4bool IsApplicable(const G4ParticleDefinition&);
-    virtual void PrintInfo();
+  virtual G4bool IsApplicable(const G4ParticleDefinition&);
+  virtual void PrintInfo();
+
+  static G4String GetDefaultName()
+  {
+    return "DNAElectronSolvatation";
+  }
+
+  static int ProcessSubType()
+  {
+    return 58;
+  }
 
 protected:
-    virtual void InitialiseProcess(const G4ParticleDefinition*);
+  virtual void InitialiseProcess(const G4ParticleDefinition*);
 
 private:
-    G4bool       isInitialised;
+  G4bool isInitialised;
 };
 
 #endif

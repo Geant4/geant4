@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fcn.hh 73423 2013-08-27 10:54:55Z gcosmo $
+// $Id: G4Fcn.hh 92688 2015-09-14 07:01:13Z gcosmo $
 
 // Author: Ivana Hrivnacova, 04/07/2012  (ivana@ipno.in2p3.fr)
 
@@ -33,7 +33,7 @@
 #include "globals.hh"
 
 // Generic function which can be applied to histogram/ntuple values
-typedef G4double (*G4Fcn) (G4double);
+using G4Fcn = G4double (*) (G4double);
 
 // Identity function
 inline G4double G4FcnIdentity(G4double value) { return value; }
@@ -42,8 +42,5 @@ inline G4double G4FcnIdentity(G4double value) { return value; }
 namespace G4Analysis {
 G4Fcn GetFunction(const G4String& fcnName);
 }
-
-
-
 
 #endif  

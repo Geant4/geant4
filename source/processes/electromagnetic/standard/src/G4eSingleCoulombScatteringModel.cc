@@ -54,6 +54,7 @@
 
 
 #include "G4eSingleCoulombScatteringModel.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4ParticleChangeForGamma.hh"
@@ -172,55 +173,76 @@ void G4eSingleCoulombScatteringModel::SampleSecondaries(
   G4double Z  = currentElement->GetZ();
   G4int iz    = G4int(Z);
   G4int ia = SelectIsotopeNumber(currentElement);
+  G4double mass2 = G4NucleiProperties::GetNuclearMass(ia, iz);
 
-  //cout<<"Element "<<currentElement->GetName()<<endl;;	
+  //G4cout<<"..Z: "<<Z<<" ..iz: "<<iz<<" ..ia: "<<ia<<" ..mass2: "<<mass2<<G4endl;
 
   G4double cross= Mottcross->GetTotalCross();
-
   if(cross == 0.0) { return; }
-    		
-  G4ThreeVector dir = dp->GetMomentumDirection(); //old direction
-  G4ThreeVector newDirection=Mottcross->GetNewDirection();//new direction
-  newDirection.rotateUz(dir);   
+
+  G4double z1 = Mottcross->GetScatteringAngle();
+  G4double sint = sin(z1);
+  G4double cost = sqrt(1.0 - sint*sint);
+  G4double phi  = twopi* G4UniformRand();
+
+  // kinematics in the Lab system
+  G4double ptot = dp->GetTotalMomentum();
+  G4double e1   = dp->GetTotalEnergy();
+  // Lab. system kinematics along projectile direction
+  G4LorentzVector v0 = G4LorentzVector(0, 0, ptot, e1);
+  G4double bet  = ptot/(v0.e() + mass2);
+  G4double gam  = 1.0/sqrt((1.0 - bet)*(1.0 + bet));
+
+  //CM Projectile 	
+  G4double momCM = gam*(ptot - bet*e1); 
+  G4double eCM   = gam*(e1 - bet*ptot); 
+  //energy & momentum after scattering of incident particle
+  G4double pxCM = momCM*sint*cos(phi);
+  G4double pyCM = momCM*sint*sin(phi);
+  G4double pzCM = momCM*cost;
+
+  //CM--->Lab
+  G4LorentzVector v1(pxCM , pyCM, gam*(pzCM + bet*eCM), gam*(eCM + bet*pzCM));
+  
+  // Rotate to global system
+  G4ThreeVector dir = dp->GetMomentumDirection(); 
+  G4ThreeVector newDirection = v1.vect().unit();
+  newDirection.rotateUz(dir);
   
   fParticleChange->ProposeMomentumDirection(newDirection);   
-  
-  //Recoil energy
-  G4double trec= Mottcross->GetTrec();
 
-  //Energy after scattering	
-  if(trec > kinEnergy) { trec = kinEnergy; }
-  G4double finalT = kinEnergy - trec;
+  // recoil
+  v0 -= v1;
+  G4double trec = v0.e();
   G4double edep = 0.0;
 
   G4double tcut = recoilThreshold;
+
+  //G4cout<<" Energy Transfered: "<<trec/eV<<G4endl;
+  
   if(pCuts) { 
-    tcut= std::min(tcut,(*pCuts)[currentMaterialIndex]); 
+    tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]); 
   }
 
   if(trec > tcut) {
-
-    //cout<<"Trec "<<trec/eV<<endl;
     G4ParticleDefinition* ion = theIonTable->GetIon(iz, ia, 0);
-
-    //incident before scattering
-    G4double ptot=sqrt(Mottcross->GetMom2Lab());
-    //incident after scattering
-    G4double plab = sqrt(finalT*(finalT + 2.0*mass));
-    G4ThreeVector p2 = (ptot*dir - plab*newDirection).unit();
-    //secondary particle
-    G4DynamicParticle* newdp  = new G4DynamicParticle(ion, p2, trec);
+    newDirection = v0.vect().unit();
+    newDirection.rotateUz(dir);
+    G4DynamicParticle* newdp  = new G4DynamicParticle(ion, newDirection, trec);
     fvect->push_back(newdp);
   } else if(trec > 0.0) {
     edep = trec;
-    fParticleChange->ProposeNonIonizingEnergyDeposit(trec);
+    fParticleChange->ProposeNonIonizingEnergyDeposit(edep);
   }
-
+  
   // finelize primary energy and energy balance
+  G4double finalT = v1.e() - mass;
+  //G4cout<<"Final Energy: "<<finalT/eV<<G4endl;
   if(finalT <= lowEnergyLimit) { 
     edep += finalT;  
     finalT = 0.0;
   } 
+  edep = std::max(edep, 0.0);
   fParticleChange->SetProposedKineticEnergy(finalT);
   fParticleChange->ProposeLocalEnergyDeposit(edep);
 

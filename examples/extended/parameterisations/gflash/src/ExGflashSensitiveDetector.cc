@@ -23,49 +23,54 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExGflashSensitiveDetector.cc 72372 2013-07-16 14:30:39Z gcosmo $
+// $Id: ExGflashSensitiveDetector.cc 94396 2015-11-13 13:37:16Z gcosmo $
 //
 /// \file parameterisations/gflash/src/ExGflashSensitiveDetector.cc
 /// \brief Implementation of the ExGflashSensitiveDetector class
 //
 // Created by Joanna Weng 26.11.2004
 #include "ExGflashSensitiveDetector.hh"
-#include "ExGflashHitsCollection.hh"
 #include "ExGflashHit.hh"
+#include "G4GFlashSpot.hh"
+#include "ExGflashDetectorConstruction.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Step.hh"
 #include "G4VTouchable.hh"
 #include "G4TouchableHistory.hh"
-#include "G4SDManager.hh"
-#include <iostream>
-using namespace std;
 
 //WARNING :  You have to use also  G4VGFlashSensitiveDetector() as base class
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 ExGflashSensitiveDetector::ExGflashSensitiveDetector(G4String name,
-                                                     ExGflashDetectorConstruction* det):
-  G4VSensitiveDetector(name), G4VGFlashSensitiveDetector(), fDetector(det), HCID(-1)
+                                                     ExGflashDetectorConstruction* det)
+ : G4VSensitiveDetector(name), G4VGFlashSensitiveDetector(), fDetector(det), fHCID(-1)
 {
   G4String caloname="ExGflashCollection";
   collectionName.insert(caloname);
 }
 
-ExGflashSensitiveDetector::~ExGflashSensitiveDetector() {}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExGflashSensitiveDetector::Initialize(G4HCofThisEvent*HCE)
+ExGflashSensitiveDetector::~ExGflashSensitiveDetector() 
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ExGflashSensitiveDetector::Initialize(G4HCofThisEvent* HCE)
 {
-  if(HCID<0){ HCID = GetCollectionID(0); }
+  if(fHCID<0){ fHCID = GetCollectionID(0); }
   fCaloHitsCollection=new 
   ExGflashHitsCollection(SensitiveDetectorName,collectionName[0]); // first collection
-  HCE->AddHitsCollection( HCID, fCaloHitsCollection );
+  HCE->AddHitsCollection( fHCID, fCaloHitsCollection );
 }
 
-void ExGflashSensitiveDetector::EndOfEvent(G4HCofThisEvent*HCE)
-{
-  if (HCE){;}  
-  // No Hadronic
-  //    cout<<"IEndOfEvent  " << HCID << endl;
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ExGflashSensitiveDetector::EndOfEvent(G4HCofThisEvent*)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool ExGflashSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
 {
@@ -95,6 +100,8 @@ G4bool ExGflashSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory* 
   return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 // Separate GFLASH interface
 G4bool ExGflashSensitiveDetector::ProcessHits(G4GFlashSpot*aSpot ,G4TouchableHistory* ROhist)
 {  //cout<<"This is ProcessHits GFLASH"<<endl;
@@ -118,3 +125,6 @@ G4bool ExGflashSensitiveDetector::ProcessHits(G4GFlashSpot*aSpot ,G4TouchableHis
   
   return true;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

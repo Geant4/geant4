@@ -152,11 +152,9 @@ int main(int argc ,char ** argv)
   IORTInteractionParameters* pInteraction = new IORTInteractionParameters(true);
 	
   // Initialize analysis
-
-#ifdef G4ANALYSIS_USE_ROOT
   IORTAnalysisManager* analysis = IORTAnalysisManager::GetInstance();
   analysis -> book();
-#endif
+
 
 #ifdef G4VIS_USE
   // Visualization manager
@@ -200,15 +198,11 @@ int main(int argc ,char ** argv)
     {
 	pMatrix -> TotalEnergyDeposit(); 
 	pMatrix -> StoreDoseFluenceAscii();
-#ifdef G4ANALYSIS_USE_ROOT
         pMatrix -> StoreDoseFluenceRoot();
-#endif
     }
 
-#ifdef G4ANALYSIS_USE_ROOT
-  if (analysis -> IsTheTFile()) analysis -> flush();     // Finalize & write the root file 
-#endif
 
+  analysis -> flush();     // Finalize & write the root file 
 
 #ifdef G4VIS_USE
   delete visManager;

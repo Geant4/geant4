@@ -39,9 +39,9 @@
 # Edit these only if you require Geant4 to be found relative to the
 # location of this modulefile
 #
-set geant4_install_prefix "@CMAKE_INSTALL_PREFIX@"
-set geant4_install_bindir "@CMAKE_INSTALL_FULL_BINDIR@"
-set geant4_install_libdir "@CMAKE_INSTALL_FULL_LIBDIR@"
+set geant4_install_prefix "@GEANT4_MODULEFILE_INSTALL_PREFIX@"
+set geant4_install_bindir "@GEANT4_MODULEFILE_INSTALL_BINDIR@"
+set geant4_install_libdir "@GEANT4_MODULEFILE_INSTALL_LIBDIR@"
 
 #
 # Provide help and whatis responses
@@ -68,9 +68,11 @@ prepend-path @DYNAMIC_LOADER_PATHNAME@ $geant4_install_libdir
 
 #
 # Resource paths
-#
+# - Datasets
 array set G4DATASETS [list @G4DATASET_TCLLIST@]
 foreach {key value} [array get G4DATASETS] {
   setenv $key $value
 }
+
+# - Fonts
 

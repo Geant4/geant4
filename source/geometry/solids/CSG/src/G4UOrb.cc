@@ -31,6 +31,9 @@
 
 #include "G4Orb.hh"
 #include "G4UOrb.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+
 #include "G4VPVParameterisation.hh"
 
 ////////////////////////////////////////////////////////////////////////
@@ -107,3 +110,5 @@ G4VSolid* G4UOrb::Clone() const
 {
   return new G4UOrb(*this);
 }
+
+#endif  // G4GEOM_USE_USOLIDS

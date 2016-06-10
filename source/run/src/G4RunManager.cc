@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc 86968 2014-11-21 11:52:04Z gcosmo $
+// $Id: G4RunManager.cc 90233 2015-05-21 08:56:28Z gcosmo $
 //
 // 
 
@@ -905,7 +905,7 @@ void G4RunManager::GeometryHasBeenModified(G4bool prop)
 
 void G4RunManager::ReinitializeGeometry(G4bool destroyFirst, G4bool prop)
 {
-  if(destroyFirst && !(G4Threading::IsWorkerThread()))
+  if(destroyFirst && G4Threading::IsMasterThread())
   {
     if(verboseLevel>0)
     { 

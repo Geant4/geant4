@@ -49,7 +49,6 @@ class ElectronActionInitialization : public G4VUserActionInitialization
     
 private:
     G4String fOutputFileSpec;
-    G4GeneralParticleSource* masterGPS;
 };
 
 #endif

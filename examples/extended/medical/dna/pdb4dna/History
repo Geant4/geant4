@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+05.05.2015 S.I.                 tag pdb4dna-V10-01-02
+- renamed affiche as Affiche in PDBresidue.hh
+- cleaned for coding guidelines
+
+05.05.2015 S.I.                 tag pdb4dna-V10-01-01
+- removed compilation warning
+
+04.05.2015 S.I.                 tag pdb4dna-V10-01-00
+- removed modulo printing at EventAction level
+
 24.11.2014 M.K                  tag pdb4dna-V10-00-06
 -----------------------------------------------------
 - Retag before release

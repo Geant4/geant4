@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmBiasingManager.cc 76765 2013-11-15 09:38:15Z gcosmo $
+// $Id: G4EmBiasingManager.cc 92921 2015-09-21 15:06:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -63,7 +63,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4EmBiasingManager::G4EmBiasingManager() 
-  : nForcedRegions(0),nSecBiasedRegions(0),eIonisation(0),
+  : nForcedRegions(0),nSecBiasedRegions(0),eIonisation(nullptr),
     currentStepLimit(0.0),startTracking(true)
 {
   fSafetyMin = 1.e-6*mm;
@@ -78,11 +78,11 @@ G4EmBiasingManager::~G4EmBiasingManager()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmBiasingManager::Initialise(const G4ParticleDefinition& part,
-				    const G4String& procName, G4int verbose)
+                                    const G4String& procName, G4int verbose)
 {
   //G4cout << "G4EmBiasingManager::Initialise for "
-  //	 << part.GetParticleName()
-  //	 << " and " << procName << G4endl;
+  //         << part.GetParticleName()
+  //         << " and " << procName << G4endl;
   const G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
@@ -97,30 +97,30 @@ void G4EmBiasingManager::Initialise(const G4ParticleDefinition& part,
     const G4ProductionCuts* pcuts = couple->GetProductionCuts();
     if(0 <  nForcedRegions) {
       for(G4int i=0; i<nForcedRegions; ++i) {
-	if(forcedRegions[i]) {
-	  if(pcuts == forcedRegions[i]->GetProductionCuts()) { 
-	    idxForcedCouple[j] = i;
-	    break; 
-	  }
-	}
+        if(forcedRegions[i]) {
+          if(pcuts == forcedRegions[i]->GetProductionCuts()) { 
+            idxForcedCouple[j] = i;
+            break; 
+          }
+        }
       }
     }
     if(0 < nSecBiasedRegions) { 
       for(G4int i=0; i<nSecBiasedRegions; ++i) {
-	if(secBiasedRegions[i]) {
-	  if(pcuts == secBiasedRegions[i]->GetProductionCuts()) { 
-	    idxSecBiasedCouple[j] = i;
-	    break; 
-	  }
-	}
+        if(secBiasedRegions[i]) {
+          if(pcuts == secBiasedRegions[i]->GetProductionCuts()) { 
+            idxSecBiasedCouple[j] = i;
+            break; 
+          }
+        }
       }
     }
   }
   if (nForcedRegions > 0 && 0 < verbose) {
     G4cout << " Forced Interaction is activated for "
-	   << part.GetParticleName() << " and " 
-	   << procName 
-	   << " inside G4Regions: " << G4endl;
+           << part.GetParticleName() << " and " 
+           << procName 
+           << " inside G4Regions: " << G4endl;
     for (G4int i=0; i<nForcedRegions; ++i) {
       const G4Region* r = forcedRegions[i];
       if(r) { G4cout << "           " << r->GetName() << G4endl; }
@@ -128,14 +128,14 @@ void G4EmBiasingManager::Initialise(const G4ParticleDefinition& part,
   }
   if (nSecBiasedRegions > 0 && 0 < verbose) {
     G4cout << " Secondary biasing is activated for " 
-	   << part.GetParticleName() << " and " 
-	   << procName 
-	   << " inside G4Regions: " << G4endl;
+           << part.GetParticleName() << " and " 
+           << procName 
+           << " inside G4Regions: " << G4endl;
     for (G4int i=0; i<nSecBiasedRegions; ++i) {
       const G4Region* r = secBiasedRegions[i];
       if(r) { 
-	G4cout << "           " << r->GetName() 
-	       << "  BiasingWeight= " << secBiasedWeight[i] << G4endl; 
+        G4cout << "           " << r->GetName() 
+               << "  BiasingWeight= " << secBiasedWeight[i] << G4endl; 
       }
     }
   }
@@ -144,7 +144,7 @@ void G4EmBiasingManager::Initialise(const G4ParticleDefinition& part,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmBiasingManager::ActivateForcedInteraction(G4double val, 
-						   const G4String& rname)
+                                                   const G4String& rname)
 {
   G4RegionStore* regionStore = G4RegionStore::GetInstance();
   G4String name = rname;
@@ -154,8 +154,8 @@ void G4EmBiasingManager::ActivateForcedInteraction(G4double val,
   const G4Region* reg = regionStore->GetRegion(name, false);
   if(!reg) { 
     G4cout << "### G4EmBiasingManager::ForcedInteraction WARNING: "
-	   << " G4Region <"
-	   << rname << "> is unknown" << G4endl;
+           << " G4Region <"
+           << rname << "> is unknown" << G4endl;
     return; 
   }
 
@@ -163,15 +163,15 @@ void G4EmBiasingManager::ActivateForcedInteraction(G4double val,
   if (0 < nForcedRegions) {
     for (G4int i=0; i<nForcedRegions; ++i) {
       if (reg == forcedRegions[i]) {
-	lengthForRegion[i] = val; 
+        lengthForRegion[i] = val; 
         return;
       }
     }
   }
   if(val < 0.0) { 
     G4cout << "### G4EmBiasingManager::ForcedInteraction WARNING: "
-	   << val << " < 0.0, so no activation for the G4Region <"
-	   << rname << ">" << G4endl;
+           << val << " < 0.0, so no activation for the G4Region <"
+           << rname << ">" << G4endl;
     return; 
   }
 
@@ -185,12 +185,12 @@ void G4EmBiasingManager::ActivateForcedInteraction(G4double val,
 
 void 
 G4EmBiasingManager::ActivateSecondaryBiasing(const G4String& rname, 
-					     G4double factor,
-					     G4double energyLimit)
+                                             G4double factor,
+                                             G4double energyLimit)
 {
   //G4cout << "G4EmBiasingManager::ActivateSecondaryBiasing: "
-  //	 << rname << " F= " << factor << " E(MeV)= " << energyLimit/MeV
-  //	 << G4endl; 
+  //         << rname << " F= " << factor << " E(MeV)= " << energyLimit/MeV
+  //         << G4endl; 
   G4RegionStore* regionStore = G4RegionStore::GetInstance();
   G4String name = rname;
   if(name == "" || name == "world" || name == "World") {
@@ -199,8 +199,8 @@ G4EmBiasingManager::ActivateSecondaryBiasing(const G4String& rname,
   const G4Region* reg = regionStore->GetRegion(name, false);
   if(!reg) { 
     G4cout << "### G4EmBiasingManager::ActivateBremsstrahlungSplitting "
-	   << "WARNING: G4Region <"
-	   << rname << "> is unknown" << G4endl;
+           << "WARNING: G4Region <"
+           << rname << "> is unknown" << G4endl;
     return; 
   }
 
@@ -223,17 +223,17 @@ G4EmBiasingManager::ActivateSecondaryBiasing(const G4String& rname,
   if (0 < nSecBiasedRegions) {
     for (G4int i=0; i<nSecBiasedRegions; ++i) {
       if (reg == secBiasedRegions[i]) {
-	secBiasedWeight[i] = w;
+        secBiasedWeight[i] = w;
         nBremSplitting[i]  = nsplit; 
-	secBiasedEnegryLimit[i] = energyLimit;
+        secBiasedEnegryLimit[i] = energyLimit;
         return;
       }
     }
   }
   /*
     G4cout << "### G4EmBiasingManager::ActivateSecondaryBiasing: "
-	   << " nsplit= " << nsplit << " for the G4Region <"
-	   << rname << ">" << G4endl; 
+           << " nsplit= " << nsplit << " for the G4Region <"
+           << rname << ">" << G4endl; 
   */
 
   // new region 
@@ -248,7 +248,7 @@ G4EmBiasingManager::ActivateSecondaryBiasing(const G4String& rname,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmBiasingManager::GetStepLimit(G4int coupleIdx, 
-					  G4double previousStep)
+                                          G4double previousStep)
 {
   if(startTracking) {
     startTracking = false;
@@ -270,14 +270,14 @@ G4double G4EmBiasingManager::GetStepLimit(G4int coupleIdx,
 
 G4double 
 G4EmBiasingManager::ApplySecondaryBiasing(
-		    std::vector<G4DynamicParticle*>& vd,
-		    const G4Track& track,
-		    G4VEmModel* currentModel,
-		    G4ParticleChangeForLoss* pPartChange,
-		    G4double& eloss,  
-		    G4int coupleIdx,
-		    G4double tcut, 
-		    G4double safety)
+                    std::vector<G4DynamicParticle*>& vd,
+                    const G4Track& track,
+                    G4VEmModel* currentModel,
+                    G4ParticleChangeForLoss* pPartChange,
+                    G4double& eloss,  
+                    G4int coupleIdx,
+                    G4double tcut, 
+                    G4double safety)
 {
   G4int index = idxSecBiasedCouple[coupleIdx];
   G4double weight = 1.0;
@@ -293,21 +293,21 @@ G4EmBiasingManager::ApplySecondaryBiasing(
 
       // Range cut
       if(0 == nsplit) { 
-	if(safety > fSafetyMin) { ApplyRangeCut(vd, track, eloss, safety); }
+        if(safety > fSafetyMin) { ApplyRangeCut(vd, track, eloss, safety); }
 
-	// Russian Roulette
+        // Russian Roulette
       } if(1 == nsplit) { 
-	weight = ApplyRussianRoulette(vd, index);
+        weight = ApplyRussianRoulette(vd, index);
 
-	// Splitting
+        // Splitting
       } else {
-	G4double tmpEnergy = pPartChange->GetProposedKineticEnergy();
-	G4ThreeVector tmpMomDir = pPartChange->GetProposedMomentumDirection();
+        G4double tmpEnergy = pPartChange->GetProposedKineticEnergy();
+        G4ThreeVector tmpMomDir = pPartChange->GetProposedMomentumDirection();
 
-	weight = ApplySplitting(vd, track, currentModel, index, tcut);
+        weight = ApplySplitting(vd, track, currentModel, index, tcut);
 
-	pPartChange->SetProposedKineticEnergy(tmpEnergy);
-	pPartChange->ProposeMomentumDirection(tmpMomDir);
+        pPartChange->SetProposedKineticEnergy(tmpEnergy);
+        pPartChange->ProposeMomentumDirection(tmpMomDir);
       }
     }
   }
@@ -319,13 +319,13 @@ G4EmBiasingManager::ApplySecondaryBiasing(
 G4double 
 G4EmBiasingManager::ApplySecondaryBiasing(
                   std::vector<G4DynamicParticle*>& vd,
-		  const G4Track& track,
-		  G4VEmModel* currentModel, 
-		  G4ParticleChangeForGamma* pPartChange,
-		  G4double& eloss,  
-		  G4int coupleIdx,
-		  G4double tcut, 
-		  G4double safety)
+                  const G4Track& track,
+                  G4VEmModel* currentModel, 
+                  G4ParticleChangeForGamma* pPartChange,
+                  G4double& eloss,  
+                  G4int coupleIdx,
+                  G4double tcut, 
+                  G4double safety)
 {
   G4int index = idxSecBiasedCouple[coupleIdx];
   G4double weight = 1.0;
@@ -341,21 +341,21 @@ G4EmBiasingManager::ApplySecondaryBiasing(
 
       // Range cut
       if(0 == nsplit) { 
-	if(safety > fSafetyMin) { ApplyRangeCut(vd, track, eloss, safety); }
+        if(safety > fSafetyMin) { ApplyRangeCut(vd, track, eloss, safety); }
 
-	// Russian Roulette
+        // Russian Roulette
       } else if(1 == nsplit) { 
-	weight = ApplyRussianRoulette(vd, index);
+        weight = ApplyRussianRoulette(vd, index);
 
-	// Splitting
+        // Splitting
       } else {
-	G4double tmpEnergy = pPartChange->GetProposedKineticEnergy();
-	G4ThreeVector tmpMomDir = pPartChange->GetProposedMomentumDirection();
+        G4double tmpEnergy = pPartChange->GetProposedKineticEnergy();
+        G4ThreeVector tmpMomDir = pPartChange->GetProposedMomentumDirection();
 
-	weight = ApplySplitting(vd, track, currentModel, index, tcut);
+        weight = ApplySplitting(vd, track, currentModel, index, tcut);
 
-	pPartChange->SetProposedKineticEnergy(tmpEnergy);
-	pPartChange->ProposeMomentumDirection(tmpMomDir);
+        pPartChange->SetProposedKineticEnergy(tmpEnergy);
+        pPartChange->ProposeMomentumDirection(tmpMomDir);
       }
     }
   }
@@ -366,7 +366,7 @@ G4EmBiasingManager::ApplySecondaryBiasing(
 
 G4double 
 G4EmBiasingManager::ApplySecondaryBiasing(std::vector<G4Track*>& track,
-					  G4int coupleIdx)
+                                          G4int coupleIdx)
 {
   G4int index = idxSecBiasedCouple[coupleIdx];
   G4double weight = 1.0;
@@ -380,16 +380,16 @@ G4EmBiasingManager::ApplySecondaryBiasing(std::vector<G4Track*>& track,
 
       G4int nsplit = nBremSplitting[index];
 
-	// Russian Roulette only
+        // Russian Roulette only
       if(1 == nsplit) { 
-	weight = secBiasedWeight[index];
-	for(size_t k=0; k<n; ++k) {
-	  if(G4UniformRand()*weight > 1.0) {
-	    const G4Track* t = track[k];
-	    delete t;
-	    track[k] = 0;
-	  }
-	}
+        weight = secBiasedWeight[index];
+        for(size_t k=0; k<n; ++k) {
+          if(G4UniformRand()*weight > 1.0) {
+            const G4Track* t = track[k];
+            delete t;
+            track[k] = 0;
+          }
+        }
       }
     }
   }
@@ -400,8 +400,8 @@ G4EmBiasingManager::ApplySecondaryBiasing(std::vector<G4Track*>& track,
 
 void
 G4EmBiasingManager::ApplyRangeCut(std::vector<G4DynamicParticle*>& vd,
-				  const G4Track& track,
-				  G4double& eloss, G4double safety)
+                                  const G4Track& track,
+                                  G4double& eloss, G4double safety)
 {
   size_t n = vd.size();
   if(!eIonisation) { 
@@ -412,13 +412,13 @@ G4EmBiasingManager::ApplyRangeCut(std::vector<G4DynamicParticle*>& vd,
     for(size_t k=0; k<n; ++k) {
       const G4DynamicParticle* dp = vd[k];
       if(dp->GetDefinition() == theElectron) {
-	G4double e = dp->GetKineticEnergy();
+        G4double e = dp->GetKineticEnergy();
         if(eIonisation->GetRangeForLoss(e, track.GetMaterialCutsCouple()) 
-	   < safety) {
-	  eloss += e;
-	  delete dp;
+           < safety) {
+          eloss += e;
+          delete dp;
           vd[k] = 0;
-	}
+        }
       }
     }
   }
@@ -428,10 +428,10 @@ G4EmBiasingManager::ApplyRangeCut(std::vector<G4DynamicParticle*>& vd,
 
 G4double
 G4EmBiasingManager::ApplySplitting(std::vector<G4DynamicParticle*>& vd,
-				   const G4Track& track,
-				   G4VEmModel* currentModel, 
-				   G4int index,
-				   G4double tcut)
+                                   const G4Track& track,
+                                   G4VEmModel* currentModel, 
+                                   G4int index,
+                                   G4double tcut)
 {
   // method is applied only if 1 secondary created PostStep 
   // in the case of many secodndaries there is a contrudition
@@ -458,9 +458,9 @@ G4EmBiasingManager::ApplySplitting(std::vector<G4DynamicParticle*>& vd,
     for(G4int k=1; k<nsplit; ++k) {  
       tmpSecondaries.clear();
       currentModel->SampleSecondaries(&tmpSecondaries, couple, dynParticle, 
-				      tcut);
+                                      tcut);
       for (size_t kk=0; kk<tmpSecondaries.size(); ++kk) {
-	vd.push_back(tmpSecondaries[kk]);
+        vd.push_back(tmpSecondaries[kk]);
       }
     }
   }

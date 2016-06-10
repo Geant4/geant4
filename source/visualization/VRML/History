@@ -1,4 +1,4 @@
-$Id: History 78838 2014-01-28 08:46:17Z gcosmo $
+$Id: History 88190 2015-02-02 17:24:54Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/VRML sub-category
 ------------------------------------------------
+
+2nd February 2015  Gabriele Cosmo (VRML-V10-01-00)
+- Fix to sources.cmake script to include missing dependency on external library.
 
 10th December 2013  John Allison  (VRML-V10-00-00)
 - G4VRML1/2File.cc: Declared as G4VGraphicsSystem::fileWriter.

@@ -31,7 +31,7 @@
 #include "G4AnalysisManagerState.hh"
 
 #include "tools/rroot/file"
-#include <tools/gzip_buffer>
+#include <tools/zlib>
 
 #include <iostream>
 #include <cstdio>
@@ -69,7 +69,7 @@ G4bool G4RootRFileManager::OpenRFile(const G4String& fileName,
 
   // create new file
   tools::rroot::file* newFile = new tools::rroot::file(G4cout, name);
-  newFile->add_unziper('Z',tools::gunzip_buffer);
+  newFile->add_unziper('Z',tools::decompress_buffer);
   
   if ( ! newFile->is_open() ) {
     G4ExceptionDescription description;
@@ -112,6 +112,6 @@ tools::rroot::file* G4RootRFileManager::GetRFile(const G4String& fileName,
   if  ( it != fRFiles.end() )
     return it->second;
   else {
-    return 0;
+    return nullptr;
   }     
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectroNuclearCrossSection.cc 81105 2014-05-21 08:03:54Z gcosmo $
+// $Id: G4ElectroNuclearCrossSection.cc 94079 2015-11-05 15:03:02Z gcosmo $
 //
 // G4 Physics class: G4ElectroNuclearCrossSection for gamma+A cross sections
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-01
@@ -67,20 +67,20 @@ static const G4double pos=16.5;                // HE Pomeron shift
 static const G4double reg=.11;                 // HE Reggeon slope
 static const G4double mel=0.5109989;           // Mass of an electron in MeV
 static const G4double mel2=mel*mel;     // Squared Mass of electron in MeV
-static const G4double lmel=std::log(mel);      // Log of an electron mass
+static const G4double lmel=G4Log(mel);      // Log of an electron mass
 //
 static const G4int nE=336;
-static const G4int mL=nE-1;
+static const G4int mLL=nE-1;
 static const G4double EMi=2.0612; // Minimum tabulated Energy of the Electron
 static const G4double EMa=50000.; // Maximum tabulated Energy of the Electron
 static const G4double EMa2=EMa*EMa; // Maximum tabulated Energy of the Electron ^2
-static const G4double lEMi=std::log(EMi);  // Minimum tabulated logarithmic Energy of the Electron
-static const G4double lEMa=std::log(EMa);  // Maximum tabulated logarithmic Energy of the Electron
+static const G4double lEMi=G4Log(EMi);  // Minimum tabulated logarithmic Energy of the Electron
+static const G4double lEMa=G4Log(EMa);  // Maximum tabulated logarithmic Energy of the Electron
 static const G4double lEMa2=lEMa*lEMa;  // Maximum tabulated logarithmic Energy of the Electron ^2
-static const G4double dlnE=(lEMa-lEMi)/mL; // Logarithmic step in the table for the electron Energy
+static const G4double dlnE=(lEMa-lEMi)/mLL; // Logarithmic step in the table for the electron Energy
 static const G4double alop=1./137.036/3.14159265; //coef. for the calculated functions (Ee>50000.)
-static const G4double le1=(lEMa-1.)*EMa;  // (std::log(E0)-1)*E0
-static const G4double leh=(lEMa-.5)*EMa2; // (std::log(E0)-.5)*E0^2
+static const G4double le1=(lEMa-1.)*EMa;  // (G4Log(E0)-1)*E0
+static const G4double leh=(lEMa-.5)*EMa2; // (G4Log(E0)-.5)*E0^2
 //
 static const G4double ha=poc*.5;        // a/2
 static const G4double hab=ha*pos;    // a*b/2
@@ -90,9 +90,9 @@ static const G4double d2 = 2 - reg;
 static const G4double cd=shd/reg;    // c/d
 static const G4double cd1=shd/d1;    // c/d1
 static const G4double cd2=shd/d2;    // c/d2
-static const G4double ele=std::exp(-reg*lEMa); // E0^(-d)
-static const G4double ele1=std::exp(d1*lEMa); // E0^(-d1)
-static const G4double ele2=std::exp(d2*lEMa); // E0^(-d2)
+static const G4double ele=G4Exp(-reg*lEMa); // E0^(-d)
+static const G4double ele1=G4Exp(d1*lEMa); // E0^(-d1)
+static const G4double ele2=G4Exp(d2*lEMa); // E0^(-d2)
 //
 static const G4double phte=poc*(lEMa-pos)+shd*ele; // CrossX on theHighTableEdge (small change)
 static const G4int    imax=27;   // Not more than "imax" steps to find the solution
@@ -103,14 +103,14 @@ static const G4double infEn = 9.e27;
 static const G4double dM=938.27+939.57; // Mean double nucleon mass = m_n+m_p (@@ no binding)
 static const G4double Q0=843.;          // Coefficient of the dipole nucleonic form-factor
 static const G4double Q02=Q0*Q0;        // Squared coefficient of the dipole nucleonic form-factor
-static const G4double blK0=std::log(185.);   // Coefficient of the b-function
+static const G4double blK0=G4Log(185.);   // Coefficient of the b-function
 static const G4double bp=0.85;          // Power of the b-function
-static const G4double clK0=std::log(1390.);  // Coefficient of the c-function
+static const G4double clK0=G4Log(1390.);  // Coefficient of the c-function
 static const G4double cp=3.;            // Power of the c-function
 //
 static const G4int nN=14;
 //
-static const G4int L[nN]={138, 2, 32, 75, 26, 41, 0, 67, 58, 46, 41, 38, 39, 36};
+static const G4int LL[nN]={138, 2, 32, 75, 26, 41, 0, 67, 58, 46, 41, 38, 39, 36};
 // !! @@ Change it from ln(A) to A approximation !!
 static const G4double A[nN]={1.,2.,3.,4.,6.,7.,9.,12.,16.,27.,63.546,118.71,207.2,238.472};
 //
@@ -2205,28 +2205,29 @@ G4ElectroNuclearCrossSection::~G4ElectroNuclearCrossSection()
      ++it;
      }
      cache.clear();
+     delete lastUsedCacheEl;
 }
 
 G4double G4ElectroNuclearCrossSection::HighEnergyJ1(G4double lE)
 {
-    return ha*(lE*lE-lEMa2)-ab*(lE-lEMa)-cd*(std::exp(-reg*lE)-ele);
+    return ha*(lE*lE-lEMa2)-ab*(lE-lEMa)-cd*(G4Exp(-reg*lE)-ele);
 }
 
 G4double G4ElectroNuclearCrossSection::HighEnergyJ2(G4double lE, G4double E)
 {
-    return poc*((lE-1.)*E-le1)-ab*(E-EMa)+cd1*(std::exp(d1*lE)-ele1);
+    return poc*((lE-1.)*E-le1)-ab*(E-EMa)+cd1*(G4Exp(d1*lE)-ele1);
 }
 
 G4double G4ElectroNuclearCrossSection::HighEnergyJ3(G4double lE, G4double E2)
 {
-    return ha*((lE-.5)*E2-leh)-hab*(E2-EMa2)+cd2*(std::exp(d2*lE)-ele2);
+    return ha*((lE-.5)*E2-leh)-hab*(E2-EMa2)+cd2*(G4Exp(d2*lE)-ele2);
 }
 
 G4double G4ElectroNuclearCrossSection::DFun(G4double x)
 {
-    G4double y=std::exp(x-lastG-lmel);             // y for the x
+    G4double y=G4Exp(x-lastG-lmel);             // y for the x
     G4double flux=lastG*(2.-y*(2.-y))-1.;          // flux factor
-    return (poc*(x-pos)+shd*std::exp(-reg*x))*flux;
+    return (poc*(x-pos)+shd*G4Exp(-reg*x))*flux;
 }
 
 G4double G4ElectroNuclearCrossSection::Fun(G4double x)
@@ -2234,8 +2235,8 @@ G4double G4ElectroNuclearCrossSection::Fun(G4double x)
     // Integrated PhoNuc cross section
     G4double dlg1=lastG+lastG-1.;
     G4double lgoe=lastG/lastE;
-    G4double HE2=HighEnergyJ2(x, std::exp(x));
-    return dlg1*HighEnergyJ1(x)-lgoe*(HE2+HE2-HighEnergyJ3(x, std::exp(2*x))/lastE);
+    G4double HE2=HighEnergyJ2(x, G4Exp(x));
+    return dlg1*HighEnergyJ1(x)-lgoe*(HE2+HE2-HighEnergyJ3(x, G4Exp(2*x))/lastE);
 }
 
 void
@@ -2277,7 +2278,7 @@ G4double G4ElectroNuclearCrossSection::GetElementCrossSection(const G4DynamicPar
             G4double Aa = nistmngr->GetAtomicMassAmu(ZZ); // average A
             G4int N = (G4int)Aa - ZZ;
             lastUsedCacheEl->F  = GetFunctions(Aa,lastUsedCacheEl->J1,lastUsedCacheEl->J2,lastUsedCacheEl->J3); // new ZeroPos and filling of J-functions
-            lastUsedCacheEl->H  = alop*Aa*(1.-.072*std::log(Aa));// corresponds to lastSP from G4PhotonuclearCrossSection
+            lastUsedCacheEl->H  = alop*Aa*(1.-.072*G4Log(Aa));// corresponds to lastSP from G4PhotonuclearCrossSection
             lastUsedCacheEl->TH = ThresholdEnergy(ZZ, N); // The last Threshold Energy
             cacheEl_t* new_el = new cacheEl_t(*lastUsedCacheEl);
             cache[ZZ] = new_el;
@@ -2308,9 +2309,9 @@ G4double G4ElectroNuclearCrossSection::GetElementCrossSection(const G4DynamicPar
         return 0.;
     }
     
-    G4double lE=std::log(Energy);               // std::log(eE) (it is necessary at this point for the fit)
+    G4double lE=G4Log(Energy);               // G4Log(eE) (it is necessary at this point for the fit)
 
-    lastG=lE-lmel;                         // Gamma of the electron (used to recover std::log(eE))
+    lastG=lE-lmel;                         // Gamma of the electron (used to recover G4Log(eE))
     G4double dlg1=lastG+lastG-1.;
     G4double lgoe=lastG/lastE;
     if(lE<lEMa) // Linear fit is made explicitly to fix the last bin for the randomization
@@ -2318,7 +2319,7 @@ G4double G4ElectroNuclearCrossSection::GetElementCrossSection(const G4DynamicPar
         G4double shift=(lE-lEMi)/dlnE;
         G4int    blast=static_cast<int>(shift);
         if(blast<0)   blast=0;
-        if(blast>=mL) blast=mL-1;
+        if(blast>=mLL) blast=mLL-1;
         shift-=blast;
         lastL=blast+1;
         G4double YNi=dlg1*lastUsedCacheEl->J1[blast]-lgoe*(lastUsedCacheEl->J2[blast]+lastUsedCacheEl->J2[blast]-lastUsedCacheEl->J3[blast]/lastE);
@@ -2328,14 +2329,14 @@ G4double G4ElectroNuclearCrossSection::GetElementCrossSection(const G4DynamicPar
     }
     else
 	{
-        lastL=mL;
+        lastL=mLL;
         
-        G4double term1=lastUsedCacheEl->J1[mL]+lastUsedCacheEl->H*HighEnergyJ1(lE);
+        G4double term1=lastUsedCacheEl->J1[mLL]+lastUsedCacheEl->H*HighEnergyJ1(lE);
         
-        G4double term2=lastUsedCacheEl->J2[mL]+lastUsedCacheEl->H*HighEnergyJ2(lE, Energy);
+        G4double term2=lastUsedCacheEl->J2[mLL]+lastUsedCacheEl->H*HighEnergyJ2(lE, Energy);
         
         G4double En2 = Energy*Energy;
-        G4double term3=lastUsedCacheEl->J3[mL]+lastUsedCacheEl->H*HighEnergyJ3(lE, En2);
+        G4double term3=lastUsedCacheEl->J3[mLL]+lastUsedCacheEl->H*HighEnergyJ3(lE, En2);
 
         lastSig=dlg1*term1-lgoe*(term2+term2-term3/lastE);
     }
@@ -2374,7 +2375,7 @@ G4double G4ElectroNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
 }
 
 
-// Calculate the functions for the std::log(A)
+// Calculate the functions for the G4Log(A)
 G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* xx, G4double* yy, G4double* zz)
 {
     // --------------------------------
@@ -2397,7 +2398,7 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* xx, G4dou
                 yy[k]=P1[i][k];                    // J1
                 zz[k]=P2[i][k];                    // J2
             }
-            r=L[i];                             // Low channel for the J-functions
+            r=LL[i];                             // Low channel for the J-functions
         }
         if(r<0)                               // Not the basic A-value -> must be calculated
         {
@@ -2417,8 +2418,8 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* xx, G4dou
                 G4double zi=P2[k1][q];
                 zz[q]=zi+(P2[k][q]-zi)*b;
             }
-            r=L[k];
-            if(L[k1]<r) r=L[k1];
+            r=LL[k];
+            if(LL[k1]<r) r=LL[k1];
         }
     }
     return r;
@@ -2427,10 +2428,10 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* xx, G4dou
 G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
 {
     if(lastSig <= 0.0) { return 0.0; }  // VI
-    G4double phLE = 0.;                        // Prototype of the std::log(nu=E_gamma)
+    G4double phLE = 0.;                        // Prototype of the G4Log(nu=E_gamma)
     G4double Y[nE] = {0.0};                    // Prepare the array for randomization
     
-    G4double lastLE=lastG+lmel;   // recover std::log(eE) from the gamma (lastG)
+    G4double lastLE=lastG+lmel;   // recover G4Log(eE) from the gamma (lastG)
     G4double dlg1=lastG+lastG-1.;
     G4double lgoe=lastG/lastE;
     for (G4int i=lastUsedCacheEl->F;i<=lastL;i++) {
@@ -2439,13 +2440,13 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
     }
     // Tempory IF of H.P.: delete it if the *HP* err message does not
     // show up M.K.
-    if(lastSig>0.99*Y[lastL] && lastL<mL && Y[lastL]<1.E-30)
+    if(lastSig>0.99*Y[lastL] && lastL<mLL && Y[lastL]<1.E-30)
     {
         G4cerr << "*HP*G4ElNucCS::GetEqPhotE:S=" << lastSig <<">" << Y[lastL]
-        << ",l=" << lastL << ">" << mL << G4endl;
+        << ",l=" << lastL << ">" << mLL << G4endl;
         if(lastSig <= 0.0) { return 0.0; }  // VI
     }
-    G4double ris = lastSig*G4UniformRand(); // Sig can be > Y[lastL = mL], then it
+    G4double ris = lastSig*G4UniformRand(); // Sig can be > Y[lastL = mLL], then it
     // is in the funct. region
     
     if (ris < Y[lastL]) {               // Search the table
@@ -2459,7 +2460,7 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
         G4double Yi = Y[j1];              // Previous value is below ris
         phLE = lEMi + (j1 + (ris-Yi)/(Yj-Yi) )*dlnE;
     } else {                            // Search with the function
-        if (lastL < mL) G4cerr << "**G4EleNucCS::GetEfPhE:L=" << lastL << ",S="
+        if (lastL < mLL) G4cerr << "**G4EleNucCS::GetEfPhE:L=" << lastL << ",S="
             << lastSig << ",Y=" << Y[lastL] << G4endl;
         G4double f = (ris-Y[lastL])/lastUsedCacheEl->H;    // The scaled residual value of the cross-section integral
         phLE=SolveTheEquation(f);           // Solve the equation to find theLog(phE) (compare with lastLE)
@@ -2470,18 +2471,18 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
         << currentZ << ", lpE" << phLE << ">leE" << lastLE << ",Sig="
         << lastSig << ",rndSig=" << ris << ",Beg=" << lastUsedCacheEl->F << ",End="
         << lastL << ",Y=" << Y[lastL] << G4endl;
-        if(lastLE<7.2) phLE=std::log(std::exp(lastLE)-.511);
+        if(lastLE<7.2) phLE=G4Log(G4Exp(lastLE)-.511);
         else phLE=7.;
     }
-    return std::exp(phLE);
+    return G4Exp(phLE);
 }
 
 
 G4double G4ElectroNuclearCrossSection::SolveTheEquation(G4double f)
 {
-    G4double lastLE=lastG+lmel;                          // recover std::log(eE) from the gamma (lastG)
-    G4double topLim=lastLE-.001;                         // maximum std::log(phE) for equivalent photons
-    G4double rE=EMa/std::exp(lastLE);                         // r=EMa/Eel to make the firs guess
+    G4double lastLE=lastG+lmel;                          // recover G4Log(eE) from the gamma (lastG)
+    G4double topLim=lastLE-.001;                         // maximum G4Log(phE) for equivalent photons
+    G4double rE=EMa/G4Exp(lastLE);                         // r=EMa/Eel to make the firs guess
     G4double x=lEMa+f/phte/(lastG*(2.-rE*(2.-rE))-1.);         // First guess (the first step from the edge)
     if(x>topLim) x=topLim;
     for(G4int i=0; i<imax; i++)
@@ -2516,7 +2517,7 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonQ2(G4double nu)
     G4double iar=Qi2/Qa2;                   // Q2min/Q2max ratio
     G4double Dy=ye+.5*y2;                   // D(y) function
     G4double Py=ye/Dy;                      // P(y) function
-    G4double ePy=1.-std::exp(Py);                // 1-std::exp(P(y)) part
+    G4double ePy=1.-G4Exp(Py);                // 1-std::exp(P(y)) part
     G4double Uy=Py*(1.-iar);                // U(y) function
     G4double Fy=(ye+ye)*(1.+ye)*iar/y2;     // F(y) function
     G4double fr=iar/(1.-ePy*iar);           // Q-fraction
@@ -2524,7 +2525,7 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonQ2(G4double nu)
     {
         return 0.;
     }
-    G4double LyQa2=std::log(Fy+fr);              // L(y,Q2max) function
+    G4double LyQa2=G4Log(Fy+fr);              // L(y,Q2max) function
     G4bool cond=true;
     G4int maxTry=3;
     G4int cntTry=0;
@@ -2532,7 +2533,7 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonQ2(G4double nu)
     while(cond&&cntTry<maxTry)             // The loop to avoid x>1.
     {
         G4double R=G4UniformRand();           // Random number (0,1)
-        Q2=Qi2*(ePy+1./(std::exp(R*LyQa2-(1.-R)*Uy)-Fy));
+        Q2=Qi2*(ePy+1./(G4Exp(R*LyQa2-(1.-R)*Uy)-Fy));
         cntTry++;
         cond = Q2>1878.*nu;
     }
@@ -2556,12 +2557,12 @@ G4double G4ElectroNuclearCrossSection::GetVirtualFactor(G4double nu, G4double Q2
     {
         return 0.;
     }
-    G4double lK=std::log(K);                     // ln(K)
+    G4double lK=G4Log(K);                     // ln(K)
     G4double x=1.-K/nu;                     // This definitin saves one div.
     G4double GD=1.+Q2/Q02;                  // Reversed nucleonic form-factor
-    G4double b=std::exp(bp*(lK-blK0));           // b-factor
-    G4double c=std::exp(cp*(lK-clK0));           // c-factor
-    G4double r=.5*std::log(Q2+nu*nu)-lK;         // r=.5*std::log((Q^2+nu^2)/K^2)
-    G4double ef=std::exp(r*(b-c*r*r));           // exponential factor
+    G4double b=G4Exp(bp*(lK-blK0));           // b-factor
+    G4double c=G4Exp(cp*(lK-clK0));           // c-factor
+    G4double r=.5*G4Log(Q2+nu*nu)-lK;         // r=.5*G4Log((Q^2+nu^2)/K^2)
+    G4double ef=G4Exp(r*(b-c*r*r));           // exponential factor
     return (1.-x)*ef/GD/GD;
 }

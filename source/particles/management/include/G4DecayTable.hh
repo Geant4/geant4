@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayTable.hh 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4DecayTable.hh 92057 2015-08-14 13:34:55Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -82,7 +82,7 @@ class G4DecayTable
     // Returns number of decay channels inside
 
  public: // With Description
-    G4VDecayChannel* SelectADecayChannel();
+    G4VDecayChannel* SelectADecayChannel(G4double parentMass= -1.);
     // A decay channel is selected at random according to the branching ratio 
   
     G4VDecayChannel* GetDecayChannel(G4int index) const;

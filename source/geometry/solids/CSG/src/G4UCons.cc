@@ -32,6 +32,9 @@
 
 #include "G4Cons.hh"
 #include "G4UCons.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+
 #include "G4VPVParameterisation.hh"
  
 //////////////////////////////////////////////////////////////////////////
@@ -113,3 +116,5 @@ G4VSolid* G4UCons::Clone() const
 {
   return new G4UCons(*this);
 }
+
+#endif  // G4GEOM_USE_USOLIDS

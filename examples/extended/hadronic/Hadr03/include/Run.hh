@@ -53,7 +53,7 @@ class Run : public G4Run
   public:
     void SetPrimary(G4ParticleDefinition* particle, G4double energy);
     void SetTargetXXX(G4bool);        
-    void CountProcesses(const G4VProcess* process);
+    void CountProcesses(G4VProcess* process);
     void SumTrack (G4double);    
     void CountNuclearChannel(G4String, G4double);                          
     void ParticleCount(G4String, G4double);

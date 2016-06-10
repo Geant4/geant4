@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PDGCodeChecker.cc 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4PDGCodeChecker.cc 94091 2015-11-05 15:13:52Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -384,15 +384,15 @@ G4int G4PDGCodeChecker::CheckForNuclei()
   }
 
   pcode -= 1000000000;
-  G4int L = pcode/10000000;
-  pcode -= 10000000*L;
+  G4int LL = pcode/10000000;
+  pcode -= 10000000*LL;
   G4int Z = pcode/10000;
   pcode -= 10000*Z;
   G4int A = pcode/10;
   
   // Allow neutron balls
-  // if (A < 2 || Z > A-L || L>A || Z<=0 ) {
-  if (A < 2 || Z > A-L || L>A ) {
+  // if (A < 2 || Z > A-LL || LL>A || Z<=0 ) {
+  if (A < 2 || Z > A-LL || LL>A ) {
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
       G4cout << " G4PDGCodeChecker::CheckPDGCode : ";
@@ -403,9 +403,9 @@ G4int G4PDGCodeChecker::CheckForNuclei()
     return 0;
   }
 
-  G4int n_up   = 2*Z +   (A-Z-L) + L;
-  G4int n_down =   Z + 2*(A-Z-L) + L;
-  G4int n_s    =   L;
+  G4int n_up   = 2*Z +   (A-Z-LL) + LL;
+  G4int n_down =   Z + 2*(A-Z-LL) + LL;
+  G4int n_s    =   LL;
 
   // Fill Quark contents
   if (code>0) {

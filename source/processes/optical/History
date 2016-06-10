@@ -16,6 +16,32 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ 9 Oct 15: P. Gumplinger (op-V10-01-05)
+-  fix Coverity error in G4OpBoundaryProcess.cc
+
+13 Aug 15: P. Gumplinger (op-V10-01-04)
+- G4OpBoundaryProcess.cc, G4OpRayleigh.cc - checked while loops
+
+3 July 2015 P. Gumplinger (op-V10-01-03)
+- Allow for a real and imaginary part of the index of refraction
+  for Material1 in G4OpBoundaryProcess::GetReflectivity
+  Bug report: #1762
+
+26 June 2015 P. Gumplinger (op-V10-01-02)
+- Correct the reflectivity calculation with complex refractive index;
+  include the index of refraction of the PreStepPoint medium
+  Bug report: #1762
+
+23 March 2015 P. Gumplinger (op-V10-01-01)
+- change the calculation of NewPolarization in G4OpRayleigh.cc to avoid a
+  divided by zero when the NewMomentumDirection is perpendicular to the
+  OldPolarization. If the polarization is perpendicular to the scattering
+  plane, it will not change after the scattering.
+
+11 March 2015 P. Gumplinger (op-V10-01-00)
+- add aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
+  to G4OpAbsorption
+
 06 November 2014 P. Gumplinger (op-V10-00-10)
 - fix Coverity error in G4OpWLS.cc
 

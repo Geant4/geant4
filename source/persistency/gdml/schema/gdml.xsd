@@ -36,6 +36,7 @@
       </xs:choice>
     </xs:sequence>
     <xs:attribute name="name" type="xs:ID"></xs:attribute>
+    <xs:attribute name="copynumber" type="xs:integer"/>
   </xs:complexType>
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
   <xs:complexType name="DivisionPlacementType">
@@ -169,6 +170,14 @@
 	<xs:element ref="materials"/>
 	<xs:element ref="solids"/>
 	<xs:element ref="structure"/>
+	<xs:element minOccurs="0" maxOccurs="1" name="userinfo">
+	  <xs:complexType>
+	    <xs:sequence>
+	      <xs:element maxOccurs="unbounded" minOccurs="0" name="auxiliary" type="AuxiliaryType"/>
+	    </xs:sequence>
+	  </xs:complexType>	  
+	</xs:element>
+	
 	<xs:element maxOccurs="unbounded" name="setup">
 	  <xs:annotation>
 	    <xs:documentation>Geometry setup representing the particular geometry hierarchy by refferring to

@@ -35,12 +35,13 @@
 #define G4H2ToolsManager_h 1
 
 #include "G4VH2Manager.hh"
-#include "G4BaseToolsManager.hh"
+#include "G4THnManager.hh"
 #include "G4HnManager.hh"
 #include "globals.hh"
 
 #include <vector>
 #include <map>
+#include <memory>
 
 namespace tools {
 namespace histo { 
@@ -48,20 +49,17 @@ class h2d;
 }
 }
 
-class G4H2ToolsManager : public G4VH2Manager
+class G4H2ToolsManager : public G4VH2Manager,
+                         public G4THnManager<tools::histo::h2d>
 {
   public:
-    G4H2ToolsManager(const G4AnalysisManagerState& state);
+    explicit G4H2ToolsManager(const G4AnalysisManagerState& state);
     virtual ~G4H2ToolsManager();
 
     // Method to add histograms read from a file
     G4int AddH2(const G4String& name, tools::histo::h2d* h2d);
     // Method for merge (MT)
     void AddH2Vector(const std::vector<tools::histo::h2d*>& h2Vector);
-    // Reset data
-    G4bool Reset();
-    // Return true if the H2 vector is empty
-    G4bool IsEmpty() const;
     
     // Access methods
     //
@@ -91,7 +89,7 @@ class G4H2ToolsManager : public G4VH2Manager
                            const G4String& xfcnName = "none", 
                            const G4String& yfcnName = "none",
                            const G4String& xbinScheme = "linear",
-                           const G4String& ybinScheme = "linear");
+                           const G4String& ybinScheme = "linear") final;
                            
     virtual G4int CreateH2(const G4String& name, const G4String& title,
                            const std::vector<G4double>& xedges,
@@ -99,7 +97,7 @@ class G4H2ToolsManager : public G4VH2Manager
                            const G4String& xunitName = "none", 
                            const G4String& yunitName = "none",
                            const G4String& xfcnName = "none", 
-                           const G4String& yfcnName = "none");
+                           const G4String& yfcnName = "none") final;
                           
     virtual G4bool SetH2(G4int id,
                            G4int nxbins, G4double xmin, G4double xmax, 
@@ -109,7 +107,7 @@ class G4H2ToolsManager : public G4VH2Manager
                            const G4String& xfcnName = "none", 
                            const G4String& yfcnName = "none",
                            const G4String& xbinScheme = "linear",
-                           const G4String& ybinScheme = "linear");
+                           const G4String& ybinScheme = "linear") final;
                            
     virtual G4bool SetH2(G4int id,
                            const std::vector<G4double>& xedges,
@@ -117,53 +115,51 @@ class G4H2ToolsManager : public G4VH2Manager
                            const G4String& xunitName = "none", 
                            const G4String& yunitName = "none",
                            const G4String& xfcnName = "none", 
-                           const G4String& yfcnName = "none");
+                           const G4String& yfcnName = "none") final;
 
-    virtual G4bool ScaleH2(G4int id, G4double factor);
+    virtual G4bool ScaleH2(G4int id, G4double factor) final;
     
     // Method to fill histograms
     //
     virtual G4bool FillH2(G4int id, G4double xvalue, G4double yvalue,
-                          G4double weight = 1.0);
+                          G4double weight = 1.0) final;
                           
 
     // Methods to manipulate histograms
     //
 
     // Access methods
-    virtual G4int  GetH2Id(const G4String& name, G4bool warn = true) const;
+    virtual G4int  GetH2Id(const G4String& name, G4bool warn = true) const final;
 
     // Access to H2 parameters
-    virtual G4int    GetH2Nxbins(G4int id) const;
-    virtual G4double GetH2Xmin(G4int id) const;
-    virtual G4double GetH2Xmax(G4int id) const;
-    virtual G4double GetH2XWidth(G4int id) const;
-    virtual G4int    GetH2Nybins(G4int id) const;
-    virtual G4double GetH2Ymin(G4int id) const;
-    virtual G4double GetH2Ymax(G4int id) const;
-    virtual G4double GetH2YWidth(G4int id) const;
+    virtual G4int    GetH2Nxbins(G4int id) const final;
+    virtual G4double GetH2Xmin(G4int id) const final;
+    virtual G4double GetH2Xmax(G4int id) const final;
+    virtual G4double GetH2XWidth(G4int id) const final;
+    virtual G4int    GetH2Nybins(G4int id) const final;
+    virtual G4double GetH2Ymin(G4int id) const final;
+    virtual G4double GetH2Ymax(G4int id) const final;
+    virtual G4double GetH2YWidth(G4int id) const final;
         
     // Setters for attributes for plotting
-    virtual G4bool SetH2Title(G4int id, const G4String& title);
-    virtual G4bool SetH2XAxisTitle(G4int id, const G4String& title);
-    virtual G4bool SetH2YAxisTitle(G4int id, const G4String& title);
-    virtual G4bool SetH2ZAxisTitle(G4int id, const G4String& title);
+    virtual G4bool SetH2Title(G4int id, const G4String& title) final;
+    virtual G4bool SetH2XAxisTitle(G4int id, const G4String& title) final;
+    virtual G4bool SetH2YAxisTitle(G4int id, const G4String& title) final;
+    virtual G4bool SetH2ZAxisTitle(G4int id, const G4String& title) final;
 
     // Access attributes for plotting
-    virtual G4String GetH2Title(G4int id) const;
-    virtual G4String GetH2XAxisTitle(G4int id) const;
-    virtual G4String GetH2YAxisTitle(G4int id) const;
-    virtual G4String GetH2ZAxisTitle(G4int id) const;
+    virtual G4String GetH2Title(G4int id) const final;
+    virtual G4String GetH2XAxisTitle(G4int id) const final;
+    virtual G4String GetH2YAxisTitle(G4int id) const final;
+    virtual G4String GetH2ZAxisTitle(G4int id) const final;
  
      // Write data on ASCII file
-    virtual G4bool WriteOnAscii(std::ofstream& output);
+    virtual G4bool WriteOnAscii(std::ofstream& output) final;
    
+    // Access to Hn manager
+    virtual std::shared_ptr<G4HnManager> GetHnManager() final;
 
   private:
-    virtual tools::histo::h2d*  GetH2InFunction(G4int id, G4String function,
-                                      G4bool warn = true,
-                                      G4bool onlyIfActive = true) const;
-
     void AddH2Information(const G4String& name,  
                           const G4String& xunitName, 
                           const G4String& yunitName, 
@@ -171,37 +167,36 @@ class G4H2ToolsManager : public G4VH2Manager
                           const G4String& yfcnName,
                           G4BinScheme xbinScheme,
                           G4BinScheme ybinScheme) const;
-
-    G4int RegisterToolsH2(tools::histo::h2d* h2d, 
-                          const G4String& name);
                             
     // data members
     //
-    G4BaseToolsManager fBaseToolsManager;
-    std::vector<tools::histo::h2d*>  fH2Vector;            
-    std::map<G4String, G4int>  fH2NameIdMap;            
+    // static constexpr G4int kDimension = 2;  // not yet supported on vc12
+    static const G4int kDimension;
 };
 // inline methods
 
 inline  std::vector<tools::histo::h2d*>::iterator G4H2ToolsManager::BeginH2()
-{ return fH2Vector.begin(); }
+{ return BeginT(); }
 
 inline  std::vector<tools::histo::h2d*>::iterator G4H2ToolsManager::EndH2()
-{ return fH2Vector.end(); }
+{ return EndT(); }
 
 inline  std::vector<tools::histo::h2d*>::const_iterator 
 G4H2ToolsManager::BeginConstH2() const
-{ return fH2Vector.begin(); }
+{ return BeginConstT(); }
 
 inline  std::vector<tools::histo::h2d*>::const_iterator 
 G4H2ToolsManager::EndConstH2() const
-{ return fH2Vector.end(); }
+{ return EndConstT(); }
 
 inline const std::vector<tools::histo::h2d*>& G4H2ToolsManager::GetH2Vector() const
-{ return fH2Vector; }
+{ return fTVector; }
 
 inline const std::vector<G4HnInformation*>& G4H2ToolsManager::GetHnVector() const
 { return fHnManager->GetHnVector(); }
+
+inline std::shared_ptr<G4HnManager> G4H2ToolsManager::GetHnManager() 
+{ return std::shared_ptr<G4HnManager>(fHnManager); }
 
 #endif
 

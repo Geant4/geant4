@@ -23,22 +23,23 @@ include(${Geant4_USE_FILE})
 #----------------------------------------------------------------------------
 # Find ROOT (optional package)
 #
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 find_package(ROOT QUIET)
 if(ROOT_FOUND)
-  message(STATUS "G4 Examples: ROOT found. --> iort_therapy example with ROOT enabled.") 
+  message(STATUS "G4 Examples: ROOT found. --> iort_therapy example with ROOT plotter enabled.") 
   # Uncomment this line if suitable (some customization may be needed)
   add_definitions(-DG4ANALYSIS_USE_ROOT)   
+  include_directories(${PROJECT_SOURCE_DIR}/include 
+                    ${Geant4_INCLUDE_DIR}
+                    ${ROOT_INCLUDE_DIR})
 else()
-  message(STATUS "G4 Examples: ROOT not found. --> iort_therapy example with ROOT disabled.") 
+  message(STATUS "G4 Examples: ROOT not found. --> iort_therapy example with ROOT plotter disabled.") 
+  include_directories(${PROJECT_SOURCE_DIR}/include 
+                    ${Geant4_INCLUDE_DIR})
 endif()
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
-include_directories(${PROJECT_SOURCE_DIR}/include 
-                    ${Geant4_INCLUDE_DIR}
-                    ${ROOT_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
@@ -46,7 +47,11 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(iort_therapy iort_therapy.cc ${sources} ${headers})
-target_link_libraries(iort_therapy ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} )
+if(ROOT_FOUND)
+ target_link_libraries(iort_therapy ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
+else()
+ target_link_libraries(iort_therapy ${Geant4_LIBRARIES})
+endif()
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
@@ -54,7 +59,7 @@ target_link_libraries(iort_therapy ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(iort_therapy_SCRIPTS
-    batch.mac defaultMacro.mac defaultMacroWithReferencePhysicsList.mac
+    batch.mac defaultMacro.mac defaultMacroWithReferencePhysicsList.mac macro/GUIPersonalisation.mac
   )
 
 foreach(_script ${iort_therapy_SCRIPTS})

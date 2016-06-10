@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNADingfelderChargeIncreaseModel.hh 70171 2013-05-24 13:34:18Z gcosmo $
+// $Id: G4DNADingfelderChargeIncreaseModel.hh 92859 2015-09-18 07:58:30Z gcosmo $
 //
 
 #ifndef G4DNADingfelderChargeIncreaseModel_h
@@ -62,18 +62,21 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
+  inline void SelectStationary(G4bool input); 
+
 protected:
 
   G4ParticleChangeForGamma* fParticleChangeForGamma;
 
 private:
+ 
   // Water density table
   const std::vector<G4double>* fpMolWaterDensity;
 
   std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
   std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
 
-  G4bool isInitialised;
+  G4bool isInitialised, statCode;
   G4int verboseLevel;
   
   // Partial cross section
@@ -114,7 +117,14 @@ private:
   G4DNADingfelderChargeIncreaseModel(const  G4DNADingfelderChargeIncreaseModel&);
 
 };
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4DNADingfelderChargeIncreaseModel::SelectStationary (G4bool input)
+{ 
+    statCode = input; 
+}		 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
+

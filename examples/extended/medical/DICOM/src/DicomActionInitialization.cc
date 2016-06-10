@@ -28,7 +28,6 @@
 /// \file DicomActionInitialization.cc
 /// \brief Implementation of the DicomActionInitialization class
 
-
 #include "DicomActionInitialization.hh"
 
 #include "DicomActionInitialization.hh"
@@ -65,5 +64,3 @@ void DicomActionInitialization::Build() const
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

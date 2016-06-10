@@ -250,7 +250,6 @@ G4double G4FragmentingString::LightConeDecay()
 	if (decaying == Left ) return Pplus;
 	else if (decaying == Right ) return Pminus;
 	else throw G4HadronicException(__FILE__, __LINE__, "G4FragmentingString::DecayPt: decay side UNdefined!");
-	return 0;
 }
 
 //---------------------------------------------------------------------------------

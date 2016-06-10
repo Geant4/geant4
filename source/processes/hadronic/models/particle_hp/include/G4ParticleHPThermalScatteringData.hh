@@ -96,6 +96,8 @@ class G4ParticleHPThermalScatteringData : public G4VCrossSectionDataSet
                               //Name of G4Element , Name of NDL file
       void AddUserThermalScatteringFile( G4String , G4String );
    
+      virtual void CrossSectionDescription(std::ostream&) const;
+
    private:
 
       G4double GetX ( const G4DynamicParticle* , G4double aT , std::map< G4double , G4ParticleHPVector* >* );
@@ -105,9 +107,9 @@ class G4ParticleHPThermalScatteringData : public G4VCrossSectionDataSet
       void clearCurrentXSData();
 
 //              element            temp       x section from E
-      std::map< G4int , std::map< G4double , G4ParticleHPVector* >* > coherent;
-      std::map< G4int , std::map< G4double , G4ParticleHPVector* >* > incoherent;
-      std::map< G4int , std::map< G4double , G4ParticleHPVector* >* > inelastic;
+      std::map< G4int , std::map< G4double , G4ParticleHPVector* >* >* coherent;
+      std::map< G4int , std::map< G4double , G4ParticleHPVector* >* >* incoherent;
+      std::map< G4int , std::map< G4double , G4ParticleHPVector* >* >* inelastic;
 
       std::map< G4double , G4ParticleHPVector* >* readData ( G4String ); 
 

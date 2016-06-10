@@ -42,8 +42,16 @@
  * \author Davide Mancusi
  */
 
+#include "G4INCLXXInterfaceStore.hh"
 #include "G4INCLXXInterfaceMessenger.hh"
+#include "G4INCLConfigEnums.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4HadronicInteraction.hh"
+#include "G4HadronicInteractionRegistry.hh"
+#include "G4INCLXXInterface.hh"
+#include "G4INCLConfig.hh"
+#include "G4AblaInterface.hh"
+#include <vector>
 
 G4ThreadLocal G4INCLXXInterfaceStore *G4INCLXXInterfaceStore::theInstance = NULL;
 
@@ -210,3 +218,47 @@ G4INCLXXVInterfaceTally *G4INCLXXInterfaceStore::GetTally() const { return theTa
 
 void G4INCLXXInterfaceStore::SetTally(G4INCLXXVInterfaceTally * const aTally) { theTally = aTally; }
 
+void G4INCLXXInterfaceStore::SetINCLPhysics(const G4String &option) {
+  if(option == "default") {
+    theConfig.init();
+  } else if(option == "incl42") {
+    const G4String message = "Changing INCL++ physics to mimick INCL4.2. Do this ONLY if you fully understand the implications!";
+    EmitBigWarning(message);
+
+    theConfig.setPotentialType(G4INCL::ConstantPotential);
+    theConfig.setPionPotential(false);
+    theConfig.setLocalEnergyBBType(G4INCL::NeverLocalEnergy);
+    theConfig.setLocalEnergyPiType(G4INCL::NeverLocalEnergy);
+    theConfig.setBackToSpectator(false);
+    theConfig.setClusterAlgorithm(G4INCL::NoClusterAlgorithm);
+    theConfig.setCoulombType(G4INCL::NoCoulomb);
+    // UseRealMasses intentionally left out because it creates problems with
+    // energy conservation
+    // theConfig.setUseRealMasses(false);
+    theConfig.setCrossSectionsType(G4INCL::INCL46CrossSections);
+  } else {
+    G4Exception("G4INCLXXInterfaceStore::SetINCLPhysics", "INCLXX0001", FatalErrorInArgument,
+                "SetINCLPhysics argument must be one of: default, incl42"
+                );
+  }
+}
+
+void G4INCLXXInterfaceStore::UseAblaDeExcitation() {
+  // Get hold of pointers to the INCL++ model interfaces
+  std::vector<G4HadronicInteraction *> const &interactions = G4HadronicInteractionRegistry::Instance()
+    ->FindAllModels(G4INCLXXInterfaceStore::GetInstance()->getINCLXXVersionName());
+  for(std::vector<G4HadronicInteraction *>::const_iterator iInter=interactions.begin(), e=interactions.end();
+      iInter!=e; ++iInter) {
+    G4INCLXXInterface *theINCLInterface = dynamic_cast<G4INCLXXInterface*>(*iInter);
+    if(theINCLInterface) {
+      // Instantiate the ABLA model
+      G4HadronicInteraction *interaction = G4HadronicInteractionRegistry::Instance()->FindModel("ABLA");
+      G4AblaInterface *theAblaInterface = dynamic_cast<G4AblaInterface*>(interaction);
+      if(!theAblaInterface)
+        theAblaInterface = new G4AblaInterface;
+      // Couple INCL++ to ABLA
+      G4cout << "Coupling INCLXX to ABLA" << G4endl;
+      theINCLInterface->SetDeExcitation(theAblaInterface);
+    }
+  }
+}

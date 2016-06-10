@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsShielding.hh 83412 2014-08-21 15:20:27Z gcosmo $
+// $Id: G4HadronPhysicsShielding.hh 93878 2015-11-03 08:18:00Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -57,11 +57,13 @@
 #include "G4NeutronBuilder.hh"
 #include "G4BertiniNeutronBuilder.hh"
 #include "G4FTFPNeutronBuilder.hh"
-#include "G4NeutronHPBuilder.hh"
+#include "G4NeutronPHPBuilder.hh"
 
 #include "G4HyperonFTFPBuilder.hh"
 #include "G4AntiBarionBuilder.hh"
 #include "G4FTFPAntiBarionBuilder.hh"
+
+class G4ComponentGGHadronNucleusXsc;
 
 
 class G4HadronPhysicsShielding : public G4VPhysicsConstructor
@@ -85,7 +87,7 @@ class G4HadronPhysicsShielding : public G4VPhysicsConstructor
     
     struct ThreadPrivate { 
       G4NeutronBuilder * theNeutrons;
-      //G4NeutronHPBuilder * theHPNeutron;
+      //G4NeutronPHPBuilder * theHPNeutron;
       G4VNeutronBuilder * theLENeutron;
       G4BertiniNeutronBuilder * theBertiniNeutron;
       G4FTFPNeutronBuilder * theFTFPNeutron;
@@ -103,14 +105,10 @@ class G4HadronPhysicsShielding : public G4VPhysicsConstructor
       G4AntiBarionBuilder * theAntiBaryon;
       G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
 
-      G4VCrossSectionDataSet * theChipsKaonMinus;
-      G4VCrossSectionDataSet * theChipsKaonPlus;
-      G4VCrossSectionDataSet * theChipsKaonZero;
- 
+      G4ComponentGGHadronNucleusXsc * xsKaon;
       G4VCrossSectionDataSet * theBGGxsNeutron;
       G4VCrossSectionDataSet * theNeutronHPJENDLHEInelastic;
       G4VCrossSectionDataSet * theBGGxsProton;
-
       G4VCrossSectionDataSet * xsNeutronCaptureXS;
     };
     static G4ThreadLocal ThreadPrivate* tpdata;

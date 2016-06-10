@@ -1,0 +1,51 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_cmemT
+#define tools_cmemT
+
+#include <cstdlib>
+
+#ifdef TOOLS_MEM
+#include "mem"
+#endif
+
+namespace tools {
+
+template <class T>
+inline void cmem_free(T*& a_p){
+  if(!a_p) return;
+  ::free(a_p);
+  a_p = NULL;
+#ifdef TOOLS_MEM
+  mem::decrement("cmem");
+#endif
+}
+
+template <class T>
+inline T* cmem_alloc(unsigned int a_num){
+  if(a_num<=0) return 0;
+  T* p = (T*)::malloc(a_num*sizeof(T));  
+  if(!p) return 0;
+#ifdef TOOLS_MEM
+  mem::increment("cmem");
+#endif  
+  return p;
+}
+
+template <class T>
+inline T* cmem_alloc_copy(const T* a_from,unsigned int a_num){
+  if(a_num<=0) return 0;
+  T* p = (T*)::malloc(a_num*sizeof(T));  
+  if(!p) return 0;
+#ifdef TOOLS_MEM
+  mem::increment("cmem");
+#endif  
+  //::memcpy(p,a_from,a_num*sizeof(T));
+  for(unsigned int i=0;i<a_num;i++) p[i] = a_from[i];
+  return p;
+}
+
+}
+
+#endif

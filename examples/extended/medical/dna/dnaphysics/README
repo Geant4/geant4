@@ -48,11 +48,8 @@ In interactive mode, run:
 
 ./dnaphysics
 
-The macro dna.mac is executed by default. It shows how to shoot different 
+In batch, the macro dnaphysics.in can be used. It shows how to shoot different 
 particle types.
-
-To get visualization, make sure to uncomment the #/control/execute vis.mac
- line in the macro (not recommended).
 
 ---->4. PHYSICS
 

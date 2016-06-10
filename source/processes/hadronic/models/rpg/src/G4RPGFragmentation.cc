@@ -23,12 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGFragmentation.cc 79869 2014-03-19 09:59:40Z gcosmo $
+// $Id: G4RPGFragmentation.cc 94214 2015-11-09 08:18:05Z gcosmo $
 //
  
 #include <iostream>
 #include <signal.h>
 
+#include "G4Log.hh"
+#include "G4Pow.hh"
 #include "G4RPGFragmentation.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -163,7 +165,7 @@ ReactionStage(const G4HadProjectile* originalIncident,
     targetMass = targetParticle.GetMass()/GeV;
   }
   const G4double afc = std::min( 0.75,
-        0.312+0.200*std::log(std::log(centerofmassEnergy*centerofmassEnergy))+
+        0.312+0.200*G4Log(G4Log(centerofmassEnergy*centerofmassEnergy))+
         std::pow(centerofmassEnergy*centerofmassEnergy,1.5)/6000.0 );
     
   G4double freeEnergy = centerofmassEnergy-currentMass-targetMass;
@@ -256,10 +258,12 @@ ReactionStage(const G4HadProjectile* originalIncident,
   // in the case of small target nuclei
 
   G4double xtarg;
-  if( centerofmassEnergy < (2.0+G4UniformRand()) )
-    xtarg = afc * (std::pow(atomicWeight,0.33)-1.0) * (2.0*backwardCount+vecLen+2)/2.0;
+  G4double a13 = G4Pow::GetInstance()->A13(atomicWeight);  // A**(1/3)
+  if (centerofmassEnergy < (2.0+G4UniformRand()) )
+    xtarg = afc * (a13-1.0) * (2.0*backwardCount+vecLen+2)/2.0;
   else
-    xtarg = afc * (std::pow(atomicWeight,0.33)-1.0) * (2.0*backwardCount);
+    xtarg = afc * (a13-1.0) * (2.0*backwardCount);
+
   if( xtarg <= 0.0 )xtarg = 0.01;
   G4int nuclearExcitationCount = G4Poisson( xtarg );
   // To do: try reducing nuclearExcitationCount with increasing energy 
@@ -272,9 +276,20 @@ ReactionStage(const G4HadProjectile* originalIncident,
     const G4double nucsup[] = { 1.00, 0.7, 0.5, 0.4, 0.35, 0.3 };
     const G4double psup[] = { 3., 6., 20., 50., 100., 1000. };
     G4int momentumBin = 0;
+
+    G4int loop = 0;
+    G4ExceptionDescription ed;
+    ed << " While count exceeded " << G4endl;
     while( (momentumBin < 6) &&
-           (modifiedOriginal.GetTotalMomentum()/GeV > psup[momentumBin]) )
+           (modifiedOriginal.GetTotalMomentum()/GeV > psup[momentumBin]) ) {  /* Loop checking, 01.09.2015, D.Wright */
       ++momentumBin;
+      loop++;
+      if (loop > 1000) {
+        G4Exception("G4RPGFragmentation::ReactionStage()", "HAD_RPG_100", JustWarning, ed);
+        break;
+      }
+    }
+
     momentumBin = std::min( 5, momentumBin );
 
     //  NOTE: in GENXPT, these new particles were given negative codes
@@ -390,7 +405,7 @@ ReactionStage(const G4HadProjectile* originalIncident,
     // Set mass parameter for lambda fragmentation model
 
     vecMass = vec[i]->GetMass()/GeV;
-    G4double ran = -std::log(1.0-G4UniformRand())/3.5;
+    G4double ran = -G4Log(1.0-G4UniformRand())/3.5;
 
     if (vec[i]->GetSide() == -2) {  // backward nucleon
       aspar = 0.20;
@@ -425,7 +440,7 @@ ReactionStage(const G4HadProjectile* originalIncident,
     resetEnergies = true;
     dndl[0] = 0.0;
 
-    while (++outerCounter < 3) {
+    while (++outerCounter < 3) {  /* Loop checking, 01.09.2015, D.Wright */
 
       FragmentationIntegral(pt, et, aspar, vecMass);
       innerCounter = 0;
@@ -433,11 +448,23 @@ ReactionStage(const G4HadProjectile* originalIncident,
 
       // Start of inner iteration loop
 
-      while (++innerCounter < 7) {
+      while (++innerCounter < 7) {  /* Loop checking, 01.09.2015, D.Wright */
 
         ran = G4UniformRand()*dndl[19];
         l = 1;
-        while( ( ran > dndl[l] ) && ( l < 19 ) ) l++;
+
+        G4int loop = 0;
+        G4ExceptionDescription ed;
+        ed << " While count exceeded " << G4endl; 
+        while( ( ran > dndl[l] ) && ( l < 19 ) ) { /* Loop checking, 01.09.2015, D.Wright */
+          l++;
+          loop++;
+          if (loop > 1000) {
+            G4Exception("G4RPGFragmentation::ReactionStage()", "HAD_RPG_100", JustWarning, ed);
+            break;
+          }
+        }
+
         x = (G4double(l-1) + G4UniformRand())/19.;
         if (vec[i]->GetSide() < 0) x *= -1.;
         vec[i]->SetMomentum( x*et*GeV );              // set the z-momentum
@@ -577,7 +604,7 @@ ReactionStage(const G4HadProjectile* originalIncident,
   // Set mass parameter for lambda fragmentation model.
   // Set pt and phi values, which are changed somewhat in the iteration loop
 
-  G4double ran = -std::log(1.0-G4UniformRand());
+  G4double ran = -G4Log(1.0-G4UniformRand());
   if (currentParticle.GetDefinition()->GetParticleSubType() == "pi") {
     aspar = 0.60;
     pt = std::sqrt( std::pow( ran/6.0, 1.7 ) );
@@ -599,7 +626,19 @@ ReactionStage(const G4HadProjectile* originalIncident,
 
   ran = G4UniformRand()*dndl[19];
   l = 1;
-  while( ( ran > dndl[l] ) && ( l < 19 ) ) l++;
+
+  G4int loop = 0;
+  G4ExceptionDescription ed;
+  ed << " While count exceeded " << G4endl;
+  while( ( ran > dndl[l] ) && ( l < 19 ) ) { /* Loop checking, 01.09.2015, D.Wright */
+    l++;
+    loop++;
+    if (loop > 1000) {
+      G4Exception("G4RPGFragmentation::ReactionStage()", "HAD_RPG_100", JustWarning, ed);
+      break;
+    }
+  }
+
   x = (G4double(l-1) + G4UniformRand())/19.;
   currentParticle.SetMomentum( x*et*GeV );             // set the z-momentum
 
@@ -638,7 +677,7 @@ ReactionStage(const G4HadProjectile* originalIncident,
     // Set mass parameter for lambda fragmentation model
 
     vecMass = targetParticle.GetMass()/GeV;
-    ran = -std::log(1.0-G4UniformRand());
+    ran = -G4Log(1.0-G4UniformRand());
     aspar = 0.40;
     pt = std::max( 0.001, std::sqrt( std::pow( ran/4.0, 1.2 ) ) );
     phi = G4UniformRand()*twopi;
@@ -652,13 +691,25 @@ ReactionStage(const G4HadProjectile* originalIncident,
     if( extraNucleonCount < 20 ) xxx = 0.95+0.05*extraNucleonCount/20.0;
     G4ThreeVector momentum;
 
-    while (++outerCounter < 4) {
+    while (++outerCounter < 4) {  /* Loop checking, 01.09.2015, D.Wright */
       FragmentationIntegral(pt, et, aspar, vecMass);
 
       for (innerCounter = 0; innerCounter < 6; innerCounter++) {
         ran = G4UniformRand()*dndl[19];
         l = 1;
-        while( ( ran > dndl[l] ) && ( l < 19 ) ) l++;
+
+        G4int loopa = 0;
+        G4ExceptionDescription eda;
+        eda << " While count exceeded " << G4endl; 
+        while( ( ran > dndl[l] ) && ( l < 19 ) ) { /* Loop checking, 01.09.2015, D.Wright */
+          l++;
+          loopa++;
+          if (loopa > 1000) {
+            G4Exception("G4RPGFragmentation::ReactionStage()", "HAD_RPG_100", JustWarning, eda);
+            break;
+          }
+        }
+
         x = -(G4double(l-1) + G4UniformRand())/19.;
         targetParticle.SetMomentum( x*et*GeV );        // set the z-momentum
         totalEnergy = std::sqrt(x*et*x*et + pt*pt + vecMass*vecMass);
@@ -1064,7 +1115,7 @@ ReactionStage(const G4HadProjectile* originalIncident,
 
   if( (atomicWeight >= 1.5) && (atomicWeight <= 230.0) && (ekOriginal <= 0.2) )
     currentParticle.SetTOF( 
-         1.0-500.0*std::exp(-ekOriginal/0.04)*std::log(G4UniformRand()) );
+         1.0-500.0*G4Exp(-ekOriginal/0.04)*G4Log(G4UniformRand()) );
   else
     currentParticle.SetTOF( 1.0 );
   return true;

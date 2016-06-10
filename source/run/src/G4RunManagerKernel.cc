@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc 87128 2014-11-25 09:00:59Z gcosmo $
+// $Id: G4RunManagerKernel.cc 90233 2015-05-21 08:56:28Z gcosmo $
 //
 //
 
@@ -160,7 +160,7 @@ numberOfParallelWorld(0),geometryNeedsToBeClosed(true),
 #endif
 
 #ifdef G4FPE_DEBUG
-   if ( ! G4Threading::IsWorkerThread() ) {
+   if ( G4Threading::IsMasterThread() ) {
 	   InvalidOperationDetection();
    }
 #endif
@@ -287,6 +287,7 @@ G4RunManagerKernel::~G4RunManagerKernel()
   if(verboseLevel>1) G4cout << "Units table cleared." << G4endl;
 
   // deletion of navigation levels
+  if(verboseLevel>1) G4NavigationHistoryPool::GetInstance()->Print();
   delete G4NavigationHistoryPool::GetInstance();
 
   // deletion of allocators
@@ -374,7 +375,7 @@ void G4RunManagerKernel::WorkerDefineWorldVolume(G4VPhysicalVolume* worldVol,
   if(topologyIsChanged) geometryNeedsToBeClosed = true;
 
   // Notify the VisManager as well                                                                                
-  if(!(G4Threading::IsWorkerThread()))
+  if(G4Threading::IsMasterThread())
   {
     G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
     if(pVVisManager) pVVisManager->GeometryHasChanged();
@@ -434,7 +435,7 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
   if(topologyIsChanged) geometryNeedsToBeClosed = true;
   
   // Notify the VisManager as well
-  if(!(G4Threading::IsWorkerThread()))
+  if(G4Threading::IsMasterThread())
   {
     G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
     if(pVVisManager) pVVisManager->GeometryHasChanged();
@@ -538,7 +539,7 @@ void G4RunManagerKernel::InitializePhysics()
     //Cannot assume that SetCuts and CheckRegions are thread safe. We need to mutex
     //Report from valgrind --tool=drd
   G4AutoLock l(&initphysicsmutex);
-  if ( !G4Threading::IsWorkerThread() ) {
+  if ( G4Threading::IsMasterThread() ) {
 	  if(verboseLevel>1) G4cout << "physicsList->setCut() start." << G4endl;
 	  physicsList->SetCuts();
 
@@ -548,7 +549,7 @@ void G4RunManagerKernel::InitializePhysics()
 
 /*******************
 //  static G4bool createIsomerOnlyOnce = false;
-//  if(G4Threading::IsMultithreadedApplication() && !G4Threading::IsWorkerThread())
+//  if(G4Threading::IsMultithreadedApplication() && G4Threading::IsMasterThread())
 //  {
 //    if(!createIsomerOnlyOnce)
 //    {
@@ -612,7 +613,7 @@ G4bool G4RunManagerKernel::RunInitialization(G4bool fakeRun)
     ResetNavigator();
     // CheckRegularGeometry();
     // Notify the VisManager as well
-    if(!(G4Threading::IsWorkerThread()))
+    if(G4Threading::IsMasterThread())
     {
       G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
       if(pVVisManager) pVVisManager->GeometryHasChanged();

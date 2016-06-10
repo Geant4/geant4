@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointCSMatrix.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4AdjointCSMatrix.cc 91870 2015-08-07 15:21:40Z gcosmo $
 //
 
 #include <iomanip>
@@ -88,6 +88,7 @@ void G4AdjointCSMatrix::Clear()
 		G4double log_val = int(std::min((*aLogProbVector)[0],aLogProbVector->back())/dlog)*dlog;
 		log0Vector.push_back(log_val);
 		
+                // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
 		while(log_val<0.) {
 			aLogProbVectorIndex->push_back(theInterpolator->FindPosition(log_val,(*aLogProbVector)));
 			log_val+=dlog;

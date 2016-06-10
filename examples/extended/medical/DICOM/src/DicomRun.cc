@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomRun.cc 84839 2014-10-21 13:44:55Z gcosmo $
+// $Id: DicomRun.cc 92820 2015-09-17 15:22:14Z gcosmo $
 //
 /// \file medical/DICOM/src/DicomRun.cc
 /// \brief Implementation of the DicomRun class
@@ -190,9 +190,9 @@ void DicomRun::RecordEvent(const G4Event* aEvent)
 void DicomRun::Merge(const G4Run* aRun)
 {
   const DicomRun* localRun = static_cast<const DicomRun*>(aRun);
-  copy(fCollName, localRun->fCollName);
-  copy(fCollID, localRun->fCollID);
-  unsigned ncopies = copy(fRunMap, localRun->fRunMap);
+  Copy(fCollName, localRun->fCollName);
+  Copy(fCollID, localRun->fCollID);
+  unsigned ncopies = Copy(fRunMap, localRun->fRunMap);
   // copy function returns the fRunMap size if all data is copied
   // so this loop isn't executed the first time around
   G4cout << "DicomRun :: Num copies = " << ncopies << G4endl;
@@ -201,7 +201,6 @@ void DicomRun::Merge(const G4Run* aRun)
   }
   G4Run::Merge(aRun);
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //=================================================================
@@ -241,4 +240,3 @@ G4THitsMap<G4double>* DicomRun::GetHitsMap(const G4String& fullName) const
               "GetHitsMap failed to locate the requested HitsMap");
   return NULL;
 }
-

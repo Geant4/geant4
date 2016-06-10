@@ -31,6 +31,9 @@
 
 #include "G4Polycone.hh"
 #include "G4UPolycone.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+
 #include "G4VPVParameterisation.hh"
 
 ////////////////////////////////////////////////////////////////////////
@@ -151,3 +154,5 @@ G4Polyhedron* G4UPolycone::CreatePolyhedron() const
 
   return polyhedron;
 }
+
+#endif  // G4GEOM_USE_USOLIDS

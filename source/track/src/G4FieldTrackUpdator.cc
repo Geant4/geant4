@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrackUpdator.cc 81134 2014-05-21 13:12:24Z gcosmo $
+// $Id: G4FieldTrackUpdator.cc 90644 2015-06-05 13:19:36Z gcosmo $
 //
 //   M. Asai - first implementation Apr/28/2006
 //
@@ -61,9 +61,10 @@ void G4FieldTrackUpdator::Update(G4FieldTrack* ftrk,const G4Track* trk)
 {
   const G4DynamicParticle* ptDynamicParticle= trk->GetDynamicParticle();
 
-  // The following properties must be updated ONCE for each new track (at least)
+  // The following properties must be updated 1) for each new track, and 
   ftrk->SetRestMass(ptDynamicParticle->GetMass());   
-
+  // 2) Since ion can lose/gain electrons, this must be done at every step
+  
   ftrk->UpdateState(
     trk->GetPosition(),     
     trk->GetGlobalTime(),
@@ -82,7 +83,9 @@ void G4FieldTrackUpdator::Update(G4FieldTrack* ftrk,const G4Track* trk)
 
   ftrk->SetProperTimeOfFlight(trk->GetProperTime());
 
-  ftrk->SetChargeAndMoments( ptDynamicParticle->GetCharge() );
+  ftrk->SetChargeAndMoments( ptDynamicParticle->GetCharge(),
+                             ptDynamicParticle->GetMagneticMoment()); 
+  ftrk->SetPDGSpin(          ptDynamicParticle->GetParticleDefinition()->GetPDGSpin() ); 
    // The charge can change during tracking
   ftrk->SetSpin( ptDynamicParticle->GetPolarization() );
 }

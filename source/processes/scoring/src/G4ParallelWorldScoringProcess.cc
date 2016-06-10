@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorldScoringProcess.cc 86967 2014-11-21 11:51:28Z gcosmo $
+// $Id: G4ParallelWorldScoringProcess.cc 88349 2015-02-16 08:47:16Z gcosmo $
 //
 //
 
@@ -372,7 +372,7 @@ G4double G4ParallelWorldScoringProcess::AlongStepGetPhysicalInteractionLength(
     {
       // Track is on the boundary
       fOnBoundary = true;
-      // proposedSafety = fGhostSafety;
+      // fEndGhostSafety = 0.0;  // Will apply at the end of the step ...
     }
     proposedSafety = fGhostSafety;
     if(eLimited == kUnique || eLimited == kSharedOther) {

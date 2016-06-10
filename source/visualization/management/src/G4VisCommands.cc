@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc 87360 2014-12-01 16:07:16Z gcosmo $
+// $Id: G4VisCommands.cc 93025 2015-09-30 16:02:12Z gcosmo $
 
 // /vis/ top level commands - John Allison  5th February 2001
 
@@ -153,7 +153,7 @@ void G4VisCommandList::SetNewValue (G4UIcommand*, G4String newValue)
   G4VisManager::Verbosity verbosity =
     fpVisManager->GetVerbosityValue(verbosityString);
 
-  fpVisManager->PrintAvailableGraphicsSystems();
+  fpVisManager->PrintAvailableGraphicsSystems(verbosity);
   G4cout << G4endl;
   fpVisManager->PrintAvailableModels(verbosity);
   G4cout << G4endl;
@@ -162,8 +162,8 @@ void G4VisCommandList::SetNewValue (G4UIcommand*, G4String newValue)
   fpVisManager->PrintAvailableColours(verbosity);
   G4cout << G4endl;
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  UImanager->ApplyCommand("/vis/scene/list ! c");
-  UImanager->ApplyCommand("/vis/viewer/list ! c");
+  UImanager->ApplyCommand("/vis/scene/list ! " + newValue);
+  UImanager->ApplyCommand("/vis/viewer/list ! " + newValue);
 
   G4cout <<
   "\nAttributes available for modeling and filtering with"
@@ -190,7 +190,7 @@ void G4VisCommandList::SetNewValue (G4UIcommand*, G4String newValue)
 
   if (verbosity < G4VisManager::parameters)
     G4cout <<
-  "\nTo get more information, \"/vis/list all all\" or use individual commands"
+  "\nTo get more information, \"/vis/list all\" or use individual commands"
   "\n  such as (use \"ls\" or \"help\"):"
   "\n    /vis/scene/list all all"
   "\n    /vis/viewer/list all all"

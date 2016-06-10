@@ -44,6 +44,9 @@
 #define G4UPOLYHEDRA_HH
 
 #include "G4USolid.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+
 #include "UPolyhedra.hh"
 #include "G4PolyhedraSide.hh"
 #include "G4PolyhedraHistorical.hh"
@@ -182,5 +185,7 @@ inline G4bool G4UPolyhedra::Reset()
 {
   return GetShape()->Reset();
 }
+
+#endif  // G4GEOM_USE_USOLIDS
 
 #endif

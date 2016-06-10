@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id: EventAction.cc 86064 2014-11-07 08:49:32Z gcosmo $
+// $Id: EventAction.cc 93258 2015-10-14 08:34:50Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,35 +34,38 @@
 #include "EventAction.hh"
 
 #include "RunAction.hh"
-#include "EventActionMessenger.hh"
 #include "HistoManager.hh"
+#include "Run.hh"
+#include "G4RunManager.hh"
 
 #include "G4Event.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(RunAction* run)
-:fRunAct(run), fDrawFlag("none"), fPrintModulo(10000), fEventMessenger(0)
+EventAction::EventAction()
 {
-  fEventMessenger = new EventActionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
 {
-  delete fEventMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::BeginOfEventAction(const G4Event* evt)
+void EventAction::BeginOfEventAction(const G4Event* evt )
 {
- G4int evtNb = evt->GetEventID();
-
- //survey convergence
- //
- if (evtNb%fPrintModulo == 0) fRunAct->SurveyConvergence(evtNb);
+  
+  if ( ! G4Threading::IsMultithreadedApplication() ) {
+ 
+    G4int evtNb = evt->GetEventID();
+    G4int printProgress = G4RunManager::GetRunManager()->GetPrintProgress();
+    //survey convergence
+    Run* run = static_cast<Run*>(
+               G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+    if (evtNb%printProgress == 0) run->SurveyConvergence(evtNb);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -147,7 +147,7 @@ G4LMsdGenerator::ApplyYourself( const G4HadProjectile& aTrack,
   G4ParticleMomentum p1unit = p1.unit();
 
   G4double Mx = SampleMx(aParticle); // in GeV
-  G4double t  = SampleT( Mx);
+  G4double t  = 0.; // SampleT( aParticle, Mx); // in GeV
 
   Mx *= CLHEP::GeV;
 
@@ -254,22 +254,30 @@ G4LMsdGenerator::ApplyYourself( const G4HadProjectile& aTrack,
 
   // G4cout<<fPDGencoding<<", "<<ddPart->GetParticleName()<<", "<<ddPart->GetPDGMass()<<" MeV; lvRes = "<<lvRes<<G4endl;
 
+    G4DynamicParticle * aRes = new G4DynamicParticle( ddPart, lvRes);
+    theParticleChange.AddSecondary(aRes); // simply return resonance
+
+
+  /*
+  // Recursive decay using methods of G4KineticTrack
+
   G4KineticTrack ddkt( ddPart, 0., G4ThreeVector(0.,0.,0.), lvRes);
   G4KineticTrackVector* ddktv = ddkt.Decay();
 
+  G4DecayKineticTracks decay( ddktv );
 
   for( unsigned int i = 0; i < ddktv->size(); i++ ) // add products to partchange
   {
     G4DynamicParticle * aNew = 
       new G4DynamicParticle( ddktv->operator[](i)->GetDefinition(),
-                            ddktv->operator[](i)->Get4Momentum());
+                             ddktv->operator[](i)->Get4Momentum());
     // G4cout<<"       "<<i<<", "<<aNew->GetDefinition()->GetParticleName()<<", "<<aNew->Get4Momentum()<<G4endl;
 
     theParticleChange.AddSecondary(aNew);
     delete ddktv->operator[](i);
   }
   delete ddktv;
-  
+  */  
   return &theParticleChange;
 }
 
@@ -279,7 +287,7 @@ G4LMsdGenerator::ApplyYourself( const G4HadProjectile& aTrack,
 
 G4double G4LMsdGenerator::SampleMx(const G4HadProjectile* aParticle)                          
 {
-  G4double Mx=0.;
+  G4double Mx = 0.;
   G4int i;
   G4double rand = G4UniformRand();
 
@@ -290,6 +298,8 @@ G4double G4LMsdGenerator::SampleMx(const G4HadProjectile* aParticle)
   if(i <= 0)       Mx = fProbMx[0][0];
   else if(i >= 59) Mx = fProbMx[59][0];
   else             Mx = fProbMx[i][0];
+
+  fPDGencoding = 0;
 
   if ( Mx <=  1.45 )   
   {   
@@ -305,13 +315,17 @@ G4double G4LMsdGenerator::SampleMx(const G4HadProjectile* aParticle)
     }
     else if( aParticle->GetDefinition() == G4PionPlus::PionPlus() ) 
     {
-      Mx = 1.3;
-      fPDGencoding = 100211;
+      // Mx = 1.3;
+      // fPDGencoding = 100211;
+      Mx = 1.26;
+      fPDGencoding = 20213; // a1(1260)+
     }
     else if( aParticle->GetDefinition() == G4PionMinus::PionMinus() ) 
     {
-      Mx = 1.3;
-      fPDGencoding = -100211;
+      // Mx = 1.3;
+      // fPDGencoding = -100211;
+      Mx = 1.26;
+      fPDGencoding = -20213; // a1(1260)-
     }
     else if( aParticle->GetDefinition() == G4KaonPlus::KaonPlus() ) 
     {
@@ -338,13 +352,17 @@ G4double G4LMsdGenerator::SampleMx(const G4HadProjectile* aParticle)
     }
     else if( aParticle->GetDefinition() == G4PionPlus::PionPlus() ) 
     {
-      Mx = 1.45;
-      fPDGencoding = 10211;
+      // Mx = 1.45;
+      // fPDGencoding = 10211;
+      Mx = 1.32;
+      fPDGencoding = 215; // a2(1320)+
     }
     else if( aParticle->GetDefinition() == G4PionMinus::PionMinus() ) 
     {
-      Mx = 1.45;
-      fPDGencoding = -10211;
+      // Mx = 1.45;
+      // fPDGencoding = -10211;
+      Mx = 1.32;
+      fPDGencoding = -215; // a2(1320)-
     }
     else if( aParticle->GetDefinition() == G4KaonPlus::KaonPlus() ) 
     {
@@ -371,17 +389,17 @@ G4double G4LMsdGenerator::SampleMx(const G4HadProjectile* aParticle)
     }
     else if( aParticle->GetDefinition() == G4PionPlus::PionPlus() ) 
     {
-      // Mx = 1.67;
-      // fPDGencoding = 10215;
-      Mx = 1.45;
-      fPDGencoding = 10211;
+      Mx = 1.67;
+      fPDGencoding = 10215;  // pi2(1670)+
+      // Mx = 1.45;
+      // fPDGencoding = 10211;
     }
     else if( aParticle->GetDefinition() == G4PionMinus::PionMinus() ) 
     {
-      // Mx = 1.67; // f0 problems->4pi vmg 20.11.14
-      // fPDGencoding = -10215;
-      Mx = 1.45;
-      fPDGencoding = -10211;
+      Mx = 1.67;     // f0 problems->4pi vmg 20.11.14
+      fPDGencoding = -10215;  // pi2(1670)-
+      // Mx = 1.45;
+      // fPDGencoding = -10211;
     }
     else if( aParticle->GetDefinition() == G4KaonPlus::KaonPlus() ) 
     {
@@ -399,17 +417,24 @@ G4double G4LMsdGenerator::SampleMx(const G4HadProjectile* aParticle)
       Mx = 1.44;
       fPDGencoding = 12212;   
   } 
-  return Mx;
+  G4ParticleDefinition* myResonance = 
+  G4ParticleTable::GetParticleTable()->FindParticle( fPDGencoding );
+  
+  if ( myResonance ) Mx = myResonance->GetPDGMass();
+
+  // G4cout<<"PDG-ID = "<<fPDGencoding<<"; with mass = "<<Mx/CLHEP::GeV<<" GeV"<<G4endl;
+
+  return Mx/CLHEP::GeV;
 }
 
 ////////////////////////////////////// 
 //
 // Sample t with kinematic limitations of Mx and Tkin
 
-G4double G4LMsdGenerator::SampleT(  // const G4HadProjectile* aParticle, 
+G4double G4LMsdGenerator::SampleT(  const G4HadProjectile* aParticle, 
 G4double Mx)                          
 {
-  G4double t=0., b=0.;
+  G4double t=0., b=0., rTkin = 50.*CLHEP::GeV, eTkin = aParticle->GetKineticEnergy();
   G4int i;
 
   for( i = 0; i < 23; ++i)
@@ -419,6 +444,8 @@ G4double Mx)
   if( i <= 0 )       b = fMxBdata[0][1];
   else if( i >= 22 ) b = fMxBdata[22][1];
   else               b = fMxBdata[i][1];
+
+  if( eTkin > rTkin ) b *= 1. + G4Log(eTkin/rTkin);
 
   G4double rand = G4UniformRand();
 

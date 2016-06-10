@@ -31,6 +31,7 @@
 #include "globals.hh"
 #include "G4VContinuousDiscreteProcess.hh"
 #include "ExExChParticleUserInfo.hh"
+#include "G4ParticleChangeForNothing.hh"
 
 class G4Material;
 
@@ -45,11 +46,13 @@ public:
     XWrapperContinuousDiscreteProcess(const G4String& processName,
                                       G4ProcessType);
     
+    G4int ItHasToWork(const G4Track&);
+    
     virtual ~XWrapperContinuousDiscreteProcess();
     
 public:
     void RegisterProcess(G4VContinuousDiscreteProcess*);
-    void RegisterProcess(G4VContinuousDiscreteProcess*,G4int);
+    void RegisterProcess(G4VContinuousDiscreteProcess*,G4int,G4int aBool = 0);
 
     G4VContinuousDiscreteProcess* GetRegisteredProcess()
     {return fRegisteredProcess;};
@@ -67,13 +70,14 @@ private:
                             const XWrapperContinuousDiscreteProcess& right);
     
     //private data members
+    G4int bBothOrCrystalOrDetectorPhysics;
     G4int bNucleiOrElectronFlag;
     //Decide whether to use nuclei (+1) or electron (-1)
     //or both (0) density to change parameters
     G4VContinuousDiscreteProcess* fRegisteredProcess;
     
     const G4Step theStepCopy;
-    
+    G4ParticleChangeForNothing* fParticleChangeForNothing;
     /////////////////////////////////////////////////////////
     /////////////////// GEANT4 PROCESS METHODS //////////////
     /////////////////////////////////////////////////////////
@@ -81,6 +85,10 @@ public:
     // DO IT
     virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step& );
     virtual G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step& );
+    virtual G4VParticleChange* AtRestDoIt(const G4Track& aTrack,
+            const G4Step& aStep){
+        return fRegisteredProcess->AtRestDoIt(aTrack,aStep);
+    }
 
     // GPIL
     virtual G4double PostStepGetPhysicalInteractionLength (
@@ -93,6 +101,11 @@ public:
                             G4double,
                             G4double&,
                             G4GPILSelection*);
+    virtual G4double AtRestGetPhysicalInteractionLength(const G4Track& aTrack,
+            G4ForceCondition* condition){
+        return fRegisteredProcess->AtRestGetPhysicalInteractionLength(aTrack,
+               condition);
+    };
 
     // GENERAL
     virtual void StartTracking(G4Track* aTrack);

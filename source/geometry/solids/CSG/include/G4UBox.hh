@@ -43,6 +43,9 @@
 #define G4UBOX_HH
 
 #include "G4USolid.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+
 #include "UBox.hh"
 #include "G4Polyhedron.hh"
 
@@ -120,5 +123,7 @@ inline void G4UBox::SetZHalfLength(G4double dz)
   GetShape()->SetZHalfLength(dz);
   fRebuildPolyhedron = true;
 }
+
+#endif  // G4GEOM_USE_USOLIDS
 
 #endif

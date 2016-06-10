@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.cc 87361 2014-12-01 16:10:28Z gcosmo $
+// $Id: G4LundStringFragmentation.cc 91857 2015-08-07 13:55:49Z gcosmo $
 // GEANT4 tag $Name:  $ 1.8
 //
 // -----------------------------------------------------------------------------
@@ -39,6 +39,9 @@
 #include "G4FragmentingString.hh"
 #include "G4DiQuarks.hh"
 #include "G4Quarks.hh"
+
+#include "G4Exp.hh"
+#include "G4Pow.hh"
 
 //#define debug_LUNDfragmentation                       // Uzhi 20.06.2014
 
@@ -61,9 +64,9 @@ G4LundStringFragmentation::G4LundStringFragmentation()
     SmoothParam  = 0.2;                   
 
     SetStringTensionParameter(1.);                         
-    SetDiquarkBreakProbability(0.05); // 0.05                          Uzhi 27.09.2014
-    SetStrangenessSuppression(0.447); // 0.47                          Uzhi 27.09.2014
-    SetDiquarkSuppression(0.05);      // 0.087                         Uzhi 27.09.2014
+    SetDiquarkBreakProbability(0.05); 
+    SetStrangenessSuppression(0.46); //(0.447);                        Uzhi 25.05.2015
+    SetDiquarkSuppression(0.05);
 
 // For treating of small string decays
    for(G4int i=0; i<3; i++)
@@ -125,7 +128,8 @@ G4LundStringFragmentation::G4LundStringFragmentation()
    MesonWeight[1][1][3]=pspin_meson*(1.-vectorMesonMix[0]);
 
          Meson[1][1][4]=223;                       // ubar-u Omega
-   MesonWeight[1][1][4]=pspin_meson*(scalarMesonMix[0]);
+   //MesonWeight[1][1][4]=pspin_meson*(scalarMesonMix[0]);
+   MesonWeight[1][1][4]=pspin_meson*(vectorMesonMix[0]);  // Uzhi 2015 scalar -> vector
 //--------------------------
 
          Meson[1][2][0]=321;                      // ubar-s K-
@@ -386,9 +390,11 @@ G4LundStringFragmentation::G4LundStringFragmentation()
 		G4cin>>Uzhi;
     */
 
+   SetStrangenessSuppression(0.375);                                      // Uzhi May 2015
    Prob_QQbar[0]=StrangeSuppress;         // Probability of ddbar production
    Prob_QQbar[1]=StrangeSuppress;         // Probability of uubar production
-   Prob_QQbar[2]=1.0-2.*StrangeSuppress;  // Probability of ssbar production Uzhi May 2014
+   Prob_QQbar[2]=1.0-2.*StrangeSuppress;  // Probability of ssbar production 
+   SetStrangenessSuppression(0.46); //(0.447);                            // Uzhi May 2014
 
    //A.R. 25-Jul-2012 : Coverity fix.
    for ( G4int i=0 ; i<35 ; i++ ) { 
@@ -466,6 +472,7 @@ void G4LundStringFragmentation::SetMinimalStringMass(const G4FragmentingString  
 
 #ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
 //  G4cout<<"Min mass with Qleft and Qright "<<Qright<<" "<<EstimatedMass<<G4endl;
+//  G4cout<<"Number_of_quarks "<<Number_of_quarks<<" Number_of_squarks "<<Number_of_squarks<<G4endl;
 #endif
 
 	if(Number_of_quarks==2){EstimatedMass += 70.*MeV;} //100.*MeV;}
@@ -531,7 +538,8 @@ G4KineticTrackVector* G4LundStringFragmentation::FragmentString(const G4ExcitedS
 
 	G4KineticTrackVector * LeftVector(0);
 
-	if(!IsFragmentable(&aString)) // produce 1 hadron   True ===============
+//Uzhi 29.05.2015	if(!IsFragmentable(&aString)) // produce 1 hadron   True ===============
+	if(!aString.FourQuarkString() && !IsFragmentable(&aString))
 	{
 #ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
   G4cout<<"Non fragmentable - the string is converted to one hadron "<<G4endl;
@@ -591,7 +599,7 @@ G4KineticTrackVector* G4LundStringFragmentation::FragmentString(const G4ExcitedS
 	}
 
 	// Join Left- and RightVector into LeftVector in correct order.
-	while(!RightVector->empty())
+	while(!RightVector->empty())  /* Loop checking, 07.08.2015, A.Ribon */
 	{
 		LeftVector->push_back(RightVector->back());
 		RightVector->erase(RightVector->end()-1);
@@ -639,9 +647,10 @@ G4bool G4LundStringFragmentation::StopFragmenting(const G4FragmentingString * co
 
 	if (string->FourQuarkString())
 	{
-		return G4UniformRand() < std::exp(-0.0005*(string->Mass() - MinimalStringMass));
+		return G4UniformRand() < G4Exp(-0.0005*(string->Mass() - MinimalStringMass));
 	} else {
-		return G4UniformRand() < std::exp(-0.88e-6*(string->Mass()*string->Mass() -
+                // Uzhi 23 Jan. 2015       0.88 -> 0.66      
+		return G4UniformRand() < G4Exp(-0.66e-6*(string->Mass()*string->Mass() -
 				                            MinimalStringMass*MinimalStringMass));
 	}
 }
@@ -756,14 +765,14 @@ void G4LundStringFragmentation::Sample4Momentum(G4LorentzVector*     Mom, G4doub
 	G4ThreeVector Pt;
 	G4double MassMt2, AntiMassMt2;
 	G4double AvailablePz, AvailablePz2;
-
-#ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
+        G4double ProbIsotropy = sqr(sqr(938.0/InitialMass));                     // Uzhi May 2015
+#ifdef debug_LUNDfragmentation
   G4cout<<"Sampling of momenta of 2 last produced hadrons ----------------"<<G4endl;
   G4cout<<"Masses "<<InitialMass<<" "<<Mass<<" "<<AntiMass<<G4endl;
 #endif
 
-	if((Mass > 930. || AntiMass > 930.)) //If there is a baryon
-	{
+	if((Mass > 930. || AntiMass > 930.) && (G4UniformRand() < ProbIsotropy)) // Uzhi May 2015 
+	{       //If there is a baryon
 		// ----------------- Isotropic decay ------------------------------------
 		G4double r_val = sqr(InitialMass*InitialMass - Mass*Mass - AntiMass*AntiMass) -
 				sqr(2.*Mass*AntiMass);
@@ -787,6 +796,8 @@ void G4LundStringFragmentation::Sample4Momentum(G4LorentzVector*     Mom, G4doub
 	}
 	else
 	{
+                const G4int maxNumberOfLoops = 1000;
+                G4int loopCounter = 0;
 		do
 		{
 			// GF 22-May-09, limit sampled pt to allowed range
@@ -805,7 +816,12 @@ void G4LundStringFragmentation::Sample4Momentum(G4LorentzVector*     Mom, G4doub
 			AvailablePz2= sqr(InitialMass*InitialMass - MassMt2 - AntiMassMt2) -
 					4.*MassMt2*AntiMassMt2;
 		}
-		while(AvailablePz2 < 0.);     // GF will occur only for numerical precision problem with limit in sampled pt
+		while( (AvailablePz2 < 0.) &&  // GF will occur only for numerical precision problem with limit in sampled pt
+                       ++loopCounter < maxNumberOfLoops );  /* Loop checking, 07.08.2015, A.Ribon */
+
+                if ( loopCounter >= maxNumberOfLoops ) {
+                  AvailablePz2 = 0.0;
+                }
 
 		AvailablePz2 /=(4.*InitialMass*InitialMass);
 		AvailablePz = std::sqrt(AvailablePz2);
@@ -870,7 +886,7 @@ G4LorentzVector * G4LundStringFragmentation::SplitEandP(G4ParticleDefinition * p
          HadronMassT2 = sqr(HadronMass) + HadronPt.mag2();
          ResidualMassT2=sqr(MinimalStringMass) + RemSysPt.mag2();
 
-        } while(std::sqrt(HadronMassT2) + std::sqrt(ResidualMassT2) > StringMT);
+        } while(std::sqrt(HadronMassT2) + std::sqrt(ResidualMassT2) > StringMT);  /* Loop checking, 07.08.2015, A.Ribon */
 
 	//...  sample z to define hadron longitudinal momentum and energy
 	//... but first check the available phase space
@@ -934,15 +950,20 @@ G4double G4LundStringFragmentation::GetLightConeZ(G4double zmin, G4double zmax,
 	//    const G4double  blund = 1;
 
 	   zOfMaxyf=alund*Mt2/(alund*Mt2 + 1.);
-	   maxYf=(1-zOfMaxyf)/zOfMaxyf * std::exp(-alund*Mt2/zOfMaxyf);
+	   maxYf=(1-zOfMaxyf)/zOfMaxyf * G4Exp(-alund*Mt2/zOfMaxyf);
 
+           const G4int maxNumberOfLoops = 1000;
+           G4int loopCounter = 0;
 	   do
 	   {
 		z = zmin + G4UniformRand()*(zmax-zmin);
-		yf = (1-z)/z * std::exp(-alund*Mt2/z);
-	//	yf = std::pow(1.0-z,blund)/z*std::exp(-alund*Mt2/z
+		yf = (1-z)/z * G4Exp(-alund*Mt2/z);
+	//	yf = G4Pow::GetInstance()->powA(1.0-z,blund)/z*G4Exp(-alund*Mt2/z
 	   }
-	   while (G4UniformRand()*maxYf > yf);
+	   while ( (G4UniformRand()*maxYf > yf) && ++loopCounter < maxNumberOfLoops );  /* Loop checking, 07.08.2015, A.Ribon */
+           if ( loopCounter >= maxNumberOfLoops ) {
+             z = 0.5*(zmin + zmax);  // Just a value between zmin and zmax, no physics considerations at all! 
+           }
 	   return z;
         }
 
@@ -955,7 +976,7 @@ G4double G4LundStringFragmentation::GetLightConeZ(G4double zmin, G4double zmax,
 	    do
 	    {
 		z = zmin + G4UniformRand()*(zmax-zmin);
-		//yf=std::exp(-sqr(z-Zc)/2/sqr(0.28));  // 0.42 0.632 0.28 a'la UrQMD
+		//yf=G4Exp(-sqr(z-Zc)/2/sqr(0.28));  // 0.42 0.632 0.28 a'la UrQMD
 		yf =(z-zmin);
 	    }
 	    while (G4UniformRand()*maxYf > yf);
@@ -999,7 +1020,7 @@ G4bool G4LundStringFragmentation::Loop_toFragmentString(G4ExcitedString * & theS
 	G4bool final_success=false;
         G4bool inner_success=true;
 	G4int attempt=0;
-	while ( ! final_success && attempt++ < StringLoopInterrupt )
+	while ( ! final_success && attempt++ < StringLoopInterrupt )  /* Loop checking, 07.08.2015, A.Ribon */
 	{       // If the string fragmentation do not be happend, repeat the fragmentation.
 
 		G4FragmentingString *currentString=new G4FragmentingString(*theStringInCMS);
@@ -1012,7 +1033,9 @@ G4bool G4LundStringFragmentation::Loop_toFragmentString(G4ExcitedString * & theS
 
 		// Main fragmentation loop until the string will not be able to fragment
 		inner_success=true;  // set false on failure.
-		while (! StopFragmenting(currentString) )
+                const G4int maxNumberOfLoops = 1000;
+                G4int loopCounter = -1;
+		while ( (! StopFragmenting(currentString)) && ++loopCounter < maxNumberOfLoops )  /* Loop checking, 07.08.2015, A.Ribon */
 		{       // Split current string into hadron + new string
 #ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
   G4cout<<"The string can fragment. "<<G4endl;;
@@ -1037,7 +1060,10 @@ G4bool G4LundStringFragmentation::Loop_toFragmentString(G4ExcitedString * & theS
 				delete currentString;
 				currentString=newString;
 			}
-		}; 
+		};
+                if ( loopCounter >= maxNumberOfLoops ) {
+                  inner_success=false;
+                }
 		// Split remaining string into 2 final hadrons.
 #ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
   G4cout<<"Split remaining string into 2 final hadrons."<<G4endl;
@@ -1093,7 +1119,7 @@ Diquark_AntiDiquark_belowThreshold_lastSplitting(G4FragmentingString * & string,
 		//... repeat procedure, if mass of cluster is too low to produce hadrons
 		//... ClusterMassCut = 0.15*GeV model parameter
 	}
-	while ((StringMass <= LeftHadron->GetPDGMass() + RightHadron->GetPDGMass()));
+	while ((StringMass <= LeftHadron->GetPDGMass() + RightHadron->GetPDGMass()));  /* Loop checking, 07.08.2015, A.Ribon */
 
   	return true;
 }
@@ -1136,6 +1162,8 @@ Diquark_AntiDiquark_aboveThreshold_lastSplitting(G4FragmentingString * & string,
 	for(G4int ProdQ=1; ProdQ < 4; ProdQ++)
 	{
 		G4int StateADiQ=0;
+                const G4int maxNumberOfLoops = 1000;
+                G4int loopCounter = 0;
 		do  // while(Meson[AbsIDquark-1][ProdQ-1][StateQ]<>0);
 		{
 			LeftHadron=G4ParticleTable::GetParticleTable()->FindParticle(
@@ -1145,13 +1173,15 @@ Diquark_AntiDiquark_aboveThreshold_lastSplitting(G4FragmentingString * & string,
 			//G4cout<<"Anti Bar "<<LeftHadron->GetParticleName()<<G4endl;
 
 			G4int StateDiQ=0;
+                        const G4int maxNumberOfInternalLoops = 1000;
+                        G4int internalLoopCounter = 0;
 			do // while(Baryon[Di_q1-1][Di_q2-1][ProdQ-1][StateDiQ]<>0);
 			{
 				RightHadron=G4ParticleTable::GetParticleTable()->FindParticle(
 								+Baryon[Di_q1-1][Di_q2-1][ProdQ-1][StateDiQ]);
 				G4double RightHadronMass=RightHadron->GetPDGMass();
 
-				if(StringMass >= LeftHadronMass + RightHadronMass)
+				if(StringMass > LeftHadronMass + RightHadronMass)
 				{
                                         if ( NumberOf_FS > 34 ) {
                                           G4ExceptionDescription ed;
@@ -1173,14 +1203,22 @@ Diquark_AntiDiquark_aboveThreshold_lastSplitting(G4FragmentingString * & string,
 					FS_RightHadron[NumberOf_FS]= RightHadron;
 
 					NumberOf_FS++;
-				} // End of if(StringMass >= LeftHadronMass + RightHadronMass)
+				} // End of if(StringMass > LeftHadronMass + RightHadronMass)
 
 				StateDiQ++;
 
-			} while(Baryon[Di_q1-1][Di_q2-1][ProdQ-1][StateDiQ]!=0);
-
+			} while( (Baryon[Di_q1-1][Di_q2-1][ProdQ-1][StateDiQ]!=0) && 
+                                 ++internalLoopCounter < maxNumberOfInternalLoops );  /* Loop checking, 07.08.2015, A.Ribon */
+                        if ( internalLoopCounter >= maxNumberOfInternalLoops ) {
+                          return false;
+                        }
+ 
 			StateADiQ++;
-		} while(Baryon[ADi_q1-1][ADi_q2-1][ProdQ-1][StateADiQ]!=0);
+		} while( (Baryon[ADi_q1-1][ADi_q2-1][ProdQ-1][StateADiQ]!=0) &&
+                         ++loopCounter < maxNumberOfLoops );  /* Loop checking, 07.08.2015, A.Ribon */
+                if ( loopCounter >= maxNumberOfLoops ) {
+                  return false;
+                }
 	} // End of for(G4int ProdQ=1; ProdQ < 4; ProdQ++)
 
   	return true;
@@ -1241,6 +1279,8 @@ Quark_Diquark_lastSplitting(G4FragmentingString * & string,
 		//G4cout<<"Insert QQbar "<<ProdQ<<" Sign "<<SignQ<<G4endl;
 
 		G4int StateQ=0;
+                const G4int maxNumberOfLoops = 1000;
+                G4int loopCounter = 0;
 		do  // while(Meson[AbsIDquark-1][ProdQ-1][StateQ]<>0);
 		{
 			LeftHadron=G4ParticleTable::GetParticleTable()->FindParticle(SignQ*
@@ -1248,13 +1288,15 @@ Quark_Diquark_lastSplitting(G4FragmentingString * & string,
 			G4double LeftHadronMass=LeftHadron->GetPDGMass();
 
 			G4int StateDiQ=0;
+                        const G4int maxNumberOfInternalLoops = 1000;
+                        G4int internalLoopCounter = 0;
 			do // while(Baryon[Di_q1-1][Di_q2-1][ProdQ-1][StateDiQ]<>0);
 			{
 				RightHadron=G4ParticleTable::GetParticleTable()->FindParticle(SignDiQ*
 								Baryon[Di_q1-1][Di_q2-1][ProdQ-1][StateDiQ]);
 				G4double RightHadronMass=RightHadron->GetPDGMass();
 
-				if(StringMass >= LeftHadronMass + RightHadronMass)
+				if(StringMass > LeftHadronMass + RightHadronMass)
 				{
                                         if ( NumberOf_FS > 34 ) {
                                           G4ExceptionDescription ed;
@@ -1275,14 +1317,22 @@ Quark_Diquark_lastSplitting(G4FragmentingString * & string,
 					FS_RightHadron[NumberOf_FS]= RightHadron;
 
 					NumberOf_FS++;
-				} // End of if(StringMass >= LeftHadronMass + RightHadronMass)
+				} // End of if(StringMass > LeftHadronMass + RightHadronMass)
 
 				StateDiQ++;
 
-			} while(Baryon[Di_q1-1][Di_q2-1][ProdQ-1][StateDiQ]!=0);
+			} while( (Baryon[Di_q1-1][Di_q2-1][ProdQ-1][StateDiQ]!=0) &&
+                                 ++internalLoopCounter < maxNumberOfInternalLoops );  /* Loop checking, 07.08.2015, A.Ribon */
+                        if ( internalLoopCounter >= maxNumberOfInternalLoops ) {
+                          return false;
+                        }
 
 			StateQ++;
-		} while(Meson[AbsIDquark-1][ProdQ-1][StateQ]!=0);
+		} while( (Meson[AbsIDquark-1][ProdQ-1][StateQ]!=0) &&
+                         ++loopCounter < maxNumberOfLoops );  /* Loop checking, 07.08.2015, A.Ribon */
+                  if ( loopCounter >= maxNumberOfLoops ) {
+                    return false;
+                  }
 	} // End of for(G4int ProdQ=1; ProdQ < 4; ProdQ++)
 
 	return true;
@@ -1331,6 +1381,8 @@ Quark_AntiQuark_lastSplitting(G4FragmentingString * & string,
 		if(AbsIDanti_quark == ProdQ)            SignAQ= 1;
 
 		G4int StateQ=0;
+                const G4int maxNumberOfLoops = 1000;
+                G4int loopCounter = 0;
 		do  // while(Meson[AbsIDquark-1][ProdQ-1][StateQ]<>0);
 		{
 			LeftHadron=G4ParticleTable::GetParticleTable()->FindParticle(SignQ*
@@ -1338,13 +1390,15 @@ Quark_AntiQuark_lastSplitting(G4FragmentingString * & string,
 			G4double LeftHadronMass=LeftHadron->GetPDGMass();
 
 			G4int StateAQ=0;
+                        const G4int maxNumberOfInternalLoops = 1000;
+                        G4int internalLoopCounter = 0;
 			do // while(Meson[AbsIDanti_quark-1][ProdQ-1][StateAQ]<>0);
 			{
 				RightHadron=G4ParticleTable::GetParticleTable()->FindParticle(SignAQ*
 								Meson[AbsIDanti_quark-1][ProdQ-1][StateAQ]);
 				G4double RightHadronMass=RightHadron->GetPDGMass();
 
-				if(StringMass >= LeftHadronMass + RightHadronMass)
+				if(StringMass > LeftHadronMass + RightHadronMass)
 				{
                                         if ( NumberOf_FS > 34 ) {
                                           G4ExceptionDescription ed;
@@ -1373,13 +1427,21 @@ Quark_AntiQuark_lastSplitting(G4FragmentingString * & string,
 					}
 					NumberOf_FS++;
 
-				} // End of if(StringMass >= LeftHadronMass + RightHadronMass)
+				} // End of if(StringMass > LeftHadronMass + RightHadronMass)
 
 				StateAQ++;
-			} while(Meson[AbsIDanti_quark-1][ProdQ-1][StateAQ]!=0);
+			} while( (Meson[AbsIDanti_quark-1][ProdQ-1][StateAQ]!=0) &&
+                                 ++internalLoopCounter < maxNumberOfInternalLoops );  /* Loop checking, 07.08.2015, A.Ribon */
+                          if ( internalLoopCounter >= maxNumberOfInternalLoops ) {
+                            return false;
+                          }
 
 			StateQ++;
-		} while(Meson[AbsIDquark-1][ProdQ-1][StateQ]!=0);
+		} while( (Meson[AbsIDquark-1][ProdQ-1][StateQ]!=0) &&
+                         ++loopCounter < maxNumberOfLoops );  /* Loop checking, 07.08.2015, A.Ribon */
+                  if ( loopCounter >= maxNumberOfLoops ) {
+                    return false;
+                  }
 	} // End of for(G4int ProdQ=1; ProdQ < 4; ProdQ++)
 
 	return true;

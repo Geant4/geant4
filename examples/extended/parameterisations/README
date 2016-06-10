@@ -12,6 +12,13 @@
  It was moved in extended examples from novice/N05 with removal of
  novice examples. 
 
+ Par02
+ -------
+ 
+ This example shows how to do "track and energy smearing" in Geant4,
+ in order to have a very fast simulation based on assumed detector
+ resolutions.
+
  gflash
  -------
 

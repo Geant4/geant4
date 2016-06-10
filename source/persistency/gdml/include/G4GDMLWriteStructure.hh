@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.hh 68053 2013-03-13 14:39:51Z gcosmo $
+// $Id: G4GDMLWriteStructure.hh 89493 2015-04-14 09:22:54Z gcosmo $
 //
 //
 // class G4GDMLWriteStructure
@@ -42,7 +42,6 @@
 
 #include "G4Types.hh"
 #include "G4Transform3D.hh"
-
 #include "G4GDMLWriteParamvol.hh"
 
 class G4LogicalVolume;
@@ -52,6 +51,7 @@ class G4LogicalBorderSurface;
 class G4LogicalSkinSurface;
 class G4OpticalSurface;
 class G4SurfaceProperty;
+class G4ReflectionFactory;
 
 class G4GDMLWriteStructure : public G4GDMLWriteParamvol
 {
@@ -62,6 +62,9 @@ class G4GDMLWriteStructure : public G4GDMLWriteParamvol
    virtual ~G4GDMLWriteStructure();
 
    virtual void StructureWrite(xercesc::DOMElement*);
+   void AddVolumeAuxiliary(G4GDMLAuxStructType myaux, const G4LogicalVolume* const);
+
+   void SetEnergyCutsExport(G4bool);
 
  protected:
 
@@ -77,16 +80,20 @@ class G4GDMLWriteStructure : public G4GDMLWriteParamvol
    const G4LogicalBorderSurface* GetBorderSurface(const G4VPhysicalVolume* const);
    const G4LogicalSkinSurface* GetSkinSurface(const G4LogicalVolume* const);
    G4bool FindOpticalSurface(const G4SurfaceProperty*);
+   void ExportEnergyCuts(const G4LogicalVolume* const);
 
  protected:
 
    xercesc::DOMElement* structureElement;
    std::vector<xercesc::DOMElement*> borderElementVec;
    std::vector<xercesc::DOMElement*> skinElementVec;
+   std::map<const G4LogicalVolume*, G4GDMLAuxListType> auxmap;
 
  private:  // cache for optical surfaces...
 
    std::vector<const G4OpticalSurface*> opt_vec;
+   G4ReflectionFactory* reflFactory;
+   G4bool cexport;  // Flag for optional export of energy cuts per volume
 };
 
 #endif

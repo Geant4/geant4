@@ -57,7 +57,6 @@
 #include "G4ScreeningMottCrossSection.hh"
 
 #include <vector>
-using namespace std;
 
 class G4ParticleChangeForGamma;
 class G4ParticleDefinition;

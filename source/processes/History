@@ -1,4 +1,4 @@
-$Id: History 66892 2013-01-17 10:57:59Z gunter $
+$Id: History 94124 2015-11-06 09:47:51Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 6, 2015 G.Cosmo
+- Removed module 'neutron_hp', now merged in 'particle_hp'.
+  Updated CMake and GNUmake scripts.
 
 July 9, 2012 G.Cosmo (processes-V09-05-00)
 - Archived "hadronic/models/incl" module.

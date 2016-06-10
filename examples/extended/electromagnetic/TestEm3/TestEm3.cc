@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm3/TestEm3.cc
 /// \brief Main program of the electromagnetic/TestEm3 example
 //
-// $Id: TestEm3.cc 85425 2014-10-29 08:24:37Z gcosmo $
+// $Id: TestEm3.cc 92914 2015-09-21 15:00:48Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,17 +59,26 @@ int main(int argc,char** argv) {
 
   //choose the Random engine
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
- 
+  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
+
   // Construct the default run manager
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
-  G4int nThreads = G4Threading::G4GetNumberOfCores();
-  if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
-  runManager->SetNumberOfThreads(nThreads);
+  // Number of threads can be defined via 3rd argument
+  G4int nThreads = 4;
+  if (argc==3) {
+    if(G4String(argv[2]) == "NMAX") { 
+      nThreads = G4Threading::G4GetNumberOfCores();
+    } else {
+      nThreads = G4UIcommand::ConvertToInt(argv[2]);
+    } 
+  } else if(argc==1) { 
+    nThreads = 1;
+  }
+  if (nThreads > 0) { runManager->SetNumberOfThreads(nThreads); }
   G4cout << "===== TestEm3 is started with " 
          <<  runManager->GetNumberOfThreads() << " threads =====" << G4endl;
-#else
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
+#else 
   G4RunManager* runManager = new G4RunManager;
 #endif  
 
@@ -86,16 +95,15 @@ int main(int argc,char** argv) {
 
   if (argc!=1)   // batch mode
     {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UI->ApplyCommand(command+fileName);
     }
- 
   else           //define visualization and UI terminal for interactive mode
     {
 #ifdef G4VIS_USE
-   G4VisManager* visManager = new G4VisExecutive;
-   visManager->Initialize();
+      G4VisManager* visManager = new G4VisExecutive;
+      visManager->Initialize();
 #endif
  
 #ifdef G4UI_USE
@@ -105,14 +113,13 @@ int main(int argc,char** argv) {
 #endif
  
 #ifdef G4VIS_USE
-     delete visManager;
+      delete visManager;
 #endif
     }
 
   // job termination
   //
   delete runManager;
-
   return 0;
 }
 

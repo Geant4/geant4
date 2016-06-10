@@ -23,26 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNASancheExcitationModel.cc 87137 2014-11-25 09:12:48Z gcosmo $
+// $Id: G4DNASancheExcitationModel.cc 93616 2015-10-27 08:59:17Z gcosmo $
 //
 
 // Created by Z. Francis
 
-#include "G4DNASancheExcitationModel.hh"
+#include <G4DNASancheExcitationModel.hh>
 #include "G4SystemOfUnits.hh"
 #include "G4DNAMolecularMaterial.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 using namespace std;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4DNASancheExcitationModel::G4DNASancheExcitationModel(const G4ParticleDefinition*,
                                                        const G4String& nam) :
     G4VEmModel(nam), isInitialised(false)
 {
-  //  nistwater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
   fpWaterDensity = 0;
 
   lowEnergyLimit = 2 * eV;
@@ -70,13 +69,13 @@ G4DNASancheExcitationModel::G4DNASancheExcitationModel(const G4ParticleDefinitio
   fpWaterDensity = 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4DNASancheExcitationModel::~G4DNASancheExcitationModel()
 {
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4DNASancheExcitationModel::Initialise(const G4ParticleDefinition* /*particle*/,
                                             const G4DataVector& /*cuts*/)
@@ -137,17 +136,34 @@ void G4DNASancheExcitationModel::Initialise(const G4ParticleDefinition* /*partic
   tdummyVec.clear();
   //
 
+  double t;
+  double xs;
+
   while(!input.eof())
   {
-    double t;
     input>>t;
     tdummyVec.push_back(t);
-    input>>map1[t][0]>>map1[t][1]>>map1[t][2]>>map1[t][3]>>map1[t][4]>>map1[t][5]>>map1[t][6]>>map1[t][7]>>map1[t][8];
-    //G4cout<<t<<"  "<<map1[t][0]<<map1[t][1]<<map1[t][2]<<map1[t][3]<<map1[t][4]<<map1[t][5]<<map1[t][6]<<map1[t][7]<<map1[t][8]<<G4endl;
+
+    fEnergyLevelXS.push_back(std::vector<double>());
+    fEnergyTotalXS.push_back(0);
+    std::vector<double>& levelXS = fEnergyLevelXS.back();
+    levelXS.reserve(9);
+
+//    G4cout<<t;
+
+    for(size_t i = 0 ; i < 9 ;++i)
+    {
+      input>>xs;
+      levelXS.push_back(xs);
+      fEnergyTotalXS.back() += xs;
+//      G4cout <<"  " << levelXS[i];
+    }
+
+//    G4cout << G4endl;
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4DNASancheExcitationModel::CrossSectionPerVolume(const G4Material* material,
                                                            const G4ParticleDefinition* particleDefinition,
@@ -166,37 +182,36 @@ G4double G4DNASancheExcitationModel::CrossSectionPerVolume(const G4Material* mat
   G4double waterDensity = (*fpWaterDensity)[material->GetIndex()];
 
   if(waterDensity!= 0.0)
-  //  if (material == nistwater || material->GetBaseMaterial() == nistwater)
   {
 
-    if (particleDefinition == G4Electron::ElectronDefinition())
+//    if (particleDefinition == G4Electron::ElectronDefinition()) // pas besoin
     {
       if (ekin >= lowEnergyLimit && ekin < highEnergyLimit)
+        // for now this is necessary 
       {
-        sigma = Sum(ekin);
+        //sigma = Sum(ekin);
+        sigma =  TotalCrossSection(ekin);
       }
     }
 
     if (verboseLevel > 2)
     {
       G4cout << "__________________________________" << G4endl;
-      G4cout << "°°° G4DNASancheExcitationModel - XS INFO START" << G4endl;
-      G4cout << "°°° Kinetic energy(eV)=" << ekin/eV << " particle : " << particleDefinition->GetParticleName() << G4endl;
-      G4cout << "°°° Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
-      G4cout << "°°° Cross section per water molecule (cm^-1)=" << sigma*waterDensity/(1./cm) << G4endl;
-      //      G4cout << " - Cross section per water molecule (cm^-1)=" << sigma*material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
-      G4cout << "°°° G4DNASancheExcitationModel - XS INFO END" << G4endl;
+      G4cout << "=== G4DNASancheExcitationModel - XS INFO START" << G4endl;
+      G4cout << "=== Kinetic energy(eV)=" << ekin/eV << " particle : " << particleDefinition->GetParticleName() << G4endl;
+      G4cout << "=== Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
+      G4cout << "=== Cross section per water molecule (cm^-1)=" << sigma*waterDensity/(1./cm) << G4endl;
+      G4cout << "=== G4DNASancheExcitationModel - XS INFO END" << G4endl;
     }
 
   } // if water
 
-  //  return sigma*2*material->GetAtomicNumDensityVector()[1];
   return sigma*2*waterDensity;
   // see papers for factor 2 description
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4DNASancheExcitationModel::SampleSecondaries(std::vector<
                                                        G4DynamicParticle*>*,
@@ -252,9 +267,40 @@ G4double G4DNASancheExcitationModel::PartialCrossSection(G4double t,
                                                       tdummyVec.end(), t / eV);
   std::vector<double>::iterator t1 = t2 - 1;
 
-  double sigma = LinInterpolate((*t1), (*t2), t / eV, map1[*t1][level],
-                                map1[*t2][level]);
-  sigma *= 1e-16 * cm * cm;
+  size_t i1 = t1 - tdummyVec.begin();
+  size_t i2 = t2 - tdummyVec.begin();
+
+  double sigma = LinInterpolate((*t1), (*t2),
+                                t / eV,
+                                fEnergyLevelXS[i1][level],
+                                fEnergyLevelXS[i2][level]);
+
+  static const double conv_factor =  1e-16 * cm * cm;
+
+  sigma *= conv_factor;
+  if (sigma == 0.) sigma = 1e-30;
+  return (sigma);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4DNASancheExcitationModel::TotalCrossSection(G4double t)
+{
+  std::vector<double>::iterator t2 = std::upper_bound(tdummyVec.begin(),
+                                                      tdummyVec.end(), t / eV);
+  std::vector<double>::iterator t1 = t2 - 1;
+
+  size_t i1 = t1 - tdummyVec.begin();
+  size_t i2 = t2 - tdummyVec.begin();
+
+  double sigma = LinInterpolate((*t1), (*t2),
+                                t / eV,
+                                fEnergyTotalXS[i1],
+                                fEnergyTotalXS[i2]);
+
+  static const double conv_factor =  1e-16 * cm * cm;
+
+  sigma *= conv_factor;
   if (sigma == 0.) sigma = 1e-30;
   return (sigma);
 }
@@ -263,7 +309,7 @@ G4double G4DNASancheExcitationModel::PartialCrossSection(G4double t,
 
 G4double G4DNASancheExcitationModel::VibrationEnergy(G4int level)
 {
-  G4double energies[9] = { 0.01, 0.024, 0.061, 0.092, 0.204, 0.417, 0.460,
+  static G4double energies[9] = { 0.01, 0.024, 0.061, 0.092, 0.204, 0.417, 0.460,
                            0.500, 0.835 };
   return (energies[level] * eV);
 }
@@ -317,6 +363,7 @@ G4double G4DNASancheExcitationModel::Sum(G4double k)
   {
     totalCrossSection += PartialCrossSection(k, i);
   }
+
   return totalCrossSection;
 }
 

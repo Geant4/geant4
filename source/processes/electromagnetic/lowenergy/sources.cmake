@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 83410 2014-08-21 15:17:53Z gcosmo $
+# $Id: sources.cmake 93359 2015-10-19 13:42:18Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -104,10 +104,13 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermorePolarizedComptonModel.hh
         G4LivermorePolarizedGammaConversionModel.hh
         G4LivermorePolarizedPhotoElectricModel.hh
+        G4LivermorePolarizedPhotoElectricGDModel.hh
         G4LivermorePolarizedRayleighModel.hh
         G4LivermoreRayleighModel.hh
         G4LogLogInterpolation.hh
+        G4LowECapture.hh
         G4LowEPComptonModel.hh
+        G4LowEPPolarizedComptonModel.hh
         G4LowEWentzelVIModel.hh
         G4MicroElecCrossSectionDataSet.hh
         G4MicroElecElastic.hh
@@ -220,10 +223,13 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermorePolarizedComptonModel.cc
         G4LivermorePolarizedGammaConversionModel.cc
         G4LivermorePolarizedPhotoElectricModel.cc
+	G4LivermorePolarizedPhotoElectricGDModel.cc
         G4LivermorePolarizedRayleighModel.cc
         G4LivermoreRayleighModel.cc
         G4LogLogInterpolation.cc
+        G4LowECapture.cc
         G4LowEPComptonModel.cc
+        G4LowEPPolarizedComptonModel.cc
         G4LowEWentzelVIModel.cc
         G4MicroElecCrossSectionDataSet.cc
         G4MicroElecElastic.cc

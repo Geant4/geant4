@@ -44,16 +44,28 @@
 #include "G4ParticleHPIsotropic.hh"
 #include "G4ParticleHPNBodyPhaseSpace.hh"
 #include "G4ParticleHPLabAngularEnergy.hh"
+#include "G4Cache.hh"
 class G4ParticleDefinition;
 
 enum G4HPMultiMethod { G4HPMultiPoisson, G4HPMultiBetweenInts };
 
 class G4ParticleHPProduct
 {
+
+   struct toBeCached {
+      G4ReactionProduct* theProjectileRP;
+      G4ReactionProduct* theTarget;
+      G4int theCurrentMultiplicity;
+      toBeCached() : theProjectileRP(NULL),theTarget(NULL),theCurrentMultiplicity(-1) {};
+   };
+
   public:
   G4ParticleHPProduct()
   {
     theDist = 0;
+    toBeCached val;
+    fCache.Put( val );
+
     char * method = getenv( "G4PHP_MULTIPLICITY_METHOD" );
     if( method )  {
       if( G4String(method) == "Poisson" ) {
@@ -81,6 +93,7 @@ class G4ParticleHPProduct
     theGroundStateQValue*= CLHEP::eV;
     theActualStateQValue*= CLHEP::eV;
     theYield.Init(aDataFile, CLHEP::eV);
+    theYield.Hash();
     if(theDistLaw==0)
     {
       // distribution not known, use E-independent, isotropic angular distribution
@@ -147,17 +160,17 @@ class G4ParticleHPProduct
   
   void SetProjectileRP(G4ReactionProduct * aIncidentPart) 
   { 
-    theProjectileRP = aIncidentPart; 
+    fCache.Get().theProjectileRP = aIncidentPart; 
   }
   
   void SetTarget(G4ReactionProduct * aTarget)
   { 
-    theTarget = aTarget; 
+    fCache.Get().theTarget = aTarget; 
   }
   
-  inline G4ReactionProduct * GetTarget() { return theTarget; }
+  inline G4ReactionProduct * GetTarget() { return fCache.Get().theTarget; }
   
-  inline G4ReactionProduct * GetProjectileRP() { return theProjectileRP; }
+  inline G4ReactionProduct * GetProjectileRP() { return fCache.Get().theProjectileRP; }
   
   inline G4double MeanEnergyOfThisInteraction() 
   { 
@@ -169,7 +182,7 @@ class G4ParticleHPProduct
     else
     {
       result=theDist->MeanEnergyOfThisInteraction();
-      result *= theCurrentMultiplicity;
+      result *= fCache.Get().theCurrentMultiplicity;
     }
     return result;
   }
@@ -196,12 +209,13 @@ class G4ParticleHPProduct
    
    // Utility quantities
    
-   G4ReactionProduct * theTarget;
-   G4ReactionProduct * theProjectileRP;
+   //G4ReactionProduct * theTarget;
+   //G4ReactionProduct * theProjectileRP;
 
    // cashed values
    
-   G4int theCurrentMultiplicity;
+   //G4int theCurrentMultiplicity;
+   G4Cache<toBeCached> fCache;
 
   G4HPMultiMethod theMultiplicityMethod;  
 };

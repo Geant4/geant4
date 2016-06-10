@@ -43,11 +43,22 @@
 
 G4int G4ParticleHPProduct::GetMultiplicity(G4double anEnergy )
 {
-  if(theDist == 0) { return 0; }
+  //if(theDist == 0) { return 0; }
+  //151120 TK Modified for solving reproducibility problem 
+  if ( theDist == 0 ) { 
+     fCache.Get().theCurrentMultiplicity = 0;
+     return 0; 
+  }
 
   G4double mean = theYield.GetY(anEnergy);
   //g  G4cout << "G4ParticleHPProduct MEAN NUMBER OF PARTICLES " << mean << " for " << theMass << G4endl;
-  if( mean <= 0. ) return 0;
+  //if( mean <= 0. ) return 0;
+  //151120 TK Modified for solving reproducibility problem 
+  //This is also a real fix
+  if ( mean <= 0. )  {
+     fCache.Get().theCurrentMultiplicity = 0;
+     return 0; 
+  }
 
   G4int multi;
   multi = G4int(mean+0.0001);
@@ -85,7 +96,7 @@ G4int G4ParticleHPProduct::GetMultiplicity(G4double anEnergy )
 #endif
   }
 
-  theCurrentMultiplicity = static_cast<G4int>(mean);
+  fCache.Get().theCurrentMultiplicity = static_cast<G4int>(mean);
 
   return multi;
 }
@@ -96,8 +107,8 @@ G4ReactionProductVector * G4ParticleHPProduct::Sample(G4double anEnergy, G4int m
   if(theDist == 0) { return 0; }
   G4ReactionProductVector * result = new G4ReactionProductVector;
 
-  theDist->SetTarget(theTarget);
-  theDist->SetProjectileRP(theProjectileRP);
+  theDist->SetTarget(fCache.Get().theTarget);
+  theDist->SetProjectileRP(fCache.Get().theProjectileRP);
   G4int i;
 //  G4double eMax = GetTarget()->GetMass()+GetNeutron()->GetMass()
 //                  - theActualStateQValue;

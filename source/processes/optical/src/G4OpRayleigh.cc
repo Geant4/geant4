@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpRayleigh.cc 84717 2014-10-20 07:39:47Z gcosmo $
+// $Id: G4OpRayleigh.cc 92045 2015-08-14 07:21:23Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -139,24 +139,27 @@ G4OpRayleigh::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         G4ThreeVector OldMomentumDirection, NewMomentumDirection;
         G4ThreeVector OldPolarization, NewPolarization;
 
+        G4double rand, constant;
+        G4double CosTheta, SinTheta, SinPhi, CosPhi, unit_x, unit_y, unit_z;
+
         do {
            // Try to simulate the scattered photon momentum direction
            // w.r.t. the initial photon momentum direction
 
-           G4double CosTheta = G4UniformRand();
-           G4double SinTheta = std::sqrt(1.-CosTheta*CosTheta);
+           CosTheta = G4UniformRand();
+           SinTheta = std::sqrt(1.-CosTheta*CosTheta);
            // consider for the angle 90-180 degrees
            if (G4UniformRand() < 0.5) CosTheta = -CosTheta;
 
            // simulate the phi angle
-           G4double rand = twopi*G4UniformRand();
-           G4double SinPhi = std::sin(rand);
-           G4double CosPhi = std::cos(rand);
+           rand = twopi*G4UniformRand();
+           SinPhi = std::sin(rand);
+           CosPhi = std::cos(rand);
 
            // start constructing the new momentum direction
-	   G4double unit_x = SinTheta * CosPhi; 
-	   G4double unit_y = SinTheta * SinPhi;  
-	   G4double unit_z = CosTheta; 
+	   unit_x = SinTheta * CosPhi; 
+	   unit_y = SinTheta * SinPhi;  
+	   unit_z = CosTheta; 
 	   NewMomentumDirection.set (unit_x,unit_y,unit_z);
 
            // Rotate the new momentum direction into global reference system
@@ -169,9 +172,9 @@ G4OpRayleigh::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
            // The new polarization needs to be in the same plane as the new
            // momentum direction and the old polarization direction
            OldPolarization = aParticle->GetPolarization();
-           G4double constant = -1./NewMomentumDirection.dot(OldPolarization);
+           constant = -NewMomentumDirection.dot(OldPolarization);
 
-           NewPolarization = NewMomentumDirection + constant*OldPolarization;
+           NewPolarization = OldPolarization + constant*NewMomentumDirection;
            NewPolarization = NewPolarization.unit();
 
            // There is a corner case, where the Newmomentum direction
@@ -189,6 +192,7 @@ G4OpRayleigh::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	  
 	   // simulate according to the distribution cos^2(theta)
            cosTheta = NewPolarization.dot(OldPolarization);
+          // Loop checking, 13-Aug-2015, Peter Gumplinger
         } while (std::pow(cosTheta,2) < G4UniformRand());
 
         aParticleChange.ProposePolarization(NewPolarization);

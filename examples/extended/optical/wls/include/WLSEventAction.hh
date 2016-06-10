@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSEventAction.hh 69561 2013-05-08 12:25:56Z gcosmo $
+// $Id: WLSEventAction.hh 90240 2015-05-21 09:08:13Z gcosmo $
 //
 /// \file optical/wls/include/WLSEventAction.hh
 /// \brief Definition of the WLSEventAction class
@@ -56,27 +56,14 @@ class WLSEventAction : public G4UserEventAction
     G4int GetEventNo();
     void SetEventVerbose(G4int);
 
-    void SetDrawFlag(G4String val)  { fDrawFlag = val; };
-    void SetPrintModulo(G4int val)  { fPrintModulo = val; };
-
-    void SetForceDrawPhotons(G4bool b){fForceDrawPhotons=b;}
-    void SetForceDrawNoPhotons(G4bool b){fForceNoPhotons=b;}
- 
   private:
 
     WLSRunAction* fRunAction;
     WLSEventActionMessenger* fEventMessenger;
 
     G4int fVerboseLevel;
-    G4int fPrintModulo;
  
     G4int fMPPCCollID;
- 
-    G4String fDrawFlag;
-
-    G4bool fForceDrawPhotons;
-    G4bool fForceNoPhotons;
-
 };
 
 #endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B1RunAction.cc 87359 2014-12-01 16:04:27Z gcosmo $
+// $Id: B1RunAction.cc 93886 2015-11-03 08:28:26Z gcosmo $
 //
 /// \file B1RunAction.cc
 /// \brief Implementation of the B1RunAction class
@@ -31,9 +31,11 @@
 #include "B1RunAction.hh"
 #include "B1PrimaryGeneratorAction.hh"
 #include "B1DetectorConstruction.hh"
-#include "B1Run.hh"
+// #include "B1Run.hh"
 
 #include "G4RunManager.hh"
+#include "G4Run.hh"
+#include "G4ParameterManager.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4LogicalVolume.hh"
 #include "G4UnitsTable.hh"
@@ -42,7 +44,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B1RunAction::B1RunAction()
-: G4UserRunAction()
+: G4UserRunAction(),
+  fEdep("Edep", 0.),
+  fEdep2("Edep2", 0.)
 { 
   // add new units for dose
   // 
@@ -54,7 +58,12 @@ B1RunAction::B1RunAction()
   new G4UnitDefinition("milligray", "milliGy" , "Dose", milligray);
   new G4UnitDefinition("microgray", "microGy" , "Dose", microgray);
   new G4UnitDefinition("nanogray" , "nanoGy"  , "Dose", nanogray);
-  new G4UnitDefinition("picogray" , "picoGy"  , "Dose", picogray);        
+  new G4UnitDefinition("picogray" , "picoGy"  , "Dose", picogray); 
+
+  // Register parameter to the parameter manager
+  G4ParameterManager* parameterManager = G4ParameterManager::Instance();
+  parameterManager->RegisterParameter(fEdep);
+  parameterManager->RegisterParameter(fEdep2); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,17 +73,15 @@ B1RunAction::~B1RunAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Run* B1RunAction::GenerateRun()
-{
-  return new B1Run; 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void B1RunAction::BeginOfRunAction(const G4Run*)
 { 
-  //inform the runManager to save random number seed
+  // inform the runManager to save random number seed
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
+
+  // reset parameters to their initial values
+  G4ParameterManager* parameterManager = G4ParameterManager::Instance();
+  parameterManager->Reset();
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -83,15 +90,18 @@ void B1RunAction::EndOfRunAction(const G4Run* run)
 {
   G4int nofEvents = run->GetNumberOfEvent();
   if (nofEvents == 0) return;
-  
-  const B1Run* b1Run = static_cast<const B1Run*>(run);
 
-  // Compute dose
+  // Merge parameters 
+  G4ParameterManager* parameterManager = G4ParameterManager::Instance();
+  parameterManager->Merge();
+
+  // Compute dose = total energy deposit in a run and its variance
   //
-  G4double edep  = b1Run->GetEdep();
-  G4double edep2 = b1Run->GetEdep2();
+  G4double edep  = fEdep.GetValue();
+  G4double edep2 = fEdep2.GetValue();
+  
   G4double rms = edep2 - edep*edep/nofEvents;
-  if (rms > 0.) rms = std::sqrt(rms); else rms = 0.;
+  if (rms > 0.) rms = std::sqrt(rms); else rms = 0.;  
 
   const B1DetectorConstruction* detectorConstruction
    = static_cast<const B1DetectorConstruction*>
@@ -133,8 +143,8 @@ void B1RunAction::EndOfRunAction(const G4Run* run)
      << G4endl
      << " The run consists of " << nofEvents << " "<< runCondition
      << G4endl
-     << " Dose in scoring volume : " 
-     << G4BestUnit(dose,"Dose") << " +- " << G4BestUnit(rmsDose,"Dose")
+     << " Cumulated dose per run, in scoring volume : " 
+     << G4BestUnit(dose,"Dose") << " rms = " << G4BestUnit(rmsDose,"Dose")
      << G4endl
      << "------------------------------------------------------------"
      << G4endl
@@ -142,3 +152,13 @@ void B1RunAction::EndOfRunAction(const G4Run* run)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B1RunAction::AddEdep(G4double edep)
+{
+  fEdep  += edep;
+  fEdep2 += edep*edep;
+}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

@@ -15,6 +15,7 @@
 #include "scast"
 #include "ntuple_booking"
 #include "sout"
+//#include "srep"
 
 namespace tools {
 namespace wcsv {
@@ -25,7 +26,7 @@ public:
     static const std::string s_v("tools::wcsv::ntuple");
     return s_v;
   }
-protected:
+public:
   class icol {
   public:
     virtual ~icol(){}
@@ -85,19 +86,82 @@ public:
     T m_tmp;
   };
 
+/*
+  template <class T>
+  static void escape(T&,const std::string&){}
+  static void escape(std::string& a_s,const std::string& a_sep){
+    replace(a_s,a_sep,"\\"+a_sep); //if changing here, change rcsv_ntuple/_vec_read() too.
+  }
+*/
+
+  template <class T>
+  class std_vector_column : public virtual icol {
+  public:
+    static cid id_class() {return _cid_std_vector<T>();}
+    virtual void* cast(cid a_class) const {
+      if(void* p = cmp_cast<std_vector_column>(this,a_class)) {return p;}
+      else return 0;
+    }
+    virtual cid id_cls() const {return id_class();}
+  public: //icol
+    virtual void add() {
+      if(m_user_vec.empty()) {
+        //m_writer << "none";
+      } else {
+        //std::string sep;sep+=m_vec_sep;
+        //T value;
+        typedef typename std::vector<T>::const_iterator it_t;
+        for(it_t it=m_user_vec.begin();it!=m_user_vec.end();++it) {
+          if(it!=m_user_vec.begin()) m_writer << m_vec_sep;
+          m_writer << *it;
+          //value = *it;escape(value,sep);
+          //m_writer << value;
+        }
+      }
+    }
+    virtual const std::string& name() const {return m_name;}
+  public:
+    std_vector_column(std::ostream& a_writer,const std::string& a_name,std::vector<T>& a_user_vec,char a_vec_sep)
+    :m_writer(a_writer)
+    ,m_name(a_name)
+    ,m_user_vec(a_user_vec)
+    ,m_vec_sep(a_vec_sep)
+    {}
+    virtual ~std_vector_column(){}
+  protected:
+    std_vector_column(const std_vector_column& a_from)
+    :icol(a_from)
+    ,m_writer(a_from.m_writer)
+    ,m_name(a_from.m_name) 
+    ,m_user_vec(a_from.m_user_vec)
+    ,m_vec_sep(a_from.m_vec_sep)
+    {}
+    std_vector_column& operator=(const std_vector_column& a_from){
+      m_name = a_from.m_name;
+      m_vec_sep = a_from.m_vec_sep;
+      return *this;
+    }
+  protected:
+    std::ostream& m_writer;
+    std::string m_name;
+    std::vector<T>& m_user_vec;
+    char m_vec_sep;
+  };
 
 public:
-  ntuple(std::ostream& a_writer,char a_sep = ',')
+  ntuple(std::ostream& a_writer,char a_sep = ',',char a_vec_sep = ';')
   :m_writer(a_writer)
   ,m_sep(a_sep)
+  ,m_vec_sep(a_vec_sep)
   {}
 
   ntuple(std::ostream& a_writer,
          std::ostream& a_out, //for errors.
          const ntuple_booking& a_bkg,
-         char a_sep = ',')
+         char a_sep = ',',char a_vec_sep = ';')
   :m_writer(a_writer)
   ,m_sep(a_sep)
+  ,m_vec_sep(a_vec_sep)
   ,m_title(a_bkg.title())
   {
     const std::vector<column_booking>& cols = a_bkg.columns();
@@ -128,6 +192,35 @@ public:
       } else if((*it).cls_id()==_cid(uint64(0))) {
         create_column<uint64>((*it).name());
 
+#define TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(a__type) \
+      } else if((*it).cls_id()==_cid_std_vector<a__type>()) {\
+        std::vector<a__type>* vec = (std::vector<a__type>*)(*it).user_obj();\
+        if(vec) {\
+          create_column<a__type>((*it).name(),*vec);\
+        } else {\
+          a_out << "tools::wcsv_ntuple :"\
+                << " for std::vector column " << sout((*it).name())\
+                << ", the user vector pointer is null."\
+                << std::endl;\
+          tools::clear<icol>(m_cols);\
+          return;\
+        }
+
+      TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(char)
+      TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(short)
+      TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(int)
+      TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(float)
+      TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(double)
+      TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(std::string)
+      TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(uchar)
+      TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(ushort)
+      TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(uint32)
+      TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(bool)
+      TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(int64)
+      TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(uint64)
+
+#undef TOOLS_WCSV_NTUPLE_CREATE_VEC_COL
+
       } else {
         a_out << "tools::wcsv::ntuple :"
               << " for column " << sout((*it).name())
@@ -147,10 +240,12 @@ protected:
   ntuple(const ntuple& a_from)
   :m_writer(a_from.m_writer)
   ,m_sep(a_from.m_sep)
+  ,m_vec_sep(a_from.m_vec_sep)
   ,m_title(a_from.m_title)
   {}
   ntuple& operator=(const ntuple& a_from){
     m_sep = a_from.m_sep;
+    m_vec_sep = a_from.m_vec_sep;
     m_title = a_from.m_title;
     return *this;
   }
@@ -170,6 +265,7 @@ public:
     m_writer << "#class " << s_class() << std::endl;
     m_writer << "#title " << m_title << std::endl;
     m_writer << "#separator " << (unsigned int)m_sep << std::endl;
+    m_writer << "#vector_separator " << (unsigned int)m_vec_sep << std::endl;
     bool status = true;
    {for(unsigned int count=0;count<m_cols.size();count++) {
        icol* _col = m_cols[count];
@@ -189,6 +285,16 @@ public:
   column<T>* create_column(const std::string& a_name,const T& a_def = T()) {
     if(find_named<icol>(m_cols,a_name)) return 0;
     column<T>* col = new column<T>(m_writer,a_name,a_def);
+    if(!col) return 0;
+    m_cols.push_back(col);
+    return col;
+  }
+
+  template <class T>
+  std_vector_column<T>* create_column(const std::string& a_name,std::vector<T>& a_user_vec) {
+    //NOTE : to optimize, we do not handle a default std::vector value logic.
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    std_vector_column<T>* col = new std_vector_column<T>(m_writer,a_name,a_user_vec,m_vec_sep);
     if(!col) return 0;
     m_cols.push_back(col);
     return col;
@@ -222,6 +328,7 @@ public:
 protected:
   std::ostream& m_writer;
   char m_sep;
+  char m_vec_sep;
   std::string m_title;
   std::vector<icol*> m_cols;
 };

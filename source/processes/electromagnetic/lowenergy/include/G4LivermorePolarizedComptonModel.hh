@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedComptonModel.hh 82874 2014-07-15 15:25:29Z gcosmo $
+// $Id: G4LivermorePolarizedComptonModel.hh 93359 2015-10-19 13:42:18Z gcosmo $
 //
 // Authors: G.Depaola & F.Longo
 //
@@ -32,15 +32,23 @@
 #define G4LivermorePolarizedComptonModel_h 1
 
 #include "G4VEmModel.hh"
-#include "G4Electron.hh"
-#include "G4ParticleChangeForGamma.hh"
-#include "G4CrossSectionHandler.hh"
-#include "G4LogLogInterpolation.hh"
+#include "G4LPhysicsFreeVector.hh"
+
+class G4ParticleChangeForGamma;
+class G4VAtomDeexcitation;
+class G4ShellData;
+class G4DopplerProfile;
+
+#include "G4VEMDataSet.hh"
 #include "G4CompositeEMDataSet.hh"
-#include "G4ShellData.hh"
-#include "G4DopplerProfile.hh"
-#include "G4ForceCondition.hh"
-#include "G4Gamma.hh"
+
+
+//#include "G4Electron.hh"
+//#include "G4CrossSectionHandler.hh"
+//#include "G4LogLogInterpolation.hh"
+//#include "G4CompositeEMDataSet.hh"
+//#include "G4ForceCondition.hh"
+//#include "G4Gamma.hh"
 
 class G4LivermorePolarizedComptonModel : public G4VEmModel
 {
@@ -53,6 +61,10 @@ public:
   virtual ~G4LivermorePolarizedComptonModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+
+  virtual void InitialiseLocal(const G4ParticleDefinition*, G4VEmModel* masterModel);
+
+  virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
 
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
@@ -68,44 +80,42 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
-protected:
+private:
 
   G4ParticleChangeForGamma* fParticleChange;
+  G4VAtomDeexcitation* fAtomDeexcitation;
 
-  /*
-  G4double GetMeanFreePath(const G4Track& aTrack, 
-			   G4double previousStepSize, 
-			   G4ForceCondition* condition);
-			   */
-private:
- 
   G4bool isInitialised;
   G4int verboseLevel;
 
-  G4VEMDataSet* meanFreePathTable;
-  G4VEMDataSet* scatterFunctionData;
-  G4VCrossSectionHandler* crossSectionHandler;
+  G4LivermorePolarizedComptonModel & operator=(const  G4LivermorePolarizedComptonModel &right);
+  G4LivermorePolarizedComptonModel(const  G4LivermorePolarizedComptonModel&);
 
   // specific methods for polarization 
   
   G4ThreeVector GetRandomPolarization(G4ThreeVector& direction0); // Random Polarization
   G4ThreeVector GetPerpendicularPolarization(const G4ThreeVector& direction0, const G4ThreeVector& polarization0) const;
-  
   G4ThreeVector SetPerpendicularVector(G4ThreeVector& a); // temporary
   G4ThreeVector SetNewPolarization(G4double epsilon, G4double sinSqrTheta, 
 				   G4double phi, G4double cosTheta);
   G4double SetPhi(G4double, G4double);
-  
   void SystemOfRefChange(G4ThreeVector& direction0, G4ThreeVector& direction1, 
 			 G4ThreeVector& polarization0, G4ThreeVector& polarization1);
   
   // Doppler Broadening
- 
-  G4ShellData shellData;
-  G4DopplerProfile profileData;
+  
+  static G4ShellData* shellData;
+  static G4DopplerProfile* profileData;
 
-  G4LivermorePolarizedComptonModel & operator=(const  G4LivermorePolarizedComptonModel &right);
-  G4LivermorePolarizedComptonModel(const  G4LivermorePolarizedComptonModel&);
+  // Cross Section Handling 
+ 
+  static G4int maxZ;
+  static G4LPhysicsFreeVector* data[100];
+  void ReadData(size_t Z, const char* path = 0);
+
+  // Scattering function 
+
+  static G4CompositeEMDataSet* scatterFunctionData;
 
 };
 

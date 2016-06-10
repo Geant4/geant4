@@ -75,7 +75,7 @@ void Run::SetTargetXXX(G4bool flag)
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::CountProcesses(const G4VProcess* process) 
+void Run::CountProcesses(G4VProcess* process) 
 {
   G4String procName = process->GetProcessName();
   std::map<G4String,G4int>::iterator it = fProcCounter.find(procName);

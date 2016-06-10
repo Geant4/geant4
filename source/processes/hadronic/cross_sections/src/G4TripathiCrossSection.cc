@@ -86,9 +86,9 @@ GetElementCrossSection(const G4DynamicParticle* aPart, G4int ZZ,
   if(E_cm <= DBL_MIN) { return result; }
   // done
   G4double r_rms_p = 0.6 * myNuleonRadius * 
-                                   std::pow(projectileAtomicNumber, 1./3.);
+                                   G4Pow::GetInstance()->powA(projectileAtomicNumber, 1./3.);
   G4double r_rms_t = 0.6 * myNuleonRadius * 
-                                   std::pow(targetAtomicNumber, 1./3.);
+                                   G4Pow::GetInstance()->powA(targetAtomicNumber, 1./3.);
   
   // done
   G4double r_p = 1.29*r_rms_p/nuleonRadius ;
@@ -96,8 +96,8 @@ GetElementCrossSection(const G4DynamicParticle* aPart, G4int ZZ,
   
   // done
   G4double Radius = r_p + r_t + 
-           1.2*(std::pow(targetAtomicNumber, 1./3.) + 
-            std::pow(projectileAtomicNumber, 1./3.))/std::pow(E_cm, 1./3.);
+           1.2*(G4Pow::GetInstance()->powA(targetAtomicNumber, 1./3.) + 
+            G4Pow::GetInstance()->powA(projectileAtomicNumber, 1./3.))/G4Pow::GetInstance()->powA(E_cm, 1./3.);
 
   //done
   G4double B = 1.44*nProjProtons*nTargetProtons/Radius;
@@ -123,7 +123,7 @@ GetElementCrossSection(const G4DynamicParticle* aPart, G4int ZZ,
   {
     D = 2.77-(8.0E-3*targetAtomicNumber)+
           (1.8E-5*targetAtomicNumber*targetAtomicNumber)
-                   - 0.8/(1+std::exp((250.-Energy)/75.));
+                   - 0.8/(1+G4Exp((250.-Energy)/75.));
   }
   else
   {
@@ -136,24 +136,24 @@ GetElementCrossSection(const G4DynamicParticle* aPart, G4int ZZ,
     D = 1.75;
   }
   // done
-  G4double C_E = D * (1-std::exp(-Energy/40.)) - 
-       0.292*std::exp(-Energy/792.)*std::cos(0.229*std::pow(Energy, 0.453));
+  G4double C_E = D * (1-G4Exp(-Energy/40.)) - 
+       0.292*G4Exp(-Energy/792.)*std::cos(0.229*G4Pow::GetInstance()->powA(Energy, 0.453));
   
   // done
-  G4double S = std::pow(projectileAtomicNumber, 1./3.)*
-               std::pow(targetAtomicNumber, 1./3.)/
-               (std::pow(projectileAtomicNumber, 1./3.) + 
-               std::pow(targetAtomicNumber, 1./3.)); 
+  G4double S = G4Pow::GetInstance()->powA(projectileAtomicNumber, 1./3.)*
+               G4Pow::GetInstance()->powA(targetAtomicNumber, 1./3.)/
+               (G4Pow::GetInstance()->powA(projectileAtomicNumber, 1./3.) + 
+               G4Pow::GetInstance()->powA(targetAtomicNumber, 1./3.)); 
   
   // done
-  G4double deltaE = 1.85*S + 0.16*S/std::pow(E_cm,1./3.) - C_E +
+  G4double deltaE = 1.85*S + 0.16*S/G4Pow::GetInstance()->powA(E_cm,1./3.) - C_E +
                     0.91*(targetAtomicNumber-2.*nTargetProtons)*nProjProtons/
 		    (targetAtomicNumber*projectileAtomicNumber);
   
   // done 
   result = pi * nuleonRadius*nuleonRadius * 
-           std::pow(( std::pow(targetAtomicNumber, 1./3.) + 
-	         std::pow(projectileAtomicNumber, 1./3.) + deltaE),2.) * 
+           G4Pow::GetInstance()->powA(( G4Pow::GetInstance()->powA(targetAtomicNumber, 1./3.) + 
+	         G4Pow::GetInstance()->powA(projectileAtomicNumber, 1./3.) + deltaE),2.) * 
                  (1-B/E_cm);
   
   if(result < 0.) { result = 0.; }

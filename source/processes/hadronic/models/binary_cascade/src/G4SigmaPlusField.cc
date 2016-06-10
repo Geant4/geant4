@@ -44,6 +44,7 @@
 #include "G4FermiMomentum.hh"
 #include "G4SigmaPlus.hh"
 #include "G4HadTmpUtil.hh"
+#include "G4Pow.hh"
 
 G4SigmaPlusField::G4SigmaPlusField(G4V3DNucleus * nucleus, G4double coeff)
   : G4VNuclearField(nucleus)
@@ -78,7 +79,7 @@ G4double G4SigmaPlusField::GetBarrier()
 {
   G4double A = theNucleus->GetMassNumber();
   G4double Z = theNucleus->GetCharge();
-  G4double coulombBarrier = (1.44/1.14) * MeV * Z / (1.0 + std::pow(A,1./3.));
+  G4double coulombBarrier = (1.44/1.14) * MeV * Z / (1.0 + G4Pow::GetInstance()->A13(A));
   return coulombBarrier;
 }
 

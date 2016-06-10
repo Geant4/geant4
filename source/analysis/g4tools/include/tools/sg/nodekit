@@ -1,0 +1,97 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_nodekit
+#define tools_sg_nodekit
+
+#include "pick_action"
+#include "group"
+
+namespace tools {
+namespace sg {
+
+inline void nodekit_pick(pick_action& a_action,node& a_sg,node* a_node) {
+  if(a_action.stop_at_first()){
+    a_sg.pick(a_action);
+    if(a_action.done()) {
+      a_action.set_node(a_node);
+      a_action.save_state(a_action.state());
+    }
+  } else {
+    // have a local pick_action to override node in the found pick list.
+    pick_action action(a_action);
+    a_sg.pick(action);
+    typedef pick_action::pick_t pick_t;
+    const std::vector<pick_t>& pks = action.picks();
+    std::vector<pick_t>::const_iterator it;
+    for(it=pks.begin();it!=pks.end();++it) {
+      a_action.add_pick(*a_node,(*it).zs(),(*it).ws(),(*it).state());
+    }
+  }
+}
+
+}}
+
+#include "render_action"
+#include "bbox_action"
+
+namespace tools {
+namespace sg {
+
+class nodekit : public node {
+  TOOLS_HEADER(nodekit,tools::sg::nodekit,node)
+public:
+  virtual void update_sg(std::ostream&) = 0;
+public:
+  virtual void render(tools::sg::render_action& a_action) {
+    update_if_touched(a_action.out());
+    m_group.render(a_action);
+  }
+  virtual void search(tools::sg::search_action& a_action) {
+    parent::search(a_action);
+    if(a_action.done()) return;
+    update_if_touched(a_action.out());
+    m_group.search(a_action);
+  }
+  virtual void bbox(tools::sg::bbox_action& a_action) {
+    update_if_touched(a_action.out());
+    m_group.bbox(a_action);
+  }
+/*
+  virtual void pick(tools::sg::pick_action& a_action) {
+    update_if_touched(a_action.out());
+    nodekit_pick(a_action,m_group,this);
+  }
+  virtual bool write(tools::sg::write_action& a_action) {
+    update_if_touched(a_action.out());
+    //if(!write_fields(a_action)) return false;
+    return m_group.write(a_action);
+  }
+*/
+public:
+  nodekit()
+  :parent()
+  {}
+  virtual ~nodekit(){}
+public:
+  nodekit(const nodekit& a_from)
+  :parent(a_from)
+  {}
+  nodekit& operator=(const nodekit& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+protected:
+  void update_if_touched(std::ostream& a_out) {
+    if(touched()) {
+      update_sg(a_out);
+      reset_touched();
+    }
+  }
+protected:
+  group m_group;
+};
+
+}}
+
+#endif

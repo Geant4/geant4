@@ -27,7 +27,7 @@
 /// \brief Implementation of the F01RunAction class
 //
 //
-// $Id: F01RunAction.cc 76248 2013-11-08 11:19:52Z gcosmo $
+// $Id: F01RunAction.cc 92496 2015-09-02 07:22:25Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,10 +61,8 @@ F01RunAction::~F01RunAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F01RunAction::BeginOfRunAction(const G4Run* run)
+void F01RunAction::BeginOfRunAction(const G4Run*)
 {
-  G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
-
   // save Rndm status
   if (fSaveRndm > 0)
   {

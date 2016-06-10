@@ -27,7 +27,7 @@
 /// \brief Definition of the F02DetectorConstruction class
 //
 //
-// $Id: F02DetectorConstruction.hh 77484 2013-11-25 10:11:57Z gcosmo $
+// $Id: F02DetectorConstruction.hh 90340 2015-05-26 08:38:06Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -96,10 +96,10 @@ class F02DetectorConstruction : public G4VUserDetectorConstruction
      G4LogicalVolume* GetLogicalAbsorber()    {return fLogicAbsorber;}
 
   private:
+
      F02DetectorMessenger* fDetectorMessenger;  // pointer -> Messenger
      G4Cache<F02CalorimeterSD*> fCalorimeterSD; // pointer -> sensitive detector
      G4Cache<F02ElectricFieldSetup*> fEmFieldSetup;
-
 
      G4Tubs*            fSolidWorld;     // pointer to the solid World
      G4LogicalVolume*   fLogicWorld;     // pointer to the logical World
@@ -136,7 +136,6 @@ inline void F02DetectorConstruction::ComputeCalorParameters()
 
      fZStartAbs = fZAbsorber-0.5*fAbsorberThickness;
      fZEndAbs   = fZAbsorber+0.5*fAbsorberThickness;
-
 }
 
 #endif

@@ -62,19 +62,19 @@
 #include "G4HadProjectile.hh"
 #include "G4DynamicParticleVector.hh"
 #include "G4HadFinalState.hh"
-#include "G4NeutronHPFinalState.hh"
-#include "G4NeutronHPNames.hh"
-#include "G4NeutronHPNeutronYield.hh"
-#include "G4NeutronHPFissionERelease.hh"
-#include "G4NeutronHPEnergyDistribution.hh"
-#include "G4NeutronHPPhotonDist.hh"
-#include "G4NeutronHPAngular.hh"
+#include "G4ParticleHPFinalState.hh"
+#include "G4ParticleHPNames.hh"
+#include "G4ParticleHPParticleYield.hh"
+#include "G4ParticleHPFissionERelease.hh"
+#include "G4ParticleHPEnergyDistribution.hh"
+#include "G4ParticleHPPhotonDist.hh"
+#include "G4ParticleHPAngular.hh"
 #include "G4Nucleus.hh"
 #include "Randomize.hh"
 #include "G4LLNLFission.hh"
 #include "G4fissionEvent.hh"
 
-class G4FissionLibrary : public G4NeutronHPFinalState
+class G4FissionLibrary : public G4ParticleHPFinalState
 {
   public:
   
@@ -82,9 +82,10 @@ class G4FissionLibrary : public G4NeutronHPFinalState
   ~G4FissionLibrary();
 
   //void Init (G4double A, G4double Z, G4String & dirName, G4String &);
-  void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String &);
+  //void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String &);
+  void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String &, G4ParticleDefinition* );
   G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack);
-  G4NeutronHPFinalState * New() ;
+  G4ParticleHPFinalState * New() ;
 
   private:
   G4fissionEvent* fe;
@@ -92,15 +93,15 @@ class G4FissionLibrary : public G4NeutronHPFinalState
   G4double targetMass;
   void SampleMult(const G4HadProjectile & theTrack, G4int* nPrompt,
                                    G4int* gPrompt, G4double eKinetic);
-  inline G4NeutronHPFissionERelease * GetEnergyRelease() {
+  inline G4ParticleHPFissionERelease * GetEnergyRelease() {
     return &theEnergyRelease;
   }
-  G4NeutronHPNeutronYield theFinalStateNeutrons;
-  G4NeutronHPEnergyDistribution thePromptNeutronEnDis;
-  G4NeutronHPEnergyDistribution theDelayedNeutronEnDis;
-  G4NeutronHPAngular theNeutronAngularDis;
+  G4ParticleHPParticleYield theFinalStateNeutrons;
+  G4ParticleHPEnergyDistribution thePromptNeutronEnDis;
+  G4ParticleHPEnergyDistribution theDelayedNeutronEnDis;
+  G4ParticleHPAngular theNeutronAngularDis;
 
-  G4NeutronHPPhotonDist theFinalStatePhotons;
-  G4NeutronHPFissionERelease theEnergyRelease;
+  G4ParticleHPPhotonDist theFinalStatePhotons;
+  G4ParticleHPFissionERelease theEnergyRelease;
 };
 #endif

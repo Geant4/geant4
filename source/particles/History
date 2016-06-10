@@ -1,4 +1,4 @@
-$Id: History 86833 2014-11-19 08:24:49Z gcosmo $
+$Id: History 94620 2015-11-26 14:05:52Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,87 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- 25 Nov. 2015  Gunter Folger (particles-V10-01-18)
+- Fix for Windows in G4NuclideTable:
+    Convert static G4double levelTolerance to data member of singleton.
+    
+- 14 Nov.  2015 Makoto Asai (particles-V10-01-17)
+- Add G4ParticleTable::DestroyWorkerG4ParticleTable() and
+  G4IonTable::DestroyWorkerG4IonTable() to cleanly delete
+  particle disctionaries when worker threads are deleted.
+
+- 11 Nov.  2015 Tatsumi Koi (particles-V10-01-16)
+- Add Messenger for NuclideTable 
+
+- 16 Oct.  2015 Tatsumi Koi (particles-V10-01-15)
+- Fix problem on particles-V10-01-13
+
+- 13 Oct.  2015 Tatsumi Koi (particles-V10-01-14)
+- Re tag for testing 
+
+- 13 Oct.  2015 Tatsumi Koi (particles-V10-01-13)
+- Update of G4NuclideTable 
+  Delete hard-coded state data
+  Enable to change tolerance value for finding state
+
+- 9 Oct.  2015 Peter Gumplinger (particles-V10-01-12)
+- fix Covarity error in both G4PionRadiativeDecayChannel.cc and
+  G4MuonRadiativeDecayChannelWithSpin.cc
+
+- 2 Oct.  2015 Hisaya Kurashige (particles-V10-01-11)
+- Remove parent_polarization from G4MuonRadiatioveDecayChannelWithSpin
+
+- 29 Sep.  2015 Hisaya Kurashige (particles-V10-01-10)
+- Add parent_polarization to G4VDecayChannel
+  (Remove parent_polarization from G4MuonDecayChannelWithSpin)
+
+- 18 Sep. 2015 Makoto Asai (particles-V10-01-09)
+- G4ParticleDefinition::GetIonLifeTime() no longer consults to
+  G4IonTable, as each individual G4Ions object gets its individual 
+  life time taken from G4NuclideTable when it is instantiated.
+
+- 18 Sep. 2015 Makoto Asai (particles-V10-01-08)
+- Introducing a utility method G4IonTable::GetLifeTime(A,Z,E) which
+  returns lifetime of a nuclide without instantiating that G4Ion 
+  object.
+
+- 17 Sep. 2015 Makoto Asai (particles-V10-01-06 -07)
+- Clean up G4IonTable class.
+  - Make sure worker knows G4NuclideTable
+  - Simplify GetLifeTime()
+
+- 12 Aug. 2015 Hisaya Kurashige (particles-V10-01-05)
+- Add a new method of G4VDecayChannel::IsOKWithParentMass() 
+   to check that parent mass (dynamical mass) enough for decay products 
+- Add parentMass as a arugment of G4DecayTable::SelectADecayChannel
+   Channels which gives false with IsOKWithParentMass are ignored
+- Add a new method of  G4PhaseSpaceDecayChannel::SetDaughterMasses
+   to give daughter masses instead of sampling masses 
+   according to PDG mass and width. 
+   A new method of SampleDaughterMasses switch back to sampling masses
+-- co work iwth decay-V10-01-02
+
+- 12 Aug. 2015 Hisaya Kurashige (particles-V10-01-04)
+- Fix a bug in K-K* decay modes in G4ExitedMesonConstructor
+ (K-K* modes in pi2(1670) decay are missing) 
+ 
+- 11 Aug. 2015 Hisaya Kurashige (particles-V10-01-03)
+- Fix coverity defects in G4IonTable
+
+- 10 Aug. 2015 Hisaya Kurashige (particles-V10-01-02)
+- Modify loop for better performance.
+
+- 9 Aug. 2015 Hisaya Kurashige (particles-V10-01-01)
+- Loop check was done
+  'while' statement remains in following classes
+  - G4IonTable, G4NuclideTable, G4ParticleMessenger, G4ParticleTable, 
+    G4PhaseSpaceDecayChannel, G4PrimaryVertex, G4VParticlePropertyReporter, 
+    G4IsotopeMagneticMomentTable, G4TextPPRetriever.cc
+
+- 16 Feb. 2015 Hisaya Kurashige (particles-V10-01-00)
+- Add gamma-gamma, omega-gamma modes to EtaPrime 
+  and update braching ratio
 
 - 18 Nov. 2014 Makoto Asai (particles-V10-00-27)
 - Fix G4IonTable to delete thread-local string objects.

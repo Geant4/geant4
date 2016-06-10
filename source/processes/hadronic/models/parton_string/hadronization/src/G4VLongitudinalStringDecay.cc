@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.cc 84826 2014-10-21 12:31:00Z gcosmo $
+// $Id: G4VLongitudinalStringDecay.cc 91773 2015-08-05 13:59:07Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -52,6 +52,9 @@
 #include "G4DiQuarks.hh"
 #include "G4Quarks.hh"
 #include "G4Gluons.hh"
+
+#include "G4Exp.hh"
+#include "G4Log.hh"
 
 //------------------------debug switches
 //#define debug_VStringDecay                  // Uzhi 20.06.2014
@@ -498,10 +501,10 @@ G4ThreeVector G4VLongitudinalStringDecay::SampleQuarkPt(G4double ptMax)
    G4double Pt;
    if ( ptMax < 0 ) {
       // sample full gaussian
-      Pt = -std::log(G4UniformRand());
+      Pt = -G4Log(G4UniformRand());
    } else {
       // sample in limited range
-      Pt = -std::log(G4RandFlat::shoot(std::exp(-sqr(ptMax)/sqr(SigmaQT)), 1.));
+      Pt = -G4Log(G4RandFlat::shoot(G4Exp(-sqr(ptMax)/sqr(SigmaQT)), 1.));
    }
    Pt = SigmaQT * std::sqrt(Pt);
    G4double phi = 2.*pi*G4UniformRand();

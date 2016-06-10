@@ -8,7 +8,8 @@
 
 # Compiler flags (because user apps are a bit dependent on them...)
 set(GEANT4_COMPILER_FLAG_HINTS "#
-set(Geant4_CXX_FLAGS \"${CMAKE_CXX_FLAGS}\")
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(Geant4_CXX_FLAGS \"${CMAKE_CXX_FLAGS} ${GEANT4_CXXSTD_FLAGS}\")
 set(Geant4_EXE_LINKER_FLAGS \"${CMAKE_EXE_LINKER_FLAGS}\")")
 
 foreach(_mode DEBUG MINSIZEREL RELEASE RELWITHDEBINFO)
@@ -35,12 +36,6 @@ endif()
 
 if(GEANT4_BUILD_VERBOSE_CODE)
   list(APPEND GEANT4_CORE_DEFINITIONS -DG4VERBOSE)
-endif()
-
-# - We do actually need G4LIB_BUILD_DLL on Windows, even for user
-# applications...
-if(WIN32)
-  list(APPEND GEANT4_CORE_DEFINITIONS -DG4LIB_BUILD_DLL)
 endif()
 
 # - Stuff from Geant4OptionalComponents.cmake
@@ -77,16 +72,11 @@ endif()
 # Compile definitions
 if(GEANT4_USE_USOLIDS)
   list(APPEND GEANT4_CORE_DEFINITIONS -DG4GEOM_USE_USOLIDS)
-endif()
 
-# If it's internal, add to the externals lib list
-if(GEANT4_USE_SYSTEM_USOLIDS)
   # System USolids headers, because these do appear in Geant4's
   # public interface. The library should be in the link interface
-  # of G4geometry
+  # of G4geometry (may need refinding)
   list(APPEND GEANT4_THIRD_PARTY_INCLUDES ${USOLIDS_INCLUDE_DIRS})
-else()
-  list(APPEND GEANT4_EXTERNALS_TARGETS G4geomUSolids)
 endif()
 
 # - Stuff from Geant4InterfaceOptions.cmake
@@ -164,6 +154,12 @@ configure_file(
 configure_file(
   ${PROJECT_SOURCE_DIR}/cmake/Modules/CMakeMacroParseArguments.cmake
   ${PROJECT_BINARY_DIR}/Modules/CMakeMacroParseArguments.cmake
+  COPYONLY
+  )
+
+configure_file(
+  ${PROJECT_SOURCE_DIR}/cmake/Modules/IntelCompileFeatures.cmake
+  ${PROJECT_BINARY_DIR}/Modules/IntelCompileFeatures.cmake
   COPYONLY
   )
 

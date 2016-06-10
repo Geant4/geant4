@@ -32,6 +32,9 @@
 
 #include "G4Trd.hh"
 #include "G4UTrd.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+
 #include "G4VPVParameterisation.hh"
 
 /////////////////////////////////////////////////////////////////////////
@@ -110,3 +113,5 @@ G4VSolid* G4UTrd::Clone() const
 {
   return new G4UTrd(*this);
 }
+
+#endif  // G4GEOM_USE_USOLIDS

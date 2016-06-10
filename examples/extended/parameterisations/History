@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2005-11-04 15:18:14 gcosmo Exp $
+$Id: History 90849 2015-06-10 13:46:10Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 10th, 2015 I. Hrivnacova (exParameterisations-V10-01-01)
+--------------------
+- Fixed handling required gdml package in CMake files
+
+May 13th, 2015 I. Hrivnacova (exParameterisations-V10-01-00)
+--------------------
+- Added new Par02 example
 
 Dec 13th, 2012 I. Hrivnacova (exParameterisations-V09-06-00)
 --------------------

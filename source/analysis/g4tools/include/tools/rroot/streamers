@@ -130,7 +130,7 @@ inline bool Axis_stream(buffer& a_buffer,tools::histo::axis<double,unsigned int>
     if(!a_buffer.read_version(v,s,c)) return false;
 
     std::string name;
-    std::string title;  
+    std::string title;
     if(!Named_stream(a_buffer,name,title)) return false;
 
     if(!AttAxis_stream(a_buffer)) return false;
@@ -141,7 +141,7 @@ inline bool Axis_stream(buffer& a_buffer,tools::histo::axis<double,unsigned int>
     if(!a_buffer.read(min)) return false;
     double max;
     if(!a_buffer.read(max)) return false;
-    //printf("debug : BatchLab::RioTH::streamTAxis : %d %g %g\n",
+    //::printf("debug : BatchLab::RioTH::streamTAxis : %d %g %g\n",
     //  number,min,max);
 
     std::vector<double> edges;
@@ -202,12 +202,12 @@ inline bool TH_read_1D(buffer& a_buffer,hd_data& a_data,
     short vers;
     if(!a_buffer.read_version(vers,s,c)) return false;
 
-    //printf("debug : BatchLab::Rio::TH::streamTH1 : version %d\n",vers);
+    //::printf("debug : BatchLab::Rio::TH::streamTH1 : version %d\n",vers);
 
     // Version 3 streaming (ROOT/v3-00-6).
 
     std::string name;
-    std::string title;  
+    std::string title;
     if(!Named_stream(a_buffer,name,title)) return false;
 
     a_data.m_title = title;
@@ -227,7 +227,7 @@ inline bool TH_read_1D(buffer& a_buffer,hd_data& a_data,
 
     if(a_data.m_dimension==2) {
       if(!Axis_stream(a_buffer,a_data.m_axes[1])) return false; //fYAxis
-      a_data.m_axes[1].m_offset = 
+      a_data.m_axes[1].m_offset =
         a_data.m_axes[0].m_offset * (a_data.m_axes[0].bins()+2);
 
       tools::histo::axis<double,unsigned int> dummy;
@@ -247,8 +247,8 @@ inline bool TH_read_1D(buffer& a_buffer,hd_data& a_data,
     if(!a_buffer.read(a_entries)) return false;
 
     if(!a_buffer.read(a_Sw)) return false; //fTsumw
-    //printf("debug : BatchLab::Rio::TH::streamTH1 : \"%s\" %g %g\n",
-    //       a_data.m_title.c_str(),fEntries,fSw);
+    //::printf("debug : BatchLab::Rio::TH::streamTH1 : \"%s\" %g %g\n",
+    //         a_data.m_title.c_str(),fEntries,fSw);
 
     if(!a_buffer.read(a_Sw2)) return false;
 
@@ -306,17 +306,19 @@ inline bool TH_read_1D(buffer& a_buffer,hd_data& a_data,
     if(a_data.m_dimension==1) {
       a_data.m_bin_number = a_data.m_axes[0].m_number_of_bins + 2;
     } else if(a_data.m_dimension==2) {
-      a_data.m_bin_number = 
-        (a_data.m_axes[0].m_number_of_bins + 2) * 
+      a_data.m_bin_number =
+        (a_data.m_axes[0].m_number_of_bins + 2) *
 	(a_data.m_axes[1].m_number_of_bins + 2);
     }
 
     unsigned int binn = a_data.m_bin_number;
-    a_data.m_bin_Sw2.resize(binn,0);
+    a_data.m_bin_Sw2.resize(binn);
     if(binn==sumw2.size()) {
       for(unsigned int index=0;index<binn;index++){
         a_data.m_bin_Sw2[index] = sumw2[index];
       }
+    } else {
+      a_data.m_bin_Sw2.assign(binn,0);
     }
 
     if(!a_buffer.check_byte_count(s,c,"TH")) return false;
@@ -332,7 +334,7 @@ inline bool TH_read_2D(buffer& a_buffer,hd_data& a_data,
     short v;
     if(!a_buffer.read_version(v,s,c)) return false;
 
-    //printf("debug : BatchLab::Rio::TH::streamTH2 : version %d\n",v);
+    //::printf("debug : BatchLab::Rio::TH::streamTH2 : version %d\n",v);
  
     // Version 3 streaming (ROOT/v3-00-6).
 
@@ -347,9 +349,11 @@ inline bool TH_read_2D(buffer& a_buffer,hd_data& a_data,
     if(!a_buffer.read(ScaleFactor)) return false;
     if(!a_buffer.read(a_Syw)) return false;
     if(!a_buffer.read(a_Sy2w)) return false;
+
     double Tsumwxy;
     if(!a_buffer.read(Tsumwxy)) return false;
-  
+    a_data.m_in_range_plane_Sxyw[0] = Tsumwxy;  
+
     if(!a_buffer.check_byte_count(s,c,"TH2")) return false;
   
     return true;
@@ -385,6 +389,10 @@ inline bool TH_read_3D(buffer& a_buffer,hd_data& a_data,
     double Tsumwyz;
     if(!a_buffer.read(Tsumwyz)) return false;
 
+    a_data.m_in_range_plane_Sxyw[0] = Tsumwxy;  
+    a_data.m_in_range_plane_Sxyw[1] = Tsumwyz;  
+    a_data.m_in_range_plane_Sxyw[2] = Tsumwxz;  
+
     if(!a_buffer.check_byte_count(s,c,"TH3")) return false;
 
     return true;
@@ -395,7 +403,7 @@ inline tools::histo::h1d* TH1F_stream(buffer& a_buffer){
     short v;
     if(!a_buffer.read_version(v,s,c)) return 0;
 
-    //printf("debug : BatchLab::Rio::TH1F::stream : version %d\n",v);
+    //::printf("debug : BatchLab::Rio::TH1F::stream : version %d\n",v);
 
     // Version 1 streaming (ROOT/v3-00-6).
 
@@ -420,11 +428,11 @@ inline tools::histo::h1d* TH1F_stream(buffer& a_buffer){
     //data.m_bin_Sw2
 
     std::vector<float> bins; //fArray TArrayF
-    if(!Array_stream<float>(a_buffer,bins)) return 0; 
+    if(!Array_stream<float>(a_buffer,bins)) return 0;
     if(!a_buffer.check_byte_count(s,c,"TH1F")) return 0;
 
     unsigned int binn = data.m_bin_number;
-    //printf("debug : BatchLab::Rio::TH1F::stream : histo bins %d\n",binn);
+    //::printf("debug : BatchLab::Rio::TH1F::stream : histo bins %d\n",binn);
     data.m_bin_Sw.resize(binn,0);
    {for(unsigned int index=0;index<binn;index++){
       data.m_bin_Sw[index] = double(bins[index]);
@@ -454,7 +462,7 @@ inline tools::histo::h1d* TH1D_stream(buffer& a_buffer){
     short v;
     if(!a_buffer.read_version(v,s,c)) return 0;
 
-    //printf("debug : BatchLab::Rio::TH1D::stream : version %d\n",v);
+    //::printf("debug : BatchLab::Rio::TH1D::stream : version %d\n",v);
 
     // Version 1 streaming (ROOT/v3-00-6).
 
@@ -477,7 +485,7 @@ inline tools::histo::h1d* TH1D_stream(buffer& a_buffer){
     //data.m_bin_Sw2
 
     std::vector<double> bins; //fArray TArrayD
-    if(!Array_stream<double>(a_buffer,bins)) return 0; 
+    if(!Array_stream<double>(a_buffer,bins)) return 0;
     if(!a_buffer.check_byte_count(s,c,"TH1D")) return 0;
 
     unsigned int binn = data.m_bin_number;
@@ -508,7 +516,7 @@ inline tools::histo::h2d* TH2F_stream(buffer& a_buffer){
     short v;
     if(!a_buffer.read_version(v,s,c)) return 0;
 
-    //printf("debug : BatchLab::Rio::TH2F::stream : version %d\n",v);
+    //::printf("debug : BatchLab::Rio::TH2F::stream : version %d\n",v);
 
     // Version 3 streaming (ROOT/v3-00-6).
 
@@ -519,6 +527,7 @@ inline tools::histo::h2d* TH2F_stream(buffer& a_buffer){
     //data.m_coords.resize(data.m_dimension,0);
     //data.m_ints.resize(data.m_dimension,0);
     data.m_axes.resize(2);
+    data.m_in_range_plane_Sxyw.resize(1,0);
 
     double fEntries; //in range + outflow.
     double fSw;      //in range.
@@ -535,11 +544,11 @@ inline tools::histo::h2d* TH2F_stream(buffer& a_buffer){
     //data.m_bin_Sw2
 
     std::vector<float> bins; //fArray TArrayF
-    if(!Array_stream<float>(a_buffer,bins)) return 0; 
+    if(!Array_stream<float>(a_buffer,bins)) return 0;
     if(!a_buffer.check_byte_count(s,c,"TH2F")) return 0;
 
-    //printf("debug : BatchLab::Rio::TH2F::stream : histo bins %d\n",n);
     unsigned int binn = data.m_bin_number;
+    //::printf("debug : BatchLab::Rio::TH2F::stream : histo bins %d\n",binn);
     data.m_bin_Sw.resize(binn,0);
    {for(unsigned int index=0;index<binn;index++){
       data.m_bin_Sw[index] = double(bins[index]);
@@ -572,7 +581,7 @@ inline tools::histo::h2d* TH2D_stream(buffer& a_buffer){
     short v;
     if(!a_buffer.read_version(v,s,c)) return 0;
 
-    //printf("debug : BatchLab::Rio::TH2D::stream : version %d\n",v);
+    //::printf("debug : BatchLab::Rio::TH2D::stream : version %d\n",v);
 
     // Version 3 streaming (ROOT/v3-00-6).
 
@@ -583,6 +592,7 @@ inline tools::histo::h2d* TH2D_stream(buffer& a_buffer){
     //data.m_coords.resize(data.m_dimension,0);
     //data.m_ints.resize(data.m_dimension,0);
     data.m_axes.resize(2);
+    data.m_in_range_plane_Sxyw.resize(1,0);
 
     double fEntries; //in range + outflow.
     double fSw;      //in range.
@@ -599,7 +609,7 @@ inline tools::histo::h2d* TH2D_stream(buffer& a_buffer){
     //data.m_bin_Sw2
 
     std::vector<double> bins; //fArray TArrayD
-    if(!Array_stream<double>(a_buffer,bins)) return 0; 
+    if(!Array_stream<double>(a_buffer,bins)) return 0;
     if(!a_buffer.check_byte_count(s,c,"TH2D")) return 0;
 
     unsigned int binn = data.m_bin_number;
@@ -632,7 +642,7 @@ inline tools::histo::h3d* TH3D_stream(buffer& a_buffer){
     short v;
     if(!a_buffer.read_version(v,s,c)) return 0;
 
-    //printf("debug : BatchLab::Rio::TH2D::stream : version %d\n",v);
+    //::printf("debug : BatchLab::Rio::TH2D::stream : version %d\n",v);
 
     // Now we have to reconstruct a valid Histogram from a_buffer :
     hd_data data;
@@ -641,6 +651,7 @@ inline tools::histo::h3d* TH3D_stream(buffer& a_buffer){
     //data.m_coords.resize(data.m_dimension,0);
     //data.m_ints.resize(data.m_dimension,0);
     data.m_axes.resize(2);
+    data.m_in_range_plane_Sxyw.resize(3,0);
 
     double fEntries; //in range + outflow.
     double fSw;      //in range.
@@ -706,11 +717,11 @@ inline tools::histo::p1d* TProfile_stream(buffer& a_buffer){
 
     //NOTE : histo.m_bin_Sw <---> TH1D::TArrayD::fArray
 
-    pd_data data(h->get_histo_data());
+    pd_data data(h->dac());
     delete h;
 
     std::vector<double> bins; //fBinEntries TArrayD
-    if(!Array_stream<double>(a_buffer,bins)) return 0; 
+    if(!Array_stream<double>(a_buffer,bins)) return 0;
     int errorMode;
     if(!a_buffer.read(errorMode)) return 0;
     double ymin;
@@ -737,18 +748,19 @@ inline tools::histo::p1d* TProfile_stream(buffer& a_buffer){
     data.m_max_v = ymax;
 
     unsigned int binn = data.m_bin_number;
-    data.m_bin_Svw.resize(binn,0);
-    data.m_bin_Sv2w.resize(binn,0);
+    data.m_bin_Svw.resize(binn);
+    data.m_bin_Sv2w.resize(binn);
 
     for(unsigned int index=0;index<binn;index++){
       double svw = data.m_bin_Sw[index];
+      double sv2w = data.m_bin_Sw2[index];
       double sw = bins[index];
     //data.m_bin_entries[index] = (int)sw; //FIXME : ok for w = 1 only !
       data.m_bin_Sw[index] = (double)sw;
       //FIXME : data.m_bin_Sxw
       //FIXME : data.m_bin_Sx2w
       data.m_bin_Svw[index] = svw;
-    //data.m_bin_Sv2w[index] = 0; //FIXME
+      data.m_bin_Sv2w[index] = sv2w;
     }
 
     tools::histo::p1d* p = new tools::histo::p1d("",10,0,1);
@@ -774,7 +786,7 @@ inline tools::histo::p2d* TProfile2D_stream(buffer& a_buffer){
 
     //NOTE : histo.m_bin_Sw <---> TH2D::TArrayD::fArray
 
-    pd_data data(h->get_histo_data());
+    pd_data data(h->dac());
     delete h;
 
     std::vector<double> bins; //fBinEntries TArrayD
@@ -785,7 +797,6 @@ inline tools::histo::p2d* TProfile2D_stream(buffer& a_buffer){
     if(!a_buffer.read(zmin)) return 0;
     double zmax;
     if(!a_buffer.read(zmax)) return 0;
-
     if(v>=5) {
       double  sumwz;
       if(!a_buffer.read(sumwz)) return 0;
@@ -804,18 +815,19 @@ inline tools::histo::p2d* TProfile2D_stream(buffer& a_buffer){
     data.m_max_v = zmax;
 
     unsigned int binn = data.m_bin_number;
-    data.m_bin_Svw.resize(binn,0);
-    data.m_bin_Sv2w.resize(binn,0);
+    data.m_bin_Svw.resize(binn);
+    data.m_bin_Sv2w.resize(binn);
 
     for(unsigned int index=0;index<binn;index++){
       double svw = data.m_bin_Sw[index];
+      double sv2w = data.m_bin_Sw2[index];
       double sw = bins[index];
     //data.m_bin_entries[index] = (int)sw; //FIXME : ok for w = 1 only !
       data.m_bin_Sw[index] = (double)sw;
       //FIXME : data.m_bin_Sxw
       //FIXME : data.m_bin_Sx2w
       data.m_bin_Svw[index] = svw;
-    //data.m_bin_Sv2w[index] = 0; //FIXME
+      data.m_bin_Sv2w[index] = sv2w;
     }
 
     tools::histo::p2d* p = new tools::histo::p2d("",10,0,1,10,0,1);
@@ -922,8 +934,8 @@ inline void dump(std::ostream& a_out,
 
     if(!a_recursive) continue;
 
-    uint32 sz;    
-    char* buf = k.get_object_buffer(sz); 
+    uint32 sz;
+    char* buf = k.get_object_buffer(sz);
     //we don't have ownership of buf.
     if(!buf) {
       a_out  << "tools::rroot::dump :"

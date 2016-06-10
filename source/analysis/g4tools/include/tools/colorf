@@ -1,0 +1,141 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_colorf
+#define tools_colorf
+
+#include "lina/vec4f"
+
+namespace tools {
+
+class colorf : public vec4f {  
+public: //for swig
+  typedef unsigned char uchar;
+public:
+  TOOLS_SCLASS(tools::colorf) //for stype()
+public:
+  colorf():vec4f(0,0,0,1){}
+  colorf(float a_r,float a_g,float a_b,float a_a = 1):vec4f(a_r,a_g,a_b,a_a){}
+  virtual ~colorf() {}
+public:
+  colorf(const colorf& a_from):vec4f(a_from){}
+  colorf& operator=(const colorf& a_from){
+    vec4f::operator=(a_from);
+    return *this;
+  }
+public:
+  float r() const {return v0();}
+  float g() const {return v1();}
+  float b() const {return v2();}
+  float a() const {return v3();}
+
+  void set_r(float a_v) {m_data[0] = a_v;}
+  void set_g(float a_v) {m_data[1] = a_v;}
+  void set_b(float a_v) {m_data[2] = a_v;}
+  void set_a(float a_v) {m_data[3] = a_v;}
+
+  uchar rchar() const {return uchar(255.0f*m_data[0]);}
+  uchar gchar() const {return uchar(255.0f*m_data[1]);}
+  uchar bchar() const {return uchar(255.0f*m_data[2]);}
+
+public:
+  // our forever 65 named colors taken long time ago from X11.
+
+  //NOTE : don't handle a static object because of mem balance.
+  //0-9
+  static colorf aquamarine() {return colorf(0.496101F,0.996109F,0.828138F);}
+  static colorf mediumaquamarine() {return colorf(0.398444F,0.800793F,0.664073F);}
+  static colorf black() {return colorf(0,0,0);}
+  static colorf blue() {return colorf(0,0,1);}
+  static colorf cadetblue() {return colorf(0.371099F,0.617197F,0.62501F);}
+  static colorf cornflowerblue() {return colorf(0.390631F,0.58204F,0.925795F);}
+  static colorf darkslateblue() {return colorf(0.281254F,0.238285F,0.542977F);}
+  static colorf lightblue() {return colorf(0.675792F,0.843763F,0.898451F);}
+  static colorf lightsteelblue() {return colorf(0.68751F,0.765637F,0.867201F);}
+  static colorf mediumblue() {return colorf(0,0,0.800793F);}
+ 
+  //10-19
+  static colorf mediumslateblue() {return colorf(0.480476F,0.406256F,0.929702F);}
+  static colorf midnightblue() {return colorf(0.0976577F,0.0976577F,0.437507F);}
+  static colorf navyblue() {return colorf(0,0,0.500008F);}
+  static colorf navy() {return colorf(0,0,0.500008F);}
+  static colorf skyblue() {return colorf(0.527352F,0.8047F,0.917983F);}
+  static colorf slateblue() {return colorf(0.414069F,0.351568F,0.800793F);}
+  static colorf steelblue() {return colorf(0.273442F,0.50782F,0.703136F);}
+  static colorf coral() {return colorf(0.996109F,0.496101F,0.312505F);}
+  static colorf cyan() {return colorf(0,1,1);}
+  static colorf firebrick() {return colorf(0.695323F,0.132815F,0.132815F);}
+      
+  //20-29
+  static colorf brown() {return colorf(0.644541F,0.164065F,0.164065F);}
+  static colorf gold() {return colorf(0.996109F,0.839857F,0);}
+  static colorf goldenrod() {return colorf(0.851575F,0.644541F,0.125002F);}
+  static colorf green() {return colorf(0,1,0);}
+  static colorf darkgreen() {return colorf(0,0.390631F,0);}
+  static colorf darkolivegreen() {return colorf(0.332036F,0.417975F,0.183597F);}
+  static colorf forestgreen() {return colorf(0.132815F,0.542977F,0.132815F);}
+  static colorf limegreen() {return colorf(0.195315F,0.800793F,0.195315F);}
+  static colorf mediumseagreen() {return colorf(0.234379F,0.699229F,0.441413F);}
+  static colorf mediumspringgreen() {return colorf(0,0.976577F,0.601572F);}
+      
+  //30-39
+  static colorf palegreen() {return colorf(0.593759F,0.980484F,0.593759F);}
+  static colorf seagreen() {return colorf(0.17969F,0.542977F,0.339849F);}
+  static colorf springgreen() {return colorf(0,0.996109F,0.496101F);}
+  static colorf yellowgreen() {return colorf(0.601572F,0.800793F,0.195315F);}
+  static colorf darkslategrey() {return colorf(0.183597F,0.308598F,0.308598F);}
+  static colorf dimgrey() {return colorf(0.410163F,0.410163F,0.410163F);}
+  static colorf lightgrey() {return colorf(0.824231F,0.824231F,0.824231F);}
+  static colorf grey() {return colorf(0.750011F,0.750011F,0.750011F);}
+  static colorf khaki() {return colorf(0.937514F,0.898451F,0.546883F);}
+  static colorf magenta() {return colorf(1,0,1);}
+
+  //40-49
+  static colorf maroon() {return colorf(0.68751F,0.187503F,0.375006F);}
+  static colorf orange() {return colorf(0.996109F,0.644541F,0);}
+  static colorf orchid() {return colorf(0.851575F,0.437507F,0.83595F);}
+  static colorf darkorchid() {return colorf(0.597665F,0.195315F,0.796887F);}
+  static colorf mediumorchid() {return colorf(0.726574F,0.332036F,0.824231F);}
+  static colorf pink() {return colorf(0.996109F,0.750011F,0.792981F);}
+  static colorf plum() {return colorf(0.863294F,0.62501F,0.863294F);}
+  static colorf red() {return colorf(1,0,0);}
+  static colorf indianred() {return colorf(0.800793F,0.35938F,0.35938F);}
+  static colorf mediumvioletred() {return colorf(0.777356F,0.0820325F,0.519539F);}
+      
+  //50-59
+  static colorf orangered() {return colorf(0.996109F,0.269535F,0);}
+  static colorf violetred() {return colorf(0.812512F,0.125002F,0.562509F);}
+  static colorf salmon() {return colorf(0.976577F,0.500008F,0.445319F);}
+  static colorf sienna() {return colorf(0.62501F,0.320317F,0.175784F);}
+  static colorf tan() {return colorf(0.820325F,0.703136F,0.546883F);}
+  static colorf thistle() {return colorf(0.843763F,0.746105F,0.843763F);}
+  static colorf turquoise() {return colorf(0.250004F,0.875013F,0.812512F);}
+  static colorf darkturquoise() {return colorf(0,0.8047F,0.816419F);}
+  static colorf mediumturquoise() {return colorf(0.281254F,0.816419F,0.796887F);}
+  static colorf violet() {return colorf(0.929702F,0.50782F,0.929702F);}
+
+  //60-64
+  static colorf blueviolet() {return colorf(0.539071F,0.167971F,0.882826F);}
+  static colorf wheat() {return colorf(0.957046F,0.867201F,0.699229F);}
+  static colorf white() {return colorf(1,1,1);}
+  static colorf yellow() {return colorf(1,1,0);}
+  static colorf greenyellow() {return colorf(0.675792F,0.996109F,0.18359F);}
+};
+
+struct cmp_colorf {
+  bool operator()(const colorf& a_a,const colorf& a_b) const {
+    // x :
+    if(a_a.v0()<a_b.v0()) return true;
+    if(a_a.v0()>a_b.v0()) return false;
+    // y :
+    if(a_a.v1()<a_b.v1()) return true;
+    if(a_a.v1()>a_b.v1()) return false;
+    // z :
+    if(a_a.v2()<a_b.v2()) return true;
+    return false;
+  }
+};
+
+}
+
+#endif

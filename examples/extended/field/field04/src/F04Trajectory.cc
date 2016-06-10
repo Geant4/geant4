@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04Trajectory.cc 76690 2013-11-14 08:45:07Z gcosmo $
+// $Id: F04Trajectory.cc 90239 2015-05-21 09:07:05Z gcosmo $
 //
 /// \file field/field04/src/F04Trajectory.cc
 /// \brief Implementation of the F04Trajectory class
@@ -107,15 +107,6 @@ void F04Trajectory::ShowTrajectory(std::ostream& os) const
 {
     // Invoke the default implementation in G4VTrajectory...
     G4VTrajectory::ShowTrajectory(os);
-    // ... or override with your own code here.
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void F04Trajectory::DrawTrajectory() const
-{
-    // Invoke the default implementation in G4VTrajectory...
-    G4VTrajectory::DrawTrajectory();
     // ... or override with your own code here.
 }
 

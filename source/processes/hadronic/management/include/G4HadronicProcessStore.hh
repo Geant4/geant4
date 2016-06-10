@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.hh 86515 2014-11-13 09:11:45Z gcosmo $
+// $Id: G4HadronicProcessStore.hh 90394 2015-05-27 12:14:48Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -64,7 +64,6 @@
 
 class G4Element;
 class G4HadronicEPTestMessenger;
-
 
 class G4HadronicProcessStore
 {
@@ -213,6 +212,10 @@ private:
 
   // print process info
   void Print(G4int idxProcess, G4int idxParticle);
+  
+  G4String HtmlFileName(const G4String &) const;
+
+  static G4ThreadLocal G4HadronicProcessStore* instance;
 
   typedef const G4ParticleDefinition* PD;
   typedef G4HadronicProcess* HP;

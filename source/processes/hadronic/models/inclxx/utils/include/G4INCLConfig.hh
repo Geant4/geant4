@@ -144,11 +144,11 @@ namespace G4INCL {
     /// \brief Do we want CDPP?
     G4bool getCDPP() const { return CDPP; }
 
-    /// \brief Do we want the pion potential?
-    G4bool getPionPotential() const { return pionPotential; }
-
     /// \brief Get the Coulomb-distortion algorithm.
     CoulombType getCoulombType() const { return coulombType; }
+
+    /// \brief Set the Coulomb-distortion algorithm.
+    void setCoulombType(CoulombType const c) { coulombType = c; }
 
     /// \brief Get the type of the potential for nucleons.
     PotentialType getPotentialType() const { return potentialType; }
@@ -156,17 +156,20 @@ namespace G4INCL {
     /// \brief Set the type of the potential for nucleons.
     void setPotentialType(PotentialType type) { potentialType = type; }
 
+    /// \brief Do we want the pion potential?
+    G4bool getPionPotential() const { return pionPotential; }
+
     /// \brief Set the type of the potential for nucleons.
     void setPionPotential(const G4bool pionPot) { pionPotential = pionPot; }
 
     /// \brief Get the type of local energy for N-N avatars.
     LocalEnergyType getLocalEnergyBBType() const { return localEnergyBBType; }
 
-    /// \brief Get the type of local energy for pi-N and decay avatars.
-    LocalEnergyType getLocalEnergyPiType() const { return localEnergyPiType; }
-
     /// \brief Set the type of local energy for N-N avatars.
     void setLocalEnergyBBType(const LocalEnergyType t) { localEnergyBBType=t; }
+
+    /// \brief Get the type of local energy for pi-N and decay avatars.
+    LocalEnergyType getLocalEnergyPiType() const { return localEnergyPiType; }
 
     /// \brief Set the type of local energy for N-N avatars.
     void setLocalEnergyPiType(const LocalEnergyType t) { localEnergyPiType=t; }
@@ -183,6 +186,9 @@ namespace G4INCL {
     /// \brief Get the clustering algorithm.
     ClusterAlgorithmType getClusterAlgorithm() const { return clusterAlgorithmType; }
 
+    /// \brief Set the clustering algorithm.
+    void setClusterAlgorithm(ClusterAlgorithmType const c) { clusterAlgorithmType = c; }
+
     /// \brief Get the maximum mass for production of clusters.
     G4int getClusterMaxMass() const { return clusterMaxMass; }
 
@@ -191,6 +197,9 @@ namespace G4INCL {
 
     /// \brief Get back-to-spectator
     G4bool getBackToSpectator() const { return backToSpectator; }
+
+    /// \brief Set back-to-spectator
+    void setBackToSpectator(const G4bool b) { backToSpectator = b; }
 
     /// \brief Whether to use real masses
     G4bool getUseRealMasses() const { return useRealMasses; }
@@ -287,7 +296,7 @@ namespace G4INCL {
     /// \brief Get the neutron-halo size
     G4double getNeutronHalo() const { return neutronHalo; }
 
-    /// \brief Set the neutron-skin additional diffuseness
+    /// \brief Set the neutron-halo size
     void setNeutronHalo(const G4double d) { neutronHalo=d; }
 
     /// \brief True if we should use refraction
@@ -323,8 +332,26 @@ namespace G4INCL {
     /// \brief Get the Cross Section type
     CrossSectionsType getCrossSectionsType() const { return crossSectionsType; }
 
+    /// \brief Get the maximum number of pions for multipion collisions
+    G4int getMaxNumberMultipions() const { return maxNumberMultipions; }
+
+    /// \brief Set the maximum number of pions for multipion collisions
+    void setMaxNumberMultipions(const G4int n) { maxNumberMultipions=n; }
+
     /// \brief Set the Cross Section type
     void setCrossSectionsType(CrossSectionsType const c) { crossSectionsType=c; }
+
+    /// \brief Get the hadronization time
+    G4double getHadronizationTime() const { return hadronizationTime; }
+
+    /// \brief Set the hadronization time
+    void setHadronizationTime(const G4double t) { hadronizationTime=t; }
+
+#ifdef INCL_ROOT_USE
+    G4bool getConciseROOTTree() const { return conciseROOTTree; }
+#endif
+
+    G4bool getInverseKinematics() const { return inverseKinematics; }
 
   private:
 
@@ -431,9 +458,18 @@ namespace G4INCL {
 
     std::string crossSectionsString;
     CrossSectionsType crossSectionsType;
+    G4int maxNumberMultipions;
 
     std::string cascadeAction;
     CascadeActionType cascadeActionType;
+
+    G4double hadronizationTime;
+
+#ifdef INCL_ROOT_USE
+    G4bool conciseROOTTree;
+#endif
+
+    G4bool inverseKinematics;
 
     friend class ::ConfigParser;
   };

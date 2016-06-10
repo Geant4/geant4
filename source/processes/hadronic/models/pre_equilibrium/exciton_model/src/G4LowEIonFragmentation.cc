@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LowEIonFragmentation.cc 68717 2013-04-05 09:15:15Z gcosmo $
+// $Id: G4LowEIonFragmentation.cc 91837 2015-08-07 07:27:08Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -106,6 +106,8 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
   G4Nucleon * pNucleon;
   // need at lease one particle from the projectile model beyond the 
   // projectileHorizon.
+
+  // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
   while(0==particlesFromProjectile)
   {
     do
@@ -113,6 +115,7 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
       x = 2*G4UniformRand() - 1;
       y = 2*G4UniformRand() - 1;
     }
+    // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
     while(x*x + y*y > 1);
     impactParameter = std::sqrt(x*x+y*y)*(targetOuterRadius+projectileOuterRadius);
     ++totalTries;
@@ -127,6 +130,8 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
     // Calculate the number of nucleons involved in collision
     // From projectile
     aPrim.StartLoop();
+
+    // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
     while((pNucleon = aPrim.GetNextNucleon()))
     {
       if(pNucleon->GetPosition().y()>projectileHorizon)
@@ -147,6 +152,7 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
   G4int chargedFromTarget = 0;
   G4int particlesFromTarget = 0;
   aTarg.StartLoop();  
+  // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
   while((pNucleon = aTarg.GetNextNucleon()))
   {
     if(pNucleon->GetPosition().y()>targetHorizon)
@@ -175,15 +181,18 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
   			    fragment4Momentum);
   // M.A. Cortes fix
   //anInitialState.SetNumberOfParticles(particlesFromProjectile);
-  anInitialState.SetNumberOfExcitedParticle(particlesFromProjectile+particlesFromTarget,
-					    chargedFromProjectile + chargedFromTarget);
+  anInitialState.SetNumberOfExcitedParticle(particlesFromProjectile
+					    + particlesFromTarget,
+					    chargedFromProjectile 
+					    + chargedFromTarget);
   anInitialState.SetNumberOfHoles(particlesFromProjectile+particlesFromTarget,
 				  chargedFromProjectile + chargedFromTarget);
   G4double time = thePrimary.GetGlobalTime();
   anInitialState.SetCreationTime(time);
 
   // Fragment the Fragment using Pre-compound
-  G4ReactionProductVector* thePreCompoundResult = theModel->DeExcite(anInitialState);
+  G4ReactionProductVector* thePreCompoundResult = 
+    theModel->DeExcite(anInitialState);
   
   // De-excite the projectile using ExcitationHandler
   G4ReactionProductVector * theExcitationResult = 0; 
@@ -215,7 +224,8 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
   if(nexc > 0) {
     for(G4int k=0; k<nexc; ++k) {
       G4ReactionProduct* p = (*theExcitationResult)[k];
-      theResult.AddSecondary(new G4DynamicParticle(p->GetDefinition(),p->GetMomentum()));
+      theResult.AddSecondary(new G4DynamicParticle(p->GetDefinition(),
+						   p->GetMomentum()));
       delete p;
     }
   }
@@ -223,7 +233,8 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
   if(npre > 0) {
     for(G4int k=0; k<npre; ++k) {
       G4ReactionProduct* p = (*thePreCompoundResult)[k];
-      theResult.AddSecondary(new G4DynamicParticle(p->GetDefinition(),p->GetMomentum()));
+      theResult.AddSecondary(new G4DynamicParticle(p->GetDefinition(),
+						   p->GetMomentum()));
       delete p;
     }
   }
@@ -233,5 +244,4 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
 
   // return the particle change
   return &theResult;
-  
 }

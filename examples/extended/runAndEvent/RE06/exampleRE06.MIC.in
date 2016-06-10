@@ -1,0 +1,7 @@
+/control/verbose 2
+/run/verbose 1
+/run/initialize
+/run/dumpRegion
+/run/beamOn 300
+/run/dumpCouples
+##

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc 83009 2014-07-24 14:51:29Z gcosmo $
+// $Id: G4PhysicsVector.cc 93409 2015-10-21 13:26:27Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -56,8 +56,6 @@
 #include <iomanip>
 #include "G4PhysicsVector.hh"
 
-//G4ThreadLocal G4Allocator<G4PhysicsVector> *fpPVAllocator = 0;
-
 // --------------------------------------------------------------
 
 G4PhysicsVector::G4PhysicsVector(G4bool)
@@ -67,7 +65,6 @@ G4PhysicsVector::G4PhysicsVector(G4bool)
    dBin(0.), baseBin(0.),
    verboseLevel(0)
 {
-  // if (!fpPVAllocator) fpPVAllocator = new G4Allocator<G4PhysicsVector>;
 }
 
 // --------------------------------------------------------------
@@ -281,14 +278,10 @@ G4PhysicsVector::ScaleVector(G4double factorE, G4double factorV)
 {
   size_t n = dataVector.size();
   size_t i;
-  if(n > 0) { 
-    for(i=0; i<n; ++i) {
-      binVector[i]  *= factorE;
-      dataVector[i] *= factorV;
-    } 
+  for(i=0; i<n; ++i) {
+    binVector[i]  *= factorE;
+    dataVector[i] *= factorV; 
   }
-  //  n = secDerivative.size();
-  // if(n > 0) { for(i=0; i<n; ++i) { secDerivative[i] *= factorV; } }
   secDerivative.clear();
 
   edgeMin *= factorE;
@@ -523,22 +516,14 @@ G4double G4PhysicsVector::Value(G4double theEnergy, size_t& lastIdx) const
 G4double G4PhysicsVector::FindLinearEnergy(G4double rand) const
 {
   if(1 >= numberOfNodes) { return 0.0; }
-  size_t n1 = 0;
-  size_t n2 = numberOfNodes/2;
-  size_t n3 = numberOfNodes - 1;
-  G4double y = rand*dataVector[n3];
-  while (n1 + 1 != n3)
-    {
-      if (y > dataVector[n2])
-	{ n1 = n2; }
-      else
-	{ n3 = n2; }
-      n2 = (n3 + n1 + 1)/2;
-    }
-  G4double res = binVector[n1];
-  G4double del = dataVector[n3] - dataVector[n1];
+  G4double y = rand*dataVector[numberOfNodes-1];
+  size_t bin = std::lower_bound(dataVector.begin(), dataVector.end(), y)
+             - dataVector.begin() - 1;
+  bin = std::min(bin, numberOfNodes-2);
+  G4double res = binVector[bin];
+  G4double del = dataVector[bin+1] - dataVector[bin];
   if(del > 0.0) { 
-    res += (y - dataVector[n1])*(binVector[n3] - res)/del;  
+    res += (y - dataVector[bin])*(binVector[bin+1] - res)/del;  
   }
   return res;
 }

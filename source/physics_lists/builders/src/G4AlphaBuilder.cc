@@ -60,7 +60,5 @@
 
  G4AlphaBuilder::
  ~G4AlphaBuilder() 
- {
-   delete theAlphaInelastic;
- }
+ {}
 

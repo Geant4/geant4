@@ -1,4 +1,4 @@
-$Id: History 87071 2014-11-24 14:05:16Z gcosmo $
+$Id: History 94599 2015-11-25 13:00:41Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,283 @@ committal in the SVN repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 25, 2015 I. Hrivnacova (analysis-V10-01-47)
+- Adding GNUmakefile in parameters sub-category
+
+November 25, 2015 I. Hrivnacova (analysis-V10-01-46)
+- Updated GNUmakefile for added parameters sub-category
+
+November 20, 2015 I. Hrivnacova (analysis-V10-01-45)
+- Fix compiler warning about unused parameter 'size' observed on MacOS/clang
+  (Guy Barrand)
+
+November 6, 2015 I. Hrivnacova (analysis-V10-01-44)
+- Fixed default viewer settings and finalized supported plotting
+  configurations:
+  - Updated to  g4tools 1.26.2 (G. Barrand):
+    - See History_tools for the complete list of modifications.
+  - Extended viewplot.cpp with a test which mimics usage in analysis category
+  - Set limits for layout parameters which can be changed via UI commands
+
+November 3, 2015 I. Hrivnacova (analysis-V10-00-46)
+- Fixed handling ntuples created in MT mode on master thread
+  This fixes the problem reported in hypernews (#495) and the problem
+  of deleting non-empty Root file containing only ntuples.
+
+November 2, 2015 I. Hrivnacova (analysis-V10-01-43)
+- Fixed G4Parameter constructor 
+
+Oct 30, 2015 I. Hrivnacova (analysis-V10-01-42)
+- Fixed handling ntuples created in MT mode on master thread
+  This fixes the problem reported in hypernews (#495) and the problem
+  of deleting non-empty Root file containing only ntuples.
+
+Oct 22, 2015 I. Hrivnacova (analysis-V10-01-41)
+- Updated to g4tools 1.26.0 (Guy Barrand):
+  with added support for using freetype rendering in plotting
+  See History_tools for the complete list of modifications.
+- Implemented support for freetype in G4PlotManager
+- Added G4PlotParameters and G4PlotMessenger classes which
+  define the plot configuration parameters that can be set via UI
+  commands
+- Removed unused include of G4PlotManager in hntools/src/G4ToolsAnalysisReader.cc
+
+Sep 23, 2015 I. Hrivnacova (analysis-V10-01-40)
+- Fixed compiler warning
+
+Sep 23, 2015 I. Hrivnacova (analysis-V10-01-39)
+- Added  G4AnalysisOutput type (as class enum) and
+  G4AnalysisManager functions needed to connect analysis to Geant4 scorers:
+    static G4bool IsInstance();
+    G4bool IsOpenFile() const;
+- Two more minor fixes
+
+Sep 21, 2015 I. Hrivnacova (analysis-V10-01-38)
+- Implemented setPlotting commands and added G4HnManager::SetPlotting() function
+  to set plotting to all objects
+- Fixed false warning issued from G4TNtupleManager
+- Fixed plotting in more pages
+
+Sep 18, 2015 I. Hrivnacova (analysis-V10-01-37)
+- Fixed return value also in FillNtupleTColumn() in G4TNtupleManager.icc
+
+Sep 18, 2015 I. Hrivnacova (analysis-V10-01-36)
+- Fixed return value in FillNtupleTColumn() in G4RootNtupleManager.hh
+
+Sep 18, 2015 I. Hrivnacova (analysis-V10-01-35)
+- Updated to g4tools 1.24.2 (Guy Barrand):
+  - tools/wcsv_ntuple, tools/wroot/ntuple : have class icol public.
+  - tools/mpi/wrmpi : fixed use of TOOLS_USE_MPI_PACK_NOT_CONST 
+  - See History_tools for the complete list of modifications.
+- Use tools ntuple column base type (icol, iobj), which access is now enabled in tools,
+  to avoid casting to/from void* and type check in FillNtupleXColumn (where both column type and
+  column Id must be consistent with ntuple definition)
+- Simplified definitions of G4TNtupleManager pure virtual functions
+
+Sep 16, 2015 I. Hrivnacova (analysis-V10-01-34)
+- In G4TNtupleManager::FillNtupleTColumn: 
+  changed Tvalue in const T& value to match exactlly with fill()
+  functions in tools
+
+Sep 15, 2015 I. Hrivnacova (analysis-V10-01-33)
+- Do not delete ntuple with Root output type
+
+Sep 14, 2015 I. Hrivnacova (analysis-V10-01-32)
+- One more fix in G4RootNtupleManager - exact match of arguments in 
+  template specialization
+
+Sep 14, 2015 I. Hrivnacova (analysis-V10-01-31)
+- Added declaration for template specializations in G4RootNtupleManager.hh;
+  Trying to fix vc12 compiler error:  
+  'none of the 5 overloads could convert all the argument types'
+
+Sep 14, 2015 I. Hrivnacova (analysis-V10-01-30)
+- Added scope G4Analysis:: to all calls to make_unique 
+  (to avoid ambiguity error on vc12 with std::make_unique )
+
+Sep 14, 2015 I. Hrivnacova (analysis-V10-01-29)
+- Replaced constexpr (not supported on vc12) with const definitions
+
+Sep 12, 2015 I. Hrivnacova (analysis-V10-01-28)
+- Removed G4CsvNtupleManager.icc file, not used
+
+Sep 11, 2015 I. Hrivnacova (analysis-V10-01-27)
+- Fixed compilation warnings about unused variables      
+
+Sep 11, 2015 I. Hrivnacova (analysis-V10-01-26)
+- Fixed compilation with gcc 5.1:
+  Added #include <memory> where missing
+
+Sep 11, 2015 I. Hrivnacova (analysis-V10-01-25)
+Merged developments from analysis_c++11 branch:
+- Introduced C++11 features
+- Added classes for common handling of tools objects
+  to avoid code duplication:
+  - G4ToolsAnalysisManager, ToolsAnalysisReader; G4THnAnalysisManager (templated)
+  - Improved G4XNtupleManager classes:
+    - Introduced template functions to avoid code duplication and added
+      G4TNtupleManager class template with a common implementation
+      for all output types
+- G4BaseToolsManager class replaced with G4Analysis namespace utility functions,
+  defined in G4BaseHistoUtilies
+- Added new sub-category parameters
+  with first implementation of G4ParameterManager (still to be finalized)
+
+Sep 03, 2015 I. Hrivnacova (analysis-V10-01-24)
+- Updated to g4tools 1.24.1 (Guy Barrand):
+  Added ability to handle old MPI_[Pack,UnPack] signature;
+  make whbook.cpp test compiling with tools in Geant4;
+  Coverity fixes.
+  See History_tools for the complete list of modifications.
+
+Aug 27, 2015 I. Hrivnacova (analysis-V10-01-23)
+- Removed profile directory; the profiles are put in the histograms directory,
+  if its name is set by the user.
+
+Aug 17, 2015 I. Hrivnacova (analysis-V10-01-22)
+- Updated exception_classification:
+  Added Analysis_W041: Requested feature is not available with selected output.
+
+Aug 12, 2015 I. Hrivnacova (analysis-V10-01-21)
+- Fixed parameter range in setAscii command
+  (thanks to Mihaly Novak for reporting this problem)
+
+Jul 01, 2015 I. Hrivnacova (analysis-V10-01-20)
+- Updated to g4tools 1.23.1 (Guy Barrand):
+  Finalize interfaces to MPI; 
+  prepare the ground for plot style files.
+  See History_tools for the complete list of modifications.
+- Added G4VAnalysisManager::Merge(tools::histo::hmpi*) 
+  and G4MMPIToolsManager class which implements histogram & profiles
+  MPI merging using tools/histo/hmpi interface 
+
+Jun 23, 2015 I. Hrivnacova (analysis-V10-00-45)
+- Fixed G4Analysis::Tokenize() which was failing when processsing a string
+  containing opening double quota without a closing one.
+
+Jun 23, 2015 I. Hrivnacova (analysis-V10-01-19)
+- Revised while loops and fixed G4Analysis::Tokenize()
+
+Jun 10, 2015 I. Hrivnacova (analysis-V10-01-18)
+- Make new functions SetNtupleSColumn() in G4VRNtupleManager
+  pure virtual.
+
+Jun 03, 2015 I. Hrivnacova (analysis-V10-01-17) 
+- Updated to g4tools 1.22.1 (Guy Barrand):
+     Revisit structure for plotting related code. 
+     Added methods for writing multiple pages in a file.
+- Integrated changes in g4tools: 
+  generating a single plot file with multiple pages.
+
+Jun 03, 2015 I. Hrivnacova (analysis-V10-01-16) 
+- Added functions for batch plotting:
+  o to activate batch plotting of a selected hitsogram/profile:
+    analysisManger->SetH1Plotting(id, true);
+  o the output .ps file is then create on Write() call
+    in addition to standard output files
+  o Plotting available for  1D, 2D histograms          
+- Updated to g4tools 1.21.0 (Guy Barrand):
+     Revisit #include paths to avoid too much -I when compiling.
+
+May 19, 2015 I. Hrivnacova (analysis-V10-01-15) 
+ - Updated to g4tools 1.20.0 (Guy Barrand):
+   Added "batch plotting" facility. 
+
+May 6, 2015 I. Hrivnacova (analysis-V10-01-14)
+ - Fixed command directory names and code clean-up.
+
+May 6, 2015 I. Hrivnacova (analysis-V10-01-13)
+ - Attempt to fix a compilation error on Windows:
+   replaced use of string operator [] with substr()
+
+May 6, 2015 I. Hrivnacova (analysis-V10-01-12)
+ - Attempt to fix a compilation error on Windows.
+
+May 5, 2015 I. Hrivnacova (analysis-V10-01-11)
+ - Implemented activation of ntuples
+ - Implemented setX,Y,Z commands for setting histograms/profiles 
+   parameters per dimensiion. They can be used as an alternative to the
+   complex set commands.
+   Note: The parameters per dimensions have to be set sucessively; eg.
+   /analysis/h2/setX ...
+   /analysis/h2/setY ...
+   Incomplete or ordre-reverted setting will result in issuing a warning
+   and will be ignored.
+ - Restructured messenger classes to avoid code duplications.  
+
+May 3, 2015 I. Hrivnacova (analysis-V10-01-10)
+ - Implemented support for ntuple vector columns with Csv output
+ - Added Set/GetCompressionLevel() functions to G4AnalysisManager 
+   (used only with Root output) and changed its default value to 1 (was 9))
+
+April 14, 2015 I. Hrivnacova (analysis-V10-01-09) 
+ - Updated to g4tools 1.19.2 (Guy Barrand):
+   Fixed compilation on Mac, clang 3.4.
+   See History_tools for the complete list of modifications.
+
+April 13, 2015 I. Hrivnacova (analysis-V10-01-08) 
+ - Updated to g4tools 1.19.1 (Guy Barrand):
+   csv: handle vector column if using the ntuple_booking way
+   See History_tools for the complete list of modifications.
+
+April 9, 2015 I. Hrivnacova (analysis-V10-00-44)
+  tag to be included in the patch release:
+- Updated to g4tools 1.17.2 (Guy Barrand):
+  Changes for Windows (MinGW) - fixing problem #1721 (mainly to change 
+  #ifdef WIN32 to #ifdef _MSC_VER, which more clean)
+
+April 02, 2015 I. Hrivnacova (analysis-V10-01-07) 
+ - Updated to g4tools 1.19.0 (Guy Barrand):
+   - Csv handles vector columns
+   - Changes for Windows (MinGW) - fixing problem #1721 (mainly to change 
+     #ifdef WIN32 to #ifdef _MSC_VER, which more clean)
+   - Various optimisations to be faster in converting numbers to strings 
+     (huge improvements with that around csv and xml tuples)
+   - See History_tools for the complete list of modifications.
+
+March 18, 2015 I. Hrivnacova (analysis-V10-00-43)
+  tag to be included in the patch release:
+- Fixed reading XML ntuples with a column of a vector type
+  tools do not support direct use of ntuple_bindings with a vector,
+  use of a temorary sub-ntuple is needed
+
+March 17, 2015 I. Hrivnacova (analysis-V10-01-06)
+- Fixed reading XML ntuples with a column of a vector type
+  tools do not support direct use of ntuple_bindings with a vector,
+  use of a temorary sub-ntuple is needed
+
+March 13, 2015 I. Hrivnacova (analysis-V10-01-05)
+- Fixed false warnings about unknown column type when an ntuple contains 
+  a column of a vector type and is created via ntuple booking 
+  
+March 13, 2015 I. Hrivnacova (analysis-V10-01-04)
+- Fixed G4AnalysisManager::IsActive() - now taken into all Hn & Pn
+  managers
+
+March 13, 2015 I. Hrivnacova (analysis-V10-00-42)
+  tag to be included in the patch release:
+- Fixed G4AnalysisManager::IsActive() - now taken into all Hn & Pn
+  managers
+
+February 20, 2015 I. Hrivnacova (analysis-V10-01-03)
+- Updated to g4tools 1.18.2 (Guy Barrand):
+  Added code to send/recv histos through MPI;
+  see History_tools for the complete list of modifications.
+
+February 04, 2015 I. Hrivnacova (analysis-V10-01-02)
+- Updated to g4tools 1.17.1 (Guy Barrand):
+  Fixed resetting histograms;
+  see History_tools for the complete list of modifications.
+
+January 21, 2015 I. Hrivnacova (analysis-V10-01-01)
+- Updated to g4tools 1.17.0 (Guy Barrand):
+  Fixes in the Root files output to be compatible with ROOT 6.02/x;
+  see History_tools for the complete list of modifications.
+
+December 5, 2014 G. Cosmo (analysis-V10-01-00)
+- Corrected csv/sources.cmake to include missing file:
+    G4CsvAnalysisReader.icc
 
 November 24, 2014 I. Hrivnacova (analysis-V10-00-41)
 - Fixed update to g4tools 1.16.3:

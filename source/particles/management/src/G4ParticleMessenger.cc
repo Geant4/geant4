@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleMessenger.cc 72999 2013-08-15 08:05:14Z gcosmo $
+// $Id: G4ParticleMessenger.cc 91885 2015-08-10 07:05:56Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -145,7 +145,7 @@ void G4ParticleMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
     G4ParticleTable::G4PTblDicIterator *piter = theParticleTable->GetIterator();
     piter -> reset();
   
-    while( (*piter)() ){
+    while( (*piter)() ){// Loop checking, 09.08.2015, K.Kurashige
       G4ParticleDefinition *particle = piter->value();
       if ((newValues=="all") || (newValues==particle->GetParticleType())) {
         G4cout << std::setw(19) << particle->GetParticleName();
@@ -163,7 +163,7 @@ void G4ParticleMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
     // set candidate List
     G4String candidates("none");
     piter -> reset();
-    while( (*piter)() ){
+    while( (*piter)() ){// Loop checking, 09.08.2015, K.Kurashige
       G4ParticleDefinition *particle = piter->value();
       candidates += " " + particle->GetParticleName();
     }
@@ -208,7 +208,7 @@ G4String G4ParticleMessenger::GetCurrentValue(G4UIcommand * command)
     G4String candidates("none");
     G4ParticleTable::G4PTblDicIterator *piter = theParticleTable->GetIterator();
     piter -> reset();
-    while( (*piter)() ){
+    while( (*piter)() ){// Loop checking, 09.08.2015, K.Kurashige
       G4ParticleDefinition *particle = piter->value();
       candidates += " " + particle->GetParticleName();
     }

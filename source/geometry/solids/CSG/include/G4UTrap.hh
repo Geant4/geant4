@@ -43,6 +43,9 @@
 #define G4UTrap_HH
 
 #include "G4USolid.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+
 #include "UTrap.hh"
 
 class G4Polyhedron;
@@ -189,7 +192,7 @@ inline TrapSidePlane G4UTrap::GetSidePlane(G4int n) const
 inline G4ThreeVector G4UTrap::GetSymAxis() const
 {
   UVector3 axis = GetShape()->GetSymAxis();
-  return G4ThreeVector(axis.x, axis.y, axis.z);
+  return G4ThreeVector(axis.x(), axis.y(), axis.z());
 }
 
 inline
@@ -215,5 +218,7 @@ inline void G4UTrap::SetPlanes(const G4ThreeVector pt[8])
   GetShape()->SetPlanes(upt);
   fRebuildPolyhedron = true;
 }
+
+#endif  // G4GEOM_USE_USOLIDS
 
 #endif

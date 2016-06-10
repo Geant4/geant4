@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.cc 85824 2014-11-05 15:26:17Z gcosmo $
+// $Id: G4Fragment.cc 92230 2015-08-24 10:57:08Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -40,14 +40,13 @@
 
 #include "G4Fragment.hh"
 #include "G4HadronicException.hh"
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
 #include "G4ios.hh"
 #include <iomanip>
 
 //#define debug_G4Fragment 
 
 G4ThreadLocal G4Allocator<G4Fragment> *pFragmentAllocator = 0;
+const G4double exclimit = -10*CLHEP::eV;
 
 // Default constructor
 G4Fragment::G4Fragment() :
@@ -56,7 +55,7 @@ G4Fragment::G4Fragment() :
   theExcitationEnergy(0.0),
   theGroundStateMass(0.0),
   theMomentum(G4LorentzVector(0,0,0,0)),
-  theAngularMomentum(G4ThreeVector(0,0,0)),
+  thePolarization(0),
   creatorModel(-1),
   numberOfParticles(0),
   numberOfCharged(0),
@@ -64,28 +63,29 @@ G4Fragment::G4Fragment() :
   numberOfChargedHoles(0),
   numberOfShellElectrons(0),
   theParticleDefinition(0),
-  theCreationTime(0.0),
-  isStable(true)
+  theCreationTime(0.0)
 {}
 
 // Copy Constructor
-G4Fragment::G4Fragment(const G4Fragment &right) 
+G4Fragment::G4Fragment(const G4Fragment &right) :
+   theA(right.theA),
+   theZ(right.theZ),
+   theExcitationEnergy(right.theExcitationEnergy),
+   theGroundStateMass(right.theGroundStateMass),
+   theMomentum(right.theMomentum),
+   thePolarization(0),
+   creatorModel(right.creatorModel),
+   numberOfParticles(right.numberOfParticles),
+   numberOfCharged(right.numberOfCharged),
+   numberOfHoles(right.numberOfHoles),
+   numberOfChargedHoles(right.numberOfChargedHoles),
+   numberOfShellElectrons(right.numberOfShellElectrons),
+   theParticleDefinition(right.theParticleDefinition),
+   theCreationTime(right.theCreationTime)
 {
-   theA = right.theA;
-   theZ = right.theZ;
-   theExcitationEnergy = right.theExcitationEnergy;
-   theGroundStateMass = right.theGroundStateMass;
-   theMomentum  = right.theMomentum;
-   theAngularMomentum = right.theAngularMomentum;
-   creatorModel = right.creatorModel;
-   numberOfParticles = right.numberOfParticles;
-   numberOfCharged = right.numberOfCharged;
-   numberOfHoles = right.numberOfHoles;
-   numberOfChargedHoles = right.numberOfChargedHoles;
-   numberOfShellElectrons = right.numberOfShellElectrons;
-   theParticleDefinition = right.theParticleDefinition;
-   theCreationTime = right.theCreationTime;
-   isStable = right.isStable;
+   if(right.thePolarization) { 
+     thePolarization = new G4NuclearPolarization(*(right.thePolarization));
+   }
 }
 
 G4Fragment::~G4Fragment()
@@ -94,8 +94,10 @@ G4Fragment::~G4Fragment()
 G4Fragment::G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum) :
   theA(A),
   theZ(Z),
+  theExcitationEnergy(0.0),
+  theGroundStateMass(0.0),
   theMomentum(aMomentum),
-  theAngularMomentum(G4ThreeVector(0,0,0)),
+  thePolarization(0),
   creatorModel(-1),
   numberOfParticles(0),
   numberOfCharged(0),
@@ -103,18 +105,11 @@ G4Fragment::G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum) :
   numberOfChargedHoles(0),
   numberOfShellElectrons(0),
   theParticleDefinition(0),
-  theCreationTime(0.0),
-  isStable(true)
+  theCreationTime(0.0)
 {
-  theExcitationEnergy = 0.0;
-  theGroundStateMass = 0.0;
   if(theA > 0) { 
     CalculateGroundStateMass();
     CalculateExcitationEnergy(); 
-
-    // default flag of stability for excited fragments is false
-    // it may be overwritten by SetStable(G4bool val) method
-    if(theExcitationEnergy > 0.0) { isStable = false; }
   }
 }
 
@@ -123,8 +118,9 @@ G4Fragment::G4Fragment(const G4LorentzVector& aMomentum,
 		       const G4ParticleDefinition * aParticleDefinition) :
   theA(0),
   theZ(0),
+  theExcitationEnergy(0.0),
   theMomentum(aMomentum),
-  theAngularMomentum(G4ThreeVector(0,0,0)),
+  thePolarization(0),
   creatorModel(-1),
   numberOfParticles(0),
   numberOfCharged(0),
@@ -132,10 +128,8 @@ G4Fragment::G4Fragment(const G4LorentzVector& aMomentum,
   numberOfChargedHoles(0),
   numberOfShellElectrons(0),
   theParticleDefinition(aParticleDefinition),
-  theCreationTime(0.0),
-  isStable(true)
+  theCreationTime(0.0)
 {
-  theExcitationEnergy = 0.0;
   if(aParticleDefinition->GetPDGEncoding() != 22 && 
      aParticleDefinition->GetPDGEncoding() != 11) {
     G4String text = "G4Fragment::G4Fragment constructor for gamma used for "
@@ -153,7 +147,10 @@ G4Fragment & G4Fragment::operator=(const G4Fragment &right)
     theExcitationEnergy = right.theExcitationEnergy;
     theGroundStateMass = right.theGroundStateMass;
     theMomentum  = right.theMomentum;
-    theAngularMomentum = right.theAngularMomentum;
+    delete thePolarization; thePolarization = 0;
+    if(right.thePolarization) { 
+     thePolarization = new G4NuclearPolarization(*(right.thePolarization));
+    }
     creatorModel = right.creatorModel;
     numberOfParticles = right.numberOfParticles;
     numberOfCharged = right.numberOfCharged;
@@ -162,7 +159,6 @@ G4Fragment & G4Fragment::operator=(const G4Fragment &right)
     numberOfShellElectrons = right.numberOfShellElectrons;
     theParticleDefinition = right.theParticleDefinition;
     theCreationTime = right.theCreationTime;
-    isStable = right.isStable;
   }
   return *this;
 }
@@ -196,26 +192,29 @@ std::ostream& operator << (std::ostream &out, const G4Fragment *theFragment)
 
   out << std::setprecision(3)
       << ", U = " << theFragment->GetExcitationEnergy()/CLHEP::MeV 
-      << " MeV  IsStable= " << theFragment->IsStable();
-  if(theFragment->creatorModel >= 0) { 
-    out << " creatorModelType= " << theFragment->creatorModel; 
+      << " MeV  ";
+  if(theFragment->GetCreatorModelType() >= 0) { 
+    out << " creatorModelType= " << theFragment->GetCreatorModelType(); 
   }
   out << G4endl
       << "          P = (" 
-      << theFragment->theMomentum.x()/CLHEP::MeV << ","
-      << theFragment->theMomentum.y()/CLHEP::MeV << ","
-      << theFragment->theMomentum.z()/CLHEP::MeV 
+      << theFragment->GetMomentum().x()/CLHEP::MeV << ","
+      << theFragment->GetMomentum().y()/CLHEP::MeV << ","
+      << theFragment->GetMomentum().z()/CLHEP::MeV 
       << ") MeV   E = " 
-      << theFragment->theMomentum.t()/CLHEP::MeV << " MeV"
+      << theFragment->GetMomentum().t()/CLHEP::MeV << " MeV"
       << G4endl;
        
-  // What about Angular momentum???
+  if(theFragment->GetNuclearPolarization()) { 
+    out << theFragment->GetNuclearPolarization(); 
+  }
+ 
   if (theFragment->GetNumberOfExcitons() != 0) {
     out << "          " 
-	<< "#Particles= " << theFragment->numberOfParticles 
-	<< ", #Charged= " << theFragment->numberOfCharged
-	<< ", #Holes= "   << theFragment->numberOfHoles
-	<< ", #ChargedHoles= " << theFragment->numberOfChargedHoles
+	<< "#Particles= " << theFragment->GetNumberOfParticles() 
+	<< ", #Charged= " << theFragment->GetNumberOfCharged()
+	<< ", #Holes= "   << theFragment->GetNumberOfHoles()
+	<< ", #ChargedHoles= " << theFragment->GetNumberOfChargedHoles()
 	<< G4endl;
   }
   out.setf(old_floatfield,std::ios::floatfield);
@@ -232,7 +231,7 @@ std::ostream& operator << (std::ostream &out, const G4Fragment &theFragment)
 
 void G4Fragment::ExcitationEnergyWarning()
 {
-  if (theExcitationEnergy < -10 * CLHEP::eV) {
+  if (theExcitationEnergy < exclimit) {
 
 #ifdef G4VERBOSE
     G4cout << "G4Fragment::CalculateExcitationEnergy(): WARNING "<<G4endl;
@@ -256,4 +255,19 @@ void G4Fragment::NumberOfExitationWarning(const G4String& value)
   G4cout << this << G4endl; 
   G4String text = "G4Fragment::G4Fragment wrong exciton number ";
   throw G4HadronicException(__FILE__, __LINE__, text);
+}
+
+void G4Fragment::SetAngularMomentum(G4ThreeVector& v)
+{
+  std::vector< std::vector<G4complex> > pol;
+  pol.resize(1);
+  pol[0].assign(1, G4complex(v.mag(),0.0)); 
+  thePolarization = new G4NuclearPolarization();
+  thePolarization->SetPolarization(pol);
+}
+
+G4ThreeVector G4Fragment::GetAngularMomentum() const
+{
+  G4ThreeVector v(0.0,0.0,((thePolarization->GetPolarization()[0])[0]).real());
+  return v;
 }

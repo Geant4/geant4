@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VITRestProcess.hh 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id: G4VITRestProcess.hh 91584 2015-07-27 13:01:48Z gcosmo $
 //
 /// \brief Identical to G4VRestProcess with dependency from G4VITProcess
 //
@@ -49,8 +49,6 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
-
-
 #ifndef G4VITRestProcess_h
 #define G4VITRestProcess_h 1
 
@@ -59,80 +57,77 @@
 #include "G4VITProcess.hh"
 
 /**
-  * Identical to G4VRestProcess with dependency from G4VITProcess
-  */
+ * Identical to G4VRestProcess with dependency from G4VITProcess
+ */
 
 class G4VITRestProcess : public G4VITProcess
 {
   //  Abstract class which defines the public behavior of
   //  physics interactions at rest.
 
-  public:
-      G4VITRestProcess(const G4String&  ,
-		     G4ProcessType   aType = fNotDefined );
-      G4VITRestProcess(const G4VITRestProcess& );
+public:
+  G4VITRestProcess(const G4String&, G4ProcessType aType = fNotDefined);
+  G4VITRestProcess(const G4VITRestProcess&);
 
-      virtual ~G4VITRestProcess();
+  virtual ~G4VITRestProcess();
 
-  public:   //  with description
-      virtual G4double AtRestGetPhysicalInteractionLength(
-                             const G4Track& track,
-			     G4ForceCondition* condition
-			    );
+public:
+  //  with description
+  virtual G4double AtRestGetPhysicalInteractionLength(const G4Track& track,
+                                                      G4ForceCondition* condition);
 
-      virtual G4VParticleChange* AtRestDoIt(
-			     const G4Track& ,
-			     const G4Step&
-			    );
+  virtual G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&);
 
-     //  no operation in  PostStepDoIt and  AlongStepDoIt
-      virtual G4double AlongStepGetPhysicalInteractionLength(
-                             const G4Track&,
-			     G4double  ,
-			     G4double  ,
-			     G4double& ,
-	                     G4GPILSelection*
-                           ){ return -1.0; }
+  //  no operation in  PostStepDoIt and  AlongStepDoIt
+  virtual G4double AlongStepGetPhysicalInteractionLength(const G4Track&,
+                                                         G4double,
+                                                         G4double,
+                                                         G4double&,
+                                                         G4GPILSelection*)
+  {
+    return -1.0;
+  }
 
-      virtual G4double PostStepGetPhysicalInteractionLength(
-                             const G4Track& ,
-			     G4double   ,
-			     G4ForceCondition*
-                            ) { return -1.0; }
+  virtual G4double PostStepGetPhysicalInteractionLength(const G4Track&,
+                                                        G4double,
+                                                        G4ForceCondition*)
+  {
+    return -1.0;
+  }
 
-     //  no operation in  PostStepDoIt and  AlongStepDoIt
-      virtual G4VParticleChange* PostStepDoIt(
-			     const G4Track& ,
-			     const G4Step&
-                            ) {return 0;}
+  //  no operation in  PostStepDoIt and  AlongStepDoIt
+  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&)
+  {
+    return 0;
+  }
 
-      virtual G4VParticleChange* AlongStepDoIt(
-			     const G4Track& ,
-			     const G4Step&
-                            ) {return 0;}
+  virtual G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&)
+  {
+    return 0;
+  }
 
-  protected: //  with description
+protected:
+  //  with description
 
-      virtual G4double GetMeanLifeTime(const G4Track& aTrack,G4ForceCondition* condition)=0;
-      //  Calculates the mean life-time (i.e. for decays) of the
-      //  particle at rest due to the occurence of the given process,
-      //  or converts the probability of interaction (i.e. for
-      //  annihilation) into the life-time of the particle for the
-      //  occurence of the given process.
+  virtual G4double GetMeanLifeTime(const G4Track& aTrack,
+                                   G4ForceCondition* condition)=0;
+  //  Calculates the mean life-time (i.e. for decays) of the
+  //  particle at rest due to the occurence of the given process,
+  //  or converts the probability of interaction (i.e. for
+  //  annihilation) into the life-time of the particle for the
+  //  occurence of the given process.
 
- protected:
+protected:
   // hide default constructor and assignment operator as private
-      G4VITRestProcess();
-      G4VITRestProcess & operator=(const G4VITRestProcess &right);
+  G4VITRestProcess();
+  G4VITRestProcess & operator=(const G4VITRestProcess &right);
 };
 
 // -----------------------------------------
 //  inlined function members implementation
 // -----------------------------------------
-inline G4double G4VITRestProcess::AtRestGetPhysicalInteractionLength(
-                             const G4Track& track,
-			     G4ForceCondition* condition
-			    )
+inline G4double G4VITRestProcess::AtRestGetPhysicalInteractionLength(const G4Track& track,
+                                                                     G4ForceCondition* condition)
 {
   // beggining of tracking
   ResetNumberOfInteractionLengthLeft();
@@ -144,33 +139,28 @@ inline G4double G4VITRestProcess::AtRestGetPhysicalInteractionLength(
   fpState->currentInteractionLength = GetMeanLifeTime(track, condition);
 
 #ifdef G4VERBOSE
- if ((fpState->currentInteractionLength <0.0) || (verboseLevel>2)){
+  if((fpState->currentInteractionLength < 0.0) || (verboseLevel > 2))
+  {
     G4cout << "G4VITRestProcess::AtRestGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" <<G4endl;
+    G4cout << "[ " << GetProcessName() << "]" << G4endl;
     track.GetDynamicParticle()->DumpInfo();
-    G4cout << " in Material  " << track.GetMaterial()->GetName() <<G4endl;
-    G4cout << "MeanLifeTime = " << fpState->currentInteractionLength/CLHEP::ns << "[ns]" <<G4endl;
+    G4cout << " in Material  " << track.GetMaterial()->GetName() << G4endl;
+    G4cout << "MeanLifeTime = " << fpState->currentInteractionLength / CLHEP::ns
+           << "[ns]" << G4endl;
   }
 #endif
 
-  return (fpState->theNumberOfInteractionLengthLeft) * (fpState->currentInteractionLength);
+  return (fpState->theNumberOfInteractionLengthLeft)
+      * (fpState->currentInteractionLength);
 }
 
-
-inline G4VParticleChange* G4VITRestProcess::AtRestDoIt(
-			     const G4Track&,
-			     const G4Step&
-			    )
+inline G4VParticleChange* G4VITRestProcess::AtRestDoIt(const G4Track&,
+                                                       const G4Step&)
 {
-//  clear NumberOfInteractionLengthLeft
-    ClearNumberOfInteractionLengthLeft();
-
-    return pParticleChange;
+  ClearNumberOfInteractionLengthLeft();
+  ClearInteractionTimeLeft();
+  return pParticleChange;
 }
-
 
 #endif
-
-
-
 

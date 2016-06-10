@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: lArCal.cc 84371 2014-10-14 12:51:18Z gcosmo $
+// $Id: lArCal.cc 89572 2015-04-20 07:18:15Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -77,19 +77,17 @@ int main(int argc,char** argv) {
   G4PhysListFactory factory;
   runManager->SetUserInitialization(factory.ReferencePhysList());
   
+  runManager->SetUserInitialization(new FCALActionInitialization);
+
+  // get the pointer to the User Interface manager 
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+
 #ifdef G4VIS_USE
   // visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
-    
-  runManager->SetUserInitialization(new FCALActionInitialization);
-    
-
-    
-  // get the pointer to the User Interface manager 
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
-
+        
   if (argc==1)   // Define UI session for interactive mode.
      {
 #ifdef G4UI_USE

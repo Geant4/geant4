@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.hh 68795 2013-04-05 13:24:46Z gcosmo $
+// $Id: G4Step.hh 93028 2015-09-30 16:09:00Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -201,6 +201,8 @@ class G4Step
 // Secondary buckets
 public:
   // secodaries in the current step
+   G4int GetNumberOfSecondariesInCurrentStep() const;
+
    const std::vector<const G4Track*>* GetSecondaryInCurrentStep() const; 
 
    // NOTE: Secondary bucket of the Step contains  

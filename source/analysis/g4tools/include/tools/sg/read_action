@@ -1,0 +1,44 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_read_action
+#define tools_sg_read_action
+
+#include "action"
+#include "ifield_factory"
+
+namespace tools {
+namespace io {
+  class irbuf;
+}}
+
+namespace tools {
+namespace sg {
+  class node_desc;
+}}
+
+namespace tools {
+namespace sg {
+
+class read_action : public action {
+public:
+  virtual io::irbuf& buffer() = 0;
+  virtual bool get_node_desc(const std::string&,node_desc&) const = 0;
+  virtual const ifield_factory& field_factory() const = 0;
+public:
+  read_action(std::ostream& a_out)
+  :action(a_out){}
+  virtual ~read_action(){}
+protected:
+  read_action(const read_action& a_from)
+  :action(a_from)
+  {}
+  read_action& operator=(const read_action& a_from){
+    action::operator=(a_from);
+    return *this;
+  }
+};
+
+}}
+
+#endif

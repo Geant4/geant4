@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/src/PhysicsListMessenger.cc
 /// \brief Implementation of the PhysicsListMessenger class
 //
-// $Id: PhysicsListMessenger.cc 85243 2014-10-27 08:22:42Z gcosmo $
+// $Id: PhysicsListMessenger.cc 92047 2015-08-14 07:23:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -47,6 +47,7 @@
 #include "PhysicsList.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "TestParameters.hh"
@@ -54,12 +55,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
-:G4UImessenger(),fPhysicsList(pPhys),
- fECmd(0),
- fEBCmd(0),
- fCBCmd(0),
- fListCmd(0),
- fADCCmd(0)
+:G4UImessenger(),fPhysicsList(pPhys)
 {   
   fPhysDir = new G4UIdirectory("/testem/phys/");
   fPhysDir->SetGuidance("physics list commands");
@@ -78,23 +74,42 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
   fEBCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   fCBCmd = new G4UIcmdWithAnInteger("/testem/phys/setNbinsCl",this);  
-  fCBCmd->SetGuidance("Set max number of clusters.");
+  fCBCmd->SetGuidance("Set number of bins of clusters.");
   fCBCmd->SetParameterName("Cbins",false);
   fCBCmd->SetRange("Cbins>0");
   fCBCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+
+  fCMCmd = new G4UIcmdWithAnInteger("/testem/phys/setMaxCl",this);  
+  fCMCmd->SetGuidance("Set max number of clusters.");
+  fCMCmd->SetParameterName("Cmax",false);
+  fCMCmd->SetRange("Cmax>0");
+  fCMCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
   fListCmd = new G4UIcmdWithAString("/testem/phys/addPhysics",this);  
   fListCmd->SetGuidance("Add modula physics list.");
   fListCmd->SetParameterName("PList",false);
   fListCmd->AvailableForStates(G4State_PreInit);
 
-  fADCCmd = new G4UIcmdWithADoubleAndUnit("/testem/setEnergyPerChannel",this);
+  fADCCmd = 
+    new G4UIcmdWithADoubleAndUnit("/testem/phys/setEnergyPerChannel",this);
   fADCCmd->SetGuidance("Set energy per ADC channel");
   fADCCmd->SetParameterName("enadc",false,false);
   fADCCmd->SetUnitCategory("Energy");
   fADCCmd->SetDefaultUnit("keV");
   fADCCmd->SetRange("enadc>0.");
   fADCCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  fNorCmd = new G4UIcmdWithADouble("/testem/phys/setNormFactor",this);
+  fNorCmd->SetGuidance("Set factor for histogram normalisation");
+  fNorCmd->SetParameterName("nfac",false,false);
+  fNorCmd->SetRange("nfac>0.");
+  fNorCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  fSmCmd = new G4UIcmdWithADouble("/testem/phys/setEnergySmear",this);
+  fSmCmd->SetGuidance("Set intrinsic width of detector response");
+  fSmCmd->SetParameterName("sm",false,false);
+  fSmCmd->SetRange("sm>0.");
+  fSmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -104,8 +119,11 @@ PhysicsListMessenger::~PhysicsListMessenger()
   delete fECmd;
   delete fEBCmd;
   delete fCBCmd;
+  delete fCMCmd;
   delete fListCmd;
   delete fADCCmd;
+  delete fNorCmd;
+  delete fSmCmd;
   delete fPhysDir;
 }
 
@@ -122,10 +140,16 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
    { man->SetNumberBins(fEBCmd->GetNewIntValue(newValue)); }
   if( command == fCBCmd )
    { man->SetNumberBinsCluster(fCBCmd->GetNewIntValue(newValue)); }
+  if( command == fCMCmd )
+   { man->SetMaxCluster(fCMCmd->GetNewIntValue(newValue)); }
   if( command == fListCmd )
    { fPhysicsList->AddPhysicsList(newValue); }
   if( command == fADCCmd )
     { man->SetEnergyPerChannel(fADCCmd->GetNewDoubleValue(newValue)); }
+  if( command == fNorCmd )
+    { man->SetNormFactor(fNorCmd->GetNewDoubleValue(newValue)); }
+  if( command == fSmCmd )
+    { man->SetEnergySmear(fSmCmd->GetNewDoubleValue(newValue)); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

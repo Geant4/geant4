@@ -1,4 +1,4 @@
-$Id: README 78001 2013-12-02 08:24:53Z gcosmo $
+$Id: README 94093 2015-11-05 15:16:06Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -50,18 +50,18 @@ $Id: README 78001 2013-12-02 08:24:53Z gcosmo $
                                           /InstallationGuide/html/ch03s03.html
  3- ACTION INITALIZATION
 
-   A newly introduced class, B1ActionInitialization, instantiates and registers 
-   to Geant4 kernel all user action classes.
+   B3[a,b]ActionInitialization class instantiates and registers to Geant4 kernel 
+   all user action classes.
 
    While in sequential mode the action classes are instatiated just once,
    via invoking the method:
-      B3ActionInitialization::Build() 
+      B3[a,b]ActionInitialization::Build() 
    in multi-threading mode the same method is invoked for each thread worker
    and so all user action classes are defined thread-local.
 
    A run action class is instantiated both thread-local 
    and global that's why its instance is created also in the method
-      B3ActionInitialization::BuildForMaster() 
+      B3[a,b]ActionInitialization::BuildForMaster() 
    which is invoked only in multi-threading mode.
     	 
  4- PRIMARY GENERATOR
@@ -79,16 +79,36 @@ $Id: README 78001 2013-12-02 08:24:53Z gcosmo $
    corresponds to a measure of the efficiency of the PET system. 
    The total dose deposited in a patient during a run is also computed. 
    
-   Scorers are defined in DetectorConstruction::ConstructSDandField(). There are
+   Scorers are defined in B3DetectorConstruction::ConstructSDandField(). There are
    two G4MultiFunctionalDetector objects: one for the Crystal (EnergyDeposit), 
    and one for the Patient (DoseDeposit)
-	
-   B3Run::RecordEvent(), called at end of event, collects informations 
+
+   Two variants of accumulation event statistics in a run are demonstrated 
+   in this example:
+
+   B3a:
+   
+   At the end of event, the values acummulated in B3aEventAction are passed 
+   in B3aRunAction and summed over the whole run (see B3aEventAction::EndOfevent()). 
+   In multi-threading mode the data accumulated in G4Parameter objects per
+   workers is merged to the master in B3aRunAction::EndOfRunAction() and the final
+   result is printed on the screen.
+   
+   G4Parameter<> type instead of G4double and G4int types is used for the B3aRunAction
+   data members in order to facilitate merging of the values accumulated on workers 
+   to the master.  Currently the parameters have to be registered to G4ParametersManager
+   and G4ParametersManager::Merge() has to be called from the users code. This is planned
+   to be further simplified with a closer integration of G4Parameter classes in
+   the Geant4 kernel next year.
+
+   B3b:
+
+   B3bRun::RecordEvent(), called at end of event, collects informations 
    event per event from the hits collections, and accumulates statistic for 
-   RunAction::EndOfRunAction().	
+   B3bRunAction::EndOfRunAction().	
    
    In multi-threading mode the statistics accumulated per workers is merged 
-   to the master in Run::Merge().
+   to the master in B3bRun::Merge().
    		
  6- STACKING ACTION
  
@@ -147,8 +167,8 @@ $Id: README 78001 2013-12-02 08:24:53Z gcosmo $
  
 C- HOW TO RUN
 
-    - Execute exampleB3 in the 'interactive mode' with visualization
-        % exampleB3
+    - Execute exampleB3a in the 'interactive mode' with visualization
+        % exampleB3a
       and type in the commands from run1.mac line by line:  
         Idle> /control/verbose 2
         Idle> /tracking/verbose 2
@@ -160,9 +180,9 @@ C- HOW TO RUN
         ....
         Idle> exit
 
-    - Execute exampleB3 in the 'batch' mode from macro files 
+    - Execute exampleB3a in the 'batch' mode from macro files 
      (without visualization)
-        % exampleB3 run2.mac
-        % exampleB3 exampleB3.in > exampleB3.out
+        % exampleB3a run2.mac
+        % exampleB3a exampleB3.in > exampleB3.out
 
 	

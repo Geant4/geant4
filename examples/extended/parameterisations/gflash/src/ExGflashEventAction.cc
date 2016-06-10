@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExGflashEventAction.cc 75838 2013-11-06 17:25:50Z gcosmo $
+// $Id: ExGflashEventAction.cc 94396 2015-11-13 13:37:16Z gcosmo $
 //
 /// \file parameterisations/gflash/src/ExGflashEventAction.cc
 /// \brief Implementation of the ExGflashEventAction class
@@ -46,16 +46,24 @@
 using namespace std;
 
 
-ExGflashEventAction::ExGflashEventAction():
-fNevent(0),fDtime(0.0),fCalorimeterCollectionId(-1)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ExGflashEventAction::ExGflashEventAction()
+ : G4UserEventAction(),
+   fNevent(0),fDtime(0.0),fCalorimeterCollectionId(-1)
 {
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExGflashEventAction::~ExGflashEventAction()
 {
-  if ( fNevent > 0 ) G4cout << "Internal Real Elapsed Time /event is: "<< fDtime /fNevent<< G4endl;
+  if ( fNevent > 0 ) {
+    G4cout << "Internal Real Elapsed Time /event is: "<< fDtime /fNevent<< G4endl;
+  }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExGflashEventAction::BeginOfEventAction(const G4Event *evt)
 {
@@ -64,6 +72,8 @@ void ExGflashEventAction::BeginOfEventAction(const G4Event *evt)
   fNevent=evt->GetEventID();
   G4cout<<" Start generating event Nr "<<fNevent<<G4endl<<G4endl;   
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExGflashEventAction::EndOfEventAction(const G4Event *evt)
 {  
@@ -79,7 +89,7 @@ void ExGflashEventAction::EndOfEventAction(const G4Event *evt)
   G4cout << G4endl;
   G4cout << "******************************************"<< G4endl;
   fDtime+=fTimerIntern.GetRealElapsed();
-  G4cout<<" ------ ExGflashEventAction::End of event nr. "<<fNevent<<"  -----"<< G4endl;   
+  G4cout<<" ------ ExGflashEventAction::End of event nr. "<<fNevent<<"  -----"<< G4endl;
   
   G4SDManager * SDman = G4SDManager::GetSDMpointer();
   G4String colNam;
@@ -172,6 +182,9 @@ void ExGflashEventAction::EndOfEventAction(const G4Event *evt)
   G4cout << "    " << n_trajectories  << " trajectories stored in this event." << G4endl;
   
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 
 
 

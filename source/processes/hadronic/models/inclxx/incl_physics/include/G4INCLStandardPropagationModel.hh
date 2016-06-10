@@ -68,7 +68,7 @@ namespace G4INCL {
      */
     class StandardPropagationModel: public G4INCL::IPropagationModel {
     public:
-      StandardPropagationModel(LocalEnergyType localEnergyType, LocalEnergyType localEnergyDeltaType);
+      StandardPropagationModel(LocalEnergyType localEnergyType, LocalEnergyType localEnergyDeltaType, const G4double hTime = 0.0);
       virtual ~StandardPropagationModel();
 
       G4double getCurrentTime();
@@ -194,6 +194,7 @@ namespace G4INCL {
       G4INCL::Nucleus *theNucleus;
       G4double maximumTime;
       G4double currentTime;
+      G4double hadronizationTime;
       G4bool firstAvatar;
       LocalEnergyType theLocalEnergyType, theLocalEnergyDeltaType;
       Particle backupParticle1, backupParticle2;

@@ -1,0 +1,247 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_render_action
+#define tools_sg_render_action
+
+#include "matrix_action"
+
+#include "../glprims"
+#include "../vdata"
+#include "../colorf"
+
+namespace tools {
+namespace sg {
+  class gl_manager;
+}}
+
+
+namespace tools {
+namespace sg {
+
+typedef unsigned int bufpos;
+
+class render_action : public matrix_action {
+public:
+  virtual void load_proj_matrix(const mat4f&) = 0;
+  virtual void load_model_matrix(const mat4f&) = 0;
+public:
+  virtual void draw_vertex_array(gl::mode_t,
+                                 unsigned int,
+                                 const float*) = 0;
+  virtual void draw_vertex_array_xy(gl::mode_t,
+                                    unsigned int,
+                                    const float*) = 0;
+  virtual void draw_vertex_color_array(gl::mode_t,
+                                       unsigned int,
+                                       const float*,
+                                       const float*) = 0;
+  virtual void draw_vertex_normal_array(gl::mode_t,
+                                        unsigned int,
+                                        const float*,
+                                        const float*) = 0;
+  virtual void draw_vertex_color_normal_array(gl::mode_t,
+                                        unsigned int,
+                                        const float*,
+                                        const float*,
+                                        const float*) = 0;
+
+  /////////////////////////////////////////////////////////////////
+  /// texture /////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////
+  virtual void draw_vertex_array_texture(tools::gl::mode_t,
+                                         unsigned int,const float*,
+                                         unsigned int,
+                                         const float*) = 0;
+  virtual void draw_vertex_normal_array_texture(tools::gl::mode_t,
+                                         unsigned int,
+                                         const float*,const float*,
+                                         unsigned int,
+                                         const float*) = 0;
+
+  /////////////////////////////////////////////////////////////////
+  /// VBO /////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////
+  virtual void begin_gsto(unsigned int) = 0;
+  virtual void draw_gsto_v(gl::mode_t,unsigned int,bufpos) = 0;
+  virtual void draw_gsto_vc(gl::mode_t,unsigned int,bufpos,bufpos) = 0;
+  virtual void draw_gsto_vn(gl::mode_t,unsigned int,bufpos,bufpos) = 0;
+  virtual void draw_gsto_vcn(gl::mode_t,unsigned int,bufpos,bufpos,bufpos) = 0;
+  virtual void end_gsto() = 0;
+  /////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////
+
+  virtual void clear_color(float,float,float,float) = 0;
+  virtual void color4f(float,float,float,float) = 0;
+  virtual void line_width(float) = 0;
+  virtual void point_size(float) = 0;
+  virtual void set_polygon_offset(bool) = 0;
+  virtual void set_winding(winding_type) = 0;
+  virtual void set_cull_face(bool) = 0;
+  virtual void set_point_smooth(bool) = 0;
+  virtual void set_line_smooth(bool) = 0;
+  virtual void normal(float,float,float) = 0;
+  virtual void set_depth_test(bool) = 0;
+  virtual unsigned int max_lights() = 0;
+  virtual void enable_light(unsigned int,
+                            float,float,float, //directrion
+                            float,float,float,float) = 0; //RGBA
+  virtual void set_lighting(bool) = 0;
+  virtual void restore_state(unsigned int) = 0;
+
+  virtual tools::sg::gl_manager& gl_manager() = 0;
+public:
+  render_action(std::ostream& a_out,unsigned int a_ww,unsigned int a_wh)
+  :matrix_action(a_out,a_ww,a_wh){}
+  virtual ~render_action(){}
+public:
+  render_action(const render_action& a_from)
+  :matrix_action(a_from)
+  {}
+  render_action& operator=(const render_action& a_from){
+    matrix_action::operator=(a_from);
+    return *this;
+  }
+public:
+  void load_matrices_to_identity() {
+    load_proj_matrix(m_identity);
+    load_model_matrix(m_identity);
+  }
+  void load_matrices_from_state() {
+    load_proj_matrix(m_state.m_proj);
+    load_model_matrix(m_state.m_model);
+  }
+
+  void clear_color(const colorf& a_color){
+    clear_color(a_color[0],a_color[1],a_color[2],a_color[3]);
+  }
+  void color4f(const colorf& a_color){
+    color4f(a_color[0],a_color[1],a_color[2],a_color[3]);
+  }
+
+  void enable_light(unsigned int a_light,
+                    const vec3f& a_dir,
+                    const colorf& a_col) {
+    enable_light(a_light,
+                 a_dir[0],a_dir[1],a_dir[2],
+                 a_col[0],a_col[1],a_col[2],1);
+  }
+
+  void draw_vertex_array(gl::mode_t a_mode,const std::vector<float>& a_xyzs){
+    const float* _xyzs = vec_data<float>(a_xyzs);
+    draw_vertex_array(a_mode,a_xyzs.size(),_xyzs);    
+  }
+
+  void draw_vertex_array_xy(gl::mode_t a_mode,const std::vector<float>& a_xys){
+    const float* _xys = vec_data<float>(a_xys);
+    draw_vertex_array_xy(a_mode,a_xys.size(),_xys);    
+  }
+
+  void draw_vertex_color_array(gl::mode_t a_mode,
+                               const std::vector<float>& a_xyzs,
+                               const std::vector<float>& a_rgbas){
+    const float* _xyzs = vec_data<float>(a_xyzs);
+    const float* _rgbas = vec_data<float>(a_rgbas);
+    draw_vertex_color_array(a_mode,a_xyzs.size(),_xyzs,_rgbas);    
+  }
+
+  void draw_vertex_normal_array(gl::mode_t a_mode,
+                                const std::vector<float>& a_xyzs,
+                                const std::vector<float>& a_nms){
+    const float* _xyzs = vec_data<float>(a_xyzs);
+    const float* _nms = vec_data<float>(a_nms);
+    draw_vertex_normal_array(a_mode,a_xyzs.size(),_xyzs,_nms);    
+  }
+
+  void draw_vertex_color_normal_array(gl::mode_t a_mode,
+                                      const std::vector<float>& a_xyzs,
+                                      const std::vector<float>& a_rgbas,
+                                      const std::vector<float>& a_nms){
+    const float* _xyzs = vec_data<float>(a_xyzs);
+    const float* _rgbas = vec_data<float>(a_rgbas);
+    const float* _nms = vec_data<float>(a_nms);
+    draw_vertex_color_normal_array(a_mode,a_xyzs.size(),_xyzs,_rgbas,_nms);    
+  }
+
+  void normal(const vec3f& a_vec) {normal(a_vec[0],a_vec[1],a_vec[2]);}
+
+public:
+  // for sphere::visit template.
+  bool add_triangle_fan(unsigned int a_floatn,const float* a_xyzs,const float* a_nms) {
+    draw_vertex_normal_array(gl::triangle_fan(),a_floatn,a_xyzs,a_nms);
+    return true;
+  }
+  bool add_triangle_fan(unsigned int a_floatn,const float* a_xyzs,float* a_rgbas,const float* a_nms) {
+    draw_vertex_color_normal_array(gl::triangle_fan(),a_floatn,a_xyzs,a_rgbas,a_nms);
+    return true;
+  }
+  bool add_triangle_strip(unsigned int a_floatn,const float* a_xyzs,const float* a_nms) {
+    draw_vertex_normal_array(gl::triangle_strip(),a_floatn,a_xyzs,a_nms);
+    return true;
+  }
+  bool add_triangle_strip(unsigned int a_floatn,const float* a_xyzs,const float* a_rgbas,const float* a_nms) {
+    draw_vertex_color_normal_array(gl::triangle_strip(),a_floatn,a_xyzs,a_rgbas,a_nms);
+    return true;
+  }
+  bool add_line_loop(unsigned int a_floatn,const float* a_xyzs) {
+    draw_vertex_array(gl::line_loop(),a_floatn,a_xyzs);
+    return true;
+  }
+  bool add_line_strip(unsigned int a_floatn,const float* a_xyzs) {
+    draw_vertex_array(gl::line_strip(),a_floatn,a_xyzs);
+    return true;
+  }
+  bool add_points(unsigned int a_floatn,const float* a_xyzs) {
+    draw_vertex_array(gl::points(),a_floatn,a_xyzs);
+    return true;
+  }
+
+/*
+  bool add_triangles_texture(unsigned int a_floatn,const float* a_xyzs,unsigned int a_tex,const float* a_texs){
+    draw_vertex_array_texture(gl::triangles(),a_floatn,a_xyzs,a_tex,a_texs);
+    return true;
+  }
+  bool add_triangle_fan_texture(unsigned int a_floatn,const float* a_xyzs,unsigned int a_tex,const float* a_texs){
+    draw_vertex_array_texture(gl::triangle_fan(),a_floatn,a_xyzs,a_tex,a_texs);
+    return true;
+  }
+  bool add_triangle_strip_texture(unsigned int a_floatn,const float* a_xyzs,unsigned int a_tex,const float* a_texs){
+    draw_vertex_array_texture(gl::triangle_strip(),a_floatn,a_xyzs,a_tex,a_texs);
+    return true;
+  }
+*/
+  bool add_triangle_fan_texture(unsigned int a_floatn,const float* a_xyzs,const float* a_nms,
+                                unsigned int a_tex,const float* a_texs){
+    draw_vertex_normal_array_texture(gl::triangle_fan(),a_floatn,a_xyzs,a_nms,a_tex,a_texs);
+    return true;
+  }
+  bool add_triangle_strip_texture(unsigned int a_floatn,const float* a_xyzs,const float* a_nms,
+                                  unsigned int a_tex,const float* a_texs){
+    draw_vertex_normal_array_texture(gl::triangle_strip(),a_floatn,a_xyzs,a_nms,a_tex,a_texs);
+    return true;
+  }
+
+  bool add_line_loop(const std::vector<float>& a_xyzs){
+    const float* _xyzs = tools::vec_data<float>(a_xyzs);
+    draw_vertex_array(gl::line_loop(),a_xyzs.size(),_xyzs);
+    return true;
+  }
+
+  void dump_vertex_array_xy(std::ostream& a_out,gl::mode_t /*a_mode*/,unsigned int a_floatn,const float* a_xys) {
+    unsigned int num = a_floatn/2;
+    if(!num) return;
+    a_out << "dump_vertex_array_xy : begin : " << num << std::endl;
+    for(unsigned int index=0;index<num;index++) {
+      a_out << "xy : " << index
+            << " " << a_xys[2*index]
+            << " " << a_xys[2*index+1]
+            << std::endl; 
+    }
+    a_out << "dump_vertex_array_xy : end." << std::endl;
+  }
+};
+
+}}
+
+#endif

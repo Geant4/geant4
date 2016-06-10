@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.cc 77080 2013-11-21 10:33:55Z gcosmo $
+// $Id: G4Track.cc 91231 2015-06-26 10:40:45Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -43,6 +43,8 @@
 #include "G4PhysicalConstants.hh"
 #include "G4ParticleTable.hh"
 #include "G4VelocityTable.hh"
+#include "G4VAuxiliaryTrackInformation.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 #include <iostream>
 #include <iomanip>
@@ -73,7 +75,8 @@ G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
     prev_mat(0),  groupvel(0),
     prev_velocity(0.0), prev_momentum(0.0),
     is_OpticalPhoton(false),
-    useGivenVelocity(false)
+    useGivenVelocity(false),
+    fpAuxiliaryTrackInformationMap(0)
 {
   static G4ThreadLocal G4bool isFirstTime = true;
   static G4ThreadLocal G4ParticleDefinition* fOpticalPhoton =0;
@@ -111,7 +114,8 @@ G4Track::G4Track()
     prev_mat(0),  groupvel(0),
     prev_velocity(0.0), prev_momentum(0.0),
     is_OpticalPhoton(false),
-    useGivenVelocity(false)
+    useGivenVelocity(false),
+    fpAuxiliaryTrackInformationMap(0)
 {
 }
 
@@ -135,7 +139,8 @@ G4Track::G4Track(const G4Track& right)
     prev_mat(0),  groupvel(0),
     prev_velocity(0.0), prev_momentum(0.0),
     is_OpticalPhoton(false),
-    useGivenVelocity(false)
+    useGivenVelocity(false),
+    fpAuxiliaryTrackInformationMap(0)
 {
   *this = right;
 }
@@ -146,6 +151,7 @@ G4Track::~G4Track()
 {
    delete fpDynamicParticle;
    delete fpUserInformation;
+   ClearAuxiliaryTrackInformation();
 }
 
 //////////////////
@@ -199,6 +205,8 @@ G4Track & G4Track::operator=(const G4Track &right)
 
    is_OpticalPhoton = right.is_OpticalPhoton;
    useGivenVelocity = right.useGivenVelocity; 
+
+   fpAuxiliaryTrackInformationMap = 0;
   }
   return *this;
 }
@@ -311,3 +319,63 @@ G4double G4Track::GetMinTOfVelocityTable()
 G4int    G4Track::GetNbinOfVelocityTable() 
 ///////////////////
 { return G4VelocityTable::GetNbinOfVelocityTable(); }
+
+///////////////////
+void G4Track::SetAuxiliaryTrackInformation(G4int idx, G4VAuxiliaryTrackInformation* info) const
+///////////////////
+{
+  if(!fpAuxiliaryTrackInformationMap)
+  { fpAuxiliaryTrackInformationMap = new std::map<G4int,G4VAuxiliaryTrackInformation*>; }
+  if(idx<0 || idx>=G4PhysicsModelCatalog::Entries())
+  {
+    G4ExceptionDescription ED;
+    ED << "Process/model index <" << idx << "> is invalid.";
+    G4Exception("G4VAuxiliaryTrackInformation::G4VAuxiliaryTrackInformation()","TRACK0982",
+    FatalException, ED);
+  }
+  (*fpAuxiliaryTrackInformationMap)[idx] = info;
+}
+
+///////////////////
+G4VAuxiliaryTrackInformation* G4Track::GetAuxiliaryTrackInformation(G4int idx) const
+///////////////////
+{
+  if(!fpAuxiliaryTrackInformationMap) return 0;
+  std::map<G4int,G4VAuxiliaryTrackInformation*>::iterator itr
+   = fpAuxiliaryTrackInformationMap->find(idx);
+  if(itr==fpAuxiliaryTrackInformationMap->end()) return 0;
+  else return (*itr).second;
+}
+
+///////////////////
+void G4Track::RemoveAuxiliaryTrackInformation(G4int idx)
+///////////////////
+{
+  if(fpAuxiliaryTrackInformationMap && idx>=0 && idx<G4PhysicsModelCatalog::Entries())
+      fpAuxiliaryTrackInformationMap->erase(idx);
+}
+
+///////////////////
+void G4Track::RemoveAuxiliaryTrackInformation(G4String& name)
+///////////////////
+{
+  if(fpAuxiliaryTrackInformationMap) 
+  {
+    G4int idx = G4PhysicsModelCatalog::GetIndex(name);
+    RemoveAuxiliaryTrackInformation(idx);
+  }
+}
+
+///////////////////
+void G4Track::ClearAuxiliaryTrackInformation()
+///////////////////
+{
+  if(!fpAuxiliaryTrackInformationMap) return;
+  for(std::map<G4int,G4VAuxiliaryTrackInformation*>::iterator itr=fpAuxiliaryTrackInformationMap->begin();
+      itr!=fpAuxiliaryTrackInformationMap->end(); itr++)
+  { delete (*itr).second; }
+  delete fpAuxiliaryTrackInformationMap;
+  fpAuxiliaryTrackInformationMap = 0;
+}
+
+

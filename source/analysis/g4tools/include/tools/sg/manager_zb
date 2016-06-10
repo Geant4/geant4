@@ -1,0 +1,75 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_manager_zb
+#define tools_sg_manager_zb
+
+#include "gl_manager"
+
+#include <map>
+
+namespace tools {
+namespace sg {
+
+class manager_zb : public virtual gl_manager {
+public:
+  virtual void begin_render(unsigned int,unsigned int,float,float,float,float) {}
+  virtual void end_render() {}
+
+  virtual unsigned int create_texture(const tools::img_byte& a_img) {    
+    m_gen_id++; //never return 0.
+    m_gstos[m_gen_id] = a_img;
+    return m_gen_id;
+  }
+
+  virtual unsigned int create_gsto_from_data(unsigned int,const float*) {return 0;}
+
+  virtual bool is_gsto_id_valid(unsigned int a_id) const {
+    gstos_t::const_iterator it = m_gstos.find(a_id);
+    if(it==m_gstos.end()) return false;
+    return true;
+  }
+  virtual void delete_gsto(unsigned int a_id) {
+    gstos_t::iterator it = m_gstos.find(a_id);
+    if(it!=m_gstos.end()) m_gstos.erase(it);
+  }
+
+  //
+  virtual gsto_mode get_gsto_mode() const {return gsto_memory;}
+  virtual void set_gsto_mode(tools::sg::gsto_mode) {}
+  virtual void available_gsto_modes(std::vector<std::string>& a_v) {a_v.clear();}
+  virtual void available_not_memory_gsto_mode(std::string& a_s) const {a_s.clear();}
+  virtual unsigned int used_texture_memory() const {return 0;}
+  virtual unsigned int gstos_size() const {return 0;}
+public:
+  manager_zb():m_gen_id(0){}
+  virtual ~manager_zb(){}
+public:
+  manager_zb(const manager_zb& a_from)
+  :gl_manager(a_from)
+  ,m_gen_id(0)
+  ,m_gstos(a_from.m_gstos)
+  {}
+  manager_zb& operator=(const manager_zb& a_from){
+    if(&a_from==this) return *this;
+    m_gen_id = 0;
+    m_gstos = a_from.m_gstos;
+    return *this;
+  }
+public:
+  bool find(unsigned int a_id,tools::img_byte& a_img) {
+    gstos_t::iterator it = m_gstos.find(a_id);
+    if(it==m_gstos.end()) return false;
+    a_img = (*it).second;
+    return true;
+  }
+  void cleanup() {}
+protected:
+  unsigned int m_gen_id;
+  typedef std::map<unsigned int,tools::img_byte> gstos_t;
+  gstos_t m_gstos; //only textures for the moment.
+};
+
+}}
+
+#endif

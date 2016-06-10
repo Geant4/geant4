@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SauterGavrilaAngularDistribution.cc 78929 2014-02-04 09:00:46Z gcosmo $
+// $Id: G4SauterGavrilaAngularDistribution.cc 91726 2015-08-03 15:41:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -79,6 +79,7 @@ G4SauterGavrilaAngularDistribution::SampleDirection(
       z = 2*A*(2*q + Ap2*std::sqrt(q))/(Ap2*Ap2 - 4*q); 
       g = (2 - z)*(1.0/(A + z) + B);
 
+      // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
     } while(g < G4UniformRand()*grej);
  
     G4double cost = 1 - z;
@@ -97,5 +98,5 @@ void G4SauterGavrilaAngularDistribution::PrintGeneratorInformation() const
   G4cout << "Non-polarized photoelectric effect angular generator." << G4endl;
   G4cout << "The Sauter-Gavrila distribution for the K-shell is used."<<G4endl;
   G4cout << "Originally developed by M.Maire for Geant3" 
-	 << G4endl;
+         << G4endl;
 } 

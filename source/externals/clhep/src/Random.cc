@@ -18,6 +18,7 @@
 //                  initialisation of static generator: 5th Jan 1999
 // =======================================================================
 
+#include <assert.h>
 #include "CLHEP/Random/JamesRandom.h"
 #include "CLHEP/Random/Random.h"
 #include "CLHEP/Random/StaticRandomStates.h"
@@ -57,8 +58,8 @@ struct defaults {
   ~defaults()
   { }
 
-  shared_ptr<HepRandom      >  theGenerator;
-  shared_ptr<HepRandomEngine>  theEngine;
+  std::shared_ptr<HepRandom      >  theGenerator;
+  std::shared_ptr<HepRandomEngine>  theEngine;
 };  // defaults
 
   defaults &  theDefaults()  {

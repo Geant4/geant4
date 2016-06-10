@@ -59,7 +59,10 @@
 // resolving technical portability issues.
 //
 // 12 June 2012, A. Ribon, CERN, Switzerland
-// Fixing trivial warning errors of shadowed variables. 
+// Fixing trivial warning errors of shadowed variables.
+//
+// 4 August 2015, A. Ribon, CERN, Switzerland
+// Replacing std::pow with the faster G4Pow. 
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ////////////////////////////////////////////////////////////////////////////////
@@ -68,6 +71,7 @@
 #include "G4WilsonRadius.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Pow.hh"
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4NuclearAbrasionGeometry::G4NuclearAbrasionGeometry (G4double AP1,
@@ -131,7 +135,7 @@ G4double G4NuclearAbrasionGeometry::P ()
   else
   {
     if (rP-rT<=r && r<=rP+rT) valueP = 0.125*R*U*S - 0.125*(0.5*std::sqrt(n/m)*U-
-      (std::sqrt(1.0-m*m)/n - 1.0)*std::sqrt((2.0-m)/std::pow(m,5.0)))*T;
+      (std::sqrt(1.0-m*m)/n - 1.0)*std::sqrt((2.0-m)/G4Pow::GetInstance()->powN(m,5)))*T;
     else                      valueP = (std::sqrt(1.0-m*m)/n-1.0)*std::sqrt(1.0-b*b/n/n);
   }
 
@@ -162,8 +166,8 @@ G4double G4NuclearAbrasionGeometry::F ()
   else
   {
     if (rP-rT<=r && r<=rP+rT) valueF = 0.75*R*S - 0.125*(3.0*std::sqrt(n/m)-
-      (1.0-std::pow(1.0-m*m,3.0/2.0))*std::sqrt(1.0-std::pow(1.0-m,2.0))/std::pow(m,3.0))*T;
-    else                      valueF = (1.0-std::pow(1.0-m*m,3.0/2.0))*std::sqrt(1.0-b*b/n/n);
+      (1.0-G4Pow::GetInstance()->powA(1.0-m*m,3.0/2.0))*std::sqrt(1.0-G4Pow::GetInstance()->powN(1.0-m,2))/G4Pow::GetInstance()->powN(m,3))*T;
+    else                      valueF = (1.0-G4Pow::GetInstance()->powA(1.0-m*m,3.0/2.0))*std::sqrt(1.0-b*b/n/n);
   }
 
   if (!(valueF <= 1.0 && valueF>= 0.0))
@@ -182,7 +186,7 @@ G4double G4NuclearAbrasionGeometry::GetExcitationEnergyOfProjectile ()
   G4double Es = 0.0;
 
   Es = 0.95 * MeV * 4.0 * pi * rP*rP/fermi/fermi *
-       (1.0+P1-std::pow(1.0-F1,2.0/3.0));
+       (1.0+P1-G4Pow::GetInstance()->A23(1.0-F1));
 //  if (rT < rP && r < rP-rT)
   if ((r-rP)/rT < rth)
   {
@@ -214,7 +218,7 @@ G4double G4NuclearAbrasionGeometry::GetExcitationEnergyOfTarget ()
   G4double Es = 0.0;
 
   Es = 0.95 * MeV * 4.0 * pi * rT*rT/fermi/fermi *
-       (1.0+P1-std::pow(1.0-F1,2.0/3.0));
+       (1.0+P1-G4Pow::GetInstance()->A23(1.0-F1));
 
 //  if (rP < rT && r < rT-rP)
   if ((r-rT)/rP < rth) {

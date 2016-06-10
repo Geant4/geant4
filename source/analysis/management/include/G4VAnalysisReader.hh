@@ -42,8 +42,7 @@
 #include "globals.hh"
 
 #include <vector>
-#include <fstream>
-
+#include <memory>
 
 class G4HnManager;
 class G4BaseFileManager;
@@ -226,24 +225,18 @@ class G4VAnalysisReader
    
   protected:
     // virtual methods
-    virtual G4int  ReadH1Impl(const G4String& /*h1Name*/, 
-                              const G4String& /*fileName*/,
-                              G4bool /*isUserFileName*/) { return false; }
-    virtual G4int  ReadH2Impl(const G4String& /*h2Name*/, 
-                              const G4String& /*fileName*/,
-                              G4bool /*isUserFileName*/) { return false; }
-    virtual G4int  ReadH3Impl(const G4String& /*h2Name*/, 
-                              const G4String& /*fileName*/,
-                              G4bool /*isUserFileName*/) { return false; }
-    virtual G4int  ReadP1Impl(const G4String& /*h1Name*/, 
-                              const G4String& /*fileName*/,
-                              G4bool /*isUserFileName*/) { return false; }
-    virtual G4int  ReadP2Impl(const G4String& /*h2Name*/, 
-                              const G4String& /*fileName*/,
-                              G4bool /*isUserFileName*/) { return false; }
-    virtual G4int  ReadNtupleImpl(const G4String& /*ntupleName*/, 
-                              const G4String& /*fileName*/,
-                              G4bool /*isUserFileName*/) { return false; }
+    virtual G4int  ReadH1Impl(const G4String& h1Name, const G4String& fileName,
+                              G4bool isUserFileName) = 0;
+    virtual G4int  ReadH2Impl(const G4String& h2Name, const G4String& fileName,
+                              G4bool isUserFileName) = 0;
+    virtual G4int  ReadH3Impl(const G4String& h3Name, const G4String& fileName,
+                              G4bool isUserFileName) = 0;
+    virtual G4int  ReadP1Impl(const G4String& p1Name, const G4String& fileName,
+                              G4bool isUserFileName) = 0;
+    virtual G4int  ReadP2Impl(const G4String& p2Name, const G4String& fileName,
+                              G4bool isUserFileName) = 0;
+    virtual G4int  ReadNtupleImpl(const G4String& ntupleName, const G4String& fileName,
+                              G4bool isUserFileName) = 0;
  
     // methods
     void SetH1Manager(G4VH1Manager* h1Manager);
@@ -259,13 +252,13 @@ class G4VAnalysisReader
 
   private:
     // data members
-    G4VH1Manager*     fVH1Manager;
-    G4VH2Manager*     fVH2Manager;
-    G4VH3Manager*     fVH3Manager;
-    G4VP1Manager*     fVP1Manager;
-    G4VP2Manager*     fVP2Manager;
-    G4VRNtupleManager* fVNtupleManager;
-    G4BaseFileManager* fFileManager;
+    std::unique_ptr<G4VH1Manager>     fVH1Manager;
+    std::unique_ptr<G4VH2Manager>     fVH2Manager;
+    std::unique_ptr<G4VH3Manager>     fVH3Manager;
+    std::unique_ptr<G4VP1Manager>     fVP1Manager;
+    std::unique_ptr<G4VP2Manager>     fVP2Manager;
+    std::unique_ptr<G4VRNtupleManager> fVNtupleManager;
+    std::unique_ptr<G4BaseFileManager> fFileManager;
 };
 
 // inline functions

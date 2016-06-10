@@ -36,6 +36,7 @@
 //
 // Modifications:
 //
+// 16.03.15 V. Grichine safety against H ( A > 1 only ) 
 
 #include "G4DiffElasticRatio.hh"
 #include "G4ParticleDefinition.hh"
@@ -46,6 +47,7 @@ G4DiffElasticRatio::G4DiffElasticRatio(const G4String& nam, G4int verb)
   : G4VCrossSectionRatio( nam, verb) 
 {
   fGGXsc = new G4ComponentGGHadronNucleusXsc();
+  fDDthreshold = 450.*CLHEP::MeV; // ~3 pi masses
 }
 
 G4DiffElasticRatio::~G4DiffElasticRatio()
@@ -58,13 +60,17 @@ G4double G4DiffElasticRatio::ComputeRatio(const G4ParticleDefinition* theParticl
 			G4double kinEnergy, 
 			G4int Z, G4int A)
 {
-  G4double ratio=0.;
-  G4double ggElXsc = fGGXsc->GetElasticElementCrossSection(theParticleDefinition,kinEnergy,
+  G4double ratio = 0.;
+
+  if( A > 1 && kinEnergy > fDDthreshold )
+  {
+    G4double ggElXsc = fGGXsc->GetElasticElementCrossSection(theParticleDefinition,kinEnergy,
                                                        Z,A);
-  G4double ggsdXsc = fGGXsc->GetDiffractionGlauberGribovXsc();
+    G4double ggsdXsc = fGGXsc->GetDiffractionGlauberGribovXsc();
 
-  if( ggElXsc > 0.) ratio = ggsdXsc/ggElXsc;
-  else              ratio = 0;
-
+    if( ggElXsc > 0.) ratio = ggsdXsc/ggElXsc;
+    else              ratio = 0;
+  }
+  // G4cout<<theParticleDefinition->GetParticleName()<<"; "<<kinEnergy/CLHEP::GeV<<" GeV; r = "<<ratio<<G4endl;
   return ratio;
 }

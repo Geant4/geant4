@@ -53,6 +53,7 @@
 //		it in a static function with mutexes.
 // 20130620  M. Kelsey -- Address Coverity #37503, check self in op=()
 // 20140523  M. Kelsey -- Avoid FPE in setExcitationEnergy() for zero Ekin
+// 20150608  M. Kelsey -- Label all while loops as terminating.
 
 #include "G4InuclNuclei.hh"
 #include "G4AutoLock.hh"
@@ -138,6 +139,8 @@ void G4InuclNuclei::copy(G4V3DNucleus* a3DNucleus, Model model) {
   // Convert every hit nucleon into an exciton hole
   if (a3DNucleus->StartLoop()) {
     G4Nucleon* nucl = 0;
+
+    /* Loop checking 08.06.2015 MHK */
     while ((nucl = a3DNucleus->GetNextNucleon())) {
       if (nucl->AreYouHit()) {	// Found previously interacted nucleon
 	if (nucl->GetParticleType() == G4Proton::Definition())

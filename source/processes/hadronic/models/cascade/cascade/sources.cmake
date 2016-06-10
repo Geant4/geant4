@@ -33,6 +33,7 @@
 # 20130621  M. Kelsey -- Add G4VCascadeDeexcitation.cc
 # 20130627  M. Kelsey -- Add G4InuclParticleNames.cc with enum/string fns
 # 20130630  M. Kelsey -- Add G4CascadeDeexciteBase
+# 20150323  M. Kelsey -- Add newly split G4KaonSampler and G4HyperonSampler
 #------------------------------------------------------------------------------
 
 # List external includes needed.
@@ -157,6 +158,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4HadNucl3BodyAngDst.hh
         G4HadNucl3BodyMomDst.hh
         G4HadNucl4BodyMomDst.hh
+        G4HyperonSampler.hh
         G4InteractionCase.hh
         G4IntraNucleiCascader.hh
         G4InuclCollider.hh
@@ -169,6 +171,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4InuclParticleNames.hh
         G4InuclSpecialFunctions.hh
         G4KaonHypSampler.hh
+        G4KaonSampler.hh
         G4LorentzConvertor.hh
         G4MultiBodyMomentumDist.hh
 	G4NP2NPAngDst.hh
@@ -268,6 +271,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4HadNucl3BodyAngDst.cc
         G4HadNucl3BodyMomDst.cc
         G4HadNucl4BodyMomDst.cc
+        G4HyperonSampler.cc
         G4InteractionCase.cc
         G4IntraNucleiCascader.cc
         G4InuclCollider.cc
@@ -279,6 +283,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4InuclParticle.cc
         G4InuclParticleNames.cc
         G4InuclSpecialFunctions.cc
+        G4KaonSampler.cc
         G4KaonHypSampler.cc
         G4LorentzConvertor.cc
         G4MultiBodyMomentumDist.cc

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.hh 85582 2014-10-31 09:07:30Z gcosmo $
+// $Id: G4VisCommandsSceneAdd.hh 93069 2015-10-02 09:54:27Z gcosmo $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -325,7 +325,7 @@ public:
 private:
   G4VisCommandSceneAddMagneticField (const G4VisCommandSceneAddMagneticField&);
   G4VisCommandSceneAddMagneticField& operator = (const G4VisCommandSceneAddMagneticField&);
-  G4UIcmdWithAnInteger* fpCommand;
+  G4UIcommand* fpCommand;
 };
 
 class G4VisCommandSceneAddPSHits: public G4VVisCommandScene {

@@ -1,0 +1,36 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_sf_vec3f
+#define tools_sg_sf_vec3f
+
+#include "sf_vec"
+
+#include "../lina/vec3f"
+#include "../HEADER"
+namespace tools {
+namespace sg {
+
+class sf_vec3f : public sf_vec<vec3f,float> {
+  typedef sf_vec<vec3f,float> _parent;
+  TOOLS_HEADER(sf_vec3f,tools::sg::sf_vec3f,_parent)
+public:
+  sf_vec3f():parent(){}
+  sf_vec3f(const vec3f& a_v):parent(a_v){}
+  virtual ~sf_vec3f(){}
+public:
+  sf_vec3f(const sf_vec3f& a_from):parent(a_from){}
+  sf_vec3f& operator=(const sf_vec3f& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+public:
+  void set_value(float a_0,float a_1,float a_2) {value(vec3f(a_0,a_1,a_2));}
+public: //for iv2sg
+  void setValue(const vec3f& a_v) {value(a_v);}
+  void setValue(float a_0,float a_1,float a_2) {value(vec3f(a_0,a_1,a_2));}
+};
+
+}}
+
+#endif

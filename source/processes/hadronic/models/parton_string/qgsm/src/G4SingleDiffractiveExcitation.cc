@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SingleDiffractiveExcitation.cc 69570 2013-05-08 13:23:39Z gcosmo $
+// $Id: G4SingleDiffractiveExcitation.cc 93563 2015-10-26 14:46:09Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -45,6 +45,9 @@
 #include "G4ParticleDefinition.hh"
 #include "G4VSplitableHadron.hh"
 #include "G4ExcitedString.hh"
+
+#include "G4Log.hh"
+
 
 G4SingleDiffractiveExcitation::G4SingleDiffractiveExcitation(G4double sigmaPt, G4double minextraMass,G4double x0mass)
 :
@@ -158,7 +161,7 @@ ExciteParticipants(G4VSplitableHadron *projectile, G4VSplitableHadron *target) c
 		//	 G4cout << " Masses (P/T) : " << (Pprojectile+Qmomentum).mag() <<
 		//			   " / " << (Ptarget-Qmomentum).mag() << G4endl;
 
-	} while (  (Ptarget-Qmomentum).mag2() <= Mtarget2
+	} while (  (Ptarget-Qmomentum).mag2() <= Mtarget2  /* Loop checking, 26.10.2015, A.Ribon */
 			|| (Pprojectile+Qmomentum).mag2() <= Mprojectile2
 			|| (Ptarget-Qmomentum).e() < 0.
 			|| (Pprojectile+Qmomentum).e() < 0. );
@@ -218,7 +221,7 @@ G4double G4SingleDiffractiveExcitation::ChooseX(G4double Xmin, G4double Xmax) co
 	G4double x;
 	do {
 		x=Xmin + G4UniformRand() * range;
-	}  while ( Xmin/x < G4UniformRand() );
+	} while ( Xmin/x < G4UniformRand() );  /* Loop checking, 26.10.2015, A.Ribon */
 
 	//	cout << "DiffractiveX "<<x<<G4endl;
 	return x;
@@ -229,9 +232,12 @@ G4ThreeVector G4SingleDiffractiveExcitation::GaussianPt(G4double widthSquare, G4
 
 	G4double pt2;
 
+        const G4int maxNumberOfLoops = 1000;
+        G4int loopCounter = -1;
 	do {
-		pt2=widthSquare * std::log( G4UniformRand() );
-	} while ( pt2 > maxPtSquare);
+		pt2=widthSquare * G4Log( G4UniformRand() );
+	} while ( ( pt2 > maxPtSquare) && ++loopCounter < maxNumberOfLoops );  /* Loop checking, 26.10.2015, A.Ribon */
+        if ( loopCounter >= maxNumberOfLoops ) pt2 = 0.0;
 
 	pt2=std::sqrt(pt2);
 

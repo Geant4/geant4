@@ -27,7 +27,7 @@
 /// \brief Definition of the F02EventAction class
 //
 //
-// $Id: F02EventAction.hh 76247 2013-11-08 11:18:52Z gcosmo $
+// $Id: F02EventAction.hh 92497 2015-09-02 07:23:12Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,7 +40,6 @@
 #include "G4UserEventAction.hh"
 
 class F02RunAction;
-class F02EventActionMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,17 +53,8 @@ class F02EventAction : public G4UserEventAction
     virtual void BeginOfEventAction(const G4Event*);
     virtual void EndOfEventAction(const G4Event*);
 
-    void SetEventVerbose(G4int level) {fVerboseLevel = level;}
-    void SetPrintModulo(G4int val)    {fPrintModulo = val;}
-
   private:
-    G4int    fCalorimeterCollID;
-
-    F02EventActionMessenger*  fEventMessenger;
     F02RunAction* fRunAction;
-
-    G4int fVerboseLevel;
-    G4int fPrintModulo;
 };
 
 #endif

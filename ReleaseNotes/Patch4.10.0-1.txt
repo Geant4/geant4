@@ -215,7 +215,7 @@ List of fixes included in this public patch since the public release 10.0:
 
   o Interfaces:
     ----------
-    + Explicitly set the LC_NUMBERIC locale to "C" in G4UIQt.
+    + Explicitly set the LC_NUMERIC locale to "C" in G4Qt.
       Addressing problem report #1487.
       Fixed problem with resizing the QGLwidget when scene is opened from UI.
 

@@ -14,6 +14,35 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12 November 2015 V. Ivantchenko  (hadr-stopping-V10-01-05)
+--------------------------------------------------------------------
+- G4HadronStoppingProcess - removed call to DeRegistration to avoid
+    a problem reported by Valgrind
+
+09 September 2015 A. Ribon     (hadr-stopping-V10-01-04)
+--------------------------------------------------------------------
+- G4AntiNeutronAnnihilationAtRest: migration to G4Exp, G4Log and G4Pow.
+
+06 August 2015 V. Ivantchenko  (hadr-stopping-V10-01-03)
+--------------------------------------------------------------------
+- Added checks on while/do loops
+
+26 February 2015 V. Ivantchenko  (hadr-stopping-V10-01-02)
+--------------------------------------------------------------------
+- G4MuonMinusBoundDecay - use G4Log
+
+26 January 2015 V. Ivantchenko  (hadr-stopping-V10-01-01)
+--------------------------------------------------------------------
+- G4HadronStoppingProcess, G4MuMinusCapturePrecompound,  
+  G4MuonMinusBoundDecay - cleanup comments
+
+08 December 2014 V. Ivantchenko  (hadr-stopping-V10-01-00)
+--------------------------------------------------------------------
+- G4HadronStoppingProcess, G4MuonMinusBoundDecay: fixed time of muon 
+    nuclear capture secondaries (fix #1695); define index in the model 
+    cathalog inside PreparePhysicsTable() to avoid bad interference 
+    with EM physics
+
 30 August 2014 V. Ivantchenko  (hadr-stopping-V10-00-08)
 --------------------------------------------------------------------
 - removed obsolete G4MuonMinusCaptureAtRest, G4StopElementSelector,

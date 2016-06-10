@@ -359,33 +359,29 @@ void IORTMatrix::StoreDoseFluenceAscii(G4String file)
 }
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef G4ANALYSIS_USE_ROOT
 void IORTMatrix::StoreDoseFluenceRoot()
 {
     IORTAnalysisManager* analysis = IORTAnalysisManager::GetInstance();
-    if (analysis -> IsTheTFile())
-    {
-	for(G4int i = 0; i < numberOfVoxelAlongX; i++) 
-	    for(G4int j = 0; j < numberOfVoxelAlongY; j++) 
-		for(G4int k = 0; k < numberOfVoxelAlongZ; k++) 
-		{
-		    G4int n = Index(i, j, k);
-		    for (size_t l=0; l < ionStore.size(); l++)
-
-		    {
-			// Do the same work for .root file: fill dose/fluence ntuple  
-			analysis -> FillVoxelFragmentTuple( i, j, k, 
-				ionStore[l].A, 
-				ionStore[l].Z, 
-				ionStore[l].dose[n]/massOfVoxel/doseUnit, 
-				ionStore[l].fluence[n] );
-
-
-		    }
-		}
-    }
+    for(G4int i = 0; i < numberOfVoxelAlongX; i++) 
+      for(G4int j = 0; j < numberOfVoxelAlongY; j++) 
+	for(G4int k = 0; k < numberOfVoxelAlongZ; k++) 
+	  {
+	    G4int n = Index(i, j, k);
+	    for (size_t l=0; l < ionStore.size(); l++)
+	      
+	      {
+		// Do the same work for .root file: fill dose/fluence ntuple  
+		analysis -> FillVoxelFragmentTuple( i, j, k, 
+						    ionStore[l].A, 
+						    ionStore[l].Z, 
+						    ionStore[l].dose[n]/massOfVoxel/doseUnit, 
+						    ionStore[l].fluence[n] );
+		
+		
+	      }
+	    
+	  }
 }
-#endif
 
 void IORTMatrix::Fill(G4int i, G4int j, G4int k, 
 			       G4double energyDeposit)
@@ -400,69 +396,6 @@ void IORTMatrix::TotalEnergyDeposit()
 {
     // Store the information of the matrix in a ntuple and in 
     // a 1D Histogram
-
-/*
-/////////////////////////////////// imported from eliot_geant4.9.3p01_version /////////////////////////////
-  G4int k;
-  G4int j;
-  G4int i;
-  
-  if (matrix)
-    {  		//  AGGIUNTO
-      std::ofstream ofs;    	//  AGGIUNTO
-     
-ofs.open("PDD9.9Mev_coll60_0gradi_s500_Sp1_6gradi_step0.01_setcuts0.01.out");  //  AGGIUNTO  
-          
-      for(G4int l = 0; l < numberOfVoxelAlongZ; l++) //  was "numberVoxelZ" and so in the other directions
-	{
-	  k = l;
-	  
-	  for(G4int m = 0; m < numberOfVoxelAlongY; m++) 
-	    { 
-	      j = m * numberOfVoxelAlongZ + k; 
-		
-		for(G4int n = 0; n <  numberOfVoxelAlongX; n++)
-		  {
-		    i =  n* numberOfVoxelAlongZ * numberOfVoxelAlongY + j;
-		    if(matrix[i] != 0)
-		      {	
-			ofs<< n <<'\t'<< m <<'\t'<< // AGGIUNTO
-			  k<<'\t'<<matrix[i]<<G4endl; // AGGIUNTO
-
-
-                       }
-		  }       
-	      }
-	  }
-          ofs.close();  	//  AGGIUNTO
-    }
-/////////////////////////////////// imported from eliot_geant4.9.3p01_version /////////////////////////////
-*/
-
-    // Convert energy deposited to dose.
-    // Store the information of the matrix in a ntuple and in 
-    // a 1D Histogram
-/*
-    IORTAnalysisManager* analysis = IORTAnalysisManager::GetInstance();
-    if (matrix)
-    {  
-	for(G4int i = 0; i < numberOfVoxelAlongX; i++) 
-	    for(G4int j = 0; j < numberOfVoxelAlongY; j++) 
-		for(G4int k = 0; k < numberOfVoxelAlongZ; k++)
-		{
-		    G4int n = Index(i,j,k);
-
-#ifdef G4ANALYSIS_USE_ROOT
-		    if (analysis -> IsTheTFile() )
-		    {
-			analysis -> FillEnergyDeposit(i, j, k, matrix[n]/massOfVoxel/doseUnit);
-			analysis -> BraggPeak(i, matrix[n]/massOfVoxel/doseUnit);
-		    }
-#endif
-
-		}
-    }
-*/
 }
 
 

@@ -44,9 +44,10 @@
 
 #include "globals.hh"
 #include "G4ParticleHPThermalScatteringNames.hh"
-#include "G4ParticleHPThermalScatteringData.hh"
-#include "G4ParticleHPElastic.hh"
 #include "G4HadronicInteraction.hh"
+
+class G4ParticleHPThermalScatteringData;
+class G4ParticleHPElastic;
 
 struct E_isoAng 
 {
@@ -89,24 +90,30 @@ class G4ParticleHPThermalScattering : public G4HadronicInteraction
                               //Name of G4Element , Name of NDL file
       void AddUserThermalScatteringFile( G4String , G4String );
 
+      void BuildPhysicsTable(const G4ParticleDefinition&);
+
+      virtual void ModelDescription(std::ostream& outFile) const;
+
    private:
+
+      void clearCurrentFSData();
 
       G4ParticleHPThermalScatteringNames names;
 
       // Coherent Elastic 
-      //         ElementID             temp                                BraggE    cumulativeP
-      std::map < G4int , std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >* > coherentFSs;
+      //         ElementID             temp                             BraggE     cumulativeP
+      std::map < G4int , std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >* >* coherentFSs;
       std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >* readACoherentFSDATA( G4String );
 
       // Incoherent Elastic 
-      //         ElementID          temp        aFS for this temp (and this element)
-      std::map < G4int , std::map < G4double , std::vector < E_isoAng* >* >* > incoherentFSs;
+      //         ElementID          temp       aFS for this temp (and this element)
+      std::map < G4int , std::map < G4double , std::vector < E_isoAng* >* >* >* incoherentFSs;
       std::map < G4double , std::vector < E_isoAng* >* >* readAnIncoherentFSDATA( G4String );
       E_isoAng* readAnE_isoAng ( std::istream* );
 
       // Inelastic 
-      //         ElementID          temp         aFS for this temp (and this element) 
-      std::map < G4int ,  std::map < G4double , std::vector < E_P_E_isoAng* >* >* > inelasticFSs;
+      //         ElementID          temp        aFS for this temp (and this element) 
+      std::map < G4int ,  std::map < G4double , std::vector < E_P_E_isoAng* >* >* >* inelasticFSs;
       std::map < G4double , std::vector < E_P_E_isoAng* >* >* readAnInelasticFSDATA( G4String );
       E_P_E_isoAng* readAnE_P_E_isoAng ( std::istream* );
   
@@ -129,7 +136,13 @@ class G4ParticleHPThermalScattering : public G4HadronicInteraction
       void buildPhysicsTable();
       G4int getTS_ID( const G4Material* , const G4Element* );
 
-      size_t sizeOfMaterialTable;
+      //size_t sizeOfMaterialTable;
+
+      G4bool check_E_isoAng( E_isoAng* );
+
+      //In order to judge whether the rebuilding of physics table is a necessity or not
+      size_t nMaterial;
+      size_t nElement;
 
 };
 

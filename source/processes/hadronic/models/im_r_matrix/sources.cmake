@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
+# $Id: sources.cmake 90242 2015-05-21 09:11:25Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -68,7 +68,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_im_r_matrix
         G4VCollision.hh
         G4BaryonWidth.hh
         G4VScatterer.hh
-        G4Clebsch.hh
         G4VXResonance.hh
         G4CollisionComposite.hh
         G4VXResonanceTable.hh
@@ -170,7 +169,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_im_r_matrix
         G4VCollision.cc
         G4BaryonWidth.cc
         G4VXResonance.cc
-        G4Clebsch.cc
         G4XAqmElastic.cc
         G4CollisionComposite.cc
         G4XDeltaDeltaTable.cc

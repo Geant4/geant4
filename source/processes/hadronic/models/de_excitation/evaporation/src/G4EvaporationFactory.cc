@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationFactory.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4EvaporationFactory.cc 92431 2015-09-01 09:11:46Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -43,11 +43,6 @@
 #include "G4AlphaEvaporationChannel.hh"
 
 #include "G4CompetitiveFission.hh"
-#include "G4PhotonEvaporation.hh"
-
-G4EvaporationFactory::G4EvaporationFactory()
-  : G4VEvaporationFactory(new G4PhotonEvaporation())
-{}
 
 G4EvaporationFactory::G4EvaporationFactory(G4VEvaporationChannel* ptr)
   : G4VEvaporationFactory(ptr)
@@ -72,6 +67,10 @@ std::vector<G4VEvaporationChannel*>* G4EvaporationFactory::GetChannel()
   theChannel->push_back( new G4He3EvaporationChannel() );      // He3
   theChannel->push_back( new G4AlphaEvaporationChannel() );    // Alpha
 
+  size_t nn = theChannel->size();
+  for(size_t i=2; i<nn; ++i) { 
+    (*theChannel)[i]->SetPhotonEvaporation(thePhotonEvaporation);
+  }
 
   return theChannel;
 

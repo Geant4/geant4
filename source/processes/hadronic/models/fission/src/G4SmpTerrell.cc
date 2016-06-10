@@ -57,6 +57,8 @@
 //
 
 #include <cmath>
+#include "G4Exp.hh"
+#include "G4Log.hh"
 #include "G4fissionEvent.hh"
 
 #define TWOPI 6.283185307
@@ -96,14 +98,22 @@ G4double G4fissionEvent::G4SmpTerrell(G4double nubar) {
   temp1 = nubar + 0.5;
   temp2 = temp1/width;
   temp2 *= temp2;
-  expo = std::exp(-temp2);
+  expo = G4Exp(-temp2);
   cshift = temp1 + BSHIFT * WIDTH * expo/(1. - expo);
 
+  G4int icounter = 0;
+  G4int icounter_max = 1024;
   do {
-    rw = std::sqrt(-std::log(fisslibrng()));
+    rw = std::sqrt(-G4Log(fisslibrng()));
     theta = TWOPI * fisslibrng();
     sampleg = width * rw * std::cos(theta) + cshift;
+    icounter++;
+    if ( icounter > icounter_max ) { 
+      G4cout << "Loop-counter exceeded the threshold value at " << __LINE__ << "th line of " << __FILE__ << "." << G4endl;
+      break;
+    }
   } while (sampleg < 0.0);
+  // Loop checking, 11.03.2015, T. Koi
 
   return std::floor(sampleg);
 }

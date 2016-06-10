@@ -1,14 +1,14 @@
 #
 # (can be run in batch, without graphic)
 #
-#/run/numberOfThreads 8
+/run/numberOfThreads 10
 /run/initialize
-/process/verbose  0
+#/process/verbose  0
 /tracking/verbose 0
 /run/verbose      2
 /event/verbose    0
 # the default are 20 GeV e-
 # /gun/particle e-
 # /gun/energy 20 GeV
-/run/beamOn 20
+/run/beamOn 18
 

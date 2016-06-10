@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc 86366 2014-11-10 08:46:07Z gcosmo $
+// $Id: G4Evaporation.cc 94459 2015-11-18 14:39:46Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -57,7 +57,8 @@
 #include "G4NistManager.hh"
 #include "G4FermiFragmentsPool.hh"
 #include "G4PhotonEvaporation.hh"
-
+#include "G4PhotonEvaporationOLD.hh"
+#include "G4VEvaporationChannel.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 
@@ -65,7 +66,13 @@ G4Evaporation::G4Evaporation()
   : nChannels(0)
 {
   thePool = G4FermiFragmentsPool::Instance();
-  SetPhotonEvaporation(new G4PhotonEvaporation());
+
+  G4VEvaporationChannel* gammaEvap = 0;
+  char* env = getenv("G4UsePhotonEvaporationOLD"); 
+  if(env)  { gammaEvap = new G4PhotonEvaporationOLD(); } 
+  else     { gammaEvap = new G4PhotonEvaporation(); }
+  SetPhotonEvaporation(gammaEvap);
+
   theChannelFactory = new G4EvaporationDefaultGEMFactory(thePhotonEvaporation);
   SetParameters();
   InitialiseEvaporation();
@@ -86,22 +93,12 @@ G4Evaporation::G4Evaporation(G4VEvaporationChannel* photoEvaporation)
 }
 
 G4Evaporation::~G4Evaporation()
-{
-  CleanChannels();
-  delete thePhotonEvaporation;
-  delete theChannelFactory; 
-}
-
-void G4Evaporation::CleanChannels()
-{
-  for (size_t i=1; i<nChannels; ++i) { delete (*theChannels)[i]; }
-  delete theChannels;
-}
+{}
 
 void G4Evaporation::SetParameters()
 {
   nist = G4NistManager::Instance();
-  minExcitation = CLHEP::keV;
+  minExcitation = 0.1*CLHEP::keV;
   maxZforFBU = thePool->GetMaxZ();
   maxAforFBU = thePool->GetMaxA();
   probabilities.reserve(68);
@@ -113,10 +110,10 @@ void G4Evaporation::InitialiseEvaporation()
   theChannels = theChannelFactory->GetChannel(); 
   nChannels = theChannels->size();   
   probabilities.resize(nChannels, 0.0);
-  Initialise();
+  InitialiseChannels();
 }
 
-void G4Evaporation::Initialise()
+void G4Evaporation::InitialiseChannels()
 {
   for(size_t i=0; i<nChannels; ++i) {
     (*theChannels)[i]->SetOPTxs(OPTxs);
@@ -144,12 +141,6 @@ void G4Evaporation::SetCombinedChannel()
   delete theChannelFactory;
   theChannelFactory = new G4EvaporationDefaultGEMFactory(thePhotonEvaporation);
   InitialiseEvaporation();
-}
-
-void G4Evaporation::SetPhotonEvaporation(G4VEvaporationChannel* ptr)
-{
-  if(ptr) { G4VEvaporation::SetPhotonEvaporation(ptr); }
-  if(0 < nChannels) { (*theChannels)[0] = ptr; }
 }
 
 G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
@@ -187,7 +178,7 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
     }
     // check if it is stable, then finish evaporation
     G4double abun = nist->GetIsotopeAbundance(Z, A); 
-    /*        
+    /*
     G4cout << "### G4Evaporation::BreakItUp step " << ia << " Z= " << Z
     	   << " A= " << A << " Eex(MeV)= " 
     	   << theResidualNucleus->GetExcitationEnergy()
@@ -208,7 +199,7 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
     // loop over evaporation channels
     for(i=0; i<nChannels; ++i) {
       prob = (*theChannels)[i]->GetEmissionProbability(theResidualNucleus);
-      //G4cout << "  Channel# " << i << "  prob= " << prob << G4endl; 
+      // G4cout << "  Channel# " << i << "  prob= " << prob << G4endl; 
 
       totprob += prob;
       probabilities[i] = totprob;
@@ -226,7 +217,7 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
     // photon evaporation in the case of no other channels available
     // do evaporation chain and reset total probability
     if(0.0 < totprob && probabilities[0] == totprob) {
-      //G4cout << "Start chain of gamma evaporation" << G4endl;
+      // G4cout << "Start chain of gamma evaporation" << G4endl;
       (*theChannels)[0]->BreakUpChain(theResult, theResidualNucleus);
       totprob = 0.0;
     }
@@ -251,6 +242,7 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
 
     //G4cout << "Channel # " << i << G4endl;
     G4Fragment* frag = (*theChannels)[i]->EmittedFragment(theResidualNucleus);
+    //if(frag) G4cout << "   " << *frag << G4endl;
     if(frag) { theResult->push_back(frag); }
     // selected channel cannot sample secondary
     else { 

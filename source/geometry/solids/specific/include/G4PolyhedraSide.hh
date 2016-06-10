@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyhedraSide.hh 67973 2013-03-13 10:16:25Z gcosmo $
+// $Id: G4PolyhedraSide.hh 93505 2015-10-23 12:30:04Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -164,8 +164,6 @@ class G4PolyhedraSide : public G4VCSGface
     static const G4PhSideManager& GetSubInstanceManager();
       // Returns the private data instance manager.
 
-  protected:
-
     //
     // A couple internal data structures
     //
@@ -189,6 +187,8 @@ class G4PolyhedraSide : public G4VCSGface
                                       //     [0]=low phi [1]=high phi
       G4ThreeVector  edgeNorm[2];     // RZ edge normals [i] at {r[i],z[i]}
     } G4PolyhedraSideVec;
+
+  protected:
 
     G4bool IntersectSidePlane( const G4ThreeVector &p, const G4ThreeVector &v,
                                const G4PolyhedraSideVec& vec,

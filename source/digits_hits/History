@@ -1,4 +1,4 @@
-$Id: History 83518 2014-08-27 12:57:10Z gcosmo $
+$Id: History 92598 2015-09-07 07:11:03Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Sept 4, 2015, A.Dotti (digits_hits-V10-01-01)
+- Removing sporious cout
+ 
+Aug 14, 2015, A.Dotti (digits_hits-V10-01-00)
+- Adding new G4MultiSensitiveDetector functionality
 
 Aug 25, 2014, M.Asai (digits_hits-V10-00-08)
 - G4VScoringMesh, G4ScoringBox, G4ScoringCylinder : fix Construct()

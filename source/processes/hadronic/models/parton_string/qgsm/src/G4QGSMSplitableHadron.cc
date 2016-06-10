@@ -34,6 +34,10 @@
 #include "G4KaonPlus.hh"
 #include "G4KaonMinus.hh"
 
+#include "G4Log.hh"
+#include "G4Pow.hh"
+
+
 // based on prototype by Maxim Komogorov
 // Splitting into methods, and centralizing of model parameters HPW Feb 1999
 // restructuring HPW Feb 1999
@@ -185,7 +189,7 @@ void G4QGSMSplitableHadron::SoftSplitUp()
 	//   G4double LightConeMomentum = (Direction)? Get4Momentum().plus() : Get4Momentum().minus();
 	//   G4double Xmin = theMinPz/LightConeMomentum;
 	G4double Xmin = theMinPz/( Get4Momentum().e() - GetDefinition()->GetPDGMass() );
-	while(Xmin>=1-(2*nSeaPair+1)*Xmin) Xmin*=0.95;
+	while(Xmin>=1-(2*nSeaPair+1)*Xmin) Xmin*=0.95;  /* Loop checking, 26.10.2015, A.Ribon */
 
 	G4int aSeaPair;
 	for (aSeaPair = 0; aSeaPair < nSeaPair; aSeaPair++)
@@ -241,7 +245,7 @@ void G4QGSMSplitableHadron::SoftSplitUp()
 	GetValenceQuarkFlavors(GetDefinition(), pColorParton, pAntiColorParton);
 	G4int ColorEncoding = pColorParton->GetPDGcode();
 
-	pts   =  sigmaPt*std::sqrt(-std::log(G4UniformRand()));
+	pts   =  sigmaPt*std::sqrt(-G4Log(G4UniformRand()));
 	phi   = 2.*pi*G4UniformRand();
 	G4double Px = pts*std::cos(phi);
 	G4double Py = pts*std::sin(phi);
@@ -276,6 +280,7 @@ void G4QGSMSplitableHadron::SoftSplitUp()
 	if (GetDefinition() == G4PionZero::PionZeroDefinition()) aBeta = 1.;
 	if (GetDefinition() == G4KaonPlus::KaonPlusDefinition()) aBeta = 0.;
 	if (GetDefinition() == G4KaonMinus::KaonMinusDefinition()) aBeta = 0.;
+        const G4int maxNumberOfAttempts = 1000;
 	do
 	{
 		SumX = 0;
@@ -296,7 +301,8 @@ void G4QGSMSplitableHadron::SoftSplitUp()
 			if (1. - SumX <= Xmin)  break;
 		}
 	}
-	while (1. - SumX <= Xmin);
+	while ( (1. - SumX <= Xmin) && nAttempt < maxNumberOfAttempts );  /* Loop checking, 26.10.2015, A.Ribon */   
+        if ( nAttempt >= maxNumberOfAttempts ) return;
 
 	(*(AntiColor.end()-1))->SetX(1. - SumX); // the di-quark takes the rest, then go to momentum
 	G4double lightCone  = ((!Direction) ? Get4Momentum().minus() : Get4Momentum().plus());
@@ -378,7 +384,11 @@ void G4QGSMSplitableHadron::GetValenceQuarkFlavors(const G4ParticleDefinition * 
 G4ThreeVector G4QGSMSplitableHadron::GaussianPt(G4double widthSquare, G4double maxPtSquare)
 {
 	G4double R;
-	while((R = -widthSquare*std::log(G4UniformRand())) > maxPtSquare) {;}
+        const G4int maxNumberOfLoops = 1000;
+        G4int loopCounter = -1;
+	while ( ((R = -widthSquare*G4Log(G4UniformRand())) > maxPtSquare) &&  /* Loop checking, 26.10.2015, A.Ribon */
+                ++loopCounter < maxNumberOfLoops ) {;}
+        if ( loopCounter >= maxNumberOfLoops ) R = 0.0;
 	R = std::sqrt(R);
 	G4double phi = twopi*G4UniformRand();
 	return G4ThreeVector (R*std::cos(phi), R*std::sin(phi), 0.);
@@ -404,9 +414,9 @@ SampleX(G4double anXmin, G4int nSea, G4int totalSea, G4double aBeta)
 	G4double ymax = 0;
 	for(G4int ii=1; ii<100; ii++)
 	{
-		G4double y = std::pow(1./G4double(ii), alpha);
-		y *= std::pow( std::pow(1-anXmin-totalSea*anXmin, alpha+1) - std::pow(anXmin, alpha+1), nSea);
-		y *= std::pow(1-anXmin-totalSea*anXmin, aBeta+1) - std::pow(anXmin, aBeta+1);
+		G4double y = G4Pow::GetInstance()->powA(1./G4double(ii), alpha);
+		y *= G4Pow::GetInstance()->powN( G4Pow::GetInstance()->powA(1-anXmin-totalSea*anXmin, alpha+1) - G4Pow::GetInstance()->powA(anXmin, alpha+1), nSea);
+		y *= G4Pow::GetInstance()->powA(1-anXmin-totalSea*anXmin, aBeta+1) - G4Pow::GetInstance()->powA(anXmin, aBeta+1);
 		if(y>ymax) ymax = y;
 	}
 	G4double y;
@@ -416,15 +426,22 @@ SampleX(G4double anXmin, G4int nSea, G4int totalSea, G4double aBeta)
 		G4cout << "anXmin = "<<anXmin<<" nSea = "<<nSea<<" totalSea = "<< totalSea<<G4endl;
 		throw G4HadronicException(__FILE__, __LINE__, "G4QGSMSplitableHadron - Fatal: Cannot sample parton densities under these constraints.");
 	}
+        const G4int maxNumberOfLoops = 10000;
+        G4int loopCounter = -1;
 	do
 	{
 		x1 = G4RandFlat::shoot(anXmin, xMax);
-		y = std::pow(x1, alpha);
-		y *= std::pow( std::pow(1-x1-totalSea*anXmin, alpha+1) - std::pow(anXmin, alpha+1), nSea);
-		y *= std::pow(1-x1-totalSea*anXmin, aBeta+1) - std::pow(anXmin, aBeta+1);
+		y = G4Pow::GetInstance()->powA(x1, alpha);
+		y *= G4Pow::GetInstance()->powN( G4Pow::GetInstance()->powA(1-x1-totalSea*anXmin, alpha+1) - G4Pow::GetInstance()->powA(anXmin, alpha+1), nSea);
+		y *= G4Pow::GetInstance()->powA(1-x1-totalSea*anXmin, aBeta+1) - G4Pow::GetInstance()->powA(anXmin, aBeta+1);
 		x2 = ymax*G4UniformRand();
 	}
-	while(x2>y);
+	while ( (x2>y) && ++loopCounter < maxNumberOfLoops );  /* Loop checking, 26.10.2015, A.Ribon */
+        if ( loopCounter >= maxNumberOfLoops ) {
+          G4ExceptionDescription ed;
+          ed << " Failed sampling after maxNumberOfLoops attempts : forced exit! " << G4endl;
+          G4Exception( "G4QGSMSplitableHadron::SampleX ", "HAD_QGS_002", JustWarning, ed );
+        }
 	result = x1;
 	return result;
 }

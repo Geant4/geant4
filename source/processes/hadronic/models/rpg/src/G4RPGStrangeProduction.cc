@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGStrangeProduction.cc 79697 2014-03-12 13:10:09Z gcosmo $
+// $Id: G4RPGStrangeProduction.cc 94214 2015-11-09 08:18:05Z gcosmo $
 //
  
 #include <iostream>
 #include <signal.h>
 
 #include "G4RPGStrangeProduction.hh"
+#include "G4Log.hh"
 #include "Randomize.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4HadReentrentException.hh"
@@ -105,7 +106,20 @@ ReactionStage(const G4HadProjectile* /*originalIncident*/,
   G4int ibin, i3, i4;
   G4double avk, avy, avn, ran;
   G4int i = 1;
-  while( (i<12) && (centerofmassEnergy>avrs[i]) )++i;
+
+  G4int loop = 0;
+  G4ExceptionDescription ed;
+  ed << " While count exceeded " << G4endl;
+  while ((i<12) && (centerofmassEnergy>avrs[i]) ) {   /* Loop checking, 01.09.2015, D.Wright */
+    i++;
+    loop++;
+    if (loop > 1000) {
+      G4Exception("G4RPGStrangeProduction::ReactionStage()", "HAD_RPG_100", JustWarning, ed);
+      break;
+    }
+  }
+
+
   if( i == 12 )
     ibin = 11;
   else
@@ -119,11 +133,12 @@ ReactionStage(const G4HadProjectile* /*originalIncident*/,
     i4 = 1;   // note that we will be adding a new secondary particle in this case only
   } else {    // otherwise  0 <= i3,i4 < vecLen
     G4double rnd = G4UniformRand();
-    while (rnd == 1.0) rnd = G4UniformRand();
+    while (rnd == 1.0) rnd = G4UniformRand();  /* Loop checking, 01.09.2015, D.Wright */
     i4 = i3 = G4int(vecLen*rnd);
-    while(i3 == i4) {
+
+    while(i3 == i4) {  /* Loop checking, 01.09.2015, D.Wright */
       rnd = G4UniformRand();
-      while( rnd == 1.0 ) rnd = G4UniformRand();
+      while( rnd == 1.0 ) rnd = G4UniformRand();  /* Loop checking, 01.09.2015, D.Wright */
       i4 = G4int(vecLen*rnd);
     }
   }
@@ -137,17 +152,17 @@ ReactionStage(const G4HadProjectile* /*originalIncident*/,
   const G4double avnnb[] = { 0.00001, 0.0001, 0.0006, 0.0025, 0.01, 0.02,
                              0.04,    0.05,   0.12,   0.15,   0.18, 0.20 };
     
-  avk = (std::log(avkkb[ibin])-std::log(avkkb[ibin-1]))*(centerofmassEnergy-avrs[ibin-1])
-    /(avrs[ibin]-avrs[ibin-1]) + std::log(avkkb[ibin-1]);
-  avk = std::exp(avk);
+  avk = (G4Log(avkkb[ibin])-G4Log(avkkb[ibin-1]))*(centerofmassEnergy-avrs[ibin-1])
+    /(avrs[ibin]-avrs[ibin-1]) + G4Log(avkkb[ibin-1]);
+  avk = G4Exp(avk);
     
-  avy = (std::log(avky[ibin])-std::log(avky[ibin-1]))*(centerofmassEnergy-avrs[ibin-1])
-    /(avrs[ibin]-avrs[ibin-1]) + std::log(avky[ibin-1]);
-  avy = std::exp(avy);
+  avy = (G4Log(avky[ibin])-G4Log(avky[ibin-1]))*(centerofmassEnergy-avrs[ibin-1])
+    /(avrs[ibin]-avrs[ibin-1]) + G4Log(avky[ibin-1]);
+  avy = G4Exp(avy);
     
-  avn = (std::log(avnnb[ibin])-std::log(avnnb[ibin-1]))*(centerofmassEnergy-avrs[ibin-1])
-    /(avrs[ibin]-avrs[ibin-1]) + std::log(avnnb[ibin-1]);
-  avn = std::exp(avn);
+  avn = (G4Log(avnnb[ibin])-G4Log(avnnb[ibin-1]))*(centerofmassEnergy-avrs[ibin-1])
+    /(avrs[ibin]-avrs[ibin-1]) + G4Log(avnnb[ibin-1]);
+  avn = G4Exp(avn);
     
   if( avk+avy+avn <= 0.0 )return true;
     
@@ -209,7 +224,19 @@ ReactionStage(const G4HadProjectile* /*originalIncident*/,
     const G4int ipakkb2[] = { 13, 11, 12, 11, 12, 11, 12, 13, 13 };
     ran = G4UniformRand();
     i = 0;
-    while( (i<9) && (ran>=kkb[i]) )++i;
+
+    loop = 0;
+    G4ExceptionDescription eda;
+    eda << " While count exceeded " << G4endl;
+    while( (i<9) && (ran>=kkb[i]) ) {  /* Loop checking, 01.09.2015, D.Wright */
+      ++i;
+      loop++;
+      if (loop > 1000) {
+        G4Exception("G4RPGStrangeProduction::ReactionStage()", "HAD_RPG_100", JustWarning, eda);
+        break;
+      }
+    }
+
     if( i == 9 )return true;
     //
     // ipakkb[] = { 10,13, 10,11, 10,12, 11,11, 11,12, 12,11, 12,12, 11,13, 12,13 };
@@ -271,9 +298,8 @@ ReactionStage(const G4HadProjectile* /*originalIncident*/,
          break;
       }
     }
-  }
-  else if( ran < avy )
-  {
+
+  } else if( ran < avy ) {
     if( availableEnergy < 1.6 )return true;
       
     const G4double ky[] = { 0.200, 0.300, 0.400, 0.550, 0.625, 0.700,
@@ -284,123 +310,131 @@ ReactionStage(const G4HadProjectile* /*originalIncident*/,
     const G4int ipakyb2[] = { 13, 12, 11, 13, 12, 11, 13, 12, 11, 13, 12, 11 };
     ran = G4UniformRand();
     i = 0;
-    while( (i<12) && (ran>ky[i]) )++i;
+
+    loop = 0;
+    G4ExceptionDescription edb;
+    edb << " While count exceeded " << G4endl;
+    while( (i<12) && (ran>ky[i]) ) {  /* Loop checking, 01.09.2015, D.Wright */
+      ++i;
+      loop++;
+      if (loop > 1000) {
+        G4Exception("G4RPGStrangeProduction::ReactionStage()", "HAD_RPG_100", JustWarning, edb);
+        break;
+      }
+    }
+
     if( i == 12 )return true;
-      if( (currentMass<protonMass) || (G4UniformRand()<0.5) )
+    if ( (currentMass<protonMass) || (G4UniformRand()<0.5) ) {
+      // ipaky[] = { 18,10, 18,11, 18,12, 20,10, 20,11, 20,12,
+      //             0  +   0  0   0  0   +  +   +  0   +  0
+      //
+      //             21,10, 21,11, 21,12, 22,10, 22,11, 22,12 }
+      //             0  +   0  0   0  0   -  +   -  0   -  0
+      switch( ipaky1[i] )
       {
-        // ipaky[] = { 18,10, 18,11, 18,12, 20,10, 20,11, 20,12,
-        //             0  +   0  0   0  0   +  +   +  0   +  0
-        //
-        //             21,10, 21,11, 21,12, 22,10, 22,11, 22,12 }
-        //             0  +   0  0   0  0   -  +   -  0   -  0
+       case 18:
+         targetParticle.SetDefinition( aLambda );
+         break;
+       case 20:
+         targetParticle.SetDefinition( aSigmaPlus );
+         break;
+       case 21:
+         targetParticle.SetDefinition( aSigmaZero );
+         break;
+       case 22:
+         targetParticle.SetDefinition( aSigmaMinus );
+         break;
+      }
+      targetHasChanged = true;
+      switch( ipaky2[i] )
+      {
+       case 10:
+         vec[i3]->SetDefinition( aKaonPlus ); 
+         vec[i3]->SetMayBeKilled(false);
+         break;
+       case 11:
+         vec[i3]->SetDefinition( aKaonZS );
+         vec[i3]->SetMayBeKilled(false);
+         break;
+       case 12:
+         vec[i3]->SetDefinition( aKaonZL );
+         vec[i3]->SetMayBeKilled(false);
+         break;
+      }
+
+    } else {  // (currentMass >= protonMass) && (G4UniformRand() >= 0.5)
+      // ipakyb[] = { 19,13, 19,12, 19,11, 23,13, 23,12, 23,11,
+      //              24,13, 24,12, 24,11, 25,13, 25,12, 25,11 };
+      if ( (currentParticle.GetDefinition() == anAntiProton) ||
+           (currentParticle.GetDefinition() == anAntiNeutron) ||
+           (currentParticle.GetDefinition() == anAntiLambda) ||
+           (currentMass > sigmaMinusMass) ) {
+        switch( ipakyb1[i] )
+        {
+         case 19:
+           currentParticle.SetDefinitionAndUpdateE( anAntiLambda );
+           break;
+         case 23:
+           currentParticle.SetDefinitionAndUpdateE( anAntiSigmaPlus );
+           break;
+         case 24:
+           currentParticle.SetDefinitionAndUpdateE( anAntiSigmaZero );
+           break;
+         case 25:
+           currentParticle.SetDefinitionAndUpdateE( anAntiSigmaMinus );
+           break;
+        }
+        incidentHasChanged = true;
+        switch( ipakyb2[i] )
+        {
+         case 11:
+           vec[i3]->SetDefinition( aKaonZS ); 
+           vec[i3]->SetMayBeKilled(false);
+           break;
+         case 12:
+           vec[i3]->SetDefinition( aKaonZL );
+           vec[i3]->SetMayBeKilled(false);
+           break;
+         case 13:
+           vec[i3]->SetDefinition( aKaonMinus );
+           vec[i3]->SetMayBeKilled(false);
+           break;
+        }
+
+      } else {
         switch( ipaky1[i] )
         {
          case 18:
-           targetParticle.SetDefinition( aLambda );
+           currentParticle.SetDefinitionAndUpdateE( aLambda );
            break;
          case 20:
-           targetParticle.SetDefinition( aSigmaPlus );
+           currentParticle.SetDefinitionAndUpdateE( aSigmaPlus );
            break;
          case 21:
-           targetParticle.SetDefinition( aSigmaZero );
+           currentParticle.SetDefinitionAndUpdateE( aSigmaZero );
            break;
          case 22:
-           targetParticle.SetDefinition( aSigmaMinus );
+           currentParticle.SetDefinitionAndUpdateE( aSigmaMinus );
            break;
         }
-        targetHasChanged = true;
+        incidentHasChanged = true;
         switch( ipaky2[i] )
         {
          case 10:
            vec[i3]->SetDefinition( aKaonPlus ); 
-	   vec[i3]->SetMayBeKilled(false);
+           vec[i3]->SetMayBeKilled(false);
            break;
          case 11:
            vec[i3]->SetDefinition( aKaonZS );
-	   vec[i3]->SetMayBeKilled(false);
+           vec[i3]->SetMayBeKilled(false);
            break;
          case 12:
            vec[i3]->SetDefinition( aKaonZL );
-	   vec[i3]->SetMayBeKilled(false);
+           vec[i3]->SetMayBeKilled(false);
            break;
         }
       }
-      else  // (currentMass >= protonMass) && (G4UniformRand() >= 0.5)
-      {
-        // ipakyb[] = { 19,13, 19,12, 19,11, 23,13, 23,12, 23,11,
-        //              24,13, 24,12, 24,11, 25,13, 25,12, 25,11 };
-        if( (currentParticle.GetDefinition() == anAntiProton) ||
-            (currentParticle.GetDefinition() == anAntiNeutron) ||
-            (currentParticle.GetDefinition() == anAntiLambda) ||
-            (currentMass > sigmaMinusMass) )
-        {
-          switch( ipakyb1[i] )
-          {
-           case 19:
-             currentParticle.SetDefinitionAndUpdateE( anAntiLambda );
-             break;
-           case 23:
-             currentParticle.SetDefinitionAndUpdateE( anAntiSigmaPlus );
-             break;
-           case 24:
-             currentParticle.SetDefinitionAndUpdateE( anAntiSigmaZero );
-             break;
-           case 25:
-             currentParticle.SetDefinitionAndUpdateE( anAntiSigmaMinus );
-             break;
-          }
-          incidentHasChanged = true;
-          switch( ipakyb2[i] )
-          {
-           case 11:
-             vec[i3]->SetDefinition( aKaonZS ); 
-	     vec[i3]->SetMayBeKilled(false);
-             break;
-           case 12:
-             vec[i3]->SetDefinition( aKaonZL );
-	     vec[i3]->SetMayBeKilled(false);
-             break;
-           case 13:
-             vec[i3]->SetDefinition( aKaonMinus );
-	     vec[i3]->SetMayBeKilled(false);
-             break;
-          }
-        }
-        else
-        {
-          switch( ipaky1[i] )
-          {
-           case 18:
-             currentParticle.SetDefinitionAndUpdateE( aLambda );
-             break;
-           case 20:
-             currentParticle.SetDefinitionAndUpdateE( aSigmaPlus );
-             break;
-           case 21:
-             currentParticle.SetDefinitionAndUpdateE( aSigmaZero );
-             break;
-           case 22:
-             currentParticle.SetDefinitionAndUpdateE( aSigmaMinus );
-             break;
-          }
-          incidentHasChanged = true;
-          switch( ipaky2[i] )
-          {
-           case 10:
-             vec[i3]->SetDefinition( aKaonPlus ); 
-	     vec[i3]->SetMayBeKilled(false);
-             break;
-           case 11:
-             vec[i3]->SetDefinition( aKaonZS );
-	     vec[i3]->SetMayBeKilled(false);
-             break;
-           case 12:
-             vec[i3]->SetDefinition( aKaonZL );
-	     vec[i3]->SetMayBeKilled(false);
-             break;
-          }
-        }
-      }
+    }
   }
   else return true;
 

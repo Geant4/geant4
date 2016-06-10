@@ -38,14 +38,12 @@
 ActionInitialization::ActionInitialization(AnalysisManager* analysisMan):
 G4VUserActionInitialization()
 {
- masterGPS = new G4GeneralParticleSource();
  analysis = analysisMan;
 }
 
 
 ActionInitialization::~ActionInitialization()
 {
- delete masterGPS;
 }
 
 void ActionInitialization::BuildForMaster() const

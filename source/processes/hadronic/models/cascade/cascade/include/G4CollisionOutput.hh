@@ -45,6 +45,7 @@
 // 20110922  M. Kelsey -- Add optional stream argument to printCollisionOutput
 // 20121002  M. Kelsey -- Add strangeness calculation
 // 20130628  M. Kelsey -- Support multiple recoil fragments (for G4Fissioner)
+// 20141208  M. Kelsey -- Split function to do pair-wise "hard" tuning
 
 #ifndef G4COLLISION_OUTPUT_HH
 #define G4COLLISION_OUTPUT_HH
@@ -180,10 +181,12 @@ private:
   std::vector<G4Fragment> recoilFragments;
   static const G4Fragment emptyFragment;	// To return if list empty
 
-  G4double eex_rest;		// Used by setOnShell() for kinematics
-
   std::pair<std::pair<G4int,G4int>, G4int> selectPairToTune(G4double de) const; 
+  G4bool tuneSelectedPair(G4LorentzVector& mom1, G4LorentzVector& mom2,
+			  G4int mom_index) const;
 
+  G4double eex_rest;		// Used by setOnShell() for kinematics
+  G4LorentzVector mom_non_cons;
   G4bool on_shell;
 };        
 

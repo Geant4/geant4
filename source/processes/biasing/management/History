@@ -1,4 +1,4 @@
-$Id: History 86417 2014-11-11 08:52:10Z gcosmo $
+$Id: History 94224 2015-11-09 08:30:58Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 6th, 2015, M. Verderi
+- adaptation to using G4VAuxiliaryTrackInformation:
+  o Removal of classes:
+       - G4BiasingTrackData
+       - G4BiasingTrackDataStore
+  o Removal of methods:
+      G4VBiasingOperator::GetBirthOperation(const G4Track* track )
+	                ::RememberSecondaries(...)
+                        ::ForgetTrack(...)
+- tag : proc-biasmng-V10-01-00
 
 November 10th, 2014 M. Verderi
 - Fix G4BiasingOperatorStateNotifier::Notify(...) to detect

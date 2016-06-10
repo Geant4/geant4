@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventor.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4OpenInventor.cc 91687 2015-07-31 09:44:16Z gcosmo $
 //
 #ifdef G4VIS_BUILD_OI_DRIVER
 
@@ -46,6 +46,9 @@
 #include "Geant4_SoPolyhedron.h"
 
 #include "G4OpenInventorSceneHandler.hh"
+
+#include "G4UImanager.hh"
+#include "G4UIbatch.hh"
 
 G4OpenInventor::G4OpenInventor (
  const G4String name
@@ -88,6 +91,30 @@ void G4OpenInventor::InitNodes()
   SoAlternateRepAction::initClass();
 }
 
+G4bool G4OpenInventor::IsUISessionCompatible () const
+{
+  G4bool isCompatible = false;
+  G4UImanager* ui = G4UImanager::GetUIpointer();
+  G4UIsession* session = ui->GetSession();
 
+  // If session is a batch session, it may be:
+  // a) this is a batch job (the user has not instantiated any UI session);
+  // b) we are currently processing a UI command, in which case the UI
+  //    manager creates a temporary batch session and to find out if there is
+  //    a genuine UI session that the user has instantiated we must drill
+  //    down through previous sessions to a possible non-batch session.
+  while (G4UIbatch* batch = dynamic_cast<G4UIbatch*>(session)) {
+    session = batch->GetPreviousSession();
+  }
+
+  // OI windows are not appropriate in a batch session.
+  if (session) {
+    // If non-zero, this is the originating non-batch session
+    // The user has instantiated a UI session...
+    isCompatible = true;
+  }
+
+  return isCompatible;
+}
 
 #endif

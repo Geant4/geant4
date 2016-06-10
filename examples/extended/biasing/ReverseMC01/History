@@ -1,4 +1,4 @@
-$Id: History 77912 2013-11-29 10:58:21Z gcosmo $
+$Id: History 90260 2015-05-22 08:59:31Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21-May, 2015  V.Ivanchenko         (ReverseMC01-V10-01-00)
+- RMC01AnalysisManager - a variable fNentry is added in order correctly
+    compute mean and error of energy deposition
 
 29-November, 2013  L.Hrivnacova  
 - Updated .README

@@ -14,6 +14,188 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20 November 2015 Tatsumi Koi (hadr-hpp-V10-01-31)
+---------------------------------------------------
+- Fix for solving reproducibility problem 
+
+
+11 November 2015 Tatsumi Koi (hadr-hpp-V10-01-30)
+---------------------------------------------------
+- Fix bug which was introduced at hadr-hpp-V10-01-23
+
+
+5 November 2015 Tatsumi Koi (hadr-hpp-V10-01-29)
+---------------------------------------------------
+- Loop check
+
+
+5 November 2015 Gabriele Cosmo (hadr-hpp-V10-01-28)
+---------------------------------------------------
+- Replaced use of variable 'L' in G4ParticleHPThermalScattering.cc and
+  G4PolarizationTransition to avoid shadowing of new volumetric units.
+
+
+4 November 2015 Tatsumi Koi (hadr-hpp-V10-01-27)
+---------------------------------------------------
+- Fix problem on previous tag 
+
+
+4 November 2015 Tatsumi Koi (hadr-hpp-V10-01-26)
+---------------------------------------------------
+- Migration to fast-math functions
+
+
+3 November 2015 Tatsumi Koi (hadr-hpp-V10-01-25)
+---------------------------------------------------
+Fix problem on include/G4InterpolationIterator.hh
+
+
+3 November 2015 Tatsumi Koi (hadr-hpp-V10-01-24)
+---------------------------------------------------
+Move header files from NeutronHP for keeping backward compatibility 
+Add NeutronHP.History which is a copy of History in neutron_hp
+Add FissFragGen.History which is a copy of FissFragHistory in neutron_hp
+
+
+28 October 2015 Pedro Arce (hadr-hpp-V10-01-23)
+---------------------------------------------------
+Make particle_hp behave the same as neutron_hp when PHP_AS_HP and DO_NOT_ADJUST_FINAL_STATE are selected (neutron_hp keeps on applying the adjusting in some places)
+
+
+8 October 2015 Tatsumi Koi (hadr-hpp-V10-01-22)
+---------------------------------------------------
+Fix circular dependency, co-working with hadr-hpn-V10-01-20
+
+
+28 July 2015 Tatsumi Koi (hadr-hpp-V10-01-21)
+---------------------------------------------------
+Changing to use G4Threading::IsMasterThread() instera of !G4Threading::IsWorkerThread()
+
+
+21 July 2015 Tatsumi Koi (hadr-hpp-V10-01-20)
+---------------------------------------------------
+Improve memory consumption
+
+
+15 July 2015 Tatsumi Koi (hadr-hpp-V10-01-19)
+---------------------------------------------------
+Code clean up
+
+
+10 July 2015 Tatsumi Koi (hadr-hpp-V10-01-18)
+---------------------------------------------------
+Enable to use dynamically generated materials
+
+
+1 July 2015 Tatsumi Koi (hadr-hpp-V10-01-17)
+---------------------------------------------------
+Fix problem on UI commands defined in ParticleHPMessenger
+Add UI command for changing verbose level 
+
+
+29 June 2015 Tatsumi Koi (hadr-hpp-V10-01-16)
+---------------------------------------------------
+Fix problem at deletion in multithreading mode
+Fix reproducibility problem on multithreading mode
+
+
+16 June 2015 Tatsumi Koi (hadr-hpp-V10-01-15)
+---------------------------------------------------
+Fix out of bound array error 
+
+
+11 June 2015 Tatsumi Koi (hadr-hpp-V10-01-14)
+---------------------------------------------------
+Fix coverity issue #60878, 60879, 60880, 60886 and 60887
+Fix coverity issue #58746
+
+
+8 June 2015 Tatsumi Koi (hadr-hpp-V10-01-13)
+---------------------------------------------------
+Fix problem on photon distribution Bugzilla #1745
+
+
+4 June 2015 Tatsumi Koi (hadr-hpp-V10-01-12)
+---------------------------------------------------
+-Add model and cross section descriptions
+
+
+4 June 2015 Tatsumi Koi (hadr-hpp-V10-01-11)
+---------------------------------------------------
+-Fix warning in previous tag 
+
+
+3 June 2015 Tatsumi Koi (hadr-hpp-V10-01-10)
+---------------------------------------------------
+- Sharing static data among worker threads
+
+
+27 May 2015 Gabriele Cosmo (hadr-hpp-V10-01-09)
+---------------------------------------------------
+-Corrected GNUmakefile for inclusion of internal zlib.
+
+
+24 May 2015 Tatsumi Koi (hadr-hpp-V10-01-08)
+---------------------------------------------------
+-Making not to use the cache of cross section
+ Since the same feature is offered in CrossSectionDataStore
+
+
+21 May 2015 Tatsumi Koi (hadr-hpp-V10-01-07)
+---------------------------------------------------
+-Fix warning in previous tag 
+
+
+12 May 2015 Tatsumi Koi (hadr-hpp-V10-01-06)
+---------------------------------------------------
+-Delete unnecessary issue of BuildPhysicTable
+-Introducing ThreadLocalManager
+for storing information related to each individual reactions
+hadr-hpn-V10-00-18
+
+
+10 May 2015 Tatsumi Koi (hadr-hpp-V10-01-05)
+---------------------------------------------------
+-Fix rare core dump in ThermalScattering
+-Uncomment out para and ortho hydrogen and liquid and solid methane
+-Minor changes in ParticleHPManager
+Upto hadr-nhp-V10-00-16
+-Adjust A and Z in the case of miss much between selected data and target nucleus
+hadr-nhp-V10-00-25
+-Adding UI commands for controlling options of HP package
+-Adding G4ParticleHPMessenger
+hadr-hpn-V10-00-17
+
+
+8 May 2015 Tatsumi Koi (hadr-hpp-V10-01-04)
+---------------------------------------------------
+- Fixing problem on entering infinite loop
+	src/G4ParticleHPEnAngCorrelation.cc
+
+
+6 May 2015 Tatsumi Koi (hadr-hpp-V10-01-03)
+---------------------------------------------------
+-Fixed problem on previous tag
+
+
+6 May 2015 Tatsumi Koi (hadr-hpp-V10-01-02)
+---------------------------------------------------
+- Setting PHP_AS_HP is made a default for a while.
+  Setting environment variable of "DO_NOT_SET_PHP_AS_HP" overcomes the default.
+       sources.cmake
+       GNUmakefile
+
+
+28 January 2015 Tatsumi Koi (hadr-hpp-V10-01-01)
+---------------------------------------------------
+-Enable to read data file that has a signature of evaluation name.
+
+
+11 December 2014 Gabriele Cosmo (hadr-hpp-V10-01-00)
+---------------------------------------------------
+- Removed commented files in sources.cmake script to allow for proper
+  validation of sources in system testing.
+
 6 November 2014 Pedro Arce   (hadr-hpp-V10-00-05)
 ---------------------------------------------------
 - Code cleanup

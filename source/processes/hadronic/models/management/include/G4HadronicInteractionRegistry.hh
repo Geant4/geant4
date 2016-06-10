@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicInteractionRegistry.hh 82440 2014-06-20 10:39:49Z gcosmo $
+// $Id: G4HadronicInteractionRegistry.hh 88839 2015-03-12 10:30:07Z gcosmo $
 //
 // 23-Jan-2009 V.Ivanchenko make the class to be a singleton
 // 17-Aug-2012 V.Ivanchenko added hadronic model factories
@@ -37,11 +37,14 @@
 
 #include <vector>
 #include "globals.hh"
+#include "G4ThreadLocalSingleton.hh"
 
 class G4HadronicInteraction;
 
 class G4HadronicInteractionRegistry
 {
+friend class G4ThreadLocalSingleton<G4HadronicInteractionRegistry>;
+
 public:
 
   static G4HadronicInteractionRegistry* Instance();
@@ -49,14 +52,14 @@ public:
   
   ~G4HadronicInteractionRegistry();
 
-  void Clean();
-  // delete models
-  
   void RegisterMe(G4HadronicInteraction * aModel);
   // register new model
 
   void RemoveMe(G4HadronicInteraction * aModel);
   // deregister model
+
+  void Clean();
+  // delete all models
 
   G4HadronicInteraction* FindModel(const G4String& name);
   // find existing hadronic interaction by name
@@ -68,8 +71,8 @@ private:
 
   G4HadronicInteractionRegistry();
 
-  static G4ThreadLocal G4HadronicInteractionRegistry* theInstance;
-  
+  static G4ThreadLocal G4HadronicInteractionRegistry* instance;
+
   std::vector <G4HadronicInteraction*>  allModels;
 
 };

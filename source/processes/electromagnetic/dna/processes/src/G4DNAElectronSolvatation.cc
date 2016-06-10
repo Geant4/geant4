@@ -59,14 +59,17 @@ void G4DNAElectronSolvatation::PrintInfo()
 
 void G4DNAElectronSolvatation::InitialiseProcess(const G4ParticleDefinition*)
 {
-    if(!isInitialised)
-    {
-        isInitialised = true;
-        SetBuildTableFlag(false);
+  if(!isInitialised)
+  {
+    isInitialised = true;
+    SetBuildTableFlag(false);
 
-        if(!EmModel()) SetEmModel(new G4DNAOneStepSolvatationModel);
-        AddEmModel(1, EmModel());
+    if(!EmModel())
+    {
+      SetEmModel(new G4DNAOneStepThermalizationModel);
     }
+    AddEmModel(1, EmModel());
+  }
 }
 
 

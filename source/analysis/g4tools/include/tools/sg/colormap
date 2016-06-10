@@ -1,0 +1,414 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_colormap
+#define tools_sg_colormap
+
+#include "../colorf"
+#include "../mathf"
+#include "../scast"
+#include "style_parser"
+
+#include <string>
+#include <cfloat> //FLT_MAX
+
+namespace tools {
+namespace sg {
+
+class base_colormap {
+public:
+  virtual void get_color(float,colorf&) const = 0;
+  virtual void* cast(const std::string&) const = 0;
+public:
+  base_colormap(){}
+  base_colormap(const base_colormap& aFrom)
+  :m_values(aFrom.m_values),m_colors(aFrom.m_colors){}
+  base_colormap& operator=(const base_colormap& aFrom){ 
+    m_values = aFrom.m_values;
+    m_colors = aFrom.m_colors;
+    return *this;
+  }
+  virtual ~base_colormap(){}
+public:
+  unsigned int colorn() const {return m_colors.size();}
+  unsigned int valn() const {return m_values.size();}
+  colorf color(unsigned int a_index) const {
+    unsigned int n = m_colors.size();
+    if(a_index>=n) return colorf(0.5F,0.5F,0.5F);
+    return m_colors[a_index];
+  }
+  float value(unsigned int a_index) const {
+    unsigned int n = m_values.size();
+    if(a_index>=n) return 0;
+    return m_values[a_index];
+  }
+public:
+  // helper :
+  void set_colors(void(*aGet)(float,colorf&),unsigned int a_ncell) {
+    m_colors.clear();
+    m_colors.resize(a_ncell);
+    if(!a_ncell) return;
+    float d = 1.0F/(a_ncell-1);
+    for(unsigned int index=0;index<a_ncell;index++) {
+      aGet(d*index,m_colors[index]);
+    }
+  }
+
+  void set_PAW_coloring() {
+    unsigned int _valn = m_values.size();
+    if(_valn==1) {
+      m_values[0] = take_log(m_values[0]);
+    } else if(_valn>=2) {
+      //CERN/PAW coloring :
+      if(m_values[0]==0) m_values[0] = 10e-5F;
+      float vmin = take_log(m_values[0]);
+      float vmax = take_log(m_values[_valn-1]);
+      float dv = (vmax-vmin)/(_valn-1);
+      for(unsigned int count=0;count<_valn;count++) {
+        m_values[count] = vmin + dv * count;
+      }
+    }
+  }
+
+protected:
+  static float take_log(float aVal){
+    if(aVal<=0) {
+      return -FLT_MAX;
+    } else {
+      return flog10(aVal);
+    }
+  }
+
+protected:
+  std::vector<float> m_values;
+  std::vector<colorf> m_colors;
+};
+
+class by_value_colormap : public base_colormap {
+public:
+  TOOLS_SCLASS(tools::sg::by_value_colormap)
+public:
+  virtual void get_color(float a_value,colorf& a_col) const{
+    get_by_value(a_value,m_values,m_colors,a_col);
+  }
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<by_value_colormap>(this,a_class)) {return p;}
+    else return 0;
+  }
+public:
+  by_value_colormap(std::ostream& a_out,
+                    const sg::cmaps_t& a_cmaps,
+                    const std::string& aString){
+    set_by_value(a_out,a_cmaps,aString,m_values,m_colors);
+  }
+  by_value_colormap(const by_value_colormap& aFrom):base_colormap(aFrom){}
+  by_value_colormap& operator=(const by_value_colormap& aFrom){ 
+    base_colormap::operator=(aFrom);
+    return *this;
+  }
+  virtual ~by_value_colormap(){}
+protected:
+  static void set_by_value(std::ostream& a_out,
+                           const sg::cmaps_t& a_cmaps,
+                           const std::string& aString,
+                           std::vector<float>& aValues,
+                           std::vector<colorf>& aColors) {
+    //  The given string is of the format :
+    //      [<color name> <value>] <color name>
+    //  or :
+    //      [<value> <color name>] <value>
+    //  For example :
+    //      black 10 cyan 50 green 100 orange 200 blue 300 pink 400 red
+    std::vector<std::string> ws;
+    words(aString," ",false,ws);
+    int wordn = ws.size();
+    int number = wordn/2;
+    if(number<=0) {
+      aValues.clear();
+      aColors.clear();
+    } else if((2*number+1)!=wordn) {
+      a_out << "by_value_colormap::set_by_value :"
+            << " An odd number (" << wordn
+            << " given) of words is expected in " << sout(aString) << "."
+            << std::endl;
+      aValues.clear();
+      aColors.clear();
+    } else {
+      // look if :
+      //   <col> <num> <col> ... <num> <col>
+      // or :
+      //   <num> <col> <num> ... <col> <num>
+      // FIXME : case of <col> being three floats ?
+      colorf c;
+      if(sg::find_color(a_cmaps,ws[0],c)) {
+        // <col> <num> <col> ... <num> <col>
+        aValues.resize(number);
+        aColors.resize(number+1);
+        for(int count=0;count<number;count++) {
+         {const std::string& word = ws[2*count];
+          if(!sg::find_color(a_cmaps,word,aColors[count])) {
+            a_out << "by_value_colormap::set_by_value :"
+                  << " in " << sout(aString)
+                  << ", " << word << " not a color."
+                  << std::endl;
+            aValues.clear();
+            aColors.clear();
+            return;
+          }}
+         {const std::string& word = ws[2*count+1];
+          if(!to(word,aValues[count]))  {
+            a_out << "by_value_colormap::set_by_value :"
+                  << " in " << sout(aString)
+                  << ", " << word << " not a number."
+                  << std::endl;
+            aValues.clear();
+            aColors.clear();
+            return;
+          }}
+        }
+        const std::string& word = ws[wordn-1];
+        if(!sg::find_color(a_cmaps,word,aColors[number])) {
+          a_out << "by_value_colormap::set_by_value :"
+                << " in " << sout(aString)
+                << ", " << word << " not a color."
+                << std::endl;
+          aValues.clear();
+          aColors.clear();
+        }
+      } else {
+        // <num> <col> <num> ... <col> <num>
+        aValues.resize(number+1);
+        aColors.resize(number);
+        for(int count=0;count<number;count++) {
+         {const std::string& word = ws[2*count];
+          if(!to(word,aValues[count]))  {
+            a_out << "by_value_colormap::set_by_value :"
+                  << " in " << sout(aString)
+                  << ", " << word << " not a number."
+                  << std::endl;
+            aValues.clear();
+            aColors.clear();
+            return;
+          }}
+         {const std::string& word = ws[2*count+1];
+          if(!sg::find_color(a_cmaps,word,aColors[count])) {
+            a_out << "by_value_colormap::set_by_value :"
+                  << " in " << sout(aString)
+                  << ", " << word << " not a color."
+                  << std::endl;
+            aValues.clear();
+            aColors.clear();
+            return;
+          }}
+        }
+       {const std::string& word = ws[wordn-1];
+        if(!to(word,aValues[number]))  {
+          a_out << "by_value_colormap::set_by_value :"
+                << " in " << sout(aString)
+                << ", " << word << " not a number."
+                << std::endl;
+          aValues.clear();
+          aColors.clear();
+          return;
+        }}
+      }
+    } 
+  }
+
+  static void get_by_value(float aValue,
+                           const std::vector<float>& aValues,
+                           const std::vector<colorf>& aColors,
+                           colorf& a_col){
+    // There are aValuen (n) entries in aValues and (n+1) aColors
+    //  aColors[0] aValues[0] aColors[1] aValues[1]...
+    //                 aValues[n-2] aColors[n-1] aValues[n-1] aColors[n]
+    //      black 10 cyan 50 green 100 orange 200 blue 300 pink 400 red
+    // valuen = 6
+    // values[0] 10 
+    // values[1] 50 
+    // values[2] 100 
+    // values[3] 200 
+    // values[4] 300 
+    // values[5] 400 
+    //
+    // colors[0] black
+    // colors[1] cyan
+    // colors[2] green
+    // colors[3] orange
+    // colors[4] blue
+    // colors[5] pink
+    // colors[6] red
+    unsigned int _valn = aValues.size();
+    if(!_valn) {a_col = colorf::black();return;}
+    if(aColors.size()==(_valn+1)) {
+      // col0 val0 col1 val1 col2 val2 col3
+      if(aValue<aValues[0]) {
+        a_col = aColors[0];
+      } else {
+        for(int count=0;count<=int(_valn-2);count++) {
+          if( (aValues[count]<=aValue) && (aValue<aValues[count+1]) ) {
+            a_col = aColors[count+1];
+            return;
+          }
+        }
+        a_col = aColors[_valn];
+      }
+    } else if((aColors.size()+1)==_valn) {
+      // val0 col0 val1 col1 val2 col2 val3
+      for(int count=0;count<=int(_valn-2);count++) {
+        if( (aValues[count]<=aValue) && (aValue<aValues[count+1]) ) {
+          a_col = aColors[count];
+          return;
+        }
+      }
+      if(aValue<aValues[0]) {a_col = aColors[0];return;}
+      if(aValue>=aValues[_valn-1]) {a_col = aColors[aColors.size()-1];return;}
+      a_col = colorf::black();
+    } else {
+      a_col = colorf::black();
+    }
+  }
+  
+};
+
+class grey_scale_colormap : public base_colormap {
+public:
+  TOOLS_SCLASS(tools::sg::grey_scale_colormap)
+public:
+  virtual void get_color(float a_value,colorf& a_col) const { //a_value in [0,1]
+    get_grey(a_value,a_col);
+  }
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<grey_scale_colormap>(this,a_class)) {return p;}
+    else return 0;
+  }
+public:
+  grey_scale_colormap(float a_min,float a_max,unsigned int a_ncell){
+    m_values.resize(2);
+    m_values[0] = a_min;
+    m_values[1] = a_max;
+    set_colors(get_grey,a_ncell);
+  }
+  grey_scale_colormap(const grey_scale_colormap& aFrom):base_colormap(aFrom){}
+  grey_scale_colormap& operator=(const grey_scale_colormap& aFrom){ 
+    base_colormap::operator=(aFrom);
+    return *this;
+  }
+  virtual ~grey_scale_colormap(){}
+protected:
+  static void get_grey(float a_ratio,colorf& a_col) {
+    if(a_ratio<0.0F) a_ratio = 0;
+    if(a_ratio>1.0F) a_ratio = 1;
+    a_col.set_value(a_ratio,a_ratio,a_ratio,1);
+  }
+};
+
+class grey_scale_inverse_colormap : public base_colormap {
+public:
+  TOOLS_SCLASS(tools::sg::grey_scale_inverse_colormap)
+public:
+  virtual void get_color(float a_value,colorf& a_col) const { //a_value in [0,1]
+    get_grey_inverse(a_value,a_col);
+  }
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<grey_scale_inverse_colormap>(this,a_class)) {return p;}
+    else return 0;
+  }
+public:
+  grey_scale_inverse_colormap(float a_min,float a_max,unsigned int a_ncell){
+    m_values.resize(2);
+    m_values[0] = a_min;
+    m_values[1] = a_max;
+    set_colors(get_grey_inverse,a_ncell);
+  }
+  grey_scale_inverse_colormap(const grey_scale_inverse_colormap& aFrom):base_colormap(aFrom){}
+  grey_scale_inverse_colormap& operator=(const grey_scale_inverse_colormap& aFrom){ 
+    base_colormap::operator=(aFrom);
+    return *this;
+  }
+  virtual ~grey_scale_inverse_colormap(){}
+protected:
+  static void get_grey_inverse(float a_ratio,colorf& a_col){
+    if(a_ratio<0.0F) a_ratio = 0;
+    if(a_ratio>1.0F) a_ratio = 1;
+    a_ratio = 1 - a_ratio;
+    a_col.set_value(a_ratio,a_ratio,a_ratio,1);
+  }
+};
+
+class violet_to_red_colormap : public base_colormap {
+public:
+  TOOLS_SCLASS(tools::sg::violet_to_red_colormap)
+public:
+  virtual void get_color(float a_value,colorf& a_col) const { //a_value in [0,1]
+    get_violet_to_red(a_value,a_col);
+  }
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<violet_to_red_colormap>(this,a_class)) {return p;}
+    else return 0;
+  }
+public:
+  violet_to_red_colormap(float a_min,float a_max,unsigned int a_ncell){
+    set(a_min,a_max,a_ncell);
+  }
+  violet_to_red_colormap(const violet_to_red_colormap& aFrom):base_colormap(aFrom){}
+  violet_to_red_colormap& operator=(const violet_to_red_colormap& aFrom){ 
+    base_colormap::operator=(aFrom);
+    return *this;
+  }
+  virtual ~violet_to_red_colormap(){}
+public:
+  void set(float a_min,float a_max,unsigned int a_ncell){
+    m_values.resize(2);
+    m_values[0] = a_min;
+    m_values[1] = a_max;
+    set_colors(get_violet_to_red,a_ncell);
+  }
+protected:
+  static void get_violet_to_red(float a_ratio,colorf& a_col){
+    if(a_ratio<0.0F) a_ratio = 0;
+    if(a_ratio>1.0F) a_ratio = 1;
+    // a_ratio in [0,1]
+    // From ROOT pretty palette.
+    // Initialize with the spectrum Violet->Red
+    // The color model used here is based on the HLS model which
+    // is much more suitable for creating palettes than RGB.
+    // Fixing the saturation and lightness we can scan through the
+    // spectrum of visible light by using "hue" alone.
+    // In Root hue takes values from 0 to 360.
+    float saturation = 1;
+    float lightness = 0.5;
+    float hue_mn = 0;
+    float hue_mx = 280;
+    float hue = hue_mx - a_ratio * (hue_mx-hue_mn);
+    float r,g,b;
+    hls_to_rgb(hue,lightness,saturation,r,g,b);
+    a_col.set_value(r,g,b,1);
+  }
+
+};
+
+class const_colormap : public base_colormap {
+public:
+  TOOLS_SCLASS(tools::sg::const_colormap)
+public:
+  virtual void get_color(float,colorf& a_col) const { //a_value in [0,1]
+    a_col = m_colors[0];
+  }
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<const_colormap>(this,a_class)) {return p;}
+    else return 0;
+  }
+public:
+  const_colormap(const colorf& aColor){m_colors.push_back(aColor);}
+  const_colormap(const const_colormap& aFrom):base_colormap(aFrom){}
+  const_colormap& operator=(const const_colormap& aFrom){ 
+    base_colormap::operator=(aFrom);
+    return *this;
+  }
+  virtual ~const_colormap(){}
+};
+
+}}
+
+#endif

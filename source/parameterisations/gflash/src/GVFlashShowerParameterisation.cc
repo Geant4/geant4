@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GVFlashShowerParameterisation.cc 69000 2013-04-15 09:24:35Z gcosmo $
+// $Id: GVFlashShowerParameterisation.cc 93079 2015-10-02 14:43:41Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -49,6 +49,7 @@
 GVFlashShowerParameterisation::GVFlashShowerParameterisation()
   : thePar(0), density(0.), A(0.), Z(0.), X0(0.), Ec(0.), Rm(0.), NSpot(0.)
 {
+  fGamma = new MyGamma;
 }
 
 GVFlashShowerParameterisation::~GVFlashShowerParameterisation()
@@ -103,11 +104,11 @@ void GVFlashShowerParameterisation::PrintMaterial(const G4Material * mat)
   G4cout<<"/********************************************/ " << G4endl;
   G4cout<<"  - GVFlashShowerParameterisation::Material -  " << G4endl;
   G4cout<<"        Material : " << mat->GetName()  << G4endl;
-  G4cout<<"   Z = "<< Z  << G4endl;
-  G4cout<<"   A = "<< A  << G4endl;
-  G4cout<<"   X0 = "<<X0/cm <<" cm" << G4endl;
-  G4cout<<"    Rm= "<<Rm/cm <<" cm" << G4endl;
-  G4cout<<"   Ec = "<<Ec/MeV << " MeV"<< G4endl;
+  G4cout<<"   Z  = " << Z      << G4endl;
+  G4cout<<"   A  = " << A      << G4endl;
+  G4cout<<"   X0 = " << X0/cm  << " cm" << G4endl;
+  G4cout<<"   Rm = " << Rm/cm  << " cm" << G4endl;
+  G4cout<<"   Ec = " << Ec/MeV << " MeV"<< G4endl;
   G4cout<<"/********************************************/ " << G4endl; 
 }
 
@@ -119,6 +120,5 @@ G4double GVFlashShowerParameterisation::GeneratePhi()
 
 G4double GVFlashShowerParameterisation::gam(G4double x, G4double a) const 
 {
-  static MyGamma theG;
-  return theG.Gamma(a, x); 
+  return fGamma->Gamma(a, x); 
 }

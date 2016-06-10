@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TauLeptonicDecayChannel.cc 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4TauLeptonicDecayChannel.cc 91896 2015-08-10 09:54:06Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -149,8 +149,9 @@ G4DecayProducts *G4TauLeptonicDecayChannel::DecayIt(G4double)
   G4double parentmass = G4MT_parent->GetPDGMass();
 
   //daughters'mass
-  G4double daughtermass[3]; 
-  for (G4int index=0; index<3; index++){
+  const G4int N_DAUGHTER=3;
+  G4double daughtermass[N_DAUGHTER]; 
+  for (G4int index=0; index<N_DAUGHTER; index++){
     daughtermass[index] = G4MT_daughters[index]->GetPDGMass();
   }
 
@@ -162,18 +163,20 @@ G4DecayProducts *G4TauLeptonicDecayChannel::DecayIt(G4double)
   delete parentparticle;
 
   // calculate daughter momentum
-  G4double daughtermomentum[3];
+  G4double daughtermomentum[N_DAUGHTER];
 
   // calcurate lepton momentum
   G4double pmax = (parentmass*parentmass-daughtermass[0]*daughtermass[0])/2./parentmass;
   G4double p, e;
   G4double r;
-  do {
+  const size_t MAX_LOOP=10000;
+  for (size_t loop_counter=0; loop_counter <MAX_LOOP; ++loop_counter){
     // determine momentum/energy
     r = G4UniformRand();
     p = pmax*G4UniformRand();
     e = std::sqrt(p*p + daughtermass[0]*daughtermass[0]);
-  } while (r > spectrum(p,e,parentmass,daughtermass[0]) );
+    if (r < spectrum(p,e,parentmass,daughtermass[0]) ) break;
+  } 
 
   //create daughter G4DynamicParticle 
   // daughter 0 (lepton)

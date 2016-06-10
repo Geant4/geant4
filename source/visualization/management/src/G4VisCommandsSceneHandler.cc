@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneHandler.cc 82756 2014-07-08 14:09:34Z gcosmo $
+// $Id: G4VisCommandsSceneHandler.cc 91721 2015-08-03 12:06:54Z gcosmo $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
 
@@ -150,16 +150,11 @@ G4VisCommandSceneHandlerCreate::G4VisCommandSceneHandlerCreate (): fId (0) {
   const G4GraphicsSystemList& gslist =
     fpVisManager -> GetAvailableGraphicsSystems ();
   G4String candidates;
-  for (size_t igslist = 0; igslist < gslist.size (); igslist++) {
-    const G4String& name = gslist [igslist] -> GetName ();
-    const G4String& nickname = gslist [igslist] -> GetNickname ();
-    if (nickname.isNull ()) {
-      candidates += name;
-    }
-    else {
-      candidates += nickname;
-    }
-    candidates += " ";
+  for (auto&& gs: gslist) {
+    const G4String& name = gs -> GetName ();
+    candidates += name + ' ';
+    for (auto&& nickname: gs -> GetNicknames ())
+      candidates += nickname + ' ';
   }
   candidates = candidates.strip ();
   parameter -> SetParameterCandidates(candidates);
@@ -213,7 +208,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand*,
 
   const G4GraphicsSystemList& gsl =
     fpVisManager -> GetAvailableGraphicsSystems ();
-  int nSystems = gsl.size ();
+  G4int nSystems = gsl.size ();
   if (nSystems <= 0) {
     if (verbosity >= G4VisManager::errors) {
       G4cerr << "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
@@ -224,56 +219,97 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand*,
     }
     return;
   }
-  int iGS;  // Selector index.
+  G4int iGS;  // Selector index.
+  G4bool found = false;
   for (iGS = 0; iGS < nSystems; iGS++) {
-    if (graphicsSystem.compareTo (gsl [iGS] -> GetName (),
-				  G4String::ignoreCase) == 0 ||
-	graphicsSystem.compareTo (gsl [iGS] -> GetNickname (),
-				  G4String::ignoreCase) == 0) {
-      break;  // Match found.
+    auto&& gs = gsl[iGS];
+    if (graphicsSystem.compareTo(gs->GetName(), G4String::ignoreCase) == 0) {
+      found = true;
+      break;  // Match found
+    } else {
+      auto&& nicknames = gs->GetNicknames();
+      for (size_t i = 0; i < nicknames.size(); ++i) {
+        auto&& nickname = nicknames[i];
+        if (graphicsSystem.compareTo (nickname, G4String::ignoreCase) == 0) {
+          found = true;
+          break;  // Match found
+        }
+      }
+      if (found) {
+        break;  // Match found
+      }
     }
   }
-  if (iGS < 0 || iGS >= nSystems) {
+  if (!found) {
     // Invalid command line argument or none.
     // This shouldn't happen!!!!!!
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
-	" invalid graphics system specified."
-	     << G4endl;
+      G4cerr <<
+      "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
+      "\n  invalid graphics system \""
+      << graphicsSystem
+      << "\" requested."
+      << G4endl;
     }
     return;
   }
 
   // Check UI session compatibility.
-  if (!gsl[iGS]->IsUISessionCompatible()) {
+  G4bool fallback = false;
+  while (!gsl[iGS]->IsUISessionCompatible()) {
+    // Not compatible, search for a fallback
+    fallback = false;
     G4String fallbackNickname = gsl[iGS]->GetNickname() + "_FALLBACK";
     for (iGS = 0; iGS < nSystems; iGS++) {
-      if (fallbackNickname.compareTo (gsl [iGS] -> GetNickname (),
-                                      G4String::ignoreCase) == 0) {
-        break;  // Match found.
+      auto&& nicknames = gsl[iGS]->GetNicknames();
+      for (size_t i = 0; i < nicknames.size(); ++i) {
+        auto&& nickname = nicknames[i];
+        if (fallbackNickname.compareTo (nickname, G4String::ignoreCase) == 0) {
+          fallback = true;
+          break;  // Match found
+        }
+      }
+      if (fallback) {
+        break;  // Match found
       }
     }
     if (iGS < 0 || iGS >= nSystems) {
       if (verbosity >= G4VisManager::errors) {
-        G4cerr << "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
-        " could not find fallback graphics system."
+        G4cerr <<
+        "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
+        " could not find fallback graphics system for \""
+        << graphicsSystem
+        << "\"."
         << G4endl;
       }
       return;
     }
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: G4VisCommandSceneHandlerCreate::SetNewValue:"
-      " using fallback graphics system."
-      << G4endl;
-    }
+    //  A fallback system found...but go back and check this too.
+  }
+
+  // A graphics system has been found
+  G4VGraphicsSystem* pSystem = gsl [iGS];
+
+  if (fallback && verbosity >= G4VisManager::warnings) {
+    G4cout << "WARNING: G4VisCommandSceneHandlerCreate::SetNewValue:"
+    "\n  Using fallback graphics system: "
+    << pSystem -> GetName ()
+    << " ("
+    << pSystem -> GetNickname ()
+    << ')'
+    << G4endl;
   }
 
   // Set current graphics system in preparation for
   // creating scene handler.
-  G4VGraphicsSystem* pSystem = gsl [iGS];
   fpVisManager -> SetCurrentGraphicsSystem (pSystem);
   if (verbosity >= G4VisManager::confirmations) {
-    G4cout << "Graphics system set to " << pSystem -> GetName () << G4endl;
+    G4cout << "Graphics system set to "
+    << pSystem -> GetName ()
+    << " ("
+    << pSystem -> GetNickname ()
+    << ')'
+    << G4endl;
   }
 
   // Now deal with name of scene handler.

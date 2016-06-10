@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremParametrizedModel.cc 74581 2013-10-15 12:03:25Z gcosmo $
+// $Id: G4eBremParametrizedModel.cc 91726 2015-08-03 15:41:36Z gcosmo $
 // GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
@@ -498,8 +498,10 @@ void G4eBremParametrizedModel::SampleSecondaries(
   G4double xmax = G4Log(emax*emax  + densityCorr);
   G4double gammaEnergy, f, x; 
 
+  CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();
+
   do {
-    x = G4Exp(xmin + G4UniformRand()*(xmax - xmin)) - densityCorr;
+    x = G4Exp(xmin + rndmEngine->flat()*(xmax - xmin)) - densityCorr;
     if(x < 0.0) x = 0.0;
     gammaEnergy = sqrt(x);
     f = ComputeDXSectionPerAtom(gammaEnergy);
@@ -512,7 +514,8 @@ void G4eBremParametrizedModel::SampleSecondaries(
 	     << G4endl;
     }
 
-  } while (f < fMax*G4UniformRand());
+    // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
+  } while (f < fMax*rndmEngine->flat());
 
   //
   // angles of the emitted gamma. ( Z - axis along the parent particle)

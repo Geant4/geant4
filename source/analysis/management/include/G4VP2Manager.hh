@@ -32,22 +32,28 @@
 #ifndef G4VP2Manager_h
 #define G4VP2Manager_h 1
 
-#include "G4BaseAnalysisManager.hh"
 #include "globals.hh"
 
-class G4HnManager;
-class G4AnalysisManagerState;
+#include <vector>
+#include <memory>
 
-class G4VP2Manager : public G4BaseAnalysisManager
+class G4HnManager;
+
+class G4VP2Manager
 {
   // Disable using the object managers outside G4VAnalysisManager
   friend class G4VAnalysisManager;
   friend class G4VAnalysisReader;
 
-  protected:
-    G4VP2Manager(const G4AnalysisManagerState& state);
-    virtual ~G4VP2Manager();
+  public:
+    G4VP2Manager() {}
+    virtual ~G4VP2Manager() {}
 
+    // deleted copy constructor & assignment operator
+    G4VP2Manager(const G4VP2Manager& rhs) = delete;
+    G4VP2Manager& operator=(const G4VP2Manager& rhs) = delete;
+
+  protected:
     // Methods for handling histograms
     virtual G4int CreateP2(const G4String& name, const G4String& title,
                            G4int nxbins, G4double xmin, G4double xmax, 
@@ -133,15 +139,9 @@ class G4VP2Manager : public G4BaseAnalysisManager
 
     // Methods to manipulate histograms
     virtual G4bool WriteOnAscii(std::ofstream& output) = 0;
-   
-   // data members
-    G4HnManager* fHnManager;
 
-  private:    
-    // Not implemented copy constructor
-    G4VP2Manager(const G4VP2Manager& rhs);
-    // Not implemented assignment operator
-    G4VP2Manager& operator=(const G4VP2Manager& rhs);
+    // Access to Hn manager
+    virtual std::shared_ptr<G4HnManager> GetHnManager() = 0;
 };
 
 #endif

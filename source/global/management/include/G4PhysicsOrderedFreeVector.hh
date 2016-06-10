@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsOrderedFreeVector.hh 74256 2013-10-02 14:24:02Z gcosmo $
+// $Id: G4PhysicsOrderedFreeVector.hh 93409 2015-10-21 13:26:27Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // PhysicsOrderedFreeVector Class Definition
@@ -86,17 +86,15 @@ class G4PhysicsOrderedFreeVector : public G4PhysicsVector
   
   void InsertValues(G4double energy, G4double value); 
 
-  //G4double GetLowEdgeEnergy(size_t binNumber) const;
-  
-  G4double GetMaxValue();
-  
-  G4double GetMinValue();
-  
   G4double GetEnergy(G4double aValue);
+
+  inline G4double GetMaxValue();
   
-  G4double GetMaxLowEdgeEnergy();
+  inline G4double GetMinValue();
+    
+  inline G4double GetMaxLowEdgeEnergy();
   
-  G4double GetMinLowEdgeEnergy();
+  inline G4double GetMinLowEdgeEnergy();
   
   void DumpValues();
 

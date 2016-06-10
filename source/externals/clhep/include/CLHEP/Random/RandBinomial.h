@@ -103,7 +103,7 @@ private:
 
   static double genBinomial( HepRandomEngine *anEngine, long n, double p );
 
-  shared_ptr<HepRandomEngine> localEngine;
+  std::shared_ptr<HepRandomEngine> localEngine;
   long defaultN;
   double defaultP;
  

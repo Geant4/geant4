@@ -1,4 +1,4 @@
-// $Id: Doxymodules_basic.h 76473 2013-11-11 10:35:14Z gcosmo $
+// $Id: Doxymodules_basic.h 94561 2015-11-24 09:17:12Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_basic.h
@@ -76,13 +76,37 @@
  *  @{
  */
 
-  class B3ActionInitialization{};
+/** @defgroup B3a B3a
+ *  Example B3a 
+ *  @ingroup B3
+ *  @{
+ */
+
+  class B3aActionInitialization{};
+  class B3aEventAction{};
+  class B3aRunAction{};
   class B3DetectorConstruction{};
   class B3PhysicsList{};
   class B3PrimaryGeneratorAction{};
-  class B3Run{};
-  class B3RunAction{};
   class B3StackingAction{};
+
+/** @} */
+
+/** @defgroup B3b B3b
+ *  Example B3b
+ *  @ingroup B3
+ *  @{
+ */
+
+  class B3bActionInitialization{};
+  class B3bRun{};
+  class B3bRunAction{};
+  class B3DetectorConstruction{};
+  class B3PhysicsList{};
+  class B3PrimaryGeneratorAction{};
+  class B3StackingAction{};
+
+/** @} */
 
 /** @} */
 

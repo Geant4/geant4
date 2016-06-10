@@ -33,6 +33,7 @@
 #include <CLHEP/Units/PhysicalConstants.h>
 
 #include "globals.hh"
+#include "G4Pow.hh"
 #include "G4ios.hh"
 #include "G4Neutron.hh"
 #include "G4VParticleHPEnergyAngular.hh"
@@ -66,16 +67,17 @@ class G4ParticleHPNBodyPhaseSpace : public G4VParticleHPEnergyAngular
   inline G4double Prob(G4double anEnergy, G4double eMax, G4int n)
   {
     G4double result;
-    result = std::sqrt(anEnergy)*std::pow(eMax-anEnergy, 3.*n/2.-4.);
+    result = std::sqrt(anEnergy)*G4Pow::GetInstance()->powA(eMax-anEnergy, 3.*n/2.-4.);
     return result;
   }
   
   inline G4double C(G4double anEnergy, G4double mass)
   {
     G4double result(0);
-    if(theTotalCount==3) result = 4./CLHEP::pi/std::pow(GetEmax(anEnergy, mass),2);
-    if(theTotalCount==4) result = 105./32./std::pow(GetEmax(anEnergy, mass), 3.5);
-    if(theTotalCount==5) result = 256./14./CLHEP::pi/std::pow(GetEmax(anEnergy, mass), 5.);
+    if(theTotalCount==3) result = 4./CLHEP::pi/G4Pow::GetInstance()->powN(GetEmax(anEnergy, mass),2);
+    if(theTotalCount==4) result = 105./32./G4Pow::GetInstance()->powA(GetEmax(anEnergy, mass), 3.5);
+    //if(theTotalCount==5) result = 256./14./CLHEP::pi/G4Pow::GetInstance()->powA(GetEmax(anEnergy, mass), 5.);
+    if(theTotalCount==5) result = 256./14./CLHEP::pi/G4Pow::GetInstance()->powN(GetEmax(anEnergy, mass), 5);
     return result;
   }
   

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HeatedKleinNishinaCompton.cc 82754 2014-07-08 14:06:13Z gcosmo $
+// $Id: G4HeatedKleinNishinaCompton.cc 91726 2015-08-03 15:41:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -151,6 +151,7 @@ void G4HeatedKleinNishinaCompton::SampleSecondaries(
     sint2   = onecost*(2.-onecost);
     greject = 1. - epsilon*sint2/(1.+ epsilonsq);
 
+    // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
   } while (greject < G4UniformRand());
  
   //

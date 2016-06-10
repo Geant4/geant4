@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KL3DecayChannel.cc 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4KL3DecayChannel.cc 91896 2015-08-10 09:54:06Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -189,11 +189,13 @@ G4DecayProducts* G4KL3DecayChannel::DecayIt(G4double)
   G4double daughterP[3], daughterE[3];
   G4double w;
   G4double r;
-  do {
+  const size_t MAX_LOOP = 10000;
+  for (size_t loop_counter=0; loop_counter <MAX_LOOP; ++loop_counter){
     r = G4UniformRand();
     PhaseSpace(massK, &daughterM[0], &daughterE[0], &daughterP[0]);
     w = DalitzDensity(daughterE[idPi],daughterE[idLepton],daughterE[idNutrino]);
-  } while ( r > w);
+    if ( r <= w) break;
+  }
 
   // output message
 #ifdef G4VERBOSE
@@ -270,7 +272,9 @@ void G4KL3DecayChannel::PhaseSpace(G4double parentM,
   //sum of daughters'mass
   G4double sumofdaughtermass = 0.0;
   G4int index;
-  for (index=0; index<3; index++){
+  const G4int N_DAUGHTER=3;
+  
+  for (index=0; index<N_DAUGHTER; index++){
     sumofdaughtermass += M[index];
   }
 
@@ -279,8 +283,8 @@ void G4KL3DecayChannel::PhaseSpace(G4double parentM,
   G4double rd1, rd2, rd;
   G4double momentummax=0.0, momentumsum = 0.0;
   G4double energy;
-
-  do {
+  const size_t MAX_LOOP=10000;
+  for (size_t loop_counter=0; loop_counter <MAX_LOOP; ++loop_counter){
     rd1 = G4UniformRand();
     rd2 = G4UniformRand();
     if (rd2 > rd1) {
@@ -308,8 +312,8 @@ void G4KL3DecayChannel::PhaseSpace(G4double parentM,
     E[2] = energy;
     if ( P[2] >momentummax )momentummax =  P[2];
     momentumsum  +=  P[2];
-  } while (momentummax >  momentumsum - momentummax );
-
+    if (momentummax <=  momentumsum - momentummax ) break;
+  }
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>2) {
      G4cout << "G4KL3DecayChannel::PhaseSpace    ";

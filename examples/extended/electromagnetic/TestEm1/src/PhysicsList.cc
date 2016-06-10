@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm1/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 // 
-// $Id: PhysicsList.cc 85268 2014-10-27 09:04:27Z gcosmo $
+// $Id: PhysicsList.cc 93735 2015-10-30 11:00:28Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,6 +42,8 @@
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4EmStandardPhysicsSS.hh"
+#include "G4EmStandardPhysicsGS.hh"
+#include "G4EmStandardPhysicsWVI.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 #include "G4EmLowEPPhysics.hh"
@@ -155,46 +157,49 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   if (name == fEmName) return;
 
   if (name == "local") {
-
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new PhysListEmStandard(name);
     
   } else if (name == "emstandard_opt0") {
-
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics();
 
   } else if (name == "emstandard_opt1") {
-
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option1();
 
   } else if (name == "emstandard_opt2") {
-
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option2();
 
   } else if (name == "emstandard_opt3") {
-
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option3();
     
   } else if (name == "emstandard_opt4") {
-
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option4();
         
   } else if (name == "emstandardSS") {
-
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysicsSS();
+    
+  } else if (name == "emstandardGS") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysicsGS();
+    
+  } else if (name == "emstandardWVI") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysicsWVI();
     
   } else if (name == "emlivermore") {
     fEmName = name;
@@ -249,7 +254,6 @@ void PhysicsList::AddRadioactiveDecay()
 {  
   G4RadioactiveDecay* radioactiveDecay = new G4RadioactiveDecay();
   radioactiveDecay->SetHLThreshold(-1.*s);
-  radioactiveDecay->SetICM(true);                //Internal Conversion
   radioactiveDecay->SetARM(true);                //Atomic Rearangement
   
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();  

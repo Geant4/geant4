@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpAbsorption.cc 69576 2013-05-08 13:48:13Z gcosmo $
+// $Id: G4OpAbsorption.cc 88840 2015-03-12 10:31:04Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon Absorption Class Implementation
@@ -101,6 +101,11 @@ G4VParticleChange*
 G4OpAbsorption::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 {
         aParticleChange.Initialize(aTrack);
+
+        const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
+        G4double thePhotonMomentum = aParticle->GetTotalMomentum();
+
+        aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
 
         aParticleChange.ProposeTrackStatus(fStopAndKill);
 

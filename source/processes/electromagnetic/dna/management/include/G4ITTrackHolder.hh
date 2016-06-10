@@ -33,7 +33,6 @@
 #ifndef G4ITTRACKHOLDER_HH
 #define G4ITTRACKHOLDER_HH
 
-#include "G4IT.hh"
 #include "G4TrackList.hh"
 #include "G4VITTrackHolder.hh"
 #include <iostream>
@@ -50,6 +49,7 @@ public:
   };
 
   PriorityList();
+  PriorityList(G4TrackManyList& allMainList);
   PriorityList(const PriorityList& right);
   virtual ~PriorityList();
 
@@ -130,6 +130,8 @@ class G4ITTrackHolder : public G4VITTrackHolder
   static G4ThreadLocal G4ITTrackHolder* fgInstance;
   static G4ITTrackHolder* fgMasterInstance;
   friend class G4Scheduler;
+  friend class G4ITStepProcessor;
+  friend class G4ITModelProcessor;
 
 public:
   //----- typedefs -----
@@ -178,6 +180,9 @@ public:
       G4TrackList::Watcher*,
       PriorityList::Type = PriorityList::MainList);
 
+  void AddWatcherForMainList(G4TrackList::Watcher*);
+  void AddWatcherForKillList(G4TrackList::Watcher*);
+
   // ----- Access track lists -----
   inline MapOfPriorityLists& GetLists()
   { return fLists;}
@@ -220,6 +225,11 @@ public:
   inline void SetVerbose(int verbose)
   {
     fVerbose = verbose;
+  }
+
+  inline G4TrackList* GetKillList()
+  {
+    return &fToBeKilledList;
   }
 
 protected:

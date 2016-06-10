@@ -1,0 +1,25 @@
+#
+/run/numberOfThreads 2
+#
+/range/det/setMat G4_WATER
+/range/det/setRadius 1 m
+#
+/range/det/setTrackingCut 10 eV
+#
+# Register physics constructor
+/range/phys/addPhysics  G4EmDNAPhysics
+#
+/run/initialize
+#
+/gun/particle e-
+#
+/gun/energy 1 keV
+#
+/analysis/setFileName range
+/analysis/h1/set 1 100  0.    200. nm	#track length
+/analysis/h1/set 2 100  0.    200. nm	#projected range
+/analysis/h1/set 3 100  0.    200. nm	#penetration
+#
+/run/printProgress 100
+#
+/run/beamOn 1000

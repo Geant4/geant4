@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDecayChannel.hh 83920 2014-09-23 09:00:36Z gcosmo $
+// $Id: G4VDecayChannel.hh 93024 2015-09-30 15:59:32Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -42,6 +42,7 @@
 
 #include "G4ios.hh"
 #include "globals.hh"
+#include "G4ThreeVector.hh"
 /////@@#include "G4PDefSplitter.hh"
 
 class    G4ParticleDefinition;
@@ -174,8 +175,11 @@ class G4VDecayChannel
  
     G4double  GetRangeMass() const;
     void      SetRangeMass(G4double val);
+    virtual G4bool    IsOKWithParentMass(G4double parentMass); 
 
-/////@@  public:  // without description
+    void  SetPolarization(const G4ThreeVector&);
+    const G4ThreeVector& GetPolarization() const;
+
 /////@@
 /////@@    // returns the instance ID.
 /////@@    inline G4int GetInstanceID() const;
@@ -223,6 +227,9 @@ class G4VDecayChannel
  
     //  range of mass allowed in decay
     G4double   rangeMass;
+
+    //  polarization of the parent particle
+    G4ThreeVector parent_polarization;
    
     // pointer to particle table
     G4ParticleTable*       particletable;
@@ -355,6 +362,19 @@ inline
 
 inline   
   void  G4VDecayChannel::SetRangeMass(G4double val){ if(val>=0.) rangeMass=val; }
+
+inline 
+  void G4VDecayChannel::SetPolarization(const G4ThreeVector& polar)
+{
+  parent_polarization = polar;
+}
+
+inline 
+  const G4ThreeVector& G4VDecayChannel::GetPolarization() const
+{
+  return parent_polarization;
+}
+
  
 /////@@inline
 /////@@ G4int G4VDecayChannel::GetInstanceID() const { return instanceID; }

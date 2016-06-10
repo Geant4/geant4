@@ -15,6 +15,143 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+6 November 2015  Dennis Wright (hadr-casc-V10-01-13)
+----------------------------------------------------
+- G4CascadeKplusNChannel: extend to 9-body final states and 32 GeV using same
+  energy bins as G4CascadeKplusPChannel
+  
+16 October 2015  V.Ivanchenko (hadr-casc-V10-01-12)
+---------------------------------------------------
+- G4CascadeCoalescence.hh:  Add #include "G4InuclElementaryParticle.hh", to
+  address compiler error from Cray (see Config HN 1764).
+
+19 August 2015  V.Ivanchenko (hadr-casc-V10-01-11)
+--------------------------------------------------
+- G4NucleiModel.cc - Randomize.hh header is included
+
+13 July 2015  M. Kelsey (hadr-casc-V10-01-10)
+---------------------------------------------
+- G4KaonSampler:  Per D. Wright, modify to 30 bins, finely divided up to 1.5
+  GeV, very coarsely grained above 10 GeV.  Binning optimized to isolate
+  various resonances in Kp and Kn spectra.
+
+- G4CascadeKplusPChannel:  Per D. Wright, use new G4KaonSampler binning,
+  with final states tabulated up to 9-body.  Should dramatically improve
+  match to data.
+
+26 June 2015  M. Kelsey (hadr-casc-V10-01-09)
+---------------------------------------------
+- G4CascadeCheckBalance.cc:  Address Coverity #60845-60850, with incorrect
+  logical expression in diagnostic output.
+
+22 June 2015  M. Kelsey (hadr-casc-V10-01-08)
+---------------------------------------------
+Follow new G4cbrt(int) by moving powers of Z and A out of argument.  Lookup
+table only covers real nuclei (up to about 300 or so).
+
+	G4EquilibriumEvaporator.cc
+	G4Fissioner.cc
+	bindingEnergyAsymptotic.cc
+
+22 June 2015  M. Kelsey (hadr-casc-V10-01-07)
+---------------------------------------------
+Per request from G. Cosmo and A. Dotti, migrate the five "TLS" local buffers
+to use the new G4AutoDelete mechanism.  This removes them as spurious memory
+leaks at end of job.
+
+	G4InuclSpecialFunctions.cc
+	G4NucleiModel.cc
+
+19 June 2015  M. Kelsey (hadr-casc-V10-01-06)
+---------------------------------------------
+Per request from A. Ribon, migrate few remaining instances of std::pow,
+std::log, and std::exp to Geant4's VDT equivalents (G4Pow, G4Log, G4Exp).
+Only G4Pow is problematic, requiring use of singleton pointer instead of
+direct replacement.
+
+	G4CascadeFinalStateAlgorithm.cc
+	G4FissionStore.cc
+	G4Fissioner.cc
+	G4IntraNucleiCascader.cc
+
+- G4InuclSpecialFunctions:  As above, and define G4cbrt(G4int) which uses
+  G4Pow::Z13() with lookup table for integer arguments (e.g. Z, A, N).
+
+8 June 2015  M. Kelsey (hadr-casc-V10-01-05)
+--------------------------------------------
+Per request from A. Ribon and ATLAS, mark every while loop in code with
+special comment string authenticating that it terminates.
+
+	G4BigBanger.cc
+	G4CascadeFinalStateAlgorithm.cc
+	G4CascadeInterface.cc
+	G4ElementaryParticleCollider.cc
+	G4EquilibriumEvaporator.cc
+	G4FissionStore.cc
+	G4Fissioner.cc
+	G4GDecay3.cc
+	G4IntraNucleiCascader.cc
+	G4InuclCollider.cc
+	G4InuclNuclei.cc
+	G4InuclParamAngDst.cc
+	G4NonEquilibriumEvaporator.cc
+	G4NucleiModel.cc
+
+23 March 2015  M. Kelsey (hadr-casc-V10-01-04)
+----------------------------------------------
+- G4CascadeInterface.cc:  Call static Initialize() function in constructor,
+  for sequential builds or master thread.  Requires global-V10-01-08.
+
+23 April 2015  A. Ribon (hadr-casc-V10-01-03)     
+---------------------------------------------
+- G4PreCompoundDeexcitation: delete precompound products (i.e. 
+  G4ReactionProduct objects) before cleaning and deleting their
+  vector container.
+
+23 March 2015  M. Kelsey
+------------------------
+- G4KaonSampler, G4HyperonSampler:  NEW Copies of G4KaonHypSampler, which
+  will eventually diverge with different energy binning, in order to extend
+  kaon and hyperon final state tables to ~30 GeV.
+
+23 February 2015  M. Kelsey (hadr-casc-V10-01-02)
+-------------------------------------------------
+- G4InuclCollider:  Speed up new photonuclearOkay() filter by checking final
+  state nucleus vs. target directly, instead of looping over secondaries.
+  Filter is still disabled behind G4CASCADE_CHECK_PHOTONUCLEAR envvar.
+
+2 February 2015  M. Kelsey (hadr-casc-V10-01-01)
+------------------------------------------------
+- G4InuclCollider:  Add special end-of-cascade test to require low-energy
+  photo-nuclear and lepto-nuclear events to produce at least one non-gamma
+  secondary.  Currently hidden behind G4CASCADE_CHECK_PHOTONUCLEAR envvar.
+  Will address bug #1680 to increase neutron yield around the giant dipole
+  resonance, without model changes.
+
+11 December 2014  M. Kelsey (hadr-casc-V10-01-00)
+-------------------------------------------------
+- G4CascadeParameters, G4CascadeParamMessenger:  Make G4CASCADE_PIN_ABSORPTION
+  a double, specifying a probability for absorption.  Requirement is
+  less-than, not less-than-or-equal, so 0. suppresses aborption in all
+  cases.
+
+- G4ElementaryParticleCollider.cc:  Use PIN_ABSORPTION value as probability.
+  Fix boosting of pion-nucleon absorption; recoil nucleus should not be
+  involved in boost.
+
+11 December 2014  M. Kelsey
+---------------------------
+- G4CollisionOutput:  Move "hard tuning" from setOnShell() to separate
+  function.  Add code in setOnShell() to do "hard tuning" of quasi-elastic,
+  recomputing momentum for single particle and nuclear recoil directly.
+
+11 December 2014  M. Kelsey
+---------------------------
+- G4IntraNucleiCascader:  Add function to identify non-interacting particles
+  (e.g., neutrinos); in generateCascade(), move such particles directly to
+  output list, rather than transporting them through the nucleus.  This
+  deals with the "trapped neutrino" case (below) more efficiently.
+
 1 December 2014  M. Kelsey (hadr-casc-V10-00-20)
 ------------------------------------------------
 - G4CascadParticle.cc:  For stopped particles (zero path length), if at core

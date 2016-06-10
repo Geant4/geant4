@@ -41,7 +41,7 @@
 const G4int G4XDeltaDeltastarTable::sizeDeltaDeltastar = 121;
 
 // Energies (GeV) corresponding to the cross section table
-// Units are assigned while filling the PhysicsVector
+// Units are assigned when filling the PhysicsVector
 
 const G4double G4XDeltaDeltastarTable::energyTable[121] =
 {
@@ -61,7 +61,7 @@ const G4double G4XDeltaDeltastarTable::energyTable[121] =
 };
 
 // Cross-sections in mb, from S.A. Bass et al., Prog.Part.Nucl.Phys.41:225-370,1998 
-// Units are assigned while filling the PhysicsVector
+// Units are assigned when filling the PhysicsVector
 
 const G4double G4XDeltaDeltastarTable::sigmaDD1600[121]= 
 {

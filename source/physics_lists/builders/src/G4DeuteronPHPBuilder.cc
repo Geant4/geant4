@@ -34,13 +34,12 @@ G4DeuteronPHPBuilder()
 {
   theMin = 0;
   theMax=200.*MeV;
+  theParticlePHPModel = 0;
 }
 
 G4DeuteronPHPBuilder::
 ~G4DeuteronPHPBuilder() 
-{
-  delete theParticlePHPModel;
-}
+{}
 
 void G4DeuteronPHPBuilder::
 Build(G4HadronElasticProcess *)

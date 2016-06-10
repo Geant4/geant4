@@ -1,4 +1,4 @@
-$Id: History 85273 2014-10-27 09:10:59Z gcosmo $
+$Id: History 94269 2015-11-10 07:55:24Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,22 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10-11-15 V.Ivanchenko (testem11-V10-01-03)
+- G4DiscreteScatteringModel- D.Dixon fixed for number of 
+    discrete angles > 1
+
+09-11-15 V.Ivanchenko (testem11-V10-01-02)
+- D.Dixon added EM physics builders G4EmStandardPhysicsMP which 
+  uses G4DiscreteScatteringModel for e- 
+- Use G4EmParameters in local Physics List classes
+- improved log output of the test
+
+27-10-15 D.Sawkey (testem11-V10-01-01)
+- Add EM physics builders G4EmStandardGS,WVI
+
+26-10-15 mma (testem11-V10-01-00)
+- RunAction, Run : correct binWidth of histo 1
 	 
 23-10-14 mma (testem11-V10-00-04)
 - PhysListEmStandard : msc algorithm fUseSafetyPlus

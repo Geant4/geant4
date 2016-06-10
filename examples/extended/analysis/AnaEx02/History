@@ -1,4 +1,4 @@
-$Id: History 85990 2014-11-06 15:40:51Z gcosmo $
+$Id: History 92374 2015-08-31 08:52:09Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30-08-15 I. Hrivnacova (AnaEx02-V10-01-02)
+- Corrected previous update which caused compilation error
+
+28-08-15 I. Hrivnacova (AnaEx02-V10-01-01)
+- Fixed compilation on Windows
+
+27-08-15 I. Hrivnacova (AnaEx02-V10-01-00)
+- Introduced meaningful histograms and ntuple names instead of numbers
+  in all AnaEx0N examples and use histogram ids starting from 0  
+- Simplified HistoManager classes and fixed function names to follow 
+  coding guidelines
 
 06-11-14 I. Hrivnacova (AnaEx02-V10-00-04)
 - Updated for moving script in shared (analysisShared-V10-00-01)

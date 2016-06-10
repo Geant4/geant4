@@ -1,0 +1,115 @@
+//$Id$
+
+///\file "exoticphysics/monopole/.README.txt"
+///\brief Example monopole README page
+
+/*! \page Examplemonopole Example monopole
+
+ \author V.Ivanchenko, M.Vladymyrov \n
+ CERN,  Geneva, Switzerland \n
+ Lebedev Physical Institute, Moscow, Russia \n
+
+
+This example is devoted to the energy deposited by classical magnetic
+monopole.
+
+\section monopole_s1 GEOMETRY DEFINITION
+
+ The geometry consists of a single block of a homogenous material,
+ placed in a world.
+
+ Four parameters define the geometry :
+    - the material of the box 
+    - the thickness of the box 
+    - the tranverse dimension of the box 
+    - the maximal step size in target
+
+ The default is 10 cm of alumunium, step is limited by 5mm.
+ Equivalent UI commands are following:
+\verbatim
+/testex/det/setMat G4_Al
+/testex/det/sizeX  10 cm
+/testex/det/sizeYZ 5 cm
+/testex/det/setStepSize 5 mm
+\endverbatim
+
+ The default geometry is constructed in DetectorConstruction class,
+ but all of the above parameters can be changed interactively via
+ the commands defined in the DetectorMessenger class. After changing
+ material and/or dimentions one must update the detector construction:
+\verbatim
+/testex/det/update
+\endverbatim
+
+\section monopole_s2 PHYSICS LIST
+
+ Physics Lists include standard QGSP physics and additional builder
+             for monopole physics.
+ To define monopole parameters an extra string should be provided
+   a) interactive mode by UI command:
+\verbatim
+/monopole/setup 2 0 200 GeV (magnetic number, electric number, mass)
+\endverbatim
+      b) batch mode:
+\verbatim
+% monopole file.mac '2 0 200 GeV'  
+\endverbatim
+
+\section monopole_s3 AN EVENT : THE PRIMARY GENERATOR
+
+ The primary kinematic consists of a single particle which hits the
+ block perpendicular to the input face. The type of the particle
+ and its energy are set in the PrimaryGeneratorAction class, and can
+ changed via the G4 build-in commands of G4ParticleGun class (see
+ the macros provided with this example).
+ The default is monopole 100 GeV
+
+ In addition one can define randomly the impact point of the incident
+ particle. The corresponding interactive command is built in
+ PrimaryGeneratorMessenger class.
+
+ A RUN is a set of events.
+
+\section monopole_s4 VISUALIZATION
+
+ The Visualization Manager is set in the main (), see monopole.cc, for interactive session.
+ The initialisation of the drawing is done via the command
+\verbatim
+/control/execute vis.mac
+\endverbatim
+
+ The detector has a default view which is a longitudinal view of the box.
+
+ The tracks are drawn at the end of event, and erased at the end of run.
+
+\section monopole_s5 HOW TO START ?
+
+  - Execute Test  in 'batch' mode from macro files
+\verbatim
+% monopole  monopole.in
+\endverbatim
+
+  - Execute Test  in 'interactive mode' with visualization
+\verbatim
+% monopole
+....
+Idle> type your commands
+....
+Idle> exit
+\endverbatim
+
+
+\section monopole_s6 HISTOGRAMS
+
+ The result is five histograms:
+    - Monopole eneregy deposition in current material
+    - dedx for proton
+    - dedx for monopole
+    - range for proton in current material
+    - range for monopole in current material
+
+ The histogram is saved in Root file.
+ Limit of bin size can be set with testex/run/binSize (default 5mm). Real size
+ is chosen as a minimal between this and step limit (see Geometry section)
+
+*/

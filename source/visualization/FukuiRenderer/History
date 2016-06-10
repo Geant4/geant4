@@ -1,4 +1,4 @@
-$Id: History 80852 2014-05-13 15:37:00Z gcosmo $
+$Id: History 88190 2015-02-02 17:24:54Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/FukuiRenderer sub-category
 ---------------------------------------------------------
+
+2nd February 2015  Gabriele Cosmo  (DAWN-V10-01-00)
+- Fix to sources.cmake script to include missing dependency on external library.
 
 13th May 2014  John Allison  (DAWN-V10-00-02)
 - Coworks: visman-V10-00-08, opengl-V10-00-05 and openinventor-V10-00-01.

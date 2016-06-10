@@ -44,17 +44,13 @@
 #include "G4ElementTable.hh"
 #include "G4ParticleHPData.hh"
 #include "G4ParticleHPManager.hh"
+#include "G4Pow.hh"
 
 G4ParticleHPElasticData::G4ParticleHPElasticData()
 :G4VCrossSectionDataSet("NeutronHPElasticXS")
 {
    SetMinKinEnergy( 0*MeV );                                   
    SetMaxKinEnergy( 20*MeV );                                   
-
-   ke_cache = 0.0;
-   xs_cache = 0.0;
-   element_cache = NULL;
-   material_cache = NULL;
 
    theCrossSections = 0;
    onFlightDB = true;
@@ -90,13 +86,7 @@ G4double G4ParticleHPElasticData::GetIsoCrossSection( const G4DynamicParticle* d
                                    const G4Element* element ,
                                    const G4Material* material )
 {
-   if ( dp->GetKineticEnergy() == ke_cache && element == element_cache &&  material == material_cache ) return xs_cache;
-
-   ke_cache = dp->GetKineticEnergy();
-   element_cache = element;
-   material_cache = material;
    G4double xs = GetCrossSection( dp , element , material->GetTemperature() );
-   xs_cache = xs;
    return xs;
 }
 
@@ -117,11 +107,16 @@ void G4ParticleHPElasticData::BuildPhysicsTable(const G4ParticleDefinition& aP)
      throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
 
 //080428
-   if ( getenv( "G4NEUTRONHP_NEGLECT_DOPPLER" ) ) 
+   if ( G4ParticleHPManager::GetInstance()->GetNeglectDoppler() ) 
    {
-      G4cout << "Find environment variable of \"G4NEUTRONHP_NEGLECT_DOPPLER\"." << G4endl;
+      G4cout << "Find a flag of \"G4NEUTRONHP_NEGLECT_DOPPLER\"." << G4endl;
       G4cout << "On the fly Doppler broadening will be neglect in the cross section calculation of elastic scattering of neutrons (<20MeV)." << G4endl;
       onFlightDB = false;
+   }
+
+   if ( G4Threading::IsWorkerThread() ) {
+      theCrossSections = G4ParticleHPManager::GetInstance()->GetElasticCrossSections();
+      return;
    }
 
   size_t numberOfElements = G4Element::GetNumberOfElements();
@@ -141,6 +136,8 @@ void G4ParticleHPElasticData::BuildPhysicsTable(const G4ParticleDefinition& aP)
       Instance(G4Neutron::Neutron())->MakePhysicsVector((*theElementTable)[i], this);
     theCrossSections->push_back(physVec);
   }
+
+   G4ParticleHPManager::GetInstance()->RegisterElasticCrossSections(theCrossSections);
 }
 
 void G4ParticleHPElasticData::DumpPhysicsTable(const G4ParticleDefinition& aP)
@@ -176,7 +173,7 @@ void G4ParticleHPElasticData::DumpPhysicsTable(const G4ParticleDefinition& aP)
 
       for ( ie = 0 ; ie < 130 ; ie++ )
       {
-         G4double eKinetic = 1.0e-5 * std::pow ( 10.0 , ie/10.0 ) *eV;
+         G4double eKinetic = 1.0e-5 * G4Pow::GetInstance()->powA ( 10.0 , ie/10.0 ) *eV;
          G4bool outOfRange = false;
 
          if ( eKinetic < 20*MeV )
@@ -208,11 +205,9 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
   // prepare neutron
   G4double eKinetic = aP->GetKineticEnergy();
 
-  // T. K. 
-//  if ( getenv( "G4NEUTRONHP_NEGLECT_DOPPLER" ) )
-//080428
   if ( !onFlightDB )
   {
+     //NEGLECT_DOPPLER_B.
      G4double factor = 1.0;
      if ( eKinetic < aT * k_Boltzmann ) 
      {
@@ -249,10 +244,10 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
   G4ThreeVector neutronVelocity = 1./G4Neutron::Neutron()->GetPDGMass()*theNeutron.GetMomentum();
   G4double neutronVMag = neutronVelocity.mag();
 
-  while(counter == 0 || std::abs(buffer-result/std::max(1,counter)) > 0.03*buffer)
+  while(counter == 0 || std::abs(buffer-result/std::max(1,counter)) > 0.03*buffer) // Loop checking, 11.05.2015, T. Koi
   {
     if(counter) buffer = result/counter;
-    while (counter<size)
+    while (counter<size) // Loop checking, 11.05.2015, T. Koi
     {
       counter ++;
       G4ReactionProduct aThermalNuc = aNuc.GetThermalNucleus(eleMass, aT);
@@ -286,4 +281,8 @@ void G4ParticleHPElasticData::
 SetVerboseLevel( G4int newValue ) 
 {
    G4ParticleHPManager::GetInstance()->SetVerboseLevel(newValue);
+}
+void G4ParticleHPElasticData::CrossSectionDescription(std::ostream& outFile) const
+{
+    outFile << "High Precision cross data based on Evaluated Nuclear Data Files (ENDF) for elastic reaction of neutrons below 20MeV\n" ;
 }

@@ -1,0 +1,145 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_box3
+#define tools_box3
+
+#include "../mnmx"
+
+//#include <limits>
+#include <ostream>
+
+namespace tools {
+
+template <class VEC3>
+class box3 {
+protected:
+  typedef typename VEC3::elem_t T_t;
+  //static T_t num_max() {return std::numeric_limits<T_t>::max();} //max is a forever pain on Windows.
+protected:
+  box3(){
+    //make_empty();
+  }
+public:
+  virtual ~box3() {}
+public:
+  box3(const box3& a_from)
+  :m_min(a_from.m_min)
+  ,m_max(a_from.m_max)
+  {}
+  box3& operator=(const box3& a_from){
+    m_min = a_from.m_min;
+    m_max = a_from.m_max;
+    return *this;
+  }
+public:
+  bool center(VEC3& a_center) const {
+    if(is_empty()) {a_center.set_value(0,0,0);return false;} //??
+    a_center.set_value((m_max[0] + m_min[0])/T_t(2),
+                       (m_max[1] + m_min[1])/T_t(2),
+                       (m_max[2] + m_min[2])/T_t(2));
+    return true;
+  }
+
+  bool set_bounds(const VEC3& a_mn,const VEC3& a_mx){
+    if( a_mn[0]>a_mx[0] || a_mn[1]>a_mx[1] || a_mn[2]>a_mx[2]) return false;
+    m_min = a_mn;
+    m_max = a_mx;
+    return true;
+  }
+  bool set_bounds(T_t a_mn_x,T_t a_mn_y,T_t a_mn_z,
+                  T_t a_mx_x,T_t a_mx_y,T_t a_mx_z){
+    if( a_mn_x>a_mx_x || a_mn_y>a_mx_y || a_mn_z>a_mx_z ) return false;
+    m_min.set_value(a_mn_x,a_mn_y,a_mn_z);
+    m_max.set_value(a_mx_x,a_mx_y,a_mx_z);
+    return true;
+  }
+
+  bool get_size(T_t& a_dx,T_t& a_dy,T_t& a_dz) const {
+    if(is_empty()) {a_dx = 0;a_dy = 0;a_dz = 0;return false;}
+    a_dx = m_max[0] - m_min[0];
+    a_dy = m_max[1] - m_min[1];
+    a_dz = m_max[2] - m_min[2];
+    return true;
+  }
+
+  bool is_empty() const {return m_max[0] < m_min[0];}
+
+  const VEC3& mn() const {return m_min;}
+  const VEC3& mx() const {return m_max;}
+
+  bool back(VEC3& a_min,VEC3& a_min_y,VEC3& a_min_xy,VEC3& a_min_x) const {
+    T_t dx,dy,dz;
+    if(!get_size(dx,dy,dz)) return false; //WARNING : a_vecs not touched.
+    // back (from m_min, clockwise order looking toward +z) :
+    a_min = m_min;
+    a_min_y.set_value (m_min.x()   ,m_min.y()+dy,m_min.z());
+    a_min_xy.set_value(m_min.x()+dx,m_min.y()+dy,m_min.z());
+    a_min_x.set_value (m_min.x()+dx,m_min.y()   ,m_min.z());
+    return true;
+  }
+
+  bool front(VEC3& a_max,VEC3& a_max_x,VEC3& a_max_xy,VEC3& a_max_y) const {
+    T_t dx,dy,dz;
+    if(!get_size(dx,dy,dz)) return false; //WARNING : a_vecs not touched.
+    // front (from m_max, clockwise order looking toward -z) :
+    a_max = m_max;
+    a_max_x.set_value (m_max.x()-dx,m_max.y()   ,m_max.z());
+    a_max_xy.set_value(m_max.x()-dx,m_max.y()-dy,m_max.z());
+    a_max_y.set_value (m_max.x()   ,m_max.y()-dy,m_max.z());
+    return true;
+  }
+
+  void extend_by(const VEC3& a_point) {
+    // Extend the boundaries of the box by the given point, i.e. make the
+    // point fit inside the box if it isn't already so.
+    if(is_empty()) {
+      set_bounds(a_point,a_point);
+    } else {
+      m_min.set_value(tools::mn<T_t>(a_point[0],m_min[0]),
+                      tools::mn<T_t>(a_point[1],m_min[1]),
+                      tools::mn<T_t>(a_point[2],m_min[2]));
+      m_max.set_value(tools::mx<T_t>(a_point[0],m_max[0]),
+                      tools::mx<T_t>(a_point[1],m_max[1]),
+                      tools::mx<T_t>(a_point[2],m_max[2]));
+    }
+  }
+
+  void extend_by(T_t a_x,T_t a_y,T_t a_z) {
+    // Extend the boundaries of the box by the given point, i.e. make the
+    // point fit inside the box if it isn't already so.
+    if(is_empty()) {
+      set_bounds(a_x,a_y,a_z,a_x,a_y,a_z);
+    } else {
+      m_min.set_value(tools::mn<T_t>(a_x,m_min[0]),
+                      tools::mn<T_t>(a_y,m_min[1]),
+                      tools::mn<T_t>(a_z,m_min[2]));
+      m_max.set_value(tools::mx<T_t>(a_x,m_max[0]),
+                      tools::mx<T_t>(a_y,m_max[1]),
+                      tools::mx<T_t>(a_z,m_max[2]));
+    }
+  }
+
+  //NOTE : print is a Python keyword.
+  void dump(std::ostream& a_out) {
+    T_t dx,dy,dz;
+    if(!get_size(dx,dy,dz)) {
+      a_out << "box is empty." << std::endl;
+    } else {
+      a_out << " size " << dx << " " << dy << " " << dz << std::endl;
+    }
+    a_out << " min " << m_min[0] << " " << m_min[1] << " " << m_min[2] << std::endl;
+    a_out << " max " << m_max[0] << " " << m_max[1] << " " << m_max[2] << std::endl;
+    VEC3 c;
+    center(c);
+    a_out << " center " << c[0] << " " << c[1] << " " << c[2] << std::endl;
+  }
+
+protected:
+  VEC3 m_min;
+  VEC3 m_max;
+};
+
+}
+
+#endif

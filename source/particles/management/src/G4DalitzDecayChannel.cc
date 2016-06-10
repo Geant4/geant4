@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DalitzDecayChannel.cc 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4DalitzDecayChannel.cc 91896 2015-08-10 09:54:06Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -126,7 +126,8 @@ G4DecayProducts *G4DalitzDecayChannel::DecayIt(G4double)
   G4double xmax  = 2.0*std::log(parentmass);
   G4double wmax = 1.5;
   G4double x, w, ww, w1, w2, w3, t;
-  do {
+  const size_t MAX_LOOP = 10000;
+  for (size_t loop_counter=0; loop_counter <MAX_LOOP; ++loop_counter){
     x = G4UniformRand()*(xmax-xmin) + xmin;
     w = G4UniformRand()*wmax;
     t = std::exp(x);
@@ -139,8 +140,9 @@ G4DecayProducts *G4DalitzDecayChannel::DecayIt(G4double)
     } else {
       ww = 0.0;
     }
-  } while (w > ww);    
- 
+    if (w <= ww) break;    
+  }
+
   // calculate gamma momentum
   G4double Pgamma = 
       G4PhaseSpaceDecayChannel::Pmx(parentmass, 0.0, std::sqrt(t)); 

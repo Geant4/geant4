@@ -1,4 +1,4 @@
-$Id: README 66241 2012-12-13 18:34:42Z gunter $
+$Id: README 93512 2015-10-23 13:45:07Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,7 +23,7 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
 	Idle> /run/initialize
 	....	
 	Idle> /testem/det/setMat Silicon
-	Idle> /testem/phys/setCuts 100 um	
+	Idle> /run/setCut 100 um	
  	Idle> /gun/particle e-
         Idle> /gun/energy 10 MeV
         Idle> /run/beamOn

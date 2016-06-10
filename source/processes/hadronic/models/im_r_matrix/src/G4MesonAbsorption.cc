@@ -324,7 +324,8 @@ AbsorptionCrossSection(const G4KineticTrack & aT, const G4KineticTrack & bT)
   if(t<=it[24])
   {
     G4int count = 0;
-    while(t>it[count])count+=2;
+    while(t>it[count])count+=2;              /* Loop checking, 30-Oct-2015, G.Folger */
+	 
     G4double x1 = it[count-2];
     G4double x2 = it[count];
     G4double y1 = it[count-1];

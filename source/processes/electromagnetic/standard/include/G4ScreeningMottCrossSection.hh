@@ -126,7 +126,8 @@ private:
   	G4ScreeningMottCrossSection(const  G4ScreeningMottCrossSection&);
 
 
-  	G4NistManager*  fNistManager;		
+  	G4NistManager*  fNistManager;	
+	G4Pow*          fG4pow;	
 	G4MottCoefficients * mottcoeff;
 
 	G4double 		TotalCross;
@@ -176,6 +177,13 @@ private:
   	G4double                 htc2;
         G4double                 e2;
 
+        //angle
+        static const G4int DIM = 950;
+
+        G4double angle[DIM];
+        G4double tet[DIM];
+        G4double dangle[DIM];
+        G4double cross[DIM];
 };
 
 
@@ -186,7 +194,7 @@ inline void G4ScreeningMottCrossSection::SetupParticle(const G4ParticleDefinitio
   	particle = p;
   	mass = particle->GetPDGMass();
   	spin = particle->GetPDGSpin();
-  		if(0.0 != spin) { spin = 0.5; }
+  	if(0.0 != spin) { spin = 0.5; }
   	tkin = 0.0;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

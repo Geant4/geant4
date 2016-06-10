@@ -100,7 +100,7 @@ private:
 
   static double genChiSquare( HepRandomEngine *anEngine, double a );
 
-  shared_ptr<HepRandomEngine> localEngine;
+  std::shared_ptr<HepRandomEngine> localEngine;
   double defaultA;
 
 };

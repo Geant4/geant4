@@ -138,7 +138,7 @@ namespace G4INCL {
       // read the file
       std::vector<MassRecord> records;
       MassRecord record;
-      while(massTableIn.good()) {
+      while(massTableIn.good()) { /* Loop checking, 10.07.2015, D.Mancusi */
         massTableIn >> record;
         records.push_back(record);
       }

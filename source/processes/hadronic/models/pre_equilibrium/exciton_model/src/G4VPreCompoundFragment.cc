@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPreCompoundFragment.cc 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4VPreCompoundFragment.cc 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // J. M. Quesada (August 2008).  Based  on previous work by V. Lara
 //
@@ -39,18 +39,19 @@
 G4VPreCompoundFragment::G4VPreCompoundFragment(
   const G4ParticleDefinition* part, G4VCoulombBarrier* aCoulombBarrier)
   : particle(part), theCoulombBarrierPtr(aCoulombBarrier),
-    theRestNucleusA(0),theRestNucleusZ(0),theBindingEnergy(0.0), 
-    theMaximalKineticEnergy(-MeV),theRestNucleusMass(0.0),
-    theReducedMass(0.0),theMomentum(0.,0.,0.,0.),
+    theMomentum(0.,0.,0.,0.),
+    theA(particle->GetBaryonNumber()),
+    theZ(G4lrint(particle->GetPDGCharge())),
+    theResA(0),theResZ(0),theFragA(0),theFragZ(0),theBindingEnergy(0.0), 
+    theMaxKinEnergy(0.0),theResMass(0.0),
+    theReducedMass(0.0),
     theEmissionProbability(0.0),theCoulombBarrier(0.0),
     OPTxs(3),useSICB(false)
 {
-  theA = particle->GetBaryonNumber();
-  theZ = G4int(particle->GetPDGCharge()/eplus + 0.1);
   theMass = particle->GetPDGMass();
   theParameters = new G4PreCompoundParameters();
   g4pow = G4Pow::GetInstance();
-  theRestNucleusA13 = 0;
+  theResA13 = 0;
 }
 
 G4VPreCompoundFragment::~G4VPreCompoundFragment()
@@ -78,38 +79,35 @@ operator << (std::ostream &out, const G4VPreCompoundFragment *theFragment)
 void 
 G4VPreCompoundFragment::Initialize(const G4Fragment & aFragment)
 {
-  theRestNucleusA = aFragment.GetA_asInt() - theA;
-  theRestNucleusZ = aFragment.GetZ_asInt() - theZ;
+  theFragA = aFragment.GetA_asInt();
+  theFragZ = aFragment.GetZ_asInt();
+  theResA = theFragA - theA;
+  theResZ = theFragZ - theZ;
 
-  if ((theRestNucleusA < theRestNucleusZ) ||
-      (theRestNucleusA < theA) ||
-      (theRestNucleusZ < theZ)) 
+  if ((theResA < theResZ) || (theResA < theA) || (theResZ < theZ)) 
     {
       // In order to be sure that emission probability will be 0.
-      theMaximalKineticEnergy = 0.0;
+      theMaxKinEnergy = 0.0;
       return;
     }
 
-  theRestNucleusA13 = g4pow->Z13(theRestNucleusA);
+  theResA13 = g4pow->Z13(theResA);
     
   // Calculate Coulomb barrier
   theCoulombBarrier = theCoulombBarrierPtr->
-    GetCoulombBarrier(theRestNucleusA,theRestNucleusZ,
-		      aFragment.GetExcitationEnergy());
+    GetCoulombBarrier(theResA,theResZ,aFragment.GetExcitationEnergy());
 
   // Calculate masses
-  theRestNucleusMass = 
-    G4NucleiProperties::GetNuclearMass(theRestNucleusA, theRestNucleusZ);
-  theReducedMass = theRestNucleusMass*theMass/(theRestNucleusMass + theMass);
+  theResMass = G4NucleiProperties::GetNuclearMass(theResA, theResZ);
+  theReducedMass = theResMass*theMass/(theResMass + theMass);
 
   // Compute Binding Energies for fragments 
   // needed to separate a fragment from the nucleus
-  theBindingEnergy = 
-    theRestNucleusMass + theMass - aFragment.GetGroundStateMass();
+  theBindingEnergy = theResMass + theMass - aFragment.GetGroundStateMass();
     
   // Compute Maximal Kinetic Energy which can be carried by fragments 
   // after separation - the true assimptotic value
   G4double Ecm  = aFragment.GetMomentum().m();
-  theMaximalKineticEnergy = 
-    ((Ecm-theRestNucleusMass)*(Ecm+theRestNucleusMass) + theMass*theMass)/(2.0*Ecm)-theMass;
+  theMaxKinEnergy = ((Ecm-theResMass)*(Ecm+theResMass) + theMass*theMass)
+    /(2.0*Ecm) - theMass;
 }

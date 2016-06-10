@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.cc 84281 2014-10-13 07:21:50Z gcosmo $
+// $Id: G4UIcommand.cc 89953 2015-05-06 08:09:12Z gcosmo $
 //
 // 
 
@@ -225,7 +225,7 @@ G4int G4UIcommand::DoIt(G4String parameterList)
   if(CheckNewValue( correctParameters ))
   { return fParameterOutOfRange+99; }
 
-  if(workerThreadOnly && !G4Threading::IsWorkerThread()) return 0;
+  if(workerThreadOnly && G4Threading::IsMasterThread()) return 0;
 
   messenger->SetNewValue( this, correctParameters );
   return 0;

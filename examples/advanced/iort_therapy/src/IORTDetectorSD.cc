@@ -101,9 +101,7 @@ G4bool IORTDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
     G4int i  = ROhist -> GetReplicaNumber(2);
     G4int j  = ROhist -> GetReplicaNumber(1);
 
-#ifdef G4ANALYSIS_USE_ROOT
     IORTAnalysisManager* analysis = IORTAnalysisManager::GetInstance();
-#endif
 
     IORTMatrix* matrix = IORTMatrix::GetInstance();
 
@@ -122,23 +120,21 @@ G4bool IORTDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
 		 */
 		if ( Z >= 1)      
 		    matrix -> Fill(trackID, particleDef, i, j, k, 0, true);
-#ifdef G4ANALYSIS_USE_ROOT
-/*
-	    // Fragments kinetic energy (ntuple)
-	    if (trackID !=1 && Z>=1) 
-	    {
+		/*
+		// Fragments kinetic energy (ntuple)
+		if (trackID !=1 && Z>=1) 
+		{
 		// First step kinetic energy for every fragment 
-		 analysis -> FillKineticFragmentTuple(i, j, k, A, Z, kineticEnergy/MeV);
-	    }	 
-	    // Kinetic energy spectra for primary particles 
-
-	    if ( trackID == 1 && i == 0) 
-	    {
+		analysis -> FillKineticFragmentTuple(i, j, k, A, Z, kineticEnergy/MeV);
+		}	 
+		// Kinetic energy spectra for primary particles 
+		
+		if ( trackID == 1 && i == 0) 
+		{
 		// First step kinetic energy for primaries only
 		analysis -> FillKineticEnergyPrimaryNTuple(i, j, k, kineticEnergy/MeV);
-	    }
-*/
-#endif
+		}
+		*/
 	}	 
 
 	if(energyDeposit != 0)
@@ -161,11 +157,10 @@ G4bool IORTDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
 	}
     }
 
-#ifdef G4ANALYSIS_USE_ROOT
     if(energyDeposit != 0)
-    {  
+      {  
 	if(trackID != 1)
-	{
+	  {
 	    if (particleName == "proton")
 		analysis -> SecondaryProtonEnergyDeposit(i, energyDeposit/MeV);
 
@@ -187,11 +182,11 @@ G4bool IORTDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
 	    else if (particleName == "deuteron")
 		analysis -> SecondaryDeuteronEnergyDeposit(i, energyDeposit/MeV);
 
-	    else if (particleName == "pi+" || particleName == "pi-" ||  particleName == "pi0")
+	    else if (particleName == "pi+" || particleName == "pi-" ||  
+		     particleName == "pi0")
 		analysis -> SecondaryPionEnergyDeposit(i, energyDeposit/MeV);   	
 	}
     }
-#endif
 
     return true;
 }
@@ -199,12 +194,12 @@ G4bool IORTDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
 /////////////////////////////////////////////////////////////////////////////
 void IORTDetectorSD::EndOfEvent(G4HCofThisEvent* HCE)
 {
-    static G4int HCID = -1;
-    if(HCID < 0)
+  static G4int HCID = -1;
+  if(HCID < 0)
     { 
-	HCID = GetCollectionID(0); 
+      HCID = GetCollectionID(0); 
     }
 
-    HCE -> AddHitsCollection(HCID,HitsCollection);
+  HCE -> AddHitsCollection(HCID,HitsCollection);
 }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HETCChargedFragment.hh 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4HETCChargedFragment.hh 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // by V. Lara
 
@@ -41,7 +41,7 @@ public:
 
   virtual ~G4HETCChargedFragment();
 
-  virtual G4double GetKineticEnergy(const G4Fragment & aFragment);
+  virtual G4double SampleKineticEnergy(const G4Fragment & aFragment);
 
 private:
 

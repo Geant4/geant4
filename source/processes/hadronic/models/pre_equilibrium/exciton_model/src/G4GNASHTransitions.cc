@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GNASHTransitions.cc 69581 2013-05-08 14:02:06Z gcosmo $
+// $Id: G4GNASHTransitions.cc 92145 2015-08-19 14:26:07Z gcosmo $
 //
 // 20.08.2010 V.Ivanchenko move constructor and destructor to the source 
 
@@ -32,6 +32,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4PreCompoundParameters.hh"
 #include "G4HadronicException.hh"
+#include "Randomize.hh"
 
 G4GNASHTransitions::G4GNASHTransitions()
 {

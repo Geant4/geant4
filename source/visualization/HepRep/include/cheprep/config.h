@@ -4,7 +4,7 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: config.h 66373 2012-12-18 09:41:34Z gcosmo $
+ * @version $Id: config.h 94590 2015-11-25 11:12:46Z gcosmo $
  */
 namespace cheprep {
 
@@ -13,8 +13,8 @@ namespace cheprep {
 // WIN32 and NOT GNU_GCC
 typedef __int64 int64;
 typedef unsigned __int64 uint64;
-#define CHEPREP_INT64_FORMAT "%ld"
-#define CHEPREP_UINT64_FORMAT "%uld"
+#define CHEPREP_INT64_FORMAT "%lld"
+#define CHEPREP_UINT64_FORMAT "%llu"
 
 #else // other than WIN32-MSVC
 #if defined(_LP64) 

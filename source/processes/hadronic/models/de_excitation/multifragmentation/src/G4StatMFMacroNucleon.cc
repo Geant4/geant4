@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroNucleon.cc 68724 2013-04-05 09:26:32Z gcosmo $
+// $Id: G4StatMFMacroNucleon.cc 91834 2015-08-07 07:24:22Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -32,6 +32,8 @@
 #include "G4StatMFMacroNucleon.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 G4StatMFMacroNucleon::G4StatMFMacroNucleon() 
   : G4VStatMFMacroCluster(1), _NeutronMeanMultiplicity(0.0),
@@ -57,20 +59,17 @@ G4StatMFMacroNucleon::CalcMeanMultiplicity(const G4double FreeVol,
 	
   static const G4double degeneracy = 2.0;
 	
-  G4double Coulomb = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
-    (1.0 - 1.0/std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
-
-  G4double exponent_proton = (mu+nu-Coulomb)/T;
+  G4double exponent_proton = (mu + nu - G4StatMFParameters::GetCoulomb())/T;
   G4double exponent_neutron = mu/T;
 
-  if (exponent_neutron > 700.0) exponent_neutron = 700.0;
-  if (exponent_proton > 700.0) exponent_proton = 700.0;
+  if (exponent_neutron > 300.0) exponent_neutron = 300.0;
+  if (exponent_proton > 300.0) exponent_proton = 300.0;
 
   _NeutronMeanMultiplicity = 
-    (degeneracy*FreeVol/lambda3)*std::exp(exponent_neutron);
+    (degeneracy*FreeVol/lambda3)*G4Exp(exponent_neutron);
 	
   _ProtonMeanMultiplicity = 
-    (degeneracy*FreeVol/lambda3)*std::exp(exponent_proton);
+    (degeneracy*FreeVol/lambda3)*G4Exp(exponent_proton);
 
   return _MeanMultiplicity = _NeutronMeanMultiplicity + _ProtonMeanMultiplicity;
 }
@@ -78,10 +77,7 @@ G4StatMFMacroNucleon::CalcMeanMultiplicity(const G4double FreeVol,
 
 G4double G4StatMFMacroNucleon::CalcEnergy(const G4double T)
 {
-  G4double Coulomb = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
-    (1.0 - 1.0/std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
-									
-  return _Energy = Coulomb * theZARatio * theZARatio + (3./2.) * T;
+  return _Energy = G4StatMFParameters::GetCoulomb()*theZARatio*theZARatio + 1.5*T;
 }
 
 G4double 
@@ -92,15 +88,13 @@ G4StatMFMacroNucleon::CalcEntropy(const G4double T, const G4double FreeVol)
 
   G4double NeutronEntropy = 0.0;
   if (_NeutronMeanMultiplicity > 0.0)
-    NeutronEntropy = _NeutronMeanMultiplicity*(5./2.+
-		      std::log(2.0*static_cast<G4double>(theA)*FreeVol/
-			       (lambda3*_NeutronMeanMultiplicity)));
+    NeutronEntropy = _NeutronMeanMultiplicity*(2.5+G4Log(2*theA*FreeVol/
+			    (lambda3*_NeutronMeanMultiplicity)));
 				
   G4double ProtonEntropy = 0.0;
   if (_ProtonMeanMultiplicity > 0.0)
-    ProtonEntropy = _ProtonMeanMultiplicity*(5./2.+
-		      std::log(2.0*static_cast<G4double>(theA)*FreeVol/
-			       (lambda3*_ProtonMeanMultiplicity)));
+    ProtonEntropy = _ProtonMeanMultiplicity*(2.5+G4Log(2*theA*FreeVol/
+		    (lambda3*_ProtonMeanMultiplicity)));
 				
   return NeutronEntropy+ProtonEntropy;
 }

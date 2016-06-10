@@ -27,7 +27,6 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/management/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include \
             -I$(G4BASE)/processes/hadronic/models/low_energy/include \
-            -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
             -I$(G4BASE)/processes/hadronic/models/util/include \
             -I$(G4BASE)/processes/hadronic/models/management/include \
             -I$(G4BASE)/particles/management/include \
@@ -39,5 +38,12 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/materials/include \
             -I$(G4BASE)/intercoms/include 
            
+ifdef G4LIB_BUILD_ZLIB
+  CPPFLAGS += -I$(G4BASE)/externals/zlib/include
+endif
+
 include $(G4INSTALL)/config/common.gmk
 
+ifndef DO_NOT_SET_PHP_AS_HP
+   CPPFLAGS += -DPHP_AS_HP
+endif

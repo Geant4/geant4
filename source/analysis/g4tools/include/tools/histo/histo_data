@@ -12,6 +12,17 @@
 namespace tools {
 namespace histo {
 
+inline unsigned int dim_planes(unsigned int a_dim) {
+  // m_dim = 1 -> 0
+  // m_dim = 2 -> 0+1=1
+  // m_dim = 3 -> 0+1+2=3
+  // m_dim = 4 -> 0+1+2+3=6
+  typedef unsigned int dim_t;
+  dim_t n = 0;
+  for(dim_t i=0;i<a_dim;i++) n += i;
+  return n;
+}
+
 //TC is for a coordinate.
 //TO is for an offset used to identify a bin.
 //TN is for a number of entries.
@@ -22,6 +33,7 @@ class histo_data {
 public:
   typedef axis<TC,TO> axis_t;
   typedef unsigned int dim_t;
+  typedef std::map<std::string,std::string> annotations_t;
 public:
   histo_data()
   :m_dimension(0)
@@ -42,6 +54,7 @@ public:
   ,m_bin_Sxw(a_from.m_bin_Sxw)
   ,m_bin_Sx2w(a_from.m_bin_Sx2w)
   ,m_axes(a_from.m_axes)
+  ,m_in_range_plane_Sxyw(a_from.m_in_range_plane_Sxyw)
   ,m_annotations(a_from.m_annotations)
   ,m_all_entries(a_from.m_all_entries)
   ,m_in_range_entries(a_from.m_in_range_entries)
@@ -62,6 +75,7 @@ public:
     m_bin_Sxw = a_from.m_bin_Sxw;
     m_bin_Sx2w = a_from.m_bin_Sx2w;
     m_axes = a_from.m_axes;
+    m_in_range_plane_Sxyw = a_from.m_in_range_plane_Sxyw;
     m_annotations = a_from.m_annotations;
     m_all_entries = a_from.m_all_entries;
     m_in_range_entries = a_from.m_in_range_entries;
@@ -73,85 +87,15 @@ public:
   }
 
   virtual ~histo_data(){}
-
-public:
-
-  // for inlib/rroot/streamers :
-  TW get_Sw() const {
-    TW sw = 0;
-    for(TO ibin=0;ibin<m_bin_number;ibin++) {
-      if(!histo::is_out(m_axes,ibin)) {
-        sw += m_bin_Sw[ibin];
-      }
-    }
-    return sw;
-  }
-/*
-  TW get_all_Sw() const {
-    TW sw = 0;
-    for(TO ibin=0;ibin<m_bin_number;ibin++) sw += m_bin_Sw[ibin];
-    return sw;
-  }
-  TN get_all_entries() const {
-    TN number = 0;
-    for(TO ibin=0;ibin<m_bin_number;ibin++) {
-      number += m_bin_entries[ibin];
-    }
-    return number;
-  }
-
-  // for inlib/wroot/streamers :
-  TN get_entries() const {
-    TN number = 0;
-    for(TO ibin=0;ibin<m_bin_number;ibin++) {
-      if(!histo::is_out(m_axes,ibin)) {
-        number += m_bin_entries[ibin];
-      }
-    }
-    return number;
-  }
-*/
-
-  TW get_Sw2() const {
-    TW sw2 = 0;
-    for(TO ibin=0;ibin<m_bin_number;ibin++) {
-      if(!histo::is_out(m_axes,ibin)) {
-        sw2 += m_bin_Sw2[ibin];
-      }
-    }
-    return sw2;
-  }
-
-  bool get_ith_axis_Sxw(dim_t a_axis,TC& a_value) const {
-    a_value = 0;
-    if(a_axis>=m_dimension) return false;
-    for(TO ibin=0;ibin<m_bin_number;ibin++) {
-      if(!histo::is_out(m_axes,ibin)) {
-        a_value += m_bin_Sxw[ibin][a_axis];
-      }
-    }
-    return true;
-  }
-
-  bool get_ith_axis_Sx2w(dim_t a_axis,TC& a_value) const {
-    a_value = 0;
-    if(a_axis>=m_dimension) return false;
-    for(TO ibin=0;ibin<m_bin_number;ibin++) {
-      if(!histo::is_out(m_axes,ibin)) {
-        a_value += m_bin_Sx2w[ibin][a_axis];
-      }
-    }
-    return true;
-  }
-
 protected:
   void reset_fast_getters(){
+    //m_in_range_plane_Sxyw is not a fast getter.
     m_all_entries = 0;
     m_in_range_entries = 0;
     m_in_range_Sw = 0;
     m_in_range_Sw2 = 0;
-    m_in_range_Sxw.resize(m_dimension,0);
-    m_in_range_Sx2w.resize(m_dimension,0);
+    m_in_range_Sxw.assign(m_dimension,0);
+    m_in_range_Sx2w.assign(m_dimension,0);
   }
 public:
   void update_fast_getters() {
@@ -184,6 +128,7 @@ public:
   // Axes :
   std::vector<axis_t> m_axes;
   // etc :
+  std::vector<TC> m_in_range_plane_Sxyw; // ill-defined relative to slicing, sub, div, mult operations. Handled because of CERN-ROOT.
   std::map<std::string,std::string> m_annotations;
   // fast getters :
   TN m_all_entries; //used if reading from a ROOT file.

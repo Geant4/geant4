@@ -35,6 +35,7 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "Randomize.hh"
+#include "G4Exp.hh"
 #include "G4ParticleHPVector.hh"
 #include "G4VParticleHPEDis.hh"
 
@@ -45,7 +46,7 @@ class G4ParticleHPFissionSpectrum : public G4VParticleHPEDis
   public:
   G4ParticleHPFissionSpectrum()
   {
-    expm1 = std::exp(-1.);
+    expm1 = G4Exp(-1.);
   }
   ~G4ParticleHPFissionSpectrum()
   {
@@ -71,13 +72,20 @@ class G4ParticleHPFissionSpectrum : public G4VParticleHPEDis
     G4double range =50*CLHEP::MeV;
     G4double max = Maxwell((theta*CLHEP::eV)/2., theta);
     G4double value;
+    G4int icounter=0;
+    G4int icounter_max=1024;
     do
     {
+      icounter++;
+      if ( icounter > icounter_max ) {
+	 G4cout << "Loop-counter exceeded the threshold value at " << __LINE__ << "th line of " << __FILE__ << "." << G4endl;
+         break;
+      }
       result = range*G4UniformRand();
       value = Maxwell(result, theta);
       cut = G4UniformRand();
     }
-    while(cut > value/max);
+    while(cut > value/max); // Loop checking, 11.05.2015, T. Koi
     return result;
   }
   
@@ -86,7 +94,7 @@ class G4ParticleHPFissionSpectrum : public G4VParticleHPEDis
   // this is the function to sample from. 
   inline G4double Maxwell(G4double anEnergy, G4double theta)
   {
-    G4double result = std::sqrt(anEnergy/CLHEP::eV)*std::exp(-anEnergy/CLHEP::eV/theta);
+    G4double result = std::sqrt(anEnergy/CLHEP::eV)*G4Exp(-anEnergy/CLHEP::eV/theta);
     return result;
   }
   

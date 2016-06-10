@@ -67,7 +67,6 @@ public:
     virtual void ProcessOneEvent(G4int i_event);
     ////virtual void TerminateEventLoop();
     virtual void ConstructScoringWorlds();
-    virtual void InitializePhysics();
     virtual void RunTermination();
 
     //The following method should be invoked by G4WorkerRunManager for each event.

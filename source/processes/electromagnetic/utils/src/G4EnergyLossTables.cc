@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossTables.cc 77290 2013-11-22 10:57:50Z gcosmo $
+// $Id: G4EnergyLossTables.cc 92921 2015-09-21 15:06:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 // first version created by P.Urban , 06/04/1998
@@ -49,22 +49,7 @@
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-/*
-G4ThreadLocal G4EnergyLossTablesHelper *G4EnergyLossTables::t = 0;
-G4ThreadLocal G4EnergyLossTablesHelper *G4EnergyLossTables::null_loss = 0;
-G4ThreadLocal G4ParticleDefinition* G4EnergyLossTables::lastParticle = 0;
-G4ThreadLocal G4double G4EnergyLossTables::QQPositron = 1.0; // e_squared
-G4ThreadLocal G4double G4EnergyLossTables::Chargesquare ;
-G4ThreadLocal G4int    G4EnergyLossTables::oldIndex = -1 ;
-G4ThreadLocal G4double G4EnergyLossTables::rmin = 0. ;
-G4ThreadLocal G4double G4EnergyLossTables::rmax = 0. ;
-G4ThreadLocal G4double G4EnergyLossTables::Thigh = 0. ;
-G4ThreadLocal G4int    G4EnergyLossTables::let_counter = 0;
-G4ThreadLocal G4int    G4EnergyLossTables::let_max_num_warnings = 100;
-G4ThreadLocal G4bool   G4EnergyLossTables::first_loss = true;
 
-G4ThreadLocal G4EnergyLossTables::helper_map *G4EnergyLossTables::dict = 0;
-*/
 G4EnergyLossTablesHelper *G4EnergyLossTables::t = 0;
 G4EnergyLossTablesHelper *G4EnergyLossTables::null_loss = 0;
 G4ParticleDefinition* G4EnergyLossTables::lastParticle = 0;
@@ -111,6 +96,8 @@ G4EnergyLossTablesHelper::G4EnergyLossTablesHelper()
   theHighestKineticEnergy= 0.0;
   theMassRatio = 0.0;
   theNumberOfBins = 0;
+  theDEDXTable = theRangeTable = theInverseRangeTable = theLabTimeTable 
+    = theProperTimeTable = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -191,7 +191,7 @@ void G4MTRunManager::SetNumberOfThreads(G4int n )
     {
       G4ExceptionDescription msg;
       msg << "Number of threads is forced to " << forcedNwokers
-          << " by G4FORCENUMBEROFWORKERS shell variable.\n"
+          << " by G4FORCENUMBEROFTHREADS shell variable.\n"
           << "Method ignored.";
       G4Exception("G4MTRunManager::SetNumberOfThreads(G4int)",
                   "Run0035", JustWarning, msg);
@@ -555,17 +555,6 @@ void G4MTRunManager::TerminateWorkers()
     }
 #endif
     threads.clear();
-}
-
-#include "G4IonTable.hh"
-#include "G4ParticleTable.hh"
-#include "G4CascadeInterface.hh"
-
-void G4MTRunManager::InitializePhysics()
-{
-    G4RunManager::InitializePhysics();
-    //BERTINI, this is needed to create pseudo-particles, to be removed
-    G4CascadeInterface::Initialize();
 }
 
 void G4MTRunManager::AbortRun(G4bool softAbort)

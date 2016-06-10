@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SurfaceVoxelizer.icc 72335 2013-07-16 09:01:49Z gcosmo $
+// $Id: G4SurfaceVoxelizer.icc 91755 2015-08-05 08:17:56Z gcosmo $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -154,6 +154,12 @@ G4SurfaceVoxelizer::GetCandidates(std::vector<G4int> &curVoxel) const
     return fCandidates[voxelsIndex];
   }
   return fNoCandidates;
+}
+
+inline
+G4int G4SurfaceVoxelizer::GetTotalCandidates() const
+{
+  return fTotalCandidates;
 }
 
 inline

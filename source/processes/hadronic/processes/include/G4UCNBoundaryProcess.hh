@@ -197,6 +197,7 @@ private:
 public:
 
         void SetMicroRoughness(G4bool );
+        G4bool GetMicroRoughness();
 
         G4UCNBoundaryProcessStatus GetStatus() const;
 
@@ -229,12 +230,24 @@ G4UCNBoundaryProcessStatus G4UCNBoundaryProcess::GetStatus() const
   return theStatus;
 }
 
-inline G4bool
-G4UCNBoundaryProcess::High(G4double Energy, G4double FermiPotDiff)
+inline
+G4bool G4UCNBoundaryProcess::High(G4double Energy, G4double FermiPotDiff)
 {
   // Returns true for Energy > Fermi Potential Difference
 
   return (Energy > FermiPotDiff);
+}
+
+inline
+void G4UCNBoundaryProcess::SetMicroRoughness(G4bool active)
+{
+   UseMicroRoughnessReflection = active;
+}
+
+inline
+G4bool G4UCNBoundaryProcess::GetMicroRoughness()
+{
+  return UseMicroRoughnessReflection;
 }
 
 #endif /* G4UCNBOUNDARYPROCESS_HH */

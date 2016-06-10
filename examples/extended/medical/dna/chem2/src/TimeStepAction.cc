@@ -117,7 +117,7 @@ void TimeStepAction::UserPostTimeStepAction()
 void
 TimeStepAction::UserReactionAction(const G4Track&,
                                    const G4Track&,
-                                   const std::vector<G4Track*>& /*products*/)
+                                   const std::vector<G4Track*>* /*products*/)
 {
   /*
    for (int i = 0 ; i < nbProducts ; i ++)

@@ -1,0 +1,771 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_cube
+#define tools_sg_cube
+
+#include "node"
+#include "sf"
+#include "render_action"
+#include "pick_action"
+#include "bbox_action"
+#include "gstos"
+
+namespace tools {
+namespace sg {
+
+class cube : public node, public gstos {
+  TOOLS_NODE(cube,tools::sg::cube,node)
+public:
+  sf<float> width;
+  sf<float> height;
+  sf<float> depth;
+public:
+  virtual const std::vector<field_desc>& node_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::cube)
+    static std::vector<field_desc> s_v;
+    if(s_v.empty()) {
+      s_v = parent::node_fields();
+      TOOLS_ADD_FIELD_DESC(width)
+      TOOLS_ADD_FIELD_DESC(height)
+      TOOLS_ADD_FIELD_DESC(depth)
+    }
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&width);
+    add_field(&height);
+    add_field(&depth);
+  }
+protected:
+  typedef float* floatp;
+protected: //gstos
+  virtual unsigned int create_gsto(std::ostream&,sg::gl_manager& a_mgr) {
+    std::vector<float> gsto_data;
+
+    //bool draw_edges = state.m_GL_LIGHTING?false:true;
+    //if(draw_edges) {
+
+   {unsigned int nsegs = 24;  //4 segs * 6 faces.
+    unsigned int ngsto = nsegs*2*3; //2 points * 3 coords.
+    unsigned int sz = gsto_data.size();
+    gsto_data.resize(sz+ngsto);
+    float* pxyz = tools::vec_data<float>(gsto_data)+sz;    
+    floatp lines;
+    _lines(lines);
+    ::memcpy(pxyz,lines,ngsto*sizeof(float));
+    m_gsto_segs_sz = ngsto;}
+
+   {unsigned int ntris = 12;
+    unsigned int nxyzs = ntris*3*3; //3 points * 3 coords
+    unsigned int ngsto = nxyzs*2;     //xyz+nms
+    unsigned int sz = gsto_data.size();
+    gsto_data.resize(sz+ngsto);
+    float* pxyz = tools::vec_data<float>(gsto_data)+sz;    
+    floatp tris,nms;
+    _tris(tris,nms);
+    ::memcpy(pxyz,tris,nxyzs*sizeof(float));
+    ::memcpy(pxyz+nxyzs,nms,nxyzs*sizeof(float));
+    m_gsto_tris_sz = nxyzs;}
+
+    if(gsto_data.empty()) return 0;
+
+    return a_mgr.create_gsto_from_data(gsto_data);
+  }
+public:
+  virtual void render(render_action& a_action) {
+    const state& state = a_action.state();
+
+    bool draw_edges = state.m_GL_LIGHTING?false:true;
+
+    if(state.m_use_gsto) {
+      unsigned int _id = get_gsto_id(a_action.out(),a_action.gl_manager());
+      if(_id) {        
+        bufpos pxyzs = 0;
+        bufpos ptris = m_gsto_segs_sz*sizeof(float);
+        bufpos pnms  = ptris+m_gsto_tris_sz*sizeof(float);
+
+        a_action.begin_gsto(_id);
+        if(draw_edges) {
+          //a_action.set_lighting(false); //NOTE : we should do that if style==draw_fill !
+          a_action.color4f(0,0,0,1); //if lighten, then rendered grey.
+          a_action.line_width(1);
+
+          a_action.draw_gsto_v(tools::gl::lines(),m_gsto_segs_sz/3,pxyzs);
+
+          //pushes back the filled polygons to avoid z-fighting with lines
+          a_action.set_polygon_offset(true);
+
+          a_action.color4f(state.m_color);
+          a_action.line_width(state.m_line_width);
+          //a_action.set_lighting(state.m_GL_LIGHTING);
+        }
+        a_action.draw_gsto_vn(tools::gl::triangles(),m_gsto_tris_sz/3,ptris,pnms);
+        a_action.set_polygon_offset(state.m_GL_POLYGON_OFFSET_FILL);
+        a_action.end_gsto();
+        return;
+  
+      } else { //!_id
+        // use immediate rendering.
+      }
+
+    } else {
+      clean_gstos(&a_action.gl_manager());
+    }
+
+    // immediate rendering :
+    if(draw_edges) {
+      a_action.color4f(0,0,0,1); //if lighten, then rendered grey.
+      a_action.line_width(1);
+
+      floatp lines;
+      _lines(lines);
+      a_action.draw_vertex_array(tools::gl::lines(),144,lines);
+
+      a_action.set_polygon_offset(true);
+
+      a_action.color4f(state.m_color);
+      a_action.line_width(state.m_line_width);
+    }
+
+    floatp tris,nms;
+    _tris(tris,nms);
+    a_action.draw_vertex_normal_array(tools::gl::triangles(),108,tris,nms);
+    a_action.set_polygon_offset(state.m_GL_POLYGON_OFFSET_FILL);
+  }
+
+  virtual void pick(pick_action& a_action) {
+    floatp tris,nms;
+    _tris(tris,nms);
+    a_action.add__triangles(*this,108,tris,true);
+  }
+  virtual void bbox(bbox_action& a_action) {
+    floatp tris,nms;
+    _tris(tris,nms);
+    a_action.add_points(108,tris);
+  }
+public:
+  cube()
+  :parent()
+  ,width(1.0f)
+  ,height(1.0f)
+  ,depth(1.0f)
+  ,m_gsto_segs_sz(0)
+  ,m_gsto_tris_sz(0)
+  {
+    add_fields();
+  }
+  virtual ~cube(){}
+public:
+  cube(const cube& a_from)
+  :parent(a_from)
+  ,gstos(a_from)
+  ,width(a_from.width)
+  ,height(a_from.height)
+  ,depth(a_from.depth)
+  ,m_gsto_segs_sz(0)
+  ,m_gsto_tris_sz(0)
+  {
+    add_fields();
+  }
+  cube& operator=(const cube& a_from){
+    parent::operator=(a_from);
+    gstos::operator=(a_from);
+
+    width = a_from.width;
+    height = a_from.height;
+    depth = a_from.depth;
+
+    return *this;
+  }
+protected:
+  void _faces(float*& a_front,float*& a_back,   //[12]
+              float*& a_right,float*& a_left,
+              float*&   a_top,float*& a_bottom){
+
+    static float front[12];
+    static float back[12];
+    static float right[12];
+    static float left[12];
+    static float top[12];
+    static float bottom[12];
+
+    float wh = width.value()*0.5f;
+    float hh = height.value()*0.5f;
+    float dh = depth.value()*0.5f;
+
+    front[0] =  wh;front[ 1] = -hh;front[ 2] = dh;
+    front[3] =  wh;front[ 4] =  hh;front[ 5] = dh;
+    front[6] = -wh;front[ 7] =  hh;front[ 8] = dh;
+    front[9] = -wh;front[10] = -hh;front[11] = dh;
+
+    back[0] =  wh;back[ 1] = -hh;back[ 2] = -dh;
+    back[3] = -wh;back[ 4] = -hh;back[ 5] = -dh;
+    back[6] = -wh;back[ 7] =  hh;back[ 8] = -dh;
+    back[9] =  wh;back[10] =  hh;back[11] = -dh;
+
+    right[0] = wh;right[ 1] = -hh;right[ 2] =  dh;
+    right[3] = wh;right[ 4] = -hh;right[ 5] = -dh;
+    right[6] = wh;right[ 7] =  hh;right[ 8] = -dh;
+    right[9] = wh;right[10] =  hh;right[11] =  dh;
+
+    left[0] = -wh;left[ 1] = -hh;left[ 2] =  dh;
+    left[3] = -wh;left[ 4] =  hh;left[ 5] =  dh;
+    left[6] = -wh;left[ 7] =  hh;left[ 8] = -dh;
+    left[9] = -wh;left[10] = -hh;left[11] = -dh;
+
+    top[0] =  wh;top[ 1] = hh;top[ 2] =  dh;
+    top[3] =  wh;top[ 4] = hh;top[ 5] = -dh;
+    top[6] = -wh;top[ 7] = hh;top[ 8] = -dh;
+    top[9] = -wh;top[10] = hh;top[11] =  dh;
+
+    bottom[0] =  wh;bottom[ 1] = -hh;bottom[ 2] =  dh;
+    bottom[3] = -wh;bottom[ 4] = -hh;bottom[ 5] =  dh;
+    bottom[6] = -wh;bottom[ 7] = -hh;bottom[ 8] = -dh;
+    bottom[9] =  wh;bottom[10] = -hh;bottom[11] = -dh;
+
+    a_front  = front;
+    a_back   = back;
+    a_right  = right;
+    a_left   = left;
+    a_top    = top;
+    a_bottom = bottom;
+  }
+
+  void _tris(float*& a_tris,float*& a_nms){ //[108]
+    floatp front,back,right,left,top,bottom;
+
+    _faces(front,back,right,left,top,bottom);
+
+    static float tris[108];
+    static float nms[108];  
+
+    /////////////////////
+    tris[0] = front[0];
+    tris[1] = front[1];
+    tris[2] = front[2];
+
+    tris[3] = front[3];
+    tris[4] = front[4];
+    tris[5] = front[5];
+
+    tris[6] = front[6];
+    tris[7] = front[7];
+    tris[8] = front[8];
+    //
+    tris[9]  = front[6];
+    tris[10] = front[7];
+    tris[11] = front[8];
+
+    tris[12] = front[9];
+    tris[13] = front[10];
+    tris[14] = front[11];
+
+    tris[15] = front[0];
+    tris[16] = front[1];
+    tris[17] = front[2];
+
+    /////////////////////
+    tris[18] = back[0];
+    tris[19] = back[1];
+    tris[20] = back[2];
+
+    tris[21] = back[3];
+    tris[22] = back[4];
+    tris[23] = back[5];
+
+    tris[24] = back[6];
+    tris[25] = back[7];
+    tris[26] = back[8];
+    //
+    tris[27] = back[6];
+    tris[28] = back[7];
+    tris[29] = back[8];
+
+    tris[30] = back[9];
+    tris[31] = back[10];
+    tris[32] = back[11];
+
+    tris[33] = back[0];
+    tris[34] = back[1];
+    tris[35] = back[2];
+
+    /////////////////////
+    tris[36] = right[0];
+    tris[37] = right[1];
+    tris[38] = right[2];
+
+    tris[39] = right[3];
+    tris[40] = right[4];
+    tris[41] = right[5];
+
+    tris[42] = right[6];
+    tris[43] = right[7];
+    tris[44] = right[8];
+    //
+    tris[45] = right[6];
+    tris[46] = right[7];
+    tris[47] = right[8];
+
+    tris[48] = right[9];
+    tris[49] = right[10];
+    tris[50] = right[11];
+
+    tris[51] = right[0];
+    tris[52] = right[1];
+    tris[53] = right[2];
+
+    /////////////////////
+    tris[54] = left[0];
+    tris[55] = left[1];
+    tris[56] = left[2];
+
+    tris[57] = left[3];
+    tris[58] = left[4];
+    tris[59] = left[5];
+
+    tris[60] = left[6];
+    tris[61] = left[7];
+    tris[62] = left[8];
+    //
+    tris[63] = left[6];
+    tris[64] = left[7];
+    tris[65] = left[8];
+
+    tris[66] = left[9];
+    tris[67] = left[10];
+    tris[68] = left[11];
+
+    tris[69] = left[0];
+    tris[70] = left[1];
+    tris[71] = left[2];
+
+    /////////////////////
+    tris[72] = top[0];
+    tris[73] = top[1];
+    tris[74] = top[2];
+
+    tris[75] = top[3];
+    tris[76] = top[4];
+    tris[77] = top[5];
+
+    tris[78] = top[6];
+    tris[79] = top[7];
+    tris[80] = top[8];
+    //
+    tris[81] = top[6];
+    tris[82] = top[7];
+    tris[83] = top[8];
+
+    tris[84] = top[9];
+    tris[85] = top[10];
+    tris[86] = top[11];
+
+    tris[87] = top[0];
+    tris[88] = top[1];
+    tris[89] = top[2];
+
+    /////////////////////
+    tris[90] = bottom[0];
+    tris[91] = bottom[1];
+    tris[92] = bottom[2];
+
+    tris[93] = bottom[3];
+    tris[94] = bottom[4];
+    tris[95] = bottom[5];
+
+    tris[96] = bottom[6];
+    tris[97] = bottom[7];
+    tris[98] = bottom[8];
+    //
+    tris[99] = bottom[6];
+    tris[100] = bottom[7];
+    tris[101] = bottom[8];
+
+    tris[102] = bottom[9];
+    tris[103] = bottom[10];
+    tris[104] = bottom[11];
+
+    tris[105] = bottom[0];
+    tris[106] = bottom[1];
+    tris[107] = bottom[2];
+    /////////////////////
+
+    ///////////////////// front
+    nms[0] = 0;
+    nms[1] = 0;
+    nms[2] = 1;
+
+    nms[3] = 0;
+    nms[4] = 0;
+    nms[5] = 1;
+
+    nms[6] = 0;
+    nms[7] = 0;
+    nms[8] = 1;
+    //
+    nms[9]  = 0;
+    nms[10] = 0;
+    nms[11] = 1;
+
+    nms[12] = 0;
+    nms[13] = 0;
+    nms[14] = 1;
+
+    nms[15] = 0;
+    nms[16] = 0;
+    nms[17] = 1;
+
+    ///////////////////// back
+    nms[18] =  0;
+    nms[19] =  0;
+    nms[20] = -1;
+
+    nms[21] =  0;
+    nms[22] =  0;
+    nms[23] = -1;
+
+    nms[24] =  0;
+    nms[25] =  0;
+    nms[26] = -1;
+    //
+    nms[27] =  0;
+    nms[28] =  0;
+    nms[29] = -1;
+
+    nms[30] =  0;
+    nms[31] =  0;
+    nms[32] = -1;
+
+    nms[33] =  0;
+    nms[34] =  0;
+    nms[35] = -1;
+
+    ///////////////////// right
+    nms[36] = 1;
+    nms[37] = 0;
+    nms[38] = 0;
+
+    nms[39] = 1;
+    nms[40] = 0;
+    nms[41] = 0;
+
+    nms[42] = 1;
+    nms[43] = 0;
+    nms[44] = 0;
+    //
+    nms[45] = 1;
+    nms[46] = 0;
+    nms[47] = 0;
+
+    nms[48] = 1;
+    nms[49] = 0;
+    nms[50] = 0;
+
+    nms[51] = 1;
+    nms[52] = 0;
+    nms[53] = 0;
+
+    ///////////////////// left
+    nms[54] = -1;
+    nms[55] =  0;
+    nms[56] =  0;
+
+    nms[57] = -1;
+    nms[58] =  0;
+    nms[59] =  0;
+
+    nms[60] = -1;
+    nms[61] =  0;
+    nms[62] =  0;
+    //
+    nms[63] = -1;
+    nms[64] =  0;
+    nms[65] =  0;
+
+    nms[66] = -1;
+    nms[67] =  0;
+    nms[68] =  0;
+
+    nms[69] = -1;
+    nms[70] =  0;
+    nms[71] =  0;
+
+    ///////////////////// top
+    nms[72] = 0;
+    nms[73] = 1;
+    nms[74] = 0;
+
+    nms[75] = 0;
+    nms[76] = 1;
+    nms[77] = 0;
+
+    nms[78] = 0;
+    nms[79] = 1;
+    nms[80] = 0;
+    //
+    nms[81] = 0;
+    nms[82] = 1;
+    nms[83] = 0;
+
+    nms[84] = 0;
+    nms[85] = 1;
+    nms[86] = 0;
+
+    nms[87] = 0;
+    nms[88] = 1;
+    nms[89] = 0;
+
+    ///////////////////// bottom
+    nms[90] =  0;
+    nms[91] = -1;
+    nms[92] =  0;
+
+    nms[93] =  0;
+    nms[94] = -1;
+    nms[95] =  0;
+
+    nms[96] =  0;
+    nms[97] = -1;
+    nms[98] =  0;
+    //
+    nms[99]  =  0;
+    nms[100] = -1;
+    nms[101] =  0;
+
+    nms[102] =  0;
+    nms[103] = -1;
+    nms[104] =  0;
+
+    nms[105] =  0;
+    nms[106] = -1;
+    nms[107] =  0;
+    /////////////////////
+
+    a_tris = tris;
+    a_nms = nms;
+  }
+
+  void _lines(float*& a_lines) { //[144]
+    floatp front,back,right,left,top,bottom;
+
+    _faces(front,back,right,left,top,bottom);
+
+    //4 segs * 2 points * 3 coords * 6 faces.
+
+    //4*2*3*6 = 24*6 = 144
+
+    static float lines[144]; //segments
+
+    lines[0] = front[0];
+    lines[1] = front[1];
+    lines[2] = front[2];
+    lines[3] = front[3];
+    lines[4] = front[4];
+    lines[5] = front[5];
+
+    lines[6] = front[3];
+    lines[7] = front[4];
+    lines[8] = front[5];
+    lines[9] = front[6];
+    lines[10] = front[7];
+    lines[11] = front[8];
+
+    lines[12] = front[6];
+    lines[13] = front[7];
+    lines[14] = front[8];
+    lines[15] = front[9];
+    lines[16] = front[10];
+    lines[17] = front[11];
+
+    lines[18] = front[9];
+    lines[19] = front[10];
+    lines[20] = front[11];
+    lines[21] = front[0];
+    lines[22] = front[1];
+    lines[23] = front[2];
+
+    lines[24] = back[0];
+    lines[25] = back[1];
+    lines[26] = back[2];
+    lines[27] = back[3];
+    lines[28] = back[4];
+    lines[29] = back[5];
+
+    lines[30] = back[3];
+    lines[31] = back[4];
+    lines[32] = back[5];
+    lines[33] = back[6];
+    lines[34] = back[7];
+    lines[35] = back[8];
+
+    lines[36] = back[6];
+    lines[37] = back[7];
+    lines[38] = back[8];
+    lines[39] = back[9];
+    lines[40] = back[10];
+    lines[41] = back[11];
+
+    lines[42] = back[9];
+    lines[43] = back[10];
+    lines[44] = back[11];
+    lines[45] = back[0];
+    lines[46] = back[1];
+    lines[47] = back[2];
+
+    lines[48] = left[0];
+    lines[49] = left[1];
+    lines[50] = left[2];
+    lines[51] = left[3];
+    lines[52] = left[4];
+    lines[53] = left[5];
+
+    lines[54] = left[3];
+    lines[55] = left[4];
+    lines[56] = left[5];
+    lines[57] = left[6];
+    lines[58] = left[7];
+    lines[59] = left[8];
+
+    lines[60] = left[6];
+    lines[61] = left[7];
+    lines[62] = left[8];
+    lines[63] = left[9];
+    lines[64] = left[10];
+    lines[65] = left[11];
+
+    lines[66] = left[9];
+    lines[67] = left[10];
+    lines[68] = left[11];
+    lines[69] = left[0];
+    lines[70] = left[1];
+    lines[71] = left[2];
+
+    lines[72] = right[0];
+    lines[73] = right[1];
+    lines[74] = right[2];
+    lines[75] = right[3];
+    lines[76] = right[4];
+    lines[77] = right[5];
+
+    lines[78] = right[3];
+    lines[79] = right[4];
+    lines[80] = right[5];
+    lines[81] = right[6];
+    lines[82] = right[7];
+    lines[83] = right[8];
+
+    lines[84] = right[6];
+    lines[85] = right[7];
+    lines[86] = right[8];
+    lines[87] = right[9];
+    lines[88] = right[10];
+    lines[89] = right[11];
+
+    lines[90] = right[9];
+    lines[91] = right[10];
+    lines[92] = right[11];
+    lines[93] = right[0];
+    lines[94] = right[1];
+    lines[95] = right[2];
+
+    lines[96] = top[0];
+    lines[97] = top[1];
+    lines[98] = top[2];
+    lines[99] = top[3];
+    lines[100] = top[4];
+    lines[101] = top[5];
+
+    lines[102] = top[3];
+    lines[103] = top[4];
+    lines[104] = top[5];
+    lines[105] = top[6];
+    lines[106] = top[7];
+    lines[107] = top[8];
+
+    lines[108] = top[6];
+    lines[109] = top[7];
+    lines[110] = top[8];
+    lines[111] = top[9];
+    lines[112] = top[10];
+    lines[113] = top[11];
+
+    lines[114] = top[9];
+    lines[115] = top[10];
+    lines[116] = top[11];
+    lines[117] = top[0];
+    lines[118] = top[1];
+    lines[119] = top[2];
+
+    lines[120] = bottom[0];
+    lines[121] = bottom[1];
+    lines[122] = bottom[2];
+    lines[123] = bottom[3];
+    lines[124] = bottom[4];
+    lines[125] = bottom[5];
+
+    lines[126] = bottom[3];
+    lines[127] = bottom[4];
+    lines[128] = bottom[5];
+    lines[129] = bottom[6];
+    lines[130] = bottom[7];
+    lines[131] = bottom[8];
+
+    lines[132] = bottom[6];
+    lines[133] = bottom[7];
+    lines[134] = bottom[8];
+    lines[135] = bottom[9];
+    lines[136] = bottom[10];
+    lines[137] = bottom[11];
+
+    lines[138] = bottom[9];
+    lines[139] = bottom[10];
+    lines[140] = bottom[11];
+    lines[141] = bottom[0];
+    lines[142] = bottom[1];
+    lines[143] = bottom[2];
+
+    a_lines = lines;
+  }   
+
+protected:
+  unsigned int m_gsto_segs_sz;
+  unsigned int m_gsto_tris_sz;
+/*
+  enum draw_style {
+    draw_point = 0,
+    draw_line = 1,
+    draw_fill = 2
+  };
+
+  template <class T>
+  void visit(T& a_visitor,draw_style a_style){
+    if(a_style==draw_fill) {
+      floatp tris,nms;
+      _tris(tris,nms);
+      a_visitor.add_triangles(108,tris);
+
+    } else if(a_style==draw_line) {
+      floatp lines;
+      _lines(lines);
+      a_action.add_lines(144,lines);
+
+    } else if(a_style==draw_point) {
+      floatp tris,nms;
+      _tris(tris,nms);
+
+      a_action.add_points(108,tris);
+
+    } else if(a_style==pick) {
+      floatp tris,nms;
+      _tris(tris,nms);
+      a_action.add__triangles(*this,108,tris,true);
+    }
+  }
+*/
+};
+
+}}
+
+#endif

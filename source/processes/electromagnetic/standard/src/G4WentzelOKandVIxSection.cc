@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.cc 85306 2014-10-27 14:17:47Z gcosmo $
+// $Id: G4WentzelOKandVIxSection.cc 91726 2015-08-03 15:41:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -64,6 +64,7 @@ G4double G4WentzelOKandVIxSection::FormFactor[]        = {0.0};
 using namespace std;
 
 G4WentzelOKandVIxSection::G4WentzelOKandVIxSection(G4bool combined) :
+  temp(0.,0.,0.),
   numlimit(0.1),
   nwarnings(0),
   nwarnlimit(50),
@@ -94,8 +95,8 @@ G4WentzelOKandVIxSection::G4WentzelOKandVIxSection(G4bool combined) :
       G4double x = a0*fG4pow->Z13(j);
       if(1 == j) { ScreenRSquare[j] = 0.5*alpha2*a0*a0; }
       else {
-	ScreenRSquare[j] = 0.5*(1 + G4Exp(-j*j*0.001))*alpha2*x*x;
-	ScreenRSquareElec[j] = 0.5*alpha2*x*x;
+        ScreenRSquare[j] = 0.5*(1 + G4Exp(-j*j*0.001))*alpha2*x*x;
+        ScreenRSquareElec[j] = 0.5*alpha2*x*x;
       }
       x = fNistManager->GetA27(j);
       FormFactor[j] = constn*x*x;
@@ -122,7 +123,7 @@ G4WentzelOKandVIxSection::~G4WentzelOKandVIxSection()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4WentzelOKandVIxSection::Initialise(const G4ParticleDefinition* p, 
-					  G4double cosThetaLim)
+                                          G4double cosThetaLim)
 {
   SetupParticle(p);
   tkin = mom2 = momCM2 = 0.0;
@@ -138,7 +139,7 @@ void G4WentzelOKandVIxSection::Initialise(const G4ParticleDefinition* p,
   currentMaterial = 0;
   
   //G4cout << "G4WentzelOKandVIxSection::Initialise  mass= " << mass
-  //	 << "  " << p->GetParticleName() 
+  //         << "  " << p->GetParticleName() 
   //     << "  cosThetaMax= " << cosThetaMax << G4endl; 
   
 }
@@ -181,12 +182,12 @@ G4WentzelOKandVIxSection::SetupTarget(G4int Z, G4double cut)
       screenZ = ScreenRSquare[targetZ]/mom2;
     } else if(mass > MeV) {
       screenZ = std::min(Z*1.13,1.13 +3.76*Z*Z*invbeta2*alpha2*chargeSquare)*
-	ScreenRSquare[targetZ]/mom2;
+        ScreenRSquare[targetZ]/mom2;
     } else {
       G4double tau = tkin/mass;
       screenZ = std::min(Z*1.13,(1.13 +3.76*Z*Z
-	  *invbeta2*alpha2*std::sqrt(tau/(tau + fG4pow->Z23(targetZ)))))*
-	ScreenRSquareElec[targetZ]/mom2;
+          *invbeta2*alpha2*std::sqrt(tau/(tau + fG4pow->Z23(targetZ)))))*
+        ScreenRSquareElec[targetZ]/mom2;
     }
     if(targetZ == 1 && cosTetMaxNuc2 < 0.0 && particle == theProton) {
       cosTetMaxNuc2 = 0.0;
@@ -233,15 +234,15 @@ G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom(G4double cosTMax)
     if(y < 0.0) {
       ++nwarnings;
       if(nwarnings < nwarnlimit) {
-	G4cout << "G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom"
-	       << " scattering on e- <0"
-	       << G4endl;
-	G4cout << "y= " << y 
-	       << " e(MeV)= " << tkin << " p(MeV/c)= " << sqrt(mom2) 
-	       << " Z= " << targetZ << "  " 
-	       << particle->GetParticleName() << G4endl;
-	G4cout << " 1-costm= " << 1.0-costm << " screenZ= " << screenZ 
-	       << " x= " << x << G4endl;
+        G4cout << "G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom"
+               << " scattering on e- <0"
+               << G4endl;
+        G4cout << "y= " << y 
+               << " e(MeV)= " << tkin << " p(MeV/c)= " << sqrt(mom2) 
+               << " Z= " << targetZ << "  " 
+               << particle->GetParticleName() << G4endl;
+        G4cout << " 1-costm= " << 1.0-costm << " screenZ= " << screenZ 
+               << " x= " << x << G4endl;
       }
       y = 0.0;
     }
@@ -250,9 +251,9 @@ G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom(G4double cosTMax)
   /* 
        G4cout << "G4WentzelVI:XS per A " << " Z= " << targetZ 
        << " e(MeV)= " << tkin/MeV << " XSel= " << xSection
-	 << " cut(MeV)= " << ecut/MeV  
-  	 << " zmaxE= " << (1.0 - cosTetMaxElec)/screenZ 
-	 << " zmaxN= " << (1.0 - cosThetaMax)/screenZ 
+         << " cut(MeV)= " << ecut/MeV  
+           << " zmaxE= " << (1.0 - cosTetMaxElec)/screenZ 
+         << " zmaxN= " << (1.0 - cosThetaMax)/screenZ 
          << " 1-costm= " << 1.0 - cosThetaMax << G4endl;
   */
   // scattering off nucleus
@@ -272,14 +273,14 @@ G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom(G4double cosTMax)
     if(y < 0.0) {
       ++nwarnings;
       if(nwarnings < nwarnlimit) {
-	G4cout << "G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom"
-	       << " scattering on nucleus <0"
-	       << G4endl;
-	G4cout << "y= " << y 
-	       << " e(MeV)= " << tkin << " Z= " << targetZ << "  " 
-	       << particle->GetParticleName() << G4endl;
-	G4cout << " formfactA= " << formfactA << " screenZ= " << screenZ 
-	       << " x= " << " x1= " << x1 <<G4endl;
+        G4cout << "G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom"
+               << " scattering on nucleus <0"
+               << G4endl;
+        G4cout << "y= " << y 
+               << " e(MeV)= " << tkin << " Z= " << targetZ << "  " 
+               << particle->GetParticleName() << G4endl;
+        G4cout << " formfactA= " << formfactA << " screenZ= " << screenZ 
+               << " x= " << " x1= " << x1 <<G4endl;
       }
       y = 0.0;
     }
@@ -289,11 +290,11 @@ G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom(G4double cosTMax)
  
   /*
   G4cout << "Z= " << targetZ << " XStot= " << xSection/barn 
-	 << " screenZ= " << screenZ << " formF= " << formfactA 
-	 << " for " << particle->GetParticleName() 
-  	 << " m= " << mass << " 1/v= " << sqrt(invbeta2) << " p= " << sqrt(mom2)
-	 << " x= " << x 
-	 << G4endl;
+         << " screenZ= " << screenZ << " formF= " << formfactA 
+         << " for " << particle->GetParticleName() 
+           << " m= " << mass << " 1/v= " << sqrt(invbeta2) << " p= " << sqrt(mom2)
+         << " x= " << x 
+         << G4endl;
   */
   return xSection; 
 }
@@ -302,41 +303,39 @@ G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom(G4double cosTMax)
 
 G4ThreeVector&
 G4WentzelOKandVIxSection::SampleSingleScattering(G4double cosTMin,
-						 G4double cosTMax,
-						 G4double elecRatio)
+                                                 G4double cosTMax,
+                                                 G4double elecRatio)
 {
   temp.set(0.0,0.0,1.0);
+  CLHEP::HepRandomEngine* rndmEngineMod = G4Random::getTheEngine();
  
   G4double formf = formfactA;
   G4double cost1 = cosTMin;
   G4double cost2 = cosTMax;
   if(elecRatio > 0.0) {
-    if(G4UniformRand() <= elecRatio) {
+    if(rndmEngineMod->flat() <= elecRatio) {
       formf = 0.0;
       cost1 = std::max(cost1,cosTetMaxElec);
       cost2 = std::max(cost2,cosTetMaxElec);
     }
   }
   if(cost1 > cost2) {
-    G4double z1, z2;
     G4double w1 = 1. - cost1 + screenZ;
     G4double w2 = 1. - cost2 + screenZ;
-    do {
-      z1 = w1*w2/(w1 + G4UniformRand()*(w2 - w1)) - screenZ;
-      z2 = 1. - z1*factB + factB1*targetZ*sqrt(z1*factB)*(2 - z1);
-    } while(G4UniformRand() > z2);
+    G4double z1 = w1*w2/(w1 + rndmEngineMod->flat()*(w2 - w1)) - screenZ;
 
     G4double fm = 1.0 + formf*z1;
-    G4double grej = (1.0 + z1*factD)*fm*fm;
+    G4double grej = (1. - z1*factB + factB1*targetZ*sqrt(z1*factB)*(2 - z1))
+      /((1.0 + z1*factD)*fm*fm);
 
-    if(G4UniformRand()*grej < 1.0) {
-      // exclude "false" scattering due to formfactor
+    if(rndmEngineMod->flat() <= grej) {
+      // exclude "false" scattering due to formfactor and spin effect
       G4double cost = 1.0 - z1;
       if(cost > 1.0)       { cost = 1.0; }
       else if(cost < -1.0) { cost =-1.0; }
       G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
       //G4cout << "sint= " << sint << G4endl;
-      G4double phi  = twopi*G4UniformRand();
+      G4double phi  = twopi*rndmEngineMod->flat();
       temp.set(sint*cos(phi),sint*sin(phi),cost);
     }
   }
@@ -370,7 +369,7 @@ G4WentzelOKandVIxSection::ComputeMaxElectronScattering(G4double cutEnergy)
       G4double ctm = (mom2 + mom22 - mom21)*0.5/sqrt(mom2*mom22);
       if(ctm <  1.0) { cosTetMaxElec = ctm; }
       if(particle == theElectron && cosTetMaxElec < 0.0) { 
-	cosTetMaxElec = 0.0; 
+        cosTetMaxElec = 0.0; 
       }
     }
   }

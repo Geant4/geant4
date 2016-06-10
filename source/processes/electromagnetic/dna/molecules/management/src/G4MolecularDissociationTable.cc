@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MolecularDissociationTable.cc 84858 2014-10-21 16:08:22Z gcosmo $
+// $Id: G4MolecularDissociationTable.cc 93883 2015-11-03 08:25:04Z gcosmo $
 //
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.
@@ -37,19 +37,25 @@
 
 #include "G4MolecularDissociationTable.hh"
 #include "G4MolecularDissociationChannel.hh"
+#include "G4MolecularConfiguration.hh"
 
 using namespace std;
+using namespace G4DNA;
+
+//______________________________________________________________________________
 
 G4MolecularDissociationTable::G4MolecularDissociationTable()
 {
   ;
 }
 
+//______________________________________________________________________________
+
 G4MolecularDissociationTable::~G4MolecularDissociationTable()
 {
-  channelsMap::iterator it_map = fDecayChannelsMap.begin();
+  ChannelMap::iterator it_map = fDissociationChannels.begin();
 
-  for (; it_map != fDecayChannelsMap.end(); it_map++)
+  for (; it_map != fDissociationChannels.end(); it_map++)
   {
     vector<const G4MolecularDissociationChannel*>& decayChannels = it_map
         ->second;
@@ -66,142 +72,109 @@ G4MolecularDissociationTable::~G4MolecularDissociationTable()
       decayChannels.clear();
     }
   }
-  fDecayChannelsMap.clear();
+  fDissociationChannels.clear();
 }
 
-G4MolecularDissociationTable::G4MolecularDissociationTable(const G4MolecularDissociationTable& right)
+//______________________________________________________________________________
+
+G4MolecularDissociationTable::
+  G4MolecularDissociationTable(const G4MolecularDissociationTable& right)
 {
   *this = right;
 }
 
-G4MolecularDissociationTable& G4MolecularDissociationTable::operator=(const G4MolecularDissociationTable& aMolecularDecayTable)
+//______________________________________________________________________________
+
+G4MolecularDissociationTable&
+G4MolecularDissociationTable::operator=(const G4MolecularDissociationTable& right)
 {
-  fExcitedStatesMap = aMolecularDecayTable.fExcitedStatesMap;
-  fDecayChannelsMap = channelsMap(aMolecularDecayTable.GetDecayChannelsMap());
+  if(this == &right) return *this;
+  fDissociationChannels = right.fDissociationChannels;
   return *this;
 }
 
-const vector<const G4MolecularDissociationChannel*>* G4MolecularDissociationTable::GetDecayChannels(const G4ElectronOccupancy* conf) const
+//______________________________________________________________________________
+
+const vector<const G4MolecularDissociationChannel*>*
+G4MolecularDissociationTable::
+  GetDecayChannels(const G4MolecularConfiguration* conf) const
 {
-  statesMap::const_iterator it_exstates = fExcitedStatesMap.find(*conf);
-  if (it_exstates == fExcitedStatesMap.end()) return 0;
-  channelsMap::const_iterator it_decchannel = fDecayChannelsMap.find(
-      it_exstates->second);
-  if (it_decchannel == fDecayChannelsMap.end()) return 0;
-  return &(it_decchannel->second);
+  ChannelMap::const_iterator it_exstates = fDissociationChannels.find(conf);
+  if (it_exstates == fDissociationChannels.end()) return 0;
+  return &(it_exstates->second);
 }
 
-const vector<const G4MolecularDissociationChannel*>* G4MolecularDissociationTable::GetDecayChannels(const G4String& exState) const
-{
-  channelsMap::const_iterator it_decchannel = fDecayChannelsMap.find(exState);
-  if (it_decchannel == fDecayChannelsMap.end()) return 0;
-  return &(it_decchannel->second);
-}
+//______________________________________________________________________________
 
-const G4String& G4MolecularDissociationTable::GetExcitedState(const G4ElectronOccupancy* conf) const
+const vector<const G4MolecularDissociationChannel*>*
+G4MolecularDissociationTable::GetDecayChannels(const G4String& exState) const
 {
-  statesMap::const_iterator it_exstates = fExcitedStatesMap.find(*conf);
-
-  if (it_exstates == fExcitedStatesMap.end())
+  for(ChannelMap::const_iterator it = fDissociationChannels.begin() ;
+      it!=fDissociationChannels.end() ; ++it
+      )
   {
-    G4String errMsg = "Excited state not found";
-    G4Exception(
-        "G4MolecularDecayTable::GetExcitedState(const G4ElectronOccupancy*)",
-        "G4MolecularDecayTable001", FatalErrorInArgument, errMsg);
-//        return *(new G4String("IM FAKE"));  // fake return statement
+    if(it->first->GetLabel() == exState) return &(it->second);
   }
-
-  return it_exstates->second;
+  return 0;
 }
 
-const G4ElectronOccupancy& G4MolecularDissociationTable::GetElectronOccupancy(const G4String& exState) const
-{
-  statesMap::const_iterator statesIter;
-  const G4ElectronOccupancy* conf(0);
-  for (statesIter = fExcitedStatesMap.begin();
-      statesIter != fExcitedStatesMap.end(); statesIter++)
-  {
-    if (exState == statesIter->second) conf = &(statesIter->first);
-  }
+//______________________________________________________________________________
 
-  if (statesIter == fExcitedStatesMap.end())
-  {
-    G4String errMsg = "Excited state" + exState + " not found";
-    G4Exception("G4MolecularDecayTable::GetElectronOccupancy(const G4String&)",
-                "G4MolecularDecayTable002", FatalErrorInArgument, errMsg);
-  }
-  return *conf;
+//void G4MolecularDissociationTable::
+//  AddExcitedState(const G4String& label,
+//                  const G4MolecularConfiguration* molConf);
+//{
+//
+//}
+
+//______________________________________________________________________________
+
+void G4MolecularDissociationTable::
+  AddChannel(const G4MolecularConfiguration* molConf,
+             const G4MolecularDissociationChannel* channel)
+{
+  fDissociationChannels[molConf].push_back(channel);
 }
 
-void G4MolecularDissociationTable::AddExcitedState(const G4String& label)
+//______________________________________________________________________________
+
+void G4MolecularDissociationTable::CheckDataConsistency() const
 {
-  channelsMap::iterator channelsIter = fDecayChannelsMap.find(label);
-  if (channelsIter != fDecayChannelsMap.end())
-  {
-    G4String errMsg = "Excited state" + label
-                      + " already registered in the decay table.";
-    G4Exception("G4MolecularDecayTable::AddExcitedState",
-                "G4MolecularDecayTable003", FatalErrorInArgument, errMsg);
-    return;
-  }
-  fDecayChannelsMap[label];
-}
+  ChannelMap::const_iterator channelsIter;
 
-void G4MolecularDissociationTable::AddeConfToExcitedState(const G4String& label,
-                                                          const G4ElectronOccupancy& conf)
-{
-  statesMap::iterator statesIter = fExcitedStatesMap.find(conf);
-
-  if (statesIter == fExcitedStatesMap.end())
-  {
-    fExcitedStatesMap[conf] = label;
-  }
-  else
-  {
-    G4Exception(
-        "G4MolecularDecayTable::AddExcitedState", "G4MolecularDecayTable004",
-        FatalErrorInArgument,
-        "Electronic configuration already registered in the decay table");
-  }
-}
-
-void G4MolecularDissociationTable::AddDecayChannel(const G4String& label,
-                                                   const G4MolecularDissociationChannel* channel)
-{
-  fDecayChannelsMap[label].push_back(channel);
-}
-
-void G4MolecularDissociationTable::CheckDataConsistency()
-{
-  channelsMap::iterator channelsIter;
-
-  //Let's check probabilities
-
-  for (channelsIter = fDecayChannelsMap.begin();
-      channelsIter != fDecayChannelsMap.end(); channelsIter++)
+  for(channelsIter = fDissociationChannels.begin();
+      channelsIter != fDissociationChannels.end(); ++channelsIter)
   {
 
-    vector<const G4MolecularDissociationChannel*>& decayVect = channelsIter
-        ->second;
+    const vector<const G4MolecularDissociationChannel*>& decayVect =
+        channelsIter->second;
     G4double sum = 0;
 
     G4double max = decayVect.size();
 
-    for (size_t i = 0; i < max; i++)
+    for(size_t i = 0; i < max; i++)
     {
       const G4MolecularDissociationChannel* decay = decayVect[i];
       const G4double prob = decay->GetProbability();
       sum += prob;
     }
 
-    if (sum != 1)
+    if(sum != 1)
     {
-      G4String errMsg = "Deexcitation Channels probabilities in "
-          + channelsIter->first + "excited state don't sum up to 1";
-      G4Exception("G4MolecularDecayTable::CheckDataConsistency",
-                  "G4MolecularDecayTable005", FatalErrorInArgument, errMsg);
+      G4ExceptionDescription errMsg;
+      errMsg << "The probabilities for deecitation of molecular configuration "
+             << channelsIter->first->GetName()
+             << " with label :" <<  channelsIter->first->GetLabel()
+             << " don't sum up to 1";
+      G4Exception("G4MolecularDissociationTable::CheckDataConsistency",
+                  "BRANCHING_RATIOS_CONSISTENCY",
+                  FatalErrorInArgument,
+                  errMsg);
     }
   }
-
 }
 
+void G4MolecularDissociationTable::Serialize(std::ostream& /*char_traits*/)
+{
+  // TODO
+}

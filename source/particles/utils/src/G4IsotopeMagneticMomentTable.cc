@@ -94,7 +94,7 @@ G4IsotopeMagneticMomentTable::G4IsotopeMagneticMomentTable()
   
   char inputChars[80]={' '};
    
-  while ( !DataFile.eof() ) {
+  while ( !DataFile.eof() ) { // Loop checking, 09.08.2015, K.Kurashige
     DataFile.getline(inputChars, 80);
     G4String inputLine = inputChars;
     G4int ionA, ionZ, ionJ, isomer;

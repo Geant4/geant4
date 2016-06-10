@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 86364 2014-11-10 08:41:56Z gcosmo $
+# $Id: GNUmakefile 94096 2015-11-05 15:19:03Z gcosmo $
 # ---------------------------------------------------------------------------
 # GNUmakefile for physics_lists/lists library.  Gunter Folger 25-Oct-2006.
 # ---------------------------------------------------------------------------
@@ -92,7 +92,6 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/isotope_production/include \
             -I$(G4BASE)/processes/hadronic/models/lend/include \
             -I$(G4BASE)/processes/hadronic/models/lepto_nuclear/include \
-            -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
             -I$(G4BASE)/processes/hadronic/models/particle_hp/include \
             -I$(G4BASE)/processes/hadronic/models/parton_string/diffraction/include \
             -I$(G4BASE)/processes/hadronic/models/parton_string/hadronization/include \

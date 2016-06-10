@@ -1,0 +1,77 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_rgba
+#define tools_sg_rgba
+
+#include "node"
+
+#include "sf_vec"
+#include "render_action"
+#include "../colorf"
+
+namespace tools {
+namespace sg {
+
+class rgba : public node {
+  TOOLS_NODE(rgba,tools::sg::rgba,node)
+public:
+  sf_vec<colorf,float> color;
+public:
+  virtual const std::vector<field_desc>& node_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::rgba)
+    static std::vector<field_desc> s_v;
+    if(s_v.empty()) {
+      s_v = parent::node_fields();
+      TOOLS_ADD_FIELD_DESC(color)
+    }
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&color);
+  }
+public:
+  virtual void render(render_action& a_action) {
+    // GL-ES : ::glMaterialfv does not work. We then use :
+    //         ::glEnable(GL_COLOR_MATERIAL) and ::glColor.
+
+    //if(a_action.state().m_GL_LIGHTING) {
+    //  float params[4];
+    //  params[0] = rgb.value().r();
+    //  params[1] = rgb.value().g();
+    //  params[2] = rgb.value().b();
+    //  params[3] = rgb.value().a();
+    //  ::glMaterialfv(GL_FRONT,GL_DIFFUSE,params);
+    //} else {
+    //}
+
+    state& state = a_action.state();
+    state.m_color = color.value();
+    a_action.color4f(state.m_color);
+  }
+public:
+  rgba()
+  :parent()
+  ,color(colorf(0.8f,0.8f,0.8f,0))
+  {
+    add_fields();
+  }
+  virtual ~rgba(){}
+public:
+  rgba(const rgba& a_from)
+  :parent(a_from)
+  ,color(a_from.color)
+  {
+    add_fields();
+  }
+  rgba& operator=(const rgba& a_from){
+    parent::operator=(a_from);
+    color = a_from.color;
+    return *this;
+  }
+};
+
+}}
+
+#endif

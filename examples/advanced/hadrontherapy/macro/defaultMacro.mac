@@ -126,7 +126,6 @@
 
 /run/beamOn 10
 
-
-# The folder 'SimulationOutputs/proton/BraggPeak' must be created before to use the following command
+/control/shell mkdir -p SimulationOutputs/proton/BraggPeak
 /control/shell mv DoseDistribution.root SimulationOutputs/proton/BraggPeak/protonBraggPeak.root
 

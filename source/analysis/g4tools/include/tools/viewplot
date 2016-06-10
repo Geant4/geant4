@@ -1,0 +1,270 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_viewplot
+#define tools_viewplot
+
+#include "sg/noderef"
+#include "sg/ortho"
+#include "sg/plots"
+#include "sg/h2plot"
+#ifdef tools_viewplot
+#else
+#include "sg/f2plot"
+#include "sg/xy2plot"
+#include "sg/fit2plot"
+#endif
+
+#include "sg/viewer"
+#include "sg/dummy_freetype"
+
+#include "sg/render_zb"
+
+#include "wps"
+
+#include "xml/styles"
+
+namespace tools {
+
+class viewplot : public sg::viewer {
+  typedef sg::viewer parent;
+public:
+  viewplot(std::ostream& a_out,
+           unsigned int a_cols = 1,unsigned int a_rows = 1,
+           unsigned int a_width = 500,unsigned int a_height = 500)
+  :parent(a_out,a_width,a_height)
+  ,m_wps(a_out)
+  ,m_ttf()
+  ,m_styles(a_out)
+  ,m_plots(m_ttf)
+  {
+    create_sg(a_cols,a_rows);
+  }
+  viewplot(std::ostream& a_out,const sg::base_freetype& a_ttf,
+           unsigned int a_cols = 1,unsigned int a_rows = 1,
+           unsigned int a_width = 500,unsigned int a_height = 500)
+  :parent(a_out,a_width,a_height)
+  ,m_wps(a_out)
+  ,m_ttf()
+  ,m_styles(a_out)
+  ,m_plots(a_ttf)
+  {
+    create_sg(a_cols,a_rows);
+  }
+  virtual ~viewplot() {}
+public:
+  viewplot(const viewplot& a_from)
+  :parent(a_from)
+  ,m_wps(a_from.m_out)
+  ,m_styles(a_from.m_styles)
+  ,m_camera(a_from.m_camera)
+  ,m_plots(a_from.m_plots)  
+  {
+    create_sg(a_from.m_plots.cols.value(),a_from.m_plots.rows.value());
+  }
+  viewplot& operator=(const viewplot& a_from){
+    parent::operator=(a_from);
+    m_styles = a_from.m_styles;
+    m_camera = a_from.m_camera;
+    m_plots = a_from.m_plots;
+    create_sg(a_from.m_plots.cols.value(),a_from.m_plots.rows.value());   
+    return *this;
+  }
+public: 
+  //methods to have less verbose user programming :
+
+  //WARNING : the viewplot must have at least 1x1 plotting area,
+  //          else the below will crash because current_plotter()
+  //          will return a null pointer.
+
+  sg::plots& plots() {return m_plots;}
+  const sg::plots& plots() const {return m_plots;}
+
+  sg::plottable* plot(const histo::h1d& a_histo) {
+    sg::plottable* p = new sg::h1d2plot(a_histo);
+    m_plots.current_plotter().add_plottable(p); //it takes ownership.
+    return p;
+  }
+
+  sg::plottable* plot(const histo::h2d& a_histo) {
+    sg::plottable* p = new sg::h2d2plot(a_histo);
+    m_plots.current_plotter().add_plottable(p); //it takes ownership.
+    return p;
+  }
+
+  sg::plottable* plot(const histo::p1d& a_histo) {
+    sg::plottable* p = new sg::p1d2plot(a_histo);
+    m_plots.current_plotter().add_plottable(p); //it takes ownership.
+    return p;
+  }
+
+#ifdef tools_viewplot
+  //deprecated, use set_current_plotter_style().
+  void style_from_res(const std::string& a_path,bool a_verbose = false) {
+    style_from_res(a_path,m_plots.current_plotter(),a_verbose);
+  }
+#endif
+
+  void set_current_plotter_style(const std::string& a_path,bool a_verbose = false) {
+    style_from_res(a_path,m_plots.current_plotter(),a_verbose);
+  }
+
+#ifdef tools_viewplot
+#else
+  template <class T>
+  sg::plottable* plot(const T& a_func) {
+    sg::plottable* p = new sg::f1d2plot<T>(a_func);
+    m_plots.current_plotter().add_plottable(p);
+    return p;
+  }
+
+  template <class T>
+  sg::plottable* plot(const std::vector<T>& a_xs,const std::vector<T>& a_ys) {
+    sg::plottable* p = new sg::xy2plot<T>(a_xs,a_ys);
+    m_plots.current_plotter().add_plottable(p);
+    return p;
+  }
+
+  sg::plottable* plot_fit(const std::vector<std::string>& a_names,const std::vector<double>& a_output) {
+    sg::plottable* p = new sg::fit2plot(a_names,a_output);
+    m_plots.current_plotter().add_plottable(p);
+    return p;
+  }
+#endif
+
+public:
+  void set_cols_rows(unsigned int a_cols,unsigned int a_rows) {
+    m_plots.cols = a_cols;
+    m_plots.rows = a_rows;
+    m_plots.adjust_size(width(),height());
+  }
+
+  bool write(const std::string& a_file) {
+    sg::render_zb action(m_mgr,m_out,width(),height());
+    colorf clear_color = colorf::white();
+    action.zbuffer().clear_color_buffer(0);
+    action.add_color(clear_color.r(),clear_color.g(),clear_color.b());
+    action.zbuffer().clear_depth_buffer();
+    sg().render(action);
+    wps wps(m_out);
+    if(!wps.open_file(a_file)) {
+      m_out << "tools::viewplot::write : can't open " << a_file << "." << std::endl;
+      return false;
+    }
+    wps.PS_BEGIN_PAGE();
+    wps.PS_PAGE_SCALE(float(width()),float(height()));
+    wps.PS_IMAGE(width(),height(),wps::rgb_4,sg::render_zb::get_rgb,&action);
+    wps.PS_END_PAGE();
+    wps.close_file();
+    return true;
+  }
+
+  bool open_file(const std::string& a_file) {
+    if(!m_wps.open_file(a_file)) {
+      m_out << "tools::viewplot::open_file : can't open " << a_file << "." << std::endl;
+      return false;
+    }
+    return true;
+  }
+  bool write_page() {
+    sg::render_zb action(m_mgr,m_out,width(),height());
+    colorf clear_color = colorf::white();
+    action.zbuffer().clear_color_buffer(0);
+    action.add_color(clear_color.r(),clear_color.g(),clear_color.b());
+    action.zbuffer().clear_depth_buffer();
+    sg().render(action);
+    m_wps.PS_BEGIN_PAGE();
+    m_wps.PS_PAGE_SCALE(float(width()),float(height()));
+    m_wps.PS_IMAGE(width(),height(),wps::rgb_4,sg::render_zb::get_rgb,&action);
+    m_wps.PS_END_PAGE();
+    return true;
+  }
+  bool close_file() {return m_wps.close_file();}
+
+  const xml::styles& styles() const {return m_styles;}
+  xml::styles& styles() {return m_styles;}
+protected:
+  void create_sg(unsigned int a_cols,unsigned int a_rows) {
+    m_sg.clear();
+
+    m_camera.height = 1;
+    float z = 10*1;
+    m_camera.znear = 0.1f*z;
+    m_camera.zfar = 10*z; //100*z induces problems with lego rendering.
+    m_camera.position = vec3f(0,0,z);
+    m_camera.orientation = rotf(vec3f(0,0,1),0);
+    m_camera.focal = z;
+    m_sg.add(new sg::noderef(m_camera));
+
+    m_plots.cols = a_cols;
+    m_plots.rows = a_rows;
+    m_plots.adjust_size(width(),height());
+
+    m_sg.add(new sg::noderef(m_plots));
+  }
+
+  void style_from_res(const std::string& a_path,sg::axis& a_axis) {
+   {typedef xml::styles::style_t style_t;
+    const style_t* style = m_styles.find_style(a_path);
+    if(style){
+      a_axis.set_from_style(m_out,*style);
+    } else {
+      //m_out << "tools::viewplot::style_from_res(axis) :"
+      //      << " style " << sout(a_path) << " not found."
+      //      << std::endl;
+    }}
+  
+    m_styles.res_sg_style<sg::line_style>(a_path+".line_style",a_axis.line_style());
+    m_styles.res_sg_style<sg::line_style>(a_path+".ticks_style",a_axis.ticks_style());
+    m_styles.res_sg_style<sg::text_style>(a_path+".labels_style",a_axis.labels_style());
+    m_styles.res_sg_style<sg::text_style>(a_path+".mag_style",a_axis.mag_style());
+    m_styles.res_sg_style<sg::text_style>(a_path+".title_style",a_axis.title_style());
+  }
+
+  void style_from_res(const std::string& a_path,sg::plotter& a_plotter,bool a_verbose) {
+    //sg::fields of plotter :
+   {typedef xml::styles::style_t style_t;
+    const style_t* _style = m_styles.find_style(a_path);
+    if(_style){
+      a_plotter.set_from_style(m_out,*_style);
+    } else {
+      if(a_verbose) {
+        m_out << "tools::viewplot::style_from_res :"
+              << " style " << sout(a_path) << " not found."
+              << std::endl;
+      }
+    }}
+  
+    //sg::fields of various xml::styles :
+    m_styles.res_sg_style<sg::style>(a_path+".bins_style.0",a_plotter.bins_style(0));
+    m_styles.res_sg_style<sg::style>(a_path+".errors_style.0",a_plotter.errors_style(0));
+    m_styles.res_sg_style<sg::style>(a_path+".func_style.0",a_plotter.func_style(0));
+    m_styles.res_sg_style<sg::style>(a_path+".points_style.0",a_plotter.points_style(0));
+  
+    m_styles.res_sg_style<sg::style>(a_path+".background_style",a_plotter.background_style());
+    m_styles.res_sg_style<sg::text_style>(a_path+".title_style",a_plotter.title_style());
+    m_styles.res_sg_style<sg::text_style>(a_path+".infos_style",a_plotter.infos_style());
+    m_styles.res_sg_style<sg::text_style>(a_path+".title_box_style",a_plotter.title_box_style());
+    m_styles.res_sg_style<sg::style>(a_path+".inner_frame_style",a_plotter.inner_frame_style());
+    m_styles.res_sg_style<sg::style>(a_path+".grid_style",a_plotter.grid_style());
+  
+    style_from_res(a_path+".x_axis",a_plotter.x_axis());
+    style_from_res(a_path+".y_axis",a_plotter.y_axis());
+    style_from_res(a_path+".z_axis",a_plotter.z_axis());
+    style_from_res(a_path+".colormap_axis",a_plotter.colormap_axis());  
+  }
+
+protected:
+  sg::manager_zb m_mgr;
+  wps m_wps;
+  sg::dummy_freetype m_ttf;
+  xml::styles m_styles;
+  //
+  sg::ortho m_camera;
+  sg::plots m_plots;
+};
+
+}
+
+#endif
+

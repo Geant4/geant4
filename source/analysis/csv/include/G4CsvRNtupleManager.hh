@@ -47,7 +47,7 @@ class G4CsvRNtupleManager : public G4VRNtupleManager
   friend class G4CsvAnalysisReader;
 
   protected:
-    G4CsvRNtupleManager(const G4AnalysisManagerState& state);
+    explicit G4CsvRNtupleManager(const G4AnalysisManagerState& state);
     virtual ~G4CsvRNtupleManager();
 
     // Methods to manipulate ntuples  

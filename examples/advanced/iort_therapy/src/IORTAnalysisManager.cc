@@ -25,7 +25,9 @@
 //
 // This is the *BASIC* version of IORT, a Geant4-based application
 //
-// Main Authors: G.Russo(a,b), C.Casarino*(c), G.C. Candiano(c), G.A.P. Cirrone(d), F.Romano(d)
+// Main Authors: G.Russo(a,b), C.Casarino*(c), G.C. Candiano(c), 
+//  G.A.P. Cirrone(d), F.Romano(d)
+//
 // Contributor Authors: S.Guatelli(e)
 // Past Authors: G.Arnetta(c), S.E.Mazzaglia(d)
 //    
@@ -45,373 +47,412 @@
 
 IORTAnalysisManager* IORTAnalysisManager::instance = 0;
 
-IORTAnalysisManager::IORTAnalysisManager() 
-#ifdef G4ANALYSIS_USE_ROOT 
-:
-analysisFileName("DoseDistribution.root"),theTFile(0), histo1(0), histo2(0), histo3(0),
-histo4(0), histo5(0), histo6(0), histo7(0), histo8(0), histo9(0), histo10(0), histo11(0), histo12(0), histo13(0), histo14(0), histo15(0), histo16(0),
-kinFragNtuple(0),
-kineticEnergyPrimaryNtuple(0),
-doseFragNtuple(0),
-fluenceFragNtuple(0),
-letFragNtuple(0),
-theROOTNtuple(0),
-theROOTIonTuple(0),
-fragmentNtuple(0),
-metaData(0),
-eventCounter(0)
-#endif
+IORTAnalysisManager::IORTAnalysisManager() : 
+  analysisFileName("DoseDistribution"),
+  eventCounter(0)
 {
-#ifdef G4ANALYSIS_USE_ROOT
-    fMess = new IORTAnalysisFileMessenger(this);
-#else
-    fMess = new IORTAnalysisFileMessenger();
-#endif
+  fMess = new IORTAnalysisFileMessenger(this);
 }
 /////////////////////////////////////////////////////////////////////////////
 
 IORTAnalysisManager::~IORTAnalysisManager()
 {
+  if (fMess)
     delete fMess; 
-#ifdef G4ANALYSIS_USE_ROOT
-    Clear();	
-#endif
+  delete G4AnalysisManager::Instance(); 
 }
+
+/////////////////////////////////////////////////////////////////////////////
 
 IORTAnalysisManager* IORTAnalysisManager::GetInstance()
 {
-	if (instance == 0) instance = new IORTAnalysisManager;
-	return instance;
+  if (instance == 0) instance = new IORTAnalysisManager;
+  return instance;
 }
-#ifdef G4ANALYSIS_USE_ROOT
-void IORTAnalysisManager::Clear()
-{
-    if (theTFile)
-    {
-	delete metaData;
-	metaData = 0;
 
-	delete fragmentNtuple;
-	fragmentNtuple = 0;
-
-	delete theROOTIonTuple;
-	theROOTIonTuple = 0;
-
-	delete theROOTNtuple;
-	theROOTNtuple = 0;
-
-	delete histo16;
-	histo16 = 0;
-
-	delete histo15;
-	histo15 = 0;
-
-	delete histo14;
-	histo14 = 0;
-
-	delete histo13;
-	histo13 = 0;
-
-	delete histo12;
-	histo12 = 0;
-
-	delete histo11;
-	histo11 = 0;
-
-	delete histo10;
-	histo10 = 0;
-
-	delete histo9;
-	histo9 = 0;
-
-	delete histo8;
-	histo8 = 0;
-
-	delete histo7;
-	histo7 = 0;
-
-	delete histo6;
-	histo6 = 0;
-
-	delete histo5;
-	histo5 = 0;
-
-	delete histo4;
-	histo4 = 0;
-
-	delete histo3;
-	histo3 = 0;
-
-	delete histo2;
-	histo2 = 0;
-
-	delete histo1;
-	histo1 = 0;
-    }
-}
 /////////////////////////////////////////////////////////////////////////////
 
 void IORTAnalysisManager::SetAnalysisFileName(G4String aFileName)
 {
-	this->analysisFileName = aFileName;
+  analysisFileName = aFileName;
 }
 
-	/////////////////////////////////////////////////////////////////////////////
-G4bool IORTAnalysisManager::IsTheTFile()
-{
-    return (theTFile) ? true:false; 
-}
+/////////////////////////////////////////////////////////////////////////////
+
 void IORTAnalysisManager::book()
 {
-	delete theTFile; // this is similar to theTFile->Close() => delete all associated variables created via new, moreover it delete itself.  
+  // Create analysis manager
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->SetVerboseLevel(1);
+  man->SetFirstHistoId(1);
+  man->SetFirstNtupleId(1);
 
-	theTFile = new TFile(analysisFileName, "RECREATE");
-
-	// Create the histograms with the energy deposit along the X axis
-	histo1 = createHistogram1D("braggPeak","slice, energy", 400, 0., 80); //<different waterthicknesses are accoutned for in ROOT-analysis stage
-	histo2 = createHistogram1D("h20","Secondary protons - slice, energy", 400, 0., 400.);
-	histo3 = createHistogram1D("h30","Secondary neutrons - slice, energy", 400, 0., 400.);
-	histo4 = createHistogram1D("h40","Secondary alpha - slice, energy", 400, 0., 400.);
-	histo5 = createHistogram1D("h50","Secondary gamma - slice, energy", 400, 0., 400.);
-	histo6 = createHistogram1D("h60","Secondary electron - slice, energy", 400, 0., 400.);
-	histo7 = createHistogram1D("h70","Secondary triton - slice, energy", 400, 0., 400.);
-	histo8 = createHistogram1D("h80","Secondary deuteron - slice, energy", 400, 0., 400.);
-	histo9 = createHistogram1D("h90","Secondary pion - slice, energy", 400, 0., 400.);
-	histo10 = createHistogram1D("h100","Energy distribution of secondary electrons", 70, 0., 70.);
-	histo11 = createHistogram1D("h110","Energy distribution of secondary photons", 70, 0., 70.);
-	histo12 = createHistogram1D("h120","Energy distribution of secondary deuterons", 70, 0., 70.);
-	histo13 = createHistogram1D("h130","Energy distribution of secondary tritons", 70, 0., 70.);
-	histo14 = createHistogram1D("h140","Energy distribution of secondary alpha particles", 70, 0., 70.);
-	histo15 = createHistogram1D("heliumEnergyAfterPhantom","Energy distribution of secondary helium fragments after the phantom",
+  man->OpenFile(analysisFileName);
+  
+  // Create the histograms with the energy deposit along the X axis
+  //ID=1 <different waterthicknesses are accoutned for in ROOT-analysis stage>
+  man->CreateH1("braggPeak","slice, energy", 400, 0., 80); //
+  //ID=2
+  man->CreateH1("h20","Secondary protons - slice, energy", 400, 0., 400.);
+  //ID=3
+  man->CreateH1("h30","Secondary neutrons - slice, energy", 400, 0., 400.);
+  //ID=4
+  man->CreateH1("h40","Secondary alpha - slice, energy", 400, 0., 400.);
+  //ID=5
+  man->CreateH1("h50","Secondary gamma - slice, energy", 400, 0., 400.);
+  //ID=6
+  man->CreateH1("h60","Secondary electron - slice, energy", 400, 0., 400.);
+  //ID=7
+  man->CreateH1("h70","Secondary triton - slice, energy", 400, 0., 400.);
+  //ID=8
+  man->CreateH1("h80","Secondary deuteron - slice, energy", 400, 0., 400.);
+  //ID=9
+  man->CreateH1("h90","Secondary pion - slice, energy", 400, 0., 400.);
+  //ID=10
+  man->CreateH1("h100","Energy distribution of secondary electrons", 70, 0., 70.);
+  //ID=11
+  man->CreateH1("h110","Energy distribution of secondary photons", 70, 0., 70.);
+  //ID=12
+  man->CreateH1("h120","Energy distribution of secondary deuterons", 70, 0., 70.);
+  //ID = 13
+  man->CreateH1("h130","Energy distribution of secondary tritons", 70, 0., 70.);
+  //ID = 14
+  man->CreateH1("h140","Energy distribution of secondary alpha particles", 70, 0., 70.);
+  //ID = 15
+  man->CreateH1("heliumEnergyAfterPhantom",
+		"Energy distribution of secondary helium fragments after the phantom",
 		70, 0., 500.);
-	histo16 = createHistogram1D("hydrogenEnergyAfterPhantom","Energy distribution of secondary helium fragments after the phantom",
+  //ID= 16
+  man->CreateH1("hydrogenEnergyAfterPhantom",
+		"Energy distribution of secondary helium fragments after the phantom",
 		70, 0., 500.);
 
-	kinFragNtuple  = new TNtuple("kinFragNtuple", 
-		"Kinetic energy by voxel & fragment", 
-		"i:j:k:A:Z:kineticEnergy");
-	kineticEnergyPrimaryNtuple= new TNtuple("kineticEnergyPrimaryNtuple", 
-		"Kinetic energy by voxel of primary", 
-		"i:j:k:kineticEnergy");
-	doseFragNtuple = new TNtuple("doseFragNtuple",
-		"Energy deposit by voxel & fragment",
-		"i:j:k:A:Z:energy");
+  //Now the ntuples
+  //ID = 1
+  man->CreateNtuple("kinFragNtuple", 
+		    "Kinetic energy by voxel & fragment");
+  man->CreateNtupleIColumn("i");
+  man->CreateNtupleIColumn("j");
+  man->CreateNtupleIColumn("k");
+  man->CreateNtupleIColumn("A");
+  man->CreateNtupleDColumn("Z");
+  man->CreateNtupleDColumn("kineticEnergy");
+  man->FinishNtuple();
 
-	fluenceFragNtuple = new TNtuple("fluenceFragNtuple", 
-		"Fluence by voxel & fragment",
-		"i:j:k:A:Z:fluence");
+  //ID = 2
+  man->CreateNtuple("kineticEnergyPrimaryNtuple", 
+		    "Kinetic energy by voxel of primary");
+  man->CreateNtupleIColumn("i");
+  man->CreateNtupleIColumn("j");
+  man->CreateNtupleIColumn("k");
+  man->CreateNtupleDColumn("kineticEnergy");
+  man->FinishNtuple();
 
-	letFragNtuple = new TNtuple("letFragNtuple", 
-		"Let by voxel & fragment",
-		"i:j:k:A:Z:letT:letD");
+  //ID = 3
+  man->CreateNtuple("doseFragNtuple",
+		    "Energy deposit by voxel & fragment");
+  man->CreateNtupleIColumn("i");
+  man->CreateNtupleIColumn("j");
+  man->CreateNtupleIColumn("k");
+  man->CreateNtupleIColumn("A");
+  man->CreateNtupleDColumn("Z");
+  man->CreateNtupleDColumn("energy");
+  man->FinishNtuple();
 
-	theROOTNtuple =   new TNtuple("theROOTNtuple", 
-		"Energy deposit by slice",
-		"i:j:k:energy");
+  // ID =4
+  man->CreateNtuple("fluenceFragNtuple", 
+		    "Fluence by voxel & fragment");
+  man->CreateNtupleIColumn("i");
+  man->CreateNtupleIColumn("j");
+  man->CreateNtupleIColumn("k");
+  man->CreateNtupleIColumn("A");
+  man->CreateNtupleDColumn("Z");
+  man->CreateNtupleDColumn("fluence");
+  man->FinishNtuple();
 
-	theROOTIonTuple = new TNtuple("theROOTIonTuple",
-		"Generic ion information",
-		"a:z:occupancy:energy");
+  // ID=5
+  man->CreateNtuple("letFragNtuple", 
+		    "Let by voxel & fragment");
+  man->CreateNtupleIColumn("i");
+  man->CreateNtupleIColumn("j");
+  man->CreateNtupleIColumn("k");
+  man->CreateNtupleIColumn("A");
+  man->CreateNtupleDColumn("Z");
+  man->CreateNtupleDColumn("letT");
+  man->CreateNtupleDColumn("letD");
+  man->FinishNtuple();
 
-	fragmentNtuple =  new TNtuple("fragmentNtuple",
-		"Fragments",
-		"A:Z:energy:posX:posY:posZ");
+  //ID=6
+  man->CreateNtuple("theROOTNtuple", 
+		    "Energy deposit by slice");
+  man->CreateNtupleIColumn("i");
+  man->CreateNtupleIColumn("j");
+  man->CreateNtupleIColumn("k");
+  man->CreateNtupleDColumn("energy");
+  man->FinishNtuple();
 
-	metaData =        new TNtuple("metaData",
-		"Metadata",
-		"events:detectorDistance:waterThickness:beamEnergy:energyError:phantomCenterDistance");
+  //ID=7
+  man->CreateNtuple("theROOTIonTuple",
+		    "Generic ion information");
+  man->CreateNtupleIColumn("a");
+  man->CreateNtupleDColumn("z");
+  man->CreateNtupleIColumn("occupancy");
+  man->CreateNtupleDColumn("energy");
+  man->FinishNtuple();
+
+  //ID=8
+  man->CreateNtuple("fragmentNtuple",
+		    "Fragments");
+  man->CreateNtupleIColumn("A");
+  man->CreateNtupleDColumn("Z");
+  man->CreateNtupleDColumn("energy");
+  man->CreateNtupleDColumn("posX");
+  man->CreateNtupleDColumn("posY");
+  man->CreateNtupleDColumn("posZ");
+  man->FinishNtuple();
+
 }
 
-	/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 void IORTAnalysisManager::FillEnergyDeposit(G4int i,
-						     G4int j,
-						     G4int k,
-						     G4double energy)
+					    G4int j,
+					    G4int k,
+					    G4double energy)
 {
-	if (theROOTNtuple) 
-	{
-		theROOTNtuple->Fill(i, j, k, energy);
-	}
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->FillNtupleIColumn(6,0,i);
+  man->FillNtupleIColumn(6,1,j);
+  man->FillNtupleIColumn(6,2,k);
+  man->FillNtupleDColumn(6,3,energy);
+  man->AddNtupleRow(6);  
 }
 
-	/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 void IORTAnalysisManager::BraggPeak(G4int slice, G4double energy)
 {
-	histo1->SetBinContent(slice, energy); //This uses setbincontent instead of fill to get labels correct
+  //FIXME
+  G4AnalysisManager::Instance()->FillH1(1,slice,energy);
+  //histo1->SetBinContent(slice, energy); //This uses setbincontent instead of fill to get labels correct
 }
 
-	/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 void IORTAnalysisManager::SecondaryProtonEnergyDeposit(G4int slice, G4double energy)
 {
-	histo2->Fill(slice, energy);
+  G4AnalysisManager::Instance()->FillH1(2,slice,energy);
 }
 
-	/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 void IORTAnalysisManager::SecondaryNeutronEnergyDeposit(G4int slice, G4double energy)
 {
-	histo3->Fill(slice, energy);
+  G4AnalysisManager::Instance()->FillH1(3,slice,energy);
 }
 
-	/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 void IORTAnalysisManager::SecondaryAlphaEnergyDeposit(G4int slice, G4double energy)
 {
-	histo4->Fill(slice, energy);
+  G4AnalysisManager::Instance()->FillH1(4,slice,energy);
 }
 
-	/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 void IORTAnalysisManager::SecondaryGammaEnergyDeposit(G4int slice, G4double energy)
 {
-	histo5->Fill(slice, energy);
+  G4AnalysisManager::Instance()->FillH1(5,slice,energy);
 }
 
-	/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 void IORTAnalysisManager::SecondaryElectronEnergyDeposit(G4int slice, G4double energy)
 {
-	histo6->Fill(slice, energy);
+  G4AnalysisManager::Instance()->FillH1(6,slice,energy);
 }
 
-	/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 void IORTAnalysisManager::SecondaryTritonEnergyDeposit(G4int slice, G4double energy)
 {
-	histo7->Fill(slice, energy);
+  G4AnalysisManager::Instance()->FillH1(7,slice,energy);
 }
 
-	/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 void IORTAnalysisManager::SecondaryDeuteronEnergyDeposit(G4int slice, G4double energy)
 {
-	histo8->Fill(slice, energy);
+  G4AnalysisManager::Instance()->FillH1(8,slice,energy);
 }
 
-	/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 void IORTAnalysisManager::SecondaryPionEnergyDeposit(G4int slice, G4double energy)
 {
-	histo9->Fill(slice, energy);
+  G4AnalysisManager::Instance()->FillH1(9,slice,energy);
 }
 
-	/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 void IORTAnalysisManager::electronEnergyDistribution(G4double energy)
 {
-	histo10->Fill(energy);
+  G4AnalysisManager::Instance()->FillH1(10,energy);
 }
 
-	/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 void IORTAnalysisManager::gammaEnergyDistribution(G4double energy)
 {
-	histo11->Fill(energy);
+  G4AnalysisManager::Instance()->FillH1(11,energy);
 }
 
-	/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 void IORTAnalysisManager::deuteronEnergyDistribution(G4double energy)
 {
-	histo12->Fill(energy);
+ G4AnalysisManager::Instance()->FillH1(12,energy);
 }
 
-	/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 void IORTAnalysisManager::tritonEnergyDistribution(G4double energy)
 {
-	histo13->Fill(energy);
+  G4AnalysisManager::Instance()->FillH1(13,energy);
 }
 
-	/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 void IORTAnalysisManager::alphaEnergyDistribution(G4double energy)
 {
-	histo14->Fill(energy);
+  G4AnalysisManager::Instance()->FillH1(14,energy);
 }
-	/////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////
 void IORTAnalysisManager::heliumEnergy(G4double secondaryParticleKineticEnergy)
 {
-	histo15->Fill(secondaryParticleKineticEnergy);
+  G4AnalysisManager::Instance()->FillH1(15,secondaryParticleKineticEnergy);
 }
 
-	/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 void IORTAnalysisManager::hydrogenEnergy(G4double secondaryParticleKineticEnergy)
 {
-	histo16->Fill(secondaryParticleKineticEnergy);
+  G4AnalysisManager::Instance()->FillH1(16,secondaryParticleKineticEnergy);
 }
 
-	/////////////////////////////////////////////////////////////////////////////
-	// FillKineticFragmentTuple create an ntuple where the voxel indexs, the atomic number and mass and the kinetic
-	// energy of all the particles interacting with the phantom, are stored
+/////////////////////////////////////////////////////////////////////////////
+// FillKineticFragmentTuple create an ntuple where the voxel indexs, the atomic number and mass and the kinetic
+// energy of all the particles interacting with the phantom, are stored
 void IORTAnalysisManager::FillKineticFragmentTuple(G4int i, G4int j, G4int k, G4int A, G4double Z, G4double kinEnergy)
 {
-    kinFragNtuple -> Fill(i, j, k, A, Z, kinEnergy);
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->FillNtupleIColumn(1,0,i);
+  man->FillNtupleIColumn(1,1,j);
+  man->FillNtupleIColumn(1,2,k);
+  man->FillNtupleIColumn(1,3,A);
+  man->FillNtupleDColumn(1,4,Z);
+  man->FillNtupleDColumn(1,5,kinEnergy);
+  man->AddNtupleRow(1);  
 }
 
-	/////////////////////////////////////////////////////////////////////////////
-	// FillKineticEnergyPrimaryNTuple creates a ntuple where the voxel indexs and the kinetic
-	// energies of ONLY primary particles interacting with the phantom, are stored
+/////////////////////////////////////////////////////////////////////////////
+// FillKineticEnergyPrimaryNTuple creates a ntuple where the voxel indexs and the kinetic
+// energies of ONLY primary particles interacting with the phantom, are stored
 void IORTAnalysisManager::FillKineticEnergyPrimaryNTuple(G4int i, G4int j, G4int k, G4double kinEnergy)
 {
-    kineticEnergyPrimaryNtuple -> Fill(i, j, k, kinEnergy);
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->FillNtupleIColumn(2,0,i);
+  man->FillNtupleIColumn(2,1,j);
+  man->FillNtupleIColumn(2,2,k);
+  man->FillNtupleDColumn(2,3,kinEnergy);
+  man->AddNtupleRow(2);  
 }
 
-	/////////////////////////////////////////////////////////////////////////////
-	// This function is called only if ROOT is activated.
-	// It is called by the IORTMatric.cc class file and it is used to create two ntuples containing 
-	// the total energy deposited and the fluence values, in each voxel and per any particle (primary 
-	// and secondary particles beam) 
-void IORTAnalysisManager::FillVoxelFragmentTuple(G4int i, G4int j, G4int k, G4int A, G4double Z, G4double energy, G4double fluence)
+/////////////////////////////////////////////////////////////////////////////
+// This function is called only if ROOT is activated.
+// It is called by the IORTMatric.cc class file and it is used to create two ntuples containing 
+// the total energy deposited and the fluence values, in each voxel and per any particle (primary 
+// and secondary particles beam) 
+void IORTAnalysisManager::FillVoxelFragmentTuple(G4int i, G4int j, G4int k, G4int A, G4double Z, 
+						 G4double energy, G4double fluence)
 {
-		// Fill the ntuple containing the voxel, mass and atomic number and the energy deposited
-    doseFragNtuple ->    Fill( i, j, k, A, Z, energy );
-	
-		// Fill the ntuple containing the voxel, mass and atomic number and the fluence
-	if (i==1 && Z==1) {
-		fluenceFragNtuple -> Fill( i, j, k, A, Z, fluence );
-
-	}
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->FillNtupleIColumn(3,0,i);
+  man->FillNtupleIColumn(3,1,j);
+  man->FillNtupleIColumn(3,2,k);
+  man->FillNtupleIColumn(3,3,A);
+  man->FillNtupleDColumn(3,4,Z);
+  man->FillNtupleDColumn(3,5,energy);
+  man->AddNtupleRow(3);
+  
+  
+  // Fill the ntuple containing the voxel, mass and atomic number and the fluence
+  if (i==1 && Z==1) {
+    man->FillNtupleIColumn(4,0,i);
+    man->FillNtupleIColumn(4,1,j);
+    man->FillNtupleIColumn(4,2,k);
+    man->FillNtupleIColumn(4,3,A);
+    man->FillNtupleDColumn(4,4,Z);
+    man->FillNtupleDColumn(4,5,fluence);
+    man->AddNtupleRow(4);    
+  }
 }
 
-void IORTAnalysisManager::FillLetFragmentTuple(G4int i, G4int j, G4int k, G4int A, G4double Z, G4double letT, G4double letD)
+void IORTAnalysisManager::FillLetFragmentTuple(G4int i, G4int j, G4int k, G4int A, G4double Z, 
+					       G4double letT, G4double letD)
 {
-	letFragNtuple -> Fill( i, j, k, A, Z, letT, letD);
-
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->FillNtupleIColumn(5,0,i);
+  man->FillNtupleIColumn(5,1,j);
+  man->FillNtupleIColumn(5,2,k);
+  man->FillNtupleIColumn(5,3,A);
+  man->FillNtupleDColumn(5,4,Z);
+  man->FillNtupleDColumn(5,5,letT);
+  man->FillNtupleDColumn(5,6,letD);
+  man->AddNtupleRow(5);  
 }
-	/////////////////////////////////////////////////////////////////////////////
-void IORTAnalysisManager::FillFragmentTuple(G4int A, G4double Z, G4double energy, G4double posX, G4double posY, G4double posZ)
+
+/////////////////////////////////////////////////////////////////////////////
+void IORTAnalysisManager::FillFragmentTuple(G4int A, G4double Z, G4double energy, 
+					    G4double posX, G4double posY, G4double posZ)
 {
-	fragmentNtuple->Fill(A, Z, energy, posX, posY, posZ);
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->FillNtupleIColumn(8,0,A);
+  man->FillNtupleDColumn(8,1,Z);
+  man->FillNtupleDColumn(8,2,energy);
+  man->FillNtupleDColumn(8,3,posX);
+  man->FillNtupleDColumn(8,4,posY);
+  man->FillNtupleDColumn(8,5,posZ);
+  man->AddNtupleRow(8); 
 }
 
-	/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 void IORTAnalysisManager::genericIonInformation(G4int a,
-														 G4double z,
-														 G4int electronOccupancy,
-														 G4double energy)
+						G4double z,
+						G4int electronOccupancy,
+						G4double energy)
 {
-	if (theROOTIonTuple) {
-		theROOTIonTuple->Fill(a, z, electronOccupancy, energy);
-	}
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->FillNtupleIColumn(7,0,a);
+  man->FillNtupleDColumn(7,1,z);
+  man->FillNtupleIColumn(7,2,electronOccupancy);
+  man->FillNtupleDColumn(7,3,energy);
+  man->AddNtupleRow(7);  
 }
 
-	/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 void IORTAnalysisManager::startNewEvent()
 {
-	eventCounter++;
+  eventCounter++;
 }
-	/////////////////////////////////////////////////////////////////////////////
-void IORTAnalysisManager::setGeometryMetaData(G4double endDetectorPosition, G4double waterThickness, G4double phantomCenter)
+/////////////////////////////////////////////////////////////////////////////
+void IORTAnalysisManager::setGeometryMetaData(G4double endDetectorPosition, G4double waterThickness, 
+					      G4double phantomCenter)
 {
-	this->detectorDistance = endDetectorPosition;
-	this->phantomDepth = waterThickness;
-	this->phantomCenterDistance = phantomCenter;
+  detectorDistance = endDetectorPosition;
+  phantomDepth = waterThickness;
+  phantomCenterDistance = phantomCenter;
 }
+
+/////////////////////////////////////////////////////////////////////////////
 void IORTAnalysisManager::setBeamMetaData(G4double meanKineticEnergy,G4double sigmaEnergy)
 {
-	this->beamEnergy = meanKineticEnergy;
-	this->energyError = sigmaEnergy;
+  beamEnergy = meanKineticEnergy;
+  energyError = sigmaEnergy;
 }
 /////////////////////////////////////////////////////////////////////////////
 // Flush data & close the file
 void IORTAnalysisManager::flush()
 {
-    if (theTFile)
-    {
-	theTFile -> Write(); 
-	theTFile -> Close();
-    }
-    theTFile = 0;
-    eventCounter = 0;
+  // Save histograms
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->Write();
+  man->CloseFile();
+  eventCounter = 0;
 }
 
-#endif

@@ -1,4 +1,4 @@
-$Id: History 85258 2014-10-27 08:51:49Z gcosmo $
+$Id: History 92996 2015-09-28 08:03:50Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+27-09-15 mma (testem14-V10-01-00)
+- DetectorConstruction::SetMatetial(): allow nist materials
 
 24-10-14 mma (testem14-V10-00-04)
 - TestEm14.in : /run/numberOfThreads 2

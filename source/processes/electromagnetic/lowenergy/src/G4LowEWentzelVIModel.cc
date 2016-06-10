@@ -96,7 +96,7 @@ G4double G4LowEWentzelVIModel::ComputeTruePathLengthLimit(
   tlimit = std::min(tlimit, currentRange);
 
   // stop here if small range particle
-  if(inside || tlimit < tlimitminfix) { 
+  if(tlimit < tlimitminfix) { 
     return ConvertTrueToGeom(tlimit, currentMinimalStep); 
   }
 
@@ -104,7 +104,6 @@ G4double G4LowEWentzelVIModel::ComputeTruePathLengthLimit(
   G4double presafety = sp->GetSafety();
   // far from geometry boundary
   if(currentRange < presafety) {
-    inside = true;  
     return ConvertTrueToGeom(tlimit, currentMinimalStep);
   }
 
@@ -113,7 +112,6 @@ G4double G4LowEWentzelVIModel::ComputeTruePathLengthLimit(
   if(stepStatus != fGeomBoundary && presafety < tlimitminfix) {
     presafety = ComputeSafety(sp->GetPosition(), tlimit); 
     if(currentRange < presafety) {
-      inside = true;  
       return ConvertTrueToGeom(tlimit, currentMinimalStep);
     }
   }

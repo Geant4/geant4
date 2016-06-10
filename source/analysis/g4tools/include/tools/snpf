@@ -10,7 +10,7 @@
 namespace tools {
 
 inline int vsnpf(char* a_s,size_t a_n,const char* a_fmt,va_list args){
-#ifdef WIN32
+#ifdef _MSC_VER
   return _vsnprintf(a_s,a_n,a_fmt,args);
 #else
   return ::vsnprintf(a_s,a_n,a_fmt,args);

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 84482 2014-10-16 08:55:11Z gcosmo $
+$Id: History 93898 2015-11-03 08:39:38Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,15 +9,18 @@ $Id: History 84482 2014-10-16 08:55:11Z gcosmo $
                       Example History file
                       ---------------------
 
-15.10.2014 - L.Pandola Tag ccal-V10-00-02
+02.11.2015 - A. Ribon (ccal-V10-01-00)
+- Migrated to ParticleHP.
+
+15.10.2014 - L.Pandola Tag (ccal-V10-00-02)
 - Explicitly delete G4analysis object at the end of the job
 
-14.10.2014 - L.Pandola Tag ccal-V10-00-01
+14.10.2014 - L.Pandola Tag (ccal-V10-00-01)
 - Updated README
 - Get rid of compiler warnings which caused rejection of ccal-V10-00-00
 - Remove #ifdef debug in the analysis class
 
-13.10.2014 - L.Pandola Tag ccal-V10-00-00
+13.10.2014 - L.Pandola Tag (ccal-V10-00-00)
 - Migrated to G4analysis tools (get rid of the AIDA dependency)
 - Remove exit() and make consistent use of G4Exception()
 

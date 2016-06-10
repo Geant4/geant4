@@ -37,24 +37,39 @@
 #include "globals.hh"
 #include "G4ParticleHPProduct.hh"
 #include "G4ReactionProduct.hh"
+#include "G4Cache.hh"
 class G4ParticleDefinition;
 
 class G4ParticleHPEnAngCorrelation
 {
+
+   struct toBeCached {
+      G4ReactionProduct* theProjectileRP;
+      G4ReactionProduct* theTarget;
+      G4double theTotalMeanEnergy;
+      toBeCached() : theProjectileRP(NULL),theTarget(NULL),theTotalMeanEnergy(-1.0) {};
+   };
+
   public:
   G4ParticleHPEnAngCorrelation() // for G4ParticleHPCaptureFS::theMF6FinalState
   {
     theProjectile = G4Neutron::Neutron();
     theProducts = 0;
     inCharge = false;
-    theTotalMeanEnergy = -1.;
+    toBeCached val;
+    fCache.Put( val );
+    //theTotalMeanEnergy = -1.;
+    fCache.Get().theTotalMeanEnergy = -1.;
   }
   G4ParticleHPEnAngCorrelation(G4ParticleDefinition* proj)
     : theProjectile(proj)
   {
     theProducts = 0;
     inCharge = false;
-    theTotalMeanEnergy = -1.;
+    toBeCached val;
+    fCache.Put( val );
+    //theTotalMeanEnergy = -1.;
+    fCache.Get().theTotalMeanEnergy = -1.;
   }
 
   ~G4ParticleHPEnAngCorrelation()
@@ -69,6 +84,10 @@ class G4ParticleHPEnAngCorrelation
     if( ctmp && G4String(ctmp) == "1" ) {
       bAdjustFinalState = false;
     }
+//T.K. Comment out following line to keep the condition at the  validation efforts compairng NeutronHP and PartileHP for neutrons (2015 Sep.)
+//#ifdef PHP_AS_HP
+//    bAdjustFinalState = false;
+//#endif
  
     inCharge = true;
     aDataFile>>targetMass>>frameFlag>>nProducts;
@@ -86,14 +105,14 @@ class G4ParticleHPEnAngCorrelation
   
   inline void SetTarget(G4ReactionProduct & aTarget)
   {
-    theTarget = aTarget;
-    for(G4int i=0;i<nProducts;i++)theProducts[i].SetTarget(&theTarget);
+    fCache.Get().theTarget = &aTarget;
+    for(G4int i=0;i<nProducts;i++)theProducts[i].SetTarget(fCache.Get().theTarget);
   }
   
   inline void SetProjectileRP(G4ReactionProduct & aIncidentPart)
   {
-    theProjectileRP = aIncidentPart;
-    for(G4int i=0;i<nProducts;i++)theProducts[i].SetProjectileRP(&theProjectileRP);
+    fCache.Get().theProjectileRP = &aIncidentPart;
+    for(G4int i=0;i<nProducts;i++)theProducts[i].SetProjectileRP(fCache.Get().theProjectileRP);
   }
   
   inline G4bool InCharge()
@@ -106,7 +125,7 @@ class G4ParticleHPEnAngCorrelation
   G4double GetTotalMeanEnergy()
   {
      // cashed in 'sample' call
-    return theTotalMeanEnergy; 
+    return fCache.Get().theTotalMeanEnergy; 
   }
 private:
    
@@ -120,12 +139,13 @@ private:
     
   // Utility quantities
   
-  G4ReactionProduct theTarget;
-  G4ReactionProduct theProjectileRP;
+  //G4ReactionProduct theTarget;
+  //G4ReactionProduct theProjectileRP;
   
   // cashed values
   
-  G4double theTotalMeanEnergy;
+  //G4double theTotalMeanEnergy;
+     G4Cache<toBeCached> fCache;
 
   G4ParticleDefinition* theProjectile;
 

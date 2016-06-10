@@ -53,7 +53,7 @@
 
 
 G4SPSAngDistribution::G4SPSAngDistribution()
-  : Theta(0.), Phi(0.)
+  : Theta(0.), Phi(0.), posDist(0),angRndm(0)
 {
   // Angular distribution Variables
   G4ThreeVector zero;
@@ -212,6 +212,7 @@ G4double G4SPSAngDistribution::GetMinTheta() { G4AutoLock l(&mutex); return MinT
 G4double G4SPSAngDistribution::GetMaxTheta() { G4AutoLock l(&mutex); return MaxTheta; }
 G4double G4SPSAngDistribution::GetMinPhi() { G4AutoLock l(&mutex); return MinPhi; }
 G4double G4SPSAngDistribution::GetMaxPhi() { G4AutoLock l(&mutex); return MaxPhi; }
+G4ThreeVector G4SPSAngDistribution::GetDirection() { G4AutoLock l(&mutex); return particle_momentum_direction; }
 
 void G4SPSAngDistribution::UserDefAngPhi(G4ThreeVector input)
 {

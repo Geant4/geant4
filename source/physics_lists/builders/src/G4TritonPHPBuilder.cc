@@ -30,17 +30,16 @@
 #include "G4ParticleHPInelasticData.hh"
 
 G4TritonPHPBuilder::
-G4TritonPHPBuilder() 
+G4TritonPHPBuilder()
 {
   theMin = 0;
   theMax=200.*MeV;
+  theParticlePHPModel = 0;
 }
 
 G4TritonPHPBuilder::
 ~G4TritonPHPBuilder() 
-{
-  delete theParticlePHPModel;
-}
+{}
 
 void G4TritonPHPBuilder::
 Build(G4HadronElasticProcess *)

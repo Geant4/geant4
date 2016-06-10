@@ -1,4 +1,4 @@
-$Id: README 66241 2012-12-13 18:34:42Z gunter $
+$Id: README 93739 2015-10-30 11:04:09Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,17 +10,14 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
      This example is intended to test the processes of gamma conversion
      to a pair of muons and annihilation of positrons with atomic
      electrons to a pair of muons.
-     To make these process more visible, the usually much more frequent
-     gamma conversion to a pair of electrons and the standard positron
-     processes are not selected in the physics list.
 	
  1- GEOMETRY DEFINITION
  
      The geometry consists of a single block of a homogenous material.
      	
      Two parameters define the geometry :
- 	- the material of the box,
-	- the (full) size of the box.
+      - the material of the box,
+      - the (full) size of the box.
      The default is 500 m of iron.
      	 	
      In addition a transverse uniform magnetic field can be applied.
@@ -30,24 +27,25 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
      the commands defined in the DetectorMessenger class.
  	
  2- PHYSICS LIST
- 
-     The particle list is the one of novice/exampleN03.
-     The physics list contains the 'standard' electromagnetic processes,
-     and decay.
-     
-     For Gamma, only the GammaConversionToMuons has been registered.
-     Futhermore, a high production cut (1 km, which gives infinity in energy)
-     prevent any production of delta-electrons from ionization or gamma
-     from bremsstrahlung.
-     For Positrons, only the annihilation process is selected.
- 		
+
+     Physics Lists are based on modular design. Several modules are 
+     instantiated:
+     1. Transportation
+     2. EM physics
+     3. Decays
+     4. StepMax - for step limitation
+  
+     The electromagnetic physics is chosen from one of the Geant4 EM
+     physics constructors in the physics_list library.
+
+     Cross sections can be enhanced (see below).
  	 
  3- AN EVENT : THE PRIMARY GENERATOR
  
      The primary kinematic consists of a single particle which hits the
      block perpendicular to the input face. The type of the particle
      and its energy are set in the PrimaryGeneratorAction class, and can
-     changed via the G4 build-in commands of ParticleGun class (see
+     changed via the G4 build-in commands of G4ParticleGun class (see
      the macros provided with this example).
      The default is a Gamma of 100 TeV.
      	
@@ -56,26 +54,25 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
      PrimaryGeneratorMessenger class.
 	 	
      A RUN is a set of events.
- 	
  				
  4- VISUALIZATION
  
-     The Visualization Manager is set in the main().
+     The Visualization Manager is set in the main() (see TestEm6.cc).
      The initialisation of the drawing is done via the command
      > /control/execute vis.mac
  	
      The detector has a default view which is a longitudinal view of the box.
  	
      The tracks are drawn at the end of event, and erased at the end of run.
-     Optionaly one can choose to draw all particles, only the charged one,
+     Optionally one can choose to draw all particles, only the charged ones,
      or none. This command is defined in EventActionMessenger class.
 
  5- PHYSICS DEMO
 
-     The particle's type and the physic processes which will be available
+     The particle's type and the physics processes which will be available
      in this example are set in PhysicsList class.
 
-     In addition a build-in interactive command (/process/inactivate proname)
+     In addition a build-in interactive command (/process/inactivate procname)
      allows to activate/inactivate the processes one by one.
 
      The threshold for producing secondaries can be changed.
@@ -84,13 +81,13 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
 	 
      To visualize the GammaConversionToMuons :
         /control/execute run01.mac
-	/control/execute vis.mac
-	/run/beamOn
+        /control/execute vis.mac
+        /run/beamOn
 		 
      To visualize the AnnihiToMuPair :
         /control/execute run11.mac
-	/control/execute vis.mac
-	/run/beamOn
+        /control/execute vis.mac
+        /run/beamOn
 		  	
  6- HOW TO START ?
  

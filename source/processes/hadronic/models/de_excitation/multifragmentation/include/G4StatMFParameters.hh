@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFParameters.hh 68724 2013-04-05 09:26:32Z gcosmo $
+// $Id: G4StatMFParameters.hh 91834 2015-08-07 07:24:22Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -57,6 +57,8 @@ public:
   static G4double GetCriticalTemp();
   
   static G4double Getr0();
+
+  static G4double GetCoulomb();
   
   static G4double Beta(G4double T);
   
@@ -82,6 +84,8 @@ public:
   static const G4double fCriticalTemp;
   // Nuclear radius
   static const G4double fr0;
+  // Coulomb 
+  static const G4double fCoulomb;
 
 };
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: DicomNestedPhantomParameterisation.hh 84839 2014-10-21 13:44:55Z gcosmo $
+//$Id: DicomNestedPhantomParameterisation.hh 92820 2015-09-17 15:22:14Z gcosmo $
 //
 /// \file medical/DICOM/include/DicomNestedPhantomParameterisation.hh
 /// \brief Definition of the DicomNestedPhantomParameterisation class
@@ -93,7 +93,6 @@ public:
   
   // Additional standard Parameterisation methods, 
   // which can be optionally defined, in case solid is used.
-  
   void ComputeDimensions(G4Box &, const G4int,
                          const G4VPhysicalVolume *) const;
   

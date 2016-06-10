@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelIonPhysics.hh 76280 2013-11-08 12:54:34Z gcosmo $
+// $Id: GammaRayTelIonPhysics.hh 93678 2015-10-28 10:03:43Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -57,7 +57,8 @@
 
 #include "G4VCrossSectionDataSet.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
-#include "G4GGNuclNuclCrossSection.hh"
+#include "G4ComponentGGNuclNuclXsc.hh"
+#include "G4CrossSectionInelastic.hh"
 
 #include "G4FTFModel.hh"
 #include "G4TheoFSGenerator.hh"

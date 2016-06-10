@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDecayChannel.cc 82270 2014-06-13 13:51:56Z gcosmo $
+// $Id: G4VDecayChannel.cc 93024 2015-09-30 15:59:32Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -66,7 +66,8 @@ G4VDecayChannel::G4VDecayChannel()
    rbranch(0.0),
    numberOfDaughters(0),
    parent_name(0), daughters_name(0),
-   rangeMass(1.0),
+   rangeMass(2.5),
+   parent_polarization(),
    particletable(0),
    verboseLevel(1)		
 {
@@ -86,7 +87,8 @@ G4VDecayChannel::G4VDecayChannel(const G4String &aName, G4int Verbose)
    rbranch(0.0),
    numberOfDaughters(0),
    parent_name(0), daughters_name(0),
-   rangeMass(1.0),
+   rangeMass(2.5),
+   parent_polarization(),
    particletable(0),
    verboseLevel(Verbose)		
 {
@@ -114,6 +116,7 @@ G4VDecayChannel::G4VDecayChannel(const G4String  &aName,
 		numberOfDaughters(theNumberOfDaughters),
 		parent_name(0), daughters_name(0),
                 rangeMass(1.0),
+                parent_polarization(),
 		particletable(0),
 		verboseLevel(1)		
 {
@@ -175,6 +178,9 @@ G4VDecayChannel::G4VDecayChannel(const G4VDecayChannel &right)
 
   // particle table
   particletable = G4ParticleTable::GetParticleTable();
+
+  parent_polarization = right.parent_polarization;
+
 }
 
 G4VDecayChannel & G4VDecayChannel::operator=(const G4VDecayChannel &right)
@@ -184,7 +190,7 @@ G4VDecayChannel & G4VDecayChannel::operator=(const G4VDecayChannel &right)
     verboseLevel = right.verboseLevel;
     rbranch = right.rbranch;
     rangeMass =  right.rangeMass;
-
+    parent_polarization = right.parent_polarization;
     // copy parent name
     parent_name = new G4String(*right.parent_name);
 
@@ -536,8 +542,7 @@ void G4VDecayChannel::DumpInfo()
 {
   G4cout << " BR:  " << rbranch << "  [" << kinematics_name << "]";
   G4cout << "   :  " ;
-  for (G4int index=0; index < numberOfDaughters; index++)
-  {
+  for (G4int index=0; index < numberOfDaughters; index++){
     if(daughters_name[index] != 0) {
       G4cout << " " << *(daughters_name[index]);
     } else {
@@ -556,14 +561,29 @@ const G4String& G4VDecayChannel::GetNoName() const
 G4double G4VDecayChannel::DynamicalMass(G4double massPDG, G4double width, G4double maxDev ) const
 { 
   if (maxDev >rangeMass) maxDev = rangeMass;
-  if (maxDev <-1.*rangeMass) return massPDG;  // can not calculate
+  if (maxDev <=-1.*rangeMass) return massPDG;  // can not calculate
  
   G4double x = G4UniformRand()*(maxDev+rangeMass) - rangeMass;
   G4double y = G4UniformRand();
-  while ( y * (width*width*x*x + massPDG*massPDG*width*width) > massPDG*massPDG*width*width  ){
+  const size_t MAX_LOOP=10000;
+  for (size_t loop_counter=0; loop_counter <MAX_LOOP; ++loop_counter){
+    if ( y * (width*width*x*x + massPDG*massPDG*width*width) <= massPDG*massPDG*width*width  ) break;
     x = G4UniformRand()*(maxDev+rangeMass) - rangeMass;
     y = G4UniformRand();
   }
   G4double mass = massPDG + x*width;
   return mass;
+}
+   
+G4bool    G4VDecayChannel::IsOKWithParentMass(G4double parentMass)
+{
+  G4double sumOfDaughterMassMin=0.0;
+  if (G4MT_parent == 0) FillParent();  
+  if (G4MT_daughters == 0) FillDaughters();
+
+  for (G4int index=0; index < numberOfDaughters;  index++) { 
+    sumOfDaughterMassMin += 
+      G4MT_daughters_mass[index] -rangeMass*G4MT_daughters_width[index];
+  }
+  return (parentMass > sumOfDaughterMassMin); 
 }

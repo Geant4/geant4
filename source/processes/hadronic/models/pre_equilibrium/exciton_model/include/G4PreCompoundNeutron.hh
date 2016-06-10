@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundNeutron.hh 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4PreCompoundNeutron.hh 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // by V. Lara
 //
@@ -47,19 +47,11 @@ public:
 
   virtual ~G4PreCompoundNeutron();
 
-protected:
+  virtual G4double GetRj(G4int NumberParticles, G4int NumberCharged) const;
 
-  virtual G4double GetRj(G4int NumberParticles, G4int NumberCharged);
+  virtual G4double GetAlpha() const;
 
-  virtual G4double CrossSection(G4double ekin); 
-
-  virtual G4double GetAlpha();
-
-  virtual G4double GetBeta();
-
-  G4double GetOpt12(G4double K);
-
-  G4double GetOpt34(G4double K);
+  virtual G4double GetBeta() const;
 
 private:
 
@@ -71,13 +63,6 @@ private:
   G4int operator!=(const G4PreCompoundNeutron &right) const;    
 
   G4NeutronCoulombBarrier theNeutronCoulombBarrier;
-  G4double ResidualAthrd;
-  G4double FragmentAthrd;
-  G4int FragmentA;
-  G4int ResidualA;
-  G4int ResidualZ;
-  G4int theA;
-  G4int theZ;
 };
  
 #endif

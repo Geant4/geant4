@@ -1,0 +1,220 @@
+
+*************************************************************
+ Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  OpenGLImmediateX (OGLI, OGLIX)
+  OpenGLStoredX (OGL, OGLS, OGLSX)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+  drawByAttribute
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+  attributeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+Available colours:
+  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
+
+/run/verbose 1
+#
+/gun/particle ion
+/gun/ion 9 18
+#
+/rdecay01/fullChain true
+#
+/tracking/verbose 2
+/run/beamOn 1
+
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
+          DefaultRegionForTheWorld
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_AIR
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = F18,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm      0 fm      0 eV      0 eV      0 fm      0 fm      World   initStep
+    1      0 fm      0 fm      0 fm      0 eV      0 eV      0 fm      0 fm      World   RadioactiveDecay
+
+    :----- List of secondaries ----------------
+             O18:  energy = 14.18 eV   time = 3.462 h  
+            nu_e:  energy = 311.7 keV  time = 3.462 h  
+              e+:  energy = 321.8 keV  time = 3.462 h  
+    :------------------------------------------
+
+
+*********************************************************************************************************
+* G4Track Information:   Particle = nu_e,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm      0 fm    312 keV     0 eV      0 fm      0 fm      World   initStep
+    1   -171 um -1e+03 um   -213 um    312 keV     0 eV   1.04 mm   1.04 mm      World   OutOfWorld
+
+*********************************************************************************************************
+* G4Track Information:   Particle = O18,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm      0 fm   14.2 eV      0 eV      0 fm      0 fm      World   initStep
+    1      0 fm      0 fm      0 fm   14.2 eV      0 eV      0 fm      0 fm      World   RadioactiveDecay
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e+,   Track ID = 4,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm      0 fm    322 keV     0 eV      0 fm      0 fm      World   initStep
+    1   -217 um  -35.7 um      1 mm    322 keV     0 eV   1.02 mm   1.02 mm      World   OutOfWorld
+
+ end of event      0 : F18 ---> O18
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0.06s Sys=0s
+
+ ======================== run summary ======================
+ The run was 1 F18 of 0 eV 
+ ===========================================================
+
+ Nb of generated particles: 
+
+            O18:       1  Emean =  14.18 eV 	( 14.18 eV  --> 14.18 eV )
+             e+:       1  Emean =  321.8 keV	( 321.8 keV --> 321.8 keV)
+           nu_e:       1  Emean =  311.7 keV	( 311.7 keV --> 311.7 keV)
+
+   Ekin Total (Q): mean =  633.5 keV	( 633.5 keV --> 633.5 keV)
+
+   Momentum balance (excluding gamma desexcitation): mean = 0.02294 eV 	( 0.02294 eV  --> 0.02294 eV )
+
+   Total time of life : mean =  3.462 h    half-life =    2.4 h     ( 3.462 h   --> 3.462 h  )
+
+   Total visible energy : mean =  321.8 keV   ( 321.8 keV --> 321.8 keV)
+
+   Activity of F18 = 2.684e+18 Bq/g   (7.255e+07 Ci/g) 
+
+#
+/analysis/setFileName beta+
+Set file name: beta+
+/analysis/h1/set 1 100 0. 1000. keV
+/analysis/h1/set 2 100 0. 2000. keV
+/analysis/h1/set 6 100 0. 2000. keV
+#
+/tracking/verbose 0
+/rdecay01/event/printModulo 10000
+#
+/run/beamOn 100000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_AIR
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+... open Root analysis file : beta+.root - done
+Start Run processing.
+
+ end of event      0 : F18 ---> O18
+
+ end of event  10000 : F18 ---> O18
+
+ end of event  20000 : F18 ---> O18
+
+ end of event  30000 : F18 ---> O18
+
+ end of event  40000 : F18 ---> O18
+
+ end of event  50000 : F18 ---> O18
+
+ end of event  60000 : F18 ---> O18
+
+ end of event  70000 : F18 ---> O18
+
+ end of event  80000 : F18 ---> O18
+
+ end of event  90000 : F18 ---> O18
+Run terminated.
+Run Summary
+  Number of events processed : 100000
+  User=2.65s Real=2.65s Sys=0s
+
+ ======================== run summary ======================
+ The run was 100000 F18 of 0 eV 
+ ===========================================================
+
+ Nb of generated particles: 
+
+            O18:  100000  Emean =  17.06 eV 	( 0.006516 eV  --> 81.74 eV )
+             e+:   96767  Emean =  249.3 keV	( 21.98 eV  --> 632.2 keV)
+           nu_e:  100000  Emean =  425.3 keV	( 1.257 keV --> 1.655 MeV)
+
+   Ekin Total (Q): mean =  666.5 keV	( 633.5 keV --> 1.656 MeV)
+
+   Momentum balance (excluding gamma desexcitation): mean = 0.03184 eV 	( 6.834e-11 eV  --> 3.023 eV )
+
+   Total time of life : mean =  2.633 h    half-life =  1.825 h     ( 114.4 ms  --> 1.33 d  )
+
+   Total visible energy : mean =  241.2 keV   ( 33.95 eV  --> 632.2 keV)
+
+   Activity of F18 = 3.53e+18 Bq/g   (9.54e+07 Ci/g) 
+
+... write Root file : beta+.root - done
+... close Root file : beta+.root - done
+Graphics systems deleted.
+Visualization Manager deleting...
+G4 kernel has come to Quit state.
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Pow.cc 83383 2014-08-21 14:20:37Z gcosmo $
+// $Id: G4Pow.cc 93311 2015-10-16 10:16:37Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -127,10 +127,11 @@ G4Pow::~G4Pow()
 
 G4double G4Pow::powN(G4double x, G4int n) const
 {
+  if(0.0 == x)        { return 0.0; }
   if(std::abs(n) > 8) { return std::pow(x, G4double(n)); }
   G4double res = 1.0;
   if(n >= 0) { for(G4int i=0; i<n; ++i) { res *= x; } }
-  else if((n < 0) && (x != 0.0))
+  else if(n < 0)
   {
     G4double y = 1.0/x;
     G4int nn = -n;

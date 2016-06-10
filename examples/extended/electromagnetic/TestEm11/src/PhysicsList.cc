@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm11/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 85029 2014-10-23 10:00:33Z gcosmo $
+// $Id: PhysicsList.cc 94269 2015-11-10 07:55:24Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,6 +35,7 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysListEmStandard.hh"
+#include "PhysListEmStandardMP.hh"
 
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
@@ -42,8 +43,11 @@
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4EmStandardPhysicsSS.hh"
+#include "G4EmStandardPhysicsGS.hh"
+#include "G4EmStandardPhysicsWVI.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
+#include "G4EmLowEPPhysics.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
@@ -63,8 +67,7 @@ G4ThreadLocal StepMax* PhysicsList::fStepMaxProcess = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() : G4VModularPhysicsList(),
-  fEmPhysicsList(0), fMessenger(0)
+PhysicsList::PhysicsList() : G4VModularPhysicsList(), fNumAngles(1)
 {
   fMessenger = new PhysicsListMessenger(this);
 
@@ -149,47 +152,55 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   if (name == fEmName) return;
 
   if (name == "local") {
-
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new PhysListEmStandard(name);
 
   } else if (name == "emstandard_opt0") {
-
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics();
     
   } else if (name == "emstandard_opt1") {
-
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option1();
 
   } else if (name == "emstandard_opt2") {
-
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option2();
         
   } else if (name == "emstandard_opt3") {
-
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option3();
     
   } else if (name == "emstandard_opt4") {
-
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option4();
     
   } else if (name == "emstandardSS") {
-
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysicsSS();
                             
+  } else if (name == "emstandardGS") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysicsGS();
+
+  } else if (name == "emstandardWVI") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysicsWVI();
+
+  } else if (name == "emlowenergy") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmLowEPPhysics();
+
   } else if (name == "emlivermore") {
     fEmName = name;
     delete fEmPhysicsList;
@@ -200,6 +211,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmPenelopePhysics();
         
+  } else if (name == "emstandardMP") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new PhysListEmStandardMP(fNumAngles);
+
   } else {
 
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"

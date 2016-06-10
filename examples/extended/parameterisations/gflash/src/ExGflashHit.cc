@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExGflashHit.cc 72372 2013-07-16 14:30:39Z gcosmo $
+// $Id: ExGflashHit.cc 94396 2015-11-13 13:37:16Z gcosmo $
 //
 /// \file parameterisations/gflash/src/ExGflashHit.cc
 /// \brief Implementation of the ExGflashHit class
@@ -35,22 +35,33 @@
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
 #include "G4LogicalVolume.hh"
-#include "G4ios.hh"
+#include "G4Transform3D.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ThreadLocal G4Allocator<ExGflashHit>* ExGflashHitAllocator=0;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 ExGflashHit::ExGflashHit()
-{fLogV=NULL;}
+: G4VHit(), fLogV(0)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExGflashHit::ExGflashHit(G4LogicalVolume* logVol)
-:fLogV(logVol)
-{;}
+: G4VHit(), fLogV(logVol)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExGflashHit::~ExGflashHit()
-{;}
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExGflashHit::ExGflashHit(const ExGflashHit &right)
-:G4VHit()
+: G4VHit(right)
 //@@@ ExGflashHit:Is it right with the init?
 {
   fEdep = right.fEdep;
@@ -61,8 +72,11 @@ ExGflashHit::ExGflashHit(const ExGflashHit &right)
   fCrystalNumber = right.fCrystalNumber;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 const ExGflashHit & ExGflashHit::operator=(const ExGflashHit &right)
 {
+  G4VHit::operator=(right);
   fEdep = right.fEdep;
   fStart =right.fStart; 
   fPos = right.fPos;
@@ -73,6 +87,8 @@ const ExGflashHit & ExGflashHit::operator=(const ExGflashHit &right)
   return *this;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 int ExGflashHit::operator==(const ExGflashHit &right) const
 {
 // @@@@ return 0;
@@ -80,6 +96,8 @@ int ExGflashHit::operator==(const ExGflashHit &right) const
   else return false;
   
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExGflashHit::Draw()
 {
@@ -98,10 +116,12 @@ void ExGflashHit::Draw()
   }
 }
 
-void ExGflashHit::Print()
-{
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void ExGflashHit::Print()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
 

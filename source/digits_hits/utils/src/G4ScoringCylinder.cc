@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringCylinder.cc 83518 2014-08-27 12:57:10Z gcosmo $
+// $Id: G4ScoringCylinder.cc 89031 2015-03-18 08:40:48Z gcosmo $
 //
 
 #include "G4ScoringCylinder.hh"
@@ -206,7 +206,8 @@ void G4ScoringCylinder::List() const {
 }
 
 
-void G4ScoringCylinder::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg) {
+void G4ScoringCylinder::Draw(std::map<G4int, G4double*> * map,
+                             G4VScoreColorMap* colorMap, G4int axflg) {
 
   G4VVisManager * pVisManager = G4VVisManager::GetConcreteInstance();
   if(pVisManager) {
@@ -220,126 +221,135 @@ void G4ScoringCylinder::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap*
     //-
     std::vector<std::vector<double> > rphicell; // rphicell[R][PHI]
     for(int r = 0; r < fNSegment[IR]; r++) rphicell.push_back(ephi);
-
+    
     // projections
     G4int q[3];
     std::map<G4int, G4double*>::iterator itr = map->begin();
     for(; itr != map->end(); itr++) {
       if(itr->first < 0) {
-	G4cout << itr->first << G4endl;
-	continue;
+        G4cout << itr->first << G4endl;
+        continue;
       }
       GetRZPhi(itr->first, q);
-
+      
       zphicell[q[IZ]][q[IPHI]] += *(itr->second)/fDrawUnitValue;
       rphicell[q[IR]][q[IPHI]] += *(itr->second)/fDrawUnitValue;
-    }  
+    }
     
     // search min./max. values
     G4double zphimin = DBL_MAX, rphimin = DBL_MAX;
     G4double zphimax = 0., rphimax = 0.;
     for(int iphi = 0; iphi < fNSegment[IPHI]; iphi++) {
       for(int iz = 0; iz < fNSegment[IZ]; iz++) {
-	if(zphimin > zphicell[iz][iphi]) zphimin = zphicell[iz][iphi];
-	if(zphimax < zphicell[iz][iphi]) zphimax = zphicell[iz][iphi];
+        if(zphimin > zphicell[iz][iphi]) zphimin = zphicell[iz][iphi];
+        if(zphimax < zphicell[iz][iphi]) zphimax = zphicell[iz][iphi];
       }
       for(int ir = 0; ir < fNSegment[IR]; ir++) {
-	if(rphimin > rphicell[ir][iphi]) rphimin = rphicell[ir][iphi];
-	if(rphimax < rphicell[ir][iphi]) rphimax = rphicell[ir][iphi];
+        if(rphimin > rphicell[ir][iphi]) rphimin = rphicell[ir][iphi];
+        if(rphimax < rphicell[ir][iphi]) rphimax = rphicell[ir][iphi];
       }
     }
-
+    
     G4VisAttributes att;
     att.SetForceSolid(true);
     att.SetForceAuxEdgeVisible(true);
-
-
+    
+    
     G4Scale3D scale;
     if(axflg/100==1) {
       // rz plane
     }
     axflg = axflg%100;
     if(axflg/10==1) {
+      pVisManager->BeginDraw();
+      
       // z-phi plane
       if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(zphimin, zphimax); }
-
+      
       G4double zhalf = fSize[1]/fNSegment[IZ];
       for(int phi = 0; phi < fNSegment[IPHI]; phi++) {
-	for(int z = 0; z < fNSegment[IZ]; z++) {
-	  //-
-	  G4double angle = twopi/fNSegment[IPHI]*phi;
-	  G4double dphi = twopi/fNSegment[IPHI];
-	  G4Tubs cylinder("z-phi",                    // name
-			  fSize[0]*0.99, fSize[0],  // inner radius, outer radius
-			  zhalf,                      // half length in z
-			  angle, dphi*0.99999);       // starting phi angle, delta angle
-	  //-
-	  G4ThreeVector zpos(0., 0., -fSize[1] + fSize[1]/fNSegment[IZ]*(1 + 2.*z));
-	  G4Transform3D trans;
-	  if(fRotationMatrix) {
-	    trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(zpos);
-	    trans = G4Translate3D(fCenterPosition)*trans;
-	  } else {
-	    trans = G4Translate3D(zpos)*G4Translate3D(fCenterPosition);
-	  }
-	  G4double c[4];
-	  colorMap->GetMapColor(zphicell[z][phi], c);
-	  att.SetColour(c[0], c[1], c[2]);//, c[3]);
-	  //-
-	  pVisManager->Draw(cylinder, att, trans);
-	}
+        for(int z = 0; z < fNSegment[IZ]; z++) {
+          //-
+          G4double angle = twopi/fNSegment[IPHI]*phi;
+          G4double dphi = twopi/fNSegment[IPHI];
+          G4Tubs cylinder("z-phi",                    // name
+                          fSize[0]*0.99, fSize[0],  // inner radius, outer radius
+                          zhalf,                      // half length in z
+                          angle, dphi*0.99999);       // starting phi angle, delta angle
+          //-
+          G4ThreeVector zpos(0., 0., -fSize[1] + fSize[1]/fNSegment[IZ]*(1 + 2.*z));
+          G4Transform3D trans;
+          if(fRotationMatrix) {
+            trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(zpos);
+            trans = G4Translate3D(fCenterPosition)*trans;
+          } else {
+            trans = G4Translate3D(zpos)*G4Translate3D(fCenterPosition);
+          }
+          G4double c[4];
+          colorMap->GetMapColor(zphicell[z][phi], c);
+          att.SetColour(c[0], c[1], c[2]);//, c[3]);
+          //-
+          G4Polyhedron * poly = cylinder.GetPolyhedron();
+          poly->Transform(trans);
+          poly->SetVisAttributes(att);
+          pVisManager->Draw(*poly);
+        }
       }
+      pVisManager->EndDraw();
     }
     axflg = axflg%10;
     if(axflg==1) {
+      pVisManager->BeginDraw();
+      
       // r-phi plane
       if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(rphimin, rphimax); }
-
+      
       G4double rsize = fSize[0]/fNSegment[IR];
       for(int phi = 0; phi < fNSegment[IPHI]; phi++) {
-	for(int r = 0; r < fNSegment[IR]; r++) {
+        for(int r = 0; r < fNSegment[IR]; r++) {
+          
+          G4double rs[2] = {rsize*r, rsize*(r+1)};
+          G4double angle = twopi/fNSegment[IPHI]*phi;
+          G4double dphi = twopi/fNSegment[IPHI];
+          G4Tubs cylindern("z-phi", rs[0], rs[1], 0.001,
+                          angle, dphi*0.99999);
+          G4Tubs cylinderp = cylindern;
+          
+          G4ThreeVector zposn(0., 0., -fSize[1]);
+          G4ThreeVector zposp(0., 0.,  fSize[1]);
+          G4Transform3D transn, transp;
+          if(fRotationMatrix) {
+            transn = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(zposn);
+            transn = G4Translate3D(fCenterPosition)*transn;
+            transp = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(zposp);
+            transp = G4Translate3D(fCenterPosition)*transp;
+          } else {
+            transn = G4Translate3D(zposn)*G4Translate3D(fCenterPosition);
+            transp = G4Translate3D(zposp)*G4Translate3D(fCenterPosition);
+          }
+          G4double c[4];
+          colorMap->GetMapColor(rphicell[r][phi], c);
+          att.SetColour(c[0], c[1], c[2]);//, c[3]);
 
-	  G4double rs[2] = {rsize*r, rsize*(r+1)};
-	  G4double angle = twopi/fNSegment[IPHI]*phi;
-	  G4double dphi = twopi/fNSegment[IPHI];
-	  G4Tubs cylinder("z-phi", rs[0], rs[1], 0.001,
-			  angle, dphi*0.99999);
-	  /*
-	  G4cout << ">>>> "
-		 << rs[0] << " - " << rs[1] << " : "
-		 << angle << " - " << angle + dphi
-		 << G4endl;
-	  */
+          G4Polyhedron * polyn = cylindern.GetPolyhedron();
+          polyn->Transform(transn);
+          polyn->SetVisAttributes(att);
+          pVisManager->Draw(*polyn);
 
-	  G4ThreeVector zposn(0., 0., -fSize[1]);
-	  G4ThreeVector zposp(0., 0.,  fSize[1]);
-	  G4Transform3D transn, transp;
-	  if(fRotationMatrix) {
-	    transn = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(zposn);
-	    transn = G4Translate3D(fCenterPosition)*transn;
-	    transp = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(zposp);
-	    transp = G4Translate3D(fCenterPosition)*transp;
-	  } else {
-	    transn = G4Translate3D(zposn)*G4Translate3D(fCenterPosition);
-	    transp = G4Translate3D(zposp)*G4Translate3D(fCenterPosition);
-	  }
-	  G4double c[4];
-	  colorMap->GetMapColor(rphicell[r][phi], c);
-	  att.SetColour(c[0], c[1], c[2]);//, c[3]);
-	  /*
-	  G4cout << "   " << c[0] << ", "
-		 << c[1] << ", " << c[2] << G4endl;
-	  */
-	  pVisManager->Draw(cylinder, att, transn);
-	  pVisManager->Draw(cylinder, att, transp);
-	}
+          G4Polyhedron * polyp = cylinderp.GetPolyhedron();
+          polyp->Transform(transp);
+          polyp->SetVisAttributes(att);
+          pVisManager->Draw(*polyp);
+        }
       }
+      
+      pVisManager->EndDraw();
     }
-
+    
     colorMap->SetPSUnit(fDrawUnit);
     colorMap->SetPSName(fDrawPSName);
     colorMap->DrawColorChart();
-
+    
   }
 }
 
@@ -348,17 +358,17 @@ void G4ScoringCylinder::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreCol
 {
   G4int projAxis = 0;
   switch(idxProj) {
-  case 0: 
-    projAxis = IR;
-    break;
-  case 1:
-    projAxis = IZ;
-    break;
-  case 2:
-    projAxis = IPHI;
-    break;
+    case 0:
+      projAxis = IR;
+      break;
+    case 1:
+      projAxis = IZ;
+      break;
+    case 2:
+      projAxis = IPHI;
+      break;
   }
-
+  
   if(idxColumn<0 || idxColumn>=fNSegment[projAxis])
   {
     G4cerr << "Warning : Column number " << idxColumn << " is out of scoring mesh [0," << fNSegment[projAxis]-1 <<
@@ -367,7 +377,7 @@ void G4ScoringCylinder::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreCol
   }
   G4VVisManager * pVisManager = G4VVisManager::GetConcreteInstance();
   if(pVisManager) {
-
+    
     // cell vectors
     std::vector<std::vector<std::vector<double> > > cell; // cell[R][Z][PHI]
     std::vector<double> ephi;
@@ -375,163 +385,178 @@ void G4ScoringCylinder::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreCol
     std::vector<std::vector<double> > ezphi;
     for(int z = 0; z < fNSegment[IZ]; z++) ezphi.push_back(ephi);
     for(int r = 0; r < fNSegment[IR]; r++) cell.push_back(ezphi);
-
+    
     std::vector<std::vector<double> > rzcell; // rzcell[R][Z]
     std::vector<double> ez;
     for(int z = 0; z < fNSegment[IZ]; z++) ez.push_back(0.);
     for(int r = 0; r < fNSegment[IR]; r++) rzcell.push_back(ez);
-
+    
     std::vector<std::vector<double> > zphicell; // zphicell[Z][PHI]
     for(int z = 0; z < fNSegment[IZ]; z++) zphicell.push_back(ephi);
-
+    
     std::vector<std::vector<double> > rphicell; // rphicell[R][PHI]
     for(int r = 0; r < fNSegment[IR]; r++) rphicell.push_back(ephi);
-
+    
     // projections
     G4int q[3];
     std::map<G4int, G4double*>::iterator itr = map->begin();
     for(; itr != map->end(); itr++) {
       if(itr->first < 0) {
-	G4cout << itr->first << G4endl;
-	continue;
+        G4cout << itr->first << G4endl;
+        continue;
       }
       GetRZPhi(itr->first, q);
-
+      
       if(projAxis == IR && q[IR] == idxColumn) { // zphi plane
-	zphicell[q[IZ]][q[IPHI]] += *(itr->second)/fDrawUnitValue;
+        zphicell[q[IZ]][q[IPHI]] += *(itr->second)/fDrawUnitValue;
       }
       if(projAxis == IZ && q[IZ] == idxColumn) { // rphi plane
-	rphicell[q[IR]][q[IPHI]] += *(itr->second)/fDrawUnitValue;
+        rphicell[q[IR]][q[IPHI]] += *(itr->second)/fDrawUnitValue;
       }
       if(projAxis == IPHI && q[IPHI] == idxColumn) { // rz plane
-	rzcell[q[IR]][q[IZ]] += *(itr->second)/fDrawUnitValue; 
+        rzcell[q[IR]][q[IZ]] += *(itr->second)/fDrawUnitValue;
       }
-    }  
-
+    }
+    
     // search min./max. values
     G4double rzmin = DBL_MAX, zphimin = DBL_MAX, rphimin = DBL_MAX;
     G4double rzmax = 0., zphimax = 0., rphimax = 0.;
     for(int r = 0; r < fNSegment[IR]; r++) {
       for(int phi = 0; phi < fNSegment[IPHI]; phi++) {
-	if(rphimin > rphicell[r][phi]) rphimin = rphicell[r][phi];
-	if(rphimax < rphicell[r][phi]) rphimax = rphicell[r][phi];
+        if(rphimin > rphicell[r][phi]) rphimin = rphicell[r][phi];
+        if(rphimax < rphicell[r][phi]) rphimax = rphicell[r][phi];
       }
       for(int z = 0; z < fNSegment[IZ]; z++) {
-	if(rzmin > rzcell[r][z]) rzmin = rzcell[r][z];
-	if(rzmax < rzcell[r][z]) rzmax = rzcell[r][z];
+        if(rzmin > rzcell[r][z]) rzmin = rzcell[r][z];
+        if(rzmax < rzcell[r][z]) rzmax = rzcell[r][z];
       }
     }
     for(int z = 0; z < fNSegment[IZ]; z++) {
       for(int phi = 0; phi < fNSegment[IPHI]; phi++) {
-	if(zphimin > zphicell[z][phi]) zphimin = zphicell[z][phi];
-	if(zphimax < zphicell[z][phi]) zphimax = zphicell[z][phi];
+        if(zphimin > zphicell[z][phi]) zphimin = zphicell[z][phi];
+        if(zphimax < zphicell[z][phi]) zphimax = zphicell[z][phi];
       }
     }
-
-
+    
+    
     G4VisAttributes att;
     att.SetForceSolid(true);
     att.SetForceAuxEdgeVisible(true);
-
-
+    
+    pVisManager->BeginDraw();
+    
     G4Scale3D scale;
     // z-phi plane
     if(projAxis == IR) {
+      
       if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(zphimin,zphimax); }
-
+      
       G4double zhalf = fSize[1]/fNSegment[IZ];
       G4double rsize[2] = {fSize[0]/fNSegment[IR]*idxColumn,
-			    fSize[0]/fNSegment[IR]*(idxColumn+1)};
+        fSize[0]/fNSegment[IR]*(idxColumn+1)};
       for(int phi = 0; phi < fNSegment[IPHI]; phi++) {
-	for(int z = 0; z < fNSegment[IZ]; z++) {
-
-	  G4double angle = twopi/fNSegment[IPHI]*phi*radian;
-	  G4double dphi = twopi/fNSegment[IPHI]*radian;
-	  G4Tubs cylinder("z-phi", rsize[0], rsize[1], zhalf,
-			  angle, dphi*0.99999);
-
-	  G4ThreeVector zpos(0., 0., -fSize[1] + fSize[1]/fNSegment[IZ]*(1 + 2.*z));
-	  G4Transform3D trans;
-	  if(fRotationMatrix) {
-	    trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(zpos);
-	    trans = G4Translate3D(fCenterPosition)*trans;
-	  } else {
-	    trans = G4Translate3D(zpos)*G4Translate3D(fCenterPosition);
-	  }
-	  G4double c[4];
-	  colorMap->GetMapColor(zphicell[z][phi], c);
-	  att.SetColour(c[0], c[1], c[2]);//, c[3]);
-	  pVisManager->Draw(cylinder, att, trans);
-	}
+        for(int z = 0; z < fNSegment[IZ]; z++) {
+          
+          G4double angle = twopi/fNSegment[IPHI]*phi*radian;
+          G4double dphi = twopi/fNSegment[IPHI]*radian;
+          G4Tubs cylinder("z-phi", rsize[0], rsize[1], zhalf,
+                          angle, dphi*0.99999);
+          
+          G4ThreeVector zpos(0., 0., -fSize[1] + fSize[1]/fNSegment[IZ]*(1 + 2.*z));
+          G4Transform3D trans;
+          if(fRotationMatrix) {
+            trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(zpos);
+            trans = G4Translate3D(fCenterPosition)*trans;
+          } else {
+            trans = G4Translate3D(zpos)*G4Translate3D(fCenterPosition);
+          }
+          G4double c[4];
+          colorMap->GetMapColor(zphicell[z][phi], c);
+          att.SetColour(c[0], c[1], c[2]);//, c[3]);
+          
+          G4Polyhedron * poly = cylinder.GetPolyhedron();
+          poly->Transform(trans);
+          poly->SetVisAttributes(att);
+          pVisManager->Draw(*poly);
+        }
       }
-
+      
       // r-phi plane
     } else if(projAxis == IZ) {
       if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(rphimin,rphimax); }
-
+      
       G4double rsize = fSize[0]/fNSegment[IR];
       for(int phi = 0; phi < fNSegment[IPHI]; phi++) {
-	for(int r = 0; r < fNSegment[IR]; r++) {
+        for(int r = 0; r < fNSegment[IR]; r++) {
+          
+          G4double rs[2] = {rsize*r, rsize*(r+1)};
+          G4double angle = twopi/fNSegment[IPHI]*phi*radian;
+          G4double dz = fSize[1]/fNSegment[IZ];
+          G4double dphi = twopi/fNSegment[IPHI]*radian;
+          G4Tubs cylinder("r-phi", rs[0], rs[1], dz,
+                          angle, dphi*0.99999);
+          G4ThreeVector zpos(0., 0.,
+                             -fSize[1]+fSize[1]/fNSegment[IZ]*(idxColumn*2+1));
+          G4Transform3D trans;
+          if(fRotationMatrix) {
+            trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(zpos);
+            trans = G4Translate3D(fCenterPosition)*trans;
+          } else {
+            trans = G4Translate3D(zpos)*G4Translate3D(fCenterPosition);
+          }
+          G4double c[4];
+          colorMap->GetMapColor(rphicell[r][phi], c);
+          att.SetColour(c[0], c[1], c[2]);//, c[3]);
 
-	  G4double rs[2] = {rsize*r, rsize*(r+1)};
-	  G4double angle = twopi/fNSegment[IPHI]*phi*radian;
-	  G4double dz = fSize[1]/fNSegment[IZ];
-	  G4double dphi = twopi/fNSegment[IPHI]*radian;
-	  G4Tubs cylinder("r-phi", rs[0], rs[1], dz,
-			  angle, dphi*0.99999);
-	  G4ThreeVector zpos(0., 0.,
-			     -fSize[1]+fSize[1]/fNSegment[IZ]*(idxColumn*2+1));
-	  G4Transform3D trans;
-	  if(fRotationMatrix) {
-	    trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(zpos);
-	    trans = G4Translate3D(fCenterPosition)*trans;
-	  } else {
-	    trans = G4Translate3D(zpos)*G4Translate3D(fCenterPosition);
-	  }
-	  G4double c[4];
-	  colorMap->GetMapColor(rphicell[r][phi], c);
-	  att.SetColour(c[0], c[1], c[2]);//, c[3]);
-	  pVisManager->Draw(cylinder, att, trans);
-	}
+          G4Polyhedron * poly = cylinder.GetPolyhedron();
+          poly->Transform(trans);
+          poly->SetVisAttributes(att);
+          pVisManager->Draw(*poly);
+        }
       }
-
+      
       // r-z plane
     } else if(projAxis == IPHI) {
       if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(rzmin,rzmax); }
-
+      
       G4double rsize = fSize[0]/fNSegment[IR];
       G4double zhalf = fSize[1]/fNSegment[IZ];
       G4double angle = twopi/fNSegment[IPHI]*idxColumn*radian;
       G4double dphi = twopi/fNSegment[IPHI]*radian;
       for(int z = 0; z < fNSegment[IZ]; z++) {
-	for(int r = 0; r < fNSegment[IR]; r++) {
+        for(int r = 0; r < fNSegment[IR]; r++) {
+          
+          G4double rs[2] = {rsize*r, rsize*(r+1)};
+          G4Tubs cylinder("z-phi", rs[0], rs[1], zhalf,
+                          angle, dphi);
+          
+          G4ThreeVector zpos(0., 0.,
+                             -fSize[1]+fSize[1]/fNSegment[IZ]*(2.*z+1));
+          G4Transform3D trans;
+          if(fRotationMatrix) {
+            trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(zpos);
+            trans = G4Translate3D(fCenterPosition)*trans;
+          } else {
+            trans = G4Translate3D(zpos)*G4Translate3D(fCenterPosition);
+          }
+          G4double c[4];
+          colorMap->GetMapColor(rzcell[r][z], c);
+          att.SetColour(c[0], c[1], c[2]);//, c[3]);
 
-	  G4double rs[2] = {rsize*r, rsize*(r+1)};
-	  G4Tubs cylinder("z-phi", rs[0], rs[1], zhalf,
-			  angle, dphi);
-
-	  G4ThreeVector zpos(0., 0.,
-			     -fSize[1]+fSize[1]/fNSegment[IZ]*(2.*z+1));
-	  G4Transform3D trans;
-	  if(fRotationMatrix) {
-	    trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(zpos);
-	    trans = G4Translate3D(fCenterPosition)*trans;
-	  } else {
-	    trans = G4Translate3D(zpos)*G4Translate3D(fCenterPosition);
-	  }
-	  G4double c[4];
-	  colorMap->GetMapColor(rzcell[r][z], c);
-	  att.SetColour(c[0], c[1], c[2]);//, c[3]);
-	  pVisManager->Draw(cylinder, att, trans);
-	}
+          G4Polyhedron * poly = cylinder.GetPolyhedron();
+          poly->Transform(trans);
+          poly->SetVisAttributes(att);
+          pVisManager->Draw(*poly);
+        }
       }
     }
+    pVisManager->EndDraw();
   }
-
+  
   colorMap->SetPSUnit(fDrawUnit);
   colorMap->SetPSName(fDrawPSName);
   colorMap->DrawColorChart();
-
+  
 }
 
 void G4ScoringCylinder::GetRZPhi(G4int index, G4int q[3]) const {

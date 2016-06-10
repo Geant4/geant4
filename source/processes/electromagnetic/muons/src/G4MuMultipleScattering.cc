@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMultipleScattering.cc 68035 2013-03-13 14:12:34Z gcosmo $
+// $Id: G4MuMultipleScattering.cc 88678 2015-03-05 08:34:20Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //
@@ -58,7 +58,6 @@ G4MuMultipleScattering::G4MuMultipleScattering(const G4String& pnam)
   : G4VMultipleScattering(pnam)
 {
   isInitialized = false;  
-  SetStepLimitType(fMinimal);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

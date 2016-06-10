@@ -122,6 +122,11 @@ class ExG4HbookNtupleManager : public G4VNtupleManager
                        G4int ntupleId, G4int columnId, const G4String& value);
     virtual G4bool AddNtupleRow(G4int ntupleId);
     
+    // Activation option
+    virtual void  SetActivation(G4bool activation);
+    virtual void  SetActivation(G4int ntupleId, G4bool activation);
+    virtual G4bool  GetActivation(G4int ntupleId) const;
+    
     // Access methods
     virtual G4int GetNofNtuples() const;
 

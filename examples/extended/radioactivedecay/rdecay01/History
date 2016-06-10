@@ -1,4 +1,4 @@
-$Id: History 83857 2014-09-19 10:19:37Z gcosmo $
+$Id: History 94458 2015-11-18 14:36:25Z gcosmo $
 -----------------------------------------------------
 
      =========================================================
@@ -15,6 +15,29 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 	 
+18-11-15 mma  (rdecay01-V10-01-06)
+- PhysicsList : add LevelTolerance (100*eV),  HalfLife(0.1*ps)
+
+13-10-15 mma  (rdecay01-V10-01-05)
+- small cosmetic in EventAction::EndOfEventAction()
+  
+01-09-15 I. Hrivnacova  (rdecay01-V10-01-04)
+- Removed EventMessenger class, now obsolete, and replaced 
+  /rdecay01/event/printModulo commands in macros with /run/printProgress
+ 
+08-06-15 mma  (rdecay01-V10-01-03)
+- references: update it1.mac and it2.mac
+	 	 
+13-03-15 mma  (rdecay01-V10-01-02)
+- PhysicsList.cc : remove initialization of UAtomicDeexcitation
+	 
+19-01-15 mma  (rdecay01-V10-01-01)
+- add subdirectory references
+
+12-01-15 mma  (rdecay01-V10-01-00)
+- PhysicsList.cc : remove SetICM()
+- compute total visible energy : TrackingAction, EventAction, Run, HistoManager
+
 18-09-14 mma (rdecay01-V10-00-03)
 - rdecay01.cc : SetNumberOfThreads(G4Threading::G4GetNumberOfCores())
      

@@ -45,9 +45,13 @@
 // 20130622  Inherit from G4CascadeDeexciteBase, move to deExcite() interface
 //		with G4Fragment
 // 20130628  Replace local list of fragments with use of output G4Fragments
+// 20150608  M. Kelsey -- Label all while loops as terminating.
+// 20150619  M. Kelsey -- Replace std::exp with G4Exp
+// 20150622  M. Kelsey -- For new G4cbrt(int), move powers of A outside.
 
 #include "G4Fissioner.hh"
 #include "G4CollisionOutput.hh"
+#include "G4Exp.hh"
 #include "G4Fragment.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4InuclNuclei.hh"
@@ -73,11 +77,12 @@ void G4Fissioner::deExcite(const G4Fragment& target,
   fissionStore.clear();
 
   getTargetData(target);
+  G4double A13 = G4cbrt(A);
   G4double mass_in = PEX.m();
   G4double e_in = mass_in; 		// Mass includes excitation
-  G4double PARA = 0.055 * G4cbrt(A*A) * (G4cbrt(A-Z) + G4cbrt(Z));
+  G4double PARA = 0.055 * A13*A13 * (G4cbrt(A-Z) + G4cbrt(Z));
   G4double TEM = std::sqrt(EEXS / PARA);
-  G4double TETA = 0.494 * G4cbrt(A) * TEM;
+  G4double TETA = 0.494 * A13 * TEM;
   
   TETA = TETA / std::sinh(TETA);
   
@@ -257,7 +262,7 @@ void G4Fissioner::potentialMinimization(G4double& VP,
   G4double B[4];
   G4int itry = 0;
 
-  while (itry < itry_max) {
+  while (itry < itry_max) {	/* Loop checking 08.06.2015 MHK */
     itry++;
     G4double S = 0.0;
 
@@ -301,13 +306,13 @@ void G4Fissioner::potentialMinimization(G4double& VP,
 
 	if (std::fabs(AL1[i]) >= DS1) {
 	  G4double XXX = AL1[i] * AL1[i] * DS2;
-	  G4double DEX = XXX > 100.0 ? huge_num : std::exp(XXX);
+	  G4double DEX = XXX > 100.0 ? huge_num : G4Exp(XXX);
 	  DX1 = 2.0 * (1.0 + 2.0 * AL1[i] * AL1[i] * DS2) * DEX * DS2;
 	};
 
 	if (std::fabs(BET1[i]) >= DS1) {
 	  G4double XXX = BET1[i] * BET1[i] * DS2;
-	  G4double DEX = XXX > 100.0 ? huge_num : std::exp(XXX);
+	  G4double DEX = XXX > 100.0 ? huge_num : G4Exp(XXX);
 	  DX2 = 2.0 * (1.+2.0 * BET1[i] * BET1[i] * DS2) * DEX * DS2;
 	};
 
@@ -337,9 +342,9 @@ void G4Fissioner::potentialMinimization(G4double& VP,
       DX1 = 0.0;
       DX2 = 0.0;
 
-      if (std::fabs(AL1[i]) >= DS1) DX1 = 2.0 * AL1[i] * DS2 * std::exp(AL1[i] * AL1[i] * DS2);
+      if (std::fabs(AL1[i]) >= DS1) DX1 = 2.0 * AL1[i] * DS2 * G4Exp(AL1[i] * AL1[i] * DS2);
 
-      if (std::fabs(BET1[i]) >= DS1) DX2 = 2.0 * BET1[i] * DS2 * std::exp(BET1[i] * BET1[i] * DS2);
+      if (std::fabs(BET1[i]) >= DS1) DX2 = 2.0 * BET1[i] * DS2 * G4Exp(BET1[i] * BET1[i] * DS2);
       B[i] =     R2 * RAL[i] - 2.0e-3 * C[i] * AL1[i] + DX1;
       B[i + 2] = R2 * RBE[i] - 2.0e-3 * F[i] * BET1[i] + DX2;
     };

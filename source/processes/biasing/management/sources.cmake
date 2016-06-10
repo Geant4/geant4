@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 77477 2013-11-25 09:42:24Z gcosmo $
+# $Id: sources.cmake 94224 2015-11-09 08:30:58Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -48,8 +48,6 @@ GEANT4_DEFINE_MODULE(NAME G4biasing_mgt
         G4ProcessPlacer.hh
         G4BiasingAppliedCase.hh
         G4BiasingOperationManager.hh
-	G4BiasingTrackData.hh
-	G4BiasingTrackDataStore.hh
         G4VBiasingInteractionLaw.hh
         G4VBiasingOperation.hh
         G4VBiasingOperator.hh
@@ -57,8 +55,6 @@ GEANT4_DEFINE_MODULE(NAME G4biasing_mgt
         G4VProcessPlacer.cc
         G4ProcessPlacer.cc
         G4BiasingOperationManager.cc
-	G4BiasingTrackData.cc
-	G4BiasingTrackDataStore.cc
         G4VBiasingOperation.cc
         G4VBiasingOperator.cc
     GRANULAR_DEPENDENCIES

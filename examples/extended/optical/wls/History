@@ -1,4 +1,4 @@
-$Id: History 84718 2014-10-20 07:40:45Z gcosmo $
+$Id: History 90240 2015-05-21 09:08:13Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,17 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
  
      ----------------------------------------------------------
+
+May 14, 2015 P. Gumplinger (WLS-V10-01-03)
+- remove obsolete /event/drawTrack and /event/printModulo
+
+March 8, 2015 A. Dotti (WLS-V10-01-02)
+- introducing global mutex for primary generation
+  because examples modifies GPS polarization/time
+
+
+March 6, 2015 A. Dotti (WLS-V10-01-00, -01)
+- removing unnecessary GPS from master
 
 October 17, 2014 P. Gumplinger (WLS-V10-00-04)
 - remove double blank lines in WLSDetectorConstruction.cc and

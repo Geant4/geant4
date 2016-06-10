@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclNuclDiffuseElastic.cc 83427 2014-08-21 15:44:43Z gcosmo $
+// $Id: G4NuclNuclDiffuseElastic.cc 91806 2015-08-06 12:20:45Z gcosmo $
 //
 //
 // Physics model class G4NuclNuclDiffuseElastic 
@@ -405,7 +405,7 @@ G4NuclNuclDiffuseElastic::GetDiffElasticProb( // G4ParticleDefinition* particle,
 
   // G4double wavek = momentum/hbarc;  // wave vector
   // G4double r0    = 1.08*fermi;
-  // G4double rad   = r0*std::pow(A, 1./3.);
+  // G4double rad   = r0*G4Pow::GetInstance()->A13(A);
 
   G4double kr    = fWaveVector*fNuclearRadius; // wavek*rad;
   G4double kr2   = kr*kr;
@@ -418,6 +418,8 @@ G4NuclNuclDiffuseElastic::GetDiffElasticProb( // G4ParticleDefinition* particle,
   bonebyarg  = BesselOneByArg(krt);
   bonebyarg2 = bonebyarg*bonebyarg;  
 
+  // VI - Coverity complains
+  /*
   if (fParticle == theProton)
   {
     diffuse = 0.63*fermi;
@@ -428,24 +430,25 @@ G4NuclNuclDiffuseElastic::GetDiffElasticProb( // G4ParticleDefinition* particle,
   }
   else // as proton, if were not defined 
   {
+  */
     diffuse = 0.63*fermi;
     gamma   = 0.3*fermi;
     delta   = 0.1*fermi*fermi;
     e1      = 0.3*fermi;
     e2      = 0.35*fermi;
-  }
+    //}
   G4double lambda = 15.; // 15 ok
 
   //  G4double kgamma    = fWaveVector*gamma;   // wavek*delta;
 
-  G4double kgamma    = lambda*(1.-std::exp(-fWaveVector*gamma/lambda));   // wavek*delta;
+  G4double kgamma    = lambda*(1.-G4Exp(-fWaveVector*gamma/lambda));   // wavek*delta;
   G4double kgamma2   = kgamma*kgamma;
 
   // G4double dk2t  = delta*fWaveVector*fWaveVector*theta; // delta*wavek*wavek*theta;
   // G4double dk2t2 = dk2t*dk2t;
   // G4double pikdt = pi*fWaveVector*diffuse*theta;// pi*wavek*diffuse*theta;
 
-  G4double pikdt    = lambda*(1.-std::exp(-pi*fWaveVector*diffuse*theta/lambda));   // wavek*delta;
+  G4double pikdt    = lambda*(1.-G4Exp(-pi*fWaveVector*diffuse*theta/lambda));   // wavek*delta;
 
   damp           = DampFactor(pikdt);
   damp2          = damp*damp;
@@ -482,7 +485,7 @@ G4NuclNuclDiffuseElastic::GetDiffElasticSumProb( // G4ParticleDefinition* partic
 
   // G4double wavek = momentum/hbarc;  // wave vector
   // G4double r0    = 1.08*fermi;
-  // G4double rad   = r0*std::pow(A, 1./3.);
+  // G4double rad   = r0*G4Pow::GetInstance()->A13(A);
 
   G4double kr    = fWaveVector*fNuclearRadius; // wavek*rad;
   G4double kr2   = kr*kr;
@@ -514,7 +517,7 @@ G4NuclNuclDiffuseElastic::GetDiffElasticSumProb( // G4ParticleDefinition* partic
   }
   G4double lambda = 15.; // 15 ok
   // G4double kgamma    = fWaveVector*gamma;   // wavek*delta;
-  G4double kgamma    = lambda*(1.-std::exp(-fWaveVector*gamma/lambda));   // wavek*delta;
+  G4double kgamma    = lambda*(1.-G4Exp(-fWaveVector*gamma/lambda));   // wavek*delta;
 
   // G4cout<<"kgamma = "<<kgamma<<G4endl;
 
@@ -534,7 +537,7 @@ G4NuclNuclDiffuseElastic::GetDiffElasticSumProb( // G4ParticleDefinition* partic
   // G4double dk2t2 = dk2t*dk2t;
   // G4double pikdt = pi*fWaveVector*diffuse*theta;// pi*wavek*diffuse*theta;
 
-  G4double pikdt    = lambda*(1.-std::exp(-pi*fWaveVector*diffuse*theta/lambda));   // wavek*delta;
+  G4double pikdt    = lambda*(1.-G4Exp(-pi*fWaveVector*diffuse*theta/lambda));   // wavek*delta;
 
   // G4cout<<"pikdt = "<<pikdt<<G4endl;
 
@@ -579,7 +582,7 @@ G4NuclNuclDiffuseElastic::GetDiffElasticSumProbA( G4double alpha )
 
   // G4double wavek = momentum/hbarc;  // wave vector
   // G4double r0    = 1.08*fermi;
-  // G4double rad   = r0*std::pow(A, 1./3.);
+  // G4double rad   = r0*G4Pow::GetInstance()->A13(A);
 
   G4double kr    = fWaveVector*fNuclearRadius; // wavek*rad;
   G4double kr2   = kr*kr;
@@ -611,7 +614,7 @@ G4NuclNuclDiffuseElastic::GetDiffElasticSumProbA( G4double alpha )
   }
   G4double lambda = 15.; // 15 ok
   // G4double kgamma    = fWaveVector*gamma;   // wavek*delta;
-  G4double kgamma    = lambda*(1.-std::exp(-fWaveVector*gamma/lambda));   // wavek*delta;
+  G4double kgamma    = lambda*(1.-G4Exp(-fWaveVector*gamma/lambda));   // wavek*delta;
 
   // G4cout<<"kgamma = "<<kgamma<<G4endl;
 
@@ -631,7 +634,7 @@ G4NuclNuclDiffuseElastic::GetDiffElasticSumProbA( G4double alpha )
   // G4double dk2t2 = dk2t*dk2t;
   // G4double pikdt = pi*fWaveVector*diffuse*theta;// pi*wavek*diffuse*theta;
 
-  G4double pikdt    = lambda*(1.-std::exp(-pi*fWaveVector*diffuse*theta/lambda));   // wavek*delta;
+  G4double pikdt    = lambda*(1.-G4Exp(-pi*fWaveVector*diffuse*theta/lambda));   // wavek*delta;
 
   // G4cout<<"pikdt = "<<pikdt<<G4endl;
 
@@ -989,6 +992,8 @@ void G4NuclNuclDiffuseElastic::BuildAngleTable()
 
     if(alphaMax > pi) alphaMax = pi;
 
+    // VI: Coverity complain
+    //alphaMax = pi2;
 
     alphaCoulomb = fRutherfordTheta*fCofAlphaCoulomb;
 
@@ -1433,7 +1438,7 @@ G4complex G4NuclNuclDiffuseElastic::GetErfComp(G4complex z, G4int nMax)
   G4double twoxy = twox*y;
   G4double twox2 = twox*twox;
 
-  G4double cof1 = std::exp(-x*x)/CLHEP::pi;
+  G4double cof1 = G4Exp(-x*x)/CLHEP::pi;
 
   G4double cos2xy = std::cos(twoxy);
   G4double sin2xy = std::sin(twoxy);
@@ -1445,7 +1450,7 @@ G4complex G4NuclNuclDiffuseElastic::GetErfComp(G4complex z, G4int nMax)
   {
     n2   = n*n;
 
-    cofn = std::exp(-0.5*n2)/(n2+twox2);  // /(n2+0.5*twox2);
+    cofn = G4Exp(-0.5*n2)/(n2+twox2);  // /(n2+0.5*twox2);
 
     chny = std::cosh(n*y);
     shny = std::sinh(n*y);
@@ -1630,7 +1635,7 @@ G4complex G4NuclNuclDiffuseElastic::AmplitudeSim(G4double theta)
     // b = ( fZommerfeld + std::sqrt( fZommerfeld*fZommerfeld + n*(n+1) ) )/fWaveVector;
     b = ( std::sqrt( G4double(n*(n+1)) ) )/fWaveVector;
     b2 = b*b;
-    T12b = fSumSigma*std::exp(-b2/fNuclearRadiusSquare)/CLHEP::pi/fNuclearRadiusSquare;         
+    T12b = fSumSigma*G4Exp(-b2/fNuclearRadiusSquare)/CLHEP::pi/fNuclearRadiusSquare;         
     shiftN = std::exp( -0.5*(1.-im*fEtaRatio)*T12b ) - 1.;
     out +=  (2.*n+1.)*shiftC*shiftN*GetLegendrePol(n, theta);   
   }
@@ -1659,7 +1664,7 @@ G4complex G4NuclNuclDiffuseElastic::AmplitudeSim(G4double theta)
 
   for( n = 1; n < fMaxL; n++)
   {    
-    T12b   = aTemp*std::exp(-b2/n)/n;         
+    T12b   = aTemp*G4Exp(-b2/n)/n;         
     aTemp *= a;  
     out   += T12b; 
     G4cout<<"out = "<<out<<G4endl;  
@@ -1836,7 +1841,7 @@ G4NuclNuclDiffuseElastic::GetHadronNucleonXscNS( G4ParticleDefinition* pParticle
   proj_momentum /= CLHEP::GeV;
   proj_energy   /= CLHEP::GeV;
   proj_mass     /= CLHEP::GeV;
-  G4double logS = std::log(sMand);
+  G4double logS = G4Log(sMand);
 
   // General PDG fit constants
 
@@ -1845,12 +1850,12 @@ G4NuclNuclDiffuseElastic::GetHadronNucleonXscNS( G4ParticleDefinition* pParticle
 
   if( proj_momentum >= 1.2 )
   {
-    fEtaRatio  = 0.13*(logS - 5.8579332)*std::pow(sMand,-0.18);
+    fEtaRatio  = 0.13*(logS - 5.8579332)*G4Pow::GetInstance()->powA(sMand,-0.18);
   }       
   else if( proj_momentum >= 0.6 )
   { 
-    fEtaRatio = -75.5*(std::pow(proj_momentum,0.25)-0.95)/
-	  (std::pow(3*proj_momentum,2.2)+1);     
+    fEtaRatio = -75.5*(G4Pow::GetInstance()->powA(proj_momentum,0.25)-0.95)/
+	  (G4Pow::GetInstance()->powA(3*proj_momentum,2.2)+1);     
   }
   else 
   {
@@ -1870,10 +1875,10 @@ G4NuclNuclDiffuseElastic::GetHadronNucleonXscNS( G4ParticleDefinition* pParticle
     if( proj_momentum >= 10.)
     {
         B0 = 7.5;
-        A0 = 100. - B0*std::log(3.0e7);
+        A0 = 100. - B0*G4Log(3.0e7);
 
-        xsection = A0 + B0*std::log(proj_energy) - 11
-                  + 103*std::pow(2*0.93827*proj_energy + proj_mass*proj_mass+
+        xsection = A0 + B0*G4Log(proj_energy) - 11
+                  + 103*G4Pow::GetInstance()->powA(2*0.93827*proj_energy + proj_mass*proj_mass+
                      0.93827*0.93827,-0.165);        //  mb
     }
   }
@@ -1883,17 +1888,17 @@ G4NuclNuclDiffuseElastic::GetHadronNucleonXscNS( G4ParticleDefinition* pParticle
       {
         if( proj_momentum < 0.73 )
         {
-          hnXsc = 23 + 50*( std::pow( std::log(0.73/proj_momentum), 3.5 ) );
+          hnXsc = 23 + 50*( G4Pow::GetInstance()->powA( G4Log(0.73/proj_momentum), 3.5 ) );
         }
         else if( proj_momentum < 1.05  )
         {
-          hnXsc = 23 + 40*(std::log(proj_momentum/0.73))*
-                         (std::log(proj_momentum/0.73));
+          hnXsc = 23 + 40*(G4Log(proj_momentum/0.73))*
+                         (G4Log(proj_momentum/0.73));
         }
         else  // if( proj_momentum < 10.  )
         {
           hnXsc = 39.0 + 
-              75*(proj_momentum - 1.2)/(std::pow(proj_momentum,3.0) + 0.15);
+              75*(proj_momentum - 1.2)/(G4Pow::GetInstance()->powA(proj_momentum,3.0) + 0.15);
         }
         xsection = hnXsc;
       }
@@ -1901,17 +1906,17 @@ G4NuclNuclDiffuseElastic::GetHadronNucleonXscNS( G4ParticleDefinition* pParticle
       {
         if( proj_momentum < 0.8 )
         {
-          hpXsc = 33+30*std::pow(std::log(proj_momentum/1.3),4.0);
+          hpXsc = 33+30*G4Pow::GetInstance()->powA(G4Log(proj_momentum/1.3),4.0);
         }      
         else if( proj_momentum < 1.4 )
         {
-          hpXsc = 33+30*std::pow(std::log(proj_momentum/0.95),2.0);
+          hpXsc = 33+30*G4Pow::GetInstance()->powA(G4Log(proj_momentum/0.95),2.0);
         }
         else    // if( proj_momentum < 10.  )
         {
           hpXsc = 33.3+
-              20.8*(std::pow(proj_momentum,2.0)-1.35)/
-                 (std::pow(proj_momentum,2.50)+0.95);
+              20.8*(G4Pow::GetInstance()->powA(proj_momentum,2.0)-1.35)/
+                 (G4Pow::GetInstance()->powA(proj_momentum,2.50)+0.95);
         }
         xsection = hpXsc;
       }

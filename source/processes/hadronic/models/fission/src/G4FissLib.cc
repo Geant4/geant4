@@ -75,7 +75,7 @@ G4FissLib::G4FissLib()
   G4String tString = "/Fission/";
   dirName = dirName + tString;
   numEle = G4Element::GetNumberOfElements();
-  theFission = new G4NeutronHPChannel[numEle];
+  theFission = new G4ParticleHPChannel[numEle];
 
   for (G4int i=0; i<numEle; i++)
   { 
@@ -94,8 +94,10 @@ G4FissLib::~G4FissLib()
 }
   
 G4HadFinalState*
-G4FissLib::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus&)
+G4FissLib::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aNucleus)
 {
+  G4ParticleHPManager::GetInstance()->OpenReactionWhiteBoard();
+
   const G4Material* theMaterial = aTrack.GetMaterial();
   G4int n = theMaterial->GetNumberOfElements();
   G4int index = theMaterial->GetElement(0)->GetIndex();
@@ -107,7 +109,7 @@ G4FissLib::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus&)
     G4int imat;
     const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
     G4double rWeight;    
-    G4NeutronHPThermalBoost aThermalE;
+    G4ParticleHPThermalBoost aThermalE;
     for (i = 0; i < n; i++) {
       imat = theMaterial->GetElement(i)->GetIndex();
       rWeight = NumAtomsPerVolume[i];
@@ -128,7 +130,20 @@ G4FissLib::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus&)
     delete [] xSec;
   }
 
-  return theFission[index].ApplyYourself(aTrack);
+  //return theFission[index].ApplyYourself(aTrack);
+   //Overwrite target parameters
+   G4HadFinalState* result = theFission[index].ApplyYourself(aTrack);
+   aNucleus.SetParameters(G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargA(),G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargZ());
+   const G4Element* target_element = (*G4Element::GetElementTable())[index];
+   const G4Isotope* target_isotope=NULL;
+   G4int iele = target_element->GetNumberOfIsotopes();
+   for ( G4int j = 0 ; j != iele ; j++ ) {
+      target_isotope=target_element->GetIsotope( j );
+      if ( target_isotope->GetN() == G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargA() ) break;
+   }
+   aNucleus.SetIsotope( target_isotope );
+   G4ParticleHPManager::GetInstance()->CloseReactionWhiteBoard();
+   return result;
 }
 
 const std::pair<G4double, G4double> G4FissLib::GetFatalEnergyCheckLevels() const

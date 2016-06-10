@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh 80656 2014-05-06 08:31:39Z gcosmo $
+// $Id: G4eCoulombScatteringModel.hh 91612 2015-07-29 08:51:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -156,13 +156,7 @@ private:
   const G4ParticleDefinition* particle;
   const G4ParticleDefinition* theProton;
 
-  G4double                  lowEnergyThreshold;
-
   G4bool                    isCombined;  
-
-  //private:
-
-  G4bool                    isInitialised;             
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -188,13 +182,6 @@ void G4eCoulombScatteringModel::SetupParticle(const G4ParticleDefinition* p)
     mass = particle->GetPDGMass();
     wokvi->SetupParticle(p);
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4eCoulombScatteringModel::SetLowEnergyThreshold(G4double val)
-{
-  lowEnergyThreshold = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4Sphere.cc 93421 2015-10-22 09:26:27Z gcosmo $
 //
 // class G4Sphere
 //
@@ -488,6 +488,22 @@ EInside G4Sphere::Inside( const G4ThreeVector& p ) const
   tolRMin = Rmin_plus;
   tolRMax = Rmax_minus;
 
+  if(rad2 == 0.0)
+  { 
+    if (fRmin > 0.0)
+    {
+      return in = kOutside;
+    }
+    if ( (!fFullPhiSphere) || (!fFullThetaSphere) )
+    {
+      return in = kSurface;
+    }
+    else
+    {
+      return in = kInside; 
+    }
+  }
+
   if ( (rad2 <= Rmax_minus*Rmax_minus) && (rad2 >= Rmin_plus*Rmin_plus) )
   {
     in = kInside;
@@ -534,11 +550,12 @@ EInside G4Sphere::Inside( const G4ThreeVector& p ) const
 
     if ( in == kInside )
     {
-      if ( (pTheta < fSTheta + halfAngTolerance)
-        || (pTheta > eTheta - halfAngTolerance) )
+      if ( ((fSTheta > 0.0) && (pTheta < fSTheta + halfAngTolerance))
+	|| ((eTheta < pi) && (pTheta > eTheta - halfAngTolerance)) )
       {
-        if ( (pTheta >= fSTheta - halfAngTolerance)
-          && (pTheta <= eTheta + halfAngTolerance) )
+	if ( (( (fSTheta>0.0)&&(pTheta>=fSTheta-halfAngTolerance) )
+             || (fSTheta == 0.0) )
+          && ((eTheta==pi)||(pTheta <= eTheta + halfAngTolerance) ) )
         {
           in = kSurface;
         }
@@ -550,8 +567,8 @@ EInside G4Sphere::Inside( const G4ThreeVector& p ) const
     }
     else
     {
-      if ( (pTheta < fSTheta - halfAngTolerance)
-        || (pTheta > eTheta + halfAngTolerance) )
+        if ( ((fSTheta > 0.0)&&(pTheta < fSTheta - halfAngTolerance))
+	   ||((eTheta < pi  )&&(pTheta > eTheta + halfAngTolerance)) )
       {
         in = kOutside;
       }
@@ -919,6 +936,22 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
   {
     tolSTheta = fSTheta - halfAngTolerance ;
     tolETheta = eTheta + halfAngTolerance ;
+
+    // Special case rad2 = 0 comparing with direction
+    //
+    if ((rad2!=0.0) || (fRmin!=0.0))
+    {
+      // Keep going for computation of distance...
+    }
+    else  // Positioned on the sphere's origin
+    {
+      G4double vTheta = std::atan2(std::sqrt(v.x()*v.x()+v.y()*v.y()),v.z()) ;
+      if ( (vTheta < tolSTheta) || (vTheta > tolETheta) )
+      {
+        return snxt ; // kInfinity
+      }
+      return snxt = 0.0 ;
+    }
   }
 
   // Outer spherical shell intersection
@@ -2274,7 +2307,10 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
           b  = t2/t1;
           c  = dist2ETheta/t1;
           d2 = b*b - c ;
-
+          if ( (d2 <halfRmaxTolerance) && (d2 > -halfRmaxTolerance) )
+          {
+            d2 = 0.;
+          }
           if ( d2 >= 0. )
           {
             d = std::sqrt(d2);
@@ -2302,11 +2338,11 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
               sd = -b - d;         // First root
 
               if ( ((std::fabs(sd) < halfRmaxTolerance) && (t2 >= 0.))
-                || (sd < 0.) || ( (sd > 0.) && (p.z() + sd*v.z() > 0.) ) )
+                || (sd < 0.) || ( (sd > 0.) && (p.z() + sd*v.z() > halfRmaxTolerance) ) )
               {
                 sd = -b + d ; // 2nd root
               }
-              if( (sd > halfRmaxTolerance) && (p.z() + sd*v.z() <= 0.) )  
+              if( (sd > halfRmaxTolerance) && (p.z() + sd*v.z() <= halfRmaxTolerance) )  
               {
                 if( sd < stheta )
                 {
@@ -2782,7 +2818,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p ) const
 {
   G4double safe=0.0,safeRMin,safeRMax,safePhi,safeTheta;
   G4double rho2,rds,rho;
-  G4double pTheta,dTheta1,dTheta2;
+  G4double pTheta,dTheta1 = kInfinity,dTheta2 = kInfinity;
   rho2=p.x()*p.x()+p.y()*p.y();
   rds=std::sqrt(rho2+p.z()*p.z());
   rho=std::sqrt(rho2);
@@ -2803,58 +2839,67 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p ) const
   }
 #endif
 
-  //
   // Distance to r shells
-  //    
+  //
+  safeRMax = fRmax-rds;
+  safe = safeRMax;  
   if (fRmin)
   {
-    safeRMin=rds-fRmin;
-    safeRMax=fRmax-rds;
-    if (safeRMin<safeRMax)
-    {
-      safe=safeRMin;
-    }
-    else
-    {
-      safe=safeRMax;
-    }
-  }
-  else
-  {
-    safe=fRmax-rds;
+     safeRMin = rds-fRmin;
+     safe = std::min( safeRMin, safeRMax ); 
   }
 
-  //
   // Distance to phi extent
   //
-  if (!fFullPhiSphere && rho)
+  if ( !fFullPhiSphere )
   {
-    if ((p.y()*cosCPhi-p.x()*sinCPhi)<=0)
+     if (rho>0.0)
+     {
+        if ((p.y()*cosCPhi-p.x()*sinCPhi)<=0)
+        {
+           safePhi=-(p.x()*sinSPhi-p.y()*cosSPhi);
+        }
+        else
+        {
+           safePhi=(p.x()*sinEPhi-p.y()*cosEPhi);
+        }
+     }
+     else
+     {
+        safePhi = 0.0;  // Distance to both Phi surfaces (extended)
+     }
+     // Both cases above can be improved - in case fRMin > 0.0
+     //  although it may be costlier (good for precise, not fast version)
+     
+     safe= std::min(safe, safePhi);
+  }
+
+  // Distance to Theta extent
+  //
+  if ( !fFullThetaSphere )
+  {
+    if( rds > 0.0 )
     {
-      safePhi=-(p.x()*sinSPhi-p.y()*cosSPhi);
+       pTheta=std::acos(p.z()/rds);
+       if (pTheta<0) { pTheta+=pi; }
+       if(fSTheta>0.)
+       { dTheta1=pTheta-fSTheta;}
+       if(eTheta<pi)
+       { dTheta2=eTheta-pTheta;}
+      
+       safeTheta=rds*std::sin(std::min(dTheta1, dTheta2) );
     }
     else
     {
-      safePhi=(p.x()*sinEPhi-p.y()*cosEPhi);
+       safeTheta= 0.0;
+         // An improvement will be to return negative answer if outside (TODO)
     }
-    if (safePhi<safe)  { safe=safePhi; }
+    safe = std::min( safe, safeTheta );
   }
 
-  //
-  // Distance to Theta extent
-  //    
-  if (rds)
-  {
-    pTheta=std::acos(p.z()/rds);
-    if (pTheta<0)  { pTheta+=pi; }
-    dTheta1=pTheta-fSTheta;
-    dTheta2=eTheta-pTheta;
-    if (dTheta1<dTheta2)  { safeTheta=rds*std::sin(dTheta1); }
-    else                  { safeTheta=rds*std::sin(dTheta2); }
-    if (safe>safeTheta)   { safe=safeTheta; }
-  }
-
-  if (safe<0)  { safe=0; }
+  if (safe<0.0) { safe=0; }
+    // An improvement to return negative answer if outside (TODO)
+  
   return safe;
 }
 

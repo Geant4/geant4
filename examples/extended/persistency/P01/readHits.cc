@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: readHits.cc 68025 2013-03-13 13:43:46Z gcosmo $
+// $Id: readHits.cc 93305 2015-10-16 07:34:53Z gcosmo $
 //
 /// \file persistency/P01/readHits.cc
 /// \brief Main program of the persistency/P01 example
@@ -34,8 +34,6 @@
 #include "TSystem.h"
 #include "TKey.h"
 //
-#include "Cintex/Cintex.h"
-//
 #include "include/ExP01TrackerHit.hh"
 
 
@@ -43,10 +41,7 @@ int main(int argc,char** argv)
 {
   // initialize ROOT
   TSystem ts;
-  gSystem->Load("libCintex");
   gSystem->Load("libExP01ClassesDict");
-  //  ROOT::Cintex::Cintex::SetDebug(2);
-  ROOT::Cintex::Cintex::Enable();
   if(argc<2) G4cout << "Missing name of the file to read!" << G4endl;
  
   TFile fo(argv[1]);

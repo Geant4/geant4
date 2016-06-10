@@ -36,6 +36,7 @@
 #include "globals.hh"
 
 #include <map>
+#include <memory>
 
 namespace tools {
 namespace wroot { 
@@ -47,42 +48,32 @@ class directory;
 class G4RootFileManager : public G4VFileManager
 {
   public:
-    G4RootFileManager(const G4AnalysisManagerState& state);
+    explicit G4RootFileManager(const G4AnalysisManagerState& state);
     virtual ~G4RootFileManager();
 
     // Methods to manipulate file
-    virtual G4bool OpenFile(const G4String& fileName);
-    virtual G4bool WriteFile();
-    virtual G4bool CloseFile(); 
+    virtual G4bool OpenFile(const G4String& fileName) final;
+    virtual G4bool WriteFile() final;
+    virtual G4bool CloseFile() final; 
 
     G4bool CreateHistoDirectory();
-    G4bool CreateProfileDirectory();
     G4bool CreateNtupleDirectory();
     
     // Get methods
-    tools::wroot::file* GetFile() const;
     tools::wroot::directory* GetHistoDirectory() const;
-    tools::wroot::directory* GetProfileDirectory() const;
     tools::wroot::directory* GetNtupleDirectory() const;
 
   private:
     // data members
-    tools::wroot::file*       fFile;
+    std::unique_ptr<tools::wroot::file>  fFile;
     tools::wroot::directory*  fHistoDirectory;
-    tools::wroot::directory*  fProfileDirectory;
     tools::wroot::directory*  fNtupleDirectory;
 };
 
 // inline functions
 
-inline tools::wroot::file* G4RootFileManager::GetFile() const
-{ return fFile; }
-
 inline tools::wroot::directory* G4RootFileManager::GetHistoDirectory() const
 { return fHistoDirectory; }
-
-inline tools::wroot::directory* G4RootFileManager::GetProfileDirectory() const
-{ return fProfileDirectory; }
 
 inline tools::wroot::directory* G4RootFileManager::GetNtupleDirectory() const
 { return fNtupleDirectory; }

@@ -106,6 +106,9 @@ void Run::Merge(const G4Run* run)
   fNbStepsCharged2 += localRun->fNbStepsCharged2;
   fNbStepsNeutral  += localRun->fNbStepsNeutral;
   fNbStepsNeutral2 += localRun->fNbStepsNeutral2;
+  fMscProjecTheta  += localRun->fMscProjecTheta;
+  fMscProjecTheta2 += localRun->fMscProjecTheta2;
+
     
   fNbGamma += localRun->fNbGamma;
   fNbElect += localRun->fNbElect;      

@@ -1,0 +1,128 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_matrix_action
+#define tools_sg_matrix_action
+
+#include "win_action"
+
+#include "../lina/mat4f"
+#include "states"
+
+namespace tools {
+namespace sg {
+
+class matrix_action : public win_action,public states {
+public:
+  matrix_action(std::ostream& a_out,unsigned int a_ww,unsigned int a_wh)
+  :win_action(a_out,a_ww,a_wh)
+  ,states(a_ww,a_wh)
+  ,m_cur(0)
+  ,m_landscape(true)  
+  {
+    m_projs.resize(5);
+    m_models.resize(5);    
+    reset();
+    m_identity.set_identity();
+  }
+  virtual ~matrix_action(){}
+public:
+  matrix_action(const matrix_action& a_from)
+  :win_action(a_from)
+  ,states(a_from)
+  ,m_projs(a_from.m_projs)
+  ,m_models(a_from.m_models)
+  ,m_cur(a_from.m_cur)
+  ,m_landscape(a_from.m_landscape)  
+  {
+    m_identity.set_identity();
+  }
+  matrix_action& operator=(const matrix_action& a_from){
+    win_action::operator=(a_from);
+    states::operator=(a_from);
+    m_projs = a_from.m_projs;
+    m_models = a_from.m_models;
+    m_cur = a_from.m_cur;
+    m_landscape = a_from.m_landscape;
+    return *this;
+  }
+public:
+  void push_matrices() {
+    if((m_cur+1)>=(int)m_projs.size()) {
+      m_projs.resize(m_projs.size()+5);
+      m_models.resize(m_models.size()+5);    
+    }
+    m_cur++;
+    m_projs[m_cur].set_matrix(m_projs[m_cur-1]);
+    m_models[m_cur].set_matrix(m_models[m_cur-1]);    
+//OPTIMIZATION : in fact the two lines below are not needed !
+//    m_state.m_proj = m_projs[m_cur];
+//    m_state.m_model = m_models[m_cur];
+  }
+
+  //WARNING : in the three below methods, there is no
+  //          protection against m_cur<0 being zero here.
+  void pop_matrices() {
+    m_cur--;
+//OPTIMIZATION : in fact the two lines below are not needed !
+//    m_state.m_proj = m_projs[m_cur];
+//    m_state.m_model = m_models[m_cur];
+  }
+  mat4f& projection_matrix() {return m_projs[m_cur];}
+  mat4f& model_matrix() {return m_models[m_cur];}
+
+  bool end() const {return m_cur==0?true:false;}
+  int cur() const {return m_cur;}
+
+  bool project_point(float& a_x,float& a_y,float& a_z,float& a_w) {
+    a_w = 1;
+    model_matrix().mul_4f(a_x,a_y,a_z,a_w);
+    projection_matrix().mul_4f(a_x,a_y,a_z,a_w);
+    if(a_w==0.0F) return false;
+    a_x /= a_w;
+    a_y /= a_w;
+    a_z /= a_w;
+    return true;
+  }
+
+  void model_point(float& a_x,float& a_y,float& a_z,float& a_w) {
+    a_w = 1;
+    model_matrix().mul_4f(a_x,a_y,a_z,a_w);
+  }
+
+  // for marker rendering :
+  void projected_origin(float& a_x,float& a_y,float& a_z) {
+    a_x = 0;
+    a_y = 0;
+    a_z = 0;
+    float w;
+    project_point(a_x,a_y,a_z,w); //if render : in [-1,1][-1,1]
+  }
+
+protected:
+  void reset() {
+    m_cur = 0;
+    if(m_landscape) {
+      m_projs[m_cur].set_identity();
+    } else {
+      m_projs[m_cur].set_matrix(0,-1,0,0,
+                                1, 0,0,0,
+                                0, 0,1,0,
+                                0, 0,0,1);
+    }
+    m_models[m_cur].set_identity();
+    m_state.m_proj = m_projs[m_cur];
+    m_state.m_model = m_models[m_cur];
+  }
+protected:
+  std::vector<mat4f> m_projs;
+  std::vector<mat4f> m_models;
+  int m_cur;
+  mat4f m_identity;
+private:
+  bool m_landscape; //false not yet ready.
+};
+
+}}
+
+#endif

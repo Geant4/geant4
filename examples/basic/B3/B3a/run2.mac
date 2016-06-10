@@ -1,0 +1,19 @@
+# $Id: run2.mac 85993 2014-11-06 16:34:10Z ihrivnac $
+#
+# Macro file of "exampleB3.cc"
+# To be run preferably in batch, without graphics:
+# % exampleB3 run3.mac
+#
+#/run/numberOfWorkers 4
+/run/initialize
+#
+/control/verbose 2
+#
+/run/beamOn 40000
+#
+# change beta source
+#
+/gun/particle ion
+/gun/ion 6 11
+#
+/run/beamOn 40000

@@ -1,4 +1,4 @@
-$Id: History 87360 2014-12-01 16:07:16Z gcosmo $
+$Id: History 93811 2015-11-02 11:28:41Z gcosmo $
 
 -------------------------------------------------------------------
 
@@ -26,6 +26,166 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+1st November 2015  John Allison  (visman-V10-01-20)
+- Introduced (again!) <chrono> for queue handling in MT mode.
+  o Except for Xeon Phi, which is protected by #ifndef __MIC__
+
+15th October 2015  John Allison  (visman-V10-01-19)
+- G4VisManager.cc:
+  o Corrected end-of-run printing for the case of 
+  "/vis/multithreading/actionOnEventQueueFull discard".
+- G4VisCommandsViewer.cc:
+  o Improved guidance and confirmation printing for /vis/viewer/save.
+
+1st October 2015  John Allison  (visman-V10-01-18)
+- Co-works with modeling-V10-01-04.
+- Added "light" representation to /vis/scene/add/magneticField.
+
+1st October 2015  John Allison  (visman-V10-01-17)
+- Reverted (again!) to G4THREADSLEEP for queue handling in MT mode.
+- Minor improvements in messages.
+
+30th September 2015  John Allison  (visman-V10-01-16)
+- Uses <chrono> for queue handling in MT mode.
+- New commands for multithreading:
+  /vis/multithreading/actionOnEventQueueFull
+  /vis/multithreading/maxEventQueueSize
+
+19th August 2015  John Allison  (visman-V10-01-15)
+- Improvements to help and verbosity printing.
+
+5th August 2015  John Allison  (visman-V10-01-14)
+- Reverted to G4THREADSLEEP for queue handling in MT mode.
+
+1st August 2015  John Allison  (visman-V10-01-13)
+- Uses <chrono>.
+
+1st August 2015  John Allison  (visman-V10-01-12)
+- G4VGraphicsSystem.cc, G4VisCommandsSceneHandler.cc, G4VisManager.cc:
+  o Use auto&& (rather than auto or auto&).
+
+30th July 2015  John Allison  (visman-V10-01-11)
+- Re-implemented graphics system fallback strategy.  A graphics system may
+  have more than one nickname.  This is used for finding a fallback graphics
+  systems when, for example, a Qt session is requested but the user has not
+  instantiated a Qt session, or when interactive graphics systems are
+  prohibited, as in batch mode.  This allows the user to run an application
+  that is fully configured with all available graphics systems, even under
+  circumstances for which the primary graphics system is inappropriate.  For
+  example, it allows one to make a image with these commands in a batch macro:
+    /vis/open OGL
+    /vis/drawVolume
+    /vis/ogl/export
+- G4VGraphicsSystem:
+  o Introduced vector of nicknames.
+  o Introduced AddNickname method.
+  o Removed: Set methods.  Data members are set in the constructor and
+    may not be changed, except to add further nicknames with AddNickname.
+  o GetNickname gets first element in nickname vector, which is, therefore,
+    the primary nickname.  Other nicknames are used for fallback strategies
+    so that fallback graphics systems can be used when, for example,
+    interactive graphics systems are prohibited, as in batch mode.
+  o Moved all inline functions to .hh.  Removed G4VGraphicsSystem.icc.
+- G4VisManager, G4VisCommandSceneHandlerCreate, G4VisExecutive.icc
+  o Re-implemented graphics system fallback strategy.
+- /vis/scene/add/volume: Improved guidance.
+- /vis/open: Simplified.
+  o Handed on parameter checking to /vis/sceneHandler/create.
+- G4ViewParameters::TouchableCommands: Bug fix.
+  o Fixed bug whereby touchable changes where not properly dumped (with
+    /vis/viewer/save) for re-reading into another viewer.
+- G4VSceneHandler.cc: Simplified some code with C++11 features.
+
+3rd June 2015  John Allison  (visman-V10-01-10)
+- G4VViewer and G4VisManager: Introduced
+  // In MT mode these functions are called in the following order for each run:
+  // Called on the master thread before starting the vis sub-thread.
+  virtual void DoneWithMasterThread ();
+  // Called on the master thread after starting the vis sub-thread.
+  virtual void MovingToVisSubThread ();
+  // Called on the vis sub-thread when waiting for events.
+  virtual void SwitchToVisSubThread ();
+  // Called on the vis sub-thread when all events have been processed.
+  virtual void DoneWithVisSubThread ();
+  // Called on the vis sub-thread when all events have been processed.
+  virtual void MovingToMasterThread ();
+  // Called on the master thread after the vis sub-thread has terminated.
+  virtual void SwitchToMasterThread ();
+
+27th May 2015  Laurent Garnier (visman-V10-01-09 co-works with opengl-V10-01-05)
+- A bit of cleaning in managing OpenGL context (Qt)
+
+26th May 2015  Laurent Garnier
+- Add methods to manage GLContext in Qt (not finished yet!)
+
+20th March 2015  John Allison  (visman-V10-01-08)
+- G4VisManager.cc: Very minor tidying.
+
+8th March 2015  John Allison  (visman-V10-01-07)
+- G4VisManager.cc: Tidied.
+- G4VisCommandGeometryList::SetNewValue: Protected null vis att pointer.
+
+1st March 2015  John Allison  (visman-V10-01-06)
+- G4VisManager.cc: Limited the use of G4USE_STD11 to the clang compiler for now.
+
+3rd February 2015  John Allison  (visman-V10-01-05)
+- G4VisManager.cc: Introduced G4USE_STD11 and tidied.
+
+2nd February 2015  Gabriele Cosmo  (visman-V10-01-04)
+- Fix to sources.cmake script to include missing dependency on external library.
+
+12th January 2015  Gabriele Cosmo  (visman-V10-01-03)
+- Use G4THREADSLEEP(tick) macro from G4Threading.hh in G4VisManager.
+- Requires tag "global-V10-01-01".
+
+19th December 2014  John Allison  (visman-V10-01-02)
+- Removed debug printing (MT mode).
+
+16th December 2014  John Allison  (visman-V10-01-01)
+- G4VisCommandsSceneAdd.cc: Fixed /vis/scene/add/eventID for MT mode.
+
+16th December 2014  John Allison  (visman-V10-01-00)
+- G4VisCommandsSceneAdd.cc: Improve guidance for /vis/scene/add/extent.
+
+2nd December 2014  John Allison  (vis-MT-branch-00-man-18)
+- G4VisManager.cc:
+  o Tidied.
+  o Removed the following from EndOfRun:
+//    // ???? I can't remember why
+//    // if (!fpSceneHandler->GetMarkForClearingTransientStore()) {
+//    // is here.  It prevents ShowView at end of run, which seems to be OK
+//    // for sequential mode, but MT mode seems to need it (I have not
+//    // figured out why). ???? JA ????
+//    if (!fpSceneHandler->GetMarkForClearingTransientStore()) {
+  o Removed the following from EndOfRun:
+//        // An extra refresh for auto-refresh viewers.
+//        // ???? I DON'T THINK THIS IS NECESSARY ???? JA ????
+//        if (fpViewer->GetViewParameters().IsAutoRefresh()) {
+//          fpViewer->RefreshView();
+//        }
+
+1st December 2014  John Allison  (vis-MT-branch-00-man-17)
+- G4VisManager.cc:
+  o Moved KeepTheEvent from the vis sub-thread to EndOfEvent,
+    where it should have been all along!!  :)
+
+1st December 2014  John Allison  (vis-MT-branch-00-man-16)
+- G4VisManager.cc: Prevented vis sub-thread for runs with no events.
+
+30th November 2014  John Allison  (vis-MT-branch-00-man-15)
+- Introduced DoneWithMaster/VisSubThread.
+
+30th November 2014  John Allison  (vis-MT-branch-00-man-14)
+- Rationalisation of vis sub-thread code and Begin/EndRun/Event.
+- Elimination of (commented out) ShowView and extra refresh for
+  auto-refresh viewers at end of run for accumulate mode.  Works
+  well for stored sequential mode but in stored MT mode trajectories
+  are drawn to the front buffer (as they should be) but they
+  disappear on refresh, as though the display lists have not been
+  made - or, perhaps made in another space?  Also, curiously,
+  they are not cleared at the start of the next run (as they should
+  be via ClearTransientStoreIfMarked).
+
 28th November 2014  John Allison  (visman-V10-00-30)
 - G4VSceneHandler.cc, G4VisCommands.cc, G4VisCommandsScene.cc,
   G4VisCommandsSceneAdd.cc:
@@ -38,6 +198,15 @@ History file for visualization management sub-category
 
 28th November 2014  John Allison  (visman-V10-00-29)
 - G4VisManager.cc: Fixed Coverity warning.
+
+26th November 2014  John Allison  (vis-MT-branch-00-man-13)
+- G4VisManager.cc: Correct placement of fEventRefreshing = false.
+
+22nd November 2014  John Allison  (vis-MT-branch-00-man-12)
+- G4VisManager.cc: Minor tidying of #include’s.
+
+22nd November 2014  John Allison  (vis-MT-branch-00-man-11)
+- Merged visman-V10-00-28 into MT version.
 
 21st November 2014  John Allison  (visman-V10-00-28)
 - G4VisManager.cc: Reset event reviewing flag at end of run in MT mode.
@@ -63,6 +232,50 @@ History file for visualization management sub-category
 - G4Scene.cc, G4VisManager.cc: Fixed spelling mistake in message.
 - G4ViewParameters.icc: Fixed win7-vc12 compiler warnings.
 
+8th November 2014  John Allison  (vis-MT-branch-00-man-10)
+- G4ViewParameters.icc: Fixed (again) win7-vc12 compiler warnings.
+
+7th November 2014  John Allison  (vis-MT-branch-00-man-09)
+- G4VisManager.cc: delete mtVisSubThread at end of run.
+- G4VViewer.icc, G4VisManager.hh: Cosmetic.
+
+7th November 2014  John Allison  (vis-MT-branch-00-man-08)
+- G4VisManager.cc: Protected event queue with mutex locks.
+
+6th November 2014  John Allison
+- G4VisManager.cc: Tidied.
+
+6th November 2014  John Allison  (vis-MT-branch-00-man-07)
+- G4VisManager.cc: Fixed compiler warning.
+
+6th November 2014  John Allison  (vis-MT-branch-00-man-06)
+- G4VisManager.cc:
+  o Move event->PostProcessingFinished() into mutex protection.
+
+5th November 2014  John Allison  (vis-MT-branch-00-man-05)
+- G4VisManager.cc: Protect fpViewer dereferencing in MT mode:
+  if (fpViewer) fpViewer->SwitchToMasterThread
+- G4Scene.cc: Fix spelling mistake in warning message.
+
+4th November 2014  John Allison  (vis-MT-branch-00-man-04)
+- G4ViewParameters.icc: Fix win7-vc12 compiler warnings.
+
+2nd November 2014  John Allison  (vis-MT-branch-00-man-03)
+- Added /vis/set/maxEventQueueSize.
+  If, during a multithreaded run, the simulation gets ahead of the
+  visualisation by more than this maximum, the simulation is delayed
+  until the vis sub-thread has drawn a few more events.  You may
+  change this maximum number of events with
+  "/vis/set/maxEventQueueSize <N>”, where N is the
+  maximum number you wish to allow.  N <= 0 means "unlimited".
+  To avoid visualisation altogether: “/vis/disable”.
+
+1st November 2014  John Allison  (vis-MT-branch-00-man-01)
+- Tidied.
+
+1st November 2014  John Allison  (vis-MT-branch-00-man-00)
+- Merged vis-V10-00-11 and tagged.
+
 30th October 2014  John Allison  (visman-V10-00-21)
 - G4VisManager.cc, G4VisCommandsSceneAdd.cc, G4Scene.cc:
   o Added informationals about /vis/scene/add/extent.
@@ -73,6 +286,40 @@ History file for visualization management sub-category
     This can be used to provide an extent to the scene even if
     no other models with extent are available. For example,
     even if there is no geometry.
+
+22nd October 2014  Laurent Garnier  (visman-V10-00-19 require greps-V10-00-08)
+- G4VSceneHandler.cc, G4ViewParameters.cc
+  o Change contant in .cc nSegmentsMin by GetMinLineSegmentsPerCircle() in the G4VisAttribute
+
+30th October 2014  John Allison  (vis-MT-branch-00-15)
+- G4VisManager.cc:
+  o Fix drawing of events in refresh mode at end of run.
+  o Fix shadowing of runManager pointer in MT mode.
+
+29th October 2014  John Allison
+- Fixed event by event refreshing (/vis/scene/endOfEventAction refresh)
+  in MT mode.
+
+29th October 2014  John Allison  (visman-V10-00-20)
+- Added /vis/scene/add/extent.
+  o Adds a dummy model with given extent to the current scene.
+    This can be used to provide an extent to the scene even if
+    no other models with extent are available. For example,
+    even if there is no geometry.
+
+24th October 2014  John Allison  (vis-MT-branch-00-05)
+- Small fix and re-tag.
+
+24th October 2014  John Allison  (vis-MT-branch-00-04)
+- Event keeping moved to EndOfEvent.
+- Draw(const G4Event*) now longer needed; removed.
+
+22nd October 2014  John Allison  (vis-MT-branch-00-visman-00)
+- Sub-thread developments.
+
+22th October 2014  Laurent Garnier  (visman-V10-00-19 require greps-V10-00-08)
+- G4VSceneHandler.cc, G4ViewParameters.cc
+  o Change contant in .cc nSegmentsMin by GetMinLineSegmentsPerCircle() in the G4VisAttribute
 
 22nd October 2014  Laurent Garnier  (visman-V10-00-19 require greps-V10-00-08)
 - G4VSceneHandler.cc, G4ViewParameters.cc

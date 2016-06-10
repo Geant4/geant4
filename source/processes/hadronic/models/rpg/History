@@ -14,6 +14,28 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+24 November 2015 Gunter Folger     (hadr-rpg-V10-01-04)
+--------------------------------------------------------
+- add few 'f' for initialisation, previously missed.
+
+23 November 2015 Gunter Folger     (hadr-rpg-V10-01-03)
+--------------------------------------------------------
+- Revert back to G4float for large data arrays, add 'f' for initialisation.
+
+13 November 2015 Gunter Folger     (hadr-rpg-V10-01-02)
+--------------------------------------------------------
+- Replace G4float by G4double
+
+ 6 November 2015 - Dennis Wright (hadr-rpg-V10-01-01)
+-----------------------------------------------------
+- migrate to fast math functions G4Exp, G4Log.  Also G4Pow for A**1/3. 
+
+ 1 September 2015 - Dennis Wright (hadr-rpg-V10-01-00)
+-----------------------------------------------------
+- G4RPGAntiProtonInelastic.cc, G4RPGFragmentation.cc,
+  G4RPGAntiNeutronInelastic.cc, G4RPGStrangeProduction.cc,
+  G4RPGTwoCluster.cc, G4RPGNeutronInelastic.cc : add temporary while loop checks
+
  5 June 2014 - Alberto Ribon (hadr-rpg-V10-00-02)
 --------------------------------------------------
 - G4RPGInelastic: defined here GHADLISTSIZE, which is needed after

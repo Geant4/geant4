@@ -3,7 +3,7 @@
 /run/verbose 2
 #
 /placement/setMethod WithDirectMatrix
-###/placement/setMethod WitInverseMatrix
+###/placement/setMethod WithInverseMatrix
 ###/placement/setMethod WithAxialRotations
 ###/placement/setMethod WithEulerAngles
 ###/placement/setMethod WithReflections

@@ -1,0 +1,337 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_node
+#define tools_sg_node
+
+#include "field"
+#include "search_action"
+#include "write_action"
+#include "read_action"
+#include "get_matrix_action"
+#include "node_desc"
+
+#include "../forit"
+
+namespace tools {
+namespace sg {
+  class render_action;
+  class pick_action;
+  class bbox_action;
+  class event_action;
+  class visible_action;
+}}
+
+namespace tools {
+namespace sg {
+
+class node {
+public:
+  TOOLS_SCLASS(tools::sg::node)
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<node>(this,a_class)) {return p;}
+    else return 0;
+  }
+  virtual const std::string& s_cls() const = 0;
+public:
+  virtual node* copy() const = 0;
+
+  virtual unsigned int cls_version() const {return 1;}
+  virtual const std::vector<field_desc>& node_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::node)
+    static const std::vector<field_desc> s_v;
+    return s_v;
+  }
+
+  virtual void render(render_action&) {}
+  virtual void pick(pick_action&) {}
+  virtual void bbox(bbox_action&) {}
+  virtual void search(search_action& a_action) {
+    if(a_action.what()==search_action::search_node_of_class) {
+      if(void* p = cast(a_action.sclass())) {
+        a_action.add_obj(p);
+        if(a_action.stop_at_first()) a_action.set_done(true);
+      }
+    } else if(a_action.what()==search_action::search_path_to_node) {
+      if(this==a_action.node()){
+        a_action.path_push(this); //ending node in the path.
+        a_action.set_done(true);
+      } 
+    } else if(a_action.what()==search_action::search_path_to_node_of_class) {
+      if(cast(a_action.sclass())) {
+        search_action::path_t path = a_action.path();
+        path.push_back(this);
+        a_action.add_path(path);        
+        if(a_action.stop_at_first()) a_action.set_done(true);
+      } 
+    }
+  }
+  virtual void get_matrix(get_matrix_action& a_action) {
+    if(this==a_action.node()){
+      a_action.set_found_model(a_action.model_matrix());
+      a_action.set_done(true);
+    } 
+  }
+  virtual bool write(write_action& a_action) {
+    if(!a_action.beg_node(*this)) return false;
+    if(!write_fields(a_action)) return false;
+    if(!a_action.end_node(*this)) return false;
+    return true;
+  }
+  virtual void event(event_action&) {}
+  virtual bool read(read_action& a_action) {return read_fields(a_action);}
+  virtual void is_visible(visible_action&) {}
+public:
+  node(){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~node(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  node(const node&){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  node& operator=(const node&){return *this;}
+protected:
+  void add_field(field* a_field) {
+    m_fields.push_back(a_field); //it does not take ownerhship.
+  }
+  bool touched() {
+    tools_vforcit(field*,m_fields,it) {
+      if((*it)->touched()) return true;
+    }
+    return false;
+  }
+  //TOOLS_CLASS_STRING(fields_end) //for write_bsg, sg::rbsg
+  bool write_fields(write_action& a_action) {
+
+    check_fields(a_action.out()); //costly.
+  //dump_field_descs(a_action.out());
+
+    unsigned int index = 0;
+    tools_vforcit(field*,m_fields,it) {
+      if(!(*it)->write(a_action.buffer())) {
+        a_action.out() << "node::write_fields :"
+                       << " for field index " << index
+                       << " and field class " << (*it)->s_cls()
+                       << " of node class " << s_cls()
+                       << " : field.write() failed" << "."
+                       << std::endl;
+        return false;
+      }
+      index++;
+    }
+    return true;
+  }
+
+  bool read_fields(read_action& a_action) { //used in protocol-2.
+    node_desc rndesc;
+    if(!a_action.get_node_desc(s_cls(),rndesc)) {
+      a_action.out() << "tools::node::read_fields :"
+                     << " for node class " << s_cls()
+                     << " : read_action.get_node_desc() failed."
+                     << std::endl;
+      return false;
+    }
+    //Whatever the current node fields, we must read all rndesc.fields() :
+    tools_vforcit(field_desc,rndesc.fields(),it) {
+      const field_desc& fdesc = *it;
+
+      field* fd = find_field(fdesc);
+      if(!fd) {
+        a_action.out() << "tools::node::read_fields :"
+                       << " for node class " << s_cls()
+                       << " : field desc name " << fdesc.name()
+                       << " : field desc class " << fdesc.cls()
+                       << " : field desc offset " << fdesc.offset()
+                       << " : field not found."
+                       << "."
+                       << std::endl;
+/*
+        check_fields(a_action.out()); //costly.
+        dump_field_descs(a_action.out());
+       {a_action.out() << "read field descs of node class " << s_cls() << " :" << std::endl;
+        tools_vforcit(field_desc,rndesc.fields(),itr) {
+          a_action.out() << "name " << (*itr).name()
+                << ", class " << (*itr).cls()
+                << ", offset " << (*itr).offset()
+                << std::endl;
+        }}
+       {a_action.out() << "m_fields of node class " << s_cls() << " :" << std::endl;
+        tools_vforcit(field*,m_fields,itm) {
+          a_action.out() << "field class " << (*itm)->s_cls()
+                << ", found offset " << field_offset(*itm)
+                << std::endl;
+        }}
+        ::exit(0);
+*/
+        fd = a_action.field_factory().create(fdesc.cls());
+        if(!fd) {
+          a_action.out() << "tools::node::read_fields :"
+                         << " for node class " << s_cls()
+                         << " : field desc class " << fdesc.cls()
+                         << " : can't create generic field."
+                         << "."
+                         << std::endl;
+          return false;
+        }
+      } /*else {
+        a_action.out() << "debug : inlib::node::read_fields :"
+                       << " for node class " << s_cls()
+                       << " : field desc class " << fdesc.cls()
+                       << " : field desc offset " << fdesc.offset()
+                       << " : field found."
+                       << "."
+                       << std::endl;
+      }*/
+
+      if(!fd->read(a_action.buffer())) {
+        a_action.out() << "tools::node::read_fields :"
+                       << " for node class " << s_cls()
+                       << " : and field class " << fd->s_cls()
+                       << " : field read() failed."
+                       << std::endl;
+        return false;
+      }
+      //fd->dump(a_action.out());
+    }
+
+    //NOTE : if some current node fields had not been found
+    //       in rndesc.fields(), they catch the default value
+    //       of the node fields.
+
+    return true;
+  }
+public:
+  void touch() {
+    if(m_fields.empty()) return;
+    m_fields.front()->touch();
+  }
+  void reset_touched() {
+    tools_vforcit(field*,m_fields,it) (*it)->reset_touched();
+  }
+/*
+  bool equal(const node& a_node) const {
+    if(m_fields.size()!=a_node.m_fields.size()) return false;
+    std::vector<field*>::iterator it = m_fields.begin();
+    std::vector<field*>::iterator ait = a_node.m_fields.begin();
+    for(;it!=m_fields.end();++it,++ait) {
+      if(!(*it)->equal(*(*ait))) return false;
+    }
+    return true;
+  }
+*/
+  std::vector<field*>& fields() {return m_fields;}
+  const std::vector<field*>& fields() const {return m_fields;}
+
+public:
+  field& field_from_desc(const field_desc& a_desc) const {
+    //WARNING : touchy.
+    return *((field*)((char*)this+a_desc.offset()));
+  }
+protected:
+  tools::sg::field_desc::offset_t field_offset(const field* a_field) const {
+    //WARNING : touchy.
+    return ((char*)(a_field)-(char*)(this));
+  }
+
+  field* find_field(const field_desc& a_rdesc) const {
+/*
+    //WARNING : must not use field name since, through inheritance, a node can have two field with same name.
+    //          (For exa sg::text has one field "color" and another one coming from back_area).
+    //::printf("debug : find_field : %s ...\n",a_rdesc.name().c_str());
+    tools_vforcit(field*,m_fields,it) {
+      //::printf("debug : find_field :   look : %s\n",field_name(*(*it)).c_str());
+      if(field_offset(*it)==a_rdesc.offset()) return (*it);
+    }
+*/
+    const std::vector<field_desc>& fds = node_fields();
+    tools_vforcit(field_desc,fds,it) {
+      if((*it).name()==a_rdesc.name()) {
+        tools_vforcit(field*,m_fields,itf) {
+          //::printf("debug : find_field :   look : %s\n",field_name(*(*it)).c_str());
+          if(field_offset(*itf)==(*it).offset()) return (*itf);
+        }
+      }
+    }
+    return 0;
+  }
+
+  void dump_field_descs(std::ostream& a_out) const {
+    a_out << "field descs of node class " << s_cls() << " :" << std::endl;
+    const std::vector<field_desc>& fds = node_fields();
+    tools_vforcit(field_desc,fds,itd) {
+      a_out << "name " << (*itd).name()
+            << ", class " << (*itd).cls()
+            << ", offset " << (*itd).offset()
+            << std::endl;
+    }
+  }
+
+  void check_fields(std::ostream& a_out) const {
+    const std::vector<field_desc>& fds = node_fields();
+    tools_vforcit(field*,m_fields,it) {
+      bool found = false;
+      tools_vforcit(field_desc,fds,itd) {
+        if( ((*itd).offset()==field_offset(*it)) &&
+            ((*itd).cls()==(*it)->s_cls())
+        ){
+          found = true;
+          break;
+        }
+      }
+      if(!found) {
+        a_out << "tools::sg::node::check_fields :"
+              << " WARNING : node of class " << s_cls()
+              << " has bad fields description."
+              << std::endl;
+      }
+    }
+  }
+private:
+  std::vector<field*> m_fields;
+};
+
+}}
+
+#include "../HEADER"
+
+#define TOOLS_NODE(a__class,a__sclass,a__parent)\
+  TOOLS_HEADER(a__class,a__sclass,a__parent)\
+  virtual tools::sg::node* copy() const {return new a__class(*this);}
+
+#define TOOLS_NODE_NO_CAST(a__class,a__sclass,a__parent)\
+private:\
+  typedef a__parent parent;\
+public:\
+  TOOLS_SCLASS(a__sclass)\
+public:\
+  virtual const std::string& s_cls() const {return s_class();}\
+  virtual tools::sg::node* copy() const {return new a__class(*this);}
+
+#define TOOLS_NODE_T(a__T,a__class,a__sclass,a__parent)\
+private:\
+  typedef a__parent parent;\
+public:\
+  static const std::string& s_class() {\
+    static const std::string s_v(std::string(#a__class)+"<"+a__T::s_class()+">");\
+    return s_v;\
+  }\
+  static void check_class_name() {a__class<a__T>::s_class();}\
+public:\
+  virtual const std::string& s_cls() const {return s_class();}\
+  virtual tools::sg::node* copy() const {return new a__class(*this);}\
+public:\
+  virtual void* cast(const std::string& a_class) const {\
+    if(void* p = tools::cmp_cast<a__class>(this,a_class)) return p;\
+    return parent::cast(a_class);\
+  }
+
+#endif

@@ -65,9 +65,9 @@ void Run::Merge(const G4Run* run)
   f_n_gam_sync += localRun->f_n_gam_sync;
   f_e_gam_sync += localRun->f_e_gam_sync;
   f_e_gam_sync2 += localRun->f_e_gam_sync2;
-  f_e_gam_sync_max += localRun->f_e_gam_sync_max;
+  f_e_gam_sync_max = std::max(f_e_gam_sync_max, localRun->f_e_gam_sync_max);
   f_lam_gam_sync += localRun->f_lam_gam_sync;
-
+ 
   G4Run::Merge(run); 
 } 
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomHandler.hh 73076 2013-08-16 07:45:30Z gcosmo $
+// $Id: DicomHandler.hh 92820 2015-09-17 15:22:14Z gcosmo $
 //
 /// \file medical/DICOM/include/DicomHandler.hh
 /// \brief Definition of the DicomHandler class
@@ -92,7 +92,7 @@ private:
     template <class Type> void GetValue(char *, Type &);
     
 private:
-    static DicomHandler* fgInstance;
+    static DicomHandler* fInstance;
  
     const int DATABUFFSIZE;
     const int LINEBUFFSIZE;
@@ -128,14 +128,14 @@ private:
     G4int** fTab;
     std::map<G4float,G4String> fMaterialIndices;
     
-    G4int nbrequali;
-    G4double* valuedensity;
-    G4double* valueCT;
-    bool readCalibration;
-    DicomPhantomZSliceMerged* mergedSlices;
+    G4int fNbrequali;
+    G4double* fValueDensity;
+    G4double* fValueCT;
+    bool fReadCalibration;
+    DicomPhantomZSliceMerged* fMergedSlices;
 
-    G4String driverFile;
-    G4String ct2densityFile;
+    G4String fDriverFile;
+    G4String fCt2DensityFile;
 
 };
 #endif

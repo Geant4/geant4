@@ -22,7 +22,7 @@
 /particle/process/dump
 #
 #/process/eLoss/verbose 1
-/testex/event/printModulo 10
+/run/printProgress 10
 #
 /gun/particle monopole
 /gun/energy 100 GeV

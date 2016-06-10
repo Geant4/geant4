@@ -67,7 +67,7 @@ namespace G4INCL {
 
     G4int nTries = 0;
     G4bool success = false;
-    while(!success) {
+    while(!success) { /* Loop checking, 10.07.2015, D.Mancusi */
       if(++nTries >= maxTries) {
         INCL_WARN("DeltaProductionChannel::sampleDeltaMass loop was stopped because maximum number of tries was reached. Minimum delta mass "
                   << ParticleTable::minDeltaMass << " MeV with CM energy " << ecm << " MeV may be unphysical." << '\n');

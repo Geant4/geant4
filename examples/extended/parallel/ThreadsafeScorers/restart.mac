@@ -1,0 +1,22 @@
+
+#########################
+# Set of the verboses 
+#
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 1
+/event/verbose 0
+
+
+##########################
+# Random
+#
+/random/setDirectoryName restart_random_seed_info
+/random/setSavingFlag 1
+/random/saveEachEventFlag 1
+/random/resetEngineFrom restart_random_seed_info/G4Master_run0.rndm
+
+##########################
+# Initialisation procedure
+#
+/run/beamOn 10000

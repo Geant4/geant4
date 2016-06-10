@@ -81,7 +81,7 @@
 const G4double G4RIsotopeTable::levelTolerance = 2.0*keV;
 
 
-G4RIsotopeTable::G4RIsotopeTable()
+G4RIsotopeTable::G4RIsotopeTable():G4VIsotopeTable("RIsotopeTable")
 {
   // Reset the list of user defined data files
   theUserRadioactiveDataFiles.clear();
@@ -209,7 +209,16 @@ G4double G4RIsotopeTable::GetMeanLifeTime(G4int Z, G4int A, G4double& aE)
     G4double a(0.0);
     G4double b(0.0);
 
-    while (!found_in_raddecay_data && !DecaySchemeFile.getline(inputChars, 100).eof()) {
+    G4int loop = 0;
+    G4ExceptionDescription ed;
+    ed << " While count exceeded " << G4endl;
+    while (!found_in_raddecay_data && !DecaySchemeFile.getline(inputChars, 100).eof()) { /* Loop checking, 01.09.2015, D.Wright */
+      loop++;
+      if (loop > 100000) {
+        G4Exception("G4RIsotopeTable::GetMeanLifeTime()", "HAD_RDM_100", JustWarning, ed);
+        break;
+      }
+ 
       inputLine = inputChars;
       inputLine = inputLine.strip(1);
 

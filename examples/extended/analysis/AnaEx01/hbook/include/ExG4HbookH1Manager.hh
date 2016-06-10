@@ -36,7 +36,8 @@
 #define ExG4HbookH1Manager_h 1
 
 #include "G4VH1Manager.hh"
-#include "G4HnInformation.hh"
+#include "G4THnManager.hh"
+#include "G4HnManager.hh"
 #include "ExG4HbookBaseHnManager.hh"
 #include "globals.hh"
 
@@ -50,19 +51,25 @@ class ExG4HbookFileManager;
 struct h1_booking {
   h1_booking(G4int nbins, G4double xmin, G4double xmax)
     : fTitle(""),
+      fXAxisTitle(""),
+      fYAxisTitle(""),
       fNbins(nbins), 
       fXmin(xmin), 
       fXmax(xmax),
       fEdges() {}
   h1_booking(const std::vector<G4double>& edges)
     : fTitle(""),
+      fXAxisTitle(""),
+      fYAxisTitle(""),
       fNbins(0), 
       fXmin(0), 
       fXmax(0),
       fEdges() {
-    for (G4int i=0; i<=G4int(edges.size()); ++i) fEdges.push_back(edges[i]);
+    for (G4int i=0; i<G4int(edges.size()); ++i) fEdges.push_back(edges[i]);
   }
   G4String fTitle;    
+  G4String fXAxisTitle;
+  G4String fYAxisTitle;
   G4int fNbins;
   G4double fXmin;
   G4double fXmax;
@@ -75,7 +82,8 @@ struct h1_booking {
 /// It is provided separately from geant4/source/analysis in order
 /// to avoid a need of linking Geant4 kernel libraries with cerblib.
 
-class ExG4HbookH1Manager : public G4VH1Manager
+class ExG4HbookH1Manager : public G4VH1Manager,
+                           public G4THnManager<tools::hbook::h1>
 {
   friend class ExG4HbookAnalysisManager;
 
@@ -163,6 +171,9 @@ class ExG4HbookH1Manager : public G4VH1Manager
     // Write data on ASCII file
     virtual G4bool WriteOnAscii(std::ofstream& output);
 
+    // Access to Hn manager
+    virtual std::shared_ptr<G4HnManager> GetHnManager();
+
   private:
     // methods
     //
@@ -182,9 +193,6 @@ class ExG4HbookH1Manager : public G4VH1Manager
                          const G4String& unitName, const G4String& fcnName,
                          G4BinScheme binScheme);
     
-    G4bool BeginSetH1(G4int id,
-                         h1_booking* h1Booking,
-                         G4HnInformation* info);
     G4bool FinishSetH1(G4int id,
                          G4HnInformation* info,
                          const G4String& unitName, const G4String& fcnName,
@@ -218,18 +226,21 @@ inline G4int ExG4HbookH1Manager::GetH1HbookIdOffset() const {
 }  
 
 inline  std::vector<tools::hbook::h1*>::iterator ExG4HbookH1Manager::BeginH1()
-{ return fH1Vector.begin(); }
+{ return BeginT(); }
 
 inline  std::vector<tools::hbook::h1*>::iterator ExG4HbookH1Manager::EndH1()
-{ return fH1Vector.end(); }
+{ return EndT(); }
 
 inline  std::vector<tools::hbook::h1*>::const_iterator 
 ExG4HbookH1Manager::BeginConstH1() const
-{ return fH1Vector.begin(); }
+{ return BeginConstT(); }
 
 inline  std::vector<tools::hbook::h1*>::const_iterator 
 ExG4HbookH1Manager::EndConstH1() const
-{ return fH1Vector.end(); }
+{ return EndConstT(); }
+
+inline std::shared_ptr<G4HnManager> ExG4HbookH1Manager::GetHnManager() 
+{ return std::shared_ptr<G4HnManager>(fHnManager); }
 
 
 #endif 

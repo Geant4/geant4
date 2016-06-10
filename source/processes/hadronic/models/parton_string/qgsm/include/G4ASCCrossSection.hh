@@ -29,6 +29,9 @@
 #include "globals.hh"
 #include "G4VAnnihilationCrossSection.hh"
 
+#include "G4Pow.hh"
+
+
 class G4ASCCrossSection : public G4VAnnihilationCrossSection
 {
 public:
@@ -57,7 +60,8 @@ InCharge(G4int aCode, G4int bCode)
 inline G4double G4ASCCrossSection::
 GetXsec(G4double S)
 {
-	G4double result = theX*std::pow(S, theEps) + theY*std::pow(S, -theEta);
+	G4double result = theX*G4Pow::GetInstance()->powA(S, theEps) + 
+                          theY*G4Pow::GetInstance()->powA(S, -theEta);
 	return result;
 }
 

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 86520 2014-11-13 09:21:11Z gcosmo $
+# $Id: GNUmakefile 94087 2015-11-05 15:10:09Z gcosmo $
 # ---------------------------------------------------------------------------
 # GNUmakefile for physics_lists/constructors/factory library.  
 #  Gunter Folger 10-Jan-2012.
@@ -73,7 +73,6 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/inclxx/interface/include \
             -I$(G4BASE)/processes/hadronic/models/lend/include \
             -I$(G4BASE)/processes/hadronic/models/lepto_nuclear/include \
-            -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
             -I$(G4BASE)/processes/hadronic/models/particle_hp/include \
             -I$(G4BASE)/processes/hadronic/models/parton_string/diffraction/include \
             -I$(G4BASE)/processes/hadronic/models/parton_string/hadronization/include \

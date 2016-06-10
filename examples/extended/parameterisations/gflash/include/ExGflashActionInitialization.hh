@@ -33,8 +33,6 @@
 
 #include "G4VUserActionInitialization.hh"
 
-class G4GeneralParticleSource;
-
 /// Action initialization class.
 ///
 
@@ -46,8 +44,6 @@ class ExGflashActionInitialization : public G4VUserActionInitialization
 
     virtual void BuildForMaster() const;
     virtual void Build() const;
-  private:
-    G4GeneralParticleSource* masterGPS;
 };
 
 #endif

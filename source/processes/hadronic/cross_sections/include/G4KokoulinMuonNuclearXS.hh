@@ -57,6 +57,9 @@ public:
   G4KokoulinMuonNuclearXS();
   virtual ~G4KokoulinMuonNuclearXS();
 
+  static const char* Default_Name() {return "KokoulinMuonNuclearXS";}
+
+  virtual void CrossSectionDescription(std::ostream&) const;
 
   G4bool IsElementApplicable(const G4DynamicParticle* particle, 
 			     G4int Z, const G4Material*);

@@ -33,7 +33,7 @@
 #ifndef G4RootAnalysisReader_h
 #define G4RootAnalysisReader_h 1
 
-#include "G4VAnalysisReader.hh"
+#include "G4ToolsAnalysisReader.hh"
 #include "globals.hh"
 
 #include "tools/histo/h1d" 
@@ -51,45 +51,34 @@ class G4P1ToolsManager;
 class G4P2ToolsManager;
 class G4RootRNtupleManager;
   
-class G4RootAnalysisReader : public G4VAnalysisReader
+class G4RootAnalysisReader : public G4ToolsAnalysisReader
 {
   public:
-    G4RootAnalysisReader(G4bool isMaster = true);
+    explicit G4RootAnalysisReader(G4bool isMaster = true);
     virtual ~G4RootAnalysisReader();
     
     // static methods
     static G4RootAnalysisReader* Instance();
     
     // Access methods
-    tools::histo::h1d*  GetH1(G4int id, G4bool warn = true) const;
-    tools::histo::h2d*  GetH2(G4int id, G4bool warn = true) const;
-    tools::histo::h3d*  GetH3(G4int id, G4bool warn = true) const;
-    tools::histo::p1d*  GetP1(G4int id, G4bool warn = true) const;
-    tools::histo::p2d*  GetP2(G4int id, G4bool warn = true) const;
     tools::rroot::ntuple* GetNtuple() const;
     tools::rroot::ntuple* GetNtuple(G4int ntupleId) const;
     using G4VAnalysisReader::GetNtuple;
     
   protected:
     // virtual methods from base class
-    virtual G4int  ReadH1Impl(const G4String& h1Name, 
-                              const G4String& fileName,
-                              G4bool isUserFileName);
-    virtual G4int  ReadH2Impl(const G4String& h1Name, 
-                              const G4String& fileName,
-                              G4bool isUserFileName);
-    virtual G4int  ReadH3Impl(const G4String& h1Name, 
-                              const G4String& fileName,
-                              G4bool isUserFileName);
-    virtual G4int  ReadP1Impl(const G4String& h1Name, 
-                              const G4String& fileName,
-                              G4bool isUserFileName);
-    virtual G4int  ReadP2Impl(const G4String& h1Name, 
-                              const G4String& fileName,
-                              G4bool isUserFileName);
-    virtual G4int  ReadNtupleImpl(const G4String& ntupleName, 
-                              const G4String& fileName,
-                              G4bool isUserFileName);
+    virtual G4int  ReadH1Impl(const G4String& h1Name,  const G4String& fileName,
+                              G4bool isUserFileName) final;
+    virtual G4int  ReadH2Impl(const G4String& h2Name,  const G4String& fileName,
+                              G4bool isUserFileName) final;
+    virtual G4int  ReadH3Impl(const G4String& h3Name,  const G4String& fileName,
+                              G4bool isUserFileName) final;
+    virtual G4int  ReadP1Impl(const G4String& p1Name,  const G4String& fileName,
+                              G4bool isUserFileName) final;
+    virtual G4int  ReadP2Impl(const G4String& p2Name,  const G4String& fileName,
+                              G4bool isUserFileName) final;
+    virtual G4int  ReadNtupleImpl(const G4String& ntupleName,  const G4String& fileName,
+                              G4bool isUserFileName) final;
  
   private:
     // static data members
@@ -105,11 +94,6 @@ class G4RootAnalysisReader : public G4VAnalysisReader
     G4bool Reset();
 
     // data members
-    G4H1ToolsManager*     fH1Manager;
-    G4H2ToolsManager*     fH2Manager;
-    G4H3ToolsManager*     fH3Manager;
-    G4P1ToolsManager*     fP1Manager;
-    G4P2ToolsManager*     fP2Manager;
     G4RootRNtupleManager* fNtupleManager;
     G4RootRFileManager*   fFileManager;
 };

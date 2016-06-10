@@ -1,0 +1,43 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_b2s
+#define tools_b2s
+
+#include <string>
+
+namespace tools {
+
+inline void b2s(bool a_value,std::string& a_s){
+  a_s = a_value?"true":"false";
+}
+
+inline void bas(bool a_value,std::string& a_s){
+  a_s += (a_value?"true":"false");
+}
+
+}
+
+#include <vector>
+
+namespace tools {
+
+inline void b2s(const std::vector<bool>& a_vals,std::string& a_s,const std::string& a_sep = "\n",bool a_sep_at_end = false) {
+  a_s.clear();
+  unsigned int number = a_vals.size();
+  if(number<=0) return;
+  number--;
+  std::string stmp;
+  for(unsigned int index=0;index<number;index++) {
+    b2s(a_vals[index],stmp);
+    a_s += stmp;
+    a_s += a_sep;
+  }
+  b2s(a_vals[number],stmp);
+  a_s += stmp;
+  if(a_sep_at_end) a_s += a_sep;
+}
+
+}
+
+#endif

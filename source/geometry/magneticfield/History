@@ -1,4 +1,4 @@
-$Id: History 85845 2014-11-05 15:43:58Z gcosmo $
+$Id: History 93806 2015-11-02 11:21:01Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,13 +16,100 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Nov  2, 2015 J.Apostolakis             - field-V10-01-15 (fixed)
+Oct 22, 2015 J.Apostolakis             - field-V10-01-14
+--------------------------
+- Reverted changes in G4FieldManager from  tags field-V10-01-05 to -07
+   inadvertently reintroduced in tag field-V10-01-13
+    (fixed in tag -15: committed new copy from tag -04 'on top')
+    
+- Added explanation comment in G4MagHelicalSteper.
+    
+Oct 13, 2015 J.Apostolakis             - field-V10-01-13
+--------------------------
+- G4ChordFinder::FindNextChord: Added check against number of iterations, 
+  to identify potential issue of lack of convergence.
+- test: fixed testProElectricMagField.cc
 
-Nov 03, 2014 G.Cosmo                      - field-V10-00-04
+- Note: tag-13 inadvertently reintroduced changes from tags field-V10-01-05 to -07
+
+Jun 26, 2015 P.Gumplinger              - field-V10-01-12, 11
+-------------------------
+- Include 'NumberOfVariables' in G4RepleteEofM constructor argument list.
+
+Jun 22, 2015 G.Cosmo                   - field-V10-01-10
+--------------------
+- Withdrawn also changes introduced in tag "field-V10-01-08", as
+  responsible for memory violation errors in Valgrind.
+  Now corresponding to tag "field-V10-01-04".
+
+Jun 18, 2015 G.Cosmo                   - field-V10-01-09
+--------------------
+- Withdrawn changes introduced from tag "field-V10-01-05" to tag
+  "field-V10-01-07" included, responsible for failures on SLC6 and
+  run-time errors on Valgrind checks.
+
+Jun 10, 2015 P.Gumplinger              - field-V10-01-08
+-------------------------
+- initialize all elements of dydx[] in G4RepleteEofM::EvaluateRhsGivenB
+  Thanks to Tatsuya Kikawa (Osaka Univ.)
+
+Jun 10, 2015 J.Apostolakis             - field-V10-01-07
+--------------------------
+- G4FieldManager.cc : Made behaviour of SetDetector 'softer'.  No
+   longer complains by default if ChordFinder is not (yet) set.
+    ( The default values of failMode = 0 i.e. quiet. )
+   If a chord-finder exists, it will still warn for other errors.
+   
+   It is still possible to have louder/extra checks done calling
+     SetDetectorField with failMode > 0
+   or by using a new method, which expects an existing field:
+     ChangeDetectorField(G4Field *detectorField)    
+
+Jun  8, 2015 J.Apostolakis             - field-V10-01-05, (-06 fixed)
+--------------------------
+- G4FieldManager.cc : Revised behaviour of SetDetector - it now
+   passes the Field to the Equation, as is the natural user expectation
+   The previous behaviour is possible, using extra argument 'failMode' 
+      flag. Values: 0           = silent ; 
+                    1 (default) = warning; 
+                    2 or other  = fatal exception.
+   Or can use alternative (new) suggestion method ProposeDetectorField();
+
+   This change is to ensure that user expectation is met: 
+      if the field is changed for an existing, working stepper it must 
+      be propagated to the equation of motion.
+   Note: this causes potential conflict between the type of the equation
+         and the field, which will need to be solved in the future.
+
+   Old behaviour (just set our own pointer) is still available in new method:
+     ProposeDetectorField(G4Field *detectorField) 
+
+   Co-works and requires new tag in geometry/navigation: geomnav-V10-01-24.
+
+Jun 4, 2015 P. Gumplinger              - field-V10-01-04
+-------------------------
+- change assignment to field instead of Field array in G4RepleteEofM.cc
+
+Jan 28, 2015 J.Apostolakis             - field-V10-01-01 (-02,03 fixed)
+--------------------------                               ( History    )
+- Revert unintended inclusion of changes in G4MagIntegratorDriver
+
+Jan 15, 2015 J.Apostolakis             - field-V10-01-00 
+--------------------------
+- Small refinements in G4FieldTrack - access rest mass, avoid div by 0
+    Avoid division by zero for Unit direction in FieldTrack 
+    Added method to get Rest Mass.
+  Needed for fixes related to Problem report 1696.
+  Thanks to Nathan S. Froemming <nfroemm@uw.edu> who reported the issue
+   and created dedicated test to demonstrate it.
+
+Nov 03, 2014 G.Cosmo                   - field-V10-00-04
 --------------------
 - Moved constructors and simple methods to in line in G4ChargeState and
   G4LineSection for CPU speedup (courtesy of S.Wenzel).
 
-May 21, 2014 J.Apostolakis                - field-V10-00-03
+May 21, 2014 J.Apostolakis             - field-V10-00-03
 --------------------------
 - G4FieldTrack:
   * Fixed SetChargeAndMoments() to use the new method

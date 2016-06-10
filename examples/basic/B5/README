@@ -1,4 +1,4 @@
-$Id: README 86065 2014-11-07 08:51:15Z gcosmo $
+$Id: README 94486 2015-11-19 08:33:37Z gcosmo $
 
     =========================================================
     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -200,6 +200,8 @@ $Id: README 86065 2014-11-07 08:51:15Z gcosmo $
    - Total energy deposit in Hadronic calorimeter
    - Time of flight in Hodoscope 1
    - Time of flight in Hodoscope 2
+   - Vector of energy deposits in EM calorimeter cells
+   - Vector of energy deposits in Hadronic calorimeter cells
 
    The histograms and ntuple are saved in the output file in a format
    according to a technology selected in B5Analysis.hh.

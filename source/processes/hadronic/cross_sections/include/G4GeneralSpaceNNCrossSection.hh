@@ -98,6 +98,8 @@ public:
   G4double GetElementCrossSection(const G4DynamicParticle* theProjectile,
 				  G4int Z, const G4Material*);
 
+  virtual void CrossSectionDescription(std::ostream& outFile) const;
+
 private:
 
   G4ProtonInelasticCrossSection *protonInelastic;

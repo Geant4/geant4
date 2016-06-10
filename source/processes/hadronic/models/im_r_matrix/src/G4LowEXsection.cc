@@ -25,7 +25,8 @@
 //
 
 #include <cmath>
-
+#include "G4Exp.hh"
+#include "G4Log.hh"
 #include "G4LowEXsection.hh"
 #include "G4SystemOfUnits.hh"
 
@@ -41,12 +42,12 @@ G4double G4LowEXsection::
      if((*i).first/MeV>aX) break;
      it = i;
    }
-   G4double x1 = std::log((*it).first);
-   G4double x2 = std::log((*(it+1)).first);
-   G4double y1 = std::log((*it).second);
-   G4double y2 = std::log((*(it+1)).second);
-   G4double x = std::log(aX);
+   G4double x1 = G4Log((*it).first);
+   G4double x2 = G4Log((*(it+1)).first);
+   G4double y1 = G4Log((*it).second);
+   G4double y2 = G4Log((*(it+1)).second);
+   G4double x = G4Log(aX);
    G4double y = y1+(x-x1)*(y2-y1)/(x2-x1);
-   result = std::exp(y);
+   result = G4Exp(y);
    return result*millibarn;
  }

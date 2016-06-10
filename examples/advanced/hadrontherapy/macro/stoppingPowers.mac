@@ -51,23 +51,6 @@
 # Calculate stopping powers for alphas into Copper from 1 keV up to 200 MeV with 100 data points
 /parameter/getstopping G4_Cu 0.001 200 100 alpha stopAlpha_Cu_1keV_200MeV.out  
 
-########
-# Ions #
-########
-# First you need to define the ion
-
-
-
-#---------------------------gps-----------------
-
-/gps/particle ion
-/gps/ion 6 12 6
-
-# This is non necessary if the ion is already into Geant4 database:
-# /particle/list
-
-
-/parameter/getstopping G4_WATER 1 150 200 C12[0.0] stopCarbon_Water_1MeV_150MeV.out
 
 
 

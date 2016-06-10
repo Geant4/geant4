@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc 86051 2014-11-07 08:30:30Z gcosmo $
+// $Id: G4RunMessenger.cc 94337 2015-11-12 10:02:04Z gcosmo $
 //
 
 #include "G4RunMessenger.hh"
@@ -292,6 +292,19 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   restoreRandCmd->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);
   restoreRandCmd->SetToBeBroadcasted(false);
     
+  restoreRandCmdMT = new G4UIcmdWithABool("/random/resetEngineFromEachEvent",this);
+  restoreRandCmdMT->SetGuidance("Reset the status of the rndm engine from a file at each event.");
+  restoreRandCmdMT->SetGuidance("Note that the file must follow the following naming convention:");
+  restoreRandCmdMT->SetGuidance("run{#1}evt{#2}.rndm ; where #1 is the run number and #2 is the event number.");
+  restoreRandCmdMT->SetGuidance("For example to re-seed the first event of the first run the file should be called run0evt0.rndm.");
+  restoreRandCmdMT->SetGuidance("If for a specific run/event the file is not found, the standard re-seeding strategy is used.");
+  restoreRandCmdMT->SetGuidance("This command has meaning only in MT mode for strong reproducibility studies.");
+  restoreRandCmdMT->SetGuidance("Directory of the status file should be set by"
+                              	  " /random/setDirectoryName.");
+  restoreRandCmdMT->SetDefaultValue(false);
+  restoreRandCmdMT->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);
+
+
   saveEachEventCmd = new G4UIcmdWithABool("/random/saveEachEventFlag",this);
   saveEachEventCmd->SetGuidance("Save random number status at beginning of each event.");
   saveEachEventCmd->SetGuidance("File name contains run and event numbers: runXXXevtYYY.rndm");
@@ -346,6 +359,8 @@ G4RunMessenger::~G4RunMessenger()
     
   delete randDirCmd;
   delete runDirectory;
+
+  delete restoreRandCmdMT;
 }
 
 void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
@@ -509,7 +524,8 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { runManager->SetRandomNumberStorePerEvent(saveEachEventCmd->GetNewBoolValue(newValue)); }
   else if( command==constScoreCmd )
   { runManager->ConstructScoringWorlds(); }
-
+  else if( command==restoreRandCmdMT)
+  { runManager->RestoreRndmEachEvent(restoreRandCmdMT->GetNewBoolValue(newValue)); }
 }
 
 G4String G4RunMessenger::GetCurrentValue(G4UIcommand * command)

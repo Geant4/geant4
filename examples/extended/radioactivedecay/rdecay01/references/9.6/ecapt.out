@@ -1,0 +1,207 @@
+
+*************************************************************
+ Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  OpenGLImmediateX (OGLI, OGLIX)
+  OpenGLStoredX (OGL, OGLS, OGLSX)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+  drawByAttribute
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+  attributeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+Available colours:
+  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
+
+/run/verbose 1
+#
+/gun/particle ion
+/gun/ion 26 55
+#
+/rdecay01/fullChain true
+#
+/tracking/verbose 2
+/run/beamOn 1
+
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
+          DefaultRegionForTheWorld
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_AIR
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = Fe55,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm      0 fm      0 eV      0 eV      0 fm      0 fm      World   initStep
+    1      0 fm      0 fm      0 fm      0 eV      0 eV      0 fm      0 fm      World   RadioactiveDecay
+
+    :----- List of secondaries ----------------
+            Mn55:  energy =0.5232 eV   time = 16.89 d  
+            nu_e:  energy = 231.4 keV  time = 16.89 d  
+    :------------------------------------------
+
+
+*********************************************************************************************************
+* G4Track Information:   Particle = nu_e,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm      0 fm    231 keV     0 eV      0 fm      0 fm      World   initStep
+    1     -1 mm   -440 um    483 um    231 keV     0 eV   1.19 mm   1.19 mm      World   OutOfWorld
+
+*********************************************************************************************************
+* G4Track Information:   Particle = Mn55,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm      0 fm  0.523 eV      0 eV      0 fm      0 fm      World   initStep
+    1      0 fm      0 fm      0 fm  0.523 eV      0 eV      0 fm      0 fm      World   RadioactiveDecay
+
+ end of event      0 : Fe55 ---> Mn55
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.01s Real=0.06s Sys=0s
+
+ ======================== run summary ======================
+ The run was 1 Fe55 of 0 eV 
+ ===========================================================
+
+ Nb of generated particles: 
+
+           Mn55:       1  Emean = 0.5232 eV 	( 0.5232 eV  --> 0.5232 eV )
+           nu_e:       1  Emean =  231.4 keV	( 231.4 keV --> 231.4 keV)
+
+   Ekin Total (Q): mean =  231.4 keV	( 231.4 keV --> 231.4 keV)
+
+   Momentum balance (excluding gamma desexcitation): mean = 0.3055 eV 	( 0.3055 eV  --> 0.3055 eV )
+
+   Total time of life : mean =  16.89 d    half-life =  11.71 d     ( 16.89 d   --> 16.89 d  )
+
+   Total visible energy : mean = 0.5232 eV    ( 0.5232 eV  --> 0.5232 eV )
+
+   Activity of Fe55 = 7.501e+15 Bq/g   (2.027e+05 Ci/g) 
+
+#
+/analysis/setFileName ecapt
+Set file name: ecapt
+/analysis/h1/set 6 100 230. 240. keV
+#
+/tracking/verbose 0
+/rdecay01/event/printModulo 10000
+#
+/run/beamOn 100000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_AIR
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+... open Root analysis file : ecapt.root - done
+Start Run processing.
+
+ end of event      0 : Fe55 ---> Mn55
+
+ end of event  10000 : Fe55 ---> Mn55
+
+ end of event  20000 : Fe55 ---> Mn55
+
+ end of event  30000 : Fe55 ---> Mn55
+
+ end of event  40000 : Fe55 ---> Mn55
+
+ end of event  50000 : Fe55 ---> Mn55
+
+ end of event  60000 : Fe55 ---> Mn55
+
+ end of event  70000 : Fe55 ---> Mn55
+
+ end of event  80000 : Fe55 ---> Mn55
+
+ end of event  90000 : Fe55 ---> Mn55
+Run terminated.
+Run Summary
+  Number of events processed : 100000
+  User=2.07s Real=2.08s Sys=0s
+
+ ======================== run summary ======================
+ The run was 100000 Fe55 of 0 eV 
+ ===========================================================
+
+ Nb of generated particles: 
+
+           Mn55:  100000  Emean = 0.5232 eV 	( 0.5232 eV  --> 0.5232 eV )
+           nu_e:  100000  Emean =  231.4 keV	( 231.4 keV --> 231.4 keV)
+
+   Ekin Total (Q): mean =  231.4 keV	( 231.4 keV --> 231.4 keV)
+
+   Momentum balance (excluding gamma desexcitation): mean = 0.3055 eV 	( 0.3055 eV  --> 0.3055 eV )
+
+   Total time of life : mean =  3.946 y    half-life =  2.735 y     ( 1.538 min --> 44.16 y  )
+
+   Total visible energy : mean = 0.5232 eV    ( 0.5232 eV  --> 0.5232 eV )
+
+   Activity of Fe55 = 8.799e+13 Bq/g   (2378 Ci/g) 
+
+... write Root file : ecapt.root - done
+... close Root file : ecapt.root - done
+Graphics systems deleted.
+Visualization Manager deleting...
+G4 kernel has come to Quit state.
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager

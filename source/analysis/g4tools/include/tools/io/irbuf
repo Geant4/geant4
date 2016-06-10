@@ -1,0 +1,82 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_io_irbuf
+#define tools_io_irbuf
+
+#include "../typedefs"
+
+#include <vector>
+#include <string>
+
+#ifdef TOOLS_MEM
+#include "../mem"
+#endif
+
+namespace tools {
+namespace io {
+
+class irbuf {
+public:
+  virtual ~irbuf() {}
+public:
+  virtual bool read(uchar&) = 0;
+  virtual bool read(char&) = 0;
+  virtual bool read(uint16&) = 0;
+  virtual bool read(int16&) = 0;
+  virtual bool read(uint32&) = 0;
+  virtual bool read(int32&) = 0;
+  virtual bool read(uint64&) = 0;
+  virtual bool read(int64&) = 0;
+  virtual bool read(float&) = 0;
+  virtual bool read(double&) = 0;
+  virtual bool read(bool&) = 0;
+
+  virtual bool read_vec(uint32&,uchar*&) = 0;
+  virtual bool read_vec(uint32&,char*&) = 0;
+  virtual bool read_vec(uint32&,uint16*&) = 0;
+  virtual bool read_vec(uint32&,int16*&) = 0;
+  virtual bool read_vec(uint32&,uint32*&) = 0;
+  virtual bool read_vec(uint32&,int32*&) = 0;
+  virtual bool read_vec(uint32&,uint64*&) = 0;
+  virtual bool read_vec(uint32&,int64*&) = 0;
+  virtual bool read_vec(uint32&,float*&) = 0;
+  virtual bool read_vec(uint32&,double*&) = 0;
+  virtual bool read_vec(uint32&,bool*&) = 0;
+
+  virtual bool read_vec(std::vector<std::string>&) = 0;
+
+  virtual bool read_cstr(char*&) = 0;
+  virtual bool read_img(uint32&,uint32&,uint32&,uchar*&) = 0;
+
+  typedef std::vector< std::vector<unsigned int> > std_vec_vec_uint_t;
+  virtual bool read_std_vec_vec(std_vec_vec_uint_t&) = 0;
+
+  typedef std::vector< std::vector<float> > std_vec_vec_float_t;
+  virtual bool read_std_vec_vec(std_vec_vec_float_t&) = 0;
+
+  typedef std::vector< std::vector<double> > std_vec_vec_double_t;
+  virtual bool read_std_vec_vec(std_vec_vec_double_t&) = 0;
+
+  typedef std::vector< std::vector<std::string> > std_vec_vec_string_t;
+  virtual bool read_std_vec_vec(std_vec_vec_string_t&) = 0;
+public: //helpers
+  template <class T>
+  bool read_std_vec(std::vector<T>& a_x) { 
+    uint32 n;
+    T* v;
+    if(!read_vec(n,v)) return false;
+    a_x.resize(n);
+    for(uint32 index=0;index<n;index++) a_x[index] = v[index];
+    delete [] v;
+#ifdef TOOLS_MEM
+    mem::decrement(s_new().c_str());
+#endif
+    return true;
+  }
+
+};
+
+}}
+
+#endif

@@ -1,0 +1,51 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_node_desc
+#define tools_sg_node_desc
+
+#include "field_desc"
+#include <vector>
+
+namespace tools {
+namespace sg {
+
+class node_desc {
+public:
+  node_desc()
+  :m_class()
+  ,m_version(0)
+  ,m_fds()
+  {}
+  node_desc(const std::string& a_class,unsigned int a_version,
+            const std::vector<field_desc>& a_fds)
+  :m_class(a_class)
+  ,m_version(a_version)
+  ,m_fds(a_fds)
+  {}
+  virtual ~node_desc(){}
+public:
+  node_desc(const node_desc& a_from)
+  :m_class(a_from.m_class)
+  ,m_version(a_from.m_version)
+  ,m_fds(a_from.m_fds)
+  {}
+  node_desc& operator=(const node_desc& a_from){
+    m_class = a_from.m_class;
+    m_version = a_from.m_version;
+    m_fds = a_from.m_fds;
+    return *this;
+  }
+public:
+  const std::string& cls() const {return m_class;}
+  unsigned int version() const {return m_version;}
+  const std::vector<field_desc>& fields() const {return m_fds;}
+protected:
+  std::string m_class;
+  unsigned int m_version;
+  std::vector<field_desc> m_fds;
+};
+
+}}
+
+#endif

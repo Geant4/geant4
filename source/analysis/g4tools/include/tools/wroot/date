@@ -4,9 +4,10 @@
 #ifndef tools_wroot_date
 #define tools_wroot_date
 
-//WIN32 : localtime_r() does not exist on Windows and we can't use the
-//        Windows ::GetLocalTime() since G4 do not want to include windows.h.
-//        Then we stay with the not thread safe localtime().
+//_MSC_VER (= Microsoft VisualC++) :
+//  localtime_r() does not exist on Windows and we can't use the
+//  Windows ::GetLocalTime() since G4 do not want to include windows.h.
+//  Then we stay with the not thread safe localtime().
 
 #include <time.h>
 
@@ -21,7 +22,7 @@ inline date get_date(){
   // Date is stored with the origin being the 1st january 1995.
   // Time has 1 second precision.
   time_t tloc = ::time(0);
-#ifdef WIN32
+#ifdef _MSC_VER
   struct tm *tp = (tm*)::localtime(&tloc); //not thread safe (but exist on Windows).
 #else
   struct tm tpa;

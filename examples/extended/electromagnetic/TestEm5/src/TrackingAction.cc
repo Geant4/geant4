@@ -27,7 +27,7 @@
 /// \brief Implementation of the TrackingAction class
 //
 //
-// $Id: TrackingAction.cc 76464 2013-11-11 10:22:56Z gcosmo $
+// $Id: TrackingAction.cc 94333 2015-11-12 09:57:47Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,7 +48,9 @@
 
 TrackingAction::TrackingAction(DetectorConstruction* DET, EventAction* EA)
 :G4UserTrackingAction(),fDetector(DET), fEventAction(EA)
-{ }
+{ 
+  fXstartAbs = fXendAbs = fPrimaryCharge = fDirX = 0.0;
+}
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -60,6 +62,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* aTrack )
     fXstartAbs = fDetector->GetxstartAbs();
     fXendAbs   = fDetector->GetxendAbs();
     fPrimaryCharge = aTrack->GetDefinition()->GetPDGCharge();
+    fDirX = aTrack->GetMomentumDirection().x();
   }
 }
 
@@ -75,9 +78,14 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   G4ThreeVector position = aTrack->GetPosition();
   G4ThreeVector vertex   = aTrack->GetVertexPosition();  
   G4double charge        = aTrack->GetDefinition()->GetPDGCharge();
+  G4double energy        = aTrack->GetKineticEnergy();
 
-  G4bool transmit = ((position.x() >= fXendAbs) && (vertex.x() < fXendAbs));
-  G4bool reflect  =  (position.x() <= fXstartAbs);
+  G4bool transmit = (((fDirX >= 0.0 && position.x() >= fXendAbs) ||
+                      (fDirX < 0.0 && position.x() <= fXstartAbs))
+                      && energy > 0.0);
+  G4bool reflect  = (((fDirX >= 0.0 && position.x() <= fXstartAbs) ||
+                      (fDirX < 0.0 && position.x() <= fXendAbs))
+                      && energy > 0.0);
   G4bool notabsor = (transmit || reflect);
 
   //transmitted + reflected particles counter
@@ -91,20 +99,20 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   //
   //histograms
   //
-  G4bool charged  = (charge != 0.);
+  G4bool charged = (charge != 0.);
   G4bool neutral = !charged;
 
   //energy spectrum at exit
-  //
+  //zero energy charged particle are not taken into account
+  // 
   G4int id = 0;  
        if (transmit && charged) id = 10;
   else if (transmit && neutral) id = 20;
   else if (reflect  && charged) id = 30;
   else if (reflect  && neutral) id = 40;
 
-  if (id>0)   
-  analysisManager->FillH1(id, aTrack->GetKineticEnergy());
-    
+  if (id>0) { analysisManager->FillH1(id, energy); }
+
   //energy leakage
   //
   if (notabsor) {
@@ -145,9 +153,9 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   //energy fluence at exit : dE(MeV)/dOmega
   //
   id = 0;  
-  if (transmit && charged) id = 11;
-  else if (transmit && neutral) id = 21;
+       if (transmit && charged) id = 11;
   else if (reflect  && charged) id = 31;
+  else if (transmit && neutral) id = 21;
   else if (reflect  && neutral) id = 41;
 
   if (id>0) {
@@ -164,7 +172,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   //projected angles distribution at exit
   //
   id = 0;   
-  if (transmit && charged) id = 13;
+       if (transmit && charged) id = 13;
   else if (transmit && neutral) id = 23;
   else if (reflect  && charged) id = 33;
   else if (reflect  && neutral) id = 43;
@@ -183,20 +191,17 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 
   //projected position and radius at exit
   //
-  id = 0;   
-  if (transmit && charged) id = 14;
-  
-  if (id>0) {
+  if (transmit && energy > 0.0) {
     G4double y = position.y(), z = position.z();
     G4double r = std::sqrt(y*y + z*z);
-    analysisManager->FillH1(id,   y);
-    analysisManager->FillH1(id,   z);
-    analysisManager->FillH1(id+1, r);
+    analysisManager->FillH1(14,  y);
+    analysisManager->FillH1(14,  z);
+    analysisManager->FillH1(15,  r);
   }
   
   //x-vertex of charged secondaries
   //
-  if ((aTrack->GetParentID() == 1) && charged) {
+  if ((aTrack->GetParentID() == 1) && charged && energy > 0.0) {
     G4double xVertex = (aTrack->GetVertexPosition()).x();
     analysisManager->FillH1(6, xVertex);
     if (notabsor) analysisManager->FillH1(7, xVertex); 

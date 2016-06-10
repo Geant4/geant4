@@ -44,5 +44,5 @@
 /run/beamOn 1
 
 /tracking/verbose 0
-/event/printModulo 10
+/run/printProgress 10
 /run/beamOn 100

@@ -23,12 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGReaction.cc 79697 2014-03-12 13:10:09Z gcosmo $
+// $Id: G4RPGReaction.cc 94406 2015-11-13 14:52:40Z gcosmo $
 //
 
 #include <iostream>
 
 #include "G4RPGReaction.hh"
+#include "G4Log.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
@@ -177,7 +178,7 @@ AddBlackTrackParticles(const G4double epnb,            // GeV
         G4int ika, kk = 0;
         if( ekw > 1.0 )ekw *= ekw;
         ekw = std::max( 0.1, ekw );
-        ika = G4int(ika1*std::exp((atomicNumber*atomicNumber/
+        ika = G4int(ika1*G4Exp((atomicNumber*atomicNumber/
                                            atomicWeight-ika2)/ika3)/ekw);
         if( ika > 0 )
         {
@@ -397,7 +398,7 @@ G4RPGReaction::GenerateNBodyEvent(const G4double totalEnergy,       // MeV
           lzero = false;
           break;
         }
-        wtmax += std::log( wtfc );
+        wtmax += G4Log( wtfc );
       }
       if( lzero )
         wtmax = -wtmax;
@@ -409,7 +410,7 @@ G4RPGReaction::GenerateNBodyEvent(const G4double totalEnergy,       // MeV
                                  256.3704, 268.4705, 240.9780, 189.2637,
                                  132.1308,  83.0202,  47.4210,  24.8295,
                                  12.0006,   5.3858,   2.2560,   0.8859 };
-      wtmax = std::log( std::pow( kineticEnergy, vecLen-2 ) * ffq[vecLen-1] / totalE );
+      wtmax = G4Log( std::pow( kineticEnergy, vecLen-2 ) * ffq[vecLen-1] / totalE );
   }
 
   // Calculate momenta for secondaries 
@@ -431,10 +432,10 @@ G4RPGReaction::GenerateNBodyEvent(const G4double totalEnergy,       // MeV
       if( pd[i] <= 0.0 )    //  changed from  ==  on 02 April 98
         lzero = false;
       else
-        wtmax += std::log( pd[i] );
+        wtmax += G4Log( pd[i] );
     }
     G4double weight = 0.0;           // weight is returned by GenerateNBodyEvent
-    if( lzero )weight = std::exp( std::max(std::min(wtmax,expxu),expxl) );
+    if( lzero )weight = G4Exp( std::max(std::min(wtmax,expxu),expxl) );
     
     G4double bang, cb, sb, s0, s1, s2, c, esys, a, b, gama, beta;
     G4double ss;
@@ -583,7 +584,7 @@ G4RPGReaction::GenerateNBodyEventT(const G4double totalEnergy,
           lzero = false;
           break;
         }
-        wtmax += std::log( wtfc );
+        wtmax += G4Log( wtfc );
       }
       if( lzero )
         wtmax = -wtmax;
@@ -595,7 +596,7 @@ G4RPGReaction::GenerateNBodyEventT(const G4double totalEnergy,
                                  256.3704, 268.4705, 240.9780, 189.2637,
                                  132.1308,  83.0202,  47.4210,  24.8295,
                                  12.0006,   5.3858,   2.2560,   0.8859 };
-      wtmax = std::log( std::pow( kineticEnergy, listLen-2 ) * ffq[listLen-1] / totalE );
+      wtmax = G4Log( std::pow( kineticEnergy, listLen-2 ) * ffq[listLen-1] / totalE );
   }
 
   // Calculate momenta for secondaries 
@@ -617,10 +618,10 @@ G4RPGReaction::GenerateNBodyEventT(const G4double totalEnergy,
       if( pd[i] <= 0.0 )    //  changed from  ==  on 02 April 98
         lzero = false;
       else
-        wtmax += std::log( pd[i] );
+        wtmax += G4Log( pd[i] );
     }
     G4double weight = 0.0;           // weight is returned by GenerateNBodyEvent
-    if( lzero )weight = std::exp( std::max(std::min(wtmax,expxu),expxl) );
+    if( lzero )weight = G4Exp( std::max(std::min(wtmax,expxu),expxl) );
     
     G4double bang, cb, sb, s0, s1, s2, c, esys, a, b, gama, beta;
     G4double ss;
@@ -763,7 +764,7 @@ void G4RPGReaction::Defs1(const G4ReactionProduct& modifiedOriginal,
     //    inclusive distributions, but it is necessary for momentum conservation
     //
     const G4double atomicWeight = targetNucleus.GetA_asInt();
-    const G4double logWeight = std::log(atomicWeight);
+    const G4double logWeight = G4Log(atomicWeight);
     
     G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();
     G4ParticleDefinition *aPiPlus = G4PionPlus::PionPlus();
@@ -779,13 +780,13 @@ void G4RPGReaction::Defs1(const G4ReactionProduct& modifiedOriginal,
     //
     //  Some smearing in transverse direction from Fermi motion
     //
-    G4float pp, pp1;
+    G4double pp, pp1;
     G4double alekw, p;
     G4double r1, r2, a1, ran1, ran2, xxh, exh, pxTemp, pyTemp, pzTemp;
     
     r1 = twopi*G4UniformRand();
     r2 = G4UniformRand();
-    a1 = std::sqrt(-2.0*std::log(r2));
+    a1 = std::sqrt(-2.0*G4Log(r2));
     ran1 = a1*std::sin(r1)*0.020*numberofFinalStateNucleons*GeV;
     ran2 = a1*std::cos(r1)*0.020*numberofFinalStateNucleons*GeV;
     G4ThreeVector fermir(ran1, ran2, 0);
@@ -839,7 +840,7 @@ void G4RPGReaction::Defs1(const G4ReactionProduct& modifiedOriginal,
       //
       const G4double alem[] = { 1.40, 2.30, 2.70, 3.00, 3.40, 4.60, 7.00 };
       const G4double val0[] = { 0.00, 0.40, 0.48, 0.51, 0.54, 0.60, 0.65 };
-      alekw = std::log( originalIncident->GetKineticEnergy()/GeV );
+      alekw = G4Log( originalIncident->GetKineticEnergy()/GeV );
       exh = 1.0;
       if( alekw > alem[0] )   //   get energy bin
       {
@@ -855,7 +856,7 @@ void G4RPGReaction::Defs1(const G4ReactionProduct& modifiedOriginal,
         }
         exh = 1.0 - exh;
       }
-      const G4double cfa = 0.025*((atomicWeight-1.)/120.)*std::exp(-(atomicWeight-1.)/120.);
+      const G4double cfa = 0.025*((atomicWeight-1.)/120.)*G4Exp(-(atomicWeight-1.)/120.);
       ekin = currentParticle.GetKineticEnergy()/GeV - cfa*(1+normal()/2.0);
       ekin = std::max( 1.0e-6, ekin );
       xxh = 1.0;

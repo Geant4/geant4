@@ -1,33 +1,33 @@
 #
 # Macro file for the initialization phase of "TestEm8.cc"
 #
-# It creates the default geometry (simple absorber cylinder )        
+# ALICE TPC test beam setup
 #
 /control/verbose 2
-/run/verbose 2
+/control/cout/ignoreThreadsExcept 0
+/run/verbose 1
 #/tracking/verbose 2
 #
 /testem/setGasThick 7.5 mm
 /testem/setGasMat   TPC_Ne-CO2-2
+/testem/setPairEnergy 10 eV
 #
 #  select EM PhysicsList
 #
-#/testem/phys/addPhysics  emstandard_opt0
-/testem/phys/addPhysics  pai
-#/testem/phys/addPhysics  pai_photon
+#/testem/phys/addPhysics  emstandard_opt3
+/process/em/AddPAIRegion all GasDetector pai
 #
 /testem/phys/setNbinsE  100
 /testem/phys/setMaxE    0.01  MeV  
-/testem/phys/setNbinsCl 200
+/testem/phys/setNbinsCl 150
+/testem/phys/setMaxCl   1500
 #
 /run/initialize
 #
-#/run/setCut  1 km
-#/run/setCutForRegion GasDetector 1 km
-#
+/process/em/verbose 1
 /run/setCut  1 mm
 /run/setCutForRegion GasDetector 1 mm
-/testem/killSecondaries true
+#/testem/killSecondaries true
 #
 /run/particle/dumpCutValues
 #
@@ -35,14 +35,12 @@
 #
 /gun/particle proton
 #
-#/gun/particle mu-
-# 
-/gun/energy 433 MeV
-#/gun/energy 2205 MeV
-#
-/testem/histo/fileName p_1gev_pai1mm3.75mm
 # 1 GeV
+/analysis/setFileName alice_tpc_1gev
+/gun/energy 433 MeV
 /run/beamOn 173780
 # 3 GeV
+#/analysis/setFileName alice_tpc_3gev
+#/gun/energy 2205 MeV
 #/run/beamOn 363830
 #

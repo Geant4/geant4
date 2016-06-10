@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 86393 2014-11-10 16:34:27Z gcosmo $
+$Id: History 93608 2015-10-27 08:50:25Z gcosmo $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -15,6 +15,28 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+26 October 2015 Tatsumi Koi  (hadr-proc-V10-01-04)
+------------------------------------------------------
+- Add  G4PhotoCaptureProcess and G4PhotoFissionProcess
+
+21 September 2015 Dennis Wright  (hadr-proc-V10-01-03)
+------------------------------------------------------
+- change default argument of G4He3InelasticProcess ctor from tInelastic to
+  he3Inelastic to avoid confusion with triton, according to bug report 1782.
+
+31 August 2015 Vladimir Ivanchenko   (hadr-proc-V10-01-02)
+----------------------------------------------------------
+- G4UCNBoundaryProcess - added checks on while loop; extend
+    warning printout 
+
+10 June 2015 Peter Gumplinger        (hadr-proc-V10-01-01)
+----------------------------------------------------------
+- inline some methods in G4UCNBoundaryProcess
+
+21 May 2015 Gunter Folger            (hadr-proc-V10-01-00)
+----------------------------------------------------------
+- G4HadronElasticProcess - switch to ProcessDescription(...) interface
 
 10 November 2014 Vladimir Ivanchenko (hadr-proc-V10-00-06)
 --------------------------------------------------

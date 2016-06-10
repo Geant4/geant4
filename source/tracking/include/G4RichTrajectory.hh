@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectory.hh 69003 2013-04-15 09:25:23Z gcosmo $
+// $Id: G4RichTrajectory.hh 90219 2015-05-21 08:07:27Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -102,6 +102,7 @@ private:
   G4TouchableHandle fpInitialVolume;
   G4TouchableHandle fpInitialNextVolume;
   const G4VProcess* fpCreatorProcess;
+  G4int             fCreatorModelID;
   G4TouchableHandle fpFinalVolume;
   G4TouchableHandle fpFinalNextVolume;
   const G4VProcess* fpEndingProcess;

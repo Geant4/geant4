@@ -80,24 +80,35 @@ int main(int argc, char** argv)
   //
   Command* commandLine(0);
 
-#ifdef G4MULTITHREADED_POPO
-  G4MTRunManager* runManager= new G4MTRunManager;
+#ifdef G4MULTITHREADED
+  G4RunManager* runManager(0);
   if ((commandLine = parser->GetCommandIfActive("-mt")))
   {
+    runManager = new G4MTRunManager;
     int nThreads = 2;
-    if(commandLine->GetOption() == "NMAX")
+    const G4String& option = commandLine->GetOption();
+    if(option == "")
+    {
+      nThreads = G4UIcommand::ConvertToInt(commandLine->GetDefaultOption());
+    }
+    else if(option == "NMAX")
     {
      nThreads = G4Threading::G4GetNumberOfCores();
     }
     else
     {
-     nThreads = G4UIcommand::ConvertToInt(commandLine->GetOption());
+      nThreads = G4UIcommand::ConvertToInt(option);
     }
+
     G4cout << "===== Chem3 is started with "
-       << runManager->GetNumberOfThreads()
+       << ((G4MTRunManager*) runManager)->GetNumberOfThreads()
        << " threads =====" << G4endl;
 
-    runManager->SetNumberOfThreads(nThreads);
+    ((G4MTRunManager*) runManager)->SetNumberOfThreads(nThreads);
+  }
+  else
+  {
+    runManager = new G4RunManager();
   }
 #else
   G4RunManager* runManager = new G4RunManager();
@@ -129,8 +140,6 @@ int main(int argc, char** argv)
   {
     ui = new G4UIExecutive(argc, argv, commandLine->GetOption());
 
-    if (ui->IsGUI()) UImanager->ApplyCommand("/control/execute gui.mac");
-
     if (parser->GetCommandIfActive("-novis") == 0)
     // visualization is used by default
     {
@@ -147,6 +156,8 @@ int main(int argc, char** argv)
       }
       UImanager->ApplyCommand("/control/execute vis.mac");
     }
+
+    if (ui->IsGUI()) UImanager->ApplyCommand("/control/execute gui.mac");
   }
   else
   // to be use visualization file (= store the visualization into
@@ -217,7 +228,7 @@ void Parse(int& argc, char** argv)
 // it is then up to you to manage this option
 
 #ifdef G4MULTITHREADED
-  parser->AddCommand("-mt", Command::WithOption,
+  parser->AddCommand("-mt", Command::OptionNotCompulsory,
                      "Launch in MT mode (events computed in parallel,"
                      " NOT RECOMMANDED WITH CHEMISTRY)",
                      "2");

@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 
 #ifndef G4SampleResonance_h
 #define G4SampleResonance_h 1
@@ -40,7 +38,7 @@
 #include "globals.hh"
 #include <map>
 #include "G4ParticleDefinition.hh"
-
+#include "G4Log.hh"
 
 class G4SampleResonance
 {
@@ -59,7 +57,7 @@ private:
     { return 2.0*gamma*std::atan( 2.0 * (x-m0)/ gamma  ); }
 
   G4double BrWigInt1(const G4double x, const G4double gamma, const G4double m0) const
-    { return 0.5*gamma*gamma*std::log( (x-m0)*(x-m0)+gamma*gamma/4.0 ) + m0*BrWigInt0(x,gamma,m0); }
+    { return 0.5*gamma*gamma*G4Log( (x-m0)*(x-m0)+gamma*gamma/4.0 ) + m0*BrWigInt0(x,gamma,m0); }
 
   G4double BrWigInv(const G4double x, const G4double gamma, const G4double m0) const
     { return 0.5*gamma*std::tan( 0.5*x/gamma )+m0; }

@@ -50,6 +50,9 @@
 #include "G4AntiXiMinus.hh"
 #include "G4AntiXiZero.hh"
 #include "G4AntiOmegaMinus.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
+#include "G4Pow.hh"
 
 // factory
 #include "G4CrossSectionFactory.hh"
@@ -80,10 +83,20 @@ G4ChipsAntiBaryonInelasticXS::~G4ChipsAntiBaryonInelasticXS()
   delete HEN;
 }
 
-G4bool G4ChipsAntiBaryonInelasticXS::IsIsoApplicable(const G4DynamicParticle* Pt, G4int, G4int,    
+void G4ChipsAntiBaryonInelasticXS::CrossSectionDescription(std::ostream& outFile) const
+{
+  outFile << "G4ChipsAntiBaryonInelasticXS provides the inelastic cross\n"
+          << "section for anti-baryon nucleus scattering as a function of incident\n"
+          << "momentum. The cross section is calculated using M. Kossov's\n"
+          << "CHIPS parameterization of cross section data.\n";
+}
+
+
+G4bool G4ChipsAntiBaryonInelasticXS::IsIsoApplicable(const G4DynamicParticle*, G4int, G4int,    
 				 const G4Element*,
 				 const G4Material*)
 {
+  /*
   const G4ParticleDefinition* particle = Pt->GetDefinition();
 
   if(particle == G4AntiNeutron::AntiNeutron())
@@ -122,7 +135,8 @@ G4bool G4ChipsAntiBaryonInelasticXS::IsIsoApplicable(const G4DynamicParticle* Pt
   {
     return true;
   }
-  return false;
+  */
+  return true;
 }
 
 // The main member function giving the collision cross section (P is in IU, CS is in mb)
@@ -221,10 +235,10 @@ G4double G4ChipsAntiBaryonInelasticXS::CalculateCrossSection(G4int F, G4int I,
   static const G4double Pmin=THmin+(nL-1)*dP; // minP for the HighE part with safety
   static const G4double Pmax=227000.;  // maxP for the HEN (High ENergy) part 227 GeV
   static const G4int    nH=224;        // A#of HEN points in lnE
-  static const G4double milP=std::log(Pmin);// Low logarithm energy for the HEN part
-  static const G4double malP=std::log(Pmax);// High logarithm energy (each 2.75 percent)
+  static const G4double milP=G4Log(Pmin);// Low logarithm energy for the HEN part
+  static const G4double malP=G4Log(Pmax);// High logarithm energy (each 2.75 percent)
   static const G4double dlP=(malP-milP)/(nH-1); // Step in log energy in the HEN part
-  static const G4double milPG=std::log(.001*Pmin);// Low logarithmEnergy for HEN part GeV/c
+  static const G4double milPG=G4Log(.001*Pmin);// Low logarithmEnergy for HEN part GeV/c
   G4double sigma=0.;
   if(F&&I) sigma=0.;                   // @@ *!* Fake line *!* to use F & I !!!Temporary!!!
   //G4double A=targN+targZ;              // A of the target
@@ -275,13 +289,13 @@ G4double G4ChipsAntiBaryonInelasticXS::CalculateCrossSection(G4int F, G4int I,
   }
   else if (Momentum<Pmax)              // High Energy region
   {
-    G4double lP=std::log(Momentum);
+    G4double lP=G4Log(Momentum);
     sigma=EquLinearFit(lP,nH,milP,dlP,lastHEN);
   }
   else                                 // UHE region (calculation, not frequent)
   {
     G4double P=0.001*Momentum;         // Approximation formula is for P in GeV/c
-    sigma=CrossSectionFormula(targZ, targN, P, std::log(P));
+    sigma=CrossSectionFormula(targZ, targN, P, G4Log(P));
   }
   if(sigma<0.) return 0.;
   return sigma;
@@ -290,14 +304,14 @@ G4double G4ChipsAntiBaryonInelasticXS::CalculateCrossSection(G4int F, G4int I,
 // Calculation formula for piMinus-nuclear inelastic cross-section (mb) (P in GeV/c)
 G4double G4ChipsAntiBaryonInelasticXS::CrossSectionLin(G4int tZ, G4int tN, G4double P)
 {
-  G4double lP=std::log(P);
+  G4double lP=G4Log(P);
   return CrossSectionFormula(tZ, tN, P, lP);
 }
 
 // Calculation formula for piMinus-nuclear inelastic cross-section (mb) log(P in GeV/c)
 G4double G4ChipsAntiBaryonInelasticXS::CrossSectionLog(G4int tZ, G4int tN, G4double lP)
 {
-  G4double P=std::exp(lP);
+  G4double P=G4Exp(lP);
   return CrossSectionFormula(tZ, tN, P, lP);
 }
 // Calculation formula for piMinus-nuclear inelastic cross-section (mb) log(P in GeV/c)
@@ -309,8 +323,8 @@ G4double G4ChipsAntiBaryonInelasticXS::CrossSectionFormula(G4int tZ, G4int tN,
   {
     G4double ld=lP-3.5;
     G4double ld2=ld*ld;
-    G4double ye=std::exp(lP*1.25);
-    G4double yt=std::exp(lP*0.35);
+    G4double ye=G4Exp(lP*1.25);
+    G4double yt=G4Exp(lP*0.35);
     G4double El=80./(ye+1.);
     G4double To=(80./yt+.3)/yt;
     sigma=(To-El)+.2443*ld2+31.48;
@@ -318,7 +332,7 @@ G4double G4ChipsAntiBaryonInelasticXS::CrossSectionFormula(G4int tZ, G4int tN,
   else if(tZ==1 && tN==1)
   {
     G4double r=lP-3.7;
-    sigma=0.6*r*r+67.+90.*std::exp(-lP*.666);
+    sigma=0.6*r*r+67.+90.*G4Exp(-lP*.666);
   }
   else if(tZ<97 && tN<152)                // General solution
   {
@@ -329,7 +343,7 @@ G4double G4ChipsAntiBaryonInelasticXS::CrossSectionFormula(G4int tZ, G4int tN,
     G4double a2=a*a;
     G4double a3=a2*a;
     G4double a2s=a2*sa;
-    G4double c=(170.+3600./a2s)/(1.+65./a2s)+40.*std::pow(a,0.712)/(1.+12.2/a)/(1.+34./a2);
+    G4double c=(170.+3600./a2s)/(1.+65./a2s)+40.*G4Pow::GetInstance()->powA(a,0.712)/(1.+12.2/a)/(1.+34./a2);
     G4double r=(170.+0.01*a3)/(1.+a3/28000.);
     sigma=c+d*d+r/sp;
   }

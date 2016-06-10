@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity2/include/PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class
 //
-// $Id: PrimaryGeneratorAction.hh 68999 2013-04-15 09:23:17Z gcosmo $
+// $Id: PrimaryGeneratorAction.hh 90829 2015-06-10 08:37:55Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,8 +55,13 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
          
     G4ParticleGun* GetParticleGun() {return fParticleGun;}
     
-    G4int GetWallCount()            {return fNwall;}         
+    G4int GetWallCount()            {return fNwall;}
+    void AddWallCount(G4int wc)     { fNwall += wc;}
+
     G4int GetCavityCount()          {return fNcavity;}
+    void AddCavityCount(G4int cc)   { fNcavity += cc;}
+
+
          
   private:
     G4ParticleGun*             fParticleGun;

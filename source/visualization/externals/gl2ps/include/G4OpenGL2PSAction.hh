@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenGL2PSAction.hh 82763 2014-07-08 14:22:48Z gcosmo $
+// $Id: G4OpenGL2PSAction.hh 88190 2015-02-02 17:24:54Z gcosmo $
 //
 
 #ifndef G4OpenGL2PSAction_h
@@ -52,6 +52,7 @@ public:
  void setViewport(int,int,int,int);
  bool extendBufferSize();
  void resetBufferSizeParameters();
+ void setBufferSize(int);
 
 protected:
  bool G4gl2psBegin();

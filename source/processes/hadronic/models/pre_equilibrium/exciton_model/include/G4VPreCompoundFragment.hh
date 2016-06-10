@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPreCompoundFragment.hh 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4VPreCompoundFragment.hh 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // J. M. Quesada (August 2008).  
 // Based  on previous work by V. Lara
@@ -87,10 +87,13 @@ public:
   // probability of a fragment
   virtual G4double CalcEmissionProbability(const G4Fragment & aFragment) = 0;
   
-  virtual G4double GetKineticEnergy(const G4Fragment & aFragment) = 0;
+  // sample kinetic energy of emitted fragment
+  virtual G4double SampleKineticEnergy(const G4Fragment & aFragment) = 0;
 
+  inline G4bool IsItPossible(const G4Fragment & aFragment) const;
+  
   inline G4ReactionProduct * GetReactionProduct() const; 	
-
+  
   inline G4int GetA() const;
   
   inline G4int GetZ() const;
@@ -99,30 +102,20 @@ public:
   
   inline G4int GetRestZ() const;
 
-  inline G4double ResidualA13() const;
-  
-  inline G4double GetCoulombBarrier() const;
-  
   inline G4double GetBindingEnergy() const;
-  
-  inline G4double GetMaximalKineticEnergy() const;
   
   inline G4double GetEnergyThreshold() const;
 
   inline G4double GetEmissionProbability() const;
-  
+    
   inline G4double GetNuclearMass() const;
   
   inline G4double GetRestNuclearMass() const;
-  
-  inline G4double GetReducedMass() const;
-  
+
   inline const G4LorentzVector& GetMomentum() const;
   
   inline void  SetMomentum(const G4LorentzVector & value);
   
-  inline const G4String GetName() const;
-
   //for inverse cross section choice
   inline void SetOPTxs(G4int);
   //for superimposed Coulomb Barrier for inverse cross sections
@@ -130,13 +123,13 @@ public:
 
 protected:
 
-  inline G4bool IsItPossible(const G4Fragment & aFragment) const;
+  virtual G4double GetAlpha() const = 0;
+
+  virtual G4double GetBeta() const = 0;
 
 private:
 
-  // default constructor
   G4VPreCompoundFragment();
-  // copy constructor
   G4VPreCompoundFragment(const G4VPreCompoundFragment &right);
   const G4VPreCompoundFragment& 
   operator= (const G4VPreCompoundFragment &right);  
@@ -150,24 +143,26 @@ private:
   const G4ParticleDefinition* particle;
   G4VCoulombBarrier * theCoulombBarrierPtr;
   
-  G4int theA;
-  G4int theZ;
-  G4int theRestNucleusA;
-  G4int theRestNucleusZ;
-
-  G4double theRestNucleusA13;
-  G4double theBindingEnergy;
-  G4double theMaximalKineticEnergy;
-  G4double theRestNucleusMass;
-  G4double theReducedMass;
-  G4double theMass;
-
   G4LorentzVector theMomentum;
   
 protected:
 
   G4PreCompoundParameters* theParameters;
   G4Pow* g4pow;
+
+  G4int theA;
+  G4int theZ;
+  G4int theResA;
+  G4int theResZ;
+  G4int theFragA;
+  G4int theFragZ;
+
+  G4double theResA13;
+  G4double theBindingEnergy;
+  G4double theMaxKinEnergy;
+  G4double theResMass;
+  G4double theReducedMass;
+  G4double theMass;
 
   G4double theEmissionProbability;
   G4double theCoulombBarrier;

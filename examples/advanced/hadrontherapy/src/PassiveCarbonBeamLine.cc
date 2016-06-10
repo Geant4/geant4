@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// **************************************************************************************
-//
-// HADRONTHERAPY:  a Geant4-based application for proton/ion-therapy studies
-// _________________________________________________________________________
-
+// Hadrontherapy advanced example for Geant4
+// See more at: https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamplesHadrontherapy
 
 #include "G4Box.hh"
 #include "G4Tubs.hh"

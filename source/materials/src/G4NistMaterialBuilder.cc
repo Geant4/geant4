@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc 80654 2014-05-06 08:29:10Z gcosmo $
+// $Id: G4NistMaterialBuilder.cc 93568 2015-10-26 14:52:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -37,11 +37,11 @@
 //
 // Modifications:
 // 31-10-05 Add chemical effect and gas properties (V.Ivanchenko)
-// 27.02.06 V.Ivanchneko add ConstructNewGasMaterial
-// 11.05.06 V.Ivanchneko add warning flag to FindMaterial method
-// 27.06.06 V.Ivanchneko fix graphite description
-// 27.07.07 V.Ivanchneko remove dependence on NistManager
-// 30.10.09 V.Ivanchneko update density of G4_GRAFITE from PDG'2008
+// 27.02.06 V.Ivanchenko add ConstructNewGasMaterial
+// 11.05.06 V.Ivanchenko add warning flag to FindMaterial method
+// 27.06.06 V.Ivanchenko fix graphite description
+// 27.07.07 V.Ivanchenko remove dependence on NistManager
+// 30.10.09 V.Ivanchenko update density of G4_GRAFITE from PDG'2008
 //                       added G4_GRAPHITE_POROUS
 // 03.11.09 A.Lechner changed following material names:
 //                    From G4_NYLON-6/6 to G4_NYLON-6-6
@@ -159,6 +159,16 @@ G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& matname,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4Material* 
+G4NistMaterialBuilder::FindOrBuildSimpleMaterial(G4int Z, G4bool warn)
+{
+  G4Material* mat = 0;
+  if(Z >= 1 && Z <= 98) { mat = FindOrBuildMaterial(names[Z-1], true, warn); }
+  return mat;  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4Material* G4NistMaterialBuilder::BuildMaterial(G4int i)
 {
   if (verbose > 1) {
@@ -166,12 +176,13 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(G4int i)
 	   << G4endl;
   }
   G4Material* mat = 0;
-  if (nMaterials == 0) { return mat; }
+  if(i >= nMaterials) { return mat; }
 
   G4int nc = components[i];
 
-  // Check gas parameters
-  G4double t = STP_Temperature;
+  // Check gas parameters:
+  // defaults may be changed via AddGas() method
+  G4double t = NTP_Temperature;
   G4double p = STP_Pressure;
   if(kStateGas == states[i]) {
     size_t nn = idxGas.size();
@@ -266,7 +277,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
   // add parameters of material into internal vectors
   // density in g/cm3, mean ionisation potential is not defined
   G4bool stp = true;
-  if(state == kStateGas && temp != STP_Temperature && pres != STP_Pressure)
+  if(state == kStateGas && (temp != NTP_Temperature || pres != STP_Pressure))
     { stp = false; }
 
   AddMaterial(name,dens*cm3/g,0,0.,els,state,stp);
@@ -316,7 +327,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
   // add parameters of material into internal vectors
   // density in g/cm3, mean ionisation potential is not defined
   G4bool stp = true;
-  if(state == kStateGas && temp != STP_Temperature && pres != STP_Pressure)
+  if(state == kStateGas && (temp != NTP_Temperature || pres != STP_Pressure))
     { stp = false; }
   AddMaterial(name,dens*cm3/g,0,0.,els,state,stp);
   if(!stp) { AddGas(name,temp,pres); }
@@ -364,7 +375,8 @@ G4Material* G4NistMaterialBuilder::ConstructNewGasMaterial(
     return 0;
   }
 
-  G4double dens = bmat->GetDensity()*pres*STP_Temperature/(temp*STP_Pressure);
+  G4double dens = bmat->GetDensity()*pres*bmat->GetTemperature()
+    /(temp*bmat->GetPressure());
   mat = new G4Material(name,dens,bmat,kStateGas,temp,pres);
 
   if (verbose>1) {
@@ -411,7 +423,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewIdealGasMaterial(
   // add parameters of material into internal vectors
   // density in g/cm3, mean ionisation potential is not defined
   G4bool stp = true;
-  if(temp != STP_Temperature && pres != STP_Pressure)
+  if(temp != NTP_Temperature && pres != STP_Pressure)
     { stp = false; }
 
   G4double massPerMole = 0;
@@ -623,24 +635,17 @@ void G4NistMaterialBuilder::DumpMix(G4int i) const
 void 
 G4NistMaterialBuilder::AddGas(const G4String& nameMat, G4double t, G4double p)
 {
-  G4int idx = nMaterials-1;
-  if(nameMat != names[idx]) {
-    idx = -1;
-    for(G4int i=0; i<nMaterials; ++i) {
-      if(nameMat == names[i]) {
-        idx = i; break;
-      }
+  for(G4int i=0; i<nMaterials; ++i) {
+    if(nameMat == names[i]) {
+      idxGas.push_back(i);
+      gasTemperature.push_back(t);
+      gasPressure.push_back(p);
+      return;
     }
   }
-  if(idx >= 0) {
-    idxGas.push_back(idx);
-    gasTemperature.push_back(t);
-    gasPressure.push_back(p);
-  } else {
-    G4cout << "WARNING: G4NistMaterialBuilder::AddGas problem: there is no "
-	   << nameMat << " in the list of materials;"
-	   << G4endl;
-  }
+  G4cout << "WARNING: G4NistMaterialBuilder::AddGas problem: there is no "
+	 << nameMat << " in the list of materials;"
+	 << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -703,6 +708,7 @@ void G4NistMaterialBuilder::Initialise()
   }
   NistSimpleMaterials();
   NistCompoundMaterials();
+  NistCompoundMaterials2();
   HepAndNuclearMaterials();
   SpaceMaterials();
   BioChemicalMaterials();
@@ -1323,7 +1329,10 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByAtomCount("Li",  2);
   AddElementByAtomCount("B" ,  4);
   AddElementByAtomCount("O" ,  7);
+}
 
+void G4NistMaterialBuilder::NistCompoundMaterials2()
+{
   //Adult Lung congested
   AddMaterial("G4_LUNG_ICRP", 1.04, 0, 75.3, 9);
   AddElementByWeightFraction( 1, 0.105);

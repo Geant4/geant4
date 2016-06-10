@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VCrossSectionDataSet.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4VCrossSectionDataSet.cc 89024 2015-03-18 08:17:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -54,12 +54,13 @@
 G4VCrossSectionDataSet::G4VCrossSectionDataSet(const G4String& nam) :
   verboseLevel(0),minKinEnergy(0.0),maxKinEnergy(100*TeV),name(nam) 
 {
-  G4CrossSectionDataSetRegistry::Instance()->Register(this);
+  registry = G4CrossSectionDataSetRegistry::Instance();
+  registry->Register(this);
 }
 
 G4VCrossSectionDataSet::~G4VCrossSectionDataSet()
 {
-  G4CrossSectionDataSetRegistry::Instance()->DeRegister(this);
+  registry->DeRegister(this);
 }
 
 G4bool 

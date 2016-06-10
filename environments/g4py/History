@@ -11,6 +11,14 @@ Geant4Py is a Geant4-Python bridge.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19 Nov. 2015 K. Murakami
+ - update CMakeLists.txt, change minimum version requirement to 3.3
+ - add exported methods requested by enhansment-id 1613
+
+13 Nov. 2015 K. Murakami
+ - update CMakeLists.txt for C++11 migration
+ - update for 10.2 release, following changes of class interface.
+
 15 Nov. 2014 K. Murakami
  - complete migration to cmake for building library. (GNUmakefiles removed)
  - update for 10.1 release, following changes of class interface.
@@ -97,14 +105,14 @@ May 25 2014 Koichi Murakami
 
 25 June 2008 K. Murakami
  - configure : fix a wrong incdir variable.
- - config/sys/linux.gmk, linuxx8664gcc : 
+ - config/sys/linux.gmk, linuxx8664gcc :
                add -fpermissive compile option for gcc 4.3
 
 12 June 2008 K. Murakami (1.6.1)
  - configure : fix echo -n problem, add --with-extra-dir flag
  - tools/g4autobuild : add treatment of XERCESCROOT
  - tools/g4pack : fix echo -n problem
- 
+
 4 June 2008 K. Murakami
  - add G4AtomicShells
  - update configure script (compatible with Debian/Ubuntsu sh)
@@ -142,7 +150,7 @@ May 25 2014 Koichi Murakami
 
 07 August 2007 K.Murakami (1.4.1)
  - add boolean sold classes
- - add G4PVPlacement constructors for geometry overlap check 
+ - add G4PVPlacement constructors for geometry overlap check
  - add gtest06/07 for geometry test
 
 12 July 2007 K.Murakami (1.4.0)
@@ -194,11 +202,11 @@ May 25 2014 Koichi Murakami
  - modify config tools for building on MacOSX (some side-effects)
  - add tools dir for support tools for building user environment
  - add intercoms dir (move pyG4UImanager.cc from interfacr to intercoms)
- - new exposed staffs; 
+ - new exposed staffs;
    G4UImanager, G4UIcommandTree, G4UIcommand, G4UIparameter
  - __init__.py is updeted
    (gUImanager as global, and some modifications)
-   
+
 12 July 2006 K.Murakami (1.0.1)
  - add exposures of G4LossTableManager, G4ProductionCutsTable
  - add site-modules/utls/MCScore
@@ -242,4 +250,3 @@ May 25 2014 Koichi Murakami
 
 27 February 2006 K.Murakami
  - commit the first version (local tag: g4py-27-feb-06)
-

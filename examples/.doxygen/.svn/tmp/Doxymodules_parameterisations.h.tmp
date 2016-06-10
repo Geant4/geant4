@@ -15,22 +15,41 @@
  *  @{
  */
 
+class Par01ActionInitialization {};
 class Par01CalorimeterHit {};
 class Par01CalorimeterSD {};
 class Par01DetectorConstruction {};
 class Par01EMShowerModel {};
 class Par01EnergySpot {};
-class Par01EventAction {};
-class Par01EventActionMessenger {};
 class Par01ParallelWorldForPion {};
 class Par01PhysicsList {};
 class Par01PiModel {};
 class Par01PionShowerModel {};
 class Par01PrimaryGeneratorAction {};
-class Par01RunAction {};
-class Par01SteppingAction {};
-class Par01SteppingActionMessenger {};
 
+
+/** @} */
+
+/** @defgroup extended_parameterisations_Par02 Par02
+ *  parameterisations example Par02
+ *  @{
+ */
+
+class Par02ActionInitialization {};
+class Par02DetectorConstruction {};
+class Par02DetectorParametrisation {};
+class Par02EventAction {};
+class Par02EventInformation {};
+class Par02FastSimModelEMCal {};
+class Par02FastSimModelHCal {};
+class Par02FastSimModelTracker {};
+class Par02Output {};
+class Par02PhysicsList {};
+class Par02PrimaryGeneratorAction {};
+class Par02PrimaryParticleInformation {};
+class Par02RunAction {};
+class Par02Smearer {};
+class Par02TrackingAction {};
 
 /** @} */
 

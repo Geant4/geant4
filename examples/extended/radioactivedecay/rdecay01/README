@@ -1,4 +1,4 @@
-$Id: README 78307 2013-12-11 10:55:57Z gcosmo $
+$Id: README 87827 2015-01-14 17:17:27Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -100,7 +100,8 @@ $Id: README 78307 2013-12-11 10:55:57Z gcosmo $
       5 : energy spectrum: ions
       6 : total kinetic energy (Q)
       7 : momentum balance
-      8 : total time of life of decay chain          
+      8 : total time of life of decay chain
+      9 : total visible energy
                             
    The histograms are managed by G4AnalysisManager and its Messenger. 
    The histos can be individually activated with the command :

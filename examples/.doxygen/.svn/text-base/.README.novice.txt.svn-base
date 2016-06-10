@@ -1,0 +1,26 @@
+// $Id: .README 66536 2012-12-19 14:32:36Z ihrivnac $
+
+///\file ".README.novice.txt"
+///\brief Geant4 Old Novice Examples README page
+
+/*! \page README_novice Old Novice Examples
+
+The old "novice" set of examples is now replaced with a new "basic" set, 
+covering the most typical use-cases of a Geant4 application with keeping 
+simplicity and ease of use.
+
+The source code of the last version of the novice examples set 
+(in 9.6.p02 release) can be viewed in
+<a href="http://www-geant4.kek.jp/lxr/source/examples/novice/?v=9.6.p2">
+the Geant4 LXR code browser </a>
+
+The new location of each example in 10.0 release:
+- N01 - removed
+- N02 - \link ExampleB2 basic/B2 \endlink
+- N03 - \link ExampleB4 basic/B4 \endlink
+- N04 - \link ExampleRE05 extended/runAndEvent/RE05 \endlink
+- N05 - \link ExamplePar01 extended/parameterisations/Par01 \endlink
+- N06 - \link ExampleOpNovice extended/optical/OpNovice \endlink
+- N07 - \link ExampleRE06 extended/runAndEvent/RE06 \endlink
+
+*/

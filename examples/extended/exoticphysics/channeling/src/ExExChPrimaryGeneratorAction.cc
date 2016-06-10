@@ -48,7 +48,7 @@ ExExChPrimaryGeneratorAction::ExExChPrimaryGeneratorAction()
         fParticleGun->GetCurrentSource()->GetPosDist();
     vPosDist->SetPosDisType("Beam");
     vPosDist->SetPosDisShape("Circle");
-    vPosDist->SetCentreCoords(G4ThreeVector(0.,0.,-1.05 * CLHEP::meter));
+    vPosDist->SetCentreCoords(G4ThreeVector(0.,0.,(- 10.5) * CLHEP::meter));
     vPosDist->SetBeamSigmaInR(0.0 * CLHEP::mm);
     
     // Angular distribution

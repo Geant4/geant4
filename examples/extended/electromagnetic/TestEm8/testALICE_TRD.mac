@@ -1,0 +1,92 @@
+#
+# Macro file for the initialization phase of "TestEm8.cc"
+#
+# It creates the default geometry (simple absorber cylinder )        
+#
+/control/verbose 2
+/control/cout/ignoreThreadsExcept 0
+/run/verbose 1
+/tracking/verbose 0
+#
+/testem/setGasThick 3.7 cm
+/testem/setGasRad   28. cm
+/testem/setGasMat   Xe15CO2
+/testem/setWindowMat  G4_KAPTON
+/testem/setWindowThick 25 um
+#/testem/setWindowMat  G4_Fe
+#/testem/setWindowThick 1 mm
+/testem/setPairEnergy 28 eV
+#
+#  select EM PhysicsList
+#
+/testem/phys/addPhysics  emstandard_opt0
+#/testem/phys/addPhysics  emstandard_opt3
+#/testem/phys/addPhysics  emstandardSS
+#
+/process/em/AddPAIRegion all GasDetector pai
+#
+# normalisation of energy is done for PAI model at 3 GeV/c
+/testem/phys/setNbinsE  100
+/testem/phys/setMaxE    0.2591 MeV  
+/testem/phys/setEnergyPerChannel 1.0777 keV
+/testem/phys/setNbinsCl 100
+/testem/phys/setMaxCl   2500  
+/testem/phys/setNormFactor 0.4106
+#/testem/phys/setEnergySmear 0.0737
+#
+/run/initialize
+#
+/run/setCut  1 mm
+/run/setCutForRegion GasDetector 1 mm
+/process/em/verbose 1
+#
+#/run/particle/dumpCutValues
+#
+/testem/stepmax   2. mm
+#/testem/stepmax   1. mm
+#
+/gun/direction 0. 0.258819 0.965926
+#
+/run/printProgress 10000
+#
+/analysis/setActivation true
+#
+#  e- 999.49, 1499.49, 1999.49, 2999.49, 3999.49, 4999.49, 5999.49
+# pi- 870.12, 1366.91, 1865.29, 2863.67, 3862.86, 4862.38, 5862.05
+# MIP pi- 418.8 MeV
+#
+#/analysis/setFileName alice_trd_pai_e-6gev
+#/gun/particle e-
+#/gun/energy 5999.49 MeV
+#/run/beamOn 100000
+#
+#/analysis/setFileName alice_trd_pai_e-3gev
+#/gun/particle e-
+#/gun/energy 2999.49 MeV
+#/run/beamOn 100000
+#
+#/analysis/setFileName alice_trd_pai_e-1gev
+#/gun/particle e-
+#/gun/energy 999.49 MeV
+#/run/beamOn 100000
+#
+/analysis/setFileName alice_trd_pai_pi-6gev
+/gun/particle pi-
+/gun/energy 5862.05 MeV
+/run/beamOn 100000
+#
+#/analysis/setFileName alice_trd_pai_pi-3gev
+#/gun/particle pi-
+#/gun/energy 2863.67 MeV
+#/run/beamOn 100000
+#
+#/analysis/setFileName alice_trd_pai_pi-1gev
+#/gun/particle pi-
+#/gun/energy 870.12 MeV
+#/run/beamOn 100000
+#
+#/analysis/setFileName alice_trd_pai_pi-MIP
+#/gun/particle pi-
+#/gun/energy 418.8 MeV
+#/run/beamOn 100000
+#

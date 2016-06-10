@@ -10,7 +10,7 @@
 /run/beamOn 1
 #
 /tracking/verbose 0
-/rdecay01/event/printModulo 10000
+/run/printProgress 10000
 #  
 /run/beamOn 100000
 #

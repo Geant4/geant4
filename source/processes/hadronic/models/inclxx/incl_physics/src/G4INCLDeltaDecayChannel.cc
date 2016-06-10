@@ -63,11 +63,13 @@ namespace G4INCL {
 
   void DeltaDecayChannel::sampleAngles(G4double *ctet_par, G4double *stet_par, G4double *phi_par) {
     const G4double hel = theParticle->getHelicity();
+    unsigned long loopCounter = 0;
+    const unsigned long maxLoopCounter = 10000000;
     do {
       (*ctet_par) = -1.0 + 2.0*Random::shoot();
       if(std::abs(*ctet_par) > 1.0) (*ctet_par) = Math::sign(*ctet_par);
-    } while(Random::shoot() > ((1.0 + 3.0 * hel * (*ctet_par) * (*ctet_par))
-		    /(1.0 + 3.0 * hel)));
+      ++loopCounter;
+    } while(loopCounter<maxLoopCounter && Random::shoot() > ((1.0 + 3.0 * hel * (*ctet_par) * (*ctet_par)) /(1.0 + 3.0 * hel))); /* Loop checking, 10.07.2015, D.Mancusi */
     (*stet_par) = std::sqrt(1.-(*ctet_par)*(*ctet_par));
     (*phi_par) = Math::twoPi * Random::shoot();
   }

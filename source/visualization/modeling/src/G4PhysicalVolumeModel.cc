@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc 81056 2014-05-20 09:02:16Z gcosmo $
+// $Id: G4PhysicalVolumeModel.cc 88763 2015-03-09 12:26:23Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -297,8 +297,8 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
       }
       G4bool visualisable = true;
       for (int n = 0; n < nReplicas; n++) {
-	G4ThreeVector translation;  // Null.
-	G4RotationMatrix rotation;  // Null - life long enough for visualizing.
+	G4ThreeVector translation;  // Identity.
+	G4RotationMatrix rotation;  // Identity - life enough for visualizing.
 	G4RotationMatrix* pRotation = 0;
 	switch (axis) {
 	default:
@@ -796,8 +796,10 @@ const std::map<G4String,G4AttDef>* G4PhysicalVolumeModel::GetAttDefs() const
 	G4AttDef("EType","Entity Type","Physics","","G4String");
       (*store)["DmpSol"] =
 	G4AttDef("DmpSol","Dump of Solid properties","Physics","","G4String");
-      (*store)["Trans"] =
-	G4AttDef("Trans","Transformation of volume","Physics","","G4String");
+      (*store)["LocalTrans"] =
+    G4AttDef("LocalTrans","Local transformation of volume","Physics","","G4String");
+      (*store)["GlobalTrans"] =
+    G4AttDef("GlobalTrans","Global transformation of volume","Physics","","G4String");
       (*store)["Material"] =
 	G4AttDef("Material","Material Name","Physics","","G4String");
       (*store)["Density"] =
@@ -881,8 +883,12 @@ std::vector<G4AttValue>* G4PhysicalVolumeModel::CreateCurrentAttValues() const
   values->push_back(G4AttValue("EType", pSol->GetEntityType(),""));
   oss.str(""); oss << '\n' << *pSol;
   values->push_back(G4AttValue("DmpSol", oss.str(),""));
+  const G4RotationMatrix localRotation = fpCurrentPV->GetObjectRotationValue();
+  const G4ThreeVector& localTranslation = fpCurrentPV->GetTranslation();
+  oss.str(""); oss << '\n' << G4Transform3D(localRotation,localTranslation);
+  values->push_back(G4AttValue("LocalTrans", oss.str(),""));
   oss.str(""); oss << '\n' << *fpCurrentTransform;
-  values->push_back(G4AttValue("Trans", oss.str(),""));
+  values->push_back(G4AttValue("GlobalTrans", oss.str(),""));
   G4String matName = fpCurrentMaterial? fpCurrentMaterial->GetName(): G4String("No material");
   values->push_back(G4AttValue("Material", matName,""));
   G4double matDensity = fpCurrentMaterial? fpCurrentMaterial->GetDensity(): 0.;

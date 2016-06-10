@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc 85355 2014-10-28 09:58:59Z gcosmo $
+// $Id: G4Cerenkov.cc 92046 2015-08-14 07:22:07Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Cerenkov Radiation Class Implementation
@@ -202,11 +202,11 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         if (!Rindex) return pParticleChange;
 
         // particle charge
-        const G4double charge = aParticle->GetDefinition()->GetPDGCharge();
+        G4double charge = aParticle->GetDefinition()->GetPDGCharge();
 
         // particle beta
-        const G4double beta = (pPreStepPoint ->GetBeta() +
-                               pPostStepPoint->GetBeta())/2.;
+        G4double beta = (pPreStepPoint ->GetBeta() +
+			 pPostStepPoint->GetBeta())*0.5;
 
 	G4double MeanNumberOfPhotons = 
                  GetAverageNumberOfPhotons(charge,beta,aMaterial,Rindex);
@@ -259,14 +259,14 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	G4double maxCos = BetaInverse / nMax; 
 	G4double maxSin2 = (1.0 - maxCos) * (1.0 + maxCos);
 
-        const G4double beta1 = pPreStepPoint ->GetBeta();
-        const G4double beta2 = pPostStepPoint->GetBeta();
+        G4double beta1 = pPreStepPoint ->GetBeta();
+        G4double beta2 = pPostStepPoint->GetBeta();
 
         G4double MeanNumberOfPhotons1 =
                      GetAverageNumberOfPhotons(charge,beta1,aMaterial,Rindex);
         G4double MeanNumberOfPhotons2 =
                      GetAverageNumberOfPhotons(charge,beta2,aMaterial,Rindex);
-
+	
 	for (G4int i = 0; i < NumPhotons; i++) {
 
 		// Determine photon energy
@@ -286,6 +286,7 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 			sin2Theta = (1.0 - cosTheta)*(1.0 + cosTheta);
 			rand = G4UniformRand();	
 
+		  // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
 		} while (rand*maxSin2 > sin2Theta);
 
 		// Generate random position of photon on cone surface 
@@ -344,21 +345,22 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
                 // Generate new G4Track object:
 
-                G4double delta, NumberOfPhotons, N;
+                G4double NumberOfPhotons, N;
 
                 do {
                    rand = G4UniformRand();
-                   delta = rand * aStep.GetStepLength();
-                   NumberOfPhotons = MeanNumberOfPhotons1 - delta *
-                                (MeanNumberOfPhotons1-MeanNumberOfPhotons2)/
-                                              aStep.GetStepLength();
+                   NumberOfPhotons = MeanNumberOfPhotons1 - rand *
+                                (MeanNumberOfPhotons1-MeanNumberOfPhotons2);
                    N = G4UniformRand() *
                        std::max(MeanNumberOfPhotons1,MeanNumberOfPhotons2);
+		  // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
                 } while (N > NumberOfPhotons);
 
-		G4double deltaTime = delta /
-                       ((pPreStepPoint->GetVelocity()+
-                         pPostStepPoint->GetVelocity())/2.);
+                G4double delta = rand * aStep.GetStepLength();
+
+                G4double deltaTime = delta / (pPreStepPoint->GetVelocity()+
+                                      rand*(pPostStepPoint->GetVelocity()-
+                                            pPreStepPoint->GetVelocity())*0.5);
 
                 G4double aSecondaryTime = t0 + deltaTime;
 

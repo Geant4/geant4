@@ -34,13 +34,12 @@ G4He3PHPBuilder()
 {
   theMin = 0;
   theMax=200.*MeV;
+  theParticlePHPModel = 0;
 }
 
 G4He3PHPBuilder::
 ~G4He3PHPBuilder() 
-{
-  delete theParticlePHPModel;
-}
+{}
 
 void G4He3PHPBuilder::
 Build(G4HadronElasticProcess *)

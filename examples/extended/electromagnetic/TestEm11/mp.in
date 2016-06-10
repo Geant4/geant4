@@ -1,0 +1,30 @@
+# $Id: TestEm11.in 85061 2014-10-23 16:30:57Z maire $
+#
+# limit the step size from histo 1
+#
+/control/verbose 2
+/control/cout/ignoreThreadsExcept 0
+/run/numberOfThreads 2
+/run/verbose 2
+#
+/testem/det/setNbOfAbsor  1
+/testem/det/setAbsor 1 G4_Si  1 mm
+/testem/det/setSizeYZ 1 mm
+#
+/testem/phys/addPhysics  emstandardMP	# em physics
+#
+/run/initialize
+#
+/gun/particle e-
+/gun/energy 500 keV
+#
+###/analysis/setFileName testem11mp
+###/analysis/h1/set 1 100 0.    1. mm	#edep profile
+###/analysis/h1/set 2 102 0.  510. keV	#total Edep
+###/analysis/h1/set 3 100 0.    2. mm	#track length
+###/analysis/h1/set 4 100 0.  200. um	#step length
+###/analysis/h1/set 5 100 0.    1. mm	#proj range
+#
+/run/printProgress 10000
+#
+/run/beamOn 20000

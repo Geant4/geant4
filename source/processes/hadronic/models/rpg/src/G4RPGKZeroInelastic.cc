@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGKZeroInelastic.cc 79697 2014-03-12 13:10:09Z gcosmo $
+// $Id: G4RPGKZeroInelastic.cc 94214 2015-11-09 08:18:05Z gcosmo $
 //
  
 #include "G4RPGKZeroInelastic.hh"
+#include "G4Exp.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
@@ -228,9 +229,9 @@ void G4RPGKZeroInelastic::Cascade(
       nneg = np = nz = 0;
       if( targetParticle.GetDefinition() == aNeutron )
       {
-        test = std::exp( std::min( expxu, std::max( expxl, -(1.0+b[0])*(1.0+b[0])/(2.0*c*c) ) ) );
+        test = G4Exp( std::min( expxu, std::max( expxl, -(1.0+b[0])*(1.0+b[0])/(2.0*c*c) ) ) );
         w0 = test/2.0;
-        test = std::exp( std::min( expxu, std::max( expxl, -(-1.0+b[0])*(1.0+b[0])/(2.0*c*c) ) ) );
+        test = G4Exp( std::min( expxu, std::max( expxl, -(-1.0+b[0])*(1.0+b[0])/(2.0*c*c) ) ) );
         wm = test*1.5;
         if( G4UniformRand() < w0/(w0+wm) )
           nz = 1;
@@ -239,10 +240,10 @@ void G4RPGKZeroInelastic::Cascade(
       }
       else  // target is a proton
       {
-        test = std::exp( std::min( expxu, std::max( expxl, -(1.0+b[1])*(1.0+b[1])/(2.0*c*c) ) ) );
+        test = G4Exp( std::min( expxu, std::max( expxl, -(1.0+b[1])*(1.0+b[1])/(2.0*c*c) ) ) );
         w0 = test;
         wp = test;
-        test = std::exp( std::min( expxu, std::max( expxl, -(-1.0+b[1])*(-1.0+b[1])/(2.0*c*c) ) ) );
+        test = G4Exp( std::min( expxu, std::max( expxl, -(-1.0+b[1])*(-1.0+b[1])/(2.0*c*c) ) ) );
         wm = test;
         wt = w0+wp+wm;
         wp += w0;
@@ -275,7 +276,7 @@ void G4RPGKZeroInelastic::Cascade(
                 nt = np+nneg+nz;
                 if( nt>0 && nt<=numSec )
                 {
-                  test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                  test = G4Exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                   dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
                   if( std::fabs(dum) < 1.0 )
                   {
@@ -309,7 +310,7 @@ void G4RPGKZeroInelastic::Cascade(
                 nt = np+nneg+nz;
                 if( nt>0 && nt<=numSec )
                 {
-                  test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                  test = G4Exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                   dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
                   if( std::fabs(dum) < 1.0 )
                   {

@@ -66,6 +66,7 @@
 # -------------------
 #  gdml              (GDML support)
 #  g3tog4            (Geant3 geometry call list reader library)
+#  freetype          (G4analysis library has freetype support)
 #
 #  ui_tcsh           (TCsh Style Application Command Line Interface)
 #  ui_win32          (WIN32 Style Application Command Line Interface)
@@ -92,11 +93,10 @@
 # components being available.
 #
 # You can also query whether the Geant4 found uses the builtin versions
-# of CLHEP, ZLIB, Expat and USolids after calling find_package via the variables
+# of CLHEP, ZLIB, or Expat after calling find_package via the variables
 #
 #  Geant4_builtin_clhep_FOUND   (TRUE if Geant4 built with internal CLHEP)
 #  Geant4_builtin_expat_FOUND   (TRUE if Geant4 built with internal Expat)
-#  Geant4_builtin_usolids_FOUND (TRUE if Geant4 built with internal USolids)
 #  Geant4_builtin_zlib_FOUND    (TRUE if Geant4 built with internal Zlib)
 #
 # These are not used via components as they do not, in general, affect
@@ -108,6 +108,12 @@
 # Geant4_LIBRARIES variables will be populated to use the builtin or
 # system APIs as required, and you should use these to ensure you compile
 # and link against the same API version.
+#
+# An additional variable is set for CLHEP when Geant4 was built using a
+# system install to indicate whether the single/granular CLHEP library/ies
+# was/were linked against
+#
+#  Geant4_system_clhep_ISGRANULAR (TRUE is Geant4 linked to granular CLHEP)
 #
 # Environment variables for, and directory paths to, physics datasets
 # used by some Geant4 physics processes may be determined from the
@@ -160,7 +166,7 @@ get_filename_component(_thisdir "${CMAKE_CURRENT_LIST_FILE}" PATH)
 @GEANT4_COMPILER_FLAG_HINTS@
 
 # - Provide variable indicating C++ Standard we were compiled against
-set(Geant4_CXXSTD "@GEANT4_BUILD_CXXSTD@")
+set(Geant4_CXXSTD "c++@GEANT4_BUILD_CXXSTD@")
 
 #-----------------------------------------------------------------------
 # Set the base compile definitions required to use Geant4 if the variable
@@ -224,11 +230,14 @@ set(Geant4_INCLUDE_DIRS
 @GEANT4_THIRD_PARTY_IMPORT_SETUP@
 
 #-----------------------------------------------------------------------
-# Include the file listing all the imported targets.
+# Include the files listing all the imported targets and configuring
+# Intel Compile Features
 # (Not needed if used in the same Geant4 project, or if we have run before)
 # This is always installed in the same location as us...
 #
 if(NOT CMAKE_PROJECT_NAME STREQUAL Geant4)
+  include("${_thisdir}/Modules/IntelCompileFeatures.cmake")
+
   if(NOT Geant4_LIBDEPS_LOADED)
     include("${_thisdir}/Geant4LibraryDepends.cmake")
     set(Geant4_LIBDEPS_LOADED 1)
@@ -262,15 +271,12 @@ unset(Geant4_DATASET_DESCRIPTIONS)
 #
 # Builtin/External packages
 set(Geant4_builtin_clhep_FOUND @GEANT4_USE_BUILTIN_CLHEP@)
+if(NOT Geant4_builtin_clhep_FOUND)
+  set(Geant4_system_clhep_ISGRANULAR @GEANT4_USE_SYSTEM_CLHEP_GRANULAR@)
+endif()
+
 set(Geant4_builtin_expat_FOUND @GEANT4_USE_BUILTIN_EXPAT@)
 set(Geant4_builtin_zlib_FOUND @GEANT4_USE_BUILTIN_ZLIB@)
-set(Geant4_builtin_usolids_FOUND @GEANT4_USE_BUILTIN_USOLIDS@)
-
-# - Usolids replacement
-set(Geant4_usolids_FOUND @GEANT4_USE_USOLIDS@)
-if(Geant4_usolids_FOUND)
-  list(REMOVE_ITEM Geant4_FIND_COMPONENTS usolids)
-endif()
 
 # - Multithreading
 set(Geant4_multithreaded_FOUND @GEANT4_BUILD_MULTITHREADED@)
@@ -295,6 +301,18 @@ if(Geant4_g3tog4_FOUND)
     set(_geant4_use_g3tog4_library ON)
   endif()
   list(REMOVE_ITEM Geant4_FIND_COMPONENTS g3tog4)
+endif()
+
+# - Usolids
+set(Geant4_usolids_FOUND @GEANT4_USE_USOLIDS@)
+if(Geant4_usolids_FOUND)
+  list(REMOVE_ITEM Geant4_FIND_COMPONENTS usolids)
+endif()
+
+# - Freetype
+set(Geant4_freetype_FOUND @GEANT4_USE_FREETYPE@)
+if(Geant4_freetype_FOUND)
+  list(REMOVE_ITEM Geant4_FIND_COMPONENTS freetype)
 endif()
 
 # - UI : TCSH
@@ -357,18 +375,20 @@ endif()
 set(Geant4_qt_FOUND @GEANT4_USE_QT@)
 set(Geant4_USES_QT5 @Qt5Core_FOUND@)
 if(Geant4_qt_FOUND)
-  if(Geant4_FIND_REQUIRED_qt OR Geant4_FIND_REQUIRED_ui_all OR
-      Geant4_FIND_REQUIRED_vis_all)
+  # Must always refind Qt5 to recreate imported targets. Because these
+  # are in the public interface, always need linking.
+  if(Geant4_USES_QT5)
+    find_package(Qt5Core REQUIRED PATHS "@Qt5Core_DIR@")
+    find_package(Qt5Gui REQUIRED PATHS "@Qt5Gui_DIR@")
+    find_package(Qt5Widgets REQUIRED PATHS "@Qt5Widgets_DIR@")
+    find_package(Qt5OpenGL REQUIRED PATHS "@Qt5OpenGL_DIR@")
+    find_package(Qt5PrintSupport REQUIRED PATHS "@Qt5PrintSupport_DIR@")
+  endif()
+
+  if(Geant4_FIND_REQUIRED_qt OR Geant4_FIND_REQUIRED_ui_all OR Geant4_FIND_REQUIRED_vis_all)
     # If we have Qt5, we need to refind the components because they use
     # imported targets, so linking will not work unless we recreate
     # them
-    if(Geant4_USES_QT5)
-      find_package(Qt5Core REQUIRED PATHS "@Qt5Core_DIR@")
-      find_package(Qt5Gui REQUIRED PATHS "@Qt5Gui_DIR@")
-      find_package(Qt5Widgets REQUIRED PATHS "@Qt5Widgets_DIR@")
-      find_package(Qt5OpenGL REQUIRED PATHS "@Qt5OpenGL_DIR@")
-      find_package(Qt5PrintSupport REQUIRED PATHS "@Qt5PrintSupport_DIR@")
-    endif()
 
     list(APPEND
       Geant4_DEFINITIONS

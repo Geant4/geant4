@@ -44,6 +44,9 @@
 #define G4UEXTRUDEDSOLID_hh
 
 #include "G4USolid.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+
 #include "UExtrudedSolid.hh"
 #include "G4TwoVector.hh"
 
@@ -148,4 +151,6 @@ inline std::vector<G4UExtrudedSolid::ZSection> G4UExtrudedSolid::GetZSections() 
   return vec;
 }
   
+#endif  // G4GEOM_USE_USOLIDS
+
 #endif

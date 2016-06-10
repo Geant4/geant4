@@ -1,0 +1,445 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_back_area
+#define tools_sg_back_area
+
+#include "node"
+#include "../colorf"
+#include "atb_vertices"
+#include "rgba"
+#include "draw_style"
+#include "../mathf"
+
+#include "separator"
+#include "normal"
+
+namespace tools {
+namespace sg {
+
+class back_area : public node {
+  TOOLS_NODE(back_area,tools::sg::back_area,node)
+public:
+  static unsigned int corner_top_right()    {return 1<<0;}
+  static unsigned int corner_top_left()     {return 1<<1;}
+  static unsigned int corner_bottom_right() {return 1<<2;}
+  static unsigned int corner_bottom_left()  {return 1<<3;}
+  static unsigned int corner_all()          {
+    return corner_top_right()|corner_top_left()|corner_bottom_right()|corner_bottom_left();
+  }
+public:
+  sf<float> width;
+  sf<float> height;
+
+  sf_vec<colorf,float> color;
+
+  sf<bool> gradient;
+  sf_vec<colorf,float> color_top;
+
+  sf<bool> border_visible;  
+  sf_vec<colorf,float> border_color;
+  sf<float> border_line_width;
+
+  sf<float> shadow; //in percent of width.
+
+  sf<float> corner_radius; //percent of height.
+  sf<unsigned int> corner_steps;
+  sf<unsigned int> corner_mask;
+public:
+  virtual const std::vector<field_desc>& node_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::back_area)
+    static std::vector<field_desc> s_v;
+    if(s_v.empty()) {
+      s_v = parent::node_fields();
+      TOOLS_ADD_FIELD_DESC(width)
+      TOOLS_ADD_FIELD_DESC(height)
+      TOOLS_ADD_FIELD_DESC(color)
+      TOOLS_ADD_FIELD_DESC(gradient)
+      TOOLS_ADD_FIELD_DESC(color_top)
+      TOOLS_ADD_FIELD_DESC(border_visible)
+      TOOLS_ADD_FIELD_DESC(border_color)
+      TOOLS_ADD_FIELD_DESC(border_line_width)
+      TOOLS_ADD_FIELD_DESC(shadow)
+      TOOLS_ADD_FIELD_DESC(corner_radius)
+      TOOLS_ADD_FIELD_DESC(corner_steps)
+      TOOLS_ADD_FIELD_DESC(corner_mask)
+    }
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&width);
+    add_field(&height);
+
+    add_field(&color);
+    add_field(&gradient);
+    add_field(&color_top);
+    add_field(&border_visible);
+    add_field(&border_color);
+    add_field(&border_line_width);
+
+    add_field(&shadow);
+
+    add_field(&corner_radius);
+    add_field(&corner_steps);
+    add_field(&corner_mask);
+  }
+public:
+  virtual void render(render_action& a_action) {
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+    m_back_sep.render(a_action);
+  }
+  virtual void search(search_action& a_action) {
+    node::search(a_action);
+    if(a_action.done()) return;
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+    m_back_sep.search(a_action);
+    if(a_action.done()) return;
+  }
+  virtual void pick(pick_action& a_action) {
+    if(touched()) {
+      update_sg();
+      reset_touched();
+    }
+    m_back_sep.pick(a_action);
+  }
+public:
+  back_area()
+  :parent()
+  ,width(1)
+  ,height(1)
+  ,color(colorf::white())
+  ,gradient(false)
+  ,color_top(colorf::white())
+  ,border_visible(true)
+  ,border_color(colorf::black())
+  ,border_line_width(1)
+  ,shadow(0)
+  ,corner_radius(0) //in percent of the height.
+  ,corner_steps(12)
+  ,corner_mask(corner_all())
+  {
+    add_fields();
+  }
+  virtual ~back_area(){}
+public:
+  back_area(const back_area& a_from)
+  :parent(a_from)
+  ,width(a_from.width)
+  ,height(a_from.height)
+  ,color(a_from.color)
+  ,gradient(a_from.gradient)
+  ,color_top(a_from.color_top)
+  ,border_visible(a_from.border_visible)
+  ,border_color(a_from.border_color)
+  ,border_line_width(a_from.border_line_width)
+  ,shadow(a_from.shadow)
+  ,corner_radius(a_from.corner_radius)
+  ,corner_steps(a_from.corner_steps)
+  ,corner_mask(a_from.corner_mask)
+  {
+    add_fields();
+  }
+  back_area& operator=(const back_area& a_from){
+    parent::operator=(a_from);
+    width = a_from.width;
+    height = a_from.height;
+    color = a_from.color;
+    gradient = a_from.gradient;
+    color_top = a_from.color_top;
+    border_visible = a_from.border_visible;
+    border_color = a_from.border_color;
+    border_line_width = a_from.border_line_width;
+    shadow = a_from.shadow;
+    corner_radius = a_from.corner_radius;
+    corner_steps = a_from.corner_steps;
+    corner_mask = a_from.corner_mask;
+    return *this;
+  }
+protected:
+  void update_sg() {
+    m_back_sep.clear();
+
+    if(width.value()<=0) return;
+    if(height.value()<=0) return;
+
+    float xb = -width*0.5f;
+    float xe =  width*0.5f;
+    float yb = -height*0.5f;
+
+    float zshadow = -0.05f;
+    float zback = 0;
+    float zborder = 0.01f;
+
+    if(shadow.value()) {
+      float zz = zshadow;
+      float ye = height*0.5f;
+
+      sg::rgba* mat = new sg::rgba();
+      mat->color = colorf::black();
+      m_back_sep.add(mat);
+
+      normal* nm = new normal;
+      //nm->vec.value(); //default is z. ok.
+      m_back_sep.add(nm);
+
+      vertices* vtxs = new vertices;
+      vtxs->mode = gl::triangle_fan();
+      m_back_sep.add(vtxs);
+
+      float dx = width*shadow;
+      float dy = -dx;
+      vtxs->add(xb+dx,yb+dy,zz);
+      vtxs->add(xe+dx,yb+dy,zz);
+      vtxs->add(xe+dx,ye+dy,zz);
+      vtxs->add(xb+dx,ye+dy,zz);
+    }
+    
+   {//background :
+    normal* nm = new normal;
+    //nm->vec.value(); //default is z. ok.
+    m_back_sep.add(nm);
+
+    if(gradient.value()) {
+//    if(true) {
+      //color gradient from (bottom,color) to (top,color_top)
+
+      atb_vertices* vtxs = new atb_vertices;
+      vtxs->mode = gl::triangle_strip();
+      m_back_sep.add(vtxs);
+
+      float zz = zback;
+
+      unsigned int ncol = 50;
+      float dy = height/ncol;
+      float ye = yb+dy;
+
+      colorf col_beg = color.value();
+      colorf col_end = color_top.value();
+
+      float dr = (col_end.r()-col_beg.r())/ncol;
+      float dg = (col_end.g()-col_beg.g())/ncol;
+      float db = (col_end.b()-col_beg.b())/ncol;
+      float da = (col_end.a()-col_beg.a())/ncol;
+      vec4f dcol(dr,dg,db,da);
+
+      colorf col = col_beg;
+
+      vtxs->add(xb,yb,zz);
+      vtxs->add_color(col);
+
+      vtxs->add(xe,yb,zz);
+      vtxs->add_color(col);
+
+      for(unsigned int index=0;index<ncol;index++) {
+        vtxs->add(xb,ye,zz);
+        vtxs->add(xe,ye,zz);
+
+        vtxs->add_color(col);
+        vtxs->add_color(col);
+
+        ye  += dy;
+        col += dcol;
+      }
+
+    } else {
+
+      float zz = zback;
+      float ye =  height*0.5f;
+
+      sg::rgba* mat = new sg::rgba();
+      mat->color = color;
+      m_back_sep.add(mat);
+
+      vertices* vtxs = new vertices;
+      vtxs->mode = gl::triangle_fan();
+      m_back_sep.add(vtxs);
+
+      float r = height*corner_radius;
+      if((r>(0.5f*height.value()))||(r>(0.5f*width.value()))) r = 0;
+
+      if((r>0) && corner_steps.value()) {
+        float dangle = fhalf_pi()/float(corner_steps);
+        unsigned int nslice = corner_steps;
+
+        vtxs->add(0,0,zz);
+        vtxs->add(xe,yb+r,zz);
+        vtxs->add(xe,ye-r,zz);
+
+        // top-right :
+        float angle = dangle;
+        if(corner_mask.value() & corner_top_right()) {
+          float xc = xe-r;
+          float yc = ye-r;
+          for(unsigned int i=0;i<nslice;i++,angle+=dangle) {
+            vtxs->add(r*fcos(angle)+xc,r*fsin(angle)+yc,zz);
+          }
+        } else {
+          angle += fhalf_pi();
+          vtxs->add(xe,ye,zz);
+          vtxs->add(xe-r,ye,zz);
+        }
+
+        vtxs->add(xb+r,ye,zz);
+
+        // top-left :
+        if(corner_mask.value() & corner_top_left()) {
+          float xc = xb+r;
+          float yc = ye-r;
+          for(unsigned int i=0;i<nslice;i++,angle+=dangle) {
+            vtxs->add(r*fcos(angle)+xc,r*fsin(angle)+yc,zz);
+          }
+        } else {
+          angle += fhalf_pi();
+          vtxs->add(xb,ye,zz);
+          vtxs->add(xb,ye-r,zz);
+        }
+
+        vtxs->add(xb,yb+r,zz);
+
+        // bottom-left :
+        if(corner_mask.value() & corner_bottom_left()) {
+          float xc = xb+r;
+          float yc = yb+r;
+          for(unsigned int i=0;i<nslice;i++,angle+=dangle) {
+            vtxs->add(r*fcos(angle)+xc,r*fsin(angle)+yc,zz);
+          }
+        } else {
+          angle += fhalf_pi();
+          vtxs->add(xb,yb,zz);
+          vtxs->add(xb+r,yb,zz);
+        }
+
+        vtxs->add(xe-r,yb,zz);
+
+        // bottom-right :
+        if(corner_mask.value() & corner_bottom_right()) {
+          float xc = xe-r;
+          float yc = yb+r;
+          for(unsigned int i=0;i<nslice;i++,angle+=dangle) {
+            vtxs->add(r*fcos(angle)+xc,r*fsin(angle)+yc,zz);
+          }
+        } else {
+          angle += fhalf_pi();
+          vtxs->add(xe,yb,zz);
+          vtxs->add(xe,yb+r,zz);
+        }
+
+      } else {
+        vtxs->add(xb,yb,zz);
+        vtxs->add(xe,yb,zz);
+        vtxs->add(xe,ye,zz);
+        vtxs->add(xb,ye,zz);
+      }
+
+    }}
+
+    if(border_visible.value()){
+      float zz = zborder;
+      float ye = height*0.5f;
+
+      sg::rgba* mat = new sg::rgba();
+      mat->color = border_color;
+      m_back_sep.add(mat);
+  
+      draw_style* ds = new draw_style;
+      ds->style = draw_style::lines;
+      ds->line_width = border_line_width;
+      m_back_sep.add(ds);
+  
+      vertices* vtxs = new vertices;
+      vtxs->mode = gl::line_strip();
+      m_back_sep.add(vtxs);
+  
+      float r = height*corner_radius;
+      if((r>(0.5f*height.value()))||(r>(0.5f*width.value()))) r = 0;
+
+      if((r>0) && corner_steps.value()) {
+        float dangle = fhalf_pi()/float(corner_steps);
+        unsigned int nslice = corner_steps;
+
+        vtxs->add(xe,yb+r,zz);
+        vtxs->add(xe,ye-r,zz);
+
+        // top-right :
+        float angle = dangle;
+        if(corner_mask.value() & corner_top_right()) {
+          float xc = xe-r;
+          float yc = ye-r;
+          for(unsigned int i=0;i<nslice;i++,angle+=dangle) {
+            vtxs->add(r*fcos(angle)+xc,r*fsin(angle)+yc,zz);
+          }
+        } else {
+          angle += fhalf_pi();
+          vtxs->add(xe,ye,zz);
+          vtxs->add(xe-r,ye,zz);
+        }
+
+        vtxs->add(xb+r,ye,zz);
+
+        // top-left :
+        if(corner_mask.value() & corner_top_left()) {
+          float xc = xb+r;
+          float yc = ye-r;
+          for(unsigned int i=0;i<nslice;i++,angle+=dangle) {
+            vtxs->add(r*fcos(angle)+xc,r*fsin(angle)+yc,zz);
+          }
+        } else {
+          angle += fhalf_pi();
+          vtxs->add(xb,ye,zz);
+          vtxs->add(xb,ye-r,zz);
+        }
+
+        vtxs->add(xb,yb+r,zz);
+
+        // bottom-left :
+        if(corner_mask.value() & corner_bottom_left()) {
+          float xc = xb+r;
+          float yc = yb+r;
+          for(unsigned int i=0;i<nslice;i++,angle+=dangle) {
+            vtxs->add(r*fcos(angle)+xc,r*fsin(angle)+yc,zz);
+          }
+        } else {
+          angle += fhalf_pi();
+          vtxs->add(xb,yb,zz);
+          vtxs->add(xb+r,yb,zz);
+        }
+
+        vtxs->add(xe-r,yb,zz);
+
+        // bottom-right :
+        if(corner_mask.value() & corner_bottom_right()) {
+          float xc = xe-r;
+          float yc = yb+r;
+          for(unsigned int i=0;i<nslice;i++,angle+=dangle) {
+            vtxs->add(r*fcos(angle)+xc,r*fsin(angle)+yc,zz);
+          }
+        } else {
+          angle += fhalf_pi();
+          vtxs->add(xe,yb,zz);
+          vtxs->add(xe,yb+r,zz);
+        }
+
+      } else {
+        vtxs->add(xb,yb,zz);
+        vtxs->add(xe,yb,zz);
+        vtxs->add(xe,ye,zz);
+        vtxs->add(xb,ye,zz);
+        vtxs->add(xb,yb,zz);
+      }
+    }
+
+  }
+protected:
+  separator m_back_sep;
+};
+
+}}
+
+#endif

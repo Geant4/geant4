@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ICRU49NuclearStoppingModel.cc 67990 2013-03-13 10:56:28Z gcosmo $
+// $Id: G4ICRU49NuclearStoppingModel.cc 93567 2015-10-26 14:51:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -125,7 +125,7 @@ G4ICRU49NuclearStoppingModel::ComputeDEDXPerVolume(
   for (G4int iel=0; iel<numberOfElements; iel++) {
     const G4Element* element = (*theElementVector)[iel] ;
     G4double z2 = element->GetZ();
-    G4double mass2 = element->GetA()*mole/g ;
+    G4double mass2 = element->GetN();
     nloss += (NuclearStoppingPower(kinEnergy, z1, z2, mass1, mass2))
            * atomDensity[iel] ;
   }
@@ -143,8 +143,8 @@ G4ICRU49NuclearStoppingModel::NuclearStoppingPower(G4double kineticEnergy,
   G4double energy = kineticEnergy/keV ;  // energy in keV
   G4double nloss = 0.0;
   G4double z12 = z1*z2;
-  G4int iz1 = G4int(z1);
-  G4int iz2 = G4int(z2);
+  G4int iz1 = G4lrint(z1);
+  G4int iz2 = G4lrint(z2);
   
   G4double rm;
   if(iz1 > 1) { rm = (mass1 + mass2)*(g4pow->Z23(iz1) + g4pow->Z23(iz2)); }

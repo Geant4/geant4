@@ -32,13 +32,12 @@
 #include "G4VBiasingInteractionLaw.hh"
 #include "G4InteractionLawPhysical.hh"
 #include "G4ProcessManager.hh"
-#include "G4BiasingTrackData.hh"
-#include "G4BiasingTrackDataStore.hh"
 #include "G4BiasingAppliedCase.hh"
 
 G4Cache<G4bool>                     G4BiasingProcessInterface::fResetInteractionLaws;// = true;
 G4Cache<G4bool>                     G4BiasingProcessInterface::fCommonStart;//          = true;
 G4Cache<G4bool>                     G4BiasingProcessInterface::fCommonEnd;//            = true;
+G4Cache<G4bool>                     G4BiasingProcessInterface::fDoCommonConfigure;
 G4MapCache< const G4ProcessManager*, G4BiasingProcessSharedData* > G4BiasingProcessInterface::fSharedDataMap;
 
 
@@ -61,6 +60,7 @@ G4BiasingProcessInterface::G4BiasingProcessInterface(G4String name)
   fResetInteractionLaws.Put( true );
   fCommonStart.Put(true);
   fCommonEnd.Put(true);
+  fDoCommonConfigure.Put(true);
 }
 
 
@@ -85,6 +85,7 @@ G4BiasingProcessInterface::G4BiasingProcessInterface(G4VProcess* wrappedProcess,
   fResetInteractionLaws.Put( true );
   fCommonStart.Put(true);
   fCommonEnd.Put(true);
+  fDoCommonConfigure.Put(true);
   
   SetProcessSubType(fWrappedProcess->GetProcessSubType());
 
@@ -159,11 +160,8 @@ void G4BiasingProcessInterface::EndTracking()
   if ( fIsPhysicsBasedBiasing ) fWrappedProcess->EndTracking();
   if ( fSharedData->fCurrentBiasingOperator) (fSharedData->fCurrentBiasingOperator)->ExitingBiasing( fCurrentTrack, this ); 
   fBiasingInteractionLaw = 0;
-  
 
-  // -- !! this part might have to be improved : could be time consuming
-  // -- !! and assumes all tracks are killed during tracking, which is
-  // -- !! not true : stacking operations may kill tracks
+  // -- Inform operators of end of tracking:
   if ( fCommonEnd.Get() )
     {
       fCommonEnd.Put( false );//   = false;
@@ -173,21 +171,6 @@ void G4BiasingProcessInterface::EndTracking()
 	( G4VBiasingOperator::GetBiasingOperators() )[optr]->EndTracking( );
 
       // -- §§ for above loop, do as in StartTracking.
-      
-      if ( ( fCurrentTrack->GetTrackStatus() == fStopAndKill ) || ( fCurrentTrack->GetTrackStatus() == fKillTrackAndSecondaries ) )
-	{
-	  G4BiasingTrackData* biasingData = G4BiasingTrackDataStore::GetInstance()->GetBiasingTrackData( fCurrentTrack );
-	  if ( biasingData ) delete biasingData; // -- this also deregisters the biasing data from the track data store
-	  if ( fCurrentTrack->GetTrackStatus() == fKillTrackAndSecondaries )
-	    {
-	      const G4TrackVector* secondaries = fCurrentTrack->GetStep()->GetSecondary();
-	      for ( size_t i2nd = 0 ; i2nd < secondaries->size() ; i2nd++ )
-		{
-		  biasingData = G4BiasingTrackDataStore::GetInstance()->GetBiasingTrackData( (*secondaries)[i2nd] );
-		  if ( biasingData ) delete biasingData;
-		}
-	    }
-	}
     }
 }
 
@@ -316,7 +299,7 @@ G4double G4BiasingProcessInterface::PostStepGetPhysicalInteractionLength( const 
   
 
   // --------------------------------------------------
-  // -- An biasing operator exists. Proceed with
+  // -- A biasing operator exists. Proceed with
   // -- treating non-physics and physics biasing cases:
   //---------------------------------------------------
   
@@ -434,6 +417,7 @@ G4VParticleChange* G4BiasingProcessInterface::PostStepDoIt(const G4Track& track,
       return finalStateParticleChange;
     }
   
+
   // -- If occurence biasing, applies the occurence biasing weight correction on top of final state (biased or not):
   G4double weightForInteraction = 1.0;
   if ( !fBiasingInteractionLaw->IsSingular() ) weightForInteraction =
@@ -475,7 +459,8 @@ G4VParticleChange* G4BiasingProcessInterface::PostStepDoIt(const G4Track& track,
   
   (fSharedData->fCurrentBiasingOperator)->ReportOperationApplied( this,                        BAC,
 								  fOccurenceBiasingOperation,  weightForInteraction,
-								  fFinalStateBiasingOperation, finalStateParticleChange );  
+								  fFinalStateBiasingOperation, finalStateParticleChange );
+
 
   fOccurenceBiasingParticleChange->SetOccurenceWeightForInteraction( weightForInteraction );
   fOccurenceBiasingParticleChange->SetSecondaryWeightByProcess( true );
@@ -662,6 +647,9 @@ void       G4BiasingProcessInterface::SetMasterProcess(G4VProcess* masterP)
 
 void      G4BiasingProcessInterface::BuildPhysicsTable(const G4ParticleDefinition& pd)
 {
+  // -- Sequential mode : called second (after PreparePhysicsTable(..))
+  // -- MT mode         : called second (after PreparePhysicsTable(..)) by master thread.
+  // --                   Corresponding process instance not used then by tracking.
   // -- PreparePhysicsTable(...) has been called first for all processes,
   // -- so the first/last flags and G4BiasingProcessInterface vector of processes have
   // -- been properly setup, fIamFirstGPIL is valid.
@@ -669,21 +657,36 @@ void      G4BiasingProcessInterface::BuildPhysicsTable(const G4ParticleDefinitio
     {
       fWrappedProcess->BuildPhysicsTable(pd);
     }
-  
-  // -- Re-order vector of processes to match that of the GPIL
-  // -- (made for fIamFirstGPIL, but important is to have it made once):
-  if ( fIamFirstGPIL ) ReorderBiasingVectorAsGPIL();
 
+  if ( fIamFirstGPIL )
+    {
+      // -- Re-order vector of processes to match that of the GPIL
+      // -- (made for fIamFirstGPIL, but important is to have it made once):
+      ReorderBiasingVectorAsGPIL();
+      // -- Let operators to configure themselves for the master thread or for sequential mode.
+      // -- Intended here is in particular the registration to physics model catalog.
+      // -- The fDoCommonConfigure is to ensure that this Configure is made by only one process (othewise each first process makes the call):
+      if ( fDoCommonConfigure.Get() )
+	{
+	  for ( size_t optr = 0 ; optr < ( G4VBiasingOperator::GetBiasingOperators() ).size() ; optr ++)
+	    ( G4VBiasingOperator::GetBiasingOperators() )[optr]->Configure( );
+	  fDoCommonConfigure.Put(false);
+	}
+      
+    }
 }
 
 
 void    G4BiasingProcessInterface::PreparePhysicsTable(const G4ParticleDefinition& pd)
 {
+  // -- Sequential mode : called first (before BuildPhysicsTable(..))
+  // -- MT mode         : called first (before BuildPhysicsTable(..)) by master thread.
+  // --                   Corresponding process instance not used then by tracking.
   // -- Let process finding its first/last position in the process manager:
   SetUpFirstLastFlags();
   if ( fWrappedProcess != 0 )
     {
-       fWrappedProcess->PreparePhysicsTable(pd);
+      fWrappedProcess->PreparePhysicsTable(pd);
     }
 }
 
@@ -741,6 +744,8 @@ const G4ProcessManager* G4BiasingProcessInterface::GetProcessManager()
 
 void G4BiasingProcessInterface::BuildWorkerPhysicsTable(const G4ParticleDefinition& pd)
 {
+  // -- Sequential mode : not called
+  // -- MT mode         : called after PrepareWorkerPhysicsTable(..)
   // -- PrepareWorkerPhysicsTable(...) has been called first for all processes,
   // -- so the first/last flags and G4BiasingProcessInterface vector of processes have
   // -- been properly setup, fIamFirstGPIL is valid.
@@ -749,15 +754,29 @@ void G4BiasingProcessInterface::BuildWorkerPhysicsTable(const G4ParticleDefiniti
       fWrappedProcess->BuildWorkerPhysicsTable(pd);
     }
 
-  // -- Re-order vector of processes to match that of the GPIL
-  // -- (made for fIamFirstGPIL, but important is to have it made once):
-  if ( fIamFirstGPIL ) ReorderBiasingVectorAsGPIL();
+  if ( fIamFirstGPIL )
+    {
+      // -- Re-order vector of processes to match that of the GPIL
+      // -- (made for fIamFirstGPIL, but important is to have it made once):
+      ReorderBiasingVectorAsGPIL();
+      // -- Let operators to configure themselves for the worker thread, if needed.
+      // -- Registration to physics model catalog **IS NOT** to be made here, but in Configure().
+      // -- The fDoCommonConfigure is to ensure that this Configure is made by only one process (othewise each first process makes the call):
+      if ( fDoCommonConfigure.Get() )
+	{
+	  for ( size_t optr = 0 ; optr < ( G4VBiasingOperator::GetBiasingOperators() ).size() ; optr ++)
+	    ( G4VBiasingOperator::GetBiasingOperators() )[optr]->ConfigureForWorker( );
+	  fDoCommonConfigure.Put(false);
+	}
+    }
 }
 
 
 void G4BiasingProcessInterface::PrepareWorkerPhysicsTable(const G4ParticleDefinition& pd)
 {
- // -- Let process finding its first/last position in the process manager:
+  // -- Sequential mode : not called
+  // -- MT mode         : called first, before BuildWorkerPhysicsTable(..)
+  // -- Let process finding its first/last position in the process manager:
   SetUpFirstLastFlags();
 
   if ( fWrappedProcess != 0 )
@@ -807,14 +826,11 @@ G4bool G4BiasingProcessInterface::IsFirstPostStepGPILInterface(G4bool physOnly) 
   const G4ProcessVector* pv = fProcessManager->GetPostStepProcessVector(typeGPIL);
   G4int thisIdx(-1);
   for (G4int i = 0; i < pv->size(); i++ ) if ( (*pv)(i) == this ) { thisIdx = i; break; }
-  //  for ( size_t i = 0; i < fCoInterfaces->size(); i++ )
   for ( size_t i = 0; i < (fSharedData->fBiasingProcessInterfaces).size(); i++ )
     {
-      //      if ( ( (*fCoInterfaces)[i]->GetWrappedProcess() != 0 ) || !physOnly )
       if ( (fSharedData->fBiasingProcessInterfaces)[i]->fIsPhysicsBasedBiasing || !physOnly )
 	{
 	  G4int thatIdx(-1);
-	  //	  for (G4int j = 0; j < pv->size(); j++ ) if ( (*pv)(j) ==  (*fCoInterfaces)[i] ) { thatIdx = j; break; }
 	  for (G4int j = 0; j < pv->size(); j++ ) if ( (*pv)(j) == (fSharedData->fBiasingProcessInterfaces)[i] ) { thatIdx = j; break; }
 	  if ( thisIdx >  thatIdx )
 	    {
@@ -833,14 +849,11 @@ G4bool G4BiasingProcessInterface::IsLastPostStepGPILInterface(G4bool physOnly) c
   const G4ProcessVector* pv = fProcessManager->GetPostStepProcessVector(typeGPIL);
   G4int thisIdx(-1);
   for (G4int i = 0; i < pv->size(); i++ ) if ( (*pv)(i) == this ) { thisIdx = i; break; }
-  //  for ( size_t i = 0; i < fCoInterfaces->size(); i++ )
   for ( size_t i = 0; i < (fSharedData->fBiasingProcessInterfaces).size(); i++ )
     {
-      //      if ( ( (*fCoInterfaces)[i]->GetWrappedProcess() != 0  ) || !physOnly )
       if ( (fSharedData->fBiasingProcessInterfaces)[i]->fIsPhysicsBasedBiasing || !physOnly )
 	{
 	  G4int thatIdx(-1);
-	  //	  for (G4int j = 0; j < pv->size(); j++ ) if ( (*pv)(j) ==  (*fCoInterfaces)[i] ) { thatIdx = j; break; }
 	  for (G4int j = 0; j < pv->size(); j++ ) if ( (*pv)(j) == (fSharedData->fBiasingProcessInterfaces)[i] ) { thatIdx = j; break; }
 	  if ( thisIdx <  thatIdx )
 	    {
@@ -859,14 +872,11 @@ G4bool G4BiasingProcessInterface::IsFirstPostStepDoItInterface(G4bool physOnly) 
   const G4ProcessVector* pv = fProcessManager->GetPostStepProcessVector(typeDoIt);
   G4int thisIdx(-1);
   for (G4int i = 0; i < pv->size(); i++ ) if ( (*pv)(i) == this ) { thisIdx = i; break; }
-  //  for ( size_t i = 0; i < fCoInterfaces->size(); i++ )
   for ( size_t i = 0; i < (fSharedData->fBiasingProcessInterfaces).size(); i++ )
     {
-      //      if ( ( (*fCoInterfaces)[i]->GetWrappedProcess() != 0  ) || !physOnly )
       if ( (fSharedData->fBiasingProcessInterfaces)[i]->fIsPhysicsBasedBiasing || !physOnly )
 	{
 	  G4int thatIdx(-1);
-	  //	  for (G4int j = 0; j < pv->size(); j++ ) if ( (*pv)(j) ==  (*fCoInterfaces)[i] ) { thatIdx = j; break; }
 	  for (G4int j = 0; j < pv->size(); j++ ) if ( (*pv)(j) == (fSharedData->fBiasingProcessInterfaces)[i] ) { thatIdx = j; break; }
 	  if ( thisIdx >  thatIdx )
 	    {
@@ -885,14 +895,11 @@ G4bool G4BiasingProcessInterface::IsLastPostStepDoItInterface(G4bool physOnly) c
   const G4ProcessVector* pv = fProcessManager->GetPostStepProcessVector(typeDoIt);
   G4int thisIdx(-1);
   for (G4int i = 0; i < pv->size(); i++ ) if ( (*pv)(i) == this ) { thisIdx = i; break; }
-  //  for ( size_t i = 0; i < fCoInterfaces->size(); i++ )
   for ( size_t i = 0; i < (fSharedData->fBiasingProcessInterfaces).size(); i++ )
     {
-      //  if ( ( (*fCoInterfaces)[i]->GetWrappedProcess() != 0  ) || !physOnly )
       if ( (fSharedData->fBiasingProcessInterfaces)[i]->fIsPhysicsBasedBiasing || !physOnly )
 	{
 	  G4int thatIdx(-1);
-	  //	  for (G4int j = 0; j < pv->size(); j++ ) if ( (*pv)(j) ==  (*fCoInterfaces)[i] ) { thatIdx = j; break; }
 	  for (G4int j = 0; j < pv->size(); j++ ) if ( (*pv)(j) == (fSharedData->fBiasingProcessInterfaces)[i] ) { thatIdx = j; break; }	  
 	  if ( thisIdx <  thatIdx )
 	    {

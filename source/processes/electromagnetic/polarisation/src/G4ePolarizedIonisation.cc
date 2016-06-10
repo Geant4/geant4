@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ePolarizedIonisation.cc 85018 2014-10-23 09:51:37Z gcosmo $
+// $Id: G4ePolarizedIonisation.cc 93113 2015-10-07 07:49:04Z gcosmo $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -53,15 +53,17 @@
 #include "G4ePolarizedIonisation.hh"
 #include "G4Electron.hh"
 #include "G4UniversalFluctuation.hh"
-#include "G4BohrFluctuations.hh"
 #include "G4UnitsTable.hh"
 
 #include "G4PolarizedMollerBhabhaModel.hh"
+#include "G4PhysicsTableHelper.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4PolarizationManager.hh"
 #include "G4PolarizationHelper.hh"
 #include "G4StokesVector.hh"
 #include "G4EmParameters.hh"
+
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -70,24 +72,57 @@ G4ePolarizedIonisation::G4ePolarizedIonisation(const G4String& name)
     theElectron(G4Electron::Electron()),
     isElectron(true),
     isInitialised(false),
-    theAsymmetryTable(NULL),
-    theTransverseAsymmetryTable(NULL)
+    theTargetPolarization(0.,0.,0.),
+    theAsymmetryTable(nullptr),
+    theTransverseAsymmetryTable(nullptr)
 {
   verboseLevel=0;
   SetProcessSubType(fIonisation);
   SetSecondaryParticle(theElectron);
-  flucModel = 0;
-  emModel = 0; 
+  flucModel = nullptr;
+  emModel = nullptr; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4ePolarizedIonisation::~G4ePolarizedIonisation()
 {
-  delete theAsymmetryTable;
-  delete theTransverseAsymmetryTable;
+  CleanTables();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4ePolarizedIonisation::CleanTables()
+{
+  if(theAsymmetryTable) {
+    theAsymmetryTable->clearAndDestroy();
+    delete theAsymmetryTable;
+    theAsymmetryTable = nullptr;
+  }
+  if(theTransverseAsymmetryTable) {
+    theTransverseAsymmetryTable->clearAndDestroy();
+    delete theTransverseAsymmetryTable;
+    theTransverseAsymmetryTable = nullptr;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double 
+G4ePolarizedIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
+					 const G4Material*, G4double cut)
+{
+  G4double x = cut;
+  if(isElectron) { x += cut; }
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4ePolarizedIonisation::IsApplicable(const G4ParticleDefinition& p)
+{
+  return (&p == G4Electron::Electron() || &p == G4Positron::Positron());
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4ePolarizedIonisation::InitialiseEnergyLossProcess(
@@ -125,126 +160,143 @@ G4double G4ePolarizedIonisation::GetMeanFreePath(const G4Track& track,
 {
   // *** get unploarised mean free path from lambda table ***
   G4double mfp = G4VEnergyLossProcess::GetMeanFreePath(track, step, cond);
-
-
-  // *** get asymmetry, if target is polarized ***
-  G4VPhysicalVolume*  aPVolume  = track.GetVolume();
-  G4LogicalVolume*    aLVolume  = aPVolume->GetLogicalVolume();
-
-  G4PolarizationManager * polarizationManger = G4PolarizationManager::GetInstance();
-  G4bool volumeIsPolarized = polarizationManger->IsPolarized(aLVolume);
-  const G4StokesVector ePolarization = track.GetPolarization();
-
-  if (mfp != DBL_MAX &&  volumeIsPolarized && !ePolarization.IsZero()) {
-    const G4DynamicParticle* aDynamicElectron = track.GetDynamicParticle();
-    G4double eEnergy = aDynamicElectron->GetKineticEnergy();
-    const G4ParticleMomentum eDirection0 = aDynamicElectron->GetMomentumDirection();
-
-    G4StokesVector volumePolarization = polarizationManger->GetVolumePolarization(aLVolume);
-
-    G4bool isOutRange;
-    size_t idx = CurrentMaterialCutsCoupleIndex();
-    G4double lAsymmetry = (*theAsymmetryTable)(idx)->
-                                  GetValue(eEnergy, isOutRange);
-    G4double tAsymmetry = (*theTransverseAsymmetryTable)(idx)->
-                                  GetValue(eEnergy, isOutRange);
-
-    // calculate longitudinal spin component
-    G4double polZZ = ePolarization.z()*
-			volumePolarization*eDirection0;
-    // calculate transvers spin components
-    G4double polXX = ePolarization.x()*
-			volumePolarization*G4PolarizationHelper::GetParticleFrameX(eDirection0);
-    G4double polYY = ePolarization.y()*
-			volumePolarization*G4PolarizationHelper::GetParticleFrameY(eDirection0);
-
-
-    G4double impact = 1. + polZZ*lAsymmetry + (polXX + polYY)*tAsymmetry;
-    // determine polarization dependent mean free path
-    mfp /= impact;
-    if (mfp <=0.) {
-     G4cout <<"PV impact ( "<<polXX<<" , "<<polYY<<" , "<<polZZ<<" )"<<G4endl;
-     G4cout << " impact on MFP is "<< impact <<G4endl;
-     G4cout<<" lAsymmetry= "<<lAsymmetry<<" ("<<std::fabs(lAsymmetry)-1.<<")\n";
-     G4cout<<" tAsymmetry= "<<tAsymmetry<<" ("<<std::fabs(tAsymmetry)-1.<<")\n";
-    }
+  if(theAsymmetryTable && theTransverseAsymmetryTable && mfp < DBL_MAX) {
+    mfp *= ComputeSaturationFactor(track);
   }
-
+  if (verboseLevel>=2) {
+    G4cout << "G4ePolarizedIonisation::MeanFreePath:  " 
+	   << mfp / mm << " mm " << G4endl;
+  }
   return mfp;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4ePolarizedIonisation::PostStepGetPhysicalInteractionLength(const G4Track& track,
                                               G4double step,
                                               G4ForceCondition* cond)
 {
+  // save previous value
+  G4double nLength = theNumberOfInteractionLengthLeft;
+
   // *** get unploarised mean free path from lambda table ***
-  G4double mfp = G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(track, step, cond);
+  G4double x = G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(track, step, cond);
 
-
-  // *** get asymmetry, if target is polarized ***
-  G4VPhysicalVolume*  aPVolume  = track.GetVolume();
-  G4LogicalVolume*    aLVolume  = aPVolume->GetLogicalVolume();
-
-  G4PolarizationManager * polarizationManger = G4PolarizationManager::GetInstance();
-  G4bool volumeIsPolarized = polarizationManger->IsPolarized(aLVolume);
-  const G4StokesVector ePolarization = track.GetPolarization();
-
-  if (mfp != DBL_MAX &&  volumeIsPolarized && !ePolarization.IsZero()) {
-    const G4DynamicParticle* aDynamicElectron = track.GetDynamicParticle();
-    G4double eEnergy = aDynamicElectron->GetKineticEnergy();
-    const G4ParticleMomentum eDirection0 = aDynamicElectron->GetMomentumDirection();
-
-    G4StokesVector volumePolarization = polarizationManger->GetVolumePolarization(aLVolume);
-
-    size_t idx = CurrentMaterialCutsCoupleIndex();
-    G4double lAsymmetry = (*theAsymmetryTable)(idx)->Value(eEnergy);
-    G4double tAsymmetry = (*theTransverseAsymmetryTable)(idx)->Value(eEnergy);
-
-    // calculate longitudinal spin component
-    G4double polZZ = ePolarization.z()*
-			volumePolarization*eDirection0;
-    // calculate transvers spin components
-    G4double polXX = ePolarization.x()*
-			volumePolarization*G4PolarizationHelper::GetParticleFrameX(eDirection0);
-    G4double polYY = ePolarization.y()*
-			volumePolarization*G4PolarizationHelper::GetParticleFrameY(eDirection0);
-
-
-    G4double impact = 1. + polZZ*lAsymmetry + (polXX + polYY)*tAsymmetry;
-    // determine polarization dependent mean free path
-    mfp /= impact;
-    if (mfp <=0.) {
-     G4cout <<"PV impact ( "<<polXX<<" , "<<polYY<<" , "<<polZZ<<" )"<<G4endl;
-     G4cout << " impact on MFP is "<< impact <<G4endl;
-     G4cout<<" lAsymmetry= "<<lAsymmetry<<" ("<<std::fabs(lAsymmetry)-1.<<")\n";
-     G4cout<<" tAsymmetry= "<<tAsymmetry<<" ("<<std::fabs(tAsymmetry)-1.<<")\n";
+  if(theAsymmetryTable && theTransverseAsymmetryTable && x < DBL_MAX) {
+    G4double curLength = currentInteractionLength*ComputeSaturationFactor(track);
+    if(nLength > 0.0) {
+      theNumberOfInteractionLengthLeft = 
+	std::max(nLength - step/curLength, 0.0);
     }
+    x = theNumberOfInteractionLengthLeft * curLength;
   }
-
-  return mfp;
+  if (verboseLevel>=2) {
+    G4cout << "G4ePolarizedIonisation::PostStepGetPhysicalInteractionLength:  " 
+	   << x/mm << " mm " << G4endl;
+  }
+  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-void G4ePolarizedIonisation::BuildPhysicsTable(const G4ParticleDefinition& part)
+
+G4double 
+G4ePolarizedIonisation::ComputeSaturationFactor(const G4Track& track)
+{
+  G4Material*         aMaterial = track.GetMaterial();
+  G4VPhysicalVolume*  aPVolume  = track.GetVolume();
+  G4LogicalVolume*    aLVolume  = aPVolume->GetLogicalVolume();
+    
+  G4PolarizationManager * polarizationManger = G4PolarizationManager::GetInstance();
+    
+  const G4bool volumeIsPolarized = polarizationManger->IsPolarized(aLVolume);
+  G4StokesVector volPolarization = polarizationManger->GetVolumePolarization(aLVolume);
+
+  G4double factor = 1.0;
+
+  if (volumeIsPolarized && !volPolarization.IsZero()) {
+     
+    // *** get asymmetry, if target is polarized ***
+    const G4DynamicParticle* aDynamicPart = track.GetDynamicParticle();
+    const G4double energy = aDynamicPart->GetKineticEnergy();
+    const G4StokesVector polarization = track.GetPolarization();
+    const G4ParticleMomentum direction0 = aDynamicPart->GetMomentumDirection();
+
+    if (verboseLevel>=2) {
+      G4cout << "G4ePolarizedIonisation::ComputeSaturationFactor: " << G4endl;      
+      G4cout << " Energy(MeV)  " << energy/MeV  << G4endl;
+      G4cout << " Direction    " << direction0  << G4endl;
+      G4cout << " Polarization " << polarization  << G4endl;
+      G4cout << " MaterialPol. " << volPolarization  << G4endl;
+      G4cout << " Phys. Volume " << aPVolume->GetName() << G4endl;
+      G4cout << " Log. Volume  " << aLVolume->GetName() << G4endl;
+      G4cout << " Material     " << aMaterial          << G4endl;
+    }
+    
+    size_t midx = CurrentMaterialCutsCoupleIndex();
+    const G4PhysicsVector* aVector = nullptr;
+    const G4PhysicsVector* bVector = nullptr;
+    if(midx < theAsymmetryTable->size()) { 
+      aVector = (*theAsymmetryTable)(midx);
+    }
+    if(midx < theTransverseAsymmetryTable->size()) { 
+      bVector = (*theTransverseAsymmetryTable)(midx);
+    }
+    if(aVector && bVector) {
+      G4double lAsymmetry = aVector->Value(energy);
+      G4double tAsymmetry = bVector->Value(energy);
+      G4double polZZ = polarization.z()*(volPolarization*direction0);
+      G4double polXX = polarization.x()*
+	(volPolarization*G4PolarizationHelper::GetParticleFrameX(direction0));
+      G4double polYY = polarization.y()*
+	(volPolarization*G4PolarizationHelper::GetParticleFrameY(direction0));
+
+      factor /= (1. + polZZ*lAsymmetry + (polXX + polYY)*tAsymmetry);
+
+      if (verboseLevel>=2) {
+	G4cout << " Asymmetry:     " << lAsymmetry << ", " << tAsymmetry  << G4endl;
+	G4cout << " PolProduct:    " << polXX << ", " << polYY << ", " << polZZ << G4endl;
+	G4cout << " Factor:        " << factor         << G4endl;
+      }
+    } else {
+      G4ExceptionDescription ed;
+      ed << "Problem with asymmetry tables: material index " << midx 
+	 << " is out of range or tables are not filled";
+      G4Exception("G4ePolarizedIonisation::ComputeSaturationFactor","em0048",
+		  JustWarning, ed, "");
+    }
+  }
+  return factor;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4ePolarizedIonisation::BuildPhysicsTable(
+        const G4ParticleDefinition& part)
 {
   // *** build DEDX and (unpolarized) cross section tables
   G4VEnergyLossProcess::BuildPhysicsTable(part);
-  //  G4PhysicsTable* pt =
-  //  BuildDEDXTable();
+  G4bool master = true;
+  const G4ePolarizedIonisation* masterProcess = 
+    static_cast<const G4ePolarizedIonisation*>(GetMasterProcess());
+  if(masterProcess && masterProcess != this) { master = false; }
+  if(master) { BuildAsymmetryTables(part); }
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-  // *** build asymmetry-table
-  if (theAsymmetryTable) {
-    theAsymmetryTable->clearAndDestroy(); delete theAsymmetryTable;}
-  if (theTransverseAsymmetryTable) {
-    theTransverseAsymmetryTable->clearAndDestroy(); delete theTransverseAsymmetryTable;}
+void G4ePolarizedIonisation::BuildAsymmetryTables(
+	const G4ParticleDefinition& part)
+{
+  // cleanup old, initialise new table
+  CleanTables();
+  theAsymmetryTable = 
+    G4PhysicsTableHelper::PreparePhysicsTable(theAsymmetryTable);
+  theTransverseAsymmetryTable = 
+    G4PhysicsTableHelper::PreparePhysicsTable(theTransverseAsymmetryTable);
 
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
-
-  theAsymmetryTable = new G4PhysicsTable(numOfCouples);
-  theTransverseAsymmetryTable = new G4PhysicsTable(numOfCouples);
 
   for (size_t j=0 ; j < numOfCouples; j++ ) {
     // get cut value
@@ -267,19 +319,20 @@ void G4ePolarizedIonisation::BuildPhysicsTable(const G4ParticleDefinition& part)
     theAsymmetryTable->insertAt( j , ptrVectorA ) ;
     theTransverseAsymmetryTable->insertAt( j , ptrVectorB ) ;
   }
-
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4ePolarizedIonisation::ComputeAsymmetry(G4double energy,
+G4double 
+G4ePolarizedIonisation::ComputeAsymmetry(G4double energy,
 					 const G4MaterialCutsCouple* couple,
-					       const G4ParticleDefinition& aParticle,
-					       G4double cut,
-					       G4double & tAsymmetry)
+					 const G4ParticleDefinition& aParticle,
+					 G4double cut,
+					 G4double & tAsymmetry)
 {
   G4double lAsymmetry = 0.0;
   	   tAsymmetry = 0.0;
-  if (isElectron) {lAsymmetry = tAsymmetry = -1.0;}
+  if (isElectron) { lAsymmetry = tAsymmetry = -1.0; }
 
   // calculate polarized cross section
   theTargetPolarization=G4ThreeVector(0.,0.,1.);
@@ -297,24 +350,25 @@ G4double G4ePolarizedIonisation::ComputeAsymmetry(G4double energy,
   theTargetPolarization=G4ThreeVector();
   emModel->SetTargetPolarization(theTargetPolarization);
   emModel->SetBeamPolarization(theTargetPolarization);
-  G4double sigma0=emModel->CrossSection(couple,&aParticle,energy,cut,energy);
+  G4double sigma0 = emModel->CrossSection(couple,&aParticle,energy,cut,energy);
   // determine assymmetries
-  if (sigma0>0.) {
-    lAsymmetry=sigma2/sigma0-1.;
-    tAsymmetry=sigma3/sigma0-1.;
+  if (sigma0 > 0.) {
+    lAsymmetry=sigma2/sigma0 - 1.;
+    tAsymmetry=sigma3/sigma0 - 1.;
   }
   if (std::fabs(lAsymmetry)>1.) {
-    G4cout<<" energy="<<energy<<"\n";
-    G4cout<<"WARNING lAsymmetry= "<<lAsymmetry<<" ("<<std::fabs(lAsymmetry)-1.<<")\n";
+    G4cout<<"G4ePolarizedIonisation::ComputeAsymmetry WARNING: E(MeV)= " 
+	  << energy << " lAsymmetry= "<<lAsymmetry
+	  <<" ("<<std::fabs(lAsymmetry)-1.<<")\n";
   }
   if (std::fabs(tAsymmetry)>1.) {
     G4cout<<" energy="<<energy<<"\n";
-    G4cout<<"WARNING tAsymmetry= "<<tAsymmetry<<" ("<<std::fabs(tAsymmetry)-1.<<")\n";
+    G4cout<<"G4ePolarizedIonisation::ComputeAsymmetry WARNING: E(MeV)= " 
+	  << energy << " tAsymmetry= "<<tAsymmetry
+	  <<" ("<<std::fabs(tAsymmetry)-1.<<")\n";
   }
-//   else {
-//     G4cout<<"        tAsymmetry= "<<tAsymmetry<<" ("<<std::fabs(tAsymmetry)-1.<<")\n";
-//   }
   return lAsymmetry;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -1,4 +1,4 @@
-$Id: History 84607 2014-10-17 07:50:42Z gcosmo $
+$Id: History 94302 2015-11-11 12:58:04Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,8 +15,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11-11-15 V.Ivant (testem0-V10-01-01)
+- DirectAccess.cc - make it work for Geant4 10.1
+
+03-09-15 I.Hrivnacova  (testem0-V10-01-00)
+- Removed local SetCutFor*() methods from PhysicsList and setCut
+  command from PhysicsListMessenger and using /run/setCut command
+
 16-10-14 I.Hrivnacova (testem0-V10-00-00)
-- Fized long line in PrimaryGeneratorAction.cc
+- Fixed long line in PrimaryGeneratorAction.cc
 
 12-10-13 V.Ivant (testem0-V09-06-07)
 - DirectAccess.cc - G4SeltzerBergerModel instead of obsolete 

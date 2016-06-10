@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ePolarizedIonisation.hh 68046 2013-03-13 14:31:38Z gcosmo $
+// $Id: G4ePolarizedIonisation.hh 93113 2015-10-07 07:49:04Z gcosmo $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
@@ -72,7 +72,7 @@ public:
 
   virtual ~G4ePolarizedIonisation();
 
-  G4bool IsApplicable(const G4ParticleDefinition& p);
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
 
   // Print out of the class parameters
   virtual void PrintInfo();
@@ -85,19 +85,27 @@ protected:
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
                                     const G4Material*, G4double cut);
 
-
   // for polarization
-  G4double PostStepGetPhysicalInteractionLength(
+  virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4double   previousStepSize,
-                             G4ForceCondition* condition
-                            );
+                             G4ForceCondition* condition);
 
-  G4double GetMeanFreePath(const G4Track& track,
+  virtual G4double GetMeanFreePath(const G4Track& track,
                               G4double previousStepSize,
                               G4ForceCondition* condition);
 
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+
+protected:
+
+  const G4ParticleDefinition* DefineBaseParticle(const G4ParticleDefinition* p);
+
+private:
+
+  void CleanTables();
+
+  void BuildAsymmetryTables(const G4ParticleDefinition& part);
 
   G4double ComputeAsymmetry(G4double energy,
 			    const G4MaterialCutsCouple* couple,
@@ -105,11 +113,8 @@ protected:
 			    G4double cut,
 			    G4double &tasm);
 
-protected:
+  G4double ComputeSaturationFactor(const G4Track& aTrack);
 
-  const G4ParticleDefinition* DefineBaseParticle(const G4ParticleDefinition* p);
-
-private:
   G4ePolarizedIonisation & operator=(const G4ePolarizedIonisation &right);
   G4ePolarizedIonisation(const G4ePolarizedIonisation&);
 
@@ -122,31 +127,11 @@ private:
 
   // for polarization:
   G4ThreeVector theTargetPolarization;
-
-
   
-  G4PhysicsTable* theAsymmetryTable;          // table for cross section assym.
-  G4PhysicsTable* theTransverseAsymmetryTable; // table for transverse cross section assym.
+  G4PhysicsTable* theAsymmetryTable;  
+  G4PhysicsTable* theTransverseAsymmetryTable;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4ePolarizedIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
-                                                   const G4Material*,
-                                                         G4double cut)
-{
-  G4double x = cut;
-  if(isElectron) x += cut;
-  return x;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4bool G4ePolarizedIonisation::IsApplicable(const G4ParticleDefinition& p)
-{
-  return (&p == G4Electron::Electron() || &p == G4Positron::Positron());
-}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

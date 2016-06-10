@@ -67,5 +67,5 @@ G4HadFinalState * G4ParticleHPTInelasticFS::ApplyYourself(const G4HadProjectile 
     G4ParticleHPInelasticCompFS::CompositeApply(theTrack, G4Triton::Triton());
              
 // return the result
-    return &theResult;
+    return theResult.Get();
 }

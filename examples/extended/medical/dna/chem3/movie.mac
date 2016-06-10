@@ -1,4 +1,4 @@
-/control/execute prep.mac
-/control/execute physics.mac
-/control/execute chemistry.mac
+/control/execute movie_prep.mac
+/control/execute movie_physics.mac
+/control/execute movie_chemistry.mac
 

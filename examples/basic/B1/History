@@ -14,7 +14,19 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+02/11/15 I. Hrivnacova (exampleB1-V10-01-03)
+- B1Run class replaced with a code based on G4Parameter
 
+04/05/15 I. Hrivnacova (exampleB1-V10-01-02)
+- Coding guidelines: removed empty lines
+     
+23/04/15 mma (exampleB1-V10-01-01)
+- RunAction : come back to previous formula
+     
+21/04/15 mma (exampleB1-V10-01-00)
+- RunAction : correct calculation of rmsEdep
+  
 29/11/14 I. Hrivnacova
 - Use G4endl instead of \n in G4cout;
   this makes each new line in the output on threads preceded with

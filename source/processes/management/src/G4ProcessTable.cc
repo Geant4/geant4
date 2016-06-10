@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTable.cc 78775 2014-01-23 11:23:25Z gcosmo $
+// $Id: G4ProcessTable.cc 91916 2015-08-11 07:03:22Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -122,16 +122,14 @@ void  G4ProcessTable::DeleteMessenger()
 
 
 //////////////////////////
-G4ProcessTable & G4ProcessTable::operator=(const G4ProcessTable &right)
+G4ProcessTable & G4ProcessTable::operator=(const G4ProcessTable &)
 {
-  verboseLevel = right.verboseLevel;
 #ifdef G4VERBOSE
   if (verboseLevel>0){
     G4cout << "--  G4ProcessTable assignment operator  --" << G4endl;
   }
 #endif
-  if (&right == this) return *this;
-  else return *this;
+  return *this;
 }
 
 //////////////////////////

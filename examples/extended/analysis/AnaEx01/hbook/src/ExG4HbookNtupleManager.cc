@@ -103,6 +103,9 @@ void ExG4HbookNtupleManager::CreateNtuplesFromBooking()
     tools::ntuple_booking* ntupleBooking = (*itn)->fNtupleBooking;
     if ( ! ntupleBooking ) continue;
 
+    // Do not create ntuple if it is inactivated
+    if ( fState.GetIsActivation() && ( ! (*itn)->fActivation ) ) continue;
+
 #ifdef G4VERBOSE
     if ( fState.GetVerboseL4() ) 
       fState.GetVerboseL4()
@@ -614,6 +617,11 @@ G4bool ExG4HbookNtupleManager::FillNtupleIColumn(
                                             G4int ntupleId, G4int columnId, 
                                             G4int value)
 {
+  if ( fState.GetIsActivation() && ( ! GetActivation(ntupleId) ) ) {
+    //G4cout << "Skipping FillNtupleIColumn for " << ntupleId << G4endl; 
+    return false; 
+  }  
+
   tools::hbook::wntuple::column<int>* column 
     = GetNtupleIColumn(ntupleId, columnId);
   if ( ! column ) {
@@ -641,6 +649,11 @@ G4bool ExG4HbookNtupleManager::FillNtupleFColumn(
                                             G4int ntupleId, G4int columnId, 
                                             G4float value)
 {
+  if ( fState.GetIsActivation() && ( ! GetActivation(ntupleId) ) ) {
+    //G4cout << "Skipping FillNtupleIColumn for " << ntupleId << G4endl; 
+    return false; 
+  }  
+
   tools::hbook::wntuple::column<float>* column 
     = GetNtupleFColumn(ntupleId, columnId);
   if ( ! column ) {
@@ -662,12 +675,18 @@ G4bool ExG4HbookNtupleManager::FillNtupleFColumn(
   }  
 #endif
   return true;       
-}                                         
+} 
+
 //_____________________________________________________________________________
 G4bool ExG4HbookNtupleManager::FillNtupleDColumn(
                                             G4int ntupleId, G4int columnId, 
                                             G4double value)
 {
+  if ( fState.GetIsActivation() && ( ! GetActivation(ntupleId) ) ) {
+    //G4cout << "Skipping FillNtupleIColumn for " << ntupleId << G4endl; 
+    return false; 
+  }  
+
   tools::hbook::wntuple::column<double>* column 
     = GetNtupleDColumn(ntupleId, columnId);
   if ( ! column ) {
@@ -693,9 +712,14 @@ G4bool ExG4HbookNtupleManager::FillNtupleDColumn(
 
 //_____________________________________________________________________________
 G4bool ExG4HbookNtupleManager::FillNtupleSColumn(
-                                   G4int /*ntupleId*/, G4int /*columnId*/, 
+                                   G4int ntupleId, G4int /*columnId*/, 
                                    const G4String& /*value*/)
 {
+  if ( fState.GetIsActivation() && ( ! GetActivation(ntupleId) ) ) {
+    //G4cout << "Skipping FillNtupleIColumn for " << ntupleId << G4endl; 
+    return false; 
+  }  
+
   G4ExceptionDescription description;
   description << "      " 
     << "Columns of string type are not supported in HBOOK."; 
@@ -707,12 +731,17 @@ G4bool ExG4HbookNtupleManager::FillNtupleSColumn(
 //_____________________________________________________________________________
 G4bool ExG4HbookNtupleManager::AddNtupleRow(G4int ntupleId)
 { 
+  if ( fState.GetIsActivation() && ( ! GetActivation(ntupleId) ) ) {
+    //G4cout << "Skipping FillNtupleIColumn for " << ntupleId << G4endl; 
+    return false;
+  }
+
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) {
     G4ExceptionDescription description;
     description << " ntupleId " << ntupleId;  
     fState.GetVerboseL4()->Message("add", "ntuple row", description);
-  }  
+  }
 #endif
 
   ExG4HbookNtupleDescription* ntupleDescription
@@ -778,3 +807,32 @@ G4bool ExG4HbookNtupleManager::SetNtupleHbookIdOffset(G4int offset)
 }  
 
 #endif
+
+//_____________________________________________________________________________
+void  ExG4HbookNtupleManager::SetActivation(G4bool activation)
+{
+  std::vector<ExG4HbookNtupleDescription*>::iterator it;  
+  for (it = fNtupleDescriptionVector.begin(); it != fNtupleDescriptionVector.end(); it++ ) {
+    (*it)->fActivation = activation;
+  }   
+}
+
+//_____________________________________________________________________________
+void  ExG4HbookNtupleManager::SetActivation(G4int ntupleId, G4bool activation)
+{
+  ExG4HbookNtupleDescription* ntupleDescription
+    = GetNtupleInFunction(ntupleId, "SetActivation");
+  if ( ! ntupleDescription ) return;
+
+  ntupleDescription->fActivation = activation;
+}
+
+//_____________________________________________________________________________
+G4bool  ExG4HbookNtupleManager::GetActivation(G4int ntupleId) const
+{
+  ExG4HbookNtupleDescription* ntupleDescription
+    = GetNtupleInFunction(ntupleId, "GetActivation");
+  if ( ! ntupleDescription ) return false;
+
+  return ntupleDescription->fActivation;
+}

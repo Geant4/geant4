@@ -52,12 +52,7 @@ G4NeutronPHPBuilder()
 
 G4NeutronPHPBuilder::
 ~G4NeutronPHPBuilder() 
-{
-  delete theHPElasticData;
-  delete theHPFissionData;
-  delete theHPCaptureData;
-  delete theHPInelasticData;
-}
+{}
 
 void G4NeutronPHPBuilder::
 Build(G4HadronElasticProcess * aP)

@@ -49,14 +49,12 @@ G4NeutronField::G4NeutronField(G4V3DNucleus * aNucleus) :
   theZ = theNucleus->GetCharge();
   theFermi.Init(theA, theZ);
   theR = 2.*theNucleus->GetOuterRadius();
-  G4double aR=0;
-  while(aR<theR)
+  for (G4double aR=0.;aR<theR; aR+=0.3*fermi)
   {
     G4ThreeVector aPosition(0,0,aR);
     G4double density = GetDensity(aPosition);
     G4double fermiMom = GetFermiMomentum(density);
     theFermiMomBuffer.push_back(fermiMom);
-    aR+=0.3*fermi;
   }
   {
   G4ThreeVector aPosition(0,0,theR);

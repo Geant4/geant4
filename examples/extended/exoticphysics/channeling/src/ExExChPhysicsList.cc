@@ -65,7 +65,8 @@
 ExExChPhysicsList::ExExChPhysicsList():  G4VModularPhysicsList(){
 
     fFilePotentialName = "";
-    
+    fTimeStepMin = 2.E2 * CLHEP::angstrom;
+    fTransverseVariationMax = 2.E-2 * CLHEP::angstrom;    
     fParticleList = new G4DecayPhysics();
     
     fDecayList = new G4RadioactiveDecayPhysics();
@@ -188,6 +189,8 @@ void ExExChPhysicsList::AddChanneling(){
     channeling->SetNucleiDensity(vNucleiDensity);
     channeling->SetElectronDensity(vElectronDensity);
     
+    channeling->SetTransverseVariationMax(fTransverseVariationMax);
+    channeling->SetTimeStepMin(fTimeStepMin);
     if(fFilePotentialName != ""){
         channeling->SetFileCharacteristicsName(fFilePotentialName);
     }

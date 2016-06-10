@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IT.hh 87061 2014-11-24 11:43:34Z gcosmo $
+// $Id: G4IT.hh 94218 2015-11-09 08:24:48Z gcosmo $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
@@ -51,9 +51,6 @@
 #include "G4ITType.hh"
 #include "G4ThreeVector.hh"
 #include "G4VUserTrackInformation.hh"
-#include "G4TrackingInformation.hh"
-#include <CLHEP/Utility/memory.h>
-#include "G4Allocator.hh"
 
 ///
 // To implement your own IT class, you should use
@@ -63,6 +60,7 @@
 ///
 
 class G4IT;
+class G4TrackingInformation;
 //template<typename PointT> class G4KDNode;
 class G4KDNode_Base;
 class G4ITBox;
@@ -71,20 +69,12 @@ class G4Track;
 G4IT* GetIT(const G4Track* track);
 G4IT* GetIT(const G4Track& track);
 
-#if defined G4EM_ALLOC_EXPORT
-extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4IT> *aITAllocator;
-#else
-extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4IT> *aITAllocator;
-#endif
-
 template<class OBJECT> class G4FastListNode;
 typedef G4FastListNode<G4Track> G4TrackListNode;
 
 /**
- * G4IT is a interface which allows the inheriting object :
- * - to be included in ITManager for the search of nearest
- * neighbour
- * - to be tracked using G4ITStepManager
+ * G4IT is a interface which allows the inheriting object
+ * to be tracked using G4ITStepProcessor
  * The inheriting class must implement the operator < , ==
  * and != in order to enable the sorting out.
  * also the concrete header of MyIT ("MyIt.hh") should contain : ITDef(MyIT)
@@ -98,8 +88,8 @@ public:
   G4IT(G4Track*);
   virtual ~G4IT();
 
-  inline void *operator new(size_t);
-  inline void operator delete(void *aIT);
+//  inline void *operator new(size_t);
+//  inline void operator delete(void *aIT);
 
   virtual void Print() const
   {
@@ -125,10 +115,12 @@ public:
   inline G4Track* GetTrack();
   inline const G4Track* GetTrack() const;
 
-  virtual const G4ThreeVector& GetPosition() const;
-  virtual const double& operator[](int i) const;
-
   void RecordCurrentPositionNTime();
+  const G4ThreeVector& GetPosition() const;
+  double operator[](int i) const;
+  const G4ThreeVector& GetPreStepPosition() const;
+  G4double GetPreStepLocalTime() const;
+  G4double GetPreStepGlobalTime() const;
 
   inline void SetPrevious(G4IT*);
   inline void SetNext(G4IT*);
@@ -140,18 +132,14 @@ public:
   inline const G4ITBox* GetITBox() const;
   void TakeOutBox();
   inline void SetNode(G4KDNode_Base*);
+  inline G4KDNode_Base* GetNode() const;
 
   inline void SetParentID(int, int);
   inline void GetParentID(int&, int&);
 
-  inline const G4ThreeVector& GetPreStepPosition() const;
-  inline G4double GetPreStepLocalTime() const;
-  inline G4double GetPreStepGlobalTime() const;
-  inline G4KDNode_Base* GetNode() const;
-
   inline G4TrackingInformation* GetTrackingInfo()
   {
-    return &fTrackingInformation;
+    return fpTrackingInformation;
   }
 
   inline G4TrackListNode* GetListNode()
@@ -184,23 +172,10 @@ private:
   int fParentID_A;
   int fParentID_B;
 
-  G4TrackingInformation fTrackingInformation;
+  G4TrackingInformation* fpTrackingInformation;
   G4TrackListNode* fpTrackNode;
 };
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-///
-// Inline methods
-///
-inline void* G4IT::operator new(size_t)
-{
-  if (!aITAllocator) aITAllocator = new G4Allocator<G4IT>;
-  return (void *) aITAllocator->MallocSingle();
-}
-
-inline void G4IT::operator delete(void *aIT)
-{
-  aITAllocator->FreeSingle((G4IT *) aIT);
-}
+//------------------------------------------------------------------------------
 
 inline const G4ITBox* G4IT::GetITBox() const
 {
@@ -257,21 +232,6 @@ inline void G4IT::GetParentID(int& p_a, int&p_b)
 {
   p_a = fParentID_A;
   p_b = fParentID_B;
-}
-
-inline G4double G4IT::GetPreStepGlobalTime() const
-{
-  return fTrackingInformation.GetPreStepGlobalTime();
-}
-
-inline G4double G4IT::GetPreStepLocalTime() const
-{
-  return fTrackingInformation.GetPreStepLocalTime();
-}
-
-inline const G4ThreeVector& G4IT::GetPreStepPosition() const
-{
-  return fTrackingInformation.GetPreStepPosition();
 }
 
 inline const G4IT* G4IT::GetPrevious() const

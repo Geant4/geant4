@@ -1,4 +1,4 @@
-$Id: History 85989 2014-11-06 15:40:05Z gcosmo $
+$Id: History 93391 2015-10-20 07:06:43Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,58 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19-10-15 I. Hrivnacova (AnaEx01-V10-01-09)
+- Updated hbook for developments in analysis category
+
+01-09-15 I. Hrivnacova (AnaEx01-V10-01-08)
+- New attempt to fix compilation on Windows 
+
+30-08-15 I. Hrivnacova (AnaEx01-V10-01-07)
+- Corrected previous update which caused compilation error
+
+28-08-15 I. Hrivnacova (AnaEx01-V10-01-06)
+- Fixed compilation on Windows
+
+27-08-15 I. Hrivnacova (AnaEx01-V10-01-05)
+- Fixed logarithmic binning in hbook
+
+27-08-15 I. Hrivnacova (AnaEx01-V10-01-04)
+- Introduced meaningful histograms and ntuple names instead of numbers
+  in all AnaEx0N examples and use histogram ids starting from 0  
+- Simplified HistoManager class and fixed function names to follow 
+  coding guidelines
+- In hbook:
+  - Fixed Set*AxisTitle methods
+  - Removed the profile directory, profiles are put in the histogram
+    directory, if its name was set by the user
+
+25-08-15 I. Hrivnacova (AnaEx01-V10-01-03)
+- More fixes in hbook:
+  - Fixed usage of "hbook offset id" - this prevents from overwriting
+    histograms if both H1 and H2 (or P1) are defined
+  - Create a profile directory if its name is set by user
+  - Fixed failing SetH1 and SetP1 functions
+  - Added missing P1 access functions
+  - Put back deleting h1, h2 and p1 in Reset(); as the error
+    message was caused by the first problem
+
+24-08-15 I. Hrivnacova (AnaEx01-V10-01-02)
+- Fix in hbook:
+  Do not delete h1, h2 and p1 in Reset(); 
+  this avoids error message at CloseFile():
+ ***** ERROR in HDELET : Unknown histogram : ID=       1 
+... close Hbook file : AnaEx01.hbook - done  
+
+17-08-15 I. Hrivnacova (AnaEx01-V10-01-01)
+- Updated hbook for developments in analysis category:
+  new G4VAnalysisManager functions: 
+     virtual G4bool PlotImpl();
+     virtual G4bool MergeImpl(tools::histo::hmpi* hmpi);   
+
+09-06-15 I. Hrivnacova (AnaEx01-V10-01-00)
+- Updated hbook for developments in analysis category:
+  implemented interfaces for activations of ntuples
 
 06-11-14 I. Hrivnacova (AnaEx01-V10-00-05)
 - Updated for moving script in shared (analysisShared-V10-00-01)

@@ -41,6 +41,7 @@
 // 20110304  M. Kelsey -- Modify rescatter to use original Propagate() input
 // 20110308  M. Kelsey -- Add ::deexcite() function to handle nuclear fragment
 // 20130620  Address Coverity complaint about missing copy actions
+// 20150128  Add function to check for sensible photonuclear final states
 
 #ifndef G4INUCL_COLLIDER_HH
 #define G4INUCL_COLLIDER_HH
@@ -77,6 +78,9 @@ public:
 
 protected:
   void deexcite(const G4Fragment& fragment, G4CollisionOutput& globalOutput);
+
+  // Looks for non-gamma final state in photonuclear or leptonuclear
+  G4bool photonuclearOkay(G4CollisionOutput& checkOutput) const;
 
 private: 
   G4ElementaryParticleCollider* theElementaryParticleCollider;

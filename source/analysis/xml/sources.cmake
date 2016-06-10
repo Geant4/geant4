@@ -11,7 +11,7 @@
 #
 # Generated on : 15/07/2013
 #
-# $Id: sources.cmake 83748 2014-09-12 12:13:37Z gcosmo $
+# $Id: sources.cmake 92688 2015-09-14 07:01:13Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -37,7 +37,6 @@ GEANT4_DEFINE_MODULE(NAME G4xml
         G4XmlAnalysisReader.hh
         G4XmlAnalysisReader.icc
         G4XmlFileManager.hh
-        G4XmlNtupleDescription.hh
         G4XmlNtupleManager.hh
         G4XmlRFileManager.hh
         G4XmlRNtupleDescription.hh

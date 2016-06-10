@@ -44,6 +44,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
+#include "G4Pow.hh"
 #include "G4XAqmElastic.hh"
 #include "G4XAqmTotal.hh"
 #include "G4KineticTrack.hh"
@@ -87,7 +88,7 @@ G4double G4XAqmElastic::CrossSection(const G4KineticTrack& trk1, const G4Kinetic
   G4XAqmTotal aqmTotal;
 
   G4double sigmaTot = aqmTotal.CrossSection(trk1,trk2);
-  sigma = coeff * std::pow(sigmaTot,param);  
+  sigma = coeff * G4Pow::GetInstance()->powA(sigmaTot,param);  
 
   // Verify that elastic cross section < total cross section
 

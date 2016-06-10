@@ -35,15 +35,15 @@ namespace G4Analysis
 //_____________________________________________________________________________
 G4BinScheme GetBinScheme(const G4String& binSchemeName)
 {
-  G4BinScheme binScheme = kLinearBinScheme;
+  G4BinScheme binScheme = G4BinScheme::kLinear;
   if ( binSchemeName != "linear" ) {
     if  ( binSchemeName == "log" )  
-      binScheme = kLogBinScheme;
+      binScheme = G4BinScheme::kLog;
     else {
-      // There is no name associated with kUserBinScheme
+      // There is no name associated with G4BinScheme::kUser
       G4ExceptionDescription description;
       description 
-        << "    \"" << binScheme << "\" binning scheme is not supported." << G4endl
+        << "    \"" << binSchemeName << "\" binning scheme is not supported." << G4endl
         << "    " << "Linear binning will be applied.";
       G4Exception("G4Analysis::GetBinScheme",
                 "Analysis_W013", JustWarning, description);
@@ -60,29 +60,29 @@ void ComputeEdges(G4int nbins, G4double xmin, G4double xmax,
 // Compute edges from parameters
 
   // Apply units
-  G4double xumin = xmin/unit;
-  G4double xumax = xmax/unit;
+  auto xumin = xmin/unit;
+  auto xumax = xmax/unit;
 
-  if ( binScheme == kLinearBinScheme ) {
-    G4double dx = (fcn(xumax) - fcn(xumin) ) / nbins;
-    G4double binValue = fcn(xumin);
-    while ( G4int(edges.size()) <= nbins ) {
+  if ( binScheme == G4BinScheme::kLinear ) {
+    auto dx = (fcn(xumax) - fcn(xumin) ) / nbins;
+    auto binValue = fcn(xumin);
+    while ( G4int(edges.size()) <= nbins ) {  // Loop checking, 23.06.2015, I. Hrivnacova
       edges.push_back(binValue);
       binValue += dx;
     }
   }  
-  else if ( binScheme == kLogBinScheme ) {
+  else if ( binScheme == G4BinScheme::kLog ) {
     // do not apply fcn 
-    G4double dlog 
+    auto dlog 
       = (std::log10(xumax) - std::log10(xumin))/ nbins;
-    G4double dx = std::pow(10, dlog);
-    G4double binValue = xumin;
-    while ( G4int(edges.size()) <= nbins ) {
+    auto dx = std::pow(10, dlog);
+    auto binValue = xumin;
+    while ( G4int(edges.size()) <= nbins ) { // Loop checking, 23.06.2015, I. Hrivnacova
       edges.push_back(binValue);
       binValue *= dx;
     }
   }
-  else if ( binScheme == kUserBinScheme ) {  
+  else if ( binScheme == G4BinScheme::kUser ) {  
     // This should never happen, but let's make sure about it
     // by issuing a warning
     G4ExceptionDescription description;
@@ -100,9 +100,9 @@ void ComputeEdges(const std::vector<G4double>& edges,
                   std::vector<G4double>& newBins)
 {
 // Apply function to defined edges
-  std::vector<G4double>::const_iterator it;
-  for (it = edges.begin(); it != edges.end(); it++ ) {
-    newBins.push_back(fcn((*it)/unit));
+
+  for (auto element : edges) {
+    newBins.push_back(fcn(element/unit));
   }
 }
     

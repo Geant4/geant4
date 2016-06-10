@@ -54,7 +54,6 @@ public:
   }
 public:
   const std::string& title() const {return m_title;}
-  std::string title() {return m_title;}
   int max_entries() const {return m_limit;}
 protected:
   static int UNLIMITED() {return -1;}

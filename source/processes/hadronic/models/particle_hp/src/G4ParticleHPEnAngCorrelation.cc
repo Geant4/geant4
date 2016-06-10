@@ -47,7 +47,17 @@ G4ReactionProduct * G4ParticleHPEnAngCorrelation::SampleOne(G4double anEnergy)
   // get the result
   G4ReactionProductVector * temp=0;
   G4int i=0;
-  while(temp == 0) temp = theProducts[i++].Sample(anEnergy,1); 
+
+  G4int icounter=0;
+  G4int icounter_max=1024;
+  while(temp == 0) {
+      icounter++;
+      if ( icounter > icounter_max ) {
+	 G4cout << "Loop-counter exceeded the threshold value at " << __LINE__ << "th line of " << __FILE__ << "." << G4endl;
+         break;
+      }
+     temp = theProducts[i++].Sample(anEnergy,1); 
+  }
   
   // is the multiplicity correct
   if(temp->size()!=1) throw G4HadronicException(__FILE__, __LINE__, "SampleOne: Yield not correct");
@@ -74,10 +84,10 @@ G4ReactionProductVector * G4ParticleHPEnAngCorrelation::Sample(G4double anEnergy
      || frameFlag==3) // Added for particle HP
   {
     // simplify and double check @
-    G4ThreeVector the3IncidentPart = theProjectileRP.GetMomentum(); //theProjectileRP has value in LAB
-    G4double nEnergy = theProjectileRP.GetTotalEnergy();
-    G4ThreeVector the3Target = theTarget.GetMomentum();  //theTarget has value in LAB
-    G4double tEnergy = theTarget.GetTotalEnergy();
+    G4ThreeVector the3IncidentPart = fCache.Get().theProjectileRP->GetMomentum(); //theProjectileRP has value in LAB
+    G4double nEnergy = fCache.Get().theProjectileRP->GetTotalEnergy();
+    G4ThreeVector the3Target = fCache.Get().theTarget->GetMomentum();  //theTarget has value in LAB
+    G4double tEnergy = fCache.Get().theTarget->GetTotalEnergy();
     G4double totE = nEnergy+tEnergy;
     G4ThreeVector the3CMS = the3Target+the3IncidentPart;
     theCMS.SetMomentum(the3CMS);
@@ -86,27 +96,33 @@ G4ReactionProductVector * G4ParticleHPEnAngCorrelation::Sample(G4double anEnergy
     theCMS.SetMass(sqrts);
     theCMS.SetTotalEnergy(totE);
     G4ReactionProduct aIncidentPart;
-    aIncidentPart.Lorentz(theProjectileRP, theCMS);
+    aIncidentPart.Lorentz(*fCache.Get().theProjectileRP, theCMS);
     //TKDB 100413 
     //ENDF-6 Formats Manual ENDF-102
     //CHAPTER 6. FILE 6: PRODUCT ENERGY-ANGLE DISTRIBUTIONS
     //LCT Reference system for secondary energy and angle (incident energy is always given in the LAB system)
     //anEnergy = aIncidentPart.GetKineticEnergy();
-    anEnergy = theProjectileRP.GetKineticEnergy(); //should be same argumment of "anEnergy"
+    anEnergy = fCache.Get().theProjectileRP->GetKineticEnergy(); //should be same argumment of "anEnergy"
 
     G4LorentzVector Ptmp (aIncidentPart.GetMomentum(), aIncidentPart.GetTotalEnergy());
 
     toZ.rotateZ(-1*Ptmp.phi());
     toZ.rotateY(-1*Ptmp.theta());
   }
-  theTotalMeanEnergy=0;
+  fCache.Get().theTotalMeanEnergy=0;
   G4LorentzRotation toLab(toZ.inverse()); //toLab only change axis NOT to LAB system
   //- get first number of particles, to check if sum of Z and N is not bigger than target values
   std::vector<int> nParticles;
   bool bNPOK = true;
+//TKDB_PHP_150507
+#ifdef PHP_AS_HP
+  G4int iTry(0);
+#endif
+//TKDB_PHP_150507
   do {
     G4int sumZ = 0;
     G4int sumA = 0;
+    nParticles.clear();
     for(i=0; i<nProducts; i++) 
       {
 	G4int massCode = G4int(theProducts[i].GetMassCode());
@@ -120,16 +136,16 @@ G4ReactionProductVector * G4ParticleHPEnAngCorrelation::Sample(G4double anEnergy
 	nParticles.push_back( nPart );
       }
     bNPOK = true;
-    double targetZ = theTarget.GetDefinition()->GetAtomicNumber();
-    double targetA = theTarget.GetDefinition()->GetAtomicMass();
-    targetZ += theProjectileRP.GetDefinition()->GetAtomicNumber();
-    targetA += theProjectileRP.GetDefinition()->GetAtomicMass();
+    double targetZ = fCache.Get().theTarget->GetDefinition()->GetAtomicNumber();
+    double targetA = fCache.Get().theTarget->GetDefinition()->GetAtomicMass();
+    targetZ += fCache.Get().theProjectileRP->GetDefinition()->GetAtomicNumber();
+    targetA += fCache.Get().theProjectileRP->GetDefinition()->GetAtomicMass();
     if( bAdjustFinalState ) {
       if ( (sumZ != targetZ || sumA != targetA ) && 
 	   (sumZ > targetZ || sumA > targetA  
 	    || ! G4IonTable::GetIonTable()->GetIon ( int(targetZ - sumZ), (int)(targetA - sumA), 0.0 ) ) ){  // e.g. Z=3, A=2
 	bNPOK = false;
-	nParticles.clear();
+	//nParticles.clear();
 #ifdef G4PHPDEBUG
 	if( getenv("G4ParticleHPDebug") ) 
 	  G4cerr << " WRONG MULTIPLICITY Z= " << sumZ 
@@ -139,8 +155,20 @@ G4ReactionProductVector * G4ParticleHPEnAngCorrelation::Sample(G4double anEnergy
 #endif
       }
     }
+//TKDB_PHP_150507
+#ifdef PHP_AS_HP
+   iTry++;
+   if ( iTry > 1024 ) {
+      G4Exception("G4ParticleHPEnAngCorrelation::Sample",
+                  "Warning",
+                  JustWarning,
+                  "Too many trials were done. Exiting current loop by force. You may have Probably, the result violating (baryon number) conservation law will be obtained.");
+      bNPOK=true;
+   }
+#endif
+//TKDB_PHP_150507
 
-  }while(!bNPOK);
+  }while(!bNPOK); // Loop checking, 11.05.2015, T. Koi
 
   for(i=0; i<nProducts; i++)
   {
@@ -148,13 +176,16 @@ G4ReactionProductVector * G4ParticleHPEnAngCorrelation::Sample(G4double anEnergy
     it = theProducts[i].Sample(anEnergy,nParticles[i]); 
     G4double aMeanEnergy = theProducts[i].MeanEnergyOfThisInteraction();
     //    if( getenv("G4PHPTEST") ) G4cout << " EnAnG energy sampled " << it->operator[](0)->GetKineticEnergy() << " aMeanEnergy " << aMeanEnergy << G4endl; // GDEB
-    if(aMeanEnergy>0)
+    //if(aMeanEnergy>0)
+    //151120 TK Modified for solving reproducibility problem 
+    //This change may have side effect. 
+    if(aMeanEnergy>=0)
     {
-      theTotalMeanEnergy += aMeanEnergy;
+      fCache.Get().theTotalMeanEnergy += aMeanEnergy;
     }
     else
     {
-      theTotalMeanEnergy = anEnergy/nProducts+theProducts[i].GetQValue();
+      fCache.Get().theTotalMeanEnergy = anEnergy/nProducts+theProducts[i].GetQValue();
     }
     if(it!=0)
     {
@@ -171,7 +202,7 @@ G4ReactionProductVector * G4ParticleHPEnAngCorrelation::Sample(G4double anEnergy
 
 	if(frameFlag==1) // target rest //TK 100413 should be LAB?
 	{
-	  it->operator[](ii)->Lorentz(*(it->operator[](ii)), -1.*theTarget); //TK 100413 Is this really need?
+	  it->operator[](ii)->Lorentz(*(it->operator[](ii)), -1.*(*fCache.Get().theTarget)); //TK 100413 Is this really need?
 	}
 	else if(frameFlag==2 ) // CMS
         {
@@ -195,7 +226,7 @@ G4ReactionProductVector * G4ParticleHPEnAngCorrelation::Sample(G4double anEnergy
            if ( theProducts[i].GetMassCode() > 4 ) //Alpha AWP 3.96713
            {
               //LAB
-              it->operator[](ii)->Lorentz(*(it->operator[](ii)), -1.*theTarget); //TK 100413 Is this really need?
+              it->operator[](ii)->Lorentz(*(it->operator[](ii)), -1.*(*fCache.Get().theTarget)); //TK 100413 Is this really need?
 #ifdef G4PHPDEBUG
 	  if( getenv("G4ParticleHPDebug") ) 
 	    G4cout <<"G4ParticleHPEnAngCorrelation: after Lorentz boost "<<

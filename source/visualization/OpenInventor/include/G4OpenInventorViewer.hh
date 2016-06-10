@@ -64,6 +64,7 @@ protected:
   virtual SoCamera* GetCamera() = 0;
   void Escape();
   void WritePostScript(const G4String& file = "g4out.ps");
+  void WritePDF(const G4String& file = "g4out.pdf");
   void WritePixmapPostScript(const G4String& file = "g4out.ps");
   void WriteInventor(const G4String& file = "g4out.iv");
   void SceneGraphStatistics();

@@ -124,6 +124,8 @@ namespace G4INCL {
     // iterate over the spectators as many times as possible, until
     // absolutely sure that all of them were rejected.
     unsigned int accepted;
+    unsigned long loopCounter = 0;
+    const unsigned long maxLoopCounter = 10000000;
     do {
       accepted = 0;
       ParticleList toBeAdded = pL;
@@ -134,7 +136,8 @@ namespace G4INCL {
           accepted++;
         }
       }
-    } while(accepted > 0);
+      ++loopCounter;
+    } while(loopCounter<maxLoopCounter && accepted > 0); /* Loop checking, 10.07.2015, D.Mancusi */
     return pL;
   }
 
@@ -218,7 +221,7 @@ namespace G4INCL {
     // Keep removing nucleons from the projectile remnant until we achieve a
     // non-negative excitation energy.
     ParticleList rejected;
-    while(!positiveExcitationEnergy && !pL.empty()) {
+    while(!positiveExcitationEnergy && !pL.empty()) { /* Loop checking, 10.07.2015, D.Mancusi */
       G4double maxExcitationEnergy = -1.E30;
       ParticleMutableIter best = pL.end();
       ThreeVector bestMomentum;

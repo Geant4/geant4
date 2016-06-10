@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm17/src/PhysListEmStandard.cc
 /// \brief Implementation of the PhysListEmStandard class
 //
-// $Id: PhysListEmStandard.cc 85311 2014-10-27 14:23:25Z gcosmo $
+// $Id: PhysListEmStandard.cc 94383 2015-11-13 10:20:27Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,13 +49,19 @@
 #include "G4hBremsstrahlung.hh"
 #include "G4hPairProduction.hh"
 
+#include "G4EmParameters.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysListEmStandard::PhysListEmStandard(const G4String& name)
    :  G4VPhysicsConstructor(name)
-{}
+{
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetDefaults();
+  param->SetMinEnergy(100*eV);  
+  param->SetMaxEnergy(1000*PeV);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

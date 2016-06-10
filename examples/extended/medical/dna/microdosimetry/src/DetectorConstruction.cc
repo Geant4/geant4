@@ -87,7 +87,6 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
                           worldSizeY/2,
                           worldSizeZ/2);  //its size
 
-
   G4LogicalVolume* logicWorld = new G4LogicalVolume(solidWorld,  //its solid
                                     fpWaterMaterial,  //its material
                                     "World");    //its name
@@ -106,7 +105,6 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
                                  worldSizeX/2,
                                  worldSizeY/2,
                                  TargetSizeZ/2);   //its size
-
 
   G4LogicalVolume* logicTarget =
       new G4LogicalVolume(targetSolid,  //its solid

@@ -47,6 +47,7 @@
 #include "G4VScoringMesh.hh"
 #include "G4Timer.hh"
 #include <sstream>
+#include <fstream>
 
 G4WorkerRunManager* G4WorkerRunManager::GetWorkerRunManager()
 { return static_cast<G4WorkerRunManager*>(G4RunManager::GetRunManager()); }
@@ -71,6 +72,7 @@ G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(workerRM) {
     nevModulo = -1;
     currEvID = -1;
     workerContext = 0;
+    readStatusFromFile = false;
 
     G4UImanager::GetUIpointer()->SetIgnoreCmdNotFound(true);
 
@@ -323,6 +325,33 @@ G4Event* G4WorkerRunManager::GenerateEvent(G4int i_event)
 ////G4cout<<"Event "<<currEvID<<" is seeded with { "<<s1<<", "<<s2<<" }"<<G4endl;
   }
 
+  //Read from file seed.
+  //Andrea Dotti 4 November 2015
+  //This is required for strong-reproducibility, in MT mode we have that each
+  //thread produces, for each event a status file, we want to do that.
+  //Search a random file with the format run{%d}evt{%d}.rndm
+
+  //This is the filename base constructed from run and event
+  const auto filename = [&] {
+	  std::ostringstream os;
+	  os << "run"<<currentRun->GetRunID() << "evt" << anEvent->GetEventID();
+	  return os.str();
+  };
+
+  G4bool RNGstatusReadFromFile = false;
+ if ( readStatusFromFile ) {
+	 //Build full path of RNG status file for this event
+	 std::ostringstream os;
+	 os << filename() << ".rndm";
+	 const G4String& randomStatusFile = os.str();
+	 std::ifstream ifile(randomStatusFile.c_str());
+	 if ( ifile ) { //File valid and readable
+		 RNGstatusReadFromFile = true;
+		 G4Random::restoreEngineStatus(randomStatusFile.c_str());
+	 }
+ }
+
+
   if(storeRandomNumberStatusToG4Event==1 || storeRandomNumberStatusToG4Event==3)
   {
     std::ostringstream oss;
@@ -331,12 +360,10 @@ G4Event* G4WorkerRunManager::GenerateEvent(G4int i_event)
     anEvent->SetRandomNumberStatus(randomNumberStatusForThisEvent);
   }
 
-  if(storeRandomNumberStatus) {
+  if(storeRandomNumberStatus && ! RNGstatusReadFromFile ) { //If reading from file, avoid to rewrite the same
       G4String fileN = "currentEvent";
       if ( rngStatusEventsFlag ) {
-          std::ostringstream os;
-          os << "run" << currentRun->GetRunID() << "evt" << anEvent->GetEventID();
-          fileN = os.str();
+    	  fileN = filename();
       }
       StoreRNGStatus(fileN);
   }
@@ -553,5 +580,61 @@ void G4WorkerRunManager::StoreRNGStatus(const G4String& fn )
 {
     std::ostringstream os;
     os << randomNumberStatusDir << "G4Worker"<<workerContext->GetThreadId()<<"_"<<fn <<".rndm";
-    G4Random::saveEngineStatus(os.str().c_str());    
+    G4Random::saveEngineStatus(os.str().c_str());
+}
+
+void G4WorkerRunManager::DoWork()
+{
+  G4MTRunManager* mrm = G4MTRunManager::GetMasterRunManager();
+  G4MTRunManager::WorkerActionRequest nextAction = mrm->ThisWorkerWaitForNextAction();
+  while( nextAction != G4MTRunManager::ENDWORKER )
+  {
+    if( nextAction == G4MTRunManager::NEXTITERATION ) // start the next run
+    {
+      //The following code deals with changing materials between runs
+      static G4ThreadLocal G4bool skipInitialization = true;
+      if(skipInitialization)
+      {
+        // re-initialization is not necessary for the first run
+        skipInitialization = false;
+      }
+      else
+      {
+//        ReinitializeGeometry();
+          workerContext->UpdateGeometryAndPhysicsVectorFromMaster();
+      }
+
+      // Execute UI commands stored in the masther UI manager
+      std::vector<G4String> cmds = mrm->GetCommandStack();
+      G4UImanager* uimgr = G4UImanager::GetUIpointer(); //TLS instance
+      std::vector<G4String>::const_iterator it = cmds.begin();
+      for(;it!=cmds.end();it++)
+      { uimgr->ApplyCommand(*it); }
+      //Start this run
+      G4int numevents = mrm->GetNumberOfEventsToBeProcessed();
+      G4String macroFile = mrm->GetSelectMacro();
+      G4int numSelect = mrm->GetNumberOfSelectEvents();
+      if ( macroFile == "" || macroFile == " " )
+      {
+          this->BeamOn(numevents);
+      }
+      else
+      {
+          this->BeamOn(numevents,macroFile,numSelect);
+      }
+    }
+    else
+    {
+      G4ExceptionDescription d;
+      d<<"Cannot continue, this worker has been requested an unknwon action: "
+       <<nextAction<<" expecting: ENDWORKER(=" <<G4MTRunManager::ENDWORKER
+       <<") or NEXTITERATION(="<<G4MTRunManager::NEXTITERATION<<")";
+      G4Exception("G4WorkerRunManager::DoWork","Run0035",FatalException,d);
+    }
+
+    //Now wait for master thread to signal new action to be performed
+    nextAction = mrm->ThisWorkerWaitForNextAction();
+  } //No more actions to perform
+
+  return;
 }

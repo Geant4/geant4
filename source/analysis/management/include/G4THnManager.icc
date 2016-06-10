@@ -1,0 +1,192 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: G4THnManager.cc 70604 2013-06-03 11:27:06Z ihrivnac $
+
+// Author: Ivana Hrivnacova, 23/06/2015  (ivana@ipno.in2p3.fr)
+
+#include "G4AnalysisManagerState.hh"
+#include "G4HnManager.hh"
+#include "G4AnalysisUtilities.hh"
+
+#include <iostream>
+
+//_____________________________________________________________________________
+template <typename T>
+G4THnManager<T>::G4THnManager(const G4AnalysisManagerState& state,
+                              const G4String& hnType)
+  : fState(state),
+    fTVector(),
+    fNameIdMap(),
+    fHnManager(nullptr)
+{
+  fHnManager = std::make_shared<G4HnManager>(hnType, state);
+}
+
+//_____________________________________________________________________________
+template <typename T>
+G4THnManager<T>::~G4THnManager()
+{
+  for ( auto t : fTVector ) {
+    delete t;
+  }    
+}
+
+// 
+// protected methods
+//
+
+//_____________________________________________________________________________
+template <typename T>
+T*  G4THnManager<T>::GetTInFunction(G4int id, 
+                                    G4String functionName, G4bool warn,
+                                    G4bool onlyIfActive) const
+{
+  G4int index = id - fHnManager->GetFirstId();
+  if ( index < 0 || index >= G4int(fTVector.size()) ) {
+    if ( warn) {
+      G4String inFunction = "G4THnManager::";
+      inFunction += functionName;
+      G4ExceptionDescription description;
+      description << "      " << "histogram " << id << " does not exist.";
+      G4Exception(inFunction, "Analysis_W011", JustWarning, description);
+    }
+    return 0;         
+  }
+  
+  // Do not return histogram if inactive 
+  if ( fState.GetIsActivation() && onlyIfActive && ( ! fHnManager->GetActivation(id) ) ) {
+    return 0; 
+  }  
+  
+  return fTVector[index];
+} 
+
+//_____________________________________________________________________________
+template <typename T>
+G4int G4THnManager<T>::RegisterT(T* t, const G4String& name)
+{
+  G4int index = fTVector.size();
+  fTVector.push_back(t);
+  
+  fHnManager->SetLockFirstId(true);
+  fNameIdMap[name] = index + fHnManager->GetFirstId();
+  return index + fHnManager->GetFirstId();
+}                                         
+
+//_____________________________________________________________________________
+template <typename T>
+G4int  G4THnManager<T>::GetTId(const G4String& name, G4bool warn) const
+{
+  auto it = fNameIdMap.find(name);
+  if ( it ==  fNameIdMap.end() ) {  
+    if ( warn) {
+      G4String inFunction = "G4THnManager::GetH1Id";
+      G4ExceptionDescription description;
+      description << "      " << "histogram " << name << " does not exist.";
+      G4Exception(inFunction, "Analysis_W011", JustWarning, description);
+    }
+    return G4Analysis::kInvalidId;         
+  }
+  return it->second;
+}  
+
+//_____________________________________________________________________________
+template <typename T>
+void G4THnManager<T>::AddTVector(const std::vector<T*>& tVector)
+{
+#ifdef G4VERBOSE
+    if ( fState.GetVerboseL4() ) 
+      fState.GetVerboseL4()->Message("merge", "all " + fHnManager->GetHnType(), "");
+#endif
+  // std::vector<tools::histo::h1d*>::const_iterator itw = h1Vector.begin();
+  // std::vector<tools::histo::h1d*>::iterator it;
+  // for (it = fH1Vector.begin(); it != fH1Vector.end(); it++ ) {
+  //   (*it)->add(*(*itw++));
+  // }  
+  auto itw = tVector.begin();
+  for ( auto t : fTVector ) {
+    t->add(*(*itw++));
+  }  
+#ifdef G4VERBOSE
+    if ( fState.GetVerboseL1() ) 
+      fState.GetVerboseL1()->Message("merge", "all " + fHnManager->GetHnType(), "");
+#endif
+}  
+
+//_____________________________________________________________________________
+template <typename T>
+typename std::vector<T*>::iterator G4THnManager<T>::BeginT()
+{ 
+  return fTVector.begin(); 
+}
+
+//_____________________________________________________________________________
+template <typename T>
+typename std::vector<T*>::iterator G4THnManager<T>::EndT()
+{ 
+  return fTVector.end(); 
+}
+
+//_____________________________________________________________________________
+template <typename T>
+typename std::vector<T*>::const_iterator G4THnManager<T>::BeginConstT() const
+{ 
+  return fTVector.begin(); 
+}
+
+//_____________________________________________________________________________
+template <typename T>
+typename std::vector<T*>::const_iterator G4THnManager<T>::EndConstT() const
+{ 
+  return fTVector.end(); 
+}
+
+// 
+// public methods
+//
+
+//_____________________________________________________________________________
+template <typename T>
+G4bool G4THnManager<T>::Reset()
+{
+// Reset histograms and ntuple
+
+  G4bool finalResult = true;
+
+  for ( auto t : fTVector ) {
+    G4bool result = t->reset();
+    if ( ! result ) finalResult = false;
+  }  
+  
+  return finalResult;
+}  
+
+//_____________________________________________________________________________
+template <typename T>
+G4bool G4THnManager<T>::IsEmpty() const
+{
+  return ! fTVector.size();
+}  

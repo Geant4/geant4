@@ -168,12 +168,9 @@ endfunction()
 #          INSTALL will set the PATH entry to the path to the dataset used
 #          by an install of Geant4.
 #
-#          NOTE : Explicitly remove ENSDF because this should not be
-#          used by default
 #
 function(geant4_export_datasets _type _output)
   geant4_get_datasetnames(_names)
-  list(REMOVE_ITEM _names "G4ENSDFSTATE")
   set(_tmplist)
 
   foreach(_ds ${_names})

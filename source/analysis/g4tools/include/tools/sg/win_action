@@ -1,0 +1,42 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_win_action
+#define tools_sg_win_action
+
+#include "action"
+
+namespace tools {
+namespace sg {
+
+class win_action : public action {
+public:
+  win_action(std::ostream& a_out,unsigned int a_ww,unsigned int a_wh)
+  :action(a_out)
+  ,m_ww(a_ww) //WARNING : we assume that we receive a not zero value.
+  ,m_wh(a_wh) //WARNING : we assume that we receive a not zero value.
+  {}
+  virtual ~win_action(){}
+protected:
+  win_action(const win_action& a_from)
+  :action(a_from)
+  ,m_ww(a_from.m_ww)
+  ,m_wh(a_from.m_wh)
+  {}
+  win_action& operator=(const win_action& a_from){
+    action::operator=(a_from);
+    m_ww = a_from.m_ww;
+    m_wh = a_from.m_wh;
+    return *this;
+  }
+public:
+  unsigned int ww() const {return m_ww;}
+  unsigned int wh() const {return m_wh;}
+protected:
+  unsigned int m_ww;  //window width
+  unsigned int m_wh;  //window height
+};
+
+}}
+
+#endif

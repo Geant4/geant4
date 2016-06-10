@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExtDEDXTable.cc 72057 2013-07-04 13:07:29Z gcosmo $
+// $Id: G4ExtDEDXTable.cc 91868 2015-08-07 15:19:52Z gcosmo $
 //
 // ===========================================================================
 // GEANT4 class source file
@@ -434,6 +434,7 @@ G4bool G4ExtDEDXTable::RetrievePhysicsTable(const G4String& fileName)
   for(G4int i = 0; i<nmbVectors; ++i) {
 
     G4String line = "";
+    // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
     while( line.empty() ) {
 
       getline( ifilestream, line );

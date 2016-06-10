@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KDTree.hh 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id: G4KDTree.hh 93883 2015-11-03 08:25:04Z gcosmo $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
@@ -104,6 +104,8 @@ public:
   // Insert and attache the data to a node at the specified position
   // In return, it gives you the corresponding node
   template<typename PointT> G4KDNode_Base* Insert(PointT* pos); // 3D
+
+  template<typename PointT> G4KDNode_Base* Insert(const PointT& pos); // 3D
 
   /* Find one of the nearest nodes from the specified point.
    *

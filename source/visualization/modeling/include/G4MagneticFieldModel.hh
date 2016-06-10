@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagneticFieldModel.hh 74097 2013-09-22 16:03:59Z gcosmo $
+// $Id: G4MagneticFieldModel.hh 93069 2015-10-02 09:54:27Z gcosmo $
 //
 // 
 // John Allison  17th August 2013
@@ -45,7 +45,11 @@ class G4MagneticFieldModel: public G4VModel {
 
 public: // With description
 
-  G4MagneticFieldModel(G4int nDataPointsPerHalfScene = 10);
+  enum Representation {fullArrow, lightArrow};
+
+  G4MagneticFieldModel
+  (G4int nDataPointsPerHalfScene = 10,
+   Representation representation = Representation::fullArrow);
   virtual ~G4MagneticFieldModel ();
 
   virtual void DescribeYourselfTo (G4VGraphicsScene&);
@@ -61,6 +65,9 @@ private:
   // Note that total number of data poinrs sampled can be as high as
   // (2*n+1)^3, which can get very big very soon.
   G4int fNDataPointsPerMaxHalfScene;
+
+  Representation fRepresentation;
+
 };
 
 #endif

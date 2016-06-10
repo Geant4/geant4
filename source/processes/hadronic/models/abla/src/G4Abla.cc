@@ -888,7 +888,7 @@ void G4Abla::initEvapora()
 
   for(int z = 0; z < 500; z++) {
     for(int a = 0; a < 500; a++) {
-      pace->dm[z][a] = dataInterface->getPace2(z,a);
+      pace->dm[z][a] = dataInterface->getPace2(a,z);
     }
   }
 
@@ -3558,7 +3558,7 @@ G4double G4Abla::haz(G4int k)
         p[iRandom] = G4AblaRandom::flat();
         nTries++;
         if(nTries > 100) break;
-      } while(p[iRandom] <= 0.0 || p[iRandom] >= 1.0);
+      } while(p[iRandom] <= 0.0 || p[iRandom] >= 1.0); /* Loop checking, 28.10.2015, D.Mancusi */
     }
     int nTries = 0;
     do { // The CERNLIB random number generator in the fortran code
@@ -3566,7 +3566,7 @@ G4double G4Abla::haz(G4int k)
       a = G4AblaRandom::flat();
       nTries++;
       if(nTries > 100) break;
-    } while(a <= 0.0 || a >= 1.0);
+    } while(a <= 0.0 || a >= 1.0); /* Loop checking, 28.10.2015, D.Mancusi */
 
     k = 0;
   }
@@ -3579,7 +3579,7 @@ G4double G4Abla::haz(G4int k)
     a = G4AblaRandom::flat();
     nTries++;
     if(nTries > 100) break;
-  } while(a <= 0.0 || a >= 1.0);
+  } while(a <= 0.0 || a >= 1.0); /* Loop checking, 28.10.2015, D.Mancusi */
   p[i] = a;
 
   //  hazard->ial = ix;

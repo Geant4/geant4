@@ -6,9 +6,6 @@
 
 // A C interface to HBOOK.
 
-// It is done in way that limits the number of #define.
-// Only two remains for WIN32.
-
 #ifdef WIN32
 #include <cstring>
 #endif

@@ -103,7 +103,7 @@ G4ExcitedStringVector * G4QGSModel<ParticipantType>::GetStrings()
   G4PartonPair* aPair;
   G4ExcitedStringVector* theStrings = new G4ExcitedStringVector;
   G4ExcitedString * aString;
-  while( (aPair = theParticipants.GetNextPartonPair()) )
+  while( (aPair = theParticipants.GetNextPartonPair()) )  /* Loop checking, 26.10.2015, A.Ribon */
   {
     if (aPair->GetCollisionType() == G4PartonPair::DIFFRACTIVE)
     {

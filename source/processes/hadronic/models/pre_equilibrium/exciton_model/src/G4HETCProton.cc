@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HETCProton.cc 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4HETCProton.cc 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // by V. Lara
 //
@@ -41,27 +41,27 @@ G4HETCProton::G4HETCProton()
 G4HETCProton::~G4HETCProton() 
 {}
 
-G4double G4HETCProton::GetAlpha()
+G4double G4HETCProton::GetAlpha() const
 {
-  G4int aZ = GetRestZ();
   G4double C = 0.0;
-  if (aZ >= 70) 
+  if (theResZ >= 70) 
     {
       C = 0.10;
     } 
   else 
     {
-      C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ + 0.98375;
+      C = ((((0.15417e-06*theResZ) - 0.29875e-04)*theResZ 
+	    + 0.21071e-02)*theResZ - 0.66612e-01)*theResZ + 0.98375;
     }
   return 1.0 + C;
 }
   
-G4double G4HETCProton::GetBeta()
+G4double G4HETCProton::GetBeta() const
 {
-  return -GetCoulombBarrier();
+  return -theCoulombBarrier;
 }
   
-G4double G4HETCProton::GetSpinFactor()
+G4double G4HETCProton::GetSpinFactor() const
 {
   // 2s+1
   return 2.0;
@@ -70,11 +70,9 @@ G4double G4HETCProton::GetSpinFactor()
 G4double G4HETCProton::K(const G4Fragment & aFragment)
 {
   // Number of protons in emitted fragment
-  G4int Pa = GetZ();
+  G4int Pa = theZ;
 
-  G4int TargetZ = GetRestZ();
-  G4int TargetA = GetRestA();
-  G4double r = G4double(TargetZ)/G4double(TargetA);
+  G4double r = G4double(theResZ)/G4double(theResA);
 
   G4int P = aFragment.GetNumberOfParticles();
   G4int H = aFragment.GetNumberOfHoles();
@@ -82,7 +80,7 @@ G4double G4HETCProton::K(const G4Fragment & aFragment)
   G4double result = 0.0;
   if (P > 0)
     {
-      result = (H*r + Pa)/P/r;
+      result = (H*r + Pa)/(P*r);
     }
 
   return std::max(0.0,result);

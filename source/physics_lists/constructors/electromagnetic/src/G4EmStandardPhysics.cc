@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics.cc 84662 2014-10-17 14:32:32Z gcosmo $
+// $Id: G4EmStandardPhysics.cc 92821 2015-09-17 15:23:49Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -99,6 +99,7 @@
 
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
+#include "G4EmModelActivator.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -110,7 +111,9 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmStandardPhysics);
 G4EmStandardPhysics::G4EmStandardPhysics(G4int ver)
   : G4VPhysicsConstructor("G4EmStandard"), verbose(ver)
 {
-  G4EmParameters::Instance()->SetVerbose(verbose);
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetDefaults();
+  param->SetVerbose(verbose);
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -119,7 +122,9 @@ G4EmStandardPhysics::G4EmStandardPhysics(G4int ver)
 G4EmStandardPhysics::G4EmStandardPhysics(G4int ver, const G4String&)
   : G4VPhysicsConstructor("G4EmStandard"), verbose(ver)
 {
-  G4EmParameters::Instance()->SetVerbose(verbose);
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetDefaults();
+  param->SetVerbose(verbose);
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -157,6 +162,10 @@ void G4EmStandardPhysics::ConstructParticle()
   G4He3::He3();
   G4Alpha::Alpha();
   G4GenericIon::GenericIonDefinition();
+
+  // dna
+  G4EmModelActivator mact;
+  mact.ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -217,6 +226,7 @@ void G4EmStandardPhysics::ConstructProcess()
       G4eMultipleScattering* msc = new G4eMultipleScattering;
       G4UrbanMscModel* msc1 = new G4UrbanMscModel();
       G4WentzelVIModel* msc2 = new G4WentzelVIModel();
+      msc1->SetNewDisplacementFlag(false);
       msc1->SetHighEnergyLimit(highEnergyLimit);
       msc2->SetLowEnergyLimit(highEnergyLimit);
       msc->AddEmModel(0, msc1);
@@ -239,6 +249,7 @@ void G4EmStandardPhysics::ConstructProcess()
       G4eMultipleScattering* msc = new G4eMultipleScattering;
       G4UrbanMscModel* msc1 = new G4UrbanMscModel();
       G4WentzelVIModel* msc2 = new G4WentzelVIModel();
+      msc1->SetNewDisplacementFlag(false);
       msc1->SetHighEnergyLimit(highEnergyLimit);
       msc2->SetLowEnergyLimit(highEnergyLimit);
       msc->AddEmModel(0, msc1);
@@ -348,6 +359,9 @@ void G4EmStandardPhysics::ConstructProcess()
   //
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
+
+  G4EmModelActivator mact;
+  mact.ConstructProcess();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

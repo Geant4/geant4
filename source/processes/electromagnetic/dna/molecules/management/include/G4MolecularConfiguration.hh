@@ -48,21 +48,21 @@
 
 #include <vector>
 #include <map>
-#include <CLHEP/Utility/memory.h>
 #include "G4Threading.hh"
+#include "G4ElectronOccupancy.hh"
+#include <cassert>
+#include <functional>
 
 class G4MolecularDissociationChannel;
 class G4MoleculeDefinition;
-
-#include "G4ElectronOccupancy.hh"
+class G4Material;
+class G4MolecularConfiguration;
 
 struct comparator
 {
   bool operator()(const G4ElectronOccupancy& occ1,
                   const G4ElectronOccupancy& occ2) const
   {
-    // Since this method is called a lot of time,
-    // we retrieve only once the totOcc
     G4int totalOcc1 = occ1.GetTotalOccupancy();
     G4int totalOcc2 = occ2.GetTotalOccupancy();
     if (totalOcc1 != totalOcc2)
@@ -74,22 +74,14 @@ struct comparator
       G4int occupancy1 = -1;
       G4int occupancy2 = -1;
       const G4int sizeOrbit = occ1.GetSizeOfOrbit();
-      for (G4int i = 0; i < occ1.GetSizeOfOrbit();)
+      for (G4int i = 0; i < sizeOrbit; i++)
       {
-        // Since this method is called a lot of time,
-        // we retrieve only once the Occ
-
         occupancy1 = occ1.GetOccupancy(i);
         occupancy2 = occ2.GetOccupancy(i);
 
         if (occupancy1 != occupancy2)
         {
           return occupancy1 < occupancy2;
-        }
-        else
-        {
-          i++;
-          if (i >= sizeOrbit) return false;
         }
       }
     }
@@ -107,25 +99,87 @@ class G4MolecularConfiguration
 {
 public:
 
-  /////////////////
+  typedef std::function<double(const G4Material*,
+                         double,
+     const G4MolecularConfiguration*)> G4DiffCoeffParam;
+
+  //____________________________________________________________________________
   // Static methods
 
+  /////////////////////////////////////////////////
+  // CREATE FINALIZED SPECIES
   // Get ground state electronic configuration
-  static G4MolecularConfiguration* GetMolecularConfiguration(const G4MoleculeDefinition*);
+  static G4MolecularConfiguration*
+  GetOrCreateMolecularConfiguration(const G4MoleculeDefinition*);
 
-  // Get for a given moleculeDefinition and a given electronic configuration, the mol conf
-  static G4MolecularConfiguration* GetMolecularConfiguration(const G4MoleculeDefinition*,
-                                                             const G4ElectronOccupancy& electronOccupancy);
+  // Get for a given moleculeDefinition and a given electronic configuration,
+  // the molecular configuration
+  static G4MolecularConfiguration*
+  GetOrCreateMolecularConfiguration(const G4MoleculeDefinition*,
+                                    const G4ElectronOccupancy& eOcc);
 
-  // Get for a given moleculeDefinition and a given electronic configuration, the mol conf
-  static G4MolecularConfiguration* GetMolecularConfiguration(const G4MoleculeDefinition*,
-                                                             int charge);
+  // Get for a given moleculeDefinition and a given electronic configuration,
+  // the molecular configuration
+  static G4MolecularConfiguration*
+  GetOrCreateMolecularConfiguration(const G4MoleculeDefinition*, int charge);
+
+  /////////////////////////////////////////////////
+  // CREATE UNFINALIZED SPECIES
+  // Create ground state electronic configuration - to be finalized
+  static G4MolecularConfiguration*
+    CreateMolecularConfiguration(const G4String& userIdentifier,
+                                 const G4MoleculeDefinition*,
+                                 bool& wasAlreadyCreated);
+
+  static G4MolecularConfiguration*
+    CreateMolecularConfiguration(const G4String& userIdentifier,
+                                 const G4MoleculeDefinition*,
+                                 const G4String& label,
+                                 const G4ElectronOccupancy& eOcc,
+                                 bool& wasAlreadyCreated);
+
+  static G4MolecularConfiguration*
+    CreateMolecularConfiguration(const G4String& userIdentifier,
+                                 const G4MoleculeDefinition*,
+                                 int charge,
+                                 const G4String& label,
+                                 bool& wasAlreadyCreated);
+
+  static G4MolecularConfiguration*
+    CreateMolecularConfiguration(const G4String& userIdentifier,
+                                 const G4MoleculeDefinition*,
+                                 const G4String& label,
+                                 bool& wasAlreadyCreated);
+
+  /////////////////////////////////////////////////
+  // GET MOL CONF
+  //
+  static G4MolecularConfiguration*
+    GetMolecularConfiguration(const G4MoleculeDefinition*,
+                              const G4String& label);
+
+  static G4MolecularConfiguration*
+    GetMolecularConfiguration(int moleculeID);
+
+  static G4MolecularConfiguration*
+    GetMolecularConfiguration(const G4String& userID);
+
+  static int GetNumberOfSpecies();
+
+  static std::map<G4String, G4MolecularConfiguration*>& GetUserIDTable()
+  {
+    return GetManager()->GetUserIDTable();
+  }
 
   // Release memory of the mol conf manager
   static void DeleteManager();
-  ///////////////
 
-  // Methods
+  static double DiffCoeffWater(double temperature_K);
+
+  void AddDiffCoeffParameterization(const G4DiffCoeffParam&);
+
+  //____________________________________________________________________________
+
   const G4MoleculeDefinition* GetDefinition() const;
 
   /** Returns the name of the molecule
@@ -170,7 +224,8 @@ public:
    */
   void PrintState() const;
 
-  const std::vector<const G4MolecularDissociationChannel*>* GetDecayChannel() const;
+  const std::vector<const G4MolecularDissociationChannel*>*
+  GetDecayChannel() const;
 
   G4int GetFakeParticleID() const;
 
@@ -192,6 +247,9 @@ public:
   /** Returns the diffusion coefficient D.
    */
   inline G4double GetDiffusionCoefficient() const;
+
+  inline G4double GetDiffusionCoefficient(const G4Material*,
+                                          double temperature) const;
 
   /** Set the decay time of the molecule.
    */
@@ -223,20 +281,61 @@ public:
    */
   inline G4double GetMass() const;
 
+  /*
+   * Adds a label to the molecular configuration
+   * (Can be used for vibrational states for instance)
+   */
+  inline void SetLabel(const G4String&);
+
+  /*
+   * Returns the label assigned by the user
+   */
+  inline const G4String& GetLabel() const;
+
+  inline void Finalize();
+  static void FinalizeAll();
+
+  inline const G4String& GetUserID() const;
+
+  static void SetGlobalTemperature(G4double);
+  static G4double GetGlobalTemperature();
+
+  //___________________________________________________________________________
+  // EXPERIMENTAL
+
+  static G4MolecularConfiguration* Load(std::istream&);
+
+  void Serialize(std::ostream&);
+  void Unserialize(std::istream&);
+  //___________________________________________________________________________
+
+
 protected:
   G4MolecularConfiguration(const G4MoleculeDefinition*,
-                           const G4ElectronOccupancy&);
-  G4MolecularConfiguration(const G4MoleculeDefinition*, int);
+                           const G4ElectronOccupancy&,
+                           const G4String& label = "");
+
+  G4MolecularConfiguration(const G4MoleculeDefinition*,
+                           int charge);
+
+  G4MolecularConfiguration(const G4MoleculeDefinition*,
+                           const G4String& label,
+                           int charge);
+
+  G4MolecularConfiguration(std::istream&);
+
   G4MolecularConfiguration(const G4MolecularConfiguration&);
   G4MolecularConfiguration & operator=(G4MolecularConfiguration &right);
   ~G4MolecularConfiguration();
   G4MolecularConfiguration* ChangeConfiguration(const G4ElectronOccupancy& newElectronOccupancy);
   G4MolecularConfiguration* ChangeConfiguration(int charge);
 
-  const G4MoleculeDefinition* fMoleculeDefinition;
-  const G4ElectronOccupancy* fElectronOccupancy;
-
   void CheckElectronOccupancy(const char* line) const;
+  void MakeExceptionIfFinalized();
+  void SetUserID(const G4String& userID);
+
+  void CreateDefaultDiffCoeffParam();
+  static void ScaleAllDiffusionCoefficientsOnWater(double temperature_K);
 
 public:
   class G4MolecularConfigurationManager
@@ -249,42 +348,122 @@ public:
     }
     ~G4MolecularConfigurationManager();
 
-    G4int SetMolecularConfiguration(const G4MoleculeDefinition* molDef,
-                                    const G4ElectronOccupancy& eOcc,
-                                    G4MolecularConfiguration* molConf);
+    int GetNumberOfCreatedSpecies()
+    {
+      return fLastMoleculeID+1;
+    }
 
-    G4int SetMolecularConfiguration(const G4MoleculeDefinition* molDef,
-                                    int charge,
-                                    G4MolecularConfiguration* molConf);
+    // TODO: TO BE IMPLEMENTED
+//    void InsertMolecularConfiguration(G4MolecularConfiguration*);
 
-    const G4ElectronOccupancy* FindCommonElectronOccupancy(const G4MoleculeDefinition* molDef,
-                                                           const G4ElectronOccupancy& eOcc);
+    //------------------------------------------------------------------------
+    // CALLED FROM CONSTRUCTORS
+    G4int Insert(const G4MoleculeDefinition* molDef,
+                 const G4ElectronOccupancy& eOcc,
+                 G4MolecularConfiguration* molConf);
 
-    G4MolecularConfiguration* GetMolecularConfiguration(const G4MoleculeDefinition* molDef,
-                                                        const G4ElectronOccupancy& eOcc);
+    G4int Insert(const G4MoleculeDefinition* molDef,
+                 int charge,
+                 G4MolecularConfiguration* molConf);
 
-    G4MolecularConfiguration* GetMolecularConfiguration(const G4MoleculeDefinition* molDef,
-                                                        int charge);
+    G4int Insert(const G4MoleculeDefinition* molDef,
+                 const G4String& label,
+                 G4MolecularConfiguration* molConf);
+
+    //------------------------------------------------------------------------
+    // CALLED WHEN USER ADD SPECIES
+    void AddUserID(const G4String& name,
+                   G4MolecularConfiguration* molecule);
+
+    void RecordNewlyLabeledConfiguration(G4MolecularConfiguration* molConf);
+
+    const G4ElectronOccupancy*
+      FindCommonElectronOccupancy(const G4MoleculeDefinition* molDef,
+                                  const G4ElectronOccupancy& eOcc);
+
+    G4MolecularConfiguration*
+      GetMolecularConfiguration(const G4MoleculeDefinition* molDef,
+                                const G4ElectronOccupancy& eOcc);
+
+    G4MolecularConfiguration*
+      GetMolecularConfiguration(const G4MoleculeDefinition* molDef,
+                                int charge);
+
+    G4MolecularConfiguration*
+      GetMolecularConfiguration(const G4MoleculeDefinition* molDef,
+                                const G4String& label);
+
+    G4MolecularConfiguration* GetMolecularConfiguration(int moleculeID);
+
+    G4MolecularConfiguration* GetMolecularConfiguration(const G4String& userID);
+
+    G4MolecularConfiguration*
+      GetOrCreateMolecularConfiguration(const G4MoleculeDefinition* molDef,
+                                        const G4ElectronOccupancy& eOcc);
+
+    G4MolecularConfiguration*
+      GetOrCreateMolecularConfiguration(const G4MoleculeDefinition* molDef,
+                                        int charge);
 
     static G4Mutex fManagerCreationMutex;
 
     void RemoveMolecularConfigurationFromTable(G4MolecularConfiguration*);
 
-  private:
-    typedef std::map<const G4MoleculeDefinition*,
-        std::map<G4ElectronOccupancy, G4MolecularConfiguration*, comparator> > MolecularConfigurationTable;
-    MolecularConfigurationTable fTable;
-    typedef std::map<const G4MoleculeDefinition*,
-        std::map<int, G4MolecularConfiguration*, comparator> > MolChargeConfigurationTable;
-    MolChargeConfigurationTable fChargeTable;
-    G4int fLastMoleculeID;
+    const std::vector<G4MolecularConfiguration*>& GetAllSpecies()
+    {
+      return fMolConfPerID;
+    }
 
+    std::map<G4String, G4MolecularConfiguration*>& GetUserIDTable()
+    {
+      return fUserIDTable;
+    }
+
+  private:
+
+    //__________________________________________________________________________
+    typedef std::map<G4ElectronOccupancy,
+                     G4MolecularConfiguration*,
+                     comparator> ElectronOccupancyTable;
+    typedef std::map<const G4MoleculeDefinition*,
+                     ElectronOccupancyTable > MolElectronConfTable;
+    MolElectronConfTable fElecOccTable;
+
+    //__________________________________________________________________________
+    typedef std::map<int,
+                     G4MolecularConfiguration*> ChargeTable;
+    typedef std::map<const G4MoleculeDefinition*,
+                     ChargeTable> MolChargeConfTable;
+    MolChargeConfTable fChargeTable;
+
+    //__________________________________________________________________________
+    typedef std::map<const G4String,
+                     G4MolecularConfiguration*> LabelTable;
+    typedef std::map<const G4MoleculeDefinition*,
+           std::map<const G4String, G4MolecularConfiguration*> > MolLabelConfTable;
+    MolLabelConfTable fLabelTable;
+
+    //__________________________________________________________________________
+    typedef std::map<G4String, G4MolecularConfiguration*> UserIDTable;
+    UserIDTable fUserIDTable;
+
+    //__________________________________________________________________________
+    std::vector<G4MolecularConfiguration*> fMolConfPerID;
+    // Indexed by molecule ID
+
+    //__________________________________________________________________________
+    G4int fLastMoleculeID;
     G4Mutex fMoleculeCreationMutex;
   };
 
 protected:
   static G4MolecularConfigurationManager* fgManager;
   static G4MolecularConfigurationManager* GetManager();
+
+  const G4MoleculeDefinition* fMoleculeDefinition;
+  const G4ElectronOccupancy* fElectronOccupancy;
+
+  mutable G4String* fLabel;
 
   G4double fDynDiffusionCoefficient;
   G4double fDynVanDerVaalsRadius;
@@ -294,6 +473,16 @@ protected:
   G4int fMoleculeID;
   /*mutable*/ G4String fFormatedName;
   /*mutable*/ G4String fName;
+  G4String fUserIdentifier;
+  G4bool fIsFinalized;
+
+  G4DiffCoeffParam fDiffParam;
+  static /*G4ThreadLocal*/double fgTemperature;
+
+  static double ReturnDefaultDiffCoeff(const G4Material*,
+                                       double,
+                                       const G4MolecularConfiguration*
+                                       molConf);
 };
 
 inline const G4MoleculeDefinition* G4MolecularConfiguration::GetDefinition() const
@@ -308,6 +497,7 @@ inline const G4ElectronOccupancy* G4MolecularConfiguration::GetElectronOccupancy
 
 inline void G4MolecularConfiguration::SetDiffusionCoefficient(G4double dynDiffusionCoefficient)
 {
+  MakeExceptionIfFinalized();
   fDynDiffusionCoefficient = dynDiffusionCoefficient;
 }
 
@@ -318,6 +508,7 @@ inline G4double G4MolecularConfiguration::GetDiffusionCoefficient() const
 
 inline void G4MolecularConfiguration::SetDecayTime(G4double dynDecayTime)
 {
+  MakeExceptionIfFinalized();
   fDynDecayTime = dynDecayTime;
 }
 
@@ -328,6 +519,7 @@ inline G4double G4MolecularConfiguration::GetDecayTime() const
 
 inline void G4MolecularConfiguration::SetVanDerVaalsRadius(G4double dynVanDerVaalsRadius)
 {
+  MakeExceptionIfFinalized();
   fDynVanDerVaalsRadius = dynVanDerVaalsRadius;
 }
 
@@ -343,6 +535,7 @@ inline G4int G4MolecularConfiguration::GetCharge() const
 
 inline void G4MolecularConfiguration::SetMass(G4double aMass)
 {
+  MakeExceptionIfFinalized();
   fDynMass = aMass;
 }
 
@@ -355,4 +548,51 @@ inline G4int G4MolecularConfiguration::GetMoleculeID() const
 {
   return fMoleculeID;
 }
+
+inline void G4MolecularConfiguration::SetLabel(const G4String& label)
+{
+  assert(fLabel == 0 || *fLabel == "");
+  if(fLabel == 0)
+  {
+    fLabel = new G4String(label);
+  }
+  else
+  {
+    *fLabel = label;
+  }
+  fgManager->RecordNewlyLabeledConfiguration(this);
+}
+
+inline const G4String& G4MolecularConfiguration::GetLabel() const
+{
+  if(fLabel == 0)
+    fLabel = new G4String();
+
+  return (*fLabel);
+}
+
+inline void G4MolecularConfiguration::Finalize()
+{
+  CreateDefaultDiffCoeffParam();
+  fIsFinalized = true;
+}
+
+inline const G4String& G4MolecularConfiguration::GetUserID() const
+{
+  return fUserIdentifier;
+}
+
+inline void G4MolecularConfiguration::AddDiffCoeffParameterization
+(const G4DiffCoeffParam& para)
+{
+  fDiffParam = para;
+}
+
+inline G4double
+G4MolecularConfiguration::GetDiffusionCoefficient(const G4Material* material,
+                                                  double temperature) const
+{
+  return fDiffParam(material, temperature, this);
+}
+
 #endif

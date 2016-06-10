@@ -1,0 +1,18 @@
+/control/verbose 2
+/run/verbose 1
+#
+/gun/particle ion
+/gun/ion 26 55
+#
+/rdecay01/fullChain true
+#
+/tracking/verbose 2
+/run/beamOn 1
+#
+/analysis/setFileName ecapt
+/analysis/h1/set 6 100  230. 240. keV	#EkinTot (Q)
+#
+/tracking/verbose 0
+/run/printProgress 10000
+#   
+/run/beamOn 100000

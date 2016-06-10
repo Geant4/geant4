@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc 87360 2014-12-01 16:07:16Z gcosmo $
+// $Id: G4VSceneHandler.cc 91686 2015-07-31 09:40:08Z gcosmo $
 //
 // 
 // John Allison  19th July 1996
@@ -584,7 +584,7 @@ void G4VSceneHandler::ProcessScene () {
 #endif
       if (runManager) {
 	const G4Run* run = runManager->GetCurrentRun();
-	const std::vector<const G4Event*>* events =
+        const std::vector<const G4Event*>* events =
 	  run? run->GetEventVector(): 0;
 	size_t nKeptEvents = 0;
 	if (events) nKeptEvents = events->size();
@@ -604,10 +604,9 @@ void G4VSceneHandler::ProcessScene () {
 	    if (verbosity >= G4VisManager::confirmations) {
 	      G4cout << "Refreshing events in run..." << G4endl;
 	    }
-	    for (size_t i = 0; i < nKeptEvents; ++i) {
-	      const G4Event* event = (*events)[i];
-	      if (event) DrawEvent(event);
-	    }
+            for (auto&& event: *events) {
+              if (event) DrawEvent(event);
+            }
 
 	    if (!fpScene->GetRefreshAtEndOfRun()) {
 	      if (verbosity >= G4VisManager::warnings) {

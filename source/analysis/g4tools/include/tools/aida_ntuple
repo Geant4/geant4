@@ -72,7 +72,6 @@ protected:
     return *this;
   }
 public:
-  std::string name() {return m_name;}
   const std::string& name() const {return m_name;}
 
   void set_index(uint64 a_index){m_index = a_index;}
@@ -149,10 +148,9 @@ protected:
     return *this;
   }
 public:
-  std::ostream& out() {return m_out;}
+  std::ostream& out() const {return m_out;}
   const std::vector<base_col*>& cols() const {return m_cols;}
 
-  std::string title() {return m_title;}
   const std::string& title() const {return m_title;}
   void set_title(const std::string& a_title) {m_title = a_title;}
 
@@ -272,11 +270,12 @@ inline const std::string& s_aida_type(int64) {
   static const std::string s_v("long");
   return s_v;
 }
+/*
 inline const std::string& s_aida_type(const std::vector<double>&) {
   static const std::string s_v("double[]");
   return s_v;
 }
-
+*/
 inline const std::string& s_aida_type_ituple() {
   static const std::string s_v("ITuple");
   return s_v;
@@ -309,7 +308,7 @@ public:
     return base_col::cast(a_class);
   }
 public:
-  virtual std::string aida_type() const = 0;
+  virtual const std::string& aida_type() const = 0;
   virtual bool s_default_value(std::string&) const = 0;
   virtual bool s_value(std::string&) const = 0;
   virtual bool s_fill(const std::string&) = 0;
@@ -394,7 +393,7 @@ public:
   }
   virtual uint64 num_elems() const {return m_data.size();}
 public:
-  virtual std::string aida_type() const {return s_aida_type(T());}
+  virtual const std::string& aida_type() const {return s_aida_type(T());}
   virtual bool s_default_value(std::string& a_s) const {
     a_s = tos(m_default);
     return true;
@@ -704,23 +703,18 @@ inline bool create_cols_from_vals(ntuple& a_ntu,
           col = a_ntu.create_col<double>((*it).label(),(*it).get_double());
 
         //} else if((*it).type()==value::UNSIGNED_CHAR) {
-        //  col = a_ntu.create_col<unsigned char>
-        //          ((*it).label(),(*it).get_unsigned_char());
+        //  col = a_ntu.create_col<unsigned char>((*it).label(),(*it).get_unsigned_char());
         } else if((*it).type()==value::UNSIGNED_SHORT) {
-          col = a_ntu.create_col<unsigned short>
-                  ((*it).label(),(*it).get_unsigned_short());
+          col = a_ntu.create_col<unsigned short>((*it).label(),(*it).get_unsigned_short());
         } else if((*it).type()==value::UNSIGNED_INT) {
-          col = a_ntu.create_col<unsigned int>
-                  ((*it).label(),(*it).get_unsigned_int());
+          col = a_ntu.create_col<unsigned int>((*it).label(),(*it).get_unsigned_int());
         } else if((*it).type()==value::UNSIGNED_INT64) {
-          col = a_ntu.create_col<uint64>
-                  ((*it).label(),(*it).get_unsigned_int64());
+          col = a_ntu.create_col<uint64>((*it).label(),(*it).get_unsigned_int64());
 
         } else if((*it).type()==value::BOOL) {
           col = a_ntu.create_col<bool>((*it).label(),(*it).get_bool());
         } else if((*it).type()==value::STRING) {
-          col = a_ntu.create_col<std::string>
-                  ((*it).label(),(*it).get_string());
+          col = a_ntu.create_col<std::string>((*it).label(),(*it).get_string());
         } else if((*it).type()==value::INT64) {
           col = a_ntu.create_col<int64>((*it).label(),(*it).get_int64());
         }
@@ -1043,8 +1037,7 @@ inline bool create_cols_from_string(ntuple& a_ntu,
   return true;
 }
 
-inline aida_col_ntu* find_col_ntu(ntuple& a_ntu,
-                                  const std::string& a_name){
+inline aida_col_ntu* find_col_ntu(ntuple& a_ntu,const std::string& a_name){
   base_col* col = find_named<base_col>(a_ntu.cols(),a_name);
   if(!col) return 0;
   return safe_cast<base_col, aida_col_ntu >(*col);
@@ -1218,7 +1211,7 @@ protected:
   }
 public:
   stat_looper(base_ntu& a_ntu,const base_col& a_col)
-  : base_looper<T>(a_ntu,a_col)
+  :base_looper<T>(a_ntu,a_col)
   ,m_first(true)
   ,m_mn(T())
   ,m_mx(T())
@@ -1229,7 +1222,7 @@ public:
   virtual ~stat_looper(){}
 public:
   stat_looper(const stat_looper& a_from)
-  : base_looper<T>(a_from)
+  :base_looper<T>(a_from)
   ,m_first(true)
   ,m_mn(T())
   ,m_mx(T())
@@ -1307,6 +1300,27 @@ inline base_col* find_leaf_column(const base_ntu& a_ntu,const std::string& a_nam
   }
   return 0;
 }  
+
+template <class T>
+inline bool to_vector(base_ntu& a_ntu,std::vector<double>& a_vec,unsigned int a_col = 0) {
+  a_vec.clear();
+  const std::vector<base_col*>& cols = a_ntu.cols();
+  if(cols.empty()) return false;
+  if(a_col>=cols.size()) return false;
+  base_col* _base_col = cols[a_col];
+  aida_col<T>* _col = safe_cast<base_col, aida_col<T> >(*_base_col);
+  if(!_col) return false;
+  a_ntu.start();
+  uint64 _rows = a_ntu.rows();
+  a_vec.resize(_rows);
+  T v;
+ {for(uint64 row=0;row<_rows;row++) {
+    if(!a_ntu.next()) {a_vec.clear();return false;}
+    if(!_col->get_entry(v)) {}
+    a_vec[row] = v;
+  }}
+  return true;
+}
 
 }}
 

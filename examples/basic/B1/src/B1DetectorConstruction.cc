@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B1DetectorConstruction.cc 75117 2013-10-28 09:38:37Z gcosmo $
+// $Id: B1DetectorConstruction.cc 94307 2015-11-11 13:42:46Z gcosmo $
 //
 /// \file B1DetectorConstruction.cc
 /// \brief Implementation of the B1DetectorConstruction class
@@ -145,7 +145,6 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct()
                     false,                   //no boolean operation
                     0,                       //copy number
                     checkOverlaps);          //overlaps checking
-
 
   //     
   // Shape 2

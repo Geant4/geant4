@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundFragment.icc 79693 2014-03-12 13:00:49Z gcosmo $
+// $Id: G4VPreCompoundFragment.icc 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // by V. Lara
 //
@@ -40,10 +40,8 @@ IsItPossible(const G4Fragment & aFragment) const
 {
   G4int pplus = aFragment.GetNumberOfCharged();
   G4int pneut = aFragment.GetNumberOfParticles()-pplus;
-  return ((pneut >= theA - theZ) && (pplus >= theZ) 
-	&& (theMaximalKineticEnergy > 0));
+  return ((pneut >= theA - theZ) && (pplus >= theZ) && (theMaxKinEnergy > 0));
 }
-
 
 inline 
 G4ReactionProduct * G4VPreCompoundFragment::GetReactionProduct() const
@@ -67,22 +65,12 @@ inline G4int G4VPreCompoundFragment::GetZ() const
 
 inline G4int G4VPreCompoundFragment::GetRestA() const 
 { 
-  return theRestNucleusA;
+  return theResA;
 }
     
 inline G4int G4VPreCompoundFragment::GetRestZ() const 
 { 
-  return theRestNucleusZ;
-}
-
-inline G4double G4VPreCompoundFragment::ResidualA13() const 
-{
-  return theRestNucleusA13;
-}
-    
-inline G4double G4VPreCompoundFragment::GetCoulombBarrier() const 
-{
-  return theCoulombBarrier;
+  return theResZ;
 }
     
 inline G4double G4VPreCompoundFragment::GetBindingEnergy() const 
@@ -90,14 +78,9 @@ inline G4double G4VPreCompoundFragment::GetBindingEnergy() const
   return theBindingEnergy;
 }
 
-inline G4double G4VPreCompoundFragment::GetMaximalKineticEnergy() const 
-{ 
-  return theMaximalKineticEnergy;
-}
-
 inline G4double G4VPreCompoundFragment::GetEnergyThreshold() const 
 { 
-  return theMaximalKineticEnergy - theCoulombBarrier;
+  return theMaxKinEnergy - theCoulombBarrier;
 }
     
 inline G4double G4VPreCompoundFragment::GetEmissionProbability() const 
@@ -112,12 +95,7 @@ inline G4double G4VPreCompoundFragment::GetNuclearMass(void) const
 
 inline G4double G4VPreCompoundFragment::GetRestNuclearMass() const 
 {
-  return theRestNucleusMass;
-}
-
-inline G4double G4VPreCompoundFragment::GetReducedMass() const 
-{
-  return theReducedMass;
+  return theResMass;
 }
 
 inline 
@@ -132,12 +110,6 @@ void G4VPreCompoundFragment::SetMomentum(const G4LorentzVector & value)
   theMomentum = value;
 }
 
-inline const G4String G4VPreCompoundFragment::
-GetName() const 
-{ 
-  return particle->GetParticleName(); 
-}
-
 //for inverse cross section choice
 inline void G4VPreCompoundFragment::SetOPTxs(G4int opt)
 {
@@ -149,3 +121,4 @@ inline void G4VPreCompoundFragment::UseSICB(G4bool use)
 {
   useSICB=use;
 }
+

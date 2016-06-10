@@ -1,4 +1,4 @@
-$Id: History 85352 2014-10-28 09:55:23Z gcosmo $
+$Id: History 91025 2015-06-16 09:40:08Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,21 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 15, 2015 - P. Gumplinger (OpNovice-V10-01-04)
+- introduce G4ThreadLocal in OpNovicePhysicsList class
+
+Jun 09, 2015 - P. Gumplinger (OpNovice-V10-01-03)
+- revert back to kernel initialization in main
+
+Jun 05, 2015 - P. Gumplinger (OpNovice-V10-01-02)
+- reduce output size and move kernel initialization to input macro
+
+May 22, 2015 - P. Gumplinger (OpNovice-V10-01-01)
+- apply coding guideline 3.3
+
+May 16, 2015 J. Allison (OpNovice-V10-01-00)
+- Replaced !G4Threading::IsWorkerThread() by G4Threading::IsMasterThread().
 
 October 27, 2014 A. Dotti (OpNovice-V10-00-06)
 - Migration to new UI system. Requires:

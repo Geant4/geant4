@@ -44,7 +44,7 @@ class G4AnalysisManagerState;
 class G4XmlRFileManager : public G4BaseFileManager
 {
   public:
-    G4XmlRFileManager(const G4AnalysisManagerState& state);
+    explicit G4XmlRFileManager(const G4AnalysisManagerState& state);
     ~G4XmlRFileManager();
 
     // Methods to manipulate input files

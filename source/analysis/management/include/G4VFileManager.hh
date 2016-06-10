@@ -38,7 +38,7 @@
 class G4VFileManager : public G4BaseFileManager
 {
   public:
-    G4VFileManager(const G4AnalysisManagerState& state);
+    explicit G4VFileManager(const G4AnalysisManagerState& state);
     virtual ~G4VFileManager();
    
     // Methods to manipulate files
@@ -48,38 +48,35 @@ class G4VFileManager : public G4BaseFileManager
     
     // Methods for handling files and directories names
     //
+    virtual G4bool SetFileName(const G4String& fileName) final;
+    
     void LockHistoDirectoryName();
-    void LockProfileDirectoryName();
     void LockNtupleDirectoryName();
 
-    virtual G4bool SetFileName(const G4String& fileName);
-    
     G4bool SetHistoDirectoryName(const G4String& dirName);
-    G4bool SetProfileDirectoryName(const G4String& dirName);
     G4bool SetNtupleDirectoryName(const G4String& dirName); 
 
+    G4bool IsOpenFile() const;
     G4String GetHistoDirectoryName() const;
-    G4String GetProfileDirectoryName() const;
     G4String GetNtupleDirectoryName() const;
 
   protected:
     // data members
+    G4bool   fIsOpenFile;
     G4String fHistoDirectoryName;
-    G4String fProfileDirectoryName;
     G4String fNtupleDirectoryName; 
     G4bool   fLockFileName;     
     G4bool   fLockHistoDirectoryName;     
-    G4bool   fLockProfileDirectoryName;     
     G4bool   fLockNtupleDirectoryName;
 };
 
 // inline functions
 
+inline G4bool G4VFileManager::IsOpenFile() const
+{ return fIsOpenFile; }
+
 inline void G4VFileManager::LockHistoDirectoryName()
 { fLockHistoDirectoryName = true; }
-
-inline void G4VFileManager::LockProfileDirectoryName()
-{ fLockProfileDirectoryName = true; }
 
 inline void G4VFileManager::LockNtupleDirectoryName()
 { fLockNtupleDirectoryName = true; }
@@ -87,10 +84,6 @@ inline void G4VFileManager::LockNtupleDirectoryName()
 
 inline G4String G4VFileManager::GetHistoDirectoryName() const {
   return fHistoDirectoryName;
-}  
-
-inline G4String G4VFileManager::GetProfileDirectoryName() const {
-  return fProfileDirectoryName;
 }  
 
 inline G4String G4VFileManager::GetNtupleDirectoryName() const {

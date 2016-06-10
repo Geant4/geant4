@@ -26,13 +26,12 @@
 /// \file persistency/P02/src/ExP02DetConstrReader.cc
 /// \brief Implementation of the ExP02DetConstrReader class
 //
-// $Id: ExP02DetConstrReader.cc 71727 2013-06-21 07:55:45Z gcosmo $
+// $Id: ExP02DetConstrReader.cc 93306 2015-10-16 07:38:07Z gcosmo $
 //
 //ROOT
 #include "TROOT.h"
 #include "TFile.h"
 #include "TSystem.h"
-#include "Cintex/Cintex.h"
 
 //G4
 #include "G4Element.hh"
@@ -50,11 +49,6 @@ ExP02DetConstrReader::ExP02DetConstrReader()
   // initialize ROOT
   TSystem ts;
   gSystem->Load("libExP02ClassesDict");
-
-  //  ROOT::Cintex::Cintex::SetDebug(2);
-  ROOT::Cintex::Cintex::Enable();
-  //  gDebug = 1;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

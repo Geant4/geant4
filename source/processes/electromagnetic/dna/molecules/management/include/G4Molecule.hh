@@ -80,6 +80,7 @@ class G4MolecularConfiguration;
 class G4MoleculeDefinition;
 class G4MolecularDissociationChannel;
 class G4DynamicParticle;
+class G4Material;
 
 G4Molecule* GetMolecule(const G4Track& track);
 G4Molecule* GetMolecule(const G4Track* track);
@@ -115,6 +116,11 @@ ITDef(G4Molecule)
   G4bool operator!=(const G4Molecule &right) const;
   G4bool operator<(const G4Molecule &right) const;
 
+  operator int() const
+  {
+    return GetMoleculeID();
+  }
+
   virtual G4ITType GetITSubType() const
   {
     return GetMoleculeID();
@@ -139,6 +145,8 @@ public:
    * false is the molecule is ionized.
    */
   G4Molecule(G4MoleculeDefinition * molecule, G4int, G4bool);
+
+  G4Molecule(G4MolecularConfiguration*);
 
   virtual ~G4Molecule();
 
@@ -222,6 +230,11 @@ public:
    */
   G4double GetDiffusionCoefficient() const;
 
+  /** Returns the diffusion coefficient D.
+   */
+  G4double GetDiffusionCoefficient(const G4Material*,
+                                   double temperature) const;
+
   /** Set the decay time of the molecule.
    */
   void SetDecayTime(G4double);
@@ -251,12 +264,21 @@ public:
   /** Returns the total mass of the molecule.
    */
   G4double GetMass() const;
+
+  /** Returns the label of the molecule configuration
+   */
+  const G4String& GetLabel() const;
+
+  void SetLabel(const G4String& label);
+
+  void ChangeConfigurationToLabel(const G4String& label);
+
 ////////////////////////////////////////////////////////////////////////
 
   G4MolecularConfiguration* GetMolecularConfiguration() const;
 
-  static void SetGlobalTemperature(G4double);
-  static G4double GetGlobalTemperature();
+//  static void SetGlobalTemperature(G4double);
+//  static G4double GetGlobalTemperature();
 
   static G4Molecule* GetMolecule(const G4Track*);
 
@@ -267,7 +289,9 @@ private:
 
   G4MolecularConfiguration* fpMolecularConfiguration;
 
-  static /*G4ThreadLocal*/double fgTemperature;
+//  double fCachedDiffusionCoefficient;
+
+//  static /*G4ThreadLocal*/double fgTemperature;
 };
 
 #if defined G4EM_ALLOC_EXPORT

@@ -29,7 +29,7 @@ $Id: README 69174 2013-04-21 20:38:15Z maire $
    directly from a single isotope.
    
    To be identified by the ThermalScattering module, the elements composing a
-   material must have a specific name (see G4NeutronHPThermalScatteringNames.cc)
+   material must have a specific name (see G4ParticleHPThermalScatteringNames.cc)
    Examples of such materials are build in DetectorConstruction.
  	
  2- PHYSICS LIST

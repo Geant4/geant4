@@ -1,0 +1,614 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_style_colormap
+#define tools_sg_style_colormap
+
+#include "style_color"
+
+#include "../hls"
+#include "../sto"
+#include "../num2s"
+#include "../S_STRING"
+#include "../forit"
+
+#include <map>
+
+namespace tools {
+namespace sg {
+
+class style_colormap : public std::map<unsigned int,style_color> {
+  typedef std::map<unsigned int,style_color> parent;
+protected:
+  typedef std::map<unsigned int,style_color> map_t;
+public:
+  TOOLS_SCLASS(tools::sg::style_colormap)
+public:
+  style_colormap():parent(){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~style_colormap(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  style_colormap(const style_colormap& a_from):parent(a_from){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  style_colormap& operator=(const style_colormap& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+public:
+  bool get_color(unsigned int a_index,colorf& a_col) const {
+    map_t::const_iterator it = find(a_index);
+    if(it==end()) {
+      a_col.set_value(0.5F,0.5F,0.5F,1);
+      return false;
+    }
+    a_col = (*it).second.second;
+    return true;
+  }
+  bool get_color(const std::string& a_s,colorf& a_col) const {
+    tools_mforcit(unsigned int,style_color,*this,it) {
+      if((*it).second.first==a_s) {
+        a_col = (*it).second.second;
+        return true;
+      }
+    }
+    //we do not set a_col to something.
+    return false;
+  }
+  bool get_string_color(unsigned int a_index,std::string& a_s) const{
+    map_t::const_iterator it = find(a_index);
+    if(it==end()) {a_s.clear();return false;}
+    colorf c = (*it).second.second;
+
+    char ss[192]; //3*64 = 192
+    snpf(ss,sizeof(ss),"%g %g %g",c[0],c[1],c[2]);
+    a_s = std::string(ss);  
+    return true;
+  }
+public:
+  void add(style_color a_color) {
+    (*this)[(*this).size()] = a_color;
+  }
+};
+
+class style_default_colormap : public style_colormap {
+public:
+  TOOLS_CLASS_STRING(default)
+public:
+  style_default_colormap() {
+    add(style_color("aquamarine",colorf::aquamarine()));
+    add(style_color("mediumaquamarine",colorf::mediumaquamarine()));
+    add(style_color("black",colorf::black()));
+    add(style_color("blue",colorf::blue()));
+    add(style_color("cadetblue",colorf::cadetblue()));
+    add(style_color("cornflowerblue",colorf::cornflowerblue()));
+    add(style_color("darkslateblue",colorf::darkslateblue()));
+    add(style_color("lightblue",colorf::lightblue()));
+    add(style_color("lightsteelblue",colorf::lightsteelblue()));
+    add(style_color("mediumblue",colorf::mediumblue()));
+
+    add(style_color("mediumslateblue",colorf::mediumslateblue()));
+    add(style_color("midnightblue",colorf::midnightblue()));
+    add(style_color("navyblue",colorf::navyblue()));
+    add(style_color("navy",colorf::navy()));
+    add(style_color("skyblue",colorf::skyblue()));
+    add(style_color("slateblue",colorf::slateblue()));
+    add(style_color("steelblue",colorf::steelblue()));
+    add(style_color("coral",colorf::coral()));
+    add(style_color("cyan",colorf::cyan()));
+    add(style_color("firebrick",colorf::firebrick()));
+      
+    add(style_color("brown",colorf::brown()));
+    add(style_color("gold",colorf::gold()));
+    add(style_color("goldenrod",colorf::goldenrod()));
+    add(style_color("green",colorf::green()));
+    add(style_color("darkgreen",colorf::darkgreen()));
+    add(style_color("darkolivegreen",colorf::darkolivegreen()));
+    add(style_color("forestgreen",colorf::forestgreen()));
+    add(style_color("limegreen",colorf::limegreen()));
+    add(style_color("mediumseagreen",colorf::mediumseagreen()));
+    add(style_color("mediumspringgreen",colorf::mediumspringgreen()));
+      
+    add(style_color("palegreen",colorf::palegreen()));
+    add(style_color("seagreen",colorf::seagreen()));
+    add(style_color("springgreen",colorf::springgreen()));
+    add(style_color("yellowgreen",colorf::yellowgreen()));
+    add(style_color("darkslategrey",colorf::darkslategrey()));
+    add(style_color("dimgrey",colorf::dimgrey()));
+    add(style_color("lightgrey",colorf::lightgrey()));
+    add(style_color("grey",colorf::grey()));
+    add(style_color("khaki",colorf::khaki()));
+    add(style_color("magenta",colorf::magenta()));
+      
+    add(style_color("maroon",colorf::maroon()));
+    add(style_color("orange",colorf::orange()));
+    add(style_color("orchid",colorf::orchid()));
+    add(style_color("darkorchid",colorf::darkorchid()));
+    add(style_color("mediumorchid",colorf::mediumorchid()));
+    add(style_color("pink",colorf::pink()));
+    add(style_color("plum",colorf::plum()));
+    add(style_color("red",colorf::red()));
+    add(style_color("indianred",colorf::indianred()));
+    add(style_color("mediumvioletred",colorf::mediumvioletred()));
+      
+    add(style_color("orangered",colorf::orangered()));
+    add(style_color("violetred",colorf::violetred()));
+    add(style_color("salmon",colorf::salmon()));
+    add(style_color("sienna",colorf::sienna()));
+    add(style_color("tan",colorf::tan()));
+    add(style_color("thistle",colorf::thistle()));
+    add(style_color("turquoise",colorf::turquoise()));
+    add(style_color("darkturquoise",colorf::darkturquoise()));
+    add(style_color("mediumturquoise",colorf::mediumturquoise()));
+    add(style_color("violet",colorf::violet()));
+      
+    add(style_color("blueviolet",colorf::blueviolet()));
+    add(style_color("wheat",colorf::wheat()));
+    add(style_color("white",colorf::white()));
+    add(style_color("yellow",colorf::yellow()));
+    add(style_color("greenyellow",colorf::greenyellow()));
+  }
+};
+
+class style_ROOT_colormap : public style_colormap {
+  //enum EColor {kWhite,kBlack,kRed,kGreen,kBlue,kYellow,kMagenta,kCyan};
+               //0    1      2    3      4     5       6        7
+
+
+  // ROOT-5.24.00b/Rtypes.h
+  enum EColor { kWhite =0,   kBlack =1,   kGray=920,
+    kRed   =632, kGreen =416, kBlue=600, kYellow=400, kMagenta=616, kCyan=432,
+    kOrange=800, kSpring=820, kTeal=840, kAzure =860, kViolet =880, kPink=900};
+
+public:
+  style_ROOT_colormap() {
+    // ROOT-4.00.08/TApplication.cxx/InitializeColors
+    // ROOT-5.18.00d/TColor.cxx/InitializeColors
+    //resize(51+50+50+50); //201
+
+    // from index 0   to 50  : default colors.
+    // from index 51  to 100 : pretty.
+    // from index 101 to 150 : dark version of default colors.
+    // from index 151 to 200 : bright version of default colors.
+
+    //base/inc/Gtypes.h
+
+    new_TColor(kWhite,1,1,1,"background");
+    new_TColor(kBlack,0,0,0,"black");
+    new_TColor(2,1,0,0,"red");
+    new_TColor(3,0,1,0,"green");
+    new_TColor(4,0,0,1,"blue");
+    new_TColor(5,1,1,0,"yellow");
+    new_TColor(6,1,0,1,"magenta");
+    new_TColor(7,0,1,1,"cyan");
+    new_TColor(10,0.999,0.999,0.999,"white");
+    new_TColor(11,0.754,0.715,0.676,"editcol");
+
+    // The color white above is defined as being nearly white.
+    // Sets the associated dark color also to white.
+    //new_TColor(110,0.999,0.999,.999,"Color110");
+
+    // Initialize Custom colors
+    new_TColor(20,0.8,0.78,0.67,"Color20");
+    new_TColor(31,0.54,0.66,0.63,"Color31");
+    new_TColor(41,0.83,0.81,0.53,"Color41");
+    new_TColor(30,0.52,0.76,0.64,"Color30");
+    new_TColor(32,0.51,0.62,0.55,"Color32");
+    new_TColor(24,0.70,0.65,0.59,"Color24");
+    new_TColor(21,0.8,0.78,0.67,"Color21");
+    new_TColor(47,0.67,0.56,0.58,"Color47");
+    new_TColor(35,0.46,0.54,0.57,"Color35");
+    new_TColor(33,0.68,0.74,0.78,"Color33");
+    new_TColor(39,0.5,0.5,0.61,"Color39");
+    new_TColor(37,0.43,0.48,0.52,"Color37");
+    new_TColor(38,0.49,0.6,0.82,"Color38");
+    new_TColor(36,0.41,0.51,0.59,"Color36");
+    new_TColor(49,0.58,0.41,0.44,"Color49");
+    new_TColor(43,0.74,0.62,0.51,"Color43");
+    new_TColor(22,0.76,0.75,0.66,"Color22");
+    new_TColor(45,0.75,0.51,0.47,"Color45");
+    new_TColor(44,0.78,0.6,0.49,"Color44");
+    new_TColor(26,0.68,0.6,0.55,"Color26");
+    new_TColor(28,0.53,0.4,0.34,"Color28");
+    new_TColor(25,0.72,0.64,0.61,"Color25");
+    new_TColor(27,0.61,0.56,0.51,"Color27");
+    new_TColor(23,0.73,0.71,0.64,"Color23");
+    new_TColor(42,0.87,0.73,0.53,"Color42");
+    new_TColor(46,0.81,0.37,0.38,"Color46");
+    new_TColor(48,0.65,0.47,0.48,"Color48");
+    new_TColor(34,0.48,0.56,0.6,"Color34");
+    new_TColor(40,0.67,0.65,0.75,"Color40");
+    new_TColor(29,0.69,0.81,0.78,"Color29");
+
+    // Initialize some additional greyish non saturated colors
+    new_TColor(8, 0.35,0.83,0.33,"Color8");
+    new_TColor(9, 0.35,0.33,0.85,"Color9");
+    new_TColor(12,.3,.3,.3,"grey12");
+    new_TColor(13,.4,.4,.4,"grey13");
+    new_TColor(14,.5,.5,.5,"grey14");
+    new_TColor(15,.6,.6,.6,"grey15");
+    new_TColor(16,.7,.7,.7,"grey16");
+    new_TColor(17,.8,.8,.8,"grey17");
+    new_TColor(18,.9,.9,.9,"grey18");
+    new_TColor(19,.95,.95,.95,"grey19");
+    new_TColor(50, 0.83,0.35,0.33,"Color50");
+
+    // Initialize the Pretty Palette Spectrum Violet->Red
+    //   The color model used here is based on the HLS model which
+    //   is much more suitable for creating palettes than RGB.
+    //   Fixing the saturation and lightness we can scan through the
+    //   spectrum of visible light by using "hue" alone.
+    //   In Root hue takes values from 0 to 360.
+   {float saturation = 1;
+    float lightness = 0.5;
+    float MaxHue = 280;
+    float MinHue = 0;
+    unsigned int MaxPretty = 50;
+
+    // from index 51 to 100.
+    float r,g,b,hue;
+    std::string head("Color");
+    for(unsigned int i=0 ; i<MaxPretty ; i++) {
+      hue = MaxHue-(i+1)*((MaxHue-MinHue)/MaxPretty);
+      hls_to_rgb(hue, lightness, saturation, r, g, b);
+      new_TColor(i+51, r, g, b,head,i+51);
+    }}
+
+    double h,l,s,r,g,b;    
+
+    // dark colors (index 101 to 150) :     
+    // NOTE : 100 = "dark black" would overlap with "pretty 49" !
+    //        then start to 1+100.
+   {for(unsigned int i=1 ; i<=50 ; i++) {
+      map_t::const_iterator it = find(i);
+      //if(it==end()) {}
+      const std::string& nam = (*it).second.first;
+      const colorf& col = (*it).second.second;
+      rgb_to_hls<double>(col.r(),col.g(),col.b(),h,l,s);
+      hls_to_rgb<double>(h,0.7*l,s, r, g, b);
+      new_TColor(i+100, r, g, b, nam+"_dark");
+    }}
+    
+    // bright colors (index 151 to 200) :     
+    // NOTE : 150 = "bright black" would overlap with "dark 50" !
+    //        then start to 1+150.
+   {for(unsigned int i=1 ; i<=50 ; i++) {
+      map_t::const_iterator it = find(i);
+      //if(it==end()) {}
+      const std::string& nam = (*it).second.first;
+      const colorf& col = (*it).second.second;
+      rgb_to_hls<double>(col.r(),col.g(),col.b(),h,l,s);
+      hls_to_rgb<double>(h,1.2*l,s, r, g, b);
+      new_TColor(i+150, r, g, b, nam+"_bright");
+    }}
+    
+    // Initialize special colors for x3d
+    // from 201 to 228=200+4*7 : 7*4 = 28.
+   {std::string head("Color");
+    unsigned int index;
+    for(unsigned int i = 1; i <= 7; i++) {
+      map_t::const_iterator it = find(i);
+      //if(it==end()) {}
+      const colorf& col = (*it).second.second;
+      r = col.r();
+      g = col.r();
+      b = col.r();
+      if (i == 1) { r = 0.6; g = 0.6; b = 0.6; }
+      if (r == 1) r = 0.9; if (r == 0) r = 0.1;
+      if (g == 1) g = 0.9; if (g == 0) g = 0.1;
+      if (b == 1) b = 0.9; if (b == 0) b = 0.1;
+
+      rgb_to_hls(r,g,b,h,l,s);
+
+      hls_to_rgb(h,0.6*l,s,r,g,b);
+      index = 200+4*i-3;
+      new_TColor(index,r,g,b,head,index);
+
+      hls_to_rgb(h,0.8*l,s,r,g,b);
+      index = 200+4*i-2;
+      new_TColor(index,r,g,b,head,index);
+
+      hls_to_rgb(h,1.2*l,s,r,g,b);
+      index = 200+4*i-1;
+      new_TColor(index,r,g,b,head,index);
+
+      hls_to_rgb(h,1.4*l,s,r,g,b);
+      index = 200+4*i;
+      new_TColor(index,r,g,b,head,index);
+    }}
+
+    create_color_wheel();
+  }
+
+protected:
+  void new_TColor(unsigned int a_i,
+                  double a_r,double a_g,double a_b,
+                  const std::string& a_n) {
+    (*this)[a_i] = style_color(a_n,float(a_r),float(a_g),float(a_b));
+  }
+  void new_TColor(unsigned int a_i,
+                  double a_r,double a_g,double a_b,
+                  const std::string& a_head,unsigned int a_index) {
+    std::string stmp;
+    if(!tools::num2s(a_index,stmp)) {}
+    new_TColor(a_i,a_r,a_g,a_b,a_head+stmp);
+  }
+
+  void create_colors_circle(unsigned int a_offset,
+                            const std::string& a_name,
+                            unsigned char a_rgb[]) {
+    // Create the "circle" colors in the Color Wheel
+    for(unsigned int n=0;n<15;n++) {      
+      int colorn = a_offset+n-10;
+      if(colorn<0) continue;
+      if(n>10) {
+        new_TColor(colorn,a_rgb[3*n]/255.,a_rgb[3*n+1]/255.,a_rgb[3*n+2]/255.,a_name+"+",n-10);
+      } else if (n<10) {
+        new_TColor(colorn,a_rgb[3*n]/255.,a_rgb[3*n+1]/255.,a_rgb[3*n+2]/255.,a_name+"-",10-n);
+      } else {
+        new_TColor(colorn,a_rgb[3*n]/255.,a_rgb[3*n+1]/255.,a_rgb[3*n+2]/255.,a_name);
+      }
+      //color->SetTitle(color->AsHexString());
+    }
+  }
+
+  void create_colors_rectangle(unsigned int a_offset,
+                               const std::string& a_name,
+                               unsigned char a_rgb[]) {
+    // Create the "rectangular" colors in the Color Wheel
+    for (unsigned int n=0;n<20;n++) {
+      int colorn = a_offset+n-9;
+      if(colorn<0) continue;
+      if(n>9) {
+        new_TColor(colorn,a_rgb[3*n]/255.,a_rgb[3*n+1]/255.,a_rgb[3*n+2]/255.,a_name+"+",n-9);
+      } else if(n<9) {
+        new_TColor(colorn,a_rgb[3*n]/255.,a_rgb[3*n+1]/255.,a_rgb[3*n+2]/255.,a_name+"-",9-n);
+      } else {
+        new_TColor(colorn,a_rgb[3*n]/255.,a_rgb[3*n+1]/255.,a_rgb[3*n+2]/255.,a_name);
+      }
+      //color->SetTitle(color->AsHexString());
+    }
+  }
+
+  void create_color_wheel() {
+    // Static function steering the creation of all colors
+    // in the ROOT Color Wheel
+    typedef unsigned char UChar_t;
+    UChar_t magenta[46]= {255,204,255
+            ,255,153,255, 204,153,204
+            ,255,102,255, 204,102,204, 153,102,153
+            ,255, 51,255, 204, 51,204, 153, 51,153, 102, 51,102
+            ,255,  0,255, 204,  0,204, 153,  0,153, 102,  0,102,  51,  0, 51};
+
+    UChar_t red[46]    = {255,204,204
+            ,255,153,153, 204,153,153
+            ,255,102,102, 204,102,102, 153,102,102
+            ,255, 51, 51, 204, 51, 51, 153, 51, 51, 102, 51, 51
+            ,255,  0,  0, 204,  0,  0, 153,  0,  0, 102,  0,  0,  51,  0,  0};
+
+    UChar_t yellow[46] = {255,255,204
+            ,255,255,153, 204,204,153
+            ,255,255,102, 204,204,102, 153,153,102
+            ,255,255, 51, 204,204, 51, 153,153, 51, 102,102, 51
+            ,255,255,  0, 204,204,  0, 153,153,  0, 102,102,  0,  51, 51,  0};
+
+    UChar_t green[46]  = {204,255,204
+            ,153,255,153, 153,204,153
+            ,102,255,102, 102,204,102, 102,153,102
+            , 51,255, 51,  51,204, 51,  51,153, 51,  51,102, 51
+            ,  0,255,  0,   0,204,  0,   0,153,  0,   0,102,  0,  0, 51,  0};
+
+    UChar_t cyan[46]   = {204,255,255
+            ,153,255,255, 153,204,204
+            ,102,255,255, 102,204,204, 102,153,153
+            , 51,255,255,  51,204,204,  51,153,153,  51,102,102
+            ,  0,255,255,   0,204,204,   0,153,153,   0,102,102,   0, 51,  51};
+
+    UChar_t blue[46]   = {204,204,255
+            ,153,153,255, 153,153,204
+            ,102,102,255, 102,102,204, 102,102,153
+            , 51, 51,255,  51, 51,204,  51, 51,153,  51, 51,102
+            ,  0,  0,255,   0,  0,204,   0,  0,153,   0,  0,102,   0,  0,  51};
+
+    UChar_t pink[60] = {
+        255, 51,153,  204,  0,102,  102,  0, 51,  153,  0, 51,  204, 51,102
+        ,255,102,153,  255,  0,102,  255, 51,102,  204,  0, 51,  255,  0, 51
+        ,255,153,204,  204,102,153,  153, 51,102,  153,  0,102,  204, 51,153
+        ,255,102,204,  255,  0,153,  204,  0,153,  255, 51,204,  255,  0,153};
+
+    UChar_t orange[60]={
+        255,204,153,  204,153,102,  153,102, 51,  153,102,  0,  204,153, 51
+        ,255,204,102,  255,153,  0,  255,204, 51,  204,153,  0,  255,204,  0
+        ,255,153, 51,  204,102,  0,  102, 51,  0,  153, 51,  0,  204,102, 51
+        ,255,153,102,  255,102,  0,  255,102, 51,  204, 51,  0,  255, 51,  0};
+
+    UChar_t spring[60]={
+        153,255, 51,  102,204,  0,   51,102,  0,   51,153,  0,  102,204, 51
+        ,153,255,102,  102,255,  0,  102,255, 51,   51,204,  0,   51,255, 0
+        ,204,255,153,  153,204,102,  102,153, 51,  102,153,  0,  153,204, 51
+        ,204,255,102,  153,255,  0,  204,255, 51,  153,204,  0,  204,255,  0};
+
+    UChar_t teal[60] = {
+        153,255,204,  102,204,153,   51,153,102,    0,153,102,   51,204,153
+        ,102,255,204,    0,255,102,   51,255,204,    0,204,153,    0,255,204
+        , 51,255,153,    0,204,102,    0,102, 51,    0,153, 51,   51,204,102
+        ,102,255,153,    0,255,153,   51,255,102,    0,204, 51,    0,255, 51};
+
+    UChar_t azure[60] ={
+        153,204,255,  102,153,204,   51,102,153,    0, 51,153,   51,102,204
+        ,102,153,255,    0,102,255,   51,102,255,    0, 51,204,    0, 51,255
+        , 51,153,255,    0,102,204,    0, 51,102,    0,102,153,   51,153,204
+        ,102,204,255,    0,153,255,   51,204,255,    0,153,204,    0,204,255};
+
+    UChar_t violet[60]={
+        204,153,255,  153,102,204,  102, 51,153,  102,  0,153,  153, 51,204
+        ,204,102,255,  153,  0,255,  204, 51,255,  153,  0,204,  204,  0,255
+        ,153, 51,255,  102,  0,204,   51,  0,102,   51,  0,153,  102, 51,204
+        ,153,102,255,  102,  0,255,  102, 51,255,   51,  0,204,   51,  0,255};
+
+    create_colors_circle(kMagenta,"kMagenta",magenta);
+    create_colors_circle(kRed,    "kRed",    red);
+    create_colors_circle(kYellow, "kYellow", yellow);
+    create_colors_circle(kGreen,  "kGreen",  green);
+    create_colors_circle(kCyan,   "kCyan",   cyan);
+    create_colors_circle(kBlue,   "kBlue",   blue);
+
+    create_colors_rectangle(kPink,  "kPink",  pink);
+    create_colors_rectangle(kOrange,"kOrange",orange);
+    create_colors_rectangle(kSpring,"kSpring",spring);
+    create_colors_rectangle(kTeal,  "kTeal",  teal);
+    create_colors_rectangle(kAzure, "kAzure", azure);
+    create_colors_rectangle(kViolet,"kViolet",violet);
+
+    // Create the Gray scale colors in the Color Wheel
+    new_TColor(kGray  ,204./255.,204./255.,204./255.,"kGray");
+    new_TColor(kGray+1,153./255.,153./255.,153./255.,"kGray+1");
+    new_TColor(kGray+2,102./255.,102./255.,102./255.,"kGray+2");
+    new_TColor(kGray+3, 51./255., 51./255., 51./255.,"kGray+3");
+  }
+
+};
+
+class style_povama_colormap : public style_colormap {
+public:
+  style_povama_colormap() {
+    add(style_color("White",colorf(1.00f, 1.00f, 1.00f)));
+    add(style_color("Black",colorf(0.00f, 0.00f, 0.00f)));
+    add(style_color("PeachPuff",colorf(1.00f, 0.85f, 0.70f)));
+    add(style_color("Peach",colorf(0.90f, 0.50f, 0.30f)));
+    add(style_color("SlateGrey",colorf(0.44f, 0.50f, 0.56f)));
+    add(style_color("CornflowerBlue",colorf(0.39f, 0.58f, 0.93f)));
+    add(style_color("Aquamarine",colorf(0.50f, 0.50f, 0.83f)));
+    add(style_color("LawnGreen",colorf(0.49f, 0.92f, 0.00f)));
+    add(style_color("DarkKhaki",colorf(0.74f, 0.71f, 0.42f)));
+    add(style_color("Gold",colorf(1.00f, 0.84f, 0.00f)));
+    add(style_color("IndianRed",colorf(0.80f, 0.36f, 0.36f)));
+    add(style_color("SaddleBrown",colorf(0.55f, 0.27f, 0.07f)));
+    add(style_color("DeepPink",colorf(1.00f, 0.08f, 0.56f)));
+  }
+};
+
+}}
+
+
+#include "../words"
+
+namespace tools {
+namespace sg {
+
+typedef std::map<std::string,style_colormap> cmaps_t;
+
+inline bool to_ulong(const std::string& a_s,unsigned long& a_v){
+  a_v = 0L;
+  if(::sscanf(a_s.c_str(),"%lx",&a_v)!=1) {
+    if(::sscanf(a_s.c_str(),"%lu",&a_v)!=1) {
+      a_v = 0L;
+      return false;
+    }
+  }
+  return true;
+}
+
+inline bool find_color(const cmaps_t& a_cmaps,
+                       const std::string& a_s,colorf& a_col){
+    //NOTE : if ret false, we do not set a_col to something.
+
+    std::string::size_type pos_slash = a_s.rfind('/');
+    if(pos_slash!=std::string::npos) { //<cmap>/<color name>
+      std::string cmap = a_s.substr(0,pos_slash);
+      std::string cnam = a_s.substr(pos_slash+1,a_s.size()-(pos_slash+1));
+      cmaps_t::const_iterator it = a_cmaps.find(cmap);
+      if(it==a_cmaps.end()) return false;
+      return (*it).second.get_color(cnam,a_col);
+      
+    } else {
+
+    if( (a_s.size()==7) && (a_s[0]=='#') ) {
+      // #RRGGBB format :
+      //  1 3 5
+      unsigned long rr,gg,bb;
+  
+     {std::string s("0x");
+      s += a_s.substr(1,2);
+      if(!to_ulong(s,rr)) return false;}
+  
+     {std::string s("0x");
+      s += a_s.substr(3,2);
+      if(!to_ulong(s,gg)) return false;}
+  
+     {std::string s("0x");
+      s += a_s.substr(5,2);
+      if(!to_ulong(s,bb)) return false;}
+  
+      a_col = colorf(((float)rr)/255,((float)gg)/255,((float)bb)/255);
+      return true;
+    } 
+  
+    //a_s of the form : <real:r> <real:g> <real:b>
+    //a_s of the form : <real:r> <real:g> <real:b> <real:a>
+    //a_s of the form : <real:r> <real:g> <real:b> <string:name> 
+    //a_s of the form : <real:r> <real:g> <real:b> <real:a> <string:name> 
+
+   {std::vector<std::string> words;
+    tools::words(a_s," ",false,words);
+    if(words.size()==3) {
+      float r,g,b;
+      if( tools::to<float>(words[0],r) &&
+          tools::to<float>(words[1],g) &&
+          tools::to<float>(words[2],b) ){
+        a_col = colorf(r,g,b);
+        return true;
+      }
+
+    } else if(words.size()==4) {
+      float r,g,b,a;
+      if( tools::to<float>(words[0],r) &&
+          tools::to<float>(words[1],g) &&
+          tools::to<float>(words[2],b) ){
+
+        if(tools::to<float>(words[3],a)) {
+          a_col = colorf(r,g,b,a);
+        } else {
+          a_col = colorf(r,g,b,1);
+        }
+        return true;
+      }
+
+    } else if(words.size()==5) {
+      float r,g,b,a;
+      if( tools::to<float>(words[0],r) &&
+          tools::to<float>(words[1],g) &&
+          tools::to<float>(words[2],b) &&
+          tools::to<float>(words[3],a) ){
+        a_col = colorf(r,g,b,a);
+        return true;
+      }
+
+    }}
+
+   {cmaps_t::const_iterator it = a_cmaps.find(style_default_colormap::s_default());
+    if(it!=a_cmaps.end()) {
+      if((*it).second.get_color(a_s,a_col)) return true;
+    }}      
+
+    }
+  
+    return false;
+}
+
+
+}}
+
+#endif
+
+
+

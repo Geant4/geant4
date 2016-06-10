@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationLevelDensityParameter.cc 85443 2014-10-29 14:35:57Z gcosmo $
+// $Id: G4EvaporationLevelDensityParameter.cc 91834 2015-08-07 07:24:22Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -65,7 +65,7 @@ const G4double G4EvaporationLevelDensityParameter::gamma = 0.059/MeV;
 const G4double G4EvaporationLevelDensityParameter::Bs = 1.0;
 
 // Asymptotic Level Density Parameter
-G4double AsymptoticLDP = (alpha*A + beta*std::pow(static_cast<G4double>(A),2./3.)*Bs)/MeV;
+//G4double AsymptoticLDP = (alpha*A + beta*g4pow-Z23(A)*Bs)/MeV;
 	
 // Shape of the LDP U dependence
 G4double exponent = -gamma*U;

@@ -1,0 +1,235 @@
+
+*************************************************************
+ Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  OpenGLImmediateX (OGLI, OGLIX)
+  OpenGLStoredX (OGL, OGLS, OGLSX)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+  drawByAttribute
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+  attributeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+Available colours:
+  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
+
+/run/verbose 1
+#
+/gun/particle ion
+/gun/ion 54 131 0 341.1
+#
+/rdecay01/fullChain true
+#
+/tracking/verbose 2
+/run/beamOn 1
+
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
+          DefaultRegionForTheWorld
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_AIR
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = Xe131[341.1],   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm      0 fm      0 eV      0 eV      0 fm      0 fm      World   initStep
+    1      0 fm      0 fm      0 fm      0 eV      0 eV      0 fm      0 fm      World   RadioactiveDecay
+
+    :----- List of secondaries ----------------
+    Xe131[163.9]:  energy =     0 eV   time = 3.815 ns 
+           gamma:  energy = 177.2 keV  time = 3.815 ns 
+    :------------------------------------------
+
+
+*********************************************************************************************************
+* G4Track Information:   Particle = Xe131[163.9],   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm      0 fm      0 eV      0 eV      0 fm      0 fm      World   initStep
+    1      0 fm      0 fm      0 fm      0 eV      0 eV      0 fm      0 fm      World   RadioactiveDecay
+
+    :----- List of secondaries ----------------
+           Xe131:  energy =     0 eV   time = 10.88 d  
+              e-:  energy = 129.3 keV  time = 10.88 d  
+    :------------------------------------------
+
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 2
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm      0 fm    129 keV     0 eV      0 fm      0 fm      World   initStep
+    1    141 um      1 mm    925 um    129 keV     0 eV   1.37 mm   1.37 mm      World   OutOfWorld
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm      0 fm    177 keV     0 eV      0 fm      0 fm      World   initStep
+    1   -217 um  -35.7 um     -1 mm    177 keV     0 eV   1.02 mm   1.02 mm      World   OutOfWorld
+
+*********************************************************************************************************
+* G4Track Information:   Particle = Xe131,   Track ID = 4,   Parent ID = 2
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm      0 fm      0 eV      0 eV      0 fm      0 fm      World   initStep
+    1      0 fm      0 fm      0 fm      0 eV      0 eV      0 fm      0 fm      World   RadioactiveDecay
+
+ end of event      0 : Xe131[341.1] ---> Xe131[163.9] ---> Xe131
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+
+ ======================== run summary ======================
+ The run was 1 Xe131[341.1] of 0 eV 
+ ===========================================================
+
+ Nb of generated particles: 
+
+          Xe131:       1  Emean =      0 eV 	( 0 eV  --> 0 eV )
+   Xe131[163.9]:       1  Emean =      0 eV 	( 0 eV  --> 0 eV )
+             e-:       1  Emean =  129.3 keV	( 129.3 keV --> 129.3 keV)
+          gamma:       1  Emean =  177.2 keV	( 177.2 keV --> 177.2 keV)
+
+   Ekin Total (Q): mean =  153.3 keV	( 129.3 keV --> 177.2 keV)
+
+   Momentum balance (excluding gamma desexcitation): mean =  192.9 keV	( 0 eV  --> 385.9 keV)
+
+   Total time of life : mean =  10.88 d    half-life =  7.543 d     ( 10.88 d   --> 10.88 d  )
+
+   Total visible energy : mean =  306.5 keV   ( 306.5 keV --> 306.5 keV)
+
+   Activity of Xe131[341.1] = 1.205e+30 Bq/g   (3.257e+19 Ci/g) 
+
+#
+/analysis/setFileName it2
+Set file name: it2
+/analysis/h1/set 1 100 0. 200. keV
+/analysis/h1/set 3 100 0. 200. keV
+/analysis/h1/set 8 100 0. 200. d
+#
+/tracking/verbose 0
+/rdecay01/event/printModulo 10000
+#
+/run/beamOn 100000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_AIR
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+... open Root analysis file : it2.root - done
+Start Run processing.
+
+ end of event      0 : Xe131[341.1] ---> Xe131[163.9] ---> Xe131
+
+ end of event  10000 : Xe131[341.1] ---> Xe131[163.9] ---> Xe131
+
+ end of event  20000 : Xe131[341.1] ---> Xe131[163.9] ---> Xe131
+
+ end of event  30000 : Xe131[341.1] ---> Xe131[163.9] ---> Xe131
+
+ end of event  40000 : Xe131[341.1] ---> Xe131[163.9] ---> Xe131
+
+ end of event  50000 : Xe131[341.1] ---> Xe131[163.9] ---> Xe131
+
+ end of event  60000 : Xe131[341.1] ---> Xe131[163.9] ---> Xe131
+
+ end of event  70000 : Xe131[341.1] ---> Xe131[163.9] ---> Xe131
+
+ end of event  80000 : Xe131[341.1] ---> Xe131[163.9] ---> Xe131
+
+ end of event  90000 : Xe131[341.1] ---> Xe131[163.9] ---> Xe131
+Run terminated.
+Run Summary
+  Number of events processed : 100000
+  User=5.27s Real=5.29s Sys=0.01s
+
+ ======================== run summary ======================
+ The run was 100000 Xe131[341.1] of 0 eV 
+ ===========================================================
+
+ Nb of generated particles: 
+
+          Xe131:  100000  Emean =      0 eV 	( 0 eV  --> 0 eV )
+   Xe131[163.9]:  100000  Emean =      0 eV 	( 0 eV  --> 0 eV )
+             e-:  117410  Emean =  142.2 keV	( 129.3 keV --> 177 keV)
+          gamma:   82590  Emean =  176.9 keV	( 163.9 keV --> 177.2 keV)
+
+   Ekin Total (Q): mean =  156.5 keV	( 129.3 keV --> 177.2 keV)
+
+   Momentum balance (excluding gamma desexcitation): mean =  238.6 keV	( 0 eV  --> 460.7 keV)
+
+   Total time of life : mean =  17.11 d    half-life =  11.86 d     ( 14.59 s   --> 193.1 d  )
+
+   Total visible energy : mean =    313 keV   ( 272 keV --> 341.1 keV)
+
+   Activity of Xe131[341.1] = 1.998e+30 Bq/g   (5.4e+19 Ci/g) 
+
+... write Root file : it2.root - done
+... close Root file : it2.root - done
+Graphics systems deleted.
+Visualization Manager deleting...
+G4 kernel has come to Quit state.
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager

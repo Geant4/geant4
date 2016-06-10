@@ -13,9 +13,8 @@
 
 namespace tools {
 
-#if defined(WIN32) && !defined(GNU_GCC)
+#ifdef _MSC_VER
 
-// WIN32 and NOT GNU_GCC
 typedef int int32;
 typedef __int64 int64;
 inline const char* int32_format() {static const char s[] = "%d";return s;}
@@ -25,6 +24,12 @@ typedef unsigned int uint32;
 typedef unsigned __int64 uint64;
 inline const char* uint32_format() {static const char s[] = "%u";return s;}
 inline const char* uint64_format() {static const char s[] = "%lu";return s;}
+
+#ifdef _WIN64
+typedef unsigned long long diff_pointer_t;
+#else
+typedef unsigned long diff_pointer_t;
+#endif
 
 #elif defined(_LP64) 
 
@@ -39,6 +44,8 @@ typedef unsigned long uint64;
 inline const char* uint32_format() {static const char s[] = "%u";return s;}
 inline const char* uint64_format() {static const char s[] = "%lu";return s;}
 
+typedef unsigned long diff_pointer_t;
+
 #else 
 
 // 32-Bit Platforms
@@ -51,6 +58,8 @@ typedef unsigned int uint32;
 typedef unsigned long long uint64;
 inline const char* uint32_format() {static const char s[] = "%u";return s;}
 inline const char* uint64_format() {static const char s[] = "%llu";return s;}
+
+typedef unsigned long diff_pointer_t;
 
 #endif
 
@@ -74,8 +83,6 @@ typedef short int16;
 typedef unsigned short ushort;
 typedef unsigned short uint16;
 typedef uint32 ref;
-// sizeof(long)==sizeof(void*) on all platforms.
-typedef unsigned long diff_pointer_t;
 typedef char* cstr_t;
 typedef const char* const_cstr_t;
 

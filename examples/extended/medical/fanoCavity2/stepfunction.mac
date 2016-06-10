@@ -1,4 +1,4 @@
-# $Id: stepfunction.mac 68999 2013-04-15 09:23:17Z gcosmo $
+# $Id: stepfunction.mac 93259 2015-10-14 08:35:22Z gcosmo $
 #
 /control/verbose 2
 /run/verbose 2
@@ -15,6 +15,6 @@
 /analysis/setFileName nothing_dr100
 /analysis/h1/set 9 100  0  5 mm	#step size in wall
 #
-/testem/event/printModulo 200000
+/run/printProgress 200000
 #
 /run/beamOn 2000000

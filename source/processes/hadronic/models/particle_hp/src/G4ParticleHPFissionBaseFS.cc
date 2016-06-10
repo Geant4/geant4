@@ -101,7 +101,7 @@ G4DynamicParticleVector * G4ParticleHPFissionBaseFS::ApplyYourself(G4int nPrompt
     G4int i;
     G4DynamicParticleVector * aResult = new G4DynamicParticleVector;
     G4ReactionProduct boosted;
-    boosted.Lorentz(theNeutronRP, theTarget);
+    boosted.Lorentz( *(fCache.Get().theNeutronRP) , *(fCache.Get().theTarget) );
     G4double eKinetic = boosted.GetKineticEnergy();
     
 // Build neutrons

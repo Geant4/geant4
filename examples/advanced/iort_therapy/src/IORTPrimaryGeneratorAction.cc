@@ -89,10 +89,10 @@ void IORTPrimaryGeneratorAction::SetDefaultPrimaryParticle()
   G4double defaultsigmaEnergy = 100.0 *CLHEP::keV;   
   sigmaEnergy = defaultsigmaEnergy;
   
-#ifdef G4ANALYSIS_USE_ROOT    
   // Write these values into the analysis if needed. Have to be written separately on change.
-  IORTAnalysisManager::GetInstance()->setBeamMetaData(meanKineticEnergy, sigmaEnergy);
-#endif                       
+  IORTAnalysisManager::GetInstance()->
+    setBeamMetaData(meanKineticEnergy, sigmaEnergy);
+
 
   // Define the parameters of the initial position: 
   // the y, z coordinates have a gaussian distribution
@@ -131,10 +131,8 @@ void IORTPrimaryGeneratorAction::SetDefaultPrimaryParticle()
 
 void IORTPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-#ifdef G4ANALYSIS_USE_ROOT
   // Increment the event counter
   IORTAnalysisManager::GetInstance()->startNewEvent();
-#endif
 
   // ****************************************
   // Set the beam angular apread 
@@ -229,20 +227,20 @@ while (true)  {
 void IORTPrimaryGeneratorAction::SetmeanKineticEnergy (G4double val )  
 {
 	meanKineticEnergy = val;
-#ifdef G4ANALYSIS_USE_ROOT
+
   // Update the beam-data in the analysis manager
-  IORTAnalysisManager::GetInstance()->setBeamMetaData(meanKineticEnergy, sigmaEnergy);
-#endif
+  IORTAnalysisManager::GetInstance()->
+    setBeamMetaData(meanKineticEnergy, sigmaEnergy);
+
 
 } 
 
 void IORTPrimaryGeneratorAction::SetsigmaEnergy (G4double val )  
 { 
-	sigmaEnergy = val;
-#ifdef G4ANALYSIS_USE_ROOT
+  sigmaEnergy = val;
   // Update the sigmaenergy in the metadata.
-  IORTAnalysisManager::GetInstance()->setBeamMetaData(meanKineticEnergy, sigmaEnergy);
-#endif
+  IORTAnalysisManager::GetInstance()->
+    setBeamMetaData(meanKineticEnergy, sigmaEnergy);
 }
 
 void IORTPrimaryGeneratorAction::SetXposition (G4double val )  

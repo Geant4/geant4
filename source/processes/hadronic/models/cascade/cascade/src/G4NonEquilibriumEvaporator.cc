@@ -49,6 +49,7 @@
 //		with G4Fragment
 // 20130808  M. Kelsey -- Use new object-version of paraMaker, for thread safety
 // 20130924  M. Kelsey -- Replace std::pow with G4Pow::powN() for CPU speed
+// 20150608  M. Kelsey -- Label all while loops as terminating.
 
 #include <cmath>
 
@@ -118,7 +119,7 @@ void G4NonEquilibriumEvaporator::deExcite(const G4Fragment& target,
   // Buffer for parameter sets
   std::pair<G4double, G4double> parms;
   
-  while (try_again) {
+  while (try_again) {			/* Loop checking 08.06.2015 MHK */
     if (A >= a_cut && Z >= z_cut && EEXS > eexs_cut) { // ok
       // update exiton system (include excitation energy!)
       G4double nuc_mass = G4InuclNuclei::getNucleiMass(A, Z, EEXS); 
@@ -299,10 +300,12 @@ void G4NonEquilibriumEvaporator::deExcite(const G4Fragment& target,
 		    G4int itry1 = 0;
 		    G4bool bad = true;
 		    
+		    /* Loop checking 08.06.2015 MHK */
 		    while (itry1 < itry_max && icase > 0 && bad) {
 		      itry1++;
 		      G4int itry = 0;		    
 		      
+		      /* Loop checking 08.06.2015 MHK */
 		      while (EEXS_new < 0.0 && itry < itry_max) {
 			itry++;
 			G4double R = inuclRndm();

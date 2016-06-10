@@ -1,0 +1,9 @@
+# $Id: run2.mac,v 1.6 2002-12-16 16:37:25 maire Exp $
+#
+# Macro file for example B3 test
+#
+/run/initialize
+#
+/control/verbose 2
+#
+/run/beamOn 10000

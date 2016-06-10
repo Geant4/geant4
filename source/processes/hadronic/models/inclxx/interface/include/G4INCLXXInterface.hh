@@ -73,8 +73,6 @@
 #include <fstream>
 #include <iostream>
 
-using namespace std;
-
 class G4INCLXXInterfaceStore;
 class G4INCLXXVInterfaceTally;
 
@@ -133,6 +131,8 @@ public:
   }
 
   virtual void ModelDescription(std::ostream& outFile) const;
+
+  G4String const &GetDeExcitationModelName() const;
 
 private:
   G4bool AccurateProjectile(const G4HadProjectile &aTrack, const G4Nucleus &theTargetNucleus) const;

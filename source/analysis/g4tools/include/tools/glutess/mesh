@@ -1,0 +1,970 @@
+// see license file for original license.
+
+#ifndef tools_glutess_mesh
+#define tools_glutess_mesh
+
+#include "_glu"
+
+typedef struct GLUmesh GLUmesh; 
+
+typedef struct GLUvertex GLUvertex;
+typedef struct GLUface GLUface;
+typedef struct GLUhalfEdge GLUhalfEdge;
+
+typedef struct ActiveRegion ActiveRegion;	/* Internal data */
+
+/* The mesh structure is similar in spirit, notation, and operations
+ * to the "quad-edge" structure (see L. Guibas and J. Stolfi, Primitives
+ * for the manipulation of general subdivisions and the computation of
+ * Voronoi diagrams, ACM Transactions on Graphics, 4(2):74-123, April 1985).
+ * For a simplified description, see the course notes for CS348a,
+ * "Mathematical Foundations of Computer Graphics", available at the
+ * Stanford bookstore (and taught during the fall quarter).
+ * The implementation also borrows a tiny subset of the graph-based approach
+ * use in Mantyla's Geometric Work Bench (see M. Mantyla, An Introduction
+ * to Sold Modeling, Computer Science Press, Rockville, Maryland, 1988).
+ *
+ * The fundamental data structure is the "half-edge".  Two half-edges
+ * go together to make an edge, but they point in opposite directions.
+ * Each half-edge has a pointer to its mate (the "symmetric" half-edge Sym),
+ * its origin vertex (Org), the face on its left side (Lface), and the
+ * adjacent half-edges in the CCW direction around the origin vertex
+ * (Onext) and around the left face (Lnext).  There is also a "next"
+ * pointer for the global edge list (see below).
+ *
+ * The notation used for mesh navigation:
+ *	Sym   = the mate of a half-edge (same edge, but opposite direction)
+ *	Onext = edge CCW around origin vertex (keep same origin)
+ *	Dnext = edge CCW around destination vertex (keep same dest)
+ *	Lnext = edge CCW around left face (dest becomes new origin)
+ *	Rnext = edge CCW around right face (origin becomes new dest)
+ *
+ * "prev" means to substitute CW for CCW in the definitions above.
+ *
+ * The mesh keeps global lists of all vertices, faces, and edges,
+ * stored as doubly-linked circular lists with a dummy header node.
+ * The mesh stores pointers to these dummy headers (vHead, fHead, eHead).
+ *
+ * The circular edge list is special; since half-edges always occur
+ * in pairs (e and e->Sym), each half-edge stores a pointer in only
+ * one direction.  Starting at eHead and following the e->next pointers
+ * will visit each *edge* once (ie. e or e->Sym, but not both).
+ * e->Sym stores a pointer in the opposite direction, thus it is
+ * always true that e->Sym->next->Sym->next == e.
+ *
+ * Each vertex has a pointer to next and previous vertices in the
+ * circular list, and a pointer to a half-edge with this vertex as
+ * the origin (NULL if this is the dummy header).  There is also a
+ * field "data" for client data.
+ *
+ * Each face has a pointer to the next and previous faces in the
+ * circular list, and a pointer to a half-edge with this face as
+ * the left face (NULL if this is the dummy header).  There is also
+ * a field "data" for client data.
+ *
+ * Note that what we call a "face" is really a loop; faces may consist
+ * of more than one loop (ie. not simply connected), but there is no
+ * record of this in the data structure.  The mesh may consist of
+ * several disconnected regions, so it may not be possible to visit
+ * the entire mesh by starting at a half-edge and traversing the edge
+ * structure.
+ *
+ * The mesh does NOT support isolated vertices; a vertex is deleted along
+ * with its last edge.  Similarly when two faces are merged, one of the
+ * faces is deleted (see __gl_meshDelete below).  For mesh operations,
+ * all face (loop) and vertex pointers must not be NULL.  However, once
+ * mesh manipulation is finished, __gl_MeshZapFace can be used to delete
+ * faces of the mesh, one at a time.  All external faces can be "zapped"
+ * before the mesh is returned to the client; then a NULL face indicates
+ * a region which is not part of the output polygon.
+ */
+
+struct GLUvertex {
+  GLUvertex	*next;		/* next vertex (never NULL) */
+  GLUvertex	*prev;		/* previous vertex (never NULL) */
+  GLUhalfEdge	*anEdge;	/* a half-edge with this origin */
+  void		*data;		/* client's data */
+
+  /* Internal data (keep hidden) */
+  GLUdouble	coords[3];	/* vertex location in 3D */
+  GLUdouble	s, t;		/* projection onto the sweep plane */
+  long		pqHandle;	/* to allow deletion from priority queue */
+};
+
+struct GLUface {
+  GLUface	*next;		/* next face (never NULL) */
+  GLUface	*prev;		/* previous face (never NULL) */
+  GLUhalfEdge	*anEdge;	/* a half edge with this left face */
+  void		*data;		/* room for client's data */
+
+  /* Internal data (keep hidden) */
+  GLUface	*trail;		/* "stack" for conversion to strips */
+  GLUboolean	marked;		/* flag for conversion to strips */
+  GLUboolean	inside;		/* this face is in the polygon interior */
+};
+
+struct GLUhalfEdge {
+  GLUhalfEdge	*next;		/* doubly-linked list (prev==Sym->next) */
+  GLUhalfEdge	*Sym;		/* same edge, opposite direction */
+  GLUhalfEdge	*Onext;		/* next edge CCW around origin */
+  GLUhalfEdge	*Lnext;		/* next edge CCW around left face */
+  GLUvertex	*Org;		/* origin vertex (Overtex too long) */
+  GLUface	*Lface;		/* left face */
+
+  /* Internal data (keep hidden) */
+  ActiveRegion	*activeRegion;	/* a region with this upper edge (sweep.c) */
+  int		winding;	/* change in winding number when crossing
+                                   from the right face to the left face */
+};
+
+#define	Rface	Sym->Lface
+#define Dst	Sym->Org
+
+#define Oprev	Sym->Lnext
+#define Lprev   Onext->Sym
+#define Dprev	Lnext->Sym
+#define Rprev	Sym->Onext
+#define Dnext	Rprev->Sym	/* 3 pointers */
+#define Rnext	Oprev->Sym	/* 3 pointers */
+
+
+struct GLUmesh {
+  GLUvertex	vHead;		/* dummy header for vertex list */
+  GLUface	fHead;		/* dummy header for face list */
+  GLUhalfEdge	eHead;		/* dummy header for edge list */
+  GLUhalfEdge	eHeadSym;	/* and its symmetric counterpart */
+};
+
+/* The mesh operations below have three motivations: completeness,
+ * convenience, and efficiency.  The basic mesh operations are MakeEdge,
+ * Splice, and Delete.  All the other edge operations can be implemented
+ * in terms of these.  The other operations are provided for convenience
+ * and/or efficiency.
+ *
+ * When a face is split or a vertex is added, they are inserted into the
+ * global list *before* the existing vertex or face (ie. e->Org or e->Lface).
+ * This makes it easier to process all vertices or faces in the global lists
+ * without worrying about processing the same data twice.  As a convenience,
+ * when a face is split, the "inside" flag is copied from the old face.
+ * Other internal data (v->data, v->activeRegion, f->data, f->marked,
+ * f->trail, e->winding) is set to zero.
+ *
+ * ********************** Basic Edge Operations **************************
+ *
+ * __gl_meshMakeEdge( mesh ) creates one edge, two vertices, and a loop.
+ * The loop (face) consists of the two new half-edges.
+ *
+ * __gl_meshSplice( eOrg, eDst ) is the basic operation for changing the
+ * mesh connectivity and topology.  It changes the mesh so that
+ *	eOrg->Onext <- OLD( eDst->Onext )
+ *	eDst->Onext <- OLD( eOrg->Onext )
+ * where OLD(...) means the value before the meshSplice operation.
+ *
+ * This can have two effects on the vertex structure:
+ *  - if eOrg->Org != eDst->Org, the two vertices are merged together
+ *  - if eOrg->Org == eDst->Org, the origin is split into two vertices
+ * In both cases, eDst->Org is changed and eOrg->Org is untouched.
+ *
+ * Similarly (and independently) for the face structure,
+ *  - if eOrg->Lface == eDst->Lface, one loop is split into two
+ *  - if eOrg->Lface != eDst->Lface, two distinct loops are joined into one
+ * In both cases, eDst->Lface is changed and eOrg->Lface is unaffected.
+ *
+ * __gl_meshDelete( eDel ) removes the edge eDel.  There are several cases:
+ * if (eDel->Lface != eDel->Rface), we join two loops into one; the loop
+ * eDel->Lface is deleted.  Otherwise, we are splitting one loop into two;
+ * the newly created loop will contain eDel->Dst.  If the deletion of eDel
+ * would create isolated vertices, those are deleted as well.
+ *
+ * ********************** Other Edge Operations **************************
+ *
+ * __gl_meshAddEdgeVertex( eOrg ) creates a new edge eNew such that
+ * eNew == eOrg->Lnext, and eNew->Dst is a newly created vertex.
+ * eOrg and eNew will have the same left face.
+ *
+ * __gl_meshSplitEdge( eOrg ) splits eOrg into two edges eOrg and eNew,
+ * such that eNew == eOrg->Lnext.  The new vertex is eOrg->Dst == eNew->Org.
+ * eOrg and eNew will have the same left face.
+ *
+ * __gl_meshConnect( eOrg, eDst ) creates a new edge from eOrg->Dst
+ * to eDst->Org, and returns the corresponding half-edge eNew.
+ * If eOrg->Lface == eDst->Lface, this splits one loop into two,
+ * and the newly created loop is eNew->Lface.  Otherwise, two disjoint
+ * loops are merged into one, and the loop eDst->Lface is destroyed.
+ *
+ * ************************ Other Operations *****************************
+ *
+ * __gl_meshNewMesh() creates a new mesh with no edges, no vertices,
+ * and no loops (what we usually call a "face").
+ *
+ * __gl_meshUnion( mesh1, mesh2 ) forms the union of all structures in
+ * both meshes, and returns the new mesh (the old meshes are destroyed).
+ *
+ * __gl_meshDeleteMesh( mesh ) will free all storage for any valid mesh.
+ *
+ * __gl_meshZapFace( fZap ) destroys a face and removes it from the
+ * global face list.  All edges of fZap will have a NULL pointer as their
+ * left face.  Any edges which also have a NULL pointer as their right face
+ * are deleted entirely (along with any isolated vertices this produces).
+ * An entire mesh can be deleted by zapping its faces, one at a time,
+ * in any order.  Zapped faces cannot be used in further mesh operations!
+ *
+ * __gl_meshCheckMesh( mesh ) checks a mesh for self-consistency.
+ */
+
+////////////////////////////////////////////////////////
+/// inlined C code : ///////////////////////////////////
+////////////////////////////////////////////////////////
+
+//#include "gluos"
+#include <cstddef>
+#include <cassert>
+#include "memalloc"
+
+inline/*static*/ GLUvertex *static_allocVertex()
+{
+   return (GLUvertex *)memAlloc( sizeof( GLUvertex ));
+}
+
+inline/*static*/ GLUface *static_allocFace()
+{
+   return (GLUface *)memAlloc( sizeof( GLUface ));
+}
+
+/************************ Utility Routines ************************/
+
+/* Allocate and free half-edges in pairs for efficiency.
+ * The *only* place that should use this fact is allocation/free.
+ */
+typedef struct { GLUhalfEdge e, eSym; } EdgePair;
+
+/* MakeEdge creates a new pair of half-edges which form their own loop.
+ * No vertex or face structures are allocated, but these must be assigned
+ * before the current edge operation is completed.
+ */
+inline/*static*/ GLUhalfEdge *static_MakeEdge( GLUhalfEdge *eNext )
+{
+  GLUhalfEdge *e;
+  GLUhalfEdge *eSym;
+  GLUhalfEdge *ePrev;
+  EdgePair *pair = (EdgePair *)memAlloc( sizeof( EdgePair ));
+  if (pair == NULL) return NULL;
+
+  e = &pair->e;
+  eSym = &pair->eSym;
+
+  /* Make sure eNext points to the first edge of the edge pair */
+  if( eNext->Sym < eNext ) { eNext = eNext->Sym; }
+
+  /* Insert in circular doubly-linked list before eNext.
+   * Note that the prev pointer is stored in Sym->next.
+   */
+  ePrev = eNext->Sym->next;
+  eSym->next = ePrev;
+  ePrev->Sym->next = e;
+  e->next = eNext;
+  eNext->Sym->next = eSym;
+
+  e->Sym = eSym;
+  e->Onext = e;
+  e->Lnext = eSym;
+  e->Org = NULL;
+  e->Lface = NULL;
+  e->winding = 0;
+  e->activeRegion = NULL;
+
+  eSym->Sym = e;
+  eSym->Onext = eSym;
+  eSym->Lnext = e;
+  eSym->Org = NULL;
+  eSym->Lface = NULL;
+  eSym->winding = 0;
+  eSym->activeRegion = NULL;
+
+  return e;
+}
+
+/* Splice( a, b ) is best described by the Guibas/Stolfi paper or the
+ * CS348a notes (see mesh.h).  Basically it modifies the mesh so that
+ * a->Onext and b->Onext are exchanged.  This can have various effects
+ * depending on whether a and b belong to different face or vertex rings.
+ * For more explanation see __gl_meshSplice() below.
+ */
+inline/*static*/ void static_Splice( GLUhalfEdge *a, GLUhalfEdge *b )
+{
+  GLUhalfEdge *aOnext = a->Onext;
+  GLUhalfEdge *bOnext = b->Onext;
+
+  aOnext->Sym->Lnext = b;
+  bOnext->Sym->Lnext = a;
+  a->Onext = bOnext;
+  b->Onext = aOnext;
+}
+
+/* MakeVertex( newVertex, eOrig, vNext ) attaches a new vertex and makes it the
+ * origin of all edges in the vertex loop to which eOrig belongs. "vNext" gives
+ * a place to insert the new vertex in the global vertex list.  We insert
+ * the new vertex *before* vNext so that algorithms which walk the vertex
+ * list will not see the newly created vertices.
+ */
+inline/*static*/ void static_MakeVertex( GLUvertex *newVertex, 
+			GLUhalfEdge *eOrig, GLUvertex *vNext )
+{
+  GLUhalfEdge *e;
+  GLUvertex *vPrev;
+  GLUvertex *vNew = newVertex;
+
+  assert(vNew != NULL);
+
+  /* insert in circular doubly-linked list before vNext */
+  vPrev = vNext->prev;
+  vNew->prev = vPrev;
+  vPrev->next = vNew;
+  vNew->next = vNext;
+  vNext->prev = vNew;
+
+  vNew->anEdge = eOrig;
+  vNew->data = NULL;
+  /* leave coords, s, t undefined */
+
+  /* fix other edges on this vertex loop */
+  e = eOrig;
+  do {
+    e->Org = vNew;
+    e = e->Onext;
+  } while( e != eOrig );
+}
+
+/* MakeFace( newFace, eOrig, fNext ) attaches a new face and makes it the left
+ * face of all edges in the face loop to which eOrig belongs.  "fNext" gives
+ * a place to insert the new face in the global face list.  We insert
+ * the new face *before* fNext so that algorithms which walk the face
+ * list will not see the newly created faces.
+ */
+inline/*static*/ void static_MakeFace( GLUface *newFace, GLUhalfEdge *eOrig, GLUface *fNext )
+{
+  GLUhalfEdge *e;
+  GLUface *fPrev;
+  GLUface *fNew = newFace;
+
+  assert(fNew != NULL); 
+
+  /* insert in circular doubly-linked list before fNext */
+  fPrev = fNext->prev;
+  fNew->prev = fPrev;
+  fPrev->next = fNew;
+  fNew->next = fNext;
+  fNext->prev = fNew;
+
+  fNew->anEdge = eOrig;
+  fNew->data = NULL;
+  fNew->trail = NULL;
+  fNew->marked = GLU_FALSE;
+
+  /* The new face is marked "inside" if the old one was.  This is a
+   * convenience for the common case where a face has been split in two.
+   */
+  fNew->inside = fNext->inside;
+
+  /* fix other edges on this face loop */
+  e = eOrig;
+  do {
+    e->Lface = fNew;
+    e = e->Lnext;
+  } while( e != eOrig );
+}
+
+/* KillEdge( eDel ) destroys an edge (the half-edges eDel and eDel->Sym),
+ * and removes from the global edge list.
+ */
+inline/*static*/ void static_KillEdge( GLUhalfEdge *eDel )
+{
+  GLUhalfEdge *ePrev, *eNext;
+
+  /* Half-edges are allocated in pairs, see EdgePair above */
+  if( eDel->Sym < eDel ) { eDel = eDel->Sym; }
+
+  /* delete from circular doubly-linked list */
+  eNext = eDel->next;
+  ePrev = eDel->Sym->next;
+  eNext->Sym->next = ePrev;
+  ePrev->Sym->next = eNext;
+
+  memFree( eDel );
+}
+
+
+/* KillVertex( vDel ) destroys a vertex and removes it from the global
+ * vertex list.  It updates the vertex loop to point to a given new vertex.
+ */
+inline/*static*/ void static_KillVertex( GLUvertex *vDel, GLUvertex *newOrg )
+{
+  GLUhalfEdge *e, *eStart = vDel->anEdge;
+  GLUvertex *vPrev, *vNext;
+
+  /* change the origin of all affected edges */
+  e = eStart;
+  do {
+    e->Org = newOrg;
+    e = e->Onext;
+  } while( e != eStart );
+
+  /* delete from circular doubly-linked list */
+  vPrev = vDel->prev;
+  vNext = vDel->next;
+  vNext->prev = vPrev;
+  vPrev->next = vNext;
+
+  memFree( vDel );
+}
+
+/* KillFace( fDel ) destroys a face and removes it from the global face
+ * list.  It updates the face loop to point to a given new face.
+ */
+inline/*static*/ void static_KillFace( GLUface *fDel, GLUface *newLface )
+{
+  GLUhalfEdge *e, *eStart = fDel->anEdge;
+  GLUface *fPrev, *fNext;
+
+  /* change the left face of all affected edges */
+  e = eStart;
+  do {
+    e->Lface = newLface;
+    e = e->Lnext;
+  } while( e != eStart );
+
+  /* delete from circular doubly-linked list */
+  fPrev = fDel->prev;
+  fNext = fDel->next;
+  fNext->prev = fPrev;
+  fPrev->next = fNext;
+
+  memFree( fDel );
+}
+
+
+/****************** Basic Edge Operations **********************/
+
+/* __gl_meshMakeEdge creates one edge, two vertices, and a loop (face).
+ * The loop consists of the two new half-edges.
+ */
+inline GLUhalfEdge *__gl_meshMakeEdge( GLUmesh *mesh )
+{
+  GLUvertex *newVertex1= static_allocVertex();
+  GLUvertex *newVertex2= static_allocVertex();
+  GLUface *newFace= static_allocFace();
+  GLUhalfEdge *e;
+
+  /* if any one is null then all get freed */
+  if (newVertex1 == NULL || newVertex2 == NULL || newFace == NULL) {
+     if (newVertex1 != NULL) memFree(newVertex1);
+     if (newVertex2 != NULL) memFree(newVertex2);
+     if (newFace != NULL) memFree(newFace);     
+     return NULL;
+  } 
+
+  e = static_MakeEdge( &mesh->eHead );
+  if (e == NULL) {
+     memFree(newVertex1);
+     memFree(newVertex2);
+     memFree(newFace);
+     return NULL;
+  }
+
+  static_MakeVertex( newVertex1, e, &mesh->vHead );
+  static_MakeVertex( newVertex2, e->Sym, &mesh->vHead );
+  static_MakeFace( newFace, e, &mesh->fHead );
+  return e;
+}
+  
+
+/* __gl_meshSplice( eOrg, eDst ) is the basic operation for changing the
+ * mesh connectivity and topology.  It changes the mesh so that
+ *	eOrg->Onext <- OLD( eDst->Onext )
+ *	eDst->Onext <- OLD( eOrg->Onext )
+ * where OLD(...) means the value before the meshSplice operation.
+ *
+ * This can have two effects on the vertex structure:
+ *  - if eOrg->Org != eDst->Org, the two vertices are merged together
+ *  - if eOrg->Org == eDst->Org, the origin is split into two vertices
+ * In both cases, eDst->Org is changed and eOrg->Org is untouched.
+ *
+ * Similarly (and independently) for the face structure,
+ *  - if eOrg->Lface == eDst->Lface, one loop is split into two
+ *  - if eOrg->Lface != eDst->Lface, two distinct loops are joined into one
+ * In both cases, eDst->Lface is changed and eOrg->Lface is unaffected.
+ *
+ * Some special cases:
+ * If eDst == eOrg, the operation has no effect.
+ * If eDst == eOrg->Lnext, the new face will have a single edge.
+ * If eDst == eOrg->Lprev, the old face will have a single edge.
+ * If eDst == eOrg->Onext, the new vertex will have a single edge.
+ * If eDst == eOrg->Oprev, the old vertex will have a single edge.
+ */
+inline int __gl_meshSplice( GLUhalfEdge *eOrg, GLUhalfEdge *eDst )
+{
+  int joiningLoops = GLU_FALSE;
+  int joiningVertices = GLU_FALSE;
+
+  if( eOrg == eDst ) return 1;
+
+  if( eDst->Org != eOrg->Org ) {
+    /* We are merging two disjoint vertices -- destroy eDst->Org */
+    joiningVertices = GLU_TRUE;
+    static_KillVertex( eDst->Org, eOrg->Org );
+  }
+  if( eDst->Lface != eOrg->Lface ) {
+    /* We are connecting two disjoint loops -- destroy eDst->Lface */
+    joiningLoops = GLU_TRUE;
+    static_KillFace( eDst->Lface, eOrg->Lface );
+  }
+
+  /* Change the edge structure */
+  static_Splice( eDst, eOrg );
+
+  if( ! joiningVertices ) {
+    GLUvertex *newVertex= static_allocVertex();
+    if (newVertex == NULL) return 0;
+
+    /* We split one vertex into two -- the new vertex is eDst->Org.
+     * Make sure the old vertex points to a valid half-edge.
+     */
+    static_MakeVertex( newVertex, eDst, eOrg->Org );
+    eOrg->Org->anEdge = eOrg;
+  }
+  if( ! joiningLoops ) {
+    GLUface *newFace= static_allocFace();  
+    if (newFace == NULL) return 0;
+
+    /* We split one loop into two -- the new loop is eDst->Lface.
+     * Make sure the old face points to a valid half-edge.
+     */
+    static_MakeFace( newFace, eDst, eOrg->Lface );
+    eOrg->Lface->anEdge = eOrg;
+  }
+
+  return 1;
+}
+
+
+/* __gl_meshDelete( eDel ) removes the edge eDel.  There are several cases:
+ * if (eDel->Lface != eDel->Rface), we join two loops into one; the loop
+ * eDel->Lface is deleted.  Otherwise, we are splitting one loop into two;
+ * the newly created loop will contain eDel->Dst.  If the deletion of eDel
+ * would create isolated vertices, those are deleted as well.
+ *
+ * This function could be implemented as two calls to __gl_meshSplice
+ * plus a few calls to memFree, but this would allocate and delete
+ * unnecessary vertices and faces.
+ */
+inline int __gl_meshDelete( GLUhalfEdge *eDel )
+{
+  GLUhalfEdge *eDelSym = eDel->Sym;
+  int joiningLoops = GLU_FALSE;
+
+  /* First step: disconnect the origin vertex eDel->Org.  We make all
+   * changes to get a consistent mesh in this "intermediate" state.
+   */
+  if( eDel->Lface != eDel->Rface ) {
+    /* We are joining two loops into one -- remove the left face */
+    joiningLoops = GLU_TRUE;
+    static_KillFace( eDel->Lface, eDel->Rface );
+  }
+
+  if( eDel->Onext == eDel ) {
+    static_KillVertex( eDel->Org, NULL );
+  } else {
+    /* Make sure that eDel->Org and eDel->Rface point to valid half-edges */
+    eDel->Rface->anEdge = eDel->Oprev;
+    eDel->Org->anEdge = eDel->Onext;
+
+    static_Splice( eDel, eDel->Oprev );
+    if( ! joiningLoops ) {
+      GLUface *newFace= static_allocFace();
+      if (newFace == NULL) return 0; 
+
+      /* We are splitting one loop into two -- create a new loop for eDel. */
+      static_MakeFace( newFace, eDel, eDel->Lface );
+    }
+  }
+
+  /* Claim: the mesh is now in a consistent state, except that eDel->Org
+   * may have been deleted.  Now we disconnect eDel->Dst.
+   */
+  if( eDelSym->Onext == eDelSym ) {
+    static_KillVertex( eDelSym->Org, NULL );
+    static_KillFace( eDelSym->Lface, NULL );
+  } else {
+    /* Make sure that eDel->Dst and eDel->Lface point to valid half-edges */
+    eDel->Lface->anEdge = eDelSym->Oprev;
+    eDelSym->Org->anEdge = eDelSym->Onext;
+    static_Splice( eDelSym, eDelSym->Oprev );
+  }
+
+  /* Any isolated vertices or faces have already been freed. */
+  static_KillEdge( eDel );
+
+  return 1;
+}
+
+
+/******************** Other Edge Operations **********************/
+
+/* All these routines can be implemented with the basic edge
+ * operations above.  They are provided for convenience and efficiency.
+ */
+
+
+/* __gl_meshAddEdgeVertex( eOrg ) creates a new edge eNew such that
+ * eNew == eOrg->Lnext, and eNew->Dst is a newly created vertex.
+ * eOrg and eNew will have the same left face.
+ */
+inline GLUhalfEdge *__gl_meshAddEdgeVertex( GLUhalfEdge *eOrg )
+{
+  GLUhalfEdge *eNewSym;
+  GLUhalfEdge *eNew = static_MakeEdge( eOrg );
+  if (eNew == NULL) return NULL;
+
+  eNewSym = eNew->Sym;
+
+  /* Connect the new edge appropriately */
+  static_Splice( eNew, eOrg->Lnext );
+
+  /* Set the vertex and face information */
+  eNew->Org = eOrg->Dst;
+  {
+    GLUvertex *newVertex= static_allocVertex();
+    if (newVertex == NULL) return NULL;
+
+    static_MakeVertex( newVertex, eNewSym, eNew->Org );
+  }
+  eNew->Lface = eNewSym->Lface = eOrg->Lface;
+
+  return eNew;
+}
+
+
+/* __gl_meshSplitEdge( eOrg ) splits eOrg into two edges eOrg and eNew,
+ * such that eNew == eOrg->Lnext.  The new vertex is eOrg->Dst == eNew->Org.
+ * eOrg and eNew will have the same left face.
+ */
+inline GLUhalfEdge *__gl_meshSplitEdge( GLUhalfEdge *eOrg )
+{
+  GLUhalfEdge *eNew;
+  GLUhalfEdge *tempHalfEdge= __gl_meshAddEdgeVertex( eOrg );
+  if (tempHalfEdge == NULL) return NULL;
+
+  eNew = tempHalfEdge->Sym;
+
+  /* Disconnect eOrg from eOrg->Dst and connect it to eNew->Org */
+  static_Splice( eOrg->Sym, eOrg->Sym->Oprev );
+  static_Splice( eOrg->Sym, eNew );
+
+  /* Set the vertex and face information */
+  eOrg->Dst = eNew->Org;
+  eNew->Dst->anEdge = eNew->Sym;	/* may have pointed to eOrg->Sym */
+  eNew->Rface = eOrg->Rface;
+  eNew->winding = eOrg->winding;	/* copy old winding information */
+  eNew->Sym->winding = eOrg->Sym->winding;
+
+  return eNew;
+}
+
+
+/* __gl_meshConnect( eOrg, eDst ) creates a new edge from eOrg->Dst
+ * to eDst->Org, and returns the corresponding half-edge eNew.
+ * If eOrg->Lface == eDst->Lface, this splits one loop into two,
+ * and the newly created loop is eNew->Lface.  Otherwise, two disjoint
+ * loops are merged into one, and the loop eDst->Lface is destroyed.
+ *
+ * If (eOrg == eDst), the new face will have only two edges.
+ * If (eOrg->Lnext == eDst), the old face is reduced to a single edge.
+ * If (eOrg->Lnext->Lnext == eDst), the old face is reduced to two edges.
+ */
+inline GLUhalfEdge *__gl_meshConnect( GLUhalfEdge *eOrg, GLUhalfEdge *eDst )
+{
+  GLUhalfEdge *eNewSym;
+  int joiningLoops = GLU_FALSE;  
+  GLUhalfEdge *eNew = static_MakeEdge( eOrg );
+  if (eNew == NULL) return NULL;
+
+  eNewSym = eNew->Sym;
+
+  if( eDst->Lface != eOrg->Lface ) {
+    /* We are connecting two disjoint loops -- destroy eDst->Lface */
+    joiningLoops = GLU_TRUE;
+    static_KillFace( eDst->Lface, eOrg->Lface );
+  }
+
+  /* Connect the new edge appropriately */
+  static_Splice( eNew, eOrg->Lnext );
+  static_Splice( eNewSym, eDst );
+
+  /* Set the vertex and face information */
+  eNew->Org = eOrg->Dst;
+  eNewSym->Org = eDst->Org;
+  eNew->Lface = eNewSym->Lface = eOrg->Lface;
+
+  /* Make sure the old face points to a valid half-edge */
+  eOrg->Lface->anEdge = eNewSym;
+
+  if( ! joiningLoops ) {
+    GLUface *newFace= static_allocFace();
+    if (newFace == NULL) return NULL;
+
+    /* We split one loop into two -- the new loop is eNew->Lface */
+    static_MakeFace( newFace, eNew, eOrg->Lface );
+  }
+  return eNew;
+}
+
+
+/******************** Other Operations **********************/
+
+/* __gl_meshZapFace( fZap ) destroys a face and removes it from the
+ * global face list.  All edges of fZap will have a NULL pointer as their
+ * left face.  Any edges which also have a NULL pointer as their right face
+ * are deleted entirely (along with any isolated vertices this produces).
+ * An entire mesh can be deleted by zapping its faces, one at a time,
+ * in any order.  Zapped faces cannot be used in further mesh operations!
+ */
+inline void __gl_meshZapFace( GLUface *fZap )
+{
+  GLUhalfEdge *eStart = fZap->anEdge;
+  GLUhalfEdge *e, *eNext, *eSym;
+  GLUface *fPrev, *fNext;
+
+  /* walk around face, deleting edges whose right face is also NULL */
+  eNext = eStart->Lnext;
+  do {
+    e = eNext;
+    eNext = e->Lnext;
+
+    e->Lface = NULL;
+    if( e->Rface == NULL ) {
+      /* delete the edge -- see __gl_MeshDelete above */
+
+      if( e->Onext == e ) {
+	static_KillVertex( e->Org, NULL );
+      } else {
+	/* Make sure that e->Org points to a valid half-edge */
+	e->Org->anEdge = e->Onext;
+	static_Splice( e, e->Oprev );
+      }
+      eSym = e->Sym;
+      if( eSym->Onext == eSym ) {
+	static_KillVertex( eSym->Org, NULL );
+      } else {
+	/* Make sure that eSym->Org points to a valid half-edge */
+	eSym->Org->anEdge = eSym->Onext;
+	static_Splice( eSym, eSym->Oprev );
+      }
+      static_KillEdge( e );
+    }
+  } while( e != eStart );
+
+  /* delete from circular doubly-linked list */
+  fPrev = fZap->prev;
+  fNext = fZap->next;
+  fNext->prev = fPrev;
+  fPrev->next = fNext;
+
+  memFree( fZap );
+}
+
+
+/* __gl_meshNewMesh() creates a new mesh with no edges, no vertices,
+ * and no loops (what we usually call a "face").
+ */
+inline GLUmesh *__gl_meshNewMesh( void )
+{
+  GLUvertex *v;
+  GLUface *f;
+  GLUhalfEdge *e;
+  GLUhalfEdge *eSym;
+  GLUmesh *mesh = (GLUmesh *)memAlloc( sizeof( GLUmesh ));
+  if (mesh == NULL) {
+     return NULL;
+  }
+  
+  v = &mesh->vHead;
+  f = &mesh->fHead;
+  e = &mesh->eHead;
+  eSym = &mesh->eHeadSym;
+
+  v->next = v->prev = v;
+  v->anEdge = NULL;
+  v->data = NULL;
+
+  f->next = f->prev = f;
+  f->anEdge = NULL;
+  f->data = NULL;
+  f->trail = NULL;
+  f->marked = GLU_FALSE;
+  f->inside = GLU_FALSE;
+
+  e->next = e;
+  e->Sym = eSym;
+  e->Onext = NULL;
+  e->Lnext = NULL;
+  e->Org = NULL;
+  e->Lface = NULL;
+  e->winding = 0;
+  e->activeRegion = NULL;
+
+  eSym->next = eSym;
+  eSym->Sym = e;
+  eSym->Onext = NULL;
+  eSym->Lnext = NULL;
+  eSym->Org = NULL;
+  eSym->Lface = NULL;
+  eSym->winding = 0;
+  eSym->activeRegion = NULL;
+
+  return mesh;
+}
+
+
+/* __gl_meshUnion( mesh1, mesh2 ) forms the union of all structures in
+ * both meshes, and returns the new mesh (the old meshes are destroyed).
+ */
+inline GLUmesh *__gl_meshUnion( GLUmesh *mesh1, GLUmesh *mesh2 )
+{
+  GLUface *f1 = &mesh1->fHead;
+  GLUvertex *v1 = &mesh1->vHead;
+  GLUhalfEdge *e1 = &mesh1->eHead;
+  GLUface *f2 = &mesh2->fHead;
+  GLUvertex *v2 = &mesh2->vHead;
+  GLUhalfEdge *e2 = &mesh2->eHead;
+
+  /* Add the faces, vertices, and edges of mesh2 to those of mesh1 */
+  if( f2->next != f2 ) {
+    f1->prev->next = f2->next;
+    f2->next->prev = f1->prev;
+    f2->prev->next = f1;
+    f1->prev = f2->prev;
+  }
+
+  if( v2->next != v2 ) {
+    v1->prev->next = v2->next;
+    v2->next->prev = v1->prev;
+    v2->prev->next = v1;
+    v1->prev = v2->prev;
+  }
+
+  if( e2->next != e2 ) {
+    e1->Sym->next->Sym->next = e2->next;
+    e2->next->Sym->next = e1->Sym->next;
+    e2->Sym->next->Sym->next = e1;
+    e1->Sym->next = e2->Sym->next;
+  }
+
+  memFree( mesh2 );
+  return mesh1;
+}
+
+
+#ifdef DELETE_BY_ZAPPING
+
+/* __gl_meshDeleteMesh( mesh ) will free all storage for any valid mesh.
+ */
+inline void __gl_meshDeleteMesh( GLUmesh *mesh )
+{
+  GLUface *fHead = &mesh->fHead;
+
+  while( fHead->next != fHead ) {
+    __gl_meshZapFace( fHead->next );
+  }
+  assert( mesh->vHead.next == &mesh->vHead );
+
+  memFree( mesh );
+}
+
+#else
+
+/* __gl_meshDeleteMesh( mesh ) will free all storage for any valid mesh.
+ */
+inline void __gl_meshDeleteMesh( GLUmesh *mesh )
+{
+  GLUface *f, *fNext;
+  GLUvertex *v, *vNext;
+  GLUhalfEdge *e, *eNext;
+
+  for( f = mesh->fHead.next; f != &mesh->fHead; f = fNext ) {
+    fNext = f->next;
+    memFree( f );
+  }
+
+  for( v = mesh->vHead.next; v != &mesh->vHead; v = vNext ) {
+    vNext = v->next;
+    memFree( v );
+  }
+
+  for( e = mesh->eHead.next; e != &mesh->eHead; e = eNext ) {
+    /* One call frees both e and e->Sym (see EdgePair above) */
+    eNext = e->next;
+    memFree( e );
+  }
+
+  memFree( mesh );
+}
+
+#endif
+
+inline void __gl_meshCheckMesh( GLUmesh *mesh )
+{
+  GLUface *fHead = &mesh->fHead;
+  GLUvertex *vHead = &mesh->vHead;
+  GLUhalfEdge *eHead = &mesh->eHead;
+  GLUface *f, *fPrev;
+  GLUvertex *v, *vPrev;
+  GLUhalfEdge *e, *ePrev;
+
+  fPrev = fHead;
+  for( fPrev = fHead ; (f = fPrev->next) != fHead; fPrev = f) {
+    assert( f->prev == fPrev );
+    e = f->anEdge;
+    do {
+      assert( e->Sym != e );
+      assert( e->Sym->Sym == e );
+      assert( e->Lnext->Onext->Sym == e );
+      assert( e->Onext->Sym->Lnext == e );
+      assert( e->Lface == f );
+      e = e->Lnext;
+    } while( e != f->anEdge );
+  }
+  assert( f->prev == fPrev && f->anEdge == NULL && f->data == NULL );
+
+  vPrev = vHead;
+  for( vPrev = vHead ; (v = vPrev->next) != vHead; vPrev = v) {
+    assert( v->prev == vPrev );
+    e = v->anEdge;
+    do {
+      assert( e->Sym != e );
+      assert( e->Sym->Sym == e );
+      assert( e->Lnext->Onext->Sym == e );
+      assert( e->Onext->Sym->Lnext == e );
+      assert( e->Org == v );
+      e = e->Onext;
+    } while( e != v->anEdge );
+  }
+  assert( v->prev == vPrev && v->anEdge == NULL && v->data == NULL );
+
+  ePrev = eHead;
+  for( ePrev = eHead ; (e = ePrev->next) != eHead; ePrev = e) {
+    assert( e->Sym->next == ePrev->Sym );
+    assert( e->Sym != e );
+    assert( e->Sym->Sym == e );
+    assert( e->Org != NULL );
+    assert( e->Dst != NULL );
+    assert( e->Lnext->Onext->Sym == e );
+    assert( e->Onext->Sym->Lnext == e );
+  }
+  assert( e->Sym->next == ePrev->Sym
+       && e->Sym == &mesh->eHeadSym
+       && e->Sym->Sym == e
+       && e->Org == NULL && e->Dst == NULL
+       && e->Lface == NULL && e->Rface == NULL );
+}
+
+#endif

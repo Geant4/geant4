@@ -106,13 +106,20 @@ G4ReactionProduct * G4ParticleHPNBodyPhaseSpace::Sample(G4double anEnergy, G4dou
    G4double rand0 = Prob(max, maxE, theTotalCount);
    G4double rand;
    
+   G4int icounter=0;
+   G4int icounter_max=1024;
    do
    {
+      icounter++;
+      if ( icounter > icounter_max ) {
+         G4cout << "Loop-counter exceeded the threshold value at " << __LINE__ << "th line of " << __FILE__ << "." << G4endl;
+         break;
+      }
      rand = rand0*G4UniformRand();
      energy = maxE*G4UniformRand();
      testit = Prob(energy, maxE, theTotalCount);
    }
-   while(rand > testit);
+   while(rand > testit); // Loop checking, 11.05.2015, T. Koi
    result->SetKineticEnergy(energy);
    
 // now do random direction

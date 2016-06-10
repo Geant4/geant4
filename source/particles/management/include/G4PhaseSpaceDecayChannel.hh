@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhaseSpaceDecayChannel.hh 81567 2014-06-03 08:46:22Z gcosmo $
+// $Id: G4PhaseSpaceDecayChannel.hh 92057 2015-08-14 13:34:55Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -45,6 +45,7 @@
 class G4PhaseSpaceDecayChannel :public G4VDecayChannel
 {
   public:  // With Description
+    enum {MAX_N_DAUGHTERS=4}; 
     //Constructors 
       G4PhaseSpaceDecayChannel(G4int Verbose = 1);
       G4PhaseSpaceDecayChannel(const G4String& theParentName,
@@ -55,12 +56,19 @@ class G4PhaseSpaceDecayChannel :public G4VDecayChannel
 			       const G4String& theDaughterName3 = "",
 			       const G4String& theDaughterName4 = ""   );
 
+   // give daughter masses instead of sampling masses 
+   // according to PDG mass and width. 
+     G4bool SetDaughterMasses( G4double masses[]);
+  
+     G4bool SampleDaughterMasses();
+
   public: 
    //  Destructor
-      virtual ~G4PhaseSpaceDecayChannel();
+     virtual ~G4PhaseSpaceDecayChannel();
 
   public:  // With Description
      virtual G4DecayProducts *DecayIt(G4double);   
+     G4bool  IsOKWithParentMass(G4double parentMass);
 
   public: 
      static G4double Pmx(G4double e, G4double p1, G4double p2);
@@ -71,6 +79,8 @@ class G4PhaseSpaceDecayChannel :public G4VDecayChannel
      G4DecayProducts *TwoBodyDecayIt();
      G4DecayProducts *ThreeBodyDecayIt();
      G4DecayProducts *ManyBodyDecayIt();
+     G4bool           useGivenDaughterMass;
+     G4double         givenDaughterMasses[MAX_N_DAUGHTERS];
 };  
 
 

@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/StackingAction.cc
 /// \brief Implementation of the StackingAction class
 //
-// $Id: StackingAction.cc 86064 2014-11-07 08:49:32Z gcosmo $
+// $Id: StackingAction.cc 90848 2015-06-10 13:44:30Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,15 +36,17 @@
 #include "DetectorConstruction.hh"
 #include "RunAction.hh"
 #include "HistoManager.hh"
+#include "G4RunManager.hh"
 #include "StackingMessenger.hh"
+#include "Run.hh"
 
 #include "G4Track.hh"
 #include "G4EmCalculator.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::StackingAction(DetectorConstruction* det, RunAction* run)
-:fDetector(det),fRunAction(run),fStackMessenger(0)
+StackingAction::StackingAction(DetectorConstruction* det)
+:fDetector(det),fStackMessenger(0)
 {
   fMatWall = 0;
   fZcav = 0.; 
@@ -77,6 +79,9 @@ StackingAction::ClassifyNewTrack(const G4Track* track)
    first   = false;
  }
  
+
+
+
  G4ClassificationOfNewTrack status = fUrgent;  
 
  //keep primary particle or neutral
@@ -85,10 +90,14 @@ StackingAction::ClassifyNewTrack(const G4Track* track)
  G4bool neutral = (particle->GetPDGCharge() == 0.);
  if ((track->GetParentID() == 0) || neutral) return status;
 
+
+ Run* run = static_cast<Run*>(
+              G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+
  //energy spectrum of charged secondaries
  //
   G4double energy = track->GetKineticEnergy();  
-  fRunAction->sumEsecond(energy);
+  run->sumEsecond(energy);
   
  // kill e- which cannot reach Cavity
  //

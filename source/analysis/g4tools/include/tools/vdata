@@ -12,9 +12,11 @@
 
 namespace tools {
 
+// || !__GXX_EXPERIMENTAL_CXX0X__
+
 template <class T>
 inline const T* vec_data(const std::vector<T>& a_vec) {
-#if TARGET_OS_IPHONE || WIN32 || __INTEL_COMPILER || !__GXX_EXPERIMENTAL_CXX0X__
+#if TARGET_OS_IPHONE || __INTEL_COMPILER || _MSC_VER || (__GNUC__ == 4 && __GNUC_MINOR__ <= 0)
   if(a_vec.empty()) return 0;
   const T& vf = a_vec.front();
   return &vf;
@@ -25,7 +27,7 @@ inline const T* vec_data(const std::vector<T>& a_vec) {
 
 template <class T>
 inline T* vec_data(std::vector<T>& a_vec) {
-#if TARGET_OS_IPHONE || WIN32 || __INTEL_COMPILER || !__GXX_EXPERIMENTAL_CXX0X__
+#if TARGET_OS_IPHONE || __INTEL_COMPILER || _MSC_VER || (__GNUC__ == 4 && __GNUC_MINOR__ <= 0)
   if(a_vec.empty()) return 0;
   T& vf = a_vec.front();
   return &vf;
@@ -33,6 +35,8 @@ inline T* vec_data(std::vector<T>& a_vec) {
   return a_vec.data();
 #endif
 }
+
+inline void inlib_vdata_check_compile() {std::vector<double> v;vec_data(v);}
 
 }
 

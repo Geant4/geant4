@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEvaporationChannel.hh 86986 2014-11-21 13:00:05Z gcosmo $
+// $Id: G4VEvaporationChannel.hh 93357 2015-10-19 13:40:13Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -44,12 +44,6 @@
 #ifndef G4VEvaporationChannel_h
 #define G4VEvaporationChannel_h 1
 
-enum G4EvaporationChannelType 
-{ 
-  fDelayedEmission = 0,
-  fPromptEmission = 1
-};
-
 #include "globals.hh"
 #include "G4Fragment.hh"
 
@@ -57,8 +51,7 @@ class G4VEvaporationChannel
 {
 public:
 
-  G4VEvaporationChannel(const G4String & aName = "Anonymous",
-			G4EvaporationChannelType timeType = fDelayedEmission);
+  G4VEvaporationChannel(const G4String & aName = "");
   virtual ~G4VEvaporationChannel();
 
   // option definition
@@ -89,28 +82,81 @@ public:
 
   virtual void Dump() const;
 
-  inline G4String GetName() const {return Name;}
-  inline void SetName(const G4String & aName) { Name = aName;}
+  // enable internal conversion
+  virtual void SetICM (G4bool);
+
+  // flag of the radioactive decay module
+  virtual void RDMForced (G4bool);
+
+  // get energy of final level if this channel is photon evaporation 
+  virtual G4double GetFinalLevelEnergy(G4int Z, G4int A, G4double energy);
+
+  // get energy of the upper level if this channel is photon evaporation
+  virtual G4double GetUpperLevelEnergy(G4int Z, G4int A);
+
+  // get energy of the upper level in level DB for any decay channel
+  inline G4double GetMaxLevelEnergy(G4int Z, G4int A);
+
+  // get energy of nearest level for any decay channel
+  inline G4double GetNearestLevelEnergy(G4int Z, G4int A, G4double energy);
+
+  // set pointer to photon evaporation in order to access level data
+  inline void SetPhotonEvaporation(G4VEvaporationChannel* p);
 
   // for cross section selection
-  inline void SetOPTxs(G4int opt) { OPTxs = opt; }
+  inline void SetOPTxs(G4int opt);
   // for superimposed Coulomb Barrier for inverse cross sections 	
-  inline void UseSICB(G4bool use) { useSICB = use; }	
+  inline void UseSICB(G4bool use);
 
 protected:
 
-  G4EvaporationChannelType sampleDecayTime;
   G4int OPTxs;
   G4bool useSICB;
 
 private:
-  G4String Name;
 
   G4VEvaporationChannel(const G4VEvaporationChannel & right);
   const G4VEvaporationChannel & operator=(const G4VEvaporationChannel & right);
   G4bool operator==(const G4VEvaporationChannel & right) const;
   G4bool operator!=(const G4VEvaporationChannel & right) const;
+
+  G4VEvaporationChannel* photonEvaporation;
 };
 
+inline G4double 
+G4VEvaporationChannel::GetNearestLevelEnergy(G4int Z, G4int A, G4double energy)
+{
+  G4double E = energy;
+  if(photonEvaporation) { 
+    E = photonEvaporation->GetFinalLevelEnergy(Z, A, E);
+  }
+  return E;
+}
+
+inline G4double 
+G4VEvaporationChannel::GetMaxLevelEnergy(G4int Z, G4int A)
+{
+  G4double E = 0.0;
+  if(photonEvaporation) { 
+    E = photonEvaporation->GetUpperLevelEnergy(Z, A);
+  }
+  return E;
+}
+
+inline void 
+G4VEvaporationChannel::SetPhotonEvaporation(G4VEvaporationChannel* p)
+{
+  photonEvaporation = p;
+}
+
+inline void G4VEvaporationChannel::SetOPTxs(G4int opt) 
+{ 
+  OPTxs = opt; 
+}
+
+inline void G4VEvaporationChannel::UseSICB(G4bool use) 
+{ 
+  useSICB = use; 
+}
 
 #endif

@@ -42,6 +42,7 @@
 #include "G4HadTmpUtil.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4HadronicInteractionRegistry.hh"
+#include "G4Log.hh"
 
 //#define debug_G4BinaryLightIonReaction
 //#define debug_BLIR_finalstate
@@ -190,7 +191,8 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 		G4LorentzVector momentum(pInitialState-pFinalState);
 		G4int loopcount(0);
 		   //G4cout << "BLIC: momentum, pspectators : " << momentum << " / " << pspectators << G4endl;
-		while (std::abs(momentum.e()-pspectators.e()) > 10*MeV)
+		while (std::abs(momentum.e()-pspectators.e()) > 10*MeV)                /* Loop checking, 31.08.2015, G.Folger */
+		                                                                       // see if on loopcount 
 		{
 			G4LorentzVector pCorrect(pInitialState-pspectators);
 		         //G4cout << "BLIC:: BIC nonconservation? (pInitialState-pFinalState) / spectators :" << momentum << " / " << pspectators << "pCorrect "<< pCorrect<< G4endl;
@@ -409,7 +411,7 @@ G4bool G4BinaryLightIonReaction::EnergyAndMomentumCorrector(
 		if ( cAttempt > 10 )
 		{
 			//         G4cout << " speed it up? " << std::abs(OldScale/(OldScale-Scale)) << G4endl;
-			factor=std::max(1.,std::log(std::abs(OldScale/(OldScale-Scale))));
+			factor=std::max(1.,G4Log(std::abs(OldScale/(OldScale-Scale))));
 			//	 G4cout << " ? factor ? " << factor << G4endl;
 		}
 	}
@@ -522,7 +524,7 @@ G4ReactionProductVector * G4BinaryLightIonReaction::Interact(G4LorentzVector & m
          nucleonMom.setX(0);
          nucleonMom.setY(0);
          theFermi.Init(pA,pZ);
-         while( (aNuc=projectile3dNucleus->GetNextNucleon()) )
+         while( (aNuc=projectile3dNucleus->GetNextNucleon()) )   /* Loop checking, 31.08.2015, G.Folger */
          {
             G4LorentzVector p4 = aNuc->GetMomentum();
             tmpV+=p4;
@@ -573,22 +575,17 @@ G4ReactionProductVector * G4BinaryLightIonReaction::Interact(G4LorentzVector & m
          // std::for_each(initalState->begin(), initalState->end(), Delete<G4KineticTrack>());
          // delete initalState;
 
-      } while (! result && tryCount< 150);
+      } while (! result && tryCount< 150);   /* Loop checking, 31.08.2015, G.Folger */
       return result;
 }
 G4double G4BinaryLightIonReaction::GetProjectileExcitation()
 {
 
       G4Nucleon * aNuc;
-      //       targetNucleus->StartLoop();
-      //       while( (aNuc=targetNucleus->GetNextNucleon()) )
-      //       {
-      //         G4cout << " tgt Nucleon : " << aNuc->GetDefinition()->GetParticleName() <<" "<< aNuc->AreYouHit() <<" "<<aNuc->GetMomentum()<<G4endl;
-      //       }
       // the projectileNucleus excitation energy estimate...
       G4double theStatisticalExEnergy = 0;
       projectile3dNucleus->StartLoop();
-      while( (aNuc=projectile3dNucleus->GetNextNucleon()) )
+      while( (aNuc=projectile3dNucleus->GetNextNucleon()) )   /* Loop checking, 31.08.2015, G.Folger */
       {
                 //G4cout << " Nucleon : " << aNuc->GetDefinition()->GetParticleName() <<" "<< aNuc->AreYouHit() <<" "<<aNuc->GetMomentum()<<G4endl;
          if(aNuc->AreYouHit()) {

@@ -36,31 +36,24 @@
 #ifndef G4AlphaDecay_h
 #define G4AlphaDecay_h 1
 
-#include "G4VDecayChannel.hh"
+#include "G4NuclearDecay.hh"
 
 
-class G4AlphaDecay : public G4VDecayChannel
+class G4AlphaDecay : public G4NuclearDecay
 {
   public:
     G4AlphaDecay(const G4ParticleDefinition* theParentNucleus,
                  const G4double& theBR, const G4double& Qvalue,
                  const G4double& excitation);
 
-    G4AlphaDecay(const G4AlphaDecay&);
-
-    ~G4AlphaDecay();
+    virtual ~G4AlphaDecay();
 
     virtual G4DecayProducts* DecayIt(G4double);
 
-    void SetHLThreshold(G4double HLT) {halflifeThreshold = HLT;}
-    G4double GetHLThreshold() {return halflifeThreshold;}
-
-    void DumpInfo();
+    virtual void DumpNuclearInfo();
 
   private:
     const G4double transitionQ;
-    const G4double daughterEx;
-    G4double halflifeThreshold;  // for variance reduction mode
 };
 #endif
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChipsPionPlusElasticXS.cc 83409 2014-08-21 15:16:07Z gcosmo $
+// $Id: G4ChipsPionPlusElasticXS.cc 93260 2015-10-14 08:37:04Z gcosmo $
 //
 //
 // G4 Physics class: G4ChipsPionPlusElasticXS for pA elastic cross sections
@@ -46,6 +46,9 @@
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
 #include "G4IonTable.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
+#include "G4Pow.hh"
 
 // factory
 #include "G4CrossSectionFactory.hh"
@@ -130,13 +133,20 @@ G4ChipsPionPlusElasticXS::~G4ChipsPionPlusElasticXS()
   B4T.clear();
 }
 
-G4bool G4ChipsPionPlusElasticXS::IsIsoApplicable(const G4DynamicParticle* Pt, G4int, G4int,    
+void
+G4ChipsPionPlusElasticXS::CrossSectionDescription(std::ostream& outFile) const
+{
+    outFile << "G4ChipsPionPlusElasticXS provides the elastic cross\n"
+            << "section for pion+ nucleus scattering as a function of incident\n"
+            << "momentum. The cross section is calculated using M. Kossov's\n"
+            << "CHIPS parameterization of cross section data.\n";
+}
+
+G4bool G4ChipsPionPlusElasticXS::IsIsoApplicable(const G4DynamicParticle*, G4int, G4int,    
 						 const G4Element*,
 						 const G4Material*)
 {
-  const G4ParticleDefinition* particle = Pt->GetDefinition();
-  if (particle == G4PionPlus::PionPlus()      ) return true;
-  return false;
+  return true;
 }
 
 // The main member function giving the collision cross section (P is in IU, CS is in mb)
@@ -226,7 +236,7 @@ G4double G4ChipsPionPlusElasticXS::CalculateCrossSection(G4bool CS, G4int F, G4i
 {
   G4double pMom=pIU/GeV;                // All calculations are in GeV
   onlyCS=CS;                            // Flag to calculate only CS (not Si/Bi)
-  lastLP=std::log(pMom);                // Make a logarithm of the momentum for calculation
+  lastLP=G4Log(pMom);                // Make a logarithm of the momentum for calculation
   if(F)                                 // This isotope was found in AMDB =>RETRIEVE/UPDATE
   {
     if(F<0)                             // the AMDB must be loded
@@ -399,9 +409,9 @@ G4double G4ChipsPionPlusElasticXS::GetPTables(G4double LP, G4double ILP, G4int P
         // Reaction cross-section parameters (pel=peh_fit.f)
         lastPAR[0]=(.95*sa+2.E5/a16)/(1.+17/a);                              // p1
         lastPAR[1]=a/(1./4.4+1./a);                                          // p2
-        lastPAR[2]=.22/std::pow(a,.33);                                      // p3
+        lastPAR[2]=.22/G4Pow::GetInstance()->powA(a,.33);                                      // p3
         lastPAR[3]=.5*a/(1.+3./a+1800./a8);                                  // p4
-        lastPAR[4]=3.E-4*std::pow(a,.32)/(1.+14./a2);                        // p5
+        lastPAR[4]=3.E-4*G4Pow::GetInstance()->powA(a,.32)/(1.+14./a2);                        // p5
         lastPAR[5]=0.;                                                       // p6 not used
         lastPAR[6]=(.55+.001*a2)/(1.+4.E-4*a2);                              // p7
         lastPAR[7]=(.0002/asa+4.E-9*a)/(1.+9./a4);                           // p8
@@ -447,10 +457,10 @@ G4double G4ChipsPionPlusElasticXS::GetPTables(G4double LP, G4double ILP, G4int P
           lastPAR[36]=4.;                                    // p3
           lastPAR[37]=64./a3;                                // p4
           // The gloria pre-exponent    (pel_us)
-          lastPAR[38]=1.e8*std::exp(.32*asa);                // p1
-          lastPAR[39]=20.*std::exp(.45*asa);                 // p2
+          lastPAR[38]=1.e8*G4Exp(.32*asa);                // p1
+          lastPAR[39]=20.*G4Exp(.45*asa);                 // p2
           lastPAR[40]=7.e3+2.4e6/a5;                         // p3
-          lastPAR[41]=2.5e5*std::exp(.085*a3);               // p4
+          lastPAR[41]=2.5e5*G4Exp(.085*a3);               // p4
           lastPAR[42]=2.5*a;                                 // p5
           // The gloria slope           (pel_ub)
           lastPAR[43]=920.+.03*a8*a3;                        // p1
@@ -464,8 +474,8 @@ G4double G4ChipsPionPlusElasticXS::GetPTables(G4double LP, G4double ILP, G4int P
           // a24
           // a36
           // The main pre-exponent      (peh_sg)
-          lastPAR[ 9]=4.5*std::pow(a,1.15);                  // p1
-          lastPAR[10]=.06*std::pow(a,.6);                    // p2
+          lastPAR[ 9]=4.5*G4Pow::GetInstance()->powA(a,1.15);                  // p1
+          lastPAR[10]=.06*G4Pow::GetInstance()->powA(a,.6);                    // p2
           lastPAR[11]=.6*a/(1.+2.e15/a16);                   // p3
           lastPAR[12]=.17/(a+9.e5/a3+1.5e33/a32);            // p4
           lastPAR[13]=(.001+7.e-11*a5)/(1.+4.4e-11*a5);      // p5
@@ -487,8 +497,8 @@ G4double G4ChipsPionPlusElasticXS::GetPTables(G4double LP, G4double ILP, G4int P
           lastPAR[26]=1.2e-11*a2/(1.+1.5e19/a12);            // p3
           lastPAR[27]=.016*asa/(1.+5.e16/a16);               // p4
           // The 1st max slope          (peh_qs)
-          lastPAR[28]=.002*a4/(1.+7.e7/std::pow(a-6.83,14)); // p1
-          lastPAR[29]=2.e6/a6+7.2/std::pow(a,.11);           // p2
+          lastPAR[28]=.002*a4/(1.+7.e7/G4Pow::GetInstance()->powA(a-6.83,14)); // p1
+          lastPAR[29]=2.e6/a6+7.2/G4Pow::GetInstance()->powA(a,.11);           // p2
           lastPAR[30]=11.*a3/(1.+7.e23/a16/a8);              // p3
           lastPAR[31]=100./asa;                              // p4
           // The 2nd max pre-exponent   (peh_ss)
@@ -602,11 +612,11 @@ G4double G4ChipsPionPlusElasticXS::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
   if(tgZ==1 && tgN==0)                // ===> p+p=p+p
   {
     G4double E1=lastTM*theB1;
-    G4double R1=(1.-std::exp(-E1));
+    G4double R1=(1.-G4Exp(-E1));
     G4double E2=lastTM*theB2;
-    G4double R2=(1.-std::exp(-E2*E2*E2));
+    G4double R2=(1.-G4Exp(-E2*E2*E2));
     G4double E3=lastTM*theB3;
-    G4double R3=(1.-std::exp(-E3));
+    G4double R3=(1.-G4Exp(-E3));
     G4double I1=R1*theS1/theB1;
     G4double I2=R2*theS2;
     G4double I3=R3*theS3;
@@ -616,38 +626,38 @@ G4double G4ChipsPionPlusElasticXS::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
     {
       G4double ran=R1*G4UniformRand();
       if(ran>1.) ran=1.;
-      q2=-std::log(1.-ran)/theB1;
+      q2=-G4Log(1.-ran)/theB1;
     }
     else if(rand<I12)
     {
       G4double ran=R2*G4UniformRand();
       if(ran>1.) ran=1.;
-      q2=-std::log(1.-ran);
+      q2=-G4Log(1.-ran);
       if(q2<0.) q2=0.;
-      q2=std::pow(q2,third)/theB2;
+      q2=G4Pow::GetInstance()->powA(q2,third)/theB2;
     }
     else
     {
       G4double ran=R3*G4UniformRand();
       if(ran>1.) ran=1.;
-      q2=-std::log(1.-ran)/theB3;
+      q2=-G4Log(1.-ran)/theB3;
     }
   }
   else
   {
     G4double a=tgZ+tgN;
     G4double E1=lastTM*(theB1+lastTM*theSS);
-    G4double R1=(1.-std::exp(-E1));
+    G4double R1=(1.-G4Exp(-E1));
     G4double tss=theSS+theSS; // for future solution of quadratic equation (imediate check)
     G4double tm2=lastTM*lastTM;
     G4double E2=lastTM*tm2*theB2;                   // power 3 for lowA, 5 for HighA (1st)
     if(a>6.5)E2*=tm2;                               // for heavy nuclei
-    G4double R2=(1.-std::exp(-E2));
+    G4double R2=(1.-G4Exp(-E2));
     G4double E3=lastTM*theB3;
     if(a>6.5)E3*=tm2*tm2*tm2;                       // power 1 for lowA, 7 (2nd) for HighA
-    G4double R3=(1.-std::exp(-E3));
+    G4double R3=(1.-G4Exp(-E3));
     G4double E4=lastTM*theB4;
-    G4double R4=(1.-std::exp(-E4));
+    G4double R4=(1.-G4Exp(-E4));
     G4double I1=R1*theS1;
     G4double I2=R2*theS2;
     G4double I3=R3*theS3;
@@ -659,31 +669,31 @@ G4double G4ChipsPionPlusElasticXS::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
     {
       G4double ran=R1*G4UniformRand();
       if(ran>1.) ran=1.;
-      q2=-std::log(1.-ran)/theB1;
+      q2=-G4Log(1.-ran)/theB1;
       if(std::fabs(tss)>1.e-7) q2=(std::sqrt(theB1*(theB1+(tss+tss)*q2))-theB1)/tss;
     }
     else if(rand<I12)
     {
       G4double ran=R2*G4UniformRand();
       if(ran>1.) ran=1.;
-      q2=-std::log(1.-ran)/theB2;
+      q2=-G4Log(1.-ran)/theB2;
       if(q2<0.) q2=0.;
-      if(a<6.5) q2=std::pow(q2,third);
-      else      q2=std::pow(q2,fifth);
+      if(a<6.5) q2=G4Pow::GetInstance()->powA(q2,third);
+      else      q2=G4Pow::GetInstance()->powA(q2,fifth);
     }
     else if(rand<I13)
     {
       G4double ran=R3*G4UniformRand();
       if(ran>1.) ran=1.;
-      q2=-std::log(1.-ran)/theB3;
+      q2=-G4Log(1.-ran)/theB3;
       if(q2<0.) q2=0.;
-      if(a>6.5) q2=std::pow(q2,sevth);
+      if(a>6.5) q2=G4Pow::GetInstance()->powA(q2,sevth);
     }
     else
     {
       G4double ran=R4*G4UniformRand();
       if(ran>1.) ran=1.;
-      q2=-std::log(1.-ran)/theB4;
+      q2=-G4Log(1.-ran)/theB4;
       if(a<6.5) q2=lastTM-q2;                    // u reduced for lightA (starts from 0)
     }
   }
@@ -742,7 +752,7 @@ G4double G4ChipsPionPlusElasticXS::GetTabValues(G4double lp, G4int PDG, G4int tg
     tgZ=1;
     tgN=0;
   }
-  G4double p=std::exp(lp);              // momentum
+  G4double p=G4Exp(lp);              // momentum
   G4double sp=std::sqrt(p);             // sqrt(p)
   G4double p2=p*p;
   G4double p3=p2*p;
@@ -753,7 +763,7 @@ G4double G4ChipsPionPlusElasticXS::GetTabValues(G4double lp, G4int PDG, G4int tg
     theSS=lastPAR[34];
     theS1=(lastPAR[12]+lastPAR[13]*dl2*dl2)/(1.+lastPAR[14]/p4/p)+
           (lastPAR[15]/p2+lastPAR[16]*p)/(p4+lastPAR[17]*sp);
-    theB1=lastPAR[18]*std::pow(p,lastPAR[19])/(1.+lastPAR[20]/p3);
+    theB1=lastPAR[18]*G4Pow::GetInstance()->powA(p,lastPAR[19])/(1.+lastPAR[20]/p3);
     theS2=lastPAR[21]+lastPAR[22]/(p4+lastPAR[23]*p);
     theB2=lastPAR[24]+lastPAR[25]/(p4+lastPAR[26]/sp); 
     theS3=lastPAR[27]+lastPAR[28]/(p4*p4+lastPAR[29]*p2+lastPAR[30]);
@@ -779,7 +789,7 @@ G4double G4ChipsPionPlusElasticXS::GetTabValues(G4double lp, G4int PDG, G4int tg
     //G4double p24=p16*p8;
     G4double dl=lp-5.;
     G4double a=tgZ+tgN;
-    G4double pah=std::pow(p,a/2);
+    G4double pah=G4Pow::GetInstance()->powA(p,a/2);
     G4double pa=pah*pah;
     G4double pa2=pa*pa;
     if(a<6.5)
@@ -789,23 +799,23 @@ G4double G4ChipsPionPlusElasticXS::GetTabValues(G4double lp, G4int PDG, G4int tg
       theB1=(lastPAR[16]+lastPAR[17]*p2)/(p4+lastPAR[18]/pah)+lastPAR[19];
       theSS=lastPAR[20]/(1.+lastPAR[21]/p2)+lastPAR[22]/(p6/pa+lastPAR[23]/p16);
       theS2=lastPAR[24]/(pa/p2+lastPAR[25]/p4)+lastPAR[26];
-      theB2=lastPAR[27]*std::pow(p,lastPAR[28])+lastPAR[29]/(p8+lastPAR[30]/p16);
+      theB2=lastPAR[27]*G4Pow::GetInstance()->powA(p,lastPAR[28])+lastPAR[29]/(p8+lastPAR[30]/p16);
       theS3=lastPAR[31]/(pa*p+lastPAR[32]/pa)+lastPAR[33];
       theB3=lastPAR[34]/(p3+lastPAR[35]/p6)+lastPAR[36]/(1.+lastPAR[37]/p2);
-      theS4=p2*(pah*lastPAR[38]*std::exp(-pah*lastPAR[39])+
-                lastPAR[40]/(1.+lastPAR[41]*std::pow(p,lastPAR[42])));
+      theS4=p2*(pah*lastPAR[38]*G4Exp(-pah*lastPAR[39])+
+                lastPAR[40]/(1.+lastPAR[41]*G4Pow::GetInstance()->powA(p,lastPAR[42])));
       theB4=lastPAR[43]*pa/p2/(1.+pa*lastPAR[44]);
     }
     else
     {
       theS1=lastPAR[9]/(1.+lastPAR[10]/p4)+lastPAR[11]/(p4+lastPAR[12]/p2)+
             lastPAR[13]/(p5+lastPAR[14]/p16);
-      theB1=(lastPAR[15]/p8+lastPAR[19])/(p+lastPAR[16]/std::pow(p,lastPAR[20]))+
+      theB1=(lastPAR[15]/p8+lastPAR[19])/(p+lastPAR[16]/G4Pow::GetInstance()->powA(p,lastPAR[20]))+
             lastPAR[17]/(1.+lastPAR[18]/p4);
-      theSS=lastPAR[21]/(p4/std::pow(p,lastPAR[23])+lastPAR[22]/p4);
-      theS2=lastPAR[24]/p4/(std::pow(p,lastPAR[25])+lastPAR[26]/p12)+lastPAR[27];
-      theB2=lastPAR[28]/std::pow(p,lastPAR[29])+lastPAR[30]/std::pow(p,lastPAR[31]);
-      theS3=lastPAR[32]/std::pow(p,lastPAR[35])/(1.+lastPAR[36]/p12)+
+      theSS=lastPAR[21]/(p4/G4Pow::GetInstance()->powA(p,lastPAR[23])+lastPAR[22]/p4);
+      theS2=lastPAR[24]/p4/(G4Pow::GetInstance()->powA(p,lastPAR[25])+lastPAR[26]/p12)+lastPAR[27];
+      theB2=lastPAR[28]/G4Pow::GetInstance()->powA(p,lastPAR[29])+lastPAR[30]/G4Pow::GetInstance()->powA(p,lastPAR[31]);
+      theS3=lastPAR[32]/G4Pow::GetInstance()->powA(p,lastPAR[35])/(1.+lastPAR[36]/p12)+
             lastPAR[33]/(1.+lastPAR[34]/p6);
       theB3=lastPAR[37]/p8+lastPAR[38]/p2+lastPAR[39]/(1.+lastPAR[40]/p8);
       theS4=(lastPAR[41]/p4+lastPAR[46]/p)/(1.+lastPAR[42]/p10)+

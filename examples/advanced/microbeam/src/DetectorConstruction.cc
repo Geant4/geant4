@@ -745,7 +745,7 @@ void DetectorConstruction::ConstructSDandField()
       
   fPropInField =
     G4TransportationManager::GetTransportationManager()->GetPropagatorInField();
-  fPropInField->SetMinimumEpsilonStep(1e-11);
-  fPropInField->SetMaximumEpsilonStep(1e-10);
+  fPropInField->SetMinimumEpsilonStep(1e-16); // instead of 11
+  fPropInField->SetMaximumEpsilonStep(1e-15); // instead of 10
 
 }

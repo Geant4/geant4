@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointhMultipleScattering.cc 73245 2013-08-22 13:13:20Z gcosmo $
+// $Id: G4AdjointhMultipleScattering.cc 90259 2015-05-22 08:57:37Z gcosmo $
 //
 
 //
@@ -53,12 +53,6 @@ G4AdjointhMultipleScattering::G4AdjointhMultipleScattering(const G4String& proce
   : G4VMultipleScattering(processName)
 {
   isInitialized = false;  
-  isIon         = false;
-  SetStepLimitType(fMinimal);
-
-  dtrl=0.;
-  lambdalimit=0.;
-  samplez=0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,39 +69,10 @@ G4bool G4AdjointhMultipleScattering::IsApplicable (const G4ParticleDefinition& p
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4AdjointhMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
+void G4AdjointhMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
-  // Modification of parameters between runs
-  if(isInitialized) {
-    if (p->GetParticleType() != "adjoint_nucleus" && p->GetPDGMass() < GeV) {
-      mscUrban->SetStepLimitType(StepLimitType());
-      mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
-      mscUrban->SetSkin(Skin());
-      mscUrban->SetRangeFactor(RangeFactor());
-      mscUrban->SetGeomFactor(GeomFactor());
-    }
-    return;
-  }
-
-  // defaults for ions, which cannot be overwritten
-  if (p->GetParticleType() == "adjoint_nucleus" || p->GetPDGMass() > GeV) {
-    SetStepLimitType(fMinimal);
-    SetLateralDisplasmentFlag(false);
-    //SetBuildLambdaTable(false);
-    if(p->GetParticleType() == "adjoint_nucleus") isIon = true;
-  }
-
-  // initialisation of parameters
-  G4String part_name = p->GetParticleName();
-  mscUrban = new G4UrbanMscModel();
-
-  mscUrban->SetStepLimitType(StepLimitType());
-  mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
-  mscUrban->SetSkin(Skin());
-  mscUrban->SetRangeFactor(RangeFactor());
-  mscUrban->SetGeomFactor(GeomFactor());
-
-  AddEmModel(1,mscUrban);
+  if(isInitialized) { return; }
+  AddEmModel(1, new G4UrbanMscModel());
   isInitialized = true;
 }
 
@@ -119,7 +84,6 @@ void G4AdjointhMultipleScattering::PrintInfo()
 	 << ", step limit type: " << StepLimitType()
          << ", lateralDisplacement: " << LateralDisplasmentFlag()
 	 << ", skin= " << Skin()  
-    //	 << ", geomFactor= " << GeomFactor()  
 	 << G4endl;
 }
 

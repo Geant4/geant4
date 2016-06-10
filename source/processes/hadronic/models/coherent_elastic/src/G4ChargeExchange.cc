@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchange.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4ChargeExchange.cc 91897 2015-08-10 09:55:12Z gcosmo $
 //
 //
 // G4 Model: Charge and strangness exchange based on G4LightMedia model
@@ -34,6 +34,7 @@
 // 07-Jun-06 V.Ivanchenko fix problem of rotation of final state
 // 25-Jul-06 V.Ivanchenko add 19 MeV low energy, below which S-wave is sampled
 // 12-Jun-12 A.Ribon fix warnings of shadowed variables
+// 06-Aug-15 A.Ribon migrating to G4Exp, G4Log and G4Pow
 //
 
 #include "G4ChargeExchange.hh"
@@ -44,6 +45,11 @@
 #include "G4IonTable.hh"
 #include "Randomize.hh"
 #include "G4NucleiProperties.hh"
+
+#include "G4Exp.hh"
+#include "G4Log.hh"
+#include "G4Pow.hh"
+
 
 G4ChargeExchange::G4ChargeExchange() : G4HadronicInteraction("Charge Exchange")
 {
@@ -304,24 +310,32 @@ G4double G4ChargeExchange::SampleT(G4double tmax, G4double A)
 {
   G4double aa, bb, cc, dd;
   if (A <= 62.) {
-    aa = std::pow(A, 1.63);
-    bb = 14.5*std::pow(A, 0.66);
-    cc = 1.4*std::pow(A, 0.33);
+    aa = G4Pow::GetInstance()->powA(A, 1.63);
+    bb = 14.5*G4Pow::GetInstance()->powA(A, 0.66);
+    cc = 1.4*G4Pow::GetInstance()->powA(A, 0.33);
     dd = 10.;
   } else {
-    aa = std::pow(A, 1.33);
-    bb = 60.*std::pow(A, 0.33);
-    cc = 0.4*std::pow(A, 0.40);
+    aa = G4Pow::GetInstance()->powA(A, 1.33);
+    bb = 60.*G4Pow::GetInstance()->powA(A, 0.33);
+    cc = 0.4*G4Pow::GetInstance()->powA(A, 0.40);
     dd = 10.;
   }
-  G4double x1 = (1.0 - std::exp(-tmax*bb))*aa/bb;
-  G4double x2 = (1.0 - std::exp(-tmax*dd))*cc/dd;
+  G4double x1 = (1.0 - G4Exp(-tmax*bb))*aa/bb;
+  G4double x2 = (1.0 - G4Exp(-tmax*dd))*cc/dd;
   
   G4double t;
   G4double y = bb;
   if(G4UniformRand()*(x1 + x2) < x2) y = dd;
 
-  do {t = -std::log(G4UniformRand())/y;} while (t > tmax);
+  const G4int maxNumberOfLoops = 10000;
+  G4int loopCounter = 0;
+  do {
+    t = -G4Log(G4UniformRand())/y;
+  } while ( (t > tmax) &&
+            ++loopCounter < maxNumberOfLoops );  /* Loop checking, 10.08.2015, A.Ribon */
+  if ( loopCounter >= maxNumberOfLoops ) {
+    t = 0.0;
+  }
 
   return t;
 }

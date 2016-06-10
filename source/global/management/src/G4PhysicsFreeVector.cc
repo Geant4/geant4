@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsFreeVector.cc 74256 2013-10-02 14:24:02Z gcosmo $
+// $Id: G4PhysicsFreeVector.cc 93409 2015-10-21 13:26:27Z gcosmo $
 //
 // 
 //--------------------------------------------------------------------
@@ -61,7 +61,7 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(size_t theNbin)
   dataVector.reserve(numberOfNodes);
   binVector.reserve(numberOfNodes);
 
-  for (size_t i=0; i<numberOfNodes; i++)
+  for (size_t i=0; i<numberOfNodes; ++i)
   {
      binVector.push_back(0.0);
      dataVector.push_back(0.0);
@@ -77,7 +77,7 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(const G4DataVector& theBinVector,
   dataVector.reserve(numberOfNodes);
   binVector.reserve(numberOfNodes);
 
-  for (size_t i=0; i<numberOfNodes; i++)
+  for (size_t i=0; i<numberOfNodes; ++i)
   {
      binVector.push_back(theBinVector[i]);
      dataVector.push_back(theDataVector[i]);
@@ -108,31 +108,3 @@ void G4PhysicsFreeVector::PutValue( size_t theBinNumber,
      edgeMin = binVector[0];
   }
 }
-/*
-size_t G4PhysicsFreeVector::FindBinLocation(G4double theEnergy) const
-{
-  // For G4PhysicsFreeVector, FindBinLocation is implemented using
-  // the binary search algorithm.
-  //
-  // Because this is a virtual function, it is accessed through a
-  // pointer to the G4PhysicsVector object for most usages. In this
-  // case, 'inline' will not be invoked. However, there is a possibility 
-  // that the user access to the G4PhysicsFreeVector object directly and 
-  // not through pointers or references. In this case, the 'inline' will
-  // be invoked. (See R.B.Murray, "C++ Strategies and Tactics", Chap.6.6)
-
-  size_t lowerBound = 0;
-  size_t upperBound = numberOfNodes-2;
-
-  while (lowerBound <= upperBound)
-  {
-    size_t midBin = (lowerBound + upperBound)/2;
-    if( theEnergy < binVector[midBin] )
-       { upperBound = midBin-1; }
-    else
-       { lowerBound = midBin+1; }
-  }
-
-  return upperBound;
-}
-*/

@@ -49,6 +49,8 @@ G4ThreadLocal G4NavigationHistoryPool* G4NavigationHistoryPool::fgInstance = 0;
 //
 G4NavigationHistoryPool::G4NavigationHistoryPool()
 {
+  fPool.reserve(512);
+  fFree.reserve(512);
 }
 
 // ***************************************************************************
@@ -70,12 +72,20 @@ void G4NavigationHistoryPool::Clean()
   {
     delete fPool[i];
   }
+  fPool.clear();
+  fFree.clear();
+}
+
+// ***************************************************************************
+// Print number of entries
+// ***************************************************************************
+//
+void G4NavigationHistoryPool::Print() const
+{
 #ifdef G4VERBOSE
   G4cout << "Total navigation history collections cleaned: "
          << fPool.size() << G4endl;
 #endif
-  fPool.clear();
-  fActive.clear();
 }
 
 // ***************************************************************************
@@ -86,25 +96,12 @@ void G4NavigationHistoryPool::Reset()
 {
   for(size_t i=0; i<fPool.size(); ++i)
   {
-    fPool[i] = 0; fActive[i] = false;
+    fPool[i] = 0;
   }
-}
-
-// ***************************************************************************
-// Return the pointer of the first available collection of levels
-// If none are available (i.e. non active) allocate collection
-// ***************************************************************************
-//
-std::vector<G4NavigationLevel> * G4NavigationHistoryPool::GetLevels()
-{
-  std::vector<G4bool>::iterator
-    pos = std::find(fActive.begin(), fActive.end(), false);
-  if (pos != fActive.end())
+  for(size_t j=0; j<fFree.size(); ++j)
   {
-    *pos = true;
-    return fPool[pos-fActive.begin()];
+    fFree[j] = 0;
   }
-  return GetNewLevels();
 }
 
 // ***************************************************************************

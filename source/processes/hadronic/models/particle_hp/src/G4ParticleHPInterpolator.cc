@@ -30,6 +30,7 @@
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 #include "G4ParticleHPInterpolator.hh"
+#include "G4Pow.hh"
 
   G4double G4ParticleHPInterpolator::
   GetBinIntegral(const G4InterpolationScheme & aScheme, 
@@ -50,9 +51,9 @@
       else if(x2==0) result = y2;
       else
       {
-        G4double b = (y2-y1)/(std::log(x2)-std::log(x1));
-        G4double a = y1 - b*std::log(x1);
-        result = (a-b)*(x2-x1) + b*(x2*std::log(x2)-x1*std::log(x1));
+        G4double b = (y2-y1)/(G4Log(x2)-G4Log(x1));
+        G4double a = y1 - b*G4Log(x1);
+        result = (a-b)*(x2-x1) + b*(x2*G4Log(x2)-x1*G4Log(x1));
       }
     }
     else if(aScheme==LOGLIN||aScheme==CLOGLIN||aScheme==ULOGLIN)
@@ -67,7 +68,7 @@
         //result = (std::exp(a)/b)*(std::exp(b*x2)-std::exp(b*x1));
         //***************************************************************
         if ( y1!=y2 ) {
-           result = (x2-x1)*(y2-y1)/std::log(y2/y1);
+           result = (x2-x1)*(y2-y1)/G4Log(y2/y1);
         } else { 
           result = y2*(x2-x1);
         }
@@ -81,9 +82,9 @@
       else if(y1==0||y2==0) result =0;
       else
       {      
-        G4double b = (std::log(y2)-std::log(y1))/(std::log(x2)-std::log(x1));
-        G4double a = std::log(y1) - b*std::log(x1);;
-        result = (std::exp(a)/(b+1))*(std::pow(x2,b+1)-std::pow(x1,b+1));
+        G4double b = (G4Log(y2)-G4Log(y1))/(G4Log(x2)-G4Log(x1));
+        G4double a = G4Log(y1) - b*G4Log(x1);;
+        result = (G4Exp(a)/(b+1))*(G4Pow::GetInstance()->powA(x2,b+1)-G4Pow::GetInstance()->powA(x1,b+1));
       }
     }
     else
@@ -116,10 +117,10 @@
       else if(x2==0) result = y2;
       else
       {
-        G4double b = (y2-y1)/(std::log(x2)-std::log(x1));
-        G4double a = y1 - b*std::log(x1);
-        result = ( x2*x2/2. * (a-b/2.+b*std::log(x2)) )
-                -( x1*x1/2. * (a-b/2.+b*std::log(x1)) );
+        G4double b = (y2-y1)/(G4Log(x2)-G4Log(x1));
+        G4double a = y1 - b*G4Log(x1);
+        result = ( x2*x2/2. * (a-b/2.+b*G4Log(x2)) )
+                -( x1*x1/2. * (a-b/2.+b*G4Log(x1)) );
       }
     }
     else if(aScheme==LOGLIN||aScheme==CLOGLIN||aScheme==ULOGLIN)
@@ -127,21 +128,21 @@
       if(y1==0||y2==0) result = 0;
       else
       {
-        G4double b = (std::log(y2)-std::log(y1))/(x2-x1);
-        G4double a = std::log(y1) - b*x1;
-        result = std::exp(a)/(b*b)*( std::exp(b*x2)*(b*x2-1.) - std::exp(b*x1)*(b*x1-1.) );
+        G4double b = (G4Log(y2)-G4Log(y1))/(x2-x1);
+        G4double a = G4Log(y1) - b*x1;
+        result = G4Exp(a)/(b*b)*( G4Exp(b*x2)*(b*x2-1.) - G4Exp(b*x1)*(b*x1-1.) );
       }
     }
     else if(aScheme==LOGLOG||aScheme==CLOGLOG||aScheme==ULOGLOG)
     {
       if(x1==0) result = y1;
       else if(x2==0) result = y2;
-      if(y1==0||y2==0) result = 0;
+      else if(y1==0||y2==0) result = 0;
       else
       {
-        G4double b = (std::log(y2)-std::log(y1))/(std::log(x2)-std::log(x1));
-        G4double a = std::log(y1) - b*std::log(x1);;
-        result = std::exp(a)/(b+2.)*( std::pow(x2, b+2.) - std::pow(x1, b+2) );
+        G4double b = (G4Log(y2)-G4Log(y1))/(G4Log(x2)-G4Log(x1));
+        G4double a = G4Log(y1) - b*G4Log(x1);;
+        result = G4Exp(a)/(b+2.)*( G4Pow::GetInstance()->powA(x2, b+2.) - G4Pow::GetInstance()->powA(x1, b+2) );
       }
     }
     else

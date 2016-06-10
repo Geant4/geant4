@@ -47,7 +47,7 @@ class file;
 class G4RootRFileManager : public G4BaseFileManager
 {
   public:
-    G4RootRFileManager(const G4AnalysisManagerState& state);
+    explicit G4RootRFileManager(const G4AnalysisManagerState& state);
     virtual ~G4RootRFileManager();
 
     // Methods to manipulate input files

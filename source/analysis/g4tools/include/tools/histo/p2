@@ -89,7 +89,7 @@ public:
     m_max_v = a_from.m_max_v;
   }
   pd_t get_histo_data() const {
-    pd_t hd(parent::base_get_data());
+    pd_t hd(parent::dac());
     hd.m_is_profile = true;
     hd.m_bin_Svw = m_bin_Svw;
     hd.m_bin_Sv2w = m_bin_Sv2w;
@@ -136,6 +136,9 @@ public:
   
     parent::m_all_entries++;
     if(inRange) {
+      parent::m_in_range_plane_Sxyw[0] += aX * aY * aWeight;
+
+      // fast getters :
       parent::m_in_range_entries++;
       parent::m_in_range_Sw += aWeight;
       parent::m_in_range_Sw2 += aWeight*aWeight;
@@ -260,6 +263,8 @@ public:
 public:
   bool configure(bn_t aXnumber,TC aXmin,TC aXmax,bn_t aYnumber,TC aYmin,TC aYmax){
     if(!parent::configure(aXnumber,aXmin,aXmax,aYnumber,aYmin,aYmax)) return false;
+    m_bin_Svw.clear();
+    m_bin_Sv2w.clear();
     m_bin_Svw.resize(parent::m_bin_number,0);
     m_bin_Sv2w.resize(parent::m_bin_number,0);
     m_cut_v = false;
@@ -269,6 +274,8 @@ public:
   }
   bool configure(const std::vector<TC>& aEdgesX,const std::vector<TC>& aEdgesY) {
     if(!parent::configure(aEdgesX,aEdgesY)) return false;
+    m_bin_Svw.clear();
+    m_bin_Sv2w.clear();
     m_bin_Svw.resize(parent::m_bin_number,0);
     m_bin_Sv2w.resize(parent::m_bin_number,0);
     m_cut_v = false;
@@ -278,6 +285,8 @@ public:
   }
   bool configure(bn_t aXnumber,TC aXmin,TC aXmax,bn_t aYnumber,TC aYmin,TC aYmax,TV aVmin,TV aVmax){
     if(!parent::configure(aXnumber,aXmin,aXmax,aYnumber,aYmin,aYmax)) return false;
+    m_bin_Svw.clear();
+    m_bin_Sv2w.clear();
     m_bin_Svw.resize(parent::m_bin_number,0);
     m_bin_Sv2w.resize(parent::m_bin_number,0);
     m_cut_v = true;
@@ -287,6 +296,8 @@ public:
   }
   bool configure(const std::vector<TC>& aEdgesX,const std::vector<TC>& aEdgesY,TV aVmin,TV aVmax) {
     if(!parent::configure(aEdgesX,aEdgesY)) return false;
+    m_bin_Svw.clear();
+    m_bin_Sv2w.clear();
     m_bin_Svw.resize(parent::m_bin_number,0);
     m_bin_Sv2w.resize(parent::m_bin_number,0);
     m_cut_v = true;

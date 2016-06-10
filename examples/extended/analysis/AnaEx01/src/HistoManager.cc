@@ -27,7 +27,7 @@
 /// \brief Implementation of the HistoManager class
 //
 //
-// $Id: HistoManager.cc 74272 2013-10-02 14:48:50Z gcosmo $
+// $Id: HistoManager.cc 92443 2015-09-01 13:56:16Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -39,37 +39,23 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::HistoManager()
-{
-  fFileName[0] = "AnaEx01";
-  fFactoryOn = false;
-  
-  // histograms
-  for (G4int k=0; k<MaxHisto; k++) {
-    fHistId[k] = 0;
-    fHistPt[k] = 0;    
-  }
-  // ntuple
-  for (G4int k=0; k<MaxNtCol; k++) {
-    fNtColId[k] = 0;
-  }  
-}
+ : fFactoryOn(false)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::~HistoManager()
-{ }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::book()
+void HistoManager::Book()
 {
   // Create or get analysis manager
   // The choice of analysis technology is done via selection of a namespace
   // in HistoManager.hh
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  analysisManager->SetVerboseLevel(2);
-  G4String extension = analysisManager->GetFileType();
-  fFileName[1] = fFileName[0] + "." + extension;
+  analysisManager->SetVerboseLevel(1);
       
   // Create directories 
   analysisManager->SetHistoDirectoryName("histo");
@@ -77,91 +63,83 @@ void HistoManager::book()
     
   // Open an output file
   //
-  G4bool fileOpen = analysisManager->OpenFile(fFileName[0]);
-  if (!fileOpen) {
-    G4cout << "\n---> HistoManager::book(): cannot open " << fFileName[1] 
-           << G4endl;
+  G4bool fileOpen = analysisManager->OpenFile("AnaEx01");
+  if (! fileOpen) {
+    G4cerr << "\n---> HistoManager::Book(): cannot open " 
+           << analysisManager->GetFileName() << G4endl;
     return;
   }
   
-  // create selected histograms
-  //
-  analysisManager->SetFirstHistoId(1);
-  analysisManager->SetFirstNtupleId(1);
+  // Create histograms.
+  // Histogram ids are generated automatically starting from 0.
+  // The start value can be changed by:
+  // analysisManager->SetFirstHistoId(1);  
+  
+  // id = 0
+  analysisManager->CreateH1("EAbs","Edep in absorber (MeV)", 100, 0., 800*MeV);
+  // id = 1
+  analysisManager->CreateH1("EGap","Edep in gap (MeV)", 100, 0., 100*MeV);
+  // id = 2
+  analysisManager->CreateH1("LAbs","trackL in absorber (mm)", 100, 0., 1*m);
+  // id = 3
+  analysisManager->CreateH1("LGap","trackL in gap (mm)", 100, 0., 50*cm);
 
-  fHistId[1] = analysisManager->CreateH1("1","Edep in absorber (MeV)",
-                                              100, 0., 800*MeV);
-  fHistPt[1] = analysisManager->GetH1(fHistId[1]);
-                                           
-  fHistId[2] = analysisManager->CreateH1("2","Edep in gap (MeV)",
-                                              100, 0., 100*MeV);
-  fHistPt[2] = analysisManager->GetH1(fHistId[2]);
-                                           
-  fHistId[3] = analysisManager->CreateH1("3","trackL in absorber (mm)",
-                                              100, 0., 1*m);
-  fHistPt[3] = analysisManager->GetH1(fHistId[3]);
-                                           
-  fHistId[4] = analysisManager->CreateH1("4","trackL in gap (mm)",
-                                              100, 0., 50*cm);
-  fHistPt[4] = analysisManager->GetH1(fHistId[4]);
-                                  
-  // Create 1st ntuple (id = 1)
-  //    
-  analysisManager->CreateNtuple("101", "Edep");
-  fNtColId[0] = analysisManager->CreateNtupleDColumn("Eabs");
-  fNtColId[1] = analysisManager->CreateNtupleDColumn("Egap");
+  // Create ntuples.
+  // Ntuples ids are generated automatically starting from 0.
+  // The start value can be changed by:
+  // analysisManager->SetFirstMtupleId(1);  
+  
+  // Create 1st ntuple (id = 0)
+  analysisManager->CreateNtuple("Ntuple1", "Edep");
+  analysisManager->CreateNtupleDColumn("Eabs"); // column Id = 0
+  analysisManager->CreateNtupleDColumn("Egap"); // column Id = 1
   analysisManager->FinishNtuple();
 
-  // Create 2nd ntuple (id = 2)
+  // Create 2nd ntuple (id = 1)
   //    
-  analysisManager->CreateNtuple("102", "TrackL");
-  fNtColId[2] = analysisManager->CreateNtupleDColumn("Labs");
-  fNtColId[3] = analysisManager->CreateNtupleDColumn("Lgap");
+  analysisManager->CreateNtuple("Ntuple2", "TrackL");
+  analysisManager->CreateNtupleDColumn("Labs"); // column Id = 0
+  analysisManager->CreateNtupleDColumn("Lgap"); // column Id = 1
   analysisManager->FinishNtuple();
   
   fFactoryOn = true;       
-  G4cout << "\n----> Histogram Tree is opened in " << fFileName[1] << G4endl;
+
+  G4cout << "\n----> Output file is open in " 
+         << analysisManager->GetFileName() << "." 
+         << analysisManager->GetFileType() << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::save()
+void HistoManager::Save()
 {
-  if (fFactoryOn) {
-    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
-    analysisManager->Write();
-    analysisManager->CloseFile();  
-    G4cout << "\n----> Histogram Tree is saved in " << fFileName[1] << G4endl;
+  if (! fFactoryOn) return;
+  
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
+  analysisManager->Write();
+  analysisManager->CloseFile(); 
+   
+  G4cout << "\n----> Histograms and ntuples are saved\n" << G4endl;
       
-    delete G4AnalysisManager::Instance();
-    fFactoryOn = false;
-  }                    
+  delete G4AnalysisManager::Instance();
+  fFactoryOn = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::FillHisto(G4int ih, G4double xbin, G4double weight)
 {
-  if (ih > MaxHisto) {
-    G4cout << "---> warning from HistoManager::FillHisto() : histo " << ih
-           << "does note xist; xbin= " << xbin << " w= " << weight << G4endl;
-    return;
-  }
-
-  if (fHistPt[ih]) fHistPt[ih]->fill(xbin, weight);
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance(); 
+  analysisManager->FillH1(ih, xbin, weight);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::Normalize(G4int ih, G4double fac)
 {
-  if (ih >= MaxHisto) {
-    G4cout << "---> warning from HistoManager::Normalize() : histo " << ih
-           << "  fac= " << fac << G4endl;
-    return;
-  }
-
-  if (fHistPt[ih]) fHistPt[ih]->scale(fac);
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance(); 
+  G4H1* h1 = analysisManager->GetH1(ih);
+  if (h1) h1->scale(fac);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -170,39 +148,39 @@ void HistoManager::FillNtuple(G4double energyAbs, G4double energyGap,
                               G4double trackLAbs, G4double trackLGap)
 {                
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  // Fill 1st ntuple ( id = 1)
-  analysisManager->FillNtupleDColumn(1,fNtColId[0], energyAbs);
-  analysisManager->FillNtupleDColumn(1,fNtColId[1], energyGap);
+  // Fill 1st ntuple ( id = 0)
+  analysisManager->FillNtupleDColumn(0, 0, energyAbs);
+  analysisManager->FillNtupleDColumn(0, 1, energyGap);
+  analysisManager->AddNtupleRow(0);  
+  // Fill 2nd ntuple ( id = 1)
+  analysisManager->FillNtupleDColumn(1, 0, trackLAbs);
+  analysisManager->FillNtupleDColumn(1, 1, trackLGap);
   analysisManager->AddNtupleRow(1);  
-  // Fill 2nd ntuple ( id = 2)
-  analysisManager->FillNtupleDColumn(2,fNtColId[2], trackLAbs);
-  analysisManager->FillNtupleDColumn(2,fNtColId[3], trackLGap);
-  analysisManager->AddNtupleRow(2);  
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::PrintStatistic()
 {
-  if(fFactoryOn) {
-    G4cout << "\n ----> print histograms statistic \n" << G4endl;
+  if (! fFactoryOn) return;
+
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
     
-    G4cout 
-       << " EAbs : mean = " << G4BestUnit(fHistPt[1]->mean(), "Energy") 
-               << " rms = " << G4BestUnit(fHistPt[1]->rms(),  "Energy") 
-               << G4endl;
-    G4cout                
-       << " EGap : mean = " << G4BestUnit(fHistPt[2]->mean(), "Energy") 
-               << " rms = " << G4BestUnit(fHistPt[2]->rms(),  "Energy") 
-               << G4endl;
-    G4cout 
-       << " LAbs : mean = " << G4BestUnit(fHistPt[3]->mean(), "Length") 
-               << " rms = " << G4BestUnit(fHistPt[3]->rms(),  "Length") 
-               << G4endl;
-    G4cout 
-       << " LGap : mean = " << G4BestUnit(fHistPt[4]->mean(), "Length") 
-               << " rms = " << G4BestUnit(fHistPt[4]->rms(),  "Length") 
-               << G4endl;
+  G4cout << "\n ----> print histograms statistic \n" << G4endl;
+  for ( G4int i=0; i<analysisManager->GetNofH1s(); ++i ) {
+    G4String name = analysisManager->GetH1Name(i);
+    G4H1* h1 = analysisManager->GetH1(i);
+    
+    G4String unitCategory;
+    if (name[0U] == 'E' ) unitCategory = "Energy"; 
+    if (name[0U] == 'L' ) unitCategory = "Length";
+         // we use an explicit unsigned int type for operator [] argument
+         // to avoid problems with windows compiler
+
+    G4cout << name
+           << ": mean = " << G4BestUnit(h1->mean(), unitCategory) 
+           << " rms = " << G4BestUnit(h1->rms(), unitCategory ) 
+           << G4endl;
   }
 }
 

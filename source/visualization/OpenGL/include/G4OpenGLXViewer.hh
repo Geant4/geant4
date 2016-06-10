@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4OpenGLXViewer.hh 87695 2014-12-17 09:35:24Z gcosmo $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -57,6 +57,10 @@ public:
   virtual ~G4OpenGLXViewer ();
   void SetView ();
   void ShowView ();
+#ifdef G4MULTITHREADED
+  void SwitchToVisSubThread();
+  void SwitchToMasterThread();
+#endif
   void DrawText(const G4Text&);
 
 protected:
@@ -80,7 +84,10 @@ protected:
   Colormap                          cmap;
   XSetWindowAttributes              swa;
   GLXDrawable                       win;
-  GLXContext                        cx;
+  GLXContext                        cxMaster;
+#ifdef G4MULTITHREADED
+  GLXContext                        cxVisSubThread;
+#endif
   XEvent                            event;
   G4int                             *attributeList,
                                     errorBase,

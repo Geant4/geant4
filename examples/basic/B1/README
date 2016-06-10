@@ -1,4 +1,4 @@
-$Id: README 78001 2013-12-02 08:24:53Z gcosmo $
+$Id: README 93886 2015-11-03 08:28:26Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -70,22 +70,27 @@ $Id: README 78001 2013-12-02 08:24:53Z gcosmo $
  5- DETECTOR RESPONSE
 
    This example demonstrates a simple scoring implemented directly
-   in the user action classes and B1Run object. 
-   Alternative ways of scoring via Geant4 classes can be found in the 
-   other examples.
+   in the user action classes.  Alternative ways of scoring via Geant4 classes 
+   can be found in the other examples.
    
    The energy deposited is collected step by step for a selected volume
    in B1SteppingAction and accumulated event by event in B1EventAction.
-   
-   At end of event, the value acummulated in B1EventAction is added in B1Run
+
+   At end of event, the value acummulated in B1EventAction is added in B1RunAction
    and summed over the whole run (see B1EventAction::EndOfevent()).
-   
+
    Total dose deposited is computed at B1RunAction::EndOfRunAction(), 
    and printed together with informations about the primary particle.
-   
-   In multi-threading mode the energy accumulated in B1Run objects per
-   workers is merged to the master in B1Run::Merge() and the final
+   In multi-threading mode the energy accumulated in G4Parameter objects per
+   workers is merged to the master in B1RunAction::EndOfRunAction() and the final
    result is printed on the screen.
+   
+   G4Parameter<G4double> type instead of G4double type is used for the B1RunAction
+   data members in order to facilitate merging of the values accumulated on workers 
+   to the master.  Currently the parameters have to be registered to G4ParametersManager
+   and G4ParametersManager::Merge() has to be called from the users code. This is planned
+   to be further simplified with a closer integration of G4Parameter classes in
+   the Geant4 kernel next year.
 
    An example of creating and computing new units (e.g., dose) is also shown 
    in the class constructor. 

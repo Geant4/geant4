@@ -1,0 +1,97 @@
+$Id$
+
+///\file "optical/OpNovice/.README.txt"
+///\brief Example OpNovice README page
+
+/*! \page ExampleOpNovice Example OpNovice
+
+This example presently illustrates the following basic concepts, and in
+particular (indicated with ***), how to use G4 for optical photon
+generation and transport. Other extended example of what is possible
+in Geant4 with optical photons can be found at
+examples/extended/optical/LXe and wls
+
+\section ExampleOpNovice_s1 main()
+
+ Define Random Number Engine and initial seed
+
+\section ExampleOpNovice_s2 G4VUserPhysicsList
+
+ - Define particles; including - *** G4OpticalPhoton     ***
+ - Define processes; including 
+   - *** G4Cerenkov          ***
+   - *** G4Scintillation     ***
+   - *** G4OpAbsorption      ***
+   - *** G4OpRayleigh        ***
+   - *** G4OpBoundaryProcess ***
+
+\section ExampleOpNovice_s3 G4VUserDetectorConstruction 
+
+ - Define material: Air and Water
+ - Define simple G4box geometry
+   - *** add G4MaterialPropertiesTable to G4Material       ***
+   - *** define G4LogicalSurface(s)                        ***
+   - *** define G4OpticalSurface                           ***
+   - *** add G4MaterialPropertiesTable to G4OpticalSurface ***
+
+\section ExampleOpNovice_s4 G4VUserPrimaryGeneratorAction
+
+ Use G4ParticleGun to shoot a charge particle into a Cerenkov radiator
+ 
+ A messenger command allows to define interactivly the polarization of an
+ primary optical photon (see for instance optPhoton.mac)
+     
+\section ExampleOpNovice_s5 G4UserRunAction
+
+ - Define G4Timer (start/stop)
+ - Set verbose levels
+
+\section ExampleOpNovice_s6 G4UserStackingAction
+
+ Show how to count the number of secondary particles in an event
+
+\section ExampleOpNovice_s7 Visualisation
+ 
+ The Visualization Manager is set in the main().
+ The initialisation of the drawing is done via a set of /vis/ commands
+ in the macro vis.mac. This macro is automatically read from 
+ the main in case of interactive running mode.
+ 	
+ The detector has a default view which is a longitudinal view of the tank. 	
+ The tracks are drawn at the end of event, and erased at the end of run.
+ 
+\section ExampleOpNovice_s8 How to start
+
+ - compile and link to generate an executable
+\verbatim
+        % cd OpNovice
+        % gmake
+\endverbatim
+
+   This example handles the program arguments in a new way.
+   It can be run with the following optional arguments:
+\verbatim
+   % OpNovice [-m macro ] [-u UIsession] [-t nThreads]
+\endverbatim
+
+   The -t option is available only in multi-threading mode
+   and it allows the user to override the Geant4 default number of
+   threads. The number of threads can be also set via G4FORCENUMBEROFTHREADS
+   environment variable which has the top priority.
+ 
+ - execute OpNovice in 'batch' mode from macro files
+\verbatim
+   % OpNovice -m OpNovice.in
+\endverbatim
+
+ - execute OpNovice in 'interactive mode' with visualization
+\verbatim
+% OpNovice
+....
+Idle> type your commands. For instance:
+Idle> /control/execute optPhoton.mac
+....
+Idle> exit
+\endverbatim
+
+*/

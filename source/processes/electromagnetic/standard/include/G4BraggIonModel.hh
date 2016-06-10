@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.hh 83008 2014-07-24 14:49:52Z gcosmo $
+// $Id: G4BraggIonModel.hh 93362 2015-10-19 13:45:19Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -70,7 +70,7 @@ class G4BraggIonModel : public G4VEmModel
 
 public:
 
-  G4BraggIonModel(const G4ParticleDefinition* p = 0,
+  G4BraggIonModel(const G4ParticleDefinition* p = nullptr,
                   const G4String& nam = "BraggIon");
 
   virtual ~G4BraggIonModel();

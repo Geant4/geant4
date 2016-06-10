@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.cc 87254 2014-11-28 07:49:23Z gcosmo $
+// $Id: G4DiffractiveExcitation.cc 92048 2015-08-14 07:24:57Z gcosmo $
 //
 
 // ------------------------------------------------------------
@@ -66,6 +66,9 @@
 #include "G4ExcitedString.hh"
 #include "G4Neutron.hh"
 
+#include "G4Exp.hh"
+#include "G4Log.hh"
+#include "G4Pow.hh"
 
 //#include "G4ios.hh"
 //#include "UZHI_diffraction.hh"
@@ -175,7 +178,7 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
   #endif
 
   G4double AveragePt2 = theParameters->GetAveragePt2();
-//  G4double ProbLogDistrPrD = theParameters->GetProbLogDistrPrD();                  // Uzhi Oct 2014
+//  G4double ProbLogDistrPrD = theParameters->GetProbLogDistrPrD();                  // Uzhi Oct 2014 ***
   G4double ProbLogDistr = theParameters->GetProbLogDistr();
   G4double SumMasses = M0projectile + M0target; // + 220.0*MeV;                      // Uzhi Nov. 2014
 
@@ -395,7 +398,7 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
       G4bool ProjExcited = false;                                          // Uzhi Oct 2014
 
       G4int attempts=0;                                                    // Uzhi Oct 2014 start
-      while(attempts < 50)
+      while(attempts < 50)  /* Loop checking, 10.08.2015, A.Ribon */
       {// Determination of a new projectile ID which garanty energy-momentum conservation
        attempts++;
 
@@ -639,7 +642,7 @@ M0target = MtestTr;                                                             
       NewTargCode = NewNucleonId( TargQ1, TargQ2, TargQ3 );
 
       G4int attempts=0;                                                    // Uzhi Oct 2014 start
-      while(attempts < 50)
+      while(attempts < 50)  /* Loop checking, 10.08.2015, A.Ribon */
       {// Determination of a new projectile ID which garanty energy-momentum conservation
        attempts++;
 
@@ -822,7 +825,6 @@ M0target = MtestTr;                                                             
     if ( ProbOfDiffraction != 0.0 ) {
       ProbProjectileDiffraction /= ProbOfDiffraction;
       ProbTargetDiffraction     /= ProbOfDiffraction;
-      ProbOfDiffraction=1.0;
     }
 //Uzhi_QEnex++;
   }  // End of if ( G4UniformRand() < QeExc + QeNoExc ) , i.e. of the charge exchange part
@@ -932,7 +934,7 @@ M0target = MtestTr;                                                             
         Qmomentum.setPz( (Qplus - Qminus)/2 );
         Qmomentum.setE(  (Qplus + Qminus)/2 );
 
-      } while ( ( Pprojectile + Qmomentum ).mag2() <  ProjectileDiffStateMinMass2 ); 
+      } while ( ( Pprojectile + Qmomentum ).mag2() <  ProjectileDiffStateMinMass2 );  /* Loop checking, 10.08.2015, A.Ribon */
                 // Repeat the sampling because there was not any excitation
 
 //      projectile->SetStatus( 1*projectile->GetStatus() );                    // Uzhi Oct 2014
@@ -1008,7 +1010,7 @@ M0target = MtestTr;                                                             
         Qmomentum.setPz( (Qplus - Qminus)/2 );
         Qmomentum.setE(  (Qplus + Qminus)/2 );
 
-      } while ( ( Ptarget - Qmomentum ).mag2() <  TargetDiffStateMinMass2 );
+      } while ( ( Ptarget - Qmomentum ).mag2() <  TargetDiffStateMinMass2 );  /* Loop checking, 10.08.2015, A.Ribon */
                  // Repeat the sampling because there was not any excitation
 
 //      target->SetStatus( 1*target->GetStatus() );                                    // Uzhi Oct 2014
@@ -1113,7 +1115,7 @@ M0target = MtestTr;                                                             
 
     } while ( ( Pprojectile + Qmomentum ).mag2() <  ProjectileNonDiffStateMinMass2  ||  //No double Diffraction
               ( Ptarget     - Qmomentum ).mag2() <  TargetNonDiffStateMinMass2      ||  // ); //
-              ( Pprojectile + Qmomentum ).pz()   <  0.);
+              ( Pprojectile + Qmomentum ).pz()   <  0.);  /* Loop checking, 10.08.2015, A.Ribon */
 
     projectile->SetStatus( 0*projectile->GetStatus() );
     target->SetStatus( 0*target->GetStatus() );
@@ -1233,19 +1235,19 @@ void G4DiffractiveExcitation::CreateStrings( G4VSplitableHadron* hadron,
     if ( W > Wmin ) {  // Kink is possible
       if ( hadron->GetStatus() == 0 ) {  // VU 10.04.2012
         G4double Pt2kink = theParameters->GetPt2Kink(); // For non-diffractive
-//        Pt = std::sqrt( Pt2kink * ( std::pow( W2/16.0/Pt2kink + 1.0, G4UniformRand() ) - 1.0 ) ); // Uzhi 18 Sept. 2014
+//        Pt = std::sqrt( Pt2kink * ( G4Pow::GetInstance()->powA( W2/16.0/Pt2kink + 1.0, G4UniformRand() ) - 1.0 ) ); // Uzhi 18 Sept. 2014
         if(Pt2kink)                                                                                 // Uzhi 18 Sept. 2014
-        {Pt = std::sqrt( Pt2kink * ( std::pow( W2/16.0/Pt2kink + 1.0, G4UniformRand() ) - 1.0 ) );} // Uzhi 18 Sept. 2014
+        {Pt = std::sqrt( Pt2kink * ( G4Pow::GetInstance()->powA( W2/16.0/Pt2kink + 1.0, G4UniformRand() ) - 1.0 ) );} // Uzhi 18 Sept. 2014
         else {Pt=0.;}                                                                               // Uzhi 18 Sept. 2014
       } else {
         Pt = 0.0;
       }
 
       if ( Pt > 500.0*MeV ) {
-        G4double Ymax = std::log( W/2.0/Pt + std::sqrt( W2/4.0/Pt/Pt - 1.0 ) );
+        G4double Ymax = G4Log( W/2.0/Pt + std::sqrt( W2/4.0/Pt/Pt - 1.0 ) );
         G4double Y = Ymax*( 1.0 - 2.0*G4UniformRand() );
-        x1 = 1.0 - Pt/W * std::exp( Y );
-        x3 = 1.0 - Pt/W * std::exp(-Y );
+        x1 = 1.0 - Pt/W * G4Exp( Y );
+        x3 = 1.0 - Pt/W * G4Exp(-Y );
         //x2 = 2.0 - x1 - x3;
 
         G4double Mass_startQ = 650.0*MeV;
@@ -1525,7 +1527,7 @@ G4double G4DiffractiveExcitation::ChooseP( G4double Pmin, G4double Pmax ) const 
     throw G4HadronicException( __FILE__, __LINE__,
                                "G4DiffractiveExcitation::ChooseP : Invalid arguments " );
   }
-  G4double P = Pmin * std::pow( Pmax/Pmin, G4UniformRand() ); 
+  G4double P = Pmin * G4Pow::GetInstance()->powA( Pmax/Pmin, G4UniformRand() ); 
   //G4double P = (Pmax - Pmin) * G4UniformRand() + Pmin;
   return P;
 }
@@ -1539,8 +1541,8 @@ G4ThreeVector G4DiffractiveExcitation::GaussianPt( G4double AveragePt2, G4double
   if ( AveragePt2 <= 0.0 ) {
     Pt2 = 0.0;
   } else {
-    Pt2 = -AveragePt2 * std::log( 1.0 + G4UniformRand() * 
-                                        ( std::exp( -maxPtSquare/AveragePt2 ) - 1.0 ) );
+    Pt2 = -AveragePt2 * G4Log( 1.0 + G4UniformRand() * 
+                                        ( G4Exp( -maxPtSquare/AveragePt2 ) - 1.0 ) );
   }
   G4double Pt = std::sqrt( Pt2 );
   G4double phi = G4UniformRand() * twopi;
@@ -1552,10 +1554,16 @@ G4ThreeVector G4DiffractiveExcitation::GaussianPt( G4double AveragePt2, G4double
 
 G4double G4DiffractiveExcitation::GetQuarkFractionOfKink( G4double zmin, G4double zmax ) const {
   G4double z, yf;
+  const G4int maxNumberOfLoops = 10000;
+  G4int loopCounter = 0;
   do {
     z = zmin + G4UniformRand() * (zmax - zmin);
     yf = z*z + sqr(1.0 - z);
-  } while ( G4UniformRand() > yf ); 
+  } while ( ( G4UniformRand() > yf ) && 
+            ++loopCounter < maxNumberOfLoops );  /* Loop checking, 10.08.2015, A.Ribon */
+  if ( loopCounter >= maxNumberOfLoops ) {
+    z = 0.5*(zmin + zmax);  // Just something acceptable, without any physics consideration.
+  }
   return z;
 }
 

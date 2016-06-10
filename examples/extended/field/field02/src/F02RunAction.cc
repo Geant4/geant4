@@ -27,7 +27,7 @@
 /// \brief Implementation of the F02RunAction class
 //
 //
-// $Id: F02RunAction.cc 76247 2013-11-08 11:18:52Z gcosmo $
+// $Id: F02RunAction.cc 92497 2015-09-02 07:23:12Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,10 +61,8 @@ F02RunAction::~F02RunAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F02RunAction::BeginOfRunAction(const G4Run* run)
+void F02RunAction::BeginOfRunAction(const G4Run*)
 {
-  G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
-
   // save Rndm status
   if (fSaveRndm > 0)
   {

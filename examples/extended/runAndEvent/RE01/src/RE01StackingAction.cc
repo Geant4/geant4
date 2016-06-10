@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/src/RE01StackingAction.cc
 /// \brief Implementation of the RE01StackingAction class
 //
-// $Id: RE01StackingAction.cc 66379 2012-12-18 09:46:33Z gcosmo $
+// $Id: RE01StackingAction.cc 90679 2015-06-08 07:58:19Z gcosmo $
 //
 
 #include "RE01StackingAction.hh"
@@ -104,7 +104,7 @@ G4VHitsCollection* RE01StackingAction::GetCalCollection()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 void RE01StackingAction::NewStage()
 {
-  G4cout << "+++++++++++ Stage " << fStage << G4endl;
+  // G4cout << "+++++++++++ Stage " << fStage << G4endl;
   if(fStage==0)
   {
     // display trajetory information in the tracking region

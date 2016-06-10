@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiElasticChannel.cc 81565 2014-06-03 08:42:52Z gcosmo $
+// $Id: G4QuasiElasticChannel.cc 91859 2015-08-07 13:58:30Z gcosmo $
 //
 
 // Author : Gunter Folger March 2007
@@ -60,12 +60,14 @@
 
 
 G4QuasiElasticChannel::G4QuasiElasticChannel()
-  : theQuasiElastic(G4QuasiElRatios::GetPointer()),
-    the3DNucleus(new G4Fancy3DNucleus) {}
+  : theQuasiElastic(new G4QuasiElRatios),
+    the3DNucleus(new G4Fancy3DNucleus) {
+}
 
 G4QuasiElasticChannel::~G4QuasiElasticChannel()
 {
   delete the3DNucleus;
+  delete theQuasiElastic;
 }
 
 G4double G4QuasiElasticChannel::GetFraction(G4Nucleus &theNucleus,
@@ -105,7 +107,7 @@ G4KineticTrackVector * G4QuasiElasticChannel::Scatter(G4Nucleus &theNucleus,
   G4int index;
   do {
     index=G4lrint((A-1)*G4UniformRand());
-  } while (index < 0 || index >= static_cast<G4int>(nucleons.size()));
+  } while (index < 0 || index >= static_cast<G4int>(nucleons.size()));  /* Loop checking, 07.08.2015, A.Ribon */
 
   const G4ParticleDefinition * pDef= nucleons[index].GetDefinition();
 

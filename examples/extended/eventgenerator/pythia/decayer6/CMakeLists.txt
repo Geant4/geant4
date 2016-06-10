@@ -38,13 +38,14 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 #----------------------------------------------------------------------------
 # Add common subdirectory
 #
+set (common_prefix decayer6_)
 add_subdirectory(common) 
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(pythia6_decayer pythia6_decayer.cc ${sources} ${headers})
-target_link_libraries(pythia6_decayer common ${Geant4_LIBRARIES} ${PYTHIA6_LIBRARIES} )
+target_link_libraries(pythia6_decayer ${common_prefix}common ${Geant4_LIBRARIES} ${PYTHIA6_LIBRARIES} )
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we

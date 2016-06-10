@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAWaterDissociationDisplacer.hh 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id: G4DNAWaterDissociationDisplacer.hh 94010 2015-11-05 10:08:33Z gcosmo $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
@@ -49,6 +49,7 @@
 #define G4DNAWaterDissociationDisplacer_h 1
 
 #include "G4VMolecularDissociationDisplacer.hh"
+#include "G4DNARevertProbability.hh"
 
 class G4DNAWaterDissociationDisplacer : public G4VMolecularDecayDisplacer
 {
@@ -59,6 +60,8 @@ public :
     virtual std::vector<G4ThreeVector> GetProductsDisplacement(const G4MolecularDissociationChannel*) const;
     virtual G4ThreeVector GetMotherMoleculeDisplacement(const G4MolecularDissociationChannel*) const;
     G4ThreeVector radialDistributionOfElectron() const;
+    G4ThreeVector radialDistributionOfProducts(G4double r_rms) const;
+    static G4double ElectronProbaDistribution(G4double r);
 
 #if defined G4EM_ALLOC_EXPORT
     G4DLLEXPORT static const DisplacementType Ionisation_DissociationDecay;
@@ -75,7 +78,9 @@ public :
 #endif
 
 private :
-    G4ThreeVector radialDistributionOfProducts(G4double) const;
+    std::function<G4double(G4double)> fProba1DFunction;
+    std::vector<G4double> fElectronThermalization;
+    G4DNARevertProbability fFastElectronDistrib;
 };
 #endif
 

@@ -1,0 +1,98 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_vpair
+#define tools_vpair
+
+#include <vector>
+
+namespace tools {
+
+template <class K,class V>
+inline void add(std::vector< std::pair<K,V> >& a_vec,const K& a_key,const V& a_value) {
+  typedef typename std::vector< std::pair<K,V> >::iterator it_t;
+  it_t it;
+  for(it=a_vec.begin();it!=a_vec.end();++it) {
+    if((*it).first==a_key) {
+      (*it).second = a_value; //override.
+      return;
+    }
+  }
+  //not found, add a new pair :
+  a_vec.push_back(std::pair<K,V>(a_key,a_value));
+}
+
+template <class K,class V>
+inline bool find(const std::vector< std::pair<K,V> >& a_vec,const K& a_key,V& a_value) {
+  typedef typename std::vector< std::pair<K,V> >::const_iterator it_t;
+  it_t it;
+  for(it=a_vec.begin();it!=a_vec.end();++it) {
+    if((*it).first==a_key) {
+      a_value = (*it).second;
+      return true;
+    }
+  }
+  a_value = V();
+  return false;
+}
+
+template <class K,class V>
+inline bool rfind(const std::vector< std::pair<K,V> >& a_vec,const K& a_key,V& a_value) {
+  typedef typename std::vector< std::pair<K,V> >::const_reverse_iterator it_t;
+  it_t it;
+  for(it=a_vec.rbegin();it!=a_vec.rend();++it) {
+    if((*it).first==a_key) {
+      a_value = (*it).second;
+      return true;
+    }
+  }
+  a_value = V();
+  return false;
+}
+
+template <class K,class V>
+inline bool find_key(const std::vector< std::pair<K,V> >& a_vec,const V& a_value,K& a_key) {
+  typedef typename std::vector< std::pair<K,V> >::const_iterator it_t;
+  it_t it;
+  for(it=a_vec.begin();it!=a_vec.end();++it) {
+    if((*it).second==a_value) {
+      a_key = (*it).first;
+      return true;
+    }
+  }
+  a_key = K();
+  return false;
+}
+
+template <class K,class V>
+inline void sort_by_second(std::vector< std::pair<K,V> >& a_vec){
+  //sort according V
+
+  //brute force.
+  std::vector< std::pair<K,V> > v;
+  typedef typename std::vector< std::pair<K,V> >::iterator it_t;
+
+  it_t it;
+  for(it=a_vec.begin();it!=a_vec.end();++it) {
+    const V& val = (*it).second;
+
+    bool done = false;
+    it_t it2;
+    for(it2=v.begin();it2!=v.end();++it2) {
+      if(val<(*it2).second) {
+        v.insert(it2,*it);
+        done = true;
+        break;
+      }
+    }
+    if(!done) {
+      v.push_back(*it);
+    }
+  }
+
+  a_vec = v;
+}
+
+}
+
+#endif

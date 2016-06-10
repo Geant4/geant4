@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 66892 2013-01-17 10:57:59Z gunter $
+# $Id: GNUmakefile 89827 2015-04-30 15:29:01Z gcosmo $
 # -----------------------------------------------------------------------
 # GNUmakefile for persistency library.  Gabriele Cosmo, 16/11/96.
 # -----------------------------------------------------------------------
@@ -13,8 +13,8 @@ ifdef G4LIB_BUILD_GDML
   SUBLIBS += G4gdml
 endif
 
-GLOBLIBS  = libG4run.lib libG4event.lib
-GLOBLIBS += libG4tracking.lib libG4digits_hits.lib libG4track.lib
+GLOBLIBS  = libG4run.lib libG4event.lib libG4tracking.lib
+GLOBLIBS += libG4processes.lib libG4digits_hits.lib libG4track.lib
 GLOBLIBS += libG4particles.lib libG4geometry.lib libG4materials.lib
 GLOBLIBS += libG4graphics_reps.lib libG4intercoms.lib libG4global.lib
 

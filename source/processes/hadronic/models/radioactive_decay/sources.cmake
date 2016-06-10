@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 85817 2014-11-05 15:15:58Z gcosmo $
+# $Id: sources.cmake 93732 2015-10-30 10:57:14Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -33,9 +33,9 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/mesons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/lowenergy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/utils/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/photon_evaporation/include)
@@ -56,15 +56,21 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
         G4AlphaDecayChannel.hh
         G4BetaDecayCorrections.hh
         G4BetaDecayType.hh
-        G4BetaFermiFunction.hh
+        G4BetaMinusDecay.hh
         G4BetaMinusDecayChannel.hh
+        G4BetaPlusDecay.hh
         G4BetaPlusDecayChannel.hh
+        G4ECDecay.hh
+        G4ITDecay.hh
         G4ITDecayChannel.hh
         G4KshellECDecayChannel.hh
         G4LshellECDecayChannel.hh
         G4MshellECDecayChannel.hh
+        G4NeutronDecay.hh
         G4NuclearDecayChannel.hh
+        G4NuclearDecay.hh
         G4NucleusLimits.hh
+        G4ProtonDecay.hh
 	G4ProtonDecayChannel.hh
         G4RIsotopeTable.hh
         G4RadioactiveDecay.hh
@@ -79,9 +85,15 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
         G4AlphaDecay.cc
         G4BetaDecayCorrections.cc
         G4BetaDecayType.cc
-        G4BetaFermiFunction.cc
+        G4BetaMinusDecay.cc
+        G4BetaPlusDecay.cc
+        G4ECDecay.cc
+        G4ITDecay.cc
+        G4NeutronDecay.cc
         G4NuclearDecayChannel.cc
+        G4NuclearDecay.cc
         G4NucleusLimits.cc
+        G4ProtonDecay.cc
         G4RIsotopeTable.cc
         G4RadioactiveDecay.cc
         G4RadioactiveDecayMode.cc

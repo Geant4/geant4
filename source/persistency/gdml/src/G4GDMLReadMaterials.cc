@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.cc 86379 2014-11-10 11:34:33Z gcosmo $
+// $Id: G4GDMLReadMaterials.cc 89243 2015-03-27 16:24:39Z gcosmo $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLReadMaterials Implementation
@@ -37,6 +37,7 @@
 
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 #include "G4Element.hh"
 #include "G4Isotope.hh"
 #include "G4Material.hh"
@@ -80,7 +81,7 @@ G4GDMLReadMaterials::AtomRead(const xercesc::DOMElement* const atomElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="value") { value = eval.Evaluate(attValue); } else
-      if (attName=="unit")  { unit = eval.Evaluate(attValue); }
+      if (attName=="unit")  { unit = G4UnitDefinition::GetValueOf(attValue); }
    }
 
    return value*unit;
@@ -150,7 +151,7 @@ G4double G4GDMLReadMaterials::DRead(const xercesc::DOMElement* const DElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="value") { value = eval.Evaluate(attValue); } else
-      if (attName=="unit")  { unit = eval.Evaluate(attValue); }
+      if (attName=="unit")  { unit = G4UnitDefinition::GetValueOf(attValue); }
    }
 
    return value*unit;
@@ -184,7 +185,7 @@ G4double G4GDMLReadMaterials::PRead(const xercesc::DOMElement* const PElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="value") { value = eval.Evaluate(attValue); } else
-      if (attName=="unit")  { unit = eval.Evaluate(attValue); }
+      if (attName=="unit")  { unit = G4UnitDefinition::GetValueOf(attValue); }
    }
 
    return value*unit;
@@ -218,7 +219,7 @@ G4double G4GDMLReadMaterials::TRead(const xercesc::DOMElement* const TElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="value") { value = eval.Evaluate(attValue); } else
-      if (attName=="unit")  { unit = eval.Evaluate(attValue); }
+      if (attName=="unit")  { unit = G4UnitDefinition::GetValueOf(attValue); }
    }
 
    return value*unit;
@@ -252,7 +253,7 @@ G4double G4GDMLReadMaterials::MEERead(const xercesc::DOMElement* const PElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="value") { value = eval.Evaluate(attValue); } else
-      if (attName=="unit")  { unit = eval.Evaluate(attValue); }
+      if (attName=="unit")  { unit = G4UnitDefinition::GetValueOf(attValue); }
    }
 
    return value*unit;

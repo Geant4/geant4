@@ -99,14 +99,14 @@ namespace G4INCL {
 
     G4double shoot0() {
       G4double r;
-      while( (r=shoot()) <= 0. )
+      while( (r=shoot()) <= 0. ) /* Loop checking, 10.07.2015, D.Mancusi */
         ;
       return r;
     }
 
     G4double shoot1() {
       G4double r;
-      while( (r=shoot()) >= 1. )
+      while( (r=shoot()) >= 1. ) /* Loop checking, 10.07.2015, D.Mancusi */
         ;
       return r;
     }

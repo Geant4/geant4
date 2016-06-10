@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclNuclDiffuseElastic.hh 82391 2014-06-18 10:29:11Z gcosmo $
+// $Id: G4NuclNuclDiffuseElastic.hh 94676 2015-12-02 09:51:20Z gunter $
 //
 //
 // G4 Model: optical elastic scattering with 4-momentum balance 
@@ -50,7 +50,10 @@
 #include "G4HadProjectile.hh"
 #include "G4Nucleus.hh"
 
-using namespace std;
+#include "G4Exp.hh"
+#include "G4Log.hh"
+#include "G4Pow.hh"
+
 
 class G4ParticleDefinition;
 class G4PhysicsTable;
@@ -464,7 +467,7 @@ G4NuclNuclDiffuseElastic::CalculateAm( G4double momentum, G4double n, G4double Z
 {
   G4double k   = momentum/CLHEP::hbarc;
   G4double ch  = 1.13 + 3.76*n*n;
-  G4double zn  = 1.77*k*std::pow(Z,-1./3.)*CLHEP::Bohr_radius;
+  G4double zn  = 1.77*k*(1.0/G4Pow::GetInstance()->A13(Z))*CLHEP::Bohr_radius;
   G4double zn2 = zn*zn;
   fAm          = ch/zn2;
 
@@ -485,19 +488,19 @@ inline  G4double G4NuclNuclDiffuseElastic::CalculateNuclearRad( G4double A)
   /*
   if( A < 50. )
   {
-    if( A > 10. ) r0  = 1.16*( 1 - std::pow(A, -2./3.) )*CLHEP::fermi;   // 1.08*fermi;
+    if( A > 10. ) r0  = 1.16*( 1 - (1.0/G4Pow::GetInstance()->A23(A)) )*CLHEP::fermi;   // 1.08*fermi;
     else          r0  = 1.1*CLHEP::fermi;
 
-    radius = r0*std::pow(A, 1./3.);
+    radius = r0*G4Pow::GetInstance()->A13(A);
   }
   else
   {
     r0 = 1.7*CLHEP::fermi;   // 1.7*fermi;
 
-    radius = r0*std::pow(A, 0.27); // 0.27);
+    radius = r0*G4Pow::GetInstance()->powA(A, 0.27); // 0.27);
   }
   */
-  radius = r0*std::pow(A, 1./3.);
+  radius = r0*G4Pow::GetInstance()->A13(A);
 
   return radius;
 }
@@ -614,7 +617,7 @@ inline G4complex G4NuclNuclDiffuseElastic::GammaLogB2n(G4complex z)
   z5 *= 1260.;
   z7 *= 1680.;
 
-  G4complex result  = (z-0.5)*std::log(z)-z+0.5*std::log(CLHEP::twopi);
+  G4complex result  = (z-0.5)*std::log(z)-z+0.5*G4Log(CLHEP::twopi);
             result += 1./z1 - 1./z3 +1./z5 -1./z7;
   return result;
 }
@@ -630,7 +633,7 @@ inline G4double  G4NuclNuclDiffuseElastic::GetErf(G4double x)
   z   = std::fabs(x);
   t   = 1.0/(1.0+0.5*z);
 
-  tmp = t*exp(-z*z-1.26551223+t*(1.00002368+t*(0.37409196+t*(0.09678418+
+  tmp = t*std::exp(-z*z-1.26551223+t*(1.00002368+t*(0.37409196+t*(0.09678418+
 		t*(-0.18628806+t*(0.27886807+t*(-1.13520398+t*(1.48851587+
 		t*(-0.82215223+t*0.17087277)))))))));
 
@@ -738,7 +741,7 @@ inline  G4double  G4NuclNuclDiffuseElastic::GetExpCos(G4double x)
 {
   G4double result;
 
-  result = std::exp(x*x-fReZ*fReZ);
+  result = G4Exp(x*x-fReZ*fReZ);
   result *= std::cos(2.*x*fReZ);
   return result;
 }
@@ -749,7 +752,7 @@ inline  G4double  G4NuclNuclDiffuseElastic::GetExpSin(G4double x)
 {
   G4double result;
 
-  result = std::exp(x*x-fReZ*fReZ);
+  result = G4Exp(x*x-fReZ*fReZ);
   result *= std::sin(2.*x*fReZ);
   return result;
 }
@@ -797,7 +800,7 @@ inline  G4complex G4NuclNuclDiffuseElastic::CoulombAmplitude(G4double theta)
   G4double sinHalfTheta2 = sinHalfTheta*sinHalfTheta; 
   sinHalfTheta2         += fAm;
 
-  G4double order         = 2.*fCoulombPhase0 - fZommerfeld*std::log(sinHalfTheta2);
+  G4double order         = 2.*fCoulombPhase0 - fZommerfeld*G4Log(sinHalfTheta2);
   G4complex z            = G4complex(0., order);
   ca                     = std::exp(z);
 
@@ -872,7 +875,7 @@ inline   G4double G4NuclNuclDiffuseElastic::ProfileNear(G4double theta)
   else
   {
     argument = fProfileDelta*dTheta;
-    result   = CLHEP::pi*argument*std::exp(fProfileAlpha*argument);
+    result   = CLHEP::pi*argument*G4Exp(fProfileAlpha*argument);
     result  /= std::sinh(CLHEP::pi*argument);
     result  -= 1.;
     result  /= dTheta;
@@ -889,7 +892,7 @@ inline   G4double G4NuclNuclDiffuseElastic::ProfileFar(G4double theta)
   G4double dTheta   = fRutherfordTheta + theta;
   G4double argument = fProfileDelta*dTheta;
 
-  G4double result   = CLHEP::pi*argument*std::exp(fProfileAlpha*argument);
+  G4double result   = CLHEP::pi*argument*G4Exp(fProfileAlpha*argument);
   result           /= std::sinh(CLHEP::pi*argument);
   result           /= dTheta;
 
@@ -922,7 +925,7 @@ inline   G4double G4NuclNuclDiffuseElastic::Profile(G4double theta)
 inline   G4complex G4NuclNuclDiffuseElastic::PhaseNear(G4double theta)
 {
   G4double twosigma = 2.*fCoulombPhase0; 
-  twosigma -= fZommerfeld*std::log(fHalfRutThetaTg2/(1.+fHalfRutThetaTg2));
+  twosigma -= fZommerfeld*G4Log(fHalfRutThetaTg2/(1.+fHalfRutThetaTg2));
   twosigma += fRutherfordTheta*fZommerfeld/fHalfRutThetaTg - CLHEP::halfpi;
   twosigma -= fProfileLambda*theta - 0.25*CLHEP::pi;
 
@@ -940,7 +943,7 @@ inline   G4complex G4NuclNuclDiffuseElastic::PhaseNear(G4double theta)
 inline   G4complex G4NuclNuclDiffuseElastic::PhaseFar(G4double theta)
 {
   G4double twosigma = 2.*fCoulombPhase0; 
-  twosigma -= fZommerfeld*std::log(fHalfRutThetaTg2/(1.+fHalfRutThetaTg2));
+  twosigma -= fZommerfeld*G4Log(fHalfRutThetaTg2/(1.+fHalfRutThetaTg2));
   twosigma += fRutherfordTheta*fZommerfeld/fHalfRutThetaTg - CLHEP::halfpi;
   twosigma += fProfileLambda*theta - 0.25*CLHEP::pi;
 

@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
+# $Id: sources.cmake 88709 2015-03-06 15:33:12Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -30,12 +30,9 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/ions/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/mesons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/shortlived/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 
 #
@@ -44,9 +41,17 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_management
     HEADERS
+        G4LevelManager.hh
+        G4LevelReader.hh
+        G4NuclearLevelData.hh
+        G4NucLevel.hh
         G4VEvaporationChannel.hh
         G4VEvaporationFactory.hh
     SOURCES
+        G4LevelManager.cc
+        G4LevelReader.cc
+        G4NuclearLevelData.cc
+        G4NucLevel.cc
         G4VEvaporationChannel.cc
         G4VEvaporationFactory.cc
     GRANULAR_DEPENDENCIES
@@ -56,15 +61,12 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_management
         G4had_mod_util
         G4hadronic_mgt
         G4hadronic_util
-        G4hadronic_xsect
         G4hepnumerics
         G4ions
         G4leptons
         G4materials
         G4mesons
         G4partman
-        G4procman
-        G4shortlived
         G4track
     GLOBAL_DEPENDENCIES
         G4global

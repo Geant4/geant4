@@ -55,6 +55,9 @@ class  QContextMenuEvent;
 class  CexmcHistoWidget : public TQtWidget
 {
     public:
+        CexmcHistoWidget();
+
+    public:
         void  contextMenuEvent( QContextMenuEvent *  event );
 };
 

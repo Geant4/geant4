@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
-// $Id: DetectorMessenger.cc 77083 2013-11-21 10:35:55Z gcosmo $
+// $Id: DetectorMessenger.cc 91972 2015-08-12 13:48:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -92,7 +92,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fAbsXposCmd->SetGuidance("Set X pos. of the Absorber");
   fAbsXposCmd->SetParameterName("Xpos",false);
   fAbsXposCmd->SetUnitCategory("Length");
-  fAbsXposCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAbsXposCmd->AvailableForStates(G4State_PreInit);
   fAbsXposCmd->SetToBeBroadcasted(false);
   
   fWorldXCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setWorldX",this);

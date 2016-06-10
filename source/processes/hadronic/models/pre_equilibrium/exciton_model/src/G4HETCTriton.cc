@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HETCTriton.cc 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4HETCTriton.cc 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // by V. Lara
 //
@@ -41,28 +41,28 @@ G4HETCTriton::G4HETCTriton()
 G4HETCTriton::~G4HETCTriton() 
 {}
 
-G4double G4HETCTriton::GetAlpha()
+G4double G4HETCTriton::GetAlpha() const
 {
-  G4double C = 0.0;
-  G4int aZ = GetZ() + GetRestZ();
-  if (aZ >= 70) 
+  G4double C;
+  if (theFragZ >= 70) 
     {
       C = 0.10;
     } 
   else 
     {
-      C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ + 0.98375; 
+      C = ((((0.15417e-06*theFragZ) - 0.29875e-04)*theFragZ 
+	    + 0.21071e-02)*theFragZ - 0.66612e-01)*theFragZ + 0.98375; 
     }
   
   return 1.0 + C/3.0;
 }
   
-G4double G4HETCTriton::GetBeta()
+G4double G4HETCTriton::GetBeta() const
 {
-  return -GetCoulombBarrier();
+  return -theCoulombBarrier;
 }
 
-G4double G4HETCTriton::GetSpinFactor()
+G4double G4HETCTriton::GetSpinFactor() const
 {
   // 2s+1
   return 2.0;
@@ -71,13 +71,11 @@ G4double G4HETCTriton::GetSpinFactor()
 G4double G4HETCTriton::K(const G4Fragment & aFragment)
 {
   // Number of protons in emitted fragment
-  G4int Pa = GetZ();
+  G4int Pa = theZ;
   // Number of neutrons in emitted fragment 
-  G4int Na = GetA() - Pa;
+  G4int Na = theA - Pa;
 
-  G4int TargetZ = GetRestZ();
-  G4int TargetA = GetRestA();
-  G4double r = G4double(TargetZ)/G4double(TargetA);
+  G4double r = G4double(theResZ)/G4double(theResA);
 
   G4int P = aFragment.GetNumberOfParticles();
   G4int H = aFragment.GetNumberOfHoles();

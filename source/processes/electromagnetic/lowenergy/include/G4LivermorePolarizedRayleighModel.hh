@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedRayleighModel.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4LivermorePolarizedRayleighModel.hh 93810 2015-11-02 11:27:56Z gcosmo $
 //
 // Author: Sebastien Incerti
 //         30 October 2008
@@ -35,10 +35,17 @@
 
 #include "G4VEmModel.hh"
 #include "G4ParticleChangeForGamma.hh"
-#include "G4CrossSectionHandler.hh"
-#include "G4LogLogInterpolation.hh"
+#include "G4LPhysicsFreeVector.hh"
+#include "G4ProductionCutsTable.hh"
+
+//#include "G4CrossSectionHandler.hh"
+//#include "G4LogLogInterpolation.hh"
+//#include "G4CompositeEMDataSet.hh"
+
+#include "G4VEMDataSet.hh"
 #include "G4CompositeEMDataSet.hh"
-#include "G4Gamma.hh"
+
+
 
 class G4LivermorePolarizedRayleighModel : public G4VEmModel
 {
@@ -52,35 +59,47 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
+  virtual void InitialiseLocal(const G4ParticleDefinition*, 
+			       G4VEmModel* masterModel);
+  
+  virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
+  
   virtual G4double ComputeCrossSectionPerAtom(
-                                const G4ParticleDefinition*,
-                                      G4double kinEnergy, 
-                                      G4double Z, 
-                                      G4double A=0, 
-                                      G4double cut=0,
-                                      G4double emax=DBL_MAX);
-
+					      const G4ParticleDefinition*,
+					      G4double kinEnergy, 
+					      G4double Z, 
+					      G4double A=0, 
+					      G4double cut=0,
+					      G4double emax=DBL_MAX);
+  
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
 				 G4double maxEnergy);
 
-protected:
-
-  G4ParticleChangeForGamma* fParticleChange;
-
 private:
 
-  G4double lowEnergyLimit;  
-  G4double highEnergyLimit; 
-  
+  G4ParticleChangeForGamma* fParticleChange;
   G4int verboseLevel;
   G4bool isInitialised;
 
-  G4VCrossSectionHandler* crossSectionHandler;
-  G4VEMDataSet* formFactorData;
+  G4double lowEnergyLimit;  
+  //G4double highEnergyLimit; 
+  
+  G4LivermorePolarizedRayleighModel & operator=(const  G4LivermorePolarizedRayleighModel &right);
+  G4LivermorePolarizedRayleighModel(const  G4LivermorePolarizedRayleighModel&);
 
+  // cross section 
+
+  void ReadData(size_t Z, const char* path = 0);
+  
+  static G4VEMDataSet* formFactorData;
+  static G4int maxZ;
+  static G4LPhysicsFreeVector* dataCS[101];
+
+  // Polarization 
+  
   //   Generates \f$cos \left ( \theta\right )\f$ of the scattered photon
   //   incomingPhotonEnergy The energy of the incoming photon
   //   zAtom Atomic number
@@ -98,11 +117,8 @@ private:
  
   G4ThreeVector GetPhotonPolarization(const G4DynamicParticle&  photon);
 
-  G4LivermorePolarizedRayleighModel & operator=(const  G4LivermorePolarizedRayleighModel &right);
-  G4LivermorePolarizedRayleighModel(const  G4LivermorePolarizedRayleighModel&);
 
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif

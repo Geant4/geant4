@@ -7,7 +7,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt 82626 2014-07-01 09:32:09Z gcosmo $
+# $Id: CMakeLists.txt 94122 2015-11-06 09:38:11Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -23,7 +23,6 @@ add_subdirectory(im_r_matrix)
 add_subdirectory(inclxx)
 add_subdirectory(lend)
 add_subdirectory(management)
-add_subdirectory(neutron_hp)
 add_subdirectory(particle_hp)
 add_subdirectory(parton_string)
 add_subdirectory(lepto_nuclear)

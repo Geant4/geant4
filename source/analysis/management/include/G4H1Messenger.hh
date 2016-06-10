@@ -40,34 +40,36 @@
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
+#include <memory>
+
 class G4VAnalysisManager;
+class G4AnalysisMessengerHelper;
 class G4UIdirectory;
 class G4UIcommand;
 
 class G4H1Messenger : public G4UImessenger
 {
   public:
-    G4H1Messenger(G4VAnalysisManager* manager);
+    explicit G4H1Messenger(G4VAnalysisManager* manager);
     virtual ~G4H1Messenger();
    
     // methods
-    virtual void SetNewValue(G4UIcommand* command, G4String value);
+    virtual void SetNewValue(G4UIcommand* command, G4String value) final;
     
   private:
     void CreateH1Cmd();
     void SetH1Cmd();
-    void SetH1TitleCmd();
-    void SetH1XAxisCmd();
-    void SetH1YAxisCmd();
  
     G4VAnalysisManager*  fManager; ///< Associated class
-    
-    G4UIdirectory*         fH1Dir;   
-    G4UIcommand*           fCreateH1Cmd;
-    G4UIcommand*           fSetH1Cmd;
-    G4UIcommand*           fSetH1TitleCmd;   
-    G4UIcommand*           fSetH1XAxisCmd;   
-    G4UIcommand*           fSetH1YAxisCmd;   
+    std::unique_ptr<G4AnalysisMessengerHelper>  fHelper; 
+    std::unique_ptr<G4UIdirectory>  fDirectory;
+
+    std::unique_ptr<G4UIcommand>  fCreateH1Cmd;
+    std::unique_ptr<G4UIcommand>  fSetH1Cmd;
+    std::unique_ptr<G4UIcommand>  fSetH1XCmd;
+    std::unique_ptr<G4UIcommand>  fSetH1TitleCmd;   
+    std::unique_ptr<G4UIcommand>  fSetH1XAxisCmd;   
+    std::unique_ptr<G4UIcommand>  fSetH1YAxisCmd;   
 };
   
 #endif

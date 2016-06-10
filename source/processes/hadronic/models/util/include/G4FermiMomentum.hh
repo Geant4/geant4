@@ -31,6 +31,7 @@
 #include "globals.hh"
 #include "G4ThreeVector.hh"
 #include "Randomize.hh"
+#include "G4Pow.hh"
 
 class G4FermiMomentum 
 {
@@ -56,13 +57,13 @@ class G4FermiMomentum
 	    p=G4ThreeVector(2.*G4UniformRand()-1.,
 	    		    2.*G4UniformRand()-1.,
 	    		    2.*G4UniformRand()-1.);
-	    } while ( p.mag() > 1. );
+	    } while ( p.mag() > 1. );  /* Loop checking, 30-Oct-2015, G.Folger */
 	return p*maxMomentum; 
      }
 
   private:
 
-    G4double cbrt(G4double x) { return std::pow(x,1./3.); }
+  G4double cbrt(G4double x) { return G4Pow::GetInstance()->A13(x); }
 
   private:
   

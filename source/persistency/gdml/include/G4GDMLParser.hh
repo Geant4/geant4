@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh 68053 2013-03-13 14:39:51Z gcosmo $
+// $Id: G4GDMLParser.hh 89698 2015-04-27 13:25:23Z gcosmo $
 //
 //
 // class G4GDMLParser
@@ -44,6 +44,7 @@
 #include "G4GDMLWriteStructure.hh"
 #include "G4STRead.hh"
 #include "G4GDMLMessenger.hh"
+#include "G4GDMLEvaluator.hh"
 
 #include "G4TransportationManager.hh"
 #include "G4Navigator.hh"
@@ -116,11 +117,16 @@ class G4GDMLParser
    inline G4GDMLMatrix GetMatrix(const G4String& name) const;
    inline G4LogicalVolume* GetVolume(const G4String& name) const;
    inline G4VPhysicalVolume* GetWorldVolume(const G4String& setupName="Default") const;
-   inline G4GDMLAuxListType GetVolumeAuxiliaryInformation(G4LogicalVolume* logvol) const;
+   inline G4GDMLAuxListType GetVolumeAuxiliaryInformation(G4LogicalVolume* lvol) const;
    inline const G4GDMLAuxMapType* GetAuxMap() const;
+   inline const G4GDMLAuxListType* GetAuxList() const;
+   inline void AddAuxiliary(G4GDMLAuxStructType myaux);
    inline void StripNamePointers() const;
    inline void SetStripFlag(G4bool);
    inline void SetOverlapCheck(G4bool);
+   inline void SetRegionExport(G4bool);
+   inline void SetEnergyCutsExport(G4bool);
+
    inline void Clear();                  // Clears the evaluator
 
    // Methods for Writer
@@ -128,13 +134,21 @@ class G4GDMLParser
    inline void AddModule(const G4VPhysicalVolume* const physvol);
    inline void AddModule(const G4int depth);
    inline void SetAddPointerToName(G4bool set);
+   inline void AddVolumeAuxiliary(G4GDMLAuxStructType myaux, const G4LogicalVolume* const lvol);
 
   private:
 
+   void ImportRegions();
+   void ExportRegions(G4bool storeReferences = true);
+
+  private:
+
+   G4GDMLEvaluator eval;
    G4GDMLReadStructure* reader;
    G4GDMLWriteStructure* writer;
+   G4GDMLAuxListType *rlist, *ullist;
    G4GDMLMessenger* messenger;
-   G4bool urcode, uwcode, strip;
+   G4bool urcode, uwcode, strip, rexp;
 
 };
 

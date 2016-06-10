@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: MedicalBeam.cc 78126 2013-12-03 17:43:56Z gcosmo $
+// $Id: MedicalBeam.cc 88353 2015-02-16 08:54:08Z gcosmo $
 //
 /// @file MedicalBeam.cc
 /// @brief Define beam profile as primary generator
@@ -85,9 +85,9 @@ G4ThreeVector MedicalBeam::GenerateBeamDirection() const
   }
 
   while(! (std::abs(x) < xmax && std::abs(y) < ymax) ) {
-    dcos = RandFlat::shoot(cos0, 1.);
+    dcos = G4RandFlat::shoot(cos0, 1.);
     dsin = std::sqrt(1.-sqr(dcos));
-    dphi = RandFlat::shoot(0., twopi);
+    dphi = G4RandFlat::shoot(0., twopi);
 
     x = std::cos(dphi)*dsin*dcos;
     y = std::sin(dphi)*dsin*dcos;

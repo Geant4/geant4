@@ -14,6 +14,21 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+24-September-2015: Ben Morgan  expat-V10-01-01
+- CMakeLists.txt : Add XML_STATIC to public compile definitions 
+  of G4expat-static. Required on Windows platforms to ensure correct
+  linkage of symbols in static mode.
+
+28-July-2015: Ben Morgan    expat-V10-01-00
+- Upgrade source code to expat 2.1.0
+- expat_config.h.cmake : templated config file from expat sources. Used
+  in CMake build, old pre-configured version fron GNUmake retained in
+  src/ folder.
+- sources.cmake : import configuration from expat 2.1.0 CMakeLists.txt,
+  always taking defaults.
+- xmlparse.cc, xmltok.cc, xmlrole.cc : Use pragmas to suppress trivial
+  warnings for GNU and Clang compilers. No warnings emitted on Windows.
+  Intel compiler may require further testing.
 
 07-November-2011: Gabriele Cosmo
 - Fixed trivial compilation warning on Mac in xmlparse.cc.

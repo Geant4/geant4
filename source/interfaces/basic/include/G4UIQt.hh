@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh 86866 2014-11-19 14:43:02Z gcosmo $
+// $Id: G4UIQt.hh 90762 2015-06-09 07:52:57Z gcosmo $
 //
 #ifndef G4UIQt_h
 #define G4UIQt_h 
@@ -200,6 +200,11 @@ public: // With description
   };
   // Return the G4cout widget with filters
 
+  inline G4UIDockWidget* GetCoutDockWidget() {
+    return fCoutDockWidget;
+  };
+  // Return the cout dockable widget as a QDockWidget
+  
   inline G4UIDockWidget* GetUserInterfaceWidget() {
     return fUIDockWidget;
   };

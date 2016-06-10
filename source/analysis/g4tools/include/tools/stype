@@ -75,6 +75,19 @@ inline const std::string& stype(const std::string&) {
 template <class T>
 inline const std::string& stype(const T&) {return T::s_class();}
 
+inline bool stemplate(const std::string& a_s,std::string& a_inc) {
+  // If a_s is of the form "xxx<yyy>zzz<ttt>uuuu", at end a_inc contains "yyy".
+  // It returns true if something had been found, else false.
+  a_inc = a_s;
+  std::string::size_type pos = a_inc.find('<');
+  if(pos==std::string::npos) {a_inc.clear();return false;}
+  a_inc = a_inc.substr((pos+1),a_inc.size()-(pos+1));
+  std::string::size_type _pos = a_inc.find('>');
+  if(_pos==std::string::npos) {a_inc.clear();return false;}
+  a_inc = a_inc.substr(0,_pos);
+  return true;
+}
+
 }
 
 #include <vector>

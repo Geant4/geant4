@@ -1,4 +1,4 @@
-$Id: History 86123 2014-11-07 11:05:05Z gcosmo $
+$Id: History 94007 2015-11-05 10:04:41Z gcosmo $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,14 @@ modifications introduced in the code and keep track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04/11/2015 - I.Hrivnacova (p6decayer-V10-01-01)
+- Restored common directory (missing in previous tag)
+
+09/06/2015 - I.Hrivnacova (p6decayer-V10-01-00)
+-------------------------
+- Set a specific prefix to common library and test 
+  to avoid name clashes when building all extended examples at once
 
 06/11/2014 - I.Hrivnacova (p6decayer-V10-00-03)
 -------------------------

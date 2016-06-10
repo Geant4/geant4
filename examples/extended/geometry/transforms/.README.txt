@@ -1,0 +1,76 @@
+$Id$
+
+///\file "geometry/transforms/.README.txt"
+///\brief Extended example Transforms README page
+
+/*! \page Exampletransforms Example transforms
+			    
+ This example shows various ways of definition of 3D transformations for 
+ placing volumes.
+  	
+\section Transforms_s1 Geometry construction
+
+ Two G4Trd volumes (daughters) are placed within a G4Tubs (mother). 
+ The various ways of placement are implemented in the DetectorConstruction class
+ in the following private functions:
+ 
+ - PlaceWithDirectMatrix()
+ - PlaceWithInverseMatrix()
+ - PlaceWithAxialRotations()
+ - PlaceWithEulerAngles()
+ - PlaceWithReflections()
+ 
+ which are then called from the Construct() function.
+ All methods define exactly same geometry except for the placement 
+ with reflection where trapezoids are placed with their symmetry axis 
+ in parallel with z-axis in order to make easier to check reflection 
+ visually. 
+
+ The method of placement can be selected interactively via the command
+ (see DetectorMessenger and debug.mac):
+\verbatim 
+/placement/setMethod method
+\endverbatim
+      
+\section Transforms_s2 Physics list
+
+ PhysicsList.cc defines only geantino and transportation process.
+         	
+\section Transforms_s3 Primary generator
+
+ Default kinematic is a geantino, at rest, at coordinate origin.
+ Can be changed with particleGun commands.
+         	
+\section Transforms_s4 Physics
+
+ No physics; only transportation.
+  	
+\section Transforms_s5 Visualisation
+
+ Visualization Manager is set in the main().
+ Initialisation of the drawing is done via the commands
+ /vis/.. in the macro vis.mac. This macro is automatically read from the main 
+ in case of interactive running mode.
+  
+\section Transforms_s6 How to start ?
+
+  - Execute transforms in 'interactive mode' with visualization
+\verbatim    
+% transforms
+....
+Idle>   ---> type your commands. For instance:
+Idle> /control/execute debug.mac 
+....
+Idle> /placement/setMethod WithInverseMatrix 	
+Idle> /run/beamOn 1
+....				
+Idle> exit
+\endverbatim 	 		
+
+  - Execute transforms in 'batch' mode from macro files
+\verbatim     
+% transforms   debug.mac	
+\endverbatim
+ 
+*/
+	

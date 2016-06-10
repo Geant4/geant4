@@ -60,8 +60,10 @@
 
 namespace G4INCL {
 
-    StandardPropagationModel::StandardPropagationModel(LocalEnergyType localEnergyType, LocalEnergyType localEnergyDeltaType)
-      :theNucleus(0), maximumTime(70.0), currentTime(0.0), firstAvatar(true),
+    StandardPropagationModel::StandardPropagationModel(LocalEnergyType localEnergyType, LocalEnergyType localEnergyDeltaType, const G4double hTime)
+      :theNucleus(0), maximumTime(70.0), currentTime(0.0),
+      hadronizationTime(hTime),
+      firstAvatar(true),
       theLocalEnergyType(localEnergyType),
       theLocalEnergyDeltaType(localEnergyDeltaType)
     {
@@ -269,7 +271,7 @@ namespace G4INCL {
       // Will the avatar take place between now and the end of the cascade?
       G4double minDistOfApproachSquared = 0.0;
       G4double t = getTime(p1, p2, &minDistOfApproachSquared);
-      if(t>maximumTime || t<currentTime) return NULL;
+      if(t>maximumTime || t<currentTime+hadronizationTime) return NULL;
 
       // Local energy. Jump through some hoops to calculate the cross section
       // at the collision point, and clean up after yourself afterwards.

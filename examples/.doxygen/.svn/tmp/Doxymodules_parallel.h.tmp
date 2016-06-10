@@ -35,6 +35,15 @@
 
 /** @} */
 
+/** @defgroup extended_parallel_MPI_exMPI03 exMPI03
+ *  Parallel MPI exMPI03 example has its 
+ *  <a href="../html_exMPI03/html/index.html">standalone documentation </a>
+ *  @ingroup extended_parallel_MPI
+ *  @{
+ */
+
+/** @} */
+
 /** @} */
 
 /** @defgroup extended_parallel_TBB TBB
@@ -91,5 +100,26 @@
 /** @} */
 
 /** @} */
+
+/** @defgroup extended_parallel_ThreadsafeScorers ThreadsafeScorers
+ *  Example ThreadsafeScorers
+ *  @ingroup extended_parallel
+ *  @{
+ */
+
+  class G4TAtomicHitsCollection {};
+  class G4TAtomicHitsMap {};
+  class G4atomic {};
+  class G4atomic_defines {};
+  class TSActionInitialization {};
+  class TSDetectorConstruction {};
+  class TSPhysicsList {};
+  class TSPrimaryGeneratorAction {};
+  class TSRun {};
+  class TSRunAction {};
+
+/** @} */
+
+
 
 /** @} */

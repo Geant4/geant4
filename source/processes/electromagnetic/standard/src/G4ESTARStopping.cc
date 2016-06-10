@@ -1020,6 +1020,7 @@ void G4ESTARStopping::AddData(const G4double* ekin, const G4double* stop,
     }
   }
   sdata[idx]->SetSpline(true);
+  sdata[idx]->FillSecondDerivatives();
   //G4cout << "done " << G4endl;
 }
 

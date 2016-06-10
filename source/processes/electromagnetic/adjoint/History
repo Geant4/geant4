@@ -1,4 +1,4 @@
-$Id: History 80314 2014-04-10 12:23:52Z gcosmo $
+$Id: History 93569 2015-10-26 14:53:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,23 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
+
+24 Oct 2015: V.Ivanchenko (emadjoint-V10-01-03)
+- G4AdjointCSManager - use G4ThreadLocalSingleton pattern, 
+    fixed computation of A of an element, added initialisation
+    of all class members in the constructor
+
+17 Oct 2015: V.Ivanchenko (emadjoint-V10-01-02)
+- G4VEmAdjointModel - fixed Coverity reported problem
+
+07 Aug 2015: V.Ivanchenko (emadjoint-V10-01-01)
+- G4VEmAdjointModel, G4ContinuousGainOfEnergy, G4AdjointPhotoElectricModel,
+  G4AdjointInterpolator, G4AdjointComptonModel,  G4AdjointCSMatrix,
+  G4AdjointCSManager - add checks for while loops
+
+21 May 2015: V.Ivanchenko (emadjoint-V10-01-00)
+- G4AdjointhMultipleScattering - make it coherent with the forward 
+    msc processes
 
 10 Apr 2014: V.Ivanchenko (emadjoint-V10-00-00)
 - G4VAdjointReverseReaction - added protection against infinite 

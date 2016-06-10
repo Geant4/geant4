@@ -36,6 +36,19 @@ inline bool is_jpeg(const std::string& a_file,bool& a_is){
   return true;
 }
 
+inline bool is_ico(const std::string& a_file,bool& a_is){
+  unsigned char head[4];
+ {unsigned int num = 4;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=4) {a_is = false;return true;}}
+  if(head[0]!=0) {a_is = false;return true;}
+  if(head[1]!=0) {a_is = false;return true;}
+  if(head[2]!=1) {a_is = false;return true;}
+  if(head[3]!=0) {a_is = false;return true;}
+  a_is = true;
+  return true;
+}
+
 inline bool is_png(const std::string& a_file,bool& a_is){
   unsigned char head[4];
  {unsigned int num = 4;
@@ -77,6 +90,20 @@ inline bool is_iv(const std::string& a_file,bool& a_is){
   if(head[6]!='t') {a_is = false;return true;}
   if(head[7]!='o') {a_is = false;return true;}
   if(head[8]!='r') {a_is = false;return true;}
+  a_is = true;  
+  return true;
+}
+
+inline bool is_wrl(const std::string& a_file,bool& a_is){
+  unsigned char head[5];
+ {unsigned int num = 5;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=5) {a_is = false;return true;}}
+  if(head[0]!='#') {a_is = false;return true;}
+  if(head[1]!='V') {a_is = false;return true;}
+  if(head[2]!='R') {a_is = false;return true;}
+  if(head[3]!='M') {a_is = false;return true;}
+  if(head[4]!='L') {a_is = false;return true;}
   a_is = true;  
   return true;
 }

@@ -18,6 +18,29 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27/11/15 I.Hrivnacova (doxygen-V10-01-03)
+- Added extended/parallel/MPI/source classes in the documentation
+
+23/11/15 I.Hrivnacova (doxygen-V10-01-02)
+- Updated configuration files for 10.2 release
+- Upgraded Doxyfiles to Doxygen 1.8.9.1
+
+09/03/15 I.Hrivnacova (doxygen-V10-01-01)
+- Added new example extended/medical/dna/microyz
+
+23/01/15 I.Hrivnacova (doxygen-V10-01-00)
+- Fixes in configuration files for 10.1 release
+
+26/11/14 I.Hrivnacova (doxygen-V10-00-02)
+- Updated link to the advanced examples page which has been moved
+
+12/11/14 I.Hrivnacova (doxygen-V10-00-01)
+- Updated configuration files for 10.1 release
+
+06/06/14 P.Gumplinger (doxygen-V10-00-00)
+- Updated Doxyfile, Doxymodules_category.h adding new
+  exoticphysics channeling and ucn examples
+
 29/11/12 I.Hrivnacova (doxygen-V09-06-01)
 - Updated configuration files for 10.0 release
 

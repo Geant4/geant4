@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4PrimaryVertex.cc 76884 2013-11-18 12:54:03Z gcosmo $
+// $Id: pyG4PrimaryVertex.cc 94509 2015-11-20 10:14:44Z gcosmo $
 // ====================================================================
 //   pyG4PrimaryVertex.cc
 //
@@ -52,6 +52,9 @@ void export_G4PrimaryVertex()
 {
   class_<G4PrimaryVertex, G4PrimaryVertex*>
     ("G4PrimaryVertex", "primary vertex")
+    .def(init<>())
+    .def(init<G4double, G4double, G4double, G4double>())
+    .def(init<G4ThreeVector, G4double>())
     // ---
     .add_property("X0", &G4PrimaryVertex::GetX0)
     .add_property("Y0", &G4PrimaryVertex::GetY0)
@@ -66,9 +69,10 @@ void export_G4PrimaryVertex()
     .def("GetT0",       &G4PrimaryVertex::GetT0)
     .def("GetNumberOfParticle", &G4PrimaryVertex::GetNumberOfParticle)
     .def("GetPrimary",  &G4PrimaryVertex::GetPrimary,
-	 return_internal_reference<>(), f_GetPrimary())
+      	 return_internal_reference<>(), f_GetPrimary())
+    .def("SetPrimary",  &G4PrimaryVertex::SetPrimary)
     .def("GetWeight",   &G4PrimaryVertex::GetWeight)
     .def("SetWeight",   &G4PrimaryVertex::SetWeight)
     .def("Print", &G4PrimaryVertex::Print)
-     ;
+    ;
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4ElasticHadrNucleusHE.cc 94236 2015-11-09 11:00:13Z gcosmo $
 //
 //
 //  The generator of high energy hadron-nucleus elastic scattering
@@ -51,10 +51,23 @@
 #include  "G4IonTable.hh"
 #include  "G4Proton.hh"
 #include  "G4NistManager.hh"
+#include  "G4Log.hh"
+#include  "G4Exp.hh"
 
 #include <cmath>
 
 using namespace std;
+
+//ANDREA-> MT Fix
+#include "G4AutoLock.hh"
+G4ElasticData* G4ElasticHadrNucleusHE::SetOfElasticData[NHADRONS][ZMAX];
+G4Mutex G4ElasticHadrNucleusHE::eldata_m[NHADRONS][ZMAX];
+namespace {
+  G4Mutex aMutex = G4MUTEX_INITIALIZER;
+  G4bool onlyOnceInit  = true;
+  G4bool onlyOnceDestroy = true;
+}
+//ANDREA<-
 
 ///////////////////////////////////////////////////////////////
 //
@@ -66,7 +79,7 @@ G4ElasticData::G4ElasticData(const G4ParticleDefinition* p,
   hadr     = p;
   massGeV  = p->GetPDGMass()/GeV;
   mass2GeV2= massGeV*massGeV;
-  AtomicWeight = G4int(AWeight + 0.5);
+  AtomicWeight = G4lrint(AWeight);
 
   DefineNucleusParameters(AWeight);
 
@@ -200,8 +213,8 @@ void G4ElasticData::DefineNucleusParameters(G4double A)
       Aeff  = 0.9;
       break;
     default:
-      R1    = 4.45*std::pow(A - 1.,0.309)*0.9;
-      R2    = 2.3 *std::pow(A, 0.36);
+      R1    = 4.45*G4Exp(G4Log(A - 1.)*0.309)*0.9;
+      R2    = 2.3 *G4Exp(G4Log(A)* 0.36);
 
       if(A < 100 && A > 3) Pnucl = 0.176 + 0.00275*A;
       else                 Pnucl = 0.4;
@@ -226,6 +239,20 @@ void G4ElasticData::DefineNucleusParameters(G4double A)
 G4ElasticHadrNucleusHE::G4ElasticHadrNucleusHE(const G4String& name)
   : G4HadronElastic(name)
 {
+  //ANDREA->
+  G4AutoLock l(&aMutex);
+  if ( onlyOnceInit ) {
+      for ( int i = 0 ; i< NHADRONS ; ++i) {
+          for (int j = 0 ; j<ZMAX ; ++j ) {
+              SetOfElasticData[i][j]=0;
+              G4MUTEXINIT(eldata_m[i][j]);
+          }
+      }
+      onlyOnceInit = false;
+  }
+  l.unlock();
+  //ANDREA<-
+
   dQ2 = hMass = hMass2 =  hLabMomentum = hLabMomentum2 = MomentumCM = HadrEnergy 
     = R1 = R2 = Pnucl = Aeff = HadrTot = HadrSlope = HadrReIm = TotP = DDSect2
     = DDSect3 = ConstU = FmaxT = Slope1 = Slope2 = Coeff1 = Coeff2 = MaxTR 
@@ -261,7 +288,7 @@ G4ElasticHadrNucleusHE::G4ElasticHadrNucleusHE(const G4String& name)
   LowEdgeEnergy[1] = 0.5;
   LowEdgeEnergy[2] = 0.7;
   G4double e = 1.0;
-  G4double f = std::pow(10.,0.1);
+  G4double f = G4Exp(G4Log(10.)*0.1);
   for(G4int i=3; i<NENERGY; i++) {
     Energy[i] = e;
     LowEdgeEnergy[i] = e/f;
@@ -288,35 +315,19 @@ G4ElasticHadrNucleusHE::G4ElasticHadrNucleusHE(const G4String& name)
     HadronType[j]  = id[j];
     HadronType1[j] = id1[j];
 
-    for(G4int k = 0; k < 93; k++) { SetOfElasticData[j][k] = 0; }
+    for(G4int k = 0; k < ZMAX; k++) { SetOfElasticData[j][k] = 0; }
   } 
 }
 
 
-void G4ElasticHadrNucleusHE::Description() const
+void G4ElasticHadrNucleusHE::ModelDescription(std::ostream& outFile) const
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetModelName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of G4ElasticHadrNucleusHE Model</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
 
     outFile << "G4ElasticHadrNucleusHE is a hadron-nucleus elastic scattering\n"
             << "model developed by N. Starkov which uses a Glauber model\n"
             << "parameterization to calculate the final state.  It is valid\n"
             << "for all hadrons with incident energies above 1 GeV.\n";
 
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
 }
 
 
@@ -326,13 +337,22 @@ void G4ElasticHadrNucleusHE::Description() const
 
 G4ElasticHadrNucleusHE::~G4ElasticHadrNucleusHE()
 {
-  for(G4int j = 0; j < NHADRONS; j++) 
-  {
-    for(G4int k = 0; k < 93; k++) 
-    {
-      if(SetOfElasticData[j][k]) delete SetOfElasticData[j][k];
-    }
-  } 
+    //ANDREA->
+  G4AutoLock l(&aMutex);
+  if ( onlyOnceDestroy ) {
+      for(G4int j = 0; j < NHADRONS; j++)
+        {
+          for(G4int k = 0; k < ZMAX; k++)
+            {
+              if ( SetOfElasticData[j][k] ) {
+                  delete SetOfElasticData[j][k];
+                  SetOfElasticData[j][k]=0;
+                  G4MUTEXDESTROY(eldata_m[j][k]);
+              }
+            }
+        }
+      onlyOnceDestroy = false;
+  }
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -342,8 +362,10 @@ G4ElasticHadrNucleusHE::~G4ElasticHadrNucleusHE()
 G4double 
 G4ElasticHadrNucleusHE::SampleInvariantT(const G4ParticleDefinition* p,
 					 G4double inLabMom, 
-					 G4int Z, G4int N)
+					 G4int iZ, G4int N)
 {
+  G4int Z = iZ;
+  if(Z >= ZMAX) { Z = ZMAX-1; }
   G4double plab  = inLabMom/GeV;   // (GeV/c)
   G4double Q2 = 0;
 
@@ -387,6 +409,7 @@ G4ElasticHadrNucleusHE::SampleInvariantT(const G4ParticleDefinition* p,
     }
   else
     {
+      G4AutoLock l(&(eldata_m[idx][Z]));//ANDREA
       G4ElasticData* ElD1 = SetOfElasticData[idx][Z];
 
       // Construct elastic data
@@ -442,6 +465,10 @@ G4double G4ElasticHadrNucleusHE::
                           HadronNucleusQ2_2(G4ElasticData* pElD, G4int Z, 
                                             G4double plab, G4double tmax)
 {
+  //ANDREA: Important notice on this function
+  //        For MT we are sharing among threads the G4ElasticData classes
+  //        The *call* to this function is proteced
+  //        with a mutex in the calling function
   G4double LineFq2[ONQ2];
 
   G4double Rand = G4UniformRand();
@@ -463,6 +490,7 @@ G4double G4ElasticHadrNucleusHE::
   }
   G4double* dNumbQ2 = pElD->TableQ2;
 
+  if(NumbOnE >= NENERGY-1) { NumbOnE = NENERGY-2; }
   G4int index = NumbOnE*ONQ2;
 
   // Select kinematics for node energy
@@ -505,7 +533,7 @@ G4double G4ElasticHadrNucleusHE::
 
       GetHeavyFq2(Z, NumbN, LineFq2);  //  %%%%%%%%%%%%%%%%%%%%%%%%%
 
-      for(G4int ii=0; ii<ONQ2; ii++)
+      for(G4int ii=0; ii<ONQ2; ++ii)
 	{
 	  //if(verboseLevel > 2)
 	  //  G4cout<<"  ii LineFq2  "<<ii<<"  "<<LineFq2[ii]/LineFq2[ONQ2-1]
@@ -520,10 +548,11 @@ G4double G4ElasticHadrNucleusHE::
 
   G4double* dNumbFQ2 = &(pElD->TableCrossSec[index]);
 
-  for( iNumbQ2 = 1; iNumbQ2<length; iNumbQ2++ ) 
+  for( iNumbQ2 = 1; iNumbQ2<length; ++iNumbQ2) 
     {
       if(Rand <= pElD->TableCrossSec[index+iNumbQ2]) break;
     }
+  if(iNumbQ2 >= ONQ2) { iNumbQ2 = ONQ2 - 1; }
   Q2 = GetQ2_2(iNumbQ2, dNumbQ2, dNumbFQ2, Rand);
 
   if(tmax < Q2max) Q2 *= tmax/Q2max;
@@ -652,10 +681,10 @@ G4double G4ElasticHadrNucleusHE::GetLightFq2(G4int Z, G4int Nucleus,
     G4double SqrQ2  = std::sqrt(Q2);
     G4double valueConstU = 2.*(hMass2 + protonM2) - Q2;
 
-    G4double y = (1.-Coeff1-Coeff0)/HadrSlope*(1.-std::exp(-HadrSlope*Q2))
-      + Coeff0*(1.-std::exp(-Slope0*Q2))
-      + Coeff2/Slope2*std::exp(Slope2*valueConstU)*(std::exp(Slope2*Q2)-1.)
-      + 2.*Coeff1/Slope1*(1./Slope1-(1./Slope1+SqrQ2)*std::exp(-Slope1*SqrQ2));
+    G4double y = (1.-Coeff1-Coeff0)/HadrSlope*(1.-G4Exp(-HadrSlope*Q2))
+      + Coeff0*(1.-G4Exp(-Slope0*Q2))
+      + Coeff2/Slope2*G4Exp(Slope2*valueConstU)*(G4Exp(Slope2*Q2)-1.)
+      + 2.*Coeff1/Slope1*(1./Slope1-(1./Slope1+SqrQ2)*G4Exp(-Slope1*SqrQ2));
 
     return y;
   }
@@ -734,7 +763,7 @@ G4double G4ElasticHadrNucleusHE::GetLightFq2(G4int Z, G4int Nucleus,
 		  dddd  = exp1+exp2;
 		  N4    = -N4*NN2;
 		  Prod3 = Prod3+N4*exp1*exp2*
-		    (1-std::exp(-Q2*dddd/4))/dddd*4*SetBinom[i1][j1];
+		    (1-G4Exp(-Q2*dddd/4))/dddd*4*SetBinom[i1][j1];
                }                                   // j1
 	      Prod2 = Prod2 +Prod3*N5*SetBinom[i2][j2];
 	    }                                      // j2
@@ -761,7 +790,7 @@ G4double G4ElasticHadrNucleusHE::
 //   ------ All external kinematical variables are in MeV -------
 //            ------ but internal in GeV !!!!  ------
 
-  G4int NWeight = int( nistManager->GetAtomicMassAmu(Z) + 0.5 ); 
+  G4int NWeight = G4lrint(nistManager->GetAtomicMassAmu(Z)); 
 
   G4double    theQ2 = aQ2;   ///GeV/GeV;  
 
@@ -783,12 +812,12 @@ G4double G4ElasticHadrNucleusHE::
 
     dSigPodT = HadrTot*HadrTot*(1+HadrReIm*HadrReIm)*
                  (
-                  Coeff1*std::exp(-Slope1*SqrQ2)+
-                  Coeff2*std::exp( Slope2*(valueConstU)+aQ2)+
-                  (1-Coeff1-Coeff0)*std::exp(-HadrSlope*aQ2)+
-                 +Coeff0*std::exp(-Slope0*aQ2)
+                  Coeff1*G4Exp(-Slope1*SqrQ2)+
+                  Coeff2*G4Exp( Slope2*(valueConstU)+aQ2)+
+                  (1-Coeff1-Coeff0)*G4Exp(-HadrSlope*aQ2)+
+                 +Coeff0*G4Exp(-Slope0*aQ2)
 //                +0.1*(1-std::fabs(CosTh))
-                  )/16/3.1416*2.568;
+                  )*2.568/(16*pi);
 
     return dSigPodT;
   }
@@ -812,17 +841,17 @@ G4double G4ElasticHadrNucleusHE::
     G4double    R22Apd   = 2/R22Ap;
     G4double R12ApdR22Ap = 0.5*(R12Apd+R22Apd);
 
-    G4double DDSec1p  = (DDSect2+DDSect3*std::log(1.06*2*HadrEnergy/R1/4));
-    G4double DDSec2p  = (DDSect2+DDSect3*std::log(1.06*2*HadrEnergy/
-                             std::sqrt((R12+R22)/2)/4));
-    G4double DDSec3p  = (DDSect2+DDSect3*std::log(1.06*2*HadrEnergy/R2/4));
+    G4double DDSec1p  = (DDSect2+DDSect3*G4Log(0.53*HadrEnergy/R1));
+    G4double DDSec2p  = (DDSect2+DDSect3*G4Log(0.53*HadrEnergy/
+                             std::sqrt((R12+R22)/2)));
+    G4double DDSec3p  = (DDSect2+DDSect3*G4Log(0.53*HadrEnergy/R2));
 
     G4double    Norm     = (R12*R1-Pnucl*R22*R2)*Aeff;
     G4double    Normp    = (R12*R1-Pnuclp*R22*R2)*Aeff;
     G4double    R13      = R12*R1/R12B;
     G4double    R23      = Pnucl*R22*R2/R22B;
-    G4double    Unucl    = Stot/twopi/Norm*R13;
-    G4double    UnuclScr = Stot/twopi/Normp*R13Ap;
+    G4double    Unucl    = Stot/(twopi*Norm)*R13;
+    G4double    UnuclScr = Stot/(twopi*Normp)*R13Ap;
     G4double    SinFi    = HadrReIm/Rho2;
     G4double    FiH      = std::asin(SinFi);
     G4double    N        = -1;
@@ -840,14 +869,14 @@ G4double G4ElasticHadrNucleusHE::
     {
       N       = -N*Unucl*(NWeight-i+1)/i*Rho2;
       N4      = 1;
-      Prod1   = std::exp(-theQ2/i*R12B/4)/i*R12B;
+      Prod1   = G4Exp(-theQ2/i*R12B/4)/i*R12B;
       medTot  = R12B/i;
 
        for(G4int l=1; l<=i; l++)
        {
          exp1    = l/R22B+(i-l)/R12B;
          N4      = -N4*(i-l+1)/l*N2;
-         Prod1   = Prod1+N4/exp1*std::exp(-theQ2/exp1/4);
+         Prod1   = Prod1+N4/exp1*G4Exp(-theQ2/(exp1*4));
          medTot  = medTot+N4/exp1;
        }  // end l
 
@@ -861,17 +890,17 @@ G4double G4ElasticHadrNucleusHE::
     ReElasticAmpl0 = ReElasticAmpl0*pi/2.568;   // The amplitude in mB
     Tot1           = Tot1*twopi/2.568;
 
-    G4double C1 = R13Ap*R13Ap/2*DDSec1p;
-    G4double C2 = 2*R23Ap*R13Ap/2*DDSec2p;
-    G4double C3 = R23Ap*R23Ap/2*DDSec3p;
+    G4double C1 = R13Ap*R13Ap*0.5*DDSec1p;
+    G4double C2 = 2*R23Ap*R13Ap*0.5*DDSec2p;
+    G4double C3 = R23Ap*R23Ap*0.5*DDSec3p;
 
     G4double N1p  = 1;
 
     G4double Din1 = 0.5;     
 
-    Din1  = 0.5*(C1*std::exp(-theQ2/8*R12Ap)/2*R12Ap-
-                 C2/R12ApdR22Ap*std::exp(-theQ2/4/R12ApdR22Ap)+
-                 C3*R22Ap/2*std::exp(-theQ2/8*R22Ap));
+    Din1  = 0.5*(C1*G4Exp(-theQ2/8*R12Ap)/2*R12Ap-
+                 C2/R12ApdR22Ap*G4Exp(-theQ2/(4*R12ApdR22Ap))+
+                 C3*R22Ap/2*G4Exp(-theQ2/8*R22Ap));
 
     DTot1 = 0.5*(C1/2*R12Ap-C2/R12ApdR22Ap+C3*R22Ap/2);
 
@@ -900,9 +929,9 @@ G4double G4ElasticHadrNucleusHE::
           exp3p = exp1+R22Apd;
 
           Din2  = Din2 + N2p*BinCoeff*
-	          (C1/exp1p*std::exp(-theQ2/4/exp1p)-
-                   C2/exp2p*std::exp(-theQ2/4/exp2p)+
-                   C3/exp3p*std::exp(-theQ2/4/exp3p));
+	    (C1/exp1p*G4Exp(-theQ2/(4*exp1p))-
+	     C2/exp2p*G4Exp(-theQ2/(4*exp2p))+
+	     C3/exp3p*G4Exp(-theQ2/(4*exp3p)));
 
 	  DmedTot = DmedTot + N2p*BinCoeff*
 	    (C1/exp1p-C2/exp2p+C3/exp3p);
@@ -910,17 +939,15 @@ G4double G4ElasticHadrNucleusHE::
 	  N2p   = -N2p*R23dR13;
 	}     // l
 
-	Din1  = Din1+Din2*N1p/*Mnoj[i]*//(i+2)/(i+1)*std::cos(FiH*i);
-	DTot1 = DTot1+DmedTot*N1p/*Mnoj[i]*//(i+2)/(i+1)*std::cos(FiH*i);
+	Din1  = Din1+Din2*N1p/*Mnoj[i]*//((i+2)*(i+1))*std::cos(FiH*i);
+	DTot1 = DTot1+DmedTot*N1p/*Mnoj[i]*//((i+2)*(i+1))*std::cos(FiH*i);
  
 	if(std::fabs(Din2*N1p/Din1) < 0.000001) break;
     }           //  i
 
-    Din1 = -Din1*NWeight*(NWeight-1)
-                 /2/pi/Normp/2/pi/Normp*16*pi*pi;
+    Din1 = -Din1*NWeight*(NWeight-1)*4/(Normp*Normp);
 
-    DTot1 = DTot1*NWeight*(NWeight-1)
-                 /2/pi/Normp/2/pi/Normp*16*pi*pi;
+    DTot1 = DTot1*NWeight*(NWeight-1)*4/(Normp*Normp);
 
     DTot1 *= 5;   //  $$$$$$$$$$$$$$$$$$$$$$$$ 
 //     Din1  *= 0.2;    //   %%%%%%%%%%%%%%%%%%%%%%%   proton
@@ -929,7 +956,7 @@ G4double G4ElasticHadrNucleusHE::
 
     G4double DiffCrSec2 = (ReElasticAmpl0*ReElasticAmpl0+
                            (ImElasticAmpl0+Din1)*
-                           (ImElasticAmpl0+Din1))*2/4/pi;
+                           (ImElasticAmpl0+Din1))/twopi;
 
     Tot1   = Tot1-DTot1;
      //  Tott1  = Tot1*1.0;
@@ -937,7 +964,7 @@ G4double G4ElasticHadrNucleusHE::
     aAIm   = ImElasticAmpl0;
     aDIm   = Din1;
 
-    return DiffCrSec2*1.0;  //  dSig/d|-t|,  mb/(GeV/c)^-2
+    return DiffCrSec2;  //  dSig/d|-t|,  mb/(GeV/c)^-2
 }   // function
 //  ##############################################
 
@@ -961,8 +988,8 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
 	   <<"  E - m  "<<HadrEnergy - hMass<< G4endl;
 
   G4double TotN = 0.0;
-  G4double logE = std::log(HadrEnergy);
-  G4double logS = std::log(sHadr);
+  G4double logE = G4Log(HadrEnergy);
+  G4double logS = G4Log(sHadr);
            TotP = 0.0;
 
   switch (iHadron)
@@ -971,7 +998,7 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
     case 6:
 
       if(hLabMomentum > 10)
-	TotP = TotN = 7.5*logE - 40.12525 + 103*std::pow(sHadr,-0.165); //  mb
+	TotP = TotN = 7.5*logE - 40.12525 + 103*G4Exp(-G4Log(sHadr)*0.165);// mb
 
       else
 	{
@@ -982,7 +1009,7 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
 
 	  if( hLabMomentum > 1.4 )
 	    TotN = 33.3+15.2*(hLabMomentum2-1.35)/
-	      (std::pow(hLabMomentum,2.37)+0.95);
+	      (G4Exp(G4Log(hLabMomentum)*2.37)+0.95);
 		
 	  else if(hLabMomentum > 0.8)
 	    {
@@ -1010,7 +1037,7 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
 	      }
 	    else 
               {
-		TotP = 23.+50.*std::pow(std::log(0.73/hLabMomentum),3.5);
+		TotP = 23.+50.*G4Exp(G4Log(G4Log(0.73/hLabMomentum))*3.5);
 	      }
 	  }
 	}
@@ -1027,11 +1054,11 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
 
 //  ...................................................
       if(hLabMomentum >= 1.2)
-	 HadrReIm  = 0.13*(logS - 5.8579332)*std::pow(sHadr,-0.18);
+	HadrReIm  = 0.13*(logS - 5.8579332)*G4Exp(-G4Log(sHadr)*0.18);
        
       else if(hLabMomentum >= 0.6) 
-	HadrReIm = -75.5*(std::pow(hLabMomentum,0.25)-0.95)/
-	  (std::pow(3*hLabMomentum,2.2)+1);     
+	HadrReIm = -75.5*(G4Exp(G4Log(hLabMomentum)*0.25)-0.95)/
+	  (G4Exp(G4Log(3*hLabMomentum)*2.2)+1);     
 
       else 
 	HadrReIm = 15.5*hLabMomentum/(27*hLabMomentum2*hLabMomentum+2);
@@ -1078,9 +1105,9 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
       HadrSlope = 8.32+0.57*logS;                //(GeV/c)^-2
 
       if( HadrEnergy < 1000 )
-	HadrReIm  = 0.06*(sqrS-2.236)*(sqrS-14.14)*std::pow(sHadr,-0.8);
+	HadrReIm  = 0.06*(sqrS-2.236)*(sqrS-14.14)*G4Exp(-G4Log(sHadr)*0.8);
       else
-	HadrReIm  = 0.6*(logS - 5.8579332)*std::pow(sHadr,-0.25);
+	HadrReIm  = 0.6*(logS - 5.8579332)*G4Exp(-G4Log(sHadr)*0.25);
 
       DDSect2   = 11;                            //mb*(GeV/c)^-2
       DDSect3   = 3;                             //mb*(GeV/c)^-2
@@ -1121,13 +1148,13 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
     case 3:
 
       if(hLabMomentum >= 3.5)
-	TotP = 10.6+2.*logE + 25.*std::pow(HadrEnergy,-0.43); // mb
+	TotP = 10.6+2.*logE + 25.*G4Exp(-G4Log(HadrEnergy)*0.43); // mb
 //  =========================================
       else if(hLabMomentum >= 1.15)
 	{
           G4double x = (hLabMomentum - 2.55)/0.55; 
 	  G4double y = (hLabMomentum - 1.47)/0.225;
-	  TotP = 3.2*std::exp(-x*x) + 12.*std::exp(-y*y) + 27.5;
+	  TotP = 3.2*G4Exp(-x*x) + 12.*G4Exp(-y*y) + 27.5;
 	}
 //  =========================================
       else if(hLabMomentum >= 0.4)
@@ -1138,40 +1165,40 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
       else 
 	{
 	  G4double x = (hLabMomentum - 0.29)/0.085;
-	  TotP = 20. + 180.*std::exp(-x*x);
+	  TotP = 20. + 180.*G4Exp(-x*x);
 	}
 //  -------------------------------------------
 
       if(hLabMomentum >= 3.0 )
-	TotN = 10.6 + 2.*logE + 30.*std::pow(HadrEnergy,-0.43); // mb
+	TotN = 10.6 + 2.*logE + 30.*G4Exp(-G4Log(HadrEnergy)*0.43); // mb
 
       else if(hLabMomentum >= 1.3) 
 	{
           G4double x = (hLabMomentum - 2.1)/0.4;
           G4double y = (hLabMomentum - 1.4)/0.12;
-	  TotN = 36.1+0.079 - 4.313*logE + 3.*std::exp(-x*x) + 
-                                              1.5*std::exp(-y*y);
+	  TotN = 36.1+0.079 - 4.313*logE + 3.*G4Exp(-x*x) + 
+                                              1.5*G4Exp(-y*y);
 	}
       else if(hLabMomentum >= 0.65)
 	{
           G4double x = (hLabMomentum - 0.72)/0.06;
           G4double y = (hLabMomentum - 1.015)/0.075;
-	  TotN = 36.1 + 10.*std::exp(-x*x) + 24*std::exp(-y*y);
+	  TotN = 36.1 + 10.*G4Exp(-x*x) + 24*G4Exp(-y*y);
 	}
       else if(hLabMomentum >= 0.37)
 	{
-	  G4double x = std::log(hLabMomentum/0.48);
+	  G4double x = G4Log(hLabMomentum/0.48);
 	  TotN = 26. + 110.*x*x;
 	}
       else 
 	{
           G4double x = (hLabMomentum - 0.29)/0.07;
-	  TotN = 28.0 + 40.*std::exp(-x*x);
+	  TotN = 28.0 + 40.*G4Exp(-x*x);
 	}
       HadrTot = (TotP+TotN)/2;
 //  ........................................
       HadrSlope = 7.28+0.245*logS;        // GeV-2
-      HadrReIm  = 0.2*(logS - 4.6051702)*std::pow(sHadr,-0.15);
+      HadrReIm  = 0.2*(logS - 4.6051702)*G4Exp(-G4Log(sHadr)*0.15);
 
       DDSect2   = 0.7;                               //mb*GeV-2
       DDSect3   = 0.27;                              //mb*GeV-2
@@ -1180,11 +1207,11 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
 //  ==========================================================
     case 4:            //  K plus
 
-      HadrTot   = 10.6+1.8*logE + 9.0*std::pow(HadrEnergy,-0.55);  // mb
+      HadrTot   = 10.6+1.8*logE + 9.0*G4Exp(-G4Log(HadrEnergy)*0.55);  // mb
       if(HadrEnergy>100) HadrSlope = 15.0;
       else HadrSlope = 1.0+1.76*logS - 2.84/sqrS;   // GeV-2
 
-      HadrReIm  = 0.4*(sHadr-20)*(sHadr-150)*std::pow(sHadr+50,-2.1);
+      HadrReIm  = 0.4*(sHadr-20)*(sHadr-150)*G4Exp(-G4Log(sHadr+50)*2.1);
       DDSect2   = 0.7;                             //mb*GeV-2
       DDSect3   = 0.21;                            //mb*GeV-2
       break;
@@ -1193,7 +1220,7 @@ void  G4ElasticHadrNucleusHE::DefineHadronValues(G4int Z)
 
        HadrTot   = 10+1.8*logE + 25./sqrS; // mb
        HadrSlope = 6.98+0.127*logS;         // GeV-2
-       HadrReIm  = 0.4*(sHadr-20)*(sHadr-20)*std::pow(sHadr+50,-2.1);
+       HadrReIm  = 0.4*(sHadr-20)*(sHadr-20)*G4Exp(-G4Log(sHadr+50)*2.1);
        DDSect2   = 0.7;                             //mb*GeV-2
        DDSect3   = 0.27;                            //mb*GeV-2
        break;
@@ -1349,7 +1376,7 @@ void  G4ElasticHadrNucleusHE::
 
   G4int NumberH=0;
 
-  while(iHadrCode!=HadronCode[NumberH]) NumberH++;
+  while(iHadrCode!=HadronCode[NumberH]) NumberH++;  /* Loop checking, 10.08.2015, A.Ribon */
 
   NumberH = HadronType1[NumberH];   
 
@@ -1371,11 +1398,11 @@ G4double G4ElasticHadrNucleusHE::GetFt(G4double Q2)
   G4double Fdistr=0;
   G4double SqrQ2 = std::sqrt(Q2);
  
-  Fdistr = (1-Coeff1-Coeff0) //-0.0*Coeff2*std::exp(ConstU))
-    /HadrSlope*(1-std::exp(-HadrSlope*Q2))
-    + Coeff0*(1-std::exp(-Slope0*Q2))
-    + Coeff2/Slope2*std::exp(Slope2*ConstU)*(std::exp(Slope2*Q2)-1)
-    + 2*Coeff1/Slope1*(1/Slope1-(1/Slope1+SqrQ2)*std::exp(-Slope1*SqrQ2));
+  Fdistr = (1-Coeff1-Coeff0) //-0.0*Coeff2*G4Exp(ConstU))
+    /HadrSlope*(1-G4Exp(-HadrSlope*Q2))
+    + Coeff0*(1-G4Exp(-Slope0*Q2))
+    + Coeff2/Slope2*G4Exp(Slope2*ConstU)*(G4Exp(Slope2*Q2)-1)
+    + 2*Coeff1/Slope1*(1/Slope1-(1/Slope1+SqrQ2)*G4Exp(-Slope1*SqrQ2));
 
   if (verboseLevel>1)
     G4cout<<"Old:  Coeff0 Coeff1 Coeff2 "<<Coeff0<<"  "
@@ -1393,7 +1420,10 @@ G4double G4ElasticHadrNucleusHE::GetQ2(G4double Ran)
   FmaxT = GetFt(MaxTR);
   delta = GetDistrFun(DDD0)-Ran;
 
-  while(std::fabs(delta) > 0.0001)
+  const G4int maxNumberOfLoops = 10000;
+  G4int loopCounter = -1;
+  while ( (std::fabs(delta) > 0.0001) && 
+          ++loopCounter < maxNumberOfLoops )  /* Loop checking, 10.08.2015, A.Ribon */
     {
       if(delta>0) 
       {
@@ -1407,6 +1437,9 @@ G4double G4ElasticHadrNucleusHE::GetQ2(G4double Ran)
       }
       delta = GetDistrFun(DDD0)-Ran;
     }
+  if ( loopCounter >= maxNumberOfLoops ) {
+    return 0.0;
+  }
 
   Q2 = DDD0;
 

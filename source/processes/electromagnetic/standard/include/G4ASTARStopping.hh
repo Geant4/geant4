@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ASTARStopping.hh 83008 2014-07-24 14:49:52Z gcosmo $
+// $Id: G4ASTARStopping.hh 91612 2015-07-29 08:51:51Z gcosmo $
 
 #ifndef G4ASTARStopping_h
 #define G4ASTARStopping_h 1
@@ -66,8 +66,6 @@ public:
   ~G4ASTARStopping();
 
   void Initialise();
-
-  G4double GetEffectiveZ(G4int idx) const;
 
   inline G4int GetIndex(const G4Material*) const;
 

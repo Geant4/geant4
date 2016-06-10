@@ -12,6 +12,7 @@
 #include "ifac"
 #include "../mnmx"
 #include "../forit"
+#include "../sprintf"
 
 #include <map>
 
@@ -594,8 +595,7 @@ public:
       } else {
         // if found, erase m_baskets[old_read_basket] to avoid
         // having all data in memory !
-        std::map<uint32, std::pair<rroot::basket*,bool> >::iterator it =
-          m_baskets.find(old_read_basket);
+        std::map<uint32, std::pair<rroot::basket*,bool> >::iterator it = m_baskets.find(old_read_basket);
         if(it!=m_baskets.end()) {
           if((*it).second.second) {
             basket* bsk = (*it).second.first;
@@ -610,8 +610,7 @@ public:
     if(!m__read_basket) {
 
       rroot::basket* bsk = 0;
-      std::map<uint32, std::pair<basket*,bool> >::iterator it =
-        m_baskets.find(m_read_basket);
+      std::map<uint32, std::pair<basket*,bool> >::iterator it = m_baskets.find(m_read_basket);
       if(it!=m_baskets.end()) {
         bsk = (*it).second.first;
       } else {
@@ -636,8 +635,7 @@ public:
           return false;
         }
 
-        bsk = get_basket(fBasketSeek[m_read_basket],
-                         fBasketBytes[m_read_basket]);
+        bsk = get_basket(fBasketSeek[m_read_basket],fBasketBytes[m_read_basket]);
         if(!bsk) {
           m_out << "tools::rroot::branch::find_entry :"
                 << " can't read basket " << m_read_basket
@@ -675,8 +673,7 @@ public:
       bufbegin = entry_offset[index];
       //::printf("debug : xxx++ %u : %u\n",index,bufbegin);
     } else {
-      bufbegin = m__read_basket->key_length() + 
-                   (a_entry-first)*m__read_basket->nev_buf_size();
+      bufbegin = m__read_basket->key_length() + (a_entry-first)*m__read_basket->nev_buf_size();
     }}
 
    {int* displacement = m__read_basket->displacement();
@@ -709,8 +706,7 @@ public:
     }
 */
 
-    rroot::buffer buffer(m_out,m_file.byte_swap(),
-                    m__read_basket->buf_size(),m__read_basket->buf(),0,false); 
+    rroot::buffer buffer(m_out,m_file.byte_swap(),m__read_basket->buf_size(),m__read_basket->buf(),0,false); 
     buffer.set_offset(bufbegin);
 
     if(!read_leaves(buffer)) {
@@ -917,9 +913,6 @@ protected:
   //bool _test_bit(uint32 a_f) const {
   //  return (bool)(m_bits & a_f);
   //}
-  static std::string sout(const std::string& a_string) {
-    return std::string("\"")+a_string+"\"";
-  }
 
 
 protected:

@@ -42,6 +42,7 @@
 #include "G4VNuclearDensity.hh"
 #include "G4FermiMomentum.hh"
 #include "G4V3DNucleus.hh"
+#include "G4Pow.hh"
 
 G4ProtonField::G4ProtonField(G4V3DNucleus * aNucleus) : 
    G4VNuclearField(aNucleus), theDensity(theNucleus->GetNuclearDensity())
@@ -51,14 +52,12 @@ G4ProtonField::G4ProtonField(G4V3DNucleus * aNucleus) :
   theBarrier = GetBarrier();
   theRadius = 2.*theNucleus->GetOuterRadius();
   theFermi.Init(theA, theZ);
-  G4double aR=0;
-  while(aR<theRadius)
+  for (G4double aR=0.;aR<theRadius; aR+=0.3*fermi)
   {
     G4ThreeVector aPosition(0,0,aR);
     G4double density = GetDensity(aPosition);
     G4double fermiMom = GetFermiMomentum(density);
     theFermiMomBuffer.push_back(fermiMom);
-    aR+=0.3*fermi;
   }
   {
   G4ThreeVector aPosition(0,0,theRadius);
@@ -98,7 +97,7 @@ G4double G4ProtonField::GetField(const G4ThreeVector & aPosition)
 
 G4double G4ProtonField::GetBarrier()
 {
-  G4double coulombBarrier = (1.44/1.14) * MeV * theZ / (1.0 + std::pow(theA,1./3.));
+  G4double coulombBarrier = (1.44/1.14) * MeV * theZ / (1.0 + G4Pow::GetInstance()->Z13(theA));
 //GF   G4double bindingEnergy = G4NucleiPropertiesTable::GetBindingEnergy(Z, A);
   G4double bindingEnergy =0;
 /*

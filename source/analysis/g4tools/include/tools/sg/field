@@ -1,0 +1,78 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_field
+#define tools_sg_field
+
+#include <ostream>
+
+#include "../scast"
+#include "../S_STRING"
+
+#ifdef TOOLS_MEM
+#include "../mem"
+#endif
+
+namespace tools {
+namespace io {
+class iwbuf;
+class irbuf;
+}}
+
+namespace tools {
+namespace sg {
+
+class field {
+public:
+  TOOLS_SCLASS(tools::sg::field)
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<field>(this,a_class)) {return p;}
+    else return 0;
+  }
+  virtual const std::string& s_cls() const = 0;
+public:
+  virtual bool write(io::iwbuf&) = 0;
+  virtual bool read(io::irbuf&) = 0;
+  virtual bool dump(std::ostream&) = 0;
+  //virtual bool s_value(std::string& a_s) const = 0;
+  virtual bool s_value(std::string& a_s) const {a_s.clear();return false;}
+protected:
+  field():m_touched(true){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+public:
+  virtual ~field(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  field(const field&):m_touched(true){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  field& operator=(const field&){m_touched=false;return *this;}
+public:
+  void touch() {m_touched = true;}
+  bool touched() const {return m_touched;}
+  void reset_touched() {m_touched = false;}
+protected:
+  bool m_touched;
+};
+
+}}
+
+#define TOOLS_FIELD_DESC_NODE_CLASS(a__class) \
+  static const std::string s_node_class(#a__class);
+
+#define TOOLS_ADD_FIELD_DESC(a__field) \
+  s_v.push_back(tools::sg::field_desc(s_node_class+"."+#a__field,this->a__field.s_cls(),(char*)((tools::sg::field*)&(this->a__field))-(char*)((tools::sg::node*)this))); 
+
+#define TOOLS_ADD_FIELD_DESC_ENUM(a__key) s_v.back().add_enum(#a__key,a__key);
+#define TOOLS_ADD_FIELD_DESC_OPT(a__value) s_v.back().add_opt(a__value);
+
+#endif
+

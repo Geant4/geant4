@@ -37,8 +37,6 @@
 
 #ifdef G4OPENGL_VERSION_2
 
-#define G4DEBUG_VIS_OGL 1
-
 // GL2PS
 #define GL2PS_TEXT_B  4
 #define GL2PS_TEXT_BL 5

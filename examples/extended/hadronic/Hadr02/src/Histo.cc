@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/Histo.cc
 /// \brief Implementation of the Histo class
 //
-// $Id: Histo.cc 81932 2014-06-06 15:39:45Z gcosmo $
+// $Id: Histo.cc 88154 2015-02-02 12:25:20Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -376,8 +376,8 @@ void Histo::SetFileType(const G4String& nam)
   if(nam == "root" || nam == "ROOT" )   { fHistType = "root"; }
   else if(nam == "xml" || nam == "XML") { fHistType = "xml"; }
   else {
-     G4cerr<<"Sorry, format for output file: "<<nam
-      <<" not supported. Use \"root\" or \"xml\" (AIDA)."; 
+     G4cout<<"Histo::SetFileType: Sorry, format for output file: "<<nam
+           <<" not supported. Use \"root\" or \"xml\"" << G4endl; 
  }
 }
 

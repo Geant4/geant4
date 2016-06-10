@@ -37,10 +37,10 @@
 
 // Enumeration for definition available binning schemes
 
-enum G4BinScheme {
-  kLinearBinScheme,
-  kLogBinScheme,
-  kUserBinScheme
+enum class G4BinScheme {
+  kLinear,
+  kLog,
+  kUser
 };  
 
 // Utility function

@@ -44,20 +44,26 @@ G4double G4AngularDistributionPP::CosTheta(G4double S, G4double m_1, G4double m_
 
     G4int je1 = 0;
     G4int je2 = NENERGY - 1;
+	 G4int iterationsLeft=2*NENERGY +1;
     do {
       G4int midBin = (je1 + je2)/2;
       if (ek < elab[midBin])
         je2 = midBin;
       else
         je1 = midBin;
-    } while (je2 - je1 > 1);
+    } while ( (je2 - je1) > 1 && --iterationsLeft > 0 );    /* Loop checking, 30-Oct-2015, G.Folger */
+	 if ( iterationsLeft <= 0 ) {
+	     G4Exception("G4AngularDistributionPP", "im_r_matrix020", FatalException,
+             "Problem with energy bin (elab) data");
+
+	 }
     //    G4int j;
     //std::abs(ek-elab[je1]) < std::abs(ek-elab[je2]) ? j = je1 : j = je2;
     G4double delab = elab[je2] - elab[je1];
 
     // Sample the angle
 
-    G4float sample = G4UniformRand();
+    G4double sample = G4UniformRand();
     G4int ke1 = 0;
     G4int ke2 = NANGLE - 1;
     G4double dsig = sig[je2][0] - sig[je1][0];
@@ -70,7 +76,8 @@ G4double G4AngularDistributionPP::CosTheta(G4double S, G4double m_1, G4double m_
                                  << ek << " " << ke1 << " " << ke2 << " "
                                  << sigint1 << " " << sigint2 << G4endl;
 
-    do {
+    iterationsLeft= 2*NANGLE +1;
+     do {
       G4int midBin = (ke1 + ke2)/2;
       dsig = sig[je2][midBin] - sig[je1][midBin];
       rc = dsig/delab;
@@ -86,7 +93,11 @@ G4double G4AngularDistributionPP::CosTheta(G4double S, G4double m_1, G4double m_
       }
       if (verboseLevel > 1)G4cout << ke1 << " " << ke2 << " "
                                   << sigint1 << " " << sigint2 << G4endl;
-    } while (ke2 - ke1 > 1);
+    } while ( (ke2 - ke1) > 1 && --iterationsLeft > 0);    /* Loop checking, 30-Oct-2015, G.Folger */
+	 if ( iterationsLeft <= 0 ) {
+	     G4Exception("G4AngularDistributionPP", "im_r_matrix021", FatalException,
+             "Problem with angular distribution (sig) data");
+	 }
 
     // sigint1 and sigint2 should be recoverable from above loop
 

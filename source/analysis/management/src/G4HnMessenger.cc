@@ -30,113 +30,74 @@
 #include "G4HnMessenger.hh"
 #include "G4HnManager.hh"
 #include "G4AnalysisUtilities.hh"
+#include "G4AnalysisMessengerHelper.hh"
 
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithABool.hh"
 
+using namespace G4Analysis;
+
 #include <iostream>
 
-namespace {
-
-void Exception(G4UIcommand* command, G4int nofParameters)
-{
-  G4ExceptionDescription description;
-  description 
-    << "Got wrong number of \"" << command->GetCommandName() 
-    << "\" parameters: " << nofParameters
-    << " instead of " << command->GetParameterEntries() 
-    << " expected" << G4endl;
-  G4Exception("G4HnMessenger::SetNewValue",
-              "Analysis_W013", JustWarning, description);
-}
-
-}                  
-
-//_____________________________________________________________________________
-G4HnMessenger::G4HnMessenger(G4HnManager* manager)
+G4HnMessenger::G4HnMessenger(G4HnManager& manager)
   : G4UImessenger(),
     fManager(manager),
-    fSetHnAsciiCmd(0), 
-    fSetHnActivationCmd(0),
-    fSetHnActivationAllCmd(0)
-{  
-  
+    fHelper(nullptr),
+    fSetHnAsciiCmd(nullptr), 
+    fSetHnActivationCmd(nullptr),
+    fSetHnActivationAllCmd(nullptr),
+    fSetHnPlottingCmd(nullptr),
+    fSetHnPlottingAllCmd(nullptr)
+{ 
+  G4String hnType = fManager.GetHnType();
+  hnType.toLower();
+  fHelper = G4Analysis::make_unique<G4AnalysisMessengerHelper>(hnType);
+
   SetHnAsciiCmd();
   SetHnActivationCmd();
   SetHnActivationToAllCmd();
+  SetHnPlottingCmd();
+  SetHnPlottingToAllCmd();
 }
 
 //_____________________________________________________________________________
 G4HnMessenger::~G4HnMessenger()
-{
-  delete fSetHnAsciiCmd;  
-  delete fSetHnActivationCmd;
-  delete fSetHnActivationAllCmd;
-}
+{}
 
 //
 // private functions
 //
 
 //_____________________________________________________________________________
-G4String  G4HnMessenger::GetCmdDirectoryName() const
-{
-  G4String hnType = fManager->GetHnType();
-  hnType.toLower();
-  G4String name("/analysis/");
-  name.append(hnType);
-  name.append("/");
-  return name;
-}
-
-//_____________________________________________________________________________
-G4String  G4HnMessenger::GetHnDescription() const
-{
-  G4String hnDescription = fManager->GetHnType();
-  hnDescription.erase(0);
-  hnDescription.append("D");
-  return hnDescription;
-}
-
-//_____________________________________________________________________________
 void G4HnMessenger::SetHnAsciiCmd()
 {
-  G4String name = GetCmdDirectoryName();
-  name.append("setAscii");
-  fSetHnAsciiCmd = new G4UIcmdWithAnInteger(name, this);
+  fSetHnAsciiCmd
+    = G4Analysis::make_unique<G4UIcmdWithAnInteger>(fHelper->Update("/analysis/HNTYPE_/setAscii"), this);
+  fSetHnAsciiCmd->SetGuidance(
+    fHelper->Update("Print NDIM_D LOBJECT of given id on ascii file."));
 
-  G4String guidance("Print ");
-  guidance.append(GetHnDescription());
-  guidance.append(" histogram of #Id on ascii file.");
-
-  fSetHnAsciiCmd->SetGuidance(guidance);
-  fSetHnAsciiCmd->SetParameterName("Id",false);
-  fSetHnAsciiCmd->SetRange("Id>=0");
+  fSetHnAsciiCmd->SetParameterName("id",false);
+  fSetHnAsciiCmd->SetRange("id>=0");
   fSetHnAsciiCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 //_____________________________________________________________________________
 void G4HnMessenger::SetHnActivationCmd()
 {
-  G4UIparameter* hnId = new G4UIparameter("idActivation", 'i', false);
-  hnId->SetGuidance("Histogram id");
-  hnId->SetParameterRange("idActivation>=0");
+  auto hnId = new G4UIparameter("id", 'i', false);
+  hnId->SetGuidance(fHelper->Update("OBJECT id"));
+  hnId->SetParameterRange("id>=0");
 
-  G4UIparameter* hnActivation = new G4UIparameter("hnActivation", 's', true);
-  hnActivation->SetGuidance("Histogram activation");
+  auto hnActivation = new G4UIparameter("hnActivation", 's', true);
+  hnActivation->SetGuidance(fHelper->Update("OBJECT activation"));
   hnActivation->SetDefaultValue("none");
 
-  G4String name = GetCmdDirectoryName();
-  name.append("setActivation");
-  fSetHnActivationCmd = new G4UIcommand(name, this);
-  
-  G4String guidance("Set activation for the ");
-  guidance.append(GetHnDescription());
-  guidance.append(" histogram of #Id");
-
-  fSetHnActivationCmd->SetGuidance(guidance);
+  fSetHnActivationCmd 
+    = G4Analysis::make_unique<G4UIcommand>(fHelper->Update("/analysis/HNTYPE_/setActivation"), this);
+  fSetHnActivationCmd->SetGuidance(
+      fHelper->Update("Set activation for the NDIM_D LOBJECT of given id"));
   fSetHnActivationCmd->SetParameter(hnId);
   fSetHnActivationCmd->SetParameter(hnActivation);
   fSetHnActivationCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
@@ -145,18 +106,43 @@ void G4HnMessenger::SetHnActivationCmd()
 //_____________________________________________________________________________
 void G4HnMessenger::SetHnActivationToAllCmd()
 {
-  G4String name = GetCmdDirectoryName();
-  name.append("setActivationToAll");
-  fSetHnActivationAllCmd = new G4UIcmdWithABool(name, this);
-  
-  G4String guidance("Set activation to all ");
-  guidance.append(GetHnDescription());
-  guidance.append(" histograms.");
-
-  fSetHnActivationAllCmd->SetGuidance(guidance);
+  fSetHnActivationAllCmd 
+    = G4Analysis::make_unique<G4UIcmdWithABool>(fHelper->Update("/analysis/HNTYPE_/setActivationToAll"), this);
+  fSetHnActivationAllCmd->SetGuidance(
+    fHelper->Update("Set activation to all NDIM_D LOBJECTs"));
   fSetHnActivationAllCmd->SetParameterName("Activation",false);
 }  
   
+//_____________________________________________________________________________
+void G4HnMessenger::SetHnPlottingCmd()
+{
+  auto hnId = new G4UIparameter("id", 'i', false);
+  hnId->SetGuidance(fHelper->Update("OBJECT id"));
+  hnId->SetParameterRange("id>=0");
+
+  auto hnPlotting = new G4UIparameter("hnPlotting", 's', true);
+  hnPlotting->SetGuidance(fHelper->Update("(In)Activate OBJECT plotting"));
+  hnPlotting->SetDefaultValue("none");
+
+  fSetHnPlottingCmd 
+    = G4Analysis::make_unique<G4UIcommand>(fHelper->Update("/analysis/HNTYPE_/setPlotting"), this);
+  fSetHnPlottingCmd->SetGuidance(
+      fHelper->Update("(In)Activate batch plotting of the NDIM_D LOBJECT of given id"));
+  fSetHnPlottingCmd->SetParameter(hnId);
+  fSetHnPlottingCmd->SetParameter(hnPlotting);
+  fSetHnPlottingCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+}  
+
+//_____________________________________________________________________________
+void G4HnMessenger::SetHnPlottingToAllCmd()
+{
+  fSetHnPlottingAllCmd 
+    = G4Analysis::make_unique<G4UIcmdWithABool>(fHelper->Update("/analysis/HNTYPE_/setPlottingToAll"), this);
+  fSetHnPlottingAllCmd->SetGuidance(
+    fHelper->Update("(In)Activate batch plotting of all NDIM_D LOBJECTs"));
+  fSetHnPlottingAllCmd->SetParameterName("Plotting",false);
+}  
+
 //
 // public methods
 //
@@ -164,28 +150,48 @@ void G4HnMessenger::SetHnActivationToAllCmd()
 //_____________________________________________________________________________
 void G4HnMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
 {
-  if ( command == fSetHnAsciiCmd ) {
-    G4int id = fSetHnAsciiCmd->GetNewIntValue(newValues);
-    fManager->SetAscii(id, true); 
+  if ( command == fSetHnAsciiCmd.get() ) { 
+    auto id = fSetHnAsciiCmd->GetNewIntValue(newValues);
+    fManager.SetAscii(id, true); 
   }      
-  else if ( command == fSetHnActivationCmd ) {
+  else if ( command == fSetHnActivationCmd.get() ) { 
     // tokenize parameters in a vector
     std::vector<G4String> parameters;
     G4Analysis::Tokenize(newValues, parameters);
     // check consistency
     if ( G4int(parameters.size()) == command->GetParameterEntries() ) {
-      G4int counter = 0;
-      G4int id = G4UIcommand::ConvertToInt(parameters[counter++]);
-      G4bool activation = G4UIcommand::ConvertToBool(parameters[counter++]);
-      fManager->SetActivation(id, activation);     
+      auto counter = 0;
+      auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+      auto activation = G4UIcommand::ConvertToBool(parameters[counter++]);
+      fManager.SetActivation(id, activation);     
     }
     else {
       // Should never happen but let's check anyway for consistency
-      Exception(command, parameters.size());
+      fHelper->WarnAboutParameters(command, parameters.size());
     }  
   }
-  else if ( command == fSetHnActivationAllCmd ) {
-    G4bool activation = fSetHnActivationAllCmd->GetNewBoolValue(newValues);
-    fManager->SetActivation(activation);
+  else if ( command == fSetHnActivationAllCmd.get() ) { 
+    auto activation = fSetHnActivationAllCmd->GetNewBoolValue(newValues);
+    fManager.SetActivation(activation);
+  }  
+  else if ( command == fSetHnPlottingCmd.get() ) { 
+    // tokenize parameters in a vector
+    std::vector<G4String> parameters;
+    G4Analysis::Tokenize(newValues, parameters);
+    // check consistency
+    if ( G4int(parameters.size()) == command->GetParameterEntries() ) {
+      auto counter = 0;
+      auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+      auto activation = G4UIcommand::ConvertToBool(parameters[counter++]);
+      fManager.SetPlotting(id, activation);     
+    }
+    else {
+      // Should never happen but let's check anyway for consistency
+      fHelper->WarnAboutParameters(command, parameters.size());
+    }  
+  }
+  else if ( command == fSetHnPlottingAllCmd.get() ) { 
+    auto activation = fSetHnPlottingAllCmd->GetNewBoolValue(newValues);
+    fManager.SetPlotting(activation);
   }  
 }  

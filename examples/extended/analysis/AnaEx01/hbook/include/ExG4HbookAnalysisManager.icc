@@ -31,7 +31,16 @@
 
 #include "ExG4HbookH1Manager.hh"
 #include "ExG4HbookH2Manager.hh"
+#include "ExG4HbookP1Manager.hh"
 #include "ExG4HbookNtupleManager.hh"
+#include "ExG4HbookFileManager.hh"
+
+//_____________________________________________________________________________
+inline
+G4bool ExG4HbookAnalysisManager::IsOpenFileImpl() const
+{
+  return fFileManager->IsOpenFile();
+}
 
 //_____________________________________________________________________________
 inline 
@@ -63,6 +72,20 @@ G4int  ExG4HbookAnalysisManager::GetH2HbookIdOffset() const
 
 //_____________________________________________________________________________
 inline 
+G4bool ExG4HbookAnalysisManager::SetP1HbookIdOffset(G4int offset)
+{
+  return fP1Manager->SetP1HbookIdOffset(offset);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4int  ExG4HbookAnalysisManager::GetP1HbookIdOffset() const
+{
+  return fP1Manager->GetP1HbookIdOffset();
+}  
+
+//_____________________________________________________________________________
+inline 
 G4bool ExG4HbookAnalysisManager::SetNtupleHbookIdOffset(G4int offset)
 {
   return fNtupleManager->SetNtupleHbookIdOffset(offset);
@@ -89,6 +112,14 @@ tools::hbook::h2*  ExG4HbookAnalysisManager::GetH2(G4int id, G4bool warn,
                                                    G4bool onlyIfActive) const 
 {
   return fH2Manager->GetH2(id, warn, onlyIfActive);
+}
+
+//_____________________________________________________________________________
+inline 
+tools::hbook::p1*  ExG4HbookAnalysisManager::GetP1(G4int id, G4bool warn,
+                                                   G4bool onlyIfActive) const 
+{ 
+  return fP1Manager->GetP1(id, warn, onlyIfActive);
 }
 
 //_____________________________________________________________________________
@@ -163,6 +194,36 @@ std::vector<tools::hbook::h2*>::const_iterator
 ExG4HbookAnalysisManager::EndConstH2() const
 {
   return fH2Manager->EndConstH2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::hbook::p1*>::iterator ExG4HbookAnalysisManager::BeginP1()
+{
+  return fP1Manager->BeginP1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::hbook::p1*>::iterator ExG4HbookAnalysisManager::EndP1()
+{
+  return fP1Manager->EndP1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::hbook::p1*>::const_iterator 
+ExG4HbookAnalysisManager::BeginConstP1() const
+{
+  return fP1Manager->BeginConstP1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::hbook::p1*>::const_iterator 
+ExG4HbookAnalysisManager::EndConstP1() const
+{
+  return fP1Manager->EndConstP1();
 }  
 
 //_____________________________________________________________________________

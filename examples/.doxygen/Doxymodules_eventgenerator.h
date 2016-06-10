@@ -1,4 +1,4 @@
-// $Id: Doxymodules_eventgenerator.h 82046 2014-06-10 08:10:10Z gcosmo $
+// $Id: Doxymodules_eventgenerator.h 94561 2015-11-24 09:17:12Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_eventgenerator.h
@@ -10,19 +10,12 @@
  *  @{
  */
 
-/** @defgroup extended_eventgenerator_exgps exgps
- *  Eventgenerator example exgps
+/** @defgroup extended_eventgenerator_exgps  exgps
+ *  Eventgenerator example exgps has its 
+ *  <a href="../html_exgps/html/index.html">standalone documentation </a>
  *  @ingroup extended_eventgenerator
  *  @{
  */
-
-  class exGPSActionInitialization {};
-  class exGPSEventAction {};
-  class exGPSGeometryConstruction {};
-  class exGPSHistoManager {};
-  class exGPSHistoMessenger {};
-  class exGPSPrimaryGeneratorAction {};
-  class exGPSRunAction {};
 
 /** @} */
 
@@ -128,6 +121,15 @@
   class P6DExtDecayerPhysics {};
   class P6DPhysicsList {};
   class Pythia6 {};
+
+/** @} */
+
+/** @defgroup extended_eventgenerator_userPrimaryGenerator userPrimaryGenerator
+ *  Eventgenerator example userPrimaryGenerator has its 
+ *  <a href="../html_userPrimaryGenerator/html/index.html">standalone documentation </a>
+ *  @ingroup extended_eventgenerator
+ *  @{
+ */
 
 /** @} */
 

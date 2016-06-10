@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomPhantomZSliceHeader.hh 84839 2014-10-21 13:44:55Z gcosmo $
+// $Id: DicomPhantomZSliceHeader.hh 92820 2015-09-17 15:22:14Z gcosmo $
 //
 /// \file medical/DICOM/include/DicomPhantomZSliceHeader.hh
 /// \brief Definition of the DicomPhantomZSliceHeader class
@@ -79,7 +79,6 @@ public:
   
   const std::vector<G4String>& GetMaterialNames() const { return fMaterialNames; };
   
-  
   void SetNoVoxelX(const G4int& val) { fNoVoxelX = val; }
   void SetNoVoxelY(const G4int& val) { fNoVoxelY = val; }
   void SetNoVoxelZ(const G4int& val) { fNoVoxelZ = val; }
@@ -92,8 +91,7 @@ public:
   void SetMaxZ(const G4double& val) { fMaxZ = val; };
   
   void SetMaterialNames(std::vector<G4String>& mn ){ fMaterialNames = mn; }
-  
-  
+
   void operator+=( const DicomPhantomZSliceHeader& rhs );
   DicomPhantomZSliceHeader operator+( const DicomPhantomZSliceHeader& rhs );
   // add two slices that have the same dimensions, merging them in Z
@@ -151,9 +149,9 @@ public:
 private:
   inline G4bool IsInteger(const G4String&);
   template <typename T> 
-  inline void print(std::ostream&, const std::vector<T>&, const G4String&, 
+  inline void Print(std::ostream&, const std::vector<T>&, const G4String&, 
                     G4int breakLine = -1);
-  template <typename T> inline T g4s2n(const G4String&);
+  template <typename T> inline T G4s2n(const G4String&);
   template <typename T> inline bool CheckConsistency(const T&, const T&, G4String);
   //
   //  END NEW REVISION
@@ -192,13 +190,14 @@ inline G4bool DicomPhantomZSliceHeader::IsInteger(const G4String& str)
 }
 //============================================================================
 template <typename T>
-inline T DicomPhantomZSliceHeader::g4s2n(const G4String& str)
+inline T DicomPhantomZSliceHeader::G4s2n(const G4String& str)
 {
   std::istringstream iss(str);
   T val;
   iss >> val;
   return val;
 }
+
 //============================================================================
 template <typename T>
 inline bool DicomPhantomZSliceHeader::CheckConsistency(const T& val1, const T& val2, 
@@ -213,7 +212,7 @@ inline bool DicomPhantomZSliceHeader::CheckConsistency(const T& val1, const T& v
 }
 //============================================================================
 template <typename T>
-inline void DicomPhantomZSliceHeader::print(std::ostream& out, const std::vector<T>& val, 
+inline void DicomPhantomZSliceHeader::Print(std::ostream& out, const std::vector<T>& val, 
                                             const G4String& delim, G4int breakLine)
 {
   for(unsigned int i = 0; i < val.size(); ++i) {

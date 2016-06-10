@@ -88,6 +88,7 @@ private:
   G4double fTotCluster;
   G4double fMeanCluster;
   G4double fFactorALICE;
+  G4double fWidthALICE;
   G4double fEvt;
 
   G4double fTotEdep;

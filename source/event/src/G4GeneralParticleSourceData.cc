@@ -64,7 +64,9 @@ namespace
 
 //G4GeneralParticleSourceData* G4GeneralParticleSourceData::theInstance = 0;
 
-G4GeneralParticleSourceData::G4GeneralParticleSourceData() : flat_sampling(false), normalised(false),currentSourceIdx(0)
+G4GeneralParticleSourceData::G4GeneralParticleSourceData() :
+		multiple_vertex(false) ,flat_sampling(false),
+		normalised(false),currentSourceIdx(0)
 {
     G4MUTEXINIT(mutex);
     
@@ -77,7 +79,6 @@ G4GeneralParticleSourceData::G4GeneralParticleSourceData() : flat_sampling(false
     sourceIntensity.push_back(1.);
 
 }
-
 
 G4GeneralParticleSourceData::~G4GeneralParticleSourceData()
 {
@@ -93,11 +94,6 @@ G4GeneralParticleSourceData* G4GeneralParticleSourceData::Instance()
     G4AutoLock lock(&singMutex);
     static G4GeneralParticleSourceData instance;
     return &instance;
-    // if(theInstance == NULL)
-    // {
-    //     theInstance = new G4GeneralParticleSourceData();
-    // }
-    // return theInstance;
 }
 
 void G4GeneralParticleSourceData::IntensityNormalise()
@@ -178,10 +174,22 @@ void G4GeneralParticleSourceData::ClearSources()
 {
     currentSourceIdx = -1;
     currentSource = NULL;
+    for ( std::vector<G4SingleParticleSource*>::iterator it = sourceVector.begin();
+    	  it != sourceVector.end() ; ++it ) { delete *it; }
     sourceVector.clear();
     sourceIntensity.clear();
+    normalised = false;
 }
 
+void G4GeneralParticleSourceData::SetVerbosityAllSources(G4int vl )
+{
+    for ( std::vector<G4SingleParticleSource*>::iterator it = sourceVector.begin();
+    	  it != sourceVector.end() ; ++it ) {
+    	(*it)->SetVerbosity(vl);
+
+    }
+
+}
 
 G4SingleParticleSource* G4GeneralParticleSourceData::GetCurrentSource(G4int idx)
 {

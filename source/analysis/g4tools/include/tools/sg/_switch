@@ -1,0 +1,129 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg__switch
+#define tools_sg__switch
+
+// NOTE : "switch" is a C/C++ keyword. Have "_switch" as a class name.
+
+#include "group"
+#include "sf"
+
+namespace tools {
+namespace sg {
+
+class _switch : public group {
+  TOOLS_NODE(_switch,tools::sg::_switch,group)
+public:
+  sf<int> which;
+public:
+  virtual const std::vector<field_desc>& node_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::_switch)
+    static std::vector<field_desc> s_v;
+    if(s_v.empty()) {
+      s_v = parent::node_fields();
+      TOOLS_ADD_FIELD_DESC(which)
+    }
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&which);
+  }
+public: //node
+  virtual void render(render_action& a_action) {
+    int index = which.value();
+    if(index==(-1)) {
+      group::render(a_action);
+    } else if((index>=0)&&(index<(int)m_children.size())) {
+      m_children[index]->render(a_action);
+    }
+  }
+  virtual void pick(pick_action& a_action) {
+    int index = which.value();
+    if(index==(-1)) {
+      group::pick(a_action);
+    } else if((index>=0)&&(index<(int)m_children.size())) {
+      m_children[index]->pick(a_action);
+    }
+  }
+  virtual void bbox(bbox_action& a_action) {
+    int index = which.value();
+    if(index==(-1)) {
+      group::bbox(a_action);
+    } else if((index>=0)&&(index<(int)m_children.size())) {
+      m_children[index]->bbox(a_action);
+    }
+  }
+  virtual void search(search_action& a_action) {
+    int index = which.value();
+    if(index==(-1)) {
+      group::search(a_action);
+    } else if((index>=0)&&(index<(int)m_children.size())) {
+      if(a_action.do_path()) a_action.path_push(this);
+      m_children[index]->search(a_action);
+      if(a_action.done()) return;
+      if(a_action.do_path()) a_action.path_pop();
+    }
+  }
+  virtual void event(event_action& a_action) {
+    if(a_action.do_switch_children()) {
+      group::event(a_action);
+    } else {
+      int index = which.value();
+      if(index==(-1)){
+        group::event(a_action);
+      } else if((index>=0)&&(index<(int)m_children.size())) {
+        m_children[index]->event(a_action);
+      }
+    }
+  }
+  virtual bool write(write_action& a_action) {
+    if(!a_action.beg_node(*this)) return false;
+    if(!write_fields(a_action)) return false;
+
+    if(a_action.switch_do_all_children()) { //for exam write_exsg
+      if(!write_children(a_action)) return false;
+    } else { //for exa write_gl2ps
+      int index = which.value();
+      if(index==(-1)) {
+        if(!write_children(a_action)) return false;
+      } else if((index>=0)&&(index<(int)m_children.size())) {
+        m_children[index]->write(a_action);
+      }
+    }
+    if(!a_action.end_node(*this)) return false;
+    return true;
+  }
+public:
+  _switch()
+  :group()
+  ,which(-1)
+  {
+    add_fields();
+  }
+  virtual ~_switch(){}
+public:
+  _switch(const _switch& a_from)
+  :group(a_from)
+  ,which(a_from.which)
+  {
+    add_fields();
+  }
+  _switch& operator=(const _switch& a_from){
+    group::operator=(a_from);
+    which = a_from.which;
+    return *this;
+  }
+public:
+  node* which_node() const {
+    int index = which.value();
+    if(index<0) return 0;
+    if(index>=(int)m_children.size()) return 0;
+    return m_children[index];
+  }
+};
+
+}}
+
+#endif

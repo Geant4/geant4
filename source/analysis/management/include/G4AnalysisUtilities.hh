@@ -33,12 +33,33 @@
 #include "globals.hh"
 
 #include <vector>
+#include <memory>
 
-namespace G4Analysis {
+// Enumeration for definition of available output types
+
+enum class G4AnalysisOutput {
+  kCsv,
+  kRoot,
+  kXml,
+  kNone
+};  
+
+namespace G4Analysis 
+{
+
+// Constant expressions
+//	
+// constexpr G4int kX = 0;  // not yet supported on vc12
+// constexpr G4int kY = 1;  // not yet supported on vc12
+// constexpr G4int kZ = 2;  // not yet supported on vc12
+const G4int kX = 0;  // not yet supported on vc12
+const G4int kY = 1;  // not yet supported on vc12
+const G4int kZ = 2;  // not yet supported on vc12
 
 // Invalid object Id
 // 
-const G4int kInvalidId = -1;
+// constexpr G4int kInvalidId = -1;  // not yet supported on vc12
+const G4int kInvalidId = -1;  // not yet supported on vc12
 
 // Utility functions for checking input parameters
 G4bool CheckNbins(G4int nbins);
@@ -57,6 +78,27 @@ void UpdateTitle(G4String& title,
                  
 // Tokenizer with taking into account composed strings within ""               
 void Tokenize(const G4String& line, std::vector<G4String>& tokens);
+
+// make-unique utility, not yet availabla in C++11
+template<typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args&&... args)
+{
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
+
+// get output type from name
+G4AnalysisOutput GetOutput(const G4String& outputName);
+G4String GetOutputName(G4AnalysisOutput outputType);
+
+/*
+// make possible to print enumerators in class enum as integer
+template <typename Enumeration>
+auto as_integer(Enumeration const value)
+    -> typename std::underlying_type<Enumeration>::type
+{
+  return static_cast<typename std::underlying_type<Enumeration>::type>(value);
+}
+*/
 
 }
 

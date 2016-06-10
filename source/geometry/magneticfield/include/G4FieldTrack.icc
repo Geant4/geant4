@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.icc 81175 2014-05-22 07:39:10Z gcosmo $
+// $Id: G4FieldTrack.icc 90643 2015-06-05 13:18:26Z gcosmo $
 //
 // -------------------------------------------------------------------
 
@@ -71,7 +71,8 @@ G4FieldTrack::SetCurvePnt(const G4ThreeVector& pPosition,
   SixVector[4] = pMomentum.y(); 
   SixVector[5] = pMomentum.z(); 
 
-  fMomentumDir = pMomentum.unit();
+  fMomentumDir = (pMomentum.mag2() > 0.0)  ?
+     pMomentum.unit() : G4ThreeVector( 0.0, 0.0, 0.0 ); 
 
   fDistanceAlongCurve= s_curve;
 
@@ -186,7 +187,10 @@ void G4FieldTrack::SetMomentum(G4ThreeVector pMomentum)
   SixVector[4] = pMomentum.y(); 
   SixVector[5] = pMomentum.z(); 
 
-  fMomentumDir = pMomentum.unit(); 
+  if( pMomentum.mag2() > 0.0 ) 
+     fMomentumDir = pMomentum.unit();
+  else
+     fMomentumDir = G4ThreeVector( 0.0, 0.0, 0.0 ); 
 }
 
 inline

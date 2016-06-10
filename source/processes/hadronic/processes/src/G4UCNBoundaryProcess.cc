@@ -707,10 +707,11 @@ G4ThreeVector G4UCNBoundaryProcess::MRDiffRefl(G4ThreeVector Normal,
 
   // Azimuthal angle of incidence
 
-//  G4double phi_i = -OldMomentum.azimAngle(-Normal);
+  //  G4double phi_i = -OldMomentum.azimAngle(-Normal);
 
   // accept-reject method for MR-reflection
 
+  G4int count = 0;
   while (!accepted) {
         theta_o = G4UniformRand()*pi/2;
         phi_o = G4UniformRand()*pi*2-pi;
@@ -740,6 +741,8 @@ G4ThreeVector G4UCNBoundaryProcess::MRDiffRefl(G4ThreeVector Normal,
                                     GetMRProbability(theta_i, Energy, 
                                                      FermiPot, theta_o, phi_o));
         }
+	// Loop checking, 31-Aug-2015, Vladimir Ivanchenko
+	if(++count > 10000) { accepted = true; }
   }
 
   // Creates vector in the local coordinate system of the reflection
@@ -764,7 +767,7 @@ G4ThreeVector G4UCNBoundaryProcess::MRDiffRefl(G4ThreeVector Normal,
   if (momentum * Normal<0) {
      momentum*=-1;
      // something has gone wrong...
-     G4cout << "!" << G4endl;
+     G4cout << "G4UCNBoundaryProcess::MRDiffRefl: !" << G4endl;
   }
 
   return momentum.unit();
@@ -786,8 +789,9 @@ G4ThreeVector G4UCNBoundaryProcess::MRDiffTrans(G4ThreeVector Normal,
 
   // azimuthal angle of incidence
 
-//  G4double phi_i = -OldMomentum.azimAngle(-Normal);
+  //  G4double phi_i = -OldMomentum.azimAngle(-Normal);
 
+  G4int count = 0;
   while (!accepted) {
     theta_o = G4UniformRand()*pi/2;
     phi_o = G4UniformRand()*pi*2-pi;
@@ -820,6 +824,8 @@ G4ThreeVector G4UCNBoundaryProcess::MRDiffTrans(G4ThreeVector Normal,
                                 GetMRTransProbability(theta_i, Energy,
                                                  FermiPot, theta_o, phi_o));
     }
+    // Loop checking, 31-Aug-2015, Vladimir Ivanchenko
+    if(++count > 10000) { accepted = true; }
   }
 
   // Creates vector in the local coordinate system of the reflection
@@ -839,7 +845,7 @@ G4ThreeVector G4UCNBoundaryProcess::MRDiffTrans(G4ThreeVector Normal,
   if (momentum*Normal<0) {
      // something has gone wrong... 
      momentum*=-1;
-     G4cout << "!" << G4endl;
+     G4cout << "G4UCNBoundaryProcess::MRDiffTrans: !" << G4endl;
   }
 
   return momentum.unit();
@@ -861,14 +867,10 @@ G4ThreeVector G4UCNBoundaryProcess::LDiffRefl(G4ThreeVector Normal)
 
   if (momentum*Normal < 0) {
      momentum*=-1;
-     G4cout << "!" << G4endl;
+     G4cout << "G4UCNBoundaryProcess::LDiffRefl: !" << G4endl;
   }
 
   return momentum.unit();
-}
-
-void G4UCNBoundaryProcess::SetMicroRoughness(G4bool active){
-  UseMicroRoughnessReflection = active;
 }
 
 G4RotationMatrix G4UCNBoundaryProcess::

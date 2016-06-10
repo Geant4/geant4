@@ -32,7 +32,7 @@
 #include "G4PhysicsFreeVector.hh"
 
 // Energies (GeV) corresponding to the cross section table
-// Units are assigned while filling the PhysicsVector
+// Units are assigned when filling the PhysicsVector
 
 const G4double G4XNDeltaTable::energyTable[121] =
 {

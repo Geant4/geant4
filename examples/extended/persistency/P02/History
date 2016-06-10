@@ -14,6 +14,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 23rd, 2015 I. Hrivnacova (exampleP02-V10-01-02)
+- Updated documentation and CMakeLists.tx (requiring ROOT 6)
+
+October 15th, 2015 W. Pokorski (exampleP02-V10-01-00)
+- changes for ROOT6
+
 June 13th, 2014 W. Pokorski (exampleP02-V10-00-01)
 - adding missing line in selection.xml
 

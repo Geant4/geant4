@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.hh 81374 2014-05-27 13:07:25Z gcosmo $
+// $Id: G4Material.hh 94016 2015-11-05 10:14:49Z gcosmo $
 //
 
 //---------------------------------------------------------------------------
@@ -113,6 +113,8 @@
 
 enum G4State { kStateUndefined = 0, kStateSolid, kStateLiquid, kStateGas };
 
+static const G4double NTP_Temperature = 293.15;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4Material
@@ -126,7 +128,7 @@ public:  // with description
                    G4double  a,					//mass of mole
                    G4double  density, 				//density
                    G4State   state    = kStateUndefined,	//solid,gas
-                   G4double  temp     = CLHEP::STP_Temperature,	//temperature
+                   G4double  temp     = NTP_Temperature,	//temperature
                    G4double  pressure = CLHEP::STP_Pressure);	//pressure
 
   //
@@ -137,7 +139,7 @@ public:  // with description
                    G4double  density, 				//density
                    G4int     nComponents,			//nbOfComponents
                    G4State   state    = kStateUndefined,	//solid,gas
-                   G4double  temp     = CLHEP::STP_Temperature,	//temperature
+                   G4double  temp     = NTP_Temperature,	//temperature
                    G4double  pressure = CLHEP::STP_Pressure);	//pressure
 
   //
@@ -147,7 +149,7 @@ public:  // with description
                    G4double  density, 				//density
              const G4Material* baseMaterial,			//base material
                    G4State   state    = kStateUndefined,	//solid,gas
-                   G4double  temp     = CLHEP::STP_Temperature,	//temperature
+                   G4double  temp     = NTP_Temperature,	//temperature
                    G4double  pressure = CLHEP::STP_Pressure);	//pressure
 
   //
@@ -215,7 +217,7 @@ public:  // with description
   inline G4double  GetElectronDensity() const {return TotNbOfElectPerVolume;}
     
   // Radiation length:     
-  inline G4double  GetRadlen()          const {return fRadlen;}
+  inline G4double  GetRadlen()            const {return fRadlen;}
     
   // Nuclear interaction length     
   inline G4double GetNuclearInterLength() const {return fNuclInterLen;}
@@ -232,17 +234,17 @@ public:  // with description
   
   // material components:
   inline
-  std::map<G4Material*,G4double> GetMatComponents() const 
-                                               {return fMatComponents;}
+  const std::map<G4Material*,G4double>& GetMatComponents() const 
+                                                {return fMatComponents;}
 					       
-  //for chemical compound
+  // for chemical compound
   inline 
-  G4double GetMassOfMolecule()     const {return fMassOfMolecule;}
+  G4double GetMassOfMolecule() const            {return fMassOfMolecule;}
       
-  //meaningful only for single material:
+  // meaningful only for single material:
   G4double GetZ() const;
   G4double GetA() const;
-  
+
   //the MaterialPropertiesTable (if any) attached to this material:
   inline void SetMaterialPropertiesTable(G4MaterialPropertiesTable* anMPT)
   {fMaterialPropertiesTable = anMPT;}
@@ -250,7 +252,7 @@ public:  // with description
   inline G4MaterialPropertiesTable* GetMaterialPropertiesTable() const
   {return fMaterialPropertiesTable;}
 
-  //the (static) Table of Materials:
+  // the static Table of Materials:
   //
   static G4MaterialTable* GetMaterialTable();
       
@@ -265,13 +267,14 @@ public:  // with description
   //
   //printing methods
   //
-  friend std::ostream& operator<<(std::ostream&, G4Material*);    
-  friend std::ostream& operator<<(std::ostream&, G4Material&);    
+  friend std::ostream& operator<<(std::ostream&, const G4Material*);    
+  friend std::ostream& operator<<(std::ostream&, const G4Material&);    
   friend std::ostream& operator<<(std::ostream&, G4MaterialTable);
-    
+
   // operators       
   G4int operator==(const G4Material&) const;
   G4int operator!=(const G4Material&) const;
+    
   G4Material(__void__&);
     // Fake default constructor for usage restricted to direct object
     // persistency for clients requiring preallocation of memory for
@@ -318,7 +321,6 @@ private:
 
   G4int            fNumberOfElements;     // Nb of Elements in the material
   G4ElementVector* theElementVector;      // vector of constituent Elements
-  G4bool           fImplicitElement;      // implicit Element created by this?
   G4double*        fMassFractionVector;   // composition by fractional mass
   G4int*           fAtomsVector;          // composition by atom count
 

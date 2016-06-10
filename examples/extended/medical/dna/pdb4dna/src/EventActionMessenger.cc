@@ -52,12 +52,6 @@ EventActionMessenger::EventActionMessenger(EventAction* EvAct)
   fpPDBDir = new G4UIdirectory("/PDB4DNA/");
   fpPDBDir->SetGuidance("commands specific to this example");
 
-  fpPrintCmd = new G4UIcmdWithAnInteger("/PDB4DNA/event/printModulo",this);
-  fpPrintCmd->SetGuidance("Print events modulo n");
-  fpPrintCmd->SetParameterName("EventNb",false);
-  fpPrintCmd->SetRange("EventNb>0");
-  fpPrintCmd->AvailableForStates(G4State_Idle);
-
   fpThresEdepCmd = new G4UIcmdWithADoubleAndUnit(
       "/PDB4DNA/event/setEnergyThres",
       this);
@@ -78,7 +72,6 @@ EventActionMessenger::EventActionMessenger(EventAction* EvAct)
 
 EventActionMessenger::~EventActionMessenger()
 {
-  delete fpPrintCmd;
   delete fpThresEdepCmd;
   delete fpThresDistCmd;
   delete fpPDBDir;
@@ -88,11 +81,6 @@ EventActionMessenger::~EventActionMessenger()
 
 void EventActionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 { 
-  if(command == fpPrintCmd)
-  {
-    fpEventAction->SetPrintModulo(fpPrintCmd->GetNewIntValue(newValue));
-  }
-
   if(command==fpThresEdepCmd)
   {
     fpEventAction->SetEnergyThresForSSB(fpThresEdepCmd->GetNewDoubleValue(

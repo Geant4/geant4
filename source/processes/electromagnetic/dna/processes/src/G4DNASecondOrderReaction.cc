@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNASecondOrderReaction.cc 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id: G4DNASecondOrderReaction.cc 94218 2015-11-09 08:24:48Z gcosmo $
 //
 #include "G4DNASecondOrderReaction.hh"
 
@@ -34,6 +34,7 @@
 #include "G4MolecularConfiguration.hh"
 #include "G4DNADamages.hh"
 #include "G4UnitsTable.hh"
+#include "G4TrackingInformation.hh"
 
 #ifndef State
 #define State(theXInfo) (GetState<SecondOrderReactionState>()->theXInfo)

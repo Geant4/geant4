@@ -13,7 +13,7 @@ namespace rroot {
 
 class member_reader : public virtual iobj_visitor {
 public:
-  virtual std::ostream& out() {return m_buf.out();}
+  virtual std::ostream& out() const {return m_buf.out();}
 
   virtual bool visit(bool& a_v){return m_buf.read(a_v);}
   virtual bool visit(char& a_v){return m_buf.read(a_v);}

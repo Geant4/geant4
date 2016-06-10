@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QGSDiffractiveExcitation.cc 69570 2013-05-08 13:23:39Z gcosmo $
+// $Id: G4QGSDiffractiveExcitation.cc 93563 2015-10-26 14:46:09Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -55,6 +55,11 @@
 #include "G4VSplitableHadron.hh"
 #include "G4ExcitedString.hh"
 //#include "G4ios.hh"
+
+#include "G4Exp.hh"
+#include "G4Log.hh"
+#include "G4Pow.hh"
+
 
 G4QGSDiffractiveExcitation::G4QGSDiffractiveExcitation()                                     // Uzhi
 {
@@ -288,7 +293,8 @@ ExciteParticipants(G4VSplitableHadron *projectile, G4VSplitableHadron *target) c
 		 */                                                                                 // Uzhi     *
 
 
-	} while (( (Pprojectile+Qmomentum).mag2() <  Mprojectile2       ||      // Uzhi No without excitation
+	} while (  /* Loop checking, 26.10.2015, A.Ribon */
+                 ( (Pprojectile+Qmomentum).mag2() <  Mprojectile2       ||      // Uzhi No without excitation
 			(Ptarget    -Qmomentum).mag2() <  Mtarget2             ) ||  // Uzhi
 			( (Pprojectile+Qmomentum).mag2()  <  ProjectileDiffCut2 &&     // Uzhi No double Diffraction
 					(Ptarget    -Qmomentum).mag2()  <  NuclearNucleonDiffCut2) );// Uzhi
@@ -453,7 +459,7 @@ G4double G4QGSDiffractiveExcitation::ChooseP(G4double Pmin, G4double Pmax) const
 	}  while ( Xmin/x < G4UniformRand() );
 	 */                                                                          // Uzhi
 
-	P=Pmin * std::pow(Pmax/Pmin,G4UniformRand());                       // Uzhi
+	P=Pmin * G4Pow::GetInstance()->powA(Pmax/Pmin,G4UniformRand());                       // Uzhi
 
 	//debug-hpw	cout << "DiffractiveX "<<x<<G4endl;
 	return P;
@@ -465,11 +471,11 @@ G4ThreeVector G4QGSDiffractiveExcitation::GaussianPt(G4double AveragePt2, G4doub
 	G4double Pt2;
 	/*                                                                          // Uzhi
 	do {
-	    pt2=widthSquare * std::log( G4UniformRand() );
+	    pt2=widthSquare * G4Log( G4UniformRand() );
 	} while ( pt2 > maxPtSquare);
 	 */                                                                          // Uzhi
 
-	Pt2 = -AveragePt2 * std::log(1. + G4UniformRand() * (std::exp(-maxPtSquare/AveragePt2)-1.));// Uzhi
+	Pt2 = -AveragePt2 * G4Log(1. + G4UniformRand() * (G4Exp(-maxPtSquare/AveragePt2)-1.));// Uzhi
 
 	G4double Pt=std::sqrt(Pt2);
 

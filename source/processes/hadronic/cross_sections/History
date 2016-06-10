@@ -14,11 +14,188 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+23 November 2015 - G.Folger (hadr-cross-V10-01-37)
+-------------------------------------------------
+- G4HadronCrossSections: Revert cross section data back to float, add f in 
+    initialisation.
+	  
+12 November 2015 - A.Dotti  (hadr-cross-V10-01-36)
+-------------------------------------------------
+- Disabling profiling functions of fast-cross-sections
+  
+12 November 2015 - G.Folger (hadr-cross-V10-01-35)
+-------------------------------------------------
+- G4HadronCrossSections: change float cross sections data to be double.
 
-07 November 2014 V.Ivanchenko (hadr-cross-V10-00-17)
+6 November 2015 - A. Ribon (hadr-cross-V10-01-34)
+-------------------------------------------------
+- G4HadronNucleonXsc, G4ComponentGGHadronNucleusXsc : Grichine's clean up
+  of kaon-nucleon xsc vector-arrays (which are not used).
+
+5 November 2015 - A. Dotti (hadr-cross-V10-01-33)
+-------------------------------------------------
+- Again WIN fix: adding define to have M_LN10 math definition
+
+5 November 2015 - G. Cosmo (hadr-cross-V10-01-32)
+-------------------------------------------------
+- Replaced use of variable 'L' in G4ElectroNuclearCrossSection.cc to avoid
+  shadowing of new volumetric units.
+
+4 November 2015 - A. Dotti (hadr-cross-V10-01-31)
+-------------------------------------------------
+- Attempt fix error reported in tag -29 on WIN systems (adding stdint.h)
+- Attempt fix warning in WIN for G4HadronCrossSection double->float conversions for 0.E+00
+
+3 November 2015 - V. Ivanchenko (hadr-cross-V10-01-30)
+-----------------------------------------------------------
+- Take only G4CrossSectionDataSetRegistry modification and not fast-path
+
+2 November 2015 - Tatsumi Koi (hadr-cross-V10-01-29)
+-----------------------------------------------------------
+- G4CrossSectionDataSetRegistry - adding same ad-hoc trick of NeutronHP to ParticleHP models to prevent problem at termination
+
+1 November 2015  A. Dotti 
+------------------------------------------------
+- First import of fast-path (ASCR style) cross-section feature 
+  (OFF by default, but code is there)
+
+27 October 2015  A. Ribon  (hadr-cross-V10-01-28)
+------------------------------------------------
+- Exactly the same tag as the previous one, with a fix in another category
+  to overcome a compilation error.
+
+27 October 2015  A. Ribon  (hadr-cross-V10-01-27)
+------------------------------------------------
+- Deleted the old classes G4GlauberGribovCrossSection and 
+  G4GGNuclNuclCrossSection, and replaced them with the new, recommended ones
+  G4ComponentGGHadronNucleusXsc and G4ComponentGGNuclNuclXsc, respectively.
+
+26 October 2015  T.Koi  (hadr-cross-V10-01-26)
+------------------------------------------------
+- G4ZeroXS: Adding an artificial cross section data set which always replys zero 
+
+24 October 2015  V.Ivanchenko  (hadr-cross-V10-01-25)
+------------------------------------------------
+- G4HadronNucleonXsc - V.Grichine fix energies for K-p data
+    in order to avoid crash when bound check is applied
+
+22 October 2015  A. Ribon  (hadr-cross-V10-01-24)
+------------------------------------------------
+- G4ComponentGGHadronNucleusXsc : added Default_Name() method.
+
+12 October 2015  W. Pokorski  (hadr-cross-V10-01-23)
+------------------------------------------------
+- removing G4Pow, G4Exp and G4Log from Chips Kaon cross sections because they cause FPEs to occur
+
+8 October 2015  W. Pokorski  (hadr-cross-V10-01-22)
+------------------------------------------------
+- further removal of G4Pow, G4Exp and G4Log from the crosse sections where FPEs occur
+
+7 October 2015  W. Pokorski  (hadr-cross-V10-01-21)
+------------------------------------------------
+- slowly removing just introduced powA and G4Log which cause FPEs
+
+6 October 2015  W. Pokorski  (hadr-cross-V10-01-20)
+------------------------------------------------
+- trying to fix the previous tag, removing powA with 0 exponent
+
+2 October 2015  W. Pokorski  (hadr-cross-V10-01-19)
+------------------------------------------------
+- migrating to G4Exp, G4Log and G4Pow
+
+10 August 2015 V.Ivanchenko (hadr-cross-V10-01-18)
+-----------------------------------------------
+- G4NeutronCaptureXS - fixed Coverity warning
+
+18 July 2015 V.Ivanchenko (hadr-cross-V10-01-17)
+-----------------------------------------------
+  Fix previous tag and removed debug cout
+
+18 July 2015 V.Ivanchenko (hadr-cross-V10-01-14)
+-----------------------------------------------
+  Cleanup previous tag
+
+18 July 2015 V.Ivanchenko (hadr-cross-V10-01-13)
+-----------------------------------------------
+- G4NeutronInelasticXS, G4NeutronCaptureXS - fixed isotope cross 
+    including retrieve, data management, isotope x-section and 
+    isotope selection (the problem was reported by Steve Quillin
+    and analyzed by Tatsumi Koi).
+
+13 July 2015 A. Dotti     (hadr-cross-V10-01-12)
+-----------------------------------------------
+- Fixing coverity issues
+
+2 June 2015  W. Pokorski  (hadr-cross-V10-01-11)
+------------------------------------------------
+- add description method to all the CHIPS cross sections
+
+1 June 2015  D.H. Wright  (hadr-cross-V10-01-10)
+------------------------------------------------
+- add description method to G4KokoulinMuonNuclearXS and 
+  G4ChipsKaonMinusInelasticXS
+ 
+28 May 2015  A.Ribon      (hadr-cross-V10-01-09)
 ---------------------------------------------------
-07 November 2014 V.Grichine class managing single diffraction to 
-                  elastic cross section ratio G4DiffElasticRatio 
+- Added description of the classes G4IonProtonCrossSection and
+  G4GeneralSpaceNNCrossSection
+
+27 May 2015  A.Ribon      (hadr-cross-V10-01-08)
+---------------------------------------------------
+- G4ComponentGGHadronNucleusXsc : Grichine's extension of applicability
+  for kaons down to 0.1*MeV
+- G4DiffElasticRatio : Grichine's addition of energy threshols to skip
+  the treatment of low-energy particles
+
+27 May 2015  G.Folger      (hadr-cross-V10-01-07)
+---------------------------------------------------
+- G4CrossSectionDataStore: Additions to print Html documentation
+
+18 March 2015 V.Ivanchenko (hadr-cross-V10-01-06)
+---------------------------------------------------
+- G4KokoulinMuonNuclearXS - removed debug cout
+
+17 March 2015 V.Ivanchenko (hadr-cross-V10-01-05)
+---------------------------------------------------
+- G4CrossSectionDataSetRegistry - protect deletion of NeutronHP
+- G4KokoulinMuonNuclearXS - fixed initialisation for the case of 
+    multiple runs
+- G4DiffElasticRatio (V.Grichine) added protection for hydrogen
+
+13 March 2015 V.Ivanchenko (hadr-cross-V10-01-04)
+---------------------------------------------------
+- G4CrossSectionDataSetRegistry, G4VCrossSectionDataSet - use 
+    G4ThreadLocalSingletone; delete all x-sections at exit except HP
+
+06 February 2015 W.Pokorski (hadr-cross-V10-01-03)
+------------------------------------------------
+- reverting back previous tag (causing FPE)
+- including V.Grishine change in G4ComponentGGHadronNucleusXsc to work for H target
+
+04 February 2015 W.Pokorski (hadr-cross-V10-01-02)
+------------------------------------------------
+- changing std::log and exp to G4Log and G4Exp
+
+07 January 2015 W.Pokorski (hadr-cross-V10-01-01)
+------------------------------------------------
+- removing obsolete (wrong) checks for particle types in IsIsoApplicable
+  in Chips cross sections
+
+12 December 2014 G.Cosmo (hadr-cross-V10-01-00)
+---------------------------------------------------
+- Workaround in G4CrossSectionFactory<T,2>::Instantiate() to allow for
+  compilation on clang-3.5 on Linux, for initialisation of TLS pointer.
+
+18 November 2014 V.Ivanchenko (hadr-cross-V10-00-18)
+---------------------------------------------------
+- G4CrossSectionDataSetRegistry, G4CrossSectionFactoryRegistry,
+  G4HadronCrossSections - use thread local singletone for
+  proper deletion of cross sections end of run
+
+07 November 2014 V.Grichine (hadr-cross-V10-00-17)
+---------------------------------------------------
+- Class managing single diffraction to elastic cross section ratio
+  G4DiffElasticRatio 
 
 30 October 2014 V.Ivanchenko (hadr-cross-V10-00-16)
 ---------------------------------------------------

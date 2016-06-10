@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VDNAReactionModel.hh 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id: G4VDNAReactionModel.hh 91584 2015-07-27 13:01:48Z gcosmo $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
@@ -51,6 +51,7 @@
 #include "AddClone_def.hh"
 
 class G4DNAMolecularReactionTable;
+class G4MolecularConfiguration;
 class G4Molecule;
 class G4Track;
 
@@ -70,9 +71,10 @@ public :
     /** This macro is defined in AddClone_def **/
     G4IT_TO_BE_CLONED(G4VDNAReactionModel)
 
-    virtual void Initialise(const G4Molecule*, const G4Track&) {;}
-    virtual void InitialiseToPrint(const G4Molecule*) = 0 ;
-    virtual G4double GetReactionRadius(const G4Molecule*, const G4Molecule*) = 0;
+    virtual void Initialise(G4MolecularConfiguration*, const G4Track&) {;}
+    virtual void InitialiseToPrint(G4MolecularConfiguration*) = 0 ;
+    virtual G4double GetReactionRadius(G4MolecularConfiguration*,
+                                       G4MolecularConfiguration*) = 0;
     virtual G4double GetReactionRadius(const int) = 0;
     virtual G4bool FindReaction(const G4Track&, const G4Track&,
                                 const G4double /*reactionRadius*/,

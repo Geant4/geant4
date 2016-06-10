@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SurfaceVoxelizer.cc 87449 2014-12-04 14:13:06Z gunter $
+// $Id: G4SurfaceVoxelizer.cc 92024 2015-08-13 14:16:00Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -351,7 +351,7 @@ void G4SurfaceVoxelizer::BuildBitmasks(std::vector<G4double> boundaries[],
       G4int i = BinarySearch(boundary, min);
       if (i < 0)  { i = 0; }
 
-      do
+      do    // Loop checking, 13.08.2015, G.Cosmo
       {
         if (!countsOnly)
         {
@@ -483,7 +483,7 @@ void G4SurfaceVoxelizer::BuildReduceVoxels(std::vector<G4double> boundaries[],
       // we go to size-1 to make sure we will not merge the last element
 
     G4int count = 0;
-    while (true)
+    while (true)    // Loop checking, 13.08.2015, G.Cosmo
     {
       G4double reduction = reductionRatio[k];
       if (reduction == 0)

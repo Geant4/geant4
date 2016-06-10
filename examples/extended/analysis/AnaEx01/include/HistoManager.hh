@@ -27,7 +27,7 @@
 /// \brief Definition of the HistoManager class
 //
 //
-// $Id: HistoManager.hh 74272 2013-10-02 14:48:50Z gcosmo $
+// $Id: HistoManager.hh 92318 2015-08-27 14:49:47Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -38,26 +38,21 @@
 #include "globals.hh"
 
 #include "g4root.hh"
-////#include "g4xml.hh"
-////#include "g4hbook.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-const G4int MaxHisto = 5;
-const G4int MaxNtCol = 4;
+//#include "g4csv.hh"
+//#include "g4xml.hh"
+//#include "g4hbook.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class HistoManager
 {
   public:
-
     HistoManager();
    ~HistoManager();
 
-    void book();
-    void save();
-
+    void Book();
+    void Save();
+    
     void FillHisto(G4int id, G4double e, G4double weight = 1.0);
     void Normalize(G4int id, G4double fac);    
 
@@ -65,15 +60,9 @@ class HistoManager
                     G4double TrackLAbs, G4double TrackLGap);
     
     void PrintStatistic();        
-
+    
   private:
-
-    G4String      fFileName[2];
-    G4bool        fFactoryOn;    
-
-    G4int         fHistId[MaxHisto];
-    G4AnaH1*      fHistPt[MaxHisto];
-    G4int         fNtColId[MaxNtCol];
+    G4bool fFactoryOn;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

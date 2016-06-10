@@ -144,6 +144,12 @@ class G4INCLXXInterfaceStore {
     /// \brief Setter for the interface tally
     void SetTally(G4INCLXXVInterfaceTally * const aTally);
 
+    /// \brief Set the INCL physics
+    void SetINCLPhysics(const G4String &option);
+
+    /// \brief Set ABLA V3 to be the de-excitation model to be used with INCL++
+    void UseAblaDeExcitation();
+
   private:
 
     /** \brief Private constructor
@@ -162,8 +168,6 @@ class G4INCLXXInterfaceStore {
 
     /// \brief Delete the INCL model engine
     void DeleteModel();
-
-    /// \brief Create a new Config object from the current options
 
     static G4ThreadLocal G4INCLXXInterfaceStore *theInstance;
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option3.cc 84662 2014-10-17 14:32:32Z gcosmo $
+// $Id: G4EmStandardPhysics_option3.cc 92821 2015-09-17 15:23:49Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -51,6 +51,7 @@
 #include "G4RayleighScattering.hh"
 #include "G4PEEffectFluoModel.hh"
 #include "G4KleinNishinaModel.hh"
+#include "G4LivermorePhotoElectricModel.hh"
 
 #include "G4eMultipleScattering.hh"
 #include "G4MuMultipleScattering.hh"
@@ -104,6 +105,7 @@
 
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
+#include "G4EmModelActivator.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -116,10 +118,14 @@ G4EmStandardPhysics_option3::G4EmStandardPhysics_option3(G4int ver)
   : G4VPhysicsConstructor("G4EmStandard_opt3"), verbose(ver)
 {
   G4EmParameters* param = G4EmParameters::Instance();
+  param->SetDefaults();
   param->SetVerbose(verbose);
   param->SetMinEnergy(10*eV);
   param->SetMaxEnergy(10*TeV);
+  param->SetLowestElectronEnergy(100*eV);
   param->SetNumberOfBinsPerDecade(20);
+  param->SetMscStepLimitType(fUseDistanceToBoundary);
+  param->SetFluo(true);
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -130,10 +136,14 @@ G4EmStandardPhysics_option3::G4EmStandardPhysics_option3(G4int ver,
   : G4VPhysicsConstructor("G4EmStandard_opt3"), verbose(ver)
 {
   G4EmParameters* param = G4EmParameters::Instance();
+  param->SetDefaults();
   param->SetVerbose(verbose);
   param->SetMinEnergy(10*eV);
   param->SetMaxEnergy(10*TeV);
+  param->SetLowestElectronEnergy(100*eV);
   param->SetNumberOfBinsPerDecade(20);
+  param->SetMscStepLimitType(fUseDistanceToBoundary);
+  param->SetFluo(true);
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -171,6 +181,10 @@ void G4EmStandardPhysics_option3::ConstructParticle()
   G4He3::He3();
   G4Alpha::Alpha();
   G4GenericIon::GenericIonDefinition();
+
+  // dna
+  G4EmModelActivator mact;
+  mact.ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -215,18 +229,20 @@ void G4EmStandardPhysics_option3::ConstructProcess()
     if (particleName == "gamma") {
 
       G4ComptonScattering* cs = new G4ComptonScattering;
-      cs->SetEmModel(new G4KleinNishinaModel());
+      cs->SetEmModel(new G4KleinNishinaModel(), 1);
 
-      ph->RegisterProcess(new G4PhotoElectricEffect(), particle);
-      ph->RegisterProcess(cs, particle);
+      G4PhotoElectricEffect* pee = new G4PhotoElectricEffect();
+      pee->SetEmModel(new G4LivermorePhotoElectricModel(), 1);
+
+      ph->RegisterProcess(pee, particle);
+      ph->RegisterProcess(cs,  particle);
       ph->RegisterProcess(new G4GammaConversion(), particle);
       ph->RegisterProcess(new G4RayleighScattering(), particle);
  
     } else if (particleName == "e-") {
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      //msc->AddEmModel(0, new G4UrbanMscModel());
-      msc->SetStepLimitType(fUseDistanceToBoundary);
+
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.2, 100*um);      
 
@@ -247,8 +263,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
     } else if (particleName == "e+") {
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      //msc->AddEmModel(0, new G4UrbanMscModel());
-      msc->SetStepLimitType(fUseDistanceToBoundary);
+
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.2, 100*um);      
 
@@ -381,7 +396,9 @@ void G4EmStandardPhysics_option3::ConstructProcess()
   // Deexcitation
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
-  de->SetFluo(true);
+
+  G4EmModelActivator mact;
+  mact.ConstructProcess();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.icc 79627 2014-03-10 11:20:02Z gcosmo $
+// $Id: G4Step.icc 93028 2015-09-30 16:09:00Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -250,6 +250,12 @@ inline
    // set velocity 
    fpTrack->SetVelocity(fpPostStepPoint->GetVelocity());
 }
+
+inline  G4int G4Step::GetNumberOfSecondariesInCurrentStep() const
+{
+  return  fSecondary->size() - nSecondaryByLastStep; 
+}  
+
 
 inline const G4TrackVector* G4Step::GetSecondary() const  
 {

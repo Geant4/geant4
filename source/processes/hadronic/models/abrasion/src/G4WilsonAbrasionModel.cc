@@ -78,6 +78,12 @@
 // 12 June 2012, A. Ribon, CERN, Switzerland
 // Fixing trivial warning errors of shadowed variables. 
 //
+// 4 August 2015, A. Ribon, CERN, Switzerland
+// Replacing std::exp and std::pow with the faster versions G4Exp and G4Pow.
+//
+// 7 August 2015, A. Ribon, CERN, Switzerland
+// Checking of 'while' loops.
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -103,6 +109,9 @@
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "globals.hh"
+
+#include "G4Exp.hh"
+#include "G4Pow.hh"
 
 
 G4WilsonAbrasionModel::G4WilsonAbrasionModel(G4bool useAblation1)
@@ -313,7 +322,10 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
 // The following loop is performed until the number of nucleons which are
 // abraded by the process is >1, i.e. an interaction MUST occur.
 //
-  while (Dabr == 0)
+  G4bool skipInteraction = false;  // It will be set true if the two nuclei fail to collide 
+  const G4int maxNumberOfLoops = 1000;
+  G4int loopCounter = -1;
+  while (Dabr == 0 && ++loopCounter < maxNumberOfLoops)  /* Loop checking, 07.08.2015, A.Ribon */
   {
 // Added by MHM 20050119 to fix leaking memory on second pass through this loop
     if (theAbrasionGeometry)
@@ -334,21 +346,10 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
 // This is a "catch" to make sure we don't go into an infinite loop because the
 // energy is too low to overcome nuclear repulsion.  PRT 20091023.  If the
 // value of rm < fradius * rPT then we're unlikely to sample a small enough
-// impact parameter (energy of incident particle is too low).  Return primary
-// and don't complete nuclear interaction analysis. 
+// impact parameter (energy of incident particle is too low).
 //
     if (rm >= fradius * rPT) {
-      theParticleChange.SetStatusChange(isAlive);
-      theParticleChange.SetEnergyChange(theTrack.GetKineticEnergy());
-      theParticleChange.SetMomentumChange(theTrack.Get4Momentum().vect().unit());
-      if (verboseLevel >= 2) {
-        G4cout <<"Particle energy too low to overcome repulsion." <<G4endl;
-        G4cout <<"Event rejected and original track maintained" <<G4endl;
-        G4cout <<"########################################"
-               <<"########################################"
-               <<G4endl;
-      }
-      return &theParticleChange;
+      skipInteraction = true;
     }
 //
 //
@@ -357,30 +358,18 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
 //
     G4int evtcnt   = 0;
     r              = 1.1 * rPT;
-    while (r > rPT && ++evtcnt < 1000)
+    while (r > rPT && ++evtcnt < 1000)  /* Loop checking, 07.08.2015, A.Ribon */
     {
       G4double bsq = rPTsq * G4UniformRand();
       r            = (rm + std::sqrt(rm*rm + 4.0*bsq)) / 2.0;
     }
 //
 //
-// We've tried to sample this 1000 times, but failed.  Assume nuclei do not
-// collide.
+// We've tried to sample this 1000 times, but failed.  
 //
     if (evtcnt >= 1000) {
-      theParticleChange.SetStatusChange(isAlive);
-      theParticleChange.SetEnergyChange(theTrack.GetKineticEnergy());
-      theParticleChange.SetMomentumChange(theTrack.Get4Momentum().vect().unit());
-      if (verboseLevel >= 2) {
-        G4cout <<"Particle energy too low to overcome repulsion." <<G4endl;
-        G4cout <<"Event rejected and original track maintained" <<G4endl;
-        G4cout <<"########################################"
-               <<"########################################"
-               <<G4endl;
-      }
-      return &theParticleChange;
+      skipInteraction = true;
     }
-
 
     rsq = r * r;
 //
@@ -409,8 +398,8 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
 //
     theAbrasionGeometry = new G4NuclearAbrasionGeometry(AP,AT,r);
     F                   = theAbrasionGeometry->F();
-    G4double lambda     = 16.6*fermi / std::pow(E/MeV,0.26);
-    G4double Mabr       = F * AP * (1.0 - std::exp(-CT/lambda));
+    G4double lambda     = 16.6*fermi / G4Pow::GetInstance()->powA(E/MeV,0.26);
+    G4double Mabr       = F * AP * (1.0 - G4Exp(-CT/lambda));
     G4long n            = 0;
     for (G4int i = 0; i<10; i++)
     {
@@ -422,7 +411,23 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
         break;
       }
     }
+  }  // End of while loop
+
+  if ( loopCounter >= maxNumberOfLoops || skipInteraction ) {
+    // Assume nuclei do not collide and return unchanged primary. 
+    theParticleChange.SetStatusChange(isAlive);
+    theParticleChange.SetEnergyChange(theTrack.GetKineticEnergy());
+    theParticleChange.SetMomentumChange(theTrack.Get4Momentum().vect().unit());
+    if (verboseLevel >= 2) {
+      G4cout <<"Particle energy too low to overcome repulsion." <<G4endl;
+      G4cout <<"Event rejected and original track maintained" <<G4endl;
+      G4cout <<"########################################"
+             <<"########################################"
+             <<G4endl;
+    }
+    return &theParticleChange;
   }
+
   if (verboseLevel >= 2)
   {
     G4cout <<G4endl;
@@ -540,7 +545,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
   G4double deltaE = TotalEPre - TotalEPost;
   if (deltaE > 0.0 && conserveEnergy)
   {
-    G4double beta = std::sqrt(1.0 - EMassP*EMassP/std::pow(deltaE+EMassP,2.0));
+    G4double beta = std::sqrt(1.0 - EMassP*EMassP/G4Pow::GetInstance()->powN(deltaE+EMassP,2));
     boost = boost / boost.mag() * beta;
   }
 //
@@ -724,8 +729,8 @@ G4Fragment *G4WilsonAbrasionModel::GetAbradedNucleons (G4int Dabr, G4double A,
 // spectrum.
 //
   
-  G4double pK   = hbarc * std::pow(9.0 * pi / 4.0 * A, third) / (1.29 * r);
-  if (A <= 24.0) pK *= -0.229*std::pow(A,third) + 1.62; 
+  G4double pK   = hbarc * G4Pow::GetInstance()->A13(9.0 * pi / 4.0 * A) / (1.29 * r);
+  if (A <= 24.0) pK *= -0.229*G4Pow::GetInstance()->A13(A) + 1.62;
   G4double pKsq = pK * pK;
   G4double p1sq = 2.0/5.0 * pKsq;
   G4double p2sq = 6.0/5.0 * pKsq;
@@ -749,6 +754,7 @@ G4Fragment *G4WilsonAbrasionModel::GetAbradedNucleons (G4int Dabr, G4double A,
 //
 // Now go through each abraded nucleon and sample type, spectrum and angle.
 //
+  G4bool isForLoopExitAnticipated = false;
   for (G4int i=0; i<Dabr; i++)
   {
 //
@@ -758,12 +764,19 @@ G4Fragment *G4WilsonAbrasionModel::GetAbradedNucleons (G4int Dabr, G4double A,
 //
     G4double p   = 0.0;
     G4bool found = false;
-    while (!found)
+    const G4int maxNumberOfLoops = 100000;
+    G4int loopCounter = -1;
+    while (!found && ++loopCounter < maxNumberOfLoops)  /* Loop checking, 07.08.2015, A.Ribon */
     {
-      while (p <= 0.0) p = npK * pK * G4UniformRand();
+      while (p <= 0.0) p = npK * pK * G4UniformRand();  /* Loop checking, 07.08.2015, A.Ribon */
       G4double psq = p * p;
-      found = maxn * G4UniformRand() < C1*std::exp(-psq/p1sq/2.0) +
-        C2*std::exp(-psq/p2sq/2.0) + C3*std::exp(-psq/p3sq/2.0) + p/gamma/std::sinh(p/gamma);
+      found = maxn * G4UniformRand() < C1*G4Exp(-psq/p1sq/2.0) +
+        C2*G4Exp(-psq/p2sq/2.0) + C3*G4Exp(-psq/p3sq/2.0) + p/gamma/(0.5*(G4Exp(p/gamma)-G4Exp(-p/gamma)));
+    }
+    if ( loopCounter >= maxNumberOfLoops )
+    {
+      isForLoopExitAnticipated = true;
+      break;
     }
 //
 //
@@ -804,7 +817,7 @@ G4Fragment *G4WilsonAbrasionModel::GetAbradedNucleons (G4int Dabr, G4double A,
 // energy.)
 //
   G4Fragment *fragment = NULL;
-  if (Z-Zabr>=1.0)
+  if ( ! isForLoopExitAnticipated && Z-Zabr>=1.0 )
   {
     G4double ionMass = G4ParticleTable::GetParticleTable()->GetIonTable()->
                        GetIonMass(G4lrint(Z-Zabr),G4lrint(A-Aabr));

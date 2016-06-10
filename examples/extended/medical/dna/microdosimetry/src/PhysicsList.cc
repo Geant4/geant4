@@ -87,10 +87,10 @@
 PhysicsList::PhysicsList():  G4VUserPhysicsList()
 {
   defaultCutValue = 1*micrometer;
-  cutForGamma     = defaultCutValue;
-  cutForElectron  = defaultCutValue;
-  cutForPositron  = defaultCutValue;
-  cutForProton    = defaultCutValue;
+  fCutForGamma     = defaultCutValue;
+  fCutForElectron  = defaultCutValue;
+  fCutForPositron  = defaultCutValue;
+  fCutForProton    = defaultCutValue;
 
   SetVerboseLevel(1);
 }
@@ -101,7 +101,6 @@ PhysicsList::~PhysicsList()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 
 void PhysicsList::ConstructParticle()
 {
@@ -465,10 +464,10 @@ void PhysicsList::SetCuts()
 
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma 
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");
-  SetCutValue(cutForProton, "proton");
+  SetCutValue(fCutForGamma, "gamma");
+  SetCutValue(fCutForElectron, "e-");
+  SetCutValue(fCutForPositron, "e+");
+  SetCutValue(fCutForProton, "proton");
 
   if (verboseLevel>0) { DumpCutValuesTable(); }
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ContinuumGammaTransition.cc 87443 2014-12-04 12:26:31Z gunter $
+// $Id: G4ContinuumGammaTransition.cc 91886 2015-08-10 07:08:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -61,7 +61,7 @@
 //static const G4double normC = CLHEP::millibarn/
 //  (CLHEP::pi*CLHEP::hbarc*CLHEP::pi*CLHEP::hbarc);
 static const G4double factor = 5;
-static const G4double tolerance = 2*CLHEP::keV;
+static const G4double tolerance = 0.1*CLHEP::keV;
 
 G4ContinuumGammaTransition::G4ContinuumGammaTransition(
                             const G4NuclearLevelManager* manager,

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ElectronBenchmarkDetector.cc 79741 2014-03-13 09:12:06Z gcosmo $
+// $Id: ElectronBenchmarkDetector.cc 93389 2015-10-20 07:04:35Z gcosmo $
 //
 /// \file medical/electronScattering2/src/ElectronBenchmarkDetector.cc
 /// \brief Implementation of the ElectronBenchmarkDetector class
@@ -59,6 +59,8 @@
 ElectronBenchmarkDetector::ElectronBenchmarkDetector()
 :G4VUserDetectorConstruction(),
 fMaterialPrimFoil(0),
+fLogPrimFoil(0),
+fSolidPrimFoil(0),
 fScorerRingLog(0),
 fLogWorld(0),
 fMessenger(0),
@@ -210,12 +212,6 @@ G4VPhysicalVolume* ElectronBenchmarkDetector::CreateGeometry(){
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ElectronBenchmarkDetector::UpdateGeometry(){
-    G4RunManager::GetRunManager()->ReinitializeGeometry();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4VPhysicalVolume* ElectronBenchmarkDetector::CreateWorld(){
     G4double halfLengthWorld = fPosScorer/2. + fPosDelta;
     G4double radWorld = fRadOverall + fRadDelta;
@@ -262,18 +258,18 @@ void ElectronBenchmarkDetector::CreatePrimaryFoil(G4LogicalVolume* worldLog){
     // For some energies, we have no Primary Foil.
     if (fHalfThicknessPrimFoil==0.) return;
     
-    G4VSolid* primFoilSolid = new G4Tubs("PrimFoilSolid", 0.*cm, fRadOverall,
-                                  fHalfThicknessPrimFoil, 0.*deg, 360.*deg);
-    G4LogicalVolume* primFoilLog = new G4LogicalVolume(primFoilSolid,
+    fSolidPrimFoil = new G4Tubs("PrimFoilSolid", 0.*cm, fRadOverall,
+                                fHalfThicknessPrimFoil, 0.*deg, 360.*deg);
+    fLogPrimFoil = new G4LogicalVolume(fSolidPrimFoil,
                                        fMaterialPrimFoil, "PrimFoilLog");
     
     fPrimFoilVisAtt = new G4VisAttributes(G4Colour(0.5,1.0,0.5));
-    primFoilLog->SetVisAttributes(fPrimFoilVisAtt);
+    fLogPrimFoil->SetVisAttributes(fPrimFoilVisAtt);
     
     new G4PVPlacement(0,
                       G4ThreeVector(0.,0.,
                       fPosPrimFoil + fHalfThicknessPrimFoil - halfLengthWorld),
-                      primFoilLog,"ScatteringFoil",worldLog,false,0);
+                      fLogPrimFoil,"ScatteringFoil",worldLog,false,0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -430,7 +426,11 @@ void ElectronBenchmarkDetector::ConstructSDandField()
 
 void ElectronBenchmarkDetector::SetPrimFoilMaterial(G4String matname){
     fMaterialPrimFoil = G4Material::GetMaterial(matname);
-    UpdateGeometry();
+    if (fLogPrimFoil) {
+      fLogPrimFoil->SetMaterial(fMaterialPrimFoil);
+    }
+    else CreatePrimaryFoil(fLogWorld);
+    G4RunManager::GetRunManager()->PhysicsHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -438,7 +438,11 @@ void ElectronBenchmarkDetector::SetPrimFoilMaterial(G4String matname){
 void ElectronBenchmarkDetector::SetPrimFoilThickness(G4double thicknessPrimFoil)
 {
     fHalfThicknessPrimFoil = thicknessPrimFoil / 2.;
-    UpdateGeometry();
+    if (fSolidPrimFoil) {
+      fSolidPrimFoil->SetZHalfLength(fHalfThicknessPrimFoil);
+    }
+    else CreatePrimaryFoil(fLogWorld);
+    G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

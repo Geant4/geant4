@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="/Users/witoldp/GEANT4/10.01.ref01/geant4/source/persistency/gdml/schema/gdml.xsd">
 
  <define>
   <position name="R" unit="mm" x="0" y="0" z="0" />
@@ -33,7 +33,10 @@
    <materialref ref="Air" />
    <solidref ref="Box" />
    <auxiliary auxtype="SensDet" auxvalue="veloSD"/>
-  </volume>
+   <auxiliary auxtype="sometype" auxvalue="somevalue">
+     <auxiliary auxtype="somesubtype" auxvalue="somesubvalue"/>
+   </auxiliary>
+   </volume>
   <volume name="World" >
    <materialref ref="Air" />
    <solidref ref="WorldBox" />
@@ -44,6 +47,35 @@
    </physvol>
   </volume>
  </structure>
+
+  <userinfo>
+    <auxiliary auxtype="region" auxvalue="myregion1">
+      
+      <auxiliary auxtype="RootLogicalVolume" auxvalue="Boxvol1">
+	<auxiliary auxtype="sometype" auxvalue="somevalue"/>
+      </auxiliary>
+      
+      <auxiliary auxtype="RootLogicalVolume" auxvalue="Boxvol2"/>
+      <auxiliary auxtype="proton_cut_legth" auxvalue="2" auxunit="mm"/>
+      <auxiliary auxtype="proton_cut_energy" auxvalue="900" auxunit="KeV"/>
+      <auxiliary auxtype="electron_cut_length" auxvalue="1" auxunit="mm"/>
+      <auxiliary auxtype="electron_cut_energy" auxvalue="1" auxunit="MeV"/>
+
+      <auxiliary auxtype="cut" auxvalue="electron">
+	<auxiliary auxtype="energy" auxvalue="900" auxunit="keV"/>
+      </auxiliary>
+      
+      <auxiliary auxtype="userlimit_electron" auxvalue="1" auxunit="keV"/>
+    </auxiliary>
+
+    <auxiliary auxtype="region" auxvalue="myregion2">
+      <auxiliary auxtype="RootLogicalVolume" auxvalue="vol1"/>
+      <auxiliary auxtype="RootLogicalVolume" auxvalue="vol2"/>
+      <auxiliary auxtype="electron_cut_length" auxvalue="1.5" auxunit="mm"/>
+      <auxiliary auxtype="proton_cut_length" auxvalue="2.5" auxunit="mm"/>
+    </auxiliary>
+ </userinfo>
+ 
 
  <setup name="Default" version="1.0" >
   <world ref="World" />

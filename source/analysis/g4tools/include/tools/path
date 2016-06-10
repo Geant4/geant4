@@ -31,7 +31,7 @@ inline std::string nosuffix(const std::string& a_string,bool a_back = true){
   return s.substr(0,dot_pos);
 }
 
-inline std::string base_name(const std::string& a_path) {
+inline void base_name(const std::string& a_path,std::string& a_value) {
   std::string::size_type pos_slash = a_path.rfind('/');
   std::string::size_type pos_bslash = a_path.rfind('\\');
   std::string::size_type pos = 0;
@@ -52,9 +52,15 @@ inline std::string base_name(const std::string& a_path) {
       }
     }
   }
-  if(pos==std::string::npos) return a_path;
+  if(pos==std::string::npos) {a_value = a_path;return;}
   pos++;
-  return a_path.substr(pos,a_path.size()-pos);
+  a_value = a_path.substr(pos,a_path.size()-pos);
+}
+
+inline std::string base_name(const std::string& a_path) { //deprecated.
+  std::string value;
+  base_name(a_path,value);
+  return value;
 }
 
 inline bool is_absolute_path(const std::string& a_path) {
@@ -66,12 +72,7 @@ inline bool is_absolute_path(const std::string& a_path) {
   }
 }
 
-inline bool path_name_suffix(
- const std::string& a_string
-,std::string& a_path
-,std::string& a_name
-,std::string& a_suffix
-){
+inline bool path_name_suffix(const std::string& a_string,std::string& a_path,std::string& a_name,std::string& a_suffix){
   // If a_string = dir0/dir1/dir2/dir3/name.xxx
   //   a_path = dir0/dir1/dir2/dir3
   //   a_name = name.xxx

@@ -11,7 +11,7 @@
 #
 # Generated on : 15/07/2013
 #
-# $Id: sources.cmake 85025 2014-10-23 09:57:57Z gcosmo $
+# $Id: sources.cmake 92688 2015-09-14 07:01:13Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -36,7 +36,6 @@ GEANT4_DEFINE_MODULE(NAME G4csv
         G4CsvAnalysisReader.hh
         G4CsvAnalysisReader.icc
         G4CsvFileManager.hh
-        G4CsvNtupleDescription.hh
         G4CsvNtupleManager.hh
         G4CsvRFileManager.hh
         G4CsvRNtupleDescription.hh

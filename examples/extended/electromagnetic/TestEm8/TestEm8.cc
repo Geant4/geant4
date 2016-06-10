@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/TestEm8.cc
 /// \brief Main program of the electromagnetic/TestEm8 example
 //
-// $Id: TestEm8.cc 85243 2014-10-27 08:22:42Z gcosmo $
+// $Id: TestEm8.cc 92915 2015-09-21 15:01:23Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,6 +66,8 @@ int main(int argc,char** argv)
     } else {
       nThreads = G4UIcommand::ConvertToInt(argv[2]);
     } 
+  } else if(argc==1) { 
+    nThreads = 1;
   }
   if (nThreads > 0) { runManager->SetNumberOfThreads(nThreads); }
   G4cout << "===== TestEm8 is started with " 

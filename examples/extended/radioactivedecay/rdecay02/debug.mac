@@ -1,0 +1,16 @@
+
+/control/verbose 2
+/run/verbose 2
+/tracking/verbose 2
+#
+/run/initialize
+#
+/gun/particle ion
+/gun/ion 10 24
+#
+/control/execute vis.mac
+#
+/analysis/setFileName rdecay02
+/analysis/h1/set 6 100 0. 2. MeV
+#
+/run/beamOn 1

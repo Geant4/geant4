@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jun 05, 2015, M. Verderi (GB04-V10-01-00)
+- Bug fix in GB04BOptnBremSplitting.cc : missing 
+  fParticleChange.SetSecondaryWeightByProcess(true);
+  as reported privately by Akihisa WAKITA.
+
 Nov 20, 2014, G. Cosmo  (GB04-V10-00-03)
 - Again included correction in GNUmakefile introduced in tag -01 which
   was lost in previous tag...

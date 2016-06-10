@@ -64,6 +64,10 @@ public:
     //In case of error currentCmd is set to the command that gave the problem
     virtual void RunTermination();
     virtual void TerminateEventLoop();
+
+    //This function is called by the thread function: it should loop until some
+    //work is requested
+    virtual void DoWork();
 protected:
     virtual void ConstructScoringWorlds();
     virtual void StoreRNGStatus(const G4String& filenamePrefix );
@@ -96,7 +100,10 @@ protected:
     G4int nevModulo;
     G4int currEvID;
     G4SeedsQueue seedsQueue;
+    G4bool readStatusFromFile;
 
+public:
+    virtual void RestoreRndmEachEvent(G4bool flag) { readStatusFromFile = flag; }
 #ifdef G4MULTITHREADED
 private:
     G4bool visIsSetUp;

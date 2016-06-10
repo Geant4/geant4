@@ -52,6 +52,11 @@ namespace G4Hbook {
   typedef std::vector<tools::hbook::h2*>::iterator  G4H2Iterator;
   typedef std::vector<tools::hbook::h2*>::const_iterator  G4H2ConstIterator;
   
+  // P1 types
+  typedef tools::hbook::p1  G4P1;
+  typedef std::vector<tools::hbook::p1*>::iterator  G4P1Iterator;
+  typedef std::vector<tools::hbook::p1*>::const_iterator  G4P1ConstIterator;
+
   // Ntuple types
   typedef tools::hbook::wntuple  G4Ntuple;
   typedef std::vector<tools::hbook::wntuple*>::iterator  G4NtupleIterator;

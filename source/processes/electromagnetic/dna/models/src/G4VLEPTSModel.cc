@@ -114,14 +114,14 @@ void G4VLEPTSModel::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
     G4String mateName = aMaterial->GetName();
 
     //READ PARAMETERS FOR THIS MATERIAL
-    string dirName = string(path) + "/lepts/";
-    string fnParam  = dirName + mateName + "." + aParticleName + ".param.dat";  
-    string baseName = string(path) + "/lepts/" + mateName + "." + aParticleName;
+    std::string dirName = std::string(path) + "/lepts/";
+    std::string fnParam  = dirName + mateName + "." + aParticleName + ".param.dat";  
+    std::string baseName = std::string(path) + "/lepts/" + mateName + "." + aParticleName;
     G4bool bData = ReadParam( fnParam, aMaterial );
     if( !bData )  continue; // MATERIAL NOT EXISTING, DO NOT READ OTHER FILES
 
     //READ INTEGRAL CROSS SECTION FOR THIS MATERIAL
-    string fnIXS  = baseName + ".IXS.dat";
+    std::string fnIXS  = baseName + ".IXS.dat";
     
     std::map< G4int, std::vector<G4double> > integralXS = ReadIXS(fnIXS, aMaterial);
     if( verboseLevel >= 2 ) G4cout << GetName() << " : " << theXSType << " " << mateName << " INTEGRALXS " << integralXS.size() << G4endl;
@@ -146,10 +146,10 @@ void G4VLEPTSModel::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
       
       BuildMeanFreePathTable( aMaterial, integralXS );
 
-      string fnDXS = baseName + ".DXS.dat";
-      string fnRMT = baseName + ".RMT.dat";
-      string fnEloss = baseName + ".Eloss.dat";
-      string fnEloss2 = baseName + ".Eloss2.dat";
+      std::string fnDXS = baseName + ".DXS.dat";
+      std::string fnRMT = baseName + ".RMT.dat";
+      std::string fnEloss = baseName + ".Eloss.dat";
+      std::string fnEloss2 = baseName + ".Eloss2.dat";
       
       theDiffXS[aMaterial] = new G4LEPTSDiffXS(fnDXS);
       if( !theDiffXS[aMaterial]->IsFileFound() ) {

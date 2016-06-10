@@ -50,13 +50,15 @@ class G4DecayWithSpin : public G4Decay
     virtual ~G4DecayWithSpin();
 
   protected: // With Description
-    virtual G4VParticleChange* DecayIt(
+    virtual G4VParticleChange* PostStepDoIt(
                              const G4Track& aTrack,
                              const G4Step&  aStep
                             );
-    // The DecayIt() method returns by pointer a particle-change object,
-    // which has information of daughter particles.
 
+    virtual G4VParticleChange* AtRestDoIt(
+                             const G4Track& aTrack,
+                             const G4Step&  aStep
+                            );
   private:
   G4ThreeVector Spin_Precession(const G4Step& aStep,
                                 G4ThreeVector B, G4double deltatime );

@@ -39,7 +39,6 @@
 #include "globals.hh"
 #include "G4teoCrossSection.hh"
 #include "G4Proton.hh"
-//#include "G4Alpha.hh"
 #include "G4ecpssrBaseKxsModel.hh"
 #include "G4ecpssrBaseLixsModel.hh"
 
@@ -48,10 +47,10 @@
 #include "G4ecpssrFormFactorMixsModel.hh"
 
 G4teoCrossSection::G4teoCrossSection(const G4String& nam)
-  :G4VhShellCrossSection(nam),totalCS(0.0),ecpssrShellK(0),ecpssrShellLi(0), ecpssrShellMi(0)
+  :G4VhShellCrossSection(nam),totalCS(0.0)
 { 
-
-  if (nam == "Analytical") 
+  ecpssrShellMi = nullptr;
+  if (nam == "ECPSSR_Analytical") 
     {
       ecpssrShellK  = new G4ecpssrBaseKxsModel();  
       ecpssrShellLi = new G4ecpssrBaseLixsModel();      
@@ -62,16 +61,21 @@ G4teoCrossSection::G4teoCrossSection(const G4String& nam)
       ecpssrShellLi = new G4ecpssrFormFactorLixsModel();
       ecpssrShellMi = new G4ecpssrFormFactorMixsModel();
     }
-  else { G4cout << "ERROR" << G4endl;}
-
-
+  else 
+    { 
+      G4cout << "G4teoCrossSection::G4teoCrossSection: ERROR " 
+	     << " in cross section name ECPSSR_Analytical is used"
+	     << G4endl;
+      ecpssrShellK  = new G4ecpssrBaseKxsModel();  
+      ecpssrShellLi = new G4ecpssrBaseLixsModel();      
+    }
 }
 
 G4teoCrossSection::~G4teoCrossSection()
 { 
   delete ecpssrShellK;
   delete ecpssrShellLi;
-  if (ecpssrShellMi) {delete ecpssrShellMi;}
+  delete ecpssrShellMi;
 }
 
 std::vector<G4double> G4teoCrossSection::GetCrossSection(G4int Z,

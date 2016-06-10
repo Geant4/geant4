@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroChemicalPotential.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4StatMFMacroChemicalPotential.cc 91834 2015-08-07 07:24:22Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 
 #include "G4StatMFMacroChemicalPotential.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4Pow.hh"
 
 // operators definitions
 G4StatMFMacroChemicalPotential & 
@@ -53,53 +54,54 @@ G4bool G4StatMFMacroChemicalPotential::operator!=(const G4StatMFMacroChemicalPot
     return true;
 }
 
-
-
-
 G4double G4StatMFMacroChemicalPotential::CalcChemicalPotentialNu(void) 
-    //	Calculate Chemical potential \nu
+//	Calculate Chemical potential \nu
 {
-    G4double CP = ((3./5.)*elm_coupling/G4StatMFParameters::Getr0())*
-	(1.0-1.0/std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1.0/3.0));
+  G4Pow* g4pow = G4Pow::GetInstance();
+  G4double CP = G4StatMFParameters::GetCoulomb();
 
-    // Initial value for _ChemPotentialNu	
-    _ChemPotentialNu = (theZ/theA)*(8.0*G4StatMFParameters::GetGamma0()+2.0*CP*std::pow(theA,2./3.)) -
-	4.0*G4StatMFParameters::GetGamma0();
+  // Initial value for _ChemPotentialNu	
+  _ChemPotentialNu = (theZ/theA)*(8.0*G4StatMFParameters::GetGamma0()
+				  +2.0*CP*g4pow->Z23(theA))
+    - 4.0*G4StatMFParameters::GetGamma0();
 		
-
-    G4double ChemPa = _ChemPotentialNu;
-    G4double ChemPb = 0.5*_ChemPotentialNu;
+  G4double ChemPa = _ChemPotentialNu;
+  G4double ChemPb = 0.5*_ChemPotentialNu;
     
-    G4double fChemPa = this->operator()(ChemPa); 
-    G4double fChemPb = this->operator()(ChemPb); 
+  G4double fChemPa = this->operator()(ChemPa); 
+  G4double fChemPb = this->operator()(ChemPb); 
 
-    if (fChemPa*fChemPb > 0.0) {    
-	// bracketing the solution
-	if (fChemPa < 0.0) {
-	    do {
-		ChemPb -= 1.5*std::abs(ChemPb-ChemPa);
-		fChemPb = this->operator()(ChemPb);   
-	    } while (fChemPb < 0.0);
-	} else {
-	    do {
-		ChemPb += 1.5*std::abs(ChemPb-ChemPa);
-		fChemPb = this->operator()(ChemPb);
-	    } while (fChemPb > 0.0);
-	}
+  if (fChemPa*fChemPb > 0.0) {    
+    // bracketing the solution
+    if (fChemPa < 0.0) {
+      do {
+	ChemPb -= 1.5*std::abs(ChemPb-ChemPa);
+	fChemPb = this->operator()(ChemPb);   
+	// Loop checking, 05-Aug-2015, Vladimir Ivanchenko
+      } while (fChemPb < 0.0);
+    } else {
+      do {
+	ChemPb += 1.5*std::abs(ChemPb-ChemPa);
+	fChemPb = this->operator()(ChemPb);
+	// Loop checking, 05-Aug-2015, Vladimir Ivanchenko
+      } while (fChemPb > 0.0);
     }
+  }
 
-    G4Solver<G4StatMFMacroChemicalPotential> * theSolver =
-      new G4Solver<G4StatMFMacroChemicalPotential>(100,1.e-4);
-    theSolver->SetIntervalLimits(ChemPa,ChemPb);
-    //    if (!theSolver->Crenshaw(*this)) 
-    if (!theSolver->Brent(*this)){
-      G4cerr <<"G4StatMFMacroChemicalPotential:"<<" ChemPa="<<ChemPa<<" ChemPb="<<ChemPb<< G4endl;
-      G4cerr <<"G4StatMFMacroChemicalPotential:"<<" fChemPa="<<fChemPa<<" fChemPb="<<fChemPb<< G4endl;
-      throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroChemicalPotential::CalcChemicalPotentialNu: I couldn't find the root.");
-    }
-    _ChemPotentialNu = theSolver->GetRoot();
-    delete theSolver;
-    return _ChemPotentialNu;
+  G4Solver<G4StatMFMacroChemicalPotential> * theSolver =
+    new G4Solver<G4StatMFMacroChemicalPotential>(100,1.e-4);
+  theSolver->SetIntervalLimits(ChemPa,ChemPb);
+  //    if (!theSolver->Crenshaw(*this)) 
+  if (!theSolver->Brent(*this)){
+    G4cout <<"G4StatMFMacroChemicalPotential:"<<" ChemPa="<<ChemPa
+	   <<" ChemPb="<<ChemPb<< G4endl;
+    G4cout <<"G4StatMFMacroChemicalPotential:"<<" fChemPa="<<fChemPa
+	   <<" fChemPb="<<fChemPb<< G4endl;
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroChemicalPotential::CalcChemicalPotentialNu: I couldn't find the root.");
+  }
+  _ChemPotentialNu = theSolver->GetRoot();
+  delete theSolver;
+  return _ChemPotentialNu;
 }
 
 
@@ -121,17 +123,14 @@ G4double G4StatMFMacroChemicalPotential::CalcMeanZ(const G4double nu)
   G4int n = 1;
   for (i = _theClusters->begin(); i != _theClusters->end(); ++i)
     {
-      MeanZ += static_cast<G4double>(n++) *
-	(*i)->GetZARatio() *
-	(*i)->GetMeanMultiplicity(); 
+      MeanZ += (n++) * (*i)->GetZARatio() * (*i)->GetMeanMultiplicity(); 
     }
   return MeanZ;
 }
 
-
 void G4StatMFMacroChemicalPotential::CalcChemicalPotentialMu(const G4double nu)
-  //	Calculate Chemical potential \mu
-  // For that is necesary to calculate mean multiplicities
+//	Calculate Chemical potential \mu
+// For that is necesary to calculate mean multiplicities
 {
   G4StatMFMacroMultiplicity * theMultip = new
     G4StatMFMacroMultiplicity(theA,_Kappa,_MeanTemperature,nu,_theClusters);
@@ -141,6 +140,5 @@ void G4StatMFMacroChemicalPotential::CalcChemicalPotentialMu(const G4double nu)
   
   delete theMultip;
   
-  return;
-  
+  return; 
 }

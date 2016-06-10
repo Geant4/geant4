@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistSurface.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4VTwistSurface.hh 91755 2015-08-05 08:17:56Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -378,7 +378,7 @@ G4bool DistanceSort( const Intersection &a, const Intersection &b)
 inline
 G4bool EqualIntersection( const Intersection &a, const Intersection &b)
 {
-  return ( ( a.xx - b.xx ).mag() < 1E-9*CLHEP::mm ) ;
+  return ( ( a.xx - b.xx ).mag() < 1E-9*CLHEP::mm ) ;  
 }
 
 #include "G4VTwistSurface.icc"

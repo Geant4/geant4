@@ -1,0 +1,1043 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_primitive_visitor
+#define tools_sg_primitive_visitor
+
+#include "../glprims"
+
+#include "../vdata"
+
+namespace tools {
+namespace sg {
+
+class primitive_visitor {
+protected:
+  virtual bool project(float& a_x,float& a_y,float& a_z,float& a_w) = 0;
+
+  // xyzw
+  virtual bool add_point(float,float,float,float) = 0;
+
+  // xyzw & rgba
+  virtual bool add_point(float,float,float,float,
+                         float,float,float,float) = 0;
+
+  // 2 xyzw
+  virtual bool add_line(float,float,float,float,
+                        float,float,float,float) = 0;
+
+  // 2 (xyzw & rgba)
+  virtual bool add_line(float,float,float,float, float,float,float,float,
+                        float,float,float,float, float,float,float,float) = 0;
+
+
+  // 3 xyzw
+  virtual bool add_triangle(float,float,float,float,
+                            float,float,float,float,
+                            float,float,float,float) = 0;
+  // 3 (xywz & rgba)
+  virtual bool add_triangle(float,float,float,float, float,float,float,float,
+                            float,float,float,float, float,float,float,float,
+                            float,float,float,float, float,float,float,float) = 0;
+public:
+  primitive_visitor():m_mode(gl::points()){}
+  virtual ~primitive_visitor(){}
+public:
+  primitive_visitor(const primitive_visitor&):m_mode(gl::points()){}
+  primitive_visitor& operator=(const primitive_visitor&){return *this;}
+public:
+  void add_one_point(float a_x,float a_y,float a_z) {
+    float w;
+    project(a_x,a_y,a_z,w);
+    add_point(a_x,a_y,a_z,w);    
+  }
+
+  bool add_triangle_fan(unsigned int a_floatn,const float* a_xyzs,bool a_stop = false){
+    unsigned int num = a_floatn/3;
+    if(num<3) return false;
+
+    m_mode = gl::triangle_fan();
+
+    float p1x,p1y,p1z,w1=1;
+    float p2x,p2y,p2z,w2=1;
+    float p3x,p3y,p3z,w3=1;
+
+    const float* pos1 = a_xyzs+3*0;
+    p1x = *(pos1+0);
+    p1y = *(pos1+1);
+    p1z = *(pos1+2);
+    project(p1x,p1y,p1z,w1);
+  
+    const float* pos2 = a_xyzs+3*1;
+    p2x = *(pos2+0);
+    p2y = *(pos2+1);
+    p2z = *(pos2+2);
+    project(p2x,p2y,p2z,w2);
+  
+    for(unsigned int index=2;index<num;index++) {
+      const float* pos = a_xyzs+3*index;
+      p3x = *(pos+0);
+      p3y = *(pos+1);
+      p3z = *(pos+2);
+      project(p3x,p3y,p3z,w3);
+
+      if(!add_triangle(p1x,p1y,p1z,w1,
+                       p2x,p2y,p2z,w2,
+                       p3x,p3y,p3z,w3)) {
+        if(a_stop) return false;
+      }
+  
+      p2x = p3x;
+      p2y = p3y;
+      p2z = p3z;
+      w2 = w3;
+    }
+    return true;
+  }
+
+  bool add_triangle_strip(unsigned int a_floatn,const float* a_xyzs,bool a_stop = false){
+    unsigned int num = a_floatn/3;
+    if(num<3) return false;
+
+    m_mode = gl::triangle_strip();
+
+    float p1x,p1y,p1z,w1=1;
+    float p2x,p2y,p2z,w2=1;
+    float p3x,p3y,p3z,w3=1;
+
+    const float* pos1 = a_xyzs+3*0;
+    p1x = *(pos1+0);
+    p1y = *(pos1+1);
+    p1z = *(pos1+2);
+    project(p1x,p1y,p1z,w1);
+  
+    const float* pos2 = a_xyzs+3*1;
+    p2x = *(pos2+0);
+    p2y = *(pos2+1);
+    p2z = *(pos2+2);
+    project(p2x,p2y,p2z,w2);
+  
+    bool flip = false;
+    for(unsigned int index=2;index<num;index++) {
+      const float* pos = a_xyzs+3*index;
+      p3x = *(pos+0);
+      p3y = *(pos+1);
+      p3z = *(pos+2);
+      project(p3x,p3y,p3z,w3);
+
+      if(flip){
+        if(!add_triangle(p1x,p1y,p1z,w1,
+                         p3x,p3y,p3z,w3,
+                         p2x,p2y,p2z,w2)) {
+          if(a_stop) return false;
+        }
+      } else {
+        if(!add_triangle(p1x,p1y,p1z,w1,
+                         p2x,p2y,p2z,w2,
+                         p3x,p3y,p3z,w3)) {
+          if(a_stop) return false;
+        }
+      }
+  
+      p1x = p2x;
+      p1y = p2y;
+      p1z = p2z;
+      w1 = w2;
+
+      p2x = p3x;
+      p2y = p3y;
+      p2z = p3z;
+      w2 = w3;
+
+      flip = flip?false:true;
+    }
+    return true;
+  }
+
+  bool add_triangles(unsigned int a_floatn,const float* a_xyzs,bool a_stop = false){
+    unsigned int num = a_floatn/3;
+    if(num<3) return false;
+
+    m_mode = gl::triangles();
+
+    float p1x,p1y,p1z,w1=1;
+    float p2x,p2y,p2z,w2=1;
+    float p3x,p3y,p3z,w3=1;
+
+    for(unsigned int index=0;index<num;index+=3) {
+
+      const float* pos = a_xyzs+3*index;
+
+      p1x = *(pos++);
+      p1y = *(pos++);
+      p1z = *(pos++);
+      project(p1x,p1y,p1z,w1);
+  
+      p2x = *(pos++);
+      p2y = *(pos++);
+      p2z = *(pos++);
+      project(p2x,p2y,p2z,w2);
+  
+      p3x = *(pos++);
+      p3y = *(pos++);
+      p3z = *(pos++);
+      project(p3x,p3y,p3z,w3);
+
+      if(!add_triangle(p1x,p1y,p1z,w1,
+                       p2x,p2y,p2z,w2,
+                       p3x,p3y,p3z,w3)) {
+        if(a_stop) return false;
+      }
+    }
+    return true;
+  }
+
+  bool add_triangles(unsigned int a_floatn,const float* a_xyzs,const float* a_rgbas,bool a_stop = false){
+    unsigned int num = a_floatn/3;
+    if(num<3) return false;
+
+    m_mode = gl::triangles();
+
+    float p1x,p1y,p1z,w1=1;
+    float p2x,p2y,p2z,w2=1;
+    float p3x,p3y,p3z,w3=1;
+
+    float r1,g1,b1,a1;
+    float r2,g2,b2,a2;
+    float r3,g3,b3,a3;
+
+    for(unsigned int index=0;index<num;index+=3) {
+
+      const float* pos = a_xyzs+3*index;
+
+      p1x = *(pos++);
+      p1y = *(pos++);
+      p1z = *(pos++);
+      project(p1x,p1y,p1z,w1);
+  
+      p2x = *(pos++);
+      p2y = *(pos++);
+      p2z = *(pos++);
+      project(p2x,p2y,p2z,w2);
+  
+      p3x = *(pos++);
+      p3y = *(pos++);
+      p3z = *(pos++);
+      project(p3x,p3y,p3z,w3);
+
+      const float* qos = a_rgbas+4*index;
+
+      r1 = *(qos++);
+      g1 = *(qos++);
+      b1 = *(qos++);
+      a1 = *(qos++);
+
+      r2 = *(qos++);
+      g2 = *(qos++);
+      b2 = *(qos++);
+      a2 = *(qos++);
+
+      r3 = *(qos++);
+      g3 = *(qos++);
+      b3 = *(qos++);
+      a3 = *(qos++);
+
+      if(!add_triangle(p1x,p1y,p1z,w1,r1,g1,b1,a1,
+                       p2x,p2y,p2z,w2,r2,g2,b2,a2,
+                       p3x,p3y,p3z,w3,r3,g3,b3,a3)) {
+        if(a_stop) return false;
+      }
+    }
+    return true;
+  }
+
+  bool add_line_strip(unsigned int a_floatn,const float* a_xyzs,bool a_stop = false){
+    unsigned int num = a_floatn/3;
+    if(num<=1) return false;
+    unsigned int nseg = num-1;
+
+    m_mode = gl::line_strip();
+
+    float xb,yb,zb,wb,xe,ye,ze,we;
+    float* pos;
+    for(unsigned int iseg = 0;iseg<nseg;iseg++) {
+      pos = (float*)(a_xyzs+3*iseg);
+      xb = *pos;pos++;
+      yb = *pos;pos++;
+      zb = *pos;pos++;
+
+      xe = *pos;pos++;
+      ye = *pos;pos++;
+      ze = *pos;pos++;
+
+      project(xb,yb,zb,wb);
+      project(xe,ye,ze,we);
+      if(!add_line(xb,yb,zb,wb, xe,ye,ze,we)) {if(a_stop) return false;}
+    }
+    return true;
+  }
+
+  bool add_line_strip(unsigned int a_floatn,const float* a_xyzs,const float* a_rgbas,bool a_stop = false){
+    unsigned int num = a_floatn/3;
+    if(num<=1) return false;
+    unsigned int nseg = num-1;
+
+    m_mode = gl::line_strip();
+
+    float xb,yb,zb,wb,xe,ye,ze,we;
+    float rb,gb,bb,ab,re,ge,be,ae;
+    float* pos;
+    float* qos;
+    for(unsigned int iseg = 0;iseg<nseg;iseg++) {
+      pos = (float*)(a_xyzs+3*iseg);
+      xb = *pos;pos++;
+      yb = *pos;pos++;
+      zb = *pos;pos++;
+
+      xe = *pos;pos++;
+      ye = *pos;pos++;
+      ze = *pos;pos++;
+
+      project(xb,yb,zb,wb);
+      project(xe,ye,ze,we);
+
+      qos = (float*)(a_rgbas+4*iseg);
+      rb = *qos;qos++;
+      gb = *qos;qos++;
+      bb = *qos;qos++;
+      ab = *qos;qos++;
+
+      re = *qos;qos++;
+      ge = *qos;qos++;
+      be = *qos;qos++;
+      ae = *qos;qos++;
+
+      if(!add_line(xb,yb,zb,wb,rb,gb,bb,ab,
+                   xe,ye,ze,we,re,ge,be,ae)) {
+        if(a_stop) return false;
+      }
+    }
+    return true;
+  }
+
+  bool add_line_loop(unsigned int a_floatn,const float* a_xyzs,bool a_stop = false) {
+    unsigned int num = a_floatn/3;
+    if(num<=1) return false;
+    unsigned int nseg = num-1;
+
+    m_mode = gl::line_loop();
+
+    float xb,yb,zb,wb,xe,ye,ze,we;
+    float* pos;
+    for(unsigned int iseg = 0;iseg<nseg;iseg++) {
+      pos = (float*)(a_xyzs+3*iseg);
+      xb = *pos;pos++;
+      yb = *pos;pos++;
+      zb = *pos;pos++;
+
+      xe = *pos;pos++;
+      ye = *pos;pos++;
+      ze = *pos;pos++;
+
+      project(xb,yb,zb,wb);
+      project(xe,ye,ze,we);
+
+      if(!add_line(xb,yb,zb,wb, xe,ye,ze,we)) {if(a_stop) return false;}
+    }
+
+    //close the loop :
+   {pos = (float*)(a_xyzs+3*(nseg-1)+3);
+    xb = *pos;pos++;
+    yb = *pos;pos++;
+    zb = *pos;pos++;
+
+    pos = (float*)(a_xyzs); //first point.
+    xe = *pos;pos++;
+    ye = *pos;pos++;
+    ze = *pos;pos++;
+    project(xb,yb,zb,wb);
+    project(xe,ye,ze,we);
+
+    if(!add_line(xb,yb,zb,wb, xe,ye,ze,we)){if(a_stop) return false;}
+    }
+
+    return true;
+  }
+  
+  bool add_line_loop(unsigned int a_floatn,const float* a_xyzs,const float* a_rgbas,bool a_stop = false) {
+    unsigned int num = a_floatn/3;
+    if(num<=1) return false;
+    unsigned int nseg = num-1;
+
+    m_mode = gl::line_loop();
+
+    float xb,yb,zb,wb,xe,ye,ze,we;
+    float rb,gb,bb,ab,re,ge,be,ae;
+    float* pos;
+    float* qos;
+    for(unsigned int iseg = 0;iseg<nseg;iseg++) {
+      pos = (float*)(a_xyzs+3*iseg);
+      xb = *pos;pos++;
+      yb = *pos;pos++;
+      zb = *pos;pos++;
+
+      xe = *pos;pos++;
+      ye = *pos;pos++;
+      ze = *pos;pos++;
+
+      project(xb,yb,zb,wb);
+      project(xe,ye,ze,we);
+
+      qos = (float*)(a_rgbas+4*iseg);
+      rb = *qos;qos++;
+      gb = *qos;qos++;
+      bb = *qos;qos++;
+      ab = *qos;qos++;
+
+      re = *qos;qos++;
+      ge = *qos;qos++;
+      be = *qos;qos++;
+      ae = *qos;qos++;
+
+      if(!add_line(xb,yb,zb,wb,rb,gb,bb,ab,
+                   xe,ye,ze,we,re,ge,be,ae)) {
+        if(a_stop) return false;
+      }
+    }
+
+    //close the loop :
+   {pos = (float*)(a_xyzs+3*nseg);
+    xb = *pos;pos++;
+    yb = *pos;pos++;
+    zb = *pos;pos++;
+
+    pos = (float*)(a_xyzs); //first point.
+    xe = *pos;pos++;
+    ye = *pos;pos++;
+    ze = *pos;pos++;
+    project(xb,yb,zb,wb);
+    project(xe,ye,ze,we);
+
+    qos = (float*)(a_rgbas+4*nseg);
+    rb = *qos;qos++;
+    gb = *qos;qos++;
+    bb = *qos;qos++;
+    ab = *qos;qos++;
+
+    qos = (float*)(a_rgbas);
+    re = *qos;qos++;
+    ge = *qos;qos++;
+    be = *qos;qos++;
+    ae = *qos;qos++;
+
+    if(!add_line(xb,yb,zb,wb,rb,gb,bb,ab,
+                 xe,ye,ze,we,re,ge,be,ae)){if(a_stop) return false;}
+    }
+
+    return true;
+  }
+  
+  bool add_lines(unsigned int a_floatn,const float* a_xyzs,const float* a_rgbas,bool a_stop = false) {
+    //lines = segments.
+    unsigned int num = a_floatn/3;
+
+    unsigned int nseg = num/2;
+    if(!nseg) return false;
+
+    m_mode = gl::lines();
+
+    float xb,yb,zb,wb,xe,ye,ze,we;
+    float rb,gb,bb,ab,re,ge,be,ae;
+    float* pos;
+    float* qos;
+    for(unsigned int iseg = 0;iseg<nseg;iseg++) {
+      pos = (float*)(a_xyzs+6*iseg);
+      xb = *pos;pos++;
+      yb = *pos;pos++;
+      zb = *pos;pos++;
+
+      xe = *pos;pos++;
+      ye = *pos;pos++;
+      ze = *pos;pos++;
+
+      qos = (float*)(a_rgbas+8*iseg);
+      rb = *qos;qos++;
+      gb = *qos;qos++;
+      bb = *qos;qos++;
+      ab = *qos;qos++;
+
+      re = *qos;qos++;
+      ge = *qos;qos++;
+      be = *qos;qos++;
+      ae = *qos;qos++;
+
+      project(xb,yb,zb,wb);
+      project(xe,ye,ze,we);
+
+      if(!add_line(xb,yb,zb,wb,rb,gb,bb,ab, xe,ye,ze,we,re,ge,be,ae)) {if(a_stop) return false;}
+    }
+    return true;
+  }
+
+  bool add_lines(unsigned int a_floatn,const float* a_xyzs,bool a_stop = false) {
+    //lines = segments.
+    unsigned int num = a_floatn/3;
+
+    unsigned int nseg = num/2;
+    if(!nseg) return false;
+
+    m_mode = gl::lines();
+
+    float xb,yb,zb,wb,xe,ye,ze,we;
+    float* pos;
+    for(unsigned int iseg = 0;iseg<nseg;iseg++) {
+      pos = (float*)(a_xyzs+6*iseg);
+      xb = *pos;pos++;
+      yb = *pos;pos++;
+      zb = *pos;pos++;
+
+      xe = *pos;pos++;
+      ye = *pos;pos++;
+      ze = *pos;pos++;
+
+      project(xb,yb,zb,wb);
+      project(xe,ye,ze,we);
+
+      if(!add_line(xb,yb,zb,wb, xe,ye,ze,we)) {if(a_stop) return false;}
+    }
+    return true;
+  }
+
+  bool add_points(unsigned int a_floatn,const float* a_xyzs,bool a_stop = false){
+    unsigned int num = a_floatn/3;
+
+    m_mode = gl::points();
+
+    float x,y,z,w;
+    float* pos;
+    for(unsigned int ipt=0;ipt<num;ipt++) {
+      pos = (float*)(a_xyzs+3*ipt);
+      x = *pos;pos++;
+      y = *pos;pos++;
+      z = *pos;pos++;
+
+      project(x,y,z,w);
+
+      if(!add_point(x,y,z,w)) {if(a_stop) return false;}
+    }
+    return true;
+  }
+
+  bool add_points(unsigned int a_floatn,const float* a_xyzs,const float* a_rgbas,bool a_stop = false){
+    unsigned int num = a_floatn/3;
+
+    m_mode = gl::points();
+
+    float x,y,z,w;
+    float r,g,b,a;
+
+    float* pos;
+    float* qos;
+
+    for(unsigned int ipt=0;ipt<num;ipt++) {
+      pos = (float*)(a_xyzs+3*ipt);
+      x = *pos;pos++;
+      y = *pos;pos++;
+      z = *pos;pos++;
+
+      qos = (float*)(a_rgbas+4*ipt);
+      r = *qos;qos++;
+      g = *qos;qos++;
+      b = *qos;qos++;
+      a = *qos;qos++;
+
+      project(x,y,z,w);
+
+      if(!add_point(x,y,z,w,r,g,b,a)) {if(a_stop) return false;}
+    }
+    return true;
+  }
+
+  bool add_primitive(gl::mode_t a_mode,unsigned int a_floatn,const float* a_xyzs,bool a_stop = false) {
+
+    if(a_mode==gl::points()) {
+      return add_points(a_floatn,a_xyzs,a_stop);
+
+    } else if(a_mode==gl::lines()) {
+      return add_lines(a_floatn,a_xyzs,a_stop);
+
+    } else if(a_mode==gl::line_loop()) {
+      return add_line_loop(a_floatn,a_xyzs,a_stop);
+
+    } else if(a_mode==gl::line_strip()) {
+      return add_line_strip(a_floatn,a_xyzs,a_stop);
+
+    } else if(a_mode==gl::triangles()) {
+      return add_triangles(a_floatn,a_xyzs,a_stop);
+
+    } else if(a_mode==gl::triangle_strip()) {
+      return add_triangle_strip(a_floatn,a_xyzs,a_stop);
+
+    } else if(a_mode==gl::triangle_fan()) {
+      return add_triangle_fan(a_floatn,a_xyzs,a_stop);
+
+    } else {
+      return false;
+    }
+  }
+
+  bool add_primitive(gl::mode_t a_mode,
+                     unsigned int a_floatn,
+                     const float* a_xyzs,
+                     const float* a_rgbas,
+                     bool a_stop = false){
+
+    if(a_mode==gl::points()) {
+      return add_points(a_floatn,a_xyzs,a_rgbas,a_stop);
+
+    } else if(a_mode==gl::lines()) {
+      return add_lines(a_floatn,a_xyzs,a_rgbas,a_stop);
+
+    } else if(a_mode==gl::line_loop()) {
+      return add_line_loop(a_floatn,a_xyzs,a_rgbas,a_stop);
+
+    } else if(a_mode==gl::line_strip()) {
+      return add_line_strip(a_floatn,a_xyzs,a_rgbas,a_stop);
+
+    } else if(a_mode==gl::triangles()) {
+      return add_triangles(a_floatn,a_xyzs,a_rgbas,a_stop);
+
+    } else if(a_mode==gl::triangle_strip()) {
+      return add_triangle_strip(a_floatn,a_xyzs,/*a_rgbas,*/a_stop);
+
+    } else if(a_mode==gl::triangle_fan()) {
+      return add_triangle_fan(a_floatn,a_xyzs,/*a_rgbas,*/a_stop);
+
+    } else {
+      return false;
+    }
+  }
+
+  ////////////////////////////////////////////////////////
+  /// points with x,y only ///////////////////////////////
+  ////////////////////////////////////////////////////////
+
+  bool add_points_xy(unsigned int a_floatn,const float* a_xys,bool a_stop = false) {
+    unsigned int num = a_floatn/2;
+
+    m_mode = gl::points();
+
+    float x,y,z,w;
+    float* pos;
+    for(unsigned int ipt=0;ipt<num;ipt++) {
+      pos = (float*)(a_xys+2*ipt);
+      x = *pos;pos++;
+      y = *pos;pos++;
+      z = 0;
+
+      project(x,y,z,w);
+
+      if(!add_point(x,y,z,w)) {if(a_stop) return false;}
+    }
+    return true;
+  }
+
+  bool add_triangle_fan_xy(unsigned int a_floatn,const float* a_xys,
+                           bool a_stop = false,
+                           bool a_triangle_revert = false){
+    unsigned int num = a_floatn/2;
+    if(num<3) return false;
+
+    m_mode = gl::triangle_fan();
+
+    float p1x,p1y,p1z,w1=1;
+    float p2x,p2y,p2z,w2=1;
+    float p3x,p3y,p3z,w3=1;
+
+    const float* pos1 = a_xys+2*0;
+    p1x = *(pos1+0);
+    p1y = *(pos1+1);
+    p1z = 0;
+    project(p1x,p1y,p1z,w1);
+  
+    const float* pos2 = a_xys+2*1;
+    p2x = *(pos2+0);
+    p2y = *(pos2+1);
+    p2z = 0;
+    project(p2x,p2y,p2z,w2);
+  
+    for(unsigned int index=2;index<num;index++) {
+      const float* pos = a_xys+2*index;
+      p3x = *(pos+0);
+      p3y = *(pos+1);
+      p3z = 0;
+      project(p3x,p3y,p3z,w3);
+
+      if(a_triangle_revert) {
+        if(!add_triangle(p3x,p3y,p3z,w3,
+                         p2x,p2y,p2z,w2,
+                         p1x,p1y,p1z,w1)) {
+          if(a_stop) return false;
+        }
+      } else {
+        if(!add_triangle(p1x,p1y,p1z,w1,
+                         p2x,p2y,p2z,w2,
+                         p3x,p3y,p3z,w3)) {
+          if(a_stop) return false;
+        }
+      }
+
+  
+      p2x = p3x;
+      p2y = p3y;
+      p2z = p3z;
+      w2 = w3;
+    }
+    return true;
+  }
+
+  bool add_triangle_strip_xy(unsigned int a_floatn,const float* a_xys,
+                             bool a_stop = false,
+                             bool a_triangle_revert = false){
+    unsigned int num = a_floatn/2;
+    if(num<3) return false;
+
+    m_mode = gl::triangle_strip();
+
+    float p1x,p1y,p1z,w1=1;
+    float p2x,p2y,p2z,w2=1;
+    float p3x,p3y,p3z,w3=1;
+
+    const float* pos1 = a_xys+2*0;
+    p1x = *(pos1+0);
+    p1y = *(pos1+1);
+    p1z = 0;
+    project(p1x,p1y,p1z,w1);
+  
+    const float* pos2 = a_xys+2*1;
+    p2x = *(pos2+0);
+    p2y = *(pos2+1);
+    p2z = 0;
+    project(p2x,p2y,p2z,w2);
+  
+    bool flip = false;
+    for(unsigned int index=2;index<num;index++) {
+      const float* pos = a_xys+2*index;
+      p3x = *(pos+0);
+      p3y = *(pos+1);
+      p3z = 0;
+      project(p3x,p3y,p3z,w3);
+
+      if(a_triangle_revert) {
+
+        if(flip){
+          if(!add_triangle(p2x,p2y,p2z,w2,
+                           p3x,p3y,p3z,w3,
+                           p1x,p1y,p1z,w1)) {
+            if(a_stop) return false;
+          }
+        } else {
+          if(!add_triangle(p3x,p3y,p3z,w3,
+                           p2x,p2y,p2z,w2,
+                           p1x,p1y,p1z,w1)) {
+            if(a_stop) return false;
+          }
+        }
+
+      } else {
+
+        if(flip){
+          if(!add_triangle(p1x,p1y,p1z,w1,
+                           p3x,p3y,p3z,w3,
+                           p2x,p2y,p2z,w2)) {
+            if(a_stop) return false;
+          }
+        } else {
+          if(!add_triangle(p1x,p1y,p1z,w1,
+                           p2x,p2y,p2z,w2,
+                           p3x,p3y,p3z,w3)) {
+            if(a_stop) return false;
+          }
+        }
+
+      }
+  
+      p1x = p2x;
+      p1y = p2y;
+      p1z = p2z;
+      w1 = w2;
+
+      p2x = p3x;
+      p2y = p3y;
+      p2z = p3z;
+      w2 = w3;
+
+      flip = flip?false:true;
+    }
+    return true;
+  }
+
+  bool add_triangles_xy(unsigned int a_floatn,const float* a_xys,bool a_stop = false,bool a_triangle_revert = false){
+    unsigned int num = a_floatn/2;
+    if(num<3) return false;
+
+    m_mode = gl::triangles();
+
+    float p1x,p1y,p1z,w1=1;
+    float p2x,p2y,p2z,w2=1;
+    float p3x,p3y,p3z,w3=1;
+
+    for(unsigned int index=0;index<num;index+=3) {
+
+      const float* pos1 = a_xys+2*index;
+      p1x = *(pos1+0);
+      p1y = *(pos1+1);
+      p1z = 0;
+      project(p1x,p1y,p1z,w1);
+  
+      const float* pos2 = a_xys+2*(index+1);
+      p2x = *(pos2+0);
+      p2y = *(pos2+1);
+      p2z = 0;
+      project(p2x,p2y,p2z,w2);
+  
+      const float* pos3 = a_xys+2*(index+2);
+      p3x = *(pos3+0);
+      p3y = *(pos3+1);
+      p3z = 0;
+      project(p3x,p3y,p3z,w3);
+
+      if(a_triangle_revert) {
+        if(!add_triangle(p3x,p3y,p3z,w3,
+                         p2x,p2y,p2z,w2,
+                         p1x,p1y,p1z,w1)) {
+          if(a_stop) return false;
+        }
+      } else {
+        if(!add_triangle(p1x,p1y,p1z,w1,
+                         p2x,p2y,p2z,w2,
+                         p3x,p3y,p3z,w3)) {
+          if(a_stop) return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  bool add_line_loop_xy(unsigned int a_floatn,const float* a_xys,bool a_stop = false){
+    unsigned int num = a_floatn/2;
+    if(num<=1) return false;
+    unsigned int nseg = num-1;
+
+    m_mode = gl::line_loop();
+
+    float xb,yb,zb,wb,xe,ye,ze,we;
+    float* pos;
+    for(unsigned int iseg = 0;iseg<nseg;iseg++) {
+      pos = (float*)(a_xys+2*iseg);
+      xb = *pos;pos++;
+      yb = *pos;pos++;
+      zb = 0;
+
+      xe = *pos;pos++;
+      ye = *pos;pos++;
+      ze = 0;
+
+      project(xb,yb,zb,wb);
+      project(xe,ye,ze,we);
+
+      if(!add_line(xb,yb,zb,wb, xe,ye,ze,we)) {if(a_stop) return false;}
+    }
+
+    //close the loop :
+   {pos = (float*)(a_xys+2*(nseg-1)+2);
+    xb = *pos;pos++;
+    yb = *pos;pos++;
+    zb = 0;
+
+    pos = (float*)(a_xys); //first point.
+    xe = *pos;pos++;
+    ye = *pos;pos++;
+    ze = 0;
+    project(xb,yb,zb,wb);
+    project(xe,ye,ze,we);
+
+    if(!add_line(xb,yb,zb,wb, xe,ye,ze,we)){if(a_stop) return false;}
+    }
+
+    return true;
+  }
+  
+  bool add_line_strip_xy(unsigned int a_floatn,const float* a_xys,bool a_stop = false){
+    unsigned int num = a_floatn/2;
+    if(num<=1) return false;
+    unsigned int nseg = num-1;
+
+    m_mode = gl::line_strip();
+
+    float xb,yb,zb,wb,xe,ye,ze,we;
+    float* pos;
+    for(unsigned int iseg = 0;iseg<nseg;iseg++) {
+      pos = (float*)(a_xys+2*iseg);
+      xb = *pos;pos++;
+      yb = *pos;pos++;
+      zb = 0;
+
+      xe = *pos;pos++;
+      ye = *pos;pos++;
+      ze = 0;
+
+      project(xb,yb,zb,wb);
+      project(xe,ye,ze,we);
+      if(!add_line(xb,yb,zb,wb, xe,ye,ze,we)) {if(a_stop) return false;}
+    }
+    return true;
+  }
+
+  bool add_lines_xy(unsigned int a_floatn,const float* a_xys,bool a_stop = false){
+    //lines = segments.  Each point having only (x,y) (no z).
+    //used in exlib::sg::[text_freetype, text_hershey].
+
+    unsigned int num = a_floatn/2;
+
+    unsigned int nseg = num/2;
+    if(!nseg) return false;
+
+    m_mode = gl::lines();
+
+    float xb,yb,zb,wb,xe,ye,ze,we;
+    float* pos;
+    for(unsigned int iseg = 0;iseg<nseg;iseg++) {
+      pos = (float*)(a_xys+4*iseg);
+      xb = *pos;pos++;
+      yb = *pos;pos++;
+      zb = 0;
+
+      xe = *pos;pos++;
+      ye = *pos;pos++;
+      ze = 0;
+
+      project(xb,yb,zb,wb);
+      project(xe,ye,ze,we);
+
+      if(!add_line(xb,yb,zb,wb, xe,ye,ze,we)) {if(a_stop) return false;}
+    }
+    return true;
+  }
+
+  bool add_primitive_xy(gl::mode_t a_mode,
+                        unsigned int a_floatn,const float* a_xys,
+                        bool a_stop = false,
+                        bool a_triangle_revert = false){
+
+    if(a_mode==gl::points()) {
+      return add_points_xy(a_floatn,a_xys,a_stop);
+
+    } else if(a_mode==gl::lines()) {
+      return add_lines_xy(a_floatn,a_xys,a_stop);
+
+    } else if(a_mode==gl::line_loop()) {
+      return add_line_loop_xy(a_floatn,a_xys,a_stop);
+
+    } else if(a_mode==gl::line_strip()) {
+      return add_line_strip_xy(a_floatn,a_xys,a_stop);
+
+    } else if(a_mode==gl::triangles()) {
+      return add_triangles_xy(a_floatn,a_xys,a_stop,a_triangle_revert);
+
+    } else if(a_mode==gl::triangle_strip()) {
+      return add_triangle_strip_xy(a_floatn,a_xys,a_stop,a_triangle_revert);
+
+    } else if(a_mode==gl::triangle_fan()) {
+      return add_triangle_fan_xy(a_floatn,a_xys,a_stop,a_triangle_revert);
+
+    } else {
+      return false;
+    }
+  }
+
+public:
+  bool add_primitive(gl::mode_t a_mode,const std::vector<float>& a_xyzs,bool a_stop = false){
+    const float* _xyzs = tools::vec_data<float>(a_xyzs);
+    return add_primitive(a_mode,a_xyzs.size(),_xyzs,a_stop);
+  }
+  bool add_primitive_xy(gl::mode_t a_mode,const std::vector<float>& a_xys,bool a_stop = false,bool a_triangle_revert = false){
+    const float* _xys = tools::vec_data<float>(a_xys);
+    return add_primitive_xy(a_mode,a_xys.size(),_xys,a_stop,a_triangle_revert);
+  }
+  bool add_line_strip(const std::vector<float>& a_xyzs,bool a_stop = false){
+    const float* _xyzs = tools::vec_data<float>(a_xyzs);
+    return add_line_strip(a_xyzs.size(),_xyzs,a_stop);
+  }
+  bool add_line_loop(const std::vector<float>& a_xyzs,bool a_stop = false){
+    const float* _xyzs = tools::vec_data<float>(a_xyzs);
+    return add_line_loop(a_xyzs.size(),_xyzs,a_stop);
+  }
+  bool add_lines(const std::vector<float>& a_xyzs,bool a_stop = false){
+    const float* _xyzs = tools::vec_data<float>(a_xyzs);
+    return add_lines(a_xyzs.size(),_xyzs,a_stop);
+  }
+  bool add_points(const std::vector<float>& a_xyzs,bool a_stop = false){
+    const float* _xyzs = tools::vec_data<float>(a_xyzs);
+    return add_points(a_xyzs.size(),_xyzs,a_stop);
+  }
+
+  bool add_triangle_strip(const std::vector<float>& a_xyzs,bool a_stop = false){
+    const float* _xyzs = tools::vec_data<float>(a_xyzs);
+    return add_triangle_strip(a_xyzs.size(),_xyzs,a_stop);
+  }
+
+  bool add_points_xy(const std::vector<float>& a_xys,bool a_stop = false){
+    const float* _xys = tools::vec_data<float>(a_xys);
+    return add_points_xy(a_xys.size(),_xys,a_stop);
+  }
+  bool add_lines_xy(const std::vector<float>& a_xys,bool a_stop = false){
+    const float* _xys = tools::vec_data<float>(a_xys);
+    return add_lines_xy(a_xys.size(),_xys,a_stop);
+  }
+  bool add_triangle_strip_xy(const std::vector<float>& a_xys,bool a_stop = false){
+    const float* _xys = tools::vec_data<float>(a_xys);
+    return add_triangle_strip_xy(a_xys.size(),_xys,a_stop);
+  }
+
+
+public:
+  //for sg::[tex_]sphere::visit() template :
+  bool add_triangle_fan(unsigned int a_floatn,const float* a_xyzs,const float* /*a_nms*/) {
+    return add_triangle_fan(a_floatn,a_xyzs);
+  }
+  bool add_triangle_fan(unsigned int a_floatn,const float* a_xyzs,const float* /*a_rgbas*/,const float* /*a_nms*/) {
+    return add_triangle_fan(a_floatn,a_xyzs);
+  }
+/*
+  bool add_triangles_texture(unsigned int a_floatn,const float* a_xyzs,unsigned int,const float*){
+    return add_triangles(a_floatn,a_xyzs);
+  }
+  bool add_triangle_fan_texture(unsigned int a_floatn,const float* a_xyzs,unsigned int,const float*){
+    return add_triangle_fan(a_floatn,a_xyzs);
+  }
+  bool add_triangle_strip_texture(unsigned int a_floatn,const float* a_xyzs,unsigned int,const float*){
+    return add_triangle_strip(a_floatn,a_xyzs,false);
+  }
+*/
+  bool add_triangle_fan_texture(unsigned int a_floatn,const float* a_xyzs,const float* /*a_nms*/,unsigned int,const float*){
+    return add_triangle_fan(a_floatn,a_xyzs);
+  }
+  bool add_triangle_strip_texture(unsigned int a_floatn,const float* a_xyzs,const float* /*a_nms*/,unsigned int,const float*){
+    return add_triangle_strip(a_floatn,a_xyzs,false);
+  }
+
+  bool add_triangle_strip(unsigned int a_floatn,const float* a_xyzs,const float* /*a_nms*/) {
+    return add_triangle_strip(a_floatn,a_xyzs,false);
+  }
+  bool add_triangle_strip(unsigned int a_floatn,const float* a_xyzs,const float* /*a_rgbas*/,const float* /*a_nms*/) {
+    return add_triangle_strip(a_floatn,a_xyzs,false);
+  }
+
+protected:
+  gl::mode_t m_mode;
+};
+
+}}
+
+#endif

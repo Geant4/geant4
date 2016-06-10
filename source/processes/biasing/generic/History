@@ -1,4 +1,4 @@
-$Id: History 86757 2014-11-17 15:16:50Z gcosmo $
+$Id: History 94220 2015-11-09 08:26:57Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 6th, 2015, M. Verderi
+- fix non initialization of model IDs in MT mode.
+- prevent "over initialization" of operators (each
+  first process of process managers were calling
+  these initializations).
+- proc-biasgen-V10-01-01
+
+November 6th, 2015, M. Verderi
+- adaptation to using G4VAuxuliaryTrackInformation:
+    o creation of G4BOptrForceCollisionTrackData
+    o quite rewriting of G4BOptrForceCollision biasing operator,
+      removing many state variables used for bookeeping of tracks
+      which is now achieved much simplier by the aux. track info.
+      Comes together with related logic re-writting.
+    o Removal of dependencies to management/G4BiasingTrackData
+      now deleted since proc-biasmng-V10-01-00 .
+- proc-biasgen-V10-01-00
 
 November 14th, 2014 M.Verderi
 - Serious fix in G4InteractionLawPhysical::

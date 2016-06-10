@@ -95,13 +95,13 @@ void G4LEPTSIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   if( Energylost < theIonisPotInt[aMaterial]) {  // External Ionisation
     //-    SetModelName("Ionisation");
     Edep = theIonisPot[aMaterial];
-    P2KinEn = max(0.001*CLHEP::eV, (Energylost - theIonisPot[aMaterial]) );
+    P2KinEn = std::max(0.001*CLHEP::eV, (Energylost - theIonisPot[aMaterial]) );
   }
   else {                   // Auger    
     //-    SetModelName("IonisAuger");
     Edep = 35*CLHEP::eV;   
-    P2KinEn = max(0.0, (Energylost - theIonisPotInt[aMaterial]) );
-    G4double P3KinEn = max(0.0, theIonisPotInt[aMaterial] - Edep);
+    P2KinEn = std::max(0.0, (Energylost - theIonisPotInt[aMaterial]) );
+    G4double P3KinEn = std::max(0.0, theIonisPotInt[aMaterial] - Edep);
 
     G4ThreeVector P3Dir;
     P3Dir.setX( G4UniformRand() );

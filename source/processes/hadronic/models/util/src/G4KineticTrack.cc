@@ -32,7 +32,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <cmath>
+//#include <cmath>
 
 #include "Randomize.hh"
 #include "G4SimpleIntegration.hh"
@@ -328,7 +328,7 @@ G4KineticTrack::G4KineticTrack(const G4ParticleDefinition* aDefinition,
 	  else  // (nDaughter==3)
 	    {
 	      
-	      int nShortLived = 0;
+	      G4int nShortLived = 0;
 	      if ( theDaughterIsShortLived[0] ) 
 		{ 
 		  nShortLived++; 
@@ -370,13 +370,16 @@ G4KineticTrack::G4KineticTrack(const G4ParticleDefinition* aDefinition,
 	      
 	    }
 	  
-          G4double l=0;
 	  //if(nDaughters<3) theChannel->GetAngularMomentum(); 
 	  G4double theMassRatio = thePoleMass / theActualMass;
           G4double theMomRatio = theActualMom / thePoleMom;
+	  // VI 11.06.2015: for l=0 one not need use pow
+          //G4double l=0;
+          //theActualWidth[index] = thePoleWidth * theMassRatio *
+          //                        std::pow(theMomRatio, (2 * l + 1)) *
+          //                        (1.2 / (1+ 0.2*std::pow(theMomRatio, (2 * l))));
           theActualWidth[index] = thePoleWidth * theMassRatio *
-                                  std::pow(theMomRatio, (2 * l + 1)) *
-                                  (1.2 / (1+ 0.2*std::pow(theMomRatio, (2 * l))));
+                                  theMomRatio;
           delete [] theDaughterMass;
 	  theDaughterMass = 0;
           delete [] theDaughterWidth;
@@ -556,9 +559,10 @@ G4KineticTrackVector* G4KineticTrack::Decay()
      G4String theDaughtersName1 = "";
      G4String theDaughtersName2 = "";
      G4String theDaughtersName3 = "";
+     G4String theDaughtersName4 = "";
      
-     G4double masses[3]={0.,0.,0.};
-     G4int shortlivedDaughters[3];
+     G4double masses[4]={0.,0.,0.,0.};
+     G4int shortlivedDaughters[4];
      G4int numberOfShortliveds(0);
      G4double SumLongLivedMass(0);
      for (G4int aD=0; aD < theNumberOfDaughters ; aD++)
@@ -582,11 +586,13 @@ G4KineticTrackVector* G4KineticTrack::Decay()
             theDaughtersName1 = theDecayChannel->GetDaughterName(0);
             theDaughtersName2 = "";
             theDaughtersName3 = "";
+            theDaughtersName4 = "";
             break;
          case 2:    
             theDaughtersName1 = theDecayChannel->GetDaughterName(0);	    
             theDaughtersName2 = theDecayChannel->GetDaughterName(1);
             theDaughtersName3 = "";
+            theDaughtersName4 = "";
 	    if (  numberOfShortliveds == 1) 
 	    {   G4SampleResonance aSampler;
                 G4double massmax=theParentMass - SumLongLivedMass;
@@ -605,16 +611,34 @@ G4KineticTrackVector* G4KineticTrack::Decay()
 		masses[shortlivedDaughters[one]]=aSampler.SampleMass(aDaughter,massmax);
 	    }
 	    break;		
-	 default:    
+	 case 3:    
             theDaughtersName1 = theDecayChannel->GetDaughterName(0);
             theDaughtersName2 = theDecayChannel->GetDaughterName(1);
             theDaughtersName3 = theDecayChannel->GetDaughterName(2);
+            theDaughtersName4 = "";
 	    if (  numberOfShortliveds == 1) 
 	    {   G4SampleResonance aSampler;
                 G4double massmax=theParentMass - SumLongLivedMass;
 		const G4ParticleDefinition * aDaughter=theDecayChannel->GetDaughter(shortlivedDaughters[0]);
 	        masses[shortlivedDaughters[0]]= aSampler.SampleMass(aDaughter,massmax);
 	    }
+	    break;
+	 default:    
+            theDaughtersName1 = theDecayChannel->GetDaughterName(0);
+            theDaughtersName2 = theDecayChannel->GetDaughterName(1);
+            theDaughtersName3 = theDecayChannel->GetDaughterName(2);
+            theDaughtersName4 = theDecayChannel->GetDaughterName(3);
+	    if (  numberOfShortliveds == 1) 
+	    {   G4SampleResonance aSampler;
+                G4double massmax=theParentMass - SumLongLivedMass;
+		const G4ParticleDefinition * aDaughter=theDecayChannel->GetDaughter(shortlivedDaughters[0]);
+	        masses[shortlivedDaughters[0]]= aSampler.SampleMass(aDaughter,massmax);
+	    }
+            if ( theNumberOfDaughters > 4 ) {
+              G4ExceptionDescription ed;
+              ed << "More than 4 decay daughters: kept only the first 4" << G4endl;
+              G4Exception( "G4KineticTrack::Decay()", "KINTRK5", JustWarning, ed );
+            }
 	    break;
 	}
 
@@ -629,6 +653,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
                                                         theDaughtersName1,                  
 		                                        theDaughtersName2,
 		                                        theDaughtersName3,
+		                                        theDaughtersName4,
 							masses);
      G4DecayProducts* theDecayProducts = thePhaseSpaceDecayChannel.DecayIt();
      if(!theDecayProducts)
@@ -638,7 +663,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
        G4cerr << "  particle was "<<thisDefinition->GetParticleName()<<G4endl;
        G4cerr << "  channel index "<< chosench << "of "<<nChannels<<"channels"<<G4endl;
        G4cerr << "  "<<theNumberOfDaughters<< " Daughter particles: "
-              << theDaughtersName1<<" "<<theDaughtersName2<<" "<<theDaughtersName3<<G4endl;
+              << theDaughtersName1<<" "<<theDaughtersName2<<" "<<theDaughtersName3<<" "<<theDaughtersName4<<G4endl;
        return 0;
      }
 		                                        

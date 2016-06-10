@@ -43,6 +43,9 @@
 
 #include "G4LFission.hh"
 #include "globals.hh"
+#include "G4Exp.hh"
+#include "G4Log.hh"
+#include "G4Pow.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
@@ -77,11 +80,11 @@ void G4LFission::init()
    G4int i;
    G4double xx = 1. - 0.5;
    G4double xxx = std::sqrt(2.29*xx);
-   spneut[0] = std::exp(-xx/0.965)*(std::exp(xxx) - std::exp(-xxx))/2.;
+   spneut[0] = G4Exp(-xx/0.965)*(G4Exp(xxx) - G4Exp(-xxx))/2.;
    for (i = 2; i <= 10; i++) {
       xx = i*1. - 0.5;
       xxx = std::sqrt(2.29*xx);
-      spneut[i-1] = spneut[i-2] + std::exp(-xx/0.965)*(std::exp(xxx) - std::exp(-xxx))/2.;
+      spneut[i-1] = spneut[i-2] + G4Exp(-xx/0.965)*(G4Exp(xxx) - G4Exp(-xxx))/2.;
    }
    for (i = 1; i <= 10; i++) {
       spneut[i-1] = spneut[i-1]/spneut[9];
@@ -145,13 +148,13 @@ G4HadFinalState* G4LFission::ApplyYourself(const G4HadProjectile& aTrack,
    if (e1 < 1.) e1 = 1.;
 
 // Average number of neutrons
-   G4double avern = 2.569 + 0.559*std::log(e1);
+   G4double avern = 2.569 + 0.559*G4Log(e1);
    G4bool photofission = 0;      // For now
 // Take the following value if photofission is not included
-   if (!photofission) avern = 2.569 + 0.900*std::log(e1);
+   if (!photofission) avern = 2.569 + 0.900*G4Log(e1);
 
 // Average number of gammas
-   G4double averg = 9.500 + 0.600*std::log(e1);
+   G4double averg = 9.500 + 0.600*G4Log(e1);
 
    G4double ran = G4RandGauss::shoot();
 // Number of neutrons
@@ -188,7 +191,7 @@ G4HadFinalState* G4LFission::ApplyYourself(const G4HadProjectile& aTrack,
    G4DynamicParticle* aGamma;
    for (i = 1; i <= ng; i++) {
       ran = G4UniformRand();
-      G4double ekin = -0.87*std::log(ran);
+      G4double ekin = -0.87*G4Log(ran);
       exg = exg + ekin;
       aGamma = new G4DynamicParticle(G4Gamma::GammaDefinition(),
                                      G4ParticleMomentum(1.,0.,0.),
@@ -265,13 +268,14 @@ G4double G4LFission::Atomas(const G4double A, const G4double Z)
       return rma;                       //Alpha
    }
 
+  G4Pow* Pow=G4Pow::GetInstance();
   G4double mass = (A - Z)*rmn + Z*rmp + Z*rmel - 15.67*A
-                  + 17.23*std::pow(A, 2./3.)
+                  + 17.23*Pow->A23(A)
                   + 93.15*(A/2. - Z)*(A/2. - Z)/A
-                  + 0.6984523*Z*Z/std::pow(A, 1./3.);
+                  + 0.6984523*Z*Z/Pow->A13(A);
   G4int ipp = (ia - iz)%2;
   G4int izz = iz%2;
-  if (ipp == izz) mass = mass + (ipp + izz -1)*12.*std::pow(A, -0.5);
+  if (ipp == izz) mass = mass + (ipp + izz -1)*12.*Pow->powA(A, -0.5);
 
   return mass;
 }

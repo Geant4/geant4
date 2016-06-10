@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.hh 83920 2014-09-23 09:00:36Z gcosmo $
+// $Id: G4IonTable.hh 94421 2015-11-16 08:22:56Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -95,6 +95,7 @@ class G4IonTable
  public:
   // destructor
    virtual ~G4IonTable();
+   void DestroyWorkerG4IonTable();
 
  public: // With Description
    G4int GetNumberOfElements() const;
@@ -209,6 +210,7 @@ class G4IonTable
    //  lvl is isomer level
  
    G4double   GetLifeTime(const G4ParticleDefinition*) const;
+   G4double   GetLifeTime(G4int Z, G4int A, G4double E) const;
    // Returns a life time of an ion. -1 for stable ion, and -1001 for ion
    // that is not listed in G4NuclideTable.
    

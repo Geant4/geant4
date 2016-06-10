@@ -120,6 +120,7 @@ public:
 	virtual ~G4TrackState<G4ITPathFinder>(){}
 
 	G4TrackState<G4ITPathFinder>() :
+      G4TrackStateBase<G4ITPathFinder>(),
 			fEndState( G4ThreeVector(), G4ThreeVector(), 0., 0., 0., 0., 0.),
 			fFieldExertedForce(false),
 			fRelocatedPoint(true),

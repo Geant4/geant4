@@ -36,7 +36,8 @@
 //_____________________________________________________________________________
 ExG4HbookH3DummyManager::ExG4HbookH3DummyManager(
                              const G4AnalysisManagerState& state)
- : G4VH3Manager(state)
+ : G4VH3Manager(),
+   G4THnManager<G4int>(state, "H3")
 {
 }
 

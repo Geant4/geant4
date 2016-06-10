@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.cc 68795 2013-04-05 13:24:46Z gcosmo $
+// $Id: G4ParticleChangeForTransport.cc 87698 2014-12-17 09:41:28Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -226,6 +226,11 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForPostStep(G4Step* pStep)
     pPostStepPoint->SetMaterialCutsCouple( theMaterialCutsCoupleChange );
     pPostStepPoint->SetSensitiveDetector( theSensitiveDetectorChange );
   }
+  if( this->GetFirstStepInVolume() ){
+    pStep->SetFirstStepFlag();
+  }else{
+    pStep->ClearFirstStepFlag(); 
+  }  
   if( this->GetLastStepInVolume() ){
     pStep->SetLastStepFlag();
   }else{

@@ -1,0 +1,30 @@
+#
+/run/numberOfThreads 2
+#
+/w/det/setMat G4_WATER
+/w/det/setRadius 1 m
+#
+/w/det/setTrackingCut 7.4 eV
+#
+# Register physics constructor
+/w/phys/addPhysics  G4EmDNAPhysics	        
+#/w/phys/addPhysics  G4EmDNAPhysics_option4	
+
+#
+/run/initialize
+#
+/gun/particle e-
+#
+/analysis/setFileName wvalue
+/analysis/h1/set 1 100  0.    1000 none	#nb of ionisation interactions per event
+/analysis/h1/set 2 100  0.    2.   keV	#total energy deposited in absorber
+/analysis/h1/set 3 100  0.    1. um	#true track length of the primary particle
+/analysis/h1/set 4 100  0.    0.1 um	#true step size of the primary particle
+/analysis/h1/set 5 100  0.    0.1 um	#projected range of the primary particle
+/analysis/h1/set 6 100  0.    1. um	#true track length of charged secondaries
+/analysis/h1/set 7 100  0.    0.1 um	#true track length of charged secondaries
+#
+/run/printProgress 100
+#
+/gun/energy 1 keV
+/run/beamOn 1000

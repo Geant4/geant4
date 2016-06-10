@@ -39,9 +39,17 @@
 #include "Randomize.hh"
 #include "G4ParticleHPLegendreStore.hh"
 #include "G4ParticleHPPartial.hh"
+#include "G4Cache.hh"
 
 class G4ParticleHPAngular
 {
+
+   struct toBeCached {
+      const G4ReactionProduct* theProjectileRP;
+      const G4ReactionProduct* theTarget;
+      toBeCached() : theProjectileRP(NULL),theTarget(NULL) {};
+   };
+
     public:
     
   G4ParticleHPAngular()
@@ -53,6 +61,8 @@ class G4ParticleHPAngular
 // TKDB
       theCoefficients = 0;
       theProbArray = 0;
+      toBeCached val;
+      fCache.Put( val );
   } 
 
   ~G4ParticleHPAngular()
@@ -66,9 +76,9 @@ class G4ParticleHPAngular
   
   void SampleAndUpdate(G4ReactionProduct & anIncidentParticle);
     
-  void SetTarget(const G4ReactionProduct & aTarget) { theTarget = aTarget; }
+  void SetTarget(const G4ReactionProduct & aTarget) { fCache.Get().theTarget = &aTarget; }
 
-  void SetProjectileRP(const G4ReactionProduct & anIncidentParticleRP) { theProjectileRP = anIncidentParticleRP; }
+  void SetProjectileRP(const G4ReactionProduct & anIncidentParticleRP) { fCache.Get().theProjectileRP = &anIncidentParticleRP; }
 
   inline G4double GetTargetMass() { return targetMass; }
 
@@ -93,8 +103,9 @@ class G4ParticleHPAngular
   
   G4double targetMass;
 
-  G4ReactionProduct theTarget;
-  G4ReactionProduct theProjectileRP;
+  //G4ReactionProduct theTarget;
+  //G4ReactionProduct theProjectileRP;
+     G4Cache<toBeCached> fCache;
 
 };
 

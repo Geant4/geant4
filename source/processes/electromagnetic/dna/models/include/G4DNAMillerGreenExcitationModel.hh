@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMillerGreenExcitationModel.hh 82852 2014-07-14 09:05:25Z gcosmo $
+// $Id: G4DNAMillerGreenExcitationModel.hh 92859 2015-09-18 07:58:30Z gcosmo $
 //
 
 #ifndef G4DNAMillerGreenExcitationModel_h
@@ -59,17 +59,27 @@ public:
 					   G4double emin,
 					   G4double emax);
 
+  virtual G4double GetPartialCrossSection(const G4Material*,
+                                          G4int /*level*/,
+                                          const G4ParticleDefinition*,
+                                          G4double /*kineticEnergy*/);
+
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
 				 G4double maxEnergy);
 
+  inline void SelectStationary(G4bool input); 
+
 protected:
 
   G4ParticleChangeForGamma* fParticleChangeForGamma;
 
 private:
+
+  G4bool statCode;
+
   // Water density table
   const std::vector<G4double>* fpMolWaterDensity;
 
@@ -123,6 +133,13 @@ private:
   G4DNAMillerGreenExcitationModel(const  G4DNAMillerGreenExcitationModel&);
 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4DNAMillerGreenExcitationModel::SelectStationary (G4bool input)
+{ 
+    statCode = input; 
+}		 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

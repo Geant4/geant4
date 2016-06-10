@@ -1,0 +1,120 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_gstos
+#define tools_sg_gstos
+
+#include "gl_manager"
+#include <vector>
+#include <ostream>
+
+//#define TOOLS_SG_GSTOS_DEBUG
+
+namespace tools {
+namespace sg {
+
+class gstos {
+protected:
+  gstos() {}
+  virtual ~gstos() {clean_gstos();}
+protected:
+  gstos(const gstos&) {}
+  gstos& operator=(const gstos& a_from) {
+    if(&a_from==this) return *this;
+    clean_gstos();
+    return *this;
+  }
+protected:
+  unsigned int get_tex_id(std::ostream& a_out,gl_manager& a_mgr,const img_byte& a_img) {
+    unsigned int _id = _find(&a_mgr);
+    if(_id && !a_mgr.is_gsto_id_valid(_id)){
+#ifdef TOOLS_SG_GSTOS_DEBUG
+      a_out << "debug : tools::sg::gstos::get_tex_id : " << _id << " not valid." << std::endl;
+#endif
+      clean_gstos(&a_mgr);
+      _id = 0;
+    }
+    if(!_id) {
+#ifdef TOOLS_SG_GSTOS_DEBUG
+      a_out << "debug : tools::sg::gstos::get_tex_id : create_texture ... " << std::endl;
+#endif
+      _id = a_mgr.create_texture(a_img);
+#ifdef TOOLS_SG_GSTOS_DEBUG
+      a_out << "debug : tools::sg::gstos::get_tex_id : create_texture : _id " << _id << "." << std::endl;
+#endif
+      if(!_id) {
+        a_out << "tools::sg::gstos::get_tex_id :"
+              << " gl_manager.create_texture() failed."
+              << std::endl;
+      } else {
+        m_gstos.push_back(std::pair<unsigned int,gl_manager*>(_id,&a_mgr));
+      }
+    }
+    return _id;
+  }
+protected:
+  virtual unsigned int create_gsto(std::ostream&,gl_manager&) {return 0;}
+
+  unsigned int get_gsto_id(std::ostream& a_out,gl_manager& a_mgr){
+    unsigned int _id = _find(&a_mgr);
+    if(_id && !a_mgr.is_gsto_id_valid(_id)){
+#ifdef TOOLS_SG_GSTOS_DEBUG
+      a_out << "debug : tools::sg::gstos::get_gsto_id : " << _id << " not valid." << std::endl;
+#endif
+      clean_gstos(&a_mgr);
+      _id = 0;
+    }
+    if(!_id) {
+#ifdef TOOLS_SG_GSTOS_DEBUG
+      a_out << "debug : tools::sg::gstos::get_gsto_id : create_gsto ..." << std::endl;
+#endif
+      _id = create_gsto(a_out,a_mgr);
+#ifdef TOOLS_SG_GSTOS_DEBUG
+      a_out << "debug : tools::sg::gstos::get_gsto_id : create_gsto : _id " << _id << "." << std::endl;
+#endif
+      if(!_id) {
+        // could be ok if there is no graphical data to load.
+        //a_out << "tools::sg::gstos::get_gsto_id :"
+        //      << " create_gsto() failed."
+        //      << std::endl;
+      } else {
+        m_gstos.push_back(std::pair<unsigned int,gl_manager*>(_id,&a_mgr));    
+      }
+    }
+    return _id;
+  }  
+protected:
+  void clean_gstos() {
+    std::vector< std::pair<unsigned int,gl_manager*> >::iterator it;
+    for(it=m_gstos.begin();it!=m_gstos.end();){
+      (*it).second->delete_gsto((*it).first);
+      it = m_gstos.erase(it);      
+    }
+  }
+  void clean_gstos(gl_manager* a_mgr) {
+    std::vector< std::pair<unsigned int,gl_manager*> >::iterator it;
+    for(it=m_gstos.begin();it!=m_gstos.end();){
+      if((*it).second==a_mgr) {
+        (*it).second->delete_gsto((*it).first);
+        it = m_gstos.erase(it);      
+      } else {
+        it++;
+      }
+    }
+  }
+protected:
+  unsigned int _find(gl_manager* a_mgr) {
+    std::vector< std::pair<unsigned int,gl_manager*> >::iterator it;
+    for(it=m_gstos.begin();it!=m_gstos.end();++it){
+      if((*it).second==a_mgr) return (*it).first;
+    }
+    return 0;
+  }
+
+protected:
+  std::vector< std::pair<unsigned int,gl_manager*> > m_gstos;
+};
+
+}}
+
+#endif

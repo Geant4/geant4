@@ -1,4 +1,4 @@
-$Id: History 85261 2014-10-27 08:54:57Z gcosmo $
+$Id: History 89678 2015-04-27 09:03:18Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,19 @@ committal in the CVS repository !
 
 History file for graphics_reps category
 ---------------------------------------
+
+26th April 2015  John Allison  (greps-V10-01-03)
+- HepPolyhedron: Minor fix for Coverity.
+
+6th March 2015  John Allison  (greps-V10-01-02)
+- HepPolyhedron: Corrected a long-standing spelling mistake:
+  o indeces should be indices;
+  o verteces should be vertices.
+  This is reflected in the method names, but the old names have been
+  kept for backwards compatibility.
+
+14th August 2014  John Allison  (greps-V10-01-01)
+- G4VisAttributes.cc: Eliminated a nonsensical “if(&a)” in operator<<.
 
 24th August 2014  Laurent Garnier (greps-V10-00-10)
 - G4VisAttributes: Fix the fMinLineSegmentsPerCircle for SetForceLineSegmentsPerCircle

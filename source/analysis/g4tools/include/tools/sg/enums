@@ -1,0 +1,166 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_enums
+#define tools_sg_enums
+
+namespace tools {
+namespace sg {
+
+enum line_pattern {
+  line_solid = 0xffff,
+  line_dashed = 0x00ff,
+  line_dotted = 0x1111,
+  line_dash_dotted = 0x1c47
+};
+
+enum marker_style {
+  marker_dot = 0,
+  marker_plus = 1,
+  marker_asterisk,
+  marker_cross,
+  marker_star,
+  marker_circle_line,
+  marker_circle_filled,
+  marker_triangle_up_line,
+  marker_triangle_up_filled,
+  marker_triangle_down_line,
+  marker_triangle_down_filled,
+  marker_david_star_line,
+  marker_david_star_filled,
+  marker_swiss_cross_line,
+  marker_swiss_cross_filled,
+  marker_diamond_line,
+  marker_diamond_filled,
+  marker_square_line,
+  marker_square_filled,
+  marker_penta_star_line,
+  marker_penta_star_filled
+};
+
+enum area_style {
+  area_solid = 0,
+  area_hatched,
+  area_checker,
+  area_edged
+};
+
+enum projection_type {
+  projection_none,
+  projection_rz,
+  projection_phiz,
+  projection_zr,
+  projection_zphi
+};
+
+enum painting_policy {
+  painting_uniform,
+  painting_by_value,
+  painting_by_level,
+  painting_grey_scale,
+  painting_violet_to_red,
+  painting_grey_scale_inverse
+};
+
+enum hatching_policy {
+  hatching_none,
+  hatching_right,
+  hatching_left,
+  hatching_left_and_right
+};
+
+enum hjust {
+  left   = 0,
+  center = 1,
+  right  = 2
+};
+
+enum vjust {
+  bottom = 0,
+  middle = 1,
+  top    = 2
+};
+
+enum font_type {
+  latin,
+  greek,
+  special
+};
+
+enum font_modeling {
+  font_outline,
+  font_filled
+};
+
+enum arrow_type {
+  arrow_up,
+  arrow_down,
+  arrow_left,
+  arrow_right
+};
+
+enum winding_type {
+  winding_ccw,
+  winding_cw
+};
+
+enum move_type {
+  //move_none,
+  move_rotate_right,
+  move_translate_right,
+  move_rotate_left,
+  move_translate_left,
+  move_up,
+  move_down,
+  move_forward,
+  move_backward,
+  move_zoom_in,
+  move_zoom_out,
+  move_rotate_around_focal_right,
+  move_rotate_around_focal_left,
+  move_zoom_in_out,
+  move_zoom_in_out_rot,
+  move_curve
+};
+
+enum anim_what {
+  anim_left,
+  anim_right,
+  anim_up,
+  anim_down
+};
+
+enum key_move {
+  key_left,
+  key_right,
+  key_up,
+  key_down
+};
+
+enum number_type {
+  number_uint,
+  number_int,
+  number_real,
+  number_ip
+};
+
+enum camera_type {
+  camera_ortho,
+  camera_perspective
+};
+
+enum gsto_mode {
+  gsto_memory  = 0,
+  gsto_gl_vbo  = 1,
+  gsto_gl_list = 2
+};
+
+enum layout_policy {
+  layout_text_under_image = 0,
+  layout_text_at_left_of_image = 1
+  //layout_text_at_right_of_image = 2
+};
+
+}}
+
+#endif

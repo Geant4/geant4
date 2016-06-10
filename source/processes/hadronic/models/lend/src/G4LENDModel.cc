@@ -42,6 +42,8 @@
 #include "G4SystemOfUnits.hh"
 #include "G4NistManager.hh"
 
+double MyRNG(void*) { return  CLHEP::HepRandom::getTheEngine()->flat(); }
+
 G4LENDModel::G4LENDModel( G4String name )
 :G4HadronicInteraction( name )
 {
@@ -52,7 +54,8 @@ G4LENDModel::G4LENDModel( G4String name )
    SetMaxEnergy( 20.*MeV );
 
    //default_evaluation = "endl99"; 
-   default_evaluation = "ENDF.B-VII.0";
+   //default_evaluation = "ENDF.B-VII.0";
+   default_evaluation = "ENDF/BVII.1";
 
    allow_nat = false;
    allow_any = false;
@@ -148,7 +151,8 @@ void G4LENDModel::create_used_target_map()
 
 
    G4cout << "Dump UsedTarget for " << GetModelName() << G4endl;
-   G4cout << "Requested Evaluation, Z , A -> Actual Evaluation, Z , A(0=Nat) , Pointer of Target" << G4endl;
+   //G4cout << "Requested Evaluation, Z , A -> Actual Evaluation, Z , A(0=Nat) , Pointer of Target" << G4endl;
+   G4cout << "Requested Evaluation, Z , A -> Actual Evaluation, Z , A(0=Nat) " << G4endl;
    for ( std::map< G4int , G4LENDUsedTarget* >::iterator 
          it = usedTarget_map.begin() ; it != usedTarget_map.end() ; it ++ )
    {
@@ -159,7 +163,7 @@ void G4LENDModel::create_used_target_map()
          << " -> " << it->second->GetActualEvaluation() 
          << ", " << it->second->GetActualZ() 
          << ", " << it->second->GetActualA() 
-         << ", " << it->second->GetTarget() 
+         //<< ", " << it->second->GetTarget() 
          << G4endl; 
    } 
 

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm9/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 82278 2014-06-13 14:42:11Z gcosmo $
+// $Id: PhysicsList.cc 93668 2015-10-28 09:54:03Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -56,6 +56,9 @@
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 #include "G4EmLowEPPhysics.hh"
+#include "G4EmStandardPhysicsGS.hh"
+#include "G4EmStandardPhysicsSS.hh"
+#include "G4EmStandardPhysicsWVI.hh"
 #include "G4DecayPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronInelasticQBBC.hh"
@@ -209,6 +212,21 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmLowEPPhysics();
+
+  } else if (name == "emstandardGS") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysicsGS();
+
+  } else if (name == "emstandardSS") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysicsSS();
+
+  } else if (name == "emstandardWVI") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysicsWVI();
 
   } else if (name == "elastic" && !fHelIsRegisted) {
     fHadronPhys.push_back( new G4HadronElasticPhysics());

@@ -68,10 +68,13 @@ endif()
 #-----------------------------------------------------------------------
 # Configure Qt Support if needed (CROSSPLATFORM).
 #
-option(GEANT4_USE_QT "Build Geant4 with Qt4 support" OFF)
+option(GEANT4_USE_QT "Build Geant4 with Qt support (Qt5 preferred, Qt4 fallback)" OFF)
+option(GEANT4_FORCE_QT4 "When building Qt support require Qt4 only" OFF)
+mark_as_advanced(GEANT4_FORCE_QT4)
 
 if(GEANT4_USE_QT)
-  # Find and configure Qt and OpenGL - require 4
+  # Find and configure Qt and OpenGL - Search for 5 first, then 4, unless
+  # GEANT4_FORCE_QT4 is set. In this case only search for 4.
   # This is fine on Mac OS X because Qt will use Framework GL.
   # On WIN32 only, set QT_USE_IMPORTED_TARGETS. The Qt4 module will
   # otherwise set QT_LIBRARIES using the 'optimized A; debug Ad'
@@ -82,11 +85,13 @@ if(GEANT4_USE_QT)
     set(QT_USE_IMPORTED_TARGETS ON)
   endif()
 
-  find_package(Qt5Core QUIET)
-  find_package(Qt5Gui QUIET)
-  find_package(Qt5Widgets QUIET)
-  find_package(Qt5OpenGL QUIET)
-  find_package(Qt5PrintSupport QUIET)
+  if(NOT GEANT4_FORCE_QT4)
+    find_package(Qt5Core QUIET)
+    find_package(Qt5Gui QUIET)
+    find_package(Qt5Widgets QUIET)
+    find_package(Qt5OpenGL QUIET)
+    find_package(Qt5PrintSupport QUIET)
+  endif()
 
   if(Qt5Core_FOUND
       AND Qt5Gui_FOUND
@@ -215,7 +220,7 @@ if(UNIX)
         )
 
     find_path(X11_Xmu_INCLUDE_PATH X11/Xmu/Xmu.h ${X11_INC_SEARCH_PATH})
-    find_library(X11_Xmu_LIBRARY Xmu ${X11_SEARCH_PATH})
+    find_library(X11_Xmu_LIBRARY Xmu ${X11_LIB_SEARCH_PATH})
     if(NOT X11_Xmu_LIBRARY OR NOT X11_Xmu_INCLUDE_PATH)
       message(FATAL_ERROR "could not find X11 Xmu library and/or headers")
     endif()

@@ -106,7 +106,6 @@ void DicomRegularDetectorConstruction::ConstructPhantom()
                                    fContainer_solid->GetYHalfLength(), 
                                    fContainer_solid->GetZHalfLength() );
 
-
   //----- The G4PVParameterised object that uses the created parameterisation
   // should be placed in the fContainer logical volume
   G4PVParameterised * phantom_phys = 
@@ -123,4 +122,3 @@ void DicomRegularDetectorConstruction::ConstructPhantom()
 
   SetScorer(voxel_logic);
 }
-

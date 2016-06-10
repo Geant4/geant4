@@ -84,12 +84,7 @@ class G4MuonRadiativeDecayChannelWithSpin : public G4VDecayChannel
 
     virtual G4DecayProducts *DecayIt(G4double);
 
-    void SetPolarization(G4ThreeVector);
-    const G4ThreeVector& GetPolarization() const;
-
   private:
-
-    G4ThreeVector parent_polarization;
 
     G4double fron(G4double Pmu, G4double x, G4double y,
                   G4double cthetaE, G4double cthetaG, G4double cthetaEG);
@@ -104,18 +99,6 @@ class G4MuonRadiativeDecayChannelWithSpin : public G4VDecayChannel
 
 };
 
-inline void G4MuonRadiativeDecayChannelWithSpin::
-                                        SetPolarization(G4ThreeVector polar)
-{
-  parent_polarization = polar;
-}
-
-inline const G4ThreeVector& G4MuonRadiativeDecayChannelWithSpin::
-                                        GetPolarization() const
-{
-  return parent_polarization;
-}
-
 inline void G4MuonRadiativeDecayChannelWithSpin::rn3dim(G4double& x,
                                                         G4double& y,
                                                         G4double& z,
@@ -128,7 +111,7 @@ inline void G4MuonRadiativeDecayChannelWithSpin::rn3dim(G4double& x,
          b = G4UniformRand() - 0.5;
          c = G4UniformRand() - 0.5;
          r = a*a + b*b + c*c;
-      } while (r > 0.25);
+      } while (r > 0.25);// Loop checking, 09.08.2015, K.Kurashige
 
       G4double rinv = xlong/(std::sqrt(r)); 
       x = a * rinv;

@@ -1,0 +1,148 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_rep
+#define tools_sg_rep
+
+namespace tools {
+namespace sg {
+
+class rep_bin1D {
+public:
+  rep_bin1D()
+  :m_x_min(0),m_x_max(0)
+  ,m_v_min(0),m_val(0)
+  ,m_ratio(0)
+  //,fSeparator(0)
+  {}
+
+  rep_bin1D(float aXmin,float aXmax,float aVmin,float aVal)
+  :m_x_min(aXmin),m_x_max(aXmax)
+  ,m_v_min(aVmin),m_val(aVal)
+  ,m_ratio(0)
+  //,fSeparator(0)
+  {}
+public:
+  rep_bin1D(const rep_bin1D& a_from)
+  :m_x_min(a_from.m_x_min),m_x_max(a_from.m_x_max)
+  ,m_v_min(a_from.m_v_min),m_val(a_from.m_val)
+  ,m_ratio(a_from.m_ratio)
+  //,fSeparator(0)
+  {}
+  rep_bin1D& operator=(const rep_bin1D& a_from){
+    m_x_min = a_from.m_x_min;
+    m_x_max = a_from.m_x_max;
+    m_v_min = a_from.m_v_min;
+    m_val = a_from.m_val;
+    m_ratio = a_from.m_ratio;
+    return *this;
+  }
+public:
+  float m_x_min;
+  float m_x_max;
+  float m_v_min;
+  float m_val;
+  float m_ratio;
+  //SoSeparator* fSeparator;
+};
+
+class rep_bin2D {
+public:
+  rep_bin2D()
+  :m_x_min(0),m_x_max(0)
+  ,m_y_min(0),m_y_max(0)
+  ,m_val(0),m_ratio(0)
+  ,fI(0),fJ(0){}
+
+  rep_bin2D(float aXmin,float aXmax,
+            float aYmin,float aYmax,
+            float aVal,int aI,int aJ)
+  :m_x_min(aXmin),m_x_max(aXmax)
+  ,m_y_min(aYmin),m_y_max(aYmax)
+  ,m_val(aVal)
+  ,m_ratio(0)
+  ,fI(aI),fJ(aJ)
+  {}
+public:
+  float m_x_min;
+  float m_x_max;
+  float m_y_min;
+  float m_y_max;
+  float m_val;
+  float m_ratio;
+  int fI;
+  int fJ;
+};
+
+class rep_top_face2D {
+public:
+  rep_top_face2D()
+  :m_x_min(0),m_x_max(0)
+  ,m_y_min(0),m_y_max(0)
+  ,m_v1(0),m_v2(0),m_v3(0),m_v4(0)
+  ,m_ratio(0)
+  {}
+
+  rep_top_face2D(float a_xmin,float a_xmax,
+                 float a_ymin,float a_ymax,
+                 float a_v1,float a_v2,float a_v3,float a_v4)
+  :m_x_min(a_xmin),m_x_max(a_xmax)
+  ,m_y_min(a_ymin),m_y_max(a_ymax)
+  ,m_v1(a_v1),m_v2(a_v2),m_v3(a_v3),m_v4(a_v4)
+  ,m_ratio(0)
+  {}
+
+  rep_top_face2D(const rep_top_face2D& a_from)
+  :m_x_min(a_from.m_x_min),m_x_max(a_from.m_x_max)
+  ,m_y_min(a_from.m_y_min),m_y_max(a_from.m_y_max)
+  ,m_v1(a_from.m_v1),m_v2(a_from.m_v2),m_v3(a_from.m_v3),m_v4(a_from.m_v4)
+  ,m_ratio(a_from.m_ratio)
+  {}
+
+  rep_top_face2D& operator=(const rep_top_face2D& a_from){
+    m_x_min = a_from.m_x_min;
+    m_x_max = a_from.m_x_max;
+    m_y_min = a_from.m_y_min;
+    m_y_max = a_from.m_y_max;
+    m_v1 = a_from.m_v1;
+    m_v2 = a_from.m_v2;
+    m_v3 = a_from.m_v3;
+    m_v4 = a_from.m_v4;
+    m_ratio = a_from.m_ratio;
+    return *this;
+  }
+public:
+  float m_x_min;
+  float m_x_max;
+  float m_y_min;
+  float m_y_max;
+  float m_v1;
+  float m_v2;
+  float m_v3;
+  float m_v4;
+  float m_ratio;
+};
+
+class rep_box {
+public:
+  rep_box(float a_pos,float a_width,bool a_log)
+  :m_pos(a_pos),m_width(a_width),m_log(a_log){}
+
+  rep_box(const rep_box& a_from)
+  :m_pos(a_from.m_pos),m_width(a_from.m_width),m_log(a_from.m_log){}
+
+  rep_box& operator=(const rep_box& a_from) {
+    m_pos = a_from.m_pos;
+    m_width = a_from.m_width;
+    m_log = a_from.m_log;
+    return *this;
+  }
+public:
+  float m_pos;
+  float m_width;
+  bool m_log;
+};
+
+}}
+
+#endif

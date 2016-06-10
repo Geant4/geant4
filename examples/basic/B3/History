@@ -1,4 +1,4 @@
-$Id: History 87359 2014-12-01 16:04:27Z gcosmo $
+$Id: History 94093 2015-11-05 15:16:06Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -15,6 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05/11/15 I. Hrivnacova (exampleB3-V10-01-01)
+- Splitting example in two variants of merging data:
+  -B3a (new) with the code based on G4Parameter 
+  -B3b (as previous B3) with the code based on G4Run
+
+04/05/15 I. Hrivnacova (exampleB3-V10-01-00)
+- Coding guidelines: removed empty lines
+     
 29/11/14 I. Hrivnacova
 - Use G4endl instead of \n in G4cout;
   this makes each new line in the output on threads preceded with

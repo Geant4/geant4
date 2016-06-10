@@ -1,0 +1,74 @@
+//$Id$
+
+///\file "analysis/AnaEx03/.README.AIDA.txt"
+///\brief Example AnaEx03 README.AIDA page
+
+/*! \page ExampleAnaEx03AIDA Example AnaEx03 - Install AIDA 
+
+
+  To use histograms, at least one of the AIDA implementations should be 
+  available.
+  
+  You can use various file formats to write histograms (hbook, root, AIDA-XML).
+
+\section ExampleAnaEx03AIDA_s1 OpenScientist (lal/in2p3)
+      
+  OpenScientist is available at http://OpenScientist.lal.in2p3.fr.
+  
+  osc_batch is a small package ( ~ 6MB), easy to install. 
+  It provides an AIDA interface to write files in ROOT or HBOOK formats.
+ 
+  See the specific \link ExampleAnaEx03OpenScientist README.OpenScientist \endlink 
+  page for more.
+  
+\section ExampleAnaEx03AIDA_s2 RAIDA (desy)
+
+  It is a ROOT based AIDA interface. It can be downloaded from 
+  http://ilcsoft.desy.de/portal/software_packages/raida/index_eng.html
+
+  
+\section ExampleAnaEx03AIDA_s3 iAIDA
+
+  Another package including AIDA (an evolution of the former cern PI project)
+  is the iAIDA package: http://iaida.dynalias.net
+
+  Once you have installed iAIDA in a specified local area $MYIAIDA, it is
+  required to add the installation path to $PATH, i.e. for example, for
+  release 1.0.11 of iAIDA:
+\verbatim
+setenv PATH ${PATH}:$MYIAIDA/bin
+\endverbatim
+
+  Before running the example the command should be issued:
+\verbatim
+eval `aida-config --runtime csh`
+\endverbatim
+     
+  
+\section ExampleAnaEx03AIDA_s4 JAIDA (slac)
+     
+  JAIDA is an implementation of AIDA in Java.  To use it, one needs Java
+  as well as AIDAJNI, a connector between AIDA-C++ and AIDA-Java.
+
+  Available for: Linux-g++2, Linux-g++3, WIN32-VC, SUN-CC,
+                 Darwin-g++2, Darwin-g++3
+  To compile and link with JAIDA using AIDAJNI, make sure you have:
+
+  -# JAIDA: see http://java.freehep.org/jaida
+  -# set enviroment variable JAIDA_HOME to your JAIDA installation
+  -# source the aida-setup script $JAIDA_HOME/bin/aida-setup.[sh|csh|win32] \n\n
+  -# AIDAJNI: see http://java.freehep.org/aidajni
+  -# set environment variable AIDAJNI_HOME to your AIDAJNI installation
+  -# set environment variable JDK_HOME to your Java Standard Development Kit (1.4.x or up).
+  -# source the aidajni-setup script $AIDAJNI_HOME/bin/$G4SYSTEM/aidajni-setup.[sh|csh|win32]
+
+  Last tested versions (with Geant4 examples): JAIDA 3.2.0, AIDAJNI 3.2.0.
+
+  Now execute:
+\verbatim
+source setup-analysis (.csh, .sh, .win32)
+gmake clean
+gmake
+\endverbatim
+
+*/     

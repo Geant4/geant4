@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 86976 2014-11-21 12:07:00Z gcosmo $
+// $Id: DetectorConstruction.cc 92047 2015-08-14 07:23:37Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -69,15 +69,16 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 #include "TestParameters.hh"
+#include "G4PionPlus.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
   : G4VUserDetectorConstruction(),
     fGasMat(0), fWindowMat(0), fWorldMaterial(0),
-    fPhysWorld(0), fLogicWorld(0), fLogicWind(0), fLogicDet(0),
-    fDetectorMessenger(0), fTargetSD(0), fGasDetectorCuts(0),
-    fRegGasDet(0)
+    fSolidWorld(0), fSolidContainer(0), fSolidDetector(0),
+    fPhysWorld(0), fLogicWorld(0), fLogicContainer(0), fLogicDetector(0),
+    fDetectorMessenger(0), fGasDetectorCuts(0), fRegGasDet(0)
 {
   fGasThickness = 23.0*mm;
   fGasRadius    = 10.*cm;
@@ -101,7 +102,6 @@ DetectorConstruction::DetectorConstruction()
 DetectorConstruction::~DetectorConstruction()
 { 
   delete fDetectorMessenger;
-  //delete fGasDetectorCuts;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -143,25 +143,29 @@ void DetectorConstruction::DefineMaterials()
 
   // 93% Kr + 7% CH4, STP
   density = 3.491*mg/cm3 ;
-  G4Material* Kr7CH4 = new G4Material(name="Kr7CH4"  , density, 
-                                      ncomponents=2);
+  G4Material* Kr7CH4 = 
+    new G4Material(name="Kr7CH4"  , density, 
+                   ncomponents=2);
   Kr7CH4->AddMaterial( Kr,       fractionmass = 0.986 ) ;
   Kr7CH4->AddMaterial( Methane,  fractionmass = 0.014 ) ;
 
   G4double TRT_Xe_density = 5.485*mg/cm3;
-  G4Material* TRT_Xe = new G4Material(name="TRT_Xe", TRT_Xe_density, nel=1,
-                                      kStateGas,293.15*kelvin,1.*atmosphere);
+  G4Material* TRT_Xe = 
+    new G4Material(name="TRT_Xe", TRT_Xe_density, nel=1,
+                   kStateGas,293.15*kelvin,1.*atmosphere);
   TRT_Xe->AddElement(elXe,1);
 
   G4double TRT_CO2_density = 1.842*mg/cm3;
-  G4Material* TRT_CO2 = new G4Material(name="TRT_CO2", TRT_CO2_density, nel=2,
-                                       kStateGas,293.15*kelvin,1.*atmosphere);
+  G4Material* TRT_CO2 = 
+    new G4Material(name="TRT_CO2", TRT_CO2_density, nel=2,
+                   kStateGas,293.15*kelvin,1.*atmosphere);
   TRT_CO2->AddElement(elC,1);
   TRT_CO2->AddElement(elO,2);
 
   G4double TRT_CF4_density = 3.9*mg/cm3;
-  G4Material* TRT_CF4 = new G4Material(name="TRT_CF4", TRT_CF4_density, nel=2,
-                                       kStateGas,293.15*kelvin,1.*atmosphere);
+  G4Material* TRT_CF4 = 
+    new G4Material(name="TRT_CF4", TRT_CF4_density, nel=2,
+                   kStateGas,293.15*kelvin,1.*atmosphere);
   TRT_CF4->AddElement(elC,1);
   TRT_CF4->AddElement(elF,4);
 
@@ -177,58 +181,77 @@ void DetectorConstruction::DefineMaterials()
 
   // C3H8,20 C, 2 atm
   density = 3.758*mg/cm3 ;
-  G4Material* C3H8 = new G4Material(name="C3H8",density,nel=2) ;
+  G4Material* C3H8 = 
+    new G4Material(name="C3H8",density,nel=2,
+                   kStateGas,293.15*kelvin,2.*atmosphere);
   C3H8->AddElement(elC,3) ;
   C3H8->AddElement(elH,8) ;
 
   // 87.5% Xe + 7.5% CH4 + 5% C3H8, 20 C, 1 atm 
   density = 4.9196*mg/cm3 ;
-  G4Material* XeCH4C3H8 = new G4Material(name="XeCH4C3H8"  , 
-                                  density,  ncomponents=3);
+  G4Material* XeCH4C3H8 = 
+    new G4Material(name="XeCH4C3H8"  , 
+                   density,  ncomponents=3,
+                   kStateGas,NTP_Temperature,1.*atmosphere);
   XeCH4C3H8->AddMaterial( Xe,      fractionmass = 0.971 ) ;
   XeCH4C3H8->AddMaterial( Methane, fractionmass = 0.010 ) ;
   XeCH4C3H8->AddMaterial( Propane, fractionmass = 0.019 ) ;
 
   // 93% Ar + 7% CH4, STP
   density = 1.709*mg/cm3 ;
-  G4Material* Ar7CH4 = new G4Material(name="Ar7CH4", density, ncomponents=2);
+  G4Material* Ar7CH4 = 
+    new G4Material(name="Ar7CH4", density, ncomponents=2,
+                   kStateGas,STP_Temperature,STP_Pressure);
   Ar7CH4->AddMaterial( Argon,    fractionmass = 0.971 ) ;
   Ar7CH4->AddMaterial( Methane,  fractionmass = 0.029 ) ;
 
   // 80% Ar + 20% CO2, STP
   density = 1.8223*mg/cm3 ;
-  G4Material* Ar_80CO2_20 = new G4Material(name="ArCO2"  , density, 
-                                           ncomponents=2);
+  G4Material* Ar_80CO2_20 = 
+    new G4Material(name="ArCO2"  , density, ncomponents=2,
+                   kStateGas,STP_Temperature,STP_Pressure);
   Ar_80CO2_20->AddMaterial( Argon,           fractionmass = 0.783 ) ;
   Ar_80CO2_20->AddMaterial( CarbonDioxide,   fractionmass = 0.217 ) ;
 
   // 80% Xe + 20% CO2, STP
   density = 5.0818*mg/cm3 ;      
-  G4Material* Xe20CO2 = new G4Material(name="Xe20CO2", density, 
-                                       ncomponents=2);
+  G4Material* Xe20CO2 = 
+    new G4Material(name="Xe20CO2", density, ncomponents=2,
+                   kStateGas,STP_Temperature,STP_Pressure);
   Xe20CO2->AddMaterial( Xe,            fractionmass = 0.922 ) ;
   Xe20CO2->AddMaterial( CarbonDioxide, fractionmass = 0.078 ) ;
 
   // 80% Kr + 20% CO2, STP
   density = 3.601*mg/cm3 ;      
-  G4Material* Kr20CO2 = new G4Material(name="Kr20CO2"  , density, 
-                                       ncomponents=2);
+  G4Material* Kr20CO2 = 
+    new G4Material(name="Kr20CO2", density, ncomponents=2,
+                   kStateGas,STP_Temperature,STP_Pressure);
   Kr20CO2->AddMaterial( Kr,            fractionmass = 0.89 ) ;
   Kr20CO2->AddMaterial( CarbonDioxide, fractionmass = 0.11 ) ;
 
   // ALICE mixture TPC_Ne-CO2-2
   density = 0.939*mg/cm3 ;      
-  G4Material* NeCO2 = new G4Material(name="TPC_Ne-CO2-2", density, 
-                                            ncomponents=3);
+  G4Material* NeCO2 = 
+    new G4Material(name="TPC_Ne-CO2-2", density, ncomponents=3,
+                   kStateGas,NTP_Temperature,1.*atmosphere);
   NeCO2->AddElement( elNe, fractionmass = 0.8039 ) ;
   NeCO2->AddElement( elO,  fractionmass = 0.1426 ) ;
   NeCO2->AddElement( elC,  fractionmass = 0.0535 ) ;
+
+  // ALICE TRD mixure 85% Xe + 15% CO2 NTP
+  density = 4.9389*mg/cm3 ;      
+  G4Material* Xe15CO2 = 
+    new G4Material(name="Xe15CO2", density, ncomponents=2,
+                   kStateGas,NTP_Temperature,1.*atmosphere);
+  Xe15CO2->AddMaterial( Xe,            fractionmass = 0.944 );
+  Xe15CO2->AddMaterial( CarbonDioxide, fractionmass = 0.056 );
    
   fGasMat = XeCH4C3H8;
   fWindowMat = Mylar;
   fWorldMaterial = empty; 
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -257,10 +280,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4cout << G4endl;
       
   // World
-  G4Tubs* SolidWorld = 
+  fSolidWorld = 
     new G4Tubs("World",0.,worldSizeR,worldSizeZ/2.,0.,CLHEP::twopi);
                    
-  fLogicWorld = new G4LogicalVolume(SolidWorld, fWorldMaterial, "World");
+  fLogicWorld = new G4LogicalVolume(fSolidWorld, fWorldMaterial, "World");
                                    
   fPhysWorld = new G4PVPlacement(0,      
                                    G4ThreeVector(0.,0.,0.),     
@@ -271,35 +294,35 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                                  0);     
 
   // Window
-  G4Tubs* wind = new G4Tubs("Absorber",                
-                            0.,contR,contThick/2.,0.,CLHEP::twopi); 
+  fSolidContainer = new G4Tubs("Absorber",                
+                               0.,contR,contThick/2.,0.,CLHEP::twopi); 
 
-  fLogicWind = new G4LogicalVolume(wind, fWindowMat, "Window"); 
+  fLogicContainer = new G4LogicalVolume(fSolidContainer, fWindowMat, "Window"); 
 
   G4PVPlacement* PhysWind = new G4PVPlacement(0, G4ThreeVector(0.,0.,0.),
-                                              "Window",  fLogicWind,
+                                              "Window",  fLogicContainer,
                                               fPhysWorld, false, 0);
                                         
   // Detector volume
-  G4Tubs* det = new G4Tubs("Gas", 0., fGasRadius, fGasThickness/2.,
-                                  0., CLHEP::twopi); 
+  fSolidDetector = new G4Tubs("Gas", 0., fGasRadius, fGasThickness/2.,
+                              0., CLHEP::twopi); 
 
-  fLogicDet = new G4LogicalVolume(det, fGasMat, "Gas"); 
+  fLogicDetector = new G4LogicalVolume(fSolidDetector, fGasMat, "Gas"); 
 
-  new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), "Gas", fLogicDet, PhysWind,
-                                                       false, 0);
+  new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), "Gas", fLogicDetector, 
+                    PhysWind, false, 0);
 
   // defined gas detector region
   fRegGasDet = new G4Region("GasDetector");
   fRegGasDet->SetProductionCuts(fGasDetectorCuts);
-  fRegGasDet->AddRootLogicalVolume(fLogicDet);
+  fRegGasDet->AddRootLogicalVolume(fLogicDetector);
 
   // visualisation
   fLogicWorld->SetVisAttributes(G4VisAttributes::Invisible);
   G4VisAttributes* color1 = new G4VisAttributes(G4Colour(0.3, 0.3, 0.3));
-  fLogicWind->SetVisAttributes(color1);
+  fLogicContainer->SetVisAttributes(color1);
   G4VisAttributes* color2 = new G4VisAttributes(G4Colour(0.0, 0.3, 0.7));
-  fLogicDet->SetVisAttributes(color2);
+  fLogicDetector->SetVisAttributes(color2);
 
   if(0.0 == fGasMat->GetIonisation()->GetMeanEnergyPerIonPair()) {
     SetPairEnergy(20*eV);
@@ -311,8 +334,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 void DetectorConstruction::ConstructSDandField()
 {  
-  fTargetSD = new TargetSD("GasSD");
-  SetSensitiveDetector(fLogicDet, fTargetSD); 
+  SetSensitiveDetector(fLogicDetector, new TargetSD("GasSD")); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -328,8 +350,8 @@ void DetectorConstruction::SetGasMaterial(const G4String& name)
   if (mat && mat != fGasMat) {
     G4cout << "### New target material: " << mat->GetName() << G4endl;
     fGasMat = mat;
-    if(fLogicDet) { 
-      fLogicDet->SetMaterial(mat); 
+    if(fLogicDetector) { 
+      fLogicDetector->SetMaterial(mat); 
       G4RunManager::GetRunManager()->PhysicsHasBeenModified();
     }
   }
@@ -348,8 +370,8 @@ void DetectorConstruction::SetContainerMaterial(const G4String& name)
   if (mat && mat != fWindowMat) {
     G4cout << "### New material for container: " << mat->GetName() << G4endl;
     fWindowMat = mat;
-    if(fLogicWind) { 
-      fLogicWind->SetMaterial(mat); 
+    if(fLogicContainer) { 
+      fLogicContainer->SetMaterial(mat); 
       G4RunManager::GetRunManager()->PhysicsHasBeenModified();
     }
   }
@@ -379,39 +401,24 @@ void DetectorConstruction::SetWorldMaterial(const G4String& name)
 
 void DetectorConstruction::SetGasThickness(G4double val)
 {
-  if(fPhysWorld) {
-    G4Exception ("DetectorConstruction::SetGasThickness()", "test005", 
-                 JustWarning, 
-                 "Attempt to change already constructed geometry is ignored");
-  } else {
-    fGasThickness = val;
-  }
+  fGasThickness = val;
+  if(fPhysWorld) { ChangeGeometry(); }
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::SetGasRadius(G4double val)
 {
-  if(fPhysWorld) {    
-    G4Exception ("DetectorConstruction::SetGasRadius()", "test005", 
-                 JustWarning, 
-                 "Attempt to change already constructed geometry is ignored");
-  } else {
-    fGasRadius = val;
-  }
+  fGasRadius = val;
+  if(fPhysWorld) { ChangeGeometry(); }
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::SetContainerThickness(G4double val)
 {
-  if(fPhysWorld) {    
-    G4Exception ("DetectorConstruction::SetContainerThickness()", "test005", 
-                 JustWarning, 
-                 "Attempt to change already constructed geometry is ignored");
-  } else {
-    fWindowThick = val;
-  }
+  fWindowThick = val;
+  if(fPhysWorld) { ChangeGeometry(); }
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -421,6 +428,29 @@ void DetectorConstruction::SetPairEnergy(G4double val)
   if(val > 0.0) {
     fGasMat->GetIonisation()->SetMeanEnergyPerIonPair(val);
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::ChangeGeometry()
+{
+  G4double contThick = fWindowThick*2 + fGasThickness;
+  G4double contR     = fWindowThick*2 + fGasRadius;
+
+  G4double worldSizeZ = contThick*1.2;
+  G4double worldSizeR = contR*1.2;
+
+  TestParameters::GetPointer()->SetPositionZ(-0.55*contThick);
+
+  fSolidWorld->SetOuterRadius(worldSizeR);
+  fSolidWorld->SetZHalfLength(worldSizeZ*0.5);
+
+  fSolidContainer->SetOuterRadius(contR);
+  fSolidContainer->SetZHalfLength(contThick*0.5);
+
+  fSolidDetector->SetOuterRadius(fGasRadius);
+  fSolidDetector->SetZHalfLength(fGasThickness*0.5);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

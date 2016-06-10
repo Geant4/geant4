@@ -46,7 +46,6 @@ using namespace G4DNAPARSER;
 CommandLineParser* CommandLineParser::fpInstance(0);
 G4String Command::fNoOption = "NoOption";
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline bool MATCH(const char *a, const char *b)
@@ -120,7 +119,6 @@ Command(commandType, description)
   fOptionName = optionName;
   fOption = "";
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

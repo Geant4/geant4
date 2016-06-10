@@ -203,3 +203,39 @@ void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
     }
 }
 
+void G4WorkerThread::SetPinAffinity(G4int affinity) const
+{
+  if ( affinity == 0 ) return;
+#if !defined(WIN32)
+  G4cout<<"AFFINITY SET"<<G4endl;
+  //Assign this thread to cpus in a round robin way
+  G4int offset = affinity;
+  G4int cpuindex = 0;
+  if ( std::abs(offset)>G4Threading::G4GetNumberOfCores() ) {
+      G4Exception("G4WorkerThread::SetPinAffinity","Run0035",
+          JustWarning,
+          "Cannot set thread affinity, affinity parameter larger than number of cores");
+      return;
+  }
+  if (offset>0) { //Start assigning affinity to given CPU
+      --offset;
+      cpuindex = (GetThreadId()+offset) % G4Threading::G4GetNumberOfCores(); //Round robin
+  } else {//Exclude the given CPU
+      offset *= -1;
+      --offset;
+      G4int myidx = GetThreadId()%(G4Threading::G4GetNumberOfCores()-1);
+      cpuindex = myidx + (myidx>=offset);
+  }
+  G4cout<<"Setting affinity to:"<<cpuindex<<G4endl;
+  //Avoid compilation warning in C90 standard w/o MT
+#if defined(G4MULTITHREADED)
+  G4Thread t = G4THREADSELF();
+#else
+  G4Thread t;
+#endif
+  G4bool success = G4Threading::G4SetPinAffinity(cpuindex,t);
+  if ( ! success ) {
+      G4Exception("G4MTRunManagerKernel::StarThread","Run0035",JustWarning,"Cannot set thread affinity.");
+  }
+#endif
+}

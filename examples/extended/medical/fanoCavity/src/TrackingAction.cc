@@ -26,21 +26,22 @@
 /// \file medical/fanoCavity/src/TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
 //
-// $Id: TrackingAction.cc 86064 2014-11-07 08:49:32Z gcosmo $
+// $Id: TrackingAction.cc 90848 2015-06-10 13:44:30Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "TrackingAction.hh"
 #include "RunAction.hh"
+#include "Run.hh"
 #include "HistoManager.hh"
+#include "G4RunManager.hh"
 
 #include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(RunAction* RuAct)
-:fRunAction(RuAct)
+TrackingAction::TrackingAction()
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,8 +64,10 @@ void TrackingAction::PostUserTrackingAction(const G4Track*)
 {
   //sum energy in cavity
   //
+  Run* run = static_cast<Run*>(
+              G4RunManager::GetRunManager()->GetNonConstCurrentRun());
   if (fEdepCavity > 0.) {
-    fRunAction->AddEdepCavity(fEdepCavity);
+    run->AddEdepCavity(fEdepCavity);
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();     
     analysisManager->FillH1(11,fEdepCavity);
   }  

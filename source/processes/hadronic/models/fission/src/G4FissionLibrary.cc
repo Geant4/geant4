@@ -61,11 +61,11 @@
 //
 
 #include "G4FissionLibrary.hh"
-#include "G4NeutronHPManager.hh"
+#include "G4ParticleHPManager.hh"
 #include "G4SystemOfUnits.hh"
 
 G4FissionLibrary::G4FissionLibrary()
-  : G4NeutronHPFinalState(), theIsotope(0), targetMass(0.0)
+  : G4ParticleHPFinalState(), theIsotope(0), targetMass(0.0)
 {
   hasXsec = false;
   fe=0;
@@ -74,19 +74,19 @@ G4FissionLibrary::G4FissionLibrary()
 G4FissionLibrary::~G4FissionLibrary()
 {}
 
-G4NeutronHPFinalState * G4FissionLibrary::New()
+G4ParticleHPFinalState * G4FissionLibrary::New()
 {
   G4FissionLibrary * theNew = new G4FissionLibrary;
   return theNew;
 }
 
 //void G4FissionLibrary::Init (G4double A, G4double Z, G4String & dirName, G4String &)
-void G4FissionLibrary::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String &)
+void G4FissionLibrary::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String &, G4ParticleDefinition*)
 {
   G4String tString = "/FS/";
   G4bool dbool;
   theIsotope = static_cast<G4int>(1000*Z+A);
-  G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), M, dirName, tString, dbool);
+  G4ParticleHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), M, dirName, tString, dbool);
   G4String filename = aFile.GetName();
 
   if(!dbool)
@@ -98,12 +98,12 @@ void G4FissionLibrary::Init (G4double A, G4double Z, G4int M, G4String & dirName
   }
   //std::ifstream theData(filename, std::ios::in);
   std::istringstream theData(std::ios::in);
-  G4NeutronHPManager::GetInstance()->GetDataStream(filename,theData);
+  G4ParticleHPManager::GetInstance()->GetDataStream(filename,theData);
 
   // here it comes
   G4int infoType, dataType;
   hasFSData = false;
-  while (theData >> infoType)
+  while (theData >> infoType) // Loop checking, 11.03.2015, T. Koi
   {
     hasFSData = true;
     theData >> dataType;
@@ -159,7 +159,8 @@ G4HadFinalState* G4FissionLibrary::ApplyYourself(const G4HadProjectile & theTrac
   theTarget = aNucleus.GetBiasedThermalNucleus( targetMass, neuVelo, theTrack.GetMaterial()->GetTemperature());
 
   // set neutron and target in the FS classes 
-  theNeutronAngularDis.SetNeutron(theNeutron);
+  //theNeutronAngularDis.SetNeutron(theNeutron);
+  theNeutronAngularDis.SetProjectileRP(theNeutron);
   theNeutronAngularDis.SetTarget(theTarget);
 
   // boost to target rest system

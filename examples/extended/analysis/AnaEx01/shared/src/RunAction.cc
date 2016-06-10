@@ -27,7 +27,7 @@
 /// \brief Implementation of the RunAction class
 //
 //
-// $Id: RunAction.cc 85901 2014-11-06 08:40:31Z gcosmo $
+// $Id: RunAction.cc 92318 2015-08-27 14:49:47Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,7 +68,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   
   //histograms
   //
-  fHistoManager->book(); 
+  fHistoManager->Book(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -131,7 +131,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //save histograms
   //
   fHistoManager->PrintStatistic();
-  fHistoManager->save();   
+  fHistoManager->Save();   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

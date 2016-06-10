@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4Polyhedra.cc 93559 2015-10-26 14:14:49Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -251,7 +251,8 @@ void G4Polyhedra::Create( G4double phiStart,
 
 
   startPhi = phiStart;
-  while( startPhi < 0 ) startPhi += twopi;
+  while( startPhi < 0 )    // Loop checking, 13.08.2015, G.Cosmo
+    startPhi += twopi;
   //
   // Phi opening? Account for some possible roundoff, and interpret
   // nonsense value as representing no phi opening
@@ -269,7 +270,8 @@ void G4Polyhedra::Create( G4double phiStart,
     // Convert phi into our convention
     //
     endPhi = phiStart+phiTotal;
-    while( endPhi < startPhi ) endPhi += twopi;
+    while( endPhi < startPhi )    // Loop checking, 13.08.2015, G.Cosmo
+      endPhi += twopi;
   }
   
   //
@@ -289,7 +291,7 @@ void G4Polyhedra::Create( G4double phiStart,
   
   G4PolyhedraSideRZ *next = corners;
   iterRZ.Begin();
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     next->r = iterRZ.GetA();
     next->z = iterRZ.GetB();
@@ -313,7 +315,7 @@ void G4Polyhedra::Create( G4double phiStart,
                     *prev = corners + numCorner-1,
                     *nextNext;
   G4VCSGface   **face = faces;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     next = corner+1;
     if (next >= corners+numCorner) next = corners;
@@ -445,7 +447,7 @@ void G4Polyhedra::CopyStuff( const G4Polyhedra &source )
   
   G4PolyhedraSideRZ  *corn = corners,
         *sourceCorn = source.corners;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     *corn = *sourceCorn;
   } while( ++sourceCorn, ++corn < corners+numCorner );
@@ -603,7 +605,8 @@ std::ostream& G4Polyhedra::StreamInfo( std::ostream& os ) const
      << " Solid type: G4Polyhedra\n"
      << " Parameters: \n"
      << "    starting phi angle : " << startPhi/degree << " degrees \n"
-     << "    ending phi angle   : " << endPhi/degree << " degrees \n";
+     << "    ending phi angle   : " << endPhi/degree << " degrees \n"
+     << "    number of sides    : " << numSide << " \n";
   G4int i=0;
   if (!genericPgon)
   {
@@ -964,18 +967,18 @@ G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
       std::vector<G4int*> triQuads;
       G4int remaining = numCorner;
       G4int iStarter = 0;
-      while (remaining >= 3)
+      while (remaining >= 3)    // Loop checking, 13.08.2015, G.Cosmo
       {
         // Find unchopped corners...
         //
         G4int A = -1, B = -1, C = -1;
         G4int iStepper = iStarter;
-        do
+        do    // Loop checking, 13.08.2015, G.Cosmo
         {
           if (A < 0)      { A = iStepper; }
           else if (B < 0) { B = iStepper; }
           else if (C < 0) { C = iStepper; }
-          do
+          do    // Loop checking, 13.08.2015, G.Cosmo
           {
             if (++iStepper >= numCorner) iStepper = 0;
           }
@@ -1002,7 +1005,7 @@ G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
         }
         else
         {
-          do
+          do    // Loop checking, 13.08.2015, G.Cosmo
           {
             if (++iStarter >= numCorner) { iStarter = 0; }
           }
@@ -1228,23 +1231,31 @@ void  G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon *rz)
 
       if(std::fabs(difZl) < kCarTolerance)
       {
-        if(corners[inextl].r >= corners[icurl].r)
-        {    
-          Rmin.push_back(corners[icurl].r);
-          Rmax.push_back(Rmax[countPlanes-2]);
-          Rmax[countPlanes-2]=corners[icurl].r;
+        if(std::fabs(difZr) < kCarTolerance)
+        {
+          Rmin.push_back(corners[inextl].r);
+          Rmax.push_back(corners[icurr].r);
         }
         else
         {
           Rmin.push_back(corners[inextl].r);
-          Rmax.push_back(corners[icurl].r);
+          Rmax.push_back(corners[icurr].r + (Zleft-corners[icurr].z)/difZr
+                                *(corners[inextr].r - corners[icurr].r)); 
         }
       }
       else if (difZl >= kCarTolerance)
       {
-        Rmin.push_back(corners[inextl].r);
-        Rmax.push_back (corners[icurr].r + (Zleft-corners[icurr].z)/difZr
-                                 *(corners[inextr].r - corners[icurr].r));
+        if(std::fabs(difZr) < kCarTolerance)
+        {
+          Rmin.push_back(corners[icurl].r);
+          Rmax.push_back(corners[icurr].r);
+        }
+        else
+        {
+          Rmin.push_back(corners[icurl].r);
+          Rmax.push_back(corners[icurr].r + (Zleft-corners[icurr].z)/difZr
+                                *(corners[inextr].r - corners[icurr].r));
+        }
       }
       else
       {
@@ -1272,22 +1283,22 @@ void  G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon *rz)
       G4double difZl=corners[inextl].z - corners[icurl].z;
       if(std::fabs(difZr) < kCarTolerance)
       {
-        if(corners[inextr].r >= corners[icurr].r)
-        {    
-          Rmin.push_back(corners[icurr].r);
+        if(std::fabs(difZl) < kCarTolerance)
+        {
           Rmax.push_back(corners[inextr].r);
-        }
+          Rmin.push_back(corners[icurr].r); 
+        } 
         else
         {
-          Rmin.push_back(corners[inextr].r);
-          Rmax.push_back(corners[icurr].r);
-          Rmax[countPlanes-2]=corners[inextr].r;
+          Rmin.push_back(corners[icurl].r + (Zright-corners[icurl].z)/difZl
+                                * (corners[inextl].r - corners[icurl].r));
+          Rmax.push_back(corners[inextr].r);
         }
         icurr++;
       }           // plate
       else if (difZr >= kCarTolerance)
       {
-        if(std::fabs(difZl)<kCarTolerance)
+        if(std::fabs(difZl) < kCarTolerance)
         {
           Rmax.push_back(corners[inextr].r);
           Rmin.push_back (corners[icurr].r); 
@@ -1314,16 +1325,8 @@ void  G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon *rz)
   inextr=1+icurr;
   inextl=(icurl <= 0)? numPlanes-1 : icurl-1;
  
-  if(corners[inextr].z==corners[inextl].z)
-  {
-    Rmax.push_back(corners[inextr].r);
-    Rmin.push_back(corners[inextl].r);
-  }
-  else
-  {
-    Rmax.push_back(corners[inextr].r);
-    Rmin.push_back(corners[inextl].r);
-  }
+  Rmax.push_back(corners[inextr].r);
+  Rmin.push_back(corners[inextl].r);
 
   // Set original parameters Rmin,Rmax,Z
   //

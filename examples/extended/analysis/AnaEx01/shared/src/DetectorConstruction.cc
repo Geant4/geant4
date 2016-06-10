@@ -27,7 +27,7 @@
 /// \brief Implementation of the DetectorConstruction class
 //
 //
-// $Id: DetectorConstruction.cc 85901 2014-11-06 08:40:31Z gcosmo $
+// $Id: DetectorConstruction.cc 77206 2013-11-22 01:33:52Z adotti $
 //
 // 
 

@@ -43,7 +43,7 @@ class G4AnalysisManagerState;
 class G4CsvRFileManager : public G4BaseFileManager
 {
   public:
-    G4CsvRFileManager(const G4AnalysisManagerState& state);
+    explicit G4CsvRFileManager(const G4AnalysisManagerState& state);
     ~G4CsvRFileManager();
 
     // Methods to manipulate input files

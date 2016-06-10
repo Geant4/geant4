@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4HadronElastic.cc 91806 2015-08-06 12:20:45Z gcosmo $
 //
 // Geant4 Header : G4HadronElastic
 //
@@ -41,6 +41,9 @@
 #include "G4Deuteron.hh"
 #include "G4Alpha.hh"
 #include "G4Pow.hh"
+#include "G4Exp.hh"
+#include "G4Log.hh"
+
 
 G4HadronElastic::G4HadronElastic(const G4String& name) 
   : G4HadronicInteraction(name)
@@ -61,20 +64,8 @@ G4HadronElastic::~G4HadronElastic()
 {}
 
 
-void G4HadronElastic::Description() const
+void G4HadronElastic::ModelDescription(std::ostream& outFile) const
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetModelName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of G4HadronElastic Model</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
 
     outFile << "G4HadronElastic is a hadron-nucleus elastic scattering\n"
             << "model which uses the Gheisha two-exponential momentum\n"
@@ -83,10 +74,6 @@ void G4HadronElastic::Description() const
             << "This model may be used for all long-lived hadrons at all\n"
             << "incident energies.\n";
 
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
 }
 
 
@@ -241,14 +228,14 @@ G4HadronElastic::SampleInvariantT(const G4ParticleDefinition* p,
     aa = g4pow->powZ(A, 1.33)/bb;
     cc = 0.4*g4pow->powZ(A, 0.4)/dd;
   }
-  G4double q1 = 1.0 - std::exp(-bb*tmax);
-  G4double q2 = 1.0 - std::exp(-dd*tmax);
+  G4double q1 = 1.0 - G4Exp(-bb*tmax);
+  G4double q2 = 1.0 - G4Exp(-dd*tmax);
   G4double s1 = q1*aa;
   G4double s2 = q2*cc;
   if((s1 + s2)*G4UniformRand() < s2) {
     q1 = q2;
     bb = dd;
   }
-  return -GeV2*std::log(1.0 - G4UniformRand()*q1)/bb;
+  return -GeV2*G4Log(1.0 - G4UniformRand()*q1)/bb;
 }
 

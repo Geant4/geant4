@@ -66,6 +66,7 @@
 class G4DynamicParticle;
 class G4Isotope;
 class G4Material;
+class G4CrossSectionDataSetRegistry;
 
 class G4VCrossSectionDataSet
 {
@@ -169,6 +170,8 @@ private:
 
   G4VCrossSectionDataSet & operator=(const G4VCrossSectionDataSet &right);
   G4VCrossSectionDataSet(const G4VCrossSectionDataSet&);
+
+  G4CrossSectionDataSetRegistry* registry;
 
   G4double minKinEnergy;
   G4double maxKinEnergy;

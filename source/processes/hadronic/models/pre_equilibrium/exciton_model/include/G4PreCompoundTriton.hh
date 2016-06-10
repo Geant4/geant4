@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundTriton.hh 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4PreCompoundTriton.hh 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // by V. Lara
 //
@@ -47,21 +47,13 @@ public:
 
   virtual ~G4PreCompoundTriton();
 
-protected:
+  virtual G4double GetRj(G4int NumberParticles, G4int NumberCharged) const;
 
-  virtual G4double GetRj(G4int NumberParticles, G4int NumberCharged);
+  virtual G4double FactorialFactor(G4int N, G4int P) const;
 
-  virtual G4double CrossSection(G4double ekin) ; 
+  virtual G4double CoalescenceFactor(G4int A) const;
 
-  virtual G4double FactorialFactor(G4int N, G4int P);
-
-  virtual G4double CoalescenceFactor(G4int A);
-
-  virtual G4double GetAlpha();
-  
-  G4double GetOpt12(G4double K);
-
-  G4double GetOpt34(G4double K);
+  virtual G4double GetAlpha() const;
 
 private:
 
@@ -73,13 +65,6 @@ private:
   G4int operator!=(const G4PreCompoundTriton &right) const;    
 
   G4TritonCoulombBarrier theTritonCoulombBarrier;
-  G4double ResidualAthrd;
-  G4double FragmentAthrd;
-  G4int FragmentA;
-  G4int ResidualA;
-  G4int ResidualZ;
-  G4int theA;
-  G4int theZ;
 };
 
 #endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAScreenedRutherfordElasticModel.cc 87137 2014-11-25 09:12:48Z gcosmo $
+// $Id: G4DNAScreenedRutherfordElasticModel.cc 92074 2015-08-17 07:03:46Z gcosmo $
 //
 
 #include "G4DNAScreenedRutherfordElasticModel.hh"
@@ -67,6 +67,10 @@ G4DNAScreenedRutherfordElasticModel::G4DNAScreenedRutherfordElasticModel(const G
     << G4endl;
   }
   fParticleChangeForGamma = 0;
+
+  // Selection of computation method
+  // We do not recommend "true" usage with the current cumul. proba. settings
+  fasterCode = false; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -206,7 +210,7 @@ G4double G4DNAScreenedRutherfordElasticModel::CrossSectionPerVolume(const G4Mate
 
   }
 
-  return sigma*material->GetAtomicNumDensityVector()[1];
+  return sigma*waterDensity;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -365,70 +369,78 @@ G4double G4DNAScreenedRutherfordElasticModel::BrennerZaiderRandomizeCosTheta(G4d
   }
 
   // ***** Original method
+  
+  if (!fasterCode)
+  {
 
-  G4double oneOverMax = 1.
+   G4double oneOverMax = 1.
       / (1. / (4. * gamma * gamma) + beta
           / ((2. + 2. * delta) * (2. + 2. * delta)));
 
-  G4double cosTheta = 0.;
-  G4double leftDenominator = 0.;
-  G4double rightDenominator = 0.;
-  G4double fCosTheta = 0.;
+   G4double cosTheta = 0.;
+   G4double leftDenominator = 0.;
+   G4double rightDenominator = 0.;
+   G4double fCosTheta = 0.;
 
-  do
-  {
-    cosTheta = 2. * G4UniformRand()- 1.;
+   do
+   {
+     cosTheta = 2. * G4UniformRand()- 1.;
 
-    leftDenominator = (1. + 2.*gamma - cosTheta);
-    rightDenominator = (1. + 2.*delta + cosTheta);
-    if ( (leftDenominator * rightDenominator) != 0. )
-    {
-      fCosTheta = oneOverMax * (1./(leftDenominator*leftDenominator) + beta/(rightDenominator*rightDenominator));
-    }
+     leftDenominator = (1. + 2.*gamma - cosTheta);
+     rightDenominator = (1. + 2.*delta + cosTheta);
+     if ( (leftDenominator * rightDenominator) != 0. )
+     {
+       fCosTheta = oneOverMax * (1./(leftDenominator*leftDenominator) + beta/(rightDenominator*rightDenominator));
+     }
+   }
+   while (fCosTheta < G4UniformRand());
+
+   return cosTheta;
   }
-  while (fCosTheta < G4UniformRand());
-
-  return cosTheta;
 
   // ***** Alternative method using cumulative probability
-  /*
-  G4double cosTheta = -1;
-  G4double cumul = 0;
-  G4double value = 0;
-  G4double leftDenominator = 0.;
-  G4double rightDenominator = 0.;
-
-  // Number of integration steps in the -1,1 range
-  G4int iMax=200;
-
-  G4double random = G4UniformRand();
-
-  // Cumulate differential cross section
-  for (G4int i=0; i<iMax; i++)
+  
+  if (fasterCode)
   {
-  cosTheta = -1 + i*2./(iMax-1);
-  leftDenominator = (1. + 2.*gamma - cosTheta);
-  rightDenominator = (1. + 2.*delta + cosTheta);
+
+   G4double cosTheta = -1;
+   G4double cumul = 0;
+   G4double value = 0;
+   G4double leftDenominator = 0.;
+   G4double rightDenominator = 0.;
+
+   // Number of integration steps in the -1,1 range
+   G4int iMax=200;
+
+   G4double random = G4UniformRand();
+
+   // Cumulate differential cross section
+   for (G4int i=0; i<iMax; i++)
+   {
+    cosTheta = -1 + i*2./(iMax-1);
+    leftDenominator = (1. + 2.*gamma - cosTheta);
+    rightDenominator = (1. + 2.*delta + cosTheta);
     if ( (leftDenominator * rightDenominator) != 0. )
     {
       cumul = cumul + (1./(leftDenominator*leftDenominator) + beta/(rightDenominator*rightDenominator));
     }
-  }
+   }
 
-  // Select cosTheta
-  for (G4int i=0; i<iMax; i++)
-  {
-    cosTheta = -1 + i*2./(iMax-1);
-    leftDenominator = (1. + 2.*gamma - cosTheta);
-    rightDenominator = (1. + 2.*delta + cosTheta);
-    if (cumul !=0 && (leftDenominator * rightDenominator) != 0.)
+   // Select cosTheta
+   for (G4int i=0; i<iMax; i++)
+   {
+     cosTheta = -1 + i*2./(iMax-1);
+     leftDenominator = (1. + 2.*gamma - cosTheta);
+     rightDenominator = (1. + 2.*delta + cosTheta);
+     if (cumul !=0 && (leftDenominator * rightDenominator) != 0.)
       value = value + (1./(leftDenominator*leftDenominator) + beta/(rightDenominator*rightDenominator)) / cumul;
-    if (random < value) break;
+     if (random < value) break;
+   }
+
+   return cosTheta;
   }
-
-  return cosTheta;
-   */
-
+ 
+  return 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -473,25 +485,31 @@ G4double G4DNAScreenedRutherfordElasticModel::ScreenedRutherfordRandomizeCosThet
 
   // ***** Original method
 
-  G4double n = ScreeningFactor(k, z);
-
-  G4double oneOverMax = (4. * n * n);
-
-  G4double cosTheta = 0.;
-  G4double fCosTheta;
-
-  do
+  if (!fasterCode)
   {
-    cosTheta = 2. * G4UniformRand()- 1.;
-    fCosTheta = (1 + 2.*n - cosTheta);
-    if (fCosTheta !=0.) fCosTheta = oneOverMax / (fCosTheta*fCosTheta);
-  }
-  while (fCosTheta < G4UniformRand());
 
-  return cosTheta;
+   G4double n = ScreeningFactor(k, z);
+
+   G4double oneOverMax = (4. * n * n);
+
+   G4double cosTheta = 0.;
+   G4double fCosTheta;
+
+   do
+   {
+     cosTheta = 2. * G4UniformRand()- 1.;
+     fCosTheta = (1 + 2.*n - cosTheta);
+     if (fCosTheta !=0.) fCosTheta = oneOverMax / (fCosTheta*fCosTheta);
+   }
+   while (fCosTheta < G4UniformRand());
+
+   return cosTheta;
+  }
 
   // ***** Alternative method using cumulative probability
-  /*
+  if (fasterCode)
+  {
+
    G4double cosTheta = -1;
    G4double cumul = 0;
    G4double value = 0;
@@ -520,6 +538,8 @@ G4double G4DNAScreenedRutherfordElasticModel::ScreenedRutherfordRandomizeCosThet
      if (random < value) break;
    }
    return cosTheta;
-   */
+  }
+
+  return 0.;
 }
 

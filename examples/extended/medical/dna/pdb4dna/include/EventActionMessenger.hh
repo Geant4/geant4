@@ -61,7 +61,6 @@ public:
 private:
   EventAction*                  fpEventAction;
   G4UIdirectory*                fpPDBDir;
-  G4UIcmdWithAnInteger*         fpPrintCmd;
   G4UIcmdWithADoubleAndUnit*    fpThresEdepCmd;
   G4UIcmdWithAnInteger*         fpThresDistCmd;
 };

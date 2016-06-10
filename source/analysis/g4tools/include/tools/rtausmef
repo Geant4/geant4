@@ -12,21 +12,22 @@
 namespace tools {
 
 class rtausmef : public rtausmeui {
+  typedef rtausmeui parent;
 public:
   TOOLS_SCLASS(tools::rtausmef)
 public:
-  rtausmef(unsigned int a_seed = 4357):rtausmeui(a_seed){}
+  rtausmef(unsigned int a_seed = 4357):parent(a_seed){}
   virtual ~rtausmef(){}
 public:
-  rtausmef(const rtausmef& a_from):rtausmeui(a_from){}
-  rtausmef& operator=(const rtausmef& a_from) {rtausmeui::operator=(a_from);return *this;}
+  rtausmef(const rtausmef& a_from):parent(a_from){}
+  rtausmef& operator=(const rtausmef& a_from) {parent::operator=(a_from);return *this;}
 protected:
   static float two_to_minus_32()  {
     static const float s_v = ::ldexpf(1,-32);
     return s_v;
   }
 public:
-  float shoot() {return float(rtausmeui::shoot()) * two_to_minus_32();}
+  float shoot() {return float(parent::shoot()) * two_to_minus_32();}
 };
 
 }

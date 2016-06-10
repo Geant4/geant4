@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionDataSetRegistry.cc 83697 2014-09-10 07:15:29Z gcosmo $
+// $Id: G4CrossSectionDataSetRegistry.cc 93904 2015-11-03 10:16:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -66,8 +66,6 @@ G4_REFERENCE_XS_FACTORY(G4ChipsPionMinusElasticXS);
 G4_REFERENCE_XS_FACTORY(G4ChipsAntiBaryonInelasticXS);
 G4_REFERENCE_XS_FACTORY(G4ChipsAntiBaryonElasticXS);
 G4_REFERENCE_XS_FACTORY(G4NucleonNuclearCrossSection);
-G4_REFERENCE_XS_FACTORY(G4GlauberGribovCrossSection);
-G4_REFERENCE_XS_FACTORY(G4GGNuclNuclCrossSection);
 G4_REFERENCE_XS_FACTORY(G4ElectroNuclearCrossSection);
 G4_REFERENCE_XS_FACTORY(G4PhotoNuclearCrossSection);
 G4_REFERENCE_XS_FACTORY(G4PiNuclearCrossSection);
@@ -76,15 +74,15 @@ G4_REFERENCE_XS_FACTORY(G4NeutronElasticXS);
 G4_REFERENCE_XS_FACTORY(G4NeutronCaptureXS);
 
 
-G4ThreadLocal G4CrossSectionDataSetRegistry* G4CrossSectionDataSetRegistry::theInstance = 0;
+G4ThreadLocal G4CrossSectionDataSetRegistry* G4CrossSectionDataSetRegistry::instance = 0;
 
 G4CrossSectionDataSetRegistry* G4CrossSectionDataSetRegistry::Instance()
 {
-  if(0 == theInstance) {
-    static G4ThreadLocal G4CrossSectionDataSetRegistry *manager_G4MT_TLS_ = 0 ; if (!manager_G4MT_TLS_) manager_G4MT_TLS_ = new  G4CrossSectionDataSetRegistry  ;  G4CrossSectionDataSetRegistry &manager = *manager_G4MT_TLS_;
-    theInstance = &manager;
+  if(0 == instance) {
+    static G4ThreadLocalSingleton<G4CrossSectionDataSetRegistry> inst;
+    instance = inst.Instance();
   }
-  return theInstance;
+  return instance;
 }
 
 G4CrossSectionDataSetRegistry::G4CrossSectionDataSetRegistry()
@@ -98,27 +96,32 @@ G4CrossSectionDataSetRegistry::~G4CrossSectionDataSetRegistry()
 void G4CrossSectionDataSetRegistry::Clean()
 {
   size_t n = xSections.size(); 
-  if(n > 0) {
-    for (size_t i=0; i<n; ++i) {
-      if(xSections[i]) {
-	G4VCrossSectionDataSet* p = xSections[i];
-	xSections[i] = 0;
-	delete p;
+  for (size_t i=0; i<n; ++i) {
+    if(xSections[i]) {
+      const char* xxx = (xSections[i]->GetName()).c_str();
+      G4int len = (xSections[i]->GetName()).length();
+      len = std::min(len, 9);
+      const G4String xname = G4String(xxx, len);
+      //std::cout << "G4CrossSectionDataSetRegistry::Clean " << xname 
+      //		<< "  " << xSections[i] << " " << this << std::endl;
+      if( (xname != "NeutronHP") && (xname != "ParticleH") ) {
+	delete xSections[i];
       }
+      //std::cout << "  done" << " " << this  << std::endl;
     }
-    xSections.clear();
   }
+  xSections.clear();
 }
 
 void G4CrossSectionDataSetRegistry::Register(G4VCrossSectionDataSet* p)
 {
   if(!p) return;
   size_t n = xSections.size(); 
-  if(n > 0) {
-    for (size_t i=0; i<n; ++i) {
-      if(xSections[i] == p) { return; }
-    }
+  for (size_t i=0; i<n; ++i) {
+    if(xSections[i] == p) { return; }
   }
+  //G4cout << "Register x-section: " << p->GetName() << "  " << p 
+  //	 << "  " << this << G4endl;
   xSections.push_back(p);
 }
 
@@ -126,12 +129,10 @@ void G4CrossSectionDataSetRegistry::DeRegister(G4VCrossSectionDataSet* p)
 {
   if(!p) return;
   size_t n = xSections.size(); 
-  if(n > 0) {
-    for (size_t i=0; i<n; ++i) {
-      if(xSections[i] == p) {
-        xSections[i] = 0;
-	return;
-      }
+  for (size_t i=0; i<n; ++i) {
+    if(xSections[i] == p) {
+      xSections[i] = 0;
+      return;
     }
   }
 }

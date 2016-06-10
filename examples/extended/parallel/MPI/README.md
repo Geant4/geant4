@@ -3,6 +3,7 @@ Geant4 MPI Interface
 
 Author:
 Koichi Murakami (KEK) / Koichi.Murakami@kek.jp
+Andrea Dotti (SLAC) / adotti@slac.stanford.edu
 
 
 About the interface
@@ -10,7 +11,7 @@ About the interface
 G4MPI is a native interface with MPI libraries. The directory contains 
 a Geant4 UI library and a couple of parallelized examples.
 Using this interface, users applications can be parallelized with
-different MPI compliant libraries, such as OpenMPI, LAM/MPI, MPICH2 and so on.
+different MPI compliant libraries, such as OpenMPI, MPICH2 and so on.
 
 System Requirements:
 --------------------
@@ -18,20 +19,25 @@ System Requirements:
 ### MPI Library
 
 The MPI interface can work with MPI-compliant libraries, 
-such as Open MPI, LAM/MPI, Intel MPI etc.
+such as Open MPI, MPICH, Intel MPI etc.
 
 For example, the information about Open MPI can be obtained from
 http://www.open-mpi.org/
 
+MPI support:
+------------
+G4mpi has been tested with the following MPI flavors:
+ *   OpenMPI 1.8.1
+ *   MPICH 3.2
+ *   Intel MPI 5.0.1
+ 
 ### CMake
 
 CMake is used to build G4MPI library, that co-works with Geant4 build system.
 
-### Optional
+### Optional (for exMPI02)
 
 ROOT for histogramming/analysis
-
-- - -
 
 How to build G4MPI
 ==================
@@ -41,18 +47,20 @@ Follow these commands,
 
     > mkdir build
     > cd build
-    > cmake -DGeant4_DIR=<your Geant4 install path>/lib64/Geant4-V.m.n -DCMAKE_CXX_COMPILER=mpicxx \
-     -DCMAKE_INSTALL_PREFIX=<where-G4mpi-lib-will-be-installed> <g4source>/examples/extended/parallel/MPI/source
+    > cmake -DGeant4_DIR=<your Geant4 install path>/lib[64]/Geant4-V.m.n \
+     -DCMAKE_INSTALL_PREFIX=<where-G4mpi-lib-will-be-installed> \
+     <g4source>/examples/extended/parallel/MPI/source
     > make
     > make install
 
-Replace mpicxx with your MPI compiler wrapper.
+The cmake step will try to guess where MPI is installed, mpi executables should 
+be in PATH. You can specify CXX and CC environment variables to your specific 
+mpi wrappers if needed.
 
-The library and header files will be installed on the installation directory specified in CMAKE_CXX_COMPILER
-a CMake configuration file will also be installed (see examples on how to compile an application using G4mpi)
-
-
-- - - 
+The library and header files will be installed on the installation directory 
+specified in CMAKE_INSTALL_PREFIX
+a CMake configuration file will also be installed 
+(see examples on how to compile an application using G4mpi)
 
 How to use
 ==========
@@ -62,7 +70,7 @@ How to make parallel applications
 
 An example of a main program:
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cc}
+```c++
 #include "G4MPImanager.hh"
 #include "G4MPIsession.hh"
 
@@ -86,9 +94,24 @@ int main(int argc,char** argv)
   // Finally, terminate the program
   delete g4MPI;
   delete runManager;
-}    
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+}
+```
 
+How to compile
+---------------
+
+Using cmake, assuming G4mpi library is installed in path _g4mpi-path_ and 
+Geant4 is installed in _g4-path_:
+
+    > mkdir build
+    > cd build
+    > cmake -DGeant4_DIR=<g4-path>/lib[64]/Geant4-V.m.n \
+      -DG4mpi_DIR=<g4mpi-path>/lib[64]/G4mpi-V.m.n \
+      <source>
+    > make
+
+Check provided examples: under examples/extended/parallel/MPI/examples for an
+example of CMakeLists.txt file to be used.
 
 ### Notes about session shell
 
@@ -112,6 +135,7 @@ How to run
 For example,
 
     > mpiexec -n # <your application>
+<p>Replace mpicxx with your MPI compiler wrapper if you need to specify which one to use.</p>
 
 Instead, `mpirun` command is more convenient for LAM users.
 
@@ -149,21 +173,11 @@ The original "/control/execute" and "/run/beamOn" are overwritten
 with "/mpi/execute" and "/mpi/beamOn" commands respectively,
 that are customized for the MPI interface.
 
-- - -
-
 Examples
 ========
 There are a couple of examples for Geant4 MPI applications.
 
-In some cases, you need to set some additional environment variables
-for running examples:
-
-- *G4LEDATA* : directory path for low energy EM data
-- *G4LEVELGAMMADATA* : directory path for photon evapolation
-- *G4SAIDXSDATA* : directory path for nucleon cross section data
-
-
-For using ROOT libraries
+For using ROOT libraries (exMPI02)
 
 - *ROOTSYS* : root path of the ROOT package
 
@@ -184,6 +198,10 @@ A simple application.
 exMPI02 (ROOT application)
 --------------------------
 An example of dosimetry in a water phantom.
+Note: due to limited MT support in ROOT, in this example
+      MT is disabled, but the code is migrated to MT, ready
+      for MT when ROOT will support MT.
+      For an example of MT+MPI take a look at exMPI03
 
 **Configuration:**
 - Geometry     : water phantom
@@ -195,3 +213,14 @@ An example of dosimetry in a water phantom.
 - Score dose distribution in a water phantom.
 - Learn how to parallelized your applications.
 - Create a ROOT file containing histograms/trees in each node.
+
+exMPI03 (merging of histograms via MPI)
+---------------------------------------
+This example is the same as exMPI02 with the following
+differences:
+- It uses g4tools instead of ROOT for histogramming
+- It shows how to merge, using g4tools, histograms via MPI
+  so that the entire statistics is accumulated in a single output file
+- It also shows how to merge G4Run objects from different ranks and 
+  how to merge scorers
+- MT is enabled.

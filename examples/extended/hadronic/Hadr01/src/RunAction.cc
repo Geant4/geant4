@@ -42,12 +42,17 @@
 #include "HistoManager.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
+#include "G4Timer.hh"
+#include "G4NuclearLevelData.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction()
  : G4UserRunAction()
-{}
+{
+  timer = new G4Timer();
+  timer->Start();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -60,6 +65,16 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4int id = aRun->GetRunID();
   G4cout << "### Run " << id << " start" << G4endl;
+  timer->Stop();
+  G4cout << "RunAction::BeginOfRunAction:  "  << *timer << G4endl;
+
+  delete timer;
+  timer = new G4Timer();
+  timer->Start();
+  G4NuclearLevelData::GetInstance();
+  timer->Stop();
+  G4cout << "NuclearData:  "  << *timer << G4endl;
+
   (HistoManager::GetPointer())->BeginOfRun();
 
 #ifdef G4VIS_USE

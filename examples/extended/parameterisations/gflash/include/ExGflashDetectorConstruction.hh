@@ -23,26 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExGflashDetectorConstruction.hh 73006 2013-08-15 08:17:11Z gcosmo $
+// $Id: ExGflashDetectorConstruction.hh 94396 2015-11-13 13:37:16Z gcosmo $
 //
-/// \file parameterisations/gflash/include/ExGflashDetectorConstruction.hh
+/// \file fParameterisations/gflash/include/ExGflashDetectorConstruction.hh
 /// \brief Definition of the ExGflashDetectorConstruction class
 //
 #ifndef ExGflashDetectorConstruction_h
 #define ExGflashDetectorConstruction_h 1
 
-#include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
+#include "globals.hh"
 
-
-class G4Box;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
-class GFlashHomoShowerParameterisation;
-class GFlashHitMaker;
-class GFlashShowerModel;
-class GFlashParticleBounds;
+class G4Region;
 
+class GFlashHomoShowerParameterisation;
+class GFlashShowerModel;
+class GFlashHitMaker;
+class GFlashParticleBounds;
 
 class ExGflashDetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -59,36 +58,14 @@ public:
   
   
 private:
-  G4LogicalVolume* fExperimentalHall_log;
-  G4LogicalVolume* fCalo_log;
-  
-  G4VPhysicalVolume* fExperimentalHall_phys;      
-  G4VPhysicalVolume* fCalo_phys;
-  
-  G4Box *fExperimentalHall_box;
-  
-  G4double fExperimentalHall_x;
-  G4double fExperimentalHall_y;
-  G4double fExperimentalHall_z;
-  
-  G4double fCalo_xside;
-  G4double fCalo_yside;
-  G4double fCalo_zside;    
-  
-  G4int    fNbOfCrystals;                // Nb of chambers in the tracker region
-  G4double fCrystalWidth;                // width of the chambers
-  G4double fCrystalLenght;
-  //@@@  ExGflashDetectorConstruction : wie mache ich das am besten ?
-  G4Box *fCrystal[100];      
-  G4LogicalVolume* fCrystal_log[100];
+  G4LogicalVolume*    fCrystal_log;
   G4VPhysicalVolume*  fCrystal_phys[100];
-  
-  // Gflash members    
-  GFlashHomoShowerParameterisation* fTheParameterisation;
-  GFlashHitMaker*                   fTheHMaker;
-  GFlashParticleBounds*             fTheParticleBounds;
-  GFlashShowerModel*                fTheFastShowerModel;     
-  G4Region*                         fRegion;
+  G4Region*           fRegion;
+
+  static G4ThreadLocal GFlashShowerModel* fFastShowerModel; 
+  static G4ThreadLocal GFlashHomoShowerParameterisation* fParameterisation;
+  static G4ThreadLocal GFlashParticleBounds* fParticleBounds;
+  static G4ThreadLocal GFlashHitMaker* fHitMaker;
 };
 
 #endif

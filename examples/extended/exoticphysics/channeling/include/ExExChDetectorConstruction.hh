@@ -59,9 +59,7 @@ private:
     void ConstructSDandField();
 
 private:
-    void ConstructWorld();
-    G4double fWorldSizeXY;
-    G4double fWorldSizeZ;
+    G4ThreeVector fWorldSize;
     G4Box* fWorldSolid;
     G4LogicalVolume* fWorldLogic;
     G4VPhysicalVolume* fWorldPhysical;
@@ -70,14 +68,26 @@ private:
     //** SSD **//
 private:
     void ConstructSiliconStripDetectors();
-    
-    G4double fSSD0XtalDistance;
-    G4double fSSD1XtalDistance;
-    G4double fSSD2XtalDistance;
+    G4LogicalVolume* ConstructSiSD(G4int);
+    G4bool bSiSD;
     G4ThreeVector fSSDSize;
-    G4Box* fSSDSolid;
-    G4LogicalVolume* fSSDLogic;
-    
+    G4double fSSDXtalDistance[3];
+    G4LogicalVolume* fSSDLogic[3];
+    G4double fSSDBoxThickness;
+    G4ThreeVector fSSDBoxSize;    
+    //** Beam pipe **//
+
+    void SetBeamPipeRadius(G4double aDouble) {fBeamPipeRadius = aDouble;};
+    G4double GetBeamPipeRadius() {return fBeamPipeRadius;};
+
+    void SetBeamPipeThickness(G4double aDouble) {fBeamPipeThickness = aDouble;};
+    G4double GetBeamPipeThickness() {return fBeamPipeThickness;};
+
+private:
+    G4LogicalVolume* ConstructBeamPipe(G4double);
+    G4bool bBeamPipe;
+    G4double fBeamPipeRadius;
+    G4double fBeamPipeThickness;
     //** Xtal **//
 public:
     void AddXtalTarget() {

@@ -1,0 +1,73 @@
+#
+/run/numberOfThreads 2
+#
+/svalue/det/setMat G4_WATER
+/svalue/det/setRadius 20 nm
+#
+/svalue/det/setTrackingCut 12 eV
+#
+# Register physics constructors
+/svalue/phys/addPhysics  dna	        
+#/svalue/phys/addPhysics dna_opt2	
+
+#
+/run/initialize
+#
+/gun/particle e-
+#
+/gun/energy 100 eV
+/run/beamOn 1000
+#
+/gun/energy 200 eV
+/run/beamOn 1000
+#
+/gun/energy 300 eV
+/run/beamOn 1000
+#
+/gun/energy 400 eV
+/run/beamOn 1000
+#
+/gun/energy 500 eV
+/run/beamOn 1000
+#
+/gun/energy 600 eV
+/run/beamOn 1000
+#
+/gun/energy 700 eV
+/run/beamOn 1000
+#
+/gun/energy 800 eV
+/run/beamOn 1000
+#
+/gun/energy 900 eV
+/run/beamOn 1000
+#
+/gun/energy 1 keV
+/run/beamOn 1000
+#
+/gun/energy 2 keV
+/run/beamOn 1000
+#
+/gun/energy 3 keV
+/run/beamOn 1000
+#
+/gun/energy 4 keV
+/run/beamOn 1000
+#
+/gun/energy 5 keV
+/run/beamOn 1000
+#
+/gun/energy 6 keV
+/run/beamOn 1000
+#
+/gun/energy 7 keV
+/run/beamOn 1000
+#
+/gun/energy 8 keV
+/run/beamOn 1000
+#
+/gun/energy 9 keV
+/run/beamOn 1000
+#
+/gun/energy 10 keV
+/run/beamOn 1000

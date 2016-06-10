@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHNScattering.cc 86646 2014-11-14 13:29:39Z gcosmo $
+// $Id: G4ElasticHNScattering.cc 91914 2015-08-11 07:00:39Z gcosmo $
 //
 
 // ------------------------------------------------------------
@@ -50,6 +50,9 @@
 #include "G4FTFParameters.hh"
 
 #include "G4SampleResonance.hh"                                  // Uzhi Oct 2014
+
+#include "G4Exp.hh"
+#include "G4Log.hh"
 
 //============================================================================
 
@@ -157,6 +160,8 @@ G4bool G4ElasticHNScattering::ElasticScattering( G4VSplitableHadron* projectile,
   G4double TargMassT2, TargMassT;
   G4LorentzVector Qmomentum;
 
+  const G4int maxNumberOfLoops = 1000;
+  G4int loopCounter = 0;
   do {
     Qmomentum = G4LorentzVector( GaussianPt( AveragePt2, maxPtSquare ), 0.0 );
     Pt2 = G4ThreeVector( Qmomentum.vect() ).mag2();                  
@@ -164,7 +169,11 @@ G4bool G4ElasticHNScattering::ElasticScattering( G4VSplitableHadron* projectile,
     ProjMassT = std::sqrt( ProjMassT2 );                            
     TargMassT2 = M0target2 + Pt2;                               
     TargMassT = std::sqrt( TargMassT2 );                            
-  } while ( SqrtS < ProjMassT + TargMassT );
+  } while ( ( SqrtS < ProjMassT + TargMassT ) && 
+            ++loopCounter < maxNumberOfLoops );  /* Loop checking, 10.08.2015, A.Ribon */
+  if ( loopCounter >= maxNumberOfLoops ) {
+    return false;
+  }
 
   PZcms2 = ( S*S + sqr( ProjMassT2 ) + sqr( TargMassT2 )                           
              - 2.0*S*ProjMassT2 - 2.0*S*TargMassT2 - 2.0*ProjMassT2*TargMassT2 ) / 4.0 / S;
@@ -206,8 +215,8 @@ G4ThreeVector G4ElasticHNScattering::GaussianPt( G4double AveragePt2,
   if ( AveragePt2 <= 0.0 ) {
     Pt2 = 0.0;
   } else {
-    Pt2 = -AveragePt2 * std::log( 1.0 + G4UniformRand() * 
-                                        ( std::exp( -maxPtSquare/AveragePt2 ) -1.0 ) ); 
+    Pt2 = -AveragePt2 * G4Log( 1.0 + G4UniformRand() * 
+                                        ( G4Exp( -maxPtSquare/AveragePt2 ) -1.0 ) ); 
   }
   G4double Pt = std::sqrt( Pt2 );
   G4double phi = G4UniformRand() * twopi;

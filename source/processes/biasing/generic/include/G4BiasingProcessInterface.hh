@@ -268,7 +268,8 @@ private:
   static G4Cache<G4bool>                           fResetInteractionLaws;
   static G4Cache<G4bool>                                    fCommonStart;
   static G4Cache<G4bool>                                      fCommonEnd;
-  
+  static G4Cache<G4bool>                              fDoCommonConfigure;
+
   const G4ProcessManager* fProcessManager;
 
 

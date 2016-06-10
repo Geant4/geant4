@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.hh 83685 2014-09-09 12:39:00Z gcosmo $
+// $Id: G4eBremsstrahlungRelModel.hh 93567 2015-10-26 14:51:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -191,7 +191,7 @@ inline void G4eBremsstrahlungRelModel::SetCurrentElement(const G4double Z)
   if(Z != currentZ) {
     currentZ = Z;
 
-    G4int iz = G4int(Z);
+    G4int iz = G4lrint(Z);
     z13 = nist->GetZ13(iz);
     z23 = z13*z13;
     lnZ = nist->GetLOGZ(iz);
@@ -201,8 +201,9 @@ inline void G4eBremsstrahlungRelModel::SetCurrentElement(const G4double Z)
       Finel = Finel_light[iz] ; 
     }
     else {
-      Fel = facFel - lnZ/3. ;
-      Finel = facFinel - 2.*lnZ/3. ;
+      G4double lnzt = lnZ/3.;
+      Fel = facFel - lnzt;
+      Finel = facFinel - 2*lnzt;
     }
 
     fCoulomb = GetCurrentElement()->GetfCoulomb();

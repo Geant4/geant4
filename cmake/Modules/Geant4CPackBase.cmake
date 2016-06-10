@@ -1,7 +1,7 @@
 # - Basic setup for packaging Geant4 using CPack
 # Still rather rough and only generally intended to create source packages
 # at the moment.
-# 
+#
 
 #-----------------------------------------------------------------------
 # Package up needed system libraries - only for WIN32?
@@ -9,7 +9,7 @@
 include(InstallRequiredSystemLibraries)
 
 #-----------------------------------------------------------------------
-# General packaging setup - variable relavant to all package formats
+# General packaging setup - variable relevant to all package formats
 #
 set(CPACK_PACKAGE_DESCRIPTION         "Geant4 Toolkit")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Geant4 Toolkit")
@@ -17,38 +17,69 @@ set(CPACK_PACKAGE_DESCRIPTION_FILE    "${CMAKE_BINARY_DIR}/README.txt")
 
 set(CPACK_PACKAGE_VENDOR "Geant4 Collaboration")
 
+# - Canonical versions
 set(CPACK_PACKAGE_VERSION       ${${PROJECT_NAME}_VERSION})
 set(CPACK_PACKAGE_VERSION_MAJOR ${${PROJECT_NAME}_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${${PROJECT_NAME}_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${${PROJECT_NAME}_VERSION_PATCH})
 
+# - Geant4 versions
+# Canonical versions padded with zeros to two digits
+function(geant4_pad_version _in _out)
+  string(LENGTH "${_in}" _vlength)
+  if(_vlength GREATER 1)
+    set(${_out} "${_in}" PARENT_SCOPE)
+  elseif(_vlength EQUAL 1)
+    set(${_out} "0${_in}" PARENT_SCOPE)
+  else()
+    set(${_out} "00" PARENT_SCOPE)
+  endif()
+endfunction()
+
+geant4_pad_version(${${PROJECT_NAME}_VERSION_MAJOR} ${PROJECT_NAME}_SOURCE_VERSION_MAJOR)
+geant4_pad_version(${${PROJECT_NAME}_VERSION_MINOR} ${PROJECT_NAME}_SOURCE_VERSION_MINOR)
+geant4_pad_version(${${PROJECT_NAME}_VERSION_PATCH} ${PROJECT_NAME}_SOURCE_VERSION_PATCH)
+set(${PROJECT_NAME}_SOURCE_VERSION "${${PROJECT_NAME}_SOURCE_VERSION_MAJOR}.${${PROJECT_NAME}_SOURCE_VERSION_MINOR}.${${PROJECT_NAME}_SOURCE_VERSION_PATCH}")
+
 # - Resource files
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_BINARY_DIR}/LICENSE.txt")
 set(CPACK_RESOURCE_FILE_README  "${CMAKE_BINARY_DIR}/README.txt")
 
-configure_file(LICENSE LICENSE.txt COPYONLY) # Suffix must be .txt 
+configure_file(LICENSE LICENSE.txt COPYONLY) # Suffix must be .txt
 file(WRITE ${CMAKE_BINARY_DIR}/README.txt "
 Geant4
 ======
-A toolkit for the simulation of the passage of particles through matter. 
-Its areas of application include high energy, nuclear and accelerator 
-physics, as well as studies in medical and space science 
+A toolkit for the simulation of the passage of particles through matter.
+Its areas of application include high energy, nuclear and accelerator
+physics, as well as studies in medical and space science
 (http://www.geant4.org).
 
-The two main reference papers for Geant4 are published in Nuclear 
-Instruments and Methods in Physics Research A 506 (2003) 250-303, and IEEE 
+The two main reference papers for Geant4 are published in Nuclear
+Instruments and Methods in Physics Research A 506 (2003) 250-303, and IEEE
 Transactions on Nuclear Science 53 No. 1 (2006) 270-278.
 
-This installer has been created using CPack (http://www.cmake.org). 
+This installer has been created using CPack (http://www.cmake.org).
 ")
 
 #-----------------------------------------------------------------------
 # Source package settings
+#
+# - Use canonical Geant4 package naming convention
+set(CPACK_SOURCE_PACKAGE_FILE_NAME "geant4.${Geant4_SOURCE_VERSION}")
+
+# - Ensure all standard source packages are built
+set(CPACK_SOURCE_GENERATOR "TGZ;TBZ2;ZIP")
+set(CPACK_SOURCE_STRIP_FILES "")
+
 # Exclude VCS and standard temporary files from the source package.
+# Exclude development specific files and directories
 # Not totally perfected yet!
-set(CPACK_SOURCE_IGNORE_FILES 
-  ${PROJECT_BINARY_DIR}
-  ${PROJECT_SOURCE_DIR}/tests
+set(CPACK_SOURCE_IGNORE_FILES
+  "${PROJECT_BINARY_DIR}"
+  "${PROJECT_SOURCE_DIR}/tests"
+  "${PROJECT_SOURCE_DIR}/ReleaseNotes/development"
+  "/test/"
+  "/tests/"
   "~$"
   "/CVS/"
   "/.svn/"
@@ -62,10 +93,6 @@ set(CPACK_SOURCE_IGNORE_FILES
   "/#"
   )
 
-# - Ensure all standard source packages are built
-set(CPACK_SOURCE_GENERATOR "TGZ;TBZ2;ZIP")
-set(CPACK_SOURCE_STRIP_FILES "")
-
 #-----------------------------------------------------------------------
 # Binary package setup
 #
@@ -78,7 +105,7 @@ else()
 endif()
 
 if(WIN32)
-  set(CPACK_GENERATOR "NSIS;ZIP")  
+  set(CPACK_GENERATOR "NSIS;ZIP")
 elseif(APPLE)
   set(CPACK_GENERATOR "PackageMaker;TGZ")
 else()
@@ -90,8 +117,8 @@ endif()
 # base CPack configuration.
 #
 configure_file(
-  cmake/Templates/CMakeCPackOptions.cmake.in 
-  CMakeCPackOptions.cmake 
+  cmake/Templates/CMakeCPackOptions.cmake.in
+  CMakeCPackOptions.cmake
   @ONLY
   )
 set(CPACK_PROJECT_CONFIG_FILE ${CMAKE_BINARY_DIR}/CMakeCPackOptions.cmake)
@@ -107,29 +134,29 @@ cpack_add_install_type(runtime   DISPLAY_NAME "Runtime Installation")
 cpack_add_install_type(developer DISPLAY_NAME "Developer Installation")
 
 # - Components for Development
-cpack_add_component(Development 
-  DISPLAY_NAME "Development Components" 
+cpack_add_component(Development
+  DISPLAY_NAME "Development Components"
   DESCRIPTION "Install all files needed for developing Geant4 applications (headers, makefiles, etc.)"
   INSTALL_TYPES developer full
   )
 
 # - Components for Runtime
-cpack_add_component(Runtime 
-  DISPLAY_NAME "Geant4 runtime Libraries" 
+cpack_add_component(Runtime
+  DISPLAY_NAME "Geant4 runtime Libraries"
   DESCRIPTION "Install all Geant4 libraries"
   INSTALL_TYPES runtime developer full
   )
 
 # - Components for Examples
-cpack_add_component(Examples 
+cpack_add_component(Examples
   DISPLAY_NAME "Application Examples"
   DESCRIPTION "Install all Geant4 examples"
   INSTALL_TYPES full developer
   )
 
 # - Components for Data
-cpack_add_component(Data 
-  DISPLAY_NAME "Geant4 Data Files" 
+cpack_add_component(Data
+  DISPLAY_NAME "Geant4 Data Files"
   DESCRIPTION "Install all Geant4 data files"
   INSTALL_TYPES full
   )
