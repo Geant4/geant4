@@ -126,7 +126,7 @@ public:
    
   static double   Tolerance() {return fgTolerance;}
 
-  inline virtual std::ostream& StreamInfo( std::ostream& os ) const = 0;
+  virtual std::ostream& StreamInfo( std::ostream& os ) const = 0;
 
   virtual UVector3 GetPointOnSurface() const = 0;
 

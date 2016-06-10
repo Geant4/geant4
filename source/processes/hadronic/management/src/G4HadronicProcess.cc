@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcess.cc 79196 2014-02-20 11:13:11Z gcosmo $
+// $Id: G4HadronicProcess.cc 88559 2015-02-26 15:13:55Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -650,13 +650,37 @@ G4HadFinalState* G4HadronicProcess::CheckResult(const G4HadProjectile & aPro,con
          }
       }
       for (G4int i = 0; i < nSec; i++) {
-         finalE += result->GetSecondary(i)->GetParticle()->GetTotalEnergy();
-      }
+      	G4DynamicParticle *pdyn=result->GetSecondary(i)->GetParticle();
+      	finalE += pdyn->GetTotalEnergy();
+      	G4double mass_pdg=pdyn->GetDefinition()->GetPDGMass();
+      	G4double mass_dyn=pdyn->GetMass();
+      	if ( std::abs(mass_pdg - mass_dyn) > 0.1*mass_pdg + 1.*MeV){
+         	 result->Clear();
+         	 result = 0;
+         	 G4ExceptionDescription desc;
+         	 desc << "Warning: Secondary with off-shell dynamic mass detected:  " << G4endl
+         	  << " " << pdyn->GetDefinition()->GetParticleName()
+         	  << ", PDG mass: " << mass_pdg << ", dynamic mass: "<< mass_dyn << G4endl
+    	   	<< (epReportLevel<0 ? "abort the event" :  "re-sample the interaction") << G4endl
+    	   	<< " Process / Model: " <<  GetProcessName()<< " / "
+    	   	<< theModel->GetModelName() << G4endl
+    	   	<< " Primary: " << aPro.GetDefinition()->GetParticleName()
+    	   	<< " (" << aPro.GetDefinition()->GetPDGEncoding() << "), "
+    	   	<< " E= " <<  aPro.Get4Momentum().e()
+    	   	<< ", target nucleus (" << aNucleus.GetZ_asInt() << ", "
+    	   	<< aNucleus.GetA_asInt() << ")" << G4endl;
+         	 G4Exception("G4HadronicProcess:CheckResult()", "had012",
+    			  epReportLevel<0 ? EventMustBeAborted : JustWarning,desc);
+         	 // must return here.....
+         	 return result;
+      	}
+    }
       G4double deltaE= nuclearMass +  aPro.GetTotalEnergy() -  finalE;
 
       std::pair<G4double, G4double> checkLevels = theModel->GetFatalEnergyCheckLevels();	// (relative, absolute)
       if (std::abs(deltaE) > checkLevels.second && std::abs(deltaE) > checkLevels.first*aPro.GetKineticEnergy()){
          // do not delete result, this is a pointer to a data member;
+         result->Clear();
          result=0;
          G4ExceptionDescription desc;
          desc << "Warning: Bad energy non-conservation detected, will "

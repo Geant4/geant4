@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsQGSP_BIC.cc 76703 2013-11-14 10:29:11Z gcosmo $
+// $Id: G4HadronPhysicsQGSP_BIC.cc 88488 2015-02-24 10:46:32Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -157,24 +157,26 @@ void G4HadronPhysicsQGSP_BIC::CreateModels()
 
 G4HadronPhysicsQGSP_BIC::~G4HadronPhysicsQGSP_BIC() 
 {
-   delete tpdata->theBinaryNeutron;
-   delete tpdata->theQGSPNeutron;
-   delete tpdata->theFTFPNeutron;
-   delete tpdata->theBertiniPiK;
-   delete tpdata->theQGSPPiK;
-   delete tpdata->theFTFPPiK;
-   delete tpdata->thePiK;
-   delete tpdata->theBinaryPro;
-   delete tpdata->theQGSPPro;
-   delete tpdata->theFTFPPro;
-   delete tpdata->thePro;
-   delete tpdata->theFTFPAntiBaryon;
-   delete tpdata->theAntiBaryon;
-   delete tpdata->theHyperon;
-   delete tpdata->xsNeutronInelasticXS;
-   delete tpdata->xsNeutronCaptureXS;
+  if (tpdata) {
+    delete tpdata->theBinaryNeutron;
+    delete tpdata->theQGSPNeutron;
+    delete tpdata->theFTFPNeutron;
+    delete tpdata->theBertiniPiK;
+    delete tpdata->theQGSPPiK;
+    delete tpdata->theFTFPPiK;
+    delete tpdata->thePiK;
+    delete tpdata->theBinaryPro;
+    delete tpdata->theQGSPPro;
+    delete tpdata->theFTFPPro;
+    delete tpdata->thePro;
+    delete tpdata->theFTFPAntiBaryon;
+    delete tpdata->theAntiBaryon;
+    delete tpdata->theHyperon;
+    delete tpdata->xsNeutronInelasticXS;
+    delete tpdata->xsNeutronCaptureXS;
 
-   delete tpdata; tpdata =0 ;
+    delete tpdata; tpdata =0 ;
+  }
 }
 
 void G4HadronPhysicsQGSP_BIC::ConstructParticle()

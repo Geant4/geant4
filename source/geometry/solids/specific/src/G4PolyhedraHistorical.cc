@@ -93,26 +93,24 @@ G4PolyhedraHistorical::operator=( const G4PolyhedraHistorical& right )
 {
   if ( &right == this ) return *this;
 
-  if (&right)
+  Start_angle   = right.Start_angle;
+  Opening_angle = right.Opening_angle;
+  numSide       = right.numSide;
+  Num_z_planes  = right.Num_z_planes;
+  
+  delete [] Z_values;
+  delete [] Rmin;
+  delete [] Rmax;
+  Z_values = new G4double[Num_z_planes];
+  Rmin     = new G4double[Num_z_planes];
+  Rmax     = new G4double[Num_z_planes];
+  
+  for( G4int i = 0; i < Num_z_planes; i++)
   {
-    Start_angle   = right.Start_angle;
-    Opening_angle = right.Opening_angle;
-    numSide       = right.numSide;
-    Num_z_planes  = right.Num_z_planes;
-  
-    delete [] Z_values;
-    delete [] Rmin;
-    delete [] Rmax;
-    Z_values = new G4double[Num_z_planes];
-    Rmin     = new G4double[Num_z_planes];
-    Rmax     = new G4double[Num_z_planes];
-  
-    for( G4int i = 0; i < Num_z_planes; i++)
-    {
-      Z_values[i] = right.Z_values[i];
-      Rmin[i]     = right.Rmin[i];
-      Rmax[i]     = right.Rmax[i];
-    }
+    Z_values[i] = right.Z_values[i];
+    Rmin[i]     = right.Rmin[i];
+    Rmax[i]     = right.Rmax[i];
   }
+
   return *this;
 }

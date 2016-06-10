@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsFTF_BIC.cc 76703 2013-11-14 10:29:11Z gcosmo $
+// $Id: G4HadronPhysicsFTF_BIC.cc 88488 2015-02-24 10:46:32Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -141,30 +141,31 @@ void G4HadronPhysicsFTF_BIC::CreateModels()
 
 G4HadronPhysicsFTF_BIC::~G4HadronPhysicsFTF_BIC() 
 {
-   delete tpdata->theFTFBinaryNeutron;
-   delete tpdata->theBinaryNeutron;
-   delete tpdata->theNeutrons;
-
-   delete tpdata->theFTFBinaryPro;
-   delete tpdata->theBinaryPro;
-   delete tpdata->thePro;
-
-   delete tpdata->theFTFBinaryPion;
-   delete tpdata->theBICPion;
-   delete tpdata->thePion;
-
-   delete tpdata->theFTFBinaryKaon;
-   delete tpdata->theBertiniKaon;
-   delete tpdata->theKaon;
-
-   delete tpdata->theHyperon;
-   delete tpdata->theAntiBaryon;
-   delete tpdata->theFTFPAntiBaryon;
-
-   delete tpdata->xsNeutronInelasticXS;
-   delete tpdata->xsNeutronCaptureXS; 
-
-   delete tpdata; tpdata = 0;
+  if (tpdata) {
+    delete tpdata->theFTFBinaryNeutron;
+    delete tpdata->theBinaryNeutron;
+    delete tpdata->theNeutrons;
+    
+    delete tpdata->theFTFBinaryPro;
+    delete tpdata->theBinaryPro;
+    delete tpdata->thePro;
+    
+    delete tpdata->theFTFBinaryPion;
+    delete tpdata->theBICPion;
+    delete tpdata->thePion;
+    
+    delete tpdata->theFTFBinaryKaon;
+    delete tpdata->theBertiniKaon;
+    delete tpdata->theKaon;
+    
+    delete tpdata->theHyperon;
+    delete tpdata->theAntiBaryon;
+    delete tpdata->theFTFPAntiBaryon;
+    
+    delete tpdata->xsNeutronInelasticXS;
+    delete tpdata->xsNeutronCaptureXS; 
+    delete tpdata; tpdata = 0;
+  }
 }
 
 void G4HadronPhysicsFTF_BIC::ConstructParticle()

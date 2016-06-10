@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsQGS_BIC.cc 76703 2013-11-14 10:29:11Z gcosmo $
+// $Id: G4HadronPhysicsQGS_BIC.cc 88488 2015-02-24 10:46:32Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -176,30 +176,32 @@ void G4HadronPhysicsQGS_BIC::CreateModels()
 
 G4HadronPhysicsQGS_BIC::~G4HadronPhysicsQGS_BIC() 
 {
-   delete tpdata->theBinaryNeutron;
-   delete tpdata->theQGSBinaryNeutron;
-   delete tpdata->theFTFBinaryNeutron;
-   delete tpdata->theNeutrons;
-   delete tpdata->theQGSBinaryPion;
-   delete tpdata->theFTFBinaryPion;
-   delete tpdata->theBertiniPion;
-   delete tpdata->theBinaryPion;
-   delete tpdata->thePion;
-   delete tpdata->theQGSBinaryKaon;
-   delete tpdata->theFTFBinaryKaon;
-   delete tpdata->theBertiniKaon;
-   delete tpdata->theKaon;
-   delete tpdata->theBinaryPro;
-   delete tpdata->theQGSBinaryPro;
-   delete tpdata->theFTFBinaryPro;
-   delete tpdata->thePro;
-   delete tpdata->theFTFPAntiBaryon;
-   delete tpdata->theAntiBaryon;
-   delete tpdata->theHyperon;
-   delete tpdata->xsNeutronInelasticXS;
-   delete tpdata->xsNeutronCaptureXS; 
-
-   delete tpdata; tpdata = 0;
+  if (tpdata) {
+    delete tpdata->theBinaryNeutron;
+    delete tpdata->theQGSBinaryNeutron;
+    delete tpdata->theFTFBinaryNeutron;
+    delete tpdata->theNeutrons;
+    delete tpdata->theQGSBinaryPion;
+    delete tpdata->theFTFBinaryPion;
+    delete tpdata->theBertiniPion;
+    delete tpdata->theBinaryPion;
+    delete tpdata->thePion;
+    delete tpdata->theQGSBinaryKaon;
+    delete tpdata->theFTFBinaryKaon;
+    delete tpdata->theBertiniKaon;
+    delete tpdata->theKaon;
+    delete tpdata->theBinaryPro;
+    delete tpdata->theQGSBinaryPro;
+    delete tpdata->theFTFBinaryPro;
+    delete tpdata->thePro;
+    delete tpdata->theFTFPAntiBaryon;
+    delete tpdata->theAntiBaryon;
+    delete tpdata->theHyperon;
+    delete tpdata->xsNeutronInelasticXS;
+    delete tpdata->xsNeutronCaptureXS; 
+    
+    delete tpdata; tpdata = 0;
+  }
 }
 
 void G4HadronPhysicsQGS_BIC::ConstructParticle()

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FPEDetection.hh 70818 2013-06-06 08:10:15Z gcosmo $
+// $Id: G4FPEDetection.hh 88528 2015-02-25 15:23:06Z gcosmo $
 //
 // 
 // -*- C++ -*-
@@ -43,8 +43,8 @@
 #include <iostream>
 #include <stdlib.h>  /* abort(), exit() */
 
+#if (defined(__GNUC__) && !defined(__clang__))
 #ifdef __linux__
-#ifdef __GNUC__
   #include <features.h>
   #include <fenv.h>
   #include <csignal>
@@ -153,14 +153,14 @@
     //(void) feenableexcept( FE_OVERFLOW );
     //(void) feenableexcept( FE_UNDERFLOW );
 
+    sigfillset(&termaction.sa_mask);
     sigdelset(&termaction.sa_mask,SIGFPE);
     termaction.sa_sigaction=TerminationSignalHandler;
     termaction.sa_flags=SA_SIGINFO;
     sigaction(SIGFPE, &termaction, &oldaction);
   }
-#endif
-#elif __MACH__      /* MacOSX */
 
+#elif defined(__MACH__)      /* MacOSX */
   #include <fenv.h>
   #include <signal.h>
 
@@ -298,6 +298,7 @@
     // fedisableexcept( FE_OVERFLOW  );
     // fedisableexcept( FE_UNDERFLOW );
 
+    sigfillset(&termaction.sa_mask);
     sigdelset(&termaction.sa_mask,SIGFPE);
     termaction.sa_sigaction=TerminationSignalHandler;
     termaction.sa_flags=SA_SIGINFO;
@@ -307,6 +308,9 @@
 
   static void InvalidOperationDetection() {;}
 
-#endif
+#endif	/* Linus or MacOSX */
+#else  /* Not GCC */
 
+  static void InvalidOperationDetection() {;}
 #endif
+#endif	/* G4FPEDetection_h */

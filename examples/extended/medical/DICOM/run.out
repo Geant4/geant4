@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-03    (31-October-2014)
+ Geant4 version Name: geant4-10-00-patch-04    (6-March-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -112,10 +112,12 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
+  OpenGLImmediateQt (OGLI, OGLIQt)
   OpenGLImmediateX (OGLIX)
-  OpenGLImmediateXm (OGLI, OGLIXm)
+  OpenGLImmediateXm (OGLIXm, OGLI_FALLBACK, OGLIQt_FALLBACK)
+  OpenGLStoredQt (OGL, OGLS, OGLSQt)
   OpenGLStoredX (OGLSX)
-  OpenGLStoredXm (OGL, OGLS, OGLSXm)
+  OpenGLStoredXm (OGLSXm, OGL_FALLBACK, OGLS_FALLBACK, OGLSQt_FALLBACK)
   RayTracer (RayTracer)
   RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
@@ -870,7 +872,7 @@ EV: 99
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.06s Real=0.05s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 
 --------------------End of Global Run----------------------- 
  The run was 200 events 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc 84624 2014-10-17 09:56:00Z gcosmo $
+// $Id: G4Polyhedra.cc 88514 2015-02-25 09:59:10Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -603,7 +603,8 @@ std::ostream& G4Polyhedra::StreamInfo( std::ostream& os ) const
      << " Solid type: G4Polyhedra\n"
      << " Parameters: \n"
      << "    starting phi angle : " << startPhi/degree << " degrees \n"
-     << "    ending phi angle   : " << endPhi/degree << " degrees \n";
+     << "    ending phi angle   : " << endPhi/degree << " degrees \n"
+     << "    number of sides    : " << numSide << " \n";
   G4int i=0;
   if (!genericPgon)
   {
@@ -1228,23 +1229,31 @@ void  G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon *rz)
 
       if(std::fabs(difZl) < kCarTolerance)
       {
-        if(corners[inextl].r >= corners[icurl].r)
-        {    
-          Rmin.push_back(corners[icurl].r);
-          Rmax.push_back(Rmax[countPlanes-2]);
-          Rmax[countPlanes-2]=corners[icurl].r;
+        if(std::fabs(difZr) < kCarTolerance)
+        {
+          Rmin.push_back(corners[inextl].r);
+          Rmax.push_back(corners[icurr].r);
         }
         else
         {
           Rmin.push_back(corners[inextl].r);
-          Rmax.push_back(corners[icurl].r);
+          Rmax.push_back(corners[icurr].r + (Zleft-corners[icurr].z)/difZr
+                                *(corners[inextr].r - corners[icurr].r)); 
         }
       }
       else if (difZl >= kCarTolerance)
       {
-        Rmin.push_back(corners[inextl].r);
-        Rmax.push_back (corners[icurr].r + (Zleft-corners[icurr].z)/difZr
-                                 *(corners[inextr].r - corners[icurr].r));
+        if(std::fabs(difZr) < kCarTolerance)
+        {
+          Rmin.push_back(corners[icurl].r);
+          Rmax.push_back(corners[icurr].r);
+        }
+        else
+        {
+          Rmin.push_back(corners[icurl].r);
+          Rmax.push_back(corners[icurr].r + (Zleft-corners[icurr].z)/difZr
+                                *(corners[inextr].r - corners[icurr].r));
+        }
       }
       else
       {
@@ -1272,22 +1281,22 @@ void  G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon *rz)
       G4double difZl=corners[inextl].z - corners[icurl].z;
       if(std::fabs(difZr) < kCarTolerance)
       {
-        if(corners[inextr].r >= corners[icurr].r)
-        {    
-          Rmin.push_back(corners[icurr].r);
+        if(std::fabs(difZl) < kCarTolerance)
+        {
           Rmax.push_back(corners[inextr].r);
-        }
+          Rmin.push_back(corners[icurr].r); 
+        } 
         else
         {
-          Rmin.push_back(corners[inextr].r);
-          Rmax.push_back(corners[icurr].r);
-          Rmax[countPlanes-2]=corners[inextr].r;
+          Rmin.push_back(corners[icurl].r + (Zright-corners[icurl].z)/difZl
+                                * (corners[inextl].r - corners[icurl].r));
+          Rmax.push_back(corners[inextr].r);
         }
         icurr++;
       }           // plate
       else if (difZr >= kCarTolerance)
       {
-        if(std::fabs(difZl)<kCarTolerance)
+        if(std::fabs(difZl) < kCarTolerance)
         {
           Rmax.push_back(corners[inextr].r);
           Rmin.push_back (corners[icurr].r); 

@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 November 2014 Gunter Folger         (hadr-man-V09-06-05)
+-----------------------------------------------------------
+- G4HadronicProcess::CheckResult(): Add check for dynamic mass 
+    to correspond to PDG mass within ~10%. 
+
 03 February 2014 Gunter Folger (hadr-man-V09-06-04)
 ---------------------------------------------------
 - G4HadronicProcess: in EnergyMomentumCheck... add printout of 3momentum  

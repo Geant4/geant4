@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-03    (31-October-2014)
+ Geant4 version Name: geant4-10-00-patch-04    (6-March-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -20,10 +20,12 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
+  OpenGLImmediateQt (OGLI, OGLIQt)
   OpenGLImmediateX (OGLIX)
-  OpenGLImmediateXm (OGLI, OGLIXm)
+  OpenGLImmediateXm (OGLIXm, OGLI_FALLBACK, OGLIQt_FALLBACK)
+  OpenGLStoredQt (OGL, OGLS, OGLSQt)
   OpenGLStoredX (OGLSX)
-  OpenGLStoredXm (OGL, OGLS, OGLSXm)
+  OpenGLStoredXm (OGLSXm, OGL_FALLBACK, OGLS_FALLBACK, OGLSQt_FALLBACK)
   RayTracer (RayTracer)
   RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
@@ -22335,10 +22337,7 @@ Point[0] Position= (-6.55328,-23.9829,2019.19)
 Point[1] Position= (-6.71256,-23.9411,2019.2)
 
 TrackID =2123 : ParentID=1845 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -29.7482 -32.3252 1.40682 keV
-Vertex : -0.00616745 -0.0225727 1.90034 m    Global time : 6.33936 ns 
-  Cur
+Particle name : e-  PDG code : 11  Charge :
 ============================================================================================
 ================= lines above cut to keep file within limits ===============================
 ============================================================================================

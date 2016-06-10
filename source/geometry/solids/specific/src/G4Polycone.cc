@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc 84624 2014-10-17 09:56:00Z gcosmo $
+// $Id: G4Polycone.cc 88514 2015-02-25 09:59:10Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -959,7 +959,7 @@ G4bool  G4Polycone::SetOriginalParameters(G4ReduciblePolygon *rz)
 
     G4double Zleft = corners[inextl].z;
     G4double Zright = corners[inextr].z;
-    if(Zright>Zleft)
+    if(Zright > Zleft)  // Next plane will be Zleft
     {
       Z.push_back(Zleft);  
       countPlanes++;
@@ -968,23 +968,31 @@ G4bool  G4Polycone::SetOriginalParameters(G4ReduciblePolygon *rz)
 
       if(std::fabs(difZl) < kCarTolerance)
       {
-        if(corners[inextl].r >= corners[icurl].r)
-        {    
-          Rmin.push_back(corners[icurl].r);
-          Rmax.push_back(Rmax[countPlanes-2]);
-          Rmax[countPlanes-2]=corners[icurl].r;
+        if(std::fabs(difZr) < kCarTolerance)
+        {
+          Rmin.push_back(corners[inextl].r);
+          Rmax.push_back(corners[icurr].r);
         }
         else
         {
           Rmin.push_back(corners[inextl].r);
-          Rmax.push_back(corners[icurl].r);
+          Rmax.push_back(corners[icurr].r + (Zleft-corners[icurr].z)/difZr
+                                *(corners[inextr].r - corners[icurr].r)); 
         }
       }
       else if (difZl >= kCarTolerance)
       {
-        Rmin.push_back(corners[inextl].r);
-        Rmax.push_back (corners[icurr].r + (Zleft-corners[icurr].z)/difZr
-                                 *(corners[inextr].r - corners[icurr].r));
+        if(std::fabs(difZr) < kCarTolerance)
+        {
+          Rmin.push_back(corners[icurl].r);
+          Rmax.push_back(corners[icurr].r);
+        }
+        else
+        {
+          Rmin.push_back(corners[icurl].r);
+          Rmax.push_back(corners[icurr].r + (Zleft-corners[icurr].z)/difZr
+                                *(corners[inextr].r - corners[icurr].r));
+        }
       }
       else
       {
@@ -1001,7 +1009,7 @@ G4bool  G4Polycone::SetOriginalParameters(G4ReduciblePolygon *rz)
       icurl=(icurl == 0)? numPlanes-1 : icurl-1;
 
       Rmin.push_back(corners[inextl].r);  
-      Rmax.push_back (corners[inextr].r);
+      Rmax.push_back(corners[inextr].r);
     }
     else  // Zright<Zleft
     {
@@ -1012,22 +1020,22 @@ G4bool  G4Polycone::SetOriginalParameters(G4ReduciblePolygon *rz)
       G4double difZl=corners[inextl].z - corners[icurl].z;
       if(std::fabs(difZr) < kCarTolerance)
       {
-        if(corners[inextr].r >= corners[icurr].r)
-        {    
-          Rmin.push_back(corners[icurr].r);
+        if(std::fabs(difZl) < kCarTolerance)
+        {
           Rmax.push_back(corners[inextr].r);
-        }
+          Rmin.push_back(corners[icurr].r); 
+        } 
         else
         {
-          Rmin.push_back(corners[inextr].r);
-          Rmax.push_back(corners[icurr].r);
-          Rmax[countPlanes-2]=corners[inextr].r;
+          Rmin.push_back(corners[icurl].r + (Zright-corners[icurl].z)/difZl
+                                *(corners[inextl].r - corners[icurl].r));
+          Rmax.push_back(corners[inextr].r);
         }
         icurr++;
       }           // plate
       else if (difZr >= kCarTolerance)
       {
-        if(std::fabs(difZl)<kCarTolerance)
+        if(std::fabs(difZl) < kCarTolerance)
         {
           Rmax.push_back(corners[inextr].r);
           Rmin.push_back (corners[icurr].r); 

@@ -134,8 +134,14 @@ UTet::UTet(const std::string& name,
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
 //
-UTet::UTet( __void__& )
-  : VUSolid()
+UTet::UTet( __void__&)
+  : VUSolid(""), fCubicVolume(0.), fSurfaceArea(0.),
+    fAnchor(0,0,0), fP2(0,0,0), fP3(0,0,0), fP4(0,0,0), fMiddle(0,0,0),
+    fNormal123(0,0,0), fNormal142(0,0,0), fNormal134(0,0,0),
+    fNormal234(0,0,0), warningFlag(0),
+    fCdotN123(0.), fCdotN142(0.), fCdotN134(0.), fCdotN234(0.),
+    fXMin(0.), fXMax(0.), fYMin(0.), fYMax(0.), fZMin(0.), fZMax(0.),
+    fDx(0.), fDy(0.), fDz(0.), fTol(0.), fMaxSize(0.)
 {
 }
 
@@ -624,12 +630,12 @@ std::vector<UVector3> UTet::GetVertices() const
 void UTet::Extent(UVector3& aMin, UVector3& aMax) const
 {
   // Returns the full 3D cartesian extent of the solid.
-  aMin.x = -fDx;
-  aMax.x = fDx;
-  aMin.y = -fDy;
-  aMax.y = fDy;
-  aMin.z = -fDz;
-  aMax.z = fDz;
+  aMin.x = fXMin;
+  aMax.x = fXMax;
+  aMin.y = fYMin;
+  aMax.y = fYMax;
+  aMin.z = fZMin;
+  aMax.z = fZMax;
 }
 //______________________________________________________________________________
 void UTet::GetParametersList(int, double* aArray) const

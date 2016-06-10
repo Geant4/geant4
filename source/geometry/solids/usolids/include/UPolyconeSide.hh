@@ -109,6 +109,9 @@ class UPolyconeSide : public UVCSGface
     double DistanceAway(const UVector3& p, bool opposite,
                         double& distOutside2, double* rzNorm = 0);
 
+    double DistanceAway(const UVector3& p,
+                        double& distOutside2, double* edgeRZnorm);
+
     bool PointOnCone(const UVector3& hit, double normSign,
                      const UVector3& p,
                      const UVector3& v, UVector3& normal);

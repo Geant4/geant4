@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.cc 81843 2014-06-06 09:11:11Z gcosmo $
+// $Id: G4GDMLWriteSolids.cc 88498 2015-02-24 13:54:04Z gcosmo $
 //
 // class G4GDMLWriteSolids Implementation
 //
@@ -115,7 +115,7 @@ BooleanWrite(xercesc::DOMElement* solElement,
       if (G4DisplacedSolid* disp = dynamic_cast<G4DisplacedSolid*>(firstPtr))
       {
          firstpos += disp->GetObjectTranslation();
-         firstrot += firstrot + GetAngles(disp->GetObjectRotation());
+         firstrot += GetAngles(disp->GetObjectRotation());
          firstPtr = disp->GetConstituentMovedSolid();
          displaced++;
          continue;

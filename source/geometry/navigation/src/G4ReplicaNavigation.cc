@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc 84727 2014-10-20 08:30:47Z gcosmo $
+// $Id: G4ReplicaNavigation.cc 88518 2015-02-25 13:22:30Z gcosmo $
 //
 //
 // class G4ReplicaNavigation Implementation
@@ -575,8 +575,8 @@ G4ReplicaNavigation::DistanceToOutRad(const G4ThreeVector &localPoint,
           // NOTE: Should use
           // rho-rmin>kRadTolerance*0.5 - [no sqrts for efficiency]
           //
-          srd = (deltaR>kRadTolerance*0.5) ? -b-std::sqrt(d2) : 0;
-          // Is the following more accurate ?   - called 'issue' below
+          srd = (deltaR>kRadTolerance*0.5) ? -b-std::sqrt(d2) : 0.0;
+          // Is the following more accurate ?
           // srd = (deltaR>kRadTolerance*0.5) ? c/( -b - std::sqrt(d2)) : 0.0;
           sideR= G4ExitNormal::kRMin;
         }
@@ -586,7 +586,8 @@ G4ReplicaNavigation::DistanceToOutRad(const G4ThreeVector &localPoint,
           //
           deltaR = t3-rmax*rmax;
           c  = deltaR/t1;
-          srd = -b+std::sqrt(b*b-c); //  See issue above
+          d2 = b*b-c;
+          srd = (d2 < 0.) ? 0.0 : -b+std::sqrt(d2);
           sideR= G4ExitNormal::kRMax;
         }
       }
@@ -597,7 +598,8 @@ G4ReplicaNavigation::DistanceToOutRad(const G4ThreeVector &localPoint,
         deltaR = t3-rmax*rmax;
         b  = t2/t1;
         c  = deltaR/t1;
-        srd = -b+std::sqrt(b*b-c);  // See issue above
+        d2 = b*b-c;
+        srd = (d2 < 0.) ? 0.0 : -b+std::sqrt(d2);
         sideR= G4ExitNormal::kRMax;
       }
     }

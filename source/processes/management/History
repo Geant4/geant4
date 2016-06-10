@@ -1,4 +1,4 @@
-$Id: History 81889 2014-06-06 13:22:52Z gcosmo $
+$Id: History 88490 2015-02-24 10:59:10Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Jan. 20, 2015  H.Kurashige (procman-V09-06-10)
+- Modify SetProcessOrderingToSecond() in G4ProcessManager
 
 - May 12th, 2014    A.Dotti     (procman-V09-06-09)
 - Fixing bug #1625: G4WrapperProcess not correctly 

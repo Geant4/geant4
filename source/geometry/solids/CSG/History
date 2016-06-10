@@ -1,4 +1,4 @@
-$Id: History 84622 2014-10-17 09:43:17Z gcosmo $
+$Id: History 88512 2015-02-25 09:39:10Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 16,  2015  G.Cosmo              geom-csg-V09-06-13
+- Fixed typo in copy-ctor and assignment operator for G4Tubs and G4OTubs.
+
+December 5, 2014  G.Cosmo
+- Fix in temporary class G4OTubs to include symbol in library in any case.
 
 September 4, 2014  T.Nikitina            geom-csg-V09-06-12
 - G4Cons: fixed typo error in GetPointOnSurface() in the call

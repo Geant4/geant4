@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevelRep.icc 67974 2013-03-13 10:17:37Z gcosmo $
+// $Id: G4NavigationLevelRep.icc 88500 2015-02-24 14:28:10Z gcosmo $
 //
 //  1 October 1997 J.Apostolakis Initial version. 
 //                        
@@ -72,7 +72,7 @@ G4int G4NavigationLevelRep::GetReplicaNo() const
 inline
 void G4NavigationLevelRep::AddAReference() 
 {
-  fCountRef++; 
+  ++fCountRef; 
 }
 
 inline

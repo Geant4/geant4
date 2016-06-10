@@ -1,4 +1,4 @@
-$Id: History 84727 2014-10-20 08:30:47Z gcosmo $
+$Id: History 88518 2015-02-25 13:22:30Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,42 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 15, 2014 - J.Apostolakis (geomnav-V09-06-25)
+---------------------------------
+- G4ErrorPropagationNavigator: revise implementation of ComputeStep, to
+  avoid calling G4Navigator::ComputeSafety (which has side effects.)
+  Addresses problem report #1679.
+
+November 27, 2014 - G.Cosmo
+---------------------------
+- Added protection in G4ReplicaNavigation::DistanceToOutRad() for potential
+  rare cases of negative value to sqrt() in equation calculation for rmin/rmax
+  intersection.
+- Improved warning printout in G4Navigator::GetGlobalExitNormal().
+
+November 20, 2014 - J.Apostolakis
+---------------------------------
+- G4ErrorPropagationNavigator: fix to make normal a unit vector,
+  and fix for Coverity issue, to protect against null 'target'.
+  Addressing problem report #1679.
+    
+November 19, 2014 - G.Cosmo
+---------------------------
+- Some code cleanup in G4Navigator source.
+
+November 18, 2014 - J.Apostolakis
+---------------------------------
+- G4ErrorPropagationNavigator: added GetGlobalExitNormal() method to
+  correspond to update of G4Navigator interface in Geant4 9.5.
+  Addresses problem report #1679.
+- G4Navigator: small fix to calculation of stored step endpoint, for steps
+  that do not hit a boundary.
+- Fixed GNUmakefile in test.
+
+November 14, 2014 - J.Apostolakis
+---------------------------------
+- G4Navigator: Corrections for Exit Normal.
 
 October 20, 2014 - G.Cosmo (geomnav-V09-06-24)
 --------------------------

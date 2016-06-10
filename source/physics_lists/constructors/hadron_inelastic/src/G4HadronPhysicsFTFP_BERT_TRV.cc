@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsFTFP_BERT_TRV.cc 73040 2013-08-15 09:36:57Z gcosmo $
+// $Id: G4HadronPhysicsFTFP_BERT_TRV.cc 88488 2015-02-24 10:46:32Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -155,26 +155,28 @@ void G4HadronPhysicsFTFP_BERT_TRV::CreateModels()
 
 G4HadronPhysicsFTFP_BERT_TRV::~G4HadronPhysicsFTFP_BERT_TRV()
 {
-  delete tpdata->theNeutrons;
-  delete tpdata->theBertiniNeutron;
-  delete tpdata->theFTFPNeutron;
+  if (tpdata) {
+    delete tpdata->theNeutrons;
+    delete tpdata->theBertiniNeutron;
+    delete tpdata->theFTFPNeutron;
     
-  delete tpdata->thePiK;
-  delete tpdata->theBertiniPiK;
-  delete tpdata->theFTFPPiK;
+    delete tpdata->thePiK;
+    delete tpdata->theBertiniPiK;
+    delete tpdata->theFTFPPiK;
     
-  delete tpdata->thePro;
-  delete tpdata->theBertiniPro;
-  delete tpdata->theFTFPPro;    
+    delete tpdata->thePro;
+    delete tpdata->theBertiniPro;
+    delete tpdata->theFTFPPro;    
     
-  delete tpdata->theHyperon;
-  delete tpdata->theAntiBaryon;
-  delete tpdata->theFTFPAntiBaryon;
+    delete tpdata->theHyperon;
+    delete tpdata->theAntiBaryon;
+    delete tpdata->theFTFPAntiBaryon;
+    
+    delete tpdata->xsNeutronInelasticXS;
+    delete tpdata->xsNeutronCaptureXS; 
 
-  delete tpdata->xsNeutronInelasticXS;
-  delete tpdata->xsNeutronCaptureXS; 
-
-  delete tpdata; tpdata = 0;
+    delete tpdata; tpdata = 0;
+  }
 }
 
 void G4HadronPhysicsFTFP_BERT_TRV::ConstructParticle()

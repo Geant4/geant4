@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusBoundDecay.cc 69573 2013-05-08 13:35:53Z gcosmo $
+// $Id: G4MuonMinusBoundDecay.cc 88553 2015-02-26 10:12:11Z gcosmo $
 //
 //-----------------------------------------------------------------------------
 //
@@ -87,8 +87,8 @@ G4MuonMinusBoundDecay::ApplyYourself(const G4HadProjectile& projectile,
 
   // ===  sample capture  time and change time of projectile
 
-  G4double time = -std::log(G4UniformRand()) / lambda;
   G4HadProjectile* p = const_cast<G4HadProjectile*>(&projectile);
+  G4double time = p->GetGlobalTime() - std::log(G4UniformRand())/lambda;
   p->SetGlobalTime(time);
     
   //G4cout << "lambda= " << lambda << " lambdac= " << lambdac 

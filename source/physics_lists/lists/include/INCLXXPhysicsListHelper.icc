@@ -106,7 +106,8 @@ template<class T, bool withNeutronHP, bool withFTFP> TINCLXXPhysicsListHelper<T,
   this->RegisterPhysics( new G4IonINCLXXPhysics(ver));
 
   // Neutron tracking cut
-  this->RegisterPhysics( new G4NeutronTrackingCut(ver));
+  if(!withNeutronHP)
+    this->RegisterPhysics( new G4NeutronTrackingCut(ver));
 
 }
 

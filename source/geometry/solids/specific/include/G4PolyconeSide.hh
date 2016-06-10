@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.hh 67973 2013-03-13 10:16:25Z gcosmo $
+// $Id: G4PolyconeSide.hh 88514 2015-02-25 09:59:10Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -156,6 +156,9 @@ class G4PolyconeSide : public G4VCSGface
     G4double DistanceAway( const G4ThreeVector &p, G4bool opposite,
                                  G4double &distOutside2, G4double *rzNorm=0 );
       
+    G4double DistanceAway( const G4ThreeVector &p,
+                                 G4double &distOutside2, G4double *edgeRZnorm );
+
     G4bool PointOnCone( const G4ThreeVector &hit, G4double normSign,
                         const G4ThreeVector &p,
                         const G4ThreeVector &v, G4ThreeVector &normal );
