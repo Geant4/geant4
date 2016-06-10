@@ -1,4 +1,4 @@
-# $Id: lockwood.mac 66241 2012-12-13 18:34:42Z gunter $
+# $Id: lockwood.mac 82038 2014-06-10 07:58:08Z gcosmo $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -19,7 +19,7 @@
 /testem/det/setAbsor 3 Aluminium 850 um
 /testem/det/setSizeYZ 1050 um
 #
-/testem/phys/setCuts 1 um
+/run/setCut 1 um
 #
 /run/initialize
 #
@@ -30,6 +30,6 @@
 #
 /testem/stepMax/absorber 2 5 um
 #
-/testem/event/printModulo 1000
+/run/printProgress 1000
 #
 /run/beamOn 10

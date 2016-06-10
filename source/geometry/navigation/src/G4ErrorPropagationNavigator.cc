@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorPropagationNavigator.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4ErrorPropagationNavigator.cc 86987 2014-11-21 13:05:28Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -37,6 +37,10 @@
 #include "G4ThreeVector.hh"
 #include "G4ErrorPropagatorData.hh"
 #include "G4ErrorSurfaceTarget.hh"
+
+#include "G4ErrorPlaneSurfaceTarget.hh"
+#include "G4ErrorCylSurfaceTarget.hh"
+
 
 //-------------------------------------------------------------------
 
@@ -147,4 +151,67 @@ ComputeSafety( const G4ThreeVector &pGlobalpoint,
     }
   }
   return newSafety;
-} 
+}
+
+G4ThreeVector G4ErrorPropagationNavigator::
+GetGlobalExitNormal(const G4ThreeVector& point, G4bool* valid)
+{
+  G4ErrorPropagatorData *g4edata
+        = G4ErrorPropagatorData::GetErrorPropagatorData();
+  const G4ErrorTarget* target = 0;
+
+  G4ThreeVector normal(0.0, 0.0, 0.0);
+  G4double      distance= 0;
+  
+  // Determine which 'geometry' limited the step
+  if (g4edata)
+  {
+    target = g4edata->GetTarget();
+    if(target)
+    {
+      distance = target->GetDistanceFromPoint(point);
+    }
+  }
+  
+  if( distance > kCarTolerance   // Not reached the target.
+     || (!target) )
+            //  If a target does not exist, this seems the best we can do
+  {
+    normal= G4Navigator::GetGlobalExitNormal(point, valid);
+  }
+  else
+  {
+    switch( target->GetType() )
+    {
+      case G4ErrorTarget_GeomVolume:
+        // The volume is in the 'real' mass geometry
+        normal= G4Navigator::GetGlobalExitNormal(point, valid);
+        break;
+      case G4ErrorTarget_TrkL:
+        normal= G4ThreeVector( 0.0, 0.0, 0.0);
+        *valid= false;
+        G4Exception("G4ErrorPropagationNavigator::GetGlobalExitNormal",
+                    "Geometry1003",
+                    JustWarning, "Unexpected value of Target type");
+        break;
+      case G4ErrorTarget_PlaneSurface:
+      case G4ErrorTarget_CylindricalSurface:
+        const G4ErrorSurfaceTarget* surfaceTarget=
+          static_cast<const G4ErrorSurfaceTarget*>(target);
+        normal= surfaceTarget->GetTangentPlane(point).normal().unit();
+        *valid= true;
+        break;
+
+//      default:
+//        normal= G4ThreeVector( 0.0, 0.0, 0.0);
+//        *valid= false;
+//        G4Exception("G4ErrorPropagationNavigator::GetGlobalExitNormal",
+//                    "Geometry:003",
+//                    FatalException, "Impossible value of Target type");
+//        exit(1);
+//        break;
+    }
+  }
+  return normal;
+}
+

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm16/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: DetectorConstruction.hh 84365 2014-10-14 12:43:52Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,11 +36,12 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
+#include "G4Cache.hh"
 
 class G4Material;
-class G4UniformMagField;
 class G4UserLimits;
 class DetectorMessenger;
+class G4GlobalMagFieldMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,14 +55,12 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   public:
 
      virtual G4VPhysicalVolume* Construct();
+     virtual void ConstructSDandField();
 
      void SetSize        (G4double);
      void SetMaterial    (G4String);
-     void SetMagField    (G4double);
      void SetMaxStepSize (G4double);
      void SetMaxStepLength (G4double);
-
-     void UpdateGeometry();
 
   public:
 
@@ -75,14 +74,15 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
   private:
 
+     G4LogicalVolume*    fLBox;
      G4VPhysicalVolume*  fBox;
 
      G4double            fBoxSize;
      G4Material*         fMaterial;
-     G4UniformMagField*  fMagField;
      G4UserLimits*       fUserLimits;
 
      DetectorMessenger*  fDetectorMessenger;
+     G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
 
   private:
 

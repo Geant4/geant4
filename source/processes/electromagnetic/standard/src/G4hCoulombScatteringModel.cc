@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hCoulombScatteringModel.cc 76536 2013-11-12 15:17:41Z gcosmo $
+// $Id: G4hCoulombScatteringModel.cc 81579 2014-06-03 10:15:54Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -67,10 +67,11 @@
 
 using namespace std;
 
-G4hCoulombScatteringModel::G4hCoulombScatteringModel(const G4String& nam)
-  : G4VEmModel(nam),
+G4hCoulombScatteringModel::G4hCoulombScatteringModel(G4bool combined)
+  : G4VEmModel("eCoulombScattering"),
     cosThetaMin(1.0),
     cosThetaMax(-1.0),
+    isCombined(combined),
     isInitialised(false)
 {
   fParticleChange = 0;
@@ -86,7 +87,7 @@ G4hCoulombScatteringModel::G4hCoulombScatteringModel(const G4String& nam)
 
   particle = 0;
   currentCouple = 0;
-  wokvi = new G4WentzelVIRelXSection();
+  wokvi = new G4WentzelVIRelXSection(combined);
 
   currentMaterialIndex = 0;
 
@@ -110,7 +111,14 @@ void G4hCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
 {
   SetupParticle(p);
   currentCouple = 0;
-  cosThetaMin = cos(PolarAngleLimit());
+
+  if(isCombined) {
+    cosThetaMin = 1.0;
+    G4double tet = PolarAngleLimit();
+    if(tet > pi)       { cosThetaMin = -1.0; }
+    else if(tet > 0.0) { cosThetaMin = cos(tet); }
+  }
+
   wokvi->Initialise(p, cosThetaMin);
   /*  
   G4cout << "G4hCoulombScatteringModel: " << particle->GetParticleName()
@@ -118,7 +126,8 @@ void G4hCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
 	 << "  cos(thetaMax)= " <<  cosThetaMax
 	 << G4endl;
   */
-  pCuts = G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
+  pCuts = &cuts;
+  //  G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
   //G4cout << "!!! G4hCoulombScatteringModel::Initialise for " 
   //	 << p->GetParticleName() << "  cos(TetMin)= " << cosThetaMin 
   //	 << "  cos(TetMax)= " << cosThetaMax <<G4endl;

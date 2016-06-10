@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 76281 2013-11-08 12:55:21Z gcosmo $
+$Id: History 85585 2014-10-31 09:09:56Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,49 @@ $Id: History 76281 2013-11-08 12:55:21Z gcosmo $
 
                       Category History file
                       ---------------------
+
+30.10.2014 - V.Ivanchenko (DMX-V10-00-08)
+             use correct mu- stopping process
+
+11.10.2014 - M. Asai (DMX-V10-00-07)
+	     Replace obsolete G4ParticleTable::GetIon() with G4IonTable::GetIon().
+
+06.08.2014 - A. Howard (DMX-V10-00-06)
+	     Removed scintillator energy deposits from optical photons (double
+	     counting!).
+
+06.08.2014 - A. Howard (DMX-V10-00-05)
+	     Repaired the photocathode description such that photon hits are now
+	     registered - must have been broken for a while since EFFICIENCY
+	     was introduced to the optical boundary process.
+
+23.05.2014 - L. Pandola (DMX-V10-00-04)
+	     Actual MT migration. Use G4MTRunManager
+	     Added G4ShortLivedConstructor in the physics list, to 
+              avoid G4Exception PART10116.
+
+21.05.2014 - L. Pandola (DMX-V10-00-03)
+	     Edit constructor of DMXSteppingAction, make const 
+             Getters in DMXEventAction.
+	     Instantiate DMXRunAction also in the master
+	     Fix a problem with the names of the ASCII files
+
+20.05.2014 - L. Pandola (DMX-V10-00-02)
+	     Edit the constructor of DMXEventAction 
+	     Make Getters const in RunAction and PrimaryGenerator
+	     ASCII files are created per-thread. Not open at every 
+	      event, but kept as private class members.
+
+13.05.2014 - L. Pandola (DMX-V10-00-01)
+	     Analysis files closed at the end of execution (not
+             end of event). 
+             Added ConstructSDandField() method in the Detector
+             Clean up the detector construction messenger
+             Made Hits allocators as ThreadLocal
+             Remove CLHEP::Random
+
+08.05.2014 - L. Pandola (DMX-V10-00-00)
+             Added ActionInitialization class 
 
 07.11.2013 - L. Pandola (DMX-V09-06-08)
 	     Remove dependency from the deprecated LEP and HEP 	

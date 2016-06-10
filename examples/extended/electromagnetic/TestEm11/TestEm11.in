@@ -1,8 +1,10 @@
-# $Id: TestEm11.in 74997 2013-10-25 10:52:13Z gcosmo $
+# $Id: TestEm11.in 85273 2014-10-27 09:10:59Z gcosmo $
 #
 # limit the step size from histo 1
 #
 /control/verbose 2
+/control/cout/ignoreThreadsExcept 0
+/run/numberOfThreads 2
 /run/verbose 2
 #
 /testem/det/setNbOfAbsor  1

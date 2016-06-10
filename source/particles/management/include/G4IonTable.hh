@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.hh 75166 2013-10-29 09:06:54Z gcosmo $
+// $Id: G4IonTable.hh 83920 2014-09-23 09:00:36Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -42,7 +42,6 @@
 //      New design using G4VIsotopeTable          5 Oct. 99 H.Kurashige
 //      Add GetNucleusEncoding according PDG 2006 9 Oct. 2006 H.Kurashige
 //      Use STL map                              30 Jul. 2009 H.Kurashige
-//      Add G4IsomerTable                        5 May. 2013  H.Kurashige
 //      Add GetIsomerMass                       25 July 2013  H.Kurashige
 //
 #ifndef G4IonTable_h
@@ -61,7 +60,6 @@
 class G4ParticleTable;
 class G4VIsotopeTable; 
 class G4IsotopeProperty;
-class G4IsomerTable; 
 class G4NuclideTable; 
 
 class G4IonTable
@@ -126,6 +124,7 @@ class G4IonTable
    // All excited ions with long life time (>1.0*ns) will be created
    //  isomers are defined in G4VIsotopeTable
    
+   void PrepareNuclideTable();
    void PreloadNuclide();
    // All nuclide with a life time longer than certain value will be created
    // prior to the event loop.
@@ -209,6 +208,9 @@ class G4IonTable
    //  L is number of lambda (A= nn + np + nlambda)
    //  lvl is isomer level
  
+   G4double   GetLifeTime(const G4ParticleDefinition*) const;
+   // Returns a life time of an ion. -1 for stable ion, and -1001 for ion
+   // that is not listed in G4NuclideTable.
    
    G4int                 Entries() const;
    // Return number of ions in the table
@@ -229,7 +231,7 @@ class G4IonTable
    G4int                 size() const;
    //  Return number of ions in the table
 
-    void DumpTable(const G4String &particle_name = "ALL") const;
+   void DumpTable(const G4String &particle_name = "ALL") const;
    // dump information of particles specified by name 
 
 
@@ -277,7 +279,6 @@ class G4IonTable
    // get Verbose Level defined in G4ParticleTable
 
  private:
-   G4IsomerTable* pIsomerTable;
    G4NuclideTable* pNuclideTable;
    G4bool         isIsomerCreated;
    // Isomer table and flag of creation    

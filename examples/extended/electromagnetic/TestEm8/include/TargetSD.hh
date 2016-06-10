@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/include/TargetSD.hh
 /// \brief Definition of the TargetSD class
 //
-// $Id: TargetSD.hh 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id: TargetSD.hh 86976 2014-11-21 12:07:00Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -50,7 +50,7 @@
 class G4Step;
 class G4TouchableHistory;
 class G4HCofThisEvent;
-class HistoManager;
+class Run;
 
 class TargetSD : public G4VSensitiveDetector
 {
@@ -67,7 +67,8 @@ public: // Without description
 
 private:
 
-  HistoManager* fHisto;
+  Run* fRun;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

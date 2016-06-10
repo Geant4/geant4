@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Text.icc 66376 2012-12-18 09:42:59Z gcosmo $
+// $Id: G4Text.icc 78955 2014-02-05 09:45:46Z gcosmo $
 //
 // 
 // John Allison  17/11/96.
@@ -47,16 +47,16 @@ inline void G4Text::SetLayout (G4Text::Layout layout) {
 
 inline G4double G4Text::GetXOffset () const 
 {
-	return fXOffset ;
+        return fXOffset ;
 }
 
 inline G4double G4Text::GetYOffset () const 
 {
-	return fYOffset ;
+        return fYOffset ;
 }
 
 inline void G4Text::SetOffset ( double x_offset,  double y_offset ) 
 {
-	fXOffset = x_offset ;
-	fYOffset = y_offset ;
+        fXOffset = x_offset ;
+        fYOffset = y_offset ;
 }

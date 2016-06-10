@@ -23,18 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITBox.hh 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4ITBox.hh 85244 2014-10-27 08:24:13Z gcosmo $
 //
-// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
+// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+
+// The code is developed in the framework of the ESA AO7146
 //
-// WARNING : This class is released as a prototype.
-// It might strongly evolve or even disapear in the next releases.
+// We would be very happy hearing from you, send us your feedback! :)
 //
-// History:
-// -----------
-// 10 Oct 2011 M.Karamitros created
+// In order for Geant4-DNA to be maintained and still open-source,
+// article citations are crucial. 
+// If you use Geant4-DNA chemistry and you publish papers about your software, 
+// in addition to the general paper on Geant4-DNA:
 //
-// -------------------------------------------------------------------
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// we would be very happy if you could please also cite the following
+// reference papers on chemistry:
+//
+// J. Comput. Phys. 274 (2014) 841-882
+// Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
 #ifndef G4ITBox_h
 #define G4ITBox_h
@@ -42,101 +50,105 @@
 #include "G4IT.hh"
 
 /**
-  * A G4ITBox contains all IT of the same kind.
-  * eg : all °OH
-  * It behaves just like a stack.
-  */
+ * G4ITBox behaves just like a stack for G4IT.
+ * You can search for specific tracks.
+ * Each G4IT knows to which G4ITBox it belongs and its corresponding node.
+ * This makes the deletion of an element very fast.
+ * The drawback is that a G4IT can only belong to one G4ITBox.
+ * If you are not looking for this feature, please use std::list.
+ */
 
 class G4ITBox
 {
 
-public :
-    G4ITBox();
-    ~G4ITBox();
+public:
+  G4ITBox();
+  ~G4ITBox();
 
-    void ResetStack();
-    void Push(G4IT*);
-    void Extract(G4IT*);
+  void ResetStack();
+  void Push(G4IT*);
+  void Extract(G4IT*);
 
-    /** The FindIT methods are used for check only.
-      * Those methods are not effective due to the
-      * linear search. It is better to use GetIT(track)
-      * in order to retrieve the IT and GetIT(track)->GetBox()
-      * in order to check which is the box pointer.
-      */
-    G4IT* FindIT(const G4Track&) ;
-    const G4IT* FindIT(const G4Track&) const;
-    void TransferTo(G4ITBox*);
+  /** The FindIT methods are used for check only.
+   * Those methods are not effective due to the
+   * linear search. It is better to use GetIT(track)
+   * in order to retrieve the IT and GetIT(track)->GetBox()
+   * in order to check which is the box pointer.
+   */
+  G4IT* FindIT(const G4Track&);
+  const G4IT* FindIT(const G4Track&) const;
+  void TransferTo(G4ITBox*);
 
-    inline G4bool Empty() const;
-    inline G4int GetNTrack() const;
+  inline G4bool Empty() const;
+  inline G4int GetNTrack() const;
 
-    inline G4IT* GetFirstIT();
-    inline G4IT* GetLastIT();
-    inline const G4IT* GetFirstIT() const;
-    inline const G4IT* GetLastIT() const;
+  inline G4IT* GetFirstIT();
+  inline G4IT* GetLastIT();
+  inline const G4IT* GetFirstIT() const;
+  inline const G4IT* GetLastIT() const;
 
-    inline void SetNextBox(G4ITBox* box);
-    inline G4ITBox* GetNextBox();
-    inline void SetPreviousBox(G4ITBox* box);
-    inline G4ITBox* GetPreviousBox();
+  inline void SetNextBox(G4ITBox* box);
+  inline G4ITBox* GetNextBox();
+  inline const G4ITBox* GetNextBox() const;
+  inline void SetPreviousBox(G4ITBox* box);
+  inline G4ITBox* GetPreviousBox();
+  inline const G4ITBox* GetPreviousBox() const;
 
-private :
-    const G4ITBox & operator=
-    (const G4ITBox &right);
-    G4int  fNbIT;
-    G4IT * fpFirstIT;
-    G4IT * fpLastIT;
+private:
+  const G4ITBox & operator=(const G4ITBox &right);
+  G4int fNbIT;
+  G4IT * fpFirstIT;
+  G4IT * fpLastIT;
 
-    G4ITBox* fpPreviousBox;
-    G4ITBox* fpNextBox;
+  G4ITBox* fpPreviousBox;
+  G4ITBox* fpNextBox;
 };
 
 inline G4bool G4ITBox::Empty() const
 {
-    return (fNbIT==0);
+  return (fNbIT <= 0);
 }
 
 inline G4int G4ITBox::GetNTrack() const
 {
-    return fNbIT ;
+  return fNbIT;
 }
 inline G4IT* G4ITBox::GetFirstIT()
 {
-    return fpFirstIT ;
+  return fpFirstIT;
 }
 inline G4IT* G4ITBox::GetLastIT()
 {
-    return fpLastIT ;
+  return fpLastIT;
 }
 
 inline const G4IT* G4ITBox::GetFirstIT() const
 {
-    return fpFirstIT ;
+  return fpFirstIT;
 }
 inline const G4IT* G4ITBox::GetLastIT() const
 {
-    return fpLastIT ;
+  return fpLastIT;
 }
 
 inline void G4ITBox::SetNextBox(G4ITBox* box)
 {
-    fpNextBox = box;
+  fpNextBox = box;
 }
 
 inline G4ITBox* G4ITBox::GetNextBox()
 {
-    return fpNextBox ;
+  return fpNextBox;
 }
 
 inline void G4ITBox::SetPreviousBox(G4ITBox* box)
 {
-    fpPreviousBox = box;
+  fpPreviousBox = box;
 }
 
 inline G4ITBox* G4ITBox::GetPreviousBox()
 {
-    return fpPreviousBox ;
+  return fpPreviousBox;
 }
 
 #endif

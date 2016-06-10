@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B1PrimaryGeneratorAction.hh 69587 2013-05-08 14:26:03Z gcosmo $
+// $Id: B1PrimaryGeneratorAction.hh 80449 2014-04-22 08:35:50Z gcosmo $
 //
 /// \file B1PrimaryGeneratorAction.hh
 /// \brief Definition of the B1PrimaryGeneratorAction class
@@ -37,9 +37,9 @@
 
 class G4ParticleGun;
 class G4Event;
-class B1DetectorConstruction;
+class G4Box;
 
-/// The primary generator action class with particle gum.
+/// The primary generator action class with particle gun.
 ///
 /// The default kinematic is a 6 MeV gamma, randomly distribued 
 /// in front of the phantom across 80% of the (X,Y) phantom size.
@@ -50,9 +50,6 @@ class B1PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     B1PrimaryGeneratorAction();    
     virtual ~B1PrimaryGeneratorAction();
 
-    // static access method
-    static const B1PrimaryGeneratorAction* Instance();
-
     // method from the base class
     virtual void GeneratePrimaries(G4Event*);         
   
@@ -60,9 +57,8 @@ class B1PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
   
   private:
-    static B1PrimaryGeneratorAction* fgInstance;
-   
     G4ParticleGun*  fParticleGun; // pointer a to G4 gun class
+    G4Box* fEnvelopeBox;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

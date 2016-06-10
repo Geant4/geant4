@@ -11,7 +11,7 @@
 #
 # Generated on : 15/07/2013
 #
-# $Id: sources.cmake 72956 2013-08-14 14:24:35Z gcosmo $
+# $Id: sources.cmake 83748 2014-09-12 12:13:37Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -34,15 +34,23 @@ GEANT4_DEFINE_MODULE(NAME G4root
     HEADERS
         G4RootAnalysisManager.hh
         G4RootAnalysisManager.icc
+        G4RootAnalysisReader.hh
+        G4RootAnalysisReader.icc
         G4RootFileManager.hh
         G4RootNtupleDescription.hh
         G4RootNtupleManager.hh
-        g4root_defs.hh
+        G4RootRFileManager.hh
+        G4RootRNtupleDescription.hh
+        G4RootRNtupleManager.hh
+       g4root_defs.hh
         g4root.hh
     SOURCES
         G4RootAnalysisManager.cc
+        G4RootAnalysisReader.cc
         G4RootFileManager.cc
         G4RootNtupleManager.cc
+        G4RootRFileManager.cc
+        G4RootRNtupleManager.cc
     GRANULAR_DEPENDENCIES
         G4globman
         G4intercoms

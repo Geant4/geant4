@@ -1,4 +1,4 @@
-$Id: History 78109 2013-12-03 14:54:26Z gcosmo $
+$Id: History 82558 2014-06-27 12:29:09Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-02-12-13  A. Dotti      (exhadr01-V09-06-07)
+02-12-13  I. Hrivnacova (exhadr01-V09-06-07)
 - Updated .README for changes in README
 
 21-11-13  A. Dotti      (exhadr01-V09-06-06)

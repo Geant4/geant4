@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSurface.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4LogicalSurface.hh 80066 2014-03-31 13:47:20Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Class G4LogicalSurface
@@ -107,7 +107,7 @@ class G4LogicalSurface
  private:  // Copying restricted
 
    G4LogicalSurface(const G4LogicalSurface &right);
-   inline const G4LogicalSurface& operator=(const G4LogicalSurface& right);
+   inline G4LogicalSurface& operator=(const G4LogicalSurface& right);
 
  private:
 

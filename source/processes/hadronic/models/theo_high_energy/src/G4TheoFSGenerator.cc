@@ -53,15 +53,16 @@ G4TheoFSGenerator::~G4TheoFSGenerator()
 void G4TheoFSGenerator::ModelDescription(std::ostream& outFile) const
 {
   outFile << GetModelName() <<" consists of a " << theHighEnergyGenerator->GetModelName()
-		  << " string model and of "
-		  << ".\n"
+		  << " string model and a stage to de-excite the excited nuclear fragment."
+		  << "\n<p>"
 		  << "The string model simulates the interaction of\n"
           << "an incident hadron with a nucleus, forming \n"
           << "excited strings, decays these strings into hadrons,\n"
-          << "and leaves an excited nucleus.\n"
-          << "The string model:\n";
+          << "and leaves an excited nucleus. \n"
+          << "<p>The string model:\n";
   theHighEnergyGenerator->ModelDescription(outFile);
-//theTransport->IntraNuclearTransportDescription(outFile)
+  outFile <<"\n<p>";
+  theTransport->PropagateModelDescription(outFile);
 }
 
 
@@ -73,17 +74,14 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
   
   // check if models have been registered, and use default, in case this is not true @@
   
-  // get result from high energy model
-  G4DynamicParticle aTemp(const_cast<G4ParticleDefinition *>(thePrimary.GetDefinition()),
-                          thePrimary.Get4Momentum().vect());
-  const G4DynamicParticle * aPart = &aTemp;
+  const G4DynamicParticle aPart(thePrimary.GetDefinition(),thePrimary.Get4Momentum().vect());
 
   if ( theQuasielastic ) {
   
-     if ( theQuasielastic->GetFraction(theNucleus, *aPart) > G4UniformRand() )
+     if ( theQuasielastic->GetFraction(theNucleus, aPart) > G4UniformRand() )
      {
        //G4cout<<"___G4TheoFSGenerator: before Scatter (1) QE=" << theQuasielastic<<G4endl;
-       G4KineticTrackVector *result= theQuasielastic->Scatter(theNucleus, *aPart);
+       G4KineticTrackVector *result= theQuasielastic->Scatter(theNucleus, aPart);
        //G4cout << "^^G4TheoFSGenerator: after Scatter (1) " << G4endl;
        if (result)
        {
@@ -109,8 +107,10 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
      } 
   }
 
+ // get result from high energy model
+
   G4KineticTrackVector * theInitialResult =
-               theHighEnergyGenerator->Scatter(theNucleus, *aPart);
+               theHighEnergyGenerator->Scatter(theNucleus, aPart);
 
 //#define DEBUG_initial_result
   #ifdef DEBUG_initial_result
@@ -123,7 +123,7 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
   		  E_out += (*ir_iter)->Get4Momentum().e();
   	  }
   	  G4double init_mass= ionTable->GetIonMass(theNucleus.GetZ_asInt(),theNucleus.GetA_asInt());
-          G4double init_E=aPart->Get4Momentum().e();
+          G4double init_E=aPart.Get4Momentum().e();
   	  // residual nucleus
 
   	  const std::vector<G4Nucleon> & thy = theHighEnergyGenerator->GetWoundedNucleus()->GetNucleons();

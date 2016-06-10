@@ -47,7 +47,6 @@
 #include "G4VBiasingOperator.hh"
 class G4BOptnChangeCrossSection;
 class G4ParticleDefinition;
-class G4VProcess;
 #include <map>
 
 
@@ -59,6 +58,8 @@ public:
   GB01BOptrChangeCrossSection(G4String particleToBias, G4String name = "ChangeXS");
   virtual ~GB01BOptrChangeCrossSection();
   
+  // -- method called at beginning of run:
+  virtual void StartRun();
   
 private:
   // -----------------------------
@@ -95,7 +96,6 @@ private:
   // -- List of associations between processes and biasing operations:
   std::map< const G4BiasingProcessInterface*, 
             G4BOptnChangeCrossSection*       > fChangeCrossSectionOperations;
-  const G4VProcess *fFirstProcess, *fLastProcess;
   G4bool                                  fSetup;
   const G4ParticleDefinition*    fParticleToBias;
 

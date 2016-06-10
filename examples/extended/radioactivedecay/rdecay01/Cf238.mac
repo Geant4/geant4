@@ -5,10 +5,6 @@
 /gun/particle ion
 /gun/ion 98 238 
 #
-/rdecay01/fullChain true
-#
 /tracking/verbose 2
 #   
-###/run/beamOn 1
-#
-/run/beamOn 20
+/run/beamOn 1

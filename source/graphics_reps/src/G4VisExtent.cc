@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExtent.cc 66376 2012-12-18 09:42:59Z gcosmo $
+// $Id: G4VisExtent.cc 78955 2014-02-05 09:45:46Z gcosmo $
 //
 // 
 // A.Walkden 28/11/95
@@ -38,8 +38,8 @@
 const G4VisExtent G4VisExtent::NullExtent;  // Default extent is null.
 
 G4VisExtent::G4VisExtent (G4double xmin, G4double xmax, 
-			  G4double ymin, G4double ymax, 
-			  G4double zmin, G4double zmax):
+                          G4double ymin, G4double ymax, 
+                          G4double zmin, G4double zmax):
   fXmin(xmin), fXmax(xmax), fYmin(ymin), fYmax(ymax), fZmin(zmin), fZmax(zmax),
   fRadiusCached(false), fCentreCached(false), fRadius(0.)
 {}
@@ -63,8 +63,8 @@ G4VisExtent::~G4VisExtent () {}
 const G4Point3D& G4VisExtent::GetExtentCentre () const {
   if (!fCentreCached) {
     fCentre = G4Point3D (((fXmin + fXmax) / 2.),
-			 ((fYmin + fYmax) / 2.),
-			 ((fZmin + fZmax) / 2.));
+                         ((fYmin + fYmax) / 2.),
+                         ((fZmin + fZmax) / 2.));
     fCentreCached = true;
   }
   return fCentre;
@@ -73,8 +73,8 @@ const G4Point3D& G4VisExtent::GetExtentCentre () const {
 G4double G4VisExtent::GetExtentRadius () const {
   if (!fRadiusCached) {
     fRadius = std::sqrt (((fXmax - fXmin) * (fXmax - fXmin)) +
-			 ((fYmax - fYmin) * (fYmax - fYmin)) +
-			 ((fZmax - fZmin) * (fZmax - fZmin))) / 2.;
+                         ((fYmax - fYmin) * (fYmax - fYmin)) +
+                         ((fZmax - fZmin) * (fZmax - fZmin))) / 2.;
     fRadiusCached = true;
   }
   return fRadius;
@@ -90,9 +90,9 @@ std::ostream& operator << (std::ostream& os, const G4VisExtent& e) {
 
 G4bool G4VisExtent::operator != (const G4VisExtent& e) const {
   return ((fXmin != e.fXmin) ||
-	  (fXmax != e.fXmax) ||
-	  (fYmin != e.fYmin) ||
-	  (fYmax != e.fYmax) ||
-	  (fZmin != e.fZmin) ||
-	  (fZmax != e.fZmax));
+          (fXmax != e.fXmax) ||
+          (fYmin != e.fYmin) ||
+          (fYmax != e.fYmax) ||
+          (fZmin != e.fZmin) ||
+          (fZmax != e.fZmax));
 }

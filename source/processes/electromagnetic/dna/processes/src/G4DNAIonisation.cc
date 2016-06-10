@@ -23,10 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAIonisation.cc 70171 2013-05-24 13:34:18Z gcosmo $
+// $Id: G4DNAIonisation.cc 85423 2014-10-29 08:22:38Z gcosmo $
 
 #include "G4DNAIonisation.hh"
+#include "G4LEPTSIonisationModel.hh"
 #include "G4SystemOfUnits.hh"
+
+//SEB
+#include "G4GenericIon.hh"
+#include "G4Positron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -53,16 +58,19 @@ G4bool G4DNAIonisation::IsApplicable(const G4ParticleDefinition& p)
 
   return 
   (
-      &p == G4Electron::Electron() 
+   &p == G4Electron::Electron() 
+   || &p == G4Positron::Positron()
    || &p == G4Proton::Proton() 
    || &p == instance->GetIon("hydrogen")
    || &p == instance->GetIon("alpha++")
    || &p == instance->GetIon("alpha+")
    || &p == instance->GetIon("helium")
-   || &p == instance->GetIon("carbon")
-   || &p == instance->GetIon("nitrogen")
-   || &p == instance->GetIon("oxygen")
-   || &p == instance->GetIon("iron")
+   //SEB
+   //|| &p == instance->GetIon("carbon")
+   //|| &p == instance->GetIon("nitrogen")
+   //|| &p == instance->GetIon("oxygen")
+   //|| &p == instance->GetIon("iron")
+   || &p == G4GenericIon::GenericIonDefinition()  
   );
 }
 
@@ -81,6 +89,13 @@ void G4DNAIonisation::InitialiseProcess(const G4ParticleDefinition* p)
     {
       if(!EmModel()) SetEmModel(new G4DNABornIonisationModel);
       EmModel()->SetLowEnergyLimit(11.*eV);
+      EmModel()->SetHighEnergyLimit(1.*MeV);
+
+      AddEmModel(1, EmModel());   
+    } else if(name == "e+")
+    {
+      if(!EmModel()) SetEmModel(new G4LEPTSIonisationModel);
+      EmModel()->SetLowEnergyLimit(1.*eV);
       EmModel()->SetHighEnergyLimit(1.*MeV);
 
       AddEmModel(1, EmModel());   
@@ -120,12 +135,16 @@ void G4DNAIonisation::InitialiseProcess(const G4ParticleDefinition* p)
 
     // Extension to HZE proposed by Z. Francis
     
-    if(name == "carbon" || name == "nitrogen" || name == "oxygen" || name == "iron")
+    //SEB
+    if(/*name == "carbon" || name == "nitrogen" || name == "oxygen" || name == "iron" ||*/
+       name == "GenericIon")
+    //
     {
       if(!EmModel()) SetEmModel(new G4DNARuddIonisationExtendedModel);
       EmModel()->SetLowEnergyLimit(0*keV);
-      EmModel()->SetHighEnergyLimit(p->GetAtomicMass()*1e6*MeV);
-
+      //SEB: 1e6*MeV by default - updated in model class
+      //EmModel()->SetHighEnergyLimit(p->GetAtomicMass()*1e6*MeV);
+      EmModel()->SetHighEnergyLimit(1e6*MeV);
       AddEmModel(1, EmModel());   
     }
 

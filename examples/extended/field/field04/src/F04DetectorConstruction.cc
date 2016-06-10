@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04DetectorConstruction.cc 77884 2013-11-29 08:41:11Z gcosmo $
+// $Id: F04DetectorConstruction.cc 78551 2014-01-07 09:45:08Z gcosmo $
 //
 /// \file field/field04/src/F04DetectorConstruction.cc
 /// \brief Implementation of the F04DetectorConstruction class
@@ -46,9 +46,7 @@
 #include "F04GlobalField.hh"
 
 #include "G4GeometryManager.hh"
-
 #include "G4SolidStore.hh"
-#include "G4RegionStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4PhysicalVolumeStore.hh"
 
@@ -64,14 +62,14 @@
 #include "F04SimpleSolenoid.hh"
 #include "F04FocusSolenoid.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4ThreadLocal F04GlobalField* F04DetectorConstruction::fField = 0;
+#include "G4AutoDelete.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04DetectorConstruction::F04DetectorConstruction()
- : fSolidWorld(0), fLogicWorld(0), fPhysiWorld(0),
+ : G4VUserDetectorConstruction(),
+   fDetectorMessenger(0),
+   fSolidWorld(0), fLogicWorld(0), fPhysiWorld(0),
    fSolidTarget(0), fLogicTarget(0), fPhysiTarget(0),
    fSolidDegrader(0), fLogicDegrader(0), fPhysiDegrader(0),
    fSolidCaptureMgnt(0), fLogicCaptureMgnt(0), fPhysiCaptureMgnt(0),
@@ -109,7 +107,6 @@ F04DetectorConstruction::F04DetectorConstruction()
 
 F04DetectorConstruction::~F04DetectorConstruction()
 {
-//  delete fField;
   delete fDetectorMessenger;
 }
 
@@ -117,6 +114,14 @@ F04DetectorConstruction::~F04DetectorConstruction()
 
 G4VPhysicalVolume* F04DetectorConstruction::Construct()
 {
+
+  if (fPhysiWorld) {
+     G4GeometryManager::GetInstance()->OpenGeometry();
+     G4PhysicalVolumeStore::GetInstance()->Clean();
+     G4LogicalVolumeStore::GetInstance()->Clean();
+     G4SolidStore::GetInstance()->Clean();
+  }
+
   fMaterials = F04Materials::GetInstance();
 
   DefineMaterials();
@@ -299,6 +304,7 @@ void F04DetectorConstruction::SetWorldMaterial(const G4String materialChoice)
   if (pttoMaterial != fWorldMaterial) {
      if ( pttoMaterial ) {
         fWorldMaterial = pttoMaterial;
+        G4RunManager::GetRunManager()->PhysicsHasBeenModified();
      } else {
         G4cout << "\n--> WARNING from SetWorldMaterial : "
                << materialChoice << " not found" << G4endl;
@@ -316,6 +322,7 @@ void F04DetectorConstruction::SetTargetMaterial(const G4String materialChoice)
   if (pttoMaterial != fTargetMaterial) {
      if ( pttoMaterial ) {
         fTargetMaterial = pttoMaterial;
+        G4RunManager::GetRunManager()->PhysicsHasBeenModified();
      } else {
         G4cout << "\n-->  WARNING from SetTargetMaterial : "
                << materialChoice << " not found" << G4endl;
@@ -334,6 +341,7 @@ void F04DetectorConstruction::SetDegraderMaterial(const G4String materialChoice)
   if (pttoMaterial != fDegraderMaterial) {
      if ( pttoMaterial ) {
         fDegraderMaterial = pttoMaterial;
+        G4RunManager::GetRunManager()->PhysicsHasBeenModified();
      } else {
         G4cout << "\n--> WARNING from SetDegraderMaterial : "
                << materialChoice << " not found" << G4endl;
@@ -346,6 +354,7 @@ void F04DetectorConstruction::SetDegraderMaterial(const G4String materialChoice)
 void F04DetectorConstruction::SetWorldSizeZ(G4double val)
 {
   fWorldSizeZ = val;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -353,6 +362,7 @@ void F04DetectorConstruction::SetWorldSizeZ(G4double val)
 void F04DetectorConstruction::SetWorldSizeR(G4double val)
 {
   fWorldSizeR = val;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -360,6 +370,7 @@ void F04DetectorConstruction::SetWorldSizeR(G4double val)
 void F04DetectorConstruction::SetCaptureMgntRadius(G4double val)
 {
   fCaptureMgntRadius = val;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -367,6 +378,7 @@ void F04DetectorConstruction::SetCaptureMgntRadius(G4double val)
 void F04DetectorConstruction::SetCaptureMgntLength(G4double val)
 {
   fCaptureMgntLength = val;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -374,6 +386,7 @@ void F04DetectorConstruction::SetCaptureMgntLength(G4double val)
 void F04DetectorConstruction::SetCaptureMgntB1(G4double val)
 {
   fCaptureMgntB1 = val;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -381,6 +394,7 @@ void F04DetectorConstruction::SetCaptureMgntB1(G4double val)
 void F04DetectorConstruction::SetCaptureMgntB2(G4double val)
 {
   fCaptureMgntB2 = val;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -388,6 +402,7 @@ void F04DetectorConstruction::SetCaptureMgntB2(G4double val)
 void F04DetectorConstruction::SetTransferMgntRadius(G4double val)
 {
   fTransferMgntRadius = val;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -395,6 +410,7 @@ void F04DetectorConstruction::SetTransferMgntRadius(G4double val)
 void F04DetectorConstruction::SetTransferMgntLength(G4double val)
 {
   fTransferMgntLength = val;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -402,6 +418,7 @@ void F04DetectorConstruction::SetTransferMgntLength(G4double val)
 void F04DetectorConstruction::SetTransferMgntB(G4double val)
 {
   fTransferMgntB = val;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -409,6 +426,7 @@ void F04DetectorConstruction::SetTransferMgntB(G4double val)
 void F04DetectorConstruction::SetTransferMgntPos(G4double val)
 {
   fTransferMgntPos = val;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -416,6 +434,7 @@ void F04DetectorConstruction::SetTransferMgntPos(G4double val)
 void F04DetectorConstruction::SetTargetRadius(G4double val)
 {
   fTargetRadius = val;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -423,6 +442,7 @@ void F04DetectorConstruction::SetTargetRadius(G4double val)
 void F04DetectorConstruction::SetTargetThickness(G4double val)
 {
   fTargetThickness = val;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -430,6 +450,7 @@ void F04DetectorConstruction::SetTargetThickness(G4double val)
 void F04DetectorConstruction::SetTargetPos(G4double val)
 {
   fTargetPos = val;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -437,6 +458,7 @@ void F04DetectorConstruction::SetTargetPos(G4double val)
 void F04DetectorConstruction::SetTargetAngle(G4int val)
 {
   fTargetAngle = val;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -444,6 +466,7 @@ void F04DetectorConstruction::SetTargetAngle(G4int val)
 void F04DetectorConstruction::SetDegraderRadius(G4double val)
 {
   fDegraderRadius = val;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -451,6 +474,7 @@ void F04DetectorConstruction::SetDegraderRadius(G4double val)
 void F04DetectorConstruction::SetDegraderThickness(G4double val)
 {
   fDegraderThickness = val;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -458,78 +482,18 @@ void F04DetectorConstruction::SetDegraderThickness(G4double val)
 void F04DetectorConstruction::SetDegraderPos(G4double val)
 {
   fDegraderPos = val;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04DetectorConstruction::ConstructSDandField()
 {
-  // ensure the global field is initialized
-  if (!fField)
-  {
-    fField = F04GlobalField::GetObject(this);
-
-    G4double l = 0.0;
-    G4double B1 = GetCaptureMgntB1();
-    G4double B2 = GetCaptureMgntB2();
-
-    F04FocusSolenoid* focusSolenoid =
-         new F04FocusSolenoid(B1, B2, l, fLogicCaptureMgnt,fCaptureMgntCenter);
-    focusSolenoid -> SetHalf(true);
-
-    G4double B = GetTransferMgntB();
-
-    F04SimpleSolenoid* simpleSolenoid = 
-            new F04SimpleSolenoid(B, l,fLogicTransferMgnt,fTransferMgntCenter);
-    simpleSolenoid->SetColor("1,0,1");
-    simpleSolenoid->SetColor("0,1,1");
-    simpleSolenoid->SetMaxStep(1.5*mm);
-    simpleSolenoid->SetMaxStep(2.5*mm);
-
-    FieldList* fields = fField->GetFields();
-
-    if (fields) {
-       if (fields->size()>0) {
-          FieldList::iterator i;
-          for (i=fields->begin(); i!=fields->end(); ++i)
-          { (*i)->Construct(fPhysiWorld); }
-       }
-    }
+  if (!fFieldSetUp.Get()) {
+     F04GlobalField* field = F04GlobalField::GetObject(this);
+     G4AutoDelete::Register(field);  // Kernel will delete the F04GlobalField
+     fFieldSetUp.Put(field);
   }
-  else
-  {
-    FieldList* fields = fField->GetFields();
-
-    if (fields) {
-       if (fields->size()>0) {
-          FieldList::iterator i;
-          for (i=fields->begin(); i!=fields->end(); ++i)
-          { (*i)->UpdateWorld(fPhysiWorld); }
-       }
-    }
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void F04DetectorConstruction::UpdateGeometry()
-{
-  if (!fPhysiWorld) return;
-
-  // clean-up previous geometry
-  G4GeometryManager::GetInstance()->OpenGeometry();
-
-  G4PhysicalVolumeStore::GetInstance()->Clean();
-  G4LogicalVolumeStore::GetInstance()->Clean();
-  G4SolidStore::GetInstance()->Clean();
-
-  //define new one
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
-
-  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
-
-  G4RegionStore::GetInstance()->UpdateMaterialList(fPhysiWorld);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

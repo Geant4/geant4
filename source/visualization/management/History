@@ -1,4 +1,4 @@
-$Id: History 77479 2013-11-25 10:01:22Z gcosmo $
+$Id: History 87360 2014-12-01 16:07:16Z gcosmo $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,186 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+28th November 2014  John Allison  (visman-V10-00-30)
+- G4VSceneHandler.cc, G4VisCommands.cc, G4VisCommandsScene.cc,
+  G4VisCommandsSceneAdd.cc:
+  o Get correct run manager in MT mode:
+  G4RunManager* runManager = G4RunManager::GetRunManager();
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsMultithreadedApplication())
+  { runManager = G4MTRunManager::GetMasterRunManager(); }
+#endif
+
+28th November 2014  John Allison  (visman-V10-00-29)
+- G4VisManager.cc: Fixed Coverity warning.
+
+21st November 2014  John Allison  (visman-V10-00-28)
+- G4VisManager.cc: Reset event reviewing flag at end of run in MT mode.
+- G4VisCommandsViewerSet.cc: Fix bug affecting file-writing viewers.
+
+20th November 2014  John Allison  (visman-V10-00-27)
+- G4ViewParameters.icc: Another go at fixing win7-vc12 compiler warnings.
+
+19th November 2014  John Allison  (visman-V10-00-26)
+- G4VisCommandsSceneAdd.cc: Fixed compiler warnings.
+
+17th November 2014  John Allison  (visman-V10-00-25)
+- G4VisCommandsGeometrySet.cc, G4VisCommandsSceneAdd.cc and G4VisManager.cc:
+  o Fixes for Coverity warnings.
+
+11th November 2014  John Allison  (visman-V10-00-24)
+- G4VisCommandsSceneAdd.cc: /vis/scene/add/scale:
+  o Added full list of parameters to GlobalDescription of scale model.
+    This is so that scales with different parameters can be added to a
+    scene without being caught in the “model already exists” trap.
+
+8th November 2014  John Allison  (visman-V10-00-23)
+- G4Scene.cc, G4VisManager.cc: Fixed spelling mistake in message.
+- G4ViewParameters.icc: Fixed win7-vc12 compiler warnings.
+
+30th October 2014  John Allison  (visman-V10-00-21)
+- G4VisManager.cc, G4VisCommandsSceneAdd.cc, G4Scene.cc:
+  o Added informationals about /vis/scene/add/extent.
+
+29th October 2014  John Allison  (visman-V10-00-20)
+- Added /vis/scene/add/extent.
+  o Adds a dummy model with given extent to the current scene.
+    This can be used to provide an extent to the scene even if
+    no other models with extent are available. For example,
+    even if there is no geometry.
+
+22nd October 2014  Laurent Garnier  (visman-V10-00-19 require greps-V10-00-08)
+- G4VSceneHandler.cc, G4ViewParameters.cc
+  o Change contant in .cc nSegmentsMin by GetMinLineSegmentsPerCircle() in the G4VisAttribute
+
+1st October 2014  John Allison  (visman-V10-00-18)
+- G4VisManager: Added DrawEvent.  Code split out of EndOfEvent in preparation
+  for calling from special vis sub-thread in multi-threading mode.
+
+1st October 2014  Laurent Garnier
+-G4VSceneHandler.cc:
+  o AddPrimitive (const G4Scale& scale) : Remove unnecessary initialization
+-G4VisManager : 
+  o Change G4cerr instead of G4cout on some error messages
+  o Add a warning in SetCurrentViewer() when no scene handler present
+
+14th August 2014  John Allison  (visman-V10-00-17)
+- Changed default text size to 12 pixels.
+
+11th August 2014  John Allison  (visman-V10-00-16)
+- Needs modeling-V10-00-07.
+- G4VisManager.hh: Tidied.
+- G4VisManager.cc: Registered /vis/set/textSize.
+- G4VVisCommand.hh/.cc:
+  o Added some Get methods.
+  o Added G4double fCurrentTextSize (default 10 pixels).
+- G4VSceneHandler.cc:
+  o Modified AddPrimitive(const G4Scale& scale) to take a
+    variable text size.
+- G4VisCommandsSet.hh/.cc:
+  o Added /vis/set/textSize.  (Default 10 pixels.)  It is used
+    by future /vis/scene/add/ commands where relevant.
+- G4VisCommandsScene/Add.cc:
+  o /vis/scene/add/axes: Use text size set by /vis/set/textSize.
+  o /vis/scene/add/scale: Use text size set by /vis/set/textSize.
+  o /vis/scene/add/logicalVolume: Added code for dumping att values
+    (but code commented out pending discussion of merits).
+- G4VisCommandsGeometrySet.cc:
+  o Small code readability improvement.
+- G4VisCommandsViewer.cc: Fixed spelling mistake in message.
+
+19th July 2014  Laurent Garnier (visman-V10-00-15)
+- G4VisCommandsViewerSet : Fix a compilation problem
+
+18th July 2014  Laurent Garnier (visman-V10-00-14)
+- Change some G4cout in G4err in case of error messages in
+  G4VisCommandSceneAdd, G4VisCommandScene, G4VisManager,G4VisCommandsViewerSet
+- G4VisCommandViewer : Fix a possible uninitialized pointer
+
+9th July 2014  Laurent Garnier (visman-V10-00-13)
+- Change some G4cout in G4err in case of error messages in
+  G4VSceneHandler, G4ViewParameters, G4VisCommand, G4VisCommandGeometry, G4VisCommandGeometrySet, 
+  G4VisCommandsTouchable, G4VisCommandsTouchableSet, G4VisCommandViewerDefault, G4VisCommandsViewerSet
+
+8th July 2014  Laurent Garnier (visman-V10-00-12)
+- G4VisCommandViewer : 
+  o Revert change to /vis/viewer/update in order not to failed with a Cerr in all examples. 
+  o Set verbosity on "/vis/viewer/update" to G4cout instead of G4cerr and change the message
+
+7th July 2014  Laurent Garnier (visman-V10-00-11)
+- Change some G4cout in G4err in case of error messages in
+  G4VisCommand, G4VisCommandSceneHandler, G4VisCommandViewer
+
+27th May 2014  John Allison (visman-V10-00-10)
+- /vis/specify and /vis/scene/add/logicalVolume:
+  o Added flag for drawing/suppressing axes.
+
+19th May 2014  John Allison (visman-V10-00-09 - requires modeling-V10-00-05)
+- Added /vis/touchable/dump.  Dumps the G4Atts to G4cout.
+- Added parameter to /vis/scene/add/axes to suppress annotations.
+- G4VisCommands.cc: Fixed deprecated call to GetAttDefs.
+
+13th May 2014  John Allison (visman-V10-00-08)
+- Coworks: DAWN-V10-00-02, opengl-V10-00-05, openinventor-V10-00-01.
+- Moved G4VisFeaturesOf* to appropriate sub-categories.
+
+13th May 2014  John Allison (visman-V10-00-07)
+- G4VisCommandsSceneAdd.cc:
+  o Added axes to /vis/scene/add/logicalVolume.
+  o Normalised axes and scale lengths to 1, 2 and 5 times an integer
+    power of 10.
+  o Trap cases of scene of null extent and output message.
+  o Minor protection for null date string.
+- G4VisManager.hh:
+  o GetInstance now public.
+  o Thus we can remove cross-subcategory friendships.
+
+10th April 2014  Laurent Garnier (visman-V10-00-06)
+- G4VSceneHandler.cc: NULL pointer fixed
+
+10th April 2014  Gabriele Cosmo (visman-V10-00-05)
+- Get rid of deprecated 'register' storage class specifier in source files.
+
+6th March 2014  John Allison  (visman-V10-00-04)
+- G4VisManager.cc: Coverity fix.
+
+24th January 2014  John Allison  (visman-V10-00-03)
+- G4VisManager:
+  o Draw(const G4VPhysicalVolume&,..): Removed the temporary physical
+    volume model introduced in visman-V10-00-01.  Such use not viable.
+    See inline comments in G4VisManager.cc.
+  o Improved some comments.
+
+23rd January 2014  John Allison  (visman-V10-00-02)
+- G4VisManager::Draw (const G4VTrajectory&):
+  o Add run ID to model of user drawn trajectories.
+
+13th January 2014  John Allison  (visman-V10-00-01)
+- Requires modeling-V10-00-00, which in turn requires greps-V10-00-01.
+- G4VisManager:
+  o Draw(const G4VTrajectory&):
+    . Corrected trajectories model.
+    . Removed dummyTrajectoriesModel - used static instead.
+  o Draw(const G4VPhysicalVolume&,..): Used a temporary physical
+    volume model for G4Atts, etc.
+- G4VSceneHandler:
+  o Protected trajectory pointer in LoadAtts.
+- G4VisCommandsViewerSet.cc:
+  o /vis/viewer/set/viewpointVector: Protected for zero length vector.
+- G4VisCommands.cc, G4VisCommandSceneAdd.cc:
+  o Migrated to operator<< for const reference G4AttDefs map.
+
+9th December 2013  John Allison  (visman-V10-00-00)
+- G4VGraphicsSystem.hh:
+  o Added G4VGraphicsSystem::fileWriter to enumerator
+    G4VGraphicsSystem::Functionality.
+- G4VisManager.cc:
+  o Used G4VGraphicsSystem::fileWriter to print an informational for
+    file writing drivers suggesting "/vis/viewer/update" at end of run
+    if endOfRunAction is "accumulate".
+  o Small bug fix for MT mode:
+    . fTransientsDrawnThisEvent should be reset for every event.
 
 22nd November 2013  John Allison (visman-V09-06-27)
 - G4VisManager.cc: Fix for end-of-run action "accumulate".

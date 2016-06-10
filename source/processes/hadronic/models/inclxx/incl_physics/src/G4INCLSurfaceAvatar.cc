@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -75,7 +76,7 @@ namespace G4INCL {
 
   G4INCL::IChannel* SurfaceAvatar::getChannel() {
     if(theParticle->isTargetSpectator()) {
-      INCL_DEBUG("Particle " << theParticle->getID() << " is a spectator, reflection" << std::endl);
+      INCL_DEBUG("Particle " << theParticle->getID() << " is a spectator, reflection" << '\n');
       return new ReflectionChannel(theNucleus, theParticle);
     }
 
@@ -85,8 +86,8 @@ namespace G4INCL {
     if(theParticle->isResonance()) {
       const G4double theFermiEnergy = theNucleus->getPotential()->getFermiEnergy(theParticle);
       if(theParticle->getKineticEnergy()<theFermiEnergy) {
-        INCL_DEBUG("Particle " << theParticle->getID() << " is a resonance below Tf, reflection" << std::endl
-            << "  Tf=" << theFermiEnergy << ", EKin=" << theParticle->getKineticEnergy() << std::endl);
+        INCL_DEBUG("Particle " << theParticle->getID() << " is a resonance below Tf, reflection" << '\n'
+            << "  Tf=" << theFermiEnergy << ", EKin=" << theParticle->getKineticEnergy() << '\n');
         return new ReflectionChannel(theNucleus, theParticle);
       }
     }
@@ -97,7 +98,7 @@ namespace G4INCL {
     const G4double kOut = particlePOut;
     const G4double cosR = cosRefractionAngle;
 
-    INCL_DEBUG("Transmission probability for particle " << theParticle->getID() << " = " << transmissionProbability << std::endl);
+    INCL_DEBUG("Transmission probability for particle " << theParticle->getID() << " = " << transmissionProbability << '\n');
     /* Don't attempt to construct clusters when a projectile spectator is
      * trying to escape during a nucleus-nucleus collision. The idea behind
      * this is that projectile spectators will later be collected in the
@@ -115,20 +116,20 @@ namespace G4INCL {
       if(candidateCluster != 0 &&
           Clustering::clusterCanEscape(theNucleus, candidateCluster)) {
 
-        INCL_DEBUG("Cluster algorithm succeded. Candidate cluster:" << std::endl << candidateCluster->print() << std::endl);
+        INCL_DEBUG("Cluster algorithm succeded. Candidate cluster:" << '\n' << candidateCluster->print() << '\n');
 
         // Check if the cluster can penetrate the Coulomb barrier
         const G4double clusterTransmissionProbability = getTransmissionProbability(candidateCluster);
         const G4double x = Random::shoot();
 
-        INCL_DEBUG("Transmission probability for cluster " << candidateCluster->getID() << " = " << clusterTransmissionProbability << std::endl);
+        INCL_DEBUG("Transmission probability for cluster " << candidateCluster->getID() << " = " << clusterTransmissionProbability << '\n');
 
         if (x <= clusterTransmissionProbability) {
           theNucleus->getStore()->getBook().incrementEmittedClusters();
-          INCL_DEBUG("Cluster " << candidateCluster->getID() << " passes the Coulomb barrier, transmitting." << std::endl);
+          INCL_DEBUG("Cluster " << candidateCluster->getID() << " passes the Coulomb barrier, transmitting." << '\n');
           return new TransmissionChannel(theNucleus, candidateCluster);
         } else {
-          INCL_DEBUG("Cluster " << candidateCluster->getID() << " does not pass the Coulomb barrier. Falling back to transmission of the leading particle." << std::endl);
+          INCL_DEBUG("Cluster " << candidateCluster->getID() << " does not pass the Coulomb barrier. Falling back to transmission of the leading particle." << '\n');
           delete candidateCluster;
         }
       } else {
@@ -142,7 +143,7 @@ namespace G4INCL {
     // Always transmit projectile spectators if no cluster was formed and if
     // transmission is energetically allowed
     if(theParticle->isProjectileSpectator() && transmissionProbability>0.) {
-      INCL_DEBUG("Particle " << theParticle->getID() << " is a projectile spectator, transmission" << std::endl);
+      INCL_DEBUG("Particle " << theParticle->getID() << " is a projectile spectator, transmission" << '\n');
       return new TransmissionChannel(theNucleus, theParticle, TOut);
     }
 
@@ -150,33 +151,33 @@ namespace G4INCL {
     const G4double x = Random::shoot();
 
     if(x <= transmissionProbability) { // Transmission
-      INCL_DEBUG("Particle " << theParticle->getID() << " passes the Coulomb barrier, transmitting." << std::endl);
+      INCL_DEBUG("Particle " << theParticle->getID() << " passes the Coulomb barrier, transmitting." << '\n');
       if(theNucleus->getStore()->getConfig()->getRefraction()) {
         return new TransmissionChannel(theNucleus, theParticle, kOut, cosR);
       } else {
         return new TransmissionChannel(theNucleus, theParticle, TOut);
       }
     } else { // Reflection
-      INCL_DEBUG("Particle " << theParticle->getID() << " does not pass the Coulomb barrier, reflection." << std::endl);
+      INCL_DEBUG("Particle " << theParticle->getID() << " does not pass the Coulomb barrier, reflection." << '\n');
       return new ReflectionChannel(theNucleus, theParticle);
     }
   }
 
-  G4INCL::FinalState* SurfaceAvatar::getFinalState() {
-    return getChannel()->getFinalState();
+  void SurfaceAvatar::fillFinalState(FinalState *fs) {
+    getChannel()->fillFinalState(fs);
   }
 
   void SurfaceAvatar::preInteraction() {}
 
-  FinalState *SurfaceAvatar::postInteraction(FinalState *fs) {
-    ParticleList outgoing = fs->getOutgoingParticles();
+  void SurfaceAvatar::postInteraction(FinalState *fs) {
+    ParticleList const &outgoing = fs->getOutgoingParticles();
     if(!outgoing.empty()) { // Transmission
 // assert(outgoing.size()==1);
       Particle *out = outgoing.front();
       out->rpCorrelate();
       if(out->isCluster()) {
-	Cluster *clusterOut = dynamic_cast<Cluster*>(out);
-        ParticleList const components = clusterOut->getParticles();
+        Cluster *clusterOut = dynamic_cast<Cluster*>(out);
+        ParticleList const &components = clusterOut->getParticles();
         for(ParticleIter i=components.begin(), e=components.end(); i!=e; ++i) {
           if(!(*i)->isTargetSpectator())
             theNucleus->getStore()->getBook().decrementCascading();
@@ -186,15 +187,14 @@ namespace G4INCL {
         theNucleus->getStore()->getBook().decrementCascading();
       }
     }
-    return fs;
   }
 
   std::string SurfaceAvatar::dump() const {
     std::stringstream ss;
-    ss << "(avatar " << theTime << " 'reflection" << std::endl
-      << "(list " << std::endl
+    ss << "(avatar " << theTime << " 'reflection" << '\n'
+      << "(list " << '\n'
       << theParticle->dump()
-      << "))" << std::endl;
+      << "))" << '\n';
     return ss.str();
   }
 
@@ -260,8 +260,8 @@ namespace G4INCL {
     const G4double px = std::sqrt(TMinusV/theTransmissionBarrier);
     const G4double logCoulombTransmission =
       particleZ*(theZ-particleZ)/137.03*std::sqrt(2.*particleMass/TMinusV/(1.+TMinusV/2./particleMass))
-      *(std::acos(px)-px*std::sqrt(1.-px*px));
-    INCL_DEBUG("Coulomb barrier, logCoulombTransmission=" << logCoulombTransmission << std::endl);
+      *(Math::arcCos(px)-px*std::sqrt(1.-px*px));
+    INCL_DEBUG("Coulomb barrier, logCoulombTransmission=" << logCoulombTransmission << '\n');
     if (logCoulombTransmission > 35.) // Transmission is forbidden by Coulomb
       return 0.;
     theTransmissionProbability *= std::exp(-2.*logCoulombTransmission);
@@ -290,6 +290,6 @@ namespace G4INCL {
           << "  cosRefractionAngle=" << cosRefractionAngle << '\n'
           << "  sinRefractionAngle=" << sinRefractionAngle << '\n'
           << "  refractionIndexRatio=" << refractionIndexRatio << '\n'
-          << "  internalReflection=" << internalReflection << std::endl);
+          << "  internalReflection=" << internalReflection << '\n');
   }
 }

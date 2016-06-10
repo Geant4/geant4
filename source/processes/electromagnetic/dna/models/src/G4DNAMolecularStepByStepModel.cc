@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularStepByStepModel.cc 65022 2012-11-12 16:43:12Z gcosmo $
+// $Id: G4DNAMolecularStepByStepModel.cc 81769 2014-06-05 08:30:21Z gcosmo $
 //
 #include "G4DNAMolecularStepByStepModel.hh"
 #include "G4VDNAReactionModel.hh"
+#include "G4DNASmoluchowskiReactionModel.hh"
 
 G4DNAMolecularStepByStepModel::G4DNAMolecularStepByStepModel(const G4String& name) :
-    G4VITModel(name),
+    G4VITStepModel(name),
     fMolecularReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable))
 {
     fpTimeStepper = new G4DNAMoleculeEncounterStepper();
@@ -58,7 +59,7 @@ G4DNAMolecularStepByStepModel& G4DNAMolecularStepByStepModel::operator=(const G4
 
 
 G4DNAMolecularStepByStepModel::G4DNAMolecularStepByStepModel(const G4DNAMolecularStepByStepModel& right):
-    G4VITModel(right),
+    G4VITStepModel(right),
     fMolecularReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable))
 {
         fpReactionTable = right.fpReactionTable;
@@ -73,8 +74,22 @@ G4DNAMolecularStepByStepModel::G4DNAMolecularStepByStepModel(const G4DNAMolecula
 
 void G4DNAMolecularStepByStepModel::Initialize()
 {
+	if(fpReactionTable == 0)
+	{
+		SetReactionTable(G4DNAMolecularReactionTable::GetReactionTable());
+	}
+
+    if(fReactionModel == 0)
+    {
+    	fReactionModel = new G4DNASmoluchowskiReactionModel();
+    }
+
     fReactionModel ->SetReactionTable((const G4DNAMolecularReactionTable*)fpReactionTable);
-    G4VITModel::Initialize();
+
+    ((G4DNAMolecularReaction*)      fpReactionProcess)-> SetReactionModel(fReactionModel);
+    ((G4DNAMoleculeEncounterStepper*) 	fpTimeStepper)	 -> SetReactionModel(fReactionModel);
+
+    G4VITStepModel::Initialize();
 }
 
 void G4DNAMolecularStepByStepModel::PrintInfo()

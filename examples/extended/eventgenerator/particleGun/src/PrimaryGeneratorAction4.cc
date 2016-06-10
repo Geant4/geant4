@@ -27,10 +27,10 @@
 /// \brief Implementation of the PrimaryGeneratorAction4 class
 //
 //
-// $Id: PrimaryGeneratorAction4.cc 68024 2013-03-13 13:42:01Z gcosmo $
+// $Id: PrimaryGeneratorAction4.cc 83897 2014-09-22 14:46:00Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PrimaryGeneratorAction4.hh"
 #include "PrimaryGeneratorAction.hh"
@@ -58,7 +58,7 @@ PrimaryGeneratorAction4::PrimaryGeneratorAction4(G4ParticleGun* gun)
   //opening angle
   //
   G4double alphaMin =  0.*deg;
-  G4double alphaMax = 10.*deg;
+  G4double alphaMax = 60.*deg;
   fCosAlphaMin = std::cos(alphaMin);
   fCosAlphaMax = std::cos(alphaMax);  
 }
@@ -88,7 +88,7 @@ void PrimaryGeneratorAction4::GeneratePrimaries(G4Event* anEvent)
   //    
   //1- in World frame
   //cosAlpha uniform in [cos(alphaMin), cos(alphaMax)]
-  G4double cosAlpha = fCosAlphaMin - G4UniformRand()*(fCosAlphaMin - fCosAlphaMax); 
+  G4double cosAlpha = fCosAlphaMin-G4UniformRand()*(fCosAlphaMin-fCosAlphaMax);
   G4double sinAlpha = std::sqrt(1. - cosAlpha*cosAlpha);
   G4double psi      = twopi*G4UniformRand();  //psi uniform in (0,2*pi)  
   G4ThreeVector dir(sinAlpha*std::cos(psi),sinAlpha*std::sin(psi),cosAlpha);

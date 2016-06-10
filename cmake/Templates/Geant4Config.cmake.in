@@ -11,6 +11,9 @@
 #  Geant4_CXX_FLAGS_<CONFIG> - Recommended CXX flags for build mode CONFIG.
 #  Geant4_USE_FILE     - path to a CMake module which may be included to
 #                        help setup CMake variables
+#  Geant4_CXXSTD       - C++ Standard used to compile Geant4, e.g. c++98
+#  Geant4_TLS_MODEL    - Thread Local Storage model used. Only set if
+#                        the install provides multithreading support.
 #
 # You may supply a version number through find_package which will be checked
 # against the version of this build. Standard CMake logic is used so that
@@ -42,11 +45,25 @@
 # then the module will issue a FATAL_ERROR if this build of Geant4 does
 # not have the requested component(s).
 #
-# The list of components available generally corresponds to the optional
-# extras that Geant4 can be built with and are:
+# The components available generally correspond to configurations of
+# the Geant4 libraries or optional extras that Geant4 can be built with.
 #
-#  multithreaded     (Libraries built with multithreading support)
+# Library Configuration
+# ---------------------
+#  static            (Static libraries available. Using this component
+#                     when static libraries are available will result in
+#                     Geant4_LIBRARIES being populated with the static
+#                     versions of the Geant4 libraries. It does not
+#                     guarantee the use of static third party libraries.)
+#  multithreaded     (Libraries have multithreading support. Using this
+#                     component will add the compiler definitions needed
+#                     to activate multithread mode to Geant4_DEFINITIONS,
+#                     if the libraries support it.)
 #
+#  usolids           (Geant4 solids are replaced with USolids equivalents)
+#
+# Optional Components
+# -------------------
 #  gdml              (GDML support)
 #  g3tog4            (Geant3 geometry call list reader library)
 #
@@ -74,12 +91,13 @@
 # argument is set. This is because these options do not depend on specific
 # components being available.
 #
-# You can also query Geant4's use, or otherwise, of its builtin versions
-# of CLHEP, ZLIB and Expat after calling find_package via the variables
+# You can also query whether the Geant4 found uses the builtin versions
+# of CLHEP, ZLIB, Expat and USolids after calling find_package via the variables
 #
-#  Geant4_builtin_clhep_FOUND  (TRUE if Geant4 built with internal CLHEP)
-#  Geant4_builtin_expat_FOUND  (TRUE if Geant4 built with internal Expat)
-#  Geant4_builtin_zlib_FOUND   (TRUE if Geant4 built with internal Zlib)
+#  Geant4_builtin_clhep_FOUND   (TRUE if Geant4 built with internal CLHEP)
+#  Geant4_builtin_expat_FOUND   (TRUE if Geant4 built with internal Expat)
+#  Geant4_builtin_usolids_FOUND (TRUE if Geant4 built with internal USolids)
+#  Geant4_builtin_zlib_FOUND    (TRUE if Geant4 built with internal Zlib)
 #
 # These are not used via components as they do not, in general, affect
 # the use of Geant4 in an application unless you yourself make direct
@@ -91,13 +109,13 @@
 # system APIs as required, and you should use these to ensure you compile
 # and link against the same API version.
 #
-# Environment variables for and directory paths to physics datasets
+# Environment variables for, and directory paths to, physics datasets
 # used by some Geant4 physics processes may be determined from the
 # variables
 #
 #  Geant4_DATASETS               (List of dataset names known to Geant4)
 #  Geant4_DATASET_<NAME>_ENVVAR  (Name of environment variable used by
-#                                 Geant4 to query for path to dataset
+#                                 Geant4 to obtain path to dataset
 #                                 <NAME>)
 #  Geant4_DATASET_<NAME>_PATH    (Path to dataset <NAME>. NB this may
 #                                 point to a non-existent path if Geant4
@@ -140,6 +158,9 @@ get_filename_component(_thisdir "${CMAKE_CURRENT_LIST_FILE}" PATH)
 # Don't mess with the actual CMAKE_CXX_FLAGS!!!
 # It's up to the user what to do with these
 @GEANT4_COMPILER_FLAG_HINTS@
+
+# - Provide variable indicating C++ Standard we were compiled against
+set(Geant4_CXXSTD "@GEANT4_BUILD_CXXSTD@")
 
 #-----------------------------------------------------------------------
 # Set the base compile definitions required to use Geant4 if the variable
@@ -243,12 +264,22 @@ unset(Geant4_DATASET_DESCRIPTIONS)
 set(Geant4_builtin_clhep_FOUND @GEANT4_USE_BUILTIN_CLHEP@)
 set(Geant4_builtin_expat_FOUND @GEANT4_USE_BUILTIN_EXPAT@)
 set(Geant4_builtin_zlib_FOUND @GEANT4_USE_BUILTIN_ZLIB@)
+set(Geant4_builtin_usolids_FOUND @GEANT4_USE_BUILTIN_USOLIDS@)
+
+# - Usolids replacement
+set(Geant4_usolids_FOUND @GEANT4_USE_USOLIDS@)
+if(Geant4_usolids_FOUND)
+  list(REMOVE_ITEM Geant4_FIND_COMPONENTS usolids)
+endif()
 
 # - Multithreading
 set(Geant4_multithreaded_FOUND @GEANT4_BUILD_MULTITHREADED@)
 if(Geant4_multithreaded_FOUND)
   list(REMOVE_ITEM Geant4_FIND_COMPONENTS multithreaded)
   list(APPEND Geant4_DEFINITIONS -DG4MULTITHREADED)
+
+  # - Define variable to indicate TLS model used
+  set(Geant4_TLS_MODEL "@GEANT4_BUILD_TLS_MODEL@")
 endif()
 
 # - GDML
@@ -440,17 +471,22 @@ endif()
 
 #-----------------------------------------------------------------------
 # Now perform final configuration of libraries...
-# We provide FOUND variables for shared and static but for now we don't
-# allow users to choose - we prefer shared if available, and fallback to
-# static otherwise
-#
+# We provide FOUND variables for presence of shared and static
+# User can supply "static" component to force use of static libraries, if
+# available.
 set(Geant4_shared_FOUND @BUILD_SHARED_LIBS@)
 set(Geant4_static_FOUND @BUILD_STATIC_LIBS@)
 
+# - Default setting : shared if available, static otherwise
 if(Geant4_shared_FOUND)
   set(_geant4_lib_use_suffix "")
 else()
   set(_geant4_lib_use_suffix "-static")
+endif()
+
+if(Geant4_FIND_REQUIRED_static AND Geant4_static_FOUND)
+  set(_geant4_lib_use_suffix "-static")
+  list(REMOVE_ITEM Geant4_FIND_COMPONENTS static)
 endif()
 
 # The list of libraries probably should be autogenerated, but we hard code
@@ -487,6 +523,28 @@ if(_geant4_use_g3tog4_library)
   set(_geant4_g3tog4_library G3toG4${_geant4_lib_use_suffix})
 endif()
 
+# - Factory registration mechanism in physics_lists requires whole
+# archive to be linked when using static libs, so requires wrapping
+# with suitable compiler dependent flags
+set(_geant4_physicslists_library G4physicslists${_geant4_lib_use_suffix})
+if(_geant4_lib_use_suffix STREQUAL "-static")
+  # - Use CMAKE_CXX_COMPILER_ID, which should be reliable enough...
+  # Though the GNU/Clang/Intel compilers/linkers *should* use identical
+  # flags,keep their sections separate until behaviour confirmed
+  #
+  if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+    set(_geant4_physicslists_library -Wl,--whole-archive G4physicslists${_geant4_lib_use_suffix} -Wl,--no-whole-archive)
+  elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    set(_geant4_physicslists_library -Wl,-force_load G4physicslists${_geant4_lib_use_suffix})
+  elseif(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
+    set(_geant4_physicslists_library -Wl,--whole-archive G4physicslists${_geant4_lib_use_suffix} -Wl,--no-whole-archive)
+  else()
+    # Needs determination of other compiler options.
+    # NB: MSVC has /OPT:NOREF, but may apply globally...
+    set(_geant4_physicslists_library G4physicslists${_geant4_lib_use_suffix})
+  endif()
+endif()
+
 # - 'Kernel' libraries
 list(APPEND _geant4_internal_libraries
   G4vis_management${_geant4_lib_use_suffix}
@@ -497,7 +555,7 @@ list(APPEND _geant4_internal_libraries
   G4analysis${_geant4_lib_use_suffix}
   G4error_propagation${_geant4_lib_use_suffix}
   G4readout${_geant4_lib_use_suffix}
-  G4physicslists${_geant4_lib_use_suffix}
+  ${_geant4_physicslists_library}
   G4run${_geant4_lib_use_suffix}
   G4event${_geant4_lib_use_suffix}
   G4tracking${_geant4_lib_use_suffix}

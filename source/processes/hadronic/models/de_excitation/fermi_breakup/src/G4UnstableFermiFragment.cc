@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UnstableFermiFragment.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4UnstableFermiFragment.cc 85607 2014-10-31 11:21:24Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -32,6 +32,7 @@
 // 01.04.2011 General cleanup by V.Ivanchenko: integer Z and A, constructor
 
 #include "G4UnstableFermiFragment.hh"
+#include "G4FermiFragmentsPool.hh"
 
 G4UnstableFermiFragment::G4UnstableFermiFragment(G4int anA, G4int aZ, 
 						 G4int Pol, G4double ExE)
@@ -43,14 +44,16 @@ G4UnstableFermiFragment::G4UnstableFermiFragment(G4int anA, G4int aZ,
 G4UnstableFermiFragment::~G4UnstableFermiFragment()
 {}
 
-G4FragmentVector * 
-G4UnstableFermiFragment::GetFragment(const G4LorentzVector& aMomentum) const
+void G4UnstableFermiFragment::FillFragment(G4FragmentVector* theResult,
+					   const G4LorentzVector& aMomentum) const
 {
-  std::vector<G4LorentzVector*> * P = thePhaseSpace.Decay(aMomentum.m(), Masses);
+  const G4FermiPhaseSpaceDecay* thePhaseSpace
+    = G4FermiFragmentsPool::Instance()->GetFermiPhaseSpaceDecay();
+ 
+  std::vector<G4LorentzVector*> * P = thePhaseSpace->Decay(aMomentum.m(), Masses);
 
   G4ThreeVector Beta = aMomentum.boostVector();
 
-  G4FragmentVector * theResult = new G4FragmentVector;
   size_t N = P->size();
 
   for (size_t i=0; i<N; ++i)
@@ -62,6 +65,4 @@ G4UnstableFermiFragment::GetFragment(const G4LorentzVector& aMomentum) const
       delete v;
     }
   delete P;
-  
-  return theResult;
 }

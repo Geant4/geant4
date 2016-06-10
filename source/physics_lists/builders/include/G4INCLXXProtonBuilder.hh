@@ -36,7 +36,6 @@
 
 #include "G4INCLXXInterface.hh"   
 #include "G4VPreCompoundModel.hh"
-#include "G4ProtonInelasticCrossSection.hh"
 
 /**
  * Builder for proton processes using the INCL++ intra-nuclear
@@ -82,7 +81,6 @@ class G4INCLXXProtonBuilder : public G4VProtonBuilder
     void SetMaxEnergy(G4double aM) {theMax = aM;}
 
   private:
-    G4ProtonInelasticCrossSection theXSec;
     G4INCLXXInterface * theModel;    
     G4VPreCompoundModel * thePreCompoundModel;    
     G4double thePreCompoundMin;

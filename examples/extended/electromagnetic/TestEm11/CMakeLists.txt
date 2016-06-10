@@ -26,53 +26,13 @@ include(${Geant4_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR}/include 
                     ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
-file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
-
-#----------------------------------------------------------------------------
-# Find HBOOK (optional package)
-#
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../../common/analysis/cmake ${CMAKE_MODULE_PATH})
-find_package(HBOOK QUIET)
-if(NOT HBOOK_FOUND)
-  message(STATUS "G4 Examples: HBOOK package not found. --> TestEm11: g4tools/hbook analysis disabled")  
-else()
-  message(STATUS "G4 Examples: HBOOK package found. --> TestEm11: g4tools/hbook analysis enabled")  
-  add_definitions(-DG4_USE_HBOOK)  
-endif()
-
-#----------------------------------------------------------------------------
-# Add g4tools/hbook sources
-#
-
-if (HBOOK_FOUND)
-  include_directories(
-       ${PROJECT_SOURCE_DIR}/../../common/analysis/include)
-
-  file(GLOB add_sources ${PROJECT_SOURCE_DIR}/../../common/analysis/src/*.cc)
-  list(APPEND sources ${add_sources})
-
-  add_custom_command(
-       OUTPUT  ${PROJECT_BINARY_DIR}/close.o
-       COMMAND gfortran
-       ARGS  -c ${Geant4_INCLUDE_DIR}/tools/hbook/close.f )
-
-  add_custom_command(
-       OUTPUT  ${PROJECT_BINARY_DIR}/setpawc.o
-       COMMAND gfortran
-       ARGS  -c ${Geant4_INCLUDE_DIR}/tools/hbook/setpawc.f )
-
-  add_custom_command(
-       OUTPUT  ${PROJECT_BINARY_DIR}/setntuc.o
-       COMMAND gfortran
-       ARGS  -c ${Geant4_INCLUDE_DIR}/tools/hbook/setntuc.f )
-  set(TOOLS_FORTRAN_OBJECTS close.o setpawc.o setntuc.o)       
-endif()       
+file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)     
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
-add_executable(TestEm11 TestEm11.cc ${sources} ${headers} ${TOOLS_FORTRAN_OBJECTS})
-target_link_libraries(TestEm11 ${Geant4_LIBRARIES} ${HBOOK_LIBRARIES})
+add_executable(TestEm11 TestEm11.cc ${sources} ${headers})
+target_link_libraries(TestEm11 ${Geant4_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we

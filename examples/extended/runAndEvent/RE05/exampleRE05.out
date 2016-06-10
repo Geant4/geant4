@@ -4,16 +4,15 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-
-<<< Geant4 Physics List engine packaging library: PACK 5.5
-<<< Geant4 Physics List simulation engine: QGSP_BERT 3.4
-
+<<< Reference Physics List QBBC 
+G4HEPEvtInterface - pythia_event.data is open.
+ G4PhysicsListHelper::AddTransportation()--- G4CoupledTransportation is used 
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
@@ -25,15 +24,15 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
+  OpenGLImmediateX (OGLIX)
+  OpenGLImmediateXm (OGLI, OGLIXm)
+  OpenGLStoredX (OGLSX)
+  OpenGLStoredXm (OGL, OGLS, OGLSXm)
   RayTracer (RayTracer)
+  RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLStoredX (OGL)
-  OpenGLImmediateX (OGLI)
-  OpenGLStoredX (OGLS)
-  OpenGLImmediateX (OGLIX)
-  OpenGLStoredX (OGLSX)
 
 Registering model factories...
 
@@ -51,364 +50,733 @@ Registered filter factories:
   originVolumeFilter
   attributeFilter
 
-/run/verbose 1
-/tracking/verbose 0
-/run/beamOn 3
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
 
-phot:   for  gamma    SubType= 12
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :   Emin=        0 eV       Emax=         10 TeV
+Some /vis commands (optionally) take a string to specify colour.
+Available colours:
+  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
-compt:   for  gamma    SubType= 13
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :   Emin=        0 eV       Emax=         10 TeV
+/run/verbose 2
+/run/beamOn 100
 
-conv:   for  gamma    SubType= 14
-      Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
+phot:   for  gamma    SubType= 12  BuildTable= 0
+      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :   Emin=        0 eV       Emax=         10 TeV
+       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
+
+compt:   for  gamma    SubType= 13  BuildTable= 1
+      Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
+      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
+
+conv:   for  gamma    SubType= 14  BuildTable= 1
+      Lambda table from 1.022 MeV to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 
 msc:   for e-    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :   Emin=        0 eV       Emax=         10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 35 bins Emin=    100 MeV   Emax=     10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :   Emin=        0 eV       Emax=         10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
+
+CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from 100 MeV to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
+
+msc:   for e+    SubType= 10
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 35 bins Emin=    100 MeV   Emax=     10 TeV
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :   Emin=        0 eV       Emax=         10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
 
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg :   Emin=        0 eV       Emax=         10 TeV
+            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  e+, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from 100 MeV to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
 
 msc:   for proton    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=          2 MeV
-          BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
+               Bragg :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
 hBrems:   for  proton    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :   Emin=        0 eV       Emax=         10 TeV
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
 
 hPairProd:   for  proton    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :   Emin=        0 eV       Emax=         10 TeV
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  proton, integral: 1     SubType= 1  BuildTable= 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon :   Emin=        0 eV       Emax=          2 MeV
-          BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
+            BraggIon :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+
+msc:   for alpha    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+ionIoni:   for  alpha    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
+          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
+
+msc:   for anti_proton    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=          2 MeV
-          BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+
+hBrems:   for  anti_proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  anti_proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  anti_proton, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for kaon+    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
-          BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
+               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
 
 hBrems:   for  kaon+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :   Emin=        0 eV       Emax=         10 TeV
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
 
 hPairProd:   for  kaon+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :   Emin=        0 eV       Emax=         10 TeV
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  kaon+, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for kaon-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
-          BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
 
 hBrems:   for  kaon-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :   Emin=        0 eV       Emax=         10 TeV
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
 
 hPairProd:   for  kaon-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :   Emin=        0 eV       Emax=         10 TeV
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-muMsc:   for mu+    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
+CoulombScat:   for  kaon-, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :   Emin=        0 eV       Emax=         10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for mu+    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=        200 keV
-          BetheBloch :   Emin=      200 keV      Emax=          1 GeV
-        MuBetheBloch :   Emin=        1 GeV      Emax=         10 TeV
+               Bragg :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
 
 muBrems:   for  mu+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :   Emin=        0 eV       Emax=         10 TeV
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
 
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :   Emin=        0 eV       Emax=         10 TeV
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu+    SubType= 1
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+CoulombScat:   for  mu+, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for mu-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=        200 keV
-          BetheBloch :   Emin=      200 keV      Emax=          1 GeV
-        MuBetheBloch :   Emin=        1 GeV      Emax=         10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
 
 muBrems:   for  mu-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :   Emin=        0 eV       Emax=         10 TeV
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
 
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :   Emin=        0 eV       Emax=         10 TeV
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu-    SubType= 1
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+CoulombScat:   for  mu-, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=    297.505 keV
-          BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
+               Bragg :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
 hBrems:   for  pi+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :   Emin=        0 eV       Emax=         10 TeV
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
 
 hPairProd:   for  pi+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :   Emin=        0 eV       Emax=         10 TeV
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  pi+, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for pi-    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=    297.505 keV
-          BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
 hBrems:   for  pi-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :   Emin=        0 eV       Emax=         10 TeV
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
 
 hPairProd:   for  pi-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :   Emin=        0 eV       Emax=         10 TeV
-============================================================================================
-             HADRONIC PROCESSES SUMMARY (verbose level 1)
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-                     Hadronic Processes for <anti_neutron>
-          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
-AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 25
-                               G4HEAntiNeutronInelastic: Emin(GeV)=    20  Emax(GeV)= 100000
+CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
-                     Hadronic Processes for <anti_proton>
-          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
- AntiProtonInelastic  Models:   G4LEAntiProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 25
-                                G4HEAntiProtonInelastic: Emin(GeV)=    20  Emax(GeV)= 100000
+====================================================================
+                  HADRONIC PROCESSES SUMMARY (verbose level 1)
 
-                     Hadronic Processes for <e->
-      ElectroNuclear  Models:                     CHIPS: Emin(GeV)=     0  Emax(GeV)= 30000
+---------------------------------------------------
+                           Hadronic Processes for neutron
 
-                     Hadronic Processes for <gamma>
-     PhotonInelastic  Models:                     CHIPS: Emin(GeV)=     0  Emax(GeV)= 3.5
-                                        TheoFSGenerator: Emin(GeV)=     3  Emax(GeV)= 100000
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:     ChipsNeutronElasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-                     Hadronic Processes for <kaon+>
-          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
-   KaonPlusInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
-                                  G4LEKaonPlusInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
-                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
+  Process: neutronInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 1 GeV ---> 12 GeV
+        Model:            Binary Cascade: 0 eV  ---> 1.5 GeV
+     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
-                     Hadronic Processes for <kaon->
-          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
-  KaonMinusInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
-                                 G4LEKaonMinusInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
-                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
+  Process: nCapture
+        Model:               nRadCapture: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaCaptureXS: 0 eV  ---> 100 TeV
 
-                     Hadronic Processes for <lambda>
-          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
-     LambdaInelastic  Models:       G4LELambdaInelastic: Emin(GeV)=     0  Emax(GeV)= 25
-                                    G4HELambdaInelastic: Emin(GeV)=    20  Emax(GeV)= 100000
+  Process: nKiller
 
-                     Hadronic Processes for <mu->
-          muMinusCaptureAtRest
+---------------------------------------------------
+                           Hadronic Processes for GenericIon
 
-                     Hadronic Processes for <neutron>
-          hadElastic  Models:             hElasticCHIPS: Emin(GeV)=     0  Emax(GeV)= 100000
-    NeutronInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
-                                   G4LENeutronInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
-                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
-            nCapture  Models:                G4LCapture: Emin(GeV)=     0  Emax(GeV)= 20000
-            nFission  Models:                G4LFission: Emin(GeV)=     0  Emax(GeV)= 20000
+  Process: ionInelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
-                     Hadronic Processes for <pi+>
-          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 1
-                                        hElasticGlauber: Emin(GeV)=     1  Emax(GeV)= 100000
-   PionPlusInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
-                                  G4LEPionPlusInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
-                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
+---------------------------------------------------
+                           Hadronic Processes for He3
 
-                     Hadronic Processes for <pi->
-          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 1
-                                        hElasticGlauber: Emin(GeV)=     1  Emax(GeV)= 100000
-  PionMinusInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
-                                 G4LEPionMinusInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
-                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
+  Process: He3Inelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
-                     Hadronic Processes for <proton>
-          hadElastic  Models:             hElasticCHIPS: Emin(GeV)=     0  Emax(GeV)= 100000
-     ProtonInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
-                                    G4LEProtonInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
-                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
-============================================================================================
+---------------------------------------------------
+                           Hadronic Processes for alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: alphaInelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_He3Inelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_alphaInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_deuteronInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_neutron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_neutronInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_proton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_protonInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_tritonInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: dInelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for e+
+
+  Process: positronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for e-
+
+  Process: electronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for gamma
+
+  Process: photonNuclear
+        Model:            BertiniCascade: 0 eV  ---> 3.5 GeV
+        Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
+     Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for kaon+
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: kaon+Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+     Cr_sctns:  ChipsKaonPlusInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for kaon-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: kaon-Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+     Cr_sctns: ChipsKaonMinusInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: lambdaInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+     Cr_sctns:   ChipsHyperonInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for mu+
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for mu-
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+  Process: muMinusCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for pi+
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
+        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: pi+Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+     Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
+                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
+                           below 91 GeV, Glauber-Gribov above 
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for pi-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
+        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: pi-Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+     Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
+                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
+                           below 91 GeV, Glauber-Gribov above 
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for proton
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:      ChipsProtonElasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: protonInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 1 GeV ---> 12 GeV
+        Model:            Binary Cascade: 0 eV  ---> 1.5 GeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: tInelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+================================================================
+
+Region <DefaultRegionForTheWorld> --  -- appears in <expHall_P> world volume
+ This region is in the mass world.
+ Root logical volume(s) : expHall_L 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air ArgonGas Silicon Scintillator Lead 
+ Production cuts :   gamma 700 um      e- 700 um      e+ 700 um  proton 700 um 
+
+Region <DefaultRegionForParallelWorld> --  -- appears in <ReadoutWorld> world volume
+ This region is in the parallel world.
+ Root logical volume(s) : ReadoutWorld 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 700 um      e- 700 um      e+ 700 um  proton 700 um 
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : ArgonGas
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Silicon
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
  Energy thresholds :  gamma  5.87535 keV    e-  424.726 keV    e+  410.692 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 3     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes
  Material : Scintillator
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
  Energy thresholds :  gamma  2.09434 keV    e-  281.891 keV    e+  276.265 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 4     used in the geometry : Yes     recalculation needed : No 
+Index : 4     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
  Energy thresholds :  gamma  94.5861 keV    e-  1.00386 MeV    e+  951.321 keV proton 70 keV
@@ -417,32 +785,754 @@ Index : 4     used in the geometry : Yes     recalculation needed : No
 
 ====================================================================
 
-### Run 0 start.
-Start Run processing.
-Stage 0->1 : 1 hits found in the muon chamber.
-Stage 1->2 : 1 isolated muon found.
->>> Event 0
-     81 hits are stored in ExN04TrackerHitsCollection.
-     28 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.52320825455927 (GeV)
-     1 hits are stored in ExN04MuonHitsCollection.
-Stage 0->1 : 0 hits found in the muon chamber.
-++++++++ event aborted
->>> Event 1
-     0 hits are stored in ExN04TrackerHitsCollection.
-     0 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0 (GeV)
-     0 hits are stored in ExN04MuonHitsCollection.
-Stage 0->1 : 1 hits found in the muon chamber.
-Stage 1->2 : 1 isolated muon found.
->>> Event 2
-     58 hits are stored in ExN04TrackerHitsCollection.
-     26 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.50149937269237 (GeV)
-     1 hits are stored in ExN04MuonHitsCollection.
-Run terminated.
-Run Summary
-  Number of events processed : 3
-  User=1.03s Real=1.03s Sys=0s
-G4 kernel has come to Quit state.
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
+    Total memory consumed for geometry optimisation:   7 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+
+    Voxelisation: top CPU users:
+    Percent   Total CPU    System CPU       Memory  Volume
+    -------   ----------   ----------     --------  ----------
+       0.00         0.00         0.00            2k expHall_L
+       0.00         0.00         0.00            0k trackerT_L
+       0.00         0.00         0.00            1k caloT_L
+       0.00         0.00         0.00            3k caloROlogical
+       0.00         0.00         0.00            1k caloROphiDivisionLogical
+
+    Voxelisation: top memory users:
+    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
+    -------   --------     ------   ------   --------   ----------    ----------
+      38.29          2k         1       48         48         0.00    caloROlogical
+      33.30          2k         6       33         48         0.00    expHall_L
+      16.54          1k         1       20         20         0.00    caloROphiDivisionLogical
+       8.32          0k         1        9         12         0.00    caloT_L
+       3.55          0k         1        3          5         0.00    trackerT_L
+### Run 0 starts.
+### Run 0 start.
+G4HEPEvtInterface - reading 484 HEPEvt particles from pythia_event.data.
+>>> Event 0
+     29 hits are stored in RE05TrackerHitsCollection.
+     45 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.3199631267818 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 755 HEPEvt particles from pythia_event.data.
+>>> Event 1
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 614 HEPEvt particles from pythia_event.data.
+>>> Event 2
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 448 HEPEvt particles from pythia_event.data.
+>>> Event 3
+     0 hits are stored in RE05TrackerHitsCollection.
+     3 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.53034280557215 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 945 HEPEvt particles from pythia_event.data.
+>>> Event 4
+     105 hits are stored in RE05TrackerHitsCollection.
+     67 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 10.948391654244 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 837 HEPEvt particles from pythia_event.data.
+>>> Event 5
+     55 hits are stored in RE05TrackerHitsCollection.
+     69 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 8.603342836041 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 603 HEPEvt particles from pythia_event.data.
+>>> Event 6
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 627 HEPEvt particles from pythia_event.data.
+>>> Event 7
+     31 hits are stored in RE05TrackerHitsCollection.
+     26 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.690912870802 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 682 HEPEvt particles from pythia_event.data.
+>>> Event 8
+     60 hits are stored in RE05TrackerHitsCollection.
+     57 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 8.6249412422617 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 330 HEPEvt particles from pythia_event.data.
+>>> Event 9
+     15 hits are stored in RE05TrackerHitsCollection.
+     22 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 4.71697879799 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 1060 HEPEvt particles from pythia_event.data.
+>>> Event 10
+     105 hits are stored in RE05TrackerHitsCollection.
+     65 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 9.3712584053084 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 1010 HEPEvt particles from pythia_event.data.
+>>> Event 11
+     0 hits are stored in RE05TrackerHitsCollection.
+     17 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 2.8572189729282 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 517 HEPEvt particles from pythia_event.data.
+>>> Event 12
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 815 HEPEvt particles from pythia_event.data.
+>>> Event 13
+     91 hits are stored in RE05TrackerHitsCollection.
+     58 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 7.4077452375703 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 702 HEPEvt particles from pythia_event.data.
+>>> Event 14
+     93 hits are stored in RE05TrackerHitsCollection.
+     35 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 5.6621659301918 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 568 HEPEvt particles from pythia_event.data.
+>>> Event 15
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 405 HEPEvt particles from pythia_event.data.
+>>> Event 16
+     16 hits are stored in RE05TrackerHitsCollection.
+     31 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 3.9257912128786 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 533 HEPEvt particles from pythia_event.data.
+>>> Event 17
+     0 hits are stored in RE05TrackerHitsCollection.
+     5 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.96836934641304 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 342 HEPEvt particles from pythia_event.data.
+>>> Event 18
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 621 HEPEvt particles from pythia_event.data.
+>>> Event 19
+     39 hits are stored in RE05TrackerHitsCollection.
+     35 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 9.5679371269078 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 906 HEPEvt particles from pythia_event.data.
+>>> Event 20
+     60 hits are stored in RE05TrackerHitsCollection.
+     48 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.1301098787783 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 427 HEPEvt particles from pythia_event.data.
+>>> Event 21
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 387 HEPEvt particles from pythia_event.data.
+History depth=2
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav0003
+      issued by : G4Navigator::GetGlobalExitNormal()
+ WARNING> Expected normal-global-frame to be valid,  i.e. a unit vector!
+  - but |normal|   = 1.0000049  - and |normal|^2 = 1.0000098
+ which differs from 1.0 by 9.800036165e-06
+   n = (-0.02383780027,0.9997207407,0)
+============================================================
+   State of Navigator: 
+The current state of G4Navigator is: 
+  ValidExitNormal= 1
+  ExitNormal     = (-0.02384,0.9997,0)
+  Exiting        = 1
+  Entering       = 0
+  BlockedPhysicalVolume= None
+  BlockedReplicaNo     = -1
+  LastStepWasZero      = 1
+
+ Current Localpoint = (-15.017814,629.82407,-488.64516)
+ PreviousSftOrigin  = (-15.017814,629.82407,-488.64516)
+ PreviousSafety     = 0
+Current History: 
+Level=[0]: Phys Name=[expHall_P] Type=[N]
+Level=[1]: Phys Name=[caloM_P] Type=[N]
+Level=[2]: Phys Name=[caloLayer_phys] Type=[P2]
+
+============================================================
+Value obtained from stored global-normal is not a unit vector.
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+>>> Event 22
+     46 hits are stored in RE05TrackerHitsCollection.
+     33 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 4.7395425006413 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 359 HEPEvt particles from pythia_event.data.
+>>> Event 23
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 438 HEPEvt particles from pythia_event.data.
+>>> Event 24
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 786 HEPEvt particles from pythia_event.data.
+>>> Event 25
+     0 hits are stored in RE05TrackerHitsCollection.
+     7 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 1.205402965091 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 661 HEPEvt particles from pythia_event.data.
+>>> Event 26
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 673 HEPEvt particles from pythia_event.data.
+>>> Event 27
+     0 hits are stored in RE05TrackerHitsCollection.
+     54 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.4584799323741 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 694 HEPEvt particles from pythia_event.data.
+>>> Event 28
+     0 hits are stored in RE05TrackerHitsCollection.
+     8 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 1.4124079842109 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 913 HEPEvt particles from pythia_event.data.
+>>> Event 29
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 425 HEPEvt particles from pythia_event.data.
+>>> Event 30
+     41 hits are stored in RE05TrackerHitsCollection.
+     34 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.4725991506038 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 466 HEPEvt particles from pythia_event.data.
+History depth=2
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav0003
+      issued by : G4Navigator::GetGlobalExitNormal()
+ WARNING> Expected normal-global-frame to be valid,  i.e. a unit vector!
+  - but |normal|   = 1.000002234  - and |normal|^2 = 1.000004467
+ which differs from 1.0 by 4.467172497e-06
+   n = (0.3275086628,0.94485054,0)
+============================================================
+   State of Navigator: 
+The current state of G4Navigator is: 
+  ValidExitNormal= 1
+  ExitNormal     = (0.3275,0.9449,0)
+  Exiting        = 1
+  Entering       = 0
+  BlockedPhysicalVolume= None
+  BlockedReplicaNo     = -1
+  LastStepWasZero      = 1
+
+ Current Localpoint = (353.70936,1020.4386,-994.39816)
+ PreviousSftOrigin  = (353.70936,1020.4386,-994.39816)
+ PreviousSafety     = 0
+Current History: 
+Level=[0]: Phys Name=[expHall_P] Type=[N]
+Level=[1]: Phys Name=[caloM_P] Type=[N]
+Level=[2]: Phys Name=[caloLayer_phys] Type=[P11]
+
+============================================================
+Value obtained from stored global-normal is not a unit vector.
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+>>> Event 31
+     50 hits are stored in RE05TrackerHitsCollection.
+     31 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 5.0545670491922 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 954 HEPEvt particles from pythia_event.data.
+>>> Event 32
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 575 HEPEvt particles from pythia_event.data.
+>>> Event 33
+     81 hits are stored in RE05TrackerHitsCollection.
+     15 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 3.9217548327916 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 1002 HEPEvt particles from pythia_event.data.
+>>> Event 34
+     121 hits are stored in RE05TrackerHitsCollection.
+     63 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 10.09261805885 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 440 HEPEvt particles from pythia_event.data.
+>>> Event 35
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 389 HEPEvt particles from pythia_event.data.
+>>> Event 36
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 318 HEPEvt particles from pythia_event.data.
+>>> Event 37
+     24 hits are stored in RE05TrackerHitsCollection.
+     34 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 4.1220877283689 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 367 HEPEvt particles from pythia_event.data.
+>>> Event 38
+     43 hits are stored in RE05TrackerHitsCollection.
+     38 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.4226782254467 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 1000 HEPEvt particles from pythia_event.data.
+>>> Event 39
+     0 hits are stored in RE05TrackerHitsCollection.
+     4 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.71906896912623 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 253 HEPEvt particles from pythia_event.data.
+>>> Event 40
+     20 hits are stored in RE05TrackerHitsCollection.
+     38 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 14.110835364329 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 474 HEPEvt particles from pythia_event.data.
+>>> Event 41
+     20 hits are stored in RE05TrackerHitsCollection.
+     26 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.6372548797412 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 695 HEPEvt particles from pythia_event.data.
+>>> Event 42
+     76 hits are stored in RE05TrackerHitsCollection.
+     43 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 5.1507125237936 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 760 HEPEvt particles from pythia_event.data.
+>>> Event 43
+     0 hits are stored in RE05TrackerHitsCollection.
+     13 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 2.2396314324215 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 328 HEPEvt particles from pythia_event.data.
+>>> Event 44
+     0 hits are stored in RE05TrackerHitsCollection.
+     10 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 1.7763255426197 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 574 HEPEvt particles from pythia_event.data.
+>>> Event 45
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 420 HEPEvt particles from pythia_event.data.
+>>> Event 46
+     33 hits are stored in RE05TrackerHitsCollection.
+     38 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 7.9850166665325 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 1092 HEPEvt particles from pythia_event.data.
+>>> Event 47
+     75 hits are stored in RE05TrackerHitsCollection.
+     47 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 8.2017902608295 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 708 HEPEvt particles from pythia_event.data.
+>>> Event 48
+     56 hits are stored in RE05TrackerHitsCollection.
+     19 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 3.9885700843824 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 942 HEPEvt particles from pythia_event.data.
+>>> Event 49
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 422 HEPEvt particles from pythia_event.data.
+History depth=2
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav0003
+      issued by : G4Navigator::GetGlobalExitNormal()
+ WARNING> Expected normal-global-frame to be valid,  i.e. a unit vector!
+  - but |normal|   = 1.000131353  - and |normal|^2 = 1.000262723
+ which differs from 1.0 by 0.000262723177
+   n = (-0.2871364569,-0.958026815,0)
+============================================================
+   State of Navigator: 
+The current state of G4Navigator is: 
+  ValidExitNormal= 1
+  ExitNormal     = (-0.2871,-0.958,0)
+  Exiting        = 1
+  Entering       = 0
+  BlockedPhysicalVolume= None
+  BlockedReplicaNo     = -1
+  LastStepWasZero      = 1
+
+ Current Localpoint = (-439.31878,-1465.781,-1971.4808)
+ PreviousSftOrigin  = (-439.31878,-1465.781,-1971.4808)
+ PreviousSafety     = 0
+Current History: 
+Level=[0]: Phys Name=[expHall_P] Type=[N]
+Level=[1]: Phys Name=[caloM_P] Type=[N]
+Level=[2]: Phys Name=[caloLayer_phys] Type=[P20]
+
+============================================================
+Value obtained from stored global-normal is not a unit vector.
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+>>> Event 50
+     24 hits are stored in RE05TrackerHitsCollection.
+     35 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 4.8189154036627 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 621 HEPEvt particles from pythia_event.data.
+>>> Event 51
+     47 hits are stored in RE05TrackerHitsCollection.
+     38 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 7.9843573847999 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 380 HEPEvt particles from pythia_event.data.
+>>> Event 52
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 780 HEPEvt particles from pythia_event.data.
+>>> Event 53
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 218 HEPEvt particles from pythia_event.data.
+>>> Event 54
+     14 hits are stored in RE05TrackerHitsCollection.
+     36 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 5.4227057553895 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 349 HEPEvt particles from pythia_event.data.
+>>> Event 55
+     50 hits are stored in RE05TrackerHitsCollection.
+     32 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.1228943235659 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 566 HEPEvt particles from pythia_event.data.
+>>> Event 56
+     60 hits are stored in RE05TrackerHitsCollection.
+     35 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.1684631237151 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 467 HEPEvt particles from pythia_event.data.
+>>> Event 57
+     59 hits are stored in RE05TrackerHitsCollection.
+     33 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 5.3517189720368 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 745 HEPEvt particles from pythia_event.data.
+>>> Event 58
+     49 hits are stored in RE05TrackerHitsCollection.
+     41 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 7.1850591963783 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 742 HEPEvt particles from pythia_event.data.
+>>> Event 59
+     0 hits are stored in RE05TrackerHitsCollection.
+     12 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 2.1198287169581 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 822 HEPEvt particles from pythia_event.data.
+>>> Event 60
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 324 HEPEvt particles from pythia_event.data.
+>>> Event 61
+     0 hits are stored in RE05TrackerHitsCollection.
+     1 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.11613936281113 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 389 HEPEvt particles from pythia_event.data.
+>>> Event 62
+     25 hits are stored in RE05TrackerHitsCollection.
+     10 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 3.1530326570177 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 624 HEPEvt particles from pythia_event.data.
+>>> Event 63
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 340 HEPEvt particles from pythia_event.data.
+>>> Event 64
+     63 hits are stored in RE05TrackerHitsCollection.
+     22 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 2.8467390404031 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 520 HEPEvt particles from pythia_event.data.
+>>> Event 65
+     41 hits are stored in RE05TrackerHitsCollection.
+     42 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 7.5949324392971 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 235 HEPEvt particles from pythia_event.data.
+>>> Event 66
+     11 hits are stored in RE05TrackerHitsCollection.
+     18 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 2.7386850791507 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 759 HEPEvt particles from pythia_event.data.
+>>> Event 67
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 865 HEPEvt particles from pythia_event.data.
+>>> Event 68
+     0 hits are stored in RE05TrackerHitsCollection.
+     7 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.94664287566537 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 264 HEPEvt particles from pythia_event.data.
+>>> Event 69
+     78 hits are stored in RE05TrackerHitsCollection.
+     35 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.2789891014604 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 785 HEPEvt particles from pythia_event.data.
+>>> Event 70
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 618 HEPEvt particles from pythia_event.data.
+>>> Event 71
+     0 hits are stored in RE05TrackerHitsCollection.
+     4 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.59584204670661 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 219 HEPEvt particles from pythia_event.data.
+>>> Event 72
+     41 hits are stored in RE05TrackerHitsCollection.
+     40 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.299792383695 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 480 HEPEvt particles from pythia_event.data.
+>>> Event 73
+     30 hits are stored in RE05TrackerHitsCollection.
+     41 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 8.3286842460937 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 614 HEPEvt particles from pythia_event.data.
+>>> Event 74
+     0 hits are stored in RE05TrackerHitsCollection.
+     4 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.59427098015959 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 436 HEPEvt particles from pythia_event.data.
+>>> Event 75
+     11 hits are stored in RE05TrackerHitsCollection.
+     60 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 7.9298201741805 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 355 HEPEvt particles from pythia_event.data.
+>>> Event 76
+     12 hits are stored in RE05TrackerHitsCollection.
+     28 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 3.7763739765947 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 865 HEPEvt particles from pythia_event.data.
+>>> Event 77
+     27 hits are stored in RE05TrackerHitsCollection.
+     93 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 10.071549073174 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 752 HEPEvt particles from pythia_event.data.
+>>> Event 78
+     0 hits are stored in RE05TrackerHitsCollection.
+     4 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.67504605454293 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 766 HEPEvt particles from pythia_event.data.
+>>> Event 79
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 564 HEPEvt particles from pythia_event.data.
+>>> Event 80
+     50 hits are stored in RE05TrackerHitsCollection.
+     40 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 4.8389878150173 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 220 HEPEvt particles from pythia_event.data.
+>>> Event 81
+     21 hits are stored in RE05TrackerHitsCollection.
+     36 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 5.0592035506425 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 823 HEPEvt particles from pythia_event.data.
+>>> Event 82
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 914 HEPEvt particles from pythia_event.data.
+>>> Event 83
+     60 hits are stored in RE05TrackerHitsCollection.
+     44 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.1671458416221 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 232 HEPEvt particles from pythia_event.data.
+>>> Event 84
+     33 hits are stored in RE05TrackerHitsCollection.
+     31 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 12.969860083685 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 1034 HEPEvt particles from pythia_event.data.
+>>> Event 85
+     138 hits are stored in RE05TrackerHitsCollection.
+     88 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 12.248331282273 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 673 HEPEvt particles from pythia_event.data.
+>>> Event 86
+     55 hits are stored in RE05TrackerHitsCollection.
+     36 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 8.035235977742 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 246 HEPEvt particles from pythia_event.data.
+>>> Event 87
+     84 hits are stored in RE05TrackerHitsCollection.
+     42 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 4.4761842020416 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 1139 HEPEvt particles from pythia_event.data.
+>>> Event 88
+     91 hits are stored in RE05TrackerHitsCollection.
+     68 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 7.267416152027 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 991 HEPEvt particles from pythia_event.data.
+>>> Event 89
+     166 hits are stored in RE05TrackerHitsCollection.
+     56 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 9.5482820721358 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 430 HEPEvt particles from pythia_event.data.
+>>> Event 90
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 232 HEPEvt particles from pythia_event.data.
+>>> Event 91
+     29 hits are stored in RE05TrackerHitsCollection.
+     33 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 7.8176855160253 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 410 HEPEvt particles from pythia_event.data.
+>>> Event 92
+     0 hits are stored in RE05TrackerHitsCollection.
+     5 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.98978594016218 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 680 HEPEvt particles from pythia_event.data.
+>>> Event 93
+     52 hits are stored in RE05TrackerHitsCollection.
+     51 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.671277749046 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 259 HEPEvt particles from pythia_event.data.
+>>> Event 94
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 358 HEPEvt particles from pythia_event.data.
+>>> Event 95
+     18 hits are stored in RE05TrackerHitsCollection.
+     30 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 4.6079338375135 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 546 HEPEvt particles from pythia_event.data.
+>>> Event 96
+     0 hits are stored in RE05TrackerHitsCollection.
+     3 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.5211917852239 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 611 HEPEvt particles from pythia_event.data.
+>>> Event 97
+     0 hits are stored in RE05TrackerHitsCollection.
+     0 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0 (GeV)
+     0 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 298 HEPEvt particles from pythia_event.data.
+>>> Event 98
+     41 hits are stored in RE05TrackerHitsCollection.
+     29 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 4.7861216897494 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+G4HEPEvtInterface - reading 755 HEPEvt particles from pythia_event.data.
+>>> Event 99
+     69 hits are stored in RE05TrackerHitsCollection.
+     55 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 9.0101384491913 (GeV)
+     1 hits are stored in RE05MuonHitsCollection.
+ Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=23.67s Real=23.79s Sys=0.04s
+#
+G4 kernel has come to Quit state.
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserActionInitialization deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+RunManager is deleting RunManagerKernel.
+G4SDManager deleted.
+EventManager deleted.
+Units table cleared.
+Total navigation history collections cleaned: 493
+================== Deleting memory pools ===================
+Number of memory pools allocated: 20 of which, static: 0
+Dynamic pools deleted: 20 / Total memory freed: 3 Mb
+============================================================
+G4Allocator objects are deleted.
+UImanager deleted.
+StateManager deleted.
+RunManagerKernel is deleted. Good bye :)

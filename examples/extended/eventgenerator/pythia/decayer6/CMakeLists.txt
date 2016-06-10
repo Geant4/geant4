@@ -29,31 +29,22 @@ find_package(Pythia6 REQUIRED)
 # Locate sources and headers for this project
 #
 include_directories(${PROJECT_SOURCE_DIR}/include 
-                    ${PROJECT_SOURCE_DIR}/../../../common/detectorConstruction/include
-                    ${PROJECT_SOURCE_DIR}/../../../common/userActions/include
-                    ${PROJECT_SOURCE_DIR}/../../../common/primaryGenerator/include
+                    ${PROJECT_SOURCE_DIR}/common/include 
                     ${Geant4_INCLUDE_DIR}
                     ${PYTHIA6_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc ${PROJECT_SOURCE_DIR}/src/*.c)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 #----------------------------------------------------------------------------
-# Get examples sources from common and shared
+# Add common subdirectory
 #
-list(APPEND sources 
-  ${PROJECT_SOURCE_DIR}/../../../common/detectorConstruction/src/ExG4DetectorConstruction01.cc
-  ${PROJECT_SOURCE_DIR}/../../../common/detectorConstruction/src/ExG4DetectorConstruction01Messenger.cc
-  ${PROJECT_SOURCE_DIR}/../../../common/userActions/src/ExG4EventAction01.cc
-  ${PROJECT_SOURCE_DIR}/../../../common/userActions/src/ExG4EventAction01Messenger.cc
-  ${PROJECT_SOURCE_DIR}/../../../common/userActions/src/ExG4RunAction01.cc
-  ${PROJECT_SOURCE_DIR}/../../../common/userActions/src/ExG4RunAction01Messenger.cc
-  ${PROJECT_SOURCE_DIR}/../../../common/primaryGenerator/src/ExG4PrimaryGeneratorAction01.cc)
-  
+add_subdirectory(common) 
+
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(pythia6_decayer pythia6_decayer.cc ${sources} ${headers})
-target_link_libraries(pythia6_decayer ${Geant4_LIBRARIES} ${PYTHIA6_LIBRARIES} )
+target_link_libraries(pythia6_decayer common ${Geant4_LIBRARIES} ${PYTHIA6_LIBRARIES} )
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we

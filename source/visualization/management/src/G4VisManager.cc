@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc 77479 2013-11-25 10:01:22Z gcosmo $
+// $Id: G4VisManager.cc 87360 2014-12-01 16:07:16Z gcosmo $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -38,6 +38,7 @@
 #include "G4VisCommandsScene.hh"
 #include "G4VisCommandsSceneAdd.hh"
 #include "G4VisCommandsSceneHandler.hh"
+#include "G4VisCommandsTouchable.hh"
 #include "G4VisCommandsTouchableSet.hh"
 #include "G4VisCommandsViewer.hh"
 #include "G4VisCommandsViewerDefault.hh"
@@ -394,6 +395,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandSetLineWidth);
   RegisterMessenger(new G4VisCommandSetTextColour);
   RegisterMessenger(new G4VisCommandSetTextLayout);
+  RegisterMessenger(new G4VisCommandSetTextSize);
   RegisterMessenger(new G4VisCommandSetTouchable);
   
   directory = new G4UIdirectory ("/vis/scene/");
@@ -416,6 +418,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandSceneAddDate);
   RegisterMessenger(new G4VisCommandSceneAddDigis);
   RegisterMessenger(new G4VisCommandSceneAddEventID);
+  RegisterMessenger(new G4VisCommandSceneAddExtent);
   RegisterMessenger(new G4VisCommandSceneAddFrame);
   RegisterMessenger(new G4VisCommandSceneAddHits);
   RegisterMessenger(new G4VisCommandSceneAddLine);
@@ -443,6 +446,8 @@ void G4VisManager::RegisterMessengers () {
   directory = new G4UIdirectory ("/vis/touchable/");
   directory -> SetGuidance ("Operations on touchables.");
   fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandsTouchable);
+  
   directory = new G4UIdirectory ("/vis/touchable/set/");
   directory -> SetGuidance ("Set vis attributes of current touchable.");
   fDirectoryList.push_back (directory);
@@ -661,7 +666,7 @@ void G4VisManager::BeginDraw (const G4Transform3D& objectTransform)
   fDrawGroupNestingDepth++;
   if (fDrawGroupNestingDepth > 1) {
     G4Exception
-      ("G4VSceneHandler::BeginDraw",
+      ("G4VisManager::BeginDraw",
        "visman0008", JustWarning,
        "Nesting detected. It is illegal to nest Begin/EndDraw."
        "\n Ignored");
@@ -698,7 +703,7 @@ void G4VisManager::BeginDraw2D (const G4Transform3D& objectTransform)
   fDrawGroupNestingDepth++;
   if (fDrawGroupNestingDepth > 1) {
     G4Exception
-      ("G4VSceneHandler::BeginDraw2D",
+      ("G4VisManager::BeginDraw2D",
        "visman0009", JustWarning,
        "Nesting detected. It is illegal to nest Begin/EndDraw2D."
        "\n Ignored");
@@ -883,14 +888,28 @@ void G4VisManager::Draw (const G4VTrajectory& traj) {
 #ifdef G4MULTITHREADED
   if (G4Threading::IsWorkerThread()) return;
 #endif
+  // A trajectory needs a trajectories model to provide G4Atts, etc.
+  static G4TrajectoriesModel trajectoriesModel;
+  trajectoriesModel.SetCurrentTrajectory(&traj);
+  const G4Run* currentRun = G4RunManager::GetRunManager()->GetCurrentRun();
+  if (currentRun) {
+    trajectoriesModel.SetRunID(currentRun->GetRunID());
+  }
+  const G4Event* currentEvent =
+  G4EventManager::GetEventManager()->GetConstCurrentEvent();
+  if (currentEvent) {
+    trajectoriesModel.SetEventID(currentEvent->GetEventID());
+  }
   if (fIsDrawGroup) {
-    fpSceneHandler -> SetModel (&dummyTrajectoriesModel);
+    fpSceneHandler -> SetModel (&trajectoriesModel);
     fpSceneHandler -> AddCompound (traj);
+    fpSceneHandler -> SetModel (0);
   } else {
     if (IsValidView ()) {
       ClearTransientStoreIfMarked();
-      fpSceneHandler -> SetModel (&dummyTrajectoriesModel);
+      fpSceneHandler -> SetModel (&trajectoriesModel);
       fpSceneHandler -> AddCompound (traj);
+      fpSceneHandler -> SetModel (0);
     }
   }
 }
@@ -929,10 +948,21 @@ void G4VisManager::Draw (const G4VSolid& solid,
 void G4VisManager::Draw (const G4VPhysicalVolume& physicalVol,
 			 const G4VisAttributes& attribs,
 			 const G4Transform3D& objectTransform) {
-  // Find corresponding logical volume and solid.
 #ifdef G4MULTITHREADED
   if (G4Threading::IsWorkerThread()) return;
 #endif
+  // Note: It is tempting to use a temporary model here, as for
+  // trajectories, in order to get at the G4Atts of the physical
+  // volume.  I tried it (JA).  But it's not easy to pass the
+  // vis attributes.  Also other aspects of the model seem not to
+  // be properly set up.  So, the idea has been abandoned for the time
+  // being.  The model pointer will be null.  So when picking there
+  // will be no G4Atts from this physical volume.
+  //
+  // If this is called from DrawHit, for example, the user may G4Atts to the
+  // hit and these will be available with "/vis/scene/add/hits".
+  //
+  // Find corresponding logical volume and solid.
   G4LogicalVolume* pLV  = physicalVol.GetLogicalVolume ();
   G4VSolid*        pSol = pLV -> GetSolid ();
   Draw (*pSol, attribs, objectTransform);
@@ -974,7 +1004,7 @@ void G4VisManager::CreateViewer
 
   if (!p) {
     if (fVerbosity >= errors) {
-      G4cout << "ERROR in G4VisManager::CreateViewer during "
+      G4cerr << "ERROR in G4VisManager::CreateViewer during "
 	     << fpGraphicsSystem -> GetName ()
 	     << " viewer creation.\n  No action taken."
 	     << G4endl;
@@ -984,7 +1014,7 @@ void G4VisManager::CreateViewer
 
   if (p -> GetViewId() < 0) {
     if (fVerbosity >= errors) {
-      G4cout << "ERROR in G4VisManager::CreateViewer during "
+      G4cerr << "ERROR in G4VisManager::CreateViewer during "
 	     << fpGraphicsSystem -> GetName ()
 	     << " viewer initialisation.\n  No action taken."
 	     << G4endl;
@@ -1351,6 +1381,14 @@ void G4VisManager::SetCurrentViewer (G4VViewer* pViewer) {
 	   << G4endl;
   }
   fpSceneHandler = fpViewer -> GetSceneHandler ();
+  if (!fpSceneHandler) {
+    if (fVerbosity >= warnings) {
+      G4cout <<
+      "WARNING: No scene handler for this viewer - please create one."
+      << G4endl;
+    }
+    return;
+  }
   fpSceneHandler -> SetCurrentViewer (pViewer);
   fpScene = fpSceneHandler -> GetScene ();
   fpGraphicsSystem = fpSceneHandler -> GetGraphicsSystem ();
@@ -1507,26 +1545,26 @@ void G4VisManager::PrintAvailableColours (Verbosity) const {
 
 void G4VisManager::PrintInvalidPointers () const {
   if (fVerbosity >= errors) {
-    G4cout << "ERROR: G4VisManager::PrintInvalidPointers:";
+    G4cerr << "ERROR: G4VisManager::PrintInvalidPointers:";
     if (!fpGraphicsSystem) {
-      G4cout << "\n null graphics system pointer.";
+      G4cerr << "\n null graphics system pointer.";
     }
     else {
-      G4cout << "\n  Graphics system is " << fpGraphicsSystem -> GetName ()
+      G4cerr << "\n  Graphics system is " << fpGraphicsSystem -> GetName ()
 	     << " but:";
       if (!fpScene)
-	G4cout <<
+	G4cerr <<
 	  "\n  Null scene pointer. Use \"/vis/drawVolume\" or"
 	  " \"/vis/scene/create\".";
       if (!fpSceneHandler)
-	G4cout <<
+	G4cerr <<
 	  "\n  Null scene handler pointer. Use \"/vis/open\" or"
 	  " \"/vis/sceneHandler/create\".";
       if (!fpViewer )
-	G4cout <<
+	G4cerr <<
 	  "\n  Null viewer pointer. Use \"/vis/viewer/create\".";
     }
-    G4cout << G4endl;
+    G4cerr << G4endl;
   }
 }
 
@@ -1666,6 +1704,7 @@ void G4VisManager::EndOfRun ()
   if (GetConcreteInstance() && eventsFromThreads) {
     std::vector<const G4Event*>::const_iterator i;
     if (fpScene->GetRefreshAtEndOfEvent()) {
+
       for (i = eventsFromThreads->begin(); i != eventsFromThreads->end(); ++i) {
         if (fVerbosity >= confirmations) {
           G4cout << "Drawing event " << (*i)->GetEventID() << G4endl;
@@ -1700,12 +1739,13 @@ void G4VisManager::EndOfRun ()
         eorModels = tmpEorModels;
 
         fTransientsDrawnThisEvent = false;
-        if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisEvent(false);
+        fpSceneHandler->SetTransientsDrawnThisEvent(false);
         fpSceneHandler->DrawEvent(*i);
         // ShowView guarantees the view comes to the screen.  No action
-        // is taken for passive viewers like OGL*X, but it passes control to
-        // interactive viewers, such OGL*Xm and allows file-writing
-        // viewers to close the file.
+        // is taken for passive viewers like OGL*X (without picking enabled),
+        // but it passes control to interactive viewers, such as OGL*X (with
+        // picking enabled) or OGL*Xm, and allows file-writing viewers to
+        // close the file.
         fpViewer->ShowView();
         fpSceneHandler->SetMarkForClearingTransientStore(true);
       }
@@ -1723,6 +1763,7 @@ void G4VisManager::EndOfRun ()
       // But, for this stop-gap solution...
       // Deactivate end-of-event and end-of-run models...
       G4Scene* scene = fpSceneHandler->GetScene();
+      assert(scene);  // To keep Coverity happy.
       std::vector<G4Scene::Model>& eoeModels = scene->SetEndOfEventModelList();
       std::vector<G4Scene::Model> tmpEoeModels = eoeModels;
       std::vector<G4Scene::Model>::iterator iEoe;
@@ -1740,12 +1781,12 @@ void G4VisManager::EndOfRun ()
       eoeModels = tmpEoeModels;
       eorModels = tmpEorModels;
 
-      fTransientsDrawnThisEvent = false;
-      if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisEvent(false);
       for (i = eventsFromThreads->begin(); i != eventsFromThreads->end(); ++i) {
         if (fVerbosity >= confirmations) {
           G4cout << "Drawing event " << (*i)->GetEventID() << G4endl;
         }
+        fTransientsDrawnThisEvent = false;
+        fpSceneHandler->SetTransientsDrawnThisEvent(false);
         fpSceneHandler->DrawEvent(*i);
       }
       if (fpScene->GetRefreshAtEndOfRun()) {
@@ -1756,9 +1797,17 @@ void G4VisManager::EndOfRun ()
           fpViewer->RefreshView();
         }
         fpSceneHandler->SetMarkForClearingTransientStore(true);
+      } else {
+        if (fpGraphicsSystem->GetFunctionality() ==
+            G4VGraphicsSystem::fileWriter) {
+          if (fVerbosity >= warnings) {
+            G4cout << "\"/vis/viewer/update\" to close file." << G4endl;
+          }
+        }
       }
     }
   }
+  fEventRefreshing = false;
 }
 
 // End of multithreaded versions of Begin/EndOfRun/Event.
@@ -1800,81 +1849,9 @@ void G4VisManager::EndOfEvent ()
   const G4Event* currentEvent = eventManager->GetConstCurrentEvent();
   if (!currentEvent) return;
 
-  G4RunManager* runManager = G4RunManager::GetRunManager();
-  const G4Run* currentRun = runManager->GetCurrentRun();
-  if (!currentRun) return;
-
   //G4cout << "G4VisManager::EndOfEvent" << G4endl;
 
-  // We are about to draw the event (trajectories, etc.), but first we
-  // have to clear the previous event(s) if necessary.  If this event
-  // needs to be drawn afresh, e.g., the first event or any event when
-  // "accumulate" is not requested, the old event has to be cleared.
-  // We have postponed this so that, for normal viewers like OGL, the
-  // previous event(s) stay on screen until this new event comes
-  // along.  For a file-writing viewer the geometry has to be drawn.
-  // See, for example, G4HepRepFileSceneHandler::ClearTransientStore.
-  ClearTransientStoreIfMarked();
-
-  // Now draw the event...
-  fpSceneHandler->DrawEvent(currentEvent);
-
-  G4int nEventsToBeProcessed = 0;
-  G4int nKeptEvents = 0;
-  G4int eventID = -2;  // (If no run manager, triggers ShowView as normal.)
-  if (currentRun) {
-    nEventsToBeProcessed = currentRun->GetNumberOfEventToBeProcessed();
-    eventID = currentEvent->GetEventID();
-    const std::vector<const G4Event*>* events =
-      currentRun->GetEventVector();
-    if (events) nKeptEvents = events->size();
-  }
-
-  if (fpScene->GetRefreshAtEndOfEvent()) {
-
-    // Unless last event (in which case wait end of run)...
-    if (eventID < nEventsToBeProcessed - 1) {
-      // ShowView guarantees the view comes to the screen.  No action
-      // is taken for passive viewers like OGL*X, but it passes control to
-      // interactive viewers, such OGL*Xm and allows file-writing
-      // viewers to close the file.
-      fpViewer->ShowView();
-      fpSceneHandler->SetMarkForClearingTransientStore(true);
-    } else {  // Last event...
-      // Keep, but only if user has not kept any...
-      if (!nKeptEvents) {
-        eventManager->KeepTheCurrentEvent();
-        fNKeepRequests++;
-	fKeptLastEvent = true;
-      }
-    }
-
-  } else {  //  Accumulating events...
-
-    G4int maxNumberOfKeptEvents = fpScene->GetMaxNumberOfKeptEvents();
-    if (maxNumberOfKeptEvents > 0 && fNKeepRequests >= maxNumberOfKeptEvents) {
-      fEventKeepingSuspended = true;
-      static G4bool warned = false;
-      if (!warned) {
-	if (fVerbosity >= warnings) {
-	  G4cout <<
- "WARNING: G4VisManager::EndOfEvent: Automatic event keeping suspended."
- "\n  The number of events exceeds the maximum, "
-		 << maxNumberOfKeptEvents <<
- ", that may be kept by\n  the vis manager."
-		 << G4endl;
-	}
-	warned = true;
-      }
-    } else if (maxNumberOfKeptEvents != 0) {
-      // If not disabled nor suspended.
-      if (GetConcreteInstance() && !fEventKeepingSuspended) {
-//        G4cout << "Requesting keeping event " << currentEvent->GetEventID() << G4endl;
-        eventManager->KeepTheCurrentEvent();
-        fNKeepRequests++;
-      }
-    }
-  }
+  DrawEvent(currentEvent);
 }
 
 void G4VisManager::EndOfRun ()
@@ -1947,19 +1924,107 @@ void G4VisManager::EndOfRun ()
       if (fpScene->GetRefreshAtEndOfRun()) {
 	fpSceneHandler->DrawEndOfRunModels();
         // ShowView guarantees the view comes to the screen.  No action
-        // is taken for passive viewers like OGL*X, but it passes control to
-        // interactive viewers, such OGL*Xm and allows file-writing
-        // viewers to close the file.
+        // is taken for passive viewers like OGL*X (without picking enabled),
+        // but it passes control to interactive viewers, such as OGL*X (with
+        // picking enabled) or OGL*Xm, and allows file-writing viewers to
+        // close the file.
 	fpViewer->ShowView();
-        // An extra refresh for auto-refresh viewers
+        // An extra refresh for auto-refresh viewers.
         if (fpViewer->GetViewParameters().IsAutoRefresh()) {
           fpViewer->RefreshView();
         }
 	fpSceneHandler->SetMarkForClearingTransientStore(true);
+      } else {
+        if (fpGraphicsSystem->GetFunctionality() ==
+            G4VGraphicsSystem::fileWriter) {
+          if (fVerbosity >= warnings) {
+            G4cout << "\"/vis/viewer/update\" to close file." << G4endl;
+          }
+        }
       }
     }
   }
   fEventRefreshing = false;
+}
+
+void G4VisManager::DrawEvent(const G4Event* event)
+{
+  G4EventManager* eventManager = G4EventManager::GetEventManager();
+  
+  G4RunManager* runManager = G4RunManager::GetRunManager();
+  const G4Run* currentRun = runManager->GetCurrentRun();
+  if (!currentRun) return;
+
+  // We are about to draw the event (trajectories, etc.), but first we
+  // have to clear the previous event(s) if necessary.  If this event
+  // needs to be drawn afresh, e.g., the first event or any event when
+  // "accumulate" is not requested, the old event has to be cleared.
+  // We have postponed this so that, for normal viewers like OGL, the
+  // previous event(s) stay on screen until this new event comes
+  // along.  For a file-writing viewer the geometry has to be drawn.
+  // See, for example, G4HepRepFileSceneHandler::ClearTransientStore.
+  ClearTransientStoreIfMarked();
+
+  // Now draw the event...
+  fpSceneHandler->DrawEvent(event);
+
+  G4int nEventsToBeProcessed = 0;
+  G4int nKeptEvents = 0;
+  G4int eventID = -2;  // (If no run manager, triggers ShowView as normal.)
+  if (currentRun) {
+    nEventsToBeProcessed = currentRun->GetNumberOfEventToBeProcessed();
+    eventID = event->GetEventID();
+    const std::vector<const G4Event*>* events =
+    currentRun->GetEventVector();
+    if (events) nKeptEvents = events->size();
+  }
+
+  if (fpScene->GetRefreshAtEndOfEvent()) {
+
+    // Unless last event (in which case wait end of run)...
+    if (eventID < nEventsToBeProcessed - 1) {
+      // ShowView guarantees the view comes to the screen.  No action
+      // is taken for passive viewers like OGL*X (without picking enabled),
+      // but it passes control to interactive viewers, such as OGL*X (with
+      // picking enabled) or OGL*Xm, and allows file-writing viewers to
+      // close the file.
+      fpViewer->ShowView();
+      fpSceneHandler->SetMarkForClearingTransientStore(true);
+    } else {  // Last event...
+              // Keep, but only if user has not kept any...
+      if (!nKeptEvents) {
+        eventManager->KeepTheCurrentEvent();
+        fNKeepRequests++;
+        fKeptLastEvent = true;
+      }
+    }
+
+  } else {  //  Accumulating events...
+
+    G4int maxNumberOfKeptEvents = fpScene->GetMaxNumberOfKeptEvents();
+    if (maxNumberOfKeptEvents > 0 && fNKeepRequests >= maxNumberOfKeptEvents) {
+      fEventKeepingSuspended = true;
+      static G4bool warned = false;
+      if (!warned) {
+        if (fVerbosity >= warnings) {
+          G4cout <<
+          "WARNING: G4VisManager::EndOfEvent: Automatic event keeping suspended."
+          "\n  The number of events exceeds the maximum, "
+          << maxNumberOfKeptEvents <<
+          ", that may be kept by\n  the vis manager."
+          << G4endl;
+        }
+        warned = true;
+      }
+    } else if (maxNumberOfKeptEvents != 0) {
+      // If not disabled nor suspended.
+      if (GetConcreteInstance() && !fEventKeepingSuspended) {
+        //        G4cout << "Requesting keeping event " << event->GetEventID() << G4endl;
+        eventManager->KeepTheCurrentEvent();
+        fNKeepRequests++;
+      }
+    }
+  }
 }
 
 #endif  // End of sequential versions of Begin/EndOfRun/Event.
@@ -2050,13 +2115,13 @@ G4VisManager::GetVerbosityValue(const G4String& verbosityString) {
     std::istringstream is(ss);
     is >> intVerbosity;
     if (!is) {
-      G4cout << "ERROR: G4VisManager::GetVerbosityValue: invalid verbosity \""
+      G4cerr << "ERROR: G4VisManager::GetVerbosityValue: invalid verbosity \""
 	     << verbosityString << "\"";
       for (size_t i = 0; i < VerbosityGuidanceStrings.size(); ++i) {
-	G4cout << '\n' << VerbosityGuidanceStrings[i];
+	G4cerr << '\n' << VerbosityGuidanceStrings[i];
       }
       verbosity = warnings;
-      G4cout << "\n  Returning " << VerbosityString(verbosity)
+      G4cerr << "\n  Returning " << VerbosityString(verbosity)
 	     << G4endl;
     }
     else {
@@ -2112,7 +2177,7 @@ G4bool G4VisManager::IsValidView () {
 
   if ((!fpScene) || (!fpSceneHandler) || (!fpViewer)) {
     if (fVerbosity >= errors) {
-      G4cout <<
+      G4cerr <<
 	"ERROR: G4VisManager::IsValidView(): Current view is not valid."
 	     << G4endl;
       PrintInvalidPointers ();
@@ -2122,7 +2187,7 @@ G4bool G4VisManager::IsValidView () {
 
   if (fpScene != fpSceneHandler -> GetScene ()) {
     if (fVerbosity >= errors) {
-      G4cout << "ERROR: G4VisManager::IsValidView ():";
+      G4cerr << "ERROR: G4VisManager::IsValidView ():";
       if (fpSceneHandler -> GetScene ()) {
 	G4cout <<
 	  "\n  The current scene \""
@@ -2158,7 +2223,7 @@ G4bool G4VisManager::IsValidView () {
   const G4ViewerList& viewerList = fpSceneHandler -> GetViewerList ();
   if (viewerList.size () == 0) {
     if (fVerbosity >= errors) {
-      G4cout <<
+      G4cerr <<
 	"ERROR: G4VisManager::IsValidView (): the current scene handler\n  \""
 	     << fpSceneHandler -> GetName ()
 	     << "\" has no viewers.  Do /vis/viewer/create."
@@ -2173,11 +2238,12 @@ G4bool G4VisManager::IsValidView () {
     G4bool successful = fpScene -> AddWorldIfEmpty (warn);
     if (!successful || fpScene -> IsEmpty ()) {        // If still empty...
       if (fVerbosity >= errors) {
-	G4cout << "ERROR: G4VisManager::IsViewValid ():";
-	G4cout <<
+	G4cerr << "ERROR: G4VisManager::IsValidView ():";
+	G4cerr <<
 	  "\n  Attempt at some drawing operation when scene is empty."
 	  "\n  Maybe the geometry has not yet been defined."
 	  "  Try /run/initialize."
+          "\n  Or use \"/vis/scene/add/extent\"."
 	       << G4endl;
       }
       isValid = false;

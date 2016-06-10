@@ -1084,7 +1084,9 @@ void G4PenelopeOscillatorManager::ReadElementData()
 
   G4AtomicTransitionManager* theTransitionManager = 
     G4AtomicTransitionManager::Instance();
-  
+  theTransitionManager->Initialise();  
+
+
   //Read header (22 lines)
   G4String theHeader;
   for (G4int iline=0;iline<22;iline++)

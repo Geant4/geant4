@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.hh 73339 2013-08-26 06:54:49Z gcosmo $
+// $Id: G4UniversalFluctuation.hh 81365 2014-05-27 12:56:32Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -59,8 +59,6 @@
 #include "G4VEmFluctuationModel.hh"
 #include "G4ParticleDefinition.hh"
 
-class G4Pow;
-
 class G4UniversalFluctuation : public G4VEmFluctuationModel
 {
 
@@ -92,12 +90,14 @@ private:
   G4UniversalFluctuation & operator=(const  G4UniversalFluctuation &right);
   G4UniversalFluctuation(const  G4UniversalFluctuation&);
 
-  G4Pow*   g4pow; 
-
   const G4ParticleDefinition* particle;
   const G4Material* lastMaterial;
 
   G4double particleMass;
+
+  // Derived quantities
+  G4double m_Inv_particleMass;
+  G4double m_massrate;
   G4double chargeSquare;
 
   // data members to speed up the fluctuation calculation
@@ -122,6 +122,8 @@ private:
   G4double nmaxCont;
   G4double rate,fw;
 
+  G4int     sizearray;
+  G4double* rndmarray;
 
 };
 

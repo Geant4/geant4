@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4ExtrudedSolid.hh 83851 2014-09-19 10:12:12Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -61,6 +61,15 @@
 
 #ifndef G4ExtrudedSolid_HH
 #define G4ExtrudedSolid_HH
+
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UEXTRUDEDSOLID 1
+#endif
+
+#if defined(G4GEOM_USE_UEXTRUDEDSOLID)
+  #define G4UExtrudedSolid G4ExtrudedSolid
+  #include "G4UExtrudedSolid.hh"
+#else
 
 #include <vector>
 
@@ -178,5 +187,7 @@ class G4ExtrudedSolid : public G4TessellatedSolid
 };    
 
 #include "G4ExtrudedSolid.icc"
+
+#endif
 
 #endif

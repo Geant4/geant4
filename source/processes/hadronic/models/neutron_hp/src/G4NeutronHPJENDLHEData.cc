@@ -73,8 +73,23 @@ G4NeutronHPJENDLHEData::G4NeutronHPJENDLHEData( G4String reaction , G4ParticleDe
 
 G4NeutronHPJENDLHEData::~G4NeutronHPJENDLHEData()
 {
-   ; 
-   //delete theCrossSections;
+  for ( std::map< G4int , std::map< G4int , G4PhysicsVector* >* >::iterator itZ = mIsotope.begin();
+        itZ != mIsotope.end(); ++itZ ) {
+    std::map< G4int , G4PhysicsVector* >* pointer_map = itZ->second;
+    if ( pointer_map ) {
+      for ( std::map< G4int , G4PhysicsVector* >::iterator itA = pointer_map->begin();
+            itA != pointer_map->end() ; ++itA ) {
+        G4PhysicsVector* pointerPhysicsVector = itA->second;
+        if ( pointerPhysicsVector ) {
+          delete pointerPhysicsVector;
+          itA->second = 0;
+        }
+      }
+      delete pointer_map;
+      itZ->second = 0;
+    }
+  }
+  mIsotope.clear();
 }
  
 

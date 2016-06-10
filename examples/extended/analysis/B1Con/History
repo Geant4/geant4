@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14/02/14 I. Hrivnacova (B1Con-V10-00-00)
+- Fixed tag name
+
+05/02/14 I. Hrivnacova (B1Con-V010-00-00)
+- Increasing number of events of run1.mac to fit the purpose 
+  of this example (T. Koi)
+
 10/10/13 I. Hrivnacova (B1Con-V09-06-03)
 - Updated for changes in B1 example
 - README.B01 renamed to README.B1 and kept identical with B1/README

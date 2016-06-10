@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 75300 2013-10-30 09:56:52Z gcosmo $
+# $Id: sources.cmake 85359 2014-10-28 10:04:03Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -100,6 +100,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
 	G4Cache.hh
 	G4ThreadLocalSingleton.hh
 	G4AutoDelete.hh
+        G4TWorkspacePool.hh
     SOURCES
         G4Allocator.cc
         G4AllocatorPool.cc

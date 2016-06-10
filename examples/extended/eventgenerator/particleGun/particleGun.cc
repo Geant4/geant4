@@ -27,20 +27,23 @@
 /// \brief Main program of the eventgenerator/particleGun example
 //
 //
-// $Id: particleGun.cc 68734 2013-04-05 09:47:02Z gcosmo $
+// $Id: particleGun.cc 85032 2014-10-23 10:04:32Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "RunAction.hh"
-#include "TrackingAction.hh"
+#include "ActionInitialization.hh"
 #include "SteppingVerbose.hh"
 
 #ifdef G4VIS_USE
@@ -57,32 +60,27 @@ int main(int argc,char** argv) {
  
   //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
   
   // Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  G4int nThreads = G4Threading::G4GetNumberOfCores();
+  if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
+  runManager->SetNumberOfThreads(nThreads);
+#else
+  //my Verbose output class
+  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
+  G4RunManager* runManager = new G4RunManager;
+#endif
 
   // set mandatory initialization classes
   //
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList);
-      
-  // set user action classes
-  // 
-  RunAction*              run   = new RunAction();
-  PrimaryGeneratorAction* prim  = new PrimaryGeneratorAction();
-  TrackingAction*         track = new TrackingAction(prim);
-        
-  runManager->SetUserAction(run);
-  runManager->SetUserAction(prim);  
-  runManager->SetUserAction(track);
-    
-  //Initialize G4 kernel
-  runManager->Initialize();
-    
+  
+  runManager->SetUserInitialization(new ActionInitialization);
+
   // get the pointer to the User Interface manager 
     G4UImanager* UI = G4UImanager::GetUIpointer();  
 

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/src/StackingAction.cc
 /// \brief Implementation of the StackingAction class
 //
-// $Id: StackingAction.cc 76464 2013-11-11 10:22:56Z gcosmo $
+// $Id: StackingAction.cc 83921 2014-09-23 09:14:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,8 +44,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingAction::StackingAction(EventAction* EA)
-:G4UserStackingAction(), fEventAction(EA),
- fKillSecondary(0),fStackMessenger(0)
+ : G4UserStackingAction(), fEventAction(EA),
+   fKillSecondary(0),fStackMessenger(0),fPhotoGamma(-1),fComptGamma(-1),
+   fPhotoAuger(-1),fComptAuger(-1),fPixeGamma(-1),fPixeAuger(-1),
+   fIDdefined(false)
 {
   fStackMessenger = new StackingMessenger(this);
 }
@@ -65,14 +67,30 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
   //keep primary particle
-  if (aTrack->GetParentID() == 0) return fUrgent;
+  if (aTrack->GetParentID() == 0) { return fUrgent; }
+
+  if(!fIDdefined) {
+    fIDdefined = true;
+    fPhotoGamma = G4PhysicsModelCatalog::GetIndex("phot_fluo");
+    fComptGamma = G4PhysicsModelCatalog::GetIndex("compt_fluo");
+    fPhotoAuger = G4PhysicsModelCatalog::GetIndex("phot_auger");
+    fComptAuger = G4PhysicsModelCatalog::GetIndex("compt_auger");
+    fPixeGamma = G4PhysicsModelCatalog::GetIndex("gammaPIXE");
+    fPixeAuger = G4PhysicsModelCatalog::GetIndex("e-PIXE");
+  }
+  G4int idx = aTrack->GetCreatorModelID();
 
   //count secondary particles
     
   Run* run = static_cast<Run*>(
              G4RunManager::GetRunManager()->GetNonConstCurrentRun()); 
   run->CountParticles(aTrack->GetDefinition());
-
+  /*
+  G4cout << "###StackingAction: new " 
+         << aTrack->GetDefinition()->GetParticleName()
+         << " E(MeV)= " << aTrack->GetKineticEnergy()
+         << "  " << aTrack->GetMomentumDirection() << G4endl;
+  */
   //
   //energy spectrum of secondaries
   //
@@ -82,11 +100,25 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
   if (charge != 0.) {
     analysisManager->FillH1(2,energy);
     analysisManager->FillH1(4,energy);
+    if(idx == fPhotoAuger || idx == fComptAuger) {
+      analysisManager->FillH1(16,energy);
+      analysisManager->FillH1(18,energy);
+    } else if(idx == fPixeAuger) {
+      analysisManager->FillH1(44,energy);
+      analysisManager->FillH1(46,energy);
+    }
   }
 
   if (aTrack->GetDefinition() == G4Gamma::Gamma()) {
     analysisManager->FillH1(3,energy);
     analysisManager->FillH1(5,energy);
+    if(idx == fPhotoGamma || idx == fComptGamma) {
+      analysisManager->FillH1(17,energy);
+      analysisManager->FillH1(19,energy);
+    } else if(idx == fPixeGamma) {
+      analysisManager->FillH1(45,energy);
+      analysisManager->FillH1(47,energy);
+    }
   }  
 
   //stack or delete secondaries

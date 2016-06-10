@@ -1,4 +1,4 @@
-$Id: History 77657 2013-11-27 08:54:43Z gcosmo $
+$Id: History 82042 2014-06-10 08:02:58Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,19 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+06 June 2014   Daren Sawkey        (exampleES2-V10-00-02)
+- extended example coding guidelines:
+  - set cuts using G4UserPhysicsListMessenger command
+  - print status using G4RunMessenger command (and remove EventAction)
+  - G4Exception rather than std::exit
+- add G4EmLowEPPhysics
+
+04 June 2014   Andrea Dotti        (exampleES2-V10-00-01)
+- Porting to new GPS for MT
+
+12 March 2014  Daren Sawkey        (exampleES2-V10-00-00)
+- Fixed memcheck error: foil thickness now defined in Detector constructor
+- Allow selection of physics list option4
 
 26 November 2013  Andrea Dotti     (exampleES2-V09-06-12)
 - Bug fixing for MT:

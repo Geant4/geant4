@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4OpenGLStoredViewer.hh 85263 2014-10-27 08:58:31Z gcosmo $
 //
-// 
+//
 // Andrew Walkden  7th February 1997
 // Class G4OpenGLStoredViewer : Encapsulates the `storedness' of
 //                              an OpenGL viewer, for inheritance by
@@ -56,10 +56,13 @@ protected:
   (G4Colour&, size_t /*currentPOListIndex*/) {}
   G4OpenGLStoredSceneHandler& fG4OpenGLStoredSceneHandler;
   G4ViewParameters fLastVP;  // Memory for making kernel visit decisions.
-
+  
   // Two virtual functions to return sub-class selection.
   virtual G4bool POSelected(size_t) {return true;}
   virtual G4bool TOSelected(size_t) {return true;}
+  
+  bool fDepthTestEnable;
+  G4Colour fOldDisplayListColor;
 };
 
 #endif

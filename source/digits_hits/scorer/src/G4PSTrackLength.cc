@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSTrackLength.cc 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4PSTrackLength.cc 81087 2014-05-20 15:44:27Z gcosmo $
 //
 // G4PSTrackLength
 #include "G4PSTrackLength.hh"
@@ -42,8 +42,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSTrackLength::G4PSTrackLength(G4String name, G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1),weighted(false),multiplyKinE(false),
-     divideByVelocity(false)
+    :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0),weighted(false),
+     multiplyKinE(false),divideByVelocity(false)
 {
     DefineUnitAndCategory();
     SetUnit("mm");
@@ -51,8 +51,8 @@ G4PSTrackLength::G4PSTrackLength(G4String name, G4int depth)
 
 G4PSTrackLength::G4PSTrackLength(G4String name, const G4String& unit, 
 				 G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1),weighted(false),multiplyKinE(false),
-     divideByVelocity(false)
+    :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0),weighted(false),
+     multiplyKinE(false),divideByVelocity(false)
 {
     DefineUnitAndCategory();
     SetUnit(unit);

@@ -1,4 +1,4 @@
-$Id: History 77665 2013-11-27 10:15:08Z gcosmo $
+$Id: History 81932 2014-06-06 15:39:45Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06-06-14  I.Hrivnacova  (exhadr02-V10-00-01)
+- Coding guidelines, code clean-up
+- Removed obsolete commands from EventMessenger
+- Replaced call to exit with G4Exception in Histo.cc
+
+04-03-14  A. Dotti  (exhadr02-V10-00-00)
+- Fixing use of XML format for output file
 
 27-11-13  G. Cosmo  (exhadr02-V09-06-09)
 - Fixed compilation warning for unused data in IonDPMJETPhysics class

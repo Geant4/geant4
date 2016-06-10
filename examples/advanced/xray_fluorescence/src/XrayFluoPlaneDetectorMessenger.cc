@@ -39,6 +39,7 @@
 
 #include "XrayFluoPlaneDetectorMessenger.hh"
 #include "XrayFluoPlaneDetectorConstruction.hh"
+#include "G4RunManager.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
@@ -105,26 +106,33 @@ XrayFluoPlaneDetectorMessenger::XrayFluoPlaneDetectorMessenger(XrayFluoPlaneDete
 void XrayFluoPlaneDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
  if( command == UpdateCmd )
-   { Detector->UpdateGeometry(); }
-
+   { 
+     //This triggers a full re-build of the geometry. The method in the 
+     //geometry will take care of that.
+     Detector->UpdateGeometry(); 
+     return;
+   }
  else if ( command == sampleCmd )
-   { Detector->SetPlaneMaterial(newValue);}
-
+   { 
+     Detector->SetPlaneMaterial(newValue);
+   }
  else if ( command == detectorCmd )
-   { Detector->SetDetectorType(newValue);}
-
+   { 
+     Detector->SetDetectorType(newValue);
+   }
  else if ( command == grainDiaCmd )
    {  
      G4double newSize = grainDiaCmd->GetNewDoubleValue(newValue);  
      Detector->SetGrainDia(newSize);
    }
-
  else if ( command == granularityFlagCmd )
    { 
      Detector->DeleteGrainObjects();
      G4bool newGranFlag = granularityFlagCmd->GetNewBoolValue(newValue);
      Detector->SetPlaneGranularity(newGranFlag);
    }
+ //Notify the run manager that the geometry has been modified
+ G4RunManager::GetRunManager()->GeometryHasBeenModified();
  
 }
 

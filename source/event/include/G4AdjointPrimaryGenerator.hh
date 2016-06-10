@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointPrimaryGenerator.hh 76257 2013-11-08 11:31:00Z gcosmo $
+// $Id: G4AdjointPrimaryGenerator.hh 86965 2014-11-21 11:48:22Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Module:		G4AdjointPrimaryGenerator
@@ -53,11 +53,15 @@
 #include <vector>
 #include <map>
 #include <iterator>
+#include"G4PhysicsOrderedFreeVector.hh"
+
 
 class G4AdjointPosOnPhysVolGenerator;
 class G4Event;
 class G4SingleParticleSource;
 class G4ParticleDefinition;
+class G4Navigator;
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 class G4AdjointPrimaryGenerator
@@ -71,6 +75,12 @@ class G4AdjointPrimaryGenerator
     void GenerateFwdPrimaryVertex(G4Event* anEvt,G4ParticleDefinition* adj_part,G4double E1,G4double E2);
     void SetSphericalAdjointPrimarySource(G4double radius, G4ThreeVector pos);
     void SetAdjointPrimarySourceOnAnExtSurfaceOfAVolume(const G4String& volume_name);
+    void ComputeAccumulatedDepthVectorAlongBackRay(G4ThreeVector glob_pos,
+                                                   G4ThreeVector direction,
+                                                   G4double ekin,
+                                                   G4ParticleDefinition* aPartDef);
+    G4double SampleDistanceAlongBackRayAndComputeWeightCorrection(G4double& weight_corr);
+
 
   private: //attributes
 
@@ -85,6 +95,16 @@ class G4AdjointPrimaryGenerator
     G4String type_of_adjoint_source; //Spherical ExtSurfaceOfAVolume
     G4double radius_spherical_source;
     G4ThreeVector center_spherical_source;
+    G4Navigator* fLinearNavigator;
+    G4PhysicsOrderedFreeVector* theAccumulatedDepthVector;
+    //G4PhysicsOrderedFreeVector* theAccumulatedCSDepthVector;
+
+    //Disable copy constructor and assignement operator
+    G4AdjointPrimaryGenerator(const G4AdjointPrimaryGenerator&);
+    G4AdjointPrimaryGenerator& operator=(const G4AdjointPrimaryGenerator&);
+
+
+
 };
 #endif
 

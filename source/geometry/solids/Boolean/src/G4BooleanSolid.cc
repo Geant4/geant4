@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4BooleanSolid.cc 83572 2014-09-01 15:23:27Z gcosmo $
 //
 // Implementation for the abstract base class for solids created by boolean 
 // operations between other solids
@@ -41,6 +41,13 @@
 #include "HepPolyhedronProcessor.h"
 #include "Randomize.hh"
 
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
+}
+
 //////////////////////////////////////////////////////////////////
 //
 // Constructor
@@ -50,7 +57,7 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
                                 G4VSolid* pSolidB   ) :
   G4VSolid(pName), fAreaRatio(0.), fStatistics(1000000), fCubVolEpsilon(0.001),
   fAreaAccuracy(-1.), fCubicVolume(0.), fSurfaceArea(0.),
-  fpPolyhedron(0), createdDisplacedSolid(false)
+  fRebuildPolyhedron(false), fpPolyhedron(0), createdDisplacedSolid(false)
 {
   fPtrSolidA = pSolidA ;
   fPtrSolidB = pSolidB ;
@@ -67,7 +74,7 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
                                 const G4ThreeVector& transVector    ) :
   G4VSolid(pName), fAreaRatio(0.), fStatistics(1000000), fCubVolEpsilon(0.001),
   fAreaAccuracy(-1.), fCubicVolume(0.), fSurfaceArea(0.),
-  fpPolyhedron(0), createdDisplacedSolid(true)
+  fRebuildPolyhedron(false), fpPolyhedron(0), createdDisplacedSolid(true)
 {
   fPtrSolidA = pSolidA ;
   fPtrSolidB = new G4DisplacedSolid("placedB",pSolidB,rotMatrix,transVector) ;
@@ -83,7 +90,7 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
                                 const G4Transform3D& transform    ) :
   G4VSolid(pName), fAreaRatio(0.), fStatistics(1000000), fCubVolEpsilon(0.001),
   fAreaAccuracy(-1.), fCubicVolume(0.), fSurfaceArea(0.),
-  fpPolyhedron(0), createdDisplacedSolid(true)
+  fRebuildPolyhedron(false), fpPolyhedron(0), createdDisplacedSolid(true)
 {
   fPtrSolidA = pSolidA ;
   fPtrSolidB = new G4DisplacedSolid("placedB",pSolidB,transform) ;
@@ -98,7 +105,7 @@ G4BooleanSolid::G4BooleanSolid( __void__& a )
   : G4VSolid(a), fPtrSolidA(0), fPtrSolidB(0), fAreaRatio(0.),
     fStatistics(1000000), fCubVolEpsilon(0.001), 
     fAreaAccuracy(-1.), fCubicVolume(0.), fSurfaceArea(0.),
-    fpPolyhedron(0), createdDisplacedSolid(false)
+    fRebuildPolyhedron(false), fpPolyhedron(0), createdDisplacedSolid(false)
 {
 }
 
@@ -112,7 +119,7 @@ G4BooleanSolid::~G4BooleanSolid()
   {
     ((G4DisplacedSolid*)fPtrSolidB)->CleanTransformations();
   }
-  delete fpPolyhedron;
+  delete fpPolyhedron; fpPolyhedron = 0;
 }
 
 ///////////////////////////////////////////////////////////////
@@ -124,7 +131,7 @@ G4BooleanSolid::G4BooleanSolid(const G4BooleanSolid& rhs)
     fAreaRatio(rhs.fAreaRatio),
     fStatistics(rhs.fStatistics), fCubVolEpsilon(rhs.fCubVolEpsilon),
     fAreaAccuracy(rhs.fAreaAccuracy), fCubicVolume(rhs.fCubicVolume),
-    fSurfaceArea(rhs.fSurfaceArea), fpPolyhedron(0),
+    fSurfaceArea(rhs.fSurfaceArea), fRebuildPolyhedron(false), fpPolyhedron(0),
     createdDisplacedSolid(rhs.createdDisplacedSolid)
 {
 }
@@ -151,6 +158,8 @@ G4BooleanSolid& G4BooleanSolid::operator = (const G4BooleanSolid& rhs)
   fAreaAccuracy= rhs.fAreaAccuracy; fCubicVolume= rhs.fCubicVolume;
   fSurfaceArea= rhs.fSurfaceArea; fpPolyhedron= 0;
   createdDisplacedSolid= rhs.createdDisplacedSolid;
+  fRebuildPolyhedron = false;
+  delete fpPolyhedron; fpPolyhedron = 0;
 
   return *this;
 }  
@@ -258,11 +267,15 @@ G4ThreeVector G4BooleanSolid::GetPointOnSurface() const
 G4Polyhedron* G4BooleanSolid::GetPolyhedron () const
 {
   if (!fpPolyhedron ||
+      fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())
     {
+      G4AutoLock l(&polyhedronMutex);
       delete fpPolyhedron;
       fpPolyhedron = CreatePolyhedron();
+      fRebuildPolyhedron = false;
+      l.unlock();
     }
   return fpPolyhedron;
 }

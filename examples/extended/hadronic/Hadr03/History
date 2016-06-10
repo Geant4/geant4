@@ -1,4 +1,4 @@
-$Id: History 78108 2013-12-03 14:53:10Z gcosmo $
+$Id: History 86892 2014-11-20 08:24:16Z gcosmo $
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -13,6 +13,44 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+19-10-14 mma (exhadr03-V10-00-09)
+- cosmetic in envHadronic.csh
+	 
+14-10-14 mma (exhadr03-V10-00-08)
+- particleCount : corrections for MT
+	 
+06-10-14 mma (exhadr03-V10-00-07)
+- nThreads as third argument in main
+	 	 
+06-10-14 mma (exhadr03-V10-00-06)
+- PhysicsList : add G4IonElasticPhysics constructor
+	 
+18-09-14 mma (exhadr03-V10-00-05)
+- Hadr03.cc : SetNumberOfThreads(G4Threading::G4GetNumberOfCores())
+- Fixed test in envHadronic.sh
+     
+07-04-14 mma (exhadr03-V10-00-04)
+- Register RunMessenger in RunAction instead of Run
+	 
+05-04-14 mma (exhadr03-V10-00-03)
+- Histograms: change numbering scheme. Add histo of atomic mass
+- EndOfRun: introduce optional print and UI command to control it
+- refresh nFission.mac
+     
+25-03-14 mma (exhadr03-V10-00-02)
+- Cosmetic when printing EndOfRun
+      
+26-02-14 mma (exhadr03-V10-00-01)
+- PhysicsList: use G4HadronElasticPhysicsHP 
+     
+14-12-13 mma (exhadr03-V10-00-00)
+- DetectorConstruction: remove magfield
+- MT: add ActionInitialization. Modify Hadr03.cc
+- MT: add Run. Modify RunAction, SteppingAction
+- remove EventAction and its messenger
+- define a stucture for nuclear channel data
+- put a flag for target name="XXXX"
 
 02-12-13  I.Hrivnacova (exhadr03-V09-06-23)
 - Updated .README for changes in README

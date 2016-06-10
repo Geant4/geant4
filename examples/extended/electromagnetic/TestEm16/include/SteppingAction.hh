@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm16/include/SteppingAction.hh
 /// \brief Definition of the SteppingAction class
 //
-// $Id: SteppingAction.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: SteppingAction.hh 84365 2014-10-14 12:43:52Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,20 +37,15 @@
 #include "G4UserSteppingAction.hh"
 #include "globals.hh"
 
-class RunAction;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class SteppingAction : public G4UserSteppingAction
 {
 public:
-  SteppingAction(RunAction*);
+  SteppingAction();
  ~SteppingAction();
 
   virtual void UserSteppingAction(const G4Step*);
-
-private:
-  RunAction*    fRunAction;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

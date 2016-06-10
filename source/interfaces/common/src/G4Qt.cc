@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Qt.cc 74547 2013-10-14 12:51:17Z gcosmo $
+// $Id: G4Qt.cc 79026 2014-02-12 09:53:32Z gcosmo $
 //
 // L. Garnier
 
@@ -153,6 +153,22 @@ G4Qt::G4Qt (
   }
 #endif
   //  AddDispatcher     ((G4DispatchFunction)XtDispatchEvent);
+  
+  /*
+   * On some non-English locale, comma is used for the decimal separator instead of dot
+   * bringing to weird behavior of strtod (string to double) function in user application.
+   * This is "by design" from Qt, see https://bugreports.qt-project.org/browse/QTBUG-10994
+   *
+   *      $ LC_NUMERIC=fr_FR.UTF-8 ./qtstrtod
+   *      strtod(0.1) = 0
+   *      $ LC_NUMERIC=C ./qtstrtod
+   *      strtod(0.1) = 0.1
+   *
+   * Jerome Suhard, jerome@suhard.fr
+   */
+
+  // explicitly set the LC_NUMBERIC locale to "C"
+  setlocale (LC_NUMERIC, "C");
 }
 /***************************************************************************/
 G4Qt::~G4Qt (

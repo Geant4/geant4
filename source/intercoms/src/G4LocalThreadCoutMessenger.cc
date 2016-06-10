@@ -95,6 +95,14 @@ G4LocalThreadCoutMessenger::G4LocalThreadCoutMessenger()
   ignoreCmd->SetParameterName("threadID",true);
   ignoreCmd->SetDefaultValue(0);
   ignoreCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  ignoreInitCmd = new G4UIcmdWithABool("/control/cout/ignoreInitializationCout",this);
+  ignoreInitCmd->SetGuidance("Omit cout from threads during initialization, as they should be identical to the masther thread.");
+  ignoreInitCmd->SetGuidance("This command takes effect only if cout destination is screen without buffering.");
+  ignoreInitCmd->SetGuidance("This command does not affect to cerr.");
+  ignoreInitCmd->SetParameterName("IgnoreInit",true);
+  ignoreInitCmd->SetDefaultValue(true);
+  ignoreInitCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 G4LocalThreadCoutMessenger::~G4LocalThreadCoutMessenger()
@@ -104,6 +112,7 @@ G4LocalThreadCoutMessenger::~G4LocalThreadCoutMessenger()
   delete bufferCoutCmd;
   delete prefixCmd;
   delete ignoreCmd;
+  delete ignoreInitCmd;
   delete coutDir;
 }
 
@@ -130,5 +139,7 @@ void G4LocalThreadCoutMessenger::SetNewValue(G4UIcommand* command,G4String newVa
   { UI->SetThreadPrefixString(newVal); }
   else if(command == ignoreCmd)
   { UI->SetThreadIgnore(StoI(newVal)); }
+  else if(command == ignoreInitCmd)
+  { UI->SetThreadIgnoreInit(StoB(newVal)); }
 }
 

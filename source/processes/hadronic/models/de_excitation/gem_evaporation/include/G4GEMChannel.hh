@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GEMChannel.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4GEMChannel.hh 86986 2014-11-21 13:00:05Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -42,9 +42,9 @@
 #include "G4NucleiProperties.hh"
 #include "Randomize.hh"
 #include "G4ParticleTable.hh"
-#include "G4IonTable.hh"
 
 class G4Pow;
+class G4PairingCorrection;
 
 class G4GEMChannel : public G4VEvaporationChannel
 {
@@ -59,7 +59,11 @@ public:
     
   virtual G4double GetEmissionProbability(G4Fragment* theNucleus);
 
+  virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
+
   virtual G4FragmentVector * BreakUp(const G4Fragment & theNucleus);
+
+  virtual void Dump() const;
 
   inline void SetLevelDensityParameter(G4VLevelDensityParameter * aLevelDensity)
   {
@@ -68,24 +72,13 @@ public:
     MyOwnLevelDensity = false;
   }
 
-  inline G4double GetMaximalKineticEnergy(void) const
-  { return MaximalKineticEnergy; }
-  
 private: 
-    
-  // Calculate Binding Energy for separate fragment from nucleus
-  G4double CalcBindingEnergy(G4int anA, G4int aZ);
-
-  // Calculate maximal kinetic energy that can be carried by fragment (in MeV)
-  G4double CalcMaximalKineticEnergy(G4double U);
 
   // Samples fragment kinetic energy.
-  G4double CalcKineticEnergy(const G4Fragment & fragment);
+  G4double SampleKineticEnergy(const G4Fragment & fragment);
 
   // This has to be removed and put in Random Generator
   G4ThreeVector IsotropicVector(G4double Magnitude  = 1.0);
-
-private:
 
   G4GEMChannel(const G4GEMChannel & right);  
   const G4GEMChannel & operator=(const G4GEMChannel & right);
@@ -117,6 +110,8 @@ private:
   // For Coulomb Barrier calculation
   G4VCoulombBarrier * theCoulombBarrierPtr;
   G4double CoulombBarrier;
+
+  G4PairingCorrection* pairingCorrection;
     
   //---------------------------------------------------
     
@@ -135,8 +130,6 @@ private:
 
   // Maximal Kinetic Energy that can be carried by fragment
   G4double MaximalKineticEnergy;
-
-
 };
 
 

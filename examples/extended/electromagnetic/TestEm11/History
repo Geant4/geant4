@@ -1,4 +1,4 @@
-$Id: History 77288 2013-11-22 10:52:58Z gcosmo $
+$Id: History 85273 2014-10-27 09:10:59Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,27 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+23-10-14 mma (testem11-V10-00-04)
+- PhysListEmStandard : msc algorithm fUseSafetyPlus
 
+22-10-14 mma (testem11-V10-00-03)
+- PhysicsList : added G4EmStandardPhysicsSS
+- TestEm11.cc : option set nThreads via command
+	 
+11-09-14 mma (testem11-V10-00-02)
+- TestEm11.cc : SetNumberOfThreads(G4Threading::G4GetNumberOfCores())
+
+22-06-14 mma (testem11-V10-00-01)
+- remove PhysicsList::SetCuts(). Update macros
+
+17-12-13 mma (testem11-V10-00-00)
+- Run::SetPrimary(particle, ekin)
+- Run::EndOfRun()
+- Set "ToBeBroadcasted == false" for UI commands that modify physics lsit
+  and detector since these should be executed only by master
+- HistoManager: remove hbook  
+        
 21-11-13 A.Dotti      (testem11-V09-06-17)
 - Correctly call G4RunManager::ReinitializeGeometry or 
   PhysicsHasBeenModified

@@ -6,15 +6,15 @@
 /control/verbose 2
 /run/verbose 2
 #
-###/testhadr/det/setIsotopeMat B10 5 10 2.46 g/cm3
+/testhadr/det/setIsotopeMat B10 5 10 2.46 g/cm3
 ###/testhadr/det/setIsotopeMat B11 5 11 2.46 g/cm3
-/testhadr/det/setMat G4_B 
+###/testhadr/det/setMat G4_B 
 /testhadr/det/setSize 100 km
 #
 /run/initialize
 #
 /gun/particle neutron
-/gun/energy 10 keV
+/gun/energy 1 eV
 #
 /process/list
 /process/inactivate hadElastic
@@ -22,11 +22,11 @@
 /process/inactivate nFission
 #
 /analysis/setFileName nCapture
-/analysis/h1/set 2  100  0. 70 keV	#recoil ion
-/analysis/h1/set 3  100  0. 15 MeV	#gamma
-/analysis/h1/set 11 100  0. 70 MeV	#Q
-/analysis/h1/set 12 100  0. 15 MeV	#Pbalance
+/analysis/h1/set 2  100  0. 15 MeV	#gamma
+/analysis/h1/set 7  100  0. 70 keV	#nuclei
+/analysis/h1/set 10 100  0. 70 MeV	#Q
+/analysis/h1/set 11 100  0. 15 MeV	#Pbalance
 #
-/testhadr/event/printModulo 10000
+/run/printProgress 10000
 #
 /run/beamOn 100000

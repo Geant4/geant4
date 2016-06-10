@@ -1,7 +1,7 @@
 #------------------------------------------------------------------------------
 # sources.cmake
 # Module : G4csg
-# Package: Geant4.src.G4geometry..G4csg
+# Package: Geant4.src.G4geometry.G4csg
 #
 # Sources description for a library.
 # Lists the sources and headers of the code explicitely.
@@ -11,17 +11,17 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 76263 2013-11-08 11:41:52Z gcosmo $
+# $Id: sources.cmake 85608 2014-10-31 11:23:30Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
 # List external includes needed.
 include_directories(${CLHEP_INCLUDE_DIRS})
+include_directories(${USOLIDS_INCLUDE_DIRS})
 
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/usolids/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPNumerics/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
@@ -62,6 +62,7 @@ GEANT4_DEFINE_MODULE(NAME G4csg
         G4UCons.hh
         G4UOrb.hh
         G4USphere.hh
+        G4UTrap.hh
         G4UTrd.hh
         G4UTubs.hh
     SOURCES
@@ -81,6 +82,7 @@ GEANT4_DEFINE_MODULE(NAME G4csg
         G4UCons.cc
         G4UOrb.cc
         G4USphere.cc
+        G4UTrap.cc
         G4UTrd.cc
         G4UTubs.cc
     GRANULAR_DEPENDENCIES
@@ -96,6 +98,7 @@ GEANT4_DEFINE_MODULE(NAME G4csg
         G4graphics_reps
         G4intercoms
     LINK_LIBRARIES
+        ${USOLIDS_LIBRARIES}
 )
 
 # List any source specific properties here

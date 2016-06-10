@@ -40,9 +40,6 @@
 
 #5) Run a wls event
 /control/execute wls.mac
-#/optics_engine/selectOpProcess OpBoundary
-#/optics_engine/setOpProcessVerbose 1
-#/tracking/verbose 1
 /run/beamOn
 
 #You will see a number of green and red trajectories drawn. The green ones

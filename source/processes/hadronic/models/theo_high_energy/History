@@ -14,6 +14,32 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+6-Nov-2014, G.Folger                    (had-theo-HE-V10-00-07)
+- remove G4LMsdGenerator and G4LMsdChannel also in source.cmake
+
+6-Nov-2014, V.Grichine, G.Folger        (had-theo-HE-V10-00-06)
+- remove G4LMsdGenerator and G4LMsdChannel
+
+15-Oct-2014, V. Grichine:               (had-theo-HE-V10-00-05)
+- G4LMsdGenerator and G4LMsdChannel were added 
+  to provide interface to inelastic single diffraction dissociation
+
+1-July-2014, Gunter Folger              (had-theo-HE-V10-00-04)
+- Updates to ModelDescription(); updated text and recurse to propagate.
+
+2-June-2014, Gunter Folger              (had-theo-HE-V10-00-03)
+- one extra G4ParticleDefinition* made const, even if not required.
+
+19-May-2014, Gunter Folger              (had-theo-HE-V10-00-02)
+- fix left over non const G4ParticleDefinition * in G4QuasiElasticChannel
+
+05-March-2014, Gunter Folger            (had-theo-HE-V10-00-01)
+- G4TheoFSGenerator: remove const_cast for ParticleDefinition and
+   simplify code.
+ 
+29-Jan-2014, Gunter Folger              (had-theo-HE-V10-00-00)
+- Removed models/common from sources.cmake
+
 16-July-2013   G. Cosmo       hadr-theo-HE-V09-06-05
 -  Correction to CMake scripts for granular build.
 

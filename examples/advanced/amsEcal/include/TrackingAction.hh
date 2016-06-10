@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingAction.hh 73008 2013-08-15 08:43:13Z gcosmo $
+// $Id: TrackingAction.hh 83418 2014-08-21 15:30:47Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,14 +35,13 @@
 #include "globals.hh"
 
 class DetectorConstruction;
-class RunAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(DetectorConstruction*,RunAction*);
+    TrackingAction(DetectorConstruction*);
     
    ~TrackingAction() {};
    
@@ -51,7 +50,6 @@ class TrackingAction : public G4UserTrackingAction {
     
   private:
     DetectorConstruction*   detector;
-    RunAction*              runAct;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

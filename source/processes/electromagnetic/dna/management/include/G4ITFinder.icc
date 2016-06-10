@@ -1,0 +1,380 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id$
+//
+// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
+//
+// WARNING : This class is released as a prototype.
+// It might strongly evolve or even disapear in the next releases.
+//
+// History:
+// -----------
+// 10 Oct 2011 M.Karamitros created
+//
+// -------------------------------------------------------------------
+
+TEMPLATE
+G4ThreadLocal G4ITMANAGER * G4ITMANAGER::fInstance(0);
+
+TEMPLATE
+G4ITMANAGER * G4ITMANAGER::Instance()
+{
+  if (!fInstance) fInstance = new G4ITFinder();
+
+  return fInstance;
+}
+
+TEMPLATE G4ITMANAGER::G4ITFinder() : G4VITFinder()
+{
+  fVerbose = 0;
+  G4AllITFinder::Instance()->RegisterManager(this);
+}
+
+TEMPLATE G4ITMANAGER::~G4ITFinder()
+{
+  Clear();
+  fInstance = 0;
+}
+
+TEMPLATE
+void G4ITMANAGER::Clear()
+{
+  {
+
+    TreeMap::iterator it;
+
+    for (it = fTree.begin(); it != fTree.end(); it++)
+    {
+      if (it->second) delete it->second;
+    }
+
+    fTree.clear();
+  }
+}
+
+TEMPLATE
+void G4ITMANAGER::iUpdatePositionMap()
+{
+  fInstance->UpdatePositionMap();
+}
+
+TEMPLATE
+void G4ITMANAGER::Push(G4Track* track)
+{
+  /*
+   * If you want to use this class with another type than G4Molecule
+   * inheriting as well from G4IT, replace T::GetMolecule by GetIT
+   * and aIT->GetMoleculeID by GetSubITType
+   */
+  T* aIT = T::GetMolecule(track);
+  aIT->RecordCurrentPositionNTime();
+
+  int key = aIT->GetMoleculeID();
+
+  if (!(aIT->GetNode()))
+  {
+    G4KDNode_Base* node = 0;
+
+     TreeMap::iterator it_fTree = fTree.find(key);
+
+    if (it_fTree != fTree.end())
+    {
+      node = it_fTree->second->Insert(aIT);
+    }
+    else
+    {
+      G4KDTree* aTree = new G4KDTree();
+      fTree.insert(std::make_pair(key, aTree));
+      node = aTree->Insert(aIT);
+    }
+
+    aIT->SetNode(node);
+  }
+}
+
+TEMPLATE
+G4KDTreeResultHandle G4ITMANAGER::FindNearest(const G4ThreeVector& position,
+    const T* key)
+{
+   TreeMap::iterator it = fTree.find(key->GetMoleculeID());
+  if (it != fTree.end()) return it->second->Nearest(position);
+  else
+  {
+    return 0;
+  }
+  return 0;
+}
+
+TEMPLATE
+G4KDTreeResultHandle G4ITMANAGER::FindNearest(const T* point0,
+    const T* key)
+{
+  if (*point0 == *key)
+  {
+    // DEBUG
+    // G4cout << "Equal keys !"<< G4endl;
+    G4KDNode_Base* node0 = point0->GetNode();
+
+    if (node0 == 0)
+    {
+      G4ExceptionDescription exceptionDescription(
+          "Bad request : no node found in the IT you are searching "
+          "closest neighbourg for");
+      G4Exception("G4ITManager::FindNearest", "ITManager002",
+          FatalErrorInArgument, exceptionDescription);
+      return 0; // coverity
+    }
+
+    TreeMap::iterator it = fTree.find(key->GetMoleculeID());
+    if (it != fTree.end())
+    {
+      G4KDTreeResultHandle output(it->second->Nearest(node0));
+
+      if (!output)
+      {
+        /*
+         * G4cout << "NO OUTPUT "
+         * << point0->GetName()
+         * << " " << key -> GetName()
+         * << G4endl;
+         */
+        return 0;
+      }
+      // G4cout << "OUTPUT" << G4endl;
+      return output;
+    }
+    else
+    {
+      // DEBUG
+      // G4cout << "Pas trouve dans la map"<< key->GetName() << G4endl;
+      return 0;
+    }
+  }
+  else
+  {
+    // DEBUG
+    // G4cout << "Not equal keys !"<< G4endl;
+    // const G4ThreeVector& position = point0->GetTrack()->GetPosition() ;
+    TreeMap::iterator it = fTree.find(key->GetMoleculeID());
+
+    if (it != fTree.end())
+    {
+      G4KDTreeResultHandle output(it->second->Nearest(*point0));
+      if (!output)
+      {
+        //                G4cout << "NO OUTPUT" << G4endl;
+        return 0;
+      }
+
+      //                G4cout << "OUTPUT" << G4endl;
+      return output;
+    }
+    else
+    {
+      // DEBUG
+      // G4cout << "Pas trouve dans la map : "<< key->GetName() << G4endl;
+      return 0;
+    }
+  }
+  return 0;
+}
+
+TEMPLATE
+G4KDTreeResultHandle
+G4ITMANAGER::FindNearestInRange(const G4ThreeVector& position,
+    const T* key,
+    G4double R)
+{
+  TreeMap::iterator it = fTree.find(key->GetMoleculeID());
+  if (it != fTree.end()) return it->second->NearestInRange(position, R);
+  else
+  {
+    return 0;
+  }
+  return 0;
+}
+
+TEMPLATE
+G4KDTreeResultHandle G4ITMANAGER::FindNearestInRange(const T* point0,
+    const T* key,
+    G4double R)
+{
+  if (*point0 == *key)
+  {
+    G4KDNode_Base* node0 = point0->GetNode();
+    TreeMap::iterator it = fTree.find(key->GetMoleculeID());
+    if (it != fTree.end()) return it->second->NearestInRange(node0, R);
+    else
+    {
+      return 0;
+    }
+  }
+  else
+  {
+    TreeMap::iterator it = fTree.find(key->GetMoleculeID());
+    if (it != fTree.end()) return it->second->NearestInRange(*point0, R);
+    else
+    {
+      return 0;
+    }
+  }
+  return 0;
+}
+
+//#define DEBUG_MEM
+
+#ifdef DEBUG_MEM
+#include "G4MemStat.hh"
+using namespace G4MemStat;
+#endif
+
+TEMPLATE
+void G4ITMANAGER::UpdatePositionMap()
+{
+  G4KDTree* currentTree = 0;
+  G4IT* currentIT = 0;
+  G4KDNode_Base* currentNode = 0;
+
+#if defined (DEBUG_MEM)
+  MemStat mem_first, mem_second, mem_diff;
+#endif
+
+#if defined (DEBUG_MEM)
+  mem_first = MemoryUsage();
+#endif
+
+  std::map<int,PriorityList*>& listMap = G4ITTrackHolder::Instance()->GetLists();
+  std::map<int,PriorityList*>::iterator it = listMap.begin();
+  std::map<int,PriorityList*>::iterator end = listMap.end();
+
+  TreeMap::iterator it_Tree;
+
+  for (; it!= end; it++)
+  {
+    currentTree = 0;
+    int key = it->first;
+    it_Tree = fTree.find(key);
+
+    // G4cout << "Box : " << it_Box->first.GetName() << G4endl;
+    // G4cout << "N tracks : " << currentBox->GetNTrack() << G4endl;
+
+    // G4cout << "Will update : " << it_Box->first.GetName() <<G4endl;
+    if (it_Tree != fTree.end())
+    {
+      currentTree = it_Tree->second;
+      if (currentTree)
+      {
+        currentTree->Clear();
+        //delete currentTree;
+        //currentTree = 0;
+
+#if defined (DEBUG_MEM)
+        mem_second = MemoryUsage();
+        mem_diff = mem_second-mem_first;
+        G4cout << "\t || MEM || G4ITMANAGER::UpdatePositionMap || "
+        "after currentTree->Clear(), diff is : " << mem_diff << G4endl;
+#endif
+      }
+    }
+
+    PriorityList* listUnion=it->second;
+
+    if(listUnion == 0 || listUnion->GetMainList() == 0
+        || listUnion->GetMainList()->empty() )
+    {
+#if defined (DEBUG_MEM)
+      mem_second = MemoryUsage();
+      mem_diff = mem_second-mem_first;
+      G4cout << "\t || MEM || G4ITMANAGER::UpdatePositionMap || "
+      "In if(currentBox->Empty()), diff is : " << mem_diff << G4endl;
+#endif
+
+      continue;
+    }
+    else
+    {
+      if (currentTree == 0)
+      {
+        currentTree = new G4KDTree();
+        fTree[key] = currentTree;
+
+//        G4cout << "**** " << "Create new tree for : " << key.GetName()
+//        << G4endl;
+
+#if defined (DEBUG_MEM)
+        mem_second = MemoryUsage();
+        mem_diff = mem_second-mem_first;
+        G4cout << "\t || MEM || G4ITMANAGER::UpdatePositionMap || "
+        "after creating tree, diff is : " << mem_diff << G4endl;
+#endif
+      }
+
+      G4TrackList* trackList = listUnion->GetMainList();
+      G4TrackList::iterator __it = trackList->begin();
+      G4TrackList::iterator __end = trackList->end();
+      // int i = 0;
+
+      // G4cout << "Box : " << key.GetName() << G4endl;
+      // G4cout << "N tracks : " << currentBox->GetNTrack() << G4endl;
+
+      for (; __it != __end; __it++)//, i++)
+      {
+        // G4cout << i << G4endl;
+        // G4cout << "track "
+        //        << currentIT->GetTrack()->GetTrackID()
+        //        << G4endl;
+        currentIT = GetIT(*__it);
+        currentNode = currentTree->Insert(currentIT);
+
+        /*G4KDNode_Base* */
+//        currentNode = currentTree->InsertMap(currentIT);
+//        if(currentIT->GetNode())
+//        {
+//          delete currentIT->GetNode();
+        // No need: deleted when tree is cleared
+//        }
+        currentIT->SetNode(currentNode);
+
+#if defined (DEBUG_MEM)
+        mem_second = MemoryUsage();
+        mem_diff = mem_second-mem_first;
+        G4cout << "\t || MEM || G4ITMANAGER::UpdatePositionMap || "
+        "after currentIT->SetNode(currentNode), diff is : "
+        << mem_diff << G4endl;
+#endif
+      }
+
+#if defined (DEBUG_MEM)
+      mem_second = MemoryUsage();
+      mem_diff = mem_second-mem_first;
+      G4cout << "\t || MEM || G4ITMANAGER::UpdatePositionMap || "
+      "In else{...}, diff is : " << mem_diff << G4endl;
+#endif
+
+    }
+//    currentTree->Build();
+  }
+}

@@ -41,9 +41,10 @@
 #include "G4DataVector.hh"
 #include "G4FluoTransition.hh"
 
-G4FluoData::G4FluoData()
+G4FluoData::G4FluoData(const G4String& dir)
 {
   numberOfVacancies=0; 
+  fluoDirectory = dir;
 }
 
 G4FluoData::~G4FluoData()
@@ -76,7 +77,10 @@ G4int G4FluoData::VacancyId(G4int vacancyIndex) const
 {
   G4int n = -1;
   if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies)
-    {G4Exception("G4FluoData::vacancyId()","de0002",FatalErrorInArgument,"vacancyIndex outside boundaries");}
+    {
+      G4Exception("G4FluoData::vacancyId()","de0002",FatalErrorInArgument,
+		  "vacancyIndex outside boundaries");
+    }
   else
     {
       std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
@@ -95,7 +99,8 @@ size_t G4FluoData::NumberOfTransitions(G4int vacancyIndex) const
   G4int n = 0;
   if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies)
     {
-      G4Exception("G4FluoData::NumberOfTransitions()","de0002",JustWarning,"vacancyIndex outside boundaries, energy deposited locally");
+      G4Exception("G4FluoData::NumberOfTransitions()","de0002",JustWarning,
+		  "vacancyIndex outside boundaries, energy deposited locally");
       return 0;
     }
   else
@@ -112,8 +117,10 @@ G4int G4FluoData::StartShellId(G4int initIndex, G4int vacancyIndex) const
  G4int n = -1;
 
  if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies)
-    {G4Exception("G4FluoData::StartShellId()","de0002",FatalErrorInArgument,"vacancyIndex outside boundaries");
-    }
+   {
+     G4Exception("G4FluoData::StartShellId()","de0002",FatalErrorInArgument,
+		 "vacancyIndex outside boundaries");
+   }
  else
    {
      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
@@ -123,13 +130,12 @@ G4int G4FluoData::StartShellId(G4int initIndex, G4int vacancyIndex) const
      G4DataVector dataSet = *((*pos).second);
    
      G4int nData = dataSet.size();
-     //The first Element of idMap's dataSets is the original shell of the vacancy, 
-     //so we must start from the first element of dataSet
- if (initIndex >= 0 && initIndex < nData)
-	    {
-	      n =  (G4int) dataSet[initIndex+1];
-	    
-	    }
+     // The first Element of idMap's dataSets is the original shell of 
+     // the vacancy, so we must start from the first element of dataSet
+     if (initIndex >= 0 && initIndex < nData)
+       {
+	 n =  (G4int) dataSet[initIndex+1];   
+       }
    }
  return n;
 }
@@ -139,22 +145,23 @@ G4double G4FluoData::StartShellEnergy(G4int initIndex, G4int vacancyIndex) const
   G4double n = -1;
   
   if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies)
-    {G4Exception("G4FluoData::StartShellEnergy()","de0002",FatalErrorInArgument,"vacancyIndex outside boundaries");}
- else
-   {
-     std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
+    {
+      G4Exception("G4FluoData::StartShellEnergy()","de0002",FatalErrorInArgument,
+		  "vacancyIndex outside boundaries");}
+  else
+    {
+      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
      
-     pos = energyMap.find(vacancyIndex);
+      pos = energyMap.find(vacancyIndex);
      
-     G4DataVector dataSet = *((*pos).second);
+      G4DataVector dataSet = *((*pos).second);
      
-     G4int nData = dataSet.size();
-     if (initIndex >= 0 && initIndex < nData)
-       {
-	 n =  dataSet[initIndex];
-	 
-       }
-   }
+      G4int nData = dataSet.size();
+      if (initIndex >= 0 && initIndex < nData)
+	{
+	  n =  dataSet[initIndex];
+	}
+    }
   return n;
 }
 
@@ -164,23 +171,23 @@ G4double G4FluoData::StartShellProb(G4int initIndex, G4int vacancyIndex) const
 
   if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies)
     {
-      G4Exception("G4FluoData::StartShellEnergy()","de0002",JustWarning,"vacancyIndex outside boundaries, energy deposited locally");
+      G4Exception("G4FluoData::StartShellEnergy()","de0002",JustWarning,
+		  "vacancyIndex outside boundaries, energy deposited locally");
       return 0;
-}
+    }
   else
     {
-     std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
+      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
      
-     pos = probabilityMap.find(vacancyIndex);
+      pos = probabilityMap.find(vacancyIndex);
      
-     G4DataVector dataSet = *((*pos).second);
+      G4DataVector dataSet = *((*pos).second);
      
-     G4int nData = dataSet.size();
-     if (initIndex >= 0 && initIndex < nData)
-       {
-	 n =  dataSet[initIndex];
-	 
-       }
+      G4int nData = dataSet.size();
+      if (initIndex >= 0 && initIndex < nData)
+	{
+	  n =  dataSet[initIndex];
+	}
     }
   return n;
 }
@@ -188,13 +195,12 @@ G4double G4FluoData::StartShellProb(G4int initIndex, G4int vacancyIndex) const
 void G4FluoData::LoadData(G4int Z)
 { 
   // Build the complete string identifying the file with the data set
-  
   std::ostringstream ost;
   if(Z != 0){
-    ost << "fl-tr-pr-"<< Z << ".dat";
+    ost << "/fl-tr-pr-"<< Z << ".dat";
   }
   else{
-    ost << "fl-tr-pr-"<<".dat"; 
+    ost << "/fl-tr-pr-"<<".dat"; 
   }
   G4String name(ost.str());
   
@@ -207,8 +213,7 @@ void G4FluoData::LoadData(G4int Z)
     }
   
   G4String pathString(path);
-  G4String fluor("/fluor/");
-  G4String dirFile = pathString + fluor + name;
+  G4String dirFile = pathString + fluoDirectory + name;
   std::ifstream file(dirFile);
   std::filebuf* lsdp = file.rdbuf();
   
@@ -267,8 +272,7 @@ void G4FluoData::LoadData(G4int Z)
 	delete transProbabilities;
 	}*/ 
     else
-      {
-	
+      {	
 	if(k%nColumns == 2)
 	  {	 
 	    // 2nd column is transition  probabilities
@@ -299,7 +303,7 @@ void G4FluoData::LoadData(G4int Z)
 
 	    if (a != -1) 
 	      {G4double e = a * MeV;
-	      transEnergies->push_back(e);}
+		transEnergies->push_back(e);}
 	   
 	    k=1;
 	  }
@@ -315,7 +319,6 @@ void G4FluoData::LoadData(G4int Z)
 
 void G4FluoData::PrintData() 
 {
-  
   for (G4int i = 0; i <numberOfVacancies; i++)
     {
       G4cout << "---- TransitionData for the vacancy nb "
@@ -339,42 +342,3 @@ void G4FluoData::PrintData()
 	     << G4endl;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

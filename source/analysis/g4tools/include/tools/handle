@@ -1,0 +1,83 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_handle
+#define tools_handle
+
+#ifdef TOOLS_MEM
+#include "mem"
+#endif
+
+#include <string>
+
+namespace tools {
+
+class base_handle {
+  static const std::string& s_class() {
+    static const std::string s_v("tools::handle");
+    return s_v;
+  }
+public:  
+  virtual void* object() const = 0;
+  virtual base_handle* copy() = 0; //can't be const.
+  virtual void disown() = 0;
+public:  
+  base_handle(){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~base_handle(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  base_handle(base_handle&){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+private:
+  //base_handle(const base_handle&){}
+  //base_handle& operator=(const base_handle&){return *this;}
+  base_handle& operator=(base_handle&){return *this;}
+};
+
+template <class T>
+class handle : public base_handle {
+  typedef base_handle parent;
+public:  
+  virtual void* object() const {return m_obj;}
+  virtual base_handle* copy() {return new handle<T>(*this);}
+  virtual void disown() {m_owner = false;}
+public:  
+  handle(T* a_obj,bool a_owner = true)
+  :parent()
+  ,m_obj(a_obj),m_owner(a_owner){}
+  virtual ~handle(){if(m_owner) delete m_obj;}
+private:
+  handle(handle& a_from):parent(a_from){
+    m_obj = a_from.m_obj;
+    if(a_from.m_owner) {
+      // this take ownership.
+      m_owner = true;
+      a_from.m_owner = false;
+    } else {
+      m_owner = false;
+    }
+    //a_from.m_obj = 0; //we do not remove the obj ref in a_from.    
+  }
+private:
+  // in principle the below are not used.
+  //handle(const handle& a_from){}
+  //handle& operator=(const handle&){return *this;}
+  handle& operator=(handle&){return *this;}
+protected:
+  T* m_obj;
+  bool m_owner;
+};
+
+}
+
+#endif

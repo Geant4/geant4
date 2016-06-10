@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnalysisMessenger.hh 68794 2013-04-05 13:23:26Z gcosmo $
+// $Id: GammaRayTelAnalysisMessenger.hh 82268 2014-06-13 13:47:30Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -38,7 +38,6 @@
 // ************************************************************
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-#ifdef G4ANALYSIS_USE
 #ifndef GammaRayTelAnalysisMessenger_h
 #define GammaRayTelAnalysisMessenger_h 1
 
@@ -65,7 +64,6 @@ private:
   
   G4UIcmdWithAString*        Histo2DModeCmd;
 };
-#endif
 #endif
 
 

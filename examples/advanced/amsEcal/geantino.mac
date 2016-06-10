@@ -1,8 +1,6 @@
-# $Id: geantino.mac 68740 2013-04-05 09:56:39Z gcosmo $
+# $Id: geantino.mac 83010 2014-07-24 14:53:07Z gcosmo $
 #
 # Macro file for "amsEcal.cc"
-#
-# Geantinos allows to measure nb of radLengths of calorimeter
 #
 /control/verbose 2
 /run/verbose 2
@@ -11,13 +9,7 @@
 #
 /ams/gun/setDefault
 /gun/particle geantino
-/ams/gun/beam 10 mm	# +- 0.5*beam
 #
-/ams/histo/setFileName nradl/nradl.g3geom
-/ams/histo/setFileType hbook
+/tracking/verbose 1
 #
-/ams/histo/setHisto 5 100  12. 22. none
-#
-/ams/event/printModulo 4000
-#
-/run/beamOn 40000
+/run/beamOn 

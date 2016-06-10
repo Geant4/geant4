@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiElasticChannel.cc 70688 2013-06-04 09:01:01Z gcosmo $
+// $Id: G4QuasiElasticChannel.cc 81565 2014-06-03 08:42:52Z gcosmo $
 //
 
 // Author : Gunter Folger March 2007
@@ -107,11 +107,11 @@ G4KineticTrackVector * G4QuasiElasticChannel::Scatter(G4Nucleus &theNucleus,
     index=G4lrint((A-1)*G4UniformRand());
   } while (index < 0 || index >= static_cast<G4int>(nucleons.size()));
 
-  G4ParticleDefinition * pDef= nucleons[index].GetDefinition();
+  const G4ParticleDefinition * pDef= nucleons[index].GetDefinition();
 
   G4int resA=A - 1;
   G4int resZ=Z - static_cast<int>(pDef->GetPDGCharge());
-  G4ParticleDefinition* resDef;
+  const G4ParticleDefinition* resDef;
   G4double residualNucleusMass;
   if(resZ)
   {

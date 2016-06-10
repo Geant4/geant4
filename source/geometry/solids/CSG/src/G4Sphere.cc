@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc 76263 2013-11-08 11:41:52Z gcosmo $
+// $Id: G4Sphere.cc 83572 2014-09-01 15:23:27Z gcosmo $
 //
 // class G4Sphere
 //
@@ -70,7 +70,6 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4VisExtent.hh"
-#include "G4Polyhedron.hh"
 
 using namespace CLHEP;
 

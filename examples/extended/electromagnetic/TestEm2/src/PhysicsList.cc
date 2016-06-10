@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm2/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 75118 2013-10-28 09:40:24Z gcosmo $
+// $Id: PhysicsList.cc 82293 2014-06-13 15:23:19Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,6 +43,7 @@
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
+#include "G4EmLowEPPhysics.hh"
 
 #include "G4DecayPhysics.hh"
 #include "StepMax.hh"
@@ -53,23 +54,21 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
-#include "G4Threading.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() 
- : G4VModularPhysicsList(),fEmPhysicsList(0),fMessenger(0)
+ : G4VModularPhysicsList(),fEmPhysicsList(0),fDecay(0),fMessenger(0)
 {
-  G4LossTableManager::Instance();
-  SetDefaultCutValue(1*mm);
-
-  fMessenger = new PhysicsListMessenger(this);
   SetVerboseLevel(1);
+  fMessenger = new PhysicsListMessenger(this);
 
   // EM physics
   fEmName = "emstandard_opt0";  
   fEmPhysicsList = new G4EmStandardPhysics();
   fDecay = new G4DecayPhysics();
+  
+  G4LossTableManager::Instance();
+  SetDefaultCutValue(1*mm);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -93,7 +92,7 @@ void PhysicsList::ConstructParticle()
 
 void PhysicsList::ConstructProcess()
 {
-  if (verboseLevel>-1) {
+  if (verboseLevel > -1) {
     G4cout << "PhysicsList::ConstructProcess start" << G4endl;
   }
   // transportation
@@ -169,6 +168,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmLivermorePhysics();
 
+  } else if (name == "emlowenergy"){
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmLowEPPhysics();
+
   } else {
 
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
@@ -194,21 +198,6 @@ void PhysicsList::AddStepMax()
           pmanager ->AddDiscreteProcess(stepMaxProcess);
         }
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCuts()
-{
-#ifdef G4MULTITHREADED
-  if(G4Threading::IsWorkerThread()) {
-    if(verboseLevel>1) { DumpCutValuesTable(); }
-  } else {
-    if(verboseLevel>0) { DumpCutValuesTable(); }
-  }
-#else
-  if(verboseLevel>0) { DumpCutValuesTable(); }
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

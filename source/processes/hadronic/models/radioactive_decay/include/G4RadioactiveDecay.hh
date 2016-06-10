@@ -102,7 +102,7 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     G4bool IsApplicable(const G4ParticleDefinition&);
 
     // Return decay table if it exists, if not, load it from file
-    G4DecayTable* GetDecayTable(G4ParticleDefinition*);
+    G4DecayTable* GetDecayTable(const G4ParticleDefinition*);
 
     // Select a logical volume in which RDM applies
     void SelectAVolume(const G4String aVolume);
@@ -157,7 +157,7 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
        {return theRadioactivityTables;}
     // Return vector of G4Radioactivity map - should be used in VR mode only
 
-    G4DecayTable* LoadDecayTable(G4ParticleDefinition& theParentNucleus);
+    G4DecayTable* LoadDecayTable(const G4ParticleDefinition& theParentNucleus);
     // Load the decay data of isotope theParentNucleus
 
     void AddUserDecayDataFile(G4int Z, G4int A,G4String filename);
@@ -231,7 +231,7 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     }
 
     // Force direction (random within half-angle) for "visible" daughters
-    // (applies to electrons, positrons, gammas, neutrons, or alphas)
+    // (applies to electrons, positrons, gammas, neutrons, protons or alphas)
 
     void BuildPhysicsTable(const G4ParticleDefinition &);
 
@@ -240,9 +240,9 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     G4VParticleChange* DecayIt(const G4Track& theTrack,
                                const G4Step&  theStep);
 
-    G4DecayProducts* DoDecay(G4ParticleDefinition& theParticleDef);
+    G4DecayProducts* DoDecay(const G4ParticleDefinition& theParticleDef);
 
-    // Apply directional bias for "visible" daughters (e+-, gamma, n, alpha)
+    // Apply directional bias for "visible" daughters (e+-, gamma, n, p, alpha)
     void CollimateDecay(G4DecayProducts* products);
     void CollimateDecayProduct(G4DynamicParticle* product);
     G4ThreeVector ChooseCollimationDirection() const;
@@ -253,7 +253,7 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     G4double GetMeanLifeTime(const G4Track& theTrack,
                              G4ForceCondition* condition);
 
-    G4double GetTaoTime(const G4double,const G4double);
+    G4double GetTaoTime(const G4double, const G4double);
 
     G4double GetDecayTime();
 
@@ -301,7 +301,7 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
 
     // for the radioactivity tables
     std::vector<G4RadioactivityTable*> theRadioactivityTables;
-    G4int decayWindows[99];
+    G4int decayWindows[100];
     static const G4double levelTolerance;
 
     //User define radioactive decay data files replacing some files in the G4RADECAY database

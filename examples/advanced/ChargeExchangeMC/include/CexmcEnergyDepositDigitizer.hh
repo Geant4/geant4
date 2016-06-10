@@ -45,9 +45,8 @@
 #define CEXMC_ENERGY_DEPOSIT_DIGITIZER_HH
 
 #include <iosfwd>
-
-#include <CLHEP/Units/SystemOfUnits.h>
 #include <G4VDigitizerModule.hh>
+#include <G4SystemOfUnits.hh>
 #include "CexmcEnergyDepositStore.hh"
 #include "CexmcSimpleRangeWithValue.hh"
 #include "CexmcException.hh"
@@ -480,7 +479,7 @@ inline void  CexmcEnergyDepositDigitizer::AddCrystalResolutionRange(
 
     /* range boundaries are given in GeV */
     crystalResolutionData.push_back( CexmcEnergyRangeWithDoubleValue(
-                                            bottom * CLHEP::GeV, top * CLHEP::GeV, value ) );
+                                            bottom * GeV, top * GeV, value ) );
 }
 
 

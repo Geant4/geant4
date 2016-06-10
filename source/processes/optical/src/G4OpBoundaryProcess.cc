@@ -117,6 +117,8 @@ G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName,
         theEfficiency   =  0.;
         theTransmittance = 0.;
 
+        theSurfaceRoughness = 0.;
+
         prob_sl = 0.;
         prob_ss = 0.;
         prob_bs = 0.;
@@ -298,6 +300,8 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         theEfficiency   =  0.;
         theTransmittance = 0.;
 
+        theSurfaceRoughness = 0.;
+
         theModel = glisur;
         theFinish = polished;
 
@@ -393,6 +397,11 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                       PropertyPointer->Value(thePhotonMomentum);
               }
 
+              if (aMaterialPropertiesTable->
+                                     ConstPropertyExists("SURFACEROUGHNESS"))
+                 theSurfaceRoughness = aMaterialPropertiesTable->
+                                         GetConstProperty("SURFACEROUGHNESS");
+
 	      if ( theModel == unified ) {
 	        PropertyPointer =
 		aMaterialPropertiesTable->GetProperty("SPECULARLOBECONSTANT");
@@ -459,12 +468,6 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	  DielectricMetal();
 
-          // Uncomment the following lines if you wish to have 
-          //         Transmission instead of Absorption
-          // if (theStatus == Absorption) {
-          //    return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
-          // }
-
 	}
         else if (type == dielectric_LUT) {
 
@@ -483,8 +486,15 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
              DielectricDielectric();
           }
 	  else {
-             if ( !G4BooleanRand(theReflectivity) ) {
-                DoAbsorption();
+             G4double rand = G4UniformRand();
+             if ( rand > theReflectivity ) {
+                if (rand > theReflectivity + theTransmittance) {
+                   DoAbsorption();
+                } else {
+                   theStatus = Transmission;
+                   NewMomentum = OldMomentum;
+                   NewPolarization = OldPolarization;
+                }
              }
              else {
                 if ( theFinish == polishedfrontpainted ) {
@@ -519,7 +529,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	aParticleChange.ProposeMomentumDirection(NewMomentum);
 	aParticleChange.ProposePolarization(NewPolarization);
 
-        if ( theStatus == FresnelRefraction ) {
+        if ( theStatus == FresnelRefraction || theStatus == Transmission ) {
            G4MaterialPropertyVector* groupvel =
            Material2->GetMaterialPropertiesTable()->GetProperty("GROUPVEL");
            G4double finalVelocity = groupvel->Value(thePhotonMomentum);
@@ -535,6 +545,8 @@ void G4OpBoundaryProcess::BoundaryProcessVerbose() const
 {
         if ( theStatus == Undefined )
                 G4cout << " *** Undefined *** " << G4endl;
+        if ( theStatus == Transmission )
+                G4cout << " *** Transmission *** " << G4endl;
         if ( theStatus == FresnelRefraction )
                 G4cout << " *** FresnelRefraction *** " << G4endl;
         if ( theStatus == FresnelReflection )
@@ -694,15 +706,16 @@ void G4OpBoundaryProcess::DielectricMetal()
 
            n++;
 
-           if( !G4BooleanRand(theReflectivity) && n == 1 ) {
-
-             // Comment out DoAbsorption and uncomment theStatus = Absorption;
-             // if you wish to have Transmission instead of Absorption
-
-             DoAbsorption();
-             // theStatus = Absorption;
-             break;
-
+           G4double rand = G4UniformRand();
+           if ( rand > theReflectivity && n == 1 ) {
+              if (rand > theReflectivity + theTransmittance) {
+                DoAbsorption();
+              } else {
+                theStatus = Transmission;
+                NewMomentum = OldMomentum;
+                NewPolarization = OldPolarization;
+              }
+              break;
            }
            else {
 
@@ -790,8 +803,17 @@ void G4OpBoundaryProcess::DielectricLUT()
         G4int phiIndexMax   = OpticalSurface->GetPhiIndexMax();
 
         do {
-           if ( !G4BooleanRand(theReflectivity) ) // Not reflected, so Absorbed
-              DoAbsorption();
+           G4double rand = G4UniformRand();
+           if ( rand > theReflectivity ) {
+              if (rand > theReflectivity + theTransmittance) {
+                 DoAbsorption();
+              } else {
+                 theStatus = Transmission;
+                 NewMomentum = OldMomentum;
+                 NewPolarization = OldPolarization;
+              }
+              break;
+           }
            else {
               // Calculate Angle between Normal and Photon Momentum
               G4double anglePhotonToNormal = 
@@ -869,12 +891,35 @@ void G4OpBoundaryProcess::DielectricDichroic()
                        "A dichroic surface must have an associated G4Physics2DVector");
         }
 
-        if ( !G4BooleanRand(theTransmittance) ) // Not transmitted, so reflect
-           DoReflection();
-        else {
+        if ( !G4BooleanRand(theTransmittance) ) { // Not transmitted, so reflect
+
+           if ( theModel == glisur || theFinish == polished ) {
+              DoReflection();
+           } else {
+              ChooseReflection();
+              if ( theStatus == LambertianReflection ) {
+                 DoReflection();
+              } else if ( theStatus == BackScattering ) {
+                 NewMomentum = -OldMomentum;
+                 NewPolarization = -OldPolarization;
+              } else {
+                do {
+                   if (theStatus==LobeReflection)
+                      theFacetNormal = GetFacetNormal(OldMomentum,theGlobalNormal);
+                   G4double PdotN = OldMomentum * theFacetNormal;
+                   NewMomentum = OldMomentum - (2.*PdotN)*theFacetNormal;
+                } while (NewMomentum * theGlobalNormal <= 0.0);
+                G4double EdotN = OldPolarization * theFacetNormal;
+                NewPolarization = -OldPolarization + (2.*EdotN)*theFacetNormal;
+              }
+           }
+
+        } else {
+
            theStatus = Dichroic;
            NewMomentum = OldMomentum;
            NewPolarization = OldPolarization;
+
         }
 }
 
@@ -882,6 +927,15 @@ void G4OpBoundaryProcess::DielectricDielectric()
 {
 	G4bool Inside = false;
 	G4bool Swap = false;
+
+        G4bool SurfaceRoughnessCriterionPass = 1;
+        if (theSurfaceRoughness != 0. && Rindex1 > Rindex2) {
+           G4double wavelength = h_Planck*c_light/thePhotonMomentum;
+           G4double SurfaceRoughnessCriterion =
+             std::exp(-std::pow((4*pi*theSurfaceRoughness*Rindex1*cost1/wavelength),2));
+           SurfaceRoughnessCriterionPass = 
+                                     G4BooleanRand(SurfaceRoughnessCriterion);
+        }
 
 	leap:
 
@@ -926,6 +980,9 @@ void G4OpBoundaryProcess::DielectricDielectric()
 	      if (Swap) Swap = !Swap;
 
               theStatus = TotalInternalReflection;
+
+              if ( !SurfaceRoughnessCriterionPass ) theStatus =
+                                                       LambertianReflection;
 
 	      if ( theModel == unified && theFinish != polished )
 						     ChooseReflection();
@@ -998,6 +1055,9 @@ void G4OpBoundaryProcess::DielectricDielectric()
                  if (Swap) Swap = !Swap;
 
 		 theStatus = FresnelReflection;
+
+                 if ( !SurfaceRoughnessCriterionPass ) theStatus =
+                                                          LambertianReflection;
 
 		 if ( theModel == unified && theFinish != polished )
 						     ChooseReflection();
@@ -1089,8 +1149,15 @@ void G4OpBoundaryProcess::DielectricDielectric()
           if( theFinish == polishedbackpainted ||
               theFinish == groundbackpainted ) {
 
-	      if( !G4BooleanRand(theReflectivity) ) {
-		DoAbsorption();
+              G4double rand = G4UniformRand();
+              if ( rand > theReflectivity ) {
+                 if (rand > theReflectivity + theTransmittance) {
+		    DoAbsorption();
+                 } else {
+                    theStatus = Transmission;
+                    NewMomentum = OldMomentum;
+                    NewPolarization = OldPolarization;
+                 }
               }
 	      else {
 		if (theStatus != FresnelRefraction ) {

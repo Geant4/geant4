@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPrimaryGeneratorMessenger.cc 66508 2012-12-19 10:16:45Z gcosmo $
+// $Id: GammaRayTelPrimaryGeneratorMessenger.cc 82630 2014-07-01 09:43:00Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -87,7 +87,7 @@ GammaRayTelPrimaryGeneratorMessenger::GammaRayTelPrimaryGeneratorMessenger
   SourceGenCmd->SetGuidance("  Choice : true(native), false(GPS)");
   SourceGenCmd->SetParameterName("choice",true);
   SourceGenCmd->SetDefaultValue((G4bool)true);
-  SourceGenCmd->AvailableForStates(G4State_PreInit);
+  SourceGenCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
 }
 

@@ -71,6 +71,7 @@
 
 class G4VSensitiveDetector;
 
+G4bool G4Transportation::fUseMagneticMoment=false;
 //////////////////////////////////////////////////////////////////////////
 //
 // Constructor
@@ -96,11 +97,11 @@ G4Transportation::G4Transportation( G4int verbosity )
     fNoLooperTrials( 0 ),
     fSumEnergyKilled( 0.0 ), fMaxEnergyKilled( 0.0 ), 
     fShortStepOptimisation( false ), // Old default: true (=fast short steps)
-    fUseMagneticMoment( false ),
     fVerboseLevel( verbosity )
 {
   // set Process Sub Type
   SetProcessSubType(static_cast<G4int>(TRANSPORTATION));
+  pParticleChange= &fParticleChange;   // Required to conform to G4VProcess 
 
   G4TransportationManager* transportMgr ; 
 
@@ -305,8 +306,10 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      G4double       lengthAlongCurve ;
 
      G4ChargeState chargeState(particleCharge,             // The charge can change (dynamic)
-                               pParticleDef->GetPDGSpin(),
-                               magneticMoment); 
+                               magneticMoment,
+                               pParticleDef->GetPDGSpin() ); 
+     // For insurance, could set it again
+     // chargeState.SetPDGSpin(pParticleDef->GetPDGSpin() );   // Provisionally in same object
 
      G4EquationOfMotion* equationOfMotion = 
      (fFieldPropagator->GetChordFinder()->GetIntegrationDriver()->GetStepper())
@@ -317,16 +320,19 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
                                               momentumMagnitude,
                                               restMass);
       
-     G4ThreeVector spin        = track.GetPolarization() ;
      G4FieldTrack  aFieldTrack = G4FieldTrack( startPosition, 
+                                               track.GetGlobalTime(), // Lab.
+                                               // track.GetProperTime(), // Particle rest frame
                                                track.GetMomentumDirection(),
-                                               0.0, 
                                                track.GetKineticEnergy(),
                                                restMass,
-                                               track.GetVelocity(),
-                                               track.GetGlobalTime(), // Lab.
-                                               track.GetProperTime(), // Part.
-                                               &spin                  ) ;
+                                               particleCharge, 
+                                               track.GetPolarization(), 
+                                               pParticleDef->GetPDGMagneticMoment(),
+                                               0.0,                    // Length along track
+                                               pParticleDef->GetPDGSpin()
+        ) ;
+
      if( currentMinimumStep > 0 ) 
      {
         // Do the Transport in the field (non recti-linear)
@@ -804,4 +810,13 @@ G4Transportation::StartTracking(G4Track* aTrack)
   // Update the current touchable handle  (from the track's)
   //
   fCurrentTouchableHandle = aTrack->GetTouchableHandle();
+}
+
+#include "G4CoupledTransportation.hh"
+G4bool G4Transportation::EnableUseMagneticMoment(G4bool useMoment)
+{
+  G4bool lastValue= fUseMagneticMoment;
+  fUseMagneticMoment= useMoment;
+  G4CoupledTransportation::fUseMagneticMoment= useMoment;
+  return lastValue;
 }

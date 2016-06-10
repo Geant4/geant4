@@ -23,13 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: exgps.cc 76468 2013-11-11 10:27:19Z gcosmo $
+// $Id: exgps.cc 85307 2014-10-27 14:19:10Z gcosmo $
 //
 /// \file eventgenerator/exgps/exgps.cc
 /// \brief Main program of the eventgenerator/exgps example
 //
-#include "G4RunManager.hh"
-#include "G4UImanager.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -47,43 +47,39 @@
 #include "G4UIExecutive.hh"
 #endif
 
+#include "GeometryConstruction.hh"
+#include "PhysicsList.hh"
+#include "ActionInitialization.hh"
 
-#include "exGPSGeometryConstruction.hh"
-#include "exGPSPhysicsList.hh"
-#include "exGPSPrimaryGeneratorAction.hh"
-#include "exGPSRunAction.hh"
-#include "exGPSEventAction.hh"
-#include "exGPSActionInitialization.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 int main(int argc,char** argv) {
 
   // Construct the default run manager
 #ifdef G4MULTITHREADED
-  G4int nThreads = 4;
   G4MTRunManager * runManager = new G4MTRunManager;
+  G4int nThreads = G4Threading::G4GetNumberOfCores();
+  if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);   
   runManager->SetNumberOfThreads(nThreads);
 #else
   G4RunManager * runManager = new G4RunManager;
 #endif
 
   // set mandatory initialization classes
-  exGPSGeometryConstruction* detector = new exGPSGeometryConstruction;
+  GeometryConstruction* detector = new GeometryConstruction;
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new exGPSPhysicsList);
-  runManager->SetUserInitialization(new exGPSActionInitialization());
+  runManager->SetUserInitialization(new PhysicsList);
   
-  //Initialize G4 kernel
-  runManager->Initialize();
+  runManager->SetUserInitialization(new ActionInitialization);
     
-  // visualization manager
 #ifdef G4VIS_USE
+  // visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
     
   // get the pointer to the User Interface manager 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();  
-  // UI->ApplyCommand("/control/execute display.mac");    
 
   if (argc!=1)   // batch mode
     {
@@ -91,20 +87,27 @@ int main(int argc,char** argv) {
       G4String fileName = argv[1];
       UImanager->ApplyCommand(command+fileName);    
     }
-  else
-    {  // interactive mode : define UI session
+  else          // interactive mode : define UI session
+    {
 #ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-      ui->SessionStart();
-      delete ui;
+     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+#ifdef G4VIS_USE
+     UImanager->ApplyCommand("/control/execute vis.mac");
+#endif             
+     ui->SessionStart();
+     delete ui;
 #endif
+     
+#ifdef G4VIS_USE
+     delete visManager;
+#endif    
     }
 
   // job termination
-#ifdef G4VIS_USE
-  delete visManager;
-#endif
+  //
   delete runManager;
   
   return 0;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 

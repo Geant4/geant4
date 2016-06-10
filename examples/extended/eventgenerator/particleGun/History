@@ -1,4 +1,4 @@
-$Id: History 72243 2013-07-12 08:45:36Z gcosmo $
+$Id: History 85032 2014-10-23 10:04:32Z gcosmo $
 -----------------------------------------------------
 
      =========================================================
@@ -12,7 +12,25 @@ summarize all major modifications introduced in the code and keep
 track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
+	 
+21-10-14 mma (particleGunExample-V10-00-05) 
+- mv /run/initialize in macros
 
+20-10-14 mma (particleGunExample-V10-00-04) 
+- particleGun.cc: nThreads via commands
+
+26-09-14 mma (particleGunExample-V10-00-03) 
+- migration to MT: add class ActionInitialization
+	 
+22-09-14 mma (particleGunExample-V10-00-02) 
+- add PrimaryGeneratorAction0 class and run0.mac
+
+21-09-14 mma (particleGunExample-V10-00-01) 
+- simplify histograms
+
+01-09-14 mma (particleGunExample-V10-00-00) 
+- modify plots of angles
+   
 11-07-13 I.Hrivnacova (particleGunExample-V09-06-06) 
 - In HistoManager: use new analysis manager method SetH1Activation()   
      

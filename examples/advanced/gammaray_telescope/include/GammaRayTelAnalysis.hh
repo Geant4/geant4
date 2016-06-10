@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifdef G4ANALYSIS_USE
 //
-// $Id: GammaRayTelAnalysis.hh 68794 2013-04-05 13:23:26Z gcosmo $
+// $Id: GammaRayTelAnalysis.hh 82268 2014-06-13 13:47:30Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -108,7 +107,7 @@ private:
 private:
   static GammaRayTelAnalysis* instance;
 
-  GammaRayTelDetectorConstruction*    GammaRayTelDetector;
+  const GammaRayTelDetectorConstruction*    GammaRayTelDetector;
 
   G4String histo2DMode;
   G4String histoFileName;
@@ -117,5 +116,4 @@ private:
 };
 
 
-#endif
 #endif

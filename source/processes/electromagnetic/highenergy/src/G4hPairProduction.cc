@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hPairProduction.cc 72943 2013-08-14 13:40:29Z gcosmo $
+// $Id: G4hPairProduction.cc 85013 2014-10-23 09:45:07Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -47,6 +47,7 @@
 #include "G4hPairProduction.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4hPairProductionModel.hh"
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -84,8 +85,9 @@ void G4hPairProduction::InitialiseEnergyLossProcess(
     if(limit > lowestKinEnergy) { lowestKinEnergy = limit; }
 
     G4VEmFluctuationModel* fm = 0;
-    EmModel()->SetLowEnergyLimit(MinKinEnergy());
-    EmModel()->SetHighEnergyLimit(MaxKinEnergy());
+    G4EmParameters* param = G4EmParameters::Instance();
+    EmModel()->SetLowEnergyLimit(param->MinKinEnergy());
+    EmModel()->SetHighEnergyLimit(param->MaxKinEnergy());
     AddEmModel(1, EmModel(), fm);
   }
 }

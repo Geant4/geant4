@@ -3,72 +3,152 @@ History File, 2004/02/27 G.A.P. Cirrone, Created
 cirrone@lns.infn.it
 http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 -------------------------------------------------------------------------------
-
+ 
          ====================================================
              History file of the Hadrontherapy application
-         ====================================================
+         ====================================================	    
+27.10.2014 A. Tramontana Tag: hadrontherapy-V10-00-09
+           - README update.
+27.10.2014 L. Pandola, A. Tramontana Tag: hadrontherapy-V10-00-08
+           - Local definition of Step Max process.
+27.10.2014 L. Pandola, A. Tramontana, Tag: hadrontherapy-V10-00-07
+           - Lock for the file reading, to avoid simultaneous accesses.
+24.10.2014 A. Tramontana, Tag: hadrontherapy-V10-00-06
+           - Removed /vis/ command call for batch mode.
+22.10.2014 A. Tramontana, Tag: hadrontherapy-V10-00-05
+           - Bug solved. Removed MasterGPS in HadrontherapyActionInitialization.cc
+21.10.2014 A. Tramontana, Tag: hadrontherapy-V10-00-04
+           - Testing of the laser driven beam line.
+20.10.2014 A. Tramontana, Tag: hadrontherapy-V10-00-03
+           - Fixed timeout problem and other things which caused failure of tag V10-00-02
+16.10.2014 G.A.P. Cirrone; F. Romano; A. Tramontana; Tag: hadrontherapy-V10-00-02
+	   -ConstructSDandField() has been added in LaserDrivenBeamLine.cc. Master GPS temporary added in HadrontherapyActionInitialization.cc
+           - Add the no fringing field maps for the quadrupole system. Different macro commands for the LaserDrivenBeamLine has been updated.
+           - Add the field map for the energy selector system with shifted central dipoles.
+           - Add the macro inputFC.mac for the Faraday Cup input and removed the old electric field map
+           - Added code to write output files in HadrontherapySteppingAction class
+           - New map of the Electric field of Faraday Cup has been added
+           - FaradayCup.cc and FaradayCup.hh files have been removed
+           - FaradayCup complete geometry has been added in LaserDrivenBeamLine class
+	   - FaradayCup detector has been added in the LaserDrivenBeamLine file
+           - The Electric field of a typical Faraday Cup has been added in the /field folder;
+	   - The LaserDrivenBeamLine has been created. It is made of ESS + Quadrupoles.
+	   - The EnergySelector classes have been removed
+	   - The field/ folder has been created for the magnetic and electric fields files
+	   - History file corrected in minor typos;
+	   - Main file modified where UI is called: now UI is called only is
+	     no macro file is passed as argument;
+	     When a macro file is passed, the run is considered 'in batch mode' and
+	     no UI starts.
+	   - Step max is setted bigger in the various macro files: the previous value was bringing 
+	     computation times extremely long.
+	   - Author names updated in the main() file and various minor revisions
+	   - Now the PHYSLIST enviroment variable (to define an external Reference Physics
+	     List) is correctly used also in batch mode
+	     This command must be invoked before the command line for the geometry section.
+	   - The 'batch.mac' macro file has been modified and now renamed
+	     'bachMacro.mac' to be used only in batch-mode configuration.
+	   - PhysicsLists class complety updated:
+	     	-- The G4EmStandardPhysics_option4 now substitute the G4EmStandardPhyscis_option3 builder.
+		   G4EmStandardPhysics_option4 in, at moment, the most accurate 
+		   Electromagnetic physics in Geant4
+	   	-- A new Physics List, called HADRONTHERAPY_1 and specifically implemented 
+		   for this application, has been defined. 
+		   HADONTHERAPY is defined as a collection of builders and is very similar to the QGSP_BIC_HP.
+		   Reference Physcs List. 
+		   HADRONTHERAPY_1 differs from the QGSP_BIC_HP in the followings:
+		   --> It contains G4EmStandardPhysics_option4 in place of G4EmStandardPhysics;
+		   --> It contains the builder G4RadioactiveDecayPhysics;
+	        -- The defaults for the physics models are now complete and they corresponds 
+		   to the HADROTHERAPY_1 apart that: 
+		   --> G4HadronPhysicsQGSP_BIC is used in place of G4HadronPhysicsQGSP_BIC_HP
+		   --> G4HadronElasticPhysics is used in place of G4HadronElasticPhysics_HP
+		   Physics List
+		-- Cuts messengers completely removed. Now cuts can be defined using 
+		   the commands '/run/setCut'  'run/setCutForAGivenParticle', etc.
+		-- Multiple G4Regions can now be defined in the PhysicsList class file, to apply specific
+		   CUTs values via the command '/run/setCutForRegion <G4Region Name> <Cut value>'
+		-- The new physics list HADRONTHERAPY_2 is created. This list contains the local 
+		   implementation of a specific ion-ion inelastic hadronic physics. 
+		   It use the QMD model to treat the ion-ion interactions.
+		-- Livermore and Penelope electromagnetic physics removed
+	   - HadrontherapyPhysicsLists.hh header file cleaned.
+	   - Corrected the command moving the simulated .root file to the experimental folder in the 
+	     defaultMcro.mac and batch.mac macro files
+	   - The 'LocalINCLIonIonInelasticPhysic' has been removed
+	   - The 'defaultMacro.mac', 'defaultMacroWithReferencePhysicsList.mac' and 'bachMacro.mac' have 
+	     been competely updated and adapted to the new physics list
+	   - Migration to MT have been done.
+	     
+13.02.2014 L.Pandola;	Tag: hadrontherapy-V10-00-01
+           - Fix bug (missing inizialization) producing the problem 
+             observed with x86_64-mac108-gcc42. Remove debug printout
 
-11.11.2013 F.Romano;      Tag: hadrontherapy-V09-06-08
+12.02.2014 L.Pandola; 	Tag: hadrontherapy-V10-00-00
+	   - Trying to debug problem observed with x86_64-mac108-gcc42
+             (added debugging printout)
+
+11.11.2013 F.Romano;	Tag: hadrontherapy-V09-06-08
            - Fixing compilation warnings for shadowing of variable
 
-08.11.2013 F.Romano;      Tag: hadrontherapy-V09-06-07
+08.11.2013 F.Romano;    Tag: hadrontherapy-V09-06-07
            - README file revised
 
-07.11.2013 L.Pandola;      Tag: hadrontherapy-V09-06-06
+07.11.2013 L.Pandola;   Tag: hadrontherapy-V09-06-06
            - Fix additional left-over dependency on LEP
 
-06.11.2013 F.Romano;       Tag: hadrontherapy-V09-06-05
+06.11.2013 F.Romano;    Tag: hadrontherapy-V09-06-05
            - Fixing dependencies on LEP package
 
-05.11.2013 F.Romano;       Tag: hadrontherapy-V09-06-04
+05.11.2013 F.Romano;    Tag: hadrontherapy-V09-06-04
            - Fixing compilation warning in HadrontherapyLet class
 
-04.11.2013 F.Romano;       Tag: hadrontherapy-V09-06-03
+04.11.2013 F.Romano;    Tag: hadrontherapy-V09-06-03
            - Included class for average LET computations
 
-31.07.2013 A.Dotti;        Tag: hadrontherapy-V09-06-02
+31.07.2013 A.Dotti;     Tag: hadrontherapy-V09-06-02
            - Fixing compilation warnings from clang32 (unused private
              data filed): in case of no ROOT found
 
-30.07.2013 A.Dotti;        Tag: hadrontherapy-V09-06-01
+30.07.2013 A.Dotti;     Tag: hadrontherapy-V09-06-01
            - Fixing compilation warnings from clang32 (unused private 
              data filed)
 
-03.02.2013 V.Ivanchenko;   Tag: hadrontherapy-V09-06-00
+03.02.2013 V.Ivanchenko; Tag: hadrontherapy-V09-06-00
            - Renamed hadronic physics class
 
-29.11.2012 G.Cosmo;        Tag: hadrontherapy-V09-05-13
+29.11.2012 G.Cosmo;      Tag: hadrontherapy-V09-05-13
            - More fixes for variable shadowing related to use of ROOT.
 
-28.11.2012 G.Cosmo;        Tag: hadrontherapy-V09-05-12
+28.11.2012 G.Cosmo;      Tag: hadrontherapy-V09-05-12
            - Fixed cases of variable shadowing.
 
-16.11.2012 F.Romano;       Tag: hadrontherapy-V09-05-11
+16.11.2012 F.Romano;     Tag: hadrontherapy-V09-05-11
            - In macro files included generic command for visualization vis/open OGL where needed.
 
-08.11.2012 F.Romano;       Tag: hadrontherapy-V09-05-10
+08.11.2012 F.Romano;     Tag: hadrontherapy-V09-05-10
            - hadrontherapy.cc: fixed problem for referencePhysList if condition.
 	   - README revised.
 	   
-29.10.2012 F.Romano;       Tag: hadrontherapy-V09-05-09
+29.10.2012 F.Romano;     Tag: hadrontherapy-V09-05-09
            - Added explicit inclusion of units and constants headers where missing.
 	   - Executable renamed to the same name of the directory to avoid possible
 	     problems with Mac/WIN (thanks to Ivana for the suggestion).
 
-26.10.2012 F.Romano;       Tag: hadrontherapy-V09-05-08
+26.10.2012 F.Romano;     Tag: hadrontherapy-V09-05-08
            - Fixed region volume problem.
 
-25.10.2012 F.Romano;       Tag: hadrontherapy-V09-05-07
+25.10.2012 F.Romano;     Tag: hadrontherapy-V09-05-07
            - Included GPS in batch.mac and minor changes.
 
-24.10.2012 F.Romano;       Tag: hadrontherapy-V09-05-06
+24.10.2012 F.Romano;     Tag: hadrontherapy-V09-05-06
            - Added explicit inclusion of units and constants headers in new file.
 
-24.10.2012 A.Ribon;       Tag: hadrontherapy-V09-05-05
+24.10.2012 A.Ribon;      Tag: hadrontherapy-V09-05-05
            - Migrated to the new stopping physics.
 
 23.10.2012 F.Romano;       Tag: hadrontherapy-V09-05-04
-           - Remove IAEA detetctor and related files
+           - Removed IAEA detector and related files
 	   - Added Carbon beam line
 	   - Fixed system of units issues
 	   - Added GPS

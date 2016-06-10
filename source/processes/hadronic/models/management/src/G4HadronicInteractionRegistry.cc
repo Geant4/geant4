@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicInteractionRegistry.cc 66872 2013-01-15 01:25:57Z japost $
+// $Id: G4HadronicInteractionRegistry.cc 82440 2014-06-20 10:39:49Z gcosmo $
 //
 // 23-Jan-2009 V.Ivanchenko make the class to be a singleton
 // 17-Aug-2012 V.Ivanchenko added hadronic model factories
@@ -116,4 +116,21 @@ G4HadronicInteractionRegistry::FindModel(const G4String& name)
     }
   }
   return model;
+}
+
+std::vector<G4HadronicInteraction*>
+G4HadronicInteractionRegistry::FindAllModels(const G4String& name)
+{
+  std::vector<G4HadronicInteraction*> models;
+
+  size_t nModels = allModels.size(); 
+  for (size_t i=0; i<nModels; ++i) {
+    G4HadronicInteraction* p = allModels[i]; 
+    if(p) {
+      if (p->GetModelName() == name) { 
+        models.push_back(p);
+      }
+    }
+  }
+  return models;
 }

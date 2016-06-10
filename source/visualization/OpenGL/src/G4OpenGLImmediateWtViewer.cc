@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWtViewer.cc 75567 2013-11-04 11:35:11Z gcosmo $
+// $Id: G4OpenGLImmediateWtViewer.cc 85263 2014-10-27 08:58:31Z gcosmo $
 //
 //
 // Class G4OpenGLImmediateWtViewer : a class derived from G4OpenGLWtViewer and
@@ -36,6 +36,7 @@
 #include "G4OpenGLImmediateSceneHandler.hh"
 
 #include "G4ios.hh"
+#define G4DEBUG_VIS_OGL 1
 
 G4OpenGLImmediateWtViewer::G4OpenGLImmediateWtViewer
 (G4OpenGLImmediateSceneHandler& sceneHandler,
@@ -49,10 +50,8 @@ G4OpenGLImmediateWtViewer::G4OpenGLImmediateWtViewer
 
 {
 // Create a new drawer
-  fWtDrawer = new G4OpenGLWtDrawer(this);
-  
   // register the WtDrawer to the OpenGLViewer
-  setWtDrawer(fWtDrawer);
+  setVboDrawer(new G4OpenGLVboDrawer(this,"OGL-ES"));
 
   // Add the GL Widget to its parent
   aParent->addWidget(this);
@@ -205,16 +204,16 @@ void G4OpenGLImmediateWtViewer::resizeGL(
   glViewport(0, 0, width, height);
 
   // Set projection matrix to some fixed values
-  Wt::WMatrix4x4 proj;
+/*  Wt::WMatrix4x4 proj;
   proj.perspective(45, ((double)width)/height, 1, 40);
-  glUniformMatrix4(pMatrixUniform_, proj);
+  glUniformMatrix4(fpMatrixUniform, proj);
+*/
+  SetView();
   //  updateWWidget();
 }
 
 
 void G4OpenGLImmediateWtViewer::paintGL() {
-// FIXME : for test
-  glClearColor(0.1234, 0.1234, 0.1234, 0.1234);
 
   if (fIsRepainting) {
     //    return ;
@@ -254,7 +253,37 @@ void G4OpenGLImmediateWtViewer::paintGL() {
   SetView();
 
   ClearView(); //ok, put the background correct
-  drawScene();
+  
+  // SHOULD BE REMOVED
+
+  // Configure the shader: set the uniforms
+  // Uniforms are 'configurable constants' in a shader: they are
+  // identical for every point that has to be drawn.
+  // Set the camera transformation to the value of a client-side JS matrix
+  glUniformMatrix4(fcMatrixUniform, jsMatrix_);
+  // Often, a model matrix is used to move the model around. We're happy
+  // with the location of the model, so we leave it as the unit matrix
+  Wt::WMatrix4x4 modelMatrix;
+  glUniformMatrix4(fmvMatrixUniform, modelMatrix);
+  // The next one is a bit complicated. In desktop OpenGL, a shader
+  // has the gl_NormalMatrix matrix available in the shader language,
+  // a matrix that is used to transform normals to e.g. implement proper
+  // Phong shading (google will help you to find a detailed explanation
+  // of why you need it). It is the transposed inverse of the model view
+  // matrix. Unfortunately, this matrix is not available in WebGL, so if
+  // you want to do phong shading, you must calculate it yourself.
+  // Wt provides methods to calculate the transposed inverse of a matrix,
+  // when client-side JS matrices are involved. Here, we inverse-transpose
+  // the product of the client-side camera matrix and the model matrix.
+  glUniformMatrix4(fnMatrixUniform, (jsMatrix_ * modelMatrix).inverted().transposed());
+
+  // Create a new Buffer
+  Buffer objBuffer_2 = glCreateBuffer(); //glGenBuffers(1,&objBuffer_2)
+  
+  // Bind this buffer
+  glBindBuffer(GL_ARRAY_BUFFER, objBuffer_2);
+  // SHOULD BE REMOVED END
+
 
   ComputeView();
 
@@ -264,8 +293,7 @@ void G4OpenGLImmediateWtViewer::paintGL() {
   printf("G4OpenGLImmediateQtViewer::paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ready %d\n\n\n",fReadyToPaint);
 #endif
   fIsRepainting = false;
-  // FIXME : for test
-  glClearColor(0.1234, 0.1234, 0.1234, 0.1234);
+
 }
 
 
@@ -337,164 +365,6 @@ void G4OpenGLImmediateWtViewer::FinishView()
 }
 
 
-void G4OpenGLImmediateWtViewer::SetView () {
-  
-  if (!fSceneHandler.GetScene()) {
-    return;
-  }
-  // Calculates view representation based on extent of object being
-  // viewed and (initial) viewpoint.  (Note: it can change later due
-  // to user interaction via visualization system's GUI.)
-  
-  /*
-  // Lighting.
-  GLfloat lightPosition [4];
-  lightPosition [0] = fVP.GetActualLightpointDirection().x();
-  lightPosition [1] = fVP.GetActualLightpointDirection().y();
-  lightPosition [2] = fVP.GetActualLightpointDirection().z();
-  lightPosition [3] = 0.;
-  // Light position is "true" light direction, so must come after gluLookAt.
-  GLfloat ambient [] = { 0.2, 0.2, 0.2, 1.};
-  GLfloat diffuse [] = { 0.8, 0.8, 0.8, 1.};
-//  enable (Wt::WGLWidget::LIGHT0);
-  
- G4double ratioX = 1;
-  G4double ratioY = 1;
-  if (getWinHeight() > getWinWidth()) {
-    ratioX = ((G4double)getWinHeight()) / ((G4double)getWinWidth());
-  }
-  if (getWinWidth() > getWinHeight()) {
-    ratioY = ((G4double)getWinWidth()) / ((G4double)getWinHeight());
-  }
-  
-  // Get radius of scene, etc.
-  // Note that this procedure properly takes into account zoom, dolly and pan.
-  const G4Point3D targetPoint
-  = fSceneHandler.GetScene()->GetStandardTargetPoint()
-  + fVP.GetCurrentTargetPoint ();
-  G4double radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
-  if(radius<=0.) radius = 1.;
-  const G4double cameraDistance = fVP.GetCameraDistance (radius);
-  const G4Point3D cameraPosition =
-  targetPoint + cameraDistance * fVP.GetViewpointDirection().unit();
-  const GLdouble pnear  = fVP.GetNearDistance (cameraDistance, radius);
-  const GLdouble pfar   = fVP.GetFarDistance  (cameraDistance, pnear, radius);
-  const GLdouble right  = fVP.GetFrontHalfHeight (pnear, radius) * ratioY;
-  const GLdouble left   = -right;
-  const GLdouble top    = fVP.GetFrontHalfHeight (pnear, radius) * ratioX;
-  const GLdouble bottom = -top;
-  */
-  // FIXME
-//  ResizeGLView();
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLWtViewer::SetView() resize viewport to %d %d\n",getWinWidth(),getWinHeight());
-#endif
-  glViewport(0, 0, getWinWidth(),getWinHeight());
-  //SHOULD SetWindowsSizeHint()...
-  
-/*
- glMatrixMode (GL_PROJECTION); // set up Frustum.
-  glLoadIdentity();
-  
-  const G4Vector3D scaleFactor = fVP.GetScaleFactor();
-  glScaled(scaleFactor.x(),scaleFactor.y(),scaleFactor.z());
-  if (fVP.GetFieldHalfAngle() == 0.) {
-    glOrtho (left, right, bottom, top, pnear, pfar);
-  }
-  else {
-    glFrustum (left, right, bottom, top, pnear, pfar);
-  }
-  
-  glMatrixMode (GL_MODELVIEW); // apply further transformations to scene.
-  glLoadIdentity();
- 
-  const G4Normal3D& upVector = fVP.GetUpVector ();
-  G4Point3D gltarget;
-  if (cameraDistance > 1.e-6 * radius) {
-    gltarget = targetPoint;
-  }
-  else {
-    gltarget = targetPoint - radius * fVP.GetViewpointDirection().unit();
-  }
-  
-  const G4Point3D& pCamera = cameraPosition;  // An alias for brevity.
-  gluLookAt (pCamera.x(),  pCamera.y(),  pCamera.z(),       // Viewpoint.
-             gltarget.x(), gltarget.y(), gltarget.z(),      // Target point.
-             upVector.x(), upVector.y(), upVector.z());     // Up vector.
-  
-  // Light position is "true" light direction, so must come after gluLookAt.
-  glLightfv (GL_LIGHT0, GL_POSITION, lightPosition);
-  
-  // OpenGL no longer seems to reconstruct clipped edges, so, when the
-  // BooleanProcessor is up to it, abandon this and use generic
-  // clipping in G4OpenGLSceneHandler::CreateSectionPolyhedron.  Also,
-  // force kernel visit on change of clipping plane in
-  // G4OpenGLStoredViewer::CompareForKernelVisit.
-  //if (fVP.IsSection () ) {  // pair of back to back clip planes.
-  if (false) {  // pair of back to back clip planes.
-    const G4Plane3D& sp = fVP.GetSectionPlane ();
-    double sArray[4];
-    sArray[0] = sp.a();
-    sArray[1] = sp.b();
-    sArray[2] = sp.c();
-    sArray[3] = sp.d() + radius * 1.e-05;
-    glClipPlane (CLIP_PLANE0, sArray);
-    enable (Wt::WGLWidget::CLIP_PLANE0);
-    sArray[0] = -sp.a();
-    sArray[1] = -sp.b();
-    sArray[2] = -sp.c();
-    sArray[3] = -sp.d() + radius * 1.e-05;
-    glClipPlane (CLIP_PLANE1, sArray);
-    enable (Wt::WGLWidget::CLIP_PLANE1);
-  } else {
-    disable (Wt::WGLWidget::CLIP_PLANE0);
-    disable (Wt::WGLWidget::CLIP_PLANE1);
-  }
-
-*/
-  // What we call intersection of cutaways is easy in OpenGL.  You
-  // just keep cutting.  Unions are more tricky - you have to have
-  // multiple passes and this is handled in
-  // G4OpenGLImmediate/StoredViewer::ProcessView.
-  const G4Planes& cutaways = fVP.GetCutawayPlanes();
-  size_t nPlanes = cutaways.size();
-  if (fVP.IsCutaway() &&
-      fVP.GetCutawayMode() == G4ViewParameters::cutawayIntersection &&
-      nPlanes > 0) {
-    double a[4];
-    a[0] = cutaways[0].a();
-    a[1] = cutaways[0].b();
-    a[2] = cutaways[0].c();
-    a[3] = cutaways[0].d();
-/*    glClipPlane (CLIP_PLANE2, a); 
-    enable (Wt::WGLWidget::CLIP_PLANE2); */
-    if (nPlanes > 1) {
-      a[0] = cutaways[1].a();
-      a[1] = cutaways[1].b();
-      a[2] = cutaways[1].c();
-      a[3] = cutaways[1].d();
-/*      glClipPlane (CLIP_PLANE3, a);
-      enable (Wt::WGLWidget::CLIP_PLANE3); */
-    }
-    if (nPlanes > 2) {
-      a[0] = cutaways[2].a();
-      a[1] = cutaways[2].b();
-      a[2] = cutaways[2].c();
-      a[3] = cutaways[2].d();
-/*      glClipPlane (CLIP_PLANE4, a);
-      enable (Wt::WGLWidget::CLIP_PLANE4); */
-    }
-  } else {
-/*    disable (Wt::WGLWidget::CLIP_PLANE2);
-    disable (Wt::WGLWidget::CLIP_PLANE3);
-    disable (Wt::WGLWidget::CLIP_PLANE4); */
-  }
-  
-  // Background.
-  background = fVP.GetBackgroundColour ();
-  
-}
-
 
 void G4OpenGLImmediateWtViewer::popMatrix() {
 }
@@ -519,53 +389,6 @@ void G4OpenGLImmediateWtViewer::setMatrixUniforms() {
    UniformLocation  mvUniform = getUniformLocation(shaderProgram, "uMVMatrix");
    uniformMatrix4fv(mvUniform, false, new Float32Array(mvMatrix.flatten()));
    */
-}
-
-void G4OpenGLImmediateWtViewer::wtDrawArrays(GLenum mode,int first,int nPoints, std::vector<double> a_vertices){
-  std::vector<double> data2;
-  for (int a=0; a< nPoints*3; a+=3) {
-    data2.push_back(a_vertices[a]);
-    data2.push_back(a_vertices[a+1]);
-    data2.push_back(a_vertices[a+2]);
-    data2.push_back(0);
-    data2.push_back(0);
-    data2.push_back(1);
-  }
-
-  //----------------------------
-  // Fill VBO buffer
-  //----------------------------
-  
-  // Create a new Buffer
-  Buffer objBuffer_2 = glCreateBuffer(); //glGenBuffers(1,&objBuffer_2)
-
-  VBO_Buffer.push_back(objBuffer_2);
-
-  // Bind this buffer
-  glBindBuffer(GL_ARRAY_BUFFER, objBuffer_2);
-
-  // Load data into VBO
-  glBufferDatafv(GL_ARRAY_BUFFER, data2.begin(), data2.end(), GL_STATIC_DRAW);
-  
-  
-  //----------------------------
-  // Draw VBO
-  //----------------------------
-  glBindBuffer(GL_ARRAY_BUFFER, objBuffer_2);
-
-  // Configure the vertex attributes:
-  vertexAttribPointer(vertexPositionAttribute_,
-                      3,     // size: Every vertex has an X, Y anc Z component
-                      GL_FLOAT, // type: They are floats
-                      false, // normalized: Please, do NOT normalize the vertices
-                      2*3*4, // stride: The first byte of the next vertex is located this
-                      //         amount of bytes further. The format of the VBO is
-                      //         vx, vy, vz, nx, ny, nz and every element is a
-                      //         Float32, hence 4 bytes large
-                      0);    // offset: The byte position of the first vertex in the buffer
-  //         is 0.
-
-  glDrawArrays(mode, first, data2.size()/6);
 }
 
 
@@ -593,73 +416,6 @@ void G4OpenGLImmediateWtViewer::updateWWidget() {
   fHasToRepaint= false;
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateWtViewer updateWWidget END\n");
-#endif
-}
-
-void G4OpenGLImmediateWtViewer::drawScene()
-{
-  // Clear color an depth buffers
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  
-  // Configure the shader: set the uniforms
-  // Uniforms are 'configurable constants' in a shader: they are
-  // identical for every point that has to be drawn.
-  // Set the camera transformation to the value of a client-side JS matrix
-  glUniformMatrix4(cMatrixUniform_, jsMatrix_);
-  // Often, a model matrix is used to move the model around. We're happy
-  // with the location of the model, so we leave it as the unit matrix
-  Wt::WMatrix4x4 modelMatrix;
-  glUniformMatrix4(mvMatrixUniform_, modelMatrix);
-  // The next one is a bit complicated. In desktop OpenGL, a shader
-  // has the gl_NormalMatrix matrix available in the shader language,
-  // a matrix that is used to transform normals to e.g. implement proper
-  // Phong shading (google will help you to find a detailed explanation
-  // of why you need it). It is the transposed inverse of the model view
-  // matrix. Unfortunately, this matrix is not available in WebGL, so if
-  // you want to do phong shading, you must calculate it yourself.
-  // Wt provides methods to calculate the transposed inverse of a matrix,
-  // when client-side JS matrices are involved. Here, we inverse-transpose
-  // the product of the client-side camera matrix and the model matrix.
-  glUniformMatrix4(nMatrixUniform_, (jsMatrix_ * modelMatrix).inverted().transposed());
-  
-  // Configure the shaders: set the attributes.
-  // Attributes are 'variables' within a shader: they vary for every point
-  // that has to be drawn. All are stored in one VBO.
-  
-  // Create a Vertex Buffer Object (VBO) and load all polygon's data
-  // (points, normals) into it. In this case we use one VBO that contains
-  // all data (6 per point: vx, vy, vz, nx, ny, nz); alternatively you
-  // can use multiple VBO's (e.g. one VBO for normals, one for points,
-  // one for texture coordinates).
-  // Note that if you use indexed buffers, you cannot have indexes
-  // larger than 65K, due to the limitations of WebGL.
-  
-  
-  
-  /// LG : test
-  std::vector<double> vertices;
-  vertices.push_back(0);
-  vertices.push_back(0);
-  vertices.push_back(0);
-  vertices.push_back(10.);
-  vertices.push_back(0);
-  vertices.push_back(0);
-  vertices.push_back(0);
-  vertices.push_back(0);
-  vertices.push_back(0);
-  vertices.push_back(0);
-  vertices.push_back(10.);
-  vertices.push_back(0);
-  vertices.push_back(0);
-  vertices.push_back(0);
-  vertices.push_back(0);
-  vertices.push_back(0);
-  vertices.push_back(0);
-  vertices.push_back(10.);
-  wtDrawArrays(GL_LINES,0,6,vertices);
-  
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLWtViewer drawScene Call ComputeView\n");
 #endif
 }
 

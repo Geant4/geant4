@@ -64,7 +64,7 @@ G4double G4AntiProtonField::GetField(const G4ThreeVector & aPosition)
 // Field is 0 out of the nucleus!
   if(aPosition.mag() >= radius) return 0.0;
 
-  G4ParticleDefinition *anAntiProton = G4AntiProton::AntiProtonDefinition();
+  const G4ParticleDefinition *anAntiProton = G4AntiProton::AntiProtonDefinition();
   G4double antiProtonMass = anAntiProton->GetPDGMass();
 
   G4int A = theNucleus->GetMassNumber();

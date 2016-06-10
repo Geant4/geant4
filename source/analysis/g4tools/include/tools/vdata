@@ -1,0 +1,39 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_vdata
+#define tools_vdata
+
+#include <vector>
+
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#endif
+
+namespace tools {
+
+template <class T>
+inline const T* vec_data(const std::vector<T>& a_vec) {
+#if TARGET_OS_IPHONE || WIN32 || __INTEL_COMPILER || !__GXX_EXPERIMENTAL_CXX0X__
+  if(a_vec.empty()) return 0;
+  const T& vf = a_vec.front();
+  return &vf;
+#else
+  return a_vec.data();
+#endif
+}
+
+template <class T>
+inline T* vec_data(std::vector<T>& a_vec) {
+#if TARGET_OS_IPHONE || WIN32 || __INTEL_COMPILER || !__GXX_EXPERIMENTAL_CXX0X__
+  if(a_vec.empty()) return 0;
+  T& vf = a_vec.front();
+  return &vf;
+#else
+  return a_vec.data();
+#endif
+}
+
+}
+
+#endif

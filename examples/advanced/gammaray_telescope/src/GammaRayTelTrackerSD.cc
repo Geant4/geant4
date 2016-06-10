@@ -93,7 +93,7 @@ void GammaRayTelTrackerSD::Initialize(G4HCofThisEvent*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool GammaRayTelTrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
+G4bool GammaRayTelTrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory* )
 { 
    
   G4double edep = aStep->GetTotalEnergyDeposit();
@@ -109,25 +109,22 @@ G4bool GammaRayTelTrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhis
   
   //G4VPhysicalVolume* phys_tile = theTouchable->GetVolume();  
   
-  G4VPhysicalVolume* plane = theTouchable->GetVolume(1);  
+  G4VPhysicalVolume* plane = theTouchable->GetVolume(2);  
   
   G4int PlaneNumber = 0;
   PlaneNumber=plane->GetCopyNo();
   G4String PlaneName = plane->GetName();
 
-  // The RO History is used to obtain the real strip
-  // of the hit
+  // The hits sees now the real strip
 
   G4int StripNumber = 0;
   G4VPhysicalVolume* strip = 0;
-  strip = ROhist->GetVolume();
+  strip = theTouchable->GetVolume();
 
-  //  if (strip){
-    G4String StripName = strip->GetName();
-    StripNumber= strip->GetCopyNo();  
-    //  }
-  //  ROhist->MoveUpHistory();
-  G4VPhysicalVolume* tile = ROhist->GetVolume(1); 
+  G4String StripName = strip->GetName();
+  StripNumber= strip->GetCopyNo();  
+  
+  G4VPhysicalVolume* tile = theTouchable->GetVolume(1); 
   G4int TileNumber = tile->GetCopyNo();  
   G4String TileName = tile->GetName();   
   

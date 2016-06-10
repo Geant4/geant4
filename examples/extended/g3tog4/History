@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2010-11-04 21:47:43 allison Exp $
+$Id: History 86124 2014-11-07 11:05:52Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,39 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 7th, 2014  I.Hrivnacova (g3tog4Tests-V10-00-05)
+---------------------------
+- Fixed CMakeLists.txt in common (excommon-V10-00-06)
+
+November 4th, 2014  I.Hrivnacova (g3tog4Tests-V10-00-04)
+---------------------------
+- Add the whole common directory via svn:externals property;
+  in this tag based on excommon-V10-00-05
+
+November 3rd, 2014  I.Hrivnacova (g3tog4Tests-V10-00-03)
+---------------------------
+- Added classes from common via svn:externals property;
+  updated CMake and GNUmake files and documentation
+
+October 16th, 2014  I.Hrivnacova (g3tog4Tests-V10-00-02)
+---------------------------
+- Fixed coding guidelines (long lines) in G3toG4DetectorConstruction.cc
+
+June 12th, 2014  I.Hrivnacova (g3tog4Tests-V10-00-01)
+---------------------------
+- Moved data directory in clGeometry and added copying data files
+  in CMake build directory
+  
+June 11th, 2014  I.Hrivnacova (g3tog4Tests-V10-00-00)
+---------------------------
+- Fixed path to copy_files.sh, clean_files.sh in GNUmakefile
+  (this makes GNUmake build working with Geant4 installation via
+   CMake)
+
+August 30th, 2013  I.Hrivnacova (g3tog4Tests-V09-06-00)
+---------------------------
+- Migration to MT
 
 October 22nd, 2012  I.Hrivnacova (g3tog4Tests-V09-05-04)
 ---------------------------

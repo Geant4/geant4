@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionDataSetRegistry.cc 73791 2013-09-12 07:55:48Z gcosmo $
+// $Id: G4CrossSectionDataSetRegistry.cc 83697 2014-09-10 07:15:29Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -70,6 +70,10 @@ G4_REFERENCE_XS_FACTORY(G4GlauberGribovCrossSection);
 G4_REFERENCE_XS_FACTORY(G4GGNuclNuclCrossSection);
 G4_REFERENCE_XS_FACTORY(G4ElectroNuclearCrossSection);
 G4_REFERENCE_XS_FACTORY(G4PhotoNuclearCrossSection);
+G4_REFERENCE_XS_FACTORY(G4PiNuclearCrossSection);
+G4_REFERENCE_XS_FACTORY(G4NeutronInelasticXS);
+G4_REFERENCE_XS_FACTORY(G4NeutronElasticXS);
+G4_REFERENCE_XS_FACTORY(G4NeutronCaptureXS);
 
 
 G4ThreadLocal G4CrossSectionDataSetRegistry* G4CrossSectionDataSetRegistry::theInstance = 0;

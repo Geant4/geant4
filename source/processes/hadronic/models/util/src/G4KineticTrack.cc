@@ -135,10 +135,10 @@ G4KineticTrack::G4KineticTrack(const G4KineticTrack &right) : G4VKineticNucleon(
 //   By argument constructor
 //
 
-G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
+G4KineticTrack::G4KineticTrack(const G4ParticleDefinition* aDefinition,
                                G4double aFormationTime,
-                               G4ThreeVector aPosition,
-                               G4LorentzVector& a4Momentum) :
+                               const G4ThreeVector& aPosition,
+                               const G4LorentzVector& a4Momentum) :
                 theDefinition(aDefinition),
 		theFormationTime(aFormationTime),
                 thePosition(aPosition),
@@ -207,7 +207,7 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
           G4double thePoleMass  = theDefinition->GetPDGMass();
           theMotherWidth = theDefinition->GetPDGWidth();
           G4double thePoleWidth = theChannel->GetBR()*theMotherWidth;
-          G4ParticleDefinition* aDaughter;
+          const G4ParticleDefinition* aDaughter;
           theDaughterMass = new G4double[nDaughters];
           theDaughterWidth = new G4double[nDaughters];
 	  theDaughterIsShortLived = new G4bool[nDaughters];
@@ -411,8 +411,8 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
 }
 
 G4KineticTrack::G4KineticTrack(G4Nucleon * nucleon,
-                                G4ThreeVector aPosition,
-                                G4LorentzVector& a4Momentum)
+								const G4ThreeVector& aPosition,
+                                const G4LorentzVector& a4Momentum)
   :     theDefinition(nucleon->GetDefinition()),
 	theFormationTime(0),
 	thePosition(aPosition),
@@ -491,7 +491,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
       G4cout << "DECAY Actual Width IND/ActualW " << index1 << "  " << theActualWidth[index1] << G4endl;
       G4cout << "DECAY Actual Mass " << theActualMass << G4endl;
 */
-  G4ParticleDefinition* thisDefinition = this->GetDefinition();
+  const G4ParticleDefinition* thisDefinition = this->GetDefinition();
   if(!thisDefinition)
   {
     G4cerr << "Error condition encountered in G4KineticTrack::Decay()"<<G4endl;
@@ -563,7 +563,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
      G4double SumLongLivedMass(0);
      for (G4int aD=0; aD < theNumberOfDaughters ; aD++)
      {
-        G4ParticleDefinition* aDaughter = theDecayChannel->GetDaughter(aD);
+        const G4ParticleDefinition* aDaughter = theDecayChannel->GetDaughter(aD);
         masses[aD] = aDaughter->GetPDGMass();
         if ( aDaughter->IsShortLived() ) 
 	{
@@ -590,7 +590,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
 	    if (  numberOfShortliveds == 1) 
 	    {   G4SampleResonance aSampler;
                 G4double massmax=theParentMass - SumLongLivedMass;
-		G4ParticleDefinition * aDaughter=theDecayChannel->GetDaughter(shortlivedDaughters[0]);	    
+		const G4ParticleDefinition * aDaughter=theDecayChannel->GetDaughter(shortlivedDaughters[0]);
 	        masses[shortlivedDaughters[0]]= aSampler.SampleMass(aDaughter,massmax);
 	    } else if (  numberOfShortliveds == 2) {
 	        // choose masses one after the other, start with randomly choosen
@@ -598,7 +598,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
 		G4int one = 1-zero;
 		G4SampleResonance aSampler;
 		G4double massmax=theParentMass - aSampler.GetMinimumMass(theDecayChannel->GetDaughter(shortlivedDaughters[one]));
-		G4ParticleDefinition * aDaughter=theDecayChannel->GetDaughter(shortlivedDaughters[zero]);	    
+		const G4ParticleDefinition * aDaughter=theDecayChannel->GetDaughter(shortlivedDaughters[zero]);
 		masses[shortlivedDaughters[zero]]=aSampler.SampleMass(aDaughter,massmax);
 		massmax=theParentMass - masses[shortlivedDaughters[zero]];
 		aDaughter=theDecayChannel->GetDaughter(shortlivedDaughters[one]);
@@ -612,7 +612,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
 	    if (  numberOfShortliveds == 1) 
 	    {   G4SampleResonance aSampler;
                 G4double massmax=theParentMass - SumLongLivedMass;
-		G4ParticleDefinition * aDaughter=theDecayChannel->GetDaughter(shortlivedDaughters[0]);	    
+		const G4ParticleDefinition * aDaughter=theDecayChannel->GetDaughter(shortlivedDaughters[0]);
 	        masses[shortlivedDaughters[0]]= aSampler.SampleMass(aDaughter,massmax);
 	    }
 	    break;
@@ -653,7 +653,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
      G4LorentzVector momentumBalanceCMS(0);
      G4KineticTrackVector* theDecayProductList = new G4KineticTrackVector;
      G4int dEntries = theDecayProducts->entries();
-     G4ParticleDefinition * aProduct = 0;
+     const G4ParticleDefinition * aProduct = 0;
      for (G4int i=dEntries; i > 0; i--)
         {
 	 theDynamicParticle = theDecayProducts->PopProducts();

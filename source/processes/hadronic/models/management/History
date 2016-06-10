@@ -13,6 +13,34 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+12 September 2014 - Tatsumi Koi (hadr-modman-V10-00-05)
+---------------------------------------------------------
+- Add BuildPhysics method for Initialisation before run
+	Co-working with hadr-man-V10-00-11
+	include/G4HadronicInteraction.hh
+
+20 June 2014 - Davide Mancusi (hadr-modman-V10-00-04)
+---------------------------------------------------------
+- G4HadronicInteractionRegistry: add new FindAllModels method
+
+5 June 2014 - Alberto Ribon (hadr-modman-V10-00-03)
+---------------------------------------------------------
+- G4HadronicInteraction: removed unnecessary dependency on G4ReactionDynamics
+
+15 April 2014- Gunter Folger (hadr-modman-V10-00-02)
+---------------------------------------------------------
+- G4VKineticNucleon: return: const G4ParticleDefinition * from GetDefinition()
+
+2 April 2014  - Gunter Folger (hadr-modman-V10-00-01)
+-----------------------------------------------------
+- G4VPreCompoundModel provide default implementation for 
+   DeExciteModelDescription()
+	
+28 March 2014 - Gunter Folger (hadr-modman-V10-00-00)
+-----------------------------------------------------
+- G4VPreCompoundModel.hh: add DeExciteModelDescription()
+
 4 June 2013 - Gunter Folger (hadr-modman-V09-06-05)
 ---------------------------------------------------------
 - Reduce limit for "fatal" energy non-conservation from (10%  && 5GeV) to 

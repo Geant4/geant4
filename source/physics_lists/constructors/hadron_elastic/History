@@ -1,4 +1,4 @@
-$Id: History 75674 2013-11-05 09:00:42Z gcosmo $
+$Id: History 87072 2014-11-24 14:06:09Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,48 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24-Nov-2014, V. Ivanchenko    (phys-ctor-helastic-V10-00-09)
+- G4HadronHElasticPhysics - corrected addition of low-mass
+    diffraction
+
+07-Nov-2014, P. Arce          (phys-ctor-helastic-V10-00-08)
+- Add G4HadronElasticPhysicsPHP for particle_hp physics list
+
+07-Nov-2014, V. Ivanchenko          (phys-ctor-helastic-V10-00-07)
+- G4HadronHElasticPhysics V. Grichine removed G4LDsdChannel
+
+15-Oct-2014, V. Ivanchenko          (phys-ctor-helastic-V10-00-06)
+- G4HadronHElasticPhysics V. Grichine activates diffraction 
+    dissociation process
+
+01-Aug-2014, Alberto Ribon          (phys-ctor-helastic-V10-00-05)
+- G4HadronHElasticPhysics: for proton, neutron, pion+ and pion-
+  elastic scattering introduced the Chips model on Hydrogen, while
+  kept G4DiffuseElastic for all other elements.
+
+31-Jul-2014, Alberto Ribon          (phys-ctor-helastic-V10-00-04)
+- G4HadronHElasticPhysics: to ensure reproducibility, use a different
+  instance of G4DiffuseElastic for each particle type (p, n, pi+, pi-),
+  and disable G4NuclNuclDiffuseElastic, using Gheisha elastic model
+  for light ions (nothing else is available for heavy ions).
+
+06-Jun-2014, Alberto Ribon          (phys-ctor-helastic-V10-00-03)
+- G4HadronHElasticPhysics: use G4NuclNuclDiffuseElastic model
+  (instead of the Gheisha-based G4HadronElastic) for all ions.
+
+05-Jun-2014, Alberto Ribon          (phys-ctor-helastic-V10-00-02)
+- G4HadronHElasticPhysics: improved version of elastic, used temporarily
+  only in FTFP_BERT_TRV as playground before becoming the default in
+  all physics lists.
+    
+04-Jun-2014, Gunter Folger          (phys-ctor-helastic-V10-00-01)
+- Fix to previous tag. the previous tag badly screwed up code for 
+   G4HadronInelastic. 
+
+02-Jun-2014, Gunter Folger          (phys-ctor-helastic-V10-00-00)
+- G4HadronElasticPhysics: Must not inline Get...() to static member data.
+    (fails on Windows)
+    
 04-Nov-2013, Tatsumi Koi    		(phys-ctor-helastic-V09-06-06)
 - Create G4IonElasticPhysics Elastic Scattering for GenericIon
 

@@ -23,73 +23,56 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B1SteppingAction.cc 69587 2013-05-08 14:26:03Z gcosmo $
+// $Id: B1SteppingAction.cc 80449 2014-04-22 08:35:50Z gcosmo $
 //
 /// \file B1SteppingAction.cc
 /// \brief Implementation of the B1SteppingAction class
 
 #include "B1SteppingAction.hh"
-
+#include "B1EventAction.hh"
 #include "B1DetectorConstruction.hh"
 
 #include "G4Step.hh"
+#include "G4Event.hh"
 #include "G4RunManager.hh"
-#include "G4UnitsTable.hh"
+#include "G4LogicalVolume.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B1SteppingAction* B1SteppingAction::fgInstance = 0;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-B1SteppingAction* B1SteppingAction::Instance()
-{
-// Static acces function via G4RunManager 
-
-  return fgInstance;
-}      
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-B1SteppingAction::B1SteppingAction()
+B1SteppingAction::B1SteppingAction(B1EventAction* eventAction)
 : G4UserSteppingAction(),
-  fVolume(0),
-  fEnergy(0.)
-{ 
-  fgInstance = this;
-}
+  fEventAction(eventAction),
+  fScoringVolume(0)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B1SteppingAction::~B1SteppingAction()
-{ 
-  fgInstance = 0;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B1SteppingAction::UserSteppingAction(const G4Step* step)
 {
+  if (!fScoringVolume) { 
+    const B1DetectorConstruction* detectorConstruction
+      = static_cast<const B1DetectorConstruction*>
+        (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+    fScoringVolume = detectorConstruction->GetScoringVolume();   
+  }
+
   // get volume of the current step
   G4LogicalVolume* volume 
     = step->GetPreStepPoint()->GetTouchableHandle()
       ->GetVolume()->GetLogicalVolume();
       
   // check if we are in scoring volume
-  if (volume != fVolume ) return;
+  if (volume != fScoringVolume) return;
 
-  // collect energy and track length step by step
-  G4double edep = step->GetTotalEnergyDeposit();
-  fEnergy += edep;
+  // collect energy deposited in this step
+  G4double edepStep = step->GetTotalEnergyDeposit();
+  fEventAction->AddEdep(edepStep);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void B1SteppingAction::Reset()
-{
-  fEnergy = 0.;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 

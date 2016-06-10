@@ -44,6 +44,7 @@
 
 #include "G4USolid.hh"
 #include "UTrd.hh"
+#include "G4Polyhedron.hh"
 
 class G4UTrd : public G4USolid 
 {
@@ -60,6 +61,8 @@ class G4UTrd : public G4USolid
     void ComputeDimensions(      G4VPVParameterisation* p,
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
+
+    G4VSolid* Clone() const;
 
     inline UTrd* GetShape() const;
 
@@ -124,34 +127,34 @@ inline G4double G4UTrd::GetZHalfLength()  const
 inline void G4UTrd::SetXHalfLength1(G4double val)
 {
   GetShape()->SetXHalfLength1(val);
-  ResetPolyhedron();
+  fRebuildPolyhedron = true;
 }
 inline void G4UTrd::SetXHalfLength2(G4double val)
 {
   GetShape()->SetXHalfLength2(val);
-  ResetPolyhedron();
+  fRebuildPolyhedron = true;
 }
 inline void G4UTrd::SetYHalfLength1(G4double val)
 {
   GetShape()->SetYHalfLength1(val);
-  ResetPolyhedron();
+  fRebuildPolyhedron = true;
 }
 inline void G4UTrd::SetYHalfLength2(G4double val)
 {
   GetShape()->SetYHalfLength2(val);
-  ResetPolyhedron();
+  fRebuildPolyhedron = true;
 }
 inline void G4UTrd::SetZHalfLength(G4double val)
 {
   GetShape()->SetZHalfLength(val);
-  ResetPolyhedron();
+  fRebuildPolyhedron = true;
 }
 inline void G4UTrd::SetAllParameters(G4double pdx1, G4double pdx2,
                                      G4double pdy1, G4double pdy2,
                                      G4double pdz)
 {
   GetShape()->SetAllParameters(pdx1, pdx2, pdy1, pdy2, pdz);
-  ResetPolyhedron();
+  fRebuildPolyhedron = true;
 }
 
 #endif

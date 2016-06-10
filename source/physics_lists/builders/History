@@ -14,6 +14,41 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-Nov-2014, G.Folger               (phys-builders-V10-00-07)
+- remove reference to G4INCLXXPiKBuilder.{hh,cc} from sources.cmake
+ 
+07-Nov-2014, P. Arce          (phys-builders-V10-00-06)
+- Add builders for particle_hp physics list
+
+15-October-2014, Gabriele Cosmo		(phys-builders-V10-00-05)
+- Added dependency to 'de_excitation/fission' module in GNUMakefile
+  and sources.cmake, now required by INCLXX.
+
+06-June-2014, Vladimir Ivanchenko	(phys-builders-V10-00-04)
+- In all builders do not create a new instance of G4PreCompoundModel
+    and G4ExcitationHandler to reduce number of its instances.
+- Do not delete processes/models/cross sections in destructors
+    of builders 
+
+03-June-2014, Julia Yarba               (phys-builders-V10-00-03)
+- Add G4QGSPLundStrFragmProtonBuilder(.hh and .cc) which outfits
+  QGSP model with G4 LundStringFragmentation object (instead of the
+  older G4QGSMFfragmentation); this appears to give better agreement
+  with data at the energies above 100GeV (tested for proton+C)
+- Set minimum energy for G4QGSPLundStrFragmProtonBuilder at 100GeV 
+
+27-May-2014, Davide Mancusi             (phys-builders-V10-00-02)
+- Convert G4INCLXXPiKBuilder to G4INCLXXPionBuilder.
+- Set the maximum energy for G4INCLXXPionBuilder to 20 GeV.
+- Add G4QGSPKaonBuilder.
+
+09-May-2014, Vladimir Ivanchenko	(phys-builders-V10-00-01)
+- OrderingParameterTable - processes "AnnihToMuMu" and "AnnihToHad"
+    should not be active AtRest - fixed problem report #1598
+
+06-Mar-2014, Alberto Ribon		(phys-builders-V10-00-00)
+- Fixed memory leak in G4FTFBuilder.cc.
+
 07-Nov-2013, Alberto Ribon		(phys-builders-V09-06-13)
 - Removed low_energy and high_energy from sources.cmake and GNUmakefile.
 

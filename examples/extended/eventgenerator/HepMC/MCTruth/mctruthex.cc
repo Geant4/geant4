@@ -26,12 +26,12 @@
 /// \file eventgenerator/HepMC/MCTruth/mctruthex.cc
 /// \brief Main program of the eventgenerator/HepMC/MCTruth example
 //
-// $Id: mctruthex.cc 73446 2013-08-27 11:32:59Z gcosmo $
+// $Id: mctruthex.cc 82281 2014-06-13 14:47:16Z gcosmo $
 //
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 
-#include "PhysicsList.hh"
+#include "FTFP_BERT.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "DetectorConstruction.hh"
 
@@ -47,7 +47,7 @@ int main()
 
   // set mandatory initialization classes
   runManager->SetUserInitialization(new DetectorConstruction);
-  runManager->SetUserInitialization(new PhysicsList);
+  runManager->SetUserInitialization(new FTFP_BERT);
 
   // set mandatory user action class
   runManager->SetUserAction(new PrimaryGeneratorAction);

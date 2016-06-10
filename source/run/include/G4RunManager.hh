@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh 77649 2013-11-27 08:39:54Z gcosmo $
+// $Id: G4RunManager.hh 86753 2014-11-17 15:12:36Z gcosmo $
 //
 // 
 
@@ -132,7 +132,7 @@ class G4PrimaryTransformer;
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "globals.hh"
-#include <vector>
+#include <list>
 #include <algorithm>
 
 class G4RunManager
@@ -260,6 +260,8 @@ public: // with description
     // If the pointer is NULL, all regions are shown.
 
   protected:
+    void CleanUpPreviousEvents();
+    void CleanUpUnnecessaryEvents(G4int keepNEvents);
     void StackPreviousEvent(G4Event* anEvent);
 
   public:
@@ -302,7 +304,7 @@ public: // with description
 
     G4Run* currentRun;
     G4Event* currentEvent;
-    std::vector<G4Event*>* previousEvents;
+    std::list<G4Event*>* previousEvents;
     G4int n_perviousEventsToBeStored;
     G4int numberOfEventToBeProcessed;
 
@@ -523,7 +525,11 @@ public: // with description
     inline const G4Event* GetPreviousEvent(G4int i) const
     {
       if(i>=1 && i<=n_perviousEventsToBeStored)
-      { return (*previousEvents)[i-1]; }
+      {
+        std::list<G4Event*>::iterator itr = previousEvents->begin();
+        for(G4int j=1;j<i;j++) { itr++; }
+        return *itr;
+      }
       return 0;
     }
     //  Returns the pointer to the "i" previous event. This method is availavle for
@@ -567,6 +573,12 @@ public: // with description
     //disable assignment and copy constructors
     G4RunManager(const G4RunManager&) {}
     G4RunManager& operator=(const G4RunManager&) { return *this; }
+
+  protected:
+    // This boolean flag has to be shared by all G4RunManager objects
+    static G4bool fGeometryHasBeenDestroyed;
+  public:
+    static G4bool IfGeometryHasBeenDestroyed();
 };
 
 #endif

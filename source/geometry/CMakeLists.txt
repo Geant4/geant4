@@ -8,7 +8,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt 75578 2013-11-04 12:03:33Z gcosmo $
+# $Id: CMakeLists.txt 85530 2014-10-30 16:17:43Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -35,7 +35,6 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             solids/Boolean/sources.cmake
             solids/CSG/sources.cmake
             solids/specific/sources.cmake
-            solids/usolids/sources.cmake
             volumes/sources.cmake
 )
 endif()

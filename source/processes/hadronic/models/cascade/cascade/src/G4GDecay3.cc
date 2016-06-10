@@ -33,6 +33,7 @@
 //              GDECA3 of Geant3
 //
 // 20130620  Address Coverity #51433, initializing all data members
+// 20141201  Fix error message text to show correct class name
 
 #include "G4GDecay3.hh"
 #include "G4PhysicalConstants.hh"
@@ -129,7 +130,7 @@ std::vector<G4ThreeVector> G4GDecay3::GetThreeBodyMomenta()
     pVect.push_back(pDaughter2*direction2);
 
   } else {
-    G4cerr << "G4GDecay::GetThreeBodyMomenta: " << loopMax
+    G4cerr << "G4GDecay3::GetThreeBodyMomenta: " << loopMax
            << " or more loops in momentum magnitude calculation " << G4endl;
   }
 

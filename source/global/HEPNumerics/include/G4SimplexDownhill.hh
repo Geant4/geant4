@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimplexDownhill.hh 67970 2013-03-13 10:10:06Z gcosmo $
+// $Id: G4SimplexDownhill.hh 79763 2014-03-13 15:16:47Z gcosmo $
 //
 // Class description:
 //
@@ -37,8 +37,8 @@
 // Author: Tatsumi Koi (SLAC/SCCS), 2007
 // --------------------------------------------------------------------------
 
-#ifndef G4SimplexDownhill
-#define G4SimplexDownhill_h
+#ifndef G4SimplexDownhill_hh
+#define G4SimplexDownhill_hh
 
 #include "globals.hh"
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4Para.cc 83572 2014-09-01 15:23:27Z gcosmo $
 //
 // class G4Para
 //
@@ -52,7 +52,6 @@
 #include "G4VPVParameterisation.hh"
 
 #include "G4VGraphicsScene.hh"
-#include "G4Polyhedron.hh"
 
 using namespace CLHEP;
 
@@ -91,7 +90,6 @@ void G4Para::SetAllParameters( G4double pDx, G4double pDy, G4double pDz,
   }
   fCubicVolume = 0.;
   fSurfaceArea = 0.;
-  fpPolyhedron = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -146,7 +144,6 @@ G4Para::G4Para( const G4String& pName,
   fTthetaSphi = ((pt[4]).y()+fDy)/fDz ;
   fCubicVolume = 0.;
   fSurfaceArea = 0.;
-  fpPolyhedron = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////

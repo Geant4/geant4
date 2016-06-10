@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSensitiveDetector.hh 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4VSensitiveDetector.hh 81087 2014-05-20 15:44:27Z gcosmo $
 //
 
 #ifndef G4VSensitiveDetector_h
@@ -60,7 +60,7 @@ class G4VSensitiveDetector
   public:
       virtual ~G4VSensitiveDetector();
 
-      const G4VSensitiveDetector & operator=(const G4VSensitiveDetector &right);
+      G4VSensitiveDetector & operator=(const G4VSensitiveDetector &right);
 
       G4int operator==(const G4VSensitiveDetector &right) const;
       G4int operator!=(const G4VSensitiveDetector &right) const;

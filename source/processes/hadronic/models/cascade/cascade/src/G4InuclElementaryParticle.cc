@@ -39,6 +39,7 @@
 // 20110922  M. Kelsey -- Add stream argument to printParticle() => print()
 // 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
 // 20130508  D. Wright -- Add lepton construction, use wrapper header
+// 20140310  M. Kelsey -- Fix constness in G4PD* passing
 
 #include "G4InuclElementaryParticle.hh"
 
@@ -54,7 +55,7 @@
 using namespace G4InuclParticleNames;
 
 
-G4ParticleDefinition* 
+const G4ParticleDefinition* 
 G4InuclElementaryParticle::makeDefinition(G4int ityp) {
   switch(ityp) {
   case proton:      return G4Proton::Definition(); break;
@@ -192,7 +193,7 @@ void G4InuclElementaryParticle::fill(G4double ekin, G4int ityp,
 }
 
 void G4InuclElementaryParticle::fill(const G4LorentzVector& mom,
-				     G4ParticleDefinition* pd,
+				     const G4ParticleDefinition* pd,
 				     G4InuclParticle::Model model) {
   setDefinition(pd);
   setMomentum(mom);
@@ -209,12 +210,12 @@ G4InuclElementaryParticle::operator=(const G4InuclElementaryParticle& right) {
 
 
 G4int G4InuclElementaryParticle::getStrangeness(G4int ityp) {
-  G4ParticleDefinition* pd = makeDefinition(ityp);
+  const G4ParticleDefinition* pd = makeDefinition(ityp);
   return pd ? (pd->GetQuarkContent(3) - pd->GetAntiQuarkContent(3)) : 0;
 }
 
 G4double G4InuclElementaryParticle::getParticleMass(G4int ityp) {
-  G4ParticleDefinition* pd = makeDefinition(ityp);
+  const G4ParticleDefinition* pd = makeDefinition(ityp);
   return pd ? pd->GetPDGMass()*MeV/GeV : 0.0;	// From G4 to Bertini units
 }
 

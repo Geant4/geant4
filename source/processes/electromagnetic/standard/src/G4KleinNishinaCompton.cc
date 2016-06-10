@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaCompton.cc 74309 2013-10-03 06:42:30Z gcosmo $
+// $Id: G4KleinNishinaCompton.cc 82754 2014-07-08 14:06:13Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -63,9 +63,13 @@
 using namespace std;
 
 static const G4double
-    d1= 2.7965e-1*barn, d2=-1.8300e-1*barn, d3= 6.7527   *barn, d4=-1.9798e+1*barn,
-    e1= 1.9756e-5*barn, e2=-1.0205e-2*barn, e3=-7.3913e-2*barn, e4= 2.7079e-2*barn,
-    f1=-3.9178e-7*barn, f2= 6.8241e-5*barn, f3= 6.0480e-5*barn, f4= 3.0274e-4*barn;
+  d1= 2.7965e-1*CLHEP::barn, d2=-1.8300e-1*CLHEP::barn, 
+  d3= 6.7527   *CLHEP::barn, d4=-1.9798e+1*CLHEP::barn,
+  e1= 1.9756e-5*CLHEP::barn, e2=-1.0205e-2*CLHEP::barn, 
+  e3=-7.3913e-2*CLHEP::barn, e4= 2.7079e-2*CLHEP::barn,
+  f1=-3.9178e-7*CLHEP::barn, f2= 6.8241e-5*CLHEP::barn, 
+  f3= 6.0480e-5*CLHEP::barn, f4= 3.0274e-4*CLHEP::barn;
+static const G4int nlooplim = 1000;
 
 G4KleinNishinaCompton::G4KleinNishinaCompton(const G4ParticleDefinition*,
                                              const G4String& nam)
@@ -73,7 +77,7 @@ G4KleinNishinaCompton::G4KleinNishinaCompton(const G4ParticleDefinition*,
 {
   theGamma = G4Gamma::Gamma();
   theElectron = G4Electron::Electron();
-  lowestGammaEnergy = 1.0*eV;
+  lowestSecondaryEnergy = 100.0*eV;
   fParticleChange = 0;
 }
 
@@ -108,9 +112,7 @@ G4double G4KleinNishinaCompton::ComputeCrossSectionPerAtom(
                                              G4double, G4double)
 {
   G4double xSection = 0.0 ;
-  if ( Z < 0.9999 )                 return xSection;
-  if ( GammaEnergy < 0.1*keV      ) return xSection;
-  //  if ( GammaEnergy > (100.*GeV/Z) ) return xSection;
+  if (GammaEnergy <= LowEnergyLimit()) { return xSection; }
 
   static const G4double a = 20.0 , b = 230.0 , c = 440.0;
        
@@ -118,7 +120,7 @@ G4double G4KleinNishinaCompton::ComputeCrossSectionPerAtom(
            p3Z = Z*(d3 + e3*Z + f3*Z*Z), p4Z = Z*(d4 + e4*Z + f4*Z*Z);
 
   G4double T0  = 15.0*keV; 
-  if (Z < 1.5) T0 = 40.0*keV; 
+  if (Z < 1.5) { T0 = 40.0*keV; }
 
   G4double X   = max(GammaEnergy, T0) / electron_mass_c2;
   xSection = p1Z*G4Log(1.+2.*X)/X
@@ -126,27 +128,28 @@ G4double G4KleinNishinaCompton::ComputeCrossSectionPerAtom(
 		
   //  modification for low energy. (special case for Hydrogen)
   if (GammaEnergy < T0) {
-    G4double dT0 = 1.*keV;
+    static const G4double dT0 = keV;
     X = (T0+dT0) / electron_mass_c2 ;
     G4double sigma = p1Z*G4Log(1.+2*X)/X
                     + (p2Z + p3Z*X + p4Z*X*X)/(1. + a*X + b*X*X + c*X*X*X);
     G4double   c1 = -T0*(sigma-xSection)/(xSection*dT0);             
     G4double   c2 = 0.150; 
-    if (Z > 1.5) c2 = 0.375-0.0556*G4Log(Z);
+    if (Z > 1.5) { c2 = 0.375-0.0556*G4Log(Z); }
     G4double    y = G4Log(GammaEnergy/T0);
     xSection *= G4Exp(-y*(c1+c2*y));          
   }
-  //  G4cout << "e= " << GammaEnergy << " Z= " << Z << " cross= " << xSection << G4endl;
+  // G4cout<<"e= "<< GammaEnergy<<" Z= "<<Z<<" cross= " << xSection << G4endl;
   return xSection;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4KleinNishinaCompton::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
-					      const G4MaterialCutsCouple*,
-					      const G4DynamicParticle* aDynamicGamma,
-					      G4double,
-					      G4double)
+void G4KleinNishinaCompton::SampleSecondaries(
+                            std::vector<G4DynamicParticle*>* fvect,
+			    const G4MaterialCutsCouple*,
+			    const G4DynamicParticle* aDynamicGamma,
+			    G4double,
+			    G4double)
 {
   // The scattered gamma energy is sampled according to Klein - Nishina formula.
   // The random number techniques of Butcher & Messel are used 
@@ -155,13 +158,8 @@ void G4KleinNishinaCompton::SampleSecondaries(std::vector<G4DynamicParticle*>* f
  
   G4double gamEnergy0 = aDynamicGamma->GetKineticEnergy();
 
-  // extra protection
-  if(gamEnergy0 < lowestGammaEnergy) {
-    fParticleChange->ProposeTrackStatus(fStopAndKill);
-    fParticleChange->ProposeLocalEnergyDeposit(gamEnergy0);
-    fParticleChange->SetProposedKineticEnergy(0.0);
-    return;
-  }
+  // do nothing below the threshold
+  if(gamEnergy0 <= LowEnergyLimit()) { return; }
 
   G4double E0_m = gamEnergy0 / electron_mass_c2 ;
 
@@ -178,13 +176,18 @@ void G4KleinNishinaCompton::SampleSecondaries(std::vector<G4DynamicParticle*>* f
   G4double alpha1     = - G4Log(eps0);
   G4double alpha2     = 0.5*(1.- epsilon0sq);
 
+  G4int nloop = 0;
   do {
-    if ( alpha1/(alpha1+alpha2) > G4UniformRand() ) {
-      epsilon   = G4Exp(-alpha1*G4UniformRand());   // eps0**r
+    ++nloop;
+    // false interaction if too many iterations
+    if(nloop > nlooplim) { return; }
+
+    if ( alpha1/(alpha1+alpha2) > rndmEngineMod->flat() ) {
+      epsilon   = G4Exp(-alpha1*rndmEngineMod->flat());   // eps0**r
       epsilonsq = epsilon*epsilon; 
 
     } else {
-      epsilonsq = epsilon0sq + (1.- epsilon0sq)*G4UniformRand();
+      epsilonsq = epsilon0sq + (1.- epsilon0sq)*rndmEngineMod->flat();
       epsilon   = sqrt(epsilonsq);
     };
 
@@ -192,7 +195,7 @@ void G4KleinNishinaCompton::SampleSecondaries(std::vector<G4DynamicParticle*>* f
     sint2   = onecost*(2.-onecost);
     greject = 1. - epsilon*sint2/(1.+ epsilonsq);
 
-  } while (greject < G4UniformRand());
+  } while (greject < rndmEngineMod->flat());
  
   //
   // scattered gamma angles. ( Z - axis along the parent gamma)
@@ -201,7 +204,7 @@ void G4KleinNishinaCompton::SampleSecondaries(std::vector<G4DynamicParticle*>* f
   if(sint2 < 0.0) { sint2 = 0.0; }
   G4double cosTeta = 1. - onecost; 
   G4double sinTeta = sqrt (sint2);
-  G4double Phi     = twopi * G4UniformRand();
+  G4double Phi     = twopi * rndmEngineMod->flat();
 
   //
   // update G4VParticleChange for the scattered gamma
@@ -210,13 +213,14 @@ void G4KleinNishinaCompton::SampleSecondaries(std::vector<G4DynamicParticle*>* f
   G4ThreeVector gamDirection1(sinTeta*cos(Phi), sinTeta*sin(Phi), cosTeta);
   gamDirection1.rotateUz(gamDirection0);
   G4double gamEnergy1 = epsilon*gamEnergy0;
-  if(gamEnergy1 > lowestGammaEnergy) {
+  G4double edep = 0.0;
+  if(gamEnergy1 > lowestSecondaryEnergy) {
     fParticleChange->ProposeMomentumDirection(gamDirection1);
     fParticleChange->SetProposedKineticEnergy(gamEnergy1);
   } else { 
     fParticleChange->ProposeTrackStatus(fStopAndKill);
-    fParticleChange->ProposeLocalEnergyDeposit(gamEnergy1);
     fParticleChange->SetProposedKineticEnergy(0.0);
+    edep = gamEnergy1;
   }
 
   //
@@ -225,13 +229,19 @@ void G4KleinNishinaCompton::SampleSecondaries(std::vector<G4DynamicParticle*>* f
 
   G4double eKinEnergy = gamEnergy0 - gamEnergy1;
 
-  if(eKinEnergy > DBL_MIN) {
+  if(eKinEnergy > lowestSecondaryEnergy) {
     G4ThreeVector eDirection = gamEnergy0*gamDirection0 - gamEnergy1*gamDirection1;
     eDirection = eDirection.unit();
 
     // create G4DynamicParticle object for the electron.
     G4DynamicParticle* dp = new G4DynamicParticle(theElectron,eDirection,eKinEnergy);
     fvect->push_back(dp);
+  } else {
+    edep += eKinEnergy;  
+  }
+  // energy balance
+  if(edep > 0.0) { 
+    fParticleChange->ProposeLocalEnergyDeposit(edep);
   }
 }
 

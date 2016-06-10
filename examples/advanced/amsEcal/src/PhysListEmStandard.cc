@@ -23,15 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc 68740 2013-04-05 09:56:39Z gcosmo $
+// $Id: PhysListEmStandard.cc 83010 2014-07-24 14:53:07Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #include "PhysListEmStandard.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4ProcessManager.hh"
+///#include "G4ProcessManager.hh"
+#include "G4PhysicsListHelper.hh"
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
@@ -57,6 +57,8 @@
 #include "G4EmProcessOptions.hh"
 #include "G4MscStepLimitType.hh"
 
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysListEmStandard::PhysListEmStandard(const G4String& name)
@@ -72,63 +74,64 @@ PhysListEmStandard::~PhysListEmStandard()
 
 void PhysListEmStandard::ConstructProcess()
 {
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+  
   // Add standard EM Processes
-
+  //
   aParticleIterator->reset();
   while( (*aParticleIterator)() ){
     G4ParticleDefinition* particle = aParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
      
     if (particleName == "gamma") {
       // gamma         
-      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
-      pmanager->AddDiscreteProcess(new G4ComptonScattering);
-      pmanager->AddDiscreteProcess(new G4GammaConversion);
+      ph->RegisterProcess(new G4PhotoElectricEffect, particle);
+      ph->RegisterProcess(new G4ComptonScattering,   particle);
+      ph->RegisterProcess(new G4GammaConversion,     particle);
       
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
-      pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung(),   -1, 3, 3);
+      ph->RegisterProcess(new G4eMultipleScattering, particle);
+      ph->RegisterProcess(new G4eIonisation,         particle);
+      ph->RegisterProcess(new G4eBremsstrahlung(),   particle);
       
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
-      pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung(),   -1, 3, 3);
-      pmanager->AddProcess(new G4eplusAnnihilation,    0,-1, 4);
+      ph->RegisterProcess(new G4eMultipleScattering, particle);
+      ph->RegisterProcess(new G4eIonisation,         particle);
+      ph->RegisterProcess(new G4eBremsstrahlung(),   particle);
+      ph->RegisterProcess(new G4eplusAnnihilation,   particle);
       
     } else if( particleName == "mu-" || 
                particleName == "mu+"    ) {
       //muon  
-      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
-      pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,    -1, 3, 3);
-      pmanager->AddProcess(new G4MuPairProduction,    -1, 4, 4);
+      ph->RegisterProcess(new G4hMultipleScattering, particle);
+      ph->RegisterProcess(new G4MuIonisation,        particle);
+      ph->RegisterProcess(new G4MuBremsstrahlung,    particle);
+      ph->RegisterProcess(new G4MuPairProduction,    particle);
              
     } else if( particleName == "proton" ||
                particleName == "pi-" ||
                particleName == "pi+"    ) {
       //proton  
-      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
-      pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
-      pmanager->AddProcess(new G4hBremsstrahlung,     -1, 3, 3);
-      pmanager->AddProcess(new G4hPairProduction,     -1, 4, 4);       
+      ph->RegisterProcess(new G4hMultipleScattering, particle);
+      ph->RegisterProcess(new G4hIonisation,         particle);
+      ph->RegisterProcess(new G4hBremsstrahlung,     particle);
+      ph->RegisterProcess(new G4hPairProduction,     particle);       
      
     } else if( particleName == "alpha" || 
 	       particleName == "He3" || 
 	       particleName == "GenericIon" ) {
       //Ions 
-      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
-      pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
+      ph->RegisterProcess(new G4hMultipleScattering, particle);
+      ph->RegisterProcess(new G4ionIonisation,       particle);
 
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
-      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
-      pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
+      ph->RegisterProcess(new G4hMultipleScattering, particle);
+      ph->RegisterProcess(new G4hIonisation,         particle);
     }
   }
 
@@ -141,28 +144,19 @@ void PhysListEmStandard::ConstructProcess()
   
   //physics tables
   //
-  emOptions.SetMinEnergy(100*eV);	//default    
-  emOptions.SetMaxEnergy(100*TeV);	//default  
-  emOptions.SetDEDXBinning(12*10);	//default=12*7  
-  emOptions.SetLambdaBinning(12*10);	//default=12*7
-  emOptions.SetSplineFlag(true);	//default
+  emOptions.SetMinEnergy(100*eV);	  //default    
+  emOptions.SetMaxEnergy(100*TeV);	  //default  
+  emOptions.SetDEDXBinning(12*10);	  //default=12*7  
+  emOptions.SetLambdaBinning(12*10);  //default=12*7
       
   //multiple coulomb scattering
   //
   emOptions.SetMscStepLimitation(fUseSafety);  //default=fUseSafety
-  emOptions.SetMscRangeFactor(0.04);		//default
-  emOptions.SetMscGeomFactor (2.5);		//default       
-  emOptions.SetSkin(3.);			//default
       
   //energy loss
   //
   emOptions.SetStepFunction(0.2, 100*um);	//default=(0.2, 1*mm)      
-  emOptions.SetLinearLossLimit(1.e-2);		//default
    
-  //ionization
-  //
-  emOptions.SetSubCutoff(false);		//default=false
-  
   //verbose
   //
   emOptions.SetVerbose(0);

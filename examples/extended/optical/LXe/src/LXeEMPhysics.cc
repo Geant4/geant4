@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeEMPhysics.cc 68752 2013-04-05 10:23:47Z gcosmo $
+// $Id: LXeEMPhysics.cc 81557 2014-06-03 08:32:44Z gcosmo $
 //
 /// \file optical/LXe/src/LXeEMPhysics.cc
 /// \brief Implementation of the LXeEMPhysics class
@@ -39,18 +39,7 @@
 
 LXeEMPhysics::LXeEMPhysics(const G4String& name)
                :  G4VPhysicsConstructor(name)
-{
-  fPhotoEffect = NULL;
-  fComptonEffect = NULL;
-  fPairProduction = NULL;
-  fElectronMultipleScattering = NULL;
-  fElectronIonisation = NULL; 
-  fElectronBremsStrahlung = NULL;
-  fPositronMultipleScattering = NULL;
-  fPositronIonisation = NULL; 
-  fPositronBremsStrahlung = NULL;
-  fAnnihilation = NULL;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -87,20 +76,30 @@ void LXeEMPhysics::ConstructParticle()
 
 void LXeEMPhysics::ConstructProcess()
 {
-  fPhotoEffect = new G4PhotoElectricEffect();
-  fComptonEffect = new G4ComptonScattering();
-  fPairProduction = new G4GammaConversion();
+  G4PhotoElectricEffect* fPhotoEffect =
+    new G4PhotoElectricEffect();
+  G4ComptonScattering* fComptonEffect =
+    new G4ComptonScattering();
+  G4GammaConversion* fPairProduction =
+    new G4GammaConversion();
  
     // Electron physics
-  fElectronMultipleScattering = new G4eMultipleScattering();
-  fElectronIonisation = new G4eIonisation();
-  fElectronBremsStrahlung = new G4eBremsstrahlung();
+  G4eMultipleScattering* fElectronMultipleScattering =
+    new G4eMultipleScattering();
+  G4eIonisation* fElectronIonisation =
+    new G4eIonisation();
+  G4eBremsstrahlung* fElectronBremsStrahlung =
+    new G4eBremsstrahlung();
  
     //Positron physics
-  fPositronMultipleScattering = new G4eMultipleScattering();
-  fPositronIonisation = new G4eIonisation();
-  fPositronBremsStrahlung = new G4eBremsstrahlung();
-  fAnnihilation = new G4eplusAnnihilation();
+  G4eMultipleScattering* fPositronMultipleScattering =
+    new G4eMultipleScattering();
+  G4eIonisation* fPositronIonisation =
+    new G4eIonisation();
+  G4eBremsstrahlung* fPositronBremsStrahlung =
+    new G4eBremsstrahlung();
+  G4eplusAnnihilation* fAnnihilation =
+    new G4eplusAnnihilation();
 
   G4ProcessManager* pManager = 0;
 

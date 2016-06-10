@@ -1,0 +1,365 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_basket
+#define tools_rroot_basket
+
+#include "iro"
+#include "key"
+
+#include "../scast"
+#include "buffer"
+#include "cids"
+
+namespace tools {
+namespace rroot {
+
+class basket : public virtual iro, public key {
+  static uint32 kDisplacementMask() {return 0xFF000000;}
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rroot::basket");
+    return s_v;
+  }
+public: //iro
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<basket>(this,a_class)) return p;
+    return 0;
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  static cid id_class() {return basket_cid();}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<basket>(this,a_class)) {return p;}
+    else return 0;
+  }
+public:
+  virtual iro* copy() const {return new basket(*this);}
+  virtual bool stream(buffer& a_buffer) {
+    _clear();
+
+    uint32 startpos = a_buffer.length();
+
+    if(!key::from_buffer(a_buffer.eob(),a_buffer.pos())) return false;
+
+    uint32 fBufferSize;
+
+    short v;
+    if(!a_buffer.read_version(v)) return false;
+    if(!a_buffer.read(fBufferSize)) return false;
+    if(!a_buffer.read(m_nev_buf_size)) return false;
+    if(!a_buffer.read(m_nev)) return false;
+    if(!a_buffer.read(m_last)) return false;
+    char flag;
+    if(!a_buffer.read(flag)) return false;
+    if(m_last>fBufferSize) fBufferSize = m_last;
+
+    uint16 basket_key_length = a_buffer.length()-startpos;
+    if(basket_key_length!=m_key_length) {
+      //m_file.out() << "tools::rroot::basket::stream :"
+      //             << " key length not consistent."
+      //             << " read " << m_key_length
+      //             << ", expected " << basket_key_length
+      //             << ". Continue with " << basket_key_length
+      //             << std::endl;
+      m_key_length = basket_key_length;
+    }
+    if(!m_object_size) {
+      //m_file.out() << "tools::rroot::basket::stream :"
+      //             << " m_object_size is found to be zero."
+      //             << " Continue with (m_nbytes-m_key_length) "
+      //             << (m_nbytes-m_key_length)
+      //             << std::endl;
+      m_object_size = m_nbytes-m_key_length;
+    }
+
+    if(!flag) return true; //fHeaderOnly
+
+    //G.Barrand : add the below test.
+    if( (flag!=1) &&(flag!=2)  &&
+        (flag!=11)&&(flag!=12) &&
+        (flag!=41)&&(flag!=42) &&
+        (flag!=51)&&(flag!=52) ) {
+      m_file.out() << "tools::rroot::basket::stream :"
+                   << " bad flag " << (int)flag
+                   << std::endl; 
+      return false;
+    }
+
+    if((flag%10)!=2) {
+      //due to the upper "G.Barrand if", flag is here in {1,11,41,51}
+
+      if(!m_nev_buf_size) {
+        m_file.out() << "tools::rroot::basket::stream :" 
+                     << " m_nev_buf_size is zero." << std::endl; 
+        return false;
+      }
+      if(m_nev>m_nev_buf_size) {
+        m_file.out() << "tools::rroot::basket::stream :" 
+                     << " m_nev>m_nev_buf_size !"
+                     << " m_nev " << m_nev
+                     << " m_nev_buf_size " << m_nev_buf_size
+                     << std::endl; 
+        return false;
+      }
+      m_entry_offset = new int[m_nev_buf_size];
+      if(m_nev) {
+        uint32 n;
+        if(!a_buffer.read_array<int>(m_nev_buf_size,m_entry_offset,n)) {
+          _clear();
+          return false;
+        }
+        if((n!=m_nev)&&(n!=(m_nev+1))) {
+          m_file.out() << "tools::rroot::basket::stream :" 
+                       << " m_entry_offset read len mismatch."
+                       << " n " << n
+                       << " m_nev " << m_nev
+                       << std::endl;
+          _clear();
+          return false;
+        }
+      }
+/* Due to the upper "G.Barrand if", flag can't be in ]20,40[, then to quiet Coverity we comment the below test.
+      if((20<flag)&&(flag<40)) {
+        for(uint32 i=0;i<m_nev;i++){        
+          m_entry_offset[i] &= ~kDisplacementMask();
+        }
+      }
+*/
+      if(flag>40) {
+        m_displacement = new int[m_nev_buf_size];
+        uint32 n;
+        if(!a_buffer.read_array<int>(m_nev_buf_size,m_displacement,n)) {
+          _clear();
+          return false;
+        }
+        if((n!=m_nev)&&(n!=(m_nev+1))) {
+          m_file.out() << "tools::rroot::basket::stream :" 
+                       << " m_displacement read len mismatch."
+                       << " n " << n
+                       << " m_nev " << m_nev
+                       << std::endl;
+          _clear();
+          return false;
+        }
+      }
+    } else {
+      //m_nev_buf_size is the size in bytes of one entry.
+    }
+    if((flag==1)||(flag>10)) {
+      delete [] m_buffer;  
+      m_buffer = 0;
+      m_buf_size = 0;
+      if(fBufferSize) {
+        char* _buf = new char[fBufferSize];
+        if(!_buf) {
+          m_file.out() << "tools::rroot::basket::stream :" 
+                       << " can't alloc " << fBufferSize << std::endl; 
+          _clear();
+          return false;
+        }
+        if(v>1) {
+          if(!a_buffer.read_fast_array(_buf,m_last)) {
+            _clear();
+            delete [] _buf;  
+            return false;
+          }
+        } else {
+          uint32 n;
+          if(!a_buffer.read_array<char>(fBufferSize,_buf,n)) {
+            _clear();
+            delete [] _buf;  
+            return false;
+          }
+        }
+        m_buffer = _buf;
+        m_buf_size = fBufferSize;
+        //fBufferRef->inline_setBufferOffset(m_last);
+        //fBranch.tree().incrementTotalBuffers(fBufferSize);
+      }
+    }
+
+    return true;
+  }
+public:
+  basket(ifile& a_file)
+  :key(a_file)
+  ,m_nev_buf_size(0)
+  ,m_nev(0)
+  ,m_last(0)
+  ,m_entry_offset(0)
+  ,m_displacement(0)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  basket(ifile& a_file,seek a_pos,uint32 a_nbytes)
+  :key(a_file,a_pos,a_nbytes)
+  ,m_nev_buf_size(0)
+  ,m_nev(0)
+  ,m_last(0)
+  ,m_entry_offset(0)
+  ,m_displacement(0)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~basket(){
+    _clear();
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  basket(const basket& a_from)
+  :iro(a_from)
+  ,key(a_from)
+  ,m_nev_buf_size(a_from.m_nev_buf_size)
+  ,m_nev(a_from.m_nev)
+  ,m_last(a_from.m_last)
+  ,m_entry_offset(0)
+  ,m_displacement(0)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    if(a_from.m_nev && a_from.m_entry_offset) {
+      m_entry_offset = new int[a_from.m_nev];
+      if(!m_entry_offset) {
+        m_file.out() << "tools::rroot::basket::basket(cpcstor) :"
+                     << " can't alloc " << a_from.m_nev << "." 
+                     << std::endl;
+      } else {
+        uint32 len = a_from.m_nev*sizeof(int);
+        ::memcpy(m_entry_offset,a_from.m_entry_offset,len);
+      }
+    }
+    if(a_from.m_nev && a_from.m_displacement) {
+      m_displacement = new int[a_from.m_nev];
+      if(!m_displacement) {
+        m_file.out() << "tools::rroot::basket::basket(cpcstor) :"
+                     << " can't alloc " << a_from.m_nev << "." 
+                     << std::endl;
+      } else {
+        uint32 len = a_from.m_nev*sizeof(int);
+        ::memcpy(m_displacement,a_from.m_displacement,len);
+      }
+    }    
+  }
+  basket& operator=(const basket& a_from){
+    key::operator=(a_from);
+
+    if(&a_from==this) return *this;
+
+    m_nev_buf_size = a_from.m_nev_buf_size;
+    m_nev = a_from.m_nev;
+    m_last = a_from.m_last;
+
+    delete [] m_entry_offset;
+    m_entry_offset = 0;
+    delete [] m_displacement;
+    m_displacement = 0;
+
+    if(a_from.m_nev && a_from.m_entry_offset) {
+      m_entry_offset = new int[a_from.m_nev];
+      if(!m_entry_offset) {
+        m_file.out() << "tools::rroot::basket::operator=() :"
+                     << " can't alloc " << a_from.m_nev << "." 
+                     << std::endl;
+      } else {
+        uint32 len = a_from.m_nev*sizeof(int);
+        ::memcpy(m_entry_offset,a_from.m_entry_offset,len);
+      }
+    }
+    if(a_from.m_nev && a_from.m_displacement) {
+      m_displacement = new int[a_from.m_nev];
+      if(!m_displacement) {
+        m_file.out() << "tools::rroot::basket::operator=() :"
+                     << " can't alloc " << a_from.m_nev << "." 
+                     << std::endl;
+      } else {
+        uint32 len = a_from.m_nev*sizeof(int);
+        ::memcpy(m_displacement,a_from.m_displacement,len);
+      }
+    }    
+
+    return *this;
+  }
+public:
+  int* entry_offset() {return m_entry_offset;}
+  int* displacement() {return m_displacement;}
+  uint32 nev_buf_size() const {return m_nev_buf_size;}
+  uint32 nev() const {return m_nev;}
+
+  bool read_offset_tables() {
+    if(!m_buffer) return false;    
+    if(!m_last) return false;    
+
+    delete [] m_entry_offset;
+    m_entry_offset = 0;
+
+    rroot::buffer buffer(m_file.out(),m_file.byte_swap(),
+                         m_buf_size,m_buffer,0,false); 
+    buffer.set_offset(m_last);
+
+   {uint32 n;
+    if(!buffer.read_array<int>(0,m_entry_offset,n)) {
+      m_file.out() << "tools::rroot::basket::read_offset_tables :"
+                   << " read_array failed."
+                   << std::endl;
+      return false;
+    }
+    if((n!=m_nev)&&(n!=(m_nev+1))) {
+      m_file.out() << "tools::rroot::basket::read_offset_tables :"
+                   << " m_entry_offset read len mismatch."
+                   << " n " << n
+                   << " m_nev " << m_nev
+                   << std::endl;
+      return false;
+    }}
+
+    delete [] m_displacement;
+    m_displacement = 0;
+    if(buffer.length()!=buffer.size()) {
+      // There is more data in the buffer!  It is the diplacement
+      // array.
+      uint32 n;
+      if(!buffer.read_array<int>(0,m_displacement,n)) {
+        m_file.out() << "tools::rroot::basket::read_offset_tables :"
+                     << " readArray(2) failed."
+                     << std::endl;
+        return false;
+      }
+      if((n!=m_nev)&&(n!=(m_nev+1))) {
+        m_file.out() << "tools::rroot::basket::read_offset_tables :"
+                     << " m_displacement read len mismatch."
+                     << " n " << n
+                     << " m_nev " << m_nev
+                     << std::endl;
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+protected:
+  void _clear(){
+    delete [] m_entry_offset;
+    delete [] m_displacement;
+    m_entry_offset = 0;
+    m_displacement = 0;
+  }
+protected: //Named
+  uint32 m_nev_buf_size;  //Length in Int_t of m_entry_offset
+  uint32 m_nev;           //Number of entries in basket
+  uint32 m_last;          //Pointer to last used byte in basket
+  int* m_entry_offset;    //[m_nev] Offset of entries in fBuffer(TKey)
+  int* m_displacement;    //![m_nev] Displacement of entries in fBuffer(TKey)
+};
+
+}}
+
+#endif

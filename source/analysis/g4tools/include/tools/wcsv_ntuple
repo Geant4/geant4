@@ -20,6 +20,11 @@ namespace tools {
 namespace wcsv {
 
 class ntuple {
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::wcsv::ntuple");
+    return s_v;
+  }
 protected:
   class icol {
   public:
@@ -92,37 +97,41 @@ public:
          const ntuple_booking& a_bkg,
          char a_sep = ',')
   :m_writer(a_writer)
-  ,m_sep(a_sep){  
-    const std::vector<ntuple_booking::col_t>& cols = a_bkg.m_columns;
-    std::vector<ntuple_booking::col_t>::const_iterator it;
+  ,m_sep(a_sep)
+  ,m_title(a_bkg.title())
+  {
+    const std::vector<column_booking>& cols = a_bkg.columns();
+    std::vector<column_booking>::const_iterator it;
     for(it=cols.begin();it!=cols.end();++it){
 
-      if((*it).second==_cid(char(0))) {
-        create_column<char>((*it).first);
-      } else if((*it).second==_cid(short(0))) {
-        create_column<short>((*it).first);
-      } else if((*it).second==_cid(int(0))) {
-        create_column<int>((*it).first);
-      } else if((*it).second==_cid(float(0))) {
-        create_column<float>((*it).first);
-      } else if((*it).second==_cid(double(0))) {
-        create_column<double>((*it).first);
+      if((*it).cls_id()==_cid(char(0))) {
+        create_column<char>((*it).name());
+      } else if((*it).cls_id()==_cid(short(0))) {
+        create_column<short>((*it).name());
+      } else if((*it).cls_id()==_cid(int(0))) {
+        create_column<int>((*it).name());
+      } else if((*it).cls_id()==_cid(float(0))) {
+        create_column<float>((*it).name());
+      } else if((*it).cls_id()==_cid(double(0))) {
+        create_column<double>((*it).name());
+      } else if((*it).cls_id()==_cid(std::string())) {
+        create_column<std::string>((*it).name());
 
-      } else if((*it).second==_cid(byte(0))) {
-        create_column<byte>((*it).first);
-      } else if((*it).second==_cid((unsigned short)0)) {
-        create_column<unsigned short>((*it).first);
-      } else if((*it).second==_cid((unsigned int)0)) {
-        create_column<unsigned int>((*it).first);
-      } else if((*it).second==_cid(bool(true))) {
-        create_column<bool>((*it).first);
-      } else if((*it).second==_cid(uint64(0))) {
-        create_column<uint64>((*it).first);
+      } else if((*it).cls_id()==_cid(byte(0))) {
+        create_column<byte>((*it).name());
+      } else if((*it).cls_id()==_cid((unsigned short)0)) {
+        create_column<unsigned short>((*it).name());
+      } else if((*it).cls_id()==_cid((unsigned int)0)) {
+        create_column<unsigned int>((*it).name());
+      } else if((*it).cls_id()==_cid(bool(true))) {
+        create_column<bool>((*it).name());
+      } else if((*it).cls_id()==_cid(uint64(0))) {
+        create_column<uint64>((*it).name());
 
       } else {
         a_out << "tools::wcsv::ntuple :"
-              << " for column " << sout((*it).first)
-              << ", type with cid " << (*it).second << " not yet handled."
+              << " for column " << sout((*it).name())
+              << ", type with cid " << (*it).cls_id() << " not yet handled."
               << std::endl;
         //throw
         tools::clear<icol>(m_cols);
@@ -138,12 +147,44 @@ protected:
   ntuple(const ntuple& a_from)
   :m_writer(a_from.m_writer)
   ,m_sep(a_from.m_sep)
+  ,m_title(a_from.m_title)
   {}
   ntuple& operator=(const ntuple& a_from){
     m_sep = a_from.m_sep;
+    m_title = a_from.m_title;
     return *this;
   }
 public:
+  void write_hippo_header() {
+    m_writer << m_title << std::endl;
+    std::vector<icol*>::const_iterator it;
+    for(it=m_cols.begin();it!=m_cols.end();++it){
+      if(it!=m_cols.begin()) m_writer << '\t';
+      m_writer << (*it)->name();
+    }
+    m_writer << std::endl;
+  }
+
+  bool write_commented_header(std::ostream& a_out) {
+    // commented header similar to the histo case.
+    m_writer << "#class " << s_class() << std::endl;
+    m_writer << "#title " << m_title << std::endl;
+    m_writer << "#separator " << (unsigned int)m_sep << std::endl;
+    bool status = true;
+   {for(unsigned int count=0;count<m_cols.size();count++) {
+       icol* _col = m_cols[count];
+       std::string sid;
+       if(!cid2s(_col->id_cls(),sid)) {
+         a_out << "tools::wcsv::ntuple::write_commented_header :"
+               << " unknow column type id " << _col->id_cls() << std::endl;
+         status = false; //but we continue.
+       } else {
+         m_writer << "#column " << sid << " " << _col->name() << std::endl;
+       }
+    }}
+    return status;
+  }
+
   template <class T>
   column<T>* create_column(const std::string& a_name,const T& a_def = T()) {
     if(find_named<icol>(m_cols,a_name)) return 0;
@@ -175,9 +216,13 @@ public:
   }
 
   const std::vector<icol*>& columns() const {return m_cols;}
+
+  void set_title(const std::string& a_value) {m_title = a_value;}
+  const std::string& title() const {return m_title;}
 protected:
   std::ostream& m_writer;
   char m_sep;
+  std::string m_title;
   std::vector<icol*> m_cols;
 };
 

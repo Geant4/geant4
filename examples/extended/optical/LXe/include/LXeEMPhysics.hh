@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeEMPhysics.hh 68752 2013-04-05 10:23:47Z gcosmo $
+// $Id: LXeEMPhysics.hh 81557 2014-06-03 08:32:44Z gcosmo $
 //
 /// \file optical/LXe/include/LXeEMPhysics.hh
 /// \brief Definition of the LXeEMPhysics class
@@ -63,23 +63,6 @@ class LXeEMPhysics : public G4VPhysicsConstructor
     // registered to the process manager of each particle type
     virtual void ConstructProcess();
 
-  protected:
-
-   // Gamma physics
-    G4PhotoElectricEffect* fPhotoEffect;
-    G4ComptonScattering* fComptonEffect;
-    G4GammaConversion* fPairProduction;
- 
-    // Electron physics
-    G4eMultipleScattering* fElectronMultipleScattering;
-    G4eIonisation* fElectronIonisation;
-    G4eBremsstrahlung* fElectronBremsStrahlung;
- 
-    //Positron physics
-    G4eMultipleScattering* fPositronMultipleScattering;
-    G4eIonisation* fPositronIonisation;
-    G4eBremsstrahlung* fPositronBremsStrahlung;
-    G4eplusAnnihilation* fAnnihilation;
 };
 
 #endif

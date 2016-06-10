@@ -29,25 +29,13 @@ find_package(ROOT REQUIRED)
 # Locate sources and headers for this project
 #
 include_directories(${PROJECT_SOURCE_DIR}/include 
-                    ${PROJECT_SOURCE_DIR}/../shared/include 
+                    ${PROJECT_SOURCE_DIR}/shared/include 
                     ${Geant4_INCLUDE_DIR}
                     ${ROOT_INCLUDE_DIR})
-file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
-file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
-
-#----------------------------------------------------------------------------
-# Get examples sources from common and shared
-#
-list(APPEND sources 
-  # uncomment the line below to include HBOOK analysis
-  # ${PROJECT_SOURCE_DIR}/../../common/analysis/src/ExG4HbookAnalysisManager.cc
-  ${PROJECT_SOURCE_DIR}/../shared/src/DetectorConstruction.cc
-  ${PROJECT_SOURCE_DIR}/../shared/src/DetectorMessenger.cc
-  ${PROJECT_SOURCE_DIR}/../shared/src/EventAction.cc
-  ${PROJECT_SOURCE_DIR}/../shared/src/PhysicsList.cc
-  ${PROJECT_SOURCE_DIR}/../shared/src/PrimaryGeneratorAction.cc
-  ${PROJECT_SOURCE_DIR}/../shared/src/RunAction.cc
-  ${PROJECT_SOURCE_DIR}/../shared/src/SteppingAction.cc)
+file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc
+                  ${PROJECT_SOURCE_DIR}/shared/src/*.cc)
+file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh
+                  ${PROJECT_SOURCE_DIR}/shared/include/*.hh)
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries

@@ -74,8 +74,8 @@ G4double G4VXResonance::IsospinCorrection(const G4KineticTrack& trk1,
 {
   G4double result = 0.;
  
-  G4ParticleDefinition* in1 = trk1.GetDefinition();
-  G4ParticleDefinition* in2 = trk2.GetDefinition();
+  const G4ParticleDefinition* in1 = trk1.GetDefinition();
+  const G4ParticleDefinition* in2 = trk2.GetDefinition();
 
   G4int isoIn1  = in1->GetPDGiIsospin();
   G4int iso3In1 = in1->GetPDGiIsospin3();
@@ -132,8 +132,8 @@ G4double G4VXResonance::DetailedBalance(const G4KineticTrack& trk1,
   // is used; in other words, the width of the resonances are folded to get the
   // mean square of the final state momentum.
 
-  G4ParticleDefinition* in1 = trk1.GetDefinition();
-  G4ParticleDefinition* in2 = trk2.GetDefinition();
+  const G4ParticleDefinition* in1 = trk1.GetDefinition();
+  const G4ParticleDefinition* in2 = trk2.GetDefinition();
   if(in1->IsShortLived() && in2->IsShortLived())
   {
     throw G4HadronicException(__FILE__, __LINE__, "Detailed balance for resonance scattering still on the schedule.");
@@ -189,8 +189,8 @@ G4double G4VXResonance::DegeneracyFactor(const G4KineticTrack& trk1,
 {
   G4double value = 0.;
 
-  G4ParticleDefinition* in1 = trk1.GetDefinition();
-  G4ParticleDefinition* in2 = trk2.GetDefinition();
+  const G4ParticleDefinition* in1 = trk1.GetDefinition();
+  const G4ParticleDefinition* in2 = trk2.GetDefinition();
 
   G4double sIn1 =  in1->GetPDGiSpin()  + 1.;
   G4double sIn2 =  in2->GetPDGiSpin()  + 1.;

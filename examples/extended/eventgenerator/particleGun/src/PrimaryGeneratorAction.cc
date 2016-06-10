@@ -27,12 +27,13 @@
 /// \brief Implementation of the PrimaryGeneratorfAction class
 //
 //
-// $Id: PrimaryGeneratorAction.cc 68734 2013-04-05 09:47:02Z gcosmo $
+// $Id: PrimaryGeneratorAction.cc 83919 2014-09-23 08:40:35Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PrimaryGeneratorAction.hh"
+#include "PrimaryGeneratorAction0.hh"
 #include "PrimaryGeneratorAction1.hh"
 #include "PrimaryGeneratorAction2.hh"
 #include "PrimaryGeneratorAction3.hh"
@@ -50,12 +51,13 @@
 PrimaryGeneratorAction::PrimaryGeneratorAction()
  : G4VUserPrimaryGeneratorAction(),
    fParticleGun(0),
+   fAction0(0),
    fAction1(0),
    fAction2(0),
    fAction3(0),
    fAction4(0),
-   fSelectedAction(1),
-   fGunMessenger(0)     
+   fSelectedAction(0),
+   fGunMessenger(0)
 {
   // default particle kinematic
   //
@@ -68,6 +70,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
         
   fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., 0.));
   
+  fAction0 = new PrimaryGeneratorAction0(fParticleGun);
   fAction1 = new PrimaryGeneratorAction1(fParticleGun);
   fAction2 = new PrimaryGeneratorAction2(fParticleGun);
   fAction3 = new PrimaryGeneratorAction3(fParticleGun);
@@ -81,6 +84,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
+  delete fAction0;
   delete fAction1;
   delete fAction2;
   delete fAction3;
@@ -95,6 +99,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   switch(fSelectedAction)
   {
+   case 0:
+    fAction0->GeneratePrimaries(anEvent);
+    break;
    case 1:
     fAction1->GeneratePrimaries(anEvent);
     break;

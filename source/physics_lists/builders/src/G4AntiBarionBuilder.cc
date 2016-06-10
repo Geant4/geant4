@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AntiBarionBuilder.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4AntiBarionBuilder.cc 81935 2014-06-06 15:41:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -53,12 +53,14 @@ G4AntiBarionBuilder(): wasActivated(false)
 
 G4AntiBarionBuilder::
 ~G4AntiBarionBuilder(){
+  /*
   delete theAntiProtonInelastic;
   delete theAntiNeutronInelastic;
   delete theAntiDeuteronInelastic;
   delete theAntiTritonInelastic;
   delete theAntiHe3Inelastic;
   delete theAntiAlphaInelastic;
+  */
 }
 
 void G4AntiBarionBuilder::

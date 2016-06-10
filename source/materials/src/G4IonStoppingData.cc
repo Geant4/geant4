@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonStoppingData.cc 76289 2013-11-08 13:07:00Z gcosmo $
+// $Id: G4IonStoppingData.cc 83419 2014-08-21 15:31:56Z gcosmo $
 //
 // ===========================================================================
 // GEANT4 class source file
@@ -70,7 +70,7 @@ G4IonStoppingData::G4IonStoppingData(const G4String& leDirectory) :
 
 G4IonStoppingData::~G4IonStoppingData() {
 
-  //  ClearTable();
+  ClearTable();
 }
 
 // #########################################################################

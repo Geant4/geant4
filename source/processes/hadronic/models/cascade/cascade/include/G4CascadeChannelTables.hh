@@ -38,6 +38,7 @@
 // 20130129  M. Kelsey -- Drop load-on-demand interfaces, fill in ctor
 // 20130306  M. Kelsey -- Add inclusive printing of all tables here
 // 20130429  M. Kelsey -- Change instance to thread-local pointer.
+// 20141121  M. Kelsey -- Dtor must be public for end-of-job cleanup.
 
 #ifndef G4_CASCADE_CHANNEL_TABLES_HH
 #define G4_CASCADE_CHANNEL_TABLES_HH
@@ -61,12 +62,14 @@ public:
   static void Print(std::ostream& os=G4cout);
   static void PrintTable(G4int initialState, std::ostream& os=G4cout);
 
+public:
+  ~G4CascadeChannelTables();
+
 private:
   static const G4CascadeChannelTables& instance();		// Singleton
   static G4ThreadLocal G4CascadeChannelTables* theInstance;	// per thread
 
   G4CascadeChannelTables();
-  ~G4CascadeChannelTables();
 
   // Fetch table from map if already registered, or return null
   const G4CascadeChannel* FindTable(G4int initialState) const;

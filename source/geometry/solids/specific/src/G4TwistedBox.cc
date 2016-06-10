@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedBox.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4TwistedBox.cc 79492 2014-03-05 15:25:30Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -71,6 +71,7 @@ G4TwistedBox::~G4TwistedBox()
 G4TwistedBox::G4TwistedBox(const G4TwistedBox& rhs)
   : G4VTwistedFaceted(rhs)
 {
+  fpPolyhedron = GetPolyhedron();
 }
 
 
@@ -85,6 +86,7 @@ G4TwistedBox& G4TwistedBox::operator = (const G4TwistedBox& rhs)
    // Copy base class data
    //
    G4VTwistedFaceted::operator=(rhs);
+   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

@@ -30,7 +30,7 @@
 
 #include "G4ReactionProduct.hh"
 
-G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator = 0;
 
 
  G4ReactionProduct::G4ReactionProduct() :
@@ -42,16 +42,17 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator_G4MT_TLS_ = 0;
     kineticEnergy(0.0),
     timeOfFlight(0.0),
     side(0),
+    theCreatorModel(-1),
     NewlyAdded(false),
     MayBeKilled(true)
-  { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ;
+  {
     SetMomentum( 0.0, 0.0, 0.0 );
     SetPositionInNucleus( 0.0, 0.0, 0.0 );
   }
  
  G4ReactionProduct::G4ReactionProduct(
-  G4ParticleDefinition *aParticleDefinition )
-  { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ;
+  const G4ParticleDefinition *aParticleDefinition )
+  {
     SetMomentum( 0.0, 0.0, 0.0 );
     SetPositionInNucleus( 0.0, 0.0, 0.0 );
     formationTime = 0.0;
@@ -62,13 +63,14 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator_G4MT_TLS_ = 0;
     kineticEnergy = 0.0;
     (aParticleDefinition->GetPDGEncoding()<0) ? timeOfFlight=-1.0 : timeOfFlight=1.0;
     side = 0;
+    theCreatorModel = -1;
     NewlyAdded = false;
     MayBeKilled = true;
   }
  
  G4ReactionProduct::G4ReactionProduct(
   const G4ReactionProduct &right )
-  { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ;
+  {
     theParticleDefinition = right.theParticleDefinition;
     positionInNucleus = right.positionInNucleus;
     formationTime = right.formationTime;
@@ -79,13 +81,14 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator_G4MT_TLS_ = 0;
     kineticEnergy = right.kineticEnergy;
     timeOfFlight = right.timeOfFlight;
     side = right.side;
+    theCreatorModel = right.theCreatorModel;
     NewlyAdded = right.NewlyAdded;
     MayBeKilled = right.MayBeKilled;
   }
  
  G4ReactionProduct &G4ReactionProduct::operator=(
   const G4ReactionProduct &right )
-  { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ;
+  {
     if( this != &right ) {
       theParticleDefinition = right.theParticleDefinition;
       positionInNucleus = right.positionInNucleus;
@@ -97,6 +100,7 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator_G4MT_TLS_ = 0;
       kineticEnergy = right.kineticEnergy;
       timeOfFlight = right.timeOfFlight;
       side = right.side;
+      theCreatorModel = right.theCreatorModel;
       NewlyAdded = right.NewlyAdded;
       MayBeKilled = right.MayBeKilled;
     }
@@ -105,7 +109,7 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator_G4MT_TLS_ = 0;
     
  G4ReactionProduct &G4ReactionProduct::operator=(
   const G4DynamicParticle &right )
-  { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ;
+  {
     theParticleDefinition = right.GetDefinition();
     SetPositionInNucleus( 0.0, 0.0, 0.0 );
     formationTime = 0.0;
@@ -116,6 +120,7 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator_G4MT_TLS_ = 0;
     kineticEnergy = right.GetKineticEnergy();
     (right.GetDefinition()->GetPDGEncoding()<0) ? timeOfFlight=-1.0 : timeOfFlight=1.0;
     side = 0;
+    theCreatorModel = -1;
     NewlyAdded = false;
     MayBeKilled = true;
     return *this;
@@ -123,8 +128,8 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator_G4MT_TLS_ = 0;
  
  G4ReactionProduct &G4ReactionProduct::operator=(
   const G4HadProjectile &right )
-  { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ;
-    theParticleDefinition = const_cast<G4ParticleDefinition *>(right.GetDefinition());
+  {
+    theParticleDefinition = right.GetDefinition();
     SetPositionInNucleus( 0.0, 0.0, 0.0 );
     formationTime = 0.0;
     hasInitialStateParton = false;
@@ -134,15 +139,15 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator_G4MT_TLS_ = 0;
     kineticEnergy = right.GetKineticEnergy();
     (right.GetDefinition()->GetPDGEncoding()<0) ? timeOfFlight=-1.0 : timeOfFlight=1.0;
     side = 0;
+    theCreatorModel = -1;
     NewlyAdded = false;
     MayBeKilled = true;
     return *this;
   }
  
  void G4ReactionProduct::SetDefinitionAndUpdateE(
-  G4ParticleDefinition *aParticleDefinition )
-  { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ;
-    G4double aKineticEnergy = GetKineticEnergy();
+  const G4ParticleDefinition *aParticleDefinition )
+  {    G4double aKineticEnergy = GetKineticEnergy();
     G4double pp = GetMomentum().mag();
     G4ThreeVector aMomentum = GetMomentum();
     SetDefinition( aParticleDefinition );
@@ -153,8 +158,8 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator_G4MT_TLS_ = 0;
   }
 
  void G4ReactionProduct::SetDefinition(
-  G4ParticleDefinition *aParticleDefinition )
-  { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ;
+  const G4ParticleDefinition *aParticleDefinition )
+  {
     theParticleDefinition = aParticleDefinition;
     mass = aParticleDefinition->GetPDGMass();
     totalEnergy = mass;
@@ -165,7 +170,7 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator_G4MT_TLS_ = 0;
  
  void G4ReactionProduct::SetMomentum(
   const G4double x, const G4double y, const G4double z )
-  { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ;
+  {
     momentum.setX( x );
     momentum.setY( y );
     momentum.setZ( z );
@@ -173,24 +178,25 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator_G4MT_TLS_ = 0;
  
  void G4ReactionProduct::SetMomentum(
   const G4double x, const G4double y )
-  { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ;
+  {
     momentum.setX( x );
     momentum.setY( y );
   }
  
  void G4ReactionProduct::SetMomentum( const G4double z )
-  { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ;
+  {
     momentum.setZ( z );
   }
  
  void G4ReactionProduct::SetZero()
-  { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ;
+  {
     SetMomentum( 0.0, 0.0, 0.0 );
     totalEnergy = 0.0;
     kineticEnergy = 0.0;
     mass = 0.0;
     timeOfFlight = 0.0;
     side = 0;
+    theCreatorModel = -1;
     NewlyAdded = false;
     SetPositionInNucleus( 0.0, 0.0, 0.0 );
     formationTime = 0.0;
@@ -199,7 +205,7 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator_G4MT_TLS_ = 0;
  
  void G4ReactionProduct::Lorentz(
    const G4ReactionProduct &p1, const G4ReactionProduct &p2 )
-  { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ;
+  {
     G4ThreeVector p1M = p1.momentum;
     G4ThreeVector p2M = p2.momentum;
     G4double p1x = p1M.x(); G4double p1y = p1M.y(); G4double p1z = p1M.z();
@@ -218,7 +224,7 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator_G4MT_TLS_ = 0;
  
  G4double G4ReactionProduct::Angle(
   const G4ReactionProduct& p ) const
-  { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ;
+  {
     G4ThreeVector tM = momentum;
     G4ThreeVector pM = p.momentum;
     G4double tx = tM.x(); G4double ty = tM.y(); G4double tz = tM.z();
@@ -235,7 +241,7 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator_G4MT_TLS_ = 0;
  
  G4ReactionProduct operator+(
   const G4ReactionProduct& p1, const G4ReactionProduct& p2 )
-  { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ;
+  {
     G4double totEnergy = p1.totalEnergy + p2.totalEnergy;
     G4double x = p1.momentum.x() + p2.momentum.x();
     G4double y = p1.momentum.y() + p2.momentum.y();
@@ -257,7 +263,7 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator_G4MT_TLS_ = 0;
  
  G4ReactionProduct operator-(
   const G4ReactionProduct& p1, const G4ReactionProduct& p2 )
-  { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ;
+  {
     G4double totEnergy = p1.totalEnergy - p2.totalEnergy;
     G4double x = p1.momentum.x() - p2.momentum.x();
     G4double y = p1.momentum.y() - p2.momentum.y();

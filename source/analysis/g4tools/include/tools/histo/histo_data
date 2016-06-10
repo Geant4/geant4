@@ -7,33 +7,35 @@
 #include <vector>
 #include <map> //for annotations
 
-#include "axis"
+#include "axes"
 
 namespace tools {
 namespace histo {
 
 //TC is for a coordinate.
+//TO is for an offset used to identify a bin.
 //TN is for a number of entries.
 //TW is for a weight.
 
-template <class TC,class TN,class TW>
+template <class TC,class TO,class TN,class TW>
 class histo_data {
 public:
-  typedef typename axis<TC>::bn_t bn_t;
+  typedef axis<TC,TO> axis_t;
   typedef unsigned int dim_t;
 public:
   histo_data()
   :m_dimension(0)
   ,m_bin_number(0)
-  //,m_mode(0)
+  ,m_all_entries(0)
+  ,m_in_range_entries(0)
+  ,m_in_range_Sw(0)
+  ,m_in_range_Sw2(0)
   {}
 public:
   histo_data(const histo_data& a_from)
   :m_title(a_from.m_title)
   ,m_dimension(a_from.m_dimension)
   ,m_bin_number(a_from.m_bin_number)
-  //,m_mode(a_from.m_mode)
-  // Arrays :
   ,m_bin_entries(a_from.m_bin_entries)
   ,m_bin_Sw(a_from.m_bin_Sw)
   ,m_bin_Sw2(a_from.m_bin_Sw2)
@@ -41,65 +43,79 @@ public:
   ,m_bin_Sx2w(a_from.m_bin_Sx2w)
   ,m_axes(a_from.m_axes)
   ,m_annotations(a_from.m_annotations)
+  ,m_all_entries(a_from.m_all_entries)
+  ,m_in_range_entries(a_from.m_in_range_entries)
+  ,m_in_range_Sw(a_from.m_in_range_Sw)
+  ,m_in_range_Sw2(a_from.m_in_range_Sw2)
+  ,m_in_range_Sxw(a_from.m_in_range_Sxw)
+  ,m_in_range_Sx2w(a_from.m_in_range_Sx2w)
   {}
 
   histo_data& operator=(const histo_data& a_from) {
+    if(&a_from==this) return *this;
     m_title = a_from.m_title;
     m_dimension = a_from.m_dimension;
     m_bin_number = a_from.m_bin_number;
-    //m_mode = a_from.m_mode;
-    // Arrays :
     m_bin_entries = a_from.m_bin_entries;
     m_bin_Sw = a_from.m_bin_Sw;
     m_bin_Sw2 = a_from.m_bin_Sw2;
     m_bin_Sxw = a_from.m_bin_Sxw;
     m_bin_Sx2w = a_from.m_bin_Sx2w;
     m_axes = a_from.m_axes;
-    //
     m_annotations = a_from.m_annotations;
+    m_all_entries = a_from.m_all_entries;
+    m_in_range_entries = a_from.m_in_range_entries;
+    m_in_range_Sw = a_from.m_in_range_Sw;
+    m_in_range_Sw2 = a_from.m_in_range_Sw2;
+    m_in_range_Sxw = a_from.m_in_range_Sxw;
+    m_in_range_Sx2w = a_from.m_in_range_Sx2w;
     return *this;
   }
 
   virtual ~histo_data(){}
-public: 
-  void base_reset() { //used in multiply,divide.
-    // Reset content (different of clear that deallocate all internal things).
-    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
-      m_bin_entries[ibin] = 0;
-      m_bin_Sw[ibin] = 0;
-      m_bin_Sw2[ibin] = 0;
-      for(dim_t iaxis=0;iaxis<m_dimension;iaxis++) {
-        m_bin_Sxw[ibin][iaxis] = 0;
-        m_bin_Sx2w[ibin][iaxis] = 0;
-      }
-    }
-  }
 
 public:
-  // for BatchLab::Rio::TH::streamTH1 :
-  TN get_entries() const {
-    TN number = 0;
-    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
-      if(!is_out(ibin)) {
-        number += m_bin_entries[ibin];
-      }
-    }
-    return number;
-  }
+
+  // for inlib/rroot/streamers :
   TW get_Sw() const {
     TW sw = 0;
-    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
-      if(!is_out(ibin)) {
+    for(TO ibin=0;ibin<m_bin_number;ibin++) {
+      if(!histo::is_out(m_axes,ibin)) {
         sw += m_bin_Sw[ibin];
       }
     }
     return sw;
   }
+/*
+  TW get_all_Sw() const {
+    TW sw = 0;
+    for(TO ibin=0;ibin<m_bin_number;ibin++) sw += m_bin_Sw[ibin];
+    return sw;
+  }
+  TN get_all_entries() const {
+    TN number = 0;
+    for(TO ibin=0;ibin<m_bin_number;ibin++) {
+      number += m_bin_entries[ibin];
+    }
+    return number;
+  }
+
+  // for inlib/wroot/streamers :
+  TN get_entries() const {
+    TN number = 0;
+    for(TO ibin=0;ibin<m_bin_number;ibin++) {
+      if(!histo::is_out(m_axes,ibin)) {
+        number += m_bin_entries[ibin];
+      }
+    }
+    return number;
+  }
+*/
 
   TW get_Sw2() const {
     TW sw2 = 0;
-    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
-      if(!is_out(ibin)) {
+    for(TO ibin=0;ibin<m_bin_number;ibin++) {
+      if(!histo::is_out(m_axes,ibin)) {
         sw2 += m_bin_Sw2[ibin];
       }
     }
@@ -109,8 +125,8 @@ public:
   bool get_ith_axis_Sxw(dim_t a_axis,TC& a_value) const {
     a_value = 0;
     if(a_axis>=m_dimension) return false;
-    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
-      if(!is_out(ibin)) {
+    for(TO ibin=0;ibin<m_bin_number;ibin++) {
+      if(!histo::is_out(m_axes,ibin)) {
         a_value += m_bin_Sxw[ibin][a_axis];
       }
     }
@@ -120,68 +136,38 @@ public:
   bool get_ith_axis_Sx2w(dim_t a_axis,TC& a_value) const {
     a_value = 0;
     if(a_axis>=m_dimension) return false;
-    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
-      if(!is_out(ibin)) {
+    for(TO ibin=0;ibin<m_bin_number;ibin++) {
+      if(!histo::is_out(m_axes,ibin)) {
         a_value += m_bin_Sx2w[ibin][a_axis];
       }
     }
     return true;
   }
 
-  TN get_all_entries() const {
-    TN number = 0;
-    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
-      number += m_bin_entries[ibin];
-    }
-    return number;
+protected:
+  void reset_fast_getters(){
+    m_all_entries = 0;
+    m_in_range_entries = 0;
+    m_in_range_Sw = 0;
+    m_in_range_Sw2 = 0;
+    m_in_range_Sxw.resize(m_dimension,0);
+    m_in_range_Sx2w.resize(m_dimension,0);
   }
-
-  bool is_out(bn_t aOffset) const {
-    int offset = aOffset;
-    int index;
-    for(int iaxis=m_dimension-1;iaxis>=0;iaxis--) { 
-      index = offset/m_axes[iaxis].m_offset;
-      if(index==0) return true;
-      if(index==(int(m_axes[iaxis].m_number_of_bins)+1)) return true;
-      offset -= index * m_axes[iaxis].m_offset;
-    }
-    return false;
-  }
-
-  void get_indices(bn_t aOffset,std::vector<int>& aIs) const {
-    int offset = aOffset;
-   {for(int iaxis=m_dimension-1;iaxis>=0;iaxis--) { 
-      aIs[iaxis] = offset/m_axes[iaxis].m_offset;
-      offset -= aIs[iaxis] * m_axes[iaxis].m_offset;
+public:
+  void update_fast_getters() {
+    reset_fast_getters();
+   {for(TO ibin=0;ibin<m_bin_number;ibin++) {
+      if(!histo::is_out(m_axes,ibin)) {
+        m_in_range_entries += m_bin_entries[ibin];
+        m_in_range_Sw += m_bin_Sw[ibin];
+        m_in_range_Sw2 += m_bin_Sw2[ibin];
+        for(dim_t iaxis=0;iaxis<m_dimension;iaxis++) {
+           m_in_range_Sxw[iaxis] += m_bin_Sxw[ibin][iaxis];
+           m_in_range_Sx2w[iaxis] += m_bin_Sx2w[ibin][iaxis];
+        }
+      }
+      m_all_entries += m_bin_entries[ibin];
     }}
-    for(dim_t iaxis=0;iaxis<m_dimension;iaxis++) {
-      if(aIs[iaxis]==0) {
-        aIs[iaxis] = axis<TC>::UNDERFLOW_BIN;
-      } else if(aIs[iaxis]==int(m_axes[iaxis].m_number_of_bins)+1) {
-        aIs[iaxis] = axis<TC>::OVERFLOW_BIN;
-      } else {
-        aIs[iaxis]--;
-      }
-    }
-  }
-
-  // for raxml :
-  bool get_offset(const std::vector<int>& aIs,bn_t& a_offset) const {
-    // aIs[iaxis] is given in in-range indexing :
-    //  - [0,n[iaxis]-1] for in-range bins
-    //  - UNDERFLOW_BIN for the iaxis underflow bin
-    //  - OVERFLOW_BIN for the iaxis overflow bin
-    a_offset = 0;
-    if(!m_dimension) return false;
-    bn_t ibin;
-    for(dim_t iaxis=0;iaxis<m_dimension;iaxis++) { 
-      if(!m_axes[iaxis].in_range_to_absolute_index(aIs[iaxis],ibin)) {
-        a_offset = 0;
-        return false;
-      }
-      a_offset += ibin * m_axes[iaxis].m_offset;
-    }
-    return true;
   }
 
 public:
@@ -189,16 +175,23 @@ public:
   std::string m_title;
   dim_t m_dimension;
   // Bins :
-  bn_t m_bin_number;
+  TO m_bin_number;
   std::vector<TN> m_bin_entries;
   std::vector<TW> m_bin_Sw;
   std::vector<TW> m_bin_Sw2;
   std::vector< std::vector<TC> > m_bin_Sxw;
   std::vector< std::vector<TC> > m_bin_Sx2w;
   // Axes :
-  std::vector< axis<TC> > m_axes;
+  std::vector<axis_t> m_axes;
   // etc :
   std::map<std::string,std::string> m_annotations;
+  // fast getters :
+  TN m_all_entries; //used if reading from a ROOT file.
+  TN m_in_range_entries;
+  TW m_in_range_Sw;
+  TW m_in_range_Sw2;
+  std::vector<TC> m_in_range_Sxw;
+  std::vector<TC> m_in_range_Sx2w;
 };
 
 }}

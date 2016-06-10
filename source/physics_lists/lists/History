@@ -1,4 +1,4 @@
-$Id: History 76249 2013-11-08 11:21:29Z gcosmo $
+$Id: History 86364 2014-11-10 08:41:56Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,75 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+07-Nov-2014, Robert Hatcher             (phys-lists-V10-00-14)
+- Also remove support for G4GenericPhysicsList in new factory
+  until the problem w/ mac/clang and G4AnyMethod is understood
+- cowork with tag "phys-ctor-fact-V10-00-02"
+
+07-Nov-2014, Robert Hatcher             (phys-lists-V10-00-13)
+- Remove support for ShieldingLEND & ShieldingM in new factory
+  until the problem w/ mac/clang & linux/icc is understood
+- cowork with tag "phys-ctor-fact-V10-00-02"
+
+07-Nov-2014, P. Arce          (phys-lists-V10-00-12)
+- Add QGSP_BIC_AllHP particle_hp physics list
+
+07-Nov-2014, Gabriele Cosmo             (phys-lists-V10-00-11)
+- Retagged.
+
+05-Nov-2014, Robert Hatcher             (phys-lists-V10-00-10)
+- Fixed overload ambiguity complaint from Visual Studio 12,
+  and tag at the right level
+- cowork with tag "phys-ctor-fact-V10-00-01" and "intercoms-V10-00-15"
+
+04-Nov-2014, Robert Hatcher             (phys-lists-V10-00-09)
+- Add g4alt::G4PhysListFactory as user extensible list factory;
+   work done via G4PhysListRegistry and G4PhysListStamper classes.
+- Modify LBE list ctor to accept ver(bosity) as optional arg
+   in the same manner as other physics lists.
+- cowork with tag "phys-ctor-fact-V10-00-01"
+
+15-Oct-2014, Alex Howard           (phys-lists-V10-00-08)
+- Increased cuts in LBE physics list to 1 micrometer (from 1 nanometer).
+
+15-Oct-2014, Alex Howard           (phys-lists-V10-00-07)
+- Bugfix 1591 for LBE 
+- removed Bertini Cascade from alphas, deuterons and tritons and replaced with 
+  BinaryLightIonReaction
+- Replaced G4MuonMinusCaptureAtRest with G4MuonMinusCapture
+
+05-Aug-2014, Krzysztof Genser           (phys-lists-V10-00-06)
+- Extended Shielding code to also include ShieldingM variant
+
+10-Jun-2014, V.Ivanchenko               (phys-lists-V10-00-05)
+- INCLXXPhysicsListHelper - for the case of HP set cut on proton to 
+  zero to simulate all recoils from elastic scattering
+
+06-Jun-2014, Alberto Ribon              (phys-lists-V10-00-04)
+- Proposed the tag which includes the two internal tags below,
+  made yesterday by Krzysztof and Vladimir I.
+
+05-Jun-2014, V.Ivanchenko
+- FTFP_BERT_HP, QGSP_BIC_HP, QGSP_BERT_HP - set cut on proton to 
+  zero to simulate all recoils from elastic scattering
+
+05-Jun-2014, Krzysztof Genser
+- Added ShieldingM and NuBeam to G4PhysListFactory
+
+05-Jun-2014, Alberto Ribon              (phys-lists-V10-00-03)
+- FTFP_BERT_TRV: use (temporary) G4HadronHElasticPhysics in order
+  to allow testing of improvements in elastic.
+
+03-June-2014, Julia Yarba               (phys-lists-V10-00-02)
+- Include new (experimental) physics lists ShieldingM and NuBeam
+
+03-Feb-2014, Luciano Pandola            (phys-lists-V10-00-01)
+- Registered model in LBE.icc to handle neutron capture above 20 MeV 
+ (Bug Report 1562) 
+
+29-Jan-2014, Gunter Folger              (phys-lists-V10-00-00)
+- Removed electromagnetic/dna, cascade/{evaporation,utils}, and 
+   isotope_productionfrom sources.cmake
 
 07-Nov-2013, Tatsumi Koi                (phys-lists-V09-06-20)
 -Activate production of fission fragments in Shielding PhysicsList

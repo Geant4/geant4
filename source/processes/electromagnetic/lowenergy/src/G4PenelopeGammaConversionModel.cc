@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeGammaConversionModel.cc 76220 2013-11-08 10:15:00Z gcosmo $
+// $Id: G4PenelopeGammaConversionModel.cc 83584 2014-09-02 08:45:37Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -87,14 +87,12 @@ G4PenelopeGammaConversionModel::~G4PenelopeGammaConversionModel()
 {
   //Delete shared tables, they exist only in the master model
   if (IsMaster() || fLocalTable)
-    {
-      //std::map <G4int,G4PhysicsFreeVector*>::iterator i;
+    {      
       if (logAtomicCrossSection)
-	{
-	  /*
+	{	  
+	  std::map <G4int,G4PhysicsFreeVector*>::iterator i;
 	  for (i=logAtomicCrossSection->begin();i != logAtomicCrossSection->end();i++)
-	     if (i->second) delete i->second;
-	  */
+	    if (i->second) delete i->second;	  
 	  delete logAtomicCrossSection;
 	}
       if (fEffectiveCharge)
@@ -250,14 +248,18 @@ G4double G4PenelopeGammaConversionModel::ComputeCrossSectionPerAtom(
      {
        //If we are here, it means that Initialize() was inkoved, but the MaterialTable was 
        //not filled up. This can happen in a UnitTest or via G4EmCalculator
-       G4ExceptionDescription ed;
-       ed << "Unable to retrieve the cross section table for Z=" << iZ << G4endl;
-       ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;   
-       G4Exception("G4PenelopeGammaConversionModel::ComputeCrossSectionPerAtom()",
-		   "em2018",JustWarning,ed);
+       if (verboseLevel > 0)
+	 {
+	   //Issue a G4Exception (warning) only in verbose mode
+	   G4ExceptionDescription ed;
+	   ed << "Unable to retrieve the cross section table for Z=" << iZ << G4endl;
+	   ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;   
+	   G4Exception("G4PenelopeGammaConversionModel::ComputeCrossSectionPerAtom()",
+		       "em2018",JustWarning,ed);
+	 }
        //protect file reading via autolock
        G4AutoLock lock(&PenelopeGammaConversionModelMutex);
-       ReadDataFile(iZ);
+       ReadDataFile(iZ);            
        lock.unlock();
      }
 
@@ -314,13 +316,36 @@ G4PenelopeGammaConversionModel::SampleSecondaries(std::vector<G4DynamicParticle*
   G4ParticleMomentum photonDirection = aDynamicGamma->GetMomentumDirection();
   const G4Material* mat = couple->GetMaterial();
 
+  //Either Initialize() was not called, or we are in a slave and InitializeLocal() was 
+  //not invoked
+  if (!fEffectiveCharge)
+    {
+      //create a **thread-local** version of the table. Used only for G4EmCalculator and 
+      //Unit Tests
+      fLocalTable = true;    
+      fEffectiveCharge = new std::map<const G4Material*,G4double>;
+      fMaterialInvScreeningRadius = new std::map<const G4Material*,G4double>;
+      fScreeningFunction = new std::map<const G4Material*,std::pair<G4double,G4double> >;
+    }
+
   if (!fEffectiveCharge->count(mat))
     {
-      G4ExceptionDescription ed;      
-      ed << "Unable to allocate the EffectiveCharge data for " << 
-	mat->GetName() << G4endl;
-      G4Exception("G4PenelopeGammaConversion::SampleSecondaries()",
-		  "em2019",FatalException,ed);		  
+      //If we are here, it means that Initialize() was inkoved, but the MaterialTable was 
+      //not filled up. This can happen in a UnitTest or via G4EmCalculator
+      if (verboseLevel > 0)
+	{
+	  //Issue a G4Exception (warning) only in verbose mode
+	  G4ExceptionDescription ed;
+	  ed << "Unable to allocate the EffectiveCharge data for " << 
+	    mat->GetName() << G4endl;
+	  ed << "This can happen only in Unit Tests" << G4endl;   
+	  G4Exception("G4PenelopeGammaConversionModel::SampleSecondaries()",
+		      "em2019",JustWarning,ed);
+	}
+      //protect file reading via autolock
+      G4AutoLock lock(&PenelopeGammaConversionModelMutex);
+      InitializeScreeningFunctions(mat);
+      lock.unlock();
     }
 
   // eps is the fraction of the photon energy assigned to e- (including rest mass)
@@ -609,10 +634,12 @@ void G4PenelopeGammaConversionModel::InitializeScreeningRadii()
 
 void G4PenelopeGammaConversionModel::InitializeScreeningFunctions(const G4Material* material)
 {
+  /*
   if (!IsMaster())    
       //Should not be here!
     G4Exception("G4PenelopeGammaConversionModel::InitializeScreeningFunctions()",
 		"em01001",FatalException,"Worker thread in this method");    
+  */
 
   // This is subroutine GPPa0 of Penelope
   //

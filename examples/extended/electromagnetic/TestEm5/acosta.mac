@@ -1,4 +1,4 @@
-# $Id: acosta.mac 76464 2013-11-11 10:22:56Z gcosmo $
+# $Id: acosta.mac 81528 2014-06-02 16:21:24Z vnivanch $
 #
 # macro file for TestEm5.cc    
 #
@@ -22,7 +22,7 @@
 /analysis/setFileName acosta
 /analysis/h1/set 40 40 0 20 keV	#energy at exit. (reflect,neutral)
 #
-/testem/phys/setGCut 1 um
+/run/setCut 1 um
 #
 /run/printProgress 100000
 # 

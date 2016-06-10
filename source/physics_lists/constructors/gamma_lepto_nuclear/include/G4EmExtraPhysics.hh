@@ -52,6 +52,8 @@
 #include "G4MuonNuclearProcess.hh"
 #include "G4MuonVDNuclearModel.hh"
 
+class G4BertiniElectroNuclearBuilder;
+
 class G4EmExtraPhysics : public G4VPhysicsConstructor
 {
 public:
@@ -84,6 +86,7 @@ private:
   static G4ThreadLocal G4bool gammNucOn;
   static G4ThreadLocal G4bool muNucOn;
 
+  G4BertiniElectroNuclearBuilder* theGNPhysics;
   G4EmMessenger*           theMessenger;
   G4int verbose;
 };

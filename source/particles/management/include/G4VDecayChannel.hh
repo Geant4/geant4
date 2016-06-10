@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDecayChannel.hh 73762 2013-09-10 12:53:56Z gcosmo $
+// $Id: G4VDecayChannel.hh 83920 2014-09-23 09:00:36Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -61,12 +61,14 @@ class    G4ParticleTable;
 /////@@      daughters = 0;
 /////@@      parent_mass = 0.0;
 /////@@      daughters_mass = 0;
+/////@@      daughters_width = 0;
 /////@@    }
 /////@@
 /////@@    G4ParticleDefinition*  parent;
 /////@@    G4ParticleDefinition** daughters;
 /////@@    G4double               parent_mass;
 /////@@    G4double*              daughters_mass;
+/////@@    G4double*              daughters_width;
 /////@@};
 /////@@
 /////@@// The type G4DecayChannelManager is introduced to encapsulate the methods used
@@ -97,6 +99,7 @@ class    G4ParticleTable;
 /////@@#define G4MT_daughters ((G4VDecayChannel::subInstanceManager.offset[instanceID]).daughters)
 /////@@#define G4MT_parent_mass ((G4VDecayChannel::subInstanceManager.offset[instanceID]).parent_mass)
 /////@@#define G4MT_daughters_mass ((G4VDecayChannel::subInstanceManager.offset[instanceID]).daughters_mass)
+/////@@#define G4MT_daughters_width ((G4VDecayChannel::subInstanceManager.offset[instanceID]).daughters_width)
 /////@@
 class G4VDecayChannel
 {
@@ -168,6 +171,9 @@ class G4VDecayChannel
     void  SetVerboseLevel(G4int value);
     G4int GetVerboseLevel()  const;
     void  DumpInfo();
+ 
+    G4double  GetRangeMass() const;
+    void      SetRangeMass(G4double val);
 
 /////@@  public:  // without description
 /////@@
@@ -200,6 +206,9 @@ class G4VDecayChannel
     const G4String& GetNoName() const;
 
   protected:
+     G4double DynamicalMass(G4double massPDG, G4double width, G4double maxDev = +1.) const;
+
+  protected:
 
     // kinematics name
     G4String   kinematics_name;
@@ -211,7 +220,10 @@ class G4VDecayChannel
     G4String*  parent_name;
     // daughter particles
     G4String** daughters_name;
-
+ 
+    //  range of mass allowed in decay
+    G4double   rangeMass;
+   
     // pointer to particle table
     G4ParticleTable*       particletable;
 
@@ -231,6 +243,7 @@ class G4VDecayChannel
     G4ParticleDefinition** G4MT_daughters;
     G4double               G4MT_parent_mass;
     G4double*              G4MT_daughters_mass;
+    G4double*              G4MT_daughters_width;
 };
 
 // ------------------------------------------------------------
@@ -337,6 +350,12 @@ inline
 inline
  G4int G4VDecayChannel::GetVerboseLevel() const { return verboseLevel; }
 
+inline   
+ G4double  G4VDecayChannel::GetRangeMass() const { return rangeMass; }
+
+inline   
+  void  G4VDecayChannel::SetRangeMass(G4double val){ if(val>=0.) rangeMass=val; }
+ 
 /////@@inline
 /////@@ G4int G4VDecayChannel::GetInstanceID() const { return instanceID; }
 

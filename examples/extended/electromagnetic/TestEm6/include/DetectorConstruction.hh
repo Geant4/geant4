@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm6/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: DetectorConstruction.hh 83428 2014-08-21 15:46:01Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,7 +57,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      virtual G4VPhysicalVolume* Construct();
      
      void SetSize        (G4double);              
-     void SetMaterial    (G4String);            
+     void SetMaterial    (const G4String&);            
      void SetMagField    (G4double);
      void SetMaxStepSize (G4double);     
 

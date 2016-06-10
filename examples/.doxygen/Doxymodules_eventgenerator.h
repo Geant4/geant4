@@ -1,4 +1,4 @@
-// $Id: Doxymodules_eventgenerator.h 60059 2012-06-27 13:00:49Z gcosmo $
+// $Id: Doxymodules_eventgenerator.h 82046 2014-06-10 08:10:10Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_eventgenerator.h
@@ -16,12 +16,11 @@
  *  @{
  */
 
-  class exGPSAnalysisManager {};
-  class exGPSAnalysisMessenger {};
+  class exGPSActionInitialization {};
   class exGPSEventAction {};
-  class exGPSEventActionMessenger {};
   class exGPSGeometryConstruction {};
-  class exGPSPhysicsList {};
+  class exGPSHistoManager {};
+  class exGPSHistoMessenger {};
   class exGPSPrimaryGeneratorAction {};
   class exGPSRunAction {};
 

@@ -1,4 +1,4 @@
-# $Id: History 69564 2013-05-08 12:33:30Z gcosmo $
+# $Id: History 83387 2014-08-21 14:28:10Z gcosmo $
 # -----------------------------------------------------------
 
           ==================================================
@@ -15,7 +15,59 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 August 2014 Tatsumi Koi (hadr-lend-V10-00-06)
+-Turn off license banner
+	src/G4LENDManager.cc
+-Fix bug FindIon -> GetIon
+	src/G4LENDCapture.cc
+	src/G4LENDModel.cc
+	src/G4LENDInelastic.cc
+	src/G4LENDElastic.cc
+
+
+2 June 2014 Tatsumi Koi (hadr-lend-V10-00-05)
+-Protect divide overflow 
+       src/tpia_misc.cc
+       src/tpia_kinetics.cc
+
+
+1 June 2014 Tatsumi Koi (hadr-lend-V10-00-04)
+-----------------------------------------------
+-Fix wrong usage of IonTable
+	src/G4LENDManager.cc
+-Relax Fatal Energy CheckLevel 
+	include/G4LENDFission.hh
+	src/G4LENDFission.cc
+
+28 March 2014 Tatsumi Koi (hadr-lend-V10-00-03)
+-----------------------------------------------
+-Bug fix 
+LEND used G4ParticleTable::GetParticleTable()->GetIon(,,) which obsolete in v10.00
+	src/G4LENDCapture.cc
+	src/G4LENDModel.cc
+	src/G4LENDFission.cc
+	src/G4LENDInelastic.cc
+	src/G4LENDElastic.cc
+
+14 March 2014 Tatsumi Koi (hadr-lend-V10-00-02)
+-----------------------------------------------
+-Remove const_cast now that pointer to G4ParticleDefinition is const
+       src/G4LENDModel.cc
+       src/G4LENDElastic.cc
+
+14 March 2014 Tatsumi Koi (hadr-lend-V10-00-01)
+-----------------------------------------------
+Fix compilation warnings detected by clang compiler on MacOS-10.9.
+	src/tpia_product.cc
+
+
+29 Jan 2014 Gunter Folger    (hadr-lend-V10-00-00)
+--------------------------------------------------
+- Removed low_energy from sources.cmake
+
+
 6 May 2013 Tatsumi Koi (hadr-lend-V09-06-01)
+--------------------------------------------
 Fix for "warning: conversion specifies type 'int' but the argument has type 'size_t'" 
 	src/xData.cc
 

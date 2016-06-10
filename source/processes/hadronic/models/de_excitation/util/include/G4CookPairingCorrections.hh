@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CookPairingCorrections.hh 68724 2013-04-05 09:26:32Z gcosmo $
+// $Id: G4CookPairingCorrections.hh 85841 2014-11-05 15:35:06Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -44,34 +44,14 @@ public:
 	
   ~G4CookPairingCorrections();
 
-  inline
-  G4double GetParingCorrection(G4int A, G4int Z) const {
-    return GetPairingZ(Z) + GetPairingN(A-Z);
-  }
-
-  inline
-  G4double GetPairingZ(G4int Z) const 
+  inline G4bool GetPairingCorrection(G4int N, G4int Z, G4double& result) const
   {
-    G4double res = 0.0;
-    if (IsInTableThisZ(Z)) { res = PairingZTable[Z-ZTableMin]; }
+    G4bool res = false;
+    if(Z >= ZTableMin && Z <= ZTableMax && N >= NTableMin && N <= NTableMax) { 
+      result = PairingZTable[Z-ZTableMin] + PairingNTable[N-NTableMin];
+      res = true; 
+    }
     return res;
-  }
-
-  G4bool IsInTableThisZ(const G4int Z) const 
-  {
-    return ( Z >= ZTableMin && Z <= ZTableMax );
-  }
-  
-  G4double GetPairingN(const G4int N) const 
-  {
-    G4double res = 0.0;
-    if (IsInTableThisN(N)) { res = PairingNTable[N-NTableMin]; }
-    return res;
-  }
-  
-  G4bool IsInTableThisN(const G4int N) const 
-  {
-    return ( N >= NTableMin && N <= NTableMax );
   }
   
   enum  { ZTableSize = 68, NTableSize = 118, ZTableMin = 28, ZTableMax = 95,

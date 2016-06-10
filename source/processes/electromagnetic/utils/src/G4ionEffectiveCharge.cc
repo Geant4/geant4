@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc 74376 2013-10-04 08:25:47Z gcosmo $
+// $Id: G4ionEffectiveCharge.cc 79394 2014-02-27 08:51:38Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -62,6 +62,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+const G4double G4ionEffectiveCharge::inveplus = 1.0/CLHEP::eplus;
+
 G4ionEffectiveCharge::G4ionEffectiveCharge()
 {
   chargeCorrection = 1.0;
@@ -97,7 +99,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
 
   G4double mass   = p->GetPDGMass();
   G4double charge = p->GetPDGCharge();
-  G4double Zi     = charge/eplus;
+  G4double Zi     = charge*inveplus;
 
   chargeCorrection = 1.0;
   effCharge = charge;
@@ -109,34 +111,37 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
   // Fast ions or hadrons
   G4double reducedEnergy = kineticEnergy * proton_mass_c2/mass ;
 
-  //G4cout << "e= " << reducedEnergy << " Zi= " << Zi << "  " << material->GetName() << G4endl;
+  //G4cout << "e= " << reducedEnergy << " Zi= " << Zi << "  " 
+  //<< material->GetName() << G4endl;
 
-  if( reducedEnergy > Zi*energyHighLimit || Zi < 1.5 || !material) return charge;
-
+  if(Zi < 1.5 || !material || reducedEnergy > Zi*energyHighLimit ) {
+    return charge;
+  }
   G4double z    = material->GetIonisation()->GetZeffective();
   reducedEnergy = std::max(reducedEnergy,energyLowLimit);
 
   // Helium ion case
   if( Zi < 2.5 ) {
 
-    static const G4double c[6] = {0.2865,0.1266,-0.001429,0.02402,-0.01135,0.001475};
+    static const G4double c[6] = 
+      {0.2865,0.1266,-0.001429,0.02402,-0.01135,0.001475};
 
     G4double Q = std::max(0.0,G4Log(reducedEnergy*massFactor));
     G4double x = c[0];
     G4double y = 1.0;
-    for (G4int i=1; i<6; i++) {
+    for (G4int i=1; i<6; ++i) {
       y *= Q;
       x += y * c[i] ;
     }
     G4double ex;
-    if(x < 0.2) ex = x * (1 - 0.5*x);
-    else        ex = 1. - G4Exp(-x);
+    if(x < 0.2) { ex = x * (1 - 0.5*x); }
+    else        { ex = 1. - G4Exp(-x); }
 
     G4double tq = 7.6 - Q;
     G4double tq2= tq*tq;
     G4double tt = ( 0.007 + 0.00005 * z );
-    if(tq2 < 0.2) tt *= (1.0 - tq2 + 0.5*tq2*tq2);
-    else          tt *= G4Exp(-tq2);
+    if(tq2 < 0.2) { tt *= (1.0 - tq2 + 0.5*tq2*tq2); }
+    else          { tt *= G4Exp(-tq2); }
 
     effCharge = charge*(1.0 + tt) * std::sqrt(ex);
 
@@ -144,12 +149,8 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
   } else {
     
     G4double y;
-    //    = g4pow->A13(Zi);
-    //G4double z23  = y*y;
     G4double zi13 = g4pow->A13(Zi);
     G4double zi23 = zi13*zi13;
-    //    G4double e = std::max(reducedEnergy,energyBohr/z23);
-    //G4double e = reducedEnergy;
 
     // v1 is ion velocity in vF unit
     G4double eF   = material->GetIonisation()->GetFermiEnergy();
@@ -169,27 +170,10 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     G4double q;
     G4double y3 = std::pow(y, 0.3) ;
     // G4cout<<"y= "<<y<<" y3= "<<y3<<" v1= "<<v1<<" vF= "<<vF<<G4endl; 
-    q = 1.0 - G4Exp( 0.803*y3 - 1.3167*y3*y3 - 0.38157*y - 0.008983*y*y ) ;
-    
-    //y *= 0.77;
-    //y *= (0.75 + 0.52/Zi);
-
-    //if( y < 0.2 ) q = y*(1.0 - 0.5*y);
-    //else          q = 1.0 - G4Exp(-y);
-
-    G4double qmin = minCharge/Zi;
-    if(q < qmin) q = qmin;
+    q = 1.0 - G4Exp( 0.803*y3 - 1.3167*y3*y3 - 0.38157*y - 0.008983*y*y);   
+    q = std::max(q,  minCharge/Zi); 
   
     effCharge = q*charge;
-
-    /*
-    G4double x1 = 1.0*effCharge*(1.0 - 0.132*G4Log(y))/(y*std::sqrt(z));
-    G4double x2 = 0.1*effCharge*effCharge*energyBohr/reducedEnergy;
-
-    chargeCorrection = 1.0 + x1 - x2;
-
-    G4cout << "x1= "<<x1<<" x2= "<< x2<<" corr= "<<chargeCorrection<<G4endl;
-    */
     
     G4double tq = 7.6 - G4Log(reducedEnergy/keV);
     G4double tq2= tq*tq;

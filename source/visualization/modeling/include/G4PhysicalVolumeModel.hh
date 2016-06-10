@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4PhysicalVolumeModel.hh 81056 2014-05-20 09:02:16Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -219,7 +219,11 @@ public: // With description
   G4bool Validate (G4bool warn);
   // Validate, but allow internal changes (hence non-const function).
 
-  void CurtailDescent() {fCurtailDescent = true;}
+  void Abort () const {fAbort = true;}
+  // Abort all further traversing.
+
+  void CurtailDescent() const {fCurtailDescent = true;}
+  // Curtail descent of current branch.
 
 protected:
 
@@ -260,7 +264,8 @@ protected:
   std::vector<G4PhysicalVolumeNodeID> fBaseFullPVPath;
   std::vector<G4PhysicalVolumeNodeID> fFullPVPath;
   std::vector<G4PhysicalVolumeNodeID> fDrawnPVPath;
-  G4bool             fCurtailDescent;// Can be set to curtail descent.
+  mutable G4bool     fAbort;         // Abort all further traversing.
+  mutable G4bool     fCurtailDescent;// Can be set to curtail descent.
   G4VSolid*          fpClippingSolid;
   ClippingMode       fClippingMode;
 

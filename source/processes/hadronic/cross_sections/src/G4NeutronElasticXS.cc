@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronElasticXS.cc 76889 2013-11-18 13:01:55Z gcosmo $
+// $Id: G4NeutronElasticXS.cc 83697 2014-09-10 07:15:29Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -53,32 +53,42 @@
 #include <fstream>
 #include <sstream>
 
+// factory
+#include "G4CrossSectionFactory.hh"
+//
+G4_DECLARE_XS_FACTORY(G4NeutronElasticXS);
+
 using namespace std;
 
+std::vector<G4PhysicsVector*>* G4NeutronElasticXS::data = 0;
+G4double G4NeutronElasticXS::coeff[] = {0.0};
+
 G4NeutronElasticXS::G4NeutronElasticXS() 
- : G4VCrossSectionDataSet("G4NeutronElasticXS"),
-   proton(G4Proton::Proton()), maxZ(92)
+ : G4VCrossSectionDataSet(Default_Name()),
+   proton(G4Proton::Proton())
 {
   //  verboseLevel = 0;
   if(verboseLevel > 0){
     G4cout  << "G4NeutronElasticXS::G4NeutronElasticXS Initialise for Z < " 
-	    << maxZ + 1 << G4endl;
+	    << MAXZEL << G4endl;
   }
-  data.resize(maxZ+1, 0);
-  coeff.resize(maxZ+1, 1.0);
   ggXsection = new G4GlauberGribovCrossSection();
   fNucleon = new G4HadronNucleonXsc();
-  isInitialized = false;
+  isMaster = false;
 }
 
 G4NeutronElasticXS::~G4NeutronElasticXS()
 {
   delete fNucleon;
-  /*
-  for(G4int i=0; i<=maxZ; ++i) {
-    delete data[i];
+  delete ggXsection;
+  if(isMaster) {
+    for(G4int i=0; i<MAXZEL; ++i) {
+      delete (*data)[i];
+      (*data)[i] = 0;
+    }
+    delete data;
+    data = 0;
   }
-  */
 }
 
 void G4NeutronElasticXS::CrossSectionDescription(std::ostream& outFile) const
@@ -105,17 +115,17 @@ G4NeutronElasticXS::GetElementCrossSection(const G4DynamicParticle* aParticle,
   G4double xs = 0.0;
   G4double ekin = aParticle->GetKineticEnergy();
 
-  if(Z < 1 || Z > maxZ) { return xs; }
+  if(Z < 1 || Z >=MAXZEL) { return xs; }
 
   G4int Amean = G4lrint(G4NistManager::Instance()->GetAtomicMassAmu(Z));
-  G4PhysicsVector* pv = data[Z];
+  G4PhysicsVector* pv = (*data)[Z];
   //  G4cout  << "G4NeutronElasticXS::GetCrossSection e= " << ekin 
   // << " Z= " << Z << G4endl;
 
   // element was not initialised
   if(!pv) {
     Initialise(Z);
-    pv = data[Z];
+    pv = (*data)[Z];
     if(!pv) { return xs; }
   }
 
@@ -144,7 +154,6 @@ G4NeutronElasticXS::GetElementCrossSection(const G4DynamicParticle* aParticle,
 void 
 G4NeutronElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 {
-  if(isInitialized) { return; }
   if(verboseLevel > 0){
     G4cout << "G4NeutronElasticXS::BuildPhysicsTable for " 
 	   << p.GetParticleName() << G4endl;
@@ -157,36 +166,46 @@ G4NeutronElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 		FatalException, ed, "");
     return; 
   }
-  isInitialized = true;
 
-  // check environment variable 
-  // Build the complete string identifying the file with the data set
-  char* path = getenv("G4NEUTRONXSDATA");
-
-  G4DynamicParticle* dynParticle = 
-    new G4DynamicParticle(G4Neutron::Neutron(),G4ThreeVector(1,0,0),1);
-
-  // Access to elements
-  const G4ElementTable* theElmTable = G4Element::GetElementTable();
-  size_t numOfElm = G4Element::GetNumberOfElements();
-  if(numOfElm > 0) {
-    for(size_t i=0; i<numOfElm; ++i) {
-      G4int Z = G4int(((*theElmTable)[i])->GetZ());
-      if(Z < 1)         { Z = 1; }
-      else if(Z > maxZ) { Z = maxZ; }
-      //G4cout << "Z= " << Z << G4endl;
-      // Initialisation 
-      if(!data[Z]) { Initialise(Z, dynParticle, path); }
-    }
+  if(0 == coeff[0]) { 
+    isMaster = true;
+    for(G4int i=0; i<MAXZEL; ++i) { coeff[i] = 1.0; }
+    data = new std::vector<G4PhysicsVector*>;
+    data->resize(MAXZEL, 0);
   }
-  delete dynParticle;
+
+  // it is possible re-initialisation for the second run
+  if(isMaster) {
+
+    // check environment variable 
+    // Build the complete string identifying the file with the data set
+    char* path = getenv("G4NEUTRONXSDATA");
+
+    G4DynamicParticle* dynParticle = 
+      new G4DynamicParticle(G4Neutron::Neutron(),G4ThreeVector(1,0,0),1);
+
+    // Access to elements
+    const G4ElementTable* theElmTable = G4Element::GetElementTable();
+    size_t numOfElm = G4Element::GetNumberOfElements();
+    if(numOfElm > 0) {
+      for(size_t i=0; i<numOfElm; ++i) {
+	G4int Z = G4int(((*theElmTable)[i])->GetZ());
+	if(Z < 1)            { Z = 1; }
+	else if(Z >= MAXZEL) { Z = MAXZEL-1; }
+	//G4cout << "Z= " << Z << G4endl;
+	// Initialisation 
+	if(!(*data)[Z]) { Initialise(Z, dynParticle, path); }
+      }
+    }
+    delete dynParticle;
+  }
 }
 
 void 
 G4NeutronElasticXS::Initialise(G4int Z, G4DynamicParticle* dp, 
 			       const char* p)
 {
-  if(data[Z]) { return; }
+  if((*data)[Z]) { return; }
   const char* path = p;
   if(!p) {
     // check environment variable 
@@ -208,7 +227,7 @@ G4NeutronElasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
   G4int Amean = G4lrint(G4NistManager::Instance()->GetAtomicMassAmu(Z));
 
   // upload data from file
-  data[Z] = new G4PhysicsLogVector();
+  (*data)[Z] = new G4PhysicsLogVector();
 
   std::ostringstream ost;
   ost << path << "/elast" << Z ;
@@ -227,7 +246,7 @@ G4NeutronElasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
     }
     
     // retrieve data from DB
-    if(!data[Z]->Retrieve(filein, true)) {
+    if(!((*data)[Z]->Retrieve(filein, true))) {
       G4ExceptionDescription ed;
       ed << "Data file <" << ost.str().c_str()
 	 << "> is not retrieved!";
@@ -237,9 +256,9 @@ G4NeutronElasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
     }
     
     // smooth transition 
-    size_t n      = data[Z]->GetVectorLength() - 1;
-    G4double emax = data[Z]->Energy(n);
-    G4double sig1 = (*data[Z])[n];
+    size_t n      = (*data)[Z]->GetVectorLength() - 1;
+    G4double emax = (*data)[Z]->Energy(n);
+    G4double sig1 = (*(*data)[Z])[n];
     dynParticle->SetKineticEnergy(emax);
     G4double sig2 = 0.0;
     if(1 == Z) {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: XrayTelAnalysis.hh 68710 2013-04-05 09:04:21Z gcosmo $
+// $Id: XrayTelAnalysis.hh 81195 2014-05-22 14:49:13Z gcosmo $
 //
 // Author: A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
 //         
@@ -50,8 +50,8 @@
 
 // uncomment g4root.hh and comment g4xml.hh for a ROOT-based output file
 
-//#include "g4root.hh"
-#include "g4xml.hh"
+#include "g4root.hh"
+//#include "g4xml.hh"
 
 class G4Track;
 
@@ -61,13 +61,15 @@ public:
 
   ~XrayTelAnalysis();
 
-  void book();
+  void book(G4bool isMaster);
   
-  void finish();
+  void finish(G4bool isMaster);
   
   void analyseStepping(const G4Track& track, G4bool entering);
 
   static XrayTelAnalysis* getInstance();
+
+  void Update(G4double energy,G4int threadID);
 
 private:
 
@@ -88,6 +90,10 @@ private:
   G4String histFileName;
   
   std::ofstream *asciiFile;
+
+  //global counters: log separately for each thread (or sequential)
+  std::map<G4int,G4int> *nEnteringTracks;
+  std::map<G4int,G4double> *totEnteringEnergy;
 
 };
 

@@ -1,0 +1,404 @@
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  OpenGLImmediateX (OGLIX)
+  OpenGLImmediateXm (OGLI, OGLIXm)
+  OpenGLStoredX (OGLSX)
+  OpenGLStoredXm (OGL, OGLS, OGLSXm)
+  RayTracer (RayTracer)
+  RayTracerX (RayTracerX)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+  drawByAttribute
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+  attributeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+Available colours:
+  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
+
+G4AdjointPhysicsList::SetCuts:CutLength : 1 mm 
+G4AdjointPhysicsList::SetCuts:CutLength : 10 um 
+/adjoint/DefineExtSourceOnExtSurfaceOfAVolume Shielding
+/adjoint/SetExtSourceEmax 10. MeV
+/adjoint/DefineAdjSourceOnExtSurfaceOfAVolume SensitiveVolume
+/adjoint/SetAdjSourceEmin 1. keV
+/adjoint/SetAdjSourceEmax 10. MeV
+/RMC01/analysis/SetExponentialSpectrumForAdjointSim e- 1. cm-2 1. 1e-3 10. MeV
+/RMC01/analysis/SetExpectedPrecisionOfResults 1.
+/run/verbose 1
+/tracking/verbose 0
+/adjoint/start_run 100000
+****************************************************************
+*** Geant4 Reverse/Adjoint Monte Carlo mode		      ***
+*** Author:	L.Desorgher				      ***
+*** Company:	SpaceIT GmbH, Bern, Switzerland 	      ***
+*** Sponsored by: ESA/ESTEC contract contract 21435/08/NL/AT ***
+****************************************************************
+
+compt:   for  gamma    SubType= 13  BuildTable= 1
+      Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
+      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
+
+phot:   for  gamma    SubType= 12  BuildTable= 0
+      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila
+
+msc:   for e-    SubType= 10
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+eIoni:   for  e-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+
+eBrem:   for  e-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
+
+msc:   for proton    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+========== Computation of cross section matrices for adjoint models ==========
+Build adjoint cross section matrices for Inv_eIon_model
+Build adjoint cross section matrices for AdjointeBremModel
+The model AdjointeBremModel does not use cross section matrices
+Build adjoint cross section matrices for AdjointCompton
+The model AdjointCompton does not use cross section matrices
+Build adjoint cross section matrices for AdjointPEEffect
+The model AdjointPEEffect does not use cross section matrices
+Build adjoint cross section matrices for Adjoint_hIonisation
+The model Adjoint_hIonisation does not use cross section matrices
+              All adjoint cross section matrices are computed!
+======================================================================
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Vacuum
+ Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 1 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : Aluminum
+ Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
+ Energy thresholds :  gamma  990 eV     e-  34.1725 keV    e+  33.9436 keV proton 1 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes
+ Material : Air
+ Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 1 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes
+ Material : Silicon
+ Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
+ Energy thresholds :  gamma  990 eV     e-  31.9516 keV    e+  31.7376 keV proton 1 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 4     used in the geometry : Yes
+ Material : Tantalum
+ Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
+ Energy thresholds :  gamma  6.90363 keV    e-  75.0136 keV    e+  73.5164 keV proton 1 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 0 starts.
+### Run 0 start.
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : Analysis_W012
+      issued by : G4VFileManager::SetHistoDirectoryName()
+Cannot set Histo directory name as its value was already used.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+----> Histogram Tree is opened in adjoint_sim.root
+nb event 0
+nb event 1
+nb event 2
+nb event 3
+nb event 4
+nb event 5
+nb event 6
+nb event 7
+nb event 8
+nb event 9
+nb event 10
+nb event 11
+nb event 12
+nb event 13
+nb event 14
+nb event 15
+nb event 16
+nb event 17
+nb event 18
+nb event 19
+nb event 20
+nb event 21
+nb event 22
+nb event 23
+nb event 24
+nb event 25
+nb event 26
+nb event 27
+nb event 28
+nb event 29
+nb event 30
+nb event 31
+nb event 32
+nb event 33
+nb event 34
+nb event 35
+nb event 36
+nb event 37
+nb event 38
+nb event 39
+nb event 40
+nb event 41
+nb event 42
+nb event 43
+nb event 44
+nb event 45
+nb event 46
+nb event 47
+nb event 48
+nb event 49
+nb event 50
+nb event 51
+nb event 52
+nb event 53
+nb event 54
+nb event 55
+nb event 56
+nb event 57
+nb event 58
+nb event 59
+nb event 60
+nb event 61
+nb event 62
+nb event 63
+nb event 64
+nb event 65
+nb event 66
+nb event 67
+nb event 68
+nb event 69
+nb event 70
+nb event 71
+nb event 72
+nb event 73
+nb event 74
+nb event 75
+nb event 76
+nb event 77
+nb event 78
+nb event 79
+nb event 80
+nb event 81
+nb event 82
+nb event 83
+nb event 84
+nb event 85
+nb event 86
+nb event 87
+nb event 88
+nb event 89
+nb event 90
+nb event 91
+nb event 92
+nb event 93
+nb event 94
+nb event 95
+nb event 96
+nb event 97
+nb event 98
+nb event 99
+nb event 100
+nb event 200
+nb event 300
+nb event 400
+nb event 500
+nb event 1000
+nb event 1500
+nb event 2000
+nb event 2500
+nb event 3000
+nb event 3500
+nb event 4000
+nb event 4500
+nb event 5000
+nb event 10000
+nb event 15000
+nb event 20000
+nb event 25000
+nb event 30000
+nb event 35000
+nb event 40000
+nb event 45000
+nb event 50000
+nb event 55000
+nb event 60000
+nb event 65000
+nb event 70000
+nb event 75000
+nb event 80000
+nb event 85000
+nb event 90000
+nb event 95000
+nb event 100000
+nb event 105000
+nb event 110000
+nb event 115000
+nb event 120000
+nb event 125000
+nb event 130000
+nb event 135000
+nb event 140000
+nb event 145000
+nb event 150000
+nb event 155000
+nb event 160000
+nb event 165000
+nb event 170000
+nb event 175000
+nb event 180000
+nb event 185000
+nb event 190000
+nb event 195000
+nb event 200000
+nb event 205000
+nb event 210000
+nb event 215000
+nb event 220000
+nb event 225000
+nb event 230000
+nb event 235000
+nb event 240000
+nb event 245000
+nb event 250000
+nb event 255000
+nb event 260000
+nb event 265000
+nb event 270000
+nb event 275000
+nb event 280000
+nb event 285000
+nb event 290000
+nb event 295000
+nb event 300000
+nb event 305000
+nb event 310000
+nb event 315000
+nb event 320000
+nb event 325000
+nb event 330000
+nb event 335000
+nb event 340000
+nb event 345000
+nb event 350000
+nb event 355000
+nb event 360000
+nb event 365000
+nb event 370000
+nb event 375000
+nb event 380000
+nb event 385000
+nb event 390000
+nb event 395000
+nb event 400000
+nb event 405000
+nb event 410000
+nb event 415000
+nb event 420000
+nb event 425000
+nb event 430000
+nb event 435000
+nb event 440000
+nb event 445000
+1%  Precision reached!
+ Run terminated.
+Run Summary
+  Run Aborted after 449720 events processed.
+  User=595.38s Real=597.28s Sys=0.06s
+Results of reverse/adjoint simulation!
+normalised edep [MeV] = 0.00158921
+error[MeV] = 1.58921e-05
+
+----> Histogram Tree is saved in adjoint_sim.root
+Graphics systems deleted.
+Visualization Manager deleting...
+G4 kernel has come to Quit state.
+Total navigation history collections cleaned: 19
+================== Deleting memory pools ===================
+Number of memory pools allocated: 12 of which, static: 1
+Dynamic pools deleted: 11 / Total memory freed: 0.037 Mb
+============================================================
+RunManagerKernel is deleted. Good bye :)

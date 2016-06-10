@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm12/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 69108 2013-04-18 13:10:10Z gcosmo $
+// $Id: RunAction.hh 78723 2014-01-20 10:32:17Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,7 +37,7 @@
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 
-class G4Run;
+class Run;
 class DetectorConstruction;
 class PhysicsList;
 class PrimaryGeneratorAction;
@@ -48,36 +48,20 @@ class HistoManager;
 class RunAction : public G4UserRunAction
 {
   public:
-    RunAction(DetectorConstruction*, PhysicsList*,PrimaryGeneratorAction*);
+    RunAction(DetectorConstruction*, PhysicsList*, PrimaryGeneratorAction*);
    ~RunAction();
 
   public:
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
-    
-    void AddEdep (G4double e)        { fEdeposit  += e; fEdeposit2  += e*e;};
-    void AddTrackLength (G4double t) { fTrackLen  += t; fTrackLen2  += t*t;};
-    void AddProjRange   (G4double x) { fProjRange += x; fProjRange2 += x*x;};
-    void AddStepSize    (G4int nb, G4double s)
-                                     { fNbOfSteps += nb; fNbOfSteps2 += nb*nb;
-                                       fStepSize  += s ; fStepSize2  += s*s;  };
-				       
-    G4double GetCsdaRange() { return fCsdaRange;};				       
-                                                                                         
-    
+    virtual G4Run* GenerateRun();
+             
   private:
     DetectorConstruction*   fDetector;
     PhysicsList*            fPhysics;
-    PrimaryGeneratorAction* fKinematic;
+    PrimaryGeneratorAction* fPrimary;
+    Run*                    fRun;    
     HistoManager*           fHistoManager;
-    
-    G4double                fEdeposit,  fEdeposit2;
-    G4double                fTrackLen,  fTrackLen2;
-    G4double                fProjRange, fProjRange2;
-    G4int                   fNbOfSteps, fNbOfSteps2;
-    G4double                fStepSize,  fStepSize2;
-    
-    G4double                fCsdaRange;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

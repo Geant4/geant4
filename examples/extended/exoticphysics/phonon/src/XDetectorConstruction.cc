@@ -26,8 +26,9 @@
 /// \file exoticphysics/phonon/src/XDetectorConstruction.cc
 /// \brief Implementation of the XDetectorConstruction class
 //
-// $Id: XDetectorConstruction.cc 76938 2013-11-19 09:51:36Z gcosmo $
+// $Id: XDetectorConstruction.cc 84197 2014-10-10 14:33:03Z gcosmo $
 //
+// 20141006  For MT compatibility, move SD handling to ConstructSDandField()
 
 #include "XDetectorConstruction.hh"
 
@@ -39,9 +40,6 @@
 #include "G4Sphere.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
-#include "G4UniformMagField.hh"
-#include "G4TransportationManager.hh"
-#include "G4FieldManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 #include "G4SDManager.hh"
@@ -59,7 +57,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XDetectorConstruction::XDetectorConstruction()
- : fConstructed(false), fIfField(true) {
+ : fConstructed(false), fIfField(false) {
   fLiquidHelium = NULL;
   fGermanium = NULL;
   fAluminum = NULL;
@@ -150,16 +148,6 @@ void XDetectorConstruction::SetupGeometry()
   new G4PVPlacement(0,G4ThreeVector(0.,0.,-1.28*cm),fAluminumLogical,
                     "fAluminumPhysical",worldLogical,false,1);
 
-
-  //
-  // detector -- Note : Aluminum electrode sensitivity is attached to Germanium 
-  //
-  G4SDManager* SDman = G4SDManager::GetSDMpointer();
-  XAluminumElectrodeSensitivity* electrodeSensitivity =
-    new XAluminumElectrodeSensitivity("XAluminumElectrode");
-  SDman->AddNewDetector(electrodeSensitivity);
-  fGermaniumLogical->SetSensitiveDetector(electrodeSensitivity);
-
   //                                        
   // Visualization attributes
   //
@@ -169,3 +157,17 @@ void XDetectorConstruction::SetupGeometry()
   fGermaniumLogical->SetVisAttributes(simpleBoxVisAtt);
   fAluminumLogical->SetVisAttributes(simpleBoxVisAtt);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void XDetectorConstruction::ConstructSDandField() { 
+  //
+  // detector -- Note : Aluminum electrode sensitivity is attached to Germanium 
+  //
+  XAluminumElectrodeSensitivity* electrodeSensitivity =
+    new XAluminumElectrodeSensitivity("XAluminumElectrode");
+
+  SetSensitiveDetector("fGermaniumLogical", electrodeSensitivity);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

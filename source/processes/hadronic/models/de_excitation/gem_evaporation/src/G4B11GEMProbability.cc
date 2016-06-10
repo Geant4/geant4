@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4B11GEMProbability.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4B11GEMProbability.cc 86783 2014-11-18 08:43:58Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
@@ -39,15 +39,15 @@ G4B11GEMProbability::G4B11GEMProbability() :
     ExcitSpins.push_back(1.0/2.0);
     ExcitLifetimes.push_back(3.8e-15*s);
 
-    ExcitEnergies.push_back(4444.89*keV);
+    ExcitEnergies.push_back(4444.98*keV);
     ExcitSpins.push_back(5.0/2.0);
     ExcitLifetimes.push_back(0.82e-15*s);
 
-    ExcitEnergies.push_back(5020.31*keV);
+    ExcitEnergies.push_back(5020.3*keV);
     ExcitSpins.push_back(3.0/2.0);
     ExcitLifetimes.push_back(0.236e-15*s);
 
-    ExcitEnergies.push_back(6742.9*keV);
+    ExcitEnergies.push_back(6741.85*keV);
     ExcitSpins.push_back(7.0/2.0);
     ExcitLifetimes.push_back(15.0e-15*s);
 
@@ -63,19 +63,19 @@ G4B11GEMProbability::G4B11GEMProbability() :
     ExcitSpins.push_back(3.0/2.0);
     ExcitLifetimes.push_back(0.4e-15*s);
 
-    ExcitEnergies.push_back(8560.3*keV);
+    ExcitEnergies.push_back(8560.1*keV);
     ExcitSpins.push_back(5.0/2.0);
     ExcitLifetimes.push_back(0.49e-15*s);
 
-    ExcitEnergies.push_back(8920.2*keV);
+    ExcitEnergies.push_back(8920.47*keV);
     ExcitSpins.push_back(5.0/2.0);
     ExcitLifetimes.push_back(4.4e-15*s);
 
-    ExcitEnergies.push_back(9185.0*keV);
+    ExcitEnergies.push_back(9183.5*keV);
     ExcitSpins.push_back(7.0/2.0);
     ExcitLifetimes.push_back(fPlanck/(1.9*eV));
 
-    ExcitEnergies.push_back(9274.4*keV);
+    ExcitEnergies.push_back(9271.7*keV);
     ExcitSpins.push_back(5.0/2.0);
     ExcitLifetimes.push_back(fPlanck/(4.0*keV));
 

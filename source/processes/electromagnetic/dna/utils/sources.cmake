@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 73081 2013-08-16 12:58:22Z gcosmo $
+# $Id: sources.cmake 80151 2014-04-03 09:42:22Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -52,23 +52,29 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-utils
         G4DNACrossSectionDataSet.hh
         G4DNADamages.hh
         G4DNAGenericIonsManager.hh
-	G4DNAIons.hh
+		G4DNAIons.hh
+	    G4DNAMolecularMaterial.hh
         G4DNAMolecularReactionTable.hh
         G4DNAWaterExcitationStructure.hh
         G4DNAWaterIonisationStructure.hh
+        G4MoleculeGun.hh
+        G4MoleculeGunMessenger.hh
         G4VDNAReactionModel.hh
-        G4DNAMolecularMaterial.hh
+        G4VUserChemistryList.hh
     SOURCES
         G4DNAChemistryManager.cc
         G4DNACrossSectionDataSet.cc
         G4DNADamages.cc
         G4DNAGenericIonsManager.cc
-	G4DNAIons.cc
+		G4DNAIons.cc
+		G4DNAMolecularMaterial.cc
         G4DNAMolecularReactionTable.cc
         G4DNAWaterExcitationStructure.cc
         G4DNAWaterIonisationStructure.cc
+        G4MoleculeGun.cc
+        G4MoleculeGunMessenger.cc
         G4VDNAReactionModel.cc
-        G4DNAMolecularMaterial.cc
+        G4VUserChemistryList.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
@@ -87,9 +93,9 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-utils
         G4partman
         G4procman
         G4track
-        G4emdna-man
-        G4emdna-molman
-        G4emdna-moltypes
+        # G4emdna-man
+        # G4emdna-molman
+        # G4emdna-moltypes
     GLOBAL_DEPENDENCIES
         G4geometry
         G4global

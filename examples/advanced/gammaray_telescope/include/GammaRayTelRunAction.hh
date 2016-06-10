@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelRunAction.hh 66508 2012-12-19 10:16:45Z gcosmo $
+// $Id: GammaRayTelRunAction.hh 82630 2014-07-01 09:43:00Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -57,8 +57,16 @@ public:
 public:
   void BeginOfRunAction(const G4Run*);
   void EndOfRunAction(const G4Run*);
+  std::ofstream* GetOutputFile();
+  
 
 private:
+  std::ofstream* outFile;
+  G4String fileName;
+
+  void OpenFile();
+  G4int fRunID;
+
 };
 
 #endif

@@ -6,6 +6,10 @@ ifeq ($(G4SYSTEM),Linux-g++)
   CXXFLAGS  := -W -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long
   CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe
   CXXFLAGS  += -Wshadow
+  ifdef G4USE_STD11
+    CPPFLAGS  += -std=c++11
+    CXXFLAGS  += -std=c++11
+  endif
 #
 # Uncomment the following options to activate Pentium4 chip specific
 # floating-point operations on the SSE unit. It will allow for more stable
@@ -40,13 +44,13 @@ ifeq ($(G4SYSTEM),Linux-g++)
     CCFLAGS   += -O2 -g
   endif
   ifdef G4LIB_BUILD_SHARED
-    ifndef G4MULTITHREADED
-      CXXFLAGS  += -fPIC
-      FCFLAGS   += -fPIC
-      CCFLAGS   += -fPIC
-    endif
+    CXXFLAGS  += -fPIC
+    FCFLAGS   += -fPIC
+    CCFLAGS   += -fPIC
   endif
   G4RUNPATHOPTION := -Wl,-rpath 
+  G4STATIC_MODE += -Wl,--whole-archive
+  G4NOSTATIC_MODE += -Wl,--no-whole-archive
   CC := gcc
   FC := gfortran
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore

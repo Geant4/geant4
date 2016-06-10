@@ -118,7 +118,7 @@ G4VisCommandSetLineWidth::G4VisCommandSetLineWidth ()
   G4bool omitable;
   fpCommand = new G4UIcmdWithADouble("/vis/set/lineWidth", this);
   fpCommand->SetGuidance
-    ("Defines lineWidth for future \"/vis/scene/add/\" commands.");
+    ("Defines line width for future \"/vis/scene/add/\" commands.");
   fpCommand->SetParameterName ("lineWidth", omitable = true);
   fpCommand->SetDefaultValue (1.);
   fpCommand->SetRange("lineWidth >= 1.");
@@ -264,6 +264,43 @@ void G4VisCommandSetTextLayout::SetNewValue (G4UIcommand*, G4String newValue)
     G4cout << "Text layout (for future \"text\" commands) has been set to \""
 	   << fCurrentTextLayout << "\"."
 	   << G4endl;
+  }
+}
+
+////////////// /vis/set/textSize ////////////////////////////////////
+
+G4VisCommandSetTextSize::G4VisCommandSetTextSize ()
+{
+  G4bool omitable;
+  fpCommand = new G4UIcmdWithADouble("/vis/set/textSize", this);
+  fpCommand->SetGuidance
+  ("Defines text size (pixels) for future \"/vis/scene/add/\" commands.");
+  fpCommand->SetParameterName ("textSize", omitable = true);
+  fpCommand->SetDefaultValue (12.);  // pixels
+  fpCommand->SetRange("textSize >= 1.");
+}
+
+G4VisCommandSetTextSize::~G4VisCommandSetTextSize ()
+{
+  delete fpCommand;
+}
+
+G4String G4VisCommandSetTextSize::GetCurrentValue (G4UIcommand*)
+{
+  return G4String();
+}
+
+void G4VisCommandSetTextSize::SetNewValue (G4UIcommand*, G4String newValue)
+{
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  fCurrentTextSize = fpCommand->GetNewDoubleValue(newValue);
+
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout <<
+    "Text size for future \"/vis/scene/add/\" commands has been set to "
+    << fCurrentTextSize
+    << G4endl;
   }
 }
 

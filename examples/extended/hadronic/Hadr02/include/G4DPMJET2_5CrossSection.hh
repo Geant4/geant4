@@ -36,7 +36,7 @@
 /// \file hadronic/Hadr02/include/G4DPMJET2_5CrossSection.hh
 /// \brief Definition of the G4DPMJET2_5CrossSection class
 //
-// $Id: G4DPMJET2_5CrossSection.hh 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: G4DPMJET2_5CrossSection.hh 81932 2014-06-06 15:39:45Z gcosmo $
 //
 
 #ifndef G4DPMJET2_5CrossSection_h
@@ -88,16 +88,16 @@ public:
   virtual ~G4DPMJET2_5CrossSection();
 
   virtual G4bool IsIsoApplicable(const G4DynamicParticle* theProjectile,
-				 G4int ZZ, G4int AA,
-				 const G4Element* elm = 0,
-				 const G4Material* mat = 0);
+                                 G4int ZZ, G4int AA,
+                                 const G4Element* elm = 0,
+                                 const G4Material* mat = 0);
 
   virtual 
   G4double GetIsoCrossSection(const G4DynamicParticle* theProjectile,
-			      G4int ZZ, G4int AA,
-			      const G4Isotope*,
-			      const G4Element* elm = 0,
-			      const G4Material* mat = 0);
+                              G4int ZZ, G4int AA,
+                              const G4Isotope*,
+                              const G4Element* elm = 0,
+                              const G4Material* mat = 0);
  
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
 

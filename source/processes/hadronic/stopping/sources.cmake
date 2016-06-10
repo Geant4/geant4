@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 76309 2013-11-08 13:48:42Z gcosmo $
+# $Id: sources.cmake 85517 2014-10-30 15:53:26Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -51,7 +51,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/theo_hi
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/pre_equilibrium/exciton_model/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/util/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
@@ -69,29 +68,23 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_stop
         G4EmCaptureCascade.hh
         G4HadronicAbsorptionFritiof.hh
         G4HadronStoppingProcess.hh
-        G4MuMinusCaptureCascade.hh
         G4MuMinusCapturePrecompound.hh
         G4MuonMinusBoundDecay.hh
         G4MuonMinusCapture.hh
-        G4MuonMinusCaptureAtRest.hh
         G4HadronicAbsorptionBertini.hh
         G4PiMinusAbsorptionBertini.hh
         G4KaonMinusAbsorptionBertini.hh
         G4SigmaMinusAbsorptionBertini.hh
-        G4StopElementSelector.hh
     SOURCES
         G4AntiNeutronAnnihilationAtRest.cc
         G4ElementSelector.cc
         G4EmCaptureCascade.cc
         G4HadronicAbsorptionFritiof.cc
         G4HadronStoppingProcess.cc
-        G4MuMinusCaptureCascade.cc
         G4MuMinusCapturePrecompound.cc
         G4MuonMinusBoundDecay.cc
         G4MuonMinusCapture.cc
-        G4MuonMinusCaptureAtRest.cc
         G4HadronicAbsorptionBertini.cc
-        G4StopElementSelector.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

@@ -26,7 +26,7 @@
 /// \file medical/GammaTherapy/include/PhysicsListMessenger.hh
 /// \brief Definition of the PhysicsListMessenger class
 //
-// $Id: PhysicsListMessenger.hh 67994 2013-03-13 11:05:39Z gcosmo $
+// $Id: PhysicsListMessenger.hh 82277 2014-06-13 14:40:54Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,7 +39,6 @@
 
 class PhysicsList;
 class G4UIdirectory;
-class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 
@@ -62,10 +61,6 @@ private:
   PhysicsList*               fPhysicsList;
     
   G4UIdirectory*             fPhysDir;    
-  G4UIcmdWithADoubleAndUnit* fGammaCutCmd;
-  G4UIcmdWithADoubleAndUnit* fElectCutCmd;
-  G4UIcmdWithADoubleAndUnit* fPositCutCmd;    
-  G4UIcmdWithADoubleAndUnit* fAllCutCmd;    
   G4UIcmdWithAnInteger*      fVerbCmd;
   G4UIcmdWithAString*        fListCmd;
     

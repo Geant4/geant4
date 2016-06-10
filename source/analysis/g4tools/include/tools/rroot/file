@@ -1,0 +1,505 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_file
+#define tools_rroot_file
+
+#include "ifile"
+
+#include "directory"
+
+#include "../platform"
+
+#include <string>
+#include <fcntl.h>
+#include <errno.h>
+
+#ifdef WIN32
+#include <io.h>
+#include <sys/stat.h>
+// disable the warning about the usage of "this" in the constructor.
+#pragma warning(disable:4355)
+#else
+#include <unistd.h>
+#endif
+
+namespace tools {
+namespace rroot {
+
+class file : public virtual ifile {
+  static int not_open() {return -1;}
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rroot::file");
+    return s_v;
+  }
+public: //ifile
+  virtual const std::string& path() const {return m_path;}
+  virtual std::string path() {return m_path;}
+
+  virtual bool verbose() const {return m_verbose;}
+  virtual std::ostream& out() {return m_out;}
+
+  virtual bool byte_swap() const {return is_little_endian();}
+  virtual bool set_pos(seek a_offset = 0,from a_from = begin){
+    int whence = 0;
+    switch(a_from) {
+    case begin:
+      whence = SEEK_SET;
+      break;
+    case current:
+      whence = SEEK_CUR;
+      break;
+    case end:
+      whence = SEEK_END;
+      break;
+    }
+
+#if defined(__linux__) && (__GLIBC__ == 2) && (__GLIBC_MINOR__ >= 2)
+    if (::lseek64(m_file, a_offset, whence) < 0) {
+#elif defined(WIN32)
+    if (::_lseeki64(m_file, a_offset, whence) < 0) {
+#else
+    if (::lseek(m_file, a_offset, whence) < 0) {
+#endif
+      m_out << "tools::rroot::file::set_pos :"
+            << " cannot set position " << a_offset 
+            << " in file " << sout(m_path) << "."
+            << std::endl;
+      return false;
+    }
+    return true;
+  }
+  virtual bool read_buffer(char* a_buffer,uint32 a_length) {
+    // Read a buffer from the file.
+    // This is the basic low level read operation.
+#ifdef WIN32
+    typedef int ssize_t;
+#endif
+    ssize_t siz;
+    while ((siz = ::read(m_file,a_buffer,a_length)) < 0 && 
+           error_number() == EINTR) reset_error_number();
+    if (siz < 0) {
+      m_out << "tools::rroot::file::read_buffer :"
+            << " error reading from file " << sout(m_path) << "."
+            << std::endl;
+      return false;
+    }
+    if (siz != ssize_t(a_length)) {
+      m_out << "tools::rroot::file::read_buffer :"
+            << " error reading all requested bytes from file " 
+            << sout(m_path) << ", got " << long2s(siz)
+            << " of " << a_length
+            << std::endl;
+      return false;
+    }
+    m_bytes_read += siz;
+    return true;
+  }
+  virtual bool unziper(char a_key,unzip_func& a_func) const {
+    std::map<char,unzip_func>::const_iterator it = m_unzipers.find(a_key);
+    if(it==m_unzipers.end()) {
+      a_func = 0;
+      return false;
+    }
+    a_func = (*it).second;
+    return true;
+  }
+
+  virtual key& sinfos_key() {return m_streamer_info_key;}
+
+public:
+  file(std::ostream& a_out,const std::string& a_path,bool a_verbose = false)
+  :m_out(a_out)
+  ,m_path(a_path)
+  ,m_verbose(a_verbose)
+  ,m_file(not_open())
+  ,m_bytes_read(0)
+  ,m_root_directory(*this)
+  ,m_streamer_info_key(*this)
+  // begin of record :
+  ,m_version(0)
+  ,m_BEGIN(0)
+  ,m_END(0)
+  ,m_seek_free(0)
+  ,m_seek_info(0)
+  ,m_nbytes_free(0)
+  ,m_nbytes_info(0)
+  ,m_nbytes_name(0)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+
+    m_file = _open(a_path.c_str(),
+#ifdef WIN32
+                               O_RDONLY | O_BINARY,S_IREAD | S_IWRITE
+#else
+                               O_RDONLY,0644
+#endif
+    );
+    if(m_file==not_open()) {
+      m_out << "tools::rroot::file::file :"
+            << " can't open " << sout(a_path) << "."
+            << std::endl;
+      return;
+    }
+    initialize();
+  }
+  virtual ~file() {
+    close();
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  file(const file& a_from)
+  :ifile(a_from)
+  ,m_out(a_from.m_out)
+  ,m_root_directory(*this)
+  ,m_streamer_info_key(*this)
+  { 
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  file& operator=(const file&){return *this;}
+public:
+  uint32 version() const {return m_version;}
+
+  bool is_open() const {
+    return (m_file==not_open()?false:true);
+  }
+
+  void close() {
+    if(m_file!=not_open()) ::close(m_file);
+    m_file = not_open();
+    m_root_directory.clear_keys();
+  }
+
+  directory& dir() {return m_root_directory;}
+  const directory& dir() const {return m_root_directory;}
+
+  bool add_unziper(char a_key,unzip_func a_func){
+    std::map<char,unzip_func>::const_iterator it = m_unzipers.find(a_key);
+    if(it!=m_unzipers.end()) {
+      //(*it).second = a_func; //override ?
+      return false;
+    } else {
+      m_unzipers[a_key] = a_func;
+      return true;
+    }
+  }
+
+protected:
+  static int _open(const char* a_name,int a_flags,uint32 a_mode) {
+#if defined(__linux__) && (__GLIBC__ == 2) && (__GLIBC_MINOR__ >= 2)
+     return ::open64(a_name,a_flags,a_mode);
+#else
+     return ::open(a_name,a_flags,a_mode);
+#endif
+  }
+  static std::string sout(const std::string& a_string) {
+    return std::string("\"")+a_string+"\"";
+  }
+  bool initialize() {
+    if(!read_header()) {
+      m_out << "tools::rroot::file::initialize :"
+            << " can't read header."
+            << std::endl;
+      return false;
+    }
+/*
+    fRootDirectory->setSeekDirectory(fBEGIN);
+    // Read Free segments structure if file is writable :
+    if (fWritable) {
+      if (fSeekFree > fBEGIN) {
+        if(!readFreeSegments()) {
+          m_out << "tools::rroot::file::initialize : Cannot read free segments." 
+               << std::endl;
+          return false;
+        }
+      } else {
+        m_out << "tools::rroot::file::initialize : file \"" << fName 
+             << "\" probably not closed, cannot read free segments" << std::endl;
+      }
+    }
+*/
+    // Read Directory info :
+    uint32 nbytes = m_nbytes_name + m_root_directory.record_size(m_version);
+    char* header = new char[nbytes];
+    char* buffer = header;
+    if(!set_pos(m_BEGIN)) {
+      m_out << "tools::rroot::file::initialize :"
+            << " can't set position."
+            << std::endl;
+      delete [] header;
+      return false;
+    }
+    if(!read_buffer(buffer,nbytes)) {
+      m_out << "tools::rroot::file::initialize :"
+            << " can't read buffer."
+            << std::endl;
+      delete [] header;
+      return false;
+    }
+    buffer = header+m_nbytes_name;
+    const char* eob = header+nbytes;
+    if(!m_root_directory.from_buffer(eob,buffer)) {
+      m_out << "tools::rroot::file::initialize :"
+            << " can't read buffer (2)."
+            << std::endl;
+      delete [] header;
+      return false;
+    }
+    uint32 nk =          //size of Key
+      sizeof(int) +      //Key::fNumberOfBytes
+      sizeof(short) +    //Key::fVersion
+      2*sizeof(int) +    //Key::fObjectSize, Date
+      2*sizeof(short) +  //Key::fKeyLength,fCycle
+      2*sizeof(seek32);  //Key::fSeekKey,fSeekParentDirectory
+                        //WARNING : the upper is seek32 since at begin of file.
+    buffer = header+nk;
+    std::string cname;
+    rbuf rb(m_out,byte_swap(),eob,buffer);
+    // Should be "TFile".
+    if(!rb.read(cname)) {
+      m_out << "tools::rroot::file::initialize :"
+            << " can't read buffer (3)."
+            << std::endl;
+      delete [] header;
+      return false;
+    }
+    if(cname!="TFile") {
+      m_out << "tools::rroot::file::initialize : TFile expected." << std::endl;
+      delete [] header;
+      return false;
+    }
+    if(m_verbose) {
+      m_out << "tools::rroot::file::initialize :"
+            << " " << sout("TFile") << " found."
+            << std::endl;
+    }
+    if(!rb.read(cname)) {
+      m_out << "tools::rroot::file::initialize :"
+            << " can't read buffer (4)."
+            << std::endl;
+      delete [] header;
+      return false;
+    }
+    if(m_verbose) {
+      m_out << "tools::rroot::file::initialize :"
+            << " found file name " << sout(cname)
+            << std::endl;
+    }
+    if(!rb.read(m_title)) {
+      m_out << "tools::rroot::file::initialize :"
+            << " can't read buffer (5)."
+            << std::endl;
+      delete [] header;
+      return false;
+    }
+    delete [] header;
+    if(m_verbose) {
+      m_out << "tools::rroot::file::initialize :"
+            << " found title " << sout(m_title)
+            << std::endl;
+    }
+    uint32 dirNbytesName = m_root_directory.nbytes_name();
+    if (dirNbytesName < 10 || dirNbytesName > 1000) {
+      m_out << "tools::rroot::file::initialize :"
+            << " can't read directory info."
+            << std::endl;
+      return false;
+    }
+    // Read keys of the top directory :
+    if(m_root_directory.seek_keys() > m_BEGIN) {
+      uint32 n;
+      if(!m_root_directory.read_keys(n)) {
+        m_out << "tools::rroot::file::initialize :"
+              << " can't read keys."
+              << std::endl;
+        return false;
+      }
+    } else {
+      m_out << "tools::rroot::file::initialize :"
+            << " file " << sout(m_path)
+            << " probably not closed."
+            << std::endl;
+      return false;
+    }
+
+    // Create StreamerInfo index
+    if(m_seek_info > m_BEGIN) {
+      if(!read_streamer_infos()) {
+        m_out << "tools::rroot::file::initialize :"
+              << " read_streamer_infos() failed."
+              << std::endl;
+        return false;
+      }
+    } else {
+      m_out << "tools::rroot::file::initialize :"
+            << " file " << sout(m_path)
+            << " probably not closed."
+            << std::endl;
+      return false;
+    }
+
+    return true;
+  }
+  bool read_header() {
+    static const uint32 kBegin = 64;
+    char header[kBegin];
+    if(!set_pos()) return false;
+    if(!read_buffer(header,kBegin)) return false;
+    // make sure this is a root file
+    if(::strncmp(header, "root", 4)) {
+      m_out << "tools::rroot::file::read_header :"
+            << " " << sout(m_path) << " not a ROOT file."
+            << std::endl;
+      return false;
+    }
+    if(m_verbose) {
+      m_out << "tools::rroot::file::read_header :"
+            << " file signature is " << sout("root")
+            << std::endl;
+    }
+    char* buffer = header + 4;    // skip the "root" file identifier
+    const char* eob = header + kBegin;
+    rbuf rb(m_out,byte_swap(),eob,buffer);
+   {int v;
+    if(!rb.read(v)) return false;
+    m_version = v;}
+   {seek32 i;
+    if(!rb.read(i)) return false;
+    m_BEGIN = i;}
+    if(m_version>1000000) {
+      if(!rb.read(m_END)) return false;
+      if(!rb.read(m_seek_free)) return false;
+    } else {
+     {seek32 i;
+      if(!rb.read(i)) return false;
+      m_END = i;}
+     {seek32 i;
+      if(!rb.read(i)) return false;
+      m_seek_free = i;}
+    }
+    if(m_verbose) {
+      m_out << "tools::rroot::file::read_header :"
+            << " begin " << m_BEGIN
+            << " end " << m_END
+            << std::endl;
+    }
+   {int v;
+    if(!rb.read(v)) return false;
+    m_nbytes_free = v;}
+    int nfree = 0;
+    if(!rb.read(nfree)) return false;
+   {int v;
+    if(!rb.read(v)) return false;
+    m_nbytes_name = v;}
+    //m_out << "debug : 1002 " << m_nbytes_name << std::endl;
+   {char fUnits;
+    if(!rb.read(fUnits)) return false;}
+   {int fCompress;
+    if(!rb.read(fCompress)) return false;}
+    if(m_version>1000000) {
+      if(!rb.read(m_seek_info)) return false;
+    } else {
+     {seek32 i;
+      if(!rb.read(i)) return false;
+      m_seek_info = i;}
+    }
+    if(!rb.read(m_nbytes_info)) return false;
+    //m_out << "debug : seek_info " << m_seek_info << " nbytes_info " << m_nbytes_info << std::endl;
+    return true;
+  }
+
+  bool read_streamer_infos() {
+    // Read the list of StreamerInfo from this file
+    // The key with name holding the list of TStreamerInfo objects is read.
+    // The corresponding TClass objects are updated.
+    if(m_seek_info<=0) return false;
+    if(m_seek_info>=m_END) return false;
+    if(!set_pos(m_seek_info)) return false;
+    char* buffer = new char[m_nbytes_info+1];
+    if(!read_buffer(buffer,m_nbytes_info)) {delete [] buffer;return false;}
+    char* buf = buffer;
+    if(!m_streamer_info_key.from_buffer(buffer+m_nbytes_info,buf)) {
+      delete [] buffer;
+      return false;
+    }
+    delete [] buffer;
+    return true;
+  }
+
+
+#if defined(__sun) && !defined(__linux__) && (__SUNPRO_CC > 0x420)
+  int error_number() {return ::errno;}
+  void reset_error_number() {::errno = 0;}
+#else
+  int error_number() {return errno;}
+  void reset_error_number() {errno = 0;}
+#endif
+
+protected:
+  std::ostream& m_out;
+  std::string m_path;
+  bool m_verbose;
+  int m_file;
+  tools::uint64 m_bytes_read; //Number of bytes read from this file
+  directory m_root_directory;
+  key m_streamer_info_key;
+  std::map<char,unzip_func> m_unzipers;
+  std::string m_title;
+  // begin of record :
+  uint32 m_version;       //File format version
+  seek m_BEGIN;           //First used byte in file
+  seek m_END;             //Last used byte in file
+  seek m_seek_free;       //Location on disk of free segments structure
+  seek m_seek_info;       //Location on disk of StreamerInfo record
+  uint32 m_nbytes_free;   //Number of bytes for free segments structure
+  uint32 m_nbytes_info;   //Number of bytes for StreamerInfo record
+  //int nfree
+  uint32 m_nbytes_name;   //Number of bytes in TNamed at creation time
+};
+
+
+}}
+
+#endif
+
+//doc
+//
+//  A ROOT file is a suite of consecutive data records with the following
+//    format (see also the TKey class);
+// TKey ---------------------
+//      byte 1->4  Nbytes    = Length of compressed object (in bytes)
+//           5->6  Version   = TKey version identifier
+//           7->10 ObjLen    = Length of uncompressed object
+//          11->14 Datime    = Date and time when object was written to file
+//          15->16 KeyLen    = Length of the key structure (in bytes)
+//          17->18 Cycle     = Cycle of key
+//          19->22 SeekKey   = Pointer to record itself (consistency check)
+//          23->26 SeekPdir  = Pointer to directory header
+//          27->27 lname     = Number of bytes in the class name
+//          28->.. ClassName = Object Class Name
+//          ..->.. lname     = Number of bytes in the object name
+//          ..->.. Name      = lName bytes with the name of the object
+//          ..->.. lTitle    = Number of bytes in the object title
+//          ..->.. Title     = Title of the object
+//          -----> DATA      = Data bytes associated to the object
+//
+//  The first data record starts at byte fBEGIN (currently set to kBegin)
+//  Bytes 1->kBegin contain the file description:
+//       byte  1->4  "root"      = Root file identifier
+//             5->8  fVersion    = File format version
+//             9->12 fBEGIN      = Pointer to first data record
+//            13->16 fEND        = Pointer to first free word at the EOF
+//            17->20 fSeekFree   = Pointer to FREE data record
+//            21->24 fNbytesFree = Number of bytes in FREE data record
+//            25->28 nfree       = Number of free data records
+//            29->32 fNbytesName = Number of bytes in TNamed at creation time
+//            33->33 fUnits      = Number of bytes for file pointers
+//            34->37 fCompress   = Zip compression level
+//

@@ -1,4 +1,4 @@
-$Id: History 75585 2013-11-04 12:24:44Z gcosmo $
+$Id: History 87378 2014-12-02 08:30:01Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,118 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28-Nov-2014, M. Karamitros (phys-ctor-em-V10-00-27)
+- G4EmDNAChemistry: remove useless activation line
+
+24-Nov-2014, M. Karamitros (phys-ctor-em-V10-00-26)
+- G4EmDNAChemistry: initialization procedure of the chemistry reviewed
+G4DNAChemistryManager::Instance()->Initialize() is called from
+G4EmDNAChemistry::ConstructProcess.
+- Elastic scattering models are extended to low energies to avoid killing the 
+electrons --> should be converted into a solvated electron
+
+21-Nov-2014, M. Karamitros (phys-ctor-em-V10-00-25)
+- Transfer initialization of chemistry from user code to geant4 code
+
+17-Nov-2014, I. Hrivnacova (phys-ctor-em-V10-00-24)
+- Improved printing in G4OpticalPhysics::PrintStatistics()
+
+12-Nov-2014, A. Dotti (phys-ctor-em-V10-00-23)
+- Use of the correct enumerator.
+
+08-Nov-2014, M. Karamitros (phys-ctor-em-V10-00-22)
+- Use G4MoleculeTable::GetModel rather than recreating molecules
+
+7-Nov-2014, V.Ivanchenko (phys-ctor-em-V10-00-21)
+- Use G4EmParameters used in low-energy constructors
+
+4-Nov-2014, A.Dotti (phys-ctor-em-V10-00-20)
+- Fix bug appearing in LXe boundscheck test. Actually it is a
+  serious bug that can also make program crash.
+
+28-Oct-2014, A. Dotti (phys-ctor-em-V10-00-19)
+- Add trailing '/' at end of new UI optical directories
+
+28-Oct-2014, P. Arce (phys-ctor-em-V10-00-18)
+- Add G4EmLEPTSPhysics
+
+27 Oct 14: A.Dotti ( phys-ctor-em-V10-00-17)
+- Address problem #1675, this requires re engineering of 
+  all UI commands related to optical processes and created
+  in G4OpticalPhysics.
+- Co-working tags: xrays-V10-00-06, op-V10-00-09, phys-ctor-em-V10-00-17
+
+23-Oct-2014, M. Karamitros (phys-ctor-em-V10-00-16)
+- G4EmDNAChemistry: correct H3O+ settings
+
+17-Oct-2014, M. Karamitros (phys-ctor-em-V10-00-15)
+- G4EmDNAChemistry: avoid reseting vibrational model
+
+17-Oct-2014, V.Ivanchenko (phys-ctor-em-V10-00-14)
+- Use G4EmParameters used in all standard constructors
+  G4EmStandardPhysics_option3,4 - use G4GeneratorBS angular generator
+    for bremsstrahlung
+  G4EmStandardPhysics_option4 - use RangeFactor = 0.02 (instead of 0.01);
+    use G4DeltaAngle angular generator for all ionisation models
+  G4EmStandardPhysicsSS, G4EmStandardPhysicsWVI - new constructors
+
+07-Jul-2014, M. Karamitros (phys-ctor-em-V10-00-13)
+- Add G4EmDNAChemistry
+
+05-Jun-2014, S. Incerti (phys-ctor-em-V10-00-12)
+- Updated G4EmDNAPhysics to G4GenericIon usage for Z>2
+
+05-Apr-2014, V.Ivanchenko (phys-ctor-em-V10-00-11)
+- G4EmLivermorePhysics, G4EmLivermorePolarizedPhysics, G4EmPenelopePhysics, 
+  G4EmStandardPhysics_option3, G4EmStandardPhysics_option4 - cleanup 
+    msc instantiation for hadrons (use the same models for 
+    particle/anti_particle)
+
+02-Apr-2014, V.Ivanchenko (phys-ctor-em-V10-00-10)
+- G4EmLowEPPhysics, G4EmStandardPhysics_option3, 
+  G4EmStandardPhysics_option4, G4EmLivermoreStandardPhysics - cleanup 
+    gamma and e- models instantiation
+
+28-Feb-2014, V.Ivanchenko (phys-ctor-em-V10-00-09)
+- G4EmLowEPPhysics - added G4LowEWentzelVIModel
+
+14-Feb-2014, V.Ivanchenko (phys-ctor-em-V10-00-08)
+- G4EmDNAPhysics_option1 - added new constructor for DNA physics 
+
+04-Feb-2014, V.Ivanchenko (phys-ctor-em-V10-00-07)
+- G4EmStandardPhysics, G4EmStandardPhysics_option1,
+  G4EmStandardPhysics_option2 - added Coulomb scattering process for
+    pions, kaons, proton, anti-proton in order to have more smooth
+    transition from EM to hadronic scattering
+
+31-Jan-2014, V.Ivanchenko (phys-ctor-em-V10-00-06)
+- G4EmStandardPhysics_option4, G4EmLivermorePhysics,
+  G4EmPenelopePhysics, G4EmStandardPhysics_option3 - use the same 
+    order of processes for e+- and the same comments, this does not
+    change any result but make more easy comparison of log
+    files for different EM physics options
+
+15-Jan-2014, V.Ivanchenko (phys-ctor-em-V10-00-05)
+- G4EmStandardPhysics_option4, G4EmLivermorePhysics,
+  G4EmPenelopePhysics: use G4UrbanMscModel for pions, kaons, protons
+    instead of WentzelVI to have more accurate ranges of low-energy 
+    hadrons (in particular, protons)
+
+14-Jan-2014, V.Ivanchenko (phys-ctor-em-V10-00-04)
+- G4EmStandardPhysics_option4, G4EmLivermorePhysics,
+  G4EmPenelopePhysics: use RangeFactor=0.01 to increase 
+  simulation accuracy
+
+23-Dec-2013, M.Asai (phys-ctor-em-V10-00-03)
+- Fix other via-pointer invokation to static methods.
+
+22-Dec-2013, M.Asai (phys-ctor-em-V10-00-02)
+- Avoid static G4Scintillation method invoked through a pointer.
+
+18-Dec-2013, P.Gumplinger (phys-ctor-em-V10-00-00 and 01)
+- Fix race condision issue in OpticalPhysics
+- /optics_engine/setOpProcessUse not available for G4State_Idle
 
 01-Nov-2013, M.K (phys-ctor-em-V09-06-21)
 - Update sources.cmake

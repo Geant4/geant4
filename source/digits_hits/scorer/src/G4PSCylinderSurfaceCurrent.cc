@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCylinderSurfaceCurrent.cc 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4PSCylinderSurfaceCurrent.cc 81087 2014-05-20 15:44:27Z gcosmo $
 //
 // G4PSCylinderSurfaceCurrent
 #include "G4PSCylinderSurfaceCurrent.hh"
@@ -56,7 +56,7 @@
 
 G4PSCylinderSurfaceCurrent::G4PSCylinderSurfaceCurrent(G4String name, 
 					 G4int direction, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
+  :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),EvtMap(0),
    weighted(true),divideByArea(true)
 {
     DefineUnitAndCategory();
@@ -67,7 +67,7 @@ G4PSCylinderSurfaceCurrent::G4PSCylinderSurfaceCurrent(G4String name,
 						       G4int direction, 
 						       const G4String& unit,
 						       G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
+  :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),EvtMap(0),
    weighted(true),divideByArea(true)
 {
     DefineUnitAndCategory();
@@ -98,7 +98,7 @@ G4bool G4PSCylinderSurfaceCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*
   G4Tubs* tubsSolid = (G4Tubs*)(solid);
 
   G4int dirFlag =IsSelectedSurface(aStep,tubsSolid);
-  G4cout << " pos " << preStep->GetPosition() <<" dirFlag " << G4endl;
+  // G4cout << " pos " << preStep->GetPosition() <<" dirFlag " << G4endl;
   if ( dirFlag > 0 ) {
     if ( fDirection == fCurrent_InOut || fDirection == dirFlag ){
       G4TouchableHandle theTouchable = preStep->GetTouchableHandle();

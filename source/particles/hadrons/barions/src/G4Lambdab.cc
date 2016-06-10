@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Lambdab.cc 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4Lambdab.cc 83749 2014-09-12 12:14:59Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -70,11 +70,11 @@ G4Lambdab* G4Lambdab::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,      5.6202*GeV,  0.462e-9*MeV,          0.,
+                 name,      5.6195*GeV,  0.454e-9*MeV,          0.,
                     1,              +1,             0,
                     0,               0,             0,
              "baryon",               0,            +1,        5122,
-                false,      1.425e-3*ns,          NULL,
+                false,      1.451e-3*ns,          NULL,
                 false,       "lambda_b");
   }
   theInstance = reinterpret_cast<G4Lambdab*>(anInstance);

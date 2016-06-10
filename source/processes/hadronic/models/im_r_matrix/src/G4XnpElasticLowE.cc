@@ -50,7 +50,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsLnVector.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 
@@ -112,7 +111,8 @@ G4XnpElasticLowE::G4XnpElasticLowE()
 
 G4XnpElasticLowE::~G4XnpElasticLowE()
 {
-  delete _sigma;
+   delete _sigma;
+   _sigma = 0;
 }
 
 
@@ -134,11 +134,11 @@ G4double G4XnpElasticLowE::CrossSection(const G4KineticTrack& trk1, const G4Kine
   G4double sqrtS = (trk1.Get4Momentum() + trk2.Get4Momentum()).mag();
   G4bool dummy = false;
 
-  G4ParticleDefinition* proton = G4Proton::ProtonDefinition();
-  G4ParticleDefinition* neutron = G4Neutron::NeutronDefinition();   
+  const G4ParticleDefinition* proton = G4Proton::ProtonDefinition();
+  const G4ParticleDefinition* neutron = G4Neutron::NeutronDefinition();
 
-  G4ParticleDefinition* def1 = trk1.GetDefinition();
-  G4ParticleDefinition* def2 = trk2.GetDefinition();
+  const G4ParticleDefinition* def1 = trk1.GetDefinition();
+  const G4ParticleDefinition* def2 = trk2.GetDefinition();
   if ( (def1 == proton && def2 == neutron) ||
        (def1 == neutron && def2 == proton) )
   {

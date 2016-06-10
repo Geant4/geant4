@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttHolder.hh 66376 2012-12-18 09:42:59Z gcosmo $
+// $Id: G4AttHolder.hh 78955 2014-02-05 09:45:46Z gcosmo $
 
 #ifndef G4ATTHOLDER_HH
 #define G4ATTHOLDER_HH
@@ -63,7 +63,7 @@ public:
   {return fDefs;}
 
   void AddAtts(const std::vector<G4AttValue>* values,
-	       const std::map<G4String,G4AttDef>* defs)
+               const std::map<G4String,G4AttDef>* defs)
   {fValues.push_back(values); fDefs.push_back(defs);}
   // Note: G4AttValues are assumed to be expendable - they will be
   // deleted in the destructor.  G4AttDefs are assumed to have long

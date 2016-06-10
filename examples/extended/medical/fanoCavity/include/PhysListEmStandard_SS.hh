@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/include/PhysListEmStandard_SS.hh
 /// \brief Definition of the PhysListEmStandard_SS class
 //
-// $Id: PhysListEmStandard_SS.hh 68459 2013-03-27 18:45:08Z maire $
+// $Id: PhysListEmStandard_SS.hh 86064 2014-11-07 08:49:32Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

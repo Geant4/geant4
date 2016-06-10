@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSPNeutronBuilder.cc 75290 2013-10-30 09:20:47Z gcosmo $
+// $Id: G4QGSPNeutronBuilder.cc 83616 2014-09-04 13:30:16Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -43,9 +43,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4NeutronInelasticCrossSection.hh"
 #include "G4BGGNucleonInelasticXS.hh"
-#include "G4ExcitationHandler.hh"
 
 
 G4QGSPNeutronBuilder::
@@ -58,9 +56,7 @@ G4QGSPNeutronBuilder(G4bool quasiElastic)
   theStringDecay = new G4ExcitedStringDecay(theQGSM = new G4QGSMFragmentation);
   theStringModel->SetFragmentationModel(theStringDecay);
 
-  theCascade = new G4GeneratorPrecompoundInterface;
-  thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
-  theCascade->SetDeExcitation(thePreEquilib);  
+  theCascade = new G4GeneratorPrecompoundInterface();
 
   theModel->SetTransport(theCascade);
   theModel->SetHighEnergyGenerator(theStringModel);
@@ -75,11 +71,7 @@ G4QGSPNeutronBuilder(G4bool quasiElastic)
 G4QGSPNeutronBuilder::~G4QGSPNeutronBuilder() 
 {
   delete theStringDecay;
-  delete theStringModel;
-  delete thePreEquilib;
-  delete theCascade;
   if ( theQuasiElastic ) delete theQuasiElastic;
-  delete theModel;
   delete theQGSM;
 }
 

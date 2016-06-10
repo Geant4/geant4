@@ -36,6 +36,7 @@
 
 
 #include "FCALTestbeamSetup.hh"
+#include "FCALTestbeamSetupSD.hh"
 
 #include "FCALMaterialConsultant.hh"
 #include "FCALCryostatVolumes.hh"
@@ -61,8 +62,9 @@
 #include "G4Colour.hh"
 
 #include "G4ios.hh"
+#include "G4Threading.hh"
 
-FCALTestbeamSetup::FCALTestbeamSetup() : FCALTBSetupSD(0) {
+FCALTestbeamSetup::FCALTestbeamSetup() {
 #include "FCALTestbeamSetupParameters.input"
 }
 
@@ -70,14 +72,15 @@ FCALTestbeamSetup::~FCALTestbeamSetup() {}
 
 G4VPhysicalVolume * FCALTestbeamSetup::Construct()
 {
-  G4int i;
+  G4int i=0;
 
   //-----------------------------
   // construction of materials
   //-----------------------------
-  
-  FCALMaterialConsultant * FCALMaterials = new FCALMaterialConsultant();
-  FCALMaterials->construct();
+  G4cout << "Constructing materials...";
+  FCALMaterialConsultant* 
+    FCALMaterials = FCALMaterialConsultant::GetInstance();
+  G4cout << "... done" << G4endl;
 
   //-------------------
   // Experimental Hall 
@@ -185,7 +188,7 @@ G4VPhysicalVolume * FCALTestbeamSetup::Construct()
   // Absorber Al. 
   G4LogicalVolume * LogicalHoleCntrAl = 
     new G4LogicalVolume(SolidHoleCntrAbsrb,  FCALMaterials->Material("Aluminium"),
-			"HoleCntrAlLoghical");
+			"HoleCntrAlLogical");
   // G4VPhysicalVolume * PhysicalHoleAl =
     new G4PVPlacement(0, G4ThreeVector(HolePosX, HolePosY, HolePosZ), LogicalHoleAbs,
 		      "HoleAlPhysical", LogicalHoleCntrAl, 0, 0);
@@ -394,41 +397,40 @@ G4VPhysicalVolume * FCALTestbeamSetup::Construct()
 		      , theCryostatVolumes, PhysicalMother, 0,0);
 
 
-  //-----------------------
-  // Senstive detectors
-  //-----------------------
-  G4SDManager* SDman = G4SDManager::GetSDMpointer();
-  
-  if(!FCALTBSetupSD)
-    {
-      FCALTBSetupSD = new FCALTestbeamSetupSD("FCALTB/TBSetupSD");
-      SDman->AddNewDetector(FCALTBSetupSD);
-    }
-      LogicalScintS1andS3->SetSensitiveDetector(FCALTBSetupSD);
-      LogicalScintS2->SetSensitiveDetector(FCALTBSetupSD);
-      LogicalMWPC->SetSensitiveDetector(FCALTBSetupSD);
-      LogicalHoleCntrScint->SetSensitiveDetector(FCALTBSetupSD);
-      LogicalHoleCntrPb->SetSensitiveDetector(FCALTBSetupSD);
-      LogicalHoleCntrAl->SetSensitiveDetector(FCALTBSetupSD);
-
-
-      //     theCryostatVolumes->SetSensitiveDetector(FCALTBSetupSD);
-
-      LogicalLeadWall->SetSensitiveDetector(FCALTBSetupSD);
-      LogicalIronWall->SetSensitiveDetector(FCALTBSetupSD);
-      LogicalBigScint->SetSensitiveDetector(FCALTBSetupSD);
-      LogicalSmallScint->SetSensitiveDetector(FCALTBSetupSD);
- 
-      LogicalBigIron->SetSensitiveDetector(FCALTBSetupSD);
-      LogicalSmallIron->SetSensitiveDetector(FCALTBSetupSD);
-      LogicalConcWallA->SetSensitiveDetector(FCALTBSetupSD);
-      LogicalConcWallB->SetSensitiveDetector(FCALTBSetupSD);
-      LogicalConcWallIns->SetSensitiveDetector(FCALTBSetupSD);
-
-      LogicalMuContr->SetSensitiveDetector(FCALTBSetupSD);
-      
-
-
   return PhysicalMother;
 
 }
+
+void FCALTestbeamSetup::ConstructSDandField()
+{
+    //-----------------------
+    // Senstive detectors
+    //-----------------------
+    G4SDManager* SDman = G4SDManager::GetSDMpointer();
+    const G4String detName = "FCALTB/TBSetupSD";
+    FCALTestbeamSetupSD* FCALTBSetupSD = static_cast<FCALTestbeamSetupSD*>(SDman->FindSensitiveDetector(detName));
+    if(!FCALTBSetupSD)
+    {
+        FCALTBSetupSD = new FCALTestbeamSetupSD(detName);
+        SDman->AddNewDetector(FCALTBSetupSD);
+    }
+    SetSensitiveDetector("ScintS1andS3Logical",FCALTBSetupSD);
+    SetSensitiveDetector("ScintS2Logical",FCALTBSetupSD);
+    SetSensitiveDetector("MWPCLogical",FCALTBSetupSD);
+    SetSensitiveDetector("HoleCntrScintLogical",FCALTBSetupSD);
+    SetSensitiveDetector("HoleCntrPbLoghical",FCALTBSetupSD);
+    SetSensitiveDetector("HoleCntrAlLogical",FCALTBSetupSD);
+    
+    SetSensitiveDetector("LeadWallLogical",FCALTBSetupSD);
+    SetSensitiveDetector("IronWallLogical",FCALTBSetupSD);
+    SetSensitiveDetector("BigScintLogical",FCALTBSetupSD);
+    SetSensitiveDetector("SmallScintLogical",FCALTBSetupSD);
+    
+    SetSensitiveDetector("BigIronLogical",FCALTBSetupSD);
+    SetSensitiveDetector("SmallIronLogical",FCALTBSetupSD);
+    SetSensitiveDetector("ConcWallALogical",FCALTBSetupSD);
+    SetSensitiveDetector("ConcWallBLogical",FCALTBSetupSD);
+    SetSensitiveDetector("LogicalConcWallIns",FCALTBSetupSD);
+    SetSensitiveDetector("MuContrLogical",FCALTBSetupSD);
+}
+

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// $Id: EventAction.hh 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id: EventAction.hh 85243 2014-10-27 08:22:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -43,8 +43,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4UserEventAction.hh"
-#include "G4Event.hh"
 #include "globals.hh"
+
+class G4Event;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -59,9 +60,6 @@ public: // Without description
 
   virtual void BeginOfEventAction(const G4Event*);
   virtual void   EndOfEventAction(const G4Event*);
-
-private:
-
 };
 
 #endif

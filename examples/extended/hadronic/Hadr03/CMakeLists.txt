@@ -40,7 +40,7 @@ target_link_libraries(Hadr03 ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(Hadr03_SCRIPTS
-    debug.mac elastic.mac gamma.mac hadr03.in inelastic.mac nCapture.mac neutron.mac nFission.mac vis.mac
+    debug.mac envHadronic.csh envHadronic.sh elastic.mac gamma.mac hadr03.in inelastic.mac ion.mac nCapture.mac neutron.mac nFission.mac vis.mac
   )
 
 foreach(_script ${Hadr03_SCRIPTS})

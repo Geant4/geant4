@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectronIonPair.hh 69580 2013-05-08 13:57:53Z gcosmo $
+// $Id: G4ElectronIonPair.hh 81058 2014-05-20 09:04:28Z gcosmo $
 //
 //
 #ifndef G4ElectronIonPair_h
@@ -75,7 +75,7 @@ class G4ElectronIonPair
 {
 public: 
 
-  G4ElectronIonPair();
+  G4ElectronIonPair(G4int verb);
 
   virtual ~G4ElectronIonPair();
 
@@ -96,18 +96,18 @@ public:
   // compute number of holes in the atom after PostStep interaction
   G4int ResidualeChargePostStep(const G4ParticleDefinition*,
 				const G4TrackVector* secondary = 0,
-				G4int processSubType = -1);
+				G4int processSubType = -1) const;
 
-  inline G4int ResidualeChargePostStep(const G4Step*);
+  inline G4int ResidualeChargePostStep(const G4Step*) const;
 
   // find mean energies per ionisation 
-  G4double FindG4MeanEnergyPerIonPair(const G4Material*);
+  G4double FindG4MeanEnergyPerIonPair(const G4Material*) const;
 
   // dump mean energies per ionisation used in run time
-  void DumpMeanEnergyPerIonPair();
+  void DumpMeanEnergyPerIonPair() const;
 
   // dump G4 list
-  void DumpG4MeanEnergyPerIonPair();
+  void DumpG4MeanEnergyPerIonPair() const;
 
   inline void SetVerbose(G4int);
 
@@ -115,7 +115,7 @@ private:
 
   void Initialise();
 
-  G4double FindMeanEnergyPerIonPair(const G4Material*);
+  G4double FindMeanEnergyPerIonPair(const G4Material*) const;
 
   // hide assignment operator
   G4ElectronIonPair & operator=(const G4ElectronIonPair &right);
@@ -136,7 +136,7 @@ private:
 };
 
 inline G4double 
-G4ElectronIonPair::MeanNumberOfIonsAlongStep(const G4Step* step)
+G4ElectronIonPair::MeanNumberOfIonsAlongStep(const G4Step* step) 
 {
   return MeanNumberOfIonsAlongStep(step->GetTrack()->GetParticleDefinition(),
 				   step->GetPreStepPoint()->GetMaterial(),
@@ -144,8 +144,8 @@ G4ElectronIonPair::MeanNumberOfIonsAlongStep(const G4Step* step)
 				   step->GetNonIonizingEnergyDeposit());
 }
 
-inline 
-G4int G4ElectronIonPair::SampleNumberOfIonsAlongStep(const G4Step* step)
+inline G4int 
+G4ElectronIonPair::SampleNumberOfIonsAlongStep(const G4Step* step) 
 {
   // use gamma distribution with mean value n=meanion and 
   // dispersion D=meanion/invFanoFactor
@@ -153,8 +153,8 @@ G4int G4ElectronIonPair::SampleNumberOfIonsAlongStep(const G4Step* step)
   return G4lrint(G4RandGamma::shoot(meanion*invFanoFactor,invFanoFactor));
 } 
 
-inline 
-G4int G4ElectronIonPair::ResidualeChargePostStep(const G4Step* step)
+inline G4int 
+G4ElectronIonPair::ResidualeChargePostStep(const G4Step* step) const
 {
   G4int subtype = -1;
   const G4VProcess* proc = step->GetPostStepPoint()->GetProcessDefinedStep();

@@ -1,4 +1,4 @@
-$Id: History 69988 2013-05-21 12:36:24Z gcosmo $
+$Id: History 82285 2014-06-13 14:56:02Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 11, 2014 W. Pokorski  (G04-V10-00-00)
+- changes to comply with coding conventions
 
 May 17st, 2013 W. Pokorski  (G04-V09-06-00)
 - changes for Coding Rule 2.1

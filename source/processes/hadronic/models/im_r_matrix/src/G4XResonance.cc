@@ -52,7 +52,7 @@ G4XResonance::G4XResonance(const G4ParticleDefinition* in1,
 
 
 G4XResonance::~G4XResonance() 
-{ 
+{
   delete table;
   table = 0;
 }

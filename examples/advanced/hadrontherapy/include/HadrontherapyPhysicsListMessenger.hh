@@ -59,12 +59,7 @@ private:
   HadrontherapyPhysicsList* pPhysicsList;
     
   G4UIdirectory*             physDir;        
-  G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-  G4UIcmdWithADoubleAndUnit* electCutCmd;
-  G4UIcmdWithADoubleAndUnit* protoCutCmd;    
-  G4UIcmdWithADoubleAndUnit* allCutCmd;    
-  G4UIcmdWithADoubleAndUnit* allDetectorCmd;    
-  G4UIcmdWithAString*        pListCmd;
+    G4UIcmdWithAString*      pListCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

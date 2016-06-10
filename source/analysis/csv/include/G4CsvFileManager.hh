@@ -25,7 +25,7 @@
 //
 // $Id: G4CsvFileManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
-// The manager for Csv file operations.
+// The manager for Csv output file operations.
 
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
@@ -50,6 +50,7 @@ class G4CsvFileManager : public G4VFileManager
     virtual G4bool WriteFile();
     virtual G4bool CloseFile(); 
 
+    // Specific methods for files per objects
     G4bool CreateNtupleFile(G4CsvNtupleDescription* ntupleDescription);
     G4bool CloseNtupleFile(G4CsvNtupleDescription* ntupleDescription); 
 };

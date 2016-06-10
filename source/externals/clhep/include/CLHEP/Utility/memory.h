@@ -154,7 +154,7 @@ bool
   abstract_ctrl_block::add_ref_lock()  // true on success
 {
   class_invariant();
-  return n_shared_ptrs ? ++n_shared_ptrs : false;
+  return n_shared_ptrs ? (++n_shared_ptrs != 0) : false;
 }
 
 void

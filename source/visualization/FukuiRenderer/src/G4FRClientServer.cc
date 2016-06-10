@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRClientServer.cc 66870 2013-01-14 23:38:59Z adotti $
+// $Id: G4FRClientServer.cc 79795 2014-03-14 10:13:31Z gcosmo $
 //
 // Satoshi TANAKA, Wed Jul  3 14:14:29 JST 1996
 ////////////////////////////////
@@ -47,8 +47,6 @@
 const  char	DEFAULT_SUN_PATH[]		= "FR_TMP3"        ;
 const  int	DEFAULT_PORT_NUMBER		= 40701            ;
 //const  char	FR_ENV_SERVER_HOST_NAME[]	= "G4DAWN_HOST_NAME" ; // moved to .hh
-const  int	MAX_BINDING_TRIAL		= 10               ;
-const  int	BINDING_TRIAL_INTERVAL		= 5                ;
 const  int	MAX_CONNECT_TRIAL		= 10               ;
 const  char     FR_DEFAULT_HOST_NAME[]          = "localhost"      ;      
 

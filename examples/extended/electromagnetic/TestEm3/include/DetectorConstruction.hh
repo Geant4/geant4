@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm3/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: DetectorConstruction.hh 78655 2014-01-14 11:13:41Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,13 +36,16 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
+#include "G4Cache.hh"
 
 class G4Box;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
-class G4UniformMagField;
 class DetectorMessenger;
+
+class G4GlobalMagFieldMessenger;
+
 
      const G4int MaxAbsor = 10;                        // 0 + 9  
      
@@ -64,13 +67,9 @@ public:
   void SetWorldMaterial (const G4String&);
   void SetCalorSizeYZ   (G4double);          
   void SetNbOfLayers    (G4int);   
-
-  void SetMagField   (G4double);
   
-  virtual   
-  G4VPhysicalVolume* Construct();
-
-  void UpdateGeometry();
+  virtual G4VPhysicalVolume* Construct();
+  virtual void ConstructSDandField();
      
 public:
   
@@ -124,10 +123,9 @@ private:
   G4LogicalVolume*   fLogicAbsor[MaxAbsor];
   G4VPhysicalVolume* fPhysiAbsor[MaxAbsor];
 
-  G4UniformMagField* fMagField;
-
   DetectorMessenger* fDetectorMessenger;
-
+  G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
+  
 private:
 
   void DefineMaterials();

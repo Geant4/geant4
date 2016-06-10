@@ -159,12 +159,13 @@ void DMXPhysicsList::ConstructMyHadrons()
 
 }
 
+#include "G4ShortLivedConstructor.hh"
 
 // construct Shortliveds://///////////////////////////////////////////////////
 void DMXPhysicsList::ConstructMyShortLiveds()
 {
-  // ShortLiveds
-  ;
+  G4ShortLivedConstructor slConstructor;
+  slConstructor.ConstructParticle();
 }
 
 
@@ -253,7 +254,7 @@ void DMXPhysicsList::AddTransportation() {
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
-#include "G4MuonMinusCaptureAtRest.hh"
+#include "G4MuonMinusCapture.hh"
 
 //OTHERS:
 #include "G4hIonisation.hh" 
@@ -349,7 +350,7 @@ void DMXPhysicsList::ConstructEM() {
 	pmanager->AddProcess(new G4MuBremsstrahlung(),      -1,-1, 3);
 	pmanager->AddProcess(new G4MuPairProduction(),      -1,-1, 4);
 	if( particleName == "mu-" )
-	  pmanager->AddProcess(new G4MuonMinusCaptureAtRest(), 0,-1,-1);
+	  pmanager->AddProcess(new G4MuonMinusCapture(), 0,-1,-1);
       } 
     else if (particleName == "proton" || 
 	     particleName == "pi+" || 
@@ -745,7 +746,7 @@ void DMXPhysicsList::ConstructHad()
       else if (particleName == "anti_proton") 
 	{
 	  // Elastic scattering
-          const G4double elastic_elimitAntiNuc = 100.0*CLHEP::MeV;
+          const G4double elastic_elimitAntiNuc = 100.0*MeV;
           G4AntiNuclElastic* elastic_anuc = new G4AntiNuclElastic();
           elastic_anuc->SetMinEnergy( elastic_elimitAntiNuc );
           G4CrossSectionElastic* elastic_anucxs = new G4CrossSectionElastic( elastic_anuc->GetComponentCrossSection() );
@@ -771,7 +772,7 @@ void DMXPhysicsList::ConstructHad()
 	G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
         theElasticProcess->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsNeutronElasticXS::Default_Name()));
         G4HadronElastic* elastic_neutronChipsModel = new G4ChipsElasticModel();
-	elastic_neutronChipsModel->SetMinEnergy( 19.0*CLHEP::MeV );
+	elastic_neutronChipsModel->SetMinEnergy( 19.0*MeV );
         theElasticProcess->RegisterMe( elastic_neutronChipsModel );
 	G4NeutronHPElastic * theElasticNeutronHP = new G4NeutronHPElastic;
         theElasticNeutronHP->SetMinEnergy( theHPMin );

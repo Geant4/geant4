@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -43,6 +44,7 @@
 
 #include "G4INCLNaturalIsotopicDistributions.hh"
 #include "G4INCLRandom.hh"
+#include "G4INCLLogger.hh"
 // #include <cassert>
 #include <utility>
 #include <iostream>
@@ -87,7 +89,7 @@ namespace G4INCL {
     if(i!=theDistributions.end())
       return i->second;
     else {
-      INCL_FATAL("Requested natural isotopic distribution for synthetic element Z = " << Z << std::endl);
+      INCL_FATAL("Requested natural isotopic distribution for synthetic element Z = " << Z << '\n');
       return theDistributions.begin()->second;
     }
   }
@@ -388,7 +390,7 @@ namespace G4INCL {
     };
 
     // Cool hack to get the size of an array in C++
-    template<typename T, ::std::size_t N> inline ::std::size_t sizeOfArray(const T(&)[ N ] ) {
+    template<typename T, ::std::size_t N> ::std::size_t sizeOfArray(const T(&)[ N ] ) {
       return N;
     }
   }

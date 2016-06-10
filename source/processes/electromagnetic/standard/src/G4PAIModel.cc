@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIModel.cc 73607 2013-09-02 10:04:03Z gcosmo $
+// $Id: G4PAIModel.cc 83400 2014-08-21 14:48:50Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -136,35 +136,51 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
     size_t numOfMat   = G4Material::GetNumberOfMaterials();
     size_t numRegions = fPAIRegionVector.size();
 
-    for(size_t iReg = 0; iReg < numRegions; ++iReg) {
+    if(fVerbose > 0) {
+      G4cout << "G4PAIModel is defined for " << numRegions << " regions "   
+	     << G4endl;
+      G4cout << "           total number of materials " << numOfMat << G4endl;
+    } 
+    for(size_t iReg = 0; iReg<numRegions; ++iReg) {
       const G4Region* curReg = fPAIRegionVector[iReg];
       G4Region* reg = const_cast<G4Region*>(curReg);
 
-      for(size_t jMat = 0; jMat < numOfMat; ++jMat) {
+      for(size_t jMat = 0; jMat<numOfMat; ++jMat) {
 	G4Material* mat = (*theMaterialTable)[jMat];
 	const G4MaterialCutsCouple* cutCouple = reg->FindCouple(mat);
-	//G4cout << "Couple <" << fCutCouple << G4endl;
+	size_t n = fMaterialCutsCoupleVector.size();
+	/*
+	G4cout << "Region: " << reg->GetName() << "  " << reg
+	       << " Couple " << cutCouple 
+	       << " PAI defined for " << n << " couples"
+	       << " jMat= " << jMat << "  " << mat->GetName()
+	       << G4endl;
+	*/
 	if(cutCouple) {
-	  /*
-	    G4cout << "Reg <" <<curReg->GetName() << ">  mat <" 
-	    << fMaterial->GetName() << ">  fCouple= " 
-	    << fCutCouple << " idx= " << fCutCouple->GetIndex()
-	    <<"  " << p->GetParticleName() <<G4endl;
-	    // G4cout << cuts.size() << G4endl;
-	    */
+	  if(fVerbose > 0) {
+	    G4cout << "Region <" << curReg->GetName() << ">  mat <" 
+		   << mat->GetName() << ">  CoupleIndex= " 
+		   << cutCouple->GetIndex()
+		   << "  " << p->GetParticleName()
+		   << " cutsize= " << cuts.size() << G4endl;
+	  }
 	  // check if this couple is not already initialized
-	  size_t n = fMaterialCutsCoupleVector.size();
+	  G4bool isnew = true;
 	  if(0 < n) {
-	    for(size_t i=0; i<fMaterialCutsCoupleVector.size(); ++i) {
+	    for(size_t i=0; i<n; ++i) {
 	      if(cutCouple == fMaterialCutsCoupleVector[i]) {
+		isnew = false;
 		break;
 	      }
 	    }
 	  }
 	  // initialise data banks
-	  fMaterialCutsCoupleVector.push_back(cutCouple);
-	  G4double deltaCutInKinEnergy = cuts[cutCouple->GetIndex()];
-	  fModelData->Initialise(cutCouple, deltaCutInKinEnergy, this);
+	  //G4cout << "   isNew: " << isnew << "  " << cutCouple << G4endl;
+	  if(isnew) { 
+	    fMaterialCutsCoupleVector.push_back(cutCouple); 
+	    G4double deltaCutInKinEnergy = cuts[cutCouple->GetIndex()];
+	    fModelData->Initialise(cutCouple, deltaCutInKinEnergy, this);
+	  }
 	}
       }
     }
@@ -187,7 +203,14 @@ G4double G4PAIModel::ComputeDEDXPerVolume(const G4Material*,
 					  G4double kineticEnergy,
 					  G4double cutEnergy)
 {
+  /*
+  G4cout << "===1=== " << CurrentCouple() 
+	 << "  idx= " << CurrentCouple()->GetIndex()
+	 << "   " <<  fMaterialCutsCoupleVector[0]
+	 << G4endl;
+  */
   G4int coupleIndex = FindCoupleIndex(CurrentCouple());
+  //G4cout << "===2=== " << coupleIndex << G4endl;
   if(0 > coupleIndex) { return 0.0; }
 
   G4double cut = std::min(MaxSecondaryEnergy(p, kineticEnergy), cutEnergy);
@@ -245,14 +268,15 @@ void G4PAIModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   G4double totalMomentum = sqrt(kineticEnergy*(totalEnergy+fMass));
 
   G4double deltaTkin = 
-    fModelData->SamplePostStepTransfer(coupleIndex, scaledTkin);
+    fModelData->SamplePostStepTransfer(coupleIndex, scaledTkin, tmax);
 
-  // G4cout<<"G4PAIModel::SampleSecondaries; deltaKIn = "<<deltaTkin/keV
-  // <<" keV "<<G4endl;
+  //G4cout<<"G4PAIModel::SampleSecondaries; deltaKIn = "<<deltaTkin/keV
+  //	<<" keV "<< " Escaled(MeV)= " << scaledTkin << G4endl;
 
-  if( deltaTkin <= 0. && fVerbose > 0) 
-  {
-    G4cout<<"G4PAIModel::SampleSecondary e- deltaTkin = "<<deltaTkin<<G4endl;
+  if( !(deltaTkin <= 0.) && !(deltaTkin > 0)) {
+    G4cout<<"G4PAIModel::SampleSecondaries; deltaKIn = "<<deltaTkin/keV
+	  <<" keV "<< " Escaled(MeV)= " << scaledTkin << G4endl;
+    return;
   }
   if( deltaTkin <= 0.) { return; }
 

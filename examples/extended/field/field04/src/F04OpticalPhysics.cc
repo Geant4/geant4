@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04OpticalPhysics.cc 68751 2013-04-05 10:21:24Z gcosmo $
+// $Id: F04OpticalPhysics.cc 85428 2014-10-29 08:28:14Z gcosmo $
 //
 /// \file field/field04/src/F04OpticalPhysics.cc
 /// \brief Implementation of the F04OpticalPhysics class
@@ -66,6 +66,7 @@ void F04OpticalPhysics::ConstructParticle()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ProcessManager.hh"
+#include "G4Threading.hh"
 
 void F04OpticalPhysics::ConstructProcess()
 {
@@ -73,6 +74,10 @@ void F04OpticalPhysics::ConstructProcess()
            << G4endl;
 
   G4Scintillation* theScintProcess = new G4Scintillation();
+  theScintProcess->SetScintillationYieldFactor(1.);
+  theScintProcess->SetScintillationExcitationRatio(0.0);
+  theScintProcess->SetTrackSecondariesFirst(true);
+    
   G4Cerenkov* theCerenkovProcess= new G4Cerenkov();
 
   G4OpAbsorption* theAbsorptionProcess= new G4OpAbsorption();
@@ -80,6 +85,7 @@ void F04OpticalPhysics::ConstructProcess()
   G4OpMieHG* theMieHGScatteringProcess = new G4OpMieHG();
   G4OpBoundaryProcess* theBoundaryProcess = new G4OpBoundaryProcess();
   G4OpWLS* theWLSProcess=new G4OpWLS();
+  theWLSProcess->UseTimeProfile("delta");
 
   G4ProcessManager* pManager =
                 G4OpticalPhoton::OpticalPhoton()->GetProcessManager();
@@ -97,14 +103,7 @@ void F04OpticalPhysics::ConstructProcess()
 
   pManager->AddDiscreteProcess(theBoundaryProcess);
 
-  theWLSProcess->UseTimeProfile("delta");
-//  theWLSProcess->UseTimeProfile("exponential");
-
   pManager->AddDiscreteProcess(theWLSProcess);
-
-  theScintProcess->SetScintillationYieldFactor(1.);
-  theScintProcess->SetScintillationExcitationRatio(0.0);
-  theScintProcess->SetTrackSecondariesFirst(true);
 
   aParticleIterator->reset();
 

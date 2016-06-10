@@ -153,7 +153,7 @@ inline bool HepBoostX::isNear(const HepBoost & b,
 // ----------  Properties:
 
 inline double HepBoostX::norm2() const {
-  register double bg = beta_*gamma_;
+  double bg = beta_*gamma_;
   return bg*bg;
 }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4F18GEMProbability.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4F18GEMProbability.cc 87017 2014-11-21 16:26:26Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
@@ -35,108 +35,107 @@
 G4F18GEMProbability::G4F18GEMProbability() :
   G4GEMProbability(18,9,1.0) // A,Z,Spin
 {
-
-  ExcitEnergies.push_back(937.0*keV);
+  ExcitEnergies.push_back(937.2*keV);
   ExcitSpins.push_back(3.0);
   ExcitLifetimes.push_back(47.0*picosecond);
 
-  ExcitEnergies.push_back(1041.9*keV);
+  ExcitEnergies.push_back(1041.55*keV);
   ExcitSpins.push_back(0.0);
   ExcitLifetimes.push_back(3.0e-3*picosecond);
 
-  ExcitEnergies.push_back(1080.9*keV);
+  ExcitEnergies.push_back(1080.54*keV);
   ExcitSpins.push_back(0.0);
   ExcitLifetimes.push_back(21.0*picosecond);
 
-  ExcitEnergies.push_back(1121.8*keV);
+  ExcitEnergies.push_back(1121.36*keV);
   ExcitSpins.push_back(5.0);
   ExcitLifetimes.push_back(151.0*nanosecond);
 
-  ExcitEnergies.push_back(1700.7*keV);
+  ExcitEnergies.push_back(1700.81*keV);
   ExcitSpins.push_back(1.0);
   ExcitLifetimes.push_back(0.60*picosecond);
 
-  ExcitEnergies.push_back(2101.3*keV);
+  ExcitEnergies.push_back(2100.61*keV);
   ExcitSpins.push_back(2.0);
   ExcitLifetimes.push_back(3.0*picosecond);
 
-  ExcitEnergies.push_back(2524.0*keV);
+  ExcitEnergies.push_back(2523.35*keV);
   ExcitSpins.push_back(2.0);
   ExcitLifetimes.push_back(0.45*picosecond);
 
-  ExcitEnergies.push_back(3059.8*keV);
+  ExcitEnergies.push_back(3061.84*keV);
   ExcitSpins.push_back(2.0);
   ExcitLifetimes.push_back(0.8e-3*picosecond);
 
-  ExcitEnergies.push_back(3134.9*keV);
+  ExcitEnergies.push_back(3133.87*keV);
   ExcitSpins.push_back(1.0);
   ExcitLifetimes.push_back(0.26*picosecond);
 
-  ExcitEnergies.push_back(3356.9*keV);
+  ExcitEnergies.push_back(3358.2*keV);
   ExcitSpins.push_back(3.0);
   ExcitLifetimes.push_back(0.33*picosecond);
 
-  ExcitEnergies.push_back(3724.2*keV);
+  ExcitEnergies.push_back(3724.19*keV);
   ExcitSpins.push_back(1.0);
   ExcitLifetimes.push_back(0.06*picosecond);
 
-  ExcitEnergies.push_back(3836.0*keV);
+  ExcitEnergies.push_back(3839.17*keV);
   ExcitSpins.push_back(2.0);
   ExcitLifetimes.push_back(0.050*picosecond);
 
-  ExcitEnergies.push_back(4361.0*keV);
+  ExcitEnergies.push_back(4360.15*keV);
   ExcitSpins.push_back(3.0);
   ExcitLifetimes.push_back(0.42*picosecond);
 
-  ExcitEnergies.push_back(5301.0*keV);
+  ExcitEnergies.push_back(5297.6*keV);
   ExcitSpins.push_back(4.0);
   ExcitLifetimes.push_back(21.0*picosecond);
 
-  ExcitEnergies.push_back(5606.0*keV);
+  ExcitEnergies.push_back(5603.38*keV);
   ExcitSpins.push_back(1.0);
   ExcitLifetimes.push_back(fPlanck/(1.2*keV));
 
-  ExcitEnergies.push_back(5674.0*keV);
+  ExcitEnergies.push_back(5672.57*keV);
   ExcitSpins.push_back(1.0);
   ExcitLifetimes.push_back(fPlanck/(0.8*keV));
 
-  ExcitEnergies.push_back(6095.0*keV);
+  ExcitEnergies.push_back(6096.4*keV);
   ExcitSpins.push_back(4.0);
   ExcitLifetimes.push_back(fPlanck/(2.0*keV));
 
-  ExcitEnergies.push_back(6161.0*keV);
+  ExcitEnergies.push_back(6163.2*keV);
   ExcitSpins.push_back(3.0);
   ExcitLifetimes.push_back(fPlanck/(15.0*keV));
 
-  ExcitEnergies.push_back(6240.0*keV);
+  ExcitEnergies.push_back(6242.0*keV);
   ExcitSpins.push_back(3.0);
   ExcitLifetimes.push_back(fPlanck/(0.8*keV));
 
-  ExcitEnergies.push_back(6261.0*keV);
+  ExcitEnergies.push_back(6262.0*keV);
   ExcitSpins.push_back(1.0);
   ExcitLifetimes.push_back(fPlanck/(3.0*keV));
 
-  ExcitEnergies.push_back(6280.0*keV);
+  ExcitEnergies.push_back(6283.2*keV);
   ExcitSpins.push_back(2.0);
   ExcitLifetimes.push_back(fPlanck/(7.5*keV));
 
-  ExcitEnergies.push_back(6309.0*keV);
+  ExcitEnergies.push_back(6310.5*keV);
   ExcitSpins.push_back(3.0);
   ExcitLifetimes.push_back(fPlanck/(3.1*keV));
 
-  ExcitEnergies.push_back(6385.0*keV);
+  ExcitEnergies.push_back(6385.5*keV);
   ExcitSpins.push_back(2.0);
   ExcitLifetimes.push_back(fPlanck/(4.5*keV));
 
-  ExcitEnergies.push_back(6483.0*keV);
+  ExcitEnergies.push_back(6484.9*keV);
   ExcitSpins.push_back(3.0);
   ExcitLifetimes.push_back(fPlanck/(1.2*keV));
 
-  ExcitEnergies.push_back(6565.0*keV);
+  ExcitEnergies.push_back(6567.0*keV);
   ExcitSpins.push_back(5.0);
   ExcitLifetimes.push_back(fPlanck/(0.8*keV));
 
-  ExcitEnergies.push_back(6646.0*keV);
+  ExcitEnergies.push_back(6643.7*keV);
   ExcitSpins.push_back(1.0);
   ExcitLifetimes.push_back(fPlanck/(89.0*keV));
 
@@ -144,11 +143,11 @@ G4F18GEMProbability::G4F18GEMProbability() :
   ExcitSpins.push_back(2.0);
   ExcitLifetimes.push_back(fPlanck/(1.6*keV));
 
-  ExcitEnergies.push_back(6780.0*keV);
+  ExcitEnergies.push_back(6777.4*keV);
   ExcitSpins.push_back(5.0);
   ExcitLifetimes.push_back(fPlanck/(10.0*keV));
 
-  ExcitEnergies.push_back(6808.0*keV);
+  ExcitEnergies.push_back(6803.1*keV);
   ExcitSpins.push_back(2.0);
   ExcitLifetimes.push_back(fPlanck/(90.0*keV));
 

@@ -1,4 +1,4 @@
-$Id: History 78003 2013-12-02 08:26:54Z gcosmo $
+$Id: History 81774 2014-06-05 08:36:37Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4th June 2014 L. Desorgher (tracking-V10-00-00)
+-Corrections in G4AdjointSteppingAction and G4AdjointTrackingAction  to have
+ the treatment of adj and forward tracks in the same event
 
 29th November2013 M.Asai (tracking-V09-06-10)
 - G4VTrajectory::ShowTrajectory() : add missing \\n.

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelTrackerHit.hh 66508 2012-12-19 10:16:45Z gcosmo $
+// $Id: GammaRayTelTrackerHit.hh 82268 2014-06-13 13:47:30Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -91,22 +91,22 @@ public:
 
 typedef G4THitsCollection<GammaRayTelTrackerHit> GammaRayTelTrackerHitsCollection;
 
-extern G4Allocator<GammaRayTelTrackerHit> GammaRayTelTrackerHitAllocator;
+extern G4ThreadLocal G4Allocator<GammaRayTelTrackerHit> *GammaRayTelTrackerHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void* GammaRayTelTrackerHit::operator new(size_t)
 {
-  void* aHit;
-  aHit = (void*) GammaRayTelTrackerHitAllocator.MallocSingle();
-  return aHit;
+  if (!GammaRayTelTrackerHitAllocator)
+    GammaRayTelTrackerHitAllocator = new G4Allocator<GammaRayTelTrackerHit>;
+  return (void*) GammaRayTelTrackerHitAllocator->MallocSingle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void GammaRayTelTrackerHit::operator delete(void* aHit)
 {
-  GammaRayTelTrackerHitAllocator.FreeSingle((GammaRayTelTrackerHit*) aHit);
+  GammaRayTelTrackerHitAllocator->FreeSingle((GammaRayTelTrackerHit*) aHit);
 }
 
 #endif

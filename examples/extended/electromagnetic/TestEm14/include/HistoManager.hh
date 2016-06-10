@@ -24,10 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: HistoManager.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: HistoManager.hh 82439 2014-06-20 10:37:29Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef HistoManager_h
 #define HistoManager_h 1
@@ -36,7 +36,6 @@
 
 #include "g4root.hh"
 //#include "g4xml.hh"
-////#include "g4hbook.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AxesModel.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4AxesModel.hh 83403 2014-08-21 15:07:30Z gcosmo $
 //
 // 
 // John Allison  3rd April 2001
@@ -51,7 +51,8 @@ public: // With description
    G4double arrowWidth = 1.,
    const G4String& colourString = "auto",
    const G4String& description = "",
-   G4bool withAnnotation = true
+   G4bool withAnnotation = true,
+   G4double textSize = 10.
    );
    
   virtual ~G4AxesModel ();

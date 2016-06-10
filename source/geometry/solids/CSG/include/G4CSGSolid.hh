@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CSGSolid.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4CSGSolid.hh 83572 2014-09-01 15:23:27Z gcosmo $
 //
 //  
 // --------------------------------------------------------------------
@@ -77,6 +77,7 @@ class G4CSGSolid : public G4VSolid
 
     G4double fCubicVolume;
     G4double fSurfaceArea;
+    mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;
 };
 

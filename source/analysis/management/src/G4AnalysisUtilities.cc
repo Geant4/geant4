@@ -30,6 +30,30 @@
 #include "G4AnalysisUtilities.hh"
 #include "G4BinScheme.hh"
 #include "G4UnitsTable.hh"
+#include "G4String.hh"
+
+namespace {
+
+//_____________________________________________________________________________
+G4bool GetToken(const G4String& line, G4String& token, 
+                std::string::size_type begIdx, std::string::size_type& endIdx)
+{
+  while ( line[begIdx] == ' ') ++begIdx;
+  if ( line[begIdx] == '"' ) {
+    endIdx = line.find('"', begIdx+1);
+    if ( endIdx == std::string::npos ) endIdx = line.length();
+    token = line.substr(begIdx+1, (endIdx-1)-begIdx);
+    ++endIdx;
+  }
+  else {
+    endIdx = line.find(' ', begIdx);
+    if ( endIdx == std::string::npos ) endIdx = line.length();
+    token = line.substr(begIdx, endIdx-begIdx);
+  }
+  return ( token.length() > 0 );
+}              
+
+}
 
 namespace G4Analysis
 {
@@ -51,7 +75,8 @@ G4bool CheckNbins(G4int nbins)
 
 
 //_____________________________________________________________________________
-G4bool CheckMinMax(G4double xmin, G4double xmax, const G4String& binSchemeName)
+G4bool CheckMinMax(G4double xmin, G4double xmax, 
+                   const G4String& fcnName, const G4String& binSchemeName)
 {
   G4bool result = true;
   
@@ -65,10 +90,23 @@ G4bool CheckMinMax(G4double xmin, G4double xmax, const G4String& binSchemeName)
     result = false;
   }
   
-  if ( ( GetBinScheme(binSchemeName) == kLogBinScheme ) && ( xmin == 0 ) ) {
+  if ( ( fcnName != "none" ) && ( binSchemeName != "linear" ) ) {
     G4ExceptionDescription description;
     description 
-      << "    Illegal value of (xmin = 0) with logarithmic binning" << G4endl;
+      << "    Combining Function and Binning scheme is not supported." 
+      << G4endl;
+      G4Exception("G4VAnalysisManager::CheckMinMax",
+                  "Analysis_W013", JustWarning, description);
+                  
+    result = false;
+  }
+  
+  if ( ( GetBinScheme(binSchemeName) == kLogBinScheme ||
+         fcnName == "log" || fcnName == "log10" ) && ( xmin == 0 ) ) {
+    G4ExceptionDescription description;
+    description 
+      << "    Illegal value of (xmin = 0) with logarithmic function or binning" 
+      << G4endl;
       G4Exception("G4VAnalysisManager::CheckMinMax",
                   "Analysis_W013", JustWarning, description);
                   
@@ -95,6 +133,22 @@ G4bool CheckEdges(const std::vector<G4double>& edges)
 }
 
 //_____________________________________________________________________________
+G4bool CheckName(const G4String& name, const G4String& objectType)
+{
+  if ( ! name.size() ) {
+    G4ExceptionDescription description;
+    description 
+      << "    Empty " << objectType << " name is not allowed." << G4endl
+      << "    " << objectType << " was not created." << G4endl;
+      G4Exception("G4VAnalysisManager::CheckName",
+                  "Analysis_W013", JustWarning, description);
+    return false;
+  }
+  else
+    return true;                   
+}
+
+//_____________________________________________________________________________
 G4double GetUnitValue(const G4String& unit)
 {
    G4double value = 1.;
@@ -114,5 +168,24 @@ void UpdateTitle(G4String& title,
   if ( unitName != "none" ) { title += " ["; title += unitName; title += "]";}
   if ( fcnName != "none" )  { title += ")"; }
 }                                                            
+
+//_____________________________________________________________________________
+void  Tokenize(const G4String& line, std::vector<G4String>& tokens)
+{
+  // Define start values
+  std::string::size_type begIdx = 0;
+  std::string::size_type endIdx = 0; 
+  G4String token;
+  
+  do {
+    if ( GetToken(line, token, begIdx, endIdx) ) {
+      //G4cout << "got token: '" << token << "'" << G4endl;
+      //G4cout << "beg, end: " << begIdx << ", " << endIdx << G4endl;
+      tokens.push_back(token);
+    }  
+    begIdx = endIdx + 1;
+  }
+  while ( endIdx != line.length() );
+}
 
 }

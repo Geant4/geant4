@@ -42,6 +42,7 @@
 // 20130621  Move doConservationChecks to G4CascadeParameters; change
 //		explosion to use reference, add validateOutput() w/G4Fragment
 // 20130622  Move fragment-handling functions to G4CascadeDeexciteBase
+// 20140930  Change name from "const char*" to "const G4String"
 
 #include "G4VCascadeCollider.hh"
 
@@ -61,7 +62,7 @@ class G4V3DNucleus;
 
 class G4CascadeColliderBase : public G4VCascadeCollider {
 public:
-  G4CascadeColliderBase(const char* name, G4int verbose=0);
+  G4CascadeColliderBase(const G4String& name, G4int verbose=0);
   virtual ~G4CascadeColliderBase();
 
   // For use with top-level Propagate to preload a set of secondaries

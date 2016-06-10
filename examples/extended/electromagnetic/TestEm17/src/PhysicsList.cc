@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysicsList class
 //
 //
-// $Id: PhysicsList.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id: PhysicsList.cc 85311 2014-10-27 14:23:25Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,10 +35,11 @@
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
 
+#include "G4EmStandardPhysics.hh"
 #include "PhysListEmStandard.hh"
 #include "MuNuclearBuilder.hh"
 
-#include "G4LossTableManager.hh"
+#include "G4EmParameters.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -64,20 +65,17 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList(),
   SetVerboseLevel(1);
   fMessenger = new PhysicsListMessenger(this);
 
-  // cuts
-  fCurrentDefaultCut   = 1.0*mm;
-  fCutForGamma         = fCurrentDefaultCut;
-  fCutForElectron      = fCurrentDefaultCut;
-  fCutForPositron      = fCurrentDefaultCut;
-  
+  //extend energy range of PhysicsTables
+  //
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetMinEnergy(100*eV);  
+  param->SetMaxEnergy(1000*PeV);
+
   // EM physics
-  fEmName = G4String("standard");
-  fEmPhysicsList = new PhysListEmStandard(fEmName);
+  fEmName = G4String("emstandard_opt0");
+  fEmPhysicsList = new G4EmStandardPhysics();
 
   fMuNuclPhysicsList = 0;
-  
-  // instanciate EnergyLossTable
-  G4LossTableManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -134,7 +132,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   if (name == fEmName) return;
 
-  if (name == "standard" && name != fEmName) {
+  if (name == "emstandard_opt0") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new PhysListEmStandard(name);
+
+  } else if (name == "local") {
 
     fEmName = name;
     delete fEmPhysicsList;
@@ -153,50 +157,4 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::SetCuts()
-{
-     
-  if (verboseLevel >0){
-    G4cout << "PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }  
-
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma
-  SetCutValue(fCutForGamma, "gamma");
-  SetCutValue(fCutForElectron, "e-");
-  SetCutValue(fCutForPositron, "e+");   
-    
-  if (verboseLevel>0) DumpCutValuesTable();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-
-void PhysicsList::SetCutForGamma(G4double cut)
-{
-  fCutForGamma = cut;
-  SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForElectron(G4double cut)
-{
-  fCutForElectron = cut;
-  SetParticleCuts(fCutForElectron, G4Electron::Electron());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForPositron(G4double cut)
-{
-  fCutForPositron = cut;
-  SetParticleCuts(fCutForPositron, G4Positron::Positron());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

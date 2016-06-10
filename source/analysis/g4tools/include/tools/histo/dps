@@ -1,0 +1,250 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_histo_dps
+#define tools_histo_dps
+
+// data point set.
+
+#include <vector>
+#include <string>
+#include "../mnmx"
+
+#ifdef TOOLS_MEM
+#include "../mem"
+#endif
+
+namespace tools {
+namespace histo {
+
+class measurement {
+  static const std::string& s_class() {
+    static const std::string s_v("tools::histo::measurement");
+    return s_v;
+  }
+public:
+  measurement():m_value(0),m_error_plus(0),m_error_minus(0){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  measurement(double a_value,double a_error_plus,double a_error_minus)
+  :m_value(a_value)
+  ,m_error_plus(a_error_plus)
+  ,m_error_minus(a_error_minus)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~measurement(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  measurement(const measurement& a_from)
+  :m_value(a_from.m_value)
+  ,m_error_plus(a_from.m_error_plus)
+  ,m_error_minus(a_from.m_error_minus)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  measurement& operator=(const measurement& a_from) {
+    if(&a_from==this) return *this;
+    m_value = a_from.m_value;
+    m_error_plus = a_from.m_error_plus;
+    m_error_minus = a_from.m_error_minus;
+    return *this;
+  }
+public:
+  double value() const {return m_value;}
+  double error_plus() const {return m_error_plus;}
+  double error_minus() const {return m_error_minus;}
+  void set_value(double a_v) {m_value = a_v;}
+  void set_error_plus(double a_v) {m_error_plus = a_v;}
+  void set_error_minus(double a_v) {m_error_minus = a_v;}
+protected:
+  double m_value;
+  double m_error_plus;
+  double m_error_minus;
+};
+
+class data_point {
+  static const std::string& s_class() {
+    static const std::string s_v("tools::histo::data_point");
+    return s_v;
+  }
+public:
+  data_point(unsigned int a_dim):m_measurements(a_dim){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~data_point() {
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  data_point(const data_point& a_from)
+  :m_measurements(a_from.m_measurements)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  data_point& operator=(const data_point& a_from) {
+    if(&a_from==this) return *this;
+    m_measurements = a_from.m_measurements;
+    return *this;
+  }
+public: //AIDA/Idata_point
+  unsigned int dimension() const {return m_measurements.size();}
+  measurement& coordinate(unsigned int a_coord) {
+    //WARNING : no check done on a_coord vs m_dim.
+    return m_measurements[a_coord];
+  }
+  const measurement& coordinate(unsigned int a_coord) const {
+    //WARNING : no check done on a_coord vs m_dim.
+    return m_measurements[a_coord];
+  }
+protected:
+  std::vector<measurement> m_measurements;
+};
+
+
+class dps {
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::histo::dps");
+    return s_v;
+  }
+public:
+  dps():m_dim(0){}
+
+  dps(const std::string& a_title,unsigned int a_dim)
+  :m_title(a_title),m_dim(a_dim)
+  {}
+  virtual ~dps(){}
+public:
+  dps(const dps& a_from)
+  :m_title(a_from.m_title)
+  ,m_dim(a_from.m_dim)
+  ,m_points(a_from.m_points)
+  {}
+  dps& operator=(const dps& a_from) {
+    if(&a_from==this) return *this;
+    m_title = a_from.m_title;
+    m_dim = a_from.m_dim;
+    m_points = a_from.m_points;
+    return *this;
+  }
+
+public:
+  const std::string& title() const {return m_title;}
+  std::string title() {return m_title;}
+
+  void set_title(const std::string& a_s) {m_title = a_s;}
+
+  unsigned int dimension() const {return m_dim;}
+  void clear() {m_points.clear();}
+  unsigned int size() const {return m_points.size();}
+
+  const data_point& point(unsigned int a_index) const { 
+    //WARNING : no check done on a_index.
+    return m_points[a_index];
+  }
+  data_point& point(unsigned int a_index) { 
+    //WARNING : no check done on a_index.
+    return m_points[a_index];
+  }
+
+  data_point& add_point() { 
+    m_points.push_back(data_point(m_dim));
+    return m_points.back();
+  }
+
+  bool remove_point(unsigned int a_index) { 
+    bool done = false;
+    if(a_index<m_points.size()){
+      std::vector<data_point>::iterator it = m_points.begin();
+      it += a_index;
+      m_points.erase(it);
+      done = true;
+    }
+    return done;
+  }
+
+  bool lower_extent(unsigned int a_coord,double& a_value) const { 
+    if(m_points.empty()||(a_coord>=m_dim)){
+      a_value = 0;
+      return false;
+    }
+    std::vector<data_point>::const_iterator it = m_points.begin();
+    a_value = (*it).coordinate(a_coord).value();
+    ++it;
+    for(;it!=m_points.end();++it) {
+      a_value = mn<double>(a_value,(*it).coordinate(a_coord).value());
+    }
+    return true;
+  }
+  
+  bool upper_extent(unsigned int a_coord,double& a_value) const { 
+    if(m_points.empty()||(a_coord>=m_dim)){
+      a_value = 0;
+      return false;
+    }
+    std::vector<data_point>::const_iterator it = m_points.begin();
+    a_value = (*it).coordinate(a_coord).value();
+    ++it;
+    for(;it!=m_points.end();++it) {
+      a_value = mx<double>(a_value,(*it).coordinate(a_coord).value());
+    }
+    return true;
+  }
+  
+  void scale(double a_scale) { 
+    std::vector<data_point>::iterator it;
+    for(it=m_points.begin();it!=m_points.end();++it) {
+      for(unsigned int coord=0;coord<m_dim;coord++) {
+        measurement& m = (*it).coordinate(coord);
+        m.set_value(m.value() * a_scale);
+        m.set_error_plus(m.error_plus() * a_scale);
+        m.set_error_minus(m.error_minus() * a_scale);
+      }
+    }
+  }
+
+  void scale_value(double a_scale) { 
+    std::vector<data_point>::iterator it;
+    for(it=m_points.begin();it!=m_points.end();++it) {
+      for(unsigned int coord=0;coord<m_dim;coord++) {
+        measurement& m = (*it).coordinate(coord);
+        m.set_value(m.value() * a_scale);
+      }
+    }
+  }
+
+  void scale_errors(double a_scale) { 
+    std::vector<data_point>::iterator it;
+    for(it=m_points.begin();it!=m_points.end();++it) {
+      for(unsigned int coord=0;coord<m_dim;coord++) {
+        measurement& m = (*it).coordinate(coord);
+        m.set_error_plus(m.error_plus() * a_scale);
+        m.set_error_minus(m.error_minus() * a_scale);
+      }
+    }
+  }
+
+protected:
+  std::string m_title;
+  unsigned int m_dim;
+  std::vector<data_point> m_points;
+};
+
+}}
+
+#endif

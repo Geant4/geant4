@@ -1,4 +1,4 @@
-# $Id: snr.mac 66879 2013-01-15 17:28:06Z vnivanch $
+# $Id: snr.mac 82280 2014-06-13 14:45:31Z gcosmo $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -35,7 +35,7 @@
 # beam size
 #/testem/gun/rndm 3 mm
 #
-/testem/event/printModulo 100
+/run/printProgress 100
 #/testem/stepMax 1 mm
 #/tracking/verbose 1
 #

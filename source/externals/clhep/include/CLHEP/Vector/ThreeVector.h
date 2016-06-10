@@ -60,13 +60,13 @@ public:
   inline ~Hep3Vector();
   // The destructor.  Not virtual - inheritance from this class is dangerous.
 
-  double operator () (int) const;
+  inline double operator () (int) const;
   // Get components by index -- 0-based (Geant4) 
 
   inline double operator [] (int) const;
   // Get components by index -- 0-based (Geant4) 
 
-  double & operator () (int);
+  inline double & operator () (int);
   // Set components by index.  0-based.
 
   inline double & operator [] (int);

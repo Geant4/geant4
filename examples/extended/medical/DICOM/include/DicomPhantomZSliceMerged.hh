@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomPhantomZSliceMerged.hh 76941 2013-11-19 09:55:03Z gcosmo $
+// $Id: DicomPhantomZSliceMerged.hh 83429 2014-08-21 15:47:32Z gcosmo $
 //
 /// \file medical/DICOM/include/DicomPhantomZSliceMerged.hh
 /// \brief Definition of the DicomPhantomZSliceMerged class
@@ -55,7 +55,6 @@ public:
     // Public functions
     void AddZSlice(DicomPhantomZSliceHeader* val) {
         fSlices[val->GetSliceLocation()] = val;
-        //std::cout << "Slice Location : " << val->GetSliceLocation()/mm << " mm" << std::endl;
     }
 
     void CheckSlices();

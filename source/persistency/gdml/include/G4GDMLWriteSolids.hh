@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.hh 76271 2013-11-08 11:51:39Z gcosmo $
+// $Id: G4GDMLWriteSolids.hh 82922 2014-07-18 15:56:35Z gcosmo $
 //
 //
 // class G4GDMLWriteSolids
@@ -43,6 +43,7 @@
 #include "G4Types.hh"
 
 #include "G4GDMLWriteMaterials.hh"
+#include "G4MultiUnion.hh"
 
 class G4BooleanSolid;
 class G4Box;
@@ -76,6 +77,25 @@ class G4OpticalSurface;
 
 class G4GDMLWriteSolids : public G4GDMLWriteMaterials
 {
+  class G4ThreeVectorCompare
+  {
+    public:
+
+    G4bool operator()(const G4ThreeVector& t1, const G4ThreeVector& t2 ) const
+    {
+      if(t1.x() < t2.x())
+        return true;
+
+      if(t1.y() < t2.y())
+        return true;
+
+      if(t1.z() < t2.z())
+        return true;
+
+      return false;
+    }
+  };
+
   public:
 
    virtual void AddSolid(const G4VSolid* const);
@@ -86,6 +106,7 @@ class G4GDMLWriteSolids : public G4GDMLWriteMaterials
    G4GDMLWriteSolids();
    virtual ~G4GDMLWriteSolids();
 
+   void MultiUnionWrite(xercesc::DOMElement* solElement, const G4MultiUnion* const);
    void BooleanWrite(xercesc::DOMElement*, const G4BooleanSolid* const);
    void BoxWrite(xercesc::DOMElement*, const G4Box* const);
    void ConeWrite(xercesc::DOMElement*, const G4Cons* const);

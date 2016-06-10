@@ -1,0 +1,23 @@
+# $Id$
+#
+# Macro file for "Hadr06.cc"
+#
+#
+/control/verbose 2
+###/control/cout/ignoreThreadsExcept 0
+###/run/numberOfThreads 2
+/run/verbose 1
+#
+/testhadr/det/setIsotopeMat Li7 3 7 1.85 g/cm3
+/testhadr/det/setRadius 30 cm
+#
+/run/initialize
+#
+/process/list
+#
+/gun/particle neutron
+/gun/energy 14.1 MeV
+#
+/run/printProgress 1000
+#
+/run/beamOn 10000

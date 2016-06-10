@@ -1,4 +1,4 @@
-$Id: History 75130 2013-10-28 10:05:45Z gcosmo $
+$Id: History 85261 2014-10-27 08:54:57Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,52 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+History file for graphics_reps category
+---------------------------------------
+
+24th August 2014  Laurent Garnier (greps-V10-00-10)
+- G4VisAttributes: Fix the fMinLineSegmentsPerCircle for SetForceLineSegmentsPerCircle
+
+23th August 2014  Laurent Garnier (greps-V10-00-09)
+- G4VisAttributes: Better implementation of fMinLineSegmentsPerCircle
+
+23th August 2014  Laurent Garnier
+- G4VisAttributes: Change fMinLineSegmentsPerCircleto a static member
+
+22th August 2014  Laurent Garnier  (greps-V10-00-08)
+- G4VisAttributes: Add fMinLineSegmentsPerCircle parameter
+
+14th August 2014  John Allison  (greps-V10-00-07)
+- HepPolyhedron::SetReferences: Protected against a null pointer.
+- BooleanProcessor::execute: Corrected spelling mistake in message.
+- G4Scale: Changed default annotation size to 12 pixels.
+
+11th August 2014  John Allison  (greps-V10-00-06)
+- G4Scale: Added annotation size (text size).
+
+4th February 2014  John Allison  (greps-V10-00-05)
+- Replaced tabs by 8 spaces.
+
+4th February 2014  John Allison  (greps-V10-00-04)
+- Reverted to greps-V10-00-01.
+- greps-V10-00-03: Was incorrectly tagged.
+
+20th December 2013  Mathieu Karamitros  (greps-V10-00-02)
+- G4VisExtent: Enable accessing data using indexes
+
+11th December 2013  John Allison  (greps-V10-00-01)
+- Introduced operator<< for const reference G4AttDefs map.
+- Deprecated const pointer equivalent.
+
+9th December 2013  John Allison  (greps-V10-00-00)
+- Another change suggested by PVS.
+
+28th November 2013  John Allison
+- G4VVisManager.hh: Cosmetics.
+
+15th November 2013  John Allison
+- Some changes as suggested by PVS.
 
 25th October 2013  John Allison  (greps-V09-06-12)
 - Cosmetic changes to code layout and comments.

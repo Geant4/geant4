@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElasticProcess.hh 66499 2012-12-19 09:16:35Z gcosmo $
+// $Id: G4HadronElasticProcess.hh 86393 2014-11-10 16:34:27Z gcosmo $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
 // 
@@ -45,6 +45,7 @@
 
 class G4ParticleDefinition;
 class G4CrossSectionDataStore;
+class G4VCrossSectionRatio;
 
 class G4HadronElasticProcess : public G4HadronicProcess
 {
@@ -68,6 +69,9 @@ public:
 
   virtual void Description() const;
 
+  // enable sampling of low-mass diffraction process
+  void SetDiffraction(G4HadronicInteraction*, G4VCrossSectionRatio*);
+
 private:
 
   // hide assignment operator as private 
@@ -76,6 +80,8 @@ private:
 
   G4double lowestEnergy;
   G4bool   isInitialised;
+  G4HadronicInteraction* fDiffraction;
+  G4VCrossSectionRatio*  fDiffractionRatio;
 };
 
 #endif

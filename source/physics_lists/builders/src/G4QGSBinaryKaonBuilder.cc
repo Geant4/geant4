@@ -36,7 +36,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4PiNuclearCrossSection.hh"
 #include "G4CrossSectionPairGG.hh"
 #include "G4ChipsKaonMinusInelasticXS.hh"
 #include "G4ChipsKaonPlusInelasticXS.hh"
@@ -54,8 +53,6 @@ G4QGSBinaryKaonBuilder(G4bool quasiElastic)
   theStringModel->SetFragmentationModel(theStringDecay);
 
   theCascade = new G4BinaryCascade;
-  thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
-  theCascade->SetDeExcitation(thePreEquilib);  
 
   theModel->SetHighEnergyGenerator(theStringModel);
   if (quasiElastic)
@@ -70,12 +67,9 @@ G4QGSBinaryKaonBuilder(G4bool quasiElastic)
 G4QGSBinaryKaonBuilder::
 ~G4QGSBinaryKaonBuilder() 
 {
-  delete theCascade;
-  delete thePreEquilib;
   if ( theQuasiElastic ) delete theQuasiElastic;
   delete theStringDecay;
   delete theStringModel;
-  delete theModel;
 }
 
 void G4QGSBinaryKaonBuilder::

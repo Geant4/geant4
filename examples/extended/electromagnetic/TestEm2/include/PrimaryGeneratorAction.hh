@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm2/include/PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class
 //
-// $Id: PrimaryGeneratorAction.hh 75597 2013-11-04 12:41:21Z gcosmo $
+// $Id: PrimaryGeneratorAction.hh 83431 2014-08-21 15:49:56Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,8 +55,6 @@ public:
 private:
   G4ParticleGun*           fParticleGun;
   DetectorConstruction*    fDetector;
-    
-  G4bool                   fInitPos; 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,4 +1,4 @@
-$Id: History 75838 2013-11-06 17:25:50Z gcosmo $
+$Id: History 81783 2014-06-05 09:10:33Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04-Jun-2014, Andrea Dotti (exgflash-V10-00-00)
+- New GPS MT compliant system
 
 06-Nov-2013, Marc Verderi (exgflash-V09-06-03)
 - Fix event action destructor in case fNevent == 0

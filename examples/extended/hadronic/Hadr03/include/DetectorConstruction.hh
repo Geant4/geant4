@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr03/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 77251 2013-11-22 10:06:41Z gcosmo $
+// $Id: DetectorConstruction.hh 78398 2013-12-16 16:39:55Z gcosmo $
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,7 +40,6 @@
 
 class G4LogicalVolume;
 class G4Material;
-class G4UniformMagField;
 class DetectorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,7 +60,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
          
     void SetSize     (G4double);              
     void SetMaterial (G4String);            
-    void SetMagField (G4double);
 
   public:
   
@@ -80,7 +78,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      
      G4double              fBoxSize;
      G4Material*           fMaterial;     
-     G4UniformMagField*    fMagField;
      
      DetectorMessenger* fDetectorMessenger;
 

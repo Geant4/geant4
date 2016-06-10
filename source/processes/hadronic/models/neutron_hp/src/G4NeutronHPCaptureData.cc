@@ -42,6 +42,7 @@
 #include "G4ElementTable.hh"
 #include "G4NeutronHPData.hh"
 #include "G4NeutronHPManager.hh"
+#include "G4Threading.hh"
 
 G4NeutronHPCaptureData::G4NeutronHPCaptureData()
 :G4VCrossSectionDataSet("NeutronHPCaptureXS")
@@ -62,9 +63,11 @@ G4NeutronHPCaptureData::G4NeutronHPCaptureData()
    
 G4NeutronHPCaptureData::~G4NeutronHPCaptureData()
 {
-   if ( theCrossSections != 0 ) theCrossSections->clearAndDestroy();
-
-   delete theCrossSections;
+   if ( theCrossSections != 0 ) {
+     theCrossSections->clearAndDestroy();
+     delete theCrossSections;
+     theCrossSections = 0;
+   } 
 }
    
 G4bool G4NeutronHPCaptureData::IsIsoApplicable( const G4DynamicParticle* dp , 
@@ -112,13 +115,19 @@ void G4NeutronHPCaptureData::BuildPhysicsTable(const G4ParticleDefinition& aP)
      throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
 
 //080428
-   if ( getenv( "G4NEUTRONHP_NEGLECT_DOPPLER" ) ) 
+   //if ( getenv( "G4NEUTRONHP_NEGLECT_DOPPLER" ) ) 
+   if ( G4NeutronHPManager::GetInstance()->GetNeglectDoppler() ) 
    {
-      G4cout << "Find environment variable of \"G4NEUTRONHP_NEGLECT_DOPPLER\"." << G4endl;
+      G4cout << "Find a flag of \"G4NEUTRONHP_NEGLECT_DOPPLER\"." << G4endl;
       G4cout << "On the fly Doppler broadening will be neglect in the cross section calculation of capture reaction of neutrons (<20MeV)." << G4endl;
       onFlightDB = false;
    }
   
+   if ( G4Threading::IsWorkerThread() ) {
+      theCrossSections = G4NeutronHPManager::GetInstance()->GetCaptureCrossSections();
+      return;
+   }
+
   size_t numberOfElements = G4Element::GetNumberOfElements();
   // G4cout << "CALLED G4NeutronHPCaptureData::BuildPhysicsTable "<<numberOfElements<<G4endl;
    // TKDB
@@ -142,6 +151,8 @@ void G4NeutronHPCaptureData::BuildPhysicsTable(const G4ParticleDefinition& aP)
       Instance()->MakePhysicsVector((*theElementTable)[i], this);
      theCrossSections->push_back(physVec);
   }
+
+   G4NeutronHPManager::GetInstance()->RegisterCaptureCrossSections( theCrossSections );
 }
 
 void G4NeutronHPCaptureData::DumpPhysicsTable(const G4ParticleDefinition& aP)
@@ -206,10 +217,9 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
   // prepare neutron
   G4double eKinetic = aP->GetKineticEnergy();
 
-//if ( getenv( "G4NEUTRONHP_NEGLECT_DOPPLER" ) )
-//080428
   if ( !onFlightDB )
   {
+     //NEGLECT_DOPPLER
      G4double factor = 1.0;
      if ( eKinetic < aT * k_Boltzmann ) 
      {

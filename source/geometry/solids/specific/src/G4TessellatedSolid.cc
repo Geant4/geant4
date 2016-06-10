@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc 72937 2013-08-14 13:20:38Z gcosmo $
+// $Id: G4TessellatedSolid.cc 83572 2014-09-01 15:23:27Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -91,6 +91,13 @@
 #include "G4PolyhedronArbitrary.hh"
 #include "G4VGraphicsScene.hh"
 #include "G4VisExtent.hh"
+
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
+}
 
 using namespace std;
 
@@ -172,7 +179,8 @@ void G4TessellatedSolid::Initialize()
 {
   kCarToleranceHalf = 0.5*kCarTolerance;
 
-  fpPolyhedron = 0; fCubicVolume = 0.; fSurfaceArea = 0.;
+  fRebuildPolyhedron = false; fpPolyhedron = 0;
+  fCubicVolume = 0.; fSurfaceArea = 0.;
 
   fGeometryType = "G4TessellatedSolid";
   fSolidClosed  = false;
@@ -190,6 +198,7 @@ void G4TessellatedSolid::DeleteObjects ()
   G4int size = fFacets.size();
   for (G4int i = 0; i < size; ++i)  { delete fFacets[i]; }
   fFacets.clear();
+  delete fpPolyhedron; fpPolyhedron = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1763,11 +1772,15 @@ G4Polyhedron *G4TessellatedSolid::CreatePolyhedron () const
 G4Polyhedron* G4TessellatedSolid::GetPolyhedron () const
 {
   if (!fpPolyhedron ||
-    fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
-    fpPolyhedron->GetNumberOfRotationSteps())
+      fRebuildPolyhedron ||
+      fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+      fpPolyhedron->GetNumberOfRotationSteps())
   {
+    G4AutoLock l(&polyhedronMutex);
     delete fpPolyhedron;
     fpPolyhedron = CreatePolyhedron();
+    fRebuildPolyhedron = false;
+    l.unlock();
   }
   return fpPolyhedron;
 }

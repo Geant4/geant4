@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,7 +13,7 @@
 
 ***** Table : Nb of materials = 11 *****
 
- Material:    Mylar    density:  1.390 g/cm3   RadL:  28.743 cm   Nucl.Int.Length:  56.337 cm 
+ Material:    Mylar    density:  1.390 g/cm3   RadL:  28.743 cm   Nucl.Int.Length:  56.319 cm 
                        Imean:  75.967 eV 
 
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
@@ -33,7 +33,7 @@
           ElmMassFraction:   4.20 %  ElmAbundance  36.36 % 
 
 
- Material: Polypropelene    density: 910.000 mg/cm3  RadL:  49.214 cm   Nucl.Int.Length:  74.351 cm 
+ Material: Polypropelene    density: 910.000 mg/cm3  RadL:  49.214 cm   Nucl.Int.Length:  74.282 cm 
                        Imean:  56.518 eV 
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -50,13 +50,13 @@
  Material:       Kr    density:  3.700 mg/cm3  RadL:  30.736 m    Nucl.Int.Length: 413.950 m  
                        Imean: 352.000 eV   temperature: 273.15 K  pressure:   1.00 atm
 
-   --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole
-         --->  Isotope:    78   Z = 36   N =  78   A =  77.92 g/mole   abundance:   0.35 %
-         --->  Isotope:    80   Z = 36   N =  80   A =  79.92 g/mole   abundance:   2.28 %
-         --->  Isotope:    82   Z = 36   N =  82   A =  81.91 g/mole   abundance:  11.58 %
-         --->  Isotope:    83   Z = 36   N =  83   A =  82.91 g/mole   abundance:  11.49 %
-         --->  Isotope:    84   Z = 36   N =  84   A =  83.91 g/mole   abundance:  57.00 %
-         --->  Isotope:    86   Z = 36   N =  86   A =  85.91 g/mole   abundance:  17.30 %
+   --->  Element: Kr (Kr)   Z = 36.0   N =  83.8   A =  83.80 g/mole
+         --->  Isotope:  Kr78   Z = 36   N =  78   A =  77.92 g/mole   abundance:   0.35 %
+         --->  Isotope:  Kr80   Z = 36   N =  80   A =  79.92 g/mole   abundance:   2.28 %
+         --->  Isotope:  Kr82   Z = 36   N =  82   A =  81.91 g/mole   abundance:  11.58 %
+         --->  Isotope:  Kr83   Z = 36   N =  83   A =  82.91 g/mole   abundance:  11.49 %
+         --->  Isotope:  Kr84   Z = 36   N =  84   A =  83.91 g/mole   abundance:  57.00 %
+         --->  Isotope:  Kr86   Z = 36   N =  86   A =  85.91 g/mole   abundance:  17.30 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
@@ -113,16 +113,16 @@
  Material:    Xenon    density:  5.858 mg/cm3  RadL:  14.478 m    Nucl.Int.Length: 303.666 m  
                        Imean: 482.000 eV   temperature: 273.15 K  pressure:   1.00 atm
 
-   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole
-         --->  Isotope:   124   Z = 54   N = 124   A = 123.91 g/mole   abundance:   0.09 %
-         --->  Isotope:   126   Z = 54   N = 126   A = 125.90 g/mole   abundance:   0.09 %
-         --->  Isotope:   128   Z = 54   N = 128   A = 127.90 g/mole   abundance:   1.92 %
-         --->  Isotope:   129   Z = 54   N = 129   A = 128.91 g/mole   abundance:  26.44 %
-         --->  Isotope:   130   Z = 54   N = 130   A = 129.90 g/mole   abundance:   4.08 %
-         --->  Isotope:   131   Z = 54   N = 131   A = 130.90 g/mole   abundance:  21.18 %
-         --->  Isotope:   132   Z = 54   N = 132   A = 131.90 g/mole   abundance:  26.89 %
-         --->  Isotope:   134   Z = 54   N = 134   A = 133.91 g/mole   abundance:  10.44 %
-         --->  Isotope:   136   Z = 54   N = 136   A = 135.91 g/mole   abundance:   8.87 %
+   --->  Element: Xe (Xe)   Z = 54.0   N = 131.3   A = 131.29 g/mole
+         --->  Isotope: Xe124   Z = 54   N = 124   A = 123.91 g/mole   abundance:   0.09 %
+         --->  Isotope: Xe126   Z = 54   N = 126   A = 125.90 g/mole   abundance:   0.09 %
+         --->  Isotope: Xe128   Z = 54   N = 128   A = 127.90 g/mole   abundance:   1.92 %
+         --->  Isotope: Xe129   Z = 54   N = 129   A = 128.91 g/mole   abundance:  26.44 %
+         --->  Isotope: Xe130   Z = 54   N = 130   A = 129.90 g/mole   abundance:   4.08 %
+         --->  Isotope: Xe131   Z = 54   N = 131   A = 130.90 g/mole   abundance:  21.18 %
+         --->  Isotope: Xe132   Z = 54   N = 132   A = 131.90 g/mole   abundance:  26.89 %
+         --->  Isotope: Xe134   Z = 54   N = 134   A = 133.91 g/mole   abundance:  10.44 %
+         --->  Isotope: Xe136   Z = 54   N = 136   A = 135.91 g/mole   abundance:   8.87 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
@@ -144,16 +144,16 @@
  Material:  Xe20CO2    density:  5.082 mg/cm3  RadL:  17.750 m    Nucl.Int.Length: 323.032 m  
                        Imean: 412.598 eV   temperature: 273.15 K  pressure:   1.00 atm
 
-   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole
-         --->  Isotope:   124   Z = 54   N = 124   A = 123.91 g/mole   abundance:   0.09 %
-         --->  Isotope:   126   Z = 54   N = 126   A = 125.90 g/mole   abundance:   0.09 %
-         --->  Isotope:   128   Z = 54   N = 128   A = 127.90 g/mole   abundance:   1.92 %
-         --->  Isotope:   129   Z = 54   N = 129   A = 128.91 g/mole   abundance:  26.44 %
-         --->  Isotope:   130   Z = 54   N = 130   A = 129.90 g/mole   abundance:   4.08 %
-         --->  Isotope:   131   Z = 54   N = 131   A = 130.90 g/mole   abundance:  21.18 %
-         --->  Isotope:   132   Z = 54   N = 132   A = 131.90 g/mole   abundance:  26.89 %
-         --->  Isotope:   134   Z = 54   N = 134   A = 133.91 g/mole   abundance:  10.44 %
-         --->  Isotope:   136   Z = 54   N = 136   A = 135.91 g/mole   abundance:   8.87 %
+   --->  Element: Xe (Xe)   Z = 54.0   N = 131.3   A = 131.29 g/mole
+         --->  Isotope: Xe124   Z = 54   N = 124   A = 123.91 g/mole   abundance:   0.09 %
+         --->  Isotope: Xe126   Z = 54   N = 126   A = 125.90 g/mole   abundance:   0.09 %
+         --->  Isotope: Xe128   Z = 54   N = 128   A = 127.90 g/mole   abundance:   1.92 %
+         --->  Isotope: Xe129   Z = 54   N = 129   A = 128.91 g/mole   abundance:  26.44 %
+         --->  Isotope: Xe130   Z = 54   N = 130   A = 129.90 g/mole   abundance:   4.08 %
+         --->  Isotope: Xe131   Z = 54   N = 131   A = 130.90 g/mole   abundance:  21.18 %
+         --->  Isotope: Xe132   Z = 54   N = 132   A = 131.90 g/mole   abundance:  26.89 %
+         --->  Isotope: Xe134   Z = 54   N = 134   A = 133.91 g/mole   abundance:  10.44 %
+         --->  Isotope: Xe136   Z = 54   N = 136   A = 135.91 g/mole   abundance:   8.87 %
           ElmMassFraction:  92.20 %  ElmAbundance  56.91 % 
 
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
@@ -171,13 +171,13 @@
  Material:  Kr20CO2    density:  3.601 mg/cm3  RadL:  34.158 m    Nucl.Int.Length: 391.555 m  
                        Imean: 296.926 eV   temperature: 273.15 K  pressure:   1.00 atm
 
-   --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole
-         --->  Isotope:    78   Z = 36   N =  78   A =  77.92 g/mole   abundance:   0.35 %
-         --->  Isotope:    80   Z = 36   N =  80   A =  79.92 g/mole   abundance:   2.28 %
-         --->  Isotope:    82   Z = 36   N =  82   A =  81.91 g/mole   abundance:  11.58 %
-         --->  Isotope:    83   Z = 36   N =  83   A =  82.91 g/mole   abundance:  11.49 %
-         --->  Isotope:    84   Z = 36   N =  84   A =  83.91 g/mole   abundance:  57.00 %
-         --->  Isotope:    86   Z = 36   N =  86   A =  85.91 g/mole   abundance:  17.30 %
+   --->  Element: Kr (Kr)   Z = 36.0   N =  83.8   A =  83.80 g/mole
+         --->  Isotope:  Kr78   Z = 36   N =  78   A =  77.92 g/mole   abundance:   0.35 %
+         --->  Isotope:  Kr80   Z = 36   N =  80   A =  79.92 g/mole   abundance:   2.28 %
+         --->  Isotope:  Kr82   Z = 36   N =  82   A =  81.91 g/mole   abundance:  11.58 %
+         --->  Isotope:  Kr83   Z = 36   N =  83   A =  82.91 g/mole   abundance:  11.49 %
+         --->  Isotope:  Kr84   Z = 36   N =  84   A =  83.91 g/mole   abundance:  57.00 %
+         --->  Isotope:  Kr86   Z = 36   N =  86   A =  85.91 g/mole   abundance:  17.30 %
           ElmMassFraction:  89.00 %  ElmAbundance  58.62 % 
 
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
@@ -252,33 +252,33 @@ Available colours:
 G4ClassicalRK4 (default) is called
 The minimal step is equal to 0.1 mm
 
-phot:   for  gamma    SubType= 12
+phot:   for  gamma    SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila
 
-compt:   for  gamma    SubType= 13
-      Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
+compt:   for  gamma    SubType= 13  BuildTable= 1
+      Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
       LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
-conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+conv:   for  gamma    SubType= 14  BuildTable= 1
+      Lambda table from 1.022 MeV to 10 TeV, 20 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
@@ -286,14 +286,14 @@ eBrem:   for  e-    SubType= 3
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
 
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
@@ -306,7 +306,7 @@ msc:   for proton    SubType= 10
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=        2 MeV
@@ -319,7 +319,7 @@ msc:   for kaon+    SubType= 10
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
@@ -332,20 +332,20 @@ msc:   for kaon-    SubType= 10
 
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
 
 msc:   for mu+    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=      200 keV
@@ -354,25 +354,25 @@ muIoni:   for  mu+    SubType= 2
 
 muBrems:   for  mu+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem :  Emin=        0 eV    Emax=       10 TeV
 
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for mu-    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=      200 keV
@@ -381,13 +381,13 @@ muIoni:   for  mu-    SubType= 2
 
 muBrems:   for  mu-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem :  Emin=        0 eV    Emax=       10 TeV
 
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
@@ -399,7 +399,7 @@ msc:   for pi+    SubType= 10
 
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
@@ -412,7 +412,7 @@ msc:   for pi-    SubType= 10
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
@@ -445,11 +445,11 @@ Step#          X             Y             Z    Direction x      dir y      dir 
     1          0 fm    1.01183 m     21.9895 m           0 8.81272e-13          1      500 MeV0.0038748 eV    1.58938 m     1.58938 m       World  Transportation
     2          0 fm    1.01183 m     21.9905 m           0 -0.00197661   0.999998      500 MeV2.43793e-06 eV          1 mm    1.59038 m    Absorber  Transportation
     3          0 fm    1.01172 m          22 m           0 -0.0207544   0.999785      500 MeV2.31622e-05 eV    9.50075 mm    1.59988 m  OutOfWorld  Transportation
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
-ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
+WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 
 ========= Table of registered couples ==============================
 
@@ -478,11 +478,11 @@ Step#          X             Y             Z    Direction x      dir y      dir 
     1          0 fm    50.6432 cm    21.9895 m           0 1.17455e-09          1      250 MeV0.0018303 eV    79.5502 cm    79.5502 cm      World  Transportation
     2          0 fm     50.643 cm    21.9905 m           0 -0.0039492   0.999992      250 MeV2.30082e-06 eV          1 mm    79.6502 cm   Absorber  Transportation
     3          0 fm    50.6214 cm         22 m           0 -0.0414666    0.99914      250 MeV2.18647e-05 eV    9.50301 mm    80.6005 cm OutOfWorld  Transportation
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
-ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
+  User=0s Real=0s Sys=0s
+WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 
 ========= Table of registered couples ==============================
 
@@ -511,11 +511,11 @@ Step#          X             Y             Z    Direction x      dir y      dir 
     1          0 fm    40.5352 cm    21.9895 m           0 -2.18033e-09          1      200 MeV0.00143689 eV    63.6725 cm    63.6725 cm      World  Transportation
     2          0 fm    40.5349 cm    21.9905 m           0 -0.00493399   0.999988      200 MeV2.2567e-06 eV          1 mm    63.7725 cm   Absorber  Transportation
     3          0 fm    40.5079 cm         22 m           0 -0.0518069   0.998657      200 MeV2.14492e-05 eV    9.50471 mm     64.723 cm OutOfWorld  Transportation
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
-ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
+WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 
 ========= Table of registered couples ==============================
 
@@ -544,11 +544,11 @@ Step#          X             Y             Z    Direction x      dir y      dir 
     1          0 fm     20.319 cm    21.9895 m           0  9.914e-09          1      100 MeV0.00067661 eV    31.9171 cm    31.9171 cm      World  Transportation
     2          0 fm    20.3185 cm    21.9905 m           0 -0.00984297   0.999952      100 MeV2.11993e-06 eV    1.00002 mm    32.0171 cm   Absorber  Transportation
     3          0 fm    20.2645 cm         22 m           0  -0.103352   0.994645      100 MeV2.0179e-05 eV    9.51883 mm     32.969 cm OutOfWorld  Transportation
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
-ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
+WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 
 ========= Table of registered couples ==============================
 
@@ -577,11 +577,11 @@ Step#          X             Y             Z    Direction x      dir y      dir 
     1          0 fm    10.2108 cm    21.9895 m           0 -7.69214e-09          1       50 MeV0.000318171 eV    16.0391 cm    16.0391 cm      World  Transportation
     2          0 fm    10.2098 cm    21.9905 m           0 -0.0195872   0.999808       50 MeV1.98385e-06 eV    1.00006 mm    16.1391 cm   Absorber  Transportation
     3          0 fm    10.1016 cm         22 m           0  -0.205667   0.978622       50 MeV1.89951e-05 eV     9.5755 mm    17.0966 cm OutOfWorld  Transportation
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
-ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
+WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 G4ClassicalRK4 (default) is called
 The minimal step is equal to 0.1 mm
 Setting Field strength to 1000 Gauss. Magnetic field vector is (0,0,1000) G 
@@ -611,11 +611,11 @@ WARNING: Scene "none" not found.
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      500 MeV     0 eV          0 fm          0 fm      World    initStep
     1          0 fm          0 fm        -22 m           0          0         -1      500 MeV0.107243 eV    43.9895 m     43.9895 m  OutOfWorld  Transportation
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
-ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
+WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 
 ========= Table of registered couples ==============================
 
@@ -652,16 +652,17 @@ WARNING: Scene "none" not found.
 ---> Begin of Event: 80
 
 ---> Begin of Event: 90
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 100
   User=0.01s Real=0s Sys=0s
-ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
+WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
+Total navigation history collections cleaned: 7
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 0.07 Mb
+Number of memory pools allocated: 12 of which, static: 0
+Dynamic pools deleted: 12 / Total memory freed: 0.012 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

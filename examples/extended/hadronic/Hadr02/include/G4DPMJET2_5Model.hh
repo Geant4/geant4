@@ -36,7 +36,7 @@
 /// \file hadronic/Hadr02/include/G4DPMJET2_5Model.hh
 /// \brief Definition of the G4DPMJET2_5Model class
 //
-// $Id: G4DPMJET2_5Model.hh 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: G4DPMJET2_5Model.hh 81932 2014-06-06 15:39:45Z gcosmo $
 //
 
 #ifndef G4DPMJET2_5Model_h
@@ -96,9 +96,9 @@ public:
   G4DPMJET2_5Model ();
   G4DPMJET2_5Model (const G4DPMJET2_5InitialisationType);
   G4DPMJET2_5Model (G4ExcitationHandler *,
-		    const G4DPMJET2_5InitialisationType initType = DEFAULT);
+                    const G4DPMJET2_5InitialisationType initType = DEFAULT);
   G4DPMJET2_5Model (G4VPreCompoundModel *,
-		    const G4DPMJET2_5InitialisationType initType = DEFAULT);
+                    const G4DPMJET2_5InitialisationType initType = DEFAULT);
   virtual ~G4DPMJET2_5Model ();
 
   G4DPMJET2_5Model(const G4DPMJET2_5Model &right);
@@ -106,10 +106,10 @@ public:
   const G4DPMJET2_5Model& operator=(G4DPMJET2_5Model &right);
     
   virtual G4bool IsApplicable(const G4HadProjectile &theTrack, 
-			      G4Nucleus &theTarget);
+                              G4Nucleus &theTarget);
     
   virtual G4HadFinalState *ApplyYourself(const G4HadProjectile &, 
-					 G4Nucleus &);
+                                         G4Nucleus &);
 
   virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
     
@@ -131,37 +131,37 @@ public:
   inline G4int GetDPMInitialRandomSeeds (const G4int i) const;
 
   inline G4double GetMinEnergy( const G4Material *aMaterial,
-				const G4Element *anElement ) const;
+                                const G4Element *anElement ) const;
   inline G4double GetMaxEnergy( const G4Material *aMaterial,
-				const G4Element *anElement ) const;
+                                const G4Element *anElement ) const;
 
   inline G4bool SetVerboseFortranOutput (const G4String filename);
   G4String GetVerboseFortranOutput () const;
     
   inline void SetDPMVariablesTAUFOR   (const G4double TAUFOR_P,
-				       const G4int    KTAUGE_P,
-				       const G4int    ITAUVE_P);
+                                       const G4int    KTAUGE_P,
+                                       const G4int    ITAUVE_P);
                                   
 private:
 
   void DumpVerboseInformation1 (const G4int n) const;
   void DumpVerboseInformation2 (const G4String particleName,
-				const G4ThreeVector p, 
-				const G4double E, 
-				const G4double T,
-				const G4ThreeVector pinit) const;
+                                const G4ThreeVector p, 
+                                const G4double E, 
+                                const G4double T,
+                                const G4ThreeVector pinit) const;
   void DumpVerboseInformation3 (const G4int i, const G4int A, 
-				const G4int Z,
-				const G4ThreeVector p, 
-				const G4double E, 
-				const G4double T,
-				const G4ThreeVector pinit) const;
+                                const G4int Z,
+                                const G4ThreeVector p, 
+                                const G4double E, 
+                                const G4double T,
+                                const G4ThreeVector pinit) const;
   void DumpVerboseInformation4 (const G4int i, 
-				const G4String particleName,
-				const G4ThreeVector p, 
-				const G4double E, 
-				const G4double T,
-				const G4ThreeVector pinit) const;
+                                const G4String particleName,
+                                const G4ThreeVector p, 
+                                const G4double E, 
+                                const G4double T,
+                                const G4ThreeVector pinit) const;
   void PrintWelcomeMessage () const;
   void Initialise ();
     

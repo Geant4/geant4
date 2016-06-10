@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -65,6 +66,8 @@ namespace G4INCL {
     FinalState();
     virtual ~FinalState();
 
+    void reset();
+
     void setTotalEnergyBeforeInteraction(G4double E) { totalEnergyBeforeInteraction = E; };
     G4double getTotalEnergyBeforeInteraction() const { return totalEnergyBeforeInteraction; };
 
@@ -80,9 +83,6 @@ namespace G4INCL {
     ParticleList const &getCreatedParticles() const;
     ParticleList const &getEnteringParticles() const;
 
-    void setBlockedDelta(Particle * const p) { blockedDelta = p; }
-    Particle *getBlockedDelta() { return blockedDelta; }
-
     FinalStateValidity getValidity() const { return validity; }
     void makeValid() { validity = ValidFS; }
     void makePauliBlocked() { validity = PauliBlockedFS; }
@@ -96,7 +96,6 @@ namespace G4INCL {
     ParticleList outgoing, created, destroyed, modified, entering;
     G4double totalEnergyBeforeInteraction;
     FinalStateValidity validity;
-    Particle *blockedDelta;
   };
 
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.cc 77079 2013-11-21 10:32:34Z gcosmo $
+// $Id: G4VRangeToEnergyConverter.cc 81295 2014-05-26 09:36:06Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -72,9 +72,6 @@ G4VRangeToEnergyConverter & G4VRangeToEnergyConverter::operator=(const G4VRangeT
     theLossTable=0;
  }
 
-  LowestEnergy = right.LowestEnergy;
-  HighestEnergy = right.HighestEnergy;
-  MaxEnergyCut = right.MaxEnergyCut;
   fMaxEnergyCut = right.fMaxEnergyCut;
   NumberOfElements = right.NumberOfElements;
   theParticle = right.theParticle;
@@ -119,7 +116,19 @@ G4VRangeToEnergyConverter & G4VRangeToEnergyConverter::operator=(const G4VRangeT
 
 G4VRangeToEnergyConverter::~G4VRangeToEnergyConverter()
 { 
-//  Reset(); 
+  // Reset();
+  // Comment out Reset() for MT application  
+
+  // delete loss table without deleteing vectors  
+  if (theLossTable) {  
+    delete theLossTable;
+  }
+  theLossTable=0;
+  NumberOfElements=0;
+  
+  //clear RangeVectorStore without deleteing vectors
+  fRangeVectorStore.clear();
+
 }
 
 G4int G4VRangeToEnergyConverter::operator==(const G4VRangeToEnergyConverter &right) const
@@ -341,8 +350,11 @@ void G4VRangeToEnergyConverter::BuildRangeVector(const G4Material* aMaterial,
   }
    
   // Integrate with Simpson formula with logarithmic binning
-  G4double ltt = std::log(MaxEnergyCut/LowestEnergy);
-  G4double dltau = ltt/TotBin;
+  G4double dltau = 1.0;
+  if (LowestEnergy>0.) {
+      G4double ltt =std::log(MaxEnergyCut/LowestEnergy);
+      dltau = ltt/TotBin;
+  }
 
   G4double s0 = 0.;
   G4double Value;

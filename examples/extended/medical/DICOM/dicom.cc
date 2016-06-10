@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DICOM.cc 74809 2013-10-22 09:49:26Z gcosmo $
+// $Id: DICOM.cc 83429 2014-08-21 15:47:32Z gcosmo $
 //
 /// \file medical/DICOM/DICOM.cc
 /// \brief Main program of the medical/DICOM example
@@ -54,7 +54,7 @@
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
-#include "DicomPhysicsList.hh"
+#include "G4GenericPhysicsList.hh"
 
 #include "DicomRegularDetectorConstruction.hh"
 #include "DicomNestedParamDetectorConstruction.hh"
@@ -107,13 +107,13 @@ int main(int argc,char** argv)
     G4MTRunManager* runManager = new G4MTRunManager;
     runManager->SetNumberOfThreads(nthreads);
 
-    std::cout << "\n\n\tDICOM running in multithreaded mode with " << nthreads 
-          << " threads\n\n" << std::endl;
+    G4cout << "\n\n\tDICOM running in multithreaded mode with " << nthreads 
+          << " threads\n\n" << G4endl;
 
     
 #else
     G4RunManager* runManager = new G4RunManager;
-    std::cout << "\n\n\tDICOM running in serial mode\n\n" << std::endl;
+    G4cout << "\n\n\tDICOM running in serial mode\n\n" << G4endl;
 
 #endif
     
@@ -134,13 +134,13 @@ int main(int argc,char** argv)
         }
     } else {
         theGeometry = new DicomPartialDetectorConstruction();
-    }
-
-    // runManager->SetUserInitialization(new DicomPhysicsList);
-    G4VUserPhysicsList* phys = 0;
-    runManager->SetUserInitialization(phys = new QGSP_BIC);
-    phys->SetVerboseLevel(0);
+    }    
     runManager->SetUserInitialization(theGeometry);
+
+    std::vector<G4String>* MyConstr = new std::vector<G4String>;
+    MyConstr->push_back("G4EmStandardPhysics");
+    G4VModularPhysicsList* phys = new G4GenericPhysicsList(MyConstr);
+    runManager->SetUserInitialization(phys);
 
     // Set user action classes
     runManager->SetUserInitialization(new DicomActionInitialization());

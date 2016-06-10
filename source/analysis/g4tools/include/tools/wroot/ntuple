@@ -15,6 +15,7 @@
 #include "../ntuple_booking"
 #include "../sout"
 #include "../scast"
+#include "../forit"
 
 namespace tools {
 namespace wroot {
@@ -29,6 +30,7 @@ protected:
     virtual cid id_cls() const = 0;
   public:
     virtual void add() = 0;
+    virtual void set_def() = 0;
     virtual const std::string& name() const = 0;
     virtual void set_basket_size(uint32) = 0;
   };
@@ -47,7 +49,8 @@ public:
     }
     virtual cid id_cls() const {return id_class();}
   public: //icol
-    virtual void add() {m_leaf->fill(m_tmp);m_tmp = m_def;}
+    virtual void add() {m_leaf->fill(m_tmp);}
+    virtual void set_def() {m_tmp = m_def;}
     virtual const std::string& name() const {return m_leaf->name();}
     virtual void set_basket_size(uint32 a_size) {
       m_leaf->branch().set_basket_size(a_size);
@@ -64,10 +67,10 @@ public:
   protected:
     column(const column& a_from)
     :icol(a_from)
-    ,m_tree(a_from.m_tree) 
+    ,m_tree(a_from.m_tree)
     ,m_leaf(0)
     ,m_def(a_from.m_def)
-    ,m_tmp(a_from.m_tmp)    
+    ,m_tmp(a_from.m_tmp)
     {}
     column& operator=(const column& a_from){
       if(&a_from==this) return *this;
@@ -85,33 +88,195 @@ public:
     T m_tmp;
   };
 
+  class column_string : public virtual icol {
+  public:
+    static cid id_class() {
+      static const std::string s_v;
+      return _cid(s_v);
+    }
+    virtual void* cast(cid a_class) const {
+      if(void* p = cmp_cast<column_string>(this,a_class)) {return p;}
+      else return 0;
+    }
+    virtual cid id_cls() const {return id_class();}
+  public: //icol
+    virtual void add() {m_leaf->fill(m_tmp);}
+    virtual void set_def() {m_tmp = m_def;}
+    virtual const std::string& name() const {return m_leaf->name();}
+    virtual void set_basket_size(uint32 a_size) {
+      m_leaf->branch().set_basket_size(a_size);
+    }
+  public:
+    column_string(tree& a_tree,const std::string& a_name,const std::string& a_def)
+    :m_tree(a_tree),m_leaf(0)
+    ,m_def(a_def),m_tmp(a_def)
+    {
+      branch* br = m_tree.create_branch(a_name);
+      m_leaf = br->create_leaf_string(a_name,a_name);
+    }
+    virtual ~column_string(){}
+  protected:
+    column_string(const column_string& a_from)
+    :icol(a_from)
+    ,m_tree(a_from.m_tree)
+    ,m_leaf(0)
+    ,m_def(a_from.m_def)
+    ,m_tmp(a_from.m_tmp)
+    {}
+    column_string& operator=(const column_string& a_from){
+      if(&a_from==this) return *this;
+      m_leaf = 0;
+      m_def = a_from.m_def;
+      m_tmp = a_from.m_tmp;
+      return *this;
+    }
+  public:
+    bool fill(const std::string& a_value) {m_tmp = a_value;return true;}
+  protected:
+    tree& m_tree;
+    leaf_string* m_leaf;
+    std::string m_def;
+    std::string m_tmp;
+  };
+
+  template <class T>
+  class std_vector_column : public virtual icol {
+  public:
+    static cid id_class() {return _cid_std_vector<T>();}
+    virtual void* cast(cid a_class) const {
+      if(void* p = cmp_cast<std_vector_column>(this,a_class)) {return p;}
+      else return 0;
+    }
+    virtual cid id_cls() const {return id_class();}
+  public: //icol
+    virtual void add() {}
+    virtual void set_def() {}
+    virtual const std::string& name() const {return m_leaf->name();}
+    virtual void set_basket_size(uint32 a_size) {
+      m_leaf->branch().set_basket_size(a_size);
+    }
+  public:
+    std_vector_column(tree& a_tree,const std::string& a_name,std::vector<T>& a_user_vec)
+    :m_tree(a_tree)
+    ,m_user_vec(a_user_vec)
+    ,m_leaf(0)
+    {
+      std_vector_be<T>* br = m_tree.create_std_vector_be<T>(a_name,m_user_vec);
+      m_leaf = br->create_leaf_element(a_name,a_name);
+    }
+    virtual ~std_vector_column(){}
+  protected:
+    std_vector_column(const std_vector_column& a_from)
+    :icol(a_from)
+    ,m_tree(a_from.m_tree) 
+    ,m_user_vec(a_from.m_user_vec)
+    ,m_leaf(0)
+    {}
+    std_vector_column& operator=(const std_vector_column& a_from){
+      if(&a_from==this) return *this;
+      m_leaf = 0;
+      return *this;
+    }
+  protected:
+    tree& m_tree;
+    std::vector<T>& m_user_vec;
+    leaf_element* m_leaf;
+  };
+
 public:
   ntuple(idir& a_dir,const std::string& a_name,const std::string& a_title)
   :tree(a_dir,a_name,a_title){}
 
   ntuple(idir& a_dir,const ntuple_booking& a_bkg)
-  :tree(a_dir,a_bkg.m_name,a_bkg.m_title){
-    const std::vector<ntuple_booking::col_t>& cols = a_bkg.m_columns;
-    std::vector<ntuple_booking::col_t>::const_iterator it;
-    for(it=cols.begin();it!=cols.end();++it){
+  :tree(a_dir,a_bkg.name(),a_bkg.title()){
+    const std::vector<column_booking>& cols = a_bkg.columns();
+    tools_vforcit(column_booking,cols,it){
 
-      if((*it).second==_cid(char(0))) {
-        create_column<char>((*it).first);
-      } else if((*it).second==_cid(short(0))) {
-        create_column<short>((*it).first);
-      } else if((*it).second==_cid(int(0))) {
-        create_column<int>((*it).first);
-      } else if((*it).second==_cid(float(0))) {
-        create_column<float>((*it).first);
-      } else if((*it).second==_cid(double(0))) {
-        create_column<double>((*it).first);
+      if((*it).cls_id()==_cid(char(0))) {
+        create_column<char>((*it).name());
+      } else if((*it).cls_id()==_cid(short(0))) {
+        create_column<short>((*it).name());
+      } else if((*it).cls_id()==_cid(int(0))) {
+        create_column<int>((*it).name());
+      } else if((*it).cls_id()==_cid(float(0))) {
+        create_column<float>((*it).name());
+      } else if((*it).cls_id()==_cid(double(0))) {
+        create_column<double>((*it).name());
+      } else if((*it).cls_id()==_cid(std::string())) {
+        create_column_string((*it).name());
+
+      } else if((*it).cls_id()==_cid_std_vector<char>()) {
+        std::vector<char>* vec = (std::vector<char>*)(*it).user_obj();
+        if(vec) {
+          create_column<char>((*it).name(),*vec);
+        } else {
+          m_out << "tools::wroot::ntuple :"
+                << " for std::vector column " << sout((*it).name())
+                << ", the user vector pointer is null."
+                << std::endl;
+          tools::clear<icol>(m_cols);
+          tools::clear<branch>(m_branches);
+          return;
+        }
+      } else if((*it).cls_id()==_cid_std_vector<short>()) {
+        std::vector<short>* vec = (std::vector<short>*)(*it).user_obj();
+        if(vec) {
+          create_column<short>((*it).name(),*vec);
+        } else {
+          m_out << "tools::wroot::ntuple :"
+                << " for std::vector column " << sout((*it).name())
+                << ", the user vector pointer is null."
+                << std::endl;
+          tools::clear<icol>(m_cols);
+          tools::clear<branch>(m_branches);
+          return;
+        }
+      } else if((*it).cls_id()==_cid_std_vector<int>()) {
+        std::vector<int>* vec = (std::vector<int>*)(*it).user_obj();
+        if(vec) {
+          create_column<int>((*it).name(),*vec);
+        } else {
+          m_out << "tools::wroot::ntuple :"
+                << " for std::vector column " << sout((*it).name())
+                << ", the user vector pointer is null."
+                << std::endl;
+          tools::clear<icol>(m_cols);
+          tools::clear<branch>(m_branches);
+          return;
+        }
+      } else if((*it).cls_id()==_cid_std_vector<float>()) {
+        std::vector<float>* vec = (std::vector<float>*)(*it).user_obj();
+        if(vec) {
+          create_column<float>((*it).name(),*vec);
+        } else {
+          m_out << "tools::wroot::ntuple :"
+                << " for std::vector column " << sout((*it).name())
+                << ", the user vector pointer is null."
+                << std::endl;
+          tools::clear<icol>(m_cols);
+          tools::clear<branch>(m_branches);
+          return;
+        }
+      } else if((*it).cls_id()==_cid_std_vector<double>()) {
+        std::vector<double>* vec = (std::vector<double>*)(*it).user_obj();
+        if(vec) {
+          create_column<double>((*it).name(),*vec);
+        } else {
+          m_out << "tools::wroot::ntuple :"
+                << " for std::vector column " << sout((*it).name())
+                << ", the user vector pointer is null."
+                << std::endl;
+          tools::clear<icol>(m_cols);
+          tools::clear<branch>(m_branches);
+          return;
+        }
 
       // no leaf_store_class() defined for the other types.
 
       } else {
         m_out << "tools::wroot::ntuple :"
-              << " for column " << sout((*it).first)
-              << ", type with cid " << (*it).second << " not yet handled."
+              << " for column " << sout((*it).name())
+              << ", type with cid " << (*it).cls_id() << " not yet handled."
               << std::endl;
         //throw
         tools::clear<icol>(m_cols);
@@ -139,6 +304,24 @@ public:
     return col;
   }
 
+  column_string* create_column_string(const std::string& a_name,const std::string& a_def = std::string()) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    column_string* col = new column_string(*this,a_name,a_def);
+    if(!col) return 0;
+    m_cols.push_back(col);
+    return col;
+  }
+
+  template <class T>
+  std_vector_column<T>* create_column(const std::string& a_name,std::vector<T>& a_user_vec) {
+    //NOTE : to optimize, we do not handle a default std::vector value logic.
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    std_vector_column<T>* col = new std_vector_column<T>(*this,a_name,a_user_vec);
+    if(!col) return 0;
+    m_cols.push_back(col);
+    return col;
+  }
+
   template <class T>
   column<T>* find_column(const std::string& a_name) {
     icol* col = find_named<icol>(m_cols,a_name);
@@ -146,18 +329,22 @@ public:
     return id_cast<icol, column<T> >(*col);
   }
 
+  column_string* find_column_string(const std::string& a_name) {
+    icol* col = find_named<icol>(m_cols,a_name);
+    if(!col) return 0;
+    return id_cast<icol, column_string >(*col);
+  }
+
   bool add_row() {
     if(m_cols.empty()) return false;
-   {std::vector<icol*>::iterator it;
-    for(it=m_cols.begin();it!=m_cols.end();++it) (*it)->add();}
+    tools_vforit(icol*,m_cols,it) (*it)->add();
     uint32 n;
-    return tree::fill(n);
+    bool status = tree::fill(n);
+    tools_vforit(icol*,m_cols,it) (*it)->set_def();
+    return status;
   }
   void set_basket_size(uint32 a_size) {
-    std::vector<icol*>::iterator it;
-    for(it=m_cols.begin();it!=m_cols.end();++it) {
-      (*it)->set_basket_size(a_size);
-    }
+    tools_vforit(icol*,m_cols,it) (*it)->set_basket_size(a_size);
   }
 protected:
   std::vector<icol*> m_cols;

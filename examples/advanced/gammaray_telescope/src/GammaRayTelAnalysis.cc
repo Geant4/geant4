@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GammaRayTelAnalysis.cc 68794 2013-04-05 13:23:26Z gcosmo $
+// $Id: GammaRayTelAnalysis.cc 82268 2014-06-13 13:47:30Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -68,24 +68,20 @@ GammaRayTelAnalysis* GammaRayTelAnalysis::instance = 0;
 GammaRayTelAnalysis::GammaRayTelAnalysis()
   :GammaRayTelDetector(0),histo2DMode("strip")
 {
-  G4RunManager* runManager = G4RunManager::GetRunManager();
   GammaRayTelDetector =
-    (GammaRayTelDetectorConstruction*)(runManager->GetUserDetectorConstruction());
+    static_cast<const GammaRayTelDetectorConstruction*>
+        (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
 
-#ifdef  G4ANALYSIS_USE
   // Define the messenger and the analysis system
-
   analysisMessenger = new GammaRayTelAnalysisMessenger(this);  
   histoFileName = "gammaraytel";
-
-
-
-#endif
 }
 
 
 GammaRayTelAnalysis::~GammaRayTelAnalysis() {
   Finish();
+  // Complete clean-up
+  delete G4AnalysisManager::Instance();
 }
 
 
@@ -94,10 +90,8 @@ void GammaRayTelAnalysis::Init()
 
 void GammaRayTelAnalysis::Finish()
 {
-#ifdef  G4ANALYSIS_USE
   delete analysisMessenger;
   analysisMessenger = 0;
-#endif
 }             
 
 GammaRayTelAnalysis* GammaRayTelAnalysis::getInstance()
@@ -109,43 +103,34 @@ GammaRayTelAnalysis* GammaRayTelAnalysis::getInstance()
 // This function fill the 2d histogram of the XZ positions
 void GammaRayTelAnalysis::InsertPositionXZ(double x, double z)
 {
-#ifdef  G4ANALYSIS_USE
   G4AnalysisManager* man = G4AnalysisManager::Instance();
   man->FillH2(1,x,z);
-#endif
 }
 
 // This function fill the 2d histogram of the YZ positions
 void GammaRayTelAnalysis::InsertPositionYZ(double y, double z)
 {
-#ifdef  G4ANALYSIS_USE
   G4AnalysisManager* man = G4AnalysisManager::Instance();
   man->FillH2(2,y,z);
-#endif
 }
 
 // This function fill the 1d histogram of the energy released in the last Si plane
 void GammaRayTelAnalysis::InsertEnergy(double en)
 {
-#ifdef  G4ANALYSIS_USE
   G4AnalysisManager* man = G4AnalysisManager::Instance();
   man->FillH1(1,en);
-#endif
 }
 
 // This function fill the 1d histogram of the hits distribution along the TKR planes
 void GammaRayTelAnalysis::InsertHits(int nplane)
 {
-#ifdef  G4ANALYSIS_USE
   G4AnalysisManager* man = G4AnalysisManager::Instance();
   man->FillH1(2,nplane);
-#endif
 }
 
-void GammaRayTelAnalysis::setNtuple(float E, float p, float x, float y, float z)
+void GammaRayTelAnalysis::setNtuple(float E, float p, float x, 
+				    float y, float z)
 {
-#ifdef  G4ANALYSIS_USE
-
   G4AnalysisManager* man = G4AnalysisManager::Instance();
   man->FillNtupleDColumn(0,E);
   man->FillNtupleDColumn(1,p);
@@ -153,8 +138,6 @@ void GammaRayTelAnalysis::setNtuple(float E, float p, float x, float y, float z)
   man->FillNtupleDColumn(3,y);
   man->FillNtupleDColumn(4,z);
   man->AddNtupleRow();
-  
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -164,10 +147,8 @@ void GammaRayTelAnalysis::setNtuple(float E, float p, float x, float y, float z)
    always the right dimensions depending from the detector geometry
 */
 
-//void GammaRayTelAnalysis::BeginOfRun(G4int n) // to be reintroduced
 void GammaRayTelAnalysis::BeginOfRun() 
 { 
-#ifdef  G4ANALYSIS_USE
   G4AnalysisManager* man = G4AnalysisManager::Instance();
 
   // Open an output file
@@ -190,11 +171,9 @@ void GammaRayTelAnalysis::BeginOfRun()
 
   // 1D histogram that store the energy deposition of the
   // particle in the last (number 0) TKR X-plane
-
   man->CreateH1("1","Edep in the last X plane (keV)", 100, 50, 200);
 
   // 1D histogram that store the hits distribution along the TKR X-planes
-  
   man->CreateH1("2","Hits dist in TKR X planes",Nplane, 0, Nplane-1);
 
   // Book 2D histograms 
@@ -215,9 +194,8 @@ void GammaRayTelAnalysis::BeginOfRun()
 		    int(sizez/5), -sizez/2, sizez/2);
     }  
 
-  // 2D histogram that store the position (mm) of the hits (YZ projection)
-  
-    if (histo2DMode == "strip")
+  // 2D histogram that store the position (mm) of the hits (YZ projection)  
+  if (histo2DMode == "strip")
     {
       man->CreateH2("2","Tracker Hits YZ (strip,plane)", 
 		    N, 0, N-1, 
@@ -229,20 +207,18 @@ void GammaRayTelAnalysis::BeginOfRun()
 		    int(sizexy/5), -sizexy/2, sizexy/2, 
 		    int(sizez/5), -sizez/2, sizez/2);
     }  
+  
     
-    
-    // Book Ntuples (energy / plane/ x / y / z)
-    //------------------------------------------
-    
-    man->CreateNtuple("1","Track ntuple");
-    man->CreateNtupleDColumn("energy");
-    man->CreateNtupleDColumn("plane"); // can I use Int values? 
-    man->CreateNtupleDColumn("x"); // can I use Int values?
-    man->CreateNtupleDColumn("y"); // can I use Int values?
-    man->CreateNtupleDColumn("z"); // can I use Int values?
-    man->FinishNtuple();
+  // Book Ntuples (energy / plane/ x / y / z)
+  //------------------------------------------  
+  man->CreateNtuple("1","Track ntuple");
+  man->CreateNtupleDColumn("energy");
+  man->CreateNtupleDColumn("plane"); // can I use Int values? 
+  man->CreateNtupleDColumn("x"); // can I use Int values?
+  man->CreateNtupleDColumn("y"); // can I use Int values?
+  man->CreateNtupleDColumn("z"); // can I use Int values?
+  man->FinishNtuple();
 
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -252,27 +228,16 @@ void GammaRayTelAnalysis::BeginOfRun()
 */
 void GammaRayTelAnalysis::EndOfRun() 
 {
-#ifdef  G4ANALYSIS_USE
-
   //Save histograms
   G4AnalysisManager* man = G4AnalysisManager::Instance();
   man->Write();
   man->CloseFile();
-  // Complete clean-up
-  delete G4AnalysisManager::Instance();
-
-#endif
 }
 
 /* This member is called at the end of every event */
 
 void GammaRayTelAnalysis::EndOfEvent(G4int /* flag */ ) 
-{
-
-#ifdef  G4ANALYSIS_USE
-
-#endif
-}
+{;}
 
 
 

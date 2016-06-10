@@ -1,4 +1,4 @@
-$Id: History 77897 2013-11-29 09:23:56Z gcosmo $
+$Id: History 85267 2014-10-27 09:03:32Z gcosmo $
 ----------------------------------------------------
 
      =========================================================
@@ -14,11 +14,39 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+23-10-14 mma (testem2-V10-00-08)
+- in TestEm1.in : /run/numberOfThreads 2
 
-22-11-13 A.Dotti      (testem2-V09-06-18)
+21-10-14 mma (testem2-V10-00-07)
+- TestEm2.cc : option set nThreads via command
+
+10-09-14 mma (testem2-V10-00-06)
+- TestEm2.cc : SetNumberOfThreads(G4Threading::G4GetNumberOfCores())
+     
+28-07-14 mma (testem2-V10-00-05)
+- RunAction + Run: introduce profiles for histos 4 and 8
+	 
+13-06-14 mma (testem2-V10-00-04)
+- remove PhysicsList::SetCuts()
+	 
+07-06-14 mma (testem2-V10-00-03)
+- minor cleanup in PhysicsList::SetCuts()
+	 
+04-06-14 mma (testem2-V10-00-02)
+- cleanup macros for /run/setCut
+ 
+28-04-14 V.Ivant (testem2-V10-00-01)
+- added "emlowenergy" option for EM physics 
+          
+27-12-13 mma (testem2-V10-00-00)
+- Run::EndOfRun()
+- minor cleanup
+
+22-11-13 A.Dotti (testem2-V09-06-18)
 - Bug fix: remove unused variable from DetectorMessenger
 
-21-11-13 A.Dotti      (testem2-V09-06-17)
+21-11-13 A.Dotti (testem2-V09-06-17)
 - Changed to use new interface G4RunManager::ReinitializeGeometry
   (requires at least run-V09-06-128)
 - Use G4GlobalMagFieldMessenger to use B-Field

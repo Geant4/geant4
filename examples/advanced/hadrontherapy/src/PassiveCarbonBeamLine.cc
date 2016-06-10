@@ -27,20 +27,6 @@
 //
 // HADRONTHERAPY:  a Geant4-based application for proton/ion-therapy studies
 // _________________________________________________________________________
-//
-// This is the FULL version of the Hadrontherapy application.
-// It is based on the Geant4 toolkit classes and released under the GPL3 license.
-//
-// Its basic version is released and maintained inside the Geant4 code
-// as Advanced Example.
-//
-// To compile and run Hadrontherapy you only require the installation of Geant4 and,
-// if you wish, the ROOT ananlysis program.
-//
-// For more information see the documentation at http://sites.google.com/site/hadrontherapy/
-// or contact cirrone@lns.infn.it
-//
-// **************************************************************************************
 
 
 #include "G4Box.hh"
@@ -58,10 +44,9 @@
 #include "HadrontherapyModulator.hh"
 #include "PassiveCarbonBeamLine.hh"
 #include "G4SystemOfUnits.hh"
+//#include "FaradayCup.hh"
 
-
-
-
+//G4bool PassiveCarbonBeamLine::doCalculation = false;
 /////////////////////////////////////////////////////////////////////////////
 PassiveCarbonBeamLine::PassiveCarbonBeamLine():
 physicalTreatmentRoom(0), hadrontherapyDetectorConstruction(0),
@@ -74,9 +59,7 @@ physiSecondHoleNozzleSupport(0),
 solidFinalCollimator(0),
 physiFinalCollimator(0)
 {
-	// Messenger to change parameters of the passiveProtonBeamLine geometry
-	//passiveMessenger = new PassiveProtonBeamLineMessenger(this);
-	
+
 //***************************** PW ***************************************
 
   static G4String ROGeometryName = "DetectorROGeometry";
@@ -88,15 +71,11 @@ physiFinalCollimator(0)
   RegisterParallelWorld(RO);
   G4cout << "... done" << G4endl;
 //***************************** PW ***************************************
-
-
-
 }
 
 /////////////////////////////////////////////////////////////////////////////
 PassiveCarbonBeamLine::~PassiveCarbonBeamLine()
 {
-	//delete passiveMessenger;
 	delete hadrontherapyDetectorConstruction;
 }
 
@@ -122,9 +101,7 @@ G4VPhysicalVolume* PassiveCarbonBeamLine::Construct()
 
  hadrontherapyDetectorConstruction->InitializeDetectorROGeometry(RO,hadrontherapyDetectorConstruction->GetDetectorToWorldPosition());
 
-//***************************** PW ***************************************
-	
-	
+//***************************** PW ***************************************		
 	return physicalTreatmentRoom;
 }
 
@@ -427,8 +404,8 @@ void PassiveCarbonBeamLine::HadrontherapyBeamLineSupport()
 	const G4double beamLineCoverZSize = 10.*mm; 
 	
 	const G4double beamLineCoverXPosition = -1745.09 *mm;
-	const G4double beamLineCoverYPosition = -980.*mm; 
-	const G4double beamLineCoverZPosition = 600.*mm;
+	const G4double beamLineCoverYPosition = -1000.*mm; 
+	const G4double beamLineCoverZPosition = 610.*mm;
 	
 	G4Box* beamLineCover = new G4Box("BeamLineCover",
 									 beamLineCoverXSize, 
@@ -744,19 +721,32 @@ void PassiveCarbonBeamLine::HadrontherapyBeamNozzle()
 										   0);
 	
 	logicNozzleSupport -> SetVisAttributes(yellow);
-	
 	// -------------------//
 	//     BRASS TUBE     //
 	// -------------------//
 	const G4double innerRadiusHoleNozzleSupport = 18.*mm;
 	const G4double outerRadiusHoleNozzleSupport = 21.5 *mm;
 	//XXX h/2 = 142.5 mm
-	const G4double hightHoleNozzleSupport = 142.5*mm;
+	const G4double hightHoleNozzleSupportFirst = nozzleSupportXSize;
+	const G4double hightHoleNozzleSupport = 113.0*mm;
 	const G4double startAngleHoleNozzleSupport = 0.*deg;
 	const G4double spanningAngleHoleNozzleSupport = 360.*deg;
-	//XXX -(320+142.5)mm
-	const G4double holeNozzleSupportXPosition = -462.50 *mm;
+	const G4double holeNozzleSupportXPosition = -415.5 *mm;
+	G4Tubs* solidNozzleSupportHole = new G4Tubs("NozzleSupportHole1", 	innerRadiusHoleNozzleSupport, 
+												outerRadiusHoleNozzleSupport,
+												hightHoleNozzleSupportFirst, 
+												startAngleHoleNozzleSupport, 
+												spanningAngleHoleNozzleSupport);
 	
+	G4LogicalVolume* logicNozzleSupportHole = new G4LogicalVolume(solidNozzleSupportHole, 
+															  holeNozzleSupportMaterial, 
+															  "NozzleSupportHole1");
+	
+	physiNozzleSupportHole = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector(0, 0., 0.)),
+											   "HoleNozzleSupportHole1", 
+											   logicNozzleSupportHole, 
+											   physiNozzleSupport, false, 0);
+		
 	G4Tubs* solidHoleNozzleSupport = new G4Tubs("HoleNozzleSupport", 
 												innerRadiusHoleNozzleSupport, 
 												outerRadiusHoleNozzleSupport,
@@ -773,7 +763,7 @@ void PassiveCarbonBeamLine::HadrontherapyBeamNozzle()
 											   "HoleNozzleSupport", 
 											   logicHoleNozzleSupport, 
 											   physicalTreatmentRoom, false, 0); 
-	
+	logicNozzleSupportHole -> SetVisAttributes(darkOrange3);		
 	logicHoleNozzleSupport -> SetVisAttributes(darkOrange3);
 	
 	//--------------------------------------------------------------//
@@ -820,7 +810,7 @@ void PassiveCarbonBeamLine::HadrontherapyBeamFinalCollimator()
 	const G4double startAngleFinalCollimator = 0.*deg;
 	const G4double spanningAngleFinalCollimator = 360.*deg;
 	//XXX
-	const G4double finalCollimatorXPosition = -323.50 *mm;  
+	const G4double finalCollimatorXPosition = -299.0 *mm;  
 	
 	G4double phi = 90. *deg;     
 	

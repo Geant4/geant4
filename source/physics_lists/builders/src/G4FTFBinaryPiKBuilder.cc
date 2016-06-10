@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBinaryPiKBuilder.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4FTFBinaryPiKBuilder.cc 83699 2014-09-10 07:18:25Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -45,11 +45,12 @@
 #include "G4ProcessManager.hh"
 #include "G4PiNuclearCrossSection.hh"
 #include "G4CrossSectionPairGG.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
 
 G4FTFBinaryPiKBuilder::
 G4FTFBinaryPiKBuilder(G4bool quasiElastic) 
 {
-  thePiData = new G4CrossSectionPairGG(new G4PiNuclearCrossSection(), 91*GeV);
+  thePiData = new G4CrossSectionPairGG((G4PiNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4PiNuclearCrossSection::Default_Name()), 91*GeV);
   theMin = 4*GeV;
   theModel = new G4TheoFSGenerator("FTFB");
 
@@ -58,8 +59,6 @@ G4FTFBinaryPiKBuilder(G4bool quasiElastic)
   theStringModel->SetFragmentationModel(theStringDecay);
 
   theCascade = new G4BinaryCascade;
-  thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
-  theCascade->SetDeExcitation(thePreEquilib);  
 
   theModel->SetHighEnergyGenerator(theStringModel);
   if (quasiElastic)
@@ -76,10 +75,9 @@ G4FTFBinaryPiKBuilder(G4bool quasiElastic)
 
 G4FTFBinaryPiKBuilder:: ~G4FTFBinaryPiKBuilder() 
 {
-  delete theCascade;
   delete theStringDecay;
   delete theStringModel;
-  delete theModel;
+  //delete theModel;
   if ( theQuasiElastic ) delete theQuasiElastic;
 }
 

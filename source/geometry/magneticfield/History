@@ -1,4 +1,4 @@
-$Id: History 76946 2013-11-19 11:33:13Z gcosmo $
+$Id: History 85845 2014-11-05 15:43:58Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,55 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-                                            field-V09-06-13 - same as
-Nov 18, 2013 P.Gumplinger                 - field-V09-06-12
+Nov 03, 2014 G.Cosmo                      - field-V10-00-04
+--------------------
+- Moved constructors and simple methods to in line in G4ChargeState and
+  G4LineSection for CPU speedup (courtesy of S.Wenzel).
+
+May 21, 2014 J.Apostolakis                - field-V10-00-03
+--------------------------
+- G4FieldTrack:
+  * Fixed SetChargeAndMoments() to use the new method
+    G4ChargeState::SetChargesAndMoments(); it was changing spin, because of
+    erroneous change in G4ChargeState::SetChargesAndMoments(), that method
+    is now renamed SetChargeSpinMoments() to show what it does;
+  * Added pdg-spin as argument to constructors (needed to track polarization);
+  * Renamed 'spin' to 'Polarization' in method, arguments, data member to
+    avoid confusion;
+  * Revised constructors to add pdg-spin as last argument (with default -1).
+- G4ChargeState:
+  - Addressed Coverity issue #56281 'Arguments in wrong order'  
+    G4ChargeState::SetChargeMoments() when used in
+    G4FieldTrack::SetChargeMoments() from addition of spin to arguments,
+    without revising name of method to reflect it;
+  - Changed order of arguments in constructor, making spin 3rd argument
+    (was 2nd) and making all arguments mandatory;
+  - Renamed SetChargeAndMoments() method with 5 arguments including spin (2nd)
+    to SetChargeSpinMoments();
+  - Added new methods including SetChargesAndMoments(), SetChargeMdm(),
+    SetChargeDipoleMoments() (no spin), and also SetChargeSpin(),
+    SetChargeMdmSpin() (which includes spin) to provide most/all potential 
+    combinations.
+- G4MagIntegratorDriver::OneGoodStep():
+  * Trial changes to address Valgrind issue, about value used before being set.
+
+Apr 01, 2014 J.Apostolakis                - field-V10-00-02
+--------------------------
+- Moved G4FieldTrack::LoadFromArray() to .cc and removed non-necessary
+  thread-local static data local to the function.
+
+Mar 14, 2014 J.Apostolakis                - field-V10-00-01
+--------------------------
+- Fix assignment operator for G4FieldTrack. (Copied Rest Mass)
+- Improve printing of G4FieldTrack
+
+Jan 17, 2014 P.Gumplinger                 - field-V10-00-00
+-------------------------
+- add G4Mag_EqRhs::SetChargeMomentumMass( particleCharge, MomentumXc, mass)
+  to G4Mag_SpinEqRhs::SetChargeMomentumMass, see bug reported at:
+  http://hypernews.slac.stanford.edu/HyperNews/geant4/get/emfields/210.html
+
+Nov 18, 2013 P.Gumplinger                 - field-V09-06-13/12
 -------------------------
 - fix Coverity warning in G4RepleteEofM
 

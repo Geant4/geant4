@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm2/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// $Id: EventAction.hh 76259 2013-11-08 11:37:28Z gcosmo $
+// $Id: EventAction.hh 78550 2014-01-07 09:43:41Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,8 +36,6 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
-
-class EventActionMessenger;
 
 class G4Event;
 
@@ -52,13 +50,6 @@ public:
 
   virtual void BeginOfEventAction(const G4Event*);
   virtual void   EndOfEventAction(const G4Event*);
-    
-  void SetPrintModulo(G4int    val)  {fPrintModulo = val;};
-    
-private:
-  
-  G4int                  fPrintModulo;          
-  EventActionMessenger*  fEventMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

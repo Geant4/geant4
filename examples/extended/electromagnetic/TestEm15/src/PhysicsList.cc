@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysicsList class
 //
 // 
-// $Id: PhysicsList.cc 68585 2013-04-01 23:35:07Z adotti $
+// $Id: PhysicsList.cc 82361 2014-06-17 15:18:30Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,22 +45,17 @@
 
 PhysicsList::PhysicsList() 
 : G4VModularPhysicsList(),
-  fEmPhysicsList(0),
-  fMessenger(0)
+  fEmPhysicsList(0), fMessenger(0)
 {
   G4LossTableManager::Instance();
+  SetDefaultCutValue(1*mm);
   
-  fCurrentDefaultCut   = 1.0*mm;
-  fCutForGamma         = fCurrentDefaultCut;
-  fCutForElectron      = fCurrentDefaultCut;
-  fCutForPositron      = fCurrentDefaultCut;
-
   fMessenger = new PhysicsListMessenger(this);
 
   SetVerboseLevel(1);
 
   // EM physics
-  fEmName = G4String("standard");
+  fEmName = G4String("local");
   fEmPhysicsList = new PhysListEmStandard(fEmName);
 
 }
@@ -206,7 +201,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   
   if (name == fEmName) return;
 
-  if (name == "standard") {
+  if (name == "local") {
 
     fEmName = name;
     delete fEmPhysicsList;
@@ -247,44 +242,5 @@ void PhysicsList::AddStepMax()
   }
 }
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-
-void PhysicsList::SetCuts()
-{    
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma
-  SetCutValue(fCutForGamma, "gamma");
-  SetCutValue(fCutForElectron, "e-");
-  SetCutValue(fCutForPositron, "e+");
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForGamma(G4double cut)
-{
-  fCutForGamma = cut;
-  SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForElectron(G4double cut)
-{
-  fCutForElectron = cut;
-  SetParticleCuts(fCutForElectron, G4Electron::Electron());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForPositron(G4double cut)
-{
-  fCutForPositron = cut;
-  SetParticleCuts(fCutForPositron, G4Positron::Positron());
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

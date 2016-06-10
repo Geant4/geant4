@@ -1,4 +1,4 @@
-$Id: History 68710 2013-04-05 09:04:21Z gcosmo $
+$Id: History 81764 2014-06-05 08:22:51Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,26 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04.06.2014   Andrea Dotti, tag xraytel-V10-00-03
+	     Migration to new MT compliant GPS
+
+23.05.2014   Luciano Pandola, tag xraytel-V10-00-02
+	     Fix compiler warning which caused the rejection 
+	     of tag xraytel-V10-00-01
+
+22.05.2014   Luciano Pandola, tag xraytel-V10-00-01
+	     Added definition of muons and short-lived
+	     Revise method book() of analysis singleton
+	     Actual MT migration, G4MTRunManager is used
+	     Added new macro geantino.mac and updated CMakeLists.txt
+
+21.05.2014   Luciano Pandola, tag xraytel-V10-00-00
+	     Added ActionInitialization class
+	     Move the method Update() from RunAction (thread-local) to 
+	      Analysis (global) 
+	     Protect analysis singleton by Mutex
+	     Changed named scheme of output objects
 
 19.03.2013   Luciano Pandola, tag xraytel-V09-06-00
 	     Migrated analysis to g4tools (removed AIDA dependency) 

@@ -51,9 +51,9 @@ public:
   virtual bool fill_basket(buffer&) const = 0;
 public:
   base_leaf(std::ostream& a_out,
-                   wroot::branch& a_branch,
-                   const std::string& a_name,
-                   const std::string& a_title)
+            wroot::branch& a_branch,
+            const std::string& a_name,
+            const std::string& a_title)
   :m_out(a_out)
   ,m_branch(a_branch)
   ,m_name(a_name)
@@ -73,7 +73,7 @@ public:
   }
 protected:
   base_leaf(const base_leaf& a_from)
-  : ibo(a_from)
+  :ibo(a_from)
   ,m_out(a_from.m_out)
   ,m_branch(a_from.m_branch)
   {}

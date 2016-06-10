@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevelRep.hh 67974 2013-03-13 10:17:37Z gcosmo $
+// $Id: G4NavigationLevelRep.hh 85846 2014-11-05 15:45:28Z gcosmo $
 //
 // class G4NavigationLevelRep
 //
@@ -57,26 +57,26 @@ class G4NavigationLevelRep
 
  public:  // with description
 
-   G4NavigationLevelRep( G4VPhysicalVolume*  newPtrPhysVol,
-                   const G4AffineTransform&  newT,
-                         EVolume             newVolTp,
-                         G4int               newRepNo= -1 );
+   inline G4NavigationLevelRep( G4VPhysicalVolume*  newPtrPhysVol,
+                          const G4AffineTransform&  newT,
+                                EVolume             newVolTp,
+                                G4int               newRepNo= -1 );
 
-   G4NavigationLevelRep( G4VPhysicalVolume*  newPtrPhysVol,
-                   const G4AffineTransform&  levelAbove,
-                   const G4AffineTransform&  relativeCurrent,
-                         EVolume             newVolTp,
-                         G4int               newRepNo= -1 );
+   inline G4NavigationLevelRep( G4VPhysicalVolume*  newPtrPhysVol,
+                          const G4AffineTransform&  levelAbove,
+                          const G4AffineTransform&  relativeCurrent,
+                                EVolume             newVolTp,
+                                G4int               newRepNo= -1 );
      // As the previous constructor, but instead of giving Transform, give 
      // the AffineTransform to the level above and the current level's 
      // Transform relative to that.
 
-   G4NavigationLevelRep();
-   G4NavigationLevelRep( G4NavigationLevelRep& );
+   inline G4NavigationLevelRep();
+   inline G4NavigationLevelRep( G4NavigationLevelRep& );
 
-   ~G4NavigationLevelRep();
+   inline ~G4NavigationLevelRep();
 
-   G4NavigationLevelRep& operator=(const G4NavigationLevelRep &right);
+   inline G4NavigationLevelRep& operator=(const G4NavigationLevelRep &right);
 
    inline G4VPhysicalVolume* GetPhysicalVolume();
 

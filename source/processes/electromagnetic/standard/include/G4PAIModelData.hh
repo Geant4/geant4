@@ -87,7 +87,8 @@ public:
 				   G4double stepFactor) const;
 
   G4double SamplePostStepTransfer(G4int coupleIndex, 
-				  G4double scaledTkin) const;
+				  G4double scaledTkin, 
+				  G4double scaledTmax) const;
 
 private:
 

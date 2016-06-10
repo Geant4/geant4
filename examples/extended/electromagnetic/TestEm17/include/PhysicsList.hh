@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm17/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 //
-// $Id: PhysicsList.hh 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id: PhysicsList.hh 85311 2014-10-27 14:23:25Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,16 +52,7 @@ class PhysicsList: public G4VModularPhysicsList
     virtual void ConstructProcess();
     void AddPhysicsList(const G4String& name);
 
-    virtual void SetCuts();
-    void SetCutForGamma(G4double);
-    void SetCutForElectron(G4double);
-    void SetCutForPositron(G4double);
-
   private:
-    G4double fCutForGamma;
-    G4double fCutForElectron;
-    G4double fCutForPositron;
-    G4double fCurrentDefaultCut;
     
     G4VPhysicsConstructor* fEmPhysicsList;
     G4VPhysicsConstructor* fMuNuclPhysicsList;

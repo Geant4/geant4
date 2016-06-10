@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -46,6 +47,9 @@
 #ifdef INCLXX_IN_GEANT4_MODE
 #include "G4ios.hh"
 #endif
+
+#include "G4INCLRandom.hh"
+#include "G4INCLConfig.hh"
 
 namespace G4INCL {
 
@@ -65,25 +69,26 @@ namespace G4INCL {
   class LoggerSlave {
     public:
       // By default, log fatal errors, errors and warnings
-      LoggerSlave(std::string const &logFileName) : logStream(0), verbosityLevel(4) {
-        if(logFileName=="-") {
-          logStream = &(std::cout);
-          logToStdout = true;
-        } else {
-          logToStdout = false;
-          logStream = new std::ofstream(logFileName.c_str());
-          if(!logStream)
-          {
-            std::cerr << "Fatal error: couldn't open log file " << logFileName << std::endl;
-            std::exit(EXIT_FAILURE);
-          }
+      LoggerSlave(std::string const &logFileName, const G4int verbosity=4) :
+        logStream(0),
+        verbosityLevel(verbosity)
+    {
+      if(logFileName=="-") {
+        logStream = &(std::cout);
+        logToStdout = true;
+      } else {
+        logToStdout = false;
+        logStream = new std::ofstream(logFileName.c_str());
+        if(!logStream)
+        {
+          std::cerr << "Fatal error: couldn't open log file " << logFileName << std::endl;
+          std::exit(EXIT_FAILURE);
         }
+      }
 
-        // Spell out "true" and "false" when logging G4bool variables
-        std::boolalpha(*logStream);
-
-        logMessage(InfoMsg, __FILE__,__LINE__, "# Logging enabled!\n");
-      };
+      // Spell out "true" and "false" when logging G4bool variables
+      std::boolalpha(*logStream);
+    };
       ~LoggerSlave() {
         if(!logToStdout)
           delete logStream;
@@ -100,7 +105,7 @@ namespace G4INCL {
       G4int getVerbosityLevel() { return verbosityLevel; }
 
       /// \brief Write the log message.
-      void logMessage(const MessageType type, const std::string &fileName, const G4int lineNumber, std::string const &s) const;
+      void logMessage(const MessageType type, const std::string &fileName, const G4int lineNumber, std::string const &s, const G4bool prefixHash=true) const;
 
       /// \brief Flush the log stream
       void flush() { logStream->flush(); }
@@ -131,7 +136,7 @@ namespace G4INCL {
 
   namespace Logger {
       /// \brief Log a message.
-      void logMessage(const MessageType type, std::string const &fileName, const G4int lineNumber, std::string const &s);
+      void logMessage(const MessageType type, std::string const &fileName, const G4int lineNumber, std::string const &s, const G4bool prefixHash=true);
 
       /// \brief Flush the log stream
       void flush();
@@ -151,6 +156,9 @@ namespace G4INCL {
       /// \brief Delete the slave Logger.
       void deleteLoggerSlave();
 
+      /// \brief Initialize the Logger.
+      void initialize(Config const * const theConfig);
+
   }
 
   // Macro definitions for line numbering in log files!
@@ -158,6 +166,7 @@ namespace G4INCL {
   if(true) {\
     std::stringstream ss_;\
     ss_ << x;\
+    ss_ << "Random seeds at the beginning of this event: " << G4INCL::Random::getSavedSeeds() << std::endl;\
     G4INCL::Logger::logMessage(G4INCL::FatalMsg, __FILE__,__LINE__, ss_.str());\
     G4INCL::Logger::flush();\
     std::exit(EXIT_FAILURE);\
@@ -166,6 +175,7 @@ namespace G4INCL {
   if(G4INCL::ErrorMsg <= G4INCL::Logger::getVerbosityLevel()) {\
     std::stringstream ss_;\
     ss_ << x;\
+    ss_ << "Random seeds at the beginning of this event: " << G4INCL::Random::getSavedSeeds() << std::endl;\
     G4INCL::Logger::logMessage(G4INCL::ErrorMsg, __FILE__,__LINE__, ss_.str());\
   } else (void)0
 #define INCL_WARN(x) \
@@ -179,6 +189,12 @@ namespace G4INCL {
     std::stringstream ss_;\
     ss_ << x;\
     G4INCL::Logger::logMessage(G4INCL::InfoMsg, __FILE__,__LINE__, ss_.str());\
+  } else (void)0
+#define INCL_INFO_NOCOMMENT(x) \
+  if(G4INCL::InfoMsg <= G4INCL::Logger::getVerbosityLevel()) {\
+    std::stringstream ss_;\
+    ss_ << x;\
+    G4INCL::Logger::logMessage(G4INCL::InfoMsg, __FILE__,__LINE__, ss_.str(), false);\
   } else (void)0
 #define INCL_DEBUG(x) \
   if(G4INCL::DebugMsg <= G4INCL::Logger::getVerbosityLevel()) {\
@@ -204,21 +220,21 @@ namespace G4INCL {
     std::stringstream location_;\
     std::string fileName_(__FILE__);\
     location_ << fileName_.substr(fileName_.find_last_of("/")+1) << ":" << __LINE__;\
-    G4Exception(location_.str().c_str(), "INCLXX0000", FatalException, ss_.str().c_str());\
+    G4Exception(location_.str().c_str(), "INCLXX0000", EventMustBeAborted, ss_.str().c_str());\
   } else (void)0
 #define INCL_ERROR(x) \
   if(G4INCL::ErrorMsg <= G4INCL::Logger::getVerbosityLevel()) {\
     std::string fileName_(__FILE__);\
     std::stringstream ss_;\
     ss_ << "INCL++ error [" << fileName_.substr(fileName_.find_last_of("/")+1) << ":" << __LINE__ << "] " << x;\
-    G4cout << ss_.str() << std::endl;\
+    G4cout << ss_.str() << '\n';\
   } else (void)0
 #define INCL_WARN(x) \
   if(G4INCL::WarningMsg <= G4INCL::Logger::getVerbosityLevel()) {\
     std::string fileName_(__FILE__);\
     std::stringstream ss_;\
     ss_ << "INCL++ warning [" << fileName_.substr(fileName_.find_last_of("/")+1) << ":" << __LINE__ << "] " << x;\
-    G4cout << ss_.str() << std::endl;\
+    G4cout << ss_.str() << '\n';\
   } else (void)0
 #define INCL_INFO(x);
 #define INCL_DEBUG(x) \
@@ -226,7 +242,7 @@ namespace G4INCL {
     std::string fileName_(__FILE__);\
     std::stringstream ss_;\
     ss_ << "INCL++ debug [" << fileName_.substr(fileName_.find_last_of("/")+1) << ":" << __LINE__ << "] " << x;\
-    G4cout << ss_.str() << std::endl;\
+    G4cout << ss_.str() << '\n';\
   } else (void)0
 #define INCL_DATABLOCK(x);
 

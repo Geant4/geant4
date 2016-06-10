@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChipsPionMinusElasticXS.cc 70680 2013-06-04 07:51:03Z gcosmo $
+// $Id: G4ChipsPionMinusElasticXS.cc 83409 2014-08-21 15:16:07Z gcosmo $
 //
 //
 // G4 Physics class: G4ChipsPionMinusElasticXS for pA elastic cross sections
@@ -135,7 +135,7 @@ G4bool G4ChipsPionMinusElasticXS::IsIsoApplicable(const G4DynamicParticle* Pt, G
 						 const G4Element*,
 						 const G4Material*)
 {
-  G4ParticleDefinition* particle = Pt->GetDefinition();
+  const G4ParticleDefinition* particle = Pt->GetDefinition();
   if (particle == G4PionMinus::PionMinus()      ) return true;
   return false;
 }
@@ -155,12 +155,6 @@ G4double G4ChipsPionMinusElasticXS::GetIsoCrossSection(const G4DynamicParticle* 
 
 G4double G4ChipsPionMinusElasticXS::GetChipsCrossSection(G4double pMom, G4int tgZ, G4int tgN, G4int)
 {
-  static G4ThreadLocal std::vector <G4int>    *colN_G4MT_TLS_ = 0 ; if (!colN_G4MT_TLS_) colN_G4MT_TLS_ = new  std::vector <G4int>     ;  std::vector <G4int>    &colN = *colN_G4MT_TLS_;  // Vector of N for calculated nuclei (isotops)
-  static G4ThreadLocal std::vector <G4int>    *colZ_G4MT_TLS_ = 0 ; if (!colZ_G4MT_TLS_) colZ_G4MT_TLS_ = new  std::vector <G4int>     ;  std::vector <G4int>    &colZ = *colZ_G4MT_TLS_;  // Vector of Z for calculated nuclei (isotops)
-  static G4ThreadLocal std::vector <G4double> *colP_G4MT_TLS_ = 0 ; if (!colP_G4MT_TLS_) colP_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colP = *colP_G4MT_TLS_;  // Vector of last momenta for the reaction
-  static G4ThreadLocal std::vector <G4double> *colTH_G4MT_TLS_ = 0 ; if (!colTH_G4MT_TLS_) colTH_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colTH = *colTH_G4MT_TLS_; // Vector of energy thresholds for the reaction
-  static G4ThreadLocal std::vector <G4double> *colCS_G4MT_TLS_ = 0 ; if (!colCS_G4MT_TLS_) colCS_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colCS = *colCS_G4MT_TLS_; // Vector of last cross sections for the reaction
-  // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
 
   G4double pEn=pMom;
   G4bool fCS = false;
@@ -231,9 +225,6 @@ G4double G4ChipsPionMinusElasticXS::GetChipsCrossSection(G4double pMom, G4int tg
 G4double G4ChipsPionMinusElasticXS::CalculateCrossSection(G4bool CS, G4int F,G4int I,
                                              G4int PDG, G4int tgZ, G4int tgN, G4double pIU)
 {
-  // *** Begin of Associative Memory DB for acceleration of the cross section calculations
-  static G4ThreadLocal std::vector <G4double>  *PIN_G4MT_TLS_ = 0 ; if (!PIN_G4MT_TLS_) PIN_G4MT_TLS_ = new  std::vector <G4double>   ;  std::vector <G4double>  &PIN = *PIN_G4MT_TLS_;   // Vector of max initialized log(P) in the table
-  // *** End of Static Definitions (Associative Memory Data Base) ***
   G4double pMom=pIU/GeV;                // All calculations are in GeV
   onlyCS=CS;                            // Flag to calculate only CS (not Si/Bi)
   lastLP=std::log(pMom);                // Make a logarithm of the momentum for calculation

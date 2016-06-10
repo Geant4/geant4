@@ -1,4 +1,4 @@
-$Id: History 73921 2013-09-17 07:45:43Z gcosmo $
+$Id: History 85989 2014-11-06 15:40:05Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -15,6 +15,50 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06-11-14 I. Hrivnacova (AnaEx01-V10-00-05)
+- Updated for moving script in shared (analysisShared-V10-00-01)
+- Updated README - commented special compilation (via make setup)
+- Updated comments for Doxygen in hbook
+
+05-11-14 I. Hrivnacova (AnaEx01-V10-00-04)
+- Including shared directory directly in the example
+  to avoid out-of-project sources
+  - based on analysisShared-V10-00-00 
+- Adding utility scripts for GNUmake build (much simpler replacement
+  for scripts from common) \
+  - based on analysisScripts-V10-00-00 
+- Moved implementation of G4AnalysisManager for hbook from 
+  extended/common/analysis in hbook sub-directory  
+
+13-08-14 mma (AnaEx01-V10-00-03)
+- update Readme and .Readme again
+
+12-08-14 mma (AnaEx01-V10-00-02)
+- restaure calorimeter drawing in Readme and .Readme 
+
+17-06-14 I. Hrivnacova (AnaEx01-V10-00-01)
+- Fixed problems reported by Davide Mancusi:
+  - Moving tools/hbook/*.f files in examples/extended/common/analysis/src 
+    to avoid their retrieval from Geant4 source/includes which causes problem 
+    when building examples against Geant4 build directory. 
+  - Added -lkernlib in list of libraries (required with Debian cernlib 
+    distribution 20061220)
+- In CMake build: replaced explicit use of gfortran with 
+  enable_language(Fortran) and using fortran_sources variable in analogous 
+  way as sources
+
+11-06-14 I. Hrivnacova (AnaEx01-V10-00-00)
+- Fixed path to copy_files.sh, clean_files.sh in GNUmalefile
+  (this makes GNUmake build working with Geant4 installation via
+   CMake)
+- Fixed SharedFilesList.txt - removed PhysicList class
+- Fixed path to hbook *.f files in GNUmakefile.tools_hbook
+
+28-05-14 I. Hrivnacova
+- Use Geant4 physics list (FTFP_BERT) in AnaEx01,02,03, 
+  removed PhysicList class from shared
+  (tag in examples/analysis)
+    
 16-09-13 I. Hrivnacova (AnaEx01-V09-06-02)
 - Updated SharedFilesList.txt for addedActionInitialization class
   (missing in analysisExample-V09-06-02 in top directory)

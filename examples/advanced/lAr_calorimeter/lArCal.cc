@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: lArCal.cc 67976 2013-03-13 10:23:17Z gcosmo $
+// $Id: lArCal.cc 84371 2014-10-14 12:51:18Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -36,7 +36,11 @@
 //
 // --------------------------------------------------------------
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
 #include "G4UImanager.hh"
 
 #include "Randomize.hh"
@@ -50,26 +54,22 @@
 #endif
 
 #include "FCALTestbeamSetup.hh"
-#include "FCALSteppingVerbose.hh"
-#include "FCALPrimaryGeneratorAction.hh"
 #include "G4PhysListFactory.hh"
-#include "FCALRunAction.hh"
-#include "FCALTBEventAction.hh"
-#include "FCALSteppingAction.hh"
-
+#include "FCALActionInitialization.hh"
 
 
 int main(int argc,char** argv) {
 
   // choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new FCALSteppingVerbose);
-     
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
+    
   // Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
-
+#ifdef G4MULTITHREADED
+    G4MTRunManager* runManager = new G4MTRunManager;
+#else
+    G4RunManager* runManager = new G4RunManager;
+#endif
+    
   // set mandatory initialization classes
   FCALTestbeamSetup* detector = new FCALTestbeamSetup;
   runManager->SetUserInitialization(detector);
@@ -83,22 +83,9 @@ int main(int argc,char** argv) {
   visManager->Initialize();
 #endif
     
-  // set user action classes
-  runManager->SetUserAction(new FCALPrimaryGeneratorAction());
+  runManager->SetUserInitialization(new FCALActionInitialization);
+    
 
-  FCALRunAction* RunAction = new FCALRunAction;
-  runManager ->SetUserAction(RunAction);
-
-  FCALSteppingAction* StepAction = new FCALSteppingAction;
-  runManager->SetUserAction(StepAction);
-
-  //  runManager->SetUserAction(new FCALRunAction);
-  
-  runManager->SetUserAction(new FCALTBEventAction(StepAction));
-  
-
-  //Initialize G4 kernel
-  runManager->Initialize();
     
   // get the pointer to the User Interface manager 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();  

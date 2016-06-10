@@ -1,4 +1,4 @@
-$Id: History 76263 2013-11-08 11:41:52Z gcosmo $
+$Id: History 85608 2014-10-31 11:23:30Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 31, 2014  Gabriele Cosmo                geometry-V10-00-02
+----------------------------
+- Fixed internal link dependency on USolids module in CMake scripts.
+
+Oct 29, 2014  Gabriele Cosmo                geometry-V10-00-01/00
+----------------------------
+- Moved solids/usolids module to source/externals.
+- Groups tags geommng-V10-00-05 and geomsolids-V10-00-02, on top of
+  geant4-10-00-ref-08.
 
 Nov 7, 2013   Gabriele Cosmo                geometry-V09-06-03
 ----------------------------

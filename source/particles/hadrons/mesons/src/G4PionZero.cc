@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PionZero.cc 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4PionZero.cc 79357 2014-02-25 10:06:54Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -37,6 +37,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4PionZero.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
@@ -71,14 +72,17 @@ G4PionZero* G4PionZero::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,   0.1349766*GeV,   7.8e-06*MeV,         0.0,
+                 name,   0.1349766*GeV,  7.73e-06*MeV,         0.0,
                     0,              -1,            +1,
                     2,               0,            -1,
               "meson",               0,             0,         111,
-                false,       8.4e-8*ns,          NULL,
+                false,      8.52e-8*ns,          NULL,
                 false,            "pi",          111);
 
- //create Decay Table
+   // Life time is given from width
+   anInstance->SetPDGLifeTime( hbar_Planck/(anInstance->GetPDGWidth()) );
+     
+  //create Decay Table
   G4DecayTable* table = new G4DecayTable();
 
   // create a decay channel

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreComptonModifiedModel.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4LivermoreComptonModifiedModel.hh 82874 2014-07-15 15:25:29Z gcosmo $
 //
 // Author: Sebastien Incerti
 //         30 October 2008
@@ -75,9 +75,6 @@ protected:
   G4ParticleChangeForGamma* fParticleChange;
 
 private:
-
-  G4double lowEnergyLimit;  
-  G4double highEnergyLimit; 
   G4bool isInitialised;
   G4int verboseLevel;
   

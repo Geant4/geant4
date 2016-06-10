@@ -1,5 +1,5 @@
 
-$Id: History 76607 2013-11-13 08:46:40Z gcosmo $
+$Id: History 86201 2014-11-07 15:22:50Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,48 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ November 7, 2014  G.Cosmo               geom-bool-V10-00-09
+ - Fixed Coverity defects in G4UMultiUnion::CreatePolyhedron() for
+   memory leaks.
+
+ October 3, 2014  G.Cosmo                geom-bool-V10-00-08
+ - Avoid polyhedron deletion (and therefore mutexing) in CreatePolyhedron
+   for G4DisplacedSolid, as not necessary.
+
+ September 25, 2014  T.Nikitina          geom-bool-V10-00-07
+ - Additional correction to G4UMultiUnion::CreatePolyhedron(), to take into
+   account possible displacement of first component in the structure and have
+   it visualised correctly.
+
+ September 18, 2014  T.Nikitina          geom-bool-V10-00-06
+ - Corrected implementation of CreatePolyhedron() in G4UMultiUnion wrapper.
+
+ September 1, 2014  G.Cosmo              geom-bool-V10-00-05
+ - Fixed use of polyhedron pointer, to avoid race condition in MT
+   when parameterised volumes are visualised.
+
+ Jul 18, 2014  G.Cosmo                   geom-bool-V10-00-04
+ - G4UMultiUnion: correction in destructor to avoid deletion of polyhedron,
+   as not owned by the structure.
+   Corrected initialisation of base class name to adopt string provided as
+   input parameter instead of hard-coded name.
+   Adapted implementation of GetTransformation() to API correction in
+   UMultiUnion. Requires co-working tag "geom-usolids-V10-00-12" with
+   'usolids' module.
+
+ Jul 04, 2014  G.Cosmo                   geom-bool-V10-00-03
+ - Avoid leak in G4UMultiUnion::AddNode() for transformations being passed,
+   now that UMultiUnion is locally caching them.
+
+ Jul 01, 2014  G.Cosmo                   geom-bool-V10-00-02
+ - Fixed assignment operator signature in G4UMultiUnion wrapper.
+
+ Jun 20, 2014  G.Cosmo                   geom-bool-V10-00-01
+ - Correction to G4MultiUnion::AddNode() for treatment of transformations.
+
+ May 23, 2014  G.Cosmo                   geom-bool-V10-00-00
+ - Enabled G4MultiUnion wrapper.
 
  November 13, 2013  G.Cosmo              geom-bool-V09-06-05, 04
  - Removed G4MultiUnion and related wrapper, as not yet ready for release.

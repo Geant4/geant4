@@ -39,11 +39,10 @@
 #ifndef XrayFluoMercuryDetectorConstruction_hh
 #define XrayFluoMercuryDetectorConstruction_hh 1
 
-#include <CLHEP/Units/SystemOfUnits.h>
-
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "G4RotationMatrix.hh"
+#include "G4Cache.hh"
 #include "XrayFluoSiLiDetectorType.hh"
 #include "XrayFluoHPGeDetectorType.hh"
 #include "XrayFluoSD.hh"
@@ -72,6 +71,8 @@ public:
 public:
   
   G4VPhysicalVolume* Construct();
+ 
+  void ConstructSDandField();
   
   void UpdateGeometry();
 
@@ -89,37 +90,37 @@ public:
 
   void PrintApparateParameters(); 
 
-  XrayFluoVDetectorType* GetDetectorType();
+  XrayFluoVDetectorType* GetDetectorType() const;
 
 
-  G4double GetWorldSizeZ()           {return WorldSizeZ;}; 
-  G4double GetWorldSizeXY()          {return WorldSizeXY;};
+  G4double GetWorldSizeZ() const     {return WorldSizeZ;}; 
+  G4double GetWorldSizeXY() const         {return WorldSizeXY;};
   
-  G4double GetDeviceThickness()      {return DeviceThickness;}; 
-  G4double GetDeviceSizeX()          {return DeviceSizeX;};
-  G4double GetDeviceSizeY()          {return DeviceSizeY;};
-  G4double GetPixelSizeXY()          {return PixelSizeXY;};
-  G4double GetContactSizeXY()        {return ContactSizeXY;};
+  G4double GetDeviceThickness() const     {return DeviceThickness;}; 
+  G4double GetDeviceSizeX() const         {return DeviceSizeX;};
+  G4double GetDeviceSizeY() const         {return DeviceSizeY;};
+  G4double GetPixelSizeXY() const         {return PixelSizeXY;};
+  G4double GetContactSizeXY() const         {return ContactSizeXY;};
 
-  G4int GetNbOfPixels()              {return NbOfPixels;}; //mandatory for XrayFluoSD 
-  G4int GetNbOfPixelRows()           {return NbOfPixelRows;}; 
-  G4int GetNbOfPixelColumns()        {return NbOfPixelColumns;}; 
+  G4int GetNbOfPixels() const  {return NbOfPixels;}; //mandatory for XrayFluoSD 
+  G4int GetNbOfPixelRows() const    {return NbOfPixelRows;}; 
+  G4int GetNbOfPixelColumns() const        {return NbOfPixelColumns;}; 
   
-  G4Material* GetOhmicPosMaterial()  {return OhmicPosMaterial;};
-  G4double    GetOhmicPosThickness() {return OhmicPosThickness;};      
+  G4Material* GetOhmicPosMaterial() const  {return OhmicPosMaterial;};
+  G4double    GetOhmicPosThickness() const {return OhmicPosThickness;};      
   
-  G4Material* GetOhmicNegMaterial()  {return OhmicNegMaterial;};
-  G4double    GetOhmicNegThickness() {return OhmicNegThickness;};      
+  G4Material* GetOhmicNegMaterial() const  {return OhmicNegMaterial;};
+  G4double    GetOhmicNegThickness() const {return OhmicNegThickness;};      
   
-  const G4VPhysicalVolume* GetphysiWorld() {return physiWorld;};  
-  const G4VPhysicalVolume* GetHPGe()        {return physiHPGe;};
-  const G4VPhysicalVolume* GetMercury()     {return physiMercury;};
+  const G4VPhysicalVolume* GetphysiWorld() const {return physiWorld;};  
+  const G4VPhysicalVolume* GetHPGe() const        {return physiHPGe;};
+  const G4VPhysicalVolume* GetMercury() const    {return physiMercury;};
 
-  const G4VPhysicalVolume* GetphysiPixel()  {return physiPixel;};           
-  const G4VPhysicalVolume* GetOhmicPos()    {return physiOhmicPos;};
-  const G4VPhysicalVolume* GetOhmicNeg()    {return physiOhmicNeg;};
+  const G4VPhysicalVolume* GetphysiPixel() const {return physiPixel;};           
+  const G4VPhysicalVolume* GetOhmicPos() const    {return physiOhmicPos;};
+  const G4VPhysicalVolume* GetOhmicNeg() const     {return physiOhmicNeg;};
 
-  const G4VPhysicalVolume* GetOptic()    {return physiOptic;};
+  const G4VPhysicalVolume* GetOptic() const    {return physiOptic;};
   
 private:
   
@@ -232,23 +233,21 @@ private:
   
   XrayFluoMercuryDetectorMessenger* detectorMessenger; //pointer to the Messenger
 
-  XrayFluoSD* HPGeSD;  //pointer to the sensitive detector
-
-
-  
+  G4Cache<XrayFluoSD*> HPGeSD;  //pointer to the sensitive detector
+ 
 public:
 
-  G4Material* GetMercuryMaterial() {return mercuryMaterial;}; 
-  G4Material* GetPixelMaterial()   {return pixelMaterial;}; 
+  G4Material* GetMercuryMaterial() const {return mercuryMaterial;}; 
+  G4Material* GetPixelMaterial() const  {return pixelMaterial;}; 
   
-  G4double GetMercuryDia()         {return mercuryDia;};
-  G4double GetSunDia()             {return sunDia;};
+  G4double GetMercuryDia()  const       {return mercuryDia;};
+  G4double GetSunDia() const {return sunDia;};
 
   //Inclinaton of the orbit respect Mercury respect the equator (latitude)
 
-  G4double GetOrbitInclination()   {return 180 * CLHEP::deg - ThetaHPGe;}; 
-  G4double GetOrbitDistance()      {return distDe;};
-  G4double GetOpticAperture()      {return opticAperture;};  
+  G4double GetOrbitInclination() const  {return 180 * CLHEP::deg - ThetaHPGe;}; 
+  G4double GetOrbitDistance() const     {return distDe;};
+  G4double GetOpticAperture() const {return opticAperture;};  
 
 
   

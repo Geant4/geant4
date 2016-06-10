@@ -1,4 +1,4 @@
-$Id: History 77479 2013-11-25 10:01:22Z gcosmo $
+$Id: History 87360 2014-12-01 16:07:16Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,73 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+28th November 2014  John Allison  (modeling-V10-00-12)
+- G4TrajectoriesModel.cc: Tidied.
+
+29th October 2014  Makoto Asai (modeling-V10-00-11)
+- G4TrajectoriesModel.cc: Further fix.
+
+27th October 2014  Makoto Asai (modeling-V10-00-10)
+- G4TrajectoriesModel.cc: Protect against incorrect casting if G4RunManager
+  base class is used in multithreaded Geant4 installation.
+
+22nd October 2014  Laurent Garnier  (modeling-V10-00-09 require greps-V10-00-08)
+- G4ModelingParameters.cc
+  o Change constant in .cc nSidesMin by GetMinLineSegmentsPerCircle() in the G4VisAttribute
+
+22nd October 2014  John Allison  (modeling-V10-00-08)
+- G4TrajectoriesModel.cc: Get appropriate run manager in MT mode.
+
+11th August 2014  John Allison  (modeling-V10-00-07)
+- Corrected date. modeling-V10-00-06 should be August.
+
+9th July 2014  John Allison  (modeling-V10-00-06)
+- G4AxesModel: Added a parameter for text size.  (Default 10 pixels.)
+- G4TrajectoryDrawerUtils.cc and G4TouchableDumpScene.cc:
+  o Fixed small memory leak.  (AttValues must be deleted by the user
+    after use.)
+
+19th May 2014  John Allison  (modeling-V10-00-05)
+- Introduced G4TouchableDumpScene.
+- Introduced G4PseudoScene.  The following now inherit it:
+  o G4PhysicalVolumeSearchScene
+  o G4BoundingSphereScene
+  o G4TouchableDumpScene
+- G4PhysicalVolumeModel
+  o Allow instantiation of an empty model via the default constructor so
+    that it can be used, for example, to get the G4AttDefs.  If it
+    proves to be a problem we might have to disallow it again, but it is
+    unlikley to be used except by visualisation experts.  See, for example,
+    /vis/list, where it is used simply to get a list of G4AttDefs
+  o Introduced Abort - all further geometry traversal is stopped.  (This
+    is useful in G4TouchableDumpScene - once the required touchable is found
+    there is no need to continue.)
+  o Tidied.
+
+6th March 2014  John Allison  (modeling-V10-00-04)
+- G4PhysicalVolumeModel.cc:
+  o More careful protection of zero pointers in constructor.
+
+26th January 2014  John Allison  (modeling-V10-00-02)
+- GNUmakefile: Added dependency on run category.
+- G4PhysicalVolumeModel:
+  o Augmented constructor to set sensible values of some data members,
+    namely fpCurrentPV, fpCurrentLV, fpCurrentMaterial and
+    fpCurrentTransform, so that CreateCurrentAttValues gives the G4Atts
+    of the top volume if called without any further processing.
+
+23rd January 2014  John Allison  (modeling-V10-00-01)
+- G4TrajectoriesModel:
+  o Add run ID.
+  o Initialise fRunID and fEventID to -1.
+
+13th January 2014  John Allison  (modeling-V10-00-00)
+- Requires greps-V10-00-01.
+- G4TrajectoryDrawByAttribute:
+  o Migrated to operator<< for const reference G4AttDefs map.
+- G4TrajectoriesModel:
+  o Added SetCurrentTrajectory and SetEventID.
 
 15th November 2013  John Allison  (modeling-V09-06-22)
 - Some changes as suggested by PVS.

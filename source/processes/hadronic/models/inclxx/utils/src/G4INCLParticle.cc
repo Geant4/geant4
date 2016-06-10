@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -93,7 +94,7 @@ namespace G4INCL {
     ID = nextID;
     nextID++;
     if(theEnergy <= 0.0) {
-      INCL_WARN("Particle with energy " << theEnergy << " created." << std::endl);
+      INCL_WARN("Particle with energy " << theEnergy << " created." << '\n');
     }
     setType(t);
     setMass(getInvariantMass());
@@ -118,7 +119,7 @@ namespace G4INCL {
     nextID++;
     setType(t);
     if( isResonance() ) {
-      INCL_ERROR("Cannot create resonance without specifying its momentum four-vector." << std::endl);
+      INCL_ERROR("Cannot create resonance without specifying its momentum four-vector." << '\n');
     }
     G4double energy = std::sqrt(theMomentum.mag2() + theMass*theMass);
     theEnergy = energy;
@@ -129,7 +130,7 @@ namespace G4INCL {
     const G4double p2 = theMomentum.mag2();
     G4double newp2 = theEnergy*theEnergy - theMass*theMass;
     if( newp2<0.0 ) {
-      INCL_ERROR("Particle has E^2 < m^2." << std::endl << print());
+      INCL_ERROR("Particle has E^2 < m^2." << '\n' << print());
       newp2 = 0.0;
       theEnergy = theMass;
     }
@@ -141,5 +142,29 @@ namespace G4INCL {
   G4double Particle::adjustEnergyFromMomentum() {
     theEnergy = std::sqrt(theMomentum.mag2() + theMass*theMass);
     return theEnergy;
+  }
+
+  void ParticleList::rotatePositionAndMomentum(const G4double angle, const ThreeVector &axis) const {
+    for(const_iterator i=begin(), e=end(); i!=e; ++i) {
+      (*i)->rotatePositionAndMomentum(angle, axis);
+    }
+  }
+
+  void ParticleList::rotatePosition(const G4double angle, const ThreeVector &axis) const {
+    for(const_iterator i=begin(), e=end(); i!=e; ++i) {
+      (*i)->rotatePosition(angle, axis);
+    }
+  }
+
+  void ParticleList::rotateMomentum(const G4double angle, const ThreeVector &axis) const {
+    for(const_iterator i=begin(), e=end(); i!=e; ++i) {
+      (*i)->rotateMomentum(angle, axis);
+    }
+  }
+
+  void ParticleList::boost(const ThreeVector &b) const {
+    for(const_iterator i=begin(), e=end(); i!=e; ++i) {
+      (*i)->boost(b);
+    }
   }
 }

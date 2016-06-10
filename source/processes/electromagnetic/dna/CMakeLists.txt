@@ -7,13 +7,13 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt 66892 2013-01-17 10:57:59Z gunter $
+# $Id: CMakeLists.txt 83860 2014-09-19 10:26:17Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
-add_subdirectory(processes)
-add_subdirectory(models)
-add_subdirectory(utils)
 add_subdirectory(management)
 add_subdirectory(molecules/management)
 add_subdirectory(molecules/types)
+add_subdirectory(utils)
+add_subdirectory(models)
+add_subdirectory(processes)

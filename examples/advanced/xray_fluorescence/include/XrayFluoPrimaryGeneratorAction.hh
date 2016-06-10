@@ -57,7 +57,7 @@ class XrayFluoPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
 
-    XrayFluoPrimaryGeneratorAction(XrayFluoDetectorConstruction*); 
+    XrayFluoPrimaryGeneratorAction(const XrayFluoDetectorConstruction*); 
    
    ~XrayFluoPrimaryGeneratorAction();
 
@@ -88,12 +88,13 @@ private:
   G4ParticleGun*                particleGun;	  
 
   //pointer to the geometry
-  XrayFluoDetectorConstruction*    XrayFluoDetector;  
+  const XrayFluoDetectorConstruction*    XrayFluoDetector;  
   
+  //pointer to the run manager (master)
+  const XrayFluoRunAction* runAction;
+
   //messenger of this class
   XrayFluoPrimaryGeneratorMessenger* gunMessenger; 
-
-  XrayFluoRunAction*  runManager;
   
   //flag for a random impact point 
   G4String                      rndmFlag;   
@@ -112,10 +113,6 @@ private:
 
   // the flag to load  particle coming from Rayleigh scattering
   G4bool rayleighFlag; 
-
-  // data for storage of phase space previously  created
-  std::vector<G4double>* particleEnergies;
-  std::vector<G4String>* particleTypes;
 
   G4ThreeVector detectorPosition;
 

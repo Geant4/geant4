@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSSphereSurfaceCurrent.cc 76272 2013-11-08 11:53:00Z gcosmo $
+// $Id: G4PSSphereSurfaceCurrent.cc 81087 2014-05-20 15:44:27Z gcosmo $
 //
 // G4PSSphereSurfaceCurrent
 #include "G4PSSphereSurfaceCurrent.hh"
@@ -56,7 +56,7 @@
 G4PSSphereSurfaceCurrent::G4PSSphereSurfaceCurrent(G4String name, 
 					 G4int direction, G4int depth)
     :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
-     weighted(true),divideByArea(true)
+     EvtMap(0),weighted(true),divideByArea(true)
 {
     DefineUnitAndCategory();
     SetUnit("percm2");
@@ -67,7 +67,7 @@ G4PSSphereSurfaceCurrent::G4PSSphereSurfaceCurrent(G4String name,
 						   const G4String& unit,
 						   G4int depth)
     :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
-     weighted(true),divideByArea(true)
+     EvtMap(0),weighted(true),divideByArea(true)
 {
     DefineUnitAndCategory();
     SetUnit(unit);

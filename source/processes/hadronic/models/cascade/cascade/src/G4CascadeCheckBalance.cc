@@ -49,6 +49,7 @@
 //		or abs. to pass (instead of requiring both)
 // 20121002  M. Kelsey -- Add strangeness check (useful for Omega- beam)
 // 20130621  Add interface to take G4Fragment input instead of G4InuclNuclei.
+// 20140930  Change name from "const char*" to "const G4String"
 
 #include "G4CascadeCheckBalance.hh"
 #include "globals.hh"
@@ -65,7 +66,7 @@
 
 const G4double G4CascadeCheckBalance::tolerance = 1e-6;	// How small is zero?
 
-G4CascadeCheckBalance::G4CascadeCheckBalance(const char* owner)
+G4CascadeCheckBalance::G4CascadeCheckBalance(const G4String& owner)
   : G4VCascadeCollider(owner), relativeLimit(G4CascadeCheckBalance::tolerance),
     absoluteLimit(G4CascadeCheckBalance::tolerance), initialBaryon(0),
     finalBaryon(0), initialCharge(0), finalCharge(0), initialStrange(0),
@@ -73,7 +74,7 @@ G4CascadeCheckBalance::G4CascadeCheckBalance(const char* owner)
 
 G4CascadeCheckBalance::G4CascadeCheckBalance(G4double relative,
 					     G4double absolute,
-					     const char* owner)
+					     const G4String& owner)
   : G4VCascadeCollider(owner), relativeLimit(relative),
     absoluteLimit(absolute), initialBaryon(0), finalBaryon(0),
     initialCharge(0), finalCharge(0), initialStrange(0),
@@ -143,8 +144,8 @@ void G4CascadeCheckBalance::collide(const G4Fragment& fragment,
 
   // Copy initial state directly from fragment (no bullet/target sums)
   initial = fragment.GetMomentum();
-  initialCharge = G4int(fragment.GetZ());
-  initialBaryon = G4int(fragment.GetA());
+  initialCharge = fragment.GetZ_asInt();
+  initialBaryon = fragment.GetA_asInt();
   initialStrange = 0;				// No hypernuclei at present
 
   // Final state totals are computed for us

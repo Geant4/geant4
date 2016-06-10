@@ -98,7 +98,7 @@ double RandGaussQ::transformQuick (double r) {
     sign = -1.0;
   } 
 
-  register int index;
+  int index;
   double  dx;
 
   if ( r >= Table1step ) { 

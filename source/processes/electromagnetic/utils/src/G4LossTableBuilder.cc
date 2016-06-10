@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.cc 71484 2013-06-17 08:12:51Z gcosmo $
+// $Id: G4LossTableBuilder.cc 81058 2014-05-20 09:04:28Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -95,7 +95,8 @@ G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
 				   const std::vector<G4PhysicsTable*>& list)
 {
   size_t n_processes = list.size();
-  //G4cout << "Nproc= " << n_processes << " Ncoup= " << dedxTable->size() << G4endl;
+  //G4cout << "Nproc= " << n_processes << " Ncoup= " 
+  //<< dedxTable->size() << G4endl;
   if(1 >= n_processes) { return; }
 
   size_t nCouples = dedxTable->size();
@@ -103,7 +104,8 @@ G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
 
   for (size_t i=0; i<nCouples; ++i) {
     //    if ((*theFlag)[i]) {
-    G4PhysicsLogVector* pv0 = static_cast<G4PhysicsLogVector*>((*(list[0]))[i]);
+    G4PhysicsLogVector* pv0 = 
+      static_cast<G4PhysicsLogVector*>((*(list[0]))[i]);
     if(pv0) {
       size_t npoints = pv0->GetVectorLength();
       G4PhysicsLogVector* pv = new G4PhysicsLogVector(*pv0);
@@ -151,7 +153,8 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
     G4double ehigh = pv->Energy(npoints-1);
     G4double dedx1 = (*pv)[0];
 
-    //G4cout << "i= " << i << "npoints= " << npoints << " dedx1= " << dedx1 << G4endl;
+    //G4cout << "i= " << i << "npoints= " << npoints << " dedx1= " 
+    //<< dedx1 << G4endl;
 
     // protection for specific cases dedx=0
     if(dedx1 == 0.0) {
@@ -214,9 +217,10 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LossTableBuilder::BuildInverseRangeTable(const G4PhysicsTable* rangeTable,
-						G4PhysicsTable* invRangeTable,
-						G4bool isIonisation)
+void 
+G4LossTableBuilder::BuildInverseRangeTable(const G4PhysicsTable* rangeTable,
+					   G4PhysicsTable* invRangeTable,
+					   G4bool isIonisation)
 // Build inverse range table from the energy loss table
 {
   size_t nCouples = rangeTable->size();
@@ -277,7 +281,9 @@ G4LossTableBuilder::InitialiseBaseMaterials(G4PhysicsTable* table)
 
   // expand vectors
   if(nFlags < nCouples) {
-    for(size_t i=nFlags; i<nCouples; ++i) { theDensityFactor->push_back(1.0); }
+    for(size_t i=nFlags; i<nCouples; ++i) { 
+      theDensityFactor->push_back(1.0); 
+    }
     for(size_t i=nFlags; i<nCouples; ++i) { theDensityIdx->push_back(-1); }
     for(size_t i=nFlags; i<nCouples; ++i) { theFlag->push_back(true); }
   }
@@ -458,7 +464,8 @@ G4LossTableBuilder::BuildTableForModel(G4PhysicsTable* aTable,
       if(aVector) {
 	aVector->SetSpline(spline);
         for(G4int j=0; j<=n; ++j) {
-          aVector->PutValue(j, model->Value(couple, part, aVector->Energy(j)));
+          aVector->PutValue(j, model->Value(couple, part, 
+					    aVector->Energy(j)));
 	}
 	if(spline) { aVector->FillSecondDerivatives(); }
       }

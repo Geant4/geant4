@@ -1,10 +1,11 @@
-# $Id: berger.mac 76464 2013-11-11 10:22:56Z gcosmo $
+# $Id: berger.mac 81528 2014-06-02 16:21:24Z vnivanch $
 #
 # macro file for TestEm5.cc    
 #
 # energy deposit by 1 MeV electrons in silicon counters.
 # M.J.Berger et al. NIM 69 (1969) page 181
 #     		    
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
 /run/verbose 2
 #
@@ -20,7 +21,7 @@
 ###/testem/phys/addPhysics emstandard_opt0
 /testem/phys/addPhysics local
 #
-/testem/phys/setCuts 10 um   
+/run/setCut 10 um   
 #
 /run/initialize
 #

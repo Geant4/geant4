@@ -40,6 +40,7 @@ G4VMPIsession::G4VMPIsession()
   is_master_ = g4mpi_-> IsMaster();
   is_slave_  = g4mpi_-> IsSlave();
   rank_ = g4mpi_-> GetRank();
+
 }
 
 // --------------------------------------------------------------------------

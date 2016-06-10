@@ -650,8 +650,7 @@ protected:
     //::printf("debug : write_free_segments : seg list :\n");
 
     uint32 nbytes = 0;
-   {std::list<free_seg*>::const_iterator it;
-    for(it=m_free_segs.begin();it!=m_free_segs.end();++it) {
+   {tools_lforcit(free_seg*,m_free_segs,it) {
       nbytes += (*it)->record_size();
       //::printf("debug : write_free_segments : %lu %lu\n",
       //         (*it)->first(),(*it)->last());
@@ -666,8 +665,7 @@ protected:
 
    {char* pos = key.data_buffer();
     wbuf wb(m_out,byte_swap(),key.eob(),pos);
-    std::list<free_seg*>::const_iterator it;
-    for(it=m_free_segs.begin();it!=m_free_segs.end();++it) {
+    tools_lforcit(free_seg*,m_free_segs,it) {
       if(!(*it)->fill_buffer(wb)) return false;
     }}
 

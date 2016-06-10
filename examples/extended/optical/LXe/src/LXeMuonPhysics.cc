@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeMuonPhysics.cc 68752 2013-04-05 10:23:47Z gcosmo $
+// $Id: LXeMuonPhysics.cc 85911 2014-11-06 08:56:31Z gcosmo $
 //
 /// \file optical/LXe/src/LXeMuonPhysics.cc
 /// \brief Implementation of the LXeMuonPhysics class
@@ -40,17 +40,6 @@
 
 LXeMuonPhysics::LXeMuonPhysics(const G4String& name)
                    :  G4VPhysicsConstructor(name) {
-  fMuPlusIonisation = NULL;
-  fMuPlusMultipleScattering = NULL;
-  fMuPlusBremsstrahlung = NULL;
-  fMuPlusPairProduction = NULL;
-
-  fMuMinusIonisation = NULL;
-  fMuMinusMultipleScattering = NULL;
-  fMuMinusBremsstrahlung = NULL;
-  fMuMinusPairProduction = NULL;
-
-  fMuMinusCaptureAtRest = NULL;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,6 +55,11 @@ LXeMuonPhysics::~LXeMuonPhysics() {}
 #include "G4MuonMinus.hh"
 #include "G4NeutrinoMu.hh"
 #include "G4AntiNeutrinoMu.hh"
+#include "G4Neutron.hh"
+#include "G4Proton.hh"
+#include "G4PionZero.hh"
+#include "G4PionPlus.hh"
+#include "G4PionMinus.hh"
 
 void LXeMuonPhysics::ConstructParticle()
 {
@@ -74,6 +68,12 @@ void LXeMuonPhysics::ConstructParticle()
   G4MuonMinus::MuonMinusDefinition();
   G4NeutrinoMu::NeutrinoMuDefinition();
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
+  //These are needed for the mu- capture
+    G4Neutron::Neutron();
+    G4Proton::Proton();
+    G4PionMinus::PionMinus();
+    G4PionZero::PionZero();
+    G4PionPlus::PionPlus();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,17 +82,26 @@ void LXeMuonPhysics::ConstructParticle()
 
 void LXeMuonPhysics::ConstructProcess()
 {
-  fMuPlusIonisation = new G4MuIonisation();
-  fMuPlusMultipleScattering = new G4MuMultipleScattering();
-  fMuPlusBremsstrahlung=new G4MuBremsstrahlung();
-  fMuPlusPairProduction= new G4MuPairProduction();
+  G4MuIonisation* fMuPlusIonisation =
+    new G4MuIonisation();
+  G4MuMultipleScattering* fMuPlusMultipleScattering =
+    new G4MuMultipleScattering();
+  G4MuBremsstrahlung* fMuPlusBremsstrahlung=
+    new G4MuBremsstrahlung();
+  G4MuPairProduction* fMuPlusPairProduction=
+    new G4MuPairProduction();
 
-  fMuMinusIonisation = new G4MuIonisation();
-  fMuMinusMultipleScattering = new G4MuMultipleScattering;
-  fMuMinusBremsstrahlung = new G4MuBremsstrahlung();
-  fMuMinusPairProduction = new G4MuPairProduction();
+  G4MuIonisation* fMuMinusIonisation =
+    new G4MuIonisation();
+  G4MuMultipleScattering* fMuMinusMultipleScattering =
+    new G4MuMultipleScattering();
+  G4MuBremsstrahlung* fMuMinusBremsstrahlung =
+    new G4MuBremsstrahlung();
+  G4MuPairProduction* fMuMinusPairProduction =
+    new G4MuPairProduction();
 
-  fMuMinusCaptureAtRest = new G4MuonMinusCaptureAtRest();
+  G4MuonMinusCapture* fMuMinusCaptureAtRest =
+    new G4MuonMinusCapture();
 
   G4ProcessManager * pManager = 0;
 

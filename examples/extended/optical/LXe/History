@@ -1,4 +1,4 @@
-$Id: History 77882 2013-11-29 08:39:07Z gcosmo $
+$Id: History 85911 2014-11-06 08:56:31Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,40 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 4, 2014 A. Dotti  (LXe-V10-00-08)
+- Add Proton and Neutron and pions to local Mu physics list
+  needed for mu- capture at rest process
+
+October 30, 2014 A. Dotti  (LXe-V10-00-07)
+- Use correct mu- stopping process
+
+October 28, 2014 A. Dotti  (LXe-V10-00-06)
+- Retagging.
+
+October 27, 2014 A. Dotti  (LXe-V10-00-05)
+- New UI commands structure. Requires 
+  xrays-V10-00-06, op-V10-00-09, phys-ctor-em-V10-00-17
+
+July 11, 2014 P. Gumplinger (LXe-V10-00-04)
+- Use implicit dimensioning for all arrays and assert that they are the
+  same (thanks to M. Kelsey for suggesting this)
+
+June 2, 2014 A. Dotti (LXe-V10-00-03)
+- Remove shared process pointers between threads.
+
+January 7, 2014 P. Gumplinger (LXe-V10-00-02)
+- reduce the size of the output file
+
+December 18, 2013 P. Gumplinger (LXe-V10-00-01)
+- rearrange /optics_engine commands in LXe.in according to what
+  is allowed when with phys-ctor-em-V10-00-01 (G4OpticalPhysics)
+
+December 04, 2013 P. Gumplinger (LXe-V10-00-00)
+- Fixes in gui.mac:
+  Commented out command specific to B2 example
+  Let execute vis.mac first to make the command in added menus available;
+  Corrected wireframe parameter
 
 November 28, 2013 P. Gumplinger (LXe-V09-06-17)
 - add icons.mac run.png

@@ -1,11 +1,13 @@
-# $Id: tileCal.mac 66241 2012-12-13 18:34:42Z gunter $
+# $Id: tileCal.mac 85425 2014-10-29 08:24:37Z gcosmo $
 #
 # Macro file for "TestEm3.cc" 
 #
 # ATLAS tileCal
 #
 /control/verbose 2
-/run/verbose 1
+/control/cout/ignoreThreadsExcept 0
+/run/verbose 2
+/run/numberOfThreads 2
 #
 /testem/det/setNbOfLayers 50
 /testem/det/setNbOfAbsor  2
@@ -14,17 +16,17 @@
 /testem/det/setSizeYZ 20 cm
 #
 /testem/phys/addPhysics  emstandard_opt0
-/testem/phys/setCuts 1 um
+/run/setCut 1 um
 #
 /run/initialize
 #
-/analysis/setFileName mu.1mm
+/analysis/setFileName mu_1mm
 /analysis/h1/set 1 100  500.  1000.  MeV
 /analysis/h1/set 2 100    0.    50.  MeV
 #
 /gun/particle mu+
 /gun/energy 20 GeV
 #
-/testem/event/printModulo 4000
+/run/printProgress 4000
 #
 /run/beamOn 20000

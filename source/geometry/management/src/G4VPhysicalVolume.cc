@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.cc 74466 2013-10-07 15:36:32Z gcosmo $
+// $Id: G4VPhysicalVolume.cc 83991 2014-09-26 09:22:26Z gcosmo $
 //
 // 
 // class G4VPhysicalVolume Implementation
@@ -105,9 +105,6 @@ G4VPhysicalVolume::G4VPhysicalVolume( __void__& )
   // Register to store
   //
   instanceID = subInstanceManager.CreateSubInstance();
-
-  this->SetRotation( 0 );                             // G4MT_rot = 0; 
-  this->SetTranslation( G4ThreeVector(0., 0., 0.) );  // G4MT_trans = ...
 
   G4PhysicalVolumeStore::Register(this);
 }

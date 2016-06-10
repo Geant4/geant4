@@ -66,11 +66,19 @@ namespace  CexmcPrivate
         static const CexmcBasePhysicsUsed  value = Cexmc_QGSP_BIC_EMY;
     };
 #else
+#ifdef CEXMC_USE_QGSP_BERT
     template  <>
     struct  CexmcBasePhysicsInstance< QGSP_BERT >
     {
         static const CexmcBasePhysicsUsed  value = Cexmc_QGSP_BERT;
     };
+#else
+    template  <>
+    struct  CexmcBasePhysicsInstance< FTFP_BERT >
+    {
+        static const CexmcBasePhysicsUsed  value = Cexmc_FTFP_BERT;
+    };
+#endif
 #endif
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.hh 68048 2013-03-13 14:34:07Z gcosmo $
+// $Id: G4CoupledTransportation.hh 86964 2014-11-21 11:47:44Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -124,7 +124,7 @@ class G4CoupledTransportation : public G4VProcess
      inline void ResetKilledStatistics( G4int report = 1);      
      // Statistics for tracks killed (currently due to looping in field)
 
-     inline G4bool EnableUseMagneticMoment(G4bool useMoment=true); 
+     static G4bool EnableUseMagneticMoment(G4bool useMoment=true); 
      // Whether to deflect particles with force due to magnetic moment
 
   public:  // without description
@@ -201,7 +201,7 @@ class G4CoupledTransportation : public G4VProcess
      G4ParticleChangeForTransport fParticleChange;
        // New ParticleChange
 
-     G4double endpointDistance;
+     G4double fEndpointDistance;
 
 
   // Thresholds for looping particles: 
@@ -221,13 +221,16 @@ class G4CoupledTransportation : public G4VProcess
 
      G4SafetyHelper* fpSafetyHelper;  // To pass it the safety value obtained
 
-  // Whether to track state change from magnetic moment in a B-field
-     G4bool   fUseMagneticMoment; 
-
   // Verbosity 
      G4int    fVerboseLevel;
        // Verbosity level for warnings
        // eg about energy non-conservation in magnetic field.
+
+  // Whether to track state change from magnetic moment in a B-field
+  private:
+     friend class G4Transportation;
+     static G4bool fUseMagneticMoment; 
+
 };
 
 #include "G4CoupledTransportation.icc"

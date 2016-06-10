@@ -1,4 +1,4 @@
-$Id: History 77330 2013-11-22 14:46:29Z gcosmo $
+$Id: History 87208 2014-11-27 08:57:44Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,14 +17,125 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-November 22nd, 2013 - I.Hrivnacova  (geomnav-V09-06-19)
+November 27, 2014 - G.Cosmo (geomnav-V10-00-19)
+---------------------------
+- Added protection in G4ReplicaNavigation::DistanceToOutRad() for potential
+  rare cases of negative value to sqrt() in equation calculation for rmin/rmax
+  intersection.
+- Improved warning printout in G4Navigator::GetGlobalExitNormal().
+
+November 20, 2014 - J.Apostolakis (geomnav-V10-00-18, 17)
+---------------------------------
+- G4ErrorPropagationNavigator: fix to make normal a unit vector,
+  and fix for Coverity issue, to protect against null 'target'.
+  Addressing problem report #1679.
+    
+November 19, 2014 - G.Cosmo (geomnav-V10-00-16)
+---------------------------
+- Some code cleanup in G4Navigator source.
+
+November 18, 2014 - J.Apostolakis (geomnav-V10-00-15)
+---------------------------------
+- G4ErrorPropagationNavigator: added GetGlobalExitNormal() method to
+  correspond to update of G4Navigator interface in Geant4 9.5.
+  Addresses problem report #1679.
+- G4Navigator: small fix to calculation of stored step endpoint, for steps
+  that do not hit a boundary.
+- Fixed GNUmakefile in test.
+
+November 14, 2014 - J.Apostolakis (geomnav-V10-00-13,14)
+---------------------------------
+- G4Navigator: Corrections for Exit Normal.
+
+October 20, 2014 - G.Cosmo (geomnav-V10-00-12)
+--------------------------
+- Leave out changes in G4FieldPropagation.cc laying on the trunk...
+
+October 18, 2014 - A.Dotti (geomnav-V10-00-11)
+------------------------
+- Code cleanup: removed unnecessary G4ThreadLocal in G4ReplicaNavigation.
+
+August 25, 2014 - G.Cosmo  (geomnav-V10-00-10)
+-------------------------
+- Minor code cleanup.
+
+August 22, 2014 - M.Asai  (geomnav-V10-00-08 and geomnav-V10-00-09)
+------------------------
+- G4TransportationManager: Add ClearParallelWorlds() method. This method is
+  invoked by G4RunManager when user destroys all the geometry and rebuild
+  from scratch.
+
+June  24, 2014 - G.Folger  (geomnav-V10-00-07)
+-------------------------
+- G4MultiNavigator: set 'fIdNavLimiting' index to navigator limiting the step,
+  if only one navigator limited the step. Fixes crash in RE05 on Windows.
+  Likely addressing problem report #1634.
+
+May   27, 2014 - J.Apostolakis  (geomnav-V10-00-06)
+------------------------------
+- G4Navigator: corrected saving/restoring of 'navigator state':
+  * Added bool sWasLimitedByGeometry to G4SaveNavigatorState struct
+     ( fixes side effect of call to ComputeSafety. )
+  * Corrected RestoreState() to reset the Safety Origin and Value
+  * ComputeSafety: If at endpoint of step, answer safety=0.0 quickly.
+       Do not save/restore state. 
+- G4PropagatorInField:
+  * Added new method GetCurrentEquationOfMotion() 
+
+May   16, 2014 - J.Apostolakis  (geomnav-V10-00-05)
+------------------------------
+- Fixed G4PathFinder::RecheckDistanceToCurrentBoundary():
+  A compilation error identified error: return value from Navigator
+  was not used to accumulate method return value.
+
+May   16, 2014 - J.Apostolakis  (geomnav-V10-00-04)
+------------------------------
+- Improved G4Navigator::RecheckDistanceToCurrentBoundary
+  * Extended it to check a daughter volume, in case the previous step ended at 
+    its boundary.  In case the proposed point is inside that daughter, it 
+    tries to identify a distance to backtrack (=> returns a negative value. )
+  * Added check that ComputeStep() that was called last, not a Locate method.
+      -currently optional - it fails due to call to Locate in ComputeSafety.
+
+May    7, 2014 - J.Apostolakis  (geomnav-V10-00-03) - (internal)
+------------------------------
+- Created  G4Navigator::RecheckDistanceToCurrentBoundary
+  * First version of a new method RecheckDistanceToCurrentBoundary
+   in G4SafetyHelper, G4Navigator and G4PathFinder
+  * The method checks
+       a proposed displacement (new Position) to see if it is in mother;
+       a proposed new direction to find potential backtrack to return to 
+          mother volume, or distance to new exit.
+  Requested by EM team (Vladimir Iv.) for use by MultipleScattering.
+
+April 10, 2014 - G.Cosmo  (geomnav-V10-00-02)
+------------------------
+- Get rid of deprecated 'register' storage class specifier in source files.
+
+March 14, 2014 - J.Apostolakis  (geomnav-V10-00-01)
+------------------------------
+- G4PathFinder: Added method for end of track - needed to signal
+   G4 Transportation Manager to use 'ordinary' Navigator.
+- Revised G4Navigator::SetupHierarchy, to reduce extra cost due to
+   handling the case of Nested Parameterisation.
+- PropagatorInField: When setting up a new Intersection Locator 
+   pass pointer to current Navigator.
+
+December 11th, 2013 - G.Cosmo  (geomnav-V10-00-00)
 -----------------------------
-- Fixed compiler warning intruduced with previous update
+- Fixed implementation of G4TransportationManager::SetNavigatorForTracking()
+  to initialise active navigator and propagator-in-field with the new
+  provided instance. Addressing problem report #1537.
+- Minor code cleanup in G4GlobalMagFieldMessenger.
+
+November 22nd, 2013 - I.Hrivnacova  (geomnav-V09-06-19)
+----------------------------------
+- Fixed compiler warning intruduced with previous update.
 
 November 22nd, 2013 - I.Hrivnacova  (geomnav-V09-06-18)
------------------------------
+----------------------------------
 - Removed checks for existence of G4TransportationManager
-  from G4GlobalMagFieldMessenger as they do not work as expected
+  from G4GlobalMagFieldMessenger as they do not work as expected.
 
 September 9th, 2013 - G.Cosmo  (geomnav-V09-06-17)
 -----------------------------

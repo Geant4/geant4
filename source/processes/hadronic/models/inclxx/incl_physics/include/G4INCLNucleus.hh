@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -97,19 +98,6 @@ namespace G4INCL {
 
     G4int getInitialA() const { return theInitialA; };
     G4int getInitialZ() const { return theInitialZ; };
-
-    /**
-     * Get the list of particles that were created by the last applied final state
-     */
-    ParticleList const &getCreatedParticles() const { return justCreated; }
-
-    /**
-     * Get the list of particles that were updated by the last applied final state
-     */
-    ParticleList const &getUpdatedParticles() const { return toBeUpdated; }
-
-    /// \brief Get the delta that could not decay
-    Particle *getBlockedDelta() const { return blockedDelta; }
 
     /**
      * Propagate the particles one time step.
@@ -279,18 +267,6 @@ namespace G4INCL {
 
     G4bool getTryCompoundNucleus() { return tryCN; }
 
-    /// \brief Return the charge number of the projectile
-    G4int getProjectileChargeNumber() const { return projectileZ; }
-
-    /// \brief Return the mass number of the projectile
-    G4int getProjectileMassNumber() const { return projectileA; }
-
-    /// \brief Set the charge number of the projectile
-    void setProjectileChargeNumber(G4int n) { projectileZ=n; }
-
-    /// \brief Set the mass number of the projectile
-    void setProjectileMassNumber(G4int n) { projectileA=n; }
-
     /// \brief Get the transmission barrier
     G4double getTransmissionBarrier(Particle const * const p) {
       const G4double theTransmissionRadius = theDensity->getTransmissionRadius(p);
@@ -410,9 +386,6 @@ namespace G4INCL {
     ThreeVector initialCenterOfMass;
     G4bool remnant;
 
-    ParticleList toBeUpdated;
-    ParticleList justCreated;
-    Particle *blockedDelta;
     G4double initialEnergy;
     Store *theStore;
     G4bool tryCN;
@@ -443,6 +416,7 @@ namespace G4INCL {
     /// \brief Pointer to the NuclearPotential object
     NuclearPotential::INuclearPotential const *thePotential;
 
+    INCL_DECLARE_ALLOCATION_POOL(Nucleus);
   };
 
 }

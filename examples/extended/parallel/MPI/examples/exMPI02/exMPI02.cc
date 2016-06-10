@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 /// @file exMPI02.cc
-// $Id: exMPI02.cc 78126 2013-12-03 17:43:56Z gcosmo $
+// $Id: exMPI02.cc 82385 2014-06-18 09:25:07Z gcosmo $
 //
 /// @brief A MPI example code
 
@@ -45,7 +45,7 @@
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
 #include "FTFP_BERT.hh"
-
+#include "G4ScoringManager.hh"
 int main(int argc, char** argv)
 {
   // --------------------------------------------------------------------
@@ -73,7 +73,8 @@ int main(int argc, char** argv)
 #else
   G4RunManager* runManager = new G4RunManager();
 #endif
-
+G4ScoringManager * scManager = G4ScoringManager::GetScoringManager();
+ scManager->SetVerboseLevel(1);
   // setup your application
   runManager-> SetUserInitialization(new DetectorConstruction);
   runManager-> SetUserInitialization(new FTFP_BERT);

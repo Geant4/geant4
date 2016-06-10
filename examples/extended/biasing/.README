@@ -84,11 +84,11 @@ This demonstrates a customised "flat" physics implementation with the addition
 of biasing. Complementary approach to the modular physics lists of B01 and B02
 
 
-\section biasing_s2 Generic biasing examples GB01, GB02
+\section biasing_s2 Generic biasing examples GB01, GB02, GB03, GB04
 
 These examples illustrate the usage of a biasing scheme implemented since
 version Geant4 10.0.
-The scheme is meant to be extensible, not limited to these two examples.
+The scheme is meant to be extensible, not limited to these four examples.
 
 \link ExampleGB01 Example GB01  \endlink
 
@@ -98,6 +98,13 @@ This example illustrates how to bias process cross-sections in this scheme.
 
 Illustrates a force collision scheme similar to the MCNP one.
 
+\link ExampleGB03 Example GB03  \endlink
+
+Illustrates geometry based biasing.
+
+\link ExampleGB04 Example GB04  \endlink
+
+Illustrates a bremsstrahlung splitting.
 
 \section biasing_s3 Reverse MonteCarlo Technique example
 

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm1/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 76293 2013-11-08 13:11:23Z gcosmo $
+// $Id: SteppingAction.cc 81776 2014-06-05 08:41:01Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +39,7 @@
 #include "G4RunManager.hh"
 #include "G4SteppingManager.hh"
 #include "G4VProcess.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -65,13 +66,16 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4int ID         = aStep->GetTrack()->GetTrackID();
   G4double steplen = aStep->GetStepLength();
   if (ID == 1) analysisManager->FillH1(3,steplen);
+
 /*  
-  //mass and charge
+  //debug: charge and mass
   //
+  G4int stepNb = aStep->GetTrack()->GetCurrentStepNumber();
   G4StepPoint* postPoint = aStep->GetPostStepPoint();
   G4double charge = postPoint->GetCharge();
   G4double mass   = postPoint->GetMass();
-  G4cout << "\n   charge= " << charge << "  mass= " << mass << G4endl;
+  G4cout << "\n   step= " << stepNb << "   charge= " << charge 
+         << "  mass= " << G4BestUnit(mass, "Energy");
 */      
 }
 

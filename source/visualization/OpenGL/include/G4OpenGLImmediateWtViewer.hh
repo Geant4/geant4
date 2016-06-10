@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWtViewer.hh 75567 2013-11-04 11:35:11Z gcosmo $
+// $Id: G4OpenGLImmediateWtViewer.hh 85263 2014-10-27 08:58:31Z gcosmo $
 //
 // 
 // Class G4OpenGLImmediateWtViewer : a class derived from
@@ -55,7 +55,6 @@ public:
   void initializeGL ();
   void DrawView();
   void ShowView();
-  void SetView();
   //
   void popMatrix();
   void pushMatrix();
@@ -63,10 +62,7 @@ public:
   void setMatrixUniforms();
   void loadIdentity();
   
-  void wtDrawArrays(GLenum mode,int first, G4int nPoints, std::vector<double> a_vertices);
-  
   void ComputeView ();
-  void drawScene ();
   void FinishView();
   
 private:
@@ -84,20 +80,10 @@ private:
   // A client-side JavaScript matrix variable
   JavaScriptMatrix4x4 jsMatrix_;
   
-  // The so-called VBOs, Vertex Buffer Objects
-  // This one contains both vertex (xyz) and normal (xyz) data
-  Buffer objBuffer_;
   //  void ComputeView ();
   // implements G4VViewer::SetView() and ClearView()
   //  void SetView ();
   //  void ClearView ();
-
-  
-  
-  // To avoid copying large constant data around, the data points are stored
-  // in a global variable.
-  std::vector<double> data;
-  std::vector <Buffer> VBO_Buffer;
 
 };
 

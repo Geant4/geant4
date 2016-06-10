@@ -26,7 +26,7 @@
 /// \file medical/electronScattering/src/StepMax.cc
 /// \brief Implementation of the StepMax class
 //
-// $Id: StepMax.cc 68393 2013-03-25 14:22:21Z maire $
+// $Id: StepMax.cc 86064 2014-11-07 08:49:32Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

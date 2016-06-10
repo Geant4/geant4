@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.hh 69569 2013-05-08 13:19:50Z gcosmo $
+// $Id: G4LundStringFragmentation.hh 84219 2014-10-10 14:55:19Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -80,6 +80,10 @@ private:
                                   G4double Px, G4double Py);      
 
    G4double lambda(G4double s, G4double m1_Sqr, G4double m2_Sqr);
+
+   virtual G4ParticleDefinition * DiQuarkSplitup(G4ParticleDefinition* decay, // Uzhi June 2014
+                                         G4ParticleDefinition *&created);
+
 
 private:
    // Internal methods introduced to improve the code structure (AR Nov 2011)

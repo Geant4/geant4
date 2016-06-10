@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.hh 68048 2013-03-13 14:34:07Z gcosmo $
+// $Id: G4Transportation.hh 84478 2014-10-16 08:49:24Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -54,6 +54,7 @@
 #include "G4Step.hh"
 #include "G4ParticleChangeForTransport.hh"
 class G4SafetyHelper; 
+class G4CoupledTransportation;
 
 class G4Transportation : public G4VProcess 
 {
@@ -121,7 +122,7 @@ class G4Transportation : public G4VProcess
      inline void EnableShortStepOptimisation(G4bool optimise=true); 
      // Whether short steps < safety will avoid to call Navigator (if field=0)
 
-     inline G4bool EnableUseMagneticMoment(G4bool useMoment=true); 
+     static G4bool EnableUseMagneticMoment(G4bool useMoment=true); 
      // Whether to deflect particles with force due to magnetic moment
 
   public:  // without description
@@ -204,15 +205,19 @@ class G4Transportation : public G4VProcess
   //   If using it, the safety estimate for endpoint will likely be smaller.
      G4bool   fShortStepOptimisation; 
 
-  // Whether to track state change from magnetic moment in a B-field
-     G4bool   fUseMagneticMoment; 
-
      G4SafetyHelper* fpSafetyHelper;  // To pass it the safety value obtained
 
   // Verbosity 
      G4int    fVerboseLevel;
        // Verbosity level for warnings
        // eg about energy non-conservation in magnetic field.
+
+  // Whether to track state change from magnetic moment in a B-field
+
+  private:
+     friend class G4CoupledTransportation;
+     static G4bool fUseMagneticMoment; 
+
 };
 
 #include "G4Transportation.icc"

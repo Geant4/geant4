@@ -22,10 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
-// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
-//
 // Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
 // the *COMPLETE* version of this program, together with its documentation;
 // Hadrontherapy (both basic and full version) are supported by the Italian INFN
@@ -33,7 +29,6 @@
 //
 
 #include "HadrontherapyPhysicsListMessenger.hh"
-
 #include "HadrontherapyPhysicsList.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
@@ -45,85 +40,24 @@ HadrontherapyPhysicsListMessenger::HadrontherapyPhysicsListMessenger(Hadronthera
 {
   physDir = new G4UIdirectory("/Physics/");
   physDir->SetGuidance("Commands to activate physics models and set cuts");
-   
-  gammaCutCmd = new G4UIcmdWithADoubleAndUnit("/Physics/setGCut",this);  
-  gammaCutCmd->SetGuidance("Set gamma cut.");
-  gammaCutCmd->SetParameterName("Gcut",false);
-  gammaCutCmd->SetUnitCategory("Length");
-  gammaCutCmd->SetRange("Gcut>0.0");
-  gammaCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  electCutCmd = new G4UIcmdWithADoubleAndUnit("/Physics/setECut",this);  
-  electCutCmd->SetGuidance("Set electron cut.");
-  electCutCmd->SetParameterName("Ecut",false);
-  electCutCmd->SetUnitCategory("Length");
-  electCutCmd->SetRange("Ecut>0.0");
-  electCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  protoCutCmd = new G4UIcmdWithADoubleAndUnit("/Physics/setPCut",this);  
-  protoCutCmd->SetGuidance("Set positron cut.");
-  protoCutCmd->SetParameterName("Pcut",false);
-  protoCutCmd->SetUnitCategory("Length");
-  protoCutCmd->SetRange("Pcut>0.0");
-  protoCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
-
-  allCutCmd = new G4UIcmdWithADoubleAndUnit("/Physics/setCuts",this);  
-  allCutCmd->SetGuidance("Set cut for all.");
-  allCutCmd->SetParameterName("cut",false);
-  allCutCmd->SetUnitCategory("Length");
-  allCutCmd->SetRange("cut>0.0");
-  allCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
-
-  allDetectorCmd = new G4UIcmdWithADoubleAndUnit("/Physics/setDetectorCuts",this);  
-  allDetectorCmd->SetGuidance("Set cut for all. into Detector");
-  allDetectorCmd->SetParameterName("cut",false);
-  allDetectorCmd->SetUnitCategory("Length");
-  allDetectorCmd->SetRange("cut>0.0");
-  allDetectorCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
-
   pListCmd = new G4UIcmdWithAString("/Physics/addPhysics",this);  
   pListCmd->SetGuidance("Add physics list.");
   pListCmd->SetParameterName("PList",false);
-  pListCmd->AvailableForStates(G4State_PreInit, G4State_Idle);  
+  pListCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyPhysicsListMessenger::~HadrontherapyPhysicsListMessenger()
 {
-  delete gammaCutCmd;
-  delete electCutCmd;
-  delete protoCutCmd;
-  delete allCutCmd;
-  delete allDetectorCmd;
-  delete pListCmd;
-  delete physDir;    
+   delete physDir;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyPhysicsListMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
-{       
-  if( command == gammaCutCmd )
-   { pPhysicsList->SetCutForGamma(gammaCutCmd->GetNewDoubleValue(newValue));}
-     
-  else if( command == electCutCmd )
-   { pPhysicsList->SetCutForElectron(electCutCmd->GetNewDoubleValue(newValue));}
-     
-  else if( command == protoCutCmd )
-   { pPhysicsList->SetCutForPositron(protoCutCmd->GetNewDoubleValue(newValue));}
-
-  else if( command == allCutCmd )
-    {
-      G4double cut = allCutCmd->GetNewDoubleValue(newValue);
-      pPhysicsList->SetCutForGamma(cut);
-      pPhysicsList->SetCutForElectron(cut);
-      pPhysicsList->SetCutForPositron(cut);
-    } 
-  else if( command == allDetectorCmd)
-  {
-      G4double cut = allDetectorCmd -> GetNewDoubleValue(newValue);
-      pPhysicsList -> SetDetectorCut(cut);
-  }
-  else if( command == pListCmd )
+{
+       if( command == pListCmd )
    { pPhysicsList->AddPhysicsList(newValue);}
 }
+

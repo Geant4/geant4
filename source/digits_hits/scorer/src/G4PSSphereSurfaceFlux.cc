@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSSphereSurfaceFlux.cc 76272 2013-11-08 11:53:00Z gcosmo $
+// $Id: G4PSSphereSurfaceFlux.cc 81087 2014-05-20 15:44:27Z gcosmo $
 //
 // G4PSSphereSurfaceFlux
 #include "G4PSSphereSurfaceFlux.hh"
@@ -54,23 +54,24 @@
 // 2010-07-22   Add weighted and divideByAre options
 // 2011-02-21   Get correct momentum direction in Flux_Out. 
 // 2011-09-09   Modify comment in PrintAll().
+// 2014-03-03  T.Aso,  To use always positive value for anglefactor.
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSSphereSurfaceFlux::G4PSSphereSurfaceFlux(G4String name, 
-					 G4int direction, G4int depth)
+                                         G4int direction, G4int depth)
   : G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
-    weighted(true),divideByArea(true)
+    EvtMap(0),weighted(true),divideByArea(true)
 {
     DefineUnitAndCategory();
     SetUnit("percm2");
 }
 
 G4PSSphereSurfaceFlux::G4PSSphereSurfaceFlux(G4String name, 
-					     G4int direction,
-					     const G4String& unit,
-					     G4int depth)
+                                             G4int direction,
+                                             const G4String& unit,
+                                             G4int depth)
   : G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
-    weighted(true),divideByArea(true)
+    EvtMap(0),weighted(true),divideByArea(true)
 {
     DefineUnitAndCategory();
     SetUnit(unit);
@@ -106,30 +107,31 @@ G4bool G4PSSphereSurfaceFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 
       G4StepPoint* thisStep=0;
       if ( dirFlag == fFlux_In ){
-	thisStep = preStep;
+        thisStep = preStep;
       }else if ( dirFlag == fFlux_Out ){
-	thisStep = aStep->GetPostStepPoint();
+        thisStep = aStep->GetPostStepPoint();
       }else{
-	return FALSE;
+        return FALSE;
       }
 
       G4TouchableHandle theTouchable = thisStep->GetTouchableHandle();
       G4ThreeVector pdirection = thisStep->GetMomentumDirection();
       G4ThreeVector localdir  = 
-	theTouchable->GetHistory()->GetTopTransform().TransformAxis(pdirection);
+        theTouchable->GetHistory()->GetTopTransform().TransformAxis(pdirection);
       G4double localdirL2 = localdir.x()*localdir.x()
-	+localdir.y()*localdir.y()
-	+localdir.z()*localdir.z();
+        +localdir.y()*localdir.y()
+        +localdir.z()*localdir.z();
       G4ThreeVector stppos1= aStep->GetPreStepPoint()->GetPosition();
       G4ThreeVector localpos1 = 
-	theTouchable->GetHistory()->GetTopTransform().TransformPoint(stppos1);
+        theTouchable->GetHistory()->GetTopTransform().TransformPoint(stppos1);
       G4double localR2 = localpos1.x()*localpos1.x()
-	+localpos1.y()*localpos1.y()
-	+localpos1.z()*localpos1.z();
+        +localpos1.y()*localpos1.y()
+        +localpos1.z()*localpos1.z();
       G4double anglefactor = (localdir.x()*localpos1.x()
-			      +localdir.y()*localpos1.y()
-			      +localdir.z()*localpos1.z())
-	/std::sqrt(localdirL2)/std::sqrt(localR2);
+                              +localdir.y()*localpos1.y()
+                              +localdir.z()*localpos1.z())
+        /std::sqrt(localdirL2)/std::sqrt(localR2);
+      if ( anglefactor < 0.0 ) anglefactor *= -1.0;
 
       G4double radi   = sphereSolid->GetInnerRadius();
       G4double dph    = sphereSolid->GetDeltaPhiAngle()/radian;
@@ -170,7 +172,7 @@ G4int G4PSSphereSurfaceFlux::IsSelectedSurface(G4Step* aStep, G4Sphere* sphereSo
     //if(std::fabs( localR2 - InsideRadius2 ) < kCarTolerance ){
     G4double InsideRadius = sphereSolid->GetInnerRadius();
     if ( localR2 > (InsideRadius-kCarTolerance)*(InsideRadius-kCarTolerance)
-	 &&localR2 < (InsideRadius+kCarTolerance)*(InsideRadius+kCarTolerance)){
+         &&localR2 < (InsideRadius+kCarTolerance)*(InsideRadius+kCarTolerance)){
       return fFlux_In;
     }
   }
@@ -188,7 +190,7 @@ G4int G4PSSphereSurfaceFlux::IsSelectedSurface(G4Step* aStep, G4Sphere* sphereSo
     //if(std::facb(localR2 - InsideRadius2) ) < kCarTolerance ){
     G4double InsideRadius = sphereSolid->GetInnerRadius();
     if ( localR2 > (InsideRadius-kCarTolerance)*(InsideRadius-kCarTolerance)
-	 &&localR2 < (InsideRadius+kCarTolerance)*(InsideRadius+kCarTolerance)){
+         &&localR2 < (InsideRadius+kCarTolerance)*(InsideRadius+kCarTolerance)){
       return fFlux_Out;
     }
   }
@@ -221,24 +223,24 @@ void G4PSSphereSurfaceFlux::PrintAll()
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  Flux  : " << *(itr->second)/GetUnitValue()
-	   << " ["<<GetUnit()<<"]"
-	   << G4endl;
+           << "  Flux  : " << *(itr->second)/GetUnitValue()
+           << " ["<<GetUnit()<<"]"
+           << G4endl;
   }
 }
 
 void G4PSSphereSurfaceFlux::SetUnit(const G4String& unit)
 {
     if ( divideByArea ) {
-	CheckAndSetUnit(unit,"Per Unit Surface");
+        CheckAndSetUnit(unit,"Per Unit Surface");
     } else {
-	if (unit == "" ){
-	    unitName = unit;
-	    unitValue = 1.0;
-	}else{
-	    G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] ) for " + GetName();
-	    G4Exception("G4PSSphereSurfaceFlux::SetUnit","DetPS0016",JustWarning,msg);
-	}
+        if (unit == "" ){
+            unitName = unit;
+            unitValue = 1.0;
+        }else{
+            G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] ) for " + GetName();
+            G4Exception("G4PSSphereSurfaceFlux::SetUnit","DetPS0016",JustWarning,msg);
+        }
     }
 }
 

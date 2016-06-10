@@ -1,0 +1,2891 @@
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+Using the sequential Run Manager
+XrayFluoAnalysisManager created
+### NIST DataBase for Materials is used
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <MadaBasaltMain> is not found out
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <MadaBasaltTraces> is not found out
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <IceBasaltMain> is not found out
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <IceBasaltTraces> is not found out
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Dolorite> is not found out
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <TracesOfDolorite> is not found out
+G4Material WARNING: duplicate name of material Dolorite
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Mars1 Main components> is not found out
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <TracesOfMars1> is not found out
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <HawaiianWD> is not found out
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <HawaiianRF> is not found out
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <IcelandicWD> is not found out
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <IcelandicRF> is not found out
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <GabbroWD> is not found out
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <GabbroRF> is not found out
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Anorthosite> is not found out
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Gabbro> is not found out
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <gallium arsenide> is not found out
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Scintillator> is not found out
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Basalt> is not found out
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <SiLi> is not found out
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found out
+
+***** Table : Nb of materials = 26 *****
+
+ Material: MadaBasaltMain    density:  3.000 g/cm3   RadL:   7.783 cm   Nucl.Int.Length:  33.583 cm 
+                       Imean: 141.985 eV 
+
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+          ElmMassFraction:  19.92 %  ElmAbundance  15.99 % 
+
+   --->  Element: Ti (Ti)   Z = 22.0   N =  47.9   A =  47.87 g/mole
+         --->  Isotope:  Ti46   Z = 22   N =  46   A =  45.95 g/mole   abundance:   8.25 %
+         --->  Isotope:  Ti47   Z = 22   N =  47   A =  46.95 g/mole   abundance:   7.44 %
+         --->  Isotope:  Ti48   Z = 22   N =  48   A =  47.95 g/mole   abundance:  73.72 %
+         --->  Isotope:  Ti49   Z = 22   N =  49   A =  48.95 g/mole   abundance:   5.41 %
+         --->  Isotope:  Ti50   Z = 22   N =  50   A =  49.94 g/mole   abundance:   5.18 %
+          ElmMassFraction:   2.03 %  ElmAbundance   0.95 % 
+
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction:   4.76 %  ElmAbundance   3.98 % 
+
+   --->  Element: Fe (Fe)   Z = 26.0   N =  55.9   A =  55.85 g/mole
+         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+          ElmMassFraction:  13.03 %  ElmAbundance   5.26 % 
+
+   --->  Element: Mn (Mn)   Z = 25.0   N =  55.0   A =  54.94 g/mole
+         --->  Isotope:  Mn55   Z = 25   N =  55   A =  54.94 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.15 %  ElmAbundance   0.06 % 
+
+   --->  Element: Mg (Mg)   Z = 12.0   N =  24.3   A =  24.31 g/mole
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance:  78.99 %
+         --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance:  10.00 %
+         --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance:  11.01 %
+          ElmMassFraction:   8.14 %  ElmAbundance   7.55 % 
+
+   --->  Element: Ca (Ca)   Z = 20.0   N =  40.1   A =  40.08 g/mole
+         --->  Isotope:  Ca40   Z = 20   N =  40   A =  39.96 g/mole   abundance:  96.94 %
+         --->  Isotope:  Ca42   Z = 20   N =  42   A =  41.96 g/mole   abundance:   0.65 %
+         --->  Isotope:  Ca43   Z = 20   N =  43   A =  42.96 g/mole   abundance:   0.14 %
+         --->  Isotope:  Ca44   Z = 20   N =  44   A =  43.96 g/mole   abundance:   2.09 %
+         --->  Isotope:  Ca46   Z = 20   N =  46   A =  45.95 g/mole   abundance:   0.00 %
+         --->  Isotope:  Ca48   Z = 20   N =  48   A =  47.95 g/mole   abundance:   0.19 %
+          ElmMassFraction:   6.47 %  ElmAbundance   3.64 % 
+
+   --->  Element: Na (Na)   Z = 11.0   N =  23.0   A =  22.99 g/mole
+         --->  Isotope:  Na23   Z = 11   N =  23   A =  22.99 g/mole   abundance: 100.00 %
+          ElmMassFraction:   1.69 %  ElmAbundance   1.66 % 
+
+   --->  Element: K (K)   Z = 19.0   N =  39.1   A =  39.10 g/mole
+         --->  Isotope:   K39   Z = 19   N =  39   A =  38.96 g/mole   abundance:  93.26 %
+         --->  Isotope:   K40   Z = 19   N =  40   A =  39.96 g/mole   abundance:   0.01 %
+         --->  Isotope:   K41   Z = 19   N =  41   A =  40.96 g/mole   abundance:   6.73 %
+          ElmMassFraction:   0.86 %  ElmAbundance   0.49 % 
+
+   --->  Element: P (P)   Z = 15.0   N =  31.0   A =  30.97 g/mole
+         --->  Isotope:   P31   Z = 15   N =  31   A =  30.97 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.20 %  ElmAbundance   0.14 % 
+
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  42.75 %  ElmAbundance  60.26 % 
+
+
+ Material: MadaBasaltTraces    density:  3.000 g/cm3   RadL:   3.460 cm   Nucl.Int.Length:  51.723 cm 
+                       Imean: 369.885 eV 
+
+   --->  Element: Ti (Ti)   Z = 22.0   N =  47.9   A =  47.87 g/mole
+         --->  Isotope:  Ti46   Z = 22   N =  46   A =  45.95 g/mole   abundance:   8.25 %
+         --->  Isotope:  Ti47   Z = 22   N =  47   A =  46.95 g/mole   abundance:   7.44 %
+         --->  Isotope:  Ti48   Z = 22   N =  48   A =  47.95 g/mole   abundance:  73.72 %
+         --->  Isotope:  Ti49   Z = 22   N =  49   A =  48.95 g/mole   abundance:   5.41 %
+         --->  Isotope:  Ti50   Z = 22   N =  50   A =  49.94 g/mole   abundance:   5.18 %
+          ElmMassFraction:   0.07 %  ElmAbundance   0.12 % 
+
+   --->  Element: Ba (Ba)   Z = 56.0   N = 137.4   A = 137.33 g/mole
+         --->  Isotope: Ba130   Z = 56   N = 130   A = 129.91 g/mole   abundance:   0.11 %
+         --->  Isotope: Ba132   Z = 56   N = 132   A = 131.90 g/mole   abundance:   0.10 %
+         --->  Isotope: Ba134   Z = 56   N = 134   A = 133.91 g/mole   abundance:   2.42 %
+         --->  Isotope: Ba135   Z = 56   N = 135   A = 134.91 g/mole   abundance:   6.59 %
+         --->  Isotope: Ba136   Z = 56   N = 136   A = 135.91 g/mole   abundance:   7.85 %
+         --->  Isotope: Ba137   Z = 56   N = 137   A = 136.91 g/mole   abundance:  11.23 %
+         --->  Isotope: Ba138   Z = 56   N = 138   A = 137.91 g/mole   abundance:  71.70 %
+          ElmMassFraction:  24.29 %  ElmAbundance  14.69 % 
+
+   --->  Element: Ce (Ce)   Z = 58.0   N = 140.2   A = 140.12 g/mole
+         --->  Isotope: Ce136   Z = 58   N = 136   A = 135.91 g/mole   abundance:   0.18 %
+         --->  Isotope: Ce138   Z = 58   N = 138   A = 137.91 g/mole   abundance:   0.25 %
+         --->  Isotope: Ce140   Z = 58   N = 140   A = 139.91 g/mole   abundance:  88.45 %
+         --->  Isotope: Ce142   Z = 58   N = 142   A = 141.91 g/mole   abundance:  11.11 %
+          ElmMassFraction:   4.16 %  ElmAbundance   2.47 % 
+
+   --->  Element: Co (Co)   Z = 27.0   N =  59.0   A =  58.93 g/mole
+         --->  Isotope:  Co59   Z = 27   N =  59   A =  58.93 g/mole   abundance: 100.00 %
+          ElmMassFraction:   2.44 %  ElmAbundance   3.43 % 
+
+   --->  Element: Cr (Cr)   Z = 24.0   N =  52.1   A =  52.00 g/mole
+         --->  Isotope:  Cr50   Z = 24   N =  50   A =  49.95 g/mole   abundance:   4.34 %
+         --->  Isotope:  Cr52   Z = 24   N =  52   A =  51.94 g/mole   abundance:  83.79 %
+         --->  Isotope:  Cr53   Z = 24   N =  53   A =  52.94 g/mole   abundance:   9.50 %
+         --->  Isotope:  Cr54   Z = 24   N =  54   A =  53.94 g/mole   abundance:   2.37 %
+          ElmMassFraction:  12.43 %  ElmAbundance  19.86 % 
+
+   --->  Element: La (La)   Z = 57.0   N = 139.0   A = 138.91 g/mole
+         --->  Isotope: La138   Z = 57   N = 138   A = 137.91 g/mole   abundance:   0.09 %
+         --->  Isotope: La139   Z = 57   N = 139   A = 138.91 g/mole   abundance:  99.91 %
+          ElmMassFraction:   1.60 %  ElmAbundance   0.96 % 
+
+   --->  Element: Nb (Nb)   Z = 41.0   N =  93.0   A =  92.91 g/mole
+         --->  Isotope:  Nb93   Z = 41   N =  93   A =  92.91 g/mole   abundance: 100.00 %
+          ElmMassFraction:   1.03 %  ElmAbundance   0.92 % 
+
+   --->  Element: Nd (Nd)   Z = 60.0   N = 144.3   A = 144.24 g/mole
+         --->  Isotope: Nd142   Z = 60   N = 142   A = 141.91 g/mole   abundance:  27.20 %
+         --->  Isotope: Nd143   Z = 60   N = 143   A = 142.91 g/mole   abundance:  12.20 %
+         --->  Isotope: Nd144   Z = 60   N = 144   A = 143.91 g/mole   abundance:  23.80 %
+         --->  Isotope: Nd145   Z = 60   N = 145   A = 144.91 g/mole   abundance:   8.30 %
+         --->  Isotope: Nd146   Z = 60   N = 146   A = 145.91 g/mole   abundance:  17.20 %
+         --->  Isotope: Nd148   Z = 60   N = 148   A = 147.92 g/mole   abundance:   5.70 %
+         --->  Isotope: Nd150   Z = 60   N = 150   A = 149.92 g/mole   abundance:   5.60 %
+          ElmMassFraction:   2.53 %  ElmAbundance   1.46 % 
+
+   --->  Element: Ni (Ni)   Z = 28.0   N =  58.8   A =  58.69 g/mole
+         --->  Isotope:  Ni58   Z = 28   N =  58   A =  57.94 g/mole   abundance:  68.08 %
+         --->  Isotope:  Ni60   Z = 28   N =  60   A =  59.93 g/mole   abundance:  26.22 %
+         --->  Isotope:  Ni61   Z = 28   N =  61   A =  60.93 g/mole   abundance:   1.14 %
+         --->  Isotope:  Ni62   Z = 28   N =  62   A =  61.93 g/mole   abundance:   3.63 %
+         --->  Isotope:  Ni64   Z = 28   N =  64   A =  63.93 g/mole   abundance:   0.93 %
+          ElmMassFraction:   0.98 %  ElmAbundance   1.38 % 
+
+   --->  Element: Rb (Rb)   Z = 37.0   N =  85.6   A =  85.47 g/mole
+         --->  Isotope:  Rb85   Z = 37   N =  85   A =  84.91 g/mole   abundance:  72.17 %
+         --->  Isotope:  Rb87   Z = 37   N =  87   A =  86.91 g/mole   abundance:  27.83 %
+          ElmMassFraction:   0.83 %  ElmAbundance   0.81 % 
+
+   --->  Element: Sc (Sc)   Z = 21.0   N =  45.0   A =  44.96 g/mole
+         --->  Isotope:  Sc45   Z = 21   N =  45   A =  44.96 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.41 %  ElmAbundance   0.75 % 
+
+   --->  Element: Sr (Sr)   Z = 38.0   N =  87.7   A =  87.62 g/mole
+         --->  Isotope:  Sr84   Z = 38   N =  84   A =  83.91 g/mole   abundance:   0.56 %
+         --->  Isotope:  Sr86   Z = 38   N =  86   A =  85.91 g/mole   abundance:   9.86 %
+         --->  Isotope:  Sr87   Z = 38   N =  87   A =  86.91 g/mole   abundance:   7.00 %
+         --->  Isotope:  Sr88   Z = 38   N =  88   A =  87.91 g/mole   abundance:  82.58 %
+          ElmMassFraction:  32.59 %  ElmAbundance  30.90 % 
+
+   --->  Element: V (V)   Z = 23.0   N =  51.0   A =  50.94 g/mole
+         --->  Isotope:   V50   Z = 23   N =  50   A =  49.95 g/mole   abundance:   0.25 %
+         --->  Isotope:   V51   Z = 23   N =  51   A =  50.94 g/mole   abundance:  99.75 %
+          ElmMassFraction:   9.17 %  ElmAbundance  14.95 % 
+
+   --->  Element: Y (Y)   Z = 39.0   N =  89.0   A =  88.91 g/mole
+         --->  Isotope:   Y89   Z = 39   N =  89   A =  88.91 g/mole   abundance: 100.00 %
+          ElmMassFraction:   1.04 %  ElmAbundance   0.97 % 
+
+   --->  Element: Zn (Zn)   Z = 30.0   N =  65.5   A =  65.40 g/mole
+         --->  Isotope:  Zn64   Z = 30   N =  64   A =  63.93 g/mole   abundance:  48.63 %
+         --->  Isotope:  Zn66   Z = 30   N =  66   A =  65.93 g/mole   abundance:  27.90 %
+         --->  Isotope:  Zn67   Z = 30   N =  67   A =  66.93 g/mole   abundance:   4.10 %
+         --->  Isotope:  Zn68   Z = 30   N =  68   A =  67.92 g/mole   abundance:  18.75 %
+         --->  Isotope:  Zn70   Z = 30   N =  70   A =  69.93 g/mole   abundance:   0.62 %
+          ElmMassFraction:   4.03 %  ElmAbundance   5.12 % 
+
+   --->  Element: Th (Th)   Z = 90.0   N = 232.0   A = 232.04 g/mole
+         --->  Isotope: Th232   Z = 90   N = 232   A = 232.04 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.19 %  ElmAbundance   0.07 % 
+
+   --->  Element: Sm (Sm)   Z = 62.0   N = 150.4   A = 150.37 g/mole
+         --->  Isotope: Sm144   Z = 62   N = 144   A = 143.91 g/mole   abundance:   3.07 %
+         --->  Isotope: Sm147   Z = 62   N = 147   A = 146.91 g/mole   abundance:  14.99 %
+         --->  Isotope: Sm148   Z = 62   N = 148   A = 147.91 g/mole   abundance:  11.24 %
+         --->  Isotope: Sm149   Z = 62   N = 149   A = 148.92 g/mole   abundance:  13.82 %
+         --->  Isotope: Sm150   Z = 62   N = 150   A = 149.92 g/mole   abundance:   7.38 %
+         --->  Isotope: Sm152   Z = 62   N = 152   A = 151.92 g/mole   abundance:  26.75 %
+         --->  Isotope: Sm154   Z = 62   N = 154   A = 153.92 g/mole   abundance:  22.75 %
+          ElmMassFraction:   0.60 %  ElmAbundance   0.33 % 
+
+   --->  Element: Eu (Eu)   Z = 63.0   N = 152.0   A = 151.96 g/mole
+         --->  Isotope: Eu151   Z = 63   N = 151   A = 150.92 g/mole   abundance:  47.81 %
+         --->  Isotope: Eu153   Z = 63   N = 153   A = 152.92 g/mole   abundance:  52.19 %
+          ElmMassFraction:   0.21 %  ElmAbundance   0.11 % 
+
+   --->  Element: Gd (Gd)   Z = 64.0   N = 157.3   A = 157.25 g/mole
+         --->  Isotope: Gd152   Z = 64   N = 152   A = 151.92 g/mole   abundance:   0.20 %
+         --->  Isotope: Gd154   Z = 64   N = 154   A = 153.92 g/mole   abundance:   2.18 %
+         --->  Isotope: Gd155   Z = 64   N = 155   A = 154.92 g/mole   abundance:  14.80 %
+         --->  Isotope: Gd156   Z = 64   N = 156   A = 155.92 g/mole   abundance:  20.47 %
+         --->  Isotope: Gd157   Z = 64   N = 157   A = 156.92 g/mole   abundance:  15.65 %
+         --->  Isotope: Gd158   Z = 64   N = 158   A = 157.92 g/mole   abundance:  24.84 %
+         --->  Isotope: Gd160   Z = 64   N = 160   A = 159.93 g/mole   abundance:  21.86 %
+          ElmMassFraction:   0.60 %  ElmAbundance   0.32 % 
+
+   --->  Element: Tb (Tb)   Z = 65.0   N = 159.0   A = 158.93 g/mole
+         --->  Isotope: Tb159   Z = 65   N = 159   A = 158.93 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.09 %  ElmAbundance   0.05 % 
+
+   --->  Element: Yb (Yb)   Z = 70.0   N = 173.1   A = 173.04 g/mole
+         --->  Isotope: Yb168   Z = 70   N = 168   A = 167.93 g/mole   abundance:   0.13 %
+         --->  Isotope: Yb170   Z = 70   N = 170   A = 169.94 g/mole   abundance:   3.04 %
+         --->  Isotope: Yb171   Z = 70   N = 171   A = 170.94 g/mole   abundance:  14.28 %
+         --->  Isotope: Yb172   Z = 70   N = 172   A = 171.94 g/mole   abundance:  21.83 %
+         --->  Isotope: Yb173   Z = 70   N = 173   A = 172.94 g/mole   abundance:  16.13 %
+         --->  Isotope: Yb174   Z = 70   N = 174   A = 173.94 g/mole   abundance:  31.83 %
+         --->  Isotope: Yb176   Z = 70   N = 176   A = 175.94 g/mole   abundance:  12.76 %
+          ElmMassFraction:   0.11 %  ElmAbundance   0.05 % 
+
+   --->  Element: Lu (Lu)   Z = 71.0   N = 175.0   A = 174.97 g/mole
+         --->  Isotope: Lu175   Z = 71   N = 175   A = 174.94 g/mole   abundance:  97.41 %
+         --->  Isotope: Lu176   Z = 71   N = 176   A = 175.94 g/mole   abundance:   2.59 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.01 % 
+
+   --->  Element: Ta (Ta)   Z = 73.0   N = 181.0   A = 180.95 g/mole
+         --->  Isotope: Ta180   Z = 73   N = 180   A = 179.95 g/mole   abundance:   0.01 %
+         --->  Isotope: Ta181   Z = 73   N = 181   A = 180.95 g/mole   abundance:  99.99 %
+          ElmMassFraction:   0.12 %  ElmAbundance   0.05 % 
+
+   --->  Element: Hf (Hf)   Z = 72.0   N = 178.5   A = 178.49 g/mole
+         --->  Isotope: Hf174   Z = 72   N = 174   A = 173.94 g/mole   abundance:   0.16 %
+         --->  Isotope: Hf176   Z = 72   N = 176   A = 175.94 g/mole   abundance:   5.26 %
+         --->  Isotope: Hf177   Z = 72   N = 177   A = 176.94 g/mole   abundance:  18.60 %
+         --->  Isotope: Hf178   Z = 72   N = 178   A = 177.94 g/mole   abundance:  27.28 %
+         --->  Isotope: Hf179   Z = 72   N = 179   A = 178.95 g/mole   abundance:  13.62 %
+         --->  Isotope: Hf180   Z = 72   N = 180   A = 179.95 g/mole   abundance:  35.08 %
+          ElmMassFraction:   0.47 %  ElmAbundance   0.22 % 
+
+
+ Material: MadaBasalt    density:  3.000 g/cm3   RadL:   7.684 cm   Nucl.Int.Length:  33.705 cm 
+                       Imean: 143.221 eV 
+
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+          ElmMassFraction:  19.71 %  ElmAbundance  15.95 % 
+
+   --->  Element: Ti (Ti)   Z = 22.0   N =  47.9   A =  47.87 g/mole
+         --->  Isotope:  Ti46   Z = 22   N =  46   A =  45.95 g/mole   abundance:   8.25 %
+         --->  Isotope:  Ti47   Z = 22   N =  47   A =  46.95 g/mole   abundance:   7.44 %
+         --->  Isotope:  Ti48   Z = 22   N =  48   A =  47.95 g/mole   abundance:  73.72 %
+         --->  Isotope:  Ti49   Z = 22   N =  49   A =  48.95 g/mole   abundance:   5.41 %
+         --->  Isotope:  Ti50   Z = 22   N =  50   A =  49.94 g/mole   abundance:   5.18 %
+          ElmMassFraction:   2.01 %  ElmAbundance   0.95 % 
+
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction:   4.71 %  ElmAbundance   3.97 % 
+
+   --->  Element: Fe (Fe)   Z = 26.0   N =  55.9   A =  55.85 g/mole
+         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+          ElmMassFraction:  12.90 %  ElmAbundance   5.25 % 
+
+   --->  Element: Mn (Mn)   Z = 25.0   N =  55.0   A =  54.94 g/mole
+         --->  Isotope:  Mn55   Z = 25   N =  55   A =  54.94 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.15 %  ElmAbundance   0.06 % 
+
+   --->  Element: Mg (Mg)   Z = 12.0   N =  24.3   A =  24.31 g/mole
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance:  78.99 %
+         --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance:  10.00 %
+         --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance:  11.01 %
+          ElmMassFraction:   8.06 %  ElmAbundance   7.53 % 
+
+   --->  Element: Ca (Ca)   Z = 20.0   N =  40.1   A =  40.08 g/mole
+         --->  Isotope:  Ca40   Z = 20   N =  40   A =  39.96 g/mole   abundance:  96.94 %
+         --->  Isotope:  Ca42   Z = 20   N =  42   A =  41.96 g/mole   abundance:   0.65 %
+         --->  Isotope:  Ca43   Z = 20   N =  43   A =  42.96 g/mole   abundance:   0.14 %
+         --->  Isotope:  Ca44   Z = 20   N =  44   A =  43.96 g/mole   abundance:   2.09 %
+         --->  Isotope:  Ca46   Z = 20   N =  46   A =  45.95 g/mole   abundance:   0.00 %
+         --->  Isotope:  Ca48   Z = 20   N =  48   A =  47.95 g/mole   abundance:   0.19 %
+          ElmMassFraction:   6.40 %  ElmAbundance   3.63 % 
+
+   --->  Element: Na (Na)   Z = 11.0   N =  23.0   A =  22.99 g/mole
+         --->  Isotope:  Na23   Z = 11   N =  23   A =  22.99 g/mole   abundance: 100.00 %
+          ElmMassFraction:   1.67 %  ElmAbundance   1.65 % 
+
+   --->  Element: K (K)   Z = 19.0   N =  39.1   A =  39.10 g/mole
+         --->  Isotope:   K39   Z = 19   N =  39   A =  38.96 g/mole   abundance:  93.26 %
+         --->  Isotope:   K40   Z = 19   N =  40   A =  39.96 g/mole   abundance:   0.01 %
+         --->  Isotope:   K41   Z = 19   N =  41   A =  40.96 g/mole   abundance:   6.73 %
+          ElmMassFraction:   0.85 %  ElmAbundance   0.49 % 
+
+   --->  Element: P (P)   Z = 15.0   N =  31.0   A =  30.97 g/mole
+         --->  Isotope:   P31   Z = 15   N =  31   A =  30.97 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.20 %  ElmAbundance   0.14 % 
+
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  42.31 %  ElmAbundance  60.09 % 
+
+   --->  Element: Ba (Ba)   Z = 56.0   N = 137.4   A = 137.33 g/mole
+         --->  Isotope: Ba130   Z = 56   N = 130   A = 129.91 g/mole   abundance:   0.11 %
+         --->  Isotope: Ba132   Z = 56   N = 132   A = 131.90 g/mole   abundance:   0.10 %
+         --->  Isotope: Ba134   Z = 56   N = 134   A = 133.91 g/mole   abundance:   2.42 %
+         --->  Isotope: Ba135   Z = 56   N = 135   A = 134.91 g/mole   abundance:   6.59 %
+         --->  Isotope: Ba136   Z = 56   N = 136   A = 135.91 g/mole   abundance:   7.85 %
+         --->  Isotope: Ba137   Z = 56   N = 137   A = 136.91 g/mole   abundance:  11.23 %
+         --->  Isotope: Ba138   Z = 56   N = 138   A = 137.91 g/mole   abundance:  71.70 %
+          ElmMassFraction:   0.25 %  ElmAbundance   0.04 % 
+
+   --->  Element: Ce (Ce)   Z = 58.0   N = 140.2   A = 140.12 g/mole
+         --->  Isotope: Ce136   Z = 58   N = 136   A = 135.91 g/mole   abundance:   0.18 %
+         --->  Isotope: Ce138   Z = 58   N = 138   A = 137.91 g/mole   abundance:   0.25 %
+         --->  Isotope: Ce140   Z = 58   N = 140   A = 139.91 g/mole   abundance:  88.45 %
+         --->  Isotope: Ce142   Z = 58   N = 142   A = 141.91 g/mole   abundance:  11.11 %
+          ElmMassFraction:   0.04 %  ElmAbundance   0.01 % 
+
+   --->  Element: Co (Co)   Z = 27.0   N =  59.0   A =  58.93 g/mole
+         --->  Isotope:  Co59   Z = 27   N =  59   A =  58.93 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.03 %  ElmAbundance   0.01 % 
+
+   --->  Element: Cr (Cr)   Z = 24.0   N =  52.1   A =  52.00 g/mole
+         --->  Isotope:  Cr50   Z = 24   N =  50   A =  49.95 g/mole   abundance:   4.34 %
+         --->  Isotope:  Cr52   Z = 24   N =  52   A =  51.94 g/mole   abundance:  83.79 %
+         --->  Isotope:  Cr53   Z = 24   N =  53   A =  52.94 g/mole   abundance:   9.50 %
+         --->  Isotope:  Cr54   Z = 24   N =  54   A =  53.94 g/mole   abundance:   2.37 %
+          ElmMassFraction:   0.13 %  ElmAbundance   0.06 % 
+
+   --->  Element: La (La)   Z = 57.0   N = 139.0   A = 138.91 g/mole
+         --->  Isotope: La138   Z = 57   N = 138   A = 137.91 g/mole   abundance:   0.09 %
+         --->  Isotope: La139   Z = 57   N = 139   A = 138.91 g/mole   abundance:  99.91 %
+          ElmMassFraction:   0.02 %  ElmAbundance   0.00 % 
+
+   --->  Element: Nb (Nb)   Z = 41.0   N =  93.0   A =  92.91 g/mole
+         --->  Isotope:  Nb93   Z = 41   N =  93   A =  92.91 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.00 % 
+
+   --->  Element: Nd (Nd)   Z = 60.0   N = 144.3   A = 144.24 g/mole
+         --->  Isotope: Nd142   Z = 60   N = 142   A = 141.91 g/mole   abundance:  27.20 %
+         --->  Isotope: Nd143   Z = 60   N = 143   A = 142.91 g/mole   abundance:  12.20 %
+         --->  Isotope: Nd144   Z = 60   N = 144   A = 143.91 g/mole   abundance:  23.80 %
+         --->  Isotope: Nd145   Z = 60   N = 145   A = 144.91 g/mole   abundance:   8.30 %
+         --->  Isotope: Nd146   Z = 60   N = 146   A = 145.91 g/mole   abundance:  17.20 %
+         --->  Isotope: Nd148   Z = 60   N = 148   A = 147.92 g/mole   abundance:   5.70 %
+         --->  Isotope: Nd150   Z = 60   N = 150   A = 149.92 g/mole   abundance:   5.60 %
+          ElmMassFraction:   0.03 %  ElmAbundance   0.00 % 
+
+   --->  Element: Ni (Ni)   Z = 28.0   N =  58.8   A =  58.69 g/mole
+         --->  Isotope:  Ni58   Z = 28   N =  58   A =  57.94 g/mole   abundance:  68.08 %
+         --->  Isotope:  Ni60   Z = 28   N =  60   A =  59.93 g/mole   abundance:  26.22 %
+         --->  Isotope:  Ni61   Z = 28   N =  61   A =  60.93 g/mole   abundance:   1.14 %
+         --->  Isotope:  Ni62   Z = 28   N =  62   A =  61.93 g/mole   abundance:   3.63 %
+         --->  Isotope:  Ni64   Z = 28   N =  64   A =  63.93 g/mole   abundance:   0.93 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.00 % 
+
+   --->  Element: Rb (Rb)   Z = 37.0   N =  85.6   A =  85.47 g/mole
+         --->  Isotope:  Rb85   Z = 37   N =  85   A =  84.91 g/mole   abundance:  72.17 %
+         --->  Isotope:  Rb87   Z = 37   N =  87   A =  86.91 g/mole   abundance:  27.83 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.00 % 
+
+   --->  Element: Sc (Sc)   Z = 21.0   N =  45.0   A =  44.96 g/mole
+         --->  Isotope:  Sc45   Z = 21   N =  45   A =  44.96 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: Sr (Sr)   Z = 38.0   N =  87.7   A =  87.62 g/mole
+         --->  Isotope:  Sr84   Z = 38   N =  84   A =  83.91 g/mole   abundance:   0.56 %
+         --->  Isotope:  Sr86   Z = 38   N =  86   A =  85.91 g/mole   abundance:   9.86 %
+         --->  Isotope:  Sr87   Z = 38   N =  87   A =  86.91 g/mole   abundance:   7.00 %
+         --->  Isotope:  Sr88   Z = 38   N =  88   A =  87.91 g/mole   abundance:  82.58 %
+          ElmMassFraction:   0.34 %  ElmAbundance   0.09 % 
+
+   --->  Element: V (V)   Z = 23.0   N =  51.0   A =  50.94 g/mole
+         --->  Isotope:   V50   Z = 23   N =  50   A =  49.95 g/mole   abundance:   0.25 %
+         --->  Isotope:   V51   Z = 23   N =  51   A =  50.94 g/mole   abundance:  99.75 %
+          ElmMassFraction:   0.09 %  ElmAbundance   0.04 % 
+
+   --->  Element: Y (Y)   Z = 39.0   N =  89.0   A =  88.91 g/mole
+         --->  Isotope:   Y89   Z = 39   N =  89   A =  88.91 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.00 % 
+
+   --->  Element: Zn (Zn)   Z = 30.0   N =  65.5   A =  65.40 g/mole
+         --->  Isotope:  Zn64   Z = 30   N =  64   A =  63.93 g/mole   abundance:  48.63 %
+         --->  Isotope:  Zn66   Z = 30   N =  66   A =  65.93 g/mole   abundance:  27.90 %
+         --->  Isotope:  Zn67   Z = 30   N =  67   A =  66.93 g/mole   abundance:   4.10 %
+         --->  Isotope:  Zn68   Z = 30   N =  68   A =  67.92 g/mole   abundance:  18.75 %
+         --->  Isotope:  Zn70   Z = 30   N =  70   A =  69.93 g/mole   abundance:   0.62 %
+          ElmMassFraction:   0.04 %  ElmAbundance   0.01 % 
+
+   --->  Element: Th (Th)   Z = 90.0   N = 232.0   A = 232.04 g/mole
+         --->  Isotope: Th232   Z = 90   N = 232   A = 232.04 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: Sm (Sm)   Z = 62.0   N = 150.4   A = 150.37 g/mole
+         --->  Isotope: Sm144   Z = 62   N = 144   A = 143.91 g/mole   abundance:   3.07 %
+         --->  Isotope: Sm147   Z = 62   N = 147   A = 146.91 g/mole   abundance:  14.99 %
+         --->  Isotope: Sm148   Z = 62   N = 148   A = 147.91 g/mole   abundance:  11.24 %
+         --->  Isotope: Sm149   Z = 62   N = 149   A = 148.92 g/mole   abundance:  13.82 %
+         --->  Isotope: Sm150   Z = 62   N = 150   A = 149.92 g/mole   abundance:   7.38 %
+         --->  Isotope: Sm152   Z = 62   N = 152   A = 151.92 g/mole   abundance:  26.75 %
+         --->  Isotope: Sm154   Z = 62   N = 154   A = 153.92 g/mole   abundance:  22.75 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.00 % 
+
+   --->  Element: Eu (Eu)   Z = 63.0   N = 152.0   A = 151.96 g/mole
+         --->  Isotope: Eu151   Z = 63   N = 151   A = 150.92 g/mole   abundance:  47.81 %
+         --->  Isotope: Eu153   Z = 63   N = 153   A = 152.92 g/mole   abundance:  52.19 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: Gd (Gd)   Z = 64.0   N = 157.3   A = 157.25 g/mole
+         --->  Isotope: Gd152   Z = 64   N = 152   A = 151.92 g/mole   abundance:   0.20 %
+         --->  Isotope: Gd154   Z = 64   N = 154   A = 153.92 g/mole   abundance:   2.18 %
+         --->  Isotope: Gd155   Z = 64   N = 155   A = 154.92 g/mole   abundance:  14.80 %
+         --->  Isotope: Gd156   Z = 64   N = 156   A = 155.92 g/mole   abundance:  20.47 %
+         --->  Isotope: Gd157   Z = 64   N = 157   A = 156.92 g/mole   abundance:  15.65 %
+         --->  Isotope: Gd158   Z = 64   N = 158   A = 157.92 g/mole   abundance:  24.84 %
+         --->  Isotope: Gd160   Z = 64   N = 160   A = 159.93 g/mole   abundance:  21.86 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.00 % 
+
+   --->  Element: Tb (Tb)   Z = 65.0   N = 159.0   A = 158.93 g/mole
+         --->  Isotope: Tb159   Z = 65   N = 159   A = 158.93 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: Yb (Yb)   Z = 70.0   N = 173.1   A = 173.04 g/mole
+         --->  Isotope: Yb168   Z = 70   N = 168   A = 167.93 g/mole   abundance:   0.13 %
+         --->  Isotope: Yb170   Z = 70   N = 170   A = 169.94 g/mole   abundance:   3.04 %
+         --->  Isotope: Yb171   Z = 70   N = 171   A = 170.94 g/mole   abundance:  14.28 %
+         --->  Isotope: Yb172   Z = 70   N = 172   A = 171.94 g/mole   abundance:  21.83 %
+         --->  Isotope: Yb173   Z = 70   N = 173   A = 172.94 g/mole   abundance:  16.13 %
+         --->  Isotope: Yb174   Z = 70   N = 174   A = 173.94 g/mole   abundance:  31.83 %
+         --->  Isotope: Yb176   Z = 70   N = 176   A = 175.94 g/mole   abundance:  12.76 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: Lu (Lu)   Z = 71.0   N = 175.0   A = 174.97 g/mole
+         --->  Isotope: Lu175   Z = 71   N = 175   A = 174.94 g/mole   abundance:  97.41 %
+         --->  Isotope: Lu176   Z = 71   N = 176   A = 175.94 g/mole   abundance:   2.59 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: Ta (Ta)   Z = 73.0   N = 181.0   A = 180.95 g/mole
+         --->  Isotope: Ta180   Z = 73   N = 180   A = 179.95 g/mole   abundance:   0.01 %
+         --->  Isotope: Ta181   Z = 73   N = 181   A = 180.95 g/mole   abundance:  99.99 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: Hf (Hf)   Z = 72.0   N = 178.5   A = 178.49 g/mole
+         --->  Isotope: Hf174   Z = 72   N = 174   A = 173.94 g/mole   abundance:   0.16 %
+         --->  Isotope: Hf176   Z = 72   N = 176   A = 175.94 g/mole   abundance:   5.26 %
+         --->  Isotope: Hf177   Z = 72   N = 177   A = 176.94 g/mole   abundance:  18.60 %
+         --->  Isotope: Hf178   Z = 72   N = 178   A = 177.94 g/mole   abundance:  27.28 %
+         --->  Isotope: Hf179   Z = 72   N = 179   A = 178.95 g/mole   abundance:  13.62 %
+         --->  Isotope: Hf180   Z = 72   N = 180   A = 179.95 g/mole   abundance:  35.08 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+
+ Material: IceBasaltMain    density:  3.000 g/cm3   RadL:   7.775 cm   Nucl.Int.Length:  33.764 cm 
+                       Imean: 145.009 eV 
+
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+          ElmMassFraction:  23.13 %  ElmAbundance  18.98 % 
+
+   --->  Element: Ti (Ti)   Z = 22.0   N =  47.9   A =  47.87 g/mole
+         --->  Isotope:  Ti46   Z = 22   N =  46   A =  45.95 g/mole   abundance:   8.25 %
+         --->  Isotope:  Ti47   Z = 22   N =  47   A =  46.95 g/mole   abundance:   7.44 %
+         --->  Isotope:  Ti48   Z = 22   N =  48   A =  47.95 g/mole   abundance:  73.72 %
+         --->  Isotope:  Ti49   Z = 22   N =  49   A =  48.95 g/mole   abundance:   5.41 %
+         --->  Isotope:  Ti50   Z = 22   N =  50   A =  49.94 g/mole   abundance:   5.18 %
+          ElmMassFraction:   1.27 %  ElmAbundance   0.61 % 
+
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction:   7.02 %  ElmAbundance   6.00 % 
+
+   --->  Element: Fe (Fe)   Z = 26.0   N =  55.9   A =  55.85 g/mole
+         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+          ElmMassFraction:  11.34 %  ElmAbundance   4.68 % 
+
+   --->  Element: Mn (Mn)   Z = 25.0   N =  55.0   A =  54.94 g/mole
+         --->  Isotope:  Mn55   Z = 25   N =  55   A =  54.94 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.19 %  ElmAbundance   0.08 % 
+
+   --->  Element: Mg (Mg)   Z = 12.0   N =  24.3   A =  24.31 g/mole
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance:  78.99 %
+         --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance:  10.00 %
+         --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance:  11.01 %
+          ElmMassFraction:   3.49 %  ElmAbundance   3.31 % 
+
+   --->  Element: Ca (Ca)   Z = 20.0   N =  40.1   A =  40.08 g/mole
+         --->  Isotope:  Ca40   Z = 20   N =  40   A =  39.96 g/mole   abundance:  96.94 %
+         --->  Isotope:  Ca42   Z = 20   N =  42   A =  41.96 g/mole   abundance:   0.65 %
+         --->  Isotope:  Ca43   Z = 20   N =  43   A =  42.96 g/mole   abundance:   0.14 %
+         --->  Isotope:  Ca44   Z = 20   N =  44   A =  43.96 g/mole   abundance:   2.09 %
+         --->  Isotope:  Ca46   Z = 20   N =  46   A =  45.95 g/mole   abundance:   0.00 %
+         --->  Isotope:  Ca48   Z = 20   N =  48   A =  47.95 g/mole   abundance:   0.19 %
+          ElmMassFraction:   7.56 %  ElmAbundance   4.35 % 
+
+   --->  Element: Na (Na)   Z = 11.0   N =  23.0   A =  22.99 g/mole
+         --->  Isotope:  Na23   Z = 11   N =  23   A =  22.99 g/mole   abundance: 100.00 %
+          ElmMassFraction:   8.92 %  ElmAbundance   8.94 % 
+
+   --->  Element: K (K)   Z = 19.0   N =  39.1   A =  39.10 g/mole
+         --->  Isotope:   K39   Z = 19   N =  39   A =  38.96 g/mole   abundance:  93.26 %
+         --->  Isotope:   K40   Z = 19   N =  40   A =  39.96 g/mole   abundance:   0.01 %
+         --->  Isotope:   K41   Z = 19   N =  41   A =  40.96 g/mole   abundance:   6.73 %
+          ElmMassFraction:   0.32 %  ElmAbundance   0.19 % 
+
+   --->  Element: P (P)   Z = 15.0   N =  31.0   A =  30.97 g/mole
+         --->  Isotope:   P31   Z = 15   N =  31   A =  30.97 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.10 %  ElmAbundance   0.07 % 
+
+   --->  Element: S (S)   Z = 16.0   N =  32.1   A =  32.07 g/mole
+         --->  Isotope:   S32   Z = 16   N =  32   A =  31.97 g/mole   abundance:  94.93 %
+         --->  Isotope:   S33   Z = 16   N =  33   A =  32.97 g/mole   abundance:   0.76 %
+         --->  Isotope:   S34   Z = 16   N =  34   A =  33.97 g/mole   abundance:   4.29 %
+         --->  Isotope:   S36   Z = 16   N =  36   A =  35.97 g/mole   abundance:   0.02 %
+          ElmMassFraction:   0.04 %  ElmAbundance   0.03 % 
+
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  36.62 %  ElmAbundance  52.76 % 
+
+
+ Material: IceBasaltTraces    density:  3.000 g/cm3   RadL:   4.081 cm   Nucl.Int.Length:  46.663 cm 
+                       Imean: 302.160 eV 
+
+   --->  Element: Ba (Ba)   Z = 56.0   N = 137.4   A = 137.33 g/mole
+         --->  Isotope: Ba130   Z = 56   N = 130   A = 129.91 g/mole   abundance:   0.11 %
+         --->  Isotope: Ba132   Z = 56   N = 132   A = 131.90 g/mole   abundance:   0.10 %
+         --->  Isotope: Ba134   Z = 56   N = 134   A = 133.91 g/mole   abundance:   2.42 %
+         --->  Isotope: Ba135   Z = 56   N = 135   A = 134.91 g/mole   abundance:   6.59 %
+         --->  Isotope: Ba136   Z = 56   N = 136   A = 135.91 g/mole   abundance:   7.85 %
+         --->  Isotope: Ba137   Z = 56   N = 137   A = 136.91 g/mole   abundance:  11.23 %
+         --->  Isotope: Ba138   Z = 56   N = 138   A = 137.91 g/mole   abundance:  71.70 %
+          ElmMassFraction:   8.56 %  ElmAbundance   3.74 % 
+
+   --->  Element: Ce (Ce)   Z = 58.0   N = 140.2   A = 140.12 g/mole
+         --->  Isotope: Ce136   Z = 58   N = 136   A = 135.91 g/mole   abundance:   0.18 %
+         --->  Isotope: Ce138   Z = 58   N = 138   A = 137.91 g/mole   abundance:   0.25 %
+         --->  Isotope: Ce140   Z = 58   N = 140   A = 139.91 g/mole   abundance:  88.45 %
+         --->  Isotope: Ce142   Z = 58   N = 142   A = 141.91 g/mole   abundance:  11.11 %
+          ElmMassFraction:   3.79 %  ElmAbundance   1.62 % 
+
+   --->  Element: Co (Co)   Z = 27.0   N =  59.0   A =  58.93 g/mole
+         --->  Isotope:  Co59   Z = 27   N =  59   A =  58.93 g/mole   abundance: 100.00 %
+          ElmMassFraction:   3.13 %  ElmAbundance   3.18 % 
+
+   --->  Element: Cr (Cr)   Z = 24.0   N =  52.1   A =  52.00 g/mole
+         --->  Isotope:  Cr50   Z = 24   N =  50   A =  49.95 g/mole   abundance:   4.34 %
+         --->  Isotope:  Cr52   Z = 24   N =  52   A =  51.94 g/mole   abundance:  83.79 %
+         --->  Isotope:  Cr53   Z = 24   N =  53   A =  52.94 g/mole   abundance:   9.50 %
+         --->  Isotope:  Cr54   Z = 24   N =  54   A =  53.94 g/mole   abundance:   2.37 %
+          ElmMassFraction:   4.29 %  ElmAbundance   4.95 % 
+
+   --->  Element: Cu (Cu)   Z = 29.0   N =  63.6   A =  63.55 g/mole
+         --->  Isotope:  Cu63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
+         --->  Isotope:  Cu65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %
+          ElmMassFraction:   7.32 %  ElmAbundance   6.91 % 
+
+   --->  Element: Ga (Ga)   Z = 31.0   N =  69.8   A =  69.72 g/mole
+         --->  Isotope:  Ga69   Z = 31   N =  69   A =  68.93 g/mole   abundance:  60.11 %
+         --->  Isotope:  Ga71   Z = 31   N =  71   A =  70.92 g/mole   abundance:  39.89 %
+          ElmMassFraction:   1.09 %  ElmAbundance   0.94 % 
+
+   --->  Element: La (La)   Z = 57.0   N = 139.0   A = 138.91 g/mole
+         --->  Isotope: La138   Z = 57   N = 138   A = 137.91 g/mole   abundance:   0.09 %
+         --->  Isotope: La139   Z = 57   N = 139   A = 138.91 g/mole   abundance:  99.91 %
+          ElmMassFraction:   1.18 %  ElmAbundance   0.51 % 
+
+   --->  Element: Mo (Mo)   Z = 42.0   N =  96.0   A =  95.93 g/mole
+         --->  Isotope:  Mo92   Z = 42   N =  92   A =  91.91 g/mole   abundance:  14.84 %
+         --->  Isotope:  Mo94   Z = 42   N =  94   A =  93.91 g/mole   abundance:   9.25 %
+         --->  Isotope:  Mo95   Z = 42   N =  95   A =  94.91 g/mole   abundance:  15.92 %
+         --->  Isotope:  Mo96   Z = 42   N =  96   A =  95.90 g/mole   abundance:  16.68 %
+         --->  Isotope:  Mo97   Z = 42   N =  97   A =  96.91 g/mole   abundance:   9.55 %
+         --->  Isotope:  Mo98   Z = 42   N =  98   A =  97.91 g/mole   abundance:  24.13 %
+         --->  Isotope: Mo100   Z = 42   N = 100   A =  99.91 g/mole   abundance:   9.63 %
+          ElmMassFraction:   0.07 %  ElmAbundance   0.04 % 
+
+   --->  Element: Nb (Nb)   Z = 41.0   N =  93.0   A =  92.91 g/mole
+         --->  Isotope:  Nb93   Z = 41   N =  93   A =  92.91 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.87 %  ElmAbundance   0.56 % 
+
+   --->  Element: Nd (Nd)   Z = 60.0   N = 144.3   A = 144.24 g/mole
+         --->  Isotope: Nd142   Z = 60   N = 142   A = 141.91 g/mole   abundance:  27.20 %
+         --->  Isotope: Nd143   Z = 60   N = 143   A = 142.91 g/mole   abundance:  12.20 %
+         --->  Isotope: Nd144   Z = 60   N = 144   A = 143.91 g/mole   abundance:  23.80 %
+         --->  Isotope: Nd145   Z = 60   N = 145   A = 144.91 g/mole   abundance:   8.30 %
+         --->  Isotope: Nd146   Z = 60   N = 146   A = 145.91 g/mole   abundance:  17.20 %
+         --->  Isotope: Nd148   Z = 60   N = 148   A = 147.92 g/mole   abundance:   5.70 %
+         --->  Isotope: Nd150   Z = 60   N = 150   A = 149.92 g/mole   abundance:   5.60 %
+          ElmMassFraction:   1.24 %  ElmAbundance   0.51 % 
+
+   --->  Element: Ni (Ni)   Z = 28.0   N =  58.8   A =  58.69 g/mole
+         --->  Isotope:  Ni58   Z = 28   N =  58   A =  57.94 g/mole   abundance:  68.08 %
+         --->  Isotope:  Ni60   Z = 28   N =  60   A =  59.93 g/mole   abundance:  26.22 %
+         --->  Isotope:  Ni61   Z = 28   N =  61   A =  60.93 g/mole   abundance:   1.14 %
+         --->  Isotope:  Ni62   Z = 28   N =  62   A =  61.93 g/mole   abundance:   3.63 %
+         --->  Isotope:  Ni64   Z = 28   N =  64   A =  63.93 g/mole   abundance:   0.93 %
+          ElmMassFraction:   2.63 %  ElmAbundance   2.69 % 
+
+   --->  Element: Rb (Rb)   Z = 37.0   N =  85.6   A =  85.47 g/mole
+         --->  Isotope:  Rb85   Z = 37   N =  85   A =  84.91 g/mole   abundance:  72.17 %
+         --->  Isotope:  Rb87   Z = 37   N =  87   A =  86.91 g/mole   abundance:  27.83 %
+          ElmMassFraction:   0.55 %  ElmAbundance   0.39 % 
+
+   --->  Element: S (S)   Z = 16.0   N =  32.1   A =  32.07 g/mole
+         --->  Isotope:   S32   Z = 16   N =  32   A =  31.97 g/mole   abundance:  94.93 %
+         --->  Isotope:   S33   Z = 16   N =  33   A =  32.97 g/mole   abundance:   0.76 %
+         --->  Isotope:   S34   Z = 16   N =  34   A =  33.97 g/mole   abundance:   4.29 %
+         --->  Isotope:   S36   Z = 16   N =  36   A =  35.97 g/mole   abundance:   0.02 %
+          ElmMassFraction:  14.68 %  ElmAbundance  27.48 % 
+
+   --->  Element: Sc (Sc)   Z = 21.0   N =  45.0   A =  44.96 g/mole
+         --->  Isotope:  Sc45   Z = 21   N =  45   A =  44.96 g/mole   abundance: 100.00 %
+          ElmMassFraction:   1.97 %  ElmAbundance   2.63 % 
+
+   --->  Element: Sr (Sr)   Z = 38.0   N =  87.7   A =  87.62 g/mole
+         --->  Isotope:  Sr84   Z = 38   N =  84   A =  83.91 g/mole   abundance:   0.56 %
+         --->  Isotope:  Sr86   Z = 38   N =  86   A =  85.91 g/mole   abundance:   9.86 %
+         --->  Isotope:  Sr87   Z = 38   N =  87   A =  86.91 g/mole   abundance:   7.00 %
+         --->  Isotope:  Sr88   Z = 38   N =  88   A =  87.91 g/mole   abundance:  82.58 %
+          ElmMassFraction:   9.78 %  ElmAbundance   6.70 % 
+
+   --->  Element: U (U)   Z = 92.0   N = 238.0   A = 238.03 g/mole
+         --->  Isotope:  U234   Z = 92   N = 234   A = 234.04 g/mole   abundance:   0.01 %
+         --->  Isotope:  U235   Z = 92   N = 235   A = 235.04 g/mole   abundance:   0.72 %
+         --->  Isotope:  U238   Z = 92   N = 238   A = 238.05 g/mole   abundance:  99.27 %
+          ElmMassFraction:   0.43 %  ElmAbundance   0.11 % 
+
+   --->  Element: V (V)   Z = 23.0   N =  51.0   A =  50.94 g/mole
+         --->  Isotope:   V50   Z = 23   N =  50   A =  49.95 g/mole   abundance:   0.25 %
+         --->  Isotope:   V51   Z = 23   N =  51   A =  50.94 g/mole   abundance:  99.75 %
+          ElmMassFraction:  19.05 %  ElmAbundance  22.45 % 
+
+   --->  Element: Y (Y)   Z = 39.0   N =  89.0   A =  88.91 g/mole
+         --->  Isotope:   Y89   Z = 39   N =  89   A =  88.91 g/mole   abundance: 100.00 %
+          ElmMassFraction:   2.99 %  ElmAbundance   2.02 % 
+
+   --->  Element: Zn (Zn)   Z = 30.0   N =  65.5   A =  65.40 g/mole
+         --->  Isotope:  Zn64   Z = 30   N =  64   A =  63.93 g/mole   abundance:  48.63 %
+         --->  Isotope:  Zn66   Z = 30   N =  66   A =  65.93 g/mole   abundance:  27.90 %
+         --->  Isotope:  Zn67   Z = 30   N =  67   A =  66.93 g/mole   abundance:   4.10 %
+         --->  Isotope:  Zn68   Z = 30   N =  68   A =  67.92 g/mole   abundance:  18.75 %
+         --->  Isotope:  Zn70   Z = 30   N =  70   A =  69.93 g/mole   abundance:   0.62 %
+          ElmMassFraction:   6.79 %  ElmAbundance   6.23 % 
+
+   --->  Element: Zr (Zr)   Z = 40.0   N =  91.3   A =  91.22 g/mole
+         --->  Isotope:  Zr90   Z = 40   N =  90   A =  89.90 g/mole   abundance:  51.45 %
+         --->  Isotope:  Zr91   Z = 40   N =  91   A =  90.91 g/mole   abundance:  11.22 %
+         --->  Isotope:  Zr92   Z = 40   N =  92   A =  91.91 g/mole   abundance:  17.15 %
+         --->  Isotope:  Zr94   Z = 40   N =  94   A =  93.91 g/mole   abundance:  17.38 %
+         --->  Isotope:  Zr96   Z = 40   N =  96   A =  95.91 g/mole   abundance:   2.80 %
+          ElmMassFraction:   9.59 %  ElmAbundance   6.31 % 
+
+
+ Material: IceBasalt    density:  3.000 g/cm3   RadL:   7.759 cm   Nucl.Int.Length:  33.785 cm 
+                       Imean: 145.224 eV 
+
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+          ElmMassFraction:  23.08 %  ElmAbundance  18.97 % 
+
+   --->  Element: Ti (Ti)   Z = 22.0   N =  47.9   A =  47.87 g/mole
+         --->  Isotope:  Ti46   Z = 22   N =  46   A =  45.95 g/mole   abundance:   8.25 %
+         --->  Isotope:  Ti47   Z = 22   N =  47   A =  46.95 g/mole   abundance:   7.44 %
+         --->  Isotope:  Ti48   Z = 22   N =  48   A =  47.95 g/mole   abundance:  73.72 %
+         --->  Isotope:  Ti49   Z = 22   N =  49   A =  48.95 g/mole   abundance:   5.41 %
+         --->  Isotope:  Ti50   Z = 22   N =  50   A =  49.94 g/mole   abundance:   5.18 %
+          ElmMassFraction:   1.27 %  ElmAbundance   0.61 % 
+
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction:   7.00 %  ElmAbundance   5.99 % 
+
+   --->  Element: Fe (Fe)   Z = 26.0   N =  55.9   A =  55.85 g/mole
+         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+          ElmMassFraction:  11.32 %  ElmAbundance   4.68 % 
+
+   --->  Element: Mn (Mn)   Z = 25.0   N =  55.0   A =  54.94 g/mole
+         --->  Isotope:  Mn55   Z = 25   N =  55   A =  54.94 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.19 %  ElmAbundance   0.08 % 
+
+   --->  Element: Mg (Mg)   Z = 12.0   N =  24.3   A =  24.31 g/mole
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance:  78.99 %
+         --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance:  10.00 %
+         --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance:  11.01 %
+          ElmMassFraction:   3.48 %  ElmAbundance   3.31 % 
+
+   --->  Element: Ca (Ca)   Z = 20.0   N =  40.1   A =  40.08 g/mole
+         --->  Isotope:  Ca40   Z = 20   N =  40   A =  39.96 g/mole   abundance:  96.94 %
+         --->  Isotope:  Ca42   Z = 20   N =  42   A =  41.96 g/mole   abundance:   0.65 %
+         --->  Isotope:  Ca43   Z = 20   N =  43   A =  42.96 g/mole   abundance:   0.14 %
+         --->  Isotope:  Ca44   Z = 20   N =  44   A =  43.96 g/mole   abundance:   2.09 %
+         --->  Isotope:  Ca46   Z = 20   N =  46   A =  45.95 g/mole   abundance:   0.00 %
+         --->  Isotope:  Ca48   Z = 20   N =  48   A =  47.95 g/mole   abundance:   0.19 %
+          ElmMassFraction:   7.54 %  ElmAbundance   4.34 % 
+
+   --->  Element: Na (Na)   Z = 11.0   N =  23.0   A =  22.99 g/mole
+         --->  Isotope:  Na23   Z = 11   N =  23   A =  22.99 g/mole   abundance: 100.00 %
+          ElmMassFraction:   8.90 %  ElmAbundance   8.94 % 
+
+   --->  Element: K (K)   Z = 19.0   N =  39.1   A =  39.10 g/mole
+         --->  Isotope:   K39   Z = 19   N =  39   A =  38.96 g/mole   abundance:  93.26 %
+         --->  Isotope:   K40   Z = 19   N =  40   A =  39.96 g/mole   abundance:   0.01 %
+         --->  Isotope:   K41   Z = 19   N =  41   A =  40.96 g/mole   abundance:   6.73 %
+          ElmMassFraction:   0.32 %  ElmAbundance   0.19 % 
+
+   --->  Element: P (P)   Z = 15.0   N =  31.0   A =  30.97 g/mole
+         --->  Isotope:   P31   Z = 15   N =  31   A =  30.97 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.10 %  ElmAbundance   0.07 % 
+
+   --->  Element: S (S)   Z = 16.0   N =  32.1   A =  32.07 g/mole
+         --->  Isotope:   S32   Z = 16   N =  32   A =  31.97 g/mole   abundance:  94.93 %
+         --->  Isotope:   S33   Z = 16   N =  33   A =  32.97 g/mole   abundance:   0.76 %
+         --->  Isotope:   S34   Z = 16   N =  34   A =  33.97 g/mole   abundance:   4.29 %
+         --->  Isotope:   S36   Z = 16   N =  36   A =  35.97 g/mole   abundance:   0.02 %
+          ElmMassFraction:   0.07 %  ElmAbundance   0.05 % 
+
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  36.54 %  ElmAbundance  52.72 % 
+
+   --->  Element: Ba (Ba)   Z = 56.0   N = 137.4   A = 137.33 g/mole
+         --->  Isotope: Ba130   Z = 56   N = 130   A = 129.91 g/mole   abundance:   0.11 %
+         --->  Isotope: Ba132   Z = 56   N = 132   A = 131.90 g/mole   abundance:   0.10 %
+         --->  Isotope: Ba134   Z = 56   N = 134   A = 133.91 g/mole   abundance:   2.42 %
+         --->  Isotope: Ba135   Z = 56   N = 135   A = 134.91 g/mole   abundance:   6.59 %
+         --->  Isotope: Ba136   Z = 56   N = 136   A = 135.91 g/mole   abundance:   7.85 %
+         --->  Isotope: Ba137   Z = 56   N = 137   A = 136.91 g/mole   abundance:  11.23 %
+         --->  Isotope: Ba138   Z = 56   N = 138   A = 137.91 g/mole   abundance:  71.70 %
+          ElmMassFraction:   0.02 %  ElmAbundance   0.00 % 
+
+   --->  Element: Ce (Ce)   Z = 58.0   N = 140.2   A = 140.12 g/mole
+         --->  Isotope: Ce136   Z = 58   N = 136   A = 135.91 g/mole   abundance:   0.18 %
+         --->  Isotope: Ce138   Z = 58   N = 138   A = 137.91 g/mole   abundance:   0.25 %
+         --->  Isotope: Ce140   Z = 58   N = 140   A = 139.91 g/mole   abundance:  88.45 %
+         --->  Isotope: Ce142   Z = 58   N = 142   A = 141.91 g/mole   abundance:  11.11 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.00 % 
+
+   --->  Element: Co (Co)   Z = 27.0   N =  59.0   A =  58.93 g/mole
+         --->  Isotope:  Co59   Z = 27   N =  59   A =  58.93 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.00 % 
+
+   --->  Element: Cr (Cr)   Z = 24.0   N =  52.1   A =  52.00 g/mole
+         --->  Isotope:  Cr50   Z = 24   N =  50   A =  49.95 g/mole   abundance:   4.34 %
+         --->  Isotope:  Cr52   Z = 24   N =  52   A =  51.94 g/mole   abundance:  83.79 %
+         --->  Isotope:  Cr53   Z = 24   N =  53   A =  52.94 g/mole   abundance:   9.50 %
+         --->  Isotope:  Cr54   Z = 24   N =  54   A =  53.94 g/mole   abundance:   2.37 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.00 % 
+
+   --->  Element: Cu (Cu)   Z = 29.0   N =  63.6   A =  63.55 g/mole
+         --->  Isotope:  Cu63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
+         --->  Isotope:  Cu65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %
+          ElmMassFraction:   0.02 %  ElmAbundance   0.01 % 
+
+   --->  Element: Ga (Ga)   Z = 31.0   N =  69.8   A =  69.72 g/mole
+         --->  Isotope:  Ga69   Z = 31   N =  69   A =  68.93 g/mole   abundance:  60.11 %
+         --->  Isotope:  Ga71   Z = 31   N =  71   A =  70.92 g/mole   abundance:  39.89 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: La (La)   Z = 57.0   N = 139.0   A = 138.91 g/mole
+         --->  Isotope: La138   Z = 57   N = 138   A = 137.91 g/mole   abundance:   0.09 %
+         --->  Isotope: La139   Z = 57   N = 139   A = 138.91 g/mole   abundance:  99.91 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: Mo (Mo)   Z = 42.0   N =  96.0   A =  95.93 g/mole
+         --->  Isotope:  Mo92   Z = 42   N =  92   A =  91.91 g/mole   abundance:  14.84 %
+         --->  Isotope:  Mo94   Z = 42   N =  94   A =  93.91 g/mole   abundance:   9.25 %
+         --->  Isotope:  Mo95   Z = 42   N =  95   A =  94.91 g/mole   abundance:  15.92 %
+         --->  Isotope:  Mo96   Z = 42   N =  96   A =  95.90 g/mole   abundance:  16.68 %
+         --->  Isotope:  Mo97   Z = 42   N =  97   A =  96.91 g/mole   abundance:   9.55 %
+         --->  Isotope:  Mo98   Z = 42   N =  98   A =  97.91 g/mole   abundance:  24.13 %
+         --->  Isotope: Mo100   Z = 42   N = 100   A =  99.91 g/mole   abundance:   9.63 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: Nb (Nb)   Z = 41.0   N =  93.0   A =  92.91 g/mole
+         --->  Isotope:  Nb93   Z = 41   N =  93   A =  92.91 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: Nd (Nd)   Z = 60.0   N = 144.3   A = 144.24 g/mole
+         --->  Isotope: Nd142   Z = 60   N = 142   A = 141.91 g/mole   abundance:  27.20 %
+         --->  Isotope: Nd143   Z = 60   N = 143   A = 142.91 g/mole   abundance:  12.20 %
+         --->  Isotope: Nd144   Z = 60   N = 144   A = 143.91 g/mole   abundance:  23.80 %
+         --->  Isotope: Nd145   Z = 60   N = 145   A = 144.91 g/mole   abundance:   8.30 %
+         --->  Isotope: Nd146   Z = 60   N = 146   A = 145.91 g/mole   abundance:  17.20 %
+         --->  Isotope: Nd148   Z = 60   N = 148   A = 147.92 g/mole   abundance:   5.70 %
+         --->  Isotope: Nd150   Z = 60   N = 150   A = 149.92 g/mole   abundance:   5.60 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: Ni (Ni)   Z = 28.0   N =  58.8   A =  58.69 g/mole
+         --->  Isotope:  Ni58   Z = 28   N =  58   A =  57.94 g/mole   abundance:  68.08 %
+         --->  Isotope:  Ni60   Z = 28   N =  60   A =  59.93 g/mole   abundance:  26.22 %
+         --->  Isotope:  Ni61   Z = 28   N =  61   A =  60.93 g/mole   abundance:   1.14 %
+         --->  Isotope:  Ni62   Z = 28   N =  62   A =  61.93 g/mole   abundance:   3.63 %
+         --->  Isotope:  Ni64   Z = 28   N =  64   A =  63.93 g/mole   abundance:   0.93 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.00 % 
+
+   --->  Element: Rb (Rb)   Z = 37.0   N =  85.6   A =  85.47 g/mole
+         --->  Isotope:  Rb85   Z = 37   N =  85   A =  84.91 g/mole   abundance:  72.17 %
+         --->  Isotope:  Rb87   Z = 37   N =  87   A =  86.91 g/mole   abundance:  27.83 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: Sc (Sc)   Z = 21.0   N =  45.0   A =  44.96 g/mole
+         --->  Isotope:  Sc45   Z = 21   N =  45   A =  44.96 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: Sr (Sr)   Z = 38.0   N =  87.7   A =  87.62 g/mole
+         --->  Isotope:  Sr84   Z = 38   N =  84   A =  83.91 g/mole   abundance:   0.56 %
+         --->  Isotope:  Sr86   Z = 38   N =  86   A =  85.91 g/mole   abundance:   9.86 %
+         --->  Isotope:  Sr87   Z = 38   N =  87   A =  86.91 g/mole   abundance:   7.00 %
+         --->  Isotope:  Sr88   Z = 38   N =  88   A =  87.91 g/mole   abundance:  82.58 %
+          ElmMassFraction:   0.02 %  ElmAbundance   0.01 % 
+
+   --->  Element: U (U)   Z = 92.0   N = 238.0   A = 238.03 g/mole
+         --->  Isotope:  U234   Z = 92   N = 234   A = 234.04 g/mole   abundance:   0.01 %
+         --->  Isotope:  U235   Z = 92   N = 235   A = 235.04 g/mole   abundance:   0.72 %
+         --->  Isotope:  U238   Z = 92   N = 238   A = 238.05 g/mole   abundance:  99.27 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: V (V)   Z = 23.0   N =  51.0   A =  50.94 g/mole
+         --->  Isotope:   V50   Z = 23   N =  50   A =  49.95 g/mole   abundance:   0.25 %
+         --->  Isotope:   V51   Z = 23   N =  51   A =  50.94 g/mole   abundance:  99.75 %
+          ElmMassFraction:   0.04 %  ElmAbundance   0.02 % 
+
+   --->  Element: Y (Y)   Z = 39.0   N =  89.0   A =  88.91 g/mole
+         --->  Isotope:   Y89   Z = 39   N =  89   A =  88.91 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.00 % 
+
+   --->  Element: Zn (Zn)   Z = 30.0   N =  65.5   A =  65.40 g/mole
+         --->  Isotope:  Zn64   Z = 30   N =  64   A =  63.93 g/mole   abundance:  48.63 %
+         --->  Isotope:  Zn66   Z = 30   N =  66   A =  65.93 g/mole   abundance:  27.90 %
+         --->  Isotope:  Zn67   Z = 30   N =  67   A =  66.93 g/mole   abundance:   4.10 %
+         --->  Isotope:  Zn68   Z = 30   N =  68   A =  67.92 g/mole   abundance:  18.75 %
+         --->  Isotope:  Zn70   Z = 30   N =  70   A =  69.93 g/mole   abundance:   0.62 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.01 % 
+
+   --->  Element: Zr (Zr)   Z = 40.0   N =  91.3   A =  91.22 g/mole
+         --->  Isotope:  Zr90   Z = 40   N =  90   A =  89.90 g/mole   abundance:  51.45 %
+         --->  Isotope:  Zr91   Z = 40   N =  91   A =  90.91 g/mole   abundance:  11.22 %
+         --->  Isotope:  Zr92   Z = 40   N =  92   A =  91.91 g/mole   abundance:  17.15 %
+         --->  Isotope:  Zr94   Z = 40   N =  94   A =  93.91 g/mole   abundance:  17.38 %
+         --->  Isotope:  Zr96   Z = 40   N =  96   A =  95.91 g/mole   abundance:   2.80 %
+          ElmMassFraction:   0.02 %  ElmAbundance   0.01 % 
+
+
+ Material: Dolorite    density:  3.000 g/cm3   RadL:   7.550 cm   Nucl.Int.Length:  33.884 cm 
+                       Imean: 144.832 eV 
+
+   --->  Element: Fe (Fe)   Z = 26.0   N =  55.9   A =  55.85 g/mole
+         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+          ElmMassFraction:  17.50 %  ElmAbundance   7.20 % 
+
+   --->  Element: Ti (Ti)   Z = 22.0   N =  47.9   A =  47.87 g/mole
+         --->  Isotope:  Ti46   Z = 22   N =  46   A =  45.95 g/mole   abundance:   8.25 %
+         --->  Isotope:  Ti47   Z = 22   N =  47   A =  46.95 g/mole   abundance:   7.44 %
+         --->  Isotope:  Ti48   Z = 22   N =  48   A =  47.95 g/mole   abundance:  73.72 %
+         --->  Isotope:  Ti49   Z = 22   N =  49   A =  48.95 g/mole   abundance:   5.41 %
+         --->  Isotope:  Ti50   Z = 22   N =  50   A =  49.94 g/mole   abundance:   5.18 %
+          ElmMassFraction:   0.82 %  ElmAbundance   0.39 % 
+
+   --->  Element: Ca (Ca)   Z = 20.0   N =  40.1   A =  40.08 g/mole
+         --->  Isotope:  Ca40   Z = 20   N =  40   A =  39.96 g/mole   abundance:  96.94 %
+         --->  Isotope:  Ca42   Z = 20   N =  42   A =  41.96 g/mole   abundance:   0.65 %
+         --->  Isotope:  Ca43   Z = 20   N =  43   A =  42.96 g/mole   abundance:   0.14 %
+         --->  Isotope:  Ca44   Z = 20   N =  44   A =  43.96 g/mole   abundance:   2.09 %
+         --->  Isotope:  Ca46   Z = 20   N =  46   A =  45.95 g/mole   abundance:   0.00 %
+         --->  Isotope:  Ca48   Z = 20   N =  48   A =  47.95 g/mole   abundance:   0.19 %
+          ElmMassFraction:   7.53 %  ElmAbundance   4.32 % 
+
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+          ElmMassFraction:  21.88 %  ElmAbundance  17.90 % 
+
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction:   6.76 %  ElmAbundance   5.76 % 
+
+   --->  Element: Mg (Mg)   Z = 12.0   N =  24.3   A =  24.31 g/mole
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance:  78.99 %
+         --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance:  10.00 %
+         --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance:  11.01 %
+          ElmMassFraction:   0.08 %  ElmAbundance   0.08 % 
+
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  43.77 %  ElmAbundance  62.85 % 
+
+   --->  Element: Mn (Mn)   Z = 25.0   N =  55.0   A =  54.94 g/mole
+         --->  Isotope:  Mn55   Z = 25   N =  55   A =  54.94 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.15 %  ElmAbundance   0.06 % 
+
+   --->  Element: Na (Na)   Z = 11.0   N =  23.0   A =  22.99 g/mole
+         --->  Isotope:  Na23   Z = 11   N =  23   A =  22.99 g/mole   abundance: 100.00 %
+          ElmMassFraction:   1.34 %  ElmAbundance   1.34 % 
+
+   --->  Element: K (K)   Z = 19.0   N =  39.1   A =  39.10 g/mole
+         --->  Isotope:   K39   Z = 19   N =  39   A =  38.96 g/mole   abundance:  93.26 %
+         --->  Isotope:   K40   Z = 19   N =  40   A =  39.96 g/mole   abundance:   0.01 %
+         --->  Isotope:   K41   Z = 19   N =  41   A =  40.96 g/mole   abundance:   6.73 %
+          ElmMassFraction:   0.11 %  ElmAbundance   0.06 % 
+
+   --->  Element: P (P)   Z = 15.0   N =  31.0   A =  30.97 g/mole
+         --->  Isotope:   P31   Z = 15   N =  31   A =  30.97 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.06 %  ElmAbundance   0.04 % 
+
+
+ Material: TracesOfDolorite    density:  3.000 g/cm3   RadL:   3.976 cm   Nucl.Int.Length:  48.058 cm 
+                       Imean: 323.948 eV 
+
+   --->  Element: Nb (Nb)   Z = 41.0   N =  93.0   A =  92.91 g/mole
+         --->  Isotope:  Nb93   Z = 41   N =  93   A =  92.91 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.58 %  ElmAbundance   0.42 % 
+
+   --->  Element: Zr (Zr)   Z = 40.0   N =  91.3   A =  91.22 g/mole
+         --->  Isotope:  Zr90   Z = 40   N =  90   A =  89.90 g/mole   abundance:  51.45 %
+         --->  Isotope:  Zr91   Z = 40   N =  91   A =  90.91 g/mole   abundance:  11.22 %
+         --->  Isotope:  Zr92   Z = 40   N =  92   A =  91.91 g/mole   abundance:  17.15 %
+         --->  Isotope:  Zr94   Z = 40   N =  94   A =  93.91 g/mole   abundance:  17.38 %
+         --->  Isotope:  Zr96   Z = 40   N =  96   A =  95.91 g/mole   abundance:   2.80 %
+          ElmMassFraction:  10.39 %  ElmAbundance   7.73 % 
+
+   --->  Element: Y (Y)   Z = 39.0   N =  89.0   A =  88.91 g/mole
+         --->  Isotope:   Y89   Z = 39   N =  89   A =  88.91 g/mole   abundance: 100.00 %
+          ElmMassFraction:   3.23 %  ElmAbundance   2.46 % 
+
+   --->  Element: Sr (Sr)   Z = 38.0   N =  87.7   A =  87.62 g/mole
+         --->  Isotope:  Sr84   Z = 38   N =  84   A =  83.91 g/mole   abundance:   0.56 %
+         --->  Isotope:  Sr86   Z = 38   N =  86   A =  85.91 g/mole   abundance:   9.86 %
+         --->  Isotope:  Sr87   Z = 38   N =  87   A =  86.91 g/mole   abundance:   7.00 %
+         --->  Isotope:  Sr88   Z = 38   N =  88   A =  87.91 g/mole   abundance:  82.58 %
+          ElmMassFraction:  15.35 %  ElmAbundance  11.89 % 
+
+   --->  Element: Rb (Rb)   Z = 37.0   N =  85.6   A =  85.47 g/mole
+         --->  Isotope:  Rb85   Z = 37   N =  85   A =  84.91 g/mole   abundance:  72.17 %
+         --->  Isotope:  Rb87   Z = 37   N =  87   A =  86.91 g/mole   abundance:  27.83 %
+          ElmMassFraction:   0.32 %  ElmAbundance   0.25 % 
+
+   --->  Element: Ga (Ga)   Z = 31.0   N =  69.8   A =  69.72 g/mole
+         --->  Isotope:  Ga69   Z = 31   N =  69   A =  68.93 g/mole   abundance:  60.11 %
+         --->  Isotope:  Ga71   Z = 31   N =  71   A =  70.92 g/mole   abundance:  39.89 %
+          ElmMassFraction:   1.74 %  ElmAbundance   1.70 % 
+
+   --->  Element: Zn (Zn)   Z = 30.0   N =  65.5   A =  65.40 g/mole
+         --->  Isotope:  Zn64   Z = 30   N =  64   A =  63.93 g/mole   abundance:  48.63 %
+         --->  Isotope:  Zn66   Z = 30   N =  66   A =  65.93 g/mole   abundance:  27.90 %
+         --->  Isotope:  Zn67   Z = 30   N =  67   A =  66.93 g/mole   abundance:   4.10 %
+         --->  Isotope:  Zn68   Z = 30   N =  68   A =  67.92 g/mole   abundance:  18.75 %
+         --->  Isotope:  Zn70   Z = 30   N =  70   A =  69.93 g/mole   abundance:   0.62 %
+          ElmMassFraction:   8.10 %  ElmAbundance   8.41 % 
+
+   --->  Element: Ni (Ni)   Z = 28.0   N =  58.8   A =  58.69 g/mole
+         --->  Isotope:  Ni58   Z = 28   N =  58   A =  57.94 g/mole   abundance:  68.08 %
+         --->  Isotope:  Ni60   Z = 28   N =  60   A =  59.93 g/mole   abundance:  26.22 %
+         --->  Isotope:  Ni61   Z = 28   N =  61   A =  60.93 g/mole   abundance:   1.14 %
+         --->  Isotope:  Ni62   Z = 28   N =  62   A =  61.93 g/mole   abundance:   3.63 %
+         --->  Isotope:  Ni64   Z = 28   N =  64   A =  63.93 g/mole   abundance:   0.93 %
+          ElmMassFraction:   5.65 %  ElmAbundance   6.54 % 
+
+   --->  Element: Sc (Sc)   Z = 21.0   N =  45.0   A =  44.96 g/mole
+         --->  Isotope:  Sc45   Z = 21   N =  45   A =  44.96 g/mole   abundance: 100.00 %
+          ElmMassFraction:   1.80 %  ElmAbundance   2.72 % 
+
+   --->  Element: V (V)   Z = 23.0   N =  51.0   A =  50.94 g/mole
+         --->  Isotope:   V50   Z = 23   N =  50   A =  49.95 g/mole   abundance:   0.25 %
+         --->  Isotope:   V51   Z = 23   N =  51   A =  50.94 g/mole   abundance:  99.75 %
+          ElmMassFraction:  20.01 %  ElmAbundance  26.68 % 
+
+   --->  Element: Cr (Cr)   Z = 24.0   N =  52.1   A =  52.00 g/mole
+         --->  Isotope:  Cr50   Z = 24   N =  50   A =  49.95 g/mole   abundance:   4.34 %
+         --->  Isotope:  Cr52   Z = 24   N =  52   A =  51.94 g/mole   abundance:  83.79 %
+         --->  Isotope:  Cr53   Z = 24   N =  53   A =  52.94 g/mole   abundance:   9.50 %
+         --->  Isotope:  Cr54   Z = 24   N =  54   A =  53.94 g/mole   abundance:   2.37 %
+          ElmMassFraction:   8.46 %  ElmAbundance  11.05 % 
+
+   --->  Element: Co (Co)   Z = 27.0   N =  59.0   A =  58.93 g/mole
+         --->  Isotope:  Co59   Z = 27   N =  59   A =  58.93 g/mole   abundance: 100.00 %
+          ElmMassFraction:   4.13 %  ElmAbundance   4.76 % 
+
+   --->  Element: Cu (Cu)   Z = 29.0   N =  63.6   A =  63.55 g/mole
+         --->  Isotope:  Cu63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
+         --->  Isotope:  Cu65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %
+          ElmMassFraction:   9.46 %  ElmAbundance  10.11 % 
+
+   --->  Element: Ba (Ba)   Z = 56.0   N = 137.4   A = 137.33 g/mole
+         --->  Isotope: Ba130   Z = 56   N = 130   A = 129.91 g/mole   abundance:   0.11 %
+         --->  Isotope: Ba132   Z = 56   N = 132   A = 131.90 g/mole   abundance:   0.10 %
+         --->  Isotope: Ba134   Z = 56   N = 134   A = 133.91 g/mole   abundance:   2.42 %
+         --->  Isotope: Ba135   Z = 56   N = 135   A = 134.91 g/mole   abundance:   6.59 %
+         --->  Isotope: Ba136   Z = 56   N = 136   A = 135.91 g/mole   abundance:   7.85 %
+         --->  Isotope: Ba137   Z = 56   N = 137   A = 136.91 g/mole   abundance:  11.23 %
+         --->  Isotope: Ba138   Z = 56   N = 138   A = 137.91 g/mole   abundance:  71.70 %
+          ElmMassFraction:   6.53 %  ElmAbundance   3.23 % 
+
+   --->  Element: Ce (Ce)   Z = 58.0   N = 140.2   A = 140.12 g/mole
+         --->  Isotope: Ce136   Z = 58   N = 136   A = 135.91 g/mole   abundance:   0.18 %
+         --->  Isotope: Ce138   Z = 58   N = 138   A = 137.91 g/mole   abundance:   0.25 %
+         --->  Isotope: Ce140   Z = 58   N = 140   A = 139.91 g/mole   abundance:  88.45 %
+         --->  Isotope: Ce142   Z = 58   N = 142   A = 141.91 g/mole   abundance:  11.11 %
+          ElmMassFraction:   2.63 %  ElmAbundance   1.27 % 
+
+   --->  Element: Nd (Nd)   Z = 60.0   N = 144.3   A = 144.24 g/mole
+         --->  Isotope: Nd142   Z = 60   N = 142   A = 141.91 g/mole   abundance:  27.20 %
+         --->  Isotope: Nd143   Z = 60   N = 143   A = 142.91 g/mole   abundance:  12.20 %
+         --->  Isotope: Nd144   Z = 60   N = 144   A = 143.91 g/mole   abundance:  23.80 %
+         --->  Isotope: Nd145   Z = 60   N = 145   A = 144.91 g/mole   abundance:   8.30 %
+         --->  Isotope: Nd146   Z = 60   N = 146   A = 145.91 g/mole   abundance:  17.20 %
+         --->  Isotope: Nd148   Z = 60   N = 148   A = 147.92 g/mole   abundance:   5.70 %
+         --->  Isotope: Nd150   Z = 60   N = 150   A = 149.92 g/mole   abundance:   5.60 %
+          ElmMassFraction:   1.62 %  ElmAbundance   0.76 % 
+
+
+ Material: Dolorite    density:  3.000 g/cm3   RadL:   7.531 cm   Nucl.Int.Length:  33.912 cm 
+                       Imean: 145.127 eV 
+
+   --->  Element: Nb (Nb)   Z = 41.0   N =  93.0   A =  92.91 g/mole
+         --->  Isotope:  Nb93   Z = 41   N =  93   A =  92.91 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: Zr (Zr)   Z = 40.0   N =  91.3   A =  91.22 g/mole
+         --->  Isotope:  Zr90   Z = 40   N =  90   A =  89.90 g/mole   abundance:  51.45 %
+         --->  Isotope:  Zr91   Z = 40   N =  91   A =  90.91 g/mole   abundance:  11.22 %
+         --->  Isotope:  Zr92   Z = 40   N =  92   A =  91.91 g/mole   abundance:  17.15 %
+         --->  Isotope:  Zr94   Z = 40   N =  94   A =  93.91 g/mole   abundance:  17.38 %
+         --->  Isotope:  Zr96   Z = 40   N =  96   A =  95.91 g/mole   abundance:   2.80 %
+          ElmMassFraction:   0.03 %  ElmAbundance   0.01 % 
+
+   --->  Element: Y (Y)   Z = 39.0   N =  89.0   A =  88.91 g/mole
+         --->  Isotope:   Y89   Z = 39   N =  89   A =  88.91 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.00 % 
+
+   --->  Element: Sr (Sr)   Z = 38.0   N =  87.7   A =  87.62 g/mole
+         --->  Isotope:  Sr84   Z = 38   N =  84   A =  83.91 g/mole   abundance:   0.56 %
+         --->  Isotope:  Sr86   Z = 38   N =  86   A =  85.91 g/mole   abundance:   9.86 %
+         --->  Isotope:  Sr87   Z = 38   N =  87   A =  86.91 g/mole   abundance:   7.00 %
+         --->  Isotope:  Sr88   Z = 38   N =  88   A =  87.91 g/mole   abundance:  82.58 %
+          ElmMassFraction:   0.04 %  ElmAbundance   0.01 % 
+
+   --->  Element: Rb (Rb)   Z = 37.0   N =  85.6   A =  85.47 g/mole
+         --->  Isotope:  Rb85   Z = 37   N =  85   A =  84.91 g/mole   abundance:  72.17 %
+         --->  Isotope:  Rb87   Z = 37   N =  87   A =  86.91 g/mole   abundance:  27.83 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: Ga (Ga)   Z = 31.0   N =  69.8   A =  69.72 g/mole
+         --->  Isotope:  Ga69   Z = 31   N =  69   A =  68.93 g/mole   abundance:  60.11 %
+         --->  Isotope:  Ga71   Z = 31   N =  71   A =  70.92 g/mole   abundance:  39.89 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: Zn (Zn)   Z = 30.0   N =  65.5   A =  65.40 g/mole
+         --->  Isotope:  Zn64   Z = 30   N =  64   A =  63.93 g/mole   abundance:  48.63 %
+         --->  Isotope:  Zn66   Z = 30   N =  66   A =  65.93 g/mole   abundance:  27.90 %
+         --->  Isotope:  Zn67   Z = 30   N =  67   A =  66.93 g/mole   abundance:   4.10 %
+         --->  Isotope:  Zn68   Z = 30   N =  68   A =  67.92 g/mole   abundance:  18.75 %
+         --->  Isotope:  Zn70   Z = 30   N =  70   A =  69.93 g/mole   abundance:   0.62 %
+          ElmMassFraction:   0.02 %  ElmAbundance   0.01 % 
+
+   --->  Element: Ni (Ni)   Z = 28.0   N =  58.8   A =  58.69 g/mole
+         --->  Isotope:  Ni58   Z = 28   N =  58   A =  57.94 g/mole   abundance:  68.08 %
+         --->  Isotope:  Ni60   Z = 28   N =  60   A =  59.93 g/mole   abundance:  26.22 %
+         --->  Isotope:  Ni61   Z = 28   N =  61   A =  60.93 g/mole   abundance:   1.14 %
+         --->  Isotope:  Ni62   Z = 28   N =  62   A =  61.93 g/mole   abundance:   3.63 %
+         --->  Isotope:  Ni64   Z = 28   N =  64   A =  63.93 g/mole   abundance:   0.93 %
+          ElmMassFraction:   0.02 %  ElmAbundance   0.01 % 
+
+   --->  Element: Sc (Sc)   Z = 21.0   N =  45.0   A =  44.96 g/mole
+         --->  Isotope:  Sc45   Z = 21   N =  45   A =  44.96 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.00 % 
+
+   --->  Element: V (V)   Z = 23.0   N =  51.0   A =  50.94 g/mole
+         --->  Isotope:   V50   Z = 23   N =  50   A =  49.95 g/mole   abundance:   0.25 %
+         --->  Isotope:   V51   Z = 23   N =  51   A =  50.94 g/mole   abundance:  99.75 %
+          ElmMassFraction:   0.06 %  ElmAbundance   0.03 % 
+
+   --->  Element: Cr (Cr)   Z = 24.0   N =  52.1   A =  52.00 g/mole
+         --->  Isotope:  Cr50   Z = 24   N =  50   A =  49.95 g/mole   abundance:   4.34 %
+         --->  Isotope:  Cr52   Z = 24   N =  52   A =  51.94 g/mole   abundance:  83.79 %
+         --->  Isotope:  Cr53   Z = 24   N =  53   A =  52.94 g/mole   abundance:   9.50 %
+         --->  Isotope:  Cr54   Z = 24   N =  54   A =  53.94 g/mole   abundance:   2.37 %
+          ElmMassFraction:   0.02 %  ElmAbundance   0.01 % 
+
+   --->  Element: Co (Co)   Z = 27.0   N =  59.0   A =  58.93 g/mole
+         --->  Isotope:  Co59   Z = 27   N =  59   A =  58.93 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.00 % 
+
+   --->  Element: Cu (Cu)   Z = 29.0   N =  63.6   A =  63.55 g/mole
+         --->  Isotope:  Cu63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
+         --->  Isotope:  Cu65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %
+          ElmMassFraction:   0.03 %  ElmAbundance   0.01 % 
+
+   --->  Element: Ba (Ba)   Z = 56.0   N = 137.4   A = 137.33 g/mole
+         --->  Isotope: Ba130   Z = 56   N = 130   A = 129.91 g/mole   abundance:   0.11 %
+         --->  Isotope: Ba132   Z = 56   N = 132   A = 131.90 g/mole   abundance:   0.10 %
+         --->  Isotope: Ba134   Z = 56   N = 134   A = 133.91 g/mole   abundance:   2.42 %
+         --->  Isotope: Ba135   Z = 56   N = 135   A = 134.91 g/mole   abundance:   6.59 %
+         --->  Isotope: Ba136   Z = 56   N = 136   A = 135.91 g/mole   abundance:   7.85 %
+         --->  Isotope: Ba137   Z = 56   N = 137   A = 136.91 g/mole   abundance:  11.23 %
+         --->  Isotope: Ba138   Z = 56   N = 138   A = 137.91 g/mole   abundance:  71.70 %
+          ElmMassFraction:   0.02 %  ElmAbundance   0.00 % 
+
+   --->  Element: Ce (Ce)   Z = 58.0   N = 140.2   A = 140.12 g/mole
+         --->  Isotope: Ce136   Z = 58   N = 136   A = 135.91 g/mole   abundance:   0.18 %
+         --->  Isotope: Ce138   Z = 58   N = 138   A = 137.91 g/mole   abundance:   0.25 %
+         --->  Isotope: Ce140   Z = 58   N = 140   A = 139.91 g/mole   abundance:  88.45 %
+         --->  Isotope: Ce142   Z = 58   N = 142   A = 141.91 g/mole   abundance:  11.11 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.00 % 
+
+   --->  Element: Nd (Nd)   Z = 60.0   N = 144.3   A = 144.24 g/mole
+         --->  Isotope: Nd142   Z = 60   N = 142   A = 141.91 g/mole   abundance:  27.20 %
+         --->  Isotope: Nd143   Z = 60   N = 143   A = 142.91 g/mole   abundance:  12.20 %
+         --->  Isotope: Nd144   Z = 60   N = 144   A = 143.91 g/mole   abundance:  23.80 %
+         --->  Isotope: Nd145   Z = 60   N = 145   A = 144.91 g/mole   abundance:   8.30 %
+         --->  Isotope: Nd146   Z = 60   N = 146   A = 145.91 g/mole   abundance:  17.20 %
+         --->  Isotope: Nd148   Z = 60   N = 148   A = 147.92 g/mole   abundance:   5.70 %
+         --->  Isotope: Nd150   Z = 60   N = 150   A = 149.92 g/mole   abundance:   5.60 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: Fe (Fe)   Z = 26.0   N =  55.9   A =  55.85 g/mole
+         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+          ElmMassFraction:  17.45 %  ElmAbundance   7.19 % 
+
+   --->  Element: Ti (Ti)   Z = 22.0   N =  47.9   A =  47.87 g/mole
+         --->  Isotope:  Ti46   Z = 22   N =  46   A =  45.95 g/mole   abundance:   8.25 %
+         --->  Isotope:  Ti47   Z = 22   N =  47   A =  46.95 g/mole   abundance:   7.44 %
+         --->  Isotope:  Ti48   Z = 22   N =  48   A =  47.95 g/mole   abundance:  73.72 %
+         --->  Isotope:  Ti49   Z = 22   N =  49   A =  48.95 g/mole   abundance:   5.41 %
+         --->  Isotope:  Ti50   Z = 22   N =  50   A =  49.94 g/mole   abundance:   5.18 %
+          ElmMassFraction:   0.82 %  ElmAbundance   0.39 % 
+
+   --->  Element: Ca (Ca)   Z = 20.0   N =  40.1   A =  40.08 g/mole
+         --->  Isotope:  Ca40   Z = 20   N =  40   A =  39.96 g/mole   abundance:  96.94 %
+         --->  Isotope:  Ca42   Z = 20   N =  42   A =  41.96 g/mole   abundance:   0.65 %
+         --->  Isotope:  Ca43   Z = 20   N =  43   A =  42.96 g/mole   abundance:   0.14 %
+         --->  Isotope:  Ca44   Z = 20   N =  44   A =  43.96 g/mole   abundance:   2.09 %
+         --->  Isotope:  Ca46   Z = 20   N =  46   A =  45.95 g/mole   abundance:   0.00 %
+         --->  Isotope:  Ca48   Z = 20   N =  48   A =  47.95 g/mole   abundance:   0.19 %
+          ElmMassFraction:   7.51 %  ElmAbundance   4.31 % 
+
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+          ElmMassFraction:  21.82 %  ElmAbundance  17.88 % 
+
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction:   6.74 %  ElmAbundance   5.75 % 
+
+   --->  Element: Mg (Mg)   Z = 12.0   N =  24.3   A =  24.31 g/mole
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance:  78.99 %
+         --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance:  10.00 %
+         --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance:  11.01 %
+          ElmMassFraction:   0.08 %  ElmAbundance   0.08 % 
+
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  43.65 %  ElmAbundance  62.79 % 
+
+   --->  Element: Mn (Mn)   Z = 25.0   N =  55.0   A =  54.94 g/mole
+         --->  Isotope:  Mn55   Z = 25   N =  55   A =  54.94 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.15 %  ElmAbundance   0.06 % 
+
+   --->  Element: Na (Na)   Z = 11.0   N =  23.0   A =  22.99 g/mole
+         --->  Isotope:  Na23   Z = 11   N =  23   A =  22.99 g/mole   abundance: 100.00 %
+          ElmMassFraction:   1.34 %  ElmAbundance   1.34 % 
+
+   --->  Element: K (K)   Z = 19.0   N =  39.1   A =  39.10 g/mole
+         --->  Isotope:   K39   Z = 19   N =  39   A =  38.96 g/mole   abundance:  93.26 %
+         --->  Isotope:   K40   Z = 19   N =  40   A =  39.96 g/mole   abundance:   0.01 %
+         --->  Isotope:   K41   Z = 19   N =  41   A =  40.96 g/mole   abundance:   6.73 %
+          ElmMassFraction:   0.11 %  ElmAbundance   0.06 % 
+
+   --->  Element: P (P)   Z = 15.0   N =  31.0   A =  30.97 g/mole
+         --->  Isotope:   P31   Z = 15   N =  31   A =  30.97 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.06 %  ElmAbundance   0.04 % 
+
+
+ Material: Mars1 Main components    density:  3.000 g/cm3   RadL:   8.190 cm   Nucl.Int.Length:  32.970 cm 
+                       Imean: 135.060 eV 
+
+   --->  Element: Fe (Fe)   Z = 26.0   N =  55.9   A =  55.85 g/mole
+         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+          ElmMassFraction:  10.09 %  ElmAbundance   3.88 % 
+
+   --->  Element: Ti (Ti)   Z = 22.0   N =  47.9   A =  47.87 g/mole
+         --->  Isotope:  Ti46   Z = 22   N =  46   A =  45.95 g/mole   abundance:   8.25 %
+         --->  Isotope:  Ti47   Z = 22   N =  47   A =  46.95 g/mole   abundance:   7.44 %
+         --->  Isotope:  Ti48   Z = 22   N =  48   A =  47.95 g/mole   abundance:  73.72 %
+         --->  Isotope:  Ti49   Z = 22   N =  49   A =  48.95 g/mole   abundance:   5.41 %
+         --->  Isotope:  Ti50   Z = 22   N =  50   A =  49.94 g/mole   abundance:   5.18 %
+          ElmMassFraction:   1.87 %  ElmAbundance   0.84 % 
+
+   --->  Element: Ca (Ca)   Z = 20.0   N =  40.1   A =  40.08 g/mole
+         --->  Isotope:  Ca40   Z = 20   N =  40   A =  39.96 g/mole   abundance:  96.94 %
+         --->  Isotope:  Ca42   Z = 20   N =  42   A =  41.96 g/mole   abundance:   0.65 %
+         --->  Isotope:  Ca43   Z = 20   N =  43   A =  42.96 g/mole   abundance:   0.14 %
+         --->  Isotope:  Ca44   Z = 20   N =  44   A =  43.96 g/mole   abundance:   2.09 %
+         --->  Isotope:  Ca46   Z = 20   N =  46   A =  45.95 g/mole   abundance:   0.00 %
+         --->  Isotope:  Ca48   Z = 20   N =  48   A =  47.95 g/mole   abundance:   0.19 %
+          ElmMassFraction:   4.04 %  ElmAbundance   2.17 % 
+
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+          ElmMassFraction:  19.64 %  ElmAbundance  15.02 % 
+
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction:  10.33 %  ElmAbundance   8.22 % 
+
+   --->  Element: Mg (Mg)   Z = 12.0   N =  24.3   A =  24.31 g/mole
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance:  78.99 %
+         --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance:  10.00 %
+         --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance:  11.01 %
+          ElmMassFraction:   2.42 %  ElmAbundance   2.13 % 
+
+   --->  Element: Mn (Mn)   Z = 25.0   N =  55.0   A =  54.94 g/mole
+         --->  Isotope:  Mn55   Z = 25   N =  55   A =  54.94 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.18 %  ElmAbundance   0.07 % 
+
+   --->  Element: Na (Na)   Z = 11.0   N =  23.0   A =  22.99 g/mole
+         --->  Isotope:  Na23   Z = 11   N =  23   A =  22.99 g/mole   abundance: 100.00 %
+          ElmMassFraction:   1.78 %  ElmAbundance   1.66 % 
+
+   --->  Element: K (K)   Z = 19.0   N =  39.1   A =  39.10 g/mole
+         --->  Isotope:   K39   Z = 19   N =  39   A =  38.96 g/mole   abundance:  93.26 %
+         --->  Isotope:   K40   Z = 19   N =  40   A =  39.96 g/mole   abundance:   0.01 %
+         --->  Isotope:   K41   Z = 19   N =  41   A =  40.96 g/mole   abundance:   6.73 %
+          ElmMassFraction:   0.57 %  ElmAbundance   0.32 % 
+
+   --->  Element: P (P)   Z = 15.0   N =  31.0   A =  30.97 g/mole
+         --->  Isotope:   P31   Z = 15   N =  31   A =  30.97 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.28 %  ElmAbundance   0.19 % 
+
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  48.80 %  ElmAbundance  65.50 % 
+
+
+ Material: TracesOfMars1    density:  3.000 g/cm3   RadL:   3.406 cm   Nucl.Int.Length:  52.099 cm 
+                       Imean: 375.468 eV 
+
+   --->  Element: Nb (Nb)   Z = 41.0   N =  93.0   A =  92.91 g/mole
+         --->  Isotope:  Nb93   Z = 41   N =  93   A =  92.91 g/mole   abundance: 100.00 %
+          ElmMassFraction:   1.95 %  ElmAbundance   1.77 % 
+
+   --->  Element: Zr (Zr)   Z = 40.0   N =  91.3   A =  91.22 g/mole
+         --->  Isotope:  Zr90   Z = 40   N =  90   A =  89.90 g/mole   abundance:  51.45 %
+         --->  Isotope:  Zr91   Z = 40   N =  91   A =  90.91 g/mole   abundance:  11.22 %
+         --->  Isotope:  Zr92   Z = 40   N =  92   A =  91.91 g/mole   abundance:  17.15 %
+         --->  Isotope:  Zr94   Z = 40   N =  94   A =  93.91 g/mole   abundance:  17.38 %
+         --->  Isotope:  Zr96   Z = 40   N =  96   A =  95.91 g/mole   abundance:   2.80 %
+          ElmMassFraction:  15.07 %  ElmAbundance  13.93 % 
+
+   --->  Element: Y (Y)   Z = 39.0   N =  89.0   A =  88.91 g/mole
+         --->  Isotope:   Y89   Z = 39   N =  89   A =  88.91 g/mole   abundance: 100.00 %
+          ElmMassFraction:   1.97 %  ElmAbundance   1.87 % 
+
+   --->  Element: Sr (Sr)   Z = 38.0   N =  87.7   A =  87.62 g/mole
+         --->  Isotope:  Sr84   Z = 38   N =  84   A =  83.91 g/mole   abundance:   0.56 %
+         --->  Isotope:  Sr86   Z = 38   N =  86   A =  85.91 g/mole   abundance:   9.86 %
+         --->  Isotope:  Sr87   Z = 38   N =  87   A =  86.91 g/mole   abundance:   7.00 %
+         --->  Isotope:  Sr88   Z = 38   N =  88   A =  87.91 g/mole   abundance:  82.58 %
+          ElmMassFraction:  32.36 %  ElmAbundance  31.15 % 
+
+   --->  Element: Rb (Rb)   Z = 37.0   N =  85.6   A =  85.47 g/mole
+         --->  Isotope:  Rb85   Z = 37   N =  85   A =  84.91 g/mole   abundance:  72.17 %
+         --->  Isotope:  Rb87   Z = 37   N =  87   A =  86.91 g/mole   abundance:  27.83 %
+          ElmMassFraction:   0.52 %  ElmAbundance   0.51 % 
+
+   --->  Element: Ga (Ga)   Z = 31.0   N =  69.8   A =  69.72 g/mole
+         --->  Isotope:  Ga69   Z = 31   N =  69   A =  68.93 g/mole   abundance:  60.11 %
+         --->  Isotope:  Ga71   Z = 31   N =  71   A =  70.92 g/mole   abundance:  39.89 %
+          ElmMassFraction:   0.64 %  ElmAbundance   0.77 % 
+
+   --->  Element: Zn (Zn)   Z = 30.0   N =  65.5   A =  65.40 g/mole
+         --->  Isotope:  Zn64   Z = 30   N =  64   A =  63.93 g/mole   abundance:  48.63 %
+         --->  Isotope:  Zn66   Z = 30   N =  66   A =  65.93 g/mole   abundance:  27.90 %
+         --->  Isotope:  Zn67   Z = 30   N =  67   A =  66.93 g/mole   abundance:   4.10 %
+         --->  Isotope:  Zn68   Z = 30   N =  68   A =  67.92 g/mole   abundance:  18.75 %
+         --->  Isotope:  Zn70   Z = 30   N =  70   A =  69.93 g/mole   abundance:   0.62 %
+          ElmMassFraction:   2.72 %  ElmAbundance   3.51 % 
+
+   --->  Element: Ni (Ni)   Z = 28.0   N =  58.8   A =  58.69 g/mole
+         --->  Isotope:  Ni58   Z = 28   N =  58   A =  57.94 g/mole   abundance:  68.08 %
+         --->  Isotope:  Ni60   Z = 28   N =  60   A =  59.93 g/mole   abundance:  26.22 %
+         --->  Isotope:  Ni61   Z = 28   N =  61   A =  60.93 g/mole   abundance:   1.14 %
+         --->  Isotope:  Ni62   Z = 28   N =  62   A =  61.93 g/mole   abundance:   3.63 %
+         --->  Isotope:  Ni64   Z = 28   N =  64   A =  63.93 g/mole   abundance:   0.93 %
+          ElmMassFraction:   1.57 %  ElmAbundance   2.25 % 
+
+   --->  Element: Sc (Sc)   Z = 21.0   N =  45.0   A =  44.96 g/mole
+         --->  Isotope:  Sc45   Z = 21   N =  45   A =  44.96 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.36 %  ElmAbundance   0.68 % 
+
+   --->  Element: V (V)   Z = 23.0   N =  51.0   A =  50.94 g/mole
+         --->  Isotope:   V50   Z = 23   N =  50   A =  49.95 g/mole   abundance:   0.25 %
+         --->  Isotope:   V51   Z = 23   N =  51   A =  50.94 g/mole   abundance:  99.75 %
+          ElmMassFraction:   2.60 %  ElmAbundance   4.31 % 
+
+   --->  Element: Cr (Cr)   Z = 24.0   N =  52.1   A =  52.00 g/mole
+         --->  Isotope:  Cr50   Z = 24   N =  50   A =  49.95 g/mole   abundance:   4.34 %
+         --->  Isotope:  Cr52   Z = 24   N =  52   A =  51.94 g/mole   abundance:  83.79 %
+         --->  Isotope:  Cr53   Z = 24   N =  53   A =  52.94 g/mole   abundance:   9.50 %
+         --->  Isotope:  Cr54   Z = 24   N =  54   A =  53.94 g/mole   abundance:   2.37 %
+          ElmMassFraction:   2.80 %  ElmAbundance   4.54 % 
+
+   --->  Element: Co (Co)   Z = 27.0   N =  59.0   A =  58.93 g/mole
+         --->  Isotope:  Co59   Z = 27   N =  59   A =  58.93 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.67 %  ElmAbundance   0.97 % 
+
+   --->  Element: Cu (Cu)   Z = 29.0   N =  63.6   A =  63.55 g/mole
+         --->  Isotope:  Cu63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
+         --->  Isotope:  Cu65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %
+          ElmMassFraction:   0.46 %  ElmAbundance   0.61 % 
+
+   --->  Element: Ba (Ba)   Z = 56.0   N = 137.4   A = 137.33 g/mole
+         --->  Isotope: Ba130   Z = 56   N = 130   A = 129.91 g/mole   abundance:   0.11 %
+         --->  Isotope: Ba132   Z = 56   N = 132   A = 131.90 g/mole   abundance:   0.10 %
+         --->  Isotope: Ba134   Z = 56   N = 134   A = 133.91 g/mole   abundance:   2.42 %
+         --->  Isotope: Ba135   Z = 56   N = 135   A = 134.91 g/mole   abundance:   6.59 %
+         --->  Isotope: Ba136   Z = 56   N = 136   A = 135.91 g/mole   abundance:   7.85 %
+         --->  Isotope: Ba137   Z = 56   N = 137   A = 136.91 g/mole   abundance:  11.23 %
+         --->  Isotope: Ba138   Z = 56   N = 138   A = 137.91 g/mole   abundance:  71.70 %
+          ElmMassFraction:  30.39 %  ElmAbundance  18.66 % 
+
+   --->  Element: Pb (Pb)   Z = 82.0   N = 207.2   A = 207.22 g/mole
+         --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
+         --->  Isotope: Pb206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
+         --->  Isotope: Pb207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
+         --->  Isotope: Pb208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %
+          ElmMassFraction:   0.32 %  ElmAbundance   0.13 % 
+
+   --->  Element: S (S)   Z = 16.0   N =  32.1   A =  32.07 g/mole
+         --->  Isotope:   S32   Z = 16   N =  32   A =  31.97 g/mole   abundance:  94.93 %
+         --->  Isotope:   S33   Z = 16   N =  33   A =  32.97 g/mole   abundance:   0.76 %
+         --->  Isotope:   S34   Z = 16   N =  34   A =  33.97 g/mole   abundance:   4.29 %
+         --->  Isotope:   S36   Z = 16   N =  36   A =  35.97 g/mole   abundance:   0.02 %
+          ElmMassFraction:   5.43 %  ElmAbundance  14.29 % 
+
+   --->  Element: U (U)   Z = 92.0   N = 238.0   A = 238.03 g/mole
+         --->  Isotope:  U234   Z = 92   N = 234   A = 234.04 g/mole   abundance:   0.01 %
+         --->  Isotope:  U235   Z = 92   N = 235   A = 235.04 g/mole   abundance:   0.72 %
+         --->  Isotope:  U238   Z = 92   N = 238   A = 238.05 g/mole   abundance:  99.27 %
+          ElmMassFraction:   0.18 %  ElmAbundance   0.06 % 
+
+
+ Material:    Mars1    density:  3.000 g/cm3   RadL:   8.138 cm   Nucl.Int.Length:  33.025 cm 
+                       Imean: 135.607 eV 
+
+   --->  Element: Nb (Nb)   Z = 41.0   N =  93.0   A =  92.91 g/mole
+         --->  Isotope:  Nb93   Z = 41   N =  93   A =  92.91 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.00 % 
+
+   --->  Element: Zr (Zr)   Z = 40.0   N =  91.3   A =  91.22 g/mole
+         --->  Isotope:  Zr90   Z = 40   N =  90   A =  89.90 g/mole   abundance:  51.45 %
+         --->  Isotope:  Zr91   Z = 40   N =  91   A =  90.91 g/mole   abundance:  11.22 %
+         --->  Isotope:  Zr92   Z = 40   N =  92   A =  91.91 g/mole   abundance:  17.15 %
+         --->  Isotope:  Zr94   Z = 40   N =  94   A =  93.91 g/mole   abundance:  17.38 %
+         --->  Isotope:  Zr96   Z = 40   N =  96   A =  95.91 g/mole   abundance:   2.80 %
+          ElmMassFraction:   0.07 %  ElmAbundance   0.02 % 
+
+   --->  Element: Y (Y)   Z = 39.0   N =  89.0   A =  88.91 g/mole
+         --->  Isotope:   Y89   Z = 39   N =  89   A =  88.91 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.00 % 
+
+   --->  Element: Sr (Sr)   Z = 38.0   N =  87.7   A =  87.62 g/mole
+         --->  Isotope:  Sr84   Z = 38   N =  84   A =  83.91 g/mole   abundance:   0.56 %
+         --->  Isotope:  Sr86   Z = 38   N =  86   A =  85.91 g/mole   abundance:   9.86 %
+         --->  Isotope:  Sr87   Z = 38   N =  87   A =  86.91 g/mole   abundance:   7.00 %
+         --->  Isotope:  Sr88   Z = 38   N =  88   A =  87.91 g/mole   abundance:  82.58 %
+          ElmMassFraction:   0.15 %  ElmAbundance   0.04 % 
+
+   --->  Element: Rb (Rb)   Z = 37.0   N =  85.6   A =  85.47 g/mole
+         --->  Isotope:  Rb85   Z = 37   N =  85   A =  84.91 g/mole   abundance:  72.17 %
+         --->  Isotope:  Rb87   Z = 37   N =  87   A =  86.91 g/mole   abundance:  27.83 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: Ga (Ga)   Z = 31.0   N =  69.8   A =  69.72 g/mole
+         --->  Isotope:  Ga69   Z = 31   N =  69   A =  68.93 g/mole   abundance:  60.11 %
+         --->  Isotope:  Ga71   Z = 31   N =  71   A =  70.92 g/mole   abundance:  39.89 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: Zn (Zn)   Z = 30.0   N =  65.5   A =  65.40 g/mole
+         --->  Isotope:  Zn64   Z = 30   N =  64   A =  63.93 g/mole   abundance:  48.63 %
+         --->  Isotope:  Zn66   Z = 30   N =  66   A =  65.93 g/mole   abundance:  27.90 %
+         --->  Isotope:  Zn67   Z = 30   N =  67   A =  66.93 g/mole   abundance:   4.10 %
+         --->  Isotope:  Zn68   Z = 30   N =  68   A =  67.92 g/mole   abundance:  18.75 %
+         --->  Isotope:  Zn70   Z = 30   N =  70   A =  69.93 g/mole   abundance:   0.62 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.00 % 
+
+   --->  Element: Ni (Ni)   Z = 28.0   N =  58.8   A =  58.69 g/mole
+         --->  Isotope:  Ni58   Z = 28   N =  58   A =  57.94 g/mole   abundance:  68.08 %
+         --->  Isotope:  Ni60   Z = 28   N =  60   A =  59.93 g/mole   abundance:  26.22 %
+         --->  Isotope:  Ni61   Z = 28   N =  61   A =  60.93 g/mole   abundance:   1.14 %
+         --->  Isotope:  Ni62   Z = 28   N =  62   A =  61.93 g/mole   abundance:   3.63 %
+         --->  Isotope:  Ni64   Z = 28   N =  64   A =  63.93 g/mole   abundance:   0.93 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.00 % 
+
+   --->  Element: Sc (Sc)   Z = 21.0   N =  45.0   A =  44.96 g/mole
+         --->  Isotope:  Sc45   Z = 21   N =  45   A =  44.96 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: V (V)   Z = 23.0   N =  51.0   A =  50.94 g/mole
+         --->  Isotope:   V50   Z = 23   N =  50   A =  49.95 g/mole   abundance:   0.25 %
+         --->  Isotope:   V51   Z = 23   N =  51   A =  50.94 g/mole   abundance:  99.75 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.00 % 
+
+   --->  Element: Cr (Cr)   Z = 24.0   N =  52.1   A =  52.00 g/mole
+         --->  Isotope:  Cr50   Z = 24   N =  50   A =  49.95 g/mole   abundance:   4.34 %
+         --->  Isotope:  Cr52   Z = 24   N =  52   A =  51.94 g/mole   abundance:  83.79 %
+         --->  Isotope:  Cr53   Z = 24   N =  53   A =  52.94 g/mole   abundance:   9.50 %
+         --->  Isotope:  Cr54   Z = 24   N =  54   A =  53.94 g/mole   abundance:   2.37 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.01 % 
+
+   --->  Element: Co (Co)   Z = 27.0   N =  59.0   A =  58.93 g/mole
+         --->  Isotope:  Co59   Z = 27   N =  59   A =  58.93 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: Cu (Cu)   Z = 29.0   N =  63.6   A =  63.55 g/mole
+         --->  Isotope:  Cu63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
+         --->  Isotope:  Cu65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: Ba (Ba)   Z = 56.0   N = 137.4   A = 137.33 g/mole
+         --->  Isotope: Ba130   Z = 56   N = 130   A = 129.91 g/mole   abundance:   0.11 %
+         --->  Isotope: Ba132   Z = 56   N = 132   A = 131.90 g/mole   abundance:   0.10 %
+         --->  Isotope: Ba134   Z = 56   N = 134   A = 133.91 g/mole   abundance:   2.42 %
+         --->  Isotope: Ba135   Z = 56   N = 135   A = 134.91 g/mole   abundance:   6.59 %
+         --->  Isotope: Ba136   Z = 56   N = 136   A = 135.91 g/mole   abundance:   7.85 %
+         --->  Isotope: Ba137   Z = 56   N = 137   A = 136.91 g/mole   abundance:  11.23 %
+         --->  Isotope: Ba138   Z = 56   N = 138   A = 137.91 g/mole   abundance:  71.70 %
+          ElmMassFraction:   0.14 %  ElmAbundance   0.02 % 
+
+   --->  Element: Pb (Pb)   Z = 82.0   N = 207.2   A = 207.22 g/mole
+         --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
+         --->  Isotope: Pb206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
+         --->  Isotope: Pb207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
+         --->  Isotope: Pb208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: S (S)   Z = 16.0   N =  32.1   A =  32.07 g/mole
+         --->  Isotope:   S32   Z = 16   N =  32   A =  31.97 g/mole   abundance:  94.93 %
+         --->  Isotope:   S33   Z = 16   N =  33   A =  32.97 g/mole   abundance:   0.76 %
+         --->  Isotope:   S34   Z = 16   N =  34   A =  33.97 g/mole   abundance:   4.29 %
+         --->  Isotope:   S36   Z = 16   N =  36   A =  35.97 g/mole   abundance:   0.02 %
+          ElmMassFraction:   0.02 %  ElmAbundance   0.02 % 
+
+   --->  Element: U (U)   Z = 92.0   N = 238.0   A = 238.03 g/mole
+         --->  Isotope:  U234   Z = 92   N = 234   A = 234.04 g/mole   abundance:   0.01 %
+         --->  Isotope:  U235   Z = 92   N = 235   A = 235.04 g/mole   abundance:   0.72 %
+         --->  Isotope:  U238   Z = 92   N = 238   A = 238.05 g/mole   abundance:  99.27 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: Fe (Fe)   Z = 26.0   N =  55.9   A =  55.85 g/mole
+         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+          ElmMassFraction:  10.05 %  ElmAbundance   3.88 % 
+
+   --->  Element: Ti (Ti)   Z = 22.0   N =  47.9   A =  47.87 g/mole
+         --->  Isotope:  Ti46   Z = 22   N =  46   A =  45.95 g/mole   abundance:   8.25 %
+         --->  Isotope:  Ti47   Z = 22   N =  47   A =  46.95 g/mole   abundance:   7.44 %
+         --->  Isotope:  Ti48   Z = 22   N =  48   A =  47.95 g/mole   abundance:  73.72 %
+         --->  Isotope:  Ti49   Z = 22   N =  49   A =  48.95 g/mole   abundance:   5.41 %
+         --->  Isotope:  Ti50   Z = 22   N =  50   A =  49.94 g/mole   abundance:   5.18 %
+          ElmMassFraction:   1.86 %  ElmAbundance   0.84 % 
+
+   --->  Element: Ca (Ca)   Z = 20.0   N =  40.1   A =  40.08 g/mole
+         --->  Isotope:  Ca40   Z = 20   N =  40   A =  39.96 g/mole   abundance:  96.94 %
+         --->  Isotope:  Ca42   Z = 20   N =  42   A =  41.96 g/mole   abundance:   0.65 %
+         --->  Isotope:  Ca43   Z = 20   N =  43   A =  42.96 g/mole   abundance:   0.14 %
+         --->  Isotope:  Ca44   Z = 20   N =  44   A =  43.96 g/mole   abundance:   2.09 %
+         --->  Isotope:  Ca46   Z = 20   N =  46   A =  45.95 g/mole   abundance:   0.00 %
+         --->  Isotope:  Ca48   Z = 20   N =  48   A =  47.95 g/mole   abundance:   0.19 %
+          ElmMassFraction:   4.02 %  ElmAbundance   2.16 % 
+
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+          ElmMassFraction:  19.55 %  ElmAbundance  15.00 % 
+
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction:  10.28 %  ElmAbundance   8.21 % 
+
+   --->  Element: Mg (Mg)   Z = 12.0   N =  24.3   A =  24.31 g/mole
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance:  78.99 %
+         --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance:  10.00 %
+         --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance:  11.01 %
+          ElmMassFraction:   2.41 %  ElmAbundance   2.13 % 
+
+   --->  Element: Mn (Mn)   Z = 25.0   N =  55.0   A =  54.94 g/mole
+         --->  Isotope:  Mn55   Z = 25   N =  55   A =  54.94 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.18 %  ElmAbundance   0.07 % 
+
+   --->  Element: Na (Na)   Z = 11.0   N =  23.0   A =  22.99 g/mole
+         --->  Isotope:  Na23   Z = 11   N =  23   A =  22.99 g/mole   abundance: 100.00 %
+          ElmMassFraction:   1.77 %  ElmAbundance   1.66 % 
+
+   --->  Element: K (K)   Z = 19.0   N =  39.1   A =  39.10 g/mole
+         --->  Isotope:   K39   Z = 19   N =  39   A =  38.96 g/mole   abundance:  93.26 %
+         --->  Isotope:   K40   Z = 19   N =  40   A =  39.96 g/mole   abundance:   0.01 %
+         --->  Isotope:   K41   Z = 19   N =  41   A =  40.96 g/mole   abundance:   6.73 %
+          ElmMassFraction:   0.57 %  ElmAbundance   0.32 % 
+
+   --->  Element: P (P)   Z = 15.0   N =  31.0   A =  30.97 g/mole
+         --->  Isotope:   P31   Z = 15   N =  31   A =  30.97 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.28 %  ElmAbundance   0.19 % 
+
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  48.58 %  ElmAbundance  65.43 % 
+
+
+ Material: HawaiianWD    density:  3.000 g/cm3   RadL:   7.956 cm   Nucl.Int.Length:  33.378 cm 
+                       Imean: 139.765 eV 
+
+   --->  Element: Fe (Fe)   Z = 26.0   N =  55.9   A =  55.85 g/mole
+         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+          ElmMassFraction:  11.82 %  ElmAbundance   4.70 % 
+
+   --->  Element: Ti (Ti)   Z = 22.0   N =  47.9   A =  47.87 g/mole
+         --->  Isotope:  Ti46   Z = 22   N =  46   A =  45.95 g/mole   abundance:   8.25 %
+         --->  Isotope:  Ti47   Z = 22   N =  47   A =  46.95 g/mole   abundance:   7.44 %
+         --->  Isotope:  Ti48   Z = 22   N =  48   A =  47.95 g/mole   abundance:  73.72 %
+         --->  Isotope:  Ti49   Z = 22   N =  49   A =  48.95 g/mole   abundance:   5.41 %
+         --->  Isotope:  Ti50   Z = 22   N =  50   A =  49.94 g/mole   abundance:   5.18 %
+          ElmMassFraction:   2.28 %  ElmAbundance   1.06 % 
+
+   --->  Element: Ca (Ca)   Z = 20.0   N =  40.1   A =  40.08 g/mole
+         --->  Isotope:  Ca40   Z = 20   N =  40   A =  39.96 g/mole   abundance:  96.94 %
+         --->  Isotope:  Ca42   Z = 20   N =  42   A =  41.96 g/mole   abundance:   0.65 %
+         --->  Isotope:  Ca43   Z = 20   N =  43   A =  42.96 g/mole   abundance:   0.14 %
+         --->  Isotope:  Ca44   Z = 20   N =  44   A =  43.96 g/mole   abundance:   2.09 %
+         --->  Isotope:  Ca46   Z = 20   N =  46   A =  45.95 g/mole   abundance:   0.00 %
+         --->  Isotope:  Ca48   Z = 20   N =  48   A =  47.95 g/mole   abundance:   0.19 %
+          ElmMassFraction:   4.50 %  ElmAbundance   2.49 % 
+
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+          ElmMassFraction:  20.52 %  ElmAbundance  16.22 % 
+
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction:  13.29 %  ElmAbundance  10.93 % 
+
+   --->  Element: Mg (Mg)   Z = 12.0   N =  24.3   A =  24.31 g/mole
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance:  78.99 %
+         --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance:  10.00 %
+         --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance:  11.01 %
+          ElmMassFraction:   0.24 %  ElmAbundance   0.22 % 
+
+   --->  Element: Na (Na)   Z = 11.0   N =  23.0   A =  22.99 g/mole
+         --->  Isotope:  Na23   Z = 11   N =  23   A =  22.99 g/mole   abundance: 100.00 %
+          ElmMassFraction:   2.23 %  ElmAbundance   2.15 % 
+
+   --->  Element: K (K)   Z = 19.0   N =  39.1   A =  39.10 g/mole
+         --->  Isotope:   K39   Z = 19   N =  39   A =  38.96 g/mole   abundance:  93.26 %
+         --->  Isotope:   K40   Z = 19   N =  40   A =  39.96 g/mole   abundance:   0.01 %
+         --->  Isotope:   K41   Z = 19   N =  41   A =  40.96 g/mole   abundance:   6.73 %
+          ElmMassFraction:   0.50 %  ElmAbundance   0.28 % 
+
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  44.63 %  ElmAbundance  61.94 % 
+
+
+ Material: HawaiianRF    density:  3.000 g/cm3   RadL:   7.991 cm   Nucl.Int.Length:  33.322 cm 
+                       Imean: 139.256 eV 
+
+   --->  Element: Fe (Fe)   Z = 26.0   N =  55.9   A =  55.85 g/mole
+         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+          ElmMassFraction:  11.13 %  ElmAbundance   4.41 % 
+
+   --->  Element: Ti (Ti)   Z = 22.0   N =  47.9   A =  47.87 g/mole
+         --->  Isotope:  Ti46   Z = 22   N =  46   A =  45.95 g/mole   abundance:   8.25 %
+         --->  Isotope:  Ti47   Z = 22   N =  47   A =  46.95 g/mole   abundance:   7.44 %
+         --->  Isotope:  Ti48   Z = 22   N =  48   A =  47.95 g/mole   abundance:  73.72 %
+         --->  Isotope:  Ti49   Z = 22   N =  49   A =  48.95 g/mole   abundance:   5.41 %
+         --->  Isotope:  Ti50   Z = 22   N =  50   A =  49.94 g/mole   abundance:   5.18 %
+          ElmMassFraction:   2.16 %  ElmAbundance   1.00 % 
+
+   --->  Element: Ca (Ca)   Z = 20.0   N =  40.1   A =  40.08 g/mole
+         --->  Isotope:  Ca40   Z = 20   N =  40   A =  39.96 g/mole   abundance:  96.94 %
+         --->  Isotope:  Ca42   Z = 20   N =  42   A =  41.96 g/mole   abundance:   0.65 %
+         --->  Isotope:  Ca43   Z = 20   N =  43   A =  42.96 g/mole   abundance:   0.14 %
+         --->  Isotope:  Ca44   Z = 20   N =  44   A =  43.96 g/mole   abundance:   2.09 %
+         --->  Isotope:  Ca46   Z = 20   N =  46   A =  45.95 g/mole   abundance:   0.00 %
+         --->  Isotope:  Ca48   Z = 20   N =  48   A =  47.95 g/mole   abundance:   0.19 %
+          ElmMassFraction:   4.36 %  ElmAbundance   2.41 % 
+
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+          ElmMassFraction:  21.33 %  ElmAbundance  16.80 % 
+
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction:  10.38 %  ElmAbundance   8.51 % 
+
+   --->  Element: Mg (Mg)   Z = 12.0   N =  24.3   A =  24.31 g/mole
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance:  78.99 %
+         --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance:  10.00 %
+         --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance:  11.01 %
+          ElmMassFraction:   1.93 %  ElmAbundance   1.76 % 
+
+   --->  Element: Na (Na)   Z = 11.0   N =  23.0   A =  22.99 g/mole
+         --->  Isotope:  Na23   Z = 11   N =  23   A =  22.99 g/mole   abundance: 100.00 %
+          ElmMassFraction:   2.82 %  ElmAbundance   2.72 % 
+
+   --->  Element: K (K)   Z = 19.0   N =  39.1   A =  39.10 g/mole
+         --->  Isotope:   K39   Z = 19   N =  39   A =  38.96 g/mole   abundance:  93.26 %
+         --->  Isotope:   K40   Z = 19   N =  40   A =  39.96 g/mole   abundance:   0.01 %
+         --->  Isotope:   K41   Z = 19   N =  41   A =  40.96 g/mole   abundance:   6.73 %
+          ElmMassFraction:   0.58 %  ElmAbundance   0.33 % 
+
+   --->  Element: P (P)   Z = 15.0   N =  31.0   A =  30.97 g/mole
+         --->  Isotope:   P31   Z = 15   N =  31   A =  30.97 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.48 %  ElmAbundance   0.34 % 
+
+   --->  Element: Mn (Mn)   Z = 25.0   N =  55.0   A =  54.94 g/mole
+         --->  Isotope:  Mn55   Z = 25   N =  55   A =  54.94 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.23 %  ElmAbundance   0.09 % 
+
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  44.58 %  ElmAbundance  61.63 % 
+
+
+ Material: IcelandicWD    density:  3.000 g/cm3   RadL:   7.888 cm   Nucl.Int.Length:  33.409 cm 
+                       Imean: 139.884 eV 
+
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+          ElmMassFraction:  22.97 %  ElmAbundance  18.22 % 
+
+   --->  Element: Ti (Ti)   Z = 22.0   N =  47.9   A =  47.87 g/mole
+         --->  Isotope:  Ti46   Z = 22   N =  46   A =  45.95 g/mole   abundance:   8.25 %
+         --->  Isotope:  Ti47   Z = 22   N =  47   A =  46.95 g/mole   abundance:   7.44 %
+         --->  Isotope:  Ti48   Z = 22   N =  48   A =  47.95 g/mole   abundance:  73.72 %
+         --->  Isotope:  Ti49   Z = 22   N =  49   A =  48.95 g/mole   abundance:   5.41 %
+         --->  Isotope:  Ti50   Z = 22   N =  50   A =  49.94 g/mole   abundance:   5.18 %
+          ElmMassFraction:   1.20 %  ElmAbundance   0.56 % 
+
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction:   7.05 %  ElmAbundance   5.82 % 
+
+   --->  Element: Fe (Fe)   Z = 26.0   N =  55.9   A =  55.85 g/mole
+         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+          ElmMassFraction:  11.34 %  ElmAbundance   4.52 % 
+
+   --->  Element: Mg (Mg)   Z = 12.0   N =  24.3   A =  24.31 g/mole
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance:  78.99 %
+         --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance:  10.00 %
+         --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance:  11.01 %
+          ElmMassFraction:   3.50 %  ElmAbundance   3.21 % 
+
+   --->  Element: Ca (Ca)   Z = 20.0   N =  40.1   A =  40.08 g/mole
+         --->  Isotope:  Ca40   Z = 20   N =  40   A =  39.96 g/mole   abundance:  96.94 %
+         --->  Isotope:  Ca42   Z = 20   N =  42   A =  41.96 g/mole   abundance:   0.65 %
+         --->  Isotope:  Ca43   Z = 20   N =  43   A =  42.96 g/mole   abundance:   0.14 %
+         --->  Isotope:  Ca44   Z = 20   N =  44   A =  43.96 g/mole   abundance:   2.09 %
+         --->  Isotope:  Ca46   Z = 20   N =  46   A =  45.95 g/mole   abundance:   0.00 %
+         --->  Isotope:  Ca48   Z = 20   N =  48   A =  47.95 g/mole   abundance:   0.19 %
+          ElmMassFraction:   7.58 %  ElmAbundance   4.21 % 
+
+   --->  Element: Na (Na)   Z = 11.0   N =  23.0   A =  22.99 g/mole
+         --->  Isotope:  Na23   Z = 11   N =  23   A =  22.99 g/mole   abundance: 100.00 %
+          ElmMassFraction:   1.86 %  ElmAbundance   1.80 % 
+
+   --->  Element: K (K)   Z = 19.0   N =  39.1   A =  39.10 g/mole
+         --->  Isotope:   K39   Z = 19   N =  39   A =  38.96 g/mole   abundance:  93.26 %
+         --->  Isotope:   K40   Z = 19   N =  40   A =  39.96 g/mole   abundance:   0.01 %
+         --->  Isotope:   K41   Z = 19   N =  41   A =  40.96 g/mole   abundance:   6.73 %
+          ElmMassFraction:   0.33 %  ElmAbundance   0.19 % 
+
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  44.17 %  ElmAbundance  61.48 % 
+
+
+ Material: IcelandicRF    density:  3.000 g/cm3   RadL:   7.795 cm   Nucl.Int.Length:  33.516 cm 
+                       Imean: 140.665 eV 
+
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+          ElmMassFraction:  24.33 %  ElmAbundance  19.43 % 
+
+   --->  Element: Ti (Ti)   Z = 22.0   N =  47.9   A =  47.87 g/mole
+         --->  Isotope:  Ti46   Z = 22   N =  46   A =  45.95 g/mole   abundance:   8.25 %
+         --->  Isotope:  Ti47   Z = 22   N =  47   A =  46.95 g/mole   abundance:   7.44 %
+         --->  Isotope:  Ti48   Z = 22   N =  48   A =  47.95 g/mole   abundance:  73.72 %
+         --->  Isotope:  Ti49   Z = 22   N =  49   A =  48.95 g/mole   abundance:   5.41 %
+         --->  Isotope:  Ti50   Z = 22   N =  50   A =  49.94 g/mole   abundance:   5.18 %
+          ElmMassFraction:   1.38 %  ElmAbundance   0.65 % 
+
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction:   6.52 %  ElmAbundance   5.42 % 
+
+   --->  Element: Fe (Fe)   Z = 26.0   N =  55.9   A =  55.85 g/mole
+         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+          ElmMassFraction:  11.83 %  ElmAbundance   4.75 % 
+
+   --->  Element: Mn (Mn)   Z = 25.0   N =  55.0   A =  54.94 g/mole
+         --->  Isotope:  Mn55   Z = 25   N =  55   A =  54.94 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.23 %  ElmAbundance   0.09 % 
+
+   --->  Element: Mg (Mg)   Z = 12.0   N =  24.3   A =  24.31 g/mole
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance:  78.99 %
+         --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance:  10.00 %
+         --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance:  11.01 %
+          ElmMassFraction:   2.35 %  ElmAbundance   2.17 % 
+
+   --->  Element: Ca (Ca)   Z = 20.0   N =  40.1   A =  40.08 g/mole
+         --->  Isotope:  Ca40   Z = 20   N =  40   A =  39.96 g/mole   abundance:  96.94 %
+         --->  Isotope:  Ca42   Z = 20   N =  42   A =  41.96 g/mole   abundance:   0.65 %
+         --->  Isotope:  Ca43   Z = 20   N =  43   A =  42.96 g/mole   abundance:   0.14 %
+         --->  Isotope:  Ca44   Z = 20   N =  44   A =  43.96 g/mole   abundance:   2.09 %
+         --->  Isotope:  Ca46   Z = 20   N =  46   A =  45.95 g/mole   abundance:   0.00 %
+         --->  Isotope:  Ca48   Z = 20   N =  48   A =  47.95 g/mole   abundance:   0.19 %
+          ElmMassFraction:   8.23 %  ElmAbundance   4.60 % 
+
+   --->  Element: K (K)   Z = 19.0   N =  39.1   A =  39.10 g/mole
+         --->  Isotope:   K39   Z = 19   N =  39   A =  38.96 g/mole   abundance:  93.26 %
+         --->  Isotope:   K40   Z = 19   N =  40   A =  39.96 g/mole   abundance:   0.01 %
+         --->  Isotope:   K41   Z = 19   N =  41   A =  40.96 g/mole   abundance:   6.73 %
+          ElmMassFraction:   0.33 %  ElmAbundance   0.19 % 
+
+   --->  Element: P (P)   Z = 15.0   N =  31.0   A =  30.97 g/mole
+         --->  Isotope:   P31   Z = 15   N =  31   A =  30.97 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.13 %  ElmAbundance   0.09 % 
+
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  44.66 %  ElmAbundance  62.60 % 
+
+
+ Material: GabbroWD    density:  3.000 g/cm3   RadL:   7.677 cm   Nucl.Int.Length:  33.718 cm 
+                       Imean: 142.657 eV 
+
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+          ElmMassFraction:  18.70 %  ElmAbundance  15.17 % 
+
+   --->  Element: Ti (Ti)   Z = 22.0   N =  47.9   A =  47.87 g/mole
+         --->  Isotope:  Ti46   Z = 22   N =  46   A =  45.95 g/mole   abundance:   8.25 %
+         --->  Isotope:  Ti47   Z = 22   N =  47   A =  46.95 g/mole   abundance:   7.44 %
+         --->  Isotope:  Ti48   Z = 22   N =  48   A =  47.95 g/mole   abundance:  73.72 %
+         --->  Isotope:  Ti49   Z = 22   N =  49   A =  48.95 g/mole   abundance:   5.41 %
+         --->  Isotope:  Ti50   Z = 22   N =  50   A =  49.94 g/mole   abundance:   5.18 %
+          ElmMassFraction:   2.34 %  ElmAbundance   1.11 % 
+
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction:   4.60 %  ElmAbundance   3.89 % 
+
+   --->  Element: Fe (Fe)   Z = 26.0   N =  55.9   A =  55.85 g/mole
+         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+          ElmMassFraction:  12.24 %  ElmAbundance   4.99 % 
+
+   --->  Element: Mg (Mg)   Z = 12.0   N =  24.3   A =  24.31 g/mole
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance:  78.99 %
+         --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance:  10.00 %
+         --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance:  11.01 %
+          ElmMassFraction:   8.38 %  ElmAbundance   7.86 % 
+
+   --->  Element: Ca (Ca)   Z = 20.0   N =  40.1   A =  40.08 g/mole
+         --->  Isotope:  Ca40   Z = 20   N =  40   A =  39.96 g/mole   abundance:  96.94 %
+         --->  Isotope:  Ca42   Z = 20   N =  42   A =  41.96 g/mole   abundance:   0.65 %
+         --->  Isotope:  Ca43   Z = 20   N =  43   A =  42.96 g/mole   abundance:   0.14 %
+         --->  Isotope:  Ca44   Z = 20   N =  44   A =  43.96 g/mole   abundance:   2.09 %
+         --->  Isotope:  Ca46   Z = 20   N =  46   A =  45.95 g/mole   abundance:   0.00 %
+         --->  Isotope:  Ca48   Z = 20   N =  48   A =  47.95 g/mole   abundance:   0.19 %
+          ElmMassFraction:  10.72 %  ElmAbundance   6.10 % 
+
+   --->  Element: Na (Na)   Z = 11.0   N =  23.0   A =  22.99 g/mole
+         --->  Isotope:  Na23   Z = 11   N =  23   A =  22.99 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.59 %  ElmAbundance   0.59 % 
+
+   --->  Element: K (K)   Z = 19.0   N =  39.1   A =  39.10 g/mole
+         --->  Isotope:   K39   Z = 19   N =  39   A =  38.96 g/mole   abundance:  93.26 %
+         --->  Isotope:   K40   Z = 19   N =  40   A =  39.96 g/mole   abundance:   0.01 %
+         --->  Isotope:   K41   Z = 19   N =  41   A =  40.96 g/mole   abundance:   6.73 %
+          ElmMassFraction:   0.17 %  ElmAbundance   0.10 % 
+
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  42.26 %  ElmAbundance  60.19 % 
+
+
+ Material: GabbroRF    density:  3.000 g/cm3   RadL:   7.608 cm   Nucl.Int.Length:  33.832 cm 
+                       Imean: 143.625 eV 
+
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+          ElmMassFraction:  16.81 %  ElmAbundance  13.75 % 
+
+   --->  Element: Ti (Ti)   Z = 22.0   N =  47.9   A =  47.87 g/mole
+         --->  Isotope:  Ti46   Z = 22   N =  46   A =  45.95 g/mole   abundance:   8.25 %
+         --->  Isotope:  Ti47   Z = 22   N =  47   A =  46.95 g/mole   abundance:   7.44 %
+         --->  Isotope:  Ti48   Z = 22   N =  48   A =  47.95 g/mole   abundance:  73.72 %
+         --->  Isotope:  Ti49   Z = 22   N =  49   A =  48.95 g/mole   abundance:   5.41 %
+         --->  Isotope:  Ti50   Z = 22   N =  50   A =  49.94 g/mole   abundance:   5.18 %
+          ElmMassFraction:   2.28 %  ElmAbundance   1.09 % 
+
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction:   5.82 %  ElmAbundance   4.95 % 
+
+   --->  Element: Fe (Fe)   Z = 26.0   N =  55.9   A =  55.85 g/mole
+         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+          ElmMassFraction:  12.72 %  ElmAbundance   5.23 % 
+
+   --->  Element: Mn (Mn)   Z = 25.0   N =  55.0   A =  54.94 g/mole
+         --->  Isotope:  Mn55   Z = 25   N =  55   A =  54.94 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.15 %  ElmAbundance   0.06 % 
+
+   --->  Element: Mg (Mg)   Z = 12.0   N =  24.3   A =  24.31 g/mole
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance:  78.99 %
+         --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance:  10.00 %
+         --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance:  11.01 %
+          ElmMassFraction:   8.37 %  ElmAbundance   7.92 % 
+
+   --->  Element: Ca (Ca)   Z = 20.0   N =  40.1   A =  40.08 g/mole
+         --->  Isotope:  Ca40   Z = 20   N =  40   A =  39.96 g/mole   abundance:  96.94 %
+         --->  Isotope:  Ca42   Z = 20   N =  42   A =  41.96 g/mole   abundance:   0.65 %
+         --->  Isotope:  Ca43   Z = 20   N =  43   A =  42.96 g/mole   abundance:   0.14 %
+         --->  Isotope:  Ca44   Z = 20   N =  44   A =  43.96 g/mole   abundance:   2.09 %
+         --->  Isotope:  Ca46   Z = 20   N =  46   A =  45.95 g/mole   abundance:   0.00 %
+         --->  Isotope:  Ca48   Z = 20   N =  48   A =  47.95 g/mole   abundance:   0.19 %
+          ElmMassFraction:  11.71 %  ElmAbundance   6.71 % 
+
+   --->  Element: Na (Na)   Z = 11.0   N =  23.0   A =  22.99 g/mole
+         --->  Isotope:  Na23   Z = 11   N =  23   A =  22.99 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: K (K)   Z = 19.0   N =  39.1   A =  39.10 g/mole
+         --->  Isotope:   K39   Z = 19   N =  39   A =  38.96 g/mole   abundance:  93.26 %
+         --->  Isotope:   K40   Z = 19   N =  40   A =  39.96 g/mole   abundance:   0.01 %
+         --->  Isotope:   K41   Z = 19   N =  41   A =  40.96 g/mole   abundance:   6.73 %
+          ElmMassFraction:   0.17 %  ElmAbundance   0.10 % 
+
+   --->  Element: P (P)   Z = 15.0   N =  31.0   A =  30.97 g/mole
+         --->  Isotope:   P31   Z = 15   N =  31   A =  30.97 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.17 %  ElmAbundance   0.13 % 
+
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  41.80 %  ElmAbundance  60.04 % 
+
+
+ Material: Anorthosite    density:  2.800 g/cm3   RadL:   8.510 cm   Nucl.Int.Length:  35.723 cm 
+                       Imean: 139.030 eV 
+
+   --->  Element: Fe (Fe)   Z = 26.0   N =  55.9   A =  55.85 g/mole
+         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+          ElmMassFraction:   9.53 %  ElmAbundance   3.78 % 
+
+   --->  Element: Mn (Mn)   Z = 25.0   N =  55.0   A =  54.94 g/mole
+         --->  Isotope:  Mn55   Z = 25   N =  55   A =  54.94 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.14 %  ElmAbundance   0.06 % 
+
+   --->  Element: Ni (Ni)   Z = 28.0   N =  58.8   A =  58.69 g/mole
+         --->  Isotope:  Ni58   Z = 28   N =  58   A =  57.94 g/mole   abundance:  68.08 %
+         --->  Isotope:  Ni60   Z = 28   N =  60   A =  59.93 g/mole   abundance:  26.22 %
+         --->  Isotope:  Ni61   Z = 28   N =  61   A =  60.93 g/mole   abundance:   1.14 %
+         --->  Isotope:  Ni62   Z = 28   N =  62   A =  61.93 g/mole   abundance:   3.63 %
+         --->  Isotope:  Ni64   Z = 28   N =  64   A =  63.93 g/mole   abundance:   0.93 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.00 % 
+
+   --->  Element: Cu (Cu)   Z = 29.0   N =  63.6   A =  63.55 g/mole
+         --->  Isotope:  Cu63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
+         --->  Isotope:  Cu65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %
+          ElmMassFraction:   0.05 %  ElmAbundance   0.02 % 
+
+   --->  Element: Na (Na)   Z = 11.0   N =  23.0   A =  22.99 g/mole
+         --->  Isotope:  Na23   Z = 11   N =  23   A =  22.99 g/mole   abundance: 100.00 %
+          ElmMassFraction:   1.76 %  ElmAbundance   1.70 % 
+
+   --->  Element: Mg (Mg)   Z = 12.0   N =  24.3   A =  24.31 g/mole
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance:  78.99 %
+         --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance:  10.00 %
+         --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance:  11.01 %
+          ElmMassFraction:   2.45 %  ElmAbundance   2.24 % 
+
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction:   8.01 %  ElmAbundance   6.57 % 
+
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+          ElmMassFraction:  23.23 %  ElmAbundance  18.32 % 
+
+   --->  Element: Ca (Ca)   Z = 20.0   N =  40.1   A =  40.08 g/mole
+         --->  Isotope:  Ca40   Z = 20   N =  40   A =  39.96 g/mole   abundance:  96.94 %
+         --->  Isotope:  Ca42   Z = 20   N =  42   A =  41.96 g/mole   abundance:   0.65 %
+         --->  Isotope:  Ca43   Z = 20   N =  43   A =  42.96 g/mole   abundance:   0.14 %
+         --->  Isotope:  Ca44   Z = 20   N =  44   A =  43.96 g/mole   abundance:   2.09 %
+         --->  Isotope:  Ca46   Z = 20   N =  46   A =  45.95 g/mole   abundance:   0.00 %
+         --->  Isotope:  Ca48   Z = 20   N =  48   A =  47.95 g/mole   abundance:   0.19 %
+          ElmMassFraction:   6.36 %  ElmAbundance   3.51 % 
+
+   --->  Element: K (K)   Z = 19.0   N =  39.1   A =  39.10 g/mole
+         --->  Isotope:   K39   Z = 19   N =  39   A =  38.96 g/mole   abundance:  93.26 %
+         --->  Isotope:   K40   Z = 19   N =  40   A =  39.96 g/mole   abundance:   0.01 %
+         --->  Isotope:   K41   Z = 19   N =  41   A =  40.96 g/mole   abundance:   6.73 %
+          ElmMassFraction:   0.47 %  ElmAbundance   0.26 % 
+
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:   0.08 %  ElmAbundance   0.15 % 
+
+   --->  Element: P (P)   Z = 15.0   N =  31.0   A =  30.97 g/mole
+         --->  Isotope:   P31   Z = 15   N =  31   A =  30.97 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.18 %  ElmAbundance   0.13 % 
+
+   --->  Element: Ti (Ti)   Z = 22.0   N =  47.9   A =  47.87 g/mole
+         --->  Isotope:  Ti46   Z = 22   N =  46   A =  45.95 g/mole   abundance:   8.25 %
+         --->  Isotope:  Ti47   Z = 22   N =  47   A =  46.95 g/mole   abundance:   7.44 %
+         --->  Isotope:  Ti48   Z = 22   N =  48   A =  47.95 g/mole   abundance:  73.72 %
+         --->  Isotope:  Ti49   Z = 22   N =  49   A =  48.95 g/mole   abundance:   5.41 %
+         --->  Isotope:  Ti50   Z = 22   N =  50   A =  49.94 g/mole   abundance:   5.18 %
+          ElmMassFraction:   2.41 %  ElmAbundance   1.11 % 
+
+   --->  Element: Cl (Cl)   Z = 17.0   N =  35.5   A =  35.45 g/mole
+         --->  Isotope:  Cl35   Z = 17   N =  35   A =  34.97 g/mole   abundance:  75.78 %
+         --->  Isotope:  Cl37   Z = 17   N =  37   A =  36.97 g/mole   abundance:  24.22 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.01 % 
+
+   --->  Element: Pd (Pd)   Z = 46.0   N = 106.5   A = 106.42 g/mole
+         --->  Isotope: Pd102   Z = 46   N = 102   A = 101.91 g/mole   abundance:   1.02 %
+         --->  Isotope: Pd104   Z = 46   N = 104   A = 103.90 g/mole   abundance:  11.14 %
+         --->  Isotope: Pd105   Z = 46   N = 105   A = 104.91 g/mole   abundance:  22.33 %
+         --->  Isotope: Pd106   Z = 46   N = 106   A = 105.90 g/mole   abundance:  27.33 %
+         --->  Isotope: Pd108   Z = 46   N = 108   A = 107.90 g/mole   abundance:  26.46 %
+         --->  Isotope: Pd110   Z = 46   N = 110   A = 109.91 g/mole   abundance:  11.72 %
+          ElmMassFraction:   0.00 %  ElmAbundance   0.00 % 
+
+   --->  Element: Cd (Cd)   Z = 48.0   N = 112.5   A = 112.41 g/mole
+         --->  Isotope: Cd106   Z = 48   N = 106   A = 105.91 g/mole   abundance:   1.25 %
+         --->  Isotope: Cd108   Z = 48   N = 108   A = 107.90 g/mole   abundance:   0.89 %
+         --->  Isotope: Cd110   Z = 48   N = 110   A = 109.90 g/mole   abundance:  12.49 %
+         --->  Isotope: Cd111   Z = 48   N = 111   A = 110.90 g/mole   abundance:  12.80 %
+         --->  Isotope: Cd112   Z = 48   N = 112   A = 111.90 g/mole   abundance:  24.13 %
+         --->  Isotope: Cd113   Z = 48   N = 113   A = 112.90 g/mole   abundance:  12.22 %
+         --->  Isotope: Cd114   Z = 48   N = 114   A = 113.90 g/mole   abundance:  28.73 %
+         --->  Isotope: Cd116   Z = 48   N = 116   A = 115.90 g/mole   abundance:   7.49 %
+          ElmMassFraction:   0.02 %  ElmAbundance   0.00 % 
+
+   --->  Element: Ag (Ag)   Z = 47.0   N = 108.0   A = 107.87 g/mole
+         --->  Isotope: Ag107   Z = 47   N = 107   A = 106.90 g/mole   abundance:  51.84 %
+         --->  Isotope: Ag109   Z = 47   N = 109   A = 108.91 g/mole   abundance:  48.16 %
+          ElmMassFraction:   0.05 %  ElmAbundance   0.01 % 
+
+   --->  Element: S (S)   Z = 16.0   N =  32.1   A =  32.07 g/mole
+         --->  Isotope:   S32   Z = 16   N =  32   A =  31.97 g/mole   abundance:  94.93 %
+         --->  Isotope:   S33   Z = 16   N =  33   A =  32.97 g/mole   abundance:   0.76 %
+         --->  Isotope:   S34   Z = 16   N =  34   A =  33.97 g/mole   abundance:   4.29 %
+         --->  Isotope:   S36   Z = 16   N =  36   A =  35.97 g/mole   abundance:   0.02 %
+          ElmMassFraction:   0.14 %  ElmAbundance   0.10 % 
+
+   --->  Element: V (V)   Z = 23.0   N =  51.0   A =  50.94 g/mole
+         --->  Isotope:   V50   Z = 23   N =  50   A =  49.95 g/mole   abundance:   0.25 %
+         --->  Isotope:   V51   Z = 23   N =  51   A =  50.94 g/mole   abundance:  99.75 %
+          ElmMassFraction:   0.23 %  ElmAbundance   0.10 % 
+
+   --->  Element: Ba (Ba)   Z = 56.0   N = 137.4   A = 137.33 g/mole
+         --->  Isotope: Ba130   Z = 56   N = 130   A = 129.91 g/mole   abundance:   0.11 %
+         --->  Isotope: Ba132   Z = 56   N = 132   A = 131.90 g/mole   abundance:   0.10 %
+         --->  Isotope: Ba134   Z = 56   N = 134   A = 133.91 g/mole   abundance:   2.42 %
+         --->  Isotope: Ba135   Z = 56   N = 135   A = 134.91 g/mole   abundance:   6.59 %
+         --->  Isotope: Ba136   Z = 56   N = 136   A = 135.91 g/mole   abundance:   7.85 %
+         --->  Isotope: Ba137   Z = 56   N = 137   A = 136.91 g/mole   abundance:  11.23 %
+         --->  Isotope: Ba138   Z = 56   N = 138   A = 137.91 g/mole   abundance:  71.70 %
+          ElmMassFraction:   0.15 %  ElmAbundance   0.02 % 
+
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  44.72 %  ElmAbundance  61.90 % 
+
+
+ Material:   Gabbro    density:  3.000 g/cm3   RadL:   7.622 cm   Nucl.Int.Length:  33.814 cm 
+                       Imean: 143.753 eV 
+
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+          ElmMassFraction:  18.70 %  ElmAbundance  15.28 % 
+
+   --->  Element: Ti (Ti)   Z = 22.0   N =  47.9   A =  47.87 g/mole
+         --->  Isotope:  Ti46   Z = 22   N =  46   A =  45.95 g/mole   abundance:   8.25 %
+         --->  Isotope:  Ti47   Z = 22   N =  47   A =  46.95 g/mole   abundance:   7.44 %
+         --->  Isotope:  Ti48   Z = 22   N =  48   A =  47.95 g/mole   abundance:  73.72 %
+         --->  Isotope:  Ti49   Z = 22   N =  49   A =  48.95 g/mole   abundance:   5.41 %
+         --->  Isotope:  Ti50   Z = 22   N =  50   A =  49.94 g/mole   abundance:   5.18 %
+          ElmMassFraction:   2.31 %  ElmAbundance   1.11 % 
+
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction:   4.58 %  ElmAbundance   3.90 % 
+
+   --->  Element: Fe (Fe)   Z = 26.0   N =  55.9   A =  55.85 g/mole
+         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+          ElmMassFraction:  12.86 %  ElmAbundance   5.29 % 
+
+   --->  Element: Mn (Mn)   Z = 25.0   N =  55.0   A =  54.94 g/mole
+         --->  Isotope:  Mn55   Z = 25   N =  55   A =  54.94 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.13 %  ElmAbundance   0.06 % 
+
+   --->  Element: Mg (Mg)   Z = 12.0   N =  24.3   A =  24.31 g/mole
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance:  78.99 %
+         --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance:  10.00 %
+         --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance:  11.01 %
+          ElmMassFraction:   8.35 %  ElmAbundance   7.89 % 
+
+   --->  Element: Ca (Ca)   Z = 20.0   N =  40.1   A =  40.08 g/mole
+         --->  Isotope:  Ca40   Z = 20   N =  40   A =  39.96 g/mole   abundance:  96.94 %
+         --->  Isotope:  Ca42   Z = 20   N =  42   A =  41.96 g/mole   abundance:   0.65 %
+         --->  Isotope:  Ca43   Z = 20   N =  43   A =  42.96 g/mole   abundance:   0.14 %
+         --->  Isotope:  Ca44   Z = 20   N =  44   A =  43.96 g/mole   abundance:   2.09 %
+         --->  Isotope:  Ca46   Z = 20   N =  46   A =  45.95 g/mole   abundance:   0.00 %
+         --->  Isotope:  Ca48   Z = 20   N =  48   A =  47.95 g/mole   abundance:   0.19 %
+          ElmMassFraction:  10.74 %  ElmAbundance   6.15 % 
+
+   --->  Element: Na (Na)   Z = 11.0   N =  23.0   A =  22.99 g/mole
+         --->  Isotope:  Na23   Z = 11   N =  23   A =  22.99 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.56 %  ElmAbundance   0.56 % 
+
+   --->  Element: K (K)   Z = 19.0   N =  39.1   A =  39.10 g/mole
+         --->  Isotope:   K39   Z = 19   N =  39   A =  38.96 g/mole   abundance:  93.26 %
+         --->  Isotope:   K40   Z = 19   N =  40   A =  39.96 g/mole   abundance:   0.01 %
+         --->  Isotope:   K41   Z = 19   N =  41   A =  40.96 g/mole   abundance:   6.73 %
+          ElmMassFraction:   0.15 %  ElmAbundance   0.09 % 
+
+   --->  Element: P (P)   Z = 15.0   N =  31.0   A =  30.97 g/mole
+         --->  Isotope:   P31   Z = 15   N =  31   A =  30.97 g/mole   abundance: 100.00 %
+          ElmMassFraction:   0.04 %  ElmAbundance   0.03 % 
+
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  41.57 %  ElmAbundance  59.64 % 
+
+
+ Material: gallium arsenide    density:  5.320 g/cm3   RadL:   2.292 cm   Nucl.Int.Length:  27.395 cm 
+                       Imean: 340.641 eV 
+
+   --->  Element: Ga (Ga)   Z = 31.0   N =  69.8   A =  69.72 g/mole
+         --->  Isotope:  Ga69   Z = 31   N =  69   A =  68.93 g/mole   abundance:  60.11 %
+         --->  Isotope:  Ga71   Z = 31   N =  71   A =  70.92 g/mole   abundance:  39.89 %
+          ElmMassFraction:  48.20 %  ElmAbundance  50.00 % 
+
+   --->  Element: As (As)   Z = 33.0   N =  75.0   A =  74.92 g/mole
+         --->  Isotope:  As75   Z = 33   N =  75   A =  74.92 g/mole   abundance: 100.00 %
+          ElmMassFraction:  51.80 %  ElmAbundance  50.00 % 
+
+
+ Material: Scintillator    density:  1.032 g/cm3   RadL:  42.544 cm   Nucl.Int.Length:  70.065 cm 
+                       Imean:  64.684 eV 
+
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:  91.47 %  ElmAbundance  47.37 % 
+
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:   8.53 %  ElmAbundance  52.63 % 
+
+
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113427275.267 pc 
+                       Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+ Material:   Basalt    density:  3.000 g/cm3   RadL:   7.851 cm   Nucl.Int.Length:  33.452 cm 
+                       Imean: 140.329 eV 
+
+   --->  Element: Fe (Fe)   Z = 26.0   N =  55.9   A =  55.85 g/mole
+         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+          ElmMassFraction:  12.00 %  ElmAbundance   4.80 % 
+
+   --->  Element: Ti (Ti)   Z = 22.0   N =  47.9   A =  47.87 g/mole
+         --->  Isotope:  Ti46   Z = 22   N =  46   A =  45.95 g/mole   abundance:   8.25 %
+         --->  Isotope:  Ti47   Z = 22   N =  47   A =  46.95 g/mole   abundance:   7.44 %
+         --->  Isotope:  Ti48   Z = 22   N =  48   A =  47.95 g/mole   abundance:  73.72 %
+         --->  Isotope:  Ti49   Z = 22   N =  49   A =  48.95 g/mole   abundance:   5.41 %
+         --->  Isotope:  Ti50   Z = 22   N =  50   A =  49.94 g/mole   abundance:   5.18 %
+          ElmMassFraction:   1.60 %  ElmAbundance   0.75 % 
+
+   --->  Element: Ca (Ca)   Z = 20.0   N =  40.1   A =  40.08 g/mole
+         --->  Isotope:  Ca40   Z = 20   N =  40   A =  39.96 g/mole   abundance:  96.94 %
+         --->  Isotope:  Ca42   Z = 20   N =  42   A =  41.96 g/mole   abundance:   0.65 %
+         --->  Isotope:  Ca43   Z = 20   N =  43   A =  42.96 g/mole   abundance:   0.14 %
+         --->  Isotope:  Ca44   Z = 20   N =  44   A =  43.96 g/mole   abundance:   2.09 %
+         --->  Isotope:  Ca46   Z = 20   N =  46   A =  45.95 g/mole   abundance:   0.00 %
+         --->  Isotope:  Ca48   Z = 20   N =  48   A =  47.95 g/mole   abundance:   0.19 %
+          ElmMassFraction:   7.50 %  ElmAbundance   4.18 % 
+
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+          ElmMassFraction:  21.60 %  ElmAbundance  17.17 % 
+
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction:   7.10 %  ElmAbundance   5.87 % 
+
+   --->  Element: Mg (Mg)   Z = 12.0   N =  24.3   A =  24.31 g/mole
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance:  78.99 %
+         --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance:  10.00 %
+         --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance:  11.01 %
+          ElmMassFraction:   5.90 %  ElmAbundance   5.42 % 
+
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  44.30 %  ElmAbundance  61.81 % 
+
+
+ Material:     SiLi    density:  2.330 g/cm3   RadL:   9.366 cm   Nucl.Int.Length:  45.635 cm 
+                       Imean: 173.000 eV 
+
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+          ElmMassFraction:  50.00 %  ElmAbundance  50.00 % 
+
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+          ElmMassFraction:  50.00 %  ElmAbundance  50.00 % 
+
+
+ Material:       Cu    density:  8.920 g/cm3   RadL:   1.442 cm   Nucl.Int.Length:  15.646 cm 
+                       Imean: 322.000 eV 
+
+   --->  Element: Cu (Cu)   Z = 29.0   N =  63.6   A =  63.55 g/mole
+         --->  Isotope:  Cu63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
+         --->  Isotope:  Cu65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %
+          ElmMassFraction:  50.00 %  ElmAbundance  50.00 % 
+
+   --->  Element: Cu (Cu)   Z = 29.0   N =  63.6   A =  63.55 g/mole
+         --->  Isotope:  Cu63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
+         --->  Isotope:  Cu65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %
+          ElmMassFraction:  50.00 %  ElmAbundance  50.00 % 
+
+
+
+PixelThickness(mm): 2.7
+PixelSizeXY(cm): 0.632456
+DeviceThickness(cm): 0.278002
+DeviceSizeX(cm): 0.632456
+DeviceSizeY(cm): 0.632456
+XrayFluoDetectorConstruction created
+XrayFluoPrimaryGeneratorMessenger created
+XrayFluoPrimaryGeneratorAction created
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  OpenGLImmediateX (OGLIX)
+  OpenGLImmediateXm (OGLI, OGLIXm)
+  OpenGLStoredX (OGLSX)
+  OpenGLStoredXm (OGL, OGLS, OGLSXm)
+  RayTracer (RayTracer)
+  RayTracerX (RayTracerX)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+  drawByAttribute
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+  attributeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+Available colours:
+  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
+
+/run/verbose 2
+/tracking/verbose 0
+# activating livermore processes
+/phys/addPhysics emlivermore
+PhysicsList::AddPhysicsList: <emlivermore>
+# Setting production edges
+/cuts/setLowEdge 250 eV
+/run/initialize
+userDetector->Construct() start.
+PixelCopyNb: 0
+-----------------------------------------------------------------------
+The sample is a box whose size is: 
+0.4 cm * 3 cm * 3 cm
+ Material: Dolorite
+The Detector is a slice  2780.02 micron thick of SiLi
+The Anode is a slice 1e-05mm thick of G4_Ni
+-------------------------------------------------------------------------
+World is registered to the default region.
+XrayFluoSD created
+physicsList->Construct() start.
+physicsList->CheckParticleList() start.
+physicsList->setCut() start.
+PhysicsList::SetCuts:CutLength : 1 mm 
+#Setting fluorescence ON  and Auger ON
+/process/em/fluo true
+/run/physicsModified
+/process/em/auger true
+/run/physicsModified
+/process/em/pixe true
+/run/physicsModified
+#Selecting Reis model for PIXE. Analytical PIXE will be used outsie 01-10 MeV energy Range
+/process/em/pixeXSmodel ecpssr_interpolated
+/run/physicsModified
+#
+#/analysis/setPhysicProduction true
+#
+#setting cuts
+/phys/setGCut 1 nm
+/phys/setECut 1 nm
+/run/setCut 0.01 mm
+PhysicsList::SetCuts:CutLength : 10 um 
+#if we want to have an M-Flare Spectrum (default)
+#/gun/spectrum on
+#otherwise
+#setting 3 MeV protons as incident particles
+/gun/particle proton
+/gun/energy 3 MeV
+#just one shot: put /tracking/verbose 0 for more particles
+/run/beamOn 10
+
+phot:   for  gamma    SubType= 12  BuildTable= 0
+      LambdaPrime table from 200 keV to 10 TeV in 154 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermorePhElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
+
+compt:   for  gamma    SubType= 13  BuildTable= 1
+      Lambda table from 100 eV  to 1 MeV, 20 bins per decade, spline: 1
+      LambdaPrime table from 1 MeV to 10 TeV in 140 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+    LivermoreCompton :  Emin=        0 eV    Emax=       10 TeV  FluoActive
+
+conv:   for  gamma    SubType= 14  BuildTable= 1
+      Lambda table from 1.022 MeV to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermoreConversion :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
+
+Rayl:   for  gamma    SubType= 11  BuildTable= 1
+      Lambda table from 100 eV  to 100 keV, 20 bins per decade, spline: 0
+      LambdaPrime table from 100 keV to 10 TeV in 160 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :  Emin=        0 eV    Emax=       10 TeV   CullenGenerator
+
+msc:   for e-    SubType= 10
+      RangeFactor= 0.01, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 120 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 100 bins Emin=    100 MeV   Emax=     10 TeV
+
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
+          DefaultRegionForTheWorld
+
+### === G4UAtomicDeexcitation::InitialiseForNewRun()
+### ===  PIXE model for hadrons: ECPSSR_FormFactor  1
+### ===  PIXE model for e+-:     Livermore  1
+
+eIoni:   for  e-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       LowEnergyIoni :  Emin=        0 eV    Emax=      100 keV   deltaVI
+        MollerBhabha :  Emin=      100 keV   Emax=       10 TeV   deltaVI
+      CSDA range table up to 1 GeV in 140 bins
+
+eBrem:   for  e-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           LowEnBrem :  Emin=        0 eV    Emax=        1 GeV   AngularGen2BS
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
+
+CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from 100 MeV to 10 TeV, 20 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
+
+msc:   for e+    SubType= 10
+      RangeFactor= 0.01, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 120 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 100 bins Emin=    100 MeV   Emax=     10 TeV
+
+eIoni:   for  e+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV   deltaVI
+      CSDA range table up to 1 GeV in 140 bins
+
+eBrem:   for  e+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
+
+annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  e+, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from 100 MeV to 10 TeV, 20 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
+
+msc:   for proton    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=        2 MeV   deltaVI
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
+      ===== Limit on energy threshold has been applied 
+      CSDA range table up to 1 GeV in 140 bins
+
+hBrems:   for  proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
+
+hPairProd:   for  proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+nuclearStopping:   for  proton    SubType= 8  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
+
+msc:   for GenericIon    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
+
+ionIoni:   for  GenericIon    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+         ParamICRU73 :  Emin=        0 eV    Emax=       10 TeV   deltaVI
+      ===== Limit on energy threshold has been applied 
+      CSDA range table up to 1 GeV in 140 bins
+
+nuclearStopping:   for  GenericIon    SubType= 8  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
+
+msc:   for alpha    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+ionIoni:   for  alpha    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV   deltaVI
+          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV   deltaVI
+      ===== Limit on energy threshold has been applied 
+      CSDA range table up to 1 GeV in 140 bins
+
+nuclearStopping:   for  alpha    SubType= 8  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
+
+msc:   for anti_proton    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  anti_proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV   deltaVI
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
+      ===== Limit on energy threshold has been applied 
+      CSDA range table up to 1 GeV in 140 bins
+
+hBrems:   for  anti_proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
+
+hPairProd:   for  anti_proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+nuclearStopping:   for  anti_proton    SubType= 8  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
+
+msc:   for kaon+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  kaon+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV   deltaVI
+      ===== Limit on energy threshold has been applied 
+      CSDA range table up to 1 GeV in 140 bins
+
+hBrems:   for  kaon+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
+
+hPairProd:   for  kaon+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for kaon-    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  kaon-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV   deltaVI
+      ===== Limit on energy threshold has been applied 
+      CSDA range table up to 1 GeV in 140 bins
+
+hBrems:   for  kaon-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
+
+hPairProd:   for  kaon-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for mu+    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+muIoni:   for  mu+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=      200 keV   deltaVI
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
+      CSDA range table up to 1 GeV in 140 bins
+
+muBrems:   for  mu+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
+
+muPairProd:   for  mu+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  mu+, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 20 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for mu-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+muIoni:   for  mu-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=      200 keV   deltaVI
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
+      CSDA range table up to 1 GeV in 140 bins
+
+muBrems:   for  mu-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
+
+muPairProd:   for  mu-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  mu-, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 20 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  pi+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV   deltaVI
+      ===== Limit on energy threshold has been applied 
+      CSDA range table up to 1 GeV in 140 bins
+
+hBrems:   for  pi+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
+
+hPairProd:   for  pi+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for pi-    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  pi-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV   deltaVI
+      ===== Limit on energy threshold has been applied 
+      CSDA range table up to 1 GeV in 140 bins
+
+hBrems:   for  pi-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
+
+hPairProd:   for  pi-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_Galactic SiLi G4_Pb G4_Ni G4_Be Dolorite 
+ Production cuts :   gamma 1 nm      e- 1 nm      e+ 1 nm  proton 10 um 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 nm      e- 1 nm      e+ 1 nm  proton 10 um 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 10 um 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton 1 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : SiLi
+ Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 10 um 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton 1 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes
+ Material : G4_Pb
+ Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 10 um 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton 1 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes
+ Material : G4_Ni
+ Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 10 um 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton 1 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 4     used in the geometry : Yes
+ Material : G4_Be
+ Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 10 um 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton 1 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 5     used in the geometry : Yes
+ Material : Dolorite
+ Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 10 um 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton 1 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   1 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+
+    Voxelisation: top CPU users:
+    Percent   Total CPU    System CPU       Memory  Volume
+    -------   ----------   ----------     --------  ----------
+       0.00         0.00         0.00            1k World
+       0.00         0.00         0.00            0k HPGeDetector
+
+    Voxelisation: top memory users:
+    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
+    -------   --------     ------   ------   --------   ----------    ----------
+      69.08          0k         3        9         24         0.00    World
+      30.92          0k         2        3         11         0.00    HPGeDetector
+### Run 0 starts.
+### Run 0 starts (master).
+Reading data... done
+XrayFluoRunAction initialized
+/vis/scene/notifyHandlers
+WARNING: Scene "none" not found.
+  /vis/scene/list to see scenes.
+Open output file: xrayfluo
+Created histos
+# = 100000 events
+1--------+---------+---------+---------+---------5e6
+ Run terminated.
+Run Summary
+  Number of events processed : 10
+  User=1.57s Real=1.57s Sys=0s
+Going to save histograms
+... write Root file : xrayfluo.root - done
+/vis/viewer/update
+WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
+Graphics systems deleted.
+Visualization Manager deleting...
+visManager deleted
+G4 kernel has come to Quit state.
+XrayFluoDetectorConstruction deleted
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserActionInitialization deleted.
+UserRunAction deleted.
+XrayFluoPrimaryGeneratorMessenger deleted
+UserPrimaryGenerator deleted.
+RunManager is deleting RunManagerKernel.
+XrayFluoSD deleted
+G4SDManager deleted.
+EventManager deleted.
+Units table cleared.
+Total navigation history collections cleaned: 7
+================== Deleting memory pools ===================
+Number of memory pools allocated: 11 of which, static: 0
+Dynamic pools deleted: 11 / Total memory freed: 0.97 Mb
+============================================================
+G4Allocator objects are deleted.
+UImanager deleted.
+StateManager deleted.
+RunManagerKernel is deleted. Good bye :)

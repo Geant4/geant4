@@ -30,8 +30,9 @@
 // ClassName:   G4GenericBiasingPhysics
 //
 // Author:      M. Verderi (Sept.10.2013)
-//
 // Modified:
+// 07/11/2014, M. Verderi : fix bug of PhysicsBias(...) which was not taking
+//             into account the vector of processes passed, but biasing all.
 //
 //----------------------------------------------------------------------------
 //
@@ -121,31 +122,42 @@ void G4GenericBiasingPhysics::ConstructProcess()
     {
       G4ParticleDefinition*     particle = aParticleIterator->value();
       G4String              particleName = particle->GetParticleName();
+      G4ProcessManager*         pmanager = particle->GetProcessManager();
       
       // -- include non physics process interface for biasing:
       if ( std::find(fNonPhysBiasedParticles.begin(),
 		     fNonPhysBiasedParticles.end(),
 		     particleName             )  != fNonPhysBiasedParticles.end() )
 	{
-	  G4ProcessManager* pmanager = particle->GetProcessManager();
 	  G4BiasingHelper::ActivateNonPhysicsBiasing(pmanager);
 	}
       
+      // -- wrap biased physics processes, all processes or only user selected:
+      std::vector< G4String >::const_iterator particleIt =
+	std::find(fBiasedParticles.begin(),
+		  fBiasedParticles.end(),
+		  particleName             );
+      if ( particleIt == fBiasedParticles.end() ) continue;
       
-      if ( std::find(fBiasedParticles.begin(),
-		     fBiasedParticles.end(),
-		     particleName             )  == fBiasedParticles.end() ) continue;
+      std::vector < G4String >& biasedProcesses = fBiasedProcesses [ particleIt - fBiasedParticles.begin() ];
+      G4bool biasAll                            = fBiasAllProcesses[ particleIt - fBiasedParticles.begin() ];
       
-      G4ProcessManager* pmanager = particle->GetProcessManager();
-      G4ProcessVector*  vprocess = pmanager->GetProcessList();
+      if ( biasAll )
+	{
+	  G4ProcessVector*  vprocess = pmanager->GetProcessList();
+	  for (G4int ip = 0 ; ip < vprocess->size() ; ip++)
+	    {
+	      G4VProcess* process = (*vprocess)[ip];
+	      biasedProcesses.push_back( process->GetProcessName() );
+	    }
+	}
       
       G4bool restartLoop(true);
       while ( restartLoop )
 	{
-	  for (G4int ip = 0 ; ip < vprocess->size() ; ip++)
+	  for (std::size_t ip = 0 ; ip < biasedProcesses.size() ; ip++)
 	    {
-	      G4VProcess* process = (*vprocess)[ip];
-	      G4bool activ = G4BiasingHelper::ActivatePhysicsBiasing(pmanager, process->GetProcessName());
+	      G4bool activ = G4BiasingHelper::ActivatePhysicsBiasing(pmanager, biasedProcesses[ip] );
 	      restartLoop = activ;
 	      if ( restartLoop ) break;
 	    }

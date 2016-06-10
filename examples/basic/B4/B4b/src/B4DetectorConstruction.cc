@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B4DetectorConstruction.cc 77601 2013-11-26 17:08:44Z gcosmo $
+// $Id: B4DetectorConstruction.cc 87359 2014-12-01 16:04:27Z gcosmo $
 // 
 /// \file B4DetectorConstruction.cc
 /// \brief Implementation of the B4DetectorConstruction class
@@ -252,12 +252,14 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
   //
   // print parameters
   //
-  G4cout << "\n------------------------------------------------------------"
-         << "\n---> The calorimeter is " << nofLayers << " layers of: [ "
-         << absoThickness/mm << "mm of " << absorberMaterial->GetName() 
-         << " + "
-         << gapThickness/mm << "mm of " << gapMaterial->GetName() << " ] " 
-         << "\n------------------------------------------------------------\n";
+  G4cout
+    << G4endl 
+    << "------------------------------------------------------------" << G4endl
+    << "---> The calorimeter is " << nofLayers << " layers of: [ "
+    << absoThickness/mm << "mm of " << absorberMaterial->GetName() 
+    << " + "
+    << gapThickness/mm << "mm of " << gapMaterial->GetName() << " ] " << G4endl
+    << "------------------------------------------------------------" << G4endl;
   
   //                                        
   // Visualization attributes

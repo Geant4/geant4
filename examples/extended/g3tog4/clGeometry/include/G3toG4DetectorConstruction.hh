@@ -27,7 +27,7 @@
 /// \brief Definition of the G3toG4DetectorConstruction class
 //
 //
-// $Id$
+// $Id: G3toG4DetectorConstruction.hh 82227 2014-06-12 09:43:33Z gcosmo $
 //
 #ifndef G3toG4DetectorConstruction_h
 #define G3toG4DetectorConstruction_h 1

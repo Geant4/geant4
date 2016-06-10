@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4RPGOmegaMinusInelastic.cc 79697 2014-03-12 13:10:09Z gcosmo $
 //
  
 #include "G4RPGOmegaMinusInelastic.hh"
@@ -59,7 +59,8 @@ G4RPGOmegaMinusInelastic::ApplyYourself( const G4HadProjectile &aTrack,
     G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
            << G4endl;
   }
-    G4ReactionProduct currentParticle( const_cast<G4ParticleDefinition *>(originalIncident->GetDefinition() ));
+
+    G4ReactionProduct currentParticle(originalIncident->GetDefinition() );
     currentParticle.SetMomentum( originalIncident->Get4Momentum().vect() );
     currentParticle.SetKineticEnergy( originalIncident->GetKineticEnergy() );
     

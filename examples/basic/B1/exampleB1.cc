@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: exampleB1.cc 75216 2013-10-29 16:08:11Z gcosmo $
+// $Id: exampleB1.cc 86065 2014-11-07 08:51:15Z gcosmo $
 //
 /// \file exampleB1.cc
 /// \brief Main program of the B1 example
@@ -40,13 +40,8 @@
 #include "G4UImanager.hh"
 #include "QBBC.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 #include "Randomize.hh"
 
@@ -54,8 +49,14 @@
 
 int main(int argc,char** argv)
 {
-  // Choose the Random engine
+  // Detect interactive mode (if no arguments) and define UI session
   //
+  G4UIExecutive* ui = 0;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
+
+  // Choose the Random engine
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
   
   // Construct the default run manager
@@ -78,40 +79,30 @@ int main(int argc,char** argv)
     
   // User action initialization
   runManager->SetUserInitialization(new B1ActionInitialization());
-
-  // Initialize G4 kernel
-  //
-  runManager->Initialize();
   
-#ifdef G4VIS_USE
   // Initialize visualization
+  //
   G4VisManager* visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
   // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
-#endif
 
   // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if (argc!=1) {
+  // Process macro or start UI session
+  //
+  if ( ! ui ) { 
     // batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command+fileName);
   }
-  else {
-    // interactive mode : define UI session
-#ifdef G4UI_USE
-    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-    UImanager->ApplyCommand("/control/execute init_vis.mac"); 
-#else
-    UImanager->ApplyCommand("/control/execute init.mac"); 
-#endif
+  else { 
+    // interactive mode
+    UImanager->ApplyCommand("/control/execute init_vis.mac");
     ui->SessionStart();
     delete ui;
-#endif
   }
 
   // Job termination
@@ -119,12 +110,8 @@ int main(int argc,char** argv)
   // owned and deleted by the run manager, so they should not be deleted 
   // in the main() program !
   
-#ifdef G4VIS_USE
   delete visManager;
-#endif
   delete runManager;
-
-  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

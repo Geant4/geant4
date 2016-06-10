@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4RPGInelastic.cc 79869 2014-03-19 09:59:40Z gcosmo $
 //
 
 #include "G4RPGInelastic.hh"
@@ -548,8 +548,8 @@ void G4RPGInelastic::CheckQnums(G4FastVector<G4ReactionProduct,256> &vec,
                                 G4ReactionProduct &targetParticle,
                                 G4double Q, G4double B, G4double S)
 {
-  G4ParticleDefinition* projDef = currentParticle.GetDefinition();
-  G4ParticleDefinition* targDef = targetParticle.GetDefinition();
+  const G4ParticleDefinition* projDef = currentParticle.GetDefinition();
+  const G4ParticleDefinition* targDef = targetParticle.GetDefinition();
   G4double chargeSum = projDef->GetPDGCharge() + targDef->GetPDGCharge();
   G4double baryonSum = projDef->GetBaryonNumber() + targDef->GetBaryonNumber();
   G4double strangenessSum = projDef->GetQuarkContent(3) - 
@@ -557,7 +557,7 @@ void G4RPGInelastic::CheckQnums(G4FastVector<G4ReactionProduct,256> &vec,
                             targDef->GetQuarkContent(3) -
                             targDef->GetAntiQuarkContent(3);
 
-  G4ParticleDefinition* secDef = 0;
+  const G4ParticleDefinition* secDef = 0;
   for (G4int i = 0; i < vecLen; i++) {
     secDef = vec[i]->GetDefinition();
     chargeSum += secDef->GetPDGCharge();

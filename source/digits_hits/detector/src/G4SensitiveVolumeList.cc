@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SensitiveVolumeList.cc 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4SensitiveVolumeList.cc 81087 2014-05-20 15:44:27Z gcosmo $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -55,7 +55,7 @@
 
 
  //Assignment Operation
-   const G4SensitiveVolumeList & G4SensitiveVolumeList::operator=(const G4SensitiveVolumeList &right)
+    G4SensitiveVolumeList & G4SensitiveVolumeList::operator=(const G4SensitiveVolumeList &right)
    {
      thePhysicalVolumeList = right.thePhysicalVolumeList;
      theLogicalVolumeList = right.theLogicalVolumeList;

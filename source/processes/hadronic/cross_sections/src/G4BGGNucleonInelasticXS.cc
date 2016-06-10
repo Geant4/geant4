@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGNucleonInelasticXS.cc 76889 2013-11-18 13:01:55Z gcosmo $
+// $Id: G4BGGNucleonInelasticXS.cc 79981 2014-03-27 15:24:11Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -153,7 +153,7 @@ G4BGGNucleonInelasticXS::GetElementCrossSection(const G4DynamicParticle* dp,
 	   << " XS(b)= " << cross/barn 
 	   << G4endl;
   }
-  if(cross <= fLowestXSection) { cross = 0.0; }
+  //AR-18Dec2013  if(cross <= fLowestXSection) { cross = 0.0; }
   return cross;
 }
 
@@ -190,7 +190,7 @@ G4BGGNucleonInelasticXS::GetIsoCrossSection(const G4DynamicParticle* dp,
 	   << " XS(b)= " << cross/barn 
 	   << G4endl;
   }
-  if(cross <= fLowestXSection) { cross = 0.0; }
+  //AR-18Dec2013  if(cross <= fLowestXSection) { cross = 0.0; }
   return cross;
 }
 
@@ -227,9 +227,8 @@ void G4BGGNucleonInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
     fHighEnergy = 2*GeV;
   }
 
-  G4ParticleDefinition* part = const_cast<G4ParticleDefinition*>(particle);
   G4ThreeVector mom(0.0,0.0,1.0);
-  G4DynamicParticle dp(part, mom, fGlauberEnergy);
+  G4DynamicParticle dp(particle, mom, fGlauberEnergy);
 
   G4NistManager* nist = G4NistManager::Instance();
   G4int A;

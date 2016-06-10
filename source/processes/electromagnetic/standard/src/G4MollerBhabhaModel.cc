@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc 74790 2013-10-22 07:31:37Z gcosmo $
+// $Id: G4MollerBhabhaModel.cc 84397 2014-10-15 07:19:14Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -131,7 +131,8 @@ G4MollerBhabhaModel::ComputeCrossSectionPerElectron(const G4ParticleDefinition* 
   G4double cross = 0.0;
   G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
   tmax = std::min(maxEnergy, tmax);
-
+  //G4cout << "E= " << kineticEnergy << " cut= " << cutEnergy 
+  //	 << " Emax= " << tmax << G4endl;
   if(cutEnergy < tmax) {
 
     G4double xmin  = cutEnergy/kineticEnergy;

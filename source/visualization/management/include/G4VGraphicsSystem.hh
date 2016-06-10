@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsSystem.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4VGraphicsSystem.hh 78838 2014-01-28 08:46:17Z gcosmo $
 //
 // 
 // John Allison  27th March 1996
@@ -46,13 +46,14 @@ class G4VGraphicsSystem {
 public: // With description
 
   enum Functionality {
-    noFunctionality,
-    nonEuclidian,       // e.g., tree representation of geometry hierarchy.
-    twoD,               // Simple 2D, e.g., X (no stored structures).
-    twoDStore,          // 2D with stored structures.
-    threeD,             // Passive 3D (with stored structures).
-    threeDInteractive,  // 3D with "pick" functionality.
-    virtualReality      // Virtual Reality functionality.
+    noFunctionality
+    ,nonEuclidian       // e.g., tree representation of geometry hierarchy.
+    ,twoD               // Simple 2D, e.g., X (no stored structures).
+    ,twoDStore          // 2D with stored structures.
+    ,threeD             // Passive 3D (with stored structures).
+    ,threeDInteractive  // 3D with "pick" functionality.
+    ,virtualReality     // Virtual Reality functionality.
+    ,fileWriter         // File writer
   };
 
   G4VGraphicsSystem (const G4String& name,

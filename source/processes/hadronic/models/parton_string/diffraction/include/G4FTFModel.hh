@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.hh 74627 2013-10-17 07:04:38Z gcosmo $
+// $Id: G4FTFModel.hh 83402 2014-08-21 15:05:10Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 // Class Description
@@ -92,7 +92,40 @@ class G4FTFModel : public G4VPartonStringModel {
                            G4Nucleon*          TargetNucleon,
                            G4bool              Annihilation ); 
     G4ThreeVector GaussianPt( G4double AveragePt2, G4double maxPtSquare ) const;
-  
+
+    G4bool ComputeNucleusProperties( G4V3DNucleus* nucleus, G4LorentzVector& nucleusMomentum, 
+                                     G4LorentzVector& residualMomentum, G4double& sumMasses,   
+                                     G4double& residualExcitationEnergy, G4double& residualMass,
+                                     G4int& residualMassNumber, G4int& residualCharge );
+    // Utility method used by PutOnMassShell.
+
+    G4bool GenerateDeltaIsobar( const G4double sqrtS, const G4int numberOfInvolvedNucleons,
+                                G4Nucleon* involvedNucleons[], G4double& sumMasses );
+    // Utility method used by PutOnMassShell.
+
+    G4bool SamplingNucleonKinematics( const G4double averagePt2, const G4double maxPt2,
+                                      const G4double dCor, G4V3DNucleus* nucleus, 
+                                      const G4LorentzVector& pResidual, 
+                                      const G4double residualMass, const G4int residualMassNumber,
+                                      const G4int numberOfInvolvedNucleons,
+                                      G4Nucleon* involvedNucleons[], G4double& mass2 );
+    // Utility method used by PutOnMassShell.
+
+    G4bool CheckKinematics( const G4double sValue, const G4double sqrtS, 
+                            const G4double projectileMass2, const G4double targetMass2,
+                            const G4double nucleusY, const G4bool isProjectileNucleus,
+                            const G4int numberOfInvolvedNucleons, G4Nucleon* involvedNucleons[],
+                            G4double& targetWminus, G4double& projectileWplus, G4bool& success );
+    // Utility method used by PutOnMassShell.
+
+    G4bool FinalizeKinematics( const G4double w, const G4bool isProjectileNucleus, 
+                               const G4LorentzRotation& boostFromCmsToLab,
+                               const G4double residualMass, const G4int residualMassNumber,
+                               const G4int numberOfInvolvedNucleons, 
+                               G4Nucleon* involvedNucleons[],
+	                       G4LorentzVector& residual4Momentum );
+    // Utility method used by PutOnMassShell.
+
     G4ReactionProduct theProjectile;       
     G4FTFParticipants theParticipants;
        

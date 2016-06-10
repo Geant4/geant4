@@ -1,4 +1,4 @@
-$Id: History 77735 2013-11-27 17:55:03Z gcosmo $
+$Id: History 83404 2014-08-21 15:08:52Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11-08-14  V.Ivanchenko (exhadr00-V10-00-01)
+- Reduced log output
+
+20-05-14  V.Ivanchenko (exhadr00-V10-00-00)
+- HistoManager - added histogram with cross section per volume
 
 27-11-13  I. Hrivnacova (exhadr00-V09-06-06)
 - Removed #ifdef G4MULTITHREADED from RunAction (not needed)

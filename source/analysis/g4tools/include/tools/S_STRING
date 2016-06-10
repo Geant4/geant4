@@ -6,6 +6,8 @@
 
 // a few place in which a cpp macro help the readability.
 
+#include <string>
+
 #define TOOLS_CLASS_STRING(a_name)\
 static const std::string& s_##a_name() {\
   static const std::string s_v(#a_name);\
@@ -24,9 +26,9 @@ inline const std::string& s_##a_name() {\
   return s_v;\
 }
 
-#define TOOLS_GLOBAL_ARG(a_name)\
+#define TOOLS_GLOBAL_STRING_VALUE(a_name,a_value)\
 inline const std::string& s_##a_name() {\
-  static const std::string s_v(std::string("-")+std::string(#a_name));\
+  static const std::string s_v(#a_value);\
   return s_v;\
 }
 
@@ -43,11 +45,5 @@ static const std::string& s_class() {\
   return s_v;\
 }\
 static void check_class_name() {a_name<a_T>::s_class();}
-
-#define TOOLS_SCLASS_NO_CHECK(a_name)\
-static const std::string& s_class() {\
-  static const std::string s_v(#a_name);\
-  return s_v;\
-}
 
 #endif

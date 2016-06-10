@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh 77246 2013-11-22 10:01:21Z gcosmo $
+// $Id: G4VisManager.hh 85021 2014-10-23 09:53:47Z gcosmo $
 //
 // 
 
@@ -118,22 +118,6 @@ typedef G4VModelFactory<G4VFilter<G4VDigi> > G4DigiFilterFactory;
 
 class G4VisManager: public G4VVisManager {
 
-  // Friends - classes and functions which need access to private
-  // members of G4VisManager.  This is mainly to obtain access to
-  // GetInstance (), which is private.  The correct way for normal
-  // users to obtain a pointer to the vis manager is with
-  // G4VVisManager::GetConcreteInstance (), always testing for
-  // non-zero.
-
-  // Odd friends that need access to the G4VisManager...
-  friend class G4RTSteppingAction;
-  friend class G4RayTrajectory;
-  friend class G4RayTracerSceneHandler;
-  friend class G4RTMessenger;
-  friend class G4OpenGLViewerMessenger;
-  friend class G4OpenGLXmViewerMessenger;
-  friend class G4HepRepFileSceneHandler;
-
   // Management friends...
   friend class G4VSceneHandler;
   friend class G4VViewer;
@@ -174,11 +158,12 @@ private:
   G4VisManager (const G4VisManager&);
   G4VisManager& operator = (const G4VisManager&);
 
+public:
   static G4VisManager* GetInstance ();
   // Returns pointer to itself.  Throws a G4Exception if called before
-  // instantiation.  Private so that only friends can use; the normal
-  // user should instead use G4VVisManager::GetConcreteInstance () to
-  // get a "higher level" pointer for general use - but always test
+  // instantiation.  Intended only for use within the vis category; the
+  // normal user should instead use G4VVisManager::GetConcreteInstance()
+  // to get a "higher level" pointer for general use - but always test
   // for non-zero.
 
 public: // With description
@@ -323,6 +308,14 @@ public: // With description
   void GeometryHasChanged ();
   // Used by run manager to notify change.
 
+  void IgnoreStateChanges(G4bool);
+  // This method shoud be invoked by a class that has its own event loop,
+  // such as the RayTracer, material scanner, etc. If the argument is true,
+  // the following state changes among Idle, GeomClosed and EventProc are
+  // caused by such a class, and thus not by the ordinary event simulation.
+  // The same method with false should be invoked once such an event loop
+  // is over.
+
   void NotifyHandlers();
   // Notify scene handlers (G4VGraphicsScene objects) that the scene
   // has changed so that they may rebuild their graphics database, if
@@ -334,6 +327,11 @@ public: // With description
   G4bool FilterTrajectory(const G4VTrajectory&);
   G4bool FilterHit(const G4VHit&);
   G4bool FilterDigi(const G4VDigi&);
+
+#ifdef G4MULTITHREADED
+  virtual void SetUpForAThread();
+  // This method is invoked by G4WorkerRunManager
+#endif
 
   ////////////////////////////////////////////////////////////////////////
   // Administration routines.
@@ -356,6 +354,8 @@ private:
   // current scene at the end of event, as required.
 
   void EndOfRun ();
+
+  void DrawEvent (const G4Event*);
 
 public: // With description
 
@@ -494,7 +494,6 @@ private:
   std::vector<G4UImessenger*> fMessengerList;
   std::vector<G4UIcommand*>   fDirectoryList;
   G4VisStateDependent*  fpStateDependent;   // Friend state dependent class.
-  G4TrajectoriesModel   dummyTrajectoriesModel;  // For passing drawing mode.
   G4bool                fEventRefreshing;
   G4bool                fTransientsDrawnThisRun;
   G4bool                fTransientsDrawnThisEvent;
@@ -506,6 +505,7 @@ private:
   G4ViewParameters      fDefaultViewParameters;
   G4bool                fIsDrawGroup;
   G4int                 fDrawGroupNestingDepth;
+  G4bool                fIgnoreStateChanges;
 
   // Trajectory draw model manager
   G4VisModelManager<G4VTrajectoryModel>* fpTrajDrawModelMgr;
@@ -518,16 +518,6 @@ private:
 
   // Digi filter model manager
   G4VisFilterManager<G4VDigi>* fpDigiFilterMgr;
-
-#ifdef G4MULTITHREADED
-public:
-  virtual void SetUpForAThread();
-#endif
-
-  virtual void IgnoreStateChanges(G4bool);
-
-protected:
-  G4bool fIgnoreStateChanges;
 };
 
 #include "G4VisManager.icc"

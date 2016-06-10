@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEventAction.hh 66508 2012-12-19 10:16:45Z gcosmo $
+// $Id: GammaRayTelEventAction.hh 82268 2014-06-13 13:47:30Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -46,6 +46,7 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
+#include "GammaRayTelRunAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -53,7 +54,7 @@ class GammaRayTelEventAction : public G4UserEventAction
 {
 public:
 
-  GammaRayTelEventAction();
+  GammaRayTelEventAction(GammaRayTelRunAction* runAction=0);
   virtual ~GammaRayTelEventAction();
   
 public:
@@ -68,6 +69,9 @@ private:
   G4int       calorimeterCollID;                
   G4int       anticoincidenceCollID;                
   G4String    drawFlag;
+
+  GammaRayTelRunAction* theRunAction;
+
 };
 
 #endif

@@ -14,6 +14,113 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24 November 2014 - V.Ivanchenko (hadr-cohe-V10-00-24)
+-----------------------------------------------------------------
+- G4hhElastic - cleanup constructors
+
+21 November 2014 - V.Ivanchenko (hadr-cohe-V10-00-23)
+-----------------------------------------------------------------
+- G4hhElastic - fixed Coverity report (V.Grichine)
+
+20 November 2014 - V.Ivanchenko (hadr-cohe-V10-00-22)
+-----------------------------------------------------------------
+- G4LMsdGenerator - fixed memory leak (V.Grichine)
+
+19 November 2014 - V.Ivanchenko (hadr-cohe-V10-00-21)
+-----------------------------------------------------------------
+- G4LMsdGenerator - fixed shortlived decays (V.Grichine)
+
+14 November 2014 - V.Ivanchenko (hadr-cohe-V10-00-20)
+-----------------------------------------------------------------
+- G4LMsdGenerator - fixed energy concervation (V.Grichine)
+
+12 November 2014 - V.Ivanchenko (hadr-cohe-V10-00-19)
+-----------------------------------------------------------------
+- G4LMsdGenerator - added pions and kaons (V.Grichine)
+
+08 November 2014 - V.Ivanchenko (hadr-cohe-V10-00-18)
+-----------------------------------------------------------------
+- G4LMsdGenerator - fixed read out of the boundary
+
+07 November 2014 - V.Ivanchenko (hadr-cohe-V10-00-17)
+-----------------------------------------------------------------
+07 November 2014 V. Grichine fixed class G4LMsdGenerator 
+
+06 November 2014 - V.Ivanchenko (hadr-cohe-V10-00-16)
+-----------------------------------------------------------------
+06 November 2014 V. Grichine class G4LMsdGenerator was added for 
+    low mass single diffraction dissociation
+
+14 October 2014 - A.Ribon (hadr-cohe-V10-00-14)
+-----------------------------------------------------------------
+- G4DiffuseElastic : extension down to 0.1 MeV, mainly for neutrons.
+- G4hhElastic : changes to combine with low mass diffraction.
+
+31 July 2014 - A.Ribon (hadr-cohe-V10-00-13)
+-----------------------------------------------------------------
+- G4DiffuseElastic and G4NuclNuclDiffuseElastic : use the average
+  nuclear weight for each element to compute the table of angles,
+  in order to improve the reproducibility.
+
+30 July 2014 - A.Ribon (hadr-cohe-V10-00-12)
+-----------------------------------------------------------------
+- G4DiffuseElastic, G4NuclNuclDiffuseElastic, G4hhElastic, and
+  G4ChargeExchangeProcess : proper deletion of physics vectors.
+
+27 June 2014 - V.Ivanchenko (hadr-cohe-V10-00-11)
+-----------------------------------------------------------------
+- G4LEppData, G4LEpp - removed data with Coulomb correction and 
+    corresponding code due to reasons: not work properly, provides 
+    double counting with EM, code too complex.
+
+18 June 2014 - A.Ribon (hadr-cohe-V10-00-10)
+-----------------------------------------------------------------
+- G4NuclNuclDiffuseElastic : proper fix of the nuclear radius issue.
+
+06 June 2014 - A.Ribon (hadr-cohe-V10-00-09)
+-----------------------------------------------------------------
+- G4DiffuseElastic : fixed deletion in destructor.
+- G4NuclNuclDiffuseElastic : fixed deletion in destructor; 
+  temporary fix of the nuclear radius (which was zero).   
+
+27 May 2014 - V.Ivanchenko (hadr-cohe-V10-00-08)
+-----------------------------------------------------------------
+- G4LEpp - fixed incorrect use data array, used GetInvariantT()
+    inside ApplyYourself 
+
+13 May 2014 - A.Ribon (hadr-cohe-V10-00-07)
+-----------------------------------------------------------------
+- Removed unused private members of G4hhElastic which are not used
+  (to avoid warnings).
+
+12 May 2014 - A.Ribon (hadr-cohe-V10-00-06)
+-----------------------------------------------------------------
+- Added V. Grichine's new class G4hhElastic : implementation of the
+  qQ-model with springy Pomeron for hadron-hadron elastic scattering
+
+06 May 2014 - A.Ribon (hadr-cohe-V10-00-05)
+-----------------------------------------------------------------
+- Tag V. Grichine's bug fix in G4DiffuseElastic.cc .
+
+10 April 2014 - G.Cosmo (hadr-cohe-V10-00-04/03)
+-----------------------------------------------------------------
+- Get rid of deprecated 'register' storage class specifier in source files.
+
+10 March 2014 - V.Ivanchenko (hadr-cohe-V10-00-02)
+-----------------------------------------------------------------
+- G4LEHadronProtonElastic, G4LEnp, G4LEpp - use const pointers 
+    to G4ParticleDefinition
+
+31 January 2014 - V.Ivanchenko (V.Grichine) (hadr-cohe-V10-00-01)
+-----------------------------------------------------------------
+- G4LEHadronProtonElastic - new dipole model
+- G4LEnp, G4LEpp - add SampleInvariantT method and inheritance
+    from G4HadronElastic
+
+18 January 2013 - V.Ivanchenko (hadr-cohe-V10-00-00)
+------------------------------------------------------
+- G4LEnp - implemented SampleT() method (V.Grichine)
+
 04 June 2013 - A.Ribon (hadr-cohe-V09-06-03)
 ------------------------------------------------------
 - Fix access to ions via the IonTable class and GetIon method

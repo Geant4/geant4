@@ -24,18 +24,19 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
 
 /*
- * Particle.hh
+ * G4INCLParticle.hh
  *
  *  \date Jun 5, 2009
  * \author Pekka Kaitaniemi
@@ -49,45 +50,23 @@
 #include "G4INCLParticleType.hh"
 #include "G4INCLParticleSpecies.hh"
 #include "G4INCLLogger.hh"
-#include <vector>
+#include "G4INCLUnorderedVector.hh"
+#include "G4INCLAllocationPool.hh"
 #include <sstream>
 #include <string>
-#include <algorithm>
 
 namespace G4INCL {
 
   class Particle;
 
-  template<class T>
-    class UnorderedVector : private std::vector<T> {
-      public:
-        UnorderedVector() {}
-        using std::vector<T>::push_back;
-        using std::vector<T>::pop_back;
-        using std::vector<T>::size;
-        using std::vector<T>::begin;
-        using std::vector<T>::end;
-        using std::vector<T>::rbegin;
-        using std::vector<T>::rend;
-        using std::vector<T>::front;
-        using std::vector<T>::back;
-        using std::vector<T>::clear;
-        using std::vector<T>::empty;
-        using std::vector<T>::insert;
-        using std::vector<T>::erase;
-        using typename std::vector<T>::iterator;
-        using typename std::vector<T>::reverse_iterator;
-        using typename std::vector<T>::const_iterator;
-        using typename std::vector<T>::const_reverse_iterator;
-        void remove(const T &t) {
-          const typename std::vector<T>::iterator removeMe = std::find(begin(), end(), t);
-// assert(removeMe!=end());
-          *removeMe = back();
-          pop_back();
-        }
-    };
+  class ParticleList : public UnorderedVector<Particle*> {
+    public:
+      void rotatePositionAndMomentum(const G4double angle, const ThreeVector &axis) const;
+      void rotatePosition(const G4double angle, const ThreeVector &axis) const;
+      void rotateMomentum(const G4double angle, const ThreeVector &axis) const;
+      void boost(const ThreeVector &b) const;
+  };
 
-  typedef UnorderedVector<Particle*>   ParticleList;
   typedef ParticleList::const_iterator ParticleIter;
   typedef ParticleList::iterator       ParticleMutableIter;
 
@@ -228,14 +207,14 @@ namespace G4INCL {
           theZ = -1;
           break;
         case Composite:
-         // INCL_ERROR("Trying to set particle type to Composite! Construct a Cluster object instead" << std::endl);
+         // INCL_ERROR("Trying to set particle type to Composite! Construct a Cluster object instead" << '\n');
           theA = 0;
           theZ = 0;
           break;
         case UnknownParticle:
           theA = 0;
           theZ = 0;
-          INCL_ERROR("Trying to set particle type to Unknown!" << std::endl);
+          INCL_ERROR("Trying to set particle type to Unknown!" << '\n');
           break;
       }
 
@@ -378,7 +357,7 @@ namespace G4INCL {
           break;
 
         default:
-          INCL_ERROR("Particle::getINCLMass: Unknown particle type." << std::endl);
+          INCL_ERROR("Particle::getINCLMass: Unknown particle type." << '\n');
           return 0.0;
           break;
       }
@@ -407,7 +386,7 @@ namespace G4INCL {
           break;
 
         default:
-          INCL_ERROR("Particle::getTableMass: Unknown particle type." << std::endl);
+          INCL_ERROR("Particle::getTableMass: Unknown particle type." << '\n');
           return 0.0;
           break;
       }
@@ -436,7 +415,7 @@ namespace G4INCL {
           break;
 
         default:
-          INCL_ERROR("Particle::getRealMass: Unknown particle type." << std::endl);
+          INCL_ERROR("Particle::getRealMass: Unknown particle type." << '\n');
           return 0.0;
           break;
       }
@@ -528,7 +507,7 @@ namespace G4INCL {
     G4double getInvariantMass() const {
       const G4double mass = std::pow(theEnergy, 2) - theMomentum.dot(theMomentum);
       if(mass < 0.0) {
-        INCL_ERROR("E*E - p*p is negative." << std::endl);
+        INCL_ERROR("E*E - p*p is negative." << '\n');
         return 0.0;
       } else {
         return std::sqrt(mass);
@@ -660,11 +639,6 @@ namespace G4INCL {
     /** \brief Recompute the energy to match the momentum. */
     G4double adjustEnergyFromMomentum();
 
-    /** \brief Check if the particle belongs to a given list **/
-    G4bool isInList(ParticleList const &l) const {
-      return (std::find(l.begin(), l.end(), this)!=l.end());
-    }
-
     G4bool isCluster() const {
       return (theType == Composite);
     }
@@ -711,8 +685,26 @@ namespace G4INCL {
      * \param angle the rotation angle
      * \param axis a unit vector representing the rotation axis
      */
-    virtual void rotate(const G4double angle, const ThreeVector &axis) {
+    virtual void rotatePositionAndMomentum(const G4double angle, const ThreeVector &axis) {
+      rotatePosition(angle, axis);
+      rotateMomentum(angle, axis);
+    }
+
+    /** \brief Rotate the particle position
+     *
+     * \param angle the rotation angle
+     * \param axis a unit vector representing the rotation axis
+     */
+    virtual void rotatePosition(const G4double angle, const ThreeVector &axis) {
       thePosition.rotate(angle, axis);
+    }
+
+    /** \brief Rotate the particle momentum
+     *
+     * \param angle the rotation angle
+     * \param axis a unit vector representing the rotation axis
+     */
+    virtual void rotateMomentum(const G4double angle, const ThreeVector &axis) {
       theMomentum.rotate(angle, axis);
       theFrozenMomentum.rotate(angle, axis);
     }
@@ -721,14 +713,14 @@ namespace G4INCL {
       std::stringstream ss;
       ss << "Particle (ID = " << ID << ") type = ";
       ss << ParticleTable::getName(theType);
-      ss << std::endl
-        << "   energy = " << theEnergy << std::endl
+      ss << '\n'
+        << "   energy = " << theEnergy << '\n'
         << "   momentum = "
         << theMomentum.print()
-        << std::endl
+        << '\n'
         << "   position = "
         << thePosition.print()
-        << std::endl;
+        << '\n';
       return ss.str();
     };
 
@@ -736,12 +728,12 @@ namespace G4INCL {
       std::stringstream ss;
       ss << "(particle " << ID << " ";
       ss << ParticleTable::getName(theType);
-      ss << std::endl
+      ss << '\n'
         << thePosition.dump()
-        << std::endl
+        << '\n'
         << theMomentum.dump()
-        << std::endl
-        << theEnergy << ")" << std::endl;
+        << '\n'
+        << theEnergy << ")" << '\n';
       return ss.str();
     };
 
@@ -751,7 +743,7 @@ namespace G4INCL {
      * Return a NULL pointer
      */
     ParticleList const *getParticles() const {
-      INCL_WARN("Particle::getParticles() method was called on a Particle object" << std::endl);
+      INCL_WARN("Particle::getParticles() method was called on a Particle object" << '\n');
       return 0;
     }
 
@@ -813,6 +805,7 @@ namespace G4INCL {
     G4double theMass;
     static G4ThreadLocal long nextID;
 
+    INCL_DECLARE_ALLOCATION_POOL(Particle);
   };
 }
 

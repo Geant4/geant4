@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Shielding.icc 76249 2013-11-08 11:21:29Z gcosmo $
+// $Id: Shielding.icc 83413 2014-08-21 15:21:43Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -34,6 +34,7 @@
 //   created from FTFP_BERT
 //
 // Modified:
+// 05.08.2014 K.L.Genser: added provision for Hadronic Physics Variant M
 // 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
 // 26.04.2011 T.Koi: Add G4RadioactiveDecayPhysics
 // 16.10.2012 A.Ribon: Use new default stopping
@@ -71,12 +72,14 @@
 #include "G4HadronPhysicsShielding.hh"
 
 //template<class T> TShielding<T>::TShielding(G4int ver):  T()
-template<class T> TShielding<T>::TShielding( G4int verbose, G4String LEN_model ):  T()
+template<class T> TShielding<T>::TShielding( G4int verbose, G4String LEN_model, 
+                                             G4String HadrPhysVariant ): T()
 {
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*CLHEP::mm;
   G4DataQuestionaire it(photon, neutron, radioactive);
-  G4cout << "<<< Geant4 Physics List simulation engine: Shielding 2.1"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: Shielding"
+         << HadrPhysVariant<< " 2.1"<<G4endl;
   G4cout <<G4endl;
   this->defaultCutValue = 0.7*CLHEP::mm;  
   this->SetVerboseLevel(verbose);
@@ -123,8 +126,13 @@ template<class T> TShielding<T>::TShielding( G4int verbose, G4String LEN_model )
      this->RegisterPhysics( new G4HadronElasticPhysicsHP(verbose) );
   } 
 
-   // Hadron Physics
-  G4HadronPhysicsShielding* hps = new G4HadronPhysicsShielding(verbose);
+  G4HadronPhysicsShielding* hps;
+  // Hadron Physics
+  if (HadrPhysVariant == "M") {
+    hps = new G4HadronPhysicsShielding("hInelastic Shielding", verbose, 9.5*GeV, 9.9*GeV);
+  } else {
+    hps = new G4HadronPhysicsShielding("hInelastic Shielding", verbose, 4.0*GeV, 5.0*GeV);
+  }
   if ( LEN_model == "HP" ) 
   {
      ;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh 75582 2013-11-04 12:13:01Z gcosmo $
+// $Id: G4eCoulombScatteringModel.hh 80656 2014-05-06 08:31:39Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -80,7 +80,7 @@ class G4eCoulombScatteringModel : public G4VEmModel
 
 public:
 
-  G4eCoulombScatteringModel(const G4String& nam = "eCoulombScattering");
+  G4eCoulombScatteringModel(G4bool combined = true);
  
   virtual ~G4eCoulombScatteringModel();
 
@@ -131,7 +131,7 @@ private:
   G4eCoulombScatteringModel & operator=(const G4eCoulombScatteringModel &right);
   G4eCoulombScatteringModel(const  G4eCoulombScatteringModel&);
 
-protected:
+  //protected:
  
   G4IonTable*               theIonTable;
   G4ParticleChangeForGamma* fParticleChange;
@@ -146,8 +146,6 @@ protected:
 
   G4double                  cosThetaMin;
   G4double                  cosThetaMax;
-  G4double                  cosTetMinNuc;
-  G4double                  cosTetMaxNuc;
   G4double                  recoilThreshold;
   G4double                  elecRatio;
   G4double                  mass;
@@ -160,7 +158,9 @@ protected:
 
   G4double                  lowEnergyThreshold;
 
-private:
+  G4bool                    isCombined;  
+
+  //private:
 
   G4bool                    isInitialised;             
 };

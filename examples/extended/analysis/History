@@ -1,4 +1,4 @@
-$Id: History 77256 2013-11-22 10:10:23Z gcosmo $
+$Id: History 81444 2014-05-28 14:28:20Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History 77256 2013-11-22 10:10:23Z gcosmo $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28th May 2014 I. Hrivnacova (analysisExample-V10-00-00)
+- Use Geant4 physics list (FTFP_BERT) in AnaEx01,02,03, 
+  removed PhysicList class from shared
 
 21th November 2013 A. Dotti      (analysisExample-V09-06-06)
 - Removing Update method and UI command in shared

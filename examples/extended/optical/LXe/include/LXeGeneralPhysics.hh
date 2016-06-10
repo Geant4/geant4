@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeGeneralPhysics.hh 68752 2013-04-05 10:23:47Z gcosmo $
+// $Id: LXeGeneralPhysics.hh 81557 2014-06-03 08:32:44Z gcosmo $
 //
 /// \file optical/LXe/include/LXeGeneralPhysics.hh
 /// \brief Definition of the LXeGeneralPhysics class
@@ -37,7 +37,7 @@
 
 #include "G4VPhysicsConstructor.hh"
 
-#include "G4Decay.hh"
+
 
 class LXeGeneralPhysics : public G4VPhysicsConstructor
 {
@@ -55,9 +55,6 @@ class LXeGeneralPhysics : public G4VPhysicsConstructor
     // registered to the process manager of each particle type
     virtual void ConstructProcess();
 
-  protected:
-
-    G4Decay* fDecayProcess;
 };
 
 #endif

@@ -60,9 +60,12 @@ void G4HnManager::AddH1Information(const G4String& name,
                                    G4double unit, G4Fcn fcn,
                                    G4BinScheme binScheme)
 {
-  fHnVector.push_back(
-    new G4HnInformation(name, unitName, unitName, fcnName, fcnName,
-                        unit, unit, fcn, fcn, binScheme, binScheme));
+  G4HnInformation* hnInformation = new G4HnInformation(name, 1);
+  hnInformation
+    ->AddHnDimensionInformation(
+         G4HnDimensionInformation(unitName, fcnName, unit,  fcn, binScheme));
+
+  fHnVector.push_back(hnInformation);
   ++fNofActiveObjects;
 }  
 
@@ -74,11 +77,45 @@ void  G4HnManager::AddH2Information(const G4String& name,
                                     const G4String& yfcnName,
                                     G4double xunit, G4double yunit,
                                     G4Fcn xfcn, G4Fcn yfcn, 
-                                    G4BinScheme xBinScheme, G4BinScheme yBinScheme)
+                                    G4BinScheme xbinScheme, G4BinScheme ybinScheme)
 {
-  fHnVector.push_back(
-    new G4HnInformation(name, xunitName, yunitName, xfcnName, yfcnName,
-                        xunit, yunit, xfcn, yfcn, xBinScheme, yBinScheme));
+  G4HnInformation* hnInformation = new G4HnInformation(name, 2);
+  hnInformation
+    ->AddHnDimensionInformation(
+         G4HnDimensionInformation(xunitName, xfcnName, xunit,  xfcn, xbinScheme));
+  hnInformation
+    ->AddHnDimensionInformation(
+         G4HnDimensionInformation(yunitName, yfcnName, yunit,  yfcn, ybinScheme));
+
+  fHnVector.push_back(hnInformation);
+  ++fNofActiveObjects;
+}  
+
+//_____________________________________________________________________________
+void  G4HnManager::AddH3Information(const G4String& name,
+                                    const G4String& xunitName, 
+                                    const G4String& yunitName,
+                                    const G4String& zunitName,
+                                    const G4String& xfcnName,
+                                    const G4String& yfcnName,
+                                    const G4String& zfcnName,
+                                    G4double xunit, G4double yunit, G4double zunit,
+                                    G4Fcn xfcn, G4Fcn yfcn, G4Fcn zfcn, 
+                                    G4BinScheme xbinScheme, G4BinScheme ybinScheme,
+                                    G4BinScheme zbinScheme)
+{
+  G4HnInformation* hnInformation = new G4HnInformation(name, 3);
+  hnInformation
+    ->AddHnDimensionInformation(
+         G4HnDimensionInformation(xunitName, xfcnName, xunit,  xfcn, xbinScheme));
+  hnInformation
+    ->AddHnDimensionInformation(
+         G4HnDimensionInformation(yunitName, yfcnName, yunit,  yfcn, ybinScheme));
+  hnInformation
+    ->AddHnDimensionInformation(
+         G4HnDimensionInformation(zunitName, zfcnName, zunit,  zfcn, zbinScheme));
+
+  fHnVector.push_back(hnInformation);
   ++fNofActiveObjects;
 }  
 
@@ -97,11 +134,22 @@ G4HnInformation* G4HnManager::GetHnInformation(G4int id,
       G4ExceptionDescription description;
       description << "      " << fHnType << " histogram " << id 
                   << " does not exist.";
-      G4Exception(inFunction, "Analysis_W007", JustWarning, description);
+      G4Exception(inFunction, "Analysis_W011", JustWarning, description);
     }  
     return 0;         
   }
   return fHnVector[index];
+}    
+
+//_____________________________________________________________________________
+G4HnDimensionInformation* G4HnManager::GetHnDimensionInformation(G4int id, 
+                                G4int dimension,
+                                G4String functionName, G4bool warn) const
+{
+  G4HnInformation* hnInformation = GetHnInformation(id, functionName, warn);
+  if ( ! hnInformation ) return 0; 
+
+  return hnInformation->GetHnDimensionInformation(dimension);
 }    
 
 //_____________________________________________________________________________
@@ -126,10 +174,10 @@ void  G4HnManager::SetActivation(G4int id, G4bool activation)
   if ( ! info ) return;
 
   // Do nothing if activation does not change
-  if ( info->fActivation == activation ) return;
+  if ( info->GetActivation() == activation ) return;
   
   // Change activation and account it in fNofActiveObjects
-  info->fActivation = activation;
+  info->SetActivation(activation);
   if ( activation ) 
     fNofActiveObjects++;
   else
@@ -146,10 +194,10 @@ void  G4HnManager::SetActivation(G4bool activation)
     G4HnInformation* info = *it;
 
     // Do nothing if activation does not change
-    if ( info->fActivation == activation ) continue;
+    if ( info->GetActivation() == activation ) continue;
   
     // Change activation and account it in fNofActiveObjects
-    info->fActivation = activation;
+    info->SetActivation(activation);
     if ( activation ) 
       fNofActiveObjects++;
     else
@@ -165,10 +213,10 @@ void  G4HnManager::SetAscii(G4int id, G4bool ascii)
   if ( ! info ) return;
 
   // Do nothing if ascii does not change
-  if ( info->fAscii == ascii ) return;
+  if ( info->GetAscii() == ascii ) return;
   
   // Change ascii and account it in fNofAsciiObjects
-  info->fAscii = ascii;
+  info->SetAscii(ascii);
   if ( ascii ) 
     fNofAsciiObjects++;
   else
@@ -182,27 +230,40 @@ G4String G4HnManager::GetName(G4int id) const
 
   if ( ! info ) return "";
     
-  return info->fName;
+  return info->GetName();
 }    
 
 //_____________________________________________________________________________
 G4double G4HnManager::GetXUnit(G4int id) const
 {
-  G4HnInformation* info = GetHnInformation(id, "GetXUnit");
+  G4HnDimensionInformation* info 
+    = GetHnDimensionInformation(id, G4HnInformation::kX, "GetXUnit");
 
   if ( ! info ) return 1.0;
   
-  return info->fXUnit;
+  return info->fUnit;
 }    
 
 //_____________________________________________________________________________
 G4double G4HnManager::GetYUnit(G4int id) const
 {
-  G4HnInformation* info = GetHnInformation(id, "GetYUnit");
+  G4HnDimensionInformation* info 
+    = GetHnDimensionInformation(id, G4HnInformation::kY, "GetYUnit");
 
   if ( ! info ) return 1.0;
   
-  return info->fYUnit;
+  return info->fUnit;
+}    
+
+//_____________________________________________________________________________
+G4double G4HnManager::GetZUnit(G4int id) const
+{
+  G4HnDimensionInformation* info 
+    = GetHnDimensionInformation(id, G4HnInformation::kZ, "GetZUnit");
+
+  if ( ! info ) return 1.0;
+  
+  return info->fUnit;
 }    
 
 //_____________________________________________________________________________
@@ -212,7 +273,7 @@ G4bool G4HnManager::GetActivation(G4int id) const
 
   if ( ! info ) return true;
   
-  return info->fActivation;
+  return info->GetActivation();
 }    
 
 //_____________________________________________________________________________
@@ -222,5 +283,5 @@ G4bool G4HnManager::GetAscii(G4int id) const
 
   if ( ! info ) return false;
   
-  return info->fAscii;
+  return info->GetAscii();
 }    

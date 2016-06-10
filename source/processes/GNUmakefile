@@ -1,9 +1,21 @@
-# $Id: GNUmakefile 76305 2013-11-08 13:38:31Z gcosmo $
+# $Id: GNUmakefile 82626 2014-07-01 09:32:09Z gcosmo $
 # ----------------------------------------------------------------------
 # GNUmakefile for processes library, Gabriele Cosmo 27-Jun-1998
 # ----------------------------------------------------------------------
 
 name := G4processes
+
+ifndef G4INSTALL
+  G4INSTALL = ../..
+endif
+
+GLOBLIBS  = libG4digits_hits.lib
+GLOBLIBS += libG4track.lib libG4particles.lib libG4geometry.lib
+GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
+GLOBLIBS += libG4intercoms.lib libG4global.lib
+GLOBLIBS += libG4expat.lib libG4zlib.lib
+
+include $(G4INSTALL)/config/architecture.gmk
 
 SUBDIRS  = management 
 SUBDIRS += cuts 
@@ -59,13 +71,6 @@ SUBLIBS += G4emdna-moltypes
 SUBLIBS += G4empii
 SUBLIBS += G4empolar
 
-GLOBLIBS  = libG4digits_hits.lib libG4track.lib libG4particles.lib libG4geometry.lib
-GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
-GLOBLIBS += libG4intercoms.lib libG4global.lib
-ifeq ($(G4SYSTEM), WIN32-VC)
-  GLOBLIBS += libG4expat.lib
-endif
-
 SUBDIRS += hadronic/cross_sections
 SUBDIRS += hadronic/management 
 SUBDIRS += hadronic/models/abla
@@ -92,6 +97,7 @@ SUBDIRS += hadronic/models/inclxx/interface
 SUBDIRS += hadronic/models/lend
 SUBDIRS += hadronic/models/management
 SUBDIRS += hadronic/models/neutron_hp
+SUBDIRS += hadronic/models/particle_hp
 SUBDIRS += hadronic/models/parton_string/diffraction
 SUBDIRS += hadronic/models/parton_string/hadronization
 SUBDIRS += hadronic/models/parton_string/management
@@ -124,6 +130,7 @@ SUBLIBS +=  G4had_lend
 SUBLIBS +=  G4had_fission
 SUBLIBS +=  G4had_mod_man
 SUBLIBS +=  G4had_neu_hp
+SUBLIBS +=  G4had_part_hp
 SUBLIBS +=  G4hadronic_radioactivedecay
 SUBLIBS +=  G4had_theo_max
 SUBLIBS +=  G4had_mod_util
@@ -149,9 +156,5 @@ SUBLIBS +=  G4had_string_frag
 SUBLIBS +=  G4had_string_man
 SUBLIBS +=  G4hadronic_quasi_elastic
 SUBLIBS +=  G4hadronic_qgstring
-
-ifndef G4INSTALL
-  G4INSTALL = ../..
-endif
 
 include $(G4INSTALL)/config/globlib.gmk

@@ -19,13 +19,23 @@ committal in the CVS repository !
 
 History file for G4 zlib package
 --------------------------------
+
+10 April 2014 Gabriele Cosmo (zlib-V10-00-01)
+-  Get rid of deprecated 'register' storage class specifier in source files
+   crc32.cc, deflate.cc and trees.cc.
+
+18 March 2014 Gabriele Cosmo (zlib-V10-00-00)
+-  Fixed compilation warnings from clang-3.4 for unused variables in
+   deflate.cc and inftrees.cc 
+
 7 May 2013 Gunter Folger     (zlib-V09-06-03)
 -  Fixes for Windows:
    - Add few more explicit typecasts, in #ifdef protected code
    - in inflate.h,.cc an enum used OS, this clashes with a #define, rename OS to
      OS_ZLIB
    - sources.cmake: add -DZLIB_DLL, to export symbols, don't rename debug
-     version of G4zlib to G4zlibd  
+     version of G4zlib to G4zlibd.
+
 6 May 2013 Gunter Folger     (zlib-V09-06-02)
 -  Adapt full zlib to G4 cmake:
    - copied portions of zlib CMakeLists.tzt to sources.cmake, 
@@ -38,8 +48,7 @@ History file for G4 zlib package
    - include complete zlib, not only writer.
    
 20 March 2013 Gabriele Cosmo (zlib-V09-06-00)
-- Moved from visualization/externals module
+-  Moved from visualization/externals module
 
 25 May 2005 Mark Donszelmann
-- zlib version 1.2.2
-
+-  zlib version 1.2.2

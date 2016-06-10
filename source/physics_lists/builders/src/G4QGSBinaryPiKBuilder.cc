@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSBinaryPiKBuilder.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4QGSBinaryPiKBuilder.cc 83699 2014-09-10 07:18:25Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -51,7 +51,7 @@
 G4QGSBinaryPiKBuilder::
 G4QGSBinaryPiKBuilder(G4bool quasiElastic) 
 {
-  thePiData = new G4CrossSectionPairGG(new G4PiNuclearCrossSection(), 91*GeV);
+  thePiData = new G4CrossSectionPairGG((G4PiNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4PiNuclearCrossSection::Default_Name()), 91*GeV);
 
   theMin = 12*GeV;
   theModel = new G4TheoFSGenerator("QGSB");
@@ -62,8 +62,6 @@ G4QGSBinaryPiKBuilder(G4bool quasiElastic)
   
 
   theCascade = new G4BinaryCascade;
-  thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
-  theCascade->SetDeExcitation(thePreEquilib);  
 
   theModel->SetHighEnergyGenerator(theStringModel);
   if (quasiElastic)
@@ -78,12 +76,9 @@ G4QGSBinaryPiKBuilder(G4bool quasiElastic)
 G4QGSBinaryPiKBuilder::
 ~G4QGSBinaryPiKBuilder() 
 {
-  delete theCascade;
-  delete thePreEquilib;
   if ( theQuasiElastic ) delete theQuasiElastic;
   delete theStringDecay;
   delete theStringModel;
-  delete theModel;
 }
 
 void G4QGSBinaryPiKBuilder::

@@ -1,10 +1,11 @@
-# $Id: TestEm5.in 77600 2013-11-26 17:07:41Z gcosmo $
+# $Id: TestEm5.in 85279 2014-10-27 09:19:21Z gcosmo $
 #
 # macro file for TestEm5.cc
 #
 /control/verbose 2
 /control/cout/ignoreThreadsExcept 0
-/run/verbose 2
+/run/numberOfThreads 2
+/run/verbose 1
 #
 /testem/det/setAbsMat Silicon
 /testem/det/setAbsThick 20 um
@@ -12,10 +13,10 @@
 #
 /testem/phys/addPhysics  emstandard_opt3
 #
-/testem/phys/setCuts 7 um
+/run/setCut 7 um
 #
 /run/initialize
-/process/em/verbose 1
+#/process/em/verbose 1
 /process/em/workerVerbose 0
 #
 /testem/gun/setDefault
@@ -36,7 +37,7 @@
 /gun/energy 15.7 MeV
 /run/beamOn 50000
 #
-/testem/phys/setCuts 10 um
+/run/setCut 10 um
 #
 /testem/det/setAbsMat G4_POLYETHYLENE
 /testem/det/setAbsThick 4.74 mm
@@ -46,7 +47,7 @@
 /gun/energy 96.2 MeV
 /run/beamOn 50000
 #
-/testem/phys/setCuts 1 mm
+/run/setCut 1 mm
 #
 /testem/stack/killSecondaries
 #

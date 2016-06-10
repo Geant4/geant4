@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4B10GEMProbability.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4B10GEMProbability.cc 86783 2014-11-18 08:43:58Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
@@ -35,19 +35,19 @@
 G4B10GEMProbability::G4B10GEMProbability() :
   G4GEMProbability(10,5,3.0) // A,Z,Spin
 {
-    ExcitEnergies.push_back(718.35*keV);
+    ExcitEnergies.push_back(718.38*keV);
     ExcitSpins.push_back(1.0);
     ExcitLifetimes.push_back(0.707e-9*s);
 
-    ExcitEnergies.push_back(1740.15*keV);
+    ExcitEnergies.push_back(1740.05*keV);
     ExcitSpins.push_back(0.0);
     ExcitLifetimes.push_back(5.0e-15*s);
 
-    ExcitEnergies.push_back(2154.3*keV);
+    ExcitEnergies.push_back(2154.27*keV);
     ExcitSpins.push_back(1.0);
     ExcitLifetimes.push_back(1.48e-12*s);
 
-    ExcitEnergies.push_back(3587.1*keV);
+    ExcitEnergies.push_back(3587.13*keV);
     ExcitSpins.push_back(2.0);
     ExcitLifetimes.push_back(106.0e-15*s);
 
@@ -63,7 +63,7 @@ G4B10GEMProbability::G4B10GEMProbability() :
     ExcitSpins.push_back(2.0);
     ExcitLifetimes.push_back(4.2e-15*s);
 
-    ExcitEnergies.push_back(5180.0*keV);
+    ExcitEnergies.push_back(5182.0*keV);
     ExcitSpins.push_back(1.0);
     ExcitLifetimes.push_back(fPlanck/(110.0*keV));
 
@@ -71,7 +71,7 @@ G4B10GEMProbability::G4B10GEMProbability() :
     ExcitSpins.push_back(2.0);
     ExcitLifetimes.push_back(fPlanck/(6.0*keV));
 
-    ExcitEnergies.push_back(6025.0*keV);
+    ExcitEnergies.push_back(6024.9*keV);
     ExcitSpins.push_back(4.0);
     ExcitLifetimes.push_back(fPlanck/(0.05*keV));
 
@@ -83,7 +83,7 @@ G4B10GEMProbability::G4B10GEMProbability() :
     ExcitSpins.push_back(4.0);
     ExcitLifetimes.push_back(fPlanck/(25.1*keV));
 
-    ExcitEnergies.push_back(6873.0*keV);
+    ExcitEnergies.push_back(6875.0*keV);
     ExcitSpins.push_back(1.0);
     ExcitLifetimes.push_back(fPlanck/(120.0*keV));
 
@@ -91,7 +91,7 @@ G4B10GEMProbability::G4B10GEMProbability() :
     ExcitSpins.push_back(2.0);
     ExcitLifetimes.push_back(fPlanck/(100.0*keV));
 
-    ExcitEnergies.push_back(7430.0*keV);
+    ExcitEnergies.push_back(7428.0*keV);
     ExcitSpins.push_back(2.0);
     ExcitLifetimes.push_back(fPlanck/(100.0*keV));
 
@@ -103,11 +103,11 @@ G4B10GEMProbability::G4B10GEMProbability() :
     ExcitSpins.push_back(2.0);
     ExcitLifetimes.push_back(fPlanck/(74.0*keV));
 
-    ExcitEnergies.push_back(7560.7*keV);
+    ExcitEnergies.push_back(7559.9*keV);
     ExcitSpins.push_back(0.0);
     ExcitLifetimes.push_back(fPlanck/(2.65*keV));
 
-    ExcitEnergies.push_back(7670.0*keV);
+    ExcitEnergies.push_back(7750.0*keV);
     ExcitSpins.push_back(1.0);
     ExcitLifetimes.push_back(fPlanck/(250.0*keV));
 

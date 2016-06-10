@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLMessenger.cc 68053 2013-03-13 14:39:51Z gcosmo $
+// $Id: G4GDMLMessenger.cc 86446 2014-11-12 09:45:58Z gcosmo $
 //
 //
 // class G4GDMLMessenger Implementation
@@ -104,9 +104,6 @@ void G4GDMLMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   if( command == ClearCmd )
   { 
     myParser->Clear();
-    G4GeometryManager::GetInstance()->OpenGeometry();
-    G4PhysicalVolumeStore::Clean();
-    G4LogicalVolumeStore::Clean();
-    G4SolidStore::Clean();
+    G4RunManager::GetRunManager()->ReinitializeGeometry(true);
   }  
 }

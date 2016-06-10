@@ -55,20 +55,19 @@
     }
     else if(aScheme==LOGLIN||aScheme==CLOGLIN||aScheme==ULOGLIN)
     {
-      if(y1==0||y2==0) result =0;
-      else
-      {
-        G4double b = (std::log(y2)-std::log(y1))/(x2-x1);
-        G4double a = std::log(y1) - b*x1;
+      if ( y1==0||y2==0 ) { 
+         result =0;
+      } else {
+        // G4double b = (std::log(y2)-std::log(y1))/(x2-x1);
+        // G4double a = std::log(y1) - b*x1;
         //***************************************************************
         //EMendoza:
         //result = (std::exp(a)/b)*(std::exp(b*x2)-std::exp(b*x1));
         //***************************************************************
-        if(b!=0){
-          result = (std::exp(a)/b)*(std::exp(b*x2)-std::exp(b*x1));
-        }
-        else{
-          result=y2*(x2-x1);
+        if ( y1!=y2 ) {
+           result = (x2-x1)*(y2-y1)/std::log(y2/y1);
+        } else { 
+          result = y2*(x2-x1);
         }
         //***************************************************************
       }

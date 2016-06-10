@@ -27,10 +27,10 @@
 /// \brief Definition of the TrackingAction class
 //
 //
-// $Id: TrackingAction.hh 68030 2013-03-13 13:51:27Z gcosmo $
+// $Id: TrackingAction.hh 78307 2013-12-11 10:55:57Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef TrackingAction_h
 #define TrackingAction_h 1
@@ -38,7 +38,6 @@
 #include "G4UserTrackingAction.hh"
 #include "globals.hh"
 
-class RunAction;
 class EventAction;
 class TrackingMessenger;
 
@@ -47,7 +46,7 @@ class TrackingMessenger;
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(RunAction*, EventAction*);
+    TrackingAction(EventAction*);
    ~TrackingAction();
    
     virtual void  PreUserTrackingAction(const G4Track*);
@@ -56,7 +55,6 @@ class TrackingAction : public G4UserTrackingAction {
     void SetFullChain(G4bool flag) { fFullChain = flag;};
     
   private:
-    RunAction*          fRun;
     EventAction*        fEvent;
     TrackingMessenger*  fTrackMessenger;
     

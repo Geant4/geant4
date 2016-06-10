@@ -25,6 +25,7 @@
 
 #include "G4HadronicWhiteBoard.hh"
 
+G4ThreadLocal G4HadronicWhiteBoard * G4HadronicWhiteBoard::theInstance = 0;
 
 G4HadronicWhiteBoard::G4HadronicWhiteBoard()
  : theProjectile(0), theDef(0), theName(0), theE(0.0), thePx(0.0),
@@ -34,8 +35,8 @@ G4HadronicWhiteBoard::G4HadronicWhiteBoard()
 
 G4HadronicWhiteBoard & G4HadronicWhiteBoard::Instance()
 {
-  static G4ThreadLocal G4HadronicWhiteBoard *theInstance_G4MT_TLS_ = 0 ; if (!theInstance_G4MT_TLS_) theInstance_G4MT_TLS_ = new  G4HadronicWhiteBoard  ;  G4HadronicWhiteBoard &theInstance = *theInstance_G4MT_TLS_;
-  return theInstance;
+  if (!theInstance) theInstance = new G4HadronicWhiteBoard;
+  return *theInstance;
 }
 
 const G4HadProjectile * G4HadronicWhiteBoard::GetProjectile() 
@@ -48,7 +49,7 @@ const G4Nucleus & G4HadronicWhiteBoard::GetTargetNucleus()
   return theTarget;
 }
 
-G4ParticleDefinition * G4HadronicWhiteBoard::GetPDef() {return theDef;}
+const G4ParticleDefinition * G4HadronicWhiteBoard::GetPDef() {return theDef;}
 G4String G4HadronicWhiteBoard::GetParticleName() {return theName;}
 G4double G4HadronicWhiteBoard::GetEnergy() {return theE;}
 G4double G4HadronicWhiteBoard::GetPx(){return thePx;}
@@ -60,9 +61,9 @@ G4int G4HadronicWhiteBoard::GetZ(){return theZ;}
   
 void G4HadronicWhiteBoard::SetProjectile(const G4HadProjectile & aProjectile)
 {
-  theProjectile = const_cast<G4HadProjectile*>(& aProjectile);
-  theDef = const_cast<G4ParticleDefinition*>(theProjectile->GetDefinition());
-  theName = const_cast<char *>(theDef->GetParticleName().c_str() );
+  theProjectile = & aProjectile;
+  theDef = theProjectile->GetDefinition();
+  theName = theDef->GetParticleName().c_str();
   theE = theProjectile->Get4Momentum().t();
   thePx = theProjectile->Get4Momentum().vect().x();
   thePy = theProjectile->Get4Momentum().vect().y();

@@ -40,6 +40,7 @@
 // 20100924  M. Kelsey -- Migrate to "OutgoingNuclei" names in CollisionOutput 
 // 20110728  M. Kelsey -- Fix Coverity #28776, remove return after throw.
 // 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
+// 20140310  M. Kelsey -- *TEMPORARY* const-cast G4PD* for G4Fragment ctor.
 
 #include <numeric>
 
@@ -153,11 +154,11 @@ G4FragmentVector* G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
       
       G4LorentzVector vlab = ipart->getMomentum().boost(boostToLab);
 
+      // TEMPORARY:  Remove constness on PD until G4Fragment is fixed
       theResult->push_back( new G4Fragment(vlab, ipart->getDefinition()) );
     }  
   }
 
-  //  G4cout << "# fragments " << output.getOutgoingNuclei().size() << G4endl;
   if (!outgoingNuclei.empty()) { 
     nucleiIterator ifrag = outgoingNuclei.begin();
     for (i=1; ifrag != outgoingNuclei.end(); ifrag++) {
@@ -178,6 +179,5 @@ G4FragmentVector* G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
     }
   }
 
-  //G4cout << ">>>> G4InuclEvaporation::BreakItUp end " << G4endl;
   return theResult;
 }

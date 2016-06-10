@@ -32,13 +32,19 @@
 //    *                                   *
 //    *************************************
 //
-// $Id: PurgMagTabulatedField3D.cc 69086 2013-04-18 07:29:59Z gcosmo $
+// $Id: PurgMagTabulatedField3D.cc 84477 2014-10-16 08:44:04Z gcosmo $
 //
 
 #include "PurgMagTabulatedField3D.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4AutoLock.hh"
 
-PurgMagTabulatedField3D::PurgMagTabulatedField3D( const char* filename, double zOffset ) 
+namespace{
+  G4Mutex myPurgMagTabulatedField3DLock = G4MUTEX_INITIALIZER;
+}
+
+PurgMagTabulatedField3D::PurgMagTabulatedField3D(const char* filename, 
+						 double zOffset ) 
   :fZoffset(zOffset),invertX(false),invertY(false),invertZ(false)
 {    
  
@@ -49,8 +55,22 @@ PurgMagTabulatedField3D::PurgMagTabulatedField3D( const char* filename, double z
 	 << "\n-----------------------------------------------------------";
     
   G4cout << "\n ---> " "Reading the field grid from " << filename << " ... " << endl; 
+
+  //
+  //This is a thread-local class and we have to avoid that all workers open the 
+  //file at the same time
+  G4AutoLock lock(&myPurgMagTabulatedField3DLock);
+
   ifstream file( filename ); // Open the file for reading.
   
+  if (!file.is_open())
+    {
+      G4ExceptionDescription ed;
+      ed << "Could not open input file " << filename << G4endl;
+      G4Exception("PurgMagTabulatedField3D::PurgMagTabulatedField3D",
+		  "pugmag001",FatalException,ed);
+    }
+
   // Ignore first blank line
   char buffer[256];
   file.getline(buffer,256);
@@ -104,6 +124,8 @@ PurgMagTabulatedField3D::PurgMagTabulatedField3D( const char* filename, double z
     }
   }
   file.close();
+
+  lock.unlock();
 
   maxx = xval * lenUnit;
   maxy = yval * lenUnit;

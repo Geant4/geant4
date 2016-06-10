@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.hh 72937 2013-08-14 13:20:38Z gcosmo $
+// $Id: G4Hype.hh 83572 2014-09-01 15:23:27Z gcosmo $
 // $Original: G4Hype.hh,v 1.0 1998/06/09 16:57:50 safai Exp $
 //
 // 
@@ -59,6 +59,7 @@
 
 #include "G4VSolid.hh"
 #include "G4ThreeVector.hh"
+#include "G4Polyhedron.hh"
 
 class G4SolidExtentList;
 class G4ClippablePolygon;
@@ -198,8 +199,8 @@ class G4Hype : public G4VSolid
 
   G4double fHalfTol;
 
+  mutable G4bool fRebuildPolyhedron;
   mutable G4Polyhedron* fpPolyhedron;
-
 };
 
 #include "G4Hype.icc"

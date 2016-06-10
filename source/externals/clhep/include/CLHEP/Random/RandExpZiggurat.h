@@ -24,6 +24,7 @@ for generating random variables", Journ. Statistical Software.
 #define RandExpZiggurat_h 1
 
 #include "CLHEP/Random/Random.h"
+#include "CLHEP/Utility/thread_local.h"
 
 namespace CLHEP {
 
@@ -125,14 +126,15 @@ protected:
   //#define RNOR (hz=SHR3, iz=hz&127, (fabs(hz)<kn[iz])? hz*wn[iz] : nfix())
   //#define REXP (jz=SHR3, iz=jz&255, (    jz <ke[iz])? jz*we[iz] : efix())
 
-  static unsigned long kn[128], ke[256];
-  static float wn[128],fn[128], we[256],fe[256];
+  static CLHEP_THREAD_LOCAL unsigned long kn[128], ke[256];
+  static CLHEP_THREAD_LOCAL float wn[128],fn[128], we[256],fe[256];
 
-  static bool ziggurat_is_init;
+  static CLHEP_THREAD_LOCAL bool ziggurat_is_init;
 
   static inline unsigned long ziggurat_SHR3(HepRandomEngine* anEngine) {return (unsigned int)(*anEngine);};
   static inline float ziggurat_UNI(HepRandomEngine* anEngine) {return anEngine->flat();};
   static inline float ziggurat_REXP(HepRandomEngine* anEngine) {
+    if(!ziggurat_is_init) ziggurat_init();
     unsigned long jz=ziggurat_SHR3(anEngine);
     unsigned long iz=jz&255;
     return (jz<ke[iz]) ? jz*we[iz] : ziggurat_efix(jz,anEngine);
@@ -155,12 +157,10 @@ namespace CLHEP {
 
 inline RandExpZiggurat::RandExpZiggurat(HepRandomEngine & anEngine, double mean ) : localEngine(&anEngine), deleteEngine(false), defaultMean(mean) 
 {
-  if(!ziggurat_is_init) ziggurat_init();
 }
 
 inline RandExpZiggurat::RandExpZiggurat(HepRandomEngine * anEngine, double mean ) : localEngine(anEngine), deleteEngine(true), defaultMean(mean) 
 {
-  if(!ziggurat_is_init) ziggurat_init();
 }
 
 }  // namespace CLHEP

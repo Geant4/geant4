@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History 76294 2013-11-08 13:13:27Z gcosmo $
+$Id: History 85987 2014-11-06 15:37:25Z gcosmo $
 ---------------------------------------------------------------------
 
          History file for the ABLA evaporation/fission model
@@ -15,6 +15,18 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+6 November 2014 - Davide Mancusi (hadr-abla-V10-00-02)
+--------------------------------------------------
+- Fix a Coverity warning.
+
+22 May 2014 - Davide Mancusi (hadr-abla-V10-00-01)
+--------------------------------------------------
+- Fix some Coverity warnings.
+
+16 April 2014 - Davide Mancusi (hadr-abla-V10-00-00)
+--------------------------------------------------
+- Add model-description methods to the interface.
 
 6 November 2013 - Davide Mancusi (hadr-abla-V09-06-03)
 --------------------------------------------------

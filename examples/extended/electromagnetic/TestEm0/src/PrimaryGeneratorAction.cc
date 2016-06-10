@@ -27,7 +27,7 @@
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
 //
-// $Id: PrimaryGeneratorAction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id: PrimaryGeneratorAction.cc 84607 2014-10-17 07:50:42Z gcosmo $
 //
 // 
 
@@ -46,7 +46,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction( DetectorConstruction* DC)
-:G4VUserPrimaryGeneratorAction(),fParticleGun(0),fDetector(DC)                                               
+:G4VUserPrimaryGeneratorAction(),fParticleGun(0),fDetector(DC)
 {
   fParticleGun  = new G4ParticleGun(1);
   SetDefaultKinematic();

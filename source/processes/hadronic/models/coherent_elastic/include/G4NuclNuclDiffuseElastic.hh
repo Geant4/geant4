@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclNuclDiffuseElastic.hh 68039 2013-03-13 14:17:40Z gcosmo $
+// $Id: G4NuclNuclDiffuseElastic.hh 82391 2014-06-18 10:29:11Z gcosmo $
 //
 //
 // G4 Model: optical elastic scattering with 4-momentum balance 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmElementSelector.cc 76333 2013-11-08 14:31:50Z gcosmo $
+// $Id: G4EmElementSelector.cc 83007 2014-07-24 14:46:57Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -85,7 +85,11 @@ G4EmElementSelector::G4EmElementSelector(G4VEmModel* mod,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmElementSelector::~G4EmElementSelector()
-{}
+{
+  if(nElmMinusOne > 0) {
+    for(G4int i=0; i<=nElmMinusOne; ++i) { delete xSections[i]; }
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -100,7 +104,8 @@ void G4EmElementSelector::Initialise(const G4ParticleDefinition* part,
   //G4cout << "cut(keV)= " << cut/keV << G4endl;
   G4double cross;
 
-  const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
+  const G4double* theAtomNumDensityVector = 
+    material->GetVecNbOfAtomsPerVolume();
 
   // loop over bins
   for(G4int j=0; j<=nbins; ++j) {

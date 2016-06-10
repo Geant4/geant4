@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B1PrimaryGeneratorAction.cc 69587 2013-05-08 14:26:03Z gcosmo $
+// $Id: B1PrimaryGeneratorAction.cc 80449 2014-04-22 08:35:50Z gcosmo $
 //
 /// \file B1PrimaryGeneratorAction.cc
 /// \brief Implementation of the B1PrimaryGeneratorAction class
@@ -42,22 +42,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B1PrimaryGeneratorAction* B1PrimaryGeneratorAction::fgInstance = 0;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-const B1PrimaryGeneratorAction* B1PrimaryGeneratorAction::Instance()
-{
-// Static acces function via G4RunManager 
-
-  return fgInstance;
-}      
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 B1PrimaryGeneratorAction::B1PrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),
-  fParticleGun(0)
+  fParticleGun(0), 
+  fEnvelopeBox(0)
 {
   G4int n_particle = 1;
   fParticleGun  = new G4ParticleGun(n_particle);
@@ -70,8 +58,6 @@ B1PrimaryGeneratorAction::B1PrimaryGeneratorAction()
   fParticleGun->SetParticleDefinition(particle);
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
   fParticleGun->SetParticleEnergy(6.*MeV);
-  
-  fgInstance = this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,7 +65,6 @@ B1PrimaryGeneratorAction::B1PrimaryGeneratorAction()
 B1PrimaryGeneratorAction::~B1PrimaryGeneratorAction()
 {
   delete fParticleGun;
-  fgInstance = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -95,18 +80,25 @@ void B1PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   
   G4double envSizeXY = 0;
   G4double envSizeZ = 0;
-  G4LogicalVolume* envLV
-    = G4LogicalVolumeStore::GetInstance()->GetVolume("Envelope");
-  G4Box* envBox = NULL;
-  if ( envLV ) envBox = dynamic_cast<G4Box*>(envLV->GetSolid());
-  if ( envBox ) {
-    envSizeXY = envBox->GetXHalfLength()*2.;
-    envSizeZ = envBox->GetZHalfLength()*2.;
+
+  if (!fEnvelopeBox)
+  {
+    G4LogicalVolume* envLV
+      = G4LogicalVolumeStore::GetInstance()->GetVolume("Envelope");
+    if ( envLV ) fEnvelopeBox = dynamic_cast<G4Box*>(envLV->GetSolid());
+  }
+
+  if ( fEnvelopeBox ) {
+    envSizeXY = fEnvelopeBox->GetXHalfLength()*2.;
+    envSizeZ = fEnvelopeBox->GetZHalfLength()*2.;
   }  
   else  {
-    G4cerr << "Envelope volume of box shape not found." << G4endl;
-    G4cerr << "Perhaps you have changed geometry." << G4endl;
-    G4cerr << "The gun will be place in the center." << G4endl;
+    G4ExceptionDescription msg;
+    msg << "Envelope volume of box shape not found.\n"; 
+    msg << "Perhaps you have changed geometry.\n";
+    msg << "The gun will be place at the center.";
+    G4Exception("B1PrimaryGeneratorAction::GeneratePrimaries()",
+     "MyCode0002",JustWarning,msg);
   }
 
   G4double size = 0.8; 

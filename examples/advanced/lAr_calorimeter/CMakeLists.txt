@@ -45,6 +45,8 @@ set(EXAMPLELARCALORIMETER_SCRIPTS
   run1.mac
   vis.mac
   icons.mac
+  prerunlArcal.mac
+  lArCal.cc
   )
 
 foreach(_script ${EXAMPLELARCALORIMETER_SCRIPTS})

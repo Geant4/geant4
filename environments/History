@@ -1,4 +1,4 @@
-$Id: History 76884 2013-11-18 12:54:03Z gcosmo $
+$Id: History 86749 2014-11-17 15:03:05Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+envs-V10-00-03 / 15 Nov. 2014 K. Murakami
+- complete migration to cmake for building library. (GNUmakefiles removed)
+- update for 10.1 release, following changes of class interface.
+- linker problem of OSX was fixed. (OSX Yosemite tested)
+
+envs-V10-00-02 / May 25 2014 Koichi Murakami
+ - pyG4EllipticalCone.cc, add missing return in CreateEllipticalCone() method.
+
+envs-V10-00-01 / May 25 2014 Koichi Murakami
+ - configure script, physics list is changed to be always turned on.
+
+envs-V10-00-00 / May 25 2014 Koichi Murakami
+ - fix compile error on pyG4Polycone
 
 envs-V09-06-00 / 15 November 2013 Koichi Murakami
 [g4py]

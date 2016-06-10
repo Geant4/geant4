@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 76279 2013-11-08 12:50:46Z gcosmo $
+# $Id: sources.cmake 86519 2014-11-13 09:17:38Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -60,6 +60,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/cascade
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/coherent_elastic/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/evaporation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/fermi_breakup/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/fission/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/handler/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/multifragmentation/include)
@@ -73,6 +74,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lend/in
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lepto_nuclear/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/neutron_hp/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/particle_hp/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/diffraction/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/hadronization/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/management/include)
@@ -123,7 +125,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4FTFPProtonBuilder.hh
         G4HyperonFTFPBuilder.hh
         G4INCLXXNeutronBuilder.hh
-        G4INCLXXPiKBuilder.hh
+        G4INCLXXPionBuilder.hh
         G4INCLXXProtonBuilder.hh
         G4KaonBuilder.hh
         G4NeutronBuilder.hh
@@ -141,9 +143,11 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4QGSBinaryPionBuilder.hh
         G4QGSBinaryProtonBuilder.hh
         G4QGSBuilder.hh
+        G4QGSPLundStrFragmProtonBuilder.hh
         G4QGSPNeutronBuilder.hh
         G4QGSPPiKBuilder.hh
         G4QGSPPionBuilder.hh
+        G4QGSPKaonBuilder.hh
         G4QGSPProtonBuilder.hh
         G4VAntiBarionBuilder.hh
         G4VHadronModelBuilder.hh
@@ -153,7 +157,25 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4VPionBuilder.hh
         G4VProtonBuilder.hh
         TheoModelFactory.hh
-    SOURCES
+        G4AlphaBuilder.hh
+        G4AlphaPHPBuilder.hh
+        G4BinaryAlphaBuilder.hh
+        G4BinaryDeuteronBuilder.hh
+        G4BinaryHe3Builder.hh
+        G4BinaryTritonBuilder.hh
+        G4DeuteronBuilder.hh
+        G4DeuteronPHPBuilder.hh
+        G4He3Builder.hh
+        G4He3PHPBuilder.hh
+        G4NeutronPHPBuilder.hh
+        G4ProtonPHPBuilder.hh
+        G4TritonBuilder.hh
+        G4TritonPHPBuilder.hh
+        G4VAlphaBuilder.hh
+        G4VDeuteronBuilder.hh
+        G4VHe3Builder.hh
+        G4VTritonBuilder.hh
+     SOURCES
         G4AntiBarionBuilder.cc
         G4BertiniKaonBuilder.cc
         G4BertiniNeutronBuilder.cc
@@ -178,7 +200,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4FTFPProtonBuilder.cc
         G4HyperonFTFPBuilder.cc
         G4INCLXXNeutronBuilder.cc
-        G4INCLXXPiKBuilder.cc
+        G4INCLXXPionBuilder.cc
         G4INCLXXProtonBuilder.cc
         G4KaonBuilder.cc
         G4NeutronBuilder.cc
@@ -197,8 +219,10 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4QGSBinaryProtonBuilder.cc
         G4QGSBuilder.cc
         G4QGSPNeutronBuilder.cc
+	G4QGSPLundStrFragmProtonBuilder.cc
         G4QGSPPiKBuilder.cc
         G4QGSPPionBuilder.cc
+        G4QGSPKaonBuilder.cc
         G4QGSPProtonBuilder.cc
         G4VAntiBarionBuilder.cc
         G4VHadronModelBuilder.cc
@@ -207,6 +231,24 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4VPiKBuilder.cc
         G4VPionBuilder.cc
         G4VProtonBuilder.cc
+        G4AlphaBuilder.cc
+        G4AlphaPHPBuilder.cc
+        G4BinaryAlphaBuilder.cc
+        G4BinaryDeuteronBuilder.cc
+        G4BinaryHe3Builder.cc
+        G4BinaryTritonBuilder.cc
+        G4DeuteronBuilder.cc
+        G4DeuteronPHPBuilder.cc
+        G4He3Builder.cc
+        G4He3PHPBuilder.cc
+        G4NeutronPHPBuilder.cc
+        G4ProtonPHPBuilder.cc
+        G4TritonBuilder.cc
+        G4TritonPHPBuilder.cc
+        G4VAlphaBuilder.cc
+        G4VDeuteronBuilder.cc
+        G4VHe3Builder.cc
+        G4VTritonBuilder.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
@@ -239,6 +281,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4hadronic_coherent_elastic
         G4hadronic_deex_evaporation
         G4hadronic_deex_fermi_breakup
+        G4hadronic_deex_fission
         G4hadronic_deex_handler
         G4hadronic_deex_management
         G4hadronic_deex_multifragmentation

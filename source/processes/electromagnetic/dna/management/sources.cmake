@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 75583 2013-11-04 12:16:46Z gcosmo $
+# $Id: sources.cmake 87375 2014-12-02 08:17:28Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -41,18 +41,27 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4emdna-man
     HEADERS
         AddClone_def.hh
-        G4AllITManager.hh
+        G4AllITFinder.hh
+        G4FastList.hh
+        G4FastList.icc
         G4ITBox.hh
         G4IT.hh
-        G4ITManager.hh
-        G4ITManager.icc
+        G4ITGun.hh
+        G4ITFinder.hh
+        G4ITFinder.icc
         G4ITModelHandler.hh
         G4ITModelManager.hh
         G4ITModelProcessor.hh
+        G4ITMultiNavigator.hh
         G4ITNavigator.hh
-        G4ITNavigator.icc
+        G4ITNavigator1.hh
+        G4ITNavigator1.icc
+        G4ITNavigator2.hh
+        G4ITNavigator2.icc
+        G4ITPathFinder.hh
         G4ITReactionChange.hh
         G4ITReactionTable.hh
+        G4ITSafetyHelper.hh
         G4ITStepProcessor.hh
         G4ITStepStatus.hh
         G4ITTrackHolder.hh
@@ -61,35 +70,50 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITTransportation.hh
         G4ITTransportation.icc
         G4ITTransportationManager.hh
+        G4ITTransportationManager.icc
         G4ITType.hh
         G4KDMap.hh
         G4KDNode.hh
+        G4KDNode.icc
         G4KDTree.hh
+        G4KDTree.icc
         G4KDTreeResult.hh
+        G4ManyFastLists.hh
+        G4ManyFastLists.icc
+        G4MemStat.hh
         G4ReferenceCast.hh
+        G4memory.hh
+        G4Scheduler.hh
+        G4SchedulerMessenger.hh
         G4TrackingInformation.hh
         G4TrackList.hh
+        G4TrackState.hh
         G4UserTimeStepAction.hh
-        G4VITModel.hh
         G4VITProcess.hh
         G4VITReactionProcess.hh
         G4VITRestDiscreteProcess.hh
         G4VITRestProcess.hh
-        G4VITTimeStepper.hh
+        G4VITStepModel.hh
+        G4VITTimeStepComputer.hh
+        G4VITTrackHolder.hh
+        G4VScheduler.hh
     SOURCES
-        G4AllITManager.cc
+        G4AllITFinder.cc
         G4ITBox.cc
         G4IT.cc
-        G4ITManager_allbox_iterator.cc
-        G4ITManager.cc
-        G4ITManager_const_iterator.cc
-        G4ITManager_iterator.cc
+        G4ITGun.cc
+        G4ITFinder.cc
         G4ITModelHandler.cc
         G4ITModelManager.cc
         G4ITModelProcessor.cc
-        G4ITNavigator.cc
+        G4ITMultiNavigator.cc
+        G4ITNavigator1.cc
+        G4ITNavigator2.cc
+        G4ITNavigatorState2.cc
+        G4ITPathFinder.cc
         G4ITReactionChange.cc
         G4ITReactionTable.cc
+        G4ITSafetyHelper.cc
         G4ITStepProcessor2.cc
         G4ITStepProcessor.cc
         G4ITTrackHolder.cc
@@ -102,15 +126,21 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4KDNode.cc
         G4KDTree.cc
         G4KDTreeResult.cc
+        G4MemStat.cc
+        G4Scheduler.cc
+        G4SchedulerMessenger.cc
         G4TrackingInformation.cc
         G4TrackList.cc
+        G4TrackState.cc
         G4UserTimeStepAction.cc
-        G4VITModel.cc
         G4VITProcess.cc
         G4VITReactionProcess.cc
         G4VITRestDiscreteProcess.cc
         G4VITRestProcess.cc
-        G4VITTimeStepper.cc
+        G4VITStepModel.cc
+        G4VITTimeStepComputer.cc
+        G4VITTrackHolder.cc
+        G4VScheduler.cc
     GRANULAR_DEPENDENCIES
         G4detector
         G4geometrymng

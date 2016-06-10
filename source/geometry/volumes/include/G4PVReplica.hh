@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.hh 67974 2013-03-13 10:17:37Z gcosmo $
+// $Id: G4PVReplica.hh 85846 2014-11-05 15:45:28Z gcosmo $
 //
 // 
 // class G4PVReplica
@@ -187,19 +187,19 @@ class G4PVReplica : public G4VPhysicalVolume
       // This method is similar to the destructor. It is used by each worker
       // thread to achieve the partial effect as that of the master thread.
 
+  private:
+
+    void CheckAndSetParameters(const EAxis pAxis, const G4int nReplicas,
+                               const G4double width, const G4double offset);
+    G4PVReplica(const G4PVReplica&);
+    G4PVReplica& operator=(const G4PVReplica&);
+
   protected:
 
     EAxis faxis;
     G4int fnReplicas;
     G4double fwidth,foffset;
  
-  private:
-
-    void CheckAndSetParameters(const EAxis pAxis, const G4int nReplicas,
-                               const G4double width, const G4double offset);
-    G4PVReplica(const G4PVReplica&);
-    const G4PVReplica& operator=(const G4PVReplica&);
-
   private:
 
     G4int fRegularStructureCode; 

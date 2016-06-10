@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: exrdmPhysListHadron.cc 75676 2013-11-05 09:03:12Z gcosmo $
+// $Id: exrdmPhysListHadron.cc 82660 2014-07-02 08:43:20Z gcosmo $
 //
 /// \file radioactivedecay/rdecay02/src/exrdmPhysListHadron.cc
 /// \brief Implementation of the exrdmPhysListHadron class
@@ -55,6 +55,7 @@
 
 #include "G4BinaryCascade.hh"
 #include "G4BinaryLightIonReaction.hh"
+#include "G4NuclNuclDiffuseElastic.hh"
 
 //HPNeutron
 
@@ -67,6 +68,7 @@
 //c-s
 #include "G4TripathiCrossSection.hh"
 #include "G4IonsShenCrossSection.hh"
+#include "G4GGNuclNuclCrossSection.hh"
 #include "G4ProtonInelasticCrossSection.hh"
 #include "G4NeutronInelasticCrossSection.hh"
 
@@ -78,7 +80,7 @@
 
 
 exrdmPhysListHadron::exrdmPhysListHadron(const G4String& name)
-  :  G4VPhysicsConstructor(name),
+ : G4VPhysicsConstructor(name),
    fTheNeutronElasticProcess(0), fTheFissionProcess(0),
    fTheCaptureProcess(0),fTheDeuteronInelasticProcess(0),
    fTheTritonInelasticProcess(0), fTheAlphaInelasticProcess(0),
@@ -88,37 +90,35 @@ exrdmPhysListHadron::exrdmPhysListHadron(const G4String& name)
 exrdmPhysListHadron::~exrdmPhysListHadron()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void exrdmPhysListHadron::ConstructProcess()
-{
-   
-  G4ProcessManager * pManager = 0;
+{   
+  G4ProcessManager* pManager = 0;
   
-  // this will be the model class for high energies
-  G4TheoFSGenerator * theTheoModel = new G4TheoFSGenerator;
+  G4TheoFSGenerator* theTheoModel = new G4TheoFSGenerator;
   // all models for treatment of thermal nucleus 
-  G4Evaporation * theEvaporation = new G4Evaporation;
-  G4FermiBreakUp * theFermiBreakUp = new G4FermiBreakUp;
-  G4StatMF * theMF = new G4StatMF;
+  G4Evaporation* theEvaporation = new G4Evaporation;
+  G4FermiBreakUp* theFermiBreakUp = new G4FermiBreakUp;
+  G4StatMF* theMF = new G4StatMF;
   // Evaporation logic
-  G4ExcitationHandler * theHandler = new G4ExcitationHandler;
+  G4ExcitationHandler* theHandler = new G4ExcitationHandler;
   theHandler->SetEvaporation(theEvaporation);
   theHandler->SetFermiModel(theFermiBreakUp);
   theHandler->SetMultiFragmentation(theMF);
   theHandler->SetMaxAandZForFermiBreakUp(12, 6);
   theHandler->SetMinEForMultiFrag(5*MeV);  
   // Pre equilibrium stage 
-  G4PreCompoundModel * thePreEquilib = new G4PreCompoundModel(theHandler);
+  G4PreCompoundModel* thePreEquilib = new G4PreCompoundModel(theHandler);
 
   // a no-cascade generator-precompound interaface
-  G4GeneratorPrecompoundInterface * theCascade =
+  G4GeneratorPrecompoundInterface* theCascade =
                                       new G4GeneratorPrecompoundInterface;
   theCascade->SetDeExcitation(thePreEquilib);  
         
-  // here come the high energy parts
-  // the string model; still not quite according to design
-  // - Explicite use of the forseen interfaces
-  G4VPartonStringModel * theStringModel;
+  // High energy parts
+  // String model; still not quite according to design
+  // Explicit use of the forseen interfaces
+  G4VPartonStringModel* theStringModel;
   theStringModel = new G4QGSModel<G4QGSParticipants>;
   theTheoModel->SetTransport(theCascade);
   theTheoModel->SetHighEnergyGenerator(theStringModel);
@@ -134,27 +134,25 @@ void exrdmPhysListHadron::ConstructProcess()
   
   fTheElasticProcess.RegisterMe(new G4HadronElastic());
 
-  // ---------------------------------------------------------------------------
-  // Hadron elastic process
-  // for all particles except neutrons
-
+  // Hadron elastic process for all particles except neutrons and generic ions
   aParticleIterator->reset();
-  while( (*aParticleIterator)() ) {
+  while ((*aParticleIterator)() ) {
     G4ParticleDefinition* particle = aParticleIterator->value();
     G4String particleName = particle->GetParticleName();
-    if (particleName != "neutron") {  
+    if (particleName != "neutron" && particleName != "GenericIon" && 
+        particleName != "He3") {
       pManager = particle->GetProcessManager();
       if (particle->GetPDGMass() > 110.*MeV &&
           fTheElasticProcess.IsApplicable(*particle) &&
           !particle->IsShortLived()) { 
         pManager->AddDiscreteProcess(&fTheElasticProcess);
-        //
         //        G4cout << "### Elastic model are registered for " 
         //       << particle->GetParticleName()
         //       << G4endl;
       }
     }
   }
+
   // Proton
   pManager = G4Proton::Proton()->GetProcessManager();
     // add inelastic process
@@ -165,18 +163,16 @@ void exrdmPhysListHadron::ConstructProcess()
   // Higher energy
   fTheProtonInelastic.RegisterMe(theTheoModel);
   // now the cross-sections.
-  G4ProtonInelasticCrossSection * theProtonData =
+  G4ProtonInelasticCrossSection* theProtonData =
                                             new G4ProtonInelasticCrossSection;
   fTheProtonInelastic.AddDataSet(theProtonData);
   pManager->AddDiscreteProcess(&fTheProtonInelastic);
-  //
-  //
+
   // Neutron
   pManager = G4Neutron::Neutron()->GetProcessManager();
   // add process
   // elastic scattering
-  fTheNeutronElasticProcess = 
-    new G4HadronElasticProcess();
+  fTheNeutronElasticProcess = new G4HadronElasticProcess();
   G4HadronElastic* theElasticModel1 = new G4HadronElastic;
   G4NeutronHPElastic * theElasticNeutron = new G4NeutronHPElastic;
   fTheNeutronElasticProcess->RegisterMe(theElasticModel1);
@@ -187,6 +183,7 @@ void exrdmPhysListHadron::ConstructProcess()
   G4NeutronHPElasticData * theNeutronData = new G4NeutronHPElasticData;
   fTheNeutronElasticProcess->AddDataSet(theNeutronData);
   pManager->AddDiscreteProcess(fTheNeutronElasticProcess);
+
   // inelastic 
   G4NeutronHPInelastic * theHPNeutronInelasticModel =
     new G4NeutronHPInelastic;
@@ -228,7 +225,7 @@ void exrdmPhysListHadron::ConstructProcess()
 
   // now light ions
   // light Ion BC
-  G4BinaryLightIonReaction * theIonBC= new G4BinaryLightIonReaction;
+  G4BinaryLightIonReaction* theIonBC= new G4BinaryLightIonReaction;
   theIonBC->SetMinEnergy(1*MeV);
   theIonBC->SetMaxEnergy(20*GeV);
   G4TripathiCrossSection * TripathiCrossSection= new G4TripathiCrossSection;
@@ -236,46 +233,43 @@ void exrdmPhysListHadron::ConstructProcess()
     
   // deuteron
   pManager = G4Deuteron::Deuteron()->GetProcessManager();
-  fTheDeuteronInelasticProcess = 
-    new G4DeuteronInelasticProcess("inelastic");
+  fTheDeuteronInelasticProcess = new G4DeuteronInelasticProcess("inelastic");
   fTheDeuteronInelasticProcess->AddDataSet(TripathiCrossSection);
   fTheDeuteronInelasticProcess->AddDataSet(aShen);
-  //  fTheDeuteronInelasticProcess->RegisterMe(theDeuteronInelasticModel);
   fTheDeuteronInelasticProcess->RegisterMe(theIonBC);
   fTheDeuteronInelasticProcess->RegisterMe(theTheoModel);
   pManager->AddDiscreteProcess(fTheDeuteronInelasticProcess);
+
   // triton
   pManager = G4Triton::Triton()->GetProcessManager();
-  fTheTritonInelasticProcess = 
-    new G4TritonInelasticProcess("inelastic");
+  fTheTritonInelasticProcess = new G4TritonInelasticProcess("inelastic");
   fTheTritonInelasticProcess->AddDataSet(TripathiCrossSection);
   fTheTritonInelasticProcess->AddDataSet(aShen);
-  //  fTheTritonInelasticProcess->RegisterMe(theTritonInelasticModel);
   fTheTritonInelasticProcess->RegisterMe(theIonBC);
   fTheTritonInelasticProcess->RegisterMe(theTheoModel);
   pManager->AddDiscreteProcess(fTheTritonInelasticProcess);
+
   // alpha
   pManager = G4Alpha::Alpha()->GetProcessManager();
-  fTheAlphaInelasticProcess = 
-    new G4AlphaInelasticProcess("inelastic");
+  fTheAlphaInelasticProcess = new G4AlphaInelasticProcess("inelastic");
   fTheAlphaInelasticProcess->AddDataSet(TripathiCrossSection);
   fTheAlphaInelasticProcess->AddDataSet(aShen);
-  //  fTheAlphaInelasticProcess->RegisterMe(theAlphaInelasticModel);
   fTheAlphaInelasticProcess->RegisterMe(theIonBC);
   fTheAlphaInelasticProcess->RegisterMe(theTheoModel);
   pManager->AddDiscreteProcess(fTheAlphaInelasticProcess);
 
-  // GenericIon
+  // Generic ion elastic
+  G4NuclNuclDiffuseElastic* ionElasticModel = new G4NuclNuclDiffuseElastic;
+  G4GGNuclNuclCrossSection* ionElasticXS = new G4GGNuclNuclCrossSection;
+  ionElasticProcess.RegisterMe(ionElasticModel);
+  ionElasticProcess.AddDataSet(ionElasticXS);
   pManager = G4GenericIon::GenericIon()->GetProcessManager();
-  // need to add the elastic explicitly
-  pManager->AddDiscreteProcess(&fTheElasticProcess);
-  fTheIonInelasticProcess = 
-    new G4IonInelasticProcess();
+  pManager->AddDiscreteProcess(&ionElasticProcess);
+
+  // Generic ion inelastic
+  fTheIonInelasticProcess = new G4IonInelasticProcess();
   fTheIonInelasticProcess->AddDataSet(TripathiCrossSection);
   fTheIonInelasticProcess->AddDataSet(aShen);
-  //  G4BinaryLightIonReaction * theGenIonBC= new G4BinaryLightIonReaction;
-  // theGenIonBC->SetMinEnergy(0*MeV);
-  //theGenIonBC->SetMaxEnergy(20*GeV);
   fTheIonInelasticProcess->RegisterMe(theIonBC);
   fTheIonInelasticProcess->RegisterMe(theTheoModel);
   pManager->AddDiscreteProcess(fTheIonInelasticProcess); 

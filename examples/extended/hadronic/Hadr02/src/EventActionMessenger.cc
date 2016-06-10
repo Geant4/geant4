@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/EventActionMessenger.cc
 /// \brief Implementation of the EventActionMessenger class
 //
-// $Id: EventActionMessenger.cc 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: EventActionMessenger.cc 81932 2014-06-06 15:39:45Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -52,33 +52,22 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventActionMessenger::EventActionMessenger(EventAction* EvAct)
-:eventAction(EvAct)
+ : G4UImessenger(),
+   fEventAction(EvAct),
+   fIonCmd(0),
+   fDebugCmd(0)
 { 
-  drawCmd = new G4UIcmdWithAString("/testhadr/DrawTracks", this);
-  drawCmd->SetGuidance("Draw the tracks in the event");
-  drawCmd->SetGuidance("  Choice : neutral, charged, all");
-  drawCmd->SetParameterName("choice",true);
-  drawCmd->SetDefaultValue("all");
-  drawCmd->SetCandidates("none charged all");
-  drawCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fIonCmd = new G4UIcmdWithAString("/testhadr/ionPhysics", this);
+  fIonCmd->SetGuidance("Added ion physics");
+  fIonCmd->SetGuidance("  Choice : FTF DPMJET");
+  fIonCmd->SetParameterName("ion",true);
+  fIonCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  ionCmd = new G4UIcmdWithAString("/testhadr/ionPhysics", this);
-  ionCmd->SetGuidance("Added ion physics");
-  ionCmd->SetGuidance("  Choice : FTF DPMJET");
-  ionCmd->SetParameterName("ion",true);
-  ionCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  
-  printCmd = new G4UIcmdWithAnInteger("/testhadr/PrintModulo",this);
-  printCmd->SetGuidance("Print events modulo n");
-  printCmd->SetParameterName("EventNb",false);
-  printCmd->SetRange("EventNb>0");
-  printCmd->AvailableForStates(G4State_PreInit,G4State_Idle);      
-
-  dCmd = new G4UIcmdWithAnInteger("/testhadr/DebugEvent",this);
-  dCmd->SetGuidance("D event to debug");
-  dCmd->SetParameterName("fNb",false);
-  dCmd->SetRange("fNb>0");
-  dCmd->AvailableForStates(G4State_PreInit,G4State_Idle);      
+  fDebugCmd = new G4UIcmdWithAnInteger("/testhadr/DebugEvent",this);
+  fDebugCmd->SetGuidance("D event to debug");
+  fDebugCmd->SetParameterName("fNb",false);
+  fDebugCmd->SetRange("fNb>0");
+  fDebugCmd->AvailableForStates(G4State_PreInit,G4State_Idle);      
 
 }
 
@@ -86,10 +75,8 @@ EventActionMessenger::EventActionMessenger(EventAction* EvAct)
 
 EventActionMessenger::~EventActionMessenger()
 {
-  delete drawCmd;
-  delete ionCmd;
-  delete printCmd;   
-  delete dCmd;
+  delete fIonCmd;
+  delete fDebugCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -97,17 +84,11 @@ EventActionMessenger::~EventActionMessenger()
 void EventActionMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
 { 
-  if(command == drawCmd)
-    {eventAction->SetDrawFlag(newValue);}
-
-  if(command == ionCmd)
+  if(command == fIonCmd)
     {HistoManager::GetPointer()->SetIonPhysics(newValue);}
-    
-  if(command == printCmd)
-    {eventAction->SetPrintModulo(printCmd->GetNewIntValue(newValue));}           
 
-  if(command == dCmd)
-    {eventAction->AddEventToDebug(dCmd->GetNewIntValue(newValue));}           
+  if(command == fDebugCmd)
+    {fEventAction->AddEventToDebug(fDebugCmd->GetNewIntValue(newValue));}           
    
 }
 

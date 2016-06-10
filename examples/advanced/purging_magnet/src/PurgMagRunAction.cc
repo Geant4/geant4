@@ -32,15 +32,15 @@
 //    *                            *
 //    ******************************
 //
-// $Id: PurgMagRunAction.cc 72967 2013-08-14 14:57:48Z gcosmo $
+// $Id: PurgMagRunAction.cc 84393 2014-10-15 07:11:25Z gcosmo $
 //
 
 #include "PurgMagRunAction.hh"
 
 #include "G4Run.hh"
 #include "G4UnitsTable.hh"
-
 #include "Randomize.hh"
+
 #include "PurgMagAnalysisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -59,18 +59,24 @@ PurgMagRunAction::~PurgMagRunAction()
 
 void PurgMagRunAction::BeginOfRunAction(const G4Run* aRun)
 {  
-
+  //Analysis must be handled by master and workers
   PurgMagAnalysisManager* analysis = PurgMagAnalysisManager::getInstance();
-   analysis->book();
-
-  G4cout << "---> Run " << aRun->GetRunID() << " start." << G4endl;
+  analysis->book();
   
+  
+  if (IsMaster())    
+    G4cout << "---> Run " << aRun->GetRunID() << " (master) start." 
+	   << G4endl;
+  else
+    G4cout << "---> Run " << aRun->GetRunID() << " (worker) start." 
+	   << G4endl;
+
   
   // save Rndm status
-  if (saveRndm > 0)
+  if (saveRndm > 0 && IsMaster())
     { 
-      CLHEP::HepRandom::showEngineStatus();
-      CLHEP::HepRandom::saveEngineStatus("beginOfRun.rndm");
+      G4Random::showEngineStatus();
+      G4Random::saveEngineStatus("beginOfRun.rndm");
     }
       
 }
@@ -82,16 +88,24 @@ void PurgMagRunAction::EndOfRunAction(const G4Run* aRun)
 {     
   
   PurgMagAnalysisManager* analysis = PurgMagAnalysisManager::getInstance();
-  
-  G4cout << "number of event = " << aRun->GetNumberOfEvent() << G4endl;
-  
   analysis->finish();
+  
+  if (IsMaster())    
+    G4cout << "Total number of event = " << aRun->GetNumberOfEvent() << G4endl;
+  else
+    G4cout << "Partial number of event in this worker = " 
+	   << aRun->GetNumberOfEvent() << G4endl;
+ 
        
-  // save Rndm status
-  if (saveRndm == 1)
-    { CLHEP::HepRandom::showEngineStatus();
-      CLHEP::HepRandom::saveEngineStatus("endOfRun.rndm");
-    }                         
+  if (IsMaster())
+    {
+      // save Rndm status
+      if (saveRndm == 1)
+	{ 
+	  G4Random::showEngineStatus();
+	  G4Random::saveEngineStatus("endOfRun.rndm");
+	}             
+    }            
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

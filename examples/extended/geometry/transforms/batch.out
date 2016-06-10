@@ -1,0 +1,108 @@
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+
+ --> phi = 30 deg  direct rotation matrix : 
+   [ (           0          -0.5      0.866025)
+     (           0      0.866025           0.5)
+     (          -1             0             0) ]
+/run/verbose 2
+#
+/placement/setMethod WithDirectMatrix
+
+ --> phi = 30 deg  direct rotation matrix : 
+   [ (           0          -0.5      0.866025)
+     (           0      0.866025           0.5)
+     (          -1             0             0) ]
+Obsolete world logical volume is removed from the default region.
+World is registered to the default region.
+###/placement/setMethod WitInverseMatrix
+###/placement/setMethod WithAxialRotations
+###/placement/setMethod WithEulerAngles
+###/placement/setMethod WithReflections
+#
+/gun/direction 1.732 1. 0.
+#
+/tracking/verbose 1
+#
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_AIR 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_AIR
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   0 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+
+    Voxelisation: top CPU users:
+    Percent   Total CPU    System CPU       Memory  Volume
+    -------   ----------   ----------     --------  ----------
+       0.00         0.00         0.00            0k World
+
+    Voxelisation: top memory users:
+    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
+    -------   --------     ------   ------   --------   ----------    ----------
+     100.00          0k         1        2          4         0.00    World
+### Run 0 starts.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm      0 fm      1 eV      0 eV      0 fm      0 fm      World   initStep
+    1    1.3 cm    7.5 mm      0 fm      1 eV      0 eV    1.5 cm    1.5 cm      World   Transportation
+    2    3.9 cm   2.25 cm      0 fm      1 eV      0 eV      3 cm    4.5 cm        Trd   Transportation
+    3   4.33 cm    2.5 cm      0 fm      1 eV      0 eV      5 mm      5 cm      World   OutOfWorld
+ Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+G4 kernel has come to Quit state.
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserPrimaryGenerator deleted.
+RunManager is deleting RunManagerKernel.
+EventManager deleted.
+Units table cleared.
+Total navigation history collections cleaned: 5
+================== Deleting memory pools ===================
+Number of memory pools allocated: 9 of which, static: 0
+Dynamic pools deleted: 9 / Total memory freed: 0.0087 Mb
+============================================================
+G4Allocator objects are deleted.
+UImanager deleted.
+StateManager deleted.
+RunManagerKernel is deleted. Good bye :)

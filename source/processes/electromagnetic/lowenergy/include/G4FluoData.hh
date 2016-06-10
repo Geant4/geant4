@@ -53,7 +53,7 @@ class G4FluoData
 {
 public:
 
-  G4FluoData();
+  G4FluoData(const G4String& dir);
 
   ~G4FluoData();
 
@@ -101,6 +101,7 @@ private:
   std::vector<G4int> nInitShells;
   G4int numberOfVacancies;
   std::map<G4int,std::vector<G4FluoTransition*>,std::less<G4int> > fluoTransitionTable;  
+  G4String fluoDirectory;  
 };
 
 #endif

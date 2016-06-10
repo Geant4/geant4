@@ -29,25 +29,17 @@
 //              analysis code
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifdef G4ANALYSIS_USE
-
 #ifndef CCalAnalysis_h 
 #define CCalAnalysis_h 1
 
-#include "G4ThreeVector.hh"
 #include "globals.hh"
-#include <vector>
 
-namespace AIDA {
-  class IAnalysisFactory;
-  class IHistogramFactory;
-  class ITree;
-  class IHistogram1D;
-  class IHistogram2D;
-  class ITuple;
-  class IPlotter;
-}
-
+//! Defines the format which is used for the output file
+//! default is a ROOT file. Comment the g4root and un-comment
+//! one of the others, to change the output format
+#include "g4root.hh"
+//! Alternative here is a XML file
+//#include "g4xml.hh"
 
 class CCalAnalysis {
 public:
@@ -77,25 +69,27 @@ public:
 
 private:
   CCalAnalysis();
+
 private:
   static CCalAnalysis* instance;
 
-  AIDA::IAnalysisFactory* analysisFactory;
-  AIDA::ITree* tree;
-  AIDA::ITuple* tuple;
+  G4int fVerbosity;
 
-  enum {numberOfTimeSlices = 200}; 
+  G4int numberOfTimeSlices;
+  //enum {numberOfTimeSlices = 200}; 
 
-  AIDA::IHistogram1D* energy;
-  AIDA::IHistogram1D* hcalE[28];           //  28 hadronic modules
-  AIDA::IHistogram1D* ecalE[49];           //  49 crystal towers
-  AIDA::IHistogram1D* timeHist[200];       // 200 nanoseconds time window
-  AIDA::IHistogram1D* lateralProfile[70];  //  70 centimeters lateral window
-                                     // (indeed 64 should be enough)
-  AIDA::IHistogram1D* timeProfile[2];      // at step and in sensitive detector
+  //
+  //Id of the histograms (first of each block). Used internally for a 
+  //quick mapping of the proper histoID
+  //
+  G4int energy;
+  G4int hcalE; //  28 hadronic modules
+  G4int ecalE; //  49 crystal towers
+  G4int timeHist; // 200 nanoseconds time window
+  G4int lateralProfile;//  70 centimeters lateral window
+  // (indeed 64 should be enough)
+  G4int timeProfile; // at step and in sensitive detector
 };
 
-
-#endif
 
 #endif

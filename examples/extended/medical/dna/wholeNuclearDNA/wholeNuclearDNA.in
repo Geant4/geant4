@@ -1,0 +1,6 @@
+/tracking/verbose 0 
+#/run/numberOfThreads 2 #if MT is activated
+/gun/particle proton
+/gun/energy 0.1 MeV
+#/run/initialize
+/run/beamOn 2

@@ -101,10 +101,15 @@
 //		reduce nesting and replicated code in collide().
 // 20130508  D. Wright -- Implement muon capture
 // 20130511  M. Kelsey -- Check for neutrinos and skip them in ::collide()
+// 20141009  M. Kelsey -- Add pion absorption by single nucleons, with
+//		nuclear recoil.  Improves pi- capture performance.
+// 20141030  M. Kelsey -- Check flag for whether to do pi-N absorption
+// 20141201  M. Kelsey -- Check for null vector return from G4GDecay3
 
 #include "G4ElementaryParticleCollider.hh"
 #include "G4CascadeChannel.hh"
 #include "G4CascadeChannelTables.hh"
+#include "G4CascadeParameters.hh"
 #include "G4CollisionOutput.hh"
 #include "G4GDecay3.hh"
 #include "G4InuclParticleNames.hh"
@@ -128,7 +133,8 @@ typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 
 G4ElementaryParticleCollider::G4ElementaryParticleCollider()
-  : G4CascadeColliderBase("G4ElementaryParticleCollider") {;}
+  : G4CascadeColliderBase("G4ElementaryParticleCollider"),
+    nucleusA(0), nucleusZ(0) {;}
 
 
 void
@@ -196,7 +202,12 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
     G4double ekin = convertToSCM.getKinEnergyInTheTRS();
     G4double etot_scm = convertToSCM.getTotalSCMEnergy();
 
-    generateSCMfinalState(ekin, etot_scm, particle1, particle2);
+    // SPECIAL:  Very low energy pions may be absorbed by a nucleon
+    if (pionNucleonAbsorption(ekin)) {
+      generateSCMpionNAbsorption(etot_scm, particle1, particle2);
+    } else {
+      generateSCMfinalState(ekin, etot_scm, particle1, particle2);
+    }
   }
 
   // Generate pion or photon collision with quasi-deuteron
@@ -470,11 +481,115 @@ G4ElementaryParticleCollider::generateSCMmuonAbsorption(G4double etot_scm,
   G4GDecay3 breakup(etot_scm, masses[0], masses[1], masses[2]);
   std::vector<G4ThreeVector> theMomenta = breakup.GetThreeBodyMomenta();
 
+  if (theMomenta.empty()) {
+    G4cerr << " generateSCMmuonAbsorption: GetThreeBodyMomenta() failed"
+	   << " for " << type2 << " dibaryon" << G4endl;
+    particle_kinds.clear();
+    masses.clear();
+    return;
+  }
+
   for (size_t i=0; i<3; i++) {
     scm_momentums[i].setVectM(theMomenta[i], masses[i]);
     particles[i].fill(scm_momentums[i], particle_kinds[i], G4InuclParticle::EPCollider);
   }
 } 
+
+
+// generate nucleons momenta for pion absorption by single nucleon
+
+void
+G4ElementaryParticleCollider::generateSCMpionNAbsorption(G4double etot_scm,
+			             G4InuclElementaryParticle* particle1,
+			             G4InuclElementaryParticle* particle2) {
+  if (verboseLevel > 3)
+    G4cout << " >>> G4ElementaryParticleCollider::generateSCMpionNAbsorption" 
+	   << G4endl;
+
+  particles.clear();		// Initialize buffers for this event
+  particles.resize(1);
+
+  particle_kinds.clear();
+
+  G4int type1 = particle1->type();
+  G4int type2 = particle2->type();
+
+  // Ensure that single-nucleon absportion is valid (charge exchangeable)
+  if ((type1*type2 != pim*pro && type1*type2 != pip*neu)) {
+    G4cerr << " pion-nucleon absorption: "
+	   << particle1->getDefinition()->GetParticleName() << " + "
+	   << particle2->getDefinition()->GetParticleName() << " -> ?"
+	   << G4endl;
+    return;
+  }
+
+  // Get outgoing nucleon type using charge exchange
+  // Proton code is 1, neutron code is 2, so 3-# swaps them
+  G4int ntype = (particle2->nucleon() ? type2 : type1);
+  G4int outType = 3 - ntype;
+  particle_kinds.push_back(outType);
+
+  fillOutgoingMasses();
+
+  // Get mass of residual nucleus (2-ntype = 1 for proton, 0 for neutron)
+  G4double mRecoil =
+    G4InuclNuclei::getNucleiMass(nucleusA-1, nucleusZ-(2-ntype));
+  G4double mRecoil2 = mRecoil*mRecoil;
+
+  // Recompute Ecm to include nucleus (for recoil kinematics)
+  G4LorentzVector vsum(0.,0.,0.,mRecoil);
+  vsum += particle1->getMomentum() + particle2->getMomentum();
+  etot_scm = vsum.m();
+
+  // Two-body kinematics (nucleon against nucleus)
+  G4double a = 0.5 * (etot_scm*etot_scm - masses2[0] - mRecoil2);
+
+  G4double pmod = std::sqrt((a*a - masses2[0]*mRecoil2)
+			    / (masses2[0] + mRecoil2 + 2.0*a));
+  G4LorentzVector mom1 = generateWithRandomAngles(pmod, masses[0]);
+
+  if (verboseLevel > 3) {
+    G4cout << " outgoing type " << outType << " recoiling on nuclear mass "
+	   << mRecoil << " a " << a << " p(SCM) " << pmod << " Ekin "
+	   << mom1.e()-masses[0] << G4endl;
+  }
+
+  // Nuclear recoil four momentum, for boosting back
+  G4LorentzVector mom2;
+  mom2.setVectM(-mom1.vect(), mRecoil);
+  mom1.boost(-mom2.boostVector());
+
+  if (verboseLevel > 3) {
+    G4cout << " after nuclear recoil p " << mom1.rho() << " Ekin "
+	   << mom1.e()-masses[0] << G4endl;
+  }
+
+  // Fill only the ejected nucleon
+  particles[0].fill(mom1, particle_kinds[0], G4InuclParticle::EPCollider);
+}
+
+
+// Evaluate whether interaction is candidate for absorption on nucleon
+
+G4bool 
+G4ElementaryParticleCollider::pionNucleonAbsorption(G4double ekin) const {
+  if (!G4CascadeParameters::piNAbsorption()) return false;
+
+  if (verboseLevel > 3)
+    G4cout << " >>> G4ElementaryParticleCollider::pionNucleonAbsorption ?"
+           << " ekin " << ekin << " is " << interCase.hadrons() << G4endl;
+
+  const G4double mpi0 = G4InuclElementaryParticle::getParticleMass(pionZero);
+
+  // Absorption occurs only for pi- p -> n, or pi+ n -> p
+  // Restrict to "very slow" pions, to allow for some normal scattering
+  G4bool isAbsorbable = ((interCase.hadrons() == pim*pro ||
+			  interCase.hadrons() == pip*neu)
+			 && ekin < 0.5*mpi0);
+
+  // FIXME:  Should have an effective cross-section to throw random here
+  return isAbsorbable;
+}
 
 
 // generate constituents of dibaryon for "explosion"

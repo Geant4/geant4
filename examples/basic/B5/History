@@ -1,4 +1,4 @@
-$Id: History 78054 2013-12-03 08:26:31Z gcosmo $
+$Id: History 87359 2014-12-01 16:04:27Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,31 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 November 2014 Ivana Hrivnacova
+- Use G4endl instead of \n in G4cout;
+  this makes each new line in the output on threads preceded with
+  G4WTN >
+
+06 November 2014 Ivana Hrivnacova
+- Moved G4UIExecutive at the beginning of main() in all examples
+- Perform run initialization in macros instead of main()
+- Added BUILD OPTIONS section in README explaining meaning of
+  G4UI_USE/G4VIS_USE options in main
+
+27 Oct 2014 Davide Mancusi (exampleB5-V10-00-01)
+- Switch off primary randomization in gui.mac (needed for the /gun/ UI commands
+  to work)
+
+16 Sept 2014 Andrea Dotti
+- Removing test code introduced in previous tag. Previous
+  tag has been rejected as planned.
+
+15 July 2014 Andrea Dotti (exampleB5-V10-00-00)
+- This tag is intentionally WRONG: it introduces an
+  FPE violation (division by zero) at event 1. It is
+  used yo verify correct behavior of FPE detection in MT.
+  When tests will be over, changes will be reverted.
 
 02 December 2013 Ivana Hrivnacova 
 - Fixed gui.mac:

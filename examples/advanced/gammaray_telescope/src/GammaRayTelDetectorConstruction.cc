@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDetectorConstruction.cc 66508 2012-12-19 10:16:45Z gcosmo $
+// $Id: GammaRayTelDetectorConstruction.cc 82630 2014-07-01 09:43:00Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -41,7 +41,6 @@
 #include "GammaRayTelDetectorMessenger.hh"
 
 #include "GammaRayTelTrackerSD.hh"
-#include "GammaRayTelTrackerROGeometry.hh"
 
 #include "GammaRayTelAnticoincidenceSD.hh"
 #include "GammaRayTelCalorimeterSD.hh"
@@ -58,13 +57,17 @@
 #include "G4TransportationManager.hh"
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
-
+#include "G4GlobalMagFieldMessenger.hh"
+#include "G4AutoDelete.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
+#include "G4UImanager.hh"
 
-#include "G4ios.hh"
+
 #include "G4RegionStore.hh"
 
+G4ThreadLocal G4GlobalMagFieldMessenger* 
+ GammaRayTelDetectorConstruction::fMagFieldMessenger = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -84,7 +87,7 @@ GammaRayTelDetectorConstruction::GammaRayTelDetectorConstruction()
    solidCALDetectorY(0),logicCALDetectorY(0),physiCALDetectorY(0),
    solidPlane(0),logicPlane(0),physiPlane(0),
    solidConverter(0),logicConverter(0),physiConverter(0),
-   trackerSD(0),calorimeterSD(0),anticoincidenceSD(0)
+   logicTKRStripX(0),logicTKRStripY(0)
    // aTKRRegion(0), aCALRegion(0)
 {
   // default parameter values of the payload
@@ -108,6 +111,11 @@ GammaRayTelDetectorConstruction::GammaRayTelDetectorConstruction()
   TilesSeparation = 100.*micrometer;
   ACDTKRDistance = 5.*cm;
   CALTKRDistance = 1.5*cm;
+
+  //Initialize thread-local sensitive detectors
+  trackerSD.Put(0);
+  calorimeterSD.Put(0);
+  anticoincidenceSD.Put(0);
 
   ComputePayloadParameters();
 
@@ -542,6 +550,8 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 			"Active Tile Y",0,0,0);
   
   
+
+
   G4int j=0;
   G4int k=0;
   
@@ -565,14 +575,14 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 	  z = 0.;
 	  
 	  new G4PVPlacement(0,
-			      G4ThreeVector(x,y,z),
-			      "Active Tile Y",		
-			      logicTKRActiveTileY,
-			      physiTKRDetectorY,
-			      false,	
-			      k);
+			    G4ThreeVector(x,y,z),
+			    logicTKRActiveTileY,
+			    "Active Tile Y",		
+			    logicTKRDetectorY,
+			    false,	
+			    k);
 	  
-
+	  
 	  x = -TKRSizeXY/2+TilesSeparation+SiliconGuardRing+
 	    TKRActiveTileXY/2+(j)*((2*SiliconGuardRing)+
 				   TilesSeparation+TKRActiveTileXY);
@@ -582,16 +592,79 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 	  z = 0.;
 	      
 	  new G4PVPlacement(0,
-			      G4ThreeVector(x,y,z),
-			      "Active Tile X",		
-			      logicTKRActiveTileX,
-			      physiTKRDetectorX,
-			      false,	
-			      k);	
+			    G4ThreeVector(x,y,z),
+			    logicTKRActiveTileX,
+			    "Active Tile X",
+			    logicTKRDetectorX,
+			    false,	
+			    k);	
 	  
 	}
     }
+
+
+  // STRIPS (not any more in the Readout Geometry)
+
+  // Silicon Strips 
+    
+  /*
+    G4double TKRXStripX=0.;
+    G4double TKRYStripY=0.;
+    G4double TKRYStripX=0.; 
+    G4double TKRXStripY=0.;
+  */
+
+  TKRXStripX = TKRYStripY = TKRSiliconPitch;
+  TKRYStripX = TKRXStripY = TKRActiveTileXY;
+  TKRZStrip  = TKRSiliconThickness;
   
+  
+  G4VSolid* solidTKRStripX = new G4Box("Strip X",			
+				       TKRXStripX/2,TKRYStripX/2,
+				       TKRZStrip/2); 
+  
+  logicTKRStripX = 
+    new G4LogicalVolume(solidTKRStripX,TKRMaterial,"Strip X",0,0,0);	 
+  
+		
+  G4VSolid* solidTKRStripY = new G4Box("Strip Y",			
+				       TKRXStripY/2,TKRYStripY/2,
+				       TKRZStrip/2); 
+  
+
+  logicTKRStripY = 
+    new G4LogicalVolume(solidTKRStripY,TKRMaterial,"Strip Y",0,0,0);	 
+	
+
+  for (i=0;i< NbOfTKRStrips; i++)
+    {  
+      new G4PVPlacement(0,
+			G4ThreeVector(-TKRActiveTileXY/2 +TKRSiliconPitch/2 +
+				      (i)*TKRSiliconPitch, 0., 0.),
+			logicTKRStripX,
+			"Strip X",		
+			logicTKRActiveTileX,
+			false,	
+			i);	
+      
+      
+      new G4PVPlacement(0,
+			G4ThreeVector(0.,-TKRActiveTileXY/2 
+				      +TKRSiliconPitch/2 +
+				      (i)*TKRSiliconPitch, 0.),
+			logicTKRStripY,
+			"Strip Y",		
+			logicTKRActiveTileY,
+			false,	
+			i);	
+      
+      
+      
+      
+
+    }
+  
+
 
   // Calorimeter Structure (CALLayerX + CALLayerY)
   
@@ -661,9 +734,9 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 	new G4PVPlacement(0,
 			  G4ThreeVector(-CALSizeXY/2+ CALBarY/2 +
 					(i)*CALBarY, 0, 0),
-			  "CALDetectorY",		
 			  logicCALDetectorY,
-			  physiCALLayerY,
+			  "CALDetectorY",		
+			  logicCALLayerY,
 			  false,	
 			  i);	
       
@@ -671,9 +744,9 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 	new G4PVPlacement(0,
 			  G4ThreeVector(0,-CALSizeXY/2+ CALBarY/2 +
 					(i)*CALBarY, 0),
-			  "CALDetectorX",		
 			  logicCALDetectorX,
-			  physiCALLayerX,
+			  "CALDetectorX",		
+			  logicCALLayerX,
 			  false,	
 			  i);	
       
@@ -697,68 +770,6 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
     aTKRRegion->AddRootLogicalVolume(logicTKR);
   */
 
-  //Sensitive Detector Manager
-  
-  G4SDManager* SDman = G4SDManager::GetSDMpointer();
-  
-  //
-  // Sensitive Detectors - Tracker
-  // 
-                               
-  
-  if(!trackerSD)
-    {
-      trackerSD = new GammaRayTelTrackerSD("TrackerSD");
-      SDman->AddNewDetector( trackerSD );		
-    }
-
-
-  G4String ROgeometryName = "TrackerROGeom";
-  G4VReadOutGeometry* trackerRO = 
-    new GammaRayTelTrackerROGeometry(ROgeometryName);
-  
-  trackerRO->BuildROGeometry();
-  trackerSD->SetROgeometry(trackerRO);
-
-  if (logicTKRActiveTileX)
-    logicTKRActiveTileX->SetSensitiveDetector(trackerSD); // ActiveTileX
-  if (logicTKRActiveTileY)
-    logicTKRActiveTileY->SetSensitiveDetector(trackerSD); // ActiveTileY
-
-  //
-  // Sensitive Detectors: Calorimeter
-  // 
-
-
-
-  if(!calorimeterSD)
-    {
-      calorimeterSD = new GammaRayTelCalorimeterSD("CalorimeterSD");
-      SDman->AddNewDetector( calorimeterSD );		
-    }
-  
-  if (logicCALDetectorX)
-    logicCALDetectorX->SetSensitiveDetector(calorimeterSD); // BarX
-  if (logicCALDetectorY)
-    logicCALDetectorY->SetSensitiveDetector(calorimeterSD); // BarY
-
-  //
-  // Sensitive Detectors: Anticoincidence
-  //
-
-  if(!anticoincidenceSD)
-    {
-      anticoincidenceSD = new GammaRayTelAnticoincidenceSD
-	("AnticoincidenceSD");
-      SDman->AddNewDetector( anticoincidenceSD );		
-    }
-  
-  if (logicACT)
-    logicACT->SetSensitiveDetector(anticoincidenceSD); // ACD top
-  if (logicACL1)
-    logicACL1->SetSensitiveDetector(anticoincidenceSD); // ACD lateral side
-  if (logicACL2)
-    logicACL2->SetSensitiveDetector(anticoincidenceSD); // ACD lateral side
 
   //                                        
   // Visualization attributes
@@ -775,7 +786,9 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
   logicCAL->SetVisAttributes(G4VisAttributes::Invisible);
   logicCALLayerX->SetVisAttributes(G4VisAttributes::Invisible);
   logicCALLayerY->SetVisAttributes(G4VisAttributes::Invisible);
-  
+  logicTKRStripX->SetVisAttributes(G4VisAttributes::Invisible);
+  logicTKRStripY->SetVisAttributes(G4VisAttributes::Invisible);  
+
   // Some visualization styles
 
   G4VisAttributes* VisAtt1= new G4VisAttributes(G4Colour(0.3,0.8,0.1));
@@ -809,6 +822,71 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void GammaRayTelDetectorConstruction::ConstructSDandField()
+{ 
+  
+  //
+  // Sensitive Detectors - Tracker
+  //                                
+  if(trackerSD.Get()==0)
+    {
+      GammaRayTelTrackerSD* SD = new GammaRayTelTrackerSD("TrackerSD");
+      trackerSD.Put(SD);
+    }
+
+  //Flags the strips as sensitive .
+
+  if (logicTKRStripX)
+    SetSensitiveDetector(logicTKRStripX,trackerSD.Get()); // ActiveStripX
+  if (logicTKRStripY)
+    SetSensitiveDetector(logicTKRStripY,trackerSD.Get()); // ActiveStripY
+  
+
+  //
+  // Sensitive Detectors: Calorimeter
+  // 
+  if(calorimeterSD.Get()==0)
+    {
+      GammaRayTelCalorimeterSD* SD = new GammaRayTelCalorimeterSD("CalorimeterSD");
+      calorimeterSD.Put(SD);
+    }  
+  if (logicCALDetectorX)
+    SetSensitiveDetector(logicCALDetectorX,calorimeterSD.Get()); // BarX
+  if (logicCALDetectorY)
+    SetSensitiveDetector(logicCALDetectorY,calorimeterSD.Get()); // BarY
+
+  //
+  // Sensitive Detectors: Anticoincidence
+  //
+
+  if(anticoincidenceSD.Get()==0)
+    {
+      GammaRayTelAnticoincidenceSD* SD = new GammaRayTelAnticoincidenceSD
+	("AnticoincidenceSD");
+      anticoincidenceSD.Put(SD);
+    }
+  
+  if (logicACT)
+    SetSensitiveDetector(logicACT,anticoincidenceSD.Get()); // ACD top
+  if (logicACL1)
+    SetSensitiveDetector(logicACL1,anticoincidenceSD.Get()); // ACD lateral side
+  if (logicACL2)
+    SetSensitiveDetector(logicACL2,anticoincidenceSD.Get()); // ACD lateral side
+
+  // Create global magnetic field messenger.
+  // Uniform magnetic field is then created automatically if
+  // the field value is not zero.
+  G4ThreeVector fieldValue = G4ThreeVector();
+  fMagFieldMessenger = new G4GlobalMagFieldMessenger(fieldValue);
+  fMagFieldMessenger->SetVerboseLevel(1);
+  
+  // Register the field messenger for deleting
+  G4AutoDelete::Register(fMagFieldMessenger);
+
+  return;
+  
+}
 
 void GammaRayTelDetectorConstruction::PrintPayloadParameters()
 {
@@ -910,20 +988,18 @@ void GammaRayTelDetectorConstruction::SetACDThickness(G4double val)
 
 void GammaRayTelDetectorConstruction::SetMagField(G4double fieldValue)
 {
-  //apply a global uniform magnetic field along Z axis
-  G4FieldManager* fieldMgr 
-    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-    
-  if(magField) delete magField;		//delete the existing magn field
-  
-  if(fieldValue!=0.)			// create a new one if non nul
-    { magField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));        
-    fieldMgr->SetDetectorField(magField);
-    fieldMgr->CreateChordFinder(magField);
-    } else {
-      magField = 0;
-      fieldMgr->SetDetectorField(magField);
-    }
+  // Just invoke manually the MT-safe command 
+  // /globalField/setValue 
+  // instantiated by the GlobalFieldMessenger
+  std::stringstream sss;
+  sss << "/globalField/setValue 0 0 " << fieldValue/tesla << " tesla";
+
+  G4String command = sss.str();
+  G4cout << "Going to execute: " << command << G4endl;
+
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+  UImanager->ApplyCommand(command);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -935,6 +1011,7 @@ void GammaRayTelDetectorConstruction::UpdateGeometry()
   G4RunManager::GetRunManager()->PhysicsHasBeenModified();
   G4RegionStore::GetInstance()->UpdateMaterialList(physiWorld);
 
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 
 }
 

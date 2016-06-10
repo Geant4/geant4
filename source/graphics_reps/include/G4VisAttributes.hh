@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.hh 66376 2012-12-18 09:42:59Z gcosmo $
+// $Id: G4VisAttributes.hh 85261 2014-10-27 08:54:57Z gcosmo $
 //
 // 
 // John Allison  23rd October 1996
@@ -70,7 +70,8 @@ public: // With description
 
   enum LineStyle {unbroken, dashed, dotted};
   enum ForcedDrawingStyle {wireframe, solid};
-
+  enum {fMinLineSegmentsPerCircle = 3};   // number of sides per circle
+  
   G4VisAttributes ();
   G4VisAttributes (const G4VisAttributes&);
   G4VisAttributes (G4bool visibility);
@@ -91,9 +92,9 @@ public: // With description
   void SetColour              (const G4Colour&);
   void SetColor               (const G4Color&);
   void SetColour              (G4double red, G4double green, G4double blue,
-			       G4double alpha = 1.);
+                               G4double alpha = 1.);
   void SetColor               (G4double red, G4double green, G4double blue,
-			       G4double alpha = 1.);
+                               G4double alpha = 1.);
   void SetLineStyle           (LineStyle);
   void SetLineWidth           (G4double);
   void SetForceWireframe      (G4bool);
@@ -122,6 +123,9 @@ public: // With description
   G4int           GetForcedLineSegmentsPerCircle () const;
   G4double        GetStartTime                   () const;
   G4double        GetEndTime                     () const;
+  static G4int    GetMinLineSegmentsPerCircle    () {
+    return fMinLineSegmentsPerCircle;
+  };
   // Returns an expendable copy of the G4AttValues...
   const std::vector<G4AttValue>* CreateAttValues () const;
   // Returns the orginal long life G4AttDefs...
@@ -139,7 +143,7 @@ private:
   ForcedDrawingStyle fForcedStyle; // Value of forced drawing style.
   G4bool    fForceAuxEdgeVisible;  // Force drawing of auxilary edges. 
   G4int fForcedLineSegmentsPerCircle;  // Forced lines segments per
-				       // circle.  <=0 means not forced.
+                                       // circle.  <=0 means not forced.
   G4double fStartTime, fEndTime;   // Time range.
   const std::vector<G4AttValue>*     fAttValues;  // For picking, etc.
   const std::map<G4String,G4AttDef>* fAttDefs;    // Corresponding definitions.

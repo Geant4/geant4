@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAElastic.cc 70171 2013-05-24 13:34:18Z gcosmo $
+// $Id: G4DNAElastic.cc 85423 2014-10-29 08:22:38Z gcosmo $
 
 #include "G4DNAElastic.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Positron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -48,7 +49,7 @@ G4DNAElastic::~G4DNAElastic()
 
 G4bool G4DNAElastic::IsApplicable(const G4ParticleDefinition& p)
 {
-  return (&p == G4Electron::Electron());
+  return (&p == G4Electron::Electron() || &p == G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

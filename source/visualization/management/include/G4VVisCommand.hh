@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.hh 66870 2013-01-14 23:38:59Z adotti $
+// $Id: G4VVisCommand.hh 83403 2014-08-21 15:07:30Z gcosmo $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -50,6 +50,14 @@ public:
   G4VVisCommand ();
   virtual ~G4VVisCommand ();
   static void SetVisManager (G4VisManager*);
+  static const G4Colour& GetCurrentColour() {return fCurrentColour;}
+  //static G4VMarker::FillStyle GetCurrentFillStyle() {return fCurrentFillStyle;}
+  //static G4VMarker::SizeType  GetCurrentSizeType() {return fCurrentSizeType;}
+  static G4double GetCurrentLineWidth() {return fCurrentLineWidth;}
+  //static G4VisAttributes::LineStyle GetCurrentLineStyle() {return fCurrentLineStyle;}
+  static const G4Colour& GetCurrentTextColour() {return fCurrentTextColour;}
+  static G4Text::Layout GetCurrentTextLayout() {return fCurrentTextLayout;}
+  static G4double GetCurrentTextSize() {return fCurrentTextSize;}
 
 protected:
 
@@ -68,12 +76,13 @@ protected:
 
   // Current quantities for use in appropriate commands
   static G4Colour                   fCurrentColour;
-  static G4Colour                   fCurrentTextColour;
-  static G4Text::Layout             fCurrentTextLayout;
-  static G4double                   fCurrentLineWidth;
-  //static G4VisAttributes::LineStyle fCurrentLineStyle;  Not yet used.
   //static G4VMarker::FillStyle       fCurrentFillStyle;  Not yet used.
   //static G4VMarker::SizeType        fCurrentSizeType;  Not yet used.
+  static G4double                   fCurrentLineWidth;
+  //static G4VisAttributes::LineStyle fCurrentLineStyle;  Not yet used.
+  static G4Colour                   fCurrentTextColour;
+  static G4Text::Layout             fCurrentTextLayout;
+  static G4double                   fCurrentTextSize;
   static G4ModelingParameters::PVNameCopyNoPath fCurrentTouchablePath;
 };
 

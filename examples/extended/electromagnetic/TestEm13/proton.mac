@@ -1,4 +1,4 @@
-# $Id: proton.mac 66241 2012-12-13 18:34:42Z gunter $
+# $Id: proton.mac 82463 2014-06-23 10:46:36Z gcosmo $
 #
 # Macro file for "TestEm13.cc"
 # (can be run in batch, without graphic)
@@ -11,7 +11,7 @@
 #
 /run/initialize
 #
-/testem/phys/setCuts 200 um
+/run/setCut 200 um
 #
 /gun/particle proton
 /gun/energy 1 GeV

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Shielding.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id: Shielding.hh 83413 2014-08-21 15:21:43Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +33,8 @@
 //   created from FTFP_BERT
 //
 // Modified:
+//
+// 2014.08.05 K.L.Genser added provision for Hadronic Physics Variant
 //
 //----------------------------------------------------------------------------
 //
@@ -51,7 +53,8 @@ class TShielding: public T
 public:
   //TShielding(G4int ver = 1);
   //TShielding(G4int ver = 1, G4bool rad=true, G4bool lend=false);
-  TShielding( G4int verbose = 1 , G4String low_energy_neutron_model = "HP" );
+  explicit TShielding( G4int verbose = 1 , G4String low_energy_neutron_model = "HP", 
+                       G4String HadrPhysVariant = "");
   virtual ~TShielding();
   
 public:

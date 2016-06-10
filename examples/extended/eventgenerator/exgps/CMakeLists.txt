@@ -40,7 +40,7 @@ target_link_libraries(exgps ${Geant4_LIBRARIES} ${AIDA_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(exgps_SCRIPTS
-    exgps_batch.in exgps.in exgps_MT.in macros/display.mac
+    exgps_batch.in exgps.in exgps_MT.in macros/spectrum.dat plotHisto.C vis.mac
   )
 
 foreach(_script ${exgps_SCRIPTS})

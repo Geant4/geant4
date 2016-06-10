@@ -32,6 +32,9 @@
 #include "G4FileMessenger.hh"
 #include "G4H1Messenger.hh"
 #include "G4H2Messenger.hh"
+#include "G4H3Messenger.hh"
+#include "G4P1Messenger.hh"
+#include "G4P2Messenger.hh"
 #include "G4HnMessenger.hh"
 
 #include "G4UIcmdWithABool.hh"
@@ -44,8 +47,14 @@ G4AnalysisMessenger::G4AnalysisMessenger(G4VAnalysisManager* manager)
     fFileMessenger(0),
     fH1Messenger(0),
     fH2Messenger(0),
+    fH3Messenger(0),
+    fP1Messenger(0),
+    fP2Messenger(0),
     fH1HnMessenger(0),
     fH2HnMessenger(0),
+    fH3HnMessenger(0),
+    fP1HnMessenger(0),
+    fP2HnMessenger(0),
     fAnalysisDir(0),  
     fSetActivationCmd(0),
     fVerboseCmd(0)
@@ -69,6 +78,9 @@ G4AnalysisMessenger::G4AnalysisMessenger(G4VAnalysisManager* manager)
   fFileMessenger = new G4FileMessenger(manager);
   fH1Messenger = new G4H1Messenger(manager);
   fH2Messenger = new G4H2Messenger(manager);
+  fH3Messenger = new G4H3Messenger(manager);
+  fP1Messenger = new G4P1Messenger(manager);
+  fP2Messenger = new G4P2Messenger(manager);
 }
 
 //_____________________________________________________________________________
@@ -80,8 +92,14 @@ G4AnalysisMessenger::~G4AnalysisMessenger()
   delete fFileMessenger;
   delete fH1Messenger;
   delete fH2Messenger;
+  delete fH3Messenger;
+  delete fP1Messenger;
+  delete fP2Messenger;
   delete fH1HnMessenger;
   delete fH2HnMessenger;
+  delete fH3HnMessenger;
+  delete fP1HnMessenger;
+  delete fP2HnMessenger;
 }
 
 //
@@ -98,6 +116,24 @@ void G4AnalysisMessenger::SetH1HnManager(G4HnManager* h1HnManager)
 void G4AnalysisMessenger::SetH2HnManager(G4HnManager* h2HnManager)
 {
   fH2HnMessenger = new G4HnMessenger(h2HnManager);
+}  
+
+//_____________________________________________________________________________
+void G4AnalysisMessenger::SetH3HnManager(G4HnManager* h2HnManager)
+{
+  fH2HnMessenger = new G4HnMessenger(h2HnManager);
+}  
+
+//_____________________________________________________________________________
+void G4AnalysisMessenger::SetP1HnManager(G4HnManager* p1HnManager)
+{
+  fP1HnMessenger = new G4HnMessenger(p1HnManager);
+}  
+
+//_____________________________________________________________________________
+void G4AnalysisMessenger::SetP2HnManager(G4HnManager* p2HnManager)
+{
+  fP2HnMessenger = new G4HnMessenger(p2HnManager);
 }  
 
 //_____________________________________________________________________________

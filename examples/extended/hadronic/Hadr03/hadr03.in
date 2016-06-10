@@ -6,7 +6,9 @@
 # proton 10 MeV; all processes
 #
 /control/verbose 2
-/run/verbose 2
+/control/cout/ignoreThreadsExcept 0
+/run/numberOfThreads 2
+/run/verbose 1
 #
 /testhadr/det/setMat Molybdenum98
 #
@@ -14,8 +16,9 @@
 #
 /process/list
 #
-/particle/createAllIsomer
 /gun/particle proton
 /gun/energy 10 MeV
+#
+/run/printProgress 1000
 #
 /run/beamOn 10000

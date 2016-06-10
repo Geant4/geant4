@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonPlus.cc 69015 2013-04-15 09:46:48Z gcosmo $
+// $Id: G4MuonPlus.cc 79342 2014-02-24 11:42:42Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -68,11 +68,11 @@ G4MuonPlus* G4MuonPlus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
   anInstance = new G4ParticleDefinition(
-                 name, 0.105658367*GeV, 2.995912e-16*MeV,  +1.*eplus, 
+                 name, 0.1056583715*GeV, 2.99598e-16*MeV,  +1.*eplus, 
 		    1,               0,                0,          
 		    0,               0,                0,             
 	     "lepton",              -1,                0,        -13,
-		false,      2197.03*ns,             NULL,
+		false,      2196.98*ns,             NULL,
              false,           "mu"
               );
    // Bohr Magnetron

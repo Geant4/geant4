@@ -26,10 +26,10 @@
 /// \file electromagnetic/TestEm1/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
-// $Id: HistoManager.cc 74271 2013-10-02 14:46:52Z gcosmo $
+// $Id: HistoManager.cc 81776 2014-06-05 08:41:01Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoManager.hh"
 #include "G4UnitsTable.hh"
@@ -71,7 +71,7 @@ void HistoManager::Book()
                   "step size of primary particle",               //3
                   "total energy deposit",                        //4
                   "energy of charged secondaries at creation",   //5
-                  "energy of neutral secondaries at creation"    //6                  
+                  "energy of neutral secondaries at creation"    //6 
                  };
   // Default values (to be reset via /analysis/h1/set command)               
   G4int nbins = 100;
@@ -82,7 +82,7 @@ void HistoManager::Book()
   // as we have not yet set nbins, vmin, vmax
   for (G4int k=0; k<kMaxHisto; k++) {
     G4int ih = analysisManager->CreateH1(id[k], title[k], nbins, vmin, vmax);
-    analysisManager->SetH1Activation(ih, false);    
+    analysisManager->SetH1Activation(ih, false);
   }
 }
 

@@ -17,6 +17,50 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 November 2014 - G.Cosmo
+- Updated to CLHEP-2.2.0.4:
+  * Utility (L.Garren <garren@fnal.gov>)
+    o memory.h: fixed a type mismatch (compilation warning on Windows/VC9).
+  * Random (L.Garren <garren@fnal.gov>)
+    o RanshiEngine.cc: use a pragma to ignore aggressive 32bit compiler
+      warnings.
+  * Vector (L.Garren <garren@fnal.gov>)
+    o ThreeVector.icc: inline Hep3Vector::operator () (int i), following
+      patch included in Geant4 on November 12th below.
+
+14 November 2014 - G.Cosmo
+- Updated to CLHEP-2.2.0.3:
+  * Units (L.Garren <garren@fnal.gov>)
+    o Moved definition of pi into SystemOfUnits.h so that its hard-coded
+      value is not defined twice.
+
+12 November 2014 - G.Cosmo
+- Moved operators 'operator()(int)' in Hep3Vector to be inline and
+  removed printout to improve CPU performance.
+  Patch provided by S.Wenzel/CERN.
+
+17 June 2014 - G.Cosmo
+- Updated to CLHEP-2.2.0.0:
+  * Random (L.Garren <garren@fnal.gov>)
+    o RanshiEngine.cc: use explicit 32bit mask to avoid compiler warnings
+    o MTwistEngine.cc: make sure we don't go past the end of the 
+      array in MTwistEngine::showStatus().
+
+24 April 2014 - G.Cosmo
+- Corrected definition of 'thread_local' keyword in Utility/thread_local.h.
+- Removed 'inline' specification in Random.cc for theDefaults().
+
+9 April 2014 - G.Cosmo
+- Updated to CLHEP-2.2.0.0.b01:
+  * Random (D.Dagenhart <wdd@fnal.gov>)
+    o Converted statics and globals to const, thread-local or atomic
+      to improve thread safety.
+    o Introduced CLHEP_THREAD_LOCAL and CLHEP_ATOMIC_INT_TYPE macros
+      thread_local and atomic<int> keywords.
+
+24 February 2014 - G.Cosmo
+- Removed deprecated 'register' qualifier in implementation.
+
 14 November 2013 - G.Cosmo
 - Updated to CLHEP-2.1.4.1:
   * Random (L.Garren <garren@fnal.gov>):

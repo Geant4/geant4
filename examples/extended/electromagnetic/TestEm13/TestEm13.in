@@ -1,4 +1,4 @@
-# $Id: TestEm13.in 66241 2012-12-13 18:34:42Z gunter $
+# $Id: TestEm13.in 85259 2014-10-27 08:52:40Z gcosmo $
 #
 # Macro file for "TestEm13.cc"
 # (can be run in batch, without graphic)
@@ -6,6 +6,8 @@
 # all processes
 #
 /control/verbose 2
+/control/cout/ignoreThreadsExcept 0
+/run/numberOfThreads 2
 /run/verbose 2
 #
 /testem/det/setMat Water
@@ -14,6 +16,7 @@
 /testem/phys/addPhysics standard
 #
 /run/initialize
+/run/printProgress 100000
 #
 /gun/particle gamma
 /gun/energy 100 keV

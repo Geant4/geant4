@@ -32,6 +32,7 @@
 #include "XrayFluoPhysicsListMessenger.hh"
 
 #include "XrayFluoPhysicsList.hh"
+#include "G4RunManager.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
@@ -132,6 +133,9 @@ void XrayFluoPhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String ne
       pPhysicsList->SetCutForPositron(cut);
       pPhysicsList->SetCutForProton(cut);
     } 
+
+  //Notify the run manager that the physics has been modified
+  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
 
 //  if( command == fluoCmd )
 //   { pPhysicsList->SetFluorescence(fluoCmd->GetNewBoolValue(newValue));}

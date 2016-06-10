@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4OpenGLImmediateSceneHandler.cc 85263 2014-10-27 08:58:31Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -58,7 +58,20 @@ G4OpenGLImmediateSceneHandler::~G4OpenGLImmediateSceneHandler ()
 
 #include <iomanip>
 
-G4bool G4OpenGLImmediateSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
+G4bool G4OpenGLImmediateSceneHandler::AddPrimitivePreamble(const G4VMarker& visible)
+{
+    return AddPrimitivePreambleInternal(visible, true, false);
+}
+G4bool G4OpenGLImmediateSceneHandler::AddPrimitivePreamble(const G4Polyline& visible)
+{
+  return AddPrimitivePreambleInternal(visible, false, true);
+}
+G4bool G4OpenGLImmediateSceneHandler::AddPrimitivePreamble(const G4Polyhedron& visible)
+{
+  return AddPrimitivePreambleInternal(visible, false, false);
+}
+
+G4bool G4OpenGLImmediateSceneHandler::AddPrimitivePreambleInternal(const G4Visible& visible, bool isMarker, bool isPolyline)
 {
   const G4Colour& c = GetColour (visible);
   G4double opacity = c.GetAlpha ();
@@ -70,21 +83,7 @@ G4bool G4OpenGLImmediateSceneHandler::AddPrimitivePreamble(const G4Visible& visi
     transparency_enabled = pViewer->transparency_enabled;
     isMarkerNotHidden = pViewer->fVP.IsMarkerNotHidden();
   }
-  
-  G4bool isMarker = false;
-  try {
-    (void) dynamic_cast<const G4VMarker&>(visible);
-    isMarker = true;
-  }
-  catch (std::bad_cast) {}
-  
-  G4bool isPolyline = false;
-  try {
-    (void) dynamic_cast<const G4Polyline&>(visible);
-    isPolyline = true;
-  }
-  catch (std::bad_cast) {}
-  
+
   G4bool isMarkerOrPolyline = isMarker || isPolyline;
   G4bool treatAsTransparent = transparency_enabled && opacity < 1.;
   G4bool treatAsNotHidden = isMarkerNotHidden && (isMarker || isPolyline);
@@ -249,14 +248,18 @@ void G4OpenGLImmediateSceneHandler::BeginPrimitives2D
   glMatrixMode (GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity();
+#ifndef G4OPENGL_VERSION_2
   glOrtho (-1., 1., -1., 1., -G4OPENGL_FLT_BIG, G4OPENGL_FLT_BIG);
+#endif
   glMatrixMode (GL_MODELVIEW);
   glPushMatrix();
   glLoadIdentity();
   G4OpenGLTransform3D oglt (objectTransformation);
   glMultMatrixd (oglt.GetGLMatrix ());
   glDisable(GL_DEPTH_TEST);  // But see parent scene handler!!  In
+#ifndef G4OPENGL_VERSION_2
   glDisable (GL_LIGHTING);   // some cases, we need to re-iterate this.
+#endif
 }
 
 void G4OpenGLImmediateSceneHandler::EndPrimitives2D()

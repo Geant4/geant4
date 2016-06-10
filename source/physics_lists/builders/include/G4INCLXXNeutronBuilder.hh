@@ -31,7 +31,6 @@
 #include "G4HadronElasticProcess.hh"
 #include "G4HadronFissionProcess.hh"
 #include "G4HadronCaptureProcess.hh"
-#include "G4NeutronInelasticProcess.hh"
 #include "G4VNeutronBuilder.hh"
 
 #include "G4INCLXXInterface.hh"   
@@ -75,7 +74,6 @@ class G4INCLXXNeutronBuilder : public G4VNeutronBuilder
   private:
     G4INCLXXInterface * theModel;    
     G4VPreCompoundModel * thePreCompoundModel;    
-    G4NeutronInelasticCrossSection theXSec;
     G4bool withPreCompound;
     G4double thePreCompoundMin;
     G4double thePreCompoundMax;

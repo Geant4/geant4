@@ -33,12 +33,33 @@
 
 #include "G4H1Messenger.hh"
 #include "G4VAnalysisManager.hh"
+#include "G4AnalysisUtilities.hh"
 
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
+#include "G4Tokenizer.hh"
 
 #include <iostream>
+#include <vector>
+
+using namespace G4Analysis;
+
+namespace {
+
+void Exception(G4UIcommand* command, G4int nofParameters)
+{
+  G4ExceptionDescription description;
+  description 
+    << "Got wrong number of \"" << command->GetCommandName() 
+    << "\" parameters: " << nofParameters
+    << " instead of " << command->GetParameterEntries() 
+    << " expected" << G4endl;
+  G4Exception("G4H1Messenger::SetNewValue",
+              "Analysis_W013", JustWarning, description);
+}
+
+}                  
 
 //_____________________________________________________________________________
 G4H1Messenger::G4H1Messenger(G4VAnalysisManager* manager)
@@ -101,13 +122,13 @@ void G4H1Messenger::CreateH1Cmd()
   h1ValMax0->SetDefaultValue(1.);
 
   G4UIparameter* h1ValUnit0 = new G4UIparameter("valUnit0", 's', true);
-  h1ValUnit0->SetGuidance("The unit of valMin0 and valMax0");
+  h1ValUnit0->SetGuidance("The unit applied to filled values and valMin0, valMax0");
   h1ValUnit0->SetDefaultValue("none");
   
   G4UIparameter* h1ValFcn0 = new G4UIparameter("valFcn0", 's', true);
   G4String fcnGuidance = "The function applied to filled values (log, log10, exp).\n";
   fcnGuidance += "Note that the unit parameter cannot be omitted in this case,\n";
-  fcnGuidance += "but none value should be used insted.";
+  fcnGuidance += "but none value should be used instead.";
   h1ValFcn0->SetGuidance(fcnGuidance);
   h1ValFcn0->SetParameterCandidates("log log10 exp none");
   h1ValFcn0->SetDefaultValue("none");
@@ -117,7 +138,7 @@ void G4H1Messenger::CreateH1Cmd()
   h1ValBinScheme0->SetParameterCandidates("linear log");
   binSchemeGuidance 
     += "Note that the unit and fcn parameters cannot be omitted in this case,\n";
-  binSchemeGuidance += "but none value should be used insted.";
+  binSchemeGuidance += "but none value should be used instead.";
   h1ValBinScheme0->SetGuidance(binSchemeGuidance);
   h1ValBinScheme0->SetDefaultValue("linear");
   
@@ -152,14 +173,14 @@ void G4H1Messenger::SetH1Cmd()
   h1ValMax->SetGuidance("Maximum value, expressed in unit");
   
   G4UIparameter* h1ValUnit = new G4UIparameter("valUnit", 's', true);
-  h1ValUnit->SetGuidance("The unit of valMin and valMax");
+  h1ValUnit->SetGuidance("The unit applied to filled values and valMin, valMax");
   h1ValUnit->SetDefaultValue("none");
 
   G4UIparameter* h1ValFcn = new G4UIparameter("valFcn", 's', true);
   h1ValFcn->SetParameterCandidates("log log10 exp none");
   G4String fcnGuidance = "The function applied to filled values (log, log10, exp, none).\n";
   fcnGuidance += "Note that the unit parameter cannot be omitted in this case,\n";
-  fcnGuidance += "but none value should be used insted.";
+  fcnGuidance += "but none value should be used instead.";
   h1ValFcn->SetGuidance(fcnGuidance);
   h1ValFcn->SetDefaultValue("none");
 
@@ -168,13 +189,13 @@ void G4H1Messenger::SetH1Cmd()
   G4String binSchemeGuidance = "The binning scheme (linear, log).\n";
   binSchemeGuidance 
     += "Note that the unit and fcn parameters cannot be omitted in this case,\n";
-  binSchemeGuidance += "but none value should be used insted.";
+  binSchemeGuidance += "but none value should be used instead.";
   h1ValBinScheme->SetGuidance(binSchemeGuidance);
   h1ValBinScheme->SetDefaultValue("linear");
  
   fSetH1Cmd = new G4UIcommand("/analysis/h1/set", this);
   fSetH1Cmd->SetGuidance("Set parameters for the 1D histogram of #Id :");
-  fSetH1Cmd->SetGuidance("  nbins; valMin; valMax; unit (of vmin and vmax)");
+  fSetH1Cmd->SetGuidance("  nbins; valMin; valMax; unit; function; binScheme");
   fSetH1Cmd->SetParameter(h1Id);
   fSetH1Cmd->SetParameter(h1Nbins);
   fSetH1Cmd->SetParameter(h1ValMin);
@@ -246,50 +267,57 @@ void G4H1Messenger::SetH1YAxisCmd()
 //_____________________________________________________________________________
 void G4H1Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
 {
+  // tokenize parameters in a vector
+  std::vector<G4String> parameters;
+  G4Analysis::Tokenize(newValues, parameters);
+  // check consistency
+  if ( G4int(parameters.size()) != command->GetParameterEntries() ) {
+    // Should never happen but let's check anyway for consistency
+    Exception(command, parameters.size());
+    return;
+  }  
+
   if ( command == fCreateH1Cmd ) { 
-    G4String name, title;
-    G4int nbins; 
-    G4double vmin,vmax; 
-    G4String sunit;
-    G4String sfcn;
-    G4String sbinScheme;
-    std::istringstream is(newValues.data());
-    is >> name >> title >> nbins >> vmin >> vmax >> sunit >> sfcn >> sbinScheme;
-    fManager->CreateH1(name, title, nbins, vmin, vmax, sunit, sfcn, sbinScheme);     
+    G4int counter = 0;
+    G4String name = parameters[counter++];
+    G4String title = parameters[counter++];
+    G4int nbins = G4UIcommand::ConvertToInt(parameters[counter++]); 
+    G4double vmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
+    G4double vmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ; 
+    G4String sunit = parameters[counter++];
+    G4String sfcn = parameters[counter++];
+    G4String sbinScheme = parameters[counter++];
+    G4double unit = GetUnitValue(sunit);
+    fManager->CreateH1(name, title, nbins, vmin*unit, vmax*unit, sunit, sfcn, sbinScheme); 
   }
   else if ( command == fSetH1Cmd ) {
-    G4int id; 
-    G4int nbins; 
-    G4double vmin, vmax; 
-    G4String sunit;
-    G4String sfcn;
-    G4String sbinScheme;
-    std::istringstream is(newValues.data());
-    is >> id >> nbins >> vmin >> vmax >> sunit >> sfcn >> sbinScheme;
-    fManager->SetH1(id, nbins, vmin, vmax, sunit, sfcn, sbinScheme);     
+    G4int counter = 0;
+    G4int id = G4UIcommand::ConvertToInt(parameters[counter++]);
+    G4int nbins = G4UIcommand::ConvertToInt(parameters[counter++]); 
+    G4double vmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
+    G4double vmax = G4UIcommand::ConvertToDouble(parameters[counter++]); 
+    G4String sunit = parameters[counter++];
+    G4String sfcn = parameters[counter++];
+    G4String sbinScheme = parameters[counter++];
+    G4double unit = GetUnitValue(sunit);
+    fManager->SetH1(id, nbins, vmin*unit, vmax*unit, sunit, sfcn, sbinScheme); 
   }
   else if ( command == fSetH1TitleCmd ) {
-    G4int id; 
-    G4String title;
-    std::istringstream is(newValues.data());
-    is >> id;
-    getline(is, title);
+    G4int counter = 0;
+    G4int id = G4UIcommand::ConvertToInt(parameters[counter++]); 
+    G4String title = parameters[counter++];
     fManager->SetH1Title(id, title);     
   }
   else if ( command == fSetH1XAxisCmd ) {
-    G4int id; 
-    G4String xaxis;
-    std::istringstream is(newValues.data());
-    is >> id;
-    getline(is, xaxis);
+    G4int counter = 0;
+    G4int id = G4UIcommand::ConvertToInt(parameters[counter++]); 
+    G4String xaxis = parameters[counter++];
     fManager->SetH1XAxisTitle(id, xaxis);     
   }
   else if ( command == fSetH1YAxisCmd ) {
-    G4int id; 
-    G4String yaxis;
-    std::istringstream is(newValues.data());
-    is >> id;
-    getline(is, yaxis);
+    G4int counter = 0;
+    G4int id = G4UIcommand::ConvertToInt(parameters[counter++]); 
+    G4String yaxis = parameters[counter++];
     fManager->SetH1YAxisTitle(id, yaxis);     
   }
 }  

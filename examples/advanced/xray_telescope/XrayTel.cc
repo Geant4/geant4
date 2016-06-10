@@ -75,10 +75,16 @@
 //
 // **********************************************************************
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "XrayTelDetectorConstruction.hh"
 #include "XrayTelPhysicsList.hh"
+#include "XrayTelActionInitializer.hh"
 
 #ifdef G4VIS_USE
   #include "G4VisExecutive.hh"
@@ -88,25 +94,21 @@
   #include "G4UIExecutive.hh"
 #endif
 
-#include "XrayTelRunAction.hh"
-#include "XrayTelSteppingAction.hh"
-#include "XrayTelPrimaryGeneratorAction.hh"
-//#include <iostream.h>
-#include <vector>
+
 
 int main( int argc, char** argv )
 {
   // Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+#else
+  G4RunManager* runManager = new G4RunManager;
+#endif
 
   // set mandatory initialization classes
   runManager->SetUserInitialization(new XrayTelDetectorConstruction ) ;
   runManager->SetUserInitialization(new XrayTelPhysicsList);
-
-  // set mandatory user action class
-  runManager->SetUserAction(new XrayTelPrimaryGeneratorAction);
-  runManager->SetUserAction(new XrayTelRunAction);
-  runManager->SetUserAction(new XrayTelSteppingAction);
+  runManager->SetUserInitialization(new XrayTelActionInitializer());
 
 #ifdef G4VIS_USE
   // visualization manager

@@ -1,4 +1,4 @@
-$Id: History 77080 2013-11-21 10:33:55Z gcosmo $
+$Id: History 83388 2014-08-21 14:29:33Z gcosmo $
 -------------------------------------------------------------------
 
 
@@ -17,6 +17,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- August 19, 2014 K. Genser (track-V10-00-04)
+- Removed non cost requirement when using G4PhysicsModelCatalog getters and moved 
+   implementations to icc file (requires global-V10-00-31)
+
+- May  21,  2014 J.Apostolakis (track-V10-00-03)
+- Fix G4FieldTrackUpdator to energy/momentum passed to field integration: 
+   first set rest mass, then update kinetic energy. Problem affects 
+   propagation in multiple geometries.
+
+- Mar. 07,  2014 H.Kurashige (track-V10-00-02)
+- Fix memory leak in G4Step::SetPre/PostStepPoint
+ (Bug # 1583)
+
+- Jan. 04, 2014 H.Kurashige (track-V10-00-00)
+- modify message from CheckIt for G4VParticleChange and G4ParticleChangeForDecay  
 
 - Nov. 21, 2013 H.Kurashige (track-V09-06-04)
 - Fix Coverity deficts in G4Track constructors

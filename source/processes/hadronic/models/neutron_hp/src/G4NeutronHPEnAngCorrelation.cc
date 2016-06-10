@@ -71,10 +71,10 @@ G4ReactionProductVector * G4NeutronHPEnAngCorrelation::Sample(G4double anEnergy)
   if(frameFlag==2||frameFlag==3)
   {
     // simplify and double check @
-    G4ThreeVector the3Neutron = theNeutron.GetMomentum(); //theNeutron has value in LAB
-    G4double nEnergy = theNeutron.GetTotalEnergy();
-    G4ThreeVector the3Target = theTarget.GetMomentum();  //theTarget has value in LAB
-    G4double tEnergy = theTarget.GetTotalEnergy();
+    G4ThreeVector the3Neutron = fCache.Get().theNeutron->GetMomentum(); //theNeutron has value in LAB
+    G4double nEnergy = fCache.Get().theNeutron->GetTotalEnergy();
+    G4ThreeVector the3Target = fCache.Get().theTarget->GetMomentum();  //theTarget has value in LAB
+    G4double tEnergy = fCache.Get().theTarget->GetTotalEnergy();
     G4double totE = nEnergy+tEnergy;
     G4ThreeVector the3CMS = the3Target+the3Neutron;
     theCMS.SetMomentum(the3CMS);
@@ -83,20 +83,20 @@ G4ReactionProductVector * G4NeutronHPEnAngCorrelation::Sample(G4double anEnergy)
     theCMS.SetMass(sqrts);
     theCMS.SetTotalEnergy(totE);
     G4ReactionProduct aNeutron;
-    aNeutron.Lorentz(theNeutron, theCMS);
+    aNeutron.Lorentz(*fCache.Get().theNeutron, theCMS);
     //TKDB 100413 
     //ENDF-6 Formats Manual ENDF-102
     //CHAPTER 6. FILE 6: PRODUCT ENERGY-ANGLE DISTRIBUTIONS
     //LCT Reference system for secondary energy and angle (incident energy is always given in the LAB system)
     //anEnergy = aNeutron.GetKineticEnergy();
-    anEnergy = theNeutron.GetKineticEnergy(); //should be same argumment of "anEnergy"
+    anEnergy = fCache.Get().theNeutron->GetKineticEnergy(); //should be same argumment of "anEnergy"
 
     G4LorentzVector Ptmp (aNeutron.GetMomentum(), aNeutron.GetTotalEnergy());
 
     toZ.rotateZ(-1*Ptmp.phi());
     toZ.rotateY(-1*Ptmp.theta());
   }
-  theTotalMeanEnergy=0;
+  fCache.Get().theTotalMeanEnergy=0;
   G4LorentzRotation toLab(toZ.inverse()); //toLab only change axis NOT to LAB system
   for(i=0; i<nProducts; i++)
   {
@@ -104,11 +104,11 @@ G4ReactionProductVector * G4NeutronHPEnAngCorrelation::Sample(G4double anEnergy)
     G4double aMeanEnergy = theProducts[i].MeanEnergyOfThisInteraction();
     if(aMeanEnergy>0)
     {
-      theTotalMeanEnergy += aMeanEnergy;
+      fCache.Get().theTotalMeanEnergy += aMeanEnergy;
     }
     else
     {
-      theTotalMeanEnergy = anEnergy/nProducts+theProducts[i].GetQValue();
+      fCache.Get().theTotalMeanEnergy = anEnergy/nProducts+theProducts[i].GetQValue();
     }
     if(it!=0)
     {
@@ -121,7 +121,7 @@ G4ReactionProductVector * G4NeutronHPEnAngCorrelation::Sample(G4double anEnergy)
 	it->operator[](ii)->SetTotalEnergy(pTmp1.e());
 	if(frameFlag==1) // target rest //TK 100413 should be LAB?
 	{
-          it->operator[](ii)->Lorentz(*(it->operator[](ii)), -1.*theTarget); //TK 100413 Is this really need?
+          it->operator[](ii)->Lorentz(*(it->operator[](ii)), -1.*(*fCache.Get().theTarget)); //TK 100413 Is this really need?
 	}
 	else if(frameFlag==2) // CMS
 	{
@@ -138,7 +138,7 @@ G4ReactionProductVector * G4NeutronHPEnAngCorrelation::Sample(G4double anEnergy)
            if ( theProducts[i].GetMassCode() > 4 ) //Alpha AWP 3.96713
            {
               //LAB
-              it->operator[](ii)->Lorentz(*(it->operator[](ii)), -1.*theTarget); //TK 100413 Is this really need?
+              it->operator[](ii)->Lorentz(*(it->operator[](ii)), -1.*(*fCache.Get().theTarget)); //TK 100413 Is this really need?
            }
            else
            {

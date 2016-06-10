@@ -66,7 +66,7 @@ class G4StatDouble
     G4double rms(G4double ext_sum_w, G4int ext_n);
       // RMS  scaled to sum of weights
 
-    void add(G4StatDouble*);
+    void add(const G4StatDouble*);
       // merge 2 statistics
 
     inline G4int    n()       const { return m_n; }

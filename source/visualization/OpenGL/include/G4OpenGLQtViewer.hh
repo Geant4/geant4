@@ -24,11 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh 77479 2013-11-25 10:01:22Z gcosmo $
+// $Id: G4OpenGLQtViewer.hh 86360 2014-11-10 08:34:16Z gcosmo $
 //
 // 
 // G4OpenGLQtViewer : Class to provide WindowsNT specific
 //                       functionality for OpenGL in GEANT4
+//
+// 30/06/2014 : M.Kelsey : Change QPixmap objects to pointers
 
 #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 
@@ -42,10 +44,12 @@
 
 #include <qobject.h>
 #include <qpoint.h>
+#include <qpixmap.h>
 
 class G4OpenGLSceneHandler;
 class G4UImanager;
 class G4Text;
+class G4UIcommand;
 
 class QGLWidget;
 class QDialog;
@@ -71,6 +75,10 @@ class G4OpenGLQtMovieDialog;
 class QLineEdit;
 class QSignalMapper;
 class G4UIQt;
+class QTableWidget;
+class QTableWidgetItem;
+class QScrollArea;
+class QSplitter;
 
 class G4OpenGLQtViewer: public QObject, virtual public G4OpenGLViewer {
 
@@ -82,11 +90,17 @@ class G4OpenGLQtViewer: public QObject, virtual public G4OpenGLViewer {
 public:
   G4OpenGLQtViewer (G4OpenGLSceneHandler& scene);
   virtual ~G4OpenGLQtViewer ();
+#ifdef G4MULTITHREADED
+  void SwitchToVisSubThread();
+  void SwitchToMasterThread();
+#endif
+
 private:
   G4OpenGLQtViewer (const G4OpenGLQtViewer&);
   G4OpenGLQtViewer& operator= (const G4OpenGLQtViewer&);
 public:
   virtual void updateQWidget()=0;
+  void updateSceneTreeComponentTreeWidgetInfos();
   QString setEncoderPath(QString path);
   QString getEncoderPath();
   QString setTempFolderPath(QString path);
@@ -125,12 +139,15 @@ public:
                                 const G4Visible& visible);
   bool isTouchableVisible(int POindex);
   void clearTreeWidget();
+  bool exportImage(std::string name="", int width=-1, int height=-1);
+
 public:
   void G4MousePressEvent(QMouseEvent *event);
   void G4wheelEvent (QWheelEvent * event); 
   void G4keyPressEvent (QKeyEvent * event); 
+  void G4keyReleaseEvent (QKeyEvent * event);
   void G4MouseDoubleClickEvent();
-  void G4MouseReleaseEvent();
+  void G4MouseReleaseEvent(QMouseEvent *evnt);
   void G4MouseMoveEvent(QMouseEvent *event);
 
 protected:
@@ -152,15 +169,15 @@ protected:
   GetPrivateVisAttributesModifiers() const;
 
 protected:
-  QGLWidget* fWindow;
-  QWidget* fGLWindow;
+  QWidget* fGLWidget;
   bool hasPendingEvents();
   void savePPMToTemp();
   int fRecordFrameNumber;
 
   bool fHasToRepaint;
-  bool fReadyToPaint;
-  bool fIsRepainting;
+  bool fUpdateGLLock;
+  bool fQGLWidgetInitialiseCompleted;
+  bool fPaintEventLock;
 
 private:
   enum RECORDING_STEP {WAIT,START,PAUSE,CONTINUE,STOP,READY_TO_ENCODE,ENCODING,FAILED,SUCCESS,BAD_ENCODER,BAD_OUTPUT,BAD_TMP,SAVE}; 
@@ -185,6 +202,8 @@ private:
                                  int currentPVPOIndex);
   void setCheckComponent(QTreeWidgetItem* item,bool check);
   void initSceneTreeComponent();
+  void initViewerPropertiesComponent();
+  void initPickingComponent();
   bool parseAndCheckVisibility(QTreeWidgetItem * treeNode,int POindex);
   QTreeWidgetItem* createTreeWidgetItem(const PVPath& fullPath,
                                      const QString& name,
@@ -217,6 +236,8 @@ private:
   std::string parseSceneTreeAndSaveState();
 
   std::string parseSceneTreeElementAndSaveState(QTreeWidgetItem* item, unsigned int level);
+  QString GetCommandParameterList (const G4UIcommand *aCommand);
+  void changeColorAndTransparency(GLuint index, G4Color color);
 
   QMenu *fContextMenu;
   QPoint fLastPos1;
@@ -272,15 +293,20 @@ private:
   QTreeWidget* fOldSceneTreeComponentTreeWidget;
   QWidget* fSceneTreeWidget;
   bool fPVRootNodeCreate;
-  QLineEdit* fHelpLine;
+  QLineEdit* fFilterOutput;
   QString fFileSavePath;
-  QString fDefaultSaveFileFormat;
-  
+  QPushButton* fSceneTreeViewerButton;
+  QPushButton* fViewerPropertiesButton;
+  QPushButton* fViewerPickingButton;
   int fNbRotation ;
   int fTimeRotation;
   QString fTouchableVolumes;
   QDialog* fShortcutsDialog;
-  QTextEdit *fTreeInfoDialogInfos;
+  QTableWidget *fSceneTreeComponentTreeWidgetInfos;
+  QWidget* fSceneTreeComponentPickingInfos;
+  QWidget* fSceneTreeViewerInfos;
+  QScrollArea* fSceneTreeComponentPickingScrollArea;
+  int fTreeWidgetInfosIgnoredCommands;
   QPushButton * fSceneTreeButtonApply;
   QTextEdit *fShortcutsDialogInfos;
   QSlider* fSceneTreeDepthSlider;
@@ -300,8 +326,9 @@ private:
   int fNumber;
   int fMaxPOindexInserted;
   G4UIQt* fUiQt;
-  QSignalMapper *signalMapperMouse;
-  QSignalMapper *signalMapperSurface;
+  QSignalMapper *fSignalMapperMouse;
+  QSignalMapper *fSignalMapperSurface;
+  QSignalMapper *fSignalMapperPicking;
 
   // quick map index to find next item
   std::map <int, QTreeWidgetItem*>::const_iterator fLastSceneTreeWidgetAskForIterator;
@@ -311,6 +338,15 @@ private:
   std::map <int, QTreeWidgetItem*>::const_iterator fOldLastSceneTreeWidgetAskForIterator;
   std::map <int, QTreeWidgetItem*>::const_iterator fOldLastSceneTreeWidgetAskForIteratorEnd;
 
+  // icons
+  QPixmap* fTreeIconOpen;
+  QPixmap* fTreeIconClosed;
+  QPixmap* fSearchIcon;
+
+  int fLastExportSliderValue;
+  G4Color fLastHighlightColor;
+  GLuint fLastHighlightName;
+  bool fIsDeleting;
 
 public Q_SLOTS :
   void startPauseVideo();
@@ -339,12 +375,18 @@ private Q_SLOTS :
   void processLookForFinished();
   void processEncodeStdout();
   void sceneTreeComponentItemChanged(QTreeWidgetItem* item, int id);
+  void toggleSceneTreeViewerInfos();
+  void toggleSceneTreeComponentTreeWidgetInfos();
+  void toggleSceneTreeComponentPickingInfos();
+  void toggleSceneTreeComponentPickingCout(int);
+  void togglePicking();
 
   // action trigger by a click on a component scene tree
   void sceneTreeComponentSelected();
   void changeDepthInSceneTree(int);
   void changeSearchSelection();
   void changeColorAndTransparency(QTreeWidgetItem* item,int val);
+  void tableWidgetViewerSetItemChanged(QTableWidgetItem *);
 };
 
 #endif

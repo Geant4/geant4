@@ -1,4 +1,4 @@
-$Id: History 76284 2013-11-08 13:00:10Z gcosmo $
+$Id: History 78920 2014-02-03 15:11:35Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,10 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29-Jan-2014, Gunter Folger              (phys-util-V10-00-00)
+- Removed electromagnetic/dna, cascade/{evaporation,utils}
+  from sources.cmake
 
 07-Nov-2013, Alberto Ribon              (phys-util-V09-06-01)
 - Removed low_energy and high_energy from sources.cmake

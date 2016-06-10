@@ -44,6 +44,7 @@
 
 #include "G4USolid.hh"
 #include "USphere.hh"
+#include "G4Polyhedron.hh"
 
 class G4USphere : public G4USolid
 {
@@ -61,6 +62,8 @@ class G4USphere : public G4USolid
     void ComputeDimensions(      G4VPVParameterisation* p,
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
+
+    G4VSolid* Clone() const;
 
     inline USphere* GetShape() const;
        
@@ -128,31 +131,32 @@ inline G4double G4USphere::GetDeltaThetaAngle() const
 inline void G4USphere::SetInnerRadius(G4double newRMin)
 {
   GetShape()->SetInnerRadius(newRMin);
-  ResetPolyhedron();
+  fRebuildPolyhedron = true;
 }
 inline void G4USphere::SetOuterRadius(G4double newRmax)
 {
   GetShape()->SetOuterRadius(newRmax);
-  ResetPolyhedron();
+  fRebuildPolyhedron = true;
 }
 inline void G4USphere::SetStartPhiAngle(G4double newSphi, G4bool trig)
 {
   GetShape()->SetStartPhiAngle(newSphi, trig);
+  fRebuildPolyhedron = true;
 }
 inline void G4USphere::SetDeltaPhiAngle(G4double newDphi)
 {
   GetShape()->SetDeltaPhiAngle(newDphi);
-  ResetPolyhedron();
+  fRebuildPolyhedron = true;
 }
 inline void G4USphere::SetStartThetaAngle(G4double newSTheta)
 {
   GetShape()->SetStartThetaAngle(newSTheta);
-  ResetPolyhedron();
+  fRebuildPolyhedron = true;
 }
 inline void G4USphere::SetDeltaThetaAngle(G4double newDTheta)
 {
   GetShape()->SetDeltaThetaAngle(newDTheta);
-  ResetPolyhedron();
+  fRebuildPolyhedron = true;
 }
 
 #endif

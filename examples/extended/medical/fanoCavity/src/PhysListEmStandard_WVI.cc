@@ -26,10 +26,10 @@
 /// \file medical/fanoCavity/src/PhysListEmStandard_WVI.cc
 /// \brief Implementation of the PhysListEmStandard_WVI class
 //
-// $Id: PhysListEmStandard_WVI.cc 68525 2013-04-01 21:16:50Z adotti $
+// $Id: PhysListEmStandard_WVI.cc 86064 2014-11-07 08:49:32Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandard_WVI.hh"
 #include "DetectorConstruction.hh"
@@ -46,6 +46,7 @@
 #include "G4MuMultipleScattering.hh"
 #include "G4WentzelVIModel.hh"
 #include "G4CoulombScattering.hh"
+#include "G4eCoulombScatteringModel.hh"
 
 #include "G4eIonisation.hh"
 #include "MyMollerBhabhaModel.hh"
@@ -89,7 +90,8 @@ void PhysListEmStandard_WVI::ConstructProcess()
       // gamma
     
       G4ComptonScattering* compton = new G4ComptonScattering();
-      MyKleinNishinaCompton* comptonModel = new MyKleinNishinaCompton(fDetector);
+      MyKleinNishinaCompton* comptonModel = 
+        new MyKleinNishinaCompton(fDetector);
       comptonModel->SetCSFactor(1000.);      
       compton->SetEmModel(comptonModel );
             
@@ -101,14 +103,21 @@ void PhysListEmStandard_WVI::ConstructProcess()
       //electron
 
       G4MuMultipleScattering* eMsc = new G4MuMultipleScattering();
-      eMsc->AddEmModel(1, new G4WentzelVIModel()); 
+      G4WentzelVIModel* wvi = new G4WentzelVIModel();
+      //wvi->SetFixedCut(50*eV);
+      eMsc->SetEmModel(wvi,1); 
+
       G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetEmModel(new MyMollerBhabhaModel);
-                         
-      pmanager->AddProcess(eMsc,                      -1, 1, 1);
-      pmanager->AddProcess(eIoni,                     -1, 2, 2);
-///      pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
-      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 3);
+      eIoni->SetEmModel(new MyMollerBhabhaModel(), 1);
+
+      G4CoulombScattering* cs = new G4CoulombScattering();
+      G4eCoulombScatteringModel* single = new G4eCoulombScatteringModel();
+      single->SetLowEnergyThreshold(1*eV);
+      cs->SetEmModel(single, 1);
+
+      pmanager->AddProcess(eMsc, -1, 1, 1);
+      pmanager->AddProcess(eIoni,-1, 2, 2);
+      pmanager->AddProcess(cs,   -1,-1, 3);
                   
     } else if (particleName == "e+") {
       //positron

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.icc 75218 2013-10-29 16:11:15Z gcosmo $
+// $Id: G4Polycone.icc 83572 2014-09-01 15:23:27Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -78,6 +78,6 @@ void G4Polycone::SetOriginalParameters(G4PolyconeHistorical* pars)
                 FatalException, "NULL pointer to parameters!");
   *original_parameters = *pars;
   fCubicVolume = 0.;
-  fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 

@@ -1,4 +1,4 @@
-$Id: History 78124 2013-12-03 17:40:38Z gcosmo $
+$Id: History 87259 2014-11-28 08:09:17Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 27, 2014 I.Hrivnacova - exbiasing-V10-00-03
+- Fixed top README, .README
+
+Nov 12, 2014 M. Verderi - exbiasing-V10-00-02
+- Creation of GB04
+
+Nov 08, 2014 I.Hrivnacova - exbiasing-V10-00-01
+- Updated README files for adding GB03
+
+Nov 07, 2014 M. Verderi - exbiasing-V10-00-00
+- Creation of GB03
 
 Dec 03, 2013 I.Hrivnacova - exbiasing-V09-06-06
 - Fixed files description (for Doxygen)

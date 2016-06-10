@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.hh 73711 2013-09-09 09:57:29Z gcosmo $
+// $Id: G4ParticleTable.hh 84274 2014-10-13 07:15:37Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -138,46 +138,6 @@ class G4ParticleTable
 
    G4IonTable* GetIonTable() const; 
    // return the pointer to G4IonTable object
-
-   ///////////////////////////////////////////////////////////////////////
-   // NOTE ::
-   //  Following FindIon/GetIon methods will be removed in future relases
-   //  Use  FindIon/GetIon methods of G4IonTable instead
-   //
-   G4ParticleDefinition* FindIon( G4int    atomicNumber, 
-				  G4int    atomicMass, 
-				  G4double excitationEnergy );
-   G4ParticleDefinition* FindIon( G4int    atomicNumber, 
-				  G4int    atomicMass, 
-				  G4int    numberOfLambda, 
-				  G4double excitationEnergy );
-   //  return the pointer to an ion  (returns 0 if the ion does not exist)
-   //  the ion has excitation energy nearest to given excitationEnergy  (0: ground state)
-
-   G4ParticleDefinition* GetIon(  G4int    atomicNumber, 
-				  G4int    atomicMass, 
-				  G4double   excitationEnergy);
-   G4ParticleDefinition* GetIon(  G4int    atomicNumber, 
-				  G4int    atomicMass, 
-				  G4int    numberOfLambda, 
-				  G4double   excitationEnergy);
-
-   G4ParticleDefinition* GetIon(G4int atomicNumber, G4int atomicMass,
-                                G4int level);
-
-   //  return the pointer to an ion ( create ion if the ion does not exist)
-   //  It has excitation energy nearest to given excitationEnergy  (0: ground state)
-  
-   G4ParticleDefinition* FindIon( G4int atomicNumber, 
-				  G4int atomicMass, 
-				  G4int dummy1,
-				  G4int dummy2 );
-   //  return the pointer to an ion
-   //  !! This routine behaves same as GetIon( atomicNumber, atomicMass, 0) 
-   //  !! The third and fourth arguments are meaningless
-   //  !! This routine is provided for compatibility to old version
-   ///////////////////////////////////////////////////////////////////////////////////////
-   
 
 
  public: // With Description

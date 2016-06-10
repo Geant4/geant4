@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSDetectorMessenger.hh 77487 2013-11-25 10:15:04Z gcosmo $
+// $Id: WLSDetectorMessenger.hh 84595 2014-10-17 07:33:27Z gcosmo $
 //
 /// \file optical/wls/include/WLSDetectorMessenger.hh
 /// \brief Definition of the WLSDetectorMessenger class
@@ -43,6 +43,7 @@
 class G4UIdirectory;
 class G4UIcmdWithABool;
 class G4UIcmdWithAString;
+
 class G4UIcmdWithADouble;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
@@ -64,27 +65,27 @@ class WLSDetectorMessenger : public G4UImessenger
  
     G4UIdirectory*             fDetDir;
 
-    G4UIcmdWithAString*        SetPhotonDetGeometryCmd;
-    G4UIcmdWithAnInteger*      SetNumOfCladLayersCmd;
-    G4UIcmdWithADoubleAndUnit* SetWLSLengthCmd;
-    G4UIcmdWithADoubleAndUnit* SetWLSRadiusCmd;
-    G4UIcmdWithADoubleAndUnit* SetClad1RadiusCmd;
-    G4UIcmdWithADoubleAndUnit* SetClad2RadiusCmd;
-    G4UIcmdWithADoubleAndUnit* SetPhotonDetHalfLengthCmd;
-    G4UIcmdWithADoubleAndUnit* SetGapCmd;
-    G4UIcmdWithADoubleAndUnit* SetPhotonDetAlignmentCmd;
-    G4UIcmdWithADouble*        SetXYRatioCmd;
-    G4UIcmdWithADouble*        SetSurfaceRoughnessCmd;
-    G4UIcmdWithADouble*        SetMirrorPolishCmd;
-    G4UIcmdWithADouble*        SetMirrorReflectivityCmd;
-    G4UIcmdWithADouble*        SetPhotonDetPolishCmd;
-    G4UIcmdWithADouble*        SetPhotonDetReflectivityCmd;
-    G4UIcmdWithABool*          SetMirrorCmd;
-    G4UIcmdWithADoubleAndUnit* SetBarLengthCmd;
-    G4UIcmdWithADoubleAndUnit* SetBarBaseCmd;
-    G4UIcmdWithADoubleAndUnit* SetHoleRadiusCmd;
-    G4UIcmdWithADoubleAndUnit* SetCoatingThicknessCmd;
-    G4UIcmdWithADoubleAndUnit* SetCoatingRadiusCmd;
+    G4UIcmdWithAString*        fSetPhotonDetGeometryCmd;
+    G4UIcmdWithAnInteger*      fSetNumOfCladLayersCmd;
+    G4UIcmdWithADoubleAndUnit* fSetWLSLengthCmd;
+    G4UIcmdWithADoubleAndUnit* fSetWLSRadiusCmd;
+    G4UIcmdWithADoubleAndUnit* fSetClad1RadiusCmd;
+    G4UIcmdWithADoubleAndUnit* fSetClad2RadiusCmd;
+    G4UIcmdWithADoubleAndUnit* fSetPhotonDetHalfLengthCmd;
+    G4UIcmdWithADoubleAndUnit* fSetGapCmd;
+    G4UIcmdWithADoubleAndUnit* fSetPhotonDetAlignmentCmd;
+    G4UIcmdWithADouble*        fSetXYRatioCmd;
+    G4UIcmdWithADouble*        fSetSurfaceRoughnessCmd;
+    G4UIcmdWithADouble*        fSetMirrorPolishCmd;
+    G4UIcmdWithADouble*        fSetMirrorReflectivityCmd;
+    G4UIcmdWithADouble*        fSetPhotonDetPolishCmd;
+    G4UIcmdWithADouble*        fSetPhotonDetReflectivityCmd;
+    G4UIcmdWithABool*          fSetMirrorCmd;
+    G4UIcmdWithADoubleAndUnit* fSetBarLengthCmd;
+    G4UIcmdWithADoubleAndUnit* fSetBarBaseCmd;
+    G4UIcmdWithADoubleAndUnit* fSetHoleRadiusCmd;
+    G4UIcmdWithADoubleAndUnit* fSetCoatingThicknessCmd;
+    G4UIcmdWithADoubleAndUnit* fSetCoatingRadiusCmd;
 
 };
 

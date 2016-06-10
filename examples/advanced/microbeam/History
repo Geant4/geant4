@@ -9,6 +9,27 @@ $Id: History 70524 2013-05-31 16:36:26Z gcosmo $
                        Package History file
                        --------------------
 
+14 Oct 2014 - S.Incerti - tag microbeam-V10-00-06
+- warnings fix for Windows
+
+13 Oct 2014 - S.Incerti - tag microbeam-V10-00-05
+- try to fix errors on MTmax
+
+7 Oct 2014 - S.Incerti - tag microbeam-V10-00-04
+- removed warnings
+
+6 Oct 2014 - S.Incerti - tag microbeam-V10-00-03
+- removed warnings
+
+4 Oct 2014 - S.Incerti - tag microbeam-V10-00-02
+- removed warning in CellParameterisation
+
+3 Oct 2014 - L.Garnier - tag microbeam-V10-00-01
+- set "/vis/ogl/set/displayListLimit" in vis.mac
+
+24 Sep 2014 - S. Incerti - tag microbeam-V10-00-00
+- Switched to singleton for handling of cell phantom
+
 03 Oct 2013 - S. Incerti - tag microbeam-V09-06-07
 - Updated for changes in analysis:
 

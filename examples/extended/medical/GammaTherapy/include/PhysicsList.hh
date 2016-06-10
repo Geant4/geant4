@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh 67994 2013-03-13 11:05:39Z gcosmo $
+// $Id: PhysicsList.hh 82277 2014-06-13 14:40:54Z gcosmo $
 //
 /// \file medical/GammaTherapy/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
@@ -49,11 +49,6 @@ public:
 
   void ConstructParticle();
   void ConstructProcess();
-  void SetCuts();
-
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
 
   void AddPhysicsList(const G4String&);
   inline void SetVerbose(G4int val);
@@ -63,9 +58,6 @@ private:
   PhysicsList & operator=(const PhysicsList &right);
   PhysicsList(const PhysicsList&);
 
-  G4double fCutForGamma;
-  G4double fCutForElectron;
-  G4double fCutForPositron;
   G4int    fVerbose;
   G4bool   fEmBuilderIsRegisted;
   G4bool   fHelIsRegisted;

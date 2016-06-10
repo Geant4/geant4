@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -62,16 +63,16 @@ namespace G4INCL {
     // A. Padal, J. Sempau Computer Physics Cummunications 175 (2006) 440-450
     G4double uscale=1.0/2.147483563e9;
 
-    long i1=iseed1/53668;
+    G4int i1=iseed1/53668;
     iseed1=40014*(iseed1-i1*53668)-i1*12211;
 
     if(iseed1 < 0) iseed1 = iseed1 + 2147483563;
 
-    long i2=iseed2/52774;
+    G4int i2=iseed2/52774;
     iseed2=40692*(iseed2-i2*52774)-i2*3791;
     if(iseed2 < 0) iseed2=iseed2+2147483399;
 
-    long iz=iseed1-iseed2;
+    G4int iz=iseed1-iseed2;
     if(iz < 1) iz=iz+2147483562;
 
     return iz*uscale;

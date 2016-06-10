@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.hh 73250 2013-08-22 13:22:23Z gcosmo $
+// $Id: G4PVPlacement.hh 85846 2014-11-05 15:45:28Z gcosmo $
 //
 // 
 // class G4PVPlacement
@@ -122,7 +122,8 @@ class G4PVPlacement : public G4VPhysicalVolume
     virtual ~G4PVPlacement();
       // Default destructor.
 
-    G4int GetCopyNo() const;
+    inline G4int GetCopyNo() const  { return fcopyNo; }
+
     void  SetCopyNo(G4int CopyNo);
       // Gets and sets the copy number of the volume.
 

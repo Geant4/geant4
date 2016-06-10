@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 68753 2013-04-05 10:26:04Z gcosmo $
+// $Id: DetectorConstruction.cc 84603 2014-10-17 07:47:11Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -116,7 +116,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   pBox = new G4PVPlacement(0,                             //no rotation
                            G4ThreeVector(),               //at (0,0,0)
-                           lBox,                          //its logical volume                           
+                           lBox,                          //its logical volume
                            aMaterial->GetName(),          //its name
                            lWorld,                        //its mother  volume
                            false,                         //no boolean operation

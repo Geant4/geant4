@@ -1,4 +1,4 @@
-$Id: History 73202 2013-08-22 08:19:09Z gcosmo $
+$Id: History 83394 2014-08-21 14:39:09Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,20 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13-08-14 mma  (fano2-V10-00-01)
+- update README again
+
+12-08-14 mma  (fano2-V10-00-00)
+- restaure drawing in README
+
+02-12-13 I.Hrivnacova
+- Minor fix in README
+
+12-11-13 V.Ivant 
+- PhysListEmStandard_WVI, PhysListEmStandard_SS - improvements for 
+    single scattering configuration (not for 10.0 release) - can
+    be picked up for any new tags
 
 21-08-13 V.Ivant (fano2-V09-06-08)
 - PhysListEmStandard_option3 - use G4UrbanMscModel instead of 

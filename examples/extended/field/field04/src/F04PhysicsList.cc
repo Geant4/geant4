@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04PhysicsList.cc 78002 2013-12-02 08:25:49Z gcosmo $
+// $Id: F04PhysicsList.cc 85915 2014-11-06 09:05:23Z gcosmo $
 //
 /// \file field/field04/src/F04PhysicsList.cc
 /// \brief Implementation of the F04PhysicsList class
@@ -43,7 +43,7 @@
 
 //#include "G4PhysListFactory.hh"
 #include "FTFP_BERT.hh"
-#include "QGSP_BERT_HP.hh"
+#include "QGSP_BERT.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -61,6 +61,9 @@
 #include "G4MuonRadiativeDecayChannelWithSpin.hh"
 
 #include "G4SystemOfUnits.hh"
+#include "G4AutoDelete.hh"
+
+G4ThreadLocal F04StepMax* F04PhysicsList::fStepMaxProcess = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -79,8 +82,8 @@ F04PhysicsList::F04PhysicsList(G4String physName) : G4VModularPhysicsList()
 
 //    G4PhysListFactory factory;
     G4VModularPhysicsList* phys = NULL;
-    if (physName == "QGSP_BERT_HP") {
-       phys = new QGSP_BERT_HP;
+    if (physName == "QGSP_BERT") {
+       phys = new QGSP_BERT;
     } else {
        phys = new FTFP_BERT;
     }
@@ -105,7 +108,6 @@ F04PhysicsList::F04PhysicsList(G4String physName) : G4VModularPhysicsList()
     RegisterPhysics(new F04ExtraPhysics());
     RegisterPhysics(new G4OpticalPhysics());
 
-    fStepMaxProcess = new F04StepMax();
     fMaxChargedStep = DBL_MAX;
 }
 
@@ -115,7 +117,7 @@ F04PhysicsList::~F04PhysicsList()
 {
     delete fMessenger;
 
-    delete fStepMaxProcess;
+    //delete fStepMaxProcess;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -147,6 +149,9 @@ void F04PhysicsList::ConstructProcess()
 {
     G4VModularPhysicsList::ConstructProcess();
 
+    fStepMaxProcess = new F04StepMax();
+    G4AutoDelete::Register(fStepMaxProcess);
+    
     G4DecayWithSpin* decayWithSpin = new G4DecayWithSpin();
 
     G4ProcessTable* processTable = G4ProcessTable::GetProcessTable();

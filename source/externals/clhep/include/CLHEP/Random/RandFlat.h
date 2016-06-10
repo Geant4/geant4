@@ -31,6 +31,7 @@
 
 #include "CLHEP/Random/Random.h"
 #include "CLHEP/Utility/memory.h"
+#include "CLHEP/Utility/thread_local.h"
 
 namespace CLHEP {
 
@@ -70,7 +71,7 @@ public:
 
   static  inline long shootInt( long n );
 
-  static  inline long shootInt( long m, long n );
+  static  inline long shootInt( long a1, long n );
 
   static  inline int shootBit();
 
@@ -90,7 +91,7 @@ public:
                                   double a, double b );
   static  inline long shootInt( HepRandomEngine* anEngine, long n );
   
-  static  inline long shootInt( HepRandomEngine* anEngine, long m, long n );
+  static  inline long shootInt( HepRandomEngine* anEngine, long a1, long n );
   
   static  inline int shootBit( HepRandomEngine* );
 
@@ -112,7 +113,7 @@ public:
 
   inline long fireInt( long n );
 
-  inline long fireInt( long m, long n );
+  inline long fireInt( long a1, long n );
 
   inline int fireBit();
 
@@ -193,8 +194,8 @@ private:
 
   unsigned long randomInt;
   unsigned long firstUnusedBit;
-  static unsigned long staticRandomInt;
-  static unsigned long staticFirstUnusedBit;
+  static CLHEP_THREAD_LOCAL unsigned long staticRandomInt;
+  static CLHEP_THREAD_LOCAL unsigned long staticFirstUnusedBit;
   
   shared_ptr<HepRandomEngine> localEngine;
   double defaultWidth;

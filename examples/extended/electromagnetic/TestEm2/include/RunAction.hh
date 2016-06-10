@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm2/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 76259 2013-11-08 11:37:28Z gcosmo $
+// $Id: RunAction.hh 78550 2014-01-07 09:43:41Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,15 +35,9 @@
 #define RunAction_h 1
 
 #include "G4UserRunAction.hh"
-
-#include "G4ParticleDefinition.hh"
 #include "G4ThreeVector.hh"
-#include "globals.hh"
 
 #include "g4root.hh"
-
-#include <vector>
-typedef  std::vector<G4double> MyVector;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -68,17 +62,15 @@ public:
   void SetVerbose(G4int val);
      
   // Histogram name 
-  inline void SetHistoName(G4String& val) {fHistoName[0] = val;};
+  void SetHistoName(G4String& val);
     
   // Acceptance parameters
   void  SetEdepAndRMS(G4ThreeVector);
      
 private:
-
   void BookHisto();
-  void SaveHisto();
-  void Reset();
-
+  
+private:
   DetectorConstruction*   fDet;
   PrimaryGeneratorAction* fKin;
   RunActionMessenger*     fRunMessenger;

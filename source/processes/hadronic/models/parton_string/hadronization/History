@@ -1,4 +1,4 @@
-$Id: History 76744 2013-11-14 15:50:20Z gcosmo $
+$Id: History 87361 2014-12-01 16:10:28Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,86 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+28-Nov-2014 V. Uzhinsky   (had-hadronization-V10-00-13)
+ - G4LundStringFragmentation - charged baryon number conservation is fixed
+   for K-nucleus interactions 
+
+6-Nov-2014 V. Uzhinsky    (had-hadronization-V10-00-12)
+ - Warning message is erased.
+
+5-Nov-2014 V. Uzhinsky    (had-hadronization-V10-00-11)
+ - Redoing tag had-hadronization-V10-00-10 because it was done in src directory
+   instead of top directory - hadronization.
+
+3-Nov-2014 V. Uzhinsky    (had-hadronization-V10-00-10)
+- G4ExcitedStringDecay.cc Restoration of the initial string system is addded 
+  for a correct repeatition of calculations in the case when hadronization is fault.
+
+- G4LundStringFragmentation.cc Fragmentation functions for qq -> B are set as 
+  f(z)~ Const for all baryons.
+
+20-Oct-2014 A.Ribon        (had-hadronization-V10-00-09) 
+- G4VLongitudinalStringDecay.cc : mixing between the vector mesons
+  rho0 and omega have been changed from 50% (rho0) - 50% (omega) to
+  100% (rho0) - 0% (omega), in order to reduce the pi0 production. 
+  Expected little effects in thin-target, and significant effects
+  in hadronic showers in calorimeters.
+
+15-Oct-2014 V.Uzhinsky     (had-hadronization-V10-00-08)
+- Essential improvement of QGS hadronization.
+  Fragmentation functions of quarks and di-quarks are closed to Kaidalov's
+  and Shabelskii's ones. G4QGSMFragmentation::GetLightConeZ was almost
+  re-written. Ionk algorithm is inserted for sampling light-cone momentum
+  fraction, z. Parameters of the fragmentation were tuned. They will be
+  improved after a revision of the QGSM string creation algorithm.
+- The algorith of G4QGSMFragmentation::SplitEandP was improved. It is 
+  faster now.
+
+29-Sep-2014, V.Uzhinsky    (had-hadronization-V10-00-07)
+- Essential improvement of hadronization.
+- Parameters and string fragmentation functions of 
+  G4LundStringFragmentation.cc were tuned, assuming that the weight of
+  uu-diquarks in protons is 1/6.
+- Threatment of string decay direction was improved in G4FragmentingString.cc
+  and G4LundStringFragmentation.cc
+- EnergyAndMomentumCorrector was improved in G4ExcitedStringDecay.cc
+- The method DiQuarkSplitUp in G4VLongitudinalStringDecay.cc is turned to
+  virtual, and the corresponding methods were introduced in
+  G4LundStringFragmentation.cc and G4QGSMFragmentation.cc
+- Debugging possibilities are improved.
+
+04-Jul-2014, A.Ribon       (had-hadronization-V10-00-06)
+- G4LundStringFragmentation.cc : brought back the Sample4Momentum method
+  as it was before to avoid crashes.
+
+02-Jul-2014, A.Ribon       (had-hadronization-V10-00-05)
+- G4ExcitedStringDecay.cc and G4LundStringFragmentation.cc : minor clean-up
+  of the previous, internal two tags, and propose for testing.
+
+30-May-2014, V.Uzhinsky    (had-hadronization-V10-00-04)
+- Bug is fixed in G4LundStringFragmentation.cc for anti-diquark-diquark strings.
+- Anisotropic decay is only left in G4LundStringFragmentation::Sample4Momentum for
+  a sampling of momenta of 2 last produced hadrons for all strings. Before this,
+  quark-diquark strings were decayed isotropically. It is improve a little bit 
+  proton spectra.
+
+25-May-2014, V. Uzhinsky   (had-hadronization-V10-00-03)
+- Parameters of G4LundStringFragmentation.cc were re-tuned.
+  Fragmentation function F(qq->B+anti-quark) was set to Z^2.
+
+22-May-2014, A.Ribon       (had-hadronization-V10-00-02)
+- Applied Coverity's suggestion to check that the vector index NumberOf_FS
+  in G4LundStringFragmentation.cc does not exceed the allowed range.
+
+12-May-2014, A.Ribon       (had-hadronization-V10-00-01)
+- Applied Vladimir Uzhinsky's bug-fix on the positions of the increment
+  of the variables "StateQ++" and "StateAQ" in G4LundStringFragmentation.cc.
+
+24-Apr-2014, A.Ribon       (had-hadronization-V10-00-00)
+- Applied Novak's bug fix in G4LundStringFragmentation.cc : replacing
+  ">=" with ">" in three if statements, which caused crashes in the
+  case of anti_sigma+ capture at rest on hydrogen.
 
 14-Nov-2013, A.Ribon       (had-hadronization-V09-06-02)
 - Fixed two mistakes in the index manipulation of the BaryonWeight

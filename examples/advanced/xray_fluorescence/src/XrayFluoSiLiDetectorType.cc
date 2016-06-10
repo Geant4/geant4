@@ -311,15 +311,23 @@ G4double XrayFluoSiLiDetectorType::GetSupData(G4double, G4double random, G4int p
 void XrayFluoSiLiDetectorType::LoadResponseData(G4String fileName)
 {
   std::ostringstream ost;
-    
   ost << fileName<<".dat";
-  
   G4String name = ost.str();
   
   char* path = getenv("XRAYDATA");
+  G4String dirFile;
+  if (path) {
+    G4String pathString(path);
+    pathString += "\0";
+    dirFile = pathString + "/" + name;
+  }
+  else{ 
+    path = getenv("PWD");
+    G4String pathString(path);
+    pathString += "\0";
+    dirFile = pathString + "/" + name;
+  }
   
-  G4String pathString(path);
-  G4String dirFile = pathString + "/" + name;
   std::ifstream file(dirFile);
   std::filebuf* lsdp = file.rdbuf();
   

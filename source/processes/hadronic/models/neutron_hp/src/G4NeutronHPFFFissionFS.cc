@@ -31,6 +31,34 @@
 #include "G4NeutronHPManager.hh"
 #include "G4SystemOfUnits.hh"
 
+G4NeutronHPFFFissionFS::~G4NeutronHPFFFissionFS()
+{
+    std::map<G4int,std::map<G4double,std::map<G4int,G4double >* >* >::iterator it = FissionProductYieldData.begin();
+    while ( it != FissionProductYieldData.end() ) {
+        std::map<G4double,std::map<G4int,G4double>* >* firstLevel = it->second;
+        if ( firstLevel ) {
+            std::map<G4double,std::map<G4int,G4double>*>::iterator it2 = firstLevel->begin();
+            while ( it2 != firstLevel->end() ) {
+                delete it2->second;
+                it2->second = 0;
+                firstLevel->erase(it2);
+                it2=firstLevel->begin();
+            }
+        }
+        delete firstLevel;
+        it->second = 0;
+        FissionProductYieldData.erase(it);
+        it = FissionProductYieldData.begin();
+    }
+    
+    std::map< G4int , std::map< G4double , G4int >* >::iterator ii = mMTInterpolation.begin();
+    while ( ii != mMTInterpolation.end() ) {
+        delete ii->second;
+        mMTInterpolation.erase(ii);
+        ii = mMTInterpolation.begin();
+    }
+}
+
 void G4NeutronHPFFFissionFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & )
 {
    //G4cout << "G4NeutronHPFFFissionFS::Init" << G4endl;

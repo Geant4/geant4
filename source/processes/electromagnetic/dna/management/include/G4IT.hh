@@ -23,18 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IT.hh 71125 2013-06-11 15:39:09Z gcosmo $
+// $Id: G4IT.hh 87061 2014-11-24 11:43:34Z gcosmo $
 //
-// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
+// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+
+// The code is developed in the framework of the ESA AO7146
 //
-// WARNING : This class is released as a prototype.
-// It might strongly evolve or even disapear in the next releases.
+// We would be very happy hearing from you, send us your feedback! :)
 //
-// History:
-// -----------
-// 10 Oct 2011 M.Karamitros created
+// In order for Geant4-DNA to be maintained and still open-source,
+// article citations are crucial. 
+// If you use Geant4-DNA chemistry and you publish papers about your software, 
+// in addition to the general paper on Geant4-DNA:
 //
-// -------------------------------------------------------------------
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// we would be very happy if you could please also cite the following
+// reference papers on chemistry:
+//
+// J. Comput. Phys. 274 (2014) 841-882
+// Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
 #ifndef G4IT_h
 #define G4IT_h 1
@@ -44,6 +52,8 @@
 #include "G4ThreeVector.hh"
 #include "G4VUserTrackInformation.hh"
 #include "G4TrackingInformation.hh"
+#include <CLHEP/Utility/memory.h>
+#include "G4Allocator.hh"
 
 ///
 // To implement your own IT class, you should use
@@ -53,12 +63,13 @@
 ///
 
 class G4IT;
-class G4KDNode;
+//template<typename PointT> class G4KDNode;
+class G4KDNode_Base;
 class G4ITBox;
 class G4Track;
 
-G4IT* GetIT(const G4Track* track) ;
-G4IT* GetIT(const G4Track& track) ;
+G4IT* GetIT(const G4Track* track);
+G4IT* GetIT(const G4Track& track);
 
 #if defined G4EM_ALLOC_EXPORT
 extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4IT> *aITAllocator;
@@ -66,199 +77,220 @@ extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4IT> *aITAllocator;
 extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4IT> *aITAllocator;
 #endif
 
-class G4TrackListNode;
+template<class OBJECT> class G4FastListNode;
+typedef G4FastListNode<G4Track> G4TrackListNode;
 
 /**
-  * G4IT is a interface which allows the inheriting object :
-  * - to be included in ITManager for the search of nearest
-  * neighbour
-  * - to be tracked using G4ITStepManager
-  * The inheriting class must implement the operator < , ==
-  * and != in order to enable the sorting out.
-  * also the concrete header of MyIT ("MyIt.hh") should contain : ITDef(MyIT)
-  * and the source of MyIT.cc : ITImp(MyIT)
-  */
+ * G4IT is a interface which allows the inheriting object :
+ * - to be included in ITManager for the search of nearest
+ * neighbour
+ * - to be tracked using G4ITStepManager
+ * The inheriting class must implement the operator < , ==
+ * and != in order to enable the sorting out.
+ * also the concrete header of MyIT ("MyIt.hh") should contain : ITDef(MyIT)
+ * and the source of MyIT.cc : ITImp(MyIT)
+ */
 
 class G4IT : public virtual G4VUserTrackInformation
 {
-public :
-    G4IT();
-    G4IT(G4Track*);
-    virtual ~G4IT();
+public:
+  G4IT();
+  G4IT(G4Track*);
+  virtual ~G4IT();
 
-    inline void *operator new(size_t);
-    inline void operator delete(void *aIT);
+  inline void *operator new(size_t);
+  inline void operator delete(void *aIT);
 
-    virtual void Print() const {;}
-    virtual const G4String& GetName() const = 0 ;
+  virtual void Print() const
+  {
+    ;
+  }
+  virtual const G4String& GetName() const = 0;
 
-    ///
-    // You should not worried of implementing diff, equal
-    // and GetType.
-    // When using ITDef(MyClass) this will be done.
-    // However, you need to implement in the concrete class
-    // even fake operators for < and ==
-    // They will be used by diff and equal.
-    ///
-    virtual G4bool diff(const G4IT& right) const  = 0 ;
-    virtual G4bool equal(const G4IT& right) const  = 0 ;
-    G4bool operator<(const G4IT& right) const;
-    G4bool operator==(const G4IT& right) const;
-    G4bool operator!=(const G4IT& right) const;
+  ///
+  // You should not worried of implementing diff, equal
+  // and GetType.
+  // When using ITDef(MyClass) this will be done.
+  // However, you need to implement in the concrete class
+  // even fake operators for < and ==
+  // They will be used by diff and equal.
+  ///
+  virtual G4bool diff(const G4IT& right) const = 0;
+  virtual G4bool equal(const G4IT& right) const = 0;
+  G4bool operator<(const G4IT& right) const;
+  G4bool operator==(const G4IT& right) const;
+  G4bool operator!=(const G4IT& right) const;
 
-    void SetTrack(G4Track*);
-    inline G4Track* GetTrack();
-    inline const G4Track* GetTrack() const;
+  void SetTrack(G4Track*);
+  inline G4Track* GetTrack();
+  inline const G4Track* GetTrack() const;
 
-    void RecordCurrentPositionNTime();
+  virtual const G4ThreeVector& GetPosition() const;
+  virtual const double& operator[](int i) const;
 
-    inline void SetPrevious(G4IT*);
-    inline void SetNext(G4IT*);
-    inline G4IT* GetPrevious();
-    inline G4IT* GetNext();
-    inline const G4IT* GetPrevious() const;
-    inline const G4IT* GetNext() const;
-    inline void SetITBox(G4ITBox*);
-    inline const G4ITBox* GetITBox() const;
-    void TakeOutBox();
-    inline void SetNode(G4KDNode*);
+  void RecordCurrentPositionNTime();
 
-    inline void SetParentID(int,int);
-    inline void GetParentID(int&,int&);
+  inline void SetPrevious(G4IT*);
+  inline void SetNext(G4IT*);
+  inline G4IT* GetPrevious();
+  inline G4IT* GetNext();
+  inline const G4IT* GetPrevious() const;
+  inline const G4IT* GetNext() const;
+  inline void SetITBox(G4ITBox*);
+  inline const G4ITBox* GetITBox() const;
+  void TakeOutBox();
+  inline void SetNode(G4KDNode_Base*);
 
-    inline const G4ThreeVector&    GetPreStepPosition() const;
-    inline G4double                GetPreStepLocalTime() const;
-    inline G4double                GetPreStepGlobalTime() const;
-    inline G4KDNode*               GetNode() const;
+  inline void SetParentID(int, int);
+  inline void GetParentID(int&, int&);
 
-    inline G4TrackingInformation* GetTrackingInfo(){return &fTrackingInformation;}
+  inline const G4ThreeVector& GetPreStepPosition() const;
+  inline G4double GetPreStepLocalTime() const;
+  inline G4double GetPreStepGlobalTime() const;
+  inline G4KDNode_Base* GetNode() const;
 
-    inline G4TrackListNode* GetTrackListNode(){return fpTrackNode;}
-    inline void SetTrackListNode(G4TrackListNode* node){fpTrackNode = node;}
+  inline G4TrackingInformation* GetTrackingInfo()
+  {
+    return &fTrackingInformation;
+  }
 
-    virtual const G4ITType GetITType() const = 0 ;
+  inline G4TrackListNode* GetListNode()
+  {
+    return fpTrackNode;
+  }
+  inline void SetListNode(G4TrackListNode* node)
+  {
+    fpTrackNode = node;
+  }
 
-protected :
-    G4IT(const G4IT&);
-    G4IT& operator=(const G4IT&);
-    G4Track* fpTrack ;
+  virtual const G4ITType GetITType() const = 0;
 
-private :
-    G4ITBox *   fpITBox;
-    G4IT*       fpPreviousIT;
-    G4IT*       fpNextIT;
-    G4KDNode*   fpKDNode ;
+  virtual G4ITType GetITSubType() const
+  {
+    return 0;
+  }
 
-    int fParentID_A;
-    int fParentID_B;
+protected:
+  G4IT(const G4IT&);
+  G4IT& operator=(const G4IT&);
+  G4Track* fpTrack;
 
-    G4TrackingInformation fTrackingInformation ;
-    G4TrackListNode* fpTrackNode;
+private:
+  G4ITBox * fpITBox;
+  G4IT* fpPreviousIT;
+  G4IT* fpNextIT;
+  G4KDNode_Base* fpKDNode;
+
+  int fParentID_A;
+  int fParentID_B;
+
+  G4TrackingInformation fTrackingInformation;
+  G4TrackListNode* fpTrackNode;
 };
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ///
 // Inline methods
 ///
 inline void* G4IT::operator new(size_t)
 {
-    if (!aITAllocator) aITAllocator = new G4Allocator<G4IT>;
-    return (void *) aITAllocator->MallocSingle();
+  if (!aITAllocator) aITAllocator = new G4Allocator<G4IT>;
+  return (void *) aITAllocator->MallocSingle();
 }
 
 inline void G4IT::operator delete(void *aIT)
 {
-    aITAllocator->FreeSingle((G4IT *) aIT);
+  aITAllocator->FreeSingle((G4IT *) aIT);
 }
 
 inline const G4ITBox* G4IT::GetITBox() const
 {
-    return fpITBox ;
+  return fpITBox;
 }
 
 inline void G4IT::SetITBox(G4ITBox * aITBox)
 {
-    fpITBox = aITBox;
+  fpITBox = aITBox;
 }
 
 inline void G4IT::SetPrevious(G4IT* aIT)
 {
-    fpPreviousIT = aIT;
+  fpPreviousIT = aIT;
 }
 
 inline void G4IT::SetNext(G4IT* aIT)
 {
-    fpNextIT = aIT;
+  fpNextIT = aIT;
 }
 
 inline G4IT* G4IT::GetPrevious()
 {
-    return fpPreviousIT;
+  return fpPreviousIT;
 }
 
 inline G4IT* G4IT::GetNext()
 {
-    return fpNextIT;
+  return fpNextIT;
 }
 
 inline void G4IT::SetTrack(G4Track* track)
 {
-    fpTrack = track;
+  fpTrack = track;
 }
 
 inline G4Track* G4IT::GetTrack()
 {
-    return fpTrack;
+  return fpTrack;
 }
 
 inline const G4Track* G4IT::GetTrack() const
 {
-    return fpTrack;
+  return fpTrack;
 }
 
 inline void G4IT::SetParentID(int p_a, int p_b)
 {
-    fParentID_A = p_a;
-    fParentID_B = p_b;
+  fParentID_A = p_a;
+  fParentID_B = p_b;
 }
 
-inline void G4IT::GetParentID(int& p_a,int&p_b)
+inline void G4IT::GetParentID(int& p_a, int&p_b)
 {
-    p_a = fParentID_A;
-    p_b = fParentID_B ;
+  p_a = fParentID_A;
+  p_b = fParentID_B;
 }
 
 inline G4double G4IT::GetPreStepGlobalTime() const
 {
-    return fTrackingInformation.GetPreStepGlobalTime();
+  return fTrackingInformation.GetPreStepGlobalTime();
 }
 
 inline G4double G4IT::GetPreStepLocalTime() const
 {
-    return fTrackingInformation.GetPreStepLocalTime();
+  return fTrackingInformation.GetPreStepLocalTime();
 }
 
 inline const G4ThreeVector& G4IT::GetPreStepPosition() const
 {
-    return fTrackingInformation.GetPreStepPosition();
+  return fTrackingInformation.GetPreStepPosition();
 }
 
 inline const G4IT* G4IT::GetPrevious() const
 {
-    return fpPreviousIT ;
+  return fpPreviousIT;
 }
 
 inline const G4IT* G4IT::GetNext() const
 {
-    return fpNextIT ;
+  return fpNextIT;
 }
 
-inline void G4IT::SetNode(G4KDNode* aNode)
+inline void G4IT::SetNode(G4KDNode_Base* aNode)
 {
-    fpKDNode = aNode ;
+  fpKDNode = aNode;
 }
 
-inline G4KDNode* G4IT::GetNode() const
+inline G4KDNode_Base* G4IT::GetNode() const
 {
-    return fpKDNode ;
+  return fpKDNode;
 }
 #endif

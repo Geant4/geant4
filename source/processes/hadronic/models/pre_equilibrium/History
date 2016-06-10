@@ -14,6 +14,22 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+07-July-2014 V.Ivanchenko+J.M.Juesada  hadr-pre-V10-00-02
+---------------------------------------------------------
+- G4PreCompoundIon - cleanup transition probability computation
+- G4PreCompoundAlpha, G4PreCompoundHe3, G4PreCompoundTriton - fixed
+    FactorialFactor method - correct denominator
+- G4PreCompoundAlpha - fixed bug #1646 - integer overflow 
+
+28-March-2014 - Gunter Folger (hadr-pre-V10-00-01)
+-----------------------------------------------------
+- G4PreCompoundModel: add DeExciteModelDescription()
+
+10-March-2014 V.Ivanchenko  hadr-pre-V10-00-00
+-------------------------------------------------
+- G4VPreCompoundFragment use const pointer to G4ParticleDefinition
+    inside GetReactionProduct()
+
 23-October-2013 V.Ivanchenko  hadr-pre-V09-06-05
 -------------------------------------------------
 - G4PreCompoundModel, G4PreCompoundEmission, G4PreCompoundProton -

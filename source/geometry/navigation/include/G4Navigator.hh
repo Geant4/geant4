@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh 70647 2013-06-03 15:12:33Z gcosmo $
+// $Id: G4Navigator.hh 81577 2014-06-03 10:13:36Z gcosmo $
 //
 //
 // class G4Navigator
@@ -190,6 +190,21 @@ class G4Navigator
     // To ensure minimum side effects from the call, keepState
     //  must be true.
   
+   virtual G4bool RecheckDistanceToCurrentBoundary(
+                               const G4ThreeVector &pGlobalPoint,
+                               const G4ThreeVector &pDirection,
+                               const G4double  CurrentProposedStepLength,
+                                     G4double *prDistance,
+                                     G4double *prNewSafety=0) const;
+    // Trial method for checking potential displacement for MS
+    // Check new Globalpoint, to see whether it is in current volume
+    // (mother) and not in potential entering daughter.
+    // If in mother, check distance to boundary along pDirection.
+    // If in entering daughter, check distance back to boundary. 
+    // NOTE:
+    // Can be called only after ComputeStep is called - before ReLocation
+    // Deals only with current volume (and potentially entered)
+
   inline G4VPhysicalVolume* GetWorldVolume() const;
     // Return the current  world (`topmost') volume.
 
@@ -456,6 +471,7 @@ class G4Navigator
      G4VPhysicalVolume* spBlockedPhysicalVolume;
      G4int sBlockedReplicaNo;  
      G4int sLastStepWasZero; 
+     G4bool sWasLimitedByGeometry;
 
      //  Potentially relevant
      //

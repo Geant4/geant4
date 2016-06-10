@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -56,11 +57,10 @@ namespace G4INCL {
 
   void Store::add(Particle *p) {
     inside.push_back(p);
+  }
 
-    if(particleAvatarConnections.find(p)==particleAvatarConnections.end()) {
-      IAvatarList *avatars = new IAvatarList;
-      particleAvatarConnections[p] = avatars;
-    }
+  void Store::add(ParticleList const &pL) {
+    inside.insert(inside.end(), pL.begin(), pL.end());
   }
 
   void Store::addParticleEntryAvatar(IAvatar *a) {
@@ -86,11 +86,6 @@ namespace G4INCL {
 
     ParticleList pList = a->getParticles();
     for(ParticleIter i=pList.begin(), e=pList.end(); i!=e; ++i) {
-      // If one of the particles participating in this avatar hasn't been
-      // registered with the store, it's probably a symptom of a bug
-      // somewhere...
-// assert(particleAvatarConnections.find(*i) != particleAvatarConnections.end());
-
       // Connect each particle to the avatar
       connectAvatarToParticle(a, *i);
     }
@@ -102,19 +97,19 @@ namespace G4INCL {
   }
 
   void Store::connectAvatarToParticle(IAvatar * const a, Particle * const p) {
-    std::map<Particle*, IAvatarList*>::const_iterator iter = particleAvatarConnections.find(p);
-    // If the particle is already connected to other avatars
-    if(iter!=particleAvatarConnections.end()) { // Add to the existing map entry
-      iter->second->push_back(a);
-    } else { // Create a new map entry
-      IAvatarList *avatars = new IAvatarList;
-      avatars->push_back(a);
-      particleAvatarConnections[p] = avatars;
-    }
+    particleAvatarConnections.insert(PAPair(p,a));
   }
 
   void Store::disconnectAvatarFromParticle(IAvatar * const a, Particle * const p) {
-    particleAvatarConnections.find(p)->second->remove(a);
+    PAIterPair iterPair = particleAvatarConnections.equal_range(p);
+    for(PAIter i=iterPair.first, last=iterPair.second; i!=last; ++i) {
+      if(i->second==a) {
+        particleAvatarConnections.erase(i);
+        return;
+      }
+    }
+    INCL_WARN("Loop in Store::disconnectAvatarFromParticle fell through." << std::endl
+              << "This indicates an inconsistent state of the particleAvatarConnections map." << std::endl);
   }
 
   void Store::removeAvatar(IAvatar * const avatar) {
@@ -125,50 +120,24 @@ namespace G4INCL {
       disconnectAvatarFromParticle(avatar, *particleIter);
     }
 
-#ifdef INCL_AVATAR_SEARCH_INCLSort
-    // Remove the avatar iterator from the avatarIterList, if it is present.
-    std::list<IAvatarIter>::iterator it=binaryIterSearch(avatar);
-    if(it != avatarIterList.end())
-      avatarIterList.erase(it);
-#endif
-
     // Remove the avatar itself
     avatarList.remove(avatar);
   }
 
-  void Store::removeAndDeleteAvatar(IAvatar * const avatar) {
-    removeAvatar(avatar);
-    delete avatar;
-  }
-
   void Store::particleHasBeenUpdated(Particle * const particle) {
-    // must make a copy of this list, because calls to removeAvatar will modify
-    // the list itself
-    IAvatarList avatars = *(particleAvatarConnections.find(particle)->second);
-    std::for_each(avatars.begin(), avatars.end(), std::bind1st(std::mem_fun(&G4INCL::Store::removeAndDeleteAvatar), this));
+    PAIterPair iterPair = particleAvatarConnections.equal_range(particle);
+    for(PAIter i=iterPair.first, last=iterPair.second; i!=last; ++i) {
+      avatarsToBeRemoved.insert(i->second);
+    }
   }
 
-#ifdef INCL_AVATAR_SEARCH_INCLSort
-  std::list<IAvatarIter>::iterator Store::binaryIterSearch(IAvatar const * const avatar) {
-    std::list<IAvatarIter>::iterator it;
-    std::iterator_traits<std::list<IAvatarIter>::iterator>::difference_type count, step;
-    std::list<IAvatarIter>::iterator first = avatarIterList.begin();
-    std::list<IAvatarIter>::iterator last = avatarIterList.end();
-    const G4double avatarTime = avatar->getTime();
-    count = distance(first,last);
-    while (count>0)
-    {
-      it = first; step=count/2; advance(it,step);
-      if ((**it)->getTime()>avatarTime)
-      { first=++it; count-=step+1;  }
-      else count=step;
+  void Store::removeScheduledAvatars() {
+    for(ASIter a=avatarsToBeRemoved.begin(), e=avatarsToBeRemoved.end(); a!=e; ++a) {
+      removeAvatar(*a);
+      delete *a;
     }
-    if(first!=last && (**first)->getID()==avatar->getID())
-      return first;
-    else
-      return last;
+    avatarsToBeRemoved.clear();
   }
-#endif
 
   IAvatar* Store::findSmallestTime() {
     if(avatarList.empty()) return NULL;
@@ -182,31 +151,6 @@ namespace G4INCL {
     avatarList.sort(Store::avatarComparisonPredicate);
     IAvatar *avatar = avatarList.front();
 
-#elif defined(INCL_AVATAR_SEARCH_INCLSort)
-
-    /* Partial sort algorithm used by INCL4.6.
-     *
-     * It nevers sorts the whole avatar list, but rather starts from the last
-     * best avatar. It requires the avatarList to be updated by appending new
-     * avatars at the end.
-     */
-
-    IAvatarIter best;
-    if(avatarIterList.empty())
-      best = avatarList.begin();
-    else
-      best = avatarIterList.back();
-    G4double bestTime = (*best)->getTime();
-    IAvatarIter a = best;
-
-    for(++a; a!=avatarList.end(); ++a)
-      if((*a)->getTime() < bestTime) {
-        best = a;
-        bestTime = (*best)->getTime();
-        avatarIterList.push_back(best);
-      }
-    IAvatar *avatar = *best;
-
 #elif defined(INCL_AVATAR_SEARCH_MinElement)
 
     /* Algorithm provided by the C++ stdlib. */
@@ -214,7 +158,7 @@ namespace G4INCL {
           Store::avatarComparisonPredicate));
 
 #else
-#error Unrecognized INCL_AVATAR_SEARCH. Allowed values are: FullSort, INCLSort, MinElement.
+#error Unrecognized INCL_AVATAR_SEARCH. Allowed values are: FullSort, MinElement.
 #endif
 
     removeAvatar(avatar);
@@ -232,9 +176,6 @@ namespace G4INCL {
     particleHasBeenUpdated(p);
     // The particle will be destroyed when destroying the Store
     inside.remove(p);
-    std::map<Particle*, IAvatarList*>::iterator mapItem = particleAvatarConnections.find(p);
-    delete mapItem->second;
-    particleAvatarConnections.erase(mapItem);
   }
 
   void Store::particleHasBeenDestroyed(Particle * const p) {
@@ -254,20 +195,9 @@ namespace G4INCL {
       delete *iter;
     }
 
-    for(std::map<Particle*, IAvatarList*>::iterator iter = particleAvatarConnections.begin(),
-	e = particleAvatarConnections.end(); iter != e; ++iter) {
-      delete iter->second;
-    }
-
     particleAvatarConnections.clear();
     avatarList.clear();
-
-  }
-
-  void Store::initialiseParticleAvatarConnections() {
-    for(ParticleIter ip=inside.begin(), e=inside.end(); ip!=e; ++ip) {
-      particleAvatarConnections[*ip] = new IAvatarList;
-    }
+    avatarsToBeRemoved.clear();
   }
 
   void Store::clear() {
@@ -277,13 +207,9 @@ namespace G4INCL {
     clearOutgoing();
 
     if( incoming.size() != 0 ) {
-      INCL_WARN("Incoming list is not empty when Store::clear() is called" << std::endl);
+      INCL_WARN("Incoming list is not empty when Store::clear() is called" << '\n');
     }
     incoming.clear();
-
-#ifdef INCL_AVATAR_SEARCH_INCLSort
-    avatarIterList.clear();
-#endif
 
   }
 
@@ -310,7 +236,7 @@ namespace G4INCL {
     outgoing.clear();
   }
 
-  void Store::loadParticles(std::string filename) {
+  void Store::loadParticles(std::string const &filename) {
     clear();
     G4int projectileA, projectileZ, A, Z;
     G4double stoppingTime, cutNN;
@@ -340,7 +266,7 @@ namespace G4INCL {
 	readA++;
       }
       else {
-        INCL_FATAL("Unrecognized particle type while loading particles; type=" << type << std::endl);
+        INCL_FATAL("Unrecognized particle type while loading particles; type=" << type << '\n');
         t = UnknownParticle;
       }
 
@@ -373,7 +299,7 @@ namespace G4INCL {
     // anything about them at this point).
     ss << "0 0 " << A << " " << Z << " "
 	      << "100.0" << " "
-	      << "0.0" << std::endl;
+	      << "0.0" << '\n';
 
     for(ParticleIter i=inside.begin(), e=inside.end(); i!=e; ++i) {
       G4int ID = (*i)->getID();
@@ -402,13 +328,13 @@ namespace G4INCL {
       ss << ID << " " << type << " " << isParticipant << " "
 		<< x << " " << y << " " << z << " "
 		<< px << " " << py << " " << pz << " "
-	 << E << " " << V << std::endl;
+	 << E << " " << V << '\n';
     }
 
     return ss.str();
   }
 
-  void Store::writeParticles(std::string filename) {
+  void Store::writeParticles(std::string const &filename) {
     std::ofstream out(filename.c_str());
     out << printParticleConfiguration();
     out.close();
@@ -417,7 +343,7 @@ namespace G4INCL {
   std::string Store::printAvatars() {
     std::stringstream ss;
     for(IAvatarIter i = avatarList.begin(), e = avatarList.end(); i != e; ++i) {
-      ss << (*i)->toString() << std::endl;
+      ss << (*i)->toString() << '\n';
     }
     return ss.str();
   }

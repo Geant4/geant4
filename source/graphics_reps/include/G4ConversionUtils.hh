@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ConversionUtils.hh 66376 2012-12-18 09:42:59Z gcosmo $
+// $Id: G4ConversionUtils.hh 78955 2014-02-05 09:45:46Z gcosmo $
 //
 // Jane Tinslay September 2006
 //
@@ -75,7 +75,7 @@ namespace G4ConversionUtils
   }
   
   template<> inline G4bool Convert(const G4String& myInput, 
-				   G4DimensionedThreeVector& output) 
+                                   G4DimensionedThreeVector& output) 
   {
     G4String input(myInput);
     input = input.strip();
@@ -113,7 +113,7 @@ namespace G4ConversionUtils
   // Return false if conversion failed or if extra characters
   // exist in input.
   template <typename Value> G4bool Convert(const G4String& myInput, Value& value1, 
-					   Value& value2) 
+                                           Value& value2) 
   {
     G4String input(myInput);
     input = input.strip();
@@ -126,7 +126,7 @@ namespace G4ConversionUtils
   
   // Conversion specialisations.
   template<> inline G4bool Convert(const G4String& myInput, G4DimensionedDouble& min, 
-				   G4DimensionedDouble& max) 
+                                   G4DimensionedDouble& max) 
   {
     G4String input(myInput);
     input = input.strip();
@@ -146,7 +146,7 @@ namespace G4ConversionUtils
   }
   
   template<> inline G4bool Convert(const G4String& myInput, G4DimensionedThreeVector& min, 
-				   G4DimensionedThreeVector& max) 
+                                   G4DimensionedThreeVector& max) 
   {   
     G4String input(myInput);
     input = input.strip();
@@ -159,7 +159,7 @@ namespace G4ConversionUtils
     char tester;
     
     if (!(is >> valueMinX >> valueMinY >> valueMinZ >> unitMin >> valueMaxX >> valueMaxY >> valueMaxZ >> unitMax)
-	|| is.get(tester)) return false;
+        || is.get(tester)) return false;
     
       min = G4DimensionedThreeVector(G4ThreeVector(valueMinX, valueMinY, valueMinZ), unitMin);
       max = G4DimensionedThreeVector(G4ThreeVector(valueMaxX, valueMaxY, valueMaxZ), unitMax);
@@ -168,7 +168,7 @@ namespace G4ConversionUtils
   }
   
   template<> inline G4bool Convert(const G4String& myInput, G4ThreeVector& min, 
-				   G4ThreeVector& max) 
+                                   G4ThreeVector& max) 
   {      
     G4String input(myInput);
     input = input.strip();
@@ -180,7 +180,7 @@ namespace G4ConversionUtils
     char tester;
 
     if (!(is >> valueMinX >> valueMinY >> valueMinZ >> valueMaxX >> valueMaxY >> valueMaxZ)
-	|| is.get(tester)) return false;
+        || is.get(tester)) return false;
     
     min = G4ThreeVector(valueMinX, valueMinY, valueMinZ);
     max = G4ThreeVector(valueMaxX, valueMaxY, valueMaxZ);

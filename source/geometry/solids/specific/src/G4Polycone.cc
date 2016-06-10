@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc 76263 2013-11-08 11:41:52Z gcosmo $
+// $Id: G4Polycone.cc 83572 2014-09-01 15:23:27Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -46,7 +46,6 @@
 
 #include "Randomize.hh"
 
-#include "G4Polyhedron.hh"
 #include "G4EnclosingCylinder.hh"
 #include "G4ReduciblePolygon.hh"
 #include "G4VPVParameterisation.hh"
@@ -373,7 +372,7 @@ G4Polycone::G4Polycone( const G4Polycone &source )
 //
 // Assignment operator
 //
-const G4Polycone &G4Polycone::operator=( const G4Polycone &source )
+G4Polycone &G4Polycone::operator=( const G4Polycone &source )
 {
   if (this == &source) return *this;
   
@@ -428,6 +427,9 @@ void G4Polycone::CopyStuff( const G4Polycone &source )
   // Enclosing cylinder
   //
   enclosingCylinder = new G4EnclosingCylinder( *source.enclosingCylinder );
+
+  fRebuildPolyhedron = false;
+  fpPolyhedron = 0;
 }
 
 
@@ -1085,12 +1087,13 @@ G4bool  G4Polycone::SetOriginalParameters(G4ReduciblePolygon *rz)
   }
   else  // Set parameters(r,z) with Rmin==0 as convention
   {
+#ifdef G4SPECSDEBUG
     std::ostringstream message;
     message << "Polycone " << GetName() << G4endl
             << "cannot be converted to Polycone with (Rmin,Rmaz,Z) parameters!";
     G4Exception("G4Polycone::SetOriginalParameters()", "GeomSolids0002",
                 JustWarning, message);
-
+#endif
     original_parameters = new G4PolyconeHistorical;
     original_parameters->Z_values = new G4double[numPlanes];
     original_parameters->Rmin = new G4double[numPlanes];

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4RPGNucleonInelastic.hh 79697 2014-03-12 13:10:09Z gcosmo $
 //
 // Author: D. H. Wright
 // Date:   19 December 2007

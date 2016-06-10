@@ -1,0 +1,117 @@
+$Id$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    extended/commmon/analysis History file
+                    --------------------------------------
+
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+03/11/2014 I. Hrivnacova (excommon-analysis-V10-00-03)
+- Updated for changes in analysis category
+- Implemented P1 manager
+- Added H3 and P2 dummy managers (now removed from Geant4 kernel)
+- Fixed applying units
+- Applied new exception classification
+
+17/06/2014 I. Hrivnacova (excommon-analysis-V10-00-02)
+- Fixed problems reported by Davide Mancusi:
+  - Moving tools/hbook/*.f files in examples/extended/common/analysis/src 
+    to avoid their retrieval from Geant4 source/includes which causes problem 
+    when building examples against Geant4 build directory. 
+  - Added -lkernlib in list of libraries (required with Debian cernlib 
+    distribution 20061220)
+- In CMake build: replaced explicit use of gfortran with 
+  enable_language(Fortran) and using fortran_sources variable in analogous 
+  way as sources
+
+12/06/2014 I. Hrivnacova (excommon-analysis-V10-00-01)
+- Added typedefs and functions for accessing iterators 
+  over H1, H2, Ntuples;
+  Usage:
+   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
+   for (G4H1Iterator it = analysisManager->BeginH1(); 
+                     it != analysisManager->EndH1(); it++ ) {
+      G4H1* h1 = *it;
+      // call any h1 function define in tools
+    }  
+
+11/06/2014 I. Hrivnacova (excommon-analysis-V10-00-00)
+- Updated for changes in analysis category:
+  ntuple columns of vectors (disabled), changes in ntuple_booking
+- Updated to g4tools 1.10.0 (by G. Barrand):
+  See History_tools for complete list of modifications.
+
+07/11/2013 I. Hrivnacova (excommon-analysis-V09-06-04)
+- Implemented functions for user defined/logarithmic binning for H1 
+  and H2; in case of H2 an exception is (not available in HBOOK) 
+
+11/07/2013 I. Hrivnacova (excommon-analysis-V09-06-03)
+- Refactoring ExG4Hnook manager class following changes
+  in analysis (analysis-V09-06-11)
+
+20/06/2013 I. Hrivnacova (excommon-analysis-V09-06-02)
+- Fixed a typo in ExG4HbookAnalysisManager.hh which caused compilation
+  error
+
+03/06/2013 I. Hrivnacova (excommon-analysis-V09-06-01)
+- Implemented ExG4HbookAnalysisManager::Create() required with
+  update for MT migration; returns an exception in case of MT mode
+  (as Hbook is not supported with MT)    
+  
+29/03/2013 I. Hrivnacova (excommon-analysis-V09-06-00)
+- Updated to analysis-V09-06-05
+- Extended the manager class for handling more than one ntuple  
+
+19/11/2012 I. Hrivnacova (excommon-analysis-V09-05-04)
+- Updated to analysis-V09-05-15
+- Adding functions for accessing h1, h2 by name
+- Splitting verbose level 1 in 2 levels and shifting the upper levels
+- Fixed GetH1[2]Width: return the correct value also when histogram is
+  inactive.
+
+28/08/2012 I. Hrivnacova (excommon-analysis-V09-05-03)
+- Updated to analysis-V09-05-10
+- Adding a possibility to fill h1, h2 with values with automatically 
+  applied function (eg. log10, exp)
+- Pass units via a name instead of value
+- Adding getters for many h1, h2 attributes 
+- Adding ScaleH1(), ScaleH2()
+- Adding setters/getters for histogram axis titles 
+  (though they are not propagated to paw)
+
+27/07/2012 I. Hrivnacova (excommon-analysis-V09-05-02)
+- Adding an additional information to analysis objects:
+  units, activation option (defined in G4HnInformation.hh)
+- Make possible to book histograms/ntuple before openning a file
+  (using new h1_booking, h2_booking and tools::ntuple_booking classes)
+- Using new bN::configure functions in SetHN(..)  
+- Messages from Fill functions only in verbose level 3
+- Fixes in memory management 
+  delete file before opening a new one (all)
+  delete ntuple before closing a file 
+- Based on g4tools 1.3.1 (by G. Barrand) - see History_tools  
+
+23/02/2012 I. Hrivnacova (excommon-analysis-V09-05-01)
+- Added functions to customize the HBOOK IDs by user:
+     G4bool SetH1HbookIdOffset(G4int offset);
+     G4bool SetH2HbookIdOffset(G4int offset);
+     G4bool SetNtupleHbookId(G4int ntupleId);
+  and appropriate data members and their getters
+- Added setting locks introduced in the base class
+- Fixed handling of directories for both histograms and ntuple
+
+14/02/2012 I. Hrivnacova (excommon-analysis-V09-05-00)
+- Adding defs include files for Hbook manager
+- Adding GetNtuple() function to specific managers
+- Increased granularity of verbose levels (now 3 levels are available)
+- Making creating directories optional

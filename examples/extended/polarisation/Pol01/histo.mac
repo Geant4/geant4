@@ -1,4 +1,4 @@
-# $Id: histo.mac 68753 2013-04-05 10:26:04Z gcosmo $
+# $Id: histo.mac 86418 2014-11-11 10:39:38Z gcosmo $
 #
 # Macro file for "Pol01.cc"
 # (can be run in batch, without graphic)
@@ -11,7 +11,7 @@
 /testem/det/setSizeZ 1.75 mm
 /testem/phys/addPhysics polarized
 #/testem/phys/addPhysics standard
-/testem/event/printModulo 5000
+/run/printProgress 5000
 #
 /run/initialize
 #
@@ -31,20 +31,19 @@
 ##/tracking/verbose 1
 ##/run/beamOn 1
 #
-/testem/histo/setFileName Pol01.aida
-/testem/histo/setFileType xml
-/testem/histo/setHisto 1  110  0     11 MeV	#gamma energy
-/testem/histo/setHisto 2  100  -1.01   1.01 none	#gamma cos(theta)
-/testem/histo/setHisto 3  100  -180. 180. deg	#gamma phi
-/testem/histo/setHisto 4  100  -1.5  1.5 none   #gamma polarization
-/testem/histo/setHisto 5  110  0     11 MeV	#electron energy
-/testem/histo/setHisto 6  100  -1.   1. none	#electron cos(theta)
-/testem/histo/setHisto 7  100  -180. 180. deg	#electron phi
-/testem/histo/setHisto 8  100  -1.5  1.5 none   #electron polarization
-/testem/histo/setHisto 9  110  0     11 MeV	#positron energy
-/testem/histo/setHisto 10 100  -1.   1. none	#positron cos(theta)
-/testem/histo/setHisto 11 100  -180. 180. deg	#positron phi
-/testem/histo/setHisto 12 100   -1.5  1.5 none  #positron polarization
+/analysis/setFileName polar
+/analysis/h1/set 1  110  0     11 MeV	#gamma energy
+/analysis/h1/set 2  100  -1.   1. 	#gamma cos(theta)
+/analysis/h1/set 3  100  -180. 180. deg	#gamma phi
+/analysis/h1/set 4  100  -1.5  1.5      #gamma polarization
+/analysis/h1/set 5  110  0     11 MeV	#electron energy
+/analysis/h1/set 6  100  -1.   1. 	#electron cos(theta)
+/analysis/h1/set 7  100  -180. 180. deg	#electron phi
+/analysis/h1/set 8  100  -1.5  1.5      #electron polarization
+/analysis/h1/set 9  110  0     11 MeV	#positron energy
+/analysis/h1/set 10 100  -1.   1. none	#positron cos(theta)
+/analysis/h1/set 11 100  -180. 180. deg	#positron phi
+/analysis/h1/set 12 100   -1.5  1.5     #positron polarization
 #
 /run/beamOn 10000
 #

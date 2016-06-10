@@ -1,0 +1,615 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_key
+#define tools_rroot_key
+
+#include "rbuf"
+#include "seek"
+#include "date"
+#include "ifile"
+
+#ifdef TOOLS_MEM
+#include "../mem"
+#endif
+
+#include <map>
+#include <ostream>
+#include <cstring> //memcpy
+
+//#include <zlib.h>
+
+//FIXME : arrange to have csz coming from the "outside" (as zip).
+
+extern "C" {
+  void csz__Init_Inflate(long,unsigned char*,long,unsigned char*);
+  int csz__Inflate();
+  unsigned char* csz__obufptr();
+}
+
+namespace tools {
+namespace rroot {
+
+class key {
+  static uint32 class_version() {return 2;}
+public:
+  static uint32 std_string_record_size(const std::string& x) {
+    // Returns size string will occupy on I/O buffer.
+    if (x.size() > 254)
+      return x.size()+sizeof(unsigned char)+sizeof(int);
+    else
+      return x.size()+sizeof(unsigned char);
+  }
+
+public:
+  key(ifile& a_file)
+  :m_file(a_file)
+  ,m_buf_size(0)
+  ,m_buffer(0)
+  // Record :
+  ,m_nbytes(0)
+  ,m_version(class_version())
+  ,m_object_size(0)
+  ,m_date(0)
+  ,m_key_length(0)
+  ,m_cycle(0)
+  ,m_seek_key(0)
+  ,m_seek_parent_dir(0)
+  //,m_object_class
+  //,m_object_name
+  //,m_object_title
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_key_length = record_size(m_version);
+    //fDate.setDate(0);
+  }
+
+  key(ifile& a_file,seek a_pos,uint32 a_nbytes)
+  :m_file(a_file)
+  ,m_buf_size(0)
+  ,m_buffer(0)
+  // Record :
+  ,m_nbytes(a_nbytes) //key len + compressed object size
+  ,m_version(class_version())
+  ,m_object_size(0)
+  ,m_date(0)
+  ,m_key_length(0)
+  ,m_cycle(0)
+  ,m_seek_key(a_pos)
+  ,m_seek_parent_dir(0)
+  //,m_object_class
+  //,m_object_name
+  //,m_object_title
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    if(a_pos>START_BIG_FILE) m_version += 1000;
+    m_buffer = new char[a_nbytes];
+    if(!m_buffer) {
+      m_file.out() << "tools::rroot::key::key(cpcstor) :"
+                   << " can't alloc " << a_nbytes << "." 
+                   << std::endl;
+    } else {
+      m_buf_size = a_nbytes;
+    }
+  }
+  virtual ~key(){
+    delete [] m_buffer;
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  key(const key& a_from)
+  :m_file(a_from.m_file)
+  ,m_buf_size(0)
+  ,m_buffer(0)
+  ,m_nbytes(a_from.m_nbytes)
+  ,m_version(a_from.m_version)
+  ,m_object_size(a_from.m_object_size)
+  ,m_date(a_from.m_date)
+  ,m_key_length(a_from.m_key_length)
+  ,m_cycle(a_from.m_cycle)
+  ,m_seek_key(a_from.m_seek_key)
+  ,m_seek_parent_dir(a_from.m_seek_parent_dir)
+  ,m_object_class(a_from.m_object_class)
+  ,m_object_name(a_from.m_object_name)
+  ,m_object_title(a_from.m_object_title)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    if(a_from.m_buf_size && a_from.m_buffer) {
+      m_buffer = new char[a_from.m_buf_size];
+      if(!m_buffer) {
+        m_file.out() << "tools::rroot::key::key(cpcstor) :"
+                     << " can't alloc " << a_from.m_buf_size << "." 
+                     << std::endl;
+      } else {
+        m_buf_size = a_from.m_buf_size;
+        ::memcpy(m_buffer,a_from.m_buffer,a_from.m_buf_size);
+      }
+    }
+  }
+public:
+  key& operator=(const key& a_from){
+    if(&a_from==this) return *this;
+    m_nbytes = a_from.m_nbytes;
+    m_version = a_from.m_version;
+    m_object_size = a_from.m_object_size;
+    m_date = a_from.m_date;
+    m_key_length = a_from.m_key_length;
+    m_cycle = a_from.m_cycle;
+    m_seek_key = a_from.m_seek_key;
+    m_seek_parent_dir = a_from.m_seek_parent_dir;
+    m_object_class = a_from.m_object_class;
+    m_object_name = a_from.m_object_name;
+    m_object_title = a_from.m_object_title;
+
+    delete [] m_buffer;
+    m_buffer = 0;
+    m_buf_size = 0;
+
+    if(a_from.m_buf_size && a_from.m_buffer) {
+      m_buffer = new char[a_from.m_buf_size];
+      if(!m_buffer) {
+        m_file.out() << "tools::rroot::key::operator=() :"
+                     << " can't alloc " << a_from.m_buf_size << "." 
+                     << std::endl;
+      } else {
+        m_buf_size = a_from.m_buf_size;
+        ::memcpy(m_buffer,a_from.m_buffer,a_from.m_buf_size);
+      }
+    }
+
+    return *this;
+  }
+
+public:
+  ifile& file() {return m_file;}
+
+  uint32 nbytes() const {return m_nbytes;}
+  seek seek_key() const {return m_seek_key;}
+  uint32 object_size() const {return m_object_size;}
+
+  const std::string& object_name() const {return m_object_name;}
+  std::string object_name() {return m_object_name;}
+
+  const std::string& object_title() const {return m_object_title;}
+  std::string object_title() {return m_object_title;}
+
+  const std::string& object_class() const {return m_object_class;}
+  std::string object_class() {return m_object_class;}
+
+  bool read_file(){
+    // Read the key structure from the file.
+    if(!m_file.set_pos(m_seek_key)) return false;
+    if(!m_file.read_buffer(m_buffer,m_nbytes)) return false;
+    if(m_file.verbose()) {
+      m_file.out() << "tools::rroot::key::read_file :"
+                   << " reading " << m_nbytes << " bytes"
+                   << " at position " << m_seek_key
+                   << "." 
+                   << std::endl;
+    }
+    return true;
+  }
+
+  char* buf() const {return m_buffer;}
+  char* data_buffer() const {return m_buffer + m_key_length;}
+  const char* eob() const {return m_buffer + m_buf_size;}
+  uint32 buf_size() const {return m_buf_size;}
+  uint32 key_length() const {return m_key_length;}
+
+  bool from_buffer(const char* aEOB,char*& a_pos) {
+    rbuf rb(m_file.out(),m_file.byte_swap(),aEOB,a_pos);
+    int _nbytes;
+    if(!rb.read(_nbytes)) return false;
+/*
+    if(m_nbytes) {
+      if(_nbytes!=int(m_nbytes)) {
+        out << "tools::rroot::key::from_buffer :"
+            << " nbytes not consistent."
+            << " read " << _nbytes
+            << ", expected " << m_nbytes
+            << ". Continue with " << _nbytes
+            << std::endl;
+        m_nbytes = _nbytes;
+      }
+    } else {
+*/
+    m_nbytes = _nbytes;
+    //}
+    short version;
+    if(!rb.read(version)) return false;
+    m_version = version;
+   {int v;
+    if(!rb.read(v)) return false;
+    m_object_size = v;}
+    unsigned int _date;
+    if(!rb.read(_date)) return false;
+    //fDate.setDate(_date);
+   {short v;
+    if(!rb.read(v)) return false;
+    m_key_length = v;}
+   {short v;
+    if(!rb.read(v)) return false;
+    m_cycle = v;}
+    if(version>1000) {
+      if(!rb.read(m_seek_key)) return false;
+      if(!rb.read(m_seek_parent_dir)) return false;
+    } else {
+     {seek32 i;
+      if(!rb.read(i)) return false;
+      m_seek_key = i;}    
+     {seek32 i;
+      if(!rb.read(i)) return false;
+      m_seek_parent_dir = i;}
+    }
+    if(!rb.read(m_object_class)) return false;
+    if(!rb.read(m_object_name)) return false;
+    if(!rb.read(m_object_title)) return false;
+    if(m_file.verbose()) {
+      m_file.out() << "tools::rroot::key::from_buffer :"
+                   << " nbytes : " << m_nbytes
+                   << ", object class : " << sout(m_object_class)
+                   << ", object name : " << sout(m_object_name)
+                   << ", object title : " << sout(m_object_title)
+                   << ", object size : " << m_object_size
+                   << "." 
+                   << std::endl;
+    }
+    return true;
+  }
+
+  char* get_object_buffer(uint32& a_size) {
+    if(!m_key_length) {
+      m_file.out() << "tools::rroot::key::get_object_buffer :" 
+                   << " WARNING : m_key_length is zero."
+                   << std::endl;
+      //delete [] m_buffer;
+      //m_buffer = 0;
+      //m_buf_size = 0;
+      //a_size = 0;
+      //return 0;
+    }
+    if(!m_nbytes) {
+      m_file.out() << "tools::rroot::key::get_object_buffer :" 
+                   << " m_nbytes is zero."
+                   << std::endl;
+      delete [] m_buffer;
+      m_buffer = 0;
+      m_buf_size = 0;
+      a_size = 0;
+      return 0;
+    }
+    if(!m_object_size) {
+      m_file.out() << "tools::rroot::key::get_object_buffer :" 
+                   << " WARNING : m_object_size is zero."
+                   << std::endl;
+    }
+
+    if(m_file.verbose()) {
+      m_file.out() << "tools::rroot::key::get_object_buffer :" 
+                   << " m_nbytes : " << m_nbytes
+                   << " m_key_length : " << m_key_length
+                   << " m_object_size : " << m_object_size << "."
+                   << " m_seek_key : " << m_seek_key << "."
+                   << std::endl;
+    }
+
+    if(m_object_size <= (m_nbytes-m_key_length)) {
+      delete [] m_buffer;
+      m_buf_size = m_key_length+m_object_size;
+      if(m_buf_size<m_nbytes) {
+        m_file.out() << "tools::rroot::key::get_object_buffer :" 
+                     << " WARNING : m_buf_size<m_nbytes."
+                     << " m_buf_size " << m_buf_size
+                     << " m_nbytes " << m_nbytes
+                     << ". Raise m_buf_size to " << m_nbytes << "."
+                     << std::endl;
+        m_buf_size = m_nbytes; //for read_file()
+      }
+      m_buffer = new char[m_buf_size];
+      if(!m_buffer) {
+        m_file.out() << "tools::rroot::key::get_object_buffer :" 
+                     << " can't alloc " << m_buf_size
+                     << std::endl;
+        m_buffer = 0;
+        m_buf_size = 0;
+        a_size = 0;
+        return 0;
+      }
+
+      if(!read_file()) {
+        delete [] m_buffer;
+        m_buffer = 0;
+        m_buf_size = 0;
+        a_size = 0;
+        return 0;
+      }
+
+    } else {
+      // have to decompress. Need a second buffer.
+
+      uint32 decsiz = m_key_length+m_object_size;
+      char* decbuf = new char[decsiz];
+      if(!decbuf) {
+        m_file.out() << "tools::rroot::key::get_object_buffer :" 
+                     << " can't alloc " << decsiz
+                     << std::endl;
+        a_size = 0;
+        return 0;
+      }
+
+      delete [] m_buffer;
+      m_buffer = new char[m_nbytes];
+      m_buf_size = m_nbytes;
+      if(!read_file()) {
+        delete [] decbuf;
+        decbuf = 0;
+        delete [] m_buffer;
+        m_buffer = 0;
+        m_buf_size = 0;
+        a_size = 0;
+        return 0;
+      }
+
+      ::memcpy(decbuf,m_buffer,m_key_length);
+
+      // decompress :
+      unsigned char* objbuf = (unsigned char*)(decbuf+m_key_length);
+      unsigned char* bufcur = (unsigned char*)(m_buffer+m_key_length);
+      int nout = 0;
+      uint32 noutot = 0;
+      while(true) {
+        int nin  = 
+         9 + ((int)bufcur[3] | ((int)bufcur[4] << 8) | ((int)bufcur[5] << 16));
+        int nbuf = 
+          (int)bufcur[6] | ((int)bufcur[7] << 8) | ((int)bufcur[8] << 16);
+        if(!unzip(m_file.out(),nin,bufcur, nbuf,objbuf, nout)) break;
+        if(!nout) break;
+        noutot += nout;
+        if(noutot >= m_object_size) break;
+        bufcur += nin;
+        objbuf += nout;
+      }
+
+      delete [] m_buffer;
+      m_buffer = 0;
+      m_buf_size = 0;
+
+      if(!noutot) {
+        m_file.out() << "tools::rroot::key::get_object_buffer :"
+                     << " nothing from decompression."
+                     << std::endl;
+        delete [] decbuf;
+        decbuf = 0;
+        a_size = 0;
+        return 0;
+      }
+      if(noutot!=m_object_size) {
+        m_file.out() << "tools::rroot::key::get_object_buffer :" 
+                     << " decompression mismatch."
+                     << " noutot " << noutot
+                     << " m_object_size " << m_object_size
+                     << std::endl;
+        delete [] decbuf;
+        decbuf = 0;
+        a_size = 0;
+        return 0;
+      }
+
+      m_buffer = decbuf;
+      m_buf_size = decsiz;
+
+    }
+    a_size = m_object_size;
+    return m_buffer+m_key_length;
+  }
+  //NOTE : print is a Python keyword.
+  void dump(std::ostream& a_out) const {
+    a_out << "class : " << sout(m_object_class)
+          << ", name : " << sout(m_object_name)
+          << ", title : " << sout(m_object_title)
+          << ", size : " << m_object_size
+          << "." 
+          << std::endl;
+  }
+
+protected:
+  static const uint32 START_BIG_FILE = 2000000000;
+protected:
+  uint32 record_size(uint32 a_version) const {
+    // Return the size in bytes of the key header structure.
+    uint32 _nbytes = sizeof(m_nbytes);
+    _nbytes += sizeof(short);         //2
+    _nbytes += sizeof(m_object_size);
+    _nbytes += sizeof(date);
+    _nbytes += sizeof(m_key_length);
+    _nbytes += sizeof(m_cycle);       //2+4*4=18
+    if(a_version>1000) {
+      _nbytes += sizeof(seek);
+      _nbytes += sizeof(seek);        //18+2*8=34
+    } else {
+      _nbytes += sizeof(seek32); 
+      _nbytes += sizeof(seek32);      //18+2*4=26
+    }
+    _nbytes += std_string_record_size(m_object_class);
+    _nbytes += std_string_record_size(m_object_name);
+    _nbytes += std_string_record_size(m_object_title);
+    //::printf("debug : record_size %d\n",_nbytes);   
+    return _nbytes;
+  }
+  static std::string sout(const std::string& a_string) {
+    return std::string("\"")+a_string+"\"";
+  }
+
+  bool unzip(std::ostream& a_out,
+                           int a_srcsize,unsigned char* a_src,
+                           int a_tgtsize,unsigned char* a_tgt,
+                           int& a_irep) {
+
+    // Author: E.Chernyaev (IHEP/Protvino)
+    // Input: scrsize - size of input buffer
+    //       src     - input buffer
+    //       tgtsize - size of target buffer
+    //
+    // Output: tgt - target buffer (decompressed)
+    //        irep - size of decompressed data
+    //        0 - if error
+
+    a_irep = 0;
+
+    // C H E C K   H E A D E R
+    const int HDRSIZE = 9;
+
+    if (a_srcsize < HDRSIZE) {
+      a_out << "tools::rroot::key::unzip : too small source" << std::endl;
+      return false;
+    }
+
+    unsigned char DEFLATE = 8;
+
+    if ((a_src[0] != 'C' && a_src[0] != 'Z') ||
+        (a_src[1] != 'S' && a_src[1] != 'L') ||
+        a_src[2] != DEFLATE) {
+      a_out << "tools::rroot::key::unzip : error in header" << std::endl;
+      return false;
+    }
+
+    long _ibufcnt = 
+      (long)a_src[3] | ((long)a_src[4] << 8) | ((long)a_src[5] << 16);
+    long isize = 
+      (long)a_src[6] | ((long)a_src[7] << 8) | ((long)a_src[8] << 16);
+
+    if(a_tgtsize<isize) {
+      a_out << "tools::rroot::key::unzip : too small target." << std::endl;
+      return false;
+    }
+
+    if(_ibufcnt + HDRSIZE != a_srcsize) {
+      a_out << "tools::rroot::key::unzip :"
+            << " discrepancy in source length." << std::endl;
+      return false;
+    }
+
+    // D E C O M P R E S S   D A T A
+
+    if (a_src[0] == 'Z' && a_src[1] == 'L') { //compressed with zlib.
+      tools::unzip_func func;
+      if(!m_file.unziper('Z',func)) {
+        a_out << "tools::rroot::key::unzip : "
+              << " zlib unziper not found." << std::endl;
+        return false;
+      }
+  
+      unsigned int irep;
+      char* src = (char*)(a_src + HDRSIZE);
+      if(!func(a_out,
+               (unsigned int)a_srcsize,src,
+               (unsigned int)a_tgtsize,(char*)a_tgt,irep)) {
+        a_out << "tools::rroot::key::unzip : "
+              << " unzip function failed." << std::endl;
+        a_irep = 0;
+        return false;
+      }
+      a_irep = irep;
+
+    } else if (a_src[0] == 'C' && a_src[1] == 'S') {
+      //compressed with Chernyaev & Smirnov
+      
+      csz__Init_Inflate(_ibufcnt,a_src + HDRSIZE,a_tgtsize,a_tgt);
+
+      if (csz__Inflate()) {
+        a_out << "tools::rroot::key::unzip :"
+              << " error during decompression." << std::endl;
+        return false;
+      }
+
+      unsigned char* obufptr = csz__obufptr();
+
+      // if (obufptr - a_tgt != isize) {
+      // There are some rare cases when a few more bytes are required
+      if (obufptr - a_tgt > a_tgtsize) {
+        a_out << "tools::rroot::key::_unzip :"
+              << " discrepancy " << (int)(obufptr - a_tgt)
+              << " with initial size: " << (int)isize
+              << ", tgtsize= " << a_tgtsize
+              << std::endl;
+        a_irep = obufptr - a_tgt;
+        //return false;
+      }
+      a_irep = isize;
+
+      //a_out << "tools::rroot::key::unzip : CS : ok "
+      //        << a_irep << std::endl;
+
+    } else {
+      a_out << "tools::rroot::key::_unzip : unknown a_src[0,1]."
+            << " [0] = " << a_src[0] << ", [1] = " << a_src[1]
+            << std::endl;
+      a_irep = 0;
+      return false;
+    }
+    return true;
+  }
+
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rroot::key");
+    return s_v;
+  }
+protected:
+  ifile& m_file;
+  uint32 m_buf_size;
+  char* m_buffer;
+  // Record (stored in file) :
+  uint32 m_nbytes;               //Number of bytes for the object on file
+  uint32 m_version;              //Key version identifier
+  uint32 m_object_size;          //Length of uncompressed object in bytes
+  date m_date;                //Date/Time of insertion in file
+  uint16 m_key_length;         //Number of bytes for the key itself
+  uint16 m_cycle;              //Cycle number
+  seek m_seek_key;            //Location of object on file
+  seek m_seek_parent_dir;     //Location of parent directory on file
+  std::string m_object_class; //Object Class name.
+  std::string m_object_name;  //name of the object.
+  std::string m_object_title; //title of the object.
+};
+
+}}
+
+#endif
+
+//doc :
+//////////////////////////////////////////////////////////////////////////
+//                                                                      //
+//  The Key class includes functions to book space on a file,           //
+//   to create I/O buffers, to fill these buffers                       //
+//   to compress/uncompress data buffers.                               //
+//                                                                      //
+//  Before saving (making persistent) an object on a file, a key must   //
+//  be created. The key structure contains all the information to       //
+//  uniquely identify a persistent object on a file.                    //
+//     fNbytes    = number of bytes for the compressed object+key       //
+//     version of the Key class                                         //
+//     fObjlen    = Length of uncompressed object                       //
+//     fDatime    = Date/Time when the object was written               //
+//     fKeylen    = number of bytes for the key structure               //
+//     fCycle     = cycle number of the object                          //
+//     fSeekKey   = Address of the object on file (points to fNbytes)   //
+//                  This is a redundant information used to cross-check //
+//                  the data base integrity.                            //
+//     fSeekPdir  = Pointer to the directory supporting this object     //
+//     fClassName = Object class name                                   //
+//     fName      = name of the object                                  //
+//     fTitle     = title of the object                                 //
+//                                                                      //
+//  The Key class is used by ROOT to:                                   //
+//    - to write an object in the Current Directory                     //
+//    - to write a new ntuple buffer                                    //
+//                                                                      //
+//////////////////////////////////////////////////////////////////////////

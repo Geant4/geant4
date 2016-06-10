@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Paraboloid.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4Paraboloid.hh 83572 2014-09-01 15:23:27Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -60,6 +60,7 @@
 #include <CLHEP/Units/PhysicalConstants.h>
 
 #include "G4VSolid.hh"
+#include "G4Polyhedron.hh"
 
 class G4Paraboloid : public G4VSolid
 {
@@ -136,6 +137,7 @@ class G4Paraboloid : public G4VSolid
 
   protected:  // without description
  
+    mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;
 
   private:

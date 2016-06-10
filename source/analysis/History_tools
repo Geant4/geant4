@@ -1,3 +1,212 @@
+ 1.16.3 :
+ - tools/rroot/ntuple : add also "id casting" in tools::rroot::ntuple::column<T> and column_element<T>.
+ - tools/rcsv_ntuple : Windows : rcsv.cpp crashed. It came from a lack of "id casting" in the
+   tools::rcsv::ntuple::column<T> class. (This induced bad pointers in _read_line()).
+ - wroot/leaf : add iro(a_from) in the copy constructors.
+ - tools/rcsv_ntuple/s_cid() : be compleete (compare to types handled in _read_line()).
+
+ 1.16.2 :
+ - test/cpp/rcsv.cpp : modifs for example code to init and read by using ntuple_binding.
+ - tools/rcsv_ntuple, cids : modifs to init and read by using ntuple_binding.
+ - test/cpp/wcsv.cpp : produce a commented header.
+ - tools/wcsv_ntuple : write a "commented header" with columns descriptor.
+
+ 1.16.1 :
+ - tools/rroot/ntuple/column_string : implement the find_entry() method. It permits to read std::string
+   column by using the ntuple_binding way.
+ - test/cpp/rroot.cpp : example of ntuple_binding(std::string) usage.
+ - tools/histo/h[1,2,3] : set_bin_content() method.
+ - tools/wcsv_ntuple : set the title if creating from a booking.
+
+ 1.16.0 : write/read ntuple with std::string columns. Some important modifs in wroot/streamers to
+   stream properly TH[1,2,3]F histos.
+ - tools/cpp/raxml.cpp, rcsv.cpp, rroot.C, rroot.cpp : examples to read an ntuple std::column.
+ - tools/cpp/waxml.cpp, wcsv.cpp, wroot.cpp : examples to write an ntuple std::string column.
+ - rcsv_ntuple : is_hippo() method : to detect if a file is at the hippodraw format.
+ - rroot/clss, rall, streamers : modifs to read TH3D histos.
+ - wroot/ntuple : class column_string + modifs to write an ntuple string column.
+ - wroot/branch : create_leaf_string() : to create an std::string column.
+ - wroot/leaf : leaf_string : to write an ntuple string column.
+ - wroot/streamers : modifs to stream properly TH[1,2,3]F histos.
+ - wcsv_ntuple : modifs to write std::string columns.
+ - waxml/ntuple : modifs to write std::string columns.
+
+ 1.15.2 :
+ - test/cpp/[w,r]csv_histo.cpp : -verbose : change output to easily compare writing and reading mean,rms axes.
+ - tools/rcsv_histo : correct m_bin_Sxw,Sx2w reading for [2,3] dimensions.
+
+ 1.15.1 :
+ - test/cpp/wcsv_histo.cpp : write an histo with variable edge bins.
+ - test/cpp/wcsv_histo.cpp : h1d : add a title with two words (to test the csv reading).
+ - test/cpp/wcsv_histo.cpp : h1d : add an annotation with an empty value (to test the csv reading).
+ - tools/rcsv_histo : if verbose, dump annotations.
+ - tools/rcsv_histo : #title : read the "rest of line".
+ - tools/rcsv_histo : add reading of axis with variable edge bins.
+
+ 1.15.0 :
+ - tools/rcsv_histo, test/cpp/rcsv_histo.cpp : to read histo at csv format.
+ - tools/wcsv_histo : for non-profile, correct the labels to remove Svw,Sv2w.
+ - tools/rcsv_ntuple : cosmetic.
+ - tools/xml/loader : if(!XML_Parse()) -> if(XML_Parse()==XML_STATUS_ERROR) : seen by Coverity.
+ - tools/xml/element : correction for Coverity.
+ - tools/aida_ntuple, columns, raxml : correction for Coverity.
+ - tools/histo/histo_data, dps, profile_data : correction for Coverity.
+ - src/csz_inflate.c : correction for Coverity.
+
+ 1.14.1 :
+ - rroot/streamers : static_cast<unsigned int> fEntries to data.m_all_entries.
+
+ 1.14.0 :
+ Changes to extend the "fast getters" logic to 1D histo and profile in order
+ that .root streaming of them be strictly compatible wiht the TProfile ones :
+ - test/cpp/wroot.cpp : have a 2D profile example. Add more verbose comments.
+ - test/cpp/rroot.cpp : have hard coded reading example (in particular of profiles) in case
+   the file is the pawdemo.root one or the out.root one produced by wroot.
+ - rroot/streamers : revisit to use at the end the m_in_range_xxx fields in mean,rms().
+ - rroot/cids, clss, streamers, rall : read TProfile2D.
+ - rroot/named : in ObjArray, List : add a lacking "delete obj" in case the read object is of bad type.
+ - wroot/infos, streamers : TProfile : pass from version 3 to version 4. TProfile2D from version 4 to 5.
+ - raxml : update_fast_getters() done on the hdata.
+ - store/osc_streamers : update_fast_getters() done on the hdata.
+ - histo/slice : update_fast_getters() done on the hdata.
+ - histo/h1, h2, h3, p1,p2 : fille() : update the m_in_range_xxx fields.
+ - histo/b1,b2,b3 : rm update_fast_getters() methods. mean,rms() use now the m_in_range fields.
+ - histo/base_histo : all_entries() uses now the m_all_entries fast getter.
+ - histo/histo_data : reset_fast_getters(), update_fast_getters().
+ - histo/histo_data : new fields : m_all_entries, m_in_range_entries, m_in_range_Sw, m_in_range_Sw2.
+ Changes in rroot to read streamers infos :
+ - rroot/file : read_streamer_infos().
+ - rroot/info : new file.
+ Others :
+ - cmathT : have "const type&" in args.
+ - forit : tools_typename_vforcit() cpp macro, but it is not yet used in this release.
+
+ 1.13.0 :
+ - test/cpp/wcsv_histo.cpp : example of changing the comment and separator characters.
+ - test/cpp/raxml.cpp : example of ntuple reading by using a ntuple_binding.
+ - tools/aida_ntuple : set_binding() logic.
+ - tools/wcsv_histo : be able to change the comment character for the header.
+ - tools/wcsv_histo : cpp tools_wcsv_ntuple -> tools_wcsv_histo.
+ - tools/rroot/rall : key_to_h1d() : to ease histogram reading knowing the name of the key.
+ - tools/rroot/rall : find_TDirectory() : to ease searching of a directory in a directory.
+ - tools/rroot/directory : file() method.
+ - tools/rroot/member_reader : cpp tools_rroot_member_writer -> tools_rroot_member_reader.
+ - tools/wroot/date : WIN32 : rm include windows.h and then stay with the not thread safe localtime() on Windows.
+ - mgr/build : do not bring wroot/date from inlib.
+
+ 1.12.0 :
+ - tools/histo/h[1,2,3],p[1,2] : s_cls() method to write class name in a csv histo file.
+ - tools/wcsv_histo, test/cpp/wcsv_histo.cpp.
+ - tools/wroot/streamers : do not use get_histo_data() since now h[1,2,3] inherits histo_data.
+ - src/setpawc.f, setntuc.f in test/cpp.
+
+ 1.11.0 :
+ - modifs to build rcsv.cpp example :
+     mgr/2g4tools.upgrade
+     mgr/build
+ - new file to build rcsv.cpp example :
+     test/cpp/out.aida
+     test/cpp/rcsv.cpp
+     test/cpp/tools_test_rcsv
+     tools/chars
+     tools/rcsv_ntuple
+     tools/s2time
+
+ - modifs to build raxml.cpp example :
+     test/cpp/build
+ - new files to read aida xml file (it needs expat) :
+     test/cpp/raxml.cpp
+     tools/aida_ntuple
+     tools/array
+     tools/columns
+     tools/file
+     tools/file_format
+     tools/file_reader
+     tools/handle
+     tools/histo/dps
+     tools/raxml
+     tools/value
+     tools/value.icc
+     tools/xml/element,loader,tree
+
+ - g4tools/hbook/CHBOOK : remove not used code.
+ - g4tools/src/hdummy.c : moved in test/cpp.
+ - g4tools/src/hids.f,hisid.f, hntvar2.f : remove.
+ - test/cpp/rroot.cpp, rxrayfluo.cpp, wroot.cpp, wroot_ntu_1000_cols.cpp, chbook.cpp, whbook.cpp : include cstdlib.
+ - test/cpp/use_f77, use_cernlib, build_f77 : Mavericks with gfortron-48 from MacPorts : rm -m32, use f77libs to
+   say where libgfortran.dylib is.
+ - tools/wroot/infos : streamer infos for TH3[F,D], TProfile2D.
+ - tools/wroot/named : Att3D_stream().
+ - tools/wroot/streamers, to : TH3[F,D], TProfile2D streamers;
+ - tools/wroot/date : use localtime_r() (instead of localtime()) which is thread safe.
+ - tools/rroot/streamers, tools/store/osc_streamers : have new axis offset template argument.
+ - toools/histo/[h,p]1,2,3d : remove __CINT__ code.
+ - tools/histo/p1, p2 : configure methods.
+ - tools/hsito/b1,b2,b3,h1,h2,h3,p1,p2 : _find_offset() logic to avoid duplicating code to find the offset from coords.
+ - tools/histo/* : handle a new template argument for the bin offset type. Needed for sparce histos that
+   will have a uint64 offset type. New base_histo inherits histo_data.
+ - tools/histo/base_histo : inherits histo_data.
+ - tools/histo/axes : to commonalize some code with sparse histos.
+ - tools/histo/axis, tools/waxml/histos, test/cpp/histo.cpp : have enum
+     axis_UNDERFLOW_BIN,axis_OVERFLOW_BIN under namspace tools::histo to avoid
+   to use template for that.
+ - tools/histo/h1df, h2df, h3df : histos with float bins.
+ - src/csz_inflate.cc : comment out register keyword.
+ - src/csz_inflate.cc : in csz__Inflate_dynamic() have some "free structure at return time" detected by Coverity.
+ - rroot/basket : in stream() comment out an if dead code block to quiet Coverity.
+ - wroot/to,bufobj,directory : cosmetic edition.
+
+ 1.10.0 :
+ - tests/cpp/*.cpp : use new random API.
+ - tools/cmathT,randT,rtausme[ui,f,d],randd,randf,random,rroot/streamers : to quit Coverity, revisit random
+   generators to avoid usage of stdlib.h/rand() indirectly used in rroot/streamers.
+ - tools/rroot/base_leaf,basket,branch,leaf,streamers : modifications to quiet Coverity.
+ - tools/mathd : rename math to mathd to follow naming convention [f,d] used in other places.
+ - test/cpp/build : inflate.c -> csz_inflate.cc.
+ - src/inflate.c -> src/csz_inflate.cc.
+
+ 1.9.4 :
+ - test/cpp/rxrayfluo.cpp : add a ntuple_binding usage.
+ - tools/ntuple_binding, rroot/ntuple : logic to attach user variables to ntuple columns when reading.
+   Available today only for the root format.
+ - tools/rroot/named, tree : use of the tools_vforcit cpp macro to simplify edition of loops with iterators.
+ - histo/c1d : correct a mistyping in "#define tools_histo_c1d" that was _cld !
+
+ 1.9.3 :
+ - test/cpp/waxml.cpp : have an histo title with <,>,&,",' to test XML escaping when writing
+   at the AIDA XML format.
+ - tools/waxml/begend, histos, ntuple : use to_xml() to escape the XML special characters in strings.
+ - tools/waxml/begend : change output dtd version from 3.0 to 3.2.1.
+ - tools/ntuple_booking : to quiet coverity, in operator=() add :
+     if(&a_from==this) return *this;
+
+ 1.9.1 :
+ - test/cpp/rxrayfluo.cpp : to test the reading of a xrayfluo.root file.
+
+ 1.9.0 :
+ - tools/rroot, test/cpp/rroot.cpp : code to read a file at CERN-ROOT format.
+
+ 1.8.0 :
+ - tools/[wroot,waxml]/ntuple : handle the creation of std::vector columns through
+   the new ntuple_booking class.
+ - tools/[wroot,waxml,hbook]/ntuple, wcsv_ntuple : handle the new ntuple_booking.
+ - tools/ntuple_boooking : revisit the logic. Have a column_booking class.
+   Handle a opaque pointer for the std::vector column case. Have fields protected
+   and have getter, setter methods.
+ - tools/wroot/ntuple : rm the unused m_def field in the std_vector_column class.
+
+ 1.7.2 :
+ - test/cpp/wroot.cpp, rroot.C : have an example of std_vector columns.
+ - tools/wroot/branch_element, leaf_element, ntuple::std_vector_column : handle column
+   of std::vectors. 
+ - mgr/build_app : have :
+     cppflags="${cppflags} -I../g4tools/include"
+
+ 1.7.1 :
+ - tools/wroot/buffer : expand2() method to have same logic as CERN-ROOT/TBuffer.
+   It boosts the writing of ntuple with large number of columns.
+ - tools/forit : use tools_[v,s,l,m]for[c]it cpp macros to shorten iterator/loop code.
+
  1.7.0 :
  - test/cpp/list_free_segs.C : to list free segments in a out.root file.
  - wroot/file : set_END() : update first back free segment m_first field
@@ -30,7 +239,7 @@
  - tools/gzip_buffer, test/cpp/wroot.cpp : show how to use compression
    with zlib.
  - histo/base_histo : in a for, change an unsigned to "unsigned int".
- - histo/c[1,2,3]d : inlib::mn,mx<> changed to mn,mx<>.
+ - histo/c[1,2,3]d : tools::mn,mx<> changed to mn,mx<>.
  - wroot/wbuf : have a public : set_byte_swap() method (then
    the wbuf byte swapping can be changed out of the constructor).
  - safe_cast, hbook/wntuple  : rename the global cast() functions

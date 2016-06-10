@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: errprop.cc 68019 2013-03-13 13:32:43Z gcosmo $
+// $Id: errprop.cc 84599 2014-10-17 07:42:42Z gcosmo $
 //
 /// \file errorpropagation/errprop.cc
 /// \brief Main program of the errorpropagation example
@@ -76,10 +76,15 @@ int main()
     } else if ( G4String(prop) == G4String("STEP_BY_STEP") ) {
       iProp = 1;
     } else {
-      G4Exception("exG4eReco","Fatal error in Argument",FatalErrorInArgument,G4String("Variable G4ERROR_PROP = " + G4String(prop) + "   It must be: UNTIL_TARGET or STEP_BY_STEP").c_str());
+      G4Exception("exG4eReco","Fatal error in Argument",
+        FatalErrorInArgument,
+        G4String("Variable G4ERROR_PROP = " + G4String(prop) + 
+                 "   It must be: UNTIL_TARGET or STEP_BY_STEP").c_str());
     }
   } else {
-    G4Exception("exG4eReco","Fatal error in Argument",JustWarning,"Variable G4ERROR_PROP not defined, taking it = UNTIL_TARGET");
+    G4Exception("exG4eReco","Fatal error in Argument",
+      JustWarning,
+      "Variable G4ERROR_PROP not defined, taking it = UNTIL_TARGET");
   } 
 
   size_t nEvents = 3;
@@ -98,8 +103,10 @@ void Initialize()
   G4VSteppingVerbose::SetInstance(new G4SteppingVerbose);
 
   // Initialize the GEANT4e manager 
-  G4ErrorPropagatorManager* g4emgr = G4ErrorPropagatorManager::GetErrorPropagatorManager();
-  G4ErrorPropagatorData* g4edata = G4ErrorPropagatorData::GetErrorPropagatorData();
+  G4ErrorPropagatorManager* g4emgr 
+    = G4ErrorPropagatorManager::GetErrorPropagatorManager();
+  G4ErrorPropagatorData* g4edata 
+    = G4ErrorPropagatorData::GetErrorPropagatorData();
 
   g4emgr->SetUserInitialization(new ExErrorDetectorConstruction); 
 
@@ -128,10 +135,14 @@ void Initialize()
     }else if( G4String(target) == G4String("TRKLEN") ) {
       iTarget = 4;
     }else {
-      G4Exception("exG4eReco","Fatal error in Argument",FatalErrorInArgument,G4String("Variable G4ERROR_TARGET = " + G4String(target) + "   It must be:  PLANE_SURFACE, CYL_SURFACE, VOLUME, TRKLEN").c_str());
+      G4Exception("exG4eReco","Fatal error in Argument",
+        FatalErrorInArgument,
+        G4String("Variable G4ERROR_TARGET = " + G4String(target) + 
+                 "   It must be:  PLANE_SURFACE, CYL_SURFACE, VOLUME, TRKLEN").c_str());
     }
   } else {
-    G4Exception("exG4eReco","Fatal error in Argument",JustWarning,"Variable G4ERROR_TARGET not defined, taking it = PLANE_SURFACE");
+    G4Exception("exG4eReco","Fatal error in Argument",
+      JustWarning,"Variable G4ERROR_TARGET not defined, taking it = PLANE_SURFACE");
   } 
 
   theTarget = BuildTarget( iTarget );
@@ -145,10 +156,14 @@ void Initialize()
     } else if( G4String(mode) == G4String("BACKWARDS") ) {
       theG4ErrorMode = G4ErrorMode_PropBackwards;
     } else {
-      G4Exception("exG4eReco","Fatal error in Argument",FatalErrorInArgument,G4String("Variable G4ERROR_MODE = " + G4String(mode) + "   It must be:  FORWARDS or BACKWARDS").c_str());
+      G4Exception("exG4eReco","Fatal error in Argument",
+        FatalErrorInArgument,
+        G4String("Variable G4ERROR_MODE = " + G4String(mode) + 
+                 "   It must be:  FORWARDS or BACKWARDS").c_str());
     }
   } else {
-    G4Exception("exG4eReco","Fatal error in Argument",JustWarning,"Variable G4ERROR_MODE not defined, taking it = BACKWARDS");
+    G4Exception("exG4eReco","Fatal error in Argument",
+      JustWarning,"Variable G4ERROR_MODE not defined, taking it = BACKWARDS");
   } 
 
 }
@@ -161,15 +176,18 @@ void ProcessEvent( G4int iProp, size_t )
   G4ThreeVector xv3( 0, 0, 0 );
   G4ThreeVector pv3( 20.0*GeV, 0.0, 0.0 );
   G4ErrorTrajErr error( 5, 0 );
-  G4ErrorFreeTrajState* g4ErrorTrajState = new G4ErrorFreeTrajState( "mu-", xv3, pv3, error );
+  G4ErrorFreeTrajState* g4ErrorTrajState 
+    = new G4ErrorFreeTrajState( "mu-", xv3, pv3, error );
 
-  G4ErrorPropagatorManager* g4emgr = G4ErrorPropagatorManager::GetErrorPropagatorManager();
+  G4ErrorPropagatorManager* g4emgr 
+    = G4ErrorPropagatorManager::GetErrorPropagatorManager();
 
   //int ierr = 0;
 
   G4Point3D surfPos(224.*cm,0.,0.);
   G4Normal3D surfNorm(1.,0.,0.);
-  //-  G4ErrorTarget* theG4ErrorTarget = new G4ErrorPlaneSurfaceTarget(surfNorm, surfPos );
+  //-  G4ErrorTarget* theG4ErrorTarget 
+  //     = new G4ErrorPlaneSurfaceTarget(surfNorm, surfPos );
 
   if( iProp == 0){
     // Propagate until G4ErrorTarget is found all in one go
@@ -181,7 +199,8 @@ void ProcessEvent( G4int iProp, size_t )
   
     g4emgr->InitTrackPropagation();
 
-    //    G4Track* aTrack = G4EventManager::GetEventManager()->GetTrackingManager()->GetTrack();
+    //    G4Track* aTrack 
+    //      = G4EventManager::GetEventManager()->GetTrackingManager()->GetTrack();
     bool moreEvt = TRUE;
     while( moreEvt ){
       
@@ -190,7 +209,8 @@ void ProcessEvent( G4int iProp, size_t )
       
       //---- Check if target is reached
       if( g4emgr->GetPropagator()->CheckIfLastStep( g4ErrorTrajState->GetG4Track() )) {
-        g4emgr->GetPropagator()->InvokePostUserTrackingAction( g4ErrorTrajState->GetG4Track() );  
+        g4emgr->GetPropagator()
+          ->InvokePostUserTrackingAction( g4ErrorTrajState->GetG4Track() );  
         moreEvt = 0;
         G4cout << "STEP_BY_STEP propagation: Last Step " << G4endl;
       }
@@ -226,7 +246,8 @@ G4ErrorTarget* BuildTarget( G4int iTarget )
   }else if( iTarget == 4 ) {
     target = new G4ErrorTrackLengthTarget(223.*cm);
   }else {
-    G4Exception("exG4eReco","Fatal error in Argument",FatalErrorInArgument,"Target type has to be between 1 and 4");
+    G4Exception("exG4eReco","Fatal error in Argument",
+                FatalErrorInArgument,"Target type has to be between 1 and 4");
   }
   return target;
 }

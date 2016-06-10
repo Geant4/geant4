@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B1DetectorConstruction.hh 69587 2013-05-08 14:26:03Z gcosmo $
+// $Id: B1DetectorConstruction.hh 80449 2014-04-22 08:35:50Z gcosmo $
 //
 /// \file B1DetectorConstruction.hh
 /// \brief Definition of the B1DetectorConstruction class
@@ -35,6 +35,7 @@
 #include "globals.hh"
 
 class G4VPhysicalVolume;
+class G4LogicalVolume;
 
 /// Detector construction class to define materials and geometry.
 
@@ -44,8 +45,12 @@ class B1DetectorConstruction : public G4VUserDetectorConstruction
     B1DetectorConstruction();
     virtual ~B1DetectorConstruction();
 
-  public:
     virtual G4VPhysicalVolume* Construct();
+    
+    G4LogicalVolume* GetScoringVolume() const { return fScoringVolume; }
+
+  protected:
+    G4LogicalVolume*  fScoringVolume;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

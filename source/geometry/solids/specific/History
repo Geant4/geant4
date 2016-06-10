@@ -1,4 +1,4 @@
-$Id: History 78188 2013-12-04 16:32:00Z gcosmo $
+$Id: History 83851 2014-09-19 10:12:12Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,47 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17-Sep-2014  G.Cosmo               (geom-specific-V10-00-11)
+- Added wrappers for UExtrudedSolid and UGenericTrap; adapted switches to
+  original G4 types accordingly. Requires tag "geom-usolids-V10-00-16".
+
+01-Sep-2014  G.Cosmo               (geom-specific-V10-00-10)
+- Fixed use of polyhedron pointer, to avoid race condition in MT
+  when parameterised volumes are visualised.
+
+22-May-2014  G.Cosmo               (geom-specific-V10-00-09)
+- Added protection in generic constructor of G4Polyhedra for the case when
+  improper number of sides is given as input.
+
+10-Apr-2014  G.Cosmo               (geom-specific-V10-00-08)
+- Get rid of deprecated 'register' storage class specifier in source files.
+
+31-Mar-2014  G.Cosmo               (geom-specific-V10-00-07)
+- Fixed signature of assignment operator to G4VCSGfaceted.
+
+31-Mar-2014  G.Cosmo               (geom-specific-V10-00-06)
+- Fixed signature of assignment operator to G4Polycone, G4Polyhedra and
+  and G4GenericPolycone.
+
+05-Mar-2014  G.Cosmo               (geom-specific-V10-00-05)
+- Fixed proper handling of polyhedron pointer in solids, to avoid memory
+  leak for visualization of parameterised volumes.
+
+12-Feb-2014  G.Cosmo               (geom-specific-V10-00-04)
+- Simply reset polyhedron pointer to zero for modifiers of G4U* wrappers
+  in parameterisation. Resolves crash in MT visualization when using USolids. 
+
+12-Feb-2014  G.Cosmo               (geom-specific-V10-00-03 [and -02])
+- Added correct cloning mechanism in G4U* wrappers.
+  Addressing problem report #1553.
+
+18-Dec-2013  T.Nikitina            (geom-specific-V10-00-01)
+- Fix in G4GenericTrap::InsidePolygone() to check if p lies between the two
+  extremes of the segment. Addressing problem report #1541.
+
+17-Dec-2013  G.Cosmo               (geom-specific-V10-00-00)
+- Corrected left-over debug printout in G4Polycone::SetOriginalParameters().
 
 04-Dec-2013  G.Cosmo               (geom-specific-V09-06-36)
 - Corrected left-over debug printout in G4Polyhedra::SetOriginalParameters().

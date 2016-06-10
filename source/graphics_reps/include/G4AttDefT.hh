@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttDefT.hh 66376 2012-12-18 09:42:59Z gcosmo $
+// $Id: G4AttDefT.hh 78955 2014-02-05 09:45:46Z gcosmo $
 //
 // Templated G4AttDef. Generates type key for given template parameter.
 //
@@ -45,9 +45,9 @@ public:
 
   // Constructor
   G4AttDefT(const G4String& name,
-	    const G4String& desc,
-	    const G4String& category,
-	    const G4String& extra="")    
+            const G4String& desc,
+            const G4String& category,
+            const G4String& extra="")    
     :G4AttDef(name, desc, category, extra, G4TypeKeyT<T>())
   {}
   

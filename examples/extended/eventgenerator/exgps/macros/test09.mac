@@ -1,0 +1,38 @@
+# test09
+#
+/run/initialize
+#
+/gps/particle geantino
+
+# source
+/gps/pos/type Surface
+/gps/pos/shape Para
+/gps/pos/centre 2. 2. 2. cm
+/gps/pos/halfx 2. cm
+/gps/pos/halfy 3. cm
+/gps/pos/halfz 5. cm
+/gps/pos/paralp 0.523599
+/gps/pos/parthe 0.523599
+/gps/pos/parphi 0.523599
+
+# angular distribution
+/gps/ang/type iso
+
+# energy distribution
+/gps/ene/type Lin
+/gps/ene/min 2 MeV
+/gps/ene/max 10 MeV
+/gps/ene/gradient -1.
+/gps/ene/intercept 12.
+
+# commands below are independent of gps
+#
+/analysis/setFileName test09
+/analysis/h1/set 1 100 1 15 MeV
+/analysis/h2/set 4 120 0 360 deg none linear 100 -1 1 none none linear
+#
+#/control/execute vis.mac
+#
+/run/printProgress 10000
+#
+/run/beamOn 100000

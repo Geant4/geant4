@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm15/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id: RunAction.cc 82283 2014-06-13 14:49:40Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,10 +64,8 @@ RunAction::~RunAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::BeginOfRunAction(const G4Run* aRun)
+void RunAction::BeginOfRunAction(const G4Run*)
 {  
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-  
   // save Rndm status
   ////G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   CLHEP::HepRandom::showEngineStatus();

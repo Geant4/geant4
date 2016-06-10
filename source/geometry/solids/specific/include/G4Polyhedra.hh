@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.hh 76263 2013-11-08 11:41:52Z gcosmo $
+// $Id: G4Polyhedra.hh 80048 2014-03-31 12:47:09Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -73,6 +73,7 @@
 #include "G4VCSGfaceted.hh"
 #include "G4PolyhedraSide.hh"
 #include "G4PolyhedraHistorical.hh"
+#include "G4Polyhedron.hh"
 
 class G4EnclosingCylinder;
 class G4ReduciblePolygon;
@@ -148,7 +149,7 @@ class G4Polyhedra : public G4VCSGfaceted
     // persistifiable objects.
 
   G4Polyhedra( const G4Polyhedra &source );
-  const G4Polyhedra &operator=( const G4Polyhedra &source );
+  G4Polyhedra &operator=( const G4Polyhedra &source );
     // Copy constructor and assignment operator.
 
  protected:  // without description

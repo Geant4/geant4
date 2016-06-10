@@ -4,6 +4,9 @@
 ifeq ($(G4SYSTEM),Linux-icc)
   CXX       := icc
   CXXFLAGS  := -ansi -fp-model precise -no-gcc -w1
+  ifdef G4USE_STD11
+    CXXFLAGS  += -std=c++11
+  endif
   ifdef G4MULTITHREADED
     CXXFLAGS += -ftls-model=initial-exec -pthread
   endif
@@ -24,14 +27,14 @@ ifeq ($(G4SYSTEM),Linux-icc)
     CCFLAGS   += -pg
   endif
   ifdef G4LIB_BUILD_SHARED
-    ifndef G4MULTITHREADED
-      CXXFLAGS  += -fPIC
-      FCFLAGS   += -fPIC
-      CCFLAGS   += -fPIC
-    endif
+    CXXFLAGS  += -fPIC
+    FCFLAGS   += -fPIC
+    CCFLAGS   += -fPIC
     LDFLAGS   += -i-dynamic
   endif
   G4RUNPATHOPTION := -Wl,-rpath -Wl,
+  G4STATIC_MODE += -Wl,--whole-archive
+  G4NOSTATIC_MODE += -Wl,--no-whole-archive
   CC := icc
   FC := ifort
   FCFLAGS += -noautomatic -assume nobscc -assume no2underscores

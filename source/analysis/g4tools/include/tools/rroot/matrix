@@ -1,0 +1,86 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_matrix
+#define tools_rroot_matrix
+
+//NOTE : not yet tested.
+
+#include "../scast"
+#include "buffer"
+#include "named"
+
+namespace tools {
+namespace rroot {
+
+class matrix : public virtual iro {
+  static const std::string& s_store_class() {
+    static const std::string s_v("TMatrix");
+    return s_v;
+  }
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rroot::matrix");
+    return s_v;
+  }
+public: //iro
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<matrix>(this,a_class)) return p;
+    return 0;
+  }
+public:
+  static cid id_class() {return matrix_cid();}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<matrix>(this,a_class)) {return p;}
+    else return 0;
+  }
+public:
+  virtual bool stream(buffer& a_buffer) {
+    unsigned int s, c;
+    short v;
+    if(!a_buffer.read_version(v,s,c)) return false;
+
+    //printf("debug : BatchLab::Rio::TMatrix::stream : version %d\n",v);
+  
+    // Version 2 streaming (ROOT/v3-00-6).
+  
+   {uint32 id,bits;
+    if(!Object_stream(a_buffer,id,bits)) return false;}
+  
+    int Nrows;
+    if(!a_buffer.read(Nrows)) return false;
+    int Ncols;
+    if(!a_buffer.read(Ncols)) return false;
+    int Nelems;
+    if(!a_buffer.read(Nelems)) return false;
+    int RowLwb;
+    if(!a_buffer.read(RowLwb)) return false;
+    int ColLwb;
+    if(!a_buffer.read(ColLwb)) return false;
+  
+    //Real_t* Elements; //[fNelems]
+    if(!dummy_array_stream<float>(a_buffer,Nelems)) return false;
+
+    if(!a_buffer.check_byte_count(s,c,s_store_class())) return false;
+    return true;
+  }
+
+public:
+  matrix(){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~matrix(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  matrix(const matrix& a_from): iro(a_from){}
+  matrix& operator=(const matrix&){return *this;}
+};
+
+}}
+
+#endif

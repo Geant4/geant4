@@ -1153,7 +1153,7 @@ G4double
 G4GlauberGribovCrossSection::GetHNinelasticXsc(const G4DynamicParticle* aParticle, 
                                                      G4int At,  G4int Zt)
 {
-  G4ParticleDefinition* hadron = aParticle->GetDefinition();
+  const G4ParticleDefinition* hadron = aParticle->GetDefinition();
   G4double sumInelastic;
   G4int Nt = At - Zt;
   if(Nt < 0) Nt = 0;

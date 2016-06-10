@@ -38,7 +38,8 @@
 G4MTcoutDestination::G4MTcoutDestination(const G4int& threadId,
                               std::ostream& co, std::ostream&  ce)
 : finalcout(co), finalcerr(ce), id(threadId), useBuffer(false),
-  threadCoutToFile(false), threadCerrToFile(false), ignoreCout(false)
+  threadCoutToFile(false), threadCerrToFile(false),
+  ignoreCout(false), ignoreInit(true)
 {
   G4coutbuf.SetDestination(this);
   G4cerrbuf.SetDestination(this);
@@ -53,6 +54,7 @@ G4MTcoutDestination::~G4MTcoutDestination()
 }
 
 namespace  { G4Mutex coutm = G4MUTEX_INITIALIZER; }
+#include "G4StateManager.hh"
 
 G4int G4MTcoutDestination::ReceiveG4cout(const G4String& msg)
 {
@@ -61,7 +63,27 @@ G4int G4MTcoutDestination::ReceiveG4cout(const G4String& msg)
   else if( useBuffer )
   { cout_buffer<<msg; }
   else if( !ignoreCout )
-  {   G4AutoLock l(&coutm); finalcout<<prefix<<id<<" > "<<msg; }
+  {
+    if(!ignoreInit || 
+       G4StateManager::GetStateManager()->GetCurrentState() != G4State_Idle )
+    {
+      G4AutoLock l(&coutm);
+        finalcout<<prefix;
+        if ( id!=G4Threading::GENERICTHREAD_ID ) finalcout<<id;
+        finalcout<<" > "<<msg<<std::flush;
+    }
+  }
+  //forward message to master G4coutDestination if set
+  if ( masterG4coutDestination &&  !ignoreCout &&
+       ( !ignoreInit || G4StateManager::GetStateManager()->GetCurrentState() != G4State_Idle )
+    ){
+        G4AutoLock l(&coutm);
+        std::stringstream ss;
+      ss<<prefix;
+      if ( id!=G4Threading::GENERICTHREAD_ID ) ss<<id;
+      ss<<" > "<<msg;
+      masterG4coutDestination->ReceiveG4cout(ss.str());
+    }
   return 0;
 }
 
@@ -72,7 +94,22 @@ G4int G4MTcoutDestination::ReceiveG4cerr(const G4String& msg)
   if( useBuffer )
   { cerr_buffer<<msg; }
   else
-  {   G4AutoLock l(&coutm); finalcerr<<prefix<<id<<" > "<<msg; }
+    {   G4AutoLock l(&coutm);
+        finalcerr<<prefix;
+        if ( id!=G4Threading::GENERICTHREAD_ID ) finalcerr<<id;
+        finalcerr<<" > "<<msg<<std::flush;
+    }
+  //forward message to master G4coutDestination if set
+    if ( masterG4coutDestination &&  !ignoreCout &&
+        ( !ignoreInit || G4StateManager::GetStateManager()->GetCurrentState() != G4State_Idle )
+    ){
+        G4AutoLock l(&coutm);
+        std::stringstream ss;
+        ss<<prefix;
+        if ( id!=G4Threading::GENERICTHREAD_ID ) ss<<id;
+        ss<<" > "<<msg;
+        masterG4coutDestination->ReceiveG4cerr(ss.str());
+    }
   return 0;
 }
 

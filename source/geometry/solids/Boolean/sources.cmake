@@ -1,7 +1,7 @@
 #------------------------------------------------------------------------------
 # sources.cmake
 # Module : G4geomBoolean
-# Package: Geant4.src.G4geometry..G4geomBoolean
+# Package: Geant4.src.G4geometry.G4geomBoolean
 #
 # Sources description for a library.
 # Lists the sources and headers of the code explicitely.
@@ -11,17 +11,17 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 76607 2013-11-13 08:46:40Z gcosmo $
+# $Id: sources.cmake 85608 2014-10-31 11:23:30Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
 # List external includes needed.
 include_directories(${CLHEP_INCLUDE_DIRS})
+include_directories(${USOLIDS_INCLUDE_DIRS})
 
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/usolids/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
@@ -38,13 +38,16 @@ GEANT4_DEFINE_MODULE(NAME G4geomBoolean
         G4BooleanSolid.icc
         G4DisplacedSolid.hh
         G4IntersectionSolid.hh
+        G4MultiUnion.hh
         G4SubtractionSolid.hh
+        G4UMultiUnion.hh
         G4UnionSolid.hh
     SOURCES
         G4BooleanSolid.cc
         G4DisplacedSolid.cc
         G4IntersectionSolid.cc
         G4SubtractionSolid.cc
+        G4UMultiUnion.cc
         G4UnionSolid.cc
     GRANULAR_DEPENDENCIES
         G4geometrymng
@@ -58,6 +61,7 @@ GEANT4_DEFINE_MODULE(NAME G4geomBoolean
         G4graphics_reps
         G4intercoms
     LINK_LIBRARIES
+        ${USOLIDS_LIBRARIES}
 )
 
 # List any source specific properties here

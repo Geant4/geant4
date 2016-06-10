@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -42,9 +43,53 @@
  */
 
 #include "G4INCLCoulombDistortion.hh"
+#include "G4INCLCoulombNone.hh"
+#include "G4INCLCoulombNonRelativistic.hh"
 
 namespace G4INCL {
 
-  G4ThreadLocal ICoulomb* CoulombDistortion::theCoulomb = 0;
+  namespace CoulombDistortion {
+
+    namespace {
+      G4ThreadLocal ICoulomb* theCoulomb = 0;
+    }
+
+    ParticleEntryAvatar *bringToSurface(Particle *p, Nucleus * const n) {
+      return theCoulomb->bringToSurface(p, n);
+    }
+
+    IAvatarList bringToSurface(Cluster * const c, Nucleus * const n) {
+      return theCoulomb->bringToSurface(c, n);
+    }
+
+    void distortOut(ParticleList const &pL, Nucleus const * const n) {
+      theCoulomb->distortOut(pL, n);
+    }
+
+    G4double maxImpactParameter(ParticleSpecies const &p, const G4double kinE, Nucleus const * const n) {
+      return theCoulomb->maxImpactParameter(p, kinE, n);
+    }
+
+    G4double maxImpactParameter(Particle const * const p, Nucleus const * const n) {
+      return maxImpactParameter(p->getSpecies(), p->getKineticEnergy(), n);
+    }
+
+    void setCoulomb(ICoulomb * const coulomb) { theCoulomb = coulomb; }
+
+    void deleteCoulomb() {
+      delete theCoulomb;
+      theCoulomb = 0;
+    }
+
+    void initialize(Config const * const theConfig) {
+      CoulombType coulombType = theConfig->getCoulombType();
+      if(coulombType == NonRelativisticCoulomb)
+        setCoulomb(new CoulombNonRelativistic);
+      else if(coulombType == NoCoulomb)
+        setCoulomb(new CoulombNone);
+      else
+        setCoulomb(NULL);
+    }
+  }
 
 }

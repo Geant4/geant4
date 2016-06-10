@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcontrolMessenger.hh 67965 2013-03-13 09:35:29Z gcosmo $
+// $Id: G4UIcontrolMessenger.hh 80641 2014-05-05 15:10:28Z gcosmo $
 //
 
 #ifndef G4UIcontrolMessenger_h
@@ -55,12 +55,14 @@ class G4UIcommand;
 //   /control/unalias
 //   /control/listAlias
 //   /control/getEnv
+//   /control/getVal
 //   /control/echo
 //   /control/shell
 //   /control/manual
 //   /control/createHTML
 //   /control/maximumStoredHistory
 //   /control/if
+//   /control/doif
 //   /control/add
 //   /control/subtract
 //   /control/multiply
@@ -86,6 +88,7 @@ class G4UIcontrolMessenger : public G4UImessenger
       G4UIcmdWithAString * unaliasCommand;
       G4UIcmdWithoutParameter * listAliasCommand;
       G4UIcmdWithAString * getEnvCmd;
+      G4UIcommand * getValCmd;
       G4UIcmdWithAString * echoCmd;
       G4UIcmdWithAString * shellCommand;
       G4UIcommand * loopCommand;
@@ -94,6 +97,7 @@ class G4UIcontrolMessenger : public G4UImessenger
       G4UIcmdWithAString * HTMLCommand;
       G4UIcmdWithAnInteger * maxStoredHistCommand;
       G4UIcommand * ifCommand;
+      G4UIcommand * doifCommand;
       G4UIcommand * addCommand;
       G4UIcommand * subtractCommand;
       G4UIcommand * multiplyCommand;

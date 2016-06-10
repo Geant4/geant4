@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSTermination.cc 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4PSTermination.cc 81087 2014-05-20 15:44:27Z gcosmo $
 //
 // G4PSTermination
 #include "G4PSTermination.hh"
@@ -41,7 +41,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSTermination::G4PSTermination(G4String name, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),weighted(false)
+  :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0),weighted(false)
 {
     SetUnit("");
 }

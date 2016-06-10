@@ -23,10 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id:$
-//
-// 
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
@@ -311,7 +307,14 @@ G4bool G4Physics2DVector::Retrieve(std::ifstream& in)
   // binning
   G4int k;
   in >> k >> numberOfXNodes >> numberOfYNodes;
-  if (in.fail() || 0 >= numberOfXNodes || 0 >= numberOfYNodes) { 
+  if (in.fail() || 0 >= numberOfXNodes || 0 >= numberOfYNodes || 
+      numberOfXNodes >= INT_MAX || numberOfYNodes >= INT_MAX) { 
+    if( 0 >= numberOfXNodes || numberOfXNodes >= INT_MAX) {
+      numberOfXNodes = 0;
+    }
+    if( 0 >= numberOfYNodes || numberOfYNodes >= INT_MAX) {
+      numberOfYNodes = 0;
+    }
     return false; 
   }
   PrepareVectors();

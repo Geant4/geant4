@@ -49,11 +49,11 @@ class G4QMDParticipant
 {
    public:
                                                 // momentum      position
-      G4QMDParticipant( G4ParticleDefinition* , G4ThreeVector , G4ThreeVector );
+      G4QMDParticipant( const G4ParticleDefinition* , G4ThreeVector , G4ThreeVector );
       ~G4QMDParticipant();
 
-      void SetDefinition( G4ParticleDefinition* pd ) { definition = pd; };
-      G4ParticleDefinition* GetDefinition() { return definition; };
+      void SetDefinition( const G4ParticleDefinition* pd ) { definition = pd; };
+      const G4ParticleDefinition* GetDefinition() { return definition; };
 
       void SetPosition( G4ThreeVector r ) { position = r; };
       G4ThreeVector GetPosition() { return position; };
@@ -83,7 +83,7 @@ class G4QMDParticipant
       G4bool IsThisTarget() { return target; }
 
    private:
-      G4ParticleDefinition* definition;
+      const G4ParticleDefinition* definition;
       G4ThreeVector momentum;
       G4ThreeVector position;
 

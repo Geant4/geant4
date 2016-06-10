@@ -1,0 +1,72 @@
+ $Id: $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Exotic Examples History file
+                    -----------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+October 16, 2014 E. Bagli (channelingExample-V10-00-15)
+- minor modification to condition for vr
+- minor modification to computation of channeling outgoing angle
+- changed nuclei density to electron and nuclei density for ss cross section computation
+
+July 1,  2014 G.Folger (channelingExample-V10-00-14)
+-  revert change introduced with tag ...-12, CMakeLists.txt rev.82513
+
+June 30, 2014 E. Bagli (channelingExample-V10-00-13)
+- erf function modified to CLHEP::HepStat::erfQ
+
+June 26, 2014 G.Folger (channelingExample-V10-00-12)
+- Build example only if erf() is available on system.
+   erf function misses on Windows up to VC11 (studio 2012) included.
+
+June 22, 2014 E. Bagli (channelingExample-V10-00-11)
+- CLHEP/Random/Stat.h added to XCrystalPlanarMoliereTempPotential.cc
+
+June 21, 2014 E. Bagli (channelingExample-V10-00-10)
+- Changed erfc(x) to 1.-erf(x)
+
+June 20, 2014 E. Bagli (channelingExample-V10-00-09)
+- Modified channelling to channeling in CMakeLists.txt
+
+June 10, 2014 E. Bagli (channelingExample-V10-00-08)
+- Moved Channeling to channeling in CMakeLists.txt and CTestDefinitions.txt
+
+June 4, 2014 A. Dotti (channelingExample-V10-00-07)
+- New GPS MT ready migration
+
+June 2, 2014 E. Bagli (channelingExample-v10-00-06)
+- Modified M_PI to CLHEP::pi
+
+May 30, 2014 E. Bagli (channelingExample-v10-00-05)
+- Removed measurement of time elapsed into channeling.c
+
+May 28, 2014 E. Bagli (channelingExample-v10-00-04)
+- Corrected conversions between data types.
+- Added root reference file (physical/ExExCh.root).
+
+May 27, 2014 A. Dotti (channelingExample-V10-00-03)
+- First version of CTest introduced, via extenral
+  file CTestDefinitions.txt
+
+May 20, 2014 E. Bagli (channelingExample-V10-00-02)
+- Removed src/G4Channeling*.
+- Removed include/G4Channeling*.
+- Removed analysis/merge.sh
+- Wrote History and inserted reference to channeling model adopted
+
+May 19, 2014 E. Bagli (channelingExample-V10-00-01)
+- Class names modified.
+
+May 9, 2014, E. Bagli (channelingExample-V10-00-00)
+- First import.
+

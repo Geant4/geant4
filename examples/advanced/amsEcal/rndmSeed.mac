@@ -1,12 +1,12 @@
-# $Id: rndmSeed.mac 68740 2013-04-05 09:56:39Z gcosmo $
+# $Id: rndmSeed.mac 83418 2014-08-21 15:30:47Z gcosmo $
 #
 # This macro illustrates how to save random number seeds
 #
 /control/verbose 2
 /run/verbose 2
 #
-/ams/phys/addPhysics  emstandard_local
-/ams/phys/setCuts 1 mm
+/ams/phys/addPhysics  local
+/run/setCut 1 mm
 #
 /run/initialize
 #
@@ -14,6 +14,9 @@
 /gun/particle mu+
 /gun/energy 1 GeV
 /ams/gun/beam 1 cm
+#
+# inform the RunManager to systematically save the seed
+/random/setSavingFlag 1
 #
 /control/shell mkdir random
 #

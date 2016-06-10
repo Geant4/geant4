@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.hh 78050 2013-12-03 08:17:33Z gcosmo $
+// $Id: G4VPhysicalVolume.hh 83991 2014-09-26 09:22:26Z gcosmo $
 //
 //
 // class G4VPhysicalVolume
@@ -65,6 +65,8 @@ class G4PVData
   //  and must have a per-thread state.
 
   public:
+    G4PVData():frot(0) {}
+
     void initialize() {
       frot = 0;
       ftrans = G4ThreeVector(0,0,0);

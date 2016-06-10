@@ -84,8 +84,8 @@ G4double G4ProtonField::GetField(const G4ThreeVector & aPosition)
 {
 //G4cout << " Fermi Potential " << (fermiMom*fermiMom)/(2*proton_mass_c2) <<G4endl;
   G4double x = aPosition.mag();
-  G4int index = static_cast<G4int>(x/(0.3*fermi) );
-  if(index+2>static_cast<G4int>(theFermiMomBuffer.size())) return theFermiMomBuffer.back();
+  unsigned int index = static_cast<unsigned int>(x/(0.3*fermi));
+  if((index+2) > theFermiMomBuffer.size()) return theFermiMomBuffer.back();
   G4double y1 = theFermiMomBuffer[index];
   G4double y2 = theFermiMomBuffer[index+1];
   G4double x1 = (0.3*fermi)*index;

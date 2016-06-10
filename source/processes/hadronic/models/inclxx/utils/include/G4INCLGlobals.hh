@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,6 +40,7 @@
 
 #include <cmath>
 #include <string>
+#include <vector>
 #include "G4INCLParticleType.hh"
 
 namespace G4INCL {
@@ -54,12 +56,6 @@ namespace G4INCL {
     /// \brief Fermi momentum [MeV/c]
     const G4double Pf = 1.37*hc;
     //  const G4double Pf = 1.36828*hc;
-
-    /// \brief Fermi momentum squared [(MeV/c)^2]
-    const G4double PfSquared = Pf*Pf;
-
-    /// \brief Fermi momentum cubed [(MeV/c)^3]
-    const G4double PfCubed = Pf*PfSquared;
 
     /** \brief Coulomb conversion factor [MeV*fm]
      *
@@ -142,15 +138,35 @@ namespace G4INCL {
      */
     G4double gaussianCDF(const G4double x, const G4double x0, const G4double sigma);
 
+    /** \brief Inverse cumulative distribution function for Gaussian
+     *
+     * A public-domain approximation taken from Abramowitz and Stegun. Applies
+     * to a Gaussian with mean=0 and sigma=1.
+     *
+     * \param x a uniform variate
+     * \return a Gaussian variate
+     */
+    G4double inverseGaussianCDF(const G4double x);
+
+    /// \brief Calculates arcsin with some tolerance on illegal arguments
+    G4double arcSin(const G4double x);
+
+    /// \brief Calculates arccos with some tolerance on illegal arguments
+    G4double arcCos(const G4double x);
   }
 
   namespace ParticleConfig {
     G4bool isPair(Particle const * const p1, Particle const * const p2, ParticleType t1, ParticleType t2);
   }
 
+#ifndef INCLXX_IN_GEANT4_MODE
   namespace String {
     void wrap(std::string &str, const size_t lineLength=78, const std::string &separators=" \t");
     void replaceAll(std::string &str, const std::string &from, const std::string &to, const size_t maxPosition=std::string::npos);
+    std::vector<std::string> tokenize(std::string const &str, const std::string &delimiters);
+    G4bool isInteger(std::string const &str);
+    std::string expandPath(std::string const &path);
   }
+#endif
 }
 #endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSplitableHadron.cc 67999 2013-03-13 11:14:32Z gcosmo $
+// $Id: G4VSplitableHadron.cc 83684 2014-09-09 12:37:39Z gcosmo $
 //
 
 // ------------------------------------------------------------
@@ -40,14 +40,14 @@
 #include "G4VKineticNucleon.hh"
 
 G4VSplitableHadron::G4VSplitableHadron()
-      :  theDefinition(NULL), TimeOfCreation(0.), theCollisionCount(0),  // Uzhi 8.05.08
-         curStatus(0), isSplit(false)                                    // Uzhi 17.07.09
+      :  theDefinition(NULL), TimeOfCreation(0.), theCollisionCount(0),
+         curStatus(0), isSplit(false)                                  
 {
 }
 
 G4VSplitableHadron::G4VSplitableHadron(const G4ReactionProduct & aPrimary)
-      :  TimeOfCreation(0.), theCollisionCount(0),                       // Uzhi 8.05.08
-         curStatus(0), isSplit(false)                                    // Uzhi 17.07.09
+      :  TimeOfCreation(0.), theCollisionCount(0),                       
+         curStatus(0), isSplit(false)                                    
 {
 	theDefinition=aPrimary.GetDefinition();
 	the4Momentum.setVect(aPrimary.GetMomentum());
@@ -56,24 +56,24 @@ G4VSplitableHadron::G4VSplitableHadron(const G4ReactionProduct & aPrimary)
 
 G4VSplitableHadron::G4VSplitableHadron(const G4Nucleon & aNucleon)
 {
-        TimeOfCreation   = 0.;                                          // Uzhi 8.05.08
+        TimeOfCreation   = 0.;                                          
 	theCollisionCount= 0;
         isSplit          = false;
 	theDefinition    =aNucleon.GetParticleType();
 	the4Momentum     =aNucleon.GetMomentum();
 	thePosition      =aNucleon.GetPosition();
-        curStatus        = 0;                                           // Uzhi 17.07.09
+        curStatus        = 0;                                           
 }
 
 G4VSplitableHadron::G4VSplitableHadron(const G4VKineticNucleon * aNucleon)
 {
-        TimeOfCreation   = 0.;   // Uzhi 8.05.08
+        TimeOfCreation   = 0.;   
 	theCollisionCount= 0;
         isSplit          = false;
 	theDefinition    =aNucleon->GetDefinition();
 	the4Momentum     =aNucleon->Get4Momentum();
 	thePosition      =aNucleon->GetPosition();
-        curStatus        = 0;                                        // Uzhi 17.07.09
+        curStatus        = 0;                                        
 }
 
 G4VSplitableHadron::G4VSplitableHadron(const G4VSplitableHadron &right)
@@ -84,7 +84,7 @@ G4VSplitableHadron::G4VSplitableHadron(const G4VSplitableHadron &right)
 	theDefinition    = right.GetDefinition();
 	the4Momentum     = right.Get4Momentum();
 	thePosition      =  right.GetPosition();
-        curStatus        = 0;                                        // Uzhi 17.07.09
+        curStatus        = 0;                                        
 }
 
 

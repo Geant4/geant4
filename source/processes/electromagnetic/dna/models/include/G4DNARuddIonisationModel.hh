@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationModel.hh 70171 2013-05-24 13:34:18Z gcosmo $
+// $Id: G4DNARuddIonisationModel.hh 81552 2014-06-03 08:28:18Z gcosmo $
 //
 
 #ifndef G4DNARuddIonisationModel_h
@@ -107,12 +107,6 @@ private:
 					  G4double incomingParticleEnergy, 
 					  G4int shell);
 
-  void RandomizeEjectedElectronDirection(G4ParticleDefinition* particleDefinition, 
-					 G4double incomingParticleEnergy, 
-					 G4double outgoingParticleEnergy, 
-					 G4double & cosTheta, 
-					 G4double & phi);
-   
   G4double  DifferentialCrossSection(G4ParticleDefinition* particleDefinition, 
 				   G4double k, 
 				   G4double energyTransfer, 

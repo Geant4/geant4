@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc 71228 2013-06-12 12:53:45Z gcosmo $
+// $Id: G4Decay.cc 79343 2014-02-24 11:44:06Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -111,7 +111,8 @@ G4double G4Decay::GetMeanLifeTime(const G4Track& aTrack  ,
 
    // check if the particle is stable?
    if (aParticleDef->GetPDGStable()) {
-     meanlife = DBL_MAX;
+    //1000000 times the life time of the universe
+     meanlife = 1e24 * s;
     
    } else {
      meanlife = aLife;
@@ -295,7 +296,6 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
     // PostStep case
     if (!isExtDecayer) products->Boost( ParentEnergy, ParentDirection);
   }
-
    // set polarization for daughter particles
    DaughterPolarization(aTrack, products);
 
@@ -374,7 +374,6 @@ G4double G4Decay::PostStepGetPhysicalInteractionLength(
                              G4ForceCondition* condition
                             )
 {
- 
    // condition is set to "Not Forced"
   *condition = NotForced;
 
@@ -407,6 +406,7 @@ G4double G4Decay::PostStepGetPhysicalInteractionLength(
     G4double value;
     if (currentInteractionLength <DBL_MAX) {
       value = theNumberOfInteractionLengthLeft * currentInteractionLength;
+      //fRemainderLifeTime = theNumberOfInteractionLengthLeft*aLife;
     } else {
       value = DBL_MAX;
     }
@@ -464,3 +464,18 @@ void G4Decay::SetExtDecayer(G4VExtDecayer* val)
     SetProcessSubType(static_cast<int>(DECAY_External));
   }
 }
+
+G4VParticleChange* G4Decay::PostStepDoIt(
+			     const G4Track& aTrack,
+			     const G4Step&  aStep
+			    )
+{
+  if ( (aTrack.GetTrackStatus() == fStopButAlive ) ||
+       (aTrack.GetTrackStatus() == fStopAndKill )   ){
+    fParticleChangeForDecay.Initialize(aTrack);
+    return &fParticleChangeForDecay;
+  } else {
+    return DecayIt(aTrack, aStep);
+  }
+}
+

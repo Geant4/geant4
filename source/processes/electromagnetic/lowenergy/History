@@ -1,4 +1,4 @@
-$Id: History 77345 2013-11-22 16:00:21Z gcosmo $
+$Id: History 86755 2014-11-17 15:15:09Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,112 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14.11.2014 G4MicroElecInelasticModel from M. Raine, tag emlowen-V10-00-22
+           - fix of loop
+
+31.10.2014 G4MicroElecInelasticModel from M. Raine, tag emlowen-V10-00-21
+           -change in angular generator, to use G4DeltaAngle model
+
+28.10.2014 G4MicroElecInelastic and G4MicroElecInelasticModel from M. Raine, tag emlowen-V10-00-20
+           - better treatment of GenericIon
+           - MT compatibility improved
+
+22.10.2014 M. Karamitros (committer), M.Raine (author), tag emlowen-V10-00-19
+	   G4MicroElecElasticModel from M. Raine:
+	   - uses cumulated cross-sections
+           - MT compatibility improved
+           - uses LinLinInterpolate instead of LinLog
+           Should use G4EMLOW6.41
+
+01.10.2014 L. Pandola et al, tag emlowen-V10-00-18
+	   Fix of bugzilla 1612
+
+02.09.2014 L. Pandola, tag emlowen-V10-00-17
+	   Coverity fix. Restored deletion of G4Physics*Vector 
+            objects at the destructor (as for ref-07)
+
+28.08.2014 S. Incerti, tag emlowen-V10-00-16
+           Coverity fix. 
+
+07.08.2014 S. Incerti, tag emlowen-V10-00-15
+           Removed unused code for atomic deexcitation.  
+
+30.07.2014 V. Ivanchenko, tag emlowen-V10-00-14
+           G4LivermorePhotoElectricModel, G4LivermoreGammaConversionModel,
+           G4LivermoreRayleighModel, G4LivermoreComptonModel,
+           G4IonParameterisedLossModel - added proper deletion
+             of G4PhysicsVectors end of run
+
+15.07.2014 V. Ivanchenko/L. Pandola, tag emlowen-V10-00-13
+           LivermorePhotoElectricModel - keep cross section const 
+           below lowest shell energy (as in Penelope model)
+	   Changed Livermore, LivemorePolarized, LivemoreModified and 
+           Penelope Compton to unify the treatment for 
+           energy < LowEnergyLimit(). Null cross 
+           section and no change in the gamma state. 
+
+03.06.2014 V. Ivanchenko tag emlowen-V10-00-12
+           G4LowEWentzelVIModel - cosmetic change trying to avoid 
+             compillation problem for strict compiler 
+
+19.05.2014 V. Ivanchenko/L. Pandola, tag emlowen-V10-00-11 
+	   Bug fix in G4PenelopePhotoElectric effect (no fluorescence in 
+           MT mode). Some cosmetics to G4PenelopeRayleigh.
+           G4LowEWentzelVIModel - set single scattering factor 0.5
+
+11.05.2014  V. Ivanchenko, tag emlowen-V10-00-10
+            G4LowEWentzelVIModel - set single scattering factor 0.7 
+              (was 1.0 before) - increasing accuracy but more slow
+            G4AtomicTransitionManager, G4UAtomicDeexcitation,
+            G4FluoData, G4LivermoreIonisationModel,
+            G4PenelopeOscillatorManager - G4AtomicTransitionManager
+              become pure singleton shared between threads, all
+              run time methods are const;
+              Initilise() method should be called in the beginning 
+              of the run.
+
+25.04.2014  S. Incerti, tag emlowen-V10-00-09
+            Updated G4UAtomicDeexcitation according to previous tag 
+
+21.04.2014  S. Incerti, tag emlowen-V10-00-08
+            Fix of G4empCrossSection 
+
+19.04.2014  S. Incerti, tag emlowen-V10-00-07
+            Update of G4empCrossSection for Miranda et al. model 
+
+15.04.2014  S. Incerti, tag emlowen-V10-00-06
+            New class for ionisation cs model from Miranda et al. 
+
+07.04.2014  V. Ivanchenko, tag emlowen-V10-00-05
+            G4LowEWentzelVIModel - fixed initialisation
+
+27.02.2014  V. Ivanchenko, tag emlowen-V10-00-04
+            G4LivermorePhotoElectricModel - added low-energy cross 
+            section for water
+            G4IonParametrisedLossModel, G4LivermoreIonisationModel -
+            added G4DeltaAngle generator for angular distribution
+
+13.02.2014  V. Ivanchenko, tag emlowen-V10-00-03
+            G4LowEWentzelVIModel - new class
+
+24.01.2014  V. Ivanchenko, tag emlowen-V10-00-02
+            G4LivermorePhotoElectricModel - fixed Coverity report 
+
+10.01.2014  L. Pandola, tag emlowen-V10-00-01
+	    Suppress G4Exception (JustWarning) issued by some Penelope 
+            models in UnitTests. Controlled by verbosity flag now (for 
+            diagnostic).
+
+11.12.2013  L. Pandola, tag emlowen-V10-00-00
+            Allow for (AutoLock-protected) creation on-the-fly of 
+            tables in SampleSecondaries(). Nothing changes for loops driven 
+            by the RunManager. Avoid crash when the loop of SampleSecondaries()
+            is inkoved in a unit test.
+
+22.11.2013  M. Karamitros, tag emlowen-V09-06-49
+	    Remove creation of material in G4MuElect* 
+	    and G4MicroElec* models
 
 21.11.2013  V. Ivanchenko, tag emlowen-V09-06-48
             G4QAOLowEnergyLoss, G4hICRU49He, G4hICRU49p, 

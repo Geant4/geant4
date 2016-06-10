@@ -27,7 +27,7 @@
 /// \brief Main program of the hadronic/Hadr00 example
 //
 //
-// $Id: Hadr00.cc 75840 2013-11-06 17:28:38Z gcosmo $
+// $Id: Hadr00.cc 81073 2014-05-20 10:23:13Z gcosmo $
 //
 // -------------------------------------------------------------
 //      GEANT4 Hadr00
@@ -87,7 +87,8 @@ int main(int argc,char** argv) {
 #endif
 
   //set mandatory initialization classes
-  runManager->SetUserInitialization(new DetectorConstruction());
+  DetectorConstruction* det = new DetectorConstruction();
+  runManager->SetUserInitialization(det);
 
   G4PhysListFactory factory;
   G4VModularPhysicsList* phys = 0;
@@ -113,7 +114,7 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(phys);
 
   //set user action classes
-  runManager->SetUserInitialization(new ActionInitialization());
+  runManager->SetUserInitialization(new ActionInitialization(det));
 
   //get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.hh 74726 2013-10-21 08:42:46Z gcosmo $
+// $Id: G4WentzelVIModel.hh 85306 2014-10-27 14:17:47Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -61,9 +61,6 @@
 #include "G4MaterialCutsCouple.hh"
 #include "G4WentzelOKandVIxSection.hh"
 
-class G4ParticleDefinition;
-class G4LossTableManager;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4WentzelVIModel : public G4VMscModel
@@ -71,11 +68,14 @@ class G4WentzelVIModel : public G4VMscModel
 
 public:
 
-  G4WentzelVIModel(const G4String& nam = "WentzelVIUni");
+  G4WentzelVIModel(G4bool comb = true, const G4String& nam = "WentzelVIUni");
 
   virtual ~G4WentzelVIModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+
+  virtual void InitialiseLocal(const G4ParticleDefinition*, 
+                               G4VEmModel* masterModel);
 
   void StartTracking(G4Track*);
 
@@ -105,27 +105,42 @@ public:
   // access to cross section class
   inline G4WentzelOKandVIxSection* GetWVICrossSection();
 
-private:
+  inline void SetUseSecondMoment(G4bool);
 
-  G4double ComputeXSectionPerVolume();
+  inline G4bool UseSecondMoment() const;
 
-  inline void SetupParticle(const G4ParticleDefinition*);
+  inline G4PhysicsTable* GetSecondMomentTable();
+
+  inline G4double SecondMoment(const G4ParticleDefinition*,
+			       const G4MaterialCutsCouple*,
+			       G4double kineticEnergy);
+
+  void SetSingleScatteringFactor(G4double);
+
+protected:
 
   inline void DefineMaterial(const G4MaterialCutsCouple*);
+
+private:
+
+  G4double ComputeTransportXSectionPerVolume(G4double cosTheta);
+
+  G4double ComputeSecondMoment(const G4ParticleDefinition*,
+			       G4double kineticEnergy);
+
+  inline void SetupParticle(const G4ParticleDefinition*);
 
   //  hide assignment operator
   G4WentzelVIModel & operator=(const  G4WentzelVIModel &right);
   G4WentzelVIModel(const  G4WentzelVIModel&);
 
-  G4LossTableManager*       theManager;
-  G4ParticleChangeForMSC*   fParticleChange;
+protected:
+
   G4WentzelOKandVIxSection* wokvi;
 
-  const G4DataVector*       currentCuts;
-
   G4double tlimitminfix;
-  G4double invsqrt12;
-  G4double fixedCut;
+  G4double ssFactor;
+  G4double invssFactor;
 
   // cache kinematics
   G4double preKinEnergy;
@@ -133,6 +148,36 @@ private:
   G4double zPathLength;
   G4double lambdaeff;
   G4double currentRange; 
+  G4double cosTetMaxNuc;
+
+  // cache material
+  G4int    currentMaterialIndex;
+  const G4MaterialCutsCouple* currentCouple;
+  const G4Material* currentMaterial;
+
+  const G4ParticleDefinition* particle;
+
+  // flags
+  G4bool   inside;
+  G4bool   singleScatteringMode;
+
+private:
+
+  G4ParticleChangeForMSC*   fParticleChange;
+  const G4DataVector*       currentCuts;
+
+  G4double invsqrt12;
+  G4double fixedCut;
+
+  // cache kinematics
+  G4double effKinEnergy;
+
+  // single scattering parameters
+  G4double cosThetaMin;
+  G4double cosThetaMax;
+
+  G4PhysicsTable* fSecondMoments;
+  size_t          idx2;
 
   // data for single scattering mode
   G4double xtsec;
@@ -142,23 +187,12 @@ private:
 
   G4double numlimit;
 
-  // cache material
-  G4int    currentMaterialIndex;
-  const G4MaterialCutsCouple* currentCouple;
-  const G4Material* currentMaterial;
-
-  // single scattering parameters
-  G4double cosThetaMin;
-  G4double cosThetaMax;
-  G4double cosTetMaxNuc;
-
   // projectile
-  const G4ParticleDefinition* particle;
   G4double lowEnergyLimit;
 
   // flags
-  G4bool   inside;
-  G4bool   singleScatteringMode;
+  G4bool   isCombined;
+  G4bool   useSecondMoment;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -205,6 +239,48 @@ inline G4double G4WentzelVIModel::GetFixedCut() const
 inline G4WentzelOKandVIxSection* G4WentzelVIModel::GetWVICrossSection()
 {
   return wokvi;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4WentzelVIModel::SetUseSecondMoment(G4bool val)
+{
+  useSecondMoment = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4WentzelVIModel::UseSecondMoment() const
+{
+  return useSecondMoment;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4PhysicsTable* G4WentzelVIModel::GetSecondMomentTable()
+{
+  return fSecondMoments;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double 
+G4WentzelVIModel::SecondMoment(const G4ParticleDefinition* part,
+			       const G4MaterialCutsCouple* couple,
+			       G4double ekin)
+{
+  G4double x = 0.0;
+  if(useSecondMoment) { 
+    DefineMaterial(couple);
+    if(fSecondMoments) { 
+      x = (*fSecondMoments)[(*theDensityIdx)[currentMaterialIndex]]
+	->Value(ekin, idx2)
+	*(*theDensityFactor)[currentMaterialIndex]/(ekin*ekin);
+    } else {
+      x = ComputeSecondMoment(part, ekin);
+    }
+  }
+  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

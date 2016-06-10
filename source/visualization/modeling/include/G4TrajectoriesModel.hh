@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoriesModel.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4TrajectoriesModel.hh 78838 2014-01-28 08:46:17Z gcosmo $
 //
 // 
 // John Allison  26th August 1998.
@@ -63,12 +63,22 @@ public: // With description
   const G4VTrajectory* GetCurrentTrajectory() const
   {return fpCurrentTrajectory;}
 
+  void SetCurrentTrajectory(const G4VTrajectory* pTraj)
+  {fpCurrentTrajectory = pTraj;}
+
+  void SetRunID(G4int runID)
+  {fRunID = runID;}
+
+  void SetEventID(G4int eventID)
+  {fEventID = eventID;}
+
   const std::map<G4String,G4AttDef>* GetAttDefs() const;
   std::vector<G4AttValue>* CreateCurrentAttValues() const;
   
 private:
 
   const G4VTrajectory* fpCurrentTrajectory;
+  G4int fRunID;
   G4int fEventID;
 
 };

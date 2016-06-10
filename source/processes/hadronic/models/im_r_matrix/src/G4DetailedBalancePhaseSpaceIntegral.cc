@@ -109,10 +109,10 @@
   };
 
 G4DetailedBalancePhaseSpaceIntegral::
-G4DetailedBalancePhaseSpaceIntegral(G4ParticleDefinition * aR) : theR(aR)
+G4DetailedBalancePhaseSpaceIntegral(const G4ParticleDefinition * aR) //: theR(aR)
 {
   G4ResonanceID theID;
-  G4int pdg=theR->GetPDGEncoding();
+  G4int pdg=aR->GetPDGEncoding();
   data=0;
        if(theID.IsDelta1232(pdg)) data = delta;
   else if(theID.IsDelta1600(pdg)) data = delta1600;
@@ -147,7 +147,7 @@ GetPhaseSpaceIntegral(G4double sqs)
 {
   G4double result = 0;
   G4int it=0;
-  for(G4int ie=0; ie<120; ie++)
+  for(G4int ie=0; ie<119; ie++)
   {
     if(sqrts[ie]*GeV>sqs) break;
     it = ie;

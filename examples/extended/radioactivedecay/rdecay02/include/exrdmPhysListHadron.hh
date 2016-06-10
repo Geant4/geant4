@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: exrdmPhysListHadron.hh 68007 2013-03-13 11:28:03Z gcosmo $
+// $Id: exrdmPhysListHadron.hh 82660 2014-07-02 08:43:20Z gcosmo $
 //
 /// \file radioactivedecay/rdecay02/include/exrdmPhysListHadron.hh
 /// \brief Definition of the exrdmPhysListHadron class
@@ -62,7 +62,8 @@ class exrdmPhysListHadron : public G4VPhysicsConstructor
 
   private:
 
-  G4HadronElasticProcess  fTheElasticProcess;
+  G4HadronElasticProcess fTheElasticProcess;
+  G4HadronElasticProcess ionElasticProcess;
   G4ProtonInelasticProcess fTheProtonInelastic;
   G4NeutronInelasticProcess  fTheNeutronInelastic;
   G4HadronElasticProcess* fTheNeutronElasticProcess;

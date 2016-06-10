@@ -1,0 +1,212 @@
+$Id: History 74238 2013-10-02 08:51:17Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Sub-Category History file
+                      -------------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all directory-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+December 02, 2014 T.Nikitina              geom-usolids-V10-00-26
+- Fixes in UPolycone: 
+  InsideSection() for openPhi when StartPhi is negative,
+  Init() for Polycone defined from ZPlane[0]>ZPlane[N],
+  DistanceToOut() for points starting on internal surface.
+
+November 27, 2014 T.Nikitina              geom-usolids-V10-00-25
+- Improved dump in StreamInfo() for UMultiUnion.
+
+November 27, 2014 G.Cosmo                 geom-usolids-V10-00-24
+- Removed 'inline' specification for pure virtual function StreamInfo()
+  in VUSolid base class.
+
+November 10, 2014 T.Nikitina              geom-usolids-V10-00-23
+- UPolyhedra: moved Extent() from protected to public.
+- UPolycone: correction in Capacity() for iteration over the number of
+  sections and in SurfaceArea() for the case opening-angle is less than 2*pi.
+- UTet: fixed approximation in Extent().
+
+November 6, 2014  T.Nikitina              geom-usolids-V10-00-22
+- Minor fixes of errors reported by Coverity and unit tests in 
+  UTubs,UCons, UTrap, UTet, UTriangular/QuadrangularFacet.
+- Fixed algorithm for Extent() in UTrap.
+
+October 30, 2014  B.Morgan                geom-usolids-V10-00-21
+- Updated CMakeLists.txt to ensure library is built/installed
+  in global mode.
+
+October 29, 2014  G.Cosmo                 geom-usolids-V10-00-20
+- Moved module from source/geometry/solids to source/externals.
+  Adapted scripts for optional external USolids library build.
+- Moved G4USolid bridge class to geometry/management.
+
+October 10, 2014  G.Cosmo                 geom-usolids-V10-00-19
+- UMultiUnion: simplified and optimised use of transformations; removed
+  no longer necessary vector of pointers.
+
+September 24, 2014  T.Nikitina
+- Fixed use of kInfinity in UGenericTrap implementation.
+
+September 22, 2014  G.Cosmo               geom-usolids-V10-00-18
+- Correction to UTessellatedSolid to define post-const attribute for
+  UVertexComparator::operator()(), to resolve compilation error on
+  Windows/VC9 compiler. Avoid inline static methods.
+  Some code formatting.
+
+September 18, 2014  G.Cosmo               geom-usolids-V10-00-17
+- Fixed typo error in USphere::SafetyFromInside() (T.Nikitina).
+- Corrected compilation warnings for variables set but not used in UTrap,
+  UGenericTrap and UTessellatedSolid.
+
+September 17, 2014  G.Cosmo               geom-usolids-V10-00-16
+- Added shapes from the USolids library: UExtrudedSolid, UGenericTrap,
+  UTessellatedSolid (together with UQuadrangularFacet, UTriangularFacet
+  and UTessellatedGeometryAlgorithms utility classes) and UTrap.
+- Modified original UExtrudedSolid, UGenericTrap and UTrap classes to
+  provide deferred initialisation through default constructor.
+  Added public accessors to UGenericTrap and UTrap.
+  Code cleanup in also in UTessellatedSolid to remove G4 types code blocks
+  and flags and make use of UUtils::Exception where commented.
+- Minor fix in UVector2 to replace use of 's' with 's1' as parameter in
+  copy constructor.
+- Removed references to G4 types in several classes.
+- Corrected treatment of transformations in UMultiUnion and
+  UVoxelizer (T.Nikitina).
+
+September 4, 2014  T.Nikitina             geom-usolids-V10-00-15
+- UCons: fixed typo error in GetPointOnSurface() in the call
+  to GetRadiusInRing(). Responsible for occasionally wrong reports
+  when checking for overlaps.
+  Fix in DistanceToIn(p,v) for points on the Surface, to resolve
+  error reported in unit testing by the OpticalEscape test.
+
+September 1, 2014  G.Cosmo                geom-usolids-V10-00-14
+- Fix in G4USolid for use of polyhedron, to avoid race condition in MT
+  when parameterised volumes are visualised.
+
+July 21, 2014  G.Cosmo                    geom-usolids-V10-00-13
+- Improved signature for UMultiUnion::GetTransformation() to return const
+  transformation.
+
+July 18, 2014  G.Cosmo                    geom-usolids-V10-00-12
+- Corrected signature for UMultiUnion::GetTransformation() to return copy
+  instead of temporary pointer to the transformation.
+
+July 4, 2014  G.Cosmo                     geom-usolids-V10-00-11
+- Added local cache for transformations in UMultiUnion, to avoid objects
+  going out of scope.
+
+May 23, 2014  T.Nikitina                  geom-usolids-V10-00-10
+- Fixed DistanceToOut() for UTubs, UCons, USphere, UVSCGfaceted and UPolycone, 
+  DistanceToOut() return normal even for concave faces.
+- Fixed DistanceToOut() for UPolycone in case of points starting on
+  the Surface or on the Internal Surface. Improved convexity algorithm in 
+  DistanceToOut() for UPolycone for points leaving +/-Dz. 
+- Introducing UMultiUnion class; fix in DistanceToOut(), added protection
+  against possible infinite loop.
+
+March 27, 2014  G.Cosmo                   geom-usolids-V10-00-09, 08
+- Removed unused SaveVectorToExternalFile() methods in UUtils, also
+  causing cyclic dependency with UVector3.
+
+March 25, 2014  T.Nikitina                geom-usolids-V10-00-07
+- Fix to DistanceToIn() for UBox in case of points located on edges.
+
+March 13, 2014  G.Cosmo                   geom-usolids-V10-00-06
+- Fixed use of inline keyword for methods defined in .cc files in UTrd,
+  UVCSGfaceted and UVoxelizer.
+- Moved findComponentFastest() to be a method of UVoxelizer and changed
+  to FindComponentFastest().
+
+March 5, 2014  G.Cosmo                    geom-usolids-V10-00-05
+- Fixed handling of polyhedron pointer in G4USolid.
+
+February 28, 2014  T.Nikitina             geom-usolids-V10-00-04
+- New Implementation of SafetyFromInside() for UPolycone, skipping internal
+  Z sections.
+- Implementation of auxiliary methods in UTubs and UCons: SafetyFromInsideR(),
+  SafetyFromOutsideR(),SafetyToPhi(). These methds are used in Polycone for
+  SafetyfromInside() calculations. SafetyFromInside() and SafetyFromOutside()
+  are changed in order to avoid duplications.
+  
+February 21, 2014  T.Nikitina             geom-usolids-V10-00-03
+- Implemented precise safety in UTubs and UCons for SafetyFromOutside().
+  Precise safety is used in UPolycone for calculation of SafetyFromOutside().
+- UPolycone fixes: added validity check of shape for case when RMin > RMax;
+  moved global bounding-box to be a class data member.
+  Corrected implementation of DistanceToOut(p,v) for convexity and normals.
+  Corrected implementation of DistanceToOut(p,v) for stuck tracks due to
+  DistanceToIn=DistanceToOut=0.
+  Corrected implementation of Inside() in case of OpenPhi.    
+
+February 12, 2014  G.Cosmo                geom-usolids-V10-00-02
+- Removed ResetPolyhedron() from G4USolid bridge class. Not necessary as
+  using mutable pointer for solids. Moved 'fPolyhedron' pointer to protected.
+
+February 12, 2014  G.Cosmo                geom-usolids-V10-00-01
+- Corrected implementation of Clone() method in UBox, UTet, UTrd.
+- Corrected cloning mechanism and copy constructor in G4USolid.
+  Addressing problem report #1553.
+
+January 10, 2014  T.Nikitina              geom-usolids-V10-00-00
+- Fixed typo in SafetyFromInside() for UTubs for correct calculation of
+  'safePhi'.
+
+November 29, 2013  G.Cosmo                geom-usolids-V09-06-11
+- Corrected library name in GNUmakefile and fixed comment in sources.cmake.
+
+November 21, 2013  G.Cosmo                geom-usolids-V09-06-10
+- Fixed compilation warning for type conversion in UVCSGfaceted
+  constructor.
+
+November 20, 2013  T.Mikitina             geom-usolids-V09-06-09
+- Fixed Coverity defects.
+
+November 14, 2013  T.Mikitina             geom-usolids-V09-06-08
+- Corrected visualization methods in bridge G4USolid.
+- Corrected returned type string from USolids and added Reset()
+  method to UPolycone.
+
+November 13, 2013  G.Cosmo                geom-usolids-V09-06-07
+- Removed useless dependency on UMultiUnion in UPolycone.
+
+November 13, 2013  G.Cosmo                geom-usolids-V09-06-06
+- Leave out UMultiUnion, as not yet ready for release.
+
+November 12, 2013  T.Nikitina             geom-usolids-V09-06-05
+- Corrected passing of parameters for normal in G4USolid::DistanceToOut(p,v).
+
+November 7, 2013  G.Cosmo                 geom-usolids-V09-06-04
+- Moved wrappers to associated modules.
+- Added missing accessor method to UTrd.
+
+November 5, 2013  G.Cosmo                 geom-usolids-V09-06-03
+- Code cleanup and added banners to USolids files.
+
+November 1, 2013  G.Cosmo                 geom-usolids-V09-06-02
+- Fixed compilation error and warnings on SLC6.
+
+November 1, 2013  G.Cosmo                 geom-usolids-V09-06-01
+- Added wrappers for Ubox, Ucons, UGenericPolycone, UMultiUnion, UOrb,
+  UPolycone, UPolyhedra, USphere, UTet, UTrd, UTubs.
+  Removed all other shapes not covered by the wrappers (will be included
+  in a later stage).
+- Updated CMake script accordingly.
+
+October 29, 2013  G.Cosmo                 geom-usolids-V09-06-00
+- Imported classes from the AIDA Unified Solids Library
+  (see https://aidasoft.web.cern.ch/USolids).
+  Shapes provided: Ubox, Ucons, UGenericPolycone, UMultiUnion, UOrb,
+  UPolycone, UPolyhedra, USphere, UTet, UTrd, UTubs (including also
+  shapes not foreseen to be wrapped as first stage).
+- Includes bridge class G4USolid and first wrapper class G4UBox.

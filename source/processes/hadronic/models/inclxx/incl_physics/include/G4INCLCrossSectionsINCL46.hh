@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -48,7 +49,7 @@
 
 namespace G4INCL {
   /// \brief Cross sections used in INCL4.6
- 
+
   class CrossSectionsINCL46 : public ICrossSections{
     public:
 
@@ -58,14 +59,20 @@ namespace G4INCL {
       /// \brief Total (elastic+inelastic) particle-particle cross section
       virtual G4double total(Particle const * const p1, Particle const * const p2);
 
-      /// \brief Total (elastic+inelastic) pion-nucleon cross section
-      virtual G4double pionNucleon(Particle const * const p1, Particle const * const p2);
-
       /// \brief Cross section for NDelta->NN
-      virtual G4double recombination(Particle const * const p1, Particle const * const p2);
+      virtual G4double NDeltaToNN(Particle const * const p1, Particle const * const p2);
 
       /// \brief Cross section for NN->NDelta
-      virtual G4double deltaProduction(Particle const * const p1, Particle const * const p2);
+      virtual G4double NNToNDelta(Particle const * const p1, Particle const * const p2);
+
+      /// \brief Cross section for piN->NDelta
+      virtual G4double piNToDelta(Particle const * const p1, Particle const * const p2);
+
+      /// \brief Cross section for X pion production - NN Channel
+      virtual G4double NNToxPiNN(const G4int xpi, Particle const * const p1, Particle const * const p2);
+
+      /// \brief Cross section for X pion production - piN Channel
+      virtual G4double piNToxPiN(const G4int xpi, Particle const * const p1, Particle const * const p2);
 
       /** \brief Calculate the slope of the NN DDXS.
        *
@@ -86,6 +93,7 @@ namespace G4INCL {
 
       G4double spnPiPlusPHE(const G4double x);
       G4double spnPiMinusPHE(const G4double x);
+
   };
 }
 

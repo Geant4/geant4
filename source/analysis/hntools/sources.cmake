@@ -11,7 +11,7 @@
 #
 # Generated on : 15/07/2013
 #
-# $Id: sources.cmake 72327 2013-07-16 06:52:43Z gcosmo $
+# $Id: sources.cmake 85025 2014-10-23 09:57:57Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -31,15 +31,19 @@ include_directories(${CMAKE_SOURCE_DIR}/source/analysis/management/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hntools
     HEADERS
-        G4H1DummyManager.hh
+        G4BaseToolsManager.hh
         G4H1ToolsManager.hh
-        G4H2DummyManager.hh
         G4H2ToolsManager.hh
+        G4H3ToolsManager.hh
+        G4P1ToolsManager.hh
+        G4P2ToolsManager.hh
     SOURCES
-        G4H1DummyManager.cc
+        G4BaseToolsManager.cc
         G4H1ToolsManager.cc
-        G4H2DummyManager.cc
         G4H2ToolsManager.cc
+        G4H3ToolsManager.cc
+        G4P1ToolsManager.cc
+        G4P2ToolsManager.cc
     GRANULAR_DEPENDENCIES
         G4globman
         G4intercoms

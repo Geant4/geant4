@@ -36,10 +36,6 @@
 
 #include "G4Run.hh"
 
-#include "G4ParticleDefinition.hh"
-#include "G4ThreeVector.hh"
-#include "globals.hh"
-
 #include "g4root.hh"
 
 #include <vector>
@@ -69,7 +65,7 @@ public:
 
   inline void AddStep(G4double q);
 
-  void ComputeStatistics(G4double edep, G4double rms, G4double& limit); 
+  void EndOfRun(G4double edep, G4double rms, G4double& limit); 
 
   inline void SetVerbose(G4int val)  {fVerbose = val;};
      

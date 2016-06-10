@@ -48,16 +48,18 @@ class G4PhysicsModelCatalog
 private:  // with description
 
     G4PhysicsModelCatalog();
-    ~G4PhysicsModelCatalog();
-    
+    G4PhysicsModelCatalog(const G4PhysicsModelCatalog&);
+    G4PhysicsModelCatalog& operator=(const G4PhysicsModelCatalog&);
+
 public:  // with description
     
-    static G4int Register(G4String&);
-    static G4String& GetModelName(G4int);
+    ~G4PhysicsModelCatalog();
+    static G4int Register(const G4String&);
+    static const G4String& GetModelName(G4int);
 
 public:  // without description
 
-    static G4int GetIndex(G4String&);
+    static G4int GetIndex(const G4String&);
     static G4int Entries();
     static void Destroy();
     

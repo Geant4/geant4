@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcess.hh 67989 2013-03-13 10:54:03Z gcosmo $
+// $Id: G4HadronicProcess.hh 86448 2014-11-12 09:48:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -64,7 +64,6 @@ class G4Track;
 class G4Step;
 class G4Element;
 class G4ParticleChange;
-
 
 class G4HadronicProcess : public G4VDiscreteProcess
 {
@@ -117,9 +116,9 @@ public:
   inline void AddDataSet(G4VCrossSectionDataSet * aDataSet)
   { theCrossSectionDataStore->AddDataSet(aDataSet);}
 
-  // access to the manager
-  inline G4EnergyRangeManager *GetManagerPointer()
-  { return &theEnergyRangeManager; }
+  // access to the list of hadronic interactions
+  std::vector<G4HadronicInteraction*>& GetHadronicInteractionList()
+  { return theEnergyRangeManager.GetHadronicInteractionList(); }
           
   // get inverse cross section per volume
   G4double GetMeanFreePath(const G4Track &aTrack, G4double, 
@@ -140,8 +139,10 @@ protected:
   // generic method to choose secondary generator 
   // recommended for all derived classes
   inline G4HadronicInteraction* ChooseHadronicInteraction(
-      G4double kineticEnergy, G4Material* aMaterial, G4Element* anElement)
-  { return theEnergyRangeManager.GetHadronicInteraction(kineticEnergy,
+      const G4HadProjectile & aHadProjectile, G4Nucleus & aTargetNucleus,
+      G4Material* aMaterial, G4Element* anElement)
+  { return theEnergyRangeManager.GetHadronicInteraction(aHadProjectile, 
+                                                        aTargetNucleus,
 							aMaterial,anElement);
   }
 
@@ -177,14 +178,6 @@ protected:
 
   void DumpState(const G4Track&, const G4String&, G4ExceptionDescription&);
             
-  // obsolete method will be removed
-  inline const G4EnergyRangeManager &GetEnergyRangeManager() const
-  { return theEnergyRangeManager; }
-    
-  // obsolete method will be removed
-  inline void SetEnergyRangeManager( const G4EnergyRangeManager &value )
-  { theEnergyRangeManager = value; }
-
   // access to the chosen generator
   inline G4HadronicInteraction* GetHadronicInteraction() const
   { return theInteraction; }
@@ -199,7 +192,7 @@ protected:
   // Check the result for catastrophic energy non-conservation
   G4HadFinalState* CheckResult(const G4HadProjectile& thePro,
 			       const G4Nucleus& targetNucleus, 
-			       G4HadFinalState* result) const;
+			       G4HadFinalState* result);
 
   // Check 4-momentum balance
   void CheckEnergyMomentumConservation(const G4Track&, const G4Nucleus&);

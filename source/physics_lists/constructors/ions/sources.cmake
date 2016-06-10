@@ -11,7 +11,7 @@
 #
 # Generated on : 10/01/2013
 #
-# $Id: sources.cmake 76274 2013-11-08 11:57:49Z gcosmo $
+# $Id: sources.cmake 84414 2014-10-15 08:19:15Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -57,6 +57,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/qmd/inc
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/coherent_elastic/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/evaporation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/fermi_breakup/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/fission/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/handler/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/multifragmentation/include)
@@ -73,7 +74,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/hadronization/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/qgsm/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/photolepton_hadron/muon_nuclear/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/pre_equilibrium/exciton_model/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/radioactive_decay/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/theo_high_energy/include)

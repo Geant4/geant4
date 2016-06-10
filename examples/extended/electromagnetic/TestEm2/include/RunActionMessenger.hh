@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm2/include/RunActionMessenger.hh
 /// \brief Definition of the RunActionMessenger class
 //
-// $Id: RunActionMessenger.hh 74994 2013-10-25 10:47:45Z gcosmo $
+// $Id: RunActionMessenger.hh 78550 2014-01-07 09:43:41Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,7 +61,7 @@ private:
   G4UIcmdWithAnInteger* fVerbCmd;
             
   G4UIdirectory*        fHistoDir;        
-  G4UIcmdWithAString*   factoryCmd;
+  G4UIcmdWithAString*   fHFileCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

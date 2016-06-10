@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/HistoMessenger.cc
 /// \brief Implementation of the HistoMessenger class
 //
-// $Id: HistoMessenger.cc 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: HistoMessenger.cc 81932 2014-06-06 15:39:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,7 +47,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoMessenger::HistoMessenger(Histo* hist)
-  :fHisto(hist)
+  : G4UImessenger(),
+    fHisto(hist),
+    fHistoDir(0),   
+    fFactoryCmd(0),
+    fFileCmd(0),
+    fHistoCmd(0)
 {
   fHistoDir = new G4UIdirectory("/testhadr/histo/");
   fHistoDir->SetGuidance("histograms control");

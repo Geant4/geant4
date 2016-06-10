@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomPartialDetectorConstruction.hh 73076 2013-08-16 07:45:30Z gcosmo $
+// $Id: DicomPartialDetectorConstruction.hh 84604 2014-10-17 07:48:13Z gcosmo $
 //
 /// \file medical/DICOM/include/DicomPartialDetectorConstruction.hh
 /// \brief Definition of the DicomPartialDetectorConstruction class
@@ -66,14 +66,17 @@ private:
   void ConstructPhantomContainer();
   virtual void ConstructPhantom();
 
-  void ReadVoxelDensitiesPartial( std::ifstream& fin, std::map< G4int, std::map< G4int, G4int > > ifxmin, std::map< G4int, std::map< G4int, G4int > > ifxmax );
+  void ReadVoxelDensitiesPartial( std::ifstream& fin, 
+                                  std::map< G4int, std::map< G4int, G4int > > ifxmin, 
+                                  std::map< G4int, std::map< G4int, G4int > > ifxmax );
 
   std::pair<G4double,G4double> ReadVoxelDim( G4int nVoxel, std::ifstream& fin ); 
   void ReadVoxelDensitiesPartial( std::ifstream& fin );
 
   void SetScorer(G4LogicalVolume* voxel_logic);
 
-  G4Material* BuildMaterialChangingDensity( const G4Material* origMate, float density, G4String mateName );
+  G4Material* BuildMaterialChangingDensity( const G4Material* origMate, 
+                                            float density, G4String mateName );
 
 
 private:

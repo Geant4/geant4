@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossMessenger.hh 74376 2013-10-04 08:25:47Z gcosmo $
+// $Id: G4EnergyLossMessenger.hh 85424 2014-10-29 08:23:44Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -84,42 +84,12 @@ public:   // with description
 private:
 
   G4EmProcessOptions*        opt;
-
-  G4UIdirectory*             eLossDirectory;
-  G4UIdirectory*             mscDirectory;
-  G4UIdirectory*             emDirectory;
-  G4UIcmdWithABool*          RndmStepCmd;
-  G4UIcmdWithABool*          EnlossFlucCmd;
   G4UIcmdWithABool*          SubSecCmd;
-  G4UIcmdWithADouble*        MinSubSecCmd;
   G4UIcommand*               StepFuncCmd;
   G4UIcommand*               deexCmd;
-  G4UIcmdWithAString*        mscCmd;
-  G4UIcmdWithADoubleAndUnit* MinEnCmd;
-  G4UIcmdWithADoubleAndUnit* MaxEnCmd;
   G4UIcmdWithABool*          IntegCmd;
-  G4UIcmdWithABool*          rangeCmd;
-  G4UIcmdWithABool*          lpmCmd;
-  G4UIcmdWithABool*          latCmd;
-  G4UIcmdWithABool*          splCmd;
-  G4UIcmdWithABool*          aplCmd;
-  G4UIcmdWithABool*          deCmd;
-  G4UIcmdWithABool*          auCmd;
-  G4UIcmdWithABool*          pixeCmd;
   G4UIcmdWithAString*        pixeXsCmd;
   G4UIcmdWithAString*        pixeeXsCmd;
-  G4UIcmdWithAnInteger*      verCmd;
-  G4UIcmdWithAnInteger*      ver1Cmd;
-  G4UIcmdWithAnInteger*      ver2Cmd;
-  G4UIcmdWithAnInteger*      dedxCmd;
-  G4UIcmdWithAnInteger*      lamCmd;
-  G4UIcmdWithADouble*        lllCmd;
-  G4UIcmdWithADouble*        labCmd;
-  G4UIcmdWithADouble*        skinCmd;
-  G4UIcmdWithADouble*        frCmd;
-  G4UIcmdWithADouble*        fgCmd;
-  G4UIcmdWithADouble*        mscfCmd;
-  G4UIcmdWithADoubleAndUnit* angCmd;
   G4UIcommand*               bfCmd;
   G4UIcommand*               fiCmd;
   G4UIcommand*               brCmd;

@@ -1,0 +1,56 @@
+-------------------------------------------------------------------
+
+          ==================================================
+          Geant4 - an Object-Oriented Toolkit for Simulation
+          ==================================================
+
+            History file for High Precision Neutron model
+            ---------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+6 November 2014 Pedro Arce   (hadr-hpp-V10-00-05)
+---------------------------------------------------
+- Code cleanup
+- Compilation flag PHP_AS_HP for comparison with neutron_hp
+
+4 August 2014 Tatsumi Koi   (hadr-hpp-V10-00-03)
+---------------------------------------------------
+- G4ParticleHPElasticData, G4ParticleHPInelasticData, G4ParticleHPCaptureData,
+  G4ParticleHPFissionData, G4ParticleHPJENDLHEData: proper deletion of
+  physics vectors.
+
+
+25 July 2014  Tatsumi Koi (hadr-hpp-V10-00-02)
+---------------------------------------------------
+- Delete unused (and also uncompilable) header file.
+	G4ParticleHPPhotonXSection.hh
+
+
+1 July 2014  Tatsumi Koi (hadr-hpp-V10-00-01)
+---------------------------------------------------
+- Fix compilation warnings
+	include/G4ParticleHPInelasticData.hh
+	src/G4ParticleHPData.cc
+	src/G4ParticleHPInelasticData.cc
+
+
+10 June 2014  Tatsumi Koi 
+for Pedro Arce and Emilio Mendoza of CIEMAT (hadr-hpp-V10-00-00)
+---------------------------------------------------
+- Regenerate particle_hp codes from hadr-hpn-V10-00-12
+- Deleteing files related FissionFragment model
+- Deleteing G4InterpolationManager and so on to avoid duplication
+
+
+22 October 2012  Dennis Wright (hadr-hpp-V09-05-00)
+---------------------------------------------------
+- create particle_hp module for treatment of low energy charged particles
+- code developed by Pedro Arce and Emilio Mendoza of CIEMAT and based on
+  neutronHP
+

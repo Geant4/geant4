@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeSearchScene.cc 68043 2013-03-13 14:27:49Z gcosmo $
+// $Id: G4PhysicalVolumeSearchScene.cc 81056 2014-05-20 09:02:16Z gcosmo $
 //
 // 
 // John Allison  10th August 1998.
@@ -44,7 +44,6 @@ G4PhysicalVolumeSearchScene::G4PhysicalVolumeSearchScene
   fpPVModel                     (pPVModel),
   fRequiredPhysicalVolumeName   (requiredPhysicalVolumeName),
   fRequiredCopyNo               (requiredCopyNo),
-  fpCurrentObjectTransformation (0),
   fFoundDepth                   (0),
   fpFoundPV                     (0),
   fpFoundLV                     (0),
@@ -54,7 +53,7 @@ G4PhysicalVolumeSearchScene::G4PhysicalVolumeSearchScene
 
 G4PhysicalVolumeSearchScene::~G4PhysicalVolumeSearchScene () {}
 
-void G4PhysicalVolumeSearchScene::FindVolume (const G4VSolid&) {
+void G4PhysicalVolumeSearchScene::ProcessVolume (const G4VSolid&) {
 
   typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
   typedef std::vector<PVNodeID> PVPath;

@@ -34,12 +34,13 @@
 
 //_____________________________________________________________________________
 G4VFileManager::G4VFileManager(const G4AnalysisManagerState& state)
-  : fState(state),
-    fFileName(""), 
+  : G4BaseFileManager(state),
     fHistoDirectoryName(""), 
+    fProfileDirectoryName(""), 
     fNtupleDirectoryName(""),
     fLockFileName(false),
     fLockHistoDirectoryName(false), 
+    fLockProfileDirectoryName(false), 
     fLockNtupleDirectoryName(false)
 {
 }
@@ -61,12 +62,11 @@ G4bool G4VFileManager::SetFileName(const G4String& fileName)
     description 
       << "Cannot set File name as its value was already used.";
     G4Exception("G4VFileManager::SetFileName()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W012", JustWarning, description);
     return false;
   }              
 
-  fFileName = fileName;
-  return true;
+  return G4BaseFileManager::SetFileName(fileName);
 }  
 
 //_____________________________________________________________________________
@@ -77,11 +77,27 @@ G4bool G4VFileManager::SetHistoDirectoryName(const G4String& dirName)
     description 
       << "Cannot set Histo directory name as its value was already used.";
     G4Exception("G4VFileManager::SetHistoDirectoryName()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W012", JustWarning, description);
     return false;
   }              
 
   fHistoDirectoryName = dirName;
+  return true;
+}  
+
+//_____________________________________________________________________________
+G4bool G4VFileManager::SetProfileDirectoryName(const G4String& dirName) 
+{
+  if ( fLockProfileDirectoryName ) {
+    G4ExceptionDescription description;
+    description 
+      << "Cannot set Profile directory name as its value was already used.";
+    G4Exception("G4VFileManager::SetProfileDirectoryName()",
+                "Analysis_W012", JustWarning, description);
+    return false;
+  }              
+
+  fProfileDirectoryName = dirName;
   return true;
 }  
 
@@ -93,62 +109,10 @@ G4bool G4VFileManager::SetNtupleDirectoryName(const G4String& dirName)
     description 
       << "Cannot set Ntuple directory name as its value was already used.";
     G4Exception("G4VFileManager::SetNtupleDirectoryName()",
-                "Analysis_W010", JustWarning, description);
+                "Analysis_W012", JustWarning, description);
     return false;
   }              
 
   fNtupleDirectoryName = dirName;
   return true;
 }  
-
-//_____________________________________________________________________________
-G4String G4VFileManager::GetFullFileName() const 
-{  
-  G4String name(fFileName);
-  // Add thread Id to a file name if MT processing
-  if ( ! fState.GetIsMaster() ) {
-    std::ostringstream os;
-    os << G4Threading::G4GetThreadId();
-    name.append("_t");
-    name.append(os.str());
-  }  
-  // Add file extension .root if no extension is given
-  if ( name.find(".") == std::string::npos ) { 
-    name.append(".");
-    name.append(GetFileType());
-  }  
-
-  return name;
-}  
-
-//_____________________________________________________________________________
-G4String G4VFileManager::GetNtupleFileName(const G4String& ntupleName) const 
-{  
-  G4String name(fFileName);
-  // Add ntupleName
-  name.append("_");
-  name.append(ntupleName);
-  // Add thread Id to a file name if MT processing
-  if ( ! fState.GetIsMaster() ) {
-    std::ostringstream os;
-    os << G4Threading::G4GetThreadId();
-    name.append("_t");
-    name.append(os.str());
-  }  
-  // Add file extension .xml if no extension is given
-  if ( name.find(".") == std::string::npos ) { 
-    name.append(".");
-    name.append(GetFileType());
-  }
-  return name;
-}  
-
-//_____________________________________________________________________________
-G4String G4VFileManager::GetFileType() const 
-{
-  G4String fileType = fState.GetType();
-  fileType.toLower();
-  return fileType;
-}                 
-
-

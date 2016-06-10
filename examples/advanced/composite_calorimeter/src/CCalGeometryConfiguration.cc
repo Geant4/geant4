@@ -83,16 +83,24 @@ CCalGeometryConfiguration::CCalGeometryConfiguration():
   G4String pathName = getenv("CCAL_CONFPATH");
   G4String fileenv  = getenv("CCAL_GEOMETRYCONF");
   if (!pathName || !fileenv) {
-    G4cerr << "ERROR: CCAL_GEOMETRYCONF and/or CCAL_CONFPATH not set" << G4endl
-	 << "       Set them to the geometry configuration file/path" << G4endl;
-    exit(-2);
+     G4ExceptionDescription ed;
+     ed << "ERROR: CCAL_GEOMETRYCONF and/or CCAL_CONFPATH not set" << G4endl
+	<< "       Set them to the geometry configuration file/path" << G4endl;
+     G4Exception("CCalGeometryConfiguration::CCalGeometryConfiguration()",
+		 "ccal003",
+		 FatalException,ed);
   }
 
   G4cout << " ==> Opening file " << fileenv << "..." << G4endl;
   std::ifstream is;
   bool ok = openGeomFile(is, pathName, fileenv);
   if (!ok)
-    exit(-1);
+    {
+      G4Exception("CCalGeometryConfiguration::CCalGeometryConfiguration()",
+		 "ccal004",
+		 FatalException,"Unable to open input data file");
+    }
+
 
   G4String name;
   GCInfo gcinfo;

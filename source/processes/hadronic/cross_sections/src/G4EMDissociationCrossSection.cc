@@ -132,7 +132,7 @@ G4double G4EMDissociationCrossSection::GetElementCrossSection
   // Get relevant information about the projectile and target (A, Z) and
   // velocity of the projectile.
   //
-  G4ParticleDefinition *definitionP = theDynamicParticle->GetDefinition();
+  const G4ParticleDefinition *definitionP = theDynamicParticle->GetDefinition();
   G4double AP   = definitionP->GetBaryonNumber();
   G4double ZP   = definitionP->GetPDGCharge();
   G4double b    = theDynamicParticle->Get4Momentum().beta();

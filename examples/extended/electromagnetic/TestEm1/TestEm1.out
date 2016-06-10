@@ -4,14 +4,14 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
 
-***** Table : Nb of materials = 19 *****
+***** Table : Nb of materials = 20 *****
 
  Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m  
                        Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
@@ -28,7 +28,7 @@
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: H2liquid    density: 70.800 mg/cm3  RadL:   8.923 m    Nucl.Int.Length:   4.960 m  
+ Material: H2liquid    density: 70.800 mg/cm3  RadL:   8.923 m    Nucl.Int.Length:   4.944 m  
                        Imean:  19.200 eV 
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -37,7 +37,7 @@
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    Water    density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.416 cm 
+ Material:    Water    density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.356 cm 
                        Imean:  78.000 eV 
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -67,63 +67,62 @@
           ElmMassFraction:  72.73 %  ElmAbundance  66.67 % 
 
 
- Material:   D2_gas    density:  0.036 kg/m3   RadL:  13.184 km   Nucl.Int.Length:  12.278 km 
-                       Imean:  41.800 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:   D2_gas    density:  0.036 kg/m3   RadL:  34.993 km   Nucl.Int.Length:   9.791 km 
+                       Imean:  19.200 eV   temperature: 273.15 K  pressure:   1.00 atm
 
-   --->  Element: D2_gas ( )   Z =  2.0   N =   2.0   A =   2.01 g/mole
-         --->  Isotope:     3   Z =  2   N =   3   A =   3.02 g/mole   abundance:   0.00 %
-         --->  Isotope:     4   Z =  2   N =   4   A =   4.00 g/mole   abundance: 100.00 %
+   --->  Element: Heavy-Hydrogen (D)   Z =  1.0   N =   2.0   A =   2.01 g/mole
+         --->  Isotope:     d   Z =  1   N =   2   A =   2.01 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
  Material: liquidArgon    density:  1.390 g/cm3   RadL:  14.065 cm   Nucl.Int.Length:  86.078 cm 
                        Imean: 188.000 eV 
 
-   --->  Element: liquidArgon ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole
-         --->  Isotope:    36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
-         --->  Isotope:    38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
-         --->  Isotope:    40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %
+   --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
+         --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
+         --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
+         --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
  Material: Aluminium    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.879 cm 
                        Imean: 166.000 eV 
 
-   --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole
-         --->  Isotope:    27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
  Material:  Silicon    density:  2.330 g/cm3   RadL:   9.368 cm   Nucl.Int.Length:  45.663 cm 
                        Imean: 173.000 eV 
 
-   --->  Element: Silicon ( )   Z = 14.0   N =  28.1   A =  28.09 g/mole
-         --->  Isotope:    28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
-         --->  Isotope:    29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
-         --->  Isotope:    30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
  Material: Chromium    density:  7.140 g/cm3   RadL:   2.093 cm   Nucl.Int.Length:  18.295 cm 
                        Imean: 257.000 eV 
 
-   --->  Element: Chromium ( )   Z = 24.0   N =  52.0   A =  51.99 g/mole
-         --->  Isotope:    50   Z = 24   N =  50   A =  49.95 g/mole   abundance:   4.34 %
-         --->  Isotope:    52   Z = 24   N =  52   A =  51.94 g/mole   abundance:  83.79 %
-         --->  Isotope:    53   Z = 24   N =  53   A =  52.94 g/mole   abundance:   9.50 %
-         --->  Isotope:    54   Z = 24   N =  54   A =  53.94 g/mole   abundance:   2.37 %
+   --->  Element: Cr (Cr)   Z = 24.0   N =  52.0   A =  51.99 g/mole
+         --->  Isotope:  Cr50   Z = 24   N =  50   A =  49.95 g/mole   abundance:   4.34 %
+         --->  Isotope:  Cr52   Z = 24   N =  52   A =  51.94 g/mole   abundance:  83.79 %
+         --->  Isotope:  Cr53   Z = 24   N =  53   A =  52.94 g/mole   abundance:   9.50 %
+         --->  Isotope:  Cr54   Z = 24   N =  54   A =  53.94 g/mole   abundance:   2.37 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
  Material: Germanium    density:  5.323 g/cm3   RadL:   2.301 cm   Nucl.Int.Length:  27.431 cm 
                        Imean: 350.000 eV 
 
-   --->  Element: Germanium ( )   Z = 32.0   N =  72.6   A =  72.61 g/mole
-         --->  Isotope:    70   Z = 32   N =  70   A =  69.92 g/mole   abundance:  20.84 %
-         --->  Isotope:    72   Z = 32   N =  72   A =  71.92 g/mole   abundance:  27.54 %
-         --->  Isotope:    73   Z = 32   N =  73   A =  72.92 g/mole   abundance:   7.73 %
-         --->  Isotope:    74   Z = 32   N =  74   A =  73.92 g/mole   abundance:  36.28 %
-         --->  Isotope:    76   Z = 32   N =  76   A =  75.92 g/mole   abundance:   7.61 %
+   --->  Element: Ge (Ge)   Z = 32.0   N =  72.6   A =  72.61 g/mole
+         --->  Isotope:  Ge70   Z = 32   N =  70   A =  69.92 g/mole   abundance:  20.84 %
+         --->  Isotope:  Ge72   Z = 32   N =  72   A =  71.92 g/mole   abundance:  27.54 %
+         --->  Isotope:  Ge73   Z = 32   N =  73   A =  72.92 g/mole   abundance:   7.73 %
+         --->  Isotope:  Ge74   Z = 32   N =  74   A =  73.92 g/mole   abundance:  36.28 %
+         --->  Isotope:  Ge76   Z = 32   N =  76   A =  75.92 g/mole   abundance:   7.61 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
@@ -152,66 +151,66 @@
  Material:     Iron    density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.999 cm 
                        Imean: 286.000 eV 
 
-   --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole
-         --->  Isotope:    54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
-         --->  Isotope:    56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
-         --->  Isotope:    57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
-         --->  Isotope:    58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+   --->  Element: Fe (Fe)   Z = 26.0   N =  55.8   A =  55.85 g/mole
+         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
  Material: Tungsten    density: 19.300 g/cm3   RadL:   3.504 mm   Nucl.Int.Length:  10.312 cm 
                        Imean: 727.000 eV 
 
-   --->  Element: Tungsten ( )   Z = 74.0   N = 183.8   A = 183.85 g/mole
-         --->  Isotope:   180   Z = 74   N = 180   A = 179.95 g/mole   abundance:   0.12 %
-         --->  Isotope:   182   Z = 74   N = 182   A = 181.95 g/mole   abundance:  26.50 %
-         --->  Isotope:   183   Z = 74   N = 183   A = 182.95 g/mole   abundance:  14.31 %
-         --->  Isotope:   184   Z = 74   N = 184   A = 183.95 g/mole   abundance:  30.64 %
-         --->  Isotope:   186   Z = 74   N = 186   A = 185.95 g/mole   abundance:  28.43 %
+   --->  Element: W (W)   Z = 74.0   N = 183.8   A = 183.85 g/mole
+         --->  Isotope:  W180   Z = 74   N = 180   A = 179.95 g/mole   abundance:   0.12 %
+         --->  Isotope:  W182   Z = 74   N = 182   A = 181.95 g/mole   abundance:  26.50 %
+         --->  Isotope:  W183   Z = 74   N = 183   A = 182.95 g/mole   abundance:  14.31 %
+         --->  Isotope:  W184   Z = 74   N = 184   A = 183.95 g/mole   abundance:  30.64 %
+         --->  Isotope:  W186   Z = 74   N = 186   A = 185.95 g/mole   abundance:  28.43 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
  Material:     Gold    density: 19.320 g/cm3   RadL:   3.344 mm   Nucl.Int.Length:  10.540 cm 
                        Imean: 790.000 eV 
 
-   --->  Element: Gold ( )   Z = 79.0   N = 197.0   A = 196.97 g/mole
-         --->  Isotope:   197   Z = 79   N = 197   A = 196.97 g/mole   abundance: 100.00 %
+   --->  Element: Au (Au)   Z = 79.0   N = 197.0   A = 196.97 g/mole
+         --->  Isotope: Au197   Z = 79   N = 197   A = 196.97 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
  Material:     Lead    density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.247 cm 
                        Imean: 823.000 eV 
 
-   --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole
-         --->  Isotope:   204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
-         --->  Isotope:   206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
-         --->  Isotope:   207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
-         --->  Isotope:   208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %
+   --->  Element: Pb (Pb)   Z = 82.0   N = 207.2   A = 207.19 g/mole
+         --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
+         --->  Isotope: Pb206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
+         --->  Isotope: Pb207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
+         --->  Isotope: Pb208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
  Material:  Uranium    density: 18.950 g/cm3   RadL:   3.166 mm   Nucl.Int.Length:  11.446 cm 
                        Imean: 890.000 eV 
 
-   --->  Element: Uranium ( )   Z = 92.0   N = 238.0   A = 238.03 g/mole
-         --->  Isotope:   234   Z = 92   N = 234   A = 234.04 g/mole   abundance:   0.01 %
-         --->  Isotope:   235   Z = 92   N = 235   A = 235.04 g/mole   abundance:   0.72 %
-         --->  Isotope:   238   Z = 92   N = 238   A = 238.05 g/mole   abundance:  99.27 %
+   --->  Element: U (U)   Z = 92.0   N = 238.0   A = 238.03 g/mole
+         --->  Isotope:  U234   Z = 92   N = 234   A = 234.04 g/mole   abundance:   0.01 %
+         --->  Isotope:  U235   Z = 92   N = 235   A = 235.04 g/mole   abundance:   0.72 %
+         --->  Isotope:  U238   Z = 92   N = 238   A = 238.05 g/mole   abundance:  99.27 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
  Material: ArgonGas    density:  1.782 mg/cm3  RadL: 109.702 m    Nucl.Int.Length: 671.417 m  
                        Imean: 188.000 eV   temperature: 273.15 K  pressure:   1.00 atm
 
-   --->  Element: ArgonGas ( )   Z = 18.0   N =  39.9   A =  39.95 g/mole
-         --->  Isotope:    36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
-         --->  Isotope:    38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
-         --->  Isotope:    40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %
+   --->  Element: Ar (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole
+         --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
+         --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
+         --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: Isobutane    density:  2.420 mg/cm3  RadL: 186.822 m    Nucl.Int.Length: 270.777 m  
+ Material: Isobutane    density:  2.420 mg/cm3  RadL: 186.822 m    Nucl.Int.Length: 270.486 m  
                        Imean:  53.040 eV   temperature: 273.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (C)   Z =  6.0   N =  12.0   A =  12.00 g/mole
@@ -225,13 +224,13 @@
           ElmMassFraction:  17.38 %  ElmAbundance  71.43 % 
 
 
- Material: ArgonButane    density:  1.835 mg/cm3  RadL: 128.398 m    Nucl.Int.Length: 522.554 m  
+ Material: ArgonButane    density:  1.835 mg/cm3  RadL: 128.398 m    Nucl.Int.Length: 522.307 m  
                        Imean: 119.578 eV   temperature: 273.15 K  pressure:   1.00 atm
 
-   --->  Element: ArgonGas ( )   Z = 18.0   N =  39.9   A =  39.95 g/mole
-         --->  Isotope:    36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
-         --->  Isotope:    38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
-         --->  Isotope:    40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %
+   --->  Element: Ar (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole
+         --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
+         --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
+         --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %
           ElmMassFraction:  70.00 %  ElmAbundance  19.51 % 
 
    --->  Element: Hydrogen (C)   Z =  6.0   N =  12.0   A =  12.00 g/mole
@@ -245,8 +244,33 @@
           ElmMassFraction:   5.22 %  ElmAbundance  57.49 % 
 
 
+ Material:  Lu2SiO5    density:  7.400 g/cm3   RadL:   1.143 cm   Nucl.Int.Length:  20.916 cm 
+                       Imean: 418.807 eV 
 
-/run/verbose 2
+   --->  Element: Lu (Lu)   Z = 71.0   N = 175.0   A = 174.97 g/mole
+         --->  Isotope: Lu175   Z = 71   N = 175   A = 174.94 g/mole   abundance:  97.41 %
+         --->  Isotope: Lu176   Z = 71   N = 176   A = 175.94 g/mole   abundance:   2.59 %
+          ElmMassFraction:  76.40 %  ElmAbundance  25.00 % 
+
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+          ElmMassFraction:   6.13 %  ElmAbundance  12.50 % 
+
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  17.47 %  ElmAbundance  62.50 % 
+
+
+
+/control/cout/ignoreThreadsExcept 0
+/run/numberOfThreads 2
+*** /run/numberOfThreads command is issued in sequential mode.
+Command is ignored.
+/run/verbose 1
 #
 /testem/det/setMat Aluminium
 /testem/det/setSize 10 m
@@ -254,39 +278,21 @@
 #
 /testem/phys/addPhysics emstandard_opt0
 ###/testem/phys/addPhysics  local
-/testem/phys/setCuts 1 mm
+/run/setCut 1 mm
 #
 /run/initialize
-userDetector->Construct() start.
 
  The Box is 10 m   of Aluminium
-Aluminium is registered to the default region.
-physicsList->Construct() start.
-physicsList->CheckParticleList() start.
-physicsList->setCut() start.
-PhysicsList::SetCuts:CutLength : 1 mm 
 ##/globalField/setValue 0 0 5 tesla
 #
 /testem/gun/setDefault
 /gun/particle e-
 /gun/energy 100 MeV
 #
+/run/verbose 1
 /run/printProgress 200
 #
 /run/beamOn 2000
-
-Region <DefaultRegionForTheWorld> --  -- appears in <Aluminium> world volume
- This region is in the mass world.
- Root logical volume(s) : Aluminium 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Aluminium 
- Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
@@ -299,11 +305,6 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
-Start closing geometry.
-G4GeometryManager::ReportVoxelStats -- Voxel Statistics
-
-    Total memory consumed for geometry optimisation:   0 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 0 starts.
 
 --------- Ranecu engine status ---------
@@ -320,55 +321,45 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 --> Event 1400 starts.
 --> Event 1600 starts.
 --> Event 1800 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=3.08s Real=3.1s Sys=0.01s
+  User=4.07s Real=4.09s Sys=0s
 
  ======================== run summary ======================
 
- The run was: 2000 e- of 100 MeV through 10 m   of Aluminium (density: 2.7 g/cm3 )
+ The run is: 2000 e- of 100 MeV through 10 m   of Aluminium (density: 2.7 g/cm3 )
 
- ============================================================
+ total energy deposit: 99.784 MeV
 
- total energy deposit: 99.819 MeV
+ nb tracks/event   neutral:  25.214   charged:  136.41
+ nb  steps/event   neutral:  129.74   charged:  202.58
 
- nb tracks/event   neutral:  25.361   charged:  138.46
- nb  steps/event   neutral:  131.24   charged:  204.99
+ Process calls frequency :
+          CoulombScat=      1        Transportation=   1910               annihil=   2883
+                compt= 209048                  conv=   2865                 eBrem=  45701
+                eIoni= 355780                   msc=    790                  phot=  45663
 
- nb of process calls per event: 
-    CoulombScatTransportation     annihil       compt        conv       eBrem       eIoni         msc        phot
-         0.0005      0.9065      1.3965      105.88      1.3965      23.057         180      0.5345      23.059
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.029 cm    rms = 3.8339 cm 
- proj Range = 9.5794 cm    rms = 3.5423 cm 
- proj/true  = 0.86853
- transverse dispersion at end = 1.6675 cm 
-      mass true Range from simulation = 29.78 g/cm2 
+ true Range = 10.968 cm    rms = 3.8693 cm 
+ proj Range = 9.5071 cm    rms = 3.5715 cm 
+ proj/true  = 0.86677
+ transverse dispersion at end = 1.5883 cm 
+      mass true Range from simulation = 29.615 g/cm2 
        from PhysicsTable (csda range) = 32.099 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1863563076, 174104628
+ Current couple of seeds = 1724451476, 2015559535
 ----------------------------------------
 G4 kernel has come to Quit state.
-UserDetectorConstruction deleted.
-UserPhysicsList deleted.
-UserActionInitialization deleted.
-UserRunAction deleted.
-UserPrimaryGenerator deleted.
-RunManager is deleting RunManagerKernel.
-EventManager deleted.
-Units table cleared.
+Total navigation history collections cleaned: 6
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.18 Mb
+Number of memory pools allocated: 9 of which, static: 0
+Dynamic pools deleted: 9 / Total memory freed: 0.06 Mb
 ============================================================
-G4Allocator objects are deleted.
-UImanager deleted.
-StateManager deleted.
 RunManagerKernel is deleted. Good bye :)

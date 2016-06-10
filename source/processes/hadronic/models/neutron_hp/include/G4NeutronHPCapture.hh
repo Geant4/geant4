@@ -59,18 +59,19 @@ class G4NeutronHPCapture : public G4HadronicInteraction
    public:
       G4int GetVerboseLevel() const;
       void SetVerboseLevel( G4int );
+      void BuildPhysicsTable(const G4ParticleDefinition&);
   
   private:
   
   G4double * xSec;
   //G4NeutronHPChannel * theCapture;
-      std::vector<G4NeutronHPChannel*> theCapture;
+      std::vector<G4NeutronHPChannel*>* theCapture;
   G4String dirName;
   G4int numEle;
 //  G4int it;
   
   G4HadFinalState theResult;
-      void addChannelForNewElement();
+      //void addChannelForNewElement();
 };
 
 #endif

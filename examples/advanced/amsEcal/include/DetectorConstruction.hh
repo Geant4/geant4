@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh 68740 2013-04-05 09:56:39Z gcosmo $
+// $Id: DetectorConstruction.hh 83418 2014-08-21 15:30:47Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,12 +33,12 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
+#include "G4Cache.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4Material;
-class G4UniformMagField;
-class DetectorMessenger;
+class G4GlobalMagFieldMessenger;
             
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -51,11 +51,10 @@ public:
 
 public:
      
-  G4VPhysicalVolume* Construct();
+  virtual G4VPhysicalVolume* Construct();
+  virtual void ConstructSDandField();
   
   void PrintCalorParameters();
-  void SetMagField(G4double);
-  void UpdateGeometry();
        
 public:
 
@@ -75,13 +74,6 @@ public:
   G4int              GetNbFibers()          {return nbOfFibers;};  
   G4int              GetNbLayers()          {return nbOfLayers;};    
   G4int              GetNbModules()         {return nbOfModules;};
-
-  G4int              GetN1Pixels()          {return n1pxl;};
-  G4int              GetN2Pixels()          {return n2pxl;};
-  G4double           GetD1Pixel()           {return d1pxl;};
-  G4double           GetD2Pixel()           {return d2pxl;};
-  G4int              GetN1Shift()           {return n1shift;};
-  G4int              GetSizeVectorPixels()  {return sizeVectorPxl;};
         			 
 private:
 
@@ -122,16 +114,8 @@ private:
   G4VPhysicalVolume* pvol_world;
   
   G4Material*        defaultMat;
-
-  //pixels readout
-  //
-  G4int            n1pxl, n2pxl;
-  G4double         d1pxl, d2pxl;
-  G4int            n1shift;
-  G4int            sizeVectorPxl;
               
-  G4UniformMagField* magField;
-  DetectorMessenger* detectorMessenger;
+  G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;  
       
 private:
 

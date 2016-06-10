@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -53,6 +54,7 @@
 #include "G4INCLFinalState.hh"
 #include "G4INCLRootFinder.hh"
 #include "G4INCLKinematicsUtils.hh"
+#include "G4INCLAllocationPool.hh"
 
 namespace G4INCL {
 
@@ -90,7 +92,7 @@ namespace G4INCL {
       void preInteractionBlocking();
 
       void preInteraction();
-      FinalState *postInteraction(FinalState *);
+      void postInteraction(FinalState *);
 
       /** \brief Restore the state of both particles.
        *
@@ -99,18 +101,7 @@ namespace G4INCL {
       void restoreParticles() const;
 
       /// \brief true if the given avatar should use local energy
-      G4bool shouldUseLocalEnergy() const {
-        if(!theNucleus) return false;
-        LocalEnergyType theLocalEnergyType;
-        if(getType()==DecayAvatarType || isPiN)
-          theLocalEnergyType = theNucleus->getStore()->getConfig()->getLocalEnergyPiType();
-        else
-          theLocalEnergyType = theNucleus->getStore()->getConfig()->getLocalEnergyBBType();
-
-        const G4bool firstAvatar = (theNucleus->getStore()->getBook().getAcceptedCollisions() == 0);
-        return ((theLocalEnergyType == FirstCollisionLocalEnergy && firstAvatar) ||
-            theLocalEnergyType == AlwaysLocalEnergy);
-      }
+      G4bool shouldUseLocalEnergy() const;
 
       Nucleus *theNucleus;
       Particle *particle1, *particle2;
@@ -127,8 +118,8 @@ namespace G4INCL {
            *
            * The constructor sets the private class members.
            */
-          ViolationEMomentumFunctor(Nucleus * const nucleus, FinalState const * const finalState, ThreeVector const * const boost, const G4bool localE);
-          virtual ~ViolationEMomentumFunctor() { particleMomenta.clear(); }
+          ViolationEMomentumFunctor(Nucleus * const nucleus, ParticleList const &modAndCre, const G4double totalEnergyBeforeInteraction, ThreeVector const &boost, const G4bool localE);
+          virtual ~ViolationEMomentumFunctor();
 
           /** \brief Compute the energy-conservation violation.
            *
@@ -144,13 +135,13 @@ namespace G4INCL {
           /// \brief List of final-state particles.
           ParticleList finalParticles;
           /// \brief CM particle momenta, as determined by the channel.
-          std::list<ThreeVector> particleMomenta;
+          std::vector<ThreeVector> particleMomenta;
           /// \brief Total energy before the interaction.
           G4double initialEnergy;
           /// \brief Pointer to the nucleus
           Nucleus *theNucleus;
           /// \brief Pointer to the boost vector
-          ThreeVector const *boostVector;
+          ThreeVector const &boostVector;
 
           /// \brief True if we should use local energy
           const G4bool shouldUseLocalEnergy;
@@ -167,19 +158,19 @@ namespace G4INCL {
 
       };
 
-      /// \brief RootFunctor-derived object for enforcing energy conservation in pi-N.
+      /// \brief RootFunctor-derived object for enforcing energy conservation in delta production
       class ViolationEEnergyFunctor : public RootFunctor {
         public:
-          /** \brief Prepare for calling the () operator and scaleParticleMomenta
+          /** \brief Prepare for calling the () operator and setParticleEnergy
            *
            * The constructor sets the private class members.
            */
-          ViolationEEnergyFunctor(Nucleus * const nucleus, FinalState const * const finalState, const G4bool localE);
+          ViolationEEnergyFunctor(Nucleus * const nucleus, Particle * const aParticle, const G4double totalEnergyBeforeInteraction, const G4bool localE);
           virtual ~ViolationEEnergyFunctor() {}
 
           /** \brief Compute the energy-conservation violation.
            *
-           * \param x scale factor for the particle momenta
+           * \param x scale factor for the particle energy
            * \return the energy-conservation violation
            */
           G4double operator()(const G4double x) const;
@@ -228,6 +219,9 @@ namespace G4INCL {
        */
       G4bool enforceEnergyConservation(FinalState * const fs);
 
+      ParticleList modified, created, modifiedAndCreated;
+
+      INCL_DECLARE_ALLOCATION_POOL(InteractionAvatar);
   };
 
 }

@@ -39,16 +39,14 @@
 class G4VPhysicalVolume;
 class HadrontherapyDetectorConstruction;
 class HadrontherapyModulator;
-//class PassiveCarbonBeamLineMessenger;
 
 class PassiveCarbonBeamLine : public G4VUserDetectorConstruction
 {
 public:
 
-	//PassiveCarbonBeamLine(G4VPhysicalVolume*);
 	PassiveCarbonBeamLine();
 	~PassiveCarbonBeamLine();
-	
+
 	G4VPhysicalVolume* Construct();  
 	
 	void HadrontherapyBeamLineSupport();
@@ -89,7 +87,8 @@ private:
 	//PassiveCarbonBeamLineMessenger* passiveMessenger;  
 	G4VPhysicalVolume* physicalTreatmentRoom;
 	HadrontherapyDetectorConstruction* hadrontherapyDetectorConstruction; 
-	
+  //FaradayCup *FC;  
+
 	G4double vacuumZoneXSize;
 	G4double vacuumZoneYSize;
 	G4double vacuumZoneZSize;
@@ -143,6 +142,7 @@ private:
 	G4VPhysicalVolume* physiFirstMonitorLayer4;
 	G4VPhysicalVolume* physiNozzleSupport;
 	G4VPhysicalVolume* physiHoleNozzleSupport; 
+	G4VPhysicalVolume* physiNozzleSupportHole;
 	G4VPhysicalVolume* physiSecondHoleNozzleSupport;
 	G4Tubs* solidFinalCollimator; 
 	G4VPhysicalVolume* physiFinalCollimator; 

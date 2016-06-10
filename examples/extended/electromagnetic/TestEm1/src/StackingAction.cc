@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm1/src/StackingAction.cc
 /// \brief Implementation of the StackingAction class
 //
-// $Id: StackingAction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id: StackingAction.cc 81776 2014-06-05 08:41:01Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -26,7 +26,7 @@
 /// \file exoticphysics/phonon/include/XDetectorConstruction.hh
 /// \brief Definition of the XDetectorConstruction class
 //
-// $Id: XDetectorConstruction.hh 76246 2013-11-08 11:17:29Z gcosmo $
+// $Id: XDetectorConstruction.hh 84197 2014-10-10 14:33:03Z gcosmo $
 //
 
 #ifndef XDetectorConstruction_h
@@ -45,6 +45,7 @@ public:
   
 public:
   virtual G4VPhysicalVolume* Construct();
+  virtual void ConstructSDandField();
   
 private:
   void DefineMaterials();

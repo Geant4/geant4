@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4empCrossSection.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4empCrossSection.cc 83410 2014-08-21 15:17:53Z gcosmo $
 //
 //         
 //
@@ -43,9 +43,19 @@
 G4empCrossSection::G4empCrossSection(const G4String& nam)
   :G4VhShellCrossSection(nam),totalCS(0.0)
 { 
-
-  paulShellK = new G4PaulKxsModel();
-  orlicShellLi = new G4OrlicLiXsModel();
+ if (nam == "Empirical") 
+  {
+    paulShellK = new G4PaulKxsModel();
+    orlicShellLi = new G4OrlicLiXsModel();
+    flag=0;
+  }
+  else 
+  { 
+    G4cout << "ERROR in G4empCrossSection name ; Paul+Orlic is selected." << G4endl; 
+    paulShellK = new G4PaulKxsModel();
+    orlicShellLi = new G4OrlicLiXsModel();
+    flag=0;
+  }
 
 }
 
@@ -53,7 +63,7 @@ G4empCrossSection::~G4empCrossSection()
 { 
 
   delete paulShellK;
-  delete orlicShellLi;
+  if (orlicShellLi)   delete orlicShellLi;
 
 }
 
@@ -74,9 +84,14 @@ std::vector<G4double> G4empCrossSection::GetCrossSection(G4int Z,
   // so it can hadle the responsibility of this check too
 
   if (mass == aProton->GetPDGMass()) {
-    crossSections.push_back( orlicShellLi->CalculateL1CrossSection(Z, incidentEnergy) );
-    crossSections.push_back( orlicShellLi->CalculateL2CrossSection(Z, incidentEnergy) );
-    crossSections.push_back( orlicShellLi->CalculateL3CrossSection(Z, incidentEnergy) );
+
+    if (flag==0)
+    {
+      crossSections.push_back( orlicShellLi->CalculateL1CrossSection(Z, incidentEnergy) );
+      crossSections.push_back( orlicShellLi->CalculateL2CrossSection(Z, incidentEnergy) );
+      crossSections.push_back( orlicShellLi->CalculateL3CrossSection(Z, incidentEnergy) );
+    }
+
   }
 
   else {
@@ -93,11 +108,9 @@ G4double G4empCrossSection::CrossSection(G4int Z, G4AtomicShellEnumerator shell,
 					 G4double mass,
 					 const G4Material*)
 {
-
-  //let's reproduce  
-
   G4double res = 0.0;
   G4ParticleDefinition* aProton = G4Proton::Proton();
+  
   if(fKShell == shell) { 
     res = paulShellK->CalculateKCrossSection(Z, mass, incidentEnergy);
   } 
@@ -106,17 +119,16 @@ G4double G4empCrossSection::CrossSection(G4int Z, G4AtomicShellEnumerator shell,
   // moreover, at the present time,this class handles explicitly Paul and Orlic models,
   // so it can hadle the responsibility of this check too
 
-
   else if (mass == aProton->GetPDGMass()) {
     
     if(fL1Shell == shell) { 
-      res = orlicShellLi->CalculateL1CrossSection(Z, incidentEnergy);
+      if (flag==0) res =   orlicShellLi->CalculateL1CrossSection(Z, incidentEnergy);
     } 
     else if(fL2Shell == shell) { 
-      res = orlicShellLi->CalculateL2CrossSection(Z, incidentEnergy);
+      if (flag==0) res =   orlicShellLi->CalculateL2CrossSection(Z, incidentEnergy);
     } 
     else if(fL3Shell == shell) { 
-      res = orlicShellLi->CalculateL3CrossSection(Z, incidentEnergy);
+      if (flag==0) res =   orlicShellLi->CalculateL3CrossSection(Z, incidentEnergy);
     } 
   }
   return res;

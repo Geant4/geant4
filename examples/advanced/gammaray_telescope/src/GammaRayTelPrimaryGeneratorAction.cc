@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPrimaryGeneratorAction.cc 66508 2012-12-19 10:16:45Z gcosmo $
+// $Id: GammaRayTelPrimaryGeneratorAction.cc 82630 2014-07-01 09:43:00Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -56,12 +56,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 GammaRayTelPrimaryGeneratorAction::GammaRayTelPrimaryGeneratorAction()
-  :rndmFlag("off"),nSourceType(0),nSpectrumType(0)
+  :rndmFlag("off"),nSourceType(0),nSpectrumType(0),sourceGun(false)
 {
-  G4RunManager* runManager = G4RunManager::GetRunManager();
-  GammaRayTelDetector =
-    (GammaRayTelDetectorConstruction*)(runManager->GetUserDetectorConstruction());
-
+  GammaRayTelDetector = static_cast<const GammaRayTelDetectorConstruction*>
+    (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
 
   //create a messenger for this class
   
@@ -70,7 +68,7 @@ GammaRayTelPrimaryGeneratorAction::GammaRayTelPrimaryGeneratorAction()
   G4int n_particle = 1;
 
   particleGun  = new G4ParticleGun(n_particle);     
-      // default particle kinematic
+  // default particle kinematic
   
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
@@ -89,10 +87,9 @@ GammaRayTelPrimaryGeneratorAction::GammaRayTelPrimaryGeneratorAction()
 
 GammaRayTelPrimaryGeneratorAction::~GammaRayTelPrimaryGeneratorAction()
 {
-  if (sourceGun)
-    delete particleGun;
-  else
-    delete particleSource;
+ 
+  delete particleGun;
+  delete particleSource;
 
   delete gunMessenger;
 }

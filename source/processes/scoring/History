@@ -1,4 +1,4 @@
-$Id: History 76935 2013-11-19 09:46:31Z gcosmo $
+$Id: History 86967 2014-11-21 11:51:28Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 20, 2014, M.Asai (procscore-V10-00-01)
+- Coverity fixes.
+
+August 26, 2014, M.Asai (procscore-V10-00-00)
+- Introducing G4ParallelWorldProcessStore to allow all the
+  G4ParallelWorldProcess objects of all threads could update their
+  corresponding world volumes when the entire geometry has been
+  destroyed and rebuilt from scratch.
 
 November 18, 2013, M.Asai (procscore-V09-06-03)
 - Remove unnecessary G4cout.

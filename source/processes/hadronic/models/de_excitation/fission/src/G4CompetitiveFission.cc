@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.cc 70744 2013-06-05 10:50:30Z gcosmo $
+// $Id: G4CompetitiveFission.cc 85841 2014-11-05 15:35:06Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -43,28 +43,27 @@
 
 G4CompetitiveFission::G4CompetitiveFission() : G4VEvaporationChannel("fission")
 {
-    theFissionBarrierPtr = new G4FissionBarrier;
-    MyOwnFissionBarrier = true;
+  theFissionBarrierPtr = new G4FissionBarrier;
+  MyOwnFissionBarrier = true;
 
-    theFissionProbabilityPtr = new G4FissionProbability;
-    MyOwnFissionProbability = true;
+  theFissionProbabilityPtr = new G4FissionProbability;
+  MyOwnFissionProbability = true;
   
-    theLevelDensityPtr = new G4FissionLevelDensityParameter;
-    MyOwnLevelDensity = true;
+  theLevelDensityPtr = new G4FissionLevelDensityParameter;
+  MyOwnLevelDensity = true;
 
-    MaximalKineticEnergy = -1000.0*MeV;
-    FissionBarrier = 0.0;
-    FissionProbability = 0.0;
-    LevelDensityParameter = 0.0;
+  MaximalKineticEnergy = -1000.0*MeV;
+  FissionBarrier = 0.0;
+  FissionProbability = 0.0;
+  LevelDensityParameter = 0.0;
+  pairingCorrection = G4PairingCorrection::GetInstance();
 }
 
 G4CompetitiveFission::~G4CompetitiveFission()
 {
-    if (MyOwnFissionBarrier) delete theFissionBarrierPtr;
-
-    if (MyOwnFissionProbability) delete theFissionProbabilityPtr;
-
-    if (MyOwnLevelDensity) delete theLevelDensityPtr;
+  if (MyOwnFissionBarrier) delete theFissionBarrierPtr;
+  if (MyOwnFissionProbability) delete theFissionProbabilityPtr;
+  if (MyOwnLevelDensity) delete theLevelDensityPtr;
 }
 
 G4double G4CompetitiveFission::GetEmissionProbability(G4Fragment* fragment)
@@ -72,7 +71,7 @@ G4double G4CompetitiveFission::GetEmissionProbability(G4Fragment* fragment)
   G4int anA = fragment->GetA_asInt();
   G4int aZ  = fragment->GetZ_asInt();
   G4double ExEnergy = fragment->GetExcitationEnergy() - 
-    G4PairingCorrection::GetInstance()->GetFissionPairingCorrection(anA,aZ);
+    pairingCorrection->GetFissionPairingCorrection(anA,aZ);
   
 
   // Saddle point excitation energy ---> A = 65
@@ -95,29 +94,35 @@ G4double G4CompetitiveFission::GetEmissionProbability(G4Fragment* fragment)
 
 G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
 {
+  G4FragmentVector * theResult = new G4FragmentVector();
+  G4Fragment* frag0 = new G4Fragment(theNucleus);
+  G4Fragment* frag1 = EmittedFragment(frag0);
+  if(frag1) { theResult->push_back(frag1); }
+  theResult->push_back(frag0);
+  return theResult;
+}
+
+G4Fragment* G4CompetitiveFission::EmittedFragment(G4Fragment* theNucleus)
+{
+  G4Fragment * Fragment1 = 0; 
   // Nucleus data
   // Atomic number of nucleus
-  G4int A = theNucleus.GetA_asInt();
+  G4int A = theNucleus->GetA_asInt();
   // Charge of nucleus
-  G4int Z = theNucleus.GetZ_asInt();
+  G4int Z = theNucleus->GetZ_asInt();
   //   Excitation energy (in MeV)
-  G4double U = theNucleus.GetExcitationEnergy() - 
-    G4PairingCorrection::GetInstance()->GetFissionPairingCorrection(A,Z);
-  // Check that U > 0
-  if (U <= 0.0) {
-    G4FragmentVector * theResult = new  G4FragmentVector;
-    theResult->push_back(new G4Fragment(theNucleus));
-    return theResult;
-  }
+  G4double U = theNucleus->GetExcitationEnergy();
+  G4double pcorr = pairingCorrection->GetFissionPairingCorrection(A,Z);
+  if (U <= pcorr) { return Fragment1; }
 
   // Atomic Mass of Nucleus (in MeV)
-  G4double M = theNucleus.GetGroundStateMass();
+  G4double M = theNucleus->GetGroundStateMass();
 
   // Nucleus Momentum
-  G4LorentzVector theNucleusMomentum = theNucleus.GetMomentum();
+  G4LorentzVector theNucleusMomentum = theNucleus->GetMomentum();
 
   // Calculate fission parameters
-  G4FissionParameters theParameters(A,Z,U,FissionBarrier);
+  G4FissionParameters theParameters(A,Z,U-pcorr,FissionBarrier);
   
   // First fragment
   G4int A1 = 0;
@@ -134,7 +139,7 @@ G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
 
   //JMQ 04/03/09 It will be used latter to fix the bug in energy conservation
   G4double FissionPairingEnergy=
-    G4PairingCorrection::GetInstance()->GetFissionPairingCorrection(A,Z);
+    pairingCorrection->GetFissionPairingCorrection(A,Z);
 
   G4int Trials = 0;
   do {
@@ -142,24 +147,24 @@ G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
     // First fragment 
     A1 = FissionAtomicNumber(A,theParameters);
     Z1 = FissionCharge(A,Z,A1);
-    M1 = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z1,A1);
+    M1 = G4NucleiProperties::GetNuclearMass(A1, Z1);
 
     // Second Fragment
     A2 = A - A1;
     Z2 = Z - Z1;
-    if (A2 < 1 || Z2 < 0) {
-      throw G4HadronicException(__FILE__, __LINE__, 
-	"G4CompetitiveFission::BreakUp: Can't define second fragment! ");
+    if (A2 < 1 || Z2 < 0 || Z2 > A2) {
+      FragmentsExcitationEnergy = -1.0;
+      continue;
     }
-    M2 = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z2,A2);
-
-    // Check that fragment masses are less or equal than total energy
-    if (M1 + M2 > theNucleusMomentum.e()) {
-      throw G4HadronicException(__FILE__, __LINE__, 
-	"G4CompetitiveFission::BreakUp: Fragments Mass > Total Energy");
-    }
+    M2 = G4NucleiProperties::GetNuclearMass(A2, Z2);
     // Maximal Kinetic Energy (available energy for fragments)
     G4double Tmax = M + U - M1 - M2;
+
+    // Check that fragment masses are less or equal than total energy
+    if (Tmax < 0.0) {
+      FragmentsExcitationEnergy = -1.0;
+      continue;
+    }
 
     FragmentsKineticEnergy = FissionKineticEnergy( A , Z,
 						   A1, Z1,
@@ -171,7 +176,7 @@ G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
     //	FragmentsExcitationEnergy = Tmax - FragmentsKineticEnergy;
     // JMQ 04/03/09 BUG FIXED: in order to fulfill energy conservation the
     // fragments carry the fission pairing energy in form of 
-    //excitation energy
+    // excitation energy
 
     FragmentsExcitationEnergy = 
       Tmax - FragmentsKineticEnergy+FissionPairingEnergy;
@@ -183,68 +188,24 @@ G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
       "G4CompetitiveFission::BreakItUp: Excitation energy for fragments < 0.0!");
   }
 
-  // while (FragmentsExcitationEnergy < 0 && Trials < 100);
-  
   // Fragment 1
-  G4double U1 = FragmentsExcitationEnergy * A1/static_cast<G4double>(A);
-    // Fragment 2
-  G4double U2 = FragmentsExcitationEnergy * A2/static_cast<G4double>(A);
+  M1 += FragmentsExcitationEnergy * A1/static_cast<G4double>(A);
+  // Fragment 2
+  M2 += FragmentsExcitationEnergy * A2/static_cast<G4double>(A);
+  // primary
+  M += U;
 
-  //JMQ  04/03/09 Full relativistic calculation is performed
-  //
-  G4double Fragment1KineticEnergy=
-    (FragmentsKineticEnergy*(FragmentsKineticEnergy+2*(M2+U2)))
-    /(2*(M1+U1+M2+U2+FragmentsKineticEnergy));
-  G4ParticleMomentum Momentum1(IsotropicVector(std::sqrt(Fragment1KineticEnergy*(Fragment1KineticEnergy+2*(M1+U1)))));
-  G4ParticleMomentum Momentum2(-Momentum1);
-  G4LorentzVector FourMomentum1(Momentum1,std::sqrt(Momentum1.mag2()+(M1+U1)*(M1+U1)));
-  G4LorentzVector FourMomentum2(Momentum2,std::sqrt(Momentum2.mag2()+(M2+U2)*(M2+U2)));
-
-  //JMQ 04/03/09 now we do Lorentz boosts (instead of Galileo boosts)
+  G4double etot1 = (M*M - M2*M2 + M1*M1)/(2*M);
+  G4ParticleMomentum Momentum1(IsotropicVector(std::sqrt((etot1 - M1)*(etot1+M1))));
+  G4LorentzVector FourMomentum1(Momentum1, etot1);
   FourMomentum1.boost(theNucleusMomentum.boostVector());
-  FourMomentum2.boost(theNucleusMomentum.boostVector());
     
-  //////////JMQ 04/03: Old version calculation is commented
-  // There was vioation of energy momentum conservation
-
-  //    G4double Pmax = std::sqrt( 2 * ( ( (M1+U1)*(M2+U2) ) /
-  //				( (M1+U1)+(M2+U2) ) ) * FragmentsKineticEnergy);
-
-  //G4ParticleMomentum momentum1 = IsotropicVector( Pmax );
-  //  G4ParticleMomentum momentum2( -momentum1 );
-
-  // Perform a Galileo boost for fragments
-  //    momentum1 += (theNucleusMomentum.boostVector() * (M1+U1));
-  //    momentum2 += (theNucleusMomentum.boostVector() * (M2+U2));
-
-
-  // Create 4-momentum for first fragment
-  // Warning!! Energy conservation is broken
-  //JMQ 04/03/09 ...NOT ANY MORE!! BUGS FIXED: Energy and momentum are NOW conserved 
-  //    G4LorentzVector FourMomentum1( momentum1 , std::sqrt(momentum1.mag2() + (M1+U1)*(M1+U1)));
-
-  // Create 4-momentum for second fragment
-  // Warning!! Energy conservation is broken
-  //JMQ 04/03/09 ...NOT ANY MORE!! BUGS FIXED: Energy and momentum are NOW conserved
-  //    G4LorentzVector FourMomentum2( momentum2 , std::sqrt(momentum2.mag2() + (M2+U2)*(M2+U2)));
-
-  //////////
-
   // Create Fragments
-  G4Fragment * Fragment1 = new G4Fragment( A1, Z1, FourMomentum1);
-  G4Fragment * Fragment2 = new G4Fragment( A2, Z2, FourMomentum2);
-
-  // Create Fragment Vector
-  G4FragmentVector * theResult = new G4FragmentVector;
-
-  theResult->push_back(Fragment1);
-  theResult->push_back(Fragment2);
-
-#ifdef debug
-  CheckConservation(theNucleus,theResult);
-#endif
-
-  return theResult;
+  Fragment1 = new G4Fragment( A1, Z1, FourMomentum1);
+  theNucleusMomentum -= FourMomentum1;
+  theNucleus->SetZandA_asInt(Z2, A2);
+  theNucleus->SetMomentum(theNucleusMomentum);
+  return Fragment1;
 }
 
 G4int 
@@ -257,7 +218,6 @@ G4CompetitiveFission::FissionAtomicNumber(G4int A,
   G4double A1 = theParam.GetA1();
   G4double A2 = theParam.GetA2();
   G4double As = theParam.GetAs();
-  //    G4double Sigma1 = theParam.GetSigma1();
   G4double Sigma2 = theParam.GetSigma2();
   G4double SigmaS = theParam.GetSigmaS();
   G4double w = theParam.GetW();
@@ -394,10 +354,9 @@ G4CompetitiveFission::FissionKineticEnergy(G4int A, G4int Z,
   // Average kinetic energy for symmetric and asymmetric components
   G4double Eaverage = 0.1071*MeV*(Z*Z)/G4Pow::GetInstance()->Z13(A) + 22.2*MeV;
 
-
   // Compute maximal average kinetic energy of fragments and Energy Dispersion (sqrt)
   G4double TaverageAfMax;
-  G4double ESigma;
+  G4double ESigma = 10*MeV;
   // Select randomly fission mode (symmetric or asymmetric)
   if (G4UniformRand() > Psy) { // Asymmetric Mode
     G4double A11 = theParam.GetA1()-0.7979*theParam.GetSigma1();
@@ -405,18 +364,20 @@ G4CompetitiveFission::FissionKineticEnergy(G4int A, G4int Z,
     G4double A21 = theParam.GetA2()-0.7979*theParam.GetSigma2();
     G4double A22 = theParam.GetA2()+0.7979*theParam.GetSigma2();
     // scale factor
-    G4double ScaleFactor = 0.5*theParam.GetSigma1()*(AsymmetricRatio(A,A11)+AsymmetricRatio(A,A12))+
+    G4double ScaleFactor = 0.5*theParam.GetSigma1()*
+      (AsymmetricRatio(A,A11)+AsymmetricRatio(A,A12))+
       theParam.GetSigma2()*(AsymmetricRatio(A,A21)+AsymmetricRatio(A,A22));
     // Compute average kinetic energy for fragment with AfMax
-    TaverageAfMax = (Eaverage + 12.5 * Xsy) * (PPas/ScaleFactor) * AsymmetricRatio(A,AfMax);
-    ESigma = 10.0*MeV; // MeV
+    TaverageAfMax = (Eaverage + 12.5 * Xsy) * (PPas/ScaleFactor) * 
+      AsymmetricRatio(A,AfMax);
 
   } else { // Symmetric Mode
     G4double As0 = theParam.GetAs() + 0.7979*theParam.GetSigmaS();
     // scale factor
     G4double ScaleFactor = theParam.GetW()*theParam.GetSigmaS()*SymmetricRatio(A,As0);
     // Compute average kinetic energy for fragment with AfMax
-    TaverageAfMax = (Eaverage - 12.5*MeV*Xas) * (PPsy/ScaleFactor) * SymmetricRatio(A,AfMax);
+    TaverageAfMax = (Eaverage - 12.5*MeV*Xas) * (PPsy/ScaleFactor) * 
+      SymmetricRatio(A,AfMax);
     ESigma = 8.0*MeV;
   }
 
@@ -493,8 +454,9 @@ void G4CompetitiveFission::CheckConservation(const G4Fragment & theInitialState,
     }
 
     if (ProductsA != theInitialState.GetA_asInt()) {
-	G4cout << "!!!!!!!!!! Baryonic Number Conservation Violation !!!!!!!!!!" << G4endl;
-	G4cout << "G4CompetitiveFission.cc: Barionic Number Conservation test for fission fragments" 
+	G4cout << "!!!!!!!!!! Baryonic Number Conservation Violation !!!!!!!!!!" 
+	       << G4endl;
+	G4cout << "G4CompetitiveFission: Baryon Number Conservation test for fission fragments" 
 	       << G4endl; 
 	G4cout << "Initial A = " << theInitialState.GetA_asInt() 
 	       << "   Fragments A = " << ProductsA << "   Diference --> " 

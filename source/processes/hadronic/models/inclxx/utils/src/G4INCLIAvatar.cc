@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -66,12 +67,13 @@ namespace G4INCL {
   }
 
   IAvatar::~IAvatar() {
+    INCL_DEBUG("destroying avatar " << this << std::endl);
   }
 
   std::string IAvatar::toString() {
     std::stringstream entry;
     std::stringstream particleString;
-    ParticleList pl = getParticles();
+    ParticleList const &pl = getParticles();
     G4int numberOfParticles = 0;
     for(ParticleIter i=pl.begin(), e=pl.end(); i!=e; ++i) {
       numberOfParticles++;
@@ -85,21 +87,24 @@ namespace G4INCL {
     return entry.str();
   }
 
-  G4INCL::FinalState* IAvatar::getFinalState()
-  {
-    INCL_DEBUG("Random seeds before preInteraction: " << Random::getSeeds() << std::endl);
-    preInteraction();
-    INCL_DEBUG("Random seeds before getChannel: " << Random::getSeeds() << std::endl);
-    IChannel *c = getChannel();
-    if( !c ) {
-      return NULL;
-    }
-    INCL_DEBUG("Random seeds before getFinalState: " << Random::getSeeds() << std::endl);
-    FinalState *fs = c->getFinalState();
-    INCL_DEBUG("Random seeds before postInteraction: " << Random::getSeeds() << std::endl);
-    fs = postInteraction(fs);
-    delete c;
+  FinalState *IAvatar::getFinalState() {
+    FinalState *fs = new FinalState;
+    fillFinalState(fs);
     return fs;
+  }
+
+  void IAvatar::fillFinalState(FinalState *fs) {
+    INCL_DEBUG("Random seeds before preInteraction: " << Random::getSeeds() << '\n');
+    preInteraction();
+    INCL_DEBUG("Random seeds before getChannel: " << Random::getSeeds() << '\n');
+    IChannel *c = getChannel();
+    if( !c )
+      return;
+    INCL_DEBUG("Random seeds before getFinalState: " << Random::getSeeds() << '\n');
+    c->fillFinalState(fs);
+    INCL_DEBUG("Random seeds before postInteraction: " << Random::getSeeds() << '\n');
+    postInteraction(fs);
+    delete c;
   }
 
 }

@@ -1,4 +1,4 @@
-$Id: README 66241 2012-12-13 18:34:42Z gunter $
+$Id: README 85031 2014-10-23 10:03:11Z gcosmo $
 -----------------------------------------------------
 
      =========================================================
@@ -35,19 +35,23 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
  physics_lists subdirectory.
      
  Local physics lists:	 
- - "local"	standard EM physics with current 'best' options setting.
-                these options are explicited in PhysListEmStandard
- - "standardSS" standard EM physics with single Coulomb scattering 
-                instead of multiple scattering			
+ - "local"	 standard EM physics with current 'best' options setting
+                 these options are explicited in PhysListEmStandard
+ - "standardSSM" standard EM physics with alternative single Coulomb 
+                 scattering model instead of multiple scattering.
     
  From geant4/source/physics_lists/builders:	 
  - "emstandard_opt0" recommended standard EM physics for LHC
  - "emstandard_opt1" best CPU performance standard physics for LHC
- - "emstandard_opt2"     
+ - "emstandard_opt2" similar fast simulation
  - "emstandard_opt3" best standard EM options - analog to "local" above
- - "emstandard_opt4" best current advanced EM options standard + lowenergy   
+ - "emstandard_opt4" best current advanced EM options standard + lowenergy
+ - "emstandardWVI" standard EM physics and WentzelVI multiple scattering
+ - "emstandardSS"  standard EM physics and single scattering model
  - "emlivermore"  low-energy EM physics using Livermore data
  - "empenelope"   low-energy EM physics implementing Penelope models
+ - "emlowenergy"  low-energy EM physics implementing experimental 
+                  low-energy models low-enegry WentzelVI model
            
  Physics lists and options can be (re)set with UI commands
     
@@ -60,8 +64,9 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
  
  The primary kinematic consists of a single particle which hits the absorber 
  perpendicular to the input face. The type of the particle and its energy are 
- set in the PrimaryGeneratorAction class, and can be changed via the G4 build-in
- commands of G4ParticleGun class (see the macros provided with this example).
+ set in the PrimaryGeneratorAction class, and can be changed via the G4 
+ build-in commands of G4ParticleGun class (see the macros provided with this 
+ example).
 	
  In addition one can choose randomly the impact point of the incident particle.
  The interactive command is built in PrimaryGeneratorMessenger class.
@@ -120,6 +125,10 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
 	13	"(transmit, charged) : projected angle at exit of world"
 	14	"(transmit, charged) : projected position at exit of world"
 	15	"(transmit, charged) : radius at exit of world"	
+        16      "energy of Auger e- at creation"
+        17      "energy of fluorescence gamma at creation"
+        18      "energy of Auger e- at creation (log scale)"
+        19      "energy of fluorescence gamma at creation (log scale)"
 	20	"(transmit, neutral) : kinetic energy at exit of world"
 	21	"(transmit, neutral) : ener fluence: dE(MeV)/dOmega"	
 	22	"(transmit, neutral) : space angle dN/dOmega"
@@ -132,6 +141,10 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
 	41	"(reflect , neutral) : ener fluence: dE(MeV)/dOmega"	
 	42	"(reflect , neutral) : space angle dN/dOmega"
 	43	"(reflect , neutral) : projected angle at exit of world"
+        44      "energy of PIXE Auger e- at creation"
+        45      "energy of PIXE gamma at creation"
+        46      "energy of PIXE Auger e- at creation (log scale)"
+        47      "energy of PIXE gamma at creation (log scale)"
 
  The histograms can be viewed using ROOT or PAW.
  

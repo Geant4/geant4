@@ -33,6 +33,8 @@
 
 #include "Run.hh"
 #include "DetectorConstruction.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "HistoManager.hh"
 
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
@@ -41,7 +43,7 @@
 
 Run::Run(DetectorConstruction* det)
 : G4Run(),
-  fDetector(det),
+  fDetector(det), fParticle(0), fEkin(0.),
   fNbStep1(0), fNbStep2(0),
   fTrackLen1(0.), fTrackLen2(0.),
   fTime1(0.),fTime2(0.)
@@ -53,14 +55,23 @@ Run::~Run()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void Run::SetPrimary(G4ParticleDefinition* particle, G4double energy)
+{ 
+  fParticle = particle;
+  fEkin = energy;
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void Run::CountProcesses(const G4VProcess* process) 
 {
-  std::map<const G4VProcess*,G4int>::iterator it = fProcCounter.find(process);
+  G4String procName = process->GetProcessName();
+  std::map<G4String,G4int>::iterator it = fProcCounter.find(procName);
   if ( it == fProcCounter.end()) {
-    fProcCounter[process] = 1;
+    fProcCounter[procName] = 1;
   }
   else {
-    fProcCounter[process]++; 
+    fProcCounter[procName]++; 
   }
 }                 
                   
@@ -97,18 +108,95 @@ void Run::SumTrackLength(G4int nstep1, G4int nstep2,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::ComputeStatistics() 
+void Run::Merge(const G4Run* run)
+{
+  const Run* localRun = static_cast<const Run*>(run);
+  
+  //primary particle info
+  //
+  fParticle = localRun->fParticle;
+  fEkin     = localRun->fEkin;
+  
+  // accumulate sums
+  //
+  fNbStep1   += localRun->fNbStep1;
+  fNbStep2   += localRun->fNbStep2;   
+  fTrackLen1 += localRun->fTrackLen1;  
+  fTrackLen2 += localRun->fTrackLen2;
+  fTime1     += localRun->fTime1;  
+  fTime2     += localRun->fTime2;
+  
+  //map: processes count
+  std::map<G4String,G4int>::const_iterator itp;
+  for ( itp = localRun->fProcCounter.begin();
+        itp != localRun->fProcCounter.end(); ++itp ) {
+
+    G4String procName = itp->first;
+    G4int localCount = itp->second;
+    if ( fProcCounter.find(procName) == fProcCounter.end()) {
+      fProcCounter[procName] = localCount;
+    }
+    else {
+      fProcCounter[procName] += localCount;
+    }  
+  }
+   
+  //map: created particles count         
+  std::map<G4String,ParticleData>::const_iterator itn;
+  for (itn = localRun->fParticleDataMap.begin(); 
+       itn != localRun->fParticleDataMap.end(); ++itn) {
+    
+    G4String name = itn->first;
+    const ParticleData& localData = itn->second;   
+    if ( fParticleDataMap.find(name) == fParticleDataMap.end()) {
+      fParticleDataMap[name]
+       = ParticleData(localData.fCount, 
+                      localData.fEmean, 
+                      localData.fEmin, 
+                      localData.fEmax);
+    }
+    else {
+      ParticleData& data = fParticleDataMap[name];   
+      data.fCount += localData.fCount;
+      data.fEmean += localData.fEmean;
+      G4double emin = localData.fEmin;
+      if (emin < data.fEmin) data.fEmin = emin;
+      G4double emax = localData.fEmax;
+      if (emax > data.fEmax) data.fEmax = emax; 
+    }   
+  }
+
+  G4Run::Merge(run); 
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Run::EndOfRun() 
 {
   G4int prec = 5, wid = prec + 2;  
   G4int dfprec = G4cout.precision(prec);
   
+  //run condition
+  //
+  G4Material* material = fDetector->GetMaterial();
+  G4double density = material->GetDensity();
+   
+  G4String Particle = fParticle->GetParticleName();    
+  G4cout << "\n The run is " << numberOfEvent << " "<< Particle << " of "
+         << G4BestUnit(fEkin,"Energy") << " through " 
+         << G4BestUnit(0.5*(fDetector->GetSize()),"Length") << " of "
+         << material->GetName() << " (density: " 
+         << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+
+  if (numberOfEvent == 0) { G4cout.precision(dfprec);   return;}
+             
   //frequency of processes
   //
-  G4cout << "\n Process calls frequency --->";  
+  G4cout << "\n Process calls frequency :" << G4endl;  
   G4int survive = 0;
-  std::map<const G4VProcess*,G4int>::iterator it;    
+  std::map<G4String,G4int>::iterator it;    
   for (it = fProcCounter.begin(); it != fProcCounter.end(); it++) {
-     G4String procName = it->first->GetProcessName();
+     G4String procName = it->first;
      G4int    count    = it->second;
      G4cout << "\t" << procName << "= " << count;
      if (procName == "Transportation") survive = count;
@@ -170,71 +258,18 @@ void Run::ComputeStatistics()
            << " --> " << G4BestUnit(eMax, "Energy") 
            << ")" << G4endl;           
  }
-                   
-  //restore default format         
-  G4cout.precision(dfprec);
+ 
+  //normalize histograms      
+  ////G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  ////G4double factor = 1./numberOfEvent;
+  ////analysisManager->ScaleH1(3,factor);
            
-  // remove all contents in fProcCounter 
+  //remove all contents in fProcCounter, fCount 
   fProcCounter.clear();
-  // remove all contents in fCount
-  fParticleDataMap.clear(); 
+  fParticleDataMap.clear();
+                          
+  //restore default format         
+  G4cout.precision(dfprec);   
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void Run::Merge(const G4Run* run)
-{
-  const Run* localRun = static_cast<const Run*>(run);
-
-  // accumulate sums
-  //
-  fNbStep1   += localRun->fNbStep1;
-  fNbStep2   += localRun->fNbStep2;   
-  fTrackLen1 += localRun->fTrackLen1;  
-  fTrackLen2 += localRun->fTrackLen2;
-  fTime1     += localRun->fTime1;  
-  fTime2     += localRun->fTime2;
-  
-  //maps
-  std::map<const G4VProcess*,G4int>::const_iterator itp;
-  for ( itp = localRun->fProcCounter.begin();
-        itp != localRun->fProcCounter.end(); ++itp ) {
-
-    const G4VProcess* process = itp->first;
-    G4int localCount = itp->second;
-    if ( fProcCounter.find(process) == fProcCounter.end()) {
-      fProcCounter[process] = localCount;
-    }
-    else {
-      fProcCounter[process] += localCount;
-    }  
-  }    
-       
-  std::map<G4String,ParticleData>::const_iterator itn;
-  for (itn = localRun->fParticleDataMap.begin(); 
-       itn != localRun->fParticleDataMap.end(); ++itn) {
-    
-    G4String name = itn->first;
-    const ParticleData& localData = itn->second;   
-    if ( fParticleDataMap.find(name) == fParticleDataMap.end()) {
-      fParticleDataMap[name]
-       = ParticleData(localData.fCount, 
-                      localData.fEmean, 
-                      localData.fEmin, 
-                      localData.fEmax);
-    }
-    else {
-      ParticleData& data = fParticleDataMap[name];   
-      data.fCount += localData.fCount;
-      data.fEmean += localData.fEmean;
-      G4double emin = localData.fEmin;
-      if (emin < data.fEmin) data.fEmin = emin;
-      G4double emax = localData.fEmax;
-      if (emax > data.fEmax) data.fEmax = emax; 
-    }   
-  }
-
-  G4Run::Merge(run); 
-} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -35,6 +35,10 @@
 // ---------------------------------------------------------------
 
 #include "G4Threading.hh"
+#include "G4AutoDelete.hh"
+#include "G4AutoLock.hh"
+#include "globals.hh"
+
 #if defined (WIN32)
    #include <Windows.h>
 #else
@@ -45,10 +49,10 @@
 
 #if defined(G4MULTITHREADED)
 
-#include <map>
-
-namespace {
-    G4ThreadLocal G4int G4ThreadID = -1;
+namespace
+{
+   G4ThreadLocal G4int G4ThreadID = G4Threading::MASTER_ID;
+   G4bool isMTAppType = false;
 }
 
 G4Pid_t G4Threading::G4GetPidId()
@@ -84,14 +88,34 @@ BOOL G4ReleaseMutex( __in G4Mutex m)
  { return ReleaseMutex(m); }
 #endif
 
-#else  // Sequential mode
+#if defined(__linux__) || defined(_AIX)
+G4bool G4Threading::G4SetPinAffinity(G4int cpu, G4Thread& aT)
+{
+   cpu_set_t* aset = new cpu_set_t;
+   G4AutoDelete::Register(aset);
+   CPU_ZERO(aset);
+   CPU_SET(cpu,aset);
+   return ( pthread_setaffinity_np(aT, sizeof(cpu_set_t), aset) == 0 );
+}
+#else //Not available for Mac, WIN,...
+G4bool G4Threading::G4SetPinAffinity(G4int, G4Thread&)
+{
+   G4Exception("G4Threading::G4SetPinAffinity()",
+          "NotImplemented", JustWarning,
+          "Affinity setting not available for this architecture, ignoring...");
+   return true;
+}
+#endif
 
-#include "globals.hh"
+void G4Threading::SetMultithreadedApplication(G4bool value ) { isMTAppType = value; }
+G4bool G4Threading::IsMultithreadedApplication() { return isMTAppType; }
+
+#else  // Sequential mode
 
 G4int fake_mutex_lock_unlock( G4Mutex* ) { return 0; }
 
-G4Pid_t G4Threading::G4GetPidId()  // In sequential mode return Process ID and not Thread ID
-{
+G4Pid_t G4Threading::G4GetPidId()
+{                    // In sequential mode return Process ID and not Thread ID
     #if defined(WIN32)
     return GetCurrentProcessId();
     #else
@@ -100,10 +124,12 @@ G4Pid_t G4Threading::G4GetPidId()  // In sequential mode return Process ID and n
 }
 
 G4int G4Threading::G4GetNumberOfCores() { return 1; }
-G4int G4Threading::G4GetThreadId() { return -2; }
+G4int G4Threading::G4GetThreadId() { return G4Threading::SEQUENTIAL_ID; }
 G4bool G4Threading::IsWorkerThread() { return false; }
 void G4Threading::G4SetThreadId(G4int) {}
 
+G4bool G4Threading::G4SetPinAffinity(G4int,G4Thread&) { return true;}
+
+void G4Threading::SetMultithreadedApplication(G4bool) {}
+G4bool G4Threading::IsMultithreadedApplication() { return false; }
 #endif
-
-

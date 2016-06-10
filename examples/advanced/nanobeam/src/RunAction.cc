@@ -30,6 +30,12 @@
 
 #include "RunAction.hh"
 #include "Analysis.hh"
+#include "G4AutoLock.hh"
+
+namespace 
+{
+  G4Mutex aMutex = G4MUTEX_INITIALIZER;
+}
 
 using namespace std;
 
@@ -110,6 +116,14 @@ void RunAction::EndOfRunAction(const G4Run* /*aRun*/)
 
 if (fDetector->GetCoef()==1)
 {
+        // 17/12/2013 - thanks to A. Dotti
+	// CLHEP Matrix inversion (as for CLHEP version 2.1.4.1)  
+        // is not thread safe, we need to protect this code.
+        // Since this is not performance critical we simply lock 
+        // all this part.
+	G4AutoLock l(&aMutex);
+        //
+	
 	CLHEP::HepMatrix m;
 	
 	// VECTOR READING

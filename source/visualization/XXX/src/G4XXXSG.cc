@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSG.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4XXXSG.cc 85582 2014-10-31 09:07:30Z gcosmo $
 //
 // 
 // John Allison  10th March 2005
@@ -54,7 +54,7 @@ G4VViewer* G4XXXSG::CreateViewer(G4VSceneHandler& scene,
     new G4XXXSGViewer((G4XXXSGSceneHandler&) scene, name);
   if (pView) {
     if (pView->GetViewId() < 0) {
-      G4cout <<
+      G4cerr <<
 	"G4XXXSG::CreateViewer: ERROR flagged by negative"
         " view id in G4XXXSGViewer creation."
         "\n Destroying view and returning null pointer."
@@ -64,7 +64,7 @@ G4VViewer* G4XXXSG::CreateViewer(G4VSceneHandler& scene,
     }
   }
   else {
-    G4cout <<
+    G4cerr <<
       "G4XXXSG::CreateViewer: ERROR: null pointer on new G4XXXSGViewer."
 	   << G4endl;
   }

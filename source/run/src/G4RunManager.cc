@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc 77649 2013-11-27 08:39:54Z gcosmo $
+// $Id: G4RunManager.cc 86968 2014-11-21 11:52:04Z gcosmo $
 //
 // 
 
@@ -58,12 +58,17 @@
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4ParallelWorldProcessStore.hh"
+
 #include "G4ios.hh"
 #include <sstream>
 
 using namespace CLHEP;
 
 G4ThreadLocal G4RunManager* G4RunManager::fRunManager = 0;
+
+G4bool G4RunManager::fGeometryHasBeenDestroyed = false;
+G4bool G4RunManager::IfGeometryHasBeenDestroyed() { return fGeometryHasBeenDestroyed; }
 
 //The following lines are needed since G4VUserPhysicsList
 //uses a #define theParticleIterator
@@ -102,7 +107,7 @@ G4RunManager::G4RunManager()
 
   timer = new G4Timer();
   runMessenger = new G4RunMessenger(this);
-  previousEvents = new std::vector<G4Event*>;
+  previousEvents = new std::list<G4Event*>;
   G4ParticleTable::GetParticleTable()->CreateMessenger();
   G4ProcessTable::GetProcessTable()->CreateMessenger();
   randomNumberStatusDir = "./";
@@ -141,6 +146,7 @@ G4RunManager::G4RunManager( RMType rmType )
   {
     G4Exception("G4RunManager::G4RunManager()", "Run0031",
                     FatalException, "G4RunManager constructed twice.");
+    return;
   }
   fRunManager = this;
     
@@ -156,6 +162,7 @@ G4RunManager::G4RunManager( RMType rmType )
     G4ExceptionDescription msgx;
     msgx<<" This type of RunManager can only be used in mult-threaded applications.";
     G4Exception("G4RunManager::G4RunManager(G4bool)","Run0035",FatalException,msgx);
+    return;
   }
   runManagerType = rmType;
 
@@ -163,7 +170,7 @@ G4RunManager::G4RunManager( RMType rmType )
         
   timer = new G4Timer();
   runMessenger = new G4RunMessenger(this);
-  previousEvents = new std::vector<G4Event*>;
+  previousEvents = new std::list<G4Event*>;
   G4ParticleTable::GetParticleTable()->CreateMessenger();
   G4ProcessTable::GetProcessTable()->CreateMessenger();
   randomNumberStatusDir = "./";
@@ -183,6 +190,7 @@ G4RunManager::~G4RunManager()
      pStateManager->SetNewState(G4State_Quit);
   }
 
+  CleanUpPreviousEvents();
   if(currentRun) delete currentRun;
   delete timer;
   delete runMessenger;
@@ -259,6 +267,7 @@ void G4RunManager::BeamOn(G4int n_event,const char* macroFile,G4int n_select)
   if(cond)
   {
     numberOfEventToBeProcessed = n_event;
+    numberOfEventProcessed = 0;
     ConstructScoringWorlds();
     RunInitialization();
     DoEventLoop(n_event,macroFile,n_select);
@@ -302,10 +311,17 @@ G4bool G4RunManager::ConfirmBeamOnCondition()
 void G4RunManager::RunInitialization()
 {
   if(!(kernel->RunInitialization(fakeRun))) return;
-  if(fakeRun) return;
 
+  runAborted = false;
+  numberOfEventProcessed = 0;
+
+  CleanUpPreviousEvents();
   if(currentRun) delete currentRun;
   currentRun = 0;
+
+  if(fakeRun) return;
+
+  if(fGeometryHasBeenDestroyed) G4ParallelWorldProcessStore::GetInstance()->UpdateWorlds();
 
   if(userRunAction) currentRun = userRunAction->GenerateRun();
   if(!currentRun) currentRun = new G4Run();
@@ -323,7 +339,6 @@ void G4RunManager::RunInitialization()
   randomNumberStatusForThisRun = oss.str();
   currentRun->SetRandomNumberStatus(randomNumberStatusForThisRun);
   
-  previousEvents->clear();
   for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
   { previousEvents->push_back((G4Event*)0); }
 
@@ -340,9 +355,6 @@ void G4RunManager::RunInitialization()
       }
       StoreRNGStatus(fileN);
   }
-
-  runAborted = false;
-  numberOfEventProcessed = 0;
 }
 
 void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_select)
@@ -357,7 +369,8 @@ void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_selec
     if(runAborted) break;
   }
 
-  TerminateEventLoop();
+  // For G4MTRunManager, TerminateEventLoop() is invoked after all threads are finished.
+  if(runManagerType==sequentialRM) TerminateEventLoop();
 }
 
 void G4RunManager::InitializeEventLoop(G4int n_event,const char* macroFile,G4int n_select)
@@ -398,10 +411,10 @@ void G4RunManager::TerminateOneEvent()
 
 void G4RunManager::TerminateEventLoop()
 {
-  if(verboseLevel>0)
+  if(verboseLevel>0 && !fakeRun)
   {
     timer->Stop();
-    G4cout << "Run terminated." << G4endl;
+    G4cout << " Run terminated." << G4endl;
     G4cout << "Run Summary" << G4endl;
     if(runAborted)
     { G4cout << "  Run Aborted after " << numberOfEventProcessed << " events processed." << G4endl; }
@@ -410,6 +423,7 @@ void G4RunManager::TerminateEventLoop()
     G4cout << "  "  << *timer << G4endl;
   }
   ////////////////  G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
+  fGeometryHasBeenDestroyed = false;
 }
 
 G4Event* G4RunManager::GenerateEvent(G4int i_event)
@@ -464,17 +478,8 @@ void G4RunManager::RunTermination()
 {
   if(!fakeRun)
   {
-    for(size_t itr=0;itr<previousEvents->size();itr++)
-    {
-      G4Event* prevEv =  (*previousEvents)[itr];
-      if((prevEv) && !(prevEv->ToBeKept())) delete prevEv;
-    }
-    previousEvents->clear();
-    for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
-    { previousEvents->push_back((G4Event*)0); }
-
+    CleanUpUnnecessaryEvents(0);
     if(userRunAction) userRunAction->EndOfRunAction(currentRun);
-
     G4VPersistencyManager* fPersM = G4VPersistencyManager::GetPersistencyManager();
     if(fPersM) fPersM->Store(currentRun);
     runIDCounter++;
@@ -483,19 +488,67 @@ void G4RunManager::RunTermination()
   kernel->RunTermination();
 }
 
+void G4RunManager::CleanUpPreviousEvents()
+{
+  // Delete all events carried over from previous run.
+  // This method is invoked at the beginning of the next run
+  // or from the destructor of G4RunManager at the very end of
+  // the program.
+  // N.B. If ToBeKept() is true, the pointer of this event is
+  // kept in G4Run of the previous run, and deleted along with
+  // the deletion of G4Run.
+
+  std::list<G4Event*>::iterator evItr = previousEvents->begin();
+  while(evItr!=previousEvents->end())
+  {
+    G4Event* evt = *evItr;
+    if(evt && !(evt->ToBeKept())) delete evt;
+    evItr = previousEvents->erase(evItr); 
+  }
+}
+
+void G4RunManager::CleanUpUnnecessaryEvents(G4int keepNEvents)
+{
+  // Delete events that are no longer necessary for post
+  // processing such as visualization.
+  // N.B. If ToBeKept() is true, the pointer of this event is
+  // kept in G4Run of the previous run, and deleted along with
+  // the deletion of G4Run.
+
+  std::list<G4Event*>::iterator evItr = previousEvents->begin();
+  while(evItr!=previousEvents->end())
+  {
+    if(G4int(previousEvents->size()) <= keepNEvents) return;
+
+    G4Event* evt = *evItr;
+    if(evt)
+    {
+      if(evt->GetNumberOfGrips()==0) 
+      {
+        if(!(evt->ToBeKept())) delete evt; 
+        evItr = previousEvents->erase(evItr);
+      }
+      else
+      { evItr++; }
+    }
+    else
+    { evItr = previousEvents->erase(evItr); }
+  }
+}
+
 void G4RunManager::StackPreviousEvent(G4Event* anEvent)
 {
   if(anEvent->ToBeKept()) currentRun->StoreEvent(anEvent);
-  G4Event* evt;
+  
   if(n_perviousEventsToBeStored==0)
-  { evt = anEvent; }
-  else
   {
-    previousEvents->insert(previousEvents->begin(),anEvent);
-    evt = previousEvents->back();
-    previousEvents->pop_back();
+    if(anEvent->GetNumberOfGrips()==0) 
+    { if(!(anEvent->ToBeKept())) delete anEvent; }
+    else
+    { previousEvents->push_back(anEvent); }
   }
-  if(evt && !(evt->ToBeKept())) delete evt;
+
+  CleanUpUnnecessaryEvents(n_perviousEventsToBeStored);
 }
 
 void G4RunManager::Initialize()
@@ -683,6 +736,7 @@ void G4RunManager::ConstructScoringWorlds()
   for(G4int iw=0;iw<nPar;iw++)
   {
     G4VScoringMesh* mesh = ScM->GetMesh(iw);
+    if(fGeometryHasBeenDestroyed) mesh->GeometryHasBeenDestroyed();
 
     G4VPhysicalVolume* pWorld
        = G4TransportationManager::GetTransportationManager()
@@ -694,20 +748,27 @@ void G4RunManager::ConstructScoringWorlds()
       pWorld->SetName(ScM->GetWorldName(iw));
 
       G4ParallelWorldProcess* theParallelWorldProcess
-        = new G4ParallelWorldProcess(ScM->GetWorldName(iw));
-      theParallelWorldProcess->SetParallelWorld(ScM->GetWorldName(iw));
+        = mesh->GetParallelWorldProcess();
+      if(theParallelWorldProcess)
+      { theParallelWorldProcess->SetParallelWorld(ScM->GetWorldName(iw)); }
+      else
+      {
+        theParallelWorldProcess = new G4ParallelWorldProcess(ScM->GetWorldName(iw));
+        mesh->SetParallelWorldProcess(theParallelWorldProcess);
+        theParallelWorldProcess->SetParallelWorld(ScM->GetWorldName(iw));
 
-      theParticleIterator->reset();
-      while( (*theParticleIterator)() ){
-        G4ParticleDefinition* particle = theParticleIterator->value();
-        G4ProcessManager* pmanager = particle->GetProcessManager();
-        if(pmanager)
-        {
-          pmanager->AddProcess(theParallelWorldProcess);
-          if(theParallelWorldProcess->IsAtRestRequired(particle))
-          { pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9999); }
-          pmanager->SetProcessOrderingToSecond(theParallelWorldProcess, idxAlongStep);
-          pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9999);
+        theParticleIterator->reset();
+        while( (*theParticleIterator)() ){
+          G4ParticleDefinition* particle = theParticleIterator->value();
+          G4ProcessManager* pmanager = particle->GetProcessManager();
+          if(pmanager)
+          {
+            pmanager->AddProcess(theParallelWorldProcess);
+            if(theParallelWorldProcess->IsAtRestRequired(particle))
+            { pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9999); }
+            pmanager->SetProcessOrderingToSecond(theParallelWorldProcess, idxAlongStep);
+            pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9999);
+          }
         }
       }
     }
@@ -840,6 +901,7 @@ void G4RunManager::GeometryHasBeenModified(G4bool prop)
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
+#include "G4RegionStore.hh"
 
 void G4RunManager::ReinitializeGeometry(G4bool destroyFirst, G4bool prop)
 {
@@ -848,14 +910,35 @@ void G4RunManager::ReinitializeGeometry(G4bool destroyFirst, G4bool prop)
     if(verboseLevel>0)
     { 
       G4cout<<"#### G4PhysicalVolumeStore, G4LogicalVolumeStore and G4SolidStore\n"
-            <<"#### are wiped out. Command-based scorer, layerd mass geometry,\n"
-            <<"#### biasing with parallel world, etc. are not functioning any longer."
-            <<G4endl;
+            <<"#### are wiped out."<<G4endl; 
     }
     G4GeometryManager::GetInstance()->OpenGeometry();
     G4PhysicalVolumeStore::GetInstance()->Clean();
     G4LogicalVolumeStore::GetInstance()->Clean();
     G4SolidStore::GetInstance()->Clean();
+
+    // remove all logical volume pointers from regions
+    // exception: world logical volume pointer must be kept
+    G4RegionStore* regionStore = G4RegionStore::GetInstance();
+    std::vector<G4Region*>::iterator rItr;
+    for(rItr = regionStore->begin();rItr != regionStore->end(); rItr++)
+    {
+      if((*rItr)->GetName()=="DefaultRegionForTheWorld") continue;
+      //if((*rItr)->GetName()=="DefaultRegionForParallelWorld") continue;
+      std::vector<G4LogicalVolume*>::iterator lvItr
+        = (*rItr)->GetRootLogicalVolumeIterator();
+      for(size_t iRLV = 0;iRLV < (*rItr)->GetNumberOfRootVolumes(); iRLV++)
+      {
+        (*rItr)->RemoveRootLogicalVolume(*lvItr,false);
+        lvItr++;
+      }
+      if(verboseLevel>0)
+      { G4cout<<"#### Region <"<<(*rItr)->GetName()<<"> is cleared."<<G4endl; }
+    }
+
+    // clear transportation manager
+    fGeometryHasBeenDestroyed = true;
+    G4TransportationManager::GetTransportationManager()->ClearParallelWorlds();
   }
   if(prop)
   { G4UImanager::GetUIpointer()->ApplyCommand("/run/reinitializeGeometry"); }

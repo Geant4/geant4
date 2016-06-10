@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAtomDeexcitation.hh 74376 2013-10-04 08:25:47Z gcosmo $
+// $Id: G4VAtomDeexcitation.hh 84398 2014-10-15 07:20:18Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -50,6 +50,7 @@
 #define G4VAtomDeexcitation_h 1
 
 #include "globals.hh"
+#include "G4EmParameters.hh"
 #include "G4AtomicShell.hh"
 #include "G4AtomicShellEnumerator.hh"
 #include "G4ProductionCutsTable.hh"
@@ -109,6 +110,10 @@ public:
   // PIXE model name for e+e-
   inline void SetPIXEElectronCrossSectionModel(const G4String&);
   inline const G4String& PIXEElectronCrossSectionModel() const;
+
+  // Set flag allowing ignore production thresholds in deexcitation
+  inline void SetIgnoreCuts(G4bool);
+  inline G4bool IgnoreCuts() const;
 
   // Access to the list of atoms active for deexcitation
   inline const std::vector<G4bool>& GetListOfActiveAtoms() const;
@@ -170,6 +175,7 @@ private:
   G4VAtomDeexcitation(G4VAtomDeexcitation &);
   G4VAtomDeexcitation & operator=(const G4VAtomDeexcitation &right);
 
+  G4EmParameters*             theParameters;  
   const G4ParticleDefinition* gamma;
 
   G4ProductionCutsTable* theCoupleTable;
@@ -181,6 +187,7 @@ private:
   G4bool   isActive;
   G4bool   flagAuger;
   G4bool   flagPIXE;
+  G4bool   ignoreCuts;
   std::vector<G4bool>   activeZ;
   std::vector<G4bool>   activeDeexcitationMedia;
   std::vector<G4bool>   activeAugerMedia;
@@ -198,6 +205,7 @@ private:
 inline void G4VAtomDeexcitation::SetFluo(G4bool val)
 {
   isActive = val;
+  theParameters->SetFluo(val);
 }
 
 inline G4bool G4VAtomDeexcitation::IsFluoActive() const
@@ -209,6 +217,7 @@ inline void G4VAtomDeexcitation::SetAuger(G4bool val)
 {
   flagAuger = val;
   if(val) { isActive = true; }
+  theParameters->SetAuger(val);
 }
 
 inline G4bool G4VAtomDeexcitation::IsAugerActive() const
@@ -220,12 +229,23 @@ inline void G4VAtomDeexcitation::SetPIXE(G4bool val)
 {
   flagPIXE = val;
   if(val) { isActive = true; }
+  theParameters->SetPixe(val);
 }
 
 inline G4bool G4VAtomDeexcitation::IsPIXEActive() const
 {
   return flagPIXE;
 }
+
+inline void G4VAtomDeexcitation::SetIgnoreCuts(G4bool val)
+{
+  ignoreCuts = val;
+} 
+
+inline G4bool G4VAtomDeexcitation::IgnoreCuts() const
+{
+  return ignoreCuts;
+} 
 
 inline const G4String& G4VAtomDeexcitation::GetName() const
 {
@@ -292,13 +312,17 @@ G4VAtomDeexcitation::GenerateParticles(std::vector<G4DynamicParticle*>* v,
 				       G4int idx)
 {
   G4double gCut = DBL_MAX;
-  if (theCoupleTable) {
+  if(ignoreCuts) {
+    gCut = 0.0;
+  } else if (theCoupleTable) {
     gCut = (*(theCoupleTable->GetEnergyCutsVector(0)))[idx];
   }
   if(gCut < as->BindingEnergy()) {
     G4double eCut = DBL_MAX;
     if(CheckAugerActiveRegion(idx)) {
-      if (theCoupleTable) {
+      if(ignoreCuts) {
+        eCut = 0.0;
+      } else if (theCoupleTable) {
 	eCut = (*(theCoupleTable->GetEnergyCutsVector(1)))[idx];
       }
     }

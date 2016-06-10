@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALEMModuleSD.hh 67976 2013-03-13 10:23:17Z gcosmo $
+// $Id: FCALEMModuleSD.hh 84483 2014-10-16 08:55:45Z gcosmo $
 //
 // 
 
@@ -68,7 +68,6 @@ class FCALEMModuleSD : public G4VSensitiveDetector
   //   G4int*                   HitID;
   FCALEMModule* EmModule;
   G4int Init_state;
-  
   public:
 
   G4double EvisF1Tile[1131];

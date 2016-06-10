@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipsoid.hh 73430 2013-08-27 11:04:49Z gcosmo $
+// $Id: G4Ellipsoid.hh 83572 2014-09-01 15:23:27Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -55,6 +55,7 @@
 #include <CLHEP/Units/PhysicalConstants.h>
 
 #include "G4VSolid.hh"
+#include "G4Polyhedron.hh"
 
 class G4Ellipsoid : public G4VSolid
 {
@@ -132,6 +133,7 @@ class G4Ellipsoid : public G4VSolid
     G4ThreeVectorList* CreateRotatedVertices(const G4AffineTransform& pT,
                                                    G4int& noPV) const;
 
+    mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;
 
   private:

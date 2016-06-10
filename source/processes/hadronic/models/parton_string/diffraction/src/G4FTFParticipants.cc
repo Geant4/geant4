@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.cc 74627 2013-10-17 07:04:38Z gcosmo $
+// $Id: G4FTFParticipants.cc 87254 2014-11-28 07:49:23Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -110,7 +110,7 @@ void G4FTFParticipants::GetList( const G4ReactionProduct& thePrimary,
 
     G4double xyradius;                          
     xyradius = theNucleus->GetOuterRadius() + deltaxy; // Range of impact parameter sampling
-                                                        
+                                                  
     do {  // while ( theInteractions.size() == 0 )
 
       std::pair< G4double, G4double > theImpactParameter;

@@ -15,6 +15,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29/11/14 I. Hrivnacova
+- Use G4endl instead of \n in G4cout;
+  this makes each new line in the output on threads preceded with
+  G4WTN >
+
+06/11/14 I. Hrivnacova
+- Removed G4UI_USE/G4VIS_USE tests and init.mac macro (not needed)
+- Moved G4UIExecutive at the beginning of main() in all examples
+- Perform run initialization in macros instead of main()
+
 28/10/13 I. Hrivnacova (exampleB1-V09-06-06)
 - Removed SetNumberOfThreads(4) from main (use Geant4 default)
      

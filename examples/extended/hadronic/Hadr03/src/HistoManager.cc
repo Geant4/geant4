@@ -26,10 +26,10 @@
 /// \file hadronic/Hadr03/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
-// $Id: HistoManager.cc 72245 2013-07-12 08:51:51Z gcosmo $
+// $Id: HistoManager.cc 80190 2014-04-07 10:18:04Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoManager.hh"
 #include "G4UnitsTable.hh"
@@ -68,17 +68,17 @@ void HistoManager::Book()
   const G4String title[] = 
                 { "dummy",                                          //0
                   "kinetic energy of scattered primary particle",   //1
-                  "kinetic energy of recoil nuclei",                //2
-                  "kinetic energy of gamma",                        //3
-                  "kinetic energy of neutrons",                     //4
-                  "kinetic energy of protons",                      //5
-                  "kinetic energy of deuterons",                    //6
-                  "kinetic energy of alphas",                       //7
-                  "kinetic energy of all others ions",              //8
-                  "kinetic energy of all others mesons",            //9
-                  "kinetic energy of all others baryons",           //10
-                  "Q = Ekin out - Ekin in",                         //11
-                  "Pbalance = mag(P_out - P_in)"                    //12
+                  "kinetic energy of gamma",                        //2
+                  "kinetic energy of neutrons",                     //3
+                  "kinetic energy of protons",                      //4
+                  "kinetic energy of deuterons",                    //5
+                  "kinetic energy of alphas",                       //6
+                  "kinetic energy of nuclei",                       //7
+                  "kinetic energy of mesons",                       //8
+                  "kinetic energy of baryons",                      //9
+                  "Q = Ekin out - Ekin in",                         //10
+                  "Pbalance = mag(P_out - P_in)",                   //11
+                  "atomic mass of nuclei"                           //12
                  };  
 
   // Default values (to be reset via /analysis/h1/set command)               

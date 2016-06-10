@@ -1,11 +1,11 @@
-# $Id: run0.mac 68740 2013-04-05 09:56:39Z gcosmo $
+# $Id: run0.mac 83010 2014-07-24 14:53:07Z gcosmo $
 #
 # Macro file for "amsEcal.cc" 
 #
 /control/verbose 2
 /run/verbose 2
 #
-/ams/phys/setCuts 1 km
+/run/setCut 1 km
 #
 /run/initialize
 #

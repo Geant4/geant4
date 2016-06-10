@@ -68,27 +68,27 @@ const G4double G4XPDGTotal::gammagammaPDGFit[5] = { 3.,    300.,  0.000156, 0.00
 
 G4XPDGTotal::G4XPDGTotal() 
 {
-  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> pp(G4Proton::ProtonDefinition(),
+  std::pair<const G4ParticleDefinition *,const G4ParticleDefinition *> pp(G4Proton::ProtonDefinition(),
 				    G4Proton::ProtonDefinition());
-  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> pn(G4Proton::ProtonDefinition(),
+  std::pair<const G4ParticleDefinition *,const G4ParticleDefinition *> pn(G4Proton::ProtonDefinition(),
 				    G4Neutron::NeutronDefinition());
-  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> piPlusp(G4PionPlus::PionPlusDefinition(),
+  std::pair<const G4ParticleDefinition *,const G4ParticleDefinition *> piPlusp(G4PionPlus::PionPlusDefinition(),
 					 G4Proton::ProtonDefinition());
-  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> piMinusp(G4PionMinus::PionMinusDefinition(),
+  std::pair<const G4ParticleDefinition *,const G4ParticleDefinition *> piMinusp(G4PionMinus::PionMinusDefinition(),
 					  G4Proton::ProtonDefinition());
-  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> KPlusp(G4KaonPlus::KaonPlusDefinition(),
+  std::pair<const G4ParticleDefinition *,const G4ParticleDefinition *> KPlusp(G4KaonPlus::KaonPlusDefinition(),
 					G4Proton::ProtonDefinition());
-  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> KPlusn(G4KaonPlus::KaonPlusDefinition(),
+  std::pair<const G4ParticleDefinition *,const G4ParticleDefinition *> KPlusn(G4KaonPlus::KaonPlusDefinition(),
 					G4Neutron::NeutronDefinition());
-  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> KMinusp(G4KaonMinus::KaonMinusDefinition(),
+  std::pair<const G4ParticleDefinition *,const G4ParticleDefinition *> KMinusp(G4KaonMinus::KaonMinusDefinition(),
 					 G4Proton::ProtonDefinition());
-  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> KMinusn(G4KaonMinus::KaonMinusDefinition(),
+  std::pair<const G4ParticleDefinition *,const G4ParticleDefinition *> KMinusn(G4KaonMinus::KaonMinusDefinition(),
 					 G4Neutron::NeutronDefinition());
-  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> gp(G4Gamma::GammaDefinition(),
+  std::pair<const G4ParticleDefinition *,const G4ParticleDefinition *> gp(G4Gamma::GammaDefinition(),
 				    G4Proton::ProtonDefinition());
-  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> gg(G4Gamma::GammaDefinition(),
+  std::pair<const G4ParticleDefinition *,const G4ParticleDefinition *> gg(G4Gamma::GammaDefinition(),
 				    G4Gamma::GammaDefinition());
-  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> nn(G4Neutron::NeutronDefinition(),
+  std::pair<const G4ParticleDefinition *,const G4ParticleDefinition *> nn(G4Neutron::NeutronDefinition(),
 				    G4Neutron::NeutronDefinition());
  
   std::vector<G4double> nnData;
@@ -161,8 +161,8 @@ G4double G4XPDGTotal::CrossSection(const G4KineticTrack& trk1,
 
   G4double sqrtS = (trk1.Get4Momentum() + trk2.Get4Momentum()).mag();
   
-  G4ParticleDefinition* def1 = trk1.GetDefinition();
-  G4ParticleDefinition* def2 = trk2.GetDefinition();
+  const G4ParticleDefinition* def1 = trk1.GetDefinition();
+  const G4ParticleDefinition* def2 = trk2.GetDefinition();
 
   G4double enc1 = def1->GetPDGEncoding();
   G4double enc2 = def2->GetPDGEncoding();
@@ -170,10 +170,10 @@ G4double G4XPDGTotal::CrossSection(const G4KineticTrack& trk1,
   if ( (enc1 < 0 && enc2 >0) || (enc2 < 0 && enc1 >0) ) coeff = 1.;
 
   // Order the pair: first is the lower mass particle, second is the higher mass one
-  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> trkPair(def1,def2);
+  std::pair<const G4ParticleDefinition *,const G4ParticleDefinition *> trkPair(def1,def2);
 
   if (def1->GetPDGMass() > def2->GetPDGMass())
-    trkPair = std::pair<G4ParticleDefinition *,G4ParticleDefinition *>(def2,def1);
+    trkPair = std::pair<const G4ParticleDefinition *,const G4ParticleDefinition *>(def2,def1);
  
   std::vector<G4double> data;   
       
@@ -183,7 +183,7 @@ G4double G4XPDGTotal::CrossSection(const G4KineticTrack& trk1,
       PairDoubleMap::const_iterator iter;
       for (iter = xMap.begin(); iter != xMap.end(); ++iter)
 	{
-	  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> thePair = (*iter).first;
+	  std::pair<const G4ParticleDefinition *,const G4ParticleDefinition *> thePair = (*iter).first;
 	  if (thePair == trkPair)
 	    {
 	      data = (*iter).second;
@@ -197,9 +197,9 @@ G4double G4XPDGTotal::CrossSection(const G4KineticTrack& trk1,
 	      // Total Cross-section fit, 1998 Review of Particle Properties, European Phys. J. 3(1998), 1
 	      
 	      // Parameters from the PDG fit
-	      const G4double epsilon = 0.095;
-	      const G4double eta1 = -0.34;
-	      const G4double eta2 = -0.55;
+	      static const G4double epsilon = 0.095;
+	      static const G4double eta1 = -0.34;
+	      static const G4double eta2 = -0.55;
 	      
 	      if (sqrtS < eMinFit || sqrtS > eMaxFit)
 	      {

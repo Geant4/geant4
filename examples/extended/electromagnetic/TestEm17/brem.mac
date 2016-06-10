@@ -1,4 +1,4 @@
-# $Id: brem.mac 66241 2012-12-13 18:34:42Z gunter $
+# $Id: brem.mac 85311 2014-10-27 14:23:25Z gcosmo $
 #
 # Macro file for "TestEm17.cc"
 # (can be run in batch, without graphic)
@@ -9,9 +9,9 @@
 /testem/det/setMat Iron
 /testem/det/setSize 1 m
 #
-/testem/phys/addPhysics standard
+/testem/phys/addPhysics emstandard_opt0
 #
-/testem/phys/setCuts 1 mm
+/run/setCut 1 mm
 #
 /run/initialize
 #
@@ -25,6 +25,6 @@
 /testem/histo/setFileName brem
 /testem/histo/setHisto 3 100 -10. 0.
 #
-/testem/event/printModulo 1000
+/run/printProgress 1000
 #
 /run/beamOn 10000

@@ -28,12 +28,29 @@
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.
 //
+// The code is developed in the framework of the ESA AO7146
+//
+// We would be very happy hearing from you, send us your feedback! :)
+//
+// In order for Geant4-DNA to be maintained and still open-source,
+// article citations are crucial. 
+// If you use Geant4-DNA chemistry and you publish papers about your software, 
+// in addition to the general paper on Geant4-DNA:
+//
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// we ask that you please cite the following reference papers on chemistry:
+//
+// J. Comput. Phys. 274 (2014) 841-882
+// Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
+//
 // ----------------------------------------------------------------
 //      GEANT 4 class header file
 //
 //      History: first implementation, Alfonso Mantero 4 Mar 2009
 // ----------------------------------------------------------------
 //
+
 #ifndef G4MolecularDecayTable_h
 #define G4MolecularDecayTable_h 1
 
@@ -41,7 +58,7 @@
 #include <vector>
 #include "G4ElectronOccupancy.hh"
 
-class G4MolecularDecayChannel;
+class G4MolecularDissociationChannel;
 
 //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
 struct eOccComp
@@ -78,22 +95,22 @@ struct eOccComp
 
 //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
 typedef std::map<G4ElectronOccupancy, G4String, eOccComp>  statesMap;
-typedef std::map<G4String, std::vector<const G4MolecularDecayChannel*>, std::less <G4String> > channelsMap;
+typedef std::map<G4String, std::vector<const G4MolecularDissociationChannel*>, std::less <G4String> > channelsMap;
 
 /** Class Description
  *  G4MolecularDecayTable operates as a container of deexcitation modes
  *  for excited or ionized molecules
  */
 
-class G4MolecularDecayTable
+class G4MolecularDissociationTable
 {
 
 public:
 
-    G4MolecularDecayTable();
-    ~G4MolecularDecayTable();
-    G4MolecularDecayTable(const G4MolecularDecayTable&);
-    G4MolecularDecayTable & operator=(const G4MolecularDecayTable &right);
+    G4MolecularDissociationTable();
+    ~G4MolecularDissociationTable();
+    G4MolecularDissociationTable(const G4MolecularDissociationTable&);
+    G4MolecularDissociationTable & operator=(const G4MolecularDissociationTable &right);
 
 public:
 
@@ -105,15 +122,15 @@ public:
 
     // creates or adds to an existing excited state an electronic configuration
     void  AddeConfToExcitedState(const G4String&,const G4ElectronOccupancy&);
-    void  AddDecayChannel(const G4String&,const G4MolecularDecayChannel*);
+    void  AddDecayChannel(const G4String&,const G4MolecularDissociationChannel*);
     void  CheckDataConsistency() ;
     // Checks that probabilities sum up to 100% for each excited state
 
 //------------Inline fuctions------------
 // Get methods to retrieve data
 
-    const std::vector<const G4MolecularDecayChannel*>* GetDecayChannels(const G4ElectronOccupancy*) const ;
-    const std::vector<const G4MolecularDecayChannel*>* GetDecayChannels(const G4String&) const ;
+    const std::vector<const G4MolecularDissociationChannel*>* GetDecayChannels(const G4ElectronOccupancy*) const ;
+    const std::vector<const G4MolecularDissociationChannel*>* GetDecayChannels(const G4String&) const ;
 
     const G4String& GetExcitedState(const G4ElectronOccupancy*) const ;
     const G4ElectronOccupancy& GetElectronOccupancy (const G4String&) const ;
@@ -126,12 +143,12 @@ private:
     channelsMap fDecayChannelsMap ;
 };
 
-inline const statesMap&  G4MolecularDecayTable::GetExcitedStateMaps() const
+inline const statesMap&  G4MolecularDissociationTable::GetExcitedStateMaps() const
 {
     return fExcitedStatesMap;
 }
 
-inline const channelsMap&  G4MolecularDecayTable::GetDecayChannelsMap() const
+inline const channelsMap&  G4MolecularDissociationTable::GetDecayChannelsMap() const
 {
     return fDecayChannelsMap;
 }

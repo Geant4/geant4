@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsTouchableSet.cc 76285 2013-11-08 13:01:44Z gcosmo $
+// $Id: G4VisCommandsTouchableSet.cc 82799 2014-07-10 13:18:29Z gcosmo $
 
 // /vis/touchable/set commands - John Allison  8th October 2012
 
@@ -166,7 +166,7 @@ void G4VisCommandsTouchableSet::SetNewValue
   G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
   if (!currentViewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<
+      G4cerr <<
       "ERROR: G4VisCommandsTouchableSet::SetNewValue: no current viewer."
       << G4endl;
     }
@@ -288,7 +288,7 @@ void G4VisCommandsTouchableSet::SetNewValue
   
   else {
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<
+      G4cerr <<
       "ERROR: G4VisCommandsTouchableSet::SetNewValue: unrecognised command."
       << G4endl;
     }

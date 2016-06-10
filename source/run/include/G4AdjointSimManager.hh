@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointSimManager.hh 76245 2013-11-08 11:14:32Z gcosmo $
+// $Id: G4AdjointSimManager.hh 81773 2014-06-05 08:35:38Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointSimManager.hh
@@ -162,7 +162,7 @@ class G4AdjointSimManager: public G4UserRunAction
     inline G4int GetNbEvtOfLastRun(){return nb_evt_of_last_run;}
     
     void SetAdjointTrackingMode(G4bool aBool);
-    inline G4bool GetAdjointTrackingMode(){return  adjoint_tracking_mode;} //true if an adjoint track is being processed
+    G4bool GetAdjointTrackingMode(); //true if an adjoint track is being processed
     inline G4bool GetAdjointSimMode(){return  adjoint_sim_mode;} //true if an adjoint simulation is running
 
     G4bool GetDidAdjParticleReachTheExtSource();
@@ -178,9 +178,9 @@ class G4AdjointSimManager: public G4UserRunAction
     G4double GetCosthAtEndOfLastAdjointTrack();
     const G4String& GetFwdParticleNameAtEndOfLastAdjointTrack();
     G4int GetFwdParticlePDGEncodingAtEndOfLastAdjointTrack();
-    inline G4int GetFwdParticleIndexAtEndOfLastAdjointTrack(){return last_fwd_part_index;}
+    G4int GetFwdParticleIndexAtEndOfLastAdjointTrack();
     
-    std::vector<G4ParticleDefinition*> GetListOfPrimaryFwdParticles();
+    std::vector<G4ParticleDefinition*>* GetListOfPrimaryFwdParticles();
     size_t GetNbOfPrimaryFwdParticles();
      
     G4bool DefineSphericalExtSource(G4double radius, G4ThreeVector pos);
@@ -216,6 +216,12 @@ class G4AdjointSimManager: public G4UserRunAction
     //Set methods for user run actions
     //--------------------------------
     inline void UseUserStackingActionInFwdTrackingPhase(G4bool aBool){use_user_StackingAction=aBool;}
+    inline void UseUserTrackingActionInFwdTrackingPhase(G4bool aBool){use_user_TrackingAction=aBool;}
+
+
+    //Set nb of primary fwd gamma
+    //---------------------------
+    void SetNbOfPrimaryFwdGammasPerEvent(G4int);
 
     //Convergence test
     //-----------------------
@@ -265,6 +271,7 @@ class G4AdjointSimManager: public G4UserRunAction
     G4UserSteppingAction*	fUserSteppingAction;
     G4UserStackingAction*	fUserStackingAction;
     bool use_user_StackingAction; //only for fwd part of the adjoint simulation
+    bool use_user_TrackingAction;
     
   //action for adjoint simulation
   //-----------------------------

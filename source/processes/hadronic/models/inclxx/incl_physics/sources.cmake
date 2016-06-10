@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 75575 2013-11-04 11:51:07Z gcosmo $
+# $Id: sources.cmake 85988 2014-11-06 15:38:49Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -59,11 +59,11 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLParticleEntryChannel.hh
         G4INCLNDFGaussian.hh
         G4INCLKinematicsUtils.hh
-        G4INCLPionNucleonChannel.hh
         G4INCLClustering.hh
         G4INCLNuclearDensityFactory.hh
         G4INCLSurfaceAvatar.hh
         G4INCLCascadeAction.hh
+        G4INCLPhaseSpaceRauboldLynch.hh
         G4INCLReflectionChannel.hh
         G4INCLBinaryCollisionAvatar.hh
         G4INCLNDFHardSphere.hh
@@ -72,13 +72,18 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLPauliStandard.hh
         G4INCLDeuteronDensity.hh
         G4INCLPauliGlobal.hh
+        G4INCLPiNElasticChannel.hh
         G4INCLClusterDecay.hh
         G4INCLProjectileRemnant.hh
         G4INCLIPauli.hh
+        G4INCLIPhaseSpaceGenerator.hh
         G4INCLDecayAvatar.hh
+        G4INCLPiNToMultiPionsChannel.hh
         G4INCLNuclearPotentialEnergyIsospin.hh
+        G4INCLAvatarDumpAction.hh
         G4INCLCoulombDistortion.hh
         G4INCLClusteringModelNone.hh
+        G4INCLPhaseSpaceKopylov.hh
         G4INCLIClusteringModel.hh
         G4INCLDeJongSpin.hh
         G4INCLParticleEntryAvatar.hh
@@ -90,12 +95,15 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLCDPP.hh
         G4INCLDeltaProductionChannel.hh
         G4INCLCoulombNonRelativistic.hh
+        G4INCLCrossSectionsMultiPions.hh
         G4INCLNuclearPotentialConstant.hh
         G4INCLNDFModifiedHarmonicOscillator.hh
+        G4INCLPiNToDeltaChannel.hh
         G4INCLPauliStrict.hh
-        G4INCLPhaseSpaceDecay.hh
         G4INCLNuclearPotentialIsospin.hh
+        G4INCLNNToMultiPionsChannel.hh
         G4INCLICoulomb.hh
+        G4INCLPhaseSpaceGenerator.hh
         G4INCLCrossSections.hh
         G4INCLRecombinationChannel.hh
         G4INCLPauliStrictStandard.hh
@@ -107,9 +115,11 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLClusteringModelIntercomparison.hh
 
     SOURCES
+        G4INCLPhaseSpaceKopylov.cc
         G4INCLPauliStandard.cc
         G4INCLParticleSampler.cc
         G4INCLNuclearDensityFactory.cc
+        G4INCLPhaseSpaceRauboldLynch.cc
         G4INCLProjectileRemnant.cc
         G4INCLNuclearPotentialConstant.cc
         G4INCLCoulombDistortion.cc
@@ -120,6 +130,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLInteractionAvatar.cc
         G4INCLCascade.cc
         G4INCLINuclearPotential.cc
+        G4INCLPiNElasticChannel.cc
         G4INCLParticleEntryChannel.cc
         G4INCLPauliBlocking.cc
         G4INCLDeuteronDensity.cc
@@ -128,17 +139,20 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLDeltaDecayChannel.cc
         G4INCLNuclearPotentialIsospin.cc
         G4INCLNuclearPotentialEnergyIsospin.cc
-        G4INCLPionNucleonChannel.cc
         G4INCLRecombinationChannel.cc
         G4INCLParticleEntryAvatar.cc
         G4INCLDeltaProductionChannel.cc
+        G4INCLNNToMultiPionsChannel.cc
         G4INCLDeJongSpin.cc
         G4INCLStandardPropagationModel.cc
         G4INCLElasticChannel.cc
+        G4INCLPhaseSpaceGenerator.cc
         G4INCLDecayAvatar.cc
         G4INCLNuclearDensity.cc
         G4INCLClusterDecay.cc
-        G4INCLPhaseSpaceDecay.cc
+        G4INCLAvatarDumpAction.cc
+        G4INCLCrossSectionsMultiPions.cc
+        G4INCLPiNToDeltaChannel.cc
         G4INCLCoulombNonRelativistic.cc
         G4INCLTransmissionChannel.cc
         G4INCLPauliStrict.cc
@@ -146,6 +160,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLPauliGlobal.cc
         G4INCLPauliStrictStandard.cc
         G4INCLCrossSections.cc
+        G4INCLPiNToMultiPionsChannel.cc
         G4INCLCascadeAction.cc
         G4INCLNucleus.cc
         G4INCLClusteringModelIntercomparison.cc

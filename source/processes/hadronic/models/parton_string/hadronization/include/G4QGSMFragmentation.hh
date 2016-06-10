@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QGSMFragmentation.hh 69569 2013-05-08 13:19:50Z gcosmo $
+// $Id: G4QGSMFragmentation.hh 84219 2014-10-10 14:55:19Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -63,6 +63,9 @@ public:
    virtual G4bool SplitLast(G4FragmentingString * string, 
 		    G4KineticTrackVector * LeftVector,
 		    G4KineticTrackVector * RightVector);
+
+   virtual G4ParticleDefinition * DiQuarkSplitup(G4ParticleDefinition* decay, // Uzhi June 2014
+                                         G4ParticleDefinition *&created);
 
   private:
     // model parameters

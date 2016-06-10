@@ -203,29 +203,26 @@ void XrayTelDetectorConstruction::ConstructTelescope()
   }
 
   // Physical volume
-  G4VPhysicalVolume* MirrorPhysicalVolume[4];
-  G4VPhysicalVolume* MirrorAuCoatingPhysicalVolume[4];
-  G4VPhysicalVolume* BafflePhysicalVolume[4];
-
+ 
   for ( i=0; i<4; i++ ) {
-    MirrorPhysicalVolume[i] = new G4PVPlacement(
-						rotateMatrix,
-						G4ThreeVector( MirrorPosition[i], 0.0*cm, 0.0*cm ),
-						"Mirror_P",
-						MirrorLogicalVolume[i],
-						physicalWorld, false, 0 );
-    MirrorAuCoatingPhysicalVolume[i] = new G4PVPlacement(
-							 rotateMatrix,
-							 G4ThreeVector( MirrorPosition[i], 0.0*cm, 0.0*cm ),
-							 "MirrorAuCoating_P",
-							 MirrorAuCoatingLogicalVolume[i],
-							 physicalWorld, false, 0 );
-    BafflePhysicalVolume[i] = new G4PVPlacement(
-						rotateMatrix,
-						G4ThreeVector( MirrorPosition[i], 0.0*cm, 0.0*cm ),
-						"Baffle_P",
-						BaffleLogicalVolume[i],
-						physicalWorld, false, 0 );
+     new G4PVPlacement(
+		       rotateMatrix,
+		       G4ThreeVector( MirrorPosition[i], 0.0*cm, 0.0*cm ),
+		       "Mirror_P",
+		       MirrorLogicalVolume[i],
+		       physicalWorld, false, 0 );
+     new G4PVPlacement(
+		       rotateMatrix,
+		       G4ThreeVector( MirrorPosition[i], 0.0*cm, 0.0*cm ),
+		       "MirrorAuCoating_P",
+		       MirrorAuCoatingLogicalVolume[i],
+		       physicalWorld, false, 0 );
+    new G4PVPlacement(
+		      rotateMatrix,
+		      G4ThreeVector( MirrorPosition[i], 0.0*cm, 0.0*cm ),
+		      "Baffle_P",
+		      BaffleLogicalVolume[i],
+		      physicalWorld, false, 0 );
   }
 
   // Make Mirror Invisible
@@ -305,35 +302,33 @@ void XrayTelDetectorConstruction::ConstructTelescope()
   BenchMainLogicalVolume -> SetVisAttributes(VisAttBench);
 
   // Physical volume
-  G4VPhysicalVolume* BenchFrontEndPhysicalVolume;
-  G4VPhysicalVolume* BenchBackEndPhysicalVolume;
-  G4VPhysicalVolume* BenchMainPhysicalVolume;
 
-  BenchFrontEndPhysicalVolume = new G4PVPlacement(
-						  rotateMatrix,
-						  G4ThreeVector( MirrorPosition[3] - BenchThickness/2,
-								 0.0*cm, 0.0*cm ),
-						  "BenchFrontEnd_P",
-						  BenchFrontEndLogicalVolume,
-						  physicalWorld, false, 0 );
+  new G4PVPlacement(
+		    rotateMatrix,
+		    G4ThreeVector( MirrorPosition[3] - BenchThickness/2,
+				   0.0*cm, 0.0*cm ),
+		    "BenchFrontEnd_P",
+		    BenchFrontEndLogicalVolume,
+		    physicalWorld, false, 0 );
 
-  BenchBackEndPhysicalVolume = new G4PVPlacement(
-						 rotateMatrix,
-						 G4ThreeVector(0.0*cm - BenchThickness/2, 0.0*cm, 0.0*cm ),
-						 "BenchBackEnd_P",
-						 BenchBackEndLogicalVolume,
-						 physicalWorld, false, 0 );
-
-  BenchMainPhysicalVolume = new G4PVPlacement(
-					      rotateMatrix,
-					      G4ThreeVector( BenchMainLength/2, 0.0*cm, 0.0*cm ),
-					      "BenchMain_P",
-					      BenchMainLogicalVolume,
-					      physicalWorld, false, 0 );
-
+  new G4PVPlacement(
+		    rotateMatrix,
+		    G4ThreeVector(0.0*cm - BenchThickness/2, 0.0*cm, 0.0*cm ),
+		    "BenchBackEnd_P",
+		    BenchBackEndLogicalVolume,
+		    physicalWorld, false, 0 );
+  
+  new G4PVPlacement(
+		    rotateMatrix,
+		    G4ThreeVector( BenchMainLength/2, 0.0*cm, 0.0*cm ),
+		    "BenchMain_P",
+		    BenchMainLogicalVolume,
+		    physicalWorld, false, 0 );
+  
   //--- Make Bench Invisible
 
-  // BenchFrontEndLogicalVolume -> SetVisAttributes(G4VisAttributes::Invisible);
+  // BenchFrontEndLogicalVolume -> SetVisAttributes(G4VisAttributes::Invisible)
+
   // BenchBackEndLogicalVolume -> SetVisAttributes(G4VisAttributes::Invisible);
   BenchMainLogicalVolume -> SetVisAttributes(G4VisAttributes::Invisible);
 
@@ -382,15 +377,15 @@ void XrayTelDetectorConstruction::ConstructFocalPlane()
   DetectorBaffleLogicalVolume -> SetVisAttributes( VisDetectorBaffle );
 
   // Physical volume
-  G4VPhysicalVolume* DetectorBafflePhysicalVolume;
-
-  DetectorBafflePhysicalVolume = new G4PVPlacement(
-						   rotateMatrix,
-						   G4ThreeVector( DetectorBaffleLength/2, 0.0*cm, 0.0*cm),
-						   "DetectorBaffle_P",
-						   DetectorBaffleLogicalVolume,
-						   physicalWorld, false, 0 );
-
+ 
+  /* G4VPhysicalVolume* DetectorBafflePhysicalVolume = */
+  new G4PVPlacement(
+		    rotateMatrix,
+		    G4ThreeVector( DetectorBaffleLength/2, 0.0*cm, 0.0*cm),
+		    "DetectorBaffle_P",
+		    DetectorBaffleLogicalVolume,
+		    physicalWorld, false, 0 );
+  
   //--- Make Invisible
 
   // DetectorBaffleLogicalVolume -> SetVisAttributes( G4VisAttributes::Invisible );
@@ -412,15 +407,14 @@ void XrayTelDetectorConstruction::ConstructFocalPlane()
   DetectorLogicalVolume -> SetVisAttributes( VisDetector );
 
   // Physical volume
-  G4VPhysicalVolume* DetectorPhysicalVolume;
-
-  DetectorPhysicalVolume = new G4PVPlacement( 
-					     rotateMatrix,
-					     G4ThreeVector( DetectorThickness/2, 0.0*cm, 0.0*cm),
-					     "Detector_P",
-					     DetectorLogicalVolume,
-					     physicalWorld, false, 0 );
-
+  /*G4VPhysicalVolume* DetectorPhysicalVolume = */
+  new G4PVPlacement( 
+		    rotateMatrix,
+		    G4ThreeVector( DetectorThickness/2, 0.0*cm, 0.0*cm),
+		    "Detector_P",
+		    DetectorLogicalVolume,
+		    physicalWorld, false, 0 );
+  
   //--- Make Invisible
   // DetectorLogicalVolume -> SetVisAttributes( G4VisAttributes::Invisible );
 

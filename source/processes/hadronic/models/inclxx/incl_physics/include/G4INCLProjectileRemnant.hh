@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -46,15 +47,13 @@
 
 #include "G4INCLCluster.hh"
 #include "G4INCLRandom.hh"
+#include "G4INCLAllocationPool.hh"
 #include <vector>
 #include <map>
 #include <numeric>
 #include <functional>
 
 namespace G4INCL {
-
-  /// \brief Helper function for ProjectileRemnant::shuffleStoredComponents
-  G4int shuffleComponentsHelper(G4int range);
 
   class ProjectileRemnant : public Cluster {
     public:
@@ -63,7 +62,7 @@ namespace G4INCL {
     typedef std::vector<G4double> EnergyLevels;
     typedef std::map<long, G4double> EnergyLevelMap;
 
-    ProjectileRemnant(ParticleSpecies const species, const G4double kineticEnergy)
+    ProjectileRemnant(ParticleSpecies const &species, const G4double kineticEnergy)
       : Cluster(species.theZ, species.theA) {
 
       // Use the table mass
@@ -136,7 +135,7 @@ namespace G4INCL {
      *
      * Return a list of rejected dynamical spectators.
      */
-    ParticleList addAllDynamicalSpectators(ParticleList pL);
+    ParticleList addAllDynamicalSpectators(ParticleList const &pL);
 
     /// \brief Clear the stored projectile components and delete the particles
     void deleteStoredComponents() {
@@ -228,7 +227,7 @@ namespace G4INCL {
     /// \brief Shuffle the list of stored projectile components
     ParticleList shuffleStoredComponents() {
       ParticleList pL = getStoredComponents();
-      std::random_shuffle(pL.begin(), pL.end(), shuffleComponentsHelper);
+      std::random_shuffle(pL.begin(), pL.end(), Random::getAdapter());
       return pL;
     }
 
@@ -243,7 +242,7 @@ namespace G4INCL {
     ThreeVector const &getStoredMomentum(Particle const * const p) const {
       std::map<long,Particle*>::const_iterator i = storedComponents.find(p->getID());
       if(i==storedComponents.end()) {
-        INCL_ERROR("Couldn't find particle " << p->getID() << " in the list of projectile components" << std::endl);
+        INCL_ERROR("Couldn't find particle " << p->getID() << " in the list of projectile components" << '\n');
         return p->getMomentum();
       } else {
         return i->second->getMomentum();
@@ -262,7 +261,7 @@ namespace G4INCL {
     /*    G4double getStoredEnergy(Particle const * const p) {
           std::map<long,Particle*>::const_iterator i = initialProjectileComponents.find(p->getID());
           if(i==initialProjectileComponents.end()) {
-          INCL_ERROR("Couldn't find particle " << p->getID() << " in the list of projectile components" << std::endl);
+          INCL_ERROR("Couldn't find particle " << p->getID() << " in the list of projectile components" << '\n');
           return 0.;
           } else {
           return i->second->getEnergy();
@@ -281,6 +280,7 @@ namespace G4INCL {
     /// \brief Ground-state energies for any number of nucleons
     EnergyLevels theGroundStateEnergies;
 
+    INCL_DECLARE_ALLOCATION_POOL(ProjectileRemnant);
   };
 }
 

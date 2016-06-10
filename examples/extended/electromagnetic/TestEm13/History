@@ -1,4 +1,4 @@
-$Id: History 71677 2013-06-20 13:17:05Z gcosmo $
+$Id: History 85259 2014-10-27 08:52:40Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,19 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+24-10-14 mma (testem13-V10-00-03)
+- TestEm12.in : /run/numberOfThreads 2
+
+04-10-14 mma (testem13-V10-00-02)
+- TestEm13.cc : use G4Random
+	 
+03-10-14 mma (testem13-V10-00-01)
+- MT migration
+
+21-06-14 mma (testem13-V10-00-00)
+- remove PhysicsList::SetCuts(). Update macros
+- suppress EventAction and its Messenger
 
 19-06-13 mma (testem13-V09-06-04)
 - SteppingVerbose: use G4Step::GetSecondaryInCurrentStep().

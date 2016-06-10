@@ -32,8 +32,10 @@
 //
 // 20130308  Use envvar to enable/disable use of 3-body generators.
 // 20130619  Change singleton instance to be thread-local, to avoid collisions.
+// 20141121  Use G4AutoDelete to avoid end-of-thread memory leaks
 
 #include "G4MultiBodyMomentumDist.hh"
+#include "G4AutoDelete.hh"
 #include "G4CascadeParameters.hh"
 #include "G4NuclNucl3BodyMomDst.hh"
 #include "G4NuclNucl4BodyMomDst.hh"
@@ -48,7 +50,11 @@ using namespace G4InuclParticleNames;
 G4ThreadLocal G4MultiBodyMomentumDist* G4MultiBodyMomentumDist::theInstance = 0;
 
 const G4MultiBodyMomentumDist* G4MultiBodyMomentumDist::GetInstance() {
-  if (!theInstance) theInstance = new G4MultiBodyMomentumDist;
+  if (!theInstance) {
+    theInstance = new G4MultiBodyMomentumDist;
+    G4AutoDelete::Register(theInstance);
+  }
+
   return theInstance;
 }
 

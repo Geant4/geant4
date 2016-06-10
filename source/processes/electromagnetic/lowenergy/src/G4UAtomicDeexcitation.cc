@@ -83,7 +83,7 @@ G4UAtomicDeexcitation::G4UAtomicDeexcitation():
   emcorr = G4LossTableManager::Instance()->EmCorrections();
   theElectron = G4Electron::Electron();
   thePositron = G4Positron::Positron();
-  transitionManager = 0;
+  transitionManager = G4AtomicTransitionManager::Instance();
   anaPIXEshellCS = 0;
 }
 
@@ -97,7 +97,7 @@ G4UAtomicDeexcitation::~G4UAtomicDeexcitation()
 void G4UAtomicDeexcitation::InitialiseForNewRun()
 {
   if(!IsFluoActive()) { return; }
-  transitionManager = G4AtomicTransitionManager::Instance();
+  transitionManager->Initialise();
   if(IsPIXEActive()) {
     G4cout << G4endl;
     G4cout << "### === G4UAtomicDeexcitation::InitialiseForNewRun()" << G4endl;
@@ -225,7 +225,8 @@ void G4UAtomicDeexcitation::InitialiseForNewRun()
 void G4UAtomicDeexcitation::InitialiseForExtraAtom(G4int /*Z*/)
 {}
 
-const G4AtomicShell* G4UAtomicDeexcitation::GetAtomicShell(G4int Z, G4AtomicShellEnumerator shell)
+const G4AtomicShell* 
+G4UAtomicDeexcitation::GetAtomicShell(G4int Z, G4AtomicShellEnumerator shell)
 {
   return transitionManager->Shell(Z, size_t(shell));
 }
@@ -240,7 +241,8 @@ void G4UAtomicDeexcitation::GenerateParticles(
 
   // Defined initial conditions
   G4int givenShellId = atomicShell->ShellId();
-  //G4cout << "generating particles for vacancy in shellId: " << givenShellId << G4endl; // debug
+  //G4cout << "generating particles for vacancy in shellId: " 
+  // << givenShellId << G4endl; // debug
   minGammaEnergy = gammaCut;
   minElectronEnergy = eCut;
 
@@ -269,17 +271,21 @@ void G4UAtomicDeexcitation::GenerateParticles(
 	    if  ( provShellId >0) 
 	      {
 		aParticle = GenerateFluorescence(Z,givenShellId,provShellId);
-		//if (aParticle != 0) { G4cout << "****FLUO!_1**** " << aParticle->GetParticleDefinition()->GetParticleType() << " " << aParticle->GetKineticEnergy()/keV << G4endl ;} //debug  
+		//if (aParticle != 0) { 
+		// G4cout << "****FLUO!_1**** " 
+                // << aParticle->GetParticleDefinition()->GetParticleType() 
+                // << " " << aParticle->GetKineticEnergy()/keV << G4endl ;}
 	      }
 	    else if ( provShellId == -1)
 	      {
-		//		G4cout << "Try to generate Auger 1" << G4endl; //debug
+		// G4cout << "Try to generate Auger 1" << G4endl; 
 		aParticle = GenerateAuger(Z, givenShellId);
-		//		if (aParticle != 0) { G4cout << "****AUGER!****" << G4endl;} //debug
+		// if (aParticle != 0) { G4cout << "****AUGER!****" << G4endl;} 
 	      }
 	    else
 	      {
-		G4Exception("G4UAtomicDeexcitation::GenerateParticles()","de0002",JustWarning, "Energy deposited locally");
+		G4Exception("G4UAtomicDeexcitation::GenerateParticles()",
+			    "de0002",JustWarning, "Energy deposited locally");
 	      }
 	  }
 	else 

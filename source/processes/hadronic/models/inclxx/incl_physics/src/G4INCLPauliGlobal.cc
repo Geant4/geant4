@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -54,7 +55,7 @@ namespace G4INCL {
       if((*p)->getMomentum().mag2() > pFermiSquared) continue;
 
       // Count particles of the same type as p below the Fermi sea
-      const ParticleList particles = n->getStore()->getParticles();
+      ParticleList const &particles = n->getStore()->getParticles();
       G4int nSea = 0;
       for(ParticleIter i=particles.begin(), end=particles.end(); i!=end; ++i) {
         if((*i)->getType() != t) continue;

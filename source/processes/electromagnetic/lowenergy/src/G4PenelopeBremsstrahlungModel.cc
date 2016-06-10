@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungModel.cc 76220 2013-11-08 10:15:00Z gcosmo $
+// $Id: G4PenelopeBremsstrahlungModel.cc 78631 2014-01-13 11:15:27Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -640,12 +640,16 @@ G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple(const G4ParticleDef
 	{
 	  //If we are here, it means that Initialize() was inkoved, but the MaterialTable was 
 	  //not filled up. This can happen in a UnitTest or via G4EmCalculator
-	  G4ExceptionDescription ed;
-	  ed << "Unable to find e- table for " << mat->GetName() << " at Ecut(gamma)= " 
-	     << cut/keV << " keV " << G4endl;
-	  ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;
-	  G4Exception("G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple()",
-		      "em2009",JustWarning,ed);
+	  if (verboseLevel > 0)
+	    {
+	      //G4Exception (warning) is issued only in verbose mode
+	      G4ExceptionDescription ed;
+	      ed << "Unable to find e- table for " << mat->GetName() << " at Ecut(gamma)= " 
+		 << cut/keV << " keV " << G4endl;
+	      ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;
+	      G4Exception("G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple()",
+			  "em2009",JustWarning,ed);
+	    }
 	  //protect file reading via autolock
 	  G4AutoLock lock(&PenelopeBremsstrahlungModelMutex);
           fPenelopeFSHelper->BuildScaledXSTable(mat,cut,true); //pretend to be a master
@@ -682,12 +686,16 @@ G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple(const G4ParticleDef
         { 
 	  //If we are here, it means that Initialize() was inkoved, but the MaterialTable was 
 	  //not filled up. This can happen in a UnitTest or via G4EmCalculator
-	  G4ExceptionDescription ed;
-	  ed << "Unable to find e+ table for " << mat->GetName() << " at Ecut(gamma)= " 
-	     << cut/keV << " keV " << G4endl;
-	  ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;
-	  G4Exception("G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple()",
-		      "em2009",JustWarning,ed);
+	  if (verboseLevel > 0)
+	    {
+	      //Issue a G4Exception (warning) only in verbose mode
+	      G4ExceptionDescription ed;
+	      ed << "Unable to find e+ table for " << mat->GetName() << " at Ecut(gamma)= " 
+		 << cut/keV << " keV " << G4endl;
+	      ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;
+	      G4Exception("G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple()",
+			  "em2009",JustWarning,ed);
+	    }
 	  //protect file reading via autolock
 	  G4AutoLock lock(&PenelopeBremsstrahlungModelMutex);
           fPenelopeFSHelper->BuildScaledXSTable(mat,cut,true); //pretend to be a master

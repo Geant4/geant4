@@ -1,0 +1,32 @@
+$Id: History 70477 2013-05-31 08:35:08Z ahoward $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Nov 20, 2014, G. Cosmo  (GB04-V10-00-03)
+- Again included correction in GNUmakefile introduced in tag -01 which
+  was lost in previous tag...
+
+Nov 14, 2014, I. Hrivnacova (GB04-V10-00-02)
+- Added files descriptions
+- Coding guidelines (data member names, separators)
+
+Nov 13, 2014, G. Cosmo  (GB04-V10-00-01)
+- Corrected GNUmakefile to point to correct main() translation unit.
+
+Nov 12, 2014, M. Verderi  (GB04-V10-00-00)
+- Created.

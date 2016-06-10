@@ -1,0 +1,124 @@
+# G.A.P.Cirrone, 
+# pablo.cirronelns.infn.it
+#
+
+# This default macro file is called when:
+# 1.- No macro file is provided at the application launch
+# 2.- The PHYSLIST enviroment variable is set to one of the 
+#     predifined reference Physics Lists 
+# 
+# The the complete list of the Reference Physiscs Lists can be found inside:
+# $G4INSTALL/source/physics_lists/lists/include
+
+#########################
+# Set of the verboses 
+#
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 1
+/event/verbose 0
+
+##########################
+# Initialisation procedure
+#
+/run/initialize
+
+##########################
+# Visualisation 
+#
+/vis/scene/create
+/vis/open OGL
+/vis/viewer/flush
+/vis/viewer/set/viewpointThetaPhi 30 140 deg
+/vis/viewer/zoom 1
+/vis/viewer/pan -10  0 cm
+/vis/scene/add/trajectories
+/vis/scene/endOfEventAction accumulate
+
+####################################################
+# Set here the CUT and the STEP MAX for the tracking. 
+# Suggested values of cut and step
+#
+
+# Set cuts OUTSIDE the detector
+# 
+/run/setCut 1 mm
+
+# Set cuts ONLY inside the detector
+#
+/run/setCutForRegion DetectorLog 0.1 mm
+
+#/Step/waterPhantomStepMax 0.1 mm 
+
+#########################
+# Set the primary particle type,
+# energy and position along the X direction
+#
+/gps/pos/shape Circle
+/gps/pos/centre -310. 0. 0. cm
+/gps/pos/radius 0. mm
+/gps/pos/sigma_r 2. mm
+/gps/particle proton
+/gps/pos/type Beam
+
+
+# the incident surface is in the y-z plane
+#
+/gps/pos/rot1 0 1 0
+/gps/pos/rot2 0 0 1
+
+# the beam is travelling along the x-axis without any angular dispersion (angular despersion set to 0.0)
+#
+/gps/ang/rot1 0 0 1
+/gps/ang/rot2 0 1 0 
+/gps/ang/type beam1d 
+/gps/ang/sigma_r 0.1 deg
+
+
+# the beam energy is in gaussian profile
+#
+/gps/ene/type Gauss
+/gps/ene/mono 62 MeV
+/gps/ene/sigma 0.3 MeV
+
+########################################################
+#		DETECTOR DESCRIPTION
+########################################################
+# USE THE FOLLOWING FOUR LINES FOR DEFINITION OF PHANTOM
+#
+#/changePhantom/position 20. 0. 0. cm
+#/changePhantom/update
+
+/changePhantom/size 40 40 40  cm
+/changePhantom/position 20 0 0 cm
+
+###################################################
+# USE THE FOLLOWING FOR A VOXELLIZED DETECTOR
+#
+/changeDetector/size 4 4 4 cm
+/changeDetector/voxelSize .1 40 40 mm
+
+# Put the detector in the lower left corner of the phantom
+#
+/changeDetector/displacement 0 18 18 cm
+/changePhantom/update
+
+#########################
+# Display the event number
+# during the run
+# 
+/event/printEventNumber 100
+
+#########################
+# Start of the run
+#
+# If secondary particles dose & fluence are needed
+#/analysis/secondary true 
+
+# Default material is water liquid
+#/changePhantom/material G4_PLEXIGLASS
+
+/run/beamOn 10
+
+# The folder 'SimulationOutputs/proton/BraggPeak' must be created before to use the following command
+/control/shell mv DoseDistribution.root SimulationOutputs/proton/BraggPeak/protonBraggPeak.root

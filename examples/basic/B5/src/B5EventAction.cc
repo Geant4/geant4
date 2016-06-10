@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5EventAction.cc 76474 2013-11-11 10:36:34Z gcosmo $
+// $Id: B5EventAction.cc 87359 2014-12-01 16:04:27Z gcosmo $
 //
 /// \file B5EventAction.cc
 /// \brief Implementation of the B5EventAction class
@@ -87,7 +87,7 @@ void B5EventAction::EndOfEventAction(const G4Event* event)
     if (!hce) 
     {
         G4ExceptionDescription msg;
-        msg << "No hits collection of this event found.\n"; 
+        msg << "No hits collection of this event found." << G4endl; 
         G4Exception("B5EventAction::EndOfEventAction()",
                     "B5Code001", JustWarning, msg);
         return;
@@ -116,7 +116,7 @@ void B5EventAction::EndOfEventAction(const G4Event* event)
     if ( (!hHC1) || (!hHC2) || (!dHC1) || (!dHC2) || (!ecHC) || (!hcHC) ) 
     {
         G4ExceptionDescription msg;
-        msg << "Some of hits collections of this event not found.\n"; 
+        msg << "Some of hits collections of this event not found." << G4endl; 
         G4Exception("B5EventAction::EndOfEventAction()",
                     "B5Code001", JustWarning, msg);
         return;

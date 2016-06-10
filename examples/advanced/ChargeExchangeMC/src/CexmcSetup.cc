@@ -53,6 +53,7 @@
 #include <G4RegionStore.hh>
 #include <G4ProductionCuts.hh>
 #include <G4VUserPhysicsList.hh>
+#include <G4SystemOfUnits.hh>
 #include "CexmcSetup.hh"
 #include "CexmcPrimitiveScorer.hh"
 #include "CexmcTrackPoints.hh"

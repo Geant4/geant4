@@ -58,8 +58,6 @@ class DMXPhysicsList: public G4VUserPhysicsList
 public:
   DMXPhysicsList();
   ~DMXPhysicsList();
-  //  virtual ~DMXPhysicsList();
-
 
 public:
   virtual void SetCuts();
@@ -76,16 +74,6 @@ protected:
   virtual void ConstructHad();
   virtual void ConstructOp();
 
-
-  /*
-  // these methods Construct all particles in each category
-  virtual void ConstructAllBosons();
-  virtual void ConstructAllLeptons();
-  virtual void ConstructAllMesons();
-  virtual void ConstructAllBaryons();
-  virtual void ConstructAllIons();
-  virtual void ConstructAllShortLiveds();
-  */
 
   virtual void AddTransportation();
 

@@ -2,8 +2,6 @@
 gROOT -> Reset();
 TFile f("brachytherapy.root");
 
-TDirectory* dir = (TDirectory*)f.Get("brachy_ntuple");
-TTree* ntuple = (TTree*)dir->Get("1");
 ntuple -> Print();   
  
 Int_t index;

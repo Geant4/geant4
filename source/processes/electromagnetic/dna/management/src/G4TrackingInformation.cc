@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrackingInformation.cc 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4TrackingInformation.cc 80151 2014-04-03 09:42:22Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -40,7 +40,7 @@
 
 G4TrackingInformation::G4TrackingInformation() :
     fStepLeader                     (false),
-    fProcessState                   ((size_t)G4VITProcess::GetMaxProcessIndex(),0)
+    fProcessState                   ((size_t)G4VITProcess::GetMaxProcessIndex()) //,0)
 {
     //ctor
     fpTrajectory_Lock           = 0;
@@ -53,6 +53,7 @@ G4TrackingInformation::G4TrackingInformation() :
 G4TrackingInformation::~G4TrackingInformation()
 {
     //dtor
+	/*
     for(int i = 0 ; i < (int) fProcessState.size() - 1 ; i++)
     {
         if(fProcessState[i])
@@ -61,6 +62,7 @@ G4TrackingInformation::~G4TrackingInformation()
             fProcessState[i] = 0;
         }
     }
+    */
     fProcessState.clear();
     if(fpStepProcessorState) delete fpStepProcessorState;
     fpStepProcessorState = 0;
@@ -87,8 +89,22 @@ G4TrackingInformation& G4TrackingInformation::operator=(const G4TrackingInformat
     //assignment operator
     return *this;
 }
+//
+//G4ProcessState_Lock* G4TrackingInformation::GetProcessState(size_t index)
+//{
+//    if(index> G4VITProcess::GetMaxProcessIndex())
+//    {
+//        G4ExceptionDescription exceptionDescription ;
+//        exceptionDescription << "G4TrackingInformation::GetProcInfo : Wrong process subType : " ;
+//        exceptionDescription << index ;
+//        G4Exception("G4TrackingInformation::GetProcessState","G4TrackingInformation003",
+//                    FatalErrorInArgument,exceptionDescription);
+//    }
+//
+//    return fProcessState[index];
+//}
 
-G4ProcessState_Lock* G4TrackingInformation::GetProcessState(size_t index)
+G4::shared_ptr<G4ProcessState_Lock> G4TrackingInformation::GetProcessState(size_t index)
 {
     if(index> G4VITProcess::GetMaxProcessIndex())
     {

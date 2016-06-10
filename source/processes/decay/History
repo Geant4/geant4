@@ -1,4 +1,4 @@
-$Id: History 71228 2013-06-12 12:53:45Z gcosmo $
+$Id: History 79343 2014-02-24 11:44:06Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Feb. 22, 14 H.Kurashige   (decay-V10-00-02)
+- Fix the bug of assigning DBL_MAX for stable particle life time
+  (Bug #1569)
 
+- Feb. 21, 14 J.Apostolakis (decay-V10-00-01) corrected bug # below.
+
+- Jan. 04, 14 H.Kurashige   (decay-V10-00-00)
+- Fix the bug of wrong global time for secondaries 
+  in case that the primary track stops during along step
+  (Bug #1555)
+ 
 - Jun. 11, 13 M.Asai (decay-V09-06-01)
 - Remove the modification in the previous tag, as it is no longer needed as all ions
   are generated after GenericIon gets the collect process manager.

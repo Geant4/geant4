@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4RPGAntiOmegaMinusInelastic.cc 79697 2014-03-12 13:10:09Z gcosmo $
 //
 //
 // NOTE:  The FORTRAN version of the cascade, CASAOM, simply called the

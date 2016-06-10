@@ -1,0 +1,29 @@
+# $Id: TestEm6.in 73985 2013-09-18 15:55:18Z gcosmo $
+#
+# Macro file for "TestEm6.cc"
+# (can be run in batch, without graphic)
+#
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat G4_Fe
+/testem/det/setSize 500 m
+/testem/phys/addPhysics emstandard_opt1
+/run/setCut 1 km
+#
+/run/initialize
+#
+#/testem/phys/SetGammaToMuPairFac 1000
+/gun/particle gamma
+/gun/energy 100 TeV
+/tracking/verbose 1
+/run/beamOn 5
+#
+#
+/gun/particle e+
+/gun/energy 1 TeV
+#/testem/phys/SetAnnihiToMuPairFac 10000
+#/testem/phys/SetAnnihiToHadronFac 10000
+/run/beamOn 5
+#

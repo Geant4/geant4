@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -42,17 +43,28 @@ namespace G4INCL {
   void Cluster::initializeParticles() {
 // assert(theA>=2);
     const ThreeVector oldPosition = thePosition;
-    ParticleList theParticles = theParticleSampler->sampleParticles(thePosition);
+    theParticleSampler->sampleParticlesIntoList(thePosition, particles);
 #if !defined(NDEBUG) && !defined(INCLXX_IN_GEANT4_MODE)
     const G4int theMassNumber = theA;
     const G4int theChargeNumber = theZ;
 #endif
-    theA = 0;
-    theZ = 0;
-    addParticles(theParticles); // add the particles to the `particles' list
+    updateClusterParameters();
     thePosition = oldPosition;
 // assert(theMassNumber==theA && theChargeNumber==theZ);
-    INCL_DEBUG("Cluster initialized:" << std::endl << print());
+    INCL_DEBUG("Cluster initialized:" << '\n' << print());
   }
 
+  void Cluster::rotatePosition(const G4double angle, const ThreeVector &axis) {
+    Particle::rotatePosition(angle, axis);
+    for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
+      (*p)->rotatePosition(angle, axis);
+    }
+  }
+
+  void Cluster::rotateMomentum(const G4double angle, const ThreeVector &axis) {
+    Particle::rotateMomentum(angle, axis);
+    for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
+      (*p)->rotateMomentum(angle, axis);
+    }
+  }
 }

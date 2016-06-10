@@ -26,45 +26,33 @@
 /// \file electromagnetic/TestEm12/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id: EventAction.cc 69108 2013-04-18 13:10:10Z gcosmo $
+// $Id: EventAction.cc 78723 2014-01-20 10:32:17Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "EventAction.hh"
 
-#include "RunAction.hh"
-#include "EventActionMessenger.hh"
+#include "Run.hh"
 #include "HistoManager.hh"
 
-#include "G4Event.hh"
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(RunAction* run)
-:G4UserEventAction(),
- fRunAct(run), fDrawFlag("none"), fPrintModulo(10000), fEventMessenger(0)
-{
-  fEventMessenger = new EventActionMessenger(this);
-}
+EventAction::EventAction()
+:G4UserEventAction()
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
-{
-  delete fEventMessenger;
-}
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::BeginOfEventAction(const G4Event* evt)
-{
- G4int evtNb = evt->GetEventID();
-
- //printing survey
- if (evtNb%fPrintModulo == 0)
-    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-    
+void EventAction::BeginOfEventAction(const G4Event*)
+{    
  //energy deposited per event
  fTotalEdep = 0.;   
 }
@@ -76,7 +64,9 @@ void EventAction::EndOfEventAction(const G4Event*)
   //plot energy deposited per event
   //
   if (fTotalEdep > 0.) {
-    fRunAct->AddEdep(fTotalEdep);
+   Run* run
+    = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+    run->AddEdep(fTotalEdep);
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
     analysisManager->FillH1(2,fTotalEdep);
   }  

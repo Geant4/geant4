@@ -1,4 +1,4 @@
-# $Id: electronScattering.in 69009 2013-04-15 09:33:05Z gcosmo $
+# $Id: electronScattering.in 86064 2014-11-07 08:49:32Z gcosmo $
 #
 # macro file for eBenchmarkV1.cc
 #
@@ -9,7 +9,7 @@
 #
 #
 /testem/phys/addPhysics  emstandard_opt0
-/testem/phys/setCut 1 mm
+/run/setCut 1 mm
 #
 /run/initialize
 #
@@ -19,11 +19,11 @@
 /testem/gun/rndm 420. um		#beam smearing
 #
 /analysis/setFileName eScattering
-/analysis/h1/set 1 180 -90. 90. deg	#proj ang
+/analysis/h1/set 1 180 -90. 90. deg	    #proj ang
 /analysis/h1/set 2 120 0. 24. cm		#dN/dS = f(r)
 /analysis/h1/set 3 120 0. 24. cm		#d(N/cost)/dS = f(r)
 /analysis/h1/set 4 120 0. 24. cm		#normalized d(N/cost)/dS = f(r) 
 #
-/testem/event/printModulo 10000
+/run/printProgress 10000
 #
 /run/beamOn 100000

@@ -1,4 +1,4 @@
-$Id: History 77498 2013-11-25 10:26:36Z gcosmo $
+$Id: History 87209 2014-11-27 08:59:48Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,22 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 24, 2014 M. Asai (exampleRE06-V10-00-04)
+- Retagged with setting production cuts to be same as before
+  exampleRE06-V10-00-02 tag.
+
+Nov 24, 2014 M. Asai (exampleRE06-V10-00-03)
+- Retagged. Co-working with run-V10-00-43.
+
+Nov 20, 2014 M. Asai (exampleRE06-V10-00-02)
+- Remove obsolete hand-written physics list.
+
+Oct 16, 2014 I. Hrivnacova (exampleRE06-V10-00-01)
+- Fixed coding guidelines (long lines) in RE06SteppingVerbose.cc
+
+Aug 20, 2014 M.Asai (exampleRE06-V10-00-00)
+- fix boolean protection in ConstructSD methods for MT.
 
 Nov 22, 2013 G.Folger (exampleRE06-V09-06-01)
 - fix typo in RE06RunAction.cc, use G4endl to end output line.

@@ -38,11 +38,12 @@
 #include "G4ProcessManager.hh"
 #include "G4PiNuclearCrossSection.hh"
 #include "G4CrossSectionPairGG.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
 
 G4QGSBinaryPionBuilder::
 G4QGSBinaryPionBuilder(G4bool quasiElastic) 
 {
-  thePiData = new G4CrossSectionPairGG(new G4PiNuclearCrossSection(), 91*GeV);
+  thePiData = new G4CrossSectionPairGG((G4PiNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4PiNuclearCrossSection::Default_Name()), 91*GeV);
 
   theMin = 12*GeV;
   theModel = new G4TheoFSGenerator("QGSB");
@@ -52,8 +53,6 @@ G4QGSBinaryPionBuilder(G4bool quasiElastic)
   theStringModel->SetFragmentationModel(theStringDecay);
 
   theCascade = new G4BinaryCascade;
-  thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
-  theCascade->SetDeExcitation(thePreEquilib);  
 
   theModel->SetHighEnergyGenerator(theStringModel);
   if (quasiElastic)
@@ -68,12 +67,9 @@ G4QGSBinaryPionBuilder(G4bool quasiElastic)
 G4QGSBinaryPionBuilder::
 ~G4QGSBinaryPionBuilder() 
 {
-  delete theCascade;
-  delete thePreEquilib;
   if ( theQuasiElastic ) delete theQuasiElastic;
   delete theStringDecay;
   delete theStringModel;
-  delete theModel;
 }
 
 void G4QGSBinaryPionBuilder::

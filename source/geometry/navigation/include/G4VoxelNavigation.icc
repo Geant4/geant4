@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.icc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4VoxelNavigation.icc 80287 2014-04-10 09:49:49Z gcosmo $
 //
 // 
 // class G4VoxelNavigation Inline implementation
@@ -128,7 +128,7 @@ G4VoxelNavigation::LevelLocate( G4NavigationHistory& history,
   // Search daughters in volume
   //
 
-  for ( register int sampleNo=targetNoDaughters-1; sampleNo>=0; sampleNo-- )
+  for ( G4int sampleNo=targetNoDaughters-1; sampleNo>=0; sampleNo-- )
   {
     samplePhysical = targetLogical->
                      GetDaughter(targetVoxelNode->GetVolume(sampleNo));

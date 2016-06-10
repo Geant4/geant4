@@ -1,10 +1,11 @@
-# $Id: hunger.mac 76464 2013-11-11 10:22:56Z gcosmo $
+# $Id: hunger.mac 81528 2014-06-02 16:21:24Z vnivanch $
 #
 # macro file for TestEm5.cc    
 #
 # Back scattering of  41 keV electrons.
 # H.J. Hunger and L. Kuchler Phys. Stat. Sol.(a) 56, K45 (1979)
 #     		    
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
 /run/verbose 2
 #
@@ -14,7 +15,7 @@
 #
 /run/initialize
 #
-/testem/phys/setCuts 1 mm
+/run/setCut 1 mm
 #
 /testem/gun/setDefault
 /gun/particle e- 

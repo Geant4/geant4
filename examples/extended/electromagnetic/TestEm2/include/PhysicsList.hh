@@ -27,7 +27,7 @@
 /// \brief Definition of the PhysicsList class
 //
 //
-// $Id: PhysicsList.hh 75118 2013-10-28 09:40:24Z gcosmo $
+// $Id: PhysicsList.hh 82293 2014-06-13 15:23:19Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -54,7 +54,6 @@ public:
 
   virtual void ConstructParticle();
   virtual void ConstructProcess();
-  virtual void SetCuts();
             
   void AddPhysicsList(const G4String& name);
     

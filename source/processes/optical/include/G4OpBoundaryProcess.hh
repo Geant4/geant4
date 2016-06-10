@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpBoundaryProcess.hh 73616 2013-09-02 10:18:24Z gcosmo $
+// $Id: G4OpBoundaryProcess.hh 84717 2014-10-20 07:39:47Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -96,8 +96,8 @@
 /////////////////////
 
 enum G4OpBoundaryProcessStatus {  Undefined,
-                                  FresnelRefraction, FresnelReflection,
-                                  TotalInternalReflection,
+                                  Transmission, FresnelRefraction,
+                                  FresnelReflection, TotalInternalReflection,
                                   LambertianReflection, LobeReflection,
                                   SpikeReflection, BackScattering,
                                   Absorption, Detection, NotAtBoundary,
@@ -244,6 +244,9 @@ private:
 	G4double theReflectivity;
 	G4double theEfficiency;
         G4double theTransmittance;
+
+        G4double theSurfaceRoughness;
+
 	G4double prob_sl, prob_ss, prob_bs;
 
         G4int iTE, iTM;

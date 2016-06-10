@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc 76333 2013-11-08 14:31:50Z gcosmo $
+// $Id: G4EmCorrections.cc 83007 2014-07-24 14:46:57Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -71,10 +71,14 @@
 #include "G4MaterialCutsCouple.hh"
 #include "G4AtomicShells.hh"
 #include "G4LPhysicsFreeVector.hh"
+#include "G4Log.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4EmCorrections::G4EmCorrections()
+const G4double G4EmCorrections::inveplus = 1.0/CLHEP::eplus;
+static const G4double twoln10 = 2.0*G4Log(10.0);
+
+G4EmCorrections::G4EmCorrections(G4int verb)
 {
   particle   = 0;
   curParticle= 0;
@@ -85,7 +89,7 @@ G4EmCorrections::G4EmCorrections()
   ionLEModel = 0;
   ionHEModel = 0;
   nIons      = 0;
-  verbose    = 1;
+  verbose    = verb;
   ncouples   = 0;
   massFactor = 1.0;
   eth        = 2.0*MeV;
@@ -102,10 +106,10 @@ G4EmCorrections::G4EmCorrections()
 
 G4EmCorrections::~G4EmCorrections()
 {
-  //  for(G4int i=0; i<nIons; ++i) {delete stopData[i];}
-  // delete BarkasCorr;
-  // delete ThetaK;
-  // delete ThetaL;
+  for(G4int i=0; i<nIons; ++i) {delete stopData[i];}
+  delete BarkasCorr;
+  delete ThetaK;
+  delete ThetaL;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -211,7 +215,7 @@ G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
   G4double sum = 0.0;
 
   if(ionHEModel) {
-    G4int Z = G4int(p->GetPDGCharge()/eplus + 0.5);
+    G4int Z = G4int(p->GetPDGCharge()*inveplus + 0.5);
     if(Z >= 100)   Z = 99;
     else if(Z < 1) Z = 1;
 
@@ -229,17 +233,18 @@ G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
     //for(std::map< G4int, std::vector<G4double> >::iterator 
     //    it = thcorr.begin(); it != thcorr.end(); ++it){
     //  G4cout << "\t map element: first (key)=" << it->first  
-    //         << "\t second (vector): vec size=" << (it->second).size() << G4endl;
+    //     << "\t second (vector): vec size=" << (it->second).size() << G4endl;
     //  for(size_t i=0; i<(it->second).size(); ++i){
-    //    G4cout << "\t \t vec element: [" << i << "]=" << (it->second)[i] << G4endl; 
-    //  } 
-    //}
+    // G4cout << "\t \t vec element: [" << i << "]=" << (it->second)[i]
+    //<< G4endl; } }
 
     G4double rest = (thcorr.find(ionPDG)->second)[couple->GetIndex()];
 
     sum = ComputeIonCorrections(p,couple->GetMaterial(),e) - rest/e;
 
-    if(verbose > 1) { G4cout << " Sum= " << sum << " dSum= " << rest/e << G4endl; } 
+    if(verbose > 1) { 
+      G4cout << " Sum= " << sum << " dSum= " << rest/e << G4endl; 
+    } 
   }
   return sum;
 }
@@ -253,7 +258,7 @@ G4double G4EmCorrections::Bethe(const G4ParticleDefinition* p,
   SetupKinematics(p, mat, e);
   G4double eexc  = material->GetIonisation()->GetMeanExcitationEnergy();
   G4double eexc2 = eexc*eexc;
-  G4double dedx = 0.5*std::log(2.0*electron_mass_c2*bg2*tmax/eexc2)-beta2;
+  G4double dedx = 0.5*G4Log(2.0*electron_mass_c2*bg2*tmax/eexc2)-beta2;
   return dedx;
 }
 
@@ -354,9 +359,10 @@ G4double G4EmCorrections::KShell(G4double tet, G4double eta)
   }
   // assimptotic case
   if(eta >= Eta[nEtaK-1]) {
-    corr = (Value(x, TheK[itet], TheK[itet+1], UK[itet], UK[itet+1]) + 
-            Value(x, TheK[itet], TheK[itet+1], VK[itet], VK[itet+1])/eta +
-            Value(x, TheK[itet], TheK[itet+1], ZK[itet], ZK[itet+1])/(eta*eta))/eta;
+    corr = 
+      (Value(x, TheK[itet], TheK[itet+1], UK[itet], UK[itet+1]) + 
+       Value(x, TheK[itet], TheK[itet+1], VK[itet], VK[itet+1])/eta +
+       Value(x, TheK[itet], TheK[itet+1], ZK[itet], ZK[itet+1])/(eta*eta))/eta;
   } else {
     G4double y = eta;
     if(eta < Eta[0]) { 
@@ -437,17 +443,17 @@ G4double G4EmCorrections::ShellCorrectionSTD(const G4ParticleDefinition* p,
   G4double taul  = material->GetIonisation()->GetTaul();
 
   if ( bg2 >= bg2lim ) {
-    for (G4int k=0; k<3; k++) {
+    for (G4int k=0; k<3; ++k) {
         x *= bg2 ;
         sh += shellCorrectionVector[k]/x;
     }
 
   } else {
-    for (G4int k=0; k<3; k++) {
+    for (G4int k=0; k<3; ++k) {
         x *= bg2lim ;
         sh += shellCorrectionVector[k]/x;
     }
-    sh *= std::log(tau/taul)/std::log(taulim/taul);
+    sh *= G4Log(tau/taul)/G4Log(taulim/taul);
   }
   sh *= 0.5;
   return sh;
@@ -470,7 +476,7 @@ G4double G4EmCorrections::ShellCorrection(const G4ParticleDefinition* p,
     G4double res = 0.0;
     G4double res0 = 0.0;
     G4double Z = (*theElementVector)[i]->GetZ();
-    G4int   iz = G4int(Z);
+    G4int   iz = G4lrint(Z);
     G4double Z2= (Z-0.3)*(Z-0.3);
     G4double f = 1.0;
     if(1 == iz) {
@@ -557,11 +563,10 @@ G4double G4EmCorrections::DensityCorrection(const G4ParticleDefinition* p,
   G4double x0den = material->GetIonisation()->GetX0density();
   G4double x1den = material->GetIonisation()->GetX1density();
 
-  G4double twoln10 = 2.0*std::log(10.0);
   G4double dedx = 0.0;
 
   // density correction
-  G4double x = std::log(bg2)/twoln10;
+  G4double x = G4Log(bg2)/twoln10;
   if ( x >= x0den ) {
     dedx = twoln10*x - cden ;
     if ( x < x1den ) dedx += aden*std::pow((x1den-x),mden) ;
@@ -678,7 +683,7 @@ G4double G4EmCorrections::NuclearDEDX(const G4ParticleDefinition* p,
   lossFlucFlag = fluct;
 
   // Projectile nucleus
-  G4double z1 = std::fabs(particle->GetPDGCharge()/eplus);
+  G4double z1 = std::abs(particle->GetPDGCharge()*inveplus);
   G4double mass1 = mass/amu_c2;
 
   //  loop for the elements in the material
@@ -711,8 +716,7 @@ G4double G4EmCorrections::NuclearStoppingPower(G4double kineticEnergy,
   if (er >= ed[0]) { nloss = a[0]; }
   else {
     // the table is inverse in energy
-    for (G4int i=102; i>=0; i--)
-    {
+    for (G4int i=102; i>=0; --i) {
       if (er <= ed[i]) {
 	nloss = (a[i] - a[i+1])*(er - ed[i+1])/(ed[i] - ed[i+1]) + a[i+1];
 	break;
@@ -722,8 +726,6 @@ G4double G4EmCorrections::NuclearStoppingPower(G4double kineticEnergy,
 
   // Stragling
   if(lossFlucFlag) {
-    //    G4double sig = 4.0 * m1 * m2 / ((m1 + m2)*(m1 + m2)*
-    //   (4.0 + 0.197*std::pow(er,-1.6991)+6.584*std::pow(er,-1.0494))) ;
     G4double sig = 4.0 * mass1 * mass2 / ((mass1 + mass2)*(mass1 + mass2)*
 				    (4.0 + 0.197/(er*er) + 6.584/er));
 
@@ -739,12 +741,13 @@ G4double G4EmCorrections::NuclearStoppingPower(G4double kineticEnergy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmCorrections::EffectiveChargeCorrection(const G4ParticleDefinition* p,
-						    const G4Material* mat,
-						    G4double ekin)
+G4double 
+G4EmCorrections::EffectiveChargeCorrection(const G4ParticleDefinition* p,
+					   const G4Material* mat,
+					   G4double ekin)
 {
   G4double factor = 1.0;
-  if(p->GetPDGCharge() <= 2.5*eplus || nIons <= 0) return factor;
+  if(p->GetPDGCharge() <= 2.5*CLHEP::eplus || nIons <= 0) { return factor; }
   /*
   if(verbose > 1) {
     G4cout << "EffectiveChargeCorrection: " << p->GetParticleName() 
@@ -772,8 +775,8 @@ G4double G4EmCorrections::EffectiveChargeCorrection(const G4ParticleDefinition* 
     }
     //    G4cout << " idx= " << idx << " dz= " << G4endl;
     if(idx >= 0) {
-      if(!ionList[idx]) BuildCorrectionVector(); 
-      if(ionList[idx])  curVector = stopData[idx];
+      if(!ionList[idx]) { BuildCorrectionVector(); } 
+      if(ionList[idx])  { curVector = stopData[idx]; }
     } else { return factor; }
   }
   if(curVector) {
@@ -1108,9 +1111,11 @@ void G4EmCorrections::Initialise()
   nEtaK = 29;
   nEtaL = 28;
 
-  const G4double d[11] = {0., 0., 0., 1.72, 2.09, 2.48, 2.82, 3.16, 3.53, 3.84, 4.15};
-  const G4double thek[20] = {0.64, 0.65, 0.66, 0.68, 0.70, 0.72, 0.74, 0.75, 0.76, 0.78,
-                             0.80, 0.82, 0.84, 0.85, 0.86, 0.88, 0.90, 0.92, 0.94, 0.95};
+  const G4double d[11] = 
+    {0., 0., 0., 1.72, 2.09, 2.48, 2.82, 3.16, 3.53, 3.84, 4.15};
+  const G4double thek[20] = 
+    {0.64, 0.65, 0.66, 0.68, 0.70, 0.72, 0.74, 0.75, 0.76, 0.78,
+     0.80, 0.82, 0.84, 0.85, 0.86, 0.88, 0.90, 0.92, 0.94, 0.95};
   const G4double sk[20] = {1.9477, 1.9232, 1.8996, 1.8550, 1.8137,
                            1.7754, 1.7396, 1.7223, 1.7063, 1.6752,
                            1.6461, 1.6189, 1.5933, 1.5811, 1.5693,
@@ -1138,9 +1143,10 @@ void G4EmCorrections::Initialise()
     VK[i]   = vk[i];
   }
 
-  const G4double thel[26] = {0.24, 0.26, 0.28, 0.30, 0.32,   0.34, 0.35, 0.36, 0.38, 0.40,
-                             0.42, 0.44, 0.45, 0.46, 0.48,   0.50, 0.52, 0.54, 0.55, 0.56,
-                             0.58, 0.60, 0.62, 0.64, 0.65,   0.66};
+  const G4double thel[26] = 
+    {0.24, 0.26, 0.28, 0.30, 0.32,   0.34, 0.35, 0.36, 0.38, 0.40,
+     0.42, 0.44, 0.45, 0.46, 0.48,   0.50, 0.52, 0.54, 0.55, 0.56,
+     0.58, 0.60, 0.62, 0.64, 0.65,   0.66};
   const G4double sl[26] = {15.3343, 13.9389, 12.7909, 11.8343, 11.0283,
                            10.3424, 10.0371,  9.7537,  9.2443,  8.8005,
 			   8.4114,  8.0683,   7.9117, 7.7641, 7.4931,
@@ -1164,10 +1170,10 @@ void G4EmCorrections::Initialise()
   }
 
   const G4double eta[29] = {0.005, 0.007, 0.01, 0.015, 0.02,
-                              0.03,  0.04,  0.05, 0.06,  0.08,
-                              0.1,   0.15,  0.2,  0.3,   0.4,
-                              0.5,   0.6,   0.7,  0.8,   1.0,
-                              1.2,   1.4,   1.5,  1.7,   2.0, 3.0, 5.0, 7.0, 10.};
+			    0.03,  0.04,  0.05, 0.06,  0.08,
+			    0.1,   0.15,  0.2,  0.3,   0.4,
+			    0.5,   0.6,   0.7,  0.8,   1.0,
+			    1.2,   1.4,   1.5,  1.7,   2.0, 3.0, 5.0, 7.0, 10.};
 
   const G4double bk1[29][11] = { 
   {0.005, 1.34782E-8, 1.46132E-8, 1.72179E-8, 2.03521E-8, 2.41370E-8, 2.87247E-8, 3.13778E-8, 3.43072E-8, 4.11274E-8, 4.94946E-8}, 
@@ -1264,7 +1270,6 @@ void G4EmCorrections::Initialise()
   {7.0, 6.8634, 6.9194, 6.9767, 7.0957, 7.2208, 7.3526, 7.4915, 7.5639, 7.6384}
   };
  
-
   const G4double bls2[28][10] = { 
   {0.005, 5.4561E-4, 6.0905E-4, 6.7863E-4, 7.5494E-4, 7.9587E-4, 8.3883E-4, 9.3160E-4, 1.0352E-3, 1.1529E-3}, 
   {0.007, 1.2068E-3, 1.3170E-3, 1.4377E-3, 1.5719E-3, 1.6451E-3, 1.7231E-3, 1.8969E-3, 2.1009E-3, 2.3459E-3}, 
@@ -1424,7 +1429,7 @@ void G4EmCorrections::Initialise()
   for(i=0; i<nEtaK; ++i) {
 
     G4double et = eta[i];
-    G4double loget = std::log(et);
+    G4double loget = G4Log(et);
     Eta[i] = et;
     //G4cout << "### eta["<<i<<"]="<<et<<"  KShell: tet= "<<TheK[0]<<" - "<<TheK[nK-1]<<G4endl;
 

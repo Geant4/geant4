@@ -1,4 +1,4 @@
-$Id: History 77651 2013-11-27 08:47:55Z gcosmo $
+$Id: History 85912 2014-11-06 08:57:43Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,64 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+05 November, 2014  Robert Hatcher  (intercoms-V10-00-15)
+- Rename a few inline method parameter names from 's' to 's0' 
+  to avoid a clash with CLHEP global 's'
+
+23 October, 2014 A. Dotti (intercoms-V10-00-14)
+- Add G4cout support for generic (non worker) threads via new method:
+  G4UImanger::SetUpForSpecialThread(G4String prefix)
+  Requires global-V10-00-38
+
+8 October, 2014 M. Asai (intercoms-V10-00-12, -13)
+- Adding a mechanism to make UI commands defined in a worker thread
+to be registered to the G4UImanager of the master thread.
+
+23 September, 2014 G. Cosmo (intercoms-V10-00-11)
+- G4UImanager.hh : Renamed getThreadId() method to GetThreadId() and made
+  post-const...
+
+23 September, 2014 L. Garnier (intercoms-V10-00-10)
+- G4UImanager.hh : Add getThreadId() method instead of a public member
+
+23 September, 2014 L. Garnier (intercoms-V10-00-09)
+- G4UImanager.hh : Change threadId from private to public
+
+12 August, 2014 L. Garnier (intercoms-V10-00-08)
+- G4UImanager.hh : add "G4MTcoutDestination* GetThreadCout()" 
+  to get the cout destination of this thread
+
+4 May, 2014 M. Asai (intercoms-V10-00-07)
+- G4GenericMessenger.cc : Fix core dump when GetCurrentValue()
+  method is invoked for a command defined by DeclareMethod().
+
+4 May, 2014 M. Asai (intercoms-V10-00-06)
+- Introducing new UI commands /control/doif and /control/getVal.
+
+3 May, 2014 M. Asai (intercoms-V10-00-05)
+- Fix the treatment of double-quotes in G4UImanager::ForeachS().
+  Addressing bug report #1614.
+
+16 April, 2014 G. Cosmo (intercoms-V10-00-04)
+- Removed unnecessary source file G4AnyType.cc, as all symbols are inlined.
+- Corrected inclusion protection flag in G4GenericMessenger.hh.
+  Addressing old problem report #1527.
+
+9 April, 2014 L. Garnier (intercoms-V10-00-03)
+- Fix DEV-140 : "/control/macroPath" now also apply to macros 
+  called inside a loop.
+
+16 March, 2014 M. Asai (intercoms-V10-00-02)
+- Introducing /control/cout/ignoreInitializationCout command to
+  omit G4cout from threads during initialization, as they should
+  be identical to the masther thread.
+
+07 March, 2014 K. Murakami (intercoms-V10-00-01)
+- G4UIparameter : improve dignostic message of CandidateCheck().
+
+04 March, 2014 M. Asai (intercoms-V10-00-00)
+- G4GenericMessenger : introducing three additional methods to make
+  it Geant4-v10.0-compliant. Addressing to bug report #1580.
 
 26 November, 2013 M. Asai (intercoms-V09-06-16)
 - G4GenericMessenger : introducing two methods for declaring a method

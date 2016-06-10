@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -42,7 +42,7 @@
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.505 cm 
+ Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.504 cm 
                        Imean:  78.000 eV 
 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -83,7 +83,7 @@
           ElmMassFraction:   1.28 %  ElmAbundance   0.47 % 
 
 
- Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.961 cm 
+ Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.960 cm 
                        Imean:  78.700 eV 
 
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
@@ -110,8 +110,6 @@
 /event/verbose 0
 /testem/verbose 0
 #
-/testem/phys/setCuts 0.1 mm
-#
 /testem/phys/addPhysics emstandard
 ### PhysicsList Add Physics <emstandard> 
 #/testem/phys/addPhysics      emstandard_opt2
@@ -126,7 +124,7 @@
 /testem/target2Z 6 mm
 /run/geometryModified
 #
-#/testem/histoName            be_w_st.paw
+#/testem/histoName            be_w_st
 #
 #/testem/stepMax               1.0  mm
 #
@@ -156,49 +154,52 @@
 Phantom R= 200 dz= 150
 Absorber R= 200 dz= 2.5 posZ= -77.5
 ### PhysicsList Construte Processes
+#
+/run/setCut 0.1 mm
+#
 /run/beamOn 10000
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
- Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 1 mm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_Be
- Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 1 mm 
- Energy thresholds :  gamma  1.05172 keV    e-  109.289 keV    e+  107.83 keV proton 100 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  1.05172 keV    e-  109.289 keV    e+  107.83 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : G4_He
- Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 1 mm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : G4_W
- Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 1 mm 
- Energy thresholds :  gamma  36.0599 keV    e-  351.877 keV    e+  337.972 keV proton 100 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  36.0599 keV    e-  351.877 keV    e+  337.972 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 4     used in the geometry : Yes
  Material : G4_MYLAR
- Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 1 mm 
- Energy thresholds :  gamma  1.21113 keV    e-  99.4755 keV    e+  98.1475 keV proton 100 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  1.21113 keV    e-  99.4755 keV    e+  98.1475 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 5     used in the geometry : Yes
  Material : G4_WATER
- Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 1 mm 
- Energy thresholds :  gamma  1.10981 keV    e-  84.6589 keV    e+  83.5287 keV proton 100 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  1.10981 keV    e-  84.6589 keV    e+  83.5287 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -211,30 +212,32 @@ Index : 5     used in the geometry : Yes
    60 bins Z   stepZ= 5 mm 
    200 bins E   stepE= 0.25 MeV 
    14-th bin in Z is used for R distribution
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=7.65s Real=7.66s Sys=0s
+  User=9.89s Real=9.92s Sys=0s
 RunAction: End of run actions are started
 Histo: End of run actions are started
 ========================================================
 Number of events                             10000
-Average number of e-                         33.38
-Average number of gamma                      19.72
-Average number of e+                         0.7623
-Average number of steps in the phantom       12.05
-Average number of e- steps in the target     18.06
-Average number of g  produced in the target  18.88
-Average number of e- produced in the target  21.07
-Average number of g produced in the phantom  0.4998
-Average number of e- produced in the phantom 6.024
-Total fGamma fluence in front of the phantom 7.947 MeV 
+Average number of e-                         33.29
+Average number of gamma                      19.61
+Average number of e+                         0.7745
+Average number of steps in the phantom       12.02
+Average number of e- steps in the target     17.99
+Average number of g  produced in the target  18.73
+Average number of e- produced in the target  20.89
+Average number of g produced in the phantom  0.5205
+Average number of e- produced in the phantom 6.067
+Total fGamma fluence in front of the phantom 7.931 MeV 
 ========================================================
 
 
+#
 G4 kernel has come to Quit state.
+Total navigation history collections cleaned: 26
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.36 Mb
+Number of memory pools allocated: 10 of which, static: 0
+Dynamic pools deleted: 10 / Total memory freed: 0.057 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

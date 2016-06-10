@@ -50,7 +50,7 @@ G4bool G4VNtupleManager::SetFirstNtupleColumnId(G4int firstId)
     description 
       << "Cannot set FirstNtupleColumnId as its value was already used.";
     G4Exception("G4VNtupleManager::SetFirstNtupleColumnId()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W013", JustWarning, description);
     return false;
   }              
 

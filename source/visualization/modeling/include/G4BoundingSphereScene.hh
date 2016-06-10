@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingSphereScene.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4BoundingSphereScene.hh 81056 2014-05-20 09:02:16Z gcosmo $
 //
 // 
 // John Allison  7th June 1997
@@ -33,46 +33,23 @@
 #ifndef G4BOUNDINGSPHERESCENE_HH
 #define G4BOUNDINGSPHERESCENE_HH
 
-#include "G4VGraphicsScene.hh"
+#include "G4PseudoScene.hh"
 #include "G4VisExtent.hh"
-#include "G4Box.hh"
-#include "G4Cons.hh"
-#include "G4Tubs.hh"
-#include "G4Trd.hh"
-#include "G4Trap.hh"
-#include "G4Sphere.hh"
-#include "G4Para.hh"
-#include "G4Torus.hh"
-#include "G4Polycone.hh"
-#include "G4Polyhedra.hh"
 
 class G4VModel;
 
-class G4BoundingSphereScene: public G4VGraphicsScene {
+class G4BoundingSphereScene: public G4PseudoScene {
 
 public:
+
   G4BoundingSphereScene (G4VModel* pModel = 0);
+
   virtual ~G4BoundingSphereScene ();
-  void PreAddSolid (const G4Transform3D& objectTransformation,
-		    const G4VisAttributes&);
-  void PostAddSolid () {}
-  void AddSolid (const G4Box& solid) {Accrue (solid);}
-  void AddSolid (const G4Cons& solid) {Accrue (solid);}
-  void AddSolid (const G4Tubs& solid) {Accrue (solid);}
-  void AddSolid (const G4Trd& solid) {Accrue (solid);}
-  void AddSolid (const G4Trap& solid) {Accrue (solid);}
-  void AddSolid (const G4Sphere& solid) {Accrue (solid);}
-  void AddSolid (const G4Para& solid) {Accrue (solid);}
-  void AddSolid (const G4Torus& solid) {Accrue (solid);}
-  void AddSolid (const G4Polycone& solid) {Accrue (solid);}
-  void AddSolid (const G4Polyhedra& solid) {Accrue (solid);}
-  void AddSolid (const G4VSolid& solid) {Accrue (solid);}
-  void AddCompound (const G4VTrajectory&) {}
-  void AddCompound (const G4VHit&) {}
-  void AddCompound (const G4VDigi&) {}
-  void AddCompound (const G4THitsMap<G4double>&) {}
+
   G4VisExtent GetBoundingSphereExtent ();
+
   const G4Point3D& GetCentre() const {return fCentre;}
+
   G4double GetRadius() const {return fRadius;}
 
   void SetCentre(const G4Point3D& centre) {fCentre = centre;}
@@ -86,27 +63,13 @@ public:
   void AccrueBoundingSphere (const G4Point3D& centre,
 			     G4double radius);
 
-  ////////////////////////////////////////////////////////////////
-  // Functions not used by required by the abstract interface.
-
-  virtual void BeginPrimitives (const G4Transform3D&) {}
-  virtual void EndPrimitives () {}
-  virtual void BeginPrimitives2D (const G4Transform3D&) {}
-  virtual void EndPrimitives2D () {}
-  virtual void AddPrimitive (const G4Polyline&)   {}
-  virtual void AddPrimitive (const G4Scale&)      {}
-  virtual void AddPrimitive (const G4Text&)       {}
-  virtual void AddPrimitive (const G4Circle&)     {}
-  virtual void AddPrimitive (const G4Square&)     {}
-  virtual void AddPrimitive (const G4Polymarker&) {}
-  virtual void AddPrimitive (const G4Polyhedron&) {}
-
 private:
-  void Accrue (const G4VSolid& solid);
+
+  void ProcessVolume (const G4VSolid& solid);
+
   G4VModel* fpModel;  // Instantiating code may optionally set this.
   G4Point3D fCentre;
   G4double fRadius;
-  const G4Transform3D* fpObjectTransformation;
 };
 
 #endif

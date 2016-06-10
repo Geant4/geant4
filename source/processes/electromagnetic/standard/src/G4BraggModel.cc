@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc 74790 2013-10-22 07:31:37Z gcosmo $
+// $Id: G4BraggModel.cc 83008 2014-07-24 14:49:52Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -80,6 +80,7 @@
 using namespace std;
 
 static const G4double invLog10 = 1.0/G4Log(10.);
+G4PSTARStopping* G4BraggModel::fPSTAR = 0;
 
 G4BraggModel::G4BraggModel(const G4ParticleDefinition* p, const G4String& nam)
   : G4VEmModel(nam),
@@ -107,7 +108,9 @@ G4BraggModel::G4BraggModel(const G4ParticleDefinition* p, const G4String& nam)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4BraggModel::~G4BraggModel()
-{}
+{
+  if(IsMaster()) { delete fPSTAR; fPSTAR = 0; }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -132,7 +135,9 @@ void G4BraggModel::Initialise(const G4ParticleDefinition* p,
        pname != "hydrogen") { isIon = true; }
 
     fParticleChange = GetParticleChangeForLoss();
+    if(!fPSTAR) { fPSTAR = new G4PSTARStopping(); }
   }
+  if(IsMaster() && particle->GetPDGMass() < GeV) { fPSTAR->Initialise(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -173,7 +178,10 @@ G4double G4BraggModel::ComputeCrossSectionPerElectron(
     G4double energy  = kineticEnergy + mass;
     G4double energy2 = energy*energy;
     G4double beta2   = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
-    cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*G4Log(maxEnergy/cutEnergy)/tmax;
+    cross = (maxEnergy - cutEnergy)/(cutEnergy*maxEnergy) 
+      - beta2*G4Log(maxEnergy/cutEnergy)/tmax;
+
+    if( 0.5 == spin ) { cross += 0.5*(maxEnergy - cutEnergy)/energy2; }
 
     cross *= twopi_mc2_rcl2*chargeSquare/beta2;
   }
@@ -341,40 +349,30 @@ G4double G4BraggModel::MaxSecondaryEnergy(const G4ParticleDefinition* pd,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool G4BraggModel::HasMaterial(const G4Material* material)
+G4bool G4BraggModel::HasMaterial(const G4Material*)
 {
+  return false;
+  /*
   G4String chFormula = material->GetChemicalFormula();
   if("" == chFormula) { return false; }
 
-  // ICRU Report N49, 1993. Power's model for He.
+  // ICRU Report N49, 1993. Power's model for H
   static const size_t numberOfMolecula = 11;
   static const G4String molName[numberOfMolecula] = {
     "Al_2O_3",                 "CO_2",                      "CH_4",
     "(C_2H_4)_N-Polyethylene", "(C_2H_4)_N-Polypropylene",  "(C_8H_8)_N",
     "C_3H_8",                  "SiO_2",                     "H_2O",
     "H_2O-Gas",                "Graphite" } ;
-  static const G4int idxPSTAR[numberOfMolecula] = {
-    6,  16,  36,
-    52, 55,  56,
-    59, 62,  71,
-    72, 13};
-
-  // Special treatment for water in gas state
-  const G4State theState = material->GetState() ;
-
-  if( theState == kStateGas && "H_2O" == chFormula) {
-    chFormula = G4String("H_2O-Gas");
-  }
 
   // Search for the material in the table
   for (size_t i=0; i<numberOfMolecula; ++i) {
     if (chFormula == molName[i]) {
-      iMolecula = -1;
-      iPSTAR = idxPSTAR[i];  
-      return true;
+      iPSTAR = fPSTAR->GetIndex(matName[i]);  
+      break;
     }
   }
-  return false;
+  return (iPSTAR >= 0);
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -598,7 +596,7 @@ G4double G4BraggModel::DEDX(const G4Material* material, G4double kineticEnergy)
     currentMaterial = material;
     iPSTAR    = -1;
     iMolecula = -1;
-    if( !HasMaterial(material) ) { iPSTAR = pstar.GetIndex(material); }
+    if( !HasMaterial(material) ) { iPSTAR = fPSTAR->GetIndex(material); }
 
     //G4cout << "%%% " <<material->GetName() << "  iMolecula= " 
     //	   << iMolecula << "  iPSTAR= " << iPSTAR << G4endl; 
@@ -610,7 +608,8 @@ G4double G4BraggModel::DEDX(const G4Material* material, G4double kineticEnergy)
                                  material->GetAtomicNumDensityVector();
   
   if( iPSTAR >= 0 ) {
-    return pstar.GetElectronicDEDX(iPSTAR, kineticEnergy)*material->GetDensity();
+    return 
+      fPSTAR->GetElectronicDEDX(iPSTAR, kineticEnergy)*material->GetDensity();
 
   } else if(iMolecula >= 0) {
 

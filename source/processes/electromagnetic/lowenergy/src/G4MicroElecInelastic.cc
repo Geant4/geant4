@@ -44,13 +44,15 @@
 #include "G4MicroElecInelastic.hh"
 #include "G4SystemOfUnits.hh"
 
+#include "G4GenericIon.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 using namespace std;
 
 G4MicroElecInelastic::G4MicroElecInelastic(const G4String& processName,
-  G4ProcessType type):G4VEmProcess (processName, type),
-    isInitialised(false)
+                                           G4ProcessType type):G4VEmProcess (processName, type),
+isInitialised(false)
 {
   SetProcessSubType(53);
 }
@@ -65,8 +67,8 @@ G4MicroElecInelastic::~G4MicroElecInelastic()
 G4bool G4MicroElecInelastic::IsApplicable(const G4ParticleDefinition& p)
 {
   return (&p == G4Electron::Electron() ||
-	&p == G4Proton::Proton()  || 
-	(p.GetPDGCharge() != 0.0 && !p.IsShortLived() && p.GetParticleType() == "nucleus"));
+          &p == G4Proton::Proton()  ||
+          &p == G4GenericIon::GenericIonDefinition());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -101,7 +103,7 @@ void G4MicroElecInelastic::InitialiseProcess(const G4ParticleDefinition* p)
     {
       if(!EmModel()) SetEmModel(new G4MicroElecInelasticModel);
       EmModel()->SetLowEnergyLimit(50.*keV);
-      EmModel()->SetHighEnergyLimit(10000.*GeV);
+      EmModel()->SetHighEnergyLimit(p->GetAtomicMass()*10.*GeV);
 
       AddEmModel(1, EmModel());   
     }
@@ -120,7 +122,7 @@ void G4MicroElecInelastic::PrintInfo()
   {
     G4cout
       << " Total cross sections computed from " 
-      << EmModel(1)->GetName() 
+      << EmModel(1)->GetName()
       << " and "
       << EmModel(2)->GetName() 
       << " models"

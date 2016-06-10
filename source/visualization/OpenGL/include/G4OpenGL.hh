@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenGL.hh 75567 2013-11-04 11:35:11Z gcosmo $
+// $Id: G4OpenGL.hh 85263 2014-10-27 08:58:31Z gcosmo $
 //
 // G.Barrand.
 
@@ -41,17 +41,14 @@
 
  #ifdef G4VIS_BUILD_OPENGLX_DRIVER
  #  include <GL/gl.h>
- #  include <GL/glu.h>
  #endif
 
  #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
  #    include <GL/gl.h>
- #    include <GL/glu.h>
  #endif
 
  #ifdef G4VIS_BUILD_OPENGLWIN32_DRIVER
  #    include <GL/gl.h>
- #    include <GL/glu.h>
  #endif
 //# Do NOT include glx Here ! It has to be done, after all <Qxx...> includes
 //#  include <GL/glx.h>
@@ -59,18 +56,23 @@
  #ifdef G4VIS_BUILD_OPENGLWT_DRIVER
  #  include <Wt/WGLWidget>
  #  define G4OPENGL_VERSION_2 1
- // include all redefinitions of gl functions for Wt
- #  include "G4OpenGLWtDrawer.hh"
  #endif
  #ifdef  G4VIS_BUILD_OPENGLQT_DRIVER
   #ifndef G4VIS_BUILD_OPENGLX_DRIVER
     #ifdef __MACH__
 //#  define G4OPENGL_VERSION_2 1
       #include <OpenGL/gl.h>
-      #include <OpenGL/glu.h>
+    #else
+      #include <GL/gl.h>
     #endif
     #include <qgl.h>
   #endif
+#endif
+
+#ifdef G4OPENGL_VERSION_2
+#  undef G4VIS_BUILD_OPENGL_GL2PS
+// include all redefinitions of openGl functions for Vertex Buffer Objects
+#  include "G4OpenGLVboDrawer.hh"
 #endif
 
 #define G4OPENGL_FLT_BIG 1.e20

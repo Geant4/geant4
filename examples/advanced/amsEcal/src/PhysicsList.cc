@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc 68740 2013-04-05 09:56:39Z gcosmo $
+// $Id: PhysicsList.cc 83010 2014-07-24 14:53:07Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,33 +33,28 @@
 
 #include "PhysListEmStandard.hh"
 
-#include "G4SystemOfUnits.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
 
 #include "G4LossTableManager.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
-  G4LossTableManager::Instance();
-  currentDefaultCut   = 1.0*mm;
-  cutForGamma         = currentDefaultCut;
-  cutForElectron      = currentDefaultCut;
-  cutForPositron      = currentDefaultCut;
-
   pMessenger = new PhysicsListMessenger(this);
-
   SetVerboseLevel(1);
 
   // EM physics
-  emName = G4String("emstandard_local");
+  emName = G4String("local");
   emPhysicsList = new PhysListEmStandard(emName);
-
+  
+  SetDefaultCutValue(1*mm);
+  G4LossTableManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,101 +66,38 @@ PhysicsList::~PhysicsList()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// Bosons
-#include "G4ChargedGeantino.hh"
-#include "G4Geantino.hh"
-#include "G4Gamma.hh"
-#include "G4OpticalPhoton.hh"
-
-// leptons
-#include "G4MuonPlus.hh"
-#include "G4MuonMinus.hh"
-#include "G4NeutrinoMu.hh"
-#include "G4AntiNeutrinoMu.hh"
-
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4NeutrinoE.hh"
-#include "G4AntiNeutrinoE.hh"
-
-// Mesons
-#include "G4PionPlus.hh"
-#include "G4PionMinus.hh"
-#include "G4PionZero.hh"
-#include "G4Eta.hh"
-#include "G4EtaPrime.hh"
-
-#include "G4KaonPlus.hh"
-#include "G4KaonMinus.hh"
-#include "G4KaonZero.hh"
-#include "G4AntiKaonZero.hh"
-#include "G4KaonZeroLong.hh"
-#include "G4KaonZeroShort.hh"
-
-// Baryons
-#include "G4Proton.hh"
-#include "G4AntiProton.hh"
-#include "G4Neutron.hh"
-#include "G4AntiNeutron.hh"
-
-// Nuclei
-#include "G4Deuteron.hh"
-#include "G4Triton.hh"
-#include "G4Alpha.hh"
-#include "G4GenericIon.hh"
+#include "G4BosonConstructor.hh"
+#include "G4LeptonConstructor.hh"
+#include "G4MesonConstructor.hh"
+#include "G4BosonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+#include "G4IonConstructor.hh"
+#include "G4ShortLivedConstructor.hh"
 
 void PhysicsList::ConstructParticle()
 {
-// pseudo-particles
-  G4Geantino::GeantinoDefinition();
-  G4ChargedGeantino::ChargedGeantinoDefinition();
-  
-// gamma
-  G4Gamma::GammaDefinition();
-  
-// optical photon
-  G4OpticalPhoton::OpticalPhotonDefinition();
+    G4BosonConstructor  pBosonConstructor;
+    pBosonConstructor.ConstructParticle();
 
-// leptons
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-  G4MuonPlus::MuonPlusDefinition();
-  G4MuonMinus::MuonMinusDefinition();
+    G4LeptonConstructor pLeptonConstructor;
+    pLeptonConstructor.ConstructParticle();
 
-  G4NeutrinoE::NeutrinoEDefinition();
-  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
-  G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();  
+    G4MesonConstructor pMesonConstructor;
+    pMesonConstructor.ConstructParticle();
 
-// mesons
-  G4PionPlus::PionPlusDefinition();
-  G4PionMinus::PionMinusDefinition();
-  G4PionZero::PionZeroDefinition();
-  G4Eta::EtaDefinition();
-  G4EtaPrime::EtaPrimeDefinition();
-  G4KaonPlus::KaonPlusDefinition();
-  G4KaonMinus::KaonMinusDefinition();
-  G4KaonZero::KaonZeroDefinition();
-  G4AntiKaonZero::AntiKaonZeroDefinition();
-  G4KaonZeroLong::KaonZeroLongDefinition();
-  G4KaonZeroShort::KaonZeroShortDefinition();
+    G4BaryonConstructor pBaryonConstructor;
+    pBaryonConstructor.ConstructParticle();
 
-// barions
-  G4Proton::ProtonDefinition();
-  G4AntiProton::AntiProtonDefinition();
-  G4Neutron::NeutronDefinition();
-  G4AntiNeutron::AntiNeutronDefinition();
+    G4IonConstructor pIonConstructor;
+    pIonConstructor.ConstructParticle();
 
-// ions
-  G4Deuteron::DeuteronDefinition();
-  G4Triton::TritonDefinition();
-  G4Alpha::AlphaDefinition();
-  G4GenericIon::GenericIonDefinition();
+    G4ShortLivedConstructor pShortLivedConstructor;
+    pShortLivedConstructor.ConstructParticle();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4ProcessManager.hh"
+#include "G4PhysicsListHelper.hh"
 #include "G4Decay.hh"
 
 void PhysicsList::ConstructProcess()
@@ -179,21 +111,13 @@ void PhysicsList::ConstructProcess()
   // Add Decay Process
   //
   G4Decay* fDecayProcess = new G4Decay();
-
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+  
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-
-    if (fDecayProcess->IsApplicable(*particle)) { 
-
-      pmanager ->AddProcess(fDecayProcess);
-
-      // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
-
-    }
+    if (fDecayProcess->IsApplicable(*particle)) 
+      ph ->RegisterProcess(fDecayProcess, particle);
   }
 }
 
@@ -207,7 +131,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   if (name == emName) return;
 
-  if (name == "emstandard_local") {
+  if (name == "local") {
 
     emName = name;
     delete emPhysicsList;
@@ -246,51 +170,3 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCuts()
-{
-     
-  if (verboseLevel >0){
-    G4cout << "PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }  
-
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");   
-    
-  if (verboseLevel>0) DumpCutValuesTable();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-
-void PhysicsList::SetCutForGamma(G4double cut)
-{
-  cutForGamma = cut;
-  SetParticleCuts(cutForGamma, G4Gamma::Gamma());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForElectron(G4double cut)
-{
-  cutForElectron = cut;
-  SetParticleCuts(cutForElectron, G4Electron::Electron());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForPositron(G4double cut)
-{
-  cutForPositron = cut;
-  SetParticleCuts(cutForPositron, G4Positron::Positron());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

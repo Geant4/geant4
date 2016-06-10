@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VGammaDeexcitation.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4VGammaDeexcitation.cc 87376 2014-12-02 08:25:05Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -76,88 +76,62 @@
 G4VGammaDeexcitation::G4VGammaDeexcitation(): _transition(0), _verbose(0),
 					      _electronO (0), _vSN(-1)
 { 
-  _nucleus = 0;
-  fTimeLimit = DBL_MAX;
+  _tolerance = 2*CLHEP::keV;
+  _timeLimit = DBL_MAX;
 }
 
 G4VGammaDeexcitation::~G4VGammaDeexcitation()
 { 
-  if (_transition != 0) { delete _transition; }
+  delete _transition; 
 }
 
-G4FragmentVector* G4VGammaDeexcitation::DoTransition()
-{
-  Initialize();
-  G4FragmentVector* products = new G4FragmentVector();
- 
-  if (CanDoTransition())
-    {
-      G4Fragment* gamma = GenerateGamma();
-      if (gamma != 0) { products->push_back(gamma); }
-    }
- 
-  if (_verbose > 1) {
-    G4cout << "G4VGammaDeexcitation::DoTransition - Transition deleted " << G4endl;
-  }
- 
-  return products;
-}
-
-G4FragmentVector* G4VGammaDeexcitation::DoChain()
+void G4VGammaDeexcitation::DoChain(G4FragmentVector* products, 
+				   G4Fragment* nucleus)
 {
   if (_verbose > 1) { G4cout << "G4VGammaDeexcitation::DoChain" << G4endl; }
-  const G4double tolerance = CLHEP::keV;
-
-  Initialize();
-  G4FragmentVector* products = new G4FragmentVector();
   
-  while (CanDoTransition())
-    {      
-      _transition->SetEnergyFrom(_nucleus->GetExcitationEnergy());
-      G4Fragment* gamma = GenerateGamma();
-      if (gamma != 0) 
-	{
-	  products->push_back(gamma);
-	  //G4cout << "Eex(keV)= " << _nucleus->GetExcitationEnergy()/keV << G4endl;
-	  if(_nucleus->GetExcitationEnergy() <= tolerance) { break; }
-	  Update();
-	}
+  if(CanDoTransition(nucleus)) { 
+    for(size_t i=0; i<100; ++i) {      
+      _transition->SetEnergyFrom(nucleus->GetExcitationEnergy());
+      G4Fragment* gamma = GenerateGamma(nucleus);
+      if (gamma) { products->push_back(gamma); }
+      else { break; } 
+      //G4cout << i << ".  Egamma(MeV)= " << gamma->GetMomentum().e() 
+      //	     << "; new Eex(MeV)= " << nucleus->GetExcitationEnergy() 
+      //       << G4endl;
+      if(nucleus->GetExcitationEnergy() <= _tolerance) { break; }
     } 
-  
-  if (_verbose > 1) {
-    G4cout << "G4VGammaDeexcitation::DoChain - Transition deleted, end of chain " << G4endl;
   }
-  
-  return products;
+  if (_verbose > 1) {
+    G4cout << "G4VGammaDeexcitation::DoChain - end" << G4endl;
+  }
 }
 
-G4Fragment* G4VGammaDeexcitation::GenerateGamma()
+G4Fragment* G4VGammaDeexcitation::GenerateGamma(G4Fragment* aNucleus)
 {
-  // 23/04/10 V.Ivanchenko rewrite complitely
-  G4double eGamma = 0.;
-  
-  if (_transition) {
-    _transition->SelectGamma();  // it can be conversion electron too
-    eGamma = _transition->GetGammaEnergy(); 
-    //G4cout << "G4VGammaDeexcitation::GenerateGamma - Egam(MeV)= " 
-    //	   << eGamma << G4endl; 
-    if(eGamma <= 0.0) { return 0; }
-  } else { return 0; }
+  G4Fragment * thePhoton = 0;
+  if(!CanDoTransition(aNucleus)) { return thePhoton; }
 
-  G4double excitation = _nucleus->GetExcitationEnergy() - eGamma;
-  if(excitation < 0.0) { excitation = 0.0; } 
-  if (_verbose > 1) 
-    {
-      G4cout << "G4VGammaDeexcitation::GenerateGamma - Edeexc(MeV)= " << eGamma 
-	     << " ** left Eexc(MeV)= " << excitation
-	     << G4endl;
-    }
+  _transition->SelectGamma();  // it can be conversion electron too
+  G4double etrans = _transition->GetGammaEnergy(); 
+  //G4cout << "G4VGammaDeexcitation::GenerateGamma - Etrans(MeV)= " 
+  //	 << etrans << G4endl; 
+  if(etrans <= 0.0) { return thePhoton; }
+
+  // final excitation
+  G4double excitation = aNucleus->GetExcitationEnergy() - etrans;
+  if(excitation <= _tolerance) { excitation = 0.0; } 
+  if (_verbose > 1) {
+    G4cout << "G4VGammaDeexcitation::GenerateGamma - Edeexc(MeV)= " << etrans 
+	   << " ** left Eexc(MeV)= " << excitation
+	   << G4endl;
+  }
 
   G4double gammaTime = _transition->GetGammaCreationTime();
   
   // Do complete Lorentz computation 
-  G4LorentzVector lv = _nucleus->GetMomentum();
-  G4double Mass = _nucleus->GetGroundStateMass() + excitation;
+  G4LorentzVector lv = aNucleus->GetMomentum();
+  G4double Mass = aNucleus->GetGroundStateMass() + excitation;
 
   // select secondary
   G4ParticleDefinition* gamma = G4Gamma::Gamma();
@@ -165,13 +139,11 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
   G4DiscreteGammaTransition* dtransition = 
     dynamic_cast <G4DiscreteGammaTransition*> (_transition);
 
-  G4bool eTransition = false;
   if (dtransition && !( dtransition->IsAGamma()) ) {
-    eTransition = true; 
     gamma = G4Electron::Electron(); 
     _vSN = dtransition->GetOrbitNumber();   
     _electronO.RemoveElectron(_vSN);
-    lv += G4LorentzVector(0.0,0.0,0.0,CLHEP::electron_mass_c2 - dtransition->GetBondEnergy());
+    lv += G4LorentzVector(0.0,0.0,0.0,CLHEP::electron_mass_c2);
   }
 
   G4double cosTheta = 1. - 2. * G4UniformRand(); 
@@ -180,14 +152,15 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
 
   G4double eMass = gamma->GetPDGMass();
   G4LorentzVector Gamma4P;
-
-  //G4cout << "Egamma= " << eGamma << " Mass= " << eMass << " t= " << gammaTime
-  //	 << " tlim= " << fTimeLimit << G4endl;
-
-  if(gammaTime > fTimeLimit) {
+  /*
+  G4cout << " Mass= " << eMass << " t= " << gammaTime
+  	 << " tlim= " << _timeLimit << G4endl;
+  */
+  if(gammaTime > _timeLimit) {
     // shortcut for long lived levels
     // not correct position of stopping ion gamma emission
     // 4-momentum balance is breaked
+    G4double eGamma = aNucleus->GetExcitationEnergy() - excitation;
     G4double e = eGamma + eMass;
     G4double mom = std::sqrt(eGamma*(eGamma + 2*eMass));
     Gamma4P.set(mom * sinTheta * std::cos(phi),
@@ -206,7 +179,7 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
     G4ThreeVector bst  = lv.boostVector();
 
     G4double GammaEnergy = 0.5*((Ecm - Mass)*(Ecm + Mass) + eMass*eMass)/Ecm;
-    if(GammaEnergy <= eMass) { return 0; }
+    if(GammaEnergy < eMass) { GammaEnergy = eMass; }
 
     G4double mom = std::sqrt((GammaEnergy - eMass)*(GammaEnergy + eMass));
     Gamma4P.set(mom * sinTheta * std::cos(phi),
@@ -219,44 +192,17 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
   }
 
   // modified primary fragment 
-  gammaTime += _nucleus->GetCreationTime();
+  gammaTime += aNucleus->GetCreationTime();
 
-  _nucleus->SetMomentum(lv);
-  _nucleus->SetCreationTime(gammaTime);
-
-  // e- is not produced
-  if(eTransition && !dtransition->GetICM()) { return 0; }
+  aNucleus->SetMomentum(lv);
+  aNucleus->SetCreationTime(gammaTime);
 
   // gamma or e- are produced
-  G4Fragment * thePhoton = new G4Fragment(Gamma4P,gamma);
+  thePhoton = new G4Fragment(Gamma4P,gamma);
   thePhoton->SetCreationTime(gammaTime);
 
   //G4cout << "G4VGammaDeexcitation::GenerateGamma : " << thePhoton << G4endl;
-  //G4cout << "       Left nucleus: " << _nucleus << G4endl;
+  //G4cout << "       Left nucleus: " << aNucleus << G4endl;
   return thePhoton;
 }
 
-void G4VGammaDeexcitation::Update()
-{
-  if (_transition !=  0) 
-    { 
-      delete _transition;
-      _transition = 0;
-      if (_verbose > 1) {
-	G4cout << "G4VGammaDeexcitation::Update - Transition deleted " << G4endl;
-      }
-    }
-  
-  _transition = CreateTransition();
-  if (_transition != 0) 
-    {
-      _transition->SetEnergyFrom(_nucleus->GetExcitationEnergy());
-      // if ( _vSN != -1) (dynamic_cast <G4DiscreteGammaTransition*> (_transition))->SetICM(false);
-      // the above line is commented out for bug fix #952. It was intruduced for reason that
-      // the k-shell electron is most likely one to be kicked out and there is no time for 
-      // the atom to deexcite before the next IC. But this limitation is causing other problems as 
-      // reported in #952
-    }
-  
-  return;
-}

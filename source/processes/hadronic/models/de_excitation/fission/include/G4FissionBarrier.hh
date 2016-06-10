@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FissionBarrier.hh 68724 2013-04-05 09:26:32Z gcosmo $
+// $Id: G4FissionBarrier.hh 85841 2014-11-05 15:35:06Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -55,7 +55,9 @@ private:
   
   inline G4double SellPlusPairingCorrection(G4int Z, G4int N)
   { 
-    return SPtr->GetShellPlusPairingZ(Z) + SPtr->GetShellPlusPairingN(N); 
+    G4double res = 0.0;
+    SPtr->GetPairingCorrection(N,Z,res);
+    return res; 
   }
 
   G4FissionBarrier(const G4FissionBarrier & right);

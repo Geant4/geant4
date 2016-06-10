@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 20th, 2014 M. Asai - B03-V10-00-00
+- B03PhysicsList.cc : replace obsolete G4ParallelWorldScoringProcess
+  with G4ParallelWorldProcess.
+
 Nov 24th, 2013 A. Howard - B03-V09-06-04
 - Set default number of MT cores back to two
 

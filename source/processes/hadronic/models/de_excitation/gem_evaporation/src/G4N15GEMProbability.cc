@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4N15GEMProbability.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4N15GEMProbability.cc 87017 2014-11-21 16:26:26Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
@@ -35,23 +35,23 @@
 G4N15GEMProbability::G4N15GEMProbability() :
   G4GEMProbability(15,7,1.0/2.0) // A,Z,Spin
 {
-  ExcitEnergies.push_back(5270.40*keV);
+  ExcitEnergies.push_back(5270.155*keV);
   ExcitSpins.push_back(5.0/2.0);
   ExcitLifetimes.push_back(1.80e-12*s);
 
-  ExcitEnergies.push_back(5298.87*keV);
+  ExcitEnergies.push_back(5298.822*keV);
   ExcitSpins.push_back(1.0/2.0);
   ExcitLifetimes.push_back(1.7E-14*s);
 
-  ExcitEnergies.push_back(6323.85*keV);
+  ExcitEnergies.push_back(6323.78*keV);
   ExcitSpins.push_back(3.0/2.0);
   ExcitLifetimes.push_back(0.15E-15*s);
 
-  ExcitEnergies.push_back(7155.36*keV);
+  ExcitEnergies.push_back(7155.05*keV);
   ExcitSpins.push_back(5.0/2.0);
   ExcitLifetimes.push_back(0.019e-12*s);
 
-  ExcitEnergies.push_back(7301.09*keV);
+  ExcitEnergies.push_back(7300.83*keV);
   ExcitSpins.push_back(3.0/2.0);
   ExcitLifetimes.push_back(0.17E-15*s);
 
@@ -59,7 +59,7 @@ G4N15GEMProbability::G4N15GEMProbability() :
   ExcitSpins.push_back(7.0/2.0);
   ExcitLifetimes.push_back(0.040e-12*s);
  
-  ExcitEnergies.push_back(8312.79*keV);
+  ExcitEnergies.push_back(8312.62*keV);
   ExcitSpins.push_back(1.0/2.0);
   ExcitLifetimes.push_back(0.014e-12*s);
 
@@ -67,19 +67,19 @@ G4N15GEMProbability::G4N15GEMProbability() :
   ExcitSpins.push_back(3.0/2.0);
   ExcitLifetimes.push_back(0.07e-12*s);
  
-  ExcitEnergies.push_back(9050.0*keV);
+  ExcitEnergies.push_back(9049.71*keV);
   ExcitSpins.push_back(1.0/2.0);
   ExcitLifetimes.push_back(0.07e-12*s);
  
-  ExcitEnergies.push_back(9152.24*keV);
+  ExcitEnergies.push_back(9151.9*keV);
   ExcitSpins.push_back(3.0/2.0);
   ExcitLifetimes.push_back(0.028e-12*s);
 
-  ExcitEnergies.push_back(9155.27*keV);
+  ExcitEnergies.push_back(9154.9*keV);
   ExcitSpins.push_back(5.0/2.0);
   ExcitLifetimes.push_back(0.007e-12*s);
 
-  ExcitEnergies.push_back(9225*keV);
+  ExcitEnergies.push_back(9222.1*keV);
   ExcitSpins.push_back(1.0/2.0);
   ExcitLifetimes.push_back(0.09e-12*s);
 
@@ -87,7 +87,7 @@ G4N15GEMProbability::G4N15GEMProbability() :
   ExcitSpins.push_back(7.0/2.0);
   ExcitLifetimes.push_back(0.13e-12*s);
 
-  ExcitEnergies.push_back(9928*keV);
+  ExcitEnergies.push_back(9925*keV);
   ExcitSpins.push_back(3.0/2.0);
   ExcitLifetimes.push_back(0.07e-12*s);
 

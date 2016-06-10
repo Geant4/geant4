@@ -55,6 +55,8 @@
 //
 // Author: M.Verderi (LLR), November 2013
 // - 05/11/13 : first implementation
+// - 07/11/14 : suppress DenyProcessPostStepDoIt(...) as redondant
+//              and special case of ApplyFinalStateBiasing(...) 
 // ---------------------------------------------------------------------
 
 
@@ -114,15 +116,11 @@ public:
   // ------     callingProcess argument.
   // ------   - the returned law will have to have been sampled prior to be returned as it will be
   // ------     asked for its GetSampledInteractionLength() by the callingProcess.
-  virtual const G4VBiasingInteractionLaw* ProvideOccurenceBiasingInteractionLaw( const G4BiasingProcessInterface* /* callingProcess */ ) = 0;
-  // ------ o Additionnal method for PostStep occurence:
-  // ------   - operation can propose a force condition in the PostStepGPIL
-  // ------   - this condition superseedes the wrapped process condition (taken as default condition)
-  // ------   - it is called after above ProvideOccurenceBiasingInteractionLaw(...) by the same calling process.
-  virtual G4ForceCondition                                ProposeForceCondition( const G4ForceCondition wrappedProcessCondition )
-  {
-    return wrappedProcessCondition;
-  }
+  // ------   - the operation can propose a force condition in the PostStepGPIL (the passed value
+  // ------     to the operation is the one of the wrapped process, if proposeForceCondition is
+  // ------     unchanged, this same value will be used as the biasing foroce condition)
+  virtual const G4VBiasingInteractionLaw* ProvideOccurenceBiasingInteractionLaw( const G4BiasingProcessInterface* /* callingProcess */ ,
+										 G4ForceCondition&                /* proposeForceCondition */ ) = 0;
   // ----
   // ---- I.2) Methods called in at the AlongStepGetPhysicalInteractionLength(...) level :
   // ---- 
@@ -150,11 +148,13 @@ public:
   // ------   - has to return true if interaction is denied by the operation
   // ------   - the primary is left unchanged in this case
   // ------   - but its weight becomes the one given by proposedTrackWeight.
-  virtual G4bool                                        DenyProcessPostStepDoIt( const G4BiasingProcessInterface*      /* callingProcess */,
-										 const G4Track*                                 /* track */,
-										 const G4Step*                                   /* step */,
-										 G4double&                        /* proposedTrackWeight */ )
-  {return false;}
+  // DEPRECATED
+  // virtual G4bool                                        DenyProcessPostStepDoIt( const G4BiasingProcessInterface*      /* callingProcess */,
+  // 										 const G4Track*                                 /* track */,
+  // 										 const G4Step*                                   /* step */,
+  // 										 G4double&                        /* proposedTrackWeight */ )
+  // {return false;}
+
 
 
   // ---- II. Biasing of the process post step final state:
@@ -163,13 +163,19 @@ public:
   // ------ holds by the G4BiasingProcessInterface callingProcess.
   // ------ User has full freedom for the particle change returned, and is reponsible for
   // ------ the correctness of weights set to tracks.
+  // ------ The forcedBiasedFinalState should be left as is (ie false) in general. In this
+  // ------ way, if an occurence biasing is also applied in the step, the weight correction
+  // ------ for it will be applied. If returned forceBiasedFinalState is returned true, then
+  // ------ the returned particle change will be returned as is to the stepping. Full
+  // ------ responsibility of the weight correctness is taken by the biasing operation.
   // ------ The wrappedProcess can be accessed through the G4BiasingProcessInterface if needed.
   // ------ This can be used in conjonction with an occurence biasing, provided this final
   // ------ state biasing is uncorrelated with the occurence biasing (as single multiplication
   // ------ of weights occur between these two biasings).
-  virtual G4VParticleChange*  ApplyFinalStateBiasing( const G4BiasingProcessInterface* /* callingProcess */,
-						      const G4Track*                            /* track */,
-						      const G4Step*                              /* step */) = 0;
+  virtual G4VParticleChange*  ApplyFinalStateBiasing( const G4BiasingProcessInterface*       /* callingProcess */,
+						      const G4Track*                                  /* track */,
+						      const G4Step*                                    /* step */,
+						      G4bool&                          /* forceBiasedFinalState */) = 0;
 
   
   // ---- III. Biasing of the process along step final state:

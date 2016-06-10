@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm11/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 77288 2013-11-22 10:52:58Z gcosmo $
+// $Id: DetectorConstruction.hh 78560 2014-01-07 10:06:52Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,7 +42,6 @@ class G4Box;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
-class G4UniformMagField;
 class DetectorMessenger;
 
 const G4int MaxAbsor = 10;                        // 0 + 9
@@ -66,12 +65,9 @@ public:
                 
   void SetAbsorSizeYZ   (G4double);          
   void SetNbOfDivisions (G4int,G4int);
-    
-  //void SetMagField      (G4double);
      
   virtual G4VPhysicalVolume* Construct();
   virtual void ConstructSDandField();
-  //void               UpdateGeometry();
      
 public:
 
@@ -101,8 +97,6 @@ private:
   G4Material*        fDefaultMaterial;  
   
   G4VPhysicalVolume* fPhysiWorld;
-  
-  //G4UniformMagField* fMagField;
 
   DetectorMessenger* fDetectorMessenger;
   G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;

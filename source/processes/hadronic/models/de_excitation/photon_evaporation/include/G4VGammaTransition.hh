@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VGammaTransition.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4VGammaTransition.hh 85841 2014-11-05 15:35:06Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -70,11 +70,6 @@ private:
   const G4VGammaTransition& operator=(const G4VGammaTransition &right);
   G4bool operator==(const G4VGammaTransition &right) const;
   G4bool operator!=(const G4VGammaTransition &right) const;
-  
-protected:
-
-  G4int _verbose;
-
 };
 
 

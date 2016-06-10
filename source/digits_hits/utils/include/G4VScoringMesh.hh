@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh 68735 2013-04-05 09:49:13Z gcosmo $
+// $Id: G4VScoringMesh.hh 83518 2014-08-27 12:57:10Z gcosmo $
 //
 
 #ifndef G4VScoringMesh_h
@@ -40,10 +40,11 @@ class G4MultiFunctionalDetector;
 class G4VPrimitiveScorer;
 class G4VSDFilter;
 class G4VScoreColorMap;
+class G4ParallelWorldProcess;
 
 #include <map>
 
-enum MeshShape { boxMesh, cylinderMesh, sphereMesh };
+enum MeshShape { boxMesh, cylinderMesh, sphereMesh , undefinedMesh = -1};
 typedef std::map<G4String,G4THitsMap<G4double>* > MeshScoreMap;
 // class description:
 //
@@ -58,10 +59,14 @@ class G4VScoringMesh
 
   public: // with description
   // a pure virtual function to construct this mesh geometry
-  virtual void Construct(G4VPhysicalVolume* fWorldPhys)=0;
+  void Construct(G4VPhysicalVolume* fWorldPhys);
 
-  virtual void WorkerConstruct(G4VPhysicalVolume* fWorldPhys);
+  void WorkerConstruct(G4VPhysicalVolume* fWorldPhys);
 
+  protected:
+  virtual void SetupGeometry(G4VPhysicalVolume * fWorldPhys) = 0;
+
+  public: // with description
   // list infomration of this mesh 
   virtual void List() const;
   
@@ -196,6 +201,20 @@ public:
   { fMeshElementLogical = val; }
   inline G4LogicalVolume* GetMeshElementLogical() const
   { return fMeshElementLogical; }
+
+protected:
+  G4ParallelWorldProcess* fParallelWorldProcess;
+  G4bool fGeometryHasBeenDestroyed;
+public:
+  inline void SetParallelWorldProcess(G4ParallelWorldProcess* proc)
+  { fParallelWorldProcess = proc; }
+  inline G4ParallelWorldProcess* GetParallelWorldProcess() const
+  { return fParallelWorldProcess; }
+  inline void GeometryHasBeenDestroyed()
+  {
+    fGeometryHasBeenDestroyed = true;
+    fMeshElementLogical = 0;
+  }
 };
 
 #endif

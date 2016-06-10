@@ -44,22 +44,29 @@ class G4BaseAnalysisManager
   public:
     G4BaseAnalysisManager(const G4AnalysisManagerState& state);
     virtual ~G4BaseAnalysisManager();
+    
+    // methods
 
     // The ids of objects are generated automatically
     // starting from 0; with the following function it is possible to
     // change the first Id to start from other value
     G4bool SetFirstId(G4int firstId);
+
+    // Access method
+    G4int GetFirstId() const;
     
   protected:
-    // methods
-    void ExceptionForHistograms(const G4String& functionName) const;                     
-
     // data members
     const G4AnalysisManagerState& fState;
     G4int    fFirstId;
-    G4bool   fLockFirstId;     
+    G4bool   fLockFirstId; 
 };
 
+// inline functions
+
+inline G4int G4BaseAnalysisManager::GetFirstId() const {
+  return fFirstId;
+}  
 
 #endif
 

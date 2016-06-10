@@ -1,0 +1,86 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: G4XmlAnalysisReader.hh 70604 2013-06-03 11:27:06Z ihrivnac $
+
+// Author: Ivana Hrivnacova, 25/07/2014 (ivana@ipno.in2p3.fr)
+
+#include "G4H1ToolsManager.hh"
+#include "G4H2ToolsManager.hh"
+#include "G4H3ToolsManager.hh"
+#include "G4P1ToolsManager.hh"
+#include "G4P2ToolsManager.hh"
+//#include "G4XmlRNtupleManager.hh"
+
+//_____________________________________________________________________________
+inline 
+tools::histo::h1d*  G4XmlAnalysisReader::GetH1(G4int id, G4bool warn) const 
+{
+  return fH1Manager->GetH1(id, warn, false);
+}
+
+//_____________________________________________________________________________
+inline 
+tools::histo::h2d*  G4XmlAnalysisReader::GetH2(G4int id, G4bool warn) const 
+{
+  return fH2Manager->GetH2(id, warn, false);
+}
+
+//_____________________________________________________________________________
+inline 
+tools::histo::h3d*  G4XmlAnalysisReader::GetH3(G4int id, G4bool warn) const 
+{
+  return fH3Manager->GetH3(id, warn, false);
+}
+
+//_____________________________________________________________________________
+inline 
+tools::histo::p1d*  G4XmlAnalysisReader::GetP1(G4int id, G4bool warn) const 
+{
+  return fP1Manager->GetP1(id, warn, false);
+}
+
+//_____________________________________________________________________________
+inline 
+tools::histo::p2d*  G4XmlAnalysisReader::GetP2(G4int id, G4bool warn) const 
+{
+  return fP2Manager->GetP2(id, warn, false);
+}
+
+//_____________________________________________________________________________
+inline
+tools::aida::ntuple* G4XmlAnalysisReader::GetNtuple() const
+{
+  //return fNtupleManager->GetNtuple();
+  return 0;
+}  
+
+//_____________________________________________________________________________
+inline
+tools::aida::ntuple* G4XmlAnalysisReader::GetNtuple(G4int /*ntupleId*/) const
+{
+  //return fNtupleManager->GetNtuple(ntupleId);
+  return 0;
+}  

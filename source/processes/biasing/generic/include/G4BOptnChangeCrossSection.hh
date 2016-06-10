@@ -55,17 +55,19 @@ public:
   // -- Methods from G4VBiasingOperation interface:
   // ----------------------------------------------
   // -- Used:
-  virtual const G4VBiasingInteractionLaw* ProvideOccurenceBiasingInteractionLaw( const G4BiasingProcessInterface* );
+  virtual const G4VBiasingInteractionLaw* ProvideOccurenceBiasingInteractionLaw( const G4BiasingProcessInterface*,
+										 G4ForceCondition& proposeForceCondition );
   
   // -- Unused:
   virtual G4VParticleChange*   ApplyFinalStateBiasing( const G4BiasingProcessInterface*,
 						       const G4Track*,
-						       const G4Step*  ) {return 0;}
+						       const G4Step*,
+						       G4bool&          )  {return 0;}
   virtual G4double           DistanceToApplyOperation( const G4Track*,
 						       G4double,
-						       G4ForceCondition*) {return DBL_MAX;}
+						       G4ForceCondition*)  {return DBL_MAX;}
   virtual G4VParticleChange* GenerateBiasingFinalState( const G4Track*,
-						        const G4Step*  ) {return 0;}
+						        const G4Step*   )  {return 0;}
   
 public:
   // -- Additional methods, specific to this class:

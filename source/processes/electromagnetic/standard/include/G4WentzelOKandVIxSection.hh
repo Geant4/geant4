@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.hh 69548 2013-05-08 10:03:12Z gcosmo $
+// $Id: G4WentzelOKandVIxSection.hh 80656 2014-05-06 08:31:39Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -73,7 +73,7 @@ class G4WentzelOKandVIxSection
 
 public:
 
-  G4WentzelOKandVIxSection();
+  G4WentzelOKandVIxSection(G4bool combined = true);
 
   virtual ~G4WentzelOKandVIxSection();
 
@@ -87,9 +87,11 @@ public:
 
   G4double ComputeTransportCrossSectionPerAtom(G4double CosThetaMax);
  
-  G4ThreeVector SampleSingleScattering(G4double CosThetaMin,
-				       G4double CosThetaMax,
-				       G4double elecRatio = 0.0);
+  G4ThreeVector& SampleSingleScattering(G4double CosThetaMin,
+					G4double CosThetaMax,
+					G4double elecRatio = 0.0);
+
+  G4double ComputeSecondTransportMoment(G4double CosThetaMax);
 
   inline G4double ComputeNuclearCrossSection(G4double CosThetaMin,
 					     G4double CosThetaMax);
@@ -123,13 +125,15 @@ private:
   G4NistManager*  fNistManager;
   G4Pow*          fG4pow;
 
-  G4double numlimit;
+  G4ThreeVector   temp;
 
-  G4double elecXSRatio;
+  G4double numlimit;
 
   // integer parameters
   G4int    nwarnings;
   G4int    nwarnlimit;
+
+  G4bool   isCombined;
 
   // single scattering parameters
   G4double coeff;
@@ -181,9 +185,12 @@ G4WentzelOKandVIxSection::SetupKinematic(G4double ekin, const G4Material* mat)
     tkin  = ekin;
     mom2  = tkin*(tkin + 2.0*mass);
     invbeta2 = 1.0 +  mass*mass/mom2;
-    factB = spin/invbeta2;
-    cosTetMaxNuc = 
-	std::max(cosThetaMax,1.-factorA2*mat->GetIonisation()->GetInvA23()/mom2);
+    factB = spin/invbeta2; 
+    cosTetMaxNuc = cosThetaMax;
+    if(isCombined) {
+      cosTetMaxNuc = std::max(cosTetMaxNuc, 
+	1.-factorA2*mat->GetIonisation()->GetInvA23()/mom2);
+    }
   } 
   return cosTetMaxNuc;
 }
@@ -241,7 +248,8 @@ G4WentzelOKandVIxSection::ComputeElectronCrossSection(G4double cosTMin,
   G4double cost1 = std::max(cosTMin,cosTetMaxElec);
   G4double cost2 = std::max(cosTMax,cosTetMaxElec);
   if(cost1 > cost2) {
-    xsec = kinFactor*(cost1 - cost2)/((1.0 - cost1 + screenZ)*(1.0 - cost2 + screenZ));
+    xsec = kinFactor*(cost1 - cost2)/
+      ((1.0 - cost1 + screenZ)*(1.0 - cost2 + screenZ));
   }
   return xsec;
 }

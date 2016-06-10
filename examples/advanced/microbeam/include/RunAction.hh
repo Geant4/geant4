@@ -57,13 +57,13 @@ public:
   void  SetRndmFreq(G4int   val)  {fSaveRndm = val;}
   G4int GetRndmFreq()             {return fSaveRndm;}
 
-  void AddDoseN(G4float dose){ fDoseN += dose;}
-  void SetDoseN(G4float dose){ fDoseN = dose;}
-  G4float GetDoseN(){return fDoseN;}
+  void AddDoseN(G4double dose){ fDoseN += dose;}
+  void SetDoseN(G4double dose){ fDoseN = dose;}
+  G4double GetDoseN(){return fDoseN;}
 
-  void AddDoseC(G4float dose){ fDoseC += dose;}
-  void SetDoseC(G4float dose){ fDoseC = dose;}
-  G4float GetDoseC(){return fDoseC;}
+  void AddDoseC(G4double dose){ fDoseC += dose;}
+  void SetDoseC(G4double dose){ fDoseC = dose;}
+  G4double GetDoseC(){return fDoseC;}
 
   G4int GetNumEvent(){return fNumEvent;}
   void SetNumEvent(G4int i){fNumEvent = i;}
@@ -71,43 +71,33 @@ public:
   G4int GetNbOfHitsGas(){return fNbOfHitsGas;}
   void AddNbOfHitsGas(){fNbOfHitsGas = fNbOfHitsGas+1;}
 
-  void SetMassNucleus(G4float mN){ fMassNucleus = mN;}
-  G4float GetMassNucleus(){return fMassNucleus;}
+  void SetMassNucleus(G4double mN){ fMassNucleus = mN;}
+  G4double GetMassNucleus(){return fMassNucleus;}
 
-  void SetMassCytoplasm(G4float mC){ fMassCytoplasm = mC;}
-  G4float GetMassCytoplasm(){return fMassCytoplasm;}
+  void SetMassCytoplasm(G4double mC){ fMassCytoplasm = mC;}
+  G4double GetMassCytoplasm(){return fMassCytoplasm;}
 
-  void AddDoseBox(G4int i, G4float x){ fDose3DDose[i] +=x;}
-  G4float GetDoseBox(G4int i){ return fDose3DDose[i];}
+  void AddDoseBox(G4int i, G4double x){ fDose3DDose[i] +=x;}
+  G4double GetDoseBox(G4int i){ return fDose3DDose[i];}
   
   G4ThreeVector GetVectCell(G4int i) {return fMapVoxels[i];}
 
 private:
 
   DetectorConstruction* fDetector;    
-  PhantomConfiguration  fMyPhantomConfiguration;  
+  CellParameterisation * fMyCellParameterisation;  
 
   G4int fSaveRndm;
   G4int fNumEvent;
   G4int fNbOfPixels;
   G4int fNbOfHitsGas;
-  G4float fSP;
-  G4float fR;
-  G4float fRnElec;
-  G4float fRcElec;
-  G4float fDoseN;
-  G4float fDoseC;
-  G4float fDoseNElec;
-  G4float fDoseCElec;
-  G4float fMassPhantom;
-  G4float fMassCytoplasm;
-  G4float fMassNucleus;
-  G4bool fBoolSP;
-  
-  G4int * fX3DDose;
-  G4int * fY3DDose;
-  G4int * fZ3DDose;
-  G4float * fDose3DDose;
+
+  G4double fDoseN;
+  G4double fDoseC;
+  G4double fMassCytoplasm;
+  G4double fMassNucleus;
+  G4double * fDose3DDose;
+
   G4ThreeVector * fMapVoxels;
 
 };

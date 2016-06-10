@@ -1,0 +1,145 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_xml_element
+#define tools_xml_element
+
+#include "../srep"
+#include "../sto"
+#include "../scast"
+
+#ifdef TOOLS_MEM
+#include "../mem"
+#include "../S_STRING"
+#endif
+
+namespace tools {
+namespace xml {
+
+class ielem {
+public:
+  virtual ~ielem(){}
+public:
+  virtual void* cast(cid) const = 0;
+};
+
+class element : public virtual ielem {
+#ifdef TOOLS_MEM
+  TOOLS_SCLASS(tools::xml::element)
+#endif
+public:
+  static cid id_class() {return 0;}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<element>(this,a_class)) {return p;}
+    else return 0;
+  }
+public:
+  typedef std::pair<std::string,std::string> atb;
+public:
+  element(const std::string& a_name,
+          const std::vector<atb>& a_atbs,
+          const std::string& a_value){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_name = a_name;
+    m_atbs = a_atbs; 
+    m_value = a_value;
+  }
+  virtual ~element(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  element(const element& a_from)
+  :ielem(a_from) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_name = a_from.m_name;
+    m_atbs = a_from.m_atbs; 
+    m_value = a_from.m_value;
+  }
+  element& operator=(const element& a_from) {
+    m_name = a_from.m_name;
+    m_atbs = a_from.m_atbs;
+    m_value = a_from.m_value;
+    return *this;
+  }
+public:
+  std::string name() const {return m_name;}
+  const std::vector<atb>& attributes() const {return m_atbs;}
+  std::string value() const {return m_value;}
+
+  void set_value(const std::string& a_value) {m_value = a_value;}
+  bool is_attribute(const std::string& a_name) const {
+    tools_vforcit(atb,m_atbs,it) {
+      if((*it).first==a_name) return true;
+    }
+    return false;
+  }
+  void add_attribute(const std::string& a_name,const std::string& a_value){
+    // No check is done about an existing a_name.
+    m_atbs.push_back(atb(a_name,a_value));
+  }
+
+  bool attribute_value(const std::string& a_atb,std::string& a_value) const {
+    tools_vforcit(atb,m_atbs,it) {
+      if((*it).first==a_atb) {
+        a_value = (*it).second;
+        return true;
+      }
+    }
+    a_value.clear();
+    return false;
+  }
+
+  template <class T>
+  bool attribute_value(const std::string& a_atb,T& a_value) const {
+    std::string sv;
+    if(!attribute_value(a_atb,sv)) {a_value=T();return false;}
+    return to<T>(sv,a_value);
+  }
+
+  
+  bool set_attribute_value(const std::string& a_atb,const std::string& a_value) {
+    tools_vforit(atb,m_atbs,it) {
+      if((*it).first==a_atb) {
+        (*it).second = a_value;
+        return true;
+      }
+    }
+    // Not found, add one :
+    m_atbs.push_back(atb(a_atb,a_value));
+    return true;
+  }
+
+  void remove_attributes(const std::string& a_atb) {
+    std::vector<atb>::iterator it;
+    for(it=m_atbs.begin();it!=m_atbs.end();) {
+      if((*it).first==a_atb) {
+        it = m_atbs.erase(it);
+      } else { 
+        ++it;
+      }
+    }
+  }
+
+  void replace(const std::string& a_old,const std::string& a_new) {
+    // Used by the obuild template system.
+    tools_vforit(atb,m_atbs,it) {
+      tools::replace((*it).second,a_old,a_new);
+    }
+    tools::replace(m_value,a_old,a_new);
+  }
+  
+protected:
+  std::string m_name;
+  std::vector<atb> m_atbs;
+  std::string m_value;
+};
+
+}}
+
+#endif

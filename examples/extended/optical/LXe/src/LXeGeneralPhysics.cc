@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeGeneralPhysics.cc 72250 2013-07-12 08:59:26Z gcosmo $
+// $Id: LXeGeneralPhysics.cc 81557 2014-06-03 08:32:44Z gcosmo $
 //
 /// \file optical/LXe/src/LXeGeneralPhysics.cc
 /// \brief Implementation of the LXeGeneralPhysics class
@@ -34,7 +34,7 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include <iomanip>
-
+#include "G4Decay.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 LXeGeneralPhysics::LXeGeneralPhysics(const G4String& name)
@@ -43,7 +43,7 @@ LXeGeneralPhysics::LXeGeneralPhysics(const G4String& name)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 LXeGeneralPhysics::~LXeGeneralPhysics() {
-  fDecayProcess = NULL;
+  //fDecayProcess = NULL;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,6 +55,8 @@ LXeGeneralPhysics::~LXeGeneralPhysics() {
 #include "G4ChargedGeantino.hh"
 
 #include "G4GenericIon.hh"
+
+#include "G4Proton.hh"
 
 void LXeGeneralPhysics::ConstructParticle()
 {
@@ -69,7 +71,7 @@ void LXeGeneralPhysics::ConstructParticle()
 
 void LXeGeneralPhysics::ConstructProcess()
 {
-  fDecayProcess = new G4Decay();
+  G4Decay* fDecayProcess = new G4Decay();
 
   // Add Decay Process
   aParticleIterator->reset();

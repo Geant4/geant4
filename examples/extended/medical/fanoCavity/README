@@ -1,4 +1,4 @@
-$Id: README 68996 2013-04-15 09:19:55Z gcosmo $
+$Id: README 86064 2014-11-07 08:49:32Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,11 +17,11 @@ $Id: README 68996 2013-04-15 09:19:55Z gcosmo $
     
     E.Poon and al, Phys. Med. Biol. 50 (2005) 681
     I.Kawrakow, Med. Phys. 27-3 (2000) 499
-	
+
  1- GEOMETRY
  
     The chamber is modelized as a cylinder with a cavity in it.
-     	
+     
     6 parameters define the geometry :
       - the material of the wall of the chamber
       - the radius of the chamber and the thickness of the wall
@@ -29,29 +29,29 @@ $Id: README 68996 2013-04-15 09:19:55Z gcosmo $
       - the radius and the thickness of the cavity
 
     Wall and cavity must be made of the same material, but with different
-    density	 	
- 	
+    density
+ 
     All above parameters can be redifined via the UI commands built in 
     DetectorMessenger class
     
-			-----------------
-			|		|
-			| wall 		|    
-			|     -----	|
-			|     |   | 	|      
-	   		|     | <-+-----+--- cavity     
-	     ------>	|     |   | 	|
-	     ------>	|     |   | 	|
-	beam	-------------------------------- cylinder axis
-	     ------>	|     |   | 	|
-	     ------>	|     |   | 	|
-			|     |   | 	|
-			|     |   | 	|
-			|     -----	|			
-			|		|
-			|		|
-			-----------------
-			
+                    -----------------
+                    |               |
+                    | wall          |
+                    |     -----     |
+                    |     |   |     |
+                    |     | <-+-----+--- cavity
+         ------>    |     |   |     |
+         ------>    |     |   |     |
+   beam     -------------------------------- cylinder axis
+         ------>    |     |   |     |
+         ------>    |     |   |     |
+                    |     |   |     |
+                    |     |   |     |
+                    |     -----     |
+                    |               |
+                    |               |
+                    -----------------
+
  2- BEAM
   
     Monoenergetic incident photon beam is uniformly distribued, perpendicular 
@@ -76,10 +76,10 @@ $Id: README 68996 2013-04-15 09:19:55Z gcosmo $
     coefficient of the wall material.
     
     The mass_energy_transfer coefficient needs :
-    	- the photon total cross section, which is read from the PhysicsTables
-	by G4EmCalculator (see EndOfRunAction).
-	- the average kinetic energy of charged secondaries generated in the
-	wall during the run. 
+        - the photon total cross section, which is read from the PhysicsTables
+          by G4EmCalculator (see EndOfRunAction).
+        - the average kinetic energy of charged secondaries generated in the
+          wall during the run. 
  
     The program needs high statistic to reach precision on the computed dose.
     The UI command /testem/event/printModulo allows to survey the convergence of
@@ -92,7 +92,7 @@ $Id: README 68996 2013-04-15 09:19:55Z gcosmo $
     
     The simplest way to study the effect of e- tracking parameters on dose 
     deposition is to use the command /testem/stepMax.
-    	 			 	
+    
  4- PHYSICS
  
     The physics lists contains the standard electromagnetic processes, with few 
@@ -127,7 +127,7 @@ $Id: README 68996 2013-04-15 09:19:55Z gcosmo $
     controled with UI commands.
     
     - All PhysicsTables are built with 100 bins per decade.  
-     	
+    
  5- HISTOGRAMS
  
    fanoCavity has several predefined 1D histograms : 
@@ -144,7 +144,7 @@ $Id: README 68996 2013-04-15 09:19:55Z gcosmo $
      10 : step size of e+- in cavity
      11 : energy deposit in cavity per track     
       
-   The histograms are managed by G4AnalysisManager class and its Messenger. 
+   The histograms are managed by G4AnalysisManager class and its messenger. 
    The histos can be individually activated with the command :
    /analysis/h1/set id nbBins  valMin valMax unit 
    where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
@@ -158,15 +158,15 @@ $Id: README 68996 2013-04-15 09:19:55Z gcosmo $
    It is also possible to print selected histograms on an ascii file:
    /analysis/h1/setAscii id
    All selected histos will be written on a file name.ascii (default fanocavity)
- 	
+ 
  6- HOW TO START ?
  
- 	- execute fanoCavity in 'batch' mode from macro files
- 		% $(G4INSTALL)/bin/$(G4SYSTEM)/fanoCavity   run01.mac
- 		
- 	- execute fanoCavity in 'interactive mode' with visualization
- 		% $(G4INSTALL)/bin/$(G4SYSTEM)/fanoCavity
- 		....
- 		Idle> type your commands
- 		....
- 		Idle> exit
+    - execute fanoCavity in 'batch' mode from macro files
+        % fanoCavity   run01.mac
+ 
+    - execute fanoCavity in 'interactive mode' with visualization
+        % fanoCavity
+        ....
+        Idle> type your commands
+        ....
+        Idle> exit

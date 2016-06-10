@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4empCrossSection.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4empCrossSection.hh 83410 2014-08-21 15:17:53Z gcosmo $
 //
 //         
 //
@@ -45,7 +45,9 @@
 
 #include "globals.hh"
 #include "G4VhShellCrossSection.hh"
+
 #include "G4PaulKxsModel.hh"
+
 #include "G4OrlicLiXsModel.hh"
 
 class G4empCrossSection : public G4VhShellCrossSection 
@@ -81,6 +83,7 @@ public:
 private:
   
   G4double totalCS;
+  G4int flag; // Flag to select Li XS set (orlic or other)
               
   G4PaulKxsModel*  paulShellK;
   G4OrlicLiXsModel* orlicShellLi;  

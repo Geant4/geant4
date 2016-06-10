@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointPrimaryGenerator.cc 76257 2013-11-08 11:31:00Z gcosmo $
+// $Id: G4AdjointPrimaryGenerator.cc 81770 2014-06-05 08:31:31Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointCrossSurfChecker
@@ -39,11 +39,19 @@
 #include "G4SingleParticleSource.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4AdjointPosOnPhysVolGenerator.hh" 
-
+#include "G4Navigator.hh"
+#include "G4TransportationManager.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4Material.hh"
+#include "Randomize.hh"
+/*
+#include "G4AdjointCSManager.hh"
+#include "G4MaterialCutsCouple.hh"
+*/
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 G4AdjointPrimaryGenerator::G4AdjointPrimaryGenerator()
-  : radius_spherical_source(0.)
+  : radius_spherical_source(0.),fLinearNavigator(0),theAccumulatedDepthVector(0)
 {
   center_spherical_source = G4ThreeVector(0.,0.,0.);
   type_of_adjoint_source="Spherical";
@@ -55,6 +63,7 @@ G4AdjointPrimaryGenerator::G4AdjointPrimaryGenerator()
   theSingleParticleSource->GetAngDist()->SetAngDistType("planar");
 
   theG4AdjointPosOnPhysVolGenerator = G4AdjointPosOnPhysVolGenerator::GetInstance();
+
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -76,6 +85,8 @@ void G4AdjointPrimaryGenerator::GenerateAdjointPrimaryVertex(G4Event* anEvent,G4
 	G4ThreeVector direction = G4ThreeVector(0.,0.,1.);
   	theG4AdjointPosOnPhysVolGenerator->GenerateAPositionOnTheExtSurfaceOfThePhysicalVolume(pos, direction,costh_to_normal);
   	if (costh_to_normal <1.e-4) costh_to_normal =1.e-4;
+  	//compute now the position along the ray backward direction
+
   	theSingleParticleSource->GetAngDist()->SetParticleMomentumDirection(-direction);
   	theSingleParticleSource->GetPosDist()->SetCentreCoords(pos);
    }	
@@ -85,6 +96,9 @@ void G4AdjointPrimaryGenerator::GenerateAdjointPrimaryVertex(G4Event* anEvent,G4
 	
    theSingleParticleSource->SetParticleDefinition(adj_part);
    theSingleParticleSource->GeneratePrimaryVertex(anEvent);
+
+
+
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -134,4 +148,69 @@ void G4AdjointPrimaryGenerator::SetAdjointPrimarySourceOnAnExtSurfaceOfAVolume(c
   theSingleParticleSource->GetPosDist()->SetPosDisType("Point");
   theSingleParticleSource->GetAngDist()->SetAngDistType("planar"); 
 }
+
+////////////////////////////////////////////////////////////////////////////////
+//
+void G4AdjointPrimaryGenerator::ComputeAccumulatedDepthVectorAlongBackRay(
+                                                 G4ThreeVector glob_pos,
+                                                 G4ThreeVector direction,
+                                                 G4double,
+                                                 G4ParticleDefinition*)
+{ if (!fLinearNavigator) fLinearNavigator =
+       G4TransportationManager::GetTransportationManager()
+                                            ->GetNavigatorForTracking();
+ G4ThreeVector position = glob_pos;
+ G4double safety=1.;
+ G4VPhysicalVolume* thePhysVolume =
+       fLinearNavigator->LocateGlobalPointAndSetup(position);
+ G4double newStep =fLinearNavigator->ComputeStep(position,direction,1.e50,
+                  safety);
+ if (theAccumulatedDepthVector) delete theAccumulatedDepthVector;
+ theAccumulatedDepthVector = new G4PhysicsOrderedFreeVector();
+ //if (theAccumulatedCSDepthVector) delete theAccumulatedCSDepthVector;
+ //theAccumulatedCSDepthVector = new G4PhysicsOrderedFreeVector();
+
+ G4double acc_depth=0.;
+ G4double acc_length=0.;
+ //G4double acc_cs_depth=0.;
+ //theAccumulatedCSDepthVector->InsertValues(acc_cs_depth, acc_length);
+ theAccumulatedDepthVector->InsertValues(acc_length,acc_depth);
+
+ while (newStep > 0. && thePhysVolume) {
+   acc_length+=newStep;
+   /*
+   const G4MaterialCutsCouple* theMatCutsCouple=
+            thePhysVolume->GetLogicalVolume()->GetMaterialCutsCouple();
+
+
+   acc_cs_depth+=newStep*G4AdjointCSManager::GetAdjointCSManager()->GetTotalAdjointCS(aPartDef,
+                                                             ekin,
+                                                        theMatCutsCouple);
+   theAccumulatedCSDepthVector->InsertValues(acc_cs_depth, acc_length);*/
+
+   acc_depth+=newStep*thePhysVolume->GetLogicalVolume()->GetMaterial()->GetDensity();
+   theAccumulatedDepthVector->InsertValues(acc_length,acc_depth);
+   position=position+newStep*direction;
+   thePhysVolume =
+          fLinearNavigator->LocateGlobalPointAndSetup(position,0,false);
+   newStep =fLinearNavigator->ComputeStep(position,direction,1.e50,
+                     safety);
+ }
+
+
+}
+////////////////////////////////////////////////////////////////////////////////
+//
+G4double G4AdjointPrimaryGenerator::SampleDistanceAlongBackRayAndComputeWeightCorrection(G4double& weight_corr)
+{G4double rand = G4UniformRand();
+ G4double distance = theAccumulatedDepthVector->FindLinearEnergy(rand);
+ /*
+ G4double acc_cs_depth=theAccumulatedCSDepthVector->GetEnergy(distance);
+ weight_corr=std::exp(-acc_cs_depth);*/
+ weight_corr=1.;
+ return distance;
+}
+
+
+
 

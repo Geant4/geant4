@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm9/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 //
-// $Id: PhysicsList.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: PhysicsList.hh 82278 2014-06-13 14:42:11Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -54,7 +54,6 @@
 class G4VPhysicsConstructor;
 class StepMax;
 class PhysicsListMessenger;
-class G4ProductionCuts;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -68,30 +67,14 @@ public:
 
   virtual void ConstructProcess();
 
-  virtual void SetCuts();
-
   void AddPhysicsList(const G4String& name);
   void AddStepMax();
-
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForProton(G4double);
-
-  void SetVertexCut(G4double val);
-  void SetMuonCut(G4double val);
 
 private:
 
   // hide assignment operator
   PhysicsList & operator=(const PhysicsList &right);
   PhysicsList(const PhysicsList&);
-
-  G4double fCutForGamma;
-  G4double fCutForElectron;
-  G4double fCutForPositron;
-  G4double fCutForProton;
-  G4double fCutForVertexDetector;
-  G4double fCutForMuonDetector;
 
   G4VPhysicsConstructor*  fEmPhysicsList;
   G4VPhysicsConstructor*  fDecayPhysicsList;
@@ -102,8 +85,6 @@ private:
   StepMax* fStepMaxProcess;
 
   PhysicsListMessenger* fMessenger;
-  G4ProductionCuts* fVertexDetectorCuts;
-  G4ProductionCuts* fMuonDetectorCuts;
 
   G4bool fHelIsRegisted;
   G4bool fBicIsRegisted;

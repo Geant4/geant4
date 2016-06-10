@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionLevelDensityParameter.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4FissionLevelDensityParameter.hh 84396 2014-10-15 07:18:24Z gcosmo $
 //
-// Hadronic Process: Nuclear De-excitations
+// Hadronic Process: Nuclear De-excitation
 // by V. Lara (Oct 1998) 
 //
 

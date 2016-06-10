@@ -41,6 +41,7 @@ using namespace G4Analysis;
 //_____________________________________________________________________________
 G4H2ToolsManager::G4H2ToolsManager(const G4AnalysisManagerState& state)
  : G4VH2Manager(state),
+   fBaseToolsManager("H2"),
    fH2Vector(), 
    fH2NameIdMap()
 {
@@ -62,7 +63,7 @@ G4H2ToolsManager::~G4H2ToolsManager()
 namespace {
 
 //_____________________________________________________________________________
-void UpdateH2Information(G4HnInformation* information,
+void UpdateH2Information(G4HnInformation* hnInformation,
                           const G4String& xunitName, 
                           const G4String& yunitName, 
                           const G4String& xfcnName,
@@ -74,16 +75,22 @@ void UpdateH2Information(G4HnInformation* information,
   G4double yunit = GetUnitValue(yunitName);
   G4Fcn xfcn = GetFunction(xfcnName);
   G4Fcn yfcn = GetFunction(yfcnName);
-  information->fXUnitName = xunitName;
-  information->fYUnitName = yunitName;
-  information->fXFcnName = xfcnName;
-  information->fYFcnName = yfcnName;
-  information->fXUnit = xunit;
-  information->fYUnit = yunit;
-  information->fXFcn = xfcn;
-  information->fYFcn = yfcn;
-  information->fXBinScheme = xbinScheme;
-  information->fYBinScheme = ybinScheme;
+
+  G4HnDimensionInformation* xInformation 
+    = hnInformation->GetHnDimensionInformation(G4HnInformation::kX);
+  xInformation->fUnitName = xunitName;
+  xInformation->fFcnName = xfcnName;
+  xInformation->fUnit = xunit;
+  xInformation->fFcn = xfcn;
+  xInformation->fBinScheme = xbinScheme;
+
+  G4HnDimensionInformation* yInformation 
+    = hnInformation->GetHnDimensionInformation(G4HnInformation::kY);
+  yInformation->fUnitName = yunitName;
+  yInformation->fFcnName = yfcnName;
+  yInformation->fUnit = yunit;
+  yInformation->fFcn = yfcn;
+  yInformation->fBinScheme = ybinScheme;
 }  
                            
 //_____________________________________________________________________________
@@ -106,11 +113,15 @@ tools::histo::h2d* CreateToolsH2(
                          const G4String& title,
                          G4int nxbins, G4double xmin, G4double xmax,
                          G4int nybins, G4double ymin, G4double ymax,
+                         const G4String& xunitName,
+                         const G4String& yunitName,
                          const G4String& xfcnName, 
                          const G4String& yfcnName,
                          const G4String& xbinSchemeName,
                          const G4String& ybinSchemeName)
 {
+  G4double xunit = GetUnitValue(xunitName);
+  G4double yunit = GetUnitValue(yunitName);
   G4Fcn xfcn = GetFunction(xfcnName);
   G4Fcn yfcn = GetFunction(yfcnName);
   G4BinScheme xbinScheme = GetBinScheme(xbinSchemeName);
@@ -128,17 +139,17 @@ tools::histo::h2d* CreateToolsH2(
                 "Analysis_W013", JustWarning, description);
     }              
     return new tools::histo::h2d(title, 
-                                 nxbins, xfcn(xmin), xfcn(xmax), 
-                                 nybins, yfcn(ymin), yfcn(ymax));
+                                 nxbins, xfcn(xmin/xunit), xfcn(xmax/xunit), 
+                                 nybins, yfcn(ymin/yunit), yfcn(ymax/yunit));
                // h2 objects are deleted in destructor and reset when 
                // closing a file.
   }
   else {
     // Compute edges
     std::vector<G4double> xedges;
-    ComputeEdges(nxbins, xmin, xmax, xfcn, xbinScheme, xedges);
+    ComputeEdges(nxbins, xmin, xmax, xunit, xfcn, xbinScheme, xedges);
     std::vector<G4double> yedges;
-    ComputeEdges(nybins, ymin, ymax, yfcn, ybinScheme, yedges);
+    ComputeEdges(nybins, ymin, ymax, yunit, yfcn, ybinScheme, yedges);
     return new tools::histo::h2d(title, xedges, yedges); 
   }
 }     
@@ -148,17 +159,21 @@ tools::histo::h2d* CreateToolsH2(
                          const G4String& title,
                          const std::vector<G4double>& xedges,
                          const std::vector<G4double>& yedges,
+                         const G4String& xunitName,
+                         const G4String& yunitName,
                          const G4String& xfcnName,
                          const G4String& yfcnName)
 {                          
+  G4double xunit = GetUnitValue(xunitName);
+  G4double yunit = GetUnitValue(yunitName);
   G4Fcn xfcn = GetFunction(xfcnName);
   G4Fcn yfcn = GetFunction(yfcnName);
 
   // Apply function 
   std::vector<G4double> xnewEdges;
-  ComputeEdges(xedges, xfcn, xnewEdges);
+  ComputeEdges(xedges, xunit, xfcn, xnewEdges);
   std::vector<G4double> ynewEdges;
-  ComputeEdges(yedges, yfcn, ynewEdges);
+  ComputeEdges(yedges, yunit, yfcn, ynewEdges);
   
   return new tools::histo::h2d(title, xnewEdges, ynewEdges); 
              // h2 objects are deleted in destructor and reset when 
@@ -169,11 +184,15 @@ tools::histo::h2d* CreateToolsH2(
 void  ConfigureToolsH2(tools::histo::h2d* h2d,
                        G4int nxbins, G4double xmin, G4double xmax,
                        G4int nybins, G4double ymin, G4double ymax,
+                       const G4String& xunitName,
+                       const G4String& yunitName,
                        const G4String& xfcnName, 
                        const G4String& yfcnName,
                        const G4String& xbinSchemeName,
                        const G4String& ybinSchemeName)
 {
+  G4double xunit = GetUnitValue(xunitName);
+  G4double yunit = GetUnitValue(yunitName);
   G4Fcn xfcn = GetFunction(xfcnName);
   G4Fcn yfcn = GetFunction(yfcnName);
   G4BinScheme xbinScheme = GetBinScheme(xbinSchemeName);
@@ -190,15 +209,15 @@ void  ConfigureToolsH2(tools::histo::h2d* h2d,
       G4Exception("G4H2ToolsManager::CreateH2",
                 "Analysis_W013", JustWarning, description);
     }              
-    h2d->configure(nxbins, xfcn(xmin), xfcn(xmax), 
-                   nybins, yfcn(ymin), yfcn(ymax));
+    h2d->configure(nxbins, xfcn(xmin/xunit), xfcn(xmax/xunit), 
+                   nybins, yfcn(ymin/yunit), yfcn(ymax/yunit));
   }
   else {
     // Compute bins
     std::vector<G4double> xedges;
-    ComputeEdges(nxbins, xmin, xmax, xfcn, xbinScheme, xedges);
+    ComputeEdges(nxbins, xmin, xmax, xunit, xfcn, xbinScheme, xedges);
     std::vector<G4double> yedges;
-    ComputeEdges(nybins, ymin, ymax, yfcn, ybinScheme, yedges);
+    ComputeEdges(nybins, ymin, ymax, yunit, yfcn, ybinScheme, yedges);
     h2d->configure(xedges, yedges);
   }
 }     
@@ -207,16 +226,20 @@ void  ConfigureToolsH2(tools::histo::h2d* h2d,
 void  ConfigureToolsH2(tools::histo::h2d* h2d,
                        const std::vector<G4double>& xedges,
                        const std::vector<G4double>& yedges,
+                       const G4String& xunitName,
+                       const G4String& yunitName,
                        const G4String& xfcnName,
                        const G4String& yfcnName)
 {
+  G4double xunit = GetUnitValue(xunitName);
   G4Fcn xfcn = GetFunction(xfcnName);
   std::vector<G4double> xnewEdges;
-  ComputeEdges(xedges, xfcn, xnewEdges);
+  ComputeEdges(xedges, xunit, xfcn, xnewEdges);
 
+  G4double yunit = GetUnitValue(yunitName);
   G4Fcn yfcn = GetFunction(yfcnName);
   std::vector<G4double> ynewEdges;
-  ComputeEdges(yedges, yfcn, ynewEdges);
+  ComputeEdges(yedges, yunit, yfcn, ynewEdges);
 
   h2d->configure(xnewEdges, ynewEdges);
 }
@@ -240,7 +263,7 @@ tools::histo::h2d*  G4H2ToolsManager::GetH2InFunction(G4int id,
       inFunction += functionName;
       G4ExceptionDescription description;
       description << "      " << "histogram " << id << " does not exist.";
-      G4Exception(inFunction, "Analysis_W007", JustWarning, description);
+      G4Exception(inFunction, "Analysis_W011", JustWarning, description);
     }
     return 0;         
   }
@@ -306,7 +329,8 @@ G4int G4H2ToolsManager::CreateH2(const G4String& name,  const G4String& title,
 #endif
   tools::histo::h2d* h2d
     = CreateToolsH2(title, nxbins, xmin, xmax, nybins, ymin, ymax, 
-                    xfcnName, yfcnName, xbinSchemeName, ybinSchemeName);
+                    xunitName, yunitName, xfcnName, yfcnName, 
+                    xbinSchemeName, ybinSchemeName);
     
   // Add annotation
   AddH2Annotation(h2d, xunitName, yunitName, xfcnName, yfcnName);        
@@ -341,7 +365,8 @@ G4int G4H2ToolsManager::CreateH2(const G4String& name,  const G4String& title,
     fState.GetVerboseL4()->Message("create", "H2", name);
 #endif
   tools::histo::h2d* h2d
-    = CreateToolsH2(title, xedges, yedges, xfcnName, yfcnName); 
+    = CreateToolsH2(title, xedges, yedges, 
+                    xunitName, yunitName, xfcnName, yfcnName); 
     
   // Add annotation
   AddH2Annotation(h2d, xunitName, yunitName, xfcnName, yfcnName);        
@@ -376,13 +401,13 @@ G4bool G4H2ToolsManager::SetH2(G4int id,
   G4HnInformation* info = fHnManager->GetHnInformation(id, "SetH2");
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("configure", "H2", info->fName);
+    fState.GetVerboseL4()->Message("configure", "H2", info->GetName());
 #endif
 
   // Configure tools h2
   ConfigureToolsH2(
-    h2d, nxbins, xmin, xmax, nybins, ymin, ymax, xfcnName, yfcnName, 
-    xbinSchemeName, xbinSchemeName);
+    h2d, nxbins, xmin, xmax, nybins, ymin, ymax, 
+    xunitName, yunitName, xfcnName, yfcnName, xbinSchemeName, ybinSchemeName);
 
   // Add annotation
   AddH2Annotation(h2d, xunitName, yunitName, xfcnName, yfcnName);        
@@ -412,11 +437,11 @@ G4bool G4H2ToolsManager::SetH2(G4int id,
   G4HnInformation* info = fHnManager->GetHnInformation(id, "SetH2");
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("configure", "H2", info->fName);
+    fState.GetVerboseL4()->Message("configure", "H2", info->GetName());
 #endif
 
   // Configure tools h2
-  ConfigureToolsH2(h2d, xedges, yedges, xfcnName, yfcnName);
+  ConfigureToolsH2(h2d, xedges, yedges, xunitName, yunitName, xfcnName, yfcnName);
 
   // Add annotation
   AddH2Annotation(h2d, xunitName, yunitName, xfcnName, yfcnName);        
@@ -452,14 +477,22 @@ G4bool G4H2ToolsManager::FillH2(G4int id,
     return false; 
   }  
 
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "FillH2");
-  h2d->fill(info->fXFcn(xvalue/info->fXUnit), 
-            info->fYFcn(yvalue/info->fYUnit), weight);
+  G4HnDimensionInformation* xInfo 
+    = fHnManager->GetHnDimensionInformation(id, G4HnInformation::kX, "FillH2");
+  G4HnDimensionInformation* yInfo 
+    = fHnManager->GetHnDimensionInformation(id, G4HnInformation::kY, "FillH2");
+
+  h2d->fill(xInfo->fFcn(xvalue/xInfo->fUnit), 
+            yInfo->fFcn(yvalue/yInfo->fUnit), weight);
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) {
     G4ExceptionDescription description;
     description << " id " << id 
-                << " xvalue " << xvalue << " yvalue " << yvalue;
+                << " xvalue " << xvalue 
+                << " xfcn(xvalue/xunit) " <<  xInfo->fFcn(xvalue/xInfo->fUnit) 
+                << " yvalue " << yvalue
+                << " yfcn(yvalue/yunit) " <<  yInfo->fFcn(yvalue/yInfo->fUnit) 
+                << " weight " << weight;
     fState.GetVerboseL4()->Message("fill", "H2", description);
   }  
 #endif
@@ -475,9 +508,9 @@ G4int  G4H2ToolsManager::GetH2Id(const G4String& name, G4bool warn) const
       G4String inFunction = "G4H2ToolsManager::GetH2Id";
       G4ExceptionDescription description;
       description << "      " << "histogram " << name << " does not exist.";
-      G4Exception(inFunction, "Analysis_W007", JustWarning, description);
+      G4Exception(inFunction, "Analysis_W011", JustWarning, description);
     }
-    return -1;         
+    return kInvalidId;         
   }
   return it->second;
 }  
@@ -488,7 +521,7 @@ G4int G4H2ToolsManager::GetH2Nxbins(G4int id) const
   tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2NXbins");
   if ( ! h2d ) return 0;
   
-  return h2d->axis_x().bins();
+  return fBaseToolsManager.GetNbins(*h2d, G4BaseToolsManager::kX);
 }  
 
 //_____________________________________________________________________________
@@ -499,8 +532,7 @@ G4double G4H2ToolsManager::GetH2Xmin(G4int id) const
   tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2Xmin");
   if ( ! h2d ) return 0;
   
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "GetH2Xmin");
-  return info->fXFcn(h2d->axis_x().lower_edge()*info->fXUnit);
+  return fBaseToolsManager.GetMin(*h2d, G4BaseToolsManager::kX);
 }  
 
 //_____________________________________________________________________________
@@ -509,8 +541,7 @@ G4double G4H2ToolsManager::GetH2Xmax(G4int id) const
   tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2Xmax");
   if ( ! h2d ) return 0;
   
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "GetH2Xmax");
-  return info->fXFcn(h2d->axis_x().upper_edge()*info->fXUnit);
+  return fBaseToolsManager.GetMax(*h2d, G4BaseToolsManager::kX);
 }  
 
 //_____________________________________________________________________________
@@ -519,18 +550,7 @@ G4double G4H2ToolsManager::GetH2XWidth(G4int id) const
   tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2XWidth", true, false);
   if ( ! h2d ) return 0;
   
-  G4int nbins = h2d->axis_x().bins();
-  if ( ! nbins ) {
-    G4ExceptionDescription description;
-    description << "    nbins = 0 (for h2 id = " << id << ").";
-    G4Exception("G4H2ToolsManager::GetH2Width",
-                "Analysis_W014", JustWarning, description);
-    return 0;
-  }              
-  
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "GetH2XWidth");
-  return ( info->fXFcn(h2d->axis_x().upper_edge()) 
-           - info->fXFcn(h2d->axis_x().lower_edge()))*info->fXUnit/nbins;
+  return fBaseToolsManager.GetWidth(*h2d, G4BaseToolsManager::kX);
 }  
 
 //_____________________________________________________________________________
@@ -539,7 +559,7 @@ G4int G4H2ToolsManager::GetH2Nybins(G4int id) const
   tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2NYbins");
   if ( ! h2d ) return 0;
   
-  return h2d->axis_y().bins();
+  return fBaseToolsManager.GetNbins(*h2d, G4BaseToolsManager::kY);
 }  
 
 //_____________________________________________________________________________
@@ -550,8 +570,7 @@ G4double G4H2ToolsManager::GetH2Ymin(G4int id) const
   tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2Ymin");
   if ( ! h2d ) return 0;
   
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "GetH2Ymin");
-  return info->fYFcn(h2d->axis_y().lower_edge()*info->fYUnit);
+  return fBaseToolsManager.GetMin(*h2d, G4BaseToolsManager::kY);
 }  
 
 //_____________________________________________________________________________
@@ -560,8 +579,7 @@ G4double G4H2ToolsManager::GetH2Ymax(G4int id) const
   tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2Ymax");
   if ( ! h2d ) return 0;
   
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "GetH2Ymax");
-  return info->fYFcn(h2d->axis_y().upper_edge()*info->fYUnit);
+  return fBaseToolsManager.GetMax(*h2d, G4BaseToolsManager::kY);
 }  
 
 //_____________________________________________________________________________
@@ -570,18 +588,7 @@ G4double G4H2ToolsManager::GetH2YWidth(G4int id) const
   tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2YWidth", true, false);
   if ( ! h2d ) return 0;
   
-  G4int nbins = h2d->axis_y().bins();
-  if ( ! nbins ) {
-    G4ExceptionDescription description;
-    description << "    nbins = 0 (for h2 id = " << id << ").";
-    G4Exception("G4H2ToolsManager::GetH2Width",
-                "Analysis_W014", JustWarning, description);
-    return 0;
-  }              
-  
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "GetH2YWidth");
-  return ( info->fYFcn(h2d->axis_y().upper_edge()) 
-           - info->fYFcn(h2d->axis_y().lower_edge()))*info->fYUnit/nbins;
+  return fBaseToolsManager.GetWidth(*h2d, G4BaseToolsManager::kY);
 }  
 
 //_____________________________________________________________________________
@@ -590,7 +597,7 @@ G4bool G4H2ToolsManager::SetH2Title(G4int id, const G4String& title)
   tools::histo::h2d* h2d = GetH2InFunction(id, "SetH2Title");
   if ( ! h2d ) return false;
   
-  return h2d->set_title(title);
+  return fBaseToolsManager.SetTitle(*h2d, title);
 }  
 
 //_____________________________________________________________________________
@@ -599,8 +606,7 @@ G4bool G4H2ToolsManager::SetH2XAxisTitle(G4int id, const G4String& title)
   tools::histo::h2d* h2d = GetH2InFunction(id, "SetH2XAxisTitle");
   if ( ! h2d ) return false;
   
-  h2d->add_annotation(tools::histo::key_axis_x_title(), title);
-  return true;
+  return fBaseToolsManager.SetAxisTitle(*h2d, G4BaseToolsManager::kX, title);
 }  
 
 //_____________________________________________________________________________
@@ -609,8 +615,7 @@ G4bool G4H2ToolsManager::SetH2YAxisTitle(G4int id, const G4String& title)
   tools::histo::h2d* h2d = GetH2InFunction(id, "SetH2YAxisTitle");
   if ( ! h2d ) return false;
   
-  h2d->add_annotation(tools::histo::key_axis_x_title(), title);
-  return true;  
+  return fBaseToolsManager.SetAxisTitle(*h2d, G4BaseToolsManager::kY, title);
 }  
 
 //_____________________________________________________________________________
@@ -619,8 +624,7 @@ G4bool G4H2ToolsManager::SetH2ZAxisTitle(G4int id, const G4String& title)
   tools::histo::h2d* h2d = GetH2InFunction(id, "SetH2ZAxisTitle");
   if ( ! h2d ) return false;
   
-  h2d->add_annotation(tools::histo::key_axis_z_title(), title);
-  return true;  
+  return fBaseToolsManager.SetAxisTitle(*h2d, G4BaseToolsManager::kZ, title);
 }  
 
 //_____________________________________________________________________________
@@ -629,7 +633,7 @@ G4String G4H2ToolsManager::GetH2Title(G4int id) const
   tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2Title");
   if ( ! h2d ) return "";
   
-  return h2d->title();
+  return fBaseToolsManager.GetTitle(*h2d);
 }  
 
 //_____________________________________________________________________________
@@ -638,17 +642,7 @@ G4String G4H2ToolsManager::GetH2XAxisTitle(G4int id) const
   tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2XAxisTitle");
   if ( ! h2d ) return "";
   
-  G4String title;
-  G4bool result = h2d->annotation(tools::histo::key_axis_x_title(), title);
-  if ( ! result ) {
-    G4ExceptionDescription description;
-    description << "    Failed to get x_axis title for h2 id = " << id << ").";
-    G4Exception("G4H2ToolsManager::GetH2XAxisTitle",
-                "Analysis_W014", JustWarning, description);
-    return "";
-  }
-  
-  return title;              
+  return fBaseToolsManager.GetAxisTitle(*h2d, G4BaseToolsManager::kX);
 } 
 
 //_____________________________________________________________________________
@@ -657,17 +651,7 @@ G4String G4H2ToolsManager::GetH2YAxisTitle(G4int id) const
   tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2YAxisTitle");
   if ( ! h2d ) return "";
   
-  G4String title;
-  G4bool result = h2d->annotation(tools::histo::key_axis_y_title(), title);
-  if ( ! result ) {
-    G4ExceptionDescription description;
-    description << "    Failed to get y_axis title for h2 id = " << id << ").";
-    G4Exception("G4H2ToolsManager::GetH2YAxisTitle",
-                "Analysis_W014", JustWarning, description);
-    return "";
-  }
-  
-  return title;              
+  return fBaseToolsManager.GetAxisTitle(*h2d, G4BaseToolsManager::kY);
 }  
 
 //_____________________________________________________________________________
@@ -676,17 +660,7 @@ G4String G4H2ToolsManager::GetH2ZAxisTitle(G4int id) const
   tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2ZAxisTitle");
   if ( ! h2d ) return "";
   
-  G4String title;
-  G4bool result = h2d->annotation(tools::histo::key_axis_z_title(), title);
-  if ( ! result ) {
-    G4ExceptionDescription description;
-    description << "    Failed to get z_axis title for h2 id = " << id << ").";
-    G4Exception("G4H2ToolsManager::GetH2ZAxisTitle",
-                "Analysis_W014", JustWarning, description);
-    return "";
-  }
-  
-  return title;              
+  return fBaseToolsManager.GetAxisTitle(*h2d, G4BaseToolsManager::kZ);
 }  
 
 //_____________________________________________________________________________
@@ -697,12 +671,36 @@ G4bool G4H2ToolsManager::WriteOnAscii(std::ofstream& /*output*/)
 // extended examples.
 // Not yet available for H2
 
-  return false;
+  return ! fHnManager->IsAscii();
 } 
 
 //
 // public methods
 // 
+
+//_____________________________________________________________________________
+G4int G4H2ToolsManager::AddH2(const G4String& name, tools::histo::h2d* h2d)
+{
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL4() ) 
+    fState.GetVerboseL4()->Message("add", "H2", name);
+#endif
+
+  // Add annotation
+  AddH2Annotation(h2d, "none", "none", "none", "none");        
+  // Add information
+  AddH2Information(name, "none", "none", "none", "none", 
+                   kLinearBinScheme, kLinearBinScheme);
+    
+  // Register histogram 
+  G4int id = RegisterToolsH2(h2d, name); 
+  
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL2() ) 
+    fState.GetVerboseL2()->Message("add", "H2", name);
+#endif
+  return id;
+}  
 
 //_____________________________________________________________________________
 void G4H2ToolsManager::AddH2Vector(

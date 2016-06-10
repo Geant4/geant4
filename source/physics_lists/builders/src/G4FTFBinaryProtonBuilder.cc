@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBinaryProtonBuilder.cc 68750 2013-04-05 10:19:04Z gcosmo $
+// $Id: G4FTFBinaryProtonBuilder.cc 83616 2014-09-04 13:30:16Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -43,7 +43,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4ProtonInelasticCrossSection.hh"
 #include "G4BGGNucleonInelasticXS.hh"
 
 G4FTFBinaryProtonBuilder::
@@ -58,8 +57,6 @@ G4FTFBinaryProtonBuilder(G4bool quasiElastic)
   theStringModel->SetFragmentationModel(theStringDecay);
 
   theCascade = new G4BinaryCascade;
-  thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
-  theCascade->SetDeExcitation(thePreEquilib);  
   theModel->SetTransport(theCascade);
 
   theModel->SetHighEnergyGenerator(theStringModel);
@@ -89,8 +86,7 @@ G4FTFBinaryProtonBuilder::
 {
   delete theStringDecay;
   delete theStringModel;
-  delete theModel;
-  delete theCascade;
+  //delete theModel;
   if ( theQuasiElastic ) delete theQuasiElastic;
 }
 

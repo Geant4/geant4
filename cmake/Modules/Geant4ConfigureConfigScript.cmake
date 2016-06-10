@@ -77,6 +77,13 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
   get_system_include_dirs(_cxx_compiler_dirs)
 
   # Setup variables needed for expansion in configuration file
+  # - Static libs
+  if(BUILD_STATIC_LIBS)
+    set(G4_BUILTWITH_STATICLIBS "yes")
+  else()
+    set(G4_BUILTWITH_STATICLIBS "no")
+  endif()
+
   # - Multithreading
   if(GEANT4_BUILD_MULTITHREADED)
     set(G4_BUILTWITH_MULTITHREADING "yes")
@@ -96,6 +103,13 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
     set(G4_BUILTWITH_EXPAT "no")
   else()
     set(G4_BUILTWITH_EXPAT "yes")
+  endif()
+
+  # - ZLIB
+  if(GEANT4_USE_SYSTEM_ZLIB)
+    set(G4_BUILTWITH_ZLIB "no")
+  else()
+    set(G4_BUILTWITH_ZLIB "yes")
   endif()
 
   # - GDML
@@ -125,6 +139,12 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
     set(G4_BUILTWITH_USOLIDS "yes")
   else()
     set(G4_BUILTWITH_USOLIDS "no")
+  endif()
+
+  if(GEANT4_USE_SYSTEM_USOLIDS)
+    set(G4_BUILTWITH_BUILTIN_USOLIDS "no")
+  else()
+    set(G4_BUILTWITH_BUILTIN_USOLIDS "yes")
   endif()
 
   # - Qt

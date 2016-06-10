@@ -1,4 +1,4 @@
-$Id: History 77479 2013-11-25 10:01:22Z gcosmo $
+$Id: History 78838 2014-01-28 08:46:17Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/VRML sub-category
 ------------------------------------------------
+
+10th December 2013  John Allison  (VRML-V10-00-00)
+- G4VRML1/2File.cc: Declared as G4VGraphicsSystem::fileWriter.
 
 15th November 2013  John Allison  (VRML-V09-06-05)
 - Some changes as suggested by PVS.

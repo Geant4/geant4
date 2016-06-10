@@ -46,7 +46,7 @@ public:
 
   G4XNDeltaTable(); 
 
-  ~G4XNDeltaTable();
+  virtual ~G4XNDeltaTable();
 
   virtual G4PhysicsVector* CrossSectionTable() const;
 

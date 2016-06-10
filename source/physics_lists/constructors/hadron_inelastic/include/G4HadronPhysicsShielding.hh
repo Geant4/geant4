@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsShielding.hh 73040 2013-08-15 09:36:57Z gcosmo $
+// $Id: G4HadronPhysicsShielding.hh 83412 2014-08-21 15:20:27Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -32,6 +32,8 @@
 // Author: 2007  tatsumi Koi, Gunter Folger
 //   created from G4HadronPhysicsFTFP_BERT
 // Modified:
+// 2014.08.05 K.L.Genser added provisions for modifing the Bertini to
+//            FTF transition energy region
 //
 //----------------------------------------------------------------------------
 //
@@ -66,15 +68,17 @@ class G4HadronPhysicsShielding : public G4VPhysicsConstructor
 {
   public: 
     //G4HadronPhysicsShielding(G4int verbose =1,G4bool blend=false);
-    G4HadronPhysicsShielding(G4int verbose =1);
-    G4HadronPhysicsShielding(const G4String& name, G4bool quasiElastic=false);
+    explicit G4HadronPhysicsShielding(G4int verbose=1);
+    explicit G4HadronPhysicsShielding(const G4String& name, G4bool );
+    explicit G4HadronPhysicsShielding(const G4String& name, G4int verbose=1,
+                                      G4double minFTFPEnergy=9.5*GeV, G4double maxBertiniEnergy=9.9*GeV);
     virtual ~G4HadronPhysicsShielding();
 
   public: 
     virtual void ConstructParticle();
     virtual void ConstructProcess();
-    void UseLEND( G4String ss="" ){useLEND=true;evaluation=ss;};
-    void UnuseLEND(){useLEND=false;};
+    void UseLEND( G4String ss="" ){useLEND_=true;evaluation_=ss;};
+    void UnuseLEND(){useLEND_=false;};
 
   private:
     void CreateModels();
@@ -112,8 +116,13 @@ class G4HadronPhysicsShielding : public G4VPhysicsConstructor
     static G4ThreadLocal ThreadPrivate* tpdata;
 
     // G4bool QuasiElastic;
-    G4bool useLEND;
-    G4String evaluation;
+    G4bool useLEND_;
+    G4String evaluation_;
+
+    const G4double minFTFPEnergy_;
+    const G4double maxBertiniEnergy_;
+    const G4double minNonHPNeutronEnergy_;
+
 };
 
 #endif

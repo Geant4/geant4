@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsShielding.cc 73040 2013-08-15 09:36:57Z gcosmo $
+// $Id: G4HadronPhysicsShielding.cc 83699 2014-09-10 07:18:25Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +33,9 @@
 //   created from G4HadronPhysicsFTFP_BERT
 //
 // Modified:
+//
+// 2014.08.05 K.L.Genser added provisions for modifing the Bertini to
+//            FTF transition energy region
 //
 //----------------------------------------------------------------------------
 //
@@ -78,56 +81,30 @@ G4HadronPhysicsShielding::tpdata = 0;
 
 G4HadronPhysicsShielding::G4HadronPhysicsShielding( G4int )
     :  G4VPhysicsConstructor("hInelastic Shielding")
-/*    , theNeutrons(0)
-    , theLENeutron(0)
-    , theBertiniNeutron(0)
-    , theFTFPNeutron(0)
-    , thePiK(0)
-    , theBertiniPiK(0)
-    , theFTFPPiK(0)
-    , thePro(0)
-    , theBertiniPro(0)
-    , theFTFPPro(0)
-    , theHyperon(0)
-    , theAntiBaryon(0)
-    , theFTFPAntiBaryon(0) */
-//    , QuasiElastic(false)
-  /*    , theChipsKaonMinus(0)
-    , theChipsKaonPlus(0)
-    , theChipsKaonZero(0)
-    , theBGGxsNeutron(0)
-    , theNeutronHPJENDLHEInelastic(0)
-    , theBGGxsProton(0)
-    , xsNeutronCaptureXS(0)*/
-    , useLEND(false)
-    , evaluation()
+    , useLEND_(false)
+    , evaluation_()
+    , minFTFPEnergy_(9.5*GeV)
+    , maxBertiniEnergy_(9.9*GeV)
+    , minNonHPNeutronEnergy_(19.9*MeV)
 {}
 
 G4HadronPhysicsShielding::G4HadronPhysicsShielding(const G4String& name, G4bool /* quasiElastic */)
     :  G4VPhysicsConstructor(name) 
-/*    , theNeutrons(0)
-    , theLENeutron(0)
-    , theBertiniNeutron(0)
-    , theFTFPNeutron(0)
-    , thePiK(0)
-    , theBertiniPiK(0)
-    , theFTFPPiK(0)
-    , thePro(0)
-    , theBertiniPro(0)
-    , theFTFPPro(0)
-    , theHyperon(0)
-    , theAntiBaryon(0)
-    , theFTFPAntiBaryon(0) */
-//    , QuasiElastic(quasiElastic)
-  /*    , theChipsKaonMinus(0)
-    , theChipsKaonPlus(0)
-    , theChipsKaonZero(0)
-    , theBGGxsNeutron(0)
-    , theNeutronHPJENDLHEInelastic(0)
-    , theBGGxsProton(0)
-    , xsNeutronCaptureXS(0)*/
-    , useLEND(false)
-    , evaluation()
+    , useLEND_(false)
+    , evaluation_()
+    , minFTFPEnergy_(9.5*GeV)
+    , maxBertiniEnergy_(9.9*GeV)
+    , minNonHPNeutronEnergy_(19.9*MeV)
+{}
+
+G4HadronPhysicsShielding::G4HadronPhysicsShielding(const G4String& name,
+                                G4int /*verbose*/, G4double minFTFPEnergy, G4double maxBertiniEnergy)
+    :  G4VPhysicsConstructor(name)
+    , useLEND_(false)
+    , evaluation_()
+    , minFTFPEnergy_(minFTFPEnergy)
+    , maxBertiniEnergy_(maxBertiniEnergy)
+    , minNonHPNeutronEnergy_(19.9*MeV)
 {}
 
 #include "G4NeutronLENDBuilder.hh"
@@ -137,30 +114,33 @@ void G4HadronPhysicsShielding::CreateModels()
 
   tpdata->theNeutrons=new G4NeutronBuilder( true ); // Fission on
   tpdata->theFTFPNeutron=new G4FTFPNeutronBuilder(quasiElasticFTF);
+  tpdata->theFTFPNeutron->SetMinEnergy(minFTFPEnergy_);
   tpdata->theNeutrons->RegisterMe(tpdata->theFTFPNeutron);
   tpdata->theNeutrons->RegisterMe(tpdata->theBertiniNeutron=new G4BertiniNeutronBuilder);
-  tpdata->theBertiniNeutron->SetMinEnergy(19.9*MeV);
-  tpdata->theBertiniNeutron->SetMaxEnergy(5*GeV);
+  tpdata->theBertiniNeutron->SetMinEnergy(minNonHPNeutronEnergy_);
+  tpdata->theBertiniNeutron->SetMaxEnergy(maxBertiniEnergy_);
   //tpdata->theNeutrons->RegisterMe(tpdata->theHPNeutron=new G4NeutronHPBuilder);
 
-    if ( useLEND != true )
+  if ( useLEND_ != true )
      tpdata->theNeutrons->RegisterMe(tpdata->theLENeutron=new G4NeutronHPBuilder);
   else
   {
-     tpdata->theNeutrons->RegisterMe(tpdata->theLENeutron=new G4NeutronLENDBuilder(evaluation));
+     tpdata->theNeutrons->RegisterMe(tpdata->theLENeutron=new G4NeutronLENDBuilder(evaluation_));
   }
 
   tpdata->thePro=new G4ProtonBuilder;
   tpdata->theFTFPPro=new G4FTFPProtonBuilder(quasiElasticFTF);
+  tpdata->theFTFPPro->SetMinEnergy(minFTFPEnergy_);
   tpdata->thePro->RegisterMe(tpdata->theFTFPPro);
   tpdata->thePro->RegisterMe(tpdata->theBertiniPro=new G4BertiniProtonBuilder);
-  tpdata->theBertiniPro->SetMaxEnergy(5*GeV);
+  tpdata->theBertiniPro->SetMaxEnergy(maxBertiniEnergy_);
 
   tpdata->thePiK=new G4PiKBuilder;
   tpdata->theFTFPPiK=new G4FTFPPiKBuilder(quasiElasticFTF);
+  tpdata->theFTFPPiK->SetMinEnergy(minFTFPEnergy_);
   tpdata->thePiK->RegisterMe(tpdata->theFTFPPiK);
   tpdata->thePiK->RegisterMe(tpdata->theBertiniPiK=new G4BertiniPiKBuilder);
-  tpdata->theBertiniPiK->SetMaxEnergy(5*GeV);
+  tpdata->theBertiniPiK->SetMaxEnergy(maxBertiniEnergy_);
 
   tpdata->theHyperon=new G4HyperonFTFPBuilder;
     
@@ -170,6 +150,8 @@ void G4HadronPhysicsShielding::CreateModels()
 
 G4HadronPhysicsShielding::~G4HadronPhysicsShielding()
 {
+  if (!tpdata) return;
+
   delete tpdata->theNeutrons;
   delete tpdata->theBertiniNeutron;
   delete tpdata->theFTFPNeutron;
@@ -191,8 +173,6 @@ G4HadronPhysicsShielding::~G4HadronPhysicsShielding()
   delete tpdata->theBGGxsNeutron;
   delete tpdata->theNeutronHPJENDLHEInelastic;
   delete tpdata->theBGGxsProton;
-
-  delete tpdata->xsNeutronCaptureXS;
 
   delete tpdata; tpdata=0;
 }
@@ -267,17 +247,17 @@ void G4HadronPhysicsShielding::ConstructProcess()
     capture = new G4HadronCaptureProcess("nCapture");
     pmanager->AddDiscreteProcess(capture);
   }
-  tpdata->xsNeutronCaptureXS = new G4NeutronCaptureXS();
+  tpdata->xsNeutronCaptureXS = (G4NeutronCaptureXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronCaptureXS::Default_Name());
   capture->AddDataSet(tpdata->xsNeutronCaptureXS);
   capture->AddDataSet( new G4NeutronHPCaptureData );
   G4NeutronRadCapture* theNeutronRadCapture = new G4NeutronRadCapture(); 
-  theNeutronRadCapture->SetMinEnergy( 19.9*MeV ); 
+  theNeutronRadCapture->SetMinEnergy( minNonHPNeutronEnergy_ ); 
   capture->RegisterMe( theNeutronRadCapture );
   if ( ! fission ) {
     fission = new G4HadronFissionProcess("nFission");
     pmanager->AddDiscreteProcess(fission);
   }
   G4LFission* theNeutronLEPFission = new G4LFission();
-  theNeutronLEPFission->SetMinEnergy( 19.9*MeV );
+  theNeutronLEPFission->SetMinEnergy( minNonHPNeutronEnergy_ );
   fission->RegisterMe( theNeutronLEPFission );
 }

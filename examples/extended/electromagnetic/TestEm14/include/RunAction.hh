@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm14/include/RunAction.hh
+/// \file electromagnetic/TestEm1/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: RunAction.hh 84208 2014-10-10 14:44:50Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,44 +36,32 @@
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
-#include <map>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+class Run;
 class DetectorConstruction;
 class PrimaryGeneratorAction;
 class HistoManager;
-class G4Run;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunAction : public G4UserRunAction
 {
   public:
-    RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
+    RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim=0);
    ~RunAction();
 
   public:
+    virtual G4Run* GenerateRun();    
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
-
-    void CountProcesses(G4String procName) 
-                {fProcCounter[procName]++;};
-    void SumTrack (G4double track) 
-                {fTotalCount++; fSumTrack += track; fSumTrack2 += track*track;};
-    void SumeTransf (G4double energy) 
-                {fEnTransfer += energy;};         
-                    
+                                  
   private:
-    DetectorConstruction*      fDetector;
-    PrimaryGeneratorAction*    fPrimary;
-    HistoManager*              fHistoManager;
-        
-    std::map<G4String,G4int>   fProcCounter;            
-    G4int fTotalCount;      //all processes counter
-    G4double fSumTrack;     //sum of trackLength
-    G4double fSumTrack2;    //sum of trackLength*trackLength
-    G4double fEnTransfer;   //energy transfered to charged secondaries
+    DetectorConstruction*   fDetector;
+    PrimaryGeneratorAction* fPrimary;
+    Run*                    fRun;        
+    HistoManager*           fHistoManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

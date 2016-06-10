@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 72967 2013-08-14 14:57:48Z gcosmo $
+$Id: History 84477 2014-10-16 08:44:04Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,23 @@ $Id: History 72967 2013-08-14 14:57:48Z gcosmo $
 
                       Category History file
                       ---------------------
+
+16.10.2014 - Luciano Pandola (purmag-V10-00-02)
+- Prevent the threads to read the B-map file at the same time
+- Clean-up the analysis singleton.
+- Actual MT migration: use G4MTRunManager, if applicable
+
+15.10.2014 - Luciano Pandola (purmag-V10-00-01)
+- Added ConstructSDandField() and registered magnetic field in a 
+ G4Cache
+- Added a protection in the case the input field file is not found
+- Registered RunAction in master and workers
+
+14.10.2014 - Luciano Pandola (purmag-V10-00-00)
+- Added ActionInitialization class (first step for MT migration)
+- Add const qualifiers for methods of DetectorConstruction
+- Changed signature of SteppingAction, to get a const pointer to 
+ geometry
 
 30.07.2013 - Andrea Dotti   (purmag-V09-06-02)
 - Bug fixing for unused variables (compilation warning clang32)

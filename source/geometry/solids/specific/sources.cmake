@@ -1,7 +1,7 @@
 #------------------------------------------------------------------------------
 # sources.cmake
 # Module : G4specsolids
-# Package: Geant4.src.G4geometry..G4specsolids
+# Package: Geant4.src.G4geometry.G4specsolids
 #
 # Sources description for a library.
 # Lists the sources and headers of the code explicitely.
@@ -11,17 +11,17 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 76263 2013-11-08 11:41:52Z gcosmo $
+# $Id: sources.cmake 85608 2014-10-31 11:23:30Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
 # List external includes needed.
 include_directories(${CLHEP_INCLUDE_DIRS})
+include_directories(${USOLIDS_INCLUDE_DIRS})
 
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/CSG/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/usolids/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPNumerics/include)
@@ -89,7 +89,9 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4TwistedTrap.hh
         G4TwistedTrd.hh
         G4TwistedTubs.hh
+        G4UExtrudedSolid.hh
         G4UGenericPolycone.hh
+        G4UGenericTrap.hh
         G4UPolycone.hh
         G4UPolyhedra.hh
         G4UTet.hh
@@ -140,7 +142,9 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4TwistedTrap.cc
         G4TwistedTrd.cc
         G4TwistedTubs.cc
+        G4UExtrudedSolid.cc
         G4UGenericPolycone.cc
+        G4UGenericTrap.cc
         G4UPolycone.cc
         G4UPolyhedra.cc
         G4UTet.cc
@@ -162,6 +166,7 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4graphics_reps
         G4intercoms
     LINK_LIBRARIES
+        ${USOLIDS_LIBRARIES}
 )
 
 # List any source specific properties here

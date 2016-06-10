@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/include/Histo.hh
 /// \brief Definition of the Histo class
 //
-// $Id: Histo.hh 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: Histo.hh 81932 2014-06-06 15:39:45Z gcosmo $
 
 #ifndef Histo_h
 #define Histo_h 1
@@ -50,7 +50,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class G4RootAnalysisManager;
+class G4VAnalysisManager;
 class HistoMessenger;
 
 class Histo
@@ -69,7 +69,7 @@ public:
 
   // In this method 1-D histogramms are predefined
   void Add1D(const G4String&, const G4String&, G4int nb, G4double x1, 
-	     G4double x2, G4double u=1.);
+            G4double x2, G4double u=1.);
 
   // It change bins and boundaries
   void SetHisto1D(G4int, G4int, G4double, G4double, G4double);
@@ -109,8 +109,8 @@ public:
 
 private:
 
-  G4RootAnalysisManager* fManager;
-  HistoMessenger*        fMessenger;
+  G4VAnalysisManager* fManager;
+  HistoMessenger* fMessenger;
  
   G4String fHistName;
   G4String fHistType;

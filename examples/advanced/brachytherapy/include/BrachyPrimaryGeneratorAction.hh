@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyPrimaryGeneratorAction.hh 74021 2013-09-19 13:41:54Z gcosmo $
+// $Id: BrachyPrimaryGeneratorAction.hh 84280 2014-10-13 07:21:10Z gcosmo $
 //
 //    ********************************************
 //    *                                          *
@@ -40,12 +40,11 @@
 #include "G4VUserPrimaryGeneratorAction.hh"
 
 class G4GeneralParticleSource;
-class BrachyAnalysisManager;
 
 class BrachyPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
  public:
-   BrachyPrimaryGeneratorAction(BrachyAnalysisManager*);
+   BrachyPrimaryGeneratorAction();
    ~BrachyPrimaryGeneratorAction();
 
  public:
@@ -53,6 +52,5 @@ class BrachyPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
  private:
   G4GeneralParticleSource* gun;
-  BrachyAnalysisManager* analysis;
 };
 #endif

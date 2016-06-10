@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCSGfaceted.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4VCSGfaceted.hh 83572 2014-09-01 15:23:27Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -58,7 +58,7 @@ class G4VCSGfaceted : public G4VSolid
     virtual ~G4VCSGfaceted();
   
     G4VCSGfaceted( const G4VCSGfaceted &source );
-    const G4VCSGfaceted &operator=( const G4VCSGfaceted &source );
+    G4VCSGfaceted &operator=( const G4VCSGfaceted &source );
   
     virtual G4bool CalculateExtent( const EAxis pAxis,
                                     const G4VoxelLimits& pVoxelLimit,
@@ -120,6 +120,7 @@ class G4VCSGfaceted : public G4VSolid
     G4VCSGface **faces;
     G4double fCubicVolume;
     G4double fSurfaceArea;
+    mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;
 
     virtual G4double DistanceTo( const G4ThreeVector &p,

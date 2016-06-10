@@ -13,7 +13,7 @@
 // with a Mersenne-prime period of 2^19937-1, uniform on open interval (0,1)
 // =======================================================================
 // Ken Smith      - Started initial draft:                    14th Jul 1998
-//                - Optimized to get pow() out of flat() method
+//                - Optimized to get std::pow() out of flat() method
 //                - Added conversion operators:                6th Aug 1998
 // J. Marraffino  - Added some explicit casts to deal with
 //                  machines where sizeof(int) != sizeof(long)  22 Aug 1998
@@ -42,21 +42,29 @@
 #include "CLHEP/Random/Random.h"
 #include "CLHEP/Random/MTwistEngine.h"
 #include "CLHEP/Random/engineIDulong.h"
+#include "CLHEP/Utility/atomic_int.h"
+
 #include <string.h>	// for strcmp
 #include <cstdlib>	// for std::abs(int)
 
 namespace CLHEP {
 
+namespace {
+  // Number of instances with automatic seed selection
+  CLHEP_ATOMIC_INT_TYPE numberOfEngines(0);
+
+  // Maximum index into the seed table
+  const int maxIndex = 215;
+}
+
 static const int MarkerLen = 64; // Enough room to hold a begin or end marker. 
 
 std::string MTwistEngine::name() const {return "MTwistEngine";}
 
-int MTwistEngine::numEngines = 0;
-int MTwistEngine::maxIndex = 215;
-
 MTwistEngine::MTwistEngine() 
 : HepRandomEngine()
 {
+  int numEngines = numberOfEngines++;
   int cycle = std::abs(int(numEngines/maxIndex));
   int curIndex = std::abs(int(numEngines%maxIndex));
   long mask = ((cycle & 0x007fffff) << 8);
@@ -66,7 +74,7 @@ MTwistEngine::MTwistEngine()
   seedlist[1] = 0;
   setSeeds( seedlist, numEngines );
   count624=0;
-  ++numEngines;
+
   for( int i=0; i < 2000; ++i ) flat();      // Warm up just a bit
 }
 
@@ -107,7 +115,7 @@ double MTwistEngine::flat() {
   unsigned int y;
 
    if( count624 >= N ) {
-    register int i;
+    int i;
 
     for( i=0; i < NminusM; ++i ) {
       y = (mt[i] & 0x80000000) | (mt[i+1] & 0x7fffffff);
@@ -211,10 +219,14 @@ void MTwistEngine::showStatus() const
    std::cout << " Initial seed      = " << theSeed << std::endl;
    std::cout << " Current index     = " << count624 << std::endl;
    std::cout << " Array status mt[] = " << std::endl;
-   for (int i=0; i<624; i+=5) {
+   // 2014/06/06  L Garren
+   // the final line has 4 elements, not 5
+   for (int i=0; i<620; i+=5) {
      std::cout << mt[i]   << " " << mt[i+1] << " " << mt[i+2] << " " 
-	       << mt[i+3] << " " << mt[i+4] << std::endl;
+	       << mt[i+3] << " " << mt[i+4] << "\n";
    }
+   std::cout << mt[620]   << " " << mt[621] << " " << mt[622] << " " 
+	     << mt[623]  << std::endl;
    std::cout << "----------------------------------------" << std::endl;
 }
 
@@ -222,7 +234,7 @@ MTwistEngine::operator float() {
   unsigned int y;
 
   if( count624 >= N ) {
-    register int i;
+    int i;
 
     for( i=0; i < NminusM; ++i ) {
       y = (mt[i] & 0x80000000) | (mt[i+1] & 0x7fffffff);
@@ -253,7 +265,7 @@ MTwistEngine::operator unsigned int() {
   unsigned int y;
 
   if( count624 >= N ) {
-    register int i;
+    int i;
 
     for( i=0; i < NminusM; ++i ) {
       y = (mt[i] & 0x80000000) | (mt[i+1] & 0x7fffffff);

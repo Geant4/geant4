@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm17/include/PhysicsListMessenger.hh
 /// \brief Definition of the PhysicsListMessenger class
 //
-// $Id: PhysicsListMessenger.hh 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id: PhysicsListMessenger.hh 85311 2014-10-27 14:23:25Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,10 +56,6 @@ class PhysicsListMessenger: public G4UImessenger
   
     PhysicsList*               fPhysicsList;
     
-    G4UIcmdWithADoubleAndUnit* fGammaCutCmd;
-    G4UIcmdWithADoubleAndUnit* fElectCutCmd;
-    G4UIcmdWithADoubleAndUnit* fProtoCutCmd;    
-    G4UIcmdWithADoubleAndUnit* fAllCutCmd;    
     G4UIcmdWithAString*        fListCmd;    
 };
 

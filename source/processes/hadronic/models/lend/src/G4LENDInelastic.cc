@@ -26,7 +26,7 @@
 #include "G4LENDInelastic.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Nucleus.hh"
-#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
   
 G4HadFinalState * G4LENDInelastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTarg )
 {
@@ -66,6 +66,11 @@ G4HadFinalState * G4LENDInelastic::ApplyYourself(const G4HadProjectile& aTrack, 
 
          G4int jZ = (*products)[j].Z; 
          G4int jA = (*products)[j].A; 
+         G4int jm = (*products)[j].m; 
+         //TK 
+         //We need coordination LEND *products)[j].m and G4IonTable(Z,A,m) 
+         //Excitation energy of isomer level is might (probably) different each other.
+         //
 
          //G4cout << "ZA = " << 1000 * (*products)[j].Z + (*products)[j].A << "  EK = "
          //     << (*products)[j].kineticEnergy
@@ -90,12 +95,12 @@ G4HadFinalState * G4LENDInelastic::ApplyYourself(const G4HadProjectile& aTrack, 
          {
             if ( jA != 0 )
             {
-               theSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon( jZ , jA , 0 , 0 ) );
+               theSec->SetDefinition( G4IonTable::GetIonTable()->GetIon( jZ , jA , jm ) );
                totN += jA;
             }
             else 
             {
-               theSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon( jZ , iA+1-totN , 0 , 0 ) );
+               theSec->SetDefinition( G4IonTable::GetIonTable()->GetIon( jZ , iA+1-totN , jm ) );
             }
          } 
          else

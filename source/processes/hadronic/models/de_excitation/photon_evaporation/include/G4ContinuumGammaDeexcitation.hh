@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ContinuumGammaDeexcitation.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4ContinuumGammaDeexcitation.hh 85841 2014-11-05 15:35:06Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -55,30 +55,26 @@
 #include "G4Fragment.hh"
 
 class G4NuclearLevelManager;
+class G4NuclearLevelStore;
+class G4DiscreteGammaTransition;
 
 class G4ContinuumGammaDeexcitation : public G4VGammaDeexcitation
 {
 public:
 
-  // Constructor
   G4ContinuumGammaDeexcitation();
 
-  // Destructor
   virtual ~G4ContinuumGammaDeexcitation();
 
-  // Functions
-
-public:
-
-  virtual G4VGammaTransition* CreateTransition();
-
-  virtual G4bool CanDoTransition();
+  virtual G4bool CanDoTransition(G4Fragment* aNucleus);
 
 private:
 
-  G4int _nucleusZ;
-  G4int _nucleusA;  
-  G4NuclearLevelManager * _levelManager;
+  G4int nucleusZ;
+  G4int nucleusA;  
+  G4NuclearLevelStore*   store;
+  G4NuclearLevelManager* levelManager;
+  G4ContinuumGammaTransition* ctransition; 
 };
 
 #endif

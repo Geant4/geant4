@@ -1,4 +1,4 @@
-# $Id: berger.mac 69108 2013-04-18 13:10:10Z gcosmo $
+# $Id: berger.mac 82461 2014-06-23 10:44:06Z gcosmo $
 #
 # macro for TestEm12 : Dose Point Kernel
 # Seltzer, Appl. Radiat. Isot. 42(1991) page 917
@@ -15,8 +15,7 @@
 /testem/phys/addPhysics  local	# em physics
 ###/testem/phys/addPhysics  emlivermore	# em physics
 #
-###/run/setCut 2 um	#will include cut for proton
-/testem/phys/setCuts 2 um
+/run/setCut 2 um
 #
 /run/initialize
 #
@@ -26,6 +25,6 @@
 /analysis/setFileName berger/100keV_local
 /analysis/h1/set 8 120  0.  1.2 none	#normalized edep profile
 #
-/testem/event/printModulo 10000
+/run/printProgress 10000
 #
 /run/beamOn 160000

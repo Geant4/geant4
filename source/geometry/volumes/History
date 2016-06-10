@@ -1,4 +1,4 @@
-$Id: History 77024 2013-11-20 16:08:38Z gcosmo $
+$Id: History 86527 2014-11-13 15:06:24Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,14 +16,56 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 13th, 2014 G.Cosmo               - geomvol-V10-00-08
+- Restored constructors/destructor for G4TouchableHistory - derived class
+  to be not inline.
+- Restored also non-inline constructors/destructors for G4NavigationHistory
+  and G4NavigationLevel (the last apparently responsible for crashes on SLC5
+  in the allocation).
+
+November 3rd, 2014 G.Cosmo                - geomvol-V10-00-07
+- Moved constructors, destructors and assignment operators for
+  G4NavigationHistory, G4NavigationLevel, G4NavigationLevelRep and
+  G4TouchableHistory to be inline, for CPU optimisation
+  (courtesy of S.Wenzel).
+
+October 18th, 2014 A.Dotti                - geomvol-V10-00-06
+- Corrected possible data race (reported by DRD) in 
+  G4PVReplica::InitialiseWorker().
+
+June 11th, 2014 G.Cosmo                   - geomvol-V10-00-05
+- Corrected implementation of copy-constructor and assignment-operator
+  for G4NavigationHistory, to provide exact copy for size of the
+  histories-level vector.
+
+June 10th, 2014 G.Cosmo                   - geomvol-V10-00-04
+- Avoid un-necessary clearing of navigation history levels in
+  G4NavigationHistory destructor.
+
+May 14th, 2014 G.Cosmo                    - geomvol-V10-00-03
+- Introduced pool G4NavigationHistoryPool for storage and reuse of
+  navigation history levels collections.
+  Disabled use of G4EnhancedAllocator in G4NavigationHistory accordingly.
+- Use G4Allocator for dynamic allocations of G4NavigationHistory objects.
+
+April 10th, 2014 G.Cosmo                  - geomvol-V10-00-02
+- Get rid of deprecated 'register' storage class specifier in source files
+
+March 31st, 2014 G.Cosmo                  - geomvol-V10-00-01
+- Corrected signature of operator=() for G4LogicalBorder/SkinSurface.
+
+February 14th, 2014 G.Cosmo               - geomvol-V10-00-00
+- Minor cleanup and optimisation to G4EnhancedAllocator.
+- Code cleanup in G4GeometryWorkspace and G4GeometryWorkspacePool.
+
 November 19th, 2013 J.Apostolakis         - geomvol-V09-06-20
 - Fix(es) for issues identified by Coverity:
-   G4GeometryWorkspace: initialisation of data member.
-   G4GeometryWorkspacePool: fixed implementation of singleton.
+  G4GeometryWorkspace: initialisation of data member.
+  G4GeometryWorkspacePool: fixed implementation of singleton.
 
 November  8th, 2013 J.Apostolakis         - geomvol-V09-06-19
-- Cleanup: reduced verbosity of G4GeometryWorkspace by making
-   it optional.  
+- Cleanup: reduced verbosity of G4GeometryWorkspace by making it optional.  
   Added Set/Get Verbose methods to toggle and view it.
 
 November  7th, 2013 J.Apostolakis         - geomvol-V09-06-18

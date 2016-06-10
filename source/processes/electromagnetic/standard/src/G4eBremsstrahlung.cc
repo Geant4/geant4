@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.cc 75582 2013-11-04 12:13:01Z gcosmo $
+// $Id: G4eBremsstrahlung.cc 84598 2014-10-17 07:39:15Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -84,6 +84,7 @@
 
 #include "G4ProductionCutsTable.hh"
 #include "G4MaterialCutsCouple.hh"
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -117,31 +118,30 @@ G4eBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 					       const G4ParticleDefinition*)
 {
   if(!isInitialised) {
+    G4EmParameters* param = G4EmParameters::Instance();
 
-    //    if (!EmModel(1)) { SetEmModel(new G4eBremsstrahlungModel(), 1); }
-    if (!EmModel(1)) { SetEmModel(new G4SeltzerBergerModel(), 1); }
-    if (!EmModel(2)) { SetEmModel(new G4eBremsstrahlungRelModel(), 2); }
-
-    G4double energyLimit = 1*GeV;
-
-    EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
-    EmModel(1)->SetHighEnergyLimit(energyLimit);
-    EmModel(2)->SetLowEnergyLimit(energyLimit);
-    EmModel(2)->SetHighEnergyLimit(MaxKinEnergy());
-                
+    G4double emin = param->MinKinEnergy();
+    G4double emax = param->MaxKinEnergy();
+    G4double energyLimit = std::min(emax, GeV);
     G4VEmFluctuationModel* fm = 0;
+
+    if (!EmModel(1)) { SetEmModel(new G4SeltzerBergerModel(), 1); }
+    EmModel(1)->SetLowEnergyLimit(emin);
+    EmModel(1)->SetHighEnergyLimit(energyLimit);
+    EmModel(1)->SetSecondaryThreshold(param->BremsstrahlungTh());
+    EmModel(1)->SetLPMFlag(false);
     AddEmModel(1, EmModel(1), fm);
-    AddEmModel(2, EmModel(2), fm);
+
+    if(emax > energyLimit) {
+      if (!EmModel(2)) { SetEmModel(new G4eBremsstrahlungRelModel(), 2); }
+      EmModel(2)->SetLowEnergyLimit(energyLimit);
+      EmModel(2)->SetHighEnergyLimit(emax); 
+      EmModel(2)->SetSecondaryThreshold(param->BremsstrahlungTh());
+      EmModel(2)->SetLPMFlag(param->LPM());
+      AddEmModel(2, EmModel(2), fm);
+    }
     isInitialised = true;
   }
-  G4LossTableManager* man = G4LossTableManager::Instance(); 
-  G4double eth = man->BremsstrahlungTh(); 
-  EmModel(1)->SetSecondaryThreshold(eth);
-  EmModel(2)->SetSecondaryThreshold(eth);
-
-  // Only high energy model LMP flag is ON/OFF
-  EmModel(1)->SetLPMFlag(false);
-  EmModel(2)->SetLPMFlag(man->LPMFlag());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -149,9 +149,9 @@ G4eBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 void G4eBremsstrahlung::PrintInfo()
 {
   if(EmModel(1)) {
-    G4LossTableManager* man = G4LossTableManager::Instance(); 
-    G4double eth = man->BremsstrahlungTh(); 
-    G4cout << "      LPM flag: " << man->LPMFlag() << " for E > " 
+    G4EmParameters* param = G4EmParameters::Instance();
+    G4double eth = param->BremsstrahlungTh(); 
+    G4cout << "      LPM flag: " << param->LPM() << " for E > " 
 	   << EmModel(1)->HighEnergyLimit()/GeV << " GeV";
     if(eth < DBL_MAX) { 
       G4cout << ",  HighEnergyThreshold(GeV)= " << eth/GeV; 

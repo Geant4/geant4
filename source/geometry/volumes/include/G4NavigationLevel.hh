@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevel.hh 67974 2013-03-13 10:17:37Z gcosmo $
+// $Id: G4NavigationLevel.hh 86527 2014-11-13 15:06:24Z gcosmo $
 //
 // class G4NavigationLevel
 //

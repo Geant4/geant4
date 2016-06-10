@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -51,6 +52,7 @@
 #endif
 
 #include <string>
+#include <vector>
 
 namespace G4INCL {
 #ifndef INCL_ROOT_USE
@@ -147,6 +149,10 @@ namespace G4INCL {
       Int_t nEnergyViolationInteraction;
       /** \brief Cross section for attempted collisions/decays for which the energy-conservation algorithm failed to find a solution. */
       Float_t energyViolationInteractionCrossSection;
+      /** \brief Initial seeds for the pseudo-random-number generator */
+      std::vector<Int_t> initialRandomSeeds;
+      /** \brief Final seeds for the pseudo-random-number generator */
+      std::vector<Int_t> finalRandomSeeds;
     };
 }
 

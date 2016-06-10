@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04DetectorConstruction.hh 77884 2013-11-29 08:41:11Z gcosmo $
+// $Id: F04DetectorConstruction.hh 78551 2014-01-07 09:45:08Z gcosmo $
 //
 /// \file field/field04/include/F04DetectorConstruction.hh
 /// \brief Definition of the F04DetectorConstruction class
@@ -33,6 +33,7 @@
 #define F04DetectorConstruction_h 1
 
 #include "globals.hh"
+#include "G4Cache.hh"
 
 #include "G4LogicalVolume.hh"
 #include "G4RotationMatrix.hh"
@@ -61,8 +62,6 @@ class F04DetectorConstruction : public G4VUserDetectorConstruction
     G4VPhysicalVolume* ConstructDetector();
 
     virtual void ConstructSDandField();
-
-    void UpdateGeometry();
 
     // StringToRotationMatrix() converts a string "X90,Y45" into a
     // G4RotationMatrix.
@@ -107,7 +106,6 @@ class F04DetectorConstruction : public G4VUserDetectorConstruction
      G4Material* GetWorldMaterial()    {return fWorldMaterial;}
      G4double GetWorldSizeZ()          {return fWorldSizeZ;}
      G4double GetWorldSizeR()          {return fWorldSizeR;}
-     G4VPhysicalVolume* GetWorld()     {return fPhysiWorld;}
 
      G4LogicalVolume* GetCaptureMgnt()     {return fLogicCaptureMgnt;}
      G4double GetCaptureMgntRadius()       {return fCaptureMgntRadius;}
@@ -135,6 +133,9 @@ class F04DetectorConstruction : public G4VUserDetectorConstruction
      G4double    GetDegraderPos()       {return fDegraderPos;}
 
   private:
+
+     F04DetectorMessenger* fDetectorMessenger;  // pointer to the Messenger
+     G4Cache<F04GlobalField*> fFieldSetUp;
 
      F04Materials* fMaterials;
 
@@ -187,13 +188,9 @@ class F04DetectorConstruction : public G4VUserDetectorConstruction
 
      G4ThreeVector fCaptureMgntCenter, fTransferMgntCenter;
 
-     static G4ThreadLocal F04GlobalField* fField;
-
   private:
 
      void DefineMaterials();
-
-     F04DetectorMessenger* fDetectorMessenger;  // pointer to the Messenger
 
 };
 

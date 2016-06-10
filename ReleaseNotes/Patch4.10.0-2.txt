@@ -1,0 +1,394 @@
+
+                 Geant4 10.0 - patch-02 Release Notes
+                 ------------------------------------
+
+                                                           13 June 2014
+
+List of fixes included in this public patch since the public release 10.0.p01:
+
+  o Configuration:
+    -------------
+    + CMake:
+      o When static libraries are used, wrap G4physicslists library with flags
+        suitable to import whole archive. Implemented for GNU, Clang and Intel
+        compilers. Other compilers require further checks on flags and how to
+        apply to single library. Functionality needed to support global
+        registration of templated factories.
+      o Fixup usage of shared/static builtin libraries. Ensure that shared
+        builtins do not get linked to static. Added new component 'static'
+        allowing user to select static Geant4 libraries if they are available.
+      o Provide advanced option to select thread local storage model when
+        building multithreaded. Supported default mode: initial-exec model.
+      o Added zlib and g3tog4 to list of features that --has-feature
+        recognizes and can query.
+      o Added -DG4FPE_DEBUG to GNU/Clang flags for Debug build mode.
+    + GNUMake:
+      o Force loading of symbols for templated libraries in physics_lists
+        module for global libraries.
+        Defined LDFLAGS for Linux and Darwin targets accordingly.
+      o Replaced old win32def tool for extracting symbols definitions for
+        DLLs build on Windows with genwindef used also in CMake.
+
+  o Analysis:
+    --------
+    + Fixed implementation of compound commands in G4H[1,2,n]Messenger classes
+      using new G4AnalysisUtilities::Tokenize() function.
+      This allows to pass multi-word strings within "".
+      Addressing problem report #1616.
+    + Fixed G4H2ToolsManager::SetH2YAxisTitle: set title to y-axis and not
+      x-axis. Addressing problem report #1620.  
+    + Do not allow creating objects with empty names.
+      Addressing problem report #1579.
+    + Do not remove Root base file if ntuples are in use.
+      Addressing problem report #1633.
+    + Fixed H1, H2 functions to access xmin, xmax and width 
+      (do not apply function and unit to return values).
+    + Fixed bug in /analysis/h1/setAscii command.
+
+  o Digits_Hits:
+    -----------
+    + Fix the angle factor in G4PSSphereSurfaceFlux to keep it always
+      positive. Addressing to Bug Report #1479.
+    + G4ScoringMessenger: fixed broadcast parameters of commands that should
+      be used only by the master thread. Addressing problem report #1554.
+    + G4PSCylinderSurfaceCurrent: removed unnecessary printout. 
+      Addressing problem report #1610.
+    + Added missing dependency to graphics_reps in scorer module.
+
+  o Environments:
+    ------------
+    + pyG4EllipticalCone: added missing return in CreateEllipticalCone()
+      method. Addressing problem report #1586.
+    + Fixed compilation error on pyG4Polycone.
+      Addressing problem report #1544.
+    + Configure script: physics list is changed to be always turned on.
+      Addressing problem report #1546.
+
+  o Externals:
+    ---------
+    + clhep:
+      o Removed deprecated 'register' qualifiers in implementation of
+        CLHEP classes.
+    + zlib:
+      o Fixed compilation warnings from clang-3.4 for unused variables.
+      o Removed deprecated 'register' storage class specifier in source files.
+
+  o G3toG4:
+    ------
+    + Removed inline specification for G3VolTableEntry::operator==()
+      in sorce file.
+
+  o Geometry:
+    --------
+    + divisions:
+      o Added missing dependency to graphics_reps.
+    + magneticfield:
+      o Moved G4FieldTrack::LoadFromArray() to .cc and removed non-necessary
+        thread-local static data local to the function.
+        Fixes crash experienced when upgrading to clang-3.4 on MacOSX.
+        Addressing problem reports #1603, #1619, #1628.
+      o Fixed assignment operator for G4FieldTrack, and improved printing.
+        Fix in SetChargeAndMoments() to use corrected method
+        SetChargesAndMoments() from G4ChargeState. Revised constructors to
+        add pdg-spin as last argument (with default -1).
+      o G4ChargeState: fixed order of arguments in constructor making spin
+        3rd argument (was 2nd) and making all arguments mandatory; fixing
+        use of SetChargeMoments() by G4FieldTrack, with addition of spin to
+        arguments.
+      o Fix in G4MagIntegratorDriver::OneGoodStep() for use of variable not set.
+    + management:
+      o Fixed operator=() signature in G4LogicalSurface.
+      o Get rid of deprecated 'register' storage class specifier in code.
+    + navigation:
+      o Added method in G4PathFinder for end of track, needed to signal
+        G4TransportationManager to use 'ordinary' navigator.
+      o G4Navigator: corrected saving/restoring of 'navigator state'.
+        Revised SetupHierarchy() to reduce extra cost due to handling the
+        case of nested parameterisations.
+      o PropagatorInField: when setting up a new intersection-locator 
+        pass pointer to the current Navigator.
+      o Get rid of deprecated 'register' storage class specifier in code.
+    + solids/CSG:
+      o Fixed proper handling of polyhedron pointer in solids, to avoid memory
+        leak for visualization of parameterised volumes.
+    + solids/specific:
+      o Fixed proper handling of polyhedron pointer in solids, to avoid memory
+        leak for visualization of parameterised volumes.
+      o Fixed signature of assignment operator to G4Polycone, G4Polyhedra,
+        G4GenericPolycone and G4VCSGfaceted.
+      o Added protection in generic constructor of G4Polyhedra for the case
+        when improper number of sides is given as input.
+      o Get rid of deprecated 'register' storage class specifier in code.
+    + solids/usolids:
+      o Fixed DistanceToOut() for UTubs, UCons, USphere, UVSCGfaceted and
+        UPolycone,  DistanceToOut() return normal even for concave faces.
+      o Fixed DistanceToOut() for UPolycone in case of points starting on
+        the Surface or on the Internal Surface. Improved convexity algorithm
+        in DistanceToOut() for UPolycone for points leaving +/-Dz.
+      o Corrected Implementation of SafetyFromInside() for UPolycone,
+        skipping internal Z sections.
+      o Implementation of auxiliary methods in UTubs and UCons:
+        SafetyFromInsideR(), SafetyFromOutsideR(),SafetyToPhi().
+        These methods are used in Polycone for SafetyfromInside()
+        calculations. SafetyFromInside() and SafetyFromOutside() are changed
+        in order to avoid duplications.
+      o Fix to DistanceToIn() for UBox in case of points located on edges.
+      o Fixed handling of polyhedron pointer in G4USolid.
+      o Fixed use of inline keyword for methods defined in .cc files in UTrd,
+        UVCSGfaceted and UVoxelizer.
+      o Moved findComponentFastest() to be a method of UVoxelizer and changed
+        to FindComponentFastest().
+      o Removed unused SaveVectorToExternalFile() methods in UUtils, also
+        causing cyclic dependency with UVector3.
+    + volumes:
+      o Minor cleanup and optimisation to G4EnhancedAllocator.
+      o Corrected signature of operator=() for G4LogicalBorder/SkinSurface.
+      o Code cleanup in G4GeometryWorkspace and G4GeometryWorkspacePool.
+      o Get rid of deprecated 'register' storage class specifier in code.
+
+  o Global:
+    ------
+    + Correction in G4Exp::G4Expf() to remove 2nd order term contribution
+      repeated twice by mistake. Correction included in VDT 0.3.7 library.
+    + Minor refinements to G4Poisson.
+    + Fix in G4SimplexDownhill header to proper define header guard.
+    + Get rid of deprecated 'register' storage class specifier in code.
+    + Updated date and version for 10.0.p02.
+
+  o Intercoms:
+    ---------
+    + G4GenericMessenger: introducing three additional methods to make class
+      compliant to release 10. Addressing problem report #1580.
+      Corrected inclusion protection flag in G4GenericMessenger.hh.
+      Addressing old problem report #1527.
+      Fixed case of core dump when GetCurrentValue() method is invoked
+      for a command defined by DeclareMethod().
+    + Fixed treatment of double-quotes in G4UImanager::ForeachS().
+      Addressing problem report #1614.
+
+  o Interfaces:
+    ----------
+    + G4UIterminal: fixed the problem that some commands could not be processed;
+      use substr() instead of () operator for the comparison of substrings.
+
+  o Materials:
+    ---------
+    + G4Material, G4Element: define default names and symbols for elements
+      and isotopes when loaded from NIST and not explicitly defined by users.
+      Fixes exporting of names in GDML when writing detector description.
+    + G4Material: corrected initialisation of pointers in fake default
+      constructor per use of persistency. Corrected typo in printout for
+      duplicate materials in function InitializePointers().
+    + G4MaterialPropertyTable: fixed race condition problem.
+      Addressing problem report #1590.
+
+  o Persistency:
+    -----------
+    + ascii:
+      o G4tgbGeometryDumper: directly use G4ThreeVector methods for SymAxis
+        for dumping G4Para parameters.
+    + gdml:
+      o Correction to G4GDMLRead::Read() for the case when schema validation
+        is turned off, to disable initialisation of schema validation in the
+        parser and allow for standalone parsing off-network.
+      o Corrected potential memory leak in G4GDMLReadSolids.
+      o Added comparison operator for 3-vector key in 'vertexMap' in
+        G4GDMLWriteSolids for export of tessellated solid.
+        Addressing problem report #1573.
+      o Corrected dump of 'phi' and 'theta' for G4Trap and G4Para in writer.
+        Addressing problem report #1602.
+      o Corrected minor Coverity defect in G4GDMLParser for uninitialised
+        'strip' flag in constructors.
+      o Get rid of deprecated 'register' storage class specifier in code.
+
+  o Physics Lists:
+    -------------
+    + builders
+      o OrderingParameterTable: processes "AnnihToMuMu" and "AnnihToHad"
+        should not be active AtRest. Addressing problem report #1598.
+      o Fixed memory leak in G4FTFBuilder.
+    + lists:
+      o Set cut on proton to zero to simulate all recoils from elastic
+        scattering in HP physics-lists (FTFP_BERT_HP, QGSP_BIC_HP,
+        QGSP_BERT_HP and in INCLXXPhysicsListHelper).
+
+  o Processes - Electromagnetic :
+    ---------------------------
+    + Adjoint:
+      o G4VAdjointReverseReaction: added protection against potential infinite 
+        loop; if cross-section correction exceeds 100 the total cross-section
+        is set to zero.
+    + DNA:
+      o Fixed compilation warnings and errors on MacOS/clang-3.4
+	for c++11 standard.
+      o Corrected typo in DLL import flag in G4DNAWaterDissociationDisplacer.
+    + Low Energy:
+      o Bug fix in G4PenelopePhotoElectric effect (no fluorescence in MT mode).
+    + Polarisation:
+      o G4PolarizationMessenger: fixed Coverity report on non-initialized
+        members.
+    + Standard:
+      o G4CoulombScattering: use G4IonCoulombScatteringModel for ions by
+        default.
+      o G4IonCoulombScatteringModel: fixed warning from G4ParticleTable;
+        fixed final state generation and scattering off Hydrogen.
+      o G4WentzelOKandVIxSection: fixed mass of recoil for Hydrogen target.
+      o G4WentzelVIModel: changed order of displacement and angular 
+        deflection (second order effect).
+      o G4GammaConversion: switch default number of bins from 77 to 140.
+    + Utils:
+      o G4EnergyLossMessenger: fix to enable re-initialisation of physics
+        after all de-excitation commands.
+      o G4LossTableMananger: fiz to do not recompute x-section if a process
+        is shared between particle and anti-particles.
+        Minor change of ionisation for charm and bottom mesons.
+      o G4VMultipleScattering - fixed old problem of displacement handling;
+        setting minimum displacement to 0.05 nm (Bohr radius).
+      o G4EmModelManager: fixed cuts for single scattering models;
+        use "cut for protons".
+
+  o Processes - Generic:
+    -------------------
+    + Cuts:
+      o Fixed Coverity defects in G4VRangeToEnergyConverter.
+    + Management:
+      o Fix for G4WrapperProcess not correctly forwarding call to wrapped
+        process with SetMasterProcess() in multi-threading mode.
+        Addressing problem report #1625.
+    + Phonon:
+      o Removed inline keywords in methods in G4PhononDownconversion.cc
+        and make coherent use of G4 types.
+    + Transportation:
+      o Fixed time in case of zero step in G4CoupledTransportation.
+        This caused a 'going back in time' error, when a zero step occurred
+        in particular at the boundary of a parallel world volume when scoring.
+        Addressing problem report #1017.
+      o Corrected AlongStepDoIt() methods of G4Transportation and 
+        G4CoupledTransportation, to adapt it to corrected signature for
+        G4FieldTrack constructors, which now take PDG spin; modified to use
+        different constructor for G4FieldTrack (no Velocity) and adapted to
+        revised signature of G4ChargeState constructor.
+      o Fixed Coverity defect in G4UserSpecialCuts.
+
+  o Processes - Hadronic:
+    --------------------
+    + models/binary_cascade:
+      o G4BinaryCasacde: improved calculation of mass, and of correction for
+        outgoing particles by always using GetIon() method; addresses potential
+        crash for p+d seen in d+H in BIC.
+      o G4{Proton,Neutron}Field.cc: protect against negative index into buffer.
+    + models/cascade
+      o Fixed implementation of G4CascadeParameters singleton to follow
+        canonical format. Addressing problem report #1557.
+      o G4InuclNuclei:fix case of floating-point exception in
+        setExcitationEnergy() for zero Ekin.
+      o Fix for memory leak in secondaries in G4IntraNucleiCascader.
+        Addressing problem report #1584.
+      o Removed non-existing modules from dependency list in CMake script.
+    + models/coherent_elastic:
+      o Get rid of deprecated 'register' storage class specifier in code.
+    + models/inclxx:
+      o Fixed use of inline keyword in G4INCLClusteringModelIntercomparison.
+    + models/lend:
+      o Fixed wrong usage of IonTable in G4LENDManager.
+      o Relaxed fatal energy CheckLevel in G4LENDFission.
+      o Fixed use of GetIon() from G4ParticleTable, obsolete since 10.0.
+      o Fixed compilation warnings detected by clang-3.4 compiler.
+    + models/neutron_hp:
+      o Fixed deletion of maps in G4NeutronHPFFFissionFS destructor.
+        Do not call G4PhysicsTable::clearAndDestroy() in destructors of 
+        G4NeutronHPCaptureData, G4NeutronHPElasticData, G4NeutronHPFissionData
+        G4NeutronHPInelasticData. Because G4PhysicsTable content are manged by
+        allocators
+      o Fixed bug in kinematics of residual nucleus in G4NeutronHPCaptureFS.
+      o Fixes for minor memory leaks and code simplification for better
+        stability.
+      o Fixed problem on single temperature data file in class
+        G4NeutronHPThermalScattering.
+        Fixed compilation warning message from clang3.4 and gcc-4.9.0.
+      o Reset isotope pointer to the target G4Nucleus object of reaction in
+        G4NeutronHPCapturem G4NeutronHPElastic, G4NeutronHPFission and
+        G4NeutronHPInelastic.
+    + models/parton_string:
+      o Set the minimum energy to apply Reggeon-Cascade at 2 GeV
+        (it was wrongly set to 5 GeV in G4 9.6.ref03, causing the bump at
+        5 GeV in the calorimeter visible energy of FTFP_BERT physics list).
+        It affects the calorimeter energy response of the physics list
+        FTFP_BERT(_HP), only for showers of hadrons between 4 and 5 GeV.
+      o Extended the vectors CandAQ, CandQ of G4FTFAnnihilation
+        in the case of one quark - anti-quark string, in order to correctly
+        handle antiproton - proton and antineutron - neutron annihilations.
+        Prepared also for Anti_Delta-- and Delta++ annihilation.
+        It is expected to affect only antiproton annihilations, with
+        negligible effects on the simulation of hadronic showers.
+      o G4LundStringFragmentation: fixed rare crashes in the case of
+        anti_sigma+ capture at rest on hydrogen; and added protections
+        against vector access outside the allowed range.
+        Negligible effects on the simulation of hadronic showers.
+      o Fix to remove 'inline' qualifier from methods in G4VParticipants
+        and G4PomeronCrossSection source files, responsible for run-time
+        errors for undefined symbols in library on clang-3.4 compiler.
+    + stopping:
+      o G4MuMinusCapturePrecompound: added simplified model for capture in
+        deuterium and in He4; reduced number of trials to find neutrino
+        4-momentum from 1000 to 100; added protection 1 keV for negative
+        excitation energy, and substituted FatalException by JustWarning.
+      o Fixes for Coverity defects in G4MuonMinusCaptureAtRest and
+        G4AntiNeutronAnnihilationAtRest.
+
+  o Readout:
+    -------
+    + Fixed Coverity defects.
+
+  o Track:
+    -----
+    + Fixed G4FieldTrackUpdator to energy/momentum passed to field
+      integration: first set rest mass, then update kinetic energy.
+      The problem affects propagation in multiple geometries.
+    + Fixed memory leak in G4Step::SetPre/PostStepPoint().
+      Addressing problem report #1583.
+
+  o Visualization:
+    -------------
+    + externals:
+      o Fixed bad text in G4OpenGL2PS action.
+    + management:
+      o Get rid of deprecated 'register' storage class specifier in code.
+    + FukuiRenderer:
+      o Fixed compilation warnings detected by clang-3.4 compiler.
+    + OpenGL:
+      o Fix in G4OpenGL to allow for compilation with only Qt driver on Linux
+        in case 'glu'h' is missing. Addressing problem report #1618.
+
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + extended/medical/DICOM:
+      o Reshuffled code for printout in DicomHandler::CheckFileFormat().
+    + extended/field/field04:
+      o Corrected mismatch for delete/new of fFp pointer array in Clear().
+      o Corrections for crashes in MT mode.
+    + extended/persistency/gdml/G01:
+      o Correction to solids.gdml for 'para' solid, where angle unit was
+        missing.
+      o Added GDML sample mat_nist.gdml showing how to load a NIST material,
+        although format is not part of the GDML schema yet (i.e. expected
+        warning in schema validation).
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 10.0 or 10.0.p01.
+  o  Technical notes distributed for release 10.0 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 10.0.p02 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

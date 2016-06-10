@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ConversionFatalError.hh 66376 2012-12-18 09:42:59Z gcosmo $
+// $Id: G4ConversionFatalError.hh 78955 2014-02-05 09:45:46Z gcosmo $
 //
 // Fatal G4Exception error
 //
@@ -41,7 +41,7 @@ struct G4ConversionFatalError {
     G4ExceptionDescription ed; 
     ed <<input<<": "<<message<<G4endl;
     G4Exception("G4ConversionFatalError::ReportError",
-		"greps0101", FatalErrorInArgument, ed);
+                "greps0101", FatalErrorInArgument, ed);
   }
   
 };

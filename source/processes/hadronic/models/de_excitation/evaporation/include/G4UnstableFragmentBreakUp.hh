@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UnstableFragmentBreakUp.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4UnstableFragmentBreakUp.hh 85443 2014-10-29 14:35:57Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -65,6 +65,11 @@ public:
 
   // decay fragment on light ions
   virtual G4FragmentVector* BreakUpFragment(G4Fragment* fragment);
+
+  // returns always "false" by this model - primary is not deleted
+  // but after de-excitation it is modified and added to the products 
+  virtual G4bool 
+  BreakUpChain(G4FragmentVector* theResult, G4Fragment* theNucleus);
 
   // dummy virtual methods
   virtual G4Fragment* EmittedFragment(G4Fragment* fragment);

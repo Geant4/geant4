@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.cc 68740 2013-04-05 09:56:39Z gcosmo $
+// $Id: PhysicsListMessenger.cc 83418 2014-08-21 15:30:47Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,7 +32,6 @@
 
 #include "PhysicsList.hh"
 #include "G4UIdirectory.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,77 +39,32 @@
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
 :pPhysicsList(pPhys)
 {
+  amsDir = new G4UIdirectory("/ams/");
+  amsDir->SetGuidance("UI commands specific to this example");
+  	
   physDir = new G4UIdirectory("/ams/phys/");
   physDir->SetGuidance("physics list commands");
-   
-  gammaCutCmd = new G4UIcmdWithADoubleAndUnit("/ams/phys/setGCut",this);  
-  gammaCutCmd->SetGuidance("Set gamma cut.");
-  gammaCutCmd->SetParameterName("Gcut",false);
-  gammaCutCmd->SetUnitCategory("Length");
-  gammaCutCmd->SetRange("Gcut>0.0");
-  gammaCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  electCutCmd = new G4UIcmdWithADoubleAndUnit("/ams/phys/setECut",this);  
-  electCutCmd->SetGuidance("Set electron cut.");
-  electCutCmd->SetParameterName("Ecut",false);
-  electCutCmd->SetUnitCategory("Length");
-  electCutCmd->SetRange("Ecut>0.0");
-  electCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  
-  protoCutCmd = new G4UIcmdWithADoubleAndUnit("/ams/phys/setPCut",this);  
-  protoCutCmd->SetGuidance("Set positron cut.");
-  protoCutCmd->SetParameterName("Pcut",false);
-  protoCutCmd->SetUnitCategory("Length");
-  protoCutCmd->SetRange("Pcut>0.0");
-  protoCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
-
-  allCutCmd = new G4UIcmdWithADoubleAndUnit("/ams/phys/setCuts",this);  
-  allCutCmd->SetGuidance("Set cut for all.");
-  allCutCmd->SetParameterName("cut",false);
-  allCutCmd->SetUnitCategory("Length");
-  allCutCmd->SetRange("cut>0.0");
-  allCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
   pListCmd = new G4UIcmdWithAString("/ams/phys/addPhysics",this);  
   pListCmd->SetGuidance("Add modula physics list.");
   pListCmd->SetParameterName("PList",false);
-  pListCmd->AvailableForStates(G4State_PreInit);  
+  pListCmd->AvailableForStates(G4State_PreInit);
+  pListCmd->SetToBeBroadcasted(false);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::~PhysicsListMessenger()
 {
-  delete gammaCutCmd;
-  delete electCutCmd;
-  delete protoCutCmd;
-  delete allCutCmd;
   delete pListCmd;
-  delete physDir;      
+  delete physDir;
+  delete amsDir;      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
-                                          G4String newValue)
+void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {       
-  if( command == gammaCutCmd )
-   { pPhysicsList->SetCutForGamma(gammaCutCmd->GetNewDoubleValue(newValue));}
-     
-  if( command == electCutCmd )
-   { pPhysicsList->SetCutForElectron(electCutCmd->GetNewDoubleValue(newValue));}
-     
-  if( command == protoCutCmd )
-   { pPhysicsList->SetCutForPositron(protoCutCmd->GetNewDoubleValue(newValue));}
-
-  if( command == allCutCmd )
-    {
-      G4double cut = allCutCmd->GetNewDoubleValue(newValue);
-      pPhysicsList->SetCutForGamma(cut);
-      pPhysicsList->SetCutForElectron(cut);
-      pPhysicsList->SetCutForPositron(cut);
-    } 
-
   if( command == pListCmd )
    { pPhysicsList->AddPhysicsList(newValue);}
 }

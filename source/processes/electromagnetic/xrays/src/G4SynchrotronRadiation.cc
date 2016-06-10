@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.cc 74582 2013-10-15 12:06:25Z gcosmo $
+// $Id: G4SynchrotronRadiation.cc 83424 2014-08-21 15:39:44Z gcosmo $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -56,18 +56,12 @@
 
 G4SynchrotronRadiation::G4SynchrotronRadiation(const G4String& processName,
   G4ProcessType type):G4VDiscreteProcess (processName, type),
-  theGamma (G4Gamma::Gamma() ),
-  theElectron ( G4Electron::Electron() ),
-  thePositron ( G4Positron::Positron() )
+  theGamma (G4Gamma::Gamma() ) 
 {
   G4TransportationManager* transportMgr = 
     G4TransportationManager::GetTransportationManager();
 
   fFieldPropagator = transportMgr->GetPropagatorInField();
-
-  fLambdaConst = std::sqrt(3.0)*electron_mass_c2/
-                           (2.5*fine_structure_const*eplus*c_light);
-  fEnergyConst = 1.5*c_light*c_light*eplus*hbar_Planck/electron_mass_c2 ;
 
   SetProcessSubType(fSynchrotronRadiation);
   verboseLevel = 1;
@@ -102,7 +96,7 @@ G4SynchrotronRadiation::SetAngularGenerator(G4VEmAngularDistribution* p)
 G4bool
 G4SynchrotronRadiation::IsApplicable(const G4ParticleDefinition& particle)
 {
-  return ( ( &particle == theElectron ) || ( &particle == thePositron ));
+  return (particle.GetPDGCharge() != 0.0 && !particle.IsShortLived()); 
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -117,7 +111,7 @@ G4SynchrotronRadiation::GetMeanFreePath(const G4Track& trackData,
 					G4ForceCondition* condition)
 {
   // gives the MeanFreePath in GEANT4 internal units
-  G4double MeanFreePath;
+  G4double MeanFreePath = DBL_MAX;
 
   const G4DynamicParticle* aDynamicParticle = trackData.GetDynamicParticle();
 
@@ -169,12 +163,21 @@ G4SynchrotronRadiation::GetMeanFreePath(const G4Track& trackData,
       G4ThreeVector unitMcrossB  = FieldValue.cross(unitMomentum);
       G4double perpB             = unitMcrossB.mag();
 
-      if( perpB > 0.0 ) MeanFreePath = fLambdaConst/perpB;
-      else              MeanFreePath = DBL_MAX;
-
+      static const G4double fLambdaConst = std::sqrt(3.0)*eplus/
+	(2.5*fine_structure_const*c_light); 
+	  
+      if( perpB > 0.0 )
+      {
+        MeanFreePath = 
+	  fLambdaConst*aDynamicParticle->GetDefinition()->GetPDGMass()
+	  /(perpB*particleCharge*particleCharge);
+      }
       if(verboseLevel > 0 && FirstTime)
       {
-        G4cout << "G4SynchrotronRadiation::GetMeanFreePath :" << '\n' 
+        G4cout << "G4SynchrotronRadiation::GetMeanFreePath "
+	       << " for particle " 
+	       << aDynamicParticle->GetDefinition()->GetParticleName() 
+	       << ":" << '\n'  //hbunew
 	       << "  MeanFreePath = " << G4BestUnit(MeanFreePath, "Length")
 	       << G4endl;
         if(verboseLevel > 1)
@@ -197,10 +200,7 @@ G4SynchrotronRadiation::GetMeanFreePath(const G4Track& trackData,
 	FirstTime=false;
       }
     }
-    else  MeanFreePath = DBL_MAX;
-
   }
-
   return MeanFreePath;
 }
 
@@ -218,7 +218,7 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
   const G4DynamicParticle* aDynamicParticle = trackData.GetDynamicParticle();
 
   G4double gamma = aDynamicParticle->GetTotalEnergy()/
-                   (aDynamicParticle->GetMass()              );
+    (aDynamicParticle->GetDefinition()->GetPDGMass());
 
   G4double particleCharge = aDynamicParticle->GetDefinition()->GetPDGCharge();
   if(gamma <= 1.0e3  || 0.0 == particleCharge) 
@@ -261,7 +261,9 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
     {
       // M-C of synchrotron photon energy
 
-      G4double energyOfSR = GetRandomEnergySR(gamma,perpB);
+      G4double energyOfSR = 
+	GetRandomEnergySR(gamma,perpB,
+			  aDynamicParticle->GetDefinition()->GetPDGMass());
 
       // check against insufficient energy
 
@@ -369,16 +371,18 @@ G4double G4SynchrotronRadiation::InvSynFracInt(G4double x)
   }
 }
 
-G4double 
-G4SynchrotronRadiation::GetRandomEnergySR(G4double gamma, G4double perpB)
+G4double G4SynchrotronRadiation::GetRandomEnergySR(
+         G4double gamma, G4double perpB, G4double mass_c2) 
 {
 
-  G4double Ecr=fEnergyConst*gamma*gamma*perpB;
+  static const G4double fEnergyConst = 1.5*c_light*c_light*eplus*hbar_Planck; 
+  G4double Ecr=fEnergyConst*gamma*gamma*perpB/mass_c2;
 
-  //  static G4ThreadLocal G4bool FirstTime=true;
   if(verboseLevel > 0 && FirstTime1)
-  { G4double Emean=8./(15.*std::sqrt(3.))*Ecr; // mean photon energy
-    G4double E_rms=std::sqrt(211./675.)*Ecr; // rms of photon energy distribution
+  { 
+    // mean and rms of photon energy 
+    G4double Emean=8./(15.*std::sqrt(3.))*Ecr;
+    G4double E_rms=std::sqrt(211./675.)*Ecr; 
     G4int prec = G4cout.precision();
     G4cout << "G4SynchrotronRadiation::GetRandomEnergySR :" << '\n' 
 	   << std::setprecision(4)
@@ -400,7 +404,8 @@ G4SynchrotronRadiation::GetRandomEnergySR(G4double gamma, G4double perpB)
 void 
 G4SynchrotronRadiation::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
-  if(0 < verboseLevel && &part==theElectron ) PrintInfoDefinition();
+  if(0 < verboseLevel && &part==G4Electron::Electron() ) PrintInfoDefinition();
+  // same for all particles, print only for one (electron)
 }
 
 ///////////////////////////////////////////////////////////////////////////////

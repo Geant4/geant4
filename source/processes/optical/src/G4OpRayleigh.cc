@@ -24,20 +24,26 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpRayleigh.cc 71487 2013-06-17 08:19:40Z gcosmo $
+// $Id: G4OpRayleigh.cc 84717 2014-10-20 07:39:47Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon Rayleigh Scattering Class Implementation
 ////////////////////////////////////////////////////////////////////////
 //
-// File:        G4OpRayleigh.cc 
-// Description: Discrete Process -- Rayleigh scattering of optical 
-//		photons  
+// File:        G4OpRayleigh.cc
+// Description: Discrete Process -- Rayleigh scattering of optical
+//		photons
 // Version:     1.0
-// Created:     1996-05-31  
+// Created:     1996-05-31
 // Author:      Juliet Armstrong
-// Updated:     2010-06-11 - Fix Bug 207; Thanks to Xin Qian
+// Updated:     2014-10-10 -  This version calculates the Rayleigh scattering   
+//              length for more materials than just Water (although the Water
+//              default is kept). To do this the user would need to specify the
+//              ISOTHERMAL_COMPRESSIBILITY as a material property and
+//              optionally an RS_SCALE_LENGTH (useful for testing). Code comes
+//              from Philip Graham (Queen Mary University of London).
+//              2010-06-11 - Fix Bug 207; Thanks to Xin Qian
 //              (Kellogg Radiation Lab of Caltech)
 //              2005-07-28 - add G4ProcessType to constructor
 //              2001-10-18 by Peter Gumplinger
@@ -86,8 +92,6 @@ G4OpRayleigh::G4OpRayleigh(const G4String& processName, G4ProcessType type)
 
         thePhysicsTable = NULL;
 
-        DefaultWater = false;
-
         if (verboseLevel>0) {
            G4cout << GetProcessName() << " is created " << G4endl;
         }
@@ -103,7 +107,7 @@ G4OpRayleigh::G4OpRayleigh(const G4String& processName, G4ProcessType type)
 
 G4OpRayleigh::~G4OpRayleigh()
 {
-        if (thePhysicsTable!= NULL) {
+        if (thePhysicsTable) {
            thePhysicsTable->clearAndDestroy();
            delete thePhysicsTable;
         }
@@ -112,11 +116,6 @@ G4OpRayleigh::~G4OpRayleigh()
         ////////////
         // Methods
         ////////////
-
-void G4OpRayleigh::BuildPhysicsTable(const G4ParticleDefinition&)
-{
-    if (!thePhysicsTable) BuildThePhysicsTable();
-}
 
 // PostStepDoIt
 // -------------
@@ -209,168 +208,115 @@ G4OpRayleigh::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 }
 
-// BuildThePhysicsTable for the Rayleigh Scattering process
+// BuildPhysicsTable for the Rayleigh Scattering process
 // --------------------------------------------------------
-//
-void G4OpRayleigh::BuildThePhysicsTable()
+void G4OpRayleigh::BuildPhysicsTable(const G4ParticleDefinition&)
 {
-//      Builds a table of scattering lengths for each material
+  if (thePhysicsTable) {
+     thePhysicsTable->clearAndDestroy();
+     delete thePhysicsTable;
+     thePhysicsTable = NULL;
+  }
 
-        if (thePhysicsTable) return;
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  const G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
-        const G4MaterialTable* theMaterialTable=
-                               G4Material::GetMaterialTable();
-        G4int numOfMaterials = G4Material::GetNumberOfMaterials();
-
-        // create a new physics table
-
-        thePhysicsTable = new G4PhysicsTable(numOfMaterials);
-
-        // loop for materials
-
-        for (G4int i=0 ; i < numOfMaterials; i++)
-        {
-            G4PhysicsOrderedFreeVector* ScatteringLengths = NULL;
-
-            G4MaterialPropertiesTable *aMaterialPropertiesTable =
-                         (*theMaterialTable)[i]->GetMaterialPropertiesTable();
-                                                                                
-            if(aMaterialPropertiesTable){
-
-              G4MaterialPropertyVector* AttenuationLengthVector =
-                            aMaterialPropertiesTable->GetProperty("RAYLEIGH");
-
-              if(!AttenuationLengthVector){
-
-                if ((*theMaterialTable)[i]->GetName() == "Water")
-                {
-		   // Call utility routine to Generate
-		   // Rayleigh Scattering Lengths
-
-                   DefaultWater = true;
-
-                   ScatteringLengths =
-		   RayleighAttenuationLengthGenerator(aMaterialPropertiesTable);
-                }
-              }
-	    }
-
-	    thePhysicsTable->insertAt(i,ScatteringLengths);
-        } 
+  thePhysicsTable = new G4PhysicsTable( numOfMaterials );
+  
+  for( G4int iMaterial = 0; iMaterial < numOfMaterials; iMaterial++ )
+  {
+      G4Material* material = (*theMaterialTable)[iMaterial];
+      G4MaterialPropertiesTable* materialProperties = 
+                                       material->GetMaterialPropertiesTable();
+      G4PhysicsOrderedFreeVector* rayleigh = NULL;
+      if ( materialProperties != NULL ) {
+         rayleigh = materialProperties->GetProperty( "RAYLEIGH" );
+         if ( rayleigh == NULL ) rayleigh = 
+                                   CalculateRayleighMeanFreePaths( material );
+      }
+      thePhysicsTable->insertAt( iMaterial, rayleigh );
+  }
 }
 
 // GetMeanFreePath()
 // -----------------
 //
 G4double G4OpRayleigh::GetMeanFreePath(const G4Track& aTrack,
-                                     G4double ,
-                                     G4ForceCondition* )
+                                       G4double ,
+                                       G4ForceCondition* )
 {
-        const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-        const G4Material* aMaterial = aTrack.GetMaterial();
+  const G4DynamicParticle* particle = aTrack.GetDynamicParticle();
+  const G4double photonMomentum = particle->GetTotalMomentum();
+  const G4Material* material = aTrack.GetMaterial();
 
-        G4double thePhotonEnergy = aParticle->GetTotalEnergy();
-
-        G4double AttenuationLength = DBL_MAX;
-
-        if (aMaterial->GetName() == "Water" && DefaultWater){
-
-           G4bool isOutRange;
-
-           AttenuationLength =
-                (*thePhysicsTable)(aMaterial->GetIndex())->
-                           GetValue(thePhotonEnergy, isOutRange);
-        }
-        else {
-
-           G4MaterialPropertiesTable* aMaterialPropertyTable =
-                           aMaterial->GetMaterialPropertiesTable();
-
-           if(aMaterialPropertyTable){
-             G4MaterialPropertyVector* AttenuationLengthVector =
-                   aMaterialPropertyTable->GetProperty("RAYLEIGH");
-             if(AttenuationLengthVector){
-               AttenuationLength = AttenuationLengthVector ->
-                                    Value(thePhotonEnergy);
-             }
-             else{
-//               G4cout << "No Rayleigh scattering length specified" << G4endl;
-             }
-           }
-           else{
-//             G4cout << "No Rayleigh scattering length specified" << G4endl; 
-           }
-        }
-
-        return AttenuationLength;
+  G4PhysicsOrderedFreeVector* rayleigh = 
+                              static_cast<G4PhysicsOrderedFreeVector*>
+                              ((*thePhysicsTable)(material->GetIndex()));
+  
+  G4double rsLength = DBL_MAX;
+  if( rayleigh != NULL ) rsLength = rayleigh->Value( photonMomentum );
+  return rsLength;
 }
 
-// RayleighAttenuationLengthGenerator()
-// ------------------------------------
-// Private method to compute Rayleigh Scattering Lengths (for water)
-//
+// CalculateRayleighMeanFreePaths()
+// --------------------------------
+// Private method to compute Rayleigh Scattering Lengths
 G4PhysicsOrderedFreeVector* 
-G4OpRayleigh::RayleighAttenuationLengthGenerator(G4MaterialPropertiesTable *aMPT) 
+G4OpRayleigh::CalculateRayleighMeanFreePaths( const G4Material* material ) const
 {
-        // Physical Constants
+  G4MaterialPropertiesTable* materialProperties = 
+                                       material->GetMaterialPropertiesTable();
 
-        // isothermal compressibility of water
-        G4double betat = 7.658e-23*m3/MeV;
+  // Retrieve the beta_T or isothermal compressibility value. For backwards
+  // compatibility use a constant if the material is "Water". If the material
+  // doesn't have an ISOTHERMAL_COMPRESSIBILITY constant then return
+  G4double betat;
+  if ( material->GetName() == "Water" )
+    betat = 7.658e-23*m3/MeV;
+  else if(materialProperties->ConstPropertyExists("ISOTHERMAL_COMPRESSIBILITY"))
+    betat = materialProperties->GetConstProperty("ISOTHERMAL_COMPRESSIBILITY");
+  else
+    return NULL;
 
-        // K Boltzman
-        G4double kboltz = 8.61739e-11*MeV/kelvin;
+  // If the material doesn't have a RINDEX property vector then return
+  G4MaterialPropertyVector* rIndex = materialProperties->GetProperty("RINDEX");
+  if ( rIndex == NULL ) return NULL;
 
-        // Temperature of water is 10 degrees celsius
-        // conversion to kelvin:
-        // TCelsius = TKelvin - 273.15 => 273.15 + 10 = 283.15
-        G4double temp = 283.15*kelvin;
+  // Retrieve the optional scale factor, (this just scales the scattering length
+  G4double scaleFactor = 1.0;
+  if( materialProperties->ConstPropertyExists( "RS_SCALE_FACTOR" ) )
+    scaleFactor= materialProperties->GetConstProperty("RS_SCALE_FACTOR" );
 
-        // Retrieve vectors for refraction index
-        // and photon energy from the material properties table
+  // Retrieve the material temperature. For backwards compatibility use a 
+  // constant if the material is "Water"
+  G4double temperature;
+  if( material->GetName() == "Water" )
+    temperature = 283.15*kelvin; // Temperature of water is 10 degrees celsius
+  else
+    temperature = material->GetTemperature();
 
-        G4MaterialPropertyVector* Rindex = aMPT->GetProperty("RINDEX");
+  G4PhysicsOrderedFreeVector* rayleighMeanFreePaths =
+                                             new G4PhysicsOrderedFreeVector();
+  // This calculates the meanFreePath via the Einstein-Smoluchowski formula
+  const G4double c1 = scaleFactor * betat * temperature * k_Boltzmann / 
+                      ( 6.0 * pi );
 
-        G4double refsq;
-        G4double e;
-        G4double xlambda;
-        G4double c1, c2, c3, c4;
-        G4double Dist;
-        G4double refraction_index;
+  for( size_t uRIndex = 0; uRIndex < rIndex->GetVectorLength(); uRIndex++ )
+  {
+     const G4double energy = rIndex->Energy( uRIndex );
+     const G4double rIndexSquared = (*rIndex)[uRIndex] * (*rIndex)[uRIndex];
+     const G4double xlambda = h_Planck * c_light / energy;
+     const G4double c2 = std::pow(twopi/xlambda,4);
+     const G4double c3 = 
+                    std::pow(((rIndexSquared-1.0)*(rIndexSquared+2.0 )/3.0),2);
 
-        G4PhysicsOrderedFreeVector *RayleighScatteringLengths = 
-				new G4PhysicsOrderedFreeVector();
+     const G4double meanFreePath = 1.0 / ( c1 * c2 * c3 );
 
-        if (Rindex ) {
+     if( verboseLevel>0 )
+       G4cout << energy << "MeV\t" << meanFreePath << "mm" << G4endl;
 
-           for (size_t i = 0; i < Rindex->GetVectorLength(); i++) {
+     rayleighMeanFreePaths->InsertValues( energy, meanFreePath );
+  }
 
-                e = Rindex->Energy(i);
-
-                refraction_index = (*Rindex)[i];
-
-                refsq = refraction_index*refraction_index;
-                xlambda = h_Planck*c_light/e;
-
-	        if (verboseLevel>0) {
-        	        G4cout << Rindex->Energy(i) << " MeV\t";
-                	G4cout << xlambda << " mm\t";
-		}
-
-                c1 = 1 / (6.0 * pi);
-                c2 = std::pow((2.0 * pi / xlambda), 4);
-                c3 = std::pow( ( (refsq - 1.0) * (refsq + 2.0) / 3.0 ), 2);
-                c4 = betat * temp * kboltz;
-
-                Dist = 1.0 / (c1*c2*c3*c4);
-
-	        if (verboseLevel>0) {
-	                G4cout << Dist << " mm" << G4endl;
-		}
-                RayleighScatteringLengths->
-			InsertValues(Rindex->Energy(i), Dist);
-           }
-
-        }
-
-	return RayleighScatteringLengths;
+  return rayleighMeanFreePaths;
 }

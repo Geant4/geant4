@@ -1,4 +1,4 @@
-# $Id: electron.mac 66241 2012-12-13 18:34:42Z gunter $
+# $Id: electron.mac 82439 2014-06-20 10:37:29Z gcosmo $
 #
 # Macro file for "TestEm14.cc"
 # (can be run in batch, without graphic)
@@ -10,7 +10,7 @@
 #
 /run/initialize
 #
-/testem/phys/setCuts 100 um
+/run/setCut 100 um
 
 ###/process/inactivate eIoni
 /process/inactivate eBrem

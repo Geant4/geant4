@@ -26,10 +26,11 @@
 /// \file electromagnetic/TestEm17/src/PhysListEmStandard.cc
 /// \brief Implementation of the PhysListEmStandard class
 //
-// $Id: PhysListEmStandard.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: PhysListEmStandard.cc 85311 2014-10-27 14:23:25Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
 
 #include "PhysListEmStandard.hh"
 
@@ -47,7 +48,6 @@
 #include "G4hIonisation.hh"
 #include "G4hBremsstrahlung.hh"
 #include "G4hPairProduction.hh"
-#include "G4LossTableManager.hh"
 
 #include "G4SystemOfUnits.hh"
 
@@ -101,14 +101,6 @@ void PhysListEmStandard::ConstructProcess()
   pmanager->AddProcess(new G4hBremsstrahlung(), -1, 3, 3);
   pmanager->AddProcess(new G4hPairProduction(), -1, 4, 4);
 
-  //extend binning of PhysicsTables
-  //
-  G4LossTableManager::Instance()->SetMinEnergy(100*eV);  
-  G4LossTableManager::Instance()->SetMaxEnergy(1000*PeV);
-  G4LossTableManager::Instance()->SetDEDXBinning(160);
-  G4LossTableManager::Instance()->SetLambdaBinning(160);
-  G4LossTableManager::Instance()->SetSplineFlag(true);  
-  G4LossTableManager::Instance()->SetVerbose(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

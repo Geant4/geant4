@@ -47,10 +47,10 @@
 #include <algorithm>
 #include <map>
 
-typedef std::pair<G4ParticleDefinition *,G4ParticleDefinition *> G4pDefPair;
-
 class G4KineticTrack;
 class G4ParticleDefinition;
+
+typedef std::pair<const G4ParticleDefinition *,const G4ParticleDefinition *> G4pDefPair;
 
 class G4XPDGElastic : public G4VCrossSectionSource
 {

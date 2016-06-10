@@ -26,7 +26,7 @@
 /// \file RE06/src/RE06SteppingVerbose.cc
 /// \brief Implementation of the RE06SteppingVerbose class
 //
-// $Id: RE06SteppingVerbose.cc 66526 2012-12-19 13:41:33Z ihrivnac $
+// $Id: RE06SteppingVerbose.cc 84600 2014-10-17 07:43:51Z gcosmo $
 //
 
 #include "RE06SteppingVerbose.hh"
@@ -91,7 +91,8 @@ void RE06SteppingVerbose::Report()
   for(G4int i=0;i<fNofRegions;i++)
   {
     G4cout << G4endl;
-    G4cout << "Region <" << (*G4RegionStore::GetInstance())[i]->GetName() << ">" << G4endl;
+    G4cout << "Region <" 
+     << (*G4RegionStore::GetInstance())[i]->GetName() << ">" << G4endl;
     G4cout << " All particles : User=" << fTimers[i]->GetUserElapsed()
      << "  Real=" << fTimers[i]->GetRealElapsed()
      << "  Sys=" << fTimers[i]->GetSystemElapsed() << G4endl;
@@ -107,11 +108,13 @@ void RE06SteppingVerbose::Report()
 void RE06SteppingVerbose::NewStep()
 {
   CopyState();
-  G4Region* reg = fTrack->GetStep()->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetRegion();
+  G4Region* reg = fTrack->GetStep()->GetPreStepPoint()
+                  ->GetPhysicalVolume()->GetLogicalVolume()->GetRegion();
   fRegIdx = FindRegion(reg);
   fTimers[fRegIdx]->Start();
   G4ParticleDefinition* pd = fTrack->GetDefinition();
-  if(pd==G4Electron::ElectronDefinition() || pd==G4Positron::PositronDefinition()) fEp = true;
+  if(pd==G4Electron::ElectronDefinition() || 
+     pd==G4Positron::PositronDefinition()) fEp = true;
   if(fEp) fTimers[fNofRegions+fRegIdx]->Start();
 } 
 

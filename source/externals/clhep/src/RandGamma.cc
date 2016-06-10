@@ -17,6 +17,7 @@
 
 #include "CLHEP/Random/RandGamma.h"
 #include "CLHEP/Random/DoubConv.h"
+#include "CLHEP/Utility/thread_local.h"
 #include <cmath>	// for std::log()
 
 namespace CLHEP {
@@ -76,8 +77,8 @@ double RandGamma::genGamma( HepRandomEngine *anEngine,
  *                              Acceptance complement method gd          *
  *************************************************************************/
 
-static double aa = -1.0, aaa = -1.0, b, c, d, e, r, s, si, ss, q0,
-       q1 = 0.0416666664, q2 =  0.0208333723, q3 = 0.0079849875,
+  static CLHEP_THREAD_LOCAL double aa = -1.0, aaa = -1.0, b, c, d, e, r, s, si, ss, q0;
+  static const double q1 = 0.0416666664, q2 =  0.0208333723, q3 = 0.0079849875,
        q4 = 0.0015746717, q5 = -0.0003349403, q6 = 0.0003340332,
        q7 = 0.0006053049, q8 = -0.0004701849, q9 = 0.0001710320,
        a1 = 0.333333333,  a2 = -0.249999949,  a3 = 0.199999867,

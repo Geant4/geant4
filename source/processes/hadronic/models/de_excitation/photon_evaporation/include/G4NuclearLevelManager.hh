@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearLevelManager.hh 77025 2013-11-20 16:11:51Z gcosmo $
+// $Id: G4NuclearLevelManager.hh 87163 2014-11-26 08:46:54Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -67,7 +67,6 @@ class G4NuclearLevelManager
 
 public:
 
-  //G4NuclearLevelManager();
   G4NuclearLevelManager(G4int Z, G4int A, const G4String& filename);
   G4NuclearLevelManager(const G4NuclearLevelManager & right);  
 
@@ -82,13 +81,15 @@ public:
   const G4NuclearLevel* GetLevel(G4int i) const;
 
   const G4NuclearLevel* NearestLevel(G4double energy,
-				     G4double eDiffMax=9999.*CLHEP::GeV) const;
+				     G4double eDiffMax=1.e+8) const;
 
   const G4NuclearLevel* LowestLevel() const;
   const G4NuclearLevel* HighestLevel() const;
 
   G4double MinLevelEnergy() const;
   G4double MaxLevelEnergy() const;
+
+  void PrintLevels();
 
   void PrintAll();
   
@@ -102,7 +103,7 @@ private:
   G4bool ReadDataItem(std::istream& dataFile, G4double& x);
   void ProcessDataLine();
 
-  void MakeLevels();
+  void MakeLevels(const G4String& filename);
   void ClearLevels();
 
   G4NuclearLevel* UseLevelOrMakeNew(G4NuclearLevel* level);
@@ -111,29 +112,29 @@ private:
 
   G4int _nucleusA;
   G4int _nucleusZ;
-  G4String _fileName;
+  //G4String _fileName;
   G4bool _validity;
   G4PtrLevelVector* _levels;
 
   // Buffers for reading data file
-  char buffer[30];		// For doubles in scientific notation
-  G4double _levelEnergy;
-  G4double _gammaEnergy;
-  G4double _probability;
-  G4double _polarity;
-  G4double _halfLife;
-  G4double _angularMomentum;
-  G4double _kCC;
-  G4double _l1CC;
-  G4double _l2CC;
-  G4double _l3CC;
-  G4double _m1CC;  
-  G4double _m2CC;
-  G4double _m3CC;
-  G4double _m4CC;
-  G4double _m5CC;
-  G4double _nPlusCC;
-  G4double _totalCC;
+  //char buffer[30];		// For doubles in scientific notation
+  static G4double _levelEnergy;
+  static G4double _gammaEnergy;
+  static G4double _probability;
+  static G4double _polarity;
+  static G4double _halfLife;
+  static G4double _angularMomentum;
+  static G4double _kCC;
+  static G4double _l1CC;
+  static G4double _l2CC;
+  static G4double _l3CC;
+  static G4double _m1CC;  
+  static G4double _m2CC;
+  static G4double _m3CC;
+  static G4double _m4CC;
+  static G4double _m5CC;
+  static G4double _nPlusCC;
+  static G4double _totalCC;
 };
 
 #endif

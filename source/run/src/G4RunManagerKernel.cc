@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc 77649 2013-11-27 08:39:54Z gcosmo $
+// $Id: G4RunManagerKernel.cc 87128 2014-11-25 09:00:59Z gcosmo $
 //
 //
 
@@ -37,6 +37,7 @@
 #include "G4ExceptionHandler.hh"
 #include "G4PrimaryTransformer.hh"
 #include "G4GeometryManager.hh"
+#include "G4NavigationHistoryPool.hh"
 #include "G4TransportationManager.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
@@ -48,6 +49,7 @@
 #include "G4ProductionCuts.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4SDManager.hh"
+#include "G4ParallelWorldProcessStore.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4UnitsTable.hh"
@@ -158,7 +160,9 @@ numberOfParallelWorld(0),geometryNeedsToBeClosed(true),
 #endif
 
 #ifdef G4FPE_DEBUG
-    InvalidOperationDetection();
+   if ( ! G4Threading::IsWorkerThread() ) {
+	   InvalidOperationDetection();
+   }
 #endif
     
     defaultExceptionHandler = new G4ExceptionHandler();
@@ -189,6 +193,8 @@ numberOfParallelWorld(0),geometryNeedsToBeClosed(true),
             = G4RegionStore::GetInstance()->GetRegion("DefaultRegionForParallelWorld", true);
         break;
      default:   
+        defaultRegion = 0;
+        defaultRegionForParallelWorld = 0;
         G4ExceptionDescription msgx;
         msgx<<" This type of RunManagerKernel can only be used in mult-threaded applications.";
         G4Exception("G4RunManagerKernel::G4RunManagerKernel(G4bool)","Run0035",FatalException,msgx);
@@ -266,6 +272,8 @@ G4RunManagerKernel::~G4RunManagerKernel()
   G4GeometryManager::GetInstance()->OpenGeometry();
 
   // deletion of Geant4 kernel classes
+  G4ParallelWorldProcessStore* pwps = G4ParallelWorldProcessStore::GetInstanceIfExist();
+  if(pwps) delete pwps;
   G4SDManager* fSDM = G4SDManager::GetSDMpointerIfExist();
   if(fSDM)
   {
@@ -277,6 +285,11 @@ G4RunManagerKernel::~G4RunManagerKernel()
 
   G4UnitDefinition::ClearUnitsTable();
   if(verboseLevel>1) G4cout << "Units table cleared." << G4endl;
+
+  // deletion of navigation levels
+  delete G4NavigationHistoryPool::GetInstance();
+
+  // deletion of allocators
   G4AllocatorList* allocList = G4AllocatorList::GetAllocatorListIfExist();
   if(allocList)
   {
@@ -436,6 +449,8 @@ void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
 {
   physicsList = uPhys;
 
+  if(runManagerKernelType==workerRMK) return;
+
   SetupPhysics();
   if(verboseLevel>2) G4ParticleTable::GetParticleTable()->DumpTable();
   if(verboseLevel>1)
@@ -459,8 +474,7 @@ void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
 
 void G4RunManagerKernel::SetupPhysics()
 {
-    G4ParticleTable::GetParticleTable()->SetReadiness();
-    if(runManagerKernelType==workerRMK) return;
+	G4ParticleTable::GetParticleTable()->SetReadiness();
 
     physicsList->ConstructParticle();
 
@@ -523,33 +537,31 @@ void G4RunManagerKernel::InitializePhysics()
   physicsList->CheckParticleList();
     //Cannot assume that SetCuts and CheckRegions are thread safe. We need to mutex
     //Report from valgrind --tool=drd
-  if(verboseLevel>1) G4cout << "physicsList->setCut() start." << G4endl;
   G4AutoLock l(&initphysicsmutex);
-  physicsList->SetCuts();
+  if ( !G4Threading::IsWorkerThread() ) {
+	  if(verboseLevel>1) G4cout << "physicsList->setCut() start." << G4endl;
+	  physicsList->SetCuts();
+
+  }
   CheckRegions();
   l.unlock();
 
-  static G4bool createIsomerOnlyOnce = false;
-  if(!G4Threading::IsWorkerThread())
-  {
-    if(!createIsomerOnlyOnce)
-    {
-      createIsomerOnlyOnce = true;
-      G4ParticleDefinition* gion = G4ParticleTable::GetParticleTable()->GetGenericIon();
-      if(gion)
-      {
-        G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIsomer();
-        G4int gionId = gion->GetParticleDefinitionID();
-        G4ParticleTable::G4PTblDicIterator* pItr = G4ParticleTable::GetParticleTable()->GetIterator();
-        pItr->reset(false);
-        while( (*pItr)() )
-        {
-          G4ParticleDefinition* particle = pItr->value();
-          if(particle->IsGeneralIon()) particle->SetParticleDefinitionID(gionId);
-        }
-      }
-    }
-  }
+/*******************
+//  static G4bool createIsomerOnlyOnce = false;
+//  if(G4Threading::IsMultithreadedApplication() && !G4Threading::IsWorkerThread())
+//  {
+//    if(!createIsomerOnlyOnce)
+//    {
+//      createIsomerOnlyOnce = true;
+//      G4ParticleDefinition* gion = G4ParticleTable::GetParticleTable()->GetGenericIon();
+//      if(gion)
+//      {
+//        G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIsomer();
+//        PropagateGenericIonID();
+//      }
+//    }
+//  }
+*********************/
 
   physicsInitialized = true;
   if(geometryInitialized && currentState!=G4State_Idle)
@@ -590,6 +602,7 @@ G4bool G4RunManagerKernel::RunInitialization(G4bool fakeRun)
 
   if(geometryNeedsToBeClosed) CheckRegularGeometry();
 
+  PropagateGenericIonID();
   SetupShadowProcess();
   UpdateRegion();
   BuildPhysicsTables(fakeRun);
@@ -612,9 +625,27 @@ G4bool G4RunManagerKernel::RunInitialization(G4bool fakeRun)
   return true;
 }
 
+void G4RunManagerKernel::PropagateGenericIonID()
+{
+  G4ParticleDefinition* gion = G4ParticleTable::GetParticleTable()->GetGenericIon();
+  if(gion)
+  {
+    //G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIsomer();
+    G4int gionId = gion->GetParticleDefinitionID();
+    G4ParticleTable::G4PTblDicIterator* pItr = G4ParticleTable::GetParticleTable()->GetIterator();
+    pItr->reset(false);
+    while( (*pItr)() )
+    {
+      G4ParticleDefinition* particle = pItr->value();
+      if(particle->IsGeneralIon()) particle->SetParticleDefinitionID(gionId);
+    }
+  }
+}
+
 void G4RunManagerKernel::RunTermination()
 {
-  G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
+  if ( runManagerKernelType != workerRMK )
+      G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
   G4StateManager::GetStateManager()->SetNewState(G4State_Idle); 
 }
 
@@ -664,6 +695,14 @@ void G4RunManagerKernel::BuildPhysicsTables(G4bool fakeRun)
   if( G4ProductionCutsTable::GetProductionCutsTable()->IsModified()
   || physicsNeedsToBeReBuilt)
   {
+#ifdef G4MULTITHREADED
+    if(runManagerKernelType==masterRMK)
+    {
+      // make sure workers also rebuild physics tables
+      G4UImanager* pUImanager = G4UImanager::GetUIpointer();
+      pUImanager->ApplyCommand("/run/physicsModified");
+    }
+#endif
     physicsList->BuildPhysicsTable();
     ////G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
     physicsNeedsToBeReBuilt = false;
@@ -708,10 +747,10 @@ void G4RunManagerKernel::CheckRegions()
     {
       if(region->IsInMassGeometry())
       {
-        G4cerr << "Warning : Region <" << region->GetName()
+        G4cout << "Warning : Region <" << region->GetName()
              << "> does not have specific production cuts," << G4endl
              << "even though it appears in the current tracking world." << G4endl;
-        G4cerr << "Default cuts are used for this region." << G4endl;
+        G4cout << "Default cuts are used for this region." << G4endl;
       }
 
       if(region->IsInMassGeometry()||region->IsInParallelGeometry())

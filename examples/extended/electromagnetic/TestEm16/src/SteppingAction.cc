@@ -26,13 +26,15 @@
 /// \file electromagnetic/TestEm16/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 67797 2013-03-08 09:52:18Z maire $
+// $Id: SteppingAction.cc 84365 2014-10-14 12:43:52Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
-#include "RunAction.hh"
+#include "Run.hh"
+
+#include "G4RunManager.hh"
 #include "G4SteppingManager.hh"
 #include "G4VProcess.hh"
 #include "G4ParticleTypes.hh"
@@ -43,8 +45,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(RunAction* RuAct)
-:G4UserSteppingAction(),fRunAction(RuAct)
+SteppingAction::SteppingAction()
+:G4UserSteppingAction()
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,7 +58,10 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-  const G4VProcess* process = aStep->GetPostStepPoint()->GetProcessDefinedStep();
+  Run* run = static_cast<Run*>(
+             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  
+ const G4VProcess* process = aStep->GetPostStepPoint()->GetProcessDefinedStep();
   if (process == 0) { return; }
 
   static G4int iCalled=0;
@@ -74,14 +79,14 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
       if (lp)
         {
           G4double  Egamma =  (*secondary)[lp-1]->GetTotalEnergy();
-          fRunAction->f_n_gam_sync++;
-          fRunAction->f_e_gam_sync += Egamma;
-          fRunAction->f_e_gam_sync2 += Egamma*Egamma;
-          if (Egamma > fRunAction->f_e_gam_sync_max) 
+          run->f_n_gam_sync++;
+          run->f_e_gam_sync += Egamma;
+          run->f_e_gam_sync2 += Egamma*Egamma;
+          if (Egamma > run->f_e_gam_sync_max) 
             { 
-              fRunAction->f_e_gam_sync_max = Egamma;
+              run->f_e_gam_sync_max = Egamma;
             }
-          fRunAction->f_lam_gam_sync += aStep->GetStepLength();
+          run->f_lam_gam_sync += aStep->GetStepLength();
           if (iCalled<nprint)
             {
               G4double      Eelec  = PrePoint->GetTotalEnergy();
@@ -90,7 +95,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
               G4bool IsGamma = 
                 ((*secondary)[lp-1]->GetDefinition() == G4Gamma::Gamma());
             
-              G4cout << "UserSteppingAction processName=" << process->GetProcessName()
+              G4cout << "UserSteppingAction processName="
+                     << process->GetProcessName()
                      << " Step Length=" << std::setw(6) 
                      << G4BestUnit(aStep->GetStepLength(),"Length")
                      << " Eelec=" << G4BestUnit(Eelec,"Energy")
@@ -101,8 +107,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
                      << " #secondaries lp=" << lp
                      << '\n';
             }
-	    
-	  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+
+          G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
           analysisManager->FillH1(1,Egamma);
 
           // power spectrum : gamma weighted with its energy

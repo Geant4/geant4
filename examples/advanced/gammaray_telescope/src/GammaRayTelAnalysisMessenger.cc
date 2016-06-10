@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnalysisMessenger.cc 68794 2013-04-05 13:23:26Z gcosmo $
+// $Id: GammaRayTelAnalysisMessenger.cc 82268 2014-06-13 13:47:30Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -35,7 +35,6 @@
 //           by R.Giannitrapani, F.Longo & G.Santin (03 dic 2000)
 // 20.11.01 G.Santin: modified according to the new GammaRayTelAnalysis.cc
 // ************************************************************
-#ifdef G4ANALYSIS_USE
 
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
@@ -81,7 +80,6 @@ void GammaRayTelAnalysisMessenger::SetNewValue(G4UIcommand* command,G4String new
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-#endif
 
 
 

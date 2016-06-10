@@ -31,12 +31,16 @@
 #ifndef G4NeutronHPFinalState_h
 #define G4NeutronHPFinalState_h
 
+#include "G4NeutronHPManager.hh"
+
 #include "G4Material.hh"
 #include "G4FastVector.hh"
 #include "G4HadFinalState.hh"
 #include "G4NeutronHPNames.hh"
 #include "G4NeutronHPVector.hh"
 #include "G4HadProjectile.hh"
+
+#include "G4Cache.hh"
 
 class G4NeutronHPFinalState
 {
@@ -56,6 +60,7 @@ public:
 
      adjustResult = true;
      if ( getenv( "G4NEUTRONHP_DO_NOT_ADJUST_FINAL_STATE" ) ) adjustResult = false;
+     theResult.Put( NULL );
 
   };
   
@@ -97,7 +102,9 @@ public:
   G4bool hasAnyData;
   G4NeutronHPNames theNames;
   
-  G4HadFinalState theResult;
+  //G4HadFinalState theResult;
+      //static G4ThreadLocal G4HadFinalState theResult;
+      G4Cache< G4HadFinalState* > theResult;
   
   G4double theBaseA;
   G4double theBaseZ;
@@ -107,7 +114,8 @@ public:
 //080721
    protected:
       void adjust_final_state ( G4LorentzVector );
-      G4bool DoNotAdjustFinalState(){ return adjustResult; };
+      //G4bool DoNotAdjustFinalState(){ return adjustResult; };
+      G4bool DoNotAdjustFinalState(){ return !G4NeutronHPManager::GetInstance()->GetDoNotAdjustFinalState(); };
       G4int theNDLDataZ;
       G4int theNDLDataA;
       G4int theNDLDataM;

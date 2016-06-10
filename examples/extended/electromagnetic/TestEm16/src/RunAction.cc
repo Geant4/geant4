@@ -26,20 +26,19 @@
 /// \file electromagnetic/TestEm16/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 67797 2013-03-08 09:52:18Z maire $
+// $Id: RunAction.cc 84365 2014-10-14 12:43:52Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RunAction.hh"
+#include "HistoManager.hh"
+#include "Run.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4UnitsTable.hh"
-#include "G4SystemOfUnits.hh"
 
 #include "Randomize.hh"
-#include "HistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -47,11 +46,6 @@ RunAction::RunAction()
  : G4UserRunAction(),
    fHistoManager(0)
 {
-  f_n_gam_sync = 0;
-  f_e_gam_sync = 0;
-  f_e_gam_sync2 = 0;
-  f_e_gam_sync_max = 0;
-  f_lam_gam_sync = 0;
   fHistoManager = new HistoManager();   
 }
 
@@ -64,13 +58,19 @@ RunAction::~RunAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::BeginOfRunAction(const G4Run* aRun)
-{
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+G4Run* RunAction::GenerateRun()
+{ 
+  fRun = new Run(); 
+  return fRun;
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::BeginOfRunAction(const G4Run*)
+{
   // save Rndm status
   ////G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  CLHEP::HepRandom::showEngineStatus();
+  if (isMaster) CLHEP::HepRandom::showEngineStatus();
      
   //histograms
   //
@@ -84,30 +84,18 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-  if (f_n_gam_sync > 0)
-  {
-    G4double Emean = f_e_gam_sync/f_n_gam_sync;
-    G4double E_rms = std::sqrt(f_e_gam_sync2/f_n_gam_sync - Emean*Emean);
-    G4cout
-    << "Summary for synchrotron radiation :" << '\n' << std::setprecision(4)
-    << "  Number of photons = " << f_n_gam_sync << '\n'
-    << "  Emean             = " << Emean/keV << " +/- "
-    << E_rms/(keV * std::sqrt((G4double) f_n_gam_sync)) << " keV" << '\n'
-    << "  E_rms             = " << G4BestUnit(E_rms,"Energy") << '\n'
-    << "  Energy Max / Mean = " << f_e_gam_sync_max / Emean << '\n'
-    << "  MeanFreePath      = " << G4BestUnit(f_lam_gam_sync/f_n_gam_sync,"Length")
-    << G4endl;
-  }
+  // compute and print statistic 
+  if (isMaster) fRun->EndOfRun();
   
   // show Rndm status
-  CLHEP::HepRandom::showEngineStatus();
+  if (isMaster) CLHEP::HepRandom::showEngineStatus();
 
   //save histograms      
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
   if ( analysisManager->IsActive() ) {
     analysisManager->Write();
     analysisManager->CloseFile();
-  }       
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

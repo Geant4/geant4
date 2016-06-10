@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointSteppingAction.hh 75570 2013-11-04 11:41:10Z gcosmo $
+// $Id: G4AdjointSteppingAction.hh 81774 2014-06-05 08:36:37Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointSteppingAction
@@ -88,6 +88,7 @@ class G4AdjointSteppingAction : public G4UserSteppingAction
     inline void SetUserForwardSteppingAction( G4UserSteppingAction* anAction) {
     	                                  theUserFwdSteppingAction = anAction;}
     inline void SetAdjointTrackingMode(G4bool aBool){is_adjoint_tracking_mode =aBool;}
+    inline void SetAdjointGeantinoTrackingMode(G4bool aBool){is_adjoint_geantino_tracking_mode =aBool;}
   private:
 
     G4double ext_sourceEMax;
@@ -103,6 +104,8 @@ class G4AdjointSteppingAction : public G4UserSteppingAction
     G4UserSteppingAction* theUserAdjointSteppingAction;
     G4UserSteppingAction* theUserFwdSteppingAction;
     G4bool is_adjoint_tracking_mode;
+    G4bool is_adjoint_geantino_tracking_mode;
+
 
 };
 #endif

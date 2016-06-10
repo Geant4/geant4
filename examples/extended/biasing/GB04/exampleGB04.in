@@ -1,0 +1,14 @@
+#
+/run/verbose 2
+/tracking/verbose 1
+#
+/GB04/biasing/setSplittingFactor 1
+/run/beamOn 10
+#
+/GB04/biasing/setSplittingFactor 10
+/run/beamOn 10
+#
+/GB04/biasing/biasPrimaryOnly false
+/GB04/biasing/biasOnlyOnce    false
+/run/beamOn 10
+

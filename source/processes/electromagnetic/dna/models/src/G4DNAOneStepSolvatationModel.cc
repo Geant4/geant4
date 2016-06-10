@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAOneStepSolvatationModel.cc 74551 2013-10-14 12:59:14Z gcosmo $
+// $Id: G4DNAOneStepSolvatationModel.cc 87137 2014-11-25 09:12:48Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -47,144 +47,148 @@
 #include "G4DNAMolecularMaterial.hh"
 
 G4DNAOneStepSolvatationModel::G4DNAOneStepSolvatationModel(const G4ParticleDefinition*,
-                                                         const G4String& nam):
-    G4VEmModel(nam),fIsInitialised(false)
+                                                           const G4String& nam) :
+    G4VEmModel(nam), fIsInitialised(false)
 {
-    fVerboseLevel = 0 ;
-    SetLowEnergyLimit(0.);
-    G4DNAWaterExcitationStructure exStructure ;
-    SetHighEnergyLimit(exStructure.ExcitationEnergy(0));
-    fParticleChangeForGamma = 0;
+  fVerboseLevel = 0;
+  SetLowEnergyLimit(0.);
+  G4DNAWaterExcitationStructure exStructure;
+  SetHighEnergyLimit(exStructure.ExcitationEnergy(0));
+  fParticleChangeForGamma = 0;
   //  fNistWater  = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
-    fpWaterDensity = 0;
+  fpWaterDensity = 0;
 }
 
 //______________________________________________________________________
 G4DNAOneStepSolvatationModel::~G4DNAOneStepSolvatationModel()
-{}
+{
+}
 
 //______________________________________________________________________
 void G4DNAOneStepSolvatationModel::Initialise(const G4ParticleDefinition* particleDefinition,
-                                             const G4DataVector&)
+                                              const G4DataVector&)
 {
 #ifdef G4VERBOSE
-    if (fVerboseLevel)
-        G4cout << "Calling G4SancheSolvatationModel::Initialise()" << G4endl;
+  if (fVerboseLevel)
+  G4cout << "Calling G4SancheSolvatationModel::Initialise()" << G4endl;
 #endif
-    if (particleDefinition != G4Electron::ElectronDefinition())
-    {
-        G4ExceptionDescription exceptionDescription ;
-        exceptionDescription << "Attempting to calculate cross section for wrong particle";
-        G4Exception("G4DNAOneStepSolvatationModel::CrossSectionPerVolume","G4DNAOneStepSolvatationModel001",
-                    FatalErrorInArgument,exceptionDescription);
-        return;
-    }
+  if (particleDefinition != G4Electron::ElectronDefinition())
+  {
+    G4ExceptionDescription exceptionDescription;
+    exceptionDescription << "Attempting to calculate cross section for wrong particle";
+    G4Exception("G4DNAOneStepSolvatationModel::CrossSectionPerVolume","G4DNAOneStepSolvatationModel001",
+        FatalErrorInArgument,exceptionDescription);
+    return;
+  }
 
-    if(!fIsInitialised)
-    {
-        fIsInitialised = true;
-        fParticleChangeForGamma = GetParticleChangeForGamma();
-    }
+  if(!fIsInitialised)
+  {
+    fIsInitialised = true;
+    fParticleChangeForGamma = GetParticleChangeForGamma();
+  }
 
-    // Initialize water density pointer
-    fpWaterDensity = G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
+  // Initialize water density pointer
+  fpWaterDensity = G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
 }
 
 //______________________________________________________________________
 G4double G4DNAOneStepSolvatationModel::CrossSectionPerVolume(const G4Material* material,
-                                                            const G4ParticleDefinition*,
-                                                            G4double ekin,
-                                                            G4double,
-                                                            G4double)
+                                                             const G4ParticleDefinition*,
+                                                             G4double ekin,
+                                                             G4double,
+                                                             G4double)
 {
 #ifdef G4VERBOSE
-    if (fVerboseLevel > 1)
-        G4cout << "Calling CrossSectionPerVolume() of G4SancheSolvatationModel" << G4endl;
+  if (fVerboseLevel > 1)
+  G4cout << "Calling CrossSectionPerVolume() of G4SancheSolvatationModel"
+  << G4endl;
 #endif
 
-    if(ekin > HighEnergyLimit())
-    {
-        return 0.0;
-    }
+  if(ekin > HighEnergyLimit())
+  {
+    return 0.0;
+  }
 
-    G4double waterDensity = (*fpWaterDensity)[material->GetIndex()];
+  G4double waterDensity = (*fpWaterDensity)[material->GetIndex()];
 
-    if(waterDensity!= 0.0)
-   //  if (material == nistwater || material->GetBaseMaterial() == nistwater)
+  if(waterDensity!= 0.0)
+  //  if (material == nistwater || material->GetBaseMaterial() == nistwater)
+  {
+    if (ekin <= HighEnergyLimit())
     {
-        if (ekin <= HighEnergyLimit())
-        {
-            return DBL_MAX;
-        }
+      return DBL_MAX;
     }
-    return 0. ;
+  }
+  return 0.;
 }
 
 //______________________________________________________________________
 G4ThreeVector G4DNAOneStepSolvatationModel::RadialDistributionOfProducts(G4double expectationValue) const
 {
-    G4double sigma = std::sqrt(1.57)/2*expectationValue;
+  G4double sigma = std::sqrt(1.57) / 2 * expectationValue;
 
-    G4double XValueForfMax = std::sqrt(2.*sigma*sigma);
-    G4double fMaxValue = std::sqrt(2./3.14) * 1./(sigma*sigma*sigma) *
-            (XValueForfMax*XValueForfMax)*
-            std::exp(-1./2. * (XValueForfMax*XValueForfMax)/(sigma*sigma));
+  G4double XValueForfMax = std::sqrt(2. * sigma * sigma);
+  G4double fMaxValue = std::sqrt(2. / 3.14) * 1. / (sigma * sigma * sigma)
+      * (XValueForfMax * XValueForfMax)
+      * std::exp(-1. / 2. * (XValueForfMax * XValueForfMax) / (sigma * sigma));
 
-    G4double R;
+  G4double R;
 
-    do
+  do
+  {
+    G4double aRandomfValue = fMaxValue * G4UniformRand();
+
+    G4double sign;
+    if(G4UniformRand() > 0.5)
     {
-        G4double aRandomfValue = fMaxValue*G4UniformRand();
-
-        G4double sign;
-        if(G4UniformRand() > 0.5)
-        {
-            sign = +1.;
-        }
-        else
-        {
-            sign = -1;
-        }
-
-        R = expectationValue + sign*3.*sigma* G4UniformRand();
-        G4double f = std::sqrt(2./3.14) * 1/std::pow(sigma, 3) * R*R * std::exp(-1./2. * R*R/(sigma*sigma));
-
-        if(aRandomfValue < f)
-        {
-            break;
-        }
+      sign = +1.;
     }
-    while(1);
+    else
+    {
+      sign = -1;
+    }
 
-    G4double costheta = (2.*G4UniformRand()-1.);
-    G4double theta = std::acos (costheta);
-    G4double phi = 2.*pi*G4UniformRand();
+    R = expectationValue + sign*3.*sigma* G4UniformRand();
+    G4double f = std::sqrt(2./3.14) * 1/std::pow(sigma, 3) * R*R * std::exp(-1./2. * R*R/(sigma*sigma));
 
-    G4double xDirection = R*std::cos(phi)* std::sin(theta);
-    G4double yDirection = R*std::sin(theta)*std::sin(phi);
-    G4double zDirection = R*costheta;
-    G4ThreeVector RandDirection = G4ThreeVector(xDirection, yDirection, zDirection);
+    if(aRandomfValue < f)
+    {
+      break;
+    }
+  }
+  while(1);
 
-    return RandDirection;
+  G4double costheta = (2. * G4UniformRand()-1.);
+  G4double theta = std::acos(costheta);
+  G4double phi = 2. * pi * G4UniformRand();
+
+  G4double xDirection = R * std::cos(phi) * std::sin(theta);
+  G4double yDirection = R * std::sin(theta) * std::sin(phi);
+  G4double zDirection = R * costheta;
+  G4ThreeVector RandDirection = G4ThreeVector(xDirection, yDirection,
+                                              zDirection);
+
+  return RandDirection;
 }
 
 //______________________________________________________________________
-void G4DNAOneStepSolvatationModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
-                                                    const G4MaterialCutsCouple*,
-                                                    const G4DynamicParticle* particle,
-                                                    G4double,
-                                                    G4double)
+void G4DNAOneStepSolvatationModel::SampleSecondaries(std::vector<
+                                                         G4DynamicParticle*>*,
+                                                     const G4MaterialCutsCouple*,
+                                                     const G4DynamicParticle* particle,
+                                                     G4double,
+                                                     G4double)
 {
 #ifdef G4VERBOSE
-    if (fVerboseLevel)
-        G4cout << "Calling SampleSecondaries() of G4SancheSolvatationModel" << G4endl;
+  if (fVerboseLevel)
+  G4cout << "Calling SampleSecondaries() of G4SancheSolvatationModel" << G4endl;
 #endif
-    G4double k = particle->GetKineticEnergy();
+  G4double k = particle->GetKineticEnergy();
 
-    if (k <= HighEnergyLimit())
-    {
-        G4double r_mean =
-                (-0.003*std::pow(k/eV,6) + 0.0749*std::pow(k/eV,5) - 0.7197*std::pow(k/eV,4)
+  if (k <= HighEnergyLimit())
+  {
+    G4double r_mean =
+    (-0.003*std::pow(k/eV,6) + 0.0749*std::pow(k/eV,5) - 0.7197*std::pow(k/eV,4)
                  + 3.1384*std::pow(k/eV,3) - 5.6926*std::pow(k/eV,2) + 5.6237*k/eV - 0.7883)*nanometer;
 
         G4ThreeVector displacement = RadialDistributionOfProducts (r_mean);

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronRadCapture.cc 76888 2013-11-18 13:00:28Z gcosmo $
+// $Id: G4NeutronRadCapture.cc 79977 2014-03-27 15:16:59Z gcosmo $
 //
 //
 // Physics model class G4NeutronRadCapture 
@@ -42,7 +42,6 @@
 #include "G4NucleiProperties.hh"
 #include "G4PhotonEvaporation.hh"
 #include "G4DynamicParticle.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "G4Deuteron.hh"
@@ -115,7 +114,7 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
     theParticleChange.AddSecondary(*news);
     delete news;
 
-    G4ParticleDefinition* theDef = 0;
+    const G4ParticleDefinition* theDef = 0;
 
     lv1 -= lv2; 
     if      (Z == 1 && A == 2) {theDef = G4Deuteron::Deuteron();}
@@ -164,7 +163,7 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
       Z = f->GetZ_asInt();
       A = f->GetA_asInt();
 
-      G4ParticleDefinition* theDef = 0;
+      const G4ParticleDefinition* theDef = 0;
       if(0 == Z && 0 == A) {theDef =  f->GetParticleDefinition();}
       else if (Z == 1 && A == 2) {theDef = G4Deuteron::Deuteron();}
       else if (Z == 1 && A == 3) {theDef = G4Triton::Triton();}
@@ -184,12 +183,12 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
         if(eexc > minExcitation) {
           G4double elevel1 = 0.0;
           G4double elevel2 = 0.0;
-	  G4ParticleDefinition* ion = 0; 
+	  const G4ParticleDefinition* ion = 0;
           for(level=1; level<9; ++level) {
 	    ion = theTableOfIons->GetIon(Z, A, level);
             //G4cout << level << "  " << ion << G4endl;
             if(ion) {
-	      G4Ions* ip = dynamic_cast<G4Ions*>(ion);
+	      const G4Ions* ip = dynamic_cast<const G4Ions*>(ion);
 	      if(ip) {
 		elevel2 = ip->GetExcitationEnergy();
 		//G4cout<<"   Level "<<level<<" E(MeV)= "<<elevel2/MeV<<G4endl;

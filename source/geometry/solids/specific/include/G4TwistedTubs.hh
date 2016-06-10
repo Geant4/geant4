@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4TwistedTubs.hh 83572 2014-09-01 15:23:27Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -239,6 +239,7 @@ class G4TwistedTubs : public G4VSolid
   G4double fCubicVolume;       // Cached value for cubic volume
   G4double fSurfaceArea;       // Cached value for surface area
 
+  mutable G4bool fRebuildPolyhedron;
   mutable G4Polyhedron* fpPolyhedron;  // pointer to polyhedron for vis
 
   class LastState              // last Inside result

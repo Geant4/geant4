@@ -26,7 +26,7 @@
 /// \file processes/phonon/include/G4PhononScattering.hh
 /// \brief Definition of the G4PhononScattering class
 //
-// $Id: G4PhononScattering.hh 75725 2013-11-05 16:52:30Z mkelsey $
+// $Id: G4PhononScattering.hh 75844 2013-11-06 17:35:56Z gcosmo $
 //
 #ifndef G4PhononScattering_h
 #define G4PhononScattering_h 1

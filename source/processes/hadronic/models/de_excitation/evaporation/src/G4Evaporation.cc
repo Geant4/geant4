@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc 71639 2013-06-19 15:07:54Z gcosmo $
+// $Id: G4Evaporation.cc 86366 2014-11-10 08:46:07Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -62,8 +62,9 @@
 #include "G4IonTable.hh"
 
 G4Evaporation::G4Evaporation()  
-  : theChannels(0),nChannels(0)
+  : nChannels(0)
 {
+  thePool = G4FermiFragmentsPool::Instance();
   SetPhotonEvaporation(new G4PhotonEvaporation());
   theChannelFactory = new G4EvaporationDefaultGEMFactory(thePhotonEvaporation);
   SetParameters();
@@ -72,11 +73,12 @@ G4Evaporation::G4Evaporation()
 }
 
 G4Evaporation::G4Evaporation(G4VEvaporationChannel* photoEvaporation)  
-  : theChannels(0),nChannels(0)
+  : nChannels(0)
 {
   if(photoEvaporation) { SetPhotonEvaporation(photoEvaporation); }
   else                 { SetPhotonEvaporation(new G4PhotonEvaporation()); }
 
+  thePool = G4FermiFragmentsPool::Instance();
   theChannelFactory = new G4EvaporationDefaultGEMFactory(thePhotonEvaporation);
   SetParameters();
   InitialiseEvaporation();
@@ -100,8 +102,8 @@ void G4Evaporation::SetParameters()
 {
   nist = G4NistManager::Instance();
   minExcitation = CLHEP::keV;
-  maxZforFBU = G4FermiFragmentsPool::Instance()->GetMaxZ();
-  maxAforFBU = G4FermiFragmentsPool::Instance()->GetMaxA();
+  maxZforFBU = thePool->GetMaxZ();
+  maxAforFBU = thePool->GetMaxA();
   probabilities.reserve(68);
 }
 
@@ -119,6 +121,7 @@ void G4Evaporation::Initialise()
   for(size_t i=0; i<nChannels; ++i) {
     (*theChannels)[i]->SetOPTxs(OPTxs);
     (*theChannels)[i]->UseSICB(useSICB);
+    (*theChannels)[i]->Initialise();
   }
 }
 
@@ -152,12 +155,14 @@ void G4Evaporation::SetPhotonEvaporation(G4VEvaporationChannel* ptr)
 G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 {
   G4FragmentVector * theResult = new G4FragmentVector;
-  G4FragmentVector * theTempResult;
-  static const G4double Elimit = 3*MeV;
-
-  // The residual nucleus (after evaporation of each fragment)
   G4Fragment* theResidualNucleus = new G4Fragment(theNucleus);
+  BreakFragment(theResult,  theResidualNucleus);
+  return theResult;
+}
 
+void G4Evaporation::BreakFragment(G4FragmentVector* theResult, 
+				  G4Fragment* theResidualNucleus)
+{
   G4double totprob, prob, oldprob = 0.0;
   size_t maxchannel, i;
 
@@ -170,26 +175,28 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
     // g,n,p and light fragments - evaporation is finished
     G4int Z = theResidualNucleus->GetZ_asInt();
     G4int A = theResidualNucleus->GetA_asInt();
+    G4double Eex = theResidualNucleus->GetExcitationEnergy();
+    G4double mass = theResidualNucleus->GetGroundStateMass();
 
-    // stop deecitation loop if can be deexcited by FBU
-    if(maxZforFBU > Z && maxAforFBU >= A) {
-      theResult->push_back(theResidualNucleus);
-      return theResult;
+    // stop deecitation loop if residual can be deexcited by FBU    
+    if(maxZforFBU > Z && maxAforFBU > A && Z > 0 && A > Z) {
+      if(thePool->IsApplicable(Z, A, mass+Eex)) {
+	theResult->push_back(theResidualNucleus);
+	return;
+      }
     }
-
     // check if it is stable, then finish evaporation
     G4double abun = nist->GetIsotopeAbundance(Z, A); 
-    /*
+    /*        
     G4cout << "### G4Evaporation::BreakItUp step " << ia << " Z= " << Z
     	   << " A= " << A << " Eex(MeV)= " 
     	   << theResidualNucleus->GetExcitationEnergy()
     	   << " aban= " << abun << G4endl;
     */
-    // stop deecitation loop in the case of the cold stable fragment 
-    G4double Eex = theResidualNucleus->GetExcitationEnergy();
+    // stop deecitation loop in the case of a cold stable fragment 
     if(Eex <= minExcitation && abun > 0.0) {
       theResult->push_back(theResidualNucleus);
-      return theResult;
+      return;
     }
  
     totprob = 0.0;
@@ -205,6 +212,7 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 
       totprob += prob;
       probabilities[i] = totprob;
+
       // if two recent probabilities are near zero stop computations
       if(i>=8) {
 	if(prob <= totprob*1.e-8 && oldprob <= totprob*1.e-8) {
@@ -213,47 +221,27 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 	}
       }
       oldprob = prob;
-      // protection for very excited fragment - avoid GEM
-      if(7 == i && Eex > Elimit*A) {
-        maxchannel = 8;
-        break;
-      }
     }
 
     // photon evaporation in the case of no other channels available
     // do evaporation chain and reset total probability
     if(0.0 < totprob && probabilities[0] == totprob) {
-      //G4cout << "Start gamma evaporation" << G4endl;
-      theTempResult = (*theChannels)[0]->BreakUpFragment(theResidualNucleus);
-      if(theTempResult) {
-	size_t nsec = theTempResult->size();
-	for(size_t j=0; j<nsec; ++j) {
-	  theResult->push_back((*theTempResult)[j]);
-	}
-        delete theTempResult;
-      }
+      //G4cout << "Start chain of gamma evaporation" << G4endl;
+      (*theChannels)[0]->BreakUpChain(theResult, theResidualNucleus);
       totprob = 0.0;
     }
 
-    // stable fragnent - evaporation is finished
+    // stable fragment - evaporation is finished
     if(0.0 == totprob) {
 
       // if fragment is exotic, then force its decay 
       if(0.0 == abun && Z < 20) {
 	//G4cout << "$$$ Decay exotic fragment" << G4endl;
-	theTempResult = unstableBreakUp.BreakUpFragment(theResidualNucleus);
-	if(theTempResult) {
-	  size_t nsec = theTempResult->size();
-	  for(size_t j=0; j<nsec; ++j) {
-	    theResult->push_back((*theTempResult)[j]);
-	  }
-	  delete theTempResult;
-	}
+	unstableBreakUp.BreakUpChain(theResult, theResidualNucleus);
+      } else {
+	theResult->push_back(theResidualNucleus);
       }
-
-      // save residual fragment
-      theResult->push_back(theResidualNucleus);
-      return theResult;
+      return;
     }
 
     // select channel
@@ -261,58 +249,16 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
     // loop over evaporation channels
     for(i=0; i<maxchannel; ++i) { if(probabilities[i] >= totprob) { break; } }
 
-    // this should not happen
-    if(i >= nChannels) { i = nChannels - 1; }
-
-
-    // single photon evaporation, primary pointer is kept
-    if(0 == i) {
-      //G4cout << "Single gamma" << G4endl;
-      G4Fragment* gamma = (*theChannels)[0]->EmittedFragment(theResidualNucleus);
-      if(gamma) { theResult->push_back(gamma); }
-
-      // fission, return results to the main loop if fission is succesful
-    } else if(1 == i) {
-      //G4cout << "Fission" << G4endl;
-      theTempResult = (*theChannels)[1]->BreakUp(*theResidualNucleus);
-      if(theTempResult) {
-	size_t nsec = theTempResult->size();
-        G4bool deletePrimary = true;
-	for(size_t j=0; j<nsec; ++j) {
-          if(theResidualNucleus == (*theTempResult)[j]) { deletePrimary = false; }
-	  theResult->push_back((*theTempResult)[j]);
-	}
-        if(deletePrimary) { delete theResidualNucleus; }
-        delete theTempResult;
-	return theResult;
-      }
-
-      // other channels
-    } else {
-      //G4cout << "Channel # " << i << G4endl;
-      theTempResult = (*theChannels)[i]->BreakUp(*theResidualNucleus);
-      if(theTempResult) {
-	size_t nsec = theTempResult->size();
-        if(nsec > 0) {
-          --nsec;
-	  for(size_t j=0; j<nsec; ++j) {
-	    theResult->push_back((*theTempResult)[j]);
-	  }
-	  // if the residual change its pointer 
-	  // then delete previous residual fragment and update to the new
-          if(theResidualNucleus != (*theTempResult)[nsec] ) { 
-	    delete theResidualNucleus; 
-	    theResidualNucleus = (*theTempResult)[nsec];
-	  }
-	}
-        delete theTempResult;
-      }
+    //G4cout << "Channel # " << i << G4endl;
+    G4Fragment* frag = (*theChannels)[i]->EmittedFragment(theResidualNucleus);
+    if(frag) { theResult->push_back(frag); }
+    // selected channel cannot sample secondary
+    else { 
+      theResult->push_back(theResidualNucleus); 
+      return; 
     }
   }
 
-  // loop is stopped, save residual
+  // loop is stopped, save residual, which is unclear state
   theResult->push_back(theResidualNucleus);
-  
-  return theResult;
 }
-

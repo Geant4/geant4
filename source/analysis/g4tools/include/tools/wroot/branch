@@ -8,6 +8,7 @@
 #include "basket"
 #include "itree"
 #include "idir"
+#include "../forit"
 
 namespace tools {
 namespace wroot {
@@ -101,8 +102,8 @@ public: //ibo
 
 public:
   branch(itree& a_tree,
-                const std::string& a_name,
-                const std::string& a_title)
+         const std::string& a_name,
+         const std::string& a_title)
   :m_tree(a_tree)
   ,m_out(a_tree.dir().file().out())
   ,m_name(a_name)
@@ -151,7 +152,7 @@ public:
   }
 protected:
   branch(const branch& a_from)
-  : ibo(a_from)
+  :ibo(a_from)
   ,m_tree(a_from.m_tree)
   ,m_out(a_from.m_out)
   {}
@@ -160,9 +161,14 @@ public:
   void set_basket_size(uint32 a_size) {m_basket_size = a_size;}
 
   template <class T>
-  leaf<T>* create_leaf(const std::string& a_name,
-                              const std::string& a_title){
+  leaf<T>* create_leaf(const std::string& a_name,const std::string& a_title){
     leaf<T>* lf = new leaf<T>(m_out,*this,a_name,a_title);
+    m_leaves.push_back(lf);
+    return lf;
+  }
+
+  leaf_string* create_leaf_string(const std::string& a_name,const std::string& a_title){
+    leaf_string* lf = new leaf_string(m_out,*this,a_name,a_title);
     m_leaves.push_back(lf);
     return lf;
   }
@@ -268,9 +274,8 @@ public:
     return true;
   }
 protected:
-  bool fill_leaves(buffer& a_buffer) {
-    std::vector<base_leaf*>::iterator it;
-    for(it=m_leaves.begin();it!=m_leaves.end();++it) {
+  virtual bool fill_leaves(buffer& a_buffer) { //virtual for branch_element.
+    tools_vforit(base_leaf*,m_leaves,it) {
       if(!(*it)->fill_basket(a_buffer)) return false;
     }
     return true;

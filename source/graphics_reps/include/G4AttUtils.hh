@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttUtils.hh 66376 2012-12-18 09:42:59Z gcosmo $
+// $Id: G4AttUtils.hh 78955 2014-02-05 09:45:46Z gcosmo $
 //
 // Jane Tinslay September 2006
 //
@@ -78,7 +78,7 @@ namespace G4AttUtils {
     std::vector<G4AttValue>* attValues = object.CreateAttValues();
     
     std::vector<G4AttValue>::iterator iter = std::find_if(attValues->begin(), attValues->end(), 
-							  HasName<G4AttValue>(name));
+                                                          HasName<G4AttValue>(name));
     if (iter == attValues->end()) return false;
     
     attVal = *iter;

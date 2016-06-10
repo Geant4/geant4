@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAExcitation.hh 70171 2013-05-24 13:34:18Z gcosmo $
+// $Id: G4DNAExcitation.hh 82852 2014-07-14 09:05:25Z gcosmo $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -37,7 +37,6 @@
 #include "G4Proton.hh"
 
 // Available models
-#include "G4DNAEmfietzoglouExcitationModel.hh"
 #include "G4DNAMillerGreenExcitationModel.hh"
 #include "G4DNABornExcitationModel.hh"
 

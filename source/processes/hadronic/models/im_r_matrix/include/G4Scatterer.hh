@@ -50,13 +50,13 @@ public:
   virtual ~G4Scatterer();
   
   virtual G4double GetTimeToInteraction(const G4KineticTrack& trk1, 
-					const G4KineticTrack& trk2);
+					const G4KineticTrack& trk2) const;
   
   G4double GetCrossSection(const G4KineticTrack& trk1, 	
-			   const G4KineticTrack& trk2);
+			   const G4KineticTrack& trk2) const;
 			   
   virtual G4KineticTrackVector* Scatter(const G4KineticTrack& trk1, 	
-					   const G4KineticTrack& trk2);
+					   const G4KineticTrack& trk2) const;
 
   virtual const std::vector<G4CollisionInitialState *> &
          GetCollisions(G4KineticTrack * aProjectile, 
@@ -69,8 +69,8 @@ public:
 
 private:
 
-  G4VCollision* FindCollision(const G4KineticTrack& trk1, 
-			      const G4KineticTrack& trk2);
+  const G4VCollision* FindCollision(const G4KineticTrack& trk1,
+			      const G4KineticTrack& trk2) const;
   
   struct Register
   {
@@ -81,7 +81,7 @@ private:
     }
   };
 
-  G4CollisionVector collisions;
+  static G4CollisionVector collisions;
   std::vector<G4CollisionInitialState *> theCollisions;
 
 }; 

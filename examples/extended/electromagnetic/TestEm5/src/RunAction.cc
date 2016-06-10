@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 76464 2013-11-11 10:22:56Z gcosmo $
+// $Id: RunAction.cc 78394 2013-12-16 16:35:20Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -76,7 +76,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
 {
   // save Rndm status
   ////  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  G4Random::showEngineStatus();
+  if (isMaster) G4Random::showEngineStatus();
      
   // keep run condition
   if ( fPrimary ) { 
@@ -96,42 +96,21 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::EndOfRunAction(const G4Run* aRun)
-{
-  G4int TotNbofEvents = aRun->GetNumberOfEvent();
-  if (TotNbofEvents == 0) return;
-  
+void RunAction::EndOfRunAction(const G4Run*)
+{  
   // print Run summary
   //
-  fRun->PrintSummary();    
-  
-  // normalize histograms
-  //
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  
-  G4int ih = 1;
-  G4double binWidth = analysisManager->GetH1Width(ih);
-  G4double unit     = analysisManager->GetH1Unit(ih);  
-  G4double fac = unit/(TotNbofEvents*binWidth);
-  analysisManager->ScaleH1(ih,fac);
-
-  ih = 10;
-  binWidth = analysisManager->GetH1Width(ih);
-  unit     = analysisManager->GetH1Unit(ih);  
-  fac = unit/(TotNbofEvents*binWidth);
-  analysisManager->ScaleH1(ih,fac);
-
-  ih = 12;
-  analysisManager->ScaleH1(ih,1./TotNbofEvents);
+  if (isMaster) fRun->EndOfRun();    
       
   // save histograms
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
   if ( analysisManager->IsActive() ) {    
     analysisManager->Write();
     analysisManager->CloseFile();
   }  
 
   // show Rndm status
-  G4Random::showEngineStatus();
+  if (isMaster) G4Random::showEngineStatus();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

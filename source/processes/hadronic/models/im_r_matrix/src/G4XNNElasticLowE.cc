@@ -31,7 +31,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsLnVector.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 
@@ -141,9 +140,9 @@ G4double G4XNNElasticLowE::CrossSection(const G4KineticTrack& trk1, const G4Kine
   G4double sqrtS = (trk1.Get4Momentum() + trk2.Get4Momentum()).mag();
   G4bool dummy = false;
 
-  G4ParticleDefinition * key = FindKeyParticle(trk1,trk2);
+  const G4ParticleDefinition * key = FindKeyParticle(trk1,trk2);
 
-  typedef std::map <G4ParticleDefinition *, G4PhysicsVector*, std::less<G4ParticleDefinition *> > StringPhysMap;
+  typedef std::map <const G4ParticleDefinition *, G4PhysicsVector*, std::less<const G4ParticleDefinition *> > StringPhysMap;
 
   if (xMap.find(key)!= xMap.end())
     {
@@ -151,7 +150,7 @@ G4double G4XNNElasticLowE::CrossSection(const G4KineticTrack& trk1, const G4Kine
       StringPhysMap::const_iterator iter;
       for (iter = xMap.begin(); iter != xMap.end(); ++iter)
 	{
-	  G4ParticleDefinition * str = (*iter).first;
+	  const G4ParticleDefinition * str = (*iter).first;
           if (str == key)
 	    {
 	      G4PhysicsVector* physVector = (*iter).second; 
@@ -180,15 +179,15 @@ void G4XNNElasticLowE::Print() const
 
   G4bool dummy = false;
   G4int i;
-  G4ParticleDefinition * key = G4Proton::ProtonDefinition();
+  const G4ParticleDefinition * key = G4Proton::ProtonDefinition();
   G4PhysicsVector* pp = 0;
 
-  typedef std::map <G4ParticleDefinition *, G4PhysicsVector*, std::less<G4ParticleDefinition *> > StringPhysMap;
+  typedef std::map <const G4ParticleDefinition *, G4PhysicsVector*, std::less<const G4ParticleDefinition *> > StringPhysMap;
   StringPhysMap::const_iterator iter;
 
   for (iter = xMap.begin(); iter != xMap.end(); ++iter)
     {
-      G4ParticleDefinition * str = (*iter).first;
+      const G4ParticleDefinition * str = (*iter).first;
       if (str == key)
 	{
 	  pp = (*iter).second; 
@@ -213,7 +212,7 @@ void G4XNNElasticLowE::Print() const
   G4PhysicsVector* np = 0;
   for (iter = xMap.begin(); iter != xMap.end(); ++iter)
     {
-      G4ParticleDefinition * str = (*iter).first;
+      const G4ParticleDefinition * str = (*iter).first;
       if (str == key)
 	{
 	  np = (*iter).second; 

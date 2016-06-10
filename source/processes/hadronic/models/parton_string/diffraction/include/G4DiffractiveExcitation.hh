@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.hh 74627 2013-10-17 07:04:38Z gcosmo $
+// $Id: G4DiffractiveExcitation.hh 86646 2014-11-14 13:29:39Z gcosmo $
 
 #ifndef G4DiffractiveExcitation_h
 #define G4DiffractiveExcitation_h 1
@@ -69,6 +69,8 @@ class G4DiffractiveExcitation {
     const G4DiffractiveExcitation& operator=( const G4DiffractiveExcitation& right );
     int operator==( const G4DiffractiveExcitation& right ) const;
     int operator!=( const G4DiffractiveExcitation& right ) const;
+
+    G4double LambdaF(G4double sqrM, G4double sqrM1, G4double sqrM2) const; // May 2014
       
     G4ThreeVector GaussianPt( G4double AveragePt2, G4double maxPtSquare ) const;
     G4double ChooseP( G4double Pmin, G4double Pmax ) const;

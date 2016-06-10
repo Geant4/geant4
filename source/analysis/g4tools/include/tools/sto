@@ -10,7 +10,8 @@ namespace tools {
 
 inline std::string to(bool a_value){return a_value?"true":"false";}
 
-inline bool to(const std::string& a_string,bool& a_value){
+inline bool to(const std::string& a_string,bool& a_value,
+               bool a_def = false){
   if(  (a_string=="1")
      ||(a_string=="true")||(a_string=="TRUE")||(a_string=="True")
      ||(a_string=="yes")||(a_string=="YES")||(a_string=="Yes")
@@ -26,7 +27,7 @@ inline bool to(const std::string& a_string,bool& a_value){
     a_value = false;
     return true;
   } else {
-    a_value = false;
+    a_value = a_def;
     return false;
   }
 }

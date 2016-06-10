@@ -57,6 +57,7 @@
 #include "G4Ions.hh"
 #include "G4TrackingManager.hh"
 #include "G4Track.hh"
+#include "G4AutoLock.hh"
 
 #include "G4SPSRandomGenerator.hh"
 
@@ -86,9 +87,11 @@ G4SPSRandomGenerator::G4SPSRandomGenerator()
 	bweights[0] = bweights[1] = bweights[2] = bweights[3] = bweights[4]
 			= bweights[5] = bweights[6] = bweights[7] = bweights[8] = 1.;
 	verbosityLevel = 0;
+    G4MUTEXINIT(mutex);
 }
 
 G4SPSRandomGenerator::~G4SPSRandomGenerator() {
+    G4MUTEXDESTROY(mutex);
 }
 
 //G4SPSRandomGenerator* G4SPSRandomGenerator::getInstance ()
@@ -100,6 +103,7 @@ G4SPSRandomGenerator::~G4SPSRandomGenerator() {
 // Biasing methods
 
 void G4SPSRandomGenerator::SetXBias(G4ThreeVector input) {
+    G4AutoLock l(&mutex);
 	G4double ehi, val;
 	ehi = input.x();
 	val = input.y();
@@ -108,6 +112,7 @@ void G4SPSRandomGenerator::SetXBias(G4ThreeVector input) {
 }
 
 void G4SPSRandomGenerator::SetYBias(G4ThreeVector input) {
+    G4AutoLock l(&mutex);
 	G4double ehi, val;
 	ehi = input.x();
 	val = input.y();
@@ -116,6 +121,7 @@ void G4SPSRandomGenerator::SetYBias(G4ThreeVector input) {
 }
 
 void G4SPSRandomGenerator::SetZBias(G4ThreeVector input) {
+    G4AutoLock l(&mutex);
 	G4double ehi, val;
 	ehi = input.x();
 	val = input.y();
@@ -124,6 +130,7 @@ void G4SPSRandomGenerator::SetZBias(G4ThreeVector input) {
 }
 
 void G4SPSRandomGenerator::SetThetaBias(G4ThreeVector input) {
+    G4AutoLock l(&mutex);
 	G4double ehi, val;
 	ehi = input.x();
 	val = input.y();
@@ -132,6 +139,7 @@ void G4SPSRandomGenerator::SetThetaBias(G4ThreeVector input) {
 }
 
 void G4SPSRandomGenerator::SetPhiBias(G4ThreeVector input) {
+    G4AutoLock l(&mutex);
 	G4double ehi, val;
 	ehi = input.x();
 	val = input.y();
@@ -140,6 +148,7 @@ void G4SPSRandomGenerator::SetPhiBias(G4ThreeVector input) {
 }
 
 void G4SPSRandomGenerator::SetEnergyBias(G4ThreeVector input) {
+    G4AutoLock l(&mutex);
 	G4double ehi, val;
 	ehi = input.x();
 	val = input.y();
@@ -148,6 +157,7 @@ void G4SPSRandomGenerator::SetEnergyBias(G4ThreeVector input) {
 }
 
 void G4SPSRandomGenerator::SetPosThetaBias(G4ThreeVector input) {
+    G4AutoLock l(&mutex);
 	G4double ehi, val;
 	ehi = input.x();
 	val = input.y();
@@ -156,6 +166,7 @@ void G4SPSRandomGenerator::SetPosThetaBias(G4ThreeVector input) {
 }
 
 void G4SPSRandomGenerator::SetPosPhiBias(G4ThreeVector input) {
+    G4AutoLock l(&mutex);
 	G4double ehi, val;
 	ehi = input.x();
 	val = input.y();
@@ -163,7 +174,27 @@ void G4SPSRandomGenerator::SetPosPhiBias(G4ThreeVector input) {
 	PosPhiBias = true;
 }
 
+void G4SPSRandomGenerator::SetIntensityWeight(G4double weight) {
+     G4AutoLock l(&mutex);
+    bweights[8] = weight;
+}
+
+G4double G4SPSRandomGenerator::GetBiasWeight() {
+     G4AutoLock l(&mutex);
+    return bweights[0] * bweights[1] * bweights[2] * bweights[3]
+    * bweights[4] * bweights[5] * bweights[6] * bweights[7]
+    * bweights[8];
+}
+
+void G4SPSRandomGenerator::SetVerbosity(G4int a) {
+     G4AutoLock l(&mutex);
+    verbosityLevel = a;
+}
+
+
+
 void G4SPSRandomGenerator::ReSetHist(G4String atype) {
+    G4AutoLock l(&mutex);
 	if (atype == "biasx") {
 		XBias = false;
 		IPDFXBias = false;
@@ -210,6 +241,7 @@ G4double G4SPSRandomGenerator::GenRandX() {
 		return (rndm);
 	} else {
 		// X is biased
+        G4AutoLock l(&mutex);
 		if (IPDFXBias == false) {
 			// IPDF has not been created, so create it
 			G4double bins[1024], vals[1024], sum;
@@ -231,6 +263,7 @@ G4double G4SPSRandomGenerator::GenRandX() {
 			// Make IPDFXBias = true
 			IPDFXBias = true;
 		}
+        l.unlock();
 		// IPDF has been create so carry on
 		G4double rndm = G4UniformRand();
 
@@ -272,6 +305,7 @@ G4double G4SPSRandomGenerator::GenRandY() {
 		return (rndm);
 	} else {
 		// Y is biased
+        G4AutoLock l(&mutex);
 		if (IPDFYBias == false) {
 			// IPDF has not been created, so create it
 			G4double bins[1024], vals[1024], sum;
@@ -293,6 +327,7 @@ G4double G4SPSRandomGenerator::GenRandY() {
 			// Make IPDFYBias = true
 			IPDFYBias = true;
 		}
+        l.unlock();
 		// IPDF has been create so carry on
 		G4double rndm = G4UniformRand();
 		size_t numberOfBin = IPDFYBiasH.GetVectorLength();
@@ -326,6 +361,7 @@ G4double G4SPSRandomGenerator::GenRandZ() {
 		return (rndm);
 	} else {
 		// Z is biased
+        G4AutoLock l(&mutex);
 		if (IPDFZBias == false) {
 			// IPDF has not been created, so create it
 			G4double bins[1024], vals[1024], sum;
@@ -347,6 +383,7 @@ G4double G4SPSRandomGenerator::GenRandZ() {
 			// Make IPDFZBias = true
 			IPDFZBias = true;
 		}
+        l.unlock();
 		// IPDF has been create so carry on
 		G4double rndm = G4UniformRand();
 		//      size_t weight_bin_no = IPDFZBiasH.FindValueBinLocation(rndm);
@@ -383,6 +420,7 @@ G4double G4SPSRandomGenerator::GenRandTheta() {
 		return (rndm);
 	} else {
 		// Theta is biased
+        G4AutoLock l(&mutex);
 		if (IPDFThetaBias == false) {
 			// IPDF has not been created, so create it
 			G4double bins[1024], vals[1024], sum;
@@ -404,6 +442,7 @@ G4double G4SPSRandomGenerator::GenRandTheta() {
 			// Make IPDFThetaBias = true
 			IPDFThetaBias = true;
 		}
+        l.unlock();
 		// IPDF has been create so carry on
 		G4double rndm = G4UniformRand();
 		//      size_t weight_bin_no = IPDFThetaBiasH.FindValueBinLocation(rndm);
@@ -439,6 +478,7 @@ G4double G4SPSRandomGenerator::GenRandPhi() {
 		return (rndm);
 	} else {
 		// Phi is biased
+        G4AutoLock l(&mutex);
 		if (IPDFPhiBias == false) {
 			// IPDF has not been created, so create it
 			G4double bins[1024], vals[1024], sum;
@@ -460,6 +500,7 @@ G4double G4SPSRandomGenerator::GenRandPhi() {
 			// Make IPDFPhiBias = true
 			IPDFPhiBias = true;
 		}
+        l.unlock();
 		// IPDF has been create so carry on
 		G4double rndm = G4UniformRand();
 		//      size_t weight_bin_no = IPDFPhiBiasH.FindValueBinLocation(rndm);
@@ -494,6 +535,7 @@ G4double G4SPSRandomGenerator::GenRandEnergy() {
 		return (rndm);
 	} else {
 		// ENERGY is biased
+        G4AutoLock l(&mutex);
 		if (IPDFEnergyBias == false) {
 			// IPDF has not been created, so create it
 			G4double bins[1024], vals[1024], sum;
@@ -515,6 +557,7 @@ G4double G4SPSRandomGenerator::GenRandEnergy() {
 			// Make IPDFEnergyBias = true
 			IPDFEnergyBias = true;
 		}
+        l.unlock();
 		// IPDF has been create so carry on
 		G4double rndm = G4UniformRand();
 		//  size_t weight_bin_no = IPDFEnergyBiasH.FindValueBinLocation(rndm);
@@ -552,6 +595,7 @@ G4double G4SPSRandomGenerator::GenRandPosTheta() {
 		return (rndm);
 	} else {
 		// Theta is biased
+        G4AutoLock l(&mutex);
 		if (IPDFPosThetaBias == false) {
 			// IPDF has not been created, so create it
 			G4double bins[1024], vals[1024], sum;
@@ -573,6 +617,7 @@ G4double G4SPSRandomGenerator::GenRandPosTheta() {
 			// Make IPDFThetaBias = true
 			IPDFPosThetaBias = true;
 		}
+        l.unlock();
 		// IPDF has been create so carry on
 		G4double rndm = G4UniformRand();
 		//      size_t weight_bin_no = IPDFThetaBiasH.FindValueBinLocation(rndm);
@@ -609,6 +654,7 @@ G4double G4SPSRandomGenerator::GenRandPosPhi() {
 		return (rndm);
 	} else {
 		// PosPhi is biased
+        G4AutoLock l(&mutex);
 		if (IPDFPosPhiBias == false) {
 			// IPDF has not been created, so create it
 			G4double bins[1024], vals[1024], sum;
@@ -630,6 +676,7 @@ G4double G4SPSRandomGenerator::GenRandPosPhi() {
 			// Make IPDFPosPhiBias = true
 			IPDFPosPhiBias = true;
 		}
+        l.unlock();
 		// IPDF has been create so carry on
 		G4double rndm = G4UniformRand();
 		//      size_t weight_bin_no = IPDFPosPhiBiasH.FindValueBinLocation(rndm);

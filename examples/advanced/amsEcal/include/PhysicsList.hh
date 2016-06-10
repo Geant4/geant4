@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh 68740 2013-04-05 09:56:39Z gcosmo $
+// $Id: PhysicsList.hh 83010 2014-07-24 14:53:07Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,17 +50,7 @@ class PhysicsList: public G4VModularPhysicsList
     
     void AddPhysicsList(const G4String& name);
     
-    void SetCuts();
-    void SetCutForGamma(G4double);
-    void SetCutForElectron(G4double);
-    void SetCutForPositron(G4double);
-
-  private:
-    G4double cutForGamma;
-    G4double cutForElectron;
-    G4double cutForPositron;
-    G4double currentDefaultCut;
-    
+  private:    
     G4VPhysicsConstructor*  emPhysicsList;
     G4String emName;
     

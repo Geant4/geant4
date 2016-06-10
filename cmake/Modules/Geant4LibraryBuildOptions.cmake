@@ -36,6 +36,8 @@ endif()
 # OFF by default. Switching on will enable multithreading, adding the
 # G4MULTITHREADED definition globally and appending the relevant
 # compiler flags to CMAKE_CXX_FLAGS
+# Enabling the option allows advanced users to further select the
+# thread local storage model if GNU/Clang/Intel compiler is used.
 option(GEANT4_BUILD_MULTITHREADED "Enable multithreading in Geant4" OFF)
 
 if(WIN32)
@@ -57,23 +59,26 @@ if(GEANT4_BUILD_MULTITHREADED)
     message(WARNING "GEANT4_BUILD_MULTITHREADED IS NOT SUPPORTED on Win32. This option should only be activated by developers")
   endif()
 
+  # - Allow advanced users to select the thread local storage model,
+  # if the compiler supports it, defaulting to that recommended by Geant4
+  if(TLSMODEL_IS_AVAILABLE)
+    enum_option(GEANT4_BUILD_TLS_MODEL
+      DOC "Build libraries with Thread Local Storage model"
+      VALUES ${TLSMODEL_IS_AVAILABLE}
+      CASE_INSENSITIVE
+    )
+    mark_as_advanced(GEANT4_BUILD_TLS_MODEL)
+    geant4_add_feature(GEANT4_BUILD_TLS_MODEL "Building with TLS model '${GEANT4_BUILD_TLS_MODEL}'")
+
+    set(GEANT4_MULTITHREADED_CXX_FLAGS "${GEANT4_MULTITHREADED_CXX_FLAGS} ${${GEANT4_BUILD_TLS_MODEL}_FLAGS}")
+  endif()
+
+  # Set Defs/Compiler Flags
   add_definitions(-DG4MULTITHREADED)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GEANT4_MULTITHREADED_CXX_FLAGS}")
 endif()
 
 geant4_add_feature(GEANT4_BUILD_MULTITHREADED "Build multithread enabled libraries")
-
-# - G4TPMALLOC
-# Only usable when Multithreading is enabled and we are not on WIN32
-# If it is enabled, add the global definition "G4TPMALLOC"
-cmake_dependent_option(GEANT4_BUILD_TPMALLOC "Build multithread optimized malloc library" OFF "GEANT4_BUILD_MULTITHREADED;NOT WIN32" OFF)
-
-if(GEANT4_BUILD_TPMALLOC)
-  add_definitions(-DG4TPMALLOC)
-endif()
-
-mark_as_advanced(GEANT4_BUILD_TPMALLOC)
-geant4_add_feature(GEANT4_BUILD_TPMALLOC "Build multithread optimized malloc library")
 
 # - G4_STORE_TRAJECTORY
 # ON by default, switching off can improve performance. Needs to be on
@@ -118,6 +123,15 @@ if(CXXSTD_IS_AVAILABLE)
   geant4_add_feature(GEANT4_BUILD_CXXSTD "Compiling against C++ Standard '${GEANT4_BUILD_CXXSTD}'")
 
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${${GEANT4_BUILD_CXXSTD}_FLAGS}")
+
+  # Get needed defs for selected standard
+  # NB this needs refactoring because, for example, newer MSVC versions
+  # will just support c++11, and the selection above isn't needed, nor
+  # available, so we cannot check it in the if statement below.
+  # Add the def(s) to flags, because it may be *required*
+  if(GEANT4_BUILD_CXXSTD MATCHES "c\\+\\+11")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DG4USE_STD11")
+  endif()
 endif()
 
 #-----------------------------------------------------------------------

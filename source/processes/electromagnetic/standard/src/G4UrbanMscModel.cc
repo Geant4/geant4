@@ -74,7 +74,6 @@
 
 using namespace std;
 
-static const G4double c_highland = 13.6*CLHEP::MeV ;
 static const G4double Tlim = 10.*CLHEP::MeV;
 static const G4double sigmafactor =
        CLHEP::twopi*CLHEP::classic_electr_radius*CLHEP::classic_electr_radius;
@@ -125,7 +124,7 @@ G4UrbanMscModel::G4UrbanMscModel(const G4String& nam)
   geommin       = 1.e-3*mm;
   geomlimit     = geombig;
   presafety     = 0.*mm;
-                          
+
   y             = 0.;
 
   Zold          = 0.;
@@ -148,6 +147,11 @@ G4UrbanMscModel::G4UrbanMscModel(const G4String& nam)
   firstStep     = true; 
   inside        = false;  
   insideskin    = false;
+  latDisplasmentbackup = false;
+
+  rangecut = geombig;
+  drr      = 0.35 ;
+  finalr   = 10.*um ;
 
   skindepth = skin*stepmin;
 
@@ -159,7 +163,6 @@ G4UrbanMscModel::G4UrbanMscModel(const G4String& nam)
   currentMaterialIndex = -1;
   fParticleChange = 0;
   couple = 0;
-  SetSampleZ(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -173,7 +176,6 @@ void G4UrbanMscModel::Initialise(const G4ParticleDefinition* p,
 				 const G4DataVector&)
 {
   skindepth = skin*stepmin;
-  //  trackID = -1;
 
   // set values of some data members
   SetParticle(p);
@@ -187,7 +189,8 @@ void G4UrbanMscModel::Initialise(const G4ParticleDefinition* p,
   */
   fParticleChange = GetParticleChangeForMSC(p);
 
-  //samplez = true;
+  latDisplasmentbackup = latDisplasment;
+
   //G4cout << "### G4UrbanMscModel::Initialise done!" << G4endl;
 }
 
@@ -444,16 +447,30 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   currentKinEnergy = dp->GetKineticEnergy();
   currentRange = GetRange(particle,currentKinEnergy,couple);
   lambda0 = GetTransportMeanFreePath(particle,currentKinEnergy);
-  if(tPathLength > currentRange) { tPathLength = currentRange; }
+  tPathLength = min(tPathLength,currentRange);
 
+  // set flag to default values
+  latDisplasment = latDisplasmentbackup;
+  /*
+  G4cout << "G4Urban::StepLimit tPathLength= " 
+   	 <<tPathLength<<" inside= " << inside
+	 << " range= " <<currentRange<< " lambda= "<<lambda0
+   	 <<G4endl;
+  */
   // stop here if small range particle
-  if(inside || tPathLength < tlimitminfix) { 
+  if(inside) { 
+    latDisplasment = false;   
+    return ConvertTrueToGeom(tPathLength, currentMinimalStep); 
+  }
+  // stop here if small step
+  if(tPathLength < tlimitminfix) { 
+    latDisplasment = false;   
     return ConvertTrueToGeom(tPathLength, currentMinimalStep); 
   }
   
   presafety = sp->GetSafety();
-  /*
-  G4cout << "G4Urban96::StepLimit tPathLength= " 
+  /*  
+  G4cout << "G4Urban::StepLimit tPathLength= " 
    	 <<tPathLength<<" safety= " << presafety
           << " range= " <<currentRange<< " lambda= "<<lambda0
    	 << " Alg: " << steppingAlgorithm <<G4endl;
@@ -462,6 +479,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   if(currentRange < presafety)
     {
       inside = true;
+      latDisplasment = false;   
       return ConvertTrueToGeom(tPathLength, currentMinimalStep);  
     }
 
@@ -476,6 +494,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       if(currentRange < presafety)
 	{
 	  inside = true;
+          latDisplasment = false;   
 	  return ConvertTrueToGeom(tPathLength, currentMinimalStep);   
 	}
 
@@ -485,8 +504,8 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       if(firstStep || (stepStatus == fGeomBoundary))
         {
           rangeinit = currentRange;
-          if(firstStep) smallstep = 1.e10;
-          else  smallstep = 1.;
+          if(firstStep) { smallstep = 1.e10; }
+          else          { smallstep = 1.; }
 
           //define stepmin here (it depends on lambda!)
           //rough estimation of lambda_elastic/lambda_transport
@@ -497,9 +516,10 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
           skindepth = skin*stepmin;
           //define tlimitmin
           tlimitmin = 10.*stepmin;
-          if(tlimitmin < tlimitminfix) tlimitmin = tlimitminfix;
+          tlimitmin = max(tlimitmin,tlimitminfix);
 	  //G4cout << "rangeinit= " << rangeinit << " stepmin= " << stepmin
-	  //	 << " tlimitmin= " << tlimitmin << " geomlimit= " << geomlimit <<G4endl;
+	  //       << " tlimitmin= " << tlimitmin << " geomlimit= " 
+	  //       << geomlimit <<G4endl;
           // constraint from the geometry
           if((geomlimit < geombig) && (geomlimit > geommin))
             {
@@ -517,14 +537,13 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
               tgeom = geombig;
         }
 
-
       //step limit 
       tlimit = facrange*rangeinit;              
 
       //lower limit for tlimit
-      if(tlimit < tlimitmin) tlimit = tlimitmin;
+      tlimit = max(tlimit,tlimitmin);
 
-      if(tlimit > tgeom) tlimit = tgeom;
+      tlimit = min(tlimit,tgeom); 
 
       //G4cout << "tgeom= " << tgeom << " geomlimit= " << geomlimit  
       //      << " tlimit= " << tlimit << " presafety= " << presafety << G4endl;
@@ -532,7 +551,9 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       // shortcut
       if((tPathLength < tlimit) && (tPathLength < presafety) &&
          (smallstep > skin) && (tPathLength < geomlimit-0.999*skindepth))
+      {
 	return ConvertTrueToGeom(tPathLength, currentMinimalStep);   
+      }
 
       // step reduction near to boundary
       if(smallstep <= skin)
@@ -544,36 +565,35 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 	{
 	  if(geomlimit > skindepth)
 	    {
-	      if(tlimit > geomlimit-0.999*skindepth)
-		tlimit = geomlimit-0.999*skindepth;
+	      tlimit = min(tlimit, geomlimit-0.999*skindepth);
 	    }
 	  else
 	    {
 	      insideskin = true;
-	      if(tlimit > stepmin) tlimit = stepmin;
+	      tlimit = min(tlimit, stepmin);
 	    }
 	}
 
-      if(tlimit < stepmin) tlimit = stepmin;
+      tlimit = max(tlimit, stepmin); 
 
       // randomize 1st step or 1st 'normal' step in volume
-      if(firstStep || ((smallstep == skin) && !insideskin)) 
+      if(firstStep || ((smallstep == skin+1) && !insideskin)) 
         { 
           G4double temptlimit = tlimit;
           if(temptlimit > tlimitmin)
           {
             do {
-              temptlimit = G4RandGauss::shoot(tlimit,0.3*tlimit);        
-               } while ((temptlimit < tlimitmin) || 
-                        (temptlimit > 2.*tlimit-tlimitmin));
+            temptlimit = G4RandGauss::shoot(rndmEngineMod,tlimit,0.3*tlimit); 
+	    } while ((temptlimit < tlimitmin) || 
+		     (temptlimit > 2.*tlimit-tlimitmin));
           }
-          else
-            temptlimit = tlimitmin;
-          if(tPathLength > temptlimit) tPathLength = temptlimit;
+          else { temptlimit = tlimitmin; }
+
+          tPathLength = min(tPathLength, temptlimit);
         }
       else
         {  
-          if(tPathLength > tlimit) tPathLength = tlimit  ; 
+          tPathLength = min(tPathLength, tlimit); 
         }
 
     }
@@ -581,10 +601,15 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
     //  there no small step/single scattering at boundaries
   else if(steppingAlgorithm == fUseSafety)
     {
-      // compute presafety again if presafety <= 0 and no boundary
-      // i.e. when it is needed for optimization purposes
-      if((stepStatus != fGeomBoundary) && (presafety < tlimitminfix)) 
+      if(currentRange < presafety)
+        {
+          inside = true;
+          latDisplasment = false;
+          return ConvertTrueToGeom(tPathLength, currentMinimalStep);
+        }   
+      else if(stepStatus != fGeomBoundary)  {
 	presafety = ComputeSafety(sp->GetPosition(),tPathLength); 
+      }
       /*
       G4cout << "presafety= " << presafety
 	     << " firstStep= " << firstStep
@@ -595,6 +620,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       if(currentRange < presafety)
         {
           inside = true;
+          latDisplasment = false;
           return ConvertTrueToGeom(tPathLength, currentMinimalStep);  
         }
 
@@ -605,27 +631,24 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
         // 9.1 like stepping for e+/e- only (not for muons,hadrons)
         if(mass < masslimite) 
         {
-          if(lambda0 > currentRange)
-            rangeinit = lambda0;
-          if(lambda0 > lambdalimit)
-            fr *= 0.75+0.25*lambda0/lambdalimit;
+	  rangeinit = max(rangeinit, lambda0);
+          if(lambda0 > lambdalimit) {
+            fr *= (0.75+0.25*lambda0/lambdalimit);
+	  }
         }
 
         //lower limit for tlimit
-        G4double rat = currentKinEnergy/MeV ;
-        rat = 1.e-3/(rat*(10.+rat)) ;
+        G4double rat = currentKinEnergy/MeV;
+        rat = 1.e-3/(rat*(10 + rat)) ;
         stepmin = lambda0*rat;
-        tlimitmin = 10.*stepmin;
-        if(tlimitmin < tlimitminfix) tlimitmin = tlimitminfix;
+        tlimitmin = max(10*stepmin, tlimitminfix);
       }
+
       //step limit
-      tlimit = fr*rangeinit;               
-
-      if(tlimit < facsafety*presafety)
-        tlimit = facsafety*presafety;
-
+      tlimit = max(fr*rangeinit, facsafety*presafety);
+  
       //lower limit for tlimit
-      if(tlimit < tlimitmin) tlimit = tlimitmin;
+      tlimit = max(tlimit, tlimitmin); 
 
       if(firstStep || stepStatus == fGeomBoundary)
       {
@@ -633,29 +656,114 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
         if(temptlimit > tlimitmin)
         {
           do {
-            temptlimit = G4RandGauss::shoot(tlimit,0.3*tlimit);
-             } while ((temptlimit < tlimitmin) ||
-                      (temptlimit > 2.*tlimit-tlimitmin));
+            temptlimit = G4RandGauss::shoot(rndmEngineMod,tlimit,0.3*tlimit); 
+	  } while ((temptlimit < tlimitmin) ||
+		   (temptlimit > 2.*tlimit-tlimitmin));
         }
-        else
-          temptlimit = tlimitmin;
+        else { temptlimit = tlimitmin; }
 
-        if(tPathLength > temptlimit) tPathLength = temptlimit;
+        tPathLength = min(tPathLength, temptlimit);
       }
-      else
-        if(tPathLength > tlimit) tPathLength = tlimit;
-
+      else { tPathLength = min(tPathLength, tlimit); }
     }
-  
+  // new stepping mode UseSafetyPlus
+    else if(steppingAlgorithm == fUseSafetyPlus)
+    {
+      if(currentRange < presafety)
+        {
+          inside = true;
+          latDisplasment = false;
+          return ConvertTrueToGeom(tPathLength, currentMinimalStep);
+        }
+      else if(stepStatus != fGeomBoundary)  {
+        presafety = ComputeSafety(sp->GetPosition(),tPathLength);
+      }
+      /*
+      G4cout << "presafety= " << presafety
+             << " firstStep= " << firstStep
+             << " stepStatus= " << stepStatus
+             << G4endl;
+      */
+      // is far from boundary
+      if(currentRange < presafety)
+        {
+          inside = true;
+          latDisplasment = false;
+          return ConvertTrueToGeom(tPathLength, currentMinimalStep);
+        }
+
+      if(firstStep || stepStatus == fGeomBoundary)
+      {
+        rangeinit = currentRange;
+        fr = facrange;
+        rangecut = geombig;
+        if(mass < masslimite)
+        {
+          G4int index = 1;
+          if(charge > 0.) index = 2;
+          rangecut = couple->GetProductionCuts()->GetProductionCut(index);
+          if(lambda0 > lambdalimit) {
+            fr *= (0.84+0.16*lambda0/lambdalimit);
+          }
+        }
+
+        //lower limit for tlimit
+        G4double rat = currentKinEnergy/MeV;
+        rat = 1.e-3/(rat*(10 + rat)) ;
+        stepmin = lambda0*rat;
+        tlimitmin = max(10*stepmin, tlimitminfix);
+      }
+      //step limit
+      tlimit = max(fr*rangeinit, facsafety*presafety);
+
+      //lower limit for tlimit
+      tlimit = max(tlimit, tlimitmin);
+
+      // condition for tPathLength from drr and finalr
+      if(currentRange > finalr) {
+        G4double tmax = drr*currentRange+
+                        finalr*(1.-drr)*(2.-finalr/currentRange);
+        tPathLength = min(tPathLength,tmax); 
+      }
+
+      // condition safety
+      if(currentRange > rangecut) {
+        if(firstStep) {
+          tPathLength = min(tPathLength,facsafety*presafety);
+        }
+      else if(stepStatus != fGeomBoundary) {
+        if(presafety > stepmin) {
+          tPathLength = min(tPathLength,presafety);
+          }
+        }
+      } 
+
+      if(firstStep || stepStatus == fGeomBoundary)
+      {
+        G4double temptlimit = tlimit;
+        if(temptlimit > tlimitmin)
+        {
+          do {
+            temptlimit = G4RandGauss::shoot(rndmEngineMod,tlimit,0.3*tlimit);
+          } while ((temptlimit < tlimitmin) ||
+                   (temptlimit > 2.*tlimit-tlimitmin));
+        }
+        else { temptlimit = tlimitmin; }
+
+        tPathLength = min(tPathLength, temptlimit);
+      }
+      else { tPathLength = min(tPathLength, tlimit); }
+    }
+
   // version similar to 7.1 (needed for some experiments)
   else
     {
       if (stepStatus == fGeomBoundary)
 	{
-	  if (currentRange > lambda0) tlimit = facrange*currentRange;
-	  else                        tlimit = facrange*lambda0;
+	  if (currentRange > lambda0) { tlimit = facrange*currentRange; }
+	  else                        { tlimit = facrange*lambda0; }
 
-	  if(tlimit < tlimitmin) tlimit = tlimitmin;
+          tlimit = max(tlimit, tlimitmin);
         }
 
       if(firstStep || stepStatus == fGeomBoundary)
@@ -664,17 +772,15 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
         if(temptlimit > tlimitmin)
         {
           do {
-            temptlimit = G4RandGauss::shoot(tlimit,0.3*tlimit);
-             } while ((temptlimit < tlimitmin) ||
-                      (temptlimit > 2.*tlimit-tlimitmin));
+            temptlimit = G4RandGauss::shoot(rndmEngineMod,tlimit,0.3*tlimit); 
+	  } while ((temptlimit < tlimitmin) ||
+		   (temptlimit > 2.*tlimit-tlimitmin));
         }
-        else
-          temptlimit = tlimitmin;
+        else { temptlimit = tlimitmin; }
 
-        if(tPathLength > temptlimit) tPathLength = temptlimit;
+        tPathLength = min(tPathLength, temptlimit);
       }
-      else
-        if(tPathLength > tlimit) tPathLength = tlimit;
+      else { tPathLength = min(tPathLength, tlimit); }
     }
   //G4cout << "tPathLength= " << tPathLength 
   //	 << " currentMinimalStep= " << currentMinimalStep << G4endl;
@@ -690,59 +796,59 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
   par1 = -1. ;  
   par2 = par3 = 0. ;  
 
+  // this correction needed to run MSC with eIoni and eBrem inactivated
+  // and makes no harm for a normal run
+  tPathLength = min(tPathLength,currentRange); 
+
   //  do the true -> geom transformation
   zPathLength = tPathLength;
 
   // z = t for very small tPathLength
   if(tPathLength < tlimitminfix2) return zPathLength;
 
-  // this correction needed to run MSC with eIoni and eBrem inactivated
-  // and makes no harm for a normal run
-  // It is already checked
+  // VI: it is already checked
   // if(tPathLength > currentRange)
   //  tPathLength = currentRange ;
-
-  G4double tau   = tPathLength/lambda0 ;
+  /*
+  G4cout << "ComputeGeomPathLength: tpl= " <<  tPathLength
+	 << " R= " << currentRange << " L0= " << lambda0
+	 << " E= " << currentKinEnergy << "  " 
+	 << particle->GetParticleName() << G4endl;
+  */
+  G4double tau = tPathLength/lambda0 ;
 
   if ((tau <= tausmall) || insideskin) {
-    zPathLength  = tPathLength;
-    if(zPathLength > lambda0) zPathLength = lambda0;
-    return zPathLength;
-  }
+    zPathLength = min(tPathLength, lambda0); 
 
-  G4double zmean = tPathLength;
-  if (tPathLength < currentRange*dtrl) {
-    if(tau < taulim) zmean = tPathLength*(1.-0.5*tau) ;
-    else             zmean = lambda0*(1.-G4Exp(-tau));
-    zPathLength = zmean ;
-    return zPathLength;    
+  } else  if (tPathLength < currentRange*dtrl) {
+    if(tau < taulim) zPathLength = tPathLength*(1.-0.5*tau) ;
+    else             zPathLength = lambda0*(1.-G4Exp(-tau));
 
   } else if(currentKinEnergy < mass || tPathLength == currentRange)  {
     par1 = 1./currentRange ;
     par2 = 1./(par1*lambda0) ;
     par3 = 1.+par2 ;
-    if(tPathLength < currentRange)
-      zmean = (1.-G4Exp(par3*G4Log(1.-tPathLength/currentRange)))/(par1*par3) ;
-    else {
-      zmean = 1./(par1*par3) ;
+    if(tPathLength < currentRange) {
+      zPathLength = 
+	(1.-G4Exp(par3*G4Log(1.-tPathLength/currentRange)))/(par1*par3);
+    } else {
+      zPathLength = 1./(par1*par3);
     }
-    zPathLength = zmean ;
-    return zPathLength;    
 
   } else {
-    G4double T1 = GetEnergy(particle,currentRange-tPathLength,couple);
+    G4double rfin = max(currentRange-tPathLength, 0.01*currentRange);
+    G4double T1 = GetEnergy(particle,rfin,couple);
     G4double lambda1 = GetTransportMeanFreePath(particle,T1);
 
     par1 = (lambda0-lambda1)/(lambda0*tPathLength);
+    //G4cout << "par1= " << par1 << " L1= " << lambda1 << G4endl;
     par2 = 1./(par1*lambda0);
     par3 = 1.+par2 ;
-    zmean = (1.-G4Exp(par3*G4Log(lambda1/lambda0)))/(par1*par3);
+    zPathLength = (1.-G4Exp(par3*G4Log(lambda1/lambda0)))/(par1*par3);
   }
 
-  zPathLength = zmean;
-
-  if(zPathLength > lambda0) { zPathLength = lambda0; }
-  //G4cout<< "zPathLength= "<< zPathLength<< " lambda1= " << lambda0 << G4endl;
+  zPathLength = min(zPathLength, lambda0);
+  //G4cout<< "zPathLength= "<< zPathLength<< " L0= " << lambda0 << G4endl;
   return zPathLength;
 }
 
@@ -751,8 +857,11 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
 G4double G4UrbanMscModel::ComputeTrueStepLength(G4double geomStepLength)
 {
   // step defined other than transportation 
-  if(geomStepLength == zPathLength)
-    { return tPathLength; }
+  if(geomStepLength == zPathLength) { 
+    //G4cout << "Urban::ComputeTrueLength: tPathLength= " << tPathLength 
+    //	   << " step= " << geomStepLength << " *** " << G4endl;
+    return tPathLength; 
+  }
 
   zPathLength = geomStepLength;
 
@@ -775,44 +884,23 @@ G4double G4UrbanMscModel::ComputeTrueStepLength(G4double geomStepLength)
 	  tlength = currentRange;
 	}
       }
+
       if(tlength < geomStepLength)   { tlength = geomStepLength; }
       else if(tlength > tPathLength) { tlength = tPathLength; }
     }  
     tPathLength = tlength; 
   }
-  //G4cout << "Urban96::ComputeTrueLength: tPathLength= " << tPathLength 
-  //	 << " step= " << geomStepLength << G4endl;
+  //G4cout << "Urban::ComputeTrueLength: tPathLength= " << tPathLength 
+  //	 << " step= " << geomStepLength << " &&& " << G4endl;
 
   return tPathLength;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4UrbanMscModel::ComputeTheta0(G4double trueStepLength,
-					  G4double KineticEnergy)
-{
-  // for all particles take the width of the central part
-  //  from a  parametrization similar to the Highland formula
-  // ( Highland formula: Particle Physics Booklet, July 2002, eq. 26.10)
-  G4double betacp = sqrt(currentKinEnergy*(currentKinEnergy+2.*mass)*
-                         KineticEnergy*(KineticEnergy+2.*mass)/
-                      ((currentKinEnergy+mass)*(KineticEnergy+mass)));
-  y = trueStepLength/currentRadLength;
-  G4double theta0 = c_highland*std::abs(charge)*sqrt(y)/betacp;
-  y = G4Log(y);
-  // correction factor from e- scattering data
-  G4double corr = coeffth1+coeffth2*y;                
-
-  theta0 *= corr ;                                               
-
-  return theta0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4ThreeVector& 
 G4UrbanMscModel::SampleScattering(const G4ThreeVector& oldDirection,
-				  G4double safety)
+				  G4double /*safety*/)
 {
   fDisplacement.set(0.0,0.0,0.0);
   G4double kineticEnergy = currentKinEnergy;
@@ -823,19 +911,13 @@ G4UrbanMscModel::SampleScattering(const G4ThreeVector& oldDirection,
   }
 
   if((kineticEnergy <= eV) || (tPathLength <= tlimitminfix) ||
-     (tPathLength/tausmall < lambda0)) { return fDisplacement; }
+     (tPathLength < tausmall*lambda0)) { return fDisplacement; }
 
-  G4double cth  = SampleCosineTheta(tPathLength,kineticEnergy);
+  G4double cth = SampleCosineTheta(tPathLength,kineticEnergy);
 
   // protection against 'bad' cth values
-  if(std::fabs(cth) > 1.) { return fDisplacement; }
+  if(std::fabs(cth) >= 1.0) { return fDisplacement; } 
 
-  // extra protection agaist high energy particles backscattered 
-    //G4cout << "Warning: large scattering E(MeV)= " << kineticEnergy 
-    //	   << " s(mm)= " << tPathLength/mm
-    //	   << " 1-cosTheta= " << 1.0 - cth << G4endl;
-    // do Gaussian central scattering
-  //  if(kineticEnergy > 5*GeV && cth < 0.9) {
   /*
   if(cth < 1.0 - 1000*tPathLength/lambda0 && cth < 0.5 &&
      kineticEnergy > 20*MeV) { 
@@ -848,7 +930,7 @@ G4UrbanMscModel::SampleScattering(const G4ThreeVector& oldDirection,
   }
   */
   G4double sth  = sqrt((1.0 - cth)*(1.0 + cth));
-  G4double phi  = twopi*G4UniformRand();
+  G4double phi  = twopi*rndmEngineMod->flat(); 
   G4double dirx = sth*cos(phi);
   G4double diry = sth*sin(phi);
 
@@ -862,9 +944,14 @@ G4UrbanMscModel::SampleScattering(const G4ThreeVector& oldDirection,
 	 << " geomStep(mm)= " << zPathLength
 	 << G4endl;
   */
-  if (latDisplasment && safety > tlimitminfix2) {
 
-    G4double r = SampleDisplacement();
+  //if (latDisplasment && safety > tlimitminfix2 && currentTau >= tausmall &&
+  //    !insideskin) {
+  if (latDisplasment && currentTau >= tausmall) {
+    //sample displacement r
+    G4double rmax = sqrt((tPathLength-zPathLength)*(tPathLength+zPathLength));
+    G4double r = rmax*G4Exp(G4Log(rndmEngineMod->flat())*third);
+
     /*    
     G4cout << "G4UrbanMscModel::SampleSecondaries: e(MeV)= " << kineticEnergy
 	   << " sinTheta= " << sth << " r(mm)= " << r
@@ -875,17 +962,19 @@ G4UrbanMscModel::SampleScattering(const G4ThreeVector& oldDirection,
     if(r > 0.)
       {
         G4double latcorr = LatCorrelation();
-        if(latcorr > r) latcorr = r;
+        latcorr = min(latcorr, r);
 
         // sample direction of lateral displacement
         // compute it from the lateral correlation
         G4double Phi = 0.;
         if(std::abs(r*sth) < latcorr)
-          Phi  = twopi*G4UniformRand();
+          Phi  = twopi*rndmEngineMod->flat();
         else
         {
+	  //G4cout << "latcorr= " << latcorr << "  r*sth= " << r*sth 
+	  //	 << " ratio= " << latcorr/(r*sth) <<  G4endl;
           G4double psi = std::acos(latcorr/(r*sth));
-          if(G4UniformRand() < 0.5)
+          if(rndmEngineMod->flat() < 0.5)
             Phi = phi+psi;
           else
             Phi = phi-psi;
@@ -918,7 +1007,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
     UpdateCache();
 
   G4double lambda1 = GetTransportMeanFreePath(particle,KineticEnergy);
-  if(std::fabs(lambda1/lambda0 - 1) > 0.01 && lambda1 > 0.)
+  if(std::fabs(lambda1 - lambda0) > lambda0*0.01 && lambda1 > 0.)
   {
     // mean tau value
     tau = trueStepLength*G4Log(lambda0/lambda1)/(lambda0-lambda1);
@@ -928,7 +1017,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
   lambdaeff = trueStepLength/currentTau;
   currentRadLength = couple->GetMaterial()->GetRadlen();
 
-  if (tau >= taubig) { cth = -1.+2.*G4UniformRand(); }
+  if (tau >= taubig) { cth = -1.+2.*rndmEngineMod->flat(); }
   else if (tau >= tausmall) {
     static const G4double numlim = 0.01;
     G4double xmeanth, x2meanth;
@@ -939,11 +1028,12 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
       xmeanth = G4Exp(-tau);
       x2meanth = (1.+2.*G4Exp(-2.5*tau))/3.;
     }
-    G4double relloss = 1.-KineticEnergy/currentKinEnergy;
 
-    if(relloss > rellossmax) 
+    // too large step of low-energy particle
+    G4double relloss = 1. - KineticEnergy/currentKinEnergy;
+    if(relloss > rellossmax) {
       return SimpleScattering(xmeanth,x2meanth);
-
+    }
     // is step extreme small ?
     G4bool extremesmallstep = false ;
     G4double tsmall = tlimitmin;
@@ -952,7 +1042,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
        theta0 = ComputeTheta0(trueStepLength,KineticEnergy);
     } else {
       G4double rate = trueStepLength/tsmall ;
-      if(G4UniformRand() < rate) {
+      if(rndmEngineMod->flat() < rate) {
 	theta0 = ComputeTheta0(tsmall,KineticEnergy);
 	extremesmallstep = true ;
       }
@@ -1036,21 +1126,21 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
     //G4cout << "c= " << c << " qprob= " << qprob << " eb1= " << eb1
     // << " c1= " << c1 << " b1= " << b1 << " bx= " << bx << " eb1= " << eb1
     //	     << G4endl;
-    if(G4UniformRand() < qprob)
+    if(rndmEngineMod->flat() < qprob)
     {
       G4double var = 0;
-      if(G4UniformRand() < prob) {
-        cth = 1.+G4Log(ea+G4UniformRand()*eaa)*x;
+      if(rndmEngineMod->flat() < prob) {
+        cth = 1.+G4Log(ea+rndmEngineMod->flat()*eaa)*x;
       } else {
-        var = (1.0 - d)*G4UniformRand();
+        var = (1.0 - d)*rndmEngineMod->flat();
         if(var < numlim*d) {
           var /= (d*c1); 
           cth = -1.0 + var*(1.0 - 0.5*var*c)*(2. + (c - xsi)*x);
         } else {
           cth = 1. + x*(c - xsi - c*G4Exp(-G4Log(var + d)/c1));
-          //b-b1*bx/G4Exp(G4Log(ebx+(eb1-ebx)*G4UniformRand())/c1) ;
         }
       } 
+      /*
       if(KineticEnergy > 5*GeV && cth < 0.9) {
         G4cout << "G4UrbanMscModel::SampleCosineTheta: E(GeV)= " 
                << KineticEnergy/GeV 
@@ -1064,15 +1154,18 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
                << " bx= " << bx << " d= " << d
                << " ea= " << ea << " eaa= " << eaa << G4endl;
       }
+      */
     }
     else {
-      cth = -1.+2.*G4UniformRand();
+      cth = -1.+2.*rndmEngineMod->flat();
+      /*
       if(KineticEnergy > 5*GeV) {
         G4cout << "G4UrbanMscModel::SampleCosineTheta: E(GeV)= " 
                << KineticEnergy/GeV 
                << " length(mm)= " << trueStepLength << " Zeff= " << Zeff 
                << " qprob= " << qprob << G4endl;
       }
+      */
     }
   }
   return cth ;
@@ -1080,59 +1173,5 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4UrbanMscModel::SimpleScattering(G4double xmeanth,G4double x2meanth)
-{
-  // 'large angle scattering'
-  // 2 model functions with correct xmean and x2mean
-  G4double a = (2.*xmeanth+9.*x2meanth-3.)/(2.*xmeanth-3.*x2meanth+1.);
-  G4double prob = (a+2.)*xmeanth/a;
 
-  // sampling
-  G4double cth = 1.;
-  if(G4UniformRand() < prob)
-    cth = -1.+2.*G4Exp(G4Log(G4UniformRand())/(a+1.));
-  else
-    cth = -1.+2.*G4UniformRand();
-  return cth;
-}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4UrbanMscModel::SampleDisplacement()
-{
-  G4double r = 0.0;
-  if ((currentTau >= tausmall) && !insideskin) {
-    G4double rmax = sqrt((tPathLength-zPathLength)*(tPathLength+zPathLength));
-    r = rmax*G4Exp(G4Log(G4UniformRand())/3.);
-  }
-  return r;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4UrbanMscModel::LatCorrelation()
-{
-  static const G4double kappa = 2.5;
-  static const G4double kappami1 = kappa-1.;
-
-  G4double latcorr = 0.;
-  if((currentTau >= tausmall) && !insideskin)
-  {
-    if(currentTau < taulim)
-      latcorr = lambdaeff*kappa*currentTau*currentTau*
-                (1.-(kappa+1.)*currentTau/3.)/3.;
-    else
-    {
-      G4double etau = 0.;
-      if(currentTau < taubig) etau = G4Exp(-currentTau);
-      latcorr = -kappa*currentTau;
-      latcorr = G4Exp(latcorr)/kappami1;
-      latcorr += 1.-kappa*etau/kappami1 ;
-      latcorr *= 2.*lambdaeff/3. ;
-    }
-  }
-
-  return latcorr;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

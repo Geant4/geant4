@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronElasticXS.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4NeutronElasticXS.hh 83697 2014-09-10 07:15:29Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -49,6 +49,8 @@
 #include "globals.hh"
 #include <vector>
 
+const G4int MAXZEL = 93;
+
 class G4DynamicParticle;
 class G4ParticleDefinition;
 class G4Element;
@@ -63,6 +65,8 @@ public: // With Description
   G4NeutronElasticXS();
 
   virtual ~G4NeutronElasticXS();
+    
+  static const char* Default_Name() {return "G4NeutronElasticXS";}
 
   virtual
   G4bool IsElementApplicable(const G4DynamicParticle*, 
@@ -89,11 +93,10 @@ private:
 
   const G4ParticleDefinition* proton;
 
-  std::vector<G4PhysicsVector*> data;
-  std::vector<G4double>         coeff;
-  G4int   maxZ;
+  static std::vector<G4PhysicsVector*>* data;
+  static G4double  coeff[MAXZEL];
 
-  G4bool  isInitialized;
+  G4bool  isMaster;
 
 };
 

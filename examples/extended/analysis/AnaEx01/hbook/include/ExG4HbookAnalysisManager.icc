@@ -1,0 +1,196 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: ExG4HbookAnalysisManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
+
+/// \file hbook/include/ExG4HbookAnalysisManager.icc
+/// \brief Inline functions of the ExG4HbookAnalysisManager class
+
+
+#include "ExG4HbookH1Manager.hh"
+#include "ExG4HbookH2Manager.hh"
+#include "ExG4HbookNtupleManager.hh"
+
+//_____________________________________________________________________________
+inline 
+G4bool ExG4HbookAnalysisManager::SetH1HbookIdOffset(G4int offset)
+{
+  return fH1Manager->SetH1HbookIdOffset(offset);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4int  ExG4HbookAnalysisManager::GetH1HbookIdOffset() const
+{
+  return fH1Manager->GetH1HbookIdOffset();
+}  
+
+//_____________________________________________________________________________
+inline 
+G4bool ExG4HbookAnalysisManager::SetH2HbookIdOffset(G4int offset)
+{
+  return fH2Manager->SetH2HbookIdOffset(offset);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4int  ExG4HbookAnalysisManager::GetH2HbookIdOffset() const
+{
+  return fH2Manager->GetH2HbookIdOffset();
+}  
+
+//_____________________________________________________________________________
+inline 
+G4bool ExG4HbookAnalysisManager::SetNtupleHbookIdOffset(G4int offset)
+{
+  return fNtupleManager->SetNtupleHbookIdOffset(offset);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4int  ExG4HbookAnalysisManager::GetNtupleHbookIdOffset() const
+{
+  return fNtupleManager->GetNtupleHbookIdOffset();
+}  
+
+//_____________________________________________________________________________
+inline 
+tools::hbook::h1*  ExG4HbookAnalysisManager::GetH1(G4int id, G4bool warn,
+                                                   G4bool onlyIfActive) const 
+{ 
+  return fH1Manager->GetH1(id, warn, onlyIfActive);
+}
+
+//_____________________________________________________________________________
+inline 
+tools::hbook::h2*  ExG4HbookAnalysisManager::GetH2(G4int id, G4bool warn,
+                                                   G4bool onlyIfActive) const 
+{
+  return fH2Manager->GetH2(id, warn, onlyIfActive);
+}
+
+//_____________________________________________________________________________
+inline
+tools::hbook::wntuple* ExG4HbookAnalysisManager::GetNtuple() const
+{
+  return fNtupleManager->GetNtuple();
+}  
+
+//_____________________________________________________________________________
+inline
+tools::hbook::wntuple* ExG4HbookAnalysisManager::GetNtuple(G4int ntupleId) const
+{
+  return fNtupleManager->GetNtuple(ntupleId);
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::hbook::h1*>::iterator ExG4HbookAnalysisManager::BeginH1()
+{
+  return fH1Manager->BeginH1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::hbook::h1*>::iterator ExG4HbookAnalysisManager::EndH1()
+{
+  return fH1Manager->EndH1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::hbook::h1*>::const_iterator 
+ExG4HbookAnalysisManager::BeginConstH1() const
+{
+  return fH1Manager->BeginConstH1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::hbook::h1*>::const_iterator 
+ExG4HbookAnalysisManager::EndConstH1() const
+{
+  return fH1Manager->EndConstH1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::hbook::h2*>::iterator ExG4HbookAnalysisManager::BeginH2()
+{
+  return fH2Manager->BeginH2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::hbook::h2*>::iterator ExG4HbookAnalysisManager::EndH2()
+{
+  return fH2Manager->EndH2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::hbook::h2*>::const_iterator 
+ExG4HbookAnalysisManager::BeginConstH2() const
+{
+  return fH2Manager->BeginConstH2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::hbook::h2*>::const_iterator 
+ExG4HbookAnalysisManager::EndConstH2() const
+{
+  return fH2Manager->EndConstH2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::hbook::wntuple*>::iterator ExG4HbookAnalysisManager::BeginNtuple()
+{
+  return fNtupleManager->BeginNtuple();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::hbook::wntuple*>::iterator ExG4HbookAnalysisManager::EndNtuple()
+{
+  return fNtupleManager->EndNtuple();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::hbook::wntuple*>::const_iterator 
+ExG4HbookAnalysisManager::BeginConstNtuple() const
+{
+  return fNtupleManager->BeginConstNtuple();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::hbook::wntuple*>::const_iterator 
+ExG4HbookAnalysisManager::EndConstNtuple() const
+{
+  return fNtupleManager->EndConstNtuple();
+}  

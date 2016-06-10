@@ -5,6 +5,9 @@
 /tracking/verbose 1
 /run/verbose 1
 /run/initialize
+/run/setCutForRegion Calor-A 1 mm
+/run/setCutForRegion Calor-B 1 mm
+/run/setCutForRegion Calor-C 10 cm
 /run/dumpRegion
 /run/beamOn 10
 /run/dumpCouples

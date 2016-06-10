@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.hh 69704 2013-05-13 09:06:12Z gcosmo $
+// $Id: G4Element.hh 80747 2014-05-09 12:53:43Z gcosmo $
 //
 
 //---------------------------------------------------------------------------
@@ -239,10 +239,10 @@ private:
     
   G4int fNbOfAtomicShells;     // number  of atomic shells
   G4double* fAtomicShells ;    // Pointer to atomic shell binding energies
-  G4int* fNbOfShellElectrons; // pointer to the number of subshell electrons
+  G4int* fNbOfShellElectrons;  // Pointer to the number of subshell electrons
     
   // Isotope vector contains constituent isotopes of the element   
-  size_t fNumberOfIsotopes;    // Number of isotopes added to the element
+  G4int fNumberOfIsotopes;     // Number of isotopes added to the element
   G4IsotopeVector* theIsotopeVector;
   G4double* fRelativeAbundanceVector;     // Fraction nb of atomes per volume
                                           // for each constituent

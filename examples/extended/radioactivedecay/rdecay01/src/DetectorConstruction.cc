@@ -27,10 +27,10 @@
 /// \brief Implementation of the DetectorConstruction class
 //
 //
-// $Id: DetectorConstruction.cc 68030 2013-03-13 13:51:27Z gcosmo $
+// $Id: DetectorConstruction.cc 78307 2013-12-11 10:55:57Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorConstruction.hh"
 
@@ -45,7 +45,7 @@
 DetectorConstruction::DetectorConstruction()
  : G4VUserDetectorConstruction()
 {
-  fWorldSize = 2*um;
+  fWorldSize = 2*mm;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,13 +75,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                                    Air,                    //its material
                                    "World");               //its name
   G4VPhysicalVolume*                                   
-  physiWorld = new G4PVPlacement(0,                        //no rotation
-                                 G4ThreeVector(),          //at (0,0,0)
-                                 logicWorld,               //its logical volume
-                                 "World",                  //its name
-                                 0,                        //its mother  volume
-                                 false,                    //no boolean operation
-                                 0);                       //copy number
+  physiWorld = new G4PVPlacement(0,                      //no rotation
+                                 G4ThreeVector(),        //at (0,0,0)
+                                 logicWorld,             //its logical volume
+                                 "World",                //its name
+                                 0,                      //its mother  volume
+                                 false,                  //no boolean operation
+                                 0);                     //copy number
                 
   //
   //always return the physical World

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiffuseElastic.cc 70682 2013-06-04 07:57:01Z gcosmo $
+// $Id: G4DiffuseElastic.cc 84417 2014-10-15 08:22:44Z gcosmo $
 //
 //
 // Physics model class G4DiffuseElastic 
@@ -55,6 +55,7 @@
 
 #include "G4Element.hh"
 #include "G4ElementTable.hh"
+#include "G4NistManager.hh"
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsFreeVector.hh"
@@ -67,7 +68,7 @@
 G4DiffuseElastic::G4DiffuseElastic() 
   : G4HadronElastic("DiffuseElastic"), fParticle(0)
 {
-  SetMinEnergy( 0.01*GeV );
+  SetMinEnergy( 0.01*MeV ); // 0.01*GeV );
   SetMaxEnergy( 1.*TeV );
   verboseLevel = 0;
   lowEnergyRecoilLimit = 100.*keV;  
@@ -106,13 +107,18 @@ G4DiffuseElastic::G4DiffuseElastic()
 
 G4DiffuseElastic::~G4DiffuseElastic()
 {
-  if(fEnergyVector) delete fEnergyVector;
-
-  if( fAngleTable )
-  {
-      fAngleTable->clearAndDestroy();
-      delete fAngleTable ;
+  if ( fEnergyVector ) {
+    delete fEnergyVector;
+    fEnergyVector = 0;
   }
+
+  for ( std::vector<G4PhysicsTable*>::iterator it = fAngleBank.begin();
+        it != fAngleBank.end(); ++it ) {
+    if ( (*it) ) (*it)->clearAndDestroy();
+    delete *it;
+    *it = 0;
+  }
+  fAngleTable = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -131,7 +137,7 @@ void G4DiffuseElastic::Initialise()
   for(jEl = 0 ; jEl < numOfEl; ++jEl) // application element loop
   {
     fAtomicNumber = (*theElementTable)[jEl]->GetZ();     // atomic number
-    fAtomicWeight = (*theElementTable)[jEl]->GetN();     // number of nucleons
+    fAtomicWeight = G4NistManager::Instance()->GetAtomicMassAmu( static_cast< G4int >( fAtomicNumber ) );
     fNuclearRadius = CalculateNuclearRad(fAtomicWeight);
 
     if(verboseLevel > 0) 
@@ -820,7 +826,7 @@ G4DiffuseElastic::SampleTableThetaCMS(const G4ParticleDefinition* particle,
 
     for(iAngle = 0; iAngle < fAngleBin-1; iAngle++)
     {
-      if( position < (*(*fAngleTable)(iMomentum))(iAngle) ) break;
+      if( position > (*(*fAngleTable)(iMomentum))(iAngle) ) break;
     }
     if (iAngle >= fAngleBin-1) iAngle = fAngleBin-2;
 
@@ -896,10 +902,10 @@ G4DiffuseElastic::SampleTableThetaCMS(const G4ParticleDefinition* particle,
 void G4DiffuseElastic::InitialiseOnFly(G4double Z, G4double A) 
 {
   fAtomicNumber  = Z;     // atomic number
-  fAtomicWeight  = A;     // number of nucleons
+  fAtomicWeight  = G4NistManager::Instance()->GetAtomicMassAmu( static_cast< G4int >( Z ) );
 
   fNuclearRadius = CalculateNuclearRad(fAtomicWeight);
-  
+
   if( verboseLevel > 0 )    
   {
     G4cout<<"G4DiffuseElastic::Initialise() the element with Z = "

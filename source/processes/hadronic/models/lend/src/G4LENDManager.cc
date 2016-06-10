@@ -48,7 +48,7 @@ G4LENDManager::G4LENDManager()
 :verboseLevel( 0 )
 {
 
-   printBanner();
+   //printBanner();
 
    G4String xmcf;
    if( getenv("G4LENDDATA") == NULL ) {
@@ -71,7 +71,7 @@ G4LENDManager::G4LENDManager()
 
    v_lend_target.clear();
 
-   ionTable = new G4IonTable();
+   ionTable = G4IonTable::GetIonTable();
    nistElementBuilder = new G4NistElementBuilder( 0 );
 
 }
@@ -95,7 +95,7 @@ G4LENDManager::~G4LENDManager()
       delete it->second;
    }
 
-   delete ionTable;
+   //delete ionTable;
    delete nistElementBuilder;
 
 }

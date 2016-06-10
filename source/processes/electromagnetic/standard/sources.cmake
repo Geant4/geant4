@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 75582 2013-11-04 12:13:01Z gcosmo $
+# $Id: sources.cmake 83008 2014-07-24 14:49:52Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -74,6 +74,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4ModifiedTsai.hh
         G4MollerBhabhaModel.hh
         G4MottCoefficients.hh
+        G4NISTStoppingData.hh
         G4NuclearStopping.hh
         G4PAIModel.hh
         G4PAIModelData.hh

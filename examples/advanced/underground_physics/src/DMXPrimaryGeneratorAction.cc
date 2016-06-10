@@ -86,9 +86,8 @@ void DMXPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
   energy_pri = 0.;
 
   // seeds
-  //  seeds = HepRandom::getTheSeeds();
-  seeds[0] = *CLHEP::HepRandom::getTheSeeds();
-  seeds[1] = *(CLHEP::HepRandom::getTheSeeds()+1);
+  seeds[0] = *G4Random::getTheSeeds();
+  seeds[1] = *(G4Random::getTheSeeds()+1);
 
   particleGun->GeneratePrimaryVertex(anEvent);
 

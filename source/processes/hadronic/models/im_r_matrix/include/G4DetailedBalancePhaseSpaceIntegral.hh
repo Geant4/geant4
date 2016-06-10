@@ -32,11 +32,11 @@
 class G4DetailedBalancePhaseSpaceIntegral
 {
   public:
-  G4DetailedBalancePhaseSpaceIntegral(G4ParticleDefinition * aR);
+  G4DetailedBalancePhaseSpaceIntegral(const G4ParticleDefinition * aR);
   G4double GetPhaseSpaceIntegral(G4double sqrts);
   
   private:
-  G4ParticleDefinition * theR;
+//  const G4ParticleDefinition * theR;
   const G4double * data;
   
   private:

@@ -27,13 +27,13 @@
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
-// MODULE:		G4PolyhedronArbitrary.hh
+// MODULE:                G4PolyhedronArbitrary.hh
 //
-// Date:		15/06/2005
-// Author:		P R Truscott
-// Organisation:	QinetiQ Ltd, UK
-// Customer:		UK Ministry of Defence : RAO CRP TD Electronic Systems
-// Contract:		C/MAT/N03517
+// Date:                15/06/2005
+// Author:                P R Truscott
+// Organisation:        QinetiQ Ltd, UK
+// Customer:                UK Ministry of Defence : RAO CRP TD Electronic Systems
+// Contract:                C/MAT/N03517
 //
 // This software is the intelectual property of QinetiQ Ltd, subject
 // DEFCON 705 IPR conditions.
@@ -78,7 +78,7 @@ class G4PolyhedronArbitrary : public G4Polyhedron
     G4PolyhedronArbitrary (const G4int nVertices, const G4int nFacets);
     virtual ~G4PolyhedronArbitrary ();
     
-    void AddVertex (const G4ThreeVector v);
+    void AddVertex (const G4ThreeVector& v);
     void AddFacet (const G4int iv1, const G4int iv2, const G4int iv3,
       const G4int iv4=0);
     

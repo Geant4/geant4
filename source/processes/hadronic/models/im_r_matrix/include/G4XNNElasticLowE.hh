@@ -77,7 +77,7 @@ private:
   static const G4double _eMinTable;
   static const G4double _eStepLog;
 
-  std::map <G4ParticleDefinition *, G4PhysicsVector*, std::less<G4ParticleDefinition *> > xMap;
+  std::map <const G4ParticleDefinition *, G4PhysicsVector*, std::less<const G4ParticleDefinition *> > xMap;
 
   G4double _eMin;
   G4double _eMax;

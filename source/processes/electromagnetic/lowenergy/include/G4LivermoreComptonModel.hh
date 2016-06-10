@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreComptonModel.hh 76220 2013-11-08 10:15:00Z gcosmo $
+// $Id: G4LivermoreComptonModel.hh 82874 2014-07-15 15:25:29Z gcosmo $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -85,8 +85,6 @@ private:
 
   G4bool isInitialised;
   G4int verboseLevel;
-
-  G4double lowestEnergy;
   
   G4ParticleChangeForGamma* fParticleChange;
   G4VAtomDeexcitation*      fAtomDeexcitation;

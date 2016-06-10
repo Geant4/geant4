@@ -1,4 +1,4 @@
-$Id: History 73035 2013-08-15 09:27:10Z gcosmo $
+$Id: History 85425 2014-10-29 08:24:37Z gcosmo $
 ----------------------------------------------------
 
      =========================================================
@@ -14,6 +14,61 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+28-10-14 mma (testem3-V10-00-16)
+- in macros : /run/numberOfThreads 2
+ 
+23-10-14 V.Ivant (testem3-V10-00-15)
+- disable extra printout for sequential 
+	 
+23-10-14 V.Ivant (testem3-V10-00-14)
+- improved output MT 
+	 
+23-10-14 mma (testem3-V10-00-13)
+- PhysListEmStandard : msc algorithm fUseSafetyPlus
+
+21-10-14 mma (testem3-V10-00-12)
+- PhysicsList : added G4EmStandardPhysicsSS
+- TestEm3.cc : option set nThreads via command
+	 
+27-08-14 mma (testem3-V10-00-11)
+- TestEm1.cc : SetNumberOfThreads( G4Threading::G4GetNumberOfCores() )
+
+13-08-14 mma (testem3-V10-00-10)
+- update .README again
+
+12-08-14 mma (testem3-V10-00-09)
+- update .README
+
+11-08-14 V.Ivant (testem3-V10-00-08)
+- added "emstandardSS" option for EM physics 
+	 
+10-08-14 mma (testem3-V10-00-07)
+- update README, emtutor.mac
+		 
+14-06-14 mma (testem3-V10-00-06)
+- remove PhysicsList::SetCuts()	
+ 
+11-06-14 mma (testem3-V10-00-05)
+- retag of 04
+ 
+07-06-14 mma (testem3-V10-00-04)
+- minor cleanup in PhysicsList::SetCuts()
+	 
+05-06-14 mma (testem3-V10-00-03)
+- replace /testem/phys/setCuts by /run/setCut
+ 
+28-04-14 V.Ivant (testem3-V10-00-02)
+- added "emlowenergy" option for EM physics 
+     
+14-01-14 mma (testem3-V10-00-01)
+- MT: Add forgotten classes ActionInitialization, Run
+     
+06-01-14 mma (testem3-V10-00-00)
+- MT: ActionInitialization, TestEm3.cc
+- MT: Run, RunAction, EventAction, TrackingAction, SteppingAction
+- MT: DetectorConstruction and Messenger
+- rm EventActionMessenger, hbook
 
 24-07-13 P.Gumplinger (testem3-V09-06-09)
 - remove unused field fEventAct from TrackingAction class

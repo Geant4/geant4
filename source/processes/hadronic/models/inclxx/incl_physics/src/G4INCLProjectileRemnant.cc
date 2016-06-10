@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -46,10 +47,6 @@
 #include <numeric>
 
 namespace G4INCL {
-
-  G4int shuffleComponentsHelper(G4int range) {
-    return (G4int)(Random::shoot1()*range);
-  }
 
   void ProjectileRemnant::reset() {
     deleteParticles();
@@ -70,17 +67,18 @@ namespace G4INCL {
       theInitialEnergyLevels[p->getID()] = energyLevel;
       addParticle(p);
     }
-    thePosition /= theA;
+    if(theA>0)
+      thePosition /= theA;
     setTableMass();
-    INCL_DEBUG("ProjectileRemnant object was reset:" << std::endl << print());
+    INCL_DEBUG("ProjectileRemnant object was reset:" << '\n' << print());
   }
 
   void ProjectileRemnant::removeParticle(Particle * const p, const G4double theProjectileCorrection) {
 // assert(p->isNucleon());
 
     INCL_DEBUG("The following Particle is about to be removed from the ProjectileRemnant:"
-        << std::endl << p->print()
-        << "theProjectileCorrection=" << theProjectileCorrection << std::endl);
+        << '\n' << p->print()
+        << "theProjectileCorrection=" << theProjectileCorrection << '\n');
     // Update A, Z, momentum and energy of the projectile remnant
     theA -= p->getA();
     theZ -= p->getZ();
@@ -117,7 +115,7 @@ namespace G4INCL {
 // assert(std::abs((theTotalMomentum-theMomentum).mag())<theThreshold);
 // assert(std::abs(theTotalEnergy-theEnergy)<theThreshold);
     INCL_DEBUG("After Particle removal, the ProjectileRemnant looks like this:"
-        << std::endl << print());
+        << '\n' << print());
   }
 
   ParticleList ProjectileRemnant::addDynamicalSpectators(ParticleList pL) {
@@ -140,7 +138,7 @@ namespace G4INCL {
     return pL;
   }
 
-  ParticleList ProjectileRemnant::addAllDynamicalSpectators(ParticleList pL) {
+  ParticleList ProjectileRemnant::addAllDynamicalSpectators(ParticleList const &pL) {
     // Put all the spectators in the projectile
     ThreeVector theNewMomentum = theMomentum;
     G4double theNewEnergy = theEnergy;
@@ -164,7 +162,7 @@ namespace G4INCL {
     // "most" method
     if(theNewEnergy<theNewEffectiveMass) {
       INCL_WARN("Could not add all the dynamical spectators back into the projectile remnant."
-           << " Falling back to the \"most\" method." << std::endl);
+           << " Falling back to the \"most\" method." << '\n');
       return addMostDynamicalSpectators(pL);
     }
 
@@ -177,7 +175,7 @@ namespace G4INCL {
     // correct value
     const G4double scalingFactorSquared = (theNewEnergy*theNewEnergy-theNewEffectiveMass*theNewEffectiveMass)/theNewMomentum.mag2();
     const G4double scalingFactor = std::sqrt(scalingFactorSquared);
-    INCL_DEBUG("Scaling factor for the projectile-remnant momentum = " << scalingFactor << std::endl);
+    INCL_DEBUG("Scaling factor for the projectile-remnant momentum = " << scalingFactor << '\n');
 
     theA = theNewA;
     theZ = theNewZ;
@@ -239,7 +237,7 @@ namespace G4INCL {
 
         if(theNewerInvariantMassSquared>=-1.e-5) {
           const G4double theNewerInvariantMass = std::sqrt(std::max(0.,theNewerInvariantMassSquared));
-          const G4double theNewerExcitationEnergy = theNewerInvariantMass-theNewerMass;
+          const G4double theNewerExcitationEnergy = ((theNewerA>1) ? theNewerInvariantMass-theNewerMass : 0.);
           // Pick the nucleon that maximises the excitation energy of the
           // ProjectileRemnant
           if(theNewerExcitationEnergy>maxExcitationEnergy) {

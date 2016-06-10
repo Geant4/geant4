@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGNucleonElasticXS.cc 78189 2013-12-04 16:34:08Z gcosmo $
+// $Id: G4BGGNucleonElasticXS.cc 79981 2014-03-27 15:24:11Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -220,9 +220,8 @@ void G4BGGNucleonElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
     fSAIDHighEnergyLimit = 3*GeV;
   }
 
-  G4ParticleDefinition* part = const_cast<G4ParticleDefinition*>(particle);
   G4ThreeVector mom(0.0,0.0,1.0);
-  G4DynamicParticle dp(part, mom, fGlauberEnergy);
+  G4DynamicParticle dp(particle, mom, fGlauberEnergy);
 
   G4NistManager* nist = G4NistManager::Instance();
 

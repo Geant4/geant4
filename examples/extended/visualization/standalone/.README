@@ -32,9 +32,10 @@ examples/extended/visualization/userVisAction.
 
 Note: The system needs an "extent" in order to point the virtual
 camera and adjust its field of view, etc.  This defines the "standard
-view".  You may zoom, etc., from this standard view.
+view".  You may zoom, etc., from this standard view.  The extent may
+be specified as suggested above or by using /vis/scene/add/extent.
 
 
 John Allison
-11th June 2012
+27th November 2014
 */

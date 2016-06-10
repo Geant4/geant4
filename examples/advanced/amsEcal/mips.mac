@@ -1,4 +1,4 @@
-# $Id: mips.mac 68740 2013-04-05 09:56:39Z gcosmo $
+# $Id: mips.mac 83418 2014-08-21 15:30:47Z gcosmo $
 #
 # Macro file for "amsEcal.cc" 
 # (can be run in batch, without graphic)
@@ -6,23 +6,24 @@
 /control/verbose 2
 /run/verbose 2
 #
-/ams/phys/addPhysics  emstandard_local
-/ams/phys/setCuts 1 mm
+/ams/phys/addPhysics  local
+/run/setCut 1 mm
 #
 /run/initialize
 #
 /ams/gun/setDefault
 /gun/particle proton
-/gun/energy 100 GeV
+/gun/energy 10 GeV
 /ams/gun/beam 20 mm
 #
-/ams/histo/setFileName mips/100gev
-/ams/histo/setFileType hbook
+/analysis/setFileName mips
 #
-/ams/histo/setHisto 1 100  0. 50. MeV		#evis in ecal
-/ams/histo/setHisto 3 20  0. 20. none
-/ams/histo/setHisto 4 20  0. 20. none
+/analysis/h1/set 1 100  0. 200. MeV		#etot in ecal
+/analysis/h1/set 2 100  0.  50. MeV		#evis in ecal
+/analysis/h1/set 3 100  0. 100. none
+/analysis/h1/set 4 100  0. 100. none
+/analysis/h1/set 5 250  0. 500. none
 #
-/ams/event/printModulo 4000
+/run/printProgress 4000
 #
 /run/beamOn 40000

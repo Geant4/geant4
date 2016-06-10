@@ -1,11 +1,13 @@
-# $Id: TestEm16.in 66241 2012-12-13 18:34:42Z gunter $
+# $Id: TestEm16.in 85257 2014-10-27 08:50:30Z gcosmo $
 #
 # Macro file for "TestEm16.cc"
 # (can be run in batch, without graphic)
 #
 #
 /control/verbose 2
-/run/verbose 2
+/control/cout/ignoreThreadsExcept 0
+/run/numberOfThreads 2
+/run/verbose 1
 #
 /testem/det/setMat Vacuum
 #
@@ -21,7 +23,7 @@
 /process/inactivate conv
 /process/inactivate Rayl
 #
-/testem/det/setField 1.0 tesla
+/globalField/setValue 0 0 1 tesla
 #
 /gun/particle e-
 /gun/energy 9.9994890009 GeV

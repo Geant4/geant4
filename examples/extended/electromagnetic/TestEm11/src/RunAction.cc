@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm11/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 76258 2013-11-08 11:36:51Z gcosmo $
+// $Id: RunAction.cc 78560 2014-01-07 10:06:52Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,18 +40,18 @@
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4UnitsTable.hh"
 #include "G4EmCalculator.hh"
 
-#include "Randomize.hh"
+#include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
-#include <iomanip>
+
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
                      PrimaryGeneratorAction* kin)
-:G4UserRunAction(),fDetector(det),fPhysics(phys),fKinematic(kin),fRun(0),
+:G4UserRunAction(),fDetector(det),fPhysics(phys),fPrimary(kin),fRun(0),
  fHistoManager(0)
 {
   // Book predefined histograms
@@ -79,34 +79,41 @@ void RunAction::BeginOfRunAction(const G4Run*)
 {  
   // save Rndm status
   ////G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  G4Random::showEngineStatus();
-  
+   if (isMaster)  G4Random::showEngineStatus();
+   
+  // keep run condition
+  if ( fPrimary ) { 
+    G4ParticleDefinition* particle 
+      = fPrimary->GetParticleGun()->GetParticleDefinition();
+    G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
+    fRun->SetPrimary(particle, energy);
+  }
+        
   //histograms
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   if ( analysisManager->IsActive() ) {
     analysisManager->OpenFile();
-  } 
-    
+  }
+   
+  if (!fPrimary) return;
+      
   //set StepMax from histos 1 and 8
-  //e
+  //
   G4double stepMax = DBL_MAX;
   G4int ih = 1;
   if (analysisManager->GetH1Activation(ih)) {
     stepMax = analysisManager->GetH1Width(ih);
   }  
   
-  if (  ! fKinematic ) return;
-  
-    //
   ih = 8;
-  G4ParticleDefinition* particle = fKinematic->GetParticleGun()
+  G4ParticleDefinition* particle = fPrimary->GetParticleGun()
                                           ->GetParticleDefinition();
   if (particle->GetPDGCharge() != 0.) {
     G4double width = analysisManager->GetH1Width(ih);
     if (width == 0.) width = 1.;                                               
     G4EmCalculator emCalculator;
-    G4double energy = fKinematic->GetParticleGun()->GetParticleEnergy();
+    G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
     G4int nbOfAbsor = fDetector->GetNbOfAbsor();
     for (G4int i=1; i<= nbOfAbsor; i++) {
       G4Material* material = fDetector->GetAbsorMaterial(i);
@@ -129,64 +136,9 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::EndOfRunAction(const G4Run* run)
-{
-  std::ios::fmtflags mode = G4cout.flags();
-  G4cout.setf(std::ios::fixed,std::ios::floatfield);
-  G4int prec = G4cout.precision(2);
- 
-  G4int nbofEvents = run->GetNumberOfEvent();
-
-  if ( fKinematic && nbofEvents ) {
-
-    //run conditions
-    //     
-    G4ParticleDefinition* particle = fKinematic->GetParticleGun()
-                                          ->GetParticleDefinition();
-    G4String partName = particle->GetParticleName();
-    G4double energy = fKinematic->GetParticleGun()->GetParticleEnergy();
-  
-    G4int nbOfAbsor = fDetector->GetNbOfAbsor();
-  
-    G4cout << "\n ======================== run summary =====================\n";
-  
-    G4cout 
-      << "\n The run consists of " << nbofEvents << " "<< partName << " of "
-      << G4BestUnit(energy,"Energy") 
-      << " through "  << nbOfAbsor << " absorbers: \n";
-    for (G4int i=1; i<= nbOfAbsor; i++) {
-       G4Material* material = fDetector->GetAbsorMaterial(i);
-       G4double thickness = fDetector->GetAbsorThickness(i);
-       G4double density = material->GetDensity();    
-       G4cout << std::setw(20) << G4BestUnit(thickness,"Length") << " of "
-              << material->GetName() << " (density: " 
-              << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
-    }         
-    G4cout << "\n ==========================================================\n";
-  }
-  
-  //compute and print total energy deposit
-  //
-  if ( isMaster ) {
-    fRun->ComputeStatistics();  
-
-    // normalize histograms of longitudinal energy profile
-    //
-    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-    G4int ih = 1;
-    G4double binWidth = analysisManager->GetH1Width(ih);
-    G4double fac = (1./(nbofEvents*binWidth))*(mm/MeV);
-    analysisManager->ScaleH1(ih,fac);
-    
-    ih = 8;
-    binWidth = analysisManager->GetH1Width(ih);
-    fac = (1./(nbofEvents*binWidth))*(g/(MeV*cm2));
-    analysisManager->ScaleH1(ih,fac);
-  }
-
-  // reset default formats
-  G4cout.setf(mode,std::ios::floatfield);
-  G4cout.precision(prec);
+void RunAction::EndOfRunAction(const G4Run*)
+{ 
+  if (isMaster) fRun->EndOfRun();  
   
   // save histograms
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
@@ -196,7 +148,7 @@ void RunAction::EndOfRunAction(const G4Run* run)
   }    
  
   // show Rndm status
-  G4Random::showEngineStatus();
+    if (isMaster) G4Random::showEngineStatus();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

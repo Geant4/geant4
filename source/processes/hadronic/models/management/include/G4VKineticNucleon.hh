@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VKineticNucleon.hh 66785 2013-01-12 15:10:13Z gcosmo $
+// $Id: G4VKineticNucleon.hh 80499 2014-04-24 13:54:26Z gcosmo $
 //
 #ifndef G4VKineticNucleon_h
 #define G4VKineticNucleon_h 1
@@ -56,7 +56,7 @@ class G4VKineticNucleon
 
       virtual const G4LorentzVector& Get4Momentum() const =0;
 
-      virtual G4ParticleDefinition* GetDefinition()const =0;
+      virtual const G4ParticleDefinition* GetDefinition()const =0;
 
       virtual const G4ThreeVector& GetPosition() const =0;
 

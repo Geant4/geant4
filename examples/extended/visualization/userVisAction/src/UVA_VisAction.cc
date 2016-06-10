@@ -27,7 +27,7 @@
 /// \brief Implementation of the UVA_VisAction class
 //
 //
-// $Id: UVA_VisAction.cc 69587 2013-05-08 14:26:03Z gcosmo $
+// $Id: UVA_VisAction.cc 80449 2014-04-22 08:35:50Z gcosmo $
 
 #include "UVA_VisAction.hh"
 
@@ -47,8 +47,9 @@ void UVA_VisAction::Draw() {
 
     // A simple logo...
     G4Orb orb("my_logo_orb", 5*cm);
-    G4Box box("my_cut_box", 1*m, 1*m, 1*m);
-    G4SubtractionSolid logo("my_logo", &orb, &box, G4Translate3D(-1*m,1*m,1*m));
+    G4Box box("my_cut_box", 5*cm, 5*cm, 5*cm);
+    G4SubtractionSolid logo("my_logo", &orb, &box,
+                            G4Translate3D(-3*cm,3*cm,3*cm));
     G4VisAttributes va1(G4Colour::Red());
     va1.SetForceSolid(true);
     pVisManager->Draw(logo,va1,G4Translate3D(-15*cm,-20*cm,25*cm));
@@ -63,4 +64,3 @@ void UVA_VisAction::Draw() {
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

@@ -38,7 +38,7 @@
 
 #include <Wt/WObject>
 #include <Wt/WWidget>
-#include <Wt/WPushbutton>
+#include <Wt/WPushButton>
 #include <Wt/WTree>
 #include <Wt/WTreeNode>
 #include <Wt/WMenu>

@@ -1,4 +1,4 @@
-$Id: History 69230 2013-04-23 14:40:59Z gcosmo $
+$Id: History 85757 2014-11-05 10:07:06Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,129 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4th December 2014  Gabriele Cosmo (examples-V10-01-00)
+- Updated reference outputs according to reference tag geant4-10-01-ref-00.
+- Includes tags: hadrontherapy-V10-00-09, exbasic-V10-00-01, AnaEx01-V10-00-05,
+                 AnaEx02-V10-00-04, AnaEx03-V10-00-04, exbiasing-V10-00-03,
+                 B03-V10-00-00, GB03-V10-00-05, excommon-V10-00-06,
+                 testem8-V10-00-07, testem17-V10-00-01, p6decayer-V10-00-03,
+                 exExoticphysics-V10-00-02, fieldex04-V10-00-11,
+                 g3tog4Tests-V10-00-05, exExtHadFissFrag-V10-00-13,
+                 exhadr03-V10-00-09, exhadr04-V10-00-06, exhadr06-V10-00-09,
+                 exMedical-V10-00-00, chem1-V10-00-06, chem2-V10-00-05,
+                 chem3-V10-00-06, dnaphysics-V10-00-04, pdb4dna-V10-00-06,
+                 microdosimetry-V10-00-08, wholeNuclearDNA-V10-00-07,
+                 LXe-V10-00-08, expol01-V10-00-02, exampleRE01-V10-00-00,
+                 exampleRE06-V10-00-04, exam-ext-vis-standalone-V10-00-01,
+                 exam-ext-vis-UVA-V10-00-02.
+
+5th November 2014  Gabriele Cosmo (examples-V10-00-09)
+- Updated reference outputs according to reference tag geant4-10-00-ref-09.
+- Includes tags: amsEcal-V10-00-07, brachy-V10-00-00, ccal-V10-00-02,
+                 ChargeExchangeMC-V10-00-01, dnageometry-V10-00-02,
+                 gammaraytel-V10-00-08, hadrontherapy-V10-00-08,
+                 human_phantom-V10-00-01, iort_therapy-V10-00-00,
+                 lAr_calorimeter-V10-00-04, microelectronics-V10-00-03,
+                 microbeam-V10-00-06, nanobeam-V10-00-06, purmag-V10-00-02,
+                 radioprotection-V10-00-01, DMX-V10-00-08, exampleB2-V10-00-03,
+                 exampleB5-V10-00-01, testem0-V10-00-00, testem1-V10-00-11,
+                 testem2-V10-00-08, testem3-V10-00-16, testem4-V10-00-03,
+                 testem5-V10-00-12, testem7-V10-00-02, testem8-V10-00-05,
+                 testem11-V10-00-04, testem12-V10-00-04, testem13-V10-00-03,
+                 testem14-V10-00-04, testem16-V10-00-04, testem17-V10-00-00,
+                 exerrprop-V10-00-00, particleGunExample-V10-00-05,
+                 exgps-V10-00-07, channelingExample-V10-00-15,
+                 monopole-V10-00-00, phononExample-V10-00-03, chem1-V10-00-02,
+                 fieldex04-V10-00-10, g3tog4Tests-V10-00-02, hadr06-V10-00-07,
+                 chem2-V10-00-02, chem3-V10-00-02, dnaphysics-V10-00-03,
+                 microdosimetry-V10-00-01, pdb4dna-V10-00-02, DICOM-V10-00-04,
+                 wholeNuclearDNA-V10-00-05, LXe-V10-00-07, OpNovice-V10-00-06,
+                 WLS-V10-00-04, expol01-V10-00-00, rdecay02-V10-00-03,
+                 exampleRE06-V10-00-01
+
+26th September 2014  Gabriele Cosmo (examples-V10-00-08)
+- Updated reference outputs according to reference tag geant4-10-00-ref-08.
+- Includes tags: gammaraytel-V10-00-07, testem1-V10-00-08, testem2-V10-00-06,
+                 testem3-V10-00-11, testem4-V10-00-01, testem5-V10-00-10,
+                 testem11-V10-00-02, testem12-V10-00-03, ExUCN-V10-00-04,
+                 particleGunExample-V10-00-02, exhadr03-V10-00-05,
+                 exhadr04-V10-00-05, exhadr06-V10-00-06, rdecay01-V10-00-03,
+                 electronScattering-V10-00-02. 
+
+27th August 2014  Gabriele Cosmo (examples-V10-00-07)
+- Updated reference outputs according to reference tag geant4-10-00-ref-07.
+- Includes tags: amsEcal-V10-00-06, dnageometry-V10-00-00, dnaphysics-V10-00-00,
+                 gammaraytel-V10-00-06, nanobeam-V10-00-03, DMX-V10-00-06,
+                 exampleB4-V10-00-01, AnaEx01-V10-00-03, AnaEx02-V10-00-02,
+                 AnaEx03-V10-00-02, testem2-V10-00-05, testem3-V10-00-10,
+                 testem5-V10-00-08, testem6-V10-00-02, testem16-V10-00-01,
+                 channelingExample-V10-00-14, ExUCN-V10-00-03, LXe-V10-00-04,
+                 exHadronic-V10-00-00, exExtHadFissFrag-V10-00-11,
+                 exhadr00-V10-00-01, exhadr06-V10-00-04, DICOM-V10-00-02,
+                 fano-V10-00-02, OpNovice-V10-00-05, rdecay02-V10-00-02,
+                 WLS-V10-00-02, MPI-V10-00-02, G01-V10-00-04, fano2-V10-00-01,
+                 exampleP01-V10-00-03, exampleP03-V10-00-03,
+                 exampleRE05-V10-00-00, exampleRE06-V10-00-00.
+
+27th June 2014  Gabriele Cosmo (examples-V10-00-06)
+- Updated reference outputs according to reference tag geant4-10-00-ref-06.
+- Includes tags: doxygen-V10-00-00, amsEcal-V10-00-02, gammaraytel-V10-00-05,
+                 XrayFluo-V10-00-10, AnaEx01-V10-00-01, AnaEx02-V10-00-00,
+                 AnaEx03-V10-00-00, excommon-analysis-V10-00-02,
+                 testem1-V10-00-07, testem2-V10-00-04, testem3-V10-00-06,
+                 testem5-V10-00-07, testem6-V10-00-00, testem7-V10-00-01,
+                 testem8-V10-00-03, testem9-V10-00-01, testem11-V10-00-01,
+                 testem12-V10-00-02, testem13-V10-00-00, testem14-V10-00-02,
+                 testem15-V10-00-01, testem16-V10-00-00, testem18-V10-00-00,
+                 mctruthex-V10-00-00, p6decayer-V10-00-01,
+                 exExoticphysics-V10-00-01, channelingExample-V10-00-11,
+                 ExUCN-V10-00-02, g3tog4Tests-V10-00-01, exhadr02-V10-00-01,
+                 exExtHadFissFrag-V10-00-09, electronScattering-V10-00-01,
+                 exampleES2-V10-00-02, gtherapy-V10-00-00, MPI-V10-00-01,
+                 G01-V10-00-03, G04-V10-00-00, exampleP01-V10-00-01,
+                 exampleP02-V10-00-01.
+
+6th June 2014  Gabriele Cosmo (examples-V10-00-05)
+- Updated reference outputs according to reference tag geant4-10-00-ref-05.
+- Includes tags: air_shower-V10-00-00, gammaknife-V10-00-00,
+                 gammaraytel-V10-00-01, human_phantom-V10-00-00, DMX-V10-00-04,
+                 XrayFluo-V10-00-09, xraytel-V10-00-03, excommon-V10-00-00,
+                 analysisExample-V10-00-00, testem1-V10-00-04, exgps-V10-00-03.
+                 testem2-V10-00-02, testem5-V10-00-05, p6decayer-V10-00-00,
+                 channelingExample-V10-00-07, exhadr00-V10-00-00, LXe-V10-00-03,
+                 exhadr04-V10-00-03, exhadr06-V10-00-03, exampleES2-V10-00-01,
+                 WLS-V10-00-01, exgflash-V10-00-00.
+
+30th April 2014  Gabriele Cosmo (examples-V10-00-04)
+- Updated reference outputs according to reference tag geant4-10-00-ref-04.
+- Includes tags: XrayFluo-V10-00-04, testem1-V10-00-02, testem2-V10-00-01,
+                 testem3-V10-00-02, testem5-V10-00-01, testem7-V10-00-00,
+                 testem8-V10-00-02, testem9-V10-00-00, testem12-V10-00-01,
+                 exhadr03-V10-00-04, exhadr04-V10-00-02, DICOM-V10-00-00,
+                 G01-V10-00-02, exam-ext-vis-UVA-V10-00-00.
+
+31st March 2014  Gabriele Cosmo (examples-V10-00-03)
+- Updated reference outputs according to reference tag geant4-10-00-ref-03.
+- Includes tags: dnaphysics-V10-00-01, testem1-V10-00-01, fieldex04-V10-00-09,
+                 exhadr03-V10-00-02, exhadr04-V10-00-01, exhadr06-V10-00-00,
+                 exampleES2-V10-00-00, fano-V10-00-00.
+
+28th February 2014  Gabriele Cosmo (examples-V10-00-02)
+- Updated reference outputs according to reference tag geant4-10-00-ref-02.
+- Includes tags: hadrontherapy-V10-00-01, B1Con-V10-00-00, fieldex04-V10-00-08,
+                 phononExample-V10-00-00, exhadr03-V10-00-01, rdecay02-V10-00-01.
+
+4th February 2014  Gabriele Cosmo (examples-V10-00-01)
+- Updated reference outputs according to reference tag geant4-10-00-ref-01.
+- Includes tags: amsEcal-V10-00-00, ChargeExchangeMC-V10-00-00,
+                 nanobeam-V10-00-00, XrayFluo-V10-00-00, testem1-V10-00-00,
+                 testem2-V10-00-00, testem3-V10-00-01, testem4-V10-00-00,
+                 testem5-V10-00-00, testem8-V10-00-01, testem11-V10-00-00,
+                 testem12-V10-00-00, fieldex04-V10-00-04, fieldex05-V10-00-00,
+                 fieldex06-V10-00-00, exhadr03-V10-00-00, exhadr04-V10-00-00,
+                 LXe-V10-00-02, OpNovice-V10-00-04, WLS-V10-00-00,
+                 rdecay01-V10-00-02, rdecay02-V10-00-00.
 
 6th December 2013  Gabriele Cosmo (examples-V10-00-00)
 - Updated reference outputs according to reference tag geant4-10-00-ref-00.

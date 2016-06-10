@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 75122 2013-10-28 09:51:40Z gcosmo $
+# $Id: sources.cmake 85360 2014-10-28 10:05:30Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -43,7 +43,6 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4HyperNucleiProperties.hh
         G4IonTable.hh
         G4Ions.hh
-	G4IsomerTable.hh
         G4IsotopeProperty.hh
         G4KL3DecayChannel.hh
         G4MuonDecayChannel.hh
@@ -68,6 +67,7 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4ParticleTable.icc
         G4ParticleTableIterator.hh
         G4ParticleWithCuts.hh
+        G4ParticlesWorkspace.hh
         G4PhaseSpaceDecayChannel.hh
         G4PionRadiativeDecayChannel.hh
         G4PrimaryParticle.hh
@@ -88,8 +88,6 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4HyperNucleiProperties.cc
         G4IonTable.cc
         G4Ions.cc
-	G4IsomerTable.cc
-	G4IsomerTable2.cc
         G4IsotopeProperty.cc
         G4KL3DecayChannel.cc
         G4MuonDecayChannel.cc
@@ -110,6 +108,7 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4ParticlePropertyMessenger.cc
         G4ParticlePropertyTable.cc
         G4ParticleTable.cc
+        G4ParticlesWorkspace.cc
         G4PhaseSpaceDecayChannel.cc
         G4PionRadiativeDecayChannel.cc
         G4PrimaryParticle.cc

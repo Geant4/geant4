@@ -13,6 +13,19 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+09 September 2014 Witek Pokorski (hadr-qmd-V10-00-03)
+- update to use G4CrossSectionDataSetRegistry
+
+04 September 2014 Witek Pokorski (hadr-qmd-V10-00-02)
+- Commenting out obsolete include of a cross section header file.
+
+14 April 2014 Gunter Folger (hadr-qmd-V10-00-01)
+- Changes for const G4ParticleDefintion* in use with G4KineticTrack.
+
+14 March 2014 Tatsumi Koi (hadr-qmd-V10-00-00)
+-Migrate to handle returned const pointer of G4ParticleDefinition
+	src/G4QMDReaction.cc
+
 15 October 2013 Tatsumi Koi (hadr-qmd-V09-06-10)
 -Change G4ParticleTable::GetParticleTable()->GetIon(,,) 
      to G4IonTable::GetIonTable()->GetIon(,,);

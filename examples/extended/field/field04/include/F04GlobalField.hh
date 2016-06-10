@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04GlobalField.hh 76690 2013-11-14 08:45:07Z gcosmo $
+// $Id: F04GlobalField.hh 78551 2014-01-07 09:45:08Z gcosmo $
 //
 /// \file field/field04/include/F04GlobalField.hh
 /// \brief Definition of the F04GlobalField class
@@ -73,13 +73,13 @@ private:
   F04GlobalField(F04DetectorConstruction* const);
   F04GlobalField(const F04GlobalField&);
 
-  virtual ~F04GlobalField();
-
   F04GlobalField& operator=(const F04GlobalField&);
 
   void SetupArray();
 
 public:
+
+  virtual ~F04GlobalField();
 
   /// GetObject() returns the single F04GlobalField object.
   /// It is constructed, if necessary.
@@ -108,9 +108,6 @@ public:
 
   /// constructs all field tracking objects
   void ConstructField();
-
-  /// updates all field tracking objects and Clear()
-  void UpdateField();
 
   /// Set the Stepper types
   void SetStepperType( G4int i ) { fStepperType = i; }

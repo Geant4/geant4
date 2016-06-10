@@ -1,4 +1,4 @@
-$Id: README 71604 2013-06-19 08:18:02Z gcosmo $
+$Id: README 80445 2014-04-22 08:27:17Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,7 +23,7 @@ Generation of particles is done via the G4ParticleGun: the example shows how to 
 
 The example includes the possibility to shoot particles according to a  given energy spectrum: the files B_flare.dat, C_Flare.dat and M_flare.dat store the spectra of photons during solar flares, the files mercury2_flx_solmax.dat and mercury_flx_solmin.dat contain the spectra of protons respectively during solar maximum and solar minimum conditions, and merc2_flx_alp_max.dat merc_flx_alp_min.dat contain  the spectra of alpha particles again respectively during solar maximum and solar minimum conditions. These features are available by changing hard-doced values in XrayFluoRunAction.cc
 
-Histogramming facilities are presently provided for the Linux environment by using the AIDA interfaces.The AIDA compliant version has not been tested by the developers and is here as a example of "forward compatibility" on how to use analysis.
+Histogramming facilities are provided using the built-it g4analysis tools of Geant4.
 
 In order to be able to use any of these packages, prior installation is necessary to configure you environment to get visulaization, as described in geant4 manual.
 
@@ -54,7 +54,7 @@ In order to run a macro, type the following command:
 
 idle> execute command "/control/execute xxxxx.mac"
 
-If the analysis options are set, histograms will automatically stored in the corresponding files (hbook or XML)
+If the analysis options are set, histograms will automatically stored in the corresponding files (root, by default)
 
 In order to launch the application in batch mode, it is necessary to specify, after the executable file name, the name of the macro file and the number of the choice:
 
@@ -76,20 +76,9 @@ This is done using the G4ParticleGun with some modifications. See XrayFluoPartic
 
 Event generation is controlled by commands in the /gun/category (see help for further details). In this readme only two commands are undrlined: 
 
-- /gun/loadGunData <filename>: to be used with the setup #1, loads the ntuple created 	in the setup #4. The loaded particles will be generated and will be directed ALL OF THEM to the detector. This can be useful to perform detector studies with encreased eficiency.
+- /gun/loadGunData <filename>: to be used with the setup #1, loads the ntuple created 	in the setup #4. The loaded particles will be generated and will be directed ALL OF THEM to the detector. This can be useful to perform detector studies with encreased efficiency.
 
 - /gun/loadRayleighFlag <true/false> This is used to let the user decide if backscattered primary particles should be loaded and directed toward the detector. This command, in order to be useful, must be used BEFORE the previous one.
 
-6. Analysis
 
-At present the analisys is provided by any AIDA-3.2.1 compliant analysis system. 
 
-To build and execute the example on platforms where there is no implementation of the analysis system, the environment variable G4ANALYSIS_USE must not be set.
-
-By setting visPlotter variable in XrayFluoAnalysisManager to true, it is possible to display the simulated output of the detector while simulation is in progress. Graph window is updated every 1000 events. 
-
-Various commads, with help,  are available for Geant4 UI. /analysis/outputFile and /analysis/fileType respectively for changing the name and the type (xml or Hbook) of the file in wich results are saved. 
-
-If these commands are used, to make the changes effective, another command, /anaysis/update, must be executed.
-
-NOTE: if a file named xrayfluo.hbk (default name) is present, it will be deleted, even if /analysis/outputFile command is issued before every run.

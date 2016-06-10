@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionProbability.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4FissionProbability.cc 84396 2014-10-15 07:18:24Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -36,12 +36,21 @@
 #include "G4FissionProbability.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4PairingCorrection.hh"
+#include "G4EvaporationLevelDensityParameter.hh"
+#include "G4FissionLevelDensityParameter.hh"
 
-G4FissionProbability::G4FissionProbability()
+G4FissionProbability::G4FissionProbability() :
+  theEvapLDP(new G4EvaporationLevelDensityParameter),
+  theFissLDP(new G4FissionLevelDensityParameter),
+  ownEvapLDP(true),
+  ownFissLDP(true)
 {}
 
 G4FissionProbability::~G4FissionProbability()
-{}
+{
+  if (ownEvapLDP) delete theEvapLDP;
+  if (ownFissLDP) delete theFissLDP;
+}
 
 
 G4double 
@@ -61,9 +70,9 @@ G4FissionProbability::EmissionProbability(const G4Fragment & fragment,
     G4PairingCorrection::GetInstance()->GetFissionPairingCorrection(A,Z);
   
   G4double SystemEntropy = 
-    2.0*std::sqrt(theEvapLDP.LevelDensityParameter(A,Z,Ucompound)*Ucompound);
+    2.0*std::sqrt(theEvapLDP->LevelDensityParameter(A,Z,Ucompound)*Ucompound);
 	
-  G4double afission = theFissLDP.LevelDensityParameter(A,Z,Ufission);
+  G4double afission = theFissLDP->LevelDensityParameter(A,Z,Ufission);
 
   G4double Cf = 2.0*std::sqrt(afission*MaximalKineticEnergy);
 

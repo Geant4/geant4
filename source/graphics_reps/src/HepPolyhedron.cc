@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.cc 69802 2013-05-15 14:52:57Z gcosmo $
+// $Id: HepPolyhedron.cc 83392 2014-08-21 14:36:35Z gcosmo $
 //
 // 
 //
@@ -721,6 +721,12 @@ void HepPolyhedron::SetReferences()
       cur = headList[k1];
       if (cur == 0) {
         headList[k1] = freeList;
+        if (!freeList) {
+          std::cerr
+          << "Polyhedron::SetReferences: bad link "
+          << std::endl;
+          break;
+        }
         freeList = freeList->next;
         cur = headList[k1];
         cur->next = 0;
@@ -756,6 +762,12 @@ void HepPolyhedron::SetReferences()
         cur = prev->next;
         if (cur == 0) {
           prev->next = freeList;
+          if (!freeList) {
+            std::cerr
+            << "Polyhedron::SetReferences: bad link "
+            << std::endl;
+            break;
+          }
           freeList = freeList->next;
           cur = prev->next;
           cur->next = 0;
@@ -2122,7 +2134,7 @@ HepPolyhedronEllipsoid::HepPolyhedronEllipsoid(G4double ax, G4double by,
   if (!zz || !rr)
     {
       G4Exception("HepPolyhedronEllipsoid::HepPolyhedronEllipsoid",
-		  "greps1002", FatalException, "Out of memory");
+                  "greps1002", FatalException, "Out of memory");
     }
 
   G4double a = dthe/(np1-cutflag-1);

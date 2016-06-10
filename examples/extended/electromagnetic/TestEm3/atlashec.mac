@@ -1,11 +1,13 @@
-# $Id: atlashec.mac 66241 2012-12-13 18:34:42Z gunter $
+# $Id: atlashec.mac 85425 2014-10-29 08:24:37Z gcosmo $
 #
 # Macro file for "TestEm3.cc" 
 #
 # Atlas HEC model;
 #
 /control/verbose 2
-/run/verbose 1
+/control/cout/ignoreThreadsExcept 0
+/run/verbose 2
+/run/numberOfThreads 2
 #
 /testem/det/setNbOfLayers 25
 /testem/det/setNbOfAbsor  2
@@ -14,7 +16,7 @@
 /testem/det/setSizeYZ             17 cm
 #
 /testem/phys/addPhysics  emstandard_opt0
-/testem/phys/setCuts 0.7 mm
+/run/setCut 0.7 mm
 #
 /run/initialize
 #
@@ -27,6 +29,6 @@
 /gun/energy 100 GeV
 /gun/position -40.635 0 0
 #
-/testem/event/printModulo 100
+/run/printProgress 100
 /run/beamOn 100
 

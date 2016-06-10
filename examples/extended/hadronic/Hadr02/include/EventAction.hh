@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// $Id: EventAction.hh 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: EventAction.hh 81932 2014-06-06 15:39:45Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -51,7 +51,6 @@
 
 class G4Event;
 class EventActionMessenger;
-class G4UImanager;
 
 class EventAction : public G4UserEventAction
 {
@@ -63,23 +62,15 @@ public: // Without description
   virtual void BeginOfEventAction(const G4Event*);
   virtual void   EndOfEventAction(const G4Event*);
 
-  inline void SetPrintModulo(G4int val)   {printModulo = val;};
-  inline void SetDrawFlag(G4String val)   {drawFlag = val;};
-  inline void AddEventToDebug(G4int val)  {selectedEvents.push_back(val);
-                                           nSelected++;};
+  void AddEventToDebug(G4int val);
 
 private:
 
-  EventActionMessenger* eventMessenger;
-  G4UImanager*          UI;
-  std::vector<G4int>    selectedEvents;
+  EventActionMessenger* fEventMessenger;
+  std::vector<G4int>    fSelectedEvents;
 
-  G4int        printModulo;
-  G4int        nSelected;
-
-  // drawFlags = all, charged, neutral, charged+n
-  G4String     drawFlag;
-  G4bool       debugStarted;
+  G4int        fNSelected;
+  G4bool       fDebugStarted;
 
 };
 

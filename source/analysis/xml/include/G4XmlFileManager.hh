@@ -25,6 +25,8 @@
 //
 // $Id: G4XmlFileManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
+// The manager for Xml file output operations.
+
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
 #ifndef G4XmlFileManager_h
@@ -33,6 +35,8 @@
 #include "G4VFileManager.hh"
 #include "G4XmlNtupleDescription.hh"
 #include "globals.hh"
+
+#include <tools/raxml>
 
 #include <fstream>
 
@@ -44,7 +48,7 @@ class G4XmlFileManager : public G4VFileManager
     G4XmlFileManager(const G4AnalysisManagerState& state);
     ~G4XmlFileManager();
 
-    // Methods to manipulate files
+    // Methods to manipulate output files
     virtual G4bool OpenFile(const G4String& fileName);
     virtual G4bool WriteFile();
     virtual G4bool CloseFile(); 
@@ -55,29 +59,17 @@ class G4XmlFileManager : public G4VFileManager
     G4bool CreateNtupleFile(G4XmlNtupleDescription* ntupleDescription);
     G4bool CloseNtupleFile(G4XmlNtupleDescription* ntupleDescription); 
     
-    // Set methods
-    void LockHistoDirectoryName();
-    void LockNtupleDirectoryName();
-    
     // Get methods
     std::ofstream* GetHnFile() const;
     
    private:
     // data members
-    //
     std::ofstream* fHnFile;
 };
 
 // inline functions
 
-inline void G4XmlFileManager::LockHistoDirectoryName()
-{ fLockHistoDirectoryName = true; }
-
-inline void G4XmlFileManager::LockNtupleDirectoryName()
-{ fLockNtupleDirectoryName = true; }
-
 inline std::ofstream* G4XmlFileManager::GetHnFile() const
 { return fHnFile; }
 
 #endif
-

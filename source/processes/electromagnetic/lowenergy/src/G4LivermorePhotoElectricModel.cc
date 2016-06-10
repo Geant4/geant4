@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePhotoElectricModel.cc 76882 2013-11-18 12:49:10Z gcosmo $
+// $Id: G4LivermorePhotoElectricModel.cc 83410 2014-08-21 15:17:53Z gcosmo $
 //
 //
 // Author: Sebastien Incerti
@@ -35,6 +35,7 @@
 
 #include "G4LivermorePhotoElectricModel.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4LossTableManager.hh"
 #include "G4Electron.hh"
 #include "G4Gamma.hh"
@@ -53,6 +54,8 @@ std::vector<G4double>* G4LivermorePhotoElectricModel::fParam[] = {0};
 G4int                  G4LivermorePhotoElectricModel::fNShells[] = {0};
 G4int                  G4LivermorePhotoElectricModel::fNShellsUsed[] = {0};
 G4ElementData*         G4LivermorePhotoElectricModel::fShellCrossSection = 0;
+G4Material*            G4LivermorePhotoElectricModel::fWater = 0;
+G4double               G4LivermorePhotoElectricModel::fWaterEnergyLimit = 0.0;
 
 using namespace std;
 
@@ -85,6 +88,8 @@ G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(
 
   //Mark this model as "applicable" for atomic deexcitation
   SetDeexcitationFlag(true);
+  fSandiaCof.resize(4,0.0);
+  fCurrSection = 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -95,6 +100,11 @@ G4LivermorePhotoElectricModel::~G4LivermorePhotoElectricModel()
     delete fShellCrossSection;
     for(G4int i=0; i<maxZ; ++i) { 
       delete fParam[i];
+      fParam[i] = 0;
+      delete fCrossSection[i];
+      fCrossSection[i] = 0;
+      delete fCrossSectionLE[i];
+      fCrossSectionLE[i] = 0;
     }
   }
 }
@@ -110,6 +120,11 @@ G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition*,
   }
 
   if(IsMaster()) {
+
+    if(!fWater) { 
+      fWater = G4Material::GetMaterial("G4_WATER", false); 
+      if(fWater) { fWaterEnergyLimit = 13.6*eV; }
+    }
 
     if(!fShellCrossSection) { fShellCrossSection = new G4ElementData(); }
 
@@ -158,6 +173,35 @@ G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4double G4LivermorePhotoElectricModel::CrossSectionPerVolume(
+                                       const G4Material* material,
+				       const G4ParticleDefinition* p,
+				       G4double energy,
+				       G4double, G4double)
+{
+  fCurrSection = 0.0;
+  if(fWater && (material == fWater || 
+		material->GetBaseMaterial() == fWater)) {
+    if(energy <= fWaterEnergyLimit) { 
+      fWater->GetSandiaTable()->GetSandiaCofWater(energy, fSandiaCof);
+
+      G4double energy2 = energy*energy;
+      G4double energy3 = energy*energy2;
+      G4double energy4 = energy2*energy2;
+
+      fCurrSection = material->GetDensity()*
+	(fSandiaCof[0]/energy  + fSandiaCof[1]/energy2 +
+	 fSandiaCof[2]/energy3 + fSandiaCof[3]/energy4);
+    } 
+  }
+  if(0.0 == fCurrSection) {
+    fCurrSection = G4VEmModel::CrossSectionPerVolume(material, p, energy);
+  }
+  return fCurrSection;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4LivermorePhotoElectricModel::ComputeCrossSectionPerAtom(
                                        const G4ParticleDefinition*,
                                              G4double energy,
@@ -169,8 +213,6 @@ G4double G4LivermorePhotoElectricModel::ComputeCrossSectionPerAtom(
 	   << " Z= " << ZZ << "  R(keV)= " << energy/keV << G4endl;
   }
   G4double cs = 0.0;
-  G4double gammaEnergy = energy;
-
   G4int Z = G4lrint(ZZ);
   if(Z < 1 || Z >= maxZ) { return cs; }
 
@@ -182,28 +224,28 @@ G4double G4LivermorePhotoElectricModel::ComputeCrossSectionPerAtom(
   }
 
   G4int idx = fNShells[Z]*6 - 4;
-  if (gammaEnergy <= (*(fParam[Z]))[idx-1]) { return cs; }
+  if (energy < (*(fParam[Z]))[idx-1]) { energy = (*(fParam[Z]))[idx-1]; }
   
-  G4double x1 = 1.0/gammaEnergy;
+  G4double x1 = 1.0/energy;
   G4double x2 = x1*x1;
   G4double x3 = x2*x1;
 
   // parameterisation
-  if(gammaEnergy >= (*(fParam[Z]))[0]) {
+  if(energy >= (*(fParam[Z]))[0]) {
     G4double x4 = x2*x2;
     cs = x1*((*(fParam[Z]))[idx] + x1*(*(fParam[Z]))[idx+1]
 	     + x2*(*(fParam[Z]))[idx+2] + x3*(*(fParam[Z]))[idx+3] 
 	     + x4*(*(fParam[Z]))[idx+4]);
     // high energy part
-  } else if(gammaEnergy >= (*(fParam[Z]))[1]) {
-    cs = x3*(fCrossSection[Z])->Value(gammaEnergy);
+  } else if(energy >= (*(fParam[Z]))[1]) {
+    cs = x3*(fCrossSection[Z])->Value(energy);
 
     // low energy part
   } else {
-    cs = x3*(fCrossSectionLE[Z])->Value(gammaEnergy);
+    cs = x3*(fCrossSectionLE[Z])->Value(energy);
   }
   if (verboseLevel > 1) { 
-    G4cout << "LivermorePhotoElectricModel: E(keV)= " << gammaEnergy/keV
+    G4cout << "LivermorePhotoElectricModel: E(keV)= " << energy/keV
 	   << " Z= " << Z << " cross(barn)= " << cs/barn << G4endl;
   }
   return cs;
@@ -226,16 +268,25 @@ G4LivermorePhotoElectricModel::SampleSecondaries(
   }
   
   // kill incident photon
-  fParticleChange->SetProposedKineticEnergy(0.);
   fParticleChange->ProposeTrackStatus(fStopAndKill);   
+  fParticleChange->SetProposedKineticEnergy(0.);
+
+  // low-energy photo-effect in water - full absorption
+  const G4Material* material = couple->GetMaterial();
+  if(fWater && (material == fWater || 
+		material->GetBaseMaterial() == fWater)) {
+    if(gammaEnergy <= fWaterEnergyLimit) { 
+      fParticleChange->ProposeLocalEnergyDeposit(gammaEnergy);      
+      return;
+    }
+  }
  
   // Returns the normalized direction of the momentum
   G4ThreeVector photonDirection = aDynamicGamma->GetMomentumDirection(); 
 
   // Select randomly one element in the current material
   //G4cout << "Select random atom Egamma(keV)= " << gammaEnergy/keV << G4endl;
-  const G4Element* elm = SelectRandomAtom(couple->GetMaterial(),theGamma,
-					  gammaEnergy);
+  const G4Element* elm = SelectRandomAtom(material, theGamma, gammaEnergy);
   G4int Z = G4lrint(elm->GetZ());
 
   // Select the ionised shell in the current atom according to shell 
@@ -434,11 +485,11 @@ G4LivermorePhotoElectricModel::ReadData(G4int Z, const char* path)
     }
     fin1 >> n1;
     if(fin1.fail()) { return; }
-    if(0 > n1) { n1 = 0; }
+    if(0 > n1 || n1 >= INT_MAX) { n1 = 0; }
 
     fin1 >> n2;
     if(fin1.fail()) { return; }
-    if(0 > n2) { n2 = 0; }
+    if(0 > n2 || n2 >= INT_MAX) { n2 = 0; }
 
     fin1 >> x;
     if(fin1.fail()) { return; }

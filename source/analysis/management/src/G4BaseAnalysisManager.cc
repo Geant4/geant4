@@ -47,26 +47,6 @@ G4BaseAnalysisManager::~G4BaseAnalysisManager()
 }
 
 // 
-// protected methods
-//
-
-//_____________________________________________________________________________
-void  G4BaseAnalysisManager::ExceptionForHistograms(
-                                         const G4String& functionName) const
-{
-  G4String inFunction = "G4";
-  inFunction += fState.GetType();
-  inFunction += "AnalysisManager::";
-  inFunction += functionName;
-
-  G4ExceptionDescription description;
-  description << "      " 
-              << "Histograms are not supported." ;
-
-  G4Exception(inFunction, "Analysis_W005", JustWarning, description);
-}  
-
-// 
 // public methods
 //
 
@@ -78,7 +58,7 @@ G4bool G4BaseAnalysisManager::SetFirstId(G4int firstId)
     description 
       << "Cannot set FirstId as its value was already used.";
     G4Exception("G4BaseAnalysisManager::SetFirstId()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W013", JustWarning, description);
     return false;
   }              
 

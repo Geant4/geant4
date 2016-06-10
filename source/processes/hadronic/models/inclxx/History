@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History 78007 2013-12-02 08:32:53Z gcosmo $
+$Id: History 86862 2014-11-19 14:38:22Z gcosmo $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -15,6 +15,105 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+19 November 2014 - Davide Mancusi (hadr-inclxx-V10-00-25)
+---------------------------------------------------------------
+- INCL++ v5.2.8
+  o Fix a compilation error in Debug mode.
+
+18 November 2014 - Davide Mancusi (hadr-inclxx-V10-00-23, -24)
+---------------------------------------------------------------
+- INCL++ v5.2.7.3
+  o Bump tweak version number for consistency with stand-alone code. No
+    changes.
+  o Update reference in G4INCLXXInterface::ModelDescription().
+
+12 November 2014 - Davide Mancusi (hadr-inclxx-V10-00-21, -22)
+---------------------------------------------------------------
+- INCL++ v5.2.7.2
+  o Fix a compilation error on an old Mac/GNUMake build.
+
+7 November 2014 - Davide Mancusi (hadr-inclxx-V10-00-18, -19, -20)
+---------------------------------------------------------------
+- INCL++ v5.2.7
+  o Might fix a compilation error on an old Mac/GNUMake build.
+
+7 November 2014 - Davide Mancusi (hadr-inclxx-V10-00-17)
+---------------------------------------------------------------
+- INCL++ v5.2.5
+  o Fix a bug that caused a large overestimation of the compound-nucleus spin
+    in "fusion".
+
+6 November 2014 - Davide Mancusi (hadr-inclxx-V10-00-15, 16)
+---------------------------------------------------------------
+- INCL++ v5.2.4.2
+  o Added AvatarDumpAction.
+
+22 October 2014 - Davide Mancusi (hadr-inclxx-V10-00-14)
+---------------------------------------------------------------
+- INCL++ v5.2.4
+  o Updated list of authors.
+  o Activate use of adjusted fission parameter in G4ExcitationHandler.
+
+15 October 2014 - Gabriele Cosmo (hadr-inclxx-V10-00-13)
+---------------------------------------------------------------
+- Corrected dependecy list in GNUMakefile and sources.cmake for 'interface'
+  module; added dependency to 'de_excitation/fission'.
+
+14 October 2014 - Davide Mancusi (hadr-inclxx-V10-00-12)
+---------------------------------------------------------------
+- INCL++ v5.2.3
+  o Large reduction in memory churn due to allocation pools. Some speed-up (a
+    few percent).
+
+26 September 2014 - Davide Mancusi (hadr-inclxx-V10-00-11)
+---------------------------------------------------------------
+- INCL++ v5.2.2
+  o Fix Coverity warning + minor clean-up
+
+8 July 2014 - Davide Mancusi (hadr-inclxx-V10-00-09, -10)
+---------------------------------------------------------------
+- INCL++ v5.2.1
+  o Add plumbing for tallying reactions treated by INCL++
+  o Minor clean-up
+
+16 June 2014 - Davide Mancusi (hadr-inclxx-V10-00-08)
+---------------------------------------------------------------
+- Fix crash in p+He2 (!) reactions
+
+2 June 2014 - Davide Mancusi (hadr-inclxx-V10-00-07)
+---------------------------------------------------------------
+- Retag as INCL++ v5.2
+
+23 May 2014 - Davide Mancusi (hadr-inclxx-V10-00-06)
+---------------------------------------------------------------
+- INCL++ v5.2_rc2
+  o Fix a compilation error on Windows.
+
+22 May 2014 - Davide Mancusi (hadr-inclxx-V10-00-04, -05)
+---------------------------------------------------------------
+- INCL++ v5.2_rc1
+  o Extends INCL++ up to 15-20 GeV incident energy.
+  o A few improvements, minor bug fixes and speed-ups.
+  o Fixes a minor Coverity warning.
+
+13 March 2014 - Gabriele Cosmo (hadr-inclxx-V10-00-03)
+---------------------------------------------------------------
+- Fixed use of inline keyword for method getPhaseSpace() defined in
+  ClusteringModelIntercomparison.cc.
+
+10 March 2014 - Davide Mancusi (hadr-inclxx-V10-00-02)
+---------------------------------------------------------------
+- Const-correctness fix for G4ParticleDefinition objects.
+
+5 March 2014 - Davide Mancusi (hadr-inclxx-V10-00-01)
+---------------------------------------------------------------
+- Fix: avoid negative Fermi energies for delta resonances
+
+9 January 2014 - Davide Mancusi (hadr-inclxx-V10-00-00)
+---------------------------------------------------------------
+- Fix: occasionally produced an excited nucleon as a pre-fragment.
+- Getter for INCL Config object in the G4INCLInterfaceStore.
 
 29 November 2013 - Davide Mancusi (hadr-inclxx-V09-06-47, -48)
 ---------------------------------------------------------------

@@ -37,6 +37,7 @@
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
+#include "G4ProcessTable.hh"
 
 // Processes
 
@@ -79,65 +80,81 @@ NeutronHPphysics::~NeutronHPphysics()
 
 void NeutronHPphysics::ConstructProcess()
 {
-   G4ProcessManager* pManager = G4Neutron::Neutron()->GetProcessManager();
+  G4ParticleDefinition* neutron = G4Neutron::Neutron();
+  G4ProcessManager* pManager = neutron->GetProcessManager();
    
-   // process: elastic
-   //
-   G4HadronElasticProcess* process1 = new G4HadronElasticProcess();
-   pManager->AddDiscreteProcess(process1);   
-   //
-   // cross section data set
-   G4NeutronHPElasticData* dataSet1a = new G4NeutronHPElasticData();
-   G4NeutronHPThermalScatteringData* dataSet1b 
-                               = new G4NeutronHPThermalScatteringData();
-   process1->AddDataSet(dataSet1a);                               
-   if (fThermal) process1->AddDataSet(dataSet1b);
-   //
-   // models
-   G4NeutronHPElastic*           model1a = new G4NeutronHPElastic();
-   G4NeutronHPThermalScattering* model1b = new G4NeutronHPThermalScattering();
-  if (fThermal)  model1a->SetMinEnergy(4*eV);
-   process1->RegisterMe(model1a);    
-   if (fThermal) process1->RegisterMe(model1b);
+  // delete all neutron processes if already registered
+  //
+  G4ProcessTable* processTable = G4ProcessTable::GetProcessTable();
+  G4VProcess* process = 0;
+  process = processTable->FindProcess("hadElastic", neutron);      
+  if (process) pManager->RemoveProcess(process);
+  //
+  process = processTable->FindProcess("neutronInelastic", neutron);
+  if (process) pManager->RemoveProcess(process);
+  //
+  process = processTable->FindProcess("nCapture", neutron);      
+  if (process) pManager->RemoveProcess(process);
+  //
+  process = processTable->FindProcess("nFission", neutron);      
+  if (process) pManager->RemoveProcess(process);      
+         
+  // (re) create process: elastic
+  //
+  G4HadronElasticProcess* process1 = new G4HadronElasticProcess();
+  pManager->AddDiscreteProcess(process1);
+  //
+  // model1a
+  G4NeutronHPElastic*  model1a = new G4NeutronHPElastic();
+  process1->RegisterMe(model1a);
+  process1->AddDataSet(new G4NeutronHPElasticData());
+  //
+  // model1b
+  if (fThermal) {
+    model1a->SetMinEnergy(4*eV);   
+    G4NeutronHPThermalScattering* model1b = new G4NeutronHPThermalScattering();
+    process1->RegisterMe(model1b);
+    process1->AddDataSet(new G4NeutronHPThermalScatteringData());         
+  }
    
-   // process: inelastic
-   //
-   G4NeutronInelasticProcess* process2 = new G4NeutronInelasticProcess();
-   pManager->AddDiscreteProcess(process2);   
-   //
-   // cross section data set
-   G4NeutronHPInelasticData* dataSet2 = new G4NeutronHPInelasticData();
-   process2->AddDataSet(dataSet2);                               
-   //
-   // models
-   G4NeutronHPInelastic* model2 = new G4NeutronHPInelastic();
-   process2->RegisterMe(model2);    
+  // (re) create process: inelastic
+  //
+  G4NeutronInelasticProcess* process2 = new G4NeutronInelasticProcess();
+  pManager->AddDiscreteProcess(process2);   
+  //
+  // cross section data set
+  G4NeutronHPInelasticData* dataSet2 = new G4NeutronHPInelasticData();
+  process2->AddDataSet(dataSet2);                               
+  //
+  // models
+  G4NeutronHPInelastic* model2 = new G4NeutronHPInelastic();
+  process2->RegisterMe(model2);    
 
-   // process: nCapture   
-   //
-   G4HadronCaptureProcess* process3 = new G4HadronCaptureProcess();
-   pManager->AddDiscreteProcess(process3);    
-   //
-   // cross section data set
-   G4NeutronHPCaptureData* dataSet3 = new G4NeutronHPCaptureData();
-   process3->AddDataSet(dataSet3);                               
-   //
-   // models
-   G4NeutronHPCapture* model3 = new G4NeutronHPCapture();
-   process3->RegisterMe(model3);
+  // (re) create process: nCapture   
+  //
+  G4HadronCaptureProcess* process3 = new G4HadronCaptureProcess();
+  pManager->AddDiscreteProcess(process3);    
+  //
+  // cross section data set
+  G4NeutronHPCaptureData* dataSet3 = new G4NeutronHPCaptureData();
+  process3->AddDataSet(dataSet3);                               
+  //
+  // models
+  G4NeutronHPCapture* model3 = new G4NeutronHPCapture();
+  process3->RegisterMe(model3);
    
-   // process: nFission   
-   //
-   G4HadronFissionProcess* process4 = new G4HadronFissionProcess();
-   pManager->AddDiscreteProcess(process4);    
-   //
-   // cross section data set
-   G4NeutronHPFissionData* dataSet4 = new G4NeutronHPFissionData();
-   process4->AddDataSet(dataSet4);                               
-   //
-   // models
-   G4NeutronHPFission* model4 = new G4NeutronHPFission();
-   process4->RegisterMe(model4);       
+  // (re) create process: nFission   
+  //
+  G4HadronFissionProcess* process4 = new G4HadronFissionProcess();
+  pManager->AddDiscreteProcess(process4);    
+  //
+  // cross section data set
+  G4NeutronHPFissionData* dataSet4 = new G4NeutronHPFissionData();
+  process4->AddDataSet(dataSet4);                               
+  //
+  // models
+  G4NeutronHPFission* model4 = new G4NeutronHPFission();
+  process4->RegisterMe(model4);       
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

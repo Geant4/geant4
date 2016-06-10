@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -42,21 +43,24 @@
 #include "G4INCLNucleus.hh"
 #include "G4INCLIChannel.hh"
 #include "G4INCLFinalState.hh"
+#include "G4INCLAllocationPool.hh"
 
 namespace G4INCL {
   class DeltaDecayChannel : public IChannel {
   public:
-    DeltaDecayChannel(Particle *, ThreeVector const);
+    DeltaDecayChannel(Particle *, ThreeVector const &);
     virtual ~DeltaDecayChannel();
 
     static G4double computeDecayTime(Particle *p);
-    FinalState* getFinalState();
+    void fillFinalState(FinalState *fs);
 
   private:
     void sampleAngles(G4double*, G4double*, G4double*);
 
     Particle *theParticle;
     ThreeVector const incidentDirection;
+
+    INCL_DECLARE_ALLOCATION_POOL(DeltaDecayChannel);
   };
 }
 

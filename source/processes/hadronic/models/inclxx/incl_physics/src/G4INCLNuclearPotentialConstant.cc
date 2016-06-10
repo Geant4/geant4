@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -96,30 +97,30 @@ namespace G4INCL {
       separationEnergy[PiZero] = 0.;
       separationEnergy[PiMinus] = 0.;
 
-      INCL_DEBUG("Table of separation energies [MeV] for A=" << theA << ", Z=" << theZ << ":" << std::endl
-            << "  proton:  " << separationEnergy[Proton] << std::endl
-            << "  neutron: " << separationEnergy[Neutron] << std::endl
-            << "  delta++: " << separationEnergy[DeltaPlusPlus] << std::endl
-            << "  delta+:  " << separationEnergy[DeltaPlus] << std::endl
-            << "  delta0:  " << separationEnergy[DeltaZero] << std::endl
-            << "  delta-:  " << separationEnergy[DeltaMinus] << std::endl
-            << "  pi+:     " << separationEnergy[PiPlus] << std::endl
-            << "  pi0:     " << separationEnergy[PiZero] << std::endl
-            << "  pi-:     " << separationEnergy[PiMinus] << std::endl
+      INCL_DEBUG("Table of separation energies [MeV] for A=" << theA << ", Z=" << theZ << ":" << '\n'
+            << "  proton:  " << separationEnergy[Proton] << '\n'
+            << "  neutron: " << separationEnergy[Neutron] << '\n'
+            << "  delta++: " << separationEnergy[DeltaPlusPlus] << '\n'
+            << "  delta+:  " << separationEnergy[DeltaPlus] << '\n'
+            << "  delta0:  " << separationEnergy[DeltaZero] << '\n'
+            << "  delta-:  " << separationEnergy[DeltaMinus] << '\n'
+            << "  pi+:     " << separationEnergy[PiPlus] << '\n'
+            << "  pi0:     " << separationEnergy[PiZero] << '\n'
+            << "  pi-:     " << separationEnergy[PiMinus] << '\n'
             );
 
-      INCL_DEBUG("Table of Fermi energies [MeV] for A=" << theA << ", Z=" << theZ << ":" << std::endl
-            << "  proton:  " << fermiEnergy[Proton] << std::endl
-            << "  neutron: " << fermiEnergy[Neutron] << std::endl
-            << "  delta++: " << fermiEnergy[DeltaPlusPlus] << std::endl
-            << "  delta+:  " << fermiEnergy[DeltaPlus] << std::endl
-            << "  delta0:  " << fermiEnergy[DeltaZero] << std::endl
-            << "  delta-:  " << fermiEnergy[DeltaMinus] << std::endl
+      INCL_DEBUG("Table of Fermi energies [MeV] for A=" << theA << ", Z=" << theZ << ":" << '\n'
+            << "  proton:  " << fermiEnergy[Proton] << '\n'
+            << "  neutron: " << fermiEnergy[Neutron] << '\n'
+            << "  delta++: " << fermiEnergy[DeltaPlusPlus] << '\n'
+            << "  delta+:  " << fermiEnergy[DeltaPlus] << '\n'
+            << "  delta0:  " << fermiEnergy[DeltaZero] << '\n'
+            << "  delta-:  " << fermiEnergy[DeltaMinus] << '\n'
             );
 
-      INCL_DEBUG("Table of Fermi momenta [MeV/c] for A=" << theA << ", Z=" << theZ << ":" << std::endl
-            << "  proton:  " << fermiMomentum[Proton] << std::endl
-            << "  neutron: " << fermiMomentum[Neutron] << std::endl
+      INCL_DEBUG("Table of Fermi momenta [MeV/c] for A=" << theA << ", Z=" << theZ << ":" << '\n'
+            << "  proton:  " << fermiMomentum[Proton] << '\n'
+            << "  neutron: " << fermiMomentum[Neutron] << '\n'
             );
     }
 

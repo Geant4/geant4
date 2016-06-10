@@ -26,7 +26,7 @@
 /// \file medical/electronScattering/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 //
-// $Id: PhysicsList.hh 68393 2013-03-25 14:22:21Z maire $
+// $Id: PhysicsList.hh 86064 2014-11-07 08:49:32Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,21 +56,11 @@ public:
   void AddDecay();
   void AddStepMax();       
     
-  virtual void SetCuts();
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-    
-private:
-  
+private:  
   PhysicsListMessenger*  fMessenger; 
 
   G4String               fEmName;
   G4VPhysicsConstructor* fEmPhysicsList;
-    
-  G4double fCutForGamma;
-  G4double fCutForElectron;
-  G4double fCutForPositron;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

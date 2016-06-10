@@ -1,4 +1,4 @@
-$Id: History 75598 2013-11-04 13:00:59Z gcosmo $
+$Id: History 87210 2014-11-27 09:02:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 26, 2014 G. Folger (exampleRE01-V10-00-00)
+- Remove obsolete sample.err
 
 Oct 31, 2013 A. Kimura (exampleRE01-V09-06-08)
 - Added newline at end of RE01DetectorConstruction.cc

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PairingCorrection.cc 69585 2013-05-08 14:17:58Z gcosmo $
+// $Id: G4PairingCorrection.cc 85841 2014-11-05 15:35:06Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -53,36 +53,26 @@ G4PairingCorrection* G4PairingCorrection::GetInstance()
 
 G4double G4PairingCorrection::GetPairingCorrection(G4int A, G4int Z) const
 {
-  G4double PCorrection = 0.0;
+  G4double pairCorr = 0.0;
   G4int N = A - Z;
-  if (theCookPairingCorrections.IsInTableThisN(N) &&
-      theCookPairingCorrections.IsInTableThisZ(Z)) {
+  if(!theCookPairingCorrections.GetPairingCorrection(N,Z,pairCorr)) {
 
-    PCorrection = theCookPairingCorrections.GetParingCorrection(A,Z);
+    if(!theCameronGilbertPairingCorrections.GetPairingCorrection(N,Z,pairCorr)) {
 
-  } else if (theCameronGilbertPairingCorrections.IsInTableThisN(N) &&
-	     theCameronGilbertPairingCorrections.IsInTableThisZ(Z)) {
-
-    PCorrection = 
-      theCameronGilbertPairingCorrections.GetPairingCorrection(A,Z);
-
-  } else {
-
-    static const G4double PairingConstant = 12.0*MeV;
-    G4double Pair = (1 - Z + 2*(Z/2)) + (1 - N + 2*(N/2));
-    PCorrection = Pair*PairingConstant/std::sqrt(static_cast<G4double>(A));
+      static const G4double PairingConstant = 12.0*MeV;
+      pairCorr = ((1 - Z + 2*(Z/2)) + (1 - N + 2*(N/2)))
+	*PairingConstant/std::sqrt(static_cast<G4double>(A));
+    }
   }
-  return std::max(PCorrection,0.0);
+  return std::max(pairCorr, 0.0);
 }
-
 
 G4double 
 G4PairingCorrection::GetFissionPairingCorrection(G4int A, G4int Z) const 
 {
   static const G4double PairingConstant = 14.0*MeV;
   G4int N = A - Z;
-  G4double Pair = (1 - Z + 2*(Z/2)) + (1 - N + 2*(N/2));
-  G4double PCorrection = 
-    Pair*PairingConstant/std::sqrt(static_cast<G4double>(A));
-  return PCorrection;
+  G4double pairCorr = ((1 - Z + 2*(Z/2)) + (1 - N + 2*(N/2)))
+    *PairingConstant/std::sqrt(static_cast<G4double>(A));
+  return pairCorr;
 }

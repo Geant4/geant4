@@ -11,17 +11,16 @@
 /testhadr/det/setMat Water_ts
 /testhadr/det/setSize 1 m
 #
-/testhadr/phys/thermalScattering false
+/testhadr/phys/thermalScattering true
 #
 /run/initialize
 #
 /process/list
 #
-/particle/createAllIsomer
 /gun/particle neutron
 /gun/energy 2 MeV
 #
-/analysis/setFileName Water_nothermal
+/analysis/setFileName Water_thermal_44
 /analysis/h1/set 1  100  0. 100. none	#nb colli >1eV
 /analysis/h1/set 2  100  0. 100. cm	#track len >1eV
 /analysis/h1/set 3  100  0. 5. mus	#time of flight >1eV

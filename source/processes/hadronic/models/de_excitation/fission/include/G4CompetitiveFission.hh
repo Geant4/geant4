@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4CompetitiveFission.hh 85841 2014-11-05 15:35:06Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -63,6 +63,8 @@ private:
 public:
 
   virtual G4FragmentVector * BreakUp(const G4Fragment &theNucleus);
+
+  virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
 
   virtual G4double GetEmissionProbability(G4Fragment* theNucleus);
 
@@ -116,6 +118,7 @@ private:
   G4VLevelDensityParameter * theLevelDensityPtr;
   G4double LevelDensityParameter;
 
+  G4PairingCorrection* pairingCorrection;
   //  --------------------
 
   // Sample AtomicNumber of Fission products

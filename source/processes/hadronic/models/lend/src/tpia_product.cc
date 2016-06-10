@@ -45,7 +45,8 @@ namespace GIDI {
 using namespace GIDI;
 #endif
 
-static const int tpia_b_unknown = 0,
+//static const int tpia_b_unknown = 0,
+static const int /*tpia_b_unknown = 0,*/
                  tpia_b_twoBody_angular = tpia_m_angular,
                  tpia_b_twoBody_formFactor = 0,                                       /* ??? */
                  tpia_b_NBody_Legendre = tpia_m_Legendre,

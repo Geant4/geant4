@@ -44,25 +44,19 @@ How to build G4MPI
 ==================
 To build G4MPI library, use CMake on Geant4 library installed with CMake build.
 
-Check `CMakeList.txt`, especially the following two variables 
-should be taken care to match your MPI library
-
-    eg.  
-    set(CMAKE_CXX_COMPILER mpicxx)  
-    #set(CMAKE_CXX_INCLUDE_PATH ) set if necessary
-
 Follow these commands,
 
-    > cd source
     > mkdir build
     > cd build
-    > cmake -DGeant4_DIR=<your Geant4 install path>/lib64/Geant4-V.m.n ..
-      (V.m.n is the version of Geant4, eg. Geant4-9.6.0)
+    > cmake -DGeant4_DIR=<your Geant4 install path>/lib64/Geant4-V.m.n -DCMAKE_CXX_COMPILER=mpicxx \
+     -DCMAKE_INSTALL_PREFIX=<where-G4mpi-lib-will-be-installed> <g4source>/examples/extended/parallel/MPI/source
     > make
     > make install
 
-The library and header files will be installed on the installation directory
-of Geant4.
+Replace mpicxx with your MPI compiler wrapper.
+
+The library and header files will be installed on the installation directory specified in CMAKE_CXX_COMPILER
+a CMake configuration file will also be installed (see examples on how to compile an application using G4mpi)
 
 - - - 
 

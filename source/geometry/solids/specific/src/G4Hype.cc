@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc 72937 2013-08-14 13:20:38Z gcosmo $
+// $Id: G4Hype.cc 83572 2014-09-01 15:23:27Z gcosmo $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 //
 // 
@@ -59,8 +59,14 @@
 #include "Randomize.hh"
 
 #include "G4VGraphicsScene.hh"
-#include "G4Polyhedron.hh"
 #include "G4VisExtent.hh"
+
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
+}
 
 using namespace CLHEP;
 
@@ -71,7 +77,8 @@ G4Hype::G4Hype(const G4String& pName,
                      G4double newInnerStereo,
                      G4double newOuterStereo,
                      G4double newHalfLenZ)
-  : G4VSolid(pName), fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
+  : G4VSolid(pName), fCubicVolume(0.), fSurfaceArea(0.),
+    fRebuildPolyhedron(false), fpPolyhedron(0)
 {
   fHalfTol = 0.5*kCarTolerance;
 
@@ -133,7 +140,8 @@ G4Hype::G4Hype( __void__& a  )
     outerStereo(0.), tanInnerStereo(0.), tanOuterStereo(0.), tanInnerStereo2(0.),
     tanOuterStereo2(0.), innerRadius2(0.), outerRadius2(0.), endInnerRadius2(0.),
     endOuterRadius2(0.), endInnerRadius(0.), endOuterRadius(0.),
-    fCubicVolume(0.), fSurfaceArea(0.), fHalfTol(0.), fpPolyhedron(0)
+    fCubicVolume(0.), fSurfaceArea(0.), fHalfTol(0.),
+    fRebuildPolyhedron(false), fpPolyhedron(0)
 {
 }
 
@@ -143,7 +151,7 @@ G4Hype::G4Hype( __void__& a  )
 //
 G4Hype::~G4Hype()
 {
-  delete fpPolyhedron;
+  delete fpPolyhedron; fpPolyhedron = 0;
 }
 
 
@@ -160,7 +168,7 @@ G4Hype::G4Hype(const G4Hype& rhs)
     endInnerRadius2(rhs.endInnerRadius2), endOuterRadius2(rhs.endOuterRadius2),
     endInnerRadius(rhs.endInnerRadius), endOuterRadius(rhs.endOuterRadius),
     fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
-    fHalfTol(rhs.fHalfTol), fpPolyhedron(0)
+    fHalfTol(rhs.fHalfTol), fRebuildPolyhedron(false), fpPolyhedron(0)
 {
 }
 
@@ -189,7 +197,9 @@ G4Hype& G4Hype::operator = (const G4Hype& rhs)
    endInnerRadius2 = rhs.endInnerRadius2; endOuterRadius2 = rhs.endOuterRadius2;
    endInnerRadius = rhs.endInnerRadius; endOuterRadius = rhs.endOuterRadius;
    fCubicVolume = rhs.fCubicVolume; fSurfaceArea = rhs.fSurfaceArea;
-   fHalfTol = rhs.fHalfTol; fpPolyhedron = 0; 
+   fHalfTol = rhs.fHalfTol;
+   fRebuildPolyhedron = false;
+   delete fpPolyhedron; fpPolyhedron = 0;
 
    return *this;
 }
@@ -1551,11 +1561,15 @@ G4Polyhedron* G4Hype::CreatePolyhedron() const
 G4Polyhedron* G4Hype::GetPolyhedron () const
 {
   if (!fpPolyhedron ||
+      fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())
     {
+      G4AutoLock l(&polyhedronMutex);
       delete fpPolyhedron;
       fpPolyhedron = CreatePolyhedron();
+      fRebuildPolyhedron = false;
+      l.unlock();
     }
   return fpPolyhedron;
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSensitiveDetector.cc 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4VSensitiveDetector.cc 81087 2014-05-20 15:44:27Z gcosmo $
 //
 // G4VSensitiveDetector
 #include "G4VSensitiveDetector.hh"
@@ -75,8 +75,9 @@ G4VSensitiveDetector* G4VSensitiveDetector::Clone() const
     return NULL;
 }
 
-const G4VSensitiveDetector & G4VSensitiveDetector::operator=(const G4VSensitiveDetector &right)
+G4VSensitiveDetector & G4VSensitiveDetector::operator=(const G4VSensitiveDetector &right)
 {
+  if (this == &right ) return *this;
   SensitiveDetectorName = right.SensitiveDetectorName;
   thePathName = right.thePathName;
   fullPathName = right.fullPathName;

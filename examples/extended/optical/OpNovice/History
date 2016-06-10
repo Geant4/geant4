@@ -1,4 +1,4 @@
-$Id: History 77883 2013-11-29 08:40:10Z gcosmo $
+$Id: History 85352 2014-10-28 09:55:23Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,33 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 27, 2014 A. Dotti (OpNovice-V10-00-06)
+- Migration to new UI system. Requires:
+  xrays-V10-00-06, op-V10-00-09, phys-ctro-em-V10-00-17
+
+July 11, 2014 P. Gumplinger (OpNovice-V10-00-05)
+- Use implicit dimensioning for all arrays in
+  OpNoviceDetectorConstruction.cc and assert that they are the
+  same (thanks to M. Kelsey for suggesting this)
+
+December 23, 2013 M. Asai (OpNovice-V10-00-04)
+- Limit invokation of static method only from master/sequential.
+
+December 22, 2013 M. Asai (OpNovice-V10-00-03)
+- Avoid static G4Scintillation method invoked through a pointer.
+
+December 18, 2013 M. Asai/P. Gumplinger (OpNovice-V10-00-02)
+- allows changes to G4Cerenkov and G4Scintillation in Idle state
+
+December 16, 2013 M. Asai (OpNovice-V10-00-01)
+- Fix race condision issue in OpNovicePhysicsList.
+
+December 04, 2013 P. Gumplinger (OpNovice-V10-00-00)
+- Fixes in gui.mac:
+  Commented out command specific to B2 example
+  Let execute vis.mac first to make the command in added menus available;
+  Corrected wireframe parameter
 
 November 28, 2013 P. Gumplinger (OpNovice-V09-06-11)
 - add gui.mac, icons.mac and run.png

@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 68753 2013-04-05 10:26:04Z gcosmo $
+// $Id: RunAction.hh 86418 2014-11-11 10:39:38Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,13 +37,14 @@
 #include "G4UserRunAction.hh"
 #include "ProcessesCount.hh"
 #include "globals.hh"
+#include "g4root.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class DetectorConstruction;
 class PrimaryGeneratorAction;
-class HistoManager;
 class G4Run;
+class G4ParticleDefinition;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -67,25 +68,35 @@ class RunAction : public G4UserRunAction
   };
 
 public:
-  RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
+
+  RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
   virtual ~RunAction();
 
-public:
   void BeginOfRunAction(const G4Run*);
   void   EndOfRunAction(const G4Run*);
 
   void CountProcesses(G4String);
 
-  void FillData(const G4String & particleName,
+  void FillData(const G4ParticleDefinition* particle,
                 G4double kinEnergy, G4double costheta, G4double phi,
                 G4double longitudinalPolarization);
+
   void EventFinished();
                                      
 private:
+
+  void BookHisto();
+  void SaveHisto(G4int nevents);
+
+  const G4ParticleDefinition* fGamma;
+  const G4ParticleDefinition* fElectron;
+  const G4ParticleDefinition* fPositron;
+
   DetectorConstruction*   detector;
   PrimaryGeneratorAction* primary;
   ProcessesCount*         ProcCounter;
-  HistoManager*           histoManager;
+
+  G4AnalysisManager*      fAnalysisManager;
   
   G4int totalEventCount;
 

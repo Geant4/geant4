@@ -1,0 +1,54 @@
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                       chem3 History file
+                       ------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+28.11.2014 M.K                  tag chem3-V10-00-06
+-----------------------------------------------------
+- Update to last dna version
+
+24.11.2014 M.K                  tag chem3-V10-00-05
+-----------------------------------------------------
+- Retag before release
+- Initialization of chemistry applications is simplified
+
+06.11.2014 I.Hrivnacova                             
+-----------------------------------------------------
+- Fixes in .README
+
+06.10.2014 M.K                  tag chem3-V10-00-04
+-----------------------------------------------------
+- Remove selection of vis driver from vis.mac
+
+06.10.2014 M.K                  tag chem3-V10-00-03
+-----------------------------------------------------
+- Make the tag
+
+05.10.2014 M.K                  
+-----------------------------------------------------
+- Update CommandLineParser
+- Select the GUI type by command line option
+- Select visualization driver from command line
+
+24.10.2014 M.K                  tag chem3-V10-00-02
+-----------------------------------------------------
+- G4ITTimeStepper --> G4VScheduler
+
+24.10.2014 M.K                  tag chem3-V10-00-01
+-----------------------------------------------------
+- CommandLineParser added
+
+20.10.2014 M.K                  tag chem3-V10-00-00
+-----------------------------------------------------
+- chem3 added

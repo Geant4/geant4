@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonINCLXXPhysics.hh 71042 2013-06-10 09:28:44Z gcosmo $
+// $Id: G4IonINCLXXPhysics.hh 78602 2014-01-09 11:40:04Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -80,9 +80,21 @@ private:
   static G4ThreadLocal G4VCrossSectionDataSet* theNuclNuclData; 
   static G4ThreadLocal G4VComponentCrossSection* theGGNuclNuclXS;
 
+  static G4ThreadLocal G4INCLXXInterface* theINCLXXDeuteron;
+  static G4ThreadLocal G4INCLXXInterface* theINCLXXTriton;
+  static G4ThreadLocal G4INCLXXInterface* theINCLXXHe3;
+  static G4ThreadLocal G4INCLXXInterface* theINCLXXAlpha;
   static G4ThreadLocal G4INCLXXInterface* theINCLXXIons;
-  static G4ThreadLocal G4HadronicInteraction* theFTFP;
-  static G4ThreadLocal G4FTFBuilder* theBuilder;
+  static G4ThreadLocal G4HadronicInteraction* theFTFPDeuteron;
+  static G4ThreadLocal G4HadronicInteraction* theFTFPTriton;
+  static G4ThreadLocal G4HadronicInteraction* theFTFPHe3;
+  static G4ThreadLocal G4HadronicInteraction* theFTFPAlpha;
+  static G4ThreadLocal G4HadronicInteraction* theFTFPIons;
+  static G4ThreadLocal G4FTFBuilder* theFTFPBuilderDeuteron;
+  static G4ThreadLocal G4FTFBuilder* theFTFPBuilderTriton;
+  static G4ThreadLocal G4FTFBuilder* theFTFPBuilderHe3;
+  static G4ThreadLocal G4FTFBuilder* theFTFPBuilderAlpha;
+  static G4ThreadLocal G4FTFBuilder* theFTFPBuilderIons;
 
   G4double emin;
   G4double emax_d, emax_t, emax_he3, emax_alpha;

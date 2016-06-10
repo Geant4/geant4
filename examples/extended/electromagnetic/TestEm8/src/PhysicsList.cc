@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 77094 2013-11-21 10:51:54Z gcosmo $
+// $Id: PhysicsList.cc 82219 2014-06-12 09:38:27Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -52,6 +52,7 @@
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
+#include "G4EmLowEPPhysics.hh"
 #include "G4DecayPhysics.hh"
 
 #include "G4PAIModel.hh"
@@ -84,12 +85,9 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList(),
 {
   fConfig = G4LossTableManager::Instance()->EmConfigurator();
   G4LossTableManager::Instance()->SetVerbose(1);
-  defaultCutValue = 1.*mm;
-  fCutForGamma     = defaultCutValue;
-  fCutForElectron  = defaultCutValue;
-  fCutForPositron  = defaultCutValue;
-  fCutForProton    = defaultCutValue;
 
+  SetDefaultCutValue(1*mm);
+ 
   fMessenger = new PhysicsListMessenger(this);
 
   fStepMaxProcess = new StepMax();
@@ -181,6 +179,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmPenelopePhysics();
 
+  } else if (name == "emlowenergy") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmLowEPPhysics();
+
   } else if (name == "pai") {
 
     fEmName = name;
@@ -223,53 +227,7 @@ void PhysicsList::AddStepMax()
 void PhysicsList::SetCuts()
 {
   G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100.*eV,1e5);
-  if ( verboseLevel > 0 )
-  {
-    G4cout << "PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }
-
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma
-
-  SetCutValue(fCutForGamma, "gamma");
-  SetCutValue(fCutForElectron, "e-");
-  SetCutValue(fCutForPositron, "e+");
-  SetCutValue(fCutForProton, "proton");
-
   if ( verboseLevel > 0 ) { DumpCutValuesTable(); }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForGamma(G4double cut)
-{
-  fCutForGamma = cut;
-  SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForElectron(G4double cut)
-{
-  fCutForElectron = cut;
-  SetParticleCuts(fCutForElectron, G4Electron::Electron());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForPositron(G4double cut)
-{
-  fCutForPositron = cut;
-  SetParticleCuts(fCutForPositron, G4Positron::Positron());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForProton(G4double cut)
-{
-  fCutForProton = cut;
-  SetParticleCuts(fCutForProton, G4Proton::Proton());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

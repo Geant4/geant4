@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByAttribute.cc 68732 2013-04-05 09:44:10Z gcosmo $
+// $Id: G4TrajectoryDrawByAttribute.cc 78838 2014-01-28 08:46:17Z gcosmo $
 //
 // Jane Tinslay August 2006
 //
@@ -95,7 +95,7 @@ G4TrajectoryDrawByAttribute::Draw(const G4VTrajectory& object,
 	  ("G4TrajectoryDrawByAttribute::Draw",
 	   "modeling0117", JustWarning, ed, ". Invalid attribute name");
 	G4cout << "Available attributes:\n"
-	       << object.GetAttDefs();
+	       << *object.GetAttDefs();
 	warnedUnableToExtract = true;
       }
       return;
@@ -133,7 +133,7 @@ G4TrajectoryDrawByAttribute::Draw(const G4VTrajectory& object,
 	("G4TrajectoryDrawByAttribute::Draw",
 	 "modeling0118", JustWarning, ed, ". Invalid attribute name");
 	G4cout << "Available attributes:\n"
-	       << object.GetAttDefs();
+	       << *object.GetAttDefs();
       warnedUnableToExtract = true;
     }
       return;

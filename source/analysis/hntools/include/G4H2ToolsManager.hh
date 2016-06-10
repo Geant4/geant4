@@ -35,6 +35,7 @@
 #define G4H2ToolsManager_h 1
 
 #include "G4VH2Manager.hh"
+#include "G4BaseToolsManager.hh"
 #include "G4HnManager.hh"
 #include "globals.hh"
 
@@ -53,6 +54,8 @@ class G4H2ToolsManager : public G4VH2Manager
     G4H2ToolsManager(const G4AnalysisManagerState& state);
     virtual ~G4H2ToolsManager();
 
+    // Method to add histograms read from a file
+    G4int AddH2(const G4String& name, tools::histo::h2d* h2d);
     // Method for merge (MT)
     void AddH2Vector(const std::vector<tools::histo::h2d*>& h2Vector);
     // Reset data
@@ -64,6 +67,12 @@ class G4H2ToolsManager : public G4VH2Manager
     //
     tools::histo::h2d*  GetH2(G4int id, G4bool warn = true,
                               G4bool onlyIfActive = true) const;
+    // Iterators
+    std::vector<tools::histo::h2d*>::iterator BeginH2();
+    std::vector<tools::histo::h2d*>::iterator EndH2();
+    std::vector<tools::histo::h2d*>::const_iterator BeginConstH2() const;
+    std::vector<tools::histo::h2d*>::const_iterator EndConstH2() const;
+                              
     // Access to histogram vector (needed for Write())
     const std::vector<tools::histo::h2d*>& GetH2Vector() const;
     const std::vector<G4HnInformation*>&   GetHnVector() const;
@@ -111,7 +120,7 @@ class G4H2ToolsManager : public G4VH2Manager
                            const G4String& yfcnName = "none");
 
     virtual G4bool ScaleH2(G4int id, G4double factor);
-
+    
     // Method to fill histograms
     //
     virtual G4bool FillH2(G4int id, G4double xvalue, G4double yvalue,
@@ -168,10 +177,25 @@ class G4H2ToolsManager : public G4VH2Manager
                             
     // data members
     //
+    G4BaseToolsManager fBaseToolsManager;
     std::vector<tools::histo::h2d*>  fH2Vector;            
     std::map<G4String, G4int>  fH2NameIdMap;            
 };
 // inline methods
+
+inline  std::vector<tools::histo::h2d*>::iterator G4H2ToolsManager::BeginH2()
+{ return fH2Vector.begin(); }
+
+inline  std::vector<tools::histo::h2d*>::iterator G4H2ToolsManager::EndH2()
+{ return fH2Vector.end(); }
+
+inline  std::vector<tools::histo::h2d*>::const_iterator 
+G4H2ToolsManager::BeginConstH2() const
+{ return fH2Vector.begin(); }
+
+inline  std::vector<tools::histo::h2d*>::const_iterator 
+G4H2ToolsManager::EndConstH2() const
+{ return fH2Vector.end(); }
 
 inline const std::vector<tools::histo::h2d*>& G4H2ToolsManager::GetH2Vector() const
 { return fH2Vector; }

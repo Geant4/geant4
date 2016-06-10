@@ -22,8 +22,8 @@ inline double Hep2Vector::y() const {
 inline Hep2Vector::Hep2Vector(double x1, double y1)
 : dx(x1), dy(y1) {}
 
-inline Hep2Vector::Hep2Vector( const Hep3Vector & p)
-: dx(p.x()), dy(p.y()) {}
+inline Hep2Vector::Hep2Vector( const Hep3Vector & v3)
+: dx(v3.x()), dy(v3.y()) {}
 
 inline void Hep2Vector::setX(double x1) {
   dx = x1;

@@ -1,4 +1,4 @@
-$Id: History 71038 2013-06-10 09:22:40Z gcosmo $
+$Id: History 81364 2014-05-27 12:55:46Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,8 +14,26 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27-May-2013, V.Ivanchenko               (phys-ctor-glnuclear-V10-00-05)
+- G4BertiniElectroNuclearBuilder - removed double deletion
+
+27-May-2013, V.Ivanchenko               (phys-ctor-glnuclear-V10-00-04)
+- G4EmExtraPhysics - fixed bug in previous tag
+
+27-May-2013, V.Ivanchenko               (phys-ctor-glnuclear-V10-00-03)
+- G4EmExtraPhysics - fixed memory leak reported by Coverity
+
+24-Apr-2014, Alberto Ribon              (phys-ctro-glnuclear-V10-00-02)
+- Switched on muon-nuclear by default.
+
+10-Apr-2014, Andrea Dotti               (phys-ctro-glnuclear-V10-00-01)
+- Implement thread safe UI messenger. Addressing bug #1606
+
+29-Jan-2014, Gunter Folger              (phys-ctor-glnuclear-V10-00-00)
+- Removed photolepton_hadron/muon_nuclear from sources.cmake
+
 08-Jun-2013, A.Dotti (phys-ctor-glnuclear-V09-06-03)
-- Fix for MT: make data memebers TLS
+- Fix for MT: make data members TLS
 
 27-Feb-2013, V.Ivanchenko (phys-ctor-glnuclear-V09-06-02)
 - G4EmExtraPhysics - fixed warning from the clang compiler on MacOS

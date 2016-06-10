@@ -76,8 +76,11 @@ DMXRunAction::~DMXRunAction()
 
 void DMXRunAction::BeginOfRunAction(const G4Run* aRun)
 {
- 
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+  //Master mode or sequential
+  if (IsMaster())    
+    G4cout << "### Run " << aRun->GetRunID() << " starts (master)." << G4endl;
+  else
+    G4cout << "### Run " << aRun->GetRunID() << " starts (worker)." << G4endl;
   
   // Book histograms and ntuples
   Book();
@@ -163,14 +166,4 @@ void DMXRunAction::Book()
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void DMXRunAction::Finish()
-{
-  // Save histograms
-  G4AnalysisManager* man = G4AnalysisManager::Instance();
-  man->Write();
-  man->CloseFile();
-  // Complete clean-up
-  delete G4AnalysisManager::Instance();
-}

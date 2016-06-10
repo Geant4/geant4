@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronCaptureXS.hh 68720 2013-04-05 09:18:58Z gcosmo $
+// $Id: G4NeutronCaptureXS.hh 83697 2014-09-10 07:15:29Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -65,6 +65,8 @@ public: // With Description
   G4NeutronCaptureXS();
 
   virtual ~G4NeutronCaptureXS();
+    
+  static const char* Default_Name() {return "G4NeutronCaptureXS";}
 
   virtual
   G4bool IsElementApplicable(const G4DynamicParticle*, G4int Z,
@@ -104,9 +106,10 @@ private:
 
   G4double emax;
   G4double elimit;
-  G4bool   isInitialized;
 
-  G4ElementData data;
+  G4bool   isMaster;
+
+  static G4ElementData* data;
 
   std::vector<G4PhysicsVector*> work;
   std::vector<G4double>         temp;

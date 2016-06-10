@@ -1,4 +1,4 @@
-# $Id: run03.mac 75118 2013-10-28 09:40:24Z gcosmo $
+# $Id: run03.mac 81771 2014-06-05 08:32:57Z gcosmo $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -27,7 +27,7 @@
 /gun/particle e-
 /gun/energy 1 GeV
 #
-/testem/event/printModulo 10
+/run/printProgress 10
 #
 /run/beamOn 500
 

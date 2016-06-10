@@ -1,0 +1,614 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: G4FastList.cc 85244 2014-10-27 08:24:13Z gcosmo $
+//
+// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
+//
+// History:
+// -----------
+// 10 Oct 2011 M.Karamitros created
+//
+// -------------------------------------------------------------------
+
+//#ifndef G4FASTLIST_ICC_
+//#define G4FASTLIST_ICC_
+
+//***********************************************************
+// TrackList_iterator
+template<class OBJECT>
+  OBJECT*
+  G4FastList_iterator<OBJECT>::operator*()
+  {
+    if (fpNode == 0) return 0;
+    return fpNode->GetObject();
+  }
+
+template<class OBJECT>
+  OBJECT*
+  G4FastList_iterator<OBJECT>::operator->()
+  {
+    if (fpNode == 0) return 0;
+    return fpNode->GetObject();
+  }
+
+template<class OBJECT>
+  const OBJECT*
+  G4FastList_iterator<OBJECT>::operator*() const
+  {
+    if (fpNode == 0) return 0;
+    return fpNode->GetObject();
+  }
+
+template<class OBJECT>
+  const OBJECT*
+  G4FastList_iterator<OBJECT>::operator->() const
+  {
+    if (fpNode == 0) return 0;
+    return fpNode->GetObject();
+  }
+
+//***********************************************************
+// TrackNodeList
+
+template<class OBJECT>
+  G4FastListNode<OBJECT>::G4FastListNode(OBJECT* track) :
+      fpObject(track), fpPrevious(0), fpNext(0)
+  {
+    fAttachedToList = false;
+  }
+
+template<class OBJECT>
+  G4FastListNode<OBJECT>::~G4FastListNode()
+  {
+    if (fListRef && fListRef->fpList)
+    {
+      fListRef->fpList->pop(this);
+    }
+  }
+
+template<class OBJECT>
+  void G4FastListNode<OBJECT>::DetachYourSelf()
+  {
+    if(fpObject)
+    {
+      fpObject->SetListNode(0);
+    }
+  }
+
+//***********************************************************
+
+template<class OBJECT>
+  G4FastList<OBJECT>::G4FastList() :
+      fBoundary()
+  {
+    fListRef.reset(new _ListRef<G4FastList<OBJECT> >(this));
+    fNbObjects = 0;
+    fBoundary.SetPrevious(&fBoundary);
+    fBoundary.SetNext(&fBoundary);
+    fBoundary.fAttachedToList = true;
+    fpNodeInManyLists = 0;
+  }
+
+// should not be used
+template<class OBJECT>
+  G4FastList<OBJECT>::G4FastList(const G4FastList<OBJECT>& /*other*/) :
+      fBoundary()
+  {
+    // One track should not belong to two different trackLists
+    fNbObjects = 0;
+    fpNodeInManyLists = 0;
+  }
+
+template<class OBJECT>
+  G4FastList<OBJECT>& G4FastList<OBJECT>::operator=(const G4FastList<OBJECT>& other)
+  {
+    // One track should not belong to two different trackList
+    if (this == &other) return *this; // handle self assignment
+    //assignment operator
+    return *this;
+  }
+
+template<class OBJECT>
+  G4FastList<OBJECT>::~G4FastList()
+  {
+    if (fNbObjects != 0)
+    {
+      G4FastListNode<OBJECT> * __stackedTrack = fBoundary.GetNext();
+      G4FastListNode<OBJECT> * __nextStackedTrack;
+
+      // delete tracks in the stack
+      while (__stackedTrack && __stackedTrack != &(fBoundary))
+      {
+        __nextStackedTrack = __stackedTrack->GetNext();
+        OBJECT* __obj = __stackedTrack->GetObject();
+
+        delete __stackedTrack;
+        __stackedTrack = 0;
+
+        if (__obj)
+        {
+          //////////////
+          DeleteObject(__obj);
+          __obj = 0;
+          //////////////
+        }
+        __stackedTrack = __nextStackedTrack;
+      }
+    }
+    fNbObjects = 0;
+
+    typename std::set<Watcher*>::iterator it = fWatchers.begin();
+    typename std::set<Watcher*>::iterator _end = fWatchers.end();
+
+    for (; it != _end; it++)
+    {
+      (*it)->NotifyDeletingList(this);
+      (*it)->StopWatching(this, false);
+    }
+
+    if (fpNodeInManyLists)
+    {
+      delete fpNodeInManyLists;
+      fpNodeInManyLists = 0;
+    }
+  }
+
+template<class OBJECT>
+  bool G4FastList<OBJECT>::empty() const
+  {
+    return (fNbObjects == 0);
+  }
+
+template<class OBJECT>
+  typename G4FastList<OBJECT>::iterator G4FastList<OBJECT>::begin()
+  {
+    return iterator(fBoundary.GetNext());
+  }
+
+template<class OBJECT>
+  typename G4FastList<OBJECT>::const_iterator G4FastList<OBJECT>::begin() const
+  {
+    return const_iterator(fBoundary.GetNext());
+  }
+
+template<class OBJECT>
+  typename G4FastList<OBJECT>::iterator G4FastList<OBJECT>::end()
+  {
+    return iterator(&(fBoundary));
+  }
+
+template<class OBJECT>
+  typename G4FastList<OBJECT>::const_iterator G4FastList<OBJECT>::end() const
+  {
+    return const_iterator(&(fBoundary));
+  }
+// return an iterator that contains an empty node
+// use for boundary checking only
+
+template<class OBJECT>
+  void G4FastList<OBJECT>::push_front(OBJECT* __obj)
+  {
+    insert(begin(), __obj);
+  }
+
+template<class OBJECT>
+  void G4FastList<OBJECT>::push_back(OBJECT* __obj)
+  {
+    insert(end(), __obj);
+  }
+
+template<class OBJECT>
+  bool G4FastList<OBJECT>::Holds(const OBJECT* __obj) const
+  {
+    node* __node = GetNode(__obj);
+    if(__node == 0) return false;
+    return (__node->fListRef->fpList == this);
+  }
+
+// TODO: A revoir
+template<class OBJECT>
+  G4FastListNode<OBJECT>* G4FastList<OBJECT>::Flag(OBJECT* __obj)
+  {
+    G4FastListNode<OBJECT>* __node = GetNode(__obj);
+
+    if (__node != 0)
+    {
+      // Suggestion move the node to this list
+      if (__node->fAttachedToList)
+      {
+        G4ExceptionDescription exceptionDescription;
+        exceptionDescription << "An object";
+        exceptionDescription << " is already attached to a TrackList ";
+        G4Exception("G4FastList<OBJECT>::Flag", "G4FastList001",
+                    FatalErrorInArgument, exceptionDescription);
+      }
+    }
+    else
+    {
+      __node = new G4FastListNode<OBJECT>(__obj);
+      SetNode(__obj,__node);
+    }
+
+    __node->fAttachedToList = true;
+    __node->fListRef = fListRef;
+    return __node;
+  }
+
+template<class OBJECT>
+  G4FastListNode<OBJECT>* G4FastList<OBJECT>::CreateNode(OBJECT* __obj)
+  {
+    G4FastListNode<OBJECT>* __listNode = Flag(__obj);
+    return __listNode;
+  }
+
+template<class OBJECT>
+  void G4FastList<OBJECT>::Hook(G4FastListNode<OBJECT>* __position,
+                                G4FastListNode<OBJECT>* __toHook)
+  {
+    /*
+     __toHook->SetNext(__position);
+     __toHook->SetPrevious(__position->GetPrevious());
+     __position->GetPrevious()->SetNext(__toHook);
+     __position->SetPrevious(__toHook);
+     */
+    G4FastListNode<OBJECT>* __previous = __position->GetPrevious();
+    __toHook->SetPrevious(__previous);
+    __toHook->SetNext(__position);
+    __position->SetPrevious(__toHook);
+    __previous->SetNext(__toHook);
+
+    /*
+     if (fNbObjects == 0)
+     {
+     // DEBUG
+     //        G4cout << "fNbObjects == 0" << G4endl;
+     fpStart = __toHook;
+     fpFinish = __toHook;
+     __toHook->SetNext(&fBoundary);
+     __toHook->SetPrevious(&fBoundary);
+     //fBoundary.SetNext(__toHook);
+     fBoundary.SetPrevious(__toHook);
+     } else if (__position == &fBoundary)
+     {
+     // DEBUG
+     //        G4cout << "__position == &fBoundary" << G4endl;
+     fpFinish->SetNext(__toHook);
+     __toHook->SetPrevious(fpFinish);
+
+     __toHook->SetNext(&fBoundary);
+     fBoundary.SetPrevious(__toHook);
+
+     fpFinish = __toHook;
+     } else if (__position == fpStart)
+     {
+     // DEBUG
+     //        G4cout << "__position == fStart" << G4endl;
+     __toHook->SetPrevious(&fBoundary);
+     //fBoundary.SetNext(__toHook);
+     __toHook->SetNext(fpStart);
+     fpStart->SetPrevious(__toHook);
+     fpStart = __toHook;
+     } else
+     {
+     // DEBUG
+     //        G4cout << "else" << G4endl;
+     G4FastListNode<OBJECT>* __previous = __position->GetPrevious();
+     __toHook->SetPrevious(__previous);
+     __toHook->SetNext(__position);
+     __position->SetPrevious(__toHook);
+     __previous->SetNext(__toHook);
+     }
+     */
+    fNbObjects++;
+
+    typename std::set<Watcher*>::iterator it = fWatchers.begin();
+    typename std::set<Watcher*>::iterator _end = fWatchers.end();
+
+    for (; it != _end; it++)
+    {
+      (*it)->NotifyNewObject(__toHook->GetObject(), this);
+    }
+  }
+
+template<class OBJECT>
+  void G4FastListNode<OBJECT>::UnHook()
+  {
+    G4FastListNode<OBJECT>* __next_node = this->fpNext;
+    G4FastListNode<OBJECT>* __prev_node = this->fpPrevious;
+
+    if (__prev_node)
+    {
+      __prev_node->fpNext = __next_node;
+    }
+
+    if (__next_node)
+    {
+      __next_node->fpPrevious = __prev_node;
+    }
+    fpNext = 0;
+    fpPrevious = 0;
+  }
+
+template<class OBJECT>
+  void G4FastList<OBJECT>::Unhook(G4FastListNode<OBJECT>* __toUnHook)
+  {
+    __toUnHook->UnHook();
+
+    fNbObjects--;
+
+    typename std::set<Watcher*>::iterator it = fWatchers.begin();
+    typename std::set<Watcher*>::iterator _end = fWatchers.end();
+
+    for (; it != _end; it++)
+    {
+      (*it)->NotifyRemoveObject(__toUnHook->GetObject(), this);
+    }
+  }
+
+template<class OBJECT>
+  typename G4FastList<OBJECT>::iterator
+  G4FastList<OBJECT>::insert(typename G4FastList<OBJECT>::iterator __position,
+                             OBJECT* __obj)
+  {
+    G4FastListNode<OBJECT>* __node = CreateNode(__obj);
+    Hook(__position.fpNode, __node);
+    return iterator(__node);
+  }
+
+//____________________________________________________________________
+//
+//                      WITHDRAW FROM LIST
+//____________________________________________________________________
+
+template<class OBJECT>
+  void G4FastList<OBJECT>::CheckFlag(G4FastListNode<OBJECT>* __node)
+  {
+    if (__node->fListRef->fpList != this)
+    {
+      G4ExceptionDescription exceptionDescription;
+      exceptionDescription << "The object "
+      << " is not correctly linked to a G4FastList." << G4endl
+      << "You are probably trying to withdraw this object "
+      << "from the list but it probably does not belong to "
+      << "this fast list." << G4endl;
+      G4Exception("G4FastList<OBJECT>::CheckFlag", "G4FastList002",
+                  FatalErrorInArgument, exceptionDescription);
+    }
+  }
+
+template<class OBJECT>
+  G4FastListNode<OBJECT>* G4FastList<OBJECT>::Unflag(OBJECT* __obj)
+  {
+    G4FastListNode<OBJECT>* __node = __GetNode(__obj);
+    CheckFlag(__node);
+    __node->fAttachedToList = false;
+    __node->fListRef.reset();
+    return __node;
+  }
+
+template<class OBJECT>
+  void G4FastList<OBJECT>::Unflag(G4FastListNode<OBJECT>* __node)
+  {
+    CheckFlag(__node);
+    __node->fAttachedToList = false;
+    __node->fListRef.reset();
+    return;
+  }
+
+template<class OBJECT>
+  OBJECT* G4FastList<OBJECT>::pop_back()
+  {
+    if (fNbObjects == 0) return 0;
+    G4FastListNode<OBJECT> * __aNode = fBoundary.GetPrevious();
+    Unhook(__aNode);
+    Unflag(__aNode);
+    return __aNode->GetObject();
+  }
+
+template<class OBJECT>
+  typename G4FastList<OBJECT>::iterator G4FastList<OBJECT>::pop(OBJECT* __obj)
+  {
+    G4FastListNode<OBJECT>* __node = Unflag(__obj);
+    iterator __next(__node->GetNext());
+    Unhook(__node);
+    return __next;
+  }
+
+template<class OBJECT>
+  typename G4FastList<OBJECT>::iterator
+  G4FastList<OBJECT>::pop(G4FastListNode<OBJECT>* __node)
+  {
+    Unflag(__node);
+    iterator __next(__node->GetNext());
+    Unhook(__node);
+    return __next;
+  }
+
+template<class OBJECT>
+  typename G4FastList<OBJECT>::iterator G4FastList<OBJECT>::erase(OBJECT* __obj)
+  {
+    G4FastListNode<OBJECT>* __next_node = EraseListNode(__obj);
+    //////////////////
+    DeleteObject(__obj);
+    __obj = 0;
+    //////////////////
+    iterator __next(__next_node);
+    return __next;
+  }
+
+template<class OBJECT>
+  G4FastListNode<OBJECT>* G4FastList<OBJECT>::EraseListNode(OBJECT* __obj)
+  {
+    G4FastListNode<OBJECT>* __node = Unflag(__obj);
+    __node->DetachYourSelf();
+    G4FastListNode<OBJECT>* __next = __node->GetNext();
+    Unhook(__node);
+    delete __node;
+    return __next;
+  }
+
+template<class OBJECT>
+  void G4FastList<OBJECT>::DeleteObject(OBJECT*)
+  {
+//    delete __obj;
+  }
+
+template<class OBJECT>
+  void G4FastList<OBJECT>::remove(OBJECT* __obj)
+  {
+    this->erase(__obj);
+  }
+
+template<class OBJECT>
+  typename G4FastList<OBJECT>::iterator G4FastList<OBJECT>::pop(iterator __first,
+                                                                iterator __last)
+  {
+    if (fNbObjects == 0) return iterator(&fBoundary);
+
+    while (__first != __last)
+    {
+      if (__first.fpNode) __first = pop(*__first);
+    }
+    return __last;
+  }
+
+template<class OBJECT>
+  typename G4FastList<OBJECT>::iterator G4FastList<OBJECT>::erase(iterator __first,
+                                                                  iterator __last)
+  {
+    if (fNbObjects == 0) return iterator(&fBoundary);
+
+    while (__first != __last)
+    {
+      if (__first.fpNode) __first = erase(*__first);
+    }
+    return __last;
+  }
+
+template<class OBJECT>
+  void G4FastList<OBJECT>::clear()
+  {
+    erase(begin(), end());
+  }
+
+template<class OBJECT>
+  void G4FastList<OBJECT>::transferTo(G4FastList<OBJECT>* __destination)
+  {
+    if (fNbObjects == 0) return;
+
+    if (__destination->fNbObjects == 0)
+    {
+      __destination->fNbObjects = this->fNbObjects;
+
+      __destination->fBoundary.SetNext(fBoundary.GetNext());
+      __destination->fBoundary.SetPrevious(fBoundary.GetPrevious());
+      fBoundary.GetNext()->SetPrevious(&__destination->fBoundary);
+      fBoundary.GetPrevious()->SetNext(&__destination->fBoundary);
+    }
+    else
+    {
+      node* lastNode = __destination->fBoundary.GetPrevious();
+      lastNode->SetNext(fBoundary.GetNext());
+      fBoundary.GetNext()->SetPrevious(lastNode);
+      __destination->fBoundary.SetPrevious(fBoundary.GetPrevious());
+      fBoundary.GetPrevious()->SetNext(&__destination->fBoundary);
+
+      __destination->fNbObjects += this->fNbObjects;
+    }
+
+    fNbObjects = 0;
+    this->fBoundary.SetPrevious(&this->fBoundary);
+    this->fBoundary.SetNext(&this->fBoundary);
+
+    fListRef->fpList = __destination;
+  }
+
+//____________________________________________________________
+//
+//                      G4FastList<OBJECT> Utils
+//____________________________________________________________
+
+template<class OBJECT>
+  G4FastListNode<OBJECT>* G4FastList<OBJECT>::__GetNode(OBJECT* __obj)
+  {
+    G4FastListNode<OBJECT>* __node = GetNode(__obj);
+    // TODO : complete the exception
+    if (__node == 0)
+    {
+      G4ExceptionDescription exceptionDescription;
+      exceptionDescription << "The object ";
+      exceptionDescription << " was not connected to any trackList ";
+      G4Exception("G4FastList<OBJECT>::Unflag", "G4FastList003",
+                  FatalErrorInArgument, exceptionDescription);
+      return 0;
+    }
+    return __node;
+  }
+
+template<class OBJECT>
+  G4FastListNode<OBJECT>* G4FastList<OBJECT>::GetNode(OBJECT* __obj)
+  {
+    G4FastListNode<OBJECT>* __node = __obj->GetListNode();
+    return __node;
+  }
+
+template<class OBJECT>
+  void G4FastList<OBJECT>::SetNode(OBJECT* __obj,
+                                   G4FastListNode<OBJECT>* __node)
+  {
+    __obj->SetListNode(__node);
+  }
+
+template<class OBJECT>
+  G4FastList<OBJECT>* G4FastList<OBJECT>::GetList(OBJECT* __obj)
+  {
+    G4FastListNode<OBJECT>* __node = GetNode(__obj);
+
+    if (__node == 0) return 0;
+    if (__node->fListRef == 0) return 0;
+
+    return __node->fListRef->fpTrackList;
+  }
+
+template<class OBJECT>
+  G4FastList<OBJECT>*
+  G4FastList<OBJECT>::GetList(G4FastListNode<OBJECT>* __node)
+  {
+    if (__node == 0) return 0;
+    if (__node->fListRef == 0) return 0;
+
+    return __node->fListRef->fpList;
+  }
+
+template<class OBJECT>
+  void G4FastList<OBJECT>::Pop(OBJECT* __obj)
+  {
+    G4FastListNode<OBJECT>* __node = G4FastList<OBJECT>::GetNode(__obj);
+    G4FastList<OBJECT>* __list = G4FastList<OBJECT>::GetList(__node);
+    if (__list) __list->pop(__node);
+  }
+
+//#endif /* G4FASTLIST_ICC_*/

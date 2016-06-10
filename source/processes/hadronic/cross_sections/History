@@ -14,11 +14,114 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+
+07 November 2014 V.Ivanchenko (hadr-cross-V10-00-17)
+---------------------------------------------------
+07 November 2014 V.Grichine class managing single diffraction to 
+                  elastic cross section ratio G4DiffElasticRatio 
+
+30 October 2014 V.Ivanchenko (hadr-cross-V10-00-16)
+---------------------------------------------------
+- added new interface class G4VCrossSectionRatio 
+
+17 October 2014 A.Dotti (hadr-cross-V10-00-15)
+---------------------------------------------------
+- Fixing data-races in G4Chips{Neutron,Proton}ElasticXS as
+  retported by DRD
+
+09 September 2014 W.Pokorski (hadr-cross-V10-00-14)
+------------------------------------------------
+- adding missing factories to G4NeutronCaptureXS, G4NeutronElasticXS, 
+G4NeutronInelasticXS, G4PiNuclearCrossSection
+
+08 August 2014 W.Pokorski (hadr-cross-V10-00-13)
+------------------------------------------------
+- fixing one more memory leak in Chips cross sections
+
+07 August 2014 W.Pokorski (hadr-cross-V10-00-12)
+------------------------------------------------
+- replacing all the statics by regular class members in Chips cross sections
+
+06 August 2014 V.Ivanchenko (hadr-cross-V10-00-11)
+------------------------------------------------
+- G4NeutronElasticXS - fixed minor memory leak at the end of job
+
+27 July 2014 V.Ivanchenko (hadr-cross-V10-00-10)
+------------------------------------------------
+- G4KokoulinMuonNuclearXS - delete G4PhysicsVectors end of job;
+    share data between threads; use G4Exp, G4Log
+
+26 July 2014 V.Ivanchenko (hadr-cross-V10-00-09)
+------------------------------------------------
+- G4NeutronInelasticXS - fixed bug from previous tag
+
+26 July 2014 V.Ivanchenko (hadr-cross-V10-00-08)
+------------------------------------------------
+- G4NeutronCaptureXS, G4NeutronElasticXS, G4NeutronInelasticXS,
+  G4ComponentSAIDTotalXS, G4UPiNuclearCrossSection - delete 
+  G4PhysicsVectors end of job
+- G4NeutronCaptureXS, G4NeutronElasticXS, G4NeutronInelasticXS
+    share data between threads
+
+24 June 2014 A.Ribon (hadr-cross-V10-00-07)
+------------------------------------------
+- G4ChipsAntiBaryonElasticXS : include anti_Omega- in the method GetPTables.
+
+5 June 2014 A.Ribon (hadr-cross-V10-00-06)
+------------------------------------------
+- G4ChipsHyperonElasticXS : avoid to exclude Sigma+ in the set of
+  hyperons which can be treated by Chips elastic scattering.
+
+3 June 2014 G.Folger (hadr-cross-V10-00-05)
+-------------------------------------------
+- Add const for G4partuicleDefinition in many places, most trivial.
+   Affects G4Chips*(trivial), G4ComponentGGNuclNuclXsc, and 
+	G4GGNuclNuclCrossSection (change in interface in two methods each, plus
+	trivial changes)
+	
+20 May 2014 A.Dotti (hadr-cross-V10-00-04)
+------------------------------------------
+- Introduce protection in destructor of G4ElectroNuclearCrossSection
+  to protect for NULL pointer entries in cache.
+- G4KokoulinMuonNuclearXS does not call anymore explicitly
+  theCrossSectionTable::clearAndDestroy() since underlying physics vectors
+  are managed by allocators
+ 
+11 April 2014 W.Pokorski (hadr-cross-V10-00-03)
+----------------------------------------------
+- Minor reshuffling of some variables suggested by Federico 
+(to calculate some variables only when used to prevent overflows)
+
+26 March 2014 G.Folger  (hadr-cross-V10-00-02)
+----------------------------------------------
+- Remove use of const_cast for G4ParticleDefinition*
+
+13 March 2014 G.Cosmo  (hadr-cross-V10-00-01)
+---------------------------------------------
+- Fixed use of inline keyword for methods defined inside
+  G4ElectroNuclearCrossSection.cc.
+
+18 December 2013 A.Ribon  (hadr-cross-V10-00-00)
+------------------------------------------------
+- Fixed wrong tag format.
+
+18 December 2013 A.Ribon  (hadr-cross-V09-06-39)
+------------------------------------------------
+- Removed wrong if statement against zero cross section in
+  G4CrossSectionDataStore::SampleZandA. This should be the correct
+  fix for the crashes observed in QBBC (see previous tag).
+- Instead of re-activate the 1 millibarn threshold introduced in
+  the previous tag, we decided to disable the same threshold also for
+  the inelastic cross section in G4BGGNucleonInelasticXS.
+  The rationale is that without the threshold we don't see CPU penalty,
+  and this allows future improvements of cross section behaviour near
+  the threshold.
+
 04 December 2013 A.Ribon  (hadr-cross-V09-06-38)
 ------------------------------------------------
-- Removed the 1 millibarn threshold in G4BGGNucleonElasticXS, to avoid
-  rare crashes observed in QBBC. A better fix of this problem will
-  be done after the release 10.
+- Commented out the 1 millibarn threshold in G4BGGNucleonElasticXS, 
+  to avoid rare crashes observed in QBBC. A better fix of this problem
+  will be done after the release 10.
 
 27 November 2013 G.Cosmo  (hadr-cross-V09-06-37)
 ------------------------------------------------

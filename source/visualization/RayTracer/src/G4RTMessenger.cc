@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTMessenger.cc 74050 2013-09-20 09:38:19Z gcosmo $
+// $Id: G4RTMessenger.cc 86973 2014-11-21 11:57:27Z gcosmo $
 //
 //
 //
@@ -57,6 +57,7 @@ G4RTMessenger* G4RTMessenger::GetInstance
 G4RTMessenger::G4RTMessenger(G4TheRayTracer* p1)
 {
   theDefaultTracer = p1;
+  theTracer = theDefaultTracer;
 
   rayDirectory = new G4UIdirectory("/vis/rayTracer/");
   rayDirectory->SetGuidance("RayTracer commands.");

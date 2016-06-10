@@ -1,0 +1,200 @@
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+/run/verbose 2
+#
+/testhadr/det/setMat Water_ts
+/testhadr/det/setSize 1 m
+/run/reinitializeGeometry
+#
+/run/initialize
+userDetector->Construct() start.
+
+ The Box is 1 m   of Water_ts
+ 
+ Material: Water_ts    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.376 cm 
+                       Imean:  78.000 eV 
+
+   --->  Element: TS_H_of_Water (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:  11.19 %  ElmAbundance  66.67 % 
+
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
+
+Water_ts is registered to the default region.
+physicsList->Construct() start.
+physicsList->CheckParticleList() start.
+physicsList->setCut() start.
+#
+/process/list
+     Transportation,         hadElastic,   neutronInelastic,           nCapture
+           nFission
+#
+/gun/particle neutron
+/gun/energy 2 MeV
+#
+/run/printProgress 100
+#
+/run/beamOn 1000
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc49-RelWithDebInfo/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc49-RelWithDebInfo/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc49-RelWithDebInfo/build/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc49-RelWithDebInfo/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc49-RelWithDebInfo/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc49-RelWithDebInfo/build/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
+
+Neutron HP Thermal Scattering Data: Following material-element pairs and/or elements are registered.
+Element TS_H_of_Water,  internal thermal scattering id 0
+Element TS_C_of_Graphite,  internal thermal scattering id 1
+
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc49-RelWithDebInfo/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc49-RelWithDebInfo/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
+
+Neutron HP Thermal Scattering: Following material-element pairs or elements are registered.
+Element TS_H_of_Water,  internal thermal scattering id 0
+Element TS_C_of_Graphite,  internal thermal scattering id 1
+
+
+Neutron HP Thermal Scattering Data: Following material-element pairs and/or elements are registered.
+Element TS_H_of_Water,  internal thermal scattering id 0
+Element TS_C_of_Graphite,  internal thermal scattering id 1
+
+
+====================================================================
+                  HADRONIC PROCESSES SUMMARY (verbose level 1)
+
+---------------------------------------------------
+                           Hadronic Processes for neutron
+
+  Process: hadElastic
+        Model:          NeutronHPElastic: 4 eV  ---> 20 MeV
+        Model: NeutronHPThermalScattering: 0 meV ---> 4 eV 
+     Cr_sctns: NeutronHPThermalScatteringData: 0 meV ---> 4 eV 
+     Cr_sctns:        NeutronHPElasticXS: 0 meV ---> 20 MeV
+     Cr_sctns:            GheishaElastic: 0 meV ---> 100 TeV
+
+  Process: neutronInelastic
+        Model:        NeutronHPInelastic: 0 meV ---> 20 MeV
+     Cr_sctns:      NeutronHPInelasticXS: 0 meV ---> 20 MeV
+     Cr_sctns:          GheishaInelastic: 0 meV ---> 100 TeV
+
+  Process: nCapture
+        Model:          NeutronHPCapture: 0 meV ---> 20 MeV
+     Cr_sctns:        NeutronHPCaptureXS: 0 meV ---> 20 MeV
+     Cr_sctns:          GheishaCaptureXS: 0 meV ---> 100 TeV
+
+  Process: nFission
+        Model:          NeutronHPFission: 0 meV ---> 20 MeV
+     Cr_sctns:        NeutronHPFissionXS: 0 meV ---> 20 MeV
+     Cr_sctns:          GheishaFissionXS: 0 meV ---> 100 TeV
+
+================================================================
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc49-RelWithDebInfo/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc49-RelWithDebInfo/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
+
+Region <DefaultRegionForTheWorld> --  -- appears in <Water_ts> world volume
+ This region is in the mass world.
+ Root logical volume(s) : Water_ts 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Water_ts 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 0 fm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Water_ts
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
+ Energy thresholds :  gamma  2.94056 keV    e-  351.877 keV    e+  342.545 keV proton 0 meV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   0 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+### Run 0 starts.
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 9876, 54321
+----------------------------------------
+--> Event 0 starts.
+--> Event 100 starts.
+--> Event 200 starts.
+--> Event 300 starts.
+--> Event 400 starts.
+--> Event 500 starts.
+--> Event 600 starts.
+--> Event 700 starts.
+--> Event 800 starts.
+--> Event 900 starts.
+ Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=31.46s Real=31.57s Sys=0s
+
+ The run is 1000 neutron of 2 MeV through 50 cm  of Water_ts (density: 1 g/cm3 )
+
+ Process calls frequency :
+	hadElastic= 209953	nCapture= 999	neutronInelastic= 1
+
+ Parcours of incident neutron:
+   nb of collisions    E>1*eV= 16.406      E<1*eV= 194.55       total= 210.95
+   track length        E>1*eV= 20.651 cm   E<1*eV= 72.709 cm    total= 93.36 cm 
+   time of flight      E>1*eV= 735.19 ns   E<1*eV= 199.38 mus   total= 200.12 mus
+
+ List of generated particles:
+            C15:       1  Emean =  127.14 meV	( 127.14 meV --> 127.14 meV)
+            O16:    2998  Emean =  42.304 keV	( 2.1228 meV --> 446.24 keV)
+            O17:       1  Emean =  33.991 eV 	( 33.991 eV  --> 33.991 eV )
+            O18:       1  Emean =  50.117 meV	( 50.117 meV --> 50.117 meV)
+          alpha:       1  Emean =  30.171 meV	( 30.171 meV --> 30.171 meV)
+       deuteron:     998  Emean =  1.3191 keV	( 1.2209 keV --> 1.3701 keV)
+          gamma:    1002  Emean =  2.2185 MeV	( 3.4978 keV --> 2.2244 MeV)
+         proton:   22584  Emean =  82.989 keV	( 0.21066 meV --> 1.9995 MeV)
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 1076884491, 1347405794
+----------------------------------------
+G4 kernel has come to Quit state.
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserActionInitialization deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+RunManager is deleting RunManagerKernel.
+EventManager deleted.
+Units table cleared.
+Total navigation history collections cleaned: 4
+================== Deleting memory pools ===================
+Number of memory pools allocated: 10 of which, static: 0
+Dynamic pools deleted: 10 / Total memory freed: 0.059 Mb
+============================================================
+G4Allocator objects are deleted.
+UImanager deleted.
+StateManager deleted.
+RunManagerKernel is deleted. Good bye :)

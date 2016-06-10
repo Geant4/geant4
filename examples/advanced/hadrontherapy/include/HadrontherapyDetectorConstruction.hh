@@ -44,11 +44,13 @@
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
+class G4PVPlacement;
 class HadrontherapyDetectorROGeometry;
 class HadrontherapyDetectorMessenger;
 class HadrontherapyDetectorSD;
 class HadrontherapyMatrix;
 class HadrontherapyLet;
+
 class HadrontherapyDetectorConstruction 
 {
 public:
@@ -69,6 +71,7 @@ private:
   void ConstructPhantom();
   void ConstructDetector();
   void ParametersCheck();
+  void CheckOverlaps();
 
 public: 
 // Get detector position relative to WORLD
@@ -161,7 +164,6 @@ inline bool IsInside(G4double detectorX,
   void UpdateGeometry();
   void PrintParameters();
   G4LogicalVolume* GetDetectorLogicalVolume(){ return detectorLogicalVolume;}
-
 
 private:
   static HadrontherapyDetectorConstruction* instance;

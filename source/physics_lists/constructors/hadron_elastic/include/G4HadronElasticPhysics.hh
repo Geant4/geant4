@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.hh 73281 2013-08-23 08:21:37Z gcosmo $
+// $Id: G4HadronElasticPhysics.hh 81758 2014-06-05 08:12:06Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -66,9 +66,9 @@ public:
   // registered to the process manager of each particle type 
   virtual void ConstructProcess();
 
-  inline G4HadronElastic* GetNeutronModel();
+  G4HadronElastic* GetNeutronModel();
 
-  inline G4HadronicProcess* GetNeutronProcess();
+  G4HadronicProcess* GetNeutronProcess();
 
 private:
 
@@ -83,17 +83,6 @@ private:
   static G4ThreadLocal G4HadronicProcess* neutronProcess;
 
 };
-
-inline G4HadronElastic* G4HadronElasticPhysics::GetNeutronModel()
-{
-  return neutronModel;
-}
-
-inline G4HadronicProcess* G4HadronElasticPhysics::GetNeutronProcess()
-{
-  return neutronProcess;
-}
-
 #endif
 
 

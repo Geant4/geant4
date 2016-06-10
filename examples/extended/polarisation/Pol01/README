@@ -1,4 +1,4 @@
-$Id: README 68753 2013-04-05 10:26:04Z gcosmo $
+$Id: README 86418 2014-11-11 10:39:38Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -87,7 +87,7 @@ $Id: README 68753 2013-04-05 10:26:04Z gcosmo $
 	The test contains 12 built-in 1D histograms, which are managed by the
 	HistoManager class and its Messenger. The histos can be individually 
 	activated with the command :
-	/testem/histo/setHisto id nbBins  valMin valMax unit 
+        /analysis/h1/set id nbBins  valMin valMax unit 
 	where unit is the desired unit for the histo (MeV or keV, etc..)
 	(see the macro histos.mac).
 
@@ -103,13 +103,6 @@ $Id: README 68753 2013-04-05 10:26:04Z gcosmo $
            10 positron cos(theta)
            11 positron phi
            12 positron polarization
-
-        If AIDA is available, i.e. if G4ANALYSIS_USE is set, these
-        histograms are stored in a compressed XML file
-        (Pol01.aida). These results can be displayed using a small
-        program (plotResults.java) based on JAIDA by simply calling 
-
-          % gmake plots
  	 				
  6- VISUALIZATION
  

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HeatedKleinNishinaCompton.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4HeatedKleinNishinaCompton.hh 82754 2014-07-08 14:06:13Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -52,29 +52,17 @@
 #ifndef G4HeatedKleinNishinaCompton_h
 #define G4HeatedKleinNishinaCompton_h 1
 
-#include "G4VEmModel.hh"
+#include "G4KleinNishinaCompton.hh"
 
-class G4ParticleChangeForGamma;
-
-class G4HeatedKleinNishinaCompton : public G4VEmModel
+class G4HeatedKleinNishinaCompton : public G4KleinNishinaCompton
 {
 
 public:
 
   G4HeatedKleinNishinaCompton(const G4ParticleDefinition* p = 0, 
-			const G4String& nam = "Heated-Klein-Nishina");
+			      const G4String& nam = "Heated-Klein-Nishina");
 
   virtual ~G4HeatedKleinNishinaCompton();
-
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-
-  virtual G4double ComputeCrossSectionPerAtom(
-                                const G4ParticleDefinition*,
-                                      G4double kinEnergy, 
-                                      G4double Z, 
-                                      G4double A, 
-                                      G4double cut,
-                                      G4double emax);
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
@@ -82,22 +70,16 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
-  void     SetElectronTemperature(G4double t){fTemperature=t;};
-  G4double GetElectronTemperature(){return fTemperature;};
-
-protected:
-
-  G4ParticleDefinition*     theGamma;
-  G4ParticleDefinition*     theElectron;
-  G4ParticleChangeForGamma* fParticleChange;
-  G4double                  lowestGammaEnergy;
-  G4double                  fTemperature;  // electron temperature in energy units
+  inline void     SetElectronTemperature(G4double t){ fTemperature = t; };
+  inline G4double GetElectronTemperature() { return fTemperature; };
 
 private:
 
   // hide assignment operator
   G4HeatedKleinNishinaCompton & operator=(const  G4HeatedKleinNishinaCompton &right);
   G4HeatedKleinNishinaCompton(const  G4HeatedKleinNishinaCompton&);
+
+  G4double fTemperature;  // electron temperature in energy units
 
 };
 

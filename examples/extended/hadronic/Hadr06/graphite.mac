@@ -1,0 +1,28 @@
+# $Id$
+#
+# Macro file for "Hadr06.cc"
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testhadr/det/setMat graphite
+/testhadr/det/setRadius 20 cm
+#
+###/testhadr/phys/thermalScattering true
+#
+/run/initialize
+#
+/process/list
+#
+/gun/particle neutron
+/gun/energy 14 MeV
+#
+/analysis/setFileName Graphite
+/analysis/h1/set 4  100  0. 15. MeV	#gamma
+/analysis/h1/set 6  100  0. 15. MeV	#neutrons
+/analysis/h1/set 9  100  0. 15. MeV	#alphas
+/analysis/h1/set 10  100  0. 15. MeV	#generic ions
+#
+/run/printProgress 1000
+#
+/run/beamOn 10000

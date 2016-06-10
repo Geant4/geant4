@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/include/PhysicsListMessenger.hh
 /// \brief Definition of the PhysicsListMessenger class
 //
-// $Id: PhysicsListMessenger.hh 68753 2013-04-05 10:26:04Z gcosmo $
+// $Id: PhysicsListMessenger.hh 86418 2014-11-11 10:39:38Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,30 +39,25 @@
 
 class PhysicsList;
 class G4UIdirectory;
-class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class PhysicsListMessenger: public G4UImessenger
 {
-  public:
+public:
   
-    PhysicsListMessenger(PhysicsList* );
-   ~PhysicsListMessenger();
+  PhysicsListMessenger(PhysicsList* );
+  virtual ~PhysicsListMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
-  private:
+private:
   
-    PhysicsList*               pPhysicsList;
+  PhysicsList*               pPhysicsList;
     
-    G4UIdirectory*             physDir;
-    G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-    G4UIcmdWithADoubleAndUnit* electCutCmd;
-    G4UIcmdWithADoubleAndUnit* protoCutCmd;    
-    G4UIcmdWithADoubleAndUnit* allCutCmd;
-    G4UIcmdWithAString*        pListCmd;
+  G4UIdirectory*             physDir;
+  G4UIcmdWithAString*        pListCmd;
     
 };
 

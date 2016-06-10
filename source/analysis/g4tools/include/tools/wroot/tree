@@ -7,7 +7,7 @@
 #include "itree"
 #include "iobject"
 
-#include "branch"
+#include "branch_element"
 
 namespace tools {
 namespace wroot {
@@ -58,11 +58,9 @@ public: //iobject
     if(!m_branches.stream(a_buffer)) return false;
 
    {ObjArray<base_leaf> m_leaves;
-    std::vector<branch*>::const_iterator itb;
-    for(itb=m_branches.begin();itb!=m_branches.end();++itb) {
+    tools_vforcit(branch*,m_branches,itb) {
       const std::vector<base_leaf*>& leaves = (*itb)->leaves();
-      std::vector<base_leaf*>::const_iterator itl;
-      for(itl=leaves.begin();itl!=leaves.end();++itl) {
+      tools_vforcit(base_leaf*,leaves,itl) {
         m_leaves.push_back(*itl); //WARNING : ownership touchy.
       }
     }
@@ -84,8 +82,8 @@ public: //itree
   virtual const idir& dir() const {return m_dir;}
 public:
   tree(idir& a_dir, //for branch/baskets(which are keys)
-              const std::string& a_name,
-              const std::string& a_title)
+       const std::string& a_name,
+       const std::string& a_title)
   :m_dir(a_dir)
   ,m_out(a_dir.file().out())
   ,m_name(a_name)
@@ -120,6 +118,13 @@ public:
     return br;
   }
 
+  template <class T>
+  std_vector_be<T>* create_std_vector_be(const std::string& a_name,std::vector<T>& a_vec){
+    std_vector_be<T>* br = new std_vector_be<T>(*this,a_name,m_name,a_vec);
+    m_branches.push_back(br);
+    return br;
+  }
+
   bool fill(uint32& a_nbytes) {
     // Fill all branches of a Tree :
     //   This function loops on all the branches of this tree.
@@ -128,8 +133,7 @@ public:
     //   If a leaf is a simple data type, a simple conversion to a machine
     //   independent format has to be done.
     a_nbytes = 0;
-    std::vector<branch*>::const_iterator it;
-    for(it=m_branches.begin();it!=m_branches.end();++it) {
+    tools_vforcit(branch*,m_branches,it) {
       //FIXME if ((*it)->testBit(kDoNotProcess)) continue;
       uint32 n;
       if(!(*it)->fill(n)) {a_nbytes = 0;return false;}

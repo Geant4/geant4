@@ -1,4 +1,4 @@
-$Id: History 78107 2013-12-03 14:50:19Z gcosmo $
+$Id: History 86064 2014-11-07 08:49:32Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,21 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13-09-14 mma (electonScattering-V10-00-02)
+- electronScttering.cc : SetNumberOfThreads(G4Threading::G4GetNumberOfCores())
+
+24-06-14 mma (electronScattering-V10-00-01)
+- restaure scatter.mac
+- remove PhysicsList::SetCuts(). Update macros
+
+05-06-14 J.Jacquemier (electronScattering-V10-00-00)
+- Migrated to multi-threading: 
+  - Add ActionInitialization
+  - Add Run
+  - Remove EventAction and EventMessenger
+  - Modify electronScattering, TrackingAction and RunAction
+  - Modify macros to change printModulo by /run/printProgress
 
 02-12-13 I.Hrivnacova (electronScattering-V09-06-09) 
 - Synchronized README and .README files

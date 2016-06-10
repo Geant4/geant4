@@ -1,4 +1,4 @@
-$Id: README 74821 2013-10-22 14:40:25Z gcosmo $
+$Id: README 85991 2014-11-06 15:41:42Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -7,14 +7,19 @@ $Id: README 74821 2013-10-22 14:40:25Z gcosmo $
 
                             AnaEx03
                             -------
+ Examples AnaEx01, AnaEx02 and AnaEx03 show the usage of histogram and tuple 
+ manipulations using G4Analysis, ROOT and AIDA compliant systems on the same
+ scenario. All analysis manipulations (histo booking, filling, saving histos 
+ in a file, etc...) are located in one class : HistoManager, implementation of 
+ which is different in each example. All the other classes are same in all 
+ three examples.
+ 
  This example shows the usage of histogram and tuple manipulations using 
- an AIDA compliant system. All analysis manipulations 
- (attaching an AIDA implementation, histo booking, filling, saving 
- histos in a file, etc...) are located in one class : HistoManager.
+ an AIDA compliant system. 
  
  The example is an adaptation of examples/novice/N03. It describes a simple 
  sampling calorimeter setup.
-	
+
  1- Detector description
  -----------------------
  
@@ -23,46 +28,57 @@ $Id: README 74821 2013-10-22 14:40:25Z gcosmo $
  replicated.
  	
  Six parameters define the calorimeter :
- 	- the material of the absorber,
-	- the thickness of an absorber plate,
- 	- the material of the detection gap,
- 	- the thickness of a  gap,
- 	- the number of layers,
- 	- the transverse size of the calorimeter (the input face is a square). 
- 	
+    - the material of the absorber,
+    - the thickness of an absorber plate,
+    - the material of the detection gap,
+    - the thickness of a  gap,
+    - the number of layers,
+    - the transverse size of the calorimeter (the input face is a square). 
+
  The default geometry is constructed in DetectorConstruction class,
  but all of the above parameters can be modified interactively via
  the commands defined in the DetectorMessenger class.
 
+        |<----layer 0---------->|<----layer 1---------->|<----layer 2---------->|
+        |                       |                       |                       |
+        ==========================================================================
+        ||              |       ||              |       ||              |       ||
+        ||              |       ||              |       ||              |       ||
+ beam   ||   absorber   |  gap  ||   absorber   |  gap  ||   absorber   |  gap  ||
+======> ||              |       ||              |       ||              |       ||
+        ||              |       ||              |       ||              |       ||
+        ==========================================================================
 
-	|<----layer 0---------->|<----layer 1---------->|<----layer 2---------->|
-	|			|			|			|
-	==========================================================================
-	||		|	||		|	||		|	||
-	||		|	||		|	||		|	||
-	||   absorber 	|  gap	||   absorber 	|  gap	||   absorber 	|  gap	||
-	||		|	||		|	||		|	||
-	||		|	||		|	||		|	||
- beam	||		|	||		|	||		|	||
-======>	||		|	||		|	||		|	||
-	||		|	||		|	||		|	||
-	||		|	||		|	||		|	||
-	||		|	||		|	||		|	||
-	||		|	||		|	||		|	||
-	||    		| 	||    		| 	||    		| 	||
-	==========================================================================
-	
- 	    
- 2- An event : PrimaryGeneratorAction
+ 2- Physics list
+ ---------------
+ 
+   The particle's type and the physic processes which will be available
+   in this example are set in the FTFP_BERT physics list.
+ 
+ 3- Action Initialization
+ ------------------------
+
+   A newly introduced class, ActionInitialization, 
+   instantiates and registers to Geant4 kernel all user action classes 
+   which are defined thread-local and a run action class
+   which is defined both thread-local and global.
+   
+   The thread-local action classes are defined in 
+     ActionInitialization::Build() 
+   and  the global run action class is defined in 
+     ActionInitialization::BuildForMaster().
+   Note that ActionInitialization::Build() is also used to 
+   instatiate user action clasess in sequential mode.
+  
+ 4- An event : PrimaryGeneratorAction
  ------------------------------------
  
  The primary kinematic consists of a single particle which hits the
  calorimeter perpendicular to the input face. The type of the particle
  and its energy are set in the PrimaryGeneratorAction class, and can
  be changed via the G4 build-in commands of ParticleGun class.
- 	
 
- 3- Histograms
+ 5- Histograms
  ------------- 
  To produce histograms, at least one of the AIDA implementations should be 
  available. See the file InstallAida.txt
@@ -91,10 +107,25 @@ $Id: README 74821 2013-10-22 14:40:25Z gcosmo $
     
  Note that, by default, histograms are disabled. To activate them, uncomment
  the flag G4ANALYSIS_USE in GNUmakefile, *before* compilation.
-   
- 4- OpenScientist
+  
+ 6- OpenScientist
  ----------------
 
  See the files README.AIDA and README.OpenScientist for more indications 
  how to use this system to visualize and handle histogram files.
+  
+      
+ 7- How to build
+ --------------- 
+
+ An additional step is needed when building the example with GNUmake
+ due to using the extra shared directory: 
+  % cd path_to_AnaEx03/AnaEx03
+  % gmake setup
+  % gmake
+
+ This will copy the files from shared in the example include and src;
+ to remove these files:
+  % gmake clean_setup
+ 
   

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALTBEventAction.cc 73002 2013-08-15 08:09:37Z gcosmo $
+// $Id: FCALTBEventAction.cc 84602 2014-10-17 07:46:09Z gcosmo $
 //
 // 
 
@@ -50,7 +50,7 @@
 #include "FCALAnalysisManager.hh"
 
 #include "G4ios.hh"
-#include <fstream>
+
 #include <iostream>
 
 #include "G4SystemOfUnits.hh"
@@ -61,7 +61,7 @@ FCALTBEventAction::FCALTBEventAction(FCALSteppingAction* SA)
   :drawFlag("all"),printModulo(10), StepAction(SA), eventMessenger(0)
 {
   eventMessenger = new FCALTBEventActionMessenger(this);
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -95,88 +95,19 @@ void FCALTBEventAction::EndOfEventAction(const G4Event*)
   // Fill histograms
   G4AnalysisManager* man = G4AnalysisManager::Instance();
 
-  G4int i,j;
   NTracksOutOfWorld = StepAction->GetOutOfWorldTracks(0, 0); 
   G4cout << "N Tracks out of world " << NTracksOutOfWorld << G4endl;
-
-  // Write Leaving Particles in File
-  //--------------------------------
-  G4String FileName1 = "OutTracks_802_1mm.dat";
-  std::ios::openmode iostemp1;
-  if(Init1 == 0) {
-    iostemp1 = std::ios::out;
-    Init1++;
-  } else {
-    iostemp1 = std::ios::out|std::ios::app; // std::ios::app;  
-  };
-  std::ofstream OutTracks(FileName1, iostemp1);
-
-  OutTracks << NTracksOutOfWorld << G4endl;
-
-  G4double OutOfWorld;
-  for(i=1; i<= NTracksOutOfWorld ; i++){
-    for(j=1; j<11 ; j++) {
-      //      G4double OutOfWorld = StepAction->GetOutOfWorldTracks(i,j);
-      OutOfWorld = StepAction->GetOutOfWorldTracks(i,j);
-      OutTracks << OutOfWorld << " " ; 
-    }
-    OutTracks << std::endl;
-    // G4double OutOfWorld2 = StepAction->GetOutOfWorldTracks(i,j);
-  } 
-  OutTracks.close();
-
+  
   man->FillH1(1,NTracksOutOfWorld);
 
   NSecondaries = StepAction->GetSecondaries(0,0);
   G4cout << "N Scondaries " << NSecondaries << G4endl;   
-  
-  // Write Secondary Particles in File
-  //----------------------------------
-  G4String FileName2 = "SecndTracks_802_1mm.dat";
-  std::ios::openmode iostemp2;
-  if(Init2 == 0) {
-    iostemp2 = std::ios::out;
-    Init2++;
-  } else {
-    iostemp2 = std::ios::out|std::ios::app; // std::ios::app;  
-  };
-  
-  std::ofstream SecndTracks(FileName2, iostemp2);
-  
-  SecndTracks << NSecondaries << std::endl;
-
-  G4double Secondary;  
-  for(i=1; i<= NSecondaries ; i++){
-    for(j=1; j<11 ; j++) {
-      Secondary = StepAction->GetSecondaries(i,j);
-      SecndTracks << Secondary  << " " ; 
-    }
-    SecndTracks << std::endl;
-    // G4double Secondary2 = StepAction->GetSecondaries(i,j);
-  }
-  SecndTracks.close();
-  
+    
   man->FillH1(2,NSecondaries);
 
-  // Write Edep in FCAL1 and FCAL2 
-  G4String FileName3 = "EdepFCAL_802_1mm.dat";
-  std::ios::openmode iostemp3;
-  if(Init3 == 0) {
-    iostemp3 = std::ios::out;
-    Init3++;
-  } else {
-    iostemp3 = std::ios::out|std::ios::app; // std::ios::app;  
-  };
-  
-  std::ofstream EdepFCAL(FileName3, iostemp3);
-  
   G4double EmEdep  = StepAction->GetEdepFCAL("FCALEm");
   G4double HadEdep = StepAction->GetEdepFCAL("FCALHad");
 
-  EdepFCAL << EmEdep << " ";
-  EdepFCAL << HadEdep; 
-  EdepFCAL << std::endl;
-  EdepFCAL.close();
 
   man->FillH1(3,EmEdep/MeV);
   man->FillH1(4,HadEdep/MeV);
@@ -190,3 +121,4 @@ void FCALTBEventAction::EndOfEventAction(const G4Event*)
 }
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+

@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr00/include/HistoManager.hh
 /// \brief Definition of the HistoManager class
 //
-// $Id: HistoManager.hh 75840 2013-11-06 17:28:38Z gcosmo $
+// $Id: HistoManager.hh 81073 2014-05-20 10:23:13Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -87,12 +87,15 @@ public:
 
   inline void SetHistoName(G4String& val);
 
+  inline void SetTargetMaterial(const G4Material* p);
+
 private:
 
   HistoManagerMessenger* fMessenger;
   G4AnalysisManager*     fAnalysisManager;
 
   const G4ParticleDefinition* fNeutron;
+  const G4Material* fTargetMaterial;
 
   G4String fParticleName;
   G4String fElementName;
@@ -152,6 +155,11 @@ inline void HistoManager::SetMaxMomentum(G4double val)
 inline void HistoManager::SetHistoName(G4String& val) 
 {
   fHistoName = val;
+}
+
+inline void HistoManager::SetTargetMaterial(const G4Material* p)
+{
+  fTargetMaterial = p;
 }
 
 #endif

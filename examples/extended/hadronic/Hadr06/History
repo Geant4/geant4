@@ -1,0 +1,48 @@
+$Id: History 71654 2013-06-19 18:20:04Z maire $
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Hadr06 History file
+                    -------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+	 
+19-11-14 mma (exhadr06-V10-00-09)
+- cosmetic in envHadronic.csh
+	 
+15-11-14 mma (exhadr06-V10-00-08)
+- Run::Merge() : add fEnergyFlow
+
+26-10-14 mma (exhadr06-V10-00-07)
+- PhysicsList : activate G4RadioactivedecayPhysics
+- Hadr06.cc : option set nThreads via command
+
+18-09-14 mma (exhadr06-V10-00-06)
+- Hadr06.cc : SetNumberOfThreads(G4Threading::G4GetNumberOfCores())
+
+15-09-14 I. Hrivnacova (exhadr06-V10-00-05)
+- Fixed test in envHadronic.sh
+     
+15-07-14 mma (exhadr06-V10-00-04)
+- remove PhysicsList::ConstructParticles() 
+	 
+13-05-14 mma (exhadr06-V10-00-03)
+- new macro fission.mac
+
+03-05-14 mma (exhadr06-V10-00-02)
+- HadronElasticPhysicsHP inherit from G4HadronElasticPhysics
+- do not register G4RadioactiveDecay
+     
+24-04-14 mma (exhadr06-V10-00-01)
+- local physics constructor HadronElasticPhysicsHP
+- NeutronHPMessenger to set up neutron thermal scattering
+     
+13-03-14 Michel Maire (exhadr06-V10-00-00)
+- created from Hadr03 and Hadr04

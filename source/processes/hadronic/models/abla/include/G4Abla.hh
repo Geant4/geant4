@@ -72,6 +72,12 @@ public:
    */
   ~G4Abla();
 
+  /// \brief Dummy copy constructor
+  G4Abla(G4Abla const &other);
+
+  /// \brief Dummy assignment operator
+  G4Abla &operator=(G4Abla const &other);
+
   /**
    * Set verbosity level.
    */

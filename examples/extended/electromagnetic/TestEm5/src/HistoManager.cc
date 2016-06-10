@@ -27,10 +27,10 @@
 /// \brief Implementation of the HistoManager class
 //
 //
-// $Id: HistoManager.cc 72235 2013-07-12 08:37:53Z gcosmo $
+// $Id: HistoManager.cc 83921 2014-09-23 09:14:40Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoManager.hh"
 #include "G4UnitsTable.hh"
@@ -87,22 +87,29 @@ void HistoManager::Book()
                   "(transmit, charged) : projected angle at exit",        //13
                   "(transmit, charged) : projected position at exit",     //14
                   "(transmit, charged) : radius at exit",                 //15
-                  "dummy","dummy","dummy","dummy",                        //16-19
+                  "energy of Auger e- at creation",                       //16
+                  "energy of fluorescence gamma at creation",             //17
+                  "energy of Auger e- at creation (log scale)",           //18
+                  "energy of fluorescence gamma at creation (log scale)", //19
                   "(transmit, neutral) : kinetic energy at exit",         //20
                   "(transmit, neutral) : ener fluence: dE(MeV)/dOmega",   //21
                   "(transmit, neutral) : space angle: dN/dOmega",         //22
                   "(transmit, neutral) : projected angle at exit",        //23
-                  "dummy","dummy","dummy","dummy","dummy","dummy",        //24-29
+                  "dummy","dummy","dummy","dummy","dummy","dummy",       //24-29
                   "(reflect , charged) : kinetic energy at exit",         //30
                   "(reflect , charged) : ener fluence: dE(MeV)/dOmega",   //31
                   "(reflect , charged) : space angle: dN/dOmega",         //32
                   "(reflect , charged) : projected angle at exit",        //33
-                  "dummy","dummy","dummy","dummy","dummy","dummy",        //34-39
+                  "dummy","dummy","dummy","dummy","dummy","dummy",       //34-39
                   "(reflect , neutral) : kinetic energy at exit",         //40
                   "(reflect , neutral) : ener fluence: dE(MeV)/dOmega",   //41
                   "(reflect , neutral) : space angle: dN/dOmega",         //42
                   "(reflect , neutral) : projected angle at exit",        //43
-                  "dummy","dummy","dummy","dummy","dummy","dummy"         //44-49
+                  "energy of PIXE Auger e- at creation",                  //44
+                  "energy of PIXE gamma at creation",                     //45
+                  "energy of PIXE Auger e- at creation (log scale)",      //46
+                  "energy of PIXE gamma at creation (log scale)",         //47
+                  "dummy","dummy"                                        //48-49
                  };
 
   // Default values (to be reset via /analysis/h1/set command)               
@@ -113,7 +120,7 @@ void HistoManager::Book()
   // Create all histograms as inactivated 
   // as we have not yet set nbins, vmin, vmax
   for (G4int k=0; k<kMaxHisto; k++) {
-    G4int ih = analysisManager->CreateH1(id[k], title[k], nbins, vmin, vmax);
+    G4int ih = analysisManager->CreateH1("h"+id[k], title[k], nbins,vmin,vmax);
     analysisManager->SetH1Activation(ih, false);
   }
 }

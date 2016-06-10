@@ -1,4 +1,4 @@
-# $Id: run2.mac 68740 2013-04-05 09:56:39Z gcosmo $
+# $Id: run2.mac 83010 2014-07-24 14:53:07Z gcosmo $
 #
 # Macro file for "amsEcal.cc" 
 # (can be run in batch, without graphic)
@@ -6,29 +6,24 @@
 /control/verbose 2
 /run/verbose 2
 #
-/ams/phys/addPhysics  emstandard_local
-/ams/phys/setCuts 1 mm
+/ams/phys/addPhysics  local
+/run/setCut 1 mm
 #
 /run/initialize
 #
 /ams/gun/setDefault
 /gun/particle e-
-/gun/energy 10 GeV
+/gun/energy 1 GeV
 /ams/gun/beam 4 mm
 #
-/ams/histo/setFileName showers/10gev.run1
-/ams/histo/setFileType hbook
-/ams/histo/setFileOption export=root
+/analysis/setFileName run2
 #
-/ams/histo/setHisto 1 100  0. 500. MeV		#evis in ecal
-/ams/histo/setHisto 2 100  4.   7. GeV		#edep in ecal
-/ams/histo/setHisto 3 20  0. 20. none
-/ams/histo/setHisto 4 20  0. 20. none
-/ams/histo/setNtuple 1
+/analysis/h1/set 1 100  0. 2. GeV		#etot in ecal
+/analysis/h1/set 2 100  0. 100. MeV		#evis in ecal
+/analysis/h1/set 3 100  0. 100. none
+/analysis/h1/set 4 100  0. 100. none
+/analysis/h1/set 5 250  0. 500. none
 #
-/ams/event/printModulo 100
+/run/printProgress 100
 #
-# set rndm seed  
-/random/resetEngineFrom random/seed1
-#
-/run/beamOn 1000
+/run/beamOn 500

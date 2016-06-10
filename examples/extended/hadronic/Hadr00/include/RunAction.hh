@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr00/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 75840 2013-11-06 17:28:38Z gcosmo $
+// $Id: RunAction.hh 81073 2014-05-20 10:23:13Z gcosmo $
 //
 
 #ifndef RunAction_h
@@ -50,12 +50,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class HistoManager;
+class DetectorConstruction;
 
 class RunAction : public G4UserRunAction
 {
 public: // Without description
 
-  RunAction();
+  RunAction(const DetectorConstruction* det = 0);
   virtual ~RunAction();
 
 public: // With description
@@ -68,7 +69,8 @@ public: // With description
 
 private:
  
-  HistoManager* fHisto;
+  HistoManager*         fHisto;
+  const DetectorConstruction* fDetector;
 
 };
 

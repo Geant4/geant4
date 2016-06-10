@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionComposite.hh 72269 2013-07-12 13:08:09Z gcosmo $
+// $Id: G4CollisionComposite.hh 82960 2014-07-21 09:19:17Z gcosmo $
 // -------------------------------------------------------------------
 //      GEANT4 Class file
 //
@@ -50,6 +50,7 @@
 #include "G4CrossSectionBuffer.hh"
 #include "G4Pair.hh"
 #include "G4ParticleTable.hh"
+#include "G4Threading.hh"
 
 class G4KineticTrack;
 class G4VCrossSectionSource;
@@ -123,6 +124,7 @@ private:
   static const G4int nPoints;
   static const G4double theT[];
   
+  mutable G4Mutex bufferMutex; //Protects concurrent access to theBuffer in MT
 };
 
 #endif

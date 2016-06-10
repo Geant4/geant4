@@ -23,7 +23,7 @@
 /process/em/auger true
 #
 # prevent ionisation and bremsstrahlung production
-/testem/phys/setCuts 1 um
+/run/setCut 1 um
 #
 # no multiple scattering
 /process/inactivate msc

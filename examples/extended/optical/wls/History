@@ -1,4 +1,4 @@
-$Id: History 78066 2013-12-03 11:08:36Z gcosmo $
+$Id: History 84718 2014-10-20 07:40:45Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,29 @@ track of all tags.
  
      ----------------------------------------------------------
 
+October 17, 2014 P. Gumplinger (WLS-V10-00-04)
+- remove double blank lines in WLSDetectorConstruction.cc and
+  WLSPrimaryGeneratorAction.cc
+
+October 16, 2014 P. Gumplinger (WLS-V10-00-03)
+- fix coding guideline 1.4 in WLSDetectorMessenger
+
+July 11, 2014 P. Gumplinger (WLS-V10-00-02)
+- Use implicit dimensioning for all arrays and assert that they are the
+  same (thanks to M. Kelsey for suggesting this)
+
+June 06, 2014 A. Dotti (WLS-V10-00-01)
+- Migration to new GPS for MT
+
+December 04, 2013 P. Gumplinger (WLS-V10-00-00)
+- Fixes in gui.mac:
+  Commented out command specific to B2 example
+  Let execute vis.mac first to make the command in added menus available;
+  Corrected wireframe parameter
+
 December 02, 2013 G. Folger     (WLS-V09-06-15)
-- corrected avoiding re-use of pointer into temporary in WLSDetectorConstruction.cc
+- corrected avoiding re-use of pointer into temporary in
+  WLSDetectorConstruction.cc
 
 December 02, 2013 G. Folger     (WLS-V09-06-14)
 - avoid re-use of pointer into temporary in WLSDetectorConstruction.cc

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.cc 76271 2013-11-08 11:51:39Z gcosmo $
+// $Id: G4GDMLWriteSolids.cc 87077 2014-11-24 15:29:00Z gcosmo $
 //
 // class G4GDMLWriteSolids Implementation
 //
@@ -79,6 +79,65 @@ G4GDMLWriteSolids::~G4GDMLWriteSolids()
 }
 
 void G4GDMLWriteSolids::
+MultiUnionWrite(xercesc::DOMElement* solElement,
+                const G4MultiUnion* const munionSolid)
+{
+   G4int numSolids=munionSolid->GetNumberOfSolids();
+   G4String tag("multiUnion");
+   
+   G4VSolid* solid;
+   G4Transform3D* transform;
+
+   const G4String& name = GenerateName(munionSolid->GetName(),munionSolid);
+   xercesc::DOMElement* multiUnionElement = NewElement(tag);
+   multiUnionElement->setAttributeNode(NewAttribute("name",name));
+
+   for (G4int i=0; i<numSolids; ++i)
+   {
+      solid = munionSolid->GetSolid(i);
+      transform = munionSolid->GetTransformation(i);
+
+      HepGeom::Rotate3D rot3d;
+      HepGeom::Translate3D transl ;
+      HepGeom::Scale3D scale;
+      transform->getDecomposition(scale,rot3d,transl); 
+
+      G4ThreeVector pos = transl.getTranslation();
+      G4RotationMatrix 
+        rotm(CLHEP::HepRep3x3(rot3d.xx(), rot3d.xy(), rot3d.xz(),
+                              rot3d.yx(), rot3d.yy(), rot3d.yz(),
+                              rot3d.zx(), rot3d.zy(), rot3d.zz()));
+      G4ThreeVector rot = GetAngles(rotm);
+
+      AddSolid(solid);
+      const G4String& solidref = GenerateName(solid->GetName(),solid);
+      std::ostringstream os; os << i+1;
+      const G4String& nodeName = "Node-" + G4String(os.str());
+      xercesc::DOMElement* solidElement = NewElement("solid");
+      solidElement->setAttributeNode(NewAttribute("ref",solidref));
+      xercesc::DOMElement* multiUnionNodeElement = NewElement("multiUnionNode");
+      multiUnionNodeElement->setAttributeNode(NewAttribute("name", nodeName));
+      multiUnionNodeElement->appendChild(solidElement); // Append solid to node
+      if ( (std::fabs(pos.x()) > kLinearPrecision)
+        || (std::fabs(pos.y()) > kLinearPrecision)
+        || (std::fabs(pos.z()) > kLinearPrecision) )
+      {
+        PositionWrite(multiUnionNodeElement,name+"_pos",pos);
+      }
+      if ( (std::fabs(rot.x()) > kAngularPrecision)
+        || (std::fabs(rot.y()) > kAngularPrecision)
+        || (std::fabs(rot.z()) > kAngularPrecision) )
+      {
+        RotationWrite(multiUnionNodeElement,name+"_rot",rot);
+      }
+      multiUnionElement->appendChild(multiUnionNodeElement); // Append node
+   }
+
+   solElement->appendChild(multiUnionElement);
+     // Add the multiUnion solid AFTER the constituent nodes!
+}
+
+void G4GDMLWriteSolids::
 BooleanWrite(xercesc::DOMElement* solElement,
              const G4BooleanSolid* const boolean)
 {
@@ -115,7 +174,7 @@ BooleanWrite(xercesc::DOMElement* solElement,
       if (G4DisplacedSolid* disp = dynamic_cast<G4DisplacedSolid*>(firstPtr))
       {
          firstpos += disp->GetObjectTranslation();
-         firstrot += firstrot + GetAngles(disp->GetObjectRotation());
+         firstrot += GetAngles(disp->GetObjectRotation());
          firstPtr = disp->GetConstituentMovedSolid();
          displaced++;
          continue;
@@ -373,9 +432,8 @@ ParaWrite(xercesc::DOMElement* solElement, const G4Para* const para)
 
    const G4ThreeVector simaxis = para->GetSymAxis();
    const G4double alpha = std::atan(para->GetTanAlpha());
-   const G4double theta = std::acos(simaxis.z());
-   const G4double phi = (simaxis.z() != 1.0)
-                      ? (std::atan(simaxis.y()/simaxis.x())) : (0.0);
+   const G4double phi = simaxis.phi();
+   const G4double theta = simaxis.theta();
 
    xercesc::DOMElement* paraElement = NewElement("para");
    paraElement->setAttributeNode(NewAttribute("name",name));
@@ -559,7 +617,7 @@ TessellatedWrite(xercesc::DOMElement* solElement,
    tessellatedElement->setAttributeNode(NewAttribute("lunit","mm"));
    solElement->appendChild(tessellatedElement);
 
-   std::map<G4ThreeVector, G4String> vertexMap;
+   std::map<G4ThreeVector, G4String, G4ThreeVectorCompare> vertexMap;
 
    const size_t NumFacets = tessellated->GetNumberOfFacets();
    size_t NumVertex = 0;
@@ -699,9 +757,8 @@ TrapWrite(xercesc::DOMElement* solElement, const G4Trap* const trap)
    const G4String& name = GenerateName(trap->GetName(),trap);
 
    const G4ThreeVector& simaxis = trap->GetSymAxis();
-   const G4double phi = (simaxis.z() != 1.0)
-                      ? (std::atan(simaxis.y()/simaxis.x())) : (0.0);
-   const G4double theta = std::acos(simaxis.z());
+   const G4double phi = simaxis.phi();
+   const G4double theta = simaxis.theta();
    const G4double alpha1 = std::atan(trap->GetTanAlpha1());
    const G4double alpha2 = std::atan(trap->GetTanAlpha2());
 
@@ -972,84 +1029,114 @@ void G4GDMLWriteSolids::AddSolid(const G4VSolid* const solidPtr)
    if (const G4BooleanSolid* const booleanPtr
      = dynamic_cast<const G4BooleanSolid*>(solidPtr))
      { BooleanWrite(solidsElement,booleanPtr); } else
-   if (const G4Box* const boxPtr
-     = dynamic_cast<const G4Box*>(solidPtr))
-     { BoxWrite(solidsElement,boxPtr); } else
-   if (const G4Cons* const conePtr
-     = dynamic_cast<const G4Cons*>(solidPtr))
-     { ConeWrite(solidsElement,conePtr); } else
-   if (const G4EllipticalCone* const elconePtr
-     = dynamic_cast<const G4EllipticalCone*>(solidPtr))
-     { ElconeWrite(solidsElement,elconePtr); } else
-   if (const G4Ellipsoid* const ellipsoidPtr
-     = dynamic_cast<const G4Ellipsoid*>(solidPtr))
-     { EllipsoidWrite(solidsElement,ellipsoidPtr); } else
-   if (const G4EllipticalTube* const eltubePtr
-     = dynamic_cast<const G4EllipticalTube*>(solidPtr))
-     { EltubeWrite(solidsElement,eltubePtr); } else
-   if (const G4ExtrudedSolid* const xtruPtr
-     = dynamic_cast<const G4ExtrudedSolid*>(solidPtr))
-     { XtruWrite(solidsElement,xtruPtr); } else
-   if (const G4Hype* const hypePtr
-     = dynamic_cast<const G4Hype*>(solidPtr))
-     { HypeWrite(solidsElement,hypePtr); } else
-   if (const G4Orb* const orbPtr
-     = dynamic_cast<const G4Orb*>(solidPtr))
-     { OrbWrite(solidsElement,orbPtr); } else
-   if (const G4Para* const paraPtr
-     = dynamic_cast<const G4Para*>(solidPtr))
-     { ParaWrite(solidsElement,paraPtr); } else
-   if (const G4Paraboloid* const paraboloidPtr
-     = dynamic_cast<const G4Paraboloid*>(solidPtr))
-     { ParaboloidWrite(solidsElement,paraboloidPtr); } else
-   if (const G4Polycone* const polyconePtr
-     = dynamic_cast<const G4Polycone*>(solidPtr))
-     { PolyconeWrite(solidsElement,polyconePtr); } else
-   if (const G4GenericPolycone* const genpolyconePtr
-     = dynamic_cast<const G4GenericPolycone*>(solidPtr))
-     { GenericPolyconeWrite(solidsElement,genpolyconePtr); } else
-   if (const G4Polyhedra* const polyhedraPtr
-     = dynamic_cast<const G4Polyhedra*>(solidPtr))
-     { PolyhedraWrite(solidsElement,polyhedraPtr); } else
-   if (const G4Sphere* const spherePtr
-     = dynamic_cast<const G4Sphere*>(solidPtr))
-     { SphereWrite(solidsElement,spherePtr); } else
-   if (const G4TessellatedSolid* const tessellatedPtr
-     = dynamic_cast<const G4TessellatedSolid*>(solidPtr))
-     { TessellatedWrite(solidsElement,tessellatedPtr); } else
-   if (const G4Tet* const tetPtr
-     = dynamic_cast<const G4Tet*>(solidPtr))
-     { TetWrite(solidsElement,tetPtr); } else
-   if (const G4Torus* const torusPtr
-     = dynamic_cast<const G4Torus*>(solidPtr))
-     { TorusWrite(solidsElement,torusPtr); } else
-   if (const G4GenericTrap* const gtrapPtr
-     = dynamic_cast<const G4GenericTrap*>(solidPtr))
-     { GenTrapWrite(solidsElement,gtrapPtr); } else
-   if (const G4Trap* const trapPtr
-     = dynamic_cast<const G4Trap*>(solidPtr))
-     { TrapWrite(solidsElement,trapPtr); } else
-   if (const G4Trd* const trdPtr
-     = dynamic_cast<const G4Trd*>(solidPtr))
-     { TrdWrite(solidsElement,trdPtr); } else
-   if (const G4Tubs* const tubePtr
-     = dynamic_cast<const G4Tubs*>(solidPtr))
-     { TubeWrite(solidsElement,tubePtr); } else
-   if (const G4CutTubs* const cuttubePtr
-     = dynamic_cast<const G4CutTubs*>(solidPtr))
-     { CutTubeWrite(solidsElement,cuttubePtr); } else
-   if (const G4TwistedBox* const twistedboxPtr
-     = dynamic_cast<const G4TwistedBox*>(solidPtr))
-     { TwistedboxWrite(solidsElement,twistedboxPtr); } else
-   if (const G4TwistedTrap* const twistedtrapPtr
-     = dynamic_cast<const G4TwistedTrap*>(solidPtr))
-     { TwistedtrapWrite(solidsElement,twistedtrapPtr); } else
-   if (const G4TwistedTrd* const twistedtrdPtr
-     = dynamic_cast<const G4TwistedTrd*>(solidPtr))
-     { TwistedtrdWrite(solidsElement,twistedtrdPtr); } else
-   if (const G4TwistedTubs* const twistedtubsPtr
-     = dynamic_cast<const G4TwistedTubs*>(solidPtr))
-     { TwistedtubsWrite(solidsElement,twistedtubsPtr); }
+   if (solidPtr->GetEntityType()=="G4MultipleUnion")
+     { const G4MultiUnion* const munionPtr
+     = static_cast<const G4MultiUnion*>(solidPtr);
+       MultiUnionWrite(solidsElement,munionPtr); } else
+   if (solidPtr->GetEntityType()=="G4Box")
+     { const G4Box* const boxPtr
+     = static_cast<const G4Box*>(solidPtr);
+       BoxWrite(solidsElement,boxPtr); } else
+   if (solidPtr->GetEntityType()=="G4Cons")
+     { const G4Cons* const conePtr
+     = static_cast<const G4Cons*>(solidPtr);
+       ConeWrite(solidsElement,conePtr); } else
+   if (solidPtr->GetEntityType()=="G4EllipticalCone")
+     { const G4EllipticalCone* const elconePtr
+     = static_cast<const G4EllipticalCone*>(solidPtr);
+       ElconeWrite(solidsElement,elconePtr); } else
+   if (solidPtr->GetEntityType()=="G4Ellipsoid")
+     { const G4Ellipsoid* const ellipsoidPtr
+     = static_cast<const G4Ellipsoid*>(solidPtr);
+       EllipsoidWrite(solidsElement,ellipsoidPtr); } else
+   if (solidPtr->GetEntityType()=="G4EllipticalTube")
+     { const G4EllipticalTube* const eltubePtr
+     = static_cast<const G4EllipticalTube*>(solidPtr);
+       EltubeWrite(solidsElement,eltubePtr); } else
+   if (solidPtr->GetEntityType()=="G4ExtrudedSolid")
+     { const G4ExtrudedSolid* const xtruPtr
+     = static_cast<const G4ExtrudedSolid*>(solidPtr);
+       XtruWrite(solidsElement,xtruPtr); } else
+   if (solidPtr->GetEntityType()=="G4Hype")
+     { const G4Hype* const hypePtr
+     = static_cast<const G4Hype*>(solidPtr);
+       HypeWrite(solidsElement,hypePtr); } else
+   if (solidPtr->GetEntityType()=="G4Orb")
+     { const G4Orb* const orbPtr
+     = static_cast<const G4Orb*>(solidPtr);
+       OrbWrite(solidsElement,orbPtr); } else
+   if (solidPtr->GetEntityType()=="G4Para")
+     { const G4Para* const paraPtr
+     = static_cast<const G4Para*>(solidPtr);
+       ParaWrite(solidsElement,paraPtr); } else
+   if (solidPtr->GetEntityType()=="G4Paraboloid")
+     { const G4Paraboloid* const paraboloidPtr
+     = static_cast<const G4Paraboloid*>(solidPtr);
+       ParaboloidWrite(solidsElement,paraboloidPtr); } else
+   if (solidPtr->GetEntityType()=="G4Polycone")
+     { const G4Polycone* const polyconePtr
+     = static_cast<const G4Polycone*>(solidPtr);
+       PolyconeWrite(solidsElement,polyconePtr); } else
+   if (solidPtr->GetEntityType()=="G4GenericPolycone")
+     { const G4GenericPolycone* const genpolyconePtr
+     = static_cast<const G4GenericPolycone*>(solidPtr);
+       GenericPolyconeWrite(solidsElement,genpolyconePtr); } else
+   if (solidPtr->GetEntityType()=="G4Polyhedra")
+     { const G4Polyhedra* const polyhedraPtr
+     = static_cast<const G4Polyhedra*>(solidPtr);
+       PolyhedraWrite(solidsElement,polyhedraPtr); } else
+   if (solidPtr->GetEntityType()=="G4Sphere")
+     { const G4Sphere* const spherePtr
+     = static_cast<const G4Sphere*>(solidPtr);
+       SphereWrite(solidsElement,spherePtr); } else
+   if (solidPtr->GetEntityType()=="G4TessellatedSolid")
+     { const G4TessellatedSolid* const tessellatedPtr
+     = static_cast<const G4TessellatedSolid*>(solidPtr);
+       TessellatedWrite(solidsElement,tessellatedPtr); } else
+   if (solidPtr->GetEntityType()=="G4Tet")
+     { const G4Tet* const tetPtr
+     = static_cast<const G4Tet*>(solidPtr);
+       TetWrite(solidsElement,tetPtr); } else
+   if (solidPtr->GetEntityType()=="G4Torus")
+     { const G4Torus* const torusPtr
+     = static_cast<const G4Torus*>(solidPtr);
+       TorusWrite(solidsElement,torusPtr); } else
+   if (solidPtr->GetEntityType()=="G4GenericTrap")
+     { const G4GenericTrap* const gtrapPtr
+     = static_cast<const G4GenericTrap*>(solidPtr);
+       GenTrapWrite(solidsElement,gtrapPtr); } else
+   if (solidPtr->GetEntityType()=="G4Trap")
+     { const G4Trap* const trapPtr
+     = static_cast<const G4Trap*>(solidPtr);
+       TrapWrite(solidsElement,trapPtr); } else
+   if (solidPtr->GetEntityType()=="G4Trd")
+     { const G4Trd* const trdPtr
+     = static_cast<const G4Trd*>(solidPtr);
+       TrdWrite(solidsElement,trdPtr); } else
+   if (solidPtr->GetEntityType()=="G4Tubs")
+     { const G4Tubs* const tubePtr
+     = static_cast<const G4Tubs*>(solidPtr);
+       TubeWrite(solidsElement,tubePtr); } else
+   if (solidPtr->GetEntityType()=="G4CutTubs")
+     { const G4CutTubs* const cuttubePtr
+     = static_cast<const G4CutTubs*>(solidPtr);
+       CutTubeWrite(solidsElement,cuttubePtr); } else
+   if (solidPtr->GetEntityType()=="G4TwistedBox")
+     { const G4TwistedBox* const twistedboxPtr
+     = static_cast<const G4TwistedBox*>(solidPtr);
+       TwistedboxWrite(solidsElement,twistedboxPtr); } else
+   if (solidPtr->GetEntityType()=="G4TwistedTrap")
+     { const G4TwistedTrap* const twistedtrapPtr
+     = static_cast<const G4TwistedTrap*>(solidPtr);
+       TwistedtrapWrite(solidsElement,twistedtrapPtr); } else
+   if (solidPtr->GetEntityType()=="G4TwistedTrd")
+     { const G4TwistedTrd* const twistedtrdPtr
+     = static_cast<const G4TwistedTrd*>(solidPtr);
+       TwistedtrdWrite(solidsElement,twistedtrdPtr); } else
+   if (solidPtr->GetEntityType()=="G4TwistedTubs")
+     { const G4TwistedTubs* const twistedtubsPtr
+     = static_cast<const G4TwistedTubs*>(solidPtr);
+       TwistedtubsWrite(solidsElement,twistedtubsPtr); }
    else
    {
      G4String error_msg = "Unknown solid: " + solidPtr->GetName()

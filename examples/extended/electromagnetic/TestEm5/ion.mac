@@ -1,7 +1,8 @@
-# $Id: ion.mac 66241 2012-12-13 18:34:42Z gunter $
+# $Id: ion.mac 81528 2014-06-02 16:21:24Z vnivanch $
 #
 # macro file for TestEm5.cc
 #
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
 /run/verbose 2
 #
@@ -12,7 +13,7 @@
 #
 /testem/phys/addPhysics  emstandard
 #
-/testem/phys/setCuts 1 km
+/run/setCut 1 km
 #
 /run/initialize
 #

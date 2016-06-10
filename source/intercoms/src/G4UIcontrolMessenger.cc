@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcontrolMessenger.cc 68725 2013-04-05 09:27:45Z gcosmo $
+// $Id: G4UIcontrolMessenger.cc 80641 2014-05-05 15:10:28Z gcosmo $
 //
 
 #include <stdlib.h>
@@ -138,6 +138,15 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   getEnvCmd = new G4UIcmdWithAString("/control/getEnv",this);
   getEnvCmd->SetGuidance("Get a shell environment variable and define it as an alias.");
 
+  getValCmd = new G4UIcommand("/control/getVal",this);
+  getValCmd->SetGuidance("Get the current value of the UI command and define it as an alias.");
+  getValCmd->SetGuidance("Command is ignored if the UI command does not support GetCurrentValue().");
+  getValCmd->SetGuidance(" Syntax : <alias_name> <UI_command>");
+  G4UIparameter* aliName = new G4UIparameter("alias_name",'s',false);
+  getValCmd->SetParameter(aliName);
+  G4UIparameter* comName = new G4UIparameter("UI_command",'s',false);
+  getValCmd->SetParameter(comName);
+
   echoCmd = new G4UIcmdWithAString("/control/echo",this);
   echoCmd->SetGuidance("Display the aliased value.");
 
@@ -177,6 +186,20 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   ifCommand->SetParameter(macroFileParam);
   ifCommand->SetToBeBroadcasted(false);
 
+  doifCommand = new G4UIcommand("/control/doif",this);
+  doifCommand->SetGuidance("Execute a macro file if the expression is true.");
+  doifCommand->SetGuidance(" Syntax : <double> <comp> <double> <UI_command>");
+  G4UIparameter* doleftParam = new G4UIparameter("left",'d',false);
+  doifCommand->SetParameter(doleftParam);
+  G4UIparameter* docompParam = new G4UIparameter("comp",'s',false);
+  docompParam->SetParameterCandidates("> >= < <= == !=");
+  doifCommand->SetParameter(docompParam);
+  G4UIparameter* dorightParam = new G4UIparameter("right",'d',false);
+  doifCommand->SetParameter(dorightParam);
+  G4UIparameter* comParam = new G4UIparameter("UI_command",'s',false);
+  doifCommand->SetParameter(comParam);
+  doifCommand->SetToBeBroadcasted(false);
+
   addCommand = new G4UIcommand("/control/add",this);
   addCommand->SetGuidance("Define a new alias as the sum of two values.");
   addCommand->SetGuidance(" Syntax : <new_alias> <value1> <value2>");
@@ -188,6 +211,7 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   addCommand->SetParameter(val1a);
   G4UIparameter* val1b = new G4UIparameter("value2",'d',false);
   addCommand->SetParameter(val1b);
+  addCommand->SetToBeBroadcasted(false);
 
   subtractCommand = new G4UIcommand("/control/subtract",this);
   subtractCommand->SetGuidance("Define a new alias as the subtraction of two values.");
@@ -200,6 +224,7 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   subtractCommand->SetParameter(val2a);
   G4UIparameter* val2b = new G4UIparameter("value2",'d',false);
   subtractCommand->SetParameter(val2b);
+  subtractCommand->SetToBeBroadcasted(false);
 
   multiplyCommand = new G4UIcommand("/control/multiply",this);
   multiplyCommand->SetGuidance("Define a new alias as the multiplification of two values.");
@@ -212,6 +237,7 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   multiplyCommand->SetParameter(val3a);
   G4UIparameter* val3b = new G4UIparameter("value2",'d',false);
   multiplyCommand->SetParameter(val3b);
+  multiplyCommand->SetToBeBroadcasted(false);
 
   divideCommand = new G4UIcommand("/control/divide",this);
   divideCommand->SetGuidance("Define a new alias as the division of two values.");
@@ -225,6 +251,7 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   G4UIparameter* val4b = new G4UIparameter("value2",'d',false);
   val4b->SetParameterRange("value2 != 0.");
   divideCommand->SetParameter(val4b);
+  divideCommand->SetToBeBroadcasted(false);
 
   remainderCommand = new G4UIcommand("/control/remainder",this);
   remainderCommand->SetGuidance("Define a new alias as the remainder of two values.");
@@ -238,6 +265,7 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   G4UIparameter* val5b = new G4UIparameter("value2",'i',false);
   val4b->SetParameterRange("value2 != 0");
   remainderCommand->SetParameter(val5b);
+  remainderCommand->SetToBeBroadcasted(false);
 
 }
 
@@ -254,6 +282,7 @@ G4UIcontrolMessenger::~G4UIcontrolMessenger()
   delete unaliasCommand;
   delete listAliasCommand;
   delete getEnvCmd;
+  delete getValCmd;
   delete echoCmd;
   delete shellCommand;
   delete loopCommand;
@@ -261,6 +290,7 @@ G4UIcontrolMessenger::~G4UIcontrolMessenger()
   delete HTMLCommand;
   delete maxStoredHistCommand;
   delete ifCommand;
+  delete doifCommand;
   delete addCommand;
   delete subtractCommand;
   delete multiplyCommand;
@@ -327,6 +357,19 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
     else
     { G4cerr << "<" << newValue << "> is not defined as a shell variable. Command ignored." << G4endl; }
   }
+  if(command==getValCmd)
+  {
+    G4Tokenizer next(newValue);
+    G4String aliName = next();
+    G4String com = next();
+    G4String curVal = UI->GetCurrentValues(com);
+    if(!(curVal.isNull()))
+    { 
+      G4String st = "/control/alias ";
+      st += aliName + " " + curVal;
+      UI->ApplyCommand(st);
+    }
+  }
   if(command==echoCmd)
   { G4cout << UI->SolveAlias(newValue) << G4endl; }
   if(command==shellCommand)
@@ -364,6 +407,39 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
     else if(comp=="==") x = (l==r);
     else if(comp=="!=") x = (l!=r);
     if(x) UI->ExecuteMacroFile(mac);
+  }
+  if(command==doifCommand)
+  {
+    G4Tokenizer next(newValue);
+    G4double l = StoD(next());
+    G4String comp = next();
+    G4double r = StoD(next());
+
+    G4String c1 = next();
+    G4String ca;
+    while(!((ca=next()).isNull()))
+    {
+      c1 += " ";
+      c1 += ca;
+    }
+    if(c1(0)=='"')
+    {
+      G4String strippedValue;
+      if(c1(c1.length()-1)=='"')
+      { strippedValue = c1(1,c1.length()-2); }
+      else
+      { strippedValue = c1(1,c1.length()-1); }
+      c1 = strippedValue;
+    }
+
+    G4bool x = false;
+    if(comp==">") x = (l>r);
+    else if(comp==">=") x = (l>=r);
+    else if(comp=="<") x = (l<r);
+    else if(comp=="<=") x = (l<=r);
+    else if(comp=="==") x = (l==r);
+    else if(comp=="!=") x = (l!=r);
+    if(x) UI->ApplyCommand(c1);
   }
   if(command==addCommand)
   {

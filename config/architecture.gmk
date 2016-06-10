@@ -1,4 +1,4 @@
-# $Id: architecture.gmk 76241 2013-11-08 11:07:59Z gcosmo $
+# $Id: architecture.gmk 85534 2014-10-30 16:19:42Z gcosmo $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -127,6 +127,13 @@ ifndef G4BIN
 endif
 G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4BIN) ] && mkdir -p $(G4BIN) )
 
+# If specified, use C++11 standard constructs and compilation options ...
+#
+ifdef G4USE_STD11
+  CPPFLAGS += -DG4USE_STD11
+  G4USE_STD11 := 1
+endif
+
 # If G4DEBUG or G4NO_OPTIMISE are not specified,
 # the default compilation is optimised ...
 #
@@ -170,6 +177,29 @@ ifndef CLHEP_INCLUDE_DIR
 endif
 ifndef CLHEP_LIB_DIR
   CLHEP_LIB_DIR     := $(CLHEP_BASE_DIR)/lib
+endif
+
+# USolids path, etc.
+#
+ifndef USOLIDS_BASE_DIR
+  USOLIDS_BASE_DIR  := $(G4BASE)/externals/usolids
+  G4LIB_BUILD_USOLIDS := 1
+  G4LIB_USE_USOLIDS := 1
+endif
+ifndef G4LIB_USE_USOLIDS
+  ifndef USOLIDS_LIB
+    ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+      USOLIDS_LIB := usolids.lib
+    else
+      USOLIDS_LIB := usolids
+    endif
+  endif
+endif
+ifndef USOLIDS_INCLUDE_DIR
+  USOLIDS_INCLUDE_DIR := $(USOLIDS_BASE_DIR)/include
+endif
+ifndef USOLIDS_LIB_DIR
+  USOLIDS_LIB_DIR     := $(USOLIDS_BASE_DIR)/lib
 endif
 
 # Paths for G4 data
@@ -217,26 +247,41 @@ endif
 # Variables for implicit rules, etc., as suggested in GNU Make manual...
 #
 CPPFLAGS  += -Iinclude 
-CPPFLAGS  += -I$(CLHEP_INCLUDE_DIR)
+CPPFLAGS  += -I$(USOLIDS_INCLUDE_DIR) -I$(CLHEP_INCLUDE_DIR)
 
 # Positional qualifiers in action...
 #
 ifndef LDFLAGS
   LDFLAGS :=
+  #
+  # run-time loading flags
+  #
+  G4STATIC_MODE :=
+  G4NOSTATIC_MODE :=
+endif
+ifndef LOADLIBS
+  LOADLIBS :=
 endif
 ifndef G4LIB_USE_CLHEP
   ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
     LDFLAGS   += -link $(LIB_PATH)$(CLHEP_LIB_DIR)
-    LOADLIBS  := $(CLHEP_LIB)
+    LOADLIBS  += $(CLHEP_LIB)
   else
     LDFLAGS   += -L$(CLHEP_LIB_DIR)
-    LOADLIBS  := -l$(CLHEP_LIB)
+    LOADLIBS  += -l$(CLHEP_LIB)
   endif
-else
-  LOADLIBS :=
+endif
+ifndef G4LIB_USE_USOLIDS
   ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
-    LDFLAGS  += -link $(LIB_PATH)$(G4INSTALL)/lib
+    LDFLAGS   += -link $(LIB_PATH)$(USOLIDS_LIB_DIR)
+    LOADLIBS  += $(USOLIDS_LIB)
+  else
+    LDFLAGS   += -L$(USOLIDS_LIB_DIR)
+    LOADLIBS  += -l$(USOLIDS_LIB)
   endif
+endif
+ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+  LDFLAGS  += -link $(LIB_PATH)$(G4INSTALL)/lib
 endif
 ifeq (,$(findstring WIN32-VC,$(G4SYSTEM)))
   ifndef G4LIB_USE_EXPAT

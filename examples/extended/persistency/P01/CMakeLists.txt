@@ -94,4 +94,5 @@ add_custom_target(P01 DEPENDS exampleP01 readHits )
 #
 install(TARGETS exampleP01 DESTINATION bin)
 install(TARGETS readHits DESTINATION bin)
+install(TARGETS ExP01ClassesDict DESTINATION lib)
 

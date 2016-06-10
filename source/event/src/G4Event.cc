@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.cc 69010 2013-04-15 09:34:16Z gcosmo $
+// $Id: G4Event.cc 84194 2014-10-10 14:29:58Z gcosmo $
 //
 
 // G4Event
@@ -45,7 +45,7 @@ G4Event::G4Event()
  HC(0),DC(0),trajectoryContainer(0),eventAborted(false),userInfo(0),
  randomNumberStatus(0),validRandomNumberStatus(false),
  randomNumberStatusForProcessing(0),validRandomNumberStatusForProcessing(false),
- keepTheEvent(false)
+ keepTheEvent(false),grips(0)
 {
 }
 
@@ -55,7 +55,7 @@ G4Event::G4Event(G4int evID)
  HC(0),DC(0),trajectoryContainer(0),eventAborted(false),userInfo(0),
  randomNumberStatus(0),validRandomNumberStatus(false),
  randomNumberStatusForProcessing(0),validRandomNumberStatusForProcessing(false),
- keepTheEvent(false)
+ keepTheEvent(false),grips(0)
 {
 }
 

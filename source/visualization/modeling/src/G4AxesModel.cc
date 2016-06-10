@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AxesModel.cc 68043 2013-03-13 14:27:49Z gcosmo $
+// $Id: G4AxesModel.cc 83403 2014-08-21 15:07:30Z gcosmo $
 //
 // 
 // John Allison  3rd April 2001
@@ -56,10 +56,10 @@ G4AxesModel::~G4AxesModel ()
 
 G4AxesModel::G4AxesModel
 (G4double x0, G4double y0, G4double z0, G4double length,
- G4double arrowWidth,
- const G4String& colourString,
+ G4double arrowWidth, const G4String& colourString,
  const G4String& description,
- G4bool withAnnotation):
+ G4bool withAnnotation,
+ G4double textSize):
   fXAxisModel(0),
   fXLabelModel(0),
   fXAnnotationModel(0),
@@ -102,15 +102,16 @@ G4AxesModel::G4AxesModel
      xColour, "x-axis: " + description);
   if (withAnnotation) {
     text = new G4Text("x",G4Point3D(x0+1.05*length, y0, z0));
-    text->SetScreenSize(10.);
+    text->SetScreenSize(textSize);
+    text->SetOffset(0.5*textSize,0.5*textSize);
     text->SetLayout(G4Text::centre);
     va = new G4VisAttributes(xColour);
     text->SetVisAttributes(va);
     fXLabelModel = new G4TextModel(*text);
     delete text;
     text = new G4Text(annotation,G4Point3D(x0+0.8*length, y0, z0));
-    text->SetScreenSize(10.);
-    text->SetOffset(5.,5.);
+    text->SetScreenSize(textSize);
+    text->SetOffset(-1.5*textSize,-1.5*textSize);
     text->SetLayout(G4Text::centre);
     va = new G4VisAttributes(xColour);
     text->SetVisAttributes(va);
@@ -125,15 +126,16 @@ G4AxesModel::G4AxesModel
      yColour, "y-axis: " + description);
   if (withAnnotation) {
     text = new G4Text("y",G4Point3D(x0, y0+1.05*length, z0));
-    text->SetScreenSize(10.);
+    text->SetScreenSize(textSize);
+    text->SetOffset(0.5*textSize,0.5*textSize);
     text->SetLayout(G4Text::centre);
     va = new G4VisAttributes(yColour);
     text->SetVisAttributes(va);
     fYLabelModel = new G4TextModel(*text);
     delete text;
     text = new G4Text(annotation,G4Point3D(x0, y0+0.8*length, z0));
-    text->SetScreenSize(10.);
-    text->SetOffset(5.,5.);
+    text->SetScreenSize(textSize);
+    text->SetOffset(-1.5*textSize,-1.5*textSize);
     text->SetLayout(G4Text::centre);
     va = new G4VisAttributes(yColour);
     text->SetVisAttributes(va);
@@ -148,15 +150,16 @@ G4AxesModel::G4AxesModel
      zColour, "z-axis: " + description);
   if (withAnnotation) {
     text = new G4Text("z",G4Point3D(x0, y0, z0+1.05*length));
-    text->SetScreenSize(10.);
+    text->SetScreenSize(textSize);
+    text->SetOffset(0.5*textSize,0.5*textSize);
     text->SetLayout(G4Text::centre);
     va = new G4VisAttributes(zColour);
     text->SetVisAttributes(va);
     fZLabelModel = new G4TextModel(*text);
     delete text;
     text = new G4Text(annotation,G4Point3D(x0, y0, z0+0.8*length));
-    text->SetScreenSize(10.);
-    text->SetOffset(5.,5.);
+    text->SetScreenSize(textSize);
+    text->SetOffset(-1.5*textSize,-1.5*textSize);
     text->SetLayout(G4Text::centre);
     va = new G4VisAttributes(zColour);
     text->SetVisAttributes(va);

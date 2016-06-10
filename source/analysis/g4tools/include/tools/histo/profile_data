@@ -9,19 +9,20 @@
 namespace tools {
 namespace histo {
 
-template <class TC,class TN,class TW,class TV>
-class profile_data : public histo_data<TC,TN,TW> {
+template <class TC,class TO,class TN,class TW,class TV>
+class profile_data : public histo_data<TC,TO,TN,TW> {
+  typedef histo_data<TC,TO,TN,TW> parent;
 public:
   profile_data()
-  : histo_data<TC,TN,TW>()
+  :parent()
   ,m_is_profile(true)
   ,m_cut_v(false)
   ,m_min_v(0)
   ,m_max_v(0)
   {}
 
-  profile_data(const histo_data<TC,TN,TW>& a_from)
-  : histo_data<TC,TN,TW>(a_from)
+  profile_data(const histo_data<TC,TO,TN,TW>& a_from)
+  :parent(a_from)
   ,m_is_profile(false)
   ,m_cut_v(false)
   ,m_min_v(0)
@@ -30,7 +31,7 @@ public:
 
 public:
   profile_data(const profile_data& a_from)
-  : histo_data<TC,TN,TW>(a_from)
+  :parent(a_from)
   ,m_is_profile(a_from.m_is_profile)
   ,m_bin_Svw(a_from.m_bin_Svw)
   ,m_bin_Sv2w(a_from.m_bin_Sv2w)
@@ -40,7 +41,7 @@ public:
   {}
 
   profile_data& operator=(const profile_data& a_from) {
-    histo_data<TC,TN,TW>::operator=(a_from);
+    parent::operator=(a_from);
     m_is_profile = a_from.m_is_profile;
     m_bin_Svw = a_from.m_bin_Svw;
     m_bin_Sv2w = a_from.m_bin_Sv2w;
@@ -53,9 +54,10 @@ public:
   virtual ~profile_data(){}
 
 public:
-  profile_data& operator=(const histo_data<TC,TN,TW>& a_from) {
+  profile_data& operator=(const histo_data<TC,TO,TN,TW>& a_from) {
     //for Rio_THisogram.
-    histo_data<TC,TN,TW>::operator=(a_from);
+    histo_data<TC,TO,TN,TW>::operator=(a_from);
+    if(&a_from==this) return *this;
     m_is_profile = false;
     m_bin_Svw.clear();
     m_bin_Sv2w.clear();

@@ -1,4 +1,4 @@
-$Id: History 73985 2013-09-18 15:55:18Z gcosmo $
+$Id: History 83428 2014-08-21 15:46:01Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30-07-14 V.Ivant (testem6-V10-00-02)
+- Naruhiro Chikuma have updated PhysicsList, DetectorConstruction,
+    and RunAction; bug fix  
+	 
+03-07-14 mma (testem6-V10-00-01)
+- replace /testem/event/printModulo by /run/printProgress
+	 
+08-06-14 mma (testem6-V10-00-00)
+- suppress EventAction and its messenger
 
 18-09-13 V.Ivant (testem6-V09-06-04)
 - fixed tag format

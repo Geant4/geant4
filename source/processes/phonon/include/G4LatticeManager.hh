@@ -26,14 +26,14 @@
 /// \file materials/include/G4LatticeManager.hh
 /// \brief Definition of the G4LatticeManager class
 //
-// $Id: G4LatticeManager.hh 76885 2013-11-18 12:55:15Z gcosmo $
+// $Id: G4LatticeManager.hh 84196 2014-10-10 14:31:48Z gcosmo $
 //
 // 20131113  Add registry to carry unique lattice pointers, for EOJ deletion
 // 20131115  Drop lattice counters, not used anywhere
+// 20141008  Change to global singleton; must be shared across worker threads
 
 #ifndef G4LatticeManager_h
 #define G4LatticeManager_h 1
-
 
 #include "G4ThreeVector.hh"
 #include <map>
@@ -47,7 +47,7 @@ class G4VPhysicalVolume;
 
 class G4LatticeManager {
 private:
-  static G4ThreadLocal G4LatticeManager* fLM;		// Singleton
+  static G4LatticeManager* fLM;		// Global, shared singleton
 
 public:
   static G4LatticeManager* GetLatticeManager(); 

@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -65,12 +66,17 @@
 // G4IonTable
 #include "G4IonTable.hh"
 
+// fission
+#include "G4VLevelDensityParameter.hh"
+#include "G4FissionProbability.hh"
+
 #include <fstream>
 #include <iostream>
 
 using namespace std;
 
 class G4INCLXXInterfaceStore;
+class G4INCLXXVInterfaceTally;
 
 /** \brief INCL++ intra-nuclear cascade
  *
@@ -126,6 +132,8 @@ public:
     theINCLModel = NULL;
   }
 
+  virtual void ModelDescription(std::ostream& outFile) const;
+
 private:
   G4bool AccurateProjectile(const G4HadProjectile &aTrack, const G4Nucleus &theTargetNucleus) const;
 
@@ -165,6 +173,7 @@ private:
   G4HadronicInteraction *theBackupModelNucleon;
 
   G4INCLXXInterfaceStore * const theInterfaceStore;
+  G4INCLXXVInterfaceTally * theTally;
 
   G4bool complainedAboutBackupModel;
   G4bool complainedAboutPreCompound;
@@ -172,6 +181,9 @@ private:
   G4IonTable * const theIonTable;
 
   G4bool dumpRemnantInfo;
+
+  G4VLevelDensityParameter *theINCLXXLevelDensity;
+  G4FissionProbability *theINCLXXFissionProbability;
 };
 
 #endif

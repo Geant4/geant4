@@ -1,4 +1,4 @@
-# $Id: TestEm6.in 73985 2013-09-18 15:55:18Z gcosmo $
+# $Id: TestEm6.in 83428 2014-08-21 15:46:01Z gcosmo $
 #
 # Macro file for "TestEm6.cc"
 # (can be run in batch, without graphic)
@@ -29,7 +29,7 @@
 #
 /run/beamOn 5
 #
-/gun/particle anti_proton
-/gun/energy 1 GeV
-/run/beamOn 2
+#/gun/particle anti_proton
+#/gun/energy 1 GeV
+#/run/beamOn 2
 #

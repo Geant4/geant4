@@ -27,10 +27,10 @@
 /// \brief Implementation of the PhysListEmPolarized class
 //
 //
-// $Id: PhysListEmPolarized.cc 68753 2013-04-05 10:26:04Z gcosmo $
+// $Id: PhysListEmPolarized.cc 86418 2014-11-11 10:39:38Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmPolarized.hh"
 #include "G4ParticleDefinition.hh"
@@ -76,54 +76,23 @@ void PhysListEmPolarized::ConstructProcess()
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 
-    if (namePhysics=="polarized") {
-      if (particleName == "gamma") {
-        pmanager->AddDiscreteProcess(new G4PolarizedPhotoElectricEffect);
-         pmanager->AddDiscreteProcess(new G4PolarizedCompton);
-        pmanager->AddDiscreteProcess(new G4PolarizedGammaConversion);      
-      }
-      else if (particleName == "e-") {
-        //electron
-        pmanager->AddProcess(new G4eMultipleScattering,   -1,1,1);
-        pmanager->AddProcess(new G4ePolarizedIonisation,  -1,2,2);
-        pmanager->AddProcess(new G4ePolarizedBremsstrahlung,      -1,3,3);
-      }       
-      else if (particleName == "e+") {
-        //positron
-        pmanager->AddProcess(new G4eMultipleScattering,  -1, 1,1);
-        pmanager->AddProcess(new G4ePolarizedIonisation, -1, 2,2);
-        pmanager->AddProcess(new G4ePolarizedBremsstrahlung,    -1, 3,3);
-        pmanager->AddProcess(new G4eplusPolarizedAnnihilation,   0,-1,4);
-      }
-    }
-    else {
-     
-      if (particleName == "gamma") {
-        // gamma         
-        pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
-        pmanager->AddDiscreteProcess(new G4ComptonScattering);
-        
-        pmanager->AddDiscreteProcess(new G4GammaConversion);      
-      } else if (particleName == "e-") {
-        //electron
-        pmanager->AddProcess(new G4eMultipleScattering,-1, 1,1);
-        pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-        pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
-                  
-      } else if (particleName == "e+") {
-        //positron
-        pmanager->AddProcess(new G4eMultipleScattering,-1, 1,1);
-        pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-        pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
-        pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
-      }
+    if (particleName == "gamma") {
+      pmanager->AddDiscreteProcess(new G4PolarizedPhotoElectricEffect);
+      pmanager->AddDiscreteProcess(new G4PolarizedCompton);
+      pmanager->AddDiscreteProcess(new G4PolarizedGammaConversion);      
+
+    } else if (particleName == "e-") {
+      pmanager->AddProcess(new G4eMultipleScattering,   -1,1,1);
+      pmanager->AddProcess(new G4ePolarizedIonisation,  -1,2,2);
+      pmanager->AddProcess(new G4ePolarizedBremsstrahlung,      -1,3,3);
+
+    } else if (particleName == "e+") {
+      pmanager->AddProcess(new G4eMultipleScattering,  -1, 1,1);
+      pmanager->AddProcess(new G4ePolarizedIonisation, -1, 2,2);
+      pmanager->AddProcess(new G4ePolarizedBremsstrahlung,    -1, 3,3);
+      pmanager->AddProcess(new G4eplusPolarizedAnnihilation,   0,-1,4);
     }
   }
-  // Em options
-  //
-  //  G4EmProcessOptions emOptions;
-  //  emOptions.SetIntegral(false);
-  //  emOptions.SetLossFluctuations(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

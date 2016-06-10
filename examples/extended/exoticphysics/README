@@ -3,7 +3,12 @@
         ----------------------------------------------
 
  Examples in this directory demonstrate exotic physics applications. 
- Currently, only two examples are provided:
+ Currently, four examples are provided:
+
+channeling
+----------
+
+This example simulates channeling of 400 GeV/c protons in a bent crystal.
 
 monopole
 ---------
@@ -16,3 +21,8 @@ phonon
 
 This example simulates phonons in sub-Kelvin temperature Germanium crystal.
 
+ucn
+---
+
+This example simulates the passage of ultra-cold neutrons (UCN) in a
+hollow pipe.

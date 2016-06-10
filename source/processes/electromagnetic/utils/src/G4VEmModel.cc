@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc 76333 2013-11-08 14:31:50Z gcosmo $
+// $Id: G4VEmModel.cc 84661 2014-10-17 14:30:16Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -50,16 +50,27 @@
 //
 
 #include "G4VEmModel.hh"
+#include "G4ElementData.hh"
 #include "G4LossTableManager.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleChangeForLoss.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Log.hh"
+#include "Randomize.hh"
+//#include "G4MTHepRandom.hh"
+
+#if __clang__
+  #if (defined(G4MULTITHREADED) && !defined(G4USE_STD11) && \
+      !__has_feature(cxx_thread_local))
+    #define CLANG_NOSTDTLS
+  #endif
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+const G4double G4VEmModel::inveplus = 1.0/CLHEP::eplus;
 const G4double log106 = 6*G4Log(10.);
 
 G4VEmModel::G4VEmModel(const G4String& nam):
@@ -69,7 +80,7 @@ G4VEmModel::G4VEmModel(const G4String& nam):
   theLPMflag(false),flagDeexcitation(false),flagForceBuildTable(false),
   isMaster(true),fElementData(0),pParticleChange(0),xSectionTable(0),
   theDensityFactor(0),theDensityIdx(0),fCurrentCouple(0),fCurrentElement(0),
-  nsec(5) 
+  fCurrentIsotope(0),nsec(5) 
 {
   xsec.resize(nsec);
   nSelectors = 0;
@@ -81,6 +92,13 @@ G4VEmModel::G4VEmModel(const G4String& nam):
 
   fManager = G4LossTableManager::Instance();
   fManager->Register(this);
+
+#if (defined(G4MULTITHREADED) && !defined(G4USE_STD11)) || \
+    (defined(CLANG_NOSTDTLS))
+  rndmEngineMod = G4MTHepRandom::getTheEngine(); 
+#else // Sequential mode or supporting C++11 standard
+  rndmEngineMod = CLHEP::HepRandom::getTheEngine();
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -97,7 +115,15 @@ G4VEmModel::~G4VEmModel()
   }
   delete anglModel;
   
-  if(localTable) { delete xSectionTable; }
+  if(localTable && xSectionTable) { 
+    xSectionTable->clearAndDestroy();
+    delete xSectionTable;
+    xSectionTable = 0; 
+  }
+  if(isMaster && fElementData) {
+    delete fElementData;
+    fElementData = 0;
+  }
   
   fManager->DeRegister(this);
 }
@@ -184,7 +210,7 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* part,
       G4double emax = std::max(highLimit, 10*emin);
       G4int nbins = G4int(fManager->GetNumberOfBinsPerDecade()
 			  *G4Log(emax/emin)/log106);
-      if(nbins < 3) { nbins = 3; }
+      nbins = std::max(nbins, 3);
 
       (*elmSelectors)[i] = new G4EmElementSelector(this,material,nbins,
 						   emin,emax,spline);
@@ -258,7 +284,7 @@ G4double G4VEmModel::CrossSectionPerVolume(const G4Material* material,
     xsec.resize(nelm);
     nsec = nelm;
   }
-  for (G4int i=0; i<nelm; i++) {
+  for (G4int i=0; i<nelm; ++i) {
     cross += theAtomNumDensityVector[i]*
       ComputeCrossSectionPerAtom(p,(*theElementVector)[i],ekin,emin,emax);
     xsec[i] = cross;
@@ -283,7 +309,7 @@ const G4Element* G4VEmModel::SelectRandomAtom(const G4Material* material,
   G4int n = material->GetNumberOfElements() - 1;
   fCurrentElement = (*theElementVector)[n];
   if (n > 0) {
-    G4double x = G4UniformRand()*
+    G4double x = rndmEngineMod->flat()*
       G4VEmModel::CrossSectionPerVolume(material,pd,kinEnergy,tcut,tmax);
     for(G4int i=0; i<n; ++i) {
       if (x <= xsec[i]) {
@@ -322,7 +348,7 @@ G4double G4VEmModel::ChargeSquareRatio(const G4Track& track)
 G4double G4VEmModel::GetChargeSquareRatio(const G4ParticleDefinition* p,
 					  const G4Material*, G4double)
 {
-  G4double q = p->GetPDGCharge()/CLHEP::eplus;
+  G4double q = p->GetPDGCharge()*inveplus;
   return q*q;
 }
 

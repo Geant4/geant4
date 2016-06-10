@@ -1,4 +1,4 @@
-# $Id: allproc.mac 67418 2013-02-19 17:58:01Z vnivanch $
+# $Id: allproc.mac 85311 2014-10-27 14:23:25Z gcosmo $
 #
 # Macro file for "TestEm17.cc"
 # (can be run in batch, without graphic)
@@ -9,14 +9,14 @@
 /testem/det/setMat Iron
 /testem/det/setSize 1 m
 #
-/testem/phys/addPhysics standard
+/testem/phys/addPhysics emstandard_opt0
 #
-/testem/phys/setCuts 1 mm
+/run/setCut 1 mm
 #
 /run/initialize
 #
 /gun/particle mu+
-/gun/energy 10 TeV
+/gun/energy 100 TeV
 #
 /testem/histo/setFileName allproc
 /testem/histo/setHisto 1 100 -10. 0.
@@ -26,6 +26,6 @@
 /testem/histo/setHisto 12 100 -10. 0.
 /testem/histo/setHisto 13 100 -10. 0.
 #
-/testem/event/printModulo 10000
+/run/printProgress 10000
 #
 /run/beamOn 1000000

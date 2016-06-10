@@ -1,0 +1,20 @@
+# -Configures for the use of G4-mpi interface
+# This sets the following
+#    G4mpi_INCLUDE_DIR directory where the include files are installed
+#    G4mpi_LIBRARIES library of the G4-MPI interface
+# Usage:
+#   Add -DG4mpi_DIR=.... to cmake command line when building a G4-MPI enabled application
+
+SET(G4mpi_INCLUDE_DIR
+	@CMAKE_INSTALL_PREFIX@/include)
+SET(G4mpi_LIBRARIES
+	@G4MPILIB@)
+
+IF ( BUILD_STATIC_LIBS ) 
+   add_library(@G4MPILIB@ STATIC IMPORTED)
+ELSE()
+   add_library(@G4MPILIB@ SHARED IMPORTED)
+ENDIF()
+set_target_properties(@G4MPILIB@ PROPERTIES
+		IMPORTED_LOCATION @G4MPIFULLPATH@)
+SET(G4mpi_FOUND TRUE)

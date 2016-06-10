@@ -1,0 +1,63 @@
+# test34 : two simultaneous sources in one generator
+#
+/run/initialize
+#
+# Source  1
+/gps/particle proton
+#
+# the incident surface is a disc in the y-z plane at -10 cm
+/gps/pos/type Plane
+/gps/pos/rot1 0 1 0
+/gps/pos/rot2 0 0 1
+/gps/pos/shape Circle 
+/gps/pos/centre -10. 0. 0. cm
+/gps/pos/radius 10. cm
+#
+# angular distribution
+/gps/ang/type cos
+#  
+# the proton energy is in gaussian profile centered at 2.5 MeV
+/gps/ene/type Gauss
+/gps/ene/mono 2.5 MeV
+/gps/ene/sigma 0.5 MeV
+#
+#
+# source #2
+/gps/source/add 1
+#
+# this is gamma source
+/gps/particle gamma
+#
+# the incident surface is a square in the x-y plane at 10 cm
+/gps/pos/type Plane
+/gps/pos/centre 0. 0. 10. cm
+/gps/pos/shape Square
+/gps/pos/halfx 2 cm
+/gps/pos/halfy 2 cm
+#
+# normal incident  
+/gps/direction 0 0 -1
+#
+# mono energy 
+/gps/energy 1 MeV
+#
+# both guns will be fired at the same time
+/gps/source/multiplevertex true
+#
+#
+# commands below are independent of gps
+#
+#
+/analysis/setFileName test34
+/analysis/h1/set 1 100 0 5 MeV
+/analysis/h2/set 1 100 -10 10 cm none linear 100 -10 10 cm none linear #x-y
+/analysis/h2/set 2 100 -10 10 cm none linear 100 -10 10 cm none linear #y-z
+/analysis/h2/set 3 100 -10 10 cm none linear 100 -10 10 cm none linear #z-x
+/analysis/h2/set 5 120 0 360 deg none linear 60 60 120 deg none linear
+#
+##/control/execute vis.mac
+##/tracking/verbose 1
+#
+/run/printProgress 10000
+#
+/run/beamOn 100000

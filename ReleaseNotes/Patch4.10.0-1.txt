@@ -1,0 +1,340 @@
+
+                 Geant4 10.0 - patch-01 Release Notes
+                 ------------------------------------
+
+                                                           28 February 2014
+
+List of fixes included in this public patch since the public release 10.0:
+
+  o Configuration:
+    -------------
+    + CMake:
+      o Include /opt/X11 paths for X11 and OpenGL on MacOS X Mavericks.
+      o Added variables for G4LIB_{BUILD,USE}_EXPAT as for ZLIB and export
+        them based on value of GEANT4_USE_SYSTEM_EXPAT.
+        Addresses problem report #1567.
+      o Added builtin zlib to list of features, added G4zlib to list of
+        libraries when used; export them to geant4-config.
+        Addresses problem report #1572.
+      o Replaced use of GNU awk extension 'length' in geant4-config for
+        determining number of datasets. Use return value of split function
+        to get length of array. Addresses problem reported in item #1614
+        in hypernews 'Installation and Configuration' forum.
+    + GNUMake:
+      o Fixed setting of -fPIC in MT-mode for Linux-g++, Linux-icc and
+        Darwin targets.
+
+  o Analysis:
+    --------
+    + Updated to g4tools 1.7.1.
+      Fixed performance issue observed for an ntuple with large numbers of
+      columns reported in item #455 in hypernews 'Analysis' forum.
+
+  o Event:
+    -----
+    + Changed default value of Q (charge) for /gun/ion and /gun/ionL commands.
+      Now electrons are fully stripped (i.e. Q = Z) if Q is not specified.
+    + G4SPSPosDistribution::IsSourceConfined(): added protection against
+      null pointer. Addressing problem report #1255.
+
+  o G3toG4:
+    ------
+    + Correction to CMake script: removed no longer existing package from
+      dependency list.
+
+  o Geometry:
+    --------
+    + magneticfield:
+      o Added call to G4Mag_EqRhs::SetChargeMomentumMass() from
+        G4Mag_SpinEqRhs::SetChargeMomentumMass(), following report in
+        item #210 in hypernews 'Fields' forum.
+    + navigation:
+      o Fixed implementation of SetNavigatorForTracking() in
+        G4TransportationManager, to initialise active navigator and
+        propagator-in-field with the new provided instance.
+        Addressing problem report #1537.
+      o Minor code cleanup in G4GlobalMagFieldMessenger.
+    + solids/CSG:
+      o Added correct cloning mechanism in G4U* wrappers.
+        Addressing problem report #1553.
+      o Simply reset polyhedron pointer to zero for modifiers of G4U* wrappers
+        in parameterisation. Resolves crash in MT visualization when using
+        USolids.
+    + solids/specific:
+      o Fix in G4GenericTrap::InsidePolygone() to check if p lies between
+        the two extremes of the segment. Addressing problem report #1541.
+      o Corrected cloning mechanism in G4U* wrappers.
+        Addressing problem report #1553.
+      o Simply reset polyhedron pointer to zero for modifiers of G4U* wrappers
+        in parameterisation. Resolves crash in MT visualization when using
+        USolids.
+      o Removed left-over debug printout in G4Polycone::SetOriginalParameters().
+    + solids/usolids:
+      o Implemented precise safety in UTubs and UCons for SafetyFromOutside().
+        Precise safety is used in UPolycone for calculation of SafetyFromOutside().
+      o Fixed typo in SafetyFromInside() for UTubs for correct calculation of
+        'safePhi'.
+      o Corrected implementation of Clone() method in UBox, UTet, UTrd.
+        Corrected cloning mechanism and copy constructor in G4USolid.
+        Addressing problem report #1553.
+      o UPolycone fixes: added validity check of shape for case when
+        RMin > RMax; moved global bounding-box to be a class data member.
+        Corrected implementation of DistanceToOut(p,v) for convexity and
+        normals; corrected implementation of DistanceToOut(p,v) for stuck
+        tracks due to DistanceToIn=DistanceToOut=0; corrected implementation
+        of Inside() in case of OpenPhi.
+      o Removed ResetPolyhedron() from G4USolid bridge class as not necessary;
+        moved 'fPolyhedron' pointer to protected.
+
+  o Global:
+    ------
+    + G4PhysicsVector: small performance optimisation to avoid one division.
+    + Fixed Coverity defects in G4Physics2DVector::Retrieve().
+    + Implemented workaround to guarantee G4cout/G4cerr are initialized
+      correctly before main function.
+    + Added protections to avoid core dumps caused by division by zero 
+      and other minor updates in G4ConvergenceTester.
+    + Updated date and version for 10.0.p01.
+
+  o Graphics Representations:
+    ------------------------
+    + Fixes defects reported by PVS static analysis tool.
+      Some code cleanup.
+
+  o Electromagnetic Processes:
+    -------------------------
+    + DNA:
+      o Fix in G4DNAMolecularMaterial to prevent segmentation fault in case a
+        model is not created at initialisation time.
+    + Low Energy:
+      o Suppressed exception warning issued by some Penelope models;
+        Controlled by verbosity flag now for diagnostics.
+      o Allow for (AutoLock-protected) creation on-the-fly of tables in
+        SampleSecondaries(); avoid crash when the loop of SampleSecondaries()
+        is inkoved in a unit test.
+      o Fixed Coverity report in G4LivermorePhotoElectricModel.
+    + Standard:
+      o Bug fix in G4UrbanMscModel; 1st normal step in StepLimitType 2 mode   
+        was not randomized. 
+        Move methods ComputeTheta0,SimpleScattering(), SampleDisplacement(),
+        LatCorrelation() to be inlined for small CPU speedup.
+      o Fix in G4UniversalFluctuation for energy loss for extreme small cuts.
+        Bug fix in "ionization" computing (small observable effect).
+        Replaced G4Pow::expA() by faster G4Exp().
+        Reduced number of divisions by addition of extra class members.
+      o G4NuclearStopping: fix to avoid changing ion charge.
+      o G4ionIonisation: do not instantiate extra model at high enegry if
+        G4IonParameterisedModel is used. Improved printout at initialisation.
+      o G4SauterGavrilaAngularDistribution: use Penelope 2008 sampling
+        algorithm, as it is more effective; distribution itself is unchanged.
+      o G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable: use G4Log(),
+        and G4Exp().
+      o G4eCoulombScatteringModel, G4eSingleCoulombScatteringModel: get pointer
+        to the vector of cuts from parameters of Initialise(..) method and not
+        from G4ProductionCutsTable; more convenient for unit tests.
+      o Fixed Coverity defects.
+    + Utils:
+      o G4VEnergyLossProcess: fixed division by zero for the case of an ion
+        with charge zero.
+      o G4EmCalculator: in FindCouple() method, implemented loop over all
+        regions if argument pointer to region of the method is null.
+        Added G4Exception if G4MaterialCutsCouple is not found out and
+        also inside GetCSDARange() when CSDA table is not initialized.
+      o G4LossTableMananger: fixed bug for initialisation of several runs
+        in one job (affecting muons and e- and providing non-reproducibility)
+      o G4LossTableMananger, G4EmProcessOptions: define default verbosity=0
+        for worker thread, so summary on EM processes is not duplicated.
+      o G4VEnergyLossProcess, G4VEmProcess: define fixed precison=6 for
+        initialisation printout.
+    + xrays:
+      o Make some class members and methods static in G4Cerenkov and
+        G4Scintillation.
+
+  o Generic Processes:
+    -----------------
+    + Cuts:
+      o Fixed verbosity warning in G4ProductionCutsTable.
+    + Decay:
+      o Fixed problem of wrong global time for secondaries in case that the
+        primary track stops during along step. Addressing problem report #1555.
+      o Replaced use of DBL_MAX with age of the universe for stable particle
+        life time. Addressing problem report #1569.
+    + Management:
+      o Fixed verbosity warning in G4ProcessTable.
+    + Optical:
+      o Make 'WLSTimeGeneratorProfile' and 'UseTimeProfile' static in G4OpWLS.
+
+  o Hadronic Processes:
+    ------------------
+    + cross_sections:
+      o Removed wrong if statement against zero cross-section in
+        G4CrossSectionDataStore::SampleZandA(). Correct fix for the crashes
+        observed in QBBC.
+      o Disabled threshold for the inelastic cross-section in
+        G4BGGNucleonInelasticXS.
+    + management:
+      o Added printout of energy momentum check in G4HadronicProcess.
+    + models/binary_cascade:
+      o G4BinaryLightIoncascade::FuseNucleiAndPrompound(): added protection at
+        low energy: available energy is not sufficient to create a fragment.
+      o G4BinaryLightIonReaction: fix for Coverity report on small leak.
+      o Added printout of particle name in check for valid type of projectile 
+        in G4BinaryCasacde::ApplyYourself().
+    + models/de_excitation:
+      o G4ExcitationHandler: fixed minor memory leak in the case when
+        FermiBreakUp has no final states available; reported in item
+        #1371 in hypernews Hadronic forum.
+      o G4NuclearLevelManager: trivial fix for defect reported by Coverity.
+    + models/inclxx:
+      o Fix for occasionally produced excited nucleon as a pre-fragment.
+      o Added getter for INCL Config object in the G4INCLInterfaceStore.
+    + models/lend:
+      o Correction to CMake scripts: removed no longer existing package
+        from dependency list.
+    + models/neutron_hp:
+      o Fixed problem in reading compressed data files in
+        G4NeutronHPThermalScatteringData. Addressing problem report #1543.
+      o Correction to CMake scripts: removed no longer existing package
+        from dependency list.
+    + models/radioactive_decay:
+      o Fixed memory leak in G4RadioactiveDecay destructor by deleting
+        decay table map.
+    + models/theo_high_energy:
+      o Correction to CMake scripts: removed no longer existing package
+        from dependency list.
+    + models/utils:
+      o Use G4Allocator for allocation of G4Fragment objects.
+        Should help reducing memory churn and improve CPU performance.
+        Removed counter of warnings; added exception warning in verbose mode.
+    + stopping:
+      o G4MuMinusCapturePrecompound: fixed case of infinite loop for mu-
+        capture. Addressing problem report #1536.
+    + util:
+      o Cleanup of automatic TLS data conversion in G4ReactionProduct,
+        G4HadSignalHandler and G4HadronicWhiteBoard.
+
+  o Interfaces:
+    ----------
+    + Explicitly set the LC_NUMBERIC locale to "C" in G4UIQt.
+      Addressing problem report #1487.
+      Fixed problem with resizing the QGLwidget when scene is opened from UI.
+
+  o Particles:
+    ---------
+    + G4ParticleDefinition::DumpTable() displays correct stability
+      information for a general ion as long as it is known to
+      G4NuclideTable. Addressing to bug report #1560.
+    + Fixed properties for heavy anti-baryons G4AntiLambdab, G4AntiSigmabZero
+      and G4AntiLambdacPlus. Addressing problem report #1571.
+    + Minor fix in G4ParticleTable::GetParticle() method.
+
+  o Physics Lists:
+    -------------
+    + Correction to CMake scripts: removed no longer existing packages from
+      dependency list.
+    + constructors/electromagnetic:
+      o G4EmStandardPhysics_option4, G4EmLivermorePhysics, G4EmPenelopePhysics:
+        use RangeFactor=0.01 to increase simulation accuracy.
+        Use G4UrbanMscModel for pions, kaons, protons instead of WentzelVI
+        to have more accurate ranges of low-energy hadrons (in particular,
+        protons).
+      o G4EmStandardPhysics_option4, G4EmLivermorePhysics, G4EmPenelopePhysics,
+        G4EmStandardPhysics_option3: use the same order of processes for e+-,
+        does not change any result but makes more easy comparing log files for
+        different EM physics options.
+      o G4EmStandardPhysics, G4EmStandardPhysics_option1,
+        G4EmStandardPhysics_option2: added Coulomb scattering process for
+        pions, kaons, proton, anti-proton in order to have more smooth
+        transition from EM to hadronic scattering.
+      o Fixed race condision issue in OpticalPhysics; also specify command
+        /optics_engine/setOpProcessUse not available for 'Idle' state.
+      o Avoid static G4Scintillation method invoked through a pointer.
+    + constructors/ions:
+      o INCL++ was incorrectly used up to 48 GeV for deuteron, triton,
+        He3 and alpha. Changed the upper limit for ions to 18*3 GeV.
+    + lists:
+      o Registered model to handle neutron capture above 20 MeV in in LBE list.
+        Addressing problem report #1562.
+
+  o Run:
+    ---
+    + Changed order of setting world volume pointer to the transportation
+      manager for worker thread to be the same as the master thread and the
+      sequential mode, i.e. prior to invoking ConstructSDandField().
+      Addressing problem report #1561.
+    + Making sure worker threads re-build physics tables as well when the
+      master thread is requested to rebuild.
+
+  o Track:
+    -----
+    + Corrected message from CheckIt() in G4VParticleChange and
+      G4ParticleChangeForDecay.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + advanced/amsEcal:
+      o Added protection against division by zero in RunAction.
+        Addressing problem report #1522.
+    + advanced/ChargeExchangeMC:
+      o Fixed few compiler warnings for shadowed variables).
+        FTFP_BERT replaces deprecated QGSP_BERT.
+    + advanced/hadrontherapy:
+      o Fixed missing inizialization of data in PassiveProtonBeamLine class.
+    + advanced/nanobeam:
+      o Made code thread safe to overcome unsafe CLHEP matrix inversion
+        in RunAction.
+    + advanced/xray_fluorescence:
+      o Fixed shadowed variables and compilation errors when AIDA is available.
+    + extended/analysis/B1Con:
+      o Increased number of events of run1.mac.
+    + extended/electromagnetic/TestEm4:
+      o Updated vis.mac macro and printout from run.
+    + extended/electromagnetic/TestEm8:
+      o HistoManager: more accurate computation of mean energy deposition;
+        fixed output of rms of mean energy.
+    + extended/exoticphysics/phonon:
+      o Fix in CMake script to copy data in build directory.
+    + extended/field/field04:
+      o Replaced Update() method and commands with ReinitializeGeometry().
+        Clean volumes and solids stores in Construct().
+      o Updated gui.mac: allow for execution of vis.mac first to make the
+        command added in menus available. Corrected wireframe parameter.
+      o Avoid static method being invoked by a pointer. Fixed uninitialized
+        variables in F04GlobalField.
+    + extended/field/field05:
+      o Corrected History.
+    + extended/optical/LXe:
+      o Updated gui.mac: allow for execution of vis.mac first to make the
+        command added in menus available. Corrected wireframe parameter.
+      o Rearrange /optics_engine commands in LXe.in, according to what
+        is allowed through G4OpticalPhysics.
+    + extended/optical/OpNovice:
+      o Fixed race condision issue in OpNovicePhysicsList.
+        Addressing problem report #1539.
+        Limit invokation of static method only from master/sequential.
+      o Updated gui.mac: allow for execution of vis.mac first to make the
+        command added in menus available. Corrected wireframe parameter.
+    + extended/optical/wls:
+      o Updated gui.mac: allow for execution of vis.mac first to make the
+        command added in menus available. Corrected wireframe parameter.
+    + extended/radioactivedecay/rdecay02:
+      o Fixed problem identified in boudary chack mode in exrdmHisto::AddRow().
+      o Fix in exrdmAnalysisManager::EndOfEvent().
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 10.0.
+  o  Technical notes distributed for release 10.0 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 10.0.p01 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

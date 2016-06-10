@@ -235,10 +235,10 @@ inline bool HepBoost::isNear(const HepBoost & b, double epsilon) const{
 // - Protected method:
 inline HepLorentzVector
 HepBoost::vectorMultiplication(const HepLorentzVector & p) const {
-  register double x = p.x();
-  register double y = p.y();
-  register double z = p.z();
-  register double t = p.t();
+  double x = p.x();
+  double y = p.y();
+  double z = p.z();
+  double t = p.t();
   return HepLorentzVector( rep_.xx_*x + rep_.xy_*y + rep_.xz_*z + rep_.xt_*t,
 			   rep_.xy_*x + rep_.yy_*y + rep_.yz_*z + rep_.yt_*t,
 			   rep_.xz_*x + rep_.yz_*y + rep_.zz_*z + rep_.zt_*t,

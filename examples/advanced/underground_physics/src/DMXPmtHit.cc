@@ -49,8 +49,9 @@
 
 #include <iomanip>
 
-G4Allocator<DMXPmtHit> DMXPmtHitsAllocator;
+G4ThreadLocal G4Allocator<DMXPmtHit> *DMXPmtHitsAllocator;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DMXPmtHit::DMXPmtHit() {
   
@@ -60,8 +61,11 @@ DMXPmtHit::DMXPmtHit() {
 }
 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 DMXPmtHit::~DMXPmtHit() {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DMXPmtHit::DMXPmtHit(const DMXPmtHit& right) : G4VHit(right) {
 
@@ -70,7 +74,7 @@ DMXPmtHit::DMXPmtHit(const DMXPmtHit& right) : G4VHit(right) {
 
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 const DMXPmtHit& DMXPmtHit::operator=(const DMXPmtHit& right) {
 
@@ -81,6 +85,7 @@ const DMXPmtHit& DMXPmtHit::operator=(const DMXPmtHit& right) {
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 int DMXPmtHit::operator==(const DMXPmtHit& right) const {
 
@@ -88,7 +93,7 @@ int DMXPmtHit::operator==(const DMXPmtHit& right) const {
 
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DMXPmtHit::Draw()  {
 
@@ -107,6 +112,7 @@ void DMXPmtHit::Draw()  {
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DMXPmtHit::Print() {
 

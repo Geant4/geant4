@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALRunAction.cc 67976 2013-03-13 10:23:17Z gcosmo $
+// $Id: FCALRunAction.cc 84371 2014-10-14 12:51:18Z gcosmo $
 //
 // 
 
@@ -42,14 +42,32 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-FCALRunAction::FCALRunAction() : 
-  fOutputFileName("fcal.root")
-{;}
+FCALRunAction::FCALRunAction()
+{
+    // Get/create analysis manager
+    G4AnalysisManager* man = G4AnalysisManager::Instance();
+    
+    // Open an output file
+    G4cout << "Opening output file " << man->GetFileName() << " ... ";
+    man->SetFileName("fcal");
+    man->SetFirstHistoId(1);
+    G4cout << " done" << G4endl;
+    
+    // Create histogram(s)
+    man->CreateH1("1","Number of Out Of World", 100,0.,10.);
+    man->CreateH1("2","Number of Secondaries", 100,0.,100.);
+    man->CreateH1("3","Electromagnetic Energy/MeV", 100,0.,100.);
+    man->CreateH1("4","hadronic Energy/MeV", 100,10.,60.);
+    
+
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 FCALRunAction::~FCALRunAction()
-{;}
+{
+ delete G4AnalysisManager::Instance();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -58,27 +76,14 @@ void FCALRunAction::BeginOfRunAction(const G4Run* aRun)
  
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4UImanager* UI = G4UImanager::GetUIpointer(); 
-      UI->ApplyCommand("/vis/scene/notifyHandlers");
-    }
-
-  // Get/create analysis manager
-  G4AnalysisManager* man = G4AnalysisManager::Instance();
-
-  // Open an output file
-  G4cout << "Opening output file " << fOutputFileName << " ... ";
-  man->OpenFile(fOutputFileName);
-  man->SetFirstHistoId(1);
-  G4cout << " done" << G4endl;
-
-  // Create histogram(s)
-  man->CreateH1("1","Number of Out Of World", 100,0.,10.); 
-  man->CreateH1("2","Number of Secondaries", 100,0.,100.);
-  man->CreateH1("3","Electromagnetic Energy/MeV", 100,0.,100.);
-  man->CreateH1("4","hadronic Energy/MeV", 100,10.,60.);
- 
+//  if (G4VVisManager::GetConcreteInstance())
+//    {
+//      G4UImanager* UI = G4UImanager::GetUIpointer(); 
+//      UI->ApplyCommand("/vis/scene/notifyHandlers");
+//    }
+    
+    G4AnalysisManager* man = G4AnalysisManager::Instance();
+    man->OpenFile();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -86,9 +91,9 @@ void FCALRunAction::BeginOfRunAction(const G4Run* aRun)
 void FCALRunAction::EndOfRunAction(const G4Run* )
 {
 
-  if (G4VVisManager::GetConcreteInstance()) {
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-  }
+//  if (G4VVisManager::GetConcreteInstance()) {
+//     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
+//  }
 
   // Save histograms
   G4AnalysisManager* man = G4AnalysisManager::Instance();

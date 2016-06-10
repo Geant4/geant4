@@ -45,18 +45,22 @@
 
 #include "globals.hh"
 #include "geomwdefs.hh"
+#include "G4AutoLock.hh"
 
 template <class T>  // T is the private data from the object to be split
 class G4GeomSplitter
 {
   public:
 
-    G4GeomSplitter() : totalobj(0), totalspace(0), sharedOffset(0) {}
+    G4GeomSplitter() : totalobj(0), totalspace(0), sharedOffset(0) {
+    	G4MUTEXINIT(mutex);
+    }
 
     G4int CreateSubInstance()
       // Invoked by the master or work thread to create a new subinstance
       // whenever a new split class instance is created.
     {
+      G4AutoLock l(&mutex);
       totalobj++;
       if (totalobj > totalspace)
       {
@@ -74,6 +78,7 @@ class G4GeomSplitter
 
     void CopyMasterContents()
     {
+      G4AutoLock l(&mutex);
       memcpy(offset, sharedOffset, totalspace * sizeof(T));
     }
   
@@ -81,6 +86,7 @@ class G4GeomSplitter
       // Invoked by each worker thread to copy all the subinstance array
       // from the master thread.
     {
+      G4AutoLock l(&mutex);
       if (offset)  { return; }
       offset = (T *) realloc(offset, totalspace * sizeof(T));
       if (offset == 0)
@@ -88,6 +94,7 @@ class G4GeomSplitter
         G4Exception("G4GeomSplitter::SlaveCopySubInstanceArray()",
                     "OutOfMemory", FatalException, "Cannot malloc space!");
       }
+      l.unlock();
       CopyMasterContents();
     }
 
@@ -96,6 +103,7 @@ class G4GeomSplitter
       // initialize each subinstance using a particular method defined by
       // the subclass.
     {
+      G4AutoLock l(&mutex);
       if (offset)  { return; }
       offset = (T *) realloc(offset, totalspace * sizeof(T));
 
@@ -116,12 +124,14 @@ class G4GeomSplitter
     //  to copy again all the subinstance array from the master thread.
     // To cope with user's changes in Geometry - e.g. change of material in a volume
     {
+      G4AutoLock l(&mutex);
       if (!offset)  {
         SlaveInitializeSubInstance();
         G4Exception("G4GeomSPlitter::SlaveReCopySubInstance()",
                     "MissingInitialisation", JustWarning,
                     "Must be called after Initialisation or first Copy.");
       }
+      l.unlock();
       CopyMasterContents();
     }
   
@@ -187,6 +197,7 @@ class G4GeomSplitter
     G4int totalobj;
     G4int totalspace;
     T* sharedOffset;
+    G4Mutex mutex;
 };
 
 #endif

@@ -14,6 +14,46 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+07 November 2014 Vladimir Ivanchenko (hadr-util-V10-00-08)
+--------------------------------------------------------
+- G4HadSecondary - added creator
+
+30 October 2014 Vladimir Ivanchenko (hadr-util-V10-00-07)
+--------------------------------------------------------
+- G4HadFinalState, G4HadSecondary, G4ReactionProduct - added creator
+    model type to secondary, moved simple methods inline
+
+05 June 2014 Alberto Ribon       (hadr-util-V10-00-06)
+------------------------------------------------------
+- Removed G4ReactionKinematics and G4ReactionDynamics classes. 
+
+19 May 2014 Gunter Folger        (hadr-util-V10-00-05)
+------------------------------------------------------
+- remove temp. method GetDefintion_asConst()
+
+26 March 2014 Gunter Folger      (hadr-util-V10-00-04)
+------------------------------------------------------
+- G4ReactionDynamics: convert to const G4ParticleDefinition*
+
+10 March 2014 Gunter Folger      (hadr-util-V10-00-03)
+------------------------------------------------------
+- ReactionProduct::GetDefinition() returns a const G4ParticleDefinition*
+ 
+05 March 2014 Gunter Folger      (hadr-util-V10-00-02)
+------------------------------------------------------
+- remove not needed several const_casts in G4HadronicWhiteBoard.
+
+20 February 2014 Gunter Folger   (hadr-util-V10-00-01)
+------------------------------------------------------
+- G4ReactionProduct: make G4ParticleDefinition* const.
+    add temp. method returning const G4ParticleDefinition* GetDefintion_asConst()
+	 will replace GetDefinition() once hadronics converted.  
+
+22 January 2014  Gabriele Cosmo  (hadr-util-V10-00-00)
+------------------------------------------------------
+- Cleanup of automatic TLS data conversion in G4ReactionProduct,
+  G4HadSignalHandler and G4HadronicWhiteBoard.
+
 02 May 2013  Alberto Ribon  (hadr-util-V09-06-00)
 -------------------------------------------------
 - For thread safety, replaced CLHEP::RandFlat with G4RandFlat in

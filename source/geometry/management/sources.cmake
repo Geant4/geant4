@@ -11,12 +11,13 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 67975 2013-03-13 10:19:44Z gcosmo $
+# $Id: sources.cmake 85608 2014-10-31 11:23:30Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
 # List external includes needed.
 include_directories(${CLHEP_INCLUDE_DIRS})
+include_directories(${USOLIDS_INCLUDE_DIRS})
 
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
@@ -63,6 +64,7 @@ GEANT4_DEFINE_MODULE(NAME G4geometrymng
         G4SmartVoxelStat.hh
         G4SolidStore.hh
         G4TouchableHandle.hh
+        G4USolid.hh
         G4VCurvedTrajectoryFilter.hh
         G4VNestedParameterisation.hh
         G4VPVDivisionFactory.hh
@@ -102,6 +104,7 @@ GEANT4_DEFINE_MODULE(NAME G4geometrymng
         G4SmartVoxelProxy.cc
         G4SmartVoxelStat.cc
         G4SolidStore.cc
+        G4USolid.cc
         G4VCurvedTrajectoryFilter.cc
         G4VNestedParameterisation.cc
         G4VPVDivisionFactory.cc
@@ -121,6 +124,7 @@ GEANT4_DEFINE_MODULE(NAME G4geometrymng
         G4intercoms
         G4materials
     LINK_LIBRARIES
+        ${USOLIDS_LIBRARIES}
 )
 
 # List any source specific properties here

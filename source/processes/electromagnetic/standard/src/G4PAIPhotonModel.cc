@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIPhotonModel.cc 76879 2013-11-18 12:44:54Z gcosmo $
+// $Id: G4PAIPhotonModel.cc 87015 2014-11-21 16:24:10Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -143,6 +143,10 @@ G4PAIPhotonModel::~G4PAIPhotonModel()
   if( fPAIplasmonTable )
   {
         delete fPAIplasmonTable;
+  }
+  if( fProtonEnergyVector )
+  {
+        delete fProtonEnergyVector;
   }
 }
 

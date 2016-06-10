@@ -31,13 +31,17 @@
 
 
 G4MapCache< const G4LogicalVolume*, G4VBiasingOperator* > G4VBiasingOperator::fLogicalToSetupMap;
-G4VectorCache< G4VBiasingOperator* > G4VBiasingOperator::fOperators;
+G4VectorCache< G4VBiasingOperator* >                      G4VBiasingOperator::fOperators;
+G4Cache< G4BiasingOperatorStateNotifier* >                G4VBiasingOperator::fStateNotifier(0);
 
 
 G4VBiasingOperator::G4VBiasingOperator(G4String name)
   : fName(name)
 {
   fOperators.Push_back(this);
+
+  if ( fStateNotifier.Get() == 0 ) fStateNotifier.Put( new G4BiasingOperatorStateNotifier() );
+
 }
 
 G4VBiasingOperator::~G4VBiasingOperator()
@@ -74,41 +78,20 @@ G4VBiasingOperator* G4VBiasingOperator::GetBiasingOperator(const G4LogicalVolume
 G4VBiasingOperation* G4VBiasingOperator::GetProposedOccurenceBiasingOperation(const G4Track* track, const G4BiasingProcessInterface* callingProcess)
 {
   fOccurenceBiasingOperation = ProposeOccurenceBiasingOperation(track, callingProcess);
-  // G4cout << GetName() << " Occurence : ";
-  // if ( fOccurenceBiasingOperation ) G4cout << fOccurenceBiasingOperation->GetName() << G4endl;
-  //  else G4cout << " (none) " << G4endl;
   return fOccurenceBiasingOperation;
 }
 
 G4VBiasingOperation* G4VBiasingOperator::GetProposedFinalStateBiasingOperation(const G4Track* track, const G4BiasingProcessInterface* callingProcess)
 {
   fFinalStateBiasingOperation = ProposeFinalStateBiasingOperation(track, callingProcess); 
-   // G4cout << GetName() << " Final State : ";
-   // if ( fFinalStateBiasingOperation ) G4cout << fFinalStateBiasingOperation->GetName() << G4endl;
-   // else G4cout << " (none) " << G4endl;
   return fFinalStateBiasingOperation;
 }
 
 G4VBiasingOperation* G4VBiasingOperator::GetProposedNonPhysicsBiasingOperation(const G4Track* track, const G4BiasingProcessInterface* callingProcess)
 {
   fNonPhysicsBiasingOperation = ProposeNonPhysicsBiasingOperation(track, callingProcess);
-   // G4cout << GetName() << " Non Physics : ";
-   // if ( fNonPhysicsBiasingOperation ) G4cout << fNonPhysicsBiasingOperation->GetName() << G4endl;
-   // else G4cout << " (none) " << G4endl;
   return fNonPhysicsBiasingOperation;
 }
-
-// void G4VBiasingOperator::RegisterSecondariesBirth( G4VBiasingOperation* operation, const G4VParticleChange* pChange )
-// {
-//   for (G4int i2nd = 0; i2nd < pChange->GetNumberOfSecondaries (); i2nd++)
-//     RegisterSecondaryBirth( operation, pChange->GetSecondary (i2nd) );
-// }
-
-// void G4VBiasingOperator::RegisterSecondaryBirth( G4VBiasingOperation* operation, const G4Track* track )
-// {
-//   //  G4cout << " --> Registering operation, track = " << operation->GetName() << " " << track << G4endl;
-//   fSecondaryBirthOperation[track] = operation;
-// }
 
 const G4VBiasingOperation* G4VBiasingOperator::GetBirthOperation( const G4Track* track )
 {
@@ -124,17 +107,6 @@ void G4VBiasingOperator::ReportOperationApplied( const G4BiasingProcessInterface
 						 const G4VParticleChange*   particleChangeProduced )
 {
   fPreviousBiasingAppliedCase = biasingCase;
-  // if ( operationApplied != 0 )
-  //   {
-  //     if ( operationApplied->GetRememberSecondaries() )
-  // 	{
-  // 	  for (G4int i2nd = 0; i2nd < particleChangeProduced->GetNumberOfSecondaries (); i2nd++)
-  // 	    new G4BiasingTrackData( particleChangeProduced->GetSecondary (i2nd),
-  // 				    operationApplied,
-  // 				    this,
-  // 				    callingProcess);
-  // 	}
-  //   }
   fPreviousAppliedOccurenceBiasingOperation  = 0;
   fPreviousAppliedFinalStateBiasingOperation = 0;
   fPreviousAppliedNonPhysicsBiasingOperation = 0;
@@ -174,17 +146,6 @@ void G4VBiasingOperator::ReportOperationApplied( const G4BiasingProcessInterface
 						 const G4VParticleChange*               particleChangeProduced )
 {
   fPreviousBiasingAppliedCase = biasingCase;
-  // G4VBiasingOperation* operation(finalStateOperationApplied != 0 ? finalStateOperationApplied : occurenceOperationApplied);
-  // G4bool remember = occurenceOperationApplied->GetRememberSecondaries();
-  // if ( finalStateOperationApplied != 0 ) remember = remember || finalStateOperationApplied->GetRememberSecondaries();
-  // if ( remember )
-  //   {
-  //     for (G4int i2nd = 0; i2nd < particleChangeProduced->GetNumberOfSecondaries (); i2nd++)
-  // 	new G4BiasingTrackData( particleChangeProduced->GetSecondary (i2nd),
-  // 				operation,
-  // 				this,
-  // 				callingProcess);
-  //   }
   fPreviousAppliedOccurenceBiasingOperation  =  occurenceOperationApplied;
   fPreviousAppliedFinalStateBiasingOperation = finalStateOperationApplied;
   OperationApplied( callingProcess, biasingCase, occurenceOperationApplied, weightForOccurenceInteraction, finalStateOperationApplied, particleChangeProduced );
@@ -239,3 +200,29 @@ void G4VBiasingOperator::OperationApplied( const G4BiasingProcessInterface*, G4B
 					   G4VBiasingOperation*,  G4double,
 					   G4VBiasingOperation*, const G4VParticleChange* )
 {}
+
+
+// ----------------------------------------------------------------------------
+// -- state machine to get biasing operators messaged at the beginning of runs:
+// ----------------------------------------------------------------------------
+
+G4BiasingOperatorStateNotifier::G4BiasingOperatorStateNotifier()
+: G4VStateDependent()
+{
+  fPreviousState =  G4State_PreInit;
+}
+
+G4BiasingOperatorStateNotifier::~G4BiasingOperatorStateNotifier()
+{}
+
+G4bool G4BiasingOperatorStateNotifier::Notify( G4ApplicationState requestedState )
+{
+  if ( ( fPreviousState == G4State_Idle ) && ( requestedState == G4State_GeomClosed ) )
+    {
+      for ( size_t i = 0 ; i < G4VBiasingOperator::fOperators.Size() ; i++ ) G4VBiasingOperator::fOperators[i]->StartRun();
+    }
+
+  fPreviousState = requestedState;
+  
+  return true;
+}

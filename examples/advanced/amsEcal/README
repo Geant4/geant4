@@ -1,4 +1,4 @@
-$Id: README 68740 2013-04-05 09:56:39Z gcosmo $
+$Id: README 83010 2014-07-24 14:53:07Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -27,12 +27,11 @@ $Id: README 68740 2013-04-05 09:56:39Z gcosmo $
  2- PHYSICS LISTS
  
   Physics lists can be local (eg. in this example) or from G4 kernel
-  physics_lists subdirectory.
+  (physics_lists subdirectory).
      
-  - "emstandard_local standard EM physics with current 'default' options.
-                      These options are explicited in PhysListEmStandard
+  - "local" standard EM physics with current 'default' options.
     
-  From geant4/source/physics_lists/builders:	 
+  From geant4/source/physics_lists/constructors:	 
     - "emstandard_opt0" standard EM physics with all default options
     - "emstandard_opt1" best CPU performance standard physics for LHC
     - "emstandard_opt2"     
@@ -41,7 +40,7 @@ $Id: README 68740 2013-04-05 09:56:39Z gcosmo $
   Physics lists and options can be (re)set with UI commands
     
   Please, notice that options set through G4EmProcessOPtions are global, eg
-  for all particle types. In G4 builders, it is shown how to set options per
+  for all particle types. In G4 constructors, it is shown how to set options per
   particle type.
         	    
  3- PRIMARY GENERATOR : mono-energetic pencil beam
@@ -59,54 +58,41 @@ $Id: README 68740 2013-04-05 09:56:39Z gcosmo $
  4- DETECTOR RESPONSE
   
   The program computes the 'visible' energy, eg. the energy deposited
-  in scintillating fibers. The fibers are packed in pixels.
+  in scintillating fibers. 
    
-  It also computes the total energy deposited per pixel, either in absorber
+  It also computes the total energy deposited per layer, either in absorber
   material or in scintillator material.
   
-  The list of pixels fired are written event per event, on an ascii file.
-  The file is created at RunAction::BeginOfRun() and filled at EndOfEvent();
-  See EventAction::WritePixels() and the format description : eventFormat.txt
-  There is also the command /ams/event/writePixels  (true/false)
+  The list of fibers fired can be written event per event, on an ascii file.
+  The file is filled at EndOfEvent(); uncomment the function WriteFibers()
+  See EventAction::WriteFibers() and the format description : eventFormat.txt
    
   NB: visible energy can be corrected for Birk's attenuation:
       see the function SteppingAction::BirksAttenuation() (not activated)
    
- 5- HISTOGRAMS and NTUPLE
+ 5- HISTOGRAMS
         
-  The Program contains 5 built-in 1D histograms, managed by HistoManager class 
-  and its Messenger. These histograms can be activated individually
-  with the command :
-  /ams/histo/setHisto id nbBins  valMin valMax unit 
+  The Program contains 5 built-in 1D histograms, managed by G4AnalysisManager. 
+  These histograms can be activated individually with the command :
+  /analysis/h1/set id nbBins  valMin valMax unit 
   where unit is the desired unit for the histo (MeV, keV, etc..)
   (see the macros xxxx.mac).
  
-	1	total visible energy in calorimeter (eg. summed all pixels) 
-	2	total deposit energy in calorimeter (eg. summed all pixels) 
-	3	visible energy per subModule (eg. longitudinal profile)
-	4	deposit energy per subModule (eg. longitudinal profile)
-	5	nb of radiation length seen by geantino	
+	1	total  energy in calorimeter (eg. summed all layers) 
+	2	vsible energy in calorimeter (eg. summed all layers) 
+	3	total energy per layer (eg. longitudinal profile)
+	4	visible energy per layer (eg. longitudinal profile)
+	5	visible energy per fiber (eg. lateral profile)	
 
-  Histograms can be viewed using ROOT or PAW. See below the note on AIDA.
+  Histograms can be viewed using ROOT.
  
   One can control the name and format of the histograms file with the command:
-  /ams/histo/setFileName  name  (default ecal)
-  /ams/histo/setFileType  type  (choice: hbook, root(default), XML)  
+  /analysis/setFileName  name  (default amsEcal)
+  /analysis/setFileType  type  (choice: root(default), XML, csv)  
    
   It is also possible to print selected histograms on an ascii file:
-  /ams/histo/printHisto id
-  All selected histos will be written on a file name.ascii (default ecal)
- 
-  An Ntuple is also predefined. It contains energies, visible and total,
-  per subModule and per event.
-  The Ntuple is activated with the command: /ams/histo/setNtuple 1  
- 	
-  Note that, by default, histograms are disabled. To activate them, uncomment 
-  the flag G4ANALYSIS_USE in GNUmakefile.
-
-  Before compilation of the example it is optimal to clean up old files:
-   gmake histclean
-   gmake
+  /analysis/h1/setAscii id
+  All selected histos will be written on a file name.ascii (default amsEcal)
     				
  6- VISUALIZATION
  
@@ -140,14 +126,8 @@ $Id: README 68740 2013-04-05 09:56:39Z gcosmo $
 	
  8- HANDLE RANDOM NUMBER SEEDS
  
-  The macro rndmSeed.mac shows how to create a set a random number seeds.
+  The macro rndmSeed.mac shows how to create a set of random number seeds.
   Here we save the seed at begin of each run (the number of events per run
   is arbitrary). The seeds are stored in subdirectory random.
    
-  Macro run2.mac shows how to start a run from one of these seeds. 
- 	   
- 9- USING HISTOGRAMS
-
-  To use histograms, at least one of the AIDA implementations should be 
-  available. See InstallAida.txt
-  
+  Macro rndmSeed.mac shows also how to start a run from one of these seeds. 

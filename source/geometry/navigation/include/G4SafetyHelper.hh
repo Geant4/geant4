@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SafetyHelper.hh 72309 2013-07-15 15:52:17Z gcosmo $
+// $Id: G4SafetyHelper.hh 81060 2014-05-20 09:12:39Z gcosmo $
 //
 //
 // class G4SafetyHelper
@@ -83,6 +83,22 @@ public: // with description
   void ReLocateWithinVolume(const G4ThreeVector& pGlobalPoint );
      //
      // Relocate the point in the volume of interest
+
+  
+  G4bool RecheckDistanceToCurrentBoundary(
+     const G4ThreeVector &pGlobalPoint,
+     const G4ThreeVector &pDirection,
+     const G4double pCurrentProposedStepLength,
+     G4double  *prDistance,
+     G4double  *prNewSafety= 0)const;
+   // Trial method for checking potential displacement for MS
+   // Check new Globalpoint, to see whether it is in current volume
+   // (mother) and not in potential entering daughter.
+   // If in mother, check distance to boundary along pDirection.
+   // If in entering daughter, check distance back to boundary. 
+   // NOTE:
+   // Can be called only after ComputeStep is called - before ReLocation
+   // Deals only with current volume (and potentially entered)
 
   inline void EnableParallelNavigation(G4bool parallel);
      // 

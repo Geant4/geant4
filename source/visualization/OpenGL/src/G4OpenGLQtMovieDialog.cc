@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtMovieDialog.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4OpenGLQtMovieDialog.cc 81942 2014-06-06 15:54:20Z gcosmo $
 //
 // 
 
@@ -69,7 +69,7 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
     fParentViewer(parentViewer)
 {
   setModal(false);
-  setWindowTitle( tr( " Movie parameters" ));
+  setWindowTitle( tr( " Save as movie" ));
 
 
   // global layout

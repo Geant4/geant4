@@ -34,9 +34,9 @@ static inline double safe_acos (double x) {
 
 HepRotation & HepRotation::set(double phi1, double theta1, double psi1) {
 
-  register double sinPhi   = std::sin( phi1   ), cosPhi   = std::cos( phi1   );
-  register double sinTheta = std::sin( theta1 ), cosTheta = std::cos( theta1 );
-  register double sinPsi   = std::sin( psi1   ), cosPsi   = std::cos( psi1   );
+  double sinPhi   = std::sin( phi1   ), cosPhi   = std::cos( phi1   );
+  double sinTheta = std::sin( theta1 ), cosTheta = std::cos( theta1 );
+  double sinPsi   = std::sin( psi1   ), cosPsi   = std::cos( psi1   );
 
   rxx =   cosPsi * cosPhi - cosTheta * sinPhi * sinPsi;
   rxy =   cosPsi * sinPhi + cosTheta * cosPhi * sinPsi;

@@ -7,7 +7,7 @@
 #######################
 #
 /control/verbose 1
-/tracking/verbose 2
+/tracking/verbose 0
 /run/verbose 1
 /event/verbose 0
 
@@ -24,8 +24,8 @@
 # Initialize graphic system #     
 #############################
 # 
-/vis/scene/create
-/vis/open OGL
+#/vis/scene/create
+#/vis/open OGL
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 30 140 deg
 /vis/scene/add/trajectories
@@ -37,8 +37,11 @@
 ##########################
 # Set here the cut and the step max for the tracking. 
 # Suggested values of cut and step:
-#
-/Physics/setCuts 0.01 mm
+# Set cuts OUTSIDE the detector
+/run/setCut 0.01 mm
+# Set cuts ONLY inside the detector
+#/run/setCutForRegion DetectorLog 0.5 mm
+
 /Step/waterPhantomStepMax 0.01 mm 
 
 #########################

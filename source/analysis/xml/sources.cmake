@@ -11,12 +11,13 @@
 #
 # Generated on : 15/07/2013
 #
-# $Id: sources.cmake 72956 2013-08-14 14:24:35Z gcosmo $
+# $Id: sources.cmake 83748 2014-09-12 12:13:37Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
 # List external includes needed.
 include_directories(${CLHEP_INCLUDE_DIRS})
+include_directories(${EXPAT_INCLUDE_DIRS})
 
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
@@ -33,15 +34,23 @@ GEANT4_DEFINE_MODULE(NAME G4xml
     HEADERS
         G4XmlAnalysisManager.hh
         G4XmlAnalysisManager.icc
+        G4XmlAnalysisReader.hh
+        G4XmlAnalysisReader.icc
         G4XmlFileManager.hh
         G4XmlNtupleDescription.hh
         G4XmlNtupleManager.hh
+        G4XmlRFileManager.hh
+        G4XmlRNtupleDescription.hh
+        G4XmlRNtupleManager.hh
         g4xml_defs.hh
         g4xml.hh
     SOURCES
         G4XmlAnalysisManager.cc
+        G4XmlAnalysisReader.cc
         G4XmlFileManager.cc
         G4XmlNtupleManager.cc
+        G4XmlRFileManager.cc
+        G4XmlRNtupleManager.cc
     GRANULAR_DEPENDENCIES
         G4globman
         G4intercoms
@@ -51,6 +60,7 @@ GEANT4_DEFINE_MODULE(NAME G4xml
         G4global
         G4intercoms
     LINK_LIBRARIES
+        ${EXPAT_LIBRARIES}
 )
 
 # List any source specific properties here

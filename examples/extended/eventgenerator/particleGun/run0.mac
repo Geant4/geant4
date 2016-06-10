@@ -1,0 +1,14 @@
+/control/verbose 2
+/run/verbose 1
+#
+/run/initialize
+#
+/gunExample/selectGunAction 0
+#
+/analysis/setFileName run0
+/analysis/h1/set 5  110  -1.1 1.1 none	#cos(alfa) for gun #0
+/analysis/h1/set 6  130  -15. 375 deg	#psi for gun  #0
+#
+/run/printProgress 10000
+#
+/run/beamOn 100000

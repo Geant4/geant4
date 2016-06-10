@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4DigiManager.hh 80987 2014-05-19 10:50:22Z gcosmo $
 //
 
 #ifndef G4DigiManager_h
@@ -124,7 +124,10 @@ class G4DigiManager
         if(DCtable) delete DCtable;
         DCtable = dc;
       }
-
+  private:
+     //Disable copy constructor and assignement operator
+     G4DigiManager(const G4DigiManager&);
+     G4DigiManager& operator=(const G4DigiManager&);
 };
 
 

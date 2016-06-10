@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALSteppingVerbose.cc 67976 2013-03-13 10:23:17Z gcosmo $
+// $Id: FCALSteppingVerbose.cc 85605 2014-10-31 11:18:19Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -59,7 +59,7 @@ void FCALSteppingVerbose::StepInfo()
 {
   CopyState();
   
-  G4int prec = G4cout.precision(3);
+  std::streamsize prec = G4cout.precision(3);
 
   if( verboseLevel >= 1 ){
     if( verboseLevel >= 4 ) VerboseTrack();
@@ -150,7 +150,7 @@ void FCALSteppingVerbose::TrackingStarted()
 {
 
   CopyState();
-G4int prec = G4cout.precision(3);
+  std::streamsize prec = G4cout.precision(3);
   if( verboseLevel > 0 ){
 
     G4cout << std::setw( 5) << "Step#"      << " "
@@ -182,3 +182,4 @@ G4int prec = G4cout.precision(3);
   }
   G4cout.precision(prec);
 }
+

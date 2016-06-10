@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDigi.cc 66508 2012-12-19 10:16:45Z gcosmo $
+// $Id: GammaRayTelDigi.cc 82268 2014-06-13 13:47:30Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -38,7 +38,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 #include "GammaRayTelDigi.hh"
 
-G4Allocator<GammaRayTelDigi> GammaRayTelDigiAllocator;
+G4ThreadLocal G4Allocator<GammaRayTelDigi> *GammaRayTelDigiAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

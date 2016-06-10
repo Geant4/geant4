@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedComptonModel.cc 68046 2013-03-13 14:31:38Z gcosmo $
+// $Id: G4PolarizedComptonModel.cc 82755 2014-07-08 14:07:29Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -65,39 +65,37 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4PolarizedComptonModel::G4PolarizedComptonModel(const G4ParticleDefinition*,
-                                             const G4String& nam)
+						 const G4String& nam)
   : G4KleinNishinaCompton(0,nam),
     verboseLevel(0)
 {
-  crossSectionCalculator=new G4PolarizedComptonCrossSection();
+  crossSectionCalculator = new G4PolarizedComptonCrossSection();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4PolarizedComptonModel::~G4PolarizedComptonModel()
 {
-  if (crossSectionCalculator) delete crossSectionCalculator;
+  delete crossSectionCalculator;
 }
-
-
 
 G4double G4PolarizedComptonModel::ComputeAsymmetryPerAtom
                        (G4double gammaEnergy, G4double /*Z*/)
  
 {
- G4double asymmetry = 0.0 ;
+  G4double asymmetry = 0.0 ;
 
- G4double k0 = gammaEnergy / electron_mass_c2 ;
- G4double k1 = 1 + 2*k0 ;
+  G4double k0 = gammaEnergy / electron_mass_c2 ;
+  G4double k1 = 1 + 2*k0 ;
 
- asymmetry = -k0;
- asymmetry *= (k0 + 1.)*sqr(k1)*std::log(k1) - 2.*k0*(5.*sqr(k0) + 4.*k0 + 1.);
- asymmetry /= ((k0 - 2.)*k0  -2.)*sqr(k1)*std::log(k1) + 2.*k0*(k0*(k0 + 1.)*(k0 + 8.) + 2.);		
+  asymmetry = -k0;
+  asymmetry *= (k0 + 1.)*sqr(k1)*std::log(k1) - 2.*k0*(5.*sqr(k0) + 4.*k0 + 1.);
+  asymmetry /= ((k0 - 2.)*k0  -2.)*sqr(k1)*std::log(k1) + 2.*k0*(k0*(k0 + 1.)*(k0 + 8.) + 2.);		
 
- // G4cout<<"energy = "<<GammaEnergy<<"  asymmetry = "<<asymmetry<<"\t\t GAM = "<<k0<<G4endl;
- if (asymmetry>1.) G4cout<<"ERROR in G4PolarizedComptonModel::ComputeAsymmetryPerAtom"<<G4endl;
+  // G4cout<<"energy = "<<GammaEnergy<<"  asymmetry = "<<asymmetry<<"\t\t GAM = "<<k0<<G4endl;
+  if (asymmetry>1.) G4cout<<"ERROR in G4PolarizedComptonModel::ComputeAsymmetryPerAtom"<<G4endl;
 
- return asymmetry;
+  return asymmetry;
 }
 
 
@@ -113,39 +111,43 @@ G4double G4PolarizedComptonModel::ComputeCrossSectionPerAtom(
     G4KleinNishinaCompton::ComputeCrossSectionPerAtom(pd,kinEnergy,
 						      Z,A,cut,emax);
   G4double polzz = theBeamPolarization.p3()*theTargetPolarization.z();
-  if (polzz!=0) {
-    G4double asym=ComputeAsymmetryPerAtom(kinEnergy, Z);  
+  if (polzz > 0.0) {
+    G4double asym = ComputeAsymmetryPerAtom(kinEnergy, Z);  
     xs*=(1.+polzz*asym);
   }
   return xs;
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4PolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
-						const G4MaterialCutsCouple*,
-						const G4DynamicParticle* aDynamicGamma,
-						G4double,
-						G4double)
+void G4PolarizedComptonModel::SampleSecondaries(
+                              std::vector<G4DynamicParticle*>* fvect,
+                              const G4MaterialCutsCouple*,
+			      const G4DynamicParticle* aDynamicGamma,
+			      G4double, G4double)
 {
+  // do nothing below the threshold
+  if(aDynamicGamma->GetKineticEnergy() <= LowEnergyLimit()) { return; }
+
   const G4Track * aTrack = fParticleChange->GetCurrentTrack();
   G4VPhysicalVolume*  aPVolume  = aTrack->GetVolume();
   G4LogicalVolume*    aLVolume  = aPVolume->GetLogicalVolume();
 
-  if (verboseLevel>=1) 
+  if (verboseLevel >= 1) {
     G4cout<<"G4PolarizedComptonModel::SampleSecondaries in "
           <<  aLVolume->GetName() <<G4endl;
-
-  G4PolarizationManager * polarizationManager = G4PolarizationManager::GetInstance();
+  }
+  G4PolarizationManager * polarizationManager = 
+    G4PolarizationManager::GetInstance();
 
   // obtain polarization of the beam
   theBeamPolarization =  aDynamicGamma->GetPolarization();
   theBeamPolarization.SetPhoton();
 
   // obtain polarization of the media
-  const G4bool targetIsPolarized = polarizationManager->IsPolarized(aLVolume);
-  theTargetPolarization = polarizationManager->GetVolumePolarization(aLVolume);
+  G4bool targetIsPolarized = polarizationManager->IsPolarized(aLVolume);
+  theTargetPolarization = 
+    polarizationManager->GetVolumePolarization(aLVolume);
 
   // if beam is linear polarized or target is transversely polarized 
   // determine the angle to x-axis
@@ -155,17 +157,17 @@ void G4PolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
 
   // transfere theTargetPolarization 
   // into the gamma frame (problem electron is at rest)
-  if (targetIsPolarized)
+  if (targetIsPolarized) {
     theTargetPolarization.rotateUz(gamDirection0);
-
-  // The scattered gamma energy is sampled according to Klein - Nishina formula.
+  }
+  // The scattered gamma energy is sampled according to 
+  // Klein - Nishina formula.
   // The random number techniques of Butcher & Messel are used 
   // (Nuc Phys 20(1960),15).
   // Note : Effects due to binding of atomic electrons are negliged.
  
   G4double gamEnergy0 = aDynamicGamma->GetKineticEnergy();
   G4double E0_m = gamEnergy0 / electron_mass_c2 ;
-
 
   //
   // sample the energy rate of the scattered gamma 
@@ -178,8 +180,15 @@ void G4PolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
   G4double alpha1     = - std::log(eps0);
   G4double alpha2     = 0.5*(1.- epsilon0sq);
 
-  G4double polarization = theBeamPolarization.p3()*theTargetPolarization.p3();
+  G4double polarization = 
+    theBeamPolarization.p3()*theTargetPolarization.p3();
+
+  G4int nloop = 0;
   do {
+    ++nloop;
+    // false interaction if too many iterations
+    if(nloop > 1000) { return; }
+
     if ( alpha1/(alpha1+alpha2) > G4UniformRand() ) {
       epsilon   = std::exp(-alpha1*G4UniformRand());   // epsilon0**r
       epsilonsq = epsilon*epsilon; 
@@ -187,11 +196,10 @@ void G4PolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
     } else {
       epsilonsq = epsilon0sq + (1.- epsilon0sq)*G4UniformRand();
       epsilon   = std::sqrt(epsilonsq);
-    };
+    }
 
     onecost = (1.- epsilon)/(epsilon*E0_m);
     sint2   = onecost*(2.-onecost);
-
 
     G4double gdiced = 2.*(1./epsilon+epsilon);
     G4double gdist  = 1./epsilon + epsilon - sint2 
@@ -199,9 +207,11 @@ void G4PolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
 
     greject = gdist/gdiced;
 
-    if (greject>1) G4cout<<"ERROR in PolarizedComptonScattering::PostStepDoIt\n"
-			 <<" costh rejection does not work properly: "<<greject<<G4endl;
-
+    if (greject>1) {
+      G4cout<<"ERROR in PolarizedComptonScattering::PostStepDoIt\n"
+	    <<" costh rejection does not work properly: "<<greject
+	    <<G4endl;
+    }
   } while (greject < G4UniformRand());
  
   //
@@ -212,26 +222,32 @@ void G4PolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
   G4double sinTeta = std::sqrt (sint2);
   G4double Phi;
   do {
-    Phi     = twopi * G4UniformRand();
-     G4double gdiced = 1./epsilon + epsilon - sint2 
+    ++nloop;
+    // false interaction if too many iterations
+    if(nloop > 1000) { return; }
+
+    Phi = twopi * G4UniformRand();
+    G4double gdiced = 1./epsilon + epsilon - sint2 
        + std::abs(theBeamPolarization.p3())*
        ( std::abs((1./epsilon-epsilon)*cosTeta*theTargetPolarization.p3())
 	+(1.-epsilon)*sinTeta*(std::sqrt(sqr(theTargetPolarization.p1()) 
 				    + sqr(theTargetPolarization.p2()))))
-       +sint2*(std::sqrt(sqr(theBeamPolarization.p1()) + sqr(theBeamPolarization.p2())));
+       +sint2*(std::sqrt(sqr(theBeamPolarization.p1()) + 
+			 sqr(theBeamPolarization.p2())));
 
-     G4double gdist = 1./epsilon + epsilon - sint2 
+    G4double gdist = 1./epsilon + epsilon - sint2 
        + theBeamPolarization.p3()*
        ((1./epsilon-epsilon)*cosTeta*theTargetPolarization.p3()
 	+(1.-epsilon)*sinTeta*(std::cos(Phi)*theTargetPolarization.p1()+
 			       std::sin(Phi)*theTargetPolarization.p2()))
        -sint2*(std::cos(2.*Phi)*theBeamPolarization.p1()
 	       +std::sin(2.*Phi)*theBeamPolarization.p2());
-     greject = gdist/gdiced;
+    greject = gdist/gdiced;
 
-    if (greject>1.+1.e-10 || greject<0) G4cout<<"ERROR in PolarizedComptonScattering::PostStepDoIt\n"
-				      <<" phi rejection does not work properly: "<<greject<<G4endl;
-
+    if (greject>1.+1.e-10 || greject<0) {
+      G4cout<<"ERROR in PolarizedComptonScattering::PostStepDoIt\n"
+	    <<" phi rejection does not work properly: "<<greject<<G4endl;
+    }
     if (greject<1.e-3) {
       G4cout<<"ERROR in PolarizedComptonScattering::PostStepDoIt\n"
 	    <<" phi rejection does not work properly: "<<greject<<"\n";
@@ -241,7 +257,8 @@ void G4PolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
     }
      
   } while (greject < G4UniformRand());
-  G4double dirx = sinTeta*std::cos(Phi), diry = sinTeta*std::sin(Phi), dirz = cosTeta;
+  G4double dirx = sinTeta*std::cos(Phi), diry = sinTeta*std::sin(Phi), 
+    dirz = cosTeta;
 
   //
   // update G4VParticleChange for the scattered gamma
@@ -250,72 +267,56 @@ void G4PolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
   G4ThreeVector gamDirection1 ( dirx,diry,dirz );
   gamDirection1.rotateUz(gamDirection0);
   G4double gamEnergy1 = epsilon*gamEnergy0;
-  fParticleChange->SetProposedKineticEnergy(gamEnergy1);
 
-
-  if(gamEnergy1 > lowestGammaEnergy) {
+  G4double edep = 0.0;
+  if(gamEnergy1 > lowestSecondaryEnergy) {
     fParticleChange->ProposeMomentumDirection(gamDirection1);
+    fParticleChange->SetProposedKineticEnergy(gamEnergy1);
   } else { 
     fParticleChange->ProposeTrackStatus(fStopAndKill);
-    gamEnergy1 += fParticleChange->GetLocalEnergyDeposit();
-    fParticleChange->ProposeLocalEnergyDeposit(gamEnergy1);
+    fParticleChange->SetProposedKineticEnergy(0.0);
+    edep = gamEnergy1;
   }
  
-  //
-  // kinematic of the scattered electron
-  //
-
-  G4double eKinEnergy = gamEnergy0 - gamEnergy1;
-  G4ThreeVector eDirection = gamEnergy0*gamDirection0 - gamEnergy1*gamDirection1;
-  eDirection = eDirection.unit();
-
   // 
   // calculate Stokesvector of final state photon and electron
   //
-  G4ThreeVector  nInteractionFrame;
-  if((gamEnergy1 > lowestGammaEnergy) ||
-     (eKinEnergy > DBL_MIN)) {
+  G4ThreeVector  nInteractionFrame = 
+    G4PolarizationHelper::GetFrame(gamDirection1,gamDirection0);
 
-    // determine interaction plane
-//     nInteractionFrame = 
-//       G4PolarizationHelper::GetFrame(gamDirection1,eDirection);
-    if (gamEnergy1 > lowestGammaEnergy) 
-      nInteractionFrame = G4PolarizationHelper::GetFrame(gamDirection1,gamDirection0);
-    else 
-      nInteractionFrame = G4PolarizationHelper::GetFrame(gamDirection0, eDirection);
-
-    // transfere theBeamPolarization and theTargetPolarization 
-    // into the interaction frame (note electron is in gamma frame)
-    if (verboseLevel>=1) {
-      G4cout << "========================================\n";
-      G4cout << " nInteractionFrame = " <<nInteractionFrame<<"\n";
-      G4cout << " GammaDirection0 = " <<gamDirection0<<"\n";
-      G4cout << " gammaPolarization = " <<theBeamPolarization<<"\n";
-      G4cout << " electronPolarization = " <<theTargetPolarization<<"\n";
-    }
-
-    theBeamPolarization.InvRotateAz(nInteractionFrame,gamDirection0);
-    theTargetPolarization.InvRotateAz(nInteractionFrame,gamDirection0);
-
-    if (verboseLevel>=1) {
-      G4cout << "----------------------------------------\n";
-      G4cout << " gammaPolarization = " <<theBeamPolarization<<"\n";
-      G4cout << " electronPolarization = " <<theTargetPolarization<<"\n";
-      G4cout << "----------------------------------------\n";
-    }
-
-    // initialize the polarization transfer matrix
-    crossSectionCalculator->Initialize(epsilon,E0_m,0.,
-				       theBeamPolarization,
-				       theTargetPolarization,2);
+  // transfere theBeamPolarization and theTargetPolarization 
+  // into the interaction frame (note electron is in gamma frame)
+  if (verboseLevel>=1) {
+    G4cout << "========================================\n";
+    G4cout << " nInteractionFrame = " <<nInteractionFrame<<"\n";
+    G4cout << " GammaDirection0 = " <<gamDirection0<<"\n";
+    G4cout << " gammaPolarization = " <<theBeamPolarization<<"\n";
+    G4cout << " electronPolarization = " <<theTargetPolarization<<"\n";
   }
 
-  //  if(eKinEnergy > DBL_MIN)
-  {
+  theBeamPolarization.InvRotateAz(nInteractionFrame,gamDirection0);
+  theTargetPolarization.InvRotateAz(nInteractionFrame,gamDirection0);
+
+  if (verboseLevel>=1) {
+    G4cout << "----------------------------------------\n";
+    G4cout << " gammaPolarization = " <<theBeamPolarization<<"\n";
+    G4cout << " electronPolarization = " <<theTargetPolarization<<"\n";
+    G4cout << "----------------------------------------\n";
+  }
+
+  // initialize the polarization transfer matrix
+  crossSectionCalculator->Initialize(epsilon,E0_m,0.,
+				     theBeamPolarization,
+				     theTargetPolarization,2);
+  
+  if(gamEnergy1 > lowestSecondaryEnergy) {
+ 
     // in interaction frame
     // calculate polarization transfer to the photon (in interaction plane)
     finalGammaPolarization = crossSectionCalculator->GetPol2();
-    if (verboseLevel>=1) G4cout << " gammaPolarization1 = " <<finalGammaPolarization<<"\n";
+    if (verboseLevel>=1) {
+      G4cout << " gammaPolarization1 = " <<finalGammaPolarization<<"\n";
+    }
     finalGammaPolarization.SetPhoton();
 
     // translate polarization into particle reference frame
@@ -325,7 +326,8 @@ void G4PolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
     if (finalGammaPolarization.mag() > 1.+1.e-8){
       G4cout<<"ERROR in Polarizaed Compton Scattering !"<<G4endl;
       G4cout<<"Polarization of final photon more than 100%"<<G4endl;
-      G4cout<<finalGammaPolarization<<" mag = "<<finalGammaPolarization.mag()<<G4endl;
+      G4cout<<finalGammaPolarization<<" mag = "
+	    <<finalGammaPolarization.mag()<<G4endl;
     }
     if (verboseLevel>=1) {
       G4cout << " gammaPolarization1 = " <<finalGammaPolarization<<"\n";
@@ -333,37 +335,50 @@ void G4PolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
     }
   }
 
-  //    if (ElecKineEnergy > fminimalEnergy) {
-  {
-    finalElectronPolarization = crossSectionCalculator->GetPol3();
-    if (verboseLevel>=1) 
-      G4cout << " electronPolarization1 = " <<finalElectronPolarization<<"\n";
+  //
+  // kinematic of the scattered electron
+  //
+  G4double eKinEnergy = gamEnergy0 - gamEnergy1;
 
+  if (eKinEnergy > lowestSecondaryEnergy) {
+  
+    G4ThreeVector eDirection = 
+      gamEnergy0*gamDirection0 - gamEnergy1*gamDirection1;
+    eDirection = eDirection.unit();
+
+    finalElectronPolarization = crossSectionCalculator->GetPol3();
+    if (verboseLevel>=1) {
+      G4cout << " electronPolarization1 = " 
+	     <<finalElectronPolarization<<"\n";
+    }
     // transfer into particle reference frame
     finalElectronPolarization.RotateAz(nInteractionFrame,eDirection);
     if (verboseLevel>=1) {
-      G4cout << " electronPolarization1 = " <<finalElectronPolarization<<"\n";
+      G4cout << " electronPolarization1 = " 
+	     <<finalElectronPolarization<<"\n";
       G4cout << " ElecDirection = " <<eDirection<<"\n";
     }
-  }
-  if (verboseLevel>=1)
-    G4cout << "========================================\n";
-       
-
-  if(eKinEnergy > DBL_MIN) {
 
     // create G4DynamicParticle object for the electron.
-    G4DynamicParticle* aElectron = new G4DynamicParticle(theElectron,eDirection,eKinEnergy);
+    G4DynamicParticle* aElectron = 
+      new G4DynamicParticle(theElectron,eDirection,eKinEnergy);
     //store polarization vector
     if (finalElectronPolarization.mag() > 1.+1.e-8){
       G4cout<<"ERROR in Polarizaed Compton Scattering !"<<G4endl;
       G4cout<<"Polarization of final electron more than 100%"<<G4endl;
-      G4cout<<finalElectronPolarization<<" mag = "<<finalElectronPolarization.mag()<<G4endl;
+      G4cout<<finalElectronPolarization<<" mag = "
+	    <<finalElectronPolarization.mag()<<G4endl;
     }
     aElectron->SetPolarization(finalElectronPolarization.p1(),
 			       finalElectronPolarization.p2(),
 			       finalElectronPolarization.p3());
     fvect->push_back(aElectron);
+  } else {
+    edep += eKinEnergy;  
+  }
+  // energy balance
+  if(edep > 0.0) { 
+    fParticleChange->ProposeLocalEnergyDeposit(edep);
   }
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalBorderSurface.cc 73926 2013-09-17 07:59:06Z gcosmo $
+// $Id: G4LogicalBorderSurface.cc 80067 2014-03-31 13:48:09Z gcosmo $
 //
 // --------------------------------------------------------------------
 // G4LogicalBorderSurface Implementation
@@ -88,7 +88,7 @@ G4LogicalBorderSurface::~G4LogicalBorderSurface()
 // Operators
 //
 
-const G4LogicalBorderSurface&
+G4LogicalBorderSurface&
 G4LogicalBorderSurface::operator=(const G4LogicalBorderSurface &right)
 {
   if (&right == this) return *this;

@@ -1,4 +1,4 @@
-# $Id: TestEm18.in 66241 2012-12-13 18:34:42Z gunter $
+# $Id: TestEm18.in 82401 2014-06-18 14:43:54Z gcosmo $
 #
 # macro file for TestEm18.cc
 #
@@ -10,7 +10,7 @@
 #
 /testem/phys/addPhysics standard
 #
-/testem/phys/setCuts 1 mm
+/run/setCut 1 mm
 #
 /run/initialize
 #

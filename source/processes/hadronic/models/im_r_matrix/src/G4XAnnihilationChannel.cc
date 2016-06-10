@@ -94,8 +94,8 @@ G4double G4XAnnihilationChannel::CrossSection(const G4KineticTrack& trk1,
   G4double sigma = 0.;
   G4double eCM = (trk1.Get4Momentum() + trk2.Get4Momentum()).mag();
 
-  G4ParticleDefinition* def1 = trk1.GetDefinition();
-  G4ParticleDefinition* def2 = trk2.GetDefinition();
+  const G4ParticleDefinition* def1 = trk1.GetDefinition();
+  const G4ParticleDefinition* def2 = trk2.GetDefinition();
 
   G4int J1 = def1->GetPDGiSpin();
   G4int J2 = def2->GetPDGiSpin();
@@ -200,8 +200,8 @@ G4double G4XAnnihilationChannel::NormalizedClebsch(const G4KineticTrack& trk1,
                                                    const G4KineticTrack& trk2) const
 {
   G4double cleb = 0.;
-  G4ParticleDefinition* def1 = trk1.GetDefinition();
-  G4ParticleDefinition* def2 = trk2.GetDefinition();
+  const G4ParticleDefinition* def1 = trk1.GetDefinition();
+  const G4ParticleDefinition* def2 = trk2.GetDefinition();
 
   G4int iso31 = def1->GetPDGiIsospin3();
   G4int iso32 = def2->GetPDGiIsospin3();

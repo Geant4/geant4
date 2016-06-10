@@ -27,7 +27,7 @@
 /// \brief Main program of the persistency/gdml/G04 example
 //
 //
-// $Id: gdml_det.cc 68025 2013-03-13 13:43:46Z gcosmo $
+// $Id: gdml_det.cc 82285 2014-06-13 14:56:02Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -46,7 +46,7 @@
 
 #include "G04PrimaryGeneratorAction.hh"
 #include "G04DetectorConstruction.hh"
-#include "G04PhysicsList.hh"
+#include "FTFP_BERT.hh"
 #include "G04SensitiveDetector.hh"
 
 #ifdef G4VIS_USE
@@ -81,7 +81,7 @@ int main(int argc,char **argv)
 
    runManager->SetUserInitialization(new G04DetectorConstruction(
                                      parser.GetWorldVolume()));
-   runManager->SetUserInitialization(new G04PhysicsList);
+   runManager->SetUserInitialization(new FTFP_BERT);
    runManager->SetUserAction(new G04PrimaryGeneratorAction);
 
    runManager->Initialize();
@@ -95,7 +95,8 @@ int main(int argc,char **argv)
    G4SDManager* SDman = G4SDManager::GetSDMpointer();
    
    G4String trackerChamberSDname = "Tracker";
-   G04SensitiveDetector* aTrackerSD = new G04SensitiveDetector(trackerChamberSDname);
+   G04SensitiveDetector* aTrackerSD = 
+     new G04SensitiveDetector(trackerChamberSDname);
    SDman->AddNewDetector( aTrackerSD );
  
    ///////////////////////////////////////////////////////////////////////
@@ -103,7 +104,7 @@ int main(int argc,char **argv)
    // Example how to retrieve Auxiliary Information for sensitive detector
    //
    const G4GDMLAuxMapType* auxmap = parser.GetAuxMap();
-   std::cout << "Found " << auxmap->size()
+   G4cout << "Found " << auxmap->size()
              << " volume(s) with auxiliary information."
              << G4endl << G4endl;
    for(G4GDMLAuxMapType::const_iterator iter=auxmap->begin();
@@ -115,8 +116,8 @@ int main(int argc,char **argv)
      for (G4GDMLAuxListType::const_iterator vit=(*iter).second.begin();
           vit!=(*iter).second.end(); vit++)
      {
-       std::cout << "--> Type: " << (*vit).type
-                 << " Value: " << (*vit).value << std::endl;
+       G4cout << "--> Type: " << (*vit).type
+                 << " Value: " << (*vit).value << G4endl;
      }
    }
    G4cout << G4endl;
@@ -139,7 +140,8 @@ int main(int argc,char **argv)
                 << " to volume " << ((*iter).first)->GetName()
                 <<  G4endl << G4endl;
 
-         G4VSensitiveDetector* mydet = SDman->FindSensitiveDetector((*vit).value);
+         G4VSensitiveDetector* mydet = 
+           SDman->FindSensitiveDetector((*vit).value);
          if(mydet) 
          {
            G4LogicalVolume* myvol = (*iter).first;

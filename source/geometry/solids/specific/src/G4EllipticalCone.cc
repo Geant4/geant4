@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EllipticalCone.cc 72937 2013-08-14 13:20:38Z gcosmo $
+// $Id: G4EllipticalCone.cc 83572 2014-09-01 15:23:27Z gcosmo $
 //
 // Implementation of G4EllipticalCone class
 //
@@ -52,10 +52,14 @@
 #include "Randomize.hh"
 
 #include "G4VGraphicsScene.hh"
-#include "G4Polyhedron.hh"
 #include "G4VisExtent.hh"
 
-//#define G4SPECSDEBUG 1    
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
+}
 
 using namespace CLHEP;
 
@@ -68,8 +72,8 @@ G4EllipticalCone::G4EllipticalCone(const G4String& pName,
                                          G4double  pySemiAxis,
                                          G4double  pzMax,
                                          G4double  pzTopCut)
-  : G4VSolid(pName), fpPolyhedron(0), fCubicVolume(0.), fSurfaceArea(0.),
-    zTopCut(0.)
+  : G4VSolid(pName), fRebuildPolyhedron(false), fpPolyhedron(0),
+    fCubicVolume(0.), fSurfaceArea(0.), zTopCut(0.)
 {
 
   kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
@@ -104,8 +108,8 @@ G4EllipticalCone::G4EllipticalCone(const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4EllipticalCone::G4EllipticalCone( __void__& a )
-  : G4VSolid(a), fpPolyhedron(0), kRadTolerance(0.),
-    halfRadTol(0.), halfCarTol(0.), fCubicVolume(0.),
+  : G4VSolid(a), fRebuildPolyhedron(false), fpPolyhedron(0),
+    kRadTolerance(0.), halfRadTol(0.), halfCarTol(0.), fCubicVolume(0.),
     fSurfaceArea(0.), xSemiAxis(0.), ySemiAxis(0.), zheight(0.),
     semiAxisMax(0.), zTopCut(0.)
 {
@@ -117,6 +121,7 @@ G4EllipticalCone::G4EllipticalCone( __void__& a )
 //
 G4EllipticalCone::~G4EllipticalCone()
 {
+  delete fpPolyhedron; fpPolyhedron = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -125,7 +130,8 @@ G4EllipticalCone::~G4EllipticalCone()
 //
 G4EllipticalCone::G4EllipticalCone(const G4EllipticalCone& rhs)
   : G4VSolid(rhs),
-    fpPolyhedron(0), kRadTolerance(rhs.kRadTolerance),
+    fRebuildPolyhedron(false), fpPolyhedron(0),
+    kRadTolerance(rhs.kRadTolerance),
     halfRadTol(rhs.halfRadTol), halfCarTol(rhs.halfCarTol), 
     fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
     xSemiAxis(rhs.xSemiAxis), ySemiAxis(rhs.ySemiAxis), zheight(rhs.zheight),
@@ -149,11 +155,13 @@ G4EllipticalCone& G4EllipticalCone::operator = (const G4EllipticalCone& rhs)
 
    // Copy data
    //
-   fpPolyhedron = 0; kRadTolerance = rhs.kRadTolerance;
+   kRadTolerance = rhs.kRadTolerance;
    halfRadTol = rhs.halfRadTol; halfCarTol = rhs.halfCarTol;
    fCubicVolume = rhs.fCubicVolume; fSurfaceArea = rhs.fSurfaceArea;
    xSemiAxis = rhs.xSemiAxis; ySemiAxis = rhs.ySemiAxis;
    zheight = rhs.zheight; semiAxisMax = rhs.semiAxisMax; zTopCut = rhs.zTopCut;
+   fRebuildPolyhedron = false;
+   delete fpPolyhedron; fpPolyhedron = 0;
 
    return *this;
 }
@@ -1074,11 +1082,15 @@ G4Polyhedron* G4EllipticalCone::CreatePolyhedron () const
 G4Polyhedron* G4EllipticalCone::GetPolyhedron () const
 {
   if ( (!fpPolyhedron)
+    || fRebuildPolyhedron
     || (fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
         fpPolyhedron->GetNumberOfRotationSteps()) )
     {
+      G4AutoLock l(&polyhedronMutex);
       delete fpPolyhedron;
       fpPolyhedron = CreatePolyhedron();
+      fRebuildPolyhedron = false;
+      l.unlock();
     }
   return fpPolyhedron;
 }

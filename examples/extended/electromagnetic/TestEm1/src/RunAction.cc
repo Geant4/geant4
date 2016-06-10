@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm1/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 76293 2013-11-08 13:11:23Z gcosmo $
+// $Id: RunAction.cc 78397 2013-12-16 16:38:53Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,7 +73,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
 {    
   // save Rndm status
   ////G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  G4Random::showEngineStatus();
+  if (isMaster)  G4Random::showEngineStatus();
      
   // keep run condition
   if ( fPrimary ) { 
@@ -95,14 +95,10 @@ void RunAction::BeginOfRunAction(const G4Run*)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run*)
-{ 
-  // print Run summary
-  fRun->PrintSummary();    
-  
-  //compute and print statistics
-  G4int nbofEvents = fRun->GetNumberOfEvent();
-  if ( isMaster && nbofEvents ) fRun->ComputeStatistics();
-          
+{
+  // compute and print statistic 
+  if (isMaster) fRun->EndOfRun();
+             
   //save histograms      
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
   if ( analysisManager->IsActive() ) {
@@ -111,7 +107,7 @@ void RunAction::EndOfRunAction(const G4Run*)
   }    
   
   // show Rndm status
-  G4Random::showEngineStatus(); 
+  if (isMaster)  G4Random::showEngineStatus(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

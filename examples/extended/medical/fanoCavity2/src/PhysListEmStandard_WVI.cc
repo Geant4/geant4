@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity2/src/PhysListEmStandard_WVI.cc
 /// \brief Implementation of the PhysListEmStandard_WVI class
 //
-// $Id: PhysListEmStandard_WVI.cc 72961 2013-08-14 14:35:56Z gcosmo $
+// $Id: PhysListEmStandard_WVI.cc 83394 2014-08-21 14:39:09Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,6 +44,7 @@
 #include "G4MuMultipleScattering.hh"
 #include "G4WentzelVIModel.hh"
 #include "G4CoulombScattering.hh"
+#include "G4eCoulombScatteringModel.hh"
 
 #include "G4eIonisation.hh"
 #include "MyMollerBhabhaModel.hh"
@@ -96,11 +97,16 @@ void PhysListEmStandard_WVI::ConstructProcess()
       eMsc->AddEmModel(1, new G4WentzelVIModel()); 
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetEmModel(new MyMollerBhabhaModel);
+
+      G4CoulombScattering* cs = new G4CoulombScattering();
+      G4eCoulombScatteringModel* single = new G4eCoulombScatteringModel();
+      single->SetLowEnergyThreshold(1*eV);
+      cs->SetEmModel(single, 1);
                          
       pmanager->AddProcess(eMsc,                      -1, 1, 1);
       pmanager->AddProcess(eIoni,                     -1, 2, 2);
 ///      pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
-      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 3);
+      pmanager->AddProcess(cs,     -1,-1, 3);
                   
     } else if (particleName == "e+") {
       //positron

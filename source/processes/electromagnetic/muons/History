@@ -1,4 +1,4 @@
-$Id: History 75168 2013-10-29 09:20:52Z gcosmo $
+$Id: History 87062 2014-11-24 11:45:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,28 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21 November 14: V.Ivanchenko (emmuons-V10-00-04)
+- G4EnergyLossForExtrapolator - fixed problem of thread safe 
+    initialisation
+
+20 November 14: V.Ivanchenko (emmuons-V10-00-03)
+- G4EnergyLossForExtrapolator - fixed tread safety - correct 
+    initialisation per thread
+
+24 October 14: V.Ivanchenko (emmuons-V10-00-02)
+- G4TablesForExtrapolator - a new class which store EM tables 
+    shared between threads
+- G4EnergyLossForExtrapolator - data moved to the new class
+
+22 October 14: V.Ivanchenko (emmuons-V10-00-01)
+- G4MuPairProductionModel, G4MuBremsstrahlungModel, G4MuIonisation
+    used G4EmParameters
+
+8 September 14: V.Ivanchenko (emmuons-V10-00-00)
+- G4MuPairProductionModel, G4MuBremsstrahlungModel -
+    protection at initialisation for the case when user artifitially
+    reducing high energy limit of the model (bug #1670)
 
 28 October 13: V.Ivanchenko (emmuons-V09-06-24)
 - G4EnergyLossForExtrapolator - substitute G4eBremsstrahlungModel 

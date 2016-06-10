@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronStoppingProcess.hh 66367 2012-12-18 09:18:08Z gcosmo $
+// $Id: G4HadronStoppingProcess.hh 85517 2014-10-30 15:53:26Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -42,6 +42,7 @@
 //  20120928  M. Kelsey -- Add GetMeanLifeTime() here, instead of in base.
 //  20121004  K. Genser -- defined two argument constructor with defaults
 //  20121016  K. Genser -- Reverting to use one argument c'tor
+//  20140818  K. Genser -- Labeled tracks using G4PhysicsModelCatalog
 //
 //------------------------------------------------------------------------
 
@@ -109,6 +110,10 @@ private:
   G4HadronicInteraction* fEmCascade;
   G4HadronicInteraction* fBoundDecay;
 
+  const G4int emcID;
+  const G4int ncID;
+  const G4int dioID;
+
   // This is shadowing "result" in the cc file and
   // looks to be unnecessary.  Removed by DHW, 12 June 2012   
   // G4HadFinalState result;   
@@ -136,9 +141,3 @@ G4HadronStoppingProcess::SetBoundDecay(G4HadronicInteraction* ptr)
 }
 
 #endif
- 
-
-
-
-
-

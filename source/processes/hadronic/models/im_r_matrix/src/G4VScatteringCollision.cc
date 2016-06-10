@@ -53,6 +53,7 @@ G4VScatteringCollision::G4VScatteringCollision()
 G4VScatteringCollision::~G4VScatteringCollision()
 { 
   delete theAngularDistribution;
+  theAngularDistribution=0;
 }
 
 
@@ -139,10 +140,8 @@ G4KineticTrackVector* G4VScatteringCollision::FinalState(const G4KineticTrack& t
 	   << trk1.GetDefinition()->GetPDGCharge()<<" "<<trk1.GetDefinition()->GetParticleName()
 	   << trk2.GetDefinition()->GetPDGCharge()<<" "<<trk2.GetDefinition()->GetParticleName()<<G4endl;
   }
-  G4KineticTrack* final1 = new G4KineticTrack(const_cast<G4ParticleDefinition *>(OutputDefinitions[0]), 0.0,
-					      trk1.GetPosition(), p4Final1);
-  G4KineticTrack* final2 = new G4KineticTrack(const_cast<G4ParticleDefinition *>(OutputDefinitions[1]), 0.0,
-					      trk2.GetPosition(), p4Final2);
+  G4KineticTrack* final1 = new G4KineticTrack(OutputDefinitions[0], 0.0, trk1.GetPosition(), p4Final1);
+  G4KineticTrack* final2 = new G4KineticTrack(OutputDefinitions[1], 0.0, trk2.GetPosition(), p4Final2);
 
   G4KineticTrackVector* finalTracks = new G4KineticTrackVector;
 
@@ -178,6 +177,8 @@ double G4VScatteringCollision::SampleResonanceMass(const double poleMass,
   }
 }
 
-void G4VScatteringCollision::establish_G4MT_TLS_G4VScatteringCollision(){establish_G4MT_TLS_G4VCollision(); 
+void G4VScatteringCollision::establish_G4MT_TLS_G4VScatteringCollision()
+{
+  establish_G4MT_TLS_G4VCollision();
   theAngularDistribution = new G4AngularDistribution(true);
 }

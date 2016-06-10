@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -66,8 +67,11 @@ namespace G4INCL {
     const G4double effectiveNucleonMass = 938.2796;
     const G4double effectiveNucleonMass2 = 8.8036860777616e5;
     const G4double effectiveDeltaMass = 1232.0;
+    const G4double effectiveDeltaWidth = 130.0;
     const G4double effectivePionMass = 138.0;
-    extern G4ThreadLocal G4double effectiveDeltaDecayThreshold;
+    extern G4ThreadLocal G4double minDeltaMass;
+    extern G4ThreadLocal G4double minDeltaMass2;
+    extern G4ThreadLocal G4double minDeltaMassRndm;
 
     /// \brief Initialize the particle table
     void initialize(Config const * const theConfig = 0);
@@ -213,10 +217,7 @@ namespace G4INCL {
     typedef G4double (*FermiMomentumFn)(const G4int, const G4int);
     extern G4ThreadLocal FermiMomentumFn getFermiMomentum;
 
-    /** \brief Return the constant value of the Fermi momentum
-     *
-     * This function should always return PhysicalConstants::Pf.
-     */
+    /// \brief Return the constant value of the Fermi momentum
     G4double getFermiMomentumConstant(const G4int /*A*/, const G4int /*Z*/);
 
     /** \brief Return the constant value of the Fermi momentum - special for light
@@ -250,11 +251,20 @@ namespace G4INCL {
      */
     G4double getRPCorrelationCoefficient(const ParticleType t);
 
-    /// \brief Get the value of the neutron skin thickness
-    G4double getNeutronSkinThickness();
+    /// \brief Get the thickness of the neutron skin
+    G4double getNeutronSkin();
 
-    /// \brief Get the value of the additional neutron skin diffuseness
-    G4double getNeutronSkinAdditionalDiffuseness();
+    /// \brief Get the size of the neutron halo
+    G4double getNeutronHalo();
+
+    /// \brief Get the type of pion
+    ParticleType getPionType(const G4int isosp);
+
+    /// \brief Get the type of nucleon
+    ParticleType getNucleonType(const G4int isosp);
+
+    /// \brief Get the type of delta
+    ParticleType getDeltaType(const G4int isosp);
 
   }
 }

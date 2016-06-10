@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -58,22 +59,31 @@ namespace G4INCL {
     for(Int_t i=0; i<nParticles; ++i) {
       // determine the particle mass from the kinetic energy and the momentum;
       // this ensures consistency with the masses uses by the models
-      const Double_t mass = std::max(
-         0.5 * (px[i]*px[i]+py[i]*py[i]+pz[i]*pz[i]-EKin[i]*EKin[i]) / EKin[i],
-         0.0);
+      Double_t mass;
+      if(EKin[i]>0.) {
+        mass = std::max(
+                        0.5 * (px[i]*px[i]+py[i]*py[i]+pz[i]*pz[i]-EKin[i]*EKin[i]) / EKin[i],
+                        0.0);
+      } else {
+        INCL_WARN("Particle with null kinetic energy in fillInverseKinematics, cannot determine its mass:\n"
+                  << "  A=" << A[i] << ", Z=" << Z[i] << '\n'
+                  << "  EKin=" << EKin[i] << ", px=" << px[i] << ", py=" << py[i] << ", pz=" << pz[i] << '\n'
+                  << "  Falling back to the mass from the INCL ParticleTable" << '\n');
+        mass = ParticleTable::getRealMass(A[i], Z[i]);
+      }
 
       const Double_t ETot = EKin[i] + mass;
       const Double_t ETotPrime = gamma*(ETot - beta*pz[i]);
       EKinPrime[i] = ETotPrime - mass;
       pzPrime[i] = -gamma*(pz[i] - beta*ETot);
       const Double_t pPrime = std::sqrt(px[i]*px[i] + py[i]*py[i] + pzPrime[i]*pzPrime[i]);
-      const Double_t cosThetaPrime = pzPrime[i]/pPrime;
+      const Double_t cosThetaPrime = (pPrime>0.) ? (pzPrime[i]/pPrime) : 1.;
       if(cosThetaPrime>=1.)
         thetaPrime[i] = 0.;
       else if(cosThetaPrime<=-1.)
         thetaPrime[i] = 180.;
       else
-        thetaPrime[i] = 180.*std::acos(cosThetaPrime)/Math::pi;
+        thetaPrime[i] = Math::toDegrees(Math::arcCos(cosThetaPrime));
     }
   }
 #endif // INCL_INVERSE_KINEMATICS
@@ -95,8 +105,8 @@ namespace G4INCL {
       pznorm = 1.;
     else if(pznorm<-1.)
       pznorm = -1.;
-    theta[nParticles] = 180.*std::acos(pznorm)/G4INCL::Math::pi;
-    phi[nParticles] = 180.*std::atan2(pyRem[remnantIndex],pxRem[remnantIndex])/G4INCL::Math::pi;
+    theta[nParticles] = Math::toDegrees(Math::arcCos(pznorm));
+    phi[nParticles] = Math::toDegrees(std::atan2(pyRem[remnantIndex],pxRem[remnantIndex]));
 
     EKin[nParticles] = EKinRem[remnantIndex];
     origin[nParticles] = -1; // Origin: cascade

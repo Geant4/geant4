@@ -30,7 +30,7 @@ public:
          const std::string& a_name,
          const std::string& a_title,
          const std::string& a_store_cls)
-  : buffer(a_out,a_byte_swap,a_size)  
+  :buffer(a_out,a_byte_swap,a_size)
   ,m_name(a_name)
   ,m_title(a_title)
   ,m_store_cls(a_store_cls)

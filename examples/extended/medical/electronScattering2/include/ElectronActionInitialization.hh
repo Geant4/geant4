@@ -33,6 +33,8 @@
 
 #include "G4VUserActionInitialization.hh"
 
+class G4GeneralParticleSource;
+
 /// Action initialization class.
 ///
 
@@ -47,6 +49,7 @@ class ElectronActionInitialization : public G4VUserActionInitialization
     
 private:
     G4String fOutputFileSpec;
+    G4GeneralParticleSource* masterGPS;
 };
 
 #endif

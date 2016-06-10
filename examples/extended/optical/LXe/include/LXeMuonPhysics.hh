@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeMuonPhysics.hh 68752 2013-04-05 10:23:47Z gcosmo $
+// $Id: LXeMuonPhysics.hh 85587 2014-10-31 09:12:28Z gcosmo $
 //
 /// \file optical/LXe/include/LXeMuonPhysics.hh
 /// \brief Definition of the LXeMuonPhysics class
@@ -42,7 +42,7 @@
 #include "G4MuIonisation.hh"
 #include "G4hIonisation.hh"
 
-#include "G4MuonMinusCaptureAtRest.hh"
+#include "G4MuonMinusCapture.hh"
 
 class LXeMuonPhysics : public G4VPhysicsConstructor
 {
@@ -59,21 +59,6 @@ class LXeMuonPhysics : public G4VPhysicsConstructor
     // each physics process will be instantiated and
     // registered to the process manager of each particle type
     virtual void ConstructProcess();
-
-  protected:
-
-   // Muon physics
-   G4MuIonisation*         fMuPlusIonisation;
-   G4MuMultipleScattering* fMuPlusMultipleScattering;
-   G4MuBremsstrahlung*     fMuPlusBremsstrahlung;
-   G4MuPairProduction*     fMuPlusPairProduction;
-
-   G4MuIonisation*         fMuMinusIonisation;
-   G4MuMultipleScattering* fMuMinusMultipleScattering;
-   G4MuBremsstrahlung*     fMuMinusBremsstrahlung;
-   G4MuPairProduction*     fMuMinusPairProduction;
-
-   G4MuonMinusCaptureAtRest* fMuMinusCaptureAtRest;
 
 };
 

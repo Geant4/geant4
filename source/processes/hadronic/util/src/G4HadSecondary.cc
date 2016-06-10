@@ -27,8 +27,9 @@
 #include "G4DynamicParticle.hh"
 #include "G4HadronicException.hh"
 
-G4HadSecondary::G4HadSecondary(G4DynamicParticle * aT, G4double aWeight) :
-    theP(aT), theWeight(aWeight), theTime(-1)
+G4HadSecondary::G4HadSecondary(G4DynamicParticle * aT, G4double aWeight, 
+			       G4int mod) :
+  theP(aT), theWeight(aWeight), theTime(-1), theCreatorModel(mod)
 {
   if(aT->GetKineticEnergy()<0)
   {
@@ -36,3 +37,6 @@ G4HadSecondary::G4HadSecondary(G4DynamicParticle * aT, G4double aWeight) :
     "ATTEMPTING TO CREATE A SECONDARY WITH NEGATIVE KINETIC ENERGY.");
   }
 }
+
+G4HadSecondary::~G4HadSecondary()
+{}

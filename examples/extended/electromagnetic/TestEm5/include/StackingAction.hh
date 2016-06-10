@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/include/StackingAction.hh
 /// \brief Definition of the StackingAction class
 //
-// $Id: StackingAction.hh 76464 2013-11-11 10:22:56Z gcosmo $
+// $Id: StackingAction.hh 83921 2014-09-23 09:14:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,6 +57,14 @@ class StackingAction : public G4UserStackingAction
     
     G4int               fKillSecondary;
     StackingMessenger*  fStackMessenger;
+
+    G4int               fPhotoGamma;
+    G4int               fComptGamma;
+    G4int               fPhotoAuger;
+    G4int               fComptAuger;
+    G4int               fPixeGamma;
+    G4int               fPixeAuger;
+    G4bool              fIDdefined;
         
 };
 

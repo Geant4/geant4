@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornIonisationModel.hh 70823 2013-06-06 08:26:50Z gcosmo $
+// $Id: G4DNABornIonisationModel.hh 81552 2014-06-03 08:28:18Z gcosmo $
 //
 
 #ifndef G4DNABornIonisationModel_h
@@ -90,13 +90,17 @@ private:
   std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
   std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
 
+  // TODO :
+//  std::map<const G4ParticleDefinition*,std::pair<G4double,G4double> > fEnergyLimits;
+
+
   G4bool isInitialised;
   G4int verboseLevel;
   
   // Cross section
 
   typedef std::map<G4String,G4String,std::less<G4String> > MapFile;
-  MapFile tableFile;
+  MapFile tableFile; // useful ?
 
   typedef std::map<G4String,G4DNACrossSectionDataSet*,std::less<G4String> > MapData;
   MapData tableData;
@@ -110,9 +114,6 @@ private:
   G4double RandomizeEjectedElectronEnergyFromCumulatedDcs(G4ParticleDefinition * aParticleDefinition, G4double incomingParticleEnergy, G4int shell) ;
 
   G4double RandomTransferedEnergy(G4ParticleDefinition * aParticleDefinition, G4double incomingParticleEnergy, G4int shell) ;
-
-  void RandomizeEjectedElectronDirection(G4ParticleDefinition * aParticleDefinition, G4double incomingParticleEnergy, G4double
-                                           outgoingParticleEnergy, G4double & cosTheta, G4double & phi );
    
   G4double Interpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
    

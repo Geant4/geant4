@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 77083 2013-11-21 10:35:55Z gcosmo $
+// $Id: SteppingAction.cc 83921 2014-09-23 09:14:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,7 +67,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
    fEventAction->CountStepsCharg();
  } else {
    fEventAction->AddTrakLenNeutr(aStep->GetStepLength());
-   fEventAction->CountStepsNeutr();   
+   fEventAction->CountStepsNeutr();
  }
 }
 

@@ -32,7 +32,7 @@
 /// \file hadronic/Hadr02/include/G4UrQMD1_3Model.hh
 /// \brief Definition of the G4UrQMD1_3Model class
 //
-// $Id: G4UrQMD1_3Model.hh 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: G4UrQMD1_3Model.hh 81932 2014-06-06 15:39:45Z gcosmo $
 //
 
 #ifndef G4UrQMD1_3Model_hh
@@ -83,11 +83,11 @@ public:
   virtual ~G4UrQMD1_3Model ();
     
   G4ReactionProductVector* Propagate(G4KineticTrackVector* 
-				     theSecondaries, 
-				     G4V3DNucleus* theTarget);
+                                     theSecondaries, 
+                                     G4V3DNucleus* theTarget);
 
   virtual G4HadFinalState* ApplyYourself(const G4HadProjectile&, 
-					 G4Nucleus&);
+                                         G4Nucleus&);
     
 private: 
 

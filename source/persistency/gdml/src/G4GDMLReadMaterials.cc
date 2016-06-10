@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.cc 70764 2013-06-05 12:54:37Z gcosmo $
+// $Id: G4GDMLReadMaterials.cc 86379 2014-11-10 11:34:33Z gcosmo $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLReadMaterials Implementation
@@ -581,8 +581,8 @@ MixtureRead(const xercesc::DOMElement *const mixtureElement,
          G4Material *materialPtr = GetMaterial(GenerateName(ref,true), false);
          G4Element *elementPtr = GetElement(GenerateName(ref,true), false);
 
-         if (materialPtr != 0) { material->AddMaterial(materialPtr,n); } else
-         if (elementPtr != 0)  { material->AddElement(elementPtr,n); }
+         if (elementPtr != 0)  { material->AddElement(elementPtr,n); } else
+         if (materialPtr != 0) { material->AddMaterial(materialPtr,n); }
 
          if ((materialPtr == 0) && (elementPtr == 0))
          {

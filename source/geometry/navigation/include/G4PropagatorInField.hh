@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // 
-// $Id: G4PropagatorInField.hh 69711 2013-05-13 09:22:17Z gcosmo $
+// $Id: G4PropagatorInField.hh 81577 2014-06-03 10:13:36Z gcosmo $
 //
 //
 // Class G4PropagatorInField 
@@ -166,6 +166,9 @@ class G4PropagatorInField
    inline G4double  GetDeltaOneStep() const;
 
    inline G4FieldManager*  GetCurrentFieldManager();
+   inline G4EquationOfMotion*  GetCurrentEquationOfMotion();
+      // Auxiliary methods - their results can/will change during propagation
+
    inline void             SetNavigatorForPropagating( G4Navigator *SimpleOrMultiNavigator ); 
    inline G4Navigator*     GetNavigatorForPropagating(); 
 

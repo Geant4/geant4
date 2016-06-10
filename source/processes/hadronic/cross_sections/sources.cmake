@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 68777 2013-04-05 12:52:17Z gcosmo $
+# $Id: sources.cmake 86167 2014-11-07 14:04:12Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -78,6 +78,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
 	G4CrossSectionInelastic.hh
 	G4CrossSectionPairGG.hh
 	G4ElectroNuclearCrossSection.hh
+        G4DiffElasticRatio.hh
 	G4EMDissociationCrossSection.hh
 	G4EMDissociationSpectrum.hh
 	G4GeneralSpaceNNCrossSection.hh
@@ -109,6 +110,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
 	G4UPiNuclearCrossSection.hh
 	G4VComponentCrossSection.hh
 	G4VCrossSectionDataSet.hh
+	G4VCrossSectionRatio.hh
 	G4CrossSectionFactoryRegistry.hh
     SOURCES
 	G4BGGNucleonElasticXS.cc
@@ -144,6 +146,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
 	G4CrossSectionElastic.cc
 	G4CrossSectionInelastic.cc
 	G4CrossSectionPairGG.cc
+        G4DiffElasticRatio.cc
 	G4ElectroNuclearCrossSection.cc
 	G4EMDissociationCrossSection.cc
 	G4EMDissociationSpectrum.cc
@@ -175,6 +178,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
 	G4UPiNuclearCrossSection.cc
 	G4VComponentCrossSection.cc
 	G4VCrossSectionDataSet.cc
+	G4VCrossSectionRatio.cc
 	G4CrossSectionFactoryRegistry.cc
     GRANULAR_DEPENDENCIES
         G4baryons

@@ -26,7 +26,7 @@
 /// \file medical/electronScattering/src/PhysListEmStandard.cc
 /// \brief Implementation of the PhysListEmStandard class
 //
-// $Id: PhysListEmStandard.cc 68608 2013-04-02 00:23:25Z adotti $
+// $Id: PhysListEmStandard.cc 86064 2014-11-07 08:49:32Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

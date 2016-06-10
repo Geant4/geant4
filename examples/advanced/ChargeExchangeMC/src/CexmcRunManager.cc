@@ -1007,7 +1007,8 @@ void  CexmcRunManager::PrintReadRunData( void ) const
                         "all interactions" ) << ")" << std::endl;
         }
     }
-    G4cout << "  -- Base physics used (1 - QGSP_BERT, 2 - QGSP_BIC_EMY): " <<
+    G4cout << "  -- Base physics used"
+              "(1 - QGSP_BERT, 2 - QGSP_BIC_EMY, 3 - FTFP_BERT): " <<
               sObject.basePhysicsUsed << G4endl;
     G4cout << "  -- Production model (1 - pi0, 2 - eta): " <<
               sObject.productionModelType << G4endl;

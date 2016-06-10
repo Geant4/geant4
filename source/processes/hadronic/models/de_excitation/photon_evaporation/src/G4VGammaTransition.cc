@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VGammaTransition.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4VGammaTransition.cc 85841 2014-11-05 15:35:06Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -38,7 +38,7 @@
 
 #include "G4VGammaTransition.hh"
 
-G4VGammaTransition::G4VGammaTransition():_verbose(0) 
+G4VGammaTransition::G4VGammaTransition() 
 {}
 
 G4VGammaTransition::~G4VGammaTransition() 

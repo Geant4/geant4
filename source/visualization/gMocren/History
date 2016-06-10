@@ -1,4 +1,4 @@
-$Id: History 75179 2013-10-29 10:09:31Z gcosmo $
+$Id: History 87360 2014-12-01 16:07:16Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,19 @@ committal in the CVS repository !
 
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
+
+29th Nobember 2014  Akinori Kimura (gMocren-V10-00-03)
+- G4GMocrenFileSceneHandler.cc, G4GMocrenFileViewer.cc: fixed warnings according to COVERITY
+
+25th Nobember 2014  Akinori Kimura (gMocren-V10-00-02)
+- G4GMocrenFileSceneHandler.cc, G4GMocrenFileViewer.cc, G4GMocrenMessenger.cc:
+  fixed STRING_OVERFLOW checks according to COVERITY
+
+5th June 2014  Laurent Garnier  (gMocren-V10-00-01)
+- G4GMocrenFile.cc: FIX Problem 1585 - Memory leak in G4GMocrenFile.cc
+
+9th December 2013  John Allison  (gMocren-V10-00-00)
+- G4GMocrenFile.cc: Declared as G4VGraphicsSystem::fileWriter.
 
 29th June 2013  Gabriele Cosmo (gMocren-V09-06-07)
 - Commmented out private declaration of G4GMocrenFileSceneHandler::operator=()

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ComptonScattering.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4ComptonScattering.cc 84598 2014-10-17 07:39:15Z gcosmo $
 //
 // 
 //------------ G4ComptonScattering physics process -----------------------------
@@ -65,6 +65,7 @@
 #include "G4KleinNishinaModel.hh"
 #include "G4KleinNishinaCompton.hh"
 #include "G4Electron.hh"
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -74,7 +75,7 @@ G4ComptonScattering::G4ComptonScattering(const G4String& processName,
   G4ProcessType type):G4VEmProcess (processName, type),
     isInitialised(false)
 {
-  SetStartFromNullFlag(false);
+  SetStartFromNullFlag(true);
   SetBuildTableFlag(true);
   SetSecondaryParticle(G4Electron::Electron());
   SetProcessSubType(fComptonScattering);
@@ -101,8 +102,9 @@ void G4ComptonScattering::InitialiseProcess(const G4ParticleDefinition*)
   if(!isInitialised) {
     isInitialised = true;
     if(!EmModel(1)) { SetEmModel(new G4KleinNishinaCompton(), 1); }
-    EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
-    EmModel(1)->SetHighEnergyLimit(MaxKinEnergy());
+    G4EmParameters* param = G4EmParameters::Instance();
+    EmModel(1)->SetLowEnergyLimit(param->MinKinEnergy());
+    EmModel(1)->SetHighEnergyLimit(param->MaxKinEnergy());
     AddEmModel(1, EmModel(1));
   } 
 }

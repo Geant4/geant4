@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/src/PhysicsListMessenger.cc
 /// \brief Implementation of the PhysicsListMessenger class
 //
-// $Id: PhysicsListMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id: PhysicsListMessenger.cc 85243 2014-10-27 08:22:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -45,10 +45,11 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysicsList.hh"
+#include "G4UIdirectory.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "HistoManager.hh"
+#include "TestParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -60,6 +61,9 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
  fListCmd(0),
  fADCCmd(0)
 {   
+  fPhysDir = new G4UIdirectory("/testem/phys/");
+  fPhysDir->SetGuidance("physics list commands");
+
   fECmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setMaxE",this);  
   fECmd->SetGuidance("Set max energy deposit");
   fECmd->SetParameterName("Emax",false);
@@ -82,7 +86,7 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
   fListCmd = new G4UIcmdWithAString("/testem/phys/addPhysics",this);  
   fListCmd->SetGuidance("Add modula physics list.");
   fListCmd->SetParameterName("PList",false);
-  fListCmd->AvailableForStates(G4State_PreInit);  
+  fListCmd->AvailableForStates(G4State_PreInit);
 
   fADCCmd = new G4UIcmdWithADoubleAndUnit("/testem/setEnergyPerChannel",this);
   fADCCmd->SetGuidance("Set energy per ADC channel");
@@ -101,7 +105,8 @@ PhysicsListMessenger::~PhysicsListMessenger()
   delete fEBCmd;
   delete fCBCmd;
   delete fListCmd;
-  delete fADCCmd; 
+  delete fADCCmd;
+  delete fPhysDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -109,19 +114,16 @@ PhysicsListMessenger::~PhysicsListMessenger()
 void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
 {       
-  HistoManager* man = HistoManager::GetPointer();
+  TestParameters* man = TestParameters::GetPointer();
+
   if( command == fECmd )
    { man->SetMaxEnergy(fECmd->GetNewDoubleValue(newValue)); }
-     
   if( command == fEBCmd )
    { man->SetNumberBins(fEBCmd->GetNewIntValue(newValue)); }
-     
   if( command == fCBCmd )
    { man->SetNumberBinsCluster(fCBCmd->GetNewIntValue(newValue)); }
-
   if( command == fListCmd )
    { fPhysicsList->AddPhysicsList(newValue); }
-
   if( command == fADCCmd )
     { man->SetEnergyPerChannel(fADCCmd->GetNewDoubleValue(newValue)); }
 }

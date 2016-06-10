@@ -7,7 +7,15 @@ cirrone@lns.infn.it
              History file of the ChargeExchangeMC application
          ====================================================
 
-02.11.2012 - L.Garnier Tag: ChargeExchangeMC-V09-05-05
+06.10.2014 - L.Pandola, Tag: ChargeExchangeMC-V10-00-01
+             Edited CMakeLists.txt file to allow for the integration
+             in the CDash testing 
+
+12.12.2013 - A. Radkov & L. Pandola, Tag: ChargeExchangeMC-V10-00-00 
+             Fix a few compiler warnings (shadowed variables, system of 
+             units). FTFP_BERT replaces deprecated QGSP_BERT
+
+22.11.2012 - L.Garnier Tag: ChargeExchangeMC-V09-05-05
             - Add "File" menu in gui.mac, Fix bug #1395
 
 02.11.2012 - L.Garnier Tag: ChargeExchangeMC-V09-05-04

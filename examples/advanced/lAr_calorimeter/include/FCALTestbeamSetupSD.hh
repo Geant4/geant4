@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALTestbeamSetupSD.hh 67976 2013-03-13 10:23:17Z gcosmo $
+// $Id: FCALTestbeamSetupSD.hh 84371 2014-10-14 12:51:18Z gcosmo $
 //
 // 
 
@@ -64,7 +64,6 @@ class FCALTestbeamSetupSD : public G4VSensitiveDetector
   //      FCALTestbeamSetup* Detector;
   //   G4int*                   HitID;
   
-  G4int InitBeam;
 
 public:
   
@@ -74,7 +73,6 @@ public:
   G4int TailCatcherID;
   G4double ETailVis[8], ETailDep[7];
   
-
 };
 
 #endif

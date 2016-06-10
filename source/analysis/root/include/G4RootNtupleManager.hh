@@ -71,20 +71,34 @@ class G4RootNtupleManager : public G4VNtupleManager
     tools::wroot::ntuple* GetNtuple() const;
     tools::wroot::ntuple* GetNtuple(G4int ntupleId) const;
 
+    // Iterators
+    std::vector<tools::wroot::ntuple*>::iterator BeginNtuple();
+    std::vector<tools::wroot::ntuple*>::iterator EndNtuple();
+    std::vector<tools::wroot::ntuple*>::const_iterator BeginConstNtuple() const;
+    std::vector<tools::wroot::ntuple*>::const_iterator EndConstNtuple() const;
+    
     // Functions independent from the output type 
     //
 
     // Methods to create ntuples
     virtual G4int CreateNtuple(const G4String& name, const G4String& title);
     // Create columns in the last created ntuple
-    virtual G4int CreateNtupleIColumn(const G4String& name);
-    virtual G4int CreateNtupleFColumn(const G4String& name);
-    virtual G4int CreateNtupleDColumn(const G4String& name);   
+    virtual G4int CreateNtupleIColumn(
+                    const G4String& name, std::vector<int>* vector);
+    virtual G4int CreateNtupleFColumn(
+                    const G4String& name, std::vector<float>* vector);
+    virtual G4int CreateNtupleDColumn(
+                    const G4String& name, std::vector<double>* vector);
+    virtual G4int CreateNtupleSColumn(const G4String& name);
     virtual void  FinishNtuple();   
     // Create columns in the ntuple with given id
-    virtual G4int CreateNtupleIColumn(G4int ntupleId, const G4String& name);
-    virtual G4int CreateNtupleFColumn(G4int ntupleId, const G4String& name);
-    virtual G4int CreateNtupleDColumn(G4int ntupleId, const G4String& name);   
+    virtual G4int CreateNtupleIColumn(G4int ntupleId, 
+                    const G4String& name, std::vector<int>* vector);
+    virtual G4int CreateNtupleFColumn(G4int ntupleId, 
+                    const G4String& name, std::vector<float>* vector);
+    virtual G4int CreateNtupleDColumn(G4int ntupleId, 
+                    const G4String& name, std::vector<double>* vector);
+    virtual G4int CreateNtupleSColumn(G4int ntupleId, const G4String& name);
     virtual void  FinishNtuple(G4int ntupleId);   
 
     // Methods to fill ntuples
@@ -92,11 +106,14 @@ class G4RootNtupleManager : public G4VNtupleManager
     virtual G4bool FillNtupleIColumn(G4int columnId, G4int value);
     virtual G4bool FillNtupleFColumn(G4int columnId, G4float value);
     virtual G4bool FillNtupleDColumn(G4int columnId, G4double value);
+    virtual G4bool FillNtupleSColumn(G4int columnId, const G4String& value);
     virtual G4bool AddNtupleRow();
     // Methods for ntuple with id > FirstNtupleId (when more ntuples exist)                      
     virtual G4bool FillNtupleIColumn(G4int ntupleId, G4int columnId, G4int value);
     virtual G4bool FillNtupleFColumn(G4int ntupleId, G4int columnId, G4float value);
     virtual G4bool FillNtupleDColumn(G4int ntupleId, G4int columnId, G4double value);
+    virtual G4bool FillNtupleSColumn(G4int ntupleId, G4int columnId, 
+                                     const G4String& value);
     virtual G4bool AddNtupleRow(G4int ntupleId);
     
     // Access methods
@@ -111,6 +128,8 @@ class G4RootNtupleManager : public G4VNtupleManager
       GetNtupleFColumn(G4int ntupleId, G4int columnId) const;
     tools::wroot::ntuple::column<double>* 
       GetNtupleDColumn(G4int ntupleId, G4int columnId) const;
+    tools::wroot::ntuple::column_string* 
+      GetNtupleSColumn(G4int ntupleId, G4int columnId) const;
 
     virtual G4RootNtupleDescription*  GetNtupleInFunction(G4int id, 
                                         G4String function,
@@ -120,15 +139,31 @@ class G4RootNtupleManager : public G4VNtupleManager
     // data members
     //
     tools::wroot::directory*  fNtupleDirectory;
-    std::vector<G4RootNtupleDescription*> fNtupleVector;
+    std::vector<G4RootNtupleDescription*> fNtupleDescriptionVector;
+    std::vector<tools::wroot::ntuple*>   fNtupleVector;
 };    
 
 // inline functions
 
 inline void G4RootNtupleManager::SetNtupleDirectory(
-                                    tools::wroot::directory* directory) {
-  fNtupleDirectory = directory;
-}    
+                                    tools::wroot::directory* directory) 
+{ fNtupleDirectory = directory; }    
+
+inline std::vector<tools::wroot::ntuple*>::iterator 
+G4RootNtupleManager::BeginNtuple()
+{ return fNtupleVector.begin(); }
+
+inline std::vector<tools::wroot::ntuple*>::iterator 
+G4RootNtupleManager::EndNtuple()
+{ return fNtupleVector.end(); }
+
+inline std::vector<tools::wroot::ntuple*>::const_iterator 
+G4RootNtupleManager::BeginConstNtuple() const
+{ return fNtupleVector.begin(); }
+
+inline  std::vector<tools::wroot::ntuple*>::const_iterator 
+G4RootNtupleManager::EndConstNtuple() const
+{ return fNtupleVector.end(); }
 
 inline G4int G4RootNtupleManager::GetNofNtuples() const
 { return fNtupleVector.size(); }

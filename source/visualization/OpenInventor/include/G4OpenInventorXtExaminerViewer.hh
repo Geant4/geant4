@@ -31,15 +31,16 @@
 #include "G4VStateDependent.hh"
 
 class G4OpenInventorXtExaminerViewer;
+
 class HookEventProcState : public G4VStateDependent
 {
 private:
-	G4OpenInventorXtExaminerViewer *viewer;
+   G4OpenInventorXtExaminerViewer *viewer;
 public:
-	HookEventProcState(G4OpenInventorXtExaminerViewer*);
-	~HookEventProcState();
+   HookEventProcState(G4OpenInventorXtExaminerViewer*);
+   ~HookEventProcState();
 
-	virtual G4bool Notify(G4ApplicationState requiredState);
+   virtual G4bool Notify(G4ApplicationState requiredState);
 };
 #endif /* HookEventProcState_H */
 
@@ -52,6 +53,7 @@ public:
 #include <fstream>
 #include <Inventor/SbLinear.h>
 #include <Inventor/nodes/SoLineSet.h>
+#include <Inventor/nodes/SoEventCallback.h>
 #include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
 #include <Inventor/events/SoKeyboardEvent.h>
 
@@ -61,6 +63,9 @@ class SoText2;
 class SoPointSet;
 
 class G4OpenInventorXtExaminerViewer : public SoXtExaminerViewer {
+
+  friend class G4OpenInventorXtExaminerViewerMessenger;
+
 private:
   Widget prevViewPtButton, nextViewPtButton;
   Widget menuBar, fileMenu, openFileDialog, newFileDialog,
@@ -83,7 +88,9 @@ public:
 	     SoXtViewer::Type type = BROWSER);
 
   ~G4OpenInventorXtExaminerViewer();
+
   template <class T> void parseString(T &t, const std::string &s, bool &error);
+
   Widget addMenu(std::string name);
   void addButton(Widget menu, std::string name, XtCallbackProc);
   Widget getMenuBar() { return menuBar; }
@@ -130,7 +137,8 @@ private:
   // Each constructor calls this generic constructor
   void constructor(const SbBool build);
 
-  static G4OpenInventorXtExaminerViewer *getObject();
+  // FWJ DISABLED
+  //  static G4OpenInventorXtExaminerViewer *getObject();
 
   HookEventProcState *hookBeamOn;
   friend class HookEventProcState;
@@ -206,7 +214,7 @@ private:
   void setReferencePath(SoLineSet*, SoCoordinate3*, bool append = false);
   void setReferencePathZPos();
   void findAndSetRefPath();
-  SoCoordinate3 *getCoordsNode(SoFullPath *path);
+  SoCoordinate3* getCoordsNode(SoFullPath *path);
   void getSceneElements(); // reads elements from the scene graph
   float sqrlen(const SbVec3f&);
   void distanceToTrajectory(const SbVec3f&, float&, SbVec3f&, int&);
@@ -285,7 +293,7 @@ private:
          // the order doesn't matter
          return true;
       }
-   };
+  };
 
   bool zcoordSetFlag;
 
@@ -302,21 +310,22 @@ private:
   std::vector<SbVec3f> refParticleTrajectory;
   // For displaying distance during anim and beamline modes
   std::vector<float> refZPositions;
+
   int refParticleIdx;
   int prevRefIdx;
   float distance;
   State currentState, prevState, beforePausing;
-  char *curViewPtName;
+  char* curViewPtName;
   
   int step;
   SbVec3f prevPt;
   SbVec3f prevParticleDir;
-  void * prevColorField;
+  void* prevColorField;
   
   viewPtData camB4Animation;
   bool returnToSaveVP;
   bool returnToAnim;
-  SoCamera *myCam;
+  SoCamera* myCam;
   void setStartingPtForAnimation(); 
   float left_right, up_down;    
   SbVec3f rotAxis; // For 90 degree rotations
@@ -373,12 +382,14 @@ private:
   // FWJ added for Ortho camera
   float defaultHeight;
   float defaultHeightAngle;
+  // FWJ add look-ahead for animation tracking on curves
+  G4int pathLookahead;
   
   // Used by G4 app during element rotations, stores previous view
   SbVec3f upVector, offsetFromCenter, center;   
   bool rotUpVec;
 
-  SoSeparator * newSceneGraph;
+  SoSeparator* newSceneGraph;
 
 
 };

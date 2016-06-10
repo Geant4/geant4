@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FermiBreakUp.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4FermiBreakUp.hh 85443 2014-10-29 14:35:57Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -32,7 +32,14 @@
 #define G4FermiBreakUp_h 1
 
 #include "G4VFermiBreakUp.hh"
-#include "G4FermiConfigurationList.hh"
+#include "globals.hh"
+#include "G4FermiConfiguration.hh"
+#include "G4VFermiFragment.hh"
+#include "G4FermiPhaseSpaceDecay.hh"
+#include <vector>
+
+class G4FermiFragmentsPool;
+class G4Pow;
 
 class G4FermiBreakUp : public G4VFermiBreakUp 
 {
@@ -41,16 +48,42 @@ public:
   G4FermiBreakUp();
   virtual ~G4FermiBreakUp();
 
+  // primary fragment is copied to the new instance, the copy is deleted 
+  // or is added to the list of products 
   G4FragmentVector * BreakItUp(const G4Fragment &theNucleus);
+
+  // new interface - vector of products is added to the provided vector
+  // primary fragment is deleted or is modified and added to the list
+  // of products 
+  void BreakFragment(G4FragmentVector*, G4Fragment* theNucleus);
   
 private:
+
+  G4double CoulombBarrier(const std::vector<const G4VFermiFragment*>* v);
+
+  G4double DecayProbability(G4int A, G4double TotalE, const G4FermiConfiguration*);
+
+  const std::vector<const G4VFermiFragment*>*
+  SelectConfiguration(G4int Z, G4int A, G4double mass);
 
   G4FermiBreakUp(const G4FermiBreakUp &right);  
   const G4FermiBreakUp & operator=(const G4FermiBreakUp &right);
   G4bool operator==(const G4FermiBreakUp &right) const;
   G4bool operator!=(const G4FermiBreakUp &right) const;
 
-  G4FermiConfigurationList theConfigurationList;
+  G4FermiFragmentsPool* thePool;
+
+  std::vector<G4double> NormalizedWeights;
+  
+  G4double Coef;
+  G4double ConstCoeff;
+  size_t   nmax;
+  
+  G4Pow* g4pow;
+
+  const G4FermiPhaseSpaceDecay*        thePhaseSpace;
+  std::vector<G4double>                massRes;
+  std::vector<const G4VFermiFragment*> frag;  
 };
 
 

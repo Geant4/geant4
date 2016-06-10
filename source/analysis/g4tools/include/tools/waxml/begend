@@ -16,7 +16,7 @@ namespace waxml {
     // Header :
     a_writer << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << std::endl;
     a_writer << "<!DOCTYPE aida SYSTEM"
-             << " \"http://aida.freehep.org/schemas/3.0/aida.dtd\">"
+             << " \"http://aida.freehep.org/schemas/3.2.1/aida.dtd\">"
              << std::endl;
 
     std::string sAIDA_VERSION("3.2.1");

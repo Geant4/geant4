@@ -1,0 +1,32 @@
+#
+# Macro file for "Hadr06.cc"
+#
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testhadr/det/setIsotopeMat Li7 3 7 1.85 g/cm3
+###/testhadr/det/setIsotopeMat Be9 4 9 1.85 g/cm3
+/testhadr/det/setRadius 30 cm
+#
+###/testhadr/phys/thermalScattering true
+#
+/run/initialize
+#
+/process/list
+#
+/gun/particle neutron
+/gun/energy 14.1 MeV
+#
+/analysis/setFileName run1
+/analysis/h1/set 1  100  0. 15. MeV	#Edep
+/analysis/h1/set 2 100  0.   30. cm	#Edep profile
+/analysis/h1/set 3  100  0. 15. MeV	#Eflow
+/analysis/h1/set 4  100  0. 15. MeV	#gamma
+/analysis/h1/set 6  200  0.001 20.  MeV log10 #neutrons
+/analysis/h1/set 9  100  0. 15. MeV	#alphas
+/analysis/h1/set 10  100  0. 15. MeV	#generic ions
+#
+/run/printProgress 10000
+#
+/run/beamOn 100000

@@ -1,4 +1,4 @@
-$Id: History 73008 2013-08-15 08:43:13Z gcosmo $
+$Id: History 84372 2014-10-14 12:52:34Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,39 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+13-10-14 mma (amsEcal-V10-00-07) 
+- CmakeLists.txt : remove AIDA references
+	 
+05-08-14 mma (amsEcal-V10-00-06) 
+- DetectorConstruction::ConstructSDandField()
+	 
+31-07-14 mma (amsEcal-V10-00-05) 
+- migration to MT
+	 
+24-07-14 mma (amsEcal-V10-00-04) 
+- physicsList and messenger
+- DetectorConstruction. fibers, layers, modules : start copy number at 1
+- suppress pixels
+- EventAction::WriteFibers()
+	 
+01-07-14 mma (amsEcal-V10-00-03) 
+- DetectorConstruction: correct rotation matrix
+- RunAction: reinitialise resEtot and resEvis in loop
+- histos: replace aida by internal system
+   	 
+25-06-14 G.Folger (amsEcal-V10-00-02)
+- Fix compilation warning for uninitialised variables resEtot 
+   and resEvis.
+
+24-06-14 mma (amsEcal-V10-00-01)
+- Additional protection in RunAction against division by zero 
+(bug report 1522)
+
+16-12-13 L.Pandola (amsEcal-V10-00-00)
+- Add in RunAction a protection against division by zero 
+(bug report 1522)
+
 30-07-13 A.Dotti (amsEcal-V09-06-01)
 - Bug fixing for clang32: warning unused private data field
 

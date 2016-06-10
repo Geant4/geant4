@@ -1,0 +1,595 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_file
+#define tools_file
+
+#include "gzip"
+#include "forit"
+
+#include <vector>
+#include <cstdlib>
+#include <cstring>
+
+#include "path" //suffix
+#include "S_STRING"
+
+#ifdef TOOLS_MEM
+#include "mem"
+#endif
+
+namespace tools {
+namespace file {
+
+inline bool exists(const std::string& a_string) {
+  FILE* file = ::fopen(a_string.c_str(),"rb");
+  if(!file) return false;
+  ::fclose(file);
+  return true;
+}
+
+inline bool size(const std::string& a_file,long& a_size){
+  FILE* file = ::fopen(a_file.c_str(),"rb");
+  if(!file) {
+    a_size = 0L;
+    return false;
+  }
+  //::rewind(file);
+  ::fseek(file,0L,SEEK_END);
+  a_size = ::ftell(file);
+  ::fclose(file);
+  return true;
+}
+
+inline bool is_empty(const std::string& a_file){
+  long sz;
+  if(!size(a_file,sz)) return true; //if not existing, consider it empty.
+  return (sz==0L)?true:false;  
+}
+
+inline bool write(const std::string& a_file,const std::string& a_string) {
+  // a_string could contain \n separated lines.
+  FILE* file = ::fopen(a_file.c_str(),"wb");
+  if(!file) return false;
+  if(::fprintf(file,"%s",a_string.c_str())<0) {
+    ::fclose(file);
+    return false;
+  }
+  ::fclose(file);
+  return true;
+}
+
+inline bool write(const std::string& a_file,const std::vector<std::string>& a_text){
+  FILE* file = ::fopen(a_file.c_str(),"wb");
+  if(!file) return false;
+  tools_vforcit(std::string,a_text,it) {
+    if(::fprintf(file,"%s\n",(*it).c_str())<0) {
+      ::fclose(file);
+      return false;
+    }
+  }
+  ::fclose(file);
+  return true;
+}
+
+inline bool read_buff(FILE* a_file,char* a_buff,unsigned int a_lbuf,size_t& a_length) {
+  a_length = ::fread(a_buff,1,a_lbuf,a_file);
+  return true;
+}
+
+inline bool read_cstring(FILE* a_file,char* a_buff,unsigned int a_lbuf,size_t& a_length) {
+  if(::fgets(a_buff,a_lbuf,a_file)==NULL) {
+    a_length = 0;
+    return false; //EOF
+  }
+
+  size_t l = ::strlen(a_buff);
+  //  On Windows, editors when saving binary files,
+  // put \r\n at place of \n ; we then look for \r\n.
+  if( (l>=2) && (a_buff[l-2]=='\r') && (a_buff[l-1]=='\n') ) {
+    a_buff[l-2] = '\0';
+    l -= 2;
+  } else if( (l>=1) && (a_buff[l-1]=='\n') ) {
+    a_buff[l-1] = '\0';
+    l -= 1;
+  }
+
+  a_length = l;
+  return true;
+}
+
+
+inline bool read(const std::string& a_file,std::vector<std::string>& a_text){
+  a_text.clear();
+  FILE* file = ::fopen(a_file.c_str(),"rb");
+  if(!file) return false;
+  unsigned int BUFSIZE = 65536;
+  char* buffer = new char[BUFSIZE+1];
+  if(!buffer) {::fclose(file);return false;}
+  while(true) {
+    size_t l;
+    if(!read_cstring(file,buffer,BUFSIZE,l)) break; // EOF.
+    a_text.push_back(buffer);
+  }
+  delete [] buffer;
+  ::fclose(file);
+  return true;
+}
+
+inline bool read_num(const std::string& a_file,std::vector<std::string>::size_type a_num,std::vector<std::string>& a_text,const std::string& a_cmt = ""){
+  a_text.clear();
+  FILE* file = ::fopen(a_file.c_str(),"rb");
+  if(!file) return false;
+  unsigned int BUFSIZE = 65536;
+  char* buffer = new char[BUFSIZE+1];
+  if(!buffer) {::fclose(file);return false;}
+  while(true) {
+    size_t l;
+    if(!read_cstring(file,buffer,BUFSIZE,l)) break; // EOF.
+    if(a_cmt.size()&&(!strncmp(a_cmt.c_str(),buffer,a_cmt.size()))) continue;
+    if(a_text.size()<a_num) {
+      a_text.push_back(buffer);
+    } else {
+      break;
+    }
+  }
+  delete [] buffer;
+  ::fclose(file);
+  return true;
+}
+
+inline bool read_bytes(const std::string& a_file,
+                       char*& a_buffer,long& a_length){
+  // Returned buffer should be deleted with delete [].
+  FILE* file = ::fopen(a_file.c_str(),"rb");
+  if(!file) {
+    a_buffer = 0;
+    a_length = 0L;
+    return false;
+  }
+  // Get file size :
+  ::fseek(file,0L,SEEK_END);
+  long filesize = ::ftell(file);
+  if(!filesize) {
+    ::fclose(file);
+    a_buffer = new char[1];
+#ifdef TOOLS_MEM
+    mem::increment(s_new().c_str());
+#endif
+    a_length = 0L;
+    return true; //empty file.
+  }
+  // Add one byte to be able to add \n if file contain lines.
+  a_buffer = new char[filesize+1];
+  if(!a_buffer) {
+    ::fclose(file);
+    a_buffer = 0;
+    a_length = 0L;
+    return false;
+  }
+#ifdef TOOLS_MEM
+  mem::increment(s_new().c_str());
+#endif
+  ::rewind(file);
+  size_t nitem = ::fread(a_buffer,(size_t)filesize,(size_t)1,file);
+  if(nitem!=1){
+    ::fclose(file);
+    delete [] a_buffer;
+#ifdef TOOLS_MEM
+    mem::decrement(s_new().c_str());
+#endif
+    a_buffer = 0;
+    a_length = 0L;
+    return false;
+  }
+  ::fclose(file);
+  a_buffer[filesize] = 0;
+  a_length = filesize;
+  return true;
+}  
+
+inline bool write_bytes(const std::string& a_file,const char* a_buffer,size_t a_length){
+  FILE* file = ::fopen(a_file.c_str(),"wb");
+  if(!file) return false;
+  if(!a_length) {
+    ::fclose(file);
+    return true;
+  }
+  size_t nitem = ::fwrite((char*)a_buffer,a_length,(size_t)1,file);
+  ::fclose(file);
+  return (nitem!=1?false:true);
+}  
+
+inline bool is_aida(const std::string& a_file,bool& a_is){
+  long sz;
+  if(!size(a_file,sz)) {a_is = false;return false;}
+
+  //NOTE : it assumes that the file is not compressed.
+  unsigned char head[1024];
+ {unsigned int num = 1024;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=1024) {a_is = false;return true;}}
+  head[1023] = 0; //to have a C string.
+  a_is = ::strstr((const char*)head,"<aida")?true:false;
+  return true;
+}
+
+// NOTE : take care of the open in exlib/app/Wt/main_cpp which can't work
+//        by using suffix.
+// NOTE : the below is_csv() does not take into account a column with strings.
+
+inline bool is_csv(const std::vector<std::string>& a_txt,bool& a_is){
+  //a_sep = 0;
+  a_is = false;
+  if(a_txt.empty()) return true;
+
+  //guess sep from first data line :
+  char sep = 0;
+ {const char* buffer = a_txt[0].c_str();
+  //::printf("debug : |%s|\n",buffer);
+  const char* pos = buffer;
+  char* end;
+ {double d = ::strtod(pos,&end);(void)d;}
+  //::printf("debug : d first %g\n",d);
+  if(end==pos) return true; //not starting with a number.
+  //end==mx is ok, one column only.
+  sep = *end;}
+
+  //::printf("debug : %d\n",sep);
+
+  unsigned int first_coln = 0;
+
+  tools_vforcit(std::string,a_txt,it) {
+    const char* buffer = (*it).c_str();
+    //::printf("debug : |%s|\n",buffer);
+    const char* pos = buffer;
+    const char* mx = buffer+(*it).size();
+    unsigned int coln = 0;
+    while(true) {
+      char* end;
+     {double d = ::strtod(pos,&end);(void)d;}
+      if(end==pos) break;
+      //::printf("debug : d %g\n",d);
+      if(*end!=sep) return true;
+      coln++;
+      pos = end+1;
+      if(pos>mx) break;
+    }
+    //::printf("debug : coln %d\n",coln);
+    if(it==a_txt.begin()) {
+      first_coln = coln;
+    } else {
+      if(coln!=first_coln) return true;      
+    }
+  }
+  
+  //a_sep = sep;
+  a_is = true;
+  return true;
+}
+
+inline bool is_csv(const std::string& a_file,bool& a_is){
+  // look at suffix. Some file can't be guessed.
+  if(suffix(a_file)=="csv") {a_is = true;return true;}
+  //try to guess :
+  std::vector<std::string> txt;
+  if(!file::read_num(a_file,3,txt,"#")) {a_is=false;return false;}
+  return is_csv(txt,a_is);
+}
+
+inline bool is_hippo(const std::string& a_file,bool& a_is){
+  //if((suffix(a_file)=="hiptxt")||(suffix(a_file)=="tnt")) {
+  //  a_is = true;
+  //  return true;
+  //}
+  std::vector<std::string> txt;
+  if(!file::read_num(a_file,5,txt)) return false;
+  //skip two first lines (title and labels).
+  std::vector<std::string> htxt;
+  for(unsigned int i=2;i<txt.size();i++) htxt.push_back(txt[i]);
+  return is_csv(htxt,a_is);
+}
+
+}}
+
+#include "fileis"
+
+namespace tools {
+namespace file {
+
+inline bool mime_type(const std::string& a_file,std::string& a_mime){
+  ////////////////
+  // binaries :
+  ////////////////
+ {bool is;
+  if(is_jpeg(a_file,is)&&is) {
+    a_mime = "image/jpeg";
+    return true;
+  }}
+
+ {bool is;
+  if(is_png(a_file,is)&&is) {
+    a_mime = "image/png";
+    return true;
+  }}
+
+ {bool is;
+  if(is_fits(a_file,is)&&is) {
+    a_mime = "image/fits";
+    return true;
+  }}
+
+ {bool is;
+  if(is_gzip(a_file,is)&&is) {
+    a_mime = "application/gzip";
+    return true;
+  }}
+
+ {bool is;
+  if(is_zip(a_file,is)&&is) {
+    a_mime = "application/zip";
+    return true;
+  }}
+
+ {bool is;
+  if(is_root(a_file,is)&&is) {
+    a_mime = "application/octet-stream";
+    return true;
+  }}
+
+  ////////////////
+  // text :
+  ////////////////
+ {bool is;
+  if(is_aida(a_file,is)&&is) {
+    a_mime = "text/xml";
+    return true;
+  }}
+ {bool is;
+  if(is_exsg(a_file,is)&&is) {
+    a_mime = "text/xml";
+    return true;
+  }}
+ {bool is;
+  if(is_scenarios(a_file,is)&&is) {
+    a_mime = "text/xml";
+    return true;
+  }}
+ {bool is;
+  if(is_slides(a_file,is)&&is) {
+    a_mime = "text/xml";
+    return true;
+  }}
+ {bool is;
+  if(is_gdml(a_file,is)&&is) {
+    a_mime = "text/xml";
+    return true;
+  }}
+
+ {bool is;
+  if(is_ps(a_file,is)&&is) {
+    a_mime = "application/postscript";
+    return true;
+  }}
+
+ {bool is;
+  if(is_fog(a_file,is)&&is) {
+    a_mime = "text/plain";
+    return true;
+  }}
+
+ {bool is;
+  if(is_csv(a_file,is)&&is) {
+    a_mime = "text/csv";
+    return true;
+  }}
+
+ {bool is;
+  if(is_hippo(a_file,is)&&is) {
+    a_mime = "text/plain";
+    return true;
+  }}
+
+ {bool is;
+  if(is_dot(a_file,is)&&is) {
+    a_mime = "text/plain";
+    return true;
+  }}
+
+ {bool is;
+  if(is_iv(a_file,is)&&is) {
+    a_mime = "application/octet-stream";
+    return true;
+  }}
+
+  a_mime = "application/octet-stream";
+  return false;
+}
+
+/*
+inline bool copy(const std::string& a_from,const std::string& a_to){
+  if(a_to==a_from) return true; //done
+  std::vector<std::string> text;
+  if(!file::read(a_from,text)) return false;
+  return file::write(a_to,text);
+}
+*/
+
+inline bool found(const std::string& a_file,const std::string& a_what,std::vector<std::string>& a_found){
+  a_found.clear();
+  std::vector<std::string> text;
+  if(!file::read(a_file,text)) return false;
+  tools_vforcit(std::string,text,it) {
+    if((*it).find(a_what)!=std::string::npos) {
+      a_found.push_back(*it);
+    }
+  }
+  return true;
+}
+
+inline bool std_remove(const std::string& a_file) {
+  if(a_file.empty()) return true;
+  return (::remove(a_file.c_str()) ==0 ? true : false);
+}
+
+inline bool std_remove(std::vector<std::string>& a_files) {
+  bool status = true;
+  tools_vforit(std::string,a_files,it) {
+    if(!std_remove(*it)) status = false;
+  }
+  a_files.clear();
+  return status;
+}
+
+inline bool std_rename(const std::string& a_from,const std::string& a_to) {
+  //NOTE : a_from must not be a path !
+  //       Darwin is ok with a path but not Linux !
+  //       For example : 
+  //         ::rename("/tmp/tmp01"."x");
+  //       return -1 on Linux.
+  //       To do the upper then someone must use move. 
+  //       But there is no move in the standard lib C !
+  return (::rename(a_from.c_str(),a_to.c_str()) == 0 ? true : false);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+/// by using C system ////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+inline std::string quote(const std::string& a_path) {
+  if(a_path.find(' ')==std::string::npos) return a_path;
+  // path with spaces :
+  if(a_path[0]=='"') return a_path; //Already in double quote.
+  return std::string("\"")+a_path+"\"";
+}
+
+// used in OnX/BaseUI.
+inline bool mv(const std::string& a_from,const std::string& a_to){
+  if(a_to==a_from) return true;
+#ifdef WIN32
+  std::string cmd = "MOVE /Y";
+#else
+  std::string cmd = "/bin/mv";
+#endif
+  cmd += " ";
+  cmd += quote(a_from);
+  cmd += " ";
+  cmd += quote(a_to);
+  int ret = ::system(cmd.c_str());
+  return (ret==(-1)?false:true);
+}
+
+inline bool cp(const std::string& a_from,const std::string& a_to) {
+  if(a_to==a_from) return true;
+#ifdef WIN32
+  std::string cmd = "COPY /Y";
+#else
+  std::string cmd = "/bin/cp";
+#endif
+  cmd += " ";
+  cmd += quote(a_from);
+  cmd += " ";
+  cmd += quote(a_to);
+  int ret = ::system(cmd.c_str());
+  return (ret==(-1)?false:true);
+}
+
+inline bool rm(const std::string& a_file){
+  // WARNING : do not confuse with file::std_remove which is 
+  //           an encapsulation of the remove of stdio.h that
+  //           does not support wildcards.
+#ifdef WIN32
+  std::string cmd = "DEL /Q";
+#else
+  std::string cmd = "/bin/rm -f";
+#endif
+  cmd += " ";
+  cmd += quote(a_file);
+  int ret = ::system(cmd.c_str());
+  return (ret==(-1)?false:true);
+}
+
+
+/*
+class holder {
+public:
+  TOOLS_SCLASS(tools::file::holder)
+public:
+  holder(const std::string& a_path):m_path(a_path){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~holder() {
+    std_remove(m_path);
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  holder(const holder& a_from):m_path(a_from.m_path){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  holder& operator=(const holder& a_from){
+    m_path = a_from.m_path;
+    return *this;
+  }
+protected:
+  std::string m_path;
+};
+*/
+
+}}
+
+#include "file_reader"
+
+namespace tools {
+
+class FILE_reader : public virtual file::reader {
+public: //file_reader
+  virtual bool open(const std::string& a_file) {
+    if(m_FILE) return false;
+    m_FILE = ::fopen(a_file.c_str(),"rb");
+    if(!m_FILE) return false;
+    return true;
+  }
+  virtual void close() {
+    if(!m_FILE) return;
+    ::fclose(m_FILE);
+    m_FILE = 0;
+  }
+  virtual bool is_open() const {return m_FILE?true:false;}
+  virtual bool read(char* a_buff,unsigned int a_lbuf,size_t& a_length) {
+    a_length = ::fread(a_buff,1,a_lbuf,m_FILE);
+    return true;
+  }
+  virtual bool get_line(char* a_buff,unsigned int a_lbuf) {
+    return ::fgets(a_buff,a_lbuf,m_FILE)==NULL?false:true;
+  }
+  virtual bool eof() const {
+#if defined(_MSC_VER) && _MSC_VER <= 1400
+    return feof(m_FILE)?true:false;
+#else
+    return ::feof(m_FILE)?true:false;
+#endif
+  }
+public:
+  FILE_reader():m_FILE(0){}
+  virtual ~FILE_reader() {if(m_FILE) ::fclose(m_FILE);}
+protected:
+  FILE_reader(const FILE_reader& a_from)
+  :file::reader(a_from)
+  ,m_FILE(0)
+  {}
+  FILE_reader& operator=(const FILE_reader&){return *this;}
+protected:
+  FILE* m_FILE;
+};
+
+}
+
+#include "file_format" //backcomp
+
+#endif

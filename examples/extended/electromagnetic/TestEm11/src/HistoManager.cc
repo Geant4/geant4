@@ -27,14 +27,13 @@
 /// \brief Implementation of the HistoManager class
 //
 //
-// $Id: HistoManager.cc 74997 2013-10-25 10:52:13Z gcosmo $
+// $Id: HistoManager.cc 78560 2014-01-07 10:06:52Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoManager.hh"
 #include "G4UnitsTable.hh"
-#include "G4Threading.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

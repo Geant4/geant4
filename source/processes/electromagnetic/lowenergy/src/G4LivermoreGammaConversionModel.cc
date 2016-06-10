@@ -66,7 +66,16 @@ G4LivermoreGammaConversionModel::G4LivermoreGammaConversionModel
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LivermoreGammaConversionModel::~G4LivermoreGammaConversionModel()
-{}
+{
+  if(IsMaster()) {
+    for(G4int i=0; i<maxZ; ++i) {
+      if(data[i]) { 
+	delete data[i];
+	data[i] = 0;
+      }
+    }
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -116,9 +125,6 @@ void G4LivermoreGammaConversionModel::Initialise(
       }
     }
   }
-  
-  //
-  
   if(isInitialised) { return; }
   fParticleChange = GetParticleChangeForGamma();
   isInitialised = true;
@@ -126,8 +132,8 @@ void G4LivermoreGammaConversionModel::Initialise(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LivermoreGammaConversionModel::InitialiseLocal(const G4ParticleDefinition*,
-					              G4VEmModel* masterModel)
+void G4LivermoreGammaConversionModel::InitialiseLocal(
+     const G4ParticleDefinition*, G4VEmModel* masterModel)
 {
   SetElementSelectors(masterModel->GetElementSelectors());
 }

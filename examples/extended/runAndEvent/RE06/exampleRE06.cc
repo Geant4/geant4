@@ -26,7 +26,7 @@
 /// \file RE06/exampleRE06.cc
 /// \brief Main program of the RE06 example
 //
-// $Id: exampleRE06.cc 75123 2013-10-28 09:53:28Z gcosmo $
+// $Id: exampleRE06.cc 86969 2014-11-21 11:54:05Z gcosmo $
 // 
 // --------------------------------------------------------------
 //      GEANT 4 - example RE06 
@@ -47,11 +47,11 @@
 #endif
 
 #include "G4UImanager.hh"
-
+#include "FTFP_BERT.hh"
+#include "G4ParallelWorldPhysics.hh"
 
 #include "RE06DetectorConstruction.hh"
 #include "RE06ParallelWorld.hh"
-#include "RE06PhysicsList.hh"
 #include "RE06PrimaryGeneratorAction.hh"
 #include "RE06RunAction.hh"
 #include "RE06SteppingVerbose.hh"
@@ -76,11 +76,13 @@ int main(int argc,char** argv)
 
  // Set mandatory initialization classes
  //
+ G4String parallelWorldName = "ParallelScoringWorld";
  G4VUserDetectorConstruction* detector = new RE06DetectorConstruction;
- detector->RegisterParallelWorld(new RE06ParallelWorld("ParallelScoringWorld"));
+ detector->RegisterParallelWorld(new RE06ParallelWorld(parallelWorldName));
  runManager->SetUserInitialization(detector);
  //
- G4VUserPhysicsList* physics = new RE06PhysicsList;
+ G4VModularPhysicsList* physics = new FTFP_BERT;
+ physics->RegisterPhysics(new G4ParallelWorldPhysics(parallelWorldName));
  runManager->SetUserInitialization(physics);
   
  // Set user action classes

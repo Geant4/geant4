@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66870 2013-01-14 23:38:59Z adotti $
+# $Id: sources.cmake 80852 2014-05-13 15:37:00Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -44,12 +44,16 @@ set(G4VIS_DAWN_MODULE_HEADERS
     G4FRConst.hh
     G4FRFeatures.hh
     G4FRSceneFunc.icc
-    G4FRofstream.hh)
+    G4FRofstream.hh
+    G4VisFeaturesOfDAWNFILE.hh
+    G4VisFeaturesOfFukuiRenderer.hh)
 
 set(G4VIS_DAWN_MODULE_SOURCES
     G4DAWNFILE.cc
     G4DAWNFILESceneHandler.cc
-    G4DAWNFILEViewer.cc)
+    G4DAWNFILEViewer.cc
+    G4VisFeaturesOfDAWNFILE.cc
+    G4VisFeaturesOfFukuiRenderer.cc)
 
 #
 # DAWN Network driver only built if user selected

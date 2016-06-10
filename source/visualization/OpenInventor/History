@@ -1,4 +1,4 @@
-$Id: History 70646 2013-06-03 15:07:58Z gcosmo $
+$Id: History 80852 2014-05-13 15:37:00Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,19 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+13th May 2014  John Allison  (openinventor-V10-00-01)
+- Coworks: DAWN-V10-00-02, visman-V10-00-08, opengl-V10-00-05.
+- Moved G4VisFeaturesOfOpenInventor from management sub-category.
+
+03 Feb 2014  Gabriele Cosmo  (openinventor-V10-00-00)
+- Fixed shadowing compilation warnings in G4OpenInventorXtExaminerViewer.cc.
+
+21 Dec 2013  Frederick Jones
+- G4OpenInventorXtExaminerViewer.cc:
+  o Adjusted dimensions of viewer aux window.
+  o Implemented look-ahead for better tracking of trajectory animation.
+  o Implemented mouse-over readout for trajectories.
 
 29th May 2013  John Allison  (openinventor-V09-06-04)
 - SoCounterAction.cc:

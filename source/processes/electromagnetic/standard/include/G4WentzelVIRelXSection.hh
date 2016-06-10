@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIRelXSection.hh 67990 2013-03-13 10:56:28Z gcosmo $
+// $Id: G4WentzelVIRelXSection.hh 79067 2014-02-14 09:48:52Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -73,7 +73,7 @@ class G4WentzelVIRelXSection
 
 public:
 
-  G4WentzelVIRelXSection();
+  G4WentzelVIRelXSection(G4bool combined = true);
 
   virtual ~G4WentzelVIRelXSection();
 
@@ -131,6 +131,8 @@ private:
   G4int    nwarnings;
   G4int    nwarnlimit;
 
+  G4bool   isCombined;
+
   // single scattering parameters
   G4double coeff;
   G4double cosTetMaxElec;
@@ -181,8 +183,10 @@ G4WentzelVIRelXSection::SetupKinematic(G4double ekin, const G4Material* mat)
     mom2  = tkin*(tkin + 2.0*mass);
     invbeta2 = 1.0 +  mass*mass/mom2;
     factB = spin/invbeta2;
-    cosTetMaxNuc = 
-	std::max(cosThetaMax,1.-factorA2*mat->GetIonisation()->GetInvA23()/mom2);
+    if(isCombined) {
+      G4double cost = 1.-factorA2*mat->GetIonisation()->GetInvA23()/mom2;
+      if(cost > cosTetMaxNuc) { cosTetMaxNuc = cost; }
+    }
   } 
   return cosTetMaxNuc;
 }
@@ -240,7 +244,8 @@ G4WentzelVIRelXSection::ComputeElectronCrossSection(G4double cosTMin,
   G4double cost1 = std::max(cosTMin,cosTetMaxElec);
   G4double cost2 = std::max(cosTMax,cosTetMaxElec);
   if(cost1 > cost2) {
-    xsec = kinFactor*(cost1 - cost2)/((1.0 - cost1 + screenZ)*(1.0 - cost2 + screenZ));
+    xsec = kinFactor*(cost1 - cost2)/
+      ((1.0 - cost1 + screenZ)*(1.0 - cost2 + screenZ));
   }
   return xsec;
 }

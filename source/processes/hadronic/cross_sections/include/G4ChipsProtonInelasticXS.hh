@@ -85,6 +85,14 @@ private:
   G4int     lastI;   // The last position in the DAMDB
   std::vector<G4double*>* LEN;  // Vector of pointers to LowEnProtonCrossSection
   std::vector<G4double*>* HEN;  // Vector of pointers to HighEnProtonCrossSection
+    
+  G4int j;                      // A#0f Z/N-records already tested in AMDB
+  std::vector <G4int> colN;  // Vector of N for calculated nuclei (isotops)
+  std::vector <G4int> colZ;  // Vector of Z for calculated nuclei (isotops)
+  std::vector <G4double> colP;  // Vector of last momenta for the reaction
+  std::vector <G4double> colTH; // Vector of energy thresholds for the reaction
+  std::vector <G4double> colCS; // Vector of last cross sections for the reaction
+  
 };
 
 #endif

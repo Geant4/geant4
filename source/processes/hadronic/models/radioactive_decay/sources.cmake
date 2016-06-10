@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66793 2013-01-12 15:31:15Z gcosmo $
+# $Id: sources.cmake 85817 2014-11-05 15:15:58Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -52,6 +52,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
     HEADERS
+        G4AlphaDecay.hh
         G4AlphaDecayChannel.hh
         G4BetaDecayCorrections.hh
         G4BetaDecayType.hh
@@ -64,6 +65,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
         G4MshellECDecayChannel.hh
         G4NuclearDecayChannel.hh
         G4NucleusLimits.hh
+	G4ProtonDecayChannel.hh
         G4RIsotopeTable.hh
         G4RadioactiveDecay.hh
         G4RadioactiveDecayMode.hh
@@ -74,6 +76,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
         G4UIcmdWithNucleusLimits.hh
         G4UserLimitsForRD.hh
     SOURCES
+        G4AlphaDecay.cc
         G4BetaDecayCorrections.cc
         G4BetaDecayType.cc
         G4BetaFermiFunction.cc
@@ -121,4 +124,3 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
 )
 
 # List any source specific properties here
-

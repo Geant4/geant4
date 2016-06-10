@@ -1,4 +1,4 @@
-# $Id: gamma.mac 71678 2013-06-20 13:18:25Z gcosmo $
+# $Id: gamma.mac 82439 2014-06-20 10:37:29Z gcosmo $
 #
 # Macro file for "TestEm14.cc"
 # (can be run in batch, without graphic)
@@ -13,7 +13,7 @@
 #
 /run/initialize
 #
-/testem/phys/setCuts 1 nm
+/run/setCut 1 nm
 #
 /gun/particle gamma
 ###/gun/energy 100 keV

@@ -44,6 +44,7 @@
 
 #include "G4USolid.hh"
 #include "UOrb.hh"
+#include "G4Polyhedron.hh"
 
 class G4UOrb : public G4USolid
 {
@@ -56,6 +57,8 @@ class G4UOrb : public G4USolid
     void ComputeDimensions(      G4VPVParameterisation* p,
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
+
+    G4VSolid* Clone() const;
 
     inline UOrb* GetShape() const;
 
@@ -91,7 +94,7 @@ inline G4double G4UOrb::GetRadius() const
 inline void G4UOrb::SetRadius(G4double newRmax)
 {
   GetShape()->SetRadius(newRmax);
-  ResetPolyhedron();
+  fRebuildPolyhedron = true;
 }
 
 #endif

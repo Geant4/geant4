@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChipsNeutronElasticXS.cc 70680 2013-06-04 07:51:03Z gcosmo $
+// $Id: G4ChipsNeutronElasticXS.cc 84714 2014-10-20 07:37:24Z gcosmo $
 //
 //
 // G4 Physics class: G4ChipsNeutronElasticXS for nA elastic cross sections
@@ -51,6 +51,13 @@
 #include "G4CrossSectionFactory.hh"
 //
 G4_DECLARE_XS_FACTORY(G4ChipsNeutronElasticXS);
+
+namespace {
+    G4double mNeut;
+    G4double mProt;
+    G4double mNeut2;
+
+}
 
 G4ChipsNeutronElasticXS::G4ChipsNeutronElasticXS():G4VCrossSectionDataSet(Default_Name()), nPoints(128), nLast(nPoints-1) 
 {
@@ -90,6 +97,10 @@ G4ChipsNeutronElasticXS::G4ChipsNeutronElasticXS():G4VCrossSectionDataSet(Defaul
   lastTH=0.;  // Last threshold momentum
   lastCS=0.;  // Last value of the Cross Section
   lastI=0;    // The last position in the DAMDB
+
+    mNeut= G4Neutron::Neutron()->GetPDGMass()*.001;// MeV to GeV
+    mProt= G4Proton::Proton()->GetPDGMass()*.001;// MeV to GeV
+    mNeut2= mNeut*mNeut;
 }
 
 G4ChipsNeutronElasticXS::~G4ChipsNeutronElasticXS()
@@ -134,7 +145,7 @@ G4bool G4ChipsNeutronElasticXS::IsIsoApplicable(const G4DynamicParticle* Pt, G4i
 				 const G4Element*,
 				 const G4Material*)
 {
-  G4ParticleDefinition* particle = Pt->GetDefinition();
+  const G4ParticleDefinition* particle = Pt->GetDefinition();
   if (particle == G4Proton::Proton()      ) return true;
   return false;
 }
@@ -154,12 +165,6 @@ G4double G4ChipsNeutronElasticXS::GetIsoCrossSection(const G4DynamicParticle* Pt
 // Make pMom in independent units ! (Now it is MeV)
 G4double G4ChipsNeutronElasticXS::GetChipsCrossSection(G4double pMom, G4int tgZ, G4int tgN, G4int)
 {
-  static G4ThreadLocal std::vector <G4int>    *colN_G4MT_TLS_ = 0 ; if (!colN_G4MT_TLS_) colN_G4MT_TLS_ = new  std::vector <G4int>     ;  std::vector <G4int>    &colN = *colN_G4MT_TLS_;  // Vector of N for calculated nuclei (isotops)
-  static G4ThreadLocal std::vector <G4int>    *colZ_G4MT_TLS_ = 0 ; if (!colZ_G4MT_TLS_) colZ_G4MT_TLS_ = new  std::vector <G4int>     ;  std::vector <G4int>    &colZ = *colZ_G4MT_TLS_;  // Vector of Z for calculated nuclei (isotops)
-  static G4ThreadLocal std::vector <G4double> *colP_G4MT_TLS_ = 0 ; if (!colP_G4MT_TLS_) colP_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colP = *colP_G4MT_TLS_;  // Vector of last momenta for the reaction
-  static G4ThreadLocal std::vector <G4double> *colTH_G4MT_TLS_ = 0 ; if (!colTH_G4MT_TLS_) colTH_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colTH = *colTH_G4MT_TLS_; // Vector of energy thresholds for the reaction
-  static G4ThreadLocal std::vector <G4double> *colCS_G4MT_TLS_ = 0 ; if (!colCS_G4MT_TLS_) colCS_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colCS = *colCS_G4MT_TLS_; // Vector of last cross sections for the reaction
-  // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
 
   G4double pEn=pMom;
   onlyCS=false;
@@ -229,9 +234,7 @@ G4double G4ChipsNeutronElasticXS::GetChipsCrossSection(G4double pMom, G4int tgZ,
 G4double G4ChipsNeutronElasticXS::CalculateCrossSection(G4bool CS, G4int F,G4int I,
                                              G4int PDG, G4int tgZ, G4int tgN, G4double pIU)
 {
-  // *** Begin of Associative Memory DB for acceleration of the cross section calculations
-  static G4ThreadLocal std::vector <G4double>  *PIN_G4MT_TLS_ = 0 ; if (!PIN_G4MT_TLS_) PIN_G4MT_TLS_ = new  std::vector <G4double>   ;  std::vector <G4double>  &PIN = *PIN_G4MT_TLS_;   // Vector of max initialized log(P) in the table
-  // *** End of Static Definitions (Associative Memory Data Base) ***
+
   G4double pMom=pIU/GeV;                // All calculations are in GeV
   onlyCS=CS;                            // Flag to calculate only CS (not Si/Bi)
   lastLP=std::log(pMom);                // Make a logarithm of the momentum for calculation
@@ -2031,11 +2034,12 @@ G4double G4ChipsNeutronElasticXS::GetTabValues(G4double lp, G4int PDG, G4int tgZ
     G4double p16=p8*p8;
     G4double dl=lp-5.;
     G4double a=tgZ+tgN;
+    if(a<6.5)
+    {
     G4double pah=std::pow(p,a/2);
     G4double pa=pah*pah;
     G4double pa2=pa*pa;
-    if(a<6.5)
-    {
+
       theS1=lastPAR[15]/(1.+lastPAR[16]*p4*pa)+lastPAR[17]/(p4+lastPAR[18]*p4/pa2)+
             (lastPAR[19]*dl*dl+lastPAR[20])/(1.+lastPAR[21]/p2);
       theB1=(lastPAR[22]+lastPAR[23]*p2)/(p4+lastPAR[24]/pah)+lastPAR[25];
@@ -2078,10 +2082,6 @@ G4double G4ChipsNeutronElasticXS::GetTabValues(G4double lp, G4int PDG, G4int tgZ
 G4double G4ChipsNeutronElasticXS::GetQ2max(G4int PDG, G4int tgZ, G4int tgN,
                                                  G4double pP)
 {
-  static const G4double mNeut= G4Neutron::Neutron()->GetPDGMass()*.001; // MeV to GeV
-  static const G4double mProt= G4Proton::Proton()->GetPDGMass()*.001; // MeV to GeV
-
-  static const G4double mNeut2= mNeut*mNeut;
 
   G4double pP2=pP*pP;                                 // squared momentum of the projectile
   if(tgZ==0 && tgN==1)

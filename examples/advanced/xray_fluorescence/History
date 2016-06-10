@@ -1,4 +1,4 @@
-# $Id: History 77520 2013-11-25 12:09:36Z gcosmo $
+# $Id: History 82041 2014-06-10 08:01:33Z gcosmo $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: geant4-09-04-ref-00 $
 # -------------------------------------------------------------------
@@ -18,6 +18,65 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06-06-2014 L.Pandola Tag: XrayFluo-V10-00-10
+- Changed verbosity in livermore.mac to bring the output 
+below 1 MB (as requested for system testing)
+
+20-05-2014 L.Pandola Tag: XrayFluo-V10-00-09
+- Migrated SteppingVerbose, registered now through the 
+ ActionInitialization class.
+
+16-05-2014 L.Pandola Tag: XrayFluo-V10-00-08
+- Real MT migration: use the G4MTRunManager
+- Add PhysicsHasBeenChanged() to the commands of the physics list 
+ messenger
+
+13-05-2014 L.Pandola Tag: XrayFluo-V10-00-07
+- Fix a bug with ntuple numbering in XrayFluoAnalysisManager
+- Fix a bug in the ActionInitializer causing the rejection of previous tag
+
+08-05-2014 L.Pandola Tag: XrayFluo-V10-00-06
+- Updated hit class to make it MT-compliant
+- Fixed the procedure for the update of geometry between runs
+- Make const methods in the RunAction. Revised logic of RunAction: only 
+the master RunAction loads data
+- Take RunAction pointer in XrayFluoPrimaryGeneratorAction
+- Remove unused verbosity in XrayFluoDataSet
+- Revise logic for reading external events (MT-compliant). 
+- Protect methods of the singleton analysis class by Mutex.
+
+22-04-2014 L.Pandola Tag: XrayFluo-V10-00-05
+- Created and integrated an action initialization class. 
+- Make const methods and add ConstructSDandField() in the detector 
+ construction classes. 
+- Getting prepared for the MT migration
+
+17-04-2014 L.Pandola Tag: XrayFluo-V10-00-04
+- Fix bug in the analysis manager
+- Remove the workaround to avoid the deletion of the output file
+ (following the fix in analysis-V10-00-09)
+
+15-04-2014 L.Pandola Tag: XrayFluo-V10-00-03
+- Remove compiler warning which caused the rejection of 
+XrayFluo-V10-00-02
+
+14-04-2014 L.Pandola Tag: XrayFluo-V10-00-02
+- Complete the migration to the g4tools (removed AIDA dependency).
+Method XrayFluoAnalysisManager::LoadGunData() is restored by using the
+new G4AnalysisReader interface.
+
+13-12-2013 L.Pandola Tag: XrayFluo-V10-00-01
+- First partial migration to g4tools (internal tag). Removed AIDA 
+dependency. Output works properly, but the application is presently 
+unable to use the method 
+ XrayFluoAnalysisManager::LoadGunData()
+to open a phase space file and feed data to the primary generator.
+
+13-12-2013 L.Pandola Tag: XrayFluo-V10-00-00
+- Fix shadowed variables and compilation errors due to the #include of 
+G4SystemOfUnits. Do not show up in system testing, but only when AIDA 
+is available.
 
 25-11-2013 G.Folger Tag: XrayFluo-V09-06-02
 - Fix  one more typo in XrayFluoDetectorConstruction.cc: G4cout replaced by G4endl; 

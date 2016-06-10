@@ -23,29 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMolecularDissociationDisplacer.cc 74551 2013-10-14 12:59:14Z gcosmo $
+// $Id: G4VMolecularDissociationDisplacer.cc 85244 2014-10-27 08:24:13Z gcosmo $
 //
 #include "G4VMolecularDissociationDisplacer.hh"
 #include "G4Molecule.hh"
 
-/*G4ThreadLocal*/ DisplacementType *G4VMolecularDecayDisplacer::Last = 0;
-const DisplacementType G4VMolecularDecayDisplacer::NoDisplacement = G4VMolecularDecayDisplacer::AddDisplacement();
+DisplacementType *G4VMolecularDecayDisplacer::Last = 0;
+const DisplacementType G4VMolecularDecayDisplacer::NoDisplacement =
+    G4VMolecularDecayDisplacer::AddDisplacement();
 
 G4VMolecularDecayDisplacer::G4VMolecularDecayDisplacer()
 {
-    if (!Last) Last = new DisplacementType ( 0) ;
-    fVerbose = 0;
+  if (!Last) Last = new DisplacementType(0);
+  fVerbose = 0;
 }
 
 G4VMolecularDecayDisplacer::~G4VMolecularDecayDisplacer()
 {
-    ;
+  ;
 }
 
 DisplacementType G4VMolecularDecayDisplacer::AddDisplacement()
 {
-    if (!Last) Last = new DisplacementType ( 0) ;
-    DisplacementType output = *Last;
-    (*Last)++;
-    return output;
+  if (!Last) Last = new DisplacementType(0);
+  DisplacementType output = *Last;
+  (*Last)++;
+  return output;
 }

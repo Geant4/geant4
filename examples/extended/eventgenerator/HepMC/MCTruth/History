@@ -1,4 +1,4 @@
-$Id: History 73446 2013-08-27 11:32:59Z gcosmo $
+$Id: History 82281 2014-06-13 14:47:16Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 June 2014 W. Pokorski (mctruthex-V10-00-00)
+- changes to comply with coding conventions
 
 30 August 2012 W. Pokorski (mctruthex-V09-05-02)
 - fixes in Cmake file

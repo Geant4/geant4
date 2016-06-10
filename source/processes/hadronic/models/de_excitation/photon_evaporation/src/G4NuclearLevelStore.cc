@@ -23,13 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearLevelStore.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4NuclearLevelStore.cc 86986 2014-11-21 13:00:05Z gcosmo $
 //
 // 06-10-2010 M. Kelsey -- Drop static data members.
 // 17-11-2010 V. Ivanchenko - make as a classical singleton. 
 // 17-10-2011 V. L. Desorgher - allows to define separate datafile for 
 //               given isotope
 // 06-01-2012 V. Ivanchenko - cleanup the code; new method GetLevelManager  
+// 19-11-2014 M. Asai - protection against reading the same file from     
+//               more than one worker threads
 //
 
 #include "G4NuclearLevelStore.hh"
@@ -37,13 +39,23 @@
 #include <fstream>
 
 G4ThreadLocal G4NuclearLevelStore* G4NuclearLevelStore::theInstance = 0;
+#ifdef G4MULTITHREADED
+G4NuclearLevelStore* G4NuclearLevelStore::theShadowInstance = 0;
+G4Mutex G4NuclearLevelStore::nuclearLevelStoreMutex = G4MUTEX_INITIALIZER;
+#endif
 
 G4NuclearLevelStore* G4NuclearLevelStore::GetInstance()
 {
   if(!theInstance) {
-    static G4ThreadLocal G4NuclearLevelStore *store_G4MT_TLS_ = 0 ; if (!store_G4MT_TLS_) store_G4MT_TLS_ = new  G4NuclearLevelStore  ;  G4NuclearLevelStore &store = *store_G4MT_TLS_;
-    theInstance = &store;
+    static G4ThreadLocalSingleton<G4NuclearLevelStore> inst;
+    theInstance = inst.Instance();
   }
+#ifdef G4MULTITHREADED
+  if(!theShadowInstance) {
+    static G4NuclearLevelStore shadowInst;
+    theShadowInstance = &shadowInst;
+  }
+#endif
   return theInstance;
 }
 
@@ -65,17 +77,19 @@ G4NuclearLevelStore::G4NuclearLevelStore()
 
 G4NuclearLevelStore::~G4NuclearLevelStore()
 {
-  ManagersMap::iterator i;
-  for (i = theManagers.begin(); i != theManagers.end(); ++i)
-    { delete i->second; }
-  MapForHEP::iterator j;
-  for (j = managersForHEP.begin(); j != managersForHEP.end(); ++j)
-    { delete j->second; }
-  if(userFiles) {
-    std::map<G4int, G4String>::iterator k;
-    for (k = theUserDataFiles.begin(); k != theUserDataFiles.end(); ++k)
-      { delete k->second; }
+#ifdef G4MULTITHREADED
+  if(this==theShadowInstance) // G4NuclearLevelManager object should be deleted only by the master
+  {
+#endif
+    ManagersMap::iterator i;
+    for (i = theManagers.begin(); i != theManagers.end(); ++i)
+      { delete i->second; }
+    MapForHEP::iterator j;
+    for (j = managersForHEP.begin(); j != managersForHEP.end(); ++j)
+      { delete j->second; }
+#ifdef G4MULTITHREADED
   }
+#endif
 }
 
 void 
@@ -123,24 +137,55 @@ G4NuclearLevelStore::GetManager(G4int Z, G4int A)
     
   // Check if already exists that key
   ManagersMap::iterator idx = theManagers.find(key);
-  // If doesn't exists then create it
+
+#ifdef G4MULTITHREADED
+  // If doesn't exists then check the master
   if ( idx == theManagers.end() )
+  {
+    G4MUTEXLOCK(&G4NuclearLevelStore::nuclearLevelStoreMutex);
+    ManagersMap::iterator idxS = theShadowInstance->theManagers.find(key);
+    if ( idxS == theShadowInstance->theManagers.end() )
     {
+      // If doesn't exists then create it
       G4String file = dirName + GenerateFileName(Z,A);
 
       //Check if data have been provided by the user
       if(userFiles) {
-	G4String file1 = theUserDataFiles[key];//1000*A+Z];
-	if (file1 != "") { file = file1; }
+        G4String file1 = theUserDataFiles[key];//1000*A+Z];
+        if (file1 != "") { file = file1; }
+      }
+      result = new G4NuclearLevelManager(Z,A,file);
+      theShadowInstance->theManagers.insert(std::make_pair(key,result));
+    }
+    else
+    {
+      // if it exists in the master
+      result = idxS->second;
+    }
+    // register to the local map
+    theManagers.insert(std::make_pair(key,result));
+    G4MUTEXUNLOCK(&G4NuclearLevelStore::nuclearLevelStoreMutex);
+  }
+#else
+  // If doesn't exists then create it
+  if ( idx == theManagers.end() )
+  {
+      G4String file = dirName + GenerateFileName(Z,A);
+
+      //Check if data have been provided by the user
+      if(userFiles) {
+        G4String file1 = theUserDataFiles[key];//1000*A+Z];
+        if (file1 != "") { file = file1; }
       }
       result = new G4NuclearLevelManager(Z,A,file);
       theManagers.insert(std::make_pair(key,result));
-    }
-  // But if it exists...
+  }
+#endif
   else
-    {
-      result = idx->second;
-    }
+  // But if it exists...
+  {
+    result = idx->second;
+  }
     
   return result; 
 }
@@ -154,14 +199,35 @@ G4NuclearLevelStore::GetLevelManager(G4int Z, G4int A)
     
   // Check if already exists that key
   MapForHEP::iterator idx = managersForHEP.find(key);
+
+#ifdef G4MULTITHREADED
+  // If doesn't exists check the master
+  if ( idx == managersForHEP.end() ) {
+    G4MUTEXLOCK(&G4NuclearLevelStore::nuclearLevelStoreMutex);
+    MapForHEP::iterator idxS = theShadowInstance->managersForHEP.find(key);
+    if ( idxS == theShadowInstance->managersForHEP.end() ) {
+      // If doesn't exists create it
+      result = new G4LevelManager(Z,A,reader,
+				dirName + GenerateFileName(Z,A));
+      theShadowInstance->managersForHEP.insert(std::make_pair(key,result));
+    }
+    else
+    { result = idxS->second; }
+    // register to the local map
+    managersForHEP.insert(std::make_pair(key,result));
+    G4MUTEXUNLOCK(&G4NuclearLevelStore::nuclearLevelStoreMutex);
+  }
+#else
   // If doesn't exists then create it
   if ( idx == managersForHEP.end() ) {
     result = new G4LevelManager(Z,A,reader,
 				dirName + GenerateFileName(Z,A));
     managersForHEP.insert(std::make_pair(key,result));
-
+  }
+#endif
+  else
     // it exists
-  } else {
+  {
     result = idx->second;
   }
     

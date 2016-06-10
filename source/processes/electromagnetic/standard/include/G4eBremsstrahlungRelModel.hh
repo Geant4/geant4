@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.hh 75582 2013-11-04 12:13:01Z gcosmo $
+// $Id: G4eBremsstrahlungRelModel.hh 83685 2014-09-09 12:39:00Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -182,7 +182,6 @@ private:
 
   // flags
   G4bool   use_completescreening;
-  G4bool   isInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

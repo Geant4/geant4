@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITTrackingInteractivity.cc 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4ITTrackingInteractivity.cc 85244 2014-10-27 08:24:13Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
@@ -41,22 +41,22 @@
 
 void G4ITTrackingInteractivity::TrackBanner(G4Track* track, const G4String& message)
 {
-    G4cout << G4endl;
-    G4cout << "*******************************************************"
-           << "**************************************************"
-           << G4endl;
-    if(message != "")
-        G4cout << message ;
-    G4cout << " * G4Track Information: "
-           << "   Particle : " << track->GetDefinition()->GetParticleName()
-           << ","
-           << "   Track ID : " << track->GetTrackID()
-           << ","
-           << "   Parent ID : " << track->GetParentID()
-           << G4endl;
-    G4cout << "*******************************************************"
-           << "**************************************************"
-           << G4endl;
-    G4cout << G4endl;
+  G4cout << G4endl;
+  G4cout << "*******************************************************"
+         << "**************************************************"
+         << G4endl;
+  if(message != "")
+      G4cout << message ;
+  G4cout << " * G4Track Information: "
+         << "   Particle : " << track->GetDefinition()->GetParticleName()
+         << ","
+         << "   Track ID : " << track->GetTrackID()
+         << ","
+         << "   Parent ID : " << track->GetParentID()
+         << G4endl;
+  G4cout << "*******************************************************"
+         << "**************************************************"
+         << G4endl;
+  G4cout << G4endl;
 }
 

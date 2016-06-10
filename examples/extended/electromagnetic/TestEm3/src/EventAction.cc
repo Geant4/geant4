@@ -26,47 +26,34 @@
 /// \file electromagnetic/TestEm3/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id: EventAction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id: EventAction.cc 78655 2014-01-14 11:13:41Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "EventAction.hh"
 
-#include "RunAction.hh"
-#include "EventActionMessenger.hh"
+#include "Run.hh"
 #include "HistoManager.hh"
 
+#include "G4RunManager.hh"
 #include "G4Event.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(DetectorConstruction* det, RunAction* run)
-:G4UserEventAction(),fDetector(det), fRunAct(run),
- fEventMessenger(0)
-{
-  fDrawFlag = "none";
-  fPrintModulo = 10000;
-  fEventMessenger = new EventActionMessenger(this);
-}
+EventAction::EventAction(DetectorConstruction* det)
+:G4UserEventAction(),fDetector(det)
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
-{
-  delete fEventMessenger;
-}
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::BeginOfEventAction(const G4Event* evt)
-{   
-  G4int evtNb = evt->GetEventID();
-
-  //survey printing
-  if (evtNb%fPrintModulo == 0)
-    G4cout << "\n---> Begin Of Event: " << evtNb << G4endl;
-    
+void EventAction::BeginOfEventAction(const G4Event*)
+{       
   //initialize EnergyDeposit per event
   //
   for (G4int k=0; k<MaxAbsor; k++) {
@@ -78,8 +65,12 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 
 void EventAction::EndOfEventAction(const G4Event*)
 {
+  //get Run
+  Run* run = static_cast<Run*>(
+             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+             
   for (G4int k=1; k<=fDetector->GetNbOfAbsor(); k++) {
-     fRunAct->FillPerEvent(k,fEnergyDeposit[k],fTrackLengthCh[k]);                       
+     run->FillPerEvent(k,fEnergyDeposit[k],fTrackLengthCh[k]);
      if (fEnergyDeposit[k] > 0.)
              G4AnalysisManager::Instance()->FillH1(k, fEnergyDeposit[k]);
   }

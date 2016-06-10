@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDef.hh 66376 2012-12-18 09:42:59Z gcosmo $
+// $Id: G4AttDef.hh 78955 2014-02-05 09:45:46Z gcosmo $
 
 #ifndef G4ATTDEF_HH
 #define G4ATTDEF_HH
@@ -58,20 +58,20 @@
 
   public:
     G4AttDef(const G4String& name,
-	     const G4String& desc,
-	     const G4String& category,
-	     const G4String& extra,
-	     const G4String& valueType):
+             const G4String& desc,
+             const G4String& category,
+             const G4String& extra,
+             const G4String& valueType):
       m_name(name),m_desc(desc),
       m_category(category),
       m_extra(extra),m_valueType(valueType){};
 
     // G4Typekey based constructor
     G4AttDef(const G4String& name,
-	     const G4String& desc,
-	     const G4String& category,
-	     const G4String& extra,
-	     const G4TypeKey& typeKey):
+             const G4String& desc,
+             const G4String& category,
+             const G4String& extra,
+             const G4TypeKey& typeKey):
       m_name(name),m_desc(desc),
       m_category(category),
       m_extra(extra),m_valueType("Null"), 
@@ -110,7 +110,15 @@
 
   };
 
+// Deprecated.  It is not a good idea to output a pointer since failure to
+// include this prototype will not cause a compilation error - it will merely
+// cause your code to use a default function that outputs the pointer as an
+// address.
 std::ostream& operator<<
-  (std::ostream& os, const std::map<G4String,G4AttDef>* definitions);
+(std::ostream& os, const std::map<G4String,G4AttDef>* definitions);
+
+// Use this instead.
+std::ostream& operator<<
+(std::ostream& os, const std::map<G4String,G4AttDef>& definitions);
 
 #endif //G4ATTDEF_H

@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -69,7 +70,7 @@ namespace G4INCL {
   {
   }
 
-  FinalState* RecombinationChannel::getFinalState()
+  void RecombinationChannel::fillFinalState(FinalState *fs)
   {
     // Compute the total available energy in the CM
     const G4double sqrts = KinematicsUtils::totalEnergyInCM(theDelta, theNucleon);
@@ -93,7 +94,7 @@ namespace G4INCL {
         theNucleon->setType(Neutron);
         break;
       default:
-        INCL_ERROR("Unknown particle type in RecombinationChannel" << std::endl);
+        INCL_ERROR("Unknown particle type in RecombinationChannel" << '\n');
         break;
     }
 
@@ -112,11 +113,8 @@ namespace G4INCL {
     theNucleon->adjustEnergyFromMomentum();
 
     // Create the final state
-    FinalState *fs = new FinalState();
     fs->addModifiedParticle(theDelta);
     fs->addModifiedParticle(theNucleon);
-
-    return fs;
 
   }
 

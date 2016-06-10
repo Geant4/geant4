@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 76280 2013-11-08 12:54:34Z gcosmo $
+$Id: History 85586 2014-10-31 09:10:31Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,48 @@ $Id: History 76280 2013-11-08 12:54:34Z gcosmo $
 
                           History file
                           ------------
+
+30.10.2014   V.Ivanchenko, Tag gammaraytel-V10-00-08
+             Use correct mu- stopping process
+
+10.09.2014   G.Cosmo, Tag gammaraytel-V10-00-07
+             Corrected compilation error in GammaRayTelIonPhysics.cc
+             for missing inclusion of units header.
+
+30.06.2014   L.Pandola, Tag gammaraytel-V10-00-06
+             Write separate files for each thread/run, if option 
+             G4STORE_DATA is active.
+             Move ordering of commands in macro: the generator action
+              is not instantiated before the run initialization
+             MT Migration: use G4MTRunManager if applicable
+             Set some volumes to invisible for faster visualization
+
+14.06.2014   L.Pandola, Tag  gammaraytel-V10-00-05
+             Get rid of additional compiler warning from 
+             GammaRayTelEventAction showing up when 
+             G4STORE_DATA=OFF
+
+13.06.2014   L.Pandola, Tag  gammaraytel-V10-00-04
+             Get rid of compiler warning in GammaRayTelRunAction 
+             showing up when G4STORE_DATA=OFF
+
+12.06.2014   L.Pandola, Tag  gammaraytel-V10-00-03
+	     const access to DetectorConstruction by PrimaryGen
+	     Remove G4ANALYSIS_USE flag (no external dependency!)
+	     Get rid of the extern output file (now member of RunAction)
+
+11.06.2014   L.Pandola, Tag  gammaraytel-V10-00-02
+	     Migrated hit and digi classes, to make them MT-compliant
+	     Added method ConstructSDandField in the geometry class
+             Use G4GlobalFieldManager instead of local field
+	     
+19.05.2014   F.Longo, Tag gammaraytel-V10-00-01
+             Removed deprecated RO geometry
+
+07.05.2014   L.Pandola, Tag gammaraytel-V10-00-00
+	     Start to prepare the MT migration: (1) create ActionInitializer
+             (2) make const Getters in the detector construction; (3) 
+             retrieve const pointer to geometry from Analysis class
 
 07.11.2013   L.Pandola, Tag: gammaraytel-V09-06-06
 	     Edit physics list according to A. Ribon's suggestions.

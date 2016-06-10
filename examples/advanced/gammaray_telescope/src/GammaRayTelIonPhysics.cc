@@ -24,15 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelIonPhysics.cc 76280 2013-11-08 12:54:34Z gcosmo $
+// $Id: GammaRayTelIonPhysics.cc 83708 2014-09-10 10:08:47Z gcosmo $
 //
 // 
+
+#include <iomanip>   
 
 #include "GammaRayTelIonPhysics.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <iomanip>   
+#include "G4SystemOfUnits.hh"
 
 
 GammaRayTelIonPhysics::GammaRayTelIonPhysics(const G4String& name)

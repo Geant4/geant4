@@ -32,7 +32,7 @@
 //    *                                  *
 //    ************************************
 //
-// $Id: PurgMagAnalysisManager.hh 69086 2013-04-18 07:29:59Z gcosmo $
+// $Id: PurgMagAnalysisManager.hh 84477 2014-10-16 08:44:04Z gcosmo $
 //
 
 #ifndef G4PROCESSTESTANALYSIS_HH
@@ -42,8 +42,11 @@
 #include <vector>
 #include "G4ThreeVector.hh"
 
+//!Uncomment #include to switch to ROOT or XML output file
 //#include "g4root.hh"
 //#include "g4xml.hh"
+
+//! Default here is a CSV file
 #include "g4csv.hh"
 
 

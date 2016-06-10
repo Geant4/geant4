@@ -183,12 +183,20 @@ class G4Track;
 class G4BiasingProcessInterface;
 class G4LogicalVolume;
 class G4VParticleChange;
+class G4BiasingOperatorStateNotifier;
 #include <map>
 #include <vector>
 #include "G4BiasingAppliedCase.hh"
 #include "G4Cache.hh"
 
+
 class G4VBiasingOperator {
+
+  // -- State machine used to inform operators
+  // -- about run starting.
+  // -- Defined at the end of this file.
+  friend class G4BiasingOperatorStateNotifier;
+  
 public:
   // ---------------
   // -- Constructor:
@@ -314,6 +322,9 @@ private:
   static G4VectorCache<G4VBiasingOperator* > fOperators;
   // static std::vector < G4VBiasingOperator* > fOperators;
 
+  // -- thread local:
+  static G4Cache< G4BiasingOperatorStateNotifier* > fStateNotifier;
+
 
   // -- For this operator:
   std::vector< const G4LogicalVolume* >        fRootVolumes;
@@ -333,6 +344,19 @@ private:
   const G4VBiasingOperation*     fPreviousAppliedNonPhysicsBiasingOperation;
   G4BiasingAppliedCase                          fPreviousBiasingAppliedCase;
   
+};
+
+// -- state machine to get biasing operators
+// -- messaged at the beginning of runs:
+#include "G4VStateDependent.hh"
+class G4BiasingOperatorStateNotifier : public G4VStateDependent {
+public:
+  G4BiasingOperatorStateNotifier();
+  ~G4BiasingOperatorStateNotifier();
+public:
+  G4bool Notify(G4ApplicationState requestedState);
+private:
+  G4ApplicationState fPreviousState;
 };
 
 #endif

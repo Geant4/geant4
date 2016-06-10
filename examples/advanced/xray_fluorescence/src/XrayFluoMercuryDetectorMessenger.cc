@@ -44,6 +44,7 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithABool.hh"
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -91,16 +92,6 @@ XrayFluoMercuryDetectorMessenger::XrayFluoMercuryDetectorMessenger(XrayFluoMercu
   orbitHeightCmd->SetDefaultUnit( "km" );
   orbitHeightCmd->SetUnitCategory( "Length" );
   orbitHeightCmd->AvailableForStates(G4State_Idle);
-
-
-
-//   granularityFlagCmd= new G4UIcmdWithABool("/apparate/sampleGranularity",this);
-//   granularityFlagCmd->SetGuidance("Set if sample granularity is present");
-//   granularityFlagCmd->SetGuidance( "After this, /apparate/update must be executed before BeamOn" );
-//   granularityFlagCmd->SetParameterName("Granularity Flag",true);
-//   granularityFlagCmd->SetDefaultValue(false);
-//   granularityFlagCmd->AvailableForStates(G4State_Idle);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -116,8 +107,12 @@ XrayFluoMercuryDetectorMessenger::XrayFluoMercuryDetectorMessenger(XrayFluoMercu
 void XrayFluoMercuryDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
  if( command == UpdateCmd )
-   { Detector->UpdateGeometry(); }
-
+   { 
+     //This triggers a full re-build of the geometry. The method in the 
+     //geometry will take care of that.
+     Detector->UpdateGeometry(); 
+     return;
+   }
  else if ( command == sampleCmd )
    { Detector->SetMercuryMaterial(newValue);}
 
@@ -135,14 +130,8 @@ void XrayFluoMercuryDetectorMessenger::SetNewValue(G4UIcommand* command,G4String
      G4double newAngle = orbitHeightCmd->GetNewDoubleValue(newValue);  
      Detector->SetOribitHeight(newAngle);
    }
-
-
-//  else if ( command == granularityFlagCmd )
-//    { 
-//      Detector->DeleteGrainObjects();
-//      G4bool newGranFlag = granularityFlagCmd->GetNewBoolValue(newValue);
-//      Detector->SetMercuryGranularity(newGranFlag);
-//    }
+ //Notify the run manager that the geometry has been modified
+ G4RunManager::GetRunManager()->GeometryHasBeenModified();
  
 }
 

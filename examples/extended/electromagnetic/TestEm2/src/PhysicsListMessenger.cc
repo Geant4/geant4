@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm2/src/PhysicsListMessenger.cc
 /// \brief Implementation of the PhysicsListMessenger class
 //
-// $Id: PhysicsListMessenger.cc 75118 2013-10-28 09:40:24Z gcosmo $
+// $Id: PhysicsListMessenger.cc 78550 2014-01-07 09:43:41Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,7 +49,8 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
   fListCmd = new G4UIcmdWithAString("/testem/phys/addPhysics",this);  
   fListCmd->SetGuidance("Add modula physics list.");
   fListCmd->SetParameterName("PList",false);
-  fListCmd->AvailableForStates(G4State_PreInit);  
+  fListCmd->AvailableForStates(G4State_PreInit);
+  fListCmd->SetToBeBroadcasted(false);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,80 +1,65 @@
-# G.A.P.Cirrone
-#
-# Batch macro file. It can be called to run Hadrontherapy in batch with no visualisation
-# 
-#
-# This macro can be used for a proton beam in water. Both electromagnetic and
-# hadronic models are swiched on
-
-#########################
-# Set of the verboses 
+#A Tramontana
+# INFN-LNS
+#######################
+# Set of the verboses # 
+#######################
 #
 /control/verbose 1
 /tracking/verbose 0
 /run/verbose 1
 /event/verbose 0
 
-##########################
-# Set of the physic models
-#
-/Physics/addPhysics QGSP_BIC_EMY
+###########################################################################################################
+#					ACTIVATED PHYSICS MODELS
 
-##########################
-# Initialisation procedure
-#
+
+/Physics/addPhysics standard_opt4
+
+/geometrySetup/selectGeometry LaserDriven
+
+# Initialize geometry and physic 
 /run/initialize
 
+########################################################################################################## 
 
-##########################
-# Set here the cut and the step max for the tracking. 
-# Suggested values of cut and step:
-#
-# Set cuts ONLY inside the detector
-/Physics/setDetectorCuts 0.01 mm
-
-# Set cuts OUTSIDE the detector 
-/Physics/setCuts 1 mm
-
-/Step/waterPhantomStepMax 0.01 mm 
-
-#########################
-# Set the primary particle type,
-# energy and position along the X direction
-
-
-#---------------------------gps-----------------
-/gps/pos/shape Circle
-/gps/pos/centre -310. 0. 0. cm
-/gps/pos/radius 0. mm
-/gps/pos/sigma_r 2. mm
 /gps/particle proton
+
+
 /gps/pos/type Beam
+/gps/pos/shape Circle
 
-
-# the incident surface is in the y-z plane
-
-/gps/pos/rot1 0 1 0
-/gps/pos/rot2 0 0 1
-
-# the beam is travelling along the x-axis without any angular dispersion (angular despersion set to 0.0)
-#
+/gps/pos/centre -171.3 0.0 0.0 cm   
+/gps/pos/radius 0.0 mm   
+/gps/pos/sigma_r 0.1 mm  
 
 /gps/ang/rot1 0 0 1
-/gps/ang/rot2 0 1 0 
-/gps/ang/type beam1d 
-/gps/ang/sigma_r 0. deg
+/gps/ang/rot2 0 1 0
+/gps/pos/rot1 0 0 1
+/gps/pos/rot2 0 1 0
 
 
-# the beam energy is in gaussian profile
-#
-/gps/ene/type Gauss
-/gps/ene/mono 62 MeV
-/gps/ene/sigma 0.3 MeV
+################### the beam energy is uniform profile from 4.0 MeV to 12 MeV
+/gps/ene/type User
+/gps/ene/type User
+/gps/hist/type energy
+/gps/hist/point 4.000001 0
+/gps/hist/point 12. 1
+/gps/direction 1 0 0
 
 
-#########################
-# Display the event number
-# during the run
-# 
+/Step/waterPhantomStepMax 1 mm 
+
+
+##################################################				
+#	    DETECTOR DESCRIPTION
+/changePhantom/position 100 100 0 cm
+/changePhantom/size 40 40 40  cm
+/changeDetector/size 4 4 4 cm
+/changeDetector/voxelSize 1 40 40 mm
+# Put the detector in the lower left corner of the phantom
+/changeDetector/displacement 0 18 18 cm
+/changePhantom/update
+
 /event/printEventNumber 100
-/run/beamOn 1000
+
+/run/beamOn 500

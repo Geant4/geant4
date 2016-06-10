@@ -35,6 +35,8 @@
 // 10.11.2005 V.Ivanchenko edit to provide a standard
 // 19.06.2006 V.Ivanchenko add mu-nuclear process
 // 16.10.2012 A.Ribon: renamed G4EmExtraBertiniPhysics as G4EmExtraPhysics
+// 10.04.2014 A.Dotti: Add MT functionality for messenger
+// 24.04.2014 A.Ribon: switched on muon-nuclear by default
 //
 //----------------------------------------------------------------------------
 //
@@ -53,6 +55,7 @@
 #include "G4MuonMinus.hh"
 #include "G4ProcessManager.hh"
 #include "G4BuilderType.hh"
+#include "G4AutoDelete.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -65,14 +68,22 @@ G4ThreadLocal G4bool G4EmExtraPhysics::gnActivated  = false;
 G4ThreadLocal G4bool G4EmExtraPhysics::synActivated = false;
 G4ThreadLocal G4bool G4EmExtraPhysics::synchOn      = false;
 G4ThreadLocal G4bool G4EmExtraPhysics::gammNucOn    = true;
-G4ThreadLocal G4bool G4EmExtraPhysics::muNucOn      = false;
+G4ThreadLocal G4bool G4EmExtraPhysics::muNucOn      = true;
 
+namespace {
+    //Thread-private instance of a messenger.
+    //Needed because this is a shared instance,
+    //but threads need access to UI commands.
+    G4ThreadLocal G4EmMessenger* theLocalMessenger = 0;
+}
 
 G4EmExtraPhysics::G4EmExtraPhysics(G4int ver): 
   G4VPhysicsConstructor("G4GammaLeptoNuclearPhys"),
   verbose(ver)
 {
+  theGNPhysics = 0;
   theMessenger = new G4EmMessenger(this);
+  theLocalMessenger = theMessenger;
   SetPhysicsType(bEmExtra);
   if(verbose > 1) G4cout << "### G4EmExtraPhysics" << G4endl;
 }
@@ -89,6 +100,7 @@ G4EmExtraPhysics::G4EmExtraPhysics(const G4String&):
 G4EmExtraPhysics::~G4EmExtraPhysics()
 {
   delete theMessenger;
+  delete theGNPhysics;
 }
 
 void G4EmExtraPhysics::Synch(G4String & newState)
@@ -128,7 +140,12 @@ void G4EmExtraPhysics::ConstructProcess()
 {
   if(wasBuilt) return;
   wasBuilt = true;
-
+  if ( theLocalMessenger == 0 ) {
+    //This thread needs a private instence of the messenger
+    theLocalMessenger = new G4EmMessenger(this);
+    G4AutoDelete::Register(theLocalMessenger); 
+    //This is tricky. Messenger should be safely deleted at the end of the job
+  }
   if (synchOn)   BuildSynch();
   if (gammNucOn) BuildGammaNuclear();
   if (muNucOn)   BuildMuonNuclear();
@@ -156,7 +173,7 @@ void G4EmExtraPhysics::BuildGammaNuclear()
   if(gnActivated) return;
   gnActivated = true;
 
-  G4BertiniElectroNuclearBuilder* theGNPhysics = new G4BertiniElectroNuclearBuilder();
+  theGNPhysics = new G4BertiniElectroNuclearBuilder();
   theGNPhysics->Build();
 }
 

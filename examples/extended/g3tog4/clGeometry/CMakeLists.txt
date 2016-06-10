@@ -24,28 +24,21 @@ include(${Geant4_USE_FILE})
 # Locate sources and headers for this project
 #
 include_directories(${PROJECT_SOURCE_DIR}/include 
-                    ${PROJECT_SOURCE_DIR}/../../common/userActions/include
-                    ${PROJECT_SOURCE_DIR}/../../common/primaryGenerator/include
+                    ${PROJECT_SOURCE_DIR}/common/include 
                     ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 #----------------------------------------------------------------------------
-# Get examples sources from common and shared
+# Add common subdirectory
 #
-list(APPEND sources 
-  # uncomment the line below to include HBOOK analysis
-  ${PROJECT_SOURCE_DIR}/../../common/userActions/src/ExG4EventAction01.cc
-  ${PROJECT_SOURCE_DIR}/../../common/userActions/src/ExG4EventAction01Messenger.cc
-  ${PROJECT_SOURCE_DIR}/../../common/userActions/src/ExG4RunAction01.cc
-  ${PROJECT_SOURCE_DIR}/../../common/userActions/src/ExG4RunAction01Messenger.cc
-  ${PROJECT_SOURCE_DIR}/../../common/primaryGenerator/src/ExG4PrimaryGeneratorAction01.cc)
-  
+add_subdirectory(common) 
+
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(clGeometry clGeometry.cc ${sources} ${headers})
-target_link_libraries(clGeometry ${Geant4_LIBRARIES} G3toG4 )
+target_link_libraries(clGeometry ${Geant4_LIBRARIES} G3toG4 common)
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
@@ -60,6 +53,19 @@ foreach(_script ${clGeometry_SCRIPTS})
   configure_file(
     ${PROJECT_SOURCE_DIR}/${_script}
     ${PROJECT_BINARY_DIR}/${_script}
+    COPYONLY
+    )
+endforeach()
+
+#----------------------------------------------------------------------------
+# Copy data
+#
+file(GLOB clGeometry_DATA 
+     RELATIVE ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/data/*.dat)
+foreach(_data_file ${clGeometry_DATA})
+  configure_file(
+    ${PROJECT_SOURCE_DIR}/${_data_file}
+    ${PROJECT_BINARY_DIR}/${_data_file}
     COPYONLY
     )
 endforeach()

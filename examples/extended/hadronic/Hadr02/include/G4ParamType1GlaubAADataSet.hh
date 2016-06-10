@@ -36,7 +36,7 @@
 /// \file hadronic/Hadr02/include/G4ParamType1GlaubAADataSet.hh
 /// \brief Definition of the G4ParamType1GlaubAADataSet class
 //
-// $Id: G4ParamType1GlaubAADataSet.hh 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: G4ParamType1GlaubAADataSet.hh 81932 2014-06-06 15:39:45Z gcosmo $
 //
 
 #ifndef G4ParamType1GlaubAADataSet_h
@@ -76,7 +76,7 @@
 
 
 class G4ParamType1GlaubAADataSet : public G4GlaubAADataSet,
-				   public G4Type1GlauberParameterisation 
+                                   public G4Type1GlauberParameterisation 
 {
 public:
 
@@ -106,7 +106,7 @@ public:
 //
 inline 
 G4double G4ParamType1GlaubAADataSet::GetValueN (const G4double f,
-						const G4double ppn) const
+                                                const G4double ppn) const
 {return GetParameterisedValueN (f, ppn);}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -115,7 +115,7 @@ G4double G4ParamType1GlaubAADataSet::GetValueN (const G4double f,
 //
 inline 
 G4double G4ParamType1GlaubAADataSet::GetValueM (const G4double f,
-						const G4double ppn) const
+                                                const G4double ppn) const
 {return GetParameterisedValueM (f, ppn);}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

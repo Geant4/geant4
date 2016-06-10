@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmLivermorePolarizedPhysics.cc 68750 2013-04-05 10:19:04Z gcosmo $
+// $Id: G4EmLivermorePolarizedPhysics.cc 86233 2014-11-07 17:21:03Z gcosmo $
 
 #include "G4EmLivermorePolarizedPhysics.hh"
 #include "G4ParticleDefinition.hh"
@@ -90,7 +90,7 @@
 
 // interfaces
 #include "G4LossTableManager.hh"
-#include "G4EmProcessOptions.hh"
+#include "G4EmParameters.hh"
 #include "G4UAtomicDeexcitation.hh"
 
 // particles
@@ -126,7 +126,12 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmLivermorePolarizedPhysics);
 G4EmLivermorePolarizedPhysics::G4EmLivermorePolarizedPhysics(G4int ver)
   : G4VPhysicsConstructor("G4EmLivermorePolarizedPhysics"), verbose(ver)
 {
-  G4LossTableManager::Instance();
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetVerbose(verbose);
+  param->SetMinEnergy(100*eV);
+  param->SetMaxEnergy(10*TeV);
+  param->SetNumberOfBinsPerDecade(20);
+  param->ActivateAngularGeneratorForIonisation(true);
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -135,7 +140,12 @@ G4EmLivermorePolarizedPhysics::G4EmLivermorePolarizedPhysics(G4int ver)
 G4EmLivermorePolarizedPhysics::G4EmLivermorePolarizedPhysics(G4int ver, const G4String&)
   : G4VPhysicsConstructor("G4EmLivermorePolarizedPhysics"), verbose(ver)
 {
-  G4LossTableManager::Instance();
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetVerbose(verbose);
+  param->SetMinEnergy(100*eV);
+  param->SetMaxEnergy(10*TeV);
+  param->SetNumberOfBinsPerDecade(20);
+  param->ActivateAngularGeneratorForIonisation(true);
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -209,7 +219,6 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
   G4double highEnergyLimit = 100*MeV;
 
   // nuclear stopping
-  G4NuclearStopping* ionnuc = new G4NuclearStopping();
   G4NuclearStopping* pnuc = new G4NuclearStopping();
 
   // Add Livermore EM Processes
@@ -336,7 +345,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
 
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(ionIoni, particle);
-      ph->RegisterProcess(ionnuc, particle);
+      ph->RegisterProcess(pnuc, particle);
 
     } else if (particleName == "GenericIon") {
 
@@ -348,7 +357,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
 
       ph->RegisterProcess(hmsc, particle);
       ph->RegisterProcess(ionIoni, particle);
-      ph->RegisterProcess(ionnuc, particle);
+      ph->RegisterProcess(pnuc, particle);
 
     } else if (particleName == "pi+" ||
                particleName == "pi-" ) {
@@ -361,6 +370,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
       ph->RegisterProcess(hIoni, particle);
       ph->RegisterProcess(pib, particle);
       ph->RegisterProcess(pip, particle);
+      ph->RegisterProcess(new G4CoulombScattering(), particle);
 
     } else if (particleName == "kaon+" ||
                particleName == "kaon-" ) {
@@ -373,6 +383,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
       ph->RegisterProcess(hIoni, particle);
       ph->RegisterProcess(kb, particle);
       ph->RegisterProcess(kp, particle);
+      ph->RegisterProcess(new G4CoulombScattering(), particle);
 
     } else if (particleName == "proton" ||
 	       particleName == "anti_proton") {
@@ -386,6 +397,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
       ph->RegisterProcess(pb, particle);
       ph->RegisterProcess(pp, particle);
       ph->RegisterProcess(pnuc, particle);
+      ph->RegisterProcess(new G4CoulombScattering(), particle);
 
     } else if (particleName == "B+" ||
 	       particleName == "B-" ||
@@ -426,29 +438,8 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
     }
   }
     
-  // Em options
-  //      
-  G4EmProcessOptions opt;
-  opt.SetVerbose(verbose);
-  
-  // Multiple Coulomb scattering
-  //
-  opt.SetPolarAngleLimit(CLHEP::pi);
-    
-  // Physics tables
-  //
-
-  opt.SetMinEnergy(100*eV);
-  opt.SetMaxEnergy(10*TeV);
-  opt.SetDEDXBinning(220);
-  opt.SetLambdaBinning(220);
-
   // Nuclear stopping
   pnuc->SetMaxKinEnergy(MeV);
-
-  // Ionization
-  //
-  //opt.SetSubCutoff(true);    
 
   // Deexcitation
   //

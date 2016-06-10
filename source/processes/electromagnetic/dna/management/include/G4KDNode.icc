@@ -1,0 +1,115 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: G4KDNode.cc 64057 2012-10-30 15:04:49Z gcosmo $
+//
+// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
+//
+// History:
+// -----------
+// 10 Oct 2011 M.Karamitros created
+//
+// -------------------------------------------------------------------
+
+//______________________________________________________________________
+template <typename PointT>
+G4KDNode<PointT>::G4KDNode(G4KDTree* tree, PointT* point,
+		G4KDNode_Base* parent) : G4KDNode_Base(tree, parent)
+{
+	fPoint = point;
+	fValid = true;
+}
+
+// Copy constructor should not be used
+template <typename PointT>
+G4KDNode<PointT>::G4KDNode(const G4KDNode<PointT>& right): G4KDNode_Base(right),
+    						fPoint(0)
+{
+	fValid = false;
+}
+
+// Assignement should not be used
+template <typename PointT>
+G4KDNode<PointT>& G4KDNode<PointT>::operator=(const G4KDNode<PointT>& right)
+{
+	if (this == &right) return *this;
+	fPoint = right.fPoint;
+	fTree = right.fTree;
+	fLeft = right.fLeft;
+	fRight = right.fRight;
+	fParent = right.fParent;
+	fSide = right.fSide;
+	fAxis = right.fAxis;
+	return *this;
+}
+
+template <typename PointT>
+G4KDNode<PointT>::~G4KDNode()
+{
+}
+
+template <typename Position>
+G4KDNode_Base* G4KDNode_Base::FindParent(const Position& x0)
+{
+	G4KDNode_Base* aParent = 0 ;
+	G4KDNode_Base* next = this ;
+	int split = -1 ;
+	while(next)
+	{
+		split = next->fAxis  ;
+		aParent = next ;
+
+		// works if node called "next" is valid
+		if(x0[split] > (*next)[split])
+			next = next->fRight ;
+		else
+			next = next->fLeft ;
+	}
+	return aParent ;
+}
+
+template <typename PointT>
+G4KDNode_Base* G4KDNode_Base::Insert(PointT* point)
+{
+	G4KDNode_Base* aParent = FindParent(*point);
+	// TODO check p == aParent->pos
+	// Exception
+
+	G4KDNode_Base* newNode = new G4KDNode<PointT>(fTree, point, aParent);
+
+	if((*point)[aParent->fAxis] > (*aParent)[aParent->fAxis])
+	{
+		aParent->fRight = newNode ;
+		newNode->fSide = 1 ;
+	}
+	else
+	{
+		aParent->fLeft = newNode ;
+		newNode->fSide = -1 ;
+	}
+
+	return newNode ;
+}
+

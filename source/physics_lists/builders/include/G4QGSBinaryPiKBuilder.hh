@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSBinaryPiKBuilder.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4QGSBinaryPiKBuilder.hh 81935 2014-06-06 15:41:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -48,8 +48,6 @@
 #include "G4VPiKBuilder.hh"
 
 #include "G4TheoFSGenerator.hh"
-#include "G4ExcitationHandler.hh"
-#include "G4PreCompoundModel.hh"
 #include "G4BinaryCascade.hh"
 #include "G4QGSModel.hh"
 #include "G4QGSParticipants.hh"
@@ -79,7 +77,6 @@ class G4QGSBinaryPiKBuilder : public G4VPiKBuilder
   private:
     G4VCrossSectionDataSet* thePiData;
     G4TheoFSGenerator * theModel;
-    G4PreCompoundModel * thePreEquilib;
     G4BinaryCascade * theCascade;
     G4QGSModel< G4QGSParticipants > * theStringModel;
     G4ExcitedStringDecay * theStringDecay;

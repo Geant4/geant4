@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-06-14 V.Ivant (testem9-V10-00-01)
+- applied code guidlines, removed SetCut methods from the example,
+  kernel UI commands used instead
+
+28-04-14 V.Ivant (testem9-V10-00-00)
+- added "emlowenergy" option for EM physics 
+
 24-07-13 P.Gumplinger (testem9-V09-06-06)
 - comply with compiler warnings about unused class fields in HistoManager.hh
 

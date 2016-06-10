@@ -1,4 +1,4 @@
-$Id: History 78056 2013-12-03 08:29:59Z gcosmo $
+$Id: History 86972 2014-11-21 11:56:23Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,197 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20th November 2014  Laurent Garnier (interfaces-V10-00-23)
+- G4UIQt.cc
+  o Fix recursive calls caused by qApp->processEvent() in some cases (cms.gdml) 
+
+19th November 2014  Laurent Garnier (interfaces-V10-00-22)
+- G4UIQt.cc
+  o Add public methods
+  o Fix a public method return type
+
+7th November 2014  Laurent Garnier (interfaces-V10-00-19 - interfaces-V10-00-20 - interfaces-V10-00-21)
+- G4UIQt.cc
+  o Fix G4Vis thread number in G4Cout
+  o Set focus on command line at the beggining
+  o Better fix for the "Recreate help tree each time we create a new viewer"
+  o Fix qt warning "QObject::connect: Cannot queue arguments of type 'QTextCursor'"
+
+5th November 2014  Laurent Garnier
+- G4UIQt.cc:
+  o Recreate help tree each time we create a new viewer
+- G4UIWt.cc: 
+  o Remove a warning
+
+31th October 2014  Laurent Garnier
+- G4UIQt.cc:
+  o Use FindMacroPath() instead of GetMacroSearchPath()
+  o Display G4Exception warning messages in G4cerr
+  o Fix a problem with Wt include names on case sensitive systems
+  o Try to fix the fact that the cout widget does not update in real
+    time when run in progress. Do not totally fix this, but update
+    is more frequent now.
+
+30th October 2014  John Allison (interfaces-V10-00-18)
+- G4UIQt.cc: Added a mutex in ReceiveG4cout and ReceiveG4cerr.
+
+29th October 2014  Laurent Garnier (interfaces-V10-00-16 retagged interfaces-V10-00-17)
+- G4UIQt : 
+  o For all methods who need a file, instead of getting the file from current path,
+    look for it in MacroPath
+  o Set viewer text tab "read only"
+  o When closing a dock panel, hide it instead of removing it. Prevent from null
+    pointer exception
+
+22th October 2014  Laurent Garnier (interfaces-V10-00-15)
+- G4UIQt : 
+  o Remove viewer size parameter (it was no longer used)
+  o Add the ability to have HTML tags inside the file given by AddViewerTabFromFile. 
+    This will allow to include for example a README file with an <img> or other HTML tags
+    Ex :
+         =====================  README  ==============================
+         <p align="center">
+         <img src="exampleB1.jpg" width="300">
+         </p>
+   And the code to be place in main() function :
+      UIQt->AddViewerTabFromFile("README", "README from my own example");
+
+21th October 2014  Laurent Garnier
+- G4UIQt : 
+  o Do not remove the first tab widget when creating a viewer
+  o add new method AddViewerTab(QWidget*, std::string), this will allow users to define their
+    own tab.
+  o Add new method AddViewerTabFromFile(std::string, std::string): add a tab in the viewer from
+    a file
+  o Fix a problem with updating viewer
+  o Activate Help Widget at the beginning instead of sceneTree
+  o Move clear G4cout icon on the right side
+  o Add left panel tab tooltips
+  o Change text on StartPage
+
+14th October 2014  Laurent Garnier
+- G4UIQt : 
+  o Add methods GetCoutWidget(), GetUserInterfaceWidget(), GetViewersWidget()
+  o Rename SetViewerFirstPageHTMLText() to SetStartPage()
+
+14th October 2014  Laurent Garnier (interfaces-V10-00-14 need global-V10-00-35)
+- G4UIQt : 
+  o Revert mdi/tabbed widgets to old tab style : It was not working so good. In tabbed mode, some
+    stranges effects when adding/switching OGL viewer : A small window was create
+    inside other tabs.
+  o Get the thread prefix string directly from G4MTcoutDestination
+
+13th October 2014  Laurent Garnier
+- G4UIQt : Fix a bug with Qt4.6
+
+7th October 2014  Laurent Garnier
+- G4UIQt : Fix a problem refreshing tab
+
+6th October 2014  Laurent Garnier
+- G4UIQt : Fix a problem when creating the first tab viewer
+
+1st October 2014  Laurent Garnier
+- G4UIQt : 
+  o Add a "mdi" and "tabbed" icon, only in the code for the moment, no way to trigger them
+  o Suppress the way to switch between "tabbed view" and "side by side view", will be replace
+    next by this icon
+
+28th August 2014  Laurent Garnier
+- G4UIQt : 
+  o Replace the tab viewer by a MDIArea in order to manage both side by side view and tabbed view
+  o Minor change in text for the first page widget
+  o Fix a problem in coloring cout sometimes after a cerr was send. Sometimes, the default color stay in red. Fixed
+  o Set the focus on the command line after a command was send
+  o For the moment, the way to switch between "tabbed view" and "side by side view" is to type "s" in the command line.
+    TO BE FIXED !
+  o Fix problem when closing the last tab. Now the first page is displayed
+
+23rd September 2014  Gabriele Cosmo (interfaces-V10-00-13)
+- G4UIQt :
+  o Use GetThreadId() from G4UImanager...
+
+23rd September 2014  Laurent Garnier (interfaces-V10-00-12)
+- G4UIQt :
+  o Change threadId by getThreadId()
+
+19th September 2014  Laurent Garnier (interfaces-V10-00-11)
+- G4UIQt :
+  o Fix the Dock output panel on the bottom right on the window
+
+18th August 2014  Laurent Garnier
+- G4UIQt :
+  o Fix a problem with closing dockable widgets
+
+14th August 2014  Laurent Garnier
+- G4UIQt :
+  o Begginning of adding dockable widgets. Still problems on :
+    - cout (should be on the right)
+    - Dock titles
+
+13th August 2014  Laurent Garnier
+- G4UIQt :
+  o Fix a bug introduced in interfaces-V10-00-07. The first time we open the viewer, is was small and dark.
+    Note: Perhaps this fix will create (in some cases) a widget outside of UI for a really short moment.
+
+13th August 2014  Laurent Garnier
+- G4UIQt :
+  o Fix a typo in SetViewerFirstPageHTMLText text
+  o Add better implementation of thread prefix before "GetPrefixString()" is implemented
+
+11th August 2014  Laurent Garnier  (interfaces-V10-00-09)
+- G4UIQt :
+  o Fix a bug for single threading output in last tag
+  o Add a "SetViewerFirstPageHTMLText" method to be able to set the first tab widget text.
+    This could be used to make some kind of a start page to display useful informations
+
+7th August 2014  Laurent Garnier  (interfaces-V10-00-08)
+- G4UIQt :
+  o Add Mutilthreading outputs
+  o New cout internal management
+  o Add a filter on thread in output
+
+1th August 2014  Laurent Garnier
+- G4UIQt : Change UI look by moving "search" at the top of the G4cout area
+
+10th July 2014  Laurent Garnier  (interfaces-V10-00-07)
+- G4UIQt : BugFix #1604
+- G4UIWt : Minor things
+
+6th June 2014  Laurent Garnier  (interfaces-V10-00-06)
+- G4UIQt : 
+  o Fix a Qt function that was only defined for Qt5
+ 
+5th June 2014  Laurent Garnier  (interfaces-V10-00-05 co-works opengl-V10-00-06)
+- G4UIQt : 
+  o Change help display to render parameters in a QTableView
+  o Change window expanding policy. Now when expanding main window, it will keep the size of the viewer
+  o When choosing "pick" icon, it will now apply /vis/viewer/set/picking true
+ 
+27th May 2014  Laurent Garnier
+- G4UIQt : 
+  o Change help display in help tree
+
+May 25th 2014 Koichi Murakami, interfaces-V10-00-04
+- basic/src/G4UIterminal.cc, fixed the problem that some commands cannot be
+  processed, because of a bug in G4SubString== operator like nC(0,3)="xxx".
+  Use substr() instead of () operator for the comparison of substr.
+
+20th May 2014  Laurent Garnier (interfaces-V10-00-02, interfaces-V10-00-03)
+- G4UIQt : 
+  o Change help tree splitter from vertical to horizontal
+  o Add method to display text in HTML
+
+22th Janvier 2014  Laurent Garnier (interfaces-V10-00-01)
+- G4Qt : BUGFIX : bugzilla 1487 : Explicitly set the LC_NUMBERIC locale to "C"
+
+4nd December 2013  Laurent Garnier (interfaces-V09-06-18)
+- G4UIQt :
+ o Fix problem with resizing the QGLwidget when a macro which open a OGL
+   widget was called by user in UI. Before the OGL widget get the minimum size 
+   (about 50 pixel height), now it does grow as much as it can without going out
+   of the window.
+ o Suppress a "printf" non protected by ifdef
 
 2nd December 2013  Laurent Garnier (interfaces-V09-06-17)
 - G4UIQt : Fix a bad bug fixed 29th November 2013. The menu name was displayed

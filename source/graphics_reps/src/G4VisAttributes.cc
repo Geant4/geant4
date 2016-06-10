@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.cc 66376 2012-12-18 09:42:59Z gcosmo $
+// $Id: G4VisAttributes.cc 85261 2014-10-27 08:54:57Z gcosmo $
 //
 // 
 // John Allison  23rd October 1996
@@ -104,7 +104,7 @@ fAttDefs             (0)
 {}
 
 G4VisAttributes::G4VisAttributes (G4bool visibility,
-				  const G4Colour& colour):
+                                  const G4Colour& colour):
 fVisible             (visibility),
 fDaughtersInvisible  (false),
 fColour              (colour),
@@ -156,7 +156,7 @@ const std::vector<G4AttValue>* G4VisAttributes::CreateAttValues () const {
 }
 
 void G4VisAttributes::SetForceLineSegmentsPerCircle (G4int nSegments) {
-  const G4int nSegmentsMin = 12;
+  const G4int nSegmentsMin = fMinLineSegmentsPerCircle;
   if (nSegments > 0 && nSegments < nSegmentsMin) {
     nSegments = nSegmentsMin;
     G4cout <<
@@ -185,14 +185,15 @@ std::ostream& operator << (std::ostream& os, const G4VisAttributes& a) {
     default: os << "unrecognised"; break;
     }
     os << ", line width: " << a.fLineWidth;
+    os << ", min line segments per circle: " << a.GetMinLineSegmentsPerCircle();
     os << "\n  drawing style: ";
     if (a.fForceDrawingStyle) {
       os << "forced to: ";
       switch (a.fForcedStyle) {
       case G4VisAttributes::wireframe:
-	os << "wireframe"; break;
+        os << "wireframe"; break;
       case G4VisAttributes::solid:
-	os << "solid"; break;
+        os << "solid"; break;
       default: os << "unrecognised"; break;
       }
     }

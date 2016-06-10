@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmabZero.cc 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4SigmabZero.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // 
 // ----------------------------------------------------------------------
@@ -76,18 +76,18 @@ G4SigmabZero* G4SigmabZero::Definition()
              "baryon",               0,            +1,        5212,
                 false,          0.0*ns,          NULL,
                 false,       "sigma_b");
-
- //create Decay Table
-  G4DecayTable* table = new G4DecayTable();
-
-  // create decay channels
-  G4VDecayChannel** mode = new G4VDecayChannel*[1];
-  // sigma_b+ -> lambda_b + pi0
-  mode[0] = new G4PhaseSpaceDecayChannel("sigma_b0",1.000,2,"lambda_b","pi0");
-
-  for (G4int index=0; index <1; index++ ) table->Insert(mode[index]);
-  delete [] mode;
-
+ 
+   //create Decay Table
+   G4DecayTable* table = new G4DecayTable();
+   
+   // create decay channels
+   G4VDecayChannel** mode = new G4VDecayChannel*[1];
+   // sigma_b0 -> lambda_b + pi0
+   mode[0] = new G4PhaseSpaceDecayChannel("sigma_b0",1.000,2,"lambda_b","pi0");
+   
+   for (G4int index=0; index <1; index++ ) table->Insert(mode[index]);
+   delete [] mode;
+   
    anInstance->SetDecayTable(table);
   }
   theInstance = reinterpret_cast<G4SigmabZero*>(anInstance);

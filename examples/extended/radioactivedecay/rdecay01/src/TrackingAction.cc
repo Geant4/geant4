@@ -27,15 +27,15 @@
 /// \brief Implementation of the TrackingAction class
 //
 //
-// $Id: TrackingAction.cc 71485 2013-06-17 08:14:54Z gcosmo $
+// $Id: TrackingAction.cc 78307 2013-12-11 10:55:57Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "TrackingAction.hh"
-#include "RunAction.hh"
+
 #include "HistoManager.hh"
-#include "RunAction.hh"
+#include "Run.hh"
 #include "EventAction.hh"
 #include "TrackingMessenger.hh"
 
@@ -45,10 +45,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(RunAction* RA, EventAction* EA)
+TrackingAction::TrackingAction(EventAction* EA)
 :G4UserTrackingAction(),
- fRun(RA),fEvent(EA),fTrackMessenger(0),
- fFullChain(false)
+ fEvent(EA),fTrackMessenger(0),
+ fFullChain(true)
  
 {
   fTrackMessenger = new TrackingMessenger(this);   
@@ -65,6 +65,9 @@ TrackingAction::~TrackingAction()
 
 void TrackingAction::PreUserTrackingAction(const G4Track* track)
 {
+  Run* run 
+   = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+         
   G4ParticleDefinition* particle = track->GetDefinition();
   G4String name   = particle->GetParticleName();
   fCharge = particle->GetPDGCharge();
@@ -77,7 +80,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
 
   //count particles
   //
-  fRun->ParticleCount(name, Ekin);
+  if (ID>1) run->ParticleCount(name, Ekin);
   
   //energy spectrum
   //
@@ -91,13 +94,17 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   else if (fCharge > 2.) ih = 5;
   if (ih) G4AnalysisManager::Instance()->FillH1(ih, Ekin);
   
-  //fFullChain: stop ion and print decay chain
+  //Ion
   //
   if (fCharge > 2.) {
-    G4Track* tr = (G4Track*) track;
-    if (fFullChain) tr->SetTrackStatus(fStopButAlive);
+    //build decay chain
     if (ID == 1) fEvent->AddDecayChain(name);
-      else       fEvent->AddDecayChain(" ---> " + name); 
+      else       fEvent->AddDecayChain(" ---> " + name);
+    // 
+    //full chain: put at rest; if not: kill secondary      
+    G4Track* tr = (G4Track*) track;
+    if (fFullChain)  tr->SetTrackStatus(fStopButAlive);
+      else if (ID>1) tr->SetTrackStatus(fStopAndKill);
   }
   
   //example of saving random number seed of this fEvent, under condition
@@ -113,14 +120,17 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   //keep only ions
   //
   if (fCharge < 3. ) return;
-
+  
+  Run* run 
+   = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+   
   G4AnalysisManager* analysis = G4AnalysisManager::Instance();
   
   //get time
   //   
   G4double time = track->GetGlobalTime();
   G4int ID = track->GetTrackID();
-  if (ID == 1) fRun->PrimaryTiming(time);        //time of life of primary ion  
+  if (ID == 1) run->PrimaryTiming(time);        //time of life of primary ion  
       
   //energy and momentum balance (from secondaries)
   //
@@ -141,7 +151,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
          Pbalance += trk->GetMomentum();                 
     }
     G4double Pbal = Pbalance.mag();  
-    fRun->Balance(EkinTot,Pbal);  
+    run->Balance(EkinTot,Pbal);  
     analysis->FillH1(6,EkinTot);
     analysis->FillH1(7,Pbal);
   }
@@ -149,7 +159,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   //no secondaries --> end of chain    
   //  
   if (!nbtrk) {
-    fRun->EventTiming(time);                     //total time of life
+    run->EventTiming(time);                     //total time of life
     analysis->FillH1(8,time);
   }
 }

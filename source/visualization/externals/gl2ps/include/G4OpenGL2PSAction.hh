@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenGL2PSAction.hh 70646 2013-06-03 15:07:58Z gcosmo $
+// $Id: G4OpenGL2PSAction.hh 82763 2014-07-08 14:22:48Z gcosmo $
 //
 
 #ifndef G4OpenGL2PSAction_h
@@ -39,6 +39,7 @@ public:
  G4OpenGL2PSAction();
  
  void setFileName(const char*);
+ void setExportImageFormat(unsigned int);
  bool enableFileWriting();
   // return true if ok, false is an error occured
 
@@ -59,6 +60,8 @@ protected:
  GLint fViewport[4];
  GLint fBufferSize;
  GLint fBufferSizeLimit;
+private:
+ unsigned int fExportImageFormat;
 };
 
 #endif

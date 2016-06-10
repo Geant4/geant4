@@ -124,6 +124,8 @@ template<class T, bool withNeutronHP, bool withFTFP> void TINCLXXPhysicsListHelp
 
   this->SetCutsWithDefault();   
 
+  if(withNeutronHP) { this->SetCutValue(0.0, "proton"); }
+
   //  if (this->verboseLevel >0)
   //    G4VUserPhysicsList::DumpCutValuesTable();  
 }

@@ -1,0 +1,223 @@
+# A: Tramontana
+# tramontana@lns.infn.it
+#
+# Macro file recommended for the use with laser-driven beam line and built-in physic list.
+# This macro uses the physics list already contained in the Geant4 distribution
+
+#######################
+# Set of the verboses # 
+#######################
+#
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 1
+/event/verbose 0
+
+###########################################################################################################
+#					ACTIVATED PHYSICS MODELS
+/Physics/addPhysics standard_opt4
+
+/geometrySetup/selectGeometry LaserDriven
+
+# Initialize geometry and physic 
+/run/initialize
+##########################################################################################################
+############### Define the entrance beam: TARANIS angular distribution
+##  beam->1-2
+#/gps/verbose 2
+/gps/source/intensity 3.6
+/gps/particle proton
+/gps/pos/type Beam
+/gps/pos/shape Circle
+/gps/pos/centre -171.3 0.0 0.0 cm   
+/gps/pos/radius 0.007 mm  
+/gps/pos/sigma_r 0. mm  
+/gps/ang/rot1 0 0 1
+/gps/ang/rot2 0 1 0
+/gps/pos/rot1 0 0 1
+/gps/pos/rot2 0 1 0
+/gps/ang/type iso
+/gps/ang/mintheta 0 deg 
+/gps/ang/maxtheta 26.69 deg 
+/gps/ene/type Arb
+/gps/hist/type arb
+/gps/hist/point 1.1 3.5
+/gps/hist/point 3.1399999999999999 1.2
+/gps/hist/inter Exp
+
+##  beam->2-3
+#/gps/verbose 2
+/gps/source/add 0.98
+/gps/particle proton
+/gps/pos/type Beam
+/gps/pos/shape Circle
+/gps/pos/centre -171.3 0.0 0.0 cm   
+/gps/pos/radius 0.007 mm  
+/gps/pos/sigma_r 0. mm  
+/gps/ang/rot1 0 0 1
+/gps/ang/rot2 0 1 0
+/gps/pos/rot1 0 0 1
+/gps/pos/rot2 0 1 0
+/gps/ang/type iso
+/gps/ang/mintheta 0 deg 
+/gps/ang/maxtheta 23.49 deg 
+/gps/ene/type Arb
+/gps/hist/type arb
+/gps/hist/point 3.14 0.98899
+/gps/hist/point 4.4499999999999999999 0.5382
+/gps/hist/inter Exp
+
+##  beam->3-4
+#/gps/verbose 2
+/gps/source/add 0.50003
+/gps/particle proton
+/gps/pos/type Beam
+/gps/pos/shape Circle
+/gps/pos/centre -171.3 0.0 0.0 cm   
+/gps/pos/radius 0.007 mm  
+/gps/pos/sigma_r 0. mm    
+/gps/ang/rot1 0 0 1
+/gps/ang/rot2 0 1 0
+/gps/pos/rot1 0 0 1
+/gps/pos/rot2 0 1 0
+/gps/ang/type iso
+/gps/ang/mintheta 0 deg 
+/gps/ang/maxtheta 19.8 deg 
+/gps/ene/type Arb
+/gps/hist/type arb
+/gps/hist/point 4.45 1.0
+/gps/hist/point 5.4999999999999999 0.59
+/gps/hist/inter Exp
+
+##  beam->4-5
+#/gps/verbose 2
+/gps/source/add 0.25041
+/gps/particle proton
+/gps/pos/type Beam
+/gps/pos/shape Circle
+/gps/pos/centre -171.3 0.0 0.0 cm   
+/gps/pos/radius 0.007 mm  
+/gps/pos/sigma_r 0. mm  
+/gps/ang/rot1 0 0 1
+/gps/ang/rot2 0 1 0
+/gps/pos/rot1 0 0 1
+/gps/pos/rot2 0 1 0
+/gps/ang/type iso
+/gps/ang/mintheta 0 deg 
+/gps/ang/maxtheta 16.03 deg 
+/gps/ene/type Arb
+/gps/hist/type arb
+/gps/hist/point 5.5 1.0
+/gps/hist/point 6.419999999999999999 0.60093
+/gps/hist/inter Exp
+
+##  beam->5-6
+#/gps/verbose 2
+/gps/source/add 0.140041
+/gps/particle proton
+/gps/pos/type Beam
+/gps/pos/shape Circle
+/gps/pos/centre -171.3 0.0 0.0 cm   
+/gps/pos/radius 0.007 mm  
+/gps/pos/sigma_r 0. mm  
+/gps/ang/rot1 0 0 1
+/gps/ang/rot2 0 1 0
+/gps/pos/rot1 0 0 1
+/gps/pos/rot2 0 1 0
+/gps/ang/type iso
+/gps/ang/mintheta 0 deg 
+/gps/ang/maxtheta 12.93 deg 
+/gps/ene/type Arb
+/gps/hist/type arb
+/gps/hist/point 6.42 1.2
+/gps/hist/point 7.249999999999999999 0.670093
+/gps/hist/inter Exp
+
+##  beam->3
+#/gps/verbose 2
+/gps/source/add 0.120094
+/gps/particle proton
+/gps/pos/type Beam
+/gps/pos/shape Circle
+/gps/pos/centre -171.3 0.0 0.0 cm   
+/gps/pos/radius 0.007 mm  
+/gps/pos/sigma_r 0. mm   
+/gps/ang/rot1 0 0 1
+/gps/ang/rot2 0 1 0
+/gps/pos/rot1 0 0 1
+/gps/pos/rot2 0 1 0
+/gps/ang/type iso
+/gps/ang/mintheta 0 deg 
+/gps/ang/maxtheta 9.45 deg 
+/gps/ene/type Arb
+/gps/hist/type arb
+/gps/hist/point 7.25 1.4
+/gps/hist/point 8.3 0.630513
+/gps/hist/inter Exp
+######################################################################
+#/gps/direction 1 0 0
+######################################################################
+# TARANIS energy spectrum without angular dipendence: exp(-.44E) for energy between 1. to 12 MeV
+###/gps/ene/type Exp
+###/gps/ene/min 1. MeV
+###/gps/ene/max 12. MeV
+###/gps/ene/ezero 2.272727273
+###################################################################### 
+/vis/scene/create 
+/vis/open OGL 
+/vis/viewer/set/background white
+/vis/viewer/set/viewpointThetaPhi 60 130
+/vis/viewer/zoom 1.0
+/vis/viewer/panTo -.27 -.0
+/vis/scene/add/axes 0 0 0 1 m
+/vis/scene/add/trajectories
+/vis/scene/endOfRunAction accumulate 
+/vis/modeling/trajectories/create/drawByCharge
+/vis/scene/endOfEventAction accumulate -1
+/vis/viewer/update
+
+################# change first collimator #################
+##/LaserDriven/EnergySelector/FirstCollimator/Radius 10.0 mm
+##/LaserDriven/EnergySelector/FirstCollimator/Thickness 20.0 mm
+##/LaserDriven/EnergySelector/FirstCollimator/zPosizion 42. mm
+################# change second collimator #################
+#/LaserDriven/EnergySelector/SecondCollimator/Radius 20.0 mm
+#/LaserDriven/EnergySelector/SecondCollimator/Thickness 20.0 mm
+#/LaserDriven/EnergySelector/SecondCollimator/zPosizion 42. mm
+######################## change slit ########################
+##/LaserDriven/EnergySelector/Slit/thickness 0.1 mm
+/LaserDriven/EnergySelector/Slit/HoleDimensionY 6. mm
+/LaserDriven/EnergySelector/Slit/HoleDimensionZ 3. mm
+/LaserDriven/EnergySelector/Slit/HolePositionZ 27.7 mm
+ #Slit position
+ # -0.5 mm   -> 37.8 mm (4MeV)
+ #-9.5 mm   -> 27.7 mm (7MeV)
+#/LaserDriven/EnergySelector/Disable     
+#/LaserDriven/Quadrupoles/DisableQuad4   
+#####################################################################################################################
+##########################################################################################################
+# CUT AND STEP MAX 
+# Suggested values of cut and step:
+# Set cuts OUTSIDE the detector
+#/run/setCut 1 mm
+# Set cuts ONLY inside the detector
+#/run/setCutForRegion DetectorLog 0.1 mm
+
+/Step/waterPhantomStepMax 1 mm 
+############################################################################################################################## 
+# 							 DETECTOR DESCRIPTION
+###################################################
+# USE THE FOLLOWING FOR A VOXELLIZED DETECTOR
+###################################################
+#
+/changePhantom/position 100 100 0 cm
+/changePhantom/size 40 40 40  cm
+/changeDetector/size 4 4 4 cm
+/changeDetector/voxelSize 1 40 40 mm
+# Put the detector in the lower left corner of the phantom
+#
+/changeDetector/displacement 0 18 18 cm
+/changePhantom/update
+/event/printEventNumber 100
+
+/run/beamOn 2000

@@ -39,12 +39,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunAction;
+class DetectorConstruction;
 
 class ActionInitialization : public G4VUserActionInitialization
 {
 public:
   
-  ActionInitialization();
+  ActionInitialization(const DetectorConstruction* det);
 
   virtual ~ActionInitialization();
 
@@ -55,6 +56,7 @@ public:
 private:
 
   RunAction* masterRunAction;
+  const DetectorConstruction* fDetector;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

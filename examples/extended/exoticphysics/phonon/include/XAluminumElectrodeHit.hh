@@ -26,8 +26,10 @@
 /// \file exoticphysics/phonon/include/XAluminumElectrodeHit.hh
 /// \brief Definition of the XAluminumElectrodeHit class
 //
-// $Id: XAluminumElectrodeHit.hh 76246 2013-11-08 11:17:29Z gcosmo $
+// $Id: XAluminumElectrodeHit.hh 84197 2014-10-10 14:33:03Z gcosmo $
 //
+// 20141008  Allocators must be thread-local, and must be pointers
+
 #ifndef XAluminumElectrodeHit_h
 #define XAluminumElectrodeHit_h 1
 
@@ -76,18 +78,19 @@ class XAluminumElectrodeHit : public G4VHit
 
 typedef G4THitsCollection<XAluminumElectrodeHit> XAluminumElectrodeHitsCollection;
 
-extern G4Allocator<XAluminumElectrodeHit> XAluminumElectrodeHitAllocator;
+extern G4ThreadLocal G4Allocator<XAluminumElectrodeHit>* XAluminumElectrodeHitAllocator;
 
 inline void* XAluminumElectrodeHit::operator new(size_t)
 {
-  void* aHit;
-  aHit = (void*)XAluminumElectrodeHitAllocator.MallocSingle();
-  return aHit;
+  if (!XAluminumElectrodeHitAllocator)                        // Singleton
+    XAluminumElectrodeHitAllocator = new G4Allocator<XAluminumElectrodeHit>;
+
+  return (void*)XAluminumElectrodeHitAllocator->MallocSingle();
 }
 
 inline void XAluminumElectrodeHit::operator delete(void* aHit)
 {
-  XAluminumElectrodeHitAllocator.FreeSingle((XAluminumElectrodeHit*) aHit);
+  XAluminumElectrodeHitAllocator->FreeSingle((XAluminumElectrodeHit*) aHit);
 }
 
 #endif

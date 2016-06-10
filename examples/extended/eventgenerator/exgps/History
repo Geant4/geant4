@@ -11,6 +11,43 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+27/10/2014 mma  (exgps-V10-00-07)
+- put /run/initialize at begin of macro
+     
+24/10/2014 mma  (exgps-V10-00-06)
+- restaure exgps_batch.in
+     
+22/10/2014 M.Maire  (exgps-V10-00-05)
+- fileNames: suppress prefix exGPS
+- PhysicsList: Transportation alone
+- review exgps.cc;  vis.mac
+- GeometryConstruction: world_r = 18 cm
+- replace EventAction by TrackingAction
+- refresh HistoManager. Adapt RunAction, TrackingAction, ActionInitialization.
+- update macros
+- /run/initialize in macros
+
+10/10/2014 A.Dotti (exgps-V10-00-04)
+- Migrated to new messenger strategy. Requires event-V10-00-14
+- Adding ctest example for PhysicsChecks group. Requires
+  ctest-V10-00-17, cmake-V10-00-26 and stattest-V10-00-V10-00-03
+  for test to be active. 
+
+04/06/2014 A. Dotti (exgps-V10-00-03)
+- Correct macros to use /run/printProgress instead of /event/printModulo
+
+04/06/2014 L. Desorgher (exgps-V10-00-02)
+- Migrate to use of  QGSP_BIC physics list to avoid dependency on data
+
+03/06/2014 A. Dotti (exgps-V10-00-01)
+- Implemented changes needed for new GPS that substantially reduces
+  memory footprint in MT mode. Requires event-V10-00-02
+
+31/05/2014  L.Desorgher (exgps-V10-00-00)
+- Migrate to use of G4 built-in physics list
+- Remove  drawTracks and printModulo commands and adapt the macro files to use 
+  the equivalent Geant4 built-in macro commands
 
 3/12/2013  I.Hrivnacova (exgps-V09-06-05)
 - Fixed file descriptions (for Doxygen)
@@ -115,7 +152,7 @@ track of all tags.
 21/12/2006 F.Lei (exgps-V08-02-00)
 -  Added the option for output results in .root file
 -  Changed particle_name to PDGcode in the ntuple
-
+exit
 19/07/2005 F.Lei (exgps-V07-01-00)
 -  Changing in GNUmakefile 
    LOADLIBS += `aida-config --lib`
@@ -129,5 +166,6 @@ track of all tags.
 03/12/2004, G.Cosmo,  (exgps-V06-02-01)
 - Implemented migration to <cmath>.
 
-28/10/2004, F.Lei,  (exgps-V06-02-00)
+mplemented changes needed for new GPS that substantially reduces
+  memory footprint in MT mode. Requires event-V10-00-0228/10/2004, F.Lei,  (exgps-V06-02-00)
 - Created.

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEvaporation.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4VEvaporation.hh 85443 2014-10-29 14:35:57Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations interface
 //
@@ -43,6 +43,9 @@
 
 #include "globals.hh"
 #include "G4Fragment.hh"
+#include "G4VEvaporationFactory.hh"
+#include "G4VEvaporationChannel.hh"
+#include <vector>
 
 class G4VEvaporationChannel;
 
@@ -60,13 +63,22 @@ private:
   
 public:
 
+  // primary fragment is copied to the new instance, the copy is deleted 
+  // or is added to the list of products 
   virtual G4FragmentVector * BreakItUp(const G4Fragment &theNucleus) = 0;
 
+  // new interface - vector of products is added to the provided vector
+  // primary fragment is deleted or is modified and added to the list
+  // of products 
+  virtual void BreakFragment(G4FragmentVector*, G4Fragment* theNucleus);
+
+  // definition of options
   virtual void Initialise();
 
   virtual void SetPhotonEvaporation(G4VEvaporationChannel* ptr);
 
   inline G4VEvaporationChannel* GetPhotonEvaporation();
+  inline G4VEvaporationChannel* GetFissionChannel();
 
   // for inverse cross section choice
   inline void SetOPTxs(G4int opt) { OPTxs = opt;} 
@@ -80,11 +92,24 @@ protected:
   G4int OPTxs;
   G4bool useSICB;
 
+  std::vector<G4VEvaporationChannel*> * theChannels;
+  G4VEvaporationFactory * theChannelFactory;
+
 };
 
 inline G4VEvaporationChannel* G4VEvaporation::GetPhotonEvaporation()
 {
   return thePhotonEvaporation;
+}
+
+inline G4VEvaporationChannel* G4VEvaporation::GetFissionChannel()
+{
+  for(std::vector<G4VEvaporationChannel*>::const_iterator iC = theChannels->begin(),
+      eC = theChannels->end(); iC!=eC; ++iC) {
+    if((*iC)->GetName() == "fission")
+      return *iC;
+  }
+  return 0;
 }
 
 #endif

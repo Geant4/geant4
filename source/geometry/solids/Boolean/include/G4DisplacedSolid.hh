@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4DisplacedSolid.hh 83572 2014-09-01 15:23:27Z gcosmo $
 //
 //
 // class G4DisplacedSolid
@@ -161,6 +161,7 @@ class G4DisplacedSolid : public G4VSolid
     G4VSolid* fPtrSolid ;
     G4AffineTransform* fPtrTransform ;
     G4AffineTransform* fDirectTransform ;
+    mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;
 } ;
 

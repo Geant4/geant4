@@ -24,7 +24,8 @@ inline h1d* slice_x(const h2d& a_from,
 }
 
 inline h1d* projection_x(const h2d& a_from,const std::string& a_title) {
-  return slice_x(a_from,axis<double>::UNDERFLOW_BIN,axis<double>::OVERFLOW_BIN,a_title);
+  typedef axis<double,unsigned int> axis_t;
+  return slice_x(a_from,axis_t::UNDERFLOW_BIN,axis_t::OVERFLOW_BIN,a_title);
 }
 
 inline h1d* slice_y(const h2d& a_from,
@@ -39,7 +40,8 @@ inline h1d* slice_y(const h2d& a_from,
 }
 
 inline h1d* projection_y(const h2d& a_from,const std::string& a_title) {
-  return slice_y(a_from,axis<double>::UNDERFLOW_BIN,axis<double>::OVERFLOW_BIN,a_title);
+  typedef axis<double,unsigned int> axis_t;
+  return slice_y(a_from,axis_t::UNDERFLOW_BIN,axis_t::OVERFLOW_BIN,a_title);
 }
 
 inline h2d* slice_xy(const h3d& a_from,
@@ -57,7 +59,8 @@ inline h2d* slice_xy(const h3d& a_from,
 }
 
 inline h2d* projection_xy(const h3d& a_from,const std::string& a_title) {
-  return slice_xy(a_from,axis<double>::UNDERFLOW_BIN,axis<double>::OVERFLOW_BIN,a_title);
+  typedef axis<double,unsigned int> axis_t;
+  return slice_xy(a_from,axis_t::UNDERFLOW_BIN,axis_t::OVERFLOW_BIN,a_title);
 }
 
 inline h2d* slice_yz(const h3d& a_from,
@@ -75,7 +78,8 @@ inline h2d* slice_yz(const h3d& a_from,
 }
 
 inline h2d* projection_yz(const h3d& a_from,const std::string& a_title) {
-  return slice_yz(a_from,axis<double>::UNDERFLOW_BIN,axis<double>::OVERFLOW_BIN,a_title);
+  typedef axis<double,unsigned int> axis_t;
+  return slice_yz(a_from,axis_t::UNDERFLOW_BIN,axis_t::OVERFLOW_BIN,a_title);
 }
 
 inline h2d* slice_xz(const h3d& a_from,
@@ -93,7 +97,8 @@ inline h2d* slice_xz(const h3d& a_from,
 }
 
 inline h2d* projection_xz(const h3d& a_from,const std::string& a_title) {
-  return slice_xz(a_from,axis<double>::UNDERFLOW_BIN,axis<double>::OVERFLOW_BIN,a_title);
+  typedef axis<double,unsigned int> axis_t;
+  return slice_xz(a_from,axis_t::UNDERFLOW_BIN,axis_t::OVERFLOW_BIN,a_title);
 }
 
 }}

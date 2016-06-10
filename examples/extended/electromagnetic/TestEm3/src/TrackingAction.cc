@@ -27,7 +27,7 @@
 /// \brief Implementation of the TrackingAction class
 //
 //
-// $Id: TrackingAction.cc 73035 2013-08-15 09:27:10Z gcosmo $
+// $Id: TrackingAction.cc 78655 2014-01-14 11:13:41Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,24 +35,26 @@
 #include "TrackingAction.hh"
 
 #include "DetectorConstruction.hh"
-#include "RunAction.hh"
-#include "EventAction.hh"
-#include "HistoManager.hh"
+#include "Run.hh"
 
-#include "G4Track.hh"
+#include "G4RunManager.hh"
 #include "G4Positron.hh"
 #include "G4PhysicalConstants.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(DetectorConstruction* det,RunAction* run)
-:G4UserTrackingAction(),fDetector(det), fRunAct(run)
+TrackingAction::TrackingAction(DetectorConstruction* det)
+:G4UserTrackingAction(),fDetector(det)
 { }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackingAction::PreUserTrackingAction(const G4Track* track )
 {
+  //get Run
+  Run* run = static_cast<Run*>(
+             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+             
   // Energy flow initialisation for primary particle
   //
   if (track->GetTrackID() == 1) {
@@ -70,9 +72,9 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track )
       Eflow += 2*electron_mass_c2; 
          
     //flux artefact, if primary vertex is inside the calorimeter   
-    for (G4int pl=1; pl<=Idnow; pl++) {fRunAct->SumEnergyFlow(pl, Eflow);}
+    for (G4int pl=1; pl<=Idnow; pl++) {run->SumEnergyFlow(pl, Eflow);}
   } else {
-    fRunAct->AddSecondaryTrack(track);
+    run->AddSecondaryTrack(track);
   }
 }
 

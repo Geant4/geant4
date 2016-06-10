@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/src/PhysicsListMessenger.cc
 /// \brief Implementation of the PhysicsListMessenger class
 //
-// $Id: PhysicsListMessenger.cc 68753 2013-04-05 10:26:04Z gcosmo $
+// $Id: PhysicsListMessenger.cc 86418 2014-11-11 10:39:38Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,7 +35,6 @@
 
 #include "PhysicsList.hh"
 #include "G4UIdirectory.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,34 +44,6 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
 { 
   physDir = new G4UIdirectory("/testem/phys/");
   physDir->SetGuidance("physics list commands");
-
-  gammaCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setGCut",this);  
-  gammaCutCmd->SetGuidance("Set gamma cut.");
-  gammaCutCmd->SetParameterName("Gcut",false);
-  gammaCutCmd->SetUnitCategory("Length");
-  gammaCutCmd->SetRange("Gcut>0.0");
-  gammaCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  electCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setECut",this);  
-  electCutCmd->SetGuidance("Set electron cut.");
-  electCutCmd->SetParameterName("Ecut",false);
-  electCutCmd->SetUnitCategory("Length");
-  electCutCmd->SetRange("Ecut>0.0");
-  electCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  
-  protoCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setPCut",this);  
-  protoCutCmd->SetGuidance("Set positron cut.");
-  protoCutCmd->SetParameterName("Pcut",false);
-  protoCutCmd->SetUnitCategory("Length");
-  protoCutCmd->SetRange("Pcut>0.0");
-  protoCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
-
-  allCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setCuts",this);  
-  allCutCmd->SetGuidance("Set cut for all.");
-  allCutCmd->SetParameterName("cut",false);
-  allCutCmd->SetUnitCategory("Length");
-  allCutCmd->SetRange("cut>0.0");
-  allCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   pListCmd = new G4UIcmdWithAString("/testem/phys/addPhysics",this);  
   pListCmd->SetGuidance("Select standard/polarized physics list.");
@@ -84,10 +55,6 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
 
 PhysicsListMessenger::~PhysicsListMessenger()
 {
-  delete gammaCutCmd;
-  delete electCutCmd;
-  delete protoCutCmd;
-  delete allCutCmd;
   delete pListCmd;
   delete physDir;
 }
@@ -97,23 +64,6 @@ PhysicsListMessenger::~PhysicsListMessenger()
 void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
 {       
-  if( command == gammaCutCmd )
-   { pPhysicsList->SetCutForGamma(gammaCutCmd->GetNewDoubleValue(newValue));}
-     
-  if( command == electCutCmd )
-   { pPhysicsList->SetCutForElectron(electCutCmd->GetNewDoubleValue(newValue));}
-     
-  if( command == protoCutCmd )
-   { pPhysicsList->SetCutForPositron(protoCutCmd->GetNewDoubleValue(newValue));}
-
-  if( command == allCutCmd )
-    {
-      G4double cut = allCutCmd->GetNewDoubleValue(newValue);
-      pPhysicsList->SetCutForGamma(cut);
-      pPhysicsList->SetCutForElectron(cut);
-      pPhysicsList->SetCutForPositron(cut);
-    }
-    
   if( command == pListCmd )
    { pPhysicsList->AddPhysicsList(newValue);}
 }

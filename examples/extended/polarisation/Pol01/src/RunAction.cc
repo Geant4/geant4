@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 68753 2013-04-05 10:26:04Z gcosmo $
+// $Id: RunAction.cc 86443 2014-11-12 09:40:56Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,29 +35,38 @@
 
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "HistoManager.hh"
+#include "G4ParticleDefinition.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4EmCalculator.hh"
 
-#include "Randomize.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
+
+#include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim,
-                     HistoManager* histo)
-  : detector(det), primary(prim), ProcCounter(0), histoManager(histo)
+RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
+  : detector(det), primary(prim), ProcCounter(0), fAnalysisManager(0)
 {
   totalEventCount=0;
- }
+  fGamma = G4Gamma::Gamma();
+  fElectron = G4Electron::Electron();
+  fPositron = G4Positron::Positron();
+
+  BookHisto();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
-{ }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -75,23 +84,94 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   photonStats.Clear();
   electronStats.Clear();
   positronStats.Clear();
-    
-  histoManager->book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void RunAction::FillData(const G4String & particleName,
+
+void RunAction::FillData(const G4ParticleDefinition* particle,
                          G4double kinEnergy, G4double costheta, 
-                         G4double /* phi*/,
+                         G4double phi,
                          G4double longitudinalPolarization)
 {
-  if (particleName=="gamma") 
+  G4int id = -1;
+  if (particle == fGamma) { 
     photonStats.FillData(kinEnergy, costheta, longitudinalPolarization);
-  else if (particleName=="e-") 
+    if(fAnalysisManager) { id = 1; } 
+  } else if (particle == fElectron) { 
     electronStats.FillData(kinEnergy, costheta, longitudinalPolarization);
-  else if (particleName=="e+") 
+    if(fAnalysisManager) { id = 5; } 
+  } else if (particle == fPositron) {
     positronStats.FillData(kinEnergy, costheta, longitudinalPolarization);
+    if(fAnalysisManager) { id = 9; } 
+  }
+  if(id > 0) {
+    fAnalysisManager->FillH1(id,kinEnergy,1.0);
+    fAnalysisManager->FillH1(id+1,costheta,1.0);
+    fAnalysisManager->FillH1(id+2,phi,1.0);
+    fAnalysisManager->FillH1(id+3,longitudinalPolarization,1.0);
+  }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::BookHisto()
+{
+  // Always creating analysis manager
+  fAnalysisManager = G4AnalysisManager::Instance();
+  fAnalysisManager->SetActivation(true);
+  fAnalysisManager->SetVerboseLevel(1);
+
+  // Open file histogram file
+  fAnalysisManager->OpenFile("pol01");
+  fAnalysisManager->SetFirstHistoId(1);
+
+  // Creating an 1-dimensional histograms in the root directory of the tree
+  const G4String id[] = { "h1", "h2", "h3", "h4", "h5", 
+                          "h6", "h7", "h8", "h9", "h10", "h11", "h12"};
+  const G4String title[] = 
+                { "Gamma Energy distribution",                      //1
+                  "Gamma Cos(Theta) distribution",                  //2
+                  "Gamma Phi angular distribution",                 //3
+                  "Gamma longitudinal Polarization",                //4
+                  "Electron Energy distribution",                   //5
+                  "Electron Cos(Theta) distribution",               //6
+                  "Electron Phi angular distribution",              //7
+                  "Electron longitudinal Polarization",             //8
+                  "Positron Energy distribution",                   //9
+                  "Positron Cos(Theta) distribution",               //10
+                  "Positron Phi angular distribution",              //11
+                  "Positron longitudinal Polarization"              //12
+                 };
+  G4double vmin, vmax;
+  G4int nbins = 120;
+  for(int i=0; i<12; ++i) {
+    G4int j = i - i/4*4;
+    if(0==j)      { vmin = 0.; vmax = 12.*MeV; }
+    else if(1==j) { vmin = -1.; vmax = 1.; }
+    else if(2==j) { vmin = 0.; vmax = pi; }
+    else          { vmin = -1.5; vmax = 1.5; }
+    G4int ih = fAnalysisManager->CreateH1(id[i],title[i],nbins,vmin,vmax);
+    fAnalysisManager->SetH1Activation(ih, false);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::SaveHisto(G4int nevents)
+{
+  if(fAnalysisManager) {
+    G4double norm = 1.0/G4double(nevents);
+    for(int i=0; i<12; ++i) {
+      fAnalysisManager->ScaleH1(i, norm);
+    }
+    fAnalysisManager->Write();
+    fAnalysisManager->CloseFile();
+    delete fAnalysisManager;
+    fAnalysisManager = 0;
+  } 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::CountProcesses(G4String procName)
 {
@@ -152,7 +232,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout.precision(prec);         
 
   // write out histograms  
-  histoManager->save();
+  SaveHisto(NbOfEvents);
 
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();

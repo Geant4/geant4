@@ -1,4 +1,4 @@
-$Id: History 73200 2013-08-22 08:16:44Z gcosmo $
+$Id: History 84270 2014-10-13 07:11:34Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11-10-14 M.Asai (testem7-V10-00-02)
+- Replace obsolete G4particleTable::getIon() with 
+G4IonTable::GetIon().
+
+11-06-14 V.Ivant (testem7-V10-00-01)
+- removed SetCuts method and corresponding UI commands,
+  updated all macro; applied code guidlines, in particular,
+  to G4ScreenedNuclearRecoil
+
+28-04-14 V.Ivant (testem7-V10-00-00)
+- added "emlowenergy" option for EM physics 
 
 21-08-13 V.Ivant (testem7-V09-06-12)
 - PhysListEmStandardNR - use G4UrbanMscModel instead of 

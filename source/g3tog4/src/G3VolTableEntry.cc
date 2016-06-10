@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3VolTableEntry.cc 67982 2013-03-13 10:36:03Z gcosmo $
+// $Id: G3VolTableEntry.cc 79777 2014-03-13 17:23:18Z gcosmo $
 //
 // modified by I.Hrivnacova, 13.10.99
 
@@ -56,7 +56,7 @@ G3VolTableEntry::~G3VolTableEntry(){
   delete fDivision;
 }
 
-inline G4bool 
+G4bool
 G3VolTableEntry::operator == ( const G3VolTableEntry& lv) const {
   return (this==&lv) ? true : false;
 }

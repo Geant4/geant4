@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtExportDialog.cc 68732 2013-04-05 09:44:10Z gcosmo $
+// $Id: G4OpenGLQtExportDialog.cc 82764 2014-07-08 14:24:04Z gcosmo $
 //
 // 
 
@@ -71,32 +71,6 @@ G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
   globalVLayout->setSpacing(10);
   
 
-
-  // FIXME : L. Garnier 4/12/07
-  // Not implented. Should deal with alpha channel
-
-//   if((format == "tif") ||
-//      (format == "tiff") ||
-//      (format == "jpg") ||
-//      (format == "jpeg") ||
-//      (format == "png") ||
-//      (format == "xpm")) {
-
-//     QGroupBox *transparencyGroupBox = new QGroupBox(tr("Transparency"),this);
-//     QVBoxLayout *transparencyGroupBoxLayout = new QVBoxLayout(transparencyGroupBox);
-
-//     boxTransparency = new QCheckBox("Save transparency",transparencyGroupBox);
-//     boxTransparency->setChecked( false );
-
-//     transparencyGroupBoxLayout->addWidget(boxTransparency);    
-//     globalVLayout->addWidget(transparencyGroupBox);
-
-//   }
-
-  // FIXME : L. Garnier 4/12/07
-  // This is not working for PS and PDF images, it does nothing.
-  // Image is staying in color mode
-  //  if ((format == "ps") || (format == "pdf") || (format == "eps")) {
 
 
   // size box
@@ -274,22 +248,6 @@ int G4OpenGLQtExportDialog::getWidth()
 {
   if (!width) return originalWidth;
   return width->text().toInt();
-}
-
-int G4OpenGLQtExportDialog::getTransparency()
-{
-  if (!boxTransparency) return -1;
-  return boxTransparency->isChecked();
-}
-
-int G4OpenGLQtExportDialog::getNbColor()
-{
-  if (!colorButton) return -1;
-  // Black and white
-  if (!colorButton->isChecked())
-    return 1;
-  // rgb color
-  return 3;
 }
 
 bool G4OpenGLQtExportDialog::getVectorEPS()

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhaseSpaceDecayChannel.hh 74261 2013-10-02 14:36:19Z gcosmo $
+// $Id: G4PhaseSpaceDecayChannel.hh 81567 2014-06-03 08:46:22Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -64,7 +64,7 @@ class G4PhaseSpaceDecayChannel :public G4VDecayChannel
 
   public: 
      static G4double Pmx(G4double e, G4double p1, G4double p2);
-
+ 
   private: 
      static G4ThreadLocal G4double        current_parent_mass;
      G4DecayProducts *OneBodyDecayIt();

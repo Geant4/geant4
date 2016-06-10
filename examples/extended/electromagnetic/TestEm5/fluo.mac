@@ -9,9 +9,7 @@
 #
 /testem/phys/addPhysics emlivermore
 #
-/testem/phys/setGCut 10 nm
-/testem/phys/setECut 10 nm
-/testem/phys/setPCut 10 nm
+/run/setCut 10 nm
 #
 /cuts/setLowEdge 250 eV
 #
@@ -27,8 +25,8 @@
 /gun/energy 1 MeV
 # 
 /analysis/setFileName fluo
-/analysis/h1/set  2 100 0 1000 keV #e-: energy at vertex
-/analysis/h1/set  3 100 1 1000 keV #gamma: energy at vertex
+/analysis/h1/set  2 100 0 10  keV #e-: energy at vertex
+/analysis/h1/set  3 100 1 500 keV #gamma: energy at vertex
 #
 /run/printProgress 10000
 # 

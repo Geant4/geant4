@@ -18,6 +18,7 @@
 
 #include "CLHEP/Random/RandBinomial.h"
 #include "CLHEP/Random/DoubConv.h"
+#include "CLHEP/Utility/thread_local.h"
 #include <algorithm>	// for min() and max()
 #include <cmath>	// for exp()
 
@@ -96,7 +97,7 @@ static double StirlingCorrection(long int k)
   #define   C5               7.93650793650793651e-04     //  +1/1260
   #define   C7              -5.95238095238095238e-04     //  -1/1680
 
-  static double  c[31] = {   0.0,
+  static const double  c[31] = {   0.0,
 			     8.106146679532726e-02, 4.134069595540929e-02,
 			     2.767792568499834e-02, 2.079067210376509e-02,
 			     1.664469118982119e-02, 1.387612882307075e-02,
@@ -174,10 +175,10 @@ double RandBinomial::genBinomial( HepRandomEngine *anEngine, long n, double p )
 #define C1_6     0.16666666666666667
 #define DMAX_KM  20L
 
-  static long int      n_last = -1L,  n_prev = -1L;
-  static double        par,np,p0,q,p_last = -1.0, p_prev = -1.0;
-  static long          b,m,nm;
-  static double        pq, rc, ss, xm, xl, xr, ll, lr, c,
+  static CLHEP_THREAD_LOCAL long int      n_last = -1L,  n_prev = -1L;
+  static CLHEP_THREAD_LOCAL double        par,np,p0,q,p_last = -1.0, p_prev = -1.0;
+  static CLHEP_THREAD_LOCAL long          b,m,nm;
+  static CLHEP_THREAD_LOCAL double        pq, rc, ss, xm, xl, xr, ll, lr, c,
 				 p1, p2, p3, p4, ch;
 
   long                 bh,i, K, Km, nK;
@@ -221,6 +222,7 @@ double RandBinomial::genBinomial( HepRandomEngine *anEngine, long n, double p )
 	p4 = p3 + c/lr;
 		 }
   }
+  if( np <= 0.0 ) return (-1.0);
   if (np<10)                                      //Inversion Chop-down
 	 {
 	  double pk;

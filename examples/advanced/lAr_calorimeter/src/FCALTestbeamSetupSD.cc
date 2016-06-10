@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALTestbeamSetupSD.cc 68716 2013-04-05 09:13:43Z gcosmo $
+// $Id: FCALTestbeamSetupSD.cc 84371 2014-10-14 12:51:18Z gcosmo $
 //
 // 
 
@@ -31,7 +31,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include <iostream>
-#include <fstream>
 
 #include "FCALTestbeamSetupSD.hh"
 
@@ -52,12 +51,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 FCALTestbeamSetupSD::FCALTestbeamSetupSD(G4String name) : G4VSensitiveDetector(name)
-{;}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 FCALTestbeamSetupSD::~FCALTestbeamSetupSD()
-{;}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -145,29 +144,6 @@ void FCALTestbeamSetupSD::EndOfEvent(G4HCofThisEvent*)
   G4cout << " Visible Energy in Tail Catcher Absorber" << G4endl;
   for (j=1; j<7 ; j++) {G4cout <<  ETailDep[j]/MeV << " " ;};  G4cout << G4endl;
 
-// Write data in File
-  //-------------------
-  G4String FileName = "Beam_802_1mm.dat";
-  std::ios::openmode iostemp;
-  if(InitBeam == 0) {
-    iostemp = std::ios::out;
-    InitBeam++;
-  } else {
-    iostemp = std::ios::out|std::ios::app;   
-  };
-  
-  std::ofstream BeamDatafile(FileName, iostemp);
-  // BeamDatafile.precision(5);
-
-  BeamDatafile << EBeamS1/MeV << " " << EBeamS2/MeV << " " << EBeamS3/MeV << std::endl;
-  BeamDatafile << EBeamHole/MeV << std::endl;
-  BeamDatafile << EBeamDead/MeV << std::endl;
-  for (j=1; j<8 ; j++) { BeamDatafile << ETailVis[j]/MeV << " " ;} ; BeamDatafile << std::endl;
-  for (j=1; j<7 ; j++) { BeamDatafile << ETailDep[j]/MeV << " " ;} ; BeamDatafile << std::endl;
- 
-  BeamDatafile.close();
-
-       
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

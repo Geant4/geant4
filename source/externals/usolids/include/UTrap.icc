@@ -1,0 +1,166 @@
+//
+// ********************************************************************
+// * This Software is part of the AIDA Unified Solids Library package *
+// * See: https://aidasoft.web.cern.ch/USolids                        *
+// ********************************************************************
+//
+// $Id:$
+//
+// --------------------------------------------------------------------
+//
+// UTrap.icc
+//
+// Implementation of inline methods of UTrap
+//
+// 12.02.13 Marek Gayer
+//          Created from original implementation in Geant4
+// --------------------------------------------------------------------
+
+inline
+double UTrap::GetZHalfLength() const
+{
+  return fDz ;
+}
+
+inline
+UVector3 UTrap::GetSymAxis() const
+{
+  double cosTheta = 1.0 / std::sqrt(1 + fTthetaCphi * fTthetaCphi +
+                                    fTthetaSphi * fTthetaSphi) ;
+
+  return UVector3(fTthetaCphi * cosTheta,
+                  fTthetaSphi * cosTheta,
+                  cosTheta) ;
+}
+
+inline
+double UTrap::GetYHalfLength1() const
+{
+  return fDy1 ;
+}
+
+inline
+double UTrap::GetXHalfLength1() const
+{
+  return fDx1 ;
+}
+
+inline
+double UTrap::GetXHalfLength2() const
+{
+  return fDx2 ;
+}
+
+inline
+double UTrap::GetTanAlpha1() const
+{
+  return fTalpha1 ;
+}
+
+inline
+double UTrap::GetYHalfLength2() const
+{
+  return fDy2 ;
+}
+
+inline
+double UTrap::GetXHalfLength3() const
+{
+  return fDx3 ;
+}
+
+inline
+double UTrap::GetXHalfLength4() const
+{
+  return fDx4 ;
+}
+
+inline
+double UTrap::GetTanAlpha2() const
+{
+  return fTalpha2 ;
+}
+
+inline
+double UTrap::GetThetaCphi() const
+{
+  return fTthetaCphi ;
+}
+
+inline
+double UTrap::GetThetaSphi() const
+{
+  return fTthetaSphi ;
+}
+
+inline
+UTrapSidePlane UTrap::GetSidePlane(int n) const
+{
+  return fPlanes[n] ;
+}
+
+inline
+double UTrap::GetFaceArea(const UVector3& p0, const UVector3& p1,
+                          const UVector3& p2, const UVector3& p3)
+{
+  double area = 0.5 * ((p1 - p0).Cross(p2 - p1).Mag() + (p3 - p2).Cross(p0 - p3).Mag());
+  return area;
+}
+
+inline
+double UTrap::Capacity()
+{
+  if (fCubicVolume != 0.)
+  {
+    ;
+  }
+  else
+  {
+    fCubicVolume = fDz * ((fDx1 + fDx2 + fDx3 + fDx4) * (fDy1 + fDy2)
+                          + (fDx4 + fDx3 - fDx2 - fDx1) * (fDy2 - fDy1) / 3);
+  }
+  return fCubicVolume;
+}
+
+inline
+double UTrap::SurfaceArea()
+{
+  if (fSurfaceArea != 0.)
+  {
+    ;
+  }
+  else
+  {
+    UVector3 ba(fDx1 - fDx2 + fTalpha1 * 2 * fDy1, 2 * fDy1, 0);
+    UVector3 bc(2 * fDz * fTthetaCphi - (fDx4 - fDx2) + fTalpha2 * fDy2 - fTalpha1 * fDy1,
+                2 * fDz * fTthetaSphi + fDy2 - fDy1, 2 * fDz);
+    UVector3 dc(-fDx4 + fDx3 + 2 * fTalpha2 * fDy2, 2 * fDy2, 0);
+    UVector3 da(-2 * fDz * fTthetaCphi - (fDx1 - fDx3) - fTalpha1 * fDy1 + fTalpha2 * fDy2,
+                -2 * fDz * fTthetaSphi - fDy1 + fDy2, -2 * fDz);
+
+    UVector3 ef(fDx2 - fDx1 + 2 * fTalpha1 * fDy1, 2 * fDy1, 0);
+    UVector3 eh(2 * fDz * fTthetaCphi + fDx3 - fDx1 + fTalpha1 * fDy1 - fTalpha2 * fDy2,
+                2 * fDz * fTthetaSphi - fDy2 + fDy1, 2 * fDz);
+    UVector3 gh(fDx3 - fDx4 - 2 * fTalpha2 * fDy2, -2 * fDy2, 0);
+    UVector3 gf(-2 * fDz * fTthetaCphi + fDx2 - fDx4 + fTalpha1 * fDy1 - fTalpha2 * fDy2,
+                -2 * fDz * fTthetaSphi + fDy1 - fDy2, -2 * fDz);
+
+    UVector3 cr;
+    cr = ba.Cross(bc);
+    double babc = cr.Mag();
+    cr = dc.Cross(da);
+    double dcda = cr.Mag();
+    cr = ef.Cross(eh);
+    double efeh = cr.Mag();
+    cr = gh.Cross(gf);
+    double ghgf = cr.Mag();
+
+    fSurfaceArea = 2 * fDy1 * (fDx1 + fDx2) + 2 * fDy2 * (fDx3 + fDx4)
+                   + (fDx1 + fDx3)
+                   * std::sqrt(4 * fDz * fDz + std::pow(fDy2 - fDy1 - 2 * fDz * fTthetaSphi, 2))
+                   + (fDx2 + fDx4)
+                   * std::sqrt(4 * fDz * fDz + std::pow(fDy2 - fDy1 + 2 * fDz * fTthetaSphi, 2))
+                   + 0.5 * (babc + dcda + efeh + ghgf);
+  }
+  return fSurfaceArea;
+}

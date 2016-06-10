@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -55,8 +56,8 @@ namespace G4INCL {
     theDensity(NULL),
     thePotential(NULL)
   {
-    std::fill(theRCDFTable, theRCDFTable + UnknownParticle, static_cast<InverseInterpolationTable *>(NULL));
-    std::fill(thePCDFTable, thePCDFTable + UnknownParticle, static_cast<InverseInterpolationTable *>(NULL));
+    std::fill(theRCDFTable, theRCDFTable + UnknownParticle, static_cast<InterpolationTable *>(NULL));
+    std::fill(thePCDFTable, thePCDFTable + UnknownParticle, static_cast<InterpolationTable *>(NULL));
     std::fill(rpCorrelationCoefficient, rpCorrelationCoefficient + UnknownParticle, 1.);
     rpCorrelationCoefficient[Proton] = ParticleTable::getRPCorrelationCoefficient(Proton);
     rpCorrelationCoefficient[Neutron] = ParticleTable::getRPCorrelationCoefficient(Neutron);
@@ -94,6 +95,12 @@ namespace G4INCL {
   }
 
   ParticleList ParticleSampler::sampleParticles(const ThreeVector &position) {
+    ParticleList aList;
+    sampleParticlesIntoList(position, aList);
+    return aList;
+  }
+
+  void ParticleSampler::sampleParticlesIntoList(const ThreeVector &position, ParticleList &theList) {
 
     if(sampleOneProton == &ParticleSampler::sampleOneParticleWithoutRPCorrelation) {
       // sampling without correlation, we need to initialize the CDF tables
@@ -103,18 +110,18 @@ namespace G4INCL {
       thePCDFTable[Neutron] = NuclearDensityFactory::createPCDFTable(Neutron, theA, theZ);
     }
 
-    ParticleList theList;
+    theList.resize(theA);
     if(theA > 2) {
       ParticleType type = Proton;
       ParticleSamplerMethod sampleOneParticle = sampleOneProton;
-      for(G4int i = 1; i <= theA; ++i) {
-        if(i == (theZ + 1)) { // Nucleons [Z+1..A] are neutrons
+      for(G4int i = 0; i < theA; ++i) {
+        if(i == theZ) { // Nucleons [Z..A-1] are neutrons
           type = Neutron;
           sampleOneParticle = sampleOneNeutron;
         }
         Particle *p = (this->*sampleOneParticle)(type);
         p->setPosition(position + p->getPosition());
-        theList.push_back(p);
+        theList[i] = p;
       }
     } else {
       // For deuterons, only sample the proton position and momentum. The
@@ -124,11 +131,9 @@ namespace G4INCL {
       Particle *aProton = (this->*(this->sampleOneProton))(Proton);
       Particle *aNeutron = new Particle(Neutron, -aProton->getMomentum(), position - aProton->getPosition());
       aProton->setPosition(position + aProton->getPosition());
-      theList.push_back(aProton);
-      theList.push_back(aNeutron);
+      theList[0] = aProton;
+      theList[1] = aNeutron;
     }
-
-    return theList;
   }
 
   Particle *ParticleSampler::sampleOneParticleWithRPCorrelation(const ParticleType t) const {

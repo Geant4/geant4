@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearLevelStore.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4NuclearLevelStore.hh 86986 2014-11-21 13:00:05Z gcosmo $
 //
 // 04-10-2010  M. Kelsey -- Replace G4String keys with integers (ZZZAAA),
 //		            move string operation to GenerateFilename()
@@ -35,6 +35,8 @@
 // 06-01-2012 V. Ivanchenko - added nuclear level data structure for 
 //               usage in HEP where internal conversion is neglected;
 //               cleanup the code; new method GetLevelManager  
+// 19-11-2014 M. Asai - protection against reading the same file from
+//               more than one worker threads
 
 #ifndef G4NuclearLevelStore_hh 
 #define G4NuclearLevelStore_hh 1
@@ -42,11 +44,15 @@
 #include "G4NuclearLevelManager.hh"
 #include "G4LevelManager.hh"
 #include "G4LevelReader.hh"
+#include "G4ThreadLocalSingleton.hh"
 #include "globals.hh"
 #include <map>
 
 class G4NuclearLevelStore
 {
+
+friend class G4ThreadLocalSingleton<G4NuclearLevelStore>;
+
 private:
 
   G4NuclearLevelStore();
@@ -79,8 +85,16 @@ private:
   G4String      dirName;
 
   static G4ThreadLocal G4NuclearLevelStore* theInstance;
+#ifdef G4MULTITHREADED
+  static G4NuclearLevelStore* theShadowInstance;
+#endif
 
   G4bool userFiles;
   std::map<G4int, G4String> theUserDataFiles;
+
+#ifdef G4MULTITHREADED
+public:
+  static G4Mutex nuclearLevelStoreMutex;
+#endif
 };
 #endif

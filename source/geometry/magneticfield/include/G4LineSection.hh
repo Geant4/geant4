@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LineSection.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4LineSection.hh 85845 2014-11-05 15:43:58Z gcosmo $
 //
 //
 // class G4LineSection
@@ -48,22 +48,45 @@ class G4LineSection
 {
   public:  // with description
 
-     G4LineSection( const G4ThreeVector& PntA, const G4ThreeVector& PntB );
+     inline G4LineSection( const G4ThreeVector& PntA, const G4ThreeVector& PntB );
 
      G4double Dist( G4ThreeVector OtherPnt ) const;
 
-     G4double GetABdistanceSq() const { return fABdistanceSq ; }
+     inline G4double GetABdistanceSq() const;
 
-     static G4double Distline( const G4ThreeVector& OtherPnt, 
-                               const G4ThreeVector& LinePntA, 
-                               const G4ThreeVector& LinePntB );
+     inline static G4double Distline( const G4ThreeVector& OtherPnt, 
+                                      const G4ThreeVector& LinePntA, 
+                                      const G4ThreeVector& LinePntB );
   private:
 
      G4ThreeVector   EndpointA;
      G4ThreeVector   VecAtoB;
-
      G4double fABdistanceSq ;
 };
 
+// Inline methods implementations
+
+inline
+G4LineSection::G4LineSection( const G4ThreeVector& PntA, 
+			      const G4ThreeVector& PntB )
+  : EndpointA(PntA), VecAtoB(PntB-PntA)
+{ 
+  fABdistanceSq = VecAtoB.mag2();  
+}
+
+inline
+G4double G4LineSection::GetABdistanceSq() const
+{
+  return fABdistanceSq;
+}
+
+inline
+G4double G4LineSection::Distline( const G4ThreeVector& OtherPnt, 
+				  const G4ThreeVector& LinePntA, 
+				  const G4ThreeVector& LinePntB )
+{
+  G4LineSection LineAB( LinePntA, LinePntB );  // Line from A to B
+  return LineAB.Dist( OtherPnt );
+}
 
 #endif

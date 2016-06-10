@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.hh 69569 2013-05-08 13:19:50Z gcosmo $
+// $Id: G4VLongitudinalStringDecay.hh 84219 2014-10-10 14:55:19Z gcosmo $
 // Maxim Komogorov
 //
 // -----------------------------------------------------------------------------
@@ -108,8 +108,8 @@ protected:
    G4ParticleDefinition * QuarkSplitup(G4ParticleDefinition* decay,
 		   		       G4ParticleDefinition *&created);
 
-   G4ParticleDefinition * DiQuarkSplitup(G4ParticleDefinition* decay,
-		   			 G4ParticleDefinition *&created);
+   virtual G4ParticleDefinition * DiQuarkSplitup(G4ParticleDefinition* decay, // Uzhi June 2014
+		   			 G4ParticleDefinition *&created)=0;
 					
    pDefPair CreatePartonPair(G4int NeedParticle, G4bool AllowDiquarks=true);
 

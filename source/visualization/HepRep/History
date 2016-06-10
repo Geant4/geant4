@@ -1,4 +1,4 @@
-.$Id: History 71534 2013-06-17 16:07:53Z gcosmo $
+.$Id: History 78838 2014-01-28 08:46:17Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+
+9th December 2013  John Allison  (vis-HepRep-V10-00-00)
+- G4HepRep.cc, G4HepRepFile.cc: Declared as G4VGraphicsSystem::fileWriter.
 
 16th June 2013  John Allison  (vis-HepRep-V09-06-06)
   o G4HepRepSceneHandler.cc: Added an assert to keep Coverity happy.

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1File.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4VRML1File.cc 78838 2014-01-28 08:46:17Z gcosmo $
 //
 // G4VRML1File.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -42,7 +42,7 @@
 
 
 G4VRML1File::G4VRML1File() :
-	G4VGraphicsSystem("VRML1FILE", "VRML1FILE", G4VGraphicsSystem::threeD)
+	G4VGraphicsSystem("VRML1FILE", "VRML1FILE", G4VGraphicsSystem::fileWriter)
 {
 }
 

@@ -1,0 +1,46 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_gzip
+#define tools_gzip
+
+#include "signature"
+
+namespace tools {
+namespace file {
+
+inline bool is_gzip(const std::string& a_file,bool& a_is){
+  unsigned char head[4];
+ {unsigned int num = 4;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=4) {a_is = false;return true;}}
+  if(head[0]!=31) {a_is = false;return true;}
+  if(head[1]!=139) {a_is = false;return true;}
+  //if(head[2]!=8) {a_is = false;return true;}
+  //if(head[3]!=8) {a_is = false;return true;}
+  a_is = true;  
+  return true;
+}
+
+inline bool gzip_usize(const std::string& a_file,unsigned int& a_usz){
+  bool is;
+  if(!is_gzip(a_file,is)) {a_usz=0;return false;}
+  if(!is) {a_usz=0;return false;}
+  FILE* file = ::fopen(a_file.c_str(),"rb");
+  if(!file) {a_usz=0;return false;}
+  ::fseek(file,-4,SEEK_END);
+  unsigned char buf[4];  
+  size_t n = ::fread(buf,1,4,file);
+  ::fclose(file);
+  if(n!=4) {a_usz=0;return false;}
+  unsigned int b4 = buf[0];
+  unsigned int b3 = buf[1];
+  unsigned int b2 = buf[2];
+  unsigned int b1 = buf[3];
+  a_usz = (b1 << 24) | ((b2 << 16) + (b3 << 8) + b4);
+  return true;
+}
+
+}}
+
+#endif

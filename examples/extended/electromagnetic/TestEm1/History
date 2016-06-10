@@ -1,4 +1,4 @@
-$Id: History 77289 2013-11-22 10:53:37Z gcosmo $
+$Id: History 85282 2014-10-27 09:22:11Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,44 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+23-10-14 mma (testem1-V10-00-11)
+- in TestEm1.in : /run/numberOfThreads 2
+
+23-10-14 mma (testem1-V10-00-10)
+- PhysListEmStandard : msc algorithm fUseSafetyPlus
+
+20-10-14 mma (testem1-V10-00-09)
+- PhysicsList : added G4EmStandardPhysicsSS
+- TestEm1.cc : option set nThreads via command
+	 
+26-08-14 mma (testem1-V10-00-08)
+- TestEm1.cc : SetNumberOfThreads( G4Threading::G4GetNumberOfCores() )
+	 
+16-06-14 mma (testem1-V10-00-07)
+- remove PhysicsList::SetCuts()
+		 
+07-06-14 mma (testem1-V10-00-05)
+- minor cleanup in PhysicsList::SetCuts()
+	 
+04-06-14 mma (testem1-V10-00-04)
+- replace /testem/phys/setCuts by /run/setCut in all macro.
+- simplify PhysicsList and its messenger, accordingly.
+
+09-04-14 V.Ivant (testem1-V10-00-03)
+- TestEm1.in - reduce printout more
+- PhysicsList - added "emlowenergy" option
+- HistoManager - added "h"
+
+09-04-14 V.Ivant (testem1-V10-00-02)
+- DetectorConstruction - define heavy water vapor starting from isotopes
+- TestEm1.in - removed printout from second thread
+     
+26-03-14 mma (testem1-V10-00-01)
+- Cosmetic when printing EndOfRun
+     
+15-12-13 mma (testem1-V10-00-00)
+- introduce function Run::EndOfRun()
 
 21-11-13 Andrea Dotti (testem1-V09-06-17)
 - In case material is changed call PhysicsHasBeenModified

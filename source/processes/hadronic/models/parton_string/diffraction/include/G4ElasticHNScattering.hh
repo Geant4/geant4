@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHNScattering.hh 74627 2013-10-17 07:04:38Z gcosmo $
+// $Id: G4ElasticHNScattering.hh 86646 2014-11-14 13:29:39Z gcosmo $
 
 #ifndef G4ElasticHNScattering_h
 #define G4ElasticHNScattering_h 1
@@ -42,6 +42,7 @@
 #include "globals.hh"
 #include "G4FTFParameters.hh"
 #include "G4ThreeVector.hh"
+#include "G4SampleResonance.hh"   // Uzhi 2014
 
 class G4VSplitableHadron;
 class G4ExcitedString;

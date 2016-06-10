@@ -47,6 +47,7 @@
 #include "UPolyhedra.hh"
 #include "G4PolyhedraSide.hh"
 #include "G4PolyhedraHistorical.hh"
+#include "G4Polyhedron.hh"
 
 class G4EnclosingCylinder;
 class G4ReduciblePolygon;
@@ -77,6 +78,8 @@ class G4UPolyhedra : public G4USolid
     void ComputeDimensions(      G4VPVParameterisation* p,
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
+
+    G4VSolid* Clone() const;
 
     inline UPolyhedra* GetShape() const;
 
@@ -173,7 +176,7 @@ inline void G4UPolyhedra::SetOriginalParameters(G4PolyhedraHistorical* pars)
     pdata->Rmin[i] = pars->Rmin[i];
     pdata->Rmax[i] = pars->Rmax[i];
   }
-  ResetPolyhedron();
+  fRebuildPolyhedron = true;
 }
 inline G4bool G4UPolyhedra::Reset()
 {

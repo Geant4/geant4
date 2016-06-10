@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm11/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 76258 2013-11-08 11:36:51Z gcosmo $
+// $Id: RunAction.hh 78560 2014-01-07 10:06:52Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,14 +52,14 @@ class RunAction : public G4UserRunAction
    ~RunAction();
 
   public:
-    virtual G4Run* GenerateRun();
     virtual void   BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*); 
+    virtual void   EndOfRunAction(const G4Run*);
+    virtual G4Run* GenerateRun();     
 
   private:
     DetectorConstruction*   fDetector;
     PhysicsList*            fPhysics;
-    PrimaryGeneratorAction* fKinematic;
+    PrimaryGeneratorAction* fPrimary;
     Run*                    fRun;
     HistoManager*           fHistoManager;
 };

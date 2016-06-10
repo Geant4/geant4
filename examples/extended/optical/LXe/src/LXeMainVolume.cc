@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeMainVolume.cc 77561 2013-11-26 09:00:04Z gcosmo $
+// $Id: LXeMainVolume.cc 82853 2014-07-14 09:07:11Z gcosmo $
 //
 /// \file optical/LXe/src/LXeMainVolume.cc
 /// \brief Implementation of the LXeMainVolume class
@@ -218,12 +218,14 @@ void LXeMainVolume::VisAttributes(){
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeMainVolume::SurfaceProperties(){
-  const G4int num = 2;
-  G4double ephoton[num] = {7.0*eV, 7.14*eV};
+  G4double ephoton[] = {7.0*eV, 7.14*eV};
+  const G4int num = sizeof(ephoton)/sizeof(G4double);
 
   //**Scintillator housing properties
-  G4double reflectivity[num] = {fRefl, fRefl};
-  G4double efficiency[num] = {0.0, 0.0};
+  G4double reflectivity[] = {fRefl, fRefl};
+  assert(sizeof(reflectivity) == sizeof(ephoton));
+  G4double efficiency[] = {0.0, 0.0};
+  assert(sizeof(efficiency) == sizeof(ephoton));
   G4MaterialPropertiesTable* scintHsngPT = new G4MaterialPropertiesTable();
   scintHsngPT->AddProperty("REFLECTIVITY", ephoton, reflectivity, num);
   scintHsngPT->AddProperty("EFFICIENCY", ephoton, efficiency, num);
@@ -232,8 +234,10 @@ void LXeMainVolume::SurfaceProperties(){
   OpScintHousingSurface->SetMaterialPropertiesTable(scintHsngPT);
  
   //**Sphere surface properties
-  G4double sphereReflectivity[num] = {1.0, 1.0};
-  G4double sphereEfficiency[num] = {0.0, 0.0};
+  G4double sphereReflectivity[] = {1.0, 1.0};
+  assert(sizeof(sphereReflectivity) == sizeof(ephoton));
+  G4double sphereEfficiency[] = {0.0, 0.0};
+  assert(sizeof(sphereEfficiency) == sizeof(ephoton));
   G4MaterialPropertiesTable* spherePT = new G4MaterialPropertiesTable();
   spherePT->AddProperty("REFLECTIVITY", ephoton, sphereReflectivity, num);
   spherePT->AddProperty("EFFICIENCY", ephoton, sphereEfficiency, num);
@@ -242,9 +246,12 @@ void LXeMainVolume::SurfaceProperties(){
   OpSphereSurface->SetMaterialPropertiesTable(spherePT);
  
   //**Photocathode surface properties
-  G4double photocath_EFF[num]={1.,1.}; //Enables 'detection' of photons
-  G4double photocath_ReR[num]={1.92,1.92};
-  G4double photocath_ImR[num]={1.69,1.69};
+  G4double photocath_EFF[]={1.,1.}; //Enables 'detection' of photons
+  assert(sizeof(photocath_EFF) == sizeof(ephoton));
+  G4double photocath_ReR[]={1.92,1.92};
+  assert(sizeof(photocath_ReR) == sizeof(ephoton));
+  G4double photocath_ImR[]={1.69,1.69};
+  assert(sizeof(photocath_ImR) == sizeof(ephoton));
   G4MaterialPropertiesTable* photocath_mt = new G4MaterialPropertiesTable();
   photocath_mt->AddProperty("EFFICIENCY",ephoton,photocath_EFF,num);
   photocath_mt->AddProperty("REALRINDEX",ephoton,photocath_ReR,num);

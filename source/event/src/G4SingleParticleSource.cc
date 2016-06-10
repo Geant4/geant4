@@ -59,6 +59,7 @@
 #include "G4Ions.hh"
 #include "G4TrackingManager.hh"
 #include "G4Track.hh"
+#include "G4AutoLock.hh"
 
 G4SingleParticleSource::G4SingleParticleSource() {
 	// Initialise all variables
@@ -86,6 +87,8 @@ G4SingleParticleSource::G4SingleParticleSource() {
 
 	// verbosity
 	verbosityLevel = 0;
+    
+    G4MUTEXINIT(mutex);
 
 }
 
@@ -94,6 +97,7 @@ G4SingleParticleSource::~G4SingleParticleSource() {
 	delete posGenerator;
 	delete angGenerator;
 	delete eneGenerator;
+    G4MUTEXDESTROY(mutex);
 }
 
 void G4SingleParticleSource::SetVerbosity(int vL) {
@@ -111,6 +115,7 @@ void G4SingleParticleSource::SetParticleDefinition(
 }
 
 void G4SingleParticleSource::GeneratePrimaryVertex(G4Event *evt) {
+    G4AutoLock l(&mutex);
 	if (particle_definition == NULL)
 		return;
 

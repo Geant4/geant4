@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scale.icc 66376 2012-12-18 09:42:59Z gcosmo $
+// $Id: G4Scale.icc 83392 2014-08-21 14:36:35Z gcosmo $
 //
 // 
 // John Allison  21st July 2001.
@@ -36,6 +36,11 @@ inline G4double G4Scale::GetLength() const {
 inline const G4String& G4Scale::GetAnnotation() const {
   return fAnnotation;
 }
+
+inline G4double G4Scale::GetAnnotationSize() const {
+  return fAnnotationSize;
+}
+
 inline G4Scale::Direction G4Scale::GetDirection() const {
   return fDirection;
 }

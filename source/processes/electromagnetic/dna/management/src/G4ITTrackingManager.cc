@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITTrackingManager.cc 65022 2012-11-12 16:43:12Z gcosmo $
+// $Id: G4ITTrackingManager.cc 85244 2014-10-27 08:24:13Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -42,7 +42,7 @@
 
 G4ITTrackingManager::G4ITTrackingManager()
 {
-    fpTrackingInteractivity = 0;
+  fpTrackingInteractivity = 0;
 }
 //___________________________________________________
 //void G4ITTrackingManager::Initialize()
@@ -52,31 +52,34 @@ G4ITTrackingManager::G4ITTrackingManager()
 //___________________________________________________
 G4ITTrackingManager::~G4ITTrackingManager()
 {
-    if(fpTrackingInteractivity) delete fpTrackingInteractivity;
+  if (fpTrackingInteractivity) delete fpTrackingInteractivity;
 }
 //___________________________________________________
 void G4ITTrackingManager::StartTracking(G4Track* track)
 {
-    if(fpTrackingInteractivity) fpTrackingInteractivity->StartTracking(track);
+  if (fpTrackingInteractivity) fpTrackingInteractivity->StartTracking(track);
 
-    // Inform beginning of tracking to physics processes
-    track->GetDefinition()->GetProcessManager()->StartTracking(track);
+  // Inform beginning of tracking to physics processes
+  track->GetDefinition()->GetProcessManager()->StartTracking(track);
 }
 //___________________________________________________
 void G4ITTrackingManager::AppendStep(G4Track* track, G4Step* step)
 {
-    if(fpTrackingInteractivity) fpTrackingInteractivity->AppendStep(track,step);
+  if (fpTrackingInteractivity) fpTrackingInteractivity->AppendStep(track, step);
 }
 
 //___________________________________________________
 void G4ITTrackingManager::SetInteractivity(G4ITTrackingInteractivity* iteractivity)
 {
-    if(fpTrackingInteractivity && fpTrackingInteractivity!=iteractivity) delete fpTrackingInteractivity;
-    fpTrackingInteractivity = iteractivity;
+  if (fpTrackingInteractivity && fpTrackingInteractivity != iteractivity)
+  {
+    delete fpTrackingInteractivity;
+  }
+  fpTrackingInteractivity = iteractivity;
 }
 
 //___________________________________________________
 void G4ITTrackingManager::EndTracking(G4Track* track)
 {
-    if(fpTrackingInteractivity) fpTrackingInteractivity->EndTracking(track);
+  if (fpTrackingInteractivity) fpTrackingInteractivity->EndTracking(track);
 }

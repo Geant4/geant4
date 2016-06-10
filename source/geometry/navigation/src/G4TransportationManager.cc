@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.cc 68709 2013-04-05 09:03:07Z gcosmo $
+// $Id: G4TransportationManager.cc 83466 2014-08-25 10:31:39Z gcosmo $
 //
 //
 // G4TransportationManager 
@@ -122,6 +122,19 @@ void G4TransportationManager::SetFieldManager(G4FieldManager* newFieldManager)
    {
       fPropagatorInField -> SetDetectorFieldManager( newFieldManager );
    }
+}
+
+// ----------------------------------------------------------------------------
+// SetNavigatorForTracking()
+//
+// Set the active navigator for tracking, always
+// the first in the collection of registered navigators.
+//
+void G4TransportationManager::SetNavigatorForTracking(G4Navigator* newNavigator)
+{
+   fNavigators[0] = newNavigator;
+   fActiveNavigators[0] = newNavigator;
+   fPropagatorInField->SetNavigatorForPropagating(newNavigator);
 }
 
 // ----------------------------------------------------------------------------
@@ -298,7 +311,7 @@ G4int G4TransportationManager::ActivateNavigator( G4Navigator* aNavigator )
          = "Navigator for volume -" + aNavigator->GetWorldVolume()->GetName()
          + "- not found in memory!";      
       G4Exception("G4TransportationManager::ActivateNavigator()",
-                  "GeomNav1002", JustWarning, message);
+                  "GeomNav1002", FatalException, message);
       return -1;
    }
 
@@ -432,3 +445,31 @@ void G4TransportationManager::DeRegisterWorld( G4VPhysicalVolume* aWorld )
                  "GeomNav1002", JustWarning, message);
    }
 }
+
+// ----------------------------------------------------------------------------
+// ClearParallelWorlds()
+//
+// Clear collection of navigators and delete allocated objects associated with
+// parallel worlds.
+// Called only by the RunManager when the entire geometry is rebuilt from
+// scratch.
+//
+void G4TransportationManager::ClearParallelWorlds()
+{
+   std::vector<G4Navigator*>::iterator pNav = fNavigators.begin();
+   G4Navigator* trackingNavigator = *pNav;
+   for (pNav=fNavigators.begin(); pNav!=fNavigators.end(); pNav++)
+   {
+     if (*pNav != trackingNavigator)  { delete *pNav; }
+   }
+   fNavigators.clear();
+   fActiveNavigators.clear();
+   fWorlds.clear();
+
+   // trackingNavigator->SetWorldVolume(0);
+   fNavigators.push_back(trackingNavigator);
+   fActiveNavigators.push_back(trackingNavigator);
+   // fWorlds.push_back(trackingNavigator->GetWorldVolume()); // NULL registered
+   fWorlds.push_back(0); // NULL registered
+}
+

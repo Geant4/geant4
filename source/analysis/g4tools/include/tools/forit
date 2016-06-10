@@ -1,0 +1,52 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_forit
+#define tools_forit
+
+#define tools_vforcit(a__T,a__v,a__it) \
+  for(std::vector< a__T >::const_iterator (a__it) = (a__v).begin();\
+      (a__it)!=(a__v).end();++(a__it))
+
+#define tools_vforit(a__T,a__v,a__it) \
+  for(std::vector< a__T >::iterator (a__it) = (a__v).begin();\
+      (a__it)!=(a__v).end();++(a__it))
+
+#define tools_typename_vforcit(a__T,a__v,a__it_t,a__it) \
+  typedef typename std::vector< a__T >::const_iterator a__it_t;\
+  for(a__it_t (a__it) = (a__v).begin();(a__it)!=(a__v).end();++(a__it))
+
+#define tools_sforcit(a__s,a__it) \
+  for(std::string::const_iterator (a__it) = (a__s).begin();\
+      (a__it)!=(a__s).end();++(a__it))
+
+#define tools_sforit(a__s,a__it) \
+  for(std::string::iterator (a__it) = (a__s).begin();\
+      (a__it)!=(a__s).end();++(a__it))
+
+#define tools_lforcit(a__T,a__l,a__it) \
+  for(std::list< a__T >::const_iterator (a__it) = (a__l).begin();\
+      (a__it)!=(a__l).end();++(a__it))
+
+#define tools_lforit(a__T,a__l,a__it) \
+  for(std::list< a__T >::iterator (a__it) = (a__l).begin();\
+      (a__it)!=(a__l).end();++(a__it))
+
+#define tools_mforcit(a__K,a__V,a__m,a__it) \
+  for(std::map< a__K , a__V >::const_iterator (a__it) = (a__m).begin();\
+      (a__it)!=(a__m).end();++(a__it))
+
+#define tools_mforit(a__K,a__V,a__m,a__it) \
+  for(std::map< a__K , a__V >::iterator (a__it) = (a__m).begin();\
+      (a__it)!=(a__m).end();++(a__it))
+
+#define tools_typename_mforcit(a__K,a__V,a__m,a__it_t,a__it) \
+  typedef typename std::map< a__K, a__V >::const_iterator a__it_t;\
+  for(a__it_t (a__it) = (a__m).begin();(a__it)!=(a__m).end();++(a__it))
+
+#define tools_typename_mforit(a__K,a__V,a__m,a__it_t,a__it) \
+  typedef typename std::map< a__K, a__V >::iterator a__it_t;\
+  for(a__it_t (a__it) = (a__m).begin();(a__it)!=(a__m).end();++(a__it))
+
+#endif
+

@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66356 2012-12-18 09:02:32Z gcosmo $
+# $Id: sources.cmake 79490 2014-03-05 15:23:33Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -24,6 +24,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/CSG/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/specific/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/graphics_reps/include)
 
 #
 # Define the Geant4 Module.

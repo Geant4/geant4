@@ -29,36 +29,74 @@
 // 121031 First implementation done by T. Koi (SLAC/PPA)
 
 #include "G4NeutronHPManager.hh"
+#include "G4NeutronHPThreadLocalManager.hh"
+#include "G4NeutronHPMessenger.hh"
 #include "G4HadronicException.hh"
 
-G4ThreadLocal G4NeutronHPManager* G4NeutronHPManager::instance = NULL;
+//G4ThreadLocal G4NeutronHPManager* G4NeutronHPManager::instance = NULL;
+G4NeutronHPManager* G4NeutronHPManager::instance = G4NeutronHPManager::GetInstance();
 
 G4NeutronHPManager::G4NeutronHPManager()
-:RWB(NULL),verboseLevel(1)
+//:RWB(NULL),
+:verboseLevel(1)
+,USE_ONLY_PHOTONEVAPORATION(false)
+,SKIP_MISSING_ISOTOPES(false)
+,NEGLECT_DOPPLER(false)
+,DO_NOT_ADJUST_FINAL_STATE(false)
+,PRODUCE_FISSION_FRAGMENTS(false)
+,theElasticCrossSections(NULL)
+,theCaptureCrossSections(NULL)
+,theInelasticCrossSections(NULL)
+,theFissionCrossSections(NULL)
+,theElasticFSs(NULL)
+,theInelasticFSs(NULL)
+,theCaptureFSs(NULL)
+,theFissionFSs(NULL)
+,theTSCoherentCrossSections(NULL)
+,theTSIncoherentCrossSections(NULL)
+,theTSInelasticCrossSections(NULL)
+,theTSCoherentFinalStates(NULL)
+,theTSIncoherentFinalStates(NULL)
+,theTSInelasticFinalStates(NULL)
 {
-;
+   messenger = new G4NeutronHPMessenger( this );
+   if ( getenv( "G4NEUTRONHP_DO_NOT_ADJUST_FINAL_STATE" ) ) DO_NOT_ADJUST_FINAL_STATE = true;
+   if ( getenv( "G4NEUTRONHP_USE_ONLY_PHOTONEVAPORATION" ) ) USE_ONLY_PHOTONEVAPORATION = true;
+   if ( getenv( "G4NEUTRONHP_NEGLECT_DOPPLER" ) ) NEGLECT_DOPPLER = true;
+   if ( getenv( "G4NEUTRONHP_SKIP_MISSING_ISOTOPES" ) ) SKIP_MISSING_ISOTOPES = true;
+   if ( getenv( "G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS" ) ) PRODUCE_FISSION_FRAGMENTS = true;
 }
+
 G4NeutronHPManager::~G4NeutronHPManager()
 {
-;
+   delete messenger;
 }
+
 void G4NeutronHPManager::OpenReactionWhiteBoard()
 {
-   if ( RWB != NULL ) {
-      G4cout << "Warning: G4NeutronHPReactionWhiteBoard is tried doubly opening" << G4endl;
-      RWB = new G4NeutronHPReactionWhiteBoard();
-   }
-   
-   RWB = new G4NeutronHPReactionWhiteBoard();
+//   if ( RWB != NULL ) {
+//      G4cout << "Warning: G4NeutronHPReactionWhiteBoard is tried doubly opening" << G4endl;
+//      RWB = new G4NeutronHPReactionWhiteBoard();
+//   }
+//   
+//   RWB = new G4NeutronHPReactionWhiteBoard();
+   G4NeutronHPThreadLocalManager::GetInstance()->OpenReactionWhiteBoard();
 }
+
 G4NeutronHPReactionWhiteBoard* G4NeutronHPManager::GetReactionWhiteBoard()
 {
-   if ( RWB == NULL ) {
-      G4cout << "Warning: try to access G4NeutronHPReactionWhiteBoard before opening" << G4endl;
-      RWB = new G4NeutronHPReactionWhiteBoard();
-   }
-   return RWB; 
+   //if ( RWB == NULL ) {
+   //   G4cout << "Warning: try to access G4NeutronHPReactionWhiteBoard before opening" << G4endl;
+   //   RWB = new G4NeutronHPReactionWhiteBoard();
+   //}
+   //return RWB; 
+   return G4NeutronHPThreadLocalManager::GetInstance()->GetReactionWhiteBoard();
 }
+void G4NeutronHPManager::CloseReactionWhiteBoard()
+{
+   G4NeutronHPThreadLocalManager::GetInstance()->CloseReactionWhiteBoard();
+}
+
 #include "zlib.h"
 #include <fstream>
 void G4NeutronHPManager::GetDataStream( G4String filename , std::istringstream& iss ) 
@@ -91,8 +129,7 @@ void G4NeutronHPManager::GetDataStream( G4String filename , std::istringstream& 
       //                                 Now "complen" has uncomplessed size
       data = new G4String ( (char*)uncompdata , (G4long)complen );
       delete [] uncompdata;
-   }
-   else {
+   } else {
 // Use regular text file 
       std::ifstream thefData( filename , std::ios::in | std::ios::ate );
       if ( thefData.good() ) {
@@ -111,10 +148,45 @@ void G4NeutronHPManager::GetDataStream( G4String filename , std::istringstream& 
          iss.setstate( std::ios::badbit ); 
       }
    }
-   if (data != NULL) iss.str(*data);
+   if ( data != NULL ) {
+      iss.str(*data);
+      G4String id;
+      iss >> id;
+      if ( id == "G4NDL" ) {
+         //Register information of file
+         G4String source;
+         iss >> source;
+         register_data_file(filename,source);
+      } else {
+         iss.seekg( 0 , std::ios::beg );
+      }
+   }
    //G4cout << iss.rdbuf()->in_avail() << G4endl;
    in->close(); delete in;
    delete data;
+}
+// Checking existance of data file 
+void G4NeutronHPManager::GetDataStream2( G4String filename , std::istringstream& iss ) 
+{
+   G4String compfilename(filename);
+   compfilename += ".z";
+   std::ifstream* in = new std::ifstream ( compfilename , std::ios::binary | std::ios::ate );
+   if ( in->good() )
+   {
+// Compressed file is exist 
+      in->close(); 
+   } else {
+      std::ifstream thefData( filename , std::ios::in | std::ios::ate );
+      if ( thefData.good() ) {
+// Regular text file is exist
+         thefData.close();
+      } else {
+// found no data file
+//                 set error bit to the stream   
+         iss.setstate( std::ios::badbit ); 
+      }
+   }
+   delete in;
 }
 
 void G4NeutronHPManager::SetVerboseLevel( G4int newValue )
@@ -122,4 +194,19 @@ void G4NeutronHPManager::SetVerboseLevel( G4int newValue )
    G4cout << "You are setting a new verbose level for neutron HP package." << G4endl;
    G4cout << "the new value will be used in whole of the neutron HP package, i.e., models and cross sections for Capture, Elastic, Fission and Inelastic interaction." << G4endl;
    verboseLevel = newValue;
+}
+
+void G4NeutronHPManager::register_data_file(G4String filename, G4String source)
+{
+   mDataEvaluation.insert( std::pair < G4String , G4String > ( filename , source ) );
+}
+void G4NeutronHPManager::DumpDataSource()
+{
+
+   G4cout << "Data source of this NeutronHP calculation are " << G4endl;
+   for (  std::map< G4String , G4String >::iterator 
+          it = mDataEvaluation.begin() ; it != mDataEvaluation.end() ; it++ ) {
+      G4cout << it->first << " " << it->second << G4endl;
+   }
+   G4cout << G4endl;
 }

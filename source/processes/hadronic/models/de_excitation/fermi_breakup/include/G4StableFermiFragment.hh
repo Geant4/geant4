@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StableFermiFragment.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4StableFermiFragment.hh 85607 2014-10-31 11:21:24Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -44,7 +44,7 @@ public:
 
   virtual ~G4StableFermiFragment();
 
-  virtual G4FragmentVector * GetFragment(const G4LorentzVector & aMomentum) const;
+  virtual void FillFragment(G4FragmentVector*, const G4LorentzVector & aMomentum) const;
   
 private:
 

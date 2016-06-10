@@ -139,7 +139,7 @@ void G4QMDCollision::CalKinematicsOfBinaryCollisions( G4double dt )
 
          G4bool decayed = false; 
 
-         G4ParticleDefinition* pd0 = theSystem->GetParticipant( i )->GetDefinition();
+         const G4ParticleDefinition* pd0 = theSystem->GetParticipant( i )->GetDefinition();
          G4ThreeVector p0 = theSystem->GetParticipant( i )->GetMomentum();
          G4ThreeVector r0 = theSystem->GetParticipant( i )->GetPosition();
 
@@ -318,7 +318,7 @@ void G4QMDCollision::CalKinematicsOfBinaryCollisions( G4double dt )
       G4ThreeVector ri =  theSystem->GetParticipant( i )->GetPosition();
       G4LorentzVector p4i =  theSystem->GetParticipant( i )->Get4Momentum();
       G4double rmi =  theSystem->GetParticipant( i )->GetMass();
-      G4ParticleDefinition* pdi =  theSystem->GetParticipant( i )->GetDefinition();
+      const G4ParticleDefinition* pdi =  theSystem->GetParticipant( i )->GetDefinition();
 //090331 gamma 
       if ( pdi->GetPDGMass() == 0.0 ) continue;
 
@@ -355,7 +355,7 @@ void G4QMDCollision::CalKinematicsOfBinaryCollisions( G4double dt )
          G4ThreeVector rj =  theSystem->GetParticipant( j )->GetPosition();
          G4LorentzVector p4j =  theSystem->GetParticipant( j )->Get4Momentum();
          G4double rmj =  theSystem->GetParticipant( j )->GetMass();
-         G4ParticleDefinition* pdj =  theSystem->GetParticipant( j )->GetDefinition();
+         const G4ParticleDefinition* pdj =  theSystem->GetParticipant( j )->GetDefinition();
 //090331 gamma 
          if ( pdj->GetPDGMass() == 0.0 ) continue;
 
@@ -573,8 +573,8 @@ G4bool G4QMDCollision::CalFinalStateOfTheBinaryCollision( G4int i , G4int j )
 
 //071031
    // will use KineticTrack
-   G4ParticleDefinition* pdi0 =theSystem->GetParticipant( i )->GetDefinition();
-   G4ParticleDefinition* pdj0 =theSystem->GetParticipant( j )->GetDefinition();
+   const G4ParticleDefinition* pdi0 =theSystem->GetParticipant( i )->GetDefinition();
+   const G4ParticleDefinition* pdj0 =theSystem->GetParticipant( j )->GetDefinition();
    G4LorentzVector p4i0 = p4i*GeV;
    G4LorentzVector p4j0 = p4j*GeV;
    G4ThreeVector ri0 = ( theSystem->GetParticipant( i )->GetPosition() )*fermi;

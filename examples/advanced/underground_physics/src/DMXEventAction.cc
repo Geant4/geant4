@@ -54,7 +54,7 @@
 #include "DMXEventActionMessenger.hh"
 #include "DMXAnalysisManager.hh"
 
-#include "G4SystemOfUnits.hh"
+
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
@@ -65,15 +65,16 @@
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
 #include "G4UnitsTable.hh"
-#include "G4ios.hh"
+#include "G4RunManager.hh"
+#include "G4Threading.hh"
 #include <fstream>
 #include <iomanip>
 
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-DMXEventAction::DMXEventAction(DMXRunAction* DMXRun,
-			       DMXPrimaryGeneratorAction* DMXGenerator) 
-  : runAct(DMXRun),genAction(DMXGenerator)
+DMXEventAction::DMXEventAction() 
+  : runAct(0),genAction(0),hitsfile(0),pmtfile(0)
 {
 
   // create messenger
@@ -101,12 +102,33 @@ DMXEventAction::DMXEventAction(DMXRunAction* DMXRun,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 DMXEventAction::~DMXEventAction() {
 
+  if (hitsfile)
+    {
+      hitsfile->close();
+      delete hitsfile;
+    }
+  if (pmtfile)
+    {
+      pmtfile->close();
+      delete pmtfile;
+    }
   delete eventMessenger;
 }
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-void DMXEventAction::BeginOfEventAction(const G4Event* evt) {
+void DMXEventAction::BeginOfEventAction(const G4Event* evt) 
+{
+
+  //thread-local run action
+  if (!runAct) 
+    runAct = 
+      dynamic_cast<const DMXRunAction*>
+      (G4RunManager::GetRunManager()->GetUserRunAction());
+  
+  if (!genAction)
+    genAction = dynamic_cast<const DMXPrimaryGeneratorAction*>
+      (G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
 
 
   // grab seeds
@@ -282,53 +304,69 @@ void DMXEventAction::EndOfEventAction(const G4Event* evt) {
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-void DMXEventAction::writeScintHitsToFile(void) {
+void DMXEventAction::writeScintHitsToFile() 
+{
 
-  //  G4String filename="hits.out";
-  G4String filename=runAct->GetsavehitsFile();
-  std::ofstream hitsfile(filename, std::ios::app);
-  if(!event_id) {
-    std::ofstream hitsfileInit(filename);
-    hitsfileInit <<"Evt     Eprim   Etot    LXe     LXeTime PMT     PMTTime Seed1           Seed2           First   Flags" 
-	     << G4endl;
-    hitsfileInit <<"#       MeV     MeV     hits    ns      hits    ns                                      hit"
-	     << G4endl
-	     << G4endl;
-  }
+  G4String filename="hits.out";
+  if (runAct)
+    filename=runAct->GetsavehitsFile();
+
+ 
+  
+  //First time it is inkoved
+  if (!hitsfile)
+    {
+      //check that we are in a worker: returns -1 in a master and -2 in sequential
+      //one file per thread is produced ending with ".N", with N= thread number
+      if (G4Threading::G4GetThreadId() >= 0)
+	{
+	  std::stringstream sss;
+	  sss << filename.c_str() << "." << G4Threading::G4GetThreadId();	 
+	  filename = sss.str();
+	  //G4cout << "Filename is: " << filename << G4endl;
+	}
+      
+      hitsfile = new std::ofstream;
+      hitsfile->open(filename);
+      (*hitsfile) <<"Evt     Eprim   Etot    LXe     LXeTime PMT     PMTTime Seed1           Seed2           First   Flags" 
+	       << G4endl;
+      (*hitsfile) <<"#       MeV     MeV     hits    ns      hits    ns                                      hit"
+	       << G4endl
+	       << G4endl;
+    }
 
   if(S_hits) {
 
-    if(hitsfile.is_open()) {
+    if(hitsfile->is_open()) {
 
 
-      hitsfile << std::setiosflags(std::ios::fixed)
-	       << std::setprecision(4)
-	       << std::setiosflags(std::ios::left)
-	       << std::setw(6)
-	       << event_id << "\t"
-	       << energy_pri/MeV << "\t" 
-	       << totEnergy/MeV << "\t"
-	       << S_hits  << "\t"
-	       << std::setiosflags(std::ios::scientific) 
-	       << std::setprecision(2)
-	       << firstLXeHitTime/nanosecond << "\t"
-	       << P_hits << "\t"
-	       << std::setiosflags(std::ios::fixed) 
-	       << std::setprecision(4)
-	       << aveTimePmtHits/nanosecond << "\t"
-	       << *seeds     << "\t"
-	       << *(seeds+1) << "\t"
-	       << firstParticleName << "\t"
-	       << (gamma_ev    ? "gamma " : "") 
-	       << (neutron_ev  ? "neutron " : "") 
-	       << (positron_ev ? "positron " : "") 
-	       << (electron_ev ? "electron " : "") 
-	       << (other_ev    ? "other " : "") 
-	       << G4endl;
+      (*hitsfile) << std::setiosflags(std::ios::fixed)
+		  << std::setprecision(4)
+		  << std::setiosflags(std::ios::left)
+		  << std::setw(6)
+		  << event_id << "\t"
+		  << energy_pri/MeV << "\t" 
+		  << totEnergy/MeV << "\t"
+		  << S_hits  << "\t"
+		  << std::setiosflags(std::ios::scientific) 
+		  << std::setprecision(2)
+		  << firstLXeHitTime/nanosecond << "\t"
+		  << P_hits << "\t"
+		  << std::setiosflags(std::ios::fixed) 
+		  << std::setprecision(4)
+		  << aveTimePmtHits/nanosecond << "\t"
+		  << *seeds     << "\t"
+		  << *(seeds+1) << "\t"
+		  << firstParticleName << "\t"
+		  << (gamma_ev    ? "gamma " : "") 
+		  << (neutron_ev  ? "neutron " : "") 
+		  << (positron_ev ? "positron " : "") 
+		  << (electron_ev ? "electron " : "") 
+		  << (other_ev    ? "other " : "") 
+		  << G4endl;
 
       if (event_id%printModulo == 0)
 	G4cout << "     Event summary in file " << filename << G4endl;  
-      hitsfile.close();
     }
 
     G4AnalysisManager* man = G4AnalysisManager::Instance();
@@ -377,29 +415,48 @@ void DMXEventAction::writeScintHitsToFile(void) {
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-void DMXEventAction::writePmtHitsToFile(const DMXPmtHitsCollection* hits) {
+void DMXEventAction::writePmtHitsToFile(const DMXPmtHitsCollection* hits) 
+{ 
+  G4String filename="pmt.out";
+  if (runAct)
+    filename=runAct->GetsavepmtFile();
+  
 
-  //  G4String filename="pmt.out";
-  G4String filename=runAct->GetsavepmtFile();
-  std::ofstream pmtfile(filename, std::ios::app);
+  //first time it is invoked: create it
+  if (!pmtfile)
+    {
+      //check that we are in a worker: returns -1 in a master and -2 in sequential
+      //one file per thread is produced ending with ".N", with N= thread number
+      if (G4Threading::G4GetThreadId() >= 0)
+	{
+	  std::stringstream sss;
+	  sss << filename.c_str() << "." << G4Threading::G4GetThreadId();	 
+	  filename = sss.str();
+	  //G4cout << "Filename is: " << filename << G4endl;
+	}
+      pmtfile = new std::ofstream;
+      pmtfile->open(filename);
+    }
+
+
   G4double x; G4double y; G4double z;
   G4AnalysisManager* man = G4AnalysisManager::Instance();
 
-  if(pmtfile.is_open()) {
-    pmtfile << "Hit#    X, mm   Y, mm   Z, mm" << G4endl;       
-    pmtfile << std::setiosflags(std::ios::fixed)
-	    << std::setprecision(3)
-	    << std::setiosflags(std::ios::left)
-	    << std::setw(6);
+  if(pmtfile->is_open()) {
+    (*pmtfile) << "Hit#    X, mm   Y, mm   Z, mm" << G4endl;       
+    (*pmtfile) << std::setiosflags(std::ios::fixed)
+	       << std::setprecision(3)
+	       << std::setiosflags(std::ios::left)
+	       << std::setw(6);
     for (G4int i=0; i<P_hits; i++)
       {
 	x = ((*hits)[i]->GetPos()).x()/mm;
 	y = ((*hits)[i]->GetPos()).y()/mm;
 	z = ((*hits)[i]->GetPos()).z()/mm;
-	pmtfile << i << "\t"
-		<< x << "\t" 
-		<< y << "\t"
-		<< z << G4endl;
+	(*pmtfile) << i << "\t"
+		   << x << "\t" 
+		   << y << "\t"
+		   << z << G4endl;
 	
 	man->FillH2(1,x/mm, y/mm);  // fill(x,y)
 	if (event_id == 0 ) {
@@ -417,7 +474,6 @@ void DMXEventAction::writePmtHitsToFile(const DMXPmtHitsCollection* hits) {
       }
     if (event_id%printModulo == 0 && P_hits > 0) 
       G4cout << "     " << P_hits << " PMT hits in " << filename << G4endl;  
-    pmtfile.close();
   }
   
 }

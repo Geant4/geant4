@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsGeometrySet.cc 66870 2013-01-14 23:38:59Z adotti $
+// $Id: G4VisCommandsGeometrySet.cc 86865 2014-11-19 14:41:25Z gcosmo $
 
 // /vis/geometry commands - John Allison  31st January 2006
 
@@ -56,7 +56,7 @@ void G4VVisCommandGeometrySet::Set
   }
   if (requestedName != "all" && !found) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout << "ERROR: Logical volume \"" << requestedName
+      G4cerr << "ERROR: Logical volume \"" << requestedName
 	     << "\" not found in logical volume store." << G4endl;
     }
     return;
@@ -83,15 +83,20 @@ void G4VVisCommandGeometrySet::SetLVVisAtts
   pLV->SetVisAttributes(newVisAtts);
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "\nLogical Volume \"" << pLV->GetName()
-	   << "\": setting vis attributes:\nwas: " << *oldVisAtts
-	   << "\nnow: " << *newVisAtts
+	   << "\": setting vis attributes:";
+    if (oldVisAtts) {
+      G4cout << "\nwas: " << *oldVisAtts;
+    } else {
+      G4cout << "\n(no old attributes)";
+    }
+    G4cout << "\nnow: " << *newVisAtts
 	   << G4endl;
   }
-  if (requestedDepth < 0 || depth++ < requestedDepth) {
+  if (requestedDepth < 0 || depth < requestedDepth) {
     G4int nDaughters = pLV->GetNoDaughters();
     for (G4int i = 0; i < nDaughters; ++i) {
       SetLVVisAtts(pLV->GetDaughter(i)->GetLogicalVolume(),
-		   setFunction, depth, requestedDepth);
+		   setFunction, ++depth, requestedDepth);
     }
   }
 }

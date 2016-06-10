@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/include/StepMax.hh
 /// \brief Definition of the StepMax class
 //
-// $Id: StepMax.hh 68459 2013-03-27 18:45:08Z maire $
+// $Id: StepMax.hh 86064 2014-11-07 08:49:32Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc 71534 2013-06-17 16:07:53Z gcosmo $
+// $Id: G4ViewParameters.cc 85021 2014-10-23 09:53:47Z gcosmo $
 //
 // 
 // John Allison  19th July 1996
@@ -152,7 +152,7 @@ void G4ViewParameters::AddCutawayPlane (const G4Plane3D& cutawayPlane) {
     fCutawayPlanes.push_back (cutawayPlane);
   }
   else {
-    G4cout <<
+    G4cerr <<
       "ERROR: G4ViewParameters::AddCutawayPlane:"
       "\n  A maximum of 3 cutaway planes supported." << G4endl;
   }
@@ -161,7 +161,7 @@ void G4ViewParameters::AddCutawayPlane (const G4Plane3D& cutawayPlane) {
 void G4ViewParameters::ChangeCutawayPlane
 (size_t index, const G4Plane3D& cutawayPlane) {
   if (index >= fCutawayPlanes.size()) {
-    G4cout <<
+    G4cerr <<
       "ERROR: G4ViewParameters::ChangeCutawayPlane:"
       "\n  Plane " << index << " does not exist." << G4endl;
   } else {
@@ -187,7 +187,7 @@ void G4ViewParameters::SetVisibleDensity (G4double visibleDensity) {
 }
 
 G4int G4ViewParameters::SetNoOfSides (G4int nSides) {
-  const G4int  nSidesMin = 12;
+  const G4int nSidesMin = fDefaultVisAttributes.GetMinLineSegmentsPerCircle();
   if (nSides < nSidesMin) {
     nSides = nSidesMin;
     G4cout << "G4ViewParameters::SetNoOfSides: attempt to set the"
@@ -1001,7 +1001,7 @@ int G4ViewParameters::ParseGeometry (
 {
 
   G4int mask = fNoValue;
-  register char *strind;
+  char *strind;
   unsigned int tempWidth  = 0;
   unsigned int tempHeight = 0;
   G4int tempX = 0;
@@ -1087,7 +1087,7 @@ int G4ViewParameters::ParseGeometry (
  */
 G4int G4ViewParameters::ReadInteger(char *string, char **NextString)
 {
-    register G4int Result = 0;
+    G4int Result = 0;
     G4int Sign = 1;
 
     if (*string == '+')

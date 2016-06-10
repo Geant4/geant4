@@ -23,14 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
-// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
-//
-// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
-// the *COMPLETE* version of this program, together with its documentation;
-// Hadrontherapy (both basic and full version) are supported by the Italian INFN
-// Institute in the framework of the MC-INFN Group
-//
+// Hadrontherapy development is supported by the
+// Italian Institute for Nuclear Physics (INFN)
+// in the framework of the MC-INFN Project
 
 #include "HadrontherapyGeometryController.hh"
 #include "HadrontherapyDetectorConstruction.hh"
@@ -39,9 +34,11 @@
 
 #include "PassiveProtonBeamLine.hh"
 #include "PassiveCarbonBeamLine.hh"
+#include "LaserDrivenBeamLine.hh"
 #include "G4RunManager.hh"
 #include "G4VUserParallelWorld.hh"
 #include "G4ThreeVector.hh"
+
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyGeometryController::HadrontherapyGeometryController()
 {}
@@ -54,34 +51,29 @@ HadrontherapyGeometryController::~HadrontherapyGeometryController()
 void HadrontherapyGeometryController::SetGeometry(G4String name)
 {
     G4cout <<"Activating geometry " << name << G4endl;
-
-    
-     if(name == "default") 
+    if(name == "default")
     {
-        
-	registerGeometry(new PassiveProtonBeamLine());
-        
-
-    } 
-
+      registerGeometry(new PassiveProtonBeamLine());
+    }
     else if(name == "Carbon")
     {
-        
-          registerGeometry(new PassiveCarbonBeamLine());
+      registerGeometry(new PassiveCarbonBeamLine());
     }
-
+    else if(name == "LaserDriven")
+    {
+      registerGeometry(new LaserDrivenBeamLine());
+    }
     else
     {
-	G4cout <<"Unknown geometry: " << name << ". Geometry not changed." << G4endl;
+        G4cout <<"Unknown geometry: " << name << ". Geometry not changed." << G4endl;
     }
 }
-	
+
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyGeometryController::registerGeometry(G4VUserDetectorConstruction *detector)
 {
 	G4RunManager *runManager = G4RunManager::GetRunManager();
-
-	runManager->SetUserInitialization(detector);
-	runManager->GeometryHasBeenModified();
+	runManager -> SetUserInitialization(detector);
+	runManager -> GeometryHasBeenModified();
 }
 

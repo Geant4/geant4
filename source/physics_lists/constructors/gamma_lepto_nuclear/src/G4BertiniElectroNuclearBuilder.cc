@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BertiniElectroNuclearBuilder.cc 66704 2013-01-10 18:20:17Z gunter $
+// $Id: G4BertiniElectroNuclearBuilder.cc 81364 2014-05-27 12:55:46Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -65,14 +65,14 @@ G4BertiniElectroNuclearBuilder::~G4BertiniElectroNuclearBuilder()
   if(wasActivated) {
     delete theFragmentation;
     delete theStringDecay;
-    delete theStringModel;
-    delete thePhotoNuclearProcess; 
-    delete theElectronNuclearProcess;
-    delete thePositronNuclearProcess;
-    delete theElectroReaction;
-    delete theGammaReaction;
-    delete theModel;
-    delete theCascade; 
+    //delete theStringModel;
+    //delete thePhotoNuclearProcess; 
+    //delete theElectronNuclearProcess;
+    //delete thePositronNuclearProcess;
+    //delete theElectroReaction;
+    //delete theGammaReaction;
+    //delete theModel;
+    //delete theCascade; 
   }
 }
 

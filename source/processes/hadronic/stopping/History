@@ -14,6 +14,60 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+30 August 2014 V. Ivantchenko  (hadr-stopping-V10-00-08)
+--------------------------------------------------------------------
+- removed obsolete G4MuonMinusCaptureAtRest, G4StopElementSelector,
+    G4MuMinusCaptureCascade
+
+19 August 2014 K. Genser  (hadr-stopping-V10-00-07)
+--------------------------------------------------------------------
+- G4HadronStoppingProcess : used G4PhysicsModelCatalog to label tracks
+    requires global-V10-00-31 and track-V10-00-04
+
+04 August 2014 V. Ivantchenko  (hadr-stopping-V10-00-06)
+--------------------------------------------------------------------
+- G4HadronStoppingProcess : do not use deRegister flag 
+    (fixing Coverity report)
+
+01 August 2014 A. Ribon    (hadr-stopping-V10-00-05)
+--------------------------------------------------------------------
+- G4HadronStoppingProcess : replaced the old method of G4EnergyRangeManager
+  (still there but deprecated) with the new one (which uses 
+  G4HadronicInteraction::IsApplicable).
+
+27 May 2014 V. Ivantchenko (hadr-stopping-V10-00-04)
+--------------------------------------------------------------------
+- G4MuonMinusCaptureAtRest, G4AntiNeutronAnnihilationAtRest -
+    fixed Coverity defects
+
+22 May 2014 A. Dotti       (hadr-stopping-V10-00-03)
+-------------------------------------------------------------------
+- G4HadronStoppingProcess : in destructor do not de-register if 
+  flag G4bool G4HadronicProcess::deRegister==true, this is needed
+  for new thread-local-singleton G4HadronicProcessStore to correct
+  for memory corruption observed in valgrind. Requires  
+  hadr-man-V10-00-05
+
+14 May 2014 V. Ivantchenko (hadr-stopping-V10-00-02)
+--------------------------------------------------------------------
+- G4MuonMinusBoundDecay - extended comments
+- G4MuMinusCapturePrecompound - added simplified model for capture
+    in deuterium and in He4; reduced number of trials to find neutrino
+    4-momentum from 1000 to 100; added protection 1 keV for negative
+    excitation energy, substitute FatalException by JustWarning.
+    All this addressing the recent ATLAS report 
+
+10 March 2014 V. Ivantchenko (hadr-stopping-V10-00-01)
+--------------------------------------------------------------------
+- G4MuMinusCapturePrecompound - use const pointers for G4ParticleDefinition
+
+31 January 2014 V. Ivantchenko (hadr-stopping-V10-00-00)
+--------------------------------------------------------------------
+- G4MuMinusCapturePrecompound - fix infonite loop (bug #1536) by 
+    reimplementing old algorithm of mu- capture which not include
+    direct muon reaction but only considering deexcitation of
+    residual fragment
+
 08 Nov   2013 A. Ribon       (hadr-stopping-V09-06-11)
 --------------------------------------------------------------------
 - Updated GNUmakefile and sources.cmake to reflect removal of HE

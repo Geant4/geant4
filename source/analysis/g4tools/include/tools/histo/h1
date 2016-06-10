@@ -10,55 +10,48 @@ namespace tools {
 namespace histo { //have that for h1 ?
 
 //TC is for a coordinate.
+//TO is for an offset used to identify a bin.
 //TN is for a number of entries.
 //TW is for a weight.
 //TH is for a height. Should be the same as TW.
 
-template <class TC,class TN,class TW,class TH>
-class h1 : public b1<TC,TN,TW,TH> {
-  typedef b1<TC,TN,TW,TH> parent;
+template <class TC,class TO,class TN,class TW,class TH>
+class h1 : public b1<TC,TO,TN,TW,TH> {
+  typedef b1<TC,TO,TN,TW,TH> parent;
 public:
-  typedef typename b1<TC,TN,TW,TH>::bn_t bn_t;
+  typedef histo_data<TC,TO,TN,TW> hd_t;
+  typedef typename parent::bn_t bn_t;
+  typedef histo::axis<TC,TO> axis_t;
 protected:
-  virtual TH get_bin_height(int a_offset) const { //TH should be the same as TW
+  virtual TH get_bin_height(TO a_offset) const { //TH should be the same as TW
     return parent::m_bin_Sw[a_offset];
   }
 public:
   virtual TH bin_error(int aI) const { //TH should be the same as TW
-    if(parent::m_bin_number==0) return 0;
-    bn_t offset;
-    if(!parent::m_axes[0].in_range_to_absolute_index(aI,offset)) return 0;
+    TO offset;
+    if(!parent::_find_offset(aI,offset)) return 0;
     return ::sqrt(parent::m_bin_Sw2[offset]);
   }
 
 public:
-  bool multiply(TW aFactor){
-    if(!parent::base_multiply(aFactor)) return false;
-    parent::update_fast_getters();
-    return true;
-  }
-  bool scale(TW aFactor) {return multiply(aFactor);}
+  bool multiply(TW a_factor){return parent::base_multiply(a_factor);}
+  bool scale(TW a_factor) {return multiply(a_factor);}
 
-  void copy_from_data(const histo_data<TC,TN,TW>& a_from) {
-    parent::base_from_data(a_from);
-  }
-  histo_data<TC,TN,TW> get_histo_data() const {
-    return parent::base_get_data();
-  }
+  void copy_from_data(const hd_t& a_from) {parent::base_from_data(a_from);}
+  hd_t get_histo_data() const {return parent::base_get_data();}
 
   bool reset() {
     parent::base_reset();
-    parent::update_fast_getters();
     return true;
   }
 
   bool fill(TC aX,TW aWeight = 1) {
-    //m_coords[0] = aX;
-    //return fill_bin(m_coords,aWeight);
-    if(parent::m_dimension<=0) return false;
+    if(parent::m_dimension!=1) return false;
 
-    bn_t offset;
-    if(!parent::m_axes[0].coord_to_absolute_index(aX,offset)) return false;
+    bn_t ibin;
+    if(!parent::m_axes[0].coord_to_absolute_index(aX,ibin)) return false;
+
+    TO offset = ibin;
 
     parent::m_bin_entries[offset]++;
     parent::m_bin_Sw[offset] += aWeight;
@@ -68,30 +61,78 @@ public:
     TC x2w = aX * xw;
     parent::m_bin_Sxw[offset][0] += xw;
     parent::m_bin_Sx2w[offset][0] += x2w;
+
+    bool inRange = true;
+    if(ibin==0) inRange = false;
+    else if(ibin==(parent::m_axes[0].m_number_of_bins+1)) inRange = false;
+
+    parent::m_all_entries++;
+    if(inRange) {
+      parent::m_in_range_entries++;
+      parent::m_in_range_Sw += aWeight;
+      parent::m_in_range_Sw2 += aWeight*aWeight;
+
+      parent::m_in_range_Sxw[0] += xw;
+      parent::m_in_range_Sx2w[0] += x2w;
+    }
+
+    return true;
+  }
+
+  bool set_bin_content(bn_t a_ibin,TN a_entries,TW a_Sw,TW a_Sw2,TC a_Sxw,TC a_Sx2w) {
+    if(parent::m_dimension!=1) return false;
+    if(a_ibin>(parent::m_axes[0].m_number_of_bins+1)) return false;
+
+    bool inRange = true;
+    if(a_ibin==0) inRange = false;
+    else if(a_ibin==(parent::m_axes[0].m_number_of_bins+1)) inRange = false;
+
+    TO offset = a_ibin;
+
+    parent::m_all_entries -= parent::m_bin_entries[offset];
+    if(inRange) {
+      parent::m_in_range_entries -= parent::m_bin_entries[offset];
+      parent::m_in_range_Sw -= parent::m_bin_Sw[offset];
+      parent::m_in_range_Sw2 -= parent::m_bin_Sw2[offset];
+      parent::m_in_range_Sxw[0] -= parent::m_bin_Sxw[offset][0];
+      parent::m_in_range_Sx2w[0] -= parent::m_bin_Sx2w[offset][0];
+    }
+
+    parent::m_bin_entries[offset] = a_entries;
+    parent::m_bin_Sw[offset] = a_Sw;
+    parent::m_bin_Sw2[offset] = a_Sw2;
+
+    parent::m_bin_Sxw[offset][0] = a_Sxw;
+    parent::m_bin_Sx2w[offset][0] = a_Sx2w;
+
+    parent::m_all_entries += a_entries;
+    if(inRange) {
+      parent::m_in_range_entries += a_entries;
+      parent::m_in_range_Sw += a_Sw;
+      parent::m_in_range_Sw2 += a_Sw2;
+
+      parent::m_in_range_Sxw[0] += a_Sxw;
+      parent::m_in_range_Sx2w[0] += a_Sx2w;
+    }
+
     return true;
   }
 
   bool add(const h1& a_histo){
     parent::base_add(a_histo);
-    parent::update_fast_getters();
     return true;
   }
   bool subtract(const h1& a_histo){
     parent::base_subtract(a_histo);
-    parent::update_fast_getters();
     return true;
   }
 
   bool multiply(const h1& a_histo) {  
-    if(!parent::base_multiply(a_histo)) return false;
-    parent::update_fast_getters();
-    return true;
+    return parent::base_multiply(a_histo);
   }
   
   bool divide(const h1& a_histo) {
-    if(!parent::base_divide(a_histo)) return false;
-    parent::update_fast_getters();
-    return true;
+    return parent::base_divide(a_histo);
   }
 
   bool gather_bins(unsigned int a_factor) { //for exa 2,3.
@@ -99,7 +140,7 @@ public:
 
     // actual bin number must be a multiple of a_factor.
     
-    const histo::axis<TC>& _axis = parent::axis();
+    const axis_t& _axis = parent::axis();
 
     bn_t n = _axis.bins();
     if(!n) return false;
@@ -109,8 +150,7 @@ public:
 
     h1* new_h = 0;
     if(_axis.is_fixed_binning()) {
-      new_h = new h1(parent::m_title,
-                     new_n,_axis.lower_edge(),_axis.upper_edge());
+      new_h = new h1(parent::m_title,new_n,_axis.lower_edge(),_axis.upper_edge());
     } else {
       const std::vector<TC>& _edges = _axis.edges();
       std::vector<TC> new_edges(new_n+1);
@@ -122,7 +162,7 @@ public:
     }
     if(!new_h) return false;
 
-    bn_t offset,new_offset,offac;
+    TO offset,new_offset,offac;
     for(bn_t ibin=0;ibin<new_n;ibin++) {
       new_offset = ibin+1;
       offset = a_factor*ibin+1;
@@ -167,7 +207,7 @@ public:
 
   virtual ~h1(){}
 public:
-  h1(const h1& a_from): parent(a_from){}
+  h1(const h1& a_from):parent(a_from){}
   h1& operator=(const h1& a_from){
     parent::operator=(a_from);
     return *this;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSTrackCounter.cc 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4PSTrackCounter.cc 81087 2014-05-20 15:44:27Z gcosmo $
 //
 // G4PSTrackCounter
 #include "G4PSTrackCounter.hh"
@@ -40,7 +40,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSTrackCounter::G4PSTrackCounter(G4String name, G4int direction, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),weighted(false)
+  :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
+   EvtMap(0),weighted(false)
 {
  SetUnit("");
 }

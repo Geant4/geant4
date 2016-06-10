@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/include/HistoManager.hh
 /// \brief Definition of the HistoManager class
 //
-// $Id: HistoManager.hh 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: HistoManager.hh 81932 2014-06-06 15:39:45Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -67,12 +67,6 @@ public:
 
   static HistoManager* GetPointer();
 
-private:
-
-  HistoManager();
-
-public: 
-
   ~HistoManager();
 
   void BookHisto();
@@ -107,6 +101,7 @@ public:
   inline void SetPhysicsList(G4VModularPhysicsList* p) {fPhysList = p;};
 
 private:
+  HistoManager();
 
   void Initialise();
 

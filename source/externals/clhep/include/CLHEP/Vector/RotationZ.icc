@@ -144,7 +144,7 @@ inline double HepRotationZ::proper( double ddelta ) {
   if ( std::fabs(ddelta) < CLHEP::pi ) {
     return  ddelta;
   } else {
-    register double x = ddelta / (CLHEP::twopi);
+    double x = ddelta / (CLHEP::twopi);
     return  (CLHEP::twopi) * ( x + std::floor(.5-x) );
   }
 }  // proper()

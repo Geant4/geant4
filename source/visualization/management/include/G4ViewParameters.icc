@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.icc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4ViewParameters.icc 86974 2014-11-21 11:58:31Z gcosmo $
 //
 // 
 // John Allison  20th October 1996
@@ -157,19 +157,19 @@ inline G4bool G4ViewParameters::IsMarkerNotHidden () const {
 }
 
 inline bool G4ViewParameters::IsWindowSizeHintX () const {
-  return (fGeometryMask & fWidthValue);
+  return ((fGeometryMask & fWidthValue) != 0);
 }
 
 inline bool G4ViewParameters::IsWindowSizeHintY () const {
-  return (fGeometryMask & fHeightValue);
+  return ((fGeometryMask & fHeightValue) != 0);
 }
 
 inline bool G4ViewParameters::IsWindowLocationHintX () const {
-  return (fGeometryMask & fXValue);
+  return ((fGeometryMask & fXValue) != 0);
 }
 
 inline bool G4ViewParameters::IsWindowLocationHintY () const {
-  return (fGeometryMask & fYValue);
+  return ((fGeometryMask & fYValue) != 0);
 }
 
 inline unsigned int G4ViewParameters::GetWindowSizeHintX () const {

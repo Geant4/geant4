@@ -48,17 +48,13 @@ class FCALMaterialConsultant
 {
 public:
 
-  FCALMaterialConsultant();
-
-public:
-
-  ~FCALMaterialConsultant() {theFCALMaterialConsultant = NULL;};
-  static FCALMaterialConsultant * construct();
+  ~FCALMaterialConsultant() {;};
+  static FCALMaterialConsultant * GetInstance();
   G4Material * Material(G4String);
 
 public:
-
   static FCALMaterialConsultant * theFCALMaterialConsultant;
+  FCALMaterialConsultant();
 
 private:
 

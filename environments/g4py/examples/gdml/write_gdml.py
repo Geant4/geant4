@@ -24,7 +24,7 @@ g4py.ParticleGun.Construct()
 gRunManager.Initialize()
 
 # visualization
-gApplyUICommand("/vis/open OGLIX")
+gApplyUICommand("/vis/open OGLSX")
 gApplyUICommand("/vis/scene/create")
 gApplyUICommand("/vis/scene/add/volume")
 gApplyUICommand("/vis/sceneHandler/attach")

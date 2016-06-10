@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpticalSurface.cc 71488 2013-06-17 08:20:50Z gcosmo $
+// $Id: G4OpticalSurface.cc 80747 2014-05-09 12:53:43Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -39,7 +39,10 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-#include "G4ios.hh"
+#include <iostream>
+#include <fstream>
+
+//#include "G4ios.hh"
 #include "globals.hh"
 #include "G4OpticalSurface.hh"
 
@@ -62,11 +65,13 @@ G4OpticalSurface& G4OpticalSurface::operator=(const G4OpticalSurface& right)
       sigma_alpha                = right.sigma_alpha;
       polish                     = right.polish;
       theMaterialPropertiesTable = right.theMaterialPropertiesTable;
-      AngularDistribution        = right.AngularDistribution;
-      readLUTFileHandle          = right.readLUTFileHandle;
-      DichroicVector             = right.DichroicVector;
-
-      theSurfacePropertyTable    = right.theSurfacePropertyTable;
+      if (AngularDistribution) delete [] AngularDistribution;
+      AngularDistribution =
+                       new G4float[incidentIndexMax*thetaIndexMax*phiIndexMax];
+      *(AngularDistribution)     = *(right.AngularDistribution);
+      if (DichroicVector) delete DichroicVector;
+      DichroicVector = new G4Physics2DVector();
+      *DichroicVector            = *(right.DichroicVector);
      } 
   return *this;
 }
@@ -110,8 +115,6 @@ G4OpticalSurface::G4OpticalSurface(const G4String& name,
         AngularDistribution = NULL;
         DichroicVector      = NULL;
 
-        readLUTFileHandle   = NULL;
-
         if (type == dielectric_LUT) {
            AngularDistribution =
                        new G4float[incidentIndexMax*thetaIndexMax*phiIndexMax];
@@ -126,10 +129,8 @@ G4OpticalSurface::G4OpticalSurface(const G4String& name,
 
 G4OpticalSurface::~G4OpticalSurface()
 {
-        if (AngularDistribution) delete AngularDistribution;
+        if (AngularDistribution) delete [] AngularDistribution;
         if (DichroicVector) delete DichroicVector;
-
-        if (readLUTFileHandle) delete readLUTFileHandle;
 }
 
 G4OpticalSurface::G4OpticalSurface(const G4OpticalSurface &right)
@@ -143,9 +144,13 @@ G4OpticalSurface::G4OpticalSurface(const G4OpticalSurface &right)
        this->sigma_alpha = right.sigma_alpha;
        this->polish = right.polish;
        this->theMaterialPropertiesTable = right.theMaterialPropertiesTable;
-       this->AngularDistribution = right.AngularDistribution;
-       this->readLUTFileHandle = right.readLUTFileHandle;
-       this->DichroicVector = right.DichroicVector;
+       if (this->AngularDistribution) delete [] AngularDistribution;
+       this->AngularDistribution =
+                       new G4float[incidentIndexMax*thetaIndexMax*phiIndexMax];
+       *(this->AngularDistribution) = *(right.AngularDistribution);
+       if (this->DichroicVector) delete DichroicVector;
+       this->DichroicVector = new G4Physics2DVector();
+       *(this->DichroicVector) = *(right.DichroicVector);
 }
 
 G4int G4OpticalSurface::operator==(const G4OpticalSurface &right) const
@@ -297,32 +302,31 @@ void G4OpticalSurface::ReadLUTFile()
 
   readLUTFileName = pathString + "/" + readLUTFileName;
 
-  readLUTFileHandle = fopen(readLUTFileName,"r");
+  std::ifstream readLUTFileHandle(readLUTFileName, std::ios::in);
 
   if (readLUTFileHandle) {
-     G4int ncols;
      G4int idxmax = incidentIndexMax*thetaIndexMax*phiIndexMax;
      for (G4int i = 0; i<idxmax; i++) {
-       ncols = fscanf(readLUTFileHandle,"%6f", &AngularDistribution[i]);
-       if (ncols < 0) break;
+       if (readLUTFileHandle.eof()) break;
+       readLUTFileHandle >> AngularDistribution[i];
      }
-     if (ncols >= 0) {
-        G4cout << "LUT - data file: " << readLUTFileName << " read in! " << G4endl;
+     if (!readLUTFileHandle.bad()) {
+        G4cout <<"LUT - data file: "<< readLUTFileName <<" read in! "<< G4endl;
      }
      else {
-        G4String excep = "LUT - data file: "+ readLUTFileName +" not read propery";
+        G4String excep="LUT - data file: "+readLUTFileName+" not read propery";
         G4Exception("G4OpticalSurface::ReadLUTFile()", "mat312",
                     FatalException, excep);
         return;
      }
   }
   else {
-     G4String excep = "LUT - data file: " + readLUTFileName + " not found";
+     G4String excep ="LUT - data file: "+readLUTFileName+" not found";
      G4Exception("G4OpticalSurface::ReadLUTFile()", "mat311",
                  FatalException, excep);
      return;
   }
-  fclose(readLUTFileHandle);
+  readLUTFileHandle.close();
 }
 
 void G4OpticalSurface::ReadDichroicFile()
@@ -360,11 +364,14 @@ void G4OpticalSurface::ReadDichroicFile()
 
   G4cout << " *** Dichroic surface data file *** " << G4endl;
 
-  size_t numberOfXNodes = DichroicVector->GetLengthX();
-  size_t numberOfYNodes = DichroicVector->GetLengthY();
+  G4int numberOfXNodes = DichroicVector->GetLengthX();
+  G4int numberOfYNodes = DichroicVector->GetLengthY();
 
   G4cout << "numberOfXNodes: " << numberOfXNodes << G4endl;
   G4cout << "numberOfYNodes: " << numberOfYNodes << G4endl;
+
+  if (0 > numberOfXNodes || numberOfXNodes >= INT_MAX) numberOfXNodes = 0;
+  if (0 > numberOfYNodes || numberOfYNodes >= INT_MAX) numberOfYNodes = 0;
 
   G4PV2DDataVector  xVector;
   G4PV2DDataVector  yVector;
@@ -372,27 +379,27 @@ void G4OpticalSurface::ReadDichroicFile()
   xVector.resize(numberOfXNodes,0.);
   yVector.resize(numberOfYNodes,0.);
 
-  for(size_t i = 0; i<numberOfXNodes; ++i) {
+  for(G4int i = 0; i<numberOfXNodes; ++i) {
      G4cout << "i: " << DichroicVector->GetX(i) << G4endl;
      xVector[i] = DichroicVector->GetX(i);
   }
-  for(size_t j = 0; j<numberOfYNodes; ++j) {
+  for(G4int j = 0; j<numberOfYNodes; ++j) {
      G4cout << "j: " << DichroicVector->GetY(j) << G4endl;
      yVector[j] = DichroicVector->GetY(j);
   }
 
-  for(size_t j = 0; j<numberOfYNodes; ++j) {
-     for(size_t i = 0; i<numberOfXNodes; ++i) {
+  for(G4int j = 0; j<numberOfYNodes; ++j) {
+     for(G4int i = 0; i<numberOfXNodes; ++i) {
         G4cout << " i: " << i << " j: " << j << " "
                << DichroicVector->GetValue(i,j) << G4endl;
      }
   }
 
-//  size_t idx, idy;
+//  G4int idx, idy;
 
-//  for(size_t j = 0; j<numberOfYNodes-1; ++j) {
+//  for(G4int j = 0; j<numberOfYNodes-1; ++j) {
 //     G4double y = (yVector[j] + yVector[j+1])/2.;
-//     for(size_t i = 0; i<numberOfXNodes-1; ++i) {
+//     for(G4int i = 0; i<numberOfXNodes-1; ++i) {
 //        G4double x = (xVector[i] + xVector[i+1])/2.;
 //        G4cout << " x: " << x << " y: " << y << " "
 //               << DichroicVector->Value(x,y,idx,idy) << G4endl;

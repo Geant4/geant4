@@ -11,7 +11,7 @@
 #
 # Generated on : 10/01/2013
 #
-# $Id: sources.cmake 76326 2013-11-08 14:17:52Z gcosmo $
+# $Id: sources.cmake 86520 2014-11-13 09:21:11Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -58,6 +58,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/qmd/inc
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/coherent_elastic/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/evaporation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/fermi_breakup/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/fission/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/handler/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/multifragmentation/include)
@@ -71,11 +72,11 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lend/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lepto_nuclear/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/neutron_hp/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/particle_hp/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/diffraction/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/hadronization/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/qgsm/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/photolepton_hadron/muon_nuclear/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/pre_equilibrium/exciton_model/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/radioactive_decay/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/theo_high_energy/include)
@@ -92,6 +93,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_hinelastic
         G4HadronPhysicsFTFP_BERT.hh
         G4HadronPhysicsFTFP_BERT_HP.hh
         G4HadronPhysicsFTFP_BERT_TRV.hh
+	G4HadronPhysicsNuBeam.hh
         G4HadronPhysicsQGS_BIC.hh
         G4HadronPhysicsQGSP_BERT.hh
         G4HadronPhysicsQGSP_BERT_HP.hh
@@ -101,12 +103,14 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_hinelastic
         G4HadronPhysicsINCLXX.hh
         G4HadronPhysicsShielding.hh
         G4VHadronPhysics.hh
+        G4HadronPhysicsQGSP_BIC_AllHP.hh 
     SOURCES
         G4HadronInelasticQBBC.cc
         G4HadronPhysicsFTF_BIC.cc
         G4HadronPhysicsFTFP_BERT.cc
         G4HadronPhysicsFTFP_BERT_HP.cc
         G4HadronPhysicsFTFP_BERT_TRV.cc
+	G4HadronPhysicsNuBeam.cc
         G4HadronPhysicsQGS_BIC.cc
         G4HadronPhysicsQGSP_BERT.cc
         G4HadronPhysicsQGSP_BERT_HP.cc
@@ -116,6 +120,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_hinelastic
         G4HadronPhysicsINCLXX.cc
         G4HadronPhysicsShielding.cc
         G4VHadronPhysics.cc
+        G4HadronPhysicsQGSP_BIC_AllHP.cc 
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

@@ -79,7 +79,7 @@ G4bool G4ChipsPionMinusInelasticXS::IsIsoApplicable(const G4DynamicParticle* Pt,
 				 const G4Element*,
 				 const G4Material*)
 {
-  G4ParticleDefinition* particle = Pt->GetDefinition();
+  const G4ParticleDefinition* particle = Pt->GetDefinition();
   if (particle == G4PionMinus::PionMinus()      ) return true;
   return false;
 }
@@ -99,13 +99,6 @@ G4double G4ChipsPionMinusInelasticXS::GetIsoCrossSection(const G4DynamicParticle
 
 G4double G4ChipsPionMinusInelasticXS::GetChipsCrossSection(G4double pMom, G4int tgZ, G4int tgN, G4int)
 {
-  static G4ThreadLocal G4int j;                      // A#0f Z/N-records already tested in AMDB
-  static G4ThreadLocal std::vector <G4int>    *colN_G4MT_TLS_ = 0 ; if (!colN_G4MT_TLS_) colN_G4MT_TLS_ = new  std::vector <G4int>     ;  std::vector <G4int>    &colN = *colN_G4MT_TLS_;  // Vector of N for calculated nuclei (isotops)
-  static G4ThreadLocal std::vector <G4int>    *colZ_G4MT_TLS_ = 0 ; if (!colZ_G4MT_TLS_) colZ_G4MT_TLS_ = new  std::vector <G4int>     ;  std::vector <G4int>    &colZ = *colZ_G4MT_TLS_;  // Vector of Z for calculated nuclei (isotops)
-  static G4ThreadLocal std::vector <G4double> *colP_G4MT_TLS_ = 0 ; if (!colP_G4MT_TLS_) colP_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colP = *colP_G4MT_TLS_;  // Vector of last momenta for the reaction
-  static G4ThreadLocal std::vector <G4double> *colTH_G4MT_TLS_ = 0 ; if (!colTH_G4MT_TLS_) colTH_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colTH = *colTH_G4MT_TLS_; // Vector of energy thresholds for the reaction
-  static G4ThreadLocal std::vector <G4double> *colCS_G4MT_TLS_ = 0 ; if (!colCS_G4MT_TLS_) colCS_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colCS = *colCS_G4MT_TLS_; // Vector of last cross sections for the reaction
-  // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
 
   G4bool in=false;                     // By default the isotope must be found in the AMDB
   if(tgN!=lastN || tgZ!=lastZ)         // The nucleus was not the last used isotope
@@ -332,12 +325,12 @@ G4double G4ChipsPionMinusInelasticXS::EquLinearFit(G4double X, G4int N, G4double
   
   G4int    N2=N-2;
   G4double d=(X-X0)/DX;
-  G4int         j=static_cast<int>(d);
-  if     (j<0)  j=0;
-  else if(j>N2) j=N2;
-  d-=j; // excess
-  G4double yi=Y[j];
-  G4double sigma=yi+(Y[j+1]-yi)*d;
+  G4int         jj=static_cast<int>(d);
+  if     (jj<0)  jj=0;
+  else if(jj>N2) jj=N2;
+  d-=jj; // excess
+  G4double yi=Y[jj];
+  G4double sigma=yi+(Y[jj+1]-yi)*d;
   
   return sigma;
 }

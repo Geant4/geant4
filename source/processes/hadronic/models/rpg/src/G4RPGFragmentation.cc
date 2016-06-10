@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4RPGFragmentation.cc 79869 2014-03-19 09:59:40Z gcosmo $
 //
  
 #include <iostream>
@@ -875,7 +875,7 @@ ReactionStage(const G4HadProjectile* originalIncident,
   pseudoParticle[3].SetTotalEnergy(
    std::sqrt( pOriginal*pOriginal + mOriginal*mOriginal )*GeV );
     
-  G4ParticleDefinition * aOrgDef = modifiedOriginal.GetDefinition();
+  const G4ParticleDefinition* aOrgDef = modifiedOriginal.GetDefinition();
   G4int diff = 0;
   if(aOrgDef == G4Proton::Proton() || aOrgDef == G4Neutron::Neutron() )  diff = 1;
   if(numberofFinalStateNucleons == 1) diff = 0;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B2TrackerSD.cc 68058 2013-03-13 14:47:43Z gcosmo $
+// $Id: B2TrackerSD.cc 87359 2014-12-01 16:04:27Z gcosmo $
 //
 /// \file B2TrackerSD.cc
 /// \brief Implementation of the B2TrackerSD class
@@ -97,7 +97,8 @@ void B2TrackerSD::EndOfEvent(G4HCofThisEvent*)
 {
   if ( verboseLevel>1 ) { 
      G4int nofHits = fHitsCollection->entries();
-     G4cout << "\n-------->Hits Collection: in this event they are " << nofHits 
+     G4cout << G4endl
+            << "-------->Hits Collection: in this event they are " << nofHits 
             << " hits in the tracker chambers: " << G4endl;
      for ( G4int i=0; i<nofHits; i++ ) (*fHitsCollection)[i]->Print();
   }

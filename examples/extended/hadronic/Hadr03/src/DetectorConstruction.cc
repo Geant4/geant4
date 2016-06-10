@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr03/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 77251 2013-11-22 10:06:41Z gcosmo $
+// $Id: DetectorConstruction.cc 78398 2013-12-16 16:39:55Z gcosmo $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,7 +40,6 @@
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
-#include "G4UniformMagField.hh"
 
 #include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
@@ -50,8 +49,6 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
 #include "G4RunManager.hh"
 
 
@@ -59,7 +56,7 @@
 
 DetectorConstruction::DetectorConstruction()
 :G4VUserDetectorConstruction(),
- fPBox(0), fLBox(0), fMaterial(0), fMagField(0), fDetectorMessenger(0)
+ fPBox(0), fLBox(0), fMaterial(0), fDetectorMessenger(0)
 {
   fBoxSize = 10*m;
   DefineMaterials();
@@ -183,31 +180,7 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
 void DetectorConstruction::SetSize(G4double value)
 {
   fBoxSize = value;
-    G4RunManager::GetRunManager()->ReinitializeGeometry();
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::SetMagField(G4double fieldValue)
-{
-  //apply a global uniform magnetic field along Z axis
-  G4FieldManager* fieldMgr
-   = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-
-  if (fMagField) delete fMagField;        //delete the existing magn field
-
-  if (fieldValue!=0.)                        // create a new one if non nul
-    {
-      fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
-      fieldMgr->SetDetectorField(fMagField);
-      fieldMgr->CreateChordFinder(fMagField);
-    }
-   else
-    {
-      fMagField = 0;
-      fieldMgr->SetDetectorField(fMagField);
-    }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

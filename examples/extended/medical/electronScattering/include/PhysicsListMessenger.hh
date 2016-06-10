@@ -26,7 +26,7 @@
 /// \file medical/electronScattering/include/PhysicsListMessenger.hh
 /// \brief Definition of the PhysicsListMessenger class
 //
-// $Id: PhysicsListMessenger.hh 68393 2013-03-25 14:22:21Z maire $
+// $Id: PhysicsListMessenger.hh 86064 2014-11-07 08:49:32Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,7 +40,6 @@
 class PhysicsList;
 class G4UIdirectory;
 class G4UIcmdWithAString;
-class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,10 +58,6 @@ class PhysicsListMessenger: public G4UImessenger
     
     G4UIdirectory*             fPhysDir;    
     G4UIcmdWithAString*        fListCmd;    
-    G4UIcmdWithADoubleAndUnit* fGammaCutCmd;
-    G4UIcmdWithADoubleAndUnit* fElectCutCmd;
-    G4UIcmdWithADoubleAndUnit* fProtoCutCmd;    
-    G4UIcmdWithADoubleAndUnit* fAllCutCmd;        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

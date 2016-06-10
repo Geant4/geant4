@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4SmartVoxelHeader.hh 84209 2014-10-10 14:46:37Z gcosmo $
 //
 // class G4SmartVoxelHeader
 //
@@ -121,8 +121,6 @@ class G4SmartVoxelHeader
     friend std::ostream&
     operator << (std::ostream&s, const G4SmartVoxelHeader& h);
 
-  protected:
-
     G4SmartVoxelHeader(G4LogicalVolume* pVolume,
 		       const G4VoxelLimits& pLimits,
 		       const G4VolumeNosVector* pCandidates,
@@ -131,6 +129,8 @@ class G4SmartVoxelHeader
       // the physical volumes numbered `pCandidates'. pSlice is used to set max
       // and min equivalent slice nos for the header - they apply to the level
       // of the header, not its nodes.
+
+  protected:
 
     //  `Worker' / operation functions:
 

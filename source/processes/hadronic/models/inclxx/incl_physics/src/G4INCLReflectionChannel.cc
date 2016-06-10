@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -54,27 +55,26 @@ namespace G4INCL {
   {
   }
 
-  FinalState* ReflectionChannel::getFinalState()
-  {
-    FinalState *fs = new FinalState(); // Create final state for the output
+  void ReflectionChannel::fillFinalState(FinalState *fs) {
     fs->setTotalEnergyBeforeInteraction(theParticle->getEnergy() - theParticle->getPotentialEnergy());
 
     const ThreeVector &oldMomentum = theParticle->getMomentum();
-    G4double pspr = theParticle->getPosition().dot(oldMomentum);
+    const ThreeVector thePosition = theParticle->getPosition();
+    G4double pspr = thePosition.dot(oldMomentum);
     if(pspr>=0) { // This means that the particle is trying to leave; perform a reflection
-      const G4double x2cour = theParticle->getPosition().mag2();
-      const ThreeVector newMomentum = oldMomentum - (theParticle->getPosition() * (2.0 * pspr/x2cour));
+      const G4double x2cour = thePosition.mag2();
+      const ThreeVector newMomentum = oldMomentum - (thePosition * (2.0 * pspr/x2cour));
       const G4double deltaP2 = (newMomentum-oldMomentum).mag2();
       theParticle->setMomentum(newMomentum);
       const G4double minDeltaP2 = sinMinReflectionAngleSquaredOverFour * newMomentum.mag2();
       if(deltaP2 < minDeltaP2) { // Avoid extremely small reflection angles
-        theParticle->setPosition(theParticle->getPosition() * positionScalingFactor);
-        INCL_DEBUG("Reflection angle for particle " << theParticle->getID() << " was too tangential: " << std::endl
-            << "  " << deltaP2 << "=deltaP2<minDeltaP2=" << minDeltaP2 << std::endl
+        theParticle->setPosition(thePosition * positionScalingFactor);
+        INCL_DEBUG("Reflection angle for particle " << theParticle->getID() << " was too tangential: " << '\n'
+            << "  " << deltaP2 << "=deltaP2<minDeltaP2=" << minDeltaP2 << '\n'
             << "  Resetting the particle position to ("
-            << theParticle->getPosition().getX() << ", "
-            << theParticle->getPosition().getY() << ", "
-            << theParticle->getPosition().getZ() << ")" << std::endl);
+            << thePosition.getX() << ", "
+            << thePosition.getY() << ", "
+            << thePosition.getZ() << ")" << '\n');
       }
       theNucleus->updatePotentialEnergy(theParticle);
     } else { // The particle momentum is already directed towards the inside of the nucleus; do nothing
@@ -84,7 +84,6 @@ namespace G4INCL {
 
     theParticle->thawPropagation();
     fs->addModifiedParticle(theParticle);
-    return fs;
   }
 }
 

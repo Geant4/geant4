@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.hh 73008 2013-08-15 08:43:13Z gcosmo $
+// $Id: SteppingAction.hh 83010 2014-07-24 14:53:07Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,10 +35,7 @@
 #include "globals.hh"
 
 class DetectorConstruction;
-class RunAction;
-class PrimaryGeneratorAction;
 class EventAction;
-class HistoManager;
 
 class G4LogicalVolume;
 
@@ -47,8 +44,7 @@ class G4LogicalVolume;
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-    SteppingAction(DetectorConstruction*,
-                   EventAction*);
+    SteppingAction(DetectorConstruction*, EventAction*);
    ~SteppingAction();
 
     void UserSteppingAction(const G4Step*);
@@ -57,17 +53,13 @@ class SteppingAction : public G4UserSteppingAction
     
   private:
     DetectorConstruction* detector;
-    EventAction*            eventAct;
+    EventAction*          eventAct;
     
     G4bool           first;
     G4LogicalVolume* lvol_world;
     G4LogicalVolume* lvol_module;
     G4LogicalVolume* lvol_layer;
     G4LogicalVolume* lvol_fiber;
-
-    G4double calorThickness, calorSizeYZ, moduleThickness;
-    G4double d1Pixel, d2Pixel;
-    G4int    n1pxl, n2pxl, n1shift;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

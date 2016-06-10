@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreComptonModifiedModel.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4LivermoreComptonModifiedModel.cc 82874 2014-07-15 15:25:29Z gcosmo $
 //
 //
 // Author: Sebastien Incerti
@@ -66,9 +66,6 @@ G4LivermoreComptonModifiedModel::G4LivermoreComptonModifiedModel(const G4Particl
    scatterFunctionData(0),
    crossSectionHandler(0),fAtomDeexcitation(0)
 {
-  lowEnergyLimit = 250 * eV; 
-  highEnergyLimit = 100 * GeV;
-
   verboseLevel=0 ;
   // Verbosity scale:
   // 0 = nothing 
@@ -77,13 +74,8 @@ G4LivermoreComptonModifiedModel::G4LivermoreComptonModifiedModel(const G4Particl
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
 
-  if(  verboseLevel>0 ) { 
-    G4cout << "Livermore Modified Compton model is constructed " << G4endl
-	   << "Energy range: "
-	   << lowEnergyLimit / eV << " eV - "
-	   << highEnergyLimit / GeV << " GeV"
-	   << G4endl;
-  }
+  if(  verboseLevel>0 ) 
+    G4cout << "Livermore Modified Compton model is constructed " << G4endl;
 
   //Mark this model as "applicable" for atomic deexcitation
   SetDeexcitationFlag(true);
@@ -143,7 +135,7 @@ void G4LivermoreComptonModifiedModel::Initialise(const G4ParticleDefinition* par
   fAtomDeexcitation  = G4LossTableManager::Instance()->AtomDeexcitation();
 
   if(  verboseLevel>0 ) { 
-    G4cout << "Livermore Compton model is initialized " << G4endl
+    G4cout << "Livermore modified Compton model is initialized " << G4endl
 	   << "Energy range: "
 	   << LowEnergyLimit() / eV << " eV - "
 	   << HighEnergyLimit() / GeV << " GeV"
@@ -162,7 +154,8 @@ G4double G4LivermoreComptonModifiedModel::ComputeCrossSectionPerAtom(
   if (verboseLevel > 3) {
     G4cout << "Calling ComputeCrossSectionPerAtom() of G4LivermoreComptonModifiedModel" << G4endl;
   }
-  if (GammaEnergy < lowEnergyLimit || GammaEnergy > highEnergyLimit) { return 0.0; }
+  if (GammaEnergy < LowEnergyLimit()) 
+    { return 0.0; }
     
   G4double cs = crossSectionHandler->FindValue(G4int(Z), GammaEnergy);  
   return cs;
@@ -197,15 +190,11 @@ void G4LivermoreComptonModifiedModel::SampleSecondaries(std::vector<G4DynamicPar
 	   << photonEnergy0/MeV << " in " << couple->GetMaterial()->GetName() 
 	   << G4endl;
   }
-  
-  // low-energy gamma is absorpted by this process
-  if (photonEnergy0 <= lowEnergyLimit) 
-    {
-      fParticleChange->ProposeTrackStatus(fStopAndKill);
-      fParticleChange->SetProposedKineticEnergy(0.);
-      fParticleChange->ProposeLocalEnergyDeposit(photonEnergy0);
-      return ;
-    }
+
+  // do nothing below the threshold
+  // should never get here because the XS is zero below the limit
+  if (photonEnergy0 < LowEnergyLimit())     
+    return ;   
 
   G4double e0m = photonEnergy0 / electron_mass_c2 ;
   G4ParticleMomentum photonDirection0 = aDynamicGamma->GetMomentumDirection();

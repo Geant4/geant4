@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm2/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 76259 2013-11-08 11:37:28Z gcosmo $
+// $Id: SteppingAction.cc 78550 2014-01-07 09:43:41Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,7 +36,6 @@
 #include "Run.hh"
 
 #include "G4RunManager.hh"
-#include "G4SteppingManager.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,8 +57,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   //
   G4double dEStep = step->GetTotalEnergyDeposit();
   Run* run 
-    = static_cast<Run*>(
-        G4RunManager::GetRunManager()->GetNonConstCurrentRun()); 
+    = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
   run->AddStep(step->GetTrack()->GetDefinition()->GetPDGCharge());
   if (dEStep > 0.) {
     G4ThreeVector prePoint  = step->GetPreStepPoint()->GetPosition();

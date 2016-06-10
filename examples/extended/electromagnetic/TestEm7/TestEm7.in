@@ -1,4 +1,4 @@
-# $Id: TestEm7.in 66241 2012-12-13 18:34:42Z gunter $
+# $Id: TestEm7.in 82280 2014-06-13 14:45:31Z gcosmo $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -33,7 +33,7 @@
 #
 /testem/stepMax 1 mm
 #
-/testem/event/printModulo 1000
+/run/printProgress 1000
 #
 /run/beamOn 10000
 #
@@ -71,14 +71,14 @@
 /gun/particle ion
 /gun/ion 54 131 35
 /gun/energy 1217 MeV
-/testem/phys/setCuts 0.002 mm
+/run/setCut 0.002 mm
 /run/beamOn 10
 #
 /testem/det/setMat Water_1.05
 /gun/particle proton
 /gun/energy 160 MeV
 /testem/stepMax 1 mm
-/testem/phys/setCuts 1 mm
+/run/setCut 1 mm
 /tracking/verbose 0
 /run/beamOn 1000
 #

@@ -1,4 +1,4 @@
-# $Id: tavora.mac 76464 2013-11-11 10:22:56Z gcosmo $
+# $Id: tavora.mac 81528 2014-06-02 16:21:24Z vnivanch $
 #
 # macro file for TestEm5.cc    
 #
@@ -6,6 +6,7 @@
 # L.M. Tavora et al. J.Phys.D: Appl. Phys. 33 (2000) page 2497
 # Fig. 7
 #     		    
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
 /run/verbose 2
 #

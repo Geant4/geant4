@@ -35,7 +35,7 @@
 //    *                                *
 //    **********************************
 //
-// $Id: G4HumanPhantomPhysicsList.cc 70025 2013-05-22 08:43:05Z gcosmo $
+// $Id: G4HumanPhantomPhysicsList.cc 84279 2014-10-13 07:19:58Z gcosmo $
 //
 #include "G4HumanPhantomPhysicsList.hh"
 
@@ -48,12 +48,13 @@
 #include "G4ios.hh"              
 #include "G4VModularPhysicsList.hh" 
 #include "G4EmStandardPhysics_option4.hh" 
-  
+#include "G4DecayPhysics.hh"
+
 G4HumanPhantomPhysicsList::G4HumanPhantomPhysicsList():  G4VModularPhysicsList()
 {
   SetVerboseLevel(1);
   emPhysicsList = new G4EmStandardPhysics_option4(1);
-
+  decPhysicsList = new G4DecayPhysics();
 // Alternatively you can substitute this physics list
 // with the LowEnergy Livermore or LowEnergy Penelope: 
 // emPhysicsList = new G4EmLivermorePhysics();
@@ -65,18 +66,20 @@ G4HumanPhantomPhysicsList::G4HumanPhantomPhysicsList():  G4VModularPhysicsList()
 
 G4HumanPhantomPhysicsList::~G4HumanPhantomPhysicsList()
 {
+delete decPhysicsList;
 delete emPhysicsList;
 }
 
 void G4HumanPhantomPhysicsList::ConstructParticle()
 {
- emPhysicsList -> ConstructParticle(); 
+ decPhysicsList -> ConstructParticle(); 
 }
 
 void G4HumanPhantomPhysicsList::ConstructProcess()
 {
   AddTransportation();
   emPhysicsList -> ConstructProcess();
+  decPhysicsList -> ConstructProcess();
 }
 
 void G4HumanPhantomPhysicsList::SetCuts()

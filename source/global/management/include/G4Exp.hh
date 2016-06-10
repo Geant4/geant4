@@ -35,8 +35,11 @@
 // A lot of ideas were inspired by the cephes math library
 // (by Stephen L. Moshier moshier@na-net.ornl.gov) as well as actual code. 
 // The Cephes library can be found here:  http://www.netlib.org/cephes/
+// Code and algorithms for G4Exp have been extracted and adapted for Geant4
+// from the original implementation in the VDT mathematical library
+// (https://svnweb.cern.ch/trac/vdt), version 0.3.7.
 
-//  Created on: Jun 23, 2012
+// Original implementation created on: Jun 23, 2012
 //      Author: Danilo Piparo, Thomas Hauth, Vincenzo Innocente
 //
 // --------------------------------------------------------------------
@@ -237,8 +240,6 @@ inline G4float G4Expf(G4float initial_x)
     const G4float x2 = x * x;
 
     z = x*G4ExpConsts::PX1expf;
-    z += G4ExpConsts::PX2expf;
-    z *= x;
     z += G4ExpConsts::PX2expf;
     z *= x;
     z += G4ExpConsts::PX3expf;

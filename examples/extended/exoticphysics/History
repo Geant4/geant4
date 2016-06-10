@@ -13,7 +13,17 @@ track of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
+
      ----------------------------------------------------------
+
+27 November 2014: I. Hrivnacova (exExoticphysics-V10-00-02)
+- Minor fixes in top README, .README
+
+8 June 2014: P. Gumplinger (exExoticphysics-V10-00-01)
+- Added new example subdirectory ucn
+
+6 June 2014: A. Dotti (exExoticphysics-V10-00-00)
+- Added new example subdirectory channeling
 
 17 November 2012: I. Hrivnacova (exExoticphysics-V09-05-02)
 - Updated documentation:

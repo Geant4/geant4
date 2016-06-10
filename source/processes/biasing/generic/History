@@ -1,4 +1,4 @@
-$Id: History 74497 2013-10-10 11:40:16Z ahoward $
+$Id: History 86757 2014-11-17 15:16:50Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,29 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 14th, 2014 M.Verderi
+- Serious fix in G4InteractionLawPhysical::
+  UpdateInteractionLengthForStep(...)
+- proc-biasgen-V10-00-03
+
+November 13th, 2014 M.Verderi
+- Tentative fix of crach in optimized mode
+  missing initialization in second constructor of G4BiasingProcessInterface.
+- proc-biasgen-V10-00-02
+
+November 11th, 2014 M.Verderi
+- fix Coverity bugs
+- proc-biasgen-V10-00-01
+
+November 11th, 2014 M.Verderi
+- Introduce anticipated call to PostStepGPIL of wrapped processes
+  by G4BiasingProcessInterface. This allows to collect all
+  physics cross-sections at the first call to biasing operator.
+- Adaptation to change of G4VBiasingOperation (suppression of
+  DenyProcessPostStepDoIt(...) ).
+- tag : proc-biasgen-V10-00-00 .
+
 
 October 10th, 2013  A.Howard
 - Subdirectory and history file created.

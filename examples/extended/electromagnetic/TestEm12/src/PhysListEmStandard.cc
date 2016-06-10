@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc 68530 2013-04-01 21:30:05Z adotti $
+// $Id: PhysListEmStandard.cc 85260 2014-10-27 08:53:35Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandard.hh"
 #include "G4ParticleDefinition.hh"
@@ -143,7 +143,7 @@ void PhysListEmStandard::ConstructProcess()
       ph->RegisterProcess(new G4hPairProduction(), particle);            
      
     } else if( particleName == "alpha" || 
-	       particleName == "He3"    ) {
+               particleName == "He3"    ) {
 
       ph->RegisterProcess(new G4hMultipleScattering(), particle);           
       G4ionIonisation* ionIoni = new G4ionIonisation();
@@ -161,9 +161,9 @@ void PhysListEmStandard::ConstructProcess()
       ph->RegisterProcess(new G4NuclearStopping(), particle);                   
       
     } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
-	       
+               (particle->GetPDGCharge() != 0.0) && 
+               (particle->GetParticleName() != "chargedgeantino")) {
+               
       //all others charged particles except geantino
       ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
@@ -186,7 +186,7 @@ void PhysListEmStandard::ConstructProcess()
   
   //multiple coulomb scattering
   //
-  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);  //default=fUseSafety
+  emOptions.SetMscStepLimitation(fUseSafetyPlus);  //default=fUseSafety
     
   // Deexcitation
   //

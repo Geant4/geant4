@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm1/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 //
-// $Id: PhysicsList.hh 66586 2012-12-21 10:48:39Z ihrivnac $
+// $Id: PhysicsList.hh 82331 2014-06-16 09:54:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -61,18 +61,9 @@ class PhysicsList: public G4VModularPhysicsList
     void AddRadioactiveDecay();
     void AddStepMax();
 
-    virtual void SetCuts();
-    void SetCutForGamma(G4double);
-    void SetCutForElectron(G4double);
-    void SetCutForPositron(G4double);
     void GetRange(G4double);
       
-  private:
-    G4double fCutForGamma;
-    G4double fCutForElectron;
-    G4double fCutForPositron;
-    G4double fCurrentDefaultCut;
-    
+  private:    
     G4VPhysicsConstructor* fEmPhysicsList;
     G4String               fEmName;
     

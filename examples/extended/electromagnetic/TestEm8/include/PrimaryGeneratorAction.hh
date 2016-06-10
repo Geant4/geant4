@@ -27,7 +27,7 @@
 /// \brief Definition of the PrimaryGeneratorAction class
 //
 //
-// $Id: PrimaryGeneratorAction.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: PrimaryGeneratorAction.hh 85243 2014-10-27 08:22:42Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -51,6 +51,7 @@
 #include "globals.hh"
 
 class G4Event;
+class TestParameters;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -63,14 +64,13 @@ public:
 
   virtual void GeneratePrimaries(G4Event*);
 
-  void SetPositionZ(G4double value);
-    
 private:
 
   PrimaryGeneratorAction & operator=(const PrimaryGeneratorAction &right);
   PrimaryGeneratorAction(const PrimaryGeneratorAction&);
 
-  G4ParticleGun*         fParticleGun;
+  G4ParticleGun*    fParticleGun;
+  TestParameters*   fParam;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

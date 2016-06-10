@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundModel.hh 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4PreCompoundModel.hh 80062 2014-03-31 13:41:30Z gcosmo $
 //
 // by V. Lara
 //
@@ -75,7 +75,7 @@ public:
   virtual G4ReactionProductVector* DeExcite(G4Fragment& aFragment);
   
   virtual void ModelDescription(std::ostream& outFile) const;
-  
+  virtual void DeExciteModelDescription(std::ostream& outFile) const;
   void UseHETCEmission();
   void UseDefaultEmission();
   void UseGNASHTransition();

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDManager.hh 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4SDManager.hh 81087 2014-05-20 15:44:27Z gcosmo $
 //
 
 #ifndef G4SDManager_h
@@ -100,6 +100,10 @@ class G4SDManager
       { return HCtable->entries(); }
       inline G4HCtable* GetHCtable() const
       { return HCtable; }
+private:
+    //Disable copy constructor and assignment operator
+    G4SDManager( const G4SDManager& );
+    G4SDManager& operator=(const G4SDManager&);
 
 };
 

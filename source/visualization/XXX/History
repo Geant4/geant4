@@ -1,4 +1,4 @@
-$Id: History 68732 2013-04-05 09:44:10Z gcosmo $
+$Id: History 85582 2014-10-31 09:07:30Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,12 @@ committal in the CVS repository !
 
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
+
+7th October 2014  Laurent Garnier  (visXXX-V10-00-01)
+- Change a message from G4cout to G4cerr
+
+10th December 2013  John Allison  (visXXX-V10-00-00)
+- G4XXXFile.cc: Declared as G4VGraphicsSystem::fileWriter.
 
 26th March 2013  John Allison  (visXXX-V09-06-01)
 - G4XXXStoredViewer.cc: Removed unused typedef.

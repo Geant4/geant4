@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B3RunAction.cc 71323 2013-06-13 16:54:23Z gcosmo $
+// $Id: B3RunAction.cc 87359 2014-12-01 16:04:27Z gcosmo $
 //
 /// \file B3RunAction.cc
 /// \brief Implementation of the B3RunAction class
@@ -107,19 +107,23 @@ void B3RunAction::EndOfRunAction(const G4Run* run)
   if (IsMaster())
   {
     G4cout
-     << "\n--------------------End of Global Run-----------------------"
-     << " \n The run was " << nofEvents << " events ";
+     << G4endl
+     << "--------------------End of Global Run-----------------------"
+     << G4endl
+     << "  The run was " << nofEvents << " events ";
   }
   else
   {
     G4cout
-     << "\n--------------------End of Local Run------------------------"
-     << " \n The run was " << nofEvents << " "<< partName;
+     << G4endl
+     << "--------------------End of Local Run------------------------"
+     << G4endl
+     << "  The run was " << nofEvents << " "<< partName;
   }      
   G4cout
-     << "; Nb of 'good' e+ annihilations: " << nbGoodEvents
-     << "\n Total dose in patient : " << G4BestUnit(sumDose,"Dose")   
-     << "\n------------------------------------------------------------\n"
+     << "; Nb of 'good' e+ annihilations: " << nbGoodEvents  << G4endl
+     << " Total dose in patient : " << G4BestUnit(sumDose,"Dose") << G4endl  
+     << "------------------------------------------------------------" << G4endl 
      << G4endl;
 }
 

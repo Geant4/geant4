@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.hh 77651 2013-11-27 08:47:55Z gcosmo $
+// $Id: G4UImanager.hh 85249 2014-10-27 08:28:57Z gcosmo $
 //
 
 #ifndef G4UImanager_h
@@ -272,8 +272,12 @@ class G4UImanager : public G4VStateDependent
       std::vector<G4String>* GetCommandStack();
       void RegisterBridge(G4UIbridge* brg);
 
-  public: 
       void SetUpForAThread(G4int tId);
+      //Setups as before but for a non-worker thread (e.g. vis)
+      void SetUpForSpecialThread(G4String aPrefix);
+    
+      inline G4int GetThreadID() const
+      { return threadID; }
 
   private:
       G4int threadID;
@@ -286,6 +290,9 @@ class G4UImanager : public G4VStateDependent
       void SetThreadPrefixString(const G4String& s = "W");
       void SetThreadUseBuffer(G4bool flg = true);
       void SetThreadIgnore(G4int tid = 0);
+      void SetThreadIgnoreInit(G4bool flg = true);
+      inline G4MTcoutDestination* GetThreadCout() {return threadCout;};
+ 
 };
 
 #endif

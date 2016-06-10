@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -9,7 +13,7 @@
 
 ***** Table : Nb of materials = 1 *****
 
- Material: G4_Galactic    density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 114319208.901 pc 
+ Material: G4_Galactic    density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 114314827.001 pc 
                        Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -46,6 +50,7 @@ Current available graphics systems are:
   OpenGLStoredX (OGLSX)
   OpenGLStoredXm (OGL, OGLS, OGLSXm)
   RayTracer (RayTracer)
+  RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
@@ -2289,10 +2294,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Track (trackID 1, parentID 0) is processed with stopping code 2
 NULL returned from G4StackManager.
 Terminate current event processing.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.08s Real=0.12s Sys=0.03s
+  User=0.04s Real=0.05s Sys=0s
 #
 Graphics systems deleted.
 Visualization Manager deleting...
@@ -2300,8 +2305,9 @@ G4 kernel has come to Quit state.
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  Maximum number of tracks in the urgent stack : 1
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Total navigation history collections cleaned: 4
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 10; of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.0096 Mb
+Number of memory pools allocated: 9 of which, static: 0
+Dynamic pools deleted: 9 / Total memory freed: 0.0087 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

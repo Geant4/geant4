@@ -23,7 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ReferenceCast.hh 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4ReferenceCast.hh 85244 2014-10-27 08:24:13Z gcosmo $
+// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+
+// The code is developed in the framework of the ESA AO7146
+//
+// We would be very happy hearing from you, send us your feedback! :)
+//
+// In order for Geant4-DNA to be maintained and still open-source,
+// article citations are crucial. 
+// If you use Geant4-DNA chemistry and you publish papers about your software, 
+// in addition to the general paper on Geant4-DNA:
+//
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// we would be very happy if you could please also cite the following
+// reference papers on chemistry:
+//
+// J. Comput. Phys. 274 (2014) 841-882
+// Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
+
 #ifndef G4REFERENCECAST_HH
 #define G4REFERENCECAST_HH
 

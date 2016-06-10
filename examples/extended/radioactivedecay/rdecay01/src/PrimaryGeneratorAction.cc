@@ -27,15 +27,15 @@
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
 //
-// $Id: PrimaryGeneratorAction.cc 68030 2013-03-13 13:51:27Z gcosmo $
+// $Id: PrimaryGeneratorAction.cc 78307 2013-12-11 10:55:57Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #include "PrimaryGeneratorAction.hh"
 
 #include "G4Event.hh"
 #include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Geantino.hh"
 #include "G4SystemOfUnits.hh"
@@ -72,7 +72,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     G4double excitEnergy = 0.*keV;
     
     G4ParticleDefinition* ion
-       = G4ParticleTable::GetParticleTable()->GetIon(Z,A,excitEnergy);
+       = G4IonTable::GetIonTable()->GetIon(Z,A,excitEnergy);
     fParticleGun->SetParticleDefinition(ion);
     fParticleGun->SetParticleCharge(ionCharge);
   }    

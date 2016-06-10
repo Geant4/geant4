@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 75773 2013-11-06 09:14:23Z gcosmo $
+# $Id: sources.cmake 80403 2014-04-16 07:56:30Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -29,6 +29,10 @@ include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4intercoms
     HEADERS
+        G4AnyMethod.hh
+        G4AnyType.hh
+        G4GenericMessenger.hh
+        G4LocalThreadCoutMessenger.hh
         G4UIaliasList.hh
         G4UIbatch.hh
         G4UIbridge.hh
@@ -53,11 +57,9 @@ GEANT4_DEFINE_MODULE(NAME G4intercoms
         G4UnitsMessenger.hh
         G4VFlavoredParallelWorld.hh
         G4VGlobalFastSimulationManager.hh
-        G4GenericMessenger.hh
-        G4LocalThreadCoutMessenger.hh
-        G4AnyType.hh
-        G4AnyMethod.hh
     SOURCES
+        G4LocalThreadCoutMessenger.cc
+        G4GenericMessenger.cc
         G4UIaliasList.cc
         G4UIbatch.cc
         G4UIbridge.cc
@@ -79,9 +81,6 @@ GEANT4_DEFINE_MODULE(NAME G4intercoms
         G4UIsession.cc
         G4UnitsMessenger.cc
         G4VGlobalFastSimulationManager.cc
-        G4LocalThreadCoutMessenger.cc
-        G4GenericMessenger.cc
-        G4AnyType.cc
     GRANULAR_DEPENDENCIES
         G4globman
     GLOBAL_DEPENDENCIES

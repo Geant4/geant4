@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusBoundDecay.cc 69573 2013-05-08 13:35:53Z gcosmo $
+// $Id: G4MuonMinusBoundDecay.cc 80902 2014-05-15 09:33:52Z gcosmo $
 //
 //-----------------------------------------------------------------------------
 //
@@ -39,8 +39,8 @@
 // 04/23/2013  K.Genser     Fixed a constant in computation of lambda
 //                          as suggested by J P Miller/Y Oksuzian;
 //                          Optimized and corrected lambda calculation/lookup
-// 04/30/2013  K.Genser     Improved GetMuonCaptureRate
-//                            extended data and lookup to take both Z & A into account
+// 04/30/2013  K.Genser     Improved GetMuonCaptureRate extended data and lookup 
+//                          to take both Z & A into account
 //                          Improved GetMuonDecayRate by using Zeff instead of Z
 //                          Extracted Zeff into GetMuonZeff
 //                          
@@ -86,6 +86,8 @@ G4MuonMinusBoundDecay::ApplyYourself(const G4HadProjectile& projectile,
   G4double lambda   = lambdac + lambdad;
 
   // ===  sample capture  time and change time of projectile
+  // ===  this is needed for the case when bound decay is not happen
+  // ===  but muon is capruted by the nucleus with some delay
 
   G4double time = -std::log(G4UniformRand()) / lambda;
   G4HadProjectile* p = const_cast<G4HadProjectile*>(&projectile);

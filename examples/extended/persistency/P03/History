@@ -14,6 +14,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 July 2014 P. Arce (exampleP03-V10-00-03)
+-------------------------- 
+- Remove ExTGPhysicsList
+
+25 July 2014 P. Arce (exampleP03-V10-00-02)
+-------------------------- 
+- Using G4GenericPhysicsList
+
 18 November 2013 I. Hrivnacova (exampleP03-V09-06-01)
 -------------------------- 
 - Fixed files description  (only comment lines modified)

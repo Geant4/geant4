@@ -1,0 +1,57 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_histo_h3df
+#define tools_histo_h3df
+
+// coord is in double.
+// weight is in float.
+
+#include "h3"
+
+namespace tools {
+namespace histo {
+
+class h3df : public h3<double,unsigned int,unsigned int,float,float> {
+  typedef h3<double,unsigned int,unsigned int,float,float> parent;
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::histo::h3df");
+    return s_v;
+  }
+  const std::string& s_cls() const {return s_class();}
+public:
+  h3df(const std::string& a_title,
+      unsigned int aXnumber,float aXmin,float aXmax,
+      unsigned int aYnumber,float aYmin,float aYmax,
+      unsigned int aZnumber,float aZmin,float aZmax)
+  :parent(a_title,aXnumber,aXmin,aXmax,
+                  aYnumber,aYmin,aYmax,
+                  aZnumber,aZmin,aZmax)
+  {}
+
+  h3df(const std::string& a_title,
+      const std::vector<double>& aEdgesX,
+      const std::vector<double>& aEdgesY,
+      const std::vector<double>& aEdgesZ)
+  :parent(a_title,aEdgesX,aEdgesY,aEdgesZ)
+  {}
+
+  virtual ~h3df(){}
+public:
+  h3df(const h3df& a_from):parent(a_from){}
+  h3df& operator=(const h3df& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+
+private:static void check_instantiation() {h3df dummy("",10,0,1,10,0,1,10,0,1);}
+};
+
+}}
+
+#endif
+
+
+
+

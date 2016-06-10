@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4coutDestination.hh 67970 2013-03-13 10:10:06Z gcosmo $
+// $Id: G4coutDestination.hh 82279 2014-06-13 14:44:00Z gcosmo $
 //
 // 
 // ---------------------------------------------------------------
@@ -47,6 +47,12 @@ class G4coutDestination
 
     virtual G4int ReceiveG4cout(const G4String&);
     virtual G4int ReceiveG4cerr(const G4String&);
+protected:
+    //For MT: if master G4coutDestination derived
+    //class wants to intercept the thread outputs
+    //derived class should set this pointer.
+    //Needed for some G4UIsession like GUIs
+    static G4coutDestination* masterG4coutDestination;
 };
 
 #endif

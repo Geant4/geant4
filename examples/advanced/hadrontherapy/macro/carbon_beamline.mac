@@ -41,7 +41,6 @@
 /vis/scene/create
 /vis/open OGL
 #/vis/viewer/set/background white
-/vis/viewer/set/style solid
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 30 140 deg
 /vis/viewer/zoomTo 1
@@ -56,15 +55,13 @@
 ##########################
 # Set here the cut and the step max for the tracking. 
 # Suggested values of cut and step:
+# Set cuts OUTSIDE the detector
+/run/setCut 1 mm
+# Set cuts ONLY inside the detector
 #
-# set cut for all 
+/run/setCutForRegion DetectorLog 0.05 mm
 
-
-#/Physics/setCuts 0.01 mm
-/Physics/setCuts 1 m
-/Physics/setDetectorCuts 0.001 mm
-
-/Step/waterPhantomStepMax 0.005 mm 
+/Step/waterPhantomStepMax 1 mm 
 
 ##########################################################################################################
 #						PRIMARY PARTICLES
@@ -121,7 +118,7 @@
 # Display the event number
 # during the run
 # 
-/event/printEventNumber 100000
+/event/printEventNumber 2
 
 # Compute Dose and Fluence for secondary 
 #/analysis/secondary true
@@ -132,6 +129,6 @@
 #
 #########################
 
-/run/beamOn 5000 
+/run/beamOn 4
 
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSplitableHadron.hh 67999 2013-03-13 11:14:32Z gcosmo $
+// $Id: G4VSplitableHadron.hh 83684 2014-09-09 12:37:39Z gcosmo $
 //
 
 #ifndef G4VSplitableHadron_h
@@ -67,24 +67,24 @@ class G4VSplitableHadron
       void Set4Momentum(const G4LorentzVector &a4Momentum);
       const G4LorentzVector & Get4Momentum() const;
 
-      void SetDefinition(G4ParticleDefinition *aDefinition);
-      G4ParticleDefinition * GetDefinition() const;
+      void SetDefinition(const G4ParticleDefinition *aDefinition);
+      const G4ParticleDefinition * GetDefinition() const;
       
       void IncrementCollisionCount(G4int aCount);
       void SetCollisionCount(G4int aCount);
 
-      void SetTimeOfCreation(G4double aTime);           // Uzhi 7.05.08
-      G4double GetTimeOfCreation();                     // Uzhi 7.05.08
+      void SetTimeOfCreation(G4double aTime);
+      G4double GetTimeOfCreation();
 
       void SetPosition(const G4ThreeVector &aPosition);
       const G4ThreeVector & GetPosition() const;
 
-      void SetStatus(const G4int aStatus);             // Uzhi 17.07.09
-      G4int GetStatus();                              // Uzhi 17.07.09
+      void SetStatus(const G4int aStatus);
+      G4int GetStatus();
 
       virtual void SplitUp() = 0;
-      virtual void SetFirstParton(G4int PDGcode) = 0;  // Uzhi 24.11.10
-      virtual void SetSecondParton(G4int PDGcode)= 0; // Uzhi 24.11.10
+      virtual void SetFirstParton(G4int PDGcode) = 0;
+      virtual void SetSecondParton(G4int PDGcode)= 0;
       virtual G4Parton * GetNextParton() = 0 ;
       virtual G4Parton * GetNextAntiParton() = 0 ;
       G4bool IsSplit() { return isSplit;}
@@ -101,15 +101,15 @@ class G4VSplitableHadron
 
   private:
 
-      G4ParticleDefinition *theDefinition;
+      const G4ParticleDefinition *theDefinition;
 
       G4LorentzVector the4Momentum;
 
-      G4double TimeOfCreation;    // Uzhi 7.05.08
+      G4double TimeOfCreation;
       G4ThreeVector thePosition;
       G4int theCollisionCount;
 
-      G4int  curStatus;             // Uzhi 17.07.09
+      G4int  curStatus;
       G4bool isSplit;
 
 };
@@ -134,12 +134,12 @@ inline const G4LorentzVector & G4VSplitableHadron::Get4Momentum() const
 	return the4Momentum;
 }
 
-inline void G4VSplitableHadron::SetDefinition(G4ParticleDefinition *aDefinition)
+inline void G4VSplitableHadron::SetDefinition(const G4ParticleDefinition *aDefinition)
 {
 	theDefinition=aDefinition;
 }
 
-inline G4ParticleDefinition * G4VSplitableHadron::GetDefinition() const
+inline const G4ParticleDefinition * G4VSplitableHadron::GetDefinition() const
 {
 	return theDefinition;
 }
@@ -149,12 +149,12 @@ inline void G4VSplitableHadron::IncrementCollisionCount(G4int aCount)
 	theCollisionCount += aCount;
 }
 
-inline void G4VSplitableHadron::SetTimeOfCreation(G4double aTime)  // Uzhi 7.05.08
+inline void G4VSplitableHadron::SetTimeOfCreation(G4double aTime)
 {
         TimeOfCreation=aTime;
 }
 
-inline G4double G4VSplitableHadron::GetTimeOfCreation()           // Uzhi 7.05.08
+inline G4double G4VSplitableHadron::GetTimeOfCreation()
 {
         return TimeOfCreation; 
 }
@@ -169,12 +169,12 @@ inline const G4ThreeVector & G4VSplitableHadron::GetPosition() const
 	return thePosition;
 }
 
-inline void G4VSplitableHadron::SetStatus(G4int aStatus)          // Uzhi 17.07.09
+inline void G4VSplitableHadron::SetStatus(G4int aStatus)
 {
         curStatus=aStatus;
 }
 
-inline G4int G4VSplitableHadron::GetStatus()                      // Uzhi 17.07.09
+inline G4int G4VSplitableHadron::GetStatus()
 {
         return curStatus; 
 }

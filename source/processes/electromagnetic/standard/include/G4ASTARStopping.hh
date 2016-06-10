@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ASTARStopping.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4ASTARStopping.hh 83008 2014-07-24 14:49:52Z gcosmo $
 
 #ifndef G4ASTARStopping_h
 #define G4ASTARStopping_h 1
@@ -53,10 +53,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "globals.hh"
+#include "G4Material.hh"
 #include "G4LPhysicsFreeVector.hh"
 #include <vector>
-
-class G4Material;
 
 class G4ASTARStopping 
 { 
@@ -66,39 +65,84 @@ public:
 
   ~G4ASTARStopping();
 
-  G4int GetIndex(const G4Material*);
-  G4double GetEffectiveZ(G4int idx);
+  void Initialise();
 
-  G4double GetElectronicDEDX(G4int idx, G4double energy);
-  G4double GetElectronicDEDX(const G4Material*, G4double energy);
+  G4double GetEffectiveZ(G4int idx) const;
+
+  inline G4int GetIndex(const G4Material*) const;
+
+  inline G4int GetIndex(const G4String&) const;
+
+  inline G4double GetElectronicDEDX(G4int idx, G4double energy) const;
+
+  inline G4double GetElectronicDEDX(const G4Material*, G4double energy) const;
 
 private:
 
-  void Initialise();
+  void AddData(const G4double* s, const G4Material*);
 
-  void AddData(G4double* e, G4double* s, G4int idx);
+  void FindData(G4int idx, const G4Material*);
+
+  void PrintWarning(G4int idx) const;
 
   // hide assignment operator
   G4ASTARStopping & operator=(const  G4ASTARStopping &right);
   G4ASTARStopping(const  G4ASTARStopping&);
 
-  G4int matIndex;
-  const G4Material* currentMaterial;
+  size_t nvectors;
   G4double emin;
-  std::vector<G4String> name;
-  std::vector<G4double> effZ; 
+  std::vector<const G4Material*> materials;
   std::vector<G4LPhysicsFreeVector*> sdata;
 };
 
-inline G4double G4ASTARStopping::GetElectronicDEDX(const G4Material* mat, 
-						   G4double energy)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4int G4ASTARStopping:: GetIndex (const G4Material* mat) const
+{  
+  G4int idx = -1;
+  for (size_t i=0; i<nvectors; ++i){
+    if (mat == materials[i]){
+      idx = i;
+      break;
+    }
+  }
+  return idx;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4int G4ASTARStopping::GetIndex(const G4String& nam) const
+{
+  G4int idx = -1;
+  for (size_t i=0; i<nvectors; ++i){
+    if (nam == materials[i]->GetName()){
+      idx = i;
+      break;
+    }
+  }
+  return idx;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double 
+G4ASTARStopping::GetElectronicDEDX(G4int idx, G4double energy) const
+{
+  G4double res = 0.0;
+  if (idx<0 || idx>= G4int(nvectors)) { PrintWarning(idx); }
+  if(energy < emin) { res = (*(sdata[idx]))[0]*std::sqrt(energy/emin); } 
+  else              { res = sdata[idx]->Value(energy); }
+  return res;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double 
+G4ASTARStopping::GetElectronicDEDX(const G4Material* mat, G4double energy) const
 {
   return GetElectronicDEDX(GetIndex(mat), energy);
 }
 
-inline G4double G4ASTARStopping::GetEffectiveZ(G4int idx)
-{
-  return effZ[idx];
-} 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

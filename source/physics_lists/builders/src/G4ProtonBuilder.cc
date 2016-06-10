@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ProtonBuilder.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4ProtonBuilder.cc 81935 2014-06-06 15:41:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -64,7 +64,6 @@
  G4ProtonBuilder::
  ~G4ProtonBuilder() 
  {
-   delete theProtonInelastic;
  }
 
  // 2002 by J.P. Wellisch

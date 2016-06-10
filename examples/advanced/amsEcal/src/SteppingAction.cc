@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc 73008 2013-08-15 08:43:13Z gcosmo $
+// $Id: SteppingAction.cc 83010 2014-07-24 14:53:07Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,13 +31,9 @@
 #include "SteppingAction.hh"
 
 #include "DetectorConstruction.hh"
-#include "RunAction.hh"
-#include "PrimaryGeneratorAction.hh"
 #include "EventAction.hh"
 
 #include "G4Step.hh"
-
-#include "G4Geantino.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -63,67 +59,35 @@ void SteppingAction::UserSteppingAction(const G4Step* step )
    lvol_world  = detector->GetLvolWorld();
    lvol_module = detector->GetLvolModule();   
    lvol_layer  = detector->GetLvolLayer();
-   lvol_fiber  = detector->GetLvolFiber();
-   
-   calorThickness  = detector->GetCalorThickness();
-   calorSizeYZ     = detector->GetCalorSizeYZ();
-   moduleThickness = detector->GetModuleThickness();   
-   d1Pixel = detector->GetD1Pixel();
-   d2Pixel = detector->GetD2Pixel();
-   n1pxl   = detector->GetN1Pixels();
-   n2pxl   = detector->GetN2Pixels();      
-   n1shift = detector->GetN1Shift();   
-      
+   lvol_fiber  = detector->GetLvolFiber();      
    first = false;   
  }
-
- //locate point in geometry
- //  
- G4TouchableHandle touch1 = step->GetPreStepPoint()->GetTouchableHandle(); 
- G4LogicalVolume* lvol = touch1->GetVolume()->GetLogicalVolume();
  
- //if world, return
- //
- if (lvol == lvol_world) return;
- 
- //sum nb of radiation length of calorimeter with geantino
- //
- G4ParticleDefinition* particle = step->GetTrack()->GetDefinition();
- if (particle == G4Geantino::Geantino()) {
-   G4double radl  = lvol->GetMaterial()->GetRadlen();
-   G4double stepl = step->GetStepLength();
-   eventAct->SumNbRadLength(stepl/radl);
- }
-    
  //if no edep, return
  //
  G4double edep = step->GetTotalEnergyDeposit();
- if (edep == 0.) return;
+ ///if (edep == 0.) return;
  
- //locate position and compute pixel number
+ //locate point in geometry
  //
- G4ThreeVector point1 = step->GetPreStepPoint()->GetPosition();
- G4int i1Module = (int) ((point1.x() + 0.5*calorThickness)/moduleThickness); 
- G4int i1Pixel  = (int) ((point1.x() + 0.5*calorThickness)/d1Pixel);
- if (i1Pixel < 0 ) i1Pixel = 0;
- if (i1Pixel >= n1pxl) i1Pixel = n1pxl - 1;
- G4double point1yz = point1.y();
- if (i1Module%2 != 0) point1yz = point1.z();
- G4int i2Pixel = (int) ((point1yz + 0.5*calorSizeYZ)/d2Pixel);
- if (i2Pixel < 0 ) i2Pixel = 0;
- if (i2Pixel >= n2pxl) i2Pixel = n2pxl - 1;
+ G4int iModule = 0;
+ G4int iLayer  = 0;
+ G4int iFiber  = 0;
+   
+ G4TouchableHandle touch1 = step->GetPreStepPoint()->GetTouchableHandle(); 
+ G4LogicalVolume* lvol = touch1->GetVolume()->GetLogicalVolume();
   
- G4int  iPixel = i1Pixel*n1shift + i2Pixel;
-  
- // sum total energy deposit
- //
- eventAct->SumTotalEnergy(iPixel, edep);         
+      if (lvol == lvol_world) return;
+ else if (lvol == lvol_module) { iModule = touch1->GetCopyNumber(0);}
+ else if (lvol == lvol_layer)  { iLayer  = touch1->GetCopyNumber(0);
+                                 iModule = touch1->GetCopyNumber(1);}
+ else if (lvol == lvol_fiber)  { iFiber  = touch1->GetCopyNumber(0);
+                                 iLayer  = touch1->GetCopyNumber(1);
+                                 iModule = touch1->GetCopyNumber(2);}
 
- //in fiber ?
- //  
- if (lvol == lvol_fiber) {
-   eventAct->SumVisibleEnergy(iPixel, edep);
- }
+ // sum edep
+ //
+ eventAct->SumDeStep(iModule, iLayer, iFiber, edep);         
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

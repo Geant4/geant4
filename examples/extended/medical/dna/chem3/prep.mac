@@ -1,0 +1,12 @@
+/control/echo Stage 1: Preparing the track
+/vis/viewer/set/targetPoint 20 10 0 nm
+
+/control/alias thePhi 0
+/control/alias startTheta -70
+/vis/viewer/set/viewpointThetaPhi {startTheta} {thePhi}
+
+#/vis/viewer/zoomTo 1.7
+#/vis/modeling/trajectories/drawByParticleID-0/default/setDrawStepPts true
+#/vis/ogl/set/endTime 1 ps
+
+/control/execute beam.in

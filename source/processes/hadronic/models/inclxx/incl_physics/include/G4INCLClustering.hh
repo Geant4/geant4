@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -50,58 +51,32 @@
 
 namespace G4INCL {
 
-  /**
-   * Cluster formation
-   *
-   */
-  class Clustering {
-  public:
-    /**
+  /// \brief Cluster formation
+  namespace Clustering {
+    /** \brief Call the clustering algorithm
+     *
      * Choose a cluster candidate to be produced. At this point we
      * don't yet decide if it can pass through the Coulomb barrier or
      * not.
      */
-    static Cluster* getCluster(Nucleus *n, Particle *p) {
-#if !defined(NDEBUG) && !defined(INCLXX_IN_GEANT4_MODE)
-      Cluster * const c=theClusteringModel->getCluster(n,p);
-// assert(!c || c->getA()<=n->getA()/2);
-      return c;
-#else
-      return theClusteringModel->getCluster(n,p);
-#endif
-    }
+    Cluster* getCluster(Nucleus *n, Particle *p);
 
-    /**
-     * Determine whether cluster can escape or not.
-     */
-    static G4bool clusterCanEscape(Nucleus const * const n, Cluster const * const c) {
-      return theClusteringModel->clusterCanEscape(n, c);
-    }
+    /// \brief Determine whether the cluster can escape or not
+    G4bool clusterCanEscape(Nucleus const * const n, Cluster const * const c);
 
-    /// \brief Get the clustering model.
-    static IClusteringModel *getClusteringModel() { return theClusteringModel; }
+    /// \brief Get the clustering model
+    IClusteringModel *getClusteringModel();
 
     /// \brief Set the clustering model
-    static void setClusteringModel(IClusteringModel * const model) {
-      theClusteringModel = model;
-    }
+    void setClusteringModel(IClusteringModel * const model);
 
-    /**
-     * Delete clustering model
-     */
-    static void deleteClusteringModel() {
-      delete theClusteringModel;
-      theClusteringModel = 0;
-    }
+    /// \brief Delete the clustering model
+    void deleteClusteringModel();
 
-  protected:
-    Clustering() {}
-    ~Clustering() {}
+    /// \brief Initialize the clustering model based on the Config object
+    void initialize(Config const * const theConfig);
 
-  private:
-    static G4ThreadLocal IClusteringModel *theClusteringModel;
-  };
-
+  }
 }
 
 #endif

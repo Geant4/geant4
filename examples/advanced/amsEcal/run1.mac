@@ -1,4 +1,4 @@
-# $Id: run1.mac 68740 2013-04-05 09:56:39Z gcosmo $
+# $Id: run1.mac 83010 2014-07-24 14:53:07Z gcosmo $
 #
 # Macro file for "amsEcal.cc" 
 # (can be run in batch, without graphic)
@@ -6,8 +6,8 @@
 /control/verbose 2
 /run/verbose 2
 #
-/ams/phys/addPhysics  emstandard_local
-/ams/phys/setCuts 1 km
+/ams/phys/addPhysics  local
+/run/setCut 1 km
 #
 /run/initialize
 #
@@ -16,6 +16,6 @@
 /gun/energy 1 GeV
 /ams/gun/beam 1 cm
 #
-/ams/event/printModulo 1000
+/run/printProgress 1000
 #
 /run/beamOn 10000

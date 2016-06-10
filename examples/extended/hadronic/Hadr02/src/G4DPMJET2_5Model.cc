@@ -36,7 +36,7 @@
 /// \file hadronic/Hadr02/src/G4DPMJET2_5Model.cc
 /// \brief Implementation of the G4DPMJET2_5Model class
 //
-// $Id: G4DPMJET2_5Model.cc 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: G4DPMJET2_5Model.cc 81932 2014-06-06 15:39:45Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -849,7 +849,7 @@ G4HadFinalState *G4DPMJET2_5Model::ApplyYourself (
         G4double py        = hkkevt_.phkk[i][1] * GeV;
         G4double pz        = hkkevt_.phkk[i][2] * GeV;
         G4double ionMass   = theIonTable->GetIonMass(nucZ,nucA);
-	//GetIonMass(nucZ,nucA) + nucex[i];  // check how to get this energy
+        //GetIonMass(nucZ,nucA) + nucex[i];  // check how to get this energy
         G4double dpmMass   = hkkevt_.phkk[i][4] * GeV;
         if (dpmMass > ionMass) ionMass = dpmMass;
         G4double et        = std::sqrt(px*px + py*py + pz*pz + ionMass*ionMass);
@@ -857,7 +857,7 @@ G4HadFinalState *G4DPMJET2_5Model::ApplyYourself (
         fragment           = new G4Fragment(nucA, nucZ, lv);
         if (verboseLevel >= 2)
           DumpVerboseInformation3 (M1, nucA, nucZ, lv.vect(), 
-				   et, et-ionMass, pP);
+                                   et, et-ionMass, pP);
 //
 //
 // Now we can decay the nuclear fragment if present.  The secondaries are
@@ -881,19 +881,19 @@ G4HadFinalState *G4DPMJET2_5Model::ApplyYourself (
               (*iter)->GetTotalEnergy(), (*iter)->GetMomentum());
             theParticleChange.AddSecondary (secondary);
             G4String particleName = 
-	      (*iter)->GetDefinition()->GetParticleName();
+              (*iter)->GetDefinition()->GetParticleName();
             delete (*iter);
             if (verboseLevel >= 2) {
               if (particleName.find("[",0) < particleName.size())
                 DumpVerboseInformation4 (m, particleName, 
-					 secondary->GetMomentum(),
-					 secondary->GetTotalEnergy(),
-					 secondary->GetKineticEnergy(), pP);
+                                         secondary->GetMomentum(),
+                                         secondary->GetTotalEnergy(),
+                                         secondary->GetKineticEnergy(), pP);
               else DumpVerboseInformation2 (particleName, 
-					    secondary->GetMomentum(),
-					    secondary->GetTotalEnergy(),
-					    secondary->GetKineticEnergy(), 
-					    pP);
+                                            secondary->GetMomentum(),
+                                            secondary->GetTotalEnergy(),
+                                            secondary->GetKineticEnergy(), 
+                                            pP);
             }
           }
           delete products;
@@ -1199,7 +1199,7 @@ void G4DPMJET2_5Model::DumpVerboseInformation2
     G4ThreeVector axis = pinit.unit();
     G4double pz = p.dot(axis);
     G4cout <<"            Transverse mass   = " <<std::sqrt(E*E-pz*pz)/MeV 
-	   <<" MeV"
+           <<" MeV"
            <<G4endl;
     G4cout <<"            Rapidity          = "
            <<0.5*std::log((E+pz)/(E-pz)) <<G4endl;
@@ -1748,7 +1748,7 @@ void G4DPMJET2_5Model::Initialise ()
   if (opened == LFALSE)
   {
     G4cout <<"ATTEMPTED TO OPEN fort.6 TO OUTPUT VERBOSE FORTRAN TEXT" 
-	   <<G4endl;
+           <<G4endl;
     G4cout <<"HOWEVER THIS WAS NOT POSSIBLE" <<G4endl;
   }
 
@@ -1824,7 +1824,7 @@ void G4DPMJET2_5Model::Initialise ()
     G4cout <<"AT G4DPMJET2_5Model::Initialise:" <<G4endl;
     G4cout <<"Printout of important Parameters before DPMJET2.5" <<G4endl;
     G4cout <<"Please note for DPMJET input all numbers are floating point!" 
-	   <<G4endl;
+           <<G4endl;
     G4cout <<"PROJPAR  " <<nucc_.ip       <<" "
                          <<nucc_.ipz      <<G4endl;
     G4cout <<"TARPAR   " <<nucc_.it       <<" "

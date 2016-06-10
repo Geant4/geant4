@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 68740 2013-04-05 09:56:39Z gcosmo $
+# $Id: GNUmakefile 82762 2014-07-08 14:21:21Z gcosmo $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -14,15 +14,6 @@ endif
 .PHONY: all
 all: lib bin
 
-#### G4ANALYSIS_USE := true
-
 include $(G4INSTALL)/config/architecture.gmk
 
 include $(G4INSTALL)/config/binmake.gmk
-
-visclean:
-	rm -f g4*.prim g4*.eps g4*.wrl
-	rm -f .DAWN_*
-	
-histclean:
-	rm ${G4WORKDIR}/tmp/${G4SYSTEM}/${G4TARGET}/HistoManager.o

@@ -1,0 +1,376 @@
+//
+// ********************************************************************
+// * This Software is part of the AIDA Unified Solids Library package *
+// * See: https://aidasoft.web.cern.ch/USolids                        *
+// ********************************************************************
+//
+// $Id:$
+//
+// --------------------------------------------------------------------
+//
+// UTubs.icc
+//
+// Implementation of inline methods of UTubs
+//
+// 19.10.12 Marek Gayer
+//          Created from original implementation in Geant4
+// --------------------------------------------------------------------
+
+inline
+double UTubs::GetInnerRadius() const
+{
+  return fRMin;
+}
+
+inline
+double UTubs::GetOuterRadius() const
+{
+  return fRMax;
+}
+
+inline
+double UTubs::GetZHalfLength() const
+{
+  return fDz;
+}
+
+inline
+double UTubs::GetStartPhiAngle() const
+{
+  return fSPhi;
+}
+
+inline
+double UTubs::GetDeltaPhiAngle() const
+{
+  return fDPhi;
+}
+
+inline
+void UTubs::Initialize()
+{
+  fCubicVolume = 0.;
+  fSurfaceArea = 0.;
+}
+
+inline
+void UTubs::InitializeTrigonometry()
+{
+  double hDPhi = 0.5 * fDPhi;                    // half delta phi
+  double cPhi = fSPhi + hDPhi;
+  double ePhi = fSPhi + fDPhi;
+
+  fSinCPhi    = std::sin(cPhi);
+  fCosCPhi    = std::cos(cPhi);
+  fCosHDPhiIT = std::cos(hDPhi - 0.5 * kAngTolerance); // inner/outer tol half dphi
+  fCosHDPhiOT = std::cos(hDPhi + 0.5 * kAngTolerance);
+  fSinSPhi = std::sin(fSPhi);
+  fCosSPhi = std::cos(fSPhi);
+  fSinEPhi = std::sin(ePhi);
+  fCosEPhi = std::cos(ePhi);
+
+  fSinSPhiDPhi = std::sin(fSPhi + fDPhi);
+  fCosSPhiDPhi = std::cos(fSPhi + fDPhi);
+}
+
+inline void UTubs::CheckSPhiAngle(double sPhi)
+{
+  // Ensure fSphi in 0-2PI or -2PI-0 range if shape crosses 0
+
+  if (sPhi < 0)
+  {
+    fSPhi = 2 * UUtils::kPi - std::fmod(std::fabs(sPhi), 2 * UUtils::kPi);
+  }
+  else
+  {
+    fSPhi = std::fmod(sPhi, 2 * UUtils::kPi) ;
+  }
+  if (fSPhi + fDPhi > 2 * UUtils::kPi)
+  {
+    fSPhi -= 2 * UUtils::kPi ;
+  }
+}
+
+inline void UTubs::CheckDPhiAngle(double dPhi)
+{
+  fPhiFullTube = true;
+  if (dPhi >= 2 * UUtils::kPi - kAngTolerance * 0.5)
+  {
+    fDPhi = 2 * UUtils::kPi;
+    fSPhi = 0;
+  }
+  else
+  {
+    fPhiFullTube = false;
+    if (dPhi > 0)
+    {
+      fDPhi = dPhi;
+    }
+    else
+    {
+      std::ostringstream message;
+      message << "Invalid dphi." << std::endl
+              << "Negative or zero delta-Phi (" << dPhi << "), for solid: "
+              << GetName();
+      UUtils::Exception("UTubs::CheckDPhiAngle()", "GeomSolids0002",
+                        FatalError, 1, message.str().c_str());
+    }
+  }
+}
+
+inline void UTubs::CheckPhiAngles(double sPhi, double dPhi)
+{
+  CheckDPhiAngle(dPhi);
+  if ((fDPhi < 2 * UUtils::kPi) && (sPhi))
+  {
+    CheckSPhiAngle(sPhi);
+  }
+  InitializeTrigonometry();
+}
+
+inline
+void UTubs::SetInnerRadius(double newRMin)
+{
+  if (newRMin < 0)   // Check radii
+  {
+    std::ostringstream message;
+    message << "Invalid radii." << std::endl
+            << "Invalid values for radii in solid " << GetName() << std::endl
+            << "				newRMin = " << newRMin
+            << ", fRMax = " << fRMax << std::endl
+            << "				Negative inner radius!";
+    UUtils::Exception("UTubs::SetInnerRadius()", "GeomSolids0002",
+                      FatalError, 1, message.str().c_str());
+  }
+  fRMin = newRMin;
+  Initialize();
+}
+
+inline
+void UTubs::SetOuterRadius(double newRMax)
+{
+  if (newRMax <= 0)   // Check radii
+  {
+    std::ostringstream message;
+    message << "Invalid radii." << std::endl
+            << "Invalid values for radii in solid " << GetName() << std::endl
+            << "				fRMin = " << fRMin
+            << ", newRMax = " << newRMax << std::endl
+            << "				Invalid outer radius!";
+    UUtils::Exception("UTubs::SetOuterRadius()", "GeomSolids0002",
+                      FatalError, 1, message.str().c_str());
+  }
+  fRMax = newRMax;
+  Initialize();
+}
+
+inline
+void UTubs::SetZHalfLength(double newDz)
+{
+  if (newDz <= 0) // Check z-len
+  {
+    std::ostringstream message;
+    message << "Invalid Z half-length." << std::endl
+            << "Negative Z half-length (" << newDz << "), for solid: "
+            << GetName();
+    UUtils::Exception("UTubs::SetZHalfLength()", "GeomSolids0002",
+                      FatalError, 1, message.str().c_str());
+  }
+  fDz = newDz;
+  Initialize();
+}
+
+inline
+void UTubs::SetStartPhiAngle(double newSPhi, bool compute)
+{
+  // Flag 'compute' can be used to explicitely avoid recomputation of
+  // trigonometry in case SetDeltaPhiAngle() is invoked afterwards
+
+  CheckSPhiAngle(newSPhi);
+  fPhiFullTube = false;
+  if (compute)
+  {
+    InitializeTrigonometry();
+  }
+  Initialize();
+}
+
+inline
+void UTubs::SetDeltaPhiAngle(double newDPhi)
+{
+  CheckPhiAngles(fSPhi, newDPhi);
+  Initialize();
+}
+
+//  Older names for access functions
+
+inline
+double UTubs::GetRMin() const
+{
+  return GetInnerRadius();
+}
+
+inline
+double UTubs::GetRMax() const
+{
+  return GetOuterRadius();
+}
+
+inline
+double UTubs::GetDz() const
+{
+  return GetZHalfLength() ;
+}
+
+inline
+double UTubs::GetSPhi() const
+{
+  return GetStartPhiAngle();
+}
+
+inline
+double UTubs::GetDPhi() const
+{
+  return GetDeltaPhiAngle();
+}
+
+inline
+double UTubs::Capacity()
+{
+  if (fCubicVolume != 0.)
+  {
+    ;
+  }
+  else
+  {
+    fCubicVolume = fDPhi * fDz * (fRMax * fRMax - fRMin * fRMin);
+  }
+  return fCubicVolume;
+}
+
+inline
+double UTubs::SurfaceArea()
+{
+  if (fSurfaceArea != 0.)
+  {
+    ;
+  }
+  else
+  {
+    fSurfaceArea = fDPhi * (fRMin + fRMax) * (2 * fDz + fRMax - fRMin);
+    if (!fPhiFullTube)
+    {
+      fSurfaceArea = fSurfaceArea + 4 * fDz * (fRMax - fRMin);
+    }
+  }
+  return fSurfaceArea;
+}
+
+inline
+double UTubs::SafetyFromInsideR(const UVector3& p,
+                                const double rho, bool) const
+{
+  // Safety From Inside R, used for UPolycone Section
+
+  double safe = 0.0, safeR1, safeR2, safePhi;
+
+  if (fRMin)
+  {
+    safeR1 = rho   - fRMin;
+    safeR2 = fRMax - rho;
+
+    if (safeR1 < safeR2)
+    {
+      safe = safeR1;
+    }
+    else
+    {
+      safe = safeR2;
+    }
+  }
+  else
+  {
+    safe = fRMax - rho;
+  }
+
+  // Check if phi divided, Calc distances closest phi plane
+  //
+  if (!fPhiFullTube)
+  {
+    if (p.y * fCosCPhi - p.x * fSinCPhi <= 0)
+    {
+      safePhi = -(p.x * fSinSPhi - p.y * fCosSPhi);
+    }
+    else
+    {
+      safePhi = (p.x * fSinEPhi - p.y * fCosEPhi);
+    }
+    if (safePhi < safe)
+    {
+      safe = safePhi;
+    }
+  }
+
+  return safe;
+}
+
+inline
+double UTubs::SafetyFromOutsideR(const UVector3& p,
+                                 const double rho, bool) const
+{
+  // Safety for R ,used in UPolycone for sections
+
+  double safe = 0.0, safe1, safe2;
+  double safePhi;
+  bool outside;
+  safe1 = rho-fRMin; //fRMin - rho;
+  safe2 = fRMax - rho;
+ 
+  if (safe1 < safe2)
+  {
+    safe = safe1;
+  }
+  else
+  {
+    safe = safe2;
+  }
+ 
+  if ((!fPhiFullTube) && (rho))
+  {
+    safePhi = SafetyToPhi(p,rho,outside);
+    if ((outside) && (safePhi > safe))
+    {
+      safe = safePhi;
+    }
+  }
+
+  return safe; // not accurate safety
+}
+
+inline
+double UTubs::SafetyToPhi(const UVector3& p,
+                          const double rho, bool& outside) const
+{
+  double cosPsi, safePhi = 0.0;
+  
+  // Psi=angle from central phi to point
+  //
+  cosPsi = (p.x * fCosCPhi + p.y * fSinCPhi) / rho;
+  outside = false;
+  if (cosPsi < std::cos(fDPhi * 0.5))
+  {
+    // Point lies outside phi range
+    //
+    outside=true;
+    if ((p.y * fCosCPhi - p.x * fSinCPhi) <= 0)
+    {
+      safePhi = std::fabs(p.x * fSinSPhi - p.y * fCosSPhi);
+    }
+    else
+    {
+      safePhi = std::fabs(p.x * fSinEPhi - p.y * fCosEPhi);
+    }
+  }
+
+  return safePhi;
+}

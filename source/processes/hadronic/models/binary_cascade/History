@@ -13,9 +13,62 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+11-November 2014 Gunter Folger    had-binary-V10-00-11
+- BinaryLightReaction: Momentum correction wrong in case of no Fragment, but 
+       primary projectile nucleon(s) in final state. 
+       Example: d + Pb -> X, where neutron or proton of deuteron did not interact.
+        
+4-November 2014 Gunter Folger    had-binary-V10-00-10
+- remove left over use of SetA/SetZ.
+- Binary cascade: improve handling of destroyed nucleus solving issues with
+    light nuclei in BinaryLightIonReaction, like He in H. 
+    final state in case target nucleus is destroyed made to conserve 
+	 energy and momentum, taking into account momentum transfered to nucleus,
+	  and finally forcing conservation.	 
+- BinaryLightIonreaction: handle currentA/Z consistant with list of spectators.
+    added optional debugging output.
+	 	  
+2 June 2014 Gunter Folger        had-binary-V10-00-09
+- G4NeutronField, G4ProtonField: add static cast to correct 
+  compilation warning.
+
+30 May 2014 Gunter Folger        had-binary-V10-00-08
+- G4NeutronField, G4ProtonField: remove superfluous const_casts and use 
+    unsigned int for index, removing need for check on negative index. 
+
+28 May 2014 Gunter Folger        had-binary-V10-00-07
+- G4BinaryCasacde: Improve calculation of mass, and of correction for outgoing 
+   particles by always using GetIon() method. IN GetIonMass() return 0 when A==0
+	(Addresses crash for p+d seen in d+H in BLIC)
+
+23 May 2014 Andrea Dotti         had-binary-V10-00-06
+- Adding protection to G4NeutronField that was missing
+
+23 May 2014 Gunter Folger        had-binary-V10-00-05
+- G4NeutronField, G4ProtonField: add protection for position far outside
+   nucleus, resulting in negative index.
+
+22 April 2014 Gunter Folger      had-binary-V10-00-04
+- move back to use GetDefinition() method, as this now returns const.
+
+2 April 2014 Gunter Folger      had-binary-V10-00-03
+- extend ModelDescription to cover de-exciation model.
+
+20 Feb 2014 Gunter Folger      had-binary-V10-00-02
+- make pointers to G4ParticleDefinition use const.
+
+31 Jan 2014 Gunter Folger      had-binary-V10-00-01
+- G4BinaryLightIoncascade::FuseNucleiAndPrompound():
+   protect at low energy: available energy is not sufficient to create a 
+	 fragment.
+16 Jan 2014 Gunter Folger      had-binary-V10-00-00
+- bring back corrected change for coverity, rejected previously in 
+  tag had-binary-V09-06-07.
+  Add printout of particle name in check for valid type of projectile 
+  in G4BinaryCasacde::ApplyYourself() 
 20 Sep 2013 Gunter Folger      had-binary-V09-06-08
 - revert change introduced for coverity fix, rev 72276, in tag 
-  had-binary-V09-06-07. The tag was rejected, and in teh ways for
+  had-binary-V09-06-07. The tag was rejected, and in the way for
   unrelated fixes.
   Remove commented lines for G4Fragment.SetParticleDefinition()
   
@@ -27,7 +80,7 @@ code and to keep track of all tags.
 10 Sep 2013 Gunter Folger
 - G4BinaryCascade.cc: fix typo, bug report 1511.
 
-12 Jul 2013 Gunter Folger      had-binary-V09-06-07
+12 Jul 2013 Gunter Folger      had-binary-V09-06-07  (tag rejected)
 - G4BinaryLightIonReaction: fix for coverity report on small leak 
 
  9 May 2013 John Apostolakis	 had-binary-V09-06-06  Retag

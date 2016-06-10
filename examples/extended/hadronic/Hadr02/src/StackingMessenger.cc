@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/StackingMessenger.cc
 /// \brief Implementation of the StackingMessenger class
 //
-// $Id: StackingMessenger.cc 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: StackingMessenger.cc 81932 2014-06-06 15:39:45Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -51,7 +51,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingMessenger::StackingMessenger(StackingAction* stack)
-:fStackAction(stack)
+ : G4UImessenger(),
+   fStackAction(stack),
+   fKillCmd(0),
+   fKillEMCmd(0)
+   
 {
   fKillCmd = new G4UIcmdWithABool("/testhadr/killAll",this);
   fKillCmd->SetGuidance("  Choice : true false");
@@ -59,11 +63,11 @@ StackingMessenger::StackingMessenger(StackingAction* stack)
   fKillCmd->SetParameterName("choice",true);
   fKillCmd->SetDefaultValue(false);
 
-  fKCmd = new G4UIcmdWithABool("/testhadr/killEM", this);
-  fKCmd->SetGuidance("  Choice : true false");
-  fKCmd->SetGuidance("Kill secondary e+, e-, gamma");
-  fKCmd->SetParameterName("ch", true);
-  fKCmd->SetDefaultValue(true);
+  fKillEMCmd = new G4UIcmdWithABool("/testhadr/killEM", this);
+  fKillEMCmd->SetGuidance("  Choice : true false");
+  fKillEMCmd->SetGuidance("Kill secondary e+, e-, gamma");
+  fKillEMCmd->SetParameterName("ch", true);
+  fKillEMCmd->SetDefaultValue(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,7 +75,7 @@ StackingMessenger::StackingMessenger(StackingAction* stack)
 StackingMessenger::~StackingMessenger()
 {
   delete fKillCmd;
-  delete fKCmd;
+  delete fKillEMCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -80,8 +84,8 @@ void StackingMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {     
   if(command == fKillCmd) {
     fStackAction->SetKillAll(fKillCmd->GetNewBoolValue(newValue));
-  } else if(command == fKCmd) {
-    fStackAction->SetKillEM(fKCmd->GetNewBoolValue(newValue));               
+  } else if(command == fKillEMCmd) {
+    fStackAction->SetKillEM(fKillEMCmd->GetNewBoolValue(newValue));
   }
 }
 

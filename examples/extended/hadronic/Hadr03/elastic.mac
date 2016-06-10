@@ -23,9 +23,11 @@
 #
 /analysis/setFileName elastic
 /analysis/h1/set 1  100  9. 11 MeV	# scaterred proton
-/analysis/h1/set 2  100  0. 50 keV	#recoil ion
-/analysis/h1/set 11 100 -700. 10 eV	#Q
-/analysis/h1/set 12 100  0. 15 MeV	#Pbalance
+/analysis/h1/set 7  100  0. 50 keV	#recoil nuclei
+/analysis/h1/set 10 100 -700. 10 eV	#Q
+/analysis/h1/set 11 100  0. 15 MeV	#Pbalance
+#
+/run/printProgress 1000
 #
 /run/beamOn 10000
 

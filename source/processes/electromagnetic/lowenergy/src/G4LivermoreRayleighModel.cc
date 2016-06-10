@@ -64,7 +64,16 @@ G4LivermoreRayleighModel::G4LivermoreRayleighModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LivermoreRayleighModel::~G4LivermoreRayleighModel()
-{}
+{
+  if(IsMaster()) {
+    for(G4int i=0; i<maxZ; ++i) {
+      if(dataCS[i]) { 
+	delete dataCS[i];
+	dataCS[i] = 0;
+      }
+    }
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

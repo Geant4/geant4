@@ -48,7 +48,6 @@
 #include "meshdefs.hh"
 
 #include "G4VGraphicsScene.hh"
-#include "G4Polyhedron.hh"
 
 using namespace CLHEP;
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ShellCorrection.hh 69585 2013-05-08 14:17:58Z gcosmo $
+// $Id: G4ShellCorrection.hh 85841 2014-11-05 15:35:06Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -54,31 +54,11 @@ public:
 
   ~G4ShellCorrection();
 
-  inline G4CameronTruranHilfShellCorrections* 
-  GetCameronTruranHilfShellCorrections()
-  {
-    return &theCameronTruranHilfShellCorrections;
-  }
+  G4CameronTruranHilfShellCorrections* GetCameronTruranHilfShellCorrections();
 
-  inline G4CameronShellPlusPairingCorrections*
-  GetCameronShellPlusPairingCorrections()
-  {
-    return &theCameronShellPlusPairingCorrections;
-  }
+  G4CameronShellPlusPairingCorrections* GetCameronShellPlusPairingCorrections();
 
-  inline 
-  G4double GetShellCorrection(G4int A, G4int Z) const 
-  {
-    G4double SCorrection = 0.0;
-    if (theCookShellCorrections.IsInTableThisN(A-Z) || 
-	theCookShellCorrections.IsInTableThisZ(Z)) {
-      SCorrection = theCookShellCorrections.GetShellCorrection(A,Z);
-    } else if (theCameronGilbertShellCorrections.IsInTableThisN(A-Z) || 
-	       theCameronGilbertShellCorrections.IsInTableThisZ(Z)) {
-      SCorrection = theCameronGilbertShellCorrections.GetShellCorrection(A,Z);
-    }    
-    return SCorrection;
-  }
+  G4double GetShellCorrection(G4int A, G4int Z) const;
 
 private:
 

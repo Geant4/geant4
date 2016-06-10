@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -77,7 +78,7 @@ namespace G4INCL {
           const G4int targetZ
           );
 
-      void finalizeGlobalInfo();
+      void finalizeGlobalInfo(Random::SeedVector const &initialSeeds);
       const GlobalInfo &getGlobalInfo() const { return theGlobalInfo; }
 
     private:
@@ -321,7 +322,7 @@ namespace G4INCL {
       void makeCompoundNucleus();
 
       /// \brief Initialise the cascade
-      G4bool preCascade(ParticleSpecies const projectileSpecies, const G4double kineticEnergy);
+      G4bool preCascade(ParticleSpecies const &projectileSpecies, const G4double kineticEnergy);
 
       /// \brief The actual cascade loop
       void cascade();

@@ -24,12 +24,35 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.icc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4NavigationHistory.icc 86527 2014-11-13 15:06:24Z gcosmo $
 //
 //
 // class G4NavigationHistory Inline implementation
 //
 // ----------------------------------------------------------------------
+
+extern G4GEOM_DLL G4ThreadLocal
+G4Allocator<G4NavigationHistory> *aNavigHistoryAllocator;
+
+// There is no provision that this class is subclassed.
+// If it is subclassed & new data members are added then the
+// following "new" & "delete" will fail and give errors. 
+//
+inline
+void* G4NavigationHistory::operator new(size_t)
+{
+  if (!aNavigHistoryAllocator)
+  {
+    aNavigHistoryAllocator = new G4Allocator<G4NavigationHistory>;
+  }
+  return (void *) aNavigHistoryAllocator->MallocSingle();
+}
+
+inline
+void G4NavigationHistory::operator delete(void *aHistory)
+{
+  aNavigHistoryAllocator->FreeSingle((G4NavigationHistory *) aHistory);
+}
 
 inline
 G4NavigationHistory&
@@ -37,16 +60,17 @@ G4NavigationHistory::operator=(const G4NavigationHistory &h)
 {
   if (&h == this)  { return *this; }
 
-  // fNavHistory=h.fNavHistory;   // This works, but is very slow.
+  // *fNavHistory=*(h.fNavHistory);   // This works, but is very slow.
 
-  if( this->GetMaxDepth() < h.fStackDepth )
+  if( GetMaxDepth() != h.GetMaxDepth() )
   {
-    fNavHistory.resize( h.fStackDepth ); 
+    fNavHistory->resize( h.GetMaxDepth() );
   }
-  for ( register G4int ilev=h.fStackDepth; ilev>=0; ilev-- )
+
+  for ( G4int ilev=h.fStackDepth; ilev>=0; --ilev )
   { 
-    fNavHistory[ilev] = h.fNavHistory[ilev]; 
-  } 
+    (*fNavHistory)[ilev] = (*h.fNavHistory)[ilev];
+  }
   fStackDepth=h.fStackDepth;
 
   return *this;
@@ -65,9 +89,9 @@ void G4NavigationHistory::Clear()
   G4NavigationLevel tmpNavLevel = G4NavigationLevel(0, origin, kNormal, -1) ;
 
   Reset();
-  for (register G4int ilev=fNavHistory.size()-1; ilev>=0; ilev--)
+  for (G4int ilev=fNavHistory->size()-1; ilev>=0; ilev--)
   {
-     fNavHistory[ilev] = tmpNavLevel;
+     (*fNavHistory)[ilev] = tmpNavLevel;
   }
 }
 
@@ -85,38 +109,38 @@ void G4NavigationHistory::SetFirstEntry(G4VPhysicalVolume* pVol)
     translation = pVol->GetTranslation();
     copyNo = pVol->GetCopyNo();
   }
-  fNavHistory[0] =
+  (*fNavHistory)[0] =
     G4NavigationLevel( pVol, G4AffineTransform(translation), kNormal, copyNo );
 }
 
 inline
 const G4AffineTransform* G4NavigationHistory::GetPtrTopTransform() const
 {
-  return fNavHistory[fStackDepth].GetPtrTransform();
+  return (*fNavHistory)[fStackDepth].GetPtrTransform();
 }
 
 inline
 const G4AffineTransform& G4NavigationHistory::GetTopTransform() const
 {
-  return fNavHistory[fStackDepth].GetTransform();
+  return (*fNavHistory)[fStackDepth].GetTransform();
 }
 
 inline
 G4int G4NavigationHistory::GetTopReplicaNo() const
 {
-  return fNavHistory[fStackDepth].GetReplicaNo();
+  return (*fNavHistory)[fStackDepth].GetReplicaNo();
 }
 
 inline
 EVolume G4NavigationHistory::GetTopVolumeType() const
 {
-  return fNavHistory[fStackDepth].GetVolumeType();
+  return (*fNavHistory)[fStackDepth].GetVolumeType();
 }
 
 inline
 G4VPhysicalVolume* G4NavigationHistory::GetTopVolume() const
 {
-  return fNavHistory[fStackDepth].GetPhysicalVolume();
+  return (*fNavHistory)[fStackDepth].GetPhysicalVolume();
 }
 
 inline
@@ -129,31 +153,31 @@ inline
 const G4AffineTransform&
 G4NavigationHistory::GetTransform(G4int n) const
 {
-  return fNavHistory[n].GetTransform();
+  return (*fNavHistory)[n].GetTransform();
 }
 
 inline
 G4int G4NavigationHistory::GetReplicaNo(G4int n) const
 {
-  return fNavHistory[n].GetReplicaNo();
+  return (*fNavHistory)[n].GetReplicaNo();
 }
 
 inline
 EVolume G4NavigationHistory::GetVolumeType(G4int n) const
 {
-  return fNavHistory[n].GetVolumeType();
+  return (*fNavHistory)[n].GetVolumeType();
 }
 
 inline
 G4VPhysicalVolume* G4NavigationHistory::GetVolume(G4int n) const
 {
-  return fNavHistory[n].GetPhysicalVolume();
+  return (*fNavHistory)[n].GetPhysicalVolume();
 }
 
 inline
 G4int G4NavigationHistory::GetMaxDepth() const
 {
-  return fNavHistory.size();
+  return fNavHistory->size();
 }
 
 inline
@@ -162,7 +186,7 @@ void G4NavigationHistory::BackLevel()
   assert( fStackDepth>0 );
 
   // Tell  the  level  that I am forgetting it
-  // delete fNavHistory(fStackDepth);
+  // delete (*fNavHistory)[fStackDepth];
   //
   fStackDepth--;
 }
@@ -177,13 +201,13 @@ void G4NavigationHistory::BackLevel(G4int n)
 inline
 void G4NavigationHistory::EnlargeHistory()
 {
-  G4int len = fNavHistory.size();
+  G4int len = fNavHistory->size();
   if ( len==fStackDepth )
   {
     // Note: Resize operation clears additional entries
     //
     G4int nlen = len+kHistoryStride;
-    fNavHistory.resize(nlen);
+    fNavHistory->resize(nlen);
   }  
 }
 
@@ -195,9 +219,9 @@ void G4NavigationHistory::NewLevel( G4VPhysicalVolume *pNewMother,
 {
   fStackDepth++;
   EnlargeHistory();  // Enlarge if required
-  fNavHistory[fStackDepth] =
+  (*fNavHistory)[fStackDepth] =
     G4NavigationLevel( pNewMother, 
-                       fNavHistory[fStackDepth-1].GetTransform(),
+                       (*fNavHistory)[fStackDepth-1].GetTransform(),
                        G4AffineTransform(pNewMother->GetRotation(),
                        pNewMother->GetTranslation()),
                        vType,

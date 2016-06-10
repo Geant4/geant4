@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VFermiBreakUp.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4VFermiBreakUp.hh 85443 2014-10-29 14:35:57Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -44,8 +44,15 @@ public:
   G4VFermiBreakUp();
   virtual ~G4VFermiBreakUp();
 
+  // primary fragment is copied to the new instance, the copy is deleted 
+  // or is added to the list of products 
   virtual G4FragmentVector * BreakItUp(const G4Fragment &theNucleus) = 0;
-  
+
+  // new interface - vector of products is added to the provided vector
+  // primary fragment is deleted or is modified and added to the list
+  // of products
+  virtual void BreakFragment(G4FragmentVector*, G4Fragment* theNucleus) = 0;
+
 private:
 
   G4VFermiBreakUp(const G4VFermiBreakUp &right);  

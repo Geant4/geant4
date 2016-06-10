@@ -14,6 +14,15 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+08 October 2014 - Alberto Ribon  (hadr-emd-V10-00-01)
+-----------------------------------------------------
+- G4EMDissociation.cc : replaced  G4ParticleTable::GetIon()  with
+                        G4IonTable::GetIon() .
+
+05 March 2014 - Alberto Ribon  (hadr-emd-V10-00-00)
+--------------------------------------------------
+- Removed useless const_cast<G4ParticleDefinition*> .
+
 20 June 2013 - Dennis Wright  (hadr-emd-V09-06-00)
 --------------------------------------------------
 - fix memory leak of products from G4ExcitationHandler

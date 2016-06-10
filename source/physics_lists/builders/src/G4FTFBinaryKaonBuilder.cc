@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBinaryKaonBuilder.cc 68750 2013-04-05 10:19:04Z gcosmo $
+// $Id: G4FTFBinaryKaonBuilder.cc 81935 2014-06-06 15:41:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -61,8 +61,6 @@ G4FTFBinaryKaonBuilder(G4bool quasiElastic)
   theStringModel->SetFragmentationModel(theStringDecay);
 
   theCascade = new G4BinaryCascade;
-  thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
-  theCascade->SetDeExcitation(thePreEquilib);  
 
   theModel->SetHighEnergyGenerator(theStringModel);
   if (quasiElastic)
@@ -79,10 +77,9 @@ G4FTFBinaryKaonBuilder(G4bool quasiElastic)
 
 G4FTFBinaryKaonBuilder:: ~G4FTFBinaryKaonBuilder()
 {
-  delete theCascade;
   delete theStringDecay;
   delete theStringModel;
-  delete theModel;
+  //delete theModel;
   if ( theQuasiElastic ) delete theQuasiElastic;
 }
 

@@ -59,12 +59,12 @@ G4ReactionProductVector * G4NeutronHPProduct::Sample(G4double anEnergy)
         multi = G4Poisson ( mean ); 
      }
   }
-  theDist->SetTarget(theTarget);
-  theDist->SetNeutron(theNeutron);
+  theDist->SetTarget(fCache.Get().theTarget);
+  theDist->SetNeutron(fCache.Get().theNeutron);
   G4int i;
 //  G4double eMax = GetTarget()->GetMass()+GetNeutron()->GetMass()
 //                  - theActualStateQValue;
-  theCurrentMultiplicity = static_cast<G4int>(mean);
+  fCache.Get().theCurrentMultiplicity = static_cast<G4int>(mean);
   G4ReactionProduct * tmp;
   theDist->ClearHistories();
   for(i=0;i<multi;i++)

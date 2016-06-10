@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WrapperProcess.cc 71231 2013-06-12 13:06:28Z gcosmo $
+// $Id: G4WrapperProcess.cc 80787 2014-05-12 09:06:07Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -169,3 +169,10 @@ const G4VProcess* G4WrapperProcess::GetRegisteredProcess() const
 {
   return pRegProcess;
 } 
+
+void G4WrapperProcess::SetMasterProcess(G4VProcess* masterP) {
+  G4WrapperProcess* master = static_cast<G4WrapperProcess*>(masterP);
+  //Cannot use getter because it returns "const" and we do not want
+  //to cast away constness explicitly (even if this is the same)
+  pRegProcess->SetMasterProcess(master->pRegProcess);
+}

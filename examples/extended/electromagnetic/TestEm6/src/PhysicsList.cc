@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm6/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 73716 2013-09-09 10:07:13Z gcosmo $
+// $Id: PhysicsList.cc 83428 2014-08-21 15:46:01Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,53 +34,55 @@
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
 
+#include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysics_option1.hh"
+#include "G4EmStandardPhysics_option2.hh"
+#include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmPenelopePhysics.hh"
+#include "G4EmLowEPPhysics.hh"
+#include "G4DecayPhysics.hh"
+
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
-#include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
+#include "G4ProcessTable.hh"
 
-#include "G4Proton.hh"
-#include "G4AntiProton.hh"
-#include "G4Neutron.hh"
-#include "G4AntiNeutron.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 
 #include "G4GammaConversionToMuons.hh"
 
-#include "G4eMultipleScattering.hh"
-#include "G4MuMultipleScattering.hh"
-#include "G4hMultipleScattering.hh"
-
-#include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
-#include "G4eplusAnnihilation.hh"
 #include "G4AnnihiToMuPair.hh"
-
-#include "G4MuIonisation.hh"
-#include "G4MuBremsstrahlung.hh"
-#include "G4MuPairProduction.hh"
-
-#include "G4hIonisation.hh"
-#include "G4hhIonisation.hh"
-#include "G4ionIonisation.hh"
 #include "G4eeToHadrons.hh"
 
-#include "G4Decay.hh"
-#include "G4EmProcessOptions.hh"
-
-#include "G4StepLimiter.hh"
-
-#include "G4ProcessTable.hh"
-
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
+#include "G4LossTableManager.hh"
+
+#include "StepMax.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList()
-: G4VUserPhysicsList(), fMes(0)
+PhysicsList::PhysicsList() : G4VModularPhysicsList(),
+ fEmPhysicsList(0),
+ fDecayPhysicsList(0),
+ fStepMaxProcess(0),
+ fMes(0)
 {
+  G4LossTableManager::Instance()->SetVerbose(1);
+
   defaultCutValue = 1.*km;
   fMes = new PhysicsListMessenger(this);
-  SetVerboseLevel(1);
+
+  fStepMaxProcess = new StepMax();
+
+  fDecayPhysicsList = new G4DecayPhysics();
+
+  SetVerboseLevel(2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -88,71 +90,16 @@ PhysicsList::PhysicsList()
 PhysicsList::~PhysicsList()
 {
   delete fMes;
+  delete fDecayPhysicsList;
+  delete fEmPhysicsList;
+  delete fStepMaxProcess;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructParticle()
 {
-  // In this method, static member functions should be called
-  // for all particles which you want to use.
-  // This ensures that objects of these particle types will be
-  // created in the program.
-  
-  ConstructBosons();
-  ConstructLeptons();
-  ConstructHadrons();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::ConstructBosons()
-{
-  // pseudo-particles
-  G4Geantino::GeantinoDefinition();
-  G4ChargedGeantino::ChargedGeantinoDefinition();
-
-  // gamma
-  G4Gamma::GammaDefinition();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::ConstructLeptons()
-{
-  // leptons
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-  G4MuonPlus::MuonPlusDefinition();
-  G4MuonMinus::MuonMinusDefinition();
-
-  G4NeutrinoE::NeutrinoEDefinition();
-  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
-  G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
-}
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::ConstructHadrons()
-{
-  // mesons
-  G4PionPlus::PionPlusDefinition();
-  G4PionMinus::PionMinusDefinition();
-  G4PionZero::PionZeroDefinition();
-  G4Eta::EtaDefinition();
-  G4EtaPrime::EtaPrimeDefinition();
-  G4KaonPlus::KaonPlusDefinition();
-  G4KaonMinus::KaonMinusDefinition();
-  G4KaonZero::KaonZeroDefinition();
-  G4AntiKaonZero::AntiKaonZeroDefinition();
-  G4KaonZeroLong::KaonZeroLongDefinition();
-  G4KaonZeroShort::KaonZeroShortDefinition();
-
-  // baryons
-  G4Proton::ProtonDefinition();
-  G4AntiProton::AntiProtonDefinition();
-  G4Neutron::NeutronDefinition();
-  G4AntiNeutron::AntiNeutronDefinition();
+  fDecayPhysicsList->ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -160,118 +107,29 @@ void PhysicsList::ConstructHadrons()
 void PhysicsList::ConstructProcess()
 {
   AddTransportation();
-  ConstructEM();
-  ConstructGeneral();
+
+  if(fEmPhysicsList) fEmPhysicsList->ConstructProcess();
+  fDecayPhysicsList->ConstructProcess();
+
+  AddStepMax();
+
+  ConstructHighEnergy();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::ConstructEM()
+void PhysicsList::ConstructHighEnergy()
 {
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    G4String particleName = particle->GetParticleName();
+  const G4ParticleDefinition* particle = G4Gamma::Gamma();
+  G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (particleName == "gamma") {
-      // gamma    allow  only   gamma -> mu+mu-
-      // pmanager->AddDiscreteProcess(new G4GammaConversionToMuons);
-      // pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
-      // pmanager->AddDiscreteProcess(new G4ComptonScattering);
-      // pmanager->AddDiscreteProcess(new G4GammaConversion);
-      pmanager->AddDiscreteProcess(new G4GammaConversionToMuons);
-          
-    } else if (particleName == "e-") {
-      //electron
-      pmanager->AddProcess(new G4eMultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);
-      pmanager->AddProcess(new G4StepLimiter,       -1,-1,4);      
+  pmanager->AddDiscreteProcess(new G4GammaConversionToMuons);
 
-    } else if (particleName == "e+") {
-      //positron
-      // to make the process of e+e- annihilation more visible,
-      // do not enable the other standard processes:
-      //pmanager->AddProcess(new G4eMultipleScattering,-1, 1,1);
-      //pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
-      //pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);
-      //pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
+  particle = G4Positron::Positron();
+  pmanager = particle->GetProcessManager();
 
-      pmanager->AddDiscreteProcess(new G4AnnihiToMuPair);
-      pmanager->AddDiscreteProcess(new G4eeToHadrons);
-      pmanager->AddDiscreteProcess(new G4StepLimiter);
-       
-    } else if( particleName == "mu+" ||
-               particleName == "mu-"    ) {
-      //muon
-      pmanager->AddProcess(new G4MuMultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3,3);
-      pmanager->AddProcess(new G4MuPairProduction,  -1, 4,4);
-      pmanager->AddProcess(new G4StepLimiter,       -1,-1,5);            
-      
-    } else if( particleName == "anti_proton") {
-      pmanager->AddProcess(new G4hMultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4hhIonisation,      -1, 2,2);
-      pmanager->AddProcess(new G4StepLimiter,       -1,-1,3);       
-
-    } else if( particleName == "GenericIon") {
-      pmanager->AddProcess(new G4hMultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4ionIonisation,     -1, 2,2);
-      pmanager->AddProcess(new G4StepLimiter,       -1,-1,3);       
-      
-    } else if( particle->GetPDGCharge() != 0.0 && !particle->IsShortLived()
-            && particleName != "chargedgeantino") {
-      pmanager->AddProcess(new G4hMultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4hIonisation,       -1, 2,2);
-      pmanager->AddProcess(new G4StepLimiter,       -1,-1,3);       
-    }
-  }
-  
-  G4EmProcessOptions opt;
-  opt.SetVerbose(1);
-  opt.SetMinEnergy(100*eV);       
-  opt.SetMaxEnergy(1000*TeV);      
-  opt.SetDEDXBinning(13*7);      
-  opt.SetLambdaBinning(13*7);    
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::ConstructGeneral()
-{
-  // Add Decay Process
-  G4Decay* theDecayProcess = new G4Decay();
-  theParticleIterator->reset();
-  while ((*theParticleIterator)()){
-      G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* pmanager = particle->GetProcessManager();
-      if (theDecayProcess->IsApplicable(*particle) && !particle->IsShortLived())
-      { pmanager ->AddProcess(theDecayProcess);
-        // set ordering for PostStepDoIt and AtRestDoIt
-        pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
-        pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
-      }
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCuts()
-{
-  if (verboseLevel >0){
-    G4cout << "PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }  
-
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma 
-  SetCutValue(defaultCutValue, "gamma");
-  SetCutValue(defaultCutValue, "e-");
-  SetCutValue(defaultCutValue, "e+");
-
-  if (verboseLevel>0) DumpCutValuesTable();
+  pmanager->AddDiscreteProcess(new G4AnnihiToMuPair);
+  pmanager->AddDiscreteProcess(new G4eeToHadrons);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -314,3 +172,90 @@ void PhysicsList::SetAnnihiToHadronFac(G4double fac)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::AddPhysicsList(const G4String& name)
+{
+  if (verboseLevel>1) {
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
+  }
+
+  if (name == fEmName) {
+    return;
+
+  } else if (name == "emstandard_opt0") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics();
+
+  } else if (name == "emstandard_opt1") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option1();
+
+  } else if (name == "emstandard_opt2") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option2();
+
+  } else if (name == "emstandard_opt3") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option3();
+
+  } else if (name == "emstandard_opt4") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option4();
+
+  } else if (name == "emlivermore") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmLivermorePhysics();
+
+  } else if (name == "empenelope") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmPenelopePhysics();
+
+  } else if (name == "emlowenergy") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmLowEPPhysics();
+
+  } else {
+
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
+           << " is not defined"
+           << G4endl;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::AddStepMax()
+{
+  //Step limitation seen as a process
+
+  theParticleIterator->reset();
+  while ((*theParticleIterator)())
+  {
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
+
+    if (fStepMaxProcess->IsApplicable(*particle))
+    {
+      pmanager ->AddDiscreteProcess(fStepMaxProcess);
+    }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

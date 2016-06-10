@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTreeSceneHandler.cc 66870 2013-01-14 23:38:59Z adotti $
+// $Id: G4VTreeSceneHandler.cc 85582 2014-10-31 09:07:30Z gcosmo $
 //
 // 
 // John Allison  5th April 2001
@@ -101,7 +101,7 @@ void G4VTreeSceneHandler::PreAddSolid
       // G4PhysicalVolumeModel sends volumes as it encounters them,
       // i.e., mothers before daughters, in its descent of the
       // geometry tree.  Error!
-      G4cout << "ERROR: G4XXXSceneHandler::PreAddSolid: Mother "
+      G4cerr << "ERROR: G4XXXSceneHandler::PreAddSolid: Mother "
 	     << ri->GetPhysicalVolume()->GetName()
 	     << ':' << ri->GetCopyNo()
 	     << " not previously encountered."

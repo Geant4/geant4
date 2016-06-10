@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeComptonModel.cc 75180 2013-10-29 10:11:24Z gcosmo $
+// $Id: G4PenelopeComptonModel.cc 82874 2014-07-15 15:25:29Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -32,9 +32,10 @@
 // 15 Feb 2010   L Pandola  Implementation
 // 18 Mar 2010   L Pandola  Removed GetAtomsPerMolecule(), now demanded 
 //                            to G4PenelopeOscillatorManager
-// 01 Feb 2011   L Pandola  Suppress fake energy-violation warning when Auger is active.
-//                          Make sure that fluorescence/Auger is generated only if 
-//                          above threshold
+// 01 Feb 2011   L Pandola  Suppress fake energy-violation warning when Auger is 
+//                            active.
+//                          Make sure that fluorescence/Auger is generated only 
+//                            if above threshold
 // 24 May 2011   L Pandola  Renamed (make v2008 as default Penelope)
 // 10 Jun 2011   L Pandola  Migrate atomic deexcitation interface
 // 09 Oct 2013   L Pandola  Migration to MT
@@ -67,7 +68,6 @@ G4PenelopeComptonModel::G4PenelopeComptonModel(const G4ParticleDefinition* part,
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
-  //  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
   SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
   //
   oscManager = G4PenelopeOscillatorManager::GetOscillatorManager();
@@ -124,6 +124,20 @@ void G4PenelopeComptonModel::Initialise(const G4ParticleDefinition* part,
 		 << "Energy range: "
 		 << LowEnergyLimit() / keV << " keV - "
 		 << HighEnergyLimit() / GeV << " GeV";  
+	}
+      //Issue a warning, if the model is going to be used down to a 
+      //energy which is outside the validity of the model itself
+      if (LowEnergyLimit() < fIntrinsicLowEnergyLimit)
+	{
+	  G4ExceptionDescription ed;
+	  ed << "Using the Penelope Compton model outside its intrinsic validity range. " 
+	     << G4endl;
+	  ed << "-> LowEnergyLimit() in process = " << LowEnergyLimit()/keV << "keV " << G4endl; 
+	  ed << "-> Instrinsic low-energy limit = " << fIntrinsicLowEnergyLimit/keV << "keV " 
+	     << G4endl;
+	  ed << "Result of the simulation have to be taken with care" << G4endl;
+	  G4Exception("G4PenelopeComptonModel::Initialise()",
+		      "em2100",JustWarning,ed);
 	}
     }      
 
@@ -182,10 +196,14 @@ G4double G4PenelopeComptonModel::CrossSectionPerVolume(const G4Material* materia
     G4cout << "Calling CrossSectionPerVolume() of G4PenelopeComptonModel" << G4endl;
   SetupForMaterial(p, material, energy);
 
-  //Retrieve the oscillator table for this material
-  G4PenelopeOscillatorTable* theTable = oscManager->GetOscillatorTableCompton(material);
 
   G4double cs = 0;
+  //Force null cross-section if below the low-energy edge of the table
+  if (energy < LowEnergyLimit()) 
+    return cs; 
+
+  //Retrieve the oscillator table for this material
+  G4PenelopeOscillatorTable* theTable = oscManager->GetOscillatorTableCompton(material);
 
   if (energy < 5*MeV) //explicit calculation for E < 5 MeV
     {
@@ -279,13 +297,10 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   
   G4double photonEnergy0 = aDynamicGamma->GetKineticEnergy();
 
-  if (photonEnergy0 <= fIntrinsicLowEnergyLimit)
-    {
-      fParticleChange->ProposeTrackStatus(fStopAndKill);
-      fParticleChange->SetProposedKineticEnergy(0.);
-      fParticleChange->ProposeLocalEnergyDeposit(photonEnergy0);
-      return ;
-    }
+  // do nothing below the threshold
+  // should never get here because the XS is zero below the limit
+  if(photonEnergy0 < LowEnergyLimit()) 
+    return; 
 
   G4ParticleMomentum photonDirection0 = aDynamicGamma->GetMomentumDirection();
   const G4Material* material = couple->GetMaterial();

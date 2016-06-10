@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtExportDialog.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4OpenGLQtExportDialog.hh 82764 2014-07-08 14:24:04Z gcosmo $
 // GEANT4 tag $Name: 
 //
 // 
@@ -76,12 +76,6 @@ class G4OpenGLQtExportDialog : public QDialog
   /** return the new height for file if format has a height widget, instead return
       the original value  */
   int getHeight();
-
-  /** return the value of the transparency if format has a transparency, instead return -1 */
-  int getTransparency();
-
-  /** return the numbers of colors in the picture if format has a BW/Color widget, instead return -1 */
-  int getNbColor();
 
   /** return if vector EPS is checked, if button does'nt exist, return 0 */
   bool getVectorEPS();

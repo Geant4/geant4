@@ -48,6 +48,7 @@
 # configuration.
 #
 
+
 #-----------------------------------------------------------------------
 # - Functions and Macros to help configuration of shell scripts.
 #-----------------------------------------------------------------------
@@ -337,6 +338,13 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY SCRIPT_NAME)
     # We have to configure things to point to the internal CLHEP...
     # Probably sufficient to do nothing...
     set(GEANT4_TC_G4LIB_USE_CLHEP "# USING INTERNAL CLHEP")
+  endif()
+
+  # - EXPAT
+  if(GEANT4_USE_SYSTEM_EXPAT)
+    set(GEANT4_TC_G4LIB_USE_EXPAT "# USING SYSTEM EXPAT")
+  else()
+    _g4tc_setenv_command(GEANT4_TC_G4LIB_USE_EXPAT ${SHELL_FAMILY} G4LIB_USE_EXPAT 1)
   endif()
 
   # - ZLIB...
@@ -724,4 +732,8 @@ foreach(_shell bourne;cshell)
     COMPONENT Runtime
     )
 endforeach()
+
+# - TEMP hack to get modulefile support in
+include(Geant4ConfigureModulefile)
+geant4_configure_modulefile()
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronHElasticPhysics.hh 73281 2013-08-23 08:21:37Z gcosmo $
+// $Id: G4HadronHElasticPhysics.hh 87072 2014-11-24 14:06:09Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -46,7 +46,7 @@ class G4HadronHElasticPhysics : public G4VPhysicsConstructor
 {
 public: 
 
-  G4HadronHElasticPhysics(G4int ver = 0); 
+  G4HadronHElasticPhysics(G4int ver = 0, G4bool diffraction=false); 
 
   virtual ~G4HadronHElasticPhysics();
 
@@ -59,13 +59,17 @@ public:
   // registered to the process manager of each particle type 
   virtual void ConstructProcess();
 
+  inline void SetDiffraction(G4bool val) {fDiffraction = val;};
+
 private:
 
   G4HadronHElasticPhysics(G4HadronHElasticPhysics &);
   G4HadronHElasticPhysics & operator=(const G4HadronHElasticPhysics &right);
 
-  G4int    verbose;
-  static G4ThreadLocal G4bool   wasActivated;
+  G4int  verbose;
+  G4bool fDiffraction;
+
+  static G4ThreadLocal G4bool wasActivated;
 };
 
 

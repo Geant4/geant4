@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HCofThisEvent.hh 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4HCofThisEvent.hh 81087 2014-05-20 15:44:27Z gcosmo $
 //
 
 #ifndef G4HCofThisEvent_h
@@ -57,6 +57,8 @@ class G4HCofThisEvent
 
       void AddHitsCollection(G4int HCID,G4VHitsCollection * aHC);
 
+      G4HCofThisEvent(const G4HCofThisEvent&);
+      G4HCofThisEvent& operator=(const G4HCofThisEvent&);
   private:
       std::vector<G4VHitsCollection*> * HC;
 

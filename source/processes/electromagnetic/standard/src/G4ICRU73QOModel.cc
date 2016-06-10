@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ICRU73QOModel.cc 74581 2013-10-15 12:03:25Z gcosmo $
+// $Id: G4ICRU73QOModel.cc 81579 2014-06-03 10:15:54Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -54,6 +54,7 @@
 #include "G4ParticleChangeForLoss.hh"
 #include "G4LossTableManager.hh"
 #include "G4AntiProton.hh"
+#include "G4DeltaAngle.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
 
@@ -112,6 +113,10 @@ void G4ICRU73QOModel::Initialise(const G4ParticleDefinition* p,
   if(!isInitialised) {
     isInitialised = true;
 
+    if(UseAngularGeneratorFlag() && !GetAngularDistribution()) {
+      SetAngularDistribution(new G4DeltaAngle());
+    }
+
     G4String pname = particle->GetParticleName();
     fParticleChange = GetParticleChangeForLoss();
     const G4MaterialTable* mtab = G4Material::GetMaterialTable(); 
@@ -135,7 +140,7 @@ G4double G4ICRU73QOModel::ComputeCrossSectionPerElectron(
     G4double energy  = kineticEnergy + mass;
     G4double energy2 = energy*energy;
     G4double beta2   = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
-    cross = 1.0/cutEnergy - 1.0/maxEnergy 
+    cross = (maxEnergy - cutEnergy)/(cutEnergy*maxEnergy) 
       - beta2*G4Log(maxEnergy/cutEnergy)/tmax;
 
     cross *= CLHEP::twopi_mc2_rcl2*chargeSquare/beta2;
@@ -366,7 +371,7 @@ void G4ICRU73QOModel::CorrectionsAlongStep(const G4MaterialCutsCouple*,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4ICRU73QOModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
-					const G4MaterialCutsCouple*,
+					const G4MaterialCutsCouple* couple,
 					const G4DynamicParticle* dp,
 					G4double xmin,
 					G4double maxEnergy)
@@ -400,30 +405,41 @@ void G4ICRU73QOModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 
   } while( grej*G4UniformRand() >= f );
 
-  G4double deltaMomentum =
+  G4ThreeVector deltaDirection;
+
+  if(UseAngularGeneratorFlag()) {
+    const G4Material* mat =  couple->GetMaterial();
+    G4int Z = SelectRandomAtomNumber(mat);
+
+    deltaDirection = 
+      GetAngularDistribution()->SampleDirection(dp, deltaKinEnergy, Z, mat);
+
+  } else {
+
+    G4double deltaMomentum =
            sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
-  G4double totMomentum = energy*sqrt(beta2);
-  G4double cost = deltaKinEnergy * (energy + electron_mass_c2) /
+    G4double totMomentum = energy*sqrt(beta2);
+    G4double cost = deltaKinEnergy * (energy + electron_mass_c2) /
                                    (deltaMomentum * totMomentum);
-  if(cost > 1.0) { cost = 1.0; }
-  G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
+    if(cost > 1.0) { cost = 1.0; }
+    G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
 
-  G4double phi = twopi * G4UniformRand() ;
+    G4double phi = twopi * G4UniformRand() ;
 
-  G4ThreeVector deltaDirection(sint*cos(phi),sint*sin(phi), cost) ;
-  deltaDirection.rotateUz(direction);
+    deltaDirection.set(sint*cos(phi),sint*sin(phi), cost) ;
+    deltaDirection.rotateUz(direction);
+  }
+  // create G4DynamicParticle object for delta ray
+  G4DynamicParticle* delta = 
+    new G4DynamicParticle(theElectron,deltaDirection,deltaKinEnergy);
 
   // Change kinematics of primary particle
-  kineticEnergy       -= deltaKinEnergy;
-  G4ThreeVector finalP = direction*totMomentum - deltaDirection*deltaMomentum;
+  kineticEnergy -= deltaKinEnergy;
+  G4ThreeVector finalP = dp->GetMomentum() - delta->GetMomentum();
   finalP               = finalP.unit();
   
   fParticleChange->SetProposedKineticEnergy(kineticEnergy);
   fParticleChange->SetProposedMomentumDirection(finalP);
-
-  // create G4DynamicParticle object for delta ray
-  G4DynamicParticle* delta = new G4DynamicParticle(theElectron,deltaDirection,
-						   deltaKinEnergy);
 
   vdp->push_back(delta);
 }

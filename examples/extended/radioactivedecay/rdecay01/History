@@ -1,4 +1,4 @@
-$Id: History 73284 2013-08-23 08:35:02Z gcosmo $
+$Id: History 83857 2014-09-19 10:19:37Z gcosmo $
 -----------------------------------------------------
 
      =========================================================
@@ -14,6 +14,25 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+18-09-14 mma (rdecay01-V10-00-03)
+- rdecay01.cc : SetNumberOfThreads(G4Threading::G4GetNumberOfCores())
+     
+11-12-13 mma (rdecay01-V10-00-02)
+- MT: move histo normalization in Run::EndOfRun()
+     
+09-12-13 mma (rdecay01-V10-00-01)
+- MT: add primary particle info in Run::Merge()
+     
+05-12-13 mma (rdecay01-V10-00-00)
+- PhysicsList: suppress SetHLThreshold()
+- TrackingAction: set fullChain true by default
+- TrackingAction: if singleDecay, kill secondary ion at BeginOfTrack
+- ParticleCount: remove incident ion
+- MT: add ActionInitialization. Modify rdecay01.cc
+- MT: PrimaryGenerator: use G4IonTable
+- MT: add Run. Modify RunAction, TrackingAction
+
 23-08-13 L.Desorgher (rdecay01-V09-06-06) 
 - In PhysicsList set the half life threshold of the G4RadioactiveDecay to 
    nanosecond 

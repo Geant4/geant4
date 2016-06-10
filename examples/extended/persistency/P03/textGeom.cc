@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: textGeom.cc 76481 2013-11-11 10:49:21Z gcosmo $
+// $Id: textGeom.cc 83430 2014-08-21 15:48:43Z gcosmo $
 //
 /// \file persistency/P03/textGeom.cc
 /// \brief Main program of the persistency/P03 example
@@ -34,7 +34,7 @@
 #include "ExTGDetectorConstructionWithSD.hh"
 #include "ExTGDetectorConstructionWithCpp.hh"
 #include "ExTGDetectorConstructionWithCuts.hh"
-#include "ExTGPhysicsList.hh"
+#include "G4GenericPhysicsList.hh"
 #include "ExTGPrimaryGeneratorAction.hh"
 #include "ExTGActionInitialization.hh"
 
@@ -72,7 +72,10 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(new ExTGDetectorConstruction);
 
   //
-  runManager->SetUserInitialization(new ExTGPhysicsList);
+  std::vector<G4String>* MyConstr = new std::vector<G4String>;
+  MyConstr->push_back("G4EmStandardPhysics");
+  G4VModularPhysicsList* phys = new G4GenericPhysicsList(MyConstr);
+  runManager->SetUserInitialization(phys);
 
   // User Action classes
   //

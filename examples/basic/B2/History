@@ -1,4 +1,4 @@
-$Id: History 78054 2013-12-03 08:26:31Z gcosmo $
+$Id: History 87359 2014-12-01 16:04:27Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,27 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29/11/14 I. Hrivnacova
+- Use G4endl instead of \n in G4cout;
+  this makes each new line in the output on threads preceded with
+  G4WTN >
+
+06/11/14 I. Hrivnacova
+- Finalized modifications in previous tags (02, 03):
+  - Removed G4UI_USE/G4VIS_USE tests and init.mac macro (not needed)
+  - Moved G4UIExecutive at the beginning of main() in all examples
+  - Perform run initialization in macros instead of main()
+
+31/10/14 L. Garnier (exampleB2-V10-00-02 - exampleB2-V10-00-03)
+ exampleB2b :
+  - Fix a warning (perhaps a crash)
+  - Fix a warning "'ui' may be used uninitialized in this function"
+
+31/10/14 L. Garnier (exampleB2-V10-00-01)
+ exampleB2a/exampleB2b : 
+  - Remove old G4UI_USE/G4VIS_USE
+  - Move G4UIExecutive at the beginning of main() 
 
 02 December 2013 Ivana Hrivnacova 
 - Fixed gui.mac:

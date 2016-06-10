@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelCalorimeterHit.cc 66508 2012-12-19 10:16:45Z gcosmo $
+// $Id: GammaRayTelCalorimeterHit.cc 82268 2014-06-13 13:47:30Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -39,7 +39,7 @@
 
 #include "GammaRayTelCalorimeterHit.hh"
 
-G4Allocator<GammaRayTelCalorimeterHit> GammaRayTelCalorimeterHitAllocator;
+G4ThreadLocal G4Allocator<GammaRayTelCalorimeterHit> *GammaRayTelCalorimeterHitAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

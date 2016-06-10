@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc 66872 2013-01-15 01:25:57Z japost $
+// $Id: G4ReplicaNavigation.cc 87208 2014-11-27 08:57:44Z gcosmo $
 //
 //
 // class G4ReplicaNavigation Implementation
@@ -40,6 +40,16 @@
 #include "G4SmartVoxelNode.hh"
 #include "G4VSolid.hh"
 #include "G4GeometryTolerance.hh"
+
+namespace
+{
+  const G4ThreeVector VecCartAxes[3]=
+  { G4ThreeVector(1.,0.,0.), G4ThreeVector(0.,1.,0.), G4ThreeVector(0.,0.,1.) };
+  const G4ExitNormal::ESide SideCartAxesPlus[3]=
+  { G4ExitNormal::kPX, G4ExitNormal::kPY, G4ExitNormal::kPZ };
+  const G4ExitNormal::ESide SideCartAxesMinus[3]=
+  { G4ExitNormal::kMX, G4ExitNormal::kMX, G4ExitNormal::kMX };
+}
 
 // ********************************************************************
 // Constructor
@@ -256,13 +266,6 @@ G4ReplicaNavigation::DistanceToOut(const G4VPhysicalVolume *pVol,
   G4double signC = 0.0;
   G4ExitNormal candidateNormal; 
    
-  static const G4ThreeVector VecCartAxes[3]=
-   { G4ThreeVector(1.,0.,0.),G4ThreeVector(0.,1.,0.),G4ThreeVector(0.,0.,1.) };
-  static G4ThreadLocal G4ExitNormal::ESide *SideCartAxesPlus = 0 ; if (!SideCartAxesPlus) {SideCartAxesPlus = new  G4ExitNormal::ESide [3] ;
-   SideCartAxesPlus[0]= G4ExitNormal::kPX;SideCartAxesPlus[1]= G4ExitNormal::kPY;SideCartAxesPlus[2]= G4ExitNormal::kPZ ;};
-  static G4ThreadLocal G4ExitNormal::ESide *SideCartAxesMinus = 0 ; if (!SideCartAxesMinus) {SideCartAxesMinus = new  G4ExitNormal::ESide [3] ;
-   SideCartAxesMinus[0]= G4ExitNormal::kMX;SideCartAxesMinus[1]= G4ExitNormal::kMY;SideCartAxesMinus[2]= G4ExitNormal::kMZ ;};
-
   pVol->GetReplicationData(axis, nReplicas, width, offset, consuming);
   switch(axis)
   {
@@ -572,8 +575,8 @@ G4ReplicaNavigation::DistanceToOutRad(const G4ThreeVector &localPoint,
           // NOTE: Should use
           // rho-rmin>kRadTolerance*0.5 - [no sqrts for efficiency]
           //
-          srd = (deltaR>kRadTolerance*0.5) ? -b-std::sqrt(d2) : 0;
-          // Is the following more accurate ?   - called 'issue' below
+          srd = (deltaR>kRadTolerance*0.5) ? -b-std::sqrt(d2) : 0.0;
+          // Is the following more accurate ?
           // srd = (deltaR>kRadTolerance*0.5) ? c/( -b - std::sqrt(d2)) : 0.0;
           sideR= G4ExitNormal::kRMin;
         }
@@ -583,7 +586,8 @@ G4ReplicaNavigation::DistanceToOutRad(const G4ThreeVector &localPoint,
           //
           deltaR = t3-rmax*rmax;
           c  = deltaR/t1;
-          srd = -b+std::sqrt(b*b-c); //  See issue above
+          d2 = b*b-c;
+          srd = (d2 < 0.) ? 0.0 : -b+std::sqrt(d2);
           sideR= G4ExitNormal::kRMax;
         }
       }
@@ -594,7 +598,8 @@ G4ReplicaNavigation::DistanceToOutRad(const G4ThreeVector &localPoint,
         deltaR = t3-rmax*rmax;
         b  = t2/t1;
         c  = deltaR/t1;
-        srd = -b+std::sqrt(b*b-c);  // See issue above
+        d2 = b*b-c;
+        srd = (d2 < 0.) ? 0.0 : -b+std::sqrt(d2);
         sideR= G4ExitNormal::kRMax;
       }
     }

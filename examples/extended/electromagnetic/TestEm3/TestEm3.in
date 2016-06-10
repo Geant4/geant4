@@ -1,4 +1,4 @@
-# $Id: TestEm3.in 66241 2012-12-13 18:34:42Z gunter $
+# $Id: TestEm3.in 85425 2014-10-29 08:24:37Z gcosmo $
 #
 # Macro file for "exampleN03.cc"
 # (can be run in batch, without graphic)
@@ -6,7 +6,9 @@
 # Lead-liquidArgon 50 layers; electron 1 GeV
 #
 /control/verbose 2
+/control/cout/ignoreThreadsExcept 0
 /run/verbose 2
+/run/numberOfThreads 2
 #
 /testem/phys/addPhysics  emstandard_opt0
 #
@@ -25,7 +27,7 @@
 ###/analysis/h1/set 21 102  0.   102. none	#energy flow
 ###/analysis/h1/set 22 102  0.   102. none	#lateral energy leakage
 #
-/testem/event/printModulo 50
+/run/printProgress 50
 #
 /run/beamOn 100
 #

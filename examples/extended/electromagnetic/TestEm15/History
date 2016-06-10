@@ -1,4 +1,4 @@
-$Id: History 73022 2013-08-15 09:09:48Z gcosmo $
+$Id: History 82361 2014-06-17 15:18:30Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+17-06-14 mma (testem15-V10-00-01)
+- remove PhysicsList::SetCuts()
+		 
+11-06-14 mma (testem15-V10-00-00)
+- rm local commands for PhysicsList::SetCuts()
 
 28-07-13 P.Gumplinger (testem15-V09-06-07)
 - fix clang32 compilation warning

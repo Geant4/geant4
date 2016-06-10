@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.hh 72937 2013-08-14 13:20:38Z gcosmo $
+// $Id: G4EllipticalTube.hh 83572 2014-09-01 15:23:27Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -51,6 +51,7 @@
 #define G4EllipticalTube_hh
 
 #include "G4VSolid.hh"
+#include "G4Polyhedron.hh"
 
 class G4EllipticalTube : public G4VSolid
 {
@@ -147,8 +148,8 @@ class G4EllipticalTube : public G4VSolid
 
     G4double fCubicVolume;
     G4double fSurfaceArea;
+    mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;
-
 };
 
 #include "G4EllipticalTube.icc"

@@ -32,12 +32,17 @@
 //    *                   *
 //    *********************
 //
-// $Id: PurgMag.cc 72967 2013-08-14 14:57:48Z gcosmo $
+// $Id: PurgMag.cc 84477 2014-10-16 08:44:04Z gcosmo $
 //
 // Comments: Main program for the Purgin Magnet example. 
 //
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
@@ -51,55 +56,32 @@
 
 #include "PurgMagDetectorConstruction.hh"
 #include "PurgMagPhysicsList.hh"
-#include "PurgMagPrimaryGeneratorAction.hh"
-#include "PurgMagRunAction.hh"
-#include "PurgMagEventAction.hh"
-#include "PurgMagTrackingAction.hh"
-#include "PurgMagSteppingAction.hh"
-#include "PurgMagSteppingVerbose.hh"
+#include "PurgMagActionInitializer.hh"
 
 int main(int argc,char** argv) {
 
   //choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  
-  //PurgMag Verbose output class
-  G4VSteppingVerbose::SetInstance(new PurgMagSteppingVerbose);
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
   
   // Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  //runManager->SetNumberOfThreads(2); 
+#else
+  G4RunManager* runManager = new G4RunManager;
+#endif
 
   // set mandatory initialization classes
-  PurgMagDetectorConstruction* detector = new PurgMagDetectorConstruction;
-  runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new PurgMagPhysicsList);
-  
-  runManager->SetUserAction(new PurgMagPrimaryGeneratorAction());
+  runManager->SetUserInitialization(new PurgMagDetectorConstruction);
+  runManager->SetUserInitialization(new PurgMagPhysicsList);  
+  runManager->SetUserInitialization(new PurgMagActionInitializer());
     
+
 #ifdef G4VIS_USE
   // visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
-
-// output environment variables:
-#ifdef G4ANALYSIS_USE
-   G4cout << G4endl << G4endl << G4endl 
-	  << " User Environment " << G4endl
-	  << " Using AIDA 3.0 analysis " << G4endl;
-# else
-   G4cout << G4endl << G4endl << G4endl 
-	  << " User Environment " << G4endl
-	  << " G4ANALYSIS_USE environment variable not set, NO ANALYSIS " 
-	  << G4endl;
-#endif   
-
-  // set user action classes
-  PurgMagRunAction* RunAct = new PurgMagRunAction();
-  runManager->SetUserAction(RunAct);
-  runManager->SetUserAction(new PurgMagEventAction());
-  runManager->SetUserAction(new PurgMagTrackingAction()); 
-  runManager->SetUserAction(new PurgMagSteppingAction(detector));
   
   //Initialize G4 kernel
   runManager->Initialize();
@@ -125,14 +107,6 @@ int main(int argc,char** argv) {
       G4String fileName = argv[1];
       UImanager->ApplyCommand(command+fileName);
     }
-
-
-  // For bg jobs with 100000 events.
-  /*
-   int numberOfEvent = 100000;
-   runManager->BeamOn(numberOfEvent);
-  */
-
 
   // job termination
 #ifdef G4VIS_USE

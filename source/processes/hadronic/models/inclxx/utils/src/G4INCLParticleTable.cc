@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -243,12 +244,15 @@ namespace G4INCL {
 
       G4ThreadLocal G4double rpCorrelationCoefficient[UnknownParticle];
 
-      G4ThreadLocal G4double neutronSkinThickness = 0.0;
-      G4ThreadLocal G4double neutronSkinAdditionalDiffuseness = 0.0;
+      G4ThreadLocal G4double neutronSkin = 0.0;
+      G4ThreadLocal G4double neutronHalo = 0.0;
 
 #ifdef INCLXX_IN_GEANT4_MODE
       G4ThreadLocal G4IonTable *theG4IonTable;
 #endif
+
+      /// \brief Default value for constant Fermi momentum
+      G4ThreadLocal G4double constantFermiMomentum = 0.0;
 
       /// \brief Transform a IUPAC char to an char representing an integer digit
       char iupacToInt(char c) {
@@ -298,7 +302,9 @@ namespace G4INCL {
       theRealPiZeroMass = theG4ParticleTable->FindParticle("pi0")->GetPDGMass() / MeV;
 #endif
 
-      effectiveDeltaDecayThreshold = theRealNeutronMass + theRealChargedPiMass + 0.5;
+      minDeltaMass = theRealNeutronMass + theRealChargedPiMass + 0.5;
+      minDeltaMass2 = minDeltaMass*minDeltaMass;
+      minDeltaMassRndm = std::atan((minDeltaMass-effectiveDeltaMass)*2./effectiveDeltaWidth);
 
       // Initialise the separation-energy function
       if(!theConfig || theConfig->getSeparationEnergyType()==INCLSeparationEnergy)
@@ -308,21 +314,28 @@ namespace G4INCL {
       else if(theConfig->getSeparationEnergyType()==RealForLightSeparationEnergy)
         getSeparationEnergy = getSeparationEnergyRealForLight;
       else {
-        INCL_FATAL("Unrecognized separation-energy type in ParticleTable initialization: " << theConfig->getSeparationEnergyType() << std::endl);
-        std::abort();
+        INCL_FATAL("Unrecognized separation-energy type in ParticleTable initialization: " << theConfig->getSeparationEnergyType() << '\n');
         return;
       }
 
       // Initialise the Fermi-momentum function
-      if(!theConfig || theConfig->getFermiMomentumType()==ConstantFermiMomentum)
+      if(!theConfig || theConfig->getFermiMomentumType()==ConstantFermiMomentum) {
         getFermiMomentum = ParticleTable::getFermiMomentumConstant;
-      else if(theConfig->getFermiMomentumType()==ConstantLightFermiMomentum)
+        if(theConfig) {
+          const G4double aFermiMomentum = theConfig->getFermiMomentum();
+          if(aFermiMomentum>0.)
+            constantFermiMomentum = aFermiMomentum;
+          else
+            constantFermiMomentum = PhysicalConstants::Pf;
+        } else {
+          constantFermiMomentum = PhysicalConstants::Pf;
+        }
+      } else if(theConfig->getFermiMomentumType()==ConstantLightFermiMomentum)
         getFermiMomentum = ParticleTable::getFermiMomentumConstantLight;
       else if(theConfig->getFermiMomentumType()==MassDependentFermiMomentum)
         getFermiMomentum = ParticleTable::getFermiMomentumMassDependent;
       else {
-        INCL_FATAL("Unrecognized Fermi-momentum type in ParticleTable initialization: " << theConfig->getFermiMomentumType() << std::endl);
-        std::abort();
+        INCL_FATAL("Unrecognized Fermi-momentum type in ParticleTable initialization: " << theConfig->getFermiMomentumType() << '\n');
         return;
       }
 
@@ -335,8 +348,8 @@ namespace G4INCL {
 
       // Initialise the neutron-skin parameters
       if(theConfig) {
-        neutronSkinThickness = theConfig->getNeutronSkinThickness();
-        neutronSkinAdditionalDiffuseness = theConfig->getNeutronSkinAdditionalDiffuseness();
+        neutronSkin = theConfig->getNeutronSkin();
+        neutronHalo = theConfig->getNeutronHalo();
       }
 
     }
@@ -457,7 +470,7 @@ namespace G4INCL {
       } else if(pt == PiZero) {
         return piZeroMass;
       } else {
-        INCL_ERROR("getMass : Unknown particle type." << std::endl);
+        INCL_ERROR("getMass : Unknown particle type." << '\n');
         return 0.0;
       }
     }
@@ -478,7 +491,7 @@ namespace G4INCL {
           return theRealPiZeroMass;
           break;
         default:
-          INCL_ERROR("Particle::getRealMass : Unknown particle type." << std::endl);
+          INCL_ERROR("Particle::getRealMass : Unknown particle type." << '\n');
           return 0.0;
           break;
       }
@@ -594,7 +607,7 @@ namespace G4INCL {
         if(thisRMS>0.0)
           return thisRMS;
         else {
-          INCL_DEBUG("getNuclearRadius: Radius for nucleus A = " << A << " Z = " << Z << " is not available" << std::endl
+          INCL_DEBUG("getNuclearRadius: Radius for nucleus A = " << A << " Z = " << Z << " is not available" << '\n'
                      << "returning radius for C12");
           return positionRMS[6][12];
         }
@@ -603,10 +616,10 @@ namespace G4INCL {
         const G4double theDiffusenessParameter = getSurfaceDiffuseness(t, A, Z);
         // The formula yields the nuclear RMS radius based on the parameters of
         // the nuclear-density function
-        return 1.581*theDiffusenessParameter*
-          (2.+5.*theRadiusParameter)/(2.+3.*theRadiusParameter);
+        return 1.225*theDiffusenessParameter*
+          std::sqrt((2.+5.*theRadiusParameter)/(2.+3.*theRadiusParameter));
       } else {
-        INCL_ERROR("getNuclearRadius: No radius for nucleus A = " << A << " Z = " << Z << std::endl);
+        INCL_ERROR("getNuclearRadius: No radius for nucleus A = " << A << " Z = " << Z << '\n');
         return 0.0;
       }
     }
@@ -621,7 +634,7 @@ namespace G4INCL {
         // phenomenological radius fit
         G4double r0 = (2.745e-4 * A + 1.063) * std::pow(A, 1.0/3.0);
         if(t==Neutron)
-          r0 += neutronSkinThickness;
+          r0 += neutronSkin;
         return r0;
       } else if(A < 6 && A >= 2) {
         if(Z<clusterTableZSize && Z>=0) {
@@ -629,12 +642,12 @@ namespace G4INCL {
           if(thisRMS>0.0)
             return thisRMS;
           else {
-            INCL_DEBUG("getRadiusParameter: Radius for nucleus A = " << A << " Z = " << Z << " is not available" << std::endl
+            INCL_DEBUG("getRadiusParameter: Radius for nucleus A = " << A << " Z = " << Z << " is not available" << '\n'
                        << "returning radius for C12");
             return positionRMS[6][12];
           }
         } else {
-          INCL_DEBUG("getRadiusParameter: Radius for nucleus A = " << A << " Z = " << Z << " is not available" << std::endl
+          INCL_DEBUG("getRadiusParameter: Radius for nucleus A = " << A << " Z = " << Z << " is not available" << '\n'
                      << "returning radius for C12");
           return positionRMS[6][12];
         }
@@ -642,7 +655,7 @@ namespace G4INCL {
         return mediumRadius[A-1];
         //      return 1.581*mediumDiffuseness[A-1]*(2.+5.*mediumRadius[A-1])/(2.+3.*mediumRadius[A-1]);
       } else {
-        INCL_ERROR("getRadiusParameter: No radius for nucleus A = " << A << " Z = " << Z << std::endl);
+        INCL_ERROR("getRadiusParameter: No radius for nucleus A = " << A << " Z = " << Z << '\n');
         return 0.0;
       }
     }
@@ -656,7 +669,7 @@ namespace G4INCL {
       } else if(A >= 2) {
         return getNuclearRadius(t, A, Z) + 4.5;
       } else {
-        INCL_ERROR("getMaximumNuclearRadius : No maximum radius for nucleus A = " << A << " Z = " << Z << std::endl);
+        INCL_ERROR("getMaximumNuclearRadius : No maximum radius for nucleus A = " << A << " Z = " << Z << '\n');
         return 0.0;
       }
     }
@@ -665,17 +678,17 @@ namespace G4INCL {
       if(A >= 28) {
         G4double a = 1.63e-4 * A + 0.510;
         if(t==Neutron)
-          a += neutronSkinAdditionalDiffuseness;
+          a += neutronHalo;
         return a;
       } else if(A < 28 && A >= 19) {
         return mediumDiffuseness[A-1];
       } else if(A < 19 && A >= 6) {
         return mediumDiffuseness[A-1];
       } else if(A < 6 && A >= 2) {
-        INCL_ERROR("getSurfaceDiffuseness: was called for A = " << A << " Z = " << Z << std::endl);
+        INCL_ERROR("getSurfaceDiffuseness: was called for A = " << A << " Z = " << Z << '\n');
         return 0.0;
       } else {
-        INCL_ERROR("getSurfaceDiffuseness: No diffuseness for nucleus A = " << A << " Z = " << Z << std::endl);
+        INCL_ERROR("getSurfaceDiffuseness: No diffuseness for nucleus A = " << A << " Z = " << Z << '\n');
         return 0.0;
       }
     }
@@ -691,7 +704,7 @@ namespace G4INCL {
       else if(t==Neutron)
         return theINCLNeutronSeparationEnergy;
       else {
-        INCL_ERROR("ParticleTable::getSeparationEnergyINCL : Unknown particle type." << std::endl);
+        INCL_ERROR("ParticleTable::getSeparationEnergyINCL : Unknown particle type." << '\n');
         return 0.0;
       }
     }
@@ -703,7 +716,7 @@ namespace G4INCL {
       else if(t==Neutron)
         return (*getTableParticleMass)(Neutron) + (*getTableMass)(A-1,Z) - (*getTableMass)(A,Z);
       else {
-        INCL_ERROR("ParticleTable::getSeparationEnergyReal : Unknown particle type." << std::endl);
+        INCL_ERROR("ParticleTable::getSeparationEnergyReal : Unknown particle type." << '\n');
         return 0.0;
       }
     }
@@ -726,7 +739,7 @@ namespace G4INCL {
 
     std::string getElementName(const G4int Z) {
       if(Z<1) {
-        INCL_WARN("getElementName called with Z<1" << std::endl);
+        INCL_WARN("getElementName called with Z<1" << '\n');
         return elementTable[0];
       } else if(Z<elementTableSize)
         return elementTable[Z];
@@ -778,7 +791,7 @@ namespace G4INCL {
     }
 
     G4double getFermiMomentumConstant(const G4int /*A*/, const G4int /*Z*/) {
-      return PhysicalConstants::Pf;
+      return constantFermiMomentum;
     }
 
     G4double getFermiMomentumConstantLight(const G4int A, const G4int Z) {
@@ -803,15 +816,56 @@ namespace G4INCL {
       return rpCorrelationCoefficient[t];
     }
 
-    G4double getNeutronSkinThickness() { return neutronSkinThickness; }
+    G4double getNeutronSkin() { return neutronSkin; }
 
-    G4double getNeutronSkinAdditionalDiffuseness() { return neutronSkinAdditionalDiffuseness; }
+    G4double getNeutronHalo() { return neutronHalo; }
 
-    G4ThreadLocal G4double effectiveDeltaDecayThreshold = 0.;
+    G4ThreadLocal G4double minDeltaMass = 0.;
+    G4ThreadLocal G4double minDeltaMass2 = 0.;
+    G4ThreadLocal G4double minDeltaMassRndm = 0.;
     G4ThreadLocal NuclearMassFn getTableMass = NULL;
     G4ThreadLocal ParticleMassFn getTableParticleMass = NULL;
     G4ThreadLocal SeparationEnergyFn getSeparationEnergy = NULL;
     G4ThreadLocal FermiMomentumFn getFermiMomentum = NULL;
+
+    ParticleType getPionType(const G4int isosp) {
+// assert(isosp == -2 || isosp == 0 || isosp == 2);
+        if (isosp == -2) {
+            return PiMinus;
+        }
+        else if (isosp == 0) {
+            return PiZero;
+        }
+        else {
+            return PiPlus;
+        }
+    }
+
+    ParticleType getNucleonType(const G4int isosp) {
+// assert(isosp == -1 || isosp == 1);
+        if (isosp == -1) {
+            return Neutron;
+        }
+        else {
+            return Proton;
+        }
+    }
+
+    ParticleType getDeltaType(const G4int isosp) {
+// assert(isosp == -3 || isosp == -1 || isosp == 1 || isosp == 3);
+        if (isosp == -3) {
+            return DeltaMinus;
+        }
+        else if (isosp == -1) {
+            return DeltaZero;
+        }
+        else if (isosp == 1) {
+            return DeltaPlus;
+        }
+        else {
+            return DeltaPlusPlus;
+        }
+    }
 
   } // namespace ParticleTable
 } // namespace G4INCL

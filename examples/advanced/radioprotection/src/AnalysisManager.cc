@@ -67,8 +67,7 @@ void AnalysisManager::book()
   G4bool fileOpen = manager->OpenFile(fileName);
   if (!fileOpen) {
     G4cout << "\n---> HistoManager::book(): cannot open " 
-           << fileName[1] 
-           << G4endl;
+           << fileName << G4endl;
     return;
   }
 

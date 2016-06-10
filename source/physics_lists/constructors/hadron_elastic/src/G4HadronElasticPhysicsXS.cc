@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysicsXS.cc 71037 2013-06-10 09:20:54Z gcosmo $
+// $Id: G4HadronElasticPhysicsXS.cc 83699 2014-09-10 07:18:25Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -53,6 +53,7 @@
 #include "G4BGGPionElasticXS.hh"
 #include "G4NeutronElasticXS.hh"
 
+#include "G4CrossSectionDataSetRegistry.hh"
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
@@ -92,7 +93,7 @@ void G4HadronElasticPhysicsXS::ConstructProcess()
   mainElasticBuilder->ConstructProcess();
 
   mainElasticBuilder->GetNeutronProcess()->
-    AddDataSet(new G4NeutronElasticXS());
+    AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronElasticXS::Default_Name()));
 
   const G4ParticleDefinition* part = G4Proton::Proton();
   AddXSection(part, new G4BGGNucleonElasticXS(part));

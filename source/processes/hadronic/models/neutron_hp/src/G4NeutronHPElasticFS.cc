@@ -117,6 +117,7 @@
           theProbArray->SetX(i, ii, costh);
           theProbArray->SetY(i, ii, prob);
         }
+        theProbArray->DoneSetXY( i );
       }
     }
     else if ( repFlag==3 )
@@ -173,6 +174,7 @@
              theProbArray->SetX( i , ii , costh );
              theProbArray->SetY( i , ii , prob );
           }
+          theProbArray->DoneSetXY( i );
        }
     }
     else if (repFlag==0)
@@ -190,10 +192,11 @@
   G4HadFinalState * G4NeutronHPElasticFS::ApplyYourself(const G4HadProjectile & theTrack)
   {  
 //    G4cout << "G4NeutronHPElasticFS::ApplyYourself+"<<G4endl;
-    theResult.Clear();
+   if ( theResult.Get() == NULL ) theResult.Put( new G4HadFinalState );
+   theResult.Get()->Clear();
     G4double eKinetic = theTrack.GetKineticEnergy();
     const G4HadProjectile *incidentParticle = &theTrack;
-    G4ReactionProduct theNeutron( const_cast<G4ParticleDefinition *>(incidentParticle->GetDefinition()) );
+    G4ReactionProduct theNeutron( incidentParticle->GetDefinition() );
     theNeutron.SetMomentum( incidentParticle->Get4Momentum().vect() );
     theNeutron.SetKineticEnergy( eKinetic );
 //    G4cout << "G4NeutronHPElasticFS::ApplyYourself++"<<eKinetic<<" "<<G4endl;
@@ -360,48 +363,14 @@ G4cout << "after " <<  ( n4p.e() - n4p.m() ) / eV<< G4endl;
     }
     // now all in Lab
 // nun den recoil generieren...und energy change, momentum change angeben.
-    theResult.SetEnergyChange(theNeutron.GetKineticEnergy());
-    theResult.SetMomentumChange(theNeutron.GetMomentum().unit());
+    theResult.Get()->SetEnergyChange(theNeutron.GetKineticEnergy());
+    theResult.Get()->SetMomentumChange(theNeutron.GetMomentum().unit());
     G4DynamicParticle* theRecoil = new G4DynamicParticle;
-    if(targetMass<4.5)
-    {
-      if(targetMass<1)
-      {
-        // proton
-        theRecoil->SetDefinition(G4Proton::Proton());
-      }
-      else if(targetMass<2 )
-      {
-        // deuteron
-        theRecoil->SetDefinition(G4Deuteron::Deuteron());
-      }
-      else if(targetMass<2.999 )
-      {
-        // 3He 
-        theRecoil->SetDefinition(G4He3::He3());
-      }
-      else if(targetMass<3 )
-      {
-        // Triton
-        theRecoil->SetDefinition(G4Triton::Triton());
-      }
-      else
-      {
-        // alpha
-        theRecoil->SetDefinition(G4Alpha::Alpha());
-      }
-    }
-    else
-    {
-      //theRecoil->SetDefinition(G4ParticleTable::GetParticleTable()
-      //                         ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA), 0, static_cast<G4int>(theBaseZ)));
-      theRecoil->SetDefinition(G4IonTable::GetIonTable()
-                               ->GetIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA), 0 ));
-    }
+    theRecoil->SetDefinition( G4IonTable::GetIonTable()->GetIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA), 0 ) );
     theRecoil->SetMomentum(theTarget.GetMomentum());
-    theResult.AddSecondary(theRecoil);
+    theResult.Get()->AddSecondary(theRecoil);
 //    G4cout << "G4NeutronHPElasticFS::ApplyYourself 10+"<<G4endl;
     // postpone the tracking of the primary neutron
-     theResult.SetStatusChange(suspend);
-    return &theResult;
+     theResult.Get()->SetStatusChange(suspend);
+    return theResult.Get();
   }

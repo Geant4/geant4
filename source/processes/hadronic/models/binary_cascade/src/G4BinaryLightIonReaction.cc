@@ -45,6 +45,7 @@
 
 //#define debug_G4BinaryLightIonReaction
 //#define debug_BLIR_finalstate
+//#define debug_BLIR_result
 
 G4BinaryLightIonReaction::G4BinaryLightIonReaction(G4VPreCompoundModel* ptr)
 : G4HadronicInteraction("Binary Light Ion Cascade"),
@@ -116,6 +117,17 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 		//      G4cout << "Using pre-compound only, E= "<<mom.t()-mom.mag()<<G4endl;
 		//      m_nucl = mom.mag();
       cascaders=FuseNucleiAndPrompound(mom);
+      if( !cascaders )
+      {
+
+         // abort!! happens for too low energy for nuclei to fuse
+
+         theResult.Clear();
+         theResult.SetStatusChange(isAlive);
+         theResult.SetEnergyChange(aTrack.GetKineticEnergy());
+         theResult.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
+         return &theResult;
+      }
 	}
 	else
 	{
@@ -123,7 +135,6 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 
       if(! result )
       {
-          {
             // abort!!
 
             G4cerr << "G4BinaryLightIonReaction no final state for: " << G4endl;
@@ -143,8 +154,6 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
             theResult.SetEnergyChange(aTrack.GetKineticEnergy());
             theResult.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
             return &theResult;
-
-         }
       }
 
 		// Calculate excitation energy,
@@ -152,10 +161,10 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 
 
 		pInitialState = mom;
-		//G4cout << "pInitialState from aTrack : " << pInitialState;
+		   //G4cout << "BLIC: pInitialState from aTrack : " << pInitialState;
 		pInitialState.setT(pInitialState.getT() +
 		     G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(tZ,tA));
-      //G4cout << "target nucleus added : " << pInitialState << G4endl;
+           //G4cout << "BLIC: target nucleus added : " << pInitialState << G4endl;
 
 		delete target3dNucleus;target3dNucleus=0;
 		delete projectile3dNucleus;projectile3dNucleus=0;
@@ -167,9 +176,10 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
       G4LorentzVector pspectators=SortResult(result,spectators,cascaders);
 
       //      pFinalState=std::accumulate(cascaders->begin(),cascaders->end(),pFinalState,ReactionProduct4Mom);
+
       std::vector<G4ReactionProduct *>::iterator iter;
 
-      //G4cout << "pInitialState, pFinalState / pspectators"<< pInitialState << " / " << pFinalState << " / " << pspectators << G4endl;
+        // G4cout << "pInitialState, pFinalState / pspectators"<< pInitialState << " / " << pFinalState << " / " << pspectators << G4endl;
 		//      if ( spectA-spectatorA !=0 || spectZ-spectatorZ !=0)
 		//      {
 		//          G4cout << "spect Nucl != spectators: nucl a,z; spect a,z" <<
@@ -179,11 +189,11 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 		result=0;
 		G4LorentzVector momentum(pInitialState-pFinalState);
 		G4int loopcount(0);
-		//G4cout << "momentum, pspectators : " << momentum << " / " << pspectators << G4endl;
+		   //G4cout << "BLIC: momentum, pspectators : " << momentum << " / " << pspectators << G4endl;
 		while (std::abs(momentum.e()-pspectators.e()) > 10*MeV)
 		{
 			G4LorentzVector pCorrect(pInitialState-pspectators);
-		   //G4cout << "BIC nonconservation? (pInitialState-pFinalState) / spectators :" << momentum << " / " << pspectators << "pCorrect "<< pCorrect<< G4endl;
+		         //G4cout << "BLIC:: BIC nonconservation? (pInitialState-pFinalState) / spectators :" << momentum << " / " << pspectators << "pCorrect "<< pCorrect<< G4endl;
 			// Correct outgoing casacde particles.... to have momentum of (initial state - spectators)
 			G4bool EnergyIsCorrect=EnergyAndMomentumCorrector(cascaders, pCorrect);
 			if ( ! EnergyIsCorrect && debug_G4BinaryLightIonReactionResults)
@@ -191,10 +201,9 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 				G4cout << "Warning - G4BinaryLightIonReaction E/P correction for cascaders failed" << G4endl;
 			}
 			pFinalState=G4LorentzVector(0,0,0,0);
-			unsigned int i;
-			for(i=0; i<cascaders->size(); i++)
+		  	for(iter=cascaders->begin(); iter!=cascaders->end(); iter++)
 			{
-				pFinalState += G4LorentzVector( (*cascaders)[i]->GetMomentum(), (*cascaders)[i]->GetTotalEnergy() );
+				pFinalState += G4LorentzVector( (*iter)->GetMomentum(), (*iter)->GetTotalEnergy() );
 			}
 			momentum=pInitialState-pFinalState;
 			if (++loopcount > 10 )
@@ -216,12 +225,16 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 		   if ( momentum.vect().mag() - momentum.e()> 10*keV )
 		   {
 
-		      G4ReactionProductVector::iterator ispectator;
-		      for (ispectator=spectators->begin();ispectator!=spectators->end();ispectator++)
+		      for (iter=spectators->begin();iter!=spectators->end();iter++)
 		      {
-		         delete *ispectator;
+		    	 delete *iter;
 		      }
 		      delete spectators;
+		  	  for(iter=cascaders->begin(); iter!=cascaders->end(); iter++)
+		  	  {
+		  		 delete *iter;
+		  	  }
+		  	  delete cascaders;
 
 		      G4cout << "G4BinaryLightIonReaction.cc: mom check: " <<  momentum
 		            << " 3.mag "<< momentum.vect().mag() << G4endl
@@ -238,7 +251,13 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
             		      << "," << targetNucleus.GetZ_asInt() << ")" << G4endl;
 		      G4cout << " if frequent, please submit above information as bug report"
 		            << G4endl << G4endl;
+#ifdef debug_G4BinaryLightIonReaction
+		      G4ExceptionDescription ed;
+		      ed << "G4BinaryLightIonreaction: Terminate for above error"  << G4endl;
+		      G4Exception("G4BinaryLightIonreaction::ApplyYourSelf()", "BLIC001", FatalException,
+		  		ed);
 
+#endif
 		      theResult.Clear();
 		      theResult.SetStatusChange(isAlive);
 		      theResult.SetEnergyChange(aTrack.GetKineticEnergy());
@@ -246,7 +265,7 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 		      return &theResult;
 		   }
 
-
+		   	   	   	   // DeExciteSpectatorNucleus() also handles also case of A=1, Z=0,1
 		   DeExciteSpectatorNucleus(spectators, cascaders, theStatisticalExEnergy, momentum);
 		} else {
 		   delete spectators;
@@ -262,17 +281,25 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 	// theResult.Clear();
 	theResult.Clear();
 	theResult.SetStatusChange(stopAndKill);
-	G4double Etot(0);
-	size_t i=0;
-	for(i=0; i<cascaders->size(); i++)
+	G4LorentzVector ptot(0);
+    G4ReactionProductVector::iterator iter;
+    #ifdef debug_BLIR_result
+       G4LorentzVector p_raw;
+    #endif
+    //G4int i=0;
+
+	for(iter=cascaders->begin(); iter!=cascaders->end(); iter++)
 	{
-		if((*cascaders)[i]->GetNewlyAdded())
+		if((*iter)->GetNewlyAdded())
 		{
 			G4DynamicParticle * aNew =
-					new G4DynamicParticle((*cascaders)[i]->GetDefinition(),
-							(*cascaders)[i]->GetTotalEnergy(),
-							(*cascaders)[i]->GetMomentum() );
+					new G4DynamicParticle((*iter)->GetDefinition(),
+							(*iter)->GetTotalEnergy(),
+							(*iter)->GetMomentum() );
 			G4LorentzVector tmp = aNew->Get4Momentum();
+             #ifdef debug_BLIR_result
+			     p_raw+= tmp;
+             #endif
 			if(swapped)
 			{
 				tmp*=toBreit.inverse();
@@ -280,23 +307,28 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 			}
 			tmp *= toLab;
 			aNew->Set4Momentum(tmp);
-			//G4cout << "result[" << i << "], 4vect: " << tmp << G4endl;
 			theResult.AddSecondary(aNew);
-			Etot += tmp.e();
-			//        G4cout << "LIBIC: Secondary " << aNew->GetDefinition()->GetParticleName()
-			//               <<" "<<  aNew->GetMomentum()
-			// 	      <<" "<<  aNew->GetTotalEnergy()
-			// 	      << G4endl;
+			ptot += tmp;
+			        //G4cout << "BLIC: Secondary " << aNew->GetDefinition()->GetParticleName()
+			        //       <<" "<<  aNew->GetMomentum()<<" "<<  aNew->GetTotalEnergy() << G4endl;
 		}
-		delete (*cascaders)[i];
+		delete *iter;
 	}
 	delete cascaders;
 
 #ifdef debug_BLIR_result
-	G4cout << "Result analysis, secondaries" << theResult.GetNumberOfSecondaries() << G4endl;
-	G4cout << " Energy conservation initial/primary/nucleus/final/delta(init-final) "
-	      << aTrack.GetTotalEnergy() + m_nucl << aTrack.GetTotalEnergy() << m_nucl <<Etot
-	      << aTrack.GetTotalEnergy() + m_nucl - Etot;
+	//G4cout << "Result analysis, secondaries " << theResult.GetNumberOfSecondaries() << G4endl;
+	//G4cout << "p_tot_raw " << p_raw << " sum p final " << ptot << G4endl;
+	G4double m_nucl=	G4ParticleTable::GetParticleTable()->GetIonTable()->
+			    GetIonMass(targetNucleus.GetZ_asInt(),targetNucleus.GetA_asInt());
+	// delete? tZ=targetNucleus.GetZ_asInt();
+
+	//G4cout << "BLIC Energy conservation initial/primary/nucleus/final/delta(init-final) "
+	 //     << aTrack.GetTotalEnergy()   + m_nucl <<" "<< aTrack.GetTotalEnergy() <<" "<< m_nucl <<" "<<ptot.e()
+	 //     <<" "<< aTrack.GetTotalEnergy() + m_nucl - ptot.e() << G4endl;
+	G4cout << "BLIC momentum conservation " << aTrack.Get4Momentum()+ G4LorentzVector(m_nucl)
+			<< " ptot " << ptot << " delta " << aTrack.Get4Momentum()+ G4LorentzVector(m_nucl) - ptot
+			<< "        3mom.mag() " << (aTrack.Get4Momentum()+ G4LorentzVector(m_nucl) - ptot).vect().mag() << G4endl;
 #endif
 
 	if(getenv("BLICDEBUG") ) G4cerr << " ######### Binary Light Ion Reaction number ends ######### " << G4endl;
@@ -418,20 +450,31 @@ G4bool G4BinaryLightIonReaction::SetLighterAsProjectile(G4LorentzVector & mom,co
 }
 G4ReactionProductVector * G4BinaryLightIonReaction::FuseNucleiAndPrompound(const G4LorentzVector & mom)
 {
+   // Check if kinematically nuclei can fuse.
+   G4double mFused=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(pZ+tZ,pA+tA);
+   G4double mTarget=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(tZ,tA);
+   G4LorentzVector pCompound(mom.e()+mTarget,mom.vect());
+   G4double m2Compound=pCompound.m2();
+   if (m2Compound < sqr(mFused) ) {
+	   //G4cout << "G4BLIC: projectile p, mTarget, mFused, mCompound, delta: " <<mom <<  " " << mTarget <<  " " << mFused
+	   //	   <<  " " << sqrt(m2Compound)<<  " " << sqrt(m2Compound) - mFused << G4endl;
+	   return 0;
+   }
+
    G4Fragment aPreFrag;
-   aPreFrag.SetA(pA+tA);
-   aPreFrag.SetZ(pZ+tZ);
+   aPreFrag.SetZandA_asInt(pZ+tZ, pA+tA);
    aPreFrag.SetNumberOfParticles(pA);
    aPreFrag.SetNumberOfCharged(pZ);
    aPreFrag.SetNumberOfHoles(0);
-   G4ThreeVector plop(0.,0., mom.vect().mag());
-   G4double m_nucl=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(tZ,tA);
-   G4LorentzVector aL(mom.t()+m_nucl, plop);
+   //GF FIXME: whyusing plop in z direction? this will not conserve momentum?
+   //G4ThreeVector plop(0.,0., mom.vect().mag());
+   //G4LorentzVector aL(mom.t()+mTarget, plop);
+   G4LorentzVector aL(mom.t()+mTarget,mom.vect());
    aPreFrag.SetMomentum(aL);
 
 
-   //      G4cout << "Fragment INFO "<< pA+tA <<" "<<pZ+tZ<<" "
-   //             << aL <<" "<<preFragDef->GetParticleName()<<G4endl;
+         //G4cout << "Fragment INFO "<< pA+tA <<" "<<pZ+tZ<<" "
+         //       << aL <<" "<<G4endl << aPreFrag << G4endl;
    G4ReactionProductVector * cascaders = theProjectileFragmentation->DeExcite(aPreFrag);
    //G4double tSum = 0;
    for(size_t count = 0; count<cascaders->size(); count++)
@@ -471,6 +514,9 @@ G4ReactionProductVector * G4BinaryLightIonReaction::Interact(G4LorentzVector & m
          projectile3dNucleus->StartLoop();
          G4Nucleon * aNuc;
          G4LorentzVector tmpV(0,0,0,0);
+         #ifdef debug_BLIR_finalstate
+             G4LorentzVector pinitial;
+         #endif
          G4LorentzVector nucleonMom(1./pA*mom);
          nucleonMom.setZ(nucleonMom.vect().mag());
          nucleonMom.setX(0);
@@ -490,9 +536,29 @@ G4ReactionProductVector * G4BinaryLightIonReaction::Interact(G4LorentzVector & m
             G4double Efermi= std::sqrt( sqr(mass) + sqr(pfermi)) - mass;
             it1->SetProjectilePotential(-Efermi);
             initalState->push_back(it1);
+            #ifdef debug_BLIR_finalstate
+               pinitial += it1->Get4Momentum();
+            #endif
          }
 
          result=theModel->Propagate(initalState, target3dNucleus);
+         #ifdef debug_BLIR_finalstate
+         if( result && result->size()>0)
+         {
+        	 G4LorentzVector presult;
+        	 G4ReactionProductVector::iterator iter;
+        	 G4ReactionProduct xp;
+        	 for (iter=result->begin(); iter !=result->end(); ++iter)
+        	 {
+        		presult += G4LorentzVector((*iter)->GetMomentum(),(*iter)->GetTotalEnergy());
+        	 }
+
+        	      G4cout << "BLIC check result :  initial " << pinitial << " mass tgt " << target3dNucleus->GetMass()
+        			 << " final " << presult
+        			 << " IF - FF " << pinitial +G4LorentzVector(target3dNucleus->GetMass()) - presult << G4endl;
+
+         }
+         #endif
          if( result && result->size()==0)
          {
             delete result;
@@ -512,7 +578,6 @@ G4ReactionProductVector * G4BinaryLightIonReaction::Interact(G4LorentzVector & m
 }
 G4double G4BinaryLightIonReaction::GetProjectileExcitation()
 {
-   spectatorA=spectatorZ=0;
 
       G4Nucleon * aNuc;
       //       targetNucleus->StartLoop();
@@ -525,14 +590,8 @@ G4double G4BinaryLightIonReaction::GetProjectileExcitation()
       projectile3dNucleus->StartLoop();
       while( (aNuc=projectile3dNucleus->GetNextNucleon()) )
       {
-         //        G4cout << " Nucleon : " << aNuc->GetDefinition()->GetParticleName() <<" "<< aNuc->AreYouHit() <<" "<<aNuc->GetMomentum()<<G4endl;
-         if(!aNuc->AreYouHit())
-         {
-            spectatorA++;
-            spectatorZ+=G4lrint(aNuc->GetDefinition()->GetPDGCharge()/eplus);
-         }
-         else
-         {
+                //G4cout << " Nucleon : " << aNuc->GetDefinition()->GetParticleName() <<" "<< aNuc->AreYouHit() <<" "<<aNuc->GetMomentum()<<G4endl;
+         if(aNuc->AreYouHit()) {
             G4ThreeVector aPosition(aNuc->GetPosition());
             G4double localDensity = projectile3dNucleus->GetNuclearDensity()->GetDensity(aPosition);
             G4double localPfermi = theFermi.GetFermiMomentum(localDensity);
@@ -548,7 +607,7 @@ G4double G4BinaryLightIonReaction::GetProjectileExcitation()
 G4LorentzVector G4BinaryLightIonReaction::SortResult(G4ReactionProductVector * result, G4ReactionProductVector * spectators,G4ReactionProductVector * cascaders)
 {
    unsigned int i(0);
-   //      G4int spectA(0),spectZ(0);
+   spectatorA=spectatorZ=0;
    G4LorentzVector pspectators(0,0,0,0);
    pFinalState=G4LorentzVector(0,0,0,0);
    for(i=0; i<result->size(); i++)
@@ -562,8 +621,8 @@ G4LorentzVector G4BinaryLightIonReaction::SortResult(G4ReactionProductVector * r
          //          G4cout <<" spectator ... ";
          pspectators += G4LorentzVector( (*result)[i]->GetMomentum(), (*result)[i]->GetTotalEnergy() );
          spectators->push_back((*result)[i]);
-         //   spectA++;
-         //   spectZ+= G4lrint((*result)[i]->GetDefinition()->GetPDGCharge()/eplus);
+         spectatorA++;
+         spectatorZ+= G4lrint((*result)[i]->GetDefinition()->GetPDGCharge()/eplus);
       }
 
       //       G4cout << (*result)[i]<< " "
@@ -571,7 +630,9 @@ G4LorentzVector G4BinaryLightIonReaction::SortResult(G4ReactionProductVector * r
       //        << (*result)[i]->GetMomentum()<< " "
       //        << (*result)[i]->GetTotalEnergy() << G4endl;
    }
-   //G4cout << "pFinalState / pspectators" << pFinalState << " / " << pspectators << G4endl;
+      //G4cout << "pFinalState / pspectators, (A,Z), p " << pFinalState << " / " << spectators->size()
+      //		<< " (" << spectatorA << ", "<< spectatorZ  << "), 4-mom: " << pspectators << G4endl;
+
    return pspectators;
 }
 
@@ -592,8 +653,7 @@ void G4BinaryLightIonReaction::DeExciteSpectatorNucleus(G4ReactionProductVector 
    {
       //  Make the fragment
       G4Fragment aProRes;
-      aProRes.SetA(spectatorA);
-      aProRes.SetZ(spectatorZ);
+      aProRes.SetZandA_asInt(spectatorZ, spectatorA);
       aProRes.SetNumberOfParticles(0);
       aProRes.SetNumberOfCharged(0);
       aProRes.SetNumberOfHoles(pA-spectatorA);
@@ -618,17 +678,18 @@ void G4BinaryLightIonReaction::DeExciteSpectatorNucleus(G4ReactionProductVector 
    }
    else if(spectatorA!=0)
    {
-      G4ReactionProductVector::iterator ispectator;
-      for (ispectator=spectators->begin();ispectator!=spectators->end();ispectator++)
+     G4ReactionProductVector::iterator ispectator;
+     for (ispectator=spectators->begin();ispectator!=spectators->end();ispectator++)
       {
          (*ispectator)->SetNewlyAdded(true);
          cascaders->push_back(*ispectator);
-         pFragments+=G4LorentzVector((*ispectator)->GetMomentum(),(*ispectator)->GetTotalEnergy());
-         //         G4cout << "from spectator "
-         //          << (*ispectator)->GetDefinition()->GetParticleName() << " "
-         //          << (*ispectator)->GetMomentum()<< " "
-         //          << (*ispectator)->GetTotalEnergy() << G4endl;
+         pFinalState+=G4LorentzVector((*ispectator)->GetMomentum(),(*ispectator)->GetTotalEnergy());
+                  //G4cout << "BLIC: spectatorA>0, Z=0 from spectator "
+                  // << (*ispectator)->GetDefinition()->GetParticleName() << " "
+                  // << (*ispectator)->GetMomentum()<< " "
+                  // << (*ispectator)->GetTotalEnergy() << G4endl;
       }
+
    }
    // / if (spectators)
    delete spectators;
@@ -655,7 +716,8 @@ void G4BinaryLightIonReaction::DeExciteSpectatorNucleus(G4ReactionProductVector 
    //  correct p/E of Cascade secondaries
    G4LorentzVector pCas=pInitialState - pFragments;
 
-   //G4cout <<" Going to correct from " << pFinalState << " to " << pCas << G4endl;
+       //G4cout <<"BLIC: Going to correct from " << pFinalState << " to " << pCas << G4endl;
+   //  the creation of excited fragment did violate E/p, so correct cascaders to get overall conservation.
    G4bool EnergyIsCorrect=EnergyAndMomentumCorrector(cascaders, pCas);
    if ( ! EnergyIsCorrect && debug_G4BinaryLightIonReactionResults)
    {
@@ -671,10 +733,10 @@ void G4BinaryLightIonReaction::DeExciteSpectatorNucleus(G4ReactionProductVector 
       }
       delete proFrag;
    }
-   //G4cout << "EnergyIsCorrect? " << EnergyIsCorrect << G4endl;
+      //G4cout << "EnergyIsCorrect? " << EnergyIsCorrect << G4endl;
    if ( ! EnergyIsCorrect )
    {
-      //G4cout <<" ! EnergyIsCorrect " << pFinalState << " to " << pInitialState << G4endl;
+         // G4cout <<" ! EnergyIsCorrect " << pFinalState << " to " << pInitialState << G4endl;
       if (! EnergyAndMomentumCorrector(cascaders,pInitialState))
       {
          if(debug_G4BinaryLightIonReactionResults)

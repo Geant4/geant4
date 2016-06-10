@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIRelXSection.cc 74581 2013-10-15 12:03:25Z gcosmo $
+// $Id: G4WentzelVIRelXSection.cc 85306 2014-10-27 14:17:47Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -53,7 +53,7 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Proton.hh"
-#include "G4LossTableManager.hh"
+#include "G4EmParameters.hh"
 #include "G4Log.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,10 +63,11 @@ G4double G4WentzelVIRelXSection::FormFactor[]    = {0.0};
 
 using namespace std;
 
-G4WentzelVIRelXSection::G4WentzelVIRelXSection() :
+G4WentzelVIRelXSection::G4WentzelVIRelXSection(G4bool combined) :
   numlimit(0.1),
   nwarnings(0),
   nwarnlimit(50),
+  isCombined(combined),
   alpha2(fine_structure_const*fine_structure_const)
 {
   fNistManager = G4NistManager::Instance();
@@ -98,6 +99,7 @@ G4WentzelVIRelXSection::G4WentzelVIRelXSection() :
   currentMaterial = 0;
   elecXSRatio = factB = factD = formfactA = screenZ = 0.0;
   cosTetMaxElec = cosTetMaxNuc = invbeta2 = kinFactor = gam0pcmp = pcmp2 = 1.0;
+  cosThetaMax = 1.0;
 
   factB1= 0.5*CLHEP::pi*fine_structure_const;
 
@@ -113,15 +115,18 @@ G4WentzelVIRelXSection::~G4WentzelVIRelXSection()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4WentzelVIRelXSection::Initialise(const G4ParticleDefinition* p, 
-					  G4double CosThetaLim)
+					G4double cosThetaLim)
 {
   SetupParticle(p);
   tkin = mom2 = momCM2 = 0.0;
   ecut = etag = DBL_MAX;
   targetZ = 0;
-  cosThetaMax = CosThetaLim;
-  G4double a = 
-    G4LossTableManager::Instance()->FactorForAngleLimit()*CLHEP::hbarc/CLHEP::fermi;
+
+  // cosThetaMax is below 1.0 only when MSC is combined with SS
+  if(isCombined) { cosThetaMax = cosThetaLim; }
+
+  G4double a = G4EmParameters::Instance()->FactorForAngleLimit()
+    *CLHEP::hbarc/CLHEP::fermi;
   factorA2 = 0.5*a*a;
   currentMaterial = 0;
 }

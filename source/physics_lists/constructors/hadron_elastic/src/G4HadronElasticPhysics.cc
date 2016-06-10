@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc 73281 2013-08-23 08:21:37Z gcosmo $
+// $Id: G4HadronElasticPhysics.cc 83616 2014-09-04 13:30:16Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -65,14 +65,12 @@
 
 #include "G4BGGNucleonElasticXS.hh"
 #include "G4BGGPionElasticXS.hh"
-#include "G4NeutronElasticXS.hh"
 
 #include "G4CrossSectionDataSetRegistry.hh"
 
 #include "G4ChipsProtonElasticXS.hh"
 #include "G4ChipsNeutronElasticXS.hh"
 
-#include "G4ComponentAntiNuclNuclearXS.hh"  
 #include "G4CrossSectionElastic.hh"
 
 // factory
@@ -240,6 +238,17 @@ void G4HadronElasticPhysics::ConstructProcess()
       pmanager->AddDiscreteProcess(hel);
     }
   }
+}
+
+
+G4HadronElastic* G4HadronElasticPhysics::GetNeutronModel()
+{
+  return neutronModel;
+}
+
+G4HadronicProcess* G4HadronElasticPhysics::GetNeutronProcess()
+{
+  return neutronProcess;
 }
 
 

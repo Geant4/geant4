@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hhIonisation.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4hhIonisation.cc 85013 2014-10-23 09:45:07Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -57,7 +57,7 @@
 #include "G4IonFluctuations.hh"
 #include "G4UnitsTable.hh"
 #include "G4Electron.hh"
-#include "G4LossTableManager.hh"
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -70,6 +70,7 @@ G4hhIonisation::G4hhIonisation(const G4String& name)
   SetStepFunction(0.1, 0.1*mm);
   SetVerboseLevel(1);
   SetProcessSubType(fIonisation);
+  SetSecondaryParticle(G4Electron::Electron());
   mass = 0.0;
   ratio = 0.0;
   flucModel = 0;
@@ -102,8 +103,9 @@ G4double G4hhIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4hhIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part,
-                                                 const G4ParticleDefinition* bpart)
+void G4hhIonisation::InitialiseEnergyLossProcess(
+         const G4ParticleDefinition* part,
+         const G4ParticleDefinition* bpart)
 {
   if(isInitialised) { return; }
 
@@ -114,19 +116,18 @@ void G4hhIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
 	   << GetProcessName() << G4endl; 
   }
   SetBaseParticle(0);
-  SetSecondaryParticle(G4Electron::Electron());
   mass  = theParticle->GetPDGMass();
   ratio = electron_mass_c2/mass;
   G4double eth = 2*MeV*mass/proton_mass_c2;
   flucModel = new G4IonFluctuations();
 
-  G4double emin = std::min(MinKinEnergy(), 0.1*eth);
-  G4double emax = std::max(MaxKinEnergy(), 100*eth);
+  G4EmParameters* param = G4EmParameters::Instance();
+  G4double emin = std::min(param->MinKinEnergy(), 0.1*eth);
+  G4double emax = std::max(param->MaxKinEnergy(), 100*eth);
 
   SetMinKinEnergy(emin);
   SetMaxKinEnergy(emax);
-  G4int bin = G4lrint(G4LossTableManager::Instance()->GetNumberOfBinsPerDecade()
-		      *std::log10(emax/emin));
+  G4int bin = G4lrint(param->NumberOfBinsPerDecade()*std::log10(emax/emin));
   SetDEDXBinning(bin);
 
   G4VEmModel* em = 0; 

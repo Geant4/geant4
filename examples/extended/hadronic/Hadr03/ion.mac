@@ -7,16 +7,17 @@
 /run/verbose 2
 #
 /testhadr/det/setIsotopeMat Be9 4 9 1.85 g/cm3
-###/testhadr/det/setIsotopeMat H3 1 3 0.09 g/cm3
-/testhadr/det/setSize 1 km 
+/testhadr/det/setSize 10 m 
 #
 /run/initialize
 #
 /process/list
-/process/inactivate hadElastic
+###/process/inactivate ionInelastic
 #
-/gun/particle alpha
-###/gun/particle deuteron
-/gun/energy 10 MeV
+/gun/particle ion
+/gun/ion 3 7
+/gun/energy 140 MeV
+#
+/run/printProgress 10000
 #
 /run/beamOn 100000

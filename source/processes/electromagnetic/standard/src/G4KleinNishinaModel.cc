@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaModel.cc 74309 2013-10-03 06:42:30Z gcosmo $
+// $Id: G4KleinNishinaModel.cc 82754 2014-07-08 14:06:13Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -65,16 +65,21 @@
 using namespace std;
 
 static const G4double
-    d1= 2.7965e-1*barn, d2=-1.8300e-1*barn, d3= 6.7527   *barn, d4=-1.9798e+1*barn,
-    e1= 1.9756e-5*barn, e2=-1.0205e-2*barn, e3=-7.3913e-2*barn, e4= 2.7079e-2*barn,
-    f1=-3.9178e-7*barn, f2= 6.8241e-5*barn, f3= 6.0480e-5*barn, f4= 3.0274e-4*barn;     
+  d1= 2.7965e-1*CLHEP::barn, d2=-1.8300e-1*CLHEP::barn, 
+  d3= 6.7527   *CLHEP::barn, d4=-1.9798e+1*CLHEP::barn,
+  e1= 1.9756e-5*CLHEP::barn, e2=-1.0205e-2*CLHEP::barn, 
+  e3=-7.3913e-2*CLHEP::barn, e4= 2.7079e-2*CLHEP::barn,
+  f1=-3.9178e-7*CLHEP::barn, f2= 6.8241e-5*CLHEP::barn, 
+  f3= 6.0480e-5*CLHEP::barn, f4= 3.0274e-4*CLHEP::barn;
+static const G4double dT0 = keV;
+static const G4int nlooplim = 1000;
 
 G4KleinNishinaModel::G4KleinNishinaModel(const G4String& nam)
   : G4VEmModel(nam)
 {
   theGamma = G4Gamma::Gamma();
   theElectron = G4Electron::Electron();
-  lowestGammaEnergy = 1.0*eV;
+  lowestSecondaryEnergy = 10*eV;
   limitFactor       = 4;
   fProbabilities.resize(9,0.0);
   SetDeexcitationFlag(true);
@@ -109,12 +114,12 @@ void G4KleinNishinaModel::InitialiseLocal(const G4ParticleDefinition*,
 
 G4double 
 G4KleinNishinaModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-						G4double GammaEnergy,
+						G4double gammaEnergy,
 						G4double Z, G4double,
 						G4double, G4double)
 {
   G4double xSection = 0.0 ;
-  if ( Z < 0.9999 || GammaEnergy < 0.1*keV) { return xSection; }
+  if (gammaEnergy <= LowEnergyLimit()) { return xSection; }
 
   static const G4double a = 20.0 , b = 230.0 , c = 440.0;
   
@@ -124,20 +129,19 @@ G4KleinNishinaModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
   G4double T0  = 15.0*keV; 
   if (Z < 1.5) { T0 = 40.0*keV; } 
 
-  G4double X   = max(GammaEnergy, T0) / electron_mass_c2;
+  G4double X   = max(gammaEnergy, T0) / electron_mass_c2;
   xSection = p1Z*G4Log(1.+2.*X)/X
                + (p2Z + p3Z*X + p4Z*X*X)/(1. + a*X + b*X*X + c*X*X*X);
 		
   //  modification for low energy. (special case for Hydrogen)
-  if (GammaEnergy < T0) {
-    G4double dT0 = keV;
+  if (gammaEnergy < T0) {
     X = (T0+dT0) / electron_mass_c2 ;
     G4double sigma = p1Z*G4Log(1.+2*X)/X
                     + (p2Z + p3Z*X + p4Z*X*X)/(1. + a*X + b*X*X + c*X*X*X);
     G4double   c1 = -T0*(sigma-xSection)/(xSection*dT0);             
     G4double   c2 = 0.150; 
     if (Z > 1.5) { c2 = 0.375-0.0556*G4Log(Z); }
-    G4double    y = G4Log(GammaEnergy/T0);
+    G4double    y = G4Log(gammaEnergy/T0);
     xSection *= G4Exp(-y*(c1+c2*y));          
   }
 
@@ -158,6 +162,10 @@ void G4KleinNishinaModel::SampleSecondaries(
 {
   // primary gamma
   G4double energy = aDynamicGamma->GetKineticEnergy();
+
+  // do nothing below the threshold
+  if(energy <= LowEnergyLimit()) { return; }
+
   G4ThreeVector direction = aDynamicGamma->GetMomentumDirection();
 
   // select atom
@@ -174,11 +182,9 @@ void G4KleinNishinaModel::SampleSecondaries(
     //totprob += elm->GetNbOfShellElectrons(i)/(bindingEnergy*bindingEnergy);
     fProbabilities[i] = totprob; 
   }
-  //if(totprob == 0.0) { return; }
 
   // Loop on sampling
-  //  const G4int nlooplim = 100;
-  //G4int nloop = 0;
+  G4int nloop = 0;
 
   G4double bindingEnergy, ePotEnergy, eKinEnergy;
   G4double gamEnergy0, gamEnergy1;
@@ -186,15 +192,13 @@ void G4KleinNishinaModel::SampleSecondaries(
   //static const G4double eminus2 =  1.0 - G4Exp(-2.0);
 
   do {
-    //++nloop;
-    G4double xprob = totprob*G4UniformRand();
+    ++nloop;
+    G4double xprob = totprob*rndmEngineMod->flat();
 
     // select shell
     for(i=0; i<nShells; ++i) { if(xprob <= fProbabilities[i]) { break; } }
    
     bindingEnergy = elm->GetAtomicShell(i);
-    //    ePotEnergy    = bindingEnergy;
-    //    gamEnergy0 = energy;
     lv1.set(0.0,0.0,energy,energy);
 
     //G4cout << "nShells= " << nShells << " i= " << i 
@@ -203,14 +207,14 @@ void G4KleinNishinaModel::SampleSecondaries(
     //   << G4endl;
 
     // for rest frame of the electron
-    G4double x = -G4Log(G4UniformRand());
+    G4double x = -G4Log(rndmEngineMod->flat());
     eKinEnergy = bindingEnergy*x;
     ePotEnergy = bindingEnergy*(1.0 + x);
 
     // for rest frame of the electron
     G4double eTotMomentum = sqrt(eKinEnergy*(eKinEnergy + 2*electron_mass_c2));
-    G4double phi = G4UniformRand()*twopi;
-    G4double costet = 2*G4UniformRand() - 1;
+    G4double phi = rndmEngineMod->flat()*twopi;
+    G4double costet = 2*rndmEngineMod->flat() - 1;
     G4double sintet = sqrt((1 - costet)*(1 + costet));
     lv2.set(eTotMomentum*sintet*cos(phi),eTotMomentum*sintet*sin(phi),
 	    eTotMomentum*costet,eKinEnergy + electron_mass_c2);
@@ -237,12 +241,16 @@ void G4KleinNishinaModel::SampleSecondaries(
     G4double alpha2     = 0.5*(1 - epsilon0sq);
 
     do {
-      if ( alpha1/(alpha1+alpha2) > G4UniformRand() ) {
-	epsilon   = G4Exp(-alpha1*G4UniformRand());   // epsilon0**r
+      ++nloop;
+      // false interaction if too many iterations
+      if(nloop > nlooplim) { return; }
+
+      if ( alpha1/(alpha1+alpha2) > rndmEngineMod->flat() ) {
+	epsilon   = G4Exp(-alpha1*rndmEngineMod->flat());   // epsilon0**r
 	epsilonsq = epsilon*epsilon; 
 
       } else {
-	epsilonsq = epsilon0sq + (1.- epsilon0sq)*G4UniformRand();
+	epsilonsq = epsilon0sq + (1.- epsilon0sq)*rndmEngineMod->flat();
 	epsilon   = sqrt(epsilonsq);
       }
 
@@ -250,7 +258,7 @@ void G4KleinNishinaModel::SampleSecondaries(
       sint2   = onecost*(2.-onecost);
       greject = 1. - epsilon*sint2/(1.+ epsilonsq);
 
-    } while (greject < G4UniformRand());
+    } while (greject < rndmEngineMod->flat());
     gamEnergy1 = epsilon*gamEnergy0;
  
     // before scattering total 4-momentum in e- system
@@ -263,7 +271,7 @@ void G4KleinNishinaModel::SampleSecondaries(
     if(sint2 < 0.0) { sint2 = 0.0; }
     costet = 1. - onecost; 
     sintet = sqrt(sint2);
-    phi  = twopi * G4UniformRand();
+    phi  = twopi * rndmEngineMod->flat();
 
     // e- recoil
     //
@@ -286,7 +294,7 @@ void G4KleinNishinaModel::SampleSecondaries(
    
   lv1.boost(bst);
   gamEnergy1 = lv1.e();
-  if(gamEnergy1 > lowestGammaEnergy) {
+  if(gamEnergy1 > lowestSecondaryEnergy) {
     G4ThreeVector gamDirection1 = lv1.vect().unit();
     gamDirection1.rotateUz(direction);
     fParticleChange->ProposeMomentumDirection(gamDirection1);
@@ -300,7 +308,7 @@ void G4KleinNishinaModel::SampleSecondaries(
   // kinematic of the scattered electron
   //
 
-  if(eKinEnergy > lowestGammaEnergy) {
+  if(eKinEnergy > lowestSecondaryEnergy) {
     G4ThreeVector eDirection = lv2.vect().unit();
     eDirection.rotateUz(direction);
     G4DynamicParticle* dp = 
@@ -336,8 +344,10 @@ void G4KleinNishinaModel::SampleSecondaries(
 		   << "  Eshell(keV)= " << shell->BindingEnergy()/keV 
 		   << G4endl;
 	    */
-	    for (size_t jj=j; jj<nafter; ++jj) { delete (*fvect)[jj]; }
-	    for (size_t jj=j; jj<nafter; ++jj) { fvect->pop_back(); }
+	    for (size_t jj=nafter-1; jj>=j; --jj) { 
+	      delete (*fvect)[jj]; 
+	      fvect->pop_back(); 
+	    }
 	    break;	      
 	  }
 	  esec += e;

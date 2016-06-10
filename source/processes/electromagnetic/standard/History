@@ -1,4 +1,4 @@
-$Id: History 76879 2013-11-18 12:44:54Z gcosmo $
+$Id: History 87015 2014-11-21 16:24:10Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,8 +18,292 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+21 November 14: V.Ivanchenko (emstand-V10-00-52)
+- G4PAIPhotonModel - fixed Coverity report (V.Grichine)
+
+15 November 14: V.Ivanchenko (emstand-V10-00-51)
+- G4PEEffectFluoModel - make internal array per material and 
+    not per materialCutsCouple allowing model be used in unit tests 
+
+07 November 14: V.Ivanchenko (emstand-V10-00-50)
+- G4GoudsmitSaundersonMscModel - fixed displacement computation
+
+27 October 14: V.Ivanchenko (emstand-V10-00-49)
+- G4GoudsmitSaundersonMscModel - fixed rare division by zero
+
+27 October 14: V.Ivanchenko (emstand-V10-00-48)
+- G4WentzelVIModel, G4WentzelOKandVIxSection, G4WentzelVIRelXSection
+    use G4EmParameters class for initialisation
+
+24 October 14: V.Ivanchenko (emstand-V10-00-47)
+- G4DeltaAngle - comment out warning happens frequently for 
+    low-enegry electrons
+
+24 October 14: V.Ivanchenko (emstand-V10-00-46)
+- G4CoulombScattering - use G4EmParameters
+- G4WentzelVIModel - refinment of lateral displacement
+- G4UrbanMscModel - refinment of lateral displacement 
+- G4WentzelOKandVIxSection - fixed sampling in single scattering
+
+16 October 14: V.Ivanchenko (emstand-V10-00-45)
+- G4eIonisation, G4hIonisation, G4ionIonisation, G4eBremsstrahlung,
+  G4GammaConversion, G4ComptonScattering, G4PhotoElectricEffect
+    - use G4EmParameterisation at initialisation
+
+14 October 14: V.Ivanchenko (emstand-V10-00-44)
+- G4PEEffectFluoModel - fixed threshold cross section
+- G4GammaConversion - minor fix of initialisation
+
+07 October 14: L.Urban
+- G4UrbanMscModel corrs to speed up (if --> min,max,
+  random numbers using rndmEngineMod pointer) 
+
+06 October 14: L. Urban (emstand-V10-00-43)
+- G4UrbanMscModel - added new step limit type UseSafetyPlus 
+
+8 September 14: V.Ivanchenko (emstand-V10-00-42)
+- G4PairProductionRelModel, G4eBremsstrahlungRelModel - added 
+    protection at initialisation for the case when user artifitially
+    reducing high energy limit of the model (bug #1670)
+
+5 September 14: V.Ivanchenko (emstand-V10-00-41)
+- G4PAIxSection - fixed memory leak reported by Coverity
+
+12 August 14: V.Ivanchenko (emstand-V10-00-40)
+- G4WentzelVIModel - fixed bug in single scattering mode (recently 
+    introduced)
+
+08 August 14: V.Ivanchenko (emstand-V10-00-39)
+- G4PAIModel - updated sampling of delta electron energy
+- G4PAIModelData - proper deletion of physics vectors end of run,
+    use spline interpolation, fixed sampling of delta-electrons
+- G4DeltaAngle - added check on length of do/while loop 
+- G4PAIxSection - added protection to avoid division by zero
+- G4PAIxSection, G4PAIPhotData, G4PAIPhotModel - proper deletion
+    end of job  
+
+21 July 14: V.Ivanchenko (emstand-V10-00-38)
+- G4ASTARStopping, G4PSTARStopping, G4BraggModel, G4BraggIonModel
+    restore functionality to access NIST stopping data via
+    chemical formula and not only by material name
+
+21 July 14: V.Ivanchenko (emstand-V10-00-37)
+- G4ASTARStopping, G4ESTARStopping, G4PSTARStopping, 
+  G4WaterStopping - reduced memory churn by using static data,
+    delete physics vectors at destruction 
+- G4ASTARStopping, G4PSTARStopping changed interface to be 
+    always const in run time (shared between threads)
+- G4BraggModel - use static pointer to G4PSTARStopping class,
+    which is initialized once 
+- G4BraggIonModel - use static pointer to G4ASTARStopping class,
+    which is initialized once 
+
+17 July 14: V.Ivanchenko (emstand-V10-00-36)
+17 July 14: V.Ivanchenko (emstand-V10-00-35)
+16 July 14: V.Ivanchenko (emstand-V10-00-34)
+- G4WentzelVIModel - define single scattering mode before 
+    transformation from true to geom step length to avoid
+    many smell steps for very low-energy particles
+- G4UrbanMscModel - fixed numerical problem for the case when 
+    range is nearly truePathLength
+
+13 July 14: V.Ivanchenko (emstand-V10-00-33)
+- G4WentzelVIModel - fixed bug introduced in tag 31, which is
+    responsible for CPU increase in several tests
+
+08 July 14: V.Ivanchenko (emstand-V10-00-32)
+- G4KleinNishinaModel - minor cleanup
+
+07 July 14: V.Ivanchenko (emstand-V10-00-31)
+- G4ComptonScattering - set startFromNull flag to "true" - for all
+    models forced to zero cross section for the low energy in the 
+    cross section table
+- G4KleinNishinaModel, G4KleinNishinaCompton, 
+  G4HeatedKleinNishinaCompton - do not sample final 
+    state below low limit of the model (default 100 eV); 
+    added protection to do/while loop; added check on secondary
+    energy of both gamma and electron using internal limit
+- G4HeatedKleinNishinaCompton - use inheritence from G4KleinNishinaCompton
+- G4WentzelVIModel - added more accurate transition to the single 
+    scattering mode
+- G4WentzelOKandVIxSection - return back method of 10.0 single 
+    scattering sampling
+- G4IonCoulombScatteringModel - fixed non-initialised (Coverity report)
+
+06 June 14: V.Ivanchenko (emstand-V10-00-30)
+- G4WentzelVIModel - removed extra printout at initialisation
+
+03 June 14: V.Ivanchenko (emstand-V10-00-29)
+- G4WentzelVIModel - SetSingleScattering Factor is moded to source
+    with attempt to fix compillation problem for strict compiler
+- G4PAIModel, G4PAIModelData - improved cout
+- G4G4BraggModel, G4BraggIonModel - added spin correction
+- G4eCoulombScatteringModel, G4hCoulombScatteringModel,
+  G4IonCoulombScatteringModel - updated initialisation
+    of vector of cuts - cut for recoil can be changed via
+    /run/setCut command
+
+27 May 14: V.Ivanchenko (emstand-V10-00-28)
+- G4IonCoulombCrossSection - tunned computation of the screen 
+    factor 
+- G4UrbanMscModel - changed ComputeGeomPathLength() method - instead
+    of many return use the one for easier printouts; no change in 
+    algorithms 
+- G4UniversalFluctuations - implemented Andrea Dotti suggestion
+    to use more vectorized code (use random engine pointer, use 
+    flatArray method) for CPU performance improvement;
+    no change of the algorithm
+- G4eCoulombScattering - fixed simple Coverity report
+- G4WentzelVIModel - changed single scattering factor from 1.5 to
+    1.25
+
+05 May 14: V.Ivanchenko (emstand-V10-00-27)
+- G4WentzelVIModel, G4WentzelVIRelModel, G4WentzelOKandVIxSection, 
+  G4eCoulombScatteringModel - revised and make consistent definition
+    of min and max scattering angle for single scattering mode,
+    removed unused class members
+- G4IonCoulombCrossSection - fixed screen factor for projectile
+    and target Z=1 
+
+02 May 14: V.Ivanchenko (emstand-V10-00-26)
+- G4WentzelVIModel, G4WentzelOKandVIxSection - a small optimisation
+    to address some CPU penalty against previous reference tag
+
+28 April 14: V.Ivanchenko (emstand-V10-00-25)
+- G4WentzelOKandVIxSection - fixed bug introduced in April tags
+
+04 April 14: V.Ivanchenko (emstand-V10-00-24)
+- G4WentzelVIModel - fixed minor bug introduced in the previous tag
+
+03 April 14: V.Ivanchenko (emstand-V10-00-23)
+- G4WentzelVIModel - optimized transition between multiple and single 
+    scattering modes; changed order of displacement and angular 
+    deflection (second order effect)
+- G4WentzelOKandVIxSection - some cleanup for sampling
+- G4IonCoulombScatteringModel - fixed for scattering off Hydrogen
+
+01 April 14: V.Ivanchenko (emstand-V10-00-22)
+- G4WentzelOKandVIxSection - some cleanup for sampling
+- G4IonCoulombScatteringModel - fixed final state generation
+- G4GammaConversion - switch default number of bins from 220 to 140
+- G4eCoulombScatteringModel - fixed mass of recoil for Hydrogen target
+
+31 March 14: V.Ivanchenko (emstand-V10-00-21)
+- G4WentzelVIModel - removed forgotten debug printout
+
+31 March 14: V.Ivanchenko (emstand-V10-00-20)
+- G4WentzelVIModel - fixed step limitation
+- G4WentzelOKandVIxSection - fixed initialisation for low-energy
+    model (this model is not combined with single scattering);
+    fixed small inaccuracy for sampling 
+- G4GammaConversion - switch default number of bins from 77 to 220
+
+28 March 14: V.Ivanchenko (emstand-V10-00-19)
+- G4CoulombScattering - use G4IonCoulombScatteringModel for ions
+    by default
+- G4IonCoulombScatteringModel - fixed warning from G4ParticleTable
+
+19 March 14: V.Ivanchenko (emstand-V10-00-18)
+19 March 14: L.Urban
+- G4UrbanMscModel - efficiency corrections rewritten, no extra
+  SimpleScattering call
+
+14 March 14: V.Ivanchenko (emstand-V10-00-17)
+13 March 14: L.Urban
+- G4UrbanMscModel - useSimpleScattering boolean flag in order to get
+   a more readable code
+
+11 March 14: L.Urban
+- G4UrbanMscModel - correction improves efficiency in UseSafety mode
+
+28 February 14: V.Ivanchenko (emstand-V10-00-16)
+- G4WentzelVIModel - make part of members of the class and one method 
+    protected in order to allow inheritence for derived models
+
+28 February 14: L.Urban
+- G4UrbanMscModel - modification in order to improve timing by
+  1-14 % (depending on the setup and cut)
+
+27 February 14: V.Ivanchenko (emstand-V10-00-15)
+- G4DeltaAngle - added implementation of SampleDirectionForShell 
+    virtual method; improved sampling 
+
+27 February 14: V.Ivanchenko (emstand-V10-00-14)
+- G4WentzelVIModel - added possibility to compute second momentum
+
+20 February 14: V.Ivanchenko (emstand-V10-00-13)
+- G4UrbanMscModel : some code cleanup - no results change
+- G4WentzelOKandVIxSection, G4WentzelVIModel - similar cleanup
+
+16 February 14: L.Urban
+- G4UrbanMscModel : change in optimization for fUseSafety case by
+    usage std::min/std::max instead of "if" constructions 
+
+14 February 14: V.Ivanchenko (emstand-V10-00-12)
+- G4UrbanMscModel : cosmetic changings
+
+14 February 14: L.Urban (emstand-V10-00-11)
+- G4UrbanMscModel : method SampleDisplacement removed, its code has been
+   put into SampleScattering 
+
+13 February 14: V.Ivanchenko (emstand-V10-00-10)
+- G4WentzelOKandVIxSection, G4WentzelVIRelXSection, G4WentzelVIModel,
+  G4WentzelVIRelModel, G4eCoulombScatteringModel, G4hCoulombScatteringModel
+    added boolean flag showing that in Physics List msc and single scattering
+    are combined or not 
+
+10 February 14: V.Ivanchenko (emstand-V10-00-09)
+- G4UrbanMscModel - (L.Urban) methods ComputeTheta0,SimpleScattering,
+  SampleDisplacement,LatCorrelation have been inlined in order
+  to improve timing (K. Genser suggesting) in these methods use 
+  class member "third" to reduce number of divisions
+- G4PAIxSection - trivial fix of Coverity report
+
+03 February 14: V.Ivanchenko (emstand-V10-00-08)
+- G4SauterGavrilaAngularDistribution - use Penelope 2008 sampling
+    algorithm, because it is more effective, distribution itself
+    is unchanged
+
+26 January 14: V.Ivanchenko (emstand-V10-00-07)
+- G4ionIonisation - improved printout at initialisation
+
+25 January 14: V.Ivanchenko (emstand-V10-00-06)
+- G4NuclearStopping - do not change ion charge (fixed problem reported
+    by Michel Maire)
+- G4ionIonisation - do not instantiate extra model at high enegry
+    if G4IonParameterisedModel is used 
+
+24 January 14: V.Ivanchenko (emstand-V10-00-05)
+- G4PAIxSection - trivial fix of Coverity report
+- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable - fixed
+    Coverity reports: substitute reading of external file from fopen
+    to ifstream; use G4Log, G4Exp
+
+18 January 14: L.Urban (emstand-V10-00-04)
+- G4UniversalFluctuation - bugfix in "ionization" computing -
+   effect of the bug was small
+
+17 January 14: V.Ivanchenko for J.Apostolakis (emstand-V10-00-03)
+- G4UniversalFluctuation - reduced number of divisions by addition
+    extra class members
+
+11 January 14: V.Ivanchenko for L.Urban (emstand-V10-00-02)
+- G4UniversalFluctuation - G4Pow::expA() is substituted by G4Exp() 
+
+08 January 14: V.Ivanchenko for L.Urban (emstand-V10-00-01)
+- G4UrbanMscModel - bug fix (1st normal step in StepLimitType 2 mode   
+                    was not randomized)  
+- G4UniversalFluctuation - energy loss for extreme small cuts was too small,
+                           it is fixed now        
+
+18 December 13: V.Ivanchenko (emstand-V10-00-00)
+- G4eCoulombScatteringModel, G4eSingleCoulombScatteringModel - get pointer
+    to the vector of cuts from parameter of Initialise(..) method and 
+    not from G4ProductionCutsTable - this is more convinient for
+    unit tests, results unchanged
+
 18 November 13: V.Ivanchenko (emstand-V09-06-79)
-- G4PAIPhotonModel, G4PAIxSection - fixed Coverity reports
+- G4PAIPhotonModel, G4PAIxSection - fixed Coverity reports (V.Grichine)
 
 12 November 13: V.Ivanchenko (emstand-V09-06-78)
 - G4IonCoulombScatteringModel, G4eCoulombScatteringModel,
@@ -133,7 +417,7 @@ secondary electron/X-ray mode.
     pow in run time methods - expected slightly improve CPU performance
 
 21 August 13: V.Ivanchenko (emstand-V09-06-56)
-- G4UrbanMscModel93, G4UrbanMscModel95, G4UrbanMscModel96 rae removed
+- G4UrbanMscModel93, G4UrbanMscModel95, G4UrbanMscModel96 are removed
     only one version of the model G4UrbanMscModel  is left  
 
 19 August 13: V.Ivanchenko (emstand-V09-06-55)

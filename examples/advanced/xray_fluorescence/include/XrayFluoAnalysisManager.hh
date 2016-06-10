@@ -25,7 +25,7 @@
 //
 //
 // $Id: XrayFluoAnalysisManager.hh
-// GEANT4 tag $Name: xray_fluo-V03-02-00
+// GEANT4 tag $Name: 
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -41,13 +41,11 @@
 
 #ifndef G4PROCESSTESTANALYSIS_HH
 #define G4PROCESSTESTANALYSIS_HH
-#ifdef G4ANALYSIS_USE
 
 #include "globals.hh"
 #include <vector>
 #include "G4ThreeVector.hh"
 #include "XrayFluoDataSet.hh"
-#include "AIDA/AIDA.h" // Headers for AIDA interfaces
 #include "XrayFluoAnalysisMessenger.hh"
 
 class G4Step;
@@ -76,36 +74,16 @@ public:
   //method to call to create an instance of this class
   static XrayFluoAnalysisManager* getInstance();
 
-  //method to create hbook or xml file for persistency
-  
-  void CreatePersistency(G4String fileName,G4String persistencyType,
-		       G4bool readOnly = false, G4bool createNew = true);
-
-  inline  void CreatePersistency() {CreatePersistency(outputFileName,persistencyType);}
-
   // methods to set the flag for the storage of the space of phases into ntuple
   inline void PhaseSpaceOn(){phaseSpaceFlag = true;}
 
   inline void PhaseSpaceOff(){phaseSpaceFlag = false;}
 
-  void ExtractData();
-
   //method to chenge the name of the output file
   void SetOutputFileName(G4String);
 
-  //method to chenge the type of the output file
-  void SetOutputFileType(G4String);
- 
-  // method used by the messenger 
-  G4bool GetDeletePersistencyFileFlag();
+  const std::pair<G4double,G4String> GetEmittedParticleEnergyAndType();
 
-  // methods used by RunManager and EvenManager to visualize partial results
-  void InitializePlotter();
-
-  void PlotCurrentResults();
-
-  std::vector<G4double>* GetEmittedParticleEnergies();
-  std::vector<G4String>* GetEmittedParticleTypes();
   void LoadGunData(G4String, G4bool);
 
   void SetPhysicFlag(G4bool);
@@ -116,16 +94,9 @@ private:
 
   G4String outputFileName;
 
-  G4bool visPlotter;
-
   G4bool phaseSpaceFlag;
 
   G4bool physicFlag;
-
-  G4String persistencyType;
-
-  G4bool deletePersistencyFile;
-
 
   std::vector<G4double>* gunParticleEnergies;
   std::vector<G4String>* gunParticleTypes;
@@ -136,44 +107,11 @@ private:
   //pointer to the analysis messenger
   XrayFluoAnalysisMessenger* analisysMessenger;
 
-  //XrayFluoEventAction* pEvent;
-
-  // analysis data members 
-
-  AIDA::IAnalysisFactory* analysisFactory;
-  AIDA::ITree* tree;
-  AIDA::ITree* treeDet;
-
-  AIDA::IHistogramFactory* histogramFactory;
-  AIDA::IHistogram1D*   histo_1;
-  AIDA::IHistogram1D*   histo_2;
-  AIDA::IHistogram1D*   histo_3;
-  AIDA::IHistogram1D*   histo_4;
-  AIDA::IHistogram1D*   histo_5;
-  AIDA::IHistogram1D*   histo_6;
-  AIDA::IHistogram1D*   histo_7;
-  AIDA::IHistogram1D*   histo_8;
-  AIDA::IHistogram1D*   histo_9;
-  //AIDA::IHistogram1D*   histo_10; //
-  //AIDA::IHistogram1D*   histo_12; // Created for debuggig purpose
-  //AIDA::IHistogram1D*   histo_11; //
-
-  AIDA::ICloud1D*  beamCloud;
-  AIDA::ICloud1D*  cloud_1;
-  AIDA::ICloud1D*  cloud_2;
-  AIDA::ICloud1D*  cloud_3;
-
-  AIDA::ITupleFactory* tupleFactory;
-  AIDA::ITupleFactory* tupleDetFactory;
-
-  AIDA::ITuple* tupleFluo;
-  AIDA::ITuple* tupleDetFluo;
-
-  AIDA::IPlotterFactory* plotterFactory;
-  AIDA::IPlotter* plotter;
+  G4bool dataLoaded;
+ 
+  G4int fParticleEnergyAndTypeIndex;
 
 };
-#endif
 #endif
 
 

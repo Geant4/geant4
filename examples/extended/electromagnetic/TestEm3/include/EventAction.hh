@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm3/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// $Id: EventAction.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: EventAction.hh 78655 2014-01-14 11:13:41Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,36 +38,25 @@
 #include "globals.hh"
 #include "DetectorConstruction.hh"
 
-class RunAction;
-class EventActionMessenger;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class EventAction : public G4UserEventAction
 {
   public:  
-    EventAction(DetectorConstruction*, RunAction*);
+    EventAction(DetectorConstruction*);
    ~EventAction();
 
     virtual void BeginOfEventAction(const G4Event*);
     virtual void   EndOfEventAction(const G4Event*);
-    
-    void SetDrawFlag   (G4String val)  {fDrawFlag    = val;};
-    void SetPrintModulo(G4int    val)  {fPrintModulo = val;};
     
     void SumEnergy(G4int k, G4double de, G4double dl)
         {fEnergyDeposit[k] += de; fTrackLengthCh[k] += dl;};          
         
   private:  
     DetectorConstruction* fDetector;
-    RunAction*            fRunAct;
     
     G4double              fEnergyDeposit[MaxAbsor];
     G4double              fTrackLengthCh[MaxAbsor];
-        
-    G4String              fDrawFlag; 
-    G4int                 fPrintModulo;         
-    EventActionMessenger* fEventMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

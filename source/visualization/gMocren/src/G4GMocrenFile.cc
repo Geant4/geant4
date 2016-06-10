@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFile.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4GMocrenFile.cc 81943 2014-06-06 15:56:00Z gcosmo $
 //
 //
 // GMocrenFile factory.
@@ -45,7 +45,7 @@
 G4GMocrenFile::G4GMocrenFile ()
  : G4VGraphicsSystem ("gMocrenFile", "gMocrenFile",
 		      "A gMocren file driver (ver.4)",
-                      G4VGraphicsSystem::threeD),
+                      G4VGraphicsSystem::fileWriter),
 		      //GMOCRENFILE_FEATURES, G4VGraphicsSystem::threeD),
    kViewer(NULL), kSceneHandler(NULL), kMessenger(new G4GMocrenMessenger()) {
   ;
@@ -53,7 +53,7 @@ G4GMocrenFile::G4GMocrenFile ()
 
 	//----- G4GMocrenFile, destructor
 G4GMocrenFile::~G4GMocrenFile () {
-  ;
+  delete kMessenger;
 }
 
 

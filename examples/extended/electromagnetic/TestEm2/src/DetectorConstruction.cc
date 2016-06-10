@@ -27,7 +27,7 @@
 /// \brief Implementation of the DetectorConstruction class
 //
 // 
-// $Id: DetectorConstruction.cc 77305 2013-11-22 11:16:19Z gcosmo $
+// $Id: DetectorConstruction.cc 78550 2014-01-07 09:43:41Z gcosmo $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,7 +38,6 @@
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
-#include "G4UniformMagField.hh"
 
 #include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
@@ -50,8 +49,8 @@
 #include "G4NistManager.hh"
 #include "G4RunManager.hh"
 
-#include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
 #include "G4AutoDelete.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

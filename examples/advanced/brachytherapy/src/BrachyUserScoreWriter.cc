@@ -34,7 +34,11 @@ Original code from geant4/examples/extended/runAndEvent/RE03, by M. Asai
 #include <fstream>
 #include "BrachyUserScoreWriter.hh"
 #include "G4SystemOfUnits.hh"
+
+#ifdef ANALYSIS_USE  
 #include "BrachyAnalysisManager.hh"
+#endif
+
 #include "G4MultiFunctionalDetector.hh"
 #include "G4SDParticleFilter.hh"
 #include "G4VPrimitiveScorer.hh"
@@ -47,10 +51,9 @@ Original code from geant4/examples/extended/runAndEvent/RE03, by M. Asai
 // The same information is stored in a ntuple, in the 
 // brachytherapy.root file
 
-BrachyUserScoreWriter::BrachyUserScoreWriter(BrachyAnalysisManager* analysis_manager):
+BrachyUserScoreWriter::BrachyUserScoreWriter():
 G4VScoreWriter() 
 {
-analysis = analysis_manager;
 }
 
 BrachyUserScoreWriter::~BrachyUserScoreWriter() 
@@ -124,6 +127,7 @@ for(int x = 0; x < fNMeshSegments[0]; x++) {
 
 #ifdef ANALYSIS_USE          
         // Save the same information in the output analysis file
+       BrachyAnalysisManager* analysis = BrachyAnalysisManager::GetInstance();
        analysis -> FillNtupleWithEnergyDeposition(xx, yy, zz, *(value->second)/keV);
 #endif
 }}}} 

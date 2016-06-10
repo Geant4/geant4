@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4OpenGLImmediateSceneHandler.hh 80466 2014-04-23 12:07:25Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -62,11 +62,15 @@ public:
 
 protected:
 
-  G4bool AddPrimitivePreamble(const G4Visible& visible);
+  G4bool AddPrimitivePreamble(const G4VMarker& visible);
+  G4bool AddPrimitivePreamble(const G4Polyline& visible);
+  G4bool AddPrimitivePreamble(const G4Polyhedron& visible);
 
   void ClearTransientStore ();
 
   static G4int    fSceneIdCount;  // static counter for OpenGLImmediate scenes.
+  private:
+  bool AddPrimitivePreambleInternal(const G4Visible& visible, bool isMarker, bool isPolyline);
 };
 
 #endif

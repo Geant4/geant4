@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm15/TestEm15.cc
 /// \brief Main program of the electromagnetic/TestEm15 example
 //
-// $Id: TestEm15.cc 73022 2013-08-15 09:09:48Z gcosmo $
+// $Id: TestEm15.cc 82283 2014-06-13 14:49:40Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,7 +40,6 @@
 #include "SteppingVerbose.hh"
 
 #include "RunAction.hh"
-#include "EventAction.hh"
 #include "SteppingAction.hh"
 
 #ifdef G4VIS_USE
@@ -74,7 +73,6 @@ int main(int argc,char** argv) {
   // set user action classes
   RunAction* run;  
   runManager->SetUserAction(run = new RunAction(det,prim)); 
-  runManager->SetUserAction(new EventAction);
   runManager->SetUserAction(new SteppingAction(det,run));
    
   // get the pointer to the User Interface manager 

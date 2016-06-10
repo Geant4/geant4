@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PairProductionRelModel.cc 74581 2013-10-15 12:03:25Z gcosmo $
+// $Id: G4PairProductionRelModel.cc 83685 2014-09-09 12:39:00Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -88,7 +88,7 @@ static const G4double Egsmall=2.*MeV;
 
 
 G4PairProductionRelModel::G4PairProductionRelModel(const G4ParticleDefinition*,
-					 const G4String& nam)
+						   const G4String& nam)
   : G4VEmModel(nam),
     fLPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)*0.5),
     fLPMflag(true),
@@ -117,7 +117,9 @@ void G4PairProductionRelModel::Initialise(const G4ParticleDefinition* p,
 					  const G4DataVector& cuts)
 {
   if(!fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
-  if(IsMaster()) { InitialiseElementSelectors(p, cuts); }
+  if(IsMaster() && LowEnergyLimit() < HighEnergyLimit()) { 
+    InitialiseElementSelectors(p, cuts); 
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -125,7 +127,9 @@ void G4PairProductionRelModel::Initialise(const G4ParticleDefinition* p,
 void G4PairProductionRelModel::InitialiseLocal(const G4ParticleDefinition*,
 					       G4VEmModel* masterModel)
 {
-  SetElementSelectors(masterModel->GetElementSelectors());
+  if(LowEnergyLimit() < HighEnergyLimit()) {
+    SetElementSelectors(masterModel->GetElementSelectors());
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

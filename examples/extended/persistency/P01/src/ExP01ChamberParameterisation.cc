@@ -27,7 +27,7 @@
 /// \brief Implementation of the ExP01ChamberParameterisation class
 //
 //
-// $Id: ExP01ChamberParameterisation.cc 71791 2013-06-24 14:08:28Z gcosmo $
+// $Id: ExP01ChamberParameterisation.cc 82130 2014-06-11 09:26:44Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,9 +58,12 @@ ExP01ChamberParameterisation::ExP01ChamberParameterisation(
    fHalfLengthIncr = 0;
    if( NoChambers > 0 ){
       fHalfLengthIncr =  0.5 * (lengthFinal-lengthInitial)/NoChambers;
+
       if (spacingZ < widthChamber) {
-        G4cout << "ExP01ChamberParameterisation construction: Width>Spacing" << G4endl;
-        exit(1);;
+        G4Exception(
+        "ExN02ChamberParameterisation::ExN02ChamberParameterisation()",
+                   "InvalidSetup", FatalException,
+                   "Width>Spacing");
       }
    }
    

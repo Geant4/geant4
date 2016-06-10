@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.hh 77649 2013-11-27 08:39:54Z gcosmo $
+// $Id: G4RunManagerKernel.hh 83384 2014-08-21 14:24:13Z gcosmo $
 //
 // 
 
@@ -226,6 +226,8 @@ protected:
     // This method will setup the G4VProcesses
     // instances to have a reference to the process instance
     // created by the master thread. See G4VProcess::GetMasterProcess
+
+    void PropagateGenericIonID();
 };
 
 #endif

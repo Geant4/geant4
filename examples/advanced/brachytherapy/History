@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 74755 2013-10-21 11:56:43Z gcosmo $
+$Id: History 84280 2014-10-13 07:21:10Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History 74755 2013-10-21 11:56:43Z gcosmo $
 
                       Category History file
                       ---------------------
+
+09.10.2014 -  S. Guatelli; brachy-V10-00-00
+	      Compilation errors and warnings with cdash deleted
+              Analysis with ROOT introduced
 
 21.10.2013 -  L. Pandola; brachy-V09-06-02
 	      Fix bug in BrachySteppingAction.cc reported by John A. 

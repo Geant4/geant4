@@ -23,24 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMoleculeEncounterStepper.hh 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4DNAMoleculeEncounterStepper.hh 85244 2014-10-27 08:24:13Z gcosmo $
 //
-// Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
+// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+
+// The code is developed in the framework of the ESA AO7146
 //
-// WARNING : This class is released as a prototype.
-// It might strongly evolve or even disapear in the next releases.
+// We would be very happy hearing from you, send us your feedback! :)
 //
-// History:
-// -----------
-// 10 Oct 2011 M.Karamitros created
+// In order for Geant4-DNA to be maintained and still open-source,
+// article citations are crucial. 
+// If you use Geant4-DNA chemistry and you publish papers about your software, 
+// in addition to the general paper on Geant4-DNA:
 //
-// -------------------------------------------------------------------
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// we would be very happy if you could please also cite the following
+// reference papers on chemistry:
+//
+// J. Comput. Phys. 274 (2014) 841-882
+// Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
 #ifndef G4MOLECULEENCOUNTERSTEPPER_H
 #define G4MOLECULEENCOUNTERSTEPPER_H
 
-#include "G4VITTimeStepper.hh"
-#include "G4ITManager.hh"
+#include "G4VITTimeStepComputer.hh"
+#include "G4KDTreeResult.hh"
 
 class G4VDNAReactionModel;
 class G4DNAMolecularReactionTable;
@@ -48,61 +56,86 @@ class G4DNAMolecularReactionTable;
 class G4Molecule;
 
 /**
-  * Given a molecule G4DNAMoleculeEncounterStepper will calculate for its possible reactants
-  * what will be the minimum encounter time and the associated molecules.*
-  *
-  * This model includes dynamical time steps as explained in
-  * "Computer-Aided Stochastic Modeling of the Radiolysis of Liquid Water",
-  * V. Michalik, M. Begusová, E. A. Bigildeev,
-  * Radiation Research, Vol. 149, No. 3 (Mar., 1998), pp. 224-236
-  *
-  */
+ * Given a molecule G4DNAMoleculeEncounterStepper will calculate for its possible reactants
+ * what will be the minimum encounter time and the associated molecules.*
+ *
+ * This model includes dynamical time steps as explained in
+ * "Computer-Aided Stochastic Modeling of the Radiolysis of Liquid Water",
+ * V. Michalik, M. Begusová, E. A. Bigildeev,
+ * Radiation Research, Vol. 149, No. 3 (Mar., 1998), pp. 224-236
+ *
+ */
 
-class G4DNAMoleculeEncounterStepper : public G4VITTimeStepper
+class G4DNAMoleculeEncounterStepper : public G4VITTimeStepComputer
 {
 public:
-    G4DNAMoleculeEncounterStepper();
-    virtual ~G4DNAMoleculeEncounterStepper();
-    G4DNAMoleculeEncounterStepper(const G4DNAMoleculeEncounterStepper&);
-    G4IT_ADD_CLONE(G4VITTimeStepper,G4DNAMoleculeEncounterStepper)
+  G4DNAMoleculeEncounterStepper();
+  virtual ~G4DNAMoleculeEncounterStepper();
+  G4DNAMoleculeEncounterStepper(const G4DNAMoleculeEncounterStepper&);
+  G4IT_ADD_CLONE(G4VITTimeStepComputer,G4DNAMoleculeEncounterStepper)
 
-    virtual void Prepare();
-//    virtual void PrepareForAllProcessors();
-    virtual G4double CalculateStep(const G4Track&, const G4double&);
+  virtual void Prepare();
+  //    virtual void PrepareForAllProcessors();
+  virtual G4double CalculateStep(const G4Track&, const G4double&);
 
-    inline void SetReactionModel(G4VDNAReactionModel*);
-    inline G4VDNAReactionModel* GetReactionModel();
+  inline void SetReactionModel(G4VDNAReactionModel*);
+  inline G4VDNAReactionModel* GetReactionModel();
 
-    inline void SetVerbose(int);
-    // Final time returned when reaction is avalaible in the reaction table = 1
-    // All details = 2
+  inline void SetVerbose(int);
+  // Final time returned when reaction is avalaible in the reaction table = 1
+  // All details = 2
 
 private:
+  void InitializeForNewTrack();
 
-    void RetrieveResults(const G4Track&, const G4Molecule*, const G4Molecule*, const G4double /*reactionRange*/,
-                         G4KDTreeResultHandle&, G4bool iterate = true);
+  class Utils;
+  void CheckAndRecordResults(const Utils&,
+#ifdef G4VERBOSE
+                             const G4double reactionRange,
+#endif
+                             G4KDTreeResultHandle&);
 
-    G4bool fHasAlreadyReachedNullTime;
+  G4bool fHasAlreadyReachedNullTime;
 
-    G4DNAMoleculeEncounterStepper& operator=(const G4DNAMoleculeEncounterStepper&);
-    const G4DNAMolecularReactionTable*& fMolecularReactionTable ;
-    G4VDNAReactionModel* fReactionModel;
-    G4int fVerbose ;
+  G4DNAMoleculeEncounterStepper& operator=(const G4DNAMoleculeEncounterStepper&);
+  const G4DNAMolecularReactionTable*& fMolecularReactionTable;
+  G4VDNAReactionModel* fReactionModel;
+  G4int fVerbose;
+
+  class Utils
+  {
+  public:
+    Utils(const G4Track& tA, const G4Molecule* mB);
+    ~Utils(){;}
+
+    G4double GetConstant() const
+    {
+      return Constant;
+    }
+
+    const G4Track& trackA;
+    const G4Molecule* moleculeB;
+    const G4Molecule* moleculeA;
+    G4double DA;
+    G4double DB;
+    G4double Constant;
+  };
+
 };
 
 inline void G4DNAMoleculeEncounterStepper::SetReactionModel(G4VDNAReactionModel* reactionModel)
 {
-    fReactionModel = reactionModel ;
+  fReactionModel = reactionModel;
 }
 
 inline G4VDNAReactionModel* G4DNAMoleculeEncounterStepper::GetReactionModel()
 {
-    return fReactionModel;
+  return fReactionModel;
 }
 
 inline void G4DNAMoleculeEncounterStepper::SetVerbose(int flag)
 {
-    fVerbose = flag;
+  fVerbose = flag;
 }
 
 #endif // G4MOLECULEENCOUNTERSTEPPER_H

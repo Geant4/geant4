@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedLambdaConstructor.cc 72955 2013-08-14 14:23:14Z gcosmo $
+// $Id: G4ExcitedLambdaConstructor.cc 83749 2014-09-12 12:14:59Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -361,7 +361,7 @@ const G4double G4ExcitedLambdaConstructor::mass[] = {
 };
 
 const G4double G4ExcitedLambdaConstructor::width[] = {
-   50.0*MeV,  15.6*MeV, 150.0*MeV,  35.0*MeV,  60.0*MeV,
+   50.5*MeV,  15.6*MeV, 150.0*MeV,  35.0*MeV,  60.0*MeV,
   300.0*MeV, 150.0*MeV,  80.0*MeV,  95.0*MeV, 100.0*MeV,
   200.0*MeV, 200.0*MeV
 };

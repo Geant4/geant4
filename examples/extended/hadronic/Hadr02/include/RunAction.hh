@@ -26,20 +26,12 @@
 /// \file hadronic/Hadr02/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: RunAction.hh 81932 2014-06-06 15:39:45Z gcosmo $
 //
 
 #ifndef RunAction_h
 #define RunAction_h 1
 
-// -------------------------------------------------------------
-//
-//      GEANT4 
-//
-// 
-// -------------------------------------------------------------
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4UserRunAction.hh"

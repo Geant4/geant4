@@ -55,9 +55,9 @@ class XrayFluoEventAction : public G4UserEventAction
 {
 public:
   
-  XrayFluoEventAction(XrayFluoDetectorConstruction*);
-  XrayFluoEventAction(XrayFluoPlaneDetectorConstruction*);
-  XrayFluoEventAction(XrayFluoMercuryDetectorConstruction*);
+  XrayFluoEventAction(const XrayFluoDetectorConstruction*);
+  XrayFluoEventAction(const XrayFluoPlaneDetectorConstruction*);
+  XrayFluoEventAction(const XrayFluoMercuryDetectorConstruction*);
 
   virtual ~XrayFluoEventAction();
   

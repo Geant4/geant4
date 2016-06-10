@@ -23,16 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITTrackingInteractivity.hh 70171 2013-05-24 13:34:18Z gcosmo $
+// $Id: G4ITTrackingInteractivity.hh 85244 2014-10-27 08:24:13Z gcosmo $
 //
-// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
+// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+
+// The code is developed in the framework of the ESA AO7146
 //
-// WARNING : This class is released as a prototype.
+// We would be very happy hearing from you, send us your feedback! :)
 //
-// History:
-// -----------
+// In order for Geant4-DNA to be maintained and still open-source,
+// article citations are crucial. 
+// If you use Geant4-DNA chemistry and you publish papers about your software, 
+// in addition to the general paper on Geant4-DNA:
 //
-// -------------------------------------------------------------------
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// we would be very happy if you could please also cite the following
+// reference papers on chemistry:
+//
+// J. Comput. Phys. 274 (2014) 841-882
+// Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
+
 
 #ifndef G4ITTRACKINGINTERACTIVITY_HH
 #define G4ITTRACKINGINTERACTIVITY_HH
@@ -50,14 +61,17 @@ protected :
     int fVerboseLevel;
 
 public:
-    G4ITTrackingInteractivity(){;}
+    G4ITTrackingInteractivity()
+	{
+    	fVerboseLevel = 0;
+	}
     virtual ~G4ITTrackingInteractivity(){;}
 
     virtual void Initialize(){;}
-
     virtual void StartTracking(G4Track*){;}
     virtual void AppendStep(G4Track* /*track*/, G4Step* /*step*/){;}
     virtual void EndTracking(G4Track*){;}
+    virtual void Finalize(){;}
 
     virtual void TrackBanner(G4Track* /*track*/, const G4String& message = "");
     inline void SetVerbose(int);

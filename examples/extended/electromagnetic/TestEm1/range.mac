@@ -1,4 +1,4 @@
-# $Id: range.mac 76293 2013-11-08 13:11:23Z gcosmo $
+# $Id: range.mac 81776 2014-06-05 08:41:01Z gcosmo $
 #
 # Macro file for "TestEm1.cc"
 # 
@@ -18,7 +18,7 @@
 /run/initialize
 #
 # prevent any secondary production
-/testem/phys/setCuts 1 km
+/run/setCut 1 km
 #
 # no step limitation from eLoss
 /process/eLoss/StepFunction 1 100 um

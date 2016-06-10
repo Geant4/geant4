@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
-// $Id: HistoManager.cc 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: HistoManager.cc 81932 2014-06-06 15:39:45Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -329,13 +329,14 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
  
     // Secondary track
   } else {
-    if(1 < fVerbose) 
+    if(1 < fVerbose) { 
       G4cout << "=== Secondary " << name 
              << " kinE(GeV)= " << e/GeV
              << "; m(GeV)= " << pd->GetPDGMass()/GeV
              << "; pos(mm)= " << track->GetPosition()/mm 
              << ";  dir= " << track->GetMomentumDirection() 
              << G4endl;
+    }         
     e = std::log10(e/GeV);
     if(pd == G4Gamma::Gamma()) {
       fNgam++;
@@ -368,11 +369,11 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
       fNpi0++;
       fHisto->Fill(7,e,1.0);
     } else if ( pd == G4KaonPlus::KaonPlus() || 
-pd == G4KaonMinus::KaonMinus()) {
+                pd == G4KaonMinus::KaonMinus()) {
       fNkaons++;
       fHisto->Fill(8,e,1.0);
     } else if ( pd == G4KaonZeroShort::KaonZeroShort() || 
-pd == G4KaonZeroLong::KaonZeroLong()) {
+                pd == G4KaonZeroLong::KaonZeroLong()) {
       fNkaons++;
       fHisto->Fill(9,e,1.0);
     } else if ( pd == G4Deuteron::Deuteron() || pd == G4Triton::Triton()) {
@@ -396,7 +397,7 @@ pd == G4KaonZeroLong::KaonZeroLong()) {
       fHisto->Fill(20,Z,1.0);
       fHisto->Fill(21,A,1.0);
     } else if ( pd == G4MuonPlus::MuonPlus() || 
-pd == G4MuonMinus::MuonMinus()) {
+                pd == G4MuonMinus::MuonMinus()) {
       fNmuons++;
       fHisto->Fill(13,e,1.0);    
     }

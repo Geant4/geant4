@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm7/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 //
-// $Id: PhysicsList.hh 66586 2012-12-21 10:48:39Z ihrivnac $
+// $Id: PhysicsList.hh 82280 2014-06-13 14:45:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -56,11 +56,6 @@ public:
 
   virtual void ConstructParticle();
     
-  virtual void SetCuts();
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-        
   void AddPhysicsList(const G4String& name);
   virtual void ConstructProcess();
     
@@ -70,10 +65,6 @@ public:
 private:
 
   void AddIonGasModels();
-
-  G4double fCutForGamma;
-  G4double fCutForElectron;
-  G4double fCutForPositron;
 
   G4bool   fHelIsRegisted;
   G4bool   fBicIsRegisted;

@@ -35,9 +35,11 @@ G4BOptnChangeCrossSection::G4BOptnChangeCrossSection(G4String name)
 }
 
 G4BOptnChangeCrossSection::~G4BOptnChangeCrossSection()
-{}
+{
+  if ( fBiasedExponentialLaw ) delete fBiasedExponentialLaw;
+}
 
-const G4VBiasingInteractionLaw* G4BOptnChangeCrossSection::ProvideOccurenceBiasingInteractionLaw( const G4BiasingProcessInterface* )
+const G4VBiasingInteractionLaw* G4BOptnChangeCrossSection::ProvideOccurenceBiasingInteractionLaw( const G4BiasingProcessInterface*, G4ForceCondition& )
 {
   return fBiasedExponentialLaw;
 }

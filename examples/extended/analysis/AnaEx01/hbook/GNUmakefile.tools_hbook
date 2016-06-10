@@ -1,0 +1,53 @@
+# $Id$
+# --------------------------------------------------------------
+# GNUmakefile for ing4 HBOOK support. 
+# --------------------------------------------------------------
+
+ifdef G4_USE_HBOOK
+
+include $(G4INSTALL)/config/architecture.gmk
+
+CPPFLAGS += -DG4_USE_HBOOK
+CPPFLAGS += -I./hbook/include
+EXTRALIBS += $(G4TMPDIR)/exe/close.o $(G4TMPDIR)/exe/setpawc.o $(G4TMPDIR)/exe/setntuc.o
+EXTRALIBS += -L${CERNLIB}/lib  -lpacklib -lmathlib -lgfortran -lcrypt -lkernlib 
+
+#FC=gfortran
+
+hbook: close.o setpawc.o setntuc.o
+ifdef CPPVERBOSE
+	(mv *.o  $(G4TMPDIR)/exe);    
+else
+	@(mv *.o  $(G4TMPDIR)/exe);    
+endif
+
+close.o : hbook/src/close.f
+	@echo Compiling close.f
+ifdef CPPVERBOSE
+	$(FC) -c hbook/src/close.f
+else
+	@$(FC) -c hbook/src/close.f
+endif
+
+setpawc.o : hbook/src/setpawc.f
+	@echo Compiling setpawc.f
+ifdef CPPVERBOSE
+	$(FC) -c hbook/src/setpawc.f
+else
+	@$(FC) -c hbook/src/setpawc.f
+endif
+
+setntuc.o : hbook/src/setntuc.f
+	@echo Compiling setntuc.f
+ifdef CPPVERBOSE
+	$(FC) -c hbook/src/setntuc.f
+else
+	@$(FC) -c hbook/src/setntuc.f
+endif
+
+else
+hbook: 
+        
+endif
+                  
+

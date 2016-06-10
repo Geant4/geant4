@@ -26,7 +26,15 @@
 //
 // $Id:$
 //
-#ifdef G4MULTITHREADED
+#if __clang__
+  #if (defined(G4MULTITHREADED) && !defined(G4USE_STD11) && \
+      !__has_feature(cxx_thread_local))
+    #define CLANG_NOSTDTLS
+  #endif
+#endif
+
+#if (defined(G4MULTITHREADED) && !defined(G4USE_STD11)) || \
+    (defined(CLANG_NOSTDTLS))
 
 #include "G4MTRandGeneral.hh"
 
@@ -83,8 +91,8 @@ void G4MTRandGeneral::prepareTable(const G4double* aProbFunc)
 
   theIntegralPdf.resize(nBins+1);
   theIntegralPdf[0] = 0;
-  register G4int ptn;
-  register G4double weight;
+  G4int ptn;
+  G4double weight;
 
   for ( ptn = 0; ptn<nBins; ++ptn ) {
     weight = aProbFunc[ptn];
@@ -206,13 +214,13 @@ G4double G4MTRandGeneral::mapRandom(G4double rand) const
 void G4MTRandGeneral::shootArray( CLHEP::HepRandomEngine* anEngine,
                                   const G4int size, G4double* vect )
 {
-   for (register G4int i=0; i<size; ++i)
+   for (G4int i=0; i<size; ++i)
      vect[i] = shoot(anEngine);
 }
 
 void G4MTRandGeneral::fireArray( const G4int size, G4double* vect )
 {
-  for (register G4int i=0; i<size; ++i)
+  for (G4int i=0; i<size; ++i)
      vect[i] = fire();
 }
 #endif

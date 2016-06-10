@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc 74544 2013-10-14 12:40:29Z gcosmo $
+// $Id: G4MuPairProductionModel.cc 83686 2014-09-09 12:40:23Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -156,11 +156,15 @@ void G4MuPairProductionModel::Initialise(const G4ParticleDefinition* p,
                                          const G4DataVector& cuts)
 { 
   SetParticle(p); 
+  if(!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
+
+  // for low-energy application this process should not work
+  if(lowestKinEnergy >= HighEnergyLimit()) { return; }
 
   // define scale of internal table for each thread only once
   if(0 == nbine) {
-    emax = HighEnergyLimit();
     emin = std::max(lowestKinEnergy, LowEnergyLimit());
+    emax = std::max(HighEnergyLimit(), emin*2);
     nbine = size_t(nYBinPerDecade*std::log10(emax/emin));
     if(nbine < 3) { nbine = 3; }
 
@@ -176,8 +180,6 @@ void G4MuPairProductionModel::Initialise(const G4ParticleDefinition* p,
     }    
     InitialiseElementSelectors(p, cuts); 
   }
-
-  if(!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -185,7 +187,7 @@ void G4MuPairProductionModel::Initialise(const G4ParticleDefinition* p,
 void G4MuPairProductionModel::InitialiseLocal(const G4ParticleDefinition* p,
 					      G4VEmModel* masterModel)
 {
-  if(p == particle) {
+  if(p == particle && lowestKinEnergy < HighEnergyLimit()) {
     SetElementSelectors(masterModel->GetElementSelectors());
     fElementData = masterModel->GetElementData();
   }

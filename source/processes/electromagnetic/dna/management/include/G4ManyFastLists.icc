@@ -1,0 +1,133 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+/*
+ * G4ManyFastLists.icc
+ *
+ *  Created on: 17 nov. 2014
+ *      Author: kara
+ */
+
+#ifndef G4MANYFASTLISTS_ICC_
+#define G4MANYFASTLISTS_ICC_
+
+//____________________________________________________________
+//
+//                      G4TrackManyLists
+//____________________________________________________________
+template<class OBJECT>
+  void G4ManyFastLists<OBJECT>::pop(OBJECT* __track)
+  {
+    // Ver 1
+    G4FastList<OBJECT>::Pop(__track);
+//  G4FastListNode* __trackListNode = G4FastList<OBJECT>::GetNode(__track);
+//  G4FastList<OBJECT>* __trackList = G4FastList<OBJECT>::GetTrackList(__trackListNode);
+//  if(__trackList) __trackList->pop(__trackListNode);
+
+//Ver 2
+//  G4FastList<OBJECT>* __list = G4FastList<OBJECT>::GetTrackList(track);
+//  if(__list) __list->pop(track);
+
+// Ver 3
+//  G4FastListNode* __node = GetIT(track)->GetTrackListNode();
+//  __node->fListRef->fpTrackList->pop(track);
+  }
+
+template<class OBJECT>
+  G4ManyFastLists_iterator<OBJECT> G4ManyFastLists_iterator<OBJECT>::UpdateToNextValidList()
+  {
+
+//    G4cout << "G4TrackManyList_iterator::UpdateToNextValidList" << G4endl;
+
+    if (fCurrentListIt == fLists->end()) // check validity
+    {
+      HasReachedEnd();
+      return *this;
+    }
+
+    fIterator = (*fCurrentListIt)->end();
+    fCurrentListIt++;
+
+    if (fCurrentListIt == fLists->end()) // check validity
+    {
+      HasReachedEnd();
+      return *this;
+    }
+
+    fIterator = (*fCurrentListIt)->begin();
+
+    while (fCurrentListIt != fLists->end()
+        &&
+//        (
+            fIterator == (*fCurrentListIt)->end()
+//            || (*fCurrentListIt)->empty()
+//            || fIterator.GetNode() == 0 || fIterator.GetNode()->GetObject() == 0)
+
+    )
+    {
+//      G4cout << "while" << G4endl;
+      fIterator = (*fCurrentListIt)->end();
+      fCurrentListIt++;
+      if (fCurrentListIt == fLists->end())
+      {
+//        G4cout << "return here" << G4endl;
+        HasReachedEnd();
+        return *this;
+      }
+      fIterator = (*fCurrentListIt)->begin();
+    }
+
+    if (fCurrentListIt == fLists->end())
+    {
+      HasReachedEnd();
+    }
+
+//    assert(fIterator.GetNode());
+//    assert(fIterator.GetNode()->GetObject());
+
+    return *this;
+  }
+
+template<class OBJECT>
+  G4ManyFastLists_iterator<OBJECT>&
+  G4ManyFastLists_iterator<OBJECT>::operator++()
+  {
+    if (fCurrentListIt == fLists->end())
+    {
+      HasReachedEnd();
+      return *this;
+    }
+
+    fIterator++;
+
+    if (fIterator == (*fCurrentListIt)->end())
+    {
+      UpdateToNextValidList();
+    }
+
+    return *this;
+  }
+
+#endif /* G4MANYFASTLISTS_ICC_ */

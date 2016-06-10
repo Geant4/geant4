@@ -1,4 +1,4 @@
-$Id: History 69574 2013-05-08 13:40:26Z gcosmo $
+$Id: History 87168 2014-11-26 09:22:28Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,65 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+26 November 2014 Alberto Ribon  (hadr-mod-util-V10-00-16)
+- G4ExcitedString : fixed a memory leak.
+
+04 October 2014 Vladimir Ivanchenko  (hadr-mod-util-V10-00-15)
+- G4Fragment - added model type
+
+06 August 2014 Gunter Folger     (hadr-mod-util-V10-00-14)
+- G4Fancy3DNucleus: remove thread local alloc in ChoosePositions().
+    Tool for Mt conversion probably confused by a static, creating a small leak.
+	 Replaced by const G4double nd2.
+	  
+02 July 2014  Alberto Ribon      (hadr-mod-util-V10-00-13)
+- G4ExcitedString.hh : minor clean-up of the previous, internal tag,
+  and propose for testing.
+
+25 May 2014   V. Uzhinsky        (hadr-mod-util-V10-00-12)
+- G4ExcitedString.hh is improved to treat a non-excited string when
+  it is given as a KineticTrack, especially to give its 4-momentum.
+
+08 May 2014   Gunter Folger      (hadr-mod-util-V10-00-11)
+- remove temp. method GetDefintion_asConst() from G4Nucleon.hh
+
+24 April 2014 Gunter Folger      (hadr-mod-util-V10-00-10)
+- change ctors to take const & for position and 4momentum.
+
+  not existing in svn : hadr-mod-util-V10-00-09
+ 
+14 April 2014 Gunter Folger      (hadr-mod-util-V10-00-08)
+- remove temp. method GetDefintion_asConst(), GetDefintion() now returns 
+   const G4ParticleDefinition*, and fix remaining uses of non const.
+
+05 March 2014 Gunter Folger      (hadr-mod-util-V10-00-07)
+- G4Fragment: make G4ParticleDefinition* const.
+
+05 March 2014 Gunter Folger      (hadr-mod-util-V10-00-06)
+- G4SampleResonance.cc remove const_cast in use of G4ParticleDefinition
+ 
+20 February 2014 Gunter Folger   (hadr-mod-util-V10-00-05)
+- G4KineticTrack: make G4ParticleDefinition* const.
+    add temp. method returning const G4ParticleDefinition* GetDefintion_asConst()
+	 will replace GetDefinition() once hadronics converted.  
+
+29-Jan-2014 Vladimir Ivanchenko		   hadr-mod-util-V10-00-04
+- G4Fragment - warning is printed out only if G4VERBOSE is set 
+
+28-Jan-2014 Vladimir Ivanchenko		   hadr-mod-util-V10-00-03
+- G4Fragment - removed counter of warnings, 
+    added G4Exception with "ifdef debug_G4Fragment"
+
+22-Jan-2014 Gabriele Cosmo		   hadr-mod-util-V10-00-02
+- Corrected use of DLL export flag for G4Fragment.
+
+21-Jan-2014 Vladimir Ivanchenko		   hadr-mod-util-V10-00-01
+- G4Fragment - fixed DLL name
+
+20-Jan-2014 Vladimir Ivanchenko		   hadr-mod-util-V10-00-00
+- G4Fragment - used G4Allocator to reduce memory churn
+
 01-May-2013 Andrea Dotti		   hadr-mod-util-V09-06-05
 - Replace use of CLHEP::HepRandom with MT safe equivalent G4Random
 

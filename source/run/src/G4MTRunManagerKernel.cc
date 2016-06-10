@@ -45,6 +45,8 @@ G4MTRunManagerKernel::G4MTRunManagerKernel() : G4RunManagerKernel(masterRMK)
     G4Exception("G4RunManagerKernel::G4RunManagerKernel()","Run0035",FatalException,msg);
 #endif
     if(!workerRMvector) workerRMvector = new std::vector<G4WorkerRunManager*>;
+    //Set flag that a MT-type kernel has been instantiated
+    G4Threading::SetMultithreadedApplication(true);
 }
 
 G4MTRunManagerKernel::~G4MTRunManagerKernel()
@@ -116,6 +118,7 @@ void* G4MTRunManagerKernel::StartThread(void* context)
   wThreadContext = static_cast<G4WorkerThread*>(context);  
   G4MTRunManager* masterRM = G4MTRunManager::GetMasterRunManager();
 
+    
   //============================
   //Step-0: Thread ID
   //============================
@@ -126,6 +129,46 @@ void* G4MTRunManagerKernel::StartThread(void* context)
   G4Threading::G4SetThreadId(thisID);
   G4UImanager::GetUIpointer()->SetUpForAThread(thisID);
 
+  //============================
+  //Optimization Step
+  //============================
+  //Enforce thread affinity if requested
+#if !defined(WIN32)
+  if ( masterRM->GetPinAffinity() != 0 ) {
+	  G4cout<<"AFFINITY SET"<<G4endl;
+      //Assign this thread to cpus in a round robin way
+	  G4int offset = masterRM->GetPinAffinity();
+	  G4int cpuindex = 0;
+	  if ( std::abs(offset)>G4Threading::G4GetNumberOfCores() ) {
+		  G4Exception("G4MTRunManagerKernel::StarThread","Run0035",JustWarning,"Cannot set thread affinity, affinity parameter larger than number of cores");
+	  }
+	  if ( offset == 0 ) {
+		  offset = 1;
+		  G4Exception("G4MTRunManagerKernel::StarThread","Run0035",JustWarning,"Affinity parameter==0, using 1 instead.");
+	  }
+	  if (offset>0) { //Start assigning affinity to given CPU
+		  --offset;
+		  cpuindex = (thisID+offset) % G4Threading::G4GetNumberOfCores(); //Round robin
+	  } else {//Exclude the given CPU
+		  offset *= -1;
+		  --offset;
+		  G4int myidx = thisID%(G4Threading::G4GetNumberOfCores()-1);
+		  cpuindex = myidx + (myidx>=offset);
+	  }
+	  G4cout<<"AFFINITY:"<<cpuindex<<G4endl;
+      //Avoid compilation warning in C90 standard w/o MT
+#if defined(G4MULTITHREADED)
+      G4Thread t = G4THREADSELF();
+#else
+      G4Thread t;
+#endif
+      G4bool success = G4Threading::G4SetPinAffinity(cpuindex,t);
+      if ( ! success ) {
+          G4Exception("G4MTRunManagerKernel::StarThread","Run0035",JustWarning,"Cannot set thread affinity.");
+      }
+  }
+#endif
+    
   //============================
   //Step-1: Random number engine
   //============================
@@ -203,7 +246,7 @@ void* G4MTRunManagerKernel::StartThread(void* context)
       G4int numSelect = masterRM->GetNumberOfSelectEvents();
       if ( macroFile == "" || macroFile == " " )
       {
-          wrm->BeamOn(numevents,0,numSelect);
+          wrm->BeamOn(numevents);
       }
       else
       {

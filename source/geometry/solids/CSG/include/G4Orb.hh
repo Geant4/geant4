@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Orb.hh 76263 2013-11-08 11:41:52Z gcosmo $
+// $Id: G4Orb.hh 79491 2014-03-05 15:24:29Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -56,6 +56,7 @@
 #include <CLHEP/Units/PhysicalConstants.h>
 
 #include "G4CSGSolid.hh"
+#include "G4Polyhedron.hh"
 
 class G4Orb : public G4CSGSolid
 {

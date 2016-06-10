@@ -32,7 +32,7 @@
 //    *                                 *
 //    ***********************************
 //
-// $Id: PurgMagSteppingAction.hh 72967 2013-08-14 14:57:48Z gcosmo $
+// $Id: PurgMagSteppingAction.hh 84366 2014-10-14 12:46:20Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -52,13 +52,13 @@ class PurgMagAnalysisManager;
 class PurgMagSteppingAction : public G4UserSteppingAction
 {
 public:
-  PurgMagSteppingAction(PurgMagDetectorConstruction*);
+  PurgMagSteppingAction(const PurgMagDetectorConstruction*);
   ~PurgMagSteppingAction();
   
   void UserSteppingAction(const G4Step*);
   
 private:
-  PurgMagDetectorConstruction* Detector; 
+  const PurgMagDetectorConstruction* Detector; 
   
 };
 

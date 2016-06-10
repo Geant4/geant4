@@ -1,9 +1,10 @@
-# $Id: scatter.mac 69009 2013-04-15 09:33:05Z gcosmo $
+# $Id: scatter.mac 86064 2014-11-07 08:49:32Z gcosmo $
 #
 # macro file for electronScattering
 #
 /control/verbose 2
 /run/verbose 2
+/run/numberOfThreads 2
 #
 # define here the Scattering foil
 #
@@ -24,8 +25,8 @@
 #
 /run/initialize
 #
-##/testem/phys/setCut 10 um
-/testem/phys/setCut 1 mm
+##/run/setCut 10 um
+/run/setCut 1 mm
 #
 /gun/particle e- 
 /gun/energy 13 MeV
@@ -36,6 +37,6 @@
 /analysis/h1/set 4 120 0. 240. mm		#normalized d(N/cost)/dS = f(r)
 ###/analysis/h1/setAscii 3
 #
-/testem/event/printModulo 100000
+/run/printProgress 100000
 #
 /run/beamOn 1000000

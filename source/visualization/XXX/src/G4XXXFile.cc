@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXFile.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4XXXFile.cc 85582 2014-10-31 09:07:30Z gcosmo $
 //
 // 
 // John Allison  7th March 2006
@@ -39,7 +39,7 @@ G4XXXFile::G4XXXFile():
   G4VGraphicsSystem("G4XXXFile",
 		    "XXXFile",
 		    "File-writing graphics driver",
-		    G4VGraphicsSystem::threeD  //?? Your functionality
+		    G4VGraphicsSystem::fileWriter  //?? Your functionality
 		    )
 {}
 
@@ -66,7 +66,7 @@ G4VViewer* G4XXXFile::CreateViewer(G4VSceneHandler& scene,
     }
   }
   else {
-    G4cout <<
+    G4cerr <<
       "G4XXXFile::CreateViewer: ERROR: null pointer on new G4XXXFileViewer."
 	   << G4endl;
   }

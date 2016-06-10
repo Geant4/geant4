@@ -24,31 +24,32 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
 
 /*
- * G4INCLIChannel.h
+ * G4INCLIChannel.hh
  *
  *  \date Jun 5, 2009
  * \author Pekka Kaitaniemi
  */
 
-#include "G4INCLFinalState.hh"
-
 #ifndef G4INCLICHANNEL_H_
 #define G4INCLICHANNEL_H_
 
+#include "G4INCLAllocationPool.hh"
+
 namespace G4INCL {
 
-  enum ChannelType {toNucleonNucleon, toNucleonDelta, toDeltaDelta};
+  class FinalState;
 
   /**
    * Channel generates a final state of an avatar.
@@ -58,7 +59,10 @@ namespace G4INCL {
     IChannel() {}
     virtual ~IChannel() {}
 
-    virtual G4INCL::FinalState* getFinalState() = 0;
+    FinalState *getFinalState();
+    virtual void fillFinalState(FinalState *fs) = 0;
+
+    INCL_DECLARE_ALLOCATION_POOL(IChannel);
   };
 
 }

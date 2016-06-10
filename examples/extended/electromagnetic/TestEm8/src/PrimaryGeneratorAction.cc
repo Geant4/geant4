@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
-// $Id: PrimaryGeneratorAction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id: PrimaryGeneratorAction.cc 85243 2014-10-27 08:22:42Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -46,6 +46,7 @@
 #include "G4Event.hh"
 #include "G4Electron.hh"
 #include "G4SystemOfUnits.hh"
+#include "TestParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,6 +58,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   fParticleGun->SetParticleDefinition(G4Electron::Electron());
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
   fParticleGun->SetParticleEnergy(1.*GeV);
+  fParam = TestParameters::GetPointer();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,22 +72,19 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
+  G4double z = fParam->GetPositionZ();
   if(0 == anEvent->GetEventID()) {
-    G4cout << "### PrimaryGeneratorAction::GeneratePrimaries ##########" << G4endl;
+    G4cout << "### PrimaryGeneratorAction::GeneratePrimaries ##########" 
+           << G4endl;
     G4cout << "### " << fParticleGun->GetParticleDefinition()->GetParticleName()
-           << "  E(MeV)= " << fParticleGun->GetParticleEnergy()/MeV << G4endl;
+           << "  E(MeV)= " << fParticleGun->GetParticleEnergy()/MeV
+           << "  Z(mm)= " << z/mm 
+           << G4endl;
     G4cout << "########################################################"
            << G4endl;
-
   }
-  fParticleGun->GeneratePrimaryVertex(anEvent);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PrimaryGeneratorAction::SetPositionZ(G4double z)
-{
   fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,z));
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

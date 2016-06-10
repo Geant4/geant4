@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.cc 66872 2013-01-15 01:25:57Z japost $
+// $Id: G4GammaConversionToMuons.cc 83660 2014-09-08 09:57:12Z gcosmo $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, April 2002
@@ -40,18 +40,28 @@
 #include "G4UnitsTable.hh"
 #include "G4MuonPlus.hh"
 #include "G4MuonMinus.hh"
+#include "G4EmProcessSubType.hh"
+#include "G4NistManager.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 using namespace std;
 
+static const G4double sqrte=sqrt(exp(1.));
+static const G4double PowSat=-0.88;
+
 G4GammaConversionToMuons::G4GammaConversionToMuons(const G4String& processName,
-    G4ProcessType type):G4VDiscreteProcess (processName, type),
-    LowestEnergyLimit (4*G4MuonPlus::MuonPlus()->GetPDGMass()), // 4*Mmuon
+						   G4ProcessType type)
+  : G4VDiscreteProcess (processName, type),
+    Mmuon(G4MuonPlus::MuonPlus()->GetPDGMass()),
+    Rc(elm_coupling/Mmuon),
+    LowestEnergyLimit (4*Mmuon), // 4*Mmuon
     HighestEnergyLimit(1e21*eV), // ok to 1e21eV=1e12GeV, then LPM suppression
     CrossSecFactor(1.)
 { 
-  SetProcessSubType(15);
+  SetProcessSubType(fGammaConversionToMuMu);
   MeanFreePath = DBL_MAX;
 }
 
@@ -59,8 +69,8 @@ G4GammaConversionToMuons::G4GammaConversionToMuons(const G4String& processName,
 
 // destructor
 
-G4GammaConversionToMuons::~G4GammaConversionToMuons() // (empty) destructor
-{ }
+G4GammaConversionToMuons::~G4GammaConversionToMuons() 
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
@@ -91,7 +101,7 @@ G4double G4GammaConversionToMuons::GetMeanFreePath(const G4Track& aTrack,
    G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
    G4Material* aMaterial = aTrack.GetMaterial();
 
-   if (GammaEnergy <  LowestEnergyLimit)
+   if (GammaEnergy <= LowestEnergyLimit)
      MeanFreePath = DBL_MAX;
    else
      MeanFreePath = ComputeMeanFreePath(GammaEnergy,aMaterial);
@@ -111,7 +121,7 @@ G4double G4GammaConversionToMuons::ComputeMeanFreePath(G4double GammaEnergy,
 
   G4double SIGMA = 0 ;
 
-  for ( size_t i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )
+  for ( size_t i=0 ; i < aMaterial->GetNumberOfElements(); ++i)
   {
     G4double AtomicZ = (*theElementVector)[i]->GetZ();
     G4double AtomicA = (*theElementVector)[i]->GetA()/(g/mole);
@@ -131,7 +141,7 @@ G4double G4GammaConversionToMuons::GetCrossSectionPerAtom(
 {
    G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
    G4double AtomicZ = anElement->GetZ();
-   G4double AtomicA = anElement->GetA()/(g/mole);
+   G4double AtomicA = anElement->GetN();
    G4double crossSection =
         ComputeCrossSectionPerAtom(GammaEnergy,AtomicZ,AtomicA);
    return crossSection;
@@ -140,50 +150,43 @@ G4double G4GammaConversionToMuons::GetCrossSectionPerAtom(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4double G4GammaConversionToMuons::ComputeCrossSectionPerAtom(
-                         G4double Egam, G4double Z, G4double A)
+                         G4double Egam, G4double ZZ, G4double)
 			 
 // Calculates the microscopic cross section in GEANT4 internal units.
 // Total cross section parametrisation from H.Burkhardt
 // It gives a good description at any energy (from 0 to 10**21 eV)
-{ static const G4double Mmuon=G4MuonPlus::MuonPlus()->GetPDGMass();
-  static const G4double Mele=electron_mass_c2;
-  static const G4double Rc=elm_coupling/Mmuon; // classical particle radius
-  static const G4double sqrte=sqrt(exp(1.));
-  static const G4double PowSat=-0.88;
+{ 
+  if(Egam <= LowestEnergyLimit) return 0 ; // below threshold return 0
 
-  static G4ThreadLocal G4double CrossSection = 0.0 ;
+  G4int Z = G4lrint(ZZ);
+  G4double CrossSection = 0.0;
+  G4NistManager* nist = G4NistManager::Instance();
 
-  if ( A < 1. ) return 0;
-  if ( Egam < 4*Mmuon ) return 0 ; // below threshold return 0
-
-  static G4ThreadLocal G4double EgamLast=0,Zlast=0,PowThres,Ecor,B,Dn,Zthird,Winfty,WMedAppr,
-      Wsatur,sigfac;
+  G4double PowThres,Ecor,B,Dn,Zthird,Winfty,WMedAppr,
+    Wsatur,sigfac;
   
-  if(Zlast==Z && Egam==EgamLast) return CrossSection; // already calculated
-  EgamLast=Egam;
-  
-  if(Zlast!=Z) // new element
-  { Zlast=Z;
-    if(Z==1) // special case of Hydrogen
+  if(Z==1) // special case of Hydrogen
     { B=202.4;
       Dn=1.49;
     }
-    else
+  else
     { B=183.;
-      Dn=1.54*pow(A,0.27);
+      Dn=1.54*nist->GetA27(Z);
     }
-    Zthird=pow(Z,-1./3.); // Z**(-1/3)
-    Winfty=B*Zthird*Mmuon/(Dn*Mele);
-    WMedAppr=1./(4.*Dn*sqrte*Mmuon);
-    Wsatur=Winfty/WMedAppr;
-    sigfac=4.*fine_structure_const*Z*Z*Rc*Rc;
-    PowThres=1.479+0.00799*Dn;
-    Ecor=-18.+4347./(B*Zthird);
-  }
-  G4double CorFuc=1.+.04*log(1.+Ecor/Egam);
-  G4double Eg=pow(1.-4.*Mmuon/Egam,PowThres)*pow( pow(Wsatur,PowSat)+
-              pow(Egam,PowSat),1./PowSat); // threshold and saturation
-  CrossSection=7./9.*sigfac*log(1.+WMedAppr*CorFuc*Eg);
+  Zthird=1./nist->GetZ13(Z); // Z**(-1/3)
+  Winfty=B*Zthird*Mmuon/(Dn*electron_mass_c2);
+  WMedAppr=1./(4.*Dn*sqrte*Mmuon);
+  Wsatur=Winfty/WMedAppr;
+  sigfac=4.*fine_structure_const*Z*Z*Rc*Rc;
+  PowThres=1.479+0.00799*Dn;
+  Ecor=-18.+4347./(B*Zthird);
+  
+  G4double CorFuc=1.+.04*G4Log(1.+Ecor/Egam);
+  //G4double Eg=pow(1.-4.*Mmuon/Egam,PowThres)*pow( pow(Wsatur,PowSat)+
+  //            pow(Egam,PowSat),1./PowSat); // threshold and saturation
+  G4double Eg=G4Exp(G4Log(1.-4.*Mmuon/Egam)*PowThres)*
+    G4Exp(G4Log( G4Exp(G4Log(Wsatur)*PowSat)+G4Exp(G4Log(Egam)*PowSat))/PowSat);
+  CrossSection=7./9.*sigfac*G4Log(1.+WMedAppr*CorFuc*Eg);
   CrossSection*=CrossSecFactor; // increase the CrossSection by  (by default 1)
   return CrossSection;
 }
@@ -192,7 +195,8 @@ G4double G4GammaConversionToMuons::ComputeCrossSectionPerAtom(
 
 void G4GammaConversionToMuons::SetCrossSecFactor(G4double fac)
 // Set the factor to artificially increase the cross section
-{ CrossSecFactor=fac;
+{ 
+  CrossSecFactor=fac;
   G4cout << "The cross section for GammaConversionToMuons is artificially "
          << "increased by the CrossSecFactor=" << CrossSecFactor << G4endl;
 }
@@ -209,39 +213,35 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
   aParticleChange.Initialize(aTrack);
   G4Material* aMaterial = aTrack.GetMaterial();
 
-  static const G4double Mmuon=G4MuonPlus::MuonPlus()->GetPDGMass();
-  static const G4double Mele=electron_mass_c2;
-  static const G4double sqrte=sqrt(exp(1.));
-
   // current Gamma energy and direction, return if energy too low
   const G4DynamicParticle *aDynamicGamma = aTrack.GetDynamicParticle();
   G4double Egam = aDynamicGamma->GetKineticEnergy();
-  if (Egam < 4*Mmuon) return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
+  if (Egam <= LowestEnergyLimit) {
+    return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
+  }
   G4ParticleMomentum GammaDirection = aDynamicGamma->GetMomentumDirection();
 
   // select randomly one element constituting the material
-  const G4Element& anElement = *SelectRandomAtom(aDynamicGamma, aMaterial);
-  G4double Z = anElement.GetZ();
-  G4double A = anElement.GetA()/(g/mole);
+  const G4Element* anElement = SelectRandomAtom(aDynamicGamma, aMaterial);
+  G4int Z = G4lrint(anElement->GetZ());
+  G4NistManager* nist = G4NistManager::Instance();
 
-  static G4ThreadLocal G4double Zlast=0,B,Dn,Zthird,Winfty,A027,C1Num2,C2Term2;
-  if(Zlast!=Z) // the element has changed
-  { Zlast=Z;
-    if(Z==1) // special case of Hydrogen
+  G4double B,Dn;
+  G4double A027 = nist->GetA27(Z);
+
+  if(Z==1) // special case of Hydrogen
     { B=202.4;
       Dn=1.49;
     }
-    else
+  else
     { B=183.;
-      Dn=1.54*pow(A,0.27);
+      Dn=1.54*A027;
     }
-    Zthird=pow(Z,-1./3.); // Z**(-1/3)
-    Winfty=B*Zthird*Mmuon/(Dn*Mele);
-    A027=pow(A,0.27);
-    G4double C1Num=0.35*A027;
-    C1Num2=C1Num*C1Num;
-    C2Term2=Mele/(183.*Zthird*Mmuon);
-  }
+  G4double Zthird=1./nist->GetZ13(Z); // Z**(-1/3)
+  G4double Winfty=B*Zthird*Mmuon/(Dn*electron_mass_c2);
+  G4double C1Num=0.35*A027;
+  G4double C1Num2=C1Num*C1Num;
+  G4double C2Term2=electron_mass_c2/(183.*Zthird*Mmuon);
 
   G4double GammaMuonInv=Mmuon/Egam;
   G4double sqrtx=sqrt(.25-GammaMuonInv);
@@ -250,23 +250,26 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
 
   // generate xPlus according to the differential cross section by rejection
   G4double Ds2=(Dn*sqrte-2.);
-  G4double sBZ=sqrte*B*Zthird/Mele;
-  G4double LogWmaxInv=1./log(Winfty*(1.+2.*Ds2*GammaMuonInv)
-                             /(1.+2.*sBZ*Mmuon*GammaMuonInv));
+  G4double sBZ=sqrte*B*Zthird/electron_mass_c2;
+  G4double LogWmaxInv=1./G4Log(Winfty*(1.+2.*Ds2*GammaMuonInv)
+			       /(1.+2.*sBZ*Mmuon*GammaMuonInv));
   G4double xPlus,xMinus,xPM,result,W;
+  G4int nn = 0;
+  const G4int nmax = 1000;
   do
   { xPlus=xmin+G4UniformRand()*(xmax-xmin);
     xMinus=1.-xPlus;
     xPM=xPlus*xMinus;
     G4double del=Mmuon*Mmuon/(2.*Egam*xPM);
     W=Winfty*(1.+Ds2*del/Mmuon)/(1.+sBZ*del);
-    if(W<1.) W=1.; // to avoid negative cross section at xmin
+    if(W<=1. || nn > nmax) { break; } // to avoid negative cross section at xmin
     G4double xxp=1.-4./3.*xPM; // the main xPlus dependence
-    result=xxp*log(W)*LogWmaxInv;
+    result=xxp*G4Log(W)*LogWmaxInv;
     if(result>1.) {
       G4cout << "G4GammaConversionToMuons::PostStepDoIt WARNING:"
 	     << " in dSigxPlusGen, result=" << result << " > 1" << G4endl;
     }
+    ++nn;
   }
   while (G4UniformRand() > result);
 
@@ -276,7 +279,7 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
   G4double rho;
 
   G4double thetaPlus,thetaMinus,phiHalf; // final angular variables
-
+  nn = 0;
   do      // t, psi, rho generation start  (while angle < pi)
   {
     //generate t by the rejection method
@@ -284,7 +287,9 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
     G4double f1_max=(1.-xPM) / (1.+C1);
     G4double f1; // the probability density
     do
-    { t=G4UniformRand();
+    { 
+      ++nn;
+      t=G4UniformRand();
       f1=(1.-2.*xPM+4.*xPM*t*(1.-t)) / (1.+C1/(t*t));
       if(f1<0 || f1> f1_max) // should never happend
 	{
@@ -301,7 +306,9 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
     // long version
     G4double f2;
     do
-    { psi=2.*pi*G4UniformRand();
+    { 
+      ++nn;
+      psi=2.*pi*G4UniformRand();
       f2=1.-2.*xPM+4.*xPM*t*(1.-t)*(1.+cos(2.*psi));
       if(f2<0 || f2> f2_max) // should never happend
 	{
@@ -317,8 +324,8 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
     G4double C2Term1=GammaMuonInv/(2.*xPM*t);
     G4double C2=4./sqrt(xPM)*pow(C2Term1*C2Term1+C2Term2*C2Term2,2.);
     G4double rhomax=1.9/A027*(1./t-1.);
-    G4double beta=log( (C2+pow(rhomax,4.))/C2 );
-    rho=pow(C2 *( exp(beta*G4UniformRand())-1. ) ,0.25);
+    G4double beta=G4Log( (C2+rhomax*rhomax*rhomax*rhomax)/C2 );
+    rho=G4Exp(G4Log(C2 *( G4Exp(beta*G4UniformRand())-1. ))*0.25);
 
     //now get from t and psi the kinematical variables
     G4double u=sqrt(1./t-1.);
@@ -327,6 +334,12 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
 
     thetaPlus =GammaMuonInv*(u+xiHalf)/xPlus;
     thetaMinus=GammaMuonInv*(u-xiHalf)/xMinus;
+
+    // protection against infinite loop
+    if(nn > nmax) {
+      if(std::abs(thetaPlus)>pi) { thetaPlus = 0.0; }
+      if(std::abs(thetaMinus)>pi) { thetaMinus = 0.0; }
+    }
 
   } while ( std::abs(thetaPlus)>pi || std::abs(thetaMinus) >pi);
 
@@ -366,8 +379,8 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4Element* G4GammaConversionToMuons::SelectRandomAtom(
-                                        const G4DynamicParticle* aDynamicGamma,
-                                              G4Material* aMaterial)
+		  const G4DynamicParticle* aDynamicGamma,
+		  G4Material* aMaterial)
 {
   // select randomly 1 element within the material, invoked by PostStepDoIt
 
@@ -381,7 +394,7 @@ G4Element* G4GammaConversionToMuons::SelectRandomAtom(
   G4double rval = G4UniformRand()/MeanFreePath;
 
 
-  for ( G4int i=0 ; i < NumberOfElements ; i++ )
+  for ( G4int i=0 ; i < NumberOfElements ; ++i)
       { PartialSumSigma += NbOfAtomsPerVolume[i] *
                  GetCrossSectionPerAtom(aDynamicGamma, (*theElementVector)[i]);
         if (rval <= PartialSumSigma) return ((*theElementVector)[i]);

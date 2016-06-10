@@ -22,10 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
-// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
-//
 // Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
 // the *COMPLETE* version of this program, together with its documentation;
 // Hadrontherapy (both basic and full version) are supported by the Italian INFN
@@ -63,10 +59,9 @@ G4double HadrontherapyStepMax::PostStepGetPhysicalInteractionLength(const G4Trac
   *condition = NotForced;
   
   G4double ProposedStep = DBL_MAX;
+if((MaxChargedStep > 0.) &&
+   (aTrack.GetVolume() != 0) && ((aTrack.GetVolume()->GetName() == "DetectorPhys")||(aTrack.GetVolume()->GetName() == "InternalChamber")||(aTrack.GetVolume()->GetName() == "CollimatorHole")||(aTrack.GetVolume()->GetName() == "PhysFourthTQuad")||(aTrack.GetVolume()->GetName() == "PhysThirdTQuad")||(aTrack.GetVolume()->GetName() == "PhysSecondTQuad")||(aTrack.GetVolume()->GetName() == "PhysFirstTQuad")||(aTrack.GetVolume()->GetName() =="physQuadChamber")||(aTrack.GetVolume()->GetName() =="PVirtualMag")||(aTrack.GetVolume()->GetName() =="PhysicCup")))
 
-  if((MaxChargedStep > 0.) &&
-     (aTrack.GetVolume() != 0) &&
-     (aTrack.GetVolume()->GetName() == "DetectorPhys"))
      ProposedStep = MaxChargedStep;
 
   return ProposedStep;

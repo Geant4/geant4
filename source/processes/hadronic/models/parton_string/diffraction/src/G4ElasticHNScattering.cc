@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHNScattering.cc 74627 2013-10-17 07:04:38Z gcosmo $
+// $Id: G4ElasticHNScattering.cc 86646 2014-11-14 13:29:39Z gcosmo $
 //
 
 // ------------------------------------------------------------
@@ -48,8 +48,8 @@
 #include "G4VSplitableHadron.hh"
 #include "G4ExcitedString.hh"
 #include "G4FTFParameters.hh"
-//#include "G4ios.hh"
 
+#include "G4SampleResonance.hh"                                  // Uzhi Oct 2014
 
 //============================================================================
 
@@ -64,12 +64,18 @@ G4bool G4ElasticHNScattering::ElasticScattering( G4VSplitableHadron* projectile,
   projectile->IncrementCollisionCount( 1 );
   target->IncrementCollisionCount( 1 );
 
+  G4SampleResonance BrW;                                                    // Uzhi Oct 2014
+
   // Projectile parameters
   G4LorentzVector Pprojectile = projectile->Get4Momentum();
   if ( Pprojectile.z() < 0.0 ) return false;
   G4bool PutOnMassShell( false );
   G4double M0projectile = Pprojectile.mag();       
-  if ( M0projectile < projectile->GetDefinition()->GetPDGMass() ) {
+//  if ( M0projectile < projectile->GetDefinition()->GetPDGMass() ) {       // Uzhi Oct 2014
+
+  G4double MminProjectile=BrW.GetMinimumMass(projectile->GetDefinition());  // Uzhi Oct 2014
+
+  if ( M0projectile < MminProjectile ) {                                    // Uzhi Oct 2014
     PutOnMassShell = true;
     M0projectile = projectile->GetDefinition()->GetPDGMass();
   }
@@ -79,7 +85,11 @@ G4bool G4ElasticHNScattering::ElasticScattering( G4VSplitableHadron* projectile,
   // Target parameters
   G4LorentzVector Ptarget = target->Get4Momentum();
   G4double M0target = Ptarget.mag();
-  if ( M0target < target->GetDefinition()->GetPDGMass() ) {
+//  if ( M0target < target->GetDefinition()->GetPDGMass() ) {              // Uzhi Oct 2014
+
+  G4double MminTarget=BrW.GetMinimumMass(target->GetDefinition());         // Uzhi Oct 2014
+
+  if ( M0target < MminTarget ) {                                           // Uzhi Oct 2014
     PutOnMassShell = true;
     M0target = target->GetDefinition()->GetPDGMass();
   }   

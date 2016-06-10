@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.cc 77563 2013-11-26 09:03:18Z gcosmo $
+// $Id: G4UIcommand.cc 84281 2014-10-13 07:21:50Z gcosmo $
 //
 // 
 
@@ -71,6 +71,10 @@ token(IDENTIFIER),paramERR(0)
   availabelStateList.push_back(G4State_Abort);
 }
 
+#ifdef G4MULTITHREADED
+#include "G4Threading.hh"
+#endif
+
 void G4UIcommand::G4UIcommandCommonConstructorCode
 (const char * theCommandPath)
 { 
@@ -78,8 +82,18 @@ void G4UIcommand::G4UIcommandCommonConstructorCode
   commandName = theCommandPath;
   G4int commandNameIndex = commandName.last('/');
   commandName.remove(0,commandNameIndex+1);
-
+#ifdef G4MULTITHREADED
+  if(messenger && messenger->CommandsShouldBeInMaster()
+     && G4Threading::IsWorkerThread())
+  {
+    toBeBroadcasted = false;
+    G4UImanager::GetMasterUIpointer()->AddNewCommand(this);
+  }
+  else
+  { G4UImanager::GetUIpointer()->AddNewCommand(this); }
+#else
   G4UImanager::GetUIpointer()->AddNewCommand(this);
+#endif
 }
 
 G4UIcommand::~G4UIcommand()

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationLevelDensityParameter.hh 68724 2013-04-05 09:26:32Z gcosmo $
+// $Id: G4EvaporationLevelDensityParameter.hh 85443 2014-10-29 14:35:57Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) 
@@ -35,7 +35,6 @@
 #define G4EvaporationLevelDensityParameter_h 1
 
 #include "G4VLevelDensityParameter.hh"
-//#include "G4CameronTruranHilfShellCorrections.hh"
 
 class G4EvaporationLevelDensityParameter : public G4VLevelDensityParameter
 {
@@ -45,11 +44,7 @@ public:
 
   virtual ~G4EvaporationLevelDensityParameter();
 
-  inline 
-  G4double LevelDensityParameter(G4int A, G4int/*Z*/, G4double /*U*/) const
-  {
-    return static_cast<G4double>(A)/10.;
-  }
+  G4double LevelDensityParameter(G4int A, G4int Z, G4double U) const;
 
 private:  
 	
@@ -59,22 +54,6 @@ private:
   G4bool operator==(const G4EvaporationLevelDensityParameter &right) const;
   G4bool operator!=(const G4EvaporationLevelDensityParameter &right) const;
   
-  /*
-private:
-  inline G4double ShellCorrection(G4int Z, G4int N) const
-  { 
-    return SPtr->GetShellZ(Z) + SPtr->GetShellN(N);
-  }
-
-  static const G4double ConstEvapLevelDensityParameter;
-  static const G4double alpha;
-  static const G4double beta;
-  static const G4double gamma;
-  static const G4double Bs;
-
-  G4CameronTruranHilfShellCorrections* SPtr;
-  */	  		
-
 };
 
 #endif

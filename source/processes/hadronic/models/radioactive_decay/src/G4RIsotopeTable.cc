@@ -70,6 +70,7 @@
 #include "G4KshellECDecayChannel.hh"
 #include "G4LshellECDecayChannel.hh"
 #include "G4AlphaDecayChannel.hh"
+#include "G4ProtonDecayChannel.hh"
 */
 #include "G4ios.hh"
 #include "globals.hh"
@@ -79,38 +80,36 @@
 
 const G4double G4RIsotopeTable::levelTolerance = 2.0*keV;
 
-///////////////////////////////////////////////////////////////////////////////
-//
+
 G4RIsotopeTable::G4RIsotopeTable()
-{//
- //Reset the list of user define data file
- //
- theUserRadioactiveDataFiles.clear();
+{
+  // Reset the list of user defined data files
+  theUserRadioactiveDataFiles.clear();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
+
 G4RIsotopeTable::~G4RIsotopeTable()
 {
+  for (G4int i = 0; i < G4int(fIsotopeList.size()); i++) delete fIsotopeList[i];
   fIsotopeList.clear();
   fIsotopeNameList.clear(); 
 }
-///////////////////////////////////////////////////////////////////////////////
-//
+
+
 G4int G4RIsotopeTable::GetVerboseLevel() const
 {
   return G4ParticleTable::GetParticleTable()->GetVerboseLevel();
 }
-///////////////////////////////////////////////////////////////////////////////
-//
+
+
 G4bool G4RIsotopeTable::FindIsotope(G4IsotopeProperty* )
 {
   // do nothing, it is here just for the compiler
   // it is required by the base class
   return true;
 }
-///////////////////////////////////////////////////////////////////////////////
-//
+
+
 G4IsotopeProperty* G4RIsotopeTable::GetIsotope(G4int Z, G4int A, G4double E)
 {
   G4String fname = GetIsotopeName(Z, A, E);  
@@ -118,19 +117,19 @@ G4IsotopeProperty* G4RIsotopeTable::GetIsotope(G4int Z, G4int A, G4double E)
   for (G4int i = 0 ; i< Entries(); i++) {
     if(fIsotopeNameList[i] == fname) j = i;}
   if (j >=0) {
-    if (GetVerboseLevel()>1) {
-    G4cout <<"G4RIsotopeTable::GetIsotope No. : ";
-    G4cout <<j<<G4endl;   
+    if (GetVerboseLevel() > 1) {
+      G4cout <<"G4RIsotopeTable::GetIsotope No. : ";
+      G4cout <<j<<G4endl;   
     }
-    return  GetIsotope(j);}
-  // isotope property data has been loaded already and just return the pointer
-  else{
+    return  GetIsotope(j);
+    // isotope property data has been loaded already - just return the pointer
+
+  } else {
     G4double meanlife = GetMeanLifeTime(Z, A, E);
-    // E is pass as a refence hence on entry E is supplied by the user and it 
+    // E is passed as a refence hence on entry E is supplied by the user and it 
     // could be slightly different from the returned value which is the one 
     // defined in the database.
-    // this call is to ensure the code uses a consistane E value through out.
-    //
+    // this call is to ensure the code uses a consistent E value throughout.
     
     G4IsotopeProperty* fProperty = new G4IsotopeProperty();   
     // Set Isotope Property

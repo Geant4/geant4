@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 66892 2013-01-17 10:57:59Z gunter $
+# $Id: GNUmakefile 84481 2014-10-16 08:53:55Z gcosmo $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -30,6 +30,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
 			-I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
 			-I$(G4BASE)/processes/hadronic/models/pre_equilibrium/include \
 			-I$(G4BASE)/processes/hadronic/models/quasi_elastic/include \
+			-I$(G4BASE)/processes/hadronic/models/coherent_elastic/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/leptons/include \
             -I$(G4BASE)/particles/bosons/include \

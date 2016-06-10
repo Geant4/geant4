@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPrimaryGeneratorAction.hh 66508 2012-12-19 10:16:45Z gcosmo $
+// $Id: GammaRayTelPrimaryGeneratorAction.hh 82268 2014-06-13 13:47:30Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -73,7 +73,7 @@ public:
 private:
   G4ParticleGun*                particleGun;
   G4GeneralParticleSource*      particleSource;	  
-  GammaRayTelDetectorConstruction*    GammaRayTelDetector;  
+  const GammaRayTelDetectorConstruction*    GammaRayTelDetector;  
   GammaRayTelPrimaryGeneratorMessenger* gunMessenger; 
   G4String                      rndmFlag;    //flag for a random impact point
   G4int                         nSourceType;

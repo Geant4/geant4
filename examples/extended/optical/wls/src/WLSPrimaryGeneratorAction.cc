@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSPrimaryGeneratorAction.cc 69561 2013-05-08 12:25:56Z gcosmo $
+// $Id: WLSPrimaryGeneratorAction.cc 84718 2014-10-20 07:40:45Z gcosmo $
 //
 /// \file optical/wls/src/WLSPrimaryGeneratorAction.cc
 /// \brief Implementation of the WLSPrimaryGeneratorAction class
@@ -159,7 +159,6 @@ void WLSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
      fFirst = true;
      BuildEmissionSpectrum();
   }
-
 
 #ifdef use_sampledEnergy
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();

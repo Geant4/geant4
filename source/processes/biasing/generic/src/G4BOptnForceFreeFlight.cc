@@ -25,6 +25,7 @@
 //
 #include "G4BOptnForceFreeFlight.hh"
 #include "G4ILawForceFreeFlight.hh"
+#include "G4BiasingProcessInterface.hh"
 #include "G4Step.hh"
 
 
@@ -36,10 +37,13 @@ G4BOptnForceFreeFlight::G4BOptnForceFreeFlight(G4String name)
 }
 
 G4BOptnForceFreeFlight::~G4BOptnForceFreeFlight()
-{}
-
-const G4VBiasingInteractionLaw* G4BOptnForceFreeFlight::ProvideOccurenceBiasingInteractionLaw( const G4BiasingProcessInterface* )
 {
+  if ( fForceFreeFlightInteractionLaw ) delete fForceFreeFlightInteractionLaw;
+}
+
+const G4VBiasingInteractionLaw* G4BOptnForceFreeFlight::ProvideOccurenceBiasingInteractionLaw( const G4BiasingProcessInterface*, G4ForceCondition& proposeForceCondition )
+{
+  proposeForceCondition = Forced;
   return fForceFreeFlightInteractionLaw;
 }
 
@@ -73,6 +77,51 @@ G4bool G4BOptnForceFreeFlight::DenyProcessPostStepDoIt( const G4BiasingProcessIn
   
   return true;
 }
+
+G4VParticleChange* G4BOptnForceFreeFlight::ApplyFinalStateBiasing( const G4BiasingProcessInterface* callingProcess,
+								   const G4Track* track,
+								   const G4Step* step,
+								   G4bool& forceFinalState)
+{
+  // -- If the track is reaching the volume boundary, its free flight ends. In this case, its zero
+  // -- weight is brought back to non-zero value: its initial weight is restored by the first
+  // -- ApplyFinalStateBiasing operation called, and the weight for force free flight is applied
+  // -- is applied by each operation.
+  // -- If the track is not reaching the volume boundary, it zero weight flight continues.
+  
+  fParticleChange.Initialize( *track );
+  forceFinalState = true;
+  if ( step->GetPostStepPoint()->GetStepStatus() == fGeomBoundary )
+    {
+      // -- Sanity checks:
+      if ( fInitialTrackWeight <= DBL_MIN )
+	{
+	  G4ExceptionDescription ed;
+	  ed << " Initial track weight is null ! " << G4endl;
+	  G4Exception(" G4BOptnForceFreeFlight::ApplyFinalStateBiasing(...)",
+		      "BIAS.GEN.05",
+		      JustWarning,
+		      ed);
+	}
+      if ( fCumulatedWeightChange <= DBL_MIN )
+	{
+	  G4ExceptionDescription ed;
+	  ed << " Cumulated weight is null ! " << G4endl;
+	  G4Exception(" G4BOptnForceFreeFlight::ApplyFinalStateBiasing(...)",
+		      "BIAS.GEN.06",
+		      JustWarning,
+		      ed);
+	}
+
+      G4double proposedWeight = track->GetWeight();
+      if ( callingProcess->GetIsFirstPostStepDoItInterface() ) proposedWeight  = fCumulatedWeightChange * fInitialTrackWeight;
+      else                                                     proposedWeight *= fCumulatedWeightChange;
+      fParticleChange.ProposeWeight(proposedWeight);
+    }
+  
+  return &fParticleChange;
+}
+
 
 void G4BOptnForceFreeFlight::AlongMoveBy( const G4BiasingProcessInterface*, const G4Step*, G4double weightChange )
 {

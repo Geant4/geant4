@@ -11,12 +11,13 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
+# $Id: sources.cmake 85532 2014-10-30 16:19:11Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
 # List external includes needed.
 include_directories(${CLHEP_INCLUDE_DIRS})
+include_directories(${USOLIDS_INCLUDE_DIRS})
 
 # Need XercesC
 include_directories(${XERCESC_INCLUDE_DIRS})

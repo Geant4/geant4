@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDetectorConstruction.hh 66508 2012-12-19 10:16:45Z gcosmo $
+// $Id: GammaRayTelDetectorConstruction.hh 82268 2014-06-13 13:47:30Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -39,6 +39,7 @@
 #define GammaRayTelDetectorConstruction_h 1
 
 #include "G4VUserDetectorConstruction.hh"
+#include "G4Cache.hh"
 #include "globals.hh"
 
 class G4Box;
@@ -51,7 +52,9 @@ class GammaRayTelDetectorMessenger;
 class GammaRayTelTrackerSD;
 class GammaRayTelAnticoincidenceSD;
 class GammaRayTelCalorimeterSD;
-class GammaRayTelTrackerROGeometry;
+class G4GlobalMagFieldMessenger;
+
+//class GammaRayTelTrackerROGeometry;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -87,48 +90,49 @@ public:
      
   G4VPhysicalVolume* Construct();
   void UpdateGeometry();
+  void ConstructSDandField();
   
 public:
   
   void PrintPayloadParameters();
                     
 
-  G4double GetWorldSizeZ()             {return WorldSizeZ;}; 
-  G4double GetWorldSizeXY()            {return WorldSizeXY;};
+  G4double GetWorldSizeZ()  const     {return WorldSizeZ;}; 
+  G4double GetWorldSizeXY() const     {return WorldSizeXY;};
   
-  G4double GetPayloadSizeZ()           {return PayloadSizeZ;}; 
-  G4double GetPayloadSizeXY()          {return PayloadSizeXY;};
+  G4double GetPayloadSizeZ() const    {return PayloadSizeZ;}; 
+  G4double GetPayloadSizeXY() const   {return PayloadSizeXY;};
 
-  G4double GetTKRSizeZ()               {return TKRSizeZ;}; 
-  G4double GetTKRSizeXY()              {return TKRSizeXY;};
+  G4double GetTKRSizeZ() const         {return TKRSizeZ;}; 
+  G4double GetTKRSizeXY() const        {return TKRSizeXY;};
 
-  G4double GetCALSizeZ()               {return CALSizeZ;}; 
-  G4double GetCALTKRDistance()         {return CALTKRDistance;}; 
+  G4double GetCALSizeZ() const         {return CALSizeZ;}; 
+  G4double GetCALTKRDistance() const   {return CALTKRDistance;}; 
      
-  G4double GetTKRSiliconThickness()    {return TKRSiliconThickness;}; 
-  G4double GetTKRSiliconTileXY()       {return TKRSiliconTileXY;}; 
-  G4double GetTKRSiliconPitch()        {return TKRSiliconPitch;}; 
-  G4int    GetNbOfTKRLayers()          {return NbOfTKRLayers;}; 
-  G4int    GetNbOfTKRTiles()           {return NbOfTKRTiles;}; 
-  G4int    GetNbOfTKRStrips()          {return NbOfTKRStrips;}; 
-  G4double GetTKRLayerDistance()       {return TKRLayerDistance;};
-  G4double GetTKRViewsDistance()       {return TKRViewsDistance;};
+  G4double GetTKRSiliconThickness() const   {return TKRSiliconThickness;}; 
+  G4double GetTKRSiliconTileXY() const {return TKRSiliconTileXY;}; 
+  G4double GetTKRSiliconPitch() const  {return TKRSiliconPitch;}; 
+  G4int    GetNbOfTKRLayers() const    {return NbOfTKRLayers;}; 
+  G4int    GetNbOfTKRTiles() const     {return NbOfTKRTiles;}; 
+  G4int    GetNbOfTKRStrips() const    {return NbOfTKRStrips;}; 
+  G4double GetTKRLayerDistance() const {return TKRLayerDistance;};
+  G4double GetTKRViewsDistance() const {return TKRViewsDistance;};
 
-  G4double GetTKRActiveTileXY()        {return TKRActiveTileXY;};
-  G4double GetTKRActiveTileZ()         {return TKRActiveTileZ;};
-  G4double GetSiliconGuardRing()       {return SiliconGuardRing;}
-  G4double GetTilesSeparation()        {return TilesSeparation;};
+  G4double GetTKRActiveTileXY() const  {return TKRActiveTileXY;};
+  G4double GetTKRActiveTileZ() const   {return TKRActiveTileZ;};
+  G4double GetSiliconGuardRing() const {return SiliconGuardRing;}
+  G4double GetTilesSeparation() const  {return TilesSeparation;};
   
-  G4Material* GetConverterMaterial()   {return ConverterMaterial;};
-  G4double    GetConverterThickness()  {return ConverterThickness;};      
+  G4Material* GetConverterMaterial() const  {return ConverterMaterial;};
+  G4double    GetConverterThickness() const {return ConverterThickness;};      
   
-  G4double GetCALBarThickness()        {return CALBarThickness;};
-  G4int GetNbOfCALLayers()             {return NbOfCALLayers;}; 
-  G4int GetNbOfCALBars()               {return NbOfCALBars;}; 
+  G4double GetCALBarThickness()  const  {return CALBarThickness;};
+  G4int GetNbOfCALLayers() const       {return NbOfCALLayers;}; 
+  G4int GetNbOfCALBars() const         {return NbOfCALBars;}; 
   
-  G4double GetACDThickness()           {return ACDThickness;};
-  G4int GetNbOfACDTopTiles()           {return NbOfACDTopTiles;}; 
-  G4int GetNbOfACDLateralTiles()       {return NbOfACDLateralTiles;};
+  G4double GetACDThickness() const     {return ACDThickness;};
+  G4int GetNbOfACDTopTiles() const     {return NbOfACDTopTiles;}; 
+  G4int GetNbOfACDLateralTiles() const {return NbOfACDLateralTiles;};
               
 private:
   
@@ -260,12 +264,18 @@ private:
   G4LogicalVolume*   logicConverter;
   G4VPhysicalVolume* physiConverter;         
 
-  G4UniformMagField* magField;      //pointer to the magnetic field
-  
+  G4LogicalVolume* logicTKRStripX;
+  G4LogicalVolume* logicTKRStripY;
+
+  // magnetic field messenger
+  static G4ThreadLocal G4GlobalMagFieldMessenger*  fMagFieldMessenger; 
+                                           
   GammaRayTelDetectorMessenger* detectorMessenger;  //pointer to the Messenger
-  GammaRayTelTrackerSD* trackerSD;  //pointer to the sensitive detector
-  GammaRayTelCalorimeterSD* calorimeterSD;  //pointer to the sensitive detector
-  GammaRayTelAnticoincidenceSD* anticoincidenceSD;  //pointer to the sensitive detector
+  
+ 
+  G4Cache<GammaRayTelTrackerSD*> trackerSD;  //pointer to the sensitive detector
+  G4Cache<GammaRayTelCalorimeterSD*> calorimeterSD;  //pointer to the sensitive detector
+  G4Cache<GammaRayTelAnticoincidenceSD*> anticoincidenceSD;  //pointer to the sensitive detector
 
   //G4Region* aTKRRegion; // TKR cut region
   //G4Region* aCALRegion; // CAL cut region

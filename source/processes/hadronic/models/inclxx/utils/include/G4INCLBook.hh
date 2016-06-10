@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -94,7 +95,7 @@ namespace G4INCL {
     G4bool getFirstCollisionIsElastic() const { return firstCollisionIsElastic; };
 
     void setCurrentTime(G4double t) { currentTime = t; };
-    G4double getCurrentTime() { return currentTime; };
+    G4double getCurrentTime() const { return currentTime; };
 
     G4int getAcceptedCollisions() const { return nAcceptedCollisions; };
     G4int getBlockedCollisions() const {return nBlockedCollisions; };

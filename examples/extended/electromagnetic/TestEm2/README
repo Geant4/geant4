@@ -1,4 +1,4 @@
-$Id: README 77305 2013-11-22 11:16:19Z gcosmo $
+$Id: README 78550 2014-01-07 09:43:41Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -137,11 +137,5 @@ $Id: README 77305 2013-11-22 11:16:19Z gcosmo $
    "/testem/histo/setFileName name"
    
  The format of the histogram file can be : root (default),
- hbook, xml, csv, by selecting g4nnn.hh in RunAction.hh 
+ xml, csv, by selecting g4nnn.hh in RunAction.hh 
  
- Using hbook format
- ------------------
- 
- Need a special treatement : the Cern Library must be installed and the
- environment variable CERNLIB correctly set. Then, *before* compiling,
- activate G4_USE_HBOOK in GNUmakefile and g4hbook.hh in RunAction.hh

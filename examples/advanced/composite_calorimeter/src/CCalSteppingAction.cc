@@ -37,19 +37,14 @@
 #include "G4StepPoint.hh"
 #include "G4ThreeVector.hh"
 
-#ifdef G4ANALYSIS_USE  
 #include "CCalAnalysis.hh"
-#endif
+
 
 
 CCalSteppingAction::CCalSteppingAction(){
 
-#ifdef G4ANALYSIS_USE  
   CCalAnalysis* analysis = CCalAnalysis::getInstance();
   timeHistoMaxBin=analysis->maxbin();
-#else
-  timeHistoMaxBin=1;
-#endif
 
   int i; 
   for (i=0; i<200; i++) {timeDeposit[i] = 0.;}
@@ -87,11 +82,9 @@ void CCalSteppingAction::UserSteppingAction(const G4Step* aStep){
 
 void CCalSteppingAction::endOfEvent(){
 
-#ifdef G4ANALYSIS_USE  
   CCalAnalysis* analysis = CCalAnalysis::getInstance();
   analysis->InsertLateralProfile(LateralProfile);  
   analysis->InsertTime(timeDeposit); 
-#endif
   
   int i=0;
   for (i=0; i<70; i++){LateralProfile[i] = 0.;}

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.cc 71534 2013-06-17 16:07:53Z gcosmo $
+// $Id: G4ModelingParameters.cc 85020 2014-10-23 09:52:52Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -125,7 +125,7 @@ void G4ModelingParameters::SetVisibleDensity (G4double visibleDensity) {
 }
 
 G4int G4ModelingParameters::SetNoOfSides (G4int nSides) {
-  const G4int  nSidesMin = 12;
+  const G4int  nSidesMin = fpDefaultVisAttributes->GetMinLineSegmentsPerCircle();
   if (nSides < nSidesMin) {
     nSides = nSidesMin;
     if (fWarning)

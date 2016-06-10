@@ -34,16 +34,16 @@
      
  Local physics lists:	 
  - "local"	standard EM physics with current 'best' options setting.
-                these options are explicited in PhysListEmStandard
- - "standardSS" standard EM physics with single Coulomb scattering 
-                instead of multiple scattering			
+                these options are explicited in PhysListEmStandard		
     
  From geant4/source/physics_lists/builders:	 
  - "emstandard_opt0" recommended standard EM physics for LHC
  - "emstandard_opt1" best CPU performance standard physics for LHC
  - "emstandard_opt2"     
  - "emstandard_opt3" best standard EM options - analog to "local" above
- - "emstandard_opt4" best current advanced EM options standard + lowenergy   
+ - "emstandard_opt4" best current advanced EM options standard + lowenergy
+ - "emstandardWVI" standard EM physics and WentzelVI multiple scattering
+ - "emstandardSS"  standard EM physics and single scattering model
  - "emlivermore"  low-energy EM physics using Livermore data
  - "empenelope"   low-energy EM physics implementing Penelope models
            

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttValue.hh 66376 2012-12-18 09:42:59Z gcosmo $
+// $Id: G4AttValue.hh 78955 2014-02-05 09:45:46Z gcosmo $
 
 #ifndef G4ATTVALUE_HH
 #define G4ATTVALUE_HH
@@ -54,8 +54,8 @@
     
   public:
     G4AttValue(const G4String& name,
-	       const G4String& value,
-	       const G4String& showLabel): 
+               const G4String& value,
+               const G4String& showLabel): 
       m_name(name),m_value(value),
       m_showLabel(showLabel){};
     G4AttValue(){};

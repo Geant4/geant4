@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChampionElasticModel.hh 70171 2013-05-24 13:34:18Z gcosmo $
+// $Id: G4DNAChampionElasticModel.hh 87137 2014-11-25 09:12:48Z gcosmo $
 //
 
 #ifndef G4DNAChampionElasticModel_h
@@ -43,27 +43,31 @@ class G4DNAChampionElasticModel : public G4VEmModel
 
 public:
 
-  G4DNAChampionElasticModel(const G4ParticleDefinition* p = 0, 
-		            const G4String& nam = "DNAChampionElasticModel");
+  G4DNAChampionElasticModel(const G4ParticleDefinition* p = 0,
+                            const G4String& nam = "DNAChampionElasticModel");
 
   virtual ~G4DNAChampionElasticModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
   virtual G4double CrossSectionPerVolume(const G4Material* material,
-					 const G4ParticleDefinition* p,
-					 G4double ekin,
-					 G4double emin,
-					 G4double emax);
+                                         const G4ParticleDefinition* p,
+                                         G4double ekin,
+                                         G4double emin,
+                                         G4double emax);
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy);
-				 
-  inline void SetKillBelowThreshold (G4double threshold);		 
-  G4double GetKillBelowThreshold () { return killBelowEnergy; }		 
+                                 const G4MaterialCutsCouple*,
+                                 const G4DynamicParticle*,
+                                 G4double tmin,
+                                 G4double maxEnergy);
+
+  void SetKillBelowThreshold(G4double threshold);
+
+  G4double GetKillBelowThreshold()
+  {
+    return killBelowEnergy;
+  }
 
 protected:
 
@@ -73,44 +77,58 @@ private:
   // Water density table
   const std::vector<G4double>* fpMolWaterDensity;
 
-  G4double killBelowEnergy;  
-  G4double lowEnergyLimit;  
-  G4double highEnergyLimit; 
+  G4double killBelowEnergy;
+  G4double lowEnergyLimit;
+  G4double highEnergyLimit;
   G4bool isInitialised;
   G4int verboseLevel;
-  
+
   // Cross section
-  
-  typedef std::map<G4String,G4String,std::less<G4String> > MapFile;
+
+  typedef std::map<G4String, G4String, std::less<G4String> > MapFile;
   MapFile tableFile;
 
-  typedef std::map<G4String,G4DNACrossSectionDataSet*,std::less<G4String> > MapData;
+  typedef std::map<G4String, G4DNACrossSectionDataSet*, std::less<G4String> > MapData;
   MapData tableData;
-  
+
   // Final state
 
   //G4double DifferentialCrossSection(G4ParticleDefinition * aParticleDefinition, G4double k, G4double theta);
 
-  G4double Theta(G4ParticleDefinition * aParticleDefinition, G4double k, G4double integrDiff);
-  
-  G4double LinLinInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
+  G4double Theta(G4ParticleDefinition * aParticleDefinition,
+                 G4double k,
+                 G4double integrDiff);
 
-  G4double LinLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
-   
-  G4double LogLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
-   
-  G4double QuadInterpolator(G4double e11, 
- 		            G4double e12, 
-			    G4double e21, 
-			    G4double e22, 
-			    G4double x11,
-			    G4double x12, 
-			    G4double x21, 
-			    G4double x22, 
-			    G4double t1, 
-			    G4double t2, 
-			    G4double t, 
-			    G4double e);
+  G4double LinLinInterpolate(G4double e1,
+                             G4double e2,
+                             G4double e,
+                             G4double xs1,
+                             G4double xs2);
+
+  G4double LinLogInterpolate(G4double e1,
+                             G4double e2,
+                             G4double e,
+                             G4double xs1,
+                             G4double xs2);
+
+  G4double LogLogInterpolate(G4double e1,
+                             G4double e2,
+                             G4double e,
+                             G4double xs1,
+                             G4double xs2);
+
+  G4double QuadInterpolator(G4double e11,
+                            G4double e12,
+                            G4double e21,
+                            G4double e22,
+                            G4double x11,
+                            G4double x12,
+                            G4double x21,
+                            G4double x22,
+                            G4double t1,
+                            G4double t2,
+                            G4double t,
+                            G4double e);
 
   typedef std::map<double, std::map<double, double> > TriDimensionMap;
 
@@ -119,33 +137,15 @@ private:
 
   typedef std::map<double, std::vector<double> > VecMap;
   VecMap eVecm;
-   
+
   G4double RandomizeCosTheta(G4double k);
-   
+
   //
-   
-  G4DNAChampionElasticModel & operator=(const  G4DNAChampionElasticModel &right);
-  G4DNAChampionElasticModel(const  G4DNAChampionElasticModel&);
+
+  G4DNAChampionElasticModel & operator=(const G4DNAChampionElasticModel &right);
+  G4DNAChampionElasticModel(const G4DNAChampionElasticModel&);
 
 };
-
-
-inline void G4DNAChampionElasticModel::SetKillBelowThreshold (G4double /*threshold*/) 
-{ 
-
-// SI - commented on 19/06/2013
-/*
-  killBelowEnergy = threshold; 
-    
-  if (threshold < 1*eV)
-     G4Exception ("*** WARNING : the G4DNAChampionElasticModel class is not validated below 1 eV !","",JustWarning,"") ;
-
-  if (threshold < 0.025*eV) threshold = 0.025*eV;
-*/
-
-  G4Exception ("*** WARNING : G4DNAChampionElasticModel::SetKillBelowThreshold INACTIVE for now","",JustWarning,"") ;
-            
-}		 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

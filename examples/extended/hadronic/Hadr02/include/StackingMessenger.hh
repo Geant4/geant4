@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/include/StackingMessenger.hh
 /// \brief Definition of the StackingMessenger class
 //
-// $Id: StackingMessenger.hh 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: StackingMessenger.hh 81932 2014-06-06 15:39:45Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -66,7 +66,7 @@ private:
   StackingAction*     fStackAction;
     
   G4UIcmdWithABool*   fKillCmd;
-  G4UIcmdWithABool*   fKCmd;
+  G4UIcmdWithABool*   fKillEMCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

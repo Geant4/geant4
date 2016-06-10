@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSkinSurface.hh 73926 2013-09-17 07:59:06Z gcosmo $
+// $Id: G4LogicalSkinSurface.hh 80067 2014-03-31 13:48:09Z gcosmo $
 //
 // class G4LogicalSkinSurface
 //
@@ -80,7 +80,7 @@ class G4LogicalSkinSurface : public G4LogicalSurface
   private:
 
     G4LogicalSkinSurface(const G4LogicalSkinSurface &right);
-    const G4LogicalSkinSurface& operator=(const G4LogicalSkinSurface &right);
+    G4LogicalSkinSurface& operator=(const G4LogicalSkinSurface &right);
       // Assignment and copying must be denied.
 
   private:

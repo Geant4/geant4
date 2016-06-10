@@ -1,4 +1,4 @@
-$Id: History 78105 2013-12-03 14:46:36Z gcosmo $
+$Id: History 84839 2014-10-21 13:44:55Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,24 @@ $Id: History 78105 2013-12-03 14:46:36Z gcosmo $
                       Category History file
 
                       ---------------------
+21.10.2014 - Pedro Arce (DICOM-V10-00-04)
+           - Fixed coding guidelines (long lines) 
+                      
+16.10.2014 - Ivana Hrivnacova (DICOM-V10-00-03)
+           - Fixed coding guidelines (long lines) in 
+             DicomPartialDetectorConstruction.hh, DicomPhantomZSliceHeader.hh
+
+29.07.2014 - Pedro Arce (DICOM-V10-00-02)
+           - Remove DicomPhysicsList
+
+25.07.2014 - Pedro Arce (DICOM-V10-00-01)
+           - Using G4GenericPhysicsList
+     	   - no std::cout 
+	   - no exit()
+
+03.12.2013 - Gabriele Cosmo (DICOM-V10-00-00)
+           - Attempt to fix Valgrind run-time error from printout in
+             DicomHandler::CheckFileFormat().
 
 03.12.2013 - Ivana Hrivnacova (DICOM-V09-06-09)
            - Updated README and .README to match (Pedro Arce)

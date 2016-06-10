@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisation.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4mplIonisation.cc 85013 2014-10-23 09:45:07Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -50,7 +50,7 @@
 #include "G4Electron.hh"
 #include "G4mplIonisationModel.hh"
 #include "G4mplIonisationWithDeltaModel.hh"
-#include "G4LossTableManager.hh"
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -97,10 +97,10 @@ void G4mplIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* p,
   ion->SetParticle(p);
 
   // define size of dedx and range tables
-  G4double emin  = std::min(MinKinEnergy(),ion->LowEnergyLimit());
-  G4double emax  = std::max(MaxKinEnergy(),ion->HighEnergyLimit());
-  G4int bin = G4lrint(G4LossTableManager::Instance()->GetNumberOfBinsPerDecade()
-		      *std::log10(emax/emin));
+  G4EmParameters* param = G4EmParameters::Instance();
+  G4double emin  = std::min(param->MinKinEnergy(),ion->LowEnergyLimit());
+  G4double emax  = std::max(param->MaxKinEnergy(),ion->HighEnergyLimit());
+  G4int bin = G4lrint(param->NumberOfBinsPerDecade()*std::log10(emax/emin));
   ion->SetLowEnergyLimit(emin);
   ion->SetHighEnergyLimit(emax);
   SetMinKinEnergy(emin);
@@ -115,9 +115,6 @@ void G4mplIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4mplIonisation::PrintInfo()
-{
-  G4cout << "      No delta-electron production, only dE/dx"
-         << G4endl;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

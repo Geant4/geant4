@@ -34,13 +34,6 @@
 #include "globals.hh"
 #include "G4VUserPhysicsList.hh"
 
-class G4Cerenkov;
-class G4Scintillation;
-class G4OpAbsorption;
-class G4OpRayleigh;
-class G4OpMieHG;
-class G4OpBoundaryProcess;
-
 class OpNovicePhysicsListMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,14 +60,9 @@ class OpNovicePhysicsList : public G4VUserPhysicsList
     void SetNbOfPhotonsCerenkov(G4int);
  
   private:
-    G4Cerenkov*          fCerenkovProcess;
-    G4Scintillation*     fScintillationProcess;
-    G4OpAbsorption*      fAbsorptionProcess;
-    G4OpRayleigh*        fRayleighScatteringProcess;
-    G4OpMieHG*           fMieHGScatteringProcess;
-    G4OpBoundaryProcess* fBoundaryProcess;
- 
+    G4int                fVerboseLebel;
     OpNovicePhysicsListMessenger* fMessenger;
+    G4int fMaxNumPhotonStep;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMillerGreenExcitationModel.hh 70171 2013-05-24 13:34:18Z gcosmo $
+// $Id: G4DNAMillerGreenExcitationModel.hh 82852 2014-07-14 09:05:25Z gcosmo $
 //
 
 #ifndef G4DNAMillerGreenExcitationModel_h
@@ -35,10 +35,11 @@
 
 #include "G4Proton.hh"
 #include "G4DNAGenericIonsManager.hh"
-#include "G4DNAEmfietzoglouExcitationModel.hh"
 #include "G4DNAWaterExcitationStructure.hh"
 #include "Randomize.hh"
 #include "G4NistManager.hh"
+
+#include <deque>
 
 class G4DNAMillerGreenExcitationModel : public G4VEmModel
 {

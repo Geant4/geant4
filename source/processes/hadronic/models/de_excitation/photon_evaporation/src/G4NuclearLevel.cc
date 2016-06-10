@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearLevel.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4NuclearLevel.cc 86986 2014-11-21 13:00:05Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -61,6 +61,7 @@
 
 #include "G4NuclearLevel.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 
 G4int G4NuclearLevel::Increment(G4int aF)
 {
@@ -228,7 +229,6 @@ G4int G4NuclearLevel::NumberOfGammas() const
   return _nGammas;
 }
  
-
 void G4NuclearLevel::PrintAll() const 
 {
   G4cout << "---- Level energy = " << _energy << ", angular momentum = "
@@ -246,17 +246,20 @@ void G4NuclearLevel::PrintAll() const
   G4cout << G4endl << "     Polarities: ";
   for (i=0; i<_nGammas; i++) { G4cout << _polarities[i] << " "; }
   G4cout << G4endl;      
-
-  return;
 }
 
+void G4NuclearLevel::PrintLevels() const 
+{
+  G4cout << "   Eexc(MeV)= " << _energy 
+	 << " Time(ns)= " << _halfLife/ns << "  Ntrans= " << _nGammas
+	 << G4endl;
+}
 
 void G4NuclearLevel::Finalize() {
   _nGammas = _energies.size();
   MakeProbabilities();
   MakeCumProb();
 }
-
 
 void G4NuclearLevel::MakeProbabilities()
 {

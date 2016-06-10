@@ -88,8 +88,8 @@ public:
   G4double GetHadronNucleonXsc(const G4DynamicParticle*, G4int At, G4int Zt);
 
  
-  G4double GetHadronNucleonXscPDG(G4ParticleDefinition*,G4double sMand, G4ParticleDefinition*);
-  G4double GetHadronNucleonXscNS(G4ParticleDefinition*,G4double pTkin, G4ParticleDefinition*);
+  G4double GetHadronNucleonXscPDG(const G4ParticleDefinition*,G4double sMand, const G4ParticleDefinition*);
+  G4double GetHadronNucleonXscNS(const G4ParticleDefinition*,G4double pTkin, const G4ParticleDefinition*);
 
   G4double GetHNinelasticXscVU(const G4DynamicParticle*, G4int At, G4int Zt);
   G4double CalculateEcmValue(const G4double, const G4double, const G4double); 
@@ -123,8 +123,8 @@ private:
   G4double fTotalXsc, fElasticXsc, fInelasticXsc, fProductionXsc, fDiffractionXsc;
 //  G4double fHadronNucleonXsc;
  
-  G4ParticleDefinition* theProton;
-  G4ParticleDefinition* theNeutron;
+  const G4ParticleDefinition* theProton;
+  const G4ParticleDefinition* theNeutron;
   G4HadronNucleonXsc* hnXsc;
 };
 

@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -108,8 +109,7 @@ namespace G4INCL {
     theParticle->adjustMomentumFromEnergy();
   }
 
-  FinalState* TransmissionChannel::getFinalState() {
-    FinalState *fs = new FinalState;
+  void TransmissionChannel::fillFinalState(FinalState *fs) {
     G4double initialEnergy = 0.0;
     initialEnergy = theParticle->getEnergy() - theParticle->getPotentialEnergy();
 
@@ -123,6 +123,5 @@ namespace G4INCL {
 
     fs->setTotalEnergyBeforeInteraction(initialEnergy);
     fs->addOutgoingParticle(theParticle); // We write the particle down as outgoing
-    return fs;
   }
 }

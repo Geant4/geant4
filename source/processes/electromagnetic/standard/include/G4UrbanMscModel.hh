@@ -67,6 +67,8 @@ class G4ParticleChangeForMSC;
 class G4SafetyHelper;
 class G4LossTableManager;
 
+static const G4double c_highland = 13.6*CLHEP::MeV ;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4UrbanMscModel : public G4VMscModel
@@ -98,22 +100,20 @@ public:
 
   G4double ComputeTrueStepLength(G4double geomStepLength);
 
-  G4double ComputeTheta0(G4double truePathLength,
-                         G4double KineticEnergy);
+  inline G4double ComputeTheta0(G4double truePathLength, 
+				G4double KineticEnergy);
 
 private:
 
-  G4double SimpleScattering(G4double xmeanth, G4double x2meanth);
-
   G4double SampleCosineTheta(G4double trueStepLength, G4double KineticEnergy);
-
-  G4double SampleDisplacement();
-
-  G4double LatCorrelation();
 
   inline void SetParticle(const G4ParticleDefinition*);
 
   inline void UpdateCache();
+  
+  inline G4double SimpleScattering(G4double xmeanth, G4double x2meanth);
+
+  inline G4double LatCorrelation();
 
   //  hide assignment operator
   G4UrbanMscModel & operator=(const  G4UrbanMscModel &right);
@@ -173,6 +173,11 @@ private:
   G4bool   firstStep;
   G4bool   inside;
   G4bool   insideskin;
+
+  G4bool   latDisplasmentbackup ;
+
+  G4double rangecut;
+  G4double drr,finalr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -202,7 +207,7 @@ void G4UrbanMscModel::UpdateCache()
     coeffth2 = facz*(4.0780e-2 + 1.7315e-4*Zeff);
 
     // tail parameters
-    G4double Z13 = std::exp(lnZ/3.);
+    G4double Z13 = w*w;
     coeffc1  = 2.3785    - Z13*(4.1981e-1 - Z13*6.3100e-2);
     coeffc2  = 4.7526e-1 + Z13*(1.7694    - Z13*3.3885e-1);
     coeffc3  = 2.3683e-1 - Z13*(1.8111    - Z13*3.2774e-1);
@@ -213,6 +218,75 @@ void G4UrbanMscModel::UpdateCache()
                                               
     Zold = Zeff;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+G4double G4UrbanMscModel::ComputeTheta0(G4double trueStepLength,
+					G4double KineticEnergy)
+{
+  // for all particles take the width of the central part
+  //  from a  parametrization similar to the Highland formula
+  // ( Highland formula: Particle Physics Booklet, July 2002, eq. 26.10)
+  G4double invbetacp = std::sqrt((currentKinEnergy+mass)*(KineticEnergy+mass)/
+				 (currentKinEnergy*(currentKinEnergy+2.*mass)*
+				  KineticEnergy*(KineticEnergy+2.*mass)));
+  y = trueStepLength/currentRadLength;
+  G4double theta0 = c_highland*std::abs(charge)*std::sqrt(y)*invbetacp;
+  y = G4Log(y);
+  // correction factor from e- scattering data
+  theta0 *= (coeffth1+coeffth2*y);
+  return theta0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+G4double G4UrbanMscModel::SimpleScattering(G4double xmeanth, G4double x2meanth)
+{
+  // 'large angle scattering'
+  // 2 model functions with correct xmean and x2mean
+  G4double a = (2.*xmeanth+9.*x2meanth-3.)/(2.*xmeanth-3.*x2meanth+1.);
+  G4double prob = (a+2.)*xmeanth/a;
+
+  // sampling
+  G4double cth = 1.;
+  if(rndmEngineMod->flat() < prob) {
+    cth = -1.+2.*G4Exp(G4Log(rndmEngineMod->flat())/(a+1.));
+  } else {
+    cth = -1.+2.*rndmEngineMod->flat();
+  }
+  return cth;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+G4double G4UrbanMscModel::LatCorrelation()
+{
+  static const G4double kappa = 2.5;
+  static const G4double kappami1 = 1.5;
+  
+  G4double latcorr = 0.;
+  if((currentTau >= tausmall) && !insideskin)
+  {
+    if(currentTau < taulim)
+      latcorr = lambdaeff*kappa*currentTau*currentTau*
+                (1.-(kappa+1.)*currentTau*third)*third;
+    else
+    {
+      G4double etau = 0.;
+      if(currentTau < taubig) { etau = G4Exp(-currentTau); }
+      latcorr = -kappa*currentTau;
+      latcorr = G4Exp(latcorr)/kappami1;
+      latcorr += 1.-kappa*etau/kappami1 ;
+      latcorr *= 2.*lambdaeff*third;
+    }
+  }
+  return latcorr;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

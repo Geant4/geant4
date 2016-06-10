@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KDTreeResult.cc 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4KDTreeResult.cc 80151 2014-04-03 09:42:22Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -34,8 +34,6 @@
 // -------------------------------------------------------------------
 
 #include "G4KDTreeResult.hh"
-#include "G4KDNode.hh"
-#include "G4KDTree.hh"
 
 using namespace std;
 
@@ -43,7 +41,7 @@ struct ResNode
 {
 public:
     ResNode():fNode(0),fDistanceSqr(0){;}
-    ResNode(double distsqr, G4KDNode* node):fNode(node),fDistanceSqr(distsqr){;}
+    ResNode(double distsqr, G4KDNode_Base* node):fNode(node),fDistanceSqr(distsqr){;}
     ResNode(const ResNode& right)
     {
         fNode = right.fNode;
@@ -56,11 +54,11 @@ public:
         return (fDistanceSqr < right.fDistanceSqr);
     }
 
-    G4KDNode* GetNode() { return fNode;}
+    G4KDNode_Base* GetNode() { return fNode;}
     double GetDistanceSqr() { return fDistanceSqr;}
 
 protected:
-    G4KDNode* fNode;
+    G4KDNode_Base* fNode;
     double fDistanceSqr;
 
 private:
@@ -87,7 +85,7 @@ G4KDTreeResult::~G4KDTreeResult()
     std::list<ResNode>::erase(begin(),end());
 }
 
-void G4KDTreeResult::Insert(double pos, G4KDNode* node)
+void G4KDTreeResult::Insert(double pos, G4KDNode_Base* node)
 {
     std::list<ResNode>::push_back(ResNode(pos,node));
 }
@@ -103,12 +101,12 @@ void G4KDTreeResult::Sort()
     std::list<ResNode>::sort(CompareResNode);
 }
 
-size_t G4KDTreeResult::GetSize()
+size_t G4KDTreeResult::GetSize() const
 {
     return std::list<ResNode>::size();
 }
 
-size_t G4KDTreeResult::size()
+size_t G4KDTreeResult::size() const
 {
     return std::list<ResNode>::size();
 }
@@ -128,40 +126,11 @@ void G4KDTreeResult::Next()
     fIterator++;
 }
 
-void* G4KDTreeResult::GetItem(double*& pos)
-{
-    if(!pos)   pos = new double[fTree->GetDim()];
-    memcpy(pos, (*fIterator).GetNode()->GetPosition(), fTree->GetDim() * sizeof *pos);
-    return (*fIterator).GetNode()->GetData();
-}
-
-void* G4KDTreeResult::GetItem(double& x, double& y, double& z)
-{
-    x = (*fIterator).GetNode()->GetPosition()[0];
-    y = (*fIterator).GetNode()->GetPosition()[1];
-    z = (*fIterator).GetNode()->GetPosition()[2];
-
-    return (*fIterator).GetNode()->GetData();
-}
-
-void* G4KDTreeResult::GetItemNDistanceSQ(double& dist_sq)
-{
-    dist_sq = (*fIterator).GetDistanceSqr();
-    return (*fIterator).GetNode()->GetData();
-}
-
-void* G4KDTreeResult::GetItemNDistanceSQ(double*& pos, double& dist_sq)
-{
-    dist_sq = (*fIterator).GetDistanceSqr();
-    return GetItem(pos);
-}
-
-void* G4KDTreeResult::GetItemData()
-{
-    return (*fIterator).GetNode()->GetData();
-}
-
-double G4KDTreeResult::GetDistanceSqr()
+double G4KDTreeResult::GetDistanceSqr() const
 {
     return (*fIterator).GetDistanceSqr();
+}
+
+G4KDNode_Base* G4KDTreeResult::GetNode() const {
+	return (*fIterator).GetNode();
 }

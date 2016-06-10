@@ -1,4 +1,4 @@
-$Id: History 75219 2013-10-29 16:12:13Z gcosmo $
+$Id: History 79490 2014-03-05 15:23:33Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 5th, 2014         G.Cosmo (geomdiv-V10-00-00)
+- Added missing dependency to graphics_reps.
 
 October 29th, 2013      T.Nikitina (geomdiv-V09-06-04)
 - Split G4Polycone into G4GenericPolycone and optimised.

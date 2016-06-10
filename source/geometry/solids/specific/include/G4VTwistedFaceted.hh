@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistedFaceted.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4VTwistedFaceted.hh 83572 2014-09-01 15:23:27Z gcosmo $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -157,6 +157,9 @@ class G4VTwistedFaceted: public G4VSolid
       // Create the List of transformed vertices in the format required
       // for G4VSolid:: ClipCrossSection and ClipBetweenSections.
 
+  mutable G4bool fRebuildPolyhedron;
+  mutable G4Polyhedron* fpPolyhedron;  // pointer to polyhedron for vis
+
  private:
  
   void CreateSurfaces();
@@ -197,8 +200,6 @@ class G4VTwistedFaceted: public G4VSolid
 
   G4double fCubicVolume ;      // volume of the solid
   G4double fSurfaceArea ;      // area of the solid
-
-  mutable G4Polyhedron* fpPolyhedron;  // pointer to polyhedron for vis
 
   class LastState              // last Inside result
   {

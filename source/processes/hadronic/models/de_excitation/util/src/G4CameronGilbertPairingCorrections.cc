@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CameronGilbertPairingCorrections.cc 68724 2013-04-05 09:26:32Z gcosmo $
+// $Id: G4CameronGilbertPairingCorrections.cc 85841 2014-11-05 15:35:06Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -52,7 +52,7 @@ G4double G4CameronGilbertPairingCorrections::PairingZTable[] =
 };
 // P(N)
 G4double G4CameronGilbertPairingCorrections::PairingNTable[] = 
-{ // 140 values from Z = 11 to Z = 150
+{ // 140 values from N = 11 to Z = 150
     0.00,  2.67,  0.00,  1.80,  0.00,  1.67,  0.00,  1.86,  0.00,  2.04,
     0.00,  1.64,  0.00,  1.44,  0.00,  1.54,  0.00,  1.30,  0.00,  1.27,
     0.00,  1.29,  0.00,  1.41,  0.00,  1.50,  0.00,  1.50,  0.00,  1.43,

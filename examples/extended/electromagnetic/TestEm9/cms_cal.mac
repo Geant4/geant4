@@ -1,4 +1,4 @@
-# $Id: cms_cal.mac 66241 2012-12-13 18:34:42Z gunter $
+# $Id: cms_cal.mac 82278 2014-06-13 14:42:11Z gcosmo $
 #
 # Macro file for "TestEm9.cc" 
 #
@@ -14,20 +14,22 @@
 #
 /testem/phys/addPhysics  emstandard_opt1
 #
-/testem/phys/VertexCuts 0.01 mm
-/testem/phys/MuonCuts  10.0 mm
-/testem/stepMax          10 mm
+/run/initialize
+#
+/run/setCut      0.1 mm
+/run/setCutForRegion VertexDetector 0.01 mm
+/run/setCutForRegion MuonDetector     10 mm
+/testem/stepMax   10 mm
 #
 #/random/setSavingFlag true
 #/random/resetEngineFrom first.rndm
 #
-/testem/phys/setCuts 0.1 mm
-/run/initialize
 /process/em/applyCuts      true
 #
 /gun/particle e-
 /gun/energy 10 GeV
 #
-/testem/event/printModulo 1000
+/run/printProgress 100
+#
 /run/beamOn 1000
 #

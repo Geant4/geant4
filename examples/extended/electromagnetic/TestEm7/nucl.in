@@ -1,4 +1,4 @@
-# $Id: nucl.in 66241 2012-12-13 18:34:42Z gunter $
+# $Id: nucl.in 82280 2014-06-13 14:45:31Z gcosmo $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -32,11 +32,11 @@
 # beam size
 /testem/gun/rndm 3 mm
 #
-/testem/event/printModulo 1000
+/run/printProgress 1000
 /testem/stepMax 1 mm
 #
 /run/beamOn 1000
-exit
+#exit
 #
 /testem/stepMax 100 mm
 /gun/particle ion

@@ -66,3 +66,8 @@
 #
 # For file-based drivers, use this to create an empty detector view:
 #/vis/viewer/flush
+/vis/scene/add/scale
+/vis/viewer/set/projection p
+
+/vis/geometry/set/colour Target ! 1 0 0
+/vis/geometry/set/colour World ! 0.5 0.5 0.9 1

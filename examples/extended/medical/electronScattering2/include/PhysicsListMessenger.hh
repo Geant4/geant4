@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.hh 70325 2013-05-29 08:06:02Z gcosmo $
+// $Id: PhysicsListMessenger.hh 82042 2014-06-10 08:02:58Z gcosmo $
 //
 /// \file medical/electronScattering2/include/PhysicsListMessenger.hh
 /// \brief Definition of the PhysicsListMessenger class
@@ -37,7 +37,6 @@
 class PhysicsList;
 class G4UIdirectory;
 class G4UIcmdWithAString;
-class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,10 +53,6 @@ class PhysicsListMessenger: public G4UImessenger
     
     G4UIdirectory*             fPhysDir;    
     G4UIcmdWithAString*        fPListCmd;    
-    G4UIcmdWithADoubleAndUnit* fGammaCutCmd;
-    G4UIcmdWithADoubleAndUnit* fElectCutCmd;
-    G4UIcmdWithADoubleAndUnit* fProtoCutCmd;    
-    G4UIcmdWithADoubleAndUnit* fAllCutCmd;        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

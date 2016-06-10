@@ -74,9 +74,19 @@ if(GEANT4_USE_GDML)
 endif()
 
 # - USolids
-# Simple compile definition
+# Compile definitions
 if(GEANT4_USE_USOLIDS)
   list(APPEND GEANT4_CORE_DEFINITIONS -DG4GEOM_USE_USOLIDS)
+endif()
+
+# If it's internal, add to the externals lib list
+if(GEANT4_USE_SYSTEM_USOLIDS)
+  # System USolids headers, because these do appear in Geant4's
+  # public interface. The library should be in the link interface
+  # of G4geometry
+  list(APPEND GEANT4_THIRD_PARTY_INCLUDES ${USOLIDS_INCLUDE_DIRS})
+else()
+  list(APPEND GEANT4_EXTERNALS_TARGETS G4geomUSolids)
 endif()
 
 # - Stuff from Geant4InterfaceOptions.cmake

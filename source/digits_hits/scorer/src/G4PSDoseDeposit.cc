@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSDoseDeposit.cc 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4PSDoseDeposit.cc 81087 2014-05-20 15:44:27Z gcosmo $
 // GEANT4 tag $Name: geant4-09-04 $
 //
 // G4PSDoseDeposit
@@ -45,14 +45,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSDoseDeposit::G4PSDoseDeposit(G4String name, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1)
+  :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0)
 {
     SetUnit("Gy");
 }
 
 G4PSDoseDeposit::G4PSDoseDeposit(G4String name, const G4String& unit,
 				 G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1)
+  :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0)
 {
     SetUnit(unit);
 }

@@ -1,4 +1,4 @@
-$Id: History 76600 2013-11-13 08:30:02Z gcosmo $
+$Id: History 85013 2014-10-23 09:45:07Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,32 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22 Oct 2014: V.Ivant (emhighenergy-V10-00-05)
+- G4eeToHadrons, G4hBremsstrahlung, G4hPairProduction, 
+  G4hhIonisation, G4mplIonisation - use G4EmParameters
+
+07 Sept 2014: V.Ivant (emhighenergy-V10-00-04)
+- G4GammaConversionToMuons - added protection agains infinite loop
+    at the reaction threashold; removed G4ThreadLocal variables;
+    introduced G4Exp, G4Log and nist functions; added counters
+    limiting do/while loops
+
+24 July 2014: V.Ivant (emhighenergy-V10-00-03)
+24 July 2014: V.Ivant (emhighenergy-V10-00-02)
+- G4Vee2hadrons - fixed build for gcc 4.1
+
+18 July 2014: V.Ivant (emhighenergy-V10-00-01)
+- G4eeTo3PiModel - fixed sampling algorithm 
+
+18 July 2014: V.Ivant (emhighenergy-V10-00-00)
+- Naruhiro Chikuma verified and updated positron annihilation
+    models: G4Vee2hadrons, G4ee2KChargedModel, G4ee2KNeutralModel,
+    G4eeTo3PiModel, G4eeToHadronsMultiModel, G4eeToPGammaModel,
+    G4eeToTwoPiModel, G4eeToHadronsModel; and process G4eeToHadrons
+    This includes adition on extra inline methods to convert from Lab 
+    to CM, to initilise models, more correct thresholds,
+    migration to updated PhysicsVector interfaces
 
 13 November 2013: V.Ivant (emhighenergy-V09-06-09)
 - G4mplIonisationModel - fixed compillation problem of the previous tag

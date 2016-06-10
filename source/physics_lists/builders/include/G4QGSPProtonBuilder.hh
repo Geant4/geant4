@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSPProtonBuilder.hh 75290 2013-10-30 09:20:47Z gcosmo $
+// $Id: G4QGSPProtonBuilder.hh 83616 2014-09-04 13:30:16Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -47,9 +47,7 @@
 #include "G4ProtonInelasticProcess.hh"
 #include "G4VProtonBuilder.hh"
 
-#include "G4NeutronInelasticCrossSection.hh"
 #include "G4TheoFSGenerator.hh"
-#include "G4PreCompoundModel.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4QGSModel.hh"
 #include "G4QGSParticipants.hh"
@@ -72,7 +70,6 @@ class G4QGSPProtonBuilder : public G4VProtonBuilder
   private:
 
     G4TheoFSGenerator * theModel;
-    G4PreCompoundModel * thePreEquilib;
     G4GeneratorPrecompoundInterface * theCascade;
     G4QGSModel< G4QGSParticipants > * theStringModel;
     G4ExcitedStringDecay * theStringDecay;

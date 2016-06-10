@@ -26,7 +26,15 @@
 //
 // $Id:$
 //
-#ifdef G4MULTITHREADED
+#if __clang__
+  #if (defined(G4MULTITHREADED) && !defined(G4USE_STD11) && \
+      !__has_feature(cxx_thread_local))
+    #define CLANG_NOSTDTLS
+  #endif
+#endif
+
+#if (defined(G4MULTITHREADED) && !defined(G4USE_STD11)) || \
+    (defined(CLANG_NOSTDTLS))
 
 #include <cmath> // for log()
 #include <CLHEP/Units/PhysicalConstants.h>
@@ -118,7 +126,7 @@ G4double G4MTRandGaussQ::transformQuick (G4double r)
     sign = -1.0;
   } 
 
-  register G4int index;
+  G4int index;
   G4double  dx;
 
   if ( r >= Table1step ) { 

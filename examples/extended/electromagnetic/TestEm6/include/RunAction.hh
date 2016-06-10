@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm6/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: RunAction.hh 83428 2014-08-21 15:46:01Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,9 +37,10 @@
 #include "G4UserRunAction.hh"
 #include "ProcessesCount.hh"
 #include "globals.hh"
+#include "G4ParticleDefinition.hh"
+#include "DetectorConstruction.hh"
 
 #include "g4root.hh"
-////#include "g4xml.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -50,7 +51,7 @@ class G4Run;
 class RunAction : public G4UserRunAction
 {
   public:
-    RunAction();
+    RunAction(DetectorConstruction*);
    ~RunAction();
 
   public:
@@ -59,7 +60,16 @@ class RunAction : public G4UserRunAction
     void     CountProcesses(G4String);
     
   private:
-    ProcessesCount*     fProcCounter;
+    DetectorConstruction* fDetector;
+    ProcessesCount*       fProcCounter;
+    G4AnalysisManager*    fAnalysis;
+    G4Material*           fMat;
+
+    G4double fMinE;
+    G4double fMaxE;
+    G4int    fnBin;
+
+    G4int fNtColId[3];
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

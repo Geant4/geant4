@@ -1,4 +1,4 @@
-$Id: History 75578 2013-11-04 12:03:33Z gcosmo $
+$Id: History 85530 2014-10-30 16:17:43Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October, 29th, 2014,  G.Cosmo           -  geomsolids-V10-00-02
+- Moved usolids module to source/externals.
+
+September, 17th, 2014,  G.Cosmo         -  geomsolids-V10-00-01
+- Includes tags on top of geomsolids-V10-00-00: geom-usolids-V10-00-16,
+  geom-csg-V10-00-06, geom-bool-V10-00-06 and geom-specific-V10-00-11.
+- Added shapes from the USolids library: UExtrudedSolid, UGenericTrap and
+  UTrap with related wrappers.
+- Updated unit tests for compilation errors and warnings...
+
+September, 1st, 2014,  G.Cosmo          -  geomsolids-V10-00-00
+- Includes tags on top of geant4-10-00-ref-07: geom-usolids-V10-00-14,
+  geom-bool-V10-00-05, geom-csg-V10-00-04 and geom-specific-V10-00-10.
+- Fixed use of polyhedron pointer, to avoid race condition in MT
+  when parameterised volumes are visualised.
+
 October, 29th, 2013,  G.Cosmo           -  geomsolids-V09-06-01
-- Include tags on top of geant4-09-06-ref-10: geom-specific-V09-06-22.
+- Includes tags on top of geant4-09-06-ref-10: geom-specific-V09-06-22.
 - Added new 'usolids' module, including classes imported from the AIDA
   Unified Solids Library (see https://aidasoft.web.cern.ch/USolids).
 

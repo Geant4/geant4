@@ -1,0 +1,148 @@
+-------------------------------------------------------------------
+$Id: README 73136 2013-08-19 14:28:09Z sincerti $
+-------------------------------------------------------------------
+
+     =========================================================
+ 		  Geant4 - Microdosimetry example
+     =========================================================
+
+                                README file
+                          ----------------------
+
+                           CORRESPONDING AUTHOR 
+
+S. Incerti (a, *), V. Ivanchenko (b), M. Karamitros (a)
+a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan 
+(CENBG), IN2P3 / CNRS / Bordeaux 1 University, 33175 Gradignan, France
+b. G4AI Ltd, UK
+* e-mail:incerti@cenbg.in2p3.fr 
+
+---->0. INTRODUCTION.                                                    
+                                                                       
+The microdosimetry example simulates the track of a 5 MeV proton in liquid water. 
+Geant4 standard EM models are used in the World volume while Geant4-DNA models
+are used in a Target volume, declared as a Region.
+
+This example is provided by the Geant4-DNA collaboration.
+
+These processes and models are further described at:
+http://geant4-dna.org
+
+Any report or published results obtained using the Geant4-DNA software shall 
+cite the following Geant4-DNA collaboration publication:
+Med. Phys. 37 (2010) 4692-4708
+
+We also suggest these other references related to this example:
+Nucl. Instrum. and Meth. B 273 (2012) 95-97
+Prog. Nucl. Sci. Tec. 2 (2011) 898-903
+
+---->1. GEOMETRY SET-UP.
+ 
+The geometry is a 1 mm side cube (World) made of liquid water containing a smaller cubic Target volume of liquid
+water, which dimensions are twenty times smaller than the dimensions of the World volume.
+
+
+6--->2. SET-UP 
+                                                                        
+Make sure G4LEDATA points to the low energy electromagnetic libraries.
+
+The code can be compiled with cmake.
+
+It works in MT mode.
+
+---->3. HOW TO RUN THE EXAMPLE                                         
+
+Normal mode, run:
+
+./microdosimetry -mt 4 -out myRootFile
+
+The macro microdosimetry.in is executed by default to select another one:
+
+./microdosimetry -mac myMacro.mac
+
+To get visualization and interactivity:
+
+./microdosimetry -gui
+( OGL used by default)
+
+or you may use your own visualization driver, for instance:
+./microdosimetry -vis "DAWNFILE"
+
+---->4. PHYSICS
+
+This example shows:
+- how to use the Geant4-DNA processes, 
+- how to count and save occurrences of processes
+- how to combine them with Standard EM Physics.
+
+A simple electron capture process is also provided in order to kill electrons 
+below a chosen energy threshold, set in the Physics list.
+
+Look at the PhyscisList.cc file.
+A
+
+---->5. SIMULATION OUTPUT AND RESULT ANALYSIS                                    
+
+The output results consists in a microdosimetry.root file, containing for each simulation step:
+- the type of particle for the current step
+- the type of process for the current step
+- the track position of the current step (in nanometers)
+- the energy deposit along the current step (in eV)
+- the step length (in nm)
+- the total enery loss along the current step (in eV)
+
+This file can be easily analyzed using for example the provided ROOT macro 
+file plot.C; to do so :
+* be sure to have ROOT installed on your machine
+* be sure to be in the microdosimetry directory
+* launch ROOT by typing root
+* under your ROOT session, type in : .X plot.C to execute the macro file
+* alternatively you can type directly under your session : root plot.C
+
+The naming scheme on the displayed ROOT plots is as follows (see SteppingAction.cc):
+
+-particles:
+e-       : 1    
+proton   : 2
+hydrogen : 3
+alpha    : 4
+alpha+   : 5
+helium   : 6
+
+-processes:
+e-_G4DNAElastic			11
+e-_G4DNAExcitation		12
+e-_G4DNAIonisation		13
+e-_G4DNAAttachment		14
+e-_G4DNAVibExcitation		15
+eCapture			16
+
+proton_G4DNAExcitation		17
+proton_G4DNAIonisation		18
+proton_G4DNAChargeDecrease	19
+
+hydrogen_G4DNAExcitation	20
+hydrogen_G4DNAIonisation	21
+hydrogen_G4DNAChargeIncrease	22
+
+alpha_G4DNAExcitation		23
+alpha_G4DNAIonisation		24
+alpha_G4DNAChargeDecrease	25
+
+alpha+_G4DNAExcitation		26
+alpha+_G4DNAIonisation		27
+alpha+_G4DNAChargeDecrease	28
+alpha+_G4DNAChargeIncrease	29
+
+helium_G4DNAExcitation		30
+helium_G4DNAIonisation		31
+helium_G4DNAChargeIncrease	32
+
+hIoni				33
+eIoni				34
+
+
+---------------------------------------------------------------------------
+
+Should you have any enquiry, please do not hesitate to contact: 
+incerti@cenbg.in2p3.fr

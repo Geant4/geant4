@@ -1,4 +1,4 @@
-# $Id: TestEm9.in 66241 2012-12-13 18:34:42Z gunter $
+# $Id: TestEm9.in 82278 2014-06-13 14:42:11Z gcosmo $
 #
 # Macro file for TestEm9 - Crystal Calorimeter
 # V.Ivanchenko
@@ -12,16 +12,16 @@
 #
 /testem/phys/addPhysics  emstandard_opt1
 #
-/testem/phys/setCuts    0.3 mm
-/testem/phys/VertexCuts 0.01 mm
-/testem/phys/MuonCuts  10.0 mm
-/testem/stepMax         100 mm
+/run/initialize
+#
+/run/setCut      0.3   mm
+/run/setCutForRegion VertexDetector 0.01 mm
+/run/setCutForRegion MuonDetector     10 mm
+/testem/stepMax  100 mm
 #
 /testem/det/acceptance1  0.8271 0.02974 2.5
 /testem/det/acceptance9  0.9570 0.01286 2.5
 /testem/det/acceptance25 0.9793 0.00884 2.5
-#
-/run/initialize
 #
 /gun/particle e-
 /gun/energy 1 GeV

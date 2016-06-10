@@ -32,7 +32,6 @@
 #include "G4Polycone.hh"
 #include "G4UPolycone.hh"
 #include "G4VPVParameterisation.hh"
-#include "G4Polyhedron.hh"
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -121,6 +120,17 @@ void G4UPolycone::ComputeDimensions(G4VPVParameterisation* p,
 {
   p->ComputeDimensions(*(G4Polycone*)this,n,pRep);
 }
+
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+
+G4VSolid* G4UPolycone::Clone() const
+{
+  return new G4UPolycone(*this);
+}
+
 
 ////////////////////////////////////////////////////////////////////////
 //

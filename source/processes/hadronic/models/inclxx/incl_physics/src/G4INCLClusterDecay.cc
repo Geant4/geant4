@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -45,7 +46,7 @@
 #include "G4INCLParticleTable.hh"
 #include "G4INCLKinematicsUtils.hh"
 #include "G4INCLRandom.hh"
-#include "G4INCLPhaseSpaceDecay.hh"
+#include "G4INCLPhaseSpaceGenerator.hh"
 // #include <cassert>
 #include <algorithm>
 
@@ -73,7 +74,7 @@ namespace G4INCL {
             decayParticle = new Cluster(2,4,false);
             break;
           default:
-            INCL_ERROR("Unrecognized cluster-decay mode in two-body decay: " << theDecayMode << std::endl
+            INCL_ERROR("Unrecognized cluster-decay mode in two-body decay: " << theDecayMode << '\n'
                   << c->print());
             return;
         }
@@ -136,7 +137,7 @@ namespace G4INCL {
             decayParticle2 = new Particle(Neutron, mom, pos);
             break;
           default:
-            INCL_ERROR("Unrecognized cluster-decay mode in three-body decay: " << theDecayMode << std::endl
+            INCL_ERROR("Unrecognized cluster-decay mode in three-body decay: " << theDecayMode << '\n'
                   << c->print());
             return;
         }
@@ -214,7 +215,7 @@ namespace G4INCL {
         decayProducts->push_back(decayParticle2);
       }
 
-#ifndef INCLXX_IN_GEANT4_MODE
+#ifdef INCL_DO_NOT_COMPILE
       /** \brief Disassembles unbound nuclei using a simple phase-space model
        *
        * The decay products are assumed to uniformly populate the momentum space
@@ -245,7 +246,7 @@ namespace G4INCL {
             theEjectileType = Neutron;
             break;
           default:
-            INCL_ERROR("Unrecognized cluster-decay mode in phase-space decay: " << theDecayMode << std::endl
+            INCL_ERROR("Unrecognized cluster-decay mode in phase-space decay: " << theDecayMode << '\n'
                   << c->print());
             return;
         }
@@ -312,7 +313,7 @@ namespace G4INCL {
                  << "). Z=" << theZ << ", A=" << theA << ", E*=" << c->getExcitationEnergy()
                  << ", availableEnergy=" << availableEnergy
                  << ", nSplits=" << nSplits
-                 << std::endl);
+                 << '\n');
             break;
           }
 
@@ -374,12 +375,12 @@ namespace G4INCL {
 // assert(std::abs(c->getRealMass()-c->getMass())<1.e-3);
         c->setExcitationEnergy(0.);
       }
-#endif // INCLXX_IN_GEANT4_MODE
+#endif // INCL_DO_NOT_COMPILE
 
       /** \brief Disassembles unbound nuclei using the phase-space model
        *
        * This implementation uses the Kopylov algorithm, defined in namespace
-       * PhaseSpaceDecay.
+       * PhaseSpaceGenerator.
        */
       void phaseSpaceDecay(Cluster * const c, ClusterDecayType theDecayMode, ParticleList *decayProducts) {
         const G4int theA = c->getA();
@@ -399,7 +400,7 @@ namespace G4INCL {
             theEjectileType = Neutron;
             break;
           default:
-            INCL_ERROR("Unrecognized cluster-decay mode in phase-space decay: " << theDecayMode << std::endl
+            INCL_ERROR("Unrecognized cluster-decay mode in phase-space decay: " << theDecayMode << '\n'
                   << c->print());
             return;
         }
@@ -410,7 +411,7 @@ namespace G4INCL {
         if(theZ<ParticleTable::clusterTableZSize && theA<ParticleTable::clusterTableASize) {
           finalDaughterZ=theZ;
           finalDaughterA=theA;
-          while(finalDaughterA>0 && clusterDecayMode[finalDaughterZ][finalDaughterA]==theDecayMode) {
+          while(finalDaughterA>0 && clusterDecayMode[finalDaughterZ][finalDaughterA]!=StableCluster) {
             finalDaughterA--;
             finalDaughterZ -= theZStep;
           }
@@ -445,7 +446,8 @@ namespace G4INCL {
           products.push_back(ejectile);
         }
 
-        G4INCL::PhaseSpaceDecay::decay(availableEnergy, boostVector, products);
+        PhaseSpaceGenerator::generate(availableEnergy, products);
+        products.boost(boostVector);
 
         // Copy decay products in the output list (but skip the residue)
         ParticleList::iterator productsIter = products.begin();
@@ -472,7 +474,7 @@ namespace G4INCL {
 
           switch(theDecayMode) {
             default:
-              INCL_ERROR("Unrecognized cluster-decay mode: " << theDecayMode << std::endl
+              INCL_ERROR("Unrecognized cluster-decay mode: " << theDecayMode << '\n'
                     << c->print());
               return;
               break;
@@ -505,12 +507,12 @@ namespace G4INCL {
         } else {
           // The cluster is too large for our decay-mode table. Decompose it only
           // if Z==0 || Z==A.
-          INCL_DEBUG("Cluster is outside the decay-mode table." << c->print() << std::endl);
+          INCL_DEBUG("Cluster is outside the decay-mode table." << c->print() << '\n');
           if(Z==A) {
-            INCL_DEBUG("Z==A, will decompose it in free protons." << std::endl);
+            INCL_DEBUG("Z==A, will decompose it in free protons." << '\n');
             phaseSpaceDecay(c, ProtonUnbound, decayProducts);
           } else if(Z==0) {
-            INCL_DEBUG("Z==0, will decompose it in free neutrons." << std::endl);
+            INCL_DEBUG("Z==0, will decompose it in free neutrons." << '\n');
             phaseSpaceDecay(c, NeutronUnbound, decayProducts);
           }
         }

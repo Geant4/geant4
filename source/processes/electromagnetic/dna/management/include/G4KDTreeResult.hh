@@ -23,18 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KDTreeResult.hh 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4KDTreeResult.hh 85244 2014-10-27 08:24:13Z gcosmo $
 //
-// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
+// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+
+// The code is developed in the framework of the ESA AO7146
 //
-// WARNING : This class is released as a prototype.
-// It might strongly evolve or even disapear in the next releases.
+// We would be very happy hearing from you, send us your feedback! :)
 //
-// History:
-// -----------
-// 10 Oct 2011 M.Karamitros created
+// In order for Geant4-DNA to be maintained and still open-source,
+// article citations are crucial. 
+// If you use Geant4-DNA chemistry and you publish papers about your software, 
+// in addition to the general paper on Geant4-DNA:
 //
-// -------------------------------------------------------------------
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// we would be very happy if you could please also cite the following
+// reference papers on chemistry:
+//
+// J. Comput. Phys. 274 (2014) 841-882
+// Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
 #ifndef G4KDTREERESULT_HH
 #define G4KDTREERESULT_HH
@@ -42,60 +50,75 @@
 #include <list>
 #include "globals.hh"
 #include "G4ReferenceCountedHandle.hh"
-class G4KDTree;
-class G4KDNode;
-struct ResNode;
+#include "G4KDNode.hh"
 
+class G4KDTree;
+class G4KDNode_Base;
+struct ResNode;
 class G4KDTreeResult;
 
 typedef G4ReferenceCountedHandle<G4KDTreeResult> G4KDTreeResultHandle;
 typedef G4ReferenceCountedHandle<ResNode> ResNodeHandle;
 
 /**
-  * G4KDTreeResult enables to go through the nearest entities found
-  * by G4KDTree.
-  */
+ * G4KDTreeResult enables to go through the nearest entities found
+ * by G4KDTree.
+ */
 
 class G4KDTreeResult : protected std::list<ResNode>
 {
-protected :
-    G4KDTree *fTree;
-    std::list<ResNode>::iterator fIterator;
+protected:
+  G4KDTree *fTree;
+  std::list<ResNode>::iterator fIterator;
 
 public:
-    G4KDTreeResult(G4KDTree*);
-    virtual ~G4KDTreeResult();
+  G4KDTreeResult(G4KDTree*);
+  virtual ~G4KDTreeResult();
 
-    void Insert(double, G4KDNode*);
+  void Insert(double, G4KDNode_Base*);
 
-    void Clear();
+  void Clear();
 
-    void Sort();
+  void Sort();
 
-    /* returns the size of the result set (in elements) */
-    size_t GetSize();
+  /* returns the size of the result set (in elements) */
+  size_t GetSize() const;
 
-    size_t size();
+  size_t size() const;
 
-    /* rewinds the result set iterator */
-    void Rewind();
+  /* rewinds the result set iterator */
+  void Rewind();
 
-    /* returns non-zero if the set iterator reached the end after the last element */
-    bool End();
+  /* returns non-zero if the set iterator reached the end after the last element*/
+  bool End();
 
-    /* advances the result set iterator
-     */
-    void Next();
+  /* advances the result set iterator
+   */
+  void Next();
 
-    /* returns the data pointer (can be null) of the current result set item
-     * and optionally sets its position to the pointers(s) if not null.
-     */
-    void* GetItemData();
-    void* GetItem(double*& /*position*/);
-    void* GetItem(double& x, double& y, double& z); // 3D
-    void* GetItemNDistanceSQ(double& /*distance*/);
-    void* GetItemNDistanceSQ(double*& /*position*/, double& /*distance*/);
-    double GetDistanceSqr();
+  /* returns the data pointer (can be null) of the current result set item
+   * and optionally sets its position to the pointers(s) if not null.
+   */
+  template<typename PointT>
+    PointT* GetItem() const;
+  G4KDNode_Base* GetNode() const;
+  template<typename PointT>
+    PointT* GetItemNDistanceSQ(double& /*distance*/) const;
+  double GetDistanceSqr() const;
 };
+
+template<typename PointT>
+  PointT* G4KDTreeResult::GetItem() const
+  {
+    G4KDNode<PointT>* node = (G4KDNode<PointT>*) (GetNode());
+    return node->GetPoint();
+  }
+
+template<typename PointT>
+  PointT* G4KDTreeResult::GetItemNDistanceSQ(double& dist_sq) const
+  {
+    dist_sq = GetDistanceSqr();
+    return this->GetItem<PointT>();
+  }
 
 #endif // G4KDTREERESULT_HH

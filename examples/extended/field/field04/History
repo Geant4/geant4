@@ -15,14 +15,53 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-December 02, 2013
-- More fixes in gui.mac:
-  corrected wireframe parameter
+November 5, 2014 A.Dotti -  (fieldex04-V10-00-11)
+- Bug fixing for shared process
+
+October 28, 2014 A. Dotti - (fieldex04-V10-00-10)
+- Proting to new optical phsyics processes API 
+  (no statics), requires: xrays-V10-00-06, op-V10-00-09, 
+  phys-ctor-em-V10-00-18 
+
+February 28, 2014 G. Cosmo - (fieldex04-V10-00-09)
+- Corrected mismatch for delete/new of fFp pointer array in Clear()...
+
+February 27, 2014 G. Cosmo - (fieldex04-V10-00-08)
+- Set pointer to NULL and fields size to zero in Clear().
+
+February 25, 2014 G. Cosmo - (fieldex04-V10-00-07)
+- F04GlobalField.cc : Fix in destructor to also -avoid- deletion of
+  fFieldManager!
+
+February 25, 2014 G. Cosmo - (fieldex04-V10-00-06)
+- F04GlobalField.cc : Fix in destructor to -not- delete fFieldPropagator
+  and set flag in Clear() for avoiding invalid memory access in GetField().
+
+February 18, 2014 P. Gumplinger - (fieldex04-V10-00-05)
+- F04GlobalField.cc : try to fix double delete.
+
+December 27, 2013 M. Asai - (fieldex04-V10-00-04)
+- F04GlobalField.cc : Fix uninitialized variables.
+
+December 23, 2013 M. Asai - (fieldex04-V10-00-03)
+- Limit static method invokation only for master/sequential.
+
+December 22, 2013 M. Asai - (fieldex04-V10-00-02)
+- Avoid static method being invoked by a pointer.
+
+December 19, 2013 A. Dotti - (fieldex09-V10-00-01)
+- Retagging: previous tag was rejected due to MT issues, but
+  problem is not reproducible. Retagging for debugging
+
+December 04, 2013 P.Gumplinger - (fieldex04-V10-00-00)
+- replace Update method and commands with ReinitializeGeometry
+- put back cleaning volumes and solid stores in Construct()
+- More Fixes in gui.mac:
+  Let execute vis.mac first to make the command in added menus available;
+  Corrected wireframe parameter;
 
 November 30, 2013 M.Asai - (fieldex04-V09-06-08)
 - fix additional thread-safety issues.
-
-November 29, 2013 - I. Hrivnacova
 - Fixed gui.mac (commented out command specific to B2 example)
 
 November 28, 2013 M.Asai - (fieldex04-V09-06-07)

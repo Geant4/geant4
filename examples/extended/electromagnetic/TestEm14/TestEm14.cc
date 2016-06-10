@@ -23,26 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm14/TestEm14.cc
-/// \brief Main program of the electromagnetic/TestEm14 example
+/// \file electromagnetic/TestEm13/TestEm13.cc
+/// \brief Main program of the electromagnetic/TestEm13 example
 //
-// $Id: TestEm14.cc 73021 2013-08-15 09:08:39Z gcosmo $
+// $Id: TestEm14.cc 85258 2014-10-27 08:51:49Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
+#include "ActionInitialization.hh"
 #include "SteppingVerbose.hh"
-
-#include "RunAction.hh"
-#include "EventAction.hh"
-#include "SteppingAction.hh"
 
 #ifdef G4VIS_USE
  #include "G4VisExecutive.hh"
@@ -53,33 +54,31 @@
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 int main(int argc,char** argv) {
- 
+
   //choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
   
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-    
   // Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  G4int nThreads = G4Threading::G4GetNumberOfCores();
+  if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
+  runManager->SetNumberOfThreads(nThreads);
+#else
+  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
+  G4RunManager* runManager = new G4RunManager;
+#endif
 
   // set mandatory initialization classes
-  DetectorConstruction* det;
-  PrimaryGeneratorAction* prim;
-  runManager->SetUserInitialization(det = new DetectorConstruction);
+  DetectorConstruction* det = new DetectorConstruction;
+  runManager->SetUserInitialization(det);
   runManager->SetUserInitialization(new PhysicsList);
-  runManager->SetUserAction(prim = new PrimaryGeneratorAction(det));
+  runManager->SetUserInitialization(new ActionInitialization(det));
       
-  // set user action classes
-  RunAction* run;  
-  runManager->SetUserAction(run = new RunAction(det,prim)); 
-  runManager->SetUserAction(new EventAction);
-  runManager->SetUserAction(new SteppingAction(run));
-   
   // get the pointer to the User Interface manager 
-    G4UImanager* UI = G4UImanager::GetUIpointer();  
+  G4UImanager* UI = G4UImanager::GetUIpointer();  
 
   if (argc!=1)   // batch mode  
     {
@@ -89,25 +88,25 @@ int main(int argc,char** argv) {
     }
     
   else           //define visualization and UI terminal for interactive mode
-    { 
+    {
 #ifdef G4VIS_USE
    G4VisManager* visManager = new G4VisExecutive;
    visManager->Initialize();
-#endif    
+#endif
 
 #ifdef G4UI_USE
       G4UIExecutive * ui = new G4UIExecutive(argc,argv);
       ui->SessionStart();
       delete ui;
 #endif
-     
+
 #ifdef G4VIS_USE
      delete visManager;
-#endif     
+#endif
     }
 
-  // job termination
-  //    
+  // job termination     
+  //
   delete runManager;
 
   return 0;

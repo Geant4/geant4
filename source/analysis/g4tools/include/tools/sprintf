@@ -9,7 +9,8 @@
 
 namespace tools {
 
-inline bool vsprintf(std::string& a_string,int a_length,const char* a_format,va_list a_args){
+inline bool vsprintf(std::string& a_string,
+                     int a_length,const char* a_format,va_list a_args){
   a_string.clear();
   if(a_length<0) return false;
   if(!a_format) return false;
@@ -31,7 +32,8 @@ inline bool vsprintf(std::string& a_string,int a_length,const char* a_format,va_
 }
 
 
-inline bool sprintf(std::string& a_string,int a_length,const char* a_format,...){
+inline bool sprintf(std::string& a_string,
+                    int a_length,const char* a_format,...){
   a_string.clear();
   if(a_length<0) return false;
   if(!a_format) return false;
@@ -55,6 +57,18 @@ inline bool sprintf(std::string& a_string,int a_length,const char* a_format,...)
   return true;
 }
 
+template <class MATRIX> //for example : MATRIX = mat<symbol,4>
+inline void set_matrix(MATRIX& a_matrix,const std::string& a_fmt) {
+  unsigned int DR = a_matrix.rows();
+  unsigned int DC = a_matrix.cols();
+  std::string ss;
+  for(unsigned int i=0;i<DR;i++) {
+    for(unsigned int j=0;j<DC;j++) {
+      tools::sprintf(ss,128,a_fmt.c_str(),i,j);
+      a_matrix.set_value(i,j,ss);
+    }
+  }
+}
 
 }
 

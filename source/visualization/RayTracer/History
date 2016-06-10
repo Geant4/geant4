@@ -1,4 +1,4 @@
-$Id: History 77479 2013-11-25 10:01:22Z gcosmo $
+$Id: History 86973 2014-11-21 11:57:27Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for Ray Tracer category
 ---------------------------------------
+
+20th November 2014  Makoto Asai (raytracer-V10-00-00)
+- Fixes for Coverity.
 
 15th November 2013  John Allison (raytracer-V09-06-07)
 - Some changes as suggested by PVS.

@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -58,9 +59,9 @@ namespace G4INCL {
     // Local energy is constant outside the surface
     if(r > n->getUniverseRadius()) {
       INCL_WARN("Tried to evaluate local energy for a particle outside the maximum radius."
-            << std::endl << p->print() << std::endl
-            << "Maximum radius = " << n->getDensity()->getMaximumRadius() << std::endl
-            << "Universe radius = " << n->getUniverseRadius() << std::endl);
+            << '\n' << p->print() << '\n'
+            << "Maximum radius = " << n->getDensity()->getMaximumRadius() << '\n'
+            << "Universe radius = " << n->getUniverseRadius() << '\n');
       return 0.0;
     }
 
@@ -96,7 +97,7 @@ namespace G4INCL {
   G4double squareTotalEnergyInCM(Particle const * const p1, Particle const * const p2) {
     G4double beta2 = makeBoostVector(p1, p2).mag2();
     if(beta2 > 1.0) {
-      INCL_ERROR("squareTotalEnergyInCM: beta2 == " << beta2 << " > 1.0" << std::endl);
+      INCL_ERROR("squareTotalEnergyInCM: beta2 == " << beta2 << " > 1.0" << '\n');
       beta2 = 0.0;
     }
     return (1.0 - beta2)*std::pow(p1->getEnergy() + p2->getEnergy(), 2);
@@ -108,7 +109,7 @@ namespace G4INCL {
     const G4double z = p1->getEnergy()*p2->getEnergy() - p1->getMomentum().dot(p2->getMomentum());
     G4double pcm2 = (z*z-m1sq*m2sq)/(2*z+m1sq+m2sq);
     if(pcm2 < 0.0) {
-      INCL_ERROR("momentumInCM: pcm2 == " << pcm2 << " < 0.0" << std::endl);
+      INCL_ERROR("momentumInCM: pcm2 == " << pcm2 << " < 0.0" << '\n');
       pcm2 = 0.0;
     }
     return std::sqrt(pcm2);
@@ -124,7 +125,7 @@ namespace G4INCL {
     const G4double m2sq = m2*m2;
     G4double plab2 = (s*s-2*s*(m1sq+m2sq)+(m1sq-m2sq)*(m1sq-m2sq))/(4*m2sq);
     if(plab2 < 0.0) {
-      INCL_ERROR("momentumInLab: plab2 == " << plab2 << " < 0.0; m1sq == " << m1sq << "; m2sq == " << m2sq << "; s == " << s << std::endl);
+      INCL_ERROR("momentumInLab: plab2 == " << plab2 << " < 0.0; m1sq == " << m1sq << "; m2sq == " << m2sq << "; s == " << s << '\n');
       plab2 = 0.0;
     }
     return std::sqrt(plab2);

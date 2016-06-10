@@ -1,3 +1,6 @@
+# Macro file for example B1 test
+
+/run/initialize
 
 # gamma 6 MeV 
 /gun/particle gamma

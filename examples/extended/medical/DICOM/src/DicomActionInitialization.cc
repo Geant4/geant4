@@ -36,25 +36,25 @@
 #include "DicomRunAction.hh"
 #include "DicomEventAction.hh"
 
-//====================================================================================
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DicomActionInitialization::DicomActionInitialization()
 : G4VUserActionInitialization()
 {  }
 
-//====================================================================================
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DicomActionInitialization::~DicomActionInitialization()
 {  }
 
-//====================================================================================
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DicomActionInitialization::BuildForMaster() const
 {
     SetUserAction(new DicomRunAction);
 }
 
-//====================================================================================
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DicomActionInitialization::Build() const
 {
@@ -64,6 +64,6 @@ void DicomActionInitialization::Build() const
     
 }
 
-//====================================================================================
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 

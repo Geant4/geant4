@@ -37,7 +37,12 @@
 //
 // CHANGE HISTORY
 // --------------
-//
+// 
+// 06/06/2014  A Dotti
+//    For thread safety: this is a shared object,
+//    mutex has been added to control access to shared resources (data members).
+//    in Getters and Setters, mutex is NOT used in GenerateOne because it is
+//    assumed that properties are not changed during event loop.
 //
 // Version 1.0, 05/02/2004, Fan Lei, Created.
 //    Based on the G4GeneralParticleSource class in Geant4 v6.0
@@ -134,34 +139,34 @@
 
 #include "G4Navigator.hh"
 #include "G4SPSRandomGenerator.hh"
+#include "G4Threading.hh"
+#include "G4Cache.hh"
 
 class G4SPSPosDistribution
 {
-  //
-  friend class G4SPSAngDistribution;
 public:
   G4SPSPosDistribution (); 
   ~G4SPSPosDistribution ();
 
   // methods to create source position dist.
   void SetPosDisType(G4String); // Point, Plane, Surface, Volume
-  inline G4String GetPosDisType() { return SourcePosType; };
+  G4String GetPosDisType();
   void SetPosDisShape(G4String);
-  inline G4String GetPosDisShape() { return Shape; };
+  G4String GetPosDisShape();
   // SetPosDisShape - Square, Circle, Annulus, Ellipse, Rectangle, Sphere,
   // Ellipsoid, Cylinder, Right (parallelepiped).
   void SetCentreCoords(G4ThreeVector);
-  inline G4ThreeVector GetCentreCoords() { return CentreCoords; } ;
+  G4ThreeVector GetCentreCoords();
   void SetPosRot1(G4ThreeVector); 
   void SetPosRot2(G4ThreeVector); 
   void SetHalfX(G4double);
-  inline G4double GetHalfX() { return halfx; } ;
+  G4double GetHalfX();
   void SetHalfY(G4double);
-  inline G4double GetHalfY()  { return halfy; } ;
+  G4double GetHalfY();
   void SetHalfZ(G4double);
-  inline G4double GetHalfZ()  { return halfz; } ;
+  G4double GetHalfZ();
   void SetRadius(G4double);
-  inline G4double GetRadius()  { return Radius; };
+  G4double GetRadius();
   void SetRadius0(G4double);
   void SetBeamSigmaInR(G4double);
   void SetBeamSigmaInX(G4double);
@@ -171,24 +176,32 @@ public:
   void SetParPhi(G4double);
   void ConfineSourceToVolume(G4String);
   //
-  void SetBiasRndm (G4SPSRandomGenerator* a) { posRndm = a ; };
+  void SetBiasRndm (G4SPSRandomGenerator* a);
   // Set the verbosity level.
-  void SetVerbosity(G4int a) {verbosityLevel = a; } ;
+  void SetVerbosity(G4int a);
   //
   G4ThreeVector GenerateOne();
+    
+    G4ThreeVector GetSideRefVec1() const;
+    G4ThreeVector GetSideRefVec2() const;
+    G4ThreeVector GetSideRefVec3() const;
+    G4String GetSourcePosType();
+    G4ThreeVector GetParticlePos() const;
 
 private:
 
   void GenerateRotationMatrices();
   // the following routines generate the source position
-  void GeneratePointSource();
-  void GeneratePointsInBeam();
-  void GeneratePointsInPlane();
-  void GeneratePointsOnSurface();
-  void GeneratePointsInVolume();
+  void GeneratePointSource(G4ThreeVector& outoutPos);
+  void GeneratePointsInBeam(G4ThreeVector& outoutPos);
+  void GeneratePointsInPlane(G4ThreeVector& outoutPos);
+  void GeneratePointsOnSurface(G4ThreeVector& outputPos);
+  void GeneratePointsInVolume(G4ThreeVector& outputPos);
 
-  G4bool IsSourceConfined();
+  G4bool IsSourceConfined(G4ThreeVector& outputPos);
 
+    void InitThreadLocalCache() const;
+    void HandleThreadLocalCache( const G4ThreeVector& v1 , const G4ThreeVector& v2, const G4ThreeVector& v3 );
 private:
 
   // Position distribution Variables
@@ -203,14 +216,19 @@ private:
   G4double ParAlpha, ParTheta, ParPhi; //Angle for Right Parallellepipeds
   G4bool Confine; //If true confines source distribution to VolName
   G4String VolName;
-  G4ThreeVector SideRefVec1,SideRefVec2,SideRefVec3; //Side rotation matrices
-  G4ThreeVector particle_position; // the final particle position to be returned
-  //  
-  G4Navigator *gNavigator;
+  //Thread local caches
+    G4Cache<G4ThreeVector*> CSideRefVec1, CSideRefVec2, CSideRefVec3;
+    G4Cache<G4ThreeVector> CParticlePos;
+
+  G4ThreeVector particle_position; // the final particle position
+  //
+  //G4Navigator *gNavigator;
   //
   G4SPSRandomGenerator* posRndm; // biased random generator
   // Verbosity
   G4int verbosityLevel;
+    
+  G4Mutex mutex; // protect access to shared resources
 
 };
 

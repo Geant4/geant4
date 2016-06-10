@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm18/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id: EventAction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id: EventAction.cc 82401 2014-06-18 14:43:54Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,36 +35,24 @@
 
 #include "RunAction.hh"
 #include "HistoManager.hh"
-#include "EventMessenger.hh"
 
 #include "G4Event.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction(RunAction* RA)
-:G4UserEventAction(),fRunAction(RA),fDrawFlag("none"),fPrintModulo(10000),
- fEventMessenger(0)
-{
-  fEventMessenger = new EventMessenger(this);
-}
+:G4UserEventAction(),fRunAction(RA)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
-{
-  delete fEventMessenger;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::BeginOfEventAction(const G4Event* evt)
+void EventAction::BeginOfEventAction(const G4Event*)
 {
- G4int evtNb = evt->GetEventID();
-
- //printing survey
- if (evtNb%fPrintModulo == 0) 
-    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-
  // initialisation per event
  fEnergyDeposit  = fEnergySecondary = 0.;
 }

@@ -1,4 +1,4 @@
-$Id: History 75669 2013-11-05 08:38:52Z gcosmo $
+$Id: History 86443 2014-11-12 09:40:56Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-11-14 V.Ivanchenko (expol01-V10-00-02)
+- RunAction - fixed compillation at gcc 4.1
+
+11-11-14 V.Ivanchenko (expol01-V10-00-01)
+- Several updates for the unification of the example: use standard 
+  physics builder from physics_list sub-package; removed local 
+  SetCuts() method; removed AIDA histograms
+
+16-10-14 I.Hrivnacova (expol01-V10-00-00)
+- Fixed coding guidelines (long lines) in DetectorConstruction.cc
 
 02-11-13 V.Ivanchenko (expol01-V09-06-02)
 - tag resubmitted

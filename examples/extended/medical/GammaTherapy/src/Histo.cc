@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Histo.cc 68699 2013-04-05 08:42:28Z gcosmo $
+// $Id: Histo.cc 82277 2014-06-13 14:40:54Z gcosmo $
 //
 /// \file medical/GammaTherapy/src/Histo.cc
 /// \brief Implementation of the Histo class
@@ -38,8 +38,8 @@
 //----------------------------------------------------------------------------
 //
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Histo.hh"
 #include "G4Gamma.hh"
@@ -50,11 +50,11 @@
 #include "G4SystemOfUnits.hh"
 #include <iomanip>
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Histo* Histo::fManager = 0;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Histo* Histo::GetPointer()
 {
@@ -65,7 +65,7 @@ Histo* Histo::GetPointer()
   return fManager;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Histo::Histo()
 {
@@ -97,12 +97,12 @@ Histo::Histo()
   fHisto.resize(fNHisto, 0);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Histo::~Histo()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::BeginOfHisto()
 {
@@ -154,7 +154,7 @@ void Histo::BeginOfHisto()
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::EndOfHisto()
 {
@@ -239,8 +239,8 @@ void Histo::EndOfHisto()
 
     // Write histogram file
     if(!fAnalysisManager->Write()) {
-      G4cout   << "Histo::Save: FATAL ERROR writing ROOT file" << G4endl;
-      exit(1);
+      G4Exception ("Histo::Save()", "hist01", FatalException, 
+                   "Cannot write ROOT file.");
     }
     G4cout << "### Histo::Save: Histograms are saved" << G4endl;
     if(fAnalysisManager->CloseFile() && fVerbose > 0) {
@@ -251,7 +251,7 @@ void Histo::EndOfHisto()
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::BookHisto()
 {
@@ -259,7 +259,8 @@ void Histo::BookHisto()
 
   if(!fAnalysisManager->OpenFile(nam)) {
     G4cout << "Histo::bookHisto: ERROR open file <" << nam << ">" << G4endl;
-    exit(0); 
+    G4Exception ("Histo::BookHisto()", "hist01", FatalException, 
+                 "Cannot open ROOT file.");
   }
   G4cout << "### Histo::Save: Opended file <" << nam << ">  for " 
          << fNHisto << " histograms " << G4endl;
@@ -303,7 +304,7 @@ void Histo::BookHisto()
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::AddTargetPhoton(const G4DynamicParticle* p)
 {
@@ -313,14 +314,14 @@ void Histo::AddTargetPhoton(const G4DynamicParticle* p)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::AddPhantomPhoton(const G4DynamicParticle*)
 {
   ++fNgamPh; 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::AddTargetElectron(const G4DynamicParticle* p)
 {
@@ -330,7 +331,7 @@ void Histo::AddTargetElectron(const G4DynamicParticle* p)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::AddPhantomElectron(const G4DynamicParticle* p)
 {
@@ -340,7 +341,7 @@ void Histo::AddPhantomElectron(const G4DynamicParticle* p)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::ScoreNewTrack(const G4Track* aTrack)
 {
@@ -393,7 +394,7 @@ void Histo::ScoreNewTrack(const G4Track* aTrack)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::AddPhantomGamma(G4double e, G4double r)
 {
@@ -410,7 +411,7 @@ void Histo::AddPhantomGamma(G4double e, G4double r)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::AddPhantomStep(G4double edep, G4double r1, G4double z1, 
                            G4double r2, G4double z2,
@@ -485,5 +486,5 @@ void Histo::AddPhantomStep(G4double edep, G4double r1, G4double z1,
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

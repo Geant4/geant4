@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -41,6 +42,7 @@
 #include "G4INCLIChannel.hh"
 #include "G4INCLParticle.hh"
 #include "G4INCLNucleus.hh"
+#include "G4INCLAllocationPool.hh"
 
 namespace G4INCL {
 
@@ -55,11 +57,11 @@ namespace G4INCL {
     DecayAvatar(G4INCL::Particle *aParticle, G4double time, G4INCL::Nucleus *aNucleus, G4bool force=false);
     virtual ~DecayAvatar();
 
-    G4INCL::IChannel* getChannel();
-    G4INCL::FinalState* getFinalState();
+    IChannel* getChannel();
+    void fillFinalState(FinalState *fs);
 
     virtual void preInteraction();
-    virtual FinalState *postInteraction(FinalState *);
+    virtual void postInteraction(FinalState *fs);
 
     ParticleList getParticles() const {
       ParticleList theParticleList;
@@ -70,7 +72,9 @@ namespace G4INCL {
     std::string dump() const;
   private:
     G4bool forced;
-    ThreeVector const &incidentDirection;
+    ThreeVector const incidentDirection;
+
+    INCL_DECLARE_ALLOCATION_POOL(DecayAvatar);
   };
 
 }

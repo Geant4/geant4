@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4alphaIonisation.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4alphaIonisation.cc 84598 2014-10-17 07:39:15Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -57,6 +57,7 @@
 #include "G4LossTableManager.hh"
 #include "G4IonFluctuations.hh"
 #include "G4UniversalFluctuation.hh"
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -71,9 +72,7 @@ G4alphaIonisation::G4alphaIonisation(const G4String& name)
 	      " The process is not ready for use - incorrect results are expected");
   SetLinearLossLimit(0.02);
   SetStepFunction(0.2, 0.01*mm);
-  //  SetIntegral(true);
   SetProcessSubType(fIonisation);
-  //  SetVerboseLevel(1);
   mass = 0.0;
   ratio = 0.0;
   eth = 8*MeV;
@@ -121,24 +120,27 @@ void G4alphaIonisation::InitialiseEnergyLossProcess(
     } else { theBaseParticle = bpart; }
 
     mass  = part->GetPDGMass();
-    ratio = electron_mass_c2/mass;
+    ratio = mass/electron_mass_c2/mass;
 
     SetBaseParticle(theBaseParticle);
     SetSecondaryParticle(G4Electron::Electron());
 
     if (!EmModel(1)) { SetEmModel(new G4BraggIonModel(), 1); }
-    EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
+
+    G4EmParameters* param = G4EmParameters::Instance();
+    G4double emin = param->MinKinEnergy();
+    EmModel(1)->SetLowEnergyLimit(emin);
 
     // model limit defined for alpha
-    eth = (EmModel(1)->HighEnergyLimit())*mass/proton_mass_c2;
+    eth = (EmModel(1)->HighEnergyLimit())*ratio;
     EmModel(1)->SetHighEnergyLimit(eth);
+    AddEmModel(1, EmModel(1), new G4IonFluctuations());
 
     if (!FluctModel()) { SetFluctModel(new G4UniversalFluctuation()); }
-    AddEmModel(1, EmModel(1), new G4IonFluctuations());
 
     if (!EmModel(2)) { SetEmModel(new G4BetheBlochModel(),2); }  
     EmModel(2)->SetLowEnergyLimit(eth);
-    EmModel(2)->SetHighEnergyLimit(MaxKinEnergy());
+    EmModel(2)->SetHighEnergyLimit(param->MaxKinEnergy());
     AddEmModel(2, EmModel(2), FluctModel());    
 
     isInitialised = true;

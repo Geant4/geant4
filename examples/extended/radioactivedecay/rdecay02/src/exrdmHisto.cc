@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: exrdmHisto.cc 68007 2013-03-13 11:28:03Z gcosmo $
+// $Id: exrdmHisto.cc 78592 2014-01-08 10:30:37Z gcosmo $
 //
 /// \file radioactivedecay/rdecay02/src/exrdmHisto.cc
 /// \brief Implementation of the exrdmHisto class
@@ -424,12 +424,13 @@ void exrdmHisto::AddRow(G4int i)
 #endif
 
 #ifdef G4ANALYSIS_USE_ROOT
-  float ar[4];
+  float *ar=new float[fRcol[i]];
   for (G4int j=0; j < fRcol[i]; j++) {
 //      G4cout << i << " " << fRarray[i][j] << G4endl;
       ar[j] = fRarray[i][j];       
   }  
   if(fROOTntup[i]) fROOTntup[i]->Fill(ar);
+  delete ar;
 #endif
 
 } 

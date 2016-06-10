@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiOmegabMinus.cc 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4AntiOmegabMinus.cc 83749 2014-09-12 12:14:59Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -69,7 +69,7 @@ G4AntiOmegabMinus* G4AntiOmegabMinus::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,      6.0710*GeV,   0.58e-9*MeV,   +1.*eplus,
+                 name,      6.0488*GeV,   0.58e-9*MeV,   +1.*eplus,
                     1,              +1,             0,
                     0,               0,             0,
              "baryon",               0,            -1,       -5332,

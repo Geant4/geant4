@@ -5,7 +5,8 @@
 # ROOT_INCLUDE_DIR    PATH to the include directory
 # ROOT_LIBRARIES      Most common libraries
 # ROOT_LIBRARY_DIR    PATH to the library directory 
-
+# ROOT_BIN_DIR	      PATH to the excutables directory
+# ROOT_PYTHONVER      Compatible python version string
 
 find_program(ROOT_CONFIG_EXECUTABLE root-config
   PATHS ${ROOTSYS}/bin $ENV{ROOTSYS}/bin)
@@ -39,6 +40,12 @@ else()
     COMMAND ${ROOT_CONFIG_EXECUTABLE} --python-version
     OUTPUT_VARIABLE ROOT_PYTHONVER
     OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+  execute_process(
+    COMMAND ${ROOT_CONFIG_EXECUTABLE} --bindir
+    OUTPUT_VARIABLE ROOT_BIN_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+    
 
   #set(ROOT_LIBRARIES ${ROOT_LIBRARIES} -lThread -lMinuit -lHtml -lVMC -lEG -lGeom -lTreePlayer -lXMLIO -lProof)
   #set(ROOT_LIBRARIES ${ROOT_LIBRARIES} -lProofPlayer -lMLP -lSpectrum -lEve -lRGL -lGed -lXMLParser -lPhysics)

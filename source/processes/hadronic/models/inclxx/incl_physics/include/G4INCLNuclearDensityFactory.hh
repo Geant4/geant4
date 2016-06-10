@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -40,21 +41,22 @@
 #include "G4INCLNuclearDensity.hh"
 #include "G4INCLParticleSampler.hh"
 #include "G4INCLParticleTable.hh"
+#include "G4INCLInterpolationTable.hh"
 #include <map>
 
 namespace G4INCL {
 
   namespace NuclearDensityFactory {
 
-    InverseInterpolationTable *createRPCorrelationTable(const ParticleType t, const G4int A, const G4int Z);
+    InterpolationTable *createRPCorrelationTable(const ParticleType t, const G4int A, const G4int Z);
 
-    InverseInterpolationTable *createRCDFTable(const ParticleType t, const G4int A, const G4int Z);
+    InterpolationTable *createRCDFTable(const ParticleType t, const G4int A, const G4int Z);
 
-    InverseInterpolationTable *createPCDFTable(const ParticleType t, const G4int A, const G4int Z);
+    InterpolationTable *createPCDFTable(const ParticleType t, const G4int A, const G4int Z);
 
     NuclearDensity const *createDensity(const G4int A, const G4int Z);
 
-    void addRPCorrelationToCache(const G4int A, const G4int Z, const ParticleType t, InverseInterpolationTable * const table);
+    void addRPCorrelationToCache(const G4int A, const G4int Z, const ParticleType t, InterpolationTable * const table);
 
     void addDensityToCache(const G4int A, const G4int Z, NuclearDensity * const density);
 

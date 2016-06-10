@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITStepProcessor2.cc 77292 2013-11-22 10:58:39Z gcosmo $
+// $Id: G4ITStepProcessor2.cc 87375 2014-12-02 08:17:28Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -35,6 +35,7 @@
 
 #include "G4ITStepProcessor.hh"
 #include "G4LossTableManager.hh"
+#include "G4EnergyLossTables.hh"
 #include "G4ProductionCuts.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4VITProcess.hh"
@@ -44,7 +45,14 @@
 #include "G4ITTransportation.hh"
 
 #include "G4ITNavigator.hh"             // Include from 'geometry'
-//#include "G4Navigator.hh"             // Include from 'geometry'
+
+//#define DEBUG_MEM 1
+
+#ifdef DEBUG_MEM
+#include "G4MemStat.hh"
+using namespace G4MemStat;
+using G4MemStat::MemStat;
+#endif
 
 void G4ITStepProcessor::DealWithSecondaries(G4int& counter)
 {
@@ -93,7 +101,23 @@ void G4ITStepProcessor::DealWithSecondaries(G4int& counter)
 
 void G4ITStepProcessor::Stepping(G4Track* track, const double & timeStep)
 {
+
+#ifdef DEBUG_MEM
+    MemStat mem_first, mem_second, mem_diff;
+#endif
+
+#ifdef DEBUG_MEM
+    mem_first = MemoryUsage();
+#endif
+
     CleanProcessor();
+
+#ifdef DEBUG_MEM
+    MemStat mem_intermediaire = MemoryUsage();
+    mem_diff = mem_intermediaire-mem_first;
+    G4cout << "\t\t\t >> || MEM || After CleanProcessor " << track->GetTrackID() << ", diff is : " << mem_diff << G4endl;
+#endif
+
     if(track == 0) return ; // maybe put an exception here
     fTimeStep = timeStep ;
     SetTrack(track);
@@ -107,6 +131,14 @@ void G4ITStepProcessor::Stepping(G4Track* track, const double & timeStep)
 void G4ITStepProcessor::DoStepping()
 {
     SetupMembers() ;
+
+#ifdef DEBUG_MEM
+    MemStat mem_first, mem_second, mem_diff;
+#endif
+
+#ifdef DEBUG_MEM
+    mem_first = MemoryUsage();
+#endif
 
     if(!fpProcessInfo)
     {
@@ -127,6 +159,12 @@ void G4ITStepProcessor::DoStepping()
             && fpProcessInfo->MAXofAlongStepLoops == 0
             && fpProcessInfo->MAXofAtRestLoops == 0)
     {
+       G4ExceptionDescription exceptionDescription ;
+       exceptionDescription << "No process was found for particle :"
+                             << fpTrack->GetDefinition()->GetParticleName();
+       G4Exception("G4ITStepProcessor::DoStepping","ITStepProcessorNoProcess",
+    	                    JustWarning,exceptionDescription);
+
         fpTrack -> SetTrackStatus(fStopAndKill) ;
         fpState->fStepStatus = fUndefined;
         return ;
@@ -137,12 +175,18 @@ void G4ITStepProcessor::DoStepping()
     else
     {
         fpNavigator->SetNavigatorState(fpITrack->GetTrackingInfo()->GetNavigatorState());
-        fpNavigator->ResetHierarchyAndLocate( fpTrack->GetPosition(),
-                                              fpTrack->GetMomentumDirection(),
-                                              *((G4TouchableHistory*)fpTrack->GetTouchableHandle()()) );
-        fpNavigator->SetNavigatorState(fpITrack->GetTrackingInfo()->GetNavigatorState());
+//        fpNavigator->ResetHierarchyAndLocate( fpTrack->GetPosition(),
+//                                              fpTrack->GetMomentumDirection(),
+//                                              *((G4TouchableHistory*)fpTrack->GetTouchableHandle()()) );
+//        fpNavigator->SetNavigatorState(fpITrack->GetTrackingInfo()->GetNavigatorState());
         // We reset the navigator state before checking for AtRest
         // in case a AtRest processe would use a navigator info
+
+#ifdef DEBUG_MEM
+    MemStat mem_intermediaire = MemoryUsage();
+    mem_diff = mem_intermediaire-mem_first;
+    G4cout << "\t\t\t >> || MEM || G4ITStepProcessor::DoStepping || After dealing with navigator with " << fpTrack->GetTrackID() << ", diff is : " << mem_diff << G4endl;
+#endif
 
         if( fpTrack->GetTrackStatus() == fStopButAlive )
         {
@@ -181,13 +225,17 @@ void G4ITStepProcessor::DoStepping()
                 // In case the track has NOT the minimum step length
                 // Given the final step time, the transportation
                 // will compute the final position of the particle
-
                 fpState->fStepStatus = fPostStepDoItProc;
                 fpStep->GetPostStepPoint()
                         ->SetProcessDefinedStep(fpTransportation);
                 FindTransportationStep();
             }
 
+#ifdef DEBUG_MEM
+    mem_intermediaire = MemoryUsage();
+    mem_diff = mem_intermediaire-mem_first;
+    G4cout << "\t\t\t >> || MEM || G4ITStepProcessor::DoStepping || After FindTransportationStep() with " << fpTrack->GetTrackID() << ", diff is : " << mem_diff << G4endl;
+#endif
 
             // Store the Step length (geometrical length) to G4Step and G4Track
             fpTrack->SetStepLength( fpState->fPhysicalStep );
@@ -200,6 +248,12 @@ void G4ITStepProcessor::DoStepping()
 
             // Invoke AlongStepDoIt
             InvokeAlongStepDoItProcs();
+
+#ifdef DEBUG_MEM
+    mem_intermediaire = MemoryUsage();
+    mem_diff = mem_intermediaire-mem_first;
+    G4cout << "\t\t\t >> || MEM || G4ITStepProcessor::DoStepping || After InvokeAlongStepDoItProcs() with " << fpTrack->GetTrackID() << ", diff is : " << mem_diff << G4endl;
+#endif
 
             // Update track by taking into account all changes by AlongStepDoIt
             // fpStep->UpdateTrack(); // done in InvokeAlongStepDoItProcs
@@ -215,16 +269,33 @@ void G4ITStepProcessor::DoStepping()
             {
                 // Invoke PostStepDoIt including G4ITTransportation::PSDI
                 InvokePostStepDoItProcs();
+
+#ifdef DEBUG_MEM
+    mem_intermediaire = MemoryUsage();
+    mem_diff = mem_intermediaire-mem_first;
+    G4cout << "\t\t\t >> || MEM || G4ITStepProcessor::DoStepping || After InvokePostStepDoItProcs() with " << fpTrack->GetTrackID() << ", diff is : " << mem_diff << G4endl;
+#endif
             }
             else
             {
                 // Only invoke transportation
                 InvokeTransportationProc();
+
+#ifdef DEBUG_MEM
+    mem_intermediaire = MemoryUsage();
+    mem_diff = mem_intermediaire-mem_first;
+    G4cout << "\t\t\t >> || MEM || G4ITStepProcessor::DoStepping || After InvokeTransportationProc() with " << fpTrack->GetTrackID() << ", diff is : " << mem_diff << G4endl;
+#endif
             }
         }
 
-        fpITrack->GetTrackingInfo()->SetNavigatorState(fpNavigator->GetNavigatorState());
-        fpNavigator->SetNavigatorState(0);
+        fpNavigator->ResetNavigatorState();
+
+#ifdef DEBUG_MEM
+    mem_intermediaire = MemoryUsage();
+    mem_diff = mem_intermediaire-mem_first;
+    G4cout << "\t\t\t >> || MEM || G4ITStepProcessor::DoStepping || After fpNavigator->SetNavigatorState with " << fpTrack->GetTrackID() << ", diff is : " << mem_diff << G4endl;
+#endif
     }
     //-------
     // Finale
@@ -233,6 +304,8 @@ void G4ITStepProcessor::DoStepping()
     // Update 'TrackLength' and remeber the Step length of the current Step
     fpTrack->AddTrackLength(fpStep->GetStepLength());
     fpTrack->IncrementCurrentStepNumber();
+
+//    G4cout << " G4ITStepProcessor::DoStepping  -- " <<fpTrack->GetTrackID() << " tps = " << fpTrack->GetGlobalTime() << G4endl;
 
     // Send G4Step information to Hit/Dig if the volume is sensitive
 /***
@@ -261,6 +334,14 @@ void G4ITStepProcessor::DoStepping()
 ***/
     fpTrackingManager->AppendStep(fpTrack,fpStep);
     // Stepping process finish. Return the value of the StepStatus.
+
+
+#ifdef DEBUG_MEM
+    MemStat mem_intermediaire = MemoryUsage();
+    mem_diff = mem_intermediaire-mem_first;
+    G4cout << "\t\t\t >> || MEM || End of DoStepping() with " << fpTrack->GetTrackID() << ", diff is : " << mem_diff << G4endl;
+#endif
+
 
     //    return fpState->fStepStatus;
 }
@@ -293,7 +374,8 @@ void G4ITStepProcessor::InvokeAtRestDoItProcs()
                         fpTrackingInfo->GetProcessState(fpCurrentProcess->GetProcessID()));
             fpParticleChange
                     = fpCurrentProcess->AtRestDoIt( *fpTrack, *fpStep);
-            fpCurrentProcess->SetProcessState(0);
+//            fpCurrentProcess->SetProcessState(0);
+            fpCurrentProcess->ResetProcessState();
 
             // Set the current process as a process which defined this Step length
             fpStep->GetPostStepPoint()
@@ -324,6 +406,14 @@ void G4ITStepProcessor::InvokeAtRestDoItProcs()
 void G4ITStepProcessor::InvokeAlongStepDoItProcs()
 {
 
+#ifdef DEBUG_MEM
+    MemStat mem_first, mem_second, mem_diff;
+#endif
+
+#ifdef DEBUG_MEM
+    mem_first = MemoryUsage();
+#endif
+
     // If the current Step is defined by a 'ExclusivelyForced'
     // PostStepDoIt, then don't invoke any AlongStepDoIt
     if(fpState->fStepStatus == fExclusivelyForcedProc)
@@ -339,9 +429,16 @@ void G4ITStepProcessor::InvokeAlongStepDoItProcs()
         // NULL means the process is inactivated by a user on fly.
 
         fpCurrentProcess->SetProcessState(fpTrackingInfo->GetProcessState(fpCurrentProcess->GetProcessID()));
-        fpParticleChange
-                = fpCurrentProcess->AlongStepDoIt( *fpTrack, *fpStep );
-        fpCurrentProcess->SetProcessState(0);
+        fpParticleChange = fpCurrentProcess->AlongStepDoIt( *fpTrack, *fpStep );
+
+#ifdef DEBUG_MEM
+    MemStat mem_intermediaire = MemoryUsage();
+    mem_diff = mem_intermediaire-mem_first;
+    G4cout << "\t\t\t >> || MEM || After calling AlongStepDoIt for " <<  fpCurrentProcess->GetProcessName() << " and track "<< fpTrack->GetTrackID() << ", diff is : " << mem_diff << G4endl;
+#endif
+
+//        fpCurrentProcess->SetProcessState(0);
+    	fpCurrentProcess->ResetProcessState();
         // Update the PostStepPoint of Step according to ParticleChange
 
         fpParticleChange->UpdateStepForAlongStep(fpStep);
@@ -356,6 +453,12 @@ void G4ITStepProcessor::InvokeAlongStepDoItProcs()
         // clear ParticleChange
         fpParticleChange->Clear();
     }
+
+#ifdef DEBUG_MEM
+    MemStat mem_intermediaire = MemoryUsage();
+    mem_diff = mem_intermediaire-mem_first;
+    G4cout << "\t\t\t >> || MEM || After looping on processes with " << fpTrack->GetTrackID() << ", diff is : " << mem_diff << G4endl;
+#endif
 
     fpStep->UpdateTrack();
 
@@ -433,7 +536,8 @@ void G4ITStepProcessor::InvokePSDIP(size_t np)
     fpCurrentProcess->SetProcessState(fpTrackingInfo->GetProcessState(fpCurrentProcess->GetProcessID()));
     fpParticleChange
             = fpCurrentProcess->PostStepDoIt( *fpTrack, *fpStep);
-    fpCurrentProcess->SetProcessState(0);
+//    fpCurrentProcess->SetProcessState(0);
+    fpCurrentProcess->ResetProcessState();
 
     // Update PostStepPoint of Step according to ParticleChange
     fpParticleChange->UpdateStepForPostStep(fpStep);
@@ -465,7 +569,7 @@ void G4ITStepProcessor::FindTransportationStep()
     double physicalStep(0.) ;
 
     fpTransportation =  fpProcessInfo->fpTransportation;
-    //            dynamic_cast<G4ITTransportation*>((fpProcessInfo->fpAlongStepGetPhysIntVector)[MAXofAlongStepLoops-1]);
+    // dynamic_cast<G4ITTransportation*>((fpProcessInfo->fpAlongStepGetPhysIntVector)[MAXofAlongStepLoops-1]);
 
     if(!fpTrack)
     {
@@ -500,11 +604,14 @@ void G4ITStepProcessor::FindTransportationStep()
     {
         fpTransportation->SetProcessState(fpTrackingInfo->GetProcessState(fpTransportation->GetProcessID()));
         fpTransportation->ComputeStep(*fpTrack, *fpStep, fTimeStep, physicalStep) ;
-        fpTransportation->SetProcessState(0);
+//        fpTransportation->SetProcessState(0);
+        fpTransportation->ResetProcessState();
     }
 
     if(physicalStep >= DBL_MAX)
     {
+    	G4cout << "---- 2) Setting stop and kill for " << GetIT(fpTrack)->GetName() << G4endl;
+
         fpTrack -> SetTrackStatus(fStopAndKill) ;
         return ;
     }

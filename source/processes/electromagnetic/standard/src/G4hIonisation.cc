@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc 71104 2013-06-11 10:21:17Z gcosmo $
+// $Id: G4hIonisation.cc 84598 2014-10-17 07:39:15Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -101,6 +101,7 @@
 #include "G4KaonPlus.hh"
 #include "G4KaonMinus.hh"
 #include "G4ICRU73QOModel.hh"
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -191,10 +192,8 @@ void G4hIonisation::InitialiseEnergyLossProcess(
       if(q > 0.0) { SetEmModel(new G4BraggModel(),1); }
       else { SetEmModel(new G4ICRU73QOModel(),1); }
     }
-    EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
-
-    // model limit defined for protons
-    //eth = (EmModel(1)->HighEnergyLimit())*mass/proton_mass_c2;
+    G4EmParameters* param = G4EmParameters::Instance();
+    EmModel(1)->SetLowEnergyLimit(param->MinKinEnergy());
     EmModel(1)->SetHighEnergyLimit(eth);
     AddEmModel(1, EmModel(1), new G4IonFluctuations());
 
@@ -202,7 +201,7 @@ void G4hIonisation::InitialiseEnergyLossProcess(
 
     if (!EmModel(2)) { SetEmModel(new G4BetheBlochModel(),2); }
     EmModel(2)->SetLowEnergyLimit(eth);
-    EmModel(2)->SetHighEnergyLimit(MaxKinEnergy());
+    EmModel(2)->SetHighEnergyLimit(param->MaxKinEnergy());
     AddEmModel(2, EmModel(2), FluctModel());  
 
     isInitialised = true;

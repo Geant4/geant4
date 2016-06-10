@@ -36,8 +36,11 @@
 // A lot of ideas were inspired by the cephes math library
 // (by Stephen L. Moshier moshier@na-net.ornl.gov) as well as actual code. 
 // The Cephes library can be found here:  http://www.netlib.org/cephes/
- 
-//  Created on: Jun 23, 2012
+// Code and algorithms for G4Exp have been extracted and adapted for Geant4
+// from the original implementation in the VDT mathematical library
+// (https://svnweb.cern.ch/trac/vdt), version 0.3.7.
+
+// Original implementation created on: Jun 23, 2012
 //      Author: Danilo Piparo, Thomas Hauth, Vincenzo Innocente
 //
 // --------------------------------------------------------------------

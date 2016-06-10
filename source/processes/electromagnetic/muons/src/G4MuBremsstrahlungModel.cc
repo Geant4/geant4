@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.cc 75168 2013-10-29 09:20:52Z gcosmo $
+// $Id: G4MuBremsstrahlungModel.cc 85023 2014-10-23 09:56:39Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -74,7 +74,7 @@
 #include "G4ElementVector.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleChangeForLoss.hh"
-#include "G4LossTableManager.hh"
+//#include "G4LossTableManager.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
 
@@ -151,10 +151,12 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
 {
   if(p) { SetParticle(p); }
 
-  if(IsMaster() && p == particle) { InitialiseElementSelectors(p, cuts); }
-
   // define pointer to G4ParticleChange
   if(!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
+
+  if(IsMaster() && p == particle && lowestKinEnergy < HighEnergyLimit()) { 
+    InitialiseElementSelectors(p, cuts); 
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -162,7 +164,7 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
 void G4MuBremsstrahlungModel::InitialiseLocal(const G4ParticleDefinition* p,
 					      G4VEmModel* masterModel)
 {
-  if(p == particle) {
+  if(p == particle && lowestKinEnergy < HighEnergyLimit()) {
     SetElementSelectors(masterModel->GetElementSelectors());
   }
 }

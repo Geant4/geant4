@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -37,6 +38,7 @@
 #include "G4INCLParticle.hh"
 #include "G4INCLIChannel.hh"
 #include "G4INCLNucleus.hh"
+#include "G4INCLAllocationPool.hh"
 
 #ifndef G4INCLParticleEntry_hh
 #define G4INCLParticleEntry_hh 1
@@ -49,7 +51,7 @@ namespace G4INCL {
     ParticleEntryChannel(Nucleus *n, Particle *p);
     virtual ~ParticleEntryChannel();
 
-    FinalState* getFinalState();
+    void fillFinalState(FinalState *fs);
 
   private:
     /** \brief Modify particle that enters the nucleus.
@@ -63,6 +65,8 @@ namespace G4INCL {
 
     Nucleus *theNucleus;
     Particle *theParticle;
+
+    INCL_DECLARE_ALLOCATION_POOL(ParticleEntryChannel);
   };
 }
 

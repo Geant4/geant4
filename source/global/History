@@ -17,6 +17,183 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 18, 2014 G.Cosmo (global-V10-00-44)
+- G4FPEDetection.hh: added call to 'sigfillset' to clear any signals
+  before any use of sigset_t in InvalidOperationDetection() for both
+  MacOS and Linux, as suggested in specifications.
+
+November 17, 2014 M.Kelsey
+- G4FPEDetection.hh: restrict FPE trapping to GCC only, excluding CLang.
+  Addresses problem with Qt generating an apparent FPE deep inside its
+  code with MacOSX CLang builds.
+
+November 7, 2014 G.Cosmo (global-V10-00-43/42)
+- Coherent use of 'thread_local' keyword for c++11, when supported.
+- Updated dates and tag-ID for release 10.1.
+
+November 6, 2014 V.Ivantchenko
+- G4StatDouble: corrected use 'const' interface for Add() method.
+
+November 5, 2014 A.Dotti (global-V10-00-41)
+- Added missing G4GLOB_DLL specification for DLL import/export to
+  G4CacheDetails specialization of cache reference for double.
+
+October 24, 2014 J.Apostolakis A.Dotti (global-V10-00-39,-40)
+- Adding template class G4TWorkspacePool.
+
+October 24, 2014 A.Dotti (global-V10-00-38)
+- Introduced G4Threading enum to hold thread IDs constants.
+- G4MTcoutDestination now supports special non-worker threads for
+  which the ID makes no sense.
+
+October 16, 2014 A.Dotti (global-V10-00-37)
+- Fixed G4ThreadLocalSingleton destructor.
+
+October 16, 2014 A.Dotti (global-V10-00-36)
+- Introduced G4MUTEXDESTROY macro.
+
+October 9, 2014 A.Dotti (global-V10-00-35)
+- Adding methods G4MTcoutDestination::GetPrefixString() and
+  G4MTcoutDestination::GetFullPrefixString() that return the
+  thread cout identification prefix respectively without and
+  with thread ID. Requested by visualization.
+
+September 23, 2014 G.Cosmo (global-V10-00-34)
+- Use G4Exp, G4Log and G4Pow to speedup G4JTPolynomialSolver.
+- Updated dates and tag-ID.
+
+August 29, 2014 A.Dotti (global-V10-00-33)
+- Coverity fix #58649.
+
+August 19, 2014 M.Asai (global-V10-00-32)
+- Recover G4PhysicsModelCatalog::Destroy() that has slipped out
+  from previous tag.
+
+August 19, 2014 K.Genser (global-V10-00-31)
+- G4PhysicsModelCatalog: made it more const; hide operator= and copy c'tor.
+  Co-works with tag "track-V10-00-04"
+
+August 5, 2014 V.Ivanchenko (global-V10-00-30)
+- G4PhysicsModelCatalog: make destructor public in order delete the class
+  at exit.
+- G4Pow: fixed destruction.
+
+August 5, 2014 V.Ivanchenko (global-V10-00-29)
+- G4Pow: make destructor public in order delete the class at exit.
+
+July 21, 2014 V.Ivanchenko (global-V10-00-28)
+- G4PhysicsVector: removed G4Allocator.
+- G4PhysicsModelCatalog: added destruction of catalog.
+
+July 14, 2014 G.Cosmo (global-V10-00-27)
+- Added symbol to exclusion list in windefs.h.
+
+July 1, 2014 A.Dotti (global-V10-00-26)
+- Added std::flush to receiving of G4MTcoutDestination.
+  Addressing problem report #1644.
+
+June 13, 2014 A.Dotti (global-V10-00-25)
+- Bug fix in G4Threading::IsMultiThreadedApplication function
+  for sequential mode.
+
+June 12, 2014 A.Dotti (global-V10-00-23,global-V10-00-24)
+- Added forward of cout and cerr in MT to master G4coutDestination
+  if setup in client derived classes. To be used by special
+  sessions (e.g. GUI) that want to intercept thread cout/cerr.
+
+May 21, 2014 G.Cosmo (global-V10-00-22)
+- Correction in G4Exp::G4Expf() to remove 2nd order term contribution
+  repeated twice by mistake. Correction included in VDT 0.3.7 library,
+  kindly contributed by D.Piparo (CERN).
+
+May 6, 2014 G.Cosmo (global-V10-00-21)
+- Temporarly set G4ThreadLocalStatic to "static __thread" in tls.hh for
+  platforms supporting TLS (overcomes limitation in latest GCC compiler).
+- Updated version and date for development.
+
+May 5, 2014 V.Ivantchenko (global-V10-00-20)
+- Moved G4PhysicsVector::Value(energy,idx) from inline back to source.
+- G4Physics2DVector::Retrieve(): added extra protection to fix
+  Coverity reports in classes which are using 2-D vector.
+
+April 24, 2014 G.Cosmo (global-V10-00-19, global-V10-00-18)
+- Added protection for clang on MT with c++11, as not yet supporting
+  'thread_local' keyword on MacOS (!). Added protection in all G4MTRandom*
+  classes.
+- More rationalisation of definitions in tls.hh.
+
+April 24, 2014 G.Cosmo (global-V10-00-17)
+- Rationalised definitions in tls.hh and corrected use of 'thread_local'
+  keyword to conform to Standard.
+
+April 11, 2014 A.Dotti (global-V10-00-16)
+- New utility function G4Threading::IsMultithreadedApplication() 
+  and G4Threding::SetMultithreadedApplication(bool) used to 
+  specify which type of kernel is instantiated indipendently by
+  build type (e.g. to distinghuish application migrated to MT or 
+  still using sequential run manager)
+
+April 11, 2014 G.Cosmo (global-V10-00-15)
+- Move G4PhysicsVector::Value(energy,idx) to inline.
+
+April 10, 2014 G.Cosmo (global-V10-00-14)
+- Get rid of deprecated 'register' storage class specifier in source files.
+
+April 8, 2014 G.Cosmo (global-V10-00-13)
+- Define G4ThreadLocal to be std::thread_local in case C++11 standard is
+  used (temporarly enabled only on GNUMake system for testing, through use
+  of environment variable G4USE_STD11); directly adopt CLHEP classes in such
+  a case instead of G4MT* wrappers. 
+
+March 27, 2014 G.Cosmo (global-V10-00-12)
+- Fixed signature for call to G4Exception in G4Threading.cc.
+
+March 26, 2014 G.Cosmo (global-V10-00-11)
+- Minor refinements to G4Poisson, based on suggestions by K.Genser/FNAL.
+
+March 26, 2014 G.Cosmo (global-V10-00-10)
+- Minor code cleanup.
+
+March 25, 2014 A.Dotti (global-V10-00-08,global-V10-00-09)
+- Introduce G4SetPinAffinity function (available only for LINUX): 
+  "locks" a pthread to the given CPU index. This will be used by run
+  category as an option to improve performance on high-core counts CPUs.
+
+March 16, 2014 M.Asai (global-V10-00-07)
+- G4MTcoutDestination : by default ignores the printout during
+  the initialization of each thread, as they are identical to
+  each other and thus redundant.
+
+March 13, 2014 G.Cosmo (global-V10-00-06)
+- Fix in G4SimplexDownhill header to proper define header guard.
+
+February 7, 2014 V.Ivantchenko (global-V10-00-05)
+- G4Physics2DVector::Retrieve(): fixed Coverity report for "taited scalar".
+- Updated date and tag-ID for geant4-10-00-ref-02.
+
+February 5, 2014 T.Koi         (global-V10-00-04)
+- Added protections to avoid core dumps caused by division by zero 
+  and other minor updates in G4ConvergenceTester.
+
+January 23, 2014 G.Cosmo       (global-V10-00-03)
+- Protected __attribute__ calls in G4ios.cc from use in WIN32.
+
+January 13, 2014 A. Dotti      (global-V10-00-02)
+- Call G4iosInitialization/G4iosFinalization with functions marked
+  __attribute__((destructor)) and __attribute__((destructor)) to 
+  guarantee G4cout/G4cerr are initialized correctly before main
+  function
+
+January 14, 2014 V.Ivantchenko (global-V10-00-01)
+- G4PhysicsVector: small performance optimisation; division by 6 substituted
+  by multiplication of 1/6 constant.
+
+December 17, 2013 G.Cosmo      (global-V10-00-00)
+- Explicitly check the upper bound of 'numberOfYNodes' in
+  G4Physics2DVector::Retrieve() (read from file), to fix defect
+  reported by Coverity (L.Pandola).
+- Updated date and tag-ID for geant4-10-00-ref-01.
+
 November 20, 2013 A.Dotti      (global-V09-06-82)
 - Patched G4HepRandom to create default engine if G4Random::setTheSeed
   is called at beginning of job (allowed in SEQ).

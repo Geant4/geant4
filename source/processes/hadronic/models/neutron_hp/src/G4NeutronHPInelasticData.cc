@@ -62,8 +62,11 @@ G4NeutronHPInelasticData::G4NeutronHPInelasticData()
    
 G4NeutronHPInelasticData::~G4NeutronHPInelasticData()
 {
-   if ( theCrossSections != 0 ) theCrossSections->clearAndDestroy(); 
-   delete theCrossSections;
+   if ( theCrossSections != 0 ) {
+     theCrossSections->clearAndDestroy();
+     delete theCrossSections;
+     theCrossSections = 0;
+   }
 }
 
 G4bool G4NeutronHPInelasticData::IsIsoApplicable( const G4DynamicParticle* dp , 
@@ -112,12 +115,18 @@ void G4NeutronHPInelasticData::BuildPhysicsTable(const G4ParticleDefinition& aP)
      throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
 
 //080428
-   if ( getenv( "G4NEUTRONHP_NEGLECT_DOPPLER" ) ) 
+   //if ( getenv( "G4NEUTRONHP_NEGLECT_DOPPLER" ) ) 
+   if ( G4NeutronHPManager::GetInstance()->GetNeglectDoppler() ) 
    {
-      G4cout << "Find environment variable of \"G4NEUTRONHP_NEGLECT_DOPPLER\"." << G4endl;
+      G4cout << "Find a flag of \"G4NEUTRONHP_NEGLECT_DOPPLER\"." << G4endl;
       G4cout << "On the fly Doppler broadening will be neglect in the cross section calculation of inelastic scattering of neutrons (<20MeV)." << G4endl;
       onFlightDB = false;
    }    
+
+   if ( G4Threading::IsWorkerThread() ) {
+      theCrossSections = G4NeutronHPManager::GetInstance()->GetInelasticCrossSections();
+      return;
+   }
 
   size_t numberOfElements = G4Element::GetNumberOfElements();
 //  theCrossSections = new G4PhysicsTable( numberOfElements );
@@ -138,6 +147,7 @@ void G4NeutronHPInelasticData::BuildPhysicsTable(const G4ParticleDefinition& aP)
       Instance()->MakePhysicsVector((*theElementTable)[i], this);
      theCrossSections->push_back(physVec);
   }
+   G4NeutronHPManager::GetInstance()->RegisterInelasticCrossSections(theCrossSections);
 }
 
 void G4NeutronHPInelasticData::DumpPhysicsTable(const G4ParticleDefinition& aP)
@@ -201,11 +211,9 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
   // prepare neutron
   G4double eKinetic = aP->GetKineticEnergy();
 
-  // T. K. 
-//if ( getenv( "G4NEUTRONHP_NEGLECT_DOPPLER" ) )
-//080428
   if ( !onFlightDB )
   {
+     //NEGLECT_DOPPLER
      G4double factor = 1.0;
      if ( eKinetic < aT * k_Boltzmann ) 
      {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessType.hh 75164 2013-10-29 08:55:08Z gcosmo $
+// $Id: G4ProcessType.hh 82045 2014-06-10 08:09:15Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -53,7 +53,8 @@ enum G4ProcessType
   fParameterisation,
   fUserDefined,
   fParallel,
-  fPhonon
+  fPhonon,
+  fUCN
 };
 #endif
 

@@ -13,6 +13,66 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+16-October-2014 Andrea Dotti	         had-im_r-V10-00-09
+- Bug fixing for DRD: correctly destroy mutex after initialization
+
+11-August-2014 Gunter Folger             had-im_r-V10-00-08
+- Add protection for double delete, i.e. set pointers to 0 after delete
+  in G4VScatteringCollision.cc, G4ConcreteN*.cc.
+
+08-August-2014 Gunter Folger             had-im_r-V10-00-07
+- G4VScatteringCollision.cc, G4ConcreteN*.cc:
+  - dtor should delete and not new data member; may fix some leaks
+  - improve formatting
+  
+01-August-2014 Gunter Folger             had-im_r-V10-00-06
+- G4VCrossSectionSource: remove unused GetTransversePionMass() and
+  GetMinStringMass()
+- G4Clebsch: remove now unused GetLogs()
+- G4XResonance, G4XNNElasticLowE, G4XAnnihilationChannel, G4XnpTotalLowE, G4XnpElasticLowE:
+    delete PhysicsVector objects, due to drop of allocator in PhysicsVector.
+
+18-July-2014 Andrea Dotti	       had-im_r-V10-00-05
+- Improve thread safety (DRD) mark as static some "const" in src code
+- Fix data-race issue in G4CollisionComposite, when shared there 
+  are concurrent accesses to G4CollisionBuffer. The simplest solution
+  is to add a lock on a mutex. 
+
+17-July-2014 Andrea Dotti              had-im_r-V10-00-04
+- Sharing of static tables between threads (G4Scatterer)
+
+10-June-2014 Gunter Folger             had-im_r-V10-00-03
+- Fix out of bound error in G4DetailedBalancePhaseSpaceIntegral, reported by
+  coverity.
+  
+21-May-2014 Andrea Dotti               had-im_r-V10-00-02
+- Do not delete physics vector explictly in destructors since 
+  they are managed by allocators in
+  G4XNNElasticLowE, G4XnpElasticLowE, G4XnpTotalLowE
+
+20-May-2014 Andrea Dotti               had-im_r-V10-00-01
+- Do not delete physics vector explictly in destructors since 
+  they are managed by allocators in G4XResonance and 
+  G4XAnnihilationChannel
+
+15-April-2014 Gunter Folger            had-im_r-V10-00-00
+-  Correct tag name from bad had-im_r-V09-06-08
+
+07-April-2014 Gunter Folger            had-im_r-V09-06-08
+- Changes for const G4ParticleDefintion* in use with G4KineticTrack.
+
+07-April-2014 Gunter Folger            had-im_r-V09-06-07
+- revert changes from revision 79352 to G4Scatterer. 
+
+05-March-2014 Gunter Folger            had-im_r-V09-06-06
+- remove const_cast in use of G4ParticleDefintion
+ 
+24-Feb-2014 Andrea Dotti             
+- Made G4Scatterer data field G4CollisionVector shared among instances
+  of G4Scatterer. Marked methods as const when possible. Added 
+  thread-safety protection for filling and deleting of G4CollisionVector.
+
 29-Jul-2013 Hisaya Kurashige            had-im_r-V09-06-05
 - remove inclusion of G4ShortLivedTable.hh in G4ResonaceNames.cc
 

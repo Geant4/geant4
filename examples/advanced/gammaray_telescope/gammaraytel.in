@@ -6,11 +6,12 @@
 /control/verbose 1
 /control/saveHistory
 /run/verbose 1
-/gun/sourceGen true
 #/control/execute emstd.mac
 
 /run/initialize
 
+#
+/gun/sourceGen true
 
 /gun/particle proton
 /gun/energy 1 GeV

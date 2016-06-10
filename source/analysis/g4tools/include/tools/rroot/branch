@@ -1,0 +1,955 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_branch
+#define tools_rroot_branch
+
+#include "base_leaf"
+#include "basket"
+#include "named"
+#include "seek"
+#include "ifile"
+#include "ifac"
+#include "../mnmx"
+#include "../forit"
+
+#include <map>
+
+namespace tools {
+namespace rroot {
+
+class branch : public virtual iro {
+  //static uint32 kDoNotProcess() {return (1<<10);} // Active bit for branches
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rroot::branch");
+    return s_v;
+  }
+public: //iro
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<branch>(this,a_class)) return p;
+    return 0;
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  static cid id_class() {return branch_cid();}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<branch>(this,a_class)) {return p;}
+    else return 0;
+  }
+public:
+  virtual iro* copy() const {return new branch(*this);}
+  virtual bool stream(buffer& a_buffer) {
+    _clear();
+
+    int fCompress;
+    int fBasketSize;
+    //int fNleaves;
+    //uint64 m_entries;
+
+    //uint64 m_tot_bytes;
+    //uint64 m_zip_bytes;
+    int fSplitLevel;
+    uint32 fMaxBaskets;
+    int fOffset;
+
+    unsigned int s,c;
+    //FIXME gROOT->SetReadingObject(kTRUE);
+    short vers;
+    if(!a_buffer.read_version(vers,s,c)) return false;
+
+    //::printf("debug : branch::stream : version %d count %d\n",vers,c);
+
+    if (vers > 5) {
+      //TBranch::Class()->ReadBuffer(b, this, v, s, c);
+      //gBranch = branchSave;
+      //fDirectory = gDirectory;
+      //fNleaves = m_leaves.GetEntriesFast();
+      //if (fFileName.Length() != 0) fDirectory = 0;
+      //gROOT->SetReadingObject(kFALSE);
+      //return;
+    }
+    //====process old versions before automatic schema evolution
+
+   {uint32 old = a_buffer.length();
+    uint32 id;
+    uint32 m_bits;
+    if(!Object_stream(a_buffer,id,m_bits)) return false;
+    a_buffer.set_offset(old);}
+    
+    if(!Named_stream(a_buffer,m_name,m_title)) return false;
+
+    //::printf("debug : branch::stream %s %s\n",
+    //   m_name.c_str(),m_title.c_str());
+
+    if(vers<=5) {
+      if(!a_buffer.read(fCompress)) return false;
+      if(!a_buffer.read(fBasketSize)) return false;
+      if(!a_buffer.read(fEntryOffsetLen)) return false;
+      if(!a_buffer.read(fMaxBaskets)) return false;
+      if(!a_buffer.read(m_write_basket)) return false;
+      if(!a_buffer.read(m_entry_number)) return false;
+     {double v;
+      if(!a_buffer.read(v)) return false;
+      //m_entries = uint64(v);
+      }
+     {double v;
+      if(!a_buffer.read(v)) return false;
+      //m_tot_bytes = uint64(v);
+      }
+     {double v;
+      if(!a_buffer.read(v)) return false;
+      //m_zip_bytes = uint64(v);
+      }
+      if(!a_buffer.read(fOffset)) return false;
+
+    } else if(vers<=6) {
+      if(!a_buffer.read(fCompress)) return false;
+      if(!a_buffer.read(fBasketSize)) return false;
+      if(!a_buffer.read(fEntryOffsetLen)) return false;
+      if(!a_buffer.read(m_write_basket)) return false;
+      if(!a_buffer.read(m_entry_number)) return false;
+      if(!a_buffer.read(fOffset)) return false;
+      if(!a_buffer.read(fMaxBaskets)) return false;
+     {double v;
+      if(!a_buffer.read(v)) return false;
+      //m_entries = uint64(v);
+      }
+     {double v;
+      if(!a_buffer.read(v)) return false;
+      //m_tot_bytes = uint64(v);
+      }
+     {double v;
+      if(!a_buffer.read(v)) return false;
+      //m_zip_bytes = uint64(v);
+      }
+
+    } else if(vers<=7) {
+      if(!a_buffer.read(fCompress)) return false;
+      if(!a_buffer.read(fBasketSize)) return false;
+      if(!a_buffer.read(fEntryOffsetLen)) return false;
+      if(!a_buffer.read(m_write_basket)) return false;
+      if(!a_buffer.read(m_entry_number)) return false;
+      if(!a_buffer.read(fOffset)) return false;
+      if(!a_buffer.read(fMaxBaskets)) return false;
+      if(!a_buffer.read(fSplitLevel)) return false;
+     {double v;
+      if(!a_buffer.read(v)) return false;
+      //m_entries = uint64(v);
+      }
+     {double v;
+      if(!a_buffer.read(v)) return false;
+      //m_tot_bytes = uint64(v);
+      }
+     {double v;
+      if(!a_buffer.read(v)) return false;
+      //m_zip_bytes = uint64(v);
+      }
+
+    } else if(vers<=9) {
+     {short color,style;
+      if(!AttFill_stream(a_buffer,color,style)) return false;}
+      if(!a_buffer.read(fCompress)) return false;
+      if(!a_buffer.read(fBasketSize)) return false;
+      if(!a_buffer.read(fEntryOffsetLen)) return false;
+      if(!a_buffer.read(m_write_basket)) return false;
+      if(!a_buffer.read(m_entry_number)) return false;
+      if(!a_buffer.read(fOffset)) return false;
+      if(!a_buffer.read(fMaxBaskets)) return false;
+      if(!a_buffer.read(fSplitLevel)) return false;
+     {double v;
+      if(!a_buffer.read(v)) return false;
+      //m_entries = uint64(v);
+      }
+     {double v;
+      if(!a_buffer.read(v)) return false;
+      //m_tot_bytes = uint64(v);
+      }
+     {double v;
+      if(!a_buffer.read(v)) return false;
+      //m_zip_bytes = uint64(v);
+      }
+
+    } else if(vers<=10) {
+     {short color,style;
+      if(!AttFill_stream(a_buffer,color,style)) return false;}
+
+      if(!a_buffer.read(fCompress)) return false;
+      if(!a_buffer.read(fBasketSize)) return false;
+      if(!a_buffer.read(fEntryOffsetLen)) return false;
+      if(!a_buffer.read(m_write_basket)) return false;
+     {uint64 v;
+      if(!a_buffer.read(v)) return false;
+      m_entry_number = uint32(v);}
+      if(!a_buffer.read(fOffset)) return false;
+      if(!a_buffer.read(fMaxBaskets)) return false;
+      if(!a_buffer.read(fSplitLevel)) return false;
+
+     {uint64 v;
+      if(!a_buffer.read(v)) return false;
+      //m_entries = v;
+      }
+     {uint64 v;
+      if(!a_buffer.read(v)) return false;
+      //m_tot_bytes = v;
+      }
+     {uint64 v;
+      if(!a_buffer.read(v)) return false;
+      //m_zip_bytes = v;
+      }
+
+    } else { //vers>=11
+
+     {short color,style;
+      if(!AttFill_stream(a_buffer,color,style)) return false;}
+
+      if(!a_buffer.read(fCompress)) return false;
+      if(!a_buffer.read(fBasketSize)) return false;
+      if(!a_buffer.read(fEntryOffsetLen)) return false;
+      if(!a_buffer.read(m_write_basket)) return false;
+     {uint64 v;
+      if(!a_buffer.read(v)) return false;
+      m_entry_number = uint32(v);}
+      if(!a_buffer.read(fOffset)) return false;
+      if(!a_buffer.read(fMaxBaskets)) return false;
+      if(!a_buffer.read(fSplitLevel)) return false;
+     {uint64 v;
+      if(!a_buffer.read(v)) return false;
+      //m_entries = v;
+      }
+     {uint64 v;
+      if(!a_buffer.read(v)) return false;} //fFirstEntry
+     {uint64 v;
+      if(!a_buffer.read(v)) return false;
+      //m_tot_bytes = v;
+      }
+     {uint64 v;
+      if(!a_buffer.read(v)) return false;
+      //m_zip_bytes = v;
+      }
+    }
+
+    //::printf("debug : branch::stream : %s : fSplitLevel %d\n",m_name.c_str(),fSplitLevel);
+
+    //TObjArray
+    //::printf("debug : branch::stream : branches : begin\n");
+   {ifac::args args;
+    if(!m_branches.stream(a_buffer,args)) {
+      m_out << "tools::rroot::branch::stream :"
+            << " can't read branches."
+            << std::endl;
+      return false;
+    }}
+    //::printf("debug : branch::stream : branches : end %d\n",
+    //    m_branches.size());
+
+/* We see that with LHCb files.
+    if(m_entry_number!=m_entries) {
+      m_out << "tools::rroot::branch::stream :"
+            << " for branch " << sout(m_name) << " :"
+            << " WARNING : m_entry_number!=m_entries."
+            << " m_entry_number " << m_entry_number
+            << " m_entries " << m_entries
+            << std::endl;
+      //return false;
+    }
+*/
+
+    //TObjArray
+    //::printf("debug : branch::stream : leaves : begin\n");
+   {ifac::args args;
+    args[ifac::arg_branch()] = this;
+    if(!m_leaves.stream(a_buffer,args)) {
+      m_out << "tools::rroot::branch::stream :"
+            << " can't read leaves."
+            << std::endl;
+      return false;
+    }}
+    //::printf("debug : branch::stream : leaves : end\n");
+
+    //TObjArray
+    //IMPORTANT : accept_null=true
+    //::printf("debug : branch::stream : streamed_baskets : begin\n");
+   {ifac::args args;
+    if(!m_streamed_baskets.stream(a_buffer,args,true)) {
+      m_out << "tools::rroot::branch::stream :"
+            << " can't read baskets."
+            << std::endl;
+      return false;
+    }}
+    //::printf("debug : branch::stream : streamed_baskets : end\n");
+    
+    //fNleaves = m_leaves.size();
+
+    if(fMaxBaskets<=0) {
+      m_out << "tools::rroot::branch::stream :"
+            << " fMaxBaskets null."
+            << std::endl;
+      return false;
+    }
+    
+    fBasketEntry = new int[fMaxBaskets];
+    fBasketBytes = new int[fMaxBaskets];
+    fBasketSeek = new seek[fMaxBaskets];
+   {for(uint32 i=0;i<fMaxBaskets;i++) {
+      fBasketEntry[i] = 0;
+      fBasketBytes[i] = 0;
+      fBasketSeek[i] = 0;
+    }}
+
+    if(vers<6) {
+     {uint32 n;
+      if(!a_buffer.read_array<int>(fMaxBaskets,fBasketEntry,n)) {
+        _clear();
+        return false;
+      }}
+      if(vers<=4) {
+        for (uint32 i=0;i<fMaxBaskets;i++) fBasketBytes[i] = 0;
+      } else {
+        uint32 n;
+        if(!a_buffer.read_array<int>(fMaxBaskets,fBasketBytes,n)) {
+          _clear();
+          return false;
+        }
+      }
+      if(vers<2) {
+        //GB : comment.
+        //for(int i=0;i<m_write_basket;i++) {
+        //  fBasketSeek[i] = getBasket(i)->seekKey();
+        //}
+        m_out << "tools::rroot::branch::stream :"
+              << " v < 2. Not (yet) handled."
+              << std::endl;
+        _clear();
+        return false;
+      } else {
+        int n;
+        if(!a_buffer.read(n)) {
+          _clear();
+          return false;
+        }
+        for(int i=0;i<n;i++) {
+          seek32 _s;
+          if(!a_buffer.read(_s)) {
+            _clear();
+            return false;
+          }
+          fBasketSeek[i] = _s;
+        }
+      }
+
+    } else if(vers<=9) {
+      // See TStreamerInfo::ReadBuffer::ReadBasicPointer
+
+      //Int_t[fMaxBaskets]
+     {char isArray;
+      if(!a_buffer.read(isArray)) {
+        _clear();
+        return false;
+      }
+      if(isArray) {
+        if(!a_buffer.read_fast_array<int>(fBasketBytes,fMaxBaskets)) {
+          _clear();
+          return false;
+        }
+      }}
+
+      //Int_t[fMaxBaskets]
+     {char isArray;
+      if(!a_buffer.read(isArray)) {
+        _clear();
+        return false;
+      }
+      if(isArray) {
+        if(!a_buffer.read_fast_array<int>(fBasketEntry,fMaxBaskets)) {
+          _clear();
+          return false;
+        }
+      }}
+
+      //Seek_t[fMaxBaskets]
+     {char isBigFile;
+      if(!a_buffer.read(isBigFile)) {
+        _clear();
+        return false;
+      }
+      if(isBigFile==2) {
+        if(!a_buffer.read_fast_array<seek>(fBasketSeek,fMaxBaskets)) {
+          _clear();
+          return false;
+        }
+      } else {
+        for(uint32 i=0;i<fMaxBaskets;i++) {
+          seek32 _s;
+          if(!a_buffer.read(_s)) {
+            _clear();
+            return false;
+          }
+          fBasketSeek[i] = _s;
+        }
+      }}
+
+    } else { //vers>=10
+      // See TStreamerInfo::ReadBuffer::ReadBasicPointer
+
+      //Int_t[fMaxBaskets]
+     {char isArray;
+      if(!a_buffer.read(isArray)) {
+        _clear();
+        return false;
+      }
+      if(isArray) {
+        if(!a_buffer.read_fast_array<int>(fBasketBytes,fMaxBaskets)) {
+          _clear();
+          return false;
+        }
+      }}
+
+      //Long64_t[fMaxBaskets]
+     {char isArray;
+      if(!a_buffer.read(isArray)) {
+        _clear();
+        return false;
+      }
+      if(isArray) {
+        uint64* v = new uint64[fMaxBaskets];
+        if(!a_buffer.read_fast_array<uint64>(v,fMaxBaskets)) {
+          _clear();
+          return false;
+        }
+        for(uint32 i=0;i<fMaxBaskets;i++) fBasketEntry[i] = int(v[i]);
+        delete [] v;
+      }}
+
+      //Long64_t[fMaxBaskets]
+     {char isArray;
+      if(!a_buffer.read(isArray)) {
+        _clear();
+        return false;
+      }
+      if(isArray) {
+        uint64* v = new uint64[fMaxBaskets];
+        if(!a_buffer.read_fast_array<uint64>(v,fMaxBaskets)) {
+          _clear();
+          return false;
+        }
+        for(uint32 i=0;i<fMaxBaskets;i++) fBasketSeek[i] = v[i];
+        delete [] v;
+      }}
+    }
+    
+    if(vers>2) {
+      //TString
+      std::string fileName;
+      if(!a_buffer.read(fileName)) {
+        _clear();
+        return false;
+      }
+    }
+
+    //FIXME if(vers<4) SetAutoDelete(kTRUE);
+    //FIXME gROOT->SetReadingObject(kFALSE);
+    if(!a_buffer.check_byte_count(s, c,"TBranch")) {
+      _clear();
+      return false;
+    }
+
+    //GB : analyse fBasketEntry.
+    m_first_last.clear();
+   {// There are (m_write_basket+1) sensitive elements in fBasketEntry :
+    // (Do we have to check that ?)
+    for(uint32 i=0;i<m_write_basket;i++) {
+      uint32 first = fBasketEntry[i];
+      uint32 last = fBasketEntry[i+1]-1;
+      m_first_last.push_back(std::pair<uint32,uint32>(first,last));
+    }
+    if(m_entry_number) {
+      uint32 first = fBasketEntry[m_write_basket];
+      uint32 last = m_entry_number-1;
+      m_first_last.push_back(std::pair<uint32,uint32>(first,last));
+    }}
+    //_dump_first_last();
+
+    //GB : analyse fBasketSeek :
+   {uint32 num = 0;
+    uint32 mxi = 0;
+    for(uint32 i=0;i<fMaxBaskets;i++) {
+      if(!fBasketSeek[i]) continue;
+      num++;
+      mxi = mx<uint32>(i,mxi);      
+    }
+    if(m_write_basket) {
+      if((num!=m_write_basket)||(mxi!=(m_write_basket-1))) {
+        m_out << "tools::rroot::branch::stream :"
+              << " fBasketSeek[] inconsistent with m_write_basket."
+              << " m_write_basket " << m_write_basket
+              << " num " << num
+              << " mxi " << mxi
+              << std::endl;
+        _clear();
+        return false;
+      }
+    }}
+
+    //GB : analyse m_streamed_baskets :
+   {int index = 0;
+    tools_vforcit(basket*,m_streamed_baskets,it) {
+      if(*it) {
+        if(!(*it)->buf()||!(*it)->buf_size()) {
+          m_out << "tools::rroot::branch::stream :"
+                << " expect a basket with a not empty buffer."
+                << std::endl;
+          return false;
+        }
+        //in the below, false is to say m_baskets is not owner of *it.
+        m_baskets[index] = std::pair<basket*,bool>(*it,false);
+      } 
+      index++;
+    }}
+    
+    return true;
+  }
+
+public:
+  //virtual for branch_element
+
+  virtual bool read_leaves(buffer& a_buffer){
+    tools_vforcit(base_leaf*,m_leaves,it) {
+      if(!(*it)->read_basket(a_buffer)) {
+        m_out << "tools::rroot::branch::read_leaves :" 
+              << " read_basket failed."
+              << std::endl;
+        return false;
+      }
+    }
+    return true;
+  }
+
+  virtual bool find_entry(uint32 a_entry,uint32& a_nbytes){
+    // Read all leaves of entry and return total number of bytes :
+    // The input argument entry is the entry serial number in the current tree.
+    a_nbytes = 0;
+    //if(_test_bit(kDoNotProcess())) return true;
+
+    //if(fReadEntry == (int)a_entry) return true;
+    if(a_entry>=m_entry_number) {
+      //m_out << "tools::rroot::branch::find_entry :"
+      //      << " for branch " << sout(m_name) << " :"
+      //      << " a_entry not within [0," << m_entry_number << "[."
+      //      << std::endl;
+      //return false;
+      return true; //CERN-ROOT does not consider it is an error.
+    }
+    if(!m_entry_number || m_first_last.empty() ) { //GB
+      m_out << "tools::rroot::branch::find_entry :"
+            << " nothing to read."
+            << std::endl;
+      return false; //nothing to read.
+    }
+
+    if(m_read_basket>=m_first_last.size()) {
+      m_out << "tools::rroot::branch::find_entry :"
+            << " bad m_first_last access."
+            << std::endl;
+      return false;
+    }
+
+    uint32 first = m_first_last[m_read_basket].first;
+    uint32 last = m_first_last[m_read_basket].second;
+
+    // Are we still in the same ReadBasket?
+    if((a_entry<first)||(a_entry>last)) {
+      m__read_basket = 0;
+      uint32 old_read_basket = m_read_basket;
+
+      //look first in the next basket window :
+      bool found = false;
+      if((m_read_basket+1)<m_first_last.size()) {
+        first = m_first_last[m_read_basket+1].first;
+        last = m_first_last[m_read_basket+1].second;
+        if((a_entry>=first)&&(a_entry<=last)) {
+          m_read_basket++;
+          found = true;
+        }   
+      }
+      if(!found) {
+        uint32 count = 0;
+        typedef std::pair<uint32,uint32> first_last;
+        tools_vforcit(first_last,m_first_last,it) {
+          first = (*it).first;
+          last = (*it).second;
+          if((a_entry>=first)&&(a_entry<=last)) {
+            m_read_basket = count;
+            found = true;
+            break;
+          }   
+          count++;
+        }
+      }
+      if(!found) { //something weird in fBasketEntry.
+        m_out << "tools::rroot::branch::find_entry :"
+              << " fancy fBasketEntry."
+              << std::endl;
+        return false;
+      } else {
+        // if found, erase m_baskets[old_read_basket] to avoid
+        // having all data in memory !
+        std::map<uint32, std::pair<rroot::basket*,bool> >::iterator it =
+          m_baskets.find(old_read_basket);
+        if(it!=m_baskets.end()) {
+          if((*it).second.second) {
+            basket* bsk = (*it).second.first;
+            m_baskets.erase(it);
+            delete bsk;
+            //::printf("debug : erase basket %d\n",old_read_basket);
+          }
+        }
+      }
+    }
+
+    if(!m__read_basket) {
+
+      rroot::basket* bsk = 0;
+      std::map<uint32, std::pair<basket*,bool> >::iterator it =
+        m_baskets.find(m_read_basket);
+      if(it!=m_baskets.end()) {
+        bsk = (*it).second.first;
+      } else {
+        if(m_read_basket>=m_write_basket) {
+          m_out << "tools::rroot::branch::find_entry :"
+                << " basket lacking !"
+                << " wanting index " << m_read_basket
+                << ". fBasketSeek entries " << m_write_basket
+                << std::endl;
+          return false;
+        }
+        if(!fBasketSeek[m_read_basket]) {
+          m_out << "tools::rroot::branch::find_entry :"
+                << " fBasketSeek is null for index " << m_read_basket
+                << std::endl;
+          return false;
+        }
+        if(!fBasketBytes[m_read_basket]) {
+          m_out << "tools::rroot::branch::find_entry :"
+                << " fBasketBytes is null for index " << m_read_basket
+                << std::endl;
+          return false;
+        }
+
+        bsk = get_basket(fBasketSeek[m_read_basket],
+                         fBasketBytes[m_read_basket]);
+        if(!bsk) {
+          m_out << "tools::rroot::branch::find_entry :"
+                << " can't read basket " << m_read_basket
+                << " at file pos " << fBasketSeek[m_read_basket]
+                << " and size " << fBasketBytes[m_read_basket]
+                << std::endl;
+          return false;
+        }
+
+        //m_out << "tools::rroot::branch::find_entry :"
+        //      << " got basket " << m_read_basket
+        //      << " of size " << fBasketBytes[m_read_basket]
+        //      << std::endl;
+
+        m_baskets[m_read_basket] = std::pair<basket*,bool>(bsk,true);
+      }
+
+      m__read_basket = bsk;
+    }
+
+    // Set entry offset in buffer and read data from all leaves
+    //buf->resetMap();
+  
+    uint32 bufbegin;
+   {int* entry_offset = m__read_basket->entry_offset();
+    if(entry_offset) {
+      uint32 index = a_entry-first;
+      if(index>=m__read_basket->nev()) {
+        m_out << "tools::rroot::branch::find_entry :"
+              << " can't access entry offset " << index
+              << ". nev " << m__read_basket->nev()
+              << std::endl;
+        return false;
+      }
+      bufbegin = entry_offset[index];
+      //::printf("debug : xxx++ %u : %u\n",index,bufbegin);
+    } else {
+      bufbegin = m__read_basket->key_length() + 
+                   (a_entry-first)*m__read_basket->nev_buf_size();
+    }}
+
+   {int* displacement = m__read_basket->displacement();
+    if(displacement) {
+      m_out << "tools::rroot::branch::find_entry :"
+            << " not null displacement. Not yet handled."
+            << std::endl;
+      //buf->setDisplacement(displacement[a_entry-first]);
+    } else {
+      //buf->setDisplacement();
+    }}
+
+/*
+    if(bufbegin>=m__read_basket->buf_size()) {
+      m_out << "tools::rroot::branch::find_entry :"
+            << " bad buffer access for entry " << a_entry
+            << ". bufbegin " << bufbegin
+            << ", buf_size " << basket->buf_size()
+            << ", (entry-first) " << (a_entry-first)
+            << std::endl;
+     {int* entry_offset = m__read_basket->entry_offset();
+      if(entry_offset) {
+        uint32 nev = m__read_basket->nev();
+        ::printf("debug : eoff : num %d\n",nev);
+        for(uint32 i=0;i<nev;i++){        
+          ::printf("debug : eoff %d : %d\n",i,entry_offset[i]);
+        }
+      }}
+      return false;
+    }
+*/
+
+    rroot::buffer buffer(m_out,m_file.byte_swap(),
+                    m__read_basket->buf_size(),m__read_basket->buf(),0,false); 
+    buffer.set_offset(bufbegin);
+
+    if(!read_leaves(buffer)) {
+      m_out << "tools::rroot::branch::find_entry :"
+            << " can't read leaves for entry " << a_entry
+            << ". read_basket was " << m_read_basket
+            << ", first " << first
+            << ", last " << last
+            << "."
+            << std::endl;
+      return false;
+    }
+
+    //fReadEntry = a_entry;
+
+    a_nbytes = buffer.length() - bufbegin;
+
+    return true;
+  }
+
+public:
+  branch(ifile& a_file,ifac& a_fac)
+  :m_file(a_file)
+  ,m_out(a_file.out())
+  ,m_fac(a_fac)
+
+  ,m_streamed_baskets(m_fac,true)
+  ,m__read_basket(0)
+
+  //,m_bits(0)
+  ,m_name("")
+  ,m_title("")
+  ,fAutoDelete(false)
+
+  ,m_branches(m_fac,true)
+  ,m_leaves(m_fac,true)
+
+  ,fEntryOffsetLen(0)
+  ,m_write_basket(0)
+  ,m_entry_number(0)
+  ,m_read_basket(0)
+  ,fBasketBytes(0)
+  ,fBasketEntry(0)
+  ,fBasketSeek(0)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~branch(){
+    _clear();
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  branch(const branch& a_from)
+  :iro(a_from)
+  ,m_file(a_from.m_file),m_out(a_from.m_out),m_fac(a_from.m_fac)
+  ,m_streamed_baskets(m_fac,false),m__read_basket(0)
+  ,fAutoDelete(false)
+  ,m_branches(m_fac,false),m_leaves(m_fac,false)
+  ,fEntryOffsetLen(1000)
+  ,m_write_basket(0)
+  ,m_entry_number(0)
+  ,m_read_basket(0)
+  ,fBasketBytes(0)
+  ,fBasketEntry(0)
+  ,fBasketSeek(0)
+  {}
+  branch& operator=(const branch&){return *this;}
+public:
+  ifile& file() {return m_file;}
+  uint32 entry_number() const {return m_entry_number;}
+  const std::string& name() const {return m_name;}
+  const std::string& title() const {return m_title;}
+  const std::vector<base_leaf*>& leaves() const {return m_leaves;}
+  const std::vector<branch*>& branches() const {return m_branches;}
+
+  bool show(std::ostream& a_out,uint32 a_entry){
+    // Print values of all active leaves for entry :
+    // if entry==-1, print current entry (default)
+    uint32 n;
+    if(!find_entry(a_entry,n)) return false;
+
+    tools_vforcit(base_leaf*,m_leaves,it) {
+      base_leaf* bl = *it;
+
+      uint32 num = bl->num_elem();
+      num = mn<uint32>(num,10);
+      if(!num) continue;
+
+     {std::string s;
+      uint32 len = bl->name().size()+128;
+      sprintf(s,len," %-15s = ",bl->name().c_str());
+      a_out << s;}
+
+      for(uint32 i=0;i<num;i++) {
+        if(i) a_out << ", ";
+        bl->print_value(a_out,i);
+      }
+
+      a_out << std::endl;
+    }
+
+    return true;
+  }
+protected:
+  basket* get_basket(seek a_pos,uint32 a_len) {
+    //if(fBranch.tree().memoryFull(fBufferSize)) fBranch.dropBaskets();
+    if(!a_len) return 0;  
+
+    rroot::basket* basket = 
+      new rroot::basket(m_file,a_pos,a_len); //basket is a key.
+    if(!basket->read_file()) {
+      m_out << "tools::rroot::branch::get_basket :" 
+            << " read_file() failed."
+            << std::endl;
+      delete basket;
+      return 0;
+    }
+   {rroot::buffer buffer(m_out,m_file.byte_swap(),
+                         a_len,basket->buf(),0,false); 
+    if(!basket->stream(buffer)) {
+      m_out << "tools::rroot::branch::get_basket :" 
+            << " basket stream failed."
+            << std::endl;
+      delete basket;
+      return 0;
+    }}
+    unsigned int sz;    
+    char* buf = basket->get_object_buffer(sz); //basket owns buf.
+    if(!buf) {
+      m_out << "tools::rroot::branch::get_basket :" 
+            << " get_object_buffer() failed."
+            << std::endl;
+      delete basket;
+      return 0;
+    }
+
+    if(basket->seek_key()!=a_pos) { //consistency check.
+      m_out << "tools::rroot::branch::get_basket :" 
+            << " seek anomaly."
+            << " a_pos " << a_pos
+            << " seek_key() " << basket->seek_key()
+            << std::endl;
+      delete basket;
+      return 0;
+    }
+    //if(basket->nbytes()!=a_len) { //consistency check.
+    //  m_out << "tools::rroot::branch::get_basket :" 
+    //        << " WARNING : length anomaly."
+    //        << " a_len " << a_len
+    //        << " nbytes() " << basket->nbytes()
+    //       << std::endl;
+    //}
+
+    if(fEntryOffsetLen) {
+    if(!basket->read_offset_tables()) {
+      m_out << "tools::rroot::branch::get_basket :" 
+            << " read_offset_tables failed."
+            << std::endl;
+      delete basket;
+      return 0;
+    }}
+
+    return basket;
+  }
+protected:
+  void _clear() {
+    delete [] fBasketEntry;
+    delete [] fBasketBytes;
+    delete [] fBasketSeek;
+    fBasketEntry = 0;
+    fBasketBytes = 0;
+    fBasketSeek = 0;
+
+   {typedef std::pair<basket*,bool> basket_todel;
+    tools_mforit(uint32,basket_todel,m_baskets,it) {
+      if((*it).second.second) delete (*it).second.first;
+    }
+    m_baskets.clear();}
+
+    m_branches.cleanup();
+    m_leaves.cleanup();
+    m_streamed_baskets.cleanup();
+  }
+
+  void _dump_first_last() {
+    m_out << "tools::rroot::branch::_dump_first_last :"
+          << " first_last " << m_first_last.size()
+          << std::endl;
+    typedef std::pair<uint32,uint32> first_last;
+    tools_vforcit(first_last,m_first_last,it) {
+      uint32 first = (*it).first;
+      uint32 last = (*it).second;
+      m_out << "tools::rroot::branch::stream :"
+            << "   first " << first
+            << "   last " << last
+            << std::endl;
+    }
+  }
+
+  //bool _test_bit(uint32 a_f) const {
+  //  return (bool)(m_bits & a_f);
+  //}
+  static std::string sout(const std::string& a_string) {
+    return std::string("\"")+a_string+"\"";
+  }
+
+
+protected:
+  //Tree& fTree;
+  ifile& m_file;
+  std::ostream& m_out;
+  ifac& m_fac;
+  std::vector< std::pair<uint32,uint32> > m_first_last;
+  std::map<uint32, std::pair<basket*,bool> > m_baskets;
+  ObjArray<basket> m_streamed_baskets;
+  basket* m__read_basket; //optimization
+protected:
+  //Object
+  //uint32 m_bits;
+  //Named
+  std::string m_name;
+  std::string m_title;
+
+  bool fAutoDelete;
+  ObjArray<branch> m_branches;
+  ObjArray<base_leaf> m_leaves;
+  uint32 fEntryOffsetLen;  //  Initial Length of fEntryOffset table in the basket buffers
+  uint32 m_write_basket;   //  Last basket number written
+  uint32 m_entry_number;   // Current entry number (last one filled in this branch)
+  uint32 m_read_basket;   //! Current basket number when reading
+  int* fBasketBytes;    //[fMaxBaskets] Lenght of baskets on file
+  int* fBasketEntry;    //[fMaxBaskets] Table of first entry in eack basket
+  seek* fBasketSeek;    //[fMaxBaskets] Addresses of baskets on file
+};
+
+}}
+
+#endif

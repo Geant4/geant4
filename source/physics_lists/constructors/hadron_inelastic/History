@@ -1,4 +1,4 @@
-$Id: History 76703 2013-11-14 10:29:11Z gcosmo $
+$Id: History 86520 2014-11-13 09:21:11Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,35 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07-Nov-2014, P. Arce          (phys-ctor-hinelastic-V10-00-08)
+- Add G4HadronPhysicsQGSP_BIC_AllHP for particle_hp physics list
+
+30-Oct-2014, Andrea Dotti               (phys-ctor-hinelastic-V10-00-07)
+- Fix in destructor of G4VHadronPhysics to check validity of pointer. 
+
+30-Oct-2014, Julia Yarba                (phys-ctor-hinelastic-V10-00-06)
+- In G4HadronPhysicsNuBeam, adjust bertini-ftf overlap from 7-10GeV to 3-3.5GeV
+  (based on stat. study, it's better for light targets)
+
+15-Oct-2014, Gabriele Cosmo             (phys-ctor-hinelastic-V10-00-05)
+- Added dependency to 'de_excitation/fission' module in GNUMakefile
+  and sources.cmake, now required by INCLXX.
+
+05-Aug-2014, Krzysztof Genser           (phys-ctor-hinelastic-V10-00-04)
+- Extended Shielding code to also include ShieldingM variant
+
+28-June-2014, Michael Kelsey            (phys-ctor-hinelastic-V10-00-03)
+- Add "if (!tpdata) return;" to all dtors, to avoid segfaults.
+
+03-June-2014, Julia Yarba               (phys-ctor-hinelastic-V10-00-02)
+- Include ctor's for NuBeam and Shielding
+
+27-May-2014, Davide Mancusi             (phys-ctor-hinelastic-V10-00-01)
+- Modify switching energies and models in HadronPhysicsINCLXX.
+
+29-Jan-2014, Gunter Folger              (phys-ctor-hinelastic-V10-00-00)
+- Removed from photolepton_hadron/muon_nuclear from sources.cmake
 
 14-Nov-2013, Alberto Ribon              (phys-ctor-hinelastic-V09-06-20)
 - Use G4NeutronInelasticXS for neutrons in the following physics lists

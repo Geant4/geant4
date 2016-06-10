@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh 76333 2013-11-08 14:31:50Z gcosmo $
+// $Id: G4LossTableManager.hh 86129 2014-11-07 11:16:37Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -95,7 +95,9 @@ class G4EmConfigurator;
 class G4ElectronIonPair;
 class G4LossTableBuilder;
 class G4VAtomDeexcitation;
+class G4VSubCutProducer;
 class G4Region;
+class G4EmParameters;
 
 class G4LossTableManager
 {
@@ -226,23 +228,17 @@ public:
 
   void SetLambdaBinning(G4int val);
 
-  G4int GetNumberOfBinsPerDecade() const;
-
   void SetStepFunction(G4double v1, G4double v2);
 
   void SetBuildCSDARange(G4bool val);
 
-  void SetLPMFlag(G4bool val);
-
-  void SetSplineFlag(G4bool val);
-
   void SetLinearLossLimit(G4double val);
 
-  void SetBremsstrahlungTh(G4double val);
-
-  void SetFactorForAngleLimit(G4double val);
-
   void SetVerbose(G4int val);
+
+  void SetAtomDeexcitation(G4VAtomDeexcitation*);
+
+  void SetSubCutProducer(G4VSubCutProducer*);
 
   //-------------------------------------------------
   // Access methods
@@ -252,19 +248,13 @@ public:
 
   G4bool BuildCSDARange() const;
 
-  G4bool LPMFlag() const;
-
-  G4bool SplineFlag() const;
-
   G4bool IsMaster() const;
-
-  G4double BremsstrahlungTh() const;
-
-  G4double FactorForAngleLimit() const;
 
   G4double MinKinEnergy() const;
 
   G4double MaxKinEnergy() const;
+
+  G4int GetNumberOfBinsPerDecade() const;
 
   const std::vector<G4VEnergyLossProcess*>& GetEnergyLossProcessVector();
 
@@ -284,9 +274,9 @@ public:
 
   G4VAtomDeexcitation* AtomDeexcitation();
 
-  G4LossTableBuilder* GetTableBuilder();
+  G4VSubCutProducer* SubCutProducer();
 
-  void SetAtomDeexcitation(G4VAtomDeexcitation*);
+  G4LossTableBuilder* GetTableBuilder();
 
 private:
 
@@ -295,6 +285,8 @@ private:
   //-------------------------------------------------
 
   G4LossTableManager();
+
+  void ResetParameters();
 
   G4VEnergyLossProcess* BuildTables(const G4ParticleDefinition* aParticle);
 
@@ -308,10 +300,12 @@ private:
 
   void CopyDEDXTables();
 
+  void PrintEWarning(G4String, G4double);
+
   G4LossTableManager(G4LossTableManager &);
   G4LossTableManager & operator=(const G4LossTableManager &right);
 
-  //static G4ThreadLocal G4LossTableManager* theInstance;
+  static G4ThreadLocal G4LossTableManager* instance;
 
   typedef const G4ParticleDefinition* PD;
 
@@ -343,28 +337,14 @@ private:
   G4bool all_tables_are_built;
   G4bool startInitialisation;
 
-  G4bool lossFluctuationFlag;
   G4bool subCutoffFlag;
-  G4bool rndmStepFlag;
   G4bool integral;
   G4bool integralActive;
-  G4bool buildCSDARange;
-  G4bool minEnergyActive;
-  G4bool maxEnergyActive;
-  G4bool maxEnergyForMuonsActive;
   G4bool stepFunctionActive;
-  G4bool flagLPM;
-  G4bool splineFlag;
   G4bool isMaster;
 
-  G4double minSubRange;
   G4double maxRangeVariation;
   G4double maxFinalStep;
-  G4double minKinEnergy;
-  G4double maxKinEnergy;
-  G4double maxKinEnergyForMuons;
-  G4double bremsTh;
-  G4double factorForAngleLimit;
 
   G4LossTableBuilder*         tableBuilder;
   G4EnergyLossMessenger*      theMessenger;
@@ -373,9 +353,10 @@ private:
   G4EmConfigurator*           emConfigurator;
   G4ElectronIonPair*          emElectronIonPair;
   G4VAtomDeexcitation*        atomDeexcitation;
+  G4VSubCutProducer*          subcutProducer;
 
-  G4int nbinsLambda;
-  G4int nbinsPerDecade;
+  G4EmParameters* theParameters;
+
   G4int verbose;
 
 };

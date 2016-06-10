@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronicInteraction.hh 69717 2013-05-13 09:47:57Z gcosmo $
+// $Id: G4HadronicInteraction.hh 83773 2014-09-15 07:19:09Z gcosmo $
 //
 // Hadronic Interaction  abstract base class
 // This class is the base class for the model classes.
@@ -58,7 +58,6 @@
 #include "G4Nucleus.hh"
 #include "G4Track.hh"
 #include "G4HadProjectile.hh"
-#include "G4ReactionDynamics.hh"
 
 class G4HadronicInteraction
 {
@@ -161,6 +160,9 @@ public: // With description
 
   virtual void ModelDescription(std::ostream& outFile) const ; //=0;
 
+  // Initialisation before run
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&){;};
+
 private:
     
   G4HadronicInteraction(const G4HadronicInteraction &right );
@@ -191,6 +193,7 @@ protected:
   G4double theMaxEnergy;
 
   G4bool isBlocked;
+
 
 private:       
     

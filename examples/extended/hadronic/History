@@ -15,6 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27-06-14 I. Hrivnacova (exHadronic-V10-00-00)
+- Updated documentation:
+  Added newly added examples in README and  .README files
+- Added Hadr06 in CMakeLists.txt
+
+03-06-13 B. Wendt
+- Added FissionGenerator in CMakeLists.txt and README
+
 27-11-13 G. Cosmo (exHadronic-V09-06-01)
 - Added Hadr05 in CMakeLists.txt and README
 

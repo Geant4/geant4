@@ -26,7 +26,7 @@
 /// \file medical/GammaTherapy/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 67994 2013-03-13 11:05:39Z gcosmo $
+// $Id: PhysicsList.cc 82277 2014-06-13 14:40:54Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -53,6 +53,7 @@
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
+#include "G4EmLowEPPhysics.hh"
 #include "StepLimiterBuilder.hh"
 #include "G4DecayPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
@@ -80,10 +81,7 @@ PhysicsList::PhysicsList(): G4VModularPhysicsList()
   fStopIsRegisted = false;
   fVerbose = 1;
   G4LossTableManager::Instance()->SetVerbose(fVerbose);
-  defaultCutValue = 1.*mm;
-  fCutForGamma     = defaultCutValue;
-  fCutForElectron  = defaultCutValue;
-  fCutForPositron  = defaultCutValue;
+  SetDefaultCutValue(1*mm);
 
   fMessenger = new PhysicsListMessenger(this);
 
@@ -160,6 +158,10 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     RegisterPhysics(new G4EmPenelopePhysics());
     fEmBuilderIsRegisted = true;
 
+  } else if (name == "emlowenergy" && !fEmBuilderIsRegisted) {
+    RegisterPhysics(new G4EmLowEPPhysics());
+    fEmBuilderIsRegisted = true;
+
   } else if (name == "elastic" && !fHelIsRegisted && fEmBuilderIsRegisted) {
     RegisterPhysics(new G4HadronElasticPhysics());
     fHelIsRegisted = true;
@@ -187,41 +189,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" 
            << " fail - module is already regitered or is unknown " << G4endl;
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCuts()
-{
-  SetCutValue(fCutForGamma, "gamma");
-  SetCutValue(fCutForElectron, "e-");
-  SetCutValue(fCutForPositron, "e+");
-
-  if (fVerbose>0) DumpCutValuesTable();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForGamma(G4double cut)
-{
-  fCutForGamma = cut;
-  SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForElectron(G4double cut)
-{
-  fCutForElectron = cut;
-  SetParticleCuts(fCutForElectron, G4Electron::Electron());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForPositron(G4double cut)
-{
-  fCutForPositron = cut;
-  SetParticleCuts(fCutForPositron, G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

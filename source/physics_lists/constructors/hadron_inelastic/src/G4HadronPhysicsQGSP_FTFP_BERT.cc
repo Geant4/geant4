@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsQGSP_FTFP_BERT.cc 76703 2013-11-14 10:29:11Z gcosmo $
+// $Id: G4HadronPhysicsQGSP_FTFP_BERT.cc 83699 2014-09-10 07:18:25Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -55,6 +55,7 @@
 #include "G4NeutronCaptureXS.hh"
 
 #include "G4PhysListUtil.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -171,6 +172,8 @@ void G4HadronPhysicsQGSP_FTFP_BERT::CreateModels()
 
 G4HadronPhysicsQGSP_FTFP_BERT::~G4HadronPhysicsQGSP_FTFP_BERT()
 {
+  if (!tpdata) return;
+
    delete tpdata->theQGSPNeutron;
    delete tpdata->theFTFPNeutron;
    delete tpdata->theBertiniNeutron;
@@ -190,9 +193,6 @@ G4HadronPhysicsQGSP_FTFP_BERT::~G4HadronPhysicsQGSP_FTFP_BERT()
    delete tpdata->theAntiBaryon;
    delete tpdata->theFTFPAntiBaryon;
 
-   delete tpdata->xsNeutronInelasticXS;
-   delete tpdata->xsNeutronCaptureXS; 
-   
    delete tpdata; tpdata = 0;
 }
 
@@ -223,7 +223,7 @@ void G4HadronPhysicsQGSP_FTFP_BERT::ConstructProcess()
   tpdata->theAntiBaryon->Build(); 
 
   // --- Neutrons ---
-  tpdata->xsNeutronInelasticXS = new G4NeutronInelasticXS();  
+  tpdata->xsNeutronInelasticXS = (G4NeutronInelasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronInelasticXS::Default_Name());
   G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(tpdata->xsNeutronInelasticXS);
 
   G4HadronicProcess* capture = 0;
@@ -238,7 +238,7 @@ void G4HadronPhysicsQGSP_FTFP_BERT::ConstructProcess()
     capture = new G4HadronCaptureProcess("nCapture");
     pmanager->AddDiscreteProcess(capture);
   }
-  tpdata->xsNeutronCaptureXS = new G4NeutronCaptureXS();
+  tpdata->xsNeutronCaptureXS = (G4NeutronCaptureXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronCaptureXS::Default_Name());
   capture->AddDataSet(tpdata->xsNeutronCaptureXS);
   capture->RegisterMe(new G4NeutronRadCapture());
 }

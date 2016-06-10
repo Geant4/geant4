@@ -67,7 +67,8 @@
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoOrthographicCamera.h>
 #include <Inventor/nodes/SoPerspectiveCamera.h>
-#include <Inventor/nodes/SoEventCallback.h>
+// FWJ moved to header file
+//#include <Inventor/nodes/SoEventCallback.h>
 #include <Inventor/nodes/SoLineSet.h>
 #include <Inventor/nodes/SoMaterial.h>
 #include <Inventor/errors/SoDebugError.h>
@@ -107,6 +108,9 @@
 
 // For searching for nodes within kits:
 #include <Inventor/nodekits/SoBaseKit.h>
+
+// FWJ
+#include <Inventor/SbVec3f.h>
 
 G4OpenInventorXtExaminerViewer* G4OpenInventorXtExaminerViewer::viewer = 0;
 
@@ -180,6 +184,8 @@ void G4OpenInventorXtExaminerViewer::constructor(const SbBool build)
    loadRefCoordsDialog = saveRefCoordsDialog = NULL;
    loadSceneGraphDialog = saveSceneGraphDialog = NULL;
    myElementList = NULL;
+   // FWJ default path look-ahead
+   pathLookahead = 5;
 
    newSceneGraph = NULL;
    zcoordSetFlag = false;
@@ -448,12 +454,13 @@ void G4OpenInventorXtExaminerViewer::constructor(const SbBool build)
 
 
 // Static function that returns the pointer to G4OpenInventorXtExaminerViewer
-G4OpenInventorXtExaminerViewer *G4OpenInventorXtExaminerViewer::getObject()
-{
-   if (!viewer)
-      new G4OpenInventorXtExaminerViewer();
-   return viewer;
-}
+// FWJ DISABLED
+//G4OpenInventorXtExaminerViewer *G4OpenInventorXtExaminerViewer::getObject()
+//{
+//   if (!viewer)
+//      new G4OpenInventorXtExaminerViewer();
+//   return viewer;
+//}
 
 
 // This method locates a named node in the superimposed or original scene.
@@ -1142,7 +1149,7 @@ void G4OpenInventorXtExaminerViewer::pickingCB(void *aThis,
 void G4OpenInventorXtExaminerViewer::mouseoverCB(void *aThis, SoEventCallback *eventCB)
 {
    SoHandleEventAction* action = eventCB->getAction();
-   const SoPickedPoint *pp = action->getPickedPoint();
+   const SoPickedPoint* pp = action->getPickedPoint();
    G4OpenInventorXtExaminerViewer* This = (G4OpenInventorXtExaminerViewer*)aThis;
 
    if(!This->abbrOutputFlag)
@@ -1204,6 +1211,91 @@ void G4OpenInventorXtExaminerViewer::mouseoverCB(void *aThis, SoEventCallback *e
                }
             }
          }
+      }
+      // FWJ Mouseover for trajectories
+      else if(node->getTypeId() == SoLineSet::getClassTypeId()) {
+         //         G4cout << "Trajectory!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << G4endl;
+         G4AttHolder* attHolder = dynamic_cast<G4AttHolder*>(node);
+         if(attHolder && attHolder->GetAttDefs().size()) {
+            std::string strTrajPoint = "G4TrajectoryPoint:";
+            std::ostringstream oss;
+            G4String t1, t2, t3, t4;
+            for (size_t i = 0; i < attHolder->GetAttDefs().size(); ++i) {
+               //               G4cout << "Getting index " << i << " from attHolder" << G4endl;
+               // No, returns a vector!   G4AttValue* attValue = attHolder->GetAttValues()[i];
+               const std::vector<G4AttValue>* vals = attHolder->GetAttValues()[i];
+               std::vector<G4AttValue>::const_iterator iValue;
+               for (iValue = vals->begin(); iValue != vals->end(); ++iValue) {
+                  const G4String& valueName = iValue->GetName();
+                  const G4String& value = iValue->GetValue();
+                  //                  G4cout << "  valueName = " << valueName << G4endl;
+                  //                  G4cout << "  value = " << value << G4endl;
+                  // LINE 1
+                  if (valueName == "PN") t1 = value;
+                  if (valueName == "Ch") {
+                     if (atof(value.c_str()) > 0)
+                        t1 += "    +";
+                     else
+                        t1 += "    ";
+                     t1 += value;
+                  }
+                  if (valueName == "PDG") {
+                     t1 += "    ";
+                     t1 += value;
+                     This->mouseOverTextLogName->string.setValue(t1);
+                  }
+                  //                  G4cout << "  t1 = " << t1 << G4endl;
+                  // LINE 2
+                  if (valueName == "EventID") t2 = "Evt " + value;
+                  if (valueName == "ID") t2 += "    Trk " + value;
+                  if (valueName == "PID") {
+                     t2 += "    Prt " + value;
+                     This->mouseOverTextSolid->string.setValue(t2);
+                  }
+                  // LINE 3
+                  if (valueName == "IKE") t3 = "KE " + value;
+                  if (valueName == "IMom") {
+                     // Remove units
+                     unsigned ipos = value.rfind(" ");
+                     G4String value1 = value;
+                     value1.erase(ipos);
+                     t3 += "    P (" + value1 + ")";
+                  }
+                  if (valueName == "IMag") {
+                     t3 += " " + value;
+                     This->mouseOverTextMaterial->string.setValue(t3);
+                  }
+                  // LINE 4
+                  if (valueName == "NTP") {
+                     std::ostringstream t4oss;
+                     t4oss << "TrjPts " <<  value;
+                     t4oss << "    Pos " << pp->getPoint()[0] << " " << pp->getPoint()[1] <<
+                        " " << pp->getPoint()[2];
+                     This->mouseOverTextZPos->string.setValue(SbString(t4oss.str().c_str()));
+                  }
+               }
+//               G4cout << "  NOW CALLING G4AttCheck" << G4endl;
+//                G4cout << G4AttCheck(attHolder->GetAttValues()[i],
+//                                     attHolder->GetAttDefs()[i]);
+//                oss << G4AttCheck(attHolder->GetAttValues()[i],
+//                                  attHolder->GetAttDefs()[i]);
+//                if(oss.str().find(strTrajPoint) != std::string::npos) {
+//                   // Last attribute displayed was a trajectory point.  Since we
+//                   // want abbreviated output, display the last one and exit
+//                   // (unless we're already at the last (and only) trajectory point)
+//                   if(i != attHolder->GetAttDefs().size()-1) {
+//                      G4cout << G4AttCheck(
+//                                           attHolder->GetAttValues()[attHolder->GetAttDefs().size()-1],
+//                                           attHolder->GetAttDefs()[attHolder->GetAttDefs().size()-1]);
+//                   }
+//                   break;
+//                }
+            }
+         }
+         This->setSuperimpositionEnabled(This->superimposition, TRUE);
+         This->scheduleRedraw();
+         eventCB->setHandled();
+         return;
       }
 
       bool redraw = false;
@@ -2328,7 +2420,9 @@ void G4OpenInventorXtExaminerViewer::createElementsList(Widget formTopRight)
    XtSetArg(args[n], XmNtopWidget, labelRight);	n++;
    XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM);	n++;
    XtSetArg(args[n], XmNbottomAttachment, XmATTACH_FORM);	n++;
-   XtSetArg(args[n], XmNwidth, 280);	n++;
+   // FWJ
+   XtSetArg(args[n], XmNwidth, 240);	n++;
+   //   XtSetArg(args[n], XmNwidth, 280);	n++;
    //	XtSetArg(args[n], XmNwidth, 300);	n++;
 
    this->myElementList = XmCreateScrolledList(formTopRight, (char *) "ListRight", args, n);
@@ -2353,6 +2447,7 @@ void G4OpenInventorXtExaminerViewer::constructListsDialog(Widget w,
                                              XtPointer client_data,
                                              XtPointer)
 {
+   G4cout << "DEBUG constructListsDialog w = " << w << G4endl;
    G4OpenInventorXtExaminerViewer * This = (G4OpenInventorXtExaminerViewer *) client_data;
    if (This->listsDialog) {
       return;
@@ -2381,7 +2476,11 @@ void G4OpenInventorXtExaminerViewer::constructListsDialog(Widget w,
    ///////////////////////CUSTOM listsDialog///////////////////////////////
 
    Widget topShell;
-   topShell = SoXt::getShellWidget(This->getParentWidget());
+   // FWJ gets the topmost window containing This->getParentWidget()
+   // This is unnecessary because the parent is passed in
+   //   topShell = SoXt::getShellWidget(This->getParentWidget());
+   topShell = w;
+   G4cout << "DEBUG PARENT (topShell) FOR AUX WINDOW = " << topShell << G4endl;
 
    // Shell Dialog
    std::string dialogNameStr = This->fileName.substr(This->fileName.rfind('/') + 1);
@@ -2403,12 +2502,15 @@ void G4OpenInventorXtExaminerViewer::constructListsDialog(Widget w,
    XtSetArg(args[n], XmNsashWidth, 1);	n++;
    XtSetArg(args[n], XmNsashHeight, 1);	n++;
    XtSetArg(args[n], XmNseparatorOn, False);	n++;
+   // FWJ
    This->listsDialog = XmCreatePanedWindow(This->myShellDialog, (char *) "MainPane",
                                            args, n);
 
 
    ////////////////////////TOP FORM//////////////////////////
    n = 0;
+   // FWJ fails compile
+   //   Widget formTop = XmCreateForm(This, (char *) "FormTop", args, n);
    Widget formTop = XmCreateForm(This->listsDialog, (char *) "FormTop", args, n);
 
    n = 0;
@@ -2457,7 +2559,9 @@ void G4OpenInventorXtExaminerViewer::constructListsDialog(Widget w,
    XtSetArg(args[n], XmNrightWidget, This->myElementList);	n++;
    XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM);	n++;
    XtSetArg(args[n], XmNbottomAttachment, XmATTACH_FORM);	n++;
-   XtSetArg(args[n], XmNwidth, 200);	n++;
+   // FWJ
+   XtSetArg(args[n], XmNwidth, 160);	n++;
+   // XtSetArg(args[n], XmNwidth, 200);	n++;
 
    This->myViewPtList = XmCreateScrolledList(formTopLeft, (char *) "ListLeft",
                                              args, n);
@@ -2476,8 +2580,9 @@ void G4OpenInventorXtExaminerViewer::constructListsDialog(Widget w,
    ////////////////////MIDDLE FORM///////////////////////////
    n = 0;
    XtSetArg(args[n], XmNmarginWidth, 6);	n++;
-   Widget formMiddle = XmCreateForm(This->listsDialog, (char *) "MiddleForm", args,
-                                    n);
+   // FWJ fails compile
+   //   Widget formMiddle = XmCreateForm(This->canvas, (char *) "MiddleForm", args, n);
+   Widget formMiddle = XmCreateForm(This->listsDialog, (char *) "MiddleForm", args, n);
 
    // Label
    n = 0;
@@ -2514,8 +2619,9 @@ void G4OpenInventorXtExaminerViewer::constructListsDialog(Widget w,
    XtSetArg(args[n], XmNfractionBase, 4);	n++;
    XtSetArg(args[n], XmNtopAttachment, XmATTACH_WIDGET);	n++;
    XtSetArg(args[n], XmNtopWidget, This->viewPtSelection);	n++;
-   Widget formAction = XmCreateForm(This->listsDialog, (char *) "ActionForm", args,
-                                    n);
+   // FWJ fails compile
+   //   Widget formAction = XmCreateForm(This, (char *) "ActionForm", args, n);
+   Widget formAction = XmCreateForm(This->listsDialog, (char *) "ActionForm", args, n);
 
    n = 0;
    XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM);	n++;
@@ -4530,6 +4636,12 @@ void G4OpenInventorXtExaminerViewer::setStartingPtForAnimation()
    // Update camera position
    p1 = p1 + (up_down * camUpV) + (left_right * leftRightAxis);
    myCam->position = p1;
+   // FWJ Try look-ahead here
+   int idx = refParticleIdx + pathLookahead;
+   idx = std::min(idx, (int)refParticleTrajectory.size() - 1);
+   myCam->pointAt(refParticleTrajectory[idx], camUpV);
+   //   myCam->pointAt(refParticleTrajectory[idx], camUpVec);
+   myCam->focalDistance = 0.1f;
 }
 
 

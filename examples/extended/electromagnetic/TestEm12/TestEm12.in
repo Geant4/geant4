@@ -1,8 +1,10 @@
-# $Id: TestEm12.in 69108 2013-04-18 13:10:10Z gcosmo $
+# $Id: TestEm12.in 85260 2014-10-27 08:53:35Z gcosmo $
 #
 # limit the step size from histos 1 and 8
 #
 /control/verbose 2
+/control/cout/ignoreThreadsExcept 0
+/run/numberOfThreads 2
 /run/verbose 2
 #
 /testem/det/setMat G4_WATER
@@ -13,7 +15,7 @@
 #
 /run/initialize
 #
-/testem/phys/setCuts 10 um
+/run/setCut 10 um
 #
 /gun/particle e-
 /gun/energy 4 MeV
@@ -26,6 +28,6 @@
 ###/analysis/h1/set 5 200 -3.    3. cm	#proj range
 ###/analysis/h1/set 8 120  0.   1.2 none	#normalized edep profile
 #
-/testem/event/printModulo 1000
+/run/printProgress 1000
 #
 /run/beamOn 10000

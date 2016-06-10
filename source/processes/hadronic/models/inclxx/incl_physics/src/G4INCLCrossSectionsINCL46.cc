@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -82,66 +83,68 @@ namespace G4INCL {
                 (p1->getType() == Neutron && p2->getType() == Proton)) {
         return elasticProtonNeutron(momentum);
       } else {
-        INCL_ERROR("CrossSectionsINCL46::elasticNN: Bad input!" << std::endl
-              << p1->print() << p2->print() << std::endl);
+        INCL_ERROR("CrossSectionsINCL46::elasticNN: Bad input!" << '\n'
+              << p1->print() << p2->print() << '\n');
       }
       return 0.0;
     }:*/
 
-  G4double CrossSectionsINCL46::elasticNNLegacy(Particle const * const part1, Particle const * const part2) {
-    G4double scale = 1.0;
+    G4double CrossSectionsINCL46::elasticNNLegacy(Particle const * const part1, Particle const * const part2) {
 
 
-    G4int i = ParticleTable::getIsospin(part1->getType())
-      + ParticleTable::getIsospin(part2->getType());
-    G4double sel = 0.0;
+        G4int i = ParticleTable::getIsospin(part1->getType())
+        + ParticleTable::getIsospin(part2->getType());
 
-    /* The NN cross section is parametrised as a function of the lab momentum
-     * of one of the nucleons. For NDelta or DeltaDelta, the physical
-     * assumption is that the cross section is the same as NN *for the same
-     * total CM energy*. Thus, we calculate s from the particles involved, and
-     * we convert this value to the lab momentum of a nucleon *as if this were
-     * an NN collision*.
-     */
-    const G4double s = KinematicsUtils::squareTotalEnergyInCM(part1, part2);
-    G4double plab = KinematicsUtils::momentumInLab(s, ParticleTable::effectiveNucleonMass, ParticleTable::effectiveNucleonMass);
+        /* The NN cross section is parametrised as a function of the lab momentum
+         * of one of the nucleons. For NDelta or DeltaDelta, the physical
+         * assumption is that the cross section is the same as NN *for the same
+         * total CM energy*. Thus, we calculate s from the particles involved, and
+         * we convert this value to the lab momentum of a nucleon *as if this were
+         * an NN collision*.
+         */
 
-    G4double p1=0.001*plab;
-    if(plab > 2000.) goto sel13;
-    if(part1->isNucleon() && part2->isNucleon())
-      goto sel1;
-    else
-      goto sel3;
-sel1: if (i == 0) goto sel2;
-sel3: if (plab < 800.) goto sel4;
-      if (plab > 2000.) goto sel13;
-      sel=(1250./(50.+p1)-4.*std::pow(p1-1.3, 2))*scale;
-      goto sel100;
-      return sel;
-sel4: if (plab < 440.) {
-        sel=34.*std::pow(p1/0.4, (-2.104))*scale;
-      } else {
-        sel=(23.5+1000.*std::pow(p1-0.7, 4))*scale;
-      }
-      goto sel100;
-      return sel;
-sel13: sel=77./(p1+1.5)*scale;
-       goto sel100;
-       return sel;
-sel2: if (plab < 800.) goto sel11;
-      if (plab > 2000.) goto sel13;
-      sel=31./std::sqrt(p1)*scale;
-      goto sel100;
-      return sel;
-sel11: if (plab < 450.) {
-         G4double alp=std::log(p1);
-         sel=6.3555*std::exp(-3.2481*alp-0.377*alp*alp)*scale;
-       } else {
-         sel=(33.+196.*std::sqrt(std::pow(std::abs(p1-0.95),5)))*scale;
-       }
-
-sel100: return sel;
-  }
+        const G4double s = KinematicsUtils::squareTotalEnergyInCM(part1, part2);
+        G4double plab = 0.001*KinematicsUtils::momentumInLab(s, ParticleTable::effectiveNucleonMass, ParticleTable::effectiveNucleonMass);
+        if(plab > 2.) { // NN, Delta-Nucleon and Delta-Delta for plab > 2.0 GeV
+            return 77./(plab+1.5);
+        }
+        else if (part1->isNucleon() && part2->isNucleon()){ // NN
+            if (i == 0) {   // pn
+                if (plab < 0.450) {
+                    G4double alp=std::log(plab);
+                    return 6.3555*std::exp(-3.2481*alp-0.377*alp*alp);
+                }
+                else if (plab < 0.800) {
+                    return (33.+196.*std::sqrt(std::pow(std::abs(plab-0.95),5)));
+                }
+                else {
+                    return 31./std::sqrt(plab);
+                }
+            }
+            else {   // nn and pp
+                if (plab < 0.440) {
+                    return 34.*std::pow(plab/0.4, (-2.104));
+                }
+                else if (plab < 0.800) {
+                    return (23.5+1000.*std::pow(plab-0.7, 4));
+                }
+                else {
+                    return (1250./(50.+plab)-4.*std::pow(plab-1.3, 2));
+                }
+            }
+        }
+        else {   // Delta-Nucleon and Delta-Delta
+            if (plab < 0.440) {
+                return 34.*std::pow(plab/0.4, (-2.104));
+            }
+            else if (plab < 0.800) {
+                return (23.5+1000.*std::pow(plab-0.7, 4));
+            }
+            else {
+                return (1250./(50.+plab)-4.*std::pow(plab-1.3, 2));
+            }
+        }
+    }
 
   G4double CrossSectionsINCL46::deltaProduction(const G4int isospin, const G4double pLab) {
     G4double xs = 0.0;
@@ -207,13 +210,13 @@ sel100: return sel;
   G4double CrossSectionsINCL46::total(Particle const * const p1, Particle const * const p2) {
     G4double inelastic = 0.0;
     if(p1->isNucleon() && p2->isNucleon()) {
-      inelastic = deltaProduction(p1, p2);
+      inelastic = NNToNDelta(p1, p2);
     } else if((p1->isNucleon() && p2->isDelta()) ||
               (p1->isDelta() && p2->isNucleon())) {
-      inelastic = recombination(p1, p2);
+      inelastic = NDeltaToNN(p1, p2);
     } else if((p1->isNucleon() && p2->isPion()) ||
               (p1->isPion() && p2->isNucleon())) {
-      inelastic = pionNucleon(p1, p2);
+      inelastic = piNToDelta(p1, p2);
     } else {
       inelastic = 0.0;
     }
@@ -221,7 +224,7 @@ sel100: return sel;
     return inelastic + elastic(p1, p2);
   }
 
-  G4double CrossSectionsINCL46::pionNucleon(Particle const * const particle1, Particle const * const particle2) {
+  G4double CrossSectionsINCL46::piNToDelta(Particle const * const particle1, Particle const * const particle2) {
     //      FUNCTION SPN(X,IND2T3,IPIT3,f17)
     // SIGMA(PI+ + P) IN THE (3,3) REGION
     // NEW FIT BY J.VANDERMEULEN  + FIT BY Th AOUST ABOVE (3,3) RES
@@ -273,14 +276,14 @@ sel100: return sel;
         spnResult=spnPiMinusPHE(x);
       else if(ipit3 == 0) spnResult = (spnPiPlusPHE(x) + spnPiMinusPHE(x))/2.0; // (spnpipphe(x)+spnpimphe(x))/2.0
       else {
-        INCL_ERROR("Unknown configuration!" << std::endl);
+        INCL_ERROR("Unknown configuration!" << '\n');
       }
     }
 
     return spnResult;
   }
 
-  G4double CrossSectionsINCL46::recombination(Particle const * const p1, Particle const * const p2) {
+  G4double CrossSectionsINCL46::NDeltaToNN(Particle const * const p1, Particle const * const p2) {
     const G4int isospin = ParticleTable::getIsospin(p1->getType()) + ParticleTable::getIsospin(p2->getType());
     if(isospin==4 || isospin==-4) return 0.0;
 
@@ -318,7 +321,7 @@ sel100: return sel;
     return result;
   }
 
-  G4double CrossSectionsINCL46::deltaProduction(Particle const * const p1, Particle const * const p2) {
+  G4double CrossSectionsINCL46::NNToNDelta(Particle const * const p1, Particle const * const p2) {
 // assert(p1->isNucleon() && p2->isNucleon());
     const G4double sqrts = KinematicsUtils::totalEnergyInCM(p1,p2);
     if(sqrts < ParticleTable::effectivePionMass + 2*ParticleTable::effectiveNucleonMass + 50.) { // approximately yields INCL4.6's hard-coded threshold in collis, 2065 MeV
@@ -359,6 +362,15 @@ sel100: return sel;
     }
     return 0.0; // Should never reach this point
   }
+
+
+    G4double CrossSectionsINCL46::NNToxPiNN(const G4int, Particle const * const, Particle const * const) {
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::piNToxPiN(const G4int, Particle const * const, Particle const * const) {
+        return 0.;
+    }
 
 } // namespace G4INCL
 

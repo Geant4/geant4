@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -57,7 +58,7 @@ namespace G4INCL {
 
   G4INCL::IChannel* DecayAvatar::getChannel() {
     if(particle1->isDelta()) {
-      INCL_DEBUG("DeltaDecayChannel chosen." << std::endl);
+      INCL_DEBUG("DeltaDecayChannel chosen." << '\n');
       return new DeltaDecayChannel(particle1, incidentDirection);
     }
     else
@@ -68,7 +69,7 @@ namespace G4INCL {
     InteractionAvatar::preInteraction();
   }
 
-  FinalState *DecayAvatar::postInteraction(FinalState *fs) {
+  void DecayAvatar::postInteraction(FinalState *fs) {
     // Make sure we have at least two particles in the final state
 // assert(fs->getModifiedParticles().size() + fs->getCreatedParticles().size() - fs->getDestroyedParticles().size() >= 2);
 
@@ -76,7 +77,7 @@ namespace G4INCL {
 
       // Call the postInteraction method of the parent class
       // (provides Pauli blocking and enforces energy conservation)
-      fs = InteractionAvatar::postInteraction(fs);
+      InteractionAvatar::postInteraction(fs);
 
       if(fs->getValidity() == PauliBlockedFS)
         /* If the decay was Pauli-blocked, make sure the propagation model
@@ -88,16 +89,17 @@ namespace G4INCL {
          * conservation can be impossible to satisfy due to weird local-energy
          * conditions, for example, that evolve with time.}
          */
-        fs->setBlockedDelta(particle1);
+        fs->addModifiedParticle(particle1);
 
     } else { // Forced decay
-      ParticleList created = fs->getCreatedParticles();
+      created = fs->getCreatedParticles();
+      modified = fs->getModifiedParticles();
 
       // Try to enforce energy conservation
       fs->setTotalEnergyBeforeInteraction(oldTotalEnergy);
       const G4bool success = enforceEnergyConservation(fs);
       if(!success) {
-        INCL_DEBUG("Enforcing energy conservation: failed!" << std::endl);
+        INCL_DEBUG("Enforcing energy conservation: failed!" << '\n');
 
         if(theNucleus) {
           // Restore the state of the initial particles
@@ -107,36 +109,27 @@ namespace G4INCL {
           for(ParticleIter i=created.begin(), e=created.end(); i!=e; ++i )
             delete *i;
 
-          FinalState *fsBlocked = new FinalState;
-          delete fs;
-          fsBlocked->makeNoEnergyConservation();
-          fsBlocked->setTotalEnergyBeforeInteraction(0.0);
+          fs->reset();
+          fs->makeNoEnergyConservation();
+          fs->setTotalEnergyBeforeInteraction(0.0);
 
-          return fsBlocked; // Interaction is blocked. Return an empty final state.
+          return; // Interaction is blocked. Return an empty final state.
         } else {
           // If there is no nucleus we have to continue anyway, even if energy
           // conservation failed. We cannot afford producing unphysical
           // remnants.
-          INCL_DEBUG("No nucleus, continuing anyway." << std::endl);
+          INCL_DEBUG("No nucleus, continuing anyway." << '\n');
         }
       } else {
-        INCL_DEBUG("Enforcing energy conservation: success!" << std::endl);
+        INCL_DEBUG("Enforcing energy conservation: success!" << '\n');
       }
 
       if(theNucleus) {
-        ParticleList modified = fs->getModifiedParticles();
-
-        // Copy the final state, but don't include the pion (as if it had been
-        // emitted right away).
-        FinalState *emissionFS = new FinalState;
-        for(ParticleIter i=modified.begin(), e=modified.end(); i!=e; ++i)
-          emissionFS->addModifiedParticle(*i);
-
         // Test CDPP blocking
         G4bool isCDPPBlocked = Pauli::isCDPPBlocked(created, theNucleus);
 
         if(isCDPPBlocked) {
-          INCL_DEBUG("CDPP: Blocked!" << std::endl);
+          INCL_DEBUG("CDPP: Blocked!" << '\n');
 
           // Restore the state of both particles
           restoreParticles();
@@ -145,20 +138,13 @@ namespace G4INCL {
           for(ParticleIter i=created.begin(), e=created.end(); i!=e; ++i )
             delete *i;
 
-          FinalState *fsBlocked = new FinalState;
-          delete fs;
-	  delete emissionFS;
+          fs->reset();
+          fs->makePauliBlocked();
+          fs->setTotalEnergyBeforeInteraction(0.0);
 
-          fsBlocked->makePauliBlocked();
-          fsBlocked->setTotalEnergyBeforeInteraction(0.0);
-
-          return fsBlocked; // Interaction is blocked. Return an empty final state.
+          return; // Interaction is blocked. Return an empty final state.
         }
-        INCL_DEBUG("CDPP: Allowed!" << std::endl);
-
-        // If all went well (energy conservation enforced and CDPP satisfied),
-        // delete the auxiliary final state
-        delete emissionFS;
+        INCL_DEBUG("CDPP: Allowed!" << '\n');
 
       }
     }
@@ -177,15 +163,15 @@ namespace G4INCL {
           theNucleus->getStore()->getBook().incrementAcceptedDecays();
       }
     }
-    return fs;
+    return;
   }
 
   std::string DecayAvatar::dump() const {
     std::stringstream ss;
-    ss << "(avatar " << theTime << " 'decay" << std::endl
-      << "(list " << std::endl
+    ss << "(avatar " << theTime << " 'decay" << '\n'
+      << "(list " << '\n'
       << particle1->dump()
-      << "))" << std::endl;
+      << "))" << '\n';
     return ss.str();
   }
 }

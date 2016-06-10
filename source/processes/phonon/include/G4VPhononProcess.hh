@@ -26,7 +26,7 @@
 /// \file processes/phonon/include/G4VPhononProcess.hh
 /// \brief Definition of the G4VPhononProcess base class
 //
-// $Id: G4VPhononProcess.hh 75725 2013-11-05 16:52:30Z mkelsey $
+// $Id: G4VPhononProcess.hh 75844 2013-11-06 17:35:56Z gcosmo $
 //
 #ifndef G4VPhononProcess_h
 #define G4VPhononProcess_h 1

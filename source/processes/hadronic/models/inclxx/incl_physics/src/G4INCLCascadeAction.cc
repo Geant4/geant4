@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -100,8 +101,8 @@ namespace G4INCL {
   void CascadeAction::beforeAvatarDefaultAction(IAvatar *a, Nucleus *n) {
     n->getStore()->getBook().incrementAvatars(a->getType());
     INCL_DEBUG("Random seeds before avatar " << a->getID() << ": "
-          << G4INCL::Random::getSeeds() << std::endl);
-    INCL_DEBUG("Next avatar:" << std::endl << a->dump() << std::endl);
+          << G4INCL::Random::getSeeds() << '\n');
+    INCL_DEBUG("Next avatar:" << '\n' << a->dump() << '\n');
   }
 
   void CascadeAction::afterAvatarDefaultAction(IAvatar *a, Nucleus * /*n*/, FinalState *fs) {
@@ -110,16 +111,16 @@ namespace G4INCL {
       return;
 
     INCL_DEBUG("Random seeds after avatar " << a->getID() << ": "
-          << G4INCL::Random::getSeeds() << std::endl);
+          << G4INCL::Random::getSeeds() << '\n');
 
-    ParticleList modified = fs->getModifiedParticles();
+    ParticleList const &modified = fs->getModifiedParticles();
     for(ParticleIter p=modified.begin(), e=modified.end(); p!=e; ++p )
       if(a->isACollision())
         (*p)->incrementNumberOfCollisions();
       else if(a->isADecay())
         (*p)->incrementNumberOfDecays();
 
-    ParticleList created = fs->getCreatedParticles();
+    ParticleList const &created = fs->getCreatedParticles();
     for(ParticleIter p=created.begin(), e=created.end(); p!=e; ++p )
       if(a->isACollision())
         (*p)->incrementNumberOfCollisions();

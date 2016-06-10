@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc 73126 2013-08-19 08:01:37Z gcosmo $
+// $Id: G4VSceneHandler.cc 87360 2014-12-01 16:07:16Z gcosmo $
 //
 // 
 // John Allison  19th July 1996
@@ -78,10 +78,14 @@
 #include "Randomize.hh"
 #include "G4StateManager.hh"
 #include "G4RunManager.hh"
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#endif
 #include "G4Run.hh"
 #include "G4Transform3D.hh"
 #include "G4AttHolder.hh"
 #include "G4AttDef.hh"
+#include "G4VVisCommand.hh"
 #include "G4PhysicalConstants.hh"
 
 G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4String& name):
@@ -397,9 +401,9 @@ void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
       rotation = G4RotateY3D(piBy2);
       break;
     }
-    G4double sxmid(scale.GetXmid());
-    G4double symid(scale.GetYmid());
-    G4double szmid(scale.GetZmid());
+    G4double sxmid;
+    G4double symid;
+    G4double szmid;
     sxmid = xmin + oneMinusMargin * (xmax - xmin);
     symid = ymin + margin * (ymax - ymin);
     szmid = zmin + oneMinusMargin * (zmax - zmin);
@@ -430,7 +434,7 @@ void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
   AddPrimitive(tick21.transform(transformation));
   AddPrimitive(tick22.transform(transformation));
   G4Text text(scale.GetAnnotation(),textPosition.transform(transformation));
-  text.SetScreenSize(12.);
+  text.SetScreenSize(scale.GetAnnotationSize());
   AddPrimitive(text);
 }
 
@@ -494,7 +498,7 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
   else {
     G4VisManager::Verbosity verbosity = G4VisManager::GetVerbosity();
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<
+      G4cerr <<
       "ERROR: G4VSceneHandler::RequestPrimitives"
       "\n  Polyhedron not available for " << solid.GetName () <<
       ".\n  This means it cannot be visualized on most systems."
@@ -574,6 +578,10 @@ void G4VSceneHandler::ProcessScene () {
     } else {
 
       G4RunManager* runManager = G4RunManager::GetRunManager();
+#ifdef G4MULTITHREADED
+      if(G4Threading::IsMultithreadedApplication())
+      { runManager = G4MTRunManager::GetMasterRunManager(); }
+#endif
       if (runManager) {
 	const G4Run* run = runManager->GetCurrentRun();
 	const std::vector<const G4Event*>* events =
@@ -672,6 +680,8 @@ void G4VSceneHandler::DrawEndOfRunModels()
 G4ModelingParameters* G4VSceneHandler::CreateModelingParameters ()
 {
   // Create modeling parameters from View Parameters...
+  if (!fpViewer) return NULL;
+
   const G4ViewParameters& vp = fpViewer -> GetViewParameters ();
 
   // Convert drawing styles...
@@ -789,16 +799,20 @@ void G4VSceneHandler::LoadAtts(const G4Visible& visible, G4AttHolder* holder)
     }
     // Load G4Atts from trajectory...
     const G4VTrajectory* traj = trajModel->GetCurrentTrajectory();
-    const std::map<G4String,G4AttDef>* trajDefs = traj->GetAttDefs();
-    if (trajDefs) {
-      holder->AddAtts(traj->CreateAttValues(), trajDefs);
-    }
-    G4int nPoints = traj->GetPointEntries();
-    for (G4int i = 0; i < nPoints; ++i) {
-      G4VTrajectoryPoint* trajPoint = traj->GetPoint(i);
-      const std::map<G4String,G4AttDef>* pointDefs = trajPoint->GetAttDefs();
-      if (pointDefs) {
-	holder->AddAtts(trajPoint->CreateAttValues(), pointDefs);
+    if (traj) {
+      const std::map<G4String,G4AttDef>* trajDefs = traj->GetAttDefs();
+      if (trajDefs) {
+        holder->AddAtts(traj->CreateAttValues(), trajDefs);
+      }
+      G4int nPoints = traj->GetPointEntries();
+      for (G4int i = 0; i < nPoints; ++i) {
+        G4VTrajectoryPoint* trajPoint = traj->GetPoint(i);
+        if (trajPoint) {
+          const std::map<G4String,G4AttDef>* pointDefs = trajPoint->GetAttDefs();
+          if (pointDefs) {
+            holder->AddAtts(trajPoint->CreateAttValues(), pointDefs);
+          }
+        }
       }
     }
   }
@@ -918,13 +932,12 @@ G4int G4VSceneHandler::GetNoOfSides(const G4VisAttributes* pVisAttribs)
   if (pVisAttribs) {
     if (pVisAttribs->IsForceLineSegmentsPerCircle())
       lineSegmentsPerCircle = pVisAttribs->GetForcedLineSegmentsPerCircle();
-    const G4int nSegmentsMin = 12;
-    if (lineSegmentsPerCircle < nSegmentsMin) {
-      lineSegmentsPerCircle = nSegmentsMin;
+    if (lineSegmentsPerCircle < pVisAttribs->GetMinLineSegmentsPerCircle()) {
+      lineSegmentsPerCircle = pVisAttribs->GetMinLineSegmentsPerCircle();
       G4cout <<
 	"G4VSceneHandler::GetNoOfSides: attempt to set the"
-	"\nnumber of line segements per circle < " << nSegmentsMin
-	     << "; forced to " << lineSegmentsPerCircle << G4endl;
+	"\nnumber of line segements per circle < " << lineSegmentsPerCircle
+	     << "; forced to " << pVisAttribs->GetMinLineSegmentsPerCircle() << G4endl;
     }
   }
   return lineSegmentsPerCircle;

@@ -26,21 +26,20 @@
 /// \file electromagnetic/TestEm8/TestEm8.cc
 /// \brief Main program of the electromagnetic/TestEm8 example
 //
-// $Id: TestEm8.cc 67235 2013-02-08 16:34:49Z vnivanch $
+// $Id: TestEm8.cc 85243 2014-10-27 08:22:42Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
+#include "G4MTRunManager.hh"
 #include "G4UImanager.hh"
+#include "G4UIcommand.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "RunAction.hh"
-#include "EventAction.hh"
-#include "StackingAction.hh"
+#include "ActionInitialization.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -57,19 +56,30 @@ int main(int argc,char** argv)
   //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   
-  // Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  // Number of threads can be defined via 3rd argument
+  G4int nThreads = 2;
+  if (argc==3) {
+    if(G4String(argv[2]) == "NMAX") { 
+      nThreads = G4Threading::G4GetNumberOfCores();
+    } else {
+      nThreads = G4UIcommand::ConvertToInt(argv[2]);
+    } 
+  }
+  if (nThreads > 0) { runManager->SetNumberOfThreads(nThreads); }
+  G4cout << "===== TestEm8 is started with " 
+         <<  runManager->GetNumberOfThreads() << " threads =====" << G4endl;
+#else
+  G4RunManager* runManager = new G4RunManager;
+#endif
 
   // set mandatory initialization classes
   runManager->SetUserInitialization(new PhysicsList);
-  PrimaryGeneratorAction* gun = new PrimaryGeneratorAction();
-  runManager->SetUserInitialization(new DetectorConstruction(gun));
+  runManager->SetUserInitialization(new DetectorConstruction());
  
   // set user action classes
-  runManager->SetUserAction(gun);
-  runManager->SetUserAction(new RunAction());
-  runManager->SetUserAction(new EventAction());
-  runManager->SetUserAction(new StackingAction());
+  runManager->SetUserInitialization(new ActionInitialization());
   
   G4UImanager* UI = G4UImanager::GetUIpointer();  
 

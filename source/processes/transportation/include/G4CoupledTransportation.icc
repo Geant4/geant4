@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.icc 68048 2013-03-13 14:34:07Z gcosmo $
+// $Id: G4CoupledTransportation.icc 84478 2014-10-16 08:49:24Z gcosmo $
 //
 
 // 
@@ -128,9 +128,3 @@ inline void G4CoupledTransportation::ResetKilledStatistics(G4int report)
      // Statistics for tracks killed (currently due to looping in field)
 
 
-inline G4bool G4CoupledTransportation::EnableUseMagneticMoment(G4bool useMoment)
-{
-  G4bool lastValue= fUseMagneticMoment;
-  fUseMagneticMoment= useMoment;
-  return lastValue; 
-}

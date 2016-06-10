@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -46,13 +47,13 @@
 #include "G4INCLGlobals.hh"
 #include "G4INCLRandom.hh"
 #include "G4INCLINuclearPotential.hh"
-#include "G4INCLInverseInterpolationTable.hh"
+#include "G4INCLInterpolationTable.hh"
 
 namespace G4INCL {
 
   class NuclearDensity {
   public:
-    NuclearDensity(const G4int A, const G4int Z, InverseInterpolationTable const * const rpCorrelationTableProton, InverseInterpolationTable const * const rpCorrelationTableNeutron);
+    NuclearDensity(const G4int A, const G4int Z, InterpolationTable const * const rpCorrelationTableProton, InterpolationTable const * const rpCorrelationTableNeutron);
     ~NuclearDensity();
 
     /// \brief Copy constructor
@@ -121,8 +122,8 @@ namespace G4INCL {
     /* \brief map of transmission radii per particle type */
     G4double transmissionRadius[UnknownParticle];
 
-    InverseInterpolationTable const *rFromP[UnknownParticle];
-    InverseInterpolationTable const *pFromR[UnknownParticle];
+    InterpolationTable const *rFromP[UnknownParticle];
+    InterpolationTable const *pFromR[UnknownParticle];
   };
 
 }

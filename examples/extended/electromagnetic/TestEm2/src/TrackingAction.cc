@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm2/src/TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
 //
-// $Id: TrackingAction.cc 76259 2013-11-08 11:37:28Z gcosmo $
+// $Id: TrackingAction.cc 78550 2014-01-07 09:43:41Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,7 +35,6 @@
 #include "Run.hh"
 
 #include "G4RunManager.hh"
-#include "G4TrackingManager.hh"
 #include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,14 +47,13 @@ TrackingAction::TrackingAction()
 
 void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {
-  //count total track length
-  G4double charge = aTrack->GetDefinition()->GetPDGCharge();
-  G4double TrLeng = aTrack->GetTrackLength();
+ //count total track length
+ G4double charge = aTrack->GetDefinition()->GetPDGCharge();
+ G4double TrLeng = aTrack->GetTrackLength();
   
-  Run* run 
-    = static_cast<Run*>(
-        G4RunManager::GetRunManager()->GetNonConstCurrentRun()); 
-  run->FillPerTrack(charge,TrLeng);     
+ Run* run 
+   = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+ run->FillPerTrack(charge,TrLeng);     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

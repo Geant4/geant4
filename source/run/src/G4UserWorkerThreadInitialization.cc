@@ -85,6 +85,7 @@ namespace {
 
 void G4UserWorkerThreadInitialization::SetupRNGEngine(const CLHEP::HepRandomEngine* aNewRNG) const
 {
+    G4AutoLock l(&rngCreateMutex);
     //No default available, let's create the instance of random stuff
     //A Call to this just forces the creation to defaults
     G4Random::getTheEngine();
@@ -92,7 +93,6 @@ void G4UserWorkerThreadInitialization::SetupRNGEngine(const CLHEP::HepRandomEngi
     CLHEP::HepRandomEngine* retRNG= 0;
 
     // Need to make these calls thread safe
-    G4AutoLock l(&rngCreateMutex);
     if ( dynamic_cast<const CLHEP::HepJamesRandom*>(aNewRNG) ) {
        retRNG= new CLHEP::HepJamesRandom;
     }

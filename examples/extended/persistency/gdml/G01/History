@@ -1,4 +1,4 @@
-$Id: History 77529 2013-11-25 13:11:09Z gcosmo $
+$Id: History 82923 2014-07-18 15:58:22Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,21 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 18th, 2014 Gabriele Cosmo G01-V10-00-04
+- Added multiUnion.gdml sample demonstrating import and export of a
+  Multi-Union structure.
+
+June 11th, 2014 Witek Pokorski G01-V10-00-03
+- Changes to comply with coding conventions.
+
+April 23rd, 2014 Gabriele Cosmo G01-V10-00-02, G01-V10-00-01
+- Added GDML sample mat_nist.gdml showing how to load a NIST material,
+  although format is not part of the GDML schema yet (i.e. expected
+  warning in schema validation).
+
+April 14th, 2014 Tatiana Nikitina G01-V10-00-00
+- Correction to solids.gdml for 'para' solid, where angle unit was missing.
 
 November 22nd, 2013 Tatiana Nikitina G01-V09-06-00
 - Added test case for 'genericPolycone' and 'genericPolyhedra'.

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VReadOutGeometry.cc 74048 2013-09-20 09:34:57Z gcosmo $
+// $Id: G4VReadOutGeometry.cc 81087 2014-05-20 15:44:27Z gcosmo $
 //
 
 #include "G4VReadOutGeometry.hh"
@@ -75,8 +75,9 @@ G4VReadOutGeometry::~G4VReadOutGeometry()
   if(ROnavigator)      delete ROnavigator;
 }
 
-const G4VReadOutGeometry & G4VReadOutGeometry::operator=(const G4VReadOutGeometry &right)
+G4VReadOutGeometry & G4VReadOutGeometry::operator=(const G4VReadOutGeometry &right)
 {
+  if ( this == &right ) return *this;
   delete fincludeList; fincludeList     = 0;
   delete fexcludeList; fexcludeList     = 0;
   name             = right.name;

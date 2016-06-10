@@ -1,4 +1,4 @@
-$Id: README 68999 2013-04-15 09:23:17Z gcosmo $
+$Id: README 83394 2014-08-21 14:39:09Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,11 +16,11 @@ $Id: README 68999 2013-04-15 09:23:17Z gcosmo $
     This variante of the Fano cavity test make use of an reciprocity theorem.
     
     J.Sempau and P.Andreo, Phys. Med. Biol. 51 (2006) 3533        
-	
+ 
  1- GEOMETRY
  
     The chamber is modelized as a cylinder with a cavity in it.
-     	
+    
     5 parameters define the geometry :
       - the radius of the chamber (must be big)
       - the material of the wall
@@ -31,28 +31,28 @@ $Id: README 68999 2013-04-15 09:23:17Z gcosmo $
     Wall and cavity must be made of the same material, but with different
     density.
     Radius must be bigger than range of electrons in cavity. 	 	
- 	
+
     All above parameters can be redifined via the UI commands built in 
     DetectorMessenger class.
-    
-			_________________
-     radius (infinite)	|     |   |	|
-			|     |   | 	|    
-			|     |   |	|
-			|     |   | 	|      
-	   		|     | <-+-----+--- cavity     
-	     		|     |   | 	|
-	     		|     |   | 	|
-		---------------------------- cylinder axis = e- source
-	     	  	|     |   | 	|
-	     	  	|     |   | 	|
-		  	|     |   | 	|
-		  	|wall |   |wall |
-		  	|     |   |	|			
-		  	|     |   |	|
-		  	|     |   |	|
-		  	-----------------
-			
+
+                        _________________
+     radius (infinite)  |     |   |     |
+                        |     |   |     |
+                        |     |   |     |
+                        |     |   |     |
+                        |     | <-+-----+--- cavity
+                        |     |   |     |
+                        |     |   |     |
+                 ---------------------------- cylinder axis = e- source
+                        |     |   |     |
+                        |     |   |     |
+                        |     |   |     |
+                        |wall |   |wall |
+                        |     |   |     |
+                        |     |   |     |
+                        |     |   |     |
+                        -----------------
+
  2- BEAM
   
     Monoenergetic (E0) incident electron source is uniformly distribued along
@@ -73,7 +73,7 @@ $Id: README 68999 2013-04-15 09:23:17Z gcosmo $
     
     The simplest way to study the effect of e- tracking parameters on dose 
     deposition is to use the command /testem/stepMax.
-    	 			 	
+    
  4- PHYSICS
  
     The physics list contains the standard electromagnetic processes, with few 
@@ -117,7 +117,7 @@ $Id: README 68999 2013-04-15 09:23:17Z gcosmo $
       9 : step size of e+- in wall
      10 : step size of e+- in cavity
      11 : energy deposit in cavity per track
-                
+   
    The histograms are managed by G4AnalysisManager class and its Messenger. 
    The histos can be individually activated with the command :
    /analysis/h1/set id nbBins  valMin valMax unit 
@@ -128,20 +128,20 @@ $Id: README 68999 2013-04-15 09:23:17Z gcosmo $
    
    It is possible to choose the format of the histogram file :
    root(default), xml, hbook.  See HistoManager.hh
-      
+   
    It is also possible to print selected histograms on an ascii file:
    /analysis/h1/setAscii id
    All selected histos will be written on a file name.ascii 
    (default fanocavity2) 
- 	
+ 
  6- HOW TO START ?
  
- 	- execute fanoCavity2 in 'batch' mode from macro files
- 		% $(G4INSTALL)/bin/$(G4SYSTEM)/fanoCavity2   run01.mac
- 		
- 	- execute fanoCavity2 in 'interactive mode' with visualization
- 		% $(G4INSTALL)/bin/$(G4SYSTEM)/fanoCavity2
- 		....
- 		Idle> type your commands
- 		....
- 		Idle> exit
+    - execute fanoCavity2 in 'batch' mode from macro files
+        % fanoCavity2   run01.mac
+ 
+    - execute fanoCavity2 in 'interactive mode' with visualization
+        % fanoCavity2
+        ....
+        Idle> type your commands
+        ....
+        Idle> exit

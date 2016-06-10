@@ -7,9 +7,9 @@
 
 namespace CLHEP {
 
-bool RandExpZiggurat::ziggurat_is_init=RandExpZiggurat::ziggurat_init();
-unsigned long RandExpZiggurat::kn[128], RandExpZiggurat::ke[256];
-float RandExpZiggurat::wn[128],RandExpZiggurat::fn[128],RandExpZiggurat::we[256],RandExpZiggurat::fe[256];
+CLHEP_THREAD_LOCAL unsigned long RandExpZiggurat::kn[128], RandExpZiggurat::ke[256];
+CLHEP_THREAD_LOCAL float RandExpZiggurat::wn[128],RandExpZiggurat::fn[128],RandExpZiggurat::we[256],RandExpZiggurat::fe[256];
+CLHEP_THREAD_LOCAL bool RandExpZiggurat::ziggurat_is_init = false;
 
 std::string RandExpZiggurat::name() const {return "RandExpZiggurat";}
 
@@ -21,7 +21,6 @@ RandExpZiggurat::~RandExpZiggurat() {
 
 RandExpZiggurat::RandExpZiggurat(const RandExpZiggurat& right) : HepRandom(right),defaultMean(right.defaultMean)
 {
-  if(!ziggurat_is_init) ziggurat_init();
 }
 
 double RandExpZiggurat::operator()()
@@ -110,6 +109,8 @@ std::istream & RandExpZiggurat::get ( std::istream & is ) {
 
 float RandExpZiggurat::ziggurat_efix(unsigned long jz,HepRandomEngine* anEngine)
 { 
+  if(!ziggurat_is_init) ziggurat_init();
+
   unsigned long iz=jz&255;
   
   float x;

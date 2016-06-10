@@ -41,9 +41,11 @@
 // 20130621  Replace collide() interface with deExcite() using G4Fragment ref
 // 20130622  Inherit from G4CascadeDeexciteBase, add verbosity interface
 //		to pass to PreCompound
+// 20140508  Per V. Ivanchenko, attempt to use common instance of PreCompound.
 
 #include "G4PreCompoundDeexcitation.hh"
-#include "globals.hh"
+#include "G4HadronicInteraction.hh"
+#include "G4HadronicInteractionRegistry.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclParticle.hh"
@@ -58,8 +60,18 @@ using namespace G4InuclParticleNames;
 
 G4PreCompoundDeexcitation::G4PreCompoundDeexcitation() 
   : G4CascadeDeexciteBase("G4PreCompoundDeexcitation"),
-    theExcitationHandler(new G4ExcitationHandler),
-    theDeExcitation(new G4PreCompoundModel(theExcitationHandler)) {}
+    theExcitationHandler(0), theDeExcitation(0) {
+  // Access common instance of PreCompound instead of creating new one
+  G4HadronicInteraction* p =
+    G4HadronicInteractionRegistry::Instance()->FindModel("PRECO");
+
+  // If not found, or cast fails, create a local instance
+  theDeExcitation = static_cast<G4PreCompoundModel*>(p);
+  if (!theDeExcitation) {
+    theExcitationHandler = new G4ExcitationHandler;
+    theDeExcitation = new G4PreCompoundModel(theExcitationHandler);
+  }
+}
 
 G4PreCompoundDeexcitation::~G4PreCompoundDeexcitation() {
   // Per V.I. -- do not delete locally; handled in hadronic registry

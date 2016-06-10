@@ -26,7 +26,7 @@
 /// \file RE06/src/RE06ParallelWorld.cc
 /// \brief Implementation of the RE06ParallelWorld class
 //
-// $Id: RE06ParallelWorld.cc 75123 2013-10-28 09:53:28Z gcosmo $
+// $Id: RE06ParallelWorld.cc 83381 2014-08-21 14:18:13Z gcosmo $
 // 
 
 #include "RE06ParallelWorld.hh"
@@ -50,6 +50,8 @@
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4ThreadLocal G4bool RE06ParallelWorld::fSDConstructed = false;
 
 RE06ParallelWorld::RE06ParallelWorld(G4String worldName)
 :G4VUserParallelWorld(worldName),
@@ -83,7 +85,6 @@ void RE06ParallelWorld::Construct()
   { 
     fConstructed = true;
     SetupGeometry();
-    //SetupDetectors();
   }
 }
 
@@ -91,7 +92,11 @@ void RE06ParallelWorld::Construct()
 
 void RE06ParallelWorld::ConstructSD()
 {
+  if(!fSDConstructed)
+  {
+    fSDConstructed = true;
     SetupDetectors();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

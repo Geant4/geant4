@@ -2,7 +2,7 @@
 // See the file tools.license for terms.
 
 #ifndef tools_histo_c1d
-#define tools_histo_cld
+#define tools_histo_c1d
 
 #include "base_cloud"
 

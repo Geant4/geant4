@@ -65,14 +65,12 @@
 #include "globals.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
-#include "G4RunManager.hh"
-#include "XrayTelRunAction.hh"
+#include "G4Threading.hh"
+
 #include "XrayTelAnalysis.hh"
 
-#include "Randomize.hh"
-
-XrayTelSteppingAction::XrayTelSteppingAction()
-{ }
+XrayTelSteppingAction::XrayTelSteppingAction() 
+{;}
 
 
 XrayTelSteppingAction::~XrayTelSteppingAction()
@@ -89,20 +87,17 @@ void XrayTelSteppingAction::UserSteppingAction(const G4Step* step)
   G4String nextVolName;
   if (track->GetNextVolume()) nextVolName =  track->GetNextVolume()->GetName();
 
+  XrayTelAnalysis* analysis = XrayTelAnalysis::getInstance();
+ 
   // Entering Detector
   if (volName != "Detector_P" && nextVolName == "Detector_P") 
     {
       entering = true;
-
-      G4RunManager* runManager = G4RunManager::GetRunManager();
-
-      // Notify the corresponding UserAction to update the run counters
-      XrayTelRunAction* runAction = (XrayTelRunAction*) runManager->GetUserRunAction();
-      runAction->Update(track->GetKineticEnergy());
+      analysis->Update(track->GetKineticEnergy(),G4Threading::G4GetThreadId());
     }
 
   // Do the analysis related to this step
-  XrayTelAnalysis* analysis = XrayTelAnalysis::getInstance();
+ 
   analysis->analyseStepping(*track,entering);
 
 }

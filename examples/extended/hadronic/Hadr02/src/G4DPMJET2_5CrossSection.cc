@@ -36,7 +36,7 @@
 /// \file hadronic/Hadr02/src/G4DPMJET2_5CrossSection.cc
 /// \brief Implementation of the G4DPMJET2_5CrossSection class
 //
-// $Id: G4DPMJET2_5CrossSection.cc 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: G4DPMJET2_5CrossSection.cc 81932 2014-06-06 15:39:45Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -116,16 +116,16 @@ G4DPMJET2_5CrossSection::~G4DPMJET2_5CrossSection ()
 //
 G4bool 
 G4DPMJET2_5CrossSection::IsIsoApplicable(const G4DynamicParticle* theProjectile, 
-					 G4int, G4int AT,
-					 const G4Element*, const G4Material*)
+                                         G4int, G4int AT,
+                                         const G4Element*, const G4Material*)
 {
   G4bool result = false;
   G4int AP = theProjectile->GetDefinition()->GetBaryonNumber();
   if(AP >= 1) {
     G4double EPN = theProjectile->GetKineticEnergy()/G4double(AP);
     result = (EPN >= lowerLimit && EPN <= upperLimit &&
-	      AT  >= ATmin      && AT  <= ATmax &&
-	      AP  >= APmin      && AP  <= APmax);
+              AT  >= ATmin      && AT  <= ATmax &&
+              AP  >= APmin      && AP  <= APmax);
   }
   return result;
 }
@@ -259,26 +259,26 @@ void G4DPMJET2_5CrossSection::Initialise ()
     G4ElementTable::const_iterator it;
     for (it=theElementTable->begin(); it!=theElementTable->end(); it++)
       {
-	G4int nIso = (*it)->GetNumberOfIsotopes();
-	G4IsotopeVector* isoVector = (*it)->GetIsotopeVector();
-	for (G4int i = 0; i < nIso; i++)
-	  {
-	    G4int AA = (*isoVector)[i]->GetN();
-	    if (theCrossSectionIndex.count(AA) == 0 && 
-		AA >= ATmin && AA <= ATmax)
-	      {
+        G4int nIso = (*it)->GetNumberOfIsotopes();
+        G4IsotopeVector* isoVector = (*it)->GetIsotopeVector();
+        for (G4int i = 0; i < nIso; i++)
+          {
+            G4int AA = (*isoVector)[i]->GetN();
+            if (theCrossSectionIndex.count(AA) == 0 && 
+                AA >= ATmin && AA <= ATmax)
+              {
 //
 //
 // Whilst the use of std::map should eliminate duplication of keys, we need to
 // know whether isotope's with the same nucleon number have been declared before
 // creating the large arrays, hence the use of the "count" member function.
 //
-		G4DPMJET2_5CrossSectionParamSet *a =
-		  new G4DPMJET2_5CrossSectionParamSet[maxA];
-		theCrossSectionIndex.insert(
+                G4DPMJET2_5CrossSectionParamSet *a =
+                  new G4DPMJET2_5CrossSectionParamSet[maxA];
+                theCrossSectionIndex.insert(
                   G4DPMJET2_5CrossSectionIndex::value_type(AA,a));
-	      }
-	  }
+              }
+          }
       }
     
     //
@@ -291,21 +291,21 @@ void G4DPMJET2_5CrossSection::Initialise ()
     G4String inputLine;
     while (-glauberXSFile.getline(inputChars, 80).eof() != EOF)
       {
-	inputLine = inputChars;
-	if (inputLine.length() != 0)
-	  {
-	    std::istringstream tmpStream(inputLine);
-	    G4int AP, AT;
-	    G4double cc0, cc1, cc2;
-	    tmpStream >>AP >>AT >>cc0 >>cc1 >>cc2;
-	    G4DPMJET2_5CrossSectionIndex::iterator IT = 
-	      theCrossSectionIndex.find(AT);
-	    if (IT != theCrossSectionIndex.end())
-	      {
-		G4DPMJET2_5CrossSectionParamSet *ptr = (IT->second) + AP;
-		*ptr = G4DPMJET2_5CrossSectionParamSet(cc0,cc1,cc2);
-	      }
-	  }
+        inputLine = inputChars;
+        if (inputLine.length() != 0)
+          {
+            std::istringstream tmpStream(inputLine);
+            G4int AP, AT;
+            G4double cc0, cc1, cc2;
+            tmpStream >>AP >>AT >>cc0 >>cc1 >>cc2;
+            G4DPMJET2_5CrossSectionIndex::iterator IT = 
+              theCrossSectionIndex.find(AT);
+            if (IT != theCrossSectionIndex.end())
+              {
+                G4DPMJET2_5CrossSectionParamSet *ptr = (IT->second) + AP;
+                *ptr = G4DPMJET2_5CrossSectionParamSet(cc0,cc1,cc2);
+              }
+          }
       }
 
     glauberXSFile.close();

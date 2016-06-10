@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc 76263 2013-11-08 11:41:52Z gcosmo $
+// $Id: G4Tubs.cc 83572 2014-09-01 15:23:27Z gcosmo $
 //
 // 
 // class G4Tubs
@@ -74,7 +74,6 @@
 #include "meshdefs.hh"
 
 #include "G4VGraphicsScene.hh"
-#include "G4Polyhedron.hh"
 
 using namespace CLHEP;
 
@@ -129,7 +128,6 @@ G4Tubs::G4Tubs( __void__& a )
     sinSPhi(0.), cosSPhi(0.), sinEPhi(0.), cosEPhi(0.),
     fPhiFullTube(false), halfCarTolerance(0.), halfRadTolerance(0.),
     halfAngTolerance(0.)
-
 {
 }
 

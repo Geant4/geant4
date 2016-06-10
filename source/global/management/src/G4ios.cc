@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ios.cc 70021 2013-05-22 07:55:29Z gcosmo $
+// $Id: G4ios.cc 78780 2014-01-23 13:55:15Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -57,10 +57,22 @@
 
   void G4iosFinalization()
   {
-    delete G4cout_p;
-    delete G4cerr_p; 
-    delete G4coutbuf_p;
-    delete G4cerrbuf_p;
+      delete G4cout_p; G4cout_p = 0;
+      delete G4cerr_p;  G4cerr_p = 0;
+      delete G4coutbuf_p; G4coutbuf_p = 0;
+      delete G4cerrbuf_p; G4cerrbuf_p = 0;
+  }
+
+  // These two functions are guaranteed to be called at load and
+  // unload of the library containing this code.
+  namespace
+  {
+#ifndef WIN32
+    void setupG4ioSystem(void) __attribute__ ((constructor));
+    void cleanupG4ioSystem(void) __attribute__((destructor));
+#endif
+    void setupG4ioSystem(void) { G4iosInitialization(); }
+    void cleanupG4ioSystem(void) { G4iosFinalization(); }
   }
 
 #else  // Sequential

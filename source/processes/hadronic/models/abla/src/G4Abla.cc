@@ -3552,16 +3552,16 @@ G4double G4Abla::haz(G4int k)
     // longer exactly the same!
     x = G4AblaRandom::flat();
     for(G4int iRandom = 0; iRandom < pSize; iRandom++) {
+      int nTries = 0;
       do { // The CERNLIB random number generator in the fortran code
-	   // returns random numbers between the open interval (0,1).
-	int nTries = 0;
-	p[iRandom] = G4AblaRandom::flat();
-	nTries++;
-	if(nTries > 100) break;
+        // returns random numbers between the open interval (0,1).
+        p[iRandom] = G4AblaRandom::flat();
+        nTries++;
+        if(nTries > 100) break;
       } while(p[iRandom] <= 0.0 || p[iRandom] >= 1.0);
     }
+    int nTries = 0;
     do { // The CERNLIB random number generator in the fortran code
-      int nTries = 0;
       // returns random numbers between the open interval (0,1).
       a = G4AblaRandom::flat();
       nTries++;
@@ -3573,8 +3573,8 @@ G4double G4Abla::haz(G4int k)
 
   i = nint(100*a)+1;
   fhaz = p[i];
+  int nTries = 0;
   do { // The CERNLIB random number generator in the fortran code
-    int nTries = 0;
     // returns random numbers between the open interval (0,1).
     a = G4AblaRandom::flat();
     nTries++;

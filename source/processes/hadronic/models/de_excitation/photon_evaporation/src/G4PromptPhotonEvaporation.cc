@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PromptPhotonEvaporation.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4PromptPhotonEvaporation.cc 85841 2014-11-05 15:35:06Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -153,28 +153,31 @@ G4PromptPhotonEvaporation::EmittedFragment(G4Fragment* theNucleus)
   return gamma;
 }
 
+G4bool 
+G4PromptPhotonEvaporation::BreakUpChain(G4FragmentVector*, 
+					G4Fragment*)
+{
+  return false;
+}
+
 G4FragmentVector* 
 G4PromptPhotonEvaporation::BreakUpFragment(G4Fragment* theNucleus)
 {
   //G4cout << "G4PromptPhotonEvaporation::BreakUpFragment" << G4endl;
-  G4FragmentVector* v = new G4FragmentVector();
-  G4Fragment* gamma = 0;
-  do {
-    gamma = EmittedFragment(theNucleus);
-    if(gamma) { v->push_back(gamma); }
-  } while(gamma);
-
-  return v;
+  G4FragmentVector* products = new G4FragmentVector();
+  BreakUpChain(products, theNucleus);
+  return products;
 }
 
 G4FragmentVector* 
 G4PromptPhotonEvaporation::BreakUp(const G4Fragment& theNucleus)
 {
   //G4cout << "G4PromptPhotonEvaporation::BreakUp" << G4endl;
-  G4Fragment* initialState = new G4Fragment(theNucleus);
-  G4FragmentVector* v = BreakUpFragment(initialState);
-  v->push_back(initialState);
-  return v;
+  G4Fragment* aNucleus = new G4Fragment(theNucleus);
+  G4FragmentVector* products = new G4FragmentVector();
+  BreakUpChain(products, aNucleus);
+  products->push_back(aNucleus);
+  return products;
 }
 
 

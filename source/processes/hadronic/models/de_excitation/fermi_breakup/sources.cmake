@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
+# $Id: sources.cmake 86237 2014-11-07 17:24:50Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -48,7 +48,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_fermi_breakup
         G4Be8FermiFragment.hh
         G4FermiBreakUp.hh
         G4FermiConfiguration.hh
-        G4FermiConfigurationList.hh
         G4FermiFragmentsPool.hh
         G4FermiPhaseSpaceDecay.hh
         G4He5FermiFragment.hh
@@ -62,7 +61,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_fermi_breakup
         G4Be8FermiFragment.cc
         G4FermiBreakUp.cc
         G4FermiConfiguration.cc
-        G4FermiConfigurationList.cc
         G4FermiFragmentsPool.cc
         G4FermiPhaseSpaceDecay.cc
         G4He5FermiFragment.cc

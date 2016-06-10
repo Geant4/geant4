@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorPropagator.cc 69836 2013-05-16 08:13:10Z gcosmo $
+// $Id: G4ErrorPropagator.cc 78318 2013-12-11 15:02:40Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -83,9 +83,11 @@ G4int G4ErrorPropagator::Propagate( G4ErrorTrajState* currentTS,
   //
   if( currentTS->GetMomentum().mag() < 1.E-9*MeV )
   {
-    G4cerr << "ERROR - G4ErrorPropagator::Propagate()" << G4endl
-           << "        Energy too low to be propagated: "
-           << G4BestUnit(currentTS->GetMomentum().mag(),"Energy") << G4endl;
+    std::ostringstream message;
+    message << "Energy too low to be propagated: "
+            << G4BestUnit(currentTS->GetMomentum().mag(),"Energy");
+    G4Exception("G4ErrorPropagator::Propagate()", "GEANT4e-Notification",
+                JustWarning, message);
     return -3; 
   }
 
@@ -142,9 +144,10 @@ G4int G4ErrorPropagator::Propagate( G4ErrorTrajState* currentTS,
     *currentTS = *currentTS_FREE;
     if(verbose >= 0 )
     {
-       G4cerr << "ERROR - G4ErrorPropagator::Propagate()" << G4endl
-              << "        Particle does not reach target: " << *currentTS
-              << G4endl;
+      std::ostringstream message;
+      message << "Particle does not reach target: " << *currentTS;
+      G4Exception("G4ErrorPropagator::Propagate()", "GEANT4e-Notification",
+                  JustWarning, message);
     }
   }
   else
@@ -200,9 +203,11 @@ G4int G4ErrorPropagator::PropagateOneStep( G4ErrorTrajState* currentTS )
   //
   if( currentTS->GetMomentum().mag() < 1.E-9*MeV )
   {
-    G4cerr << "ERROR - G4ErrorPropagator::PropagateOneStep()" << G4endl
-           << "        Energy too low to be propagated: "
-           << G4BestUnit(currentTS->GetMomentum().mag(),"Energy") << G4endl;
+    std::ostringstream message;
+    message << "Energy too low to be propagated: "
+            << G4BestUnit(currentTS->GetMomentum().mag(),"Energy");
+    G4Exception("G4ErrorPropagator::PropagateOneStep()",
+                "GEANT4e-Notification", JustWarning, message);
     return -3;   
   }
 
@@ -260,8 +265,8 @@ G4Track* G4ErrorPropagator::InitG4Track( G4ErrorTrajState& initialTS )
   {
     std::ostringstream message;
     message << "Particle type not defined: " << partType;
-    G4Exception( "G4ErrorPropagator::InitG4Track()", "InvalidSetup",
-                 FatalException, message );
+    G4Exception("G4ErrorPropagator::InitG4Track()", "InvalidSetup",
+                FatalException, message);
   }
  
   G4DynamicParticle* DP = 
@@ -432,9 +437,11 @@ G4int G4ErrorPropagator::MakeOneStep( G4ErrorFreeTrajState* currentTS_FREE )
    
   if(ierr != 0 )
   {
-    G4cerr << "ERROR - G4ErrorPropagator:MakeOneStep()" << G4endl
-           << "        Error returned: " << ierr << G4endl
-           << "        Geant4 tracking will be stopped !" << G4endl;
+    std::ostringstream message;
+    message << "Error returned: " << ierr;
+    G4Exception("G4ErrorPropagator::MakeOneStep()",
+                "GEANT4e-Notification", JustWarning, message,
+                "Geant4 tracking will be stopped !");
   }
 
   return ierr; 
@@ -564,9 +571,11 @@ G4bool G4ErrorPropagator::CheckIfLastStep( G4Track* aTrack )
     {
       if( verbose >= 1 )
       {
-        G4cerr << "ERROR - G4ErrorPropagator::CheckIfLastStep()" << G4endl
-               << "        Track extrapolated until end of World" << G4endl
-               << "        without finding the defined target " << G4endl;
+        std::ostringstream message;
+        message << "Track extrapolated until end of World" << G4endl
+                << "without finding the defined target.";
+        G4Exception("G4ErrorPropagator::CheckIfLastStep()",
+                    "GEANT4e-Notification", JustWarning, message);
       }
     }
   }  //----- not last step from G4e, but track is stopped (energy exhausted)
@@ -584,9 +593,11 @@ G4bool G4ErrorPropagator::CheckIfLastStep( G4Track* aTrack )
     {
       if( verbose >= 1 )
       {
-        G4cerr << "ERROR - G4ErrorPropagator::CheckIfLastStep()" << G4endl
-             << "        Track extrapolated until energy is exhausted" << G4endl
-             << "        without finding the defined target !" << G4endl;
+        std::ostringstream message;
+        message << "Track extrapolated until energy is exhausted" << G4endl
+                << "without finding the defined target.";
+        G4Exception("G4ErrorPropagator::CheckIfLastStep()",
+                    "GEANT4e-Notification", JustWarning, message);
       }
       lastG4eStep = 1;
     }

@@ -82,9 +82,9 @@ G4double G4XAqmTotal::CrossSection(const G4KineticTrack& trk1, const G4KineticTr
   G4double sigma = 0.;
 
   // Get strangeness content
-  G4ParticleDefinition* def1 = trk1.GetDefinition();
+  const G4ParticleDefinition* def1 = trk1.GetDefinition();
   G4int sTrk1 = def1->GetQuarkContent(3) + def1->GetAntiQuarkContent(3);
-  G4ParticleDefinition* def2 = trk2.GetDefinition();
+  const G4ParticleDefinition* def2 = trk2.GetDefinition();
   G4int sTrk2 = def2->GetQuarkContent(3) + def2->GetAntiQuarkContent(3);
   
   // Get non-strange quark content

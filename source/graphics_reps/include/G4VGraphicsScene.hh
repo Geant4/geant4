@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsScene.hh 75130 2013-10-28 10:05:45Z gcosmo $
+// $Id: G4VGraphicsScene.hh 78955 2014-02-05 09:45:46Z gcosmo $
 // John Allison  19th July 1996
 //
 // Class Description:
@@ -83,7 +83,7 @@ public: // With description
   // Visualization Category.
 
   virtual void PreAddSolid (const G4Transform3D& objectTransformation,
-			    const G4VisAttributes& visAttribs) = 0;
+                            const G4VisAttributes& visAttribs) = 0;
   // objectTransformation is the transformation in the world
   // coordinate system of the object about to be added, and
   // visAttribs is its visualization attributes.

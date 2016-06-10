@@ -23,12 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- //
- // G4 Low energy model: n-n or p-p scattering
- // F.W. Jones, L.G. Greeniaus, H.P. Wellisch
- //  
- // For further comments see G4LEppData.hh and G4LEpp.cc
- //
+//
+// G4 Low energy model: n-n or p-p scattering
+// F.W. Jones, L.G. Greeniaus, H.P. Wellisch
+//  
+// For further comments see G4LEppData.hh and G4LEpp.cc
+//
+// 30.01.14 V. Grichine add SampleInvariantT and inherit 
+//             from G4HadronElastic
 
 #ifndef G4LEpp_h
 #define G4LEpp_h 1
@@ -44,43 +46,36 @@
 #include "G4Gamma.hh"
 #include "G4Step.hh"
 #include "G4TrackStatus.hh"
-#include "G4HadronicInteraction.hh"
+#include "G4HadronElastic.hh"
 
-
-class G4LEpp : public G4HadronicInteraction
+class G4LEpp : public G4HadronElastic
 {
 private:
 
-  enum { NENERGY=40, NENERGYC=22, NANGLE=180 };
+  enum { NENERGY=40, NANGLE=180 };
 
 public:
 
   G4LEpp();
 
-  ~G4LEpp();
+  virtual ~G4LEpp();
  
   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
-				 G4Nucleus& targetNucleus);
+  				 G4Nucleus& targetNucleus);
 
-  void SetCoulombEffects(G4int State);
+  G4double SampleInvariantT(const G4ParticleDefinition* p, 
+			    G4double plab, G4int Z, G4int A);
   
 private:
-
-  const G4float * sig[NANGLE];
-  const G4float * elab;
 
   // The following arrays are declared static to allow the use of initializers.
   // They are initialized in G4LEppData.hh
 
   // Coulomb effects suppressed:
   static const G4float Sig[NENERGY][NANGLE];
-  static const G4float Pcm[NENERGY], Elab[NENERGY], 
-    dSigmax[NENERGY], Sigtot[NENERGY];
-
-  // Coulomb effects not suppressed:
-  static const G4float SigCoul[NENERGYC][NANGLE];
-  static const G4float PcmCoul[NENERGYC], ElabCoul[NENERGYC], 
-    dSigmaxCoul[NENERGYC], SigtotCoul[NENERGYC];
+  static const G4float elab[NENERGY]; 
+  static const G4float dSigmax[NENERGY];
+  static const G4float Sigtot[NENERGY];
 
 };
 

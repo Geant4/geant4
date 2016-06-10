@@ -32,18 +32,27 @@
 #include "ElectronActionInitialization.hh"
 #include "ElectronRunAction.hh"
 #include "ElectronPrimaryGeneratorAction.hh"
-#include "ElectronEventAction.hh"
+#include "G4GeneralParticleSource.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ElectronActionInitialization::ElectronActionInitialization(const G4String& outputFile)
+ElectronActionInitialization::ElectronActionInitialization(const G4String& 
+                                                           outputFile)
  : G4VUserActionInitialization(), fOutputFileSpec(outputFile)
-{}
+{
+    //AND->3June2014, temporary to take into account new GPS
+    //Create an instance of GPS in master so shared resources and messenger
+    //exist in master.
+    masterGPS = new G4GeneralParticleSource();
+    //AND<-3June2014
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ElectronActionInitialization::~ElectronActionInitialization()
-{}
+{
+  delete masterGPS;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,7 +68,6 @@ void ElectronActionInitialization::Build() const
 {
   SetUserAction(new ElectronRunAction(fOutputFileSpec));
   SetUserAction(new ElectronPrimaryGeneratorAction);
-  SetUserAction(new ElectronEventAction);
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.hh 67989 2013-03-13 10:54:03Z gcosmo $
+// $Id: G4HadronicProcessStore.hh 86515 2014-11-13 09:11:45Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -57,6 +57,7 @@
 #include "G4HadronicInteraction.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4HadronicProcessType.hh"
+#include "G4ThreadLocalSingleton.hh"
 #include <map>
 #include <vector>
 #include <iostream>
@@ -67,6 +68,8 @@ class G4HadronicEPTestMessenger;
 
 class G4HadronicProcessStore
 {
+
+friend class G4ThreadLocalSingleton<G4HadronicProcessStore>;
 
 public:
 
@@ -211,8 +214,6 @@ private:
   // print process info
   void Print(G4int idxProcess, G4int idxParticle);
 
-  static G4ThreadLocal G4HadronicProcessStore* theInstance;
-
   typedef const G4ParticleDefinition* PD;
   typedef G4HadronicProcess* HP;
   typedef G4HadronicInteraction* HI;
@@ -240,9 +241,10 @@ private:
   G4int  verbose;
   G4bool buildTableStart;
 
-  // cash
+  // cache
   HP   currentProcess;
   PD   currentParticle;
+  PD   theGenericIon;
 
   G4DynamicParticle localDP;
 

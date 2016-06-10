@@ -24,31 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4LineSection.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4LineSection.cc 85845 2014-11-05 15:43:58Z gcosmo $
 //
 // --------------------------------------------------------------------
 
 #include "G4LineSection.hh" 
-
-G4LineSection::G4LineSection( const G4ThreeVector& PntA, 
-			      const G4ThreeVector& PntB )
-  : EndpointA(PntA), 
-    VecAtoB(PntB-PntA)
-{ 
-  fABdistanceSq = VecAtoB.mag2() ;  
-  /*
-  G4double distABsquared = VecAtoB.mag2() ;  
-  if ( distABsquared == 0.0)
-  {
-    G4Exception("G4LineSection::G4LineSection()", "GeomField0002",
-                FatalException, "Equal points in input (line->point) ?") ;
-  }
-  else
-  {
-    inverse_square_distAB=1.0 / distABsquared ;
-  }
-  */
-}
 
 G4double G4LineSection::Dist( G4ThreeVector OtherPnt ) const
 {
@@ -96,13 +76,4 @@ G4double G4LineSection::Dist( G4ThreeVector OtherPnt ) const
   if( dist_sq < 0.0 ) dist_sq = 0.0 ;
 
   return std::sqrt(dist_sq) ;  
-}
-
-G4double G4LineSection::Distline( const G4ThreeVector& OtherPnt, 
-				  const G4ThreeVector& LinePntA, 
-				  const G4ThreeVector& LinePntB )
-{
-  G4LineSection LineAB( LinePntA, LinePntB );  // Line from A to B
-
-  return LineAB.Dist( OtherPnt );
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4OpenGLViewerMessenger.hh 82764 2014-07-08 14:24:04Z gcosmo $
 
 #ifndef G4OPENGLVIEWERMESSENGER_HH
 #define G4OPENGLVIEWERMESSENGER_HH
@@ -54,6 +54,8 @@ private:
   G4UIcmdWithoutParameter* fpCommandPrintEPS;
   G4UIcommand* fpCommandPrintSize;
   G4UIcommand* fpCommandPrintFilename;
+  G4UIcommand* fpCommandExport;
+  G4UIcommand* fpCommandExportFormat;
   G4UIdirectory* fpDirectorySet;
   G4UIcommand* fpCommandDisplayHeadTime;
   G4UIcmdWithAnInteger* fpCommandDisplayListLimit;

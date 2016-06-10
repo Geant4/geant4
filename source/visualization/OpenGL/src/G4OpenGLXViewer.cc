@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc 66870 2013-01-14 23:38:59Z adotti $
+// $Id: G4OpenGLXViewer.cc 83403 2014-08-21 15:07:30Z gcosmo $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -98,7 +98,22 @@ void G4OpenGLXViewer::SetView () {
            << G4endl;
     GLint error = GL_NO_ERROR;
     while ((error = glGetError()) != GL_NO_ERROR) {
-      G4cout << "GL Error: " << gluErrorString(error) << G4endl;
+      switch (error) {
+      case GL_INVALID_ENUM :
+	G4cout << "GL Error: GL_INVALID_ENUM" << G4endl;break;
+      case GL_INVALID_VALUE :
+	G4cout << "GL Error: GL_INVALID_VALUE" << G4endl;break;
+      case GL_INVALID_OPERATION :
+	G4cout << "GL Error: GL_INVALID_OPERATION" << G4endl;break;
+      case GL_OUT_OF_MEMORY :
+	G4cout << "GL Error: GL_OUT_OF_MEMORY" << G4endl;break;
+      case GL_STACK_UNDERFLOW :
+	G4cout << "GL Error: GL_STACK_UNDERFLOW" << G4endl;break;
+      case GL_STACK_OVERFLOW :
+	G4cout << "GL Error: GL_STACK_OVERFLOW" << G4endl;break;
+      default :
+	G4cout << "GL Error: " << error << G4endl;break;
+      }
     }
     return;
   }
@@ -118,7 +133,7 @@ void G4OpenGLXViewer::ShowView () {
       if (XPending(dpy)) {
 	XNextEvent(dpy, &event);
 	if (event.type == ButtonPress && event.xbutton.button == 1) {
-	  Pick(event.xbutton.x, event.xbutton.y);
+	  G4cout << Pick(event.xbutton.x, event.xbutton.y) << G4endl;
 	}
 	else if (event.type == ButtonPress && event.xbutton.button == 2) break;
       }
@@ -297,7 +312,22 @@ void G4OpenGLXViewer::CreateMainWindow () {
 	 << G4endl;
     GLint error = GL_NO_ERROR;
     while ((error = glGetError()) != GL_NO_ERROR) {
-      G4cout << "GL Error: " << gluErrorString(error) << G4endl;
+      switch (error) {
+      case GL_INVALID_ENUM :
+	G4cout << "GL Error: GL_INVALID_ENUM" << G4endl;break;
+      case GL_INVALID_VALUE :
+	G4cout << "GL Error: GL_INVALID_VALUE" << G4endl;break;
+      case GL_INVALID_OPERATION :
+	G4cout << "GL Error: GL_INVALID_OPERATION" << G4endl;break;
+      case GL_OUT_OF_MEMORY :
+	G4cout << "GL Error: GL_OUT_OF_MEMORY" << G4endl;break;
+      case GL_STACK_UNDERFLOW :
+	G4cout << "GL Error: GL_STACK_UNDERFLOW" << G4endl;break;
+      case GL_STACK_OVERFLOW :
+	G4cout << "GL Error: GL_STACK_OVERFLOW" << G4endl;break;
+      default :
+	G4cout << "GL Error: " << error << G4endl;break;
+      }
     }
     return;
   }

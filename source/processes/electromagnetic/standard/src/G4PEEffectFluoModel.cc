@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PEEffectFluoModel.cc 73607 2013-09-02 10:04:03Z gcosmo $
+// $Id: G4PEEffectFluoModel.cc 86748 2014-11-17 15:02:10Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -91,6 +91,14 @@ void G4PEEffectFluoModel::Initialise(const G4ParticleDefinition*,
 {
   fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
   if(!fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
+  size_t nmat = G4Material::GetNumberOfMaterials();
+  fMatEnergyTh.resize(nmat, 0.0);
+  for(size_t i=0; i<nmat; ++i) { 
+    fMatEnergyTh[i] = (*(G4Material::GetMaterialTable()))[i]
+      ->GetSandiaTable()->GetSandiaCofForMaterial(0, 0);
+    //G4cout << "G4PEEffectFluoModel::Initialise Eth(eV)= " 
+    //	   << fMatEnergyTh[i]/eV << G4endl; 
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -103,7 +111,6 @@ G4PEEffectFluoModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 {
   // This method may be used only if G4MaterialCutsCouple pointer
   //   has been set properly
-
   CurrentCouple()->GetMaterial()
     ->GetSandiaTable()->GetSandiaCofPerAtom((G4int)Z, energy, fSandiaCof);
 
@@ -123,6 +130,9 @@ G4PEEffectFluoModel::CrossSectionPerVolume(const G4Material* material,
 					   G4double energy,
 					   G4double, G4double)
 {
+  // This method may be used only if G4MaterialCutsCouple pointer
+  //   has been set properly
+  energy = std::max(energy, fMatEnergyTh[material->GetIndex()]);
   const G4double* SandiaCof = 
     material->GetSandiaTable()->GetSandiaCofForMaterial(energy);
 				

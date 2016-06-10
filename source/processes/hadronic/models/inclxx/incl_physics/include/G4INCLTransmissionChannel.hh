@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -37,6 +38,7 @@
 #include "G4INCLParticle.hh"
 #include "G4INCLIChannel.hh"
 #include "G4INCLNucleus.hh"
+#include "G4INCLAllocationPool.hh"
 
 #ifndef TransmissionChannel_hh
 #define TransmissionChannel_hh 1
@@ -50,7 +52,7 @@ namespace G4INCL {
     TransmissionChannel(Nucleus *n, Particle *p, const G4double kOut, const G4double cosR);
     virtual ~TransmissionChannel();
 
-    FinalState* getFinalState();
+    void fillFinalState(FinalState *fs);
 
   private:
     /** \brief Modify particle that leaves the nucleus.
@@ -82,6 +84,8 @@ namespace G4INCL {
 
     /// \brief Cosine of the refraction angle
     const G4double cosRefractionAngle;
+
+    INCL_DECLARE_ALLOCATION_POOL(TransmissionChannel);
   };
 }
 #endif // TransmissionChannel_hh

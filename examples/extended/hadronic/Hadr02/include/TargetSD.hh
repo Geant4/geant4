@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/include/TargetSD.hh
 /// \brief Definition of the TargetSD class
 //
-// $Id: TargetSD.hh 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: TargetSD.hh 81932 2014-06-06 15:39:45Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -63,8 +63,6 @@ public: // Without description
   virtual void Initialize(G4HCofThisEvent*);
   virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
   virtual void EndOfEvent(G4HCofThisEvent*);
-  virtual void clear();
-  virtual void PrintAll();
 
 private:
 

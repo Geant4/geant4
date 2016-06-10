@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedGammaConversion.cc 68046 2013-03-13 14:31:38Z gcosmo $
+// $Id: G4PolarizedGammaConversion.cc 85018 2014-10-23 09:51:37Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -45,6 +45,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4PolarizedGammaConversionModel.hh"
 #include "G4Electron.hh"
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -52,10 +53,12 @@ G4PolarizedGammaConversion::G4PolarizedGammaConversion(const G4String& processNa
   G4ProcessType type):G4VEmProcess (processName, type),
     isInitialised(false)
 {
-  SetLambdaBinning(100);
   SetMinKinEnergy(2.0*electron_mass_c2);
-  SetMaxKinEnergy(100.0*GeV);
+  SetLambdaBinning(220);
+  //SetMaxKinEnergy(100.0*GeV);
   SetProcessSubType(fGammaConversion);
+  SetBuildTableFlag(true);
+  SetSecondaryParticle(G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,28 +72,19 @@ void G4PolarizedGammaConversion::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    //    SetVerboseLevel(1);
-    SetBuildTableFlag(true);
-    SetSecondaryParticle(G4Electron::Electron());
-    G4double emin = std::max(MinKinEnergy(), 2.0*electron_mass_c2);
-    SetMinKinEnergy(emin);
-    G4double emax = MaxKinEnergy();
-    //    G4VEmModel* model = new G4BetheHeitlerModel();
-    G4VEmModel* model = new G4PolarizedGammaConversionModel();
-    model->SetLowEnergyLimit(emin);
-    model->SetHighEnergyLimit(emax);
-    AddEmModel(1, model);
+    G4EmParameters* param = G4EmParameters::Instance();
+    G4double emin = std::max(param->MinKinEnergy(), 2*electron_mass_c2);
+    G4double emax = param->MaxKinEnergy();
+    if(!EmModel(1)) { SetEmModel(new G4PolarizedGammaConversionModel(), 1); }
+    EmModel(1)->SetLowEnergyLimit(emin);
+    EmModel(1)->SetHighEnergyLimit(emax);
+    AddEmModel(1, EmModel(1));
   } 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4PolarizedGammaConversion::PrintInfo()
-{
-  G4cout << " Total cross sections has a good parametrisation" 
-         << " from 1.5 MeV to 100 GeV for all Z;"
-         << "\n      sampling secondary e+e- according to the polarized compton cross section"
-         << G4endl;
-}         
+{}         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

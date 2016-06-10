@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectronIonPair.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4ElectronIonPair.cc 81058 2014-05-20 09:04:28Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -55,9 +55,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4ElectronIonPair::G4ElectronIonPair()
+G4ElectronIonPair::G4ElectronIonPair(G4int verb)
 {
-  verbose = 1;
+  verbose = verb;
   curMaterial = 0;
   curMeanEnergy = 0.0;
   nMaterials = 0;
@@ -130,9 +130,10 @@ G4ElectronIonPair::SampleIonsAlongStep(const G4Step* step)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4int G4ElectronIonPair::ResidualeChargePostStep(const G4ParticleDefinition*,
-						 const G4TrackVector*,
-						 G4int subType)
+G4int 
+G4ElectronIonPair::ResidualeChargePostStep(const G4ParticleDefinition*,
+					   const G4TrackVector*,
+					   G4int subType) const
 {
   G4int nholes = 0;
 
@@ -142,7 +143,8 @@ G4int G4ElectronIonPair::ResidualeChargePostStep(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4ElectronIonPair::FindG4MeanEnergyPerIonPair(const G4Material* mat)
+G4double 
+G4ElectronIonPair::FindG4MeanEnergyPerIonPair(const G4Material* mat) const
 {
   G4String name = mat->GetName();
   G4double res  = 0.0;
@@ -165,12 +167,13 @@ G4double G4ElectronIonPair::FindG4MeanEnergyPerIonPair(const G4Material* mat)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4ElectronIonPair:: DumpMeanEnergyPerIonPair()
+void G4ElectronIonPair:: DumpMeanEnergyPerIonPair() const
 {
   G4int nmat = G4Material::GetNumberOfMaterials();
   const G4MaterialTable* mtable = G4Material::GetMaterialTable();
   if(nmat > 0) {
-    G4cout << "### G4ElectronIonPair: mean energy per ion pair avalable:" << G4endl;
+    G4cout << "### G4ElectronIonPair: mean energy per ion pair avalable:" 
+	   << G4endl;
     for(G4int i=0; i<nmat; ++i) {
       const G4Material* mat = (*mtable)[i];
       G4double x = mat->GetIonisation()->GetMeanEnergyPerIonPair();
@@ -184,7 +187,7 @@ void G4ElectronIonPair:: DumpMeanEnergyPerIonPair()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4ElectronIonPair::DumpG4MeanEnergyPerIonPair()
+void G4ElectronIonPair::DumpG4MeanEnergyPerIonPair() const
 {
   if(nMaterials > 0) {
     G4cout << "### G4ElectronIonPair: mean energy per ion pair "

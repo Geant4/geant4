@@ -31,9 +31,17 @@
 // 20130308  M. Kelsey -- Add flag to use separate 3-body momentum generators
 // 20130421  M. Kelsey -- Add flag for CHECK_ECONS, replacing #ifdef's
 // 20130702  M. Kelsey -- Add flag to use N-body phase-space generator
+// 20140311  G. Cosmo -- Implement standard (non-const) singleton pattern
+// 20140929  M. Kelsey -- Enable some parameters as default true (must be set
+//		'0' for false): PreCompound, phase-space, clustering,
+//		trailing effect
+// 20141111  M. Kelsey -- Revert defaults for PreCompound, phase-space,
+//		and trailing effect.
+// 20141121  Use G4AutoDelete to avoid end-of-thread memory leaks
 
 #include "G4CascadeParameters.hh"
 #include "G4CascadeParamMessenger.hh"
+#include "G4AutoDelete.hh"
 #include <stdlib.h>
 #include <iostream>
 using std::endl;
@@ -41,9 +49,15 @@ using std::endl;
 
 // Singleton accessor
 
+G4CascadeParameters* G4CascadeParameters::fpInstance = 0;
+
 const G4CascadeParameters* G4CascadeParameters::Instance() {
-  static const G4CascadeParameters theInstance;
-  return &theInstance;
+  if (!fpInstance) {
+    fpInstance = new G4CascadeParameters;
+    G4AutoDelete::Register(fpInstance);
+  }
+
+  return fpInstance;
 }
 
 
@@ -56,6 +70,7 @@ G4CascadeParameters::G4CascadeParameters()
     G4CASCADE_CHECK_ECONS(getenv("G4CASCADE_CHECK_ECONS")),
     G4CASCADE_USE_PRECOMPOUND(getenv("G4CASCADE_USE_PRECOMPOUND")),
     G4CASCADE_DO_COALESCENCE(getenv("G4CASCADE_DO_COALESCENCE")),
+    G4CASCADE_PIN_ABSORPTION(getenv("G4CASCADE_PIN_ABSORPTION")),
     G4CASCADE_SHOW_HISTORY(getenv("G4CASCADE_SHOW_HISTORY")),
     G4CASCADE_USE_3BODYMOM(getenv("G4CASCADE_USE_3BODYMOM")),
     G4CASCADE_USE_PHASESPACE(getenv("G4CASCADE_USE_PHASESPACE")),
@@ -80,11 +95,15 @@ G4CascadeParameters::G4CascadeParameters()
 void G4CascadeParameters::Initialize() {
   VERBOSE_LEVEL = (G4CASCADE_VERBOSE ? atoi(G4CASCADE_VERBOSE) : 0);
   CHECK_ECONS = (0!=G4CASCADE_CHECK_ECONS);
-  USE_PRECOMPOUND = (0!=G4CASCADE_USE_PRECOMPOUND);
-  DO_COALESCENCE = (0!=G4CASCADE_DO_COALESCENCE);
+  USE_PRECOMPOUND = (0!=G4CASCADE_USE_PRECOMPOUND &&
+		     G4CASCADE_USE_PRECOMPOUND[0]!='0');
+  DO_COALESCENCE = (0==G4CASCADE_DO_COALESCENCE ||
+		    G4CASCADE_DO_COALESCENCE[0]!='0');
+  PIN_ABSORPTION = (0!=G4CASCADE_PIN_ABSORPTION);
   SHOW_HISTORY = (0!=G4CASCADE_SHOW_HISTORY);
   USE_3BODYMOM = (0!=G4CASCADE_USE_3BODYMOM);
-  USE_PHASESPACE = (0!=G4CASCADE_USE_PHASESPACE);
+  USE_PHASESPACE = (0!=G4CASCADE_USE_PHASESPACE &&
+		    G4CASCADE_USE_PHASESPACE[0]!='0');
   RANDOM_FILE = (G4CASCADE_RANDOM_FILE ? G4CASCADE_RANDOM_FILE : "");
   BEST_PAR = (0!=G4NUCMODEL_USE_BEST);
   TWOPARAM_RADIUS = (0!=G4NUCMODEL_RAD_2PAR);
@@ -95,7 +114,7 @@ void G4CascadeParameters::Initialize() {
   RADIUS_ALPHA = (G4NUCMODEL_RAD_ALPHA ? strtod(G4NUCMODEL_RAD_ALPHA,0)
 		  : (BEST_PAR?0.84:0.70));
   RADIUS_TRAILING = ((G4NUCMODEL_RAD_TRAILING ? strtod(G4NUCMODEL_RAD_TRAILING,0)
-		      : (BEST_PAR?0.70:0.0)) * RADIUS_SCALE);
+		      : 0.) * RADIUS_SCALE);
   FERMI_SCALE = ((G4NUCMODEL_FERMI_SCALE ? strtod(G4NUCMODEL_FERMI_SCALE,0)
 		  : (BEST_PAR?0.685:(1.932/OLD_RADIUS_UNITS))) * RADIUS_SCALE);
   XSEC_SCALE = (G4NUCMODEL_XSEC_SCALE ? strtod(G4NUCMODEL_XSEC_SCALE,0)
@@ -122,6 +141,8 @@ void G4CascadeParameters::DumpConfig(std::ostream& os) const {
     os << "G4CASCADE_USE_PRECOMPOUND = " << G4CASCADE_USE_PRECOMPOUND << endl;
   if (G4CASCADE_DO_COALESCENCE)
     os << "G4CASCADE_DO_COALESCENCE = " << G4CASCADE_DO_COALESCENCE << endl;
+  if (G4CASCADE_PIN_ABSORPTION)
+    os << "G4CASCADE_PIN_ABSORPTION = " << G4CASCADE_PIN_ABSORPTION << endl;
   if (G4CASCADE_SHOW_HISTORY)
     os << "G4CASCADE_SHOW_HISTORY = " << G4CASCADE_SHOW_HISTORY << endl;
   if (G4CASCADE_USE_3BODYMOM)

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4E1Probability.cc 68724 2013-04-05 09:26:32Z gcosmo $
+// $Id: G4E1Probability.cc 86783 2014-11-18 08:43:58Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -42,6 +42,7 @@
 #include "G4E1Probability.hh"
 #include "Randomize.hh"
 #include "G4Pow.hh"
+#include "G4Exp.hh"
 #include "G4SystemOfUnits.hh"
 
 // Constructors and operators
@@ -58,13 +59,10 @@ G4E1Probability::G4E1Probability():G4VEmissionProbability()
 G4E1Probability::~G4E1Probability()
 {}
 
-// Calculate the emission probability
-//
 
 G4double G4E1Probability::EmissionProbDensity(const G4Fragment& frag, 
 					      G4double gammaE)
 {
-
   // Calculate the probability density here
 
   // From nuclear fragment properties and the excitation energy, calculate
@@ -76,21 +74,19 @@ G4double G4E1Probability::EmissionProbDensity(const G4Fragment& frag,
 
   G4int Afrag = frag.GetA_asInt();
   G4double Uexcite = frag.GetExcitationEnergy();
-  G4double U = std::max(0.0,Uexcite-gammaE);
+  G4double U = Uexcite - gammaE;
 
-  if(gammaE < 0.0) { return theProb; }
+  if(U < 0.0) { return theProb; }
 
   // Need a level density parameter.
   // For now, just use the constant approximation (not reliable near magic
-  // nuclei).
+  // nuclei) - is equivalent to G4ConstantLevelDensityParameter class
 
   G4double aLevelDensityParam = Afrag*theLevelDensityParameter;
 
-  //  G4double levelDensBef = std::exp(2*std::sqrt(aLevelDensityParam*Uexcite));
-  //  G4double levelDensAft = std::exp(2*std::sqrt(aLevelDensityParam*(Uexcite-gammaE)));
   // VI reduce number of calls to exp 
   G4double levelDens = 
-    std::exp(2*(std::sqrt(aLevelDensityParam*U)-std::sqrt(aLevelDensityParam*Uexcite)));
+    G4Exp(2*(std::sqrt(aLevelDensityParam*U)-std::sqrt(aLevelDensityParam*Uexcite)));
   // Now form the probability density
 
   // Define constants for the photoabsorption cross-section (the reverse
@@ -120,14 +116,6 @@ G4double G4E1Probability::EmissionProbDensity(const G4Fragment& frag,
   G4double sigmaAbs = sigma0*gammaR2/(egdp2*egdp2 + gammaR2); 
   theProb = normC * sigmaAbs * gammaE2 * levelDens;
 
-  // old implementation
-  //  G4double numerator = sigma0 * gammaE*gammaE * GammaR*GammaR;
-  // G4double denominator = (gammaE*gammaE - Egdp*Egdp)*
-  //         (gammaE*gammaE - Egdp*Egdp) + GammaR*GammaR*gammaE*gammaE;
-
-  //G4double sigmaAbs = numerator/denominator; 
-  //theProb = normC * sigmaAbs * gammaE2 * levelDensAft/levelDensBef;
-
   // CD
   //cout<<" sigmaAbs = "<<sigmaAbs<<G4endl;
   //cout<<" Probability = "<<theProb<<G4endl;
@@ -153,7 +141,7 @@ G4double G4E1Probability::EmissionProbability(const G4Fragment& frag,
   // Need to integrate EmissionProbDensity from lowerLim to upperLim 
   // and multiply by factor 3 (?!)
 
-  G4double integ = 3.0 * EmissionIntegration(frag,lowerLim,upperLim);
+  G4double integ = EmissionIntegration(frag,lowerLim,upperLim);
 
   return integ;
 
@@ -177,7 +165,7 @@ G4double G4E1Probability::EmissionIntegration(const G4Fragment& frag,
     res += EmissionProbDensity(frag, x);
   }
 
-  if(res > 0.0) { res /= G4double(numIters); }
+  if(res > 0.0) { res *= Step; }
   else { res = 0.0; }
 
   return res;

@@ -36,7 +36,7 @@
 /// \file hadronic/Hadr02/include/G4DPMJET2_5CrossSectionParamSet.hh
 /// \brief Definition of the G4DPMJET2_5CrossSectionParamSet class
 //
-// $Id: G4DPMJET2_5CrossSectionParamSet.hh 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: G4DPMJET2_5CrossSectionParamSet.hh 81932 2014-06-06 15:39:45Z gcosmo $
 //
 
 #ifndef G4DPMJET2_5CrossSectionParamSet_h
@@ -71,7 +71,7 @@ class G4DPMJET2_5CrossSectionParamSet
 public:
   G4DPMJET2_5CrossSectionParamSet () {c[0]=0.0; c[1]=0.0; c[2]=0.0;}
   G4DPMJET2_5CrossSectionParamSet (const G4double c0, const G4double c1,
-				   const G4double c2) 
+                                   const G4double c2) 
   {c[0]=c0; c[1]=c1; c[2]=c2;}
 
   ~G4DPMJET2_5CrossSectionParamSet () {};

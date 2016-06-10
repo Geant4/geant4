@@ -1,0 +1,24 @@
+
+#detector geometry
+/xtal/setMaterial G4_Si
+/xtal/setAngle 0. 0. 0. rad
+/xtal/setSize 1.0 70. 1.94 mm
+/xtal/setCellAngle 90. 90. 90. deg
+/xtal/setCellSize 5.431 5.431 5.431 angstrom
+/xtal/setCurvRadius 38.416 0. 0. m
+/xtal/potfilename data/si110
+
+#initialize run before stacking and primary generator actions
+/run/initialize
+
+#set gps properties
+/gps/ene/mono 400. GeV
+/gps/particle proton
+/gps/ang/sigma_x 13.36E-6 rad
+/gps/ang/sigma_y 11.25E-6 rad
+
+#kill all secondaries produced
+/mystack/KillAllSecondaries 1
+
+#beam on
+/run/beamOn 1000

@@ -63,6 +63,8 @@
 #include "G4Proton.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4NucleiProperties.hh"
+#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 
 #include "G4UnitsTable.hh"
 
@@ -72,54 +74,53 @@ using namespace std;
 
 G4IonCoulombScatteringModel::G4IonCoulombScatteringModel(const G4String& nam)
   : G4VEmModel(nam),
-
     cosThetaMin(1.0),
     isInitialised(false)
 {
-  	fNistManager = G4NistManager::Instance();
-  	theParticleTable = G4ParticleTable::GetParticleTable();
-  	theProton   = G4Proton::Proton();
+  fNistManager = G4NistManager::Instance();
+  theIonTable  = G4ParticleTable::GetParticleTable()->GetIonTable();
+  theProton    = G4Proton::Proton();
 
-	pCuts=0;
-  	currentMaterial = 0;
-  	currentElement  = 0;
-        currentCouple = 0;
+  pCuts=0;
+  currentMaterial = 0;
+  currentElement  = 0;
+  currentCouple = 0;
+  fParticleChange = 0;
 
-        lowEnergyLimit  = 100*eV;
-  	recoilThreshold = 0.*eV;
-	heavycorr =0;
-  	particle = 0;
-	mass=0;
-	currentMaterialIndex = -1;
+  lowEnergyLimit  = 100*eV;
+  recoilThreshold = 0.*eV;
+  heavycorr =0;
+  particle = 0;
+  mass=0;
+  currentMaterialIndex = -1;
 
-  	ioncross = new G4IonCoulombCrossSection(); 
-
+  ioncross = new G4IonCoulombCrossSection(); 
 }
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4IonCoulombScatteringModel::~G4IonCoulombScatteringModel()
-{ delete  ioncross;}
+{ 
+  delete  ioncross;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4IonCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
-                                           const G4DataVector&  )
+					     const G4DataVector& cuts)
 {
-  	SetupParticle(p);
-  	currentCouple = 0;
-	currentMaterialIndex = -1;
-  	cosThetaMin = cos(PolarAngleLimit());
-  	ioncross->Initialise(p,cosThetaMin);
+  SetupParticle(p);
+  currentCouple = 0;
+  currentMaterialIndex = -1;
+  ioncross->Initialise(p,cosThetaMin);
  
-        pCuts = G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
-
-
-  	if(!isInitialised) {
-	  isInitialised = true;
-	  fParticleChange = GetParticleChangeForGamma();
-	}
+  pCuts = &cuts;
+  //  G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
+  if(!isInitialised) {
+    isInitialised = true;
+    fParticleChange = GetParticleChangeForGamma();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -132,25 +133,27 @@ G4double G4IonCoulombScatteringModel::ComputeCrossSectionPerAtom(
 				G4double cutEnergy,
 				G4double)
 {
-
-  	SetupParticle(p);
+  SetupParticle(p);
  
-  	G4double cross =0.0;
-	if(kinEnergy < lowEnergyLimit) return cross;
+  G4double cross = 0.0;
+  if(kinEnergy > lowEnergyLimit) {
 
-  	DefineMaterial(CurrentCouple());
+    DefineMaterial(CurrentCouple());
 
-        G4int iz          = G4int(Z);
+    G4int iz = G4int(Z);
 
-	//from lab to pCM & mu_rel of effective particle
-        ioncross->SetupKinematic(kinEnergy, cutEnergy,iz);
+    //from lab to pCM & mu_rel of effective particle
+    G4double tmass = proton_mass_c2;
+    if(1 < iz) {
+      tmass = fNistManager->GetAtomicMassAmu(iz)*amu_c2;
+    }
+    ioncross->SetupKinematic(kinEnergy, cutEnergy, tmass);
 
-
-        ioncross->SetupTarget(Z, kinEnergy, heavycorr);
-
-  	cross = ioncross->NuclearCrossSection();
-
-//cout<< "..........cross "<<G4BestUnit(cross,"Surface") <<endl;
+    ioncross->SetupTarget(Z, kinEnergy, heavycorr);
+  
+    cross = ioncross->NuclearCrossSection();
+  }
+  //cout<< "..........cross "<<G4BestUnit(cross,"Surface") <<endl;
   return cross;
 }
 
@@ -163,77 +166,66 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
 			       G4double cutEnergy, 
 			       G4double)
 {
-  	G4double kinEnergy = dp->GetKineticEnergy();
+  G4double kinEnergy = dp->GetKineticEnergy();
 
-  	if(kinEnergy < lowEnergyLimit) return;
+  if(kinEnergy <= lowEnergyLimit) return;
 	
-  	DefineMaterial(couple);
+  DefineMaterial(couple);
 
-  	SetupParticle(dp->GetDefinition());
+  SetupParticle(dp->GetDefinition());
 
-	// Choose nucleus
-  	currentElement = SelectRandomAtom(couple,particle,
+  // Choose nucleus
+  currentElement = SelectRandomAtom(couple,particle,
                                     kinEnergy,cutEnergy,kinEnergy);
 
-	G4double Z  = currentElement->GetZ();
-  	G4int iz          = G4int(Z);
-  	G4int ia = SelectIsotopeNumber(currentElement);
-  	G4double mass2 = G4NucleiProperties::GetNuclearMass(ia, iz);
+  G4double Z  = currentElement->GetZ();
+  G4int iz = G4int(Z);
+  G4int ia = SelectIsotopeNumber(currentElement);
+  G4double mass2 = G4NucleiProperties::GetNuclearMass(ia, iz);
 
+  ioncross->SetupKinematic(kinEnergy, cutEnergy, mass2);
 
-
-	G4double cross= ComputeCrossSectionPerAtom(particle,kinEnergy, Z,
-                                kinEnergy, cutEnergy, kinEnergy) ;
-	if(cross == 0.0) { return; }
+  ioncross->SetupTarget(Z, kinEnergy, heavycorr);
     
-	//scattering angle, z1 == (1-cost)
-  	G4double z1 = ioncross->SampleCosineTheta(); 
-        if(z1 > 2.0)      { z1 = 2.0; }
-        else if(z1 < 0.0) { z1 = 0.0; }
+  //scattering angle, z1 == (1-cost)
+  G4double z1 = ioncross->SampleCosineTheta(); 
+  if(z1 > 2.0)      { z1 = 2.0; }
+  else if(z1 < 0.0) { z1 = 0.0; }
 
-  	G4double cost = 1.0 - z1;
-  	G4double sint = sqrt(z1*(1.0 + cost));
-  	G4double phi  = twopi * G4UniformRand();
+  G4double cost = 1.0 - z1;
+  G4double sint = sqrt(z1*(1.0 + cost));
+  G4double phi  = twopi * G4UniformRand();
 
+  G4LorentzVector v0 = dp->Get4Momentum();
 
-  	// kinematics in the Lab system
-  	G4double etot = kinEnergy + mass;
-  	G4double mom2=  kinEnergy*(kinEnergy+2.0*mass);
-  	G4double ptot = sqrt(mom2);
-
-	//CM particle 1
-  	G4double bet  = ptot/(etot + mass2);
-  	G4double gam  = 1.0/sqrt((1.0 - bet)*(1.0 + bet));
-
-	//CM 	
-  	G4double momCM2= ioncross->GetMomentum2();
-  	G4double momCM =std::sqrt(momCM2); 
-        //energy & momentum after scattering of incident particle
-	G4double pxCM = momCM*sint*cos(phi);
-        G4double pyCM = momCM*sint*sin(phi);
-        G4double pzCM = momCM*cost;
-  	G4double eCM  = sqrt(momCM2 + mass*mass);
-
-	//CM--->Lab
-  	G4ThreeVector v1(pxCM , pyCM, gam*(pzCM + bet*eCM));
-  	G4ThreeVector dir = dp->GetMomentumDirection(); 
-
-  	G4ThreeVector newDirection = v1.unit();
-  	newDirection.rotateUz(dir);   
+  // kinematics in the Lab system
+  G4double etot = v0.e();
+  G4double ptot = v0.mag();
   
-	fParticleChange->ProposeMomentumDirection(newDirection);   
+  //CM particle 1
+  G4double bet  = ptot/(etot + mass2);
+  G4double gam  = 1.0/sqrt((1.0 - bet)*(1.0 + bet));
+
+  //CM 	
+  G4double momCM = gam*(ptot - bet*etot); 
+  G4double eCM   = gam*(etot - bet*ptot); 
+  //energy & momentum after scattering of incident particle
+  G4double pxCM = momCM*sint*cos(phi);
+  G4double pyCM = momCM*sint*sin(phi);
+  G4double pzCM = momCM*cost;
+
+  //CM--->Lab
+  G4LorentzVector v1(pxCM , pyCM, gam*(pzCM + bet*eCM), gam*(eCM + bet*pzCM));
+
+  G4ThreeVector dir = dp->GetMomentumDirection(); 
+  G4ThreeVector newDirection = v1.vect().unit();
+  newDirection.rotateUz(dir);   
   
-	// V.Ivanchenko fix of final energies after scattering
-	// recoil.......................................
-	//G4double trec =(1.0 - cost)* mass2*(etot*etot - mass*mass )/
-	//			(mass*mass + mass2*mass2+ 2.*mass2*etot);
-        //G4double finalT = kinEnergy - trec;
-
-	// new computation
-        G4double finalT = gam*(eCM + bet*pzCM) - mass;
-	if(finalT < 0.0) { finalT = 0.0; }
-        G4double trec = kinEnergy - finalT;
-
+  fParticleChange->ProposeMomentumDirection(newDirection);   
+  
+  // recoil
+  v0 -= v1; 
+  G4double trec = v0.e() - mass2;
   G4double edep = 0.0;
 
   G4double tcut = recoilThreshold;
@@ -243,10 +235,8 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
   }
  
   if(trec > tcut) {
-    G4ParticleDefinition* ion = theParticleTable->GetIon(iz, ia, 0.0);
-    G4double plab = sqrt(finalT*(finalT + 2.0*mass));
-    G4ThreeVector p2 = (ptot*dir - plab*newDirection).unit();
-    G4DynamicParticle* newdp  = new G4DynamicParticle(ion, p2, trec);
+    G4ParticleDefinition* ion = theIonTable->GetIon(iz, ia, 0);
+    G4DynamicParticle* newdp  = new G4DynamicParticle(ion, v0);
     fvect->push_back(newdp);
   } else if(trec > 0.0) {
     edep = trec;
@@ -254,9 +244,11 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
   }
 
   // finelize primary energy and energy balance
+  G4double finalT = v1.e() - mass;
   if(finalT <= lowEnergyLimit) { 
-    edep += finalT;  
+    edep += finalT;
     finalT = 0.0;
+    if(edep < 0.0) { edep = 0.0; }
   } 
   fParticleChange->SetProposedKineticEnergy(finalT);
   fParticleChange->ProposeLocalEnergyDeposit(edep);

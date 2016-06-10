@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveSplitableHadron.cc 74627 2013-10-17 07:04:38Z gcosmo $
+// $Id: G4DiffractiveSplitableHadron.cc 86646 2014-11-14 13:29:39Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -105,6 +105,16 @@ void G4DiffractiveSplitableHadron::SplitUp() {
 
   Parton[0] = new G4Parton( stringStart );
   Parton[1] = new G4Parton( stringEnd );
+
+/*                                        // Inversion of a string
+  if ( G4UniformRand() < 1.75 ) {  //0.75
+    Parton[0] = new G4Parton( stringStart );
+    Parton[1] = new G4Parton( stringEnd );
+  } else {
+    Parton[0] = new G4Parton( stringEnd );
+    Parton[1] = new G4Parton( stringStart );
+  }
+*/
   PartonIndex = -1;
 }
 
@@ -151,20 +161,25 @@ void G4DiffractiveSplitableHadron::SetSecondParton( G4int PDGcode ) {
 
 void G4DiffractiveSplitableHadron::ChooseStringEnds( G4int PDGcode, G4int* aEnd,
                                                      G4int* bEnd ) const {
-  const G4double udspin1 = 1.0/6.0;
-  const G4double uuspin1 = 1.0/3.0;
-  //const G4double udspin0 = 1.0/2.0;
-
   G4int absPDGcode = std::abs( PDGcode );
 
   if ( absPDGcode < 1000 ) {  //--------------------  Meson -------------
-    G4int heavy = absPDGcode/100;
-    G4int light = (absPDGcode % 100)/10;
-    //G4int anti = std::pow( -1 , std::max( heavy, light ) );
-    G4int anti = 1 - 2*( std::max( heavy, light ) % 2 );
-    if (PDGcode < 0 ) anti *= -1;
-    heavy *= anti;
-    light *= -1 * anti;
+    G4int heavy(0), light(0);
+    if(!((absPDGcode == 111)||(absPDGcode == 221)||(absPDGcode == 331)))
+    {                          // Ordinary mesons =======================
+     heavy = absPDGcode/100;
+     light = (absPDGcode % 100)/10;
+     //G4int anti = std::pow( -1 , std::max( heavy, light ) );
+     G4int anti = 1 - 2*( std::max( heavy, light ) % 2 );
+     if (PDGcode < 0 ) anti *= -1;
+     heavy *= anti;
+     light *= -1 * anti;
+    } 
+    else 
+    {                         // Pi0, Eta, Eta' =======================
+     if( G4UniformRand() < 0.5 ) {heavy = 1; light = -1;}
+     else                        {heavy = 2; light = -2;}
+    }
     if ( G4UniformRand() < 0.5 ) {
       *aEnd = heavy;
       *bEnd = light;
@@ -176,7 +191,48 @@ void G4DiffractiveSplitableHadron::ChooseStringEnds( G4int PDGcode, G4int* aEnd,
     G4int j1000 = PDGcode/1000;
     G4int j100  = (PDGcode % 1000)/100;
     G4int j10   = (PDGcode % 100)/10;
-    G4double random = G4UniformRand();
+
+    G4double SuppresUUDDSS=1.0/2.0;
+    if((j1000 == j100) && (j1000 == j10)) SuppresUUDDSS=1.; 
+
+//
+    do
+    {
+      G4double random = G4UniformRand();
+
+      if(random < 0.33333)
+      {
+        if(( j100 == j10 ) && ( G4UniformRand() > SuppresUUDDSS )) continue;
+        *aEnd = j1000;
+        if( j100 == j10 )             {*bEnd = Diquark( j100, j10, 1 );}
+        else
+          if( G4UniformRand() > 0.25) {*bEnd = Diquark( j100, j10, 0 );}
+          else                        {*bEnd = Diquark( j100, j10, 1 );}
+        break;
+       }
+       else if(random < 0.66667)
+       {
+        if(( j1000 == j10 ) && ( G4UniformRand() > SuppresUUDDSS )) continue;
+        *aEnd = j100;
+        if( j1000 == j10 )            {*bEnd = Diquark( j1000, j10, 1 );}
+        else
+          if( G4UniformRand() > 0.25) {*bEnd = Diquark( j1000, j10, 0 );}
+          else                        {*bEnd = Diquark( j1000, j10, 1 );}
+        break;
+       }
+       else
+       {
+        if(( j1000 == j100 ) && ( G4UniformRand() > SuppresUUDDSS )) continue;
+        *aEnd = j10;
+        if( j1000 == j100 )           {*bEnd = Diquark( j1000, j100, 1 );}
+        else
+          if( G4UniformRand() > 0.25) {*bEnd = Diquark( j1000, j100, 0 );}
+          else                        {*bEnd = Diquark( j1000, j100, 1 );}
+        break;
+       }
+    } while(true);  
+//
+/*
     if ( std::abs( j100 ) >= std::abs( j10 ) ) {
       if ( random < udspin1 ) {
         *aEnd = j1000;
@@ -203,8 +259,8 @@ void G4DiffractiveSplitableHadron::ChooseStringEnds( G4int PDGcode, G4int* aEnd,
         *bEnd = Diquark( j1000, j10, 1 );
       }
     }
+*/
   }
-
 }
 
 

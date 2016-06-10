@@ -47,7 +47,6 @@
 #include "G4XAqmElastic.hh"
 #include "G4XAqmTotal.hh"
 #include "G4KineticTrack.hh"
-#include "G4ParticleDefinition.hh"
 
 
 // Validity range of this cross-section
@@ -82,8 +81,8 @@ G4double G4XAqmElastic::CrossSection(const G4KineticTrack& trk1, const G4Kinetic
   G4double sigma = 0.;
 
   // Reference to be checked!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  const G4double coeff = 0.39;
-  const G4double param = 1.5;
+  static const G4double coeff = 0.39;
+  static const G4double param = 1.5;
 
   G4XAqmTotal aqmTotal;
 

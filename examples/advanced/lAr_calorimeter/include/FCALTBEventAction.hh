@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALTBEventAction.hh 73002 2013-08-15 08:09:37Z gcosmo $
+// $Id: FCALTBEventAction.hh 84602 2014-10-17 07:46:09Z gcosmo $
 //
 // 
 
@@ -63,7 +63,9 @@ class FCALTBEventAction : public G4UserEventAction
     FCALTBEventActionMessenger*  eventMessenger;
 
   private:
-  G4double NTracksOutOfWorld, NSecondaries, Init1, Init2, Init3;
+  G4double NTracksOutOfWorld, NSecondaries;
+    
   };
 
-#endif    
+#endif  
+  

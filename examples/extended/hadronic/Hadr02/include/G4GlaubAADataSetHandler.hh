@@ -36,7 +36,7 @@
 /// \file hadronic/Hadr02/include/G4GlaubAADataSetHandler.hh
 /// \brief Definition of the G4GlaubAADataSetHandler class
 //
-// $Id: G4GlaubAADataSetHandler.hh 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: G4GlaubAADataSetHandler.hh 81932 2014-06-06 15:39:45Z gcosmo $
 //
 
 #ifndef G4GlaubAADataSetHandler_h
@@ -96,7 +96,7 @@ public:
 
   G4bool IsGlauberDataSetAvailable (const G4int AP, const G4int AT) const;
   G4bool SetCurrentGlauberDataSet (const G4int AP, const G4int AT,
-				   const G4double ppn = 0.0);
+                                   const G4double ppn = 0.0);
   G4GlaubAADataSet *GetCurrentGlauberDataSet () const;
   void   ResetCurrentGlauberDataSet ();
   G4double GetValueN (const G4double v, const G4double ppn1 = 0.0);

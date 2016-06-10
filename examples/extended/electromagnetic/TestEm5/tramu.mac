@@ -1,4 +1,4 @@
-# $Id: tramu.mac 77600 2013-11-26 17:07:41Z gcosmo $
+# $Id: tramu.mac 81528 2014-06-02 16:21:24Z vnivanch $
 #
 # macro file for TestEm5.cc
 #
@@ -6,6 +6,7 @@
 # Rev. of Particle Physics Eur. Phys. Jour. C (2000) page 172.
 # Rev. of Particle Physics Letters B 592 (2004) page 251.
 #
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
 /run/verbose 2
 #
@@ -16,7 +17,7 @@
 ###/testem/phys/addPhysics emstandard_opt3
 /testem/phys/addPhysics local
 #
-/testem/phys/setCuts 1 mm
+/run/setCut 1 mm
 #    
 /run/initialize
 #

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAdjointReverseReaction.cc 68044 2013-03-13 14:29:07Z gcosmo $
+// $Id: G4VAdjointReverseReaction.cc 87443 2014-12-04 12:26:31Z gunter $
 //
 #include "G4VAdjointReverseReaction.hh"
 #include "G4SystemOfUnits.hh"
@@ -50,6 +50,7 @@ G4VAdjointReverseReaction::
  IsFwdCSUsed=false;
  IsIntegralModeUsed=false;
  lastCS=0.;
+ trackid = nstep = 0;
 }
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -75,8 +76,6 @@ void G4VAdjointReverseReaction::BuildPhysicsTable(const G4ParticleDefinition&)
 //
 G4VParticleChange* G4VAdjointReverseReaction::PostStepDoIt(const G4Track& track, const G4Step&  )
 { 
-  
-  
   
   fParticleChange->Initialize(track);
  
@@ -109,14 +108,29 @@ G4double G4VAdjointReverseReaction::GetMeanFreePath(const G4Track& track,
                                          					     G4ForceCondition* condition)
 { *condition = NotForced;
   G4double preStepKinEnergy = track.GetKineticEnergy();
+
+  if(track.GetTrackID() != trackid) {
+    trackid = track.GetTrackID();
+    nstep = 0;
+  }
+  ++nstep;  
+
+
   
   /*G4double Sigma =
   		theAdjointEMModel->AdjointCrossSection(track.GetMaterialCutsCouple(),preStepKinEnergy,IsScatProjToProjCase);*/
   		
   G4double Sigma =
   		theAdjointEMModel->GetAdjointCrossSection(track.GetMaterialCutsCouple(),preStepKinEnergy,IsScatProjToProjCase);	
+
+  //G4double sig = Sigma;
+
   G4double fwd_TotCS;
-  Sigma *=  theAdjointCSManager->GetCrossSectionCorrection(track.GetDefinition(),preStepKinEnergy,track.GetMaterialCutsCouple(),IsFwdCSUsed, fwd_TotCS);
+  G4double corr =  theAdjointCSManager->GetCrossSectionCorrection(track.GetDefinition(),preStepKinEnergy,track.GetMaterialCutsCouple(),IsFwdCSUsed, fwd_TotCS);
+
+  if(std::fabs(corr) > 100.) { Sigma = 0.0; }
+  else { Sigma *= corr; }
+
   //G4cout<<fwd_TotCS<<G4endl;
   /*if (IsFwdCSUsed && IsIntegralModeUsed){ //take the maximum cross section only for charged particle		
   	G4double e_sigma_max, sigma_max;
@@ -131,7 +145,20 @@ G4double G4VAdjointReverseReaction::GetMeanFreePath(const G4Track& track,
   G4double mean_free_path = 1.e60 *mm; 
   if (Sigma>0) mean_free_path = 1./Sigma;
   lastCS=Sigma;
+  /*
+  if(nstep > 100) {
   
+    G4cout << "#* " << track.GetDefinition()->GetParticleName()
+	   << " " << GetProcessName() 
+	   << " Nstep " << nstep 
+	   << " E(MeV)= " <<  preStepKinEnergy << "  Sig0= " << sig 
+	   << " sig1= " << Sigma << " mfp= " << mean_free_path << G4endl;
+
+  } 
+  if (nstep > 20000) {
+    exit(1);
+  }
+  */
   /*G4cout<<"Sigma  "<<Sigma<<G4endl;
   G4cout<<"mean_free_path [mm] "<<mean_free_path/mm<<G4endl;
   */

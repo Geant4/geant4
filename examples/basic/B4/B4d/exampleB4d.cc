@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: exampleB4d.cc 75215 2013-10-29 16:07:06Z gcosmo $
+// $Id: exampleB4d.cc 86065 2014-11-07 08:51:15Z gcosmo $
 //
 /// \file exampleB4d.cc
 /// \brief Main program of the B4d example
@@ -43,13 +43,9 @@
 
 #include "Randomize.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
 
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -65,7 +61,7 @@ namespace {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
-{
+{  
   // Evaluate arguments
   //
   if ( argc > 7 ) {
@@ -92,6 +88,13 @@ int main(int argc,char** argv)
     }
   }  
   
+  // Detect interactive mode (if no macro provided) and define UI session
+  //
+  G4UIExecutive* ui = 0;
+  if ( ! macro.size() ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
+
   // Choose the Random engine
   //
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
@@ -118,22 +121,18 @@ int main(int argc,char** argv)
   B4dActionInitialization* actionInitialization
      = new B4dActionInitialization();
   runManager->SetUserInitialization(actionInitialization);
-    
-  // Initialize G4 kernel
-  //
-  runManager->Initialize();
   
-#ifdef G4VIS_USE
   // Initialize visualization
   G4VisManager* visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
   // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
-#endif
 
   // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
+  // Process macro or start UI session
+  //
   if ( macro.size() ) {
     // batch mode
     G4String command = "/control/execute ";
@@ -141,18 +140,12 @@ int main(int argc,char** argv)
   }
   else  {  
     // interactive mode : define UI session
-#ifdef G4UI_USE
-    G4UIExecutive* ui = new G4UIExecutive(argc, argv, session);
-#ifdef G4VIS_USE
-    UImanager->ApplyCommand("/control/execute init_vis.mac"); 
-#else
-    UImanager->ApplyCommand("/control/execute init.mac"); 
-#endif
-    if (ui->IsGUI())
+    UImanager->ApplyCommand("/control/execute init_vis.mac");
+    if (ui->IsGUI()) {
       UImanager->ApplyCommand("/control/execute gui.mac");
+    }
     ui->SessionStart();
     delete ui;
-#endif
   }
 
   // Job termination
@@ -160,12 +153,8 @@ int main(int argc,char** argv)
   // owned and deleted by the run manager, so they should not be deleted 
   // in the main() program !
 
-#ifdef G4VIS_USE
   delete visManager;
-#endif
   delete runManager;
-
-  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

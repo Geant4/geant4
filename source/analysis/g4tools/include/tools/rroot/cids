@@ -1,0 +1,45 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_cids
+#define tools_rroot_cids
+
+#include "../cid"
+
+namespace tools {
+namespace rroot {
+
+inline cid base_cid()           {return 100;} //must be > cids in ../cids.
+
+inline cid iros_cid()           {return base_cid()+0;}
+inline cid List_cid()           {return base_cid()+1;}
+inline cid HashList_cid()       {return base_cid()+2;}
+inline cid ObjArray_cid()       {return base_cid()+3;}
+
+inline cid dummy_cid()          {return base_cid()+4;}
+
+inline cid basket_cid()         {return base_cid()+5;}
+inline cid branch_cid()         {return base_cid()+6;}
+inline cid branch_element_cid() {return base_cid()+7;}
+inline cid tree_item()          {return base_cid()+8;}
+
+inline cid graph_cid()          {return base_cid()+9;}
+inline cid matrix_cid()         {return base_cid()+10;}
+
+inline cid leaf_string_cid()    {return base_cid()+11;}
+inline cid leaf_element_cid()   {return base_cid()+12;}
+
+inline cid StreamerInfo_cid()      {return base_cid()+13;}
+inline cid streamer_element_cid()  {return base_cid()+14;}
+
+inline cid stl_vector_string_cid() {return base_cid()+16;}
+
+//base for templates :
+inline cid base_leaf_cid()         {return base_cid()+20;} //+12=32
+//NOTE : leaf<T> = base_leaf_cid()+_cid(T)
+inline cid stl_vector_cid()        {return base_cid()+33;} //+12=45
+inline cid stl_vector_vector_cid() {return base_cid()+46;} //+12=58
+
+}}
+
+#endif

@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/include/EventActionMessenger.hh
 /// \brief Definition of the EventActionMessenger class
 //
-// $Id: EventActionMessenger.hh 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: EventActionMessenger.hh 81932 2014-06-06 15:39:45Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -63,11 +63,9 @@ public:
     
 private:
 
-  EventAction*          eventAction;   
-  G4UIcmdWithAString*   drawCmd;
-  G4UIcmdWithAString*   ionCmd;
-  G4UIcmdWithAnInteger* printCmd;    
-  G4UIcmdWithAnInteger* dCmd;    
+  EventAction*          fEventAction;   
+  G4UIcmdWithAString*   fIonCmd;
+  G4UIcmdWithAnInteger* fDebugCmd;    
 
 };
 

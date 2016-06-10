@@ -60,6 +60,7 @@
 #include "G4UserSteppingAction.hh"
 
 class G4Step;
+class XrayTelRunAction;
 
 class XrayTelSteppingAction : public G4UserSteppingAction
 {
@@ -71,7 +72,6 @@ public:
 
   virtual void UserSteppingAction(const G4Step* step);
   
-private:
 
 };
 

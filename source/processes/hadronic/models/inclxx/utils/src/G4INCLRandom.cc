@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -45,22 +46,40 @@
 #include "G4INCLGlobals.hh"
 // #include <cassert>
 
+#include "G4INCLRanecu.hh"
+#include "G4INCLRanecu3.hh"
+#include "G4INCLGeant4Random.hh"
+#include "G4INCLLogger.hh"
+
 namespace G4INCL {
 
   namespace Random {
 
     namespace {
 
-      G4ThreadLocal IRandomGenerator* theGenerator;
+      G4ThreadLocal IRandomGenerator* theGenerator = NULL;
+
+#ifdef INCL_COUNT_RND_CALLS
+      G4ThreadLocal unsigned long long nCalls;
+#endif
+
+      G4ThreadLocal SeedVector *savedSeeds = NULL;
+
+      G4ThreadLocal Adapter *theAdapter = NULL;
 
     }
 
     void setGenerator(G4INCL::IRandomGenerator *aGenerator) {
       if(isInitialized()) {
-        INCL_ERROR("INCL random number generator already initialized." << std::endl);
+        INCL_ERROR("INCL random number generator already initialized." << '\n');
       } else {
+#ifdef INCL_COUNT_RND_CALLS
+        nCalls = 0;
+#endif
         theGenerator = aGenerator;
       }
+      if(!theAdapter)
+        theAdapter = new Adapter();
     }
 
     void setSeeds(const SeedVector &sv) {
@@ -72,6 +91,9 @@ namespace G4INCL {
     }
 
     G4double shoot() {
+#ifdef INCL_COUNT_RND_CALLS
+      nCalls++;
+#endif
       return theGenerator->flat();
     }
 
@@ -88,11 +110,6 @@ namespace G4INCL {
         ;
       return r;
     }
-
-    template<typename T>
-      T shootInteger(T n) {
-        return static_cast<T>(shoot1() * n);
-      }
 
     G4double gauss(G4double sigma) {
       // generate a Gaussian random number with standard deviation sigma
@@ -152,12 +169,63 @@ namespace G4INCL {
 
     void deleteGenerator() {
       delete theGenerator;
-      theGenerator = 0;
+      theGenerator = NULL;
+      delete savedSeeds;
+      savedSeeds = NULL;
+      delete theAdapter;
+      theAdapter = NULL;
     }
 
     G4bool isInitialized() {
       if(theGenerator == 0) return false;
       return true;
+    }
+
+#ifdef INCL_COUNT_RND_CALLS
+    /// \brief Return the number of calls to the RNG
+    unsigned long long getNumberOfCalls() {
+      return nCalls;
+    }
+#endif
+
+    void saveSeeds() {
+      if(!savedSeeds)
+        savedSeeds = new SeedVector;
+
+      (*savedSeeds) = theGenerator->getSeeds();
+    }
+
+    SeedVector getSavedSeeds() {
+      if(!savedSeeds)
+        savedSeeds = new SeedVector;
+
+      return *savedSeeds;
+    }
+
+    void initialize(Config const * const
+#ifndef INCLXX_IN_GEANT4_MODE
+                    theConfig
+#endif
+                    ) {
+#ifdef INCLXX_IN_GEANT4_MODE
+      Random::setGenerator(new Geant4RandomGenerator());
+#else // INCLXX_IN_GEANT4_MODE
+      RNGType rng = theConfig->getRNGType();
+      if(rng == RanecuType)
+        setGenerator(new Ranecu(theConfig->getRandomSeeds()));
+      else if(rng == Ranecu3Type)
+        setGenerator(new Ranecu3(theConfig->getRandomSeeds()));
+      else
+        setGenerator(NULL);
+#endif // INCLXX_IN_GEANT4_MODE
+    }
+
+    G4int Adapter::operator()(const G4int n) const {
+      return shootInteger(n);
+    }
+
+    Adapter const &getAdapter() {
+      return *theAdapter;
     }
 
   }

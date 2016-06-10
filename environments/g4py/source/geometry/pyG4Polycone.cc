@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Polycone.cc 76884 2013-11-18 12:54:03Z gcosmo $
+// $Id: pyG4Polycone.cc 81291 2014-05-26 09:31:19Z gcosmo $
 // ====================================================================
 //   pyG4Polycone.cc
 //
@@ -96,7 +96,6 @@ void export_G4Polycone()
     .def("GetStartPhi",    &G4Polycone::GetStartPhi)
     .def("GetEndPhi",      &G4Polycone::GetEndPhi)
     .def("IsOpen",         &G4Polycone::IsOpen)
-    .def("IsGeneric",      &G4Polycone::IsGeneric)
     .def("GetNumRZCorner", &G4Polycone::GetNumRZCorner)
 
     // operators

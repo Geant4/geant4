@@ -1,0 +1,246 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_fileis
+#define tools_fileis
+
+#include "signature"
+#include <cstring>
+
+namespace tools {
+namespace file {
+
+inline bool is_zip(const std::string& a_file,bool& a_is){
+  unsigned char head[4];
+ {unsigned int num = 4;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=4) {a_is = false;return true;}}
+  if(head[0]!='P') {a_is = false;return true;}
+  if(head[1]!='K') {a_is = false;return true;}
+  if(head[2]!=3) {a_is = false;return true;}
+  if(head[3]!=4) {a_is = false;return true;}
+  a_is = true;  
+  return true;
+}
+
+inline bool is_jpeg(const std::string& a_file,bool& a_is){
+  unsigned char head[4];
+ {unsigned int num = 4;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=4) {a_is = false;return true;}}
+  if(head[0]!=255) {a_is = false;return true;}
+  if(head[1]!=216) {a_is = false;return true;}
+  if(head[2]!=255) {a_is = false;return true;}
+  //if(head[3]!=224) {a_is = false;return true;} //LRI.jpg is 225 !
+  a_is = true;  
+  return true;
+}
+
+inline bool is_png(const std::string& a_file,bool& a_is){
+  unsigned char head[4];
+ {unsigned int num = 4;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=4) {a_is = false;return true;}}
+  if(head[0]!=137) {a_is = false;return true;}
+  if(head[1]!='P') {a_is = false;return true;}
+  if(head[2]!='N') {a_is = false;return true;}
+  if(head[3]!='G') {a_is = false;return true;}
+  a_is = true;  
+  return true;
+}
+
+inline bool is_root(const std::string& a_file,bool& a_is){
+  unsigned char head[4];
+ {unsigned int num = 4;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=4) {a_is = false;return true;}}
+  if(head[0]!='r') {a_is = false;return true;}
+  if(head[1]!='o') {a_is = false;return true;}
+  if(head[2]!='o') {a_is = false;return true;}
+  if(head[3]!='t') {a_is = false;return true;}
+  // Aie, we are in a mess.
+  a_is = true;  
+  return true;
+}
+
+inline bool is_iv(const std::string& a_file,bool& a_is){
+  unsigned char head[9];
+ {unsigned int num = 9;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=9) {a_is = false;return true;}}
+  if(head[0]!='#') {a_is = false;return true;}
+  if(head[1]!='I') {a_is = false;return true;}
+  if(head[2]!='n') {a_is = false;return true;}
+  if(head[3]!='v') {a_is = false;return true;}
+  if(head[4]!='e') {a_is = false;return true;}
+  if(head[5]!='n') {a_is = false;return true;}
+  if(head[6]!='t') {a_is = false;return true;}
+  if(head[7]!='o') {a_is = false;return true;}
+  if(head[8]!='r') {a_is = false;return true;}
+  a_is = true;  
+  return true;
+}
+
+inline bool is_fog(const std::string& a_file,bool& a_is){
+  unsigned char head[256];
+ {unsigned int num = 256;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=256) {a_is = false;return true;}}
+  head[255] = 0; //to have a C string.
+  a_is = ::strstr((const char*)head,"#nb super-volumes")?true:false;
+  return true;
+}
+
+inline bool is_dot(const std::string& a_file,bool& a_is){
+  unsigned char head[8];
+ {unsigned int num = 7;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=7) {a_is = false;return true;}}
+  head[7] = 0; //to have a C string.
+  a_is = ::strcmp((const char*)head,"digraph")?false:true;
+  return true;
+}
+
+inline bool is_dcm(const std::string& a_file,bool& a_is){
+  unsigned char head[132];
+ {unsigned int num = 132;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=132) {a_is = false;return true;}}
+  if(head[128]!='D') {a_is = false;return true;}
+  if(head[129]!='I') {a_is = false;return true;}
+  if(head[130]!='C') {a_is = false;return true;}
+  if(head[131]!='M') {a_is = false;return true;}
+  a_is = true;  
+  return true;
+}
+
+inline bool is_gdml(const std::string& a_file,bool& a_is){
+  //NOTE : it assumes that the file is not compressed.
+  unsigned char head[1024];
+ {unsigned int num = 1024;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=1024) {a_is = false;return true;}}
+  head[1023] = 0; //to have a C string.
+  a_is = ::strstr((const char*)head,"<gdml")?true:false;
+  return true;
+}
+
+inline bool is_exsg(unsigned int a_sz,const char* a_buffer){
+  if(a_sz<5) return false;
+  if(a_buffer[0]!='<') return false;
+  if(a_buffer[1]!='e') return false;
+  if(a_buffer[2]!='x') return false;
+  if(a_buffer[3]!='s') return false;
+  if(a_buffer[4]!='g') return false;
+  return true;
+}
+
+inline bool is_exsg(const std::string& a_file,bool& a_is){
+  unsigned char head[5];
+ {unsigned int num = 5;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=5) {a_is = false;return true;}}
+  a_is = is_exsg(5,(const char*)head);
+  return true;
+}
+
+inline bool is_bsg(unsigned int a_sz,const char* a_buffer){
+  if(a_sz<7) return false;
+  if(a_buffer[0]!='i') return false;
+  if(a_buffer[1]!='n') return false;
+  if(a_buffer[2]!='e') return false;
+  if(a_buffer[3]!='x') return false;
+  if(a_buffer[4]!='b') return false;
+  if(a_buffer[5]!='s') return false;
+  if(a_buffer[6]!='g') return false;
+  return true;
+}
+
+inline bool is_bsg(const std::string& a_file,bool& a_is){
+  unsigned char head[7];
+ {unsigned int num = 7;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=7) {a_is = false;return true;}}
+  a_is = is_bsg(7,(const char*)head);
+  return true;
+}
+
+inline bool is_scenarios(const std::string& a_file,bool& a_is){
+  unsigned char head[10];
+ {unsigned int num = 10;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=10) {a_is = false;return true;}}
+  if(head[0]!='<') {a_is = false;return true;}
+  if(head[1]!='s') {a_is = false;return true;}
+  if(head[2]!='c') {a_is = false;return true;}
+  if(head[3]!='e') {a_is = false;return true;}
+  if(head[4]!='n') {a_is = false;return true;}
+  if(head[5]!='a') {a_is = false;return true;}
+  if(head[6]!='r') {a_is = false;return true;}
+  if(head[7]!='i') {a_is = false;return true;}
+  if(head[8]!='o') {a_is = false;return true;}
+  if(head[9]!='s') {a_is = false;return true;}
+  a_is = true;  
+  return true;
+}
+
+inline bool is_slides(const std::string& a_file,bool& a_is){
+  unsigned char head[7];
+ {unsigned int num = 7;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=7) {a_is = false;return true;}}
+  if(head[0]!='<') {a_is = false;return true;}
+  if(head[1]!='s') {a_is = false;return true;}
+  if(head[2]!='l') {a_is = false;return true;}
+  if(head[3]!='i') {a_is = false;return true;}
+  if(head[4]!='d') {a_is = false;return true;}
+  if(head[5]!='e') {a_is = false;return true;}
+  if(head[6]!='s') {a_is = false;return true;}
+  a_is = true;  
+  return true;
+}
+
+inline bool is_fits(const std::string& a_file,bool& a_is){
+  unsigned char head[6];
+ {unsigned int num = 6;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=6) {a_is = false;return true;}}
+  if(head[0]!='S') {a_is = false;return true;}
+  if(head[1]!='I') {a_is = false;return true;}
+  if(head[2]!='M') {a_is = false;return true;}
+  if(head[3]!='P') {a_is = false;return true;}
+  if(head[4]!='L') {a_is = false;return true;}
+  if(head[5]!='E') {a_is = false;return true;}
+  a_is = true;  
+  return true;
+}
+
+inline bool is_hdf(const std::string& a_file,bool& a_is){
+  unsigned char head[4];
+ {unsigned int num = 4;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=4) {a_is = false;return true;}}
+  if(head[0]!=137) {a_is = false;return true;}
+  if(head[1]!='H') {a_is = false;return true;}
+  if(head[2]!='D') {a_is = false;return true;}
+  if(head[3]!='F') {a_is = false;return true;}
+  a_is = true;  
+  return true;
+}
+
+inline bool is_ps(const std::string& a_file,bool& a_is){
+  unsigned char head[4];
+ {unsigned int num = 4;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=4) {a_is = false;return true;}}
+  if(head[0]!='%') {a_is = false;return true;}
+  if(head[1]!='!') {a_is = false;return true;}
+  if(head[2]!='P') {a_is = false;return true;}
+  if(head[3]!='S') {a_is = false;return true;}
+  a_is = true;  
+  return true;
+}
+
+}}
+
+#endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh 76333 2013-11-08 14:31:50Z gcosmo $
+// $Id: G4VEmModel.hh 84661 2014-10-17 14:30:16Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -84,11 +84,12 @@
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
+#include "G4Isotope.hh"
 #include "G4DataVector.hh"
 #include "G4VEmFluctuationModel.hh"
 #include "G4VEmAngularDistribution.hh"
 #include "G4EmElementSelector.hh"
-#include "Randomize.hh"
+#include <CLHEP/Random/RandomEngine.h>
 #include <vector>
 
 class G4ElementData;
@@ -355,6 +356,8 @@ public:
 
   inline const G4Element* GetCurrentElement() const;
 
+  inline const G4Isotope* GetCurrentIsotope() const;
+
 protected:
 
   inline const G4MaterialCutsCouple* CurrentCouple() const;
@@ -394,12 +397,15 @@ private:
 
 protected:
 
+  CLHEP::HepRandomEngine*      rndmEngineMod;
+
   G4ElementData*               fElementData;
   G4VParticleChange*           pParticleChange;
   G4PhysicsTable*              xSectionTable;
   const std::vector<G4double>* theDensityFactor;
   const std::vector<G4int>*    theDensityIdx;
   size_t                       idxTable;
+  const static G4double        inveplus;       
 
   // ======== Cashed values - may be state dependent ================
 
@@ -408,6 +414,7 @@ private:
   G4LossTableManager*         fManager;
   const G4MaterialCutsCouple* fCurrentCouple;
   const G4Element*            fCurrentElement;
+  const G4Isotope*            fCurrentIsotope;
 
   G4int                  nsec;
   std::vector<G4double>  xsec;
@@ -433,6 +440,7 @@ inline const G4MaterialCutsCouple* G4VEmModel::CurrentCouple() const
 inline void G4VEmModel::SetCurrentElement(const G4Element* elm)
 {
   fCurrentElement = elm;
+  fCurrentIsotope = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -440,6 +448,13 @@ inline void G4VEmModel::SetCurrentElement(const G4Element* elm)
 inline const G4Element* G4VEmModel::GetCurrentElement() const
 {
   return fCurrentElement;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline const G4Isotope* G4VEmModel::GetCurrentIsotope() const
+{
+  return fCurrentIsotope;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -521,6 +536,7 @@ G4VEmModel::SelectRandomAtom(const G4MaterialCutsCouple* couple,
     fCurrentElement = SelectRandomAtom(couple->GetMaterial(),part,kinEnergy,
 				       cutEnergy,maxEnergy);
   }
+  fCurrentIsotope = 0;
   return fCurrentElement;
 }
 
@@ -528,14 +544,16 @@ G4VEmModel::SelectRandomAtom(const G4MaterialCutsCouple* couple,
 
 inline G4int G4VEmModel::SelectRandomAtomNumber(const G4Material* mat)
 {
+  // this algorith assumes that cross section is proportional to
+  // number electrons multiplied by number of atoms
   size_t nn = mat->GetNumberOfElements();
   const G4ElementVector* elmv = mat->GetElementVector();
-  G4int Z = G4int((*elmv)[0]->GetZ());
+  G4int Z = G4lrint((*elmv)[0]->GetZ());
   if(1 < nn) {
     const G4double* at = mat->GetVecNbOfAtomsPerVolume();
-    G4double tot = mat->GetTotNbOfAtomsPerVolume()*G4UniformRand();
+    G4double tot = mat->GetTotNbOfAtomsPerVolume()*rndmEngineMod->flat();
     for( size_t i=0; i<nn; ++i) {
-      Z = G4int((*elmv)[0]->GetZ());
+      Z = G4lrint((*elmv)[0]->GetZ());
       tot -= Z*at[i];
       if(tot <= 0.0) { break; }
     }
@@ -548,20 +566,22 @@ inline G4int G4VEmModel::SelectRandomAtomNumber(const G4Material* mat)
 inline G4int G4VEmModel::SelectIsotopeNumber(const G4Element* elm)
 {
   SetCurrentElement(elm);
-  G4int N = G4int(elm->GetN() + 0.5);
+  G4int N = G4lrint(elm->GetN());
   G4int ni = elm->GetNumberOfIsotopes();
+  fCurrentIsotope = 0;
   if(ni > 0) {
     G4int idx = 0;
     if(ni > 1) {
       G4double* ab = elm->GetRelativeAbundanceVector();
-      G4double x = G4UniformRand();
+      G4double x = rndmEngineMod->flat();
       for(; idx<ni; ++idx) {
 	x -= ab[idx];
 	if (x <= 0.0) { break; }
       }
       if(idx >= ni) { idx = ni - 1; }
     }
-    N = elm->GetIsotope(idx)->GetN();
+    fCurrentIsotope = elm->GetIsotope(idx);
+    N = fCurrentIsotope->GetN();
   }
   return N;
 }
@@ -584,7 +604,10 @@ inline G4VEmAngularDistribution* G4VEmModel::GetAngularDistribution()
 
 inline void G4VEmModel::SetAngularDistribution(G4VEmAngularDistribution* p)
 {
-  anglModel = p;
+  if(p != anglModel) {
+    delete anglModel;
+    anglModel = p;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

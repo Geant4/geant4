@@ -33,6 +33,7 @@
 // 20130621  Implement collide() here to throw exception, use reference
 //		instead of pointer for deExcite()
 // 20130622  Promote to direct base of G4VCascadeCollider
+// 20140930  Change name from "const char*" to "const G4String"
 
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
@@ -44,7 +45,7 @@ class G4Fragment;
 
 class G4VCascadeDeexcitation : public G4VCascadeCollider {
 public:
-  G4VCascadeDeexcitation(const char* name) : G4VCascadeCollider(name) {}
+  G4VCascadeDeexcitation(const G4String& name) : G4VCascadeCollider(name) {}
   virtual ~G4VCascadeDeexcitation() {}
 
   // Standard Collider interface should not be used (will end job)

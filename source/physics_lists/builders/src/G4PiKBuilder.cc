@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PiKBuilder.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4PiKBuilder.cc 81935 2014-06-06 15:41:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -53,15 +53,8 @@ G4PiKBuilder(): wasActivated(false)
   theKaonZeroSInelastic=new G4KaonZeroSInelasticProcess;
 }
 
-G4PiKBuilder::
-~G4PiKBuilder(){
-  delete thePionPlusInelastic;
-  delete thePionMinusInelastic;
-  delete theKaonPlusInelastic;
-  delete theKaonMinusInelastic;
-  delete theKaonZeroLInelastic;
-  delete theKaonZeroSInelastic;
-}
+G4PiKBuilder::~G4PiKBuilder()
+{}
 
 void G4PiKBuilder::
 Build()

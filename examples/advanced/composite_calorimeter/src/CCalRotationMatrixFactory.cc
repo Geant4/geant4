@@ -46,7 +46,7 @@ G4String CCalRotationMatrixFactory::file="";
 CCalRotationMatrixFactory* CCalRotationMatrixFactory::getInstance(const G4String & rotfile){
   if (rotfile=="" || rotfile==file)
     return getInstance();
-  else if (file="") {
+  else if (file=="") {
     file=rotfile;
     return getInstance();
   } else {
@@ -215,14 +215,20 @@ G4RotationMatrix* CCalRotationMatrixFactory::AddMatrix(const G4String& name,
 }
 
 CCalRotationMatrixFactory::CCalRotationMatrixFactory():theMatrices(){
-  
-  G4String path = getenv("CCAL_GLOBALPATH");
+
+  G4String path = "NULL";
+  if (getenv("CCAL_GLOBALPATH"))
+    path = getenv("CCAL_GLOBALPATH");
+
   G4cout << " ==> Opening file " << file << "..." << G4endl;
   std::ifstream is;
   bool ok = openGeomFile(is, path, file);
   if (!ok) {
-    G4cerr << "ERROR: Could not open file " << file << " ... Exiting!" << G4endl;
-    exit(-1);
+    G4ExceptionDescription ed;
+    ed << "Could not open file " << file << " ... Exiting!" << G4endl;
+    G4Exception("CCalRotationMatrixFactory::CCalRotationMatrixFactory()",
+		"ccal002",
+		FatalException,ed);
   }
 
   //////////////////////////////////////////////////

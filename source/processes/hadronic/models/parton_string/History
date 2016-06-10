@@ -15,6 +15,18 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
 
 --------------------------------------------------
+26 March 2014,  G.Folger (hadr-prtn-V10-00-02)
+   convert to const G4Particledefinition*
+
+--------------------------------------------------
+25 February 2014,  A. Ribon (hadr-prtn-V10-00-01)
+   Reverting back the CMakeLists.txt as before the previous tag.
+
+--------------------------------------------------
+14 February 2014,  M. Karamitros (hadr-prtn-V10-00-00)
+   Reordering of add_subdirectory in CMakeLists.txt.
+
+--------------------------------------------------
 27 September 2012,  G. Cosmo (hadr-prtn-V09-05-00)
    Explicitly use inclusion of headers for system of units and physical
    constants, in plan to remove implicit inclusion from globals.hh.

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALCalorHit.cc 67976 2013-03-13 10:23:17Z gcosmo $
+// $Id: FCALCalorHit.cc 84371 2014-10-14 12:51:18Z gcosmo $
 //
 // 
 
@@ -32,7 +32,7 @@
 
 #include "FCALCalorHit.hh"
 
-G4Allocator<FCALCalorHit> FCALCalorHitAllocator;
+G4ThreadLocal G4Allocator<FCALCalorHit>* FCALCalorHitAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

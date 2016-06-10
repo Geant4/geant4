@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -46,6 +47,7 @@
 
 #include "G4INCLNuclearDensity.hh"
 #include "G4INCLINuclearPotential.hh"
+#include "G4INCLInterpolationTable.hh"
 
 namespace G4INCL {
 
@@ -87,6 +89,7 @@ namespace G4INCL {
       }
 
       ParticleList sampleParticles(ThreeVector const &position);
+      void sampleParticlesIntoList(ThreeVector const &position, ParticleList &theList);
 
     private:
 
@@ -122,10 +125,10 @@ namespace G4INCL {
       const G4int theZ;
 
       /// \brief Array of pointers to the r-space CDF table
-      InverseInterpolationTable const *theRCDFTable[UnknownParticle];
+      InterpolationTable const *theRCDFTable[UnknownParticle];
 
       /// \brief Array of pointers to the p-space CDF table
-      InverseInterpolationTable const *thePCDFTable[UnknownParticle];
+      InterpolationTable const *thePCDFTable[UnknownParticle];
 
       /// \brief Pointer to the Cluster's NuclearDensity
       NuclearDensity const *theDensity;

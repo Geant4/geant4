@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4coutDestination.cc 67970 2013-03-13 10:10:06Z gcosmo $
+// $Id: G4coutDestination.cc 82279 2014-06-13 14:44:00Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -32,6 +32,8 @@
 //
 
 #include "G4coutDestination.hh"
+
+G4coutDestination* G4coutDestination::masterG4coutDestination = 0;
 
 G4coutDestination::G4coutDestination()
 {

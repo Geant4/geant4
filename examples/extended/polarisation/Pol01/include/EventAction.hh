@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// $Id: EventAction.hh 68753 2013-04-05 10:26:04Z gcosmo $
+// $Id: EventAction.hh 86418 2014-11-11 10:39:38Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,28 +35,22 @@
 #define EventAction_h 1
 
 #include "G4UserEventAction.hh"
-#include "globals.hh"
 
-class EventActionMessenger;
 class RunAction;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class EventAction : public G4UserEventAction
 {
-  public:
-    EventAction(RunAction *);
-   ~EventAction();
+public:
+  EventAction(RunAction *);
+  virtual ~EventAction();
 
-  public:
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
+  virtual void BeginOfEventAction(const G4Event*);
+  virtual void EndOfEventAction(const G4Event*);
     
-    void SetPrintModulo(G4int val) {printModulo = val;};
-               
-  private:
-    G4int                 printModulo;                    
-    EventActionMessenger* eventMessenger;
-    RunAction*            runAction;
+private:
+  RunAction*            runAction;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

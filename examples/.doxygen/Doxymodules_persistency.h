@@ -1,4 +1,4 @@
-// $Id: Doxymodules_persistency.h 76473 2013-11-11 10:35:14Z gcosmo $
+// $Id: Doxymodules_persistency.h 86514 2014-11-13 09:10:24Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_persistency.h
@@ -22,7 +22,6 @@
  */
 
   class G01DetectorConstruction {};
-  class G01PhysicsList {};
   class G01PrimaryGeneratorAction {};
 
 /** @} */
@@ -63,7 +62,6 @@
  */
 
   class G04DetectorConstruction {};
-  class G04PhysicsList {};
   class G04PrimaryGeneratorAction {};
   class G04SensitiveDetector {};
 
@@ -78,13 +76,12 @@
  *  @{
  */
 
-  class Classes {};
   class ExP01ChamberParameterisation {};
+  class ExP01Classes {};
   class ExP01DetectorConstruction {};
   class ExP01DetectorMessenger {};
   class ExP01EventAction {};
   class ExP01MagneticField {};
-  class ExP01PhysicsList {};
   class ExP01PrimaryGeneratorAction {};
   class ExP01RunAction {};
   class ExP01SteppingAction {};
@@ -105,7 +102,6 @@
   class ExP02DetConstrReader {};
   class ExP02DetectorConstruction {};
   class ExP02GeoTree {};
-  class ExP02PhysicsList {};
   class ExP02PrimaryGeneratorAction {};
 
 /** @} */
@@ -121,7 +117,6 @@
   class ExTGDetectorConstructionWithCpp {};
   class ExTGDetectorConstructionWithCuts {};
   class ExTGDetectorConstructionWithSD {};
-  class ExTGPhysicsList {};
   class ExTGPrimaryGeneratorAction {};
   class ExTGRCDetectorBuilder {};
   class ExTGRCLineProcessor {};

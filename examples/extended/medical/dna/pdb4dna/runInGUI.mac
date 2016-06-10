@@ -1,0 +1,14 @@
+/tracking/verbose 0
+
+/PDB4DNA/det/loadPDB 1ZBB.pdb
+/PDB4DNA/det/buildBoundingV
+
+/PDB4DNA/event/setEnergyThres 8.22 eV #default value: 8.22 eV
+/PDB4DNA/event/setDistanceThres 10    #default value: 10
+
+/gun/particle proton
+/gun/energy 100 keV
+
+/run/initialize
+
+/run/beamOn 10

@@ -1,4 +1,4 @@
-# $Id: proton.mac 66241 2012-12-13 18:34:42Z gunter $
+# $Id: proton.mac 82401 2014-06-18 14:43:54Z gcosmo $
 #
 # macro file for TestEm18.cc
 #
@@ -8,7 +8,7 @@
 /testem/det/setMat Water
 /testem/det/setSize 1 cm
 #
-/testem/phys/setCuts 100 um
+/run/setCut 100 um
 #
 /run/initialize
 #
@@ -23,6 +23,6 @@
 /analysis/h1/set 4 100 0 300 keV    #e- energy spectrum
 /analysis/h1/set 6 100 0 10 mm	    #step size
 #
-/testem/event/printModulo 100000
+/run/printProgress 100000
 #
 /run/beamOn 1000000

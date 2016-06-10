@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc 74790 2013-10-22 07:31:37Z gcosmo $
+// $Id: G4BraggIonModel.cc 83008 2014-07-24 14:49:52Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -73,6 +73,8 @@
 
 using namespace std;
 
+G4ASTARStopping* G4BraggIonModel::fASTAR = 0;
+
 G4BraggIonModel::G4BraggIonModel(const G4ParticleDefinition* p,
                                  const G4String& nam)
   : G4VEmModel(nam),
@@ -101,7 +103,9 @@ G4BraggIonModel::G4BraggIonModel(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4BraggIonModel::~G4BraggIonModel()
-{}
+{
+  if(IsMaster()) { delete fASTAR; fASTAR = 0; }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -130,7 +134,9 @@ void G4BraggIonModel::Initialise(const G4ParticleDefinition* p,
     corr = G4LossTableManager::Instance()->EmCorrections();
 
     fParticleChange = GetParticleChangeForLoss();
+    if(!fASTAR) { fASTAR = new G4ASTARStopping(); }
   }
+  if(IsMaster() && particle->GetPDGMass() < GeV) { fASTAR->Initialise(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -160,7 +166,8 @@ G4double G4BraggIonModel::GetParticleCharge(const G4ParticleDefinition* p,
 					    const G4Material* mat,
 					    G4double kineticEnergy)
 {
-  //G4cout<<"G4BraggIonModel::GetParticleCharge e= "<<kineticEnergy<<G4endl;
+  //G4cout<<"G4BraggIonModel::GetParticleCharge e= "<<kineticEnergy <<
+  //  " q= " <<  corr->GetParticleCharge(p,mat,kineticEnergy) <<G4endl;
   // this method is called only for ions
   return corr->GetParticleCharge(p,mat,kineticEnergy);
 }
@@ -181,7 +188,10 @@ G4double G4BraggIonModel::ComputeCrossSectionPerElectron(
     G4double energy  = kineticEnergy + mass;
     G4double energy2 = energy*energy;
     G4double beta2   = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
-    cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*G4Log(maxEnergy/cutEnergy)/tmax;
+    cross = (maxEnergy - cutEnergy)/(cutEnergy*maxEnergy) 
+      - beta2*G4Log(maxEnergy/cutEnergy)/tmax;
+
+    if( 0.5 == spin ) { cross += 0.5*(maxEnergy - cutEnergy)/energy2; }
 
     cross *= twopi_mc2_rcl2*chargeSquare/beta2;
   }
@@ -375,33 +385,31 @@ G4double G4BraggIonModel::MaxSecondaryEnergy(const G4ParticleDefinition* pd,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool G4BraggIonModel::HasMaterial(const G4Material* material)
+G4bool G4BraggIonModel::HasMaterial(const G4Material*)
 {
+  return false;
+  /*
   G4String chFormula = material->GetChemicalFormula();
   if("" == chFormula) { return false; }
 
   // ICRU Report N49, 1993. Ziegler model for He.
+  
   static const size_t numberOfMolecula = 11;
   static const G4String molName[numberOfMolecula] = {
     "CaF_2",  "Cellulose_Nitrate",  "LiF", "Policarbonate",  
     "(C_2H_4)_N-Polyethylene",  "(C_2H_4)_N-Polymethly_Methacralate",
     "Polysterene", "SiO_2", "NaI", "H_2O",
     "Graphite" };
-  static const G4int idxASTAR[numberOfMolecula] = {
-    17,  19,  33, 51,
-    52,  54,  
-    56,  62,  43, 71,
-    13};
 
   // Search for the material in the table
   for (size_t i=0; i<numberOfMolecula; ++i) {
     if (chFormula == molName[i]) {
-      iMolecula = -1;
-      iASTAR = idxASTAR[i];  
-      return true;
+      iASTAR = fASTAR->GetIndex(matName[i]);  
+      break;
     }
   }
-  return false ;
+  return (iASTAR >= 0);
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -637,7 +645,7 @@ G4double G4BraggIonModel::DEDX(const G4Material* material,
     currentMaterial = material;
     iASTAR    = -1;
     iMolecula = -1;
-    if( !HasMaterial(material) ) { iASTAR = astar.GetIndex(material); }
+    if( !HasMaterial(material) ) { iASTAR = fASTAR->GetIndex(material); }
   }
 
   const G4int numberOfElements = material->GetNumberOfElements();
@@ -646,8 +654,8 @@ G4double G4BraggIonModel::DEDX(const G4Material* material,
 
   if( iASTAR >= 0 ) {
     G4double T = kineticEnergy*rateMassHe2p;
-    return astar.GetElectronicDEDX(iASTAR, T)*material->GetDensity()/
-      HeEffChargeSquare(astar.GetEffectiveZ(iASTAR), T/MeV);
+    return fASTAR->GetElectronicDEDX(iASTAR, T)*material->GetDensity()/
+      HeEffChargeSquare(fASTAR->GetEffectiveZ(iASTAR), T/MeV);
 
   } else if(iMolecula >= 0) {
 

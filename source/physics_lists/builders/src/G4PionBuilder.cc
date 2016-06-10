@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PionBuilder.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4PionBuilder.cc 81935 2014-06-06 15:41:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -48,11 +48,8 @@ G4PionBuilder(): wasActivated(false)
   thePionMinusInelastic=new G4PionMinusInelasticProcess;
 }
 
-G4PionBuilder::
-~G4PionBuilder(){
-  delete thePionPlusInelastic;
-  delete thePionMinusInelastic;
-}
+G4PionBuilder::~G4PionBuilder()
+{}
 
 void G4PionBuilder::
 Build()

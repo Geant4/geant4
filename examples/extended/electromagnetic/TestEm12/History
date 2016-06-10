@@ -1,4 +1,4 @@
-$Id: History 77092 2013-11-21 10:50:40Z gcosmo $
+$Id: History 85260 2014-10-27 08:53:35Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,26 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+24-10-14 mma (testem12-V10-00-04)
+- PhysListEmStandard : fUseSafetyPlus
+- use G4EmStandardPhysicsSS and WVI
+- TestEm12.in : /run/numberOfThreads 2
+
+11-09-14 mma (testem12-V10-00-03)
+- TestEm12.cc : SetNumberOfThreads(G4Threading::G4GetNumberOfCores())
+
+22-06-14 mma (testem12-V10-00-02)
+- remove PhysicsList::SetCuts(). Update macros
+
+21-04-04 V.Ivanchenko (testem12-V10-00-01)
+- PhysicsList - added emlowenergy and dna_option1 physics lists 
+     
+19-01-14 mma (testem12-V10-00-00)
+- MT: ActionInitialization, TestEm12.cc
+- MT: RunAction, Run, EventAction, TrackingAction, SteppingAction
+- MT: DetectorConstruction and messenger.  rm MagField
+- rm EventActionMessenger. Cleanup all macros
 
 21-11-13 V.Ivanchenko (testem12-V09-06-11)
 - PhysListEmStandardWVI and PhysListEmStandardSS - reduced low-energy 

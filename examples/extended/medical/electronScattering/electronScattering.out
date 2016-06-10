@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -60,7 +60,7 @@
           ElmMassFraction:   4.00 %  ElmAbundance   3.60 % 
 
 
- Material:    Mylar    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.937 cm 
+ Material:    Mylar    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.923 cm 
                        Imean:  75.967 eV 
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -140,12 +140,12 @@
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113804112.837 pc 
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113427275.267 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
@@ -157,7 +157,7 @@
 #
 /testem/phys/addPhysics emstandard_opt0
 PhysicsList::AddPhysicsList: <emstandard_opt0>
-/testem/phys/setCut 1 mm
+/run/setCut 1 mm
 #
 /run/initialize
 userDetector->Construct() start.
@@ -175,7 +175,6 @@ World is registered to the default region.
 physicsList->Construct() start.
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
-PhysicsList::SetCuts:CutLength : 1 mm 
 #
 /gun/particle e-
 /gun/energy 13 MeV
@@ -189,7 +188,7 @@ Set file name: eScattering
 /analysis/h1/set 3 120 0. 24. cm
 /analysis/h1/set 4 120 0. 24. cm
 #
-/testem/event/printModulo 10000
+/run/printProgress 10000
 #
 /run/beamOn 100000
 
@@ -270,37 +269,26 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
       55.71          0k         2        2          9         0.00    Frame
       44.29          0k         1        3          4         0.00    Gas
 ### Run 0 starts.
-### Run 0 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ... open Root analysis file : eScattering.root - done
-
----> Begin of Event: 0
-
----> Begin of Event: 10000
-
----> Begin of Event: 20000
-
----> Begin of Event: 30000
-
----> Begin of Event: 40000
-
----> Begin of Event: 50000
-
----> Begin of Event: 60000
-
----> Begin of Event: 70000
-
----> Begin of Event: 80000
-
----> Begin of Event: 90000
-Run terminated.
+--> Event 0 starts.
+--> Event 10000 starts.
+--> Event 20000 starts.
+--> Event 30000 starts.
+--> Event 40000 starts.
+--> Event 50000 starts.
+--> Event 60000 starts.
+--> Event 70000 starts.
+--> Event 80000 starts.
+--> Event 90000 starts.
+ Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=13.18s Real=12.9s Sys=0.01s
+  User=16.26s Real=16.32s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -309,19 +297,21 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1498528687, 1405076226
+ Current couple of seeds = 511619302, 535044548
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
+UserActionInitialization deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
+Total navigation history collections cleaned: 10
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.33 Mb
+Number of memory pools allocated: 9 of which, static: 0
+Dynamic pools deleted: 9 / Total memory freed: 0.022 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

@@ -1,4 +1,4 @@
-$Id: History 76938 2013-11-19 09:51:36Z gcosmo $
+$Id: History 84271 2014-10-13 07:12:23Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,25 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 October 2014:  M. Kelsey (phononExample-V10-00-03)
+- caustic.out-MT-*, timing.out-MT-*:  Remove platform-specific reference files.
+- caustic.out-MT, timing.out-MT:  Add new references for MT jobs; output is
+  different than sequential build.
+- CTestDefinitions.txt:  Use new platform-independent MT reference files.
+
+08 October 2014:  M. Kelsey (phononExample-V10-00-02)
+- XAluminumElectrodeHit:  G4Allocator must be thread local.
+
+06 October 2014:  M. Kelsey (phononExample-V10-00-01)
+Migration for MT compatibility:
+- XGeBox.cc:  Add XActionInitialization, use of G4MTRunManager.
+- XActionInitialization:  Move generator and stacking action here.
+- XGeneratorConstruction:  Move SD instantiation to new function.
+- sources.cmake:  Add new XActionInitialization.hh,cc
+
+06 February 2014:  J. Allison (phononExample-V10-00-00)
+- CMakeLists.txt: Added CrystalMaps to list copied to build directory.
 
 18 November 2013:  M. Kelsey (phononExample-V09-06-09)
 - XDetectorConstruction.cc:  Remove verbosity settings.

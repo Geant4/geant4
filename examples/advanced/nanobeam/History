@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 77894 2013-11-29 08:58:25Z gcosmo $
+$Id: History 85242 2014-10-27 08:21:06Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,25 @@ $Id: History 77894 2013-11-29 08:58:25Z gcosmo $
 
                        Package History file
                        --------------------
+
+25 Oct 2014 - tag nanobeam-V10-00-06 - L. Garnier
+- Fix CMakeLists.txt error
+
+24 Oct 2014 - tag nanobeam-V10-00-04/nanobeam-V10-00-05 - L. Garnier
+- Fix CMakeLists.txt to not crash compilation when Geant4_builtin_clhep FOUND
+
+10 Jul 2014 - tag nanobeam-V10-00-03 - S. Incerti, A, Dotti, B. Wendt
+- updated CMakeLists.txt
+
+03 Jul 2014 - tag nanobeam-V10-00-02 - S. Incerti, A. Dotti, B. Wendt
+- updated CMakeLists.txt
+
+28 Jui 2014 - tag nanobeam-V10-00-01 - B. Wendt
+- try to fix CMakeLists.txt in case of built-in CLHEP is used
+
+17 Dec 2013 - tag nanobeam-V10-00-00  - A. Dotti, S. Incerti
+- Made the code thread safe because of unsafe CLHEP matrix inversion
+(in RunAction.cc)
 
 28 Nov 2013 - tag nanobeam-V09-06-13  - S. Incerti
 - Changed selection of volumes in SteppingAction using names

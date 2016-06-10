@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.cc 71551 2013-06-18 07:27:24Z gcosmo $
+// $Id: G4GMocrenFileSceneHandler.cc 87360 2014-12-01 16:07:16Z gcosmo $
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura  
@@ -139,9 +139,15 @@ G4GMocrenFileSceneHandler::G4GMocrenFileSceneHandler(G4GMocrenFile& system,
 		 std::strlen(DEFAULT_GDD_FILE_NAME));   // filename
   } else {
     const char * env = std::getenv("G4GMocrenFile_DEST_DIR");
-    std::strncpy(kGddDestDir, env, std::strlen(env));  // output dir
+    int len = std::strlen(env);
+    if(len >= 256) {
+      G4Exception("G4GMocrenFileSceneHandler::G4GMocrenFileSceneHandler(*)",
+                  "gMocren1000", FatalException,
+                  "Invalid length of string set in G4GMocrenFile_DEST_DIR");
+    }
+    std::strncpy(kGddDestDir, env, len);  // output dir
     std::strncpy(kGddFileName, DEFAULT_GDD_FILE_NAME,
-		 std::strlen(DEFAULT_GDD_FILE_NAME));  // filename 
+                 std::strlen(DEFAULT_GDD_FILE_NAME));  // filename
   }
 		
   // maximum number of g4.gdd files in the dest directory

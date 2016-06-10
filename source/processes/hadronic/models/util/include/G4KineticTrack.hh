@@ -65,13 +65,13 @@ class G4KineticTrack : public G4VKineticNucleon
 
       G4KineticTrack(const G4KineticTrack& right);
 
-      G4KineticTrack(G4ParticleDefinition* aDefinition,
+      G4KineticTrack(const G4ParticleDefinition* aDefinition,
                      G4double aFormationTime,
-                     G4ThreeVector aPosition, 
-                     G4LorentzVector& a4Momentum);
+                     const G4ThreeVector& aPosition,
+                     const G4LorentzVector& a4Momentum);
       G4KineticTrack(G4Nucleon * nucleon,
-                     G4ThreeVector aPosition,
-                     G4LorentzVector& a4Momentum);
+                     const G4ThreeVector& aPosition,
+                     const G4LorentzVector& a4Momentum);
 
       ~G4KineticTrack();
 
@@ -84,8 +84,8 @@ class G4KineticTrack : public G4VKineticNucleon
       inline void *operator new(size_t);
       inline void operator delete(void *aTrack);
 */
-      G4ParticleDefinition* GetDefinition() const;
-      void SetDefinition(G4ParticleDefinition* aDefinition);
+      const G4ParticleDefinition* GetDefinition() const;
+      void SetDefinition(const G4ParticleDefinition* aDefinition);
 
       G4double GetFormationTime() const;
       void SetFormationTime(G4double aFormationTime);
@@ -164,7 +164,7 @@ public:
       
   private:
  
-      G4ParticleDefinition* theDefinition;
+      const G4ParticleDefinition* theDefinition;
 
       G4double theFormationTime;
 
@@ -210,12 +210,12 @@ inline void G4KineticTrack::operator delete(void * aT)
 }
 */
 
-inline G4ParticleDefinition* G4KineticTrack::GetDefinition() const
+inline const G4ParticleDefinition* G4KineticTrack::GetDefinition() const
 {
   return theDefinition;
 }
 
-inline void G4KineticTrack::SetDefinition(G4ParticleDefinition* aDefinition)
+inline void G4KineticTrack::SetDefinition(const G4ParticleDefinition* aDefinition)
 {
   theDefinition = aDefinition;
 }

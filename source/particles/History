@@ -1,4 +1,4 @@
-$Id: History 77701 2013-11-27 16:39:30Z gcosmo $
+$Id: History 86833 2014-11-19 08:24:49Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,144 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- 18 Nov. 2014 Makoto Asai (particles-V10-00-27)
+- Fix G4IonTable to delete thread-local string objects.
+
+- 17 Nov. 2014 Makoto Asai (particles-V10-00-26)
+- Fix G4ParticleTable to make sure all dynamically created ions to
+  be deleted at the end of the program.
+
+- 23 Oct. 2014 Andrea Dotti - John Apostolakis (particles-V10-00-25)
+- Revised G4ParticlesWorkspace to use new G4TWorkspacePool from global
+- Requires global-V10-00-39
+
+- 23 Oct. 2014 Andrea Dotti - John Apostolakis (particles-V10-00-24)
+- Introduced workspace class for particle definition
+- Revised G4PDefSplitter class to add utility methods  
+
+- 11 Oct. 2014 Hisaya Kurashige (particles-V10-00-23)
+- Remove FindIon/GetIon methods from G4ParticleTable
+
+- 23 Sep. 2014 Hisaya Kurashige (particles-V10-00-22)
+- Remove unused class of G4IsomerTable (G4NuclideTable is used)
+
+- 12 Sep. 2014 Hisaya Kurashige (particles-V10-00-21)
+- Update mass, width and lifetime according to PDG2014
+
+- 19 Aug. 2014 Makoto Asai (particles-V10-00-20)
+- Re-tag for testing.
+
+- 18 Aug. 2014 Makoto Asai (particles-V10-00-19)
+- Fix G4IonTable and G4NuclideTable so that now G4NuclideTable
+  object can be created without preloading any ion.
+
+- 18 Jul. 2014 Andrea Dotti (particles-V10-00-18)
+- Revert code changes in G4IonTable to logic of tag -16 
+  New logic is not clear, issues to be solved with time 
+  and we prefer to do it later. Keep previous bug-fix
+  code even if now has no effect.
+
+- 18 Jul. 2014 Andrea Dotti 
+- Bug fixing: ensure size methods  check null pointer condition 
+  for G4NuclideTable::fIsotopeList and return zero
+
+- 18 Jul. 2014 Makoto Asai (particles-V10-00-17)
+- G4IonTable - Introducing PrepareNuclideTable() method to allow
+  creating G4NuclideTable object without preloading any ions.
+
+- 11 Jul. 2014 Andrea Dotti (particles-V10-00-16)
+- Solve data-race condition in G4PDefSplitter
+
+- 07 Jul. 2014 Makoto Asai (particles-V10-00-15)
+- G4IonTable.cc - Fill decay channels when an ion is created on 
+  the fly to avoid race condition issue in multithreaded mode.
+  Addressing to bug report #1651.
+
+- 14 Jun. 2014 Hisaya Kurashige (particles-V10-00-14)
+- fix problems in the three-body decay in G4PhaseSpaceDecayChannel
+
+- 13 Jun. 2014 Hisaya Kurashige (particles-V10-00-13)
+- Fix the bug of mass width in G4VDecayChannelFIlleDuaghters
+
+- 12 Jun. 2014 Alberto Ribon (particles-V10-00-12)
+- G4PhaseSpaceDecayChannel: fix bug of momentum non-conservation
+  in the two-body decay
+
+- 31 May 2014 Hisaya Kurashige (particles-V10-00-11)
+- Fix bugs in G4ExcitedMesonConstructor (missing pi + eta mode in DecayTable)
+- G4PhaseSpaceDecayChannel takes in to account mass width of daughter particles
+  and gives the dynamical mass according to Breit-Wigner distribution
+
+- 27 May 2014 Hisaya Kurashige (particles-V10-00-10)
+- Add daughters_width in G4VDecayChannel
+
+- 25 May 2014 Hisaya Kurashige (particles-V10-00-08)
+- Fix Coverity Defects in G4PrimaryParticle, G4DecayTableMessenger
+- Add a new constructor in G4DynamicParticle
+
+- 06. May. 2014 Gabriele Cosmo (particles-V10-00-07)
+- Use G4ThreadLocalStatic in G4PDefSplitter.
+
+- 27. Mar. 2014 Hisaya Kurashige (particles-V10-00-06)
+- Fix Coverity defects in G4NuclideTable.cc and G4IonTable.cc
+
+- 26. Mar. 2014 Tatsumi Koi (particles-V10-00-05)
+-Fix lack of Cl35 ground state in NuclideTable2
+-Fix lack of "*std::log(2.0)" in some comparison of threshold time
+
+- 25. Feb. 2014 Hisaya Kurashige (particles-V10-00-04)
+- Add G4Exception in G4ElectronOcuppancy::AddElectron()
+- Life time is given from mass width for pi0 and sigma0
+
+- 24. Feb. 2014 Hisaya Kurashige (particles-V10-00-03)
+- Fix compiler warnings in G4IonTable::GetLifetime() 
+
+- 22. Feb. 2014 Hisaya Kurashige (particles-V10-00-02)
+- Update particle properties for PDG2013 and fix bugs
+ - Fix PDG code for f0(1370) 10221-->30221
+ - Update muon life time, mass and width
+ - Update quark mass and width
+ - Update pi0 life and width
+ - Update eta mass and width
+ - Update f0(500) mass, width and name (was f0(600))
+ - Update rho0 mass
+ - Update f0(980) mass
+ - Update f1(1285) mass and width
+ - Update eta(1405) mass and width
+ - Update K0s life and width
+ - Update K0* mass and width
+ - Update D0,AntiD0, D+/- mass
+ - Update Ds+/- mass
+ - Update B0,AntiB0, B+/- mass
+ - Update Bs0,AntiBs0 mass width and life
+ - Update Bc+/-0 mass width and life
+ - Update Etac mass width and life
+ - Update Neutron width and life
+ - Update Sigma_b+/- mass and  width
+ - Update N(1650) width
+ - Update N(1700) width
+ - Update N(1720) width
+ - Update delta(1232)- width
+ - Update delta(1600) width
+ - Update delta(1620) width
+ - Update delta(1905) mass and width
+ - Update delta(1910) mass and width
+ - Update delta(1920) width
+ - Update delta(1930) mass
+ - Update Sigmac0,Sigmac++  mass and width
+ - Update AntiLambda_b  mass ,width and life
+ - Update Sigma_b+/-  mass ,width and life
+ - Update Xi_b0/-  mass ,width and life
+ - Fix baryon number for AntiLambda_b, AntiLambda_c
+
+- 21. Feb. 2014  Makoto Asai (particles-V10-00-01)
+- G4ParticleDefinition::DumpTable() displays correct stability
+  information for a general ion as long as it is known to
+  G4NuclideTable. Addressing to bug report #1560.
+
+- 28. Jan. 2014  Makoto Asai (particles-V10-00-00)
+- Fix G4ParticleTable::GetParticle(G4int) method.
 
 - 27. Nov. 2013  Gabriele Cosmo (particles-V09-06-64)
 - Correction in G4PDefSplitter::FreeSlave() to use free() instead of

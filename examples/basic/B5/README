@@ -1,4 +1,4 @@
-$Id: README 78001 2013-12-02 08:24:53Z gcosmo $
+$Id: README 86065 2014-11-07 08:51:15Z gcosmo $
 
     =========================================================
     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -135,7 +135,7 @@ $Id: README 78001 2013-12-02 08:24:53Z gcosmo $
    The frequency of printing can be tuned with the built-in command
      /run/printProgress  frequency
 
-  4. DETECTOR RESPONSE:
+  6- DETECTOR RESPONSE:
 
      All the information required to simulate and analyze an event is 
      recorded in hits.  This information is recorded in the following 
@@ -178,7 +178,7 @@ $Id: README 78001 2013-12-02 08:24:53Z gcosmo $
      but these are filled automatically in the base classes.
      HepRep is further described at: http://www.slac.stanford.edu/~perl/heprep/
 
-  5. ANALYSIS:
+  7- ANALYSIS:
 
    The analysis tools are used to accumulate statistics.
    Histograms and an ntuple are created in B5RunAction::B5RunAction() 
@@ -207,6 +207,16 @@ $Id: README 78001 2013-12-02 08:24:53Z gcosmo $
    When running in multi-threading mode, the histograms accumulated on threads are
    automatically merged in a single output file, while the ntuple is written
    in files per thread.
+
+  8- BUILD OPTIONS:
+  
+  This example can be built with excluding visualization and/or
+  Geant4 user interface via G4VIS_USE and G4UI_USE compiler options 
+  (see exampleB5.cc).
+  These options are defined by default with Geant4 configuration;
+  they can switched off at compilation time via the CMake options 
+  G4VIS_NONE or G4UI_NONE or via the environment variables of the 
+  same name if using GNUmake build.
 
  The following paragraphs are common to all basic examples
 

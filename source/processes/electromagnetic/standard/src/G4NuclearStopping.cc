@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearStopping.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4NuclearStopping.cc 78837 2014-01-28 08:44:36Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //
@@ -36,6 +36,8 @@
 // Creation date: 20 July 2009
 // 
 // Modified:
+//
+// Warning: this class should be instantiated after G4ionIonisation
 //
 // -----------------------------------------------------------------------------
 //
@@ -106,6 +108,11 @@ G4VParticleChange* G4NuclearStopping::AlongStepDoIt(const G4Track& track,
 						    const G4Step&  step)
 {
   nParticleChange.InitializeForAlongStep(track);
+
+  // this line only valid if nuclear stopping 
+  // is computed after G4ionIonisation process 
+  nParticleChange.SetProposedCharge(step.GetPostStepPoint()->GetCharge());
+
   G4double T2 = step.GetPostStepPoint()->GetKineticEnergy();
 
   const G4ParticleDefinition* part = track.GetParticleDefinition();

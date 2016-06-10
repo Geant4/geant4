@@ -5,6 +5,8 @@
 # can be run in batch, without graphic
 # or interactively: Idle> /control/execute debug.mac
 #
+/run/initialize
+#
 /tracking/verbose 1
 #
 /gun/particle geantino

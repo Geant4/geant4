@@ -1,7 +1,7 @@
-# $Id: GNUmakefile 76263 2013-11-08 11:41:52Z gcosmo $
+# $Id: GNUmakefile 85530 2014-10-30 16:17:43Z gcosmo $
 # --------------------------------------------------------------
 # Makes libraries for each subdomain: 
-#         CSG, specific, Boolean, BREPS, STEP, STEPinterface.
+#         CSG, specific, Boolean.
 # GNUmakefile for solids libraries.  Gabriele Cosmo, 18/9/96.
 
 ifndef G4INSTALL
@@ -9,7 +9,7 @@ ifndef G4INSTALL
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
-SUBDIRS = CSG specific usolids Boolean
+SUBDIRS = CSG specific Boolean
 
 all:
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE)); done

@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -51,18 +52,19 @@ namespace G4INCL {
 
   namespace Random {
 
-    class SeedVector {
+    class SeedVector : private std::vector<G4int> {
       public:
-        long at(const size_t i) const;
-        long &operator[](const size_t i);
-        size_t size() const;
-        void resize(const size_t n);
-        void push_back(const long val);
+        using std::vector<G4int>::at;
+        using std::vector<G4int>::operator[];
+        using std::vector<G4int>::size;
+        using std::vector<G4int>::resize;
+        using std::vector<G4int>::push_back;
+        using std::vector<G4int>::clear;
+        using std::vector<G4int>::begin;
+        using std::vector<G4int>::end;
 
         friend std::ostream &operator<<(std::ostream &out, SeedVector const &sv);
 
-      private:
-        std::vector<long> theSeeds;
     };
 
   }

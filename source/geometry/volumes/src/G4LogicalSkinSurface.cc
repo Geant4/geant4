@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSkinSurface.cc 73926 2013-09-17 07:59:06Z gcosmo $
+// $Id: G4LogicalSkinSurface.cc 80067 2014-03-31 13:48:09Z gcosmo $
 //
 // --------------------------------------------------------------------
 // G4LogicalSkinSurface Implementation
@@ -83,7 +83,7 @@ G4LogicalSkinSurface::~G4LogicalSkinSurface()
 // Operators
 //
 
-const G4LogicalSkinSurface&
+G4LogicalSkinSurface&
 G4LogicalSkinSurface::operator=(const G4LogicalSkinSurface& right)
 {
   if (&right == this) return *this;

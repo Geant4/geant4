@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4OpenGLImmediateQtViewer.hh 83403 2014-08-21 15:07:30Z gcosmo $
 //
 // 
 // Class G4OpenGLImmediateQtViewer : a class derived from
@@ -68,6 +68,7 @@ protected:
   void mouseReleaseEvent(QMouseEvent *event);
   void contextMenuEvent(QContextMenuEvent *e);
   void keyPressEvent (QKeyEvent * event); 
+  void keyReleaseEvent (QKeyEvent * event);
   void paintEvent(QPaintEvent *event);
 private:
   void ComputeView ();

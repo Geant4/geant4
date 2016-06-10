@@ -2,6 +2,7 @@
 #     Macro file for hadr00
 #     06.06.2008 V.Ivanchneko
 #================================================
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 1
 /run/verbose 1
 /tracking/verbose 0
@@ -10,11 +11,11 @@
 /testhadr/TargetRadius     2  cm
 /testhadr/TargetLength     50 cm
 /run/printProgress 10
+/run/setCut           1 km
 #
 /run/initialize
 /process/em/workerVerbose 0
 #
-/run/setCut           1 km
 /gun/particle proton
 /gun/energy 20. GeV
 #/testhadr/HistoType  root

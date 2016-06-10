@@ -1,0 +1,54 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                 FissionFragment History file
+                 ----------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+03-11-14    B. Wendt            (exExtHadFissFrag-V10-00-13)
+- Fixed duplicate plate addition of -x when x=0.0 in
+  FFDetectorConstruction.cc
+
+21-08-14    B. Wendt            (exExtHadFissFrag-V10-00-12)
+- Changed batch.in /run/beamOn from 1000 events to 50
+- Set the Mersenne Twister seed directly in FissionFragment.cc
+  to hopefully achieve a portable fix. I'm not sure about
+  portability to multi-threading - i.e. will each thread have a
+  unique pseudo-random number sequence?
+- Added precompiler options to enable debugging specific features
+
+27-06-14    I.Hrivnacova        (exExtHadFissFrag-V10-00-11)
+- Fixed FFActionInitialization (compilation is squential mode)
+
+26-06-14    B. Wendt            (exExtHadFissFrag-V10-00-10)
+- Added README files for doxygen documentation
+- Updated class data members to follow coding guidelines
+
+
+23-06-14    B. Wendt            (exExtHadFissFrag-V10-00-09)
+- Fixed fuel plate placement issue. Removed need for tag
+  "exExtHadFissFrag-V10-00-08"
+- Fixed sampling location for neutron source
+	
+	
+23-06-14    B. Wendt            (exExtHadFissFrag-V10-00-08)
+- Attempt to correct compilation warnings on gcc-4.1 regarding a call
+  to "int abs(int)" in FFDetectorConstruction.cc
+	
+	
+13-06-14    Gunter Folger       (exExtHadFissFrag-V10-00-07)
+- correct compilation warning on unused variable run in FFRunAction
+- add input file for testing: batch.in
+	
+	
+06-06-13    B. Wendt            (exExtHadFissFrag-V10-00-06)
+- First release

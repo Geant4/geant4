@@ -9,67 +9,44 @@
 namespace tools {
 namespace histo {
 
-template <class TC,class TN,class TW,class TH>
-class h3 : public b3<TC,TN,TW,TH> {
-  typedef b3<TC,TN,TW,TH> parent;
+template <class TC,class TO,class TN,class TW,class TH>
+class h3 : public b3<TC,TO,TN,TW,TH> {
+  typedef b3<TC,TO,TN,TW,TH> parent;
 public:
-  typedef typename b3<TC,TN,TW,TH>::bn_t bn_t;
+  typedef histo_data<TC,TO,TN,TW> hd_t;
+  typedef typename parent::bn_t bn_t;
 protected:
-  virtual TH get_bin_height(int a_offset) const { //TH should be the same as TW
+  virtual TH get_bin_height(TO a_offset) const { //TH should be the same as TW
     return parent::m_bin_Sw[a_offset];
   }
 public:
 
   virtual TH bin_error(int aI,int aJ,int aK) const {
-    if(parent::m_bin_number==0) return 0;
-    bn_t ibin;
-    if(!parent::m_axes[0].in_range_to_absolute_index(aI,ibin)) return 0;
-    bn_t jbin;
-    if(!parent::m_axes[1].in_range_to_absolute_index(aJ,jbin)) return 0;
-    bn_t kbin;
-    if(!parent::m_axes[2].in_range_to_absolute_index(aK,kbin)) return 0;
-    bn_t offset = ibin + jbin * parent::m_axes[1].m_offset + 
-                         kbin * parent::m_axes[2].m_offset;
-  
+    TO offset;
+    if(!parent::_find_offset(aI,aJ,aK,offset)) return 0;
     return ::sqrt(parent::m_bin_Sw2[offset]);
   }
 
 public:
-  bool multiply(TW aFactor){
-    if(!parent::base_multiply(aFactor)) return false;
-    parent::update_fast_getters();
-    return true;
-  }
-  bool scale(TW aFactor) {return multiply(aFactor);}
+  bool multiply(TW a_factor){return parent::base_multiply(a_factor);}
+  bool scale(TW a_factor) {return multiply(a_factor);}
 
-  void copy_from_data(const histo_data<TC,TN,TW>& a_from) {
-    parent::base_from_data(a_from);
-  }
-  histo_data<TC,TN,TW> get_histo_data() const {
-    return parent::base_get_data();
-  }
+  void copy_from_data(const hd_t& a_from) {parent::base_from_data(a_from);}
+  hd_t get_histo_data() const {return parent::base_get_data();}
 
   bool reset() {
     parent::base_reset();
-    parent::update_fast_getters();
     return true;
   }
 
   bool fill(TC aX,TC aY,TC aZ,TW aWeight = 1) {
-    //m_coords[0] = aX;
-    //m_coords[1] = aY;
-    //m_coords[2] = aZ;
-    //return fill_bin(m_coords,aWeight);
-  
-    if(parent::m_dimension<=0) return false;
+    if(parent::m_dimension!=3) return false;
   
     bn_t ibin,jbin,kbin;
     if(!parent::m_axes[0].coord_to_absolute_index(aX,ibin)) return false;
     if(!parent::m_axes[1].coord_to_absolute_index(aY,jbin)) return false;
     if(!parent::m_axes[2].coord_to_absolute_index(aZ,kbin)) return false;
-  
-    bn_t offset = ibin + jbin * parent::m_axes[1].m_offset + 
-                         kbin * parent::m_axes[2].m_offset;
+    TO offset = ibin + jbin * parent::m_axes[1].m_offset + kbin * parent::m_axes[2].m_offset;
   
     parent::m_bin_entries[offset]++;
     parent::m_bin_Sw[offset] += aWeight;
@@ -100,44 +77,99 @@ public:
     if(kbin==0) inRange = false;
     else if(kbin==(parent::m_axes[2].m_number_of_bins+1)) inRange = false;
   
+    parent::m_all_entries++;
     if(inRange) {
       parent::m_in_range_entries++;
       parent::m_in_range_Sw += aWeight;
+      parent::m_in_range_Sw2 += aWeight*aWeight;
   
-      parent::m_in_range_Sxw += xw;
-      parent::m_in_range_Sx2w += x2w;
-  
-      parent::m_in_range_Syw += yw;
-      parent::m_in_range_Sy2w += y2w;
-  
-      parent::m_in_range_Szw += zw;
-      parent::m_in_range_Sz2w += z2w;
+      parent::m_in_range_Sxw[0] += xw;
+      parent::m_in_range_Sx2w[0] += x2w;
+
+      parent::m_in_range_Sxw[1] += yw;
+      parent::m_in_range_Sx2w[1] += y2w;
+
+      parent::m_in_range_Sxw[2] += zw;
+      parent::m_in_range_Sx2w[2] += z2w;
     }
    
     return true;
   }
 
+  bool set_bin_content(bn_t a_ibin,bn_t a_jbin,bn_t a_kbin,
+                       TN a_entries,TW a_Sw,TW a_Sw2,
+                       TC a_Sxw,TC a_Sx2w,TC a_Syw,TC a_Sy2w,TC a_Szw,TC a_Sz2w) {
+    if(parent::m_dimension!=3) return false;
+    if(a_ibin>(parent::m_axes[0].m_number_of_bins+1)) return false;
+    if(a_jbin>(parent::m_axes[1].m_number_of_bins+1)) return false;
+    if(a_kbin>(parent::m_axes[2].m_number_of_bins+1)) return false;
+
+    bool inRange = true;
+    if(a_ibin==0) inRange = false;
+    else if(a_ibin==(parent::m_axes[0].m_number_of_bins+1)) inRange = false;
+    if(a_jbin==0) inRange = false;
+    else if(a_jbin==(parent::m_axes[1].m_number_of_bins+1)) inRange = false;
+    if(a_kbin==0) inRange = false;
+    else if(a_kbin==(parent::m_axes[2].m_number_of_bins+1)) inRange = false;
+
+    TO offset = a_ibin + a_jbin * parent::m_axes[1].m_offset + a_kbin * parent::m_axes[2].m_offset;
+
+    parent::m_all_entries -= parent::m_bin_entries[offset];
+    if(inRange) {
+      parent::m_in_range_entries -= parent::m_bin_entries[offset];
+      parent::m_in_range_Sw -= parent::m_bin_Sw[offset];
+      parent::m_in_range_Sw2 -= parent::m_bin_Sw2[offset];
+      parent::m_in_range_Sxw[0] -= parent::m_bin_Sxw[offset][0];
+      parent::m_in_range_Sx2w[0] -= parent::m_bin_Sx2w[offset][0];
+      parent::m_in_range_Sxw[1] -= parent::m_bin_Sxw[offset][1];
+      parent::m_in_range_Sx2w[1] -= parent::m_bin_Sx2w[offset][1];
+      parent::m_in_range_Sxw[2] -= parent::m_bin_Sxw[offset][2];
+      parent::m_in_range_Sx2w[2] -= parent::m_bin_Sx2w[offset][2];
+    }
+
+    parent::m_bin_entries[offset] = a_entries;
+    parent::m_bin_Sw[offset] = a_Sw;
+    parent::m_bin_Sw2[offset] = a_Sw2;
+
+    parent::m_bin_Sxw[offset][0] = a_Sxw;
+    parent::m_bin_Sx2w[offset][0] = a_Sx2w;
+    parent::m_bin_Sxw[offset][1] = a_Syw;
+    parent::m_bin_Sx2w[offset][1] = a_Sy2w;
+    parent::m_bin_Sxw[offset][2] = a_Szw;
+    parent::m_bin_Sx2w[offset][2] = a_Sz2w;
+
+    parent::m_all_entries += a_entries;
+    if(inRange) {
+      parent::m_in_range_entries += a_entries;
+      parent::m_in_range_Sw += a_Sw;
+      parent::m_in_range_Sw2 += a_Sw2;
+
+      parent::m_in_range_Sxw[0] += a_Sxw;
+      parent::m_in_range_Sx2w[0] += a_Sx2w;
+      parent::m_in_range_Sxw[1] += a_Syw;
+      parent::m_in_range_Sx2w[1] += a_Sy2w;
+      parent::m_in_range_Sxw[2] += a_Szw;
+      parent::m_in_range_Sx2w[2] += a_Sz2w;
+    }
+
+    return true;
+  }
+
   bool add(const h3& a_histo){
     parent::base_add(a_histo);
-    parent::update_fast_getters();
     return true;
   }
   bool subtract(const h3& a_histo){
     parent::base_subtract(a_histo);
-    parent::update_fast_getters();
     return true;
   }
 
   bool multiply(const h3& a_histo) {  
-    if(!parent::base_multiply(a_histo)) return false;
-    parent::update_fast_getters();
-    return true;
+    return parent::base_multiply(a_histo);
   }
   
   bool divide(const h3& a_histo) {
-    if(!parent::base_divide(a_histo)) return false;
-    parent::update_fast_getters();
-    return true;
+    return parent::base_divide(a_histo);
   }
 
 public:
@@ -149,19 +181,19 @@ public:
 */
 public:
   h3(const std::string& a_title,
-                     bn_t aXnumber,TC aXmin,TC aXmax,
-                     bn_t aYnumber,TC aYmin,TC aYmax,
-                     bn_t aZnumber,TC aZmin,TC aZmax)
-  : parent(a_title,aXnumber,aXmin,aXmax,
+     bn_t aXnumber,TC aXmin,TC aXmax,
+     bn_t aYnumber,TC aYmin,TC aYmax,
+     bn_t aZnumber,TC aZmin,TC aZmax)
+  :parent(a_title,aXnumber,aXmin,aXmax,
                   aYnumber,aYmin,aYmax,
                   aZnumber,aZmin,aZmax)
   {}
 
   h3(const std::string& a_title,
-                     const std::vector<TC>& aEdgesX,
-                     const std::vector<TC>& aEdgesY,
-                     const std::vector<TC>& aEdgesZ)
-  : parent(a_title,aEdgesX,aEdgesY,aEdgesZ)
+     const std::vector<TC>& aEdgesX,
+     const std::vector<TC>& aEdgesY,
+     const std::vector<TC>& aEdgesZ)
+  :parent(a_title,aEdgesX,aEdgesY,aEdgesZ)
   {}
 
   virtual ~h3(){}

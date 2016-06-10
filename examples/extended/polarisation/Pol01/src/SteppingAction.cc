@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 68753 2013-04-05 10:26:04Z gcosmo $
+// $Id: SteppingAction.cc 86418 2014-11-11 10:39:38Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,7 +35,6 @@
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
-#include "HistoManager.hh"
 
 #include "G4RunManager.hh"
 #include "G4PolarizationHelper.hh"
@@ -43,9 +42,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* det,
-                               PrimaryGeneratorAction* prim, RunAction* RuAct, 
-                               HistoManager* Hist)
-:detector(det), primary(prim), runAction(RuAct), histoManager(Hist)
+                               PrimaryGeneratorAction* prim, RunAction* RuAct)
+ : detector(det), primary(prim), runAction(RuAct)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,23 +64,26 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   if (prePoint->GetTouchableHandle()->GetVolume()==detector->GetBox() &&
       endPoint->GetTouchableHandle()->GetVolume()==detector->GetWorld()) {
     G4Track* aTrack = aStep->GetTrack();   
-    G4String particleName = aTrack->GetDynamicParticle()->GetDefinition()->GetParticleName();
+    const G4ParticleDefinition* part = 
+      aTrack->GetDynamicParticle()->GetDefinition();
     //    G4cout<<"a "<<particleName<<" left the Box \n";
     G4ThreeVector position  = endPoint->GetPosition();
     G4ThreeVector direction = endPoint->GetMomentumDirection();
     G4double kinEnergy = endPoint->GetKineticEnergy();
 
-    G4ThreeVector beamDirection = primary->GetParticleGun()->GetParticleMomentumDirection();
+    G4ThreeVector beamDirection = 
+      primary->GetParticleGun()->GetParticleMomentumDirection();
     G4double polZ = endPoint->GetPolarization().z();
 
-    G4double costheta=direction*beamDirection;
+    G4double costheta = direction*beamDirection;
 
-    G4double  xdir=direction*G4PolarizationHelper::GetParticleFrameX(beamDirection);
-    G4double  ydir=direction*G4PolarizationHelper::GetParticleFrameY(beamDirection);
+    G4double xdir =
+      direction*G4PolarizationHelper::GetParticleFrameX(beamDirection);
+    G4double ydir =
+      direction*G4PolarizationHelper::GetParticleFrameY(beamDirection);
 
     G4double phi=std::atan2(ydir,xdir);
-    histoManager->FillHistos(particleName,kinEnergy,costheta,phi,polZ);
-    runAction->FillData(particleName,kinEnergy,costheta,phi,polZ);
+    runAction->FillData(part,kinEnergy,costheta,phi,polZ);
   }
 }
 

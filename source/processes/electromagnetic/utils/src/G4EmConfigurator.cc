@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmConfigurator.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4EmConfigurator.cc 86129 2014-11-07 11:16:37Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -91,9 +91,11 @@ void G4EmConfigurator::SetExtraEmModel(const G4String& particleName,
 	   << " Emax(MeV)= " << emax/MeV
 	   << G4endl;
   }
-  if(mod || fm) {
+  if(mod) {
     models.push_back(mod);
     flucModels.push_back(fm);
+    emax = std::min(emax, mod->HighEnergyLimit());
+    mod->SetActivationHighEnergyLimit(emax);
   } else {
     models.push_back(new G4DummyModel());
     flucModels.push_back(0);

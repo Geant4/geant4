@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 66356 2012-12-18 09:02:32Z gcosmo $
+# $Id: GNUmakefile 79490 2014-03-05 15:23:33Z gcosmo $
 # ----------------------------------------------------------------------
 # GNUmakefile for geometry/divisions library.  Gabriele Cosmo, 16/06/03.
 # ----------------------------------------------------------------------
@@ -15,6 +15,7 @@ CPPFLAGS += -DG4GEOM_ALLOC_EXPORT
 CPPFLAGS += \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPGeometry/include \
+            -I$(G4BASE)/graphics_reps/include \
             -I$(G4BASE)/geometry/solids/CSG/include \
             -I$(G4BASE)/geometry/solids/specific/include \
             -I$(G4BASE)/geometry/management/include

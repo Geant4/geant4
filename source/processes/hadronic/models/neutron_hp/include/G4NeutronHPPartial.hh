@@ -94,6 +94,7 @@ class G4NeutronHPPartial
       SetX(i,ii,eg);
       SetY(i,ii,pg);
     }          
+    data[i].Hash();
   }
   
   ~G4NeutronHPPartial()
@@ -108,6 +109,7 @@ class G4NeutronHPPartial
   inline void SetT(G4int i, G4double x) {T[i]=x;}
   inline void SetX(G4int i, G4int j, G4double x) {data[i].SetX(j,x);}
   inline void SetY(G4int i, G4int j, G4double y) {data[i].SetY(j,y);}
+  void DoneSetXY( G4int i ) { data[i].Hash(); }
   
   inline G4double GetX(G4int i) {return X[i];}
   inline G4double GetT(G4int i) {return T[i];}

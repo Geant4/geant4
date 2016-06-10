@@ -32,7 +32,7 @@
 /// \file hadronic/Hadr02/src/G4UrQMD1_3Model.cc
 /// \brief Implementation of the G4UrQMD1_3Model class
 //
-// $Id: G4UrQMD1_3Model.cc 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: G4UrQMD1_3Model.cc 81932 2014-06-06 15:39:45Z gcosmo $
 //
 ///////////////////////////////////////////////////////////////////////////////
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -232,14 +232,14 @@ const G4ParticleDefinition* anti_alp=
     }  else {
 
     G4cout << " Sorry, No definition for particle for UrQMD::"
-	   <<id<< "found" << G4endl;
+           <<id<< "found" << G4endl;
 
       //AND->
 #if G4VERSION_NUMBER>=950
       //New signature (9.5) for G4Exception
       //Using G4HadronicException
       throw G4HadronicException(__FILE__,__LINE__,
-	    "Sorry, no definition for particle for UrQMD");
+            "Sorry, no definition for particle for UrQMD");
 #else
     G4Exception(" "); 
 #endif
@@ -321,7 +321,7 @@ G4cout <<"============================================"<<G4endl;
 //New signature (9.5) for G4Exception
 //Using G4HadronicException instead of base class
 throw G4HadronicException(__FILE__,__LINE__,
-			  "Number of produced particle is very low");
+                          "Number of produced particle is very low");
 #else
 G4Exception(" ");  //stop
 #endif
@@ -345,7 +345,7 @@ G4int pid=pdgid_ (&isys_.ityp[i], &isys_.iso3[i]);
       if (pd)
       {
         G4double px        = (coor_.px[i]+ffermi_.ffermpx[i])* GeV;  
-	//units are in MeV/c for G4
+        //units are in MeV/c for G4
         G4double py        = (coor_.py[i]+ffermi_.ffermpy[i])* GeV;
         G4double pz        = (coor_.pz[i]+ffermi_.ffermpz[i])* GeV;
 

@@ -1,4 +1,4 @@
-$Id: History 77600 2013-11-26 17:07:41Z gcosmo $
+$Id: History 85279 2014-10-27 09:19:21Z gcosmo $
 ----------------------------------------------------
 
      =========================================================
@@ -14,6 +14,56 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+23-10-14 mma (testem5-V10-00-12)
+- PhysListEmStandard : msc algorithm fUseSafetyPlus
+
+21-10-14 mma (testem5-V10-00-11)
+- PhysicsList : added G4EmStandardPhysicsSS, WVI
+
+03-05-14 V.Ivant (testem5-V10-00-10)
+- TestEm5.cc - added possibility to change number on threads by
+    2nd parameter in command line, by default Michel's mechanism
+    of usage of all cores is applied (previous tag); added
+    printout of number of threads 
+- StackingAction, HistoManager - added histograms for energy of
+    gamma and Auger electrons per de-excitation model
+	 
+10-09-14 mma (testem5-V10-00-09)
+- TestEm5.cc : SetNumberOfThreads( G4Threading::G4GetNumberOfCores() )
+
+26-06-14 mma (testem5-V10-00-08)
+- HistoManager - restaure "h" in front of histogram id
+	 	 
+16-06-14 mma (testem5-V10-00-07)
+- remove PhysicsList::SetCuts()	 
+
+07-06-14 mma (testem5-V10-00-06)
+- minor cleanup in PhysicsList::SetCuts()
+	 
+04-06-14 mma (testem5-V10-00-05)
+- rm plotHisto.kumac
+
+03-05-14 V.Ivant (testem5-V10-00-04)
+- TestEm5.cc - added possibility to change number on threads by
+    2nd parameter in command line
+
+03-05-14 V.Ivant (testem5-V10-00-03)
+- Correct commit
+
+02-05-14 V.Ivant (testem5-V10-00-02)
+- PhysicsList, PhysicsListMessenger - removed local cuts commands,
+    instead /run/setCut and /run/setCutForAGivenParticle commands 
+    are used
+- HistoManager - added "h" in front of histogram id
+- macro and README updated accordingly
+
+28-04-14 V.Ivant (testem5-V10-00-01)
+- added "emlowenergy" option for EM physics 
+- slightly reduced printout for the default macro
+     
+16-12-13 mma (testem5-V10-00-00)
+- introduction of Run::EndOfRun()
      
 26-11-13 mma (testem5-V09-06-18)
 - revert to testem5-V09-06-16

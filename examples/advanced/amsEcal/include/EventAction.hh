@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.hh 68740 2013-04-05 09:56:39Z gcosmo $
+// $Id: EventAction.hh 83418 2014-08-21 15:30:47Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,56 +36,38 @@
 #include "globals.hh"
 
 #include <vector>
+#include <map>
 
-class RunAction;
 class PrimaryGeneratorAction;
-class EventActionMessenger;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class EventAction : public G4UserEventAction
 {
   public:  
-    EventAction(DetectorConstruction*, RunAction*, PrimaryGeneratorAction*,
-                HistoManager*);
+    EventAction(DetectorConstruction*, PrimaryGeneratorAction*);
    ~EventAction();
 
     void BeginOfEventAction(const G4Event*);
     void   EndOfEventAction(const G4Event*);
     
-    void SetDrawFlag   (G4String val)  {drawFlag    = val;};
-    void SetPrintModulo(G4int    val)  {printModulo = val;};
-    
-    void SumVisibleEnergy(G4int pixel, G4double de)
-                               {visibleEnergy[pixel] += de;};
+    void SumDeStep(G4int, G4int, G4int, G4double);
+	
+	void WriteFibers(const G4Event*);
 			         	    
-    void SumTotalEnergy  (G4int pixel, G4double de)
-                                 {totalEnergy[pixel] += de;};
-				 
-    void SumNbRadLength  (G4double dn)  {nbRadLen += dn;};
-    
-    void SetWriteFile(G4bool);    
-    void WritePixels(const G4Event*);
-    				         
+
   private:  
     DetectorConstruction*   detector;
-    RunAction*              runAct;
     PrimaryGeneratorAction* primary;
-          
-    std::vector<G4double>   visibleEnergy;
-    std::vector<G4double>     totalEnergy;
-    G4double                nbRadLen;
-    
-    G4bool                trigger;
-    G4double              Eseuil;   
-    
-    G4bool                writeFile;
-                    
-    G4String              drawFlag; 
-    G4int                 printModulo;         
-    EventActionMessenger* eventMessenger;
-    HistoManager*         histoManager;
+	
+	G4int nbOfModules, nbOfLayers, kLayerMax;     
+    std::vector<G4double>   EtotLayer;
+    std::vector<G4double>   EvisLayer;
+	
+	G4double EtotCalor;
+	G4double EvisCalor;
+	
+	std::map<G4int, G4double> EvisFiber;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

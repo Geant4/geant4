@@ -1,4 +1,4 @@
-$Id: History 68019 2013-03-13 13:32:43Z gcosmo $
+$Id: History 84599 2014-10-17 07:42:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 16, 2014  I.Hrivnacova (exerrprop-V10-00-00)
+- Fixed coding guidelines (long lines) in errprop.cc, ExErrorDetectorConstruction.cc
 
 Feb 13, 2013  I.Hrivnacova (exerrprop-V09-06-00)
 - Applied coding guidelines (virtual keyword, data member initialization)

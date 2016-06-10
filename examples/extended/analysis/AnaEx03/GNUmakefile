@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 68015 2013-03-13 13:27:27Z gcosmo $
+# $Id: GNUmakefile 85991 2014-11-06 15:41:42Z gcosmo $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -15,12 +15,12 @@ endif
 all: lib bin
 
 setup:
-	@echo "Copying files from common"
-	@$(G4INSTALL)/examples/extended/common/scripts/copy_files.sh
+	@echo "Copying files from shared"
+	@./shared/scripts/copy_files.sh shared
 
 clean_setup:
-	@echo "Removing files copied from common"
-	@$(G4INSTALL)/examples/extended/common/scripts/clean_files.sh
+	@echo "Removing files copied from shared"
+	@./shared/scripts/clean_files.sh shared
 
 #### G4ANALYSIS_USE := true
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringCylinder.cc 68735 2013-04-05 09:49:13Z gcosmo $
+// $Id: G4ScoringCylinder.cc 83518 2014-08-27 12:57:10Z gcosmo $
 //
 
 #include "G4ScoringCylinder.hh"
@@ -64,20 +64,6 @@ G4ScoringCylinder::G4ScoringCylinder(G4String wName)
 
 G4ScoringCylinder::~G4ScoringCylinder()
 {;}
-
-void G4ScoringCylinder::Construct(G4VPhysicalVolume* fWorldPhys)
-{
-  if(fConstructed) {
-
-    if(verboseLevel > 0) 
-      G4cout << fWorldPhys->GetName() << " --- All quantities are reset." << G4endl;
-    ResetScore();
-
-  } else {
-    fConstructed = true;
-    SetupGeometry(fWorldPhys);
-  }
-}
 
 void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 

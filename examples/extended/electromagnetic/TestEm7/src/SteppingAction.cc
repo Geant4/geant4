@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm7/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 70906 2013-06-07 10:36:44Z gcosmo $
+// $Id: SteppingAction.cc 80577 2014-04-29 07:44:25Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,7 +65,10 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     G4cout << step->GetTrack()->GetMaterial()->GetName()
            << "  E1= " << step->GetPreStepPoint()->GetKineticEnergy()
            << "  E2= " << step->GetPostStepPoint()->GetKineticEnergy()
-           << " Edep= " << edep << G4endl;
+           << " Edep= " << edep 
+           << " Q= " << step->GetTrack()->GetDynamicParticle()->GetCharge()
+           << " Qp= " << step->GetPostStepPoint()->GetCharge()
+           << G4endl;
     */
   } 
 

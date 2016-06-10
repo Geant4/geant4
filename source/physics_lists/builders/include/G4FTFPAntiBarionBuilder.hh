@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFPAntiBarionBuilder.hh 67969 2013-03-13 09:44:42Z gcosmo $ 
+// $Id: G4FTFPAntiBarionBuilder.hh 81935 2014-06-06 15:41:42Z gcosmo $ 
 // GEANT4 tag $Name: $
 //
 //---------------------------------------------------------------------------
@@ -47,8 +47,6 @@
 #include "G4VAntiBarionBuilder.hh"
 
 #include "G4TheoFSGenerator.hh"
-#include "G4ExcitationHandler.hh"
-#include "G4PreCompoundModel.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4FTFModel.hh"
 #include "G4LundStringFragmentation.hh"
@@ -78,13 +76,11 @@ class G4FTFPAntiBarionBuilder : public G4VAntiBarionBuilder
 
   private:
     G4TheoFSGenerator * theModel;
-    G4PreCompoundModel * thePreEquilib;
     G4GeneratorPrecompoundInterface * theCascade;
     G4FTFModel * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
     G4LundStringFragmentation * theLund;
-    G4ExcitationHandler * theHandler;
 
     G4VCrossSectionDataSet* theAntiNucleonData;
     G4VComponentCrossSection * theAntiNucleonXS;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITModelProcessor.cc 71125 2013-06-11 15:39:09Z gcosmo $
+// $Id: G4ITModelProcessor.cc 87375 2014-12-02 08:17:28Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
@@ -34,160 +34,187 @@
 // -------------------------------------------------------------------
 
 #include "G4ITModelProcessor.hh"
-#include "G4VITTimeStepper.hh"
+#include "G4VITTimeStepComputer.hh"
 #include "G4VITReactionProcess.hh"
+//#include "G4ITTimeStepper.hh"
 
-G4ThreadLocal std::map<const G4Track*, G4bool> *G4ITModelProcessor::fHasReacted = 0;
+//#define DEBUG_MEM
+
+#ifdef DEBUG_MEM
+#include "G4MemStat.hh"
+using namespace G4MemStat;
+#endif
+
+G4ThreadLocal std::map<const G4Track*, G4bool> *G4ITModelProcessor::fHasReacted =
+    0;
 
 G4ITModelProcessor::G4ITModelProcessor()
 {
-    //ctor
-    if (!fHasReacted) fHasReacted = new std::map<const G4Track*, G4bool>;
-    fpTrack = 0;
-    fpModelHandler = 0;
-    fpModel = 0;
-    fInitialized = false;
-    fpModelManager = 0;
-    fCurrentModel.assign(G4ITType::size(), std::vector<G4VITModel*>());
+  //ctor
+  if (!fHasReacted) fHasReacted = new std::map<const G4Track*, G4bool>;
+  fpTrack = 0;
+  fpModelHandler = 0;
+  fpModel = 0;
+  fInitialized = false;
+  fpModelManager = 0;
+  fCurrentModel.assign(G4ITType::size(), std::vector<G4VITStepModel*>());
 
-    for(int i = 0 ; i < (int) G4ITType::size() ; i++)
-    {
-        fCurrentModel[i].assign(G4ITType::size(),0);
-    }
-    fUserMinTimeStep = -1.;
+  for (int i = 0; i < (int) G4ITType::size(); i++)
+  {
+    fCurrentModel[i].assign(G4ITType::size(), 0);
+  }
+  fUserMinTimeStep = -1.;
 }
 
 G4ITModelProcessor::~G4ITModelProcessor()
 {
-    //dtor
-//    if(fpModelHandler) delete fpModelHandler; deleted by G4ITStepManager
-    fCurrentModel.clear();
-    fReactionInfo.clear();
+  //dtor
+//    if(fpModelHandler) delete fpModelHandler; deleted by G4Scheduler
+  fCurrentModel.clear();
+  fReactionInfo.clear();
 }
 
 // Should not be used
 G4ITModelProcessor::G4ITModelProcessor(const G4ITModelProcessor& /*other*/)
 {
-    //copy ctorr
-    fpTrack = 0;
-    fpModelHandler = 0;
-    fpModel = 0;
-    fInitialized = false;
-    fpModelManager = 0;
-    fUserMinTimeStep = -1.;
+  //copy ctorr
+  fpTrack = 0;
+  fpModelHandler = 0;
+  fpModel = 0;
+  fInitialized = false;
+  fpModelManager = 0;
+  fUserMinTimeStep = -1.;
 }
 
 // Should not be used
 G4ITModelProcessor& G4ITModelProcessor::operator=(const G4ITModelProcessor& rhs)
 {
-    if (this == &rhs) return *this; // handle self assignment
-    //assignment operator
-    return *this;
+  if (this == &rhs) return *this; // handle self assignment
+  //assignment operator
+  return *this;
 }
 //______________________________________________________________________________
 void G4ITModelProcessor::Initialize()
 {
-    fpModelHandler->Initialize();
-    fInitialized = true;
+  fpModelHandler->Initialize();
+  fInitialized = true;
 }
 
 //______________________________________________________________________________
 void G4ITModelProcessor::InitializeStepper(const G4double& currentGlobalTime,
                                            const G4double& userMinTime)
 {
-    // G4cout << "G4ITModelProcessor::InitializeStepper" << G4endl;
-    if(fpModelHandler==0)
+  // G4cout << "G4ITModelProcessor::InitializeStepper" << G4endl;
+  if (fpModelHandler == 0)
+  {
+    G4ExceptionDescription exceptionDescription;
+    exceptionDescription
+        << "No G4ITModelHandler was passed to the modelProcessor.";
+    G4Exception("G4ITModelProcessor::InitializeStepper", "ITModelProcessor002",
+                FatalErrorInArgument, exceptionDescription);
+  }
+  const std::vector<std::vector<G4ITModelManager*> >* modelManager =
+      fpModelHandler->GetAllModelManager();
+
+  if (modelManager == 0)
+  {
+    G4ExceptionDescription exceptionDescription;
+    exceptionDescription
+        << "No G4ITModelManager was register to G4ITModelHandler.";
+    G4Exception("G4ITModelProcessor::InitializeStepper", "ITModelProcessor003",
+                FatalErrorInArgument, exceptionDescription);
+  }
+
+  int nbModels1 = modelManager->size();
+
+  G4VITTimeStepComputer::SetTimes(currentGlobalTime, userMinTime);
+
+  // TODO !!!
+  //    if( nbModels1 != 1 || (nbModels1 == 1 && !fpModelManager) )
+  {
+    int nbModels2 = -1;
+    G4VITStepModel* model = 0;
+    G4ITModelManager* modman = 0;
+
+    for (int i = 0; i < nbModels1; i++)
     {
-        G4ExceptionDescription exceptionDescription ;
-        exceptionDescription << "No G4ITModelHandler was passed to the modelProcessor.";
-        G4Exception("G4ITModelProcessor::InitializeStepper","ITModelProcessor002",
-                    FatalErrorInArgument,exceptionDescription);
-    }
-    const std::vector<std::vector<G4ITModelManager*> >* modelManager = fpModelHandler
-            ->GetAllModelManager();
+      nbModels2 = (*modelManager)[i].size();
 
-    if(modelManager==0)
+      for (int j = 0; j <= i; j++)
+      {
+        modman = (*modelManager)[i][j];
+
+        if (modman == 0) continue;
+
+        model = modman->GetModel(currentGlobalTime);
+        G4VITTimeStepComputer* stepper = model->GetTimeStepper();
+
+#if defined (DEBUG_MEM)
+        MemStat mem_first, mem_second, mem_diff;
+#endif
+
+#if defined (DEBUG_MEM)
+        mem_first = MemoryUsage();
+#endif
+
+//      stepper->PrepareForAllProcessors() ;
+        stepper->Prepare();
+
+#if defined (DEBUG_MEM)
+        mem_second = MemoryUsage();
+        mem_diff = mem_second-mem_first;
+        G4cout << "\t || MEM || G4ITModelProcessor::InitializeStepper || After computing stepper -> Prepare(), diff is : " << mem_diff << G4endl;
+#endif
+        fCurrentModel[i][j] = model;
+      }
+    }
+
+    if (nbModels1 == 1 && nbModels2 == 1)
     {
-        G4ExceptionDescription exceptionDescription ;
-        exceptionDescription << "No G4ITModelManager was register to G4ITModelHandler.";
-        G4Exception("G4ITModelProcessor::InitializeStepper","ITModelProcessor003",
-                    FatalErrorInArgument,exceptionDescription);
+      fpModelManager = modman;
+      fpModel = model;
     }
-
-    int nbModels1 = modelManager->size() ;
-
-    G4VITTimeStepper::SetTimes(currentGlobalTime, userMinTime) ;
-
-    // TODO !!!
-    //    if( nbModels1 != 1 || (nbModels1 == 1 && !fpModelManager) )
-    {
-        int nbModels2 = -1;
-        G4VITModel* model = 0;
-        G4ITModelManager* modman = 0;
-
-        for(int i = 0 ; i < nbModels1 ; i++)
-        {
-            nbModels2 = (*modelManager)[i].size();
-
-            for(int j = 0 ; j <= i ; j++)
-            {
-                modman = (*modelManager)[i][j];
-
-                if(modman == 0) continue ;
-
-                model       =  modman -> GetModel(currentGlobalTime);
-                G4VITTimeStepper* stepper   = model->GetTimeStepper() ;
-
-//                stepper -> PrepareForAllProcessors() ;
-                stepper -> Prepare() ;
-                fCurrentModel[i][j] = model;
-            }
-        }
-
-        if(nbModels1 == 1 && nbModels2 ==1)
-        {
-            fpModelManager = modman;
-            fpModel = model;
-        }
-        else fpModel = 0;
-    }
+    else fpModel = 0;
+  }
 }
 
 //______________________________________________________________________________
-void G4ITModelProcessor::CalculateTimeStep(const G4Track* track, const G4double userMinTimeStep)
+void G4ITModelProcessor::CalculateTimeStep(const G4Track* track,
+                                           const G4double userMinTimeStep)
 {
-    // G4cout  << "G4ITModelProcessor::CalculateStep" << G4endl;
-    CleanProcessor();
-    if(track == 0)
-    {
-        G4ExceptionDescription exceptionDescription ;
-        exceptionDescription << "No track was passed to the method (track == 0).";
-        G4Exception("G4ITModelProcessor::CalculateStep","ITModelProcessor004",
-                    FatalErrorInArgument,exceptionDescription);
-    }
-    SetTrack(track);
-    fUserMinTimeStep = userMinTimeStep ;
+  // G4cout  << "G4ITModelProcessor::CalculateStep" << G4endl;
+  CleanProcessor();
+  if (track == 0)
+  {
+    G4ExceptionDescription exceptionDescription;
+    exceptionDescription << "No track was passed to the method (track == 0).";
+    G4Exception("G4ITModelProcessor::CalculateStep", "ITModelProcessor004",
+                FatalErrorInArgument, exceptionDescription);
+  }
+  SetTrack(track);
+  fUserMinTimeStep = userMinTimeStep;
 
-    DoCalculateStep();
+  DoCalculateStep();
 }
 
 //______________________________________________________________________________
 void G4ITModelProcessor::DoCalculateStep()
 {
-    if(fpModel) // ie only one model has been declared and will be used
-    {
-        fpModel -> GetTimeStepper()->CalculateStep(*fpTrack, fUserMinTimeStep);
-    }
-    else // ie many models have been declared and will be used
-    {
-        std::vector<G4VITModel*>& model = fCurrentModel[GetIT(fpTrack)->GetITType()];
+  if (fpModel) // ie only one model has been declared and will be used
+  {
+    fpModel->GetTimeStepper()->CalculateStep(*fpTrack, fUserMinTimeStep);
+  }
+  else // ie many models have been declared and will be used
+  {
+    std::vector<G4VITStepModel*>& model = fCurrentModel[GetIT(fpTrack)
+        ->GetITType()];
 
-        for(int i =0 ; i < (int) model.size() ; i++)
-        {
-            if(model[i] == 0) continue;
-            model[i]->GetTimeStepper()->CalculateStep(*fpTrack, fUserMinTimeStep);
-        }
+    for (int i = 0; i < (int) model.size(); i++)
+    {
+      if (model[i] == 0) continue;
+      model[i]->GetTimeStepper()->CalculateStep(*fpTrack, fUserMinTimeStep);
     }
+  }
 }
 
 //______________________________________________________________________________
@@ -196,97 +223,109 @@ void G4ITModelProcessor::FindReaction(std::map<G4Track*, G4TrackVectorHandle>* t
                                       const double previousStepTime,
                                       const bool reachedUserStepTimeLimit)
 {
-    // DEBUG
-    //    G4cout << "G4ITReactionManager::FindReaction" << G4endl;
-    if(tracks == 0)       return ;
+  // DEBUG
+  //    G4cout << "G4ITReactionManager::FindReaction" << G4endl;
+  if (tracks == 0) return;
 
-    if(fpModelHandler->GetAllModelManager()->empty()) return ;
+  if (fpModelHandler->GetAllModelManager()->empty()) return;
 
-    std::map<G4Track*, G4TrackVectorHandle>::iterator tracks_i = tracks->begin();;
+  std::map<G4Track*, G4TrackVectorHandle>::iterator tracks_i = tracks->begin();
 
-    for(tracks_i = tracks->begin() ; tracks_i != tracks-> end() ; tracks_i ++)
+//    G4cout << "G4ITModelProcessor::FindReaction at step :" << G4ITTimeStepper::Instance()->GetNbSteps() << G4endl;
+
+  for (tracks_i = tracks->begin(); tracks_i != tracks->end(); tracks_i++)
+  {
+    /// Get track A
+    G4Track* trackA = tracks_i->first;
+
+    if (trackA == 0) continue;
+
+    // G4cout << "trackA is " << GetIT(trackA)->GetName() << G4endl;
+
+    std::map<const G4Track*, G4bool>::iterator it_hasReacted =
+        fHasReacted->find(trackA);
+    if (it_hasReacted != fHasReacted->end()) continue;
+    if (trackA->GetTrackStatus() == fStopAndKill) continue;
+
+    G4IT* ITA = GetIT(trackA);
+    G4ITType ITypeA = ITA->GetITType();
+
+    const std::vector<G4VITStepModel*> model = fCurrentModel[ITypeA];
+
+    G4TrackVectorHandle& trackB_vector = tracks_i->second;
+    std::vector<G4Track*>::iterator trackB_i = trackB_vector->begin();
+
+    G4Track* trackB = 0;
+    G4ITType ITypeB(-1);
+    G4VITReactionProcess* process = 0;
+    G4ITReactionChange* changes = 0;
+
+    for (; trackB_i != trackB_vector->end(); trackB_i++)
     {
-        /// Get track A
-        G4Track* trackA = tracks_i->first;
+      trackB = *trackB_i;
 
-        if(trackA == 0)         continue;
+      if (trackB == 0) continue;
+      it_hasReacted = fHasReacted->find(trackB);
+      if (it_hasReacted != fHasReacted->end()) continue;
+      if (trackB->GetTrackStatus() == fStopAndKill) continue;
 
-        std::map<const G4Track*, G4bool>::iterator it_hasReacted = fHasReacted->find(trackA);
-        if(it_hasReacted != fHasReacted->end()) continue;
-        if(trackA->GetTrackStatus() == fStopAndKill) continue;
+      // DEBUG
+      //             G4cout << "Couple : " << trackA->GetParticleDefinition->GetParticleName() << " ("
+      //                        << trackA->GetTrackID() << ")   "
+      //                        << trackB->GetParticleDefinition->GetParticleName() << " ("
+      //                        << trackB->GetTrackID() << ")"
+      //                        << G4endl;
 
-        G4IT* ITA = GetIT(trackA);
-        G4ITType ITypeA = ITA -> GetITType();
+      if (trackB == trackA)
+      {
+        G4ExceptionDescription exceptionDescription;
+        exceptionDescription
+            << "The IT reaction process sent back a reaction between trackA and trackB. ";
+        exceptionDescription << "The problem is trackA == trackB";
+        G4Exception("G4ITModelProcessor::FindReaction", "ITModelProcessor005",
+                    FatalErrorInArgument, exceptionDescription);
+      }
 
-        const std::vector<G4VITModel*> model = fCurrentModel[ITypeA];
+      G4IT* ITB = GetIT(trackB);
+      G4ITType ITypeBtmp = ITB->GetITType();
 
-        G4TrackVectorHandle& trackB_vector = tracks_i->second ;
-        std::vector<G4Track*>::iterator trackB_i = trackB_vector->begin();
+      if (ITypeB != ITypeBtmp)
+      {
+        ITypeB = ITypeBtmp;
 
-        G4Track* trackB = 0 ;
-        G4ITType ITypeB(-1);
-        G4VITReactionProcess* process = 0;
-        G4ITReactionChange* changes = 0;
+        if (model[ITypeB]) process = model[ITypeB]->GetReactionProcess();
+      }
 
-        for(; trackB_i != trackB_vector->end() ; trackB_i++)
-        {
-            trackB = *trackB_i;
+      if (process && process->TestReactibility(*trackA, *trackB,
+                                               currentStepTime,
+                                               previousStepTime,
+                                               reachedUserStepTimeLimit))
+      {
+        changes = process->MakeReaction(*trackA, *trackB);
+      }
 
-            if(trackB == 0)         continue;
-            it_hasReacted = fHasReacted->find(trackB);
-            if(it_hasReacted != fHasReacted->end()) continue;
-            if(trackB->GetTrackStatus() == fStopAndKill) continue;
+      if (changes)
+      {
+        (*fHasReacted)[trackA] = true;
+        (*fHasReacted)[trackB] = true;
+        changes->GetTrackA();
+        changes->GetTrackB();
 
-            // DEBUG
-            //             G4cout << "Couple : " << trackA->GetParticleDefinition->GetParticleName() << " ("
-            //                        << trackA->GetTrackID() << ")   "
-            //                        << trackB->GetParticleDefinition->GetParticleName() << " ("
-            //                        << trackB->GetTrackID() << ")"
-            //                        << G4endl;
+        fReactionInfo.push_back(changes);
 
-            if(trackB == trackA)
-            {
-                G4ExceptionDescription exceptionDescription ;
-                exceptionDescription << "The IT reaction process sent back a reaction between trackA and trackB. ";
-                exceptionDescription << "The problem is trackA == trackB";
-                G4Exception("G4ITModelProcessor::FindReaction","ITModelProcessor005",
-                            FatalErrorInArgument,exceptionDescription);
-            }
+//				G4cout << "pushing reaction for trackA (" << trackA->GetTrackID() << ") and trackB ("
+//					   << trackB->GetTrackID() << ")" << G4endl;
+//
+//				G4cout << "nb of secondaries : " << changes->GetNumberOfSecondaries() << G4endl;
+//				G4cout << "with track 0 = " << changes->GetSecondary(0) << G4endl;
 
-            G4IT* ITB = GetIT(trackB);
-            G4ITType ITypeBtmp = ITB -> GetITType();
+        process->ResetChanges();
+        changes = 0;
 
-            if(ITypeB != ITypeBtmp)
-            {
-                ITypeB = ITypeBtmp ;
-
-                if(model[ITypeB])
-                    process = model[ITypeB]->GetReactionProcess();
-            }
-
-            if(process && process -> TestReactibility(*trackA, *trackB,
-                                                      currentStepTime, previousStepTime,
-                                                      reachedUserStepTimeLimit))
-            {
-                changes = process->MakeReaction(*trackA, *trackB);
-            }
-
-            if(changes)
-            {
-                (*fHasReacted)[trackA] = true;
-                (*fHasReacted)[trackB] = true;
-                changes -> GetTrackA();
-                changes -> GetTrackB();
-
-                fReactionInfo.push_back(changes);
-
-                process->ResetChanges();
-                changes = 0;
-
-                break;
-            }
-        }
+        break;
+      }
     }
+  }
 
-    fHasReacted->clear();
+  fHasReacted->clear();
 }

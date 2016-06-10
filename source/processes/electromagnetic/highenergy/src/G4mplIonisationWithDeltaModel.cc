@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisationWithDeltaModel.cc 76600 2013-11-13 08:30:02Z gcosmo $
+// $Id: G4mplIonisationWithDeltaModel.cc 85013 2014-10-23 09:45:07Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -57,7 +57,6 @@
 #include "Randomize.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4LossTableManager.hh"
 #include "G4ParticleChangeForLoss.hh"
 #include "G4Electron.hh"
 #include "G4DynamicParticle.hh"

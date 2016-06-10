@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmaZero.cc 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4AntiSigmaZero.cc 79357 2014-02-25 10:06:54Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -38,6 +38,7 @@
 
 #include "G4AntiSigmaZero.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4ParticleTable.hh"
 
 #include "G4PhaseSpaceDecayChannel.hh"
@@ -76,6 +77,9 @@ G4AntiSigmaZero* G4AntiSigmaZero::Definition()
                 false,      7.4e-11*ns,          NULL,
                 false,       "sigma");
  
+    // Life time is given from width
+    anInstance->SetPDGLifeTime( hbar_Planck/(anInstance->GetPDGWidth()) );
+   
     //create Decay Table 
     G4DecayTable* table = new G4DecayTable();
     

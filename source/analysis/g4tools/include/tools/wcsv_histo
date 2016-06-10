@@ -1,0 +1,115 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wcsv_histo
+#define tools_wcsv_histo
+
+#include <ostream>
+
+#include "histo/histo_data"
+
+namespace tools {
+namespace wcsv {
+
+template <class AXIS>
+inline void axis_to(std::ostream& a_writer,const AXIS& a_axis,char a_hc) {
+  if(a_axis.m_fixed) {
+    a_writer << a_hc
+             << "axis fixed " << a_axis.m_number_of_bins
+             << " " << a_axis.m_minimum_value
+             << " " << a_axis.m_maximum_value
+//           << " " << a_axis.m_bin_width
+             << std::endl;
+  } else {
+    a_writer << a_hc << "axis edges";
+    for(unsigned int iedge=0;iedge<a_axis.m_edges.size();iedge++) {
+      a_writer << " " << a_axis.m_edges[iedge];
+    }
+    a_writer << std::endl;
+  }
+}
+
+template <class ANNOTATION>
+inline void annotations_to(std::ostream& a_writer,const ANNOTATION& a_ans,char a_hc) {
+  typename ANNOTATION::const_iterator it;
+  for(it=a_ans.begin();it!=a_ans.end();++it) {
+    a_writer << a_hc << "annotation " << (*it).first << " " << (*it).second << std::endl;
+  }
+}
+
+template <class HDATA>
+inline bool hto(std::ostream& a_writer,const std::string& a_class,const HDATA& a_data,
+                char a_sep = ',',char a_hc = '#',bool a_header = true) {
+  if(a_header) {
+    a_writer << a_hc << "class " << a_class << std::endl;
+    a_writer << a_hc << "title " << a_data.m_title << std::endl;
+    a_writer << a_hc << "dimension " << a_data.m_dimension << std::endl;
+    for(unsigned int iaxis=0;iaxis<a_data.m_dimension;iaxis++) axis_to(a_writer,a_data.m_axes[iaxis],a_hc);
+    annotations_to(a_writer,a_data.m_annotations,a_hc);
+    a_writer << a_hc << "bin_number " << a_data.m_bin_number << std::endl;
+  }
+ {a_writer << "entries" << a_sep << "Sw" << a_sep << "Sw2";
+  for(unsigned int iaxis=0;iaxis<a_data.m_dimension;iaxis++) {
+    a_writer << a_sep << "Sxw" << iaxis << a_sep << "Sx2w" << iaxis;
+  }
+  a_writer << std::endl;}
+  for(unsigned int i=0;i<a_data.m_bin_number;i++) {
+    a_writer << a_data.m_bin_entries[i]
+             << a_sep << a_data.m_bin_Sw[i]
+             << a_sep << a_data.m_bin_Sw2[i];
+    for(unsigned int iaxis=0;iaxis<a_data.m_dimension;iaxis++) {
+      a_writer << a_sep << a_data.m_bin_Sxw[i][iaxis] << a_sep << a_data.m_bin_Sx2w[i][iaxis];
+    }
+    a_writer << std::endl;
+  }
+
+  return true;
+}
+
+}}
+
+#include "histo/profile_data"
+
+namespace tools {
+namespace wcsv {
+
+template <class PROF>
+inline bool pto(std::ostream& a_writer,const std::string& a_class,const PROF& a_prof,
+                char a_sep = ',',char a_hc = '#',bool a_header = true) {
+  if(a_header) {
+    a_writer << a_hc << "class " << a_class << std::endl;
+    a_writer << a_hc << "title " << a_prof.m_title << std::endl;
+    a_writer << a_hc << "dimension " << a_prof.m_dimension << std::endl;
+    for(unsigned int iaxis=0;iaxis<a_prof.m_dimension;iaxis++) axis_to(a_writer,a_prof.m_axes[iaxis],a_hc);
+    annotations_to(a_writer,a_prof.m_annotations,a_hc);
+    a_writer << a_hc << "cut_v " << (a_prof.cut_v()?"true":"false") << std::endl;
+    a_writer << a_hc << "min_v " << a_prof.min_v() << std::endl;
+    a_writer << a_hc << "max_v " << a_prof.max_v() << std::endl;
+    a_writer << a_hc << "bin_number " << a_prof.m_bin_number << std::endl;
+  }
+ {a_writer << "entries" << a_sep << "Sw" << a_sep << "Sw2" << a_sep << "Svw" << a_sep << "Sv2w";
+  for(unsigned int iaxis=0;iaxis<a_prof.m_dimension;iaxis++) {
+    a_writer << a_sep << "Sxw" << iaxis << a_sep << "Sx2w" << iaxis;
+  }
+  a_writer << std::endl;}
+  typedef typename PROF::vs_t vs_t;
+  const vs_t& Svw = a_prof.bins_sum_vw();
+  const vs_t& Sv2w = a_prof.bins_sum_v2w();
+  for(unsigned int i=0;i<a_prof.m_bin_number;i++) {
+    a_writer << a_prof.m_bin_entries[i]
+             << a_sep << a_prof.m_bin_Sw[i]
+             << a_sep << a_prof.m_bin_Sw2[i]
+             << a_sep << Svw[i]
+             << a_sep << Sv2w[i];
+    for(unsigned int iaxis=0;iaxis<a_prof.m_dimension;iaxis++) {
+      a_writer << a_sep << a_prof.m_bin_Sxw[i][iaxis] << a_sep << a_prof.m_bin_Sx2w[i][iaxis];
+    }
+    a_writer << std::endl;
+  }  
+
+  return true;
+}
+
+}}
+
+#endif

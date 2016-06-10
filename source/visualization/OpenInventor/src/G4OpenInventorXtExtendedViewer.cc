@@ -89,6 +89,7 @@ void G4OpenInventorXtExtendedViewer::Initialise() {
   G4String wName = fName;
   
   Widget parent = (Widget)fInteractorManager->GetParentInteractor ();
+  G4cout << "DEBUG G4OpenInventorXtExtendedViewer: parent = " << parent << G4endl;
   int width = 600;
   int height = 600;
 
@@ -123,6 +124,7 @@ void G4OpenInventorXtExtendedViewer::Initialise() {
 			       SoXt::getDisplay(),
 			       args,3);
     
+    G4cout << "DEBUG CREATING THE VIEWER WITH CREATED SHELL = " << fShell << G4endl;
     fViewer = new G4OpenInventorXtExaminerViewer(fShell, wName.c_str(), TRUE);
     fViewer->addEscapeCallback(EscapeFromKeyboardCbk, (void *)this);
      
@@ -196,6 +198,7 @@ void G4OpenInventorXtExtendedViewer::Initialise() {
   } else {
     char* str = fInteractorManager->GetCreationString();
     if(str!=0) wName = str;
+    G4cout << "DEBUG CREATING THE VIEWER WITH parent = " << parent << G4endl;
     fViewer = new G4OpenInventorXtExaminerViewer(parent, wName.c_str(), TRUE);
   }
 

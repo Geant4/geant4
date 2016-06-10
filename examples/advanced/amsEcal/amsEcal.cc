@@ -23,24 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: amsEcal.cc 73008 2013-08-15 08:43:13Z gcosmo $
+/// \file advanced/amsEcal.cc
+/// \brief Main program of the advanced/amsEcal example
+//
+//
+// $Id: amsEcal.cc 83418 2014-08-21 15:30:47Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "RunAction.hh"
-#include "EventAction.hh"
-#include "TrackingAction.hh"
-#include "SteppingAction.hh"
+#include "ActionInitialization.hh"
 #include "SteppingVerbose.hh"
-#include "HistoManager.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -55,73 +59,64 @@
 int main(int argc,char** argv) {
 
   //choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-    
   // Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  // Number of threads can be defined via 3rd argument
+  if (argc==3) {
+    G4int nThreads = G4UIcommand::ConvertToInt(argv[2]);
+    if(nThreads > 0) { runManager->SetNumberOfThreads(nThreads); }
+  }
+#else
+  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
+  G4RunManager* runManager = new G4RunManager;
+#endif
 
   // set mandatory initialization classes
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new PhysicsList);
-  
-  // histograms for this example 
-  HistoManager* histo = new HistoManager();
-  
-  // primary generator
-  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
-  runManager->SetUserAction(primary);
-        
+  runManager->SetUserInitialization(new PhysicsList());
+
   // set user action classes
   //
-  RunAction*      runAct = new RunAction(detector,primary,histo);
-  EventAction*    evtAct = new EventAction(detector,runAct,primary,histo);
-  TrackingAction* trkAct = new TrackingAction(detector,runAct);
-  SteppingAction* stpAct = new SteppingAction(detector,evtAct);
-  
-  runManager->SetUserAction(runAct);
-  runManager->SetUserAction(evtAct);
-  runManager->SetUserAction(trkAct);  
-  runManager->SetUserAction(stpAct);
-  
+  runManager->SetUserInitialization(new ActionInitialization(detector));  
+   
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
-
+ 
   if (argc!=1)   // batch mode  
     {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UI->ApplyCommand(command+fileName);
     }
     
   else           //define visualization and UI terminal for interactive mode
     { 
 #ifdef G4VIS_USE
-   G4VisManager* visManager = new G4VisExecutive;
-   visManager->Initialize();
+      G4VisManager* visManager = new G4VisExecutive;
+      visManager->Initialize();
 #endif    
      
 #ifdef G4UI_USE
       G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
       ui->SessionStart();
       delete ui;
-#endif     
-    
+#endif
+     
 #ifdef G4VIS_USE
-     delete visManager;
+      delete visManager;
 #endif     
     }
-
+    
   // job termination
-  //   
-  delete histo;
+  //  
   delete runManager;
 
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

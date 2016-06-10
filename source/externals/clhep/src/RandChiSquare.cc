@@ -17,6 +17,7 @@
 
 #include "CLHEP/Random/RandChiSquare.h"
 #include "CLHEP/Random/DoubConv.h"
+#include "CLHEP/Utility/thread_local.h"
 #include <cmath>	// for std::log()
 
 namespace CLHEP {
@@ -84,7 +85,7 @@ double RandChiSquare::genChiSquare( HepRandomEngine *anEngine,
  * Implemented by R. Kremer, 1990                                 *
  ******************************************************************/
 
- static double a_in = -1.0,b,vm,vp,vd;
+ static CLHEP_THREAD_LOCAL double a_in = -1.0,b,vm,vp,vd;
  double u,v,z,zz,r;
 
 // Check for invalid input value

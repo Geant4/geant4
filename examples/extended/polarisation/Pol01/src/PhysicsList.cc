@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysicsList class
 //
 // 
-// $Id: PhysicsList.cc 68753 2013-04-05 10:26:04Z gcosmo $
+// $Id: PhysicsList.cc 86418 2014-11-11 10:39:38Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,10 +35,10 @@
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
  
-#include "PhysListEmStandard.hh"
+#include "G4EmStandardPhysics.hh"
 #include "PhysListEmPolarized.hh"
 
-#include "G4LossTableManager.hh"
+#include "G4EmParameters.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
@@ -47,14 +47,9 @@
 PhysicsList::PhysicsList() 
 : G4VModularPhysicsList()
 {
-  G4LossTableManager::Instance();
-  
-  currentDefaultCut   = 0.1*mm;
-  cutForGamma         = currentDefaultCut;
-  cutForElectron      = currentDefaultCut;
-  cutForPositron      = currentDefaultCut;
-
   pMessenger = new PhysicsListMessenger(this);
+
+  G4EmParameters::Instance();
 
   SetVerboseLevel(1);
 
@@ -84,12 +79,7 @@ PhysicsList::~PhysicsList()
 
 void PhysicsList::ConstructParticle()
 {
-  // only QED in this example
-
-// gamma
   G4Gamma::GammaDefinition();
-  
-// leptons
   G4Electron::ElectronDefinition();
   G4Positron::PositronDefinition();
 }
@@ -127,17 +117,15 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandard();
+    emPhysicsList = new G4EmStandardPhysics();
             
-  } 
-  if (name == "polarized") {
+  } else if (name == "polarized") {
 
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmPolarized();
-            
-  } 
-  else {
+
+  } else {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
            << " is not defined"
            << G4endl;
@@ -162,46 +150,6 @@ void PhysicsList::AddStepMax()
       if (stepMaxProcess->IsApplicable(*particle) && pmanager)
           pmanager ->AddDiscreteProcess(stepMaxProcess);
   }
-}
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-
-void PhysicsList::SetCuts()
-{    
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForGamma(G4double cut)
-{
-  cutForGamma = cut;
-  SetParticleCuts(cutForGamma, G4Gamma::Gamma());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForElectron(G4double cut)
-{
-  cutForElectron = cut;
-  SetParticleCuts(cutForElectron, G4Electron::Electron());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForPositron(G4double cut)
-{
-  cutForPositron = cut;
-  SetParticleCuts(cutForPositron, G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

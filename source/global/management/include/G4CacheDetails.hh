@@ -126,7 +126,7 @@ public:
 
 private:
     typedef std::vector<G4double> cache_container;
-    static G4ThreadLocal std::vector<G4double> *cache;
+    G4GLOB_DLL static G4ThreadLocal std::vector<G4double> *cache;
 };
 
 

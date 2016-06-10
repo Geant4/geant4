@@ -1,0 +1,40 @@
+# test17
+#
+/run/initialize
+#
+/gps/particle geantino
+
+# source
+/gps/pos/type Volume
+/gps/pos/shape Sphere
+/gps/pos/centre 0. 0. 5. cm
+/gps/pos/radius 5 cm
+/gps/pos/confine Sphere_phys
+# confine to physical volume "Sphere_phys"
+
+# angular distribution
+/gps/ang/type iso
+
+# energy distribution
+/gps/ene/type Exp
+/gps/ene/min 2. MeV
+/gps/ene/max 10. MeV
+/gps/ene/ezero 1.
+
+# commands below are independent of gps
+#
+/analysis/setFileName test17
+/analysis/h1/set 1 100 1 15 MeV
+/analysis/h1/set 2 100 0 10 cm
+/analysis/h1/set 3 110 -1.1 1.1 none  #cos(theta)
+/analysis/h1/set 4 130 -15  375 deg   #phi
+/analysis/h2/set 1 100 -10 10 cm none linear 100 -10 10 cm none linear #x-y
+/analysis/h2/set 2 100 -10 10 cm none linear 100 -10 10 cm none linear #y-z
+/analysis/h2/set 3 100 -10 10 cm none linear 100 -10 10 cm none linear #z-x
+/analysis/h2/set 4 120 0 360 deg none linear 100 -1 1 none none linear
+#
+#/control/execute vis.mac
+#
+/run/printProgress 10000
+#
+/run/beamOn 100000

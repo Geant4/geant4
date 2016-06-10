@@ -36,8 +36,8 @@
 #endif
 
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
+
+#include "G4UIExecutive.hh"
 
 #ifdef G4VIS_USE
   #include "G4VisExecutive.hh"
@@ -51,6 +51,12 @@
 
 int main(int argc,char** argv) 
 {
+  G4UIExecutive* session = NULL;
+  if (argc==1)   // Define UI session for interactive mode.
+  {
+      session = new G4UIExecutive(argc, argv);
+  }
+
   // Choose the Random engine
   
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
@@ -76,22 +82,15 @@ int main(int argc,char** argv)
   // Initialize G4 kernel
   runManager->Initialize();
   
-#ifdef G4VIS_USE
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-#endif
-    
+  
   // Get the pointer to the User Interface manager 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
   if (argc==1)   // Define UI session for interactive mode.
-  { 
-#ifdef _WIN32
-    G4UIsession * session = new G4UIterminal();
-#else
-    G4UIsession * session = new G4UIterminal(new G4UItcsh);
-#endif
-    UImanager->ApplyCommand("/control/execute microelectronics.mac");     
+  {
+    UImanager->ApplyCommand("/control/execute microelectronics.mac");
     session->SessionStart();
     delete session;
   }
@@ -102,9 +101,7 @@ int main(int argc,char** argv)
     UImanager->ApplyCommand(command+fileName);
   }
 
-#ifdef G4VIS_USE
   delete visManager;
-#endif
 
   delete runManager;
 

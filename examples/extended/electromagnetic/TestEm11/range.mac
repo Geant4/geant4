@@ -1,4 +1,4 @@
-# $Id: range.mac 74997 2013-10-25 10:52:13Z gcosmo $
+# $Id: range.mac 82462 2014-06-23 10:45:28Z gcosmo $
 #
 # Macro file for "TestEm11.cc"
 # 
@@ -19,7 +19,7 @@
 /run/initialize
 #
 # prevent any secondary production
-/testem/phys/setCuts 1 km
+/run/setCut 1 km
 #
 # eliminate straggling
 /process/inactivate msc

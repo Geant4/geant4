@@ -51,11 +51,11 @@ private:
   ProposeNonPhysicsBiasingOperation(const G4Track* track,
                                     const G4BiasingProcessInterface* callingProcess);
   virtual G4VBiasingOperation* 
-  ProposeOccurenceBiasingOperation(const G4Track* track,
-                                   const G4BiasingProcessInterface* callingProcess);
+  ProposeOccurenceBiasingOperation (const G4Track* track,
+                                    const G4BiasingProcessInterface* callingProcess);
   virtual G4VBiasingOperation*
-  ProposeFinalStateBiasingOperation(const G4Track*,
-                                    const G4BiasingProcessInterface*) {return 0;}
+  ProposeFinalStateBiasingOperation(const G4Track* track,
+                                    const G4BiasingProcessInterface* callingProcess);
   
 private:
   // -- Avoid compiler complaining for (wrong) method shadowing,

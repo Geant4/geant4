@@ -21,21 +21,10 @@ endif()
 include(${Geant4_USE_FILE})
 
 #----------------------------------------------------------------------------
-# Find AIDA (optional package)
-#
-find_package(AIDA QUIET)
-if(AIDA_FOUND)
-  message(STATUS "G4 Examples: AIDA found. --> amsEcal example with AIDA enabled.") 
-  # Uncomment this line if suitable (some customization may be needed)
-  add_definitions(-DG4ANALYSIS_USE)   
-endif()
-
-#----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
 include_directories(${PROJECT_SOURCE_DIR}/include 
-                    ${Geant4_INCLUDE_DIR}
-                    ${AIDA_INCLUDE_DIR})
+                    ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
@@ -43,7 +32,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(amsEcal amsEcal.cc ${sources} ${headers})
-target_link_libraries(amsEcal ${Geant4_LIBRARIES} ${AIDA_LIBRARIES} )
+target_link_libraries(amsEcal ${Geant4_LIBRARIES} )
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
@@ -51,7 +40,7 @@ target_link_libraries(amsEcal ${Geant4_LIBRARIES} ${AIDA_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(amsEcal_SCRIPTS
-    geantino.mac mips.mac rndmSeed.mac run0.mac run1.mac run1.out run2.mac vis.mac
+    geantino.mac mips.mac rndmSeed.mac run0.mac run1.mac run2.mac vis.mac
   )
 
 foreach(_script ${amsEcal_SCRIPTS})

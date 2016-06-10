@@ -33,6 +33,7 @@
 #define UltraActionInitializer_h 1
 
 #include "G4VUserActionInitialization.hh"
+class G4GeneralParticleSource;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -41,11 +42,12 @@ class UltraActionInitializer : public G4VUserActionInitialization
 public:
 
   UltraActionInitializer();
-  ~UltraActionInitializer(){;};
+  ~UltraActionInitializer();
   
   void Build() const;
   void BuildForMaster() const;
-
+private:
+    G4GeneralParticleSource* masterGPS;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

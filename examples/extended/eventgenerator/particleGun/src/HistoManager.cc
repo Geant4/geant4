@@ -26,10 +26,10 @@
 /// \file hadronic/Hadr03/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
-// $Id: HistoManager.cc 72243 2013-07-12 08:45:36Z gcosmo $
+// $Id: HistoManager.cc 83919 2014-09-23 08:40:35Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoManager.hh"
 #include "G4UnitsTable.hh"
@@ -62,18 +62,16 @@ void HistoManager::Book()
   analysisManager->SetActivation(true);     //enable inactivation of histograms
   
   // Define histograms start values
-  const G4int kMaxHisto = 9;
-  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7" , "8" };
+  const G4int kMaxHisto = 7;
+  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6" };
   const G4String title[] = 
-       { "dummy",                                            //0
-         "energy spectrum dN/dE = f(E)",                     //1 for GunAction#2
-         "moment dir: angular distr dN/dOmega = f(alpha) ",  //2 for GunAction#2
-         "moment dir: angular distr dN/dOmega = f(psi) ",    //3 for GunAction#2
-         "vertex posi: radial  distr dN/dv = f(r)",          //4 for GunAction#3
-         "vertex posi: angular distr dN/dv = f(theta)",      //5 for GunAction#3
-         "vertex posi: angular distr dN/dv = f(phi)",        //6 for GunAction#3
-         "moment dir: angular distr dN/dOmega = f(alpha) ",  //7 for GunAction#3
-         "moment dir: angular distr dN/dOmega = f(psi) "     //8 for GunAction#3
+       { "dummy",                                    //0
+         "energy spectrum dN/dE = f(E)",             //1
+         "vertex position: dN/dv = f(r)",            //2
+         "vertex position: cos(theta)",              //3
+         "vertex position: phi",                     //4
+         "particle direction in local frame: cos(alpha)",   //5
+         "particle direction in local frame: psi"           //6
        };  
 
   // Default values (to be reset via /analysis/h1/set command)               

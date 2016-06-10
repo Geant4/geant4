@@ -27,10 +27,10 @@
 /// \brief Definition of the HistoManager class
 //
 //
-// $Id: HistoManager.hh 69108 2013-04-18 13:10:10Z gcosmo $
+// $Id: HistoManager.hh 78723 2014-01-20 10:32:17Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef HistoManager_h
 #define HistoManager_h 1
@@ -39,7 +39,6 @@
 
 #include "g4root.hh"
 //#include "g4xml.hh"
-////#include "g4hbook.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

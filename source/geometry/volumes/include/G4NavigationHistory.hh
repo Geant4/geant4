@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.hh 75578 2013-11-04 12:03:33Z gcosmo $
+// $Id: G4NavigationHistory.hh 86527 2014-11-13 15:06:24Z gcosmo $
 //
 // class G4NavigationHistory
 //
@@ -47,13 +47,12 @@
 #include <iostream>
 
 #include "geomdefs.hh"
+#include "geomwdefs.hh"
 #include "G4AffineTransform.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4NavigationLevel.hh"
-
-#if (defined(G4MULTITHREADED) || !defined(WIN32))
-  #include "G4EnhancedVecAllocator.hh"
-#endif
+#include "G4NavigationHistoryPool.hh"
+#include "G4Allocator.hh"
 
 class G4NavigationHistory
 {
@@ -72,7 +71,7 @@ class G4NavigationHistory
   G4NavigationHistory(const G4NavigationHistory &h);
     // Copy constructor.
 
-  G4NavigationHistory& operator=(const G4NavigationHistory &h);
+  inline G4NavigationHistory& operator=(const G4NavigationHistory &h);
     // Assignment operator.
 
   inline void Reset();
@@ -133,6 +132,11 @@ class G4NavigationHistory
   inline void BackLevel(G4int n);
     // Back up specified number of levels in history.
 
+  inline void *operator new(size_t);
+    // Override "new" for "G4Allocator".
+  inline void operator delete(void *aHistory);
+    // Override "delete" for "G4Allocator".
+
  private:
 
   inline void EnlargeHistory();
@@ -142,18 +146,11 @@ class G4NavigationHistory
 
  private:
 
-#if defined(WIN32)
-  std::vector<G4NavigationLevel> fNavHistory;
-#else
-  std::vector<G4NavigationLevel,
-              G4EnhancedVecAllocator<G4NavigationLevel> > fNavHistory;
-    // The geometrical tree; uses specialized allocator to optimize memory
-    // handling, reduce possible fragmentation and use of malloc in MT mode
-#endif
+  std::vector<G4NavigationLevel> *fNavHistory;
+    // Pointer to the vector of navigation levels.
 
   G4int fStackDepth;
-    // Depth of stack: effectively depth in geometrical tree
-
+    // Depth of stack: effectively depth in geometrical tree.
 };
 
 #include "G4NavigationHistory.icc"

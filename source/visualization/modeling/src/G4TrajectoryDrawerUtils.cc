@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawerUtils.cc 66870 2013-01-14 23:38:59Z adotti $
+// $Id: G4TrajectoryDrawerUtils.cc 83403 2014-08-21 15:07:30Z gcosmo $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
 //
@@ -123,6 +123,7 @@ namespace G4TrajectoryDrawerUtils {
 	      validity = InvalidTimes;
 	    }
 	  }
+          delete trajectoryPointAttValues;  // (Must be deleted after use.)
 	}
 
 	const std::vector<G4ThreeVector>* auxiliaries

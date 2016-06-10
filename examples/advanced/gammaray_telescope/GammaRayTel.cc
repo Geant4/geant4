@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTel.cc 66508 2012-12-19 10:16:45Z gcosmo $
+// $Id: GammaRayTel.cc 82630 2014-07-01 09:43:00Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -39,7 +39,12 @@
 //                     construction of some Action's
 // ************************************************************ 
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh" 
 
 #ifdef G4VIS_USE
@@ -52,26 +57,24 @@
  
 #include "GammaRayTelDetectorConstruction.hh"
 #include "GammaRayTelPhysicsList.hh"
-#include "GammaRayTelPrimaryGeneratorAction.hh"
-#include "GammaRayTelRunAction.hh"
-#include "GammaRayTelEventAction.hh"
- 
+#include "GammaRayTelActionInitializer.hh"
+
 //#include "QGSP_BIC.hh" 
 #include "FTFP_BERT.hh" 
 
-#ifdef G4ANALYSIS_USE
 #include "GammaRayTelAnalysis.hh"
-#endif
  
-/* This global file is used to store relevant data for
-   analysis with external tools */
-std::ofstream outFile;
-
 // This is the main function 
 int main(int argc, char** argv)
 {
   // Construct the default run manager
-  G4RunManager* runManager = new G4RunManager;   
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  //runManager->SetNumberOfThreads(2); 
+#else
+  G4RunManager* runManager = new G4RunManager;
+#endif
+
   // Set mandatory user initialization classes
   GammaRayTelDetectorConstruction* detector = 
     new GammaRayTelDetectorConstruction;
@@ -85,21 +88,12 @@ int main(int argc, char** argv)
   //  runManager->SetUserInitialization(new QGSP_BIC);
   runManager->SetUserInitialization(new FTFP_BERT);
 
-  
-  // Set mandatory user action classes
-  runManager->SetUserAction(new GammaRayTelPrimaryGeneratorAction);
-  
-#ifdef G4ANALYSIS_USE
+  //Initialize actions
+  runManager->SetUserInitialization(new GammaRayTelActionInitializer());
+
   // Creation of the analysis manager
   GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
-#endif
-  
-  // Set optional user action classes
-  GammaRayTelEventAction* eventAction = new GammaRayTelEventAction();
-  GammaRayTelRunAction* runAction = new GammaRayTelRunAction();
-  runManager->SetUserAction(eventAction);
-  runManager->SetUserAction(runAction);
-  
+    
   // Set visualization and user interface
 #ifdef G4VIS_USE
   // Visualization manager
@@ -135,9 +129,7 @@ int main(int argc, char** argv)
 #ifdef G4VIS_USE
   delete visManager;
 #endif
-#ifdef G4ANALYSIS_USE
   delete analysis;
-#endif
   delete runManager;
   return 0;
 }

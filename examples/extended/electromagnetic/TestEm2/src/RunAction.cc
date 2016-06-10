@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm2/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 76259 2013-11-08 11:37:28Z gcosmo $
+// $Id: RunAction.cc 83431 2014-08-21 15:49:56Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,11 +41,7 @@
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4UnitsTable.hh"
-#include "G4Threading.hh"
-
 #include "G4SystemOfUnits.hh"
-#include <iomanip>
 
 #include "Randomize.hh"
 
@@ -57,6 +53,7 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
   fVerbose(0), fEdeptrue(1.), fRmstrue(1.), fLimittrue(DBL_MAX)
 {
   fRunMessenger = new RunActionMessenger(this);
+  fHistoName[0] = "testem2";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,7 +75,7 @@ void RunAction::BookHisto()
     
   // Open an output file
   //
-  fHistoName[0] = "testem2";
+  ///fHistoName[0] = "testem2";
 
   fAnalysisManager->OpenFile(fHistoName[0]); 
 
@@ -107,19 +104,25 @@ void RunAction::BookHisto()
   fAnalysisManager->CreateH1( "h4","longit energy profile (% of E inc)",
                                     nLbin,0.,nLbin*dLradl);
                                     
+  fAnalysisManager->CreateP1( "p4","longit energy profile (% of E inc)",
+                                    nLbin,0.,nLbin*dLradl, 0., 1000.);
+                                    
   fAnalysisManager->CreateH1( "h5","rms on longit Edep (% of E inc)",
                                     nLbin,0.,nLbin*dLradl);
 
   G4double Zmin=0.5*dLradl, Zmax=Zmin+nLbin*dLradl;
   fAnalysisManager->CreateH1( "h6","cumul longit energy dep (% of E inc)",
-                                  nLbin,Zmin,Zmax);
+                                  nLbin,Zmin,Zmax);                          
                                     
   fAnalysisManager->CreateH1( "h7","rms on cumul longit Edep (% of E inc)",
                                   nLbin,Zmin,Zmax);
 
   fAnalysisManager->CreateH1( "h8","radial energy profile (% of E inc)",
                                   nRbin,0.,nRbin*dRradl);
-                                                                        
+                                  
+  fAnalysisManager->CreateP1( "p8","radial energy profile (% of E inc)",
+                                  nRbin,0.,nRbin*dRradl, 0., 1000.);
+                                  
   fAnalysisManager->CreateH1( "h9","rms on radial Edep (% of E inc)",
                                   nRbin,0.,nRbin*dRradl);            
 
@@ -135,12 +138,9 @@ void RunAction::BookHisto()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::SaveHisto()
+void RunAction::SetHistoName(G4String& val)
 {
-  fAnalysisManager->Write();
-  fAnalysisManager->CloseFile();
-
-  delete fAnalysisManager;
+  fHistoName[0] = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -156,13 +156,8 @@ G4Run* RunAction::GenerateRun()
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {
-  //fRun->Reset();
-     // not needed as a new Run object is created with each run
-
   // show Rndm status
-  if (isMaster) { 
-    G4Random::showEngineStatus(); 
-  }
+  if (isMaster) G4Random::showEngineStatus(); 
 
   //histograms
   //
@@ -173,15 +168,16 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-  //compute and print statistic
-  //
-  if (isMaster) fRun->ComputeStatistics(fEdeptrue, fRmstrue, fLimittrue);    
+ //compute and print statistic
+ //
+ if (isMaster) fRun->EndOfRun(fEdeptrue, fRmstrue, fLimittrue);    
 
-  // show Rndm status
-  G4Random::showEngineStatus();
+ // show Rndm status
+ if (isMaster) G4Random::showEngineStatus();
 
-  // save histos and close analysis
-  SaveHisto(); 
+ // save histos and close analysis
+ fAnalysisManager->Write();
+ fAnalysisManager->CloseFile(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -197,7 +193,7 @@ void RunAction::SetEdepAndRMS(G4ThreeVector Value)
 void RunAction::SetVerbose(G4int val)  
 {
   fVerbose = val;
-  if ( fRun ) fRun->SetVerbose(val);
+  if (fRun) fRun->SetVerbose(val);
 }
      
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

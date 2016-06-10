@@ -31,6 +31,8 @@
 // 20110917  Michael Kelsey
 // 20110920  M. Kelsey -- Use environment variables to set momentum cuts for tuning,
 //	     replace polymorphic argument lists with use of "ClusterCandidate"
+// 20140116  M. Kelsey -- Move statics to const data members to avoid weird
+//		interactions with MT.
 
 #ifndef G4CASCADE_COALESCENCE_HH
 #define G4CASCADE_COALESCENCE_HH
@@ -60,10 +62,6 @@ private:
 
   G4int verboseLevel;				// Control diagnostic messages
 
-  static const G4double dpMaxDoublet;		// Relative momenta for clusters
-  static const G4double dpMaxTriplet;
-  static const G4double dpMaxAlpha;
-
   std::vector<ClusterCandidate> allClusters;	// List of candidates found
   std::set<size_t> triedClusters;		// Hashes of combinatorics
   std::set<size_t> usedNucleons;		// List of converted nucleons
@@ -73,6 +71,10 @@ private:
 
   ClusterCandidate thisCluster;			// Reusable buffer for attempts
   G4InuclNuclei thisLightIon;			// Reusable construction buffer
+
+  const G4double dpMaxDoublet;			// Relative momenta for clusters
+  const G4double dpMaxTriplet;
+  const G4double dpMaxAlpha;
 
   // Processing stages -- search, construct, cleanup
   void selectCandidates();

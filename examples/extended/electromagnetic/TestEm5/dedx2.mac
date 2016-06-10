@@ -1,4 +1,4 @@
-# $Id: dedx2.mac 66241 2012-12-13 18:34:42Z gunter $
+# $Id: dedx2.mac 81528 2014-06-02 16:21:24Z vnivanch $
 #
 # macro file for TestEm5.cc
 #
@@ -15,7 +15,7 @@
 ###/testem/phys/addPhysics emlivermore
 ###/testem/phys/addPhysics empenelope
 #
-/testem/phys/setCuts 1 km
+/run/setCut 1 km
 #    
 /run/initialize
 #

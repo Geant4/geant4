@@ -1,4 +1,4 @@
-$Id: History 76257 2013-11-08 11:31:00Z gcosmo $
+$Id: History 86965 2014-11-21 11:48:22Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,73 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 20th, 2014 A.Dotti (event-V10-00-19 and -20)
+- Coverity fixes for G4Adjoint* classes
+
+November 20th, 2014 A.Dotti (event-V10-00-18)
+- Coverity fixes for G4SPSEneDistribution
+
+November 6th, 2014 A.Dotti (event-V10-00-17)
+- Coverity fixes for G4SPSEneDistribution
+
+October 22nd, 2014 M.Asai (event-V10-00-16)
+- G4Event.hh: Added const-qualifiers forgot with V10-00-10 tag.
+
+October 16th, 2014 A.Dotti (event-V10-00-15)
+- Adding G4MUTEXDESTROY for GPS classes
+
+October 10th, 2014 A.Dotti (event-V10-00-14)
+- New strategy for GPS messenger: it is instantiated w/ singleton
+  pattern. UI commands are created in a worker thread, but commands
+  are executed by master. Requires intercoms-V10-00-13
+
+October 10th, 2014 A.Dotti (event-V10-00-13)
+- Fix for unitialized array in G4SPSEneDistribution
+
+October 8th, 2014  A.Dotti (event-V10-00-11 and -12)
+- Correction in logic of normalization of sources for
+  GPS.
+- Initialize mutex for G4SPSEneDistribution class
+
+October 1st, 2014  M.Asai (event-V10-00-09 and -10)
+- Introduing the mechanism of G4Event not to be deleted until it is
+  visualized by the other thread.
+
+September 25th, 2014  M.Asai (event-V10-00-08)
+- G4GeneralParticleSourceMessenger.cc : Change G4ParticleTable::GetIon()
+  to G4IonTable::GetIon().
+
+Aug 29th, 2014  A.Dotti (event-V10-00-07)
+- Coverity fix #56594
+
+July 21st, 2014 A.Dotti (event-V10-00-06)
+- Fix for bug #1656: G4SPSPosDistribution::GenerateOne() not 
+  working correctly for GeneratePointsOnSurface() and
+  GeneratePointsInVolume()
+
+June 10th, 2014 A.Dotti (event-V10-00-05)
+- Removing data-race conditions in G4SPSEneDistribution class
+
+June 4th, 2014 A.Dotti (event-V10-00-04)
+- Correcting compilation warnings and errors.
+- Small changes to G4SPSEneDistribution: further memory reduction
+
+June 4th, 2013  L.Desorgher (event-V10-00-03)
+- G4AdjointPrimaryGenerator: Add splitting of fwd gamma primaries to improve 
+  convergence of G4RMC. 
+
+June 3rd, 2014 A.Dotti (event-V10-00-02)
+- First implementation of memory reduction mechanism in MT 
+  courtesy of Andrew Green (Manchester U).
+
+February 21st, 2014  M.Asai (event-V10-00-01)
+- G4SPSPosDistribution::IsSourceConfined() : Add protection against
+  null pointer. Addressing to Bug report #1255.
+
+January 23rd, 2014  M.Asai (event-V10-00-00)
+- Change the default value of Q (charge) for /gun/ion and /gun/ionL commands.
+  Now electrons are fully stripped (i.e. Q = Z) if Q is not specified.
 
 November 7th, 2013  L.Desorgher (event-V09-06-21)
 - Modification of adjoint classes to migrate to the new RMC schema where reverse

@@ -45,6 +45,14 @@
 //     - old commonds have been retained for backward compatibility, will be
 //       removed in the future. 
 //
+// Version 3.0, Aug-Oct 2014, Andrea Dotti
+//    Transformations for thread safety and use in MT application
+//    Messenger is now a singleton w/ explicit Destroy() method for deletion
+//    Note the following: the class should be instantiated only once
+//    by a worker thread. It relies on a new feature of basic messenger class
+//    that allows for UI commands to be created by worker threads but being
+//    executed by master thread. For this reason the messenger itself should
+//    be created once, form here the singleton pattern
 ///////////////////////////////////////////////////////////////////////////////
 //
 //
@@ -101,8 +109,6 @@ class G4GeneralParticleSource;
 class G4GeneralParticleSourceMessenger: public G4UImessenger
 {
   public:
-    G4GeneralParticleSourceMessenger(G4GeneralParticleSource*);
-    ~G4GeneralParticleSourceMessenger();
 
     void SetParticleGun(G4SingleParticleSource *fpg) { fParticleGun = fpg; } ;
     // Select the particle gun to be defined/modified
@@ -114,7 +120,12 @@ class G4GeneralParticleSourceMessenger: public G4UImessenger
 
     G4String GetCurrentValue(G4UIcommand *command);
 
-  private:
+    static G4GeneralParticleSourceMessenger* GetInstance(G4GeneralParticleSource*);
+    static void Destroy();
+ private:
+    G4GeneralParticleSourceMessenger(G4GeneralParticleSource*);
+    ~G4GeneralParticleSourceMessenger();
+
     void IonCommand(G4String newValues);
     void IonLvlCommand(G4String newValues);
 

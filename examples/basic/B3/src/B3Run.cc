@@ -74,7 +74,7 @@ void B3Run::RecordEvent(const G4Event* event)
   G4int evtNb = event->GetEventID();
   
   if (evtNb%fPrintModulo == 0) { 
-    G4cout << "\n---> end of event: " << evtNb << G4endl;
+    G4cout << G4endl << "---> end of event: " << evtNb << G4endl;
   }      
   
   //Hits collections
@@ -95,7 +95,7 @@ void B3Run::RecordEvent(const G4Event* event)
     G4double edep = *(itr->second);
     if (edep > eThreshold) nbOfFired++;
     ///G4int copyNb  = (itr->first);
-    ///G4cout << "\n  cryst" << copyNb << ": " << edep/keV << " keV ";
+    ///G4cout << G4endl << "  cryst" << copyNb << ": " << edep/keV << " keV ";
   }  
   if (nbOfFired == 2) fGoodEvents++;
   

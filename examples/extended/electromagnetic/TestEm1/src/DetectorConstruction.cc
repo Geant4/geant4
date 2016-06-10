@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm1/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 77289 2013-11-22 10:53:37Z gcosmo $
+// $Id: DetectorConstruction.cc 84815 2014-10-21 12:19:02Z gcosmo $
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,7 +40,7 @@
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
-#include "G4UniformMagField.hh"
+#include "G4RunManager.hh"
 
 #include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
@@ -50,7 +50,6 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
-#include "G4RunManager.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
@@ -117,8 +116,13 @@ void DetectorConstruction::DefineMaterials()
   G4Material* CO2 = new G4Material("CO2", density, ncomponents=2);
   CO2->AddElement(C, natoms=1);
   CO2->AddElement(O, natoms=2);
-  
-  new G4Material("D2_gas", z=2., a= 2.0141*g/mole, density= 0.036*mg/cm3);
+
+  G4Isotope* d = new G4Isotope("d", 1, 2, 0.0, 0);
+  G4Element* D = new G4Element("Heavy-Hydrogen" ,"D", ncomponents=1);
+  D->AddIsotope(d, 1.0);
+  G4Material* D2 = 
+    new G4Material("D2_gas", density= 0.036*mg/cm3, ncomponents=1);
+  D2->AddElement(D, natoms=2);
 
   new G4Material("liquidArgon", z=18., a= 39.95*g/mole, density= 1.390*g/cm3);
 
@@ -163,6 +167,19 @@ void DetectorConstruction::DefineMaterials()
  ArButane->AddMaterial(argonGas, fractionmass=70*perCent);
  ArButane->AddMaterial(butane ,  fractionmass=30*perCent);
 
+ G4NistManager* man = G4NistManager::Instance();
+ 
+ G4bool isotopes = false;
+ 
+ ///G4Element*  O = man->FindOrBuildElement("O" , isotopes); 
+ G4Element* Si = man->FindOrBuildElement("Si", isotopes);
+ G4Element* Lu = man->FindOrBuildElement("Lu", isotopes);  
+ 
+ G4Material* LSO = new G4Material("Lu2SiO5", 7.4*g/cm3, 3);
+ LSO->AddElement(Lu, 2);
+ LSO->AddElement(Si, 1);
+ LSO->AddElement(O , 5);
+   
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 

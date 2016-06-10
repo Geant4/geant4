@@ -25,6 +25,7 @@
 //
 #include "G4BOptnForceCommonTruncatedExp.hh"
 #include "G4ILawCommonTruncatedExp.hh"
+#include "G4ILawForceFreeFlight.hh"
 #include "G4TransportationManager.hh"
 
 #include "Randomize.hh"
@@ -35,65 +36,89 @@ G4BOptnForceCommonTruncatedExp::G4BOptnForceCommonTruncatedExp(G4String name)
     fInteractionOccured(false)
 {
   fCommonTruncatedExpLaw = new G4ILawCommonTruncatedExp("ExpLawForOperation"+name);
-  fCommonTruncatedExpLaw->SetOperation( this );
+  fForceFreeFlightLaw    = new G4ILawForceFreeFlight   ("FFFLawForOperation"+name);
+  
   fTotalCrossSection = 0.0;
 }
 
 G4BOptnForceCommonTruncatedExp::~G4BOptnForceCommonTruncatedExp()
-{}
-
-const G4VBiasingInteractionLaw* G4BOptnForceCommonTruncatedExp::ProvideOccurenceBiasingInteractionLaw( const G4BiasingProcessInterface* )
 {
-  return fCommonTruncatedExpLaw;
+  if ( fCommonTruncatedExpLaw ) delete fCommonTruncatedExpLaw;
+  if ( fForceFreeFlightLaw )    delete fForceFreeFlightLaw;
 }
 
-G4ForceCondition  G4BOptnForceCommonTruncatedExp::ProposeForceCondition( const G4ForceCondition )
+const G4VBiasingInteractionLaw* G4BOptnForceCommonTruncatedExp::ProvideOccurenceBiasingInteractionLaw( const G4BiasingProcessInterface*       callingProcess, 
+												       G4ForceCondition&                proposeForceCondition )
 {
-  return Forced;
+  if ( callingProcess->GetWrappedProcess() == fProcessToApply )
+    {
+      proposeForceCondition =                 Forced;
+      return                  fCommonTruncatedExpLaw;
+    }
+  else
+    {
+      proposeForceCondition =                 Forced;
+      return                     fForceFreeFlightLaw;
+    }
 }
 
-G4double G4BOptnForceCommonTruncatedExp::ProposeAlongStepLimit( const G4BiasingProcessInterface* callingProcess )
-{
-  if ( callingProcess->GetWrappedProcess() ==  fProcessToApply )
-    return  fCommonTruncatedExpLaw->GetInteractionDistance();
-  else return DBL_MAX;
-}
 
 G4GPILSelection   G4BOptnForceCommonTruncatedExp::ProposeGPILSelection( const G4GPILSelection )
 {
-  return CandidateForSelection;
+  return NotCandidateForSelection;
 }
 
-G4bool G4BOptnForceCommonTruncatedExp::DenyProcessPostStepDoIt( const G4BiasingProcessInterface* callingProcess,
-								const G4Track*, const G4Step* step, G4double& )
+
+G4VParticleChange* G4BOptnForceCommonTruncatedExp::ApplyFinalStateBiasing( const G4BiasingProcessInterface* callingProcess,
+									   const G4Track*                   track,
+									   const G4Step*                    step,
+									   G4bool&                          forceFinalState )
 {
+  if ( callingProcess->GetWrappedProcess() != fProcessToApply )
+    {
+      forceFinalState = true;
+      fDummyParticleChange.Initialize( *track );
+      return &fDummyParticleChange; 
+    }
+  if ( fInteractionOccured )
+    {
+      forceFinalState = true;
+      fDummyParticleChange.Initialize( *track );
+      return &fDummyParticleChange;
+    }
+
+  // -- checks if process won the GPIL race:
   G4double processGPIL = callingProcess->GetPostStepGPIL() < callingProcess->GetAlongStepGPIL() ?
     callingProcess->GetPostStepGPIL() : callingProcess->GetAlongStepGPIL() ;
   if ( processGPIL <= step->GetStepLength() )
     {
-      G4bool denyProcess = (callingProcess->GetWrappedProcess() != fProcessToApply );
-      fInteractionOccured = (fInteractionOccured || !denyProcess);
-      return denyProcess;
+      // -- if process won, wrapped process produces the final state.
+      // -- In this case, the weight for occurence biasing is applied
+      // -- by the callingProcess, at exit of present method. This is
+      // -- selected by "forceFinalState = false":
+      forceFinalState     = false;
+      fInteractionOccured = true;
+      return callingProcess->GetWrappedProcess()->PostStepDoIt( *track, *step );
     }
-  else return true;
+  else
+    {
+      forceFinalState = true;
+      fDummyParticleChange.Initialize( *track );
+      return &fDummyParticleChange; 
+    }
 }
 
-G4double G4BOptnForceCommonTruncatedExp::GetTriggeredProcessXSfraction()
-{
-  return fCrossSections[fProcessToApply] / fTotalCrossSection;
-}
 
 void G4BOptnForceCommonTruncatedExp::PostStepInteractionOccured( const G4VProcess* )
 {
 }
 
+
 void G4BOptnForceCommonTruncatedExp::AddCrossSection( const G4VProcess* process, G4double crossSection )
 {
-  fTotalCrossSection += crossSection;
-  fCrossSections[process] = crossSection;
-  fNumberOfSharing = fCrossSections.size();
-  fCommonTruncatedExpLaw->SetNumberOfSharing  ( fNumberOfSharing );
-  fCommonTruncatedExpLaw->SetForceCrossSection( fTotalCrossSection );
+  fTotalCrossSection      += crossSection;
+  fCrossSections[process]  = crossSection;
+  fNumberOfSharing         = fCrossSections.size();
 }
 
 
@@ -105,7 +130,6 @@ void G4BOptnForceCommonTruncatedExp::Initialize( const G4Track* track )
   fProcessToApply     = 0;
   fInitialMomentum    = track->GetMomentum();
 
-  fCommonTruncatedExpLaw->reset();
   G4VSolid* currentSolid = track->GetVolume()->GetLogicalVolume()->GetSolid();
   G4ThreeVector  localPosition = (G4TransportationManager::GetTransportationManager()->
 				  GetNavigatorForTracking()->
@@ -125,22 +149,24 @@ void G4BOptnForceCommonTruncatedExp::UpdateForStep( const G4Step* step )
   fTotalCrossSection  = 0.0;
   fNumberOfSharing    = 0;
   fProcessToApply     = 0;
-
+  
   fCommonTruncatedExpLaw->UpdateForStep( step->GetStepLength() );
   fMaximumDistance = fCommonTruncatedExpLaw->GetMaximumDistance();
 }
 
+
 void G4BOptnForceCommonTruncatedExp::Sample()
 {
-  fCommonTruncatedExpLaw->reset();
+  fCommonTruncatedExpLaw->SetForceCrossSection( fTotalCrossSection );
   fCommonTruncatedExpLaw->Sample();
-  ChooseProcessToApply(); 
+  ChooseProcessToApply();
+  fCommonTruncatedExpLaw->SetSelectedProcessXSfraction(fCrossSections[fProcessToApply] / fTotalCrossSection);
 }
 
 
 void G4BOptnForceCommonTruncatedExp::ChooseProcessToApply()
 {
-  G4double sigmaRand = G4UniformRand() * fTotalCrossSection;
+  G4double sigmaRand   = G4UniformRand() * fTotalCrossSection;
   G4double sigmaSelect = 0.0;
   for ( std::map< const G4VProcess*, G4double>::const_iterator it = fCrossSections.begin();
 	it != fCrossSections.end();

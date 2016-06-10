@@ -1,4 +1,4 @@
-$Id: History 77079 2013-11-21 10:32:34Z gcosmo $
+$Id: History 81295 2014-05-26 09:36:06Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May. 25th, 2014  - H.Kurashige (procuts-V10-00-02)
+- Fix Coverity defects in G4VRangeToEnergyConverter
+
+Apr. 27th, 2014  - H.Kurashige (procuts-V10-00-01)
+- Fix Coverity defects in G4VRangeToEnergyConverter
+
+Jan. 23rd, 2014  - H.Kurashige (procuts-V10-00-00)
+- Fix compiler warning in G4ProcessCutsTable.cc
+
+Nov. 21st, 2013  - H.Kurashige (procuts-V09-06-09)
+- Fix Coverity defects in G4VRangeToEnergyConverter destructor
 
 Nov. 21st, 2013  - H.Kurashige (procuts-V09-06-08)
 - Fix Coverity defects in G4VRangeToEnergyConverter CTOR 

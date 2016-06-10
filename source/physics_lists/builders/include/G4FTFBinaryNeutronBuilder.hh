@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBinaryNeutronBuilder.hh 68750 2013-04-05 10:19:04Z gcosmo $
+// $Id: G4FTFBinaryNeutronBuilder.hh 81935 2014-06-06 15:41:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -48,8 +48,6 @@
 #include "G4VNeutronBuilder.hh"
 
 #include "G4TheoFSGenerator.hh"
-#include "G4ExcitationHandler.hh"
-#include "G4PreCompoundModel.hh"
 #include "G4BinaryCascade.hh"
 #include "G4FTFModel.hh"
 #include "G4LundStringFragmentation.hh"

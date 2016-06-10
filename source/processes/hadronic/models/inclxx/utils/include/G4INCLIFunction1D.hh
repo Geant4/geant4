@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -49,7 +50,7 @@
 namespace G4INCL {
 
   // Forward declaration
-  class InverseInterpolationTable;
+  class InterpolationTable;
 
   /**
    * 1D function interface
@@ -88,8 +89,15 @@ namespace G4INCL {
       /// \brief Return a pointer to the (numerical) primitive to this function
       IFunction1D *primitive() const;
 
-      /// \brief Return a pointer to the inverse of the CDF of this function
-      InverseInterpolationTable *inverseCDFTable(const G4int nNodes=60) const;
+      /// \brief Typedef to simplify the syntax of inverseCDFTable
+      typedef G4double (* const ManipulatorFunc)(const G4double);
+
+      /** \brief Return a pointer to the inverse of the CDF of this function
+       *
+       * The function parameter fWrap is wrapped around the return value of
+       * operator(). If fWrap=NULL (default), fWrap=identity.
+       */
+      InterpolationTable *inverseCDFTable(ManipulatorFunc fWrap=0, const G4int nNodes=60) const;
 
     protected:
       /// \brief Minimum value of the independent variable

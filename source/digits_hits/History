@@ -1,4 +1,4 @@
-$Id: History 78057 2013-12-03 08:31:15Z gcosmo $
+$Id: History 83518 2014-08-27 12:57:10Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,36 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Aug 25, 2014, M.Asai (digits_hits-V10-00-08)
+- G4VScoringMesh, G4ScoringBox, G4ScoringCylinder : fix Construct()
+  to make it work when the entire geometry has been destroyed.
+  Addressing to bug report #1665.
+
+May 26, 2014, M.Asai (digits_hits-V10-00-07)
+- G4ScoringMessenger.cc : fix broadcast parameters of the commands
+  that should be used only by the master threads. Addressing to
+  bug report #1554.
+
+May 20, 2014, A.Dotti (digits_hits-V10-00-05, -06)
+- Correcting another missing end of line in a file
+
+May 19, 2014, A.Dotti (digits_hits-V10-00-04)
+- Missing end of file empty line added
+
+May 16, 2014, A.Dotti (digits_hits-V10-00-03)
+- Coverity fixes
+
+Apr 27, 2014, M.Asai (digits_hits-V10-00-02)
+- G4PSCylinderSurfaceCurrent.cc : remove unnecessary cout. 
+  Addressing to Bug Report #1610.
+
+Mar 5, 2014, G.Cosmo (digits_hits-V10-00-01)
+- Added missing dependency to graphics_reps in scorer module.
+
+Mar 2, 2014, T.Aso, M.Asai (digits_hits-V10-00-00)
+- Fix the angle factor in G4PSSphereSurfaceFlux to keep it always
+  positive. Addressing to Bug Report #1479.
 
 Dec 2, 2013, M.Asai (digits_hits-V09-06-13)
 - Remove uninitialized and unused datamember from G4ScoringMessenger.

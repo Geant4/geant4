@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 66892 2013-01-17 10:57:59Z gunter $
+# $Id: GNUmakefile 81945 2014-06-06 16:00:38Z gcosmo $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic management library.  G.Folger 10-Dec-97
 # ----------------------------------------------------------------
@@ -34,17 +34,9 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
 
 include $(G4INSTALL)/config/common.gmk
 
-# Compiling G4ReactionDynamics.cc
-# non-optimised on all platforms is recommended.
-
 ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
 
   CXXFLAGS_WITH_ZM = $(filter-out -Zm%,$(CXXFLAGS)) -Zm500
-
-$(G4TMPDIR)/G4ReactionDynamics.o: src/G4ReactionDynamics.cc
-	@$(ECHO) Compiling G4ReactionDynamics.cc ...
-	@$(CXX) $(CXXFLAGS_WITH_ZM) $(CPPFLAGS) -c $(OUT_OBJ)$@ \
-	  src/G4ReactionDynamics.cc
 
 $(G4TMPDIR)/G4HadronicWhiteBoard.o: src/G4HadronicWhiteBoard.cc
 	@$(ECHO) Compiling G4HadronicWhiteBoard.cc ...
@@ -55,11 +47,6 @@ else
 
   CXXFLAGS_WITHOUT_O := $(filter-out -O% , $(CXXFLAGS))
   CXXFLAGS_WITHOUT_O := $(filter-out +O% , $(CXXFLAGS_WITHOUT_O))
-
-$(G4TMPDIR)/G4ReactionDynamics.o: src/G4ReactionDynamics.cc
-	@$(ECHO) Compiling G4ReactionDynamics.cc ...
-	@$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c -o $@ \
-	  src/G4ReactionDynamics.cc
 
 $(G4TMPDIR)/G4HadronicWhiteBoard.o: src/G4HadronicWhiteBoard.cc
 	@$(ECHO) Compiling G4HadronicWhiteBoard.cc ...

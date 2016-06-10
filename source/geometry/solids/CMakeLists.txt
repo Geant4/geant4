@@ -7,11 +7,10 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt 75578 2013-11-04 12:03:33Z gcosmo $
+# $Id: CMakeLists.txt 85530 2014-10-30 16:17:43Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
 add_subdirectory(Boolean)
 add_subdirectory(CSG)
 add_subdirectory(specific)
-add_subdirectory(usolids)

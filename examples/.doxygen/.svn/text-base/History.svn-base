@@ -18,6 +18,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26/11/14 I.Hrivnacova (doxygen-V10-00-02)
+- Updated link to the advanced examples page which has been moved
+
+12/11/14 I.Hrivnacova (doxygen-V10-00-01)
+- Updated configuration files for 10.1 release
+
+06/06/14 P.Gumplinger (doxygen-V10-00-00)
+- Updated Doxyfile, Doxymodules_category.h adding new
+  exoticphysics channeling and ucn examples
+
 29/11/12 I.Hrivnacova (doxygen-V09-06-01)
 - Updated configuration files for 10.0 release
 

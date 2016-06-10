@@ -54,14 +54,12 @@
 #include "G4AntiOmegaMinusInelasticProcess.hh"
 
 #include "G4TheoFSGenerator.hh"
-#include "G4ExcitationHandler.hh"
-#include "G4PreCompoundModel.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4FTFModel.hh"
 #include "G4LundStringFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4CascadeInterface.hh"
-//#include "G4QHadronInelasticDataSet.hh"
+
 #include "G4ChipsHyperonInelasticXS.hh"
 class G4HyperonFTFPBuilder 
 {
@@ -76,8 +74,6 @@ class G4HyperonFTFPBuilder
  
     G4TheoFSGenerator * HyperonFTFP;
     G4TheoFSGenerator * AntiHyperonFTFP;
-    G4PreCompoundModel * thePreEquilib;
-    G4ExcitationHandler * theHandler;
     G4GeneratorPrecompoundInterface * theCascade;
     G4FTFModel * theStringModel;
     G4ExcitedStringDecay * theStringDecay;

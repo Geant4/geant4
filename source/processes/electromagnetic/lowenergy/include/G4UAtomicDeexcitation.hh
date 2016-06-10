@@ -131,7 +131,7 @@ private:
   G4UAtomicDeexcitation(G4UAtomicDeexcitation &);
   G4UAtomicDeexcitation & operator=(const G4UAtomicDeexcitation &right);
 
-  const G4AtomicTransitionManager* transitionManager;
+  G4AtomicTransitionManager* transitionManager;
  
   // Data member which stores the shells to be filled by 
   // the radiative transition

@@ -1,4 +1,4 @@
-$Id: History 78051 2013-12-03 08:18:30Z gcosmo $
+$Id: History 87128 2014-11-25 09:00:59Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,176 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 24th, 2014 M.Asai (run-V10-00-43)
+- Fix G4VUserPhysicsList.cc to alternate the cut value for the
+  region that shared the default cut value.
+
+November 20th, 2014 M.Asai, A.Dotti (run-V10-00-42)
+- Fix coverity defects
+- Fix for G4RunManager in case macroFile in beamOn is " "
+
+November 14th, 2014 M.Asai (run-V10-00-41)
+- Fix Coverity defects related to keeping events.
+
+November 8th, 2014 M.Asai (run-V10-00-39 -40)
+- Further fix of logic at G4RunManager::RunTermination() for keeping
+  events  
+
+November 7th, 2014 A.Dotti (run-V10-00-38)
+- Fix logic at G4RunManager::RunTermination() for keeping events  
+
+November 6th, 2014 M.Asai (run-V10-00-37)
+- Fix unnecessary print-out incorrectly added with run-V10-00-31.
+
+November 6th, 2014 M.Asai (run-V10-00-36)
+- In MT mode, a new option of setting random number seeds only once
+  per run per worker thread is introduced. 
+
+October 27th, 2014 M.Asai (run-V10-00-35)
+- Introduced /run/useMaximumLogicalCores UI command.
+
+October 24th, 2014 J.Apostolakis,A.Dotti (run-V10-00-34)
+- Introduced workspace for physics list split-classes
+- Improved workspace from particledefinition split-class
+- Requires global-V10-00-40 and particles-V10-00-25
+
+October 24th, 2014 M.Asai (run-V10-00-33)
+- Fix cleaning up of kept events when Vis thread keeps events.
+
+October 23rd, 2014 A.Dotti J.Apostolakis (run-V10-00-32)
+- Enable use of G4ParticlesWorkspace. Requires particles-V10-00-24
+
+October 17th, 2014 A.Dotti (run-V10-00-31)
+- G4RunManagerKernel::RunTermination() workers do not
+  call G4ProductionCutsTable::PhysicsTableUpdated()
+- G4WorkerRunManager::TermianteEventLoop() implemented
+  in workerd and avoid data-race on shared 
+  resource fGeometryHasBeenDestroyed
+- G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster
+  remove mechanism of copying pointer of region that is 
+  not needed
+
+October 14th, 2014 M.Asai (run-V10-00-30)
+- G4MTRunManager : Make sure G4RunManager::TerminateEventLoop() is
+  invoked at the end of run.
+
+October 1st, 2015 M.Asai (run-V10-00-29)
+- Introduing the mechanism of G4Event not to be deleted until it is
+  visualized by the other thread.
+
+August 26th, 2014 M.Asai (run-V10-00-28)
+- All the G4ParallelWorldProcess objects of all threads update their
+  corresponding world volumes when the entire geometry has been
+  destroyed and rebuilt from scratch. Addressing further to bug 
+  report #1665. Co-working with procscore-V10-00-00.
+
+August 25th, 2014 M.Asai (run-V10-00-27)
+- G4VScoringMesh is cleaned when geometry is rebuilt from
+  scratch. Addressing further to bug report #1665. Co-working with
+  digits_hits-V10-00-08.
+
+August 22nd, 2014 M.Asai (run-V10-00-26)
+- G4TransportationManager is cleaned when geometry is rebuilt from
+  scratch. Addressing further to bug report #1665. Co-working with
+  geomnav-V10-00-08.
+
+August 21st, 2014 M.Asai (run-V10-00-25)
+- Clean up previous tag. Addressing to bug report #1665.
+
+August 21st, 2014 M.Asai (run-V10-00-24)
+- Clear root logical volume pointers in G4Region when geometry is
+  rebuilt from scratch.
+
+August 19th, 2014 M.Asai (run-V10-00-23)
+- Preloading ions is now optional once again.
+
+August 19th, 2014 M.Asai (run-V10-00-22)
+- Force preload to see all the mechanisms work in previous tag.
+  Co-working with particles-V10-00-20 tag.
+
+August 18th, 2014 M.Asai (run-V10-00-21)
+- Preloading ions is now optional. Issues in previous tags
+  run-V10-00-18 and run-V10-00-19 are fixed.
+  Co-working with particles-V10-00-19 tag.
+
+July 19th, 2014 A.Dotti       (run-V10-00-20)
+- Revert back at run-V10-00-17, need more time to udnerstand
+  logic. Previous two tags are *probably* not correct. 
+
+July 19th, 2014 A.Dotti       (run-V10-00-19)
+- Pre-prepares nucleide-table to be empty (fix previous crash)
+  requires particles-V10-00-17
+
+July 18th, 2014 A.Dotti       (run-V10-00-18)
+- Avoid pre-creation of all ions in sequential mode
+
+July 17th, 2014 A.Dotti       (run-V10-00-17)
+- Bug fix for bug #1657: /random/setSeeds not working
+
+July 14th, 2014 A.Dotti	      (run-V10-00-16)
+- Only master thread installs FPE handler
+- Worker threads return G4RunManagerKernel::SetPhysics method
+  just after setting PL pointer (e.g. no setup needed)
+- G4VUserPhysicsList::SetCuts is not called anymore by worker threads
+  during physics initialization
+
+July 11th, 2014 A.Dotti       (run-V10-00-15)
+- Fixing race condition in G4VUPLSplitter class
+
+July 5th, 2014 A. Dotti       (run-V10-00-14)
+- Fixing data-race condition in G4RunManagerKernel 
+  when FPE is active
+
+July 5th, 2014 A. Dotti       (run-V10-00-13)
+- Fixing data-race condition when creating RNG for workers in MT:
+  G4UserWorkerThreadInitialization::SetupRNGEngine
+  (Lock moved beginning of function before default engine is created)
+
+July 1th, 2014, V. Ivanchenko (run-V10-00-12)
+- G4PhysicsListHelper - minor fix in the default list of processeses:
+    positron annihilation in muons and hadrons cannot be AtRest -
+    these are rare high energy discrete processes. Equivalent fix was 
+    for OrderingParameterTable (problem report #1598)
+
+June 4th, 2014, L. Desorgher (run-V10-00-11)
+- Changes in G4AdjointSimManager, G4AdjointSimMessenger, and G4AdjointPrimaryGeneratorAction
+  to add fwd primary splitting in the G4RMC.
+
+June 2nd, 2014, A. Dotti (run-V10-00-10)
+- Increase verbosity in case of NULL process-manager pointer in MT
+
+May 16th, 2014, A. Dotti (run-V10-00-09)
+- Fix coverity defects
+
+May 14th, 2014, G. Cosmo (run-V10-00-08)
+- Explicitly invoke deletion of new G4NavigationHistoryPool instance
+  in G4RunManagerKernel at job's end. Requires tag geomvol-V10-00-03.
+
+May 6th, 2014, G. Cosmo (run-V10-00-07)
+- Use G4ThreadLocalStatic in G4VUPLSplitter.
+
+Apr 11th, 2014, A. Dotti (run-V10-00-06)
+- Use G4Threading::SetMultithreadedApplication(true) if a G4MTRunManagerKernel
+  is instantiated. Requires global-V10-00-16 or more recent 
+
+Apr 8th, 2014,  A. Dotti (run-V10-00-04,run-V10-00-05)
+- Protect against compilation error in WIN32 for pin-affinity
+
+Mar 28th, 2014, A. Dotti (run-V10-00-03)
+- Protect agains compilation warning for C90 standard
+
+Mar 26th, 2014, A. Dotti (run-V10-00-02)
+- Introduced pin affinity functionalities
+
+Jan 21st, 2014, M. Asai (run-V10-00-01)
+- Making sure worker threads re-build physics tables as well when the
+  master thread is requested to rebuild.
+
+Dec 26th, 2013, M. Asai (run-V10-00-00)
+- Change the order of setting world volume pointer to the transportation
+  manager for worker thread to be the same as the master thread and the
+  sequential mode, i.e. prior to invoking ConstructSDandField .
 
 Dec 2nd, 2013, A. Dotti (run-V09-06-141)
 - Adds protection for multiple runs to set SD and FieldMgr for worker

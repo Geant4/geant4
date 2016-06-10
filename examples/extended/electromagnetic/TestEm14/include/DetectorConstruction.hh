@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm14/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: DetectorConstruction.hh 84208 2014-10-10 14:44:50Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,8 +57,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      void SetSize     (G4double);              
      void SetMaterial (G4String);            
 
-     void UpdateGeometry();
-     
   public:
   
      const

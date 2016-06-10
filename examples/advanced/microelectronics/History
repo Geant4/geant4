@@ -9,6 +9,28 @@ $Id: History,v 1.24 2010-11-18 11:48:21 allison Exp $
                        Package History file
                        --------------------
 
+1 November 2014 - L. Garnier from M. Raine - microelectronics-V10-00-03
+  - Fix a warning "'ui' may be used uninitialized in this function"
+
+31 October 2014 - L. Garnier from M. Raine - microelectronics-V10-00-02
+     o Remove Qt driver function, should be protect by some compilation flag
+
+30 October 2014 - L. Garnier from M. Raine - microelectronics-V10-00-01
+
+29 October 2014 - L. Garnier from M. Raine - microelectronics-V09-06-05
+   microelectronics.cc : Fix a bad path
+   plot.C : Fix a bad name
+
+29 October 2014 - L. Garnier from M. Raine - microelectronics-V09-06-04
+   microelectronics.mac : Change some decorations
+   microelectronics.cc : 
+     o Replace use of G4UITerminal by G4UIExecutive
+     o Move creation if G4UIExecutive at the beginning
+     o Remove G4UI_USE and G4VIS_USE
+     o Add Qt driver function to display the README file inside Qt Viewer
+   CMakeLists.txt : Update according to changes
+   icons.mac : Add this file in order to have icons in Qt viewer
+
 03 December 2013 - I. Hrivnacova - microelectronics-V09-06-03
    Fixed analysis code in RunAction:
    CreateHistograms must be called for each run, as the analysis manager

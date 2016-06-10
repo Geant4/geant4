@@ -22,11 +22,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
-// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
-//
-// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
-// the *COMPLETE* version of this program, together with its documentation;
 // Hadrontherapy (both basic and full version) are supported by the Italian INFN
 // Institute in the framework of the MC-INFN Group
 //
@@ -45,48 +40,38 @@ class HadrontherapyPhysicsListMessenger;
 class HadrontherapyPhysicsList: public G4VModularPhysicsList
 {
 public:
-
-  HadrontherapyPhysicsList();
-  virtual ~HadrontherapyPhysicsList();
-
-  void ConstructParticle();
-
-  void SetCuts();
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-  void SetDetectorCut(G4double cut);
-  void AddPhysicsList(const G4String& name);
-  void ConstructProcess();
-
-  void AddStepMax();
-  HadrontherapyStepMax* GetStepMaxProcess() {return stepMaxProcess;};
-  void AddPackage(const G4String& name);
-
+    
+    HadrontherapyPhysicsList();
+    virtual ~HadrontherapyPhysicsList();
+    
+    void ConstructParticle();
+    void SetCuts();
+    void SetCutForGamma(G4double);
+    void SetCutForElectron(G4double);
+    void SetCutForPositron(G4double);
+    void SetDetectorCut(G4double cut);
+    void AddPhysicsList(const G4String& name);
+    void ConstructProcess();
+    void AddStepMax();
+    void AddPackage(const G4String& name);
+    
 private:
-
-  G4EmConfigurator em_config;
-
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-
-  G4bool helIsRegistered;
-  G4bool bicIsRegistered;
-  G4bool biciIsRegistered;
-  G4bool locIonIonInelasticIsRegistered;
-  G4bool radioactiveDecayIsRegistered;
-
-  G4String                             emName;
-  G4VPhysicsConstructor*               emPhysicsList;
-  G4VPhysicsConstructor*               decPhysicsList;
-  G4VPhysicsConstructor*  raddecayList;
-
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
-
-  HadrontherapyStepMax* stepMaxProcess;
-
-  HadrontherapyPhysicsListMessenger* pMessenger;
+    
+    G4EmConfigurator em_config;
+    
+    G4double cutForGamma;
+    G4double cutForElectron;
+    G4double cutForPositron;
+    G4bool locIonIonInelasticIsRegistered;
+    G4bool radioactiveDecayIsRegistered;
+    G4String      emName;
+    G4VPhysicsConstructor* emPhysicsList;
+    G4VPhysicsConstructor* decay_List;
+    G4VPhysicsConstructor* radioactiveDecay_List;
+    
+    std::vector<G4VPhysicsConstructor*>  hadronPhys;
+        
+    HadrontherapyPhysicsListMessenger* pMessenger;
 };
 
 #endif

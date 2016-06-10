@@ -25,6 +25,7 @@
 /Physics/addPhysics QGSP_BIC_EMY
 
 
+
 ##########################
 # Initialisation procedure
 #
@@ -34,8 +35,6 @@
 # Set the primary particle type,
 # energy and position along the X direction
 #
-
-
 #---------------------------gps-----------------
 /gps/pos/shape Circle
 /gps/pos/centre -310. 0. 0. cm
@@ -72,15 +71,15 @@
 ##########################
 # Set here the cut and the step max for the tracking. 
 # Suggested values of cut and step:
+# Set cuts OUTSIDE the detector
+# 
+/run/setCut 1 mm
+
+# Set cuts ONLY inside the detector
 #
+/run/setCutForRegion DetectorLog 0.05 mm
 
-# Set cuts ONLY inside detector
-/Physics/setDetectorCuts 0.001 mm
-
-# Set cuts outside detector 
-/Physics/setCuts 1 mm
-
-/Step/waterPhantomStepMax 0.005 mm 
+/Step/waterPhantomStepMax 1 mm 
 
 #########################
 ############################################################################################################################## 
@@ -112,8 +111,8 @@
 
 # Visualisation 
 #
-#/vis/scene/create
-#/vis/open OGL
+/vis/scene/create
+/vis/open OGL
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 30 140 deg
 /vis/viewer/zoomTo 1
@@ -124,13 +123,11 @@
 /vis/scene/endOfEventAction accumulate -1
 /vis/viewer/update
 
-
-
 #########################
 # Display the event number
 # during the run
 # 
-/event/printEventNumber 100
+/event/printEventNumber 1
 
 
 # Default material is liquid water (G4_WATER)
@@ -142,7 +139,7 @@
 # For dose average LET computations of primary and secondary particles
 #/analysis/computeLet
 
-/run/beamOn 100
+/run/beamOn 10
 #########################
 # Move the generated .root & .out
 # files into the

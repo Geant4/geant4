@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WaterStopping.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4WaterStopping.hh 83008 2014-07-24 14:49:52Z gcosmo $
 
 #ifndef G4WaterStopping_h
 #define G4WaterStopping_h 1
@@ -68,7 +68,8 @@ private:
 
   void Initialise(G4EmCorrections*);
 
-  void AddData(G4double* energy, G4double* stoppower, G4double factor);
+  void AddData(const G4double* energy, const G4double* stoppower, 
+	       G4double factor);
 
   // hide assignment operator
   G4WaterStopping & operator=(const  G4WaterStopping &right);

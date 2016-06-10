@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonParametrisedLossModel.cc 76243 2013-11-08 11:11:38Z gcosmo $
+// $Id: G4IonParametrisedLossModel.cc 87443 2014-12-04 12:26:31Z gunter $
 //
 // ===========================================================================
 // GEANT4 class source file
@@ -93,6 +93,7 @@
 #include "G4LossTableManager.hh"
 #include "G4GenericIon.hh"
 #include "G4Electron.hh"
+#include "G4DeltaAngle.hh"
 #include "Randomize.hh"
 
 //#define PRINT_TABLE_BUILT
@@ -153,6 +154,9 @@ G4IonParametrisedLossModel::G4IonParametrisedLossModel(
   dedxCacheTransitionEnergy = 0.0;  
   dedxCacheTransitionFactor = 0.0;
   dedxCacheGenIonMassRatio = 0.0;
+
+  // default generator
+  SetAngularDistribution(new G4DeltaAngle());
 }
 
 // #########################################################################
@@ -163,8 +167,21 @@ G4IonParametrisedLossModel::~G4IonParametrisedLossModel() {
   LossTableList::iterator iterTables = lossTableList.begin();
   LossTableList::iterator iterTables_end = lossTableList.end();
 
-  for(;iterTables != iterTables_end; iterTables++) delete *iterTables;
+  for(;iterTables != iterTables_end; ++iterTables) { delete *iterTables; }
   lossTableList.clear();
+
+  // range table
+  RangeEnergyTable::iterator itr = r.begin();
+  RangeEnergyTable::iterator itr_end = r.end();
+  for(;itr != itr_end; ++itr) { delete itr->second; }
+  r.clear();
+
+  // inverse range
+  EnergyRangeTable::iterator ite = E.begin();
+  EnergyRangeTable::iterator ite_end = E.end();
+  for(;ite != ite_end; ++ite) { delete ite->second; }
+  E.clear();
+
 }
 
 // #########################################################################
@@ -272,13 +289,17 @@ void G4IonParametrisedLossModel::Initialise(
   RangeEnergyTable::iterator iterRange = r.begin();
   RangeEnergyTable::iterator iterRange_end = r.end();
 
-  for(;iterRange != iterRange_end; iterRange++) delete iterRange -> second;
+  for(;iterRange != iterRange_end; iterRange++) { 
+    delete iterRange->second; 
+  }
   r.clear();
 
   EnergyRangeTable::iterator iterEnergy = E.begin();
   EnergyRangeTable::iterator iterEnergy_end = E.end();
 
-  for(;iterEnergy != iterEnergy_end; iterEnergy++) delete iterEnergy -> second;
+  for(;iterEnergy != iterEnergy_end; iterEnergy++) { 
+    delete iterEnergy->second;
+  }
   E.clear();
 
   // The cut energies are (re)loaded
@@ -672,7 +693,7 @@ void G4IonParametrisedLossModel::PrintDEDXTableHandlers(
 
 void G4IonParametrisedLossModel::SampleSecondaries(
                              std::vector<G4DynamicParticle*>* secondaries,
-			     const G4MaterialCutsCouple*,
+			     const G4MaterialCutsCouple* couple,
 			     const G4DynamicParticle* particle,
 			     G4double cutKinEnergySec,
 			     G4double userMaxKinEnergySec) {
@@ -710,11 +731,10 @@ void G4IonParametrisedLossModel::SampleSecondaries(
   if(cutKinEnergySec >= maxKinEnergySec) return;
 
   G4double kineticEnergy = particle -> GetKineticEnergy();
-  G4ThreeVector direction = particle ->GetMomentumDirection();
 
   G4double energy  = kineticEnergy + cacheMass;
-  G4double betaSquared  = kineticEnergy * 
-                                    (energy + cacheMass) / (energy * energy);
+  G4double betaSquared = kineticEnergy * (energy + cacheMass) 
+    / (energy * energy);
 
   G4double kinEnergySec;
   G4double grej;
@@ -739,34 +759,30 @@ void G4IonParametrisedLossModel::SampleSecondaries(
 
   } while( G4UniformRand() >= grej );
 
-  G4double momentumSec =
-           std::sqrt(kinEnergySec * (kinEnergySec + 2.0 * electron_mass_c2));
+  const G4Material* mat =  couple->GetMaterial();
+  G4int Z = SelectRandomAtomNumber(mat);
 
-  G4double totMomentum = energy*std::sqrt(betaSquared);
-  G4double cost = kinEnergySec * (energy + electron_mass_c2) /
-                                   (momentumSec * totMomentum);
-  if(cost > 1.0) cost = 1.0;
-  G4double sint = std::sqrt((1.0 - cost)*(1.0 + cost));
+  const G4ParticleDefinition* electron = G4Electron::Electron();
+ 
+  G4DynamicParticle* delta = new G4DynamicParticle(electron, 
+    GetAngularDistribution()->SampleDirection(particle, kinEnergySec, 
+                                              Z, mat),
+                                                   kinEnergySec);
 
-  G4double phi = twopi * G4UniformRand() ;
 
-  G4ThreeVector directionSec(sint*std::cos(phi),sint*std::sin(phi), cost) ;
-  directionSec.rotateUz(direction);
-
-  // create G4DynamicParticle object for delta ray
-  G4DynamicParticle* delta = new G4DynamicParticle(G4Electron::Definition(),
-                                                   directionSec,
-						   kinEnergySec);
-
-  secondaries -> push_back(delta);
+  secondaries->push_back(delta);
 
   // Change kinematics of primary particle
-  kineticEnergy       -= kinEnergySec;
-  G4ThreeVector finalP = direction*totMomentum - directionSec*momentumSec;
+  G4ThreeVector direction = particle ->GetMomentumDirection();
+  G4double totalMomentum = std::sqrt(kineticEnergy*(energy + cacheMass));
+
+  G4ThreeVector finalP = totalMomentum*direction - delta->GetMomentum();
   finalP               = finalP.unit();
 
-  particleChangeLoss -> SetProposedKineticEnergy(kineticEnergy);
-  particleChangeLoss -> SetProposedMomentumDirection(finalP);
+  kineticEnergy       -= kinEnergySec;
+
+  particleChangeLoss->SetProposedKineticEnergy(kineticEnergy);
+  particleChangeLoss->SetProposedMomentumDirection(finalP);
 }
 
 // #########################################################################

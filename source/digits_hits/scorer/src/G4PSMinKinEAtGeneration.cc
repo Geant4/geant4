@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSMinKinEAtGeneration.cc 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4PSMinKinEAtGeneration.cc 81087 2014-05-20 15:44:27Z gcosmo $
 //
 // G4PSMinKinEAtGeneration
 #include "G4PSMinKinEAtGeneration.hh"
@@ -40,7 +40,7 @@
 //
 
 G4PSMinKinEAtGeneration::G4PSMinKinEAtGeneration(G4String name, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1)
+  :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0)
 {
     SetUnit("MeV");
 }
@@ -48,7 +48,7 @@ G4PSMinKinEAtGeneration::G4PSMinKinEAtGeneration(G4String name, G4int depth)
 G4PSMinKinEAtGeneration::G4PSMinKinEAtGeneration(G4String name, 
 						 const G4String& unit,
 						 G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1)
+  :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0)
 {
     SetUnit(unit);
 }

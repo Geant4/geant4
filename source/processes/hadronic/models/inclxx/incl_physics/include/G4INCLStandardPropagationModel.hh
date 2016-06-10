@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -81,9 +82,9 @@ namespace G4INCL {
        */
       G4INCL::Nucleus* getNucleus();
 
-      G4double shoot(ParticleSpecies const projectileSpecies, const G4double kineticEnergy, const G4double impactParameter, const G4double phi);
+      G4double shoot(ParticleSpecies const &projectileSpecies, const G4double kineticEnergy, const G4double impactParameter, const G4double phi);
       G4double shootParticle(ParticleType const t, const G4double kineticEnergy, const G4double impactParameter, const G4double phi);
-      G4double shootComposite(ParticleSpecies const s, const G4double kineticEnergy, const G4double impactParameter, const G4double phi);
+      G4double shootComposite(ParticleSpecies const &s, const G4double kineticEnergy, const G4double impactParameter, const G4double phi);
 
       /**
        * Set the stopping time of the simulation.
@@ -181,13 +182,13 @@ namespace G4INCL {
        *
        * This method excludes collision avatars between updated particles.
        */
-      void generateAllAvatarsExceptUpdated();
+      void generateAllAvatarsExceptUpdated(FinalState const * const fs);
 #endif
 
       /**
        * Propagate all particles and return the first avatar.
        */
-      G4INCL::IAvatar* propagate();
+      G4INCL::IAvatar* propagate(FinalState const * const fs);
 
     private:
       G4INCL::Nucleus *theNucleus;
@@ -196,9 +197,6 @@ namespace G4INCL {
       G4bool firstAvatar;
       LocalEnergyType theLocalEnergyType, theLocalEnergyDeltaType;
       Particle backupParticle1, backupParticle2;
-
-      /// \brief Put spectators on shell by extracting energy from the participants.
-      void putSpectatorsOnShell(IAvatarList const &entryAvatars, ParticleList const &spectators);
     };
 
 }

@@ -1,4 +1,4 @@
-$Id: History 74729 2013-10-21 08:51:35Z gcosmo $
+$Id: History 86964 2014-11-21 11:47:44Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,46 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 21st 2014, J.Apostolakis transport-V10-00-06
+--------------------------------- (corrected version of transport-V10-00-04)
+- Added initialization of G4CoupledTransportation data members (fixes Coverity issue 15280)
+  Renamed data member, to make its name canonical.
+     
+October 15th 2014, M.Asai transport-V10-00-05
+-------------------------
+- G4CoupledTransportation is reverted to transport-V10-00-03.
+- G4Transportation and G4CoupledTransportation : made data member
+  fUseMagneticMoment and its set method EnableUseMagneticMoment()
+  static.
+
+May   27st 2014, V.Ivanchenko transport-V10-00-03
+------------------------------
+- G4UserSpecialCuts - fixed trivial Coverity report
+
+May   21st 2014, J.Apostolakis transport-V10-00-02
+------------------------------
+- Revised  AlongStepDoIt methods of G4Transportation and 
+   G4CoupledTransportation:
+   * Adapted to revised signature for G4FieldTrack constructors, 
+     which now take PDG spin.
+   * Changed to use different constructor for G4FieldTrack (no Velocity)
+   * Adapted to revised signature of G4ChargeState constructor (PDG spin is
+     now 3rd argument and mandatory. )
+
+NOTE: Requires tag field-V10-00-03 of geometry/magneticfield 
+
+
+March 14th 2014, J.Apostolakis transport-V10-00-01
+------------------------------
+- Fix time in case of zero step, in G4CoupledTransportation.
+  This caused a 'going back in time' error, when a zero step occurred
+  in particular at the boundary of a parallel world volume when scoring.
+
+  > Corrects Issue 1017 in the Geant4 Problem reporting System
+    http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1017
+
+  NOTE: Requires tag geomnav-V10-00-01
 
 October 18th 2013, J.Apostolakis transport-V09-06-07
 --------------------------------

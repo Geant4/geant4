@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc 72057 2013-07-04 13:07:29Z gcosmo $
+// $Id: G4NistMaterialBuilder.cc 80654 2014-05-06 08:29:10Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -1836,6 +1836,7 @@ void G4NistMaterialBuilder::HepAndNuclearMaterials()
   AddMaterial("G4_lN2", 0.807,   7,  82.,  1, kStateLiquid, false);
   AddMaterial("G4_lO2", 1.141,   8,  95.,  1, kStateLiquid, false);
   AddMaterial("G4_lAr", 1.396 , 18, 188. , 1, kStateLiquid, false);
+  AddMaterial("G4_lBr", 3.1028, 35, 343. , 1, kStateLiquid, false);
   AddMaterial("G4_lKr", 2.418 , 36, 352. , 1, kStateLiquid, false);
   AddMaterial("G4_lXe", 2.953 , 54, 482. , 1, kStateLiquid, false);
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDParticleWithEnergyFilter.cc 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4SDParticleWithEnergyFilter.cc 81108 2014-05-21 08:10:15Z gcosmo $
 //
 // G4VSensitiveDetector
 #include "G4SDParticleWithEnergyFilter.hh"
@@ -80,3 +80,23 @@ void G4SDParticleWithEnergyFilter::show(){
   fParticleFilter->show();
   fKineticFilter->show();
 }
+
+G4SDParticleWithEnergyFilter::G4SDParticleWithEnergyFilter(const G4SDParticleWithEnergyFilter& rhs)
+    : G4VSDFilter(rhs.filterName)
+{
+    fParticleFilter = new G4SDParticleFilter(*rhs.fParticleFilter);
+    fKineticFilter = new G4SDKineticEnergyFilter(*rhs.fKineticFilter);
+}
+
+
+G4SDParticleWithEnergyFilter& G4SDParticleWithEnergyFilter::operator=(const G4SDParticleWithEnergyFilter& rhs)
+{
+    if ( this == &rhs ) return *this;
+    G4VSDFilter::operator=(rhs);
+    delete fParticleFilter;
+    fParticleFilter = new G4SDParticleFilter(*(rhs.fParticleFilter));
+    delete fKineticFilter;
+    fKineticFilter = new G4SDKineticEnergyFilter(*(rhs.fKineticFilter));
+    return *this;
+}
+

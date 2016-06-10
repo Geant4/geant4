@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm13/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 68311 2013-03-21 18:08:46Z maire $
+// $Id: DetectorConstruction.cc 84207 2014-10-10 14:44:12Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,6 +38,7 @@
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
+#include "G4RunManager.hh"
 
 #include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
@@ -197,7 +198,7 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
   if (pttoMaterial) {
    fMaterial = pttoMaterial;
-   UpdateGeometry();
+   G4RunManager::GetRunManager()->PhysicsHasBeenModified();
   } else {
     G4cout << "\n--> warning from DetectorConstruction::SetMaterial : "
            << materialChoice << " not found" << G4endl;  
@@ -209,17 +210,7 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
 void DetectorConstruction::SetSize(G4double value)
 {
   fBoxSize = value;
-  UpdateGeometry();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4RunManager.hh"
-
-void DetectorConstruction::UpdateGeometry()
-{
-  if (fPBox) 
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

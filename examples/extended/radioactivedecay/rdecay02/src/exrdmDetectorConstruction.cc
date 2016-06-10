@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: exrdmDetectorConstruction.cc 68030 2013-03-13 13:51:27Z gcosmo $
+// $Id: exrdmDetectorConstruction.cc 84601 2014-10-17 07:44:52Z gcosmo $
 //
 /// \file radioactivedecay/rdecay02/src/exrdmDetectorConstruction.cc
 /// \brief Implementation of the exrdmDetectorConstruction class
@@ -135,7 +135,7 @@ G4VPhysicalVolume* exrdmDetectorConstruction::Construct()
   fLogicTarget = new G4LogicalVolume(fSolidTarget,fTargetMater,"Target",0,0,0);
   fPhysiTarget = new G4PVPlacement(0,              // no rotation
                                   positionTarget,  // at (x,y,z)
-                                  fLogicTarget,    // its logical volume                                  
+                                  fLogicTarget,    // its logical volume
                                   "Target",        // its name
                                   fLogicWorld,     // its mother  volume
                                   false,           // no boolean operations
@@ -156,7 +156,7 @@ G4VPhysicalVolume* exrdmDetectorConstruction::Construct()
                                                                       "Detector",0,0,0);
   fPhysiDetector = new G4PVPlacement(0,             // no rotation
                                   positionDetector, // at (x,y,z)
-                                  fLogicDetector,   // its logical volume                                  
+                                  fLogicDetector,   // its logical volume
                                   "Detector",       // its name
                                   fLogicWorld,      // its mother  volume
                                   false,            // no boolean operations

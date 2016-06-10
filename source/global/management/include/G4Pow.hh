@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Pow.hh 74256 2013-10-02 14:24:02Z gcosmo $
+// $Id: G4Pow.hh 83383 2014-08-21 14:20:37Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -59,6 +59,7 @@ class G4Pow
   public:
 
     static G4Pow* GetInstance();
+   ~G4Pow();
 
     // Fast computation of Z^1/3
     //
@@ -99,11 +100,8 @@ class G4Pow
   private:
 
     G4Pow();
-   ~G4Pow();
 
     inline G4double logBase(G4double x) const;
-
-  private:
 
     static G4Pow* fpInstance;
 

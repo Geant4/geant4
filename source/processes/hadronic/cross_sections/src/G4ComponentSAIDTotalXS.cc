@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ComponentSAIDTotalXS.cc 76889 2013-11-18 13:01:55Z gcosmo $
+// $Id: G4ComponentSAIDTotalXS.cc 83409 2014-08-21 15:16:07Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -58,7 +58,6 @@ G4ComponentSAIDTotalXS::G4ComponentSAIDTotalXS()
 
 G4ComponentSAIDTotalXS::~G4ComponentSAIDTotalXS()
 {
-  /*
   for(G4int i=0; i<numberOfSaidXS; ++i) {
     if(elastdata[i]) {
       delete elastdata[i];
@@ -69,7 +68,6 @@ G4ComponentSAIDTotalXS::~G4ComponentSAIDTotalXS()
       inelastdata[i] = 0;
     }
   }
-  */
 }
 
 G4double 

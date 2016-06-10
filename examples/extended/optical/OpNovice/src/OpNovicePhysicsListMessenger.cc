@@ -54,14 +54,14 @@ OpNovicePhysicsListMessenger::
   fVerboseCmd->SetParameterName("verbose",true);
   fVerboseCmd->SetDefaultValue(1);
   fVerboseCmd->SetRange("verbose>=0");
-  fVerboseCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fVerboseCmd->AvailableForStates(G4State_PreInit);
  
   fCerenkovCmd =
            new G4UIcmdWithAnInteger("/OpNovice/phys/cerenkovMaxPhotons",this);
   fCerenkovCmd->SetGuidance("set max nb of photons per step");
   fCerenkovCmd->SetParameterName("MaxNumber",false);
   fCerenkovCmd->SetRange("MaxNumber>=0");
-  fCerenkovCmd->AvailableForStates(G4State_Idle);
+  fCerenkovCmd->AvailableForStates(G4State_PreInit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

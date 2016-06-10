@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc 68037 2013-03-13 14:15:08Z gcosmo $
+// $Id: G4VXTRenergyLoss.cc 84716 2014-10-20 07:38:47Z gcosmo $
 //
 // History:
 // 2001-2002 R&D by V.Grichine
@@ -92,7 +92,6 @@ G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope,
   fTotBin         = 50;
 
   // Proton energy vector initialization
-
   fProtonEnergyVector = new G4PhysicsLogVector(fMinProtonTkin,
 					       fMaxProtonTkin,
 					       fTotBin  );
@@ -169,9 +168,18 @@ G4VXTRenergyLoss::~G4VXTRenergyLoss()
   if(fEnvelope) delete fEnvelope;
   delete fProtonEnergyVector;
   delete fXTREnergyVector;
-  delete fEnergyDistrTable;
-  if(fAngleRadDistr) delete fAngleDistrTable;
-  delete fAngleForEnergyTable;
+  if(fEnergyDistrTable) { 
+    fEnergyDistrTable->clearAndDestroy(); 
+    delete fEnergyDistrTable;
+  }
+  if(fAngleRadDistr) {
+    fAngleDistrTable->clearAndDestroy();
+    delete fAngleDistrTable;
+  }
+  if(fAngleForEnergyTable) {
+    fAngleForEnergyTable->clearAndDestroy();
+    delete fAngleForEnergyTable;
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -461,7 +469,7 @@ void G4VXTRenergyLoss::BuildAngleForEnergyBank()
 	  <<timer.GetUserElapsed()<<" s"<<G4endl;
   }
   fGamma = 0.;
-  return;
+  delete energyVector;
 }
 
 ////////////////////////////////////////////////////////////////////////

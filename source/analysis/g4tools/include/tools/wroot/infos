@@ -1484,15 +1484,23 @@ inline void fill_infos_histo(List<StreamerInfo>& a_infos,std::ostream&) {
   scs(check,"fYmax");
   scs(check,"Double_t");
 
-  StreamerInfo* info = new StreamerInfo("TProfile",3,check);
+  scs(check,"fTsumwy");
+  scs(check,"Double_t");
+
+  scs(check,"fTsumwy2");
+  scs(check,"Double_t");
+
+  StreamerInfo* info = new StreamerInfo("TProfile",4,check);
   a_infos.push_back(info);
 
   info->add(new streamer_base("TH1D","1-Dim histograms (one double per channel)",0,TH1D_version));//580
   info->add(new streamer_basic_type("fBinEntries","number of entries per bin",580,streamer_info::OBJECT_ANY,"TArrayD"));//12
-  info->add(new streamer_basic_type("fErrorMode","Option to compute errors",592,streamer_info::DOUBLE,"EErrorType"));//4
+  info->add(new streamer_basic_type("fErrorMode","Option to compute errors",592,streamer_info::INT,"EErrorType"));//4
   info->add(new streamer_basic_type("fYmin","Lower limit in Y (if set)",596,streamer_info::DOUBLE,"Double_t"));//8
   info->add(new streamer_basic_type("fYmax","Upper limit in Y (if set)",604,streamer_info::DOUBLE,"Double_t"));//8
-  //612
+  info->add(new streamer_basic_type("fTsumwy","Total Sum of weight*Y",612,streamer_info::DOUBLE,"Double_t"));//8
+  info->add(new streamer_basic_type("fTsumwy2","Total Sum of weight*Y*Y",620,streamer_info::DOUBLE,"Double_t"));//8
+  //628
 
   //v3-05-07 : 624 = 612 + 4 + 8 (diff TH1D) = ok
   }
@@ -1520,10 +1528,10 @@ inline void fill_infos_histo(List<StreamerInfo>& a_infos,std::ostream&) {
   a_infos.push_back(info);
 
   info->add(new streamer_base("TH1","1-Dim histogram base class",0,TH1_version));//568
-  info->add(new streamer_basic_type("fScaleFactor","Scale Factor",576,streamer_info::DOUBLE,"Double_t"));//8
-  info->add(new streamer_basic_type("fTsumwy","Total Sum of weight*Y",584,streamer_info::DOUBLE,"Double_t"));//8
-  info->add(new streamer_basic_type("fTsumwy2","Total Sum of weight*Y*Y",592,streamer_info::DOUBLE,"Double_t"));//8
-  info->add(new streamer_basic_type("fTsumwxy","Total Sum of weight*X*Y",600,streamer_info::DOUBLE,"Double_t"));//8
+  info->add(new streamer_basic_type("fScaleFactor","Scale Factor",568,streamer_info::DOUBLE,"Double_t"));//8
+  info->add(new streamer_basic_type("fTsumwy","Total Sum of weight*Y",576,streamer_info::DOUBLE,"Double_t"));//8
+  info->add(new streamer_basic_type("fTsumwy2","Total Sum of weight*Y*Y",584,streamer_info::DOUBLE,"Double_t"));//8
+  info->add(new streamer_basic_type("fTsumwxy","Total Sum of weight*X*Y",592,streamer_info::DOUBLE,"Double_t"));//8
   //600
 
   //v3-05-07 : <to be checked>
@@ -1545,6 +1553,7 @@ inline void fill_infos_histo(List<StreamerInfo>& a_infos,std::ostream&) {
 
   }
 
+  short TH2D_version = 3;
  {unsigned int check = 0;  
   //this :
   scs(check,"TH2D");
@@ -1552,7 +1561,7 @@ inline void fill_infos_histo(List<StreamerInfo>& a_infos,std::ostream&) {
   scs(check,"TH2");
   scs(check,"TArrayD");
 
-  StreamerInfo* info = new StreamerInfo("TH2D",3,check);
+  StreamerInfo* info = new StreamerInfo("TH2D",TH2D_version,check);
   a_infos.push_back(info);
 
   info->add(new streamer_base("TH2","2-Dim histogram base class",0,TH2_version));//600
@@ -1560,6 +1569,120 @@ inline void fill_infos_histo(List<StreamerInfo>& a_infos,std::ostream&) {
   //612
 
   }
+
+ {unsigned int check = 0;
+  //this :
+  scs(check,"TProfile2D");
+  //base :
+  scs(check,"TH2D");
+  //members :
+  scs(check,"fBinEntries");
+  scs(check,"TArrayD");
+
+  scs(check,"fErrorMode");
+  scs(check,"EErrorType");//FIXME : ok ?
+
+  scs(check,"fZmin");
+  scs(check,"Double_t");
+
+  scs(check,"fZmax");
+  scs(check,"Double_t");
+
+  scs(check,"fTsumwz");
+  scs(check,"Double_t");
+
+  scs(check,"fTsumwz2");
+  scs(check,"Double_t");
+
+  StreamerInfo* info = new StreamerInfo("TProfile2D",5,check);
+  a_infos.push_back(info);
+
+  info->add(new streamer_base("TH2D","2-Dim histograms (one double per channel)",0,TH2D_version));//612
+  info->add(new streamer_basic_type("fBinEntries","number of entries per bin",612,streamer_info::OBJECT_ANY,"TArrayD"));//12
+  info->add(new streamer_basic_type("fErrorMode","Option to compute errors",624,streamer_info::INT,"EErrorType"));//4
+  info->add(new streamer_basic_type("fZmin","Lower limit in Z (if set)",628,streamer_info::DOUBLE,"Double_t"));//8
+  info->add(new streamer_basic_type("fZmax","Upper limit in Z (if set)",636,streamer_info::DOUBLE,"Double_t"));//8
+  info->add(new streamer_basic_type("fTsumwz","Total Sum of weight*Z",644,streamer_info::DOUBLE,"Double_t"));//8
+  info->add(new streamer_basic_type("fTsumwz2","Total Sum of weight*Z*Z",652,streamer_info::DOUBLE,"Double_t"));//8
+  //660
+
+  }
+
+  short TH3_version = 4;
+  short TAtt3D_version = 1;
+ {unsigned int check = 0;
+  //this :
+  scs(check,"TH3");
+  //bases :
+  scs(check,"TH1");
+  scs(check,"TAtt3D");
+  //members :
+  scs(check,"fTsumwy");
+  scs(check,"Double_t");
+  scs(check,"fTsumwy2");
+  scs(check,"Double_t");
+  scs(check,"fTsumwxy");
+  scs(check,"Double_t");
+
+  scs(check,"fTsumwz");
+  scs(check,"Double_t");
+  scs(check,"fTsumwz2");
+  scs(check,"Double_t");
+  scs(check,"fTsumwxz");
+  scs(check,"Double_t");
+  scs(check,"fTsumwyz");
+  scs(check,"Double_t");
+
+  StreamerInfo* info = new StreamerInfo("TH3",TH3_version,check);
+  a_infos.push_back(info);
+
+  info->add(new streamer_base("TH1","1-Dim histogram base class",0,TH1_version));//568
+  info->add(new streamer_base("TAtt3D","3D attributes",568,TAtt3D_version)); //0
+  info->add(new streamer_basic_type("fTsumwy","Total Sum of weight*Y",568,streamer_info::DOUBLE,"Double_t"));//8
+  info->add(new streamer_basic_type("fTsumwy2","Total Sum of weight*Y*Y",576,streamer_info::DOUBLE,"Double_t"));//8
+  info->add(new streamer_basic_type("fTsumwxy","Total Sum of weight*X*Y",584,streamer_info::DOUBLE,"Double_t"));//8
+
+  info->add(new streamer_basic_type("fTsumwz","Total Sum of weight*Z",592,streamer_info::DOUBLE,"Double_t"));//8
+  info->add(new streamer_basic_type("fTsumwz2","Total Sum of weight*Z*Z",600,streamer_info::DOUBLE,"Double_t"));//8
+  info->add(new streamer_basic_type("fTsumwxz","Total Sum of weight*X*Z",608,streamer_info::DOUBLE,"Double_t"));//8
+  info->add(new streamer_basic_type("fTsumwyz","Total Sum of weight*Y*Z",616,streamer_info::DOUBLE,"Double_t"));//8
+  //624
+
+  //v4-00-02 : <to be checked>
+  }
+
+ {unsigned int check = 0;
+  //this :
+  scs(check,"TH3F");
+  //base :
+  scs(check,"TH3");
+  scs(check,"TArrayF");
+
+  StreamerInfo* info = new StreamerInfo("TH3F",3,check);
+  a_infos.push_back(info);
+
+  info->add(new streamer_base("TH3","3-Dim histogram base class",0,TH3_version));//624
+  info->add(new streamer_base("TArrayF","Array of floats",624,TArrayF_version));//12
+  //636
+
+  }
+
+ {unsigned int check = 0;
+  //this :
+  scs(check,"TH3D");
+  //base :
+  scs(check,"TH3");
+  scs(check,"TArrayD");
+
+  StreamerInfo* info = new StreamerInfo("TH3D",3,check);
+  a_infos.push_back(info);
+
+  info->add(new streamer_base("TH3","3-Dim histogram base class",0,TH3_version));//624
+  info->add(new streamer_base("TArrayD","Array of doubles",624,TArrayD_version));//12
+  //636
+
+  }
+
 
 }
 

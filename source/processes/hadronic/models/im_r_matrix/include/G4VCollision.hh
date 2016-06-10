@@ -66,7 +66,7 @@ public:
 		     const G4KineticTrack& trk2) const;
 protected:
 
-  G4int GetNumberOfPartons(G4ParticleDefinition * aP) const
+  G4int GetNumberOfPartons(const G4ParticleDefinition * aP) const
   {
     G4int result = 0;
     for(G4int i=0; i<6; i++) 

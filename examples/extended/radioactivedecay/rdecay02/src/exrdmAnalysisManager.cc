@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: exrdmAnalysisManager.cc 68007 2013-03-13 11:28:03Z gcosmo $
+// $Id: exrdmAnalysisManager.cc 79181 2014-02-20 08:16:27Z gcosmo $
 //
 /// \file radioactivedecay/rdecay02/src/exrdmAnalysisManager.cc
 /// \brief Implementation of the exrdmAnalysisManager class
@@ -114,7 +114,7 @@ void exrdmAnalysisManager::BookHisto()
     "Anti-coincidence spectrum (MeV) in the detector",fHistNBin,
     fHistEMin,fHistEMax,MeV);
   fHisto->Add1D("H16",
-               "Decay emission spectrum (MeV)",fHistNBin,fHistEMin,fHistEMax,MeV);
+            "Decay emission spectrum (MeV)",fHistNBin,fHistEMin,fHistEMax,MeV);
   // in aida these histos are indiced from 0-6
   //
   fHisto->AddTuple( "T1", "Emitted Particles",
@@ -130,7 +130,9 @@ void exrdmAnalysisManager::BookHisto()
 void exrdmAnalysisManager::BeginOfRun()
 {
   fHisto->Book();
-  G4cout << "exrdmAnalysisManager: Histograms are booked and the run has been started" << G4endl;
+  G4cout 
+   << "exrdmAnalysisManager: Histograms are booked and the run has been started"
+   << G4endl;
   G4ProcessTable *pTable = G4ProcessTable::GetProcessTable();
   G4RadioactiveDecay * rDecay = (G4RadioactiveDecay *)
      pTable->FindProcess("RadioactiveDecay", "GenericIon");
@@ -170,17 +172,18 @@ void exrdmAnalysisManager::EndOfRun(G4int nevent)
       for (size_t i = 0 ; i < theTables.size(); i++) {
             G4double rate, error;
             outfile << "Radioactivities in decay window no. " << i << G4endl;
-            outfile <<
-                   "Z \tA \tE \tActivity (decays/window) \tError (decays/window) "
-                    << G4endl;
+            outfile
+              << "Z \tA \tE \tActivity (decays/window) \tError (decays/window) "
+              << G4endl;
             map<G4ThreeVector,G4TwoVector> *aMap = theTables[i]->GetTheMap();
             map<G4ThreeVector,G4TwoVector>::iterator iter;
             for(iter=aMap->begin(); iter != aMap->end(); iter++) {
               rate = iter->second.x()/nevent;
               error = std::sqrt(iter->second.y())/nevent;
-              if ( rate < 0.) rate = 0.; // statically it can be < 0. but it's unphysical
+              if ( rate < 0.) rate = 0.; // statically it can be < 0.
               outfile << iter->first.x() <<"\t"<< iter->first.y() <<"\t"
-                          << iter->first.z() << "\t" << rate <<"\t" << error << G4endl;
+                      << iter->first.z() << "\t" << rate <<"\t" << error 
+                      << G4endl;
             }
             outfile << G4endl;
       }
@@ -214,7 +217,7 @@ void exrdmAnalysisManager::EndOfEvent()
       TarW = 0.;
     }
     for (size_t i = 1; i < fEdepo.size(); i++) {
-      if (std::fabs((fEdepo[i].GetTime()- Time)/second) <= fPulseWidth) {
+      if (std::fabs(fEdepo[i].GetTime() - Time) <= fPulseWidth) {      
         if ( fEdepo[i].GetEnergy() > 0. ) {
           TarE += fEdepo[i].GetEnergy();
           TarW += fEdepo[i].GetEnergy()*fEdepo[i].GetWeight();
@@ -274,7 +277,7 @@ void exrdmAnalysisManager::EndOfEvent()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void exrdmAnalysisManager::AddEnergy(G4double edep, G4double weight,
-                                                                                                                           G4double time)
+                                                              G4double time)
 {
   if(1 < fVerbose) {
     G4cout << "exrdmAnalysisManager::AddEnergy: e(keV)= " << edep/keV 
@@ -322,7 +325,6 @@ void exrdmAnalysisManager::AddIsotope(G4double pid,G4double weight,
   fHisto->AddRow(1);
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void exrdmAnalysisManager::AddDecayProduct(G4double pid,G4int Z, G4int A,
                                            G4double energy, G4double time,
@@ -336,3 +338,5 @@ void exrdmAnalysisManager::AddDecayProduct(G4double pid,G4int Z, G4int A,
   fHisto->FillTuple(3,5,weight);
   fHisto->AddRow(3);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWtViewer.cc 75567 2013-11-04 11:35:11Z gcosmo $
+// $Id: G4OpenGLWtViewer.cc 86360 2014-11-10 08:34:16Z gcosmo $
 //
 // 
 // G4OpenGLWtViewer : Class to provide Wt specific
@@ -53,8 +53,8 @@
 #include "G4UIWt.hh"
 #include "G4UImanager.hh"
 #include "G4UIcommandTree.hh"
-#include <WT/WHBoxLayout>
-#include <WT/WApplication>
+#include <Wt/WHBoxLayout>
+#include <Wt/WApplication>
 #include <Wt/WTime>
 
 
@@ -1170,6 +1170,7 @@ void G4OpenGLWtViewer::G4MouseDoubleClickEvent()
   fLastPos2 = fLastPos1;
   fLastPos1 = Wt::WPoint(event->widget().x, event->widget().y);
 
+  printf("G4OpenGLWtViewer move :%d %d\n",event->widget().x, event->widget().y);
   int deltaX = fLastPos2.x()-fLastPos1.x();
   int deltaY = fLastPos2.y()-fLastPos1.y();
 

@@ -25,7 +25,52 @@
 //
 // $Id: G4CsvAnalysisManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
+#include "G4H1ToolsManager.hh"
+#include "G4H2ToolsManager.hh"
+#include "G4H3ToolsManager.hh"
+#include "G4P1ToolsManager.hh"
+#include "G4P2ToolsManager.hh"
 #include "G4CsvNtupleManager.hh"
+
+//_____________________________________________________________________________
+inline 
+tools::histo::h1d*  G4CsvAnalysisManager::GetH1(G4int id, G4bool warn,
+                                                G4bool onlyIfActive) const 
+{
+  return fH1Manager->GetH1(id, warn, onlyIfActive);
+}
+
+//_____________________________________________________________________________
+inline 
+tools::histo::h2d*  G4CsvAnalysisManager::GetH2(G4int id, G4bool warn,
+                                                G4bool onlyIfActive) const 
+{
+  return fH2Manager->GetH2(id, warn, onlyIfActive);
+}
+
+//_____________________________________________________________________________
+inline 
+tools::histo::h3d*  G4CsvAnalysisManager::GetH3(G4int id, G4bool warn,
+                                                 G4bool onlyIfActive) const 
+{
+  return fH3Manager->GetH3(id, warn, onlyIfActive);
+}
+
+//_____________________________________________________________________________
+inline 
+tools::histo::p1d*  G4CsvAnalysisManager::GetP1(G4int id, G4bool warn,
+                                                 G4bool onlyIfActive) const 
+{
+  return fP1Manager->GetP1(id, warn, onlyIfActive);
+}
+
+//_____________________________________________________________________________
+inline 
+tools::histo::p2d*  G4CsvAnalysisManager::GetP2(G4int id, G4bool warn,
+                                                 G4bool onlyIfActive) const 
+{
+  return fP2Manager->GetP2(id, warn, onlyIfActive);
+}
 
 //_____________________________________________________________________________
 inline
@@ -39,4 +84,198 @@ inline
 tools::wcsv::ntuple* G4CsvAnalysisManager::GetNtuple(G4int ntupleId) const
 {
   return fNtupleManager->GetNtuple(ntupleId);
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h1d*>::iterator G4CsvAnalysisManager::BeginH1()
+{
+  return fH1Manager->BeginH1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h1d*>::iterator G4CsvAnalysisManager::EndH1()
+{
+  return fH1Manager->EndH1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h1d*>::const_iterator 
+G4CsvAnalysisManager::BeginConstH1() const
+{
+  return fH1Manager->BeginConstH1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h1d*>::const_iterator 
+G4CsvAnalysisManager::EndConstH1() const
+{
+  return fH1Manager->EndConstH1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h2d*>::iterator G4CsvAnalysisManager::BeginH2()
+{
+  return fH2Manager->BeginH2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h2d*>::iterator G4CsvAnalysisManager::EndH2()
+{
+  return fH2Manager->EndH2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h2d*>::const_iterator 
+G4CsvAnalysisManager::BeginConstH2() const
+{
+  return fH2Manager->BeginConstH2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h2d*>::const_iterator 
+G4CsvAnalysisManager::EndConstH2() const
+{
+  return fH2Manager->EndConstH2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h3d*>::iterator G4CsvAnalysisManager::BeginH3()
+{
+  return fH3Manager->BeginH3();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h3d*>::iterator G4CsvAnalysisManager::EndH3()
+{
+  return fH3Manager->EndH3();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h3d*>::const_iterator 
+G4CsvAnalysisManager::BeginConstH3() const
+{
+  return fH3Manager->BeginConstH3();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h3d*>::const_iterator 
+G4CsvAnalysisManager::EndConstH3() const
+{
+  return fH3Manager->EndConstH3();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::p1d*>::iterator G4CsvAnalysisManager::BeginP1()
+{
+  return fP1Manager->BeginP1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::p1d*>::iterator G4CsvAnalysisManager::EndP1()
+{
+  return fP1Manager->EndP1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::p1d*>::const_iterator 
+G4CsvAnalysisManager::BeginConstP1() const
+{
+  return fP1Manager->BeginConstP1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::p1d*>::const_iterator 
+G4CsvAnalysisManager::EndConstP1() const
+{
+  return fP1Manager->EndConstP1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::p2d*>::iterator G4CsvAnalysisManager::BeginP2()
+{
+  return fP2Manager->BeginP2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::p2d*>::iterator G4CsvAnalysisManager::EndP2()
+{
+  return fP2Manager->EndP2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::p2d*>::const_iterator 
+G4CsvAnalysisManager::BeginConstP2() const
+{
+  return fP2Manager->BeginConstP2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::p2d*>::const_iterator 
+G4CsvAnalysisManager::EndConstP2() const
+{
+  return fP2Manager->EndConstP2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::wcsv::ntuple*>::iterator G4CsvAnalysisManager::BeginNtuple()
+{
+  return fNtupleManager->BeginNtuple();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::wcsv::ntuple*>::iterator G4CsvAnalysisManager::EndNtuple()
+{
+  return fNtupleManager->EndNtuple();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::wcsv::ntuple*>::const_iterator 
+G4CsvAnalysisManager::BeginConstNtuple() const
+{
+  return fNtupleManager->BeginConstNtuple();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::wcsv::ntuple*>::const_iterator 
+G4CsvAnalysisManager::EndConstNtuple() const
+{
+  return fNtupleManager->EndConstNtuple();
+}  
+
+//_____________________________________________________________________________
+inline
+void G4CsvAnalysisManager::SetIsCommentedHeader(G4bool isCommentedHeader)
+{
+  fNtupleManager->SetIsCommentedHeader(isCommentedHeader);
+}  
+
+//_____________________________________________________________________________
+inline
+void G4CsvAnalysisManager::SetIsHippoHeader(G4bool isHippoHeader)
+{
+  fNtupleManager->SetIsHippoHeader(isHippoHeader);
 }  

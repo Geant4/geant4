@@ -1,25 +1,38 @@
-# $Id: GNUmakefile,v 1.2 2006-03-14 10:13:55 vnivanch Exp $
-# ----------------------------------------------------------------
+# $Id: GNUmakefile 85903 2014-11-06 08:47:08Z gcosmo $
+# --------------------------------------------------------------
+# GNUmakefile for examples module
+# with use of classes from common repository.
+# --------------------------------------------------------------
 
 name := clGeometry
+
 G4TARGET := $(name)
 G4EXLIB := true
+SUBDIRS := common
 
 ifndef G4INSTALL
   G4INSTALL = ../../../..
 endif
 
-.PHONY: setup clean_setup all
-all: lib bin
-
-setup:
-	@echo "Copying files from common"
-	@$(G4INSTALL)/examples/extended/common/scripts/copy_files.sh
-
-clean_setup:
-	@echo "Removing files copied from common"
-	@$(G4INSTALL)/examples/extended/common/scripts/clean_files.sh
-
-include $(G4INSTALL)/config/architecture.gmk
+.PHONY: all makesub clean cleansub
+all: makesub lib bin
 
 include $(G4INSTALL)/config/binmake.gmk
+
+CPPFLAGS += -I./common/include
+
+makesub:
+	@for dir in $(SUBDIRS); do ( \
+	echo Entering $$dir ... ; \
+	cd $$dir; \
+	$(MAKE) obj name=clGeometry );\
+	done
+
+clean:: cleansub
+
+cleansub:
+	@for dir in $(SUBDIRS); do ( \
+	echo Entering $$dir ...; \
+	cd $$dir; \
+	$(MAKE) clean );\
+	done

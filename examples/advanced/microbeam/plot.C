@@ -340,7 +340,7 @@ c1.cd(11);
   
 c1.cd(12);
   TH2F *hist = new TH2F("hist","hist",50,-20,20,50,-20,20);
-  ntuple4->Draw("x*0.359060:z*0.162810>>hist","doseV","contz");
+  ntuple4->Draw("x*0.359060:(z+1500/0.162810+21)*0.162810>>hist","doseV","contz");
   gPad->SetLogz();
   hist->Draw("contz");
   hist->GetXaxis()->SetLabelSize(0.025);

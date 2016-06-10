@@ -1,4 +1,4 @@
-$Id: History 77479 2013-11-25 10:01:22Z gcosmo $
+$Id: History 87360 2014-12-01 16:07:16Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,177 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+28th November 2014  Laurent Garnier (vis-V10-00-15)
+- opengl-V10-00-28 :
+  o Fix refresh problem due to a bad threading management
+  o Fixes hidden marker field in Qt viewer properties.
+  o Fixes a bug whereby hidden markers are not respected if 2D objects
+    are drawn.
+  o Fix a compilation issue with Wt driver
+  o Fix some minor GUI visual issues
+  o Allow viewer properties/picking/scene tree to be accessible
+  from an external application
+  o Fix JIRA DEV-173 about using external application 
+- gMocren-V10-00-03
+  o fixed warnings according to COVERITY
+  o fixed STRING_OVERFLOW checks according to COVERITY
+- modeling-V10-00-12
+- visman-V10-00-30
+
+28th November 2014  John Allison  (vis-V10-00-14-JA-01)
+- modeling-V10-00-12: Tidied.
+- visman-V10-00-30: Get correct run manager in MT mode.
+- visman-V10-00-29: Fixed Coverity warning.
+
+26th November 2014  John Allison  (vis-V10-00-14-JA-00)
+- Private tag to assist merging wit MT vis-sub-thread version.
+
+21st November 2014  John Allison
+- visman-V10-00-28: Fix bug affecting file-writing viewers.
+
+20th November 2014  John Allison
+- visman-V10-00-27: Another go at fixing win7-vc12 compiler warnings.
+
+19th November 2014  John Allison
+- visman-V10-00-26: Fixed compiler warnings.
+
+17th November 2014  John Allison
+- visman-V10-00-25: Fixes for Coverity warnings.
+
+11th November 2014  John Allison
+- visman-V10-00-24: Improved /vis/scene/add/scale.
+
+8th November 2014  John Allison  (vis-V10-00-14)
+- visman-V10-00-23:
+  o Fixed spelling mistake in messages.
+  o Fixed win7-vc12 compiler warnings.
+
+7th November 2014  Laurent Garnier (vis-V10-00-12 - vis-V10-00-13)
+- opengl-V10-00-22 - opengl-V10-00-23
+
+30th October 2014  Laurent Garnier (vis-V10-00-10 - vis-V10-00-11)
+- visexternal-V10-00-03
+- opengl-V10-00-21
+
+30th October 2014  John Allison
+- visman-V10-00-21: Added informationals about /vis/scene/add/extent.
+
+29th October 2014  John Allison
+- visman-V10-00-20: Added /vis/scene/add/extent.
+  o Adds a dummy model with given extent to the current scene.
+    This can be used to provide an extent to the scene even if
+    no other models with extent are available. For example,
+    even if there is no geometry.
+
+22nd October 2014  John Allison  (vis-MT-branchpoint-00)
+- A tag made on the trunk from which vis-MT-branch-00 has been made.
+
+22nd October 2014  John Allison
+- modeling-V10-00-08: Get appropriate run manager in MT mode.
+- opengl-V10-00-19: Some developments by Laurent.
+
+1st October 2014  John Allison
+- visman-V10-00-18:
+  o G4VisManager: Split out some code in sequential version of EndOfEvent
+    in preparation for re-use in multi-threading mode.
+  o G4VisManager.cc and G4VSceneHandler.cc: Minor code improvements (Laurent).
+
+14th Aug 2014  John Allison  (vis-V10-00-09)
+- visman-V10-00-17: Changed default text size to 12 pixels.
+
+11th Aug 2014  John Allison  (vis-V10-00-08)
+- Re-tagged.  Needs greps-V10-00-06.
+
+11th Aug 2014  John Allison  (vis-V10-00-07)
+- modeling-V10-00-07: Added text size for axes labels.
+- visman-V10-00-16: Added text size control through /vis/set/textSize
+  for /vis/scene/add/axes and /vis/scene/add/scale.
+
+6th June 2014  Laurent Garnier (vis-V10-00-06)
+- opengl-V10-00-08 :
+  o G4OpenGLQtViewer: Fix a problem in viewer/set parameters
+
+5th June 2014  Laurent Garnier  (vis-V10-00-05)
+- opengl-V10-00-07 :
+  o Speed improvments by avoiding a dynamic_cast
+  o New Viewer parameters info panel (DEV-151)
+- gMocren-V10-00-01
+  o FIX Problem 1585 - Memory leak in G4GMocrenFile.cc
+- visexternal-V10-00-00
+  o Fix a bad text in G4OpenGL2PSAction
+
+27th May 2014  John Allison
+- visman-V10-00-10: /vis/specify and /vis/scene/add/logicalVolume:
+  o Added flag for drawing/suppressing axes.
+
+19th May 2014  John Allison  (vis-V10-00-04)
+- modeling-V10-00-05:
+  o Introduced G4TouchableDumpScene and G4PseudoScene.
+- visman-V10-00-09 - requires modeling-V10-00-05.
+- Added /vis/touchable/dump.  Dumps the G4Atts to G4cout.
+- Added parameter to /vis/scene/add/axes to suppress annotations.
+- G4VisCommands.cc: Fixed deprecated call to GetAttDefs.
+
+13th May 2014  John Allison  (vis-V10-00-03)
+- visman-V10-00-08, DAWN-V10-00-02, opengl-V10-00-05, openinventor-V10-00-01:
+  o Moved G4VisFeaturesOf* to appropriate sub-categories.
+— visman-V10-00-07:
+  o G4VisCommandsSceneAdd.cc:
+    . Added axes to /vis/scene/add/logicalVolume.
+    . Other small changes.
+  o G4VisManager.hh:
+    . GetInstance now public.
+    . Thus removed cross-subcategory friendships.
+
+6th March 2014  John Allison
+- modeling-V10-00-04: Protection of zero pointers.
+- visman-V10-00-04: Coverity fix.
+
+4th February 2014  John Allison  (vis-V10-00-02)
+- openinventor-V10-00-00:
+  o Fixed shadowing compilation warnings (Gabriele Cosmo).
+  o Improvements to G4OpenInventorXtExaminerViewer (Fred Jones).
+
+25th January 2014  John Allison  (vis-V10-00-01)
+- modeling-V10-00-02:
+  o GNUmakefile: Added dependency on run category.
+  o G4PhysicalVolumeModel: Improved constructor.
+- visman-V10-00-03:
+  o G4VisManager: Removed temporary model in Draw method for
+    G4VPhysicalVolume introduced in visman-V10-00-01.
+- opengl-V10-00-01:
+  o Improved protection of pointers.
+
+23rd January 2014  John Allison  (vis-V10-00-00)
+- modeling-V10-00-01:
+  o G4TrajectoriesModel: Add run ID.
+- visman-V10-00-02:
+  o Add run ID to G4Atts of user drawn trajectories.
+- opengl-V10-00-00:
+  o Improvements to class design and some bug fixes for picking.
+  o Some Qt fixes and improvements.
+
+13th January 2014  John Allison
+- modeling-V10-00-00: requires greps-V10-00-01:
+  o Migration and minor development.
+- visman-V10-00-01: requires modeling-V10-00-00:
+  o Migration and added protections.
+  o Used temporary models for Draw methods for G4VTrajectory and
+    G4VPhysicalVolume.
+
+10th December 2013  John Allison
+- visXXX-V10-00-00: G4XXXFile declared as G4VGraphicsSystem::fileWriter.
+- VRML-V10-00-00: VRML1/2File declared as G4VGraphicsSystem::fileWriter.
+
+9th December 2013  John Allison
+- visman-V10-00-00:
+  o Introduced G4VGraphicsSystem::fileWriter to allow special informational.
+  o Small bug fix for MT mode:
+- DAWN-V10-00-00: DAWNFILE declared as G4VGraphicsSystem::fileWriter.
+- gMocren-V10-00-00: gMocren declared as G4VGraphicsSystem::fileWriter.
+- vis-HepRep-V10-00-00:
+  o HepRep and HepRepFile declared as G4VGraphicsSystem::fileWriter.
 
 23rd November 2013  Joseph Perl  (vis-V09-06-37)
 - opengl-V09-06-11: Fixes for Qt

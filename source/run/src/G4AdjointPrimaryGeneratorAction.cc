@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointPrimaryGeneratorAction.cc 76245 2013-11-08 11:14:32Z gcosmo $
+// $Id: G4AdjointPrimaryGeneratorAction.cc 81773 2014-06-05 08:35:38Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointPrimaryGeneratorAction
@@ -42,6 +42,8 @@
 #include "G4ParticleTable.hh" 
 #include "G4AdjointSimManager.hh" 
 #include "G4AdjointPrimaryGenerator.hh"
+#include "G4Gamma.hh"
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 G4AdjointPrimaryGeneratorAction::G4AdjointPrimaryGeneratorAction()
@@ -59,6 +61,7 @@ G4AdjointPrimaryGeneratorAction::G4AdjointPrimaryGeneratorAction()
 
   ListOfPrimaryFwdParticles.clear();
   ListOfPrimaryAdjParticles.clear();
+  nb_fwd_gammas_per_event = 10;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -93,10 +96,43 @@ void G4AdjointPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
    p=fwdPrimVertex->GetPrimary()->GetMomentum();
    pos=fwdPrimVertex->GetPosition();
    G4double pmag=p.mag();
-
-
    G4double m0=ListOfPrimaryFwdParticles[index_particle]->GetPDGMass();
    G4double ekin=std::sqrt( m0*m0 + pmag*pmag) -m0;
+
+   G4double weight_correction=1.;
+   //For gamma generate the particle along the backward ray
+   G4ThreeVector dir=-p/p.mag();
+
+   /*if (ListOfPrimaryAdjParticles[index_particle]->GetParticleName() == "adj_gamma"){
+
+      theAdjointPrimaryGenerator
+              ->ComputeAccumulatedDepthVectorAlongBackRay(pos,dir,ekin,ListOfPrimaryAdjParticles[index_particle]);
+
+
+      G4double distance = theAdjointPrimaryGenerator
+       ->SampleDistanceAlongBackRayAndComputeWeightCorrection(weight_correction);
+
+      //pos=pos+dir*distance;
+      //fwdPrimVertex->SetPosition(pos[0],pos[1],pos[2]);
+   }
+   */
+   weight_correction=1.;
+
+   if (ListOfPrimaryFwdParticles[index_particle]  ==G4Gamma::Gamma() && nb_fwd_gammas_per_event>1 ){
+	   G4double weight = (1./nb_fwd_gammas_per_event);
+	   fwdPrimVertex->SetWeight(weight);
+	   for (int i=0;i<nb_fwd_gammas_per_event-1;i++){
+         G4PrimaryVertex* newFwdPrimVertex = new G4PrimaryVertex();
+         newFwdPrimVertex->SetPosition(pos.x(),pos.y(),pos.z());
+         newFwdPrimVertex->SetT0(0.);
+         G4PrimaryParticle* aPrimParticle = new G4PrimaryParticle(ListOfPrimaryFwdParticles[index_particle],
+               p.x(),p.y(),p.z());
+         newFwdPrimVertex->SetPrimary(aPrimParticle);
+         newFwdPrimVertex->SetWeight(weight);
+         anEvent->AddPrimaryVertex(newFwdPrimVertex);
+       }
+   }
+
 
    G4PrimaryVertex* adjPrimVertex = new G4PrimaryVertex();
    adjPrimVertex->SetPosition(pos.x(),pos.y(),pos.z());
@@ -109,8 +145,10 @@ void G4AdjointPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
    //The factor pi is to normalise the weight to the directional flux
    G4double adjoint_source_area = G4AdjointSimManager::GetInstance()->GetAdjointSourceArea();
-   G4double adjoint_weight = ComputeEnergyDistWeight(ekin,E1,E2)*adjoint_source_area*pi;
+   G4double adjoint_weight = weight_correction*ComputeEnergyDistWeight(ekin,E1,E2)*adjoint_source_area*pi;
+   if (ListOfPrimaryFwdParticles[index_particle]  ==G4Gamma::Gamma()) adjoint_weight = adjoint_weight/3.;
    adjPrimVertex->SetWeight(adjoint_weight);
+
 
 
 
@@ -271,6 +309,12 @@ void G4AdjointPrimaryGeneratorAction::UpdateListOfPrimaryParticles()
 			G4String adj_particle_name = G4String("adj_") + fwd_particle_name;
 			ListOfPrimaryFwdParticles.push_back(theParticleTable->FindParticle(fwd_particle_name));
 			ListOfPrimaryAdjParticles.push_back(theParticleTable->FindParticle(adj_particle_name));
+			if ( fwd_particle_name == "gamma") {
+				for (G4int i=0;i<2;i++){
+					ListOfPrimaryFwdParticles.push_back(theParticleTable->FindParticle(fwd_particle_name));
+					ListOfPrimaryAdjParticles.push_back(theParticleTable->FindParticle(adj_particle_name));
+				}
+			}
 		}
 		else {
 			if (fwd_ion ){

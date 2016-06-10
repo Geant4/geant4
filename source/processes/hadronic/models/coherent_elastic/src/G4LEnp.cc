@@ -42,7 +42,8 @@
 #include "Randomize.hh"
 
 
-G4LEnp::G4LEnp():G4HadronicInteraction("G4LEnp")
+G4LEnp::G4LEnp():
+ G4HadronElastic("G4LEnp")  // G4HadronicInteraction("G4LEnp")
 {
   //    theParticleChange.SetNumberOfSecondaries(1);
   
@@ -262,7 +263,7 @@ G4LEnp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
     PB[4] = (PA[4] - BETPA) * BETA[4];
 
     G4DynamicParticle* newP = new G4DynamicParticle;
-    newP->SetDefinition(const_cast<G4ParticleDefinition *>(aParticle->GetDefinition()));
+    newP->SetDefinition(aParticle->GetDefinition());
     newP->SetMomentum(G4ThreeVector(PB[1], PB[2], PB[3]));
 
     //The target particle...
@@ -302,6 +303,75 @@ G4LEnp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
     theParticleChange.AddSecondary(targetParticle);    
 
     return &theParticleChange;
+}
+
+////////////////////////////////////////////////////////////////////
+//
+// sample momentum transfer using Lab. momentum
+
+G4double G4LEnp::SampleInvariantT(const G4ParticleDefinition* p, 
+				  G4double plab, G4int , G4int )
+{
+  G4double nMass = p->GetPDGMass(); // 939.565346*MeV;
+  G4double ek = std::sqrt(plab*plab+nMass*nMass) - nMass;
+
+    // Find energy bin
+
+  G4int je1 = 0;
+  G4int je2 = NENERGY - 1;
+  ek = ek/GeV;
+
+  do 
+  {
+      G4int midBin = (je1 + je2)/2;
+      if (ek < elab[midBin])
+        je2 = midBin;
+      else
+        je1 = midBin;
+  } while (je2 - je1 > 1); 
+
+  G4double delab = elab[je2] - elab[je1];
+
+    // Sample the angle
+
+  G4double sample = G4UniformRand();
+  G4int ke1 = 0;
+  G4int ke2 = NANGLE - 1;
+  G4double dsig = sig[je2][0] - sig[je1][0];
+  G4double rc = dsig/delab;
+  G4double b = sig[je1][0] - rc*elab[je1];
+  G4double sigint1 = rc*ek + b;
+  G4double sigint2 = 0.;
+
+  do
+  {
+      G4int midBin = (ke1 + ke2)/2;
+      dsig = sig[je2][midBin] - sig[je1][midBin];
+      rc = dsig/delab;
+      b = sig[je1][midBin] - rc*elab[je1];
+      G4double sigint = rc*ek + b;
+
+      if (sample < sigint) 
+      {
+        ke2 = midBin;
+        sigint2 = sigint;
+      }
+      else 
+      {
+        ke1 = midBin;
+        sigint1 = sigint;
+      }
+  } while (ke2 - ke1 > 1); 
+
+  dsig = sigint2 - sigint1;
+  rc = 1./dsig;
+  b = ke1 - rc*sigint1;
+
+  G4double kint = rc*sample + b;
+  G4double theta = (0.5 + kint)*pi/180.;
+  G4double t = 0.5*plab*plab*(1-std::cos(theta));
+
+  return t;
 }
 
  // end of file

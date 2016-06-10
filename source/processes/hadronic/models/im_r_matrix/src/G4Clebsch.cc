@@ -63,13 +63,6 @@ G4bool G4Clebsch::operator!=(const G4Clebsch &right) const
 }
 
 
-const std::vector<G4double>& G4Clebsch::GetLogs() const
-{
-  return logs;
-}
-
-
-
 G4double G4Clebsch::Weight(G4int isoIn1,  G4int iso3In1, 
 			   G4int isoIn2,  G4int iso3In2, 
 			   G4int isoOut1, G4int isoOut2) const
@@ -208,7 +201,7 @@ G4double G4Clebsch::Wigner3J(G4double j1, G4double j2, G4double j3,
       sign *= (G4int) std::pow(-1.,sigma);
     }
 
-    const std::vector<G4double> logVector = GetLogs();
+    const std::vector<G4double>& logVector = logs;//GetLogs();
     size_t n1 = G4lrint(n[0]);
 
     // Some boundary checks

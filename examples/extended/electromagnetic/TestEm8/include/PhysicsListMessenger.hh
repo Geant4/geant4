@@ -27,7 +27,7 @@
 /// \brief Definition of the PhysicsListMessenger class
 //
 //
-// $Id: PhysicsListMessenger.hh 67235 2013-02-08 16:34:49Z vnivanch $
+// $Id: PhysicsListMessenger.hh 85243 2014-10-27 08:22:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -50,6 +50,7 @@
 #include "G4UImessenger.hh"
 
 class PhysicsList;
+class G4UIdirectory;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
@@ -68,7 +69,8 @@ public:
 private:
   
   PhysicsList* fPhysicsList;
-    
+
+  G4UIdirectory*             fPhysDir;           
   G4UIcmdWithADoubleAndUnit* fECmd;
   G4UIcmdWithAnInteger*      fEBCmd;
   G4UIcmdWithAnInteger*      fCBCmd;

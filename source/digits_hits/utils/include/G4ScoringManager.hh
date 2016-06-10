@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.hh 68735 2013-04-05 09:49:13Z gcosmo $
+// $Id: G4ScoringManager.hh 81087 2014-05-20 15:44:27Z gcosmo $
 //
 
 #ifndef G4ScoringManager_h
@@ -150,6 +150,10 @@ class G4ScoringManager
         if(writer) writer->SetVerboseLevel(verboseLevel);
       }
       // Replace score writers.
+private:
+    //Disable copy constructor and assignement operator
+    G4ScoringManager(const G4ScoringManager&);
+    G4ScoringManager& operator=(const G4ScoringManager&);
 };
 
 

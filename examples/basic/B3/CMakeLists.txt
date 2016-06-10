@@ -1,4 +1,4 @@
-# $Id: CMakeLists.txt 68058 2013-03-13 14:47:43Z gcosmo $
+# $Id: CMakeLists.txt 86065 2014-11-07 08:51:15Z gcosmo $
 
 #----------------------------------------------------------------------------
 # Setup the project
@@ -47,7 +47,6 @@ set(EXAMPLEB3_SCRIPTS
   debug.mac
   exampleB3.in
   exampleB3.out
-  init.mac
   init_vis.mac
   run1.mac
   run2.mac

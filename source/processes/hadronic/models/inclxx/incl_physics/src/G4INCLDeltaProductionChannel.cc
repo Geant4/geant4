@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -43,6 +44,8 @@
 
 namespace G4INCL {
 
+  const G4int DeltaProductionChannel::maxTries = 100000;
+
   DeltaProductionChannel::DeltaProductionChannel(Particle *p1,
 						 Particle *p2)
     : particle1(p1), particle2(p2)
@@ -51,36 +54,45 @@ namespace G4INCL {
   DeltaProductionChannel::~DeltaProductionChannel() {}
 
   G4double DeltaProductionChannel::sampleDeltaMass(G4double ecm) {
-    const G4double ramass = 0.0;
-    const G4int maxTries = 100000;
-    G4int nTries = 0;
-  deltaProd101: G4double rndm = Random::shoot();
-    nTries++;
-    G4double y = std::tan(Math::pi*(rndm-0.5));
-    G4double x = 1232.+0.5*130.*y+ramass;
-    if (x < ParticleTable::effectiveDeltaDecayThreshold && (nTries < maxTries))
-      goto deltaProd101;
-    if (ecm < x + ParticleTable::effectiveNucleonMass + 1.0 && (nTries < maxTries)) goto deltaProd101;
+    const G4double maxDeltaMass = ecm - ParticleTable::effectiveNucleonMass - 1.0;
+    const G4double maxDeltaMassRndm = std::atan((maxDeltaMass-ParticleTable::effectiveDeltaMass)*2./ParticleTable::effectiveDeltaWidth);
+    const G4double deltaMassRndmRange = maxDeltaMassRndm - ParticleTable::minDeltaMassRndm;
+// assert(deltaMassRndmRange>0.);
 
-    // generation of the delta mass with the penetration factor
-    // (see prc56(1997)2431)
-    y=ecm*ecm;
+    G4double y=ecm*ecm;
     G4double q2=(y-1.157776E6)*(y-6.4E5)/y/4.0; // 1.157776E6 = 1076^2, 6.4E5 = 800^2
     G4double q3=std::pow(std::sqrt(q2), 3.);
-    G4double f3max=q3/(q3+5.832E6); // 5.832E6 = 180^3
-    y=x*x;
-    q2=(y-1.157776E6)*(y-6.4E5)/y/4.0; // 1.157776E6 = 1076^2, 6.4E5 = 800^2
-    q3=std::pow(std::sqrt(q2), 3.);
-    G4double f3=q3/(q3+5.832E6); // 5.832E6 = 180^3
-    rndm = Random::shoot();
-    if (rndm > f3/f3max && (nTries < maxTries)) goto deltaProd101;
-    if(nTries >= maxTries) {
-      INCL_WARN("DeltaProductionChannel::sampleDeltaMass loop was stopped because maximum number of tries was reached. Delta mass " << x << " MeV with CM energy " << ecm << " MeV may be unphysical." << std::endl);
+    const G4double f3max=q3/(q3+5.832E6); // 5.832E6 = 180^3
+    G4double x;
+
+    G4int nTries = 0;
+    G4bool success = false;
+    while(!success) {
+      if(++nTries >= maxTries) {
+        INCL_WARN("DeltaProductionChannel::sampleDeltaMass loop was stopped because maximum number of tries was reached. Minimum delta mass "
+                  << ParticleTable::minDeltaMass << " MeV with CM energy " << ecm << " MeV may be unphysical." << '\n');
+        return ParticleTable::minDeltaMass;
+      }
+
+      G4double rndm = ParticleTable::minDeltaMassRndm + Random::shoot() * deltaMassRndmRange;
+      y = std::tan(rndm);
+      x = ParticleTable::effectiveDeltaMass + 0.5*ParticleTable::effectiveDeltaWidth*y;
+// assert(x>=ParticleTable::minDeltaMass && ecm >= x + ParticleTable::effectiveNucleonMass + 1.0);
+
+      // generation of the delta mass with the penetration factor
+      // (see prc56(1997)2431)
+      y=x*x;
+      q2=(y-1.157776E6)*(y-6.4E5)/y/4.0; // 1.157776E6 = 1076^2, 6.4E5 = 800^2
+      q3=std::pow(std::sqrt(q2), 3.);
+      const G4double f3=q3/(q3+5.832E6); // 5.832E6 = 180^3
+      rndm = Random::shoot();
+      if (rndm*f3max < f3)
+        success = true;
     }
     return x;
   }
 
-  FinalState* DeltaProductionChannel::getFinalState() {
+  void DeltaProductionChannel::fillFinalState(FinalState *fs) {
     /**
      * Delta production
      *
@@ -98,7 +110,8 @@ namespace G4INCL {
       ParticleTable::getIsospin(particle2->getType());
 
     // Calculate the outcome of the channel:
-    G4double pin = particle1->getMomentum().mag();
+    const ThreeVector &particle1Momentum = particle1->getMomentum();
+    G4double pin = particle1Momentum.mag();
     G4double rndm = 0.0, b = 0.0;
 
     G4double xmdel = sampleDeltaMass(ecm);
@@ -134,16 +147,17 @@ namespace G4INCL {
     G4double sfi = std::sin(fi);
     // delta production: correction of the angular distribution 02/09/02
 
-    G4double xx = particle1->getMomentum().perp2();
-    G4double zz = std::pow(particle1->getMomentum().getZ(), 2);
+    G4double xx = particle1Momentum.perp2();
+    const G4double particle1MomentumZ = particle1Momentum.getZ();
+    G4double zz = std::pow(particle1MomentumZ, 2);
     G4double xp1, xp2, xp3;
     if (xx >= zz*1.e-8) {
       G4double yn = std::sqrt(xx);
       G4double zn = yn*pin;
       G4double ex[3], ey[3], ez[3];
-      G4double p1 = particle1->getMomentum().getX();
-      G4double p2 = particle1->getMomentum().getY();
-      G4double p3 = particle1->getMomentum().getZ();
+      G4double p1 = particle1Momentum.getX();
+      G4double p2 = particle1Momentum.getY();
+      G4double p3 = particle1MomentumZ;
       ez[0] = p1/pin;
       ez[1] = p2/pin;
       ez[2] = p3/pin;
@@ -222,9 +236,7 @@ namespace G4INCL {
     if(particle1->isDelta()) particle1->setMass(xmdel);
     if(particle2->isDelta()) particle2->setMass(xmdel);
 
-    FinalState *fs = new FinalState;
     fs->addModifiedParticle(particle1);
     fs->addModifiedParticle(particle2);
-    return fs;
   }
 }

@@ -25,6 +25,15 @@
 //
 // $Id: G4NucleiModel.cc 71989 2013-07-02 17:12:22Z mkelsey $
 //
+// For the best approximation to a physical-units model, set the following:
+//	setenv G4NUCMODEL_XSEC_SCALE   0.1
+//	setenv G4NUCMODEL_RAD_SCALE    1.0
+//	setenv G4NUCMODEL_RAD_2PAR     1
+//	setenv G4NUCMODEL_RAD_SMALL    1.992
+//	setenv G4NUCMODEL_RAD_ALPHA    0.84
+//	setenv G4NUCMODEL_FERMI_SCALE  0.685
+//	setenv G4NUCMODEL_RAD_TRAILING 0.70
+//
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100114  M. Kelsey -- Use G4ThreeVector for position
 // 20100309  M. Kelsey -- Use new generateWithRandomAngles for theta,phi stuff;
@@ -145,6 +154,8 @@
 // 20130924  M. Kelsey -- Use G4Log, G4Exp, G4Pow for CPU speedup
 // 20130925  M. Kelsey -- Eliminate unnecessary use of pow() in integrals
 // 20131001  M. Kelsey -- Move QDinterp object to data member, thread local
+// 20140116  M. Kelsey -- Move all envvar parameters to const data members
+// 20141001  M. Kelsey -- Change sign of "dv" in boundaryTransition
 
 #include "G4NucleiModel.hh"
 #include "G4PhysicalConstants.hh"
@@ -177,42 +188,12 @@ using namespace G4InuclSpecialFunctions;
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
-// For the best approximation to a physical-units model, set the following:
-//	setenv G4NUCMODEL_XSEC_SCALE   0.1
-//	setenv G4NUCMODEL_RAD_SCALE    1.0
-//	setenv G4NUCMODEL_RAD_2PAR     1
-//	setenv G4NUCMODEL_RAD_SMALL    1.992
-//	setenv G4NUCMODEL_RAD_ALPHA    0.84
-//	setenv G4NUCMODEL_FERMI_SCALE  0.685
-//	setenv G4NUCMODEL_RAD_TRAILING 0.70
+// Cut-off limits for extreme values in calculations
+const G4double G4NucleiModel::small = 1.0e-9;
+const G4double G4NucleiModel::large = 1000.;
 
-// Scaling factors for radii and cross-sections, currently different!
-const G4double G4NucleiModel::crossSectionUnits = G4CascadeParameters::xsecScale();
-const G4double G4NucleiModel::radiusUnits =  G4CascadeParameters::radiusScale();
-const G4double G4NucleiModel::skinDepth = 0.611207*radiusUnits;
-
-// One- vs. two-parameter nuclear radius based on envvar
-// ==> radius = radiusScale*cbrt(A) + radiusScale2/cbrt(A)
-
-const G4double G4NucleiModel::radiusScale  = 
-  (G4CascadeParameters::useTwoParam() ? 1.16 : 1.2) * radiusUnits;
-const G4double G4NucleiModel::radiusScale2 =
-  (G4CascadeParameters::useTwoParam() ? -1.3456 : 0.) * radiusUnits;
-
-// NOTE:  Old code used R_small = 8.0 (~2.83*units), and R_alpha = 0.7*R_small
-// Published data suggests R_small ~ 1.992 fm, R_alpha = 0.84*R_small
-
-const G4double G4NucleiModel::radiusForSmall = G4CascadeParameters::radiusSmall();
-
-const G4double G4NucleiModel::radScaleAlpha = G4CascadeParameters::radiusAlpha();
-
-// Scale factor relating Fermi momentum to density of states, units GeV.fm
-// NOTE:  Old code has 0.685*units GeV.fm, literature suggests 0.470 GeV.fm,
-//        but this gives too small momentum; old value gives <P_F> ~ 270 MeV
-const G4double G4NucleiModel::fermiMomentum = G4CascadeParameters::fermiScale();
-
-// Effective radius (0.87 to 1.2 fm) of nucleon, for trailing effect
-const G4double G4NucleiModel::R_nucleon = G4CascadeParameters::radiusTrailing();
+// For convenience in computing densities
+const G4double G4NucleiModel::piTimes4thirds = pi*4./3.;
 
 // Zone boundaries as fraction of nuclear radius (from outside in)
 const G4double G4NucleiModel::alfa3[3] = { 0.7, 0.3, 0.01 };
@@ -223,16 +204,6 @@ const G4double G4NucleiModel::pion_vp       = 0.007;
 const G4double G4NucleiModel::pion_vp_small = 0.007;
 const G4double G4NucleiModel::kaon_vp       = 0.015;
 const G4double G4NucleiModel::hyperon_vp    = 0.030;
-
-// Cross-section scaling parameter for gamma-quasideuteron scattering
-const G4double G4NucleiModel::gammaQDscale = G4CascadeParameters::gammaQDScale();
-
-// For convenience in computing densities
-const G4double G4NucleiModel::piTimes4thirds = pi*4./3.;
-
-// Cut-off limits for extreme values in calculations
-const G4double G4NucleiModel::small = 1.0e-9;
-const G4double G4NucleiModel::large = 1000.;
 
 namespace {
   const G4double kebins[] =
@@ -254,6 +225,16 @@ G4NucleiModel::G4NucleiModel()
     A(0), Z(0), theNucleus(0), neutronNumber(0), protonNumber(0),
     neutronNumberCurrent(0), protonNumberCurrent(0), current_nucl1(0),
     current_nucl2(0), gammaQDinterp(kebins),
+    crossSectionUnits(G4CascadeParameters::xsecScale()),
+    radiusUnits(G4CascadeParameters::radiusScale()),
+    skinDepth(0.611207*radiusUnits),
+    radiusScale((G4CascadeParameters::useTwoParam()?1.16:1.2)*radiusUnits),
+    radiusScale2((G4CascadeParameters::useTwoParam()?-1.3456:0.)*radiusUnits),
+    radiusForSmall(G4CascadeParameters::radiusSmall()),
+    radScaleAlpha(G4CascadeParameters::radiusAlpha()),
+    fermiMomentum(G4CascadeParameters::fermiScale()),
+    R_nucleon(G4CascadeParameters::radiusTrailing()),
+    gammaQDscale(G4CascadeParameters::gammaQDScale()),
     neutronEP(neutron), protonEP(proton) {}
 
 G4NucleiModel::G4NucleiModel(G4int a, G4int z)
@@ -261,6 +242,16 @@ G4NucleiModel::G4NucleiModel(G4int a, G4int z)
     A(0), Z(0), theNucleus(0), neutronNumber(0), protonNumber(0),
     neutronNumberCurrent(0), protonNumberCurrent(0), current_nucl1(0),
     current_nucl2(0), gammaQDinterp(kebins),
+    crossSectionUnits(G4CascadeParameters::xsecScale()),
+    radiusUnits(G4CascadeParameters::radiusScale()),
+    skinDepth(0.611207*radiusUnits),
+    radiusScale((G4CascadeParameters::useTwoParam()?1.16:1.2)*radiusUnits),
+    radiusScale2((G4CascadeParameters::useTwoParam()?-1.3456:0.)*radiusUnits),
+    radiusForSmall(G4CascadeParameters::radiusSmall()),
+    radScaleAlpha(G4CascadeParameters::radiusAlpha()),
+    fermiMomentum(G4CascadeParameters::fermiScale()),
+    R_nucleon(G4CascadeParameters::radiusTrailing()),
+    gammaQDscale(G4CascadeParameters::gammaQDScale()),
     neutronEP(neutron), protonEP(proton) {
   generateModel(a,z);
 }
@@ -270,6 +261,16 @@ G4NucleiModel::G4NucleiModel(G4InuclNuclei* nuclei)
     A(0), Z(0), theNucleus(0), neutronNumber(0), protonNumber(0),
     neutronNumberCurrent(0), protonNumberCurrent(0), current_nucl1(0),
     current_nucl2(0), gammaQDinterp(kebins),
+    crossSectionUnits(G4CascadeParameters::xsecScale()),
+    radiusUnits(G4CascadeParameters::radiusScale()),
+    skinDepth(0.611207*radiusUnits),
+    radiusScale((G4CascadeParameters::useTwoParam()?1.16:1.2)*radiusUnits),
+    radiusScale2((G4CascadeParameters::useTwoParam()?-1.3456:0.)*radiusUnits),
+    radiusForSmall(G4CascadeParameters::radiusSmall()),
+    radScaleAlpha(G4CascadeParameters::radiusAlpha()),
+    fermiMomentum(G4CascadeParameters::fermiScale()),
+    R_nucleon(G4CascadeParameters::radiusTrailing()),
+    gammaQDscale(G4CascadeParameters::gammaQDScale()),
     neutronEP(neutron), protonEP(proton) {
   generateModel(nuclei);
 }
@@ -913,6 +914,9 @@ generateParticleFate(G4CascadParticle& cparticle,
     }
     
     EPCoutput.reset();
+    // Pass current (A,Z) configuration for possible recoils
+    G4int massNumberCurrent = protonNumberCurrent+neutronNumberCurrent;
+    theEPCollider->setNucleusState(massNumberCurrent, protonNumberCurrent);
     theEPCollider->collide(&bullet, &target, EPCoutput);
     
     // If collision failed, exit loop over partners
@@ -1115,17 +1119,18 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
   G4double pr = pos.dot(mom.vect()) / r;
   
   G4int next_zone = cparticle.movingInsideNuclei() ? zone - 1 : zone + 1;
-  
-  G4double dv = getPotential(type,zone) - getPotential(type, next_zone);
+
+  // NOTE:  dv is the height of the wall seen by the particle  
+  G4double dv = getPotential(type,next_zone) - getPotential(type,zone);
   if (verboseLevel > 3) {
     G4cout << "Potentials for type " << type << " = " 
 	   << getPotential(type,zone) << " , "
   	   << getPotential(type,next_zone) << G4endl;
   }
 
-  G4double qv = dv * dv - 2.0 * dv * mom.e() + pr * pr;
+  G4double qv = dv * dv + 2.0 * dv * mom.e() + pr * pr;
   
-  G4double p1r;
+  G4double p1r = 0.;
   
   if (verboseLevel > 3) {
     G4cout << " type " << type << " zone " << zone << " next " << next_zone
@@ -1139,7 +1144,8 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
   } else {		// transition
     if (verboseLevel > 3) G4cout << " passes thru boundary" << G4endl;
     p1r = std::sqrt(qv);
-    if(pr < 0.0) p1r = -p1r;
+    if (pr < 0.0) p1r = -p1r;
+
     cparticle.updateZone(next_zone);
     cparticle.resetReflection();
   }

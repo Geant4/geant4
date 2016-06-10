@@ -1,4 +1,4 @@
-$Id: History 75677 2013-11-05 09:07:14Z gcosmo $
+$Id: History 87255 2014-11-28 07:52:46Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27th November 2014  John Allison  (exam-ext-vis-UVA-V10-00-02)
+- README: Mention /vis/scene/add/extent.
+
+22st April March 2014  John Allison  (exam-ext-vis-UVA-V10-00-00)
+- Migrated to 10.0.  Multi-thread compliant.
+- Based on examples/basic/B1.
 
 4th November 2013 Dennis Wright (exam-ext-vis-UVA-V09-06-02)
 - generated new userVisAction.out to reflect removal of LEP models;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIparameter.cc 67965 2013-03-13 09:35:29Z gcosmo $
+// $Id: G4UIparameter.cc 79626 2014-03-10 11:18:47Z gcosmo $
 //
 
 #include "G4UIparameter.hh"
@@ -157,7 +157,8 @@ CandidateCheck(const char* newValue) {
       iToken++;
       if(aToken==newValue) return iToken;
     } 
-    G4cerr << "parameter value is not listed in the candidate List." << G4endl;
+    G4cerr << "parameter value (" << newValue
+           << ") is not listed in the candidate List." << G4endl;
     return 0;
 }
 

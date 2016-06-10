@@ -65,10 +65,9 @@ class DMXRunAction : public G4UserRunAction
     void SetsavehitsFile   (G4String val)        { savehitsFile   = val;};
     void SetsavepmtFile    (G4String val)        { savepmtFile    = val;};
     void SetsavehistFile   (G4String val)        { savehistFile   = val;};
-    void Finish();	
 
-    G4String GetsavehitsFile()                   {return savehitsFile;};
-    G4String GetsavepmtFile()                    {return savepmtFile;};
+    G4String GetsavehitsFile()  const     {return savehitsFile;};
+    G4String GetsavepmtFile()  const      {return savepmtFile;};
 
   private:
     void Book();

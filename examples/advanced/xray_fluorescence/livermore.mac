@@ -5,7 +5,7 @@
 #
 /control/verbose 2
 /run/verbose 2
-/tracking/verbose 1
+/tracking/verbose 0
 
 # activating livermore processes
 /phys/addPhysics emlivermore
@@ -14,13 +14,15 @@
 
 /run/initialize
 
-#Setting fluorescence ON  and Auger OFF
+#Setting fluorescence ON  and Auger ON
 /process/em/fluo true
 /process/em/auger true
 /process/em/pixe true
 #Selecting Reis model for PIXE. Analytical PIXE will be used outsie 01-10 MeV energy Range
 /process/em/pixeXSmodel ecpssr_interpolated
-
+#
+#/analysis/setPhysicProduction true
+#
 #setting cuts
 /phys/setGCut  1 nm
 /phys/setECut  1 nm
@@ -35,7 +37,5 @@
 /gun/particle proton
 /gun/energy 3 MeV 
 
-
-
 #just one shot: put /tracking/verbose 0 for more particles
-/run/beamOn 1
+/run/beamOn 10

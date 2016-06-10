@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.hh 68070 2013-03-13 15:03:06Z gcosmo $
+// $Id: G4Material.hh 81374 2014-05-27 13:07:25Z gcosmo $
 //
 
 //---------------------------------------------------------------------------
@@ -217,7 +217,7 @@ public:  // with description
   // Radiation length:     
   inline G4double  GetRadlen()          const {return fRadlen;}
     
-  // Nuclear interaction length:     
+  // Nuclear interaction length     
   inline G4double GetNuclearInterLength() const {return fNuclInterLen;}
         
   // ionisation parameters:
@@ -269,8 +269,7 @@ public:  // with description
   friend std::ostream& operator<<(std::ostream&, G4Material&);    
   friend std::ostream& operator<<(std::ostream&, G4MaterialTable);
     
-public:  // without description 
-       
+  // operators       
   G4int operator==(const G4Material&) const;
   G4int operator!=(const G4Material&) const;
   G4Material(__void__&);
@@ -315,9 +314,9 @@ private:
 
   G4int            maxNbComponents;       // totalNbOfComponentsInTheMaterial 
   G4int            fArrayLength;          // the length of fAtomsVector 
-  size_t           fNumberOfComponents;   // Nb of components declared so far
+  G4int            fNumberOfComponents;   // Nb of components declared so far
 
-  size_t           fNumberOfElements;     // Nb of Elements in the material
+  G4int            fNumberOfElements;     // Nb of Elements in the material
   G4ElementVector* theElementVector;      // vector of constituent Elements
   G4bool           fImplicitElement;      // implicit Element created by this?
   G4double*        fMassFractionVector;   // composition by fractional mass

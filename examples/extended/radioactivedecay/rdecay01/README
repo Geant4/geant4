@@ -1,4 +1,4 @@
-$Id: README 68017 2013-03-13 13:29:53Z gcosmo $
+$Id: README 78307 2013-12-11 10:55:57Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -33,11 +33,11 @@ $Id: README 68017 2013-03-13 13:29:53Z gcosmo $
     -------
  As said above, all particles and ions behave as geantino, eg. no energy loss.
      
- A flag, /rdecay01/fullChain (false or true), allows to limit to
- single decay (default) or full decay chain.
- 
+ A flag, /rdecay01/fullChain (true or false), allows to limit to
+ single decay or full decay chain (default). 
  In case of full decay chain, G4TrackStatus of ions is set to fStopButAlive
- in order to force decay at rest.  
+ in order to force decay at rest.   
+ In case of single decay, G4TrackStatus of secondary ion is set to fStopAndKill.
    
  At each decay, one counts and plots energy spectrum of created particles and
  ions, and energy-momentum balance of that decay.

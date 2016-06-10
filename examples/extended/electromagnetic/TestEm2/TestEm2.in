@@ -1,12 +1,13 @@
-# $Id: TestEm2.in 75118 2013-10-28 09:40:24Z gcosmo $
+# $Id: TestEm2.in 85267 2014-10-27 09:03:32Z gcosmo $
 #
 # Macro file for "TestEm2.cc"
 # (can be run in batch, without graphic)
 #
 # PbWO4 L = 20 radl  R = 5 radl; electron 5 GeV
 #
-/control/cout/ignoreThreadsExcept 0
 /control/verbose 1
+/control/cout/ignoreThreadsExcept 0
+/run/numberOfThreads 2
 /run/verbose 1
 #
 /testem/det/setMat G4_PbWO4
@@ -27,6 +28,6 @@
 /gun/particle e-
 /gun/energy 5 GeV
 #
-/testem/event/printModulo 20
+/run/printProgress 20
 #
 /run/beamOn 100

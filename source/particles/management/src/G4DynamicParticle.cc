@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.cc 72152 2013-07-11 12:49:58Z gcosmo $
+// $Id: G4DynamicParticle.cc 81373 2014-05-27 13:06:32Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -119,6 +119,28 @@ G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefin
 
 ////////////////////
 G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
+				     const G4ThreeVector& aMomentumDirection,
+				     G4double aKineticEnergy,
+                                     const G4double dynamicalMass):
+		   theMomentumDirection(aMomentumDirection),
+		   theParticleDefinition(aParticleDefinition),
+		   theKineticEnergy(aKineticEnergy),
+ 		   theProperTime(0.0),
+		   theDynamicalMass(dynamicalMass),
+		   theDynamicalCharge(aParticleDefinition->GetPDGCharge()),
+		   theDynamicalSpin(aParticleDefinition->GetPDGSpin()),
+		   theDynamicalMagneticMoment(aParticleDefinition->GetPDGMagneticMoment()),
+		   theElectronOccupancy(0),
+                   thePreAssignedDecayProducts(0),
+                   thePreAssignedDecayTime(-1.0),
+		   verboseLevel(1),
+		   primaryParticle(0),
+                   thePDGcode(0)
+{
+}
+
+////////////////////
+G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
                                      const G4ThreeVector& aParticleMomentum):
 		   theParticleDefinition(aParticleDefinition),
 		   theKineticEnergy(0.0),
@@ -136,6 +158,7 @@ G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefin
 {
   SetMomentum(aParticleMomentum);  // 3-dim momentum is given
 }
+
 
 ////////////////////
 G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,

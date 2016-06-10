@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGL2PSAction.cc 70646 2013-06-03 15:07:58Z gcosmo $
+// $Id: G4OpenGL2PSAction.cc 82763 2014-07-08 14:22:48Z gcosmo $
 //
 // 
 
@@ -56,6 +56,7 @@ G4OpenGL2PSAction::G4OpenGL2PSAction(
   fViewport[3] = 0;
   fBufferSize = 2048;
   fBufferSizeLimit = (std::numeric_limits<GLint>::max)();
+  fExportImageFormat = GL2PS_PDF;
   resetBufferSizeParameters();
 }
 
@@ -170,18 +171,14 @@ bool G4OpenGL2PSAction::G4gl2psBegin(
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
   if(!fFile) return false;
-  int options = GL2PS_OCCLUSION_CULL | 
-    GL2PS_BEST_ROOT | GL2PS_DRAW_BACKGROUND | GL2PS_USE_CURRENT_VIEWPORT;
-//   int options = GL2PS_OCCLUSION_CULL | 
-//      GL2PS_BEST_ROOT | GL2PS_SILENT | GL2PS_DRAW_BACKGROUND;
+  int options = 
+    GL2PS_BEST_ROOT | GL2PS_DRAW_BACKGROUND |GL2PS_USE_CURRENT_VIEWPORT;
   int sort = GL2PS_BSP_SORT;
-  //  int sort = GL2PS_SIMPLE_SORT;
-  
-  glGetIntegerv(GL_VIEWPORT,fViewport);
 
-  GLint res = gl2psBeginPage("title","HEPVis::G4OpenGL2PSAction", 
+  glGetIntegerv(GL_VIEWPORT,fViewport);
+  GLint res = gl2psBeginPage("Geant4 output","Geant4",
                  fViewport,
-                 GL2PS_EPS, 
+                 fExportImageFormat,
                  sort, 
                  options, 
                  GL_RGBA,0, NULL,0,0,0,
@@ -190,8 +187,18 @@ bool G4OpenGL2PSAction::G4gl2psBegin(
   if (res == GL2PS_ERROR) {
     return false;
   }
+  // enable blending for all
+  gl2psEnable(GL2PS_BLEND);
+  
   return true;
+}
 
+void G4OpenGL2PSAction::setExportImageFormat(unsigned int type){
+  if(!fFile) {
+    fExportImageFormat = type;
+  } else {
+    //  Could not change the file type at this step. Please change it before enableFileWriting()
+  }
 }
 
 

@@ -26,8 +26,9 @@
 /// \file exoticphysics/phonon/src/XAluminumElectrodeHit.cc
 /// \brief Implementation of the XAluminumElectrodeHit class
 //
-// $Id: XAluminumElectrodeHit.cc 76246 2013-11-08 11:17:29Z gcosmo $
+// $Id: XAluminumElectrodeHit.cc 84197 2014-10-10 14:33:03Z gcosmo $
 //
+// 20141008  Allocators must be thread-local, and must be pointers
 
 #include "XAluminumElectrodeHit.hh"
 
@@ -45,7 +46,7 @@
 #include "G4VisAttributes.hh"
 #include "G4SystemOfUnits.hh"
 
-G4Allocator<XAluminumElectrodeHit> XAluminumElectrodeHitAllocator;
+G4ThreadLocal G4Allocator<XAluminumElectrodeHit>* XAluminumElectrodeHitAllocator = 0;
 
 XAluminumElectrodeHit::XAluminumElectrodeHit()
 {

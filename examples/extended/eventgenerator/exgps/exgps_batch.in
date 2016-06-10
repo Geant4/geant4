@@ -1,5 +1,7 @@
 # focused beam
 #
+/run/initialize
+#
 /gps/verbose 0
 /gps/particle geantino
 #
@@ -20,21 +22,20 @@
 # the beam energy is in gaussian profile centered at 400 MeV
 /gps/ene/type Gauss
 /gps/ene/mono 400 MeV
-/gps/ene/sigma 50. MeV
+/gps/ene/sigma 50 MeV
 
 #
 # commands below are independent of gps
 #
-#/analysis/filename exgps.root
-#/analysis/filetype root
-#/analysis/maxeng 800 MeV
-#/analysis/mineng 200 MeV
-#/analysis/maxpos 10 cm 
-#/analysis/minpos -10 cm
-/event/printModulo 1000
+/analysis/setFileName exgps
+/analysis/h1/set 1 100 200 800 MeV
+/analysis/h2/set 2 100 -10 10 cm none linear 100 -10 10 cm none linear #y-z
+#
+/run/printProgress 10000
+#
 #/tracking/verbose 1
 #
-#/control/execute macros/display.mac
+#/control/execute vis.mac
 #
-/run/beamOn 2000
+/run/beamOn 100000
 

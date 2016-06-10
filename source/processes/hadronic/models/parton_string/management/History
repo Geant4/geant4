@@ -1,4 +1,4 @@
-$Id: History 67999 2013-03-13 11:14:32Z gcosmo $
+$Id: History 83684 2014-09-09 12:37:39Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,24 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+ 8-Sept-2014 V. Uzhinsky hadr-partonstring-mgt-V10-00-03
+   Cosmetic cleaning of G4InteractionContent, G4VParticipants, G4VSplitableHadron
+   Debuging option is added in G4VPartonStringModel.
+
+24-April-2014 V.Uzhinsky hadr-partonstring-mgt-V10-00-02
+   G4VPartonStringModel.cc was improved to treat an ExcitedString when
+   it is a hadron stored as a Track of the ExcitedString. It is needed
+   for a correct processing of quark-exchange processes in FTF model.
+
+21-April-2014 V. Uzhinsky hadr-partonstring-mgt-V10-00-01
+   A bug was erased in G4VPartonStringModel.cc. It appears at a debugging
+   when a residual nucleus mass number =0.
+
+13-Mar-2014 G. Cosmo hadr-partonstring-mgt-V10-00-00
+-  Fix to remove 'inline' qualifier from methods in G4VParticipants.cc
+   and G4PomeronCrossSection.cc, responsible for run-time errors for
+   undefined symbols in library...
+
 29-Jan-2013 V. Uzhinsky had-partonstring-mgt-V09-06-04
 -  New attempt to implement nucl-nucl interactions.
 

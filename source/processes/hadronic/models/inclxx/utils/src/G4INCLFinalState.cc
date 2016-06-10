@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -38,14 +39,22 @@
 
 namespace G4INCL {
 
-  FinalState::FinalState() :
-    totalEnergyBeforeInteraction(0.0), validity(ValidFS),
-    blockedDelta(NULL)
-  {
+  FinalState::FinalState() {
+    reset();
   }
 
   FinalState::~FinalState()
   {
+  }
+
+  void FinalState::reset() {
+    totalEnergyBeforeInteraction = 0.0;
+    validity = ValidFS;
+    outgoing.clear();
+    created.clear();
+    destroyed.clear();
+    modified.clear();
+    entering.clear();
   }
 
   void FinalState::addModifiedParticle(Particle *p)
@@ -100,19 +109,19 @@ namespace G4INCL {
 
   std::string FinalState::print() const {
     std::stringstream ss;
-    ss << "Modified particles:" << std::endl;
+    ss << "Modified particles:" << '\n';
     for(ParticleIter iter=modified.begin(), e=modified.end(); iter!=e; ++iter)
       ss << (*iter)->print();
-    ss << "Outgoing particles:" << std::endl;
+    ss << "Outgoing particles:" << '\n';
     for(ParticleIter iter=outgoing.begin(), e=outgoing.end(); iter!=e; ++iter)
       ss << (*iter)->print();
-    ss << "Destroyed particles:" << std::endl;
+    ss << "Destroyed particles:" << '\n';
     for(ParticleIter iter=destroyed.begin(), e=destroyed.end(); iter!=e; ++iter)
       ss << (*iter)->print();
-    ss << "Created particles:" << std::endl;
+    ss << "Created particles:" << '\n';
     for(ParticleIter iter=created.begin(), e=created.end(); iter!=e; ++iter)
       ss << (*iter)->print();
-    ss << "Entering particles:" << std::endl;
+    ss << "Entering particles:" << '\n';
     for(ParticleIter iter=entering.begin(), e=entering.end(); iter!=e; ++iter)
       ss << (*iter)->print();
     return ss.str();

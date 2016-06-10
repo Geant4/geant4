@@ -1,4 +1,4 @@
-# $Id: run11.mac 66241 2012-12-13 18:34:42Z gunter $
+# $Id: run11.mac 83428 2014-08-21 15:46:01Z gcosmo $
 #
 # Macro file for "TestEm6.cc"
 # (can be run in batch, without graphic)
@@ -6,6 +6,9 @@
 #
 /control/verbose 2
 /run/verbose 2
+#
+/testem/phys/addPhysics emstandard_opt1
+/run/setCut 1 km
 #
 /run/initialize
 #

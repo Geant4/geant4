@@ -38,6 +38,12 @@
 //
 // CHANGE HISTORY
 // --------------
+// 06/06/2014  A Dotti
+//    For thread safety: this is a shared object,
+//    mutex has been added to control access to shared resources (data members).
+//    in Getters and Setters, mutex is NOT used in GenerateOne because it is
+//    assumed that properties are not changed during event loop.
+//
 // 26/10/2004  F Lei
 //    Added a "focused" option to allow all primary particles pointing to 
 //    a user specified focusing point. 
@@ -152,6 +158,9 @@
 #include "G4SPSPosDistribution.hh"
 #include "G4SPSRandomGenerator.hh"
 
+#include "G4Threading.hh"
+#include "G4AutoLock.hh"
+
 class G4SPSAngDistribution 
 {
 public:
@@ -171,36 +180,34 @@ public:
   void UserDefAngTheta(G4ThreeVector);
   void UserDefAngPhi(G4ThreeVector);
   void SetFocusPoint(G4ThreeVector);
-  inline void SetParticleMomentumDirection
-  (G4ParticleMomentum aMomentumDirection)
-  { particle_momentum_direction =  aMomentumDirection.unit(); }
+  void SetParticleMomentumDirection(G4ParticleMomentum aMomentumDirection);
   void SetUseUserAngAxis(G4bool);
   void SetUserWRTSurface(G4bool);
   //
-  void SetPosDistribution(G4SPSPosDistribution* a) {posDist = a; }
-  void SetBiasRndm(G4SPSRandomGenerator* a) {angRndm = a;}
+  void SetPosDistribution(G4SPSPosDistribution* a);
+  void SetBiasRndm(G4SPSRandomGenerator* a);
   // method to re-set the histograms
   void ReSetHist(G4String);
   //
   // Set the verbosity level.
-  void SetVerbosity(G4int a) {verbosityLevel = a; }
+  void SetVerbosity(G4int a);
   // some get methods
-  G4String GetDistType() { return AngDistType;}
-  G4double GetMinTheta() { return MinTheta; }
-  G4double GetMaxTheta() { return MaxTheta; }
-  G4double GetMinPhi() { return MinPhi; }
-  G4double GetMaxPhi() { return MaxPhi; }
+    G4String GetDistType(); 
+    G4double GetMinTheta();
+    G4double GetMaxTheta();
+    G4double GetMinPhi();
+    G4double GetMaxPhi();
   //
   G4ParticleMomentum GenerateOne();
   
 private:
   // These methods generate the momentum vectors for the particles.
-  void GenerateFocusedFlux();
-  void GenerateIsotropicFlux();
-  void GenerateCosineLawFlux();
-  void GenerateBeamFlux();
-  void GeneratePlanarFlux();
-  void GenerateUserDefFlux();
+  void GenerateFocusedFlux(G4ParticleMomentum& outputMom);
+  void GenerateIsotropicFlux(G4ParticleMomentum& outputMom);
+  void GenerateCosineLawFlux(G4ParticleMomentum& outputMom);
+  void GenerateBeamFlux(G4ParticleMomentum& outputMom);
+  void GeneratePlanarFlux(G4ParticleMomentum& outputMom);
+  void GenerateUserDefFlux(G4ParticleMomentum& outputMom);
   G4double GenerateUserDefTheta();
   G4double GenerateUserDefPhi();
 
@@ -231,7 +238,9 @@ private:
   // Verbosity
   G4int verbosityLevel;
   //
-  G4PhysicsOrderedFreeVector ZeroPhysVector ; // for re-set only 
+  G4PhysicsOrderedFreeVector ZeroPhysVector ; // for re-set only
+  //
+  G4Mutex mutex; //protect access to shared resources
 };
 
 #endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePhotoElectricModel.hh 72941 2013-08-14 13:32:37Z gcosmo $
+// $Id: G4LivermorePhotoElectricModel.hh 79446 2014-02-28 14:29:47Z gcosmo $
 //
 // Author: Sebastien Incerti
 //         30 October 2008
@@ -58,9 +58,15 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
+  virtual G4double CrossSectionPerVolume(const G4Material*,
+                                         const G4ParticleDefinition*,
+                                         G4double energy,
+                                         G4double cutEnergy = 0.0,
+                                         G4double maxEnergy = DBL_MAX);
+
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
-                                      G4double kinEnergy, 
+                                      G4double energy, 
                                       G4double Z, 
                                       G4double A=0, 
                                       G4double cut=0,
@@ -103,9 +109,13 @@ private:
   static G4int                   fNShells[99];
   static G4int                   fNShellsUsed[99];
   static G4ElementData*          fShellCrossSection;
+  static G4Material*             fWater;
+  static G4double                fWaterEnergyLimit;
 
   G4VAtomDeexcitation*    fAtomDeexcitation;
 
+  G4double                fCurrSection;
+  std::vector<G4double>   fSandiaCof;
 };
 
 inline 

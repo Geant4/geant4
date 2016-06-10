@@ -31,6 +31,7 @@
 #include "G4AnalysisManagerState.hh"
 
 #include "tools/wroot/file"
+#include "tools/rroot/file"
 #include <tools/gzip_buffer>
 
 #include <iostream>
@@ -41,6 +42,7 @@ G4RootFileManager::G4RootFileManager(const G4AnalysisManagerState& state)
  : G4VFileManager(state),
    fFile(0),
    fHistoDirectory(0),
+   fProfileDirectory(0),
    fNtupleDirectory(0)
 {
 }
@@ -48,7 +50,7 @@ G4RootFileManager::G4RootFileManager(const G4AnalysisManagerState& state)
 //_____________________________________________________________________________
 G4RootFileManager::~G4RootFileManager()
 {  
-  delete fFile;  
+  delete fFile;
 }
 
 //
@@ -63,8 +65,9 @@ G4bool G4RootFileManager::OpenFile(const G4String& fileName)
   
   // delete previous file if exists
   if ( fFile ) delete fFile;
-  
-  fFile = new tools::wroot::file(std::cout, name);
+
+  // create new file
+  fFile = new tools::wroot::file(G4cout, name);
   fFile->add_ziper('Z',tools::gzip_buffer);
   fFile->set_compression(9);
   
@@ -78,10 +81,12 @@ G4bool G4RootFileManager::OpenFile(const G4String& fileName)
 
   // Create directories
   if ( ! CreateHistoDirectory() ) return false;
+  if ( ! CreateProfileDirectory() ) return false;
   if ( ! CreateNtupleDirectory() ) return false;
-  
+
   fLockFileName = true;
   fLockHistoDirectoryName = true;
+  fLockProfileDirectoryName = true;
   fLockNtupleDirectoryName = true;
 
   return true;
@@ -137,7 +142,7 @@ G4bool G4RootFileManager::CreateHistoDirectory()
     description << "      " 
                 << "cannot create directory " << fHistoDirectoryName;
     G4Exception("G4RootFileManager::CreateHistoDirectory()",
-              "Analysis_W002", JustWarning, description);
+              "Analysis_W001", JustWarning, description);
     return false;       
   }       
 #ifdef G4VERBOSE
@@ -145,6 +150,40 @@ G4bool G4RootFileManager::CreateHistoDirectory()
     if ( fState.GetVerboseL2() ) 
       fState.GetVerboseL2()
         ->Message("create", "directory for histograms", fHistoDirectoryName);
+  }    
+#endif
+  return true;
+}
+
+//_____________________________________________________________________________
+G4bool G4RootFileManager::CreateProfileDirectory()
+{
+  if ( fProfileDirectoryName == "" ) {
+    // Do not create a new directory if its name is not set
+    fProfileDirectory = &(fFile->dir());
+    return true;
+  }  
+  
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL4() ) 
+    fState.GetVerboseL4()
+      ->Message("create", "directory for profiles", fProfileDirectoryName);
+#endif
+  
+  fProfileDirectory = fFile->dir().mkdir(fProfileDirectoryName);
+  if ( ! fProfileDirectory ) {
+    G4ExceptionDescription description;
+    description << "      " 
+                << "cannot create directory " << fProfileDirectoryName;
+    G4Exception("G4RootFileManager::CreateProfileDirectory()",
+              "Analysis_W001", JustWarning, description);
+    return false;       
+  }       
+#ifdef G4VERBOSE
+  else {
+    if ( fState.GetVerboseL2() ) 
+      fState.GetVerboseL2()
+        ->Message("create", "directory for profiles", fProfileDirectoryName);
   }    
 #endif
   return true;
@@ -171,7 +210,7 @@ G4bool G4RootFileManager::CreateNtupleDirectory()
     description << "      " 
                 << "cannot create directory " << fNtupleDirectoryName;
     G4Exception("G4RootFileManager::CreateNtupleDirectory()",
-                "Analysis_W002", JustWarning, description);
+                "Analysis_W001", JustWarning, description);
     return false;       
   }       
 #ifdef G4VERBOSE
@@ -183,6 +222,3 @@ G4bool G4RootFileManager::CreateNtupleDirectory()
 #endif
   return true;
 }
-
-
-

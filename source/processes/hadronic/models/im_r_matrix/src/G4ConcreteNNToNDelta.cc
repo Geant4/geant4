@@ -35,9 +35,16 @@ G4ThreadLocal G4XNDeltaTable *G4ConcreteNNToNDelta::theSigmaTable_G4MT_TLS_ = 0;
 G4ConcreteNNToNDelta::G4ConcreteNNToNDelta(const G4ParticleDefinition* aPrimary,
 					   const G4ParticleDefinition* bPrimary,
 					   const G4ParticleDefinition* aSecondary,
-					   const G4ParticleDefinition* bSecondary):G4ConcreteNNTwoBodyResonance(NULL, NULL, NULL, NULL, NULL, NULL, NULL){  ;;;   if (!theSigmaTable_G4MT_TLS_) theSigmaTable_G4MT_TLS_ = new G4XNDeltaTable  ; G4XNDeltaTable &theSigmaTable = *theSigmaTable_G4MT_TLS_;  ;;;  establish_G4MT_TLS_G4ConcreteNNTwoBodyResonance(aPrimary,bPrimary,aSecondary,bSecondary,theSigmaTable);
+					   const G4ParticleDefinition* bSecondary)  :
+	G4ConcreteNNTwoBodyResonance(NULL, NULL, NULL, NULL, NULL, NULL, NULL)
+{
+   if (!theSigmaTable_G4MT_TLS_) theSigmaTable_G4MT_TLS_ = new G4XNDeltaTable;
+   G4XNDeltaTable &theSigmaTable = *theSigmaTable_G4MT_TLS_;
+   establish_G4MT_TLS_G4ConcreteNNTwoBodyResonance(aPrimary,bPrimary,aSecondary,bSecondary,theSigmaTable);
 }
 
 G4ConcreteNNToNDelta::~G4ConcreteNNToNDelta()
-{ if (!theSigmaTable_G4MT_TLS_) theSigmaTable_G4MT_TLS_ = new G4XNDeltaTable  ; 
+{
+   if (theSigmaTable_G4MT_TLS_) delete theSigmaTable_G4MT_TLS_;
+	theSigmaTable_G4MT_TLS_=0;
 }

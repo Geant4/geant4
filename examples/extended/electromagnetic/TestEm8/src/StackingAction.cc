@@ -34,19 +34,19 @@
 
 #include "StackingAction.hh"
 
-#include "HistoManager.hh"
+#include "Run.hh"
 #include "StackingMessenger.hh"
 
 #include "G4Track.hh"
 #include "G4Step.hh"
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingAction::StackingAction()
   : G4UserStackingAction(),
     fKillSecondary(false),
-    fStackMessenger(0),
-    fHisto(HistoManager::GetPointer())
+    fStackMessenger(0)
 {
   fStackMessenger = new StackingMessenger(this);
 }
@@ -69,11 +69,14 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
   //keep primary particle
   if (aTrack->GetParentID() == 0 || !fKillSecondary) { return status; }
   
+  Run* run
+    = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());  
+
   // charged tracks are killed only inside sensitive volumes
   if(aTrack->GetVolume()->GetLogicalVolume()->GetSensitiveDetector() &&
      aTrack->GetDefinition()->GetPDGCharge() != 0.0) 
     {
-      fHisto->AddEnergy(aTrack->GetKineticEnergy(), 0); 
+      run->AddEnergy(aTrack->GetKineticEnergy(), 0); 
       status = fKill;    
     }
   return status;

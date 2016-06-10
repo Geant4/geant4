@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/include/PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class
 //
-// $Id: PrimaryGeneratorAction.hh 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: PrimaryGeneratorAction.hh 81932 2014-06-06 15:39:45Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -57,13 +57,11 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 public:
 
   PrimaryGeneratorAction();
-
   virtual ~PrimaryGeneratorAction();
 
   virtual void GeneratePrimaries(G4Event*);
 
 private:
-
   PrimaryGeneratorAction & operator=(const PrimaryGeneratorAction &right);
   PrimaryGeneratorAction(const PrimaryGeneratorAction&);
 

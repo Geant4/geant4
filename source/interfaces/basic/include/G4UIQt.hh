@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh 76743 2013-11-14 15:48:22Z gcosmo $
+// $Id: G4UIQt.hh 86866 2014-11-19 14:43:02Z gcosmo $
 //
 #ifndef G4UIQt_h
 #define G4UIQt_h 
@@ -40,6 +40,7 @@
 #include <qmap.h>
 #include <qstringlist.h>
 #include <qtabwidget.h>
+#include <qdockwidget.h>
 
 class QMainWindow;
 class QLineEdit;
@@ -54,6 +55,9 @@ class QTabWidget;
 class QStringList;
 class QSplitter;
 class QToolBar;
+class QTableWidget;
+class QPixmap;
+class QComboBox;
 
 // Class description :
 //
@@ -96,6 +100,23 @@ public :
   }
 };
 
+class G4UIOutputString {
+  public :
+  G4UIOutputString(QString text,G4String thread = "",G4String outputstream= "info");
+  inline QString GetOutputList() { return " all info warning error ";};
+  QString fText;
+  G4String fThread;
+  G4String fOutputStream; // Error, Warning, Info
+};
+
+
+class G4UIDockWidget : public QDockWidget {
+public:
+  G4UIDockWidget(QString txt);
+  void closeEvent(QCloseEvent *);
+};
+
+
 class G4UIQt : public QObject, public G4VBasicShell, public G4VInteractiveSession {
   Q_OBJECT
 
@@ -123,7 +144,7 @@ public: // With description
   // Fourth argument is the path to the icon file if "user_icon" selected
   // Ex : AddButton("change background color","../background.xpm"," /vis/viewer/set/background"); 
 
-  bool AddTabWidget(QWidget*,QString,int,int);
+  bool AddTabWidget(QWidget*,QString);
   // To add a tab for vis openGL Qt driver
   
   QTabWidget* GetSceneTreeComponentsTBWidget();
@@ -162,6 +183,48 @@ public: // With description
   inline QMainWindow * GetMainWindow() {
     return fMainWindow;
   };
+  // Return the main window
+  
+  inline QPixmap* getSearchIcon() { return fSearchIcon;};
+  // return the "search" icon pixmap
+  inline QPixmap* getClearIcon() { return fClearIcon;};
+  // return the "clear" icon pixmap
+
+  void SetStartPage(const std::string&);
+  // Set the text on the first page of the viewer. If "", will take the last value as default
+  // Note: Qt Rich text format could be used, see link for example :
+  // https://qt-project.org/doc/qt-4.8/richtext-html-subset.html#table-cell-attributes
+
+  inline QWidget* GetCoutWidget() {
+    return fCoutDockWidget->widget();
+  };
+  // Return the G4cout widget with filters
+
+  inline G4UIDockWidget* GetUserInterfaceWidget() {
+    return fUIDockWidget;
+  };
+  // Return the UserInterface widget (including scene tree, help and History widgets)
+
+  inline QTabWidget* GetViewersWidget() {
+    return fUITabWidget;
+  }
+  // return the viewer widget including all viewers
+
+  inline QWidget* GetHistoryWidget() {
+    return fHistoryTBWidget;
+  }
+  // return the history widget
+  
+  inline QWidget* GetHelpWidget() {
+    return fHelpTBWidget;
+  }
+  // return the help widget
+  
+  bool AddViewerTab(QWidget* w, std::string title);
+  // Add a new tab in the viewer, could be used to add your own component
+  
+  bool AddViewerTabFromFile(std::string fileName, std::string title);
+  // Add a new tab in the viewer containing the content of the file in a QLabel
 
 public:
   ~G4UIQt();
@@ -183,7 +246,7 @@ private:
   QTreeWidgetItem* FindTreeItem(QTreeWidgetItem *,const QString&);
 
   QString GetCommandList(const G4UIcommand*);
-
+  void updateHelpArea(const G4UIcommand*);
   virtual G4bool GetHelpChoice(G4int&);// have to be implemeted because we heritate from G4VBasicShell
   bool eventFilter(QObject*,QEvent*);
   void ActivateCommand(G4String);
@@ -191,51 +254,58 @@ private:
 
   QWidget* CreateVisParametersTBWidget();
   QWidget* CreateHelpTBWidget();
-  QWidget* CreateCoutTBWidget();
+  G4UIDockWidget* CreateCoutTBWidget();
   QWidget* CreateHistoryTBWidget();
-  QWidget* CreateUITabWidget();
+  G4UIDockWidget* CreateUITabWidget();
   QWidget* CreateSceneTreeComponentsTBWidget();
-  QWidget* CreateRightSplitterWidget();
-  QWidget* CreateLeftSplitterWidget();
+  QWidget* CreateViewerWidget();
   void OpenHelpTreeOnCommand(const QString &);
   QString GetShortCommandPath(QString);
   QString GetLongCommandPath(QTreeWidgetItem*);
   G4bool IsGUICommand(const G4UIcommand*);
   bool CreateVisCommandGroupAndToolBox(G4UIcommand*, QWidget*, int, bool isDialog);
   bool CreateCommandWidget(G4UIcommand* command, QWidget* parent, bool isDialog);
-
+#ifdef G4MULTITHREADED
+  void UpdateCoutThreadFilter();
+#endif
+  void FilterAllOutputTextArea();
+  QString FilterOutput(const G4UIOutputString&,const QString&,const QString&);
+  G4String GetThreadPrefix();
 private:
 
   QMainWindow * fMainWindow;
   QLabel *fCommandLabel;
   QLineEdit * fCommandArea;
   QTextEdit *fCoutTBTextArea;
-  QTextEdit *fHelpArea;
   QTabWidget* fUITabWidget;
-  QStringList fG4cout;
+  std::vector <G4UIOutputString> fG4OutputString;
   QLineEdit * fCoutFilter;
 
   QListWidget *fHistoryTBTableList;
   QTreeWidget *fHelpTreeWidget;
   QWidget* fHelpTBWidget;
   QWidget* fHistoryTBWidget;
-  QWidget* fCoutTBWidget;
+  G4UIDockWidget* fCoutDockWidget;
+  G4UIDockWidget* fUIDockWidget;
   QTabWidget* fSceneTreeComponentsTBWidget;
   QLineEdit* fHelpLine;
   G4QTabWidget* fViewerTabWidget;
   QString fCoutText;
-  QLabel *fEmptyViewerTabLabel;
-  QSplitter * fMainSplitterWidget;
-  QSplitter* fRightSplitterWidget;
-  QWidget* fLeftSplitterWidget;
+  QTextEdit *fStartPage;
   QSplitter * fHelpVSplitter;
-  QWidget* fViewerTabHandleWidget;
+  QTextEdit* fParameterHelpLabel;
+  QTableWidget* fParameterHelpTable;
 
   QToolBar *fToolbarApp;
   QToolBar *fToolbarUser;
   QString fStringSeparator;
   G4String fLastErrMessage;
   QString fLastOpenPath;
+  
+  QPixmap* fSearchIcon;
+  QPixmap* fClearIcon;
+  QComboBox* fThreadsFilterComboBox;
+  std::string fDefaultViewerFirstPageHTMLText;
   
   bool fMoveSelected;
   bool fRotateSelected;
@@ -257,6 +327,7 @@ private Q_SLOTS :
   void UpdateTabWidget(int);
   void ResizeTabWidget( QResizeEvent* );
   void CoutFilterCallback(const QString&);
+  void ThreadComboBoxCallback(int);
   void TabCloseCallback(int);
   void ToolBoxActivated(int);
   void VisParameterCallback(QWidget*);

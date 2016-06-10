@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundModel.cc 74903 2013-10-23 16:47:40Z gcosmo $
+// $Id: G4PreCompoundModel.cc 80062 2014-03-31 13:41:30Z gcosmo $
 //
 // by V. Lara
 //
@@ -116,7 +116,12 @@ void G4PreCompoundModel::ModelDescription(std::ostream& outFile) const
 		<<	"their associated emission  probabilities according to exciton model)\n"
 		<<	"\n"
 		<<	"[1] K.K. Gudima, S.G. Mashnik, V.D. Toneev, Nucl. Phys. A401 329 (1983)\n"
-		<< std::endl;
+		<< "\n";
+}
+void G4PreCompoundModel::DeExciteModelDescription(std::ostream& outFile) const
+{
+   outFile << "description of precompound model as used with DeExcite()"
+           << "\n";
 }
 /////////////////////////////////////////////////////////////////////////////////////////
 

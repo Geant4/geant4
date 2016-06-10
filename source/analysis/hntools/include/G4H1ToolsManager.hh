@@ -35,6 +35,7 @@
 #define G4H1ToolsManager_h 1
 
 #include "G4VH1Manager.hh"
+#include "G4BaseToolsManager.hh"
 #include "G4HnManager.hh"
 #include "G4BinScheme.hh"
 #include "globals.hh"
@@ -54,6 +55,8 @@ class G4H1ToolsManager : public G4VH1Manager
     G4H1ToolsManager(const G4AnalysisManagerState& state);
     virtual ~G4H1ToolsManager();
 
+    // Method to add histograms read from a file
+    G4int AddH1(const G4String& name, tools::histo::h1d* h1d);
     // Method for merge (MT)
     void  AddH1Vector(const std::vector<tools::histo::h1d*>& h1Vector);
     // Reset data
@@ -65,6 +68,13 @@ class G4H1ToolsManager : public G4VH1Manager
     //
     tools::histo::h1d*  GetH1(G4int id, G4bool warn = true,
                               G4bool onlyIfActive = true) const;
+                              
+    // Iterators
+    std::vector<tools::histo::h1d*>::iterator BeginH1();
+    std::vector<tools::histo::h1d*>::iterator EndH1();
+    std::vector<tools::histo::h1d*>::const_iterator BeginConstH1() const;
+    std::vector<tools::histo::h1d*>::const_iterator EndConstH1() const;
+                              
     // Access to histogram vector (needed for Write())
     const std::vector<tools::histo::h1d*>& GetH1Vector() const;
     const std::vector<G4HnInformation*>&   GetHnVector() const;  
@@ -95,7 +105,7 @@ class G4H1ToolsManager : public G4VH1Manager
                            const G4String& unitName = "none",
                            const G4String& fcnName = "none");
     virtual G4bool ScaleH1(G4int id, G4double factor);
-                           
+    
     // Method to fill histograms
     //
     virtual G4bool FillH1(G4int id, G4double value, G4double weight = 1.0);
@@ -144,11 +154,26 @@ class G4H1ToolsManager : public G4VH1Manager
                             
     // data members
     //
+    G4BaseToolsManager fBaseToolsManager;
     std::vector<tools::histo::h1d*>  fH1Vector;            
     std::map<G4String, G4int>  fH1NameIdMap;            
 };
 
 // inline methods
+
+inline  std::vector<tools::histo::h1d*>::iterator G4H1ToolsManager::BeginH1()
+{ return fH1Vector.begin(); }
+
+inline  std::vector<tools::histo::h1d*>::iterator G4H1ToolsManager::EndH1()
+{ return fH1Vector.end(); }
+
+inline  std::vector<tools::histo::h1d*>::const_iterator 
+G4H1ToolsManager::BeginConstH1() const
+{ return fH1Vector.begin(); }
+
+inline  std::vector<tools::histo::h1d*>::const_iterator 
+G4H1ToolsManager::EndConstH1() const
+{ return fH1Vector.end(); }
 
 inline const std::vector<tools::histo::h1d*>& G4H1ToolsManager::GetH1Vector() const
 { return fH1Vector; }

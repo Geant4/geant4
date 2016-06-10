@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scale.cc 66376 2012-12-18 09:42:59Z gcosmo $
+// $Id: G4Scale.cc 83392 2014-08-21 14:36:35Z gcosmo $
 //
 // 
 // John Allison  21st July 2001
@@ -32,11 +32,13 @@
 #include "G4Scale.hh"
 
 G4Scale::G4Scale (G4double length, const G4String& annotation,
-		  G4Scale::Direction direction,
-		  G4bool autoPlacing,
-		  G4double xmid, G4double ymid, G4double zmid):
+                  G4Scale::Direction direction,
+                  G4bool autoPlacing,
+                  G4double xmid, G4double ymid, G4double zmid,
+                  G4double annotationSize):
   fLength(length),
   fAnnotation(annotation),
+  fAnnotationSize(annotationSize),
   fDirection(direction),
   fAutoPlacing(autoPlacing),
   fXmid(xmid), fYmid(ymid), fZmid(zmid) {}

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc 76263 2013-11-08 11:41:52Z gcosmo $
+// $Id: G4Trd.cc 83572 2014-09-01 15:23:27Z gcosmo $
 //
 //
 // Implementation for G4Trd class
@@ -49,7 +49,6 @@
 #include "Randomize.hh"
 
 #include "G4VGraphicsScene.hh"
-#include "G4Polyhedron.hh"
 
 using namespace CLHEP;
 
@@ -108,7 +107,7 @@ void G4Trd::CheckAndSetAllParameters ( G4double pdx1,  G4double pdx2,
   }
   fCubicVolume= 0.;
   fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 ///////////////////////////////////////////////////////////////////////

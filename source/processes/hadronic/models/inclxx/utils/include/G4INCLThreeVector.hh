@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -117,6 +118,9 @@ namespace G4INCL {
       /// \brief Set the z coordinate
       inline void setZ(G4double az) { z =  az; }
 
+      /// \brief Set all the coordinates
+      inline void set(const G4double ax, const G4double ay, const G4double az) { x=ax; y=ay; z=az; }
+
       inline void operator+= (const ThreeVector &v) {
         x += v.x;
         y += v.y;
@@ -177,6 +181,20 @@ namespace G4INCL {
         const G4double cos = std::cos(angle);
         const G4double sin = std::sin(angle);
         (*this) = (*this) * cos + axis.vector(*this) * sin + axis * (axis.dot(*this)*(1.-cos));
+      }
+
+      /** \brief Return a vector orthogonal to this
+       *
+       * Simple algorithm from Hughes and Moeller, J. Graphics Tools 4 (1999)
+       * 33.
+       */
+      ThreeVector anyOrthogonal() const {
+        if(x<=y && x<=z)
+          return ThreeVector(0., -z, y);
+        else if(y<=x && y<=z)
+          return ThreeVector(-z, 0., x);
+        else
+          return ThreeVector(-y, x, 0.);
       }
 
       std::string print() const {

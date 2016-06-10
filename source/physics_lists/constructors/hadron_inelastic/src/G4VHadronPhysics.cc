@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VHadronPhysics.cc 71043 2013-06-10 09:29:56Z gcosmo $
+// $Id: G4VHadronPhysics.cc 85579 2014-10-31 09:04:00Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -68,12 +68,14 @@ G4VHadronPhysics::G4VHadronPhysics(const G4String& aName, G4int verb)
 
 G4VHadronPhysics::~G4VHadronPhysics() 
 {
-  G4int n = builders->size();
-  if(n > 0) {
-    for(G4int i=0; i<n; i++) {delete (*builders)[i];}
-  }
-  delete builders;
-}                                     
+    if ( builders ) {
+        G4int n = builders->size();
+        if(n > 0) {
+            for(G4int i=0; i<n; i++) {delete (*builders)[i];}
+        }
+        delete builders;
+    }
+}
 
 void G4VHadronPhysics::ConstructParticle()
 {

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HnInformation.hh 73423 2013-08-27 10:54:55Z gcosmo $
+// $Id: G4HnInformation.hh 83599 2014-09-03 09:14:50Z gcosmo $
 
+// Data class for the added Hn/Pn information (not available in g4tools). 
+//
 // Author: Ivana Hrivnacova, 04/07/2012  (ivana@ipno.in2p3.fr)
 
 #ifndef G4HnInformation_h
@@ -34,47 +36,114 @@
 #include "G4Fcn.hh" 
 #include "G4BinScheme.hh" 
 
-struct G4HnInformation
+// The additional Hn information per dimension
+
+struct G4HnDimensionInformation
 {
-  G4HnInformation(const G4String& name, 
-                  const G4String& xunitName, const G4String& yunitName,
-                  const G4String& fxName, const G4String& fyName,
-                  G4double xunit, G4double yunit,
-                  G4Fcn fx, G4Fcn fy,
-                  G4BinScheme xBinScheme, G4BinScheme yBinScheme) 
-    : fName(name),  
-      fXUnitName(xunitName), 
-      fYUnitName(yunitName), 
-      fXFcnName(fxName),
-      fYFcnName(fyName),
-      fXUnit(xunit), 
-      fYUnit(yunit), 
-      fXFcn(fx),
-      fYFcn(fy),
-      fXBinScheme(xBinScheme),
-      fYBinScheme(yBinScheme),
-      fActivation(true),
-      fAscii(false)
-       {}
+  G4HnDimensionInformation( 
+      const G4String& unitName,
+      const G4String& fcnName,
+      G4double unit, 
+      G4Fcn fcn,
+      G4BinScheme binScheme) 
+    : fUnitName(unitName), 
+      fFcnName(fcnName),
+      fUnit(unit), 
+      fFcn(fcn),
+      fBinScheme(binScheme)
+      {}
+      
+  G4HnDimensionInformation(const G4HnDimensionInformation& rhs) 
+    : fUnitName(rhs.fUnitName), 
+      fFcnName(rhs.fFcnName),
+      fUnit(rhs.fUnit), 
+      fFcn(rhs.fFcn),
+      fBinScheme(rhs.fBinScheme)
+      {}
+      
+  G4HnDimensionInformation& operator=(const G4HnDimensionInformation& rhs) 
+    {
+      // check assignment to self
+      if (this == &rhs) return *this;
+    
+      fUnitName = rhs.fUnitName; 
+      fFcnName  = rhs.fFcnName;
+      fUnit = rhs.fUnit; 
+      fFcn  = rhs.fFcn;
+      fBinScheme = rhs.fBinScheme;
+      
+      return *this;
+    }  
 
-  G4String fName;
-  G4String fXUnitName;
-  G4String fYUnitName;
-  G4String fXFcnName;
-  G4String fYFcnName;
-  G4double fXUnit;  
-  G4double fYUnit;
-  G4Fcn    fXFcn;
-  G4Fcn    fYFcn;
-  G4BinScheme fXBinScheme;
-  G4BinScheme fYBinScheme;
-  G4bool   fActivation;
-  G4bool   fAscii;  
+  //G4String fName;
+  G4String fUnitName;
+  G4String fFcnName;
+  G4double fUnit;  
+  G4Fcn    fFcn;
+  G4BinScheme fBinScheme;
+};  
+
+class G4HnInformation
+{
+  public:
+    enum {
+      kX = 0,
+      kY = 1,
+      kZ = 2
+    };  
+
+  public:
+    G4HnInformation(const G4String& name, G4int nofDimensions)
+      : fName(name),
+        fHnDimensionInformations(),
+        fActivation(true),
+        fAscii(false) {fHnDimensionInformations.reserve(nofDimensions); }
   
-  // disable default constructor
-  private:
-    G4HnInformation(); 
+    // Set methods
+    void AddHnDimensionInformation(
+            const G4HnDimensionInformation& hnDimensionInformation);
+    void SetActivation(G4bool activation);
+    void SetAscii(G4bool ascii);  
+  
+    // Get methods
+    G4String GetName() const;
+    G4HnDimensionInformation* GetHnDimensionInformation(G4int dimension);
+    G4bool  GetActivation() const;
+    G4bool  GetAscii() const;  
 
+  private:
+    // Disabled default constructor
+    G4HnInformation(); 
+    
+    // Data members
+    G4String fName;
+    std::vector<G4HnDimensionInformation> fHnDimensionInformations;
+    G4bool   fActivation;
+    G4bool   fAscii;  
 };
+
+// inline functions
+
+inline void G4HnInformation::AddHnDimensionInformation(
+                const G4HnDimensionInformation& hnDimensionInformation)
+{ fHnDimensionInformations.push_back(hnDimensionInformation); }
+
+inline void G4HnInformation::SetActivation(G4bool activation)
+{ fActivation = activation; }
+
+inline void G4HnInformation::SetAscii(G4bool ascii)
+{ fAscii = ascii; }
+
+inline G4String G4HnInformation::GetName() const
+{ return fName; }
+
+inline G4HnDimensionInformation* G4HnInformation::GetHnDimensionInformation(G4int dimension)
+{ return &(fHnDimensionInformations[dimension]); }
+
+inline G4bool  G4HnInformation::GetActivation() const
+{ return fActivation; }
+
+inline G4bool  G4HnInformation::GetAscii() const
+{ return fAscii; }
 
 #endif  

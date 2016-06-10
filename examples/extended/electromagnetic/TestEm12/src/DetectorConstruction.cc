@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm12/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 68385 2013-03-23 14:07:15Z maire $
+// $Id: DetectorConstruction.cc 78723 2014-01-20 10:32:17Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,12 +40,12 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
-#include "G4UniformMagField.hh"
 
 #include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
+#include "G4RunManager.hh"
 
 #include "G4UnitsTable.hh"
 #include "G4PhysicalConstants.hh"
@@ -56,7 +56,6 @@
 DetectorConstruction::DetectorConstruction()
  : G4VUserDetectorConstruction(),
    fAbsorMaterial(0),
-   fMagField(0),
    fAbsor(0),
    fDetectorMessenger(0)
 {
@@ -114,20 +113,20 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   // Absorber
   //
   G4Sphere* 
-  sAbsor = new G4Sphere("Absorber",                        //name
-                     0., fAbsorRadius, 0., twopi, 0., pi);        //size
+  sAbsor = new G4Sphere("Absorber",                           //name
+                     0., fAbsorRadius, 0., twopi, 0., pi);    //size
 
   G4LogicalVolume*
   lAbsor = new G4LogicalVolume(sAbsor,                        //solid
-                                     fAbsorMaterial,                //material
-                                    "Absorber");                //name
+                                     fAbsorMaterial,          //material
+                                    "Absorber");              //name
                                    
-  fAbsor = new G4PVPlacement(0,                                //no rotation
-                             G4ThreeVector(),                //at (0,0,0)
-                             lAbsor,                        //logical volume
-                            "Absorber",                        //name
-                             0,                                //mother  volume
-                             false,                        //no boolean operation
+  fAbsor = new G4PVPlacement(0,                         //no rotation
+                             G4ThreeVector(),           //at (0,0,0)
+                             lAbsor,                    //logical volume
+                            "Absorber",                 //name
+                             0,                         //mother  volume
+                             false,                     //no boolean operation
                              0);                        //copy number
 
   // Layers
@@ -139,18 +138,18 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
     sLayer = new G4Sphere("Layer", (i-1)*fLayerThickness, i*fLayerThickness,
                           0., twopi, 0., pi);
                  
-    G4LogicalVolume*                                                                 
+    G4LogicalVolume* 
     lLayer = new G4LogicalVolume(sLayer,                //shape
-                                 fAbsorMaterial,                //material
-                                 "Layer");                //name
+                                 fAbsorMaterial,        //material
+                                 "Layer");              //name
                                  
-             new G4PVPlacement(0,                        //no rotation
-                               G4ThreeVector(),                //at (0,0,0)
-                               lLayer,                        //logical volume
-                               "Layer",                        //name
-                               lAbsor,                        //mother  volume
-                               false,                        //no boolean operation
-                               i);                        //copy number
+             new G4PVPlacement(0,                      //no rotation
+                               G4ThreeVector(),        //at (0,0,0)
+                               lLayer,                 //logical volume
+                               "Layer",                //name
+                               lAbsor,                 //mother  volume
+                               false,                  //no boolean operation
+                               i);                     //copy number
                                                    
    }                                              
 
@@ -171,7 +170,7 @@ void DetectorConstruction::PrintParameters()
          << G4BestUnit(fAbsorRadius,"Length") << " radius of "
          << fAbsorMaterial->GetName() << " divided in " << fNbOfLayers 
          << " slices of " << G4BestUnit(fLayerThickness,"Length")
-	 << "\n \n" << fAbsorMaterial << G4endl;
+         << "\n \n" << fAbsorMaterial << G4endl;
   G4cout << "\n---------------------------------------------------------\n";
 }
 
@@ -180,6 +179,7 @@ void DetectorConstruction::PrintParameters()
 void DetectorConstruction::SetRadius(G4double value)
 {
   fAbsorRadius = value;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -189,48 +189,15 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
   // search the material by its name   
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
   if (pttoMaterial) fAbsorMaterial = pttoMaterial;
+  G4RunManager::GetRunManager()->PhysicsHasBeenModified();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::SetNbOfLayers(G4int value)
 {
-  fNbOfLayers = value; 
+  fNbOfLayers = value;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();   
 }
  
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
-
-void DetectorConstruction::SetMagField(G4double fieldValue)
-{
-  //apply a global uniform magnetic field along Z axis
-  G4FieldManager* fieldMgr 
-   = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-    
-  if (fMagField) delete fMagField;        //delete the existing magn field
-  
-  if (fieldValue!=0.)                        // create a new one if non nul
-    {
-      fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));        
-      fieldMgr->SetDetectorField(fMagField);
-      fieldMgr->CreateChordFinder(fMagField);
-    }
-   else
-    {
-      fMagField = 0;
-      fieldMgr->SetDetectorField(fMagField);
-    }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4RunManager.hh" 
- 
-void DetectorConstruction::UpdateGeometry()
-{
-G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
-}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

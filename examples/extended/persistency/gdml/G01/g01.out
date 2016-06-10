@@ -1,13 +1,13 @@
 
 Usage: load_gdml <intput_gdml_file:mandatory> <output_gdml_file:optional>
 
-G4GDML: Reading '/ec/G4-builds/release/slc6-gcc47-RelWithDebInfo/09-06-ref-11_branch/examples/extended/persistency/gdml/G01/solids.gdml'...
+G4GDML: Reading '/ec/G4-builds/release/slc6-gcc49-RelWithDebInfo/10-01-ref-00_branch/examples/extended/persistency/gdml/G01/solids.gdml'...
 G4GDML: Reading definitions...
 G4GDML: Reading materials...
 G4GDML: Reading solids...
 G4GDML: Reading structure...
 G4GDML: Reading setup...
-G4GDML: Reading '/ec/G4-builds/release/slc6-gcc47-RelWithDebInfo/09-06-ref-11_branch/examples/extended/persistency/gdml/G01/solids.gdml' done!
+G4GDML: Reading '/ec/G4-builds/release/slc6-gcc49-RelWithDebInfo/10-01-ref-00_branch/examples/extended/persistency/gdml/G01/solids.gdml' done!
 Stripping off GDML names of materials, solids and volumes ...
 
         ############################################
@@ -15,12 +15,15 @@ Stripping off GDML names of materials, solids and volumes ...
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
+<<< Geant4 Physics List simulation engine: FTFP_BERT 2.0
+
+### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 G4GDML: Writing 'g01.gdml'...
 G4GDML: Writing definitions...
 G4GDML: Writing materials...
@@ -32,32 +35,699 @@ G4GDML: Writing 'g01.gdml' done !
 /run/verbose 2
 /run/beamOn 20
 
+phot:   for  gamma    SubType= 12  BuildTable= 0
+      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
+
+compt:   for  gamma    SubType= 13  BuildTable= 1
+      Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
+      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
+
+conv:   for  gamma    SubType= 14  BuildTable= 1
+      Lambda table from 1.022 MeV to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
+
+msc:   for e-    SubType= 10
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 35 bins Emin=    100 MeV   Emax=     10 TeV
+
+eIoni:   for  e-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+
+eBrem:   for  e-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
+
+CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from 100 MeV to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
+
+msc:   for e+    SubType= 10
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 35 bins Emin=    100 MeV   Emax=     10 TeV
+
+eIoni:   for  e+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+
+eBrem:   for  e+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
+
+annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  e+, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from 100 MeV to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
+
+msc:   for proton    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+
+hBrems:   for  proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  proton, integral: 1     SubType= 1  BuildTable= 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for GenericIon    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
+
+ionIoni:   for  GenericIon    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      Stopping Power data for 17 ion/material pairs 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+
+msc:   for alpha    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+ionIoni:   for  alpha    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
+          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
+
+msc:   for anti_proton    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  anti_proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+
+hBrems:   for  anti_proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  anti_proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  anti_proton, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for kaon+    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  kaon+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+
+hBrems:   for  kaon+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  kaon+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  kaon+, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for kaon-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  kaon-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+
+hBrems:   for  kaon-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  kaon-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  kaon-, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for mu+    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+muIoni:   for  mu+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
+
+muBrems:   for  mu+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+
+muPairProd:   for  mu+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  mu+, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for mu-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+muIoni:   for  mu-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
+
+muBrems:   for  mu-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+
+muPairProd:   for  mu-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  mu-, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  pi+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+
+hBrems:   for  pi+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  pi+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  pi+, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for pi-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  pi-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+
+hBrems:   for  pi-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  pi-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+====================================================================
+                  HADRONIC PROCESSES SUMMARY (verbose level 1)
+
+---------------------------------------------------
+                           Hadronic Processes for neutron
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:     ChipsNeutronElasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: neutronInelastic
+        Model:                      FTFP: 4 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: nCapture
+        Model:               nRadCapture: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaCaptureXS: 0 eV  ---> 100 TeV
+
+  Process: nKiller
+
+---------------------------------------------------
+                           Hadronic Processes for GenericIon
+
+  Process: ionInelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for He3
+
+  Process: He3Inelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: alphaInelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_He3Inelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_alphaInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_deuteronInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_neutron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_neutronInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_proton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_protonInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_tritonInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: dInelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for e+
+
+  Process: positronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for e-
+
+  Process: electronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for gamma
+
+  Process: photonNuclear
+        Model:            BertiniCascade: 0 eV  ---> 3.5 GeV
+        Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
+     Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for kaon+
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: kaon+Inelastic
+        Model:                      FTFP: 4 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns:  ChipsKaonPlusInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for kaon-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: kaon-Inelastic
+        Model:                      FTFP: 4 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns: ChipsKaonMinusInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: lambdaInelastic
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns:   ChipsHyperonInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for mu+
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for mu-
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+  Process: muMinusCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for pi+
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
+        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: pi+Inelastic
+        Model:                      FTFP: 4 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
+                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
+                           below 91 GeV, Glauber-Gribov above 
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for pi-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
+        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: pi-Inelastic
+        Model:                      FTFP: 4 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
+                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
+                           below 91 GeV, Glauber-Gribov above 
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for proton
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:      ChipsProtonElasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: protonInelastic
+        Model:                      FTFP: 4 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: tInelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+================================================================
+
 Region <DefaultRegionForTheWorld> --  -- appears in <World_PV> world volume
  This region is in the mass world.
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
- Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+ Production cuts :   gamma 700 um      e- 700 um      e+ 700 um  proton 700 um 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+ Production cuts :   gamma 700 um      e- 700 um      e+ 700 um  proton 700 um 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes
  Material : Air
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : Water
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.51944 keV    e-  276.265 keV    e+  270.751 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -77,7 +747,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-     100.00          3k        12       44        132         0.00    World
+     100.00          3k        11       41        126         0.00    World
 ### Run 0 starts.
 
 *********************************************************************************************************
@@ -92,15 +762,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
     5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
     6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
-    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
-    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
-    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
+    7     -130      0.1      0.1     1e+03        0     92.6  1.87e+03     vol2_PV Transportation
+    8     -120      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
+    9       -5      0.1      0.1     1e+03        0      115  1.99e+03     vol0_PV Transportation
    10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
    11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
    12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
-   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
-   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
-   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
+   13      245      0.1      0.1     1e+03        0     70.1  2.25e+03     vol4_PV Transportation
+   14      255      0.1      0.1     1e+03        0       10  2.26e+03    World_PV Transportation
+   15      535      0.1      0.1     1e+03        0      280  2.53e+03    vol71_PV Transportation
    16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
    17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
    18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
@@ -140,15 +810,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
     5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
     6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
-    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
-    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
-    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
+    7     -130      0.1      0.1     1e+03        0     92.6  1.87e+03     vol2_PV Transportation
+    8     -120      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
+    9       -5      0.1      0.1     1e+03        0      115  1.99e+03     vol0_PV Transportation
    10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
    11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
    12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
-   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
-   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
-   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
+   13      245      0.1      0.1     1e+03        0     70.1  2.25e+03     vol4_PV Transportation
+   14      255      0.1      0.1     1e+03        0       10  2.26e+03    World_PV Transportation
+   15      535      0.1      0.1     1e+03        0      280  2.53e+03    vol71_PV Transportation
    16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
    17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
    18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
@@ -188,15 +858,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
     5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
     6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
-    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
-    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
-    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
+    7     -130      0.1      0.1     1e+03        0     92.6  1.87e+03     vol2_PV Transportation
+    8     -120      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
+    9       -5      0.1      0.1     1e+03        0      115  1.99e+03     vol0_PV Transportation
    10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
    11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
    12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
-   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
-   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
-   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
+   13      245      0.1      0.1     1e+03        0     70.1  2.25e+03     vol4_PV Transportation
+   14      255      0.1      0.1     1e+03        0       10  2.26e+03    World_PV Transportation
+   15      535      0.1      0.1     1e+03        0      280  2.53e+03    vol71_PV Transportation
    16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
    17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
    18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
@@ -236,15 +906,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
     5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
     6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
-    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
-    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
-    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
+    7     -130      0.1      0.1     1e+03        0     92.6  1.87e+03     vol2_PV Transportation
+    8     -120      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
+    9       -5      0.1      0.1     1e+03        0      115  1.99e+03     vol0_PV Transportation
    10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
    11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
    12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
-   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
-   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
-   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
+   13      245      0.1      0.1     1e+03        0     70.1  2.25e+03     vol4_PV Transportation
+   14      255      0.1      0.1     1e+03        0       10  2.26e+03    World_PV Transportation
+   15      535      0.1      0.1     1e+03        0      280  2.53e+03    vol71_PV Transportation
    16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
    17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
    18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
@@ -284,15 +954,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
     5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
     6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
-    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
-    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
-    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
+    7     -130      0.1      0.1     1e+03        0     92.6  1.87e+03     vol2_PV Transportation
+    8     -120      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
+    9       -5      0.1      0.1     1e+03        0      115  1.99e+03     vol0_PV Transportation
    10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
    11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
    12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
-   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
-   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
-   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
+   13      245      0.1      0.1     1e+03        0     70.1  2.25e+03     vol4_PV Transportation
+   14      255      0.1      0.1     1e+03        0       10  2.26e+03    World_PV Transportation
+   15      535      0.1      0.1     1e+03        0      280  2.53e+03    vol71_PV Transportation
    16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
    17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
    18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
@@ -332,15 +1002,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
     5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
     6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
-    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
-    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
-    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
+    7     -130      0.1      0.1     1e+03        0     92.6  1.87e+03     vol2_PV Transportation
+    8     -120      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
+    9       -5      0.1      0.1     1e+03        0      115  1.99e+03     vol0_PV Transportation
    10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
    11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
    12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
-   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
-   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
-   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
+   13      245      0.1      0.1     1e+03        0     70.1  2.25e+03     vol4_PV Transportation
+   14      255      0.1      0.1     1e+03        0       10  2.26e+03    World_PV Transportation
+   15      535      0.1      0.1     1e+03        0      280  2.53e+03    vol71_PV Transportation
    16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
    17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
    18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
@@ -380,15 +1050,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
     5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
     6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
-    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
-    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
-    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
+    7     -130      0.1      0.1     1e+03        0     92.6  1.87e+03     vol2_PV Transportation
+    8     -120      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
+    9       -5      0.1      0.1     1e+03        0      115  1.99e+03     vol0_PV Transportation
    10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
    11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
    12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
-   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
-   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
-   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
+   13      245      0.1      0.1     1e+03        0     70.1  2.25e+03     vol4_PV Transportation
+   14      255      0.1      0.1     1e+03        0       10  2.26e+03    World_PV Transportation
+   15      535      0.1      0.1     1e+03        0      280  2.53e+03    vol71_PV Transportation
    16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
    17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
    18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
@@ -407,10 +1077,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     3     -740      126      0.1     1e+03        0       20  1.27e+03   vol601_PV Transportation
     4     -720      128      0.1     1e+03        0       20  1.29e+03    World_PV Transportation
     5    5e+03      700      0.1     1e+03        0 5.75e+03  7.03e+03  OutOfWorld Transportation
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.01s Sys=0.01s
 /gun/direction 0 0 -1
 /run/beamOn 20
 
@@ -419,27 +1089,27 @@ Region <DefaultRegionForTheWorld> --  -- appears in <World_PV> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
- Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+ Production cuts :   gamma 699.9999999999999 um      e- 699.9999999999999 um      e+ 699.9999999999999 um  proton 699.9999999999999 um 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+ Production cuts :   gamma 699.9999999999999 um      e- 699.9999999999999 um      e+ 699.9999999999999 um  proton 699.9999999999999 um 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes
  Material : Air
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
+ Range cuts        :  gamma  699.9999999999999 um     e-  699.9999999999999 um     e+  699.9999999999999 um  proton 699.9999999999999 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 69.99999999999999 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : Water
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
+ Range cuts        :  gamma  699.9999999999999 um     e-  699.9999999999999 um     e+  699.9999999999999 um  proton 699.9999999999999 um 
+ Energy thresholds :  gamma  2.519443689999529 keV    e-  276.265024276672 keV    e+  270.7512371977523 keV proton 69.99999999999999 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -459,15 +1129,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
     5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
     6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
-    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
-    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
-    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
+    7     -130      0.1      0.1     1e+03        0     92.6  1.87e+03     vol2_PV Transportation
+    8     -120      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
+    9       -5      0.1      0.1     1e+03        0      115  1.99e+03     vol0_PV Transportation
    10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
    11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
    12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
-   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
-   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
-   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
+   13      245      0.1      0.1     1e+03        0     70.1  2.25e+03     vol4_PV Transportation
+   14      255      0.1      0.1     1e+03        0       10  2.26e+03    World_PV Transportation
+   15      535      0.1      0.1     1e+03        0      280  2.53e+03    vol71_PV Transportation
    16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
    17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
    18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
@@ -507,15 +1177,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
     5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
     6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
-    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
-    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
-    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
+    7     -130      0.1      0.1     1e+03        0     92.6  1.87e+03     vol2_PV Transportation
+    8     -120      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
+    9       -5      0.1      0.1     1e+03        0      115  1.99e+03     vol0_PV Transportation
    10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
    11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
    12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
-   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
-   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
-   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
+   13      245      0.1      0.1     1e+03        0     70.1  2.25e+03     vol4_PV Transportation
+   14      255      0.1      0.1     1e+03        0       10  2.26e+03    World_PV Transportation
+   15      535      0.1      0.1     1e+03        0      280  2.53e+03    vol71_PV Transportation
    16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
    17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
    18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
@@ -555,15 +1225,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
     5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
     6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
-    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
-    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
-    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
+    7     -130      0.1      0.1     1e+03        0     92.6  1.87e+03     vol2_PV Transportation
+    8     -120      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
+    9       -5      0.1      0.1     1e+03        0      115  1.99e+03     vol0_PV Transportation
    10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
    11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
    12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
-   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
-   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
-   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
+   13      245      0.1      0.1     1e+03        0     70.1  2.25e+03     vol4_PV Transportation
+   14      255      0.1      0.1     1e+03        0       10  2.26e+03    World_PV Transportation
+   15      535      0.1      0.1     1e+03        0      280  2.53e+03    vol71_PV Transportation
    16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
    17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
    18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
@@ -603,15 +1273,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
     5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
     6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
-    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
-    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
-    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
+    7     -130      0.1      0.1     1e+03        0     92.6  1.87e+03     vol2_PV Transportation
+    8     -120      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
+    9       -5      0.1      0.1     1e+03        0      115  1.99e+03     vol0_PV Transportation
    10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
    11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
    12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
-   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
-   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
-   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
+   13      245      0.1      0.1     1e+03        0     70.1  2.25e+03     vol4_PV Transportation
+   14      255      0.1      0.1     1e+03        0       10  2.26e+03    World_PV Transportation
+   15      535      0.1      0.1     1e+03        0      280  2.53e+03    vol71_PV Transportation
    16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
    17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
    18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
@@ -651,15 +1321,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
     5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
     6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
-    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
-    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
-    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
+    7     -130      0.1      0.1     1e+03        0     92.6  1.87e+03     vol2_PV Transportation
+    8     -120      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
+    9       -5      0.1      0.1     1e+03        0      115  1.99e+03     vol0_PV Transportation
    10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
    11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
    12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
-   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
-   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
-   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
+   13      245      0.1      0.1     1e+03        0     70.1  2.25e+03     vol4_PV Transportation
+   14      255      0.1      0.1     1e+03        0       10  2.26e+03    World_PV Transportation
+   15      535      0.1      0.1     1e+03        0      280  2.53e+03    vol71_PV Transportation
    16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
    17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
    18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
@@ -699,15 +1369,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
     5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
     6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
-    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
-    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
-    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
+    7     -130      0.1      0.1     1e+03        0     92.6  1.87e+03     vol2_PV Transportation
+    8     -120      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
+    9       -5      0.1      0.1     1e+03        0      115  1.99e+03     vol0_PV Transportation
    10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
    11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
    12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
-   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
-   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
-   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
+   13      245      0.1      0.1     1e+03        0     70.1  2.25e+03     vol4_PV Transportation
+   14      255      0.1      0.1     1e+03        0       10  2.26e+03    World_PV Transportation
+   15      535      0.1      0.1     1e+03        0      280  2.53e+03    vol71_PV Transportation
    16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
    17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
    18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
@@ -747,15 +1417,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
     5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
     6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
-    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
-    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
-    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
+    7     -130      0.1      0.1     1e+03        0     92.6  1.87e+03     vol2_PV Transportation
+    8     -120      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
+    9       -5      0.1      0.1     1e+03        0      115  1.99e+03     vol0_PV Transportation
    10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
    11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
    12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
-   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
-   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
-   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
+   13      245      0.1      0.1     1e+03        0     70.1  2.25e+03     vol4_PV Transportation
+   14      255      0.1      0.1     1e+03        0       10  2.26e+03    World_PV Transportation
+   15      535      0.1      0.1     1e+03        0      280  2.53e+03    vol71_PV Transportation
    16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
    17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
    18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
@@ -774,10 +1444,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     3     -740      126      0.1     1e+03        0       20  1.27e+03   vol601_PV Transportation
     4     -720      128      0.1     1e+03        0       20  1.29e+03    World_PV Transportation
     5    5e+03      700      0.1     1e+03        0 5.75e+03  7.03e+03  OutOfWorld Transportation
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.02s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /gun/direction 0.3 0.2 1
 /run/beamOn 20
@@ -787,34 +1457,34 @@ Region <DefaultRegionForTheWorld> --  -- appears in <World_PV> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
- Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+ Production cuts :   gamma 699.9999999999999 um      e- 699.9999999999999 um      e+ 699.9999999999999 um  proton 699.9999999999999 um 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+ Production cuts :   gamma 699.9999999999999 um      e- 699.9999999999999 um      e+ 699.9999999999999 um  proton 699.9999999999999 um 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes
  Material : Air
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
+ Range cuts        :  gamma  699.9999999999999 um     e-  699.9999999999999 um     e+  699.9999999999999 um  proton 699.9999999999999 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 69.99999999999999 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : Water
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
+ Range cuts        :  gamma  699.9999999999999 um     e-  699.9999999999999 um     e+  699.9999999999999 um  proton 699.9999999999999 um 
+ Energy thresholds :  gamma  2.519443689999529 keV    e-  276.265024276672 keV    e+  270.7512371977523 keV proton 69.99999999999999 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ====================================================================
 
 ### Run 2 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 20
   User=0s Real=0s Sys=0s
@@ -826,37 +1496,37 @@ Region <DefaultRegionForTheWorld> --  -- appears in <World_PV> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
- Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+ Production cuts :   gamma 699.9999999999999 um      e- 699.9999999999999 um      e+ 699.9999999999999 um  proton 699.9999999999999 um 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+ Production cuts :   gamma 699.9999999999999 um      e- 699.9999999999999 um      e+ 699.9999999999999 um  proton 699.9999999999999 um 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes
  Material : Air
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
+ Range cuts        :  gamma  699.9999999999999 um     e-  699.9999999999999 um     e+  699.9999999999999 um  proton 699.9999999999999 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 69.99999999999999 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : Water
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
+ Range cuts        :  gamma  699.9999999999999 um     e-  699.9999999999999 um     e+  699.9999999999999 um  proton 699.9999999999999 um 
+ Energy thresholds :  gamma  2.519443689999529 keV    e-  276.265024276672 keV    e+  270.7512371977523 keV proton 69.99999999999999 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ====================================================================
 
 ### Run 3 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0.01s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /gun/direction -0.3 0.2 0.6
 /run/beamOn 20
 
@@ -865,34 +1535,34 @@ Region <DefaultRegionForTheWorld> --  -- appears in <World_PV> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
- Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+ Production cuts :   gamma 699.9999999999999 um      e- 699.9999999999999 um      e+ 699.9999999999999 um  proton 699.9999999999999 um 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+ Production cuts :   gamma 699.9999999999999 um      e- 699.9999999999999 um      e+ 699.9999999999999 um  proton 699.9999999999999 um 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes
  Material : Air
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
+ Range cuts        :  gamma  699.9999999999999 um     e-  699.9999999999999 um     e+  699.9999999999999 um  proton 699.9999999999999 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 69.99999999999999 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : Water
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
+ Range cuts        :  gamma  699.9999999999999 um     e-  699.9999999999999 um     e+  699.9999999999999 um  proton 699.9999999999999 um 
+ Energy thresholds :  gamma  2.519443689999529 keV    e-  276.265024276672 keV    e+  270.7512371977523 keV proton 69.99999999999999 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ====================================================================
 
 ### Run 4 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 20
   User=0s Real=0s Sys=0s
@@ -903,9 +1573,10 @@ UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
+Total navigation history collections cleaned: 8
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.0096 Mb
+Dynamic pools deleted: 9 / Total memory freed: 0.011 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

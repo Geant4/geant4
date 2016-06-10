@@ -1,4 +1,4 @@
-# $Id: pol01.in 68753 2013-04-05 10:26:04Z gcosmo $
+# $Id: pol01.in 86418 2014-11-11 10:39:38Z gcosmo $
 #
 # Macro file for "Pol01.cc"
 # (can be run in batch, without graphic, without analysis)
@@ -10,9 +10,10 @@
 /testem/det/setSizeZ 1.75 mm
 /testem/phys/addPhysics polarized
 #/testem/phys/addPhysics standard
-/testem/event/printModulo 5000
+/run/printProgress 5000
 #
 /run/initialize
+/run/setCut 0.1 mm
 #
 /polarization/manager/verbose 1
 /polarization/volume/set theBox 0. 0. 0.08

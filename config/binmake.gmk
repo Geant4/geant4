@@ -1,4 +1,4 @@
-# $Id: binmake.gmk 76321 2013-11-08 14:09:58Z gcosmo $
+# $Id: binmake.gmk 85534 2014-10-30 16:19:42Z gcosmo $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -131,6 +131,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/models/lepto_nuclear/include \
               -I$(G4BASE)/processes/hadronic/models/management/include \
               -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
+              -I$(G4BASE)/processes/hadronic/models/particle_hp/include \
               -I$(G4BASE)/processes/hadronic/models/parton_string/diffraction/include \
               -I$(G4BASE)/processes/hadronic/models/parton_string/hadronization/include \
               -I$(G4BASE)/processes/hadronic/models/parton_string/management/include \
@@ -149,7 +150,6 @@ ifndef INCFLAGS
               -I$(G4BASE)/geometry/solids/CSG/include \
               -I$(G4BASE)/geometry/solids/specific/include \
               -I$(G4BASE)/geometry/solids/Boolean/include \
-              -I$(G4BASE)/geometry/solids/usolids/include \
               -I$(G4BASE)/geometry/divisions/include \
               -I$(G4BASE)/geometry/volumes/include \
               -I$(G4BASE)/geometry/navigation/include \
@@ -250,6 +250,10 @@ ifdef GLOBALLIBS
              -lG4intercoms \
              -lG4global
 
+  ifdef G4LIB_USE_USOLIDS
+    LDLIBS2 += -lG4geomUSolids
+  endif
+
   ifdef G4LIB_USE_CLHEP
     LDLIBS2 += -lG4clhep
   endif
@@ -266,9 +270,17 @@ ifdef GLOBALLIBS
     LDLIBS2 += -lG4zlib
   endif
 
+  # Bring all symbols in for libraries which requires this (templated factories).
+  #
+  ifeq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+    ifndef SHAREDLIBS
+      LDFLAGS += $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4physicslists.a $(G4NOSTATIC_MODE)
+    endif
+  endif
+
 else
-# The next lines specifically should read LDLIBS2 = , not LDLIBS2 :=, so
-# that it is not expanded until the directory G4TMPDIR is created.
+  # The next lines specifically should read LDLIBS2 = , not LDLIBS2 :=, so
+  # that it is not expanded until the directory G4TMPDIR is created.
   ifeq ($(G4INCLUDE_EXEC),1)
     LDLIBS2 = $(shell \
         G4TMP=$(G4TMP); export G4TMP; \
@@ -290,6 +302,24 @@ else
 # Extra libraries to resolve remaining circular dependencies...
 #  LDLIBS2EXTRA = 
   endif
+  # Bring all symbols in for libraries which requires this (templated factories).
+  #
+  # ifeq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+  #   ifndef SHAREDLIBS
+  #     LDFLAGS += $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_lists.a $(G4NOSTATIC_MODE) \
+  #                $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_decay.a $(G4NOSTATIC_MODE) \
+  #                $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_em.a $(G4NOSTATIC_MODE) \
+  #                $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_glnuclear.a $(G4NOSTATIC_MODE) \
+  #                $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_helastic.a $(G4NOSTATIC_MODE) \
+  #                $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_hinelastic.a $(G4NOSTATIC_MODE) \
+  #                $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_ions.a $(G4NOSTATIC_MODE) \
+  #                $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_limiters.a $(G4NOSTATIC_MODE) \
+  #                $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_stopping.a $(G4NOSTATIC_MODE) \
+  #                $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_builders.a $(G4NOSTATIC_MODE) \
+  #                $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_factory.a $(G4NOSTATIC_MODE) \
+  #                $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4physlist_util.a $(G4NOSTATIC_MODE)
+  #   endif
+  # endif
 endif
 
 # LDLIBS3 contains the first set of low level libraries...

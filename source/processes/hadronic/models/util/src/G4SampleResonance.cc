@@ -59,7 +59,7 @@ G4double G4SampleResonance::GetMinimumMass(const G4ParticleDefinition* p) const
 		{
 			// G4cout << "--> request for " << p->GetParticleName() << G4endl;
 
-			const G4DecayTable* theDecays = const_cast<G4ParticleDefinition*>(p)->GetDecayTable();
+			const G4DecayTable* theDecays = p->GetDecayTable();
 			const G4int nDecays = theDecays->entries();
 
 			for (G4int i=0; i<nDecays; i++)

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4RPGInelastic.hh 81944 2014-06-06 15:57:38Z gcosmo $
 //
 // Author: D. H. Wright
 // Date:   26 May 2007
@@ -48,6 +48,8 @@
 #include "G4RPGTwoBody.hh"
 #include "G4RPGStrangeProduction.hh"
 #include "G4RPGPionSuppression.hh"
+
+enum{ GHADLISTSIZE=256};
 
 
 class G4RPGInelastic : public G4HadronicInteraction

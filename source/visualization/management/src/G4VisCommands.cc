@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc 75567 2013-11-04 11:35:11Z gcosmo $
+// $Id: G4VisCommands.cc 87360 2014-12-01 16:07:16Z gcosmo $
 
 // /vis/ top level commands - John Allison  5th February 2001
 
@@ -36,6 +36,9 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4RunManager.hh"
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#endif
 #include "G4Run.hh"
 #include "G4UIsession.hh"
 #include "G4Trajectory.hh"
@@ -168,18 +171,22 @@ void G4VisCommandList::SetNewValue (G4UIcommand*, G4String newValue)
   "\n  \"/vis/filtering/trajectories/create/attributeFilter\" commands"
   "\nand by picking:"
   << G4endl;
-  G4cout << G4TrajectoriesModel().GetAttDefs();
-  G4cout << G4RichTrajectory().GetAttDefs()
-  << G4RichTrajectoryPoint().GetAttDefs();
-  G4cout << G4SmoothTrajectory().GetAttDefs()
-  << G4SmoothTrajectoryPoint().GetAttDefs();
-  G4cout << G4Trajectory().GetAttDefs()
-  << G4TrajectoryPoint().GetAttDefs();
+  G4cout
+  << *G4TrajectoriesModel().GetAttDefs();
+  G4cout
+  << *G4RichTrajectory().GetAttDefs()
+  << *G4RichTrajectoryPoint().GetAttDefs();
+  G4cout
+  << *G4SmoothTrajectory().GetAttDefs()
+  << *G4SmoothTrajectoryPoint().GetAttDefs();
+  G4cout
+  << *G4Trajectory().GetAttDefs()
+  << *G4TrajectoryPoint().GetAttDefs();
 
   G4cout <<
-  "\nAttributes available for touchables by picking:"
-  << G4endl;
-  G4cout << G4PhysicalVolumeModel().GetAttDefs();
+  "\nGeometry attributes available for touchables by picking:\n";
+  G4cout
+  << *G4PhysicalVolumeModel().GetAttDefs();
 
   if (verbosity < G4VisManager::parameters)
     G4cout <<
@@ -241,13 +248,17 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   G4RunManager* runManager = G4RunManager::GetRunManager();
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsMultithreadedApplication())
+  { runManager = G4MTRunManager::GetMasterRunManager(); }
+#endif
   const G4Run* run = runManager? runManager->GetCurrentRun(): 0;
   const std::vector<const G4Event*>* events = run? run->GetEventVector(): 0;
   size_t nKeptEvents = events? events->size(): 0;
 
   if (!nKeptEvents) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<
+      G4cerr <<
 	"ERROR: G4VisCommandReviewKeptEvents::SetNewValue: No kept events,"
 	"\n  or kept events not accessible."
 	     << G4endl;
@@ -258,7 +269,7 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
   G4VViewer* viewer = fpVisManager->GetCurrentViewer();
   if (!viewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<
+      G4cerr <<
   "ERROR: No current viewer - \"/vis/viewer/list\" to see possibilities."
              << G4endl;
     }
@@ -268,7 +279,7 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout << "ERROR: No current scene.  Please create one." << G4endl;
+      G4cerr << "ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }

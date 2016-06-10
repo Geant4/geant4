@@ -42,11 +42,12 @@
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
-#include "Randomize.hh"
+#include "tls.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class XrayFluoRunAction;
+
 class XrayFluoSensorHit : public G4VHit
 {
 public:
@@ -75,22 +76,22 @@ private:
 
 typedef G4THitsCollection<XrayFluoSensorHit> XrayFluoSensorHitsCollection;
 
-extern G4Allocator<XrayFluoSensorHit> XrayFluoSensorHitAllocator;
+extern G4ThreadLocal G4Allocator<XrayFluoSensorHit> *XrayFluoSensorHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void* XrayFluoSensorHit::operator new(size_t)
 {
-  void* aHit;
-  aHit = (void*) XrayFluoSensorHitAllocator.MallocSingle();
-  return aHit;
+  if (!XrayFluoSensorHitAllocator)
+    XrayFluoSensorHitAllocator = new G4Allocator<XrayFluoSensorHit>;
+  return (void*) XrayFluoSensorHitAllocator->MallocSingle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void XrayFluoSensorHit::operator delete(void* aHit)
 {
-  XrayFluoSensorHitAllocator.FreeSingle((XrayFluoSensorHit*) aHit);
+  XrayFluoSensorHitAllocator->FreeSingle((XrayFluoSensorHit*) aHit);
 }
 
 #endif

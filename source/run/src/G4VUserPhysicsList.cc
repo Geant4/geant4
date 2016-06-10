@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc 73604 2013-09-02 09:31:25Z gcosmo $
+// $Id: G4VUserPhysicsList.cc 87128 2014-11-25 09:00:59Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -82,7 +82,7 @@
 // size of G4VUPLData instances.
 //
 template <class G4VUPLData> G4ThreadLocal
-G4int G4VUPLSplitter<G4VUPLData>::slavetotalspace = 0;
+G4int G4VUPLSplitter<G4VUPLData>::workertotalspace = 0;
 
 // This static member is thread local. For each thread, it points to the
 // array of G4VUPLData instances.
@@ -501,6 +501,14 @@ void G4VUserPhysicsList::SetParticleCuts( G4double cut, const G4String& particle
   }
 
   G4ProductionCuts* pcuts = region->GetProductionCuts();
+  if(region!=(*(G4RegionStore::GetInstance()))[0] &&
+     pcuts==G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts())
+  { // This region had no unique cuts yet but shares the default cuts.
+    // Need to create a new object before setting the value.
+    pcuts = new G4ProductionCuts(
+     *(G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts()));
+    region->SetProductionCuts(pcuts);
+  }
   pcuts->SetProductionCut(cut,particleName);
 #ifdef G4VERBOSE
   if (verboseLevel>2){      

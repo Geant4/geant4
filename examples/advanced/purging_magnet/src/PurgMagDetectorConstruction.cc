@@ -32,7 +32,7 @@
 //    *                                       *
 //    *****************************************
 //
-// $Id: PurgMagDetectorConstruction.cc 69086 2013-04-18 07:29:59Z gcosmo $
+// $Id: PurgMagDetectorConstruction.cc 84393 2014-10-15 07:11:25Z gcosmo $
 //
 #include "PurgMagDetectorConstruction.hh"
 #include "PurgMagTabulatedField3D.hh"
@@ -84,11 +84,13 @@ PurgMagDetectorConstruction::PurgMagDetectorConstruction()
   :physiWorld(NULL), logicWorld(NULL), solidWorld(NULL),
    physiGap1(NULL), logicGap1(NULL), solidGap1(NULL),
    physiGap2(NULL), logicGap2(NULL), solidGap2(NULL),
-   physiMeasureVolume(NULL), logicMeasureVolume(NULL), solidMeasureVolume(NULL),
+   physiMeasureVolume(NULL), logicMeasureVolume(NULL), 
+   solidMeasureVolume(NULL),
    WorldMaterial(NULL), 
    GapMaterial(NULL)
     
 {
+  fField.Put(0);
   WorldSizeXY=WorldSizeZ=0;
   GapSizeX1=GapSizeX2=GapSizeY1=GapSizeY2=GapSizeZ=0;
   MeasureVolumeSizeXY=MeasureVolumeSizeZ=0;
@@ -255,32 +257,6 @@ G4VPhysicalVolume* PurgMagDetectorConstruction::ConstructCalorimeter()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 // 
-//  Magnetic Field - Purging magnet
-//
-#if MAG
-
-  static G4bool fieldIsInitialized = false;
-  if(!fieldIsInitialized)
-    {
-      G4FieldManager   *pFieldMgr;
-      // G4MagIntegratorStepper *pStepper;
-      
-      //Field grid in A9.TABLE. File must be in accessible from run urn directory. 
-      G4MagneticField* PurgMagField= new PurgMagTabulatedField3D("PurgMag3D.TABLE", zOffset);
-      
-      pFieldMgr=G4TransportationManager::GetTransportationManager()->GetFieldManager();
-      
-      G4cout<< "DeltaStep "<<pFieldMgr->GetDeltaOneStep()/mm <<"mm" <<endl;
-      
-      G4ChordFinder *pChordFinder = new G4ChordFinder(PurgMagField);
-      pFieldMgr->SetChordFinder( pChordFinder );
-      
-      pFieldMgr->SetDetectorField(PurgMagField);
-      
-      fieldIsInitialized = true;
-    }
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 // Some out prints of the setup. 
@@ -441,4 +417,28 @@ G4VPhysicalVolume* PurgMagDetectorConstruction::ConstructCalorimeter()
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void PurgMagDetectorConstruction::ConstructSDandField()
+{
+//  Magnetic Field - Purging magnet
+//
+#if MAG
+  
+  if (fField.Get() == 0)
+    {
+      //Field grid in A9.TABLE. File must be in accessible from run urn directory. 
+      G4MagneticField* PurgMagField= new PurgMagTabulatedField3D("PurgMag3D.TABLE", zOffset);
+      fField.Put(PurgMagField);
+      
+      //This is thread-local
+      G4FieldManager* pFieldMgr = 
+	G4TransportationManager::GetTransportationManager()->GetFieldManager();
+           
+      G4cout<< "DeltaStep "<<pFieldMgr->GetDeltaOneStep()/mm <<"mm" <<endl;
+      //G4ChordFinder *pChordFinder = new G4ChordFinder(PurgMagField);
 
+      pFieldMgr->SetDetectorField(fField.Get());
+      pFieldMgr->CreateChordFinder(fField.Get());
+      
+    }
+#endif
+}

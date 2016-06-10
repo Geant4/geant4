@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIySection.cc 75699 2013-11-05 13:01:52Z gcosmo $
+// $Id: G4PAIySection.cc 83400 2014-08-21 14:48:50Z gcosmo $
 //
 // 
 // G4PAIySection.cc -- class implementation file
@@ -134,7 +134,8 @@ void G4PAIySection::Initialize( const G4Material* material,
 
   if( fVerbose > 0 )
   {
-    G4cout<<"fDensity = "<<fDensity<<"\t"<<fElectronDensity<<"\t fIntervalNumber = "<<fIntervalNumber<<G4endl;
+    G4cout<<"fDensity = "<<fDensity<<"\t"<<fElectronDensity<<"\t fIntervalNumber = "
+	  <<fIntervalNumber<< " (beta*gamma)^2= " << betaGammaSq << G4endl;
   }  
   fEnergyInterval = G4DataVector(fIntervalNumber+2,0.0);
   fA1             = G4DataVector(fIntervalNumber+2,0.0);
@@ -149,7 +150,8 @@ void G4PAIySection::Initialize( const G4Material* material,
       fIntervalNumber--;
       continue;
     }
-    if( ( sandia->GetSandiaMatTablePAI(i-1,0) >= maxEnergyTransfer ) || i >= fIntervalNumber ) 
+    if( ( sandia->GetSandiaMatTablePAI(i-1,0) >= maxEnergyTransfer ) 
+	|| i >= fIntervalNumber ) 
     {
       fEnergyInterval[i] = maxEnergyTransfer;
       fIntervalNumber = i;
@@ -161,14 +163,15 @@ void G4PAIySection::Initialize( const G4Material* material,
     fA3[i]             = sandia->GetSandiaMatTablePAI(i-1,3);
     fA4[i]             = sandia->GetSandiaMatTablePAI(i-1,4);
 
-      if( fVerbose > 0 ) 
-      {
-        G4cout<<i<<"\t"<<fEnergyInterval[i]/keV<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
-             <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl;
-      }
+    if( fVerbose > 0 ) {
+      G4cout<<i<<"\t"<<fEnergyInterval[i]/keV<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
+	    <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl;
+    }
   }
-  if( fVerbose > 0 ) G4cout<<"last i = "<<i<<"; "<<"fIntervalNumber = "<<fIntervalNumber<<G4endl;   
-
+  if( fVerbose > 0 ) { 
+    G4cout<<"last i = "<<i<<"; "<<"fIntervalNumber = "
+	  <<fIntervalNumber<<G4endl;   
+  }
   if( fEnergyInterval[fIntervalNumber] != maxEnergyTransfer )
   {
       fIntervalNumber++;
@@ -182,8 +185,9 @@ void G4PAIySection::Initialize( const G4Material* material,
         <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl;
     }
   }  
-  if( fVerbose > 0 )    G4cout<<"Now checking, if two borders are too close together"<<G4endl;
-
+  if( fVerbose > 0 ) {
+    G4cout<<"Now checking, if two borders are too close together"<<G4endl;
+  }
   for( i = 1; i < fIntervalNumber; i++ )
   {
     if( fEnergyInterval[i+1]-fEnergyInterval[i] >
@@ -199,7 +203,6 @@ void G4PAIySection::Initialize( const G4Material* material,
 	      fA4[j]             = fA4[j+1];
       }
       fIntervalNumber--;
-      // i--;
     }
   }
   if( fVerbose > 0 )

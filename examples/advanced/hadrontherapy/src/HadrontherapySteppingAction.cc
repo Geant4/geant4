@@ -22,10 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
-// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
-//
 // Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
 // the *COMPLETE* version of this program, together with its documentation;
 // Hadrontherapy (both basic and full version) are supported by the Italian INFN
@@ -64,7 +60,53 @@ HadrontherapySteppingAction::~HadrontherapySteppingAction()
 
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapySteppingAction::UserSteppingAction(const G4Step* aStep)
-{ 
+{
+G4StepPoint* PreStep = aStep->GetPreStepPoint();
+G4StepPoint* PostStep = aStep->GetPostStepPoint();
+
+G4double PreStepX =PreStep->GetPosition().x();
+G4double PreStepY =PreStep->GetPosition().y();
+G4double PreStepZ =PreStep->GetPosition().z();
+G4double parentID =aStep->GetTrack()->GetParentID();
+G4double trackID =aStep->GetTrack()->GetTrackID();
+
+G4double PostStepX =PostStep->GetPosition().x();
+G4double PostStepY =PostStep->GetPosition().y();
+G4double PostStepZ  =PostStep->GetPosition().z();
+
+// positions in the global coordinate system:
+//G4ThreeVector posPreStep  = PreStep->GetPosition();
+// G4ThreeVector posPostStep = PostStep->GetPosition();
+
+G4TouchableHandle touchPreStep = PreStep->GetTouchableHandle();
+G4TouchableHandle touchPostStep = PostStep->GetTouchableHandle();
+//To get the current volume:
+G4VPhysicalVolume* volumePre = touchPreStep->GetVolume();
+G4VPhysicalVolume* volumePost =touchPostStep->GetVolume();
+
+//To get its name:
+G4String namePre = volumePre->GetName();
+ G4String namePost;
+
+if(volumePost){
+ namePost = volumePost->GetName(); 
+     }
+
+
+G4int eventNum = G4RunManager::GetRunManager() -> GetCurrentEvent() -> GetEventID();
+G4double eKin = aStep -> GetPreStepPoint() -> GetKineticEnergy();
+G4double PosX = aStep->GetTrack()->GetPosition().x();
+G4double PosY = aStep->GetTrack()->GetPosition().y();
+G4double PosZ = aStep->GetTrack()->GetPosition().z();
+G4String material= aStep -> GetTrack() -> GetMaterial() -> GetName();
+G4String volume=  aStep->GetTrack()->GetVolume()->GetName();
+G4Track* theTrack = aStep->GetTrack();	
+
+ if((namePre== "collimator")||(namePre== "PhysicExternalMagnet_1Down")||(namePre== "PhysicExternalMagnet_1")||(namePre== "PhysicMagnet_1Right")||(namePre== "PhysicMagnet_1Left")||(namePre== "PhysicExternalMagnet_2")||(namePre== "PhysicExternalMagnet_2Down")||(namePre== "PhysicMagnet_2Right")||(namePre== "PhysicMagnet_2Left")||(namePre== "PhysicExternalMagnet_3")||(namePre== "PhysicExternalMagnet_3Down")||(namePre== "PhysicMagnet_3Right")||(namePre== "PhysicMagnet_3Left")||(namePre== "PhysicExternalMagnet_4")||(namePre== "PhysicExternalMagnet_4Down")||(namePre=="physQuadChamberWall")||(namePre== "PhysicMagnet_4Right")||(namePre== "PhysicMagnet_4Left")||(namePre=="ExternalChamber")||(namePre=="collimatorFinal")||(namePre=="ExternalSlit")||(namePre=="PhysFourthQuad")||(namePre=="PhysThirdQuad")||(namePre=="PhysSecondQuad")||(namePre=="PhysFirstQuad")) 
+     {
+       theTrack -> SetTrackStatus(fKillTrackAndSecondaries);	        
+    }
+ 
  // G4TransportationManager* tManager = G4TransportationManager::GetTransportationManager();
   //G4VPhysicalVolume* pW = tManager->GetParallelWorld ("DetectorROGeometry");
 
@@ -78,20 +120,452 @@ void HadrontherapySteppingAction::UserSteppingAction(const G4Step* aStep)
    // G4cout << "Sensitive Detector: " << currentVol->GetLogicalVolume()->GetSensitiveDetector()->GetName() << G4endl;
 
 
-    /*
-    // USEFULL METHODS TO RETRIEVE INFORMATION DURING THE STEPS
-    if( (aStep->GetTLocateGlobalPointAndSeturack()->GetVolume()->GetName() == "DetectorPhys") 
-    && aStep->GetTrack()->GetDefinition()->GetParticleName() == "proton")
-    //G4int evtNb = G4RunManager::GetRunManager()->GetCurrentEvent() -> GetEventID();
+   
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////  A METHOD TO RETRIEVE INFORMATIONS ABOUT SECONDARY ELECTRONS IN DIFFERENT POINTS OF FARADAY CUP      ////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+
+    
+   
+  //if( (aStep->GetTLocateGlobalPointAndSeturack()->GetVolume()->GetName() == "PVirtualMag") 
+ if((aStep->GetTrack()->GetVolume()->GetName()=="PVirtualMag") && aStep->GetTrack()->GetDefinition()->GetParticleName() == "e-")
     {
-    G4cout << "ENERGIA:   " << aStep->GetTrack()->GetKineticEnergy() 
+      std::ofstream WriteDataIn("new200.out", std::ios::app);
+      WriteDataIn	<<   eKin             << '\t' << "   "
+			<<   eventNum         << '\t' << "   "
+			<<   PosX             << '\t' << "   "
+			<<   PosY             << '\t' << "   "
+			<<   PosZ             << '\t' << "   "
+	//<<   material         << '\t' << "   "
+	//              <<   volume           << '\t' << "   "
+			<<   G4endl;
+
+
+}
+
+// USEFULL METHODS TO RETRIEVE INFORMATION DURING THE STEPS
+
+      /*    G4cout << "ENERGIA:   " << aStep->GetTrack()->GetKineticEnergy() 
     << "   VOLUME  " << aStep->GetTrack()->GetVolume()->GetName()
     << "   MATERIALE    " <<  aStep -> GetTrack() -> GetMaterial() -> GetName()
     << "   EVENTO     " << G4RunManager::GetRunManager()->GetCurrentEvent() -> GetEventID()
     << "   POS     " << aStep->GetTrack()->GetPosition().x()
-    << G4endl;
-    }
-    */
+    << G4endl;*/
+    
+    
+
+
+
+
+
+
+if ((namePre=="PhysicEntranceWindow")   &&  
+    (aStep->GetTrack()->GetDefinition()->GetParticleName() == "e-") && (PreStep->GetStepStatus() == fGeomBoundary))
+{       
+       std::ofstream WriteDataIn("finestra.out", std::ios::app);
+       WriteDataIn	<<      eKin             << '\t' << "   "
+			<<   eventNum            << '\t' << "   "
+			<<   PreStepX            << '\t' << "   "
+			<<   PreStepY            << '\t' << "   "
+			<<   PreStepZ            << '\t' << "   "
+			<<   parentID            << '\t'  << "   "
+                        <<    trackID            << '\t'  << "   "
+			<< G4endl;
+
+       //theTrack -> SetTrackStatus(fKillTrackAndSecondaries);
+       
+      }
+   
+ if ((namePre=="PhysicCup")   &&  (aStep->GetTrack()->GetDefinition()->GetParticleName() == "e-") && (PreStep->GetStepStatus() == fGeomBoundary))
+{
+      
+       std::ofstream WriteDataBack("fondo.out", std::ios::app);
+       WriteDataBack	<<      eKin             << '\t' << "   "
+			<<   eventNum            << '\t' << "   "
+			<<   PreStepX            << '\t' << "   "
+			<<   PreStepY            << '\t' << "   "
+			<<   PreStepZ            << '\t' << "   "
+			<<   parentID            << '\t'  << "   "
+                        <<    trackID            << '\t'  << "   "
+			<< G4endl;
+      
+    
+       //theTrack -> SetTrackStatus(fKillTrackAndSecondaries);
+ }
+
+                                                            ////////////////////////////////////  VIRTUAL WINDOW  //////////////////////////////////////////////////   
+
+ if (((namePost=="PhysicVirtualWindow") && (namePre!="PhysicVirtualWindow"))  &&  
+ (aStep->GetTrack()->GetDefinition()->GetParticleName() == "e-") && (PreStep->GetStepStatus() == fGeomBoundary)) //To check that the particle has just entered in the current volume (i.e. it is at the first step in the volume; the preStepPoint is at the boundary):
+{  //(namePost=="VirtualWindow") && 
+      
+     if ((PostStepX - PreStepX)>0)
+      { 
+  
+//To check that the particle is leaving the current volume (i.e. it is at the last step in the volume; the postStepPoint is at the boundary):
+// if (PostStep->GetStepStatus() == fGeomBoundary)
+
+      
+      
+ 
+       std::ofstream WriteDataIn("DatiFCWindowIn.out", std::ios::app);
+       WriteDataIn	<<      eKin             << '\t' << "   "
+			<<   eventNum            << '\t' << "   "
+			<<   PostStepX            << '\t' << "   "
+			<<   PostStepY            << '\t' << "   "
+			<<   PostStepZ            << '\t' << "   "
+                        //<<   direction.x()            << '\t'  << "   "
+                        //<<   direction.y()            << '\t'  << "   "
+                        //<<   direction.z()            << '\t'  << "   "
+			<<   parentID            << '\t'  << "   "
+                        <<    trackID            << '\t'  << "   "
+			<< G4endl;
+       
+      }
+    
+      else //if  ((PostStepX - PreStepX)<0)
+     {
+      
+//G4cout<<"ecco il nome del volume nella condizione Out  "<< namePre<<"   "<<namePost<<G4endl;
+      
+       std::ofstream WriteDataBack("DatiFCWindowBack.out", std::ios::app);
+       WriteDataBack	<<      eKin             << '\t' << "   "
+			<<   eventNum            << '\t' << "   "
+			<<   PostStepX            << '\t' << "   "
+			<<   PostStepY            << '\t' << "   "
+			<<   PostStepZ            << '\t' << "   "
+			<<   parentID            << '\t'  << "   "
+                        <<    trackID            << '\t'  << "   "
+			<< G4endl;
+      
+     }
+}
+
+
+
+                                                           /////////////////////////////////////////  proton in window //////////////////////////////////////////////////
+
+/*
+if ((namePost=="SpectrumPVolume") && (namePre!="SpectrumPVolume")  &&  
+   (aStep->GetTrack()->GetDefinition()->GetParticleName() == "proton"))//&& (PreStep->GetStepStatus() == fGeomBoundary)To check that the particle has just entered in the current volume (i.e. it is at the first step in the volume; the preStepPoint is at the boundary):
+{  //(namePost=="VirtualVolumeWindow") && 
+      
+    
+  
+//To check that the particle is leaving the current volume (i.e. it is at the last step in the volume; the postStepPoint is at the boundary):
+// if (PostStep->GetStepStatus() == fGeomBoundary)
+
+      
+*/
+/*     
+     
+       std::ofstream WriteDataP("DatiFCWindowProton.out", std::ios::app);
+       WriteDataP	<<      eKin             << '\t' << "   "
+			<<   eventNum            << '\t' << "   "
+			<<   PostStepX            << '\t' << "   "
+			<<   PostStepY            << '\t' << "   "
+			<<   PostStepZ            << '\t' << "   "
+			<<   parentID            << '\t'  << "   "
+                        <<    trackID            << '\t'  << "   "
+			<< G4endl;
+       
+      }
+*/
+ 
+if (((namePost=="PhysicVirtualWindow") && (namePre!="PhysicVirtualWindow"))  &&  
+    (aStep->GetTrack()->GetDefinition()->GetParticleName() == "proton"))//&& (PreStep->GetStepStatus() == fGeomBoundary)) //To check that the particle has just entered in the current volume (i.e. it is at the first step in the volume; the preStepPoint is at the boundary):
+{  //(namePost=="VirtualVolumeWindow") && 
+      
+    
+  
+//To check that the particle is leaving the current volume (i.e. it is at the last step in the volume; the postStepPoint is at the boundary):
+// if (PostStep->GetStepStatus() == fGeomBoundary)
+
+      
+      
+      
+// 
+      
+       std::ofstream WriteData("DatiFCAfterWindowProton.out", std::ios::app);
+       WriteData	<<      eKin             << '\t' << "   "
+			<<   eventNum            << '\t' << "   "
+			<<   PostStepX            << '\t' << "   "
+			<<   PostStepY            << '\t' << "   "
+			<<   PostStepZ            << '\t' << "   "
+			<<   parentID            << '\t'  << "   "
+                        <<    trackID            << '\t'  << "   "
+			<< G4endl;
+       
+      }
+
+
+
+
+                                                         //////////////////////////////////////////////////  GUARD RING  ///////////////////////////////////////////////////////////////
+      
+    
+if ((namePre=="PhysicGuardRing")  &&  
+     (aStep->GetTrack()->GetDefinition()->GetParticleName() == "e-")&& (PreStep->GetStepStatus() == fGeomBoundary))
+{
+      
+     if ((PostStepX - PreStepX)>0)
+    {      
+     
+      
+       std::ofstream WriteDataIn("DatiFCGuardRingIn.out", std::ios::app);
+       WriteDataIn	<<      eKin             << '\t' << "   "
+			<<   eventNum            << '\t' << "   "
+			<<   PreStepX            << '\t' << "   "
+			<<   PreStepY            << '\t' << "   "
+			<<   PreStepZ            << '\t' << "   "
+			<<   parentID            << '\t'  << "   "
+			<< G4endl;
+       
+     }
+    
+   else
+     {
+      
+
+       std::ofstream WriteDataBack("DatiFCGuardRingBack.out", std::ios::app);
+       WriteDataBack	<<      eKin             << '\t' << "   "
+			<<   eventNum            << '\t' << "   "
+			<<   PreStepX            << '\t' << "   "
+			<<   PreStepY            << '\t' << "   "
+			<<   PreStepZ            << '\t' << "   "
+			<<   parentID            << '\t' << "   "
+			<< G4endl;
+      
+     }
+} 
+
+                                                           ////////////////////////////////////////  VIRTUAL MIDDLE  ///////////////////////////////////////////////////////////////
+    
+ if (((namePost=="PhysicVirtualMiddle") && (namePre!="PhysicVirtualMiddle"))  &&
+ (aStep->GetTrack()->GetDefinition()->GetParticleName() == "e-") && (PreStep->GetStepStatus() == fGeomBoundary))
+{
+      
+     if ((PostStepX - PreStepX)>0)
+    {      
+      
+      
+// 
+      
+       std::ofstream WriteMDataIn("DatiFCMiddleIn.out", std::ios::app);
+       WriteMDataIn	<<      eKin             << '\t' << "   "
+			<<   eventNum            << '\t' << "   "
+			<<   PostStepX            << '\t' << "   "
+			<<   PostStepY            << '\t' << "   "
+			<<   PostStepZ            << '\t' << "   "
+			<<   parentID            << '\t'  << "   "
+                        <<    trackID            << '\t'  << "   "
+			<< G4endl;
+       
+     }
+    
+   else
+     {
+      
+       std::ofstream WriteMDataBack("DatiFCMiddleBack.out", std::ios::app);
+       WriteMDataBack	<<      eKin             << '\t' << "   "
+			<<   eventNum            << '\t' << "   "
+			<<   PostStepX            << '\t' << "   "
+			<<   PostStepY            << '\t' << "   "
+			<<   PostStepZ            << '\t' << "   "
+			<<   parentID            << '\t'  << "   "
+                        <<    trackID            << '\t'  << "   "
+			<< G4endl;
+      
+     }
+} 
+
+                                                         /////////////////////////////////////// VIRTUAL BOTTOM  ///////////////////////////////////////////////////////////////    
+
+ if (((namePost=="PhysicVirtualBottom") && (namePre!="PhysicVirtualBottom")) && 
+ (aStep->GetTrack()->GetDefinition()->GetParticleName() == "e-")&& (PreStep->GetStepStatus() == fGeomBoundary))
+{
+      
+     if ((PostStepX - PreStepX)>0)
+    {      
+      
+       std::ofstream WriteDataIn("DatiFCBottomIn.out", std::ios::app);
+       WriteDataIn	<<      eKin             << '\t' << "   "
+			<<   eventNum            << '\t' << "   "
+			<<   PostStepX            << '\t' << "   "
+			<<   PostStepY            << '\t' << "   "
+			<<   PostStepZ            << '\t' << "   "
+			<<   parentID            << '\t'  << "   "
+                        <<    trackID            << '\t'  << "   "
+			<< G4endl;
+       
+     }
+    
+   else
+     {
+      
+//G4cout<<"ecco il nome del volume nella condizione Back  "<< namePre<<"   "<<namePost<<G4endl;
+      
+       std::ofstream WriteDataBack("DatiFCBottomBack.out", std::ios::app);
+       WriteDataBack	<<      eKin             << '\t' << "   "
+			<<   eventNum            << '\t' << "   "
+			<<   PostStepX            << '\t' << "   "
+			<<   PostStepY            << '\t' << "   "
+			<<   PostStepZ            << '\t' << "   "
+                        //<<   direction.x()            << '\t'  << "   "
+                        //<<   direction.y()            << '\t'  << "   "
+                        //<<   direction.z()            << '\t'  << "   "
+			<<   parentID            << '\t'  << "   "
+                        <<    trackID            << '\t'  << "   "
+			<< G4endl;
+      
+     }
+} 
+
+
+
+                                                         //////////////////////////////////////////////////  Dose Calculation  ///////////////////////////////////////////////////////////////
+
+//namePre!=("Cup")
+ if (((namePost=="PhysicCup") && (namePre!="PhysicCup")) &&
+     (aStep->GetTrack()->GetDefinition()->GetParticleName() == "proton") && (PreStep->GetStepStatus() == fGeomBoundary)) //|| (namePre=="Cup") && )
+{
+
+ std::ofstream Carica("CaricaRaccolta.out", std::ios::app);
+                 Carica	<<      eKin             << '\t' << "   "
+			<<   eventNum            << '\t' << "   "
+			<<   PostStepX            << '\t' << "   "
+			<<   PostStepY            << '\t' << "   "
+			<<   PostStepZ            << '\t' << "   "
+			<<   parentID            << '\t'  << "   "
+                        <<    trackID            << '\t'  << "   "
+			<< G4endl;
+
+
+}
+
+//namePre!=("PhysicFaradayCupBottom")
+ if (((namePost=="PhysicFaradayCupBottom") && (namePre!="PhysicFaradayCupBottom"))&& 
+    (aStep->GetTrack()->GetDefinition()->GetParticleName() == "proton") && (PreStep->GetStepStatus() == fGeomBoundary)) // || (namePre=="cup") && )
+{
+
+ std::ofstream CaricaLatFC("CaricaRaccoltaLatFC.out", std::ios::app);
+                 CaricaLatFC	<<      eKin             << '\t' << "   "
+			<<   eventNum            << '\t' << "   "
+			<<   PostStepX            << '\t' << "   "
+			<<   PostStepY            << '\t' << "   "
+			<<   PostStepZ            << '\t' << "   "
+			<<   parentID            << '\t'  << "   "
+                        <<    trackID            << '\t'  << "   "
+			<< G4endl;
+
+
+}
+
+
+
+ if (((namePre=="PhysicFaradayCupBottom") || (namePre=="PhysicCup")) && ((aStep->GetTrack()->GetDefinition()->GetParticleName() == "e-") && (PreStep->GetStepStatus() == fGeomBoundary)))
+{
+      
+     if ((PostStepX - PreStepX)>0)
+    {      
+      
+       std::ofstream WriteDataIn("DatiFCConeBottomCupIn.out", std::ios::app);
+       WriteDataIn	<<      eKin             << '\t' << "   "
+			<<   eventNum            << '\t' << "   "
+			<<   PreStepX            << '\t' << "   "
+			<<   PreStepY            << '\t' << "   "
+			<<   PreStepZ            << '\t' << "   "
+			<<   parentID            << '\t'  << "   "
+			<< G4endl;
+       
+     }
+    
+   else
+     {
+      
+//G4cout<<"ecco il nome del volume nella condizione Back  "<< namePre<<"   "<<namePost<<G4endl;
+      
+       std::ofstream WriteDataBack("DatiFCConeBottomCupBack.out", std::ios::app);
+       WriteDataBack	<<      eKin             << '\t' << "   "
+			<<   eventNum            << '\t' << "   "
+			<<   PreStepX            << '\t' << "   "
+			<<   PreStepY            << '\t' << "   "
+			<<   PreStepZ            << '\t' << "   "
+			<<   parentID            << '\t'  << "   "
+			<< G4endl;
+      
+     }
+}
+
+                                                    /////////////////////////////////////////////////  VIRTUAL OVER BOTTOM  ///////////////////////////////////////////////////////////////
+    
+   
+if ((namePre=="PhysicVirtualOverBottom")  &&  
+    (aStep->GetTrack()->GetDefinition()->GetParticleName() == "e-")&& (PreStep->GetStepStatus() == fGeomBoundary))
+{
+      
+     if ((PostStepX - PreStepX)>0)
+    {      
+      
+      
+// 
+      
+       std::ofstream WriteDataIn("DatiFCOverBottomIn.out", std::ios::app);
+       WriteDataIn	<<      eKin             << '\t' << "   "
+			<<   eventNum            << '\t' << "   "
+			<<   PreStepX            << '\t' << "   "
+			<<   PreStepY            << '\t' << "   "
+			<<   PreStepZ            << '\t' << "   "
+			<<   parentID            << '\t'  << "   "
+                        <<    trackID            << '\t'  << "   "
+			<< G4endl;
+       
+     }
+    
+   else
+     {
+      
+//G4cout<<"ecco il nome del volume nella condizione Back  "<< namePre<<"   "<<namePost<<G4endl;
+      
+       std::ofstream WriteDataBack("DatiFCOverBottomBack.out", std::ios::app);
+       WriteDataBack	<<      eKin             << '\t' << "   "
+			<<   eventNum            << '\t' << "   "
+			<<   PreStepX            << '\t' << "   "
+			<<   PreStepY            << '\t' << "   "
+			<<   PreStepZ            << '\t' << "   "
+			<<   parentID            << '\t'  << "   "
+                        <<    trackID            << '\t'  << "   "
+			<< G4endl;
+      
+     }
+     
+     
+}
+
+
+                                                    /////////////////////////////////////////////  VIRTUAL LATERAL  ///////////////////////////////////////////////////////////////
+   
+
+if (((namePost=="PhysicVirtualLateral") && (namePre!="PhysicVirtualLateral"))&&
+    (aStep->GetTrack()->GetDefinition()->GetParticleName() == "e-") && (PreStep->GetStepStatus() == fGeomBoundary))
+{
+     
+      
+       std::ofstream WriteDataIn("DatiFCLateral.out", std::ios::app);
+       WriteDataIn	<<      eKin             << '\t' << "   "
+			<<   eventNum            << '\t' << "   "
+			<<   PostStepX            << '\t' << "   "
+			<<   PostStepY            << '\t' << "   "
+			<<   PostStepZ            << '\t' << "   "
+			<<   parentID            << '\t'  << "   "
+                        <<    trackID            << '\t'  << "   "
+			<< G4endl;
+
+       
+     }
+
+
 
     if( aStep->GetTrack()->GetVolume()->GetName() == "NewDetectorPhys"){
 #ifdef G4ANALYSIS_USE_ROOT

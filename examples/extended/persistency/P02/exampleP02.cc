@@ -27,7 +27,7 @@
 /// \brief Main program of the persistency/P02 example
 //
 //
-// $Id: exampleP02.cc 68025 2013-03-13 13:43:46Z gcosmo $
+// $Id: exampleP02.cc 82291 2014-06-13 15:20:32Z gcosmo $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,8 +35,10 @@
 
 #include "ExP02DetectorConstruction.hh"
 #include "ExP02DetConstrReader.hh"
-#include "ExP02PhysicsList.hh"
 #include "ExP02PrimaryGeneratorAction.hh"
+
+#include "FTFP_BERT.hh"
+
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -56,7 +58,7 @@ int main(int argc, char** argv)
 
   if(argc==1)
   {
-    std::cout << "Please give 'write' or 'read' as argument " << std::endl;
+    G4cout << "Please give 'write' or 'read' as argument " << G4endl;
     return 0;
   }
 
@@ -72,7 +74,7 @@ int main(int argc, char** argv)
   }
   else
   {
-    std::cout << "Wrong argument!" << std::endl;
+    G4cout << "Wrong argument!" << G4endl;
     return 0;
   }
 
@@ -81,7 +83,9 @@ int main(int argc, char** argv)
 
   // UserInitialization classes (mandatory)
   runManager->SetUserInitialization(det);
-  runManager->SetUserInitialization(new ExP02PhysicsList);
+
+  G4VModularPhysicsList* physicsList = new FTFP_BERT;
+  runManager->SetUserInitialization(physicsList);
   
 #ifdef G4VIS_USE
   // Visualization, if you choose to have it!

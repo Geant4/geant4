@@ -1,0 +1,130 @@
+
+#######################
+# Set of the verboses # 
+#######################
+#
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 1
+/event/verbose 0
+
+###########################################################################################################
+#					ACTIVATED PHYSICS MODELS
+/Physics/addPhysics standard_opt4
+
+/geometrySetup/selectGeometry LaserDriven
+
+# Initialize geometry and physic 
+/run/initialize
+##########################################################################################################
+##########Cut ##########
+
+/run/setCut 0.01 mm
+
+# Set cuts ONLY inside the detector
+#
+#/run/setCutForRegion DetectorLog 0.1 mm
+
+/Step/waterPhantomStepMax 1 mm 
+
+
+############### Input proton beam at the entrance of Faraday Cup after ESS 
+
+/gps/particle proton
+/gps/pos/type Beam 
+/gps/pos/shape Circle
+/gps/pos/centre -175. 0.0 0.0 mm
+/gps/pos/radius 1.5 mm
+
+#/gps/ang/rot1 0 0 1
+#/gps/ang/rot2 0 1 0
+
+#/gps/pos/rot1 0 0 1
+#/gps/pos/rot2 0 1 0    
+
+########### The beam axis after the ESS final collimator is at 1.5 deg respect to the x-axis in the z direction ###########
+          
+/gps/ang/rot1 -0.0261 0 0.999
+/gps/ang/rot2  0 0.999 -0.0261
+
+/gps/pos/rot1  -0.026 0 0.999
+/gps/pos/rot2 0 0.999 -0.026  
+
+############################### Input after last collimator 4 MeV ###############################
+
+/gps/ang/type iso
+/gps/ang/mintheta 0 deg 
+/gps/ang/maxtheta 0.7 deg 
+
+/gps/ene/type Arb
+/gps/hist/type arb
+
+/gps/hist/point 3.93962	0.149951784
+/gps/hist/point 4.02586	0.486981678
+/gps/hist/point 4.1121	0.870781099
+/gps/hist/point 4.19834	0.949373192
+/gps/hist/point 4.28458	0.910318226
+/gps/hist/point 4.37082	0.864995178
+/gps/hist/point 4.45706	1
+/gps/hist/point 4.5433	0.884763742
+/gps/hist/point 4.62954	0.467213115
+/gps/hist/point 4.71578	0.141755063
+/gps/hist/inter Lin
+################################################################################################
+
+
+############################### Input after last collimator 7 MeV ###############################
+
+#/gps/ang/type iso
+#/gps/ang/mintheta 0 deg 
+#/gps/ang/maxtheta 0.7 deg 
+
+#/gps/ene/type Arb
+#/gps/hist/type arb
+
+#/gps/hist/point 6.04803	0.075220186
+#/gps/hist/point 6.22209	0.309688169
+#/gps/hist/point 6.39615	0.675791478
+#/gps/hist/point 6.57021	1
+#/gps/hist/point 6.74427	0.8543204
+#/gps/hist/point 6.91833	0.759581052
+#/gps/hist/point 7.09239	0.59604856
+#/gps/hist/point 7.26645	0.711259224
+#/gps/hist/point 7.44051	0.501309212
+#/gps/hist/point 7.61457	0.130445132
+
+#/gps/hist/inter Lin
+
+##################################################################################################
+
+
+
+
+
+############################################## 
+/vis/scene/create 
+/vis/open OGL 
+/vis/viewer/set/background white
+/vis/viewer/set/viewpointThetaPhi 60 130
+/vis/viewer/zoom 1.0
+/vis/viewer/panTo -.27 -.0
+/vis/scene/add/axes 0 0 0 1 m
+/vis/scene/add/trajectories
+/vis/scene/endOfRunAction accumulate 
+/vis/modeling/trajectories/create/drawByCharge
+/vis/scene/endOfEventAction accumulate -1
+/vis/viewer/update
+
+###################################################
+#
+/changePhantom/position 100 100 0 cm
+/changePhantom/size 40 40 40  cm
+/changeDetector/size 4 4 4 cm
+/changeDetector/voxelSize 1 40 40 mm
+
+/changeDetector/displacement 0 18 18 cm
+/changePhantom/update
+/event/printEventNumber 10
+
+/run/beamOn 100
+

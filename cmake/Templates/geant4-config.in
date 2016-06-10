@@ -77,11 +77,22 @@ vis_libs="-lG4Tree \
 cflags="@CMAKE_CXX_FLAGS@"
 feature_list=""
 
+# - CXX Standard
+geant4_cxx_std="@GEANT4_BUILD_CXXSTD@"
+
+# - static libs
+have_staticlibs="@G4_BUILTWITH_STATICLIBS@"
+feature_list="${feature_list} staticlibs[${have_staticlibs}]"
+# No action as yet
+
 # - multithreading
 have_multithreading="@G4_BUILTWITH_MULTITHREADING@"
 feature_list="${feature_list} multithreading[${have_multithreading}]"
 if test "x${have_multithreading}" = "xyes" ; then
+  geant4_tls_model="@GEANT4_BUILD_TLS_MODEL@"
   cflags="${cflags} -DG4MULTITHREADED"
+else
+  geant4_tls_model=""
 fi
 
 # - Includes and Libs
@@ -135,6 +146,14 @@ if test "x${have_expat}" = "xyes" ; then
   libs="${libs} -lG4expat"
 fi
 
+# - ZLIB
+have_zlib="@G4_BUILTWITH_ZLIB@"
+feature_list="${feature_list} zlib[${have_zlib}]"
+
+if test "x${have_zlib}" = "xyes" ; then
+  libs="${libs} -lG4zlib"
+fi
+
 # - GDML
 have_gdml="@G4_BUILTWITH_GDML@"
 feature_list="${feature_list} gdml[${have_gdml}]"
@@ -145,9 +164,13 @@ fi
 
 # - USolids
 have_usolids="@G4_BUILTWITH_USOLIDS@"
+have_internal_usolids="@G4_BUILTWITH_BUILTIN_USOLIDS@"
 feature_list="${feature_list} usolids[${have_usolids}]"
 if test "x${have_usolids}" = "xyes" ; then
   cflags="-DG4GEOM_USE_USOLIDS ${cflags}"
+fi
+if test "x${have_internal_usolids}" = "xyes" ; then
+  libs="${libs} -lG4geomUSolids"
 fi
 
 # - G3toG4
@@ -226,9 +249,13 @@ fi
 # Datasets
 # - List creation for sh compatibility, see:
 #    https://wiki.ubuntu.com/DashAsBinSh
+# Note however that the guide in the link uses the GNU awk extension
+# 'length' to find the number of elements in the array. This will fail
+# on other awk implementations. Use standard feature of split function
+# returning number of elements.
 dataset_url="@GEANT4_DATASETS_URL@"
 dataset_timeout="@GEANT4_INSTALL_DATA_TIMEOUT@"
-dataset_list=$(awk 'BEGIN { split( "@GEANT4_CONFIG_DATASET_DESCRIPTIONS@", array, ";"); for (i=1;i<=length(array);i++) { print array[i]; } }')
+dataset_list=$(awk 'BEGIN { n = split( "@GEANT4_CONFIG_DATASET_DESCRIPTIONS@", array, ";"); for (i=1;i<=n;i++) { print array[i]; } }')
 
 #-----------------------------------------------------------------------
 # function print_datasets
@@ -408,6 +435,8 @@ help()
 Usage: geant4-config [OPTION...]
   --prefix                output installation prefix of Geant4
   --version               output version for Geant4
+  --cxxstd                C++ Standard compiled against
+  --tls-model             Thread Local Storage model used
   --libs                  output all linker flags
   --cflags                output all preprocessor
                           and compiler flags
@@ -485,6 +514,14 @@ while test $# -gt 0 ; do
       echo ${version}
       ;;
 
+    --cxxstd)
+      echo ${geant4_cxx_std}
+      ;;
+
+    --tls-model)
+      echo ${geant4_tls_model}
+      ;;
+
     --libs)
       echo "-L${libdir}" ${vis_libs} ${libs}
       ;;
@@ -505,6 +542,9 @@ while test $# -gt 0 ; do
       shift
 
       case "$1" in
+        static)
+          echo ${have_staticlibs}
+          ;;
         multithreading)
           echo ${have_multithreading}
           ;;
@@ -514,11 +554,17 @@ while test $# -gt 0 ; do
         expat)
           echo ${have_expat}
           ;;
+        zlib)
+          echo ${have_zlib}
+          ;;
         gdml)
           echo ${have_gdml}
           ;;
         usolids)
           echo ${have_usolids}
+          ;;
+        g3tog4)
+          echo ${have_g3tog4}
           ;;
         qt)
           echo ${have_qt}

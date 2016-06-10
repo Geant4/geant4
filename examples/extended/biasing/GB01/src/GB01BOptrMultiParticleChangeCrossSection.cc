@@ -30,6 +30,8 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 
+#include "G4SystemOfUnits.hh"
+
 GB01BOptrMultiParticleChangeCrossSection::GB01BOptrMultiParticleChangeCrossSection()
   : G4VBiasingOperator("TestManyExponentialTransform")
 {}
@@ -60,14 +62,14 @@ GB01BOptrMultiParticleChangeCrossSection::
 ProposeOccurenceBiasingOperation(const G4Track* track,
                                  const G4BiasingProcessInterface* callingProcess)
 {
-  // -- examples of limitations imposed to applied the biasing:
+  // -- examples of limitations imposed to apply the biasing:
   // -- limit application of biasing to primary particles only:
   if ( track->GetParentID() != 0 ) return 0;
   // -- limit to at most 5 biased interactions:
   if ( fnInteractions > 4 )        return 0;
   // -- and limit to a weight of at least 0.05:
   if ( track->GetWeight() < 0.05 ) return 0;
-
+  
   if ( fCurrentOperator ) return fCurrentOperator->
                             GetProposedOccurenceBiasingOperation(track, callingProcess);
   else                    return 0;

@@ -54,7 +54,7 @@ class XrayFluoPlanePrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
 
-    XrayFluoPlanePrimaryGeneratorAction(XrayFluoPlaneDetectorConstruction*); 
+    XrayFluoPlanePrimaryGeneratorAction(const XrayFluoPlaneDetectorConstruction*); 
    
    ~XrayFluoPlanePrimaryGeneratorAction();
 
@@ -78,7 +78,7 @@ private:
   G4ParticleGun*                particleGun;	  
 
   //pointer to the geometry
-  XrayFluoPlaneDetectorConstruction*    XrayFluoDetector;  
+  const XrayFluoPlaneDetectorConstruction*    XrayFluoDetector;  
   
   //messenger of this class
   XrayFluoPlanePrimaryGeneratorMessenger* gunMessenger; 

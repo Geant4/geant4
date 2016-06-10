@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDefStore.cc 69802 2013-05-15 14:52:57Z gcosmo $
+// $Id: G4AttDefStore.cc 78955 2014-02-05 09:45:46Z gcosmo $
 
 #include "G4AttDefStore.hh"
 
@@ -36,7 +36,7 @@ G4ThreadLocal
 std::map<G4String,std::map<G4String,G4AttDef>*> *m_defsmaps = 0;
 
 std::map<G4String,G4AttDef>*
-GetInstance(G4String storeKey, G4bool& isNew)
+GetInstance(const G4String& storeKey, G4bool& isNew)
 {
   if (!m_defsmaps)
     m_defsmaps = new std::map<G4String,std::map<G4String,G4AttDef>*>;
@@ -71,10 +71,10 @@ G4bool GetStoreKey
   for (i = m_defsmaps->begin(); i != m_defsmaps->end(); ++i)
     {
       if (i->second == definitions)
-	{
-	  key = i->first;
-	  return true;
-	}
+        {
+          key = i->first;
+          return true;
+        }
     }
 
   return false;

@@ -44,12 +44,13 @@ class G4VH1Manager : public G4BaseAnalysisManager
 {
   // Disable using the object managers outside 
   friend class G4VAnalysisManager;
+  friend class G4VAnalysisReader;
 
   protected:
     G4VH1Manager(const G4AnalysisManagerState& state);
     virtual ~G4VH1Manager();
    
-    // Methods for handling histogrammes
+    // Methods for handling histograms
     virtual G4int CreateH1(const G4String& name, const G4String& title,
                            G4int nbins, G4double xmin, G4double xmax,
                            const G4String& unitName = "none",

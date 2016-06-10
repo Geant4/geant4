@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiscreteGammaDeexcitation.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4DiscreteGammaDeexcitation.hh 85841 2014-11-05 15:35:06Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file
@@ -62,41 +62,35 @@
 #include "G4DiscreteGammaTransition.hh"
 #include "G4Fragment.hh"
 
-
 class G4NuclearLevelManager;
+class G4NuclearLevelStore;
+class G4DiscreteGammaTransition;
 
 class G4DiscreteGammaDeexcitation : public G4VGammaDeexcitation {
 public:
 
-  // Constructor
   G4DiscreteGammaDeexcitation();
 
-  // Destructor
   virtual ~G4DiscreteGammaDeexcitation();
 
-  // Functions
+  virtual G4bool CanDoTransition(G4Fragment* nucleus);
 
-public:
+  inline void SetICM(G4bool hl)  { icm = hl; };
 
-  virtual G4VGammaTransition * CreateTransition();
-
-  virtual G4bool CanDoTransition();
-
-  inline void SetICM(G4bool hl) { _icm = hl; };
-
-  inline void SetRDM(G4bool hl) { _rdm = hl; };
+  inline void SetRDM(G4bool hl)  { rdm = hl; };
   
-  inline void SetHL(G4double hl) { _max_hl = hl; };
+  inline void SetHL(G4double hl) { maxhl = hl; };
 
 private:
 
-  G4int _nucleusZ;
-  G4int _nucleusA;
-  G4double _tolerance;
-  G4double _max_hl;
-  G4bool _icm;
-  G4bool _rdm;
-  G4NuclearLevelManager * _levelManager;
+  G4int nucleusZ;
+  G4int nucleusA;
+  G4double maxhl;
+  G4bool icm;
+  G4bool rdm;
+  G4NuclearLevelStore* store;
+  G4NuclearLevelManager* levelManager;
+  G4DiscreteGammaTransition* dtransition; 
 };
 
 

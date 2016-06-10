@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.hh 70822 2013-06-06 08:25:05Z gcosmo $
+// $Id: G4OpticalSurface.hh 80747 2014-05-09 12:53:43Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -217,9 +217,6 @@ private:
         static const G4int phiIndexMax = 37;
 
         G4float* AngularDistribution;
-
-        // Open LUT with Material and Integer Angle
-        FILE* readLUTFileHandle;
 
         G4Physics2DVector* DichroicVector;
 

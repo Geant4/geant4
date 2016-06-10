@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationModel.cc 70171 2013-05-24 13:34:18Z gcosmo $
+// $Id: G4DNARuddIonisationModel.cc 81552 2014-06-03 08:28:18Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -34,6 +34,8 @@
 #include "G4LossTableManager.hh"
 #include "G4DNAChemistryManager.hh"
 #include "G4DNAMolecularMaterial.hh"
+#include "G4DNARuddAngle.hh"
+#include "G4DeltaAngle.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -74,6 +76,9 @@ G4DNARuddIonisationModel::G4DNARuddIonisationModel(const G4ParticleDefinition*,
     {
         G4cout << "Rudd ionisation model is constructed " << G4endl;
     }
+
+    // define default angular generator
+    SetAngularDistribution(new G4DNARuddAngle());
 
     //Mark this model as "applicable" for atomic deexcitation
     SetDeexcitationFlag(true);
@@ -402,7 +407,7 @@ G4double G4DNARuddIonisationModel::CrossSectionPerVolume(const G4Material* mater
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4DNARuddIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
-                                                 const G4MaterialCutsCouple* /*couple*/,
+                                                 const G4MaterialCutsCouple* couple,
                                                  const G4DynamicParticle* particle,
                                                  G4double,
                                                  G4double)
@@ -475,8 +480,8 @@ void G4DNARuddIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
         G4double bindingEnergy = 0;
         bindingEnergy = waterStructure.IonisationEnergy(ionizationShell);
 
+	G4int Z = 8;
         if(fAtomDeexcitation) {
-            G4int Z = 8;
             G4AtomicShellEnumerator as = fKShell;
 
             if (ionizationShell <5 && ionizationShell >1)
@@ -508,16 +513,10 @@ void G4DNARuddIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 
         G4double secondaryKinetic = RandomizeEjectedElectronEnergy(definition,k,ionizationShell);
 
-        G4double cosTheta = 0.;
-        G4double phi = 0.;
-        RandomizeEjectedElectronDirection(definition, k,secondaryKinetic, cosTheta, phi);
-
-        G4double sinTheta = std::sqrt(1.-cosTheta*cosTheta);
-        G4double dirX = sinTheta*std::cos(phi);
-        G4double dirY = sinTheta*std::sin(phi);
-        G4double dirZ = cosTheta;
-        G4ThreeVector deltaDirection(dirX,dirY,dirZ);
-        deltaDirection.rotateUz(primaryDirection);
+	G4ThreeVector deltaDirection = 
+	  GetAngularDistribution()->SampleDirectionForShell(particle, secondaryKinetic, 
+							    Z, ionizationShell,
+							    couple->GetMaterial());
 
         // Ignored for ions on electrons
         /*
@@ -623,7 +622,10 @@ G4double G4DNARuddIonisationModel::RandomizeEjectedElectronEnergy(G4ParticleDefi
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+// The following section is not used anymore but is kept for memory
+// GetAngularDistribution()->SampleDirectionForShell is used instead
 
+/*
 void G4DNARuddIonisationModel::RandomizeEjectedElectronDirection(G4ParticleDefinition* particleDefinition, 
                                                                  G4double k,
                                                                  G4double secKinetic,
@@ -650,7 +652,7 @@ void G4DNARuddIonisationModel::RandomizeEjectedElectronDirection(G4ParticleDefin
 
     phi = twopi * G4UniformRand();
 
-    //cosTheta = std::sqrt(secKinetic / maxSecKinetic);
+    // cosTheta = std::sqrt(secKinetic / maxSecKinetic);
 
     // Restriction below 100 eV from Emfietzoglou (2000)
 
@@ -658,7 +660,7 @@ void G4DNARuddIonisationModel::RandomizeEjectedElectronDirection(G4ParticleDefin
     else cosTheta = (2.*G4UniformRand())-1.;
 
 }
-
+*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 

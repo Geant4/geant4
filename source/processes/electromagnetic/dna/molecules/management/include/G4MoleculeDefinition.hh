@@ -35,7 +35,24 @@
 //                  Based on prototype of A.Mantero
 // **********************************************************************
 //
+// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
+// The code is developed in the framework of the ESA AO7146
+//
+// We would be very happy hearing from you, send us your feedback! :)
+//
+// In order for Geant4-DNA to be maintained and still open-source,
+// article citations are crucial. 
+// If you use Geant4-DNA chemistry and you publish papers about your software, 
+// in addition to the general paper on Geant4-DNA:
+//
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// we would be very happy if you could please also cite the following
+// reference papers on chemistry:
+//
+// J. Comput. Phys. 274 (2014) 841-882
+// Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
 #ifndef G4MoleculeDefinition_h
 #define G4MoleculeDefinition_h 1
@@ -46,188 +63,206 @@
 #include "G4ElectronOccupancy.hh"
 #include "G4MolecularDissociationTable.hh"
 #include "G4MolecularDissociationChannel.hh"
-#include "G4MoleculeID.hh"
+#include "G4FakeParticleID.hh"
 
 // ######################################################################
 // ###                          Molecule                              ###
 // ######################################################################
 
-class G4MolecularDecayChannel;
-class G4MolecularDecayTable;
+class G4MolecularDissociationChannel;
+class G4MolecularDissociationTable;
 class G4MolecularConfiguration;
 
 class G4MoleculeDefinition : public G4ParticleDefinition
 {
-// Class Description
-//  This is the base class for all molecules
-//  All molecules created are objects of this class.
+  // Class Description
+  //  This is the base class for all molecules
+  //  All molecules created are objects of this class.
 
-public: //With Description
-    G4MoleculeDefinition(const G4String& name,
-                         G4double mass,
-                         G4int    electronsNumber,
-                         G4int    electronicLevels,
-                         G4double diffCoeff,
-                         G4int atomsNumber = -1,
-                         G4double radius = -1,
-                         G4double lifetime = -1,
-                         G4String aType = "",
-                         G4MoleculeID ID = G4MoleculeID::Create()
-                         );
+public:
+  //With Description
+  G4MoleculeDefinition(const G4String& name,
+                       G4double mass,
+                       G4double diffCoeff,
+                       G4int charge = 0,
+                       G4int electronicLevels = 0,
+                       G4double radius = -1,
+                       G4int atomsNumber = -1,
+                       G4double lifetime = -1,
+                       G4String aType = "",
+                       G4FakeParticleID ID = G4FakeParticleID::Create());
 
-    virtual ~G4MoleculeDefinition();
+  virtual ~G4MoleculeDefinition();
 
-    // Set the electronic configuration at ground level
-    void SetLevelOccupation(G4int, G4int eNb=2);
-    // set the occupation(0(def), 1 or 2) of the level specified
-    //(levels numbering starts from 0)
+  // Set the electronic configuration at ground level
+  void SetLevelOccupation(G4int, G4int eNb = 2);
+  // set the occupation(0(def), 1 or 2) of the level specified
+  //(levels numbering starts from 0)
 
-    //methods to set/get diffusion properties
-    inline void SetDiffusionCoefficient(G4double);
-    inline G4double GetDiffusionCoefficient() const;
+  //methods to set/get diffusion properties
+  inline void SetDiffusionCoefficient(G4double);
+  inline G4double GetDiffusionCoefficient() const;
 
-    inline void SetAtomsNumber(G4int);
-    inline G4int GetAtomsNumber() const;
+  inline void SetAtomsNumber(G4int);
+  inline G4int GetAtomsNumber() const;
 
-    inline void SetVanDerVaalsRadius(G4double);
-    inline G4double GetVanDerVaalsRadius() const;
+  inline void SetVanDerVaalsRadius(G4double);
+  inline G4double GetVanDerVaalsRadius() const;
 
-    //°°°°°°°°°°°°°°°°°°°°°°°°
-    // Build the decay table
-    void AddExcitedState(const G4String&) ;
-    const G4String& GetExcitedState(const G4ElectronOccupancy*) const;
-    void AddDecayChannel(const G4String&, const G4MolecularDecayChannel*) ;
-    void AddeConfToExcitedState(const G4String&,const G4ElectronOccupancy&, double decayTime = 0.);
+  //°°°°°°°°°°°°°°°°°°°°°°°°
+  // Build the decay table
+  void AddExcitedState(const G4String&);
+  const G4String& GetExcitedState(const G4ElectronOccupancy*) const;
+  void AddDecayChannel(const G4String&, const G4MolecularDissociationChannel*);
+  void AddeConfToExcitedState(const G4String&,
+                              const G4ElectronOccupancy&,
+                              double decayTime = 0.);
 
-    //°°°°°°°°°°°°°°°°°°°°°°°°
-    // "Get" methods related to decay
-    const std::vector<const G4MolecularDecayChannel*>* GetDecayChannels(const G4ElectronOccupancy*) const;
-    const std::vector<const G4MolecularDecayChannel*>* GetDecayChannels(const G4String&) const;
+  //°°°°°°°°°°°°°°°°°°°°°°°°
+  // "Get" methods related to decay
+  const std::vector<const G4MolecularDissociationChannel*>* GetDecayChannels(const G4ElectronOccupancy*) const;
+  const std::vector<const G4MolecularDissociationChannel*>* GetDecayChannels(const G4String&) const;
 
-    //°°°°°°°°°°°°°°°°°°°°°°°°
-    // General "Get" methods
-    inline const G4ElectronOccupancy*   GetGroundStateElectronOccupancy() const;
-    inline const G4String&              GetName() const;
-    inline G4double                     GetMass() const;
-    inline const G4String&              GetType() const;
-    inline G4int                        GetNbElectrons() const;
-    inline G4int                        GetNbMolecularShells() const;
-    inline const G4MolecularDecayTable* GetDecayTable() const ;
-    inline G4MolecularDecayTable*       GetDecayTable() ;
-    inline G4double                     GetDecayTime() const;
+  //°°°°°°°°°°°°°°°°°°°°°°°°
+  // General "Get" methods
+  inline const G4ElectronOccupancy* GetGroundStateElectronOccupancy() const;
+  inline G4int GetCharge() const;
+  inline const G4String& GetName() const;
+  inline G4double GetMass() const;
+  inline const G4String& GetType() const;
+  inline G4int GetNbElectrons() const;
+  inline G4int GetNbMolecularShells() const;
+  inline const G4MolecularDissociationTable* GetDecayTable() const;
+  inline G4MolecularDissociationTable* GetDecayTable();
+  inline G4double GetDecayTime() const;
 
-protected :
-    G4MoleculeDefinition();
-    G4MoleculeDefinition(const G4MoleculeDefinition&);
+  inline void SetFormatedName(const G4String& name)
+  {
+    fFormatedName = name;
+  }
 
-private :
-    const G4MoleculeDefinition & operator=(const G4MoleculeDefinition &right);
+  inline const G4String& GetFormatedName() const
+  {
+    return fFormatedName;
+  }
+
+protected:
+  G4MoleculeDefinition();
+  G4MoleculeDefinition(const G4MoleculeDefinition&);
 
 private:
-    G4double fMass;
+  const G4MoleculeDefinition & operator=(const G4MoleculeDefinition &right);
 
-    G4int fNbOfElectrons;
-    G4int fNbOfMolecularShells;
+private:
+  G4int fCharge;
 
-    // Diffusion Coefficient in one medium only
-    // Note : For the time being, we will consider only one diffusion
-    // coefficient for the all simulation => diffusion in one medium only
-    // If the user needs to use the diffusion in different materials,
-    // she/he should contact the developpers/mainteners of this package
-    G4double fDiffusionCoefficient;
+  // Diffusion Coefficient in one medium only
+  // Note : For the time being, we will consider only one diffusion
+  // coefficient for the all simulation => diffusion in one medium only
+  // If the user needs to use the diffusion in different materials,
+  // she/he should contact the developpers/mainteners of this package
+  G4double fDiffusionCoefficient;
 
-    G4int fAtomsNb;
-    G4double fVanDerVaalsRadius;
+  G4int fAtomsNb;
+  G4double fVanDerVaalsRadius;
 
-    G4ElectronOccupancy* fElectronOccupancy;
-    G4MolecularDecayTable* fDecayTable;
+  G4String fFormatedName;
+
+  G4ElectronOccupancy* fElectronOccupancy;
+  G4MolecularDissociationTable* fDecayTable;
 };
-
 
 inline void G4MoleculeDefinition::SetDiffusionCoefficient(G4double value)
 {
-    fDiffusionCoefficient = value;
+  fDiffusionCoefficient = value;
 }
 
 inline G4double G4MoleculeDefinition::GetDiffusionCoefficient() const
 {
-    return fDiffusionCoefficient;
+  return fDiffusionCoefficient;
+}
+
+inline G4int G4MoleculeDefinition::GetCharge() const
+{
+  return fCharge;
 }
 
 inline G4double G4MoleculeDefinition::GetDecayTime() const
 {
-    return GetPDGLifeTime();
+  return GetPDGLifeTime();
 }
 
 inline void G4MoleculeDefinition::SetAtomsNumber(G4int val)
 {
-    fAtomsNb = val;
+  fAtomsNb = val;
 }
 
 inline G4int G4MoleculeDefinition::GetAtomsNumber() const
 {
-    return fAtomsNb;
+  return fAtomsNb;
 }
 
 inline void G4MoleculeDefinition::SetVanDerVaalsRadius(G4double val)
 {
-    fVanDerVaalsRadius = val;
+  fVanDerVaalsRadius = val;
 }
 
 inline G4double G4MoleculeDefinition::GetVanDerVaalsRadius() const
 {
-    return fVanDerVaalsRadius;
+  return fVanDerVaalsRadius;
 }
 
 inline const G4ElectronOccupancy* G4MoleculeDefinition::GetGroundStateElectronOccupancy() const
 {
-    return fElectronOccupancy;
+  return fElectronOccupancy;
 }
 
 inline const G4String& G4MoleculeDefinition::GetName() const
 {
 
-    return GetParticleName();
+  return GetParticleName();
 }
 
 inline G4double G4MoleculeDefinition::GetMass() const
 {
-    return fMass;
+  return GetPDGMass();
 }
 
 inline const G4String& G4MoleculeDefinition::GetType() const
 {
 
-    return GetParticleSubType();
+  return GetParticleSubType();
 }
 
 inline G4int G4MoleculeDefinition::GetNbElectrons() const
 {
+  if (fElectronOccupancy)
+  {
+    return fElectronOccupancy->GetTotalOccupancy();
+  }
 
-    return fNbOfElectrons;
+  return 0;
+  //    return fNbOfElectrons;
 }
 
 inline G4int G4MoleculeDefinition::GetNbMolecularShells() const
 {
+  if (fElectronOccupancy)
+  {
+    return fElectronOccupancy->GetSizeOfOrbit();
+  }
 
-    return fNbOfMolecularShells;
+  return 0;
 }
 
-inline const G4MolecularDecayTable* G4MoleculeDefinition::GetDecayTable() const
+inline const G4MolecularDissociationTable* G4MoleculeDefinition::GetDecayTable() const
 {
-    return fDecayTable;
+  return fDecayTable;
 }
 
-inline G4MolecularDecayTable* G4MoleculeDefinition::GetDecayTable()
+inline G4MolecularDissociationTable* G4MoleculeDefinition::GetDecayTable()
 {
-    return fDecayTable;
+  return fDecayTable;
 }
 #endif
-
-
-
-
-
-
-
 

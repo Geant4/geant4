@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66870 2013-01-14 23:38:59Z adotti $
+# $Id: sources.cmake 81056 2014-05-20 09:02:16Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -77,16 +77,13 @@ GEANT4_DEFINE_MODULE(NAME G4vis_management
         G4VisCommandsScene.hh
         G4VisCommandsSceneAdd.hh
         G4VisCommandsSceneHandler.hh
+        G4VisCommandsTouchable.hh
         G4VisCommandsTouchableSet.hh
         G4VisCommandsViewer.hh
         G4VisCommandsViewerDefault.hh
         G4VisCommandsViewerSet.hh
         G4VisExecutive.hh
         G4VisExecutive.icc
-        G4VisFeaturesOfDAWNFILE.hh
-        G4VisFeaturesOfFukuiRenderer.hh
-        G4VisFeaturesOfOpenGL.hh
-        G4VisFeaturesOfOpenInventor.hh
         G4VisFilterManager.hh
         G4VisListManager.hh
         G4VisManager.hh
@@ -112,14 +109,11 @@ GEANT4_DEFINE_MODULE(NAME G4vis_management
         G4VisCommandsScene.cc
         G4VisCommandsSceneAdd.cc
         G4VisCommandsSceneHandler.cc
+        G4VisCommandsTouchable.cc
         G4VisCommandsTouchableSet.cc
         G4VisCommandsViewer.cc
         G4VisCommandsViewerDefault.cc
         G4VisCommandsViewerSet.cc
-        G4VisFeaturesOfDAWNFILE.cc
-        G4VisFeaturesOfFukuiRenderer.cc
-        G4VisFeaturesOfOpenGL.cc
-        G4VisFeaturesOfOpenInventor.cc
         G4VisManager.cc
         G4VisStateDependent.cc
     GRANULAR_DEPENDENCIES

@@ -31,7 +31,6 @@
 
 #include "G4Polyhedra.hh"
 #include "G4UPolyhedra.hh"
-#include "G4Polyhedron.hh"
 #include "G4VPVParameterisation.hh"
 
 using CLHEP::twopi;
@@ -127,6 +126,16 @@ void G4UPolyhedra::ComputeDimensions(G4VPVParameterisation* p,
                                      const G4VPhysicalVolume* pRep)
 {
   p->ComputeDimensions(*(G4Polyhedra*)this,n,pRep);
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+
+G4VSolid* G4UPolyhedra::Clone() const
+{
+  return new G4UPolyhedra(*this);
 }
 
 

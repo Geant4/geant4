@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParameters.hh 74627 2013-10-17 07:04:38Z gcosmo $
+// $Id: G4FTFParameters.hh 86646 2014-11-14 13:29:39Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 #ifndef G4FTFParameters_h
@@ -70,11 +70,12 @@ class G4FTFParameters {
 
     void SetProjMinDiffMass( const G4double aValue );
     void SetProjMinNonDiffMass( const G4double aValue );
-    void SetProbabilityOfProjDiff( const G4double aValue );
+//    void SetProbabilityOfProjDiff( const G4double aValue );    // Uzhi Oct 2014
+    void SetProbLogDistrPrD( const G4double aValue );            // Uzhi Oct 2014
 
     void SetTarMinDiffMass( const G4double aValue ); 
     void SetTarMinNonDiffMass( const G4double aValue );
-    void SetProbabilityOfTarDiff( const G4double aValue );
+//    void SetProbabilityOfTarDiff( const G4double aValue );     // Uzhi Oct 2014
 
     void SetAveragePt2( const G4double aValue );
     void SetProbLogDistr( const G4double aValue );
@@ -119,6 +120,7 @@ class G4FTFParameters {
 
     G4double GetProjMinDiffMass();
     G4double GetProjMinNonDiffMass();
+    G4double GetProbLogDistrPrD();                               // Uzhi Oct 2014
 
     G4double GetTarMinDiffMass();
     G4double GetTarMinNonDiffMass();
@@ -165,14 +167,14 @@ class G4FTFParameters {
     G4double FTFGamma0;
 
     // Parameters of excitations
-    G4double ProcParams[4][7];
+    G4double ProcParams[5][7];
 
     G4double DeltaProbAtQuarkExchange;
     G4double ProbOfSameQuarkExchange;
 
     G4double ProjMinDiffMass;
     G4double ProjMinNonDiffMass;
-
+    G4double ProbLogDistrPrD;                                    // Uzhi Oct 2014
     G4double TarMinDiffMass;  
     G4double TarMinNonDiffMass;
 
@@ -298,6 +300,10 @@ inline void G4FTFParameters::SetTarMinNonDiffMass( const G4double aValue ) {
 
 inline void G4FTFParameters::SetAveragePt2( const G4double aValue ) {
   AveragePt2 = aValue*CLHEP::GeV*CLHEP::GeV;
+}
+
+inline void G4FTFParameters::SetProbLogDistrPrD( const G4double aValue ) {  // Uzhi Oct 2014
+  ProbLogDistrPrD = aValue;
 }
 
 inline void G4FTFParameters::SetProbLogDistr( const G4double aValue ) {
@@ -431,6 +437,10 @@ inline G4double G4FTFParameters::GetTarMinNonDiffMass() {
 
 inline G4double G4FTFParameters::GetAveragePt2() {
   return AveragePt2;
+}
+
+inline G4double G4FTFParameters::GetProbLogDistrPrD() {          // Uzhi Oct 2014
+  return ProbLogDistrPrD;
 }
 
 inline G4double G4FTFParameters::GetProbLogDistr() {

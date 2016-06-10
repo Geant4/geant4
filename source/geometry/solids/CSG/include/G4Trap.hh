@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4Trap.hh 83851 2014-09-19 10:12:12Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -96,13 +96,24 @@
 #ifndef G4Trap_HH
 #define G4Trap_HH
 
-#include "G4CSGSolid.hh"
+#include "G4Types.hh"
 
 struct TrapSidePlane
 {
     G4double a,b,c,d;    // Normal unit vector (a,b,c)  and offset (d)
         // => Ax+By+Cz+D=0  
 };
+
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UTRAP 1
+#endif
+
+#if defined(G4GEOM_USE_UTRAP)
+  #define G4UTrap G4Trap
+  #include "G4UTrap.hh"
+#else
+
+#include "G4CSGSolid.hh"
 
 class G4Trap : public G4CSGSolid
 {
@@ -283,5 +294,7 @@ class G4Trap : public G4CSGSolid
 };
 
 #include "G4Trap.icc"
+
+#endif
 
 #endif

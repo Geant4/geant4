@@ -24,15 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4HumanPhantomPhysicsList.hh 70025 2013-05-22 08:43:05Z gcosmo $
+// $Id: G4HumanPhantomPhysicsList.hh 84279 2014-10-13 07:19:58Z gcosmo $
 //
 // Authors: S. Guatelli, G. Guerrieri and M. G. Pia 
 //
-//    **********************************
-//    *                                *
+//    ******************************************
+//    *                                        *
 //    *      G4HumanPhantomPhysicsList.hh      *
-//    *                                *
-//    **********************************
+//    *                                        *
+//    ******************************************
 
 #ifndef G4HumanPhantomPhysicsList_h
 #define G4HumanPhantomPhysicsList_h 1
@@ -54,6 +54,7 @@ protected:
 
 private:
   G4VPhysicsConstructor* emPhysicsList;
+  G4VPhysicsConstructor* decPhysicsList;
 };
 #endif
 

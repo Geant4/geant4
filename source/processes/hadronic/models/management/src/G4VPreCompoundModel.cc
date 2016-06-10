@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundModel.cc 66785 2013-01-12 15:10:13Z gcosmo $
+// $Id: G4VPreCompoundModel.cc 80131 2014-04-02 14:35:47Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class file
@@ -46,3 +46,9 @@ G4VPreCompoundModel::G4VPreCompoundModel(G4ExcitationHandler* ptr,
 G4VPreCompoundModel::~G4VPreCompoundModel()
 {}
  
+void G4VPreCompoundModel::DeExciteModelDescription(std::ostream& outFile) const
+{
+   outFile << "description of DeExcite() for model derived from G4VPrecompoundModel missing"
+           << "\n";
+
+}

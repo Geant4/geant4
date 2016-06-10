@@ -16,7 +16,58 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-26th August 2014 P. Gumplinger (op-V09-06-06)
+06 November 2014 P. Gumplinger (op-V10-00-10)
+- fix Coverity error in G4OpWLS.cc
+
+27 October 2014 A. Dotti (op-V10-00-09)
+- Address problem #1675, this requires re engineering of 
+  all UI commands related to optical processes and created
+  in G4OpticalPhysics.
+- Co-working tags: xrays-V10-00-06, op-V10-00-09, phys-ctor-em-V10-00-17
+
+17th October 2014 P. Gumplinger (op-V10-00-08)
+- fix G4OpRayleigh.cc to actually set the temperature for materials other
+  than Water
+- G4OpBoundaryProcess: Add a ConstProperty "SURFACEROUGHNESS". If set,
+  the reflectivity at dielectric_dielectric surface is angular dependent
+  and calculated from:
+  exp(-pow((4*pi*theSurfaceroughness*Rindex1*cost1/wavelength),2))
+  for Rindex1 > Rindex2. Thanks to M. van Dijk (Bristol University).
+
+16th October 2014 P. Gumplinger (op-V10-00-07)
+- previous tag was committed only to /include directory
+
+10th October 2014 P. Gumplinger (op-V10-00-06)
+- G4OpRayleigh Process: This version calculates the Rayleigh scattering
+  length for more materials than just Water (although the Water default
+  is kept). To do this the user would need to specify the
+  ISOTHERMAL_COMPRESSIBILITY as a material property and optionally an
+  RS_SCALE_LENGTH (useful for testing). Code comes from Philip Graham
+  (Queen Mary University of London).
+
+9th October 2014 P. Gumplinger (op-V10-00-05)
+- G4OpBoundaryProcess allow for a Transmittance, Reflectivity and
+  Absorption on dielectric_dielectric and dielectric_metal boundaries 
+
+10th June 2014 P. Gumplinger (op-V10-00-04)
+- G4OpWLS always rebuild theIntegralTable in BuildPhysicsTable method
+- G4OpRayleigh always rebuild thePhysicsTable in BuildPhysicsTable method
+- remove the private method BuildThePhysicsTable
+
+6th June 2014 P. Gumplinger (op-V10-00-03)
+- implement the full UNIFIED reflectivity probabilities when a
+  dichroic surface reflects
+
+23rd December 2013 M. Asai (op-V10-00-02)
+- Additional protection.
+
+22nd December 2013 M. Asai (op-V10-00-01)
+- move construction of WLSTimeGeneratorProfile to the constructor of G4OpWLS.
+
+18th December 2013 P. Gumplinger (op-V10-00-00)
+- make WLSTimeGeneratorProfile and UseTimeProfile static in G4OpWLS
+
+26th August 2013 P. Gumplinger (op-V09-06-06)
 - move theStatus assignment for Dichroic where the decision is actually made
 - made the necessary and required modifications for G4OpBoundaryProcess to
   work in situations with parallel worlds
@@ -24,7 +75,7 @@ committal in the CVS repository !
   detector associated with the PostStepPoint volume when optical photons are
   detected at the entrance boundary
 
-14th June 2014 P. Gumplinger (op-V09-06-05)
+14th June 2013 P. Gumplinger (op-V09-06-05)
 - fix coverity errors in G4OpBoundaryProcess
 
 13th June 2013 P.Gumplinger (op-V09-06-04)

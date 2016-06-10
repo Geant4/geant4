@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundFragment.icc 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4VPreCompoundFragment.icc 79693 2014-03-12 13:00:49Z gcosmo $
 //
 // by V. Lara
 //
@@ -49,7 +49,7 @@ inline
 G4ReactionProduct * G4VPreCompoundFragment::GetReactionProduct() const
 {
   G4ReactionProduct * theReactionProduct =
-    new G4ReactionProduct(const_cast<G4ParticleDefinition*>(particle));
+    new G4ReactionProduct(particle);
   theReactionProduct->SetMomentum(GetMomentum().vect());
   theReactionProduct->SetTotalEnergy(GetMomentum().e());
   return theReactionProduct;

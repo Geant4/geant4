@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id: EventAction.cc 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: EventAction.cc 81932 2014-06-06 15:39:45Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -52,22 +52,21 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-EventAction::EventAction():
-  printModulo(100),
-  nSelected(0),
-  drawFlag("all"),
-  debugStarted(false)
+EventAction::EventAction()
+ : G4UserEventAction(),
+   fEventMessenger(0),
+   fSelectedEvents(),
+   fNSelected(0),
+   fDebugStarted(false)
 {
-  eventMessenger = new EventActionMessenger(this);
-  UI = G4UImanager::GetUIpointer();
-  selectedEvents.clear();
+  fEventMessenger = new EventActionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 EventAction::~EventAction()
 {
-  delete eventMessenger;
+  delete fEventMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -77,12 +76,12 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
   // New event
   G4int nEvt = evt->GetEventID();
 
-  if(nSelected>0) {
-    for(G4int i=0; i<nSelected; i++) {
-      if(nEvt == selectedEvents[i]) {
-        UI->ApplyCommand("/random/saveThisEvent");
-        UI->ApplyCommand("/tracking/verbose  2");
-        debugStarted = true;
+  if (fNSelected>0) {
+    for(G4int i=0; i<fNSelected; i++) {
+      if (nEvt == fSelectedEvents[i]) {
+        G4UImanager::GetUIpointer()->ApplyCommand("/random/saveThisEvent");
+        G4UImanager::GetUIpointer()->ApplyCommand("/tracking/verbose  2");
+        fDebugStarted = true;
         break;
       }
     }
@@ -91,25 +90,32 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
   // Initialize user actions
   HistoManager* man = HistoManager::GetPointer();
   man->BeginOfEvent(); 
-  if(man->GetVerbose() > 0 || G4int(nEvt/printModulo)*printModulo == nEvt) 
-    G4cout << "EventAction: Event # "
-           << nEvt << " started" << G4endl;
-
+  if ( man->GetVerbose() > 0 ) {
+    G4cout << "EventAction: Event # " << nEvt << " started" << G4endl;
+  }         
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void EventAction::EndOfEventAction(const G4Event*)
 {
-  if(debugStarted) {
-    UI->ApplyCommand("/tracking/verbose  0");
-    debugStarted = false;
+  if (fDebugStarted) {
+    G4UImanager::GetUIpointer()->ApplyCommand("/tracking/verbose  0");
+    fDebugStarted = false;
   }
 
   HistoManager* man = HistoManager::GetPointer();
   man->EndOfEvent(); 
   if(man->GetVerbose() > 1) 
     G4cout << "EventAction: Event ended" << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void EventAction::AddEventToDebug(G4int val)  
+{
+  fSelectedEvents.push_back(val);
+  fNSelected++;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

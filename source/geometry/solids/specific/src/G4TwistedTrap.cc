@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrap.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4TwistedTrap.cc 79492 2014-03-05 15:25:30Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -90,6 +90,7 @@ G4TwistedTrap::~G4TwistedTrap()
 G4TwistedTrap::G4TwistedTrap(const G4TwistedTrap& rhs)
   : G4VTwistedFaceted(rhs)
 {
+  fpPolyhedron = GetPolyhedron();
 }
 
 // Assignment operator
@@ -103,6 +104,7 @@ G4TwistedTrap& G4TwistedTrap::operator = (const G4TwistedTrap& rhs)
    // Copy base class data
    //
    G4VTwistedFaceted::operator=(rhs);
+   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

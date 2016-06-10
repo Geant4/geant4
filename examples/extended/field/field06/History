@@ -1,4 +1,4 @@
-// $Id: History 78053 2013-12-03 08:25:13Z gcosmo $
+// $Id: History 78302 2013-12-11 10:49:31Z gcosmo $
 // ------------------------------------------------------------------
 
      =========================================================
@@ -15,13 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-December 02, 2013
-- More fixes in gui.mac:
+December 04, 2013 I. Hrivnacova, P. Gumplinger - fieldex06-V10-00-00
+- Fixes in gui.mac:
   Let execute vis.mac first to make the command in added menus available;
-  corrected wireframe parameter
-
-November 29, 2013 - I. Hrivnacova P. Gumplinger
-- Fixed gui.mac (commented out command specific to B2 example)
+  Corrected wireframe parameter;
+  Commented out command specific to B2 example);
 - updated CMakeLists.txt
 
 Nov 4nd,  2013 P. Gumplinger - fieldex06-V09-06-09 and 10

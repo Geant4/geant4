@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExErrorDetectorConstruction.cc 68019 2013-03-13 13:32:43Z gcosmo $
+// $Id: ExErrorDetectorConstruction.cc 84599 2014-10-17 07:42:42Z gcosmo $
 //
 /// \file ExErrorDetectorConstruction.cc
 /// \brief Implementation of the ExErrorDetectorConstruction class
@@ -59,7 +59,8 @@ ExErrorDetectorConstruction::ExErrorDetectorConstruction()
   // create UserLimits
   fUserLimits = new G4UserLimits();
 
-  fMagField = new ExErrorMagneticField(G4ThreeVector(0.*kilogauss,0.*kilogauss,-1.*kilogauss));
+  fMagField = new ExErrorMagneticField(
+                    G4ThreeVector(0.*kilogauss,0.*kilogauss,-1.*kilogauss));
   fDetectorMessenger = new ExErrorDetectorMessenger(this);
 
 }
@@ -96,7 +97,7 @@ G4VPhysicalVolume* ExErrorDetectorConstruction::Construct()
   G4cout << G4endl << "The materials defined are : " << G4endl << G4endl;
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
   
-  //--------- Sizes of the principal geometrical components (solids)  --------- (half lengths)
+  //--- Sizes of the principal geometrical components (solids)  --- (half lengths)
   //double fXBEAM  = 5.*2.*cm;
   //double fXCDET  = 90.*cm;
   //double fXECAL  = 40.*cm;
@@ -185,7 +186,8 @@ G4VPhysicalVolume* ExErrorDetectorConstruction::Construct()
   //------------------------------ 
   // SOLN
   //------------------------------   
-  G4ThreeVector positionSOLN = G4ThreeVector(fXBEAM + fXCDET + fXECAL + fXSOLN/2., 0., 0.);
+  G4ThreeVector positionSOLN 
+    = G4ThreeVector(fXBEAM + fXCDET + fXECAL + fXSOLN/2., 0., 0.);
   G4Box* solidSOLN = new G4Box("SOLN",fXSOLN/2.,fYZLength,fYZLength);
   G4LogicalVolume* logicSOLN = new G4LogicalVolume(solidSOLN,al,"SOLN",0,0,0);
   new G4PVPlacement(0,             // no rotation
@@ -219,7 +221,8 @@ G4VPhysicalVolume* ExErrorDetectorConstruction::Construct()
   //------------------------------ 
   // MUON
   //------------------------------   
-  G4ThreeVector positionMUON = G4ThreeVector(fXBEAM + fXCDET + fXECAL + fXSOLN + fXHCAL + fXMUON/2., 0., 0.);
+  G4ThreeVector positionMUON 
+    = G4ThreeVector(fXBEAM + fXCDET + fXECAL + fXSOLN + fXHCAL + fXMUON/2., 0., 0.);
   G4Box* solidMUON = new G4Box("MUON",fXMUON/2.,fYZLength,fYZLength);
   G4LogicalVolume* logicMUON = new G4LogicalVolume(solidMUON,air,"MUON",0,0,0);
   new G4PVPlacement(0,             // no rotation

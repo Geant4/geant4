@@ -1,34 +1,28 @@
-$Id: exception_classification.txt 72312 2013-07-15 16:01:02Z gcosmo $
+$Id: exception_classification.txt 85317 2014-10-27 15:58:15Z gcosmo $
 
 Analysis_F001: Fatal exception when trying to create a singleton manager twice
 
-Analysis_W001: Cannot create directory for histograms or ntpuple
-Analysis_W002: Writing histogram or ntuple on file failed
-Analysis_W003: Adding ntpule row failed
+Analysis_W001: Cannot create file or directory for output
 
-Analysis_W004: Cannot create ntuple; only one ntuple supported.
-               Unsuported column type when ntuple is created from 
-               booking.
-Analysis_W005: Cannot create ntuple column; ntuple has to be created
-               first.
+Analysis_W002: Cannot create an object for output
 
-Analysis_W006: Trying to get/fill Histogram which does not exist
-Analysis_W007: Trying to get/fill Ntuple which does not exist
-Analysis_W008: Trying to get/fill Ntuple column which does not exist
+Analysis_W011: Cannot manipulate an object which does not exist
 
-Analysis_W009: Cannot set Histogram directory name or firstHistoId,
-               as some histograms already exists
-Analysis_W010: Cannot set Ntuple directory name or firstNtupleId;
-               as an ntuple already exists
-               
-Analysis_W011: The histogram ID has to be redefined in the output as
-               its generic value is not allowed in given output type
-Analysis_W012: The ntuple ID has to be redefined in the output as
-               its generic value is not allowed in given output type
+Analysis_W012: Cannot set an object name 
 
-Analysis_W013: Cannot apply histogram/ntuple attribute due to its
-               wrong definition
-Analysis_W013: Wrong histogram/ntuple attribute value
-              
-Analysis_W014: Master manager not instatiated, 
-               histogram data cannot be merged
+Analysis_W013: Cannot apply an attribute to an object
+
+Analysis_W014: Cannot access an attribute of an object
+
+Analysis_W021: Writing or closing a file has failed
+
+Analysis_W022: Writing an object on file has failed
+
+Analysis_W031: Merging data has failed
+
+Analysis_WR001: Cannot open a file for reading
+
+Analysis_WR011: Cannot access an object in a file 
+
+Analysis_WR021: Reading an object from a file has failed
+

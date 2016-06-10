@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImessenger.hh 74278 2013-10-02 15:04:18Z gcosmo $
+// $Id: G4UImessenger.hh 84281 2014-10-13 07:21:50Z gcosmo $
 //
 
 #ifndef G4UImessenger_h
@@ -89,6 +89,11 @@ class G4UImessenger
       template <typename T> T* CreateCommand(const G4String& cname, 
                                              const G4String& dsc);
 
+  protected:
+      G4bool commandsShouldBeInMaster;
+  public:
+      G4bool CommandsShouldBeInMaster() const
+      { return commandsShouldBeInMaster; }
 };
 
 template <typename T>

@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: DetectorConstruction.hh 81932 2014-06-06 15:39:45Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -74,19 +74,17 @@ private:
   DetectorConstruction & operator=(const DetectorConstruction &right);
   DetectorConstruction(const DetectorConstruction&);
 
-  G4double radius;
+  G4double fRadius;
 
-  G4Material*  targetMaterial;
-  G4Material*  worldMaterial;
+  G4Material*  fTargetMaterial;
+  G4Material*  fWorldMaterial;
 
-  CheckVolumeSD*   checkSD;
-  TargetSD*        targetSD;
+  TargetSD*        fTargetSD;
 
-  G4LogicalVolume* logicTarget;
-  G4LogicalVolume* logicCheck;
-  G4LogicalVolume* logicWorld;
+  G4LogicalVolume* fLogicTarget;
+  G4LogicalVolume* fLogicWorld;
 
-  DetectorMessenger* detectorMessenger;
+  DetectorMessenger* fDetectorMessenger;
 
 };
 

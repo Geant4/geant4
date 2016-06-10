@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -52,6 +53,7 @@
 #include <sstream>
 
 class G4INCLXXInterfaceMessenger;
+class G4INCLXXVInterfaceTally;
 
 /** \class G4INCLXXInterfaceStore
  * \brief Singleton class for configuring the INCL++ Geant4 interface.
@@ -80,7 +82,7 @@ class G4INCLXXInterfaceStore {
     /// \brief Setter for accurateProjectile
     void SetAccurateProjectile(const G4bool b);
 
-    /// \brief Setter for theMaxClusterMass
+    /// \brief Setter for the maximum cluster mass
     void SetMaxClusterMass(const G4int aMass);
 
     /// \brief Setter for cascadeMinEnergyPerNucleon
@@ -106,12 +108,8 @@ class G4INCLXXInterfaceStore {
      */
     G4double GetCascadeMinEnergyPerNucleon() const;
 
-    /** \brief Getter for ClusterMaxMass
-     *
-     * The \see{G4INCLXXInterfaceMessenger} class provides a UI command to set
-     * this parameter.
-     */
-    G4int GetMaxClusterMass() const;
+    /// \brief Getter for theConfig
+    G4INCL::Config &GetINCLConfig();
 
 
 
@@ -140,6 +138,12 @@ class G4INCLXXInterfaceStore {
      */
     void EmitBigWarning(const G4String &message) const;
 
+    /// \brief Getter for the interface tally
+    G4INCLXXVInterfaceTally *GetTally() const;
+
+    /// \brief Setter for the interface tally
+    void SetTally(G4INCLXXVInterfaceTally * const aTally);
+
   private:
 
     /** \brief Private constructor
@@ -157,15 +161,15 @@ class G4INCLXXInterfaceStore {
     ~G4INCLXXInterfaceStore();
 
     /// \brief Delete the INCL model engine
-    void DeleteModel() { delete theINCLModel; theINCLModel=NULL; }
+    void DeleteModel();
 
     /// \brief Create a new Config object from the current options
 
     static G4ThreadLocal G4INCLXXInterfaceStore *theInstance;
 
+    G4INCL::Config theConfig;
+
     G4bool accurateProjectile;
-    const G4int theMaxClusterMassDefault;
-    G4int theMaxClusterMass;
     const G4int theMaxProjMassINCL;
     G4double cascadeMinEnergyPerNucleon;
     G4double conservationTolerance;
@@ -173,6 +177,8 @@ class G4INCLXXInterfaceStore {
     G4INCLXXInterfaceMessenger *theINCLXXInterfaceMessenger;
 
     G4INCL::INCL *theINCLModel;
+
+    G4INCLXXVInterfaceTally *theTally;
 
     /// \brief Static warning counter
     G4int nWarnings;

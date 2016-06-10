@@ -20,8 +20,9 @@ endif()
 #
 include(${Geant4_USE_FILE})
 
-if(GEANT4_builtin_clhep_FOUND)
-  message(FATAL_ERROR "G4 Examples: nanobeam example requires system CLHEP --> nanobeam cannot be built")
+if(Geant4_builtin_clhep_FOUND)
+  message(STATUS "G4 Examples: CLHEP external package not found  --> nanobeam disabled")
+  return()
 endif() 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
@@ -30,7 +31,6 @@ include_directories(${PROJECT_SOURCE_DIR}/include
                     ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
-
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #

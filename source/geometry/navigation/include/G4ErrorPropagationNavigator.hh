@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorPropagationNavigator.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4ErrorPropagationNavigator.hh 86834 2014-11-19 08:27:45Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -66,7 +66,19 @@ class G4ErrorPropagationNavigator : public G4Navigator
                            const G4bool keepState = true);
       // Calls the navigation in the detector geometry and then checks
       // if the distance to surface is smaller than the proposed safety
+  
+    G4ThreeVector GetGlobalExitNormal(const G4ThreeVector& point,
+                                            G4bool* valid);
+    // Return Exit Surface Normal and validity too. Can only be called if
+    // the Navigator's last Step has crossed a volume geometrical boundary.
+    // Normal points out of the volume exited and/or into the volume entered.
 
+    //-- NOT implemented, as it is difficult to define the coordinate system:
+    // G4ThreeVector GetLocalExitNormal(G4bool* valid);
+    // G4ThreeVector GetLocalExitNormalAndCheck(const G4ThreeVector& point,
+    //                                               G4bool* valid);
+    // Convention:
+    //   The *local* normal is in the coordinate system of the *final* volume.
 };
 
 #endif

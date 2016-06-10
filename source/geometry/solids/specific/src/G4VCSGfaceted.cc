@@ -29,7 +29,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4VCSGfaceted.cc 83572 2014-09-01 15:23:27Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -56,12 +56,20 @@
 #include "G4VGraphicsScene.hh"
 #include "G4VisExtent.hh"
 
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
+}
+
 //
 // Constructor
 //
 G4VCSGfaceted::G4VCSGfaceted( const G4String& name )
   : G4VSolid(name),
-    numFace(0), faces(0), fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0),
+    numFace(0), faces(0), fCubicVolume(0.), fSurfaceArea(0.),
+    fRebuildPolyhedron(false), fpPolyhedron(0),
     fStatistics(1000000), fCubVolEpsilon(0.001), fAreaAccuracy(-1.)
 {
 }
@@ -73,7 +81,8 @@ G4VCSGfaceted::G4VCSGfaceted( const G4String& name )
 //
 G4VCSGfaceted::G4VCSGfaceted( __void__& a )
   : G4VSolid(a),
-    numFace(0), faces(0), fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0),
+    numFace(0), faces(0), fCubicVolume(0.), fSurfaceArea(0.),
+    fRebuildPolyhedron(false), fpPolyhedron(0),
     fStatistics(1000000), fCubVolEpsilon(0.001), fAreaAccuracy(-1.)
 {
 }
@@ -84,7 +93,7 @@ G4VCSGfaceted::G4VCSGfaceted( __void__& a )
 G4VCSGfaceted::~G4VCSGfaceted()
 {
   DeleteStuff();
-  delete fpPolyhedron;
+  delete fpPolyhedron; fpPolyhedron = 0;
 }
 
 
@@ -105,7 +114,7 @@ G4VCSGfaceted::G4VCSGfaceted( const G4VCSGfaceted &source )
 //
 // Assignment operator
 //
-const G4VCSGfaceted &G4VCSGfaceted::operator=( const G4VCSGfaceted &source )
+G4VCSGfaceted &G4VCSGfaceted::operator=( const G4VCSGfaceted &source )
 {
   if (&source == this) { return *this; }
   
@@ -146,6 +155,7 @@ void G4VCSGfaceted::CopyStuff( const G4VCSGfaceted &source )
   } while( ++sourceFace, ++face < faces+numFace );
   fCubicVolume = source.fCubicVolume;
   fSurfaceArea = source.fSurfaceArea;
+  fRebuildPolyhedron = false;
   fpPolyhedron = 0;
 }
 
@@ -167,6 +177,7 @@ void G4VCSGfaceted::DeleteStuff()
 
     delete [] faces;
   }
+  delete fpPolyhedron; fpPolyhedron = 0;
 }
 
 
@@ -572,11 +583,15 @@ G4double G4VCSGfaceted::GetSurfaceArea()
 G4Polyhedron* G4VCSGfaceted::GetPolyhedron () const
 {
   if (!fpPolyhedron ||
+      fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())
   {
+    G4AutoLock l(&polyhedronMutex);
     delete fpPolyhedron;
     fpPolyhedron = CreatePolyhedron();
+    fRebuildPolyhedron = false;
+    l.unlock();
   }
   return fpPolyhedron;
 }

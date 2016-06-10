@@ -40,8 +40,8 @@ class G4GeneralNNCollision : public G4CollisionComposite
   IsInCharge(const G4KineticTrack& trk1, const G4KineticTrack& trk2) const
   {
     G4bool result = false;
-    G4ParticleDefinition * aD = trk1.GetDefinition();
-    G4ParticleDefinition * bD = trk2.GetDefinition();
+    const G4ParticleDefinition * aD = trk1.GetDefinition();
+    const G4ParticleDefinition * bD = trk2.GetDefinition();
     if(  (aD==G4Proton::Proton() || aD == G4Neutron::Neutron())
        &&(bD==G4Proton::Proton() || bD == G4Neutron::Neutron()) ) result = true;
     return result;

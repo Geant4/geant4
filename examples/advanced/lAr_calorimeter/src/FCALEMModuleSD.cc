@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALEMModuleSD.cc 67976 2013-03-13 10:23:17Z gcosmo $
+// $Id: FCALEMModuleSD.cc 84602 2014-10-17 07:46:09Z gcosmo $
 //
 // 
 
@@ -31,7 +31,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include <iostream>
-#include <fstream>
+
 
 #include "FCALEMModuleSD.hh"
 
@@ -106,38 +106,15 @@ G4bool FCALEMModuleSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 void FCALEMModuleSD::EndOfEvent(G4HCofThisEvent*)
 {
   G4int NF1Tile = 0;
-  G4int AddTileP[300];
-  G4double EvisTileP[300];
   G4int i=0;
   for (i=1; i <= 1130; i++){
     if(EvisF1Tile[i] > 0.) {
       NF1Tile++;
-      AddTileP[NF1Tile] = i;
-      EvisTileP[NF1Tile] = EvisF1Tile[i];
     }
   }
 
   G4cout << "Number of F1 Tiles with Positive energy : " << NF1Tile <<  G4endl;
 
-  // Write in File
-  //--------------
-  const char * FileName = "EmModule_802_1mm.dat";
-  std::ios::openmode iostemp;
-  if(Init_state == 1) {
-    iostemp = std::ios::out;
-    Init_state++;
-  } else {
-    iostemp = std::ios::out|std::ios::app; // std::ios::app;  
-  }
-  
-  std::ofstream EmDatafile(FileName, iostemp);
-  // EmDatafile.precision(5);
-
-  EmDatafile << NF1Tile << std::endl;
-  for (i=1; i <= NF1Tile; i++) {
-    EmDatafile << AddTileP[i] << " " << EvisTileP[i]/MeV << std::endl;
-  }
-  EmDatafile.close();
 
 }
   

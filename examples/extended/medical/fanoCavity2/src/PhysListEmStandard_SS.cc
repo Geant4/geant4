@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity2/src/PhysListEmStandard_SS.cc
 /// \brief Implementation of the PhysListEmStandard_SS class
 //
-// $Id: PhysListEmStandard_SS.cc 72961 2013-08-14 14:35:56Z gcosmo $
+// $Id: PhysListEmStandard_SS.cc 83394 2014-08-21 14:39:09Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,6 +41,7 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4CoulombScattering.hh"
+#include "G4eCoulombScatteringModel.hh"
 
 #include "G4eIonisation.hh"
 #include "MyMollerBhabhaModel.hh"
@@ -91,7 +92,12 @@ void PhysListEmStandard_SS::ConstructProcess()
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetEmModel(new MyMollerBhabhaModel);
                          
-      pmanager->AddProcess(new G4CoulombScattering,  -1, -1, 1);
+      G4CoulombScattering* cs = new G4CoulombScattering();
+      G4eCoulombScatteringModel* csmod = new G4eCoulombScatteringModel();
+      csmod->SetLowEnergyThreshold(1*eV);
+      cs->SetEmModel(csmod, 1);
+      pmanager->AddProcess(cs,     -1, -1, 1);
+
       pmanager->AddProcess(eIoni,                    -1,  1, 2);
 ///      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2, 3);
             

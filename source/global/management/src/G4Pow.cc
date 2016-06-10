@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Pow.cc 74256 2013-10-02 14:24:02Z gcosmo $
+// $Id: G4Pow.cc 83383 2014-08-21 14:20:37Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -44,7 +44,9 @@
 // -------------------------------------------------------------------
 
 #include "G4Pow.hh"
+#ifdef G4MULTITHREADED
 #include "G4Threading.hh"
+#endif
 
 G4Pow* G4Pow::fpInstance = 0;
 
@@ -54,7 +56,8 @@ G4Pow* G4Pow::GetInstance()
 {
   if (fpInstance == 0)
   {
-    fpInstance = new G4Pow;
+    static G4Pow geant4pow;
+    fpInstance = &geant4pow;
   }
   return fpInstance;
 }
@@ -63,12 +66,14 @@ G4Pow* G4Pow::GetInstance()
 
 G4Pow::G4Pow()
   : onethird(1.0/3.0), max2(5)
-{
-  if(G4Threading::IsWorkerThread() == true) { 
-    G4Exception ("G4Pow::G4Pow()", "glob090", FatalException, 
-                 "Attempt to instantiate G4Pow in worker thread");
+{  
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsWorkerThread())
+  { 
+    G4Exception ("G4Pow::G4Pow()", "InvalidSetup", FatalException, 
+                 "Attempt to instantiate G4Pow in worker thread!");
   }
-
+#endif
   const G4int maxZ = 512; 
   const G4int maxZfact = 170; 
 
@@ -116,9 +121,7 @@ G4Pow::G4Pow()
 // -------------------------------------------------------------------
 
 G4Pow::~G4Pow()
-{
-  delete fpInstance; fpInstance = 0;
-}
+{}
 
 // -------------------------------------------------------------------
 

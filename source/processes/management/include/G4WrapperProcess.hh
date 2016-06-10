@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WrapperProcess.hh 71231 2013-06-12 13:06:28Z gcosmo $
+// $Id: G4WrapperProcess.hh 80787 2014-05-12 09:06:07Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -178,7 +178,8 @@ class G4WrapperProcess : public G4VProcess
    public:
       virtual void      ResetNumberOfInteractionLengthLeft();
       // reset (determine the value of)NumberOfInteractionLengthLeft
-
+      virtual void SetMasterProcess(G4VProcess* masterP);
+     // Needed for MT, forward call to underlying process 
 };
 
 inline

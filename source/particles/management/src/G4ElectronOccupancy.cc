@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectronOccupancy.cc 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4ElectronOccupancy.cc 79357 2014-02-25 10:06:54Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -38,6 +38,7 @@
 // ---------------------------------------------------------------
 
 #include "G4ElectronOccupancy.hh"
+#include <sstream>
 
 G4ThreadLocal G4Allocator<G4ElectronOccupancy> *aElectronOccupancyAllocator = 0;
 
@@ -130,4 +131,43 @@ void G4ElectronOccupancy::DumpInfo() const
     G4cout << "   " << index << "-th orbit       " 
            <<  theOccupancies[index] << G4endl;
   }
+}
+
+G4int  G4ElectronOccupancy::AddElectron(G4int orbit, G4int number)
+{
+  G4int value =0;
+  if (orbit>=theSizeOfOrbit){
+    std::ostringstream smsg;
+    smsg<<  "Orbit (" << orbit 
+	<<") exceeds the maximum("
+	<<theSizeOfOrbit-1<<")  ";
+    G4String msg = smsg.str();
+    G4Exception("G4ElectronOccupancy::AddElectron()","PART131",
+		JustWarning, msg);
+  } else if (orbit >=0) {
+    theOccupancies[orbit] += number;
+    theTotalOccupancy += number; 
+    value = number;   
+  }
+  return value;
+}
+
+G4int  G4ElectronOccupancy::RemoveElectron(G4int orbit, G4int number)
+{
+  G4int value =0;
+  if (orbit>=theSizeOfOrbit){
+    std::ostringstream smsg;
+    smsg<<  "Orbit (" << orbit 
+	<<") exceeds the maximum("
+	<<theSizeOfOrbit-1 <<") ";
+    G4String msg = smsg.str();
+    G4Exception("G4ElectronOccupancy::RemoveElectron()","PART131",
+		JustWarning, msg);
+  } else if (orbit >=0) {
+    if ( theOccupancies[orbit] < number ) number = theOccupancies[orbit];
+    theOccupancies[orbit] -= number;
+    theTotalOccupancy -= number;    
+    value = number;
+  }
+  return value;
 }

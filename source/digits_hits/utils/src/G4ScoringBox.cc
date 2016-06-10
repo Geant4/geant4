@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc 74457 2013-10-07 15:21:35Z gcosmo $
+// $Id: G4ScoringBox.cc 83518 2014-08-27 12:57:10Z gcosmo $
 //
 
 #include "G4ScoringBox.hh"
@@ -60,21 +60,6 @@ G4ScoringBox::G4ScoringBox(G4String wName)
 
 G4ScoringBox::~G4ScoringBox()
 {
-}
-
-void G4ScoringBox::Construct(G4VPhysicalVolume* fWorldPhys)
-{
-  if(fConstructed) {
-    
-    if(verboseLevel > 0)
-      G4cout << fWorldPhys->GetName() << " --- All quantities are reset."
-      << G4endl;
-    ResetScore();
-    
-  } else {
-    fConstructed = true;
-    SetupGeometry(fWorldPhys);
-  }
 }
 
 void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {

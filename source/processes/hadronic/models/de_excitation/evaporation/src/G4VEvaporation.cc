@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEvaporation.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4VEvaporation.cc 85443 2014-10-29 14:35:57Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) writen from G4Evaporation.cc (May 1998)
@@ -37,6 +37,7 @@
 
 G4VEvaporation::G4VEvaporation()
   :thePhotonEvaporation(0),OPTxs(3),useSICB(false)
+   ,theChannels(0),theChannelFactory(0)
 {}
 
 G4VEvaporation::~G4VEvaporation() 
@@ -52,6 +53,9 @@ void G4VEvaporation::SetPhotonEvaporation(G4VEvaporationChannel* ptr)
     thePhotonEvaporation = ptr;
   }
 }
+
+void G4VEvaporation::BreakFragment(G4FragmentVector*, G4Fragment*)
+{}
 
 
 

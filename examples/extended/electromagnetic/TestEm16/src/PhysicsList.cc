@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm16/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id: PhysicsList.cc 84365 2014-10-14 12:43:52Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,12 +54,18 @@
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
 
+#include "G4hMultipleScattering.hh"
+#include "G4hIonisation.hh"
+#include "G4hBremsstrahlung.hh"
+#include "G4hPairProduction.hh"
+
 #include "G4SynchrotronRadiation.hh"
 #include "G4SynchrotronRadiationInMat.hh"
 
 #include "G4StepLimiter.hh"
 
 #include "G4SystemOfUnits.hh"
+#include "G4AutoDelete.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -67,7 +73,7 @@ PhysicsList::PhysicsList()
 : G4VUserPhysicsList(),
   fMess(0)
 {
-  defaultCutValue = 1.*km;
+  SetDefaultCutValue(1.*km);
   
   fSRType = true; 
   fMess = new PhysicsListMessenger(this);
@@ -91,6 +97,22 @@ void PhysicsList::ConstructParticle()
 
   ConstructBosons();
   ConstructLeptons();
+
+// charged mesons
+  G4PionPlus::PionPlusDefinition();
+  G4PionMinus::PionMinusDefinition();
+  G4KaonPlus::KaonPlusDefinition();
+  G4KaonMinus::KaonMinusDefinition();
+
+// charged baryons
+  G4Proton::ProtonDefinition();
+  G4AntiProton::AntiProtonDefinition();
+
+// ions
+  //G4Deuteron::DeuteronDefinition();
+  //G4Triton::TritonDefinition();
+  //G4Alpha::AlphaDefinition();
+  G4GenericIon::GenericIonDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -131,10 +153,11 @@ void PhysicsList::ConstructProcess()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void PhysicsList::ConstructEM()
 {
   theParticleIterator->reset();
+  G4SynchrotronRadiation* fSync = new G4SynchrotronRadiation();
+    G4AutoDelete::Register(fSync);
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
@@ -153,9 +176,9 @@ void PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4eIonisation,               -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,           -1, 3, 3);
       if (fSRType) {
-	pmanager->AddProcess(new G4SynchrotronRadiation,      -1,-1, 4);
+        pmanager->AddProcess(fSync,    -1,-1, 4);
       } else {
-	pmanager->AddProcess(new G4SynchrotronRadiationInMat, -1,-1, 4); 
+        pmanager->AddProcess(new G4SynchrotronRadiationInMat,-1,-1, 4); 
       }
       pmanager->AddProcess(new G4StepLimiter,               -1,-1, 5);
      
@@ -166,9 +189,9 @@ void PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4eBremsstrahlung,           -1, 3, 3);
       pmanager->AddProcess(new G4eplusAnnihilation,          0,-1, 4);
       if (fSRType) {
-	pmanager->AddProcess(new G4SynchrotronRadiation,      -1,-1, 5);
+        pmanager->AddProcess(fSync,      -1,-1, 5);
       } else {
-	pmanager->AddProcess(new G4SynchrotronRadiationInMat, -1,-1, 5);
+        pmanager->AddProcess(new G4SynchrotronRadiationInMat, -1,-1, 5);
       }
       pmanager->AddProcess(new G4StepLimiter,               -1,-1, 6);
       
@@ -179,7 +202,21 @@ void PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4MuIonisation,         -1, 2, 2);
       pmanager->AddProcess(new G4MuBremsstrahlung,     -1, 3, 3);
       pmanager->AddProcess(new G4MuPairProduction,     -1, 4, 4);
-      
+      pmanager->AddProcess(fSync, -1,-1, 5); 
+      pmanager->AddProcess(new G4StepLimiter,               -1,-1, 6);
+
+    } else if( particleName == "proton") {
+      //proton
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
+      pmanager->AddProcess(new G4hBremsstrahlung,     -1, 3, 3);
+      pmanager->AddProcess(new G4hPairProduction,     -1, 4, 4);
+      pmanager->AddProcess(fSync, -1,-1, 5); 
+      pmanager->AddProcess(new G4StepLimiter,          -1,-1, 6);
+    }
+    else if (particle->GetPDGCharge() != 0.0 && !particle->IsShortLived()) 
+    {
+      pmanager->AddProcess(fSync,-1,-1, 1);  
     }
   }
 }
@@ -203,23 +240,6 @@ void PhysicsList::ConstructGeneral()
         pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
       }
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCuts()
-{
-  if (verboseLevel >0){
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }
-
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma
-  SetCutValue(defaultCutValue, "gamma");
-  SetCutValue(defaultCutValue, "e-");
-  SetCutValue(defaultCutValue, "e+");
-
-  if (verboseLevel>0) DumpCutValuesTable();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

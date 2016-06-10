@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B4RunAction.cc 75215 2013-10-29 16:07:06Z gcosmo $
+// $Id: B4RunAction.cc 87359 2014-12-01 16:04:27Z gcosmo $
 //
 /// \file B4RunAction.cc
 /// \brief Implementation of the B4RunAction class
@@ -106,12 +106,12 @@ void B4RunAction::EndOfRunAction(const G4Run* /*run*/)
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   if ( analysisManager->GetH1(1) ) {
-    G4cout << "\n ----> print histograms statistic ";
+    G4cout << G4endl << " ----> print histograms statistic ";
     if(isMaster) {
-      G4cout << "for the entire run \n" << G4endl; 
+      G4cout << "for the entire run " << G4endl << G4endl; 
     }
     else {
-      G4cout << "for the local thread \n" << G4endl; 
+      G4cout << "for the local thread " << G4endl << G4endl; 
     }
     
     G4cout << " EAbs : mean = " 

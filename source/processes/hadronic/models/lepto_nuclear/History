@@ -1,4 +1,4 @@
-$Id: History 77347 2013-11-22 16:06:22Z gcosmo $
+$Id: History 80655 2014-05-06 08:30:34Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,15 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+05-May-2014, Vladimir Ivanchenko        (hadr-lepnuc-V10-00-01)
+- Reuse PreCompoundModel and ExcitationHandler and not instantiate
+    locally as new; do not delete objects which following 
+    G4HadronicInteraction interface to avoid double delition
+
+29-Jan-2014, Gunter Folger              (hadr-lepnuc-V10-00-00)
+- Removed cascade/{evaporation,utils}, high_energy, low_energy
+  from sources.cmake
 
 22 November 2013 W. Pokorski (hadr-lepnuc-V09-06-04)
 ---------------------------------------------

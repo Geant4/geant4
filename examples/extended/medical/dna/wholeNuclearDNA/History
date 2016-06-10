@@ -1,0 +1,44 @@
+     =========================================================
+ 		      Geant4 - wholeNuclearDNA example
+     =========================================================
+
+                       Package History file
+                       --------------------
+
+24 Nov 2014 - M. Karamitros - tag wholeNuclearDNA-V10-00-07
+- Add beamOn 2
+- Correct plot.C to handle mt mode
+- Add a warning if the DetectorConstruction::fBuildBases is not on
+  ==> outfile is then empty
+- Homogenize the command line "-out" with other dna examples
+
+10 Nov 2014 - M. Karamitros - tag wholeNuclearDNA-V10-00-06
+- Copy missing plot.C in the bin directory
+- Create histogram only if needed
+- Add GUI+vis selection via command line 
+  (just as other dna examples)
+
+06 Nov 2014 - I. Hrivnacova
+- Added copying macros and data files in build directory
+- Fixes in README
+
+30 Oct 2014 - M. Karamitros - tag wholeNuclearDNA-V10-00-05
+- Add missing GNUmakefile
+
+22 Oct 2014 - M. Karamitros - tag wholeNuclearDNA-V10-00-04
+- Change tag name (previous name: dnageometry)
+- Adapt CMakeLists.txt to the new example name
+
+22 Oct 2014 - M. Karamitros - tag dnageometry-V10-00-03
+- Migration to extended
+- Apply coding guidelines
+- Add a flags to construct or not the entire geometry
+
+07 Oct 2014 - C. Villagrasa - tag dnageometry-V10-00-02
+
+26 Nov 2013 - L. Pandola, C. Villagrasa - tag dnageometry-V09-06-01
+- Updated README
+
+17 Sep 2013 - C. Villagrasa, S.Incerti - tag dnageometry-V09-06-00
+- Created example
+

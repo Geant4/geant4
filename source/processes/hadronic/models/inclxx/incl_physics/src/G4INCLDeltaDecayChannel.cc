@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -42,7 +43,7 @@
 
 namespace G4INCL {
 
-  DeltaDecayChannel::DeltaDecayChannel(Particle *p, ThreeVector const dir)
+  DeltaDecayChannel::DeltaDecayChannel(Particle *p, ThreeVector const &dir)
     :theParticle(p), incidentDirection(dir)
   { }
 
@@ -71,7 +72,7 @@ namespace G4INCL {
     (*phi_par) = Math::twoPi * Random::shoot();
   }
 
-  FinalState* DeltaDecayChannel::getFinalState() {
+  void DeltaDecayChannel::fillFinalState(FinalState *fs) {
     //      SUBROUTINE DECAY2(P1,P2,P3,WP,ij,
     //     s       X1,X2,hel,B1,B2,B3)
 
@@ -157,7 +158,7 @@ namespace G4INCL {
         pionType = PiMinus;
         break;
       default:
-        INCL_FATAL("Unrecognized delta type; type=" << theParticle->getType() << std::endl);
+        INCL_FATAL("Unrecognized delta type; type=" << theParticle->getType() << '\n');
         pionType = UnknownParticle;
         break;
     }
@@ -176,7 +177,6 @@ namespace G4INCL {
     theParticle->setMomentum(-pionMomentum);
     theParticle->adjustEnergyFromMomentum();
 
-    FinalState *fs = new FinalState;
     fs->addModifiedParticle(theParticle);
     fs->addCreatedParticle(pion);
     //      call loren(q1,q2,q3,b1,b2,b3,wq)
@@ -188,6 +188,5 @@ namespace G4INCL {
     //      ym(ij)=xi
     //      RETURN                                                            P-N21120
     //      END                                                               P-N21130
-    return fs;
   }
 }

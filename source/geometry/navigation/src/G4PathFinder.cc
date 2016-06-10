@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc 73734 2013-09-09 15:01:46Z gcosmo $
+// $Id: G4PathFinder.cc 81060 2014-05-20 09:12:39Z gcosmo $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -96,7 +96,7 @@ G4PathFinder::G4PathFinder()
    fNewTrack= false; 
    fNoGeometriesLimiting= 0; 
 
-   for( register int num=0; num< fMaxNav; ++num )
+   for( G4int num=0; num< fMaxNav; ++num )
    {
       fpNavigator[num] =  0;   
       fLimitTruth[num] = false;
@@ -433,6 +433,15 @@ G4PathFinder::PrepareNewTrack( const G4ThreeVector& position,
   fRelocatedPoint= false; 
 }
 
+
+void G4PathFinder::EndTrack()
+     // Signal end of tracking of current track.  
+     //   Reset TransportationManager to use 'ordinary' Navigator
+     //   Reset internal state, if needed
+{
+  EnableParallelNavigation(false);  // Else it will be continue to be used
+}
+
 void G4PathFinder::ReportMove( const G4ThreeVector& OldVector, 
                                const G4ThreeVector& NewVector, 
                                const G4String& Quantity ) const
@@ -496,7 +505,7 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
   }
 #endif
 
-  for ( register G4int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
+  for ( G4int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
   {
      //  ... who limited the step ....
 
@@ -702,7 +711,7 @@ void G4PathFinder::ReLocate( const G4ThreeVector& position )
   }
 #endif // G4DEBUG_PATHFINDER
 
-  for ( register G4int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
+  for ( G4int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
   {
      //  ... none limited the step
 
@@ -738,7 +747,7 @@ G4double  G4PathFinder::ComputeSafety( const G4ThreeVector& position )
    std::vector<G4Navigator*>::iterator pNavigatorIter;
    pNavigatorIter= fpTransportManager->GetActiveNavigatorsIterator();
 
-   for( register G4int num=0; num<fNoActiveNavigators; ++pNavigatorIter,++num )
+   for( G4int num=0; num<fNoActiveNavigators; ++pNavigatorIter,++num )
    {
       G4double safety = (*pNavigatorIter)->ComputeSafety( position,true );
       if( safety < minSafety ) { minSafety = safety; } 
@@ -806,7 +815,7 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
   G4double minSafety= kInfinity, minStep;
 
   const G4int IdTransport= 0;  // Id of Mass Navigator !!
-  register G4int num=0; 
+  G4int num=0; 
 
 #ifdef G4DEBUG_PATHFINDER
   if( fVerboseLevel > 2 )
@@ -1343,6 +1352,52 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
   return minStep; 
 }
 
+
+G4bool G4PathFinder::RecheckDistanceToCurrentBoundary(
+                                        const G4ThreeVector &pGlobalPoint,
+                                        const G4ThreeVector &pDirection,
+                                        const G4double aProposedMove,
+                                        G4double  *prDistance,
+                                        G4double  *prNewSafety)const
+{
+  G4bool retval= true;
+  
+  if( fNoActiveNavigators > 0 )
+  {
+    // Calculate the safety values before making the step
+    
+    G4double minSafety= kInfinity;
+    G4double minMove=   kInfinity;
+    int numNav;
+    for( numNav=0; numNav < fNoActiveNavigators; ++numNav )
+    {
+      G4double distance, safety;
+      G4bool   moveIsOK;
+      moveIsOK= fpNavigator[numNav]->RecheckDistanceToCurrentBoundary(
+                                                                pGlobalPoint,
+                                                                pDirection,
+                                                                aProposedMove,
+                                                                &distance,
+                                                                &safety);
+      minSafety = std::min( safety, minSafety );
+      minMove   = std::min( distance, minMove );
+      // The first surface encountered will determine it 
+      //   - even if it is at a negative distance.
+      retval &= moveIsOK;
+    }
+    
+    *prDistance= minMove;
+    if( prNewSafety ) *prNewSafety= minSafety;
+  
+  }else{
+    retval= false;
+  }
+
+  return retval;
+}
+
+
+
 G4String& G4PathFinder::LimitedString( ELimited lim )
 {
   static G4String StrDoNot("DoNot"),
@@ -1367,7 +1422,7 @@ void G4PathFinder::PushPostSafetyToPreSafety()
 {
   fPreSafetyLocation= fSafetyLocation;
   fPreSafetyMinValue= fMinSafety_atSafLocation;
-  for( register G4int nav=0; nav < fNoActiveNavigators; ++nav )
+  for( G4int nav=0; nav < fNoActiveNavigators; ++nav )
   {
      fPreSafetyValues[nav]= fNewSafetyComputed[nav];
   }

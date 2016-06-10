@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.cc 75582 2013-11-04 12:13:01Z gcosmo $
+// $Id: G4eBremsstrahlungRelModel.cc 83685 2014-09-09 12:39:00Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -93,7 +93,7 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(
     fMigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length*4.0*pi),
     fLPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)*0.5),
     fXiLPM(0), fPhiLPM(0), fGLPM(0),
-    use_completescreening(false),isInitialised(false)
+    use_completescreening(false)
 {
   fParticleChange = 0;
   theGamma = G4Gamma::Gamma();
@@ -169,7 +169,6 @@ void G4eBremsstrahlungRelModel::SetupForMaterial(const G4ParticleDefinition*,
   kp=sqrt(densityCorr);    
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
@@ -179,11 +178,11 @@ void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
 
   currentZ = 0.;
 
-  if(IsMaster()) { InitialiseElementSelectors(p, cuts); }
+  if(IsMaster() && LowEnergyLimit() < HighEnergyLimit()) { 
+    InitialiseElementSelectors(p, cuts); 
+  }
 
-  if(isInitialised) { return; }
-  fParticleChange = GetParticleChangeForLoss();
-  isInitialised = true;
+  if(!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -191,7 +190,9 @@ void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
 void G4eBremsstrahlungRelModel::InitialiseLocal(const G4ParticleDefinition*,
 						G4VEmModel* masterModel)
 {
-  SetElementSelectors(masterModel->GetElementSelectors());
+  if(LowEnergyLimit() < HighEnergyLimit()) { 
+    SetElementSelectors(masterModel->GetElementSelectors());
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -26,13 +26,15 @@
 /// \file electromagnetic/TestEm6/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id: DetectorConstruction.cc 83428 2014-08-21 15:46:01Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
+#include "G4NistManager.hh" 
+#include "G4RunManager.hh" 
 
 #include "G4Material.hh"
 #include "G4Box.hh"
@@ -114,7 +116,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
                              G4ThreeVector(),                //at (0,0,0)
                            fL_Box,                        //its logical volume
                            fMaterial->GetName(),        //its name
-                           0,                                       //its mother  volume
+                           0,                           //its mother  volume
                            false,                        //no boolean operation
                            0);                                //copy number
                            
@@ -136,12 +138,26 @@ void DetectorConstruction::PrintParameters()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetMaterial(G4String materialChoice)
+void DetectorConstruction::SetMaterial(const G4String& name)
 {
-  // search the material by its name   
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
-  if (pttoMaterial) fMaterial = pttoMaterial;             
+  G4cout << "###SetMaterial"  << G4endl;
+
+  // get the pointer to the existing material
+  G4Material* mat = G4Material::GetMaterial(name, false);
+  
+  // create the material by its name
+  if(!mat) { mat = G4NistManager::Instance()->FindOrBuildMaterial(name); }
+  
+  if (mat && mat != fMaterial) {
+    G4cout << "### New target material: " << mat->GetName() << G4endl;
+    fMaterial = mat;
+    if(fL_Box) {
+      fL_Box->SetMaterial(mat);
+      G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+    } 
+  }
 }
+  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -165,7 +181,7 @@ void DetectorConstruction::SetMagField(G4double fieldValue)
   
   if (fieldValue!=0.)                        // create a new one if non nul
     {
-      fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));        
+      fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue)); 
       fieldMgr->SetDetectorField(fMagField);
       fieldMgr->CreateChordFinder(fMagField);
     }

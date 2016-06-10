@@ -3,8 +3,8 @@
 #
 #/run/verbose 1
 /control/verbose 2
-#/event/verbose 1
-#/tracking/verbose 1
+/event/verbose 1
+/tracking/verbose 1
 #
 /field04/SetWorldMat G4_AIR
 /field04/SetWorldR  5.0 m
@@ -42,14 +42,12 @@
 #
 /field/setStepperType 4
 /field/setMinStep 10 mm
-/field/update
 #
 #/process/inactivate msc
 #/process/activate msc
 #
 #/field04/SetTgtMat G4_Pb
 #/field04/SetCaptureR 0.6 m
-#/field04/Update
 #
 /gun/particle proton
 /gun/energy 500.0 MeV
@@ -74,5 +72,9 @@
 #/gun/yvertex 0. cm
 #/gun/zvertex 0. cm
 #
-#/run/beamOn 1
+/field/SetCaptureB1 2. tesla
+/field/SetCaptureB2 4.0 tesla
+/field/SetTransferB 4.0 tesla
+#
+/run/beamOn 10
 #

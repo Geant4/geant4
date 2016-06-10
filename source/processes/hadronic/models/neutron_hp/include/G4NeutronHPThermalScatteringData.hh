@@ -102,9 +102,9 @@ class G4NeutronHPThermalScatteringData : public G4VCrossSectionDataSet
       void clearCurrentXSData();
 
 //              element            temp       x section from E
-      std::map< G4int , std::map< G4double , G4NeutronHPVector* >* > coherent;
-      std::map< G4int , std::map< G4double , G4NeutronHPVector* >* > incoherent;
-      std::map< G4int , std::map< G4double , G4NeutronHPVector* >* > inelastic;
+      std::map< G4int , std::map< G4double , G4NeutronHPVector* >* >* coherent;
+      std::map< G4int , std::map< G4double , G4NeutronHPVector* >* >* incoherent;
+      std::map< G4int , std::map< G4double , G4NeutronHPVector* >* >* inelastic;
 
       std::map< G4double , G4NeutronHPVector* >* readData ( G4String ); 
 

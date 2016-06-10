@@ -23,12 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- //
- // G4 Low energy model: n-p scattering
- // F.W. Jones, L.G. Greeniaus, H.P. Wellisch
- //  
- // For further comments see G4LEnpData.hh and G4LEnp.cc
- //
+//
+// G4 Low energy model: n-p scattering
+// F.W. Jones, L.G. Greeniaus, H.P. Wellisch
+//  
+// For further comments see G4LEnpData.hh and G4LEnp.cc
+//
+// 02.01.2014 V. Grichine add SampInvariantT for testing ds/dt
 
 #ifndef G4LEnp_h
 #define G4LEnp_h 1
@@ -44,7 +45,8 @@
 #include "G4Gamma.hh"
 #include "G4Step.hh"
 #include "G4TrackStatus.hh"
-#include "G4HadronicInteraction.hh"
+// #include "G4HadronicInteraction.hh"
+#include "G4HadronElastic.hh"
 
 #ifdef NPDEBUG
 #include <iostream>
@@ -52,7 +54,7 @@
 #endif
 
 
-class G4LEnp : public G4HadronicInteraction
+class G4LEnp : public G4HadronElastic  // G4HadronicInteraction
 {
  private:
 
@@ -68,7 +70,10 @@ class G4LEnp : public G4HadronicInteraction
    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
                                   G4Nucleus& targetNucleus);
 
+  // sample momentum transfer using Lab. momentum
 
+  G4double SampleInvariantT(const G4ParticleDefinition* p, 
+			    G4double plab, G4int Z, G4int A);
  private:
 
    //   std::ofstream* outFile;

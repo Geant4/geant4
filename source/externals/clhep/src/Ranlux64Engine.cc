@@ -57,20 +57,24 @@
 #include "CLHEP/Random/Ranlux64Engine.h"
 #include "CLHEP/Random/engineIDulong.h"
 #include "CLHEP/Random/DoubConv.h"
+#include "CLHEP/Utility/atomic_int.h"
+
 #include <string.h>	// for strcmp
 #include <cstdlib>	// for std::abs(int)
 #include <limits>       // for numeric_limits
 
 namespace CLHEP {
 
+namespace {
+  // Number of instances with automatic seed selection
+  CLHEP_ATOMIC_INT_TYPE numberOfEngines(0);
+
+  // Maximum index into the seed table
+  const int maxIndex = 215;
+}
+
 static const int MarkerLen = 64; // Enough room to hold a begin or end marker. 
 
-
-// Number of instances with automatic seed selection
-int Ranlux64Engine::numEngines = 0;
-
-// Maximum index into the seed table
-int Ranlux64Engine::maxIndex = 215;
 
 #ifndef WIN32
 namespace detail {
@@ -102,9 +106,10 @@ Ranlux64Engine::Ranlux64Engine()
 : HepRandomEngine()
 {
    luxury = 1;
+   int numEngines = numberOfEngines++;
    int cycle    = std::abs(int(numEngines/maxIndex));
    int curIndex = std::abs(int(numEngines%maxIndex));
-   numEngines +=1;
+
    long mask = ((cycle & 0x007fffff) << 8);
    long seedlist[2];
    HepRandom::getTheTableSeeds( seedlist, curIndex );
@@ -186,7 +191,7 @@ void Ranlux64Engine::update() {
   // but we can treat the special case of endIters = 1 separately for superior
   // efficiency in the cases of levels 0 and 2.
 
-  register double  y1;
+  double  y1;
 
   if ( endIters == 1 ) {  	// Luxury levels 0 and 2 will go here
     y1 = randoms[ 4] - randoms[11] - carry;
@@ -251,10 +256,10 @@ void Ranlux64Engine::update() {
 
 void Ranlux64Engine::advance(int dozens) {
 
-  register double  y1, y2, y3;
-  register double  cValue = twoToMinus_48();
-  register double  zero = 0.0;
-  register double  one  = 1.0;
+  double  y1, y2, y3;
+  double  cValue = twoToMinus_48();
+  double  zero = 0.0;
+  double  one  = 1.0;
 
 		// Technical note:  We use Luscher's trick to only do the
 		// carry subtraction when we really have to.  Like him, we use 

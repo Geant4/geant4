@@ -1,0 +1,15 @@
+/control/add upTo {startTime} {timeWindow}
+/control/echo startTime: {startTime} ns, endTime: {upTo}
+
+#/control/alias newTheta 0
+#/control/add newTheta 100 {startTime}
+#/control/multiply newTheta -0.9 {newTheta}
+#/vis/viewer/set/viewpointThetaPhi {newTheta} 180
+#/control/echo Theta: {newTheta}
+
+/vis/set/textColour black
+/vis/ogl/set/startTime {startTime} ns
+/vis/ogl/set/endTime {upTo} ns
+/vis/set/textColour black
+#/vis/ogl/printEPS
+# {timeRange} ps

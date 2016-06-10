@@ -1,4 +1,4 @@
-$Id: History 72363 2013-07-16 13:32:32Z gcosmo $
+$Id: History 83699 2014-09-10 07:18:25Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09-09-2014, Witek Pokorski (physics_lists-V10-00-01)
+- replacing explicite instantiation of cross sections by calls
+to G4CrossSectionDataSetRegistry (using factory approach)
+
+04-09-2014, Witek Pokorski (physics_lists-V10-00-00)
+- Cosmetic clean-up, removing obsolete includes of cross-section headers.
 
 16-07-2013, Gabriele Cosmo (physics_lists-V09-06-02)
 - Correction to CMake scripts for granular build.

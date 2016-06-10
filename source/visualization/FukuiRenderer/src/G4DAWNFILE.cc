@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILE.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4DAWNFILE.cc 78838 2014-01-28 08:46:17Z gcosmo $
 //
 // Satoshi TANAKA
 // DAWNFILE factory.
@@ -50,7 +50,7 @@ G4DAWNFILE::G4DAWNFILE ():
   G4VGraphicsSystem ("DAWNFILE",
 		     "DAWNFILE",
 		     FR_DAWNFILE_FEATURES,
-		     G4VGraphicsSystem::threeD)
+		     G4VGraphicsSystem::fileWriter)
 {}
 
 	//----- G4DAWNFILE, destructor

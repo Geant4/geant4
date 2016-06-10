@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ElectronBenchmarkDetector.cc 77657 2013-11-27 08:54:43Z gcosmo $
+// $Id: ElectronBenchmarkDetector.cc 79741 2014-03-13 09:12:06Z gcosmo $
 //
 /// \file medical/electronScattering2/src/ElectronBenchmarkDetector.cc
 /// \brief Implementation of the ElectronBenchmarkDetector class
@@ -77,6 +77,7 @@ fScorerVisAtt(0)
     
     // Scattering Foil
     fPosPrimFoil    =   2.650000*cm;
+    fHalfThicknessPrimFoil = 0.0*cm;
     
     // Monitor Chamber
     fPosMon0        =   5.000000*cm;

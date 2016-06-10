@@ -1,5 +1,5 @@
 Hi-------------------------------------------------------------------
-$Id: History 73002 2013-08-15 08:09:37Z gcosmo $
+$Id: History 85605 2014-10-31 11:18:19Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,21 @@ $Id: History 73002 2013-08-15 08:09:37Z gcosmo $
 
                       Category History file
                       ---------------------
+
+31.10.2014 - L.Pandola Tag (lAr_calorimeter-V10-00-04)
+             Changed interface of FCALMaterialConsultant to avoid multiple 
+              definition of materials
+	     Fix casting warning in FCALSteppingVerbose.cc (seen on Win)
+
+16.10.2014 - A.Dotti Tag (lAr_calorimeter-V10-00-02, lAr_calorimeter-V10-00-03)
+             Bug fixing for clang warnings	     
+
+15.10.2014 - A.Dotti Tag (lAr_calorimeter-V10-00-01)
+             Removing output to txt file (non thread safe)
+             and redundant with cout
+
+13.10.2014 - A.Dotti Tag (lAr_calorimeter-V10-00-00)
+	     Migration to MT
 
 30.07.2013 - A.Dotti Tag (lAr_calorimeter-V09-06-05)
              Bug fixing for clang32 compilation warnings

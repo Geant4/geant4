@@ -23,24 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Description:
-//      Manage the per-thread state of the geometry, spanning those
-//   which have a per-thread state and their dependents.
-//   In particular it 
+//
+// $Id: G4GeometryWorkspace.hh 79096 2014-02-14 16:07:39Z gcosmo $
+//
+//
+// ------------------------------------------------------------
+// GEANT 4 class header file 
+//
+// Class Description:
+//
+// Class managing the per-thread state of the geometry, spanning those
+// which have a per-thread state and their dependents.
+// In particular it:
 //       - owns the arrays that implement 'split' classes 
-//       - classes/objects which are owned by the split classes.
-//   Background: the classes/objects affected are  
+//       - owns classes/objects which are owned by the split classes.
+// The classes/objects affected are:
 //       - 'split' classes part of its state is per-thread,
 //       - per-thread objects, in particular those which are owned 
 //         by the split classes.
 // Goal: Take ownership and control of per-thread state of 
-//        classes to work with multi-threading. 
-// 
-// Designed / created by John Apostolakis
-// Interface design - review with Andrea Dotti (July 2013)
-// 
-// First version:    7th July    2013
-// Working version:  4th October 2013
+//       classes to work with multi-threading. 
+
+// Authors: John Apostolakis (CERN), Andrea Dotti (SLAC), July 2013
+// ------------------------------------------------------------
 
 #ifndef G4GEOMETRYWORKSPACE_HH
 #define G4GEOMETRYWORKSPACE_HH
@@ -56,41 +61,44 @@
 
 class G4GeometryWorkspace
 {
-  public: 
-      G4GeometryWorkspace();
-     ~G4GeometryWorkspace();
+  public:
+ 
+    G4GeometryWorkspace();
+   ~G4GeometryWorkspace();
 
-     void UseWorkspace();     //Take ownership
-     void ReleaseWorkspace(); //Release ownership
-     void DestroyWorkspace(); //Release ownership and destroy
+    void UseWorkspace();     // Take ownership
+    void ReleaseWorkspace(); // Release ownership
+    void DestroyWorkspace(); // Release ownership and destroy
 
-     void InitialiseWorkspace();
+    void InitialiseWorkspace();
       // To be called at start of each run (especially 2nd and further runs)
 
-     void   SetVerbose(G4bool v) { fVerbose=v; } 
-     G4bool GetVerbose()  { return fVerbose;   } 
+    inline void   SetVerbose(G4bool v) { fVerbose=v; } 
+    inline G4bool GetVerbose()  { return fVerbose;   } 
   
- protected:  // Implementation methods
-      void   InitialisePhysicalVolumes();
-      G4bool CloneParameterisedSolids( G4PVParameterised *paramVol );
-      G4bool CloneReplicaSolid( G4PVReplica *);
+  protected:  // Implementation methods
+
+    void   InitialisePhysicalVolumes();
+    G4bool CloneParameterisedSolids( G4PVParameterised *paramVol );
+    G4bool CloneReplicaSolid( G4PVReplica *);
   
- private:    // Helper pointers - can be per instance or shared
+  private:    // Helper pointers - can be per instance or shared
+
     G4LVManager     *fpLogicalVolumeSIM;
     G4PVManager     *fpPhysicalVolumeSIM;
     G4PVRManager    *fpReplicaSIM;
     G4RegionManager *fpRegionSIM;
   
-  // Per Instance variables
-  //   NOTE: the ownership of the Data Arrays is IN this object
- private:
-     // Store SubInstanceManager object pointers (SIM pointers)
-     G4LVData      *fLogicalVolumeOffset; // (G4LogicalVolume::GetSubInstanceManager())
-     G4PVData      *fPhysicalVolumeOffset;
-     G4ReplicaData *fReplicaOffset;       
-     G4RegionData  *fRegionOffset;        
+    // Per Instance variables
+    // NOTE: the ownership of the Data Arrays is IN this object
+    // Store SubInstanceManager object pointers (SIM pointers)
 
-     G4bool         fVerbose;
+    G4LVData      *fLogicalVolumeOffset; // (G4LVolume::GetSubInstanceManager())
+    G4PVData      *fPhysicalVolumeOffset;
+    G4ReplicaData *fReplicaOffset;       
+    G4RegionData  *fRegionOffset;        
+
+    G4bool         fVerbose;
 };
 
-#endif //G4GEOMETRYWORKSPACE_HH
+#endif

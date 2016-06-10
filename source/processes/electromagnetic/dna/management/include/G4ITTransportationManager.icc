@@ -1,0 +1,133 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: G4ITTransportationManager.icc 66356 2012-12-18 09:02:32Z gcosmo $
+// ------------------------------------------------------------
+//  GEANT 4  inlined function members implementation
+// ------------------------------------------------------------
+//
+// Created :  10 March 1997, J. Apostolakis
+// Reviewed:  26 April 2006, G. Cosmo
+//  
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// GetNavigatorForTracking()
+//
+// Utility method to return the active navigator for tracking, always
+// the first in the collection of registered navigators.
+//
+inline
+G4ITNavigator* G4ITTransportationManager::GetNavigatorForTracking() const
+{
+   return fNavigators[0];
+}
+
+// ----------------------------------------------------------------------------
+// SetWorldForTracking()
+//
+// Set the tracking world volume.
+// This method is to be invoked by G4RunManagerKernel.
+//
+inline 
+void G4ITTransportationManager::SetWorldForTracking(G4VPhysicalVolume* theWorld)
+{
+   fWorlds[0] = theWorld;
+   fNavigators[0]->SetWorldVolume(theWorld);
+}
+
+// ----------------------------------------------------------------------------
+// SetNavigatorForTracking()
+//
+// Set the active navigator for tracking, always
+// the first in the collection of registered navigators.
+//
+//inline
+//void G4ITTransportationManager::SetNavigatorForTracking(G4ITNavigator* newNavigator)
+//{
+//   fNavigators[0] = newNavigator;
+//}
+
+// ----------------------------------------------------------------------------
+// GetNoActiveNavigators()
+//
+// Return the number of active navigators.
+//
+inline
+size_t G4ITTransportationManager::GetNoActiveNavigators() const
+{
+   return fActiveNavigators.size();
+}
+
+// ----------------------------------------------------------------------------
+// GetActiveNavigatorsIterator()
+//
+// Return an iterator to the list of active navigators.
+//
+inline
+std::vector<G4ITNavigator*>::iterator
+G4ITTransportationManager::GetActiveNavigatorsIterator()
+{
+   std::vector<G4ITNavigator*>::iterator iterator
+     = std::vector<G4ITNavigator*>::iterator(fActiveNavigators.begin());
+   return iterator;
+}
+
+// ----------------------------------------------------------------------------
+// GetNoWorlds()
+//
+// Return the number of registerd worlds.
+//
+inline
+size_t G4ITTransportationManager::GetNoWorlds() const
+{
+   return fWorlds.size();
+}
+
+// ----------------------------------------------------------------------------
+// GetWorldsIterator()
+//
+// Return an iterator to the list of registered worlds.
+//
+inline
+std::vector<G4VPhysicalVolume*>::iterator
+G4ITTransportationManager::GetWorldsIterator()
+{
+   std::vector<G4VPhysicalVolume*>::iterator iterator
+     = std::vector<G4VPhysicalVolume*>::iterator(fWorlds.begin());
+   return iterator;
+}
+
+// ----------------------------------------------------------------------------
+// GetSafetyHelper()
+//
+// Return pointer to the created navigation safety helper instance.
+//
+inline
+G4ITSafetyHelper* G4ITTransportationManager::GetSafetyHelper() const
+{
+  return fpSafetyHelper;
+}

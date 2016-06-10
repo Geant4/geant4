@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointPrimaryGeneratorAction.hh 76245 2013-11-08 11:14:32Z gcosmo $
+// $Id: G4AdjointPrimaryGeneratorAction.hh 86968 2014-11-21 11:52:04Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointPrimaryGeneratorAction
@@ -97,8 +97,10 @@ class G4AdjointPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void SetPrimaryIon(G4ParticleDefinition* adjointIon, G4ParticleDefinition* fwdIon);
     void UpdateListOfPrimaryParticles();
     inline size_t GetNbOfAdjointPrimaryTypes(){return ListOfPrimaryAdjParticles.size();}
-    inline std::vector<G4ParticleDefinition*> GetListOfPrimaryFwdParticles(){return ListOfPrimaryFwdParticles;}
+    inline std::vector<G4ParticleDefinition*>* GetListOfPrimaryFwdParticles(){
+                                             return &ListOfPrimaryFwdParticles;}
     inline const G4String& GetPrimaryIonName(){return ion_name;}
+    inline void SetNbPrimaryFwdGammasPerEvent(G4int nb) {nb_fwd_gammas_per_event=nb;}
 
   private: //private methods
 
@@ -126,18 +128,22 @@ class G4AdjointPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
 
     size_t index_particle;
-    //G4bool last_generated_part_was_adjoint;
+
     G4ThreeVector  pos,  direction, p; 
    
     G4String type_of_adjoint_source; //Spherical ExtSurfaceOfAVolume
     G4double radius_spherical_source;
     G4ThreeVector center_spherical_source;
+    G4int nb_fwd_gammas_per_event;
     
     //For simulation with ions
     //--------------------------
     G4ParticleDefinition* fwd_ion;
     G4ParticleDefinition* adj_ion;
     G4String ion_name;
+    //disable copy constructor and assignement operator
+    G4AdjointPrimaryGeneratorAction(const G4AdjointPrimaryGeneratorAction&);
+    G4AdjointPrimaryGeneratorAction& operator=(const G4AdjointPrimaryGeneratorAction&);
 };
 #endif
 

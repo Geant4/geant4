@@ -27,7 +27,7 @@
 /// \brief Main program of the electromagnetic/TestEm2 example
 //
 //
-// $Id: TestEm2.cc 76259 2013-11-08 11:37:28Z gcosmo $
+// $Id: TestEm2.cc 84840 2014-10-21 13:46:12Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,20 +59,13 @@ int main(int argc,char** argv) {
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
 #ifdef G4MULTITHREADED  
-  G4MTRunManager * runManager = new G4MTRunManager(); 
-
-  // Number of threads can be defined via 3rd argument
-  if (argc==3) {
-    G4int nThreads = G4UIcommand::ConvertToInt(argv[2]);
-    runManager->SetNumberOfThreads(nThreads);
-  }
-  G4cout << "##### TestEm2 started for " << runManager->GetNumberOfThreads() 
-         << " threads" << " #####" << G4endl;
+  G4MTRunManager * runManager = new G4MTRunManager();
+  G4int nThreads = G4Threading::G4GetNumberOfCores();
+  if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
+  runManager->SetNumberOfThreads(nThreads);
 #else
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
   G4RunManager * runManager = new G4RunManager(); 
-  G4cout << "##### TestEm2 started in sequential mode" 
-         << " #####" << G4endl;
 #endif
 
   // set mandatory initialization classes

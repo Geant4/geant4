@@ -1,0 +1,34 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rtausmed
+#define tools_rtausmed
+
+#include "rtausmeui"
+#include "S_STRING"
+
+#include <cmath>
+
+namespace tools {
+
+class rtausmed : public rtausmeui {
+public:
+  TOOLS_SCLASS(tools::rtausmed)
+public:
+  rtausmed(unsigned int a_seed = 4357):rtausmeui(a_seed){}
+  virtual ~rtausmed(){}
+public:
+  rtausmed(const rtausmed& a_from):rtausmeui(a_from){}
+  rtausmed& operator=(const rtausmed& a_from) {rtausmeui::operator=(a_from);return *this;}
+protected:
+  static double two_to_minus_32()  {
+    static const double s_v = std::ldexp(1.0,-32);
+    return s_v;
+  }
+public:
+  double shoot() {return double(rtausmeui::shoot()) * two_to_minus_32();}
+};
+
+}
+
+#endif

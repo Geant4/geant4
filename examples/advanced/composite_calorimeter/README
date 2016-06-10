@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README 70119 2013-05-23 14:06:52Z gcosmo $
+$Id: README 84370 2014-10-14 12:50:02Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -26,9 +26,8 @@ $Id: README 70119 2013-05-23 14:06:52Z gcosmo $
  have been omitted here (to avoid too many technical details),
  nevertheless, this example is able to reproduce the main features of
  most of the relevant observables as measured in the real test-beam. 
- The output of this example, if the AIDA or Anaphe/Lizard environment 
- has been properly setup (see below), consists of a set of histograms 
- and one ntuple which are stored on a HBOOK file.
+ The output of this example consists of a set of histograms 
+ and one ntuple which are stored on a ROOT file (default). 
  In our opinion, the most original "lesson" which is offered by this
  advanced example for the Geant4 user is to show how the Geometry and
  the Sensitive/Hit part of the simulation is treated in a big experiment.
@@ -48,40 +47,41 @@ $Id: README 70119 2013-05-23 14:06:52Z gcosmo $
 ---------------------------------------
 
  The user should first setup, as "usual", the Geant4 environmental
- variables (in particular, the variable G4ANALYSIS_USE must be set
- if you want to have the histograms and the ntuple).
- Then the specific setup for this example, including the AIDA/PI part
- used in the analysis, should be run:
+ variables (e.g. the script produced by cmake) 
+ Then the specific setup for this example should be run:
  
      >  source envExample.csh      in the case of C-shell
  or
      >  . envExample.sh            in the case of bash-shell
  
- The analysis part is based on AIDA/PI.
- Please take a look to the web page:  http://www.cern.ch/PI .
+ The analysis part is based on the native g4analysis tools. As default 
+ the output is a ROOT file. This can be changed to XML by commenting 
+ the line
+#include "g4root.hh"
+ in CCalAnalysis.hh and uncommenting 
+#include "g4xml.hh"
 
 
 2. Sample run
 -------------
 
  Once the environmental variables are setup, you can get the executable
-    $G4WORKDIR/bin/$G4SYSTEM/CompositeCalorimeter
- by typing "gmake" on this directory.
+    CompositeCalorimeter
+ by configuring with cmake and then running the compiler.
  Then, you can execute it using the Geant4 macro command input file test.g4mac
  as follows:    
  
-    >  $G4WORKDIR/bin/$G4SYSTEM/CompositeCalorimeter test.g4mac
+    >  ./CompositeCalorimeter test.g4mac
  
  which simulate 10 events, each being a 100 GeV pi- incident on the 
  electromagnetic crystal calorimeter followed by the hadronic calorimeter,
  without magnetic field.
- The output is the HBOOK file "ccal.his" , which can be seen either with
- Lizard (or any other AIDA-compliant package) or with Paw or Root.
+ The output is the ROOT file "ccal.root" .
  See part "8. Analysis / Histogramming" below for more details on the
  content of that file.
  If you run instead: 
 
-    >  $G4WORKDIR/bin/$G4SYSTEM/CompositeCalorimeter
+    >  ./CompositeCalorimeter
 
  after having setup the Geant4 visualization variables and the PATH,
  you can visualize the geometry of the apparatus, and also see some
@@ -348,31 +348,30 @@ No Noise and Digitization
 ----------------------------
 
  The analysis part of CompositeCalorimeter is kept in class CCalAnalysis,
- and is based on the AIDA interfaces and their implementation in PI.
- Please take a look to the web page:  http://www.cern.ch/PI .    
+ and is based on the g4tool interfaces.
  Both the histograms and the ntuple are saved at the end of the run in the 
- HBOOK file "ccal.his". You can than analyze offline the contents of such 
- a file, using Lizard (or any other AIDA-compliant package) or with 
- Paw or Root. Please note that in a multiple run session, the last run 
- always override the HBOOK file.
+ ROOT file "ccal.root" (default: this can be changed to XML or to other 
+ formats supported by the g4analysis tools). 
+ Please note that in a multiple run session, the last run always overrides 
+ the output file.
  What the histograms and the variables of the ntuple represent is 
  explained below:
  
-  Histograms  100 - 127 : energy deposit (in GeV) in the sensitive part
+  Histograms  h100 - h127 : energy deposit (in GeV) in the sensitive part
                           (plastic scintillator layer) of one Hadronic 
                           calorimeter module (there are 28 modules, numbered
                           from 0 to 27, and the corresponding histogram has
                           ID = 100 + number of module).
   Ntuple variables  hcal0 - hcal27 : provide the same information.
 
-  Histograms  200 - 248 : energy deposit (in GeV) in one crystal
+  Histograms  h200 - h248 : energy deposit (in GeV) in one crystal
                           electromagnetic towers (there are a matrix of
                           7 x 7 = 49 towers, numbered from 0 to 48, and 
                           the corresponding histogram has 
                           ID = 200 + number of tower).
   Ntuple variables  ecal0 - ecal48 : provide the same information.
   
-  Histograms  300 - 339 : total energy deposit (in GeV) in any 
+  Histograms  h300 - h339 : total energy deposit (in GeV) in any 
                           electromagnetic crystal tower or hadronic module 
                           (either in a sensitive or insensitive layer)
                           in one of the 40 nanosecond time slices: in other
@@ -383,13 +382,13 @@ No Noise and Digitization
                            40 nanoseconds, is larger than the LHC 
                            bunch-crossing of 25 nanoseconds.)
   
-  Histograms  400 - 469 : energy profile (in GeV), summed over all layers
+  Histograms  h400 - h469 : energy profile (in GeV), summed over all layers
                           sensitive (plastic scintillator) and insensitive
                           (copper absorber), as a function of the radial
                           distance (in centimeter) from the beam axis 
                           ( ID histo = 400 + radial distance in cm ).
 
-  Histogram  4000 : total energy deposit (in GeV) in the sensitive parts
+  Histogram  h4000 : total energy deposit (in GeV) in the sensitive parts
                     of either the electromagnetic or hadronic calorimeters. 
   Ntuple variable  edep provides the same information.
 
@@ -427,7 +426,7 @@ No Noise and Digitization
   PATH  as well, it is then possible to visualize the detector and also 
  some events. 
  To do so, you have to run 
-     >  $G4WORKDIR/bin/$G4SYSTEM/CompositeCalorimeter
+     >  ./CompositeCalorimeter
  without input file: you then see the detector; after that,
  you can select the particle gun and its energy, in the
  case you want something different from the the default 

@@ -1,4 +1,4 @@
-$Id: History 77557 2013-11-26 08:57:39Z gcosmo $
+$Id: History 87164 2014-11-26 08:48:31Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,346 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25th November 2014  Laurent Garnier  (opengl-V10-00-28)
+- G4OpenGLStoredQtViewer/G4OpenGLImmediatedQtViewer :
+  Fix refresh problem due to a bad threading management
+
+25th November 2014  John Allison
+- G4OpenGLQtViewer.cc:
+  o Fixes hidden marker field in Qt viewer properties.
+- G4OpenGLStoredSceneHandler.cc:
+  o Fixes a bug whereby hidden markers are not respected if 2D objects
+    are drawn.
+
+21st November 2014  Laurent Garnier  (opengl-V10-00-27)
+- G4OpenGLStoredQtViewer/G4OpenGLImmediatedQtViewer :
+ o Avoid repainting problems by disable recursive repaints (from last commit)
+
+20th November 2014  Laurent Garnier  (opengl-V10-00-26)
+- G4OpenGLVboDrawer: 
+ o Fix a compilation issue with Wt driver
+- G4OpenGLStoredQtViewer/G4OpenGLImmediatedQtViewer :
+ o Avoid recursive repaints
+- G4OpenGLQtViewer : 
+ o Fix some minor GUI visual issues
+
+19th November 2014  Laurent Garnier  (opengl-V10-00-25)
+- G4OpenGLQtViewer: Allow viewer properties/picking/scene tree to be accessible
+  from an external application
+
+18th November 2014  Laurent Garnier  (opengl-V10-00-24)
+- G4OpenGLQtViewer: Fix JIRA DEV-173 about using external application 
+
+7th November 2014  Laurent Garnier  (opengl-V10-00-22 - opengl-V10-00-23)
+- G4OpenGLQtViewer:
+ o Fix the "invalid drawable" warning in Qt
+ o Set the scene tree / viewer properties / picking open at the beggining
+ o Move "search" at the top of scene tree component
+ o Fix a problem with Picking composant, it was impossible to disable it. 
+ o Add viewer properties and picking for Immediate mode
+ o Fix a possible problem for fSceneHandler.GetScene()
+ o Hide picking infos at the beggining
+ o open all scene tree items
+- G4OpenGLStoredQtViewer:
+ o Remove ClearView() : Cause the ugly window problem
+
+- G4OpenGLViewer:
+ o Fix glCheckFramebufferStatus problem by #ifdef GL_VERSION_3
+
+6th November 2014  Laurent Garnier
+- G4OpenGLQtViewer :
+ o Rename fWindow by fGLWidget and avoid problems for users using an
+   external Qt Application (and external Main Window)
+ o Remove resizing GLwidget *before* it was attached in the ui. This
+   will prevent from a early repainting
+ o Fix warnings
+- G4OpenGLViewer :
+  o Add ClearViewWithoutFlush() function
+- G4OpenGLStoredQtViewer/G4OpenGLImmediateQtViewer : 
+  o Add a protection in case vis is called in another thread than main thread
+- G4OpenGLStoredQtViewer:
+  o Fix ugly window at beginning
+
+G4OpenGLWtViewer
+  o Fix a problem with Wt include names on case sensitive systems
+
+5th November 2014  Laurent Garnier
+- G4OpenGLQtViewer: 
+ o Rename fWindow by fGLWidget and avoid problems for users using an external
+   Qt Application (and external Main Window)
+ o Remove resizing GLwidget *before* it was attached in the ui. This will prevent
+   from a early repainting
+
+30th October 2014  Laurent Garnier (opengl-V10-00-21)
+- Tagged
+
+27th October 2014  Laurent Garnier
+G4OpenGLStoredViewer
+  o Solve DEV-170 bug, introduced 4th september
+G4OpenGLQtViewer
+  o Add SwitchToVisSubThread() and SwitchToMasterThread() functions
+
+24th October 2014  Laurent Garnier (opengl-V10-00-20 require interfaces-V10-00-15)
+G4OpenGLImmediateSceneHandler, G4OpenGLSceneHandler :
+  o Improvements for OpenGL VBO
+G4OpenGLQtViewer:
+  o Suppress sizeX, sizeY when calling AddTabWidget (needs interfaces-V10-00-15)
+
+22nd October 2014  John Allison  (opengl-V10-00-19)
+- Tagged.
+
+9th October 2014  Laurent Garnier
+- G4OpenGL.hh :
+  o Remove specific include for Wt
+- G4OpenGLQtViewer, G4OpenGLStoredQtViewer, G4OpenGLImmediateQtViewer :
+  o Rename fReadyToPaint to fQGLWidgetInitialiseCompleted
+  o Rename fIsRepainting to fPaintEventLock
+- G4OpenGLSceneHandler : 
+  o Change specific things from Wt viewers to all OpenGL2
+- Rename G4OpenGLVBOViewer files to G4OpenGLVboDrawer
+- G4OpenGLViewer
+  o Move OpenGL2 specific things outside (in G4OpenGLVboDrawer)
+  o Move Wt specific things now available for all OpenGL2
+  o Avoid a warning from coverity in DrawText
+- G4OpenGLImmediateQtViewer
+  o Add some work about OpenGL2 (not yet finished)
+
+10th September 2014  Laurent Garnier
+- Renaming G4OpenGLWtDrawer => G4OpenGLVboDrawer  to be able to add Wt/Qt inside
+- G4OpenGLImmediateWtViewer, G4OpenGLSceneHandler : Renaming + remove unuseful thing
+
+10th September 2014  Laurent Garnier
+- G4OpenGLWtDrawer, G4OpenGLViewer : Enhancements for OpenGL VBO
+
+4th September 2014  Laurent Garnier
+- G4OpenGLStoredViewer :
+  o Remove unnecessary call to :
+   glEnable (GL_DEPTH_TEST) and glDepthFunc (GL_LEQUAL)
+   glColor4d()
+- G4OpenGLStoredSceneHandler : Remove glDrawBuffer(GL_BACK)
+- G4OpenGLStoredQtViewer : Optimizations
+- G4OpenGLSceneHandler :
+  o Remove unnecessary glEdgeFlag (GL_TRUE)
+  o lineWidth(), markerSize()
+  o Little work for Vertex Buffer Object
+- G4OpenGLImmediateQtViewer : Avoid paintEvent() at initialisation
+
+28th August 2014  Laurent Garnier
+- G4OpenGLImmediateQtViewer, G4OpenGLStoredQtViewer :
+  o Rename to avoid confusion :
+    - fIsRepainting -> fPaintEventLock : Could not have another paintEvent() inside 
+      a PaintEvent()
+    - fReadyToPaint -> fQGLWidgetInitialiseCompleted : Wait for complete Initialization
+      before drawing anything
+  o Call ClearViewWithoutFlush() instead of ClearView() : Avoid a unnecessary flush()
+- G4OpenGLQtViewer : 
+  o Do not trigger a resizeEvent before adding viewer to the MDIArea
+  o FinishView() : Nothing to do (instead of a glFlush() )
+- G4OpenGLStoredQtViewer : 
+  o Remove makeCurrent() at beginning of Initialie(), not useful
+  o Remove setVisible() in InitializedGL() : do not set this component visible until 
+    it is totally realized
+    (normally done by G4UIQt::AddTab() )
+  o Remove sendPostedEvents () in InitializedGL() : Not useful and cause the mainWindow 
+    to be redraw before the session_start()
+  o Remove makeCurrent() in ComputeView ()  
+  o Call ClearViewWithoutFlush() instead of ClearView() : Avoid a unnecessary flush()
+  o In ResizeGL() : Now call the Clear-Set-Draw sequence
+  o Move half of painGL() in paintEvent(). The paintGL() function now does only the 
+    Set-Clear-Compute sequence.
+  o showEvent() does now only repaint visible windows
+  o Remove glFlush() in DrawView(). Avoid flickering
+- G4OpenGLViewer :
+  o Add a new function ClearViewWithoutFlush(): Avoid a unnecessary flush()
+
+22th August 2014  Laurent Garnier (opengl-V10-00-18)
+- G4OpenGLQtViewer :
+  o Fix a crash when closing a tab viewer when auto rotating
+  o Change the "search" look and feel in the tree viewer
+
+13th August 2014  Laurent Garnier (opengl-V10-00-17)
+- G4OpenGLQtViewer : Fix a compiler warning
+
+4rd August 2014  Laurent Garnier
+- G4OpenGLImmediateQtViewer, G4OpenGLStoredQtViewer, G4OpenGLQtViewer : 
+  o Add a keyReleaseEvent() method
+  o Allow rotation/move during picking
+- G4OpenGLQtViewer :
+  o Change cursor shape according to mouse operation
+  o Activate picking info widget when picking
+
+3rd August 2014  Laurent Garnier (opengl-V10-00-16)
+- G4OpenGLQtViewer : Fix a compilation error(missing change in G4OpenGLQtViewer.hh)
+
+1st August 2014  Laurent Garnier (opengl-V10-00-15)
+- G4OpenGLXViewer : Fix a compilation error
+
+30th July 2014  Laurent Garnier (opengl-V10-00-14)
+- G4OpenGLImmediateQtViewer/G4OpenGLStoredQtViewer :
+  o Add the "event" parameter to "mouseReleaseEvent" method
+- G4OpenGLQtViewer : 
+  o Move picking event from "mouse click" to "mouse release" function
+  o Fix a compilation problem with std::to_string
+- G4OpenGLViewer : 
+  o Fix a compilation problem with std::to_string
+
+30th July 2014  Laurent Garnier (opengl-V10-00-13)
+- G4OpenGLViewer : Fix a compilation error
+
+30th July 2014  Laurent Garnier (opengl-V10-00-12)
+- G4OpenGL.hh:
+  o Remove all references to glu.h
+- G4OpenGLXViewer :
+  o Replace gluGetError to avoid calling of glu function
+
+30th July 2014  Laurent Garnier
+- G4OpenGLStoredSceneHandler : Change some G4cout in G4err in case of error messages
+
+30th July 2014  Laurent Garnier
+- G4OpenGLQtViewer :
+  o Add a "picking info" component at bottom left inside the scene browser
+  o Add a horizontal splitter inside the scene browser
+  o Beginning of changing color of a picking item (need to be improved)
+  o Some renaming on signalMapper parameters
+  o Fix a bug : Previously when changing cursor to "Pick" on context menu, nothing was done.
+  o Change picking effect, instead of displaying in G4Cout, will now display all picking infos 
+    separate by "hit number" in another widget inside the scene browser
+  o New method "changeColorAndTransparency" to be able to change color and transparency on a PO index
+- G4OpenGLViewer : 
+  o Add a "fIsGettingPickInfos" parameter to avoid problems
+  o Split "Pick" function in 2 parts : "Pick" and "GetPickDetails"
+  o Add a inner class "G4OpenGLViewerPickMap"
+
+7nd July 2014  Laurent Garnier  (opengl-V10-00-11)
+- G4OpenGLViewer : 
+  o Fix a warning
+
+7nd July 2014  Laurent Garnier  (opengl-V10-00-10)
+- G4OpenGLViewer : 
+  o Replace deprecated gluLookAt by g4GluLookAt
+
+2nd July 2014  Laurent Garnier  (opengl-V10-00-09)
+- G4OpenGLQtExportDialog : Remove unused functions
+- G4OpenGLQtViewer : 
+  o Remove unused functions
+  o Factorisation of Qt save function and OGL save functions.
+- G4OpenGLViewer : 
+  o Move to private members from static members "fPrintSizeX", "fPrintSizeY", "fPrintFilename" and "fPrintFilenameIndex"
+  o Change default export format to "pdf" instead of "eps"
+  o Change default export name to "G4OpenGL-XXXX" where XXXX is the viewer_name
+  o Change method signature for printEPS(), now return false when failed
+  o printEPS() now deal with all gl2ps formats (eps/ps/pdf/svg)
+  o Add a exportImage(name, width, height) generic function with lots of formats available
+  o printGl2PS() : Better error messages
+  o Renaming :
+    o getRealPrintSizeX() to getRealExportSizeX()
+    o getRealPrintSizeY() to getRealExportSizeY()
+    o setPrintSize() to setExportSize()
+    o setPrintFilename() to setExportFilename()
+  o New methods :
+    o addExportImageFormat()
+    o setExportImageFormat()
+    o exportImage(name, width, height) generic function with lots of formats available
+    o isInitialized()
+- G4OpenGLViewerMessenger :
+  o Add new commands :
+    o /vis/ogl/set/exportFormat
+    o /vis/ogl/export
+
+30th June 2014  Michael Kelsey
+- G4OpenGLQtViewer:  Change QPixmap objects to be pointers; fixes fatal 
+  problem creating viewer in "batch" application without interactive GUI.
+
+6th June 2014  Laurent Garnier (opengl-V10-00-08)
+- G4OpenGLQtViewer: Fix a problem in viewer/set parameters
+
+5th June 2014  Laurent Garnier (opengl-V10-00-07)
+- G4OpenGLStoredSceneHandler : Split AddPrimitivePreamble() in 3 functions to avoid 
+  dynamic_cast (+20% faster in drawing)
+
+5th June 2014  Laurent Garnier (opengl-V10-00-06 co-works interfaces-V10-00-05)
+- G4OpenGLQtViewer: 
+  o Improve Viewer parameters info panel
+  o Fix problem with /vis/viewer/set/ "auxiliaryEdge"/"defaultTextColour"/"globalLineWidthScale"
+  o Implement missing commands : "edge", "lightsThetaPhi", "upVector", "viewpointVector"
+- G4OpenGLImmediateQtViewer/G4OpenGLStoredQtViewer:
+  o Add feedback for Viewer parameters info panel
+
+3rd June 2014  Laurent Garnier
+- G4OpenGLQtViewer: 
+  o Hide Viewer parameters under a widget at the bottom of the Viewer panel
+  o Most of viewer/set parameters are now implemented. Still missing :
+    "culling", "edge", "lightsThetaPhi", "upVector", "viewpointVector"
+
+28th May 2014  Laurent Garnier
+- G4OpenGLQtViewer: Add current parameters for targetPoint, lineSegmentsPerCircle, upThetaPhi
+
+27th May 2014  Laurent Garnier
+- G4OpenGLQtViewer: Viewer parameter panel improvments, all viewer parameters are editable
+
+26th May 2014  Laurent Garnier
+- G4OpenGLQtViewer: Beggining of DEV-151 : Add a viewer parameter panel
+   o All view parameters with a "set" ui command are there.
+   o Only viewpointThetaPhi has a feedback
+   o All other parameters are default.
+
+20th May 2014  Laurent Garnier
+- G4OpenGLQtMovieDialog: Minor change in movie menu title
+
+13th May 2014  John Allison  (opengl-V10-00-05)
+- Coworks: DAWN-V10-00-02, visman-V10-00-08, openinventor-V10-00-01.
+- Moved G4VisFeaturesOfOpenGL from management sub-category.
+
+5th May 2014  Laurent Garnier  (opengl-V10-00-04)
+- G4OpenGLQtViewer : Fix a bug in Picking in Qt viewer. A G4cout was missing in order 
+  to see picked informations
+
+23th April 2014  Laurent Garnier (opengl-V10-00-03)
+- G4OpenGL.hh: Fix bugzilla #1618 : for a Linux user, compiling Geant4 with only 
+  Qt driver will failed because of missing glu.h.
+
+18th April 2014  Laurent Garnier
+- G4OpenGLImmediateSceneHandler: Split AddPrimitivePreamble() in 3 functions to avoid 
+  dynamic_cast (+20% faster in drawing)
+
+17th April 2014  Laurent Garnier
+- G4OpenGLViewer : Time optimization in printEPS for Immediate mode
+  => save 70-80% in drawing time on batch drawing. 10-20% when printing with a screen
+     viewer
+
+10th April 2014  Laurent Garnier (opengl-V10-00-02)
+- G4OpenGLQtViewer : Add changing the color of text in DrawText() 
+- G4OpenGLViewer : manage bad file name case (missing directory) in printGl2PS()
+
+5th February 2014  Laurent Garnier
+- G4OpenGLStoredQtViewer : Bugfix for Qt5
+
+25th January 2014  John Allison  (opengl-V10-00-01)
+- G4OpenGLStoredSceneHandler::AddPrimitivePreamble:
+  o Improved protection of pointers in display list reuse test.
+
+23rd January 2014  John Allison  (opengl-V10-00-00)
+- G4OpenGLViewer:
+  o Switch off debug flag G4DEBUG_VIS_OGL.
+  o G4OpenGLViewer::Pick:
+    - Make virtual so it can be overloaded.
+    - Return information in G4String.
+    - Comment out debug printing.
+- G4OpenGLXViewer::ShowView: Adapt to new G4OpenGLViewer::Pick.
+
+9th December 2013 Laurent Garnier
+- G4OpenGLViewer : Fix a warning
+
+6th December 2013 Laurent Garnier
+- G4OpenGLStoredQtViewer.cc
+ o Fix (a part of) the picking problem (JIRA-DEV113)
+ o Fix a potentiel problem with freezing OGL window with Qt driver
+- G4OpenGLQtViewer : 
+ o Better size handling at start
+- G4OpenGLViewer : 
+ o Prepare picking in order to display additional information on viewer (and not
+   in G4cout)
 
 20th November 2013 Laurent Garnier  (opengl-V09-06-12)
 - G4OpenGLQtViewer : Fix a bug with endsWith that I have introduce in last revision

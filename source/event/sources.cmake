@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 69010 2013-04-15 09:34:16Z gcosmo $
+# $Id: sources.cmake 81623 2014-06-04 08:10:21Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -86,6 +86,7 @@ GEANT4_DEFINE_MODULE(NAME G4event
         evmandefs.hh
         evtdefs.hh
         trajectoryControl.hh
+	G4GeneralParticleSourceData.hh
     SOURCES
         G4AdjointPosOnPhysVolGenerator.cc
         G4AdjointPrimaryGenerator.cc
@@ -115,6 +116,7 @@ GEANT4_DEFINE_MODULE(NAME G4event
         G4UserEventAction.cc
         G4UserStackingAction.cc
         G4VPrimaryGenerator.cc
+	G4GeneralParticleSourceData.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

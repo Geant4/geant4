@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenMessenger.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4GMocrenMessenger.cc 87126 2014-11-25 08:58:14Z gcosmo $
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura  
@@ -39,7 +39,7 @@
 #include "G4Tokenizer.hh"
 
 G4GMocrenMessenger::G4GMocrenMessenger()
-  : suffix (""), geometry(true), solids(true), invisibles(true),
+  : suffix (""), geometry(true), pointAttributes(false), solids(true), invisibles(true),
     kgMocrenVolumeName("gMocrenVolume"),
     kgMocrenScoringMeshName("gMocrenScoringMesh"),
     kDrawVolumeGrid(false) {

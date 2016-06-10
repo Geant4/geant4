@@ -39,40 +39,37 @@
 #include "XrayFluoDetectorConstruction.hh"
 #include "XrayFluoPrimaryGeneratorMessenger.hh"
 #include "XrayFluoRunAction.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
+#include "G4Gamma.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4MTRunManager.hh"
 #include "Randomize.hh"
 #include "XrayFluoAnalysisManager.hh"
 #include "XrayFluoDataSet.hh"
-#ifdef G4ANALYSIS_USE  
-#include "AIDA/AIDA.h"
-#endif
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayFluoPrimaryGeneratorAction::XrayFluoPrimaryGeneratorAction(XrayFluoDetectorConstruction* XrayFluoDC)
+XrayFluoPrimaryGeneratorAction::XrayFluoPrimaryGeneratorAction(const 
+							       XrayFluoDetectorConstruction* XrayFluoDC)
   :rndmFlag("off"),beam("off"),spectrum("off"),isoVert("off"),phaseSpaceGunFlag(false), 
-   rayleighFlag(true), particleEnergies(0),  particleTypes(0), detectorPosition(0) 
+   rayleighFlag(true), detectorPosition(0) 
 {
-
+  runAction = 0;
   XrayFluoDetector = XrayFluoDC;
 
   G4int n_particle = 1;
   particleGun  = new G4ParticleGun(n_particle);
   
   //create a messenger for this class
-  gunMessenger = new XrayFluoPrimaryGeneratorMessenger(this);
-  runManager = new XrayFluoRunAction();
-  
+  gunMessenger = new XrayFluoPrimaryGeneratorMessenger(this); 
+
   // default particle kinematic
-  
-  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4String particleName;
   G4ParticleDefinition* particle
-    = particleTable->FindParticle(particleName="gamma");
+    = G4Gamma::Definition();
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
   particleGun->SetParticleEnergy(10. * keV);
@@ -80,14 +77,12 @@ XrayFluoPrimaryGeneratorAction::XrayFluoPrimaryGeneratorAction(XrayFluoDetectorC
   G4double position = -0.5*(XrayFluoDetector->GetWorldSizeZ());
   particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));
 
-
-  
   G4cout << "XrayFluoPrimaryGeneratorAction created" << G4endl;
   
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifdef G4ANALYSIS_USE     
 void XrayFluoPrimaryGeneratorAction::ActivatePhaseSpace(G4String fileName) {
 
   // load phase-space
@@ -98,23 +93,16 @@ void XrayFluoPrimaryGeneratorAction::ActivatePhaseSpace(G4String fileName) {
 
   XrayFluoAnalysisManager* analysis =  XrayFluoAnalysisManager::getInstance();
   analysis->LoadGunData(fileName, rayleighFlag);
-  particleEnergies = analysis->GetEmittedParticleEnergies();
-  particleTypes = analysis->GetEmittedParticleTypes();
   detectorPosition = XrayFluoDetector->GetDetectorPosition();
   detectorPosition.setR(detectorPosition.r()-(5.*cm)); // 5 cm before the detector, so in front of it.
-#else     
-void XrayFluoPrimaryGeneratorAction::ActivatePhaseSpace(G4String ) {
-#endif
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayFluoPrimaryGeneratorAction::SetRayleighFlag (G4bool value)
 {
-
-  G4cout <<  "value: " << value << G4endl; 
-  rayleighFlag = value;
-  
+  rayleighFlag = value; 
 }
 
 
@@ -124,16 +112,27 @@ XrayFluoPrimaryGeneratorAction::~XrayFluoPrimaryGeneratorAction()
 {
   delete particleGun;
   delete gunMessenger;
-  delete runManager;
-
-  G4cout << "XrayFluoPrimaryGeneratorAction deleted" << G4endl;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayFluoPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
+  //retrieve runAction, if not done
+  if (!runAction)
+    {
+      //Sequential runaction
+      if (G4RunManager::GetRunManager()->GetRunManagerType() == 
+	  G4RunManager::sequentialRM)
+	runAction = static_cast<const XrayFluoRunAction*>
+	  (G4RunManager::GetRunManager()->GetUserRunAction());  
+      else //MT master runaction
+	runAction = static_cast<const XrayFluoRunAction*>
+	  (G4MTRunManager::GetMasterRunManager()->GetUserRunAction());  
+      if (!runAction)
+	G4cout << "Something wrong here!" << G4endl;
+    }
+ 
   //this function is called at the begining of event
   // 
   G4double z0 = -0.5*(XrayFluoDetector->GetWorldSizeZ());
@@ -165,10 +164,10 @@ void XrayFluoPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	->GetParticleName();
       if(particle == "proton"|| particle == "alpha")
 	{
-	  G4DataVector* energies =  runManager->GetEnergies();
-	  G4DataVector* data =  runManager->GetData();
+	  G4DataVector* energies =  runAction->GetEnergies();
+	  G4DataVector* data =  runAction->GetData();
 	 
-	  G4double sum = runManager->GetDataSum();
+	  G4double sum = runAction->GetDataSum();
 	  G4double partSum = 0;
 	  G4int j = 0;
 	  G4double random= sum*G4UniformRand();
@@ -183,7 +182,7 @@ void XrayFluoPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	}
       else if (particle == "gamma")
 	{
-	  const XrayFluoDataSet* dataSet = runManager->GetGammaSet();
+	  const XrayFluoDataSet* dataSet = runAction->GetGammaSet();
 	  
 	  G4int i = 0;
 	  G4int id = 0;
@@ -239,22 +238,16 @@ void XrayFluoPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   if (phaseSpaceGunFlag){
 
-    size_t i = anEvent->GetEventID();
-
     particleGun->SetParticlePosition(detectorPosition); 
     particleGun->SetParticleMomentumDirection(detectorPosition);
-    G4double energy;
+   
     G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-    G4ParticleDefinition* particle;
-    if (i < particleEnergies->size()) {      
-      energy = (*particleEnergies)[i];
-      particle = particleTable->FindParticle((*particleTypes)[i]);
-    }
+   
+    const std::pair<G4double,G4String> kine = 
+      XrayFluoAnalysisManager::getInstance()->GetEmittedParticleEnergyAndType();
 
-    else {
-      energy = 0.;
-      particle = particleTable->FindParticle("gamma");
-    }
+    G4double energy = kine.first;
+    G4ParticleDefinition* particle = particleTable->FindParticle(kine.second);
 
     particleGun->SetParticleEnergy(energy);
     particleGun->SetParticleDefinition(particle);
@@ -262,13 +255,10 @@ void XrayFluoPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   }
 
-#ifdef G4ANALYSIS_USE 
-
   G4double partEnergy = particleGun->GetParticleEnergy();
   XrayFluoAnalysisManager* analysis =  XrayFluoAnalysisManager::getInstance();
   analysis->analysePrimaryGenerator(partEnergy/keV);
 
-#endif
  
   particleGun->GeneratePrimaryVertex(anEvent);
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh 70371 2013-05-29 15:18:07Z gcosmo $
+// $Id: G4EmCorrections.hh 81058 2014-05-20 09:04:28Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -73,7 +73,7 @@ class G4EmCorrections
 
 public:
 
-  G4EmCorrections();
+  G4EmCorrections(G4int verb);
 
   virtual ~G4EmCorrections();
 
@@ -164,6 +164,8 @@ public:
 
   inline G4int GetNumberOfStoppingVectors();
 
+  inline void SetVerbose(G4int verb);
+
 private:
 
   void Initialise();
@@ -180,7 +182,8 @@ private:
 
   G4int Index(G4double x, G4double* y, G4int n);
 
-  G4double Value(G4double xv, G4double x1, G4double x2, G4double y1, G4double y2);
+  G4double Value(G4double xv, G4double x1, G4double x2, 
+		 G4double y1, G4double y2);
 
   G4double Value2(G4double xv, G4double yv, G4double x1, G4double x2,
                   G4double y1, G4double y2,
@@ -192,6 +195,8 @@ private:
   // hide assignment operator
   G4EmCorrections & operator=(const G4EmCorrections &right);
   G4EmCorrections(const G4EmCorrections&);
+
+  static const G4double inveplus;
 
   G4double     ed[104];
   G4double     a[104];
@@ -289,7 +294,7 @@ private:
 inline G4int G4EmCorrections::Index(G4double x, G4double* y, G4int n)
 {
   G4int iddd = n-1;
-  do {iddd--;} while (iddd>0 && x<y[iddd]);
+  do {--iddd;} while (iddd>0 && x<y[iddd]);
   return iddd;
 }
 
@@ -354,13 +359,9 @@ inline void G4EmCorrections::SetupKinematics(const G4ParticleDefinition* p,
     beta  = std::sqrt(beta2);
     ba2   = beta2/alpha2;
     G4double ratio = CLHEP::electron_mass_c2/mass;
-    tmax  = 2.0*CLHEP::electron_mass_c2*bg2 /(1. + 2.0*gamma*ratio + ratio*ratio);
-    charge  = p->GetPDGCharge()/CLHEP::eplus;
-    //if(charge < 1.5)  {q2 = charge*charge;}
-    //else {
-    //  q2 = effCharge.EffectiveChargeSquareRatio(p,mat,kinEnergy);
-    //  charge = std::sqrt(q2);
-    //}
+    tmax  = 2.0*CLHEP::electron_mass_c2*bg2 
+      /(1. + 2.0*gamma*ratio + ratio*ratio);
+    charge  = p->GetPDGCharge()*inveplus;
     if(charge > 1.5) { charge = effCharge.EffectiveCharge(p,mat,kinEnergy); }
     q2 = charge*charge;
   }
@@ -370,6 +371,11 @@ inline void G4EmCorrections::SetupKinematics(const G4ParticleDefinition* p,
     atomDensity  = material->GetAtomicNumDensityVector(); 
     numberOfElements = material->GetNumberOfElements();
   }
+}
+
+inline void G4EmCorrections::SetVerbose(G4int verb)
+{
+  verbose = verb;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

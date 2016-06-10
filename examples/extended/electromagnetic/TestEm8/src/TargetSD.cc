@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/src/TargetSD.cc
 /// \brief Implementation of the TargetSD class
 //
-// $Id: TargetSD.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: TargetSD.cc 86976 2014-11-21 12:07:00Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -40,52 +40,54 @@
 // 
 
 #include "TargetSD.hh"
+#include "Run.hh"
 #include "globals.hh"
-#include "HistoManager.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4TouchableHistory.hh"
 #include "G4Step.hh"
+#include "G4RunManager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TargetSD::TargetSD(const G4String& name)
- : G4VSensitiveDetector(name), fHisto(HistoManager::GetPointer())
+  : G4VSensitiveDetector(name), fRun(0)
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TargetSD::~TargetSD()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TargetSD::Initialize(G4HCofThisEvent*)
-{}
+{
+  fRun = (Run*)G4RunManager::GetRunManager()->GetNonConstCurrentRun();  
+}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool TargetSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
-  fHisto->AddEnergy(edep, aStep); 
+  fRun->AddEnergy(edep, aStep); 
   return true;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TargetSD::EndOfEvent(G4HCofThisEvent*)
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TargetSD::clear()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TargetSD::PrintAll()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

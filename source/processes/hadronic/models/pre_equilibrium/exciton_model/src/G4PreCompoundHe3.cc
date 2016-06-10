@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundHe3.cc 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4PreCompoundHe3.cc 82765 2014-07-08 14:25:39Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -38,6 +38,7 @@
 // 21.08.2008 J. M. Quesada add choice of options  
 // 20.08.2010 V.Ivanchenko added G4Pow and G4PreCompoundParameters pointers
 //                         use int Z and A and cleanup
+// 05.07.2013 J.M. Quesada FactorialFactor fixed
 //
  
 #include "G4PreCompoundHe3.hh"
@@ -61,7 +62,7 @@ G4PreCompoundHe3::~G4PreCompoundHe3()
 
 G4double G4PreCompoundHe3::FactorialFactor(G4int N, G4int P)
 {
-  return G4double((N-3)*(P-2)*(N-2)*(P-1)*(N-1)*P)/6.0; 
+  return G4double((N-3)*(P-2)*(N-2)*(P-1)*(N-1)*P)/12.0; 
 }
   
 G4double G4PreCompoundHe3::CoalescenceFactor(G4int A)

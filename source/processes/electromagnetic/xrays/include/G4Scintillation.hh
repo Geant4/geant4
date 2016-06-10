@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.hh 71877 2013-06-27 13:55:53Z gunter $
+// $Id: G4Scintillation.hh 85355 2014-10-28 09:58:59Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -96,7 +96,7 @@ public:
 
 	G4Scintillation(const G4String& processName = "Scintillation",
                                  G4ProcessType type = fElectromagnetic);
-	~G4Scintillation();	
+	~G4Scintillation();
 
 private:
 
@@ -151,7 +151,7 @@ public:
 
         // These are the methods implementing the scintillation process.
 
-	void SetTrackSecondariesFirst(const G4bool state);
+        void SetTrackSecondariesFirst(const G4bool state);
         // If set, the primary particle tracking is interrupted and any
         // produced scintillation photons are tracked next. When all 
         // have been tracked, the tracking of the primary resumes.
@@ -174,7 +174,7 @@ public:
         G4double GetScintillationYieldFactor() const;
         // Returns the photon yield factor.
 
-        void SetScintillationExcitationRatio(const G4double excitationratio);
+        void SetScintillationExcitationRatio(const G4double ratio);
         // Called to set the scintillation exciation ratio, needed when
         // the scintillation level excitation is different for different
         // types of particles. This overwrites the YieldRatio obtained
@@ -189,13 +189,13 @@ public:
         G4PhysicsTable* GetSlowIntegralTable() const;
         // Returns the address of the slow scintillation integral table.
 
-        void AddSaturation(G4EmSaturation* sat) { emSaturation = sat; }
+        void AddSaturation(G4EmSaturation* );
         // Adds Birks Saturation to the process.
 
-        void RemoveSaturation() { emSaturation = NULL; }
+        void RemoveSaturation();
         // Removes the Birks Saturation from the process.
 
-        G4EmSaturation* GetSaturation() const { return emSaturation; }
+        G4EmSaturation* GetSaturation() const { return fEmSaturation; }
         // Returns the Birks Saturation.
 
         void SetScintillationByParticleType(const G4bool );
@@ -203,7 +203,7 @@ public:
         // of energy deposited by particle type
 
         G4bool GetScintillationByParticleType() const
-        { return scintillationByParticleType; }
+        { return fScintillationByParticleType; }
         // Return the boolean that determines the method of scintillation
         // production
 
@@ -220,23 +220,23 @@ protected:
         // Class Data Members
         ///////////////////////
 
-        G4PhysicsTable* theSlowIntegralTable;
-        G4PhysicsTable* theFastIntegralTable;
+        G4PhysicsTable* fFastIntegralTable;
+        G4PhysicsTable* fSlowIntegralTable;
+
+private:
 
         G4bool fTrackSecondariesFirst;
         G4bool fFiniteRiseTime;
 
-        G4double YieldFactor;
+        G4double fYieldFactor;
 
-        G4double ExcitationRatio;
+        G4double fExcitationRatio;
 
-        G4bool scintillationByParticleType;
+        G4bool fScintillationByParticleType;
 
 #ifdef G4DEBUG_SCINTILLATION
         G4double ScintTrackEDep, ScintTrackYield;
 #endif
-
-private:
 
         G4double single_exp(G4double t, G4double tau2);
         G4double bi_exp(G4double t, G4double tau1, G4double tau2);
@@ -244,13 +244,7 @@ private:
         // emission time distribution when there is a finite rise time
         G4double sample_time(G4double tau1, G4double tau2);
 
-        G4EmSaturation* emSaturation;
-
-
-public:
-
-
-private:
+        G4EmSaturation* fEmSaturation;
 
 };
 
@@ -267,18 +261,6 @@ G4bool G4Scintillation::IsApplicable(const G4ParticleDefinition& aParticleType)
        return true;
 }
 
-inline 
-void G4Scintillation::SetTrackSecondariesFirst(const G4bool state) 
-{
-	fTrackSecondariesFirst = state;
-}
-
-inline
-void G4Scintillation::SetFiniteRiseTime(const G4bool state)
-{
-        fFiniteRiseTime = state;
-}
-
 inline
 G4bool G4Scintillation::GetTrackSecondariesFirst() const
 {
@@ -292,62 +274,50 @@ G4bool G4Scintillation::GetFiniteRiseTime() const
 }
 
 inline
-void G4Scintillation::SetScintillationYieldFactor(const G4double yieldfactor)
-{
-        YieldFactor = yieldfactor;
-}
-
-inline
 G4double G4Scintillation::GetScintillationYieldFactor() const
 {
-        return YieldFactor;
-}
-
-inline
-void G4Scintillation::SetScintillationExcitationRatio(const G4double excitationratio)
-{
-        ExcitationRatio = excitationratio;
+        return fYieldFactor;
 }
 
 inline
 G4double G4Scintillation::GetScintillationExcitationRatio() const
 {
-        return ExcitationRatio;
+        return fExcitationRatio;
 }
 
 inline
 G4PhysicsTable* G4Scintillation::GetSlowIntegralTable() const
 {
-        return theSlowIntegralTable;
+        return fSlowIntegralTable;
 }
 
 inline
 G4PhysicsTable* G4Scintillation::GetFastIntegralTable() const
 {
-        return theFastIntegralTable;
+        return fFastIntegralTable;
 }
 
 inline
 void G4Scintillation::DumpPhysicsTable() const
 {
-        if (theFastIntegralTable) {
-           G4int PhysicsTableSize = theFastIntegralTable->entries();
+        if (fFastIntegralTable) {
+           G4int PhysicsTableSize = fFastIntegralTable->entries();
            G4PhysicsOrderedFreeVector *v;
 
            for (G4int i = 0 ; i < PhysicsTableSize ; i++ )
            {
-        	v = (G4PhysicsOrderedFreeVector*)(*theFastIntegralTable)[i];
+        	v = (G4PhysicsOrderedFreeVector*)(*fFastIntegralTable)[i];
         	v->DumpValues();
            }
          }
 
-        if (theSlowIntegralTable) {
-           G4int PhysicsTableSize = theSlowIntegralTable->entries();
+        if (fSlowIntegralTable) {
+           G4int PhysicsTableSize = fSlowIntegralTable->entries();
            G4PhysicsOrderedFreeVector *v;
 
            for (G4int i = 0 ; i < PhysicsTableSize ; i++ )
            {
-                v = (G4PhysicsOrderedFreeVector*)(*theSlowIntegralTable)[i];
+                v = (G4PhysicsOrderedFreeVector*)(*fSlowIntegralTable)[i];
                 v->DumpValues();
            }
          }

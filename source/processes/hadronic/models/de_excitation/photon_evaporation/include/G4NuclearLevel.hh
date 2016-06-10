@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearLevel.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4NuclearLevel.hh 86986 2014-11-21 13:00:05Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -119,6 +119,8 @@ public:
   G4int NumberOfGammas() const;
 
   void PrintAll() const;  
+
+  void PrintLevels() const;  
 
   G4bool operator==(const G4NuclearLevel &right) const;
   G4bool operator!=(const G4NuclearLevel &right) const;

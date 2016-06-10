@@ -23,135 +23,169 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KDNode.hh 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4KDNode.hh 85244 2014-10-27 08:24:13Z gcosmo $
 //
-// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
+// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+
+// The code is developed in the framework of the ESA AO7146
 //
-// WARNING : This class is released as a prototype.
-// It might strongly evolve or even disapear in the next releases.
+// We would be very happy hearing from you, send us your feedback! :)
 //
-// History:
-// -----------
-// 10 Oct 2011 M.Karamitros created
+// In order for Geant4-DNA to be maintained and still open-source,
+// article citations are crucial. 
+// If you use Geant4-DNA chemistry and you publish papers about your software, 
+// in addition to the general paper on Geant4-DNA:
 //
-// -------------------------------------------------------------------
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// we would be very happy if you could please also cite the following
+// reference papers on chemistry:
+//
+// J. Comput. Phys. 274 (2014) 841-882
+// Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
+
 
 #ifndef G4KDNODE_HH
 #define G4KDNODE_HH
 
 #include <list>
+#include <map>
+#include <vector>
+#include <deque>
+#include <G4ThreeVector.hh>
+#include <G4Allocator.hh>
+
+#include "globals.hh"
+#include <ostream>
 
 class G4KDTree;
+class G4KDMap;
 
-/**
-  * G4KDNode stores one entity in G4KDTree
-  * This class is for internal use only
-  */
-class G4KDNode
+class G4KDNode_Base
 {
-
 public :
-    // For root node :
-    // parent = 0, axis = 0, side = 0
-    G4KDNode(G4KDTree*, const double* /*position*/, void* /*data*/,
-             G4KDNode* /*parent*/, int axis0);
-    virtual ~G4KDNode();
+	//________________________
+	// For root node :
+	// parent = 0, axis = 0, side = 0
+	G4KDNode_Base(G4KDTree*, G4KDNode_Base* /*parent*/);
+	virtual ~G4KDNode_Base();
+	virtual double operator[](size_t) const = 0;
+	virtual void InactiveNode();
+	virtual bool IsValid() const{ return true; }
 
-    inline G4KDTree* GetTree();
-    inline void SetTree(G4KDTree*);
+	//________________________
+	inline G4KDTree* GetTree() const {return fTree;}
+	inline void SetTree(G4KDTree* tree) {fTree = tree;}
 
-    inline const double* GetPosition();
+	//________________________
+	int GetDim() const;
+	inline int       GetAxis() const{return fAxis;}
+	inline G4KDNode_Base* GetParent(){return fParent;}
+	inline G4KDNode_Base* GetLeft(){return fLeft;}
+	inline G4KDNode_Base* GetRight(){return fRight;}
 
-    int GetDim();
+	//________________________
+	template <typename Position> G4KDNode_Base* FindParent(const Position& x0);
+	template <typename PointT> G4KDNode_Base* Insert(PointT* point);
+	int	Insert(G4KDNode_Base* newNode);
 
-    inline int       GetAxis();
-    inline void*     GetData();
-    inline void      SetData(void*);
-    inline G4KDNode* GetParent();
-    inline G4KDNode* GetLeft();
-    inline G4KDNode* GetRight();
+	void PullSubTree();
+	void RetrieveNodeList(std::list<G4KDNode_Base*>& node_list);
 
-    G4KDNode* FindParent(const double* x0);
-    G4KDNode* Insert(const double* p, void* data);
+	void Print(std::ostream& out, int level = 0) const ;
 
-    int	Insert(G4KDNode* newNode, double* p);
-    int	Insert(G4KDNode* newNode, const double& x, const double& y, const double& z);
-    int	Insert(G4KDNode* newNode);
-
-    void InactiveNode();
-    void PullSubTree();
-    void RetrieveNodeList(std::list<G4KDNode*>& node_list);
+//	std::vector<std::deque<G4KDNode_Base* >::iterator >* GetIteratorsForSortingAlgo(G4KDMap*);
+//	std::map<G4KDMap*, std::vector<std::deque<G4KDNode_Base* >::iterator > >* fpIteratorInSortingAlgo;
 
 protected :
+	//°°°°°°°°°°°
+	// Members
+	//°°°°°°°°°°°
+	size_t fAxis;              // axis : x, y, z ...
+	int fSide ;             // left/right
+	/* fSide == 0  : Is the root node
+	 * fSide == -1 : It is the left of the parent node
+	 * fSide == 1  : It is the right of the parent node
+	 */
 
-    int SetPosition(const double* newposition);
-
-    //°°°°°°°°°°°
-    // Members
-    //°°°°°°°°°°°
-    double* fPosition;
-    int fAxis;              // axis : x, y, z ...
-    void *fData;
-    int fSide ;             // left/right
-    /* fSide == 0  : Is the root node
-     * fSide == -1 : It is the left of the parent node
-     * fSide == 1  : It is the right of the parent node
-     */
-
-    G4KDTree* fTree ;
-    G4KDNode *fLeft, *fRight, *fParent;
-    /* Left : fLeft->fPosition[axis] < this->fPosition[axis]
-     * Right : fRight->fPosition[axis] > this->fPosition[axis]
-     * Root node : fParent = 0
-     */
+	G4KDTree* fTree ;
+	G4KDNode_Base *fLeft, *fRight, *fParent;
+	/* Left : fLeft->fPosition[axis] < this->fPosition[axis]
+	 * Right : fRight->fPosition[axis] > this->fPosition[axis]
+	 * Root node : fParent = 0
+	 */
 private :
-    G4KDNode(const G4KDNode& right);
-    G4KDNode& operator=(const G4KDNode& right);
+	G4KDNode_Base(const G4KDNode_Base& right);
+	G4KDNode_Base& operator=(const G4KDNode_Base& right);
 };
 
-inline int G4KDNode::GetAxis()
+/**
+ * G4KDNode stores one entity in G4KDTree
+ * This class is for internal use only
+ */
+
+template <typename PointT>
+class G4KDNode : public G4KDNode_Base
 {
-    return fAxis;
+public :
+	//________________________
+	// For root node :
+	// parent = 0, axis = 0, side = 0
+	G4KDNode(G4KDTree*, PointT* /*point*/,
+			G4KDNode_Base* /*parent*/);
+	virtual ~G4KDNode();
+	
+    void *operator new(size_t);
+    void operator delete(void *);
+
+	inline PointT* GetPoint() {
+			return fPoint;
+	}
+	
+	virtual double operator[](size_t i) const
+	{
+		if(fPoint == 0) abort();
+		return (*fPoint)[i];
+	}
+
+	virtual void InactiveNode()
+	{
+		fValid = false;
+		G4KDNode_Base::InactiveNode();
+	}
+
+	virtual bool IsValid() const
+	{
+		return fValid;
+	}
+
+protected:
+	PointT* fPoint;
+	G4bool fValid;
+
+private :
+	G4KDNode(const G4KDNode<PointT>& right);
+	G4KDNode& operator=(const G4KDNode<PointT>& right);
+
+	static G4ThreadLocal G4Allocator<G4KDNode<PointT> >* fgAllocator;
+};
+
+template <typename PointT>
+G4ThreadLocal G4Allocator<G4KDNode<PointT> >* G4KDNode<PointT>::fgAllocator(0);
+
+template<typename PointT>
+void* G4KDNode<PointT>::operator new(size_t)
+{
+    if (!fgAllocator) fgAllocator = new G4Allocator<G4KDNode<PointT> >;
+    return (void *) fgAllocator->MallocSingle();
 }
 
-inline void* G4KDNode::GetData()
+template<typename PointT>
+void G4KDNode<PointT>::operator delete(void *aNode)
 {
-    return fData;
+	fgAllocator->FreeSingle((G4KDNode<PointT> *) aNode);
 }
 
-inline void  G4KDNode::SetData(void* data)
-{
-    fData = data;
-}
-
-inline const double* G4KDNode::GetPosition()
-{
-    return fPosition;
-}
-
-inline G4KDNode* G4KDNode::GetParent()
-{
-    return fParent;
-}
-
-inline G4KDNode* G4KDNode::GetLeft()
-{
-    return fLeft;
-}
-
-inline G4KDNode* G4KDNode::GetRight()
-{
-    return fRight;
-}
-
-inline G4KDTree* G4KDNode::GetTree()
-{
-    return fTree;
-}
-
-inline void G4KDNode::SetTree(G4KDTree* tree)
-{
-    fTree = tree;
-}
+#include "G4KDNode.icc"
 
 #endif // G4KDNODE_HH

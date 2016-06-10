@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedComptonModel.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4LivermorePolarizedComptonModel.hh 82874 2014-07-15 15:25:29Z gcosmo $
 //
 // Authors: G.Depaola & F.Longo
 //
@@ -78,9 +78,7 @@ protected:
 			   G4ForceCondition* condition);
 			   */
 private:
-
-  G4double lowEnergyLimit;  
-  G4double highEnergyLimit; 
+ 
   G4bool isInitialised;
   G4int verboseLevel;
 

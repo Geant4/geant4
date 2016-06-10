@@ -27,7 +27,7 @@
 /// \brief Main program of the electromagnetic/TestEm1 example
 //
 //
-// $Id: TestEm1.cc 76485 2013-11-11 10:54:47Z gcosmo $
+// $Id: TestEm1.cc 84815 2014-10-21 12:19:02Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,6 +64,9 @@ int main(int argc,char** argv) {
   // Construct the default run manager
 #ifdef G4MULTITHREADED
     G4MTRunManager* runManager = new G4MTRunManager;
+    G4int nThreads = G4Threading::G4GetNumberOfCores();
+    if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
+    runManager->SetNumberOfThreads(nThreads);
 #else
     G4VSteppingVerbose::SetInstance(new SteppingVerbose);
     G4RunManager* runManager = new G4RunManager;

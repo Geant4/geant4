@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.cc 73008 2013-08-15 08:43:13Z gcosmo $
+// $Id: TrackingAction.cc 83418 2014-08-21 15:30:47Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,19 +32,20 @@
 #include "TrackingAction.hh"
 
 #include "DetectorConstruction.hh"
-#include "RunAction.hh"
+#include "Run.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "EventAction.hh"
 #include "HistoManager.hh"
 
+#include "G4RunManager.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4Track.hh"
 #include "G4Positron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(DetectorConstruction* det,RunAction* run)
-:G4UserTrackingAction(),detector(det),runAct(run)
+TrackingAction::TrackingAction(DetectorConstruction* det)
+:G4UserTrackingAction(),detector(det)
 { }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,7 +75,9 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
      Eleak += 2*electron_mass_c2;
      
   //sum leakage
-  runAct->fillDetailedLeakage(icase,Eleak);         
+  Run* run = static_cast<Run*>(
+             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  run->DetailedLeakage(icase,Eleak);         
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,4 +1,4 @@
-$Id: History 76885 2013-11-18 12:55:15Z gcosmo $
+$Id: History 84196 2014-10-10 14:31:48Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the SVN repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+8 October 2014  Michael Kelsey (prophonon-V10-00-01)
+----------------------------------------------------
+- G4LatticeManager:  Change to globally shared object (simple "static", not
+  G4ThreadLocal).  Fixes null-pointer crash in MT phononExample.
+
+13 March 2014  Gabriele Cosmo (prophonon-V10-00-00)
+---------------------------------------------------
+- Removed inline keywords in methods in G4PhononDownconversion.cc
+  and make coherent use of G4 types.
 
 15 November 2013  Michael Kelsey (prophonon-V09-06-07)
 ------------------------------------------------------

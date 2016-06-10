@@ -15,6 +15,184 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+1 December 2014  M. Kelsey (hadr-casc-V10-00-20)
+------------------------------------------------
+- G4CascadParticle.cc:  For stopped particles (zero path length), if at core
+  of nucleus switch "movingIn" flag to false to particle will be forced to
+  escape.  Protects against very rare infinite loop in mu- capture (nu_mu
+  produced with tiny momentum, gets stuck in nucleus zone 0).
+
+1 December 2014  M. Kelsey (hadr-casc-V10-00-19)
+------------------------------------------------
+- G4ElementaryParticleCollider.cc:  In muon absorption, check return from
+  G4GDecay3 for null vector; report no-collision status and return.
+
+- G4GDecay3.cc:  Fix typo in error report to use correct class name.
+
+21 November 2014  M. Kelsey (hadr-casc-V10-00-18)
+-------------------------------------------------
+Per A. Dotti, introduce G4AutoDelete for all singleton classes to avoid
+end-of-job memory leaks:
+
+	G4CascadeChannelTables.cc,.hh	(also make dtor public)
+	G4CascadeParameters.cc
+	G4MultiBodyMomentumDist.cc
+	G4TwoBodyAngularDist.cc
+
+21 November 2014  M. Kelsey (hadr-casc-V10-00-17)
+-------------------------------------------------
+- G4PreCompoundDeexcitation.cc:  Per V.I., fix memory leak on exit by passing
+  excitation handler through to PreCompound.
+
+19 November 2014  M. Kelsey (hadr-casc-V10-00-16)
+-------------------------------------------------
+- G4CascadeInterface.cc:  Fix parentheses in retryInelasticNucleus()
+  expression for conditional-compilation flag (does not affect defaults).
+
+18 November 2014  M. Kelsey (hadr-casc-V10-00-15)
+-------------------------------------------------
+- G4CascadeInterface.cc:  Fix possible infinite-loop condition where (nTries
+  >= maxTries) and momentum balance fails, by regrouping conditions in
+  retryInelasticNucleus().
+
+11 November 2014  M. Kelsey (hadr-casc-V10-00-14)
+-------------------------------------------------
+- G4CascadeParameters.cc:  Revert default changes in V10-00-12 tag:  turn
+  off phase-space, trailing-effect, and PreCompound.
+
+- G4InuclCollider.cc:  Replace G4Fragment::GetA() with GetA_asInt().
+
+- G4ElementaryParticleCollider.cc:  Improve optional pion-nucleon
+  absorption.  NOTE:  This is DISABLED by default; used for studies of pion
+  stopping.
+
+- G4NucleiModel.cc:  Initialize local p1r variable in declaration.
+
+30 October 2014  M. Kelsey (hadr-casc-V10-00-13)
+------------------------------------------------
+- G4CascadeParameters, G4CascadeParamMessenger:  Add flag to enable
+  absorbing pion on a single nucleon.  See G4EPCollider below for details.
+
+- G4ElementaryParticleCollider:  Add support for absorbing a pion with a
+  single nucleon (via a charge exchange interaction, e.g. pi- p -> n), with
+  momentum conservation handled by recoiling against the nucleus.  This is
+  intended to improve the match to data for pi- capture.
+
+- G4NucleiModel.cc:  In boundaryTransition(), switch sign of "dv" so that
+  particle sees a barrier (next_zone potential > current potential) as
+  positive.  In generateParticleFate(), pass (A,Z) to EPCollider for
+  possible nuclear-recoil calculations.
+
+- G4CascadeCheckBalance.cc:  Per V.Ivantchenko, use G4Fragment::GetZ_asInt(),
+  GetZ_asInt().  Should have been done long ago.
+
+1 October 2014  M. Kelsey (hadr-casc-V10-00-12)
+-----------------------------------------------
+- G4CascadeCheckBalance:  Change ctor arg from "const char*" to "const
+  G4String&" to avoid memory deallocation problems.
+
+- G4CascadeColliderBase:  Change ctor arg from "const char*" to "const
+  G4String&" to avoid memory deallocation problems.
+
+- G4CascadeInterface.cc:  Call both usePreCompoundDeexcitation() and
+  useCascadeDeexcitation() in ctor, with if-else.
+
+- G4CascadeParameters.cc:  Make PreCompound, phase space, trailing effect,
+  and light-ion clustering active by default.  User must set envvars to "0"
+  to disable.
+
+- G4InuclCollider.cc:  Make PreCompound the default in ctor.
+
+- G4VCascadeCollider:  Change ctor arg from "const char*" to "const
+  G4String&" to avoid memory deallocation problems.
+
+- G4VCascadeDeexcitation.hh:  Change ctor arg from "const char*" to "const
+  G4String&" to avoid memory deallocation problems.
+
+27 June 2014  M. Kelsey (hadr-casc-V10-00-11)
+---------------------------------------------
+- G4CascadeFinalStateAlgorithm.cc:  Address bug #1558, using ".c_str()" in
+  diagnostic outputs, to avoid IBM XL compiler error.
+
+23 May 2014  M. Kelsey (hadr-casc-V10-00-10)
+--------------------------------------------
+- G4InuclNuclei.cc:  Avoid FPE in setExcitationEnergy() for zero Ekin.  This
+  must be backported to 9.6 and 10.0.
+
+9 May 2014  M. Kelsey (hadr-casc-V10-00-09)
+-------------------------------------------
+- G4PreCompoundDeexcitation.cc: Fix mistake in copying example code; created
+  a local copy instead of filling the data member.
+
+9 May 2014  M. Kelsey (hadr-casc-V10-00-08)
+-------------------------------------------
+- 4PreCompoundDeexcitation.cc:  Per V.Ivanchenko, attempt to use shared
+  instance of PreCompound by fetching from hadronic registry.  Only if that
+  fails should a local instance be created.
+
+9 April 2014  M. Kelsey (hadr-casc-V10-00-07)
+---------------------------------------------
+- G4IntraNucleiCascader.cc:  Use const G4PD*.
+- G4InuclEvaporation.cc:  Remove temporary const_cast<G4PD*> (see 10 Mar).
+
+12 March 2014  M. Kelsey (hadr-casc-V10-00-06)
+----------------------------------------------
+- G4CascadeParameters:  Copy Gabriele's version of the singleton here, from
+  the 9.6-patch-03 branch.
+
+10 March 2014  M. Kelsey (hadr-casc-V10-00-05)
+----------------------------------------------
+- G4CollisionOutput.cc:  Use const G4PD* for G4HadronicProduct secondaries.
+
+- G4InuclParticle:  Apply "const G4PD*" everywhere for consistency with
+  hadr-util updates.
+
+- G4InuclElementaryParticle:  Apply "const G4PD*" everywhere for consistency
+  with hadr-util updates.
+
+- G4InculEvaporation.cc:  TEMPORARY:  Use const_cast<G4PD*> to access ctor
+  of G4Fragment, until new hadr-util code is public.
+
+10 March 2014  M. Kelsey (hadr-casc-V10-00-04)
+----------------------------------------------
+- G4IntraNucleiCascader.cc:  Fix bug #1584, memory leak in secondaries.
+
+10 March 2014  M. Kelsey (hadr-casc-V10-00-03)
+----------------------------------------------
+- G4CascadeParameters.cc:  Restore original 10.0 version, because January
+  mods caused unexpected side effects in build, which aren't being fixed.
+
+29 January 2014  G.Folger  not tagged
+-------------------------------------
+- Removed cascade/utils from cascade/sources.cmake
+
+16 January 2014  M.Kelsey (hadr-casc-V10-00-02)
+-----------------------------------------------
+- G4CascadeInterface:  Move static member into const data, initialize in
+  ctor.  This avoids calling G4CascadeParameters::Instance() before main().
+
+- G4CascadeCoalescence:  Move static members into const data, initialize in
+  ctor.  This avoids calling G4CascadeParameters::Instance() before main().
+
+- G4NucleiModel:  Move static members which use envvars into const data,
+  initialize in ctors (with copy-and-paste code blocks).  This avoids
+  calling G4CascadeParameters::Instance() before main().
+
+7 January 2014  Dennis Wright (hadr-casc-V10-00-01)
+---------------------------------------------------
+- added new pi-nucleon 2-body angular distributions: 
+  G4PipP2PipPAngDst, G4PimP2PimPAngDst, G4Pi0P2Pi0PAngDst and G4PimP2Pi0NAngDst.
+  Below 2.6 GeV, distributions taken from SAID phase shift calculations with
+  Coulomb phase removed.  Above 2.6 GeV, taken from data.
+- also modified: G4TwoBodyAngularDist, sources.cmake
+
+6 January 2014  M.Kelsey (hadr-casc-V10-00-00)
+----------------------------------------------
+- G4CascadeParameters.cc:  Improve singleton initialization by moving static
+  instance to pointer in file scope (anon namespace), check for null pointer
+  in Instance() call.  Drop use of messenger (temporarily) since it's not
+  thread safe.  This change needs to be backported to 9.6 and 10.0.
+
 2 October 2013  V.Ivanchenko (hadr-casc-V09-06-52)
 ----------------------------------------------------
 - G4NonEquilibriumEvaporator.hh - added forward declaration of G4Pow,

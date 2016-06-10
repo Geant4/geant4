@@ -26,10 +26,10 @@
 /// \file electromagnetic/TestEm6/TestEm6.cc
 /// \brief Main program of the electromagnetic/TestEm6 example
 //
-// $Id: TestEm6.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: TestEm6.cc 83428 2014-08-21 15:46:01Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -41,7 +41,6 @@
 #include "SteppingVerbose.hh"
 
 #include "RunAction.hh"
-#include "EventAction.hh"
 #include "SteppingAction.hh"
 #include "StackingAction.hh"
 
@@ -67,16 +66,15 @@ int main(int argc,char** argv) {
   G4RunManager * runManager = new G4RunManager;
 
   //set mandatory initialization classes
-   DetectorConstruction* det;
+  DetectorConstruction* det;
   runManager->SetUserInitialization(det = new DetectorConstruction);
   runManager->SetUserInitialization(new PhysicsList);
   runManager->SetUserAction(new PrimaryGeneratorAction(det));
     
   //set user action classes
-   RunAction* RunAct;
+  RunAction* RunAct;
   
-  runManager->SetUserAction(RunAct = new RunAction); 
-  runManager->SetUserAction(new EventAction);
+  runManager->SetUserAction(RunAct = new RunAction(det)); 
   runManager->SetUserAction(new SteppingAction(RunAct));
   runManager->SetUserAction(new StackingAction);
 
@@ -115,4 +113,4 @@ int main(int argc,char** argv) {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

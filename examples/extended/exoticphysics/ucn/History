@@ -1,0 +1,32 @@
+$Id: $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Exotic Examples History file
+                    -----------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+September 16, 2014 I. Hrivnacova (ExUCN-V10-00-04)
+- improved formatting in .README
+
+June 26, 2014 P. Gumplinger (ExUCN-V10-00-03)
+- add missing .README file
+
+June 16, 2014 P. Gumplinger (ExUCN-V10-00-02)
+- retag to work with materials-V10-00-17
+
+June 13, 2014 P. Gumplinger (ExUCN-V10-00-01)
+- Remove G4PhysicsListHelper->GetTransportation in ExUCNExtraPhysics.cc
+- Remove run.png from CMakeLists.txt
+
+June 6, 2014 P. Gumplinger (ExUCN-V10-00-00)
+- First import

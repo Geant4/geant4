@@ -45,22 +45,37 @@
 #include "G4CollisionInitialState.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4Pair.hh"
+#include "G4AutoLock.hh"
+
+//Mutex for control of shared resource
+namespace  {
+    G4Mutex collisions_mutex = G4MUTEX_INITIALIZER;
+    G4bool setupDone = false;
+}
 
 // Declare the categories of collisions the Scatterer can handle
 typedef GROUP2(G4CollisionNN, G4CollisionMesonBaryon) theChannels;
+
+G4CollisionVector G4Scatterer::collisions;
 
 //----------------------------------------------------------------------------
 
 G4Scatterer::G4Scatterer()
 {
-  Register aR;
-  G4ForEach<theChannels>::Apply(&aR, &collisions);
+  G4AutoLock l(&collisions_mutex);
+  if ( ! setupDone )
+  {
+      Register aR;
+      G4ForEach<theChannels>::Apply(&aR, &collisions);
+      setupDone = true;
+  }
 }
 
 //----------------------------------------------------------------------------
 
 G4Scatterer::~G4Scatterer()
 {
+  G4AutoLock l(&collisions_mutex);
   std::for_each(collisions.begin(), collisions.end(), G4Delete());
   collisions.clear();
 }
@@ -68,7 +83,7 @@ G4Scatterer::~G4Scatterer()
 //----------------------------------------------------------------------------
 
 G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
-					   const G4KineticTrack& trk2)
+					   const G4KineticTrack& trk2) const
 {
   G4double time = DBL_MAX;
     G4double distance_fast;
@@ -182,7 +197,7 @@ G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
 
 
 
-	  G4VCollision* collision = FindCollision(trk1,trk2);
+	  const G4VCollision* collision = FindCollision(trk1,trk2);
 	  G4double totalCrossSection;
 	  // The cross section is interpreted geometrically as an area
 	  // Two particles are assumed to collide if their distance is < (totalCrossSection/pi)
@@ -267,7 +282,7 @@ G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
 //----------------------------------------------------------------------------
 
 G4KineticTrackVector* G4Scatterer::Scatter(const G4KineticTrack& trk1,
-					      const G4KineticTrack& trk2)
+					      const G4KineticTrack& trk2) const
 {
 //   G4double sqrtS = (trk1.Get4Momentum() + trk2.Get4Momentum()).mag();
    G4LorentzVector pInitial=trk1.Get4Momentum() + trk2.Get4Momentum();
@@ -280,7 +295,7 @@ G4KineticTrackVector* G4Scatterer::Scatter(const G4KineticTrack& trk1,
    G4int baryonBalance = trk1.GetDefinition()->GetBaryonNumber()
                        + trk2.GetDefinition()->GetBaryonNumber();
 
-   G4VCollision* collision = FindCollision(trk1,trk2);
+   const G4VCollision* collision = FindCollision(trk1,trk2);
    if (collision != 0)
    {
      G4double aCrossSection = collision->CrossSection(trk1,trk2);
@@ -377,8 +392,8 @@ G4KineticTrackVector* G4Scatterer::Scatter(const G4KineticTrack& trk1,
 
 //----------------------------------------------------------------------------
 
-G4VCollision* G4Scatterer::FindCollision(const G4KineticTrack& trk1,
-					 const G4KineticTrack& trk2)
+const G4VCollision* G4Scatterer::FindCollision(const G4KineticTrack& trk1,
+					 const G4KineticTrack& trk2) const
 {
   G4VCollision* collisionInCharge = 0;
 
@@ -407,9 +422,9 @@ G4VCollision* G4Scatterer::FindCollision(const G4KineticTrack& trk1,
 //----------------------------------------------------------------------------
 
 G4double G4Scatterer::GetCrossSection(const G4KineticTrack& trk1,
-				      const G4KineticTrack& trk2)
+				      const G4KineticTrack& trk2) const
 {
-   G4VCollision* collision = FindCollision(trk1,trk2);
+   const G4VCollision* collision = FindCollision(trk1,trk2);
    G4double aCrossSection = 0;
    if (collision != 0)
    {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiscreteGammaTransition.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4DiscreteGammaTransition.hh 85841 2014-11-05 15:35:06Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -72,7 +72,6 @@
 #include "G4VGammaTransition.hh"
 
 class G4NuclearLevel;
-//JMQ 180410
 class G4NuclearLevelManager;
 
 
@@ -80,47 +79,44 @@ class G4DiscreteGammaTransition : public G4VGammaTransition
 {
 public:
 
-  //JMQ 180410
-  G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z, G4int A);
+  G4DiscreteGammaTransition(const G4NuclearLevel* level, 
+			    G4int Z, G4int ver);
 
-  // Destructor
   virtual ~G4DiscreteGammaTransition();
-
-  // Functions
-
-public:
 
   virtual void SetEnergyFrom(G4double energy);
   virtual G4double GetGammaEnergy();
   virtual G4double GetGammaCreationTime();
   virtual void SelectGamma();
 
-  inline void SetICM(G4bool ic)    { _icm = ic; };
-  inline G4bool GetICM() const     { return _icm;};
-  inline G4double GetBondEnergy () {return _bondE;};
-  inline G4int GetOrbitNumber ()   {return _orbitE;};
-  inline G4bool IsAGamma()         {return _aGamma;};
- 
+  inline void SetICM(G4bool ic)    { icm = ic; };
+  inline G4bool GetICM() const     { return icm;};
+  inline G4double GetBondEnergy () { return bondE;};
+  inline G4int GetOrbitNumber ()   { return orbitE;};
+  inline G4bool IsAGamma()         { return aGamma;};
+
+  inline void Update(const G4NuclearLevel* level, G4int Z)
+  {
+    aLevel = level; 
+    nucleusZ = Z; 
+  }
+
 private:
   
-  G4int _nucleusZ;
-  G4int _orbitE;
-  G4double _bondE;
-  G4bool _aGamma;
-  G4bool _icm;
+  G4int nucleusZ;
+  G4int orbitE;
+  G4int verbose;
 
-  G4double _gammaEnergy;
-  const G4NuclearLevel& _level;     
-  G4double _excitation;
-  G4double _gammaCreationTime;
-  //JMQ 180410
-//  G4int _A;
-//  G4int _Z;
-  G4NuclearLevelManager * _levelManager;
-  //JMQ 190410
-  G4double _tolerance;
+  G4double bondE;
+  G4double gammaEnergy;
+  G4double excitation;
+  G4double gammaCreationTime;
+
+  G4bool aGamma;
+  G4bool icm;
+
+  const G4NuclearLevel* aLevel;
 };
-
 
 #endif
 

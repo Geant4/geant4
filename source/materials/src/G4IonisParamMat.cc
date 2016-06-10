@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonisParamMat.cc 76883 2013-11-18 12:50:08Z gcosmo $
+// $Id: G4IonisParamMat.cc 83992 2014-09-26 09:26:06Z gcosmo $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -109,6 +109,8 @@ G4IonisParamMat::G4IonisParamMat(__void__&)
   fBirks = 0.0;
   fMeanEnergyPerIon = 0.0;
   twoln10 = 2.*G4Pow::GetInstance()->logZ(10);
+
+  if(!fDensityData) { fDensityData = new G4DensityEffectData(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -257,9 +259,9 @@ void G4IonisParamMat::ComputeDensityEffect()
 
       fMdensity = 3.;
       fX1density = 4.0;
-      //static const G4double ClimiG[] = { 10. , 10.5 , 11. , 11.5 , 12.25 , 13.804};
-      //static const G4double X0valG[] = { 1.6 , 1.7 ,  1.8 ,  1.9 , 2.0   ,  2.0 };
-      //static const G4double X1valG[] = { 4.0 , 4.0 ,  4.0 ,  4.0 , 4.0   ,  5.0 };
+      //static const G4double ClimiG[] = {10.,10.5,11.,11.5,12.25,13.804};
+      //static const G4double X0valG[] = {1.6,1.7,1.8,1.9,2.0,2.0};
+      //static const G4double X1valG[] = {4.0,4.0,4.0,4.0,4.0,5.0};
 
       if(fCdensity < 10.) {
 	fX0density = 1.6; 
@@ -312,7 +314,8 @@ void G4IonisParamMat::ComputeDensityEffect()
       /std::pow((fX1density-fX0density),fMdensity);
   }
   /*  
-  G4cout << "G4IonisParamMat: density effect data for <" << fMaterial->GetName() 
+  G4cout << "G4IonisParamMat: density effect data for <" 
+         << fMaterial->GetName() 
 	 << "> " << G4endl;
   G4cout << "Eplasma(eV)= " << fPlasmaEnergy/eV
 	 << " rho= " << fAdjustmentFactor
@@ -492,14 +495,14 @@ G4double G4IonisParamMat::FindMeanExcitationEnergy(const G4String& chFormula)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
+/*
 G4IonisParamMat::G4IonisParamMat(const G4IonisParamMat& right)
 {
   fShellCorrectionVector = 0;
   fMaterial = 0;
   *this = right;
 }
-
+*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 G4IonisParamMat& G4IonisParamMat::operator=(const G4IonisParamMat& right)
@@ -537,7 +540,6 @@ G4IonisParamMat& G4IonisParamMat::operator=(const G4IonisParamMat& right)
       fInvA23                   = right.fInvA23;
       fBirks                    = right.fBirks;
       fMeanEnergyPerIon         = right.fMeanEnergyPerIon;
-      fDensityData              = right.fDensityData;
       twoln10                   = right.twoln10;
     } 
   return *this;

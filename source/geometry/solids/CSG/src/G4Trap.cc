@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4Trap.cc 83851 2014-09-19 10:12:12Z gcosmo $
 //
 // class G4Trap
 //
@@ -48,6 +48,9 @@
 //////////////////////////////////////////////////////////////////////////////////// 
 
 #include "G4Trap.hh"
+
+#if !defined(G4GEOM_USE_UTRAP)
+
 #include "globals.hh"
 
 #include "G4VoxelLimits.hh"
@@ -623,7 +626,7 @@ void G4Trap::SetAllParameters ( G4double pDz,
   }
   fCubicVolume= 0.;
   fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
   fDz=pDz;
   fTthetaCphi=std::tan(pTheta)*std::cos(pPhi);
   fTthetaSphi=std::tan(pTheta)*std::sin(pPhi);
@@ -1966,3 +1969,5 @@ G4Polyhedron* G4Trap::CreatePolyhedron () const
                               fDy1, fDx1, fDx2, alpha1,
                               fDy2, fDx3, fDx4, alpha2);
 }
+
+#endif

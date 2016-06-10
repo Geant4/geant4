@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsQGSP_BIC_HP.cc 73040 2013-08-15 09:36:57Z gcosmo $
+// $Id: G4HadronPhysicsQGSP_BIC_HP.cc 83699 2014-09-10 07:18:25Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -60,6 +60,8 @@
 #include "G4NeutronCaptureXS.hh"
 #include "G4NeutronHPCaptureData.hh"
 #include "G4LFission.hh"
+
+#include "G4CrossSectionDataSetRegistry.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -159,6 +161,8 @@ void G4HadronPhysicsQGSP_BIC_HP::CreateModels()
 
 G4HadronPhysicsQGSP_BIC_HP::~G4HadronPhysicsQGSP_BIC_HP() 
 {
+  if (!tpdata) return;
+
    delete tpdata->theHPNeutron;
    delete tpdata->theBinaryNeutron;
    delete tpdata->theQGSPNeutron;
@@ -174,7 +178,6 @@ G4HadronPhysicsQGSP_BIC_HP::~G4HadronPhysicsQGSP_BIC_HP()
    delete tpdata->theFTFPAntiBaryon;
    delete tpdata->theAntiBaryon;
    delete tpdata->theHyperon;
-   delete tpdata->xsNeutronCaptureXS;
 
    delete tpdata; tpdata = 0;
 }
@@ -221,7 +224,7 @@ void G4HadronPhysicsQGSP_BIC_HP::ConstructProcess()
     capture = new G4HadronCaptureProcess("nCapture");
     pmanager->AddDiscreteProcess(capture);
   }
-  tpdata->xsNeutronCaptureXS = new G4NeutronCaptureXS();
+  tpdata->xsNeutronCaptureXS = (G4NeutronCaptureXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronCaptureXS::Default_Name());
   capture->AddDataSet(tpdata->xsNeutronCaptureXS);
   capture->AddDataSet( new G4NeutronHPCaptureData );
   G4NeutronRadCapture* theNeutronRadCapture = new G4NeutronRadCapture(); 

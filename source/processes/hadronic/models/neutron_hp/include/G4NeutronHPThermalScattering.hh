@@ -41,15 +41,20 @@
 
 #include "globals.hh"
 #include "G4NeutronHPThermalScatteringNames.hh"
-#include "G4NeutronHPThermalScatteringData.hh"
-#include "G4NeutronHPElastic.hh"
 #include "G4HadronicInteraction.hh"
+
+class G4NeutronHPThermalScatteringData;
+class G4NeutronHPElastic;
 
 struct E_isoAng 
 {
    G4double energy;
    G4int n;
    std::vector < G4double > isoAngle; 
+   E_isoAng() {
+      energy=0.0;
+      n=0;
+   };
 };
 
 struct E_P_E_isoAng 
@@ -59,6 +64,11 @@ struct E_P_E_isoAng
    std::vector < G4double > prob; 
    std::vector < E_isoAng* > vE_isoAngle; 
    G4double sum_of_probXdEs;  // should be close to 1
+   E_P_E_isoAng() {
+      energy=0.0;
+      n=0;
+      sum_of_probXdEs=0.0;
+   };
 };
 
 class G4NeutronHPThermalScattering : public G4HadronicInteraction
@@ -77,24 +87,28 @@ class G4NeutronHPThermalScattering : public G4HadronicInteraction
                               //Name of G4Element , Name of NDL file
       void AddUserThermalScatteringFile( G4String , G4String );
 
+      void BuildPhysicsTable(const G4ParticleDefinition&);
+
    private:
+
+      void clearCurrentFSData();
 
       G4NeutronHPThermalScatteringNames names;
 
       // Coherent Elastic 
       //         ElementID             temp                                BraggE    cumulativeP
-      std::map < G4int , std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >* > coherentFSs;
+      std::map < G4int , std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >* >* coherentFSs;
       std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >* readACoherentFSDATA( G4String );
 
       // Incoherent Elastic 
-      //         ElementID          temp        aFS for this temp (and this element)
-      std::map < G4int , std::map < G4double , std::vector < E_isoAng* >* >* > incoherentFSs;
+      //         ElementID          temp       aFS for this temp (and this element)
+      std::map < G4int , std::map < G4double , std::vector < E_isoAng* >* >* >* incoherentFSs;
       std::map < G4double , std::vector < E_isoAng* >* >* readAnIncoherentFSDATA( G4String );
       E_isoAng* readAnE_isoAng ( std::istream* );
 
       // Inelastic 
-      //         ElementID          temp         aFS for this temp (and this element) 
-      std::map < G4int ,  std::map < G4double , std::vector < E_P_E_isoAng* >* >* > inelasticFSs;
+      //         ElementID          temp       aFS for this temp (and this element) 
+      std::map < G4int , std::map < G4double , std::vector < E_P_E_isoAng* >* >* >* inelasticFSs;
       std::map < G4double , std::vector < E_P_E_isoAng* >* >* readAnInelasticFSDATA( G4String );
       E_P_E_isoAng* readAnE_P_E_isoAng ( std::istream* );
   
@@ -117,8 +131,13 @@ class G4NeutronHPThermalScattering : public G4HadronicInteraction
       void buildPhysicsTable();
       G4int getTS_ID( const G4Material* , const G4Element* );
 
-      size_t sizeOfMaterialTable;
+      //size_t sizeOfMaterialTable;
 
+      G4bool check_E_isoAng( E_isoAng* );
+
+      //In order to judge whether rebuild of physics table is a necessity
+      size_t nMaterial;
+      size_t nElement;
 };
 
 #endif

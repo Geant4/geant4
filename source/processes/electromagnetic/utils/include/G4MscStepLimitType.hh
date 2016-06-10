@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MscStepLimitType.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4MscStepLimitType.hh 84204 2014-10-10 14:40:56Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -48,6 +48,7 @@ enum G4MscStepLimitType
 {
   fMinimal = 0,
   fUseSafety,
+  fUseSafetyPlus,
   fUseDistanceToBoundary
 };
 #endif

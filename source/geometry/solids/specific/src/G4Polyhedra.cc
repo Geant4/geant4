@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc 78188 2013-12-04 16:32:00Z gcosmo $
+// $Id: G4Polyhedra.cc 83572 2014-09-01 15:23:27Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -63,7 +63,6 @@
 
 #include "Randomize.hh"
 
-#include "G4Polyhedron.hh"
 #include "G4EnclosingCylinder.hh"
 #include "G4ReduciblePolygon.hh"
 #include "G4VPVParameterisation.hh"
@@ -172,6 +171,15 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
                           const G4double z[]   )
   : G4VCSGfaceted( name ), genericPgon(true)
 { 
+  if (theNumSide <= 0)
+  {
+    std::ostringstream message;
+    message << "Solid must have at least one side - " << GetName() << G4endl
+            << "        No sides specified !";
+    G4Exception("G4Polyhedra::G4Polyhedra()", "GeomSolids0002",
+                FatalErrorInArgument, message);
+  }
+
   G4ReduciblePolygon *rz = new G4ReduciblePolygon( r, z, numRZ );
   
   Create( phiStart, phiTotal, theNumSide, rz );
@@ -398,7 +406,7 @@ G4Polyhedra::G4Polyhedra( const G4Polyhedra &source )
 //
 // Assignment operator
 //
-const G4Polyhedra &G4Polyhedra::operator=( const G4Polyhedra &source )
+G4Polyhedra &G4Polyhedra::operator=( const G4Polyhedra &source )
 {
   if (this == &source) return *this;
 
@@ -455,6 +463,9 @@ void G4Polyhedra::CopyStuff( const G4Polyhedra &source )
   // Enclosing cylinder
   //
   enclosingCylinder = new G4EnclosingCylinder( *source.enclosingCylinder );
+
+  fRebuildPolyhedron = false;
+  fpPolyhedron = 0;
 }
 
 

@@ -23,24 +23,33 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularStepByStepModel.hh 65022 2012-11-12 16:43:12Z gcosmo $
+// $Id: G4DNAMolecularStepByStepModel.hh 85244 2014-10-27 08:24:13Z gcosmo $
 //
-// Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
+// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+
+// The code is developed in the framework of the ESA AO7146
 //
-// WARNING : This class is released as a prototype.
-// It might strongly evolve or even disapear in the next releases.
+// We would be very happy hearing from you, send us your feedback! :)
 //
-// History:
-// -----------
-// 10 Oct 2011 M.Karamitros created
+// In order for Geant4-DNA to be maintained and still open-source,
+// article citations are crucial. 
+// If you use Geant4-DNA chemistry and you publish papers about your software, 
+// in addition to the general paper on Geant4-DNA:
 //
-// -------------------------------------------------------------------
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// we would be very happy if you could please also cite the following
+// reference papers on chemistry:
+//
+// J. Comput. Phys. 274 (2014) 841-882
+// Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
+
 
 #ifndef G4MOLECULARSTEPBYSTEPMODEL_H
 #define G4MOLECULARSTEPBYSTEPMODEL_H
 
 #include "AddClone_def.hh"
-#include "G4VITModel.hh"
+#include "G4VITStepModel.hh"
 #include "G4DNAMoleculeEncounterStepper.hh"
 #include "G4DNAMolecularReaction.hh"
 #include "G4DNAMolecularReactionTable.hh"
@@ -55,7 +64,7 @@
   * reaction.
   */
 
-class G4DNAMolecularStepByStepModel : public G4VITModel
+class G4DNAMolecularStepByStepModel : public G4VITStepModel
 {
 public:
     /** Default constructor */
@@ -65,7 +74,7 @@ public:
 
     G4DNAMolecularStepByStepModel(const G4DNAMolecularStepByStepModel&);
 
-    G4IT_ADD_CLONE(G4VITModel, G4DNAMolecularStepByStepModel)
+    G4IT_ADD_CLONE(G4VITStepModel, G4DNAMolecularStepByStepModel)
 
     virtual void PrintInfo();
     virtual void Initialize();
@@ -88,8 +97,6 @@ private :
 inline void G4DNAMolecularStepByStepModel::SetReactionModel(G4VDNAReactionModel* reactionModel)
 {
     fReactionModel = reactionModel;
-    ((G4DNAMolecularReaction*)      fpReactionProcess)-> SetReactionModel(reactionModel);
-    ((G4DNAMoleculeEncounterStepper*) 	fpTimeStepper)	 -> SetReactionModel(reactionModel);
 }
 
 inline G4VDNAReactionModel* G4DNAMolecularStepByStepModel::GetReactionModel()

@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorldProcess.cc 76935 2013-11-19 09:46:31Z gcosmo $
+// $Id: G4ParallelWorldProcess.cc 86967 2014-11-21 11:51:28Z gcosmo $
 // GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 //
 
 #include "G4ios.hh"
 #include "G4ParallelWorldProcess.hh"
+#include "G4ParallelWorldProcessStore.hh"
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
 #include "G4Navigator.hh"
@@ -74,6 +75,13 @@ G4ParallelWorldProcess(const G4String& processName,G4ProcessType theType)
   fTransportationManager = G4TransportationManager::GetTransportationManager();
   fTransportationManager->GetNavigatorForTracking()->SetPushVerbosity(false);
   fPathFinder = G4PathFinder::GetInstance();
+
+  fGhostWorldName = "** NotDefined **";
+  fGhostWorld = 0;
+  fGhostSafety = 0.;
+  fOnBoundary = false;
+
+  G4ParallelWorldProcessStore::GetInstance()->SetParallelWorld(this,processName);
 
   if (verboseLevel>0)
   {

@@ -1,4 +1,4 @@
-$Id: History 72242 2013-07-12 08:44:19Z gcosmo $
+$Id: History 82401 2014-06-18 14:43:54Z gcosmo $
 ----------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+18-06-14 mma (testem18-V10-00-00)
+- remove PhysicsList::SetCuts()
+- remove EventActionMessenger
 
 11-07-13 I.Hrivnacova (testem18-V09-06-05) 
 - In HistoManager: use new analysis manager method SetH1Activation();

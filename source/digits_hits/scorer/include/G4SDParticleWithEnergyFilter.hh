@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDParticleWithEnergyFilter.hh 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4SDParticleWithEnergyFilter.hh 81087 2014-05-20 15:44:27Z gcosmo $
 //
 
 #ifndef G4SDParticleWithEnergyFilter_h
@@ -69,6 +69,9 @@ class G4SDParticleWithEnergyFilter : public G4VSDFilter
   private:
      G4SDParticleFilter* fParticleFilter;
      G4SDKineticEnergyFilter* fKineticFilter;
+  public:
+    G4SDParticleWithEnergyFilter(const G4SDParticleWithEnergyFilter&);
+    G4SDParticleWithEnergyFilter& operator=(const G4SDParticleWithEnergyFilter&);
 };
 
 #endif

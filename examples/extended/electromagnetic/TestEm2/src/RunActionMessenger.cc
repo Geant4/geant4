@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm2/src/RunActionMessenger.cc
 /// \brief Implementation of the RunActionMessenger class
 //
-// $Id: RunActionMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id: RunActionMessenger.cc 78550 2014-01-07 09:43:41Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,7 +47,7 @@ RunActionMessenger::RunActionMessenger(RunAction* run)
  fAccCmd(0),
  fVerbCmd(0), 
  fHistoDir(0),        
- factoryCmd(0)
+ fHFileCmd(0)
 {
   fRunDir = new G4UIdirectory("/testem/run/");
   fRunDir->SetGuidance("run control");
@@ -66,8 +66,8 @@ RunActionMessenger::RunActionMessenger(RunAction* run)
   fHistoDir = new G4UIdirectory("/testem/histo/");
   fHistoDir->SetGuidance("histograms control");
   
-  factoryCmd = new G4UIcmdWithAString("/testem/histo/setFileName",this);
-  factoryCmd->SetGuidance("set name for the histograms file");    
+  fHFileCmd = new G4UIcmdWithAString("/testem/histo/setFileName",this);
+  fHFileCmd->SetGuidance("set name for the histograms file");    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,7 +77,7 @@ RunActionMessenger::~RunActionMessenger()
   delete fVerbCmd;
   delete fAccCmd;
   delete fRunDir;
-  delete factoryCmd;
+  delete fHFileCmd;
   delete fHistoDir;
 }
 
@@ -91,7 +91,7 @@ void RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if (command == fVerbCmd )
    { fRun->SetVerbose(fVerbCmd->GetNewIntValue(newValue));}
       
-  if (command == factoryCmd)
+  if (command == fHFileCmd)
    { fRun->SetHistoName(newValue);}
 }
 

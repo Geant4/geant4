@@ -35,7 +35,13 @@
 // 18 Jan 2011 adapted to new deexcitation design
 //
 // -------------------------------------------------------------------
+
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 #ifdef G4VIS_USE
@@ -48,137 +54,96 @@
 #include "XrayFluoPlaneDetectorConstruction.hh"
 #include "XrayFluoMercuryDetectorConstruction.hh"
 #include "XrayFluoPhysicsList.hh"
-#include "XrayFluoPrimaryGeneratorAction.hh"
-#include "XrayFluoPlanePrimaryGeneratorAction.hh"
-#include "XrayFluoMercuryPrimaryGeneratorAction.hh"
-#include "XrayFluoRunAction.hh"
-#include "XrayFluoEventAction.hh"
-#include "XrayFluoSteppingAction.hh"
-#include "XrayFluoSteppingVerbose.hh"
 #include "XrayFluoSimulation.hh"
-#ifdef G4ANALYSIS_USE
+
+#include "XrayFluoActionInitializer.hh"
 #include "XrayFluoAnalysisManager.hh"
-#endif
-using namespace CLHEP;
+
 
 XrayFluoSimulation::XrayFluoSimulation(G4int seed):dir(seed)
+{;}
 
-{ }
 
 XrayFluoSimulation::~XrayFluoSimulation()
-
-{ }
+{;}
 
 void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
 {
-
   // choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  CLHEP::HepRandom::setTheSeed(dir);
-
-  //XrayFluo Verbose output class
-  G4VSteppingVerbose::SetInstance(new XrayFluoSteppingVerbose);
-     
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
+  G4Random::setTheSeed(dir);
+   
+#ifdef G4MULTITHREADED
   // Construct the default run manager
+  G4MTRunManager* runManager = new G4MTRunManager();
+  G4cout << "Using the MT Run Manager (G4MULTITHREADED=ON)" << G4endl; 
+#else
   G4RunManager * runManager = new G4RunManager;
+  G4cout << "Using the sequential Run Manager" << G4endl;
+#endif
 
-  // set mandatory initialization 
-
-  XrayFluoPhysicsList* xrayList = new   XrayFluoPhysicsList();
 
   // chosing Geometry setup
-
   G4int geometryNumber = 0; 
 
   if (argc == 3){
     geometryNumber =  atoi(argv[2]);
 
   }
-  while ( (geometryNumber != 1) && (geometryNumber !=2) && (geometryNumber !=3) && (geometryNumber !=4)) {
+  while ( (geometryNumber < 1) || (geometryNumber >4)) {
     G4cout << "Please Select Simulation Geometrical Set-Up: "<< G4endl;
     G4cout << "1 - Test Beam" << G4endl;
     G4cout << "2 - Infinite Plane" << G4endl;
     G4cout << "3 - Planet and Sun"<< G4endl;
     G4cout << "4 - Phase-Space Production"<< G4endl;
 
-
     G4cin >> geometryNumber;
   }
 
-  XrayFluoDetectorConstruction* testBeamDetector = 0;
-  XrayFluoPlaneDetectorConstruction* planeDetector = 0;
-  XrayFluoMercuryDetectorConstruction* mercuryDetector = 0;
+  // set analysis to have the messenger running...
+  XrayFluoAnalysisManager* analysis = 
+    XrayFluoAnalysisManager::getInstance();
 
+  // set mandatory initialization 
 
-
+  //Initialize geometry
   if (geometryNumber == 1 || geometryNumber == 4) {
-    testBeamDetector = XrayFluoDetectorConstruction::GetInstance();
+    XrayFluoDetectorConstruction* testBeamDetector 
+      = XrayFluoDetectorConstruction::GetInstance();
     if (geometryNumber == 4) {
       testBeamDetector->PhaseSpaceOn();
+      analysis->PhaseSpaceOn();
     }
     runManager->SetUserInitialization(testBeamDetector);
   }
   else if (geometryNumber == 2) {
-    planeDetector = XrayFluoPlaneDetectorConstruction::GetInstance();
+    XrayFluoPlaneDetectorConstruction* 
+      planeDetector = XrayFluoPlaneDetectorConstruction::GetInstance();
     runManager->SetUserInitialization(planeDetector);
   }
   else if (geometryNumber == 3) {
-    mercuryDetector = XrayFluoMercuryDetectorConstruction::GetInstance();
+    XrayFluoMercuryDetectorConstruction* mercuryDetector = 
+      XrayFluoMercuryDetectorConstruction::GetInstance();
     runManager->SetUserInitialization(mercuryDetector);
   }
 
 
-  runManager->SetUserInitialization(xrayList);
-  
+  //Initialize physics
+  runManager->SetUserInitialization(new   XrayFluoPhysicsList()); 
+
+  //Initialize actions
+  runManager->SetUserInitialization
+    (new XrayFluoActionInitializer(geometryNumber));
+
 #ifdef G4VIS_USE
   //visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
-
-#ifdef G4ANALYSIS_USE
-  // set analysis to have the messenger running...
-  XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
-#endif
-  XrayFluoEventAction* eventAction = 0;
-  XrayFluoRunAction* runAction = new XrayFluoRunAction();
-  XrayFluoSteppingAction* stepAction = new XrayFluoSteppingAction();
-
-
-  //Selecting the PrimaryGenerator depending upon Geometry setup selected
-
-  if (geometryNumber == 1 || geometryNumber == 4) {
-    if (geometryNumber == 4) {
-#ifdef G4ANALYSIS_USE
-     analysis->PhaseSpaceOn();
-     analysis->CreatePersistency();
-#endif
-    }
-    eventAction = new XrayFluoEventAction(testBeamDetector);
-    runManager->SetUserAction(new XrayFluoPrimaryGeneratorAction(testBeamDetector));
-  }
-
-  else if (geometryNumber == 2) {
-    eventAction = new XrayFluoEventAction(planeDetector);
-    runManager->SetUserAction(new XrayFluoPlanePrimaryGeneratorAction(planeDetector));
-  }
-
-  else if (geometryNumber == 3) {
-    stepAction->SetMercuryFlag(true);
-    eventAction = new XrayFluoEventAction(mercuryDetector);
-    runManager->SetUserAction(new XrayFluoMercuryPrimaryGeneratorAction(mercuryDetector));
-  }
- 
-  runManager->SetUserAction(eventAction); 
-  runManager->SetUserAction(runAction);
-  runManager->SetUserAction(stepAction);
-  
-  //Initialize G4 kernel
-  //runManager->Initialize();
   
   // get the pointer to the User Interface manager 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-
+  
   if (getenv("G4VIS_USE")) {
     UImanager->ApplyCommand("/control/execute vis.mac");
   }     
@@ -187,10 +152,7 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
     {
       UImanager->ApplyCommand("/control/execute initInter.mac");     
 #ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-
-      if (ui->IsGUI())
-        UImanager->ApplyCommand("/control/execute gui.mac");     
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);        
       ui->SessionStart();
       delete ui;
 #endif
@@ -203,19 +165,13 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
     }
   
   // job termination
-  
 #ifdef G4VIS_USE
   delete visManager;
   G4cout << "visManager deleted"<< G4endl;
 #endif
 
-//   if (testBeamDetector) delete testBeamDetector;
-//   if (planeDetector) delete planeDetector;
-//   if (mercuryDetector) delete mercuryDetector;
-
   
   delete runManager;
   
-   
-
+  
 }

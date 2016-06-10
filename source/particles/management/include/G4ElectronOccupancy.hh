@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectronOccupancy.hh 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4ElectronOccupancy.hh 79357 2014-02-25 10:06:54Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -62,7 +62,7 @@
 class G4ElectronOccupancy 
 {
  public:
-   enum { MaxSizeOfOrbit = 10};
+   enum { MaxSizeOfOrbit = 20};
 
  public: // With Description
    G4ElectronOccupancy( G4int sizeOrbit = MaxSizeOfOrbit   );
@@ -144,28 +144,5 @@ inline
   return value;  
 }
 
-inline 
- G4int  G4ElectronOccupancy::AddElectron(G4int orbit, G4int number)
-{
-  G4int value =0;
-  if ((orbit >=0)&&(orbit<theSizeOfOrbit)){
-    theOccupancies[orbit] += number;
-    theTotalOccupancy += number; 
-    value = number;   
-  }
-  return value;
-}
 
-inline 
- G4int  G4ElectronOccupancy::RemoveElectron(G4int orbit, G4int number)
-{
-  G4int value =0;
-  if ((orbit >=0)&&(orbit<theSizeOfOrbit) ){
-    if ( theOccupancies[orbit] < number ) number = theOccupancies[orbit];
-    theOccupancies[orbit] -= number;
-    theTotalOccupancy -= number;    
-    value = number;
-  }
-  return value;
-}
 #endif

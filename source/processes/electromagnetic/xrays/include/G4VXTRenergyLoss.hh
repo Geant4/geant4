@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.hh 68037 2013-03-13 14:15:08Z gcosmo $
+// $Id: G4VXTRenergyLoss.hh 83661 2014-09-08 09:58:34Z gcosmo $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////
@@ -231,10 +231,14 @@ protected:
 
   G4ParticleChange fParticleChange;
 
-  // G4double fEnergyForAngle;
-  // G4PhysicsLinearVector* fAngleVector;
   G4PhysicsTable*                    fAngleForEnergyTable;
   std::vector<G4PhysicsTable*>       fAngleBank;
+
+private:
+
+  // copy constructor and hide assignment operator
+  G4VXTRenergyLoss(G4VXTRenergyLoss &);
+  G4VXTRenergyLoss & operator=(const G4VXTRenergyLoss &right);
 
 };
 

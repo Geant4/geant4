@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomDetectorConstruction.cc 74809 2013-10-22 09:49:26Z gcosmo $
+// $Id: DicomDetectorConstruction.cc 84839 2014-10-21 13:44:55Z gcosmo $
 //
 /// \file  medical/DICOM/src/DicomDetectorConstruction.cc
 /// \brief Implementation of the DicomDetectorConstruction class
@@ -350,172 +350,183 @@ void DicomDetectorConstruction::ReadPhantomData()
 void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
 {
 #ifdef G4VERBOSE
-    G4cout << " DicomDetectorConstruction::ReadPhantomDataFile opening file " << fname << G4endl;
+  G4cout << " DicomDetectorConstruction::ReadPhantomDataFile opening file " 
+         << fname << G4endl;
 #endif
-    std::ifstream fin(fname.c_str(), std::ios_base::in);
-    if( !fin.is_open() ) {
+  std::ifstream fin(fname.c_str(), std::ios_base::in);
+  if( !fin.is_open() ) {
+    G4Exception("DicomDetectorConstruction::ReadPhantomDataFile",
+                "",
+                FatalErrorInArgument,
+                G4String("File not found " + fname ).c_str());
+  }
+  //----- Define density differences (maximum density difference to create
+  // a new material)
+  char* part = getenv( "DICOM_CHANGE_MATERIAL_DENSITY" );
+  G4double densityDiff = -1.;
+  if( part ) densityDiff = G4UIcommand::ConvertToDouble(part);
+  if( densityDiff != -1. ) {
+    for( unsigned int ii = 0; ii < fOriginalMaterials.size(); ii++ ){
+      fDensityDiffs[ii] = densityDiff; //currently all materials with 
+      // same difference
+    }
+  }else {
+    if( fMaterials.size() == 0 ) { // do it only for first slice
+      for( unsigned int ii = 0; ii < fOriginalMaterials.size(); ii++ ){
+        fMaterials.push_back( fOriginalMaterials[ii] );
+      }
+    }
+  }
+  
+  //----- Read data header
+  DicomPhantomZSliceHeader* sliceHeader = new DicomPhantomZSliceHeader( fin );
+  fZSliceHeaders.push_back( sliceHeader );
+  
+  //----- Read material indices
+  G4int nVoxels = sliceHeader->GetNoVoxels();
+  
+  //--- If first slice, initiliaze fMateIDs
+  if( fZSliceHeaders.size() == 1 ) {
+    //fMateIDs = new unsigned int[fNoFiles*nVoxels];
+    fMateIDs = new size_t[fNoFiles*nVoxels];
+    
+  }
+  
+  unsigned int mateID;
+  // number of voxels from previously read slices
+  G4int voxelCopyNo = (fZSliceHeaders.size()-1)*nVoxels;
+  for( G4int ii = 0; ii < nVoxels; ii++, voxelCopyNo++ ){
+    fin >> mateID;
+    fMateIDs[voxelCopyNo] = mateID;
+  }
+  
+  //----- Read material densities and build new materials if two voxels have
+  //  same material but its density is in a different density interval 
+  // (size of density intervals defined by densityDiff)
+  G4double density;
+  // number of voxels from previously read slices
+  voxelCopyNo = (fZSliceHeaders.size()-1)*nVoxels;
+  for( G4int ii = 0; ii < nVoxels; ii++, voxelCopyNo++ ){
+    fin >> density;
+    
+    //-- Get material from list of original materials
+    mateID = fMateIDs[voxelCopyNo];
+    G4Material* mateOrig  = fOriginalMaterials[mateID];
+    
+    //-- Get density bin: middle point of the bin in which the current
+    // density is included
+    G4String newMateName = mateOrig->GetName();
+    float densityBin = 0.;
+    if( densityDiff != -1.) {
+      densityBin = fDensityDiffs[mateID] * 
+        (G4int(density/fDensityDiffs[mateID])+0.5);
+      //-- Build the new material name
+      newMateName += G4UIcommand::ConvertToString(densityBin);
+    }
+    
+    //-- Look if a material with this name is already created
+    //  (because a previous voxel was already in this density bin)
+    unsigned int im;
+    for( im = 0; im < fMaterials.size(); im++ ){
+      if( fMaterials[im]->GetName() == newMateName ) {
+        break;
+      }
+    }
+    //-- If material is already created use index of this material
+    if( im != fMaterials.size() ) {
+      fMateIDs[voxelCopyNo] = im;
+      //-- else, create the material
+    } else {
+      if( densityDiff != -1.) {
+        fMaterials.push_back( BuildMaterialWithChangingDensity( mateOrig,
+                                                  densityBin, newMateName ) );
+        fMateIDs[voxelCopyNo] = fMaterials.size()-1;
+      } else {
+        G4cerr << " im " << im << " < " << fMaterials.size() << " name "
+               << newMateName << G4endl;
         G4Exception("DicomDetectorConstruction::ReadPhantomDataFile",
                     "",
                     FatalErrorInArgument,
-                    G4String("File not found " + fname ).c_str());
+                    "Wrong index in material"); //it should never reach here
+      }
     }
-    //----- Define density differences (maximum density difference to create a new material)
-    char* part = getenv( "DICOM_CHANGE_MATERIAL_DENSITY" );
-    G4double densityDiff = -1.;
-    if( part ) densityDiff = G4UIcommand::ConvertToDouble(part);
-    if( densityDiff != -1. ) {
-        for( unsigned int ii = 0; ii < fOriginalMaterials.size(); ii++ ){
-            fDensityDiffs[ii] = densityDiff; //currently all materials with same difference
-        }
-    }else {
-        if( fMaterials.size() == 0 ) { // do it only for first slice
-            for( unsigned int ii = 0; ii < fOriginalMaterials.size(); ii++ ){
-                fMaterials.push_back( fOriginalMaterials[ii] );
-            }
-        }
-    }
-
-    //----- Read data header
-    DicomPhantomZSliceHeader* sliceHeader = new DicomPhantomZSliceHeader( fin );
-    fZSliceHeaders.push_back( sliceHeader );
-
-    //----- Read material indices
-    G4int nVoxels = sliceHeader->GetNoVoxels();
-
-    //--- If first slice, initiliaze fMateIDs
-    if( fZSliceHeaders.size() == 1 ) {
-        //fMateIDs = new unsigned int[fNoFiles*nVoxels];
-        fMateIDs = new size_t[fNoFiles*nVoxels];
-
-    }
-
-    unsigned int mateID;
-    // number of voxels from previously read slices
-    G4int voxelCopyNo = (fZSliceHeaders.size()-1)*nVoxels;
-    for( G4int ii = 0; ii < nVoxels; ii++, voxelCopyNo++ ){
-        fin >> mateID;
-        fMateIDs[voxelCopyNo] = mateID;
-    }
-
-    //----- Read material densities and build new materials if two voxels have same
-    //      material but its density is in a different density interval (size of
-    //      density intervals defined by densityDiff)
-    G4double density;
-    // number of voxels from previously read slices
-    voxelCopyNo = (fZSliceHeaders.size()-1)*nVoxels;
-    for( G4int ii = 0; ii < nVoxels; ii++, voxelCopyNo++ ){
-        fin >> density;
-
-        //-- Get material from list of original materials
-        mateID = fMateIDs[voxelCopyNo];
-        G4Material* mateOrig  = fOriginalMaterials[mateID];
-
-        //-- Get density bin: middle point of the bin in which the current density is included
-        G4String newMateName = mateOrig->GetName();
-        float densityBin = 0.;
-        if( densityDiff != -1.) {
-            densityBin = fDensityDiffs[mateID] * (G4int(density/fDensityDiffs[mateID])+0.5);
-            //-- Build the new material name
-            newMateName += G4UIcommand::ConvertToString(densityBin);
-        }
-
-        //-- Look if a material with this name is already created
-        //  (because a previous voxel was already in this density bin)
-        unsigned int im;
-        for( im = 0; im < fMaterials.size(); im++ ){
-            if( fMaterials[im]->GetName() == newMateName ) {
-                break;
-            }
-        }
-        //-- If material is already created use index of this material
-        if( im != fMaterials.size() ) {
-            fMateIDs[voxelCopyNo] = im;
-            //-- else, create the material
-        } else {
-            if( densityDiff != -1.) {
-                fMaterials.push_back( BuildMaterialWithChangingDensity( mateOrig,
-                densityBin, newMateName ) );
-                fMateIDs[voxelCopyNo] = fMaterials.size()-1;
-            } else {
-                G4cerr << " im " << im << " < " << fMaterials.size() << " name "
-                << newMateName << G4endl;
-                G4Exception("DicomDetectorConstruction::ReadPhantomDataFile",
-                            "",
-                            FatalErrorInArgument,
-                            "Wrong index in material"); //it should never reach here
-            }
-        }
-    }
-
+  }
+  
 }
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomDetectorConstruction::MergeZSliceHeaders()
 {
-    //----- Images must have the same dimension ...
-    fZSliceHeaderMerged = new DicomPhantomZSliceHeader( *fZSliceHeaders[0] );
-    for( unsigned int ii = 1; ii < fZSliceHeaders.size(); ii++ ) {
-        *fZSliceHeaderMerged += *fZSliceHeaders[ii];
-    };
-
+  //----- Images must have the same dimension ...
+  fZSliceHeaderMerged = new DicomPhantomZSliceHeader( *fZSliceHeaders[0] );
+  for( unsigned int ii = 1; ii < fZSliceHeaders.size(); ii++ ) {
+    *fZSliceHeaderMerged += *fZSliceHeaders[ii];
+  };
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4Material* DicomDetectorConstruction::BuildMaterialWithChangingDensity(const G4Material* origMate,
-        float density, G4String newMateName )
+G4Material* DicomDetectorConstruction::BuildMaterialWithChangingDensity(
+           const G4Material* origMate, float density, G4String newMateName )
 {
-    //----- Copy original material, but with new density
-    G4int nelem = origMate->GetNumberOfElements();
-    G4Material* mate = new G4Material( newMateName, density*g/cm3, nelem,
-    kStateUndefined, STP_Temperature );
-
-    for( G4int ii = 0; ii < nelem; ii++ ){
-        G4double frac = origMate->GetFractionVector()[ii];
-        G4Element* elem = const_cast<G4Element*>(origMate->GetElement(ii));
-        mate->AddElement( elem, frac );
-    }
-
-    return mate;
+  //----- Copy original material, but with new density
+  G4int nelem = origMate->GetNumberOfElements();
+  G4Material* mate = new G4Material( newMateName, density*g/cm3, nelem,
+                                     kStateUndefined, STP_Temperature );
+  
+  for( G4int ii = 0; ii < nelem; ii++ ){
+    G4double frac = origMate->GetFractionVector()[ii];
+    G4Element* elem = const_cast<G4Element*>(origMate->GetElement(ii));
+    mate->AddElement( elem, frac );
+  }
+  
+  return mate;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomDetectorConstruction::ConstructPhantomContainer()
 {
-    //---- Extract number of voxels and voxel dimensions
-    fNVoxelX = fZSliceHeaderMerged->GetNoVoxelX();
-    fNVoxelY = fZSliceHeaderMerged->GetNoVoxelY();
-    fNVoxelZ = fZSliceHeaderMerged->GetNoVoxelZ();
-
-    fVoxelHalfDimX = fZSliceHeaderMerged->GetVoxelHalfX();
-    fVoxelHalfDimY = fZSliceHeaderMerged->GetVoxelHalfY();
-    fVoxelHalfDimZ = fZSliceHeaderMerged->GetVoxelHalfZ();
+  //---- Extract number of voxels and voxel dimensions
+  fNVoxelX = fZSliceHeaderMerged->GetNoVoxelX();
+  fNVoxelY = fZSliceHeaderMerged->GetNoVoxelY();
+  fNVoxelZ = fZSliceHeaderMerged->GetNoVoxelZ();
+  
+  fVoxelHalfDimX = fZSliceHeaderMerged->GetVoxelHalfX();
+  fVoxelHalfDimY = fZSliceHeaderMerged->GetVoxelHalfY();
+  fVoxelHalfDimZ = fZSliceHeaderMerged->GetVoxelHalfZ();
 #ifdef G4VERBOSE
-    G4cout << " fNVoxelX " << fNVoxelX << " fVoxelHalfDimX " << fVoxelHalfDimX <<G4endl;
-    G4cout << " fNVoxelY " << fNVoxelY << " fVoxelHalfDimY " << fVoxelHalfDimY <<G4endl;
-    G4cout << " fNVoxelZ " << fNVoxelZ << " fVoxelHalfDimZ " << fVoxelHalfDimZ <<G4endl;
-    G4cout << " totalPixels " << fNVoxelX*fNVoxelY*fNVoxelZ <<  G4endl;
+  G4cout << " fNVoxelX " << fNVoxelX << " fVoxelHalfDimX " << fVoxelHalfDimX 
+         <<G4endl;
+  G4cout << " fNVoxelY " << fNVoxelY << " fVoxelHalfDimY " << fVoxelHalfDimY 
+         <<G4endl;
+  G4cout << " fNVoxelZ " << fNVoxelZ << " fVoxelHalfDimZ " << fVoxelHalfDimZ 
+         <<G4endl;
+  G4cout << " totalPixels " << fNVoxelX*fNVoxelY*fNVoxelZ <<  G4endl;
 #endif
-
-    //----- Define the volume that contains all the voxels
-    fContainer_solid = new G4Box("phantomContainer",fNVoxelX*fVoxelHalfDimX,
-                                    fNVoxelY*fVoxelHalfDimY,
-                                    fNVoxelZ*fVoxelHalfDimZ);
-    fContainer_logic =
+  
+  //----- Define the volume that contains all the voxels
+  fContainer_solid = new G4Box("phantomContainer",fNVoxelX*fVoxelHalfDimX,
+                               fNVoxelY*fVoxelHalfDimY,
+                               fNVoxelZ*fVoxelHalfDimZ);
+  fContainer_logic =
     new G4LogicalVolume( fContainer_solid,
-            //the material is not important, it will be fully filled by the voxels
-                        fMaterials[0],
-                        "phantomContainer",
-                        0, 0, 0 );
-    //--- Place it on the world
-    G4double fOffsetX = (fZSliceHeaderMerged->GetMaxX() + fZSliceHeaderMerged->GetMinX() ) /2.;
-    G4double fOffsetY = (fZSliceHeaderMerged->GetMaxY() + fZSliceHeaderMerged->GetMinY() ) /2.;
-    G4double fOffsetZ = (fZSliceHeaderMerged->GetMaxZ() + fZSliceHeaderMerged->GetMinZ() ) /2.;
-    G4ThreeVector posCentreVoxels(fOffsetX,fOffsetY,fOffsetZ);
+   //the material is not important, it will be fully filled by the voxels
+                         fMaterials[0],
+                         "phantomContainer",
+                         0, 0, 0 );
+  //--- Place it on the world
+  G4double fOffsetX = (fZSliceHeaderMerged->GetMaxX() + 
+                       fZSliceHeaderMerged->GetMinX() ) /2.;
+  G4double fOffsetY = (fZSliceHeaderMerged->GetMaxY() + 
+                       fZSliceHeaderMerged->GetMinY() ) /2.;
+  G4double fOffsetZ = (fZSliceHeaderMerged->GetMaxZ() + 
+                       fZSliceHeaderMerged->GetMinZ() ) /2.;
+  G4ThreeVector posCentreVoxels(fOffsetX,fOffsetY,fOffsetZ);
 #ifdef G4VERBOSE
-    G4cout << " placing voxel container volume at " << posCentreVoxels << G4endl;
+  G4cout << " placing voxel container volume at " << posCentreVoxels << G4endl;
 #endif
-    fContainer_phys =
+  fContainer_phys =
     new G4PVPlacement(0,  // rotation
                       posCentreVoxels,
                       fContainer_logic,     // The logic volume
@@ -523,8 +534,8 @@ void DicomDetectorConstruction::ConstructPhantomContainer()
                       fWorld_logic,  // Mother
                       false,           // No op. bool.
                       1);              // Copy number
-
-    //fContainer_logic->SetVisAttributes(new G4VisAttributes(G4Colour(1.,0.,0.)));
+  
+  //fContainer_logic->SetVisAttributes(new G4VisAttributes(G4Colour(1.,0.,0.)));
 }
 
 
@@ -536,71 +547,54 @@ void DicomDetectorConstruction::ConstructPhantomContainer()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomDetectorConstruction::SetScorer(G4LogicalVolume* voxel_logic)
 {
-
-    G4cout << "\n\n\n\n\t SET SCORER : " << voxel_logic->GetName() << " \n\n\n" << G4endl;
-
-
-    scorers.insert(voxel_logic);
-
-    /*
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    //
-    // Sensitive Detector Name
-    G4String concreteSDname = "phantomSD";
-
-    //------------------------
-    // MultiFunctionalDetector
-    //------------------------
-    //
-    // Define MultiFunctionalDetector with name.
-    G4MultiFunctionalDetector* MFDet = new G4MultiFunctionalDetector(concreteSDname);
-    SDman->AddNewDetector( MFDet );                 // Register SD to SDManager
-
-    voxel_logic->SetSensitiveDetector(MFDet);
-
-    G4PSDoseDeposit*   scorer = new G4PSDoseDeposit("DoseDeposit");
-    MFDet->RegisterPrimitive(scorer);*/
-
+  
+  G4cout << "\n\n\n\n\t SET SCORER : " << voxel_logic->GetName() 
+         << " \n\n\n" << G4endl;
+  
+  scorers.insert(voxel_logic);
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DicomDetectorConstruction::ConstructSDandField()
 {
-
-    G4cout << "\n\n\n\n\t CONSTRUCT SD AND FIELD \n\n\n" << G4endl;
-    
-    //G4SDManager* SDman = G4SDManager::GetSDMpointer();
-
-    //SDman->SetVerboseLevel(1);
-
-    //
-    // Sensitive Detector Name
-    G4String concreteSDname = "phantomSD";
-    std::vector<G4String> scorer_names;
-    scorer_names.push_back(concreteSDname);
-    //------------------------
-    // MultiFunctionalDetector
-    //------------------------
-    //
-    // Define MultiFunctionalDetector with name.
-    // declare MFDet as a MultiFunctionalDetector scorer
-    G4MultiFunctionalDetector* MFDet = new G4MultiFunctionalDetector(concreteSDname);
-    //SDman->AddNewDetector( MFDet );                 // Register SD to SDManager
-    //G4VPrimitiveScorer* dosedep = new G4PSDoseDeposit("DoseDeposit");
-    G4VPrimitiveScorer* dosedep = new G4PSDoseDeposit3D("DoseDeposit", fNVoxelX, fNVoxelY, 
-                            fNVoxelZ);
-    MFDet->RegisterPrimitive(dosedep);
-
-    for(std::set<G4LogicalVolume*>::iterator ite = scorers.begin(); ite != scorers.end(); ++ite) {
-        SetSensitiveDetector(*ite, MFDet);
-    }
-
-    /*if(DicomRunAction::Instance()->GetDicomRun()) {
-        DicomRunAction::Instance()->GetDicomRun()->ConstructMFD(scorer_names);
-    }*/
-
-
+  
+  G4cout << "\n\n\n\n\t CONSTRUCT SD AND FIELD \n\n\n" << G4endl;
+  
+  //G4SDManager* SDman = G4SDManager::GetSDMpointer();
+  
+  //SDman->SetVerboseLevel(1);
+  
+  //
+  // Sensitive Detector Name
+  G4String concreteSDname = "phantomSD";
+  std::vector<G4String> scorer_names;
+  scorer_names.push_back(concreteSDname);
+  //------------------------
+  // MultiFunctionalDetector
+  //------------------------
+  //
+  // Define MultiFunctionalDetector with name.
+  // declare MFDet as a MultiFunctionalDetector scorer
+  G4MultiFunctionalDetector* MFDet = 
+    new G4MultiFunctionalDetector(concreteSDname);
+  //SDman->AddNewDetector( MFDet );                 // Register SD to SDManager
+  //G4VPrimitiveScorer* dosedep = new G4PSDoseDeposit("DoseDeposit");
+  G4VPrimitiveScorer* dosedep = 
+    new G4PSDoseDeposit3D("DoseDeposit", fNVoxelX, fNVoxelY, fNVoxelZ);
+  MFDet->RegisterPrimitive(dosedep);
+  
+  for(std::set<G4LogicalVolume*>::iterator ite = scorers.begin(); 
+      ite != scorers.end(); ++ite) {
+    SetSensitiveDetector(*ite, MFDet);
+  }
+  
+  /*if(DicomRunAction::Instance()->GetDicomRun()) {
+      DicomRunAction::Instance()->GetDicomRun()->ConstructMFD(scorer_names);
+      }*/
+  
+  
 }
 
 

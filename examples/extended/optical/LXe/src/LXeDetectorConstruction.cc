@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeDetectorConstruction.cc 77882 2013-11-29 08:39:07Z gcosmo $
+// $Id: LXeDetectorConstruction.cc 82853 2014-07-14 09:07:11Z gcosmo $
 //
 /// \file optical/LXe/src/LXeDetectorConstruction.cc
 /// \brief Implementation of the LXeDetectorConstruction class
@@ -144,12 +144,15 @@ void LXeDetectorConstruction::DefineMaterials(){
  
   //***Material properties tables
 
-  const G4int lxenum = 3;
-  G4double lxe_Energy[lxenum]    = { 7.0*eV , 7.07*eV, 7.14*eV };
+  G4double lxe_Energy[]    = { 7.0*eV , 7.07*eV, 7.14*eV };
+  const G4int lxenum = sizeof(lxe_Energy)/sizeof(G4double);
 
-  G4double lxe_SCINT[lxenum] = { 0.1, 1.0, 0.1 };
-  G4double lxe_RIND[lxenum]  = { 1.59 , 1.57, 1.54 };
-  G4double lxe_ABSL[lxenum]  = { 35.*cm, 35.*cm, 35.*cm};
+  G4double lxe_SCINT[] = { 0.1, 1.0, 0.1 };
+  assert(sizeof(lxe_SCINT) == sizeof(lxe_Energy));
+  G4double lxe_RIND[]  = { 1.59 , 1.57, 1.54 };
+  assert(sizeof(lxe_RIND) == sizeof(lxe_Energy));
+  G4double lxe_ABSL[]  = { 35.*cm, 35.*cm, 35.*cm};
+  assert(sizeof(lxe_ABSL) == sizeof(lxe_Energy));
   fLXe_mt = new G4MaterialPropertiesTable();
   fLXe_mt->AddProperty("FASTCOMPONENT", lxe_Energy, lxe_SCINT, lxenum);
   fLXe_mt->AddProperty("SLOWCOMPONENT", lxe_Energy, lxe_SCINT, lxenum);
@@ -166,26 +169,33 @@ void LXeDetectorConstruction::DefineMaterials(){
 
   fLXe->GetIonisation()->SetBirksConstant(0.126*mm/MeV);
  
-  G4double glass_RIND[lxenum]={1.49,1.49,1.49};
-  G4double glass_AbsLength[lxenum]={420.*cm,420.*cm,420.*cm};
+  G4double glass_RIND[]={1.49,1.49,1.49};
+  assert(sizeof(glass_RIND) == sizeof(lxe_Energy));
+  G4double glass_AbsLength[]={420.*cm,420.*cm,420.*cm};
+  assert(sizeof(glass_AbsLength) == sizeof(lxe_Energy));
   G4MaterialPropertiesTable *glass_mt = new G4MaterialPropertiesTable();
   glass_mt->AddProperty("ABSLENGTH",lxe_Energy,glass_AbsLength,lxenum);
   glass_mt->AddProperty("RINDEX",lxe_Energy,glass_RIND,lxenum);
   fGlass->SetMaterialPropertiesTable(glass_mt);
 
-  G4double vacuum_Energy[lxenum]={2.0*eV,7.0*eV,7.14*eV};
-  G4double vacuum_RIND[lxenum]={1.,1.,1.};
+  G4double vacuum_Energy[]={2.0*eV,7.0*eV,7.14*eV};
+  const G4int vacnum = sizeof(vacuum_Energy)/sizeof(G4double);
+  G4double vacuum_RIND[]={1.,1.,1.};
+  assert(sizeof(vacuum_RIND) == sizeof(vacuum_Energy));
   G4MaterialPropertiesTable *vacuum_mt = new G4MaterialPropertiesTable();
-  vacuum_mt->AddProperty("RINDEX", vacuum_Energy, vacuum_RIND,lxenum);
+  vacuum_mt->AddProperty("RINDEX", vacuum_Energy, vacuum_RIND,vacnum);
   fVacuum->SetMaterialPropertiesTable(vacuum_mt);
   fAir->SetMaterialPropertiesTable(vacuum_mt);//Give air the same rindex
 
-  const G4int wlsnum = 4;
   G4double wls_Energy[] = {2.00*eV,2.87*eV,2.90*eV,3.47*eV};
+  const G4int wlsnum = sizeof(wls_Energy)/sizeof(G4double);
  
-  G4double rIndexPstyrene[wlsnum]={ 1.5, 1.5, 1.5, 1.5};
-  G4double absorption1[wlsnum]={2.*cm, 2.*cm, 2.*cm, 2.*cm};
-  G4double scintilFast[wlsnum]={0.00, 0.00, 1.00, 1.00};
+  G4double rIndexPstyrene[]={ 1.5, 1.5, 1.5, 1.5};
+  assert(sizeof(rIndexPstyrene) == sizeof(wls_Energy));
+  G4double absorption1[]={2.*cm, 2.*cm, 2.*cm, 2.*cm};
+  assert(sizeof(absorption1) == sizeof(wls_Energy));
+  G4double scintilFast[]={0.00, 0.00, 1.00, 1.00};
+  assert(sizeof(scintilFast) == sizeof(wls_Energy));
   fMPTPStyrene = new G4MaterialPropertiesTable();
   fMPTPStyrene->AddProperty("RINDEX",wls_Energy,rIndexPstyrene,wlsnum);
   fMPTPStyrene->AddProperty("ABSLENGTH",wls_Energy,absorption1,wlsnum);
@@ -199,9 +209,12 @@ void LXeDetectorConstruction::DefineMaterials(){
 
   fPstyrene->GetIonisation()->SetBirksConstant(0.126*mm/MeV);
 
-  G4double RefractiveIndexFiber[wlsnum]={ 1.60, 1.60, 1.60, 1.60};
-  G4double AbsFiber[wlsnum]={9.00*m,9.00*m,0.1*mm,0.1*mm};
-  G4double EmissionFib[wlsnum]={1.0, 1.0, 0.0, 0.0};
+  G4double RefractiveIndexFiber[]={ 1.60, 1.60, 1.60, 1.60};
+  assert(sizeof(RefractiveIndexFiber) == sizeof(wls_Energy));
+  G4double AbsFiber[]={9.00*m,9.00*m,0.1*mm,0.1*mm};
+  assert(sizeof(AbsFiber) == sizeof(wls_Energy));
+  G4double EmissionFib[]={1.0, 1.0, 0.0, 0.0};
+  assert(sizeof(EmissionFib) == sizeof(wls_Energy));
   G4MaterialPropertiesTable* fiberProperty = new G4MaterialPropertiesTable();
   fiberProperty->AddProperty("RINDEX",wls_Energy,RefractiveIndexFiber,wlsnum);
   fiberProperty->AddProperty("WLSABSLENGTH",wls_Energy,AbsFiber,wlsnum);
@@ -209,13 +222,15 @@ void LXeDetectorConstruction::DefineMaterials(){
   fiberProperty->AddConstProperty("WLSTIMECONSTANT", 0.5*ns);
   fPMMA->SetMaterialPropertiesTable(fiberProperty);
 
-  G4double RefractiveIndexClad1[wlsnum]={ 1.49, 1.49, 1.49, 1.49};
+  G4double RefractiveIndexClad1[]={ 1.49, 1.49, 1.49, 1.49};
+  assert(sizeof(RefractiveIndexClad1) == sizeof(wls_Energy));
   G4MaterialPropertiesTable* clad1Property = new G4MaterialPropertiesTable();
   clad1Property->AddProperty("RINDEX",wls_Energy,RefractiveIndexClad1,wlsnum);
   clad1Property->AddProperty("ABSLENGTH",wls_Energy,AbsFiber,wlsnum);
   fPethylene1->SetMaterialPropertiesTable(clad1Property);
 
-  G4double RefractiveIndexClad2[wlsnum]={ 1.42, 1.42, 1.42, 1.42};
+  G4double RefractiveIndexClad2[]={ 1.42, 1.42, 1.42, 1.42};
+  assert(sizeof(RefractiveIndexClad2) == sizeof(wls_Energy));
   G4MaterialPropertiesTable* clad2Property = new G4MaterialPropertiesTable();
   clad2Property->AddProperty("RINDEX",wls_Energy,RefractiveIndexClad2,wlsnum);
   clad2Property->AddProperty("ABSLENGTH",wls_Energy,AbsFiber,wlsnum);
@@ -282,11 +297,12 @@ G4VPhysicalVolume* LXeDetectorConstruction::ConstructDetector()
     scintWrap->SetFinish(polished);
     scintWrap->SetModel(glisur);
 
-    const G4int num = 2;
-
-    G4double pp[num] = {2.0*eV, 3.5*eV};
-    G4double reflectivity[num] = {1., 1.};
-    G4double efficiency[num] = {0.0, 0.0};
+    G4double pp[] = {2.0*eV, 3.5*eV};
+    const G4int num = sizeof(pp)/sizeof(G4double);
+    G4double reflectivity[] = {1., 1.};
+    assert(sizeof(reflectivity) == sizeof(pp));
+    G4double efficiency[] = {0.0, 0.0};
+    assert(sizeof(efficiency) == sizeof(pp));
     
     G4MaterialPropertiesTable* scintWrapProperty 
       = new G4MaterialPropertiesTable();

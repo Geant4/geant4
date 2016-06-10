@@ -26,11 +26,13 @@
 /// \file materials/src/G4LatticeManager.cc
 /// \brief Implementation of the G4LatticeManager class
 //
-// $Id: G4LatticeManager.cc 76693 2013-11-14 08:47:37Z gcosmo $
+// $Id: G4LatticeManager.cc 84196 2014-10-10 14:31:48Z gcosmo $
 //
 // 20131113  Delete lattices in (new) registry, not in lookup maps
+// 20141008  Change to global singleton; must be shared across worker threads
 
 #include "G4LatticeManager.hh"
+#include "G4AutoLock.hh"
 #include "G4LatticeLogical.hh"
 #include "G4LatticePhysical.hh"
 #include "G4LatticeReader.hh"
@@ -38,10 +40,14 @@
 #include "G4Material.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Threading.hh"
 #include <fstream>
 
-G4ThreadLocal G4LatticeManager* G4LatticeManager::fLM = 0;
+G4LatticeManager* G4LatticeManager::fLM = 0;	// Global (shared) singleton
 
+namespace {
+  G4Mutex latMutex = G4MUTEX_INITIALIZER;	// For thread protection
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -82,8 +88,11 @@ void G4LatticeManager::Clear() {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LatticeManager* G4LatticeManager::GetLatticeManager() {
-  //if no lattice manager exists, create one.
+  // if no lattice manager exists, create one.
+  G4AutoLock latLock(&latMutex);	// Protect before changing pointer
   if (!fLM) fLM = new G4LatticeManager();
+  latLock.unlock();
+
   return fLM;
 }
 
@@ -95,8 +104,10 @@ G4bool G4LatticeManager::RegisterLattice(G4Material* Mat,
 					 G4LatticeLogical* Lat) {
   if (!Mat || !Lat) return false;	// Don't register null pointers
 
+  G4AutoLock latLock(&latMutex);	// Protect before changing registry
   fLLattices.insert(Lat);		// Take ownership in registry
   fLLatticeList[Mat] = Lat;
+  latLock.unlock();
 
   if (verboseLevel) {
     G4cout << "G4LatticeManager::RegisterLattice: "
@@ -162,11 +173,15 @@ G4bool G4LatticeManager::RegisterLattice(G4VPhysicalVolume* Vol,
 					 G4LatticePhysical* Lat) {
   if (!Vol || !Lat) return false;	// Don't register null pointers
 
+  G4AutoLock latLock(&latMutex);	// Protect before changing registry
+
   // SPECIAL: Register first lattice with a null volume to act as default
   if (fPLatticeList.empty()) fPLatticeList[0] = Lat;
 
   fPLattices.insert(Lat);
   fPLatticeList[Vol] = Lat;
+
+  latLock.unlock();
 
   if (verboseLevel) {
     G4cout << "G4LatticeManager::RegisterLattice: "
@@ -200,7 +215,6 @@ G4LatticeLogical* G4LatticeManager::GetLattice(G4Material* Mat) const {
 	     << " for " << (Mat?Mat->GetName():"NULL") << "." << G4endl;
     return latFind->second;
   }
-
 
   if (verboseLevel) 
     G4cerr << "G4LatticeManager:: Found no matching lattices for "

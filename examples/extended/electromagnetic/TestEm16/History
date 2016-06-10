@@ -1,4 +1,4 @@
-$Id: History 74596 2013-10-16 06:57:50Z gcosmo $
+$Id: History 85257 2014-10-27 08:50:30Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,22 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-10-14 mma (testem16-V10-00-04)
+- in TestEm16.in : /run/numberOfThreads 2
+
+13-10-14 adotti (testem16-V10-00-03  )
+- Fix thread safety in class PhysicsList
+
+28-09-14 mma (testem16-V10-00-02)
+- migration to MT
+
+01-08-14 V.Ivant (testem16-V10-00-01)
+- PhysicsList - removed SetCut() method, added Synchrotron radiation 
+    to all charged particles
+	 
+09-06-14 mma (testem16-V10-00-00)
+- suppress EventAction and its messenger
 
 15-10-13 V.Ivant (testem16-V09-06-05)
 - updated vis.mac

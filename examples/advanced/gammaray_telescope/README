@@ -1,4 +1,4 @@
-$Id: README 68794 2013-04-05 13:23:26Z gcosmo $
+$Id: README 81063 2014-05-20 09:14:00Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -156,13 +156,7 @@ Tuples.
  UI help for more information). We are planning to include, in the next
  releases of this example, the General Particle Source module of G4.
  
-6. ReadOutGeometry
-------------------
-
- The tracker is made of Silicon Microstrips detectors. The ReadOut geometry
- provides the description of the strips.
-
-7. Hit
+6. Hit
 ------
 
  In this version the hits from the TKR the CAL and the ACD are generated. 
@@ -179,7 +173,7 @@ Tuples.
  The hit information are saved on an ASCII file named Tracks_N.dat, where 
  N is the progressive ID number associated to the run. 
 
-8. Analysis
+7. Analysis
 ----------------
  
 Relevant information from the simulation is processed in the GammarayTelAnalysis
@@ -197,7 +191,7 @@ must be installed and a FORTRAN compiler must be present)
  "gammaraytel.root". Please note that in a multiple run session, 
 the last run always override the root file.
 
-9. Histogramming
+8. Histogramming
 ----------------
 
  The 1D histograms contain the energy deposition in the last X plane of 
@@ -215,7 +209,7 @@ the last run always override the root file.
  In this example we only show the use of very basic feature of this new 
  simulation/analysis framework.
 
-10. Digi
+9. Digi
 --------
 
  For the TKR also the digits corresponding to the Hits are generated. 
@@ -228,7 +222,7 @@ the last run always override the root file.
   c) Number of the plane
   d) Type of the plane (1=X  0=Y)
 
-11. Classes Overview
+10. Classes Overview
 -------------------
 
  This is the overview of the classes defined in this example
@@ -289,9 +283,6 @@ the last run always override the root file.
 
   GammaRayTelDigitizer
 	Description of the digitizer for the tracker
-
-  GammaRayTelTrackerROGeometry
-	Description of the readout geometry for strips subdivision
 
   GammaRayTelTrackerSD
 	Description of the TKR sensitive detector

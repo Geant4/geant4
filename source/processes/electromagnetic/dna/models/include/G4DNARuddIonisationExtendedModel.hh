@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationExtendedModel.hh 70171 2013-05-24 13:34:18Z gcosmo $
+// $Id: G4DNARuddIonisationExtendedModel.hh 81941 2014-06-06 15:50:50Z gcosmo $
 //
 
 #ifndef G4DNARuddIonisationExtendedModel_h
@@ -80,7 +80,8 @@ private:
 
   std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
   std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
-// ZF 26-10-2010
+  
+  // ZF: 26-10-2010
   std::map<G4double,G4double> lowEnergyLimitForA, lowEnergyLimitOfModelForA, killBelowEnergyForA;
 
   G4bool isInitialised;
@@ -102,11 +103,14 @@ private:
 					  G4double incomingParticleEnergy, 
 					  G4int shell);
 
+  // SI: Not necessary anymore since we now use interface to angle generator
+  /*
   void RandomizeEjectedElectronDirection(G4ParticleDefinition* particleDefinition, 
 					 G4double incomingParticleEnergy, 
 					 G4double outgoingParticleEnergy, 
 					 G4double & cosTheta, 
 					 G4double & phi, G4int shell);
+  */
 
   G4double RejectionFunction(G4ParticleDefinition* particle, 
 							      G4double k, 

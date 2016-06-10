@@ -9,6 +9,17 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 July 2014 A. Dotti (MPI-V10-00-02)
+- Fixing bug for RNG seed distribution in MT compilations
+  (Bug #1653)
+
+13 June 2014 A. Dotti (MPI-V10-00-01)
+- Adding first version of G4RunMerger and 
+  G4ScorerMerger
+
+10 June 2014 A. Dotti (MPI-V10-00-00)
+- New CMake receipe: increase portability of the code
+ 
 10 Novembeer 2013 K. Murakami (MPI-V09-06-00)
 [source]
 - new coding guide line

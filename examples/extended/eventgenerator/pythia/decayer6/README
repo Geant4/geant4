@@ -1,4 +1,4 @@
- $Id: README 72244 2013-07-12 08:49:56Z gcosmo $
+ $Id: README 85904 2014-11-06 08:50:03Z gcosmo $
  ------------------------------------------------------------ 
 
  Example of the external decayer implementation with PYTHIA6
@@ -80,7 +80,8 @@
  
  %  pythia6_decayer pythia6_decayer.in
    
- The list of classes used from common:
+ This example uses the user action classes from the extended examples common 
+ repository available in common subdirectory, see below their complete list.
 
  ExG4DetectorConstruction01
  ExG4DetectorConstruction01Messenger

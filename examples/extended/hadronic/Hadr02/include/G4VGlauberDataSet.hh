@@ -36,7 +36,7 @@
 /// \file hadronic/Hadr02/include/G4VGlauberDataSet.hh
 /// \brief Definition of the G4VGlauberDataSet class
 //
-// $Id: G4VGlauberDataSet.hh 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: G4VGlauberDataSet.hh 81932 2014-06-06 15:39:45Z gcosmo $
 //
 
 #ifndef G4VGlauberDataSet_h
@@ -119,9 +119,9 @@ public:
   G4int         verboseLevel; 
     
   friend std::ofstream & operator << (std::ofstream &File, 
-				      const G4VGlauberDataSet &q);
+                                      const G4VGlauberDataSet &q);
   friend std::ifstream & operator >> (std::ifstream &File, 
-				      G4VGlauberDataSet &q);
+                                      G4VGlauberDataSet &q);
 
 };
 

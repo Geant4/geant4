@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh 70325 2013-05-29 08:06:02Z gcosmo $
+// $Id: PhysicsList.hh 82042 2014-06-10 08:02:58Z gcosmo $
 //
 /// \file medical/electronScattering2/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
@@ -53,21 +53,12 @@ public:
   void AddDecay();
   void AddStepMax();       
     
-  virtual void SetCuts();
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-    
 private:
   
   PhysicsListMessenger* fMessenger; 
 
   G4String fEmName;
   G4VPhysicsConstructor*  fEmPhysicsList;
-    
-  G4double fCutForGamma;
-  G4double fCutForElectron;
-  G4double fCutForPositron;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

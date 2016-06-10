@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GEMProbability.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4GEMProbability.hh 86986 2014-11-21 13:00:05Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -60,6 +60,8 @@ public:
 
   G4double EmissionProbability(const G4Fragment & fragment, G4double anEnergy);
 
+  void Dump() const;
+
   inline G4int GetZ_asInt(void) const;
 	
   inline G4int GetA_asInt(void) const;
@@ -70,7 +72,7 @@ public:
 
   inline G4double GetSpin(void) const;
 
-  inline G4double GetNormalization(void) const;
+  //  inline G4double GetNormalization(void) const;
     
   inline void SetCoulomBarrier(const G4VCoulombBarrier * aCoulombBarrierStrategy);
 
@@ -115,9 +117,6 @@ private:
   // Coulomb Barrier
   const G4VCoulombBarrier * theCoulombBarrierPtr;
   
-  // Normalization
-  G4double Normalization;
-
 protected:
 
   G4double fPlanck;
@@ -157,12 +156,12 @@ inline G4double G4GEMProbability::GetSpin(void) const
 { 
   return Spin; 
 }
-
+/*
 inline G4double G4GEMProbability::GetNormalization(void) const 
 { 
   return Normalization; 
 }
-    
+*/  
 inline void 
 G4GEMProbability::SetCoulomBarrier(const G4VCoulombBarrier * aCoulombBarrierStrategy)
 {

@@ -27,14 +27,13 @@
 /// \brief Main program of the analysis/AnaEx01 example
 //
 //
-// $Id: AnaEx01.cc 73919 2013-09-17 07:38:47Z gcosmo $
+// $Id: AnaEx01.cc 81444 2014-05-28 14:28:20Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorConstruction.hh"
-#include "PhysicsList.hh"
 #include "ActionInitialization.hh"
 
 #ifdef G4MULTITHREADED
@@ -44,6 +43,7 @@
 #endif
 
 #include "G4UImanager.hh"
+#include "FTFP_BERT.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -71,7 +71,7 @@ int main(int argc,char** argv)
   //
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new PhysicsList);
+  runManager->SetUserInitialization(new FTFP_BERT);
   runManager->SetUserInitialization(new ActionInitialization(detector));
       
   // Initialize G4 kernel

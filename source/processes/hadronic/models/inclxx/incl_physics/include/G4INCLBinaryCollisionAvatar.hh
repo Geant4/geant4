@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -48,10 +49,11 @@
 #include "G4INCLNucleus.hh"
 #include "G4INCLFinalState.hh"
 #include "G4INCLInteractionAvatar.hh"
+#include "G4INCLAllocationPool.hh"
 
 namespace G4INCL {
 
-  class BinaryCollisionAvatar: public G4INCL::InteractionAvatar {
+  class BinaryCollisionAvatar: public InteractionAvatar {
   public:
     BinaryCollisionAvatar(G4double, G4double, G4INCL::Nucleus*, G4INCL::Particle*, G4INCL::Particle*);
     virtual ~BinaryCollisionAvatar();
@@ -64,7 +66,7 @@ namespace G4INCL {
     };
 
     virtual void preInteraction();
-    virtual FinalState *postInteraction(FinalState *);
+    virtual void postInteraction(FinalState *);
 
     std::string dump() const;
 
@@ -84,6 +86,8 @@ namespace G4INCL {
     G4bool isParticle1Spectator;
     G4bool isParticle2Spectator;
     G4bool isElastic;
+
+    INCL_DECLARE_ALLOCATION_POOL(BinaryCollisionAvatar);
   };
 
 }

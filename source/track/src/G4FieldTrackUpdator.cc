@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrackUpdator.cc 68795 2013-04-05 13:24:46Z gcosmo $
+// $Id: G4FieldTrackUpdator.cc 81134 2014-05-21 13:12:24Z gcosmo $
 //
 //   M. Asai - first implementation Apr/28/2006
 //
@@ -59,20 +59,32 @@ G4FieldTrack* G4FieldTrackUpdator::CreateFieldTrack(const G4Track* trk)
 
 void G4FieldTrackUpdator::Update(G4FieldTrack* ftrk,const G4Track* trk)
 {
+  const G4DynamicParticle* ptDynamicParticle= trk->GetDynamicParticle();
+
+  // The following properties must be updated ONCE for each new track (at least)
+  ftrk->SetRestMass(ptDynamicParticle->GetMass());   
+
   ftrk->UpdateState(
     trk->GetPosition(),     
     trk->GetGlobalTime(),
     trk->GetMomentumDirection(),
     trk->GetKineticEnergy()
     );
-  const G4DynamicParticle* ptDynamicParticle= trk->GetDynamicParticle();
+
+#ifdef G4CHECK  
+  if( ( trk->GetMomentum() - ftrk->GetMomentum()).mag2() > 1.e-16 * trk->GetMomentum().mag2() ){
+     G4cerr << "ERROR> G4FieldTrackUpdator sees *Disagreement* in momentum " << G4endl;
+     G4cout << "  FTupdator: Tracking Momentum= " << trk->GetMomentum() << G4endl;
+     G4cout << "  FTupdator: FldTrack Momentum= " << ftrk->GetMomentum() << G4endl;
+     G4cout << "  FTupdator: FldTrack-Tracking= " << ftrk->GetMomentum() - trk->GetMomentum() << G4endl;
+  }
+#endif
+
+  ftrk->SetProperTimeOfFlight(trk->GetProperTime());
 
   ftrk->SetChargeAndMoments( ptDynamicParticle->GetCharge() );
    // The charge can change during tracking
   ftrk->SetSpin( ptDynamicParticle->GetPolarization() );
-
-  // The following properties must be updated ONCE for each new track (at least)
-  ftrk->SetRestMass(ptDynamicParticle->GetMass());   
 }
 
 

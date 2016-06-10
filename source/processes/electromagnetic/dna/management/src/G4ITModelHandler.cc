@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITModelHandler.cc 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4ITModelHandler.cc 85244 2014-10-27 08:24:13Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -38,187 +38,186 @@
 
 G4ITModelHandler::G4ITModelHandler()
 {
-    //ctor
-    fIsInitialized = false;
-    fTimeStepComputerFlag = false;
-    fReactionProcessFlag = false;
+  //ctor
+  fIsInitialized = false;
+  fTimeStepComputerFlag = false;
+  fReactionProcessFlag = false;
 
-    size_t IT_size (G4ITType::size());
+  size_t IT_size(G4ITType::size());
 
-    fModelManager.assign(IT_size, std::vector<G4ITModelManager*>());
-    for(G4int i = 0 ; i < (int) IT_size ; i++)
-    {
-        fModelManager[i].assign(IT_size,0);
-    }
+  fModelManager.assign(IT_size, std::vector<G4ITModelManager*>());
+  for (G4int i = 0; i < (int) IT_size; i++)
+  {
+    fModelManager[i].assign(IT_size, 0);
+  }
 }
 
 G4ITModelHandler::~G4ITModelHandler()
 {
-    //dtor
-    G4int size = fModelManager.size();
+  //dtor
+  G4int size = fModelManager.size();
 
-    for(G4int i = 0 ; i < size ; i++)
+  for (G4int i = 0; i < size; i++)
+  {
+    for (G4int j = 0; j <= i; j++)
     {
-        for(G4int j = 0 ; j <= i ; j++)
-        {
-            if(fModelManager[i][j])
-            {
-                delete fModelManager[i][j];
-                fModelManager[i][j] = 0;
-                fModelManager[j][i] = 0;
-            }
-        }
+      if (fModelManager[i][j])
+      {
+        delete fModelManager[i][j];
+        fModelManager[i][j] = 0;
+        fModelManager[j][i] = 0;
+      }
     }
-    fModelManager.clear();
+  }
+  fModelManager.clear();
 }
 
 G4ITModelHandler::G4ITModelHandler(const G4ITModelHandler& other)
 {
-    //copy ctor
-    size_t IT_size (G4ITType::size());
+  //copy ctor
+  size_t IT_size(G4ITType::size());
 
-    fModelManager.assign(IT_size, std::vector<G4ITModelManager*>());
-    for(int i = 0 ; i < (int) IT_size ; i++)
+  fModelManager.assign(IT_size, std::vector<G4ITModelManager*>());
+  for (int i = 0; i < (int) IT_size; i++)
+  {
+    fModelManager[i].assign(IT_size, 0);
+    for (int j = 0; j < (int) IT_size; j++)
     {
-        fModelManager[i].assign(IT_size,0);
-        for(int j = 0 ; j < (int) IT_size ; j++)
-        {
-            if(other.fModelManager[i][j] != 0)
-            {
-                fModelManager[i][j] = new G4ITModelManager(*(other.fModelManager[i][j])) ;
-            }
-        }
+      if (other.fModelManager[i][j] != 0)
+      {
+        fModelManager[i][j] = new G4ITModelManager(
+            *(other.fModelManager[i][j]));
+      }
     }
+  }
 
-    fIsInitialized = other.fIsInitialized;
-    fTimeStepComputerFlag = other.fTimeStepComputerFlag;
-    fReactionProcessFlag = other.fReactionProcessFlag;
+  fIsInitialized = other.fIsInitialized;
+  fTimeStepComputerFlag = other.fTimeStepComputerFlag;
+  fReactionProcessFlag = other.fReactionProcessFlag;
 }
 
 G4ITModelHandler& G4ITModelHandler::operator=(const G4ITModelHandler& rhs)
 {
-    if (this == &rhs) return *this; // handle self assignment
-    //assignment operator
-    return *this;
+  if (this == &rhs) return *this; // handle self assignment
+  //assignment operator
+  return *this;
 }
 
 void G4ITModelHandler::Initialize()
 {
-    fIsInitialized = true;
+  fIsInitialized = true;
 
-    for(G4int i = 0 ; i < int(fModelManager.size()) ; i++)
+  for (G4int i = 0; i < int(fModelManager.size()); i++)
+  {
+    for (G4int j = 0; j <= i; j++)
     {
-        for(G4int j = 0 ; j <= i ; j++)
-        {
-            G4ITModelManager* modman = fModelManager[i][j];
-            if(modman)
-            {
-                modman->Initialize();
-            }
-        }
+      G4ITModelManager* modman = fModelManager[i][j];
+      if (modman)
+      {
+        modman->Initialize();
+      }
     }
+  }
 }
 
-void G4ITModelHandler::RegisterModel(
-    G4VITModel* aModel,
-    G4double startingTime)
+void G4ITModelHandler::RegisterModel(G4VITStepModel* aModel,
+                                     G4double startingTime)
 {
-    assert(aModel != 0);
+  assert(aModel != 0);
 
-    //________________________________________________
-    // Prepare the correct model manager
-    if( fModelManager.empty() )
+  //________________________________________________
+  // Prepare the correct model manager
+  if (fModelManager.empty())
+  {
+    size_t IT_size(G4ITType::size());
+    fModelManager.assign(IT_size, std::vector<G4ITModelManager*>());
+
+    for (int i = 0; i < (int) IT_size; i++)
     {
-        size_t IT_size (G4ITType::size());
-        fModelManager.assign(IT_size, std::vector<G4ITModelManager*>());
-
-        for(int i = 0 ; i < (int) IT_size ; i++)
-        {
-            fModelManager[i].assign((size_t) i,0);
-        }
+      fModelManager[i].assign((size_t) i, 0);
     }
+  }
 
-    G4ITType type1;
-    G4ITType type2;
+  G4ITType type1;
+  G4ITType type2;
 
-    //________________________________________________
-    // Retrieve applicability
-    aModel->IsApplicable(type1, type2);
+  //________________________________________________
+  // Retrieve applicability
+  aModel->IsApplicable(type1, type2);
 
-    if(type1 > type2)
-    {
-        G4ITType buffer(-1);
-        buffer = type1;
-        type1 = type2;
-        type2 = buffer;
-    }
+  if (type1 > type2)
+  {
+    G4ITType buffer(-1);
+    buffer = type1;
+    type1 = type2;
+    type2 = buffer;
+  }
 
-    if(fModelManager[type1][type2] == 0)
-    {
-        fModelManager[type1][type2] = new G4ITModelManager();
-    }
+  if (fModelManager[type1][type2] == 0)
+  {
+    fModelManager[type1][type2] = new G4ITModelManager();
+  }
 
-    fModelManager[type1][type2]-> SetModel(aModel, startingTime);
+  fModelManager[type1][type2]->SetModel(aModel, startingTime);
 
-    //________________________________________________
-    // Setup ITStepManager
-    if(aModel->GetTimeStepper())
-    {
-        fTimeStepComputerFlag = true;
-    }
-    if(aModel->GetReactionProcess())
-    {
-        fReactionProcessFlag = true;
-    }
+  //________________________________________________
+  // Setup ITStepManager
+  if (aModel->GetTimeStepper())
+  {
+    fTimeStepComputerFlag = true;
+  }
+  if (aModel->GetReactionProcess())
+  {
+    fReactionProcessFlag = true;
+  }
 }
 
 void G4ITModelHandler::SetModel(G4ITType type1,
-                              G4ITType type2,
-                              G4VITModel* aModel,
-                              G4double startingTime)
+                                G4ITType type2,
+                                G4VITStepModel* aModel,
+                                G4double startingTime)
 {
-    assert(aModel == 0);
+  assert(aModel == 0);
 
-    if(type1 > type2)
-    {
-        G4ITType buffer(-1);
-        buffer = type1;
-        type1 = type2;
-        type2 = buffer;
-    }
+  if (type1 > type2)
+  {
+    G4ITType buffer(-1);
+    buffer = type1;
+    type1 = type2;
+    type2 = buffer;
+  }
 
-    if(type1 > (int) fModelManager.capacity())
-    {
-        fModelManager.reserve(type1);
-    }
+  if (type1 > (int) fModelManager.capacity())
+  {
+    fModelManager.reserve(type1);
+  }
 
-    if(type2 > (int) fModelManager[type1].capacity())
-    {
-        fModelManager[type1].reserve(type2);
-    }
+  if (type2 > (int) fModelManager[type1].capacity())
+  {
+    fModelManager[type1].reserve(type2);
+  }
 
-    fModelManager[type1][type2] -> SetModel(aModel, startingTime);
+  fModelManager[type1][type2]->SetModel(aModel, startingTime);
 }
 
-
-G4VITModel* G4ITModelHandler::GetModel(G4ITType type1,
-                                     G4ITType type2,
-                                     const G4double globalTime)
+G4VITStepModel* G4ITModelHandler::GetModel(G4ITType type1,
+                                           G4ITType type2,
+                                           const G4double globalTime)
 {
-    if(fModelManager.empty())
-    {
-        return 0;
-    }
-
-    if((int) fModelManager.size() < type1) return 0;
-
-    std::vector<G4ITModelManager*>* v = &(fModelManager.at(type1));
-
-    if((int) v->size() < type2) return 0;
-
-    if(v->at(type2))
-    {
-        return v->at(type2)->GetModel(globalTime);
-    }
+  if (fModelManager.empty())
+  {
     return 0;
+  }
+
+  if ((int) fModelManager.size() < type1) return 0;
+
+  std::vector<G4ITModelManager*>* v = &(fModelManager.at(type1));
+
+  if ((int) v->size() < type2) return 0;
+
+  if (v->at(type2))
+  {
+    return v->at(type2)->GetModel(globalTime);
+  }
+  return 0;
 }

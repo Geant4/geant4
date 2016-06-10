@@ -32,7 +32,7 @@
 //    *                                 *
 //    ***********************************
 //
-// $Id: PurgMagSteppingAction.cc 72967 2013-08-14 14:57:48Z gcosmo $
+// $Id: PurgMagSteppingAction.cc 84366 2014-10-14 12:46:20Z gcosmo $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -50,7 +50,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-PurgMagSteppingAction::PurgMagSteppingAction(PurgMagDetectorConstruction* det)
+PurgMagSteppingAction::PurgMagSteppingAction(const 
+					     PurgMagDetectorConstruction* det)
 :Detector(det)
 { }
 

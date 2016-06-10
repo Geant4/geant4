@@ -1,20 +1,11 @@
-1- Run Header
-   ----------
-   - NbOfEvents   N1Pixels   N2Pixels   N1Shift
-   
-2- loop on Events
+   loop on Events
    --------------
    - EventNb
-   - Energy (MeV)   Direction   Position (mm)
-   - NbOfPixels
+   - beam_Energy (MeV)   Direction   Position (mm)
+   - nb_of_fibers_fired
    
-   - loop on Pixels
+   - loop on fibers
      --------------
-     - PixelNb (coded)   Evis (MeV)   Etot (MeV)   
+     - kFiber (coded)   EvisFiber (MeV)   
 
-Coding convention
------------------
-- Pixel has a double index :
-    Pixel[i1,i2]  i1 = 0,...,N1Pixels-1,  i2 = 0,...,N2Pixels-1
-- by convention PixelNb = i1*N1Shift+i2
-- therefore : i1 = int(PixelNb/N1Shift),  i2 = PixelNb%N1Shift
+     coding convention : kFiber = kLayer*1000 + iFiber

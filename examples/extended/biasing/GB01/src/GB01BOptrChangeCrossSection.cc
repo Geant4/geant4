@@ -33,11 +33,11 @@
 
 #include "Randomize.hh"
 
+#include "G4InteractionLawPhysical.hh"
+
 GB01BOptrChangeCrossSection::GB01BOptrChangeCrossSection(G4String particleName,
                                                          G4String         name)
   : G4VBiasingOperator(name),
-    fFirstProcess(0), 
-    fLastProcess(0),
     fSetup(true)
 {
   fParticleToBias = G4ParticleTable::GetParticleTable()->FindParticle(particleName);
@@ -61,40 +61,49 @@ GB01BOptrChangeCrossSection::~GB01BOptrChangeCrossSection()
         it++ ) delete (*it).second;
 }
 
+
+void GB01BOptrChangeCrossSection::StartRun()
+{
+  // --------------
+  // -- Setup stage:
+  // ---------------
+  // -- Start by collecting processes under biasing, create needed biasing
+  // -- operations and associate these operations to the processes:
+  if ( fSetup )
+    {
+      const G4ProcessManager* processManager = fParticleToBias->GetProcessManager();
+      const G4BiasingProcessSharedData* sharedData =
+        G4BiasingProcessInterface::GetSharedData( processManager );
+      if ( sharedData ) // -- sharedData tested, as is can happen a user attaches an operator to a
+                        // -- volume but without defined BiasingProcessInterface processes.
+        {
+          for ( size_t i = 0 ; i < (sharedData->GetPhysicsBiasingProcessInterfaces()).size(); i++ )
+            {
+              const G4BiasingProcessInterface* wrapperProcess =
+                (sharedData->GetPhysicsBiasingProcessInterfaces())[i];
+              G4String operationName = "XSchange-" + 
+                wrapperProcess->GetWrappedProcess()->GetProcessName();
+              fChangeCrossSectionOperations[wrapperProcess] = 
+                new G4BOptnChangeCrossSection(operationName);
+            }
+        }
+      fSetup = false;
+    }
+}
+
+
 G4VBiasingOperation* 
 GB01BOptrChangeCrossSection::ProposeOccurenceBiasingOperation(const G4Track*            track, 
                                                               const G4BiasingProcessInterface*
                                                                                callingProcess)
 {
 
+  // -----------------------------------------------------
   // -- Check if current particle type is the one to bias:
+  // -----------------------------------------------------
   if ( track->GetDefinition() != fParticleToBias ) return 0;
-
-  // -----------------------------------------------------------------------
-  // -- Setup stage ( Might consider moving this in a less called method. ):
-  // -----------------------------------------------------------------------
-  // -- Start by collecting processes under biasing, create needed biasing operations
-  // -- and assocation operations to these processes:
-  if ( fSetup )
-    {
-      if ( ( fFirstProcess == 0 ) && 
-           ( callingProcess->GetIsFirstPostStepGPILInterface() ) ) fFirstProcess = callingProcess;
-      if ( fLastProcess == 0 )
-        {
-          G4String operationName = "XSchange-" + 
-            callingProcess->GetWrappedProcess()->GetProcessName();
-          fChangeCrossSectionOperations[callingProcess] = 
-            new G4BOptnChangeCrossSection(operationName);
-          if ( callingProcess->GetIsLastPostStepGPILInterface() )
-            {
-              fLastProcess = callingProcess;
-              fSetup = false;
-            }
-        }
-    }
-
-
-
+  
+  
   // ---------------------------------------------------------------------
   // -- select and setup the biasing operation for current callingProcess:
   // ---------------------------------------------------------------------
@@ -154,14 +163,17 @@ GB01BOptrChangeCrossSection::ProposeOccurenceBiasingOperation(const G4Track*    
         }
       else
         {
+          // -- update the 'interaction length' and underneath 'number of interaction lengths'
+          // -- for past step  (this takes into accout the previous step cross-section value)
           operation->UpdateForStep( callingProcess->GetPreviousStepSize() );
+          // -- update the cross-section value:
           operation->SetBiasedCrossSection( XStransformation * analogXS );
+          // -- forces recomputation of the 'interaction length' taking into account above
+          // -- new cross-section value [tricky : to be improved]
+          operation->UpdateForStep( 0.0 );
         }
     }
   
-  //  operation->SetBiasedCrossSection( XStransformation * analogXS );
-  //  operation->Sample();
-
   return operation;
   
 }

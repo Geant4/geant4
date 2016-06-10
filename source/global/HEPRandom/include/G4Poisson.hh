@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Poisson.hh 76334 2013-11-08 14:37:37Z gcosmo $
+// $Id: G4Poisson.hh 79932 2014-03-26 10:43:05Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -52,7 +52,7 @@ inline G4long G4Poisson(G4double mean)
 {
   G4long number = 0;
   const G4int border = 16;
-  G4double limit = 2e9;
+  const G4double limit = 2e9;
 
   if(mean <= border)
   {
@@ -62,21 +62,18 @@ inline G4long G4Poisson(G4double mean)
 
     while(poissonSum <= position)
     {
-      number++ ;
+      ++number;
       poissonValue *= mean/number;
       poissonSum += poissonValue;
     }
     return number;
   } // the case of mean <= 16
 
-  G4double value, t, y;
-  t = std::sqrt(-2*std::log(G4UniformRand()));
-  y = CLHEP::twopi*G4UniformRand();
-  t *= std::cos(y);
-  value = mean + t*std::sqrt(mean) + 0.5;
-  if(value <= 0) {return 0;}
-  if(value >= limit) { return G4long(limit);}
-  return G4long(value);
+  G4double t = std::sqrt(-2.*std::log(G4UniformRand()))*
+               std::cos(2.*CLHEP::pi*G4UniformRand());
+  G4double value = mean + t*std::sqrt(mean) + 0.5;
+  if(value < 0.) {return 0;}
+  return (value >= limit) ? G4long(limit) : G4long(value);
 }
 
 #endif  /* G4POISSON_HH */

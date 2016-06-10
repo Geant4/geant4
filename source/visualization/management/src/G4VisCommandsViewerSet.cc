@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc 76477 2013-11-11 10:39:56Z gcosmo $
+// $Id: G4VisCommandsViewerSet.cc 86988 2014-11-21 13:06:15Z gcosmo $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 
@@ -500,7 +500,7 @@ void G4VisCommandsViewerSet::SetNewValue
   G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
   if (!currentViewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout << 
+      G4cerr <<
 	"ERROR: G4VisCommandsViewerSet::SetNewValue: no current viewer."
 	     << G4endl;
     }
@@ -513,7 +513,7 @@ void G4VisCommandsViewerSet::SetNewValue
     G4VViewer* fromViewer = fpVisManager->GetViewer(newValue);
     if (!fromViewer) {
       if (verbosity >= G4VisManager::errors) {
-	G4cout <<
+	G4cerr <<
 	  "ERROR: G4VisCommandsViewerSet::SetNewValue: all:"
 	  "\n  unrecognised from-viewer."
 	       << G4endl;
@@ -562,8 +562,8 @@ void G4VisCommandsViewerSet::SetNewValue
 	  << currentViewer->GetName() << " is NOT auto-refesh by default"
 	  << "\n  so cannot be set to auto-refresh."
 	  << G4endl;
-	return;
       }
+      return;
     }
     vp.SetAutoRefresh(autoRefresh);
     if (verbosity >= G4VisManager::confirmations) {
@@ -680,7 +680,7 @@ void G4VisCommandsViewerSet::SetNewValue
     }
     else {
       if (verbosity >= G4VisManager::errors) {
-	G4cout <<
+	G4cerr <<
 	  "ERROR: G4VisCommandsViewerSet::SetNewValue: culling:"
 	  "\n  option not recognised."
 	       << G4endl;
@@ -891,7 +891,7 @@ void G4VisCommandsViewerSet::SetNewValue
       vp.SetLightsMoveWithCamera(false);
     else {
       if (verbosity >= G4VisManager::errors) {
-	G4cout << "ERROR: \"" << newValue << "\" not recognised."
+	G4cerr << "ERROR: \"" << newValue << "\" not recognised."
 	"  Looking for \"cam\" or \"obj\" in string." << G4endl;
       }
     }
@@ -965,7 +965,7 @@ void G4VisCommandsViewerSet::SetNewValue
       fieldHalfAngle *= G4UIcommand::ValueOf(unit);
       if (fieldHalfAngle > 89.5 * deg || fieldHalfAngle <= 0.0) {
 	if (verbosity >= G4VisManager::errors) {
-	  G4cout <<
+	  G4cerr <<
 	    "ERROR: Field half angle should be 0 < angle <= 89.5 degrees.";
 	  G4cout << G4endl;
 	}
@@ -974,7 +974,7 @@ void G4VisCommandsViewerSet::SetNewValue
     }
     else {
       if (verbosity >= G4VisManager::errors) {
-	G4cout << "ERROR: \"" << newValue << "\" not recognised."
+	G4cerr << "ERROR: \"" << newValue << "\" not recognised."
 	  "  Looking for 'o' or 'p' first character." << G4endl;
       }
       return;
@@ -1050,7 +1050,7 @@ void G4VisCommandsViewerSet::SetNewValue
       style = G4ViewParameters::freeRotation;
     else {
       if (verbosity >= G4VisManager::errors) {
-	G4cout << "ERROR: \"" << newValue << "\" not recognised." << G4endl;
+	G4cerr << "ERROR: \"" << newValue << "\" not recognised." << G4endl;
       }
       return;
     }
@@ -1095,7 +1095,7 @@ void G4VisCommandsViewerSet::SetNewValue
     }
     else {
       if (verbosity >= G4VisManager::errors) {
-	G4cout << "ERROR: \"" << newValue << "\" not recognised."
+	G4cerr << "ERROR: \"" << newValue << "\" not recognised."
 	  "  Looking for 'w' or 's' first character." << G4endl;
       }
       return;
@@ -1167,21 +1167,28 @@ void G4VisCommandsViewerSet::SetNewValue
   }
 
   else if (command == fpCommandViewpointVector) {
-    fViewpointVector = G4UIcommand::ConvertTo3Vector(newValue).unit();
-    vp.SetViewAndLights(fViewpointVector);
-    if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Viewpoint direction set to "
-	     << vp.GetViewpointDirection() << G4endl;
-      if (vp.GetLightsMoveWithCamera ()) {
-	G4cout << "Lightpoint direction set to "
-	       << vp.GetActualLightpointDirection () << G4endl;
+    G4ThreeVector viewpointVector = G4UIcommand::ConvertTo3Vector(newValue);
+    if (viewpointVector.mag2() <= 0.) {
+      if (verbosity >= G4VisManager::errors) {
+        G4cerr << "ERROR: Null viewpoint vector. No action taken." << G4endl;
+      }
+    } else {
+      fViewpointVector = viewpointVector.unit();
+      vp.SetViewAndLights(fViewpointVector);
+      if (verbosity >= G4VisManager::confirmations) {
+        G4cout << "Viewpoint direction set to "
+        << vp.GetViewpointDirection() << G4endl;
+        if (vp.GetLightsMoveWithCamera ()) {
+          G4cout << "Lightpoint direction set to "
+          << vp.GetActualLightpointDirection () << G4endl;
+        }
       }
     }
   }
 
   else {
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<
+      G4cerr <<
 	"ERROR: G4VisCommandsViewerSet::SetNewValue: unrecognised command."
 	     << G4endl;
     }

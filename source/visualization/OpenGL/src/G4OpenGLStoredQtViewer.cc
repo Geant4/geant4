@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc 74995 2013-10-25 10:50:02Z gcosmo $
+// $Id: G4OpenGLStoredQtViewer.cc 87164 2014-11-26 08:48:31Z gcosmo $
 //
 //
 // Class G4OpenGLStoredQtViewer : a class derived from G4OpenGLQtViewer and
@@ -36,6 +36,9 @@
 
 #include "G4OpenGLStoredSceneHandler.hh"
 #include "G4ios.hh"
+#ifdef G4MULTITHREADED
+#include "G4Threading.hh"
+#endif
 
 #include <qapplication.h>
 
@@ -54,7 +57,8 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
 
   setFocusPolicy(Qt::StrongFocus); // enable keybord events
   fHasToRepaint = false;
-  fIsRepainting = false;
+  fPaintEventLock = false;
+  fUpdateGLLock = false;
 
   resize(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
 
@@ -74,12 +78,12 @@ void G4OpenGLStoredQtViewer::Initialise() {
   printf("G4OpenGLStoredQtViewer::Initialise 1\n");
 #endif
   hide();
-  fReadyToPaint = false;
+  fQGLWidgetInitialiseCompleted = false;
   CreateMainWindow (this,QString(GetName()));
 
   glDrawBuffer (GL_BACK);
+  fQGLWidgetInitialiseCompleted = true;
 
-  fReadyToPaint = true;
 }
 
 void G4OpenGLStoredQtViewer::initializeGL () {
@@ -182,8 +186,14 @@ G4bool G4OpenGLStoredQtViewer::TOSelected(size_t)
   return true;
 }
 
-void G4OpenGLStoredQtViewer::DrawView () {  
+void G4OpenGLStoredQtViewer::DrawView () {
+#ifdef G4MULTITHREADED
+  if (G4Threading::G4GetThreadId() == G4Threading::MASTER_ID) {
+    updateQWidget();
+  }
+#else
   updateQWidget();
+#endif
 }
 
 void G4OpenGLStoredQtViewer::ComputeView () {
@@ -206,7 +216,9 @@ void G4OpenGLStoredQtViewer::ComputeView () {
   G4bool kernelVisitWasNeeded = fNeedKernelVisit; // Keep (ProcessView resets).
   ProcessView ();
    
-
+  if (fNeedKernelVisit) {
+    displaySceneTreeComponent();
+  }
   if(dstyle!=G4ViewParameters::hlr &&
      haloing_enabled) {
 #ifdef G4DEBUG_VIS_OGL
@@ -291,10 +303,10 @@ void G4OpenGLStoredQtViewer::paintGL()
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::paintGL \n");
 #endif
-  if (fIsRepainting) {
-    //    return ;
+  if (fPaintEventLock) {
+//    return ;
   }
-  fIsRepainting = true;
+  fPaintEventLock = true;
   if ((getWinWidth() == 0) && (getWinHeight() == 0)) {
     return;
   }
@@ -302,8 +314,8 @@ void G4OpenGLStoredQtViewer::paintGL()
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::paintGL ready:%d fHasTo:%d??\n",fReadyToPaint,fHasToRepaint);
 #endif
-  if (!fReadyToPaint) {
-    fReadyToPaint= true;
+  if (!fQGLWidgetInitialiseCompleted) {
+    fPaintEventLock = false;
     return;
   }
   // DO NOT RESIZE IF SIZE HAS NOT CHANGE :
@@ -328,24 +340,31 @@ void G4OpenGLStoredQtViewer::paintGL()
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::paintGL VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV ready %d\n",fReadyToPaint);
 #endif
+  // Ensure that we really draw the BACK buffer
+  glDrawBuffer (GL_BACK);
 
   SetView();
-
+  
   ClearView (); //ok, put the background correct
   ComputeView();
 
   fHasToRepaint = false;
 
-  // update the view component tree
-  displaySceneTreeComponent();
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ready %d\n",fReadyToPaint);
 #endif
-  fIsRepainting = false;
+  fPaintEventLock = false;
 }
 
 void G4OpenGLStoredQtViewer::paintEvent(QPaintEvent *) {
+  if (! fQGLWidgetInitialiseCompleted) {
+    return;
+  }
   if ( fHasToRepaint) {
+    // Will really update the widget by calling CGLFlushDrawable
+    // The widget's rendering context will become the current context and initializeGL()
+    // will be called if it hasn't already been called.
+    // Copies the back buffer of a double-buffered context to the front buffer.
     updateGL();
   }
 }
@@ -360,7 +379,12 @@ void G4OpenGLStoredQtViewer::keyPressEvent (QKeyEvent * event)
   G4keyPressEvent(event);
 }
 
-void G4OpenGLStoredQtViewer::wheelEvent (QWheelEvent * event) 
+void G4OpenGLStoredQtViewer::keyReleaseEvent (QKeyEvent * event)
+{
+  G4keyReleaseEvent(event);
+}
+
+void G4OpenGLStoredQtViewer::wheelEvent (QWheelEvent * event)
 {
   G4wheelEvent(event);
 }
@@ -379,9 +403,9 @@ void G4OpenGLStoredQtViewer::mouseDoubleClickEvent(QMouseEvent *)
   G4MouseDoubleClickEvent();
 }
 
-void G4OpenGLStoredQtViewer::mouseReleaseEvent(QMouseEvent *)
+void G4OpenGLStoredQtViewer::mouseReleaseEvent(QMouseEvent *event)
 {
-  G4MouseReleaseEvent();
+  G4MouseReleaseEvent(event);
 }
 
 void G4OpenGLStoredQtViewer::mouseMoveEvent(QMouseEvent *event)
@@ -396,9 +420,19 @@ void G4OpenGLStoredQtViewer::contextMenuEvent(QContextMenuEvent *e)
 }
 
 void G4OpenGLStoredQtViewer::updateQWidget() {
+  if (fUpdateGLLock) {
+    return;
+  }
+  fUpdateGLLock = true;
   fHasToRepaint= true;
+  // Will really update the widget by calling CGLFlushDrawable
+  // The widget's rendering context will become the current context and initializeGL()
+  // will be called if it hasn't already been called.
+  // Copies the back buffer of a double-buffered context to the front buffer.
   updateGL();
+  updateSceneTreeComponentTreeWidgetInfos();
   fHasToRepaint= false;
+  fUpdateGLLock = false;
 }
 
 void G4OpenGLStoredQtViewer::ShowView (
@@ -412,8 +446,9 @@ void G4OpenGLStoredQtViewer::ShowView (
   ClearView();
   DrawView();
   activateWindow();
-  glFlush();
-
+  //  glFlush(); // NO NEED and as drawView will already cause a flush
+  // that could do a double flush
+  
 }
 
 

@@ -1,4 +1,4 @@
-# $Id: brems.mac 66241 2012-12-13 18:34:42Z gunter $
+# $Id: brems.mac 81776 2014-06-05 08:41:01Z gcosmo $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
@@ -16,13 +16,13 @@
 /run/initialize
 #
 # prevent any e- ionisation production
-/testem/phys/setECut  1 km
+/run/setCutForAGivenParticle e-  1 km
 #
 # no multiple scattering
 /process/inactivate msc
 #
 # set cut for gamma bremsstrahlung
-/testem/phys/setGCut  1 mm
+/run/setCutForAGivenParticle gamma 1 mm
 #
 # no gamma interaction
 /process/inactivate phot
@@ -35,10 +35,10 @@
 #
 /analysis/setFileName brems
 /analysis/h1/set 1 100 0   50 cm		#track length of primary
-/analysis/h1/set 2 100 0  100 none	#nb steps of primary
+/analysis/h1/set 2 100 0  100 none	    #nb steps of primary
 /analysis/h1/set 3 200 0   50 mm		#step size of primary
 #
-/testem/event/printModulo 2000
+/run/printProgress 2000
 #
 /process/eLoss/verbose 0
 /process/inactivate eIoni

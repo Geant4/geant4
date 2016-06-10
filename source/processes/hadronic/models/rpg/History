@@ -14,6 +14,21 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+ 5 June 2014 - Alberto Ribon (hadr-rpg-V10-00-02)
+--------------------------------------------------
+- G4RPGInelastic: defined here GHADLISTSIZE, which is needed after
+  the removal of the class G4ReactionDynamics.
+
+18 March 2014 - Dennis Wright (hadr-rpg-V10-00-01)
+--------------------------------------------------
+- G4RPGInelastic::CheckQnums:  make projDef and targDef const pointers
+
+10 March 2014 - Dennis Wright (hadr-rpg-V10-00-00)
+--------------------------------------------------
+- remove const_cast from G4RPGKPlusInelastic.cc, G4RPGKMinusInelastic.cc,
+  G4RPGPiPlusInelastic.cc, G4RPGPiMinusInelastic.cc, G4RPGOmegaMinusInelastic.cc,
+  now that pointer to G4ParticleDefinition is const.
+
 21 September 2012 - Gabriele Cosmo (hadr-rpg-V09-05-01)
 -------------------------------------------------------
 - Explicitly use inclusion of headers for system of units and physical

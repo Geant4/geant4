@@ -1,4 +1,4 @@
-$Id: History 77239 2013-11-22 09:52:40Z gcosmo $
+$Id: History 83851 2014-09-19 10:12:12Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,33 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 17, 2014  G.Cosmo              geom-csg-V10-00-06
+- Added wrapper for UTrap shape; adapted switch to original G4Trap accordingly.
+  Requires tag "geom-usolids-V10-00-16".
+
+September 4, 2014  T.Nikitina            geom-csg-V10-00-05
+- G4Cons: fixed typo error in GetPointOnSurface() in the call
+  to GetRadiusInRing(). Responsible for occasionally wrong reports
+  when checking for overlaps.
+- G4Cons: fix in DistanceToIn(p,v) for points on the Surface, to resolve
+  error reported in unit testing by the OpticalEscape test.
+
+September 1, 2014  G.Cosmo               geom-csg-V10-00-04
+- Fixed use of polyhedron pointer, to avoid race condition in MT
+  when parameterised volumes are visualised.
+
+March 5, 2014  G.Cosmo                   geom-csg-V10-00-03
+- Fixed proper handling of polyhedron pointer in solids, to avoid memory
+  leak for visualization of parameterised volumes.
+
+February 12, 2014  G.Cosmo               geom-csg-V10-00-02
+- Simply reset polyhedron pointer to zero for modifiers of G4U* wrappers
+  in parameterisation. Resolves crash in MT visualization when using USolids. 
+
+February 12, 2014  G.Cosmo               geom-csg-V10-00-01 (and -00)
+- Added correct cloning mechanism in G4U* wrappers.
+  Addressing problem report #1553.
 
 November 22, 2013  G.Cosmo               geom-csg-V09-06-09
 - Correction to USolids wrappers for proper setting of name to base class.

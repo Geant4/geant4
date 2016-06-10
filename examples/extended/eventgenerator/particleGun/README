@@ -1,4 +1,4 @@
-$Id: README 68024 2013-03-13 13:42:01Z gcosmo $
+$Id: README 83919 2014-09-23 08:40:35Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -12,8 +12,9 @@ $Id: README 68024 2013-03-13 13:42:01Z gcosmo $
   10-06-2010 : Makoto Asai - merge into one example
   13-05-2010 : Michel Maire - create as three examples
   
- This example demonstrates 4 ways of the usage of G4ParticleGun shooting
+ This example demonstrates 5 ways of the usage of G4ParticleGun shooting
  primary particles in different cases. These are
+  0) uniform particle direction in a given solid angle
   1) Generate several vertices and particles per event
   2) Show how to sample a tabulated function (eg. energy spectrum)  
   3) Divergent beam in an arbitrary direction 
@@ -35,18 +36,23 @@ $Id: README 68024 2013-03-13 13:42:01Z gcosmo $
  3- Primary generator
     -----------------
 
- There are 4 concrete primary generator action classes
- (PrimaryGeneratorActionN, N=1,2,3,4) which can be used as an independent sample
+ There are 5 concrete primary generator action classes
+ (PrimaryGeneratorActionN, N=0,1,2,3,4) which can be used as an independent sample
  code. 
  PrimaryGeneratorAction is the class which uses and switches between these 
- 4 concrete action classes. Each concrete generator action shoots geantinoes
+ 5 concrete action classes. Each concrete generator action shoots geantinoes
  in a distribution decribed below.
-
+ 
+ 3.0- uniform particle direction in a given solid angle
+      -------------------------------------------------
+ spherical angles (alpha,psi) respective to z axis
+ Histograms 5,6 show momentum direction in master frame.
+ 
  3.1- Generate several vertices and particles per event
       -------------------------------------------------
 
  particle 1 : a geantino uniformly randomized on a cylinder surface.
- particle 2 and 3 : on opposite side of the cylnder surface to particle 1
+ particle 2 and 3 : on opposite side of the cylinder surface to particle 1
 
  3.2- Show how to sample a tabulated function (energy spectrum)
       ---------------------------------------------------------
@@ -68,7 +74,7 @@ $Id: README 68024 2013-03-13 13:42:01Z gcosmo $
  RotateUz() transforms uz to newUz. It is composition of two simple rotations:
  theta around oy, then phi around oz (non commutative).
 http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
- Histograms 2,3 show momentum direction in local frame.
+ Histograms 5,6 show momentum direction in local frame.
   
  3.4- Shooting primaries in spherical coordinates with rotation matrix
       ----------------------------------------------------------------
@@ -79,7 +85,7 @@ http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
  One wishes to shoot uniformly within a spherical shell.
  One works in spherical coordinates. One uses inverse cumulative method with
  analytical formulae.
- Histograms 4,5,6 demonstrate uniform distribution of vertex position.
+ Histograms 2,3,4 demonstrate uniform distribution of vertex position.
 
  b) Momentum direction
  One wants to limit particle direction uniformly within (alphaMin, alphaMax).
@@ -88,7 +94,7 @@ http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
  RotateUz() transforms uz to ur. It is composition of two elementary rotations:
  theta around oy, then phi around oz (non commutative).
 http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
- Histograms 7,8 show momentum direction in vertex_position frame.
+ Histograms 5,6 show momentum direction in vertex_position frame.
 
  4- Visualisation
     -------------
@@ -108,7 +114,7 @@ http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
  	% particleGun
  	....
  	Idle>      ---> type your commands. For instance:
-        Idle> /gunExample/selectGunAction 1
+    Idle> /gunExample/selectGunAction 1
 	Idle> /run/beamOn 10
 	....
  	Idle> exit
@@ -120,29 +126,27 @@ http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
   particleGun.root by default.
 
       1 : energy spectrum dN/dE = f(E)
-      2 : momentum direction: angular distr dN/dOmega = f(alpha)
-      3 : momentum direction: angular distr dN/dOmega = f(psi)      
-      4 : vertex position: radial  distr dN/dv = f(r)
-      5 : vertex position: angular distr dN/dv = f(theta)
-      6 : vertex position: angular distr dN/dv = f(phi)
-      7 : momentum direction: angular distr dN/dOmega = f(alpha)
-      8 : momentum direction: angular distr dN/dOmega = f(psi)
+      2 : vertex position: radial distr dN/dv = f(r)
+      3 : vertex position: cos(theta)
+      4 : vertex position: phi
+      5 : particle direction in local frame: cos(alpha)
+      6 : particle direction in local frame: psi
 
   Please note that histogram 1 will be filled only if you use 
-  PrimaryGeneratorAction2, histos 2,3 with PrimaryGeneratorAction3
-  and 4 through 8 will be filled with PrimaryGeneratorAction4.
+  PrimaryGeneratorAction2, histos 5,6 with PrimaryGeneratorAction0 and 3
+  and 2 through 6 will be filled with PrimaryGeneratorAction4.
 
   The histograms are managed by the HistoManager class and its Messenger. 
   The histos can be individually activated with the command :
-  /gunExample/histo/setHisto id nbBins  valMin valMax unit 
+  /analysis/h1/set id nbBins  valMin valMax unit 
   where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
    
   One can control the name of the histograms file with the command:
-  /gunExample/histo/setFileName  name  (default particleGun)
+  /analysis/h1/setFileName  name  (default particleGun)
    
    It is possible to choose the format of the histogram file : root (default),
-   hbook, xml, csv, by using namespace in HistoManager.hh
+   xml, csv, by using namespace in HistoManager.hh
    
    It is also possible to print selected histograms on an ascii file:
-   /gunExample/histo/printHisto id
+   /analysis/h1/setAscii id
    All selected histos will be written on a file name.ascii (default gunExample)

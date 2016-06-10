@@ -26,7 +26,7 @@
 /// \file medical/electronScattering/include/StepMax.hh
 /// \brief Definition of the StepMax class
 //
-// $Id: StepMax.hh 68393 2013-03-25 14:22:21Z maire $
+// $Id: StepMax.hh 86064 2014-11-07 08:49:32Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,0 +1,491 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id$
+//
+//
+// class G4ITNavigator1 Inline implementation
+// 
+// G4ITNavigator1 is a duplicate version of G4Navigator started from Geant4.9.5
+// initially written by Paul Kent and colleagues.
+// The only difference resides in the way the information is saved and managed
+//
+// ********************************************************************
+
+// ********************************************************************
+// GetCurrentLocalCoordinate
+//
+// Returns the local coordinate of the current track
+// ********************************************************************
+//
+inline
+G4ThreeVector G4ITNavigator1::GetCurrentLocalCoordinate() const
+{
+  return fLastLocatedPointLocal;
+}
+
+// ********************************************************************
+// ComputeLocalAxis
+//
+// Returns local direction of vector direction in world coord system
+// ********************************************************************
+//
+inline
+G4ThreeVector G4ITNavigator1::ComputeLocalAxis(const G4ThreeVector& pVec) const
+{
+  return (fHistory.GetTopTransform().IsRotated())
+         ? fHistory.GetTopTransform().TransformAxis(pVec) : pVec ;
+}
+
+// ********************************************************************
+// ComputeLocalPoint
+//
+// Returns local coordinates of a point in the world coord system
+// ********************************************************************
+//
+inline
+G4ThreeVector
+G4ITNavigator1::ComputeLocalPoint(const G4ThreeVector& pGlobalPoint) const
+{
+  return ( fHistory.GetTopTransform().TransformPoint(pGlobalPoint) ) ;
+}
+
+// ********************************************************************
+// GetWorldVolume
+//
+// Returns the current  world (`topmost') volume
+// ********************************************************************
+//
+inline
+G4VPhysicalVolume* G4ITNavigator1::GetWorldVolume() const
+{
+  return fTopPhysical;
+}
+
+// ********************************************************************
+// SetWorldVolume
+//
+// Sets the world (`topmost') volume
+// ********************************************************************
+//
+inline
+void G4ITNavigator1::SetWorldVolume(G4VPhysicalVolume* pWorld)
+{
+  if ( !(pWorld->GetTranslation()==G4ThreeVector(0,0,0)) )
+  {
+    G4Exception ("G4ITNavigator1::SetWorldVolume()", "GeomNav0002",
+                 FatalException, "Volume must be centered on the origin.");
+  }
+  const G4RotationMatrix* rm = pWorld->GetRotation();
+  if ( rm && (!rm->isIdentity()) )
+  {
+    G4Exception ("G4ITNavigator1::SetWorldVolume()", "GeomNav0002",
+                 FatalException, "Volume must not be rotated.");
+  }
+  fTopPhysical = pWorld;
+  fHistory.SetFirstEntry(pWorld);
+}
+
+// ********************************************************************
+// SetGeometrycallyLimitedStep
+//
+// Informs the navigator that the previous Step calculated
+// by the geometry was taken in its entirety
+// ********************************************************************
+//
+inline
+void G4ITNavigator1::SetGeometricallyLimitedStep()
+{
+  fWasLimitedByGeometry=true;
+}
+
+// ********************************************************************
+// ResetStackAndState
+//
+// Resets stack and minimum of navigator state `machine'
+// ********************************************************************
+//
+inline
+void G4ITNavigator1::ResetStackAndState()
+{
+  fHistory.Reset();
+  ResetState();
+}
+
+// ********************************************************************
+// VolumeType
+// ********************************************************************
+//
+inline
+EVolume G4ITNavigator1::VolumeType(const G4VPhysicalVolume *pVol) const
+{
+  return pVol->VolumeType();
+}
+
+// ********************************************************************
+// CharacteriseDaughters
+// ********************************************************************
+//
+inline
+EVolume G4ITNavigator1::CharacteriseDaughters(const G4LogicalVolume *pLog) const
+{
+  return pLog->CharacteriseDaughters();
+}
+
+// ********************************************************************
+// GetDaughtersRegularStructureId
+// ********************************************************************
+//
+inline
+G4int G4ITNavigator1::
+GetDaughtersRegularStructureId(const G4LogicalVolume *pLog) const
+{
+  G4int regId = 0;
+  G4VPhysicalVolume *pVol;
+
+  if ( pLog->GetNoDaughters()==1 )
+  {
+    pVol = pLog->GetDaughter(0);
+    regId = pVol->GetRegularStructureId();
+  }
+  return regId;
+}
+
+// ********************************************************************
+// GetGlobalToLocalTransform
+//
+// Returns local to global transformation.
+// I.e. transformation that will take point or axis in world coord system
+// and return one in the local coord system
+// ********************************************************************
+//
+inline
+const G4AffineTransform& G4ITNavigator1::GetGlobalToLocalTransform() const
+{
+  return fHistory.GetTopTransform();
+}
+
+// ********************************************************************
+// GetLocalToGlobalTransform
+//
+// Returns global to local transformation 
+// ********************************************************************
+//
+inline
+const G4AffineTransform G4ITNavigator1::GetLocalToGlobalTransform() const
+{
+  G4AffineTransform  tempTransform;
+  tempTransform = fHistory.GetTopTransform().Inverse(); 
+  return tempTransform;
+}
+
+// ********************************************************************
+// NetTranslation
+//
+// Computes+returns the local->global translation of current volume
+// ********************************************************************
+//
+inline
+G4ThreeVector G4ITNavigator1::NetTranslation() const
+{
+  G4AffineTransform tf(fHistory.GetTopTransform().Inverse());
+  return tf.NetTranslation();
+}
+
+// ********************************************************************
+// NetRotation
+//
+// Computes+returns the local->global rotation of current volume
+// ********************************************************************
+//
+inline
+G4RotationMatrix G4ITNavigator1::NetRotation() const
+{
+  G4AffineTransform tf(fHistory.GetTopTransform().Inverse());
+  return tf.NetRotation();
+}
+
+// ********************************************************************
+// CreateGRSVolume
+//
+// `Touchable' creation method: caller has deletion responsibility
+// ********************************************************************
+//
+inline
+G4GRSVolume* G4ITNavigator1::CreateGRSVolume() const
+{
+  G4AffineTransform tf(fHistory.GetTopTransform().Inverse());
+  return new G4GRSVolume(fHistory.GetTopVolume(),
+                         tf.NetRotation(),
+                         tf.NetTranslation());
+}
+
+// ********************************************************************
+// CreateGRSSolid
+//
+// `Touchable' creation method: caller has deletion responsibility
+// ********************************************************************
+//
+inline
+G4GRSSolid* G4ITNavigator1::CreateGRSSolid() const
+{
+  G4AffineTransform tf(fHistory.GetTopTransform().Inverse());
+  return new G4GRSSolid(fHistory.GetTopVolume()->GetLogicalVolume()->GetSolid(),
+                        tf.NetRotation(),
+                        tf.NetTranslation());
+}
+
+// ********************************************************************
+// CreateTouchableHistory
+//
+// `Touchable' creation method: caller has deletion responsibility
+// ********************************************************************
+//
+inline
+G4TouchableHistory* G4ITNavigator1::CreateTouchableHistory() const
+{
+  return new G4TouchableHistory(fHistory);
+}
+
+// ********************************************************************
+// CreateTouchableHistory(history)
+//
+// `Touchable' creation method: caller has deletion responsibility
+// ********************************************************************
+//
+inline
+G4TouchableHistory*
+G4ITNavigator1::CreateTouchableHistory(const G4NavigationHistory* history) const
+{
+  return new G4TouchableHistory(*history);
+}
+
+// ********************************************************************
+// LocateGlobalPointAndUpdateTouchableHandle
+// ********************************************************************
+//
+inline
+void G4ITNavigator1::LocateGlobalPointAndUpdateTouchableHandle(
+                               const G4ThreeVector&       position,
+                               const G4ThreeVector&       direction,
+                                     G4TouchableHandle&   oldTouchableToUpdate,
+                               const G4bool               RelativeSearch )
+{
+  G4VPhysicalVolume* pPhysVol;
+  pPhysVol = LocateGlobalPointAndSetup( position,&direction,RelativeSearch );
+  if( fEnteredDaughter || fExitedMother )
+  {
+     oldTouchableToUpdate = CreateTouchableHistory();
+     if( pPhysVol == 0 )
+     {
+       // We want to ensure that the touchable is correct in this case.
+       //  The method below should do this and recalculate a lot more ....
+       //
+       oldTouchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
+     }
+  }
+  return;
+}
+
+// ********************************************************************
+// LocateGlobalPointAndUpdateTouchable
+//
+// Use direction
+// ********************************************************************
+//
+inline
+void G4ITNavigator1::LocateGlobalPointAndUpdateTouchable(
+                           const G4ThreeVector&       position,
+                           const G4ThreeVector&       direction,
+                                 G4VTouchable*        touchableToUpdate,
+                           const G4bool               RelativeSearch  )
+{
+  G4VPhysicalVolume* pPhysVol;
+  pPhysVol = LocateGlobalPointAndSetup( position, &direction, RelativeSearch);  
+  touchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
+}
+
+// ********************************************************************
+// LocateGlobalPointAndUpdateTouchable
+// ********************************************************************
+//
+inline
+void G4ITNavigator1::LocateGlobalPointAndUpdateTouchable(
+                           const G4ThreeVector&       position,
+                                 G4VTouchable*        touchableToUpdate,
+                           const G4bool               RelativeSearch )
+{
+  G4VPhysicalVolume* pPhysVol;
+  pPhysVol = LocateGlobalPointAndSetup( position, 0, RelativeSearch);  
+  touchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
+}
+
+// ********************************************************************
+// GetVerboseLevel
+// ********************************************************************
+//
+inline
+G4int G4ITNavigator1::GetVerboseLevel() const
+{
+  return fVerbose;
+}
+
+// ********************************************************************
+// SetVerboseLevel
+// ********************************************************************
+//
+inline
+void G4ITNavigator1::SetVerboseLevel(G4int level)
+{
+  fVerbose = level;
+  fnormalNav.SetVerboseLevel(level);
+  fvoxelNav.SetVerboseLevel(level);
+  fparamNav.SetVerboseLevel(level);
+  freplicaNav.SetVerboseLevel(level);
+  fregularNav.SetVerboseLevel(level);
+}
+
+// ********************************************************************
+// IsActive
+// ********************************************************************
+//
+inline
+G4bool G4ITNavigator1::IsActive() const
+{
+  return fActive;
+}
+
+// ********************************************************************
+// Activate
+// ********************************************************************
+//
+inline
+void G4ITNavigator1::Activate(G4bool flag)
+{
+  fActive = flag;
+}
+
+// ********************************************************************
+// EnteredDaughterVolume
+//
+// To inform the caller if the track is entering a daughter volume
+// ********************************************************************
+//
+inline
+G4bool G4ITNavigator1::EnteredDaughterVolume() const
+{
+  return fEnteredDaughter;
+}
+
+// ********************************************************************
+// ExitedMotherVolume
+// ********************************************************************
+//
+inline
+G4bool G4ITNavigator1::ExitedMotherVolume() const
+{
+  return fExitedMother;
+}
+
+// ********************************************************************
+// CheckMode
+// ********************************************************************
+//
+inline
+void  G4ITNavigator1::CheckMode(G4bool mode)
+{
+  fCheck = mode;
+  fnormalNav.CheckMode(mode);
+  fvoxelNav.CheckMode(mode);
+  fparamNav.CheckMode(mode);
+  freplicaNav.CheckMode(mode);
+  fregularNav.CheckMode(mode);
+}
+
+// ********************************************************************
+// IsCheckModeActive
+// ********************************************************************
+//
+inline
+G4bool G4ITNavigator1::IsCheckModeActive() const
+{
+  return fCheck;
+}
+
+// ********************************************************************
+// SetPushVerbosity
+// ********************************************************************
+//
+inline
+void G4ITNavigator1::SetPushVerbosity(G4bool mode)
+{
+  fWarnPush = mode;
+}
+
+// ********************************************************************
+// SeverityOfZeroStepping
+//
+// Reports on severity of error in case Navigator is stuck
+// and is returning zero steps
+// ********************************************************************
+//
+inline 
+G4int G4ITNavigator1::SeverityOfZeroStepping( G4int* noZeroSteps ) const
+{
+  G4int severity=0, noZeros= fNumberZeroSteps;
+  if( noZeroSteps) *noZeroSteps = fNumberZeroSteps;
+
+  if( noZeros >= fAbandonThreshold_NoZeroSteps )
+  {
+    severity = 10;
+  }
+  if( noZeros > 0 && noZeros < fActionThreshold_NoZeroSteps )
+  {
+    severity =  5 * noZeros / fActionThreshold_NoZeroSteps;
+  }
+  else if( noZeros == fActionThreshold_NoZeroSteps )
+  {
+    severity =  5; 
+  }
+  else if( noZeros >= fAbandonThreshold_NoZeroSteps - 2 )
+  {
+    severity =  9; 
+  }
+  else if( noZeros < fAbandonThreshold_NoZeroSteps - 2 )
+  {
+    severity =  5 + 4 * (noZeros-fAbandonThreshold_NoZeroSteps)
+                      / fActionThreshold_NoZeroSteps;
+  }
+  return severity;
+}
+
+// ********************************************************************
+// EnableBestSafety
+// ********************************************************************
+//
+inline void G4ITNavigator1::EnableBestSafety( G4bool value )
+{
+  fvoxelNav.EnableBestSafety( value );
+}

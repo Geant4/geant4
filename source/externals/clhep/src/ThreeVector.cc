@@ -35,40 +35,6 @@ void Hep3Vector::setMag(double ma) {
   }
 }
 
-double Hep3Vector::operator () (int i) const {
-  switch(i) {
-  case X:
-    return x();
-  case Y:
-    return y();
-  case Z:
-    return z();
-  default:
-    std::cerr << "Hep3Vector::operator () - "
-              << "Hep3Vector subscripting: bad index (" << i << ")"
-              << std::endl;
-  }
-  return 0.;
-}
-
-double & Hep3Vector::operator () (int i) {
-  static double dummy;
-  switch(i) {
-  case X:
-    return dx;
-  case Y:
-    return dy;
-  case Z:
-    return dz;
-  default:
-    std::cerr
-      << "Hep3Vector::operator () - "
-      << "Hep3Vector subscripting: bad index (" << i << ")"
-      << std::endl;
-    return dummy;
-  }
-}
-
 Hep3Vector & Hep3Vector::rotateUz(const Hep3Vector& NewUzVector) {
   // NewUzVector must be normalized !
 

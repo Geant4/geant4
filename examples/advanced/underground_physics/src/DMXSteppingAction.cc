@@ -48,7 +48,7 @@
 #include "DMXEventAction.hh"
 #include "DMXAnalysisManager.hh"
 
-
+#include "G4RunManager.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
@@ -65,8 +65,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-DMXSteppingAction::DMXSteppingAction(DMXEventAction* eventAction)
-  : evtAction(eventAction)  {
+DMXSteppingAction::DMXSteppingAction()
+  : evtAction(0)  {
 
   steppingMessenger = new DMXSteppingActionMessenger(this);
 
@@ -92,6 +92,11 @@ DMXSteppingAction::~DMXSteppingAction()
 
 void DMXSteppingAction::UserSteppingAction(const G4Step* fStep)
 {
+  if (!evtAction)
+    evtAction = 
+      dynamic_cast<const DMXEventAction*>
+      (G4RunManager::GetRunManager()->GetUserEventAction());
+
 
   // removed 28/11/01 - unnecessary unless program "freezes"
   // kill track if too many steps
@@ -105,7 +110,7 @@ void DMXSteppingAction::UserSteppingAction(const G4Step* fStep)
     { 
       G4double partEnergy = fStep->GetPreStepPoint()->GetKineticEnergy();
       G4ParticleDefinition* particleType = fStep->GetTrack()->GetDefinition();
-      //G4String particleName = particleType->GetParticleName();
+     
       G4AnalysisManager* man = G4AnalysisManager::Instance();
       if (particleType == G4Gamma::Definition())
 	man->FillH1(8,partEnergy);

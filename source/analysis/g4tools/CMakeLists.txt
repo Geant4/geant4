@@ -20,7 +20,7 @@
 #
 # Created on: 28/07/2011
 #
-# $Id: CMakeLists.txt 72327 2013-07-16 06:52:43Z gcosmo $
+# $Id: CMakeLists.txt 80313 2014-04-10 12:21:49Z gcosmo $
 #
 #-----------------------------------------------------------------------
 
@@ -46,4 +46,12 @@ install(DIRECTORY include/
 install(FILES tools.license
   DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/Geant4-${Geant4_VERSION}
   )
+
+#------------------------------------------------------------------------------
+# Finally we need to build C source code file(s)
+#
+if(GEANT4_BUILD_GRANULAR_LIBS)
+    include(Geant4MacroLibraryTargets)
+    GEANT4_GRANULAR_LIBRARY_TARGET(COMPONENT sources.cmake)
+endif()
 

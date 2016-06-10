@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: RunAction.hh 85243 2014-10-27 08:22:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -43,17 +43,24 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4UserRunAction.hh"
-#include "G4Run.hh"
 #include "globals.hh"
+
+#include "g4root.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+class Run;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class RunAction : public G4UserRunAction
 {
-public: // Without description
+public: 
 
   RunAction();
   virtual ~RunAction();
+
+  virtual G4Run* GenerateRun(); 
 
   virtual void BeginOfRunAction(const G4Run*);
   // In this method histogramms are booked
@@ -61,6 +68,17 @@ public: // Without description
   virtual void EndOfRunAction(const G4Run*);
   // In this method bookHisto method is called in which histogramms are filled
 
+private:
+
+  // Book predefined histogramms  
+  void Book();
+
+private:
+
+  G4AnalysisManager*      fAnalysisManager;
+  Run*  fRun;
+
+  G4String fHistName;
 };
 
 #endif

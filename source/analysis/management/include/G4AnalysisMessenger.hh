@@ -43,6 +43,9 @@ class G4HnManager;
 class G4FileMessenger;
 class G4H1Messenger;
 class G4H2Messenger;
+class G4H3Messenger;
+class G4P1Messenger;
+class G4P2Messenger;
 class G4HnMessenger;
 
 class G4UIdirectory;
@@ -58,6 +61,9 @@ class G4AnalysisMessenger : public G4UImessenger
     // methods
     void SetH1HnManager(G4HnManager* h1HnManager);
     void SetH2HnManager(G4HnManager* h2HnManager);
+    void SetH3HnManager(G4HnManager* h2HnManager);
+    void SetP1HnManager(G4HnManager* h1HnManager);
+    void SetP2HnManager(G4HnManager* h2HnManager);
 
     // methods
     virtual void SetNewValue(G4UIcommand* command, G4String value);
@@ -67,8 +73,14 @@ class G4AnalysisMessenger : public G4UImessenger
     G4FileMessenger*       fFileMessenger;
     G4H1Messenger*         fH1Messenger;
     G4H2Messenger*         fH2Messenger;
+    G4H3Messenger*         fH3Messenger;
+    G4P1Messenger*         fP1Messenger;
+    G4P2Messenger*         fP2Messenger;
     G4HnMessenger*         fH1HnMessenger;
     G4HnMessenger*         fH2HnMessenger;
+    G4HnMessenger*         fH3HnMessenger;
+    G4HnMessenger*         fP1HnMessenger;
+    G4HnMessenger*         fP2HnMessenger;
     
     G4UIdirectory*         fAnalysisDir;   
     G4UIcmdWithABool*      fSetActivationCmd;   

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SensitiveVolumeList.hh 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4SensitiveVolumeList.hh 81087 2014-05-20 15:44:27Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file --- Copyright CERN 1996
@@ -64,7 +64,7 @@ class G4SensitiveVolumeList
       ~G4SensitiveVolumeList();
 
     //Assignment Operation
-      const G4SensitiveVolumeList & operator=(const G4SensitiveVolumeList &right
+    G4SensitiveVolumeList & operator=(const G4SensitiveVolumeList &right
 );
 
     //Equality Operations

@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 #include <exception>
+#include "CLHEP/Utility/thread_local.h"
 
 namespace CLHEP {
 
@@ -56,8 +57,8 @@ private:
     double d;
   };
   static void fill_byte_order ();
-  static bool byte_order_known;
-  static int  byte_order[8];
+  static CLHEP_THREAD_LOCAL bool byte_order_known;
+  static CLHEP_THREAD_LOCAL int  byte_order[8];
     // Meaning of byte_order:  The first (high-order in IEEE 754) byte to
     // output (or the high-order byte of the first unsigned long)
     // is  of db.b[byte_order[0]].  Thus the index INTO byte_order

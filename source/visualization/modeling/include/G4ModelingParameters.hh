@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.hh 77479 2013-11-25 10:01:22Z gcosmo $
+// $Id: G4ModelingParameters.hh 81056 2014-05-20 09:02:16Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -74,6 +74,7 @@ public: // With description
     VASForceAuxEdgeVisible,
     VASForceLineSegmentsPerCircle
   };
+
   class PVNameCopyNo {
   public:
     PVNameCopyNo(G4String name, G4int copyNo):
@@ -88,6 +89,7 @@ public: // With description
   };
   typedef std::vector<PVNameCopyNo> PVNameCopyNoPath;
   typedef PVNameCopyNoPath::const_iterator PVNameCopyNoPathConstIterator;
+
   class VisAttributesModifier {
   public:
     VisAttributesModifier

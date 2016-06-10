@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm6/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 //
-// $Id: PhysicsList.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: PhysicsList.hh 83428 2014-08-21 15:46:01Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,9 +34,13 @@
 #ifndef PhysicsList_h
 #define PhysicsList_h 1
 
-#include "G4VUserPhysicsList.hh"
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+#include "G4EmConfigurator.hh"
 
+
+class G4VPhysicsConstructor;
+class StepMax;
 class PhysicsListMessenger;
 class G4GammaConversionToMuons;
 class G4AnnihiToMuPair;
@@ -44,31 +48,37 @@ class G4eeToHadrons;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VUserPhysicsList
+class PhysicsList: public G4VModularPhysicsList
 {
   public:
     PhysicsList();
-   ~PhysicsList();
+    virtual ~PhysicsList();
 
     // Construct particles
     virtual void ConstructParticle();
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructHadrons();
+    virtual void ConstructProcess();
 
-    void SetCuts();
+    void AddPhysicsList(const G4String& name);
+    void ConstructHighEnergy();
+
+    void AddStepMax();
 
     // Construct processes and register them
-    virtual void ConstructProcess();
-    void ConstructGeneral();
-    void ConstructEM();
 
     void SetGammaToMuPairFac(G4double);
     void SetAnnihiToMuPairFac(G4double);
     void SetAnnihiToHadronFac(G4double);
 
   private:
-     PhysicsListMessenger*  fMes;
+ 
+    G4VPhysicsConstructor* fEmPhysicsList;
+    G4VPhysicsConstructor* fDecayPhysicsList;
+    G4String fEmName;
+
+    StepMax* fStepMaxProcess;
+
+    PhysicsListMessenger*  fMes;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

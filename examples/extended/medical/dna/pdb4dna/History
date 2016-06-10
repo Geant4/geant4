@@ -1,0 +1,55 @@
+$Id$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      pdb4dna History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+     
+24.11.2014 M.K                  tag pdb4dna-V10-00-06
+-----------------------------------------------------
+- Retag before release
+     
+06.11.2014 I.Hrivnacova                             
+-----------------------------------------------------
+- Fixes in README files
+
+05.11.2014 M.K                  tag pdb4dna-V10-00-05
+-----------------------------------------------------
+- order of parsing changed. The goal: one can both 
+select a macro, mt, gui or choose a visualization 
+driver
+
+05.11.2014 M.K                  tag pdb4dna-V10-00-04
+-----------------------------------------------------
+- add CommandLineParser
+- select visu + gui by command line
+
+04.11.2014 M.K                  tag pdb4dna-V10-00-03
+-----------------------------------------------------
+- try to solve FPE error
+
+30.10.2014 M.K                  tag pdb4dna-V10-00-02
+-----------------------------------------------------
+- Add missing GNUmakefile
+
+23.10.2014 M.K                  tag pdb4dna-V10-00-01
+-----------------------------------------------------
+- try to solve FPE error
+
+23.10.2014 M.K                  tag pdb4dna-V10-00-00
+-----------------------------------------------------
+- pdb4dna added
+
+

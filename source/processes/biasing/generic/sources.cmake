@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 76470 2013-11-11 10:31:24Z gcosmo $
+# $Id: sources.cmake 86197 2014-11-07 15:09:00Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -46,6 +46,7 @@ GEANT4_DEFINE_MODULE(NAME G4biasing_gen
     HEADERS
         G4BiasingHelper.hh
         G4BiasingProcessInterface.hh
+        G4BiasingProcessSharedData.hh
         G4BOptnChangeCrossSection.hh
         G4BOptnCloning.hh
         G4BOptnForceCommonTruncatedExp.hh

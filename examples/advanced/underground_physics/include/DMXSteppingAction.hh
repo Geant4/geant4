@@ -55,7 +55,7 @@ class DMXAnalysisManager;
 class DMXSteppingAction : public G4UserSteppingAction
 {
   public:
-    DMXSteppingAction(DMXEventAction*);
+    DMXSteppingAction();
     virtual ~DMXSteppingAction();
 
     virtual void UserSteppingAction(const G4Step*);
@@ -76,7 +76,7 @@ class DMXSteppingAction : public G4UserSteppingAction
 
     DMXSteppingActionMessenger*  steppingMessenger;
 
-    DMXEventAction*    evtAction;  //pointer to event action
+    const DMXEventAction*  evtAction;  //pointer to event action
 
 
 };

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneHandler.cc 70646 2013-06-03 15:07:58Z gcosmo $
+// $Id: G4VisCommandsSceneHandler.cc 82756 2014-07-08 14:09:34Z gcosmo $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
 
@@ -81,7 +81,7 @@ void G4VisCommandSceneHandlerAttach::SetNewValue (G4UIcommand*,
   G4VSceneHandler* pSceneHandler = fpVisManager -> GetCurrentSceneHandler ();
   if (!pSceneHandler) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<
+      G4cerr <<
       "ERROR: Current scene handler not defined.  Please select or create one."
 	     << G4endl;
     }
@@ -92,7 +92,7 @@ void G4VisCommandSceneHandlerAttach::SetNewValue (G4UIcommand*,
 
   if (sceneList.empty ()) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<
+      G4cerr <<
       "ERROR: No valid scenes available yet.  Please create one."
 	     << G4endl;
     }
@@ -126,7 +126,7 @@ void G4VisCommandSceneHandlerAttach::SetNewValue (G4UIcommand*,
   }
   else {
     if (verbosity >= G4VisManager::errors) {
-      G4cout << "ERROR: Scene \"" << sceneName
+      G4cerr << "ERROR: Scene \"" << sceneName
 	     << "\" not found.  Use \"/vis/scene/list\" to see possibilities."
 	     << G4endl;
     }
@@ -216,7 +216,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand*,
   int nSystems = gsl.size ();
   if (nSystems <= 0) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout << "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
+      G4cerr << "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
 	" no graphics systems available."
 	"\n  Did you instantiate any in"
 	" YourVisManager::RegisterGraphicsSystems()?"
@@ -237,7 +237,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand*,
     // Invalid command line argument or none.
     // This shouldn't happen!!!!!!
     if (verbosity >= G4VisManager::errors) {
-      G4cout << "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
+      G4cerr << "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
 	" invalid graphics system specified."
 	     << G4endl;
     }
@@ -255,7 +255,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand*,
     }
     if (iGS < 0 || iGS >= nSystems) {
       if (verbosity >= G4VisManager::errors) {
-        G4cout << "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
+        G4cerr << "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
         " could not find fallback graphics system."
         << G4endl;
       }
@@ -289,7 +289,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand*,
     G4VSceneHandler* sceneHandler = list [iScene];
     if (sceneHandler -> GetName () == newName) {
       if (verbosity >= G4VisManager::errors) {
-	G4cout << "ERROR: Scene handler \"" << newName
+	G4cerr << "ERROR: Scene handler \"" << newName
 	       << "\" already exists." << G4endl;
       }
       return;
@@ -300,7 +300,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand*,
   fpVisManager -> CreateSceneHandler (newName);
   if (fpVisManager -> GetCurrentSceneHandler () -> GetName () != newName) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout << "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
+      G4cerr << "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
 	" Curious name mismatch."
 	"\n Current name \""
 	     << fpVisManager -> GetCurrentSceneHandler () -> GetName ()
@@ -439,9 +439,8 @@ void G4VisCommandSceneHandlerSelect::SetNewValue (G4UIcommand*,
   }
   else {
     if (verbosity >= G4VisManager::errors) {
-      G4cout << "ERROR: Scene handler \"" << selectName << "\""
-	     << " not found - \"/vis/sceneHandler/list\""
-	"\n  to see possibilities."
+      G4cerr << "ERROR: Scene handler \"" << selectName << "\""
+	     << " not found - \"/vis/sceneHandler/list\" to see possibilities."
 	     << G4endl;
     }
   }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ElectronRunAction.cc 75702 2013-11-05 13:08:48Z gcosmo $
+// $Id: ElectronRunAction.cc 82042 2014-06-10 08:02:58Z gcosmo $
 //
 /// \file medical/electronScattering2/src/ElectronRunAction.cc
 /// \brief Implementation of the ElectronRunAction class
@@ -31,13 +31,16 @@
 #include "ElectronRunAction.hh"
 #include "ElectronRun.hh"
 #include "G4Run.hh"
+#include "G4RunManager.hh"
 #include <assert.h>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ElectronRunAction::ElectronRunAction(const G4String& outputFile):
 G4UserRunAction(), fOutputFileSpec(outputFile)
-{;}
+{
+    G4RunManager::GetRunManager()->SetPrintProgress(100000);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -1,4 +1,4 @@
-svn log $Id: History 77473 2013-11-25 09:32:54Z gcosmo $
+svn log $Id: History 85534 2014-10-30 16:19:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,49 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29th October 2014   Gabriele Cosmo  (config-V10-00-11/10)
+- Moved geometry/solids/usolids module to externals.
+  Adapted scripts for optional external USolids library build.
+- Withdrawn changes made to Darwin-clang.gmk in previous tag.
+
+11th October 2014   Michael Kelsey   (config-V10-00-09)
+- Darwin-clang.gmk: added references to core G4 library list for linking
+  shared libraries, needed for applications with G4EXLIB.
+
+17th September 2014   Gabriele Cosmo  (config-V10-00-08)
+- Added flags in geomconf.gmk for added USolids shapes UExtrudedSolid,
+  UGenericTrap and UTrap.
+
+25th July 2014   Gabriele Cosmo  (config-V10-00-07)
+- Added flag for C++11 also to CPPFLAGS in Linus-g++.gmk when G4USE_STD11
+  is set.
+
+1st July 2014   Gabriele Cosmo  (config-V10-00-06)
+- Added 'particle_hp' module to binmake.gmk.
+
+8th April 2014   Gabriele Cosmo  (config-V10-00-05)
+- Added G4USE_STD11 flag for C++11 Standard.
+
+4th April 2014   Gabriele Cosmo  (config-V10-00-04)
+- Force loading of symbols for templated libraries in physics_lists modules
+  only for global libraries. Granular libraries not supporting physics_lists
+  factories.
+
+27th March 2014   Gabriele Cosmo  (config-V10-00-03)
+- Replaced old win32def tool for extracting symbols definitions for
+  DLLs build on Windows with genwindef used also in CMake.
+
+24th March 2014   Gabriele Cosmo  (config-V10-00-02)
+- Force loading of symbols for templated libraries in physics_lists modules.
+  Defined LDFLAGS for Linux and Darwin targets.
+  Modified binmake.gmk accordingly.
+
+17th January 2014   Gabriele Cosmo  (config-V10-00-01)
+- Fixed setting of -fPIC also for Darwin targets.
+
+13th January 2014   Gabriele Cosmo  (config-V10-00-00)
+- Fixed setting of -fPIC in MT-mode for Linux-g++ and Linux-icc.
 
 25th November 2013   Gabriele Cosmo  (config-V09-06-17)
 - Corrected settings for Linux-g++ and Linux-icc in the use of -fPIC in

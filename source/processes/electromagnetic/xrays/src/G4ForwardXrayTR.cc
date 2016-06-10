@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForwardXrayTR.cc 68037 2013-03-13 14:15:08Z gcosmo $
+// $Id: G4ForwardXrayTR.cc 87013 2014-11-21 16:22:53Z gcosmo $
 //
 // G4ForwardXrayTR class -- implementation file
 //
@@ -500,7 +500,7 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
   // No TR photons ?!
 
   if (     iMat == jMat
-      || (    (fMatIndex1 >= 0 && fMatIndex1 >= 0)
+      || (    (fMatIndex1 >= 0 && fMatIndex2 >= 0)
            && ( iMat != fMatIndex1 && iMat != fMatIndex2 )
            && ( jMat != fMatIndex1 && jMat != fMatIndex2 )  )
 

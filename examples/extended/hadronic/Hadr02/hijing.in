@@ -9,7 +9,7 @@
 /testhadr/TargetMat        G4_Al 
 /testhadr/TargetRadius     20 cm
 /testhadr/TargetLength     10 cm
-/testhadr/PrintModulo      100
+/run/printProgress      100
 #
 #/testhadr/ionPhysics HIJING
 #/testhadr/ionPhysics FTF

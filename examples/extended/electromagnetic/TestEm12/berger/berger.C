@@ -8,7 +8,7 @@
    */   
 
    ifstream in;
-   in.open("./EGSnrc/10keV-DPK.ascii");
+   in.open("./EGSnrc/100keV-DPK.ascii");
    //in.open("./Etran/100keV-DPK.ascii");
    
    // Create a new histogram
@@ -29,7 +29,7 @@
    in.close();
    
    // Draw histogram
-   h1d->SetTitle("Dose point kernel : energy deposition profile, e- 10 keV");
+   h1d->SetTitle("Dose point kernel : energy deposition profile, e- 100 keV");
    h1d->GetXaxis()->SetTitle("d(E/E0)/d(r/r0) along r/r0                             r/r0");
    h1d->GetYaxis()->SetTitle("DPK");
    h1d->SetStats(kFALSE);  // Eliminate statistics box      
@@ -38,7 +38,7 @@
 
 
    // Draw histograms fill by Geant4 TestEm12 simulation
-   TFile f1("./10keV.opt3.root");
+   TFile f1("./100keV_local.root");
    TH1D* h1 = (TH1D*) f1.Get("8");
    h1->SetLineColor(kBlack);      
    h1->Draw("SAME HIST");
@@ -55,7 +55,7 @@
 */      
    // Print the histograms legend
    TLegend *legend = new TLegend(0.7,0.6,0.86,0.78);
-   legend->AddEntry(h1,"opt3 ","l");
+   legend->AddEntry(h1,"local ","l");
    ///legend->AddEntry(h2,"liver ","l");
    ///legend->AddEntry(h3,"penel","l");      
    legend->AddEntry(h1d,"EGSnrc","l");

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc 66870 2013-01-14 23:38:59Z adotti $
+// $Id: G4VisCommandsCompound.cc 82050 2014-06-10 08:24:52Z gcosmo $
 
 // Compound /vis/ commands - John Allison  15th May 2000
 
@@ -312,6 +312,10 @@ G4VisCommandSpecify::G4VisCommandSpecify() {
   fpCommand->SetParameter(parameter);
   parameter = new G4UIparameter("readout-flag", 'b', omitable = true);
   parameter->SetDefaultValue(true);
+  fpCommand->SetParameter(parameter);
+  parameter = new G4UIparameter("axes-flag", 'b', omitable = true);
+  parameter->SetDefaultValue(true);
+  parameter -> SetGuidance ("Set \"false\" to suppress axes.");
   fpCommand->SetParameter(parameter);
 }
 

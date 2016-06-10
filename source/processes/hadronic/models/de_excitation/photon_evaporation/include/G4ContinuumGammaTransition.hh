@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ContinuumGammaTransition.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4ContinuumGammaTransition.hh 87017 2014-11-21 16:26:26Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -53,46 +53,54 @@
 
 #include "globals.hh"
 #include "G4VGammaTransition.hh"
-#include "G4NuclearLevelManager.hh"
-#include "G4VLevelDensityParameter.hh"
+#include "G4ConstantLevelDensityParameter.hh"
+#include <vector>
+
+class G4NuclearLevelManager;
+class G4Pow;
 
 class G4ContinuumGammaTransition : public G4VGammaTransition
 {
 public:
 
-  // Constructor
-  G4ContinuumGammaTransition(const G4NuclearLevelManager* levelManager,
-			     G4int Z, G4int A, G4double excitation,
-			     G4int verbose);
+  G4ContinuumGammaTransition(const G4NuclearLevelManager* manager,
+			     G4int Z, G4int A, G4double exc, G4int ver);
 
-  // Destructor
   virtual ~G4ContinuumGammaTransition();
 
-  // Functions
-
-  //--  virtual G4double GammaEnergy();
-  //--  virtual G4double GetEnergyTo() const;
   virtual void SetEnergyFrom(G4double energy);
   virtual G4double GetGammaEnergy();
   virtual G4double GetGammaCreationTime();
   virtual void SelectGamma();
+
+  void Update(const G4NuclearLevelManager* manager,
+	      G4int Z, G4int A, G4double exc);
 
 private:
 
   G4double E1Pdf(G4double energy);
   G4double GammaTime();
 
-  G4int _nucleusA;
-  G4int _nucleusZ;
-  G4double _eMin;
-  G4double _eMax;
-  G4double _maxLevelE;
-  G4double _minLevelE;
-  G4double _excitation;
-  G4double _eGamma;
-  const G4NuclearLevelManager* _levelManager;
-  G4double _gammaCreationTime;
+  G4int nucleusA;
+  G4int nucleusZ;
+  G4int nBins; 
+  G4int verbose;
 
+  G4double eMin;
+  G4double eMax;
+  G4double minLevelE;
+  G4double excitation;
+  G4double eGamma;
+  G4double gammaCreationTime;
+  G4double energyGDR2;
+  G4double widthGDR;
+  G4double widthGDR2;
+
+  std::vector<G4double> sampleArray;
+
+  const G4NuclearLevelManager* levelManager;
+  G4Pow* g4pow;
+  G4ConstantLevelDensityParameter ldPar;
 };
 
 #endif

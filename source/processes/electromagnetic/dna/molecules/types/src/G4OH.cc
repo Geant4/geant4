@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OH.cc 74551 2013-10-14 12:59:14Z gcosmo $
+// $Id: G4OH.cc 85244 2014-10-27 08:24:13Z gcosmo $
 //
 // Author: Mathieu Karamitors 
 //
@@ -41,45 +41,44 @@
 // ######################################################################
 // ###                         Hydroxyl                               ###
 // ######################################################################
-/*G4ThreadLocal*/ G4OH* G4OH::theInstance = 0;
+G4OH* G4OH::theInstance = 0;
 
 G4OH* G4OH::Definition()
 {
-    if (theInstance !=0) return theInstance;
-    const G4String name = "OH";
-    // search in particle table]
-    G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-    G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-    if (anInstance ==0)
-    {
-        // create molecule
-        //
-        //        G4MoleculeDefinition(G4String name,
-        //                             G4double mass,
-        //                             G4int    electronsNumber,
-        //                             G4int    electronicLevels,
-        //                             G4double diffCoeff,
-        //                             G4int atomsNumber = -1,
-        //                             G4double radius = -1,
-        //                             G4double lifetime = -1,
-        //                             G4String aType = "",
-        //                             G4MoleculeID ID = G4MoleculeID::Create()
-        //                             );
+  if (theInstance != 0) return theInstance;
+  const G4String name = "OH";
+  // search in particle table]
+  G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance == 0)
+  {
+    // create molecule
+    //
+    //    G4MoleculeDefinition(const G4String& name,
+    //        G4double mass,
+    //        G4double diffCoeff,
+    //        G4int    charge = 0,
+    //        G4int    electronicLevels = 0,
+    //        G4double radius = -1,
+    //        G4int    atomsNumber = -1,
+    //        G4double lifetime = -1,
+    //        G4String aType = "",
+    //        G4FakeParticleID ID = G4FakeParticleID::Create()
+    //    );
 
+    G4double mass = 17.00734 * g / Avogadro * c_squared;
+    anInstance = new G4MoleculeDefinition(name, mass, 2.8e-9 * (m * m / s), 0,
+                                          5, 0.958 * angstrom, // radius
+                                          2 // number of atoms
+                                          );
 
-        G4double mass = 17.00734*g/Avogadro * c_squared;
-        anInstance = new G4MoleculeDefinition(name, mass,
-                                              9, 5,
-                                              2.8e-9*(m*m/s),
-                                              2, 0.958 * angstrom);
-
-
-        ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(0);
-        ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(1);
-        ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(2);
-        ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(3,3);
-    }
-    theInstance = reinterpret_cast<G4OH*>(anInstance);
-    return theInstance;
+    ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(0);
+    ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(1);
+    ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(2);
+    ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(3, 3);
+    ((G4MoleculeDefinition*) anInstance)->SetFormatedName("OH");
+  }
+  theInstance = reinterpret_cast<G4OH*>(anInstance);
+  return theInstance;
 }
 

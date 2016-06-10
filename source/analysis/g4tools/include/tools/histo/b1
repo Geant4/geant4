@@ -11,89 +11,85 @@
 namespace tools {
 namespace histo {
 
-template <class TC,class TN,class TW,class TH>
-class b1 : public base_histo<TC,TN,TW,TH> {
-  typedef base_histo<TC,TN,TW,TH> parent;
+template <class TC,class TO,class TN,class TW,class TH>
+class b1 : public base_histo<TC,TO,TN,TW,TH> {
+  typedef base_histo<TC,TO,TN,TW,TH> parent;
 protected:
   enum {AxisX=0};
 public:
-  typedef typename base_histo<TC,TN,TW,TH>::bn_t bn_t;
+  typedef histo::axis<TC,TO> axis_t;
+  typedef typename parent::bn_t bn_t;
 public:
   virtual TH bin_error(int) const = 0; //for print
 public:
-  void update_fast_getters(){}
-
   // Partition :
   int coord_to_index(TC aCoord) const {
     return axis().coord_to_index(aCoord);
   }
   TC mean() const {
-    TC value;
-    parent::get_ith_axis_mean(AxisX,value); //can return false.
-    return value;
+    //TC value;
+    //parent::get_ith_axis_mean(AxisX,value); //can return false.
+    //return value;
+    if(parent::m_in_range_Sw==0) return 0;
+    return parent::m_in_range_Sxw[0]/parent::m_in_range_Sw;
   }
   TC rms() const {
-    TC value;
-    parent::get_ith_axis_rms(AxisX,value); //can return false.
-    return value;
+    //TC value;
+    //parent::get_ith_axis_rms(AxisX,value); //can return false.
+    //return value;
+    if(parent::m_in_range_Sw==0) return 0;
+    TC _mean = parent::m_in_range_Sxw[0]/parent::m_in_range_Sw;
+    return ::sqrt(::fabs((parent::m_in_range_Sx2w[0] / parent::m_in_range_Sw) - _mean * _mean));
   }
 
   // bins :
   TN bin_entries(int aI) const {
-    if(parent::m_bin_number==0) return 0;
-    bn_t offset;
-    if(!parent::m_axes[0].in_range_to_absolute_index(aI,offset)) return 0;
+    TO offset;
+    if(!_find_offset(aI,offset)) return 0;
     return parent::m_bin_entries[offset];
   }
 
   TW bin_Sw(int aI) const {
-    if(parent::m_bin_number==0) return 0;
-    bn_t offset;
-    if(!parent::m_axes[0].in_range_to_absolute_index(aI,offset)) return 0;
+    TO offset;
+    if(!_find_offset(aI,offset)) return 0;
     return parent::m_bin_Sw[offset];
   }
 
   TW bin_Sw2(int aI) const {
-    if(parent::m_bin_number==0) return 0;
-    bn_t offset;
-    if(!parent::m_axes[0].in_range_to_absolute_index(aI,offset)) return 0;
+    TO offset;
+    if(!_find_offset(aI,offset)) return 0;
     return parent::m_bin_Sw2[offset];
   }
   TC bin_Sxw(int aI) const {
-    if(parent::m_bin_number==0) return 0;
-    bn_t offset;
-    if(!parent::m_axes[0].in_range_to_absolute_index(aI,offset)) return 0;
+    TO offset;
+    if(!_find_offset(aI,offset)) return 0;
     return parent::m_bin_Sxw[offset][AxisX];
   }
   TC bin_Sx2w(int aI) const {
-    if(parent::m_bin_number==0) return 0;
-    bn_t offset;
-    if(!parent::m_axes[0].in_range_to_absolute_index(aI,offset)) return 0;
+    TO offset;
+    if(!_find_offset(aI,offset)) return 0;
     return parent::m_bin_Sx2w[offset][AxisX];
   }
 
   TH bin_height(int aI) const {
-    if(parent::m_bin_number==0) return 0;
-    bn_t offset;
-    if(!parent::m_axes[0].in_range_to_absolute_index(aI,offset)) return 0;
+    TO offset;
+    if(!_find_offset(aI,offset)) return 0;
     return this->get_bin_height(offset);
   }
 
   TC bin_center(int aI) const {return parent::m_axes[0].bin_center(aI);}
 
   TC bin_mean(int aI) const {
-    if(parent::m_bin_number==0) return 0;
-    bn_t offset;
-    if(!parent::m_axes[0].in_range_to_absolute_index(aI,offset)) return 0;
+    TO offset;
+    if(!_find_offset(aI,offset)) return 0;
     TW sw = parent::m_bin_Sw[offset];
     if(sw==0) return 0;
     return parent::m_bin_Sxw[offset][AxisX]/sw;
   }
 
   TC bin_rms(int aI) const {
-    if(parent::m_bin_number==0) return 0;
-    bn_t offset;
-    if(!parent::m_axes[0].in_range_to_absolute_index(aI,offset)) return 0;
+    TO offset;
+    if(!_find_offset(aI,offset)) return 0;
     TW sw = parent::m_bin_Sw[offset];
     if(sw==0) return 0;
     TC sxw = parent::m_bin_Sxw[offset][AxisX];
@@ -103,8 +99,8 @@ public:
   }
 
   // Axis :
-  const histo::axis<TC>& axis() const {return parent::m_axes[0];}
-  histo::axis<TC>& axis() {return parent::m_axes[0];} //touchy
+  const axis_t& axis() const {return parent::m_axes[0];}
+  axis_t& axis() {return parent::m_axes[0];} //touchy
 public:
   //NOTE : print is a Python keyword.
   void hprint(std::ostream& a_out) {
@@ -113,8 +109,8 @@ public:
     a_out 
       << " * ENTRIES = " << parent::all_entries()
       << " * ALL CHANNELS = " << parent::sum_bin_heights()
-      << " * UNDERFLOW = " << bin_height(histo::axis<TC>::UNDERFLOW_BIN)
-      << " * OVERFLOW = " << bin_height(histo::axis<TC>::OVERFLOW_BIN)
+      << " * UNDERFLOW = " << bin_height(axis_t::UNDERFLOW_BIN)
+      << " * OVERFLOW = " << bin_height(axis_t::OVERFLOW_BIN)
       << std::endl;
     a_out 
       << " * BIN WID = " << axis().bin_width(0)
@@ -150,8 +146,7 @@ public:
       << std::endl;
   }
 protected:
-  b1(const std::string& a_title,
-     bn_t aXnumber,TC aXmin,TC aXmax){
+  b1(const std::string& a_title,bn_t aXnumber,TC aXmin,TC aXmax) {
     parent::m_title = a_title;
     std::vector<bn_t> nbins;
     nbins.push_back(aXnumber);
@@ -170,15 +165,8 @@ protected:
 
   virtual ~b1(){}
 protected:
-  b1(const b1& a_from): parent(a_from) {
-    update_fast_getters();
-  }
-  b1& operator=(const b1& a_from) {
-    parent::operator=(a_from);
-    update_fast_getters();
-    return *this;
-  }
-
+  b1(const b1& a_from):parent(a_from){}
+  b1& operator=(const b1& a_from) {parent::operator=(a_from);return *this;}
 public:
   bool configure(bn_t aXnumber,TC aXmin,TC aXmax){
     std::vector<bn_t> nbins;
@@ -194,7 +182,14 @@ public:
     edges[0] = aEdges;
     return parent::configure(1,edges);
   }
-
+protected:
+  bool _find_offset(int aI,TO& a_offset) const {
+    if(parent::m_dimension!=1) {a_offset=0;return false;}
+    bn_t ibin;
+    if(!parent::m_axes[0].in_range_to_absolute_index(aI,ibin)) {a_offset=0;return false;}
+    a_offset = ibin;
+    return true;
+  }
 };
 
 }}

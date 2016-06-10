@@ -11,14 +11,14 @@
 namespace tools {
 namespace histo {
 
-template <class TC,class TN,class TW,class TH>
-inline bool fill_slice_x(const h2<TC,TN,TW,TH>& a_from,
+template <class TC,class TO,class TN,class TW,class TH>
+inline bool fill_slice_x(const h2<TC,TO,TN,TW,TH>& a_from,
                          int aJbeg,int aJend,
-                         h1<TC,TN,TW,TH>& a_to) {
+                         h1<TC,TO,TN,TW,TH>& a_to) {
 
   if(!a_from.dimension()) return false;
   
-  typedef typename axis<TC>::bn_t bn_t;
+  typedef typename axis<TC,TO>::bn_t bn_t;
 
   bn_t jbeg;
   if(!a_from.axis_y().in_range_to_absolute_index(aJbeg,jbeg)) return false;
@@ -28,7 +28,7 @@ inline bool fill_slice_x(const h2<TC,TN,TW,TH>& a_from,
 
   if(a_from.axis_x().bins()!=a_to.axis().bins()) return false;
 
-  histo_data<TC,TN,TW> hdata = a_to.get_histo_data();
+  histo_data<TC,TO,TN,TW> hdata = a_to.get_histo_data();
 
   bn_t aoffset,offset,jbin;     
   bn_t yoffset = a_from.axis_y().m_offset;
@@ -56,16 +56,16 @@ inline bool fill_slice_x(const h2<TC,TN,TW,TH>& a_from,
       hdata.m_bin_Sx2w[aoffset][0] += af_bin_Sx2w[offset][0];
     }
   }
+  hdata.update_fast_getters();
   a_to.copy_from_data(hdata);
-  a_to.update_fast_getters();
   return true;
 }
 
-template <class TC,class TN,class TW,class TH>
-inline h1<TC,TN,TW,TH>* slice_x(const h2<TC,TN,TW,TH>& a_from,
+template <class TC,class TO,class TN,class TW,class TH>
+inline h1<TC,TO,TN,TW,TH>* slice_x(const h2<TC,TO,TN,TW,TH>& a_from,
                              int aJbeg,int aJend,
                              const std::string& a_title) {
-  h1<TC,TN,TW,TH>* slice = new h1<TC,TN,TW,TH>(a_title,
+  h1<TC,TO,TN,TW,TH>* slice = new h1<TC,TO,TN,TW,TH>(a_title,
                                    a_from.axis_x().bins(),
                                    a_from.axis_x().lower_edge(),
                                    a_from.axis_x().upper_edge());
@@ -73,19 +73,19 @@ inline h1<TC,TN,TW,TH>* slice_x(const h2<TC,TN,TW,TH>& a_from,
   return slice;
 }
 
-template <class TC,class TN,class TW,class TH>
-inline h1<TC,TN,TW,TH>* projection_x(const h2<TC,TN,TW,TH>& a_from,const std::string& a_title) {
-  return slice_x(a_from,axis<TC>::UNDERFLOW_BIN,axis<TC>::OVERFLOW_BIN,a_title);
+template <class TC,class TO,class TN,class TW,class TH>
+inline h1<TC,TO,TN,TW,TH>* projection_x(const h2<TC,TO,TN,TW,TH>& a_from,const std::string& a_title) {
+  return slice_x(a_from,axis<TC,TO>::UNDERFLOW_BIN,axis<TC,TO>::OVERFLOW_BIN,a_title);
 }
 
-template <class TC,class TN,class TW,class TH>
-inline bool fill_slice_y(const h2<TC,TN,TW,TH>& a_from,
+template <class TC,class TO,class TN,class TW,class TH>
+inline bool fill_slice_y(const h2<TC,TO,TN,TW,TH>& a_from,
                          int aIbeg,int aIend,
-                         h1<TC,TN,TW,TH>& a_to) {
+                         h1<TC,TO,TN,TW,TH>& a_to) {
 
   if(!a_from.dimension()) return false;
 
-  typedef typename axis<TC>::bn_t bn_t;
+  typedef typename axis<TC,TO>::bn_t bn_t;
 
   bn_t ibeg;
   if(!a_from.axis_x().in_range_to_absolute_index(aIbeg,ibeg)) return false;
@@ -95,7 +95,7 @@ inline bool fill_slice_y(const h2<TC,TN,TW,TH>& a_from,
 
   if(a_from.axis_y().bins()!=a_to.axis().bins()) return false;
 
-  histo_data<TC,TN,TW> hdata = a_to.get_histo_data();
+  histo_data<TC,TO,TN,TW> hdata = a_to.get_histo_data();
 
   bn_t aibin,aoffset,offset,ibin;     
   bn_t yoffset = a_from.axis_y().m_offset;
@@ -123,16 +123,16 @@ inline bool fill_slice_y(const h2<TC,TN,TW,TH>& a_from,
       hdata.m_bin_Sx2w[aoffset][0] += af_bin_Sx2w[offset][1];
     }
   }
+  hdata.update_fast_getters();
   a_to.copy_from_data(hdata);
-  a_to.update_fast_getters();  
   return true;
 }
 
-template <class TC,class TN,class TW,class TH>
-inline h1<TC,TN,TW,TH>* slice_y(const h2<TC,TN,TW,TH>& a_from,
+template <class TC,class TO,class TN,class TW,class TH>
+inline h1<TC,TO,TN,TW,TH>* slice_y(const h2<TC,TO,TN,TW,TH>& a_from,
                              int aIbeg,int aIend,
                              const std::string& a_title) {
-  h1<TC,TN,TW,TH>* slice = new h1<TC,TN,TW,TH>(a_title,
+  h1<TC,TO,TN,TW,TH>* slice = new h1<TC,TO,TN,TW,TH>(a_title,
                                    a_from.axis_y().bins(),
                                    a_from.axis_y().lower_edge(),
                                    a_from.axis_y().upper_edge());
@@ -140,19 +140,19 @@ inline h1<TC,TN,TW,TH>* slice_y(const h2<TC,TN,TW,TH>& a_from,
   return slice;
 }
 
-template <class TC,class TN,class TW,class TH>
-inline h1<TC,TN,TW,TH>* projection_y(const h2<TC,TN,TW,TH>& a_from,const std::string& a_title) {
-  return slice_y(a_from,axis<TC>::UNDERFLOW_BIN,axis<TC>::OVERFLOW_BIN,a_title);
+template <class TC,class TO,class TN,class TW,class TH>
+inline h1<TC,TO,TN,TW,TH>* projection_y(const h2<TC,TO,TN,TW,TH>& a_from,const std::string& a_title) {
+  return slice_y(a_from,axis<TC,TO>::UNDERFLOW_BIN,axis<TC,TO>::OVERFLOW_BIN,a_title);
 }
 
 
-template <class TC,class TN,class TW,class TH>
-inline bool fill_slice_yz(const h3<TC,TN,TW,TH>& a_from,
-                          int aIbeg,int aIend,h2<TC,TN,TW,TH>& a_to) {
+template <class TC,class TO,class TN,class TW,class TH>
+inline bool fill_slice_yz(const h3<TC,TO,TN,TW,TH>& a_from,
+                          int aIbeg,int aIend,h2<TC,TO,TN,TW,TH>& a_to) {
 
   if(!a_from.dimension()) return false;
 
-  typedef typename axis<TC>::bn_t bn_t;
+  typedef typename axis<TC,TO>::bn_t bn_t;
 
   bn_t ibeg;
   if(!a_from.axis_x().in_range_to_absolute_index(aIbeg,ibeg)) return false;
@@ -163,7 +163,7 @@ inline bool fill_slice_yz(const h3<TC,TN,TW,TH>& a_from,
   if(a_from.axis_y().bins()!=a_to.axis_x().bins()) return false;
   if(a_from.axis_z().bins()!=a_to.axis_y().bins()) return false;
 
-  histo_data<TC,TN,TW> hdata = a_to.get_histo_data();
+  histo_data<TC,TO,TN,TW> hdata = a_to.get_histo_data();
   
   bn_t aibin,ajbin,aoffset,offset,ibin;     
   
@@ -201,18 +201,18 @@ inline bool fill_slice_yz(const h3<TC,TN,TW,TH>& a_from,
       }
     }
   }
+  hdata.update_fast_getters();
   a_to.copy_from_data(hdata);
-  a_to.update_fast_getters();
   return true;
 }
 
-template <class TC,class TN,class TW,class TH>
-inline bool fill_slice_xy(const h3<TC,TN,TW,TH>& a_from,
-                          int aKbeg,int aKend,h2<TC,TN,TW,TH>& a_to) {
+template <class TC,class TO,class TN,class TW,class TH>
+inline bool fill_slice_xy(const h3<TC,TO,TN,TW,TH>& a_from,
+                          int aKbeg,int aKend,h2<TC,TO,TN,TW,TH>& a_to) {
   
   if(!a_from.dimension()) return false;
 
-  typedef typename axis<TC>::bn_t bn_t;
+  typedef typename axis<TC,TO>::bn_t bn_t;
 
   bn_t kbeg;
   if(!a_from.axis_z().in_range_to_absolute_index(aKbeg,kbeg)) return false;
@@ -223,7 +223,7 @@ inline bool fill_slice_xy(const h3<TC,TN,TW,TH>& a_from,
   if(a_from.axis_x().bins()!=a_to.axis_x().bins()) return false;
   if(a_from.axis_y().bins()!=a_to.axis_y().bins()) return false;
 
-  histo_data<TC,TN,TW> hdata = a_to.get_histo_data();
+  histo_data<TC,TO,TN,TW> hdata = a_to.get_histo_data();
   
   bn_t kbin;
   bn_t aibin,ajbin,aoffset,offset;     
@@ -262,18 +262,18 @@ inline bool fill_slice_xy(const h3<TC,TN,TW,TH>& a_from,
       }
     }
   }
+  hdata.update_fast_getters();
   a_to.copy_from_data(hdata);
-  a_to.update_fast_getters();
   return true;
 }
 
-template <class TC,class TN,class TW,class TH>
-inline bool fill_slice_xz(const h3<TC,TN,TW,TH>& a_from,
-                          int aJbeg,int aJend,h2<TC,TN,TW,TH>& a_to) {
+template <class TC,class TO,class TN,class TW,class TH>
+inline bool fill_slice_xz(const h3<TC,TO,TN,TW,TH>& a_from,
+                          int aJbeg,int aJend,h2<TC,TO,TN,TW,TH>& a_to) {
   
   if(!a_from.dimension()) return false;
 
-  typedef typename axis<TC>::bn_t bn_t;
+  typedef typename axis<TC,TO>::bn_t bn_t;
 
   bn_t jbeg;
   if(!a_from.axis_y().in_range_to_absolute_index(aJbeg,jbeg)) return false;
@@ -284,7 +284,7 @@ inline bool fill_slice_xz(const h3<TC,TN,TW,TH>& a_from,
   if(a_from.axis_x().bins()!=a_to.axis_x().bins()) return false;
   if(a_from.axis_z().bins()!=a_to.axis_y().bins()) return false;
   
-  histo_data<TC,TN,TW> hdata = a_to.get_histo_data();
+  histo_data<TC,TO,TN,TW> hdata = a_to.get_histo_data();
 
   bn_t aibin,ajbin,aoffset,offset,jbin;     
   
@@ -323,17 +323,17 @@ inline bool fill_slice_xz(const h3<TC,TN,TW,TH>& a_from,
     }
   }
   
+  hdata.update_fast_getters();
   a_to.copy_from_data(hdata);
-  a_to.update_fast_getters();
 
   return true;
 }
 
-template <class TC,class TN,class TW,class TH>
-inline h2<TC,TN,TW,TH>* slice_xy(const h3<TC,TN,TW,TH>& a_from,
+template <class TC,class TO,class TN,class TW,class TH>
+inline h2<TC,TO,TN,TW,TH>* slice_xy(const h3<TC,TO,TN,TW,TH>& a_from,
                              int aKbeg,int aKend,
                              const std::string& a_title) {
-  h2<TC,TN,TW,TH>* slice = new h2<TC,TN,TW,TH>(a_title,
+  h2<TC,TO,TN,TW,TH>* slice = new h2<TC,TO,TN,TW,TH>(a_title,
                                               a_from.axis_x().bins(),
                                               a_from.axis_x().lower_edge(),
                                               a_from.axis_x().upper_edge(),
@@ -344,11 +344,11 @@ inline h2<TC,TN,TW,TH>* slice_xy(const h3<TC,TN,TW,TH>& a_from,
   return slice;
 }
 
-template <class TC,class TN,class TW,class TH>
-inline h2<TC,TN,TW,TH>* slice_yz(const h3<TC,TN,TW,TH>& a_from,
+template <class TC,class TO,class TN,class TW,class TH>
+inline h2<TC,TO,TN,TW,TH>* slice_yz(const h3<TC,TO,TN,TW,TH>& a_from,
                              int aIbeg,int aIend,
                              const std::string& a_title) {
-  h2<TC,TN,TW,TH>* slice = new h2<TC,TN,TW,TH>(a_title,
+  h2<TC,TO,TN,TW,TH>* slice = new h2<TC,TO,TN,TW,TH>(a_title,
                                               a_from.axis_y().bins(),
                                               a_from.axis_y().lower_edge(),
                                               a_from.axis_y().upper_edge(),
@@ -359,11 +359,11 @@ inline h2<TC,TN,TW,TH>* slice_yz(const h3<TC,TN,TW,TH>& a_from,
   return slice;
 }
 
-template <class TC,class TN,class TW,class TH>
-inline h2<TC,TN,TW,TH>* slice_xz(const h3<TC,TN,TW,TH>& a_from,
+template <class TC,class TO,class TN,class TW,class TH>
+inline h2<TC,TO,TN,TW,TH>* slice_xz(const h3<TC,TO,TN,TW,TH>& a_from,
                              int aJbeg,int aJend,
                              const std::string& a_title) {
-  h2<TC,TN,TW,TH>* slice = new h2<TC,TN,TW,TH>(a_title,
+  h2<TC,TO,TN,TW,TH>* slice = new h2<TC,TO,TN,TW,TH>(a_title,
                                               a_from.axis_x().bins(),
                                               a_from.axis_x().lower_edge(),
                                               a_from.axis_x().upper_edge(),

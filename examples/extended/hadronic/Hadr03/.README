@@ -83,17 +83,17 @@
    (see the macros xxxx.mac).
    
    - 1   : "kinetic energy of scattered primary particle"
-   - 2   : "kinetic energy of recoil nuclei"
-   - 3   : "kinetic energy of gamma"
-   - 4   : "kinetic energy of neutrons"
-   - 5   : "kinetic energy of protons"
-   - 6   : "kinetic energy of deuterons"
-   - 7   : "kinetic energy of alphas"
-   - 8   : "kinetic energy of all others ions"
-   - 9   : "kinetic energy of all others mesons"
-   - 10  : "kinetic energy of all others baryons"
-   - 11  : "Q = Ekin out - Ekin in"              
-   - 12  : "Pbalance = mag(P_out - P_in)"		
+   - 2   : "kinetic energy of gamma"
+   - 3   : "kinetic energy of neutrons"
+   - 4   : "kinetic energy of protons"
+   - 5   : "kinetic energy of deuterons"
+   - 6   : "kinetic energy of alphas"
+   - 7   : "kinetic energy of nuclei"
+   - 8   : "kinetic energy of mesons"
+   - 9   : "kinetic energy of baryons"
+   - 10  : "Q = Ekin out - Ekin in"              
+   - 11  : "Pbalance = mag(P_out - P_in)"
+   - 12  : "atomic mass of nuclei"   		
       
    The histograms are managed by the HistoManager class and its Messenger. 
    The histos can be individually activated with the command :

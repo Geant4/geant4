@@ -236,27 +236,21 @@ such as Open MPI, LAM/MPI, Intel MPI etc.</p>
 
 <p>To build G4MPI library, use CMake on Geant4 library installed with CMake build.</p>
 
-<p>Check <code>CMakeList.txt</code>, especially the following two variables 
-should be taken care to match your MPI library</p>
-
-<pre><code>eg.  
-set(CMAKE_CXX_COMPILER mpicxx)  
-#set(CMAKE_CXX_INCLUDE_PATH ) set if necessary
-</code></pre>
-
 <p>Follow these commands,</p>
 
-<pre><code>&gt; cd source
-&gt; mkdir build
+<pre><code>&gt; mkdir build
 &gt; cd build
-&gt; cmake -DGeant4_DIR=&lt;your Geant4 install path&gt;/lib64/Geant4-V.m.n ..
-  (V.m.n is the version of Geant4, eg. Geant4-9.6.0)
+&gt; cmake -DGeant4_DIR=&lt;your Geant4 install path&gt;/lib64/Geant4-V.m.n -DCMAKE_CXX_COMPILER=mpicxx \
+     -DCMAKE_INSTALL_PREFIX=&lt;where-G4mpi-lib-will-be-installed&gt; &lt;g4source&gt;/examples/extended/parallel/MPI/source
 &gt; make
 &gt; make install
 </code></pre>
 
-<p>The library and header files will be installed on the installation directory
-of Geant4.</p>
+<p>Replace mpicxx with your MPI compiler wrapper.</p>
+
+<p>The library and header files will be installed on the installation directory specified in CMAKE_CXX_COMPILER
+a CMake configuration file will also be installed (see examples on how
+to compile an application using G4mpi)</p>
 
 <hr>
 

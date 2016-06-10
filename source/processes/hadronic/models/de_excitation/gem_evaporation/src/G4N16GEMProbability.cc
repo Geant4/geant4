@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4N16GEMProbability.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4N16GEMProbability.cc 87017 2014-11-21 16:26:26Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
@@ -35,11 +35,15 @@
 G4N16GEMProbability::G4N16GEMProbability() :
   G4GEMProbability(16,7,2.0) // A,Z,Spin
 {
-  ExcitEnergies.push_back(120.1*keV);
+  ExcitEnergies.push_back(120.42*keV);
   ExcitSpins.push_back(0.0);
   ExcitLifetimes.push_back(5.25e-6*s);
 
-  ExcitEnergies.push_back(397.5*keV);
+  ExcitEnergies.push_back(298.22*keV);
+  ExcitSpins.push_back(0.0);
+  ExcitLifetimes.push_back(9.13e-11*s);
+
+  ExcitEnergies.push_back(397.27*keV);
   ExcitSpins.push_back(1.0);
   ExcitLifetimes.push_back(4.5e-12*s);
 

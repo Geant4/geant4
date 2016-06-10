@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.cc 75567 2013-11-04 11:35:11Z gcosmo $
+// $Id: G4Scene.cc 86360 2014-11-10 08:34:16Z gcosmo $
 //
 // 
 // Scene data  John Allison  19th July 1996.
@@ -147,6 +147,8 @@ void G4Scene::CalculateExtent ()
 	   "visman0202", JustWarning,
 	   "Scene has no extent.  Please activate or add something."
 	   "\nThe camera needs to have something to point at!"
+           "\nAdd a volume. (You may need \"/run/initialize\".)"
+           "\nOr use \"/vis/scene/add/extent\"."
 	   "\n\"/vis/scene/list\" to see list of models.");
   }
 }

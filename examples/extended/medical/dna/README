@@ -1,0 +1,30 @@
+    =========================================================
+                    Geant4 - dna examples
+    =========================================================
+                        README file
+                   ----------------------
+
+This directory contains a set of dna examples.
+
+   - dnaphysics 
+       The dnaphysics example shows how to simulate track structures in liquid 
+       water using the Geant4-DNA physics processes and models.
+
+   - microdosimetry 
+       The microdosimetry example simulates the track of a 5 MeV proton in 
+       liquid water. 
+       Geant4 standard EM models are used in the World volume while Geant4-DNA 
+       models are used in a Target volume, declared as a Region.
+
+   - chem1   Simple activation of the chemistry module.
+   - chem2   Usage of TimeStepAction in the chemistry module.
+   - chem3   Activate the full interactivity with the chemistry module.
+
+   - wholenucleardna 
+       Description of the full nucleus
+   - pdb4dna         
+       Usage of the Protein Data Bank (PDB) file format to build geometries
+
+See the README page inside each example for more detail.
+
+

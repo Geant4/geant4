@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImessenger.cc 74278 2013-10-02 15:04:18Z gcosmo $
+// $Id: G4UImessenger.cc 84281 2014-10-13 07:21:50Z gcosmo $
 //
 
 #include "G4UImessenger.hh"
@@ -36,13 +36,13 @@
 #include <sstream>
 
 G4UImessenger::G4UImessenger()
-  : baseDir(NULL), baseDirName("")
+  : baseDir(NULL), baseDirName(""), commandsShouldBeInMaster(false)
 { 
 }
 
 G4UImessenger::G4UImessenger(const G4String& path, const G4String& dsc,
                              G4bool commandsToBeBroadcasted)
-  : baseDir(NULL), baseDirName("")
+  : baseDir(NULL), baseDirName(""), commandsShouldBeInMaster(false)
 {
   CreateDirectory(path, dsc, commandsToBeBroadcasted);
 }

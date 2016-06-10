@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.icc 69005 2013-04-15 09:26:47Z gcosmo $
+// $Id: G4Track.icc 83388 2014-08-21 14:29:33Z gcosmo $
 //
 //-----------------------------------------------------------------
 // Definitions of inline functions
@@ -276,6 +276,15 @@ extern G4TRACK_DLL G4ThreadLocal G4Allocator<G4Track> *aTrackAllocator;
 
    inline void G4Track::SetCreatorProcess(const G4VProcess* aValue)
    { fpCreatorProcess = aValue; }
+
+   inline void G4Track::SetCreatorModelIndex(G4int idx)
+   { fCreatorModelIndex = idx; }
+
+   inline const G4String & G4Track::GetCreatorModelName() const
+   { return G4PhysicsModelCatalog::GetModelName(fCreatorModelIndex); }
+
+   inline G4int G4Track::GetCreatorModelID() const
+   { return fCreatorModelIndex; }
 
 // flag for "Below Threshold"
    inline G4bool G4Track::IsBelowThreshold() const

@@ -27,7 +27,7 @@
 /// \brief Definition of the PhysListEmStandardWVI class
 //
 //
-// $Id: PhysListEmStandardWVI.hh 68393 2013-03-25 14:22:21Z maire $
+// $Id: PhysListEmStandardWVI.hh 86064 2014-11-07 08:49:32Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

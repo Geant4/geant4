@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorMatrix.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4ErrorMatrix.cc 78318 2013-12-11 15:02:40Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -804,9 +804,10 @@ G4double G4ErrorMatrix::trace() const
 
 void G4ErrorMatrix::error(const char *msg)
 {
-  G4cerr << msg << G4endl;
-  G4cerr << "---Exiting to System." << G4endl;
-  abort();
+  std::ostringstream message;
+  message << msg;
+  G4Exception("G4ErrorMatrix::error()", "GEANT4e-Error",
+              FatalException, message, "Exiting to System.");
 }
 
 

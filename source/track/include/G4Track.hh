@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.hh 74276 2013-10-02 14:59:07Z gcosmo $
+// $Id: G4Track.hh 83388 2014-08-21 14:29:33Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -242,12 +242,11 @@ public: // With description
    const G4VProcess* GetCreatorProcess() const;
    void SetCreatorProcess(const G4VProcess* aValue);
 
-   inline void SetCreatorModelIndex(G4int idx)
-   { fCreatorModelIndex = idx; }
-   inline G4String& GetCreatorModelName()
-   { return G4PhysicsModelCatalog::GetModelName(fCreatorModelIndex); }
-   inline G4int GetCreatorModelID()
-   { return fCreatorModelIndex; }
+   inline void SetCreatorModelIndex(G4int idx);
+
+   inline const G4String& GetCreatorModelName() const;
+
+   inline G4int GetCreatorModelID() const;
 
   // track weight
   // These are methods for manipulating a weight for this track.

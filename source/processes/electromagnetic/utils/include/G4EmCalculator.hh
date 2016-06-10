@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.hh 70371 2013-05-29 15:18:07Z gcosmo $
+// $Id: G4EmCalculator.hh 83007 2014-07-24 14:46:57Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -224,7 +224,7 @@ public:
 		       const G4String&);
 
   //===========================================================================
-  // Methods to access particles, materials, regions
+  // Methods to access particles, materials, regions, processes
   //===========================================================================
 
   const G4ParticleDefinition* FindParticle(const G4String&);
@@ -237,6 +237,9 @@ public:
 
   const G4MaterialCutsCouple* FindCouple(const G4Material*, 
 					 const G4Region* r = 0);
+
+  G4VProcess* FindProcess(const G4ParticleDefinition* part,
+			  const G4String& processName);
 
   void SetVerbose(G4int val);
 

@@ -1,0 +1,100 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_randT
+#define tools_randT
+
+#include "cmathT"
+
+#include "mathd"
+
+namespace tools {
+
+template <class FLAT,class REAL>
+class rgauss {
+public:
+  rgauss(FLAT& a_flat,REAL a_mean = 0,REAL a_std_dev = 1)
+  :m_flat(a_flat),m_mean(a_mean),m_std_dev(a_std_dev){}
+  virtual ~rgauss(){}
+public:
+  rgauss(const rgauss& a_from):m_flat(a_from.m_flat),m_mean(a_from.m_mean),m_std_dev(a_from.m_std_dev){}
+  rgauss& operator=(const rgauss& a_from) {
+    m_mean = a_from.m_mean;
+    m_std_dev = a_from.m_std_dev;
+    return *this;
+  }
+public:
+  REAL shoot() {
+    //  Shoot random numbers according a 
+    // rgaussian distribution of mean 0 and sigma 1.
+    REAL v1,v2,r,fac;
+    do {
+      v1 = REAL(2) * m_flat.shoot() - REAL(1);
+      v2 = REAL(2) * m_flat.shoot() - REAL(1);
+      r = v1*v1 + v2*v2;
+    } while (r>REAL(1));
+    fac = _sqrt(-REAL(2)*_log(r)/r);
+    return (v2 * fac) * m_std_dev + m_mean;
+  }
+  FLAT& flat() {return m_flat;}
+protected:
+  FLAT& m_flat;
+  REAL m_mean;
+  REAL m_std_dev;
+};
+
+template <class FLAT,class REAL>
+class rbw {
+public:
+  rbw(FLAT& a_flat,REAL a_mean = 0,REAL a_gamma = 1)
+  :m_flat(a_flat),m_mean(a_mean),m_gamma(a_gamma){
+    _half_pi(m_half_pi);
+  }
+  virtual ~rbw(){}
+public:
+  rbw(const rbw& a_from):m_flat(a_from.m_flat),m_mean(a_from.m_mean),m_gamma(a_from.m_gamma),m_half_pi(a_from.m_half_pi){}
+  rbw& operator=(const rbw& a_from) {
+    m_mean = a_from.m_mean;
+    m_gamma = a_from.m_gamma;
+    m_half_pi = a_from.m_half_pi;
+    return *this;
+  }
+public:
+  REAL shoot() const {
+    REAL rval = REAL(2) * m_flat.shoot() - REAL(1);
+    REAL displ = (REAL(1)/REAL(2)) * m_gamma * _tan(rval * m_half_pi);
+    return m_mean + displ;
+  }
+  FLAT& flat() {return m_flat;}
+protected:
+  FLAT& m_flat;
+  REAL m_mean;
+  REAL m_gamma;
+  REAL m_half_pi;
+};
+
+template <class FLAT,class REAL>
+class rexp {
+public:
+  rexp(FLAT& a_flat,REAL a_rate = 1):m_flat(a_flat),m_rate(a_rate){}
+  virtual ~rexp(){}
+public:
+  rexp(const rexp& a_from):m_flat(a_from.m_flat),m_rate(a_from.m_rate){}
+  rexp& operator=(const rexp& a_from) {m_rate = a_from.m_rate;return *this;}
+public:
+  REAL shoot() const {
+    REAL v;
+    do {
+      v = m_flat.shoot();
+    } while(v<=REAL(0));
+    return -_log(v)/m_rate;
+  }
+  FLAT& flat() {return m_flat;}
+protected:
+  FLAT& m_flat;
+  REAL m_rate;
+};
+
+}
+
+#endif

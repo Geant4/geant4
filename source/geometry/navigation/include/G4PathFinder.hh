@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PathFinder.hh 69058 2013-04-17 09:08:25Z gcosmo $
+// $Id: G4PathFinder.hh 81060 2014-05-20 09:12:39Z gcosmo $
 // 
 // class G4PathFinder 
 //
@@ -99,11 +99,24 @@ class G4PathFinder
      //
      // Check and cache set of active navigators.
 
-   G4TouchableHandle CreateTouchableHandle( G4int navId ) const;
-   inline G4VPhysicalVolume* GetLocatedVolume( G4int navId ) const; 
+   void EndTrack();
+     // Signal end of tracking of current track.  
+     //   Reset internal state
+     //   Inform TransportationManager to use 'ordinary' Navigator
+
+    G4TouchableHandle CreateTouchableHandle( G4int navId ) const;
+    inline G4VPhysicalVolume* GetLocatedVolume( G4int navId ) const;
+
+    G4bool RecheckDistanceToCurrentBoundary(
+                                          const G4ThreeVector &pGlobalPoint,
+                                          const G4ThreeVector &pDirection,
+                                          const G4double pCurrentProposedStepLength,
+                                          G4double  *prDistance,
+                                          G4double  *prNewSafety= 0)const;
+   // Trial method for checking potential displacement for MS
 
    // -----------------------------------------------------------------
-
+  
    inline G4bool   IsParticleLooping() const;
 
    inline G4double GetCurrentSafety() const;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreIonisationModel.cc 74822 2013-10-22 14:42:13Z gcosmo $
+// $Id: G4LivermoreIonisationModel.cc 87443 2014-12-04 12:26:31Z gunter $
 //
 // Author: Luciano Pandola
 //         on base of G4LowEnergyIonisation developed by A.Forti and V.Ivanchenko
@@ -84,7 +84,7 @@ G4LivermoreIonisationModel::G4LivermoreIonisationModel(const G4ParticleDefinitio
   fIntrinsicHighEnergyLimit = 100.0*GeV;
 
   verboseLevel = 0;
-  //SetAngularDistribution(new G4DeltaAngle());
+  SetAngularDistribution(new G4DeltaAngle());
 
   transitionManager = G4AtomicTransitionManager::Instance();
 }
@@ -109,6 +109,8 @@ void G4LivermoreIonisationModel::Initialise(const G4ParticleDefinition* particle
 		  "em0002",FatalException,
 		  "Livermore Ionisation Model is applicable only to electrons");
     }
+
+  transitionManager->Initialise();
 
   //Read energy spectrum
   if (energySpectrum) 
@@ -281,58 +283,21 @@ void G4LivermoreIonisationModel::SampleSecondaries(
   if (energyDelta == 0.) //nothing happens
     { return; }
 
-  // Transform to shell potential
-  G4double deltaKinE = energyDelta + 2.0*bindingEnergy;
-  G4double primaryKinE = kineticEnergy + 2.0*bindingEnergy;
+  const G4ParticleDefinition* electron = G4Electron::Electron();
+  G4DynamicParticle* delta = new G4DynamicParticle(electron, 
+    GetAngularDistribution()->SampleDirectionForShell(aDynamicParticle, energyDelta,
+						      Z, shellIndex,
+                                                      couple->GetMaterial()),
+                                                      energyDelta);
 
-  // sampling of scattering angle neglecting atomic motion
-  G4double deltaMom = std::sqrt(deltaKinE*(deltaKinE + 2.0*electron_mass_c2));
-  G4double primaryMom = std::sqrt(primaryKinE*(primaryKinE + 2.0*electron_mass_c2));
+  fvect->push_back(delta);
 
-  G4double cost = deltaKinE * (primaryKinE + 2.0*electron_mass_c2)
-                            / (deltaMom * primaryMom);
-  if (cost > 1.) { cost = 1.; }
-  G4double sint = std::sqrt((1. - cost)*(1. + cost));
-  G4double phi  = twopi * G4UniformRand();
-  G4double dirx = sint * std::cos(phi);
-  G4double diry = sint * std::sin(phi);
-  G4double dirz = cost;
-  
-  // Rotate to incident electron direction
-  G4ThreeVector primaryDirection = aDynamicParticle->GetMomentumDirection();
-  G4ThreeVector deltaDir(dirx,diry,dirz);
-  deltaDir.rotateUz(primaryDirection);
-  //Updated components
-  dirx = deltaDir.x();
-  diry = deltaDir.y();
-  dirz = deltaDir.z();
+  // Change kinematics of primary particle
+  G4ThreeVector direction = aDynamicParticle->GetMomentumDirection();
+  G4double totalMomentum = std::sqrt(kineticEnergy*(kineticEnergy + 2*electron_mass_c2));
 
-  // Take into account atomic motion del is relative momentum of the motion
-  // kinetic energy of the motion == bindingEnergy in V.Ivanchenko model
-  cost = 2.0*G4UniformRand() - 1.0;
-  sint = std::sqrt(1. - cost*cost);
-  phi  = twopi * G4UniformRand();
-  G4double del = std::sqrt(bindingEnergy *(bindingEnergy + 2.0*electron_mass_c2))
-               / deltaMom;
-  dirx += del* sint * std::cos(phi);
-  diry += del* sint * std::sin(phi);
-  dirz += del* cost;
-
-  // Find out new primary electron direction
-  G4double finalPx = primaryMom*primaryDirection.x() - deltaMom*dirx;
-  G4double finalPy = primaryMom*primaryDirection.y() - deltaMom*diry;
-  G4double finalPz = primaryMom*primaryDirection.z() - deltaMom*dirz;
-
-  //Ok, ready to create the delta ray
-  G4DynamicParticle* theDeltaRay = new G4DynamicParticle();
-  theDeltaRay->SetKineticEnergy(energyDelta);
-  G4double norm = 1.0/std::sqrt(dirx*dirx + diry*diry + dirz*dirz);
-  dirx *= norm;
-  diry *= norm;
-  dirz *= norm;
-  theDeltaRay->SetMomentumDirection(dirx, diry, dirz);
-  theDeltaRay->SetDefinition(G4Electron::Electron());
-  fvect->push_back(theDeltaRay);
+  G4ThreeVector finalP = totalMomentum*direction - delta->GetMomentum();
+  finalP               = finalP.unit();
 
   //This is the amount of energy available for fluorescence
   G4double theEnergyDeposit = bindingEnergy;
@@ -347,11 +312,7 @@ void G4LivermoreIonisationModel::SampleSecondaries(
     } 
   else 
     {
-      G4double normLocal = 1.0/std::sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
-      finalPx *= normLocal;
-      finalPy *= normLocal;
-      finalPz *= normLocal;
-      fParticleChange->ProposeMomentumDirection(finalPx, finalPy, finalPz);
+      fParticleChange->ProposeMomentumDirection(finalP);
     }
   fParticleChange->SetProposedKineticEnergy(finalKinEnergy);
 

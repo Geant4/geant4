@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearLevelManager.cc 77025 2013-11-20 16:11:51Z gcosmo $
+// $Id: G4NuclearLevelManager.cc 87163 2014-11-26 08:46:54Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -58,18 +58,37 @@
 #include "G4ios.hh"
 #include "G4HadronicException.hh"
 #include "G4HadTmpUtil.hh"
+#include "G4NucleiProperties.hh"
+#include "G4PhysicalConstants.hh"
+
+G4double G4NuclearLevelManager::_levelEnergy=0.;
+G4double G4NuclearLevelManager::_gammaEnergy=0.;
+G4double G4NuclearLevelManager::_probability=0.;
+G4double G4NuclearLevelManager::_polarity=0.;
+G4double G4NuclearLevelManager::_halfLife=0.;
+G4double G4NuclearLevelManager::_angularMomentum=0.;
+G4double G4NuclearLevelManager::_kCC=0.;
+G4double G4NuclearLevelManager::_l1CC=0.;
+G4double G4NuclearLevelManager::_l2CC=0.;
+G4double G4NuclearLevelManager::_l3CC=0.;
+G4double G4NuclearLevelManager::_m1CC=0.;
+G4double G4NuclearLevelManager::_m2CC=0.;
+G4double G4NuclearLevelManager::_m3CC=0.;
+G4double G4NuclearLevelManager::_m4CC=0.;
+G4double G4NuclearLevelManager::_m5CC=0.;
+G4double G4NuclearLevelManager::_nPlusCC=0.;
+G4double G4NuclearLevelManager::_totalCC=0.;
 
 G4NuclearLevelManager::G4NuclearLevelManager(G4int Z, G4int A, 
 					     const G4String& filename) :
-    _nucleusA(A), _nucleusZ(Z), _fileName(filename), _validity(false), 
-    _levels(0), _levelEnergy(0), _gammaEnergy(0), _probability(0)
+    _nucleusA(A), _nucleusZ(Z), _validity(false), 
+    _levels(0)
 { 
   if (A <= 0 || Z <= 0 || Z > A ) {
     throw G4HadronicException(__FILE__, __LINE__, 
 			      "==== G4NuclearLevelManager ==== (Z,A) <0, or Z>A");
   }
-  for(G4int i=0; i<30; ++i) { buffer[i] = 0; }
-  MakeLevels();
+  MakeLevels(filename);
 }
 
 G4NuclearLevelManager::~G4NuclearLevelManager()
@@ -87,8 +106,7 @@ void G4NuclearLevelManager::SetNucleus(G4int Z, G4int A, const G4String& filenam
     {
       _nucleusA = A;
       _nucleusZ = Z;
-      _fileName = filename;
-      MakeLevels();
+      MakeLevels(filename);
     }
 }
 
@@ -97,8 +115,7 @@ const G4NuclearLevel* G4NuclearLevelManager::GetLevel(G4int i) const {
 }
 
 const G4NuclearLevel* 
-G4NuclearLevelManager::NearestLevel(G4double energy, 
-				    G4double eDiffMax) const 
+G4NuclearLevelManager::NearestLevel(G4double energy, G4double) const 
 {
   if (NumberOfLevels() <= 0) return 0;
 
@@ -107,13 +124,13 @@ G4NuclearLevelManager::NearestLevel(G4double energy,
   //G4cout << "G4NuclearLevelManager::NearestLevel E(MeV)= " 
   //	 << energy/MeV << " dEmax(MeV)= " << eDiffMax/MeV << G4endl;
   
-  G4double diff = 9999. * GeV;
-  for (unsigned int i=0; i<_levels->size(); i++)
+  G4double diff = 1.e+10;
+  for (unsigned int i=0; i<_levels->size(); ++i)
     {
       G4double e = GetLevel(i)->Energy();
-      G4double eDiff = std::abs(e - energy);
+      G4double eDiff = std::fabs(e - energy);
       //G4cout << i << ".   eDiff(MeV)= " << eDiff/MeV << G4endl;
-      if (eDiff < diff && eDiff <= eDiffMax)
+      if (eDiff <= diff)
 	{ 
 	  diff = eDiff; 
 	  iNear = i;
@@ -191,6 +208,8 @@ G4NuclearLevelManager::ReadDataItem(std::istream& dataFile, G4double& x)
 {
   // G4bool okay = (dataFile >> buffer) != 0;		// Get next token
   // if (okay) x = strtod(buffer, NULL);
+  char buffer[30];
+  for(G4int i=0; i<30; ++i) { buffer[i] = 0; }
   G4bool okay = true;
   dataFile >> buffer;
   if(dataFile.fail()) { okay = false; }
@@ -263,12 +282,12 @@ void G4NuclearLevelManager::ClearLevels()
   _levels = 0;
 }
 
-void G4NuclearLevelManager::MakeLevels()
+void G4NuclearLevelManager::MakeLevels(const G4String& filename)
 {
   _validity = false;
   if (NumberOfLevels() > 0) ClearLevels();	// Discard existing data
 
-  std::ifstream inFile(_fileName, std::ios::in);
+  std::ifstream inFile(filename, std::ios::in);
   if (! inFile) 
     {
 #ifdef GAMMAFILEWARNING
@@ -356,49 +375,47 @@ void G4NuclearLevelManager::PrintAll()
 	 << G4endl << "Lowest level is at energy " << MinLevelEnergy()
 	 << " MeV " << G4endl;
     
-  for (G4int i=0; i<nLevels; i++)
+  for (G4int i=0; i<nLevels; ++i) {
     GetLevel(i)->PrintAll();
+  }
+}
+
+void G4NuclearLevelManager::PrintLevels()
+{
+  G4int nLevels = NumberOfLevels();
+  G4double efermi = G4NucleiProperties::GetNuclearMass(_nucleusA-1, _nucleusZ)
+    + neutron_mass_c2 -
+    G4NucleiProperties::GetNuclearMass(_nucleusA, _nucleusZ);
+
+  G4cout << "Z= " << _nucleusZ << " A= " << _nucleusA
+	 << "  " << nLevels << " levels" 
+	 << "  Efermi(MeV)= " << efermi << G4endl;
+    
+  for (G4int i=0; i<nLevels; ++i) {
+    GetLevel(i)->PrintLevels();
+  }
 }
 
 G4NuclearLevelManager::G4NuclearLevelManager(const G4NuclearLevelManager &right)
 {
-    _levelEnergy = right._levelEnergy;
-    _gammaEnergy = right._gammaEnergy;
-    _probability = right._probability;
-    _polarity = right._polarity;
-    _halfLife = right._halfLife;
-    _angularMomentum = right._angularMomentum;
-    _kCC = right._kCC;
-    _l1CC = right._l1CC;
-    _l2CC = right._l2CC;
-    _l3CC = right._l3CC;
-    _m1CC = right._m1CC;
-    _m2CC = right._m2CC;
-    _m3CC = right._m3CC;
-    _m4CC = right._m4CC;
-    _m5CC = right._m5CC;
-    _nPlusCC = right._nPlusCC;
-    _totalCC = right._totalCC;
-    _nucleusA = right._nucleusA;
-    _nucleusZ = right._nucleusZ;
-    _fileName = right._fileName;
-    _validity = right._validity;
+  _nucleusA = right._nucleusA;
+  _nucleusZ = right._nucleusZ;
+  _validity = right._validity;
 
-    if (right._levels != 0)   
-      {
-	_levels = new G4PtrLevelVector;
-	G4int n = right._levels->size();
-	G4int i;
-	for (i=0; i<n; ++i)
-	  {
-	    _levels->push_back(new G4NuclearLevel(*(right.GetLevel(i))));
-	  }
-	
-	G4PtrSort<G4NuclearLevel>(_levels);
-      }
-    else 
-      {
-	_levels = 0;
-      }
+  if (right._levels != 0)   
+    {
+      _levels = new G4PtrLevelVector;
+      G4int n = right._levels->size();
+      G4int i;
+      for (i=0; i<n; ++i)
+	{
+	  _levels->push_back(new G4NuclearLevel(*(right.GetLevel(i))));
+	}
+      G4PtrSort<G4NuclearLevel>(_levels);
+    }
+  else 
+    {
+      _levels = 0;
+    }
 }
 

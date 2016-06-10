@@ -1,17 +1,22 @@
-# $Id: GNUmakefile 66378 2012-12-18 09:45:21Z gcosmo $
+# $Id: GNUmakefile 80449 2014-04-22 08:35:50Z gcosmo $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
-name := userVisAction
+name := exampleB1
 G4TARGET := $(name)
 G4EXLIB := true
 
 ifndef G4INSTALL
-  G4INSTALL = ../../../..
+  G4INSTALL = ../../..
 endif
 
 .PHONY: all
 all: lib bin
 
 include $(G4INSTALL)/config/binmake.gmk
+
+visclean:
+	rm -f g4*.prim g4*.eps g4*.wrl
+	rm -f .DAWN_*
+

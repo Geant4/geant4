@@ -1,0 +1,561 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rcsv_histo
+#define tools_rcsv_histo
+
+#include "sto"
+#include "chars"
+#include "words"
+#include "forit"
+
+#include "histo/h1d"
+#include "histo/h2d"
+#include "histo/h3d"
+#include "histo/p1d"
+#include "histo/p2d"
+//#include "histo/h1df"
+
+#ifdef TOOLS_MEM
+#include "mem"
+#endif
+
+#include <istream>
+
+namespace tools {
+namespace rcsv {
+
+class histo {
+#ifdef TOOLS_MEM
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rcsv::histo");
+    return s_v;
+  }
+#endif
+public:
+  histo(std::istream& a_reader)
+  :m_reader(a_reader)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~histo() {
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  histo(const histo& a_from)
+  :m_reader(a_from.m_reader)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  histo& operator=(const histo&){return *this;}
+public:
+  std::istream& istrm() {return m_reader;}
+public:
+  bool read(std::ostream& a_out,std::string& a_class,void*& a_obj,bool a_verbose = false) {
+    a_class.clear();
+    a_obj = 0;
+
+    std::streampos file_sz = 0;
+    m_reader.clear();
+    m_reader.seekg(0,std::ios::end);
+    file_sz = m_reader.tellg();
+    m_reader.seekg(0,std::ios::beg);
+    if(!file_sz) {
+      a_out << "tools::rcsv::histo::read :"
+            << " stream is empty."
+            << std::endl;
+      return false;
+    }
+    if(a_verbose) a_out << "file size is " << file_sz << std::endl;
+
+    tools::histo::histo_data<double,unsigned int,unsigned int,double> hdata; //to be filled correctly.
+    hdata.m_dimension = 0;
+    hdata.m_bin_number = 0;
+
+    bool is_profile = false;
+    bool _cut_v = false;
+    double _min_v = 0;
+    double _max_v = 0;
+
+    // read commented header :
+    std::string _class;
+    typedef tools::histo::axis<double,unsigned int> axis_t;
+   {std::string line;
+    while(read_header_line(m_reader,file_sz,line)) {
+//      a_out << "line : " << sout(s) << std::endl;
+      std::vector<std::string> _words;
+      tools::words(line," ",false,_words);
+      if(!_words.size()) {
+        a_out << "tools::rcsv::histo::read :"
+              << " syntax error : empty header line."
+              << std::endl;
+        return false;
+      }
+      if((_words[0]=="#class")) {
+        if(_words.size()!=2) {
+          a_out << "tools::rcsv::histo::read :"
+                << " syntax error in " << sout(line)
+                << std::endl;
+          return false;
+        }
+        _class = _words[1];
+      } else if(_words[0]=="#title") {
+        if(_words.size()<1) {
+          a_out << "tools::rcsv::histo::read :"
+                << " syntax error in " << sout(line)
+                << std::endl;
+          return false;
+        }
+        if(_words.size()==1)  {
+          hdata.m_title.clear();
+        } else {
+          std::string::size_type pos = line.find(_words[0]);
+          pos += _words[0].size()+1;
+          hdata.m_title = line.substr(pos,line.size()-pos);
+        }
+      } else if(_words[0]=="#dimension") {
+        if(_words.size()!=2) {
+          a_out << "tools::rcsv::histo::read :"
+                << " syntax error in " << sout(line)
+                << std::endl;
+          return false;
+        }
+        to(_words[1],hdata.m_dimension);
+      } else if(_words[0]=="#annotation") {
+        if(_words.size()<2) {
+          a_out << "tools::rcsv::histo::read :"
+                << " syntax error in " << sout(line)
+                << std::endl;
+          return false;
+        }
+        if(_words.size()==2) {
+          hdata.m_annotations[_words[1]] = std::string();
+        } else {
+          std::string::size_type pos = line.find(_words[1]);
+          pos += _words[1].size()+1;
+          hdata.m_annotations[_words[1]] = line.substr(pos,line.size()-pos);
+        }
+      } else if(_words[0]=="#axis") {
+        if(_words.size()<2) {
+          a_out << "tools::rcsv::histo::read :"
+                << " syntax error in " << sout(line)
+                << std::endl;
+          return false;
+        }
+        if(_words[1]=="fixed") {
+          if(_words.size()!=5) {
+            a_out << "tools::rcsv::histo::read :"
+                  << " syntax error in " << sout(line)
+                  << std::endl;
+            return false;
+          }
+          unsigned int number_of_bins;
+          if(!to(_words[2],number_of_bins)) {
+            a_out << "tools::rcsv::histo::read :"
+                  << " syntax error in " << sout(line)
+                  << std::endl;
+            return false;
+          }
+          double minimum_value;
+          if(!to(_words[3],minimum_value)) {
+            a_out << "tools::rcsv::histo::read :"
+                  << " syntax error in " << sout(line)
+                  << std::endl;
+            return false;
+          }
+          double maximum_value;
+          if(!to(_words[4],maximum_value)) {
+            a_out << "tools::rcsv::histo::read :"
+                  << " syntax error in " << sout(line)
+                  << std::endl;
+            return false;
+          }
+          axis_t axis;
+          if(!axis.configure(number_of_bins,minimum_value,maximum_value)) {
+            a_out << "tools::rcsv::histo::read :"
+                  << " bad axis values in line " << sout(line)
+                  << std::endl;
+            return false;
+          }
+          hdata.m_axes.push_back(axis);
+        } else if(_words[1]=="edges") {
+          std::vector<double> edges;
+          double value;
+          for(unsigned int index=2;index<_words.size();index++) {
+            if(!to(_words[index],value)) {
+              a_out << "tools::rcsv::histo::read :"
+                    << " syntax error in " << sout(line)
+                    << std::endl;
+              return false;
+            }
+            edges.push_back(value);
+          }
+          axis_t axis;
+          if(!axis.configure(edges)) {
+            a_out << "tools::rcsv::histo::read :"
+                  << " bad axis values in line " << sout(line)
+                  << std::endl;
+            return false;
+          }
+          hdata.m_axes.push_back(axis);
+        } else {
+          a_out << "tools::rcsv::histo::read :"
+                << " syntax error in " << sout(line)
+                << std::endl;
+          return false;
+        }
+      } else if(_words[0]=="#bin_number") {
+        if(_words.size()!=2) {
+          a_out << "tools::rcsv::histo::read :"
+                << " syntax error in " << sout(line)
+                << std::endl;
+          return false;
+        }
+        to(_words[1],hdata.m_bin_number);
+      } else if(_words[0]=="#cut_v") {
+        if(_words.size()!=2) {
+          a_out << "tools::rcsv::histo::read :"
+                << " syntax error in " << sout(line)
+                << std::endl;
+          return false;
+        }
+        if(!to(_words[1],_cut_v)) {
+          a_out << "tools::rcsv::histo::read :"
+                << " syntax error in " << sout(line)
+                << std::endl;
+          return false;
+        }
+        is_profile = true;
+      } else if(_words[0]=="#min_v") {
+        if(_words.size()!=2) {
+          a_out << "tools::rcsv::histo::read :"
+                << " syntax error in " << sout(line)
+                << std::endl;
+          return false;
+        }
+        if(!to(_words[1],_min_v)) {
+          a_out << "tools::rcsv::histo::read :"
+                << " syntax error in " << sout(line)
+                << std::endl;
+          return false;
+        }
+      } else if(_words[0]=="#max_v") {
+        if(_words.size()!=2) {
+          a_out << "tools::rcsv::histo::read :"
+                << " syntax error in " << sout(line)
+                << std::endl;
+          return false;
+        }
+        if(!to(_words[1],_max_v)) {
+          a_out << "tools::rcsv::histo::read :"
+                << " syntax error in " << sout(line)
+                << std::endl;
+          return false;
+        }
+      } else {
+        a_out << "tools::rcsv::histo::read :"
+              << " syntax error in " << sout(line)
+              << std::endl;
+        return false;
+      }
+    }}
+
+    if(a_verbose) {
+      a_out << "class " << _class << std::endl;
+      a_out << "title " << hdata.m_title << std::endl;
+      tools_mforcit(std::string,std::string,hdata.m_annotations,it) {
+         a_out << "annotation " << (*it).first << " " << sout((*it).second) << std::endl;
+      }
+    }
+
+    if(!hdata.m_dimension) {
+      a_out << "tools::rcsv::histo::read :"
+            << " null dimension."
+            << std::endl;
+      return false;
+    }
+
+    // csv labels :
+    std::vector<std::string> labels;
+   {std::string line;
+    if(!read_line(m_reader,file_sz,line)) {
+      a_out << "tools::rcsv::histo::read :"
+            << " syntax error in " << sout(line)
+            << ". Can't read labels."
+            << std::endl;
+      return false;
+    }
+    if(a_verbose) a_out << "labels " << sout(line) << std::endl;
+    tools::words(line,",",false,labels);}
+
+    unsigned int valn = 3+2*hdata.m_dimension;
+
+    if(is_profile) valn += 2;
+    std::vector<double> _bin_Svw;
+    std::vector<double> _bin_Sv2w;
+
+    if(labels.size()!=valn) {
+      a_out << "tools::rcsv::histo::read :"
+            << " bad number of labels " << labels.size() << ". Expected " << valn << "."
+            << std::endl;
+      return false;
+    }
+
+    // csv data (bins) :
+   {std::vector<double> vals;
+    unsigned int nline = 0;
+    std::vector<double> bin_Sxw(hdata.m_dimension);
+    std::vector<double> bin_Sx2w(hdata.m_dimension);
+    while(read_data_line(m_reader,file_sz,labels.size(),vals)) {
+/*
+      for(unsigned int index=0;index<vals.size();index++) {
+        a_out << vals[index] << " ";
+      }
+      a_out << std::endl;
+*/
+      if(vals.size()!=valn) {
+         a_out << "tools::rcsv::histo::read :"
+               << " bad number of items in data line " << vals.size() << ". Expected " << valn << "."
+               << std::endl;
+         return false;
+      }
+      unsigned int ival = 0;
+      hdata.m_bin_entries.push_back(static_cast<unsigned int>(vals[ival++]));
+      hdata.m_bin_Sw.push_back(vals[ival++]);
+      hdata.m_bin_Sw2.push_back(vals[ival++]);
+      if(is_profile) {
+        _bin_Svw.push_back(vals[ival++]);
+        _bin_Sv2w.push_back(vals[ival++]);
+      }
+     {for(unsigned int iaxis=0;iaxis<hdata.m_dimension;iaxis++) {
+        bin_Sxw[iaxis] = vals[ival++];
+        bin_Sx2w[iaxis] = vals[ival++];
+      }}
+      hdata.m_bin_Sxw.push_back(bin_Sxw);
+      hdata.m_bin_Sx2w.push_back(bin_Sx2w);
+      nline++;
+    }
+    if(nline!=hdata.m_bin_number) {
+      a_out << "tools::rcsv::histo::read :"
+            << " bad data line number " << nline << ". Expected " << hdata.m_bin_number << "."
+            << std::endl;
+      return false;
+    }}
+
+    if(hdata.m_axes.size()!=hdata.m_dimension) {
+      a_out << "tools::rcsv::histo::read :"
+            << " inconsistent axes data."
+            << std::endl;
+      return false;
+    }
+
+    hdata.m_axes[0].m_offset = 1;
+   {for(unsigned int iaxis=1;iaxis<hdata.m_dimension;iaxis++) {
+      hdata.m_axes[iaxis].m_offset = hdata.m_axes[iaxis-1].m_offset * (hdata.m_axes[iaxis-1].bins()+2);
+    }}
+
+    hdata.update_fast_getters(); //important.
+
+    tools::histo::profile_data<double,unsigned int,unsigned int,double,double> pdata(hdata); //to be filled correctly.
+    if(is_profile) {
+      pdata.m_is_profile = true;
+      pdata.m_bin_Svw = _bin_Svw;
+      pdata.m_bin_Sv2w = _bin_Sv2w;
+      pdata.m_cut_v = _cut_v;
+      pdata.m_min_v = _min_v;
+      pdata.m_max_v = _max_v;
+    }
+
+    if(_class==tools::histo::h1d::s_class()) {
+      if(hdata.m_dimension!=1) {
+        a_out << "tools::rcsv::histo::read :"
+              << " inconsistent dimension data."
+              << std::endl;
+        return false;
+      }
+      tools::histo::h1d* h = new tools::histo::h1d("",10,0,1);
+      h->copy_from_data(hdata);
+      //if(a_verbose) h->hprint(a_out);
+      if(a_verbose) {
+        a_out << "h1d : " << h->title()
+              << ", all entries " << h->all_entries()
+              << ", entries " << h->entries()
+              << ", mean " << h->mean() << ", rms " << h->rms()
+              << std::endl;
+      }
+      a_class = _class;
+      a_obj = h;
+
+    } else if(_class==tools::histo::h2d::s_class()) {
+      if(hdata.m_dimension!=2) {
+        a_out << "tools::rcsv::histo::read :"
+              << " inconsistent dimension data."
+              << std::endl;
+        return false;
+      }
+      tools::histo::h2d* h = new tools::histo::h2d("",10,0,1,10,0,1);
+      h->copy_from_data(hdata);
+      //if(a_verbose) h->hprint(a_out);
+      if(a_verbose) {
+        a_out << "h2d : " << h->title()
+              << ", all entries " << h->all_entries()
+              << ", entries " << h->entries()
+              << ", mean_x " << h->mean_x() << ", rms_x " << h->rms_x()
+              << ", mean_y " << h->mean_y() << ", rms_y " << h->rms_y()
+              << std::endl;
+      }
+      a_class = _class;
+      a_obj = h;
+
+    } else if(_class==tools::histo::h3d::s_class()) {
+      if(hdata.m_dimension!=3) {
+        a_out << "tools::rcsv::histo::read :"
+              << " inconsistent dimension data."
+              << std::endl;
+        return false;
+      }
+      tools::histo::h3d* h = new tools::histo::h3d("",10,0,1,10,0,1,10,0,1);
+      h->copy_from_data(hdata);
+      //if(a_verbose) h->hprint(a_out);
+      if(a_verbose) {
+        a_out << "h3d : " << h->title()
+              << ", all entries " << h->all_entries()
+              << ", entries " << h->entries()
+              << ", mean_x " << h->mean_x() << ", rms_x " << h->rms_x()
+              << ", mean_y " << h->mean_y() << ", rms_y " << h->rms_y()
+              << ", mean_z " << h->mean_z() << ", rms_z " << h->rms_z()
+              << std::endl;
+      }
+      a_class = _class;
+      a_obj = h;
+
+    } else if(_class==tools::histo::p1d::s_class()) {
+      if(hdata.m_dimension!=1) {
+        a_out << "tools::rcsv::histo::read :"
+              << " inconsistent dimension data."
+              << std::endl;
+        return false;
+      }
+      tools::histo::p1d* h = new tools::histo::p1d("",10,0,1);
+      h->copy_from_data(pdata);
+      //if(a_verbose) h->hprint(a_out);
+      if(a_verbose) {
+        a_out << "p1d : " << h->title()
+              << ", all entries " << h->all_entries()
+              << ", entries " << h->entries()
+              << ", mean " << h->mean() << ", rms " << h->rms()
+              << std::endl;
+      }
+      a_class = _class;
+      a_obj = h;
+
+    } else if(_class==tools::histo::p2d::s_class()) {
+      if(hdata.m_dimension!=2) {
+        a_out << "tools::rcsv::histo::read :"
+              << " inconsistent dimension data."
+              << std::endl;
+        return false;
+      }
+      tools::histo::p2d* h = new tools::histo::p2d("",10,0,1,10,0,1);
+      h->copy_from_data(pdata);
+      //if(a_verbose) h->hprint(a_out);
+      if(a_verbose) {
+        a_out << "p2d : " << h->title()
+              << ", all entries " << h->all_entries()
+              << ", entries " << h->entries()
+              << ", mean_x " << h->mean_x() << ", rms_x " << h->rms_x()
+              << ", mean_y " << h->mean_y() << ", rms_y " << h->rms_y()
+              << std::endl;
+      }
+      a_class = _class;
+      a_obj = h;
+
+/*
+    } else if(_class==tools::histo::h1df::s_class()) {
+      if(hdata.m_dimension!=1) {
+        a_out << "tools::rcsv::histo::read :"
+              << " inconsistent dimension data."
+              << std::endl;
+        return false;
+      }
+      tools::histo::h1df* h = new tools::histo::h1df("",10,0,1);
+      h->copy_from_data(hdata);
+      //return h; //give ownership to caller.
+      if(a_verbose) h->hprint(a_out);
+*/
+
+    } else {
+      a_out << "tools::rcsv::histo::read :"
+            << " unknown class " << sout(_class)
+            << std::endl;
+      return false;
+    }
+
+    return true;
+  }
+protected:
+  static bool read_line(std::istream& a_reader,std::streampos a_sz,std::string& a_s){
+    a_s.clear();
+    char c;
+    while(true) {
+      if(a_reader.tellg()>=a_sz) {a_s.clear();return false;}
+      a_reader.get(c);
+      if(c==CR()) continue;
+      if(c==LF()) break; //eol.
+      a_s += c;
+    }
+    return true;
+  }
+
+  static bool read_header_line(std::istream& a_reader,std::streampos a_sz,std::string& a_s){
+    //we should be at bol.
+    //ret true = we had a commented line, false : a data line or nothing.
+    if(a_reader.tellg()>=a_sz) {a_s.clear();return false;}
+    char c;
+    a_reader.get(c);
+    a_reader.putback(c);
+    if(c!='#') {a_s.clear();return false;}
+    return read_line(a_reader,a_sz,a_s);
+  }
+
+  static bool _read(std::istream& a_reader,double& a_v) {
+    a_reader >> a_v;
+    if(a_reader.tellg()==std::streampos(-1)) {a_v = 0;return false;}
+    //std::cout << "debug : _read(double) " << a_v << std::endl;
+    return true;
+  }
+
+  static bool read_data_line(std::istream& a_reader,std::streampos a_sz,unsigned int a_number,std::vector<double>& a_vals) {
+    a_vals.clear();
+    for(unsigned int index=0;index<a_number;index++) {
+      double v;
+      if(!_read(a_reader,v)) return false;
+      a_vals.push_back(v);
+      if(index==(a_number-1)) { //read up to LF()
+        char c;
+        while(true){
+          if(a_reader.tellg()>=a_sz) break;
+          a_reader.get(c);
+          if(c==LF()) break;
+        }
+      } else { //read sep :
+        char sep;
+        a_reader.get(sep);
+      }
+    }
+    return true;
+  }
+protected:
+  std::istream& m_reader;
+};
+
+}}
+
+#endif

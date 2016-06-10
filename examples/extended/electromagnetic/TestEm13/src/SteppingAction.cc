@@ -26,20 +26,20 @@
 /// \file electromagnetic/TestEm13/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id: SteppingAction.cc 84207 2014-10-10 14:44:12Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
-#include "RunAction.hh"
+#include "Run.hh"
 
 #include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(RunAction* RuAct)
-:G4UserSteppingAction(),fRunAction(RuAct)
+SteppingAction::SteppingAction()
+:G4UserSteppingAction()
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,8 +53,10 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   G4StepPoint* endPoint = aStep->GetPostStepPoint();
   G4String procName = endPoint->GetProcessDefinedStep()->GetProcessName();
-
-  fRunAction->CountProcesses(procName);  
+  
+  Run* run = static_cast<Run*>(
+             G4RunManager::GetRunManager()->GetNonConstCurrentRun()); 
+  run->CountProcesses(procName);  
            
   // kill event after first interaction
   //

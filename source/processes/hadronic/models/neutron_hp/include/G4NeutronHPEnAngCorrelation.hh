@@ -37,14 +37,26 @@
 #include "G4NeutronHPProduct.hh"
 #include "G4ReactionProduct.hh"
 
+#include "G4Cache.hh"
+
 class G4NeutronHPEnAngCorrelation
 {
+
+   struct toBeCached {
+      G4ReactionProduct* theNeutron;
+      G4ReactionProduct* theTarget;
+      G4double theTotalMeanEnergy;
+      toBeCached() : theNeutron(NULL),theTarget(NULL), theTotalMeanEnergy(-1.0) {};
+   };
+
   public:
   G4NeutronHPEnAngCorrelation()
   {
     theProducts = 0;
     inCharge = false;
-    theTotalMeanEnergy = -1.;
+    toBeCached val;
+    fCache.Put( val );
+    fCache.Get().theTotalMeanEnergy = -1.;
   }
   ~G4NeutronHPEnAngCorrelation()
   {
@@ -68,14 +80,14 @@ class G4NeutronHPEnAngCorrelation
   
   inline void SetTarget(G4ReactionProduct & aTarget)
   {
-    theTarget = aTarget;
-    for(G4int i=0;i<nProducts;i++)theProducts[i].SetTarget(&theTarget);
+    fCache.Get().theTarget = &aTarget;
+    for(G4int i=0;i<nProducts;i++)theProducts[i].SetTarget(fCache.Get().theTarget);
   }
   
   inline void SetNeutron(G4ReactionProduct & aNeutron)
   {
-    theNeutron = aNeutron;
-    for(G4int i=0;i<nProducts;i++)theProducts[i].SetNeutron(&theNeutron);
+    fCache.Get().theNeutron = &aNeutron;
+    for(G4int i=0;i<nProducts;i++)theProducts[i].SetNeutron(fCache.Get().theNeutron);
   }
   
   inline G4bool InCharge()
@@ -88,7 +100,7 @@ class G4NeutronHPEnAngCorrelation
   G4double GetTotalMeanEnergy()
   {
      // cashed in 'sample' call
-    return theTotalMeanEnergy; 
+    return fCache.Get().theTotalMeanEnergy; 
   }
   
   private:
@@ -103,12 +115,14 @@ class G4NeutronHPEnAngCorrelation
     
   // Utility quantities
   
-  G4ReactionProduct theTarget;
-  G4ReactionProduct theNeutron;
+  //G4ReactionProduct theTarget;
+  //G4ReactionProduct theNeutron;
   
   // cashed values
   
-  G4double theTotalMeanEnergy;
+  //G4double theTotalMeanEnergy;
+  private:
+     G4Cache<toBeCached> fCache;
   
 };
 

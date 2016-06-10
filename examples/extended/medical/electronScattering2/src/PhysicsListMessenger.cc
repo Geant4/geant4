@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.cc 77657 2013-11-27 08:54:43Z gcosmo $
+// $Id: PhysicsListMessenger.cc 82042 2014-06-10 08:02:58Z gcosmo $
 //
 /// \file medical/electronScattering2/src/PhysicsListMessenger.cc
 /// \brief Implementation of the PhysicsListMessenger class
@@ -33,14 +33,12 @@
 #include "PhysicsList.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
 : G4UImessenger(), fPhysicsList(pPhys),
-  fPListCmd(0), fGammaCutCmd(0), fElectCutCmd(0), fProtoCutCmd(0), 
-  fAllCutCmd(0)
+  fPListCmd(0)
 {
     fPhysDir = new G4UIdirectory("/testem/phys/");
     fPhysDir->SetGuidance("physics list commands");
@@ -50,38 +48,6 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
     fPListCmd->SetParameterName("PList",false);
     fPListCmd->AvailableForStates(G4State_PreInit);
     fPListCmd->SetToBeBroadcasted(false);
-    
-    fGammaCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setGCut",this);
-    fGammaCutCmd->SetGuidance("Set gamma cut.");
-    fGammaCutCmd->SetParameterName("Gcut",false);
-    fGammaCutCmd->SetUnitCategory("Length");
-    fGammaCutCmd->SetRange("Gcut>0.0");
-    fGammaCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-    fGammaCutCmd->SetToBeBroadcasted(false);
-    
-    fElectCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setECut",this);
-    fElectCutCmd->SetGuidance("Set electron cut.");
-    fElectCutCmd->SetParameterName("Ecut",false);
-    fElectCutCmd->SetUnitCategory("Length");
-    fElectCutCmd->SetRange("Ecut>0.0");
-    fElectCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-    fElectCutCmd->SetToBeBroadcasted(false);
-    
-    fProtoCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setPCut",this);
-    fProtoCutCmd->SetGuidance("Set positron cut.");
-    fProtoCutCmd->SetParameterName("Pcut",false);
-    fProtoCutCmd->SetUnitCategory("Length");
-    fProtoCutCmd->SetRange("Pcut>0.0");
-    fProtoCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-    fProtoCutCmd->SetToBeBroadcasted(false);
-    
-    fAllCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setCut",this);
-    fAllCutCmd->SetGuidance("Set cut for all.");
-    fAllCutCmd->SetParameterName("cut",false);
-    fAllCutCmd->SetUnitCategory("Length");
-    fAllCutCmd->SetRange("cut>0.0");
-    fAllCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-    fAllCutCmd->SetToBeBroadcasted(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -89,10 +55,6 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
 PhysicsListMessenger::~PhysicsListMessenger()
 {
     delete fPListCmd;
-    delete fGammaCutCmd;
-    delete fElectCutCmd;
-    delete fProtoCutCmd;
-    delete fAllCutCmd;
     delete fPhysDir;
 }
 
@@ -102,27 +64,6 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
     if( command == fPListCmd )
     { fPhysicsList->AddPhysicsList(newValue);}
-    
-    if( command == fGammaCutCmd )
-    { fPhysicsList->SetCutForGamma(fGammaCutCmd->GetNewDoubleValue(newValue));}
-    
-    if( command == fElectCutCmd )
-    {
-    fPhysicsList->SetCutForElectron(fElectCutCmd->GetNewDoubleValue(newValue));
-    }
-    
-    if( command == fProtoCutCmd )
-    {
-    fPhysicsList->SetCutForPositron(fProtoCutCmd->GetNewDoubleValue(newValue));
-    }
-    
-    if( command == fAllCutCmd )
-    {
-        G4double cut = fAllCutCmd->GetNewDoubleValue(newValue);
-        fPhysicsList->SetCutForGamma(cut);
-        fPhysicsList->SetCutForElectron(cut);
-        fPhysicsList->SetCutForPositron(cut);
-    } 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorldScoringProcess.cc 68733 2013-04-05 09:45:28Z gcosmo $
+// $Id: G4ParallelWorldScoringProcess.cc 86967 2014-11-21 11:51:28Z gcosmo $
 //
 //
 
@@ -62,6 +62,10 @@ G4ParallelWorldScoringProcess(const G4String& processName,G4ProcessType theType)
 
   fTransportationManager = G4TransportationManager::GetTransportationManager();
   fPathFinder = G4PathFinder::GetInstance();
+
+  fGhostWorld = 0;
+  fGhostSafety = 0.;
+  fOnBoundary = false;
 
   if (verboseLevel>0)
   {

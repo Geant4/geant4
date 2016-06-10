@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundModel.hh 66785 2013-01-12 15:10:13Z gcosmo $
+// $Id: G4VPreCompoundModel.hh 80131 2014-04-02 14:35:47Z gcosmo $
 //
 
 #ifndef G4VPreCompoundModel_h
@@ -82,6 +82,9 @@ public:
           ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus) = 0;
   
   virtual G4ReactionProductVector* DeExcite(G4Fragment& aFragment) = 0;
+
+  virtual void DeExciteModelDescription(std::ostream& outFile) const ;
+
 
   inline void SetExcitationHandler(G4ExcitationHandler* ptr);
     

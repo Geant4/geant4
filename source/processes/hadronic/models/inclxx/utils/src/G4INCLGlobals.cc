@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -36,6 +37,9 @@
 
 #include "G4INCLGlobals.hh"
 #include "G4INCLParticle.hh"
+#ifdef HAVE_WORDEXP
+#include <wordexp.h>
+#endif
 
 namespace G4INCL {
   namespace Math {
@@ -49,6 +53,21 @@ namespace G4INCL {
       const G4double gcdfa4 = -1.453152027;
       const G4double gcdfa5 =  1.061405429;
       const G4double gcdfp  =  0.3275911;
+
+      // constants for the inverse Gaussian CDF approximation
+      const G4double igcdfc1 = 2.515517;
+      const G4double igcdfc2 = 0.802853;
+      const G4double igcdfc3 = 0.010328;
+      const G4double igcdfd1 = 1.432788;
+      const G4double igcdfd2 = 0.189269;
+      const G4double igcdfd3 = 0.001308;
+
+      G4double inverseGaussianCDFRational(const G4double t) {
+        // Abramowitz and Stegun formula 26.2.23.
+        // The absolute value of the error should be less than 4.5 e-4.
+        return t - ((igcdfc3*t + igcdfc2)*t + igcdfc1) /
+          (((igcdfd3*t + igcdfd2)*t + igcdfd1)*t + 1.0);
+      }
 
     }
 
@@ -67,6 +86,23 @@ namespace G4INCL {
 
     G4double gaussianCDF(const G4double x, const G4double x0, const G4double sigma) {
       return gaussianCDF((x-x0)/sigma);
+    }
+
+    G4double inverseGaussianCDF(G4double x) {
+      if (x < 0.5)
+        return -inverseGaussianCDFRational( std::sqrt(-2.0*std::log(x)) );
+      else
+        return inverseGaussianCDFRational( std::sqrt(-2.0*std::log(1.-x)) );
+    }
+
+    G4double arcSin(const G4double x) {
+// assert(x>-1.000001 && x<1.000001);
+      return ((x > 1.) ? 0. : ((x<-1.) ? pi : std::asin(x)));
+    }
+
+    G4double arcCos(const G4double x) {
+// assert(x>-1.000001 && x<1.000001);
+      return ((x > 1.) ? 0. : ((x<-1.) ? pi : std::acos(x)));
     }
   }
 
@@ -110,7 +146,43 @@ namespace G4INCL {
           cur_max_pos += to_len - from_len;
       }
     }
+
+    std::vector<std::string> tokenize(std::string const &str, const std::string &delimiters) {
+      size_t startPos = 0, endPos;
+      std::vector<std::string> tokens;
+      do {
+        endPos = str.find_first_of(delimiters, startPos);
+        std::string token = str.substr(startPos, endPos-startPos);
+        tokens.push_back(token);
+        startPos = str.find_first_not_of(delimiters, endPos);
+      } while(endPos!=std::string::npos);
+
+      return tokens;
+    }
+
+    G4bool isInteger(std::string const &str) {
+      const size_t pos = str.find_first_not_of("0123456789");
+      return (pos==std::string::npos);
+    }
+
+    std::string expandPath(std::string const &path) {
+#ifdef HAVE_WORDEXP
+      wordexp_t expansionResult;
+      std::string result;
+      G4int err = wordexp(path.c_str(), &expansionResult, WRDE_NOCMD);
+      if(err)
+        result = path;
+      else
+        result = expansionResult.we_wordv[0];
+      wordfree(&expansionResult);
+      return result;
+#else
+      // no-op if wordexp.h is not found
+      return path;
+#endif
+    }
   }
+
 #endif // INCLXX_IN_GEANT4_MODE
 
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIRelModel.hh 66592 2012-12-23 09:34:55Z vnivanch $
+// $Id: G4WentzelVIRelModel.hh 79067 2014-02-14 09:48:52Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -71,7 +71,7 @@ class G4WentzelVIRelModel : public G4VMscModel
 
 public:
 
-  G4WentzelVIRelModel(const G4String& nam = "WentzelVIUni");
+  G4WentzelVIRelModel(G4bool combined = true);
 
   virtual ~G4WentzelVIRelModel();
 
@@ -149,6 +149,7 @@ private:
   G4double lowEnergyLimit;
 
   // flags
+  G4bool   isCombined;
   G4bool   inside;
   G4bool   singleScatteringMode;
 };

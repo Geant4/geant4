@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreComptonModel.cc 76988 2013-11-20 09:54:40Z gcosmo $
+// $Id: G4LivermoreComptonModel.cc 84216 2014-10-10 14:51:51Z gcosmo $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -69,9 +69,7 @@ static const G4double ln10 = G4Log(10.);
 G4LivermoreComptonModel::G4LivermoreComptonModel(const G4ParticleDefinition*, 
 						 const G4String& nam)
   : G4VEmModel(nam),isInitialised(false)
-{
-  lowestEnergy = 10 * eV;
-
+{  
   verboseLevel=1 ;
   // Verbosity scale:
   // 0 = nothing 
@@ -100,6 +98,12 @@ G4LivermoreComptonModel::~G4LivermoreComptonModel()
     shellData = 0;
     delete profileData;
     profileData = 0;
+    for(G4int i=0; i<maxZ; ++i) {
+      if(data[i]) { 
+	delete data[i];
+	data[i] = 0;
+      }
+    }
   }
 }
 
@@ -244,7 +248,7 @@ G4LivermoreComptonModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
   }
   G4double cs = 0.0; 
 
-  if (GammaEnergy < lowestEnergy) { return 0.0; }
+  if (GammaEnergy < LowEnergyLimit()) { return 0.0; }
 
   G4int intZ = G4lrint(Z);
   if(intZ < 1 || intZ > maxZ) { return cs; } 
@@ -302,15 +306,11 @@ void G4LivermoreComptonModel::SampleSecondaries(
 	   << photonEnergy0/MeV << " in " << couple->GetMaterial()->GetName() 
 	   << G4endl;
   }
-  
-  // low-energy gamma is absorpted by this process
-  if (photonEnergy0 <= lowestEnergy) 
-    {
-      fParticleChange->ProposeTrackStatus(fStopAndKill);
-      fParticleChange->SetProposedKineticEnergy(0.);
-      fParticleChange->ProposeLocalEnergyDeposit(photonEnergy0);
-      return ;
-    }
+
+  // do nothing below the threshold
+  // should never get here because the XS is zero below the limit
+  if (photonEnergy0 < LowEnergyLimit())     
+    return ;    
 
   G4double e0m = photonEnergy0 / electron_mass_c2 ;
   G4ParticleMomentum photonDirection0 = aDynamicGamma->GetMomentumDirection();
@@ -508,12 +508,28 @@ void G4LivermoreComptonModel::SampleSecondaries(
       size_t nafter = fvect->size();
       if(nafter > nbefore) {
 	for (size_t i=nbefore; i<nafter; ++i) {
-	  bindingE -= ((*fvect)[i])->GetKineticEnergy();
+          //Check if there is enough residual energy 
+          if (bindingE >= ((*fvect)[i])->GetKineticEnergy())
+           {
+             //Ok, this is a valid secondary: keep it
+	     bindingE -= ((*fvect)[i])->GetKineticEnergy();
+           }
+          else
+           {
+ 	     //Invalid secondary: not enough energy to create it!
+ 	     //Keep its energy in the local deposit
+             delete (*fvect)[i]; 
+             (*fvect)[i]=0;
+           }
 	} 
       }
     }
   }
-  if(bindingE < 0.0) { bindingE = 0.0; }
+  //This should never happen
+  if(bindingE < 0.0) 
+     G4Exception("G4LivermoreComptonModel::SampleSecondaries()",
+                 "em2050",FatalException,"Negative local energy deposit");	 
+ 
   fParticleChange->ProposeLocalEnergyDeposit(bindingE);
 }
 

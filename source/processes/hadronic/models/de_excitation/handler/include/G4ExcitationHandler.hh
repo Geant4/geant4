@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4ExcitationHandler.hh 85443 2014-10-29 14:35:57Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -59,6 +59,7 @@ class G4VFermiBreakUp;
 class G4VEvaporation;
 class G4VEvaporationChannel;
 class G4FermiFragmentsPool;
+class G4NistManager;
 
 class G4ExcitationHandler 
 {
@@ -76,7 +77,7 @@ private:
   
 public:
 
-  G4ReactionProductVector * BreakItUp(const G4Fragment &theInitialState) const;
+  G4ReactionProductVector * BreakItUp(const G4Fragment &theInitialState);
 
   void SetEvaporation(G4VEvaporation* ptr);
 
@@ -90,6 +91,8 @@ public:
   void SetMaxAForFermiBreakUp(G4int anA);
   void SetMaxAandZForFermiBreakUp(G4int anA,G4int aZ);
   void SetMinEForMultiFrag(G4double anE);
+
+  void ModelDescription(std::ostream& outFile) const;
 
   // access methods
   inline G4VEvaporation* GetEvaporation();
@@ -122,11 +125,23 @@ private:
   G4double minExcitation;
 
   G4IonTable* theTableOfIons;
+  G4NistManager* nist;
 
   G4int OPTxs;
   G4bool useSICB;
   G4bool isEvapLocal;
-  
+
+  // list of fragments to store final result   
+  std::vector<G4Fragment*> theResults;
+
+  // list of fragments to store intermediate result   
+  std::vector<G4Fragment*> results;
+
+  // list of fragments to apply PhotonEvaporation 
+  std::vector<G4Fragment*> thePhotoEvapList;
+
+  // list of fragments to apply Evaporation or Fermi Break-Up
+  std::vector<G4Fragment*> theEvapList;          
 };
 
 inline G4VEvaporation* G4ExcitationHandler::GetEvaporation()

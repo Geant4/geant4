@@ -1,160 +1,167 @@
-More info on
+More info on http://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides
+                                 /ForApplicationDeveloper/html/ch02s07.html
+---------------------------------------------------------------------------
 
-	http://reat.space.qinetiq.com/gps
-
------------------------------------
-
-test1.g4mac
------------
+test01.mac
+----------
 point source, isotropic radiation, monoenergetic
 
-test2.g4mac
------------
+test02.mac
+----------
 square plane source, cosine-law radiation, linear energy
 
-test3.g4mac
------------
+test03.mac
+----------
 rectangular plane source, isotropic radiation, power-law energy
  
-test4.g4mac
------------
+test04.mac
+----------
 circular plane source, cosine-law radiation, exponential energy
 
-test5.g4mac
------------
+test05.mac
+----------
 elliptical plane source, isotropic radiation, bremsstrahlung energy
 
-test6.g4mac
------------
+test06.mac
+----------
 spherical surface source, isotropic radiation, black-body energy
 
-test7.g4mac
------------
+test07.mac
+----------
 cylindrical surface source, cosine-law radiation, Cosmic diffuse energy
 
-test8.g4mac
------------
+test08.mac
+----------
 elliptical surface source, isotropic radiation, linear energy
 
-test9.g4mac
------------
+test09.mac
+----------
 parallepiped surface source, isotropic radiation, linear energy
 
-test10.g4mac
-------------
+test10.mac
+----------
 spherical volume source, isotropic radiation, linear energy
 
-test11.g4mac
-------------
+test11.mac
+----------
 cylindrical volume source, isotropic radiation, power-law energy
 
-test12.g4mac
-------------
+test12.mac
+----------
 elliptical volume source, isotropic radiation, power-law energy
 
-test13.g4mac
-------------
+test13.mac
+----------
 parallelepiped volume source, cosine-law radiation, exponential energy
 
-test14.g4mac
-------------
+test14.mac
+----------
 rotated circular plane source, isotropic radiation, exponential energy
 
-test15.g4mac
-------------
+test15.mac
+----------
 rotated surface cylinder source, isotropic radiation, bremsstrahlung energy
 
-test16.g4mac
-------------
+test16.mac
+----------
 rotated parallelepiped volume source, isotropic radiation, bremsstrahlung energy
 
-test17.g4mac
-------------
+test17.mac
+----------
 confined spherical volume source, isotropic radiation, exponential energy
 
-test18.g4mac
-------------
+test18.mac
+----------
 square plane source, cosine-law radiation, user-defined energy histogram
 
-test19.g4mac
-------------
-square plane source, cosine-law radiation, arbitrary point-wise energy function with linear interpolation.
+test19.mac
+----------
+square plane source, cosine-law radiation, arbitrary point-wise energy function
+with linear interpolation.
 
-test20.g4mac
-------------
-square plane source, cosine-law radiation, arbitrary point-wise energy function with logarithmic interpolation.
+test20.mac
+----------
+square plane source, cosine-law radiation, arbitrary point-wise energy function
+with logarithmic interpolation.
 
-test21.g4mac
-------------
-square plane source, cosine-law radiation, arbitrary point-wise energy function with exponential interpolation.
+test21.mac
+----------
+square plane source, cosine-law radiation, arbitrary point-wise energy function
+with exponential interpolation.
 
-test22.g4mac
-------------
-square plane source, cosine-law radiation, arbitrary point-wise energy function with spline interpolation.
+test22.mac
+----------
+square plane source, cosine-law radiation, arbitrary point-wise energy function
+with spline interpolation.
 
-test23.g4mac
-------------
-square plane source with x and y biasing, user-defined theta and phi distributions, user-defined EPN energy distribution.
+test23.mac
+----------
+square plane source with x and y biasing, user-defined theta and phi 
+distributions, user-defined EPN energy distribution.
 
-test24.g4mac
-------------
-spherical volume source with z biasing, isotropic radiation with theta and phi biasing, arbitrary point-wise energy function with linear interpolation.
+test24.mac
+----------
+spherical volume source with z biasing, isotropic radiation with theta and phi
+biasing, arbitrary point-wise energy function with linear interpolation.
 
-test25.g4mac
-------------
-spherical volume source, isotropic radiation with theta and phi biasing, user-defined energy histogram
+test25.mac
+----------
+spherical volume source, isotropic radiation with theta and phi biasing,
+user-defined energy histogram
 
-test26.g4mac
-------------
-square plane source, cosine-law radiation with lower and upper theta and phi limits, linear energy with biasing.
+test26.mac
+----------
+square plane source, cosine-law radiation with lower and upper theta and phi 
+limits, linear energy with biasing.
 
-test27.g4mac
-------------
-square plane source, user-defined theta, arbitrary point-wise energy function with linear interpolation.
+test27.mac
+----------
+square plane source, user-defined theta, arbitrary point-wise energy function 
+with linear interpolation.
 
-test28.g4mac
-------------
+test28.mac
+----------
 particle=ion, square plane source, isotropic radiation, monoenergetic energy.
 
-test29.g4mac
-------------
+test29.mac
+----------
 plane source of type annulus, cosine-law radiation, exponential energy
 
-test30.g4mac
-------------
+test30.mac
+----------
 rotated 1d beam source, Gaussian beam energy 
 
-test31.g4mac
-------------
+test31.mac
+----------
 two-beam incidence, i.e. multiple sources with relative intensities.
  
-test32.g4mac
-------------
+test32.mac
+----------
 Sphere volume source, with biasing in theta and phi
 Isotropic directional distribution with theta and phi biasing
 
-test33.g4mac
-------------
+test33.mac
+----------
 Focused angular distribution.
 
-test34.g4mac
-------------
+test34.mac
+----------
 Two simultaneous sources, both fired at the same time. 
 
-test35.g4mac
-------------
+test35.mac
+----------
 automatic biasing of the energy distribution sampling, original in power-law
 
-test36.g4mac
-------------
-automatic biasing of the energy distribution sampling, original in arbitrary data points
+test36.mac
+----------
+automatic biasing of the energy distribution sampling, original in arbitrary 
+data points
 
-test37.g4mac
-------------
-automatic biasing of the energy distribution sampling, original in exponetial form
+test37.mac
+----------
+automatic biasing of the energy distribution sampling, original in exponetial 
+form
 
-test38.g4mac
-------------
-arbitrary energy distribution, defined using the ascii (spectrum.dat) file input. 
-
-
+test38.mac
+----------
+arbitrary energy distribution, defined using the ascii input file: spectrum.dat

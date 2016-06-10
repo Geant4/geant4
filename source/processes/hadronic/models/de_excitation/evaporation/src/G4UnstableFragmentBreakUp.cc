@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UnstableFragmentBreakUp.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4UnstableFragmentBreakUp.cc 85443 2014-10-29 14:35:57Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -75,6 +75,14 @@ G4FragmentVector* G4UnstableFragmentBreakUp::BreakUpFragment(G4Fragment* nucleus
 {
   //G4cout << "G4UnstableFragmentBreakUp::BreakUpFragment" << G4endl;
   G4FragmentVector * theResult = new G4FragmentVector();
+  BreakUpChain(theResult, nucleus);
+  return theResult;
+}
+
+G4bool G4UnstableFragmentBreakUp::BreakUpChain(G4FragmentVector* theResult, 
+					       G4Fragment* nucleus)
+{
+  //G4cout << "G4UnstableFragmentBreakUp::BreakUpChain" << G4endl;
 
   G4int Z = nucleus->GetZ_asInt();
   G4int A = nucleus->GetA_asInt();
@@ -136,13 +144,10 @@ G4FragmentVector* G4UnstableFragmentBreakUp::BreakUpFragment(G4Fragment* nucleus
     A  -= Afr[index];
   }
 
-  // updated fragment
-  if( theResult->size() > 0) {
-    nucleus->SetZandA_asInt(Z, A);
-    nucleus->SetMomentum(lv);
-  }
-
-  return theResult;
+  nucleus->SetZandA_asInt(Z, A);
+  nucleus->SetMomentum(lv);
+  theResult->push_back(nucleus);
+  return false;
 }
 
 G4FragmentVector* G4UnstableFragmentBreakUp::BreakUp(const G4Fragment&)

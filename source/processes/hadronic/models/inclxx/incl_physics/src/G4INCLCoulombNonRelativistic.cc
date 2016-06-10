@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -109,8 +110,8 @@ namespace G4INCL {
           G4double uTemp = (1.-b0/transmissionRadius) * std::sin(thr) +
             b0/transmissionRadius;
           if(uTemp>tcos) uTemp=tcos;
-          const G4double thd = std::acos(cosTheta)-Math::piOverTwo + thr +
-            std::acos(uTemp);
+          const G4double thd = Math::arcCos(cosTheta)-Math::piOverTwo + thr +
+            Math::arcCos(uTemp);
           const G4double c1 = std::sin(thd)*cosTheta/sinTheta + std::cos(thd);
           const G4double c2 = -p*std::sin(thd)/(r*sinTheta);
           const ThreeVector newMomentum = momentum*c1 + position*c2;
@@ -142,7 +143,9 @@ namespace G4INCL {
     // Some useful variables
     const G4double theMinimumDistance = minimumDistance(p, n);
     // deltaTheta2 = (pi - Rutherford scattering angle)/2
-    const G4double deltaTheta2 = std::atan(2.*impactParameter/theMinimumDistance);
+    G4double deltaTheta2 = std::atan(2.*impactParameter/theMinimumDistance);
+    if(deltaTheta2<0.)
+      deltaTheta2 += Math::pi;
     const G4double eccentricity = 1./std::cos(deltaTheta2);
 
     G4double newImpactParameter, alpha; // Parameters that must be determined by the deviation
@@ -162,12 +165,12 @@ namespace G4INCL {
       // Compute the entrance angle
       const G4double argument = -(1. + 2.*impactParameter*impactParameter/(radius*theMinimumDistance))
         / eccentricity;
-// assert(std::abs(argument)<=1.);
-      const G4double thetaIn = Math::twoPi - std::acos(argument) - deltaTheta2;
+      const G4double thetaIn = Math::twoPi - Math::arcCos(argument) - deltaTheta2;
 
       // Velocity angle at the entrance point
       alpha = std::atan((1+std::cos(thetaIn))
-        / (std::sqrt(eccentricity*eccentricity-1.) - std::sin(thetaIn)));
+        / (std::sqrt(eccentricity*eccentricity-1.) - std::sin(thetaIn)))
+        * Math::sign(theMinimumDistance);
       // New impact parameter
       newImpactParameter = radius * std::sin(thetaIn - alpha);
     }
@@ -184,7 +187,7 @@ namespace G4INCL {
     // Apply the rotation
     if(axisLength>1E-20) {
       rotationAxis /= axisLength;
-      p->rotate(alpha, rotationAxis);
+      p->rotatePositionAndMomentum(alpha, rotationAxis);
     }
 
     return true;
@@ -218,11 +221,11 @@ namespace G4INCL {
       }
       if(radius<=0.) {
         radius = ParticleTable::getLargestNuclearRadius(Ap,Zp) + ParticleTable::getLargestNuclearRadius(At, Zt);
-        INCL_ERROR("Negative Coulomb radius! Using the sum of nuclear radii = " << radius << std::endl);
+        INCL_ERROR("Negative Coulomb radius! Using the sum of nuclear radii = " << radius << '\n');
       }
       INCL_DEBUG("Coulomb radius for particle "
             << ParticleTable::getShortName(p) << " in nucleus A=" << At <<
-            ", Z=" << Zt << ": " << radius << std::endl);
+            ", Z=" << Zt << ": " << radius << '\n');
       return radius;
     } else
       return n->getUniverseRadius();

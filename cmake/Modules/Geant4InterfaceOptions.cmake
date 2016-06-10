@@ -203,6 +203,7 @@ if(UNIX)
         /usr/openwin/include
         /usr/openwin/share/include
         /opt/graphics/OpenGL/include
+        /opt/X11/include
         )
 
     set(X11_LIB_SEARCH_PATH
@@ -210,6 +211,7 @@ if(UNIX)
         /usr/X11R6/lib
         /usr/X11R7/lib
         /usr/openwin/lib
+        /opt/X11/lib
         )
 
     find_path(X11_Xmu_INCLUDE_PATH X11/Xmu/Xmu.h ${X11_INC_SEARCH_PATH})
@@ -252,17 +254,17 @@ if(UNIX)
       set(CMAKE_FIND_FRAMEWORK NEVER)
 
       find_path(OPENGL_X11_INCLUDE_DIR GL/gl.h
-        PATHS /usr/X11R6/include
+        PATHS /usr/X11R6/include /opt/X11/include
         NO_DEFAULT_PATH
         )
 
       find_library(OPENGL_X11_gl_LIBRARY GL
-        PATHS /usr/X11R6/lib
+        PATHS /usr/X11R6/lib /opt/X11/lib
         NO_DEFAULT_PATH
         )
 
       find_library(OPENGL_X11_glu_LIBRARY GLU
-        PATHS /usr/X11R6/lib
+        PATHS /usr/X11R6/lib /opt/X11/lib
         NO_DEFAULT_PATH
         )
 

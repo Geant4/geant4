@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh 73008 2013-08-15 08:43:13Z gcosmo $
+/// \file electromagnetic/TestEm1/include/HistoManager.hh
+/// \brief Definition of the HistoManager class
 //
+// $Id: HistoManager.hh 82762 2014-07-08 14:21:21Z gcosmo $
+// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -33,80 +36,21 @@
 
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-namespace AIDA {
- class IAnalysisFactory;
- class ITree;
- class IHistogram1D;
- class ITuple;
-} 
-
-class HistoMessenger;
-
-  const G4int MaxHisto = 6; const G4int MaxNtupl = 2;
+#include "g4root.hh"
+////#include "g4xml.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class HistoManager
 {
   public:
-  
-    HistoManager();
-   ~HistoManager();
-   
-    void SetFileName   (const G4String& name) { fileName[0] = name;};
-    void SetFileType   (const G4String& name) { fileType    = name;};
-    void SetFileOption (const G4String& name) { fileOption  = name;};        
-    void book();
-    void save();
-    void SetHisto (G4int,G4int,G4double,G4double,const G4String& unit="none");  
-    void FillHisto(G4int id, G4double bin, G4double weight = 1.0);
-    void Normalize(G4int id, G4double fac);    
-    void RemoveHisto(G4int);   
-    void PrintHisto (G4int);
-    
-    void SetNtuple (G4int);      
-    void FillNtuple(G4int id, G4int column, G4double value);
-    void AddRowNtuple(G4int id);
-                
-    G4bool    HistoExist  (G4int id) {return exist[id];}    
-    G4double  GetHistoUnit(G4int id) {return Unit[id];}
-    G4double  GetBinWidth (G4int id) {return Width[id];}    
-    G4String  GetFileName ()         {return fileName[0];}
-        
-  private:
-  
-    G4String                 fileName[2];
-    G4String                 fileType;
-    G4String                 fileOption;
-#ifdef G4ANALYSIS_USE
-    G4bool                   factoryOn;
-    AIDA::IAnalysisFactory*  af;
-    AIDA::ITree*             tree;
-#endif
-    
-    AIDA::IHistogram1D*      histo[MaxHisto];    
-    G4bool                   exist[MaxHisto];
-    G4String                 Label[MaxHisto];
-    G4String                 Title[MaxHisto];
-    G4int                    Nbins[MaxHisto];
-    G4double                 Vmin [MaxHisto];
-    G4double                 Vmax [MaxHisto];        
-    G4double                 Unit [MaxHisto];
-    G4double                 Width[MaxHisto];
-    G4bool                   ascii[MaxHisto];
-        
-    AIDA::ITuple*      	        ntupl[MaxNtupl];    
-    G4bool                    existNt[MaxNtupl];
-    G4String                  LabelNt[MaxNtupl];
-    G4String                  TitleNt[MaxNtupl];
-    G4String                 ColumnNt[MaxNtupl];    
+   HistoManager();
+  ~HistoManager();
 
-    HistoMessenger*          histoMessenger;
-    
   private:
-    void saveAscii();         
+    void Book();
+
+    G4String fFileName;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

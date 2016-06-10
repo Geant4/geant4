@@ -14,6 +14,28 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+29/11/14 I. Hrivnacova
+- Use G4endl instead of \n in G4cout;
+  this makes each new line in the output on threads preceded with
+  G4WTN >
+
+06/11/14 I. Hrivnacova
+- Finalized modifications in previous tag 02, 03):
+  - Removed G4UI_USE/G4VIS_USE tests and init.mac macro (not needed)
+  - Moved G4UIExecutive at the beginning of main() in all examples
+  - Perform run initialization in macros instead of main()
+
+04/11/14 L. Garnier (exampleB4-V10-00-02 - exampleB4-V10-00-03)
+- Remove old G4UI_USE/G4VIS_USE
+- Move G4UIExecutive at the beginning of main()
+- Fix a problem bad design when calling .mac
+
+13/08/14 mma (exampleB4-V10-00-01)
+- update README and .README again
+
+11/08/14 mma (exampleB4-V10-00-00)
+- Restaure drawing in README and .README
 
 02 December 2013 Ivana Hrivnacova 
 - Fixed gui.mac:

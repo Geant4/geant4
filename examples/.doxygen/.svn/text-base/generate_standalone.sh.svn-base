@@ -50,7 +50,7 @@ for DIR in analysis/shared analysis/AnaEx01 analysis/AnaEx02 analysis/AnaEx03 el
 done  
 
 # process examples in third level directory in extended
-for DIR in parallel/TopC/ParN02  parallel/TopC/ParN04; do
+for DIR in parallel/TopC/ParN02  parallel/TopC/ParN04 medical/dna/chem1 medical/dna/chem2 medical/dna/chem3 medical/dna/dnaphysics medical/dna/microdosimetry medical/dna/pdb4dna medical/dna/wholeNuclearDNA; do
   generate ${DIR} ${BACK_PATH3}
 done  
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizationMessenger.cc 68046 2013-03-13 14:31:38Z gcosmo $
+// $Id: G4PolarizationMessenger.cc 81375 2014-05-27 13:08:40Z gcosmo $
 //
 //
 // GEANT4 Class file
@@ -76,7 +76,6 @@ G4PolarizationMessenger::G4PolarizationMessenger(G4PolarizationManager * polMgr)
   optActivateCmd->SetParameterName("flag",true);
   optActivateCmd->SetDefaultValue(true);
 
-
   volumeDirectory = new G4UIdirectory("/polarization/volume/");
   volumeDirectory->SetGuidance("Status control commands of registered polarized logical volumes.");
 
@@ -111,13 +110,23 @@ G4PolarizationMessenger::G4PolarizationMessenger(G4PolarizationManager * polMgr)
   testPolarizationTransformationCmd->SetGuidance("checks definition of particle reference frame and corresponding translation routines"); 
   testPolarizationTransformationCmd->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);
 
-
-
+  testInteractionFrameCmd = new G4UIcmdWithoutParameter("/polarization/test/interactionFrame",this);
+  testInteractionFrameCmd->SetGuidance("checks definition of interaction frame"); 
+  testInteractionFrameCmd->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);
 }
 
 G4PolarizationMessenger::~G4PolarizationMessenger()
 {
   delete verboseCmd;
+  delete testInteractionFrameCmd;
+  delete testPolarizationTransformationCmd;
+  delete testDirectory;
+  delete setPolarizationCmd;
+  delete printVolumeListCmd;
+  delete volumeDirectory;
+  delete optActivateCmd;
+  delete managerDirectory;
+  delete polarizationDirectory;
 }
 
 void G4PolarizationMessenger::SetNewValue(G4UIcommand * command,G4String newValue)

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedSigmaConstructor.cc 72955 2013-08-14 14:23:14Z gcosmo $
+// $Id: G4ExcitedSigmaConstructor.cc 79342 2014-02-24 11:42:42Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -582,7 +582,7 @@ G4double G4ExcitedSigmaConstructor::GetWidth(G4int iState, G4int iso3)
 {
   G4double fw=width[iState];
   if (iState == 0 ) {
-    if (iso3== +2)       fw = 35.8*MeV;  // sigma+
+    if (iso3== +2)       fw = 36.0*MeV;  // sigma+
     else if (iso3== -2)  fw = 39.4*MeV;  // sigma-
   }
   return fw;

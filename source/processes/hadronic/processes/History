@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 69176 2013-04-22 06:51:19Z gcosmo $
+$Id: History 86393 2014-11-10 16:34:27Z gcosmo $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -15,6 +15,46 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+10 November 2014 Vladimir Ivanchenko (hadr-proc-V10-00-06)
+--------------------------------------------------
+- G4HadronElasticProcess - added low-mass difrection option
+
+07 November 2014 Tatsumi Koi (hadr-proc-V10-00-05)
+--------------------------------------------------
+- Add G4He3InelasticProcess
+
+05 November 2014 Peter Gumplinger (hadr-proc-V10-00-04)
+-------------------------------------------------------
+- fix Coverity error in G4UCNBoundaryProcess.cc
+
+09 October 2014 Peter Gumplinger (hadr-proc-V10-00-03)
+------------------------------------------------------
+- make method 'High' inline in G4UCNBoundaryProcess
+- SetMRMaxProbability and SetMRMaxTransProbability during simulation
+
+01 August 2014 Alberto Ribon (hadr-proc-V10-00-02)
+--------------------------------------------------
+- G4HadronElasticProcess : replaced the old method of G4EnergyRangeManager
+  (still there but deprecated) with the new one (which uses 
+  G4HadronicInteraction::IsApplicable). 
+
+27 June 2014 Peter Gumplinger (hadr-proc-V10-00-01)
+---------------------------------------------------
+- fix bug in call to Reflectivity in MRreflectHigh:
+  (1) the arguments were wrong/reversed - Reflectivity(Energy, FermiPot)
+      should read Reflectivity(FermiPot,Energy)
+  (2) but the 2nd argument should also be Enormal instead of total kin. Energy
+- fix Coverity error uninitilized non-static class members in
+  G4UCNBoundaryProcess
+- make/provide public methods in G4UCNBoundaryProcess for unit-testing of
+  the MR model
+
+06 June 2014 Peter Gumplinger (hadr-proc-V10-00-00)
+- add G4UCNLoss, G4UCNAbsorption, G4UCNMultiScattering and
+  G4UCNBoundaryProcess with G4UCNBoundaryProcessMessenger as well as
+  G4UCNProcessSubType and add new dependencies to GNUmakefile and
+  CMakeLists
      
 19 April 2013 Michel Maire (hadr-proc-V09-06-01)
 ------------------------------------------------

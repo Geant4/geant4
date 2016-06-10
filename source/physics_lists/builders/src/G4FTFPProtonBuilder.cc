@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFPProtonBuilder.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4FTFPProtonBuilder.cc 81935 2014-06-06 15:41:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -56,8 +56,7 @@ G4FTFPProtonBuilder(G4bool quasiElastic)
   theStringDecay = new G4ExcitedStringDecay(theLund = new G4LundStringFragmentation);
   theStringModel->SetFragmentationModel(theStringDecay);
 
-  thePreEquilib = new G4PreCompoundModel(theHandler = new G4ExcitationHandler);
-  theCascade = new G4GeneratorPrecompoundInterface(thePreEquilib);
+  theCascade = new G4GeneratorPrecompoundInterface();
 
   theModel->SetHighEnergyGenerator(theStringModel);
   if (quasiElastic)
@@ -87,10 +86,7 @@ G4FTFPProtonBuilder::
 {
   delete theStringDecay;
   delete theStringModel;
-  delete theModel;
-  delete theCascade;
   if ( theQuasiElastic ) delete theQuasiElastic;
-  //delete theHandler;
   delete theLund;
 }
 

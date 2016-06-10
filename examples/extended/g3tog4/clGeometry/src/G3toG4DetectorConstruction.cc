@@ -27,7 +27,7 @@
 /// \brief Implementation of the G3toG4DetectorConstruction class
 //
 //
-// $Id$
+// $Id: G3toG4DetectorConstruction.cc 84605 2014-10-17 07:49:11Z gcosmo $
 //
 //--------------------------------------------------------------------------
 // G3toG4DetectorConstruction. Most the work is Done in
@@ -51,7 +51,7 @@ G3toG4DetectorConstruction::G3toG4DetectorConstruction(G4String inFile)
   : G4VUserDetectorConstruction(),
     fInFile(inFile)
 {
-  G4cout << "Instantiated G3toG4DetectorConstruction using call list file \""
+  G4cout << "Instantiated G3toG4DetectorConstruction using call list file \"" 
          << fInFile << "\"" << G4endl;
 }
 

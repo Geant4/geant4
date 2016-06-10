@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc 69711 2013-05-13 09:22:17Z gcosmo $
+// $Id: G4PropagatorInField.icc 81577 2014-06-03 10:13:36Z gcosmo $
 //
 // 
 // ------------------------------------------------------------------------
@@ -250,7 +250,12 @@ inline
 void G4PropagatorInField::
 SetIntersectionLocator( G4VIntersectionLocator *pIntLoc )
 {
-  if(pIntLoc)  { fIntersectionLocator= pIntLoc; }
+  if(pIntLoc)  { 
+     fIntersectionLocator= pIntLoc; 
+
+     // Ensure that the Intersection Locator uses the correct Navigator
+     pIntLoc->SetNavigatorFor( fNavigator ); 
+  }
 }
 
 inline
@@ -274,3 +279,31 @@ G4bool G4PropagatorInField::IntersectChord( const G4ThreeVector&  StartPointA,
                           LinearStepLength,IntersectionPoint);
 }
 
+inline G4EquationOfMotion*   G4PropagatorInField::GetCurrentEquationOfMotion()
+{
+  G4EquationOfMotion*    equationOfMotion = 0; 
+
+  // equationOfMotion = 
+  //     (fFieldPropagator->GetChordFinder()->GetIntegrationDriver()->GetStepper())
+  //      ->GetEquationOfMotion();
+  
+  // Consolidate into auxiliary method G4EquationOfMotion* GetEquationOfMotion() 
+  G4MagIntegratorStepper*  pStepper= 0;
+  
+  G4ChordFinder*    pChordFinder= this->GetChordFinder();
+  if( pChordFinder ) 
+  {
+     G4MagInt_Driver*  pIntDriver= 0; 
+     
+     pIntDriver= pChordFinder->GetIntegrationDriver(); 
+     if( pIntDriver )
+     {
+        pStepper= pIntDriver->GetStepper(); 
+     }
+     if( pStepper )
+     {
+        equationOfMotion= pStepper->GetEquationOfMotion();
+     }
+  }
+  return equationOfMotion;
+}

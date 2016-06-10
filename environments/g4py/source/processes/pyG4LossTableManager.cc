@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4LossTableManager.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: pyG4LossTableManager.cc 86749 2014-11-17 15:03:05Z gcosmo $
 // ====================================================================
 //   pyG4LossTableManager.cc
 //
@@ -47,8 +47,6 @@ void export_G4LossTableManager()
     .staticmethod("Instance")
 
     // internally used methods are limmitted to be exposed...
-
-    // ----
     .def("SetLossFluctuations",  &G4LossTableManager::SetLossFluctuations)
     .def("SetSubCutoff",         &G4LossTableManager::SetSubCutoff)
     .def("SetIntegral",          &G4LossTableManager::SetIntegral)
@@ -56,55 +54,14 @@ void export_G4LossTableManager()
     .def("SetMinSubRange",       &G4LossTableManager::SetMinSubRange)
     .def("SetMinEnergy",         &G4LossTableManager::SetMinEnergy)
     .def("SetMaxEnergy",         &G4LossTableManager::SetMaxEnergy)
-
-#if G4VERSION_NUMBER >= 810
     .def("SetMaxEnergyForCSDARange", 
          &G4LossTableManager::SetMaxEnergyForCSDARange)
-#else
-    .def("SetMaxEnergyForPreciseRange", 
-         &G4LossTableManager::SetMaxEnergyForPreciseRange)
-#endif
-
     .def("SetMaxEnergyForMuons", &G4LossTableManager::SetMaxEnergyForMuons)
-
-#if G4VERSION_NUMBER >= 810
     .def("SetStepFunction",      &G4LossTableManager::SetStepFunction)
     .def("SetBuildCSDARange",    &G4LossTableManager::SetBuildCSDARange)
-    .def("SetLPMFlag",           &G4LossTableManager::SetLPMFlag)
-    .def("SetBremsstrahlungTh",  &G4LossTableManager::SetBremsstrahlungTh)
-#else
-    .def("SetStepLimits",        &G4LossTableManager::SetStepLimits)
-    .def("SetBuildPreciseRange", &G4LossTableManager::SetBuildPreciseRange)
-#endif
     .def("SetVerbose",           &G4LossTableManager::SetVerbose)
-
-    // ---
-#if G4VERSION_NUMBER >= 810
     .def("BuildCSDARange",       &G4LossTableManager::BuildCSDARange)
-    .def("LPMFlag",              &G4LossTableManager::LPMFlag)
-    .def("BremsstrahlungTh",     &G4LossTableManager::BremsstrahlungTh)
-
-#if G4VERSION_NUMBER <= 830
-    .def("SetMscStepLimitation", &G4LossTableManager::SetMscStepLimitation)
-    .def("MscFlag",              &G4LossTableManager::MscFlag)
-    .def("FacRange",             &G4LossTableManager::FacRange)
-#endif
-
-#else
-    .def("BuildPreciseRange",    &G4LossTableManager::BuildPreciseRange)
-#endif
-
-    // ---
-#if G4VERSION_NUMBER == 830
-    .def("SetMscLateralDisplacement", 
-         &G4LossTableManager::SetMscLateralDisplacement)
-    .def("SetSkin",              &G4LossTableManager::SetSkin)
-#endif
-
-#if G4VERSION_NUMBER >= 830
     .def("SetLinearLossLimit",   &G4LossTableManager::SetLinearLossLimit)
-#endif
-
     ;
 
 }

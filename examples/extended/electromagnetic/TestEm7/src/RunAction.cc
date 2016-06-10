@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm7/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 72236 2013-07-12 08:38:55Z gcosmo $
+// $Id: RunAction.cc 82280 2014-06-13 14:45:31Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -201,7 +201,7 @@ void RunAction::BookHisto()
 
   // Define histograms start values
   const G4int kMaxHisto = 4;
-  const G4String id[] = { "0", "1", "2", "3" };
+  const G4String id[] = { "h0", "h1", "h2", "h3" };
   const G4String title[] = 
                 { "dummy",                                      //0
                   "Edep (MeV/mm) along absorber ",              //1

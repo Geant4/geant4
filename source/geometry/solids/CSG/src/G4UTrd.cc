@@ -101,3 +101,12 @@ void G4UTrd::ComputeDimensions(      G4VPVParameterisation* p,
 {
   p->ComputeDimensions(*(G4Trd*)this,n,pRep);
 }
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+
+G4VSolid* G4UTrd::Clone() const
+{
+  return new G4UTrd(*this);
+}

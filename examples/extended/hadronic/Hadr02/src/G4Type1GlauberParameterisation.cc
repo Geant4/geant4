@@ -36,7 +36,7 @@
 /// \file hadronic/Hadr02/src/G4Type1GlauberParameterisation.cc
 /// \brief Implementation of the G4Type1GlauberParameterisation class
 //
-// $Id: G4Type1GlauberParameterisation.cc 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: G4Type1GlauberParameterisation.cc 81932 2014-06-06 15:39:45Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -184,7 +184,7 @@ G4double G4Type1GlauberParameterisation::GetFitParameters
     for (G4int i = pt2; i<pt3; i++) {
       G4double f  = bsite[i];
       G4double B  = p[2] * std::pow(f,p[3]) / 
-	std::pow((1.0-std::pow(f,GAMMA)),EXPON);
+        std::pow((1.0-std::pow(f,GAMMA)),EXPON);
       G4double epsilon = std::abs((ib[i]-B)/ib[i]);
       if (epsilon > DELTA) DELTA = epsilon;
     }
@@ -223,7 +223,7 @@ G4double G4Type1GlauberParameterisation::GetFitParameters
 //
 G4double 
 G4Type1GlauberParameterisation::GetParameterisedValueN(const G4double f,
-						       const G4double ppn) const
+                                                       const G4double ppn) const
 {
   G4int ig = 0;
   if (ppn < 1.0E-10) {
@@ -259,7 +259,7 @@ G4Type1GlauberParameterisation::GetParameterisedValueN(const G4double f,
 //
 G4double 
 G4Type1GlauberParameterisation::GetParameterisedValueM(const G4double f,
-						       const G4double ppn) const
+                                                       const G4double ppn) const
 {
   G4int ig = 0;
   if (ppn < 1.0E-10) {

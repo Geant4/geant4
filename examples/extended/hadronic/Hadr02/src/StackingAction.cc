@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/StackingAction.cc
 /// \brief Implementation of the StackingAction class
 //
-// $Id: StackingAction.cc 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id: StackingAction.cc 81932 2014-06-06 15:39:45Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -51,11 +51,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingAction::StackingAction()
+ : G4UserStackingAction(),
+   fHistoManager(0),
+   fStackMessenger(0),
+   fKillAll(true),
+   fKillEM(true)
 {
   fStackMessenger = new StackingMessenger(this);
   fHistoManager   = HistoManager::GetPointer();
-  fKillAll        = true;
-  fKillEM         = true; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,25 +71,25 @@ StackingAction::~StackingAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ClassificationOfNewTrack
-StackingAction::ClassifyNewTrack(const G4Track* aTrack)
+StackingAction::ClassifyNewTrack(const G4Track* track)
 {
   G4ClassificationOfNewTrack status = fUrgent;
 
-  fHistoManager->ScoreNewTrack(aTrack);
+  fHistoManager->ScoreNewTrack(track);
 
-  if(fHistoManager->GetVerbose() > 1 ) {
+  if (fHistoManager->GetVerbose() > 1 ) {
     G4cout << "Track #"
-           << aTrack->GetTrackID() << " of " 
-           << aTrack->GetDefinition()->GetParticleName()
-           << " E(MeV)= " << aTrack->GetKineticEnergy()/MeV
-           << " ID= " << aTrack->GetParentID()
+           << track->GetTrackID() << " of " 
+           << track->GetDefinition()->GetParticleName()
+           << " E(MeV)= " << track->GetKineticEnergy()/MeV
+           << " ID= " << track->GetParentID()
            << G4endl;
   }
-  if(aTrack->GetTrackID() == 1) { return status; }
+  if (track->GetTrackID() == 1) { return status; }
 
   //stack or delete secondaries
   if (fKillAll)  { status = fKill; }
-  else if(fKillEM && aTrack->GetDefinition()->GetPDGMass() < MeV) 
+  else if(fKillEM && track->GetDefinition()->GetPDGMass() < MeV) 
     { status = fKill; }
 
   return status;

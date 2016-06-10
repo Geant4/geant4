@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyRangeManager.hh 71734 2013-06-21 08:53:11Z gcosmo $
+// $Id: G4EnergyRangeManager.hh 83772 2014-09-15 07:18:08Z gcosmo $
 //
  // Hadronic Process: Energy Range Manager
  // original by H.P. Wellisch
@@ -35,50 +35,50 @@
 #define G4EnergyRangeManager_h 1
  
 #include "G4HadronicInteraction.hh"
+#include <vector>
  
-
 class G4EnergyRangeManager 
-{
-     
-  public:
+{     
+public:
     
-    G4EnergyRangeManager();
+  G4EnergyRangeManager();
  
-    ~G4EnergyRangeManager() {}
+  ~G4EnergyRangeManager();
     
-    G4EnergyRangeManager(const G4EnergyRangeManager& right);
+  G4EnergyRangeManager(const G4EnergyRangeManager& right);
     
-    G4EnergyRangeManager& operator=( const G4EnergyRangeManager &right );
+  G4EnergyRangeManager& operator=( const G4EnergyRangeManager &right );
     
-  public:
-    
-    inline G4bool operator==( const G4EnergyRangeManager &right ) const
+  inline G4bool operator==( const G4EnergyRangeManager &right ) const
     { return ( this == (G4EnergyRangeManager *) &right ); }
     
-    inline G4bool operator!=( const G4EnergyRangeManager &right ) const
+  inline G4bool operator!=( const G4EnergyRangeManager &right ) const
     { return ( this != (G4EnergyRangeManager *) &right ); }
     
-    void RegisterMe( G4HadronicInteraction *a );
+  void RegisterMe( G4HadronicInteraction *a );
     
-    G4HadronicInteraction *GetHadronicInteraction(
-     const G4double kineticEnergy,
-     const G4Material *aMaterial,
-     const G4Element *anElement ) const;
-    
-	//private:
-    
-    inline G4int GetHadronicInteractionCounter() const
-    { return theHadronicInteractionCounter; }
+  G4HadronicInteraction *GetHadronicInteraction(const G4HadProjectile & aHadProjectile, 
+                                                G4Nucleus & aTargetNucleus,
+						const G4Material *aMaterial,
+						const G4Element *anElement ) const;
+  // This is the new one to be used.
 
-    void Dump( G4int verbose = 0 ); 
+  G4HadronicInteraction *GetHadronicInteraction(const G4double kineticEnergy,
+						const G4Material *aMaterial,
+						const G4Element *anElement ) const;
+  // This is the old, deprecated one, which will be removed later on.
+
+  std::vector<G4HadronicInteraction*>& GetHadronicInteractionList();
     
-  private:
+  void Dump( G4int verbose = 0 ); 
+
+  void BuildPhysicsTable(const G4ParticleDefinition&);
+    
+private:
      
-    enum { MAX_NUMBER_OF_MODELS = 100 };
-
-    G4int theHadronicInteractionCounter;
-    G4HadronicInteraction* theHadronicInteraction[ MAX_NUMBER_OF_MODELS ];
- };
+  G4int theHadronicInteractionCounter;
+  std::vector<G4HadronicInteraction*> theHadronicInteraction;
+};
 
 #endif
  

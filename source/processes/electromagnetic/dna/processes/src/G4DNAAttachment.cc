@@ -23,11 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAAttachment.cc 70171 2013-05-24 13:34:18Z gcosmo $
+// $Id: G4DNAAttachment.cc 85423 2014-10-29 08:22:38Z gcosmo $
 // GEANT4 tag $Name:  $
 
 #include "G4DNAAttachment.hh"
+#include "G4LEPTSAttachmentModel.hh"
+
 #include "G4SystemOfUnits.hh"
+#include "G4Positron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -49,7 +52,7 @@ G4DNAAttachment::~G4DNAAttachment()
 
 G4bool G4DNAAttachment::IsApplicable(const G4ParticleDefinition& p)
 {
-  return (&p == G4Electron::Electron());
+  return (&p == G4Electron::Electron() || &p == G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -63,11 +66,17 @@ void G4DNAAttachment::InitialiseProcess(const G4ParticleDefinition* p)
 
     G4String name = p->GetParticleName();
 
-    if(name == "e-")
+    if(name == "e-" )
     {
       if(!EmModel()) SetEmModel(new G4DNAMeltonAttachmentModel);
       EmModel()->SetLowEnergyLimit(4.*eV);
       EmModel()->SetHighEnergyLimit(13.*eV);
+      AddEmModel(1, EmModel());   
+    } else if(name == "e+" )
+    {
+      if(!EmModel()) SetEmModel(new G4LEPTSAttachmentModel);
+      EmModel()->SetLowEnergyLimit(1.*eV);
+      EmModel()->SetHighEnergyLimit(1.*MeV);
       AddEmModel(1, EmModel());   
     }
   } 

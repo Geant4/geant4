@@ -26,25 +26,23 @@
 /// \file electromagnetic/TestEm12/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 73024 2013-08-15 09:11:40Z gcosmo $
+// $Id: SteppingAction.cc 78723 2014-01-20 10:32:17Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
-#include "RunAction.hh"
+#include "Run.hh"
 #include "EventAction.hh"
 #include "HistoManager.hh"
 
-#include "G4SteppingManager.hh"
-#include "Randomize.hh"
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(RunAction* RuAct,
-                               EventAction* event)
+SteppingAction::SteppingAction(EventAction* event)
 :G4UserSteppingAction(),
- fRunAction(RuAct), fEventAction(event)
+ fEventAction(event)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,7 +70,10 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
  analysisManager->FillH1(1, r, edep);
  
- G4double r0 = fRunAction->GetCsdaRange();
+ Run* run
+   = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+    
+ G4double r0 = run->GetCsdaRange();
  if (r0 > 0.) analysisManager->FillH1(8, r/r0, edep);
  
  //step size of primary particle or charged secondaries

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALRunAction.hh 67976 2013-03-13 10:23:17Z gcosmo $
+// $Id: FCALRunAction.hh 84602 2014-10-17 07:46:09Z gcosmo $
 //
 // 
 
@@ -52,11 +52,8 @@ public:
   
   void EndOfRunAction(const G4Run*);
   
-  void SetOutputFileName(G4String name){fOutputFileName = name;};
-
-private:
-  G4String fOutputFileName;
 };
 
 
 #endif
+

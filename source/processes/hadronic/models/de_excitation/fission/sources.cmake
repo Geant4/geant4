@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
+# $Id: sources.cmake 84396 2014-10-15 07:18:24Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -49,6 +49,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_fission
         G4CompetitiveFission.hh
         G4FissionBarrier.hh
         G4FissionLevelDensityParameter.hh
+        G4FissionLevelDensityParameterINCLXX.hh
         G4FissionParameters.hh
         G4FissionProbability.hh
         G4ParaFissionModel.hh
@@ -57,6 +58,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_fission
         G4CompetitiveFission.cc
         G4FissionBarrier.cc
         G4FissionLevelDensityParameter.cc
+        G4FissionLevelDensityParameterINCLXX.cc
         G4FissionParameters.cc
         G4FissionProbability.cc
         G4VFissionBarrier.cc

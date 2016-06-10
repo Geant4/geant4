@@ -54,6 +54,8 @@ public:
     //New method
     void SetNumberOfThreads( G4int n );
     G4int GetNumberOfThreads() const { return nworkers; }
+    void SetPinAffinity(G4int n=1);
+    G4int GetPinAffinity() const { return pinAffinity; }
 public:
 
     //Inherited methods to re-implement for MT case
@@ -63,7 +65,7 @@ public:
     //The following do not do anything for this runmanager
     virtual void TerminateOneEvent();
     virtual void ProcessOneEvent(G4int i_event);
-    virtual void TerminateEventLoop();
+    ////virtual void TerminateEventLoop();
     virtual void ConstructScoringWorlds();
     virtual void InitializePhysics();
     virtual void RunTermination();
@@ -72,15 +74,16 @@ public:
     //False is returned if no more event to be processed.
     // Note: G4Event object must be instantiated by a worker thread. In case no more
     //  event remains to be processed, that worker thread must delete that G4Event
-    //  object.
-    virtual G4bool SetUpAnEvent(G4Event*, long& s1, long& s2, long& s3);
+    //  object. If a worker runs with its own random number sequence, the boolean flag
+    //  reseedRequired should be set to false. This is *NOT* allowed for the first event.
+    virtual G4bool SetUpAnEvent(G4Event*, long& s1, long& s2, long& s3, G4bool reseedRequired=true);
     // Same as above method, but the seeds are set only once over "eventModulo" events.
     // The return value shows the number of events the caller Worker has to process
     // (between 1 and eventModulo depending on number of events yet to be processed).
     // G4Event object has the event ID of the first event of this bunch.
     // If zero is returned no more event needs to be processed, and worker thread 
     // must delete that G4Event.
-    virtual G4int SetUpNEvents(G4Event*, G4SeedsQueue* seedsQueue);
+    virtual G4int SetUpNEvents(G4Event*, G4SeedsQueue* seedsQueue, G4bool reseedRequired=true);
     
     //Method called by Initialize() method
 protected:
@@ -103,6 +106,8 @@ private:
     G4int nworkers;
     // Force to use this number regardless of SetNumberOfThreads() method.
     G4int forcedNwokers;
+    // Pin Affinity parameter
+    G4int pinAffinity;
 
     //List of workers (i.e. thread)
     typedef std::list<G4Thread*> G4ThreadsList;
@@ -219,6 +224,26 @@ public:
 public:
     virtual void AbortRun(G4bool softAbort=false);
     virtual void AbortEvent();
+
+protected:
+    static G4int seedOncePerCommunication;
+  // - If it is set to 0 (default), seeds that are centrally managed 
+  //   by G4MTRunManager are set for every event of every worker thread. 
+  //   This option guarantees event reproducability regardless of number 
+  //   of threads. 
+  // - If it is set to 1, seeds are set only once for the first 
+  //   event of each run of each worker thread. Event reproducability is 
+  //   guaranteed only if the same number of worker threads are used. 
+  //   On the other hand, this option offers better computing performance 
+  //   in particular for applications with relatively small primary 
+  //   particle energy and large number of events. 
+  // - If it is set to 2, seeds are set only for the first event of 
+  //   group of N events. This option is reserved for the future use when 
+  //   Geant4 allows number of threads to be dynatically changed during an 
+  //   event loop. 
+public:
+    static G4int SeedOncePerCommunication() { return seedOncePerCommunication; }
+    static void SetSeedOncePerCommunication(G4int val) { seedOncePerCommunication = val; }
 };
 
 #endif //G4MTRunManager_h

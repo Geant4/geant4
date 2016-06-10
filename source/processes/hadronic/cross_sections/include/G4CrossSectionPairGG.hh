@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionPairGG.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4CrossSectionPairGG.hh 79981 2014-03-27 15:24:11Z gcosmo $
 // $ GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   Class G4CrossSectionPairGG
@@ -83,7 +83,7 @@ class G4CrossSectionPairGG : public G4VCrossSectionDataSet
     G4GlauberGribovCrossSection * theHighX;
     G4double ETransition;
     typedef std::valarray<G4double> XS_factors;
-    typedef std::pair<G4ParticleDefinition *, XS_factors > ParticleXScale;
+    typedef std::pair<const G4ParticleDefinition *, XS_factors > ParticleXScale;
     std::vector<ParticleXScale> scale_factors;
 
 };

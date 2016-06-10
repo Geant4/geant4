@@ -1,6 +1,11 @@
-# $Id: run2.mac 68058 2013-03-13 14:47:43Z gcosmo $
+# $Id: run2.mac 86065 2014-11-07 08:51:15Z gcosmo $
 #
 # Macro file of "exampleB3.cc"
+# To be run preferably in batch, without graphics:
+# % exampleB3 run3.mac
+#
+#/run/numberOfWorkers 4
+/run/initialize
 #
 /control/verbose 2
 #

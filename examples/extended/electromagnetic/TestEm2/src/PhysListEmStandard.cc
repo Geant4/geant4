@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc 68528 2013-04-01 21:22:23Z adotti $
+// $Id: PhysListEmStandard.cc 83431 2014-08-21 15:49:56Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandard.hh"
 #include "G4ParticleDefinition.hh"
@@ -143,7 +143,7 @@ void PhysListEmStandard::ConstructProcess()
       ph->RegisterProcess(new G4hPairProduction(), particle);            
      
     } else if( particleName == "alpha" || 
-	       particleName == "He3"    ) {
+               particleName == "He3"    ) {
 
       ph->RegisterProcess(new G4hMultipleScattering(), particle);           
       G4ionIonisation* ionIoni = new G4ionIonisation();
@@ -161,9 +161,9 @@ void PhysListEmStandard::ConstructProcess()
       ph->RegisterProcess(new G4NuclearStopping(), particle);                   
       
     } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
-	       
+               (particle->GetPDGCharge() != 0.0) && 
+               (particle->GetParticleName() != "chargedgeantino")) {
+               
       //all others charged particles except geantino
       ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
@@ -179,10 +179,10 @@ void PhysListEmStandard::ConstructProcess()
   
   //physics tables
   //
-  emOptions.SetMinEnergy(10*eV);	//default 100 eV   
-  emOptions.SetMaxEnergy(10*TeV);	//default 100 TeV 
-  emOptions.SetDEDXBinning(12*10);	//default=12*7
-  emOptions.SetLambdaBinning(12*10);	//default=12*7
+  emOptions.SetMinEnergy(10*eV);        //default 100 eV   
+  emOptions.SetMaxEnergy(10*TeV);        //default 100 TeV 
+  emOptions.SetDEDXBinning(12*10);        //default=12*7
+  emOptions.SetLambdaBinning(12*10);        //default=12*7
   
   //multiple coulomb scattering
   //

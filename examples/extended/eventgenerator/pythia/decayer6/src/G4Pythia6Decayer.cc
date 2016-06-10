@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Pythia6Decayer.cc 72244 2013-07-12 08:49:56Z gcosmo $
+// $Id: G4Pythia6Decayer.cc 81443 2014-05-28 14:26:55Z gcosmo $
 //
 /// \file eventgenerator/pythia/decayer6/src/G4Pythia6Decayer.cc
 /// \brief Implementation of the G4Pythia6Decayer class
@@ -96,7 +96,7 @@ GetParticleDefinition(const Pythia6Particle* particle, G4bool warn) const
     particleDefinition = particleTable->FindParticle(pdgEncoding);
 
   if ( particleDefinition == 0 && warn) {
-    std::cerr 
+    G4cerr 
       << "G4Pythia6Decayer: GetParticleDefinition: " << std::endl
       << "G4ParticleTable::FindParticle() for particle with PDG = " 
       << pdgEncoding 

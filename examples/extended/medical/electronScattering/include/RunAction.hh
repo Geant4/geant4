@@ -26,7 +26,7 @@
 /// \file medical/electronScattering/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 69009 2013-04-15 09:33:05Z gcosmo $
+// $Id: RunAction.hh 86064 2014-11-07 08:49:32Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +41,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4Run;
+class Run;
 class DetectorConstruction;
 class PrimaryGeneratorAction;
 class HistoManager;
@@ -51,31 +51,19 @@ class HistoManager;
 class RunAction : public G4UserRunAction
 {
   public:
-    RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
+    RunAction(DetectorConstruction*, PrimaryGeneratorAction* prim=0);
    ~RunAction();
 
   public:
-    virtual void BeginOfRunAction(const G4Run*);
+    virtual void   BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
+    virtual G4Run* GenerateRun();
 
-    void InitFluence ();    
-    void SumFluence(G4double, G4double); 
-    void ComputeFluenceError();
-    void PrintFluence(G4int);
-    
   private:
     DetectorConstruction*   fDetector;
     PrimaryGeneratorAction* fPrimary;
     HistoManager*           fHistoManager;
-
-    //for fluence computation
-    //
-    G4int                   fNbBins;
-    G4double                fDr;
-    std::vector<G4double>   fluence;
-    std::vector<G4double>   fluence1;        //normalized fluence    
-    std::vector<G4double>   fluence2;        //rms on norm. fl
-    std::vector<G4int>      fNbEntries;      //entries per bin            
+    Run*                    fRun;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

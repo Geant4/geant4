@@ -115,14 +115,14 @@ bool HepLorentzVector::isNearCM
 
   double b2 = vTotal2*tRecip*tRecip;
 
-  register double ggamma = std::sqrt(1./(1.-b2));
-  register double boostDotV1 = bboost.dot(pp);
-  register double gm1_b2 = (ggamma-1)/b2;
+  double ggamma = std::sqrt(1./(1.-b2));
+  double boostDotV1 = bboost.dot(pp);
+  double gm1_b2 = (ggamma-1)/b2;
 
   HepLorentzVector w1 ( pp   + ((gm1_b2)*boostDotV1+ggamma*ee) * bboost,
                      ggamma * (ee + boostDotV1) );
 
-  register double boostDotV2 = bboost.dot(w.pp);
+  double boostDotV2 = bboost.dot(w.pp);
   HepLorentzVector w2 ( w.pp + ((gm1_b2)*boostDotV2+ggamma*w.ee) * bboost,
                      ggamma * (w.ee + boostDotV2) );
 
@@ -170,14 +170,14 @@ double HepLorentzVector::howNearCM(const HepLorentzVector & w) const {
 //    std::cerr << "HepLorentzVector::howNearCM() - "
 //	<< "boost vector in howNearCM appears to be tachyonic" << std::endl;
 //  }
-  register double ggamma = std::sqrt(1./(1.-b2));
-  register double boostDotV1 = bboost.dot(pp);
-  register double gm1_b2 = (ggamma-1)/b2;
+  double ggamma = std::sqrt(1./(1.-b2));
+  double boostDotV1 = bboost.dot(pp);
+  double gm1_b2 = (ggamma-1)/b2;
 
   HepLorentzVector w1 ( pp   + ((gm1_b2)*boostDotV1+ggamma*ee) * bboost,
                      ggamma * (ee + boostDotV1) );
 
-  register double boostDotV2 = bboost.dot(w.pp);
+  double boostDotV2 = bboost.dot(w.pp);
   HepLorentzVector w2 ( w.pp + ((gm1_b2)*boostDotV2+ggamma*w.ee) * bboost,
                      ggamma * (w.ee + boostDotV2) );
 

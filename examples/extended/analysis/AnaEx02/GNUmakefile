@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 59973 2012-06-25 08:22:51Z gcosmo $
+# $Id: GNUmakefile 85990 2014-11-06 15:40:51Z gcosmo $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -15,12 +15,12 @@ endif
 all: lib bin
 
 setup:
-	@echo "Copying files from common"
-	@$(G4INSTALL)/examples/extended/common/scripts/copy_files.sh
+	@echo "Copying files from shared"
+	@./shared/scripts/copy_files.sh shared
 
 clean_setup:
-	@echo "Removing files copied from common"
-	@$(G4INSTALL)/examples/extended/common/scripts/clean_files.sh
+	@echo "Removing files copied from shared"
+	@./shared/scripts/clean_files.sh shared
 
 # ROOT support
 CPPFLAGS += -I$(shell root-config --incdir) 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGunMessenger.cc 73713 2013-09-09 10:00:06Z gcosmo $
+// $Id: G4ParticleGunMessenger.cc 78841 2014-01-28 08:52:40Z gcosmo $
 //
 
 #include "G4ParticleGunMessenger.hh"
@@ -138,16 +138,14 @@ G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun * fPtclGun)
   
   G4UIparameter* param;
   param = new G4UIparameter("Z",'i',false);
-  param->SetDefaultValue("1");
   ionCmd->SetParameter(param);
   param = new G4UIparameter("A",'i',false);
-  param->SetDefaultValue("1");
   ionCmd->SetParameter(param);
   param = new G4UIparameter("Q",'i',true);
-  param->SetDefaultValue("0");
+  param->SetDefaultValue(-1);
   ionCmd->SetParameter(param);
   param = new G4UIparameter("E",'d',true);
-  param->SetDefaultValue("0.0");
+  param->SetDefaultValue(0.0);
   ionCmd->SetParameter(param);
 
   ionLvlCmd = new G4UIcommand("/gun/ionL",this);
@@ -160,13 +158,11 @@ G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun * fPtclGun)
 
   G4UIparameter* paraml;
   paraml = new G4UIparameter("Z",'i',false);
-  paraml->SetDefaultValue("1");
   ionLvlCmd->SetParameter(paraml);
   paraml = new G4UIparameter("A",'i',false);
-  paraml->SetDefaultValue("1");
   ionLvlCmd->SetParameter(paraml);
   paraml = new G4UIparameter("Q",'i',true);
-  paraml->SetDefaultValue("0");
+  paraml->SetDefaultValue(-1);
   ionLvlCmd->SetParameter(paraml);
   paraml = new G4UIparameter("I",'i',true);
   paraml->SetDefaultValue("0");
@@ -292,16 +288,16 @@ void G4ParticleGunMessenger::IonLevelCommand(G4String newValues)
     fAtomicNumber = StoI(next());
     fAtomicMass = StoI(next());
     G4String sQ = next();
-    if (sQ.isNull()) {
+    if (sQ.isNull() || StoI(sQ)<0) {
       fIonCharge = fAtomicNumber;
     } else {
       fIonCharge = StoI(sQ);
-      sQ = next();
-      if (sQ.isNull()) {
-        fIonEnergyLevel = 0;
-      } else {
-        fIonEnergyLevel = StoI(sQ);
-      }
+    }
+    sQ = next();
+    if (sQ.isNull()) {
+      fIonEnergyLevel = 0;
+    } else {
+      fIonEnergyLevel = StoI(sQ);
     }
     G4ParticleDefinition* ion = 0;
     ion =  G4IonTable::GetIonTable()->GetIon(fAtomicNumber,fAtomicMass,fIonEnergyLevel);
@@ -326,7 +322,7 @@ void G4ParticleGunMessenger::IonCommand(G4String newValues)
     fAtomicNumber = StoI(next());
     fAtomicMass = StoI(next());
     G4String sQ = next();
-    if (sQ.isNull()) {
+    if (sQ.isNull() || StoI(sQ)<0) {
       fIonCharge = fAtomicNumber;
     } else {
 	fIonCharge = StoI(sQ);
@@ -337,7 +333,6 @@ void G4ParticleGunMessenger::IonCommand(G4String newValues)
         fIonExciteEnergy = StoD(sQ) * keV;
       }
     }
-
     G4ParticleDefinition* ion = 0;
     ion =  G4IonTable::GetIonTable()->GetIon( fAtomicNumber, fAtomicMass, fIonExciteEnergy);
     if (ion==0) {

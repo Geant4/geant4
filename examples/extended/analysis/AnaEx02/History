@@ -1,4 +1,4 @@
-$Id: History 68775 2013-04-05 12:50:10Z gcosmo $
+$Id: History 85990 2014-11-06 15:40:51Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -15,6 +15,35 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06-11-14 I. Hrivnacova (AnaEx02-V10-00-04)
+- Updated for moving script in shared (analysisShared-V10-00-01)
+- Updated README - commented special compilation (via make setup)
+
+05-11-14 I. Hrivnacova (AnaEx02-V10-00-03)
+- Including shared directory directly in the example
+  to avoid out-of-project sources
+  - based on analysisShared-V10-00-00 
+- Adding utility scripts for GNUmake build (much simpler replacement
+  for scripts from common) \
+  - based on analysisScripts-V10-00-00 
+
+13-08-14 mma (AnaEx02-V10-00-02)
+- update Readme and .Readme again
+
+12-08-14 mma (AnaEx02-V10-00-01)
+- restaure calorimeter drawing in Readme and .Readme
+ 
+11-06-14 I. Hrivnacova (AnaEx02-V10-00-00)
+- Fixed path to copy_files.sh, clean_files.sh in GNUmalefile
+  (this makes GNUmake build working with Geant4 installation via
+   CMake)
+- Fixed SharedFilesList.txt - removed PhysicList class
+
+28-05-14 I. Hrivnacova
+- Use Geant4 physics list (FTFP_BERT) in AnaEx01,02,03, 
+  removed PhysicList class from shared
+  (tag in examples/analysis)
+    
 02-04-13 I. Hrivnacova (AnaEx02-V09-06-00)
 - Create two ntuples instead of one in order to demonstrate 
   how to do this with all tools.

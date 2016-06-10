@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 68459 2013-03-27 18:45:08Z maire $
+// $Id: PhysicsList.cc 86064 2014-11-07 08:49:32Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,8 +77,6 @@ PhysicsList::PhysicsList(DetectorConstruction* det)
   defaultCutValue = 10*km;
 
   SetVerboseLevel(1);  
-  
-  G4LossTableManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

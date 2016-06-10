@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCellCurrent.cc 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4PSPassageCellCurrent.cc 81087 2014-05-20 15:44:27Z gcosmo $
 //
 // G4PSPassageCellCurrent
 #include "G4PSPassageCellCurrent.hh"
@@ -46,7 +46,7 @@
 
 G4PSPassageCellCurrent::G4PSPassageCellCurrent(G4String name, G4int depth)
     :G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fCurrent(0),
-     weighted(true)
+     EvtMap(0),weighted(true)
 {
     SetUnit("");
 }

@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh 75567 2013-11-04 11:35:11Z gcosmo $
+// $Id: G4OpenGLSceneHandler.hh 85263 2014-10-27 08:58:31Z gcosmo $
 //
-// 
+//
 // Andrew Walkden  27th March 1996
 // OpenGL scene handler - base for immediate mode and stored mode classes to
 //                        inherit from.
@@ -47,9 +47,9 @@ class G4AttHolder;
 
 // Base class for various OpenGLSceneHandler classes.
 class G4OpenGLSceneHandler: public G4VSceneHandler {
-
+  
   friend class G4OpenGLViewer;
-
+  
 public:
   virtual void BeginPrimitives (const G4Transform3D& objectTransformation);
   virtual void EndPrimitives ();
@@ -64,9 +64,9 @@ public:
   void AddPrimitivesSquare (const std::vector <G4VMarker>&);
   void AddPrimitive (const G4Scale&);
   void AddPrimitive (const G4Polyhedron&);
-
+  
   void PreAddSolid (const G4Transform3D& objectTransformation,
-		    const G4VisAttributes&);
+                    const G4VisAttributes&);
   void AddSolid (const G4Box&);
   void AddSolid (const G4Cons&);
   void AddSolid (const G4Tubs&);
@@ -82,12 +82,12 @@ public:
   void AddCompound (const G4VHit&);
   void AddCompound (const G4VDigi&);
   void AddCompound (const G4THitsMap<G4double>&);
-
+  
   G4int GetEventsDrawInterval() {return fEventsDrawInterval;}
   void SetEventsDrawInterval(G4int interval) {fEventsDrawInterval = interval;}
-
+  
 #ifdef G4OPENGL_VERSION_2
-private :
+  private :
   // vertex vector to be given to the graphic card
   std::vector<double> fOglVertex;
   // indices vector to be given to the graphic card
@@ -105,44 +105,46 @@ private :
   void glBeginVBO(GLenum type);
   void drawVBOArray(std::vector<double> vertices);
   
-// Buffers used to access vertex and indices elements
+  // Buffers used to access vertex and indices elements
 #ifndef G4VIS_BUILD_OPENGLWT_DRIVER
   GLuint fVertexBufferObject;
   GLuint fIndicesBufferObject;
 #else
   Wt::WGLWidget::Buffer fVertexBufferObject;
   Wt::WGLWidget::Buffer fIndicesBufferObject;
-#endif
-
-#endif
-
+#endif // G4VIS_BUILD_OPENGLWT_DRIVER
+  
+#endif //G4OPENGL_VERSION_2
+  
 protected:
-
+  
   G4OpenGLSceneHandler (G4VGraphicsSystem& system,
-			G4int id,
-			const G4String& name = "");
+                        G4int id,
+                        const G4String& name = "");
   virtual ~G4OpenGLSceneHandler ();
-
+  
   void ProcessScene();
   G4VSolid* CreateSectionSolid ();
   G4VSolid* CreateCutawaySolid ();
-
+  
   void ClearAndDestroyAtts();  // Destroys att holders and clears pick map.
+  
+#ifdef G4OPENGL_VERSION_2
+  // Special case for VBO, we want to have acces to the VBO drawer everywhere
+  // because instead of OpenGL call which are static, VBO openGL functions :
+  // - Are functions of an WGLWidget object(G4OpenGLImmediateViewer in our case)
+  // - Needs an access to the QGLSHader
+  // - Have to be redefined in a VBO way
 
-#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
-  // Special case for Wt, we want to have acces to the Wt drawer everywhere
-  // because instead of OpenGL call which are static, Wt openGL functions are functions of an WGLWidget
-  // object(G4OpenGLImmediateViewer in our case)
-
-  inline void setWtDrawer(G4OpenGLWtDrawer* drawer) {
-    fWtDrawer = drawer;
+  inline void setVboDrawer(G4OpenGLVboDrawer* drawer) {
+    fVboDrawer = drawer;
   }
-  G4OpenGLWtDrawer* fWtDrawer;
-#endif
+  G4OpenGLVboDrawer* fVboDrawer;
+#endif // G4OPENGL_VERSION_2
   
   GLuint fPickName;
   std::map<GLuint, G4AttHolder*> fPickMap;  // For picking.
-
+  
   // Shared code to wait until we make a single glFlush
   void ScaledFlush () ;
   // Number of events to wait until we make a single glFlush
@@ -152,7 +154,7 @@ protected:
   
   // True if caller of primitives is capable of processing three passes.
   G4bool fThreePassCapable;
-
+  
   G4bool fSecondPassForTransparencyRequested;
   G4bool fSecondPassForTransparency;
   
@@ -160,10 +162,11 @@ protected:
   G4bool fThirdPassForNonHiddenMarkers;
   
   static const GLubyte fStippleMaskHashed [128];
+  bool fEdgeFlag;
 };
 
 #include "G4OpenGLSceneHandler.icc"
 
-#endif
+#endif // G4OPENGLSCENEHANDLER_HH
 
-#endif
+#endif // G4VIS_BUILD_OPENGL_DRIVER

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4OpenGLStoredSceneHandler.cc 87164 2014-11-26 08:48:31Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -184,7 +184,20 @@ void G4OpenGLStoredSceneHandler::EndPrimitives2D ()
   G4OpenGLSceneHandler::EndPrimitives2D ();
 }
 
-G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
+G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4VMarker& visible)
+{
+  return AddPrimitivePreambleInternal(visible, true, false);
+}
+G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Polyline& visible)
+{
+  return AddPrimitivePreambleInternal(visible, false, true);
+}
+G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Polyhedron& visible)
+{
+  return AddPrimitivePreambleInternal(visible, false, false);
+}
+
+G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreambleInternal(const G4Visible& visible, bool isMarker, bool isPolyline)
 {
   const G4Colour& c = GetColour (visible);
   G4double opacity = c.GetAlpha ();
@@ -196,20 +209,6 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible
     transparency_enabled = pViewer->transparency_enabled;
     isMarkerNotHidden = pViewer->fVP.IsMarkerNotHidden();
   }
-  
-  G4bool isMarker = false;
-  try {
-    (void) dynamic_cast<const G4VMarker&>(visible);
-    isMarker = true;
-  }
-  catch (std::bad_cast) {}
-  
-  G4bool isPolyline = false;
-  try {
-    (void) dynamic_cast<const G4Polyline&>(visible);
-    isPolyline = true;
-  }
-  catch (std::bad_cast) {}
   
   G4bool isTransparent = opacity < 1.;
   G4bool isMarkerOrPolyline = isMarker || isPolyline;
@@ -288,7 +287,15 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible
     // this solid, re-use it if possible.  We could be smarter, and
     // recognise repeated branches of the geometry hierarchy, for
     // example.  But this algorithm should be secure, I think...
-    pSolid = pPVModel->GetCurrentPV()->GetLogicalVolume()->GetSolid();
+    G4VPhysicalVolume* pPV = pPVModel->GetCurrentPV();
+    if (!pPV)
+      // It's probably a dummy model, e.g., for a user-drawn hit?
+      goto end_of_display_list_reuse_test;
+    G4LogicalVolume* pLV = pPV->GetLogicalVolume();
+    if (!pLV)
+      // Dummy model again?
+      goto end_of_display_list_reuse_test;
+    pSolid = pLV->GetSolid();
     EAxis axis = kRho;
     G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
     if (pCurrentPV -> IsReplicated ()) {
@@ -426,8 +433,9 @@ end_of_display_list_reuse_test:
     glLoadIdentity();
     G4OpenGLTransform3D oglt (fObjectTransformation);
     glMultMatrixd (oglt.GetGLMatrix ());
-    glDisable(GL_DEPTH_TEST);  // But see parent scene handler!!  In
-    glDisable (GL_LIGHTING);   // some cases, we need to re-iterate this.
+    glDisable (GL_LIGHTING);
+  } else {
+    glEnable (GL_LIGHTING);
   }
 
   return true;
@@ -445,7 +453,7 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePostamble()
 
   //  if ((glGetError() == GL_TABLE_TOO_LARGE) || (glGetError() == GL_OUT_OF_MEMORY)) {  // Could close?
   if (glGetError() == GL_OUT_OF_MEMORY) {  // Could close?
-    G4cout <<
+    G4cerr <<
       "ERROR: G4OpenGLStoredSceneHandler::AddPrimitivePostamble: Failure"
       "  to allocate display List for fTopPODL - try OpenGL Immediated mode."
            << G4endl;
@@ -453,7 +461,7 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePostamble()
   if (fMemoryForDisplayLists) {
     glEndList();
     if (glGetError() == GL_OUT_OF_MEMORY) {  // Could close?
-      G4cout <<
+      G4cerr <<
         "ERROR: G4OpenGLStoredSceneHandler::AddPrimitivePostamble: Failure"
 	"  to allocate display List for fTopPODL - try OpenGL Immediated mode."
              << G4endl;
@@ -542,7 +550,7 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
   // Make a List which calls the other lists.
   fTopPODL = glGenLists (1);
   if (glGetError() == GL_OUT_OF_MEMORY) {  // Could pre-allocate?
-    G4cout <<
+    G4cerr <<
       "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"
       "  display List for fTopPODL - try OpenGL Immediated mode."
 	   << G4endl;
@@ -562,7 +570,7 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
     glEndList ();
 
     if (glGetError() == GL_OUT_OF_MEMORY) {  // Could close?
-      G4cout <<
+      G4cerr <<
         "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"
         "  display List for fTopPODL - try OpenGL Immediated mode."
              << G4endl;

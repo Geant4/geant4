@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BertiniKaonBuilder.cc 67969 2013-03-13 09:44:42Z gcosmo $
+// $Id: G4BertiniKaonBuilder.cc 81935 2014-06-06 15:41:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -64,9 +64,11 @@ G4BertiniKaonBuilder()
 
 G4BertiniKaonBuilder::~G4BertiniKaonBuilder() 
 {
+  /*
    delete ChipsKaonMinus;
    delete ChipsKaonPlus;
    delete ChipsKaonZero;
+  */
 }
 
 void G4BertiniKaonBuilder::

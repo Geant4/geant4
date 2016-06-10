@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotonEvaporation.hh 70091 2013-05-23 08:55:18Z gcosmo $
+// $Id: G4PhotonEvaporation.hh 85841 2014-11-05 15:35:06Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file
@@ -75,58 +75,66 @@ class G4PhotonEvaporation : public G4VEvaporationChannel {
 
 public:
 
-    G4PhotonEvaporation(const G4String & aName = "Anonymous",
-                        G4EvaporationChannelType timeType = fDelayedEmission);
+  G4PhotonEvaporation(const G4String & aName = "Anonymous",
+		      G4EvaporationChannelType timeType = fDelayedEmission);
 
-    virtual ~G4PhotonEvaporation();
+  virtual ~G4PhotonEvaporation();
 
-    virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
+  // returns one gamma or e-
+  virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
 
-    virtual G4FragmentVector* BreakUpFragment(G4Fragment* theNucleus);
+  // returns "false", emitted gamma and e- are added to the results
+  virtual G4bool 
+  BreakUpChain(G4FragmentVector* theResult, G4Fragment* theNucleus);
 
-    virtual G4FragmentVector * BreakItUp(const G4Fragment & nucleus);
+  // emitted gamma and e- are added to the results
+  virtual G4FragmentVector* BreakUpFragment(G4Fragment* theNucleus);
 
-    virtual G4FragmentVector * BreakUp(const G4Fragment & nucleus);
+  // emitted gamma, e-, and residual fragment are added to the results
+  virtual G4FragmentVector * BreakItUp(const G4Fragment & nucleus);
 
-    virtual G4double GetEmissionProbability(G4Fragment* theNucleus);
+  // emitted gamma, e-, and residual fragment are added to the results
+  virtual G4FragmentVector * BreakUp(const G4Fragment & nucleus);
 
-    virtual void SetEmissionStrategy(G4VEmissionProbability * probAlgorithm);
+  virtual G4double GetEmissionProbability(G4Fragment* theNucleus);
 
-    void SetVerboseLevel(G4int verbose);
+  virtual void SetEmissionStrategy(G4VEmissionProbability * probAlgorithm);
 
-    void SetICM (G4bool);
+  void SetVerboseLevel(G4int verbose);
 
-    void RDMForced (G4bool);
+  void SetICM (G4bool);
+
+  void RDMForced (G4bool);
   
-    void SetMaxHalfLife(G4double);
+  void SetMaxHalfLife(G4double);
 
-    void SetTimeLimit(G4double value);
+  void SetTimeLimit(G4double value);
  
-    void SetEOccupancy( G4ElectronOccupancy  eOccupancy) ;
+  void SetEOccupancy( G4ElectronOccupancy  eOccupancy) ;
 
-    G4ElectronOccupancy GetEOccupancy () { return eOccupancy;} ;
+  inline G4ElectronOccupancy GetEOccupancy () { return eOccupancy;} ;
    
-    G4int GetVacantShellNumber () { return vShellNumber;};
+  inline G4int GetVacantShellNumber () { return vShellNumber;};
 
 private:
 
-    G4int verbose;
-    G4bool myOwnProbAlgorithm;
-    G4VEmissionProbability * probAlgorithm;
-    G4VGammaDeexcitation * discrDeexcitation;
-    G4VGammaDeexcitation * contDeexcitation;
+  G4int verbose;
+  G4bool myOwnProbAlgorithm;
+  G4VEmissionProbability * probAlgorithm;
+  G4VGammaDeexcitation * discrDeexcitation;
+  G4VGammaDeexcitation * contDeexcitation;
 
-    G4ElectronOccupancy eOccupancy;
-    G4int vShellNumber;
+  G4ElectronOccupancy eOccupancy;
+  G4int vShellNumber;
 
-    G4Fragment* nucleus;
-    G4double gammaE;
+  G4Fragment* nucleus;
+  G4double gammaE;
 
-    G4PhotonEvaporation(const G4PhotonEvaporation & right);
-    const G4PhotonEvaporation & operator = (const G4PhotonEvaporation & right);
+  G4PhotonEvaporation(const G4PhotonEvaporation & right);
+  const G4PhotonEvaporation & operator = (const G4PhotonEvaporation & right);
 
-    G4bool operator == (const G4PhotonEvaporation & right) const;
-    G4bool operator != (const G4PhotonEvaporation & right) const;
+  G4bool operator == (const G4PhotonEvaporation & right) const;
+  G4bool operator != (const G4PhotonEvaporation & right) const;
 
 };
 

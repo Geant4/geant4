@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsGeometry.cc 66870 2013-01-14 23:38:59Z adotti $
+// $Id: G4VisCommandsGeometry.cc 82799 2014-07-10 13:18:29Z gcosmo $
 
 // /vis/geometry commands - John Allison  31st January 2006
 
@@ -83,7 +83,7 @@ void G4VisCommandGeometryList::SetNewValue(G4UIcommand*, G4String newValue)
   }
   if (newValue != "all" && !found) {
     if (fpVisManager->GetVerbosity() >= G4VisManager::errors) {
-      G4cout << "ERROR: Logical volume \"" << newValue
+      G4cerr << "ERROR: Logical volume \"" << newValue
 	     << "\" not found in logical volume store." << G4endl;
     }
     return;
@@ -140,7 +140,7 @@ void G4VisCommandGeometryRestore::SetNewValue(G4UIcommand*, G4String newValue)
   }
   if (newValue != "all" && !found) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout << "ERROR: Logical volume \"" << newValue
+      G4cerr << "ERROR: Logical volume \"" << newValue
 	     << "\" not found in logical volume store." << G4endl;
     }
     return;

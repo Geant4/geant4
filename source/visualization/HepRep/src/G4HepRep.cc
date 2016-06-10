@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRep.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4HepRep.cc 78838 2014-01-28 08:46:17Z gcosmo $
 //
 
 /**
@@ -49,7 +49,7 @@ G4HepRep::G4HepRep ()
         : G4VGraphicsSystem ("G4HepRep",
                              "HepRepXML",
         	             "HepRep Generic Driver for XML, RMI and CORBA",
-                             G4VGraphicsSystem::threeD),
+                             G4VGraphicsSystem::fileWriter),
           sceneHandler(NULL),
           viewer(NULL) {
 		G4HepRepMessenger::GetInstance();

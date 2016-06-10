@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm1/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 77289 2013-11-22 10:53:37Z gcosmo $
+// $Id: DetectorConstruction.hh 84815 2014-10-21 12:19:02Z gcosmo $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,9 +41,7 @@
 
 class G4LogicalVolume;
 class G4Material;
-class G4UniformMagField;
 class DetectorMessenger;
-class FieldMessenger;
 class G4GlobalMagFieldMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

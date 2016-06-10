@@ -39,7 +39,6 @@
 #include "globals.hh"
 
 class StackingMessenger;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,7 +56,6 @@ private:
     
   G4bool              fKillSecondary;
   StackingMessenger*  fStackMessenger;
-  HistoManager*       fHisto;
 
 };
 

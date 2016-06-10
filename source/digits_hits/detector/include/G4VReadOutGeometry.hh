@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VReadOutGeometry.hh 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4VReadOutGeometry.hh 81087 2014-05-20 15:44:27Z gcosmo $
 //
 // ------------------------------------------------------------
 
@@ -58,7 +58,7 @@ class G4VReadOutGeometry
 
   protected:
       G4VReadOutGeometry(const G4VReadOutGeometry &right);
-      const G4VReadOutGeometry & operator=(const G4VReadOutGeometry &right);
+      G4VReadOutGeometry & operator=(const G4VReadOutGeometry &right);
 
       virtual G4bool FindROTouchable(G4Step*);
 

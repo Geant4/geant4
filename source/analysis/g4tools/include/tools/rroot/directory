@@ -1,0 +1,199 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_directory
+#define tools_rroot_directory
+
+#include "seek"
+#include "date"
+#include "key"
+#include "ifile"
+#include "../forit"
+#include "../vmanip"
+
+namespace tools {
+namespace rroot {
+
+class directory {
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rroot::directory");
+    return s_v;
+  }
+public:
+  directory(ifile& a_file)
+  :m_file(a_file)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_date_C = 0; //.set();
+    m_date_M = 0; //.set();
+    m_nbytes_keys = 0;
+    m_nbytes_name = 0;
+    m_seek_directory = 0;
+    m_seek_parent = 0;
+    m_seek_keys = 0;
+  }
+  virtual ~directory(){
+    clear_keys();
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  directory(const directory& a_from):m_file(a_from.m_file){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  directory& operator=(const directory &){return *this;}
+public:
+  ifile& file() {return m_file;}
+
+  const std::vector<key*>& keys() const {return m_keys;}
+  std::vector<key*>& keys() {return m_keys;}
+
+  key* find_key(const std::string& a_name) {
+    if(m_file.verbose()) {
+      m_file.out() << "tools::rroot::directory::find_key :" 
+                   << " " << sout(a_name) << " ..."
+                   << std::endl;
+    }
+    tools_vforcit(key*,m_keys,it) {
+      if((*it)->object_name()==a_name) return *it;
+    }
+
+    return 0;
+  }
+
+  key* find_key_from_class(const std::string& a_class) {
+    if(m_file.verbose()) {
+      m_file.out() << "tools::rroot::directory::find_key_from_class :" 
+                   << " " << sout(a_class) << " ..."
+                   << std::endl;
+    }
+    tools_vforcit(key*,m_keys,it) {
+      if((*it)->object_class()==a_class) return *it;
+    }
+
+    return 0;
+  }
+
+  uint32 nbytes_name() const {return m_nbytes_name;}
+  seek seek_keys() const {return m_seek_keys;}
+  uint32 record_size(uint32 a_version) const {
+    uint32 nbytes = sizeof(short);
+    nbytes += sizeof(date); //m_date_C.record_size();
+    nbytes += sizeof(date); //m_date_M.record_size();
+    nbytes += sizeof(m_nbytes_keys);
+    nbytes += sizeof(m_nbytes_name);
+    if(a_version>=40000) {
+      nbytes += sizeof(seek);
+      nbytes += sizeof(seek);
+      nbytes += sizeof(seek);
+    } else {
+      nbytes += sizeof(seek32);
+      nbytes += sizeof(seek32);
+      nbytes += sizeof(seek32);
+    }
+    return nbytes;
+  }
+  bool from_buffer(const char* aEOB,char*& a_buffer){
+    // Decode input buffer.
+    // (Name, title) are stored in the (name, title) of the associated key.
+    rbuf rb(m_file.out(),m_file.byte_swap(),aEOB,a_buffer);
+    short versiondir;
+    if(!rb.read(versiondir)) return false;
+    unsigned int _date;
+    if(!rb.read(_date)) return false;
+    //fDateC.setDate(_date);
+    if(!rb.read(_date)) return false;
+    //fDateM.setDate(_date);
+   {int v;
+    if(!rb.read(v)) return false;
+    m_nbytes_keys = v;}
+   {int v;
+    if(!rb.read(v)) return false;
+    m_nbytes_name = v;}
+    if(versiondir>1000) {
+      if(!rb.read(m_seek_directory)) return false;
+      if(!rb.read(m_seek_parent)) return false;
+      if(!rb.read(m_seek_keys)) return false;
+    } else {
+     {seek32 i;
+      if(!rb.read(i)) return false;
+      m_seek_directory = i;}
+  
+     {seek32 i;
+      if(!rb.read(i)) return false;
+      m_seek_parent = i;}
+  
+     {seek32 i;
+      if(!rb.read(i)) return false;
+      m_seek_keys = i;}
+    }
+    if(m_file.verbose()) {
+      m_file.out() << "tools::rroot::key::from_buffer :"
+                   << " nbytes keys : " << m_nbytes_keys 
+                   << ", pos keys : " << m_seek_keys 
+                   << std::endl;
+    }
+    return true;
+  }
+  bool read_keys(uint32& a_number) {
+    // Read the KEYS :
+    //  Every directory has a list (fKeys). This list has been
+    //  written on the file via CERN-ROOT::TDirectory::writeKeys
+    //  as a single data record.
+    a_number = 0;
+
+    clear_keys();
+  
+    key headerkey(m_file,m_seek_keys,m_nbytes_keys);
+    if(!headerkey.read_file()) return false;
+    char* buffer = headerkey.data_buffer();
+    if(!headerkey.from_buffer(headerkey.eob(),buffer)) return false;
+    int nkeys = 0;
+    rbuf rb(m_file.out(),m_file.byte_swap(),headerkey.eob(),buffer);
+    if(!rb.read(nkeys)) return false;
+    if(m_file.verbose()) {
+      m_file.out() << "tools::rroot::directory::read_keys :"
+                   << " nkeys " << nkeys
+                   << "."
+                   << std::endl;
+    }
+    for(int i=0;i<nkeys;i++) {
+      key* k = new key(m_file);
+      if(!k->from_buffer(headerkey.eob(),buffer)) {
+        delete k;
+        return false;
+      }
+      m_keys.push_back(k);
+    }
+    a_number = nkeys;
+    return true;
+  }
+  void clear_keys() {
+    clear<key>(m_keys);
+  }
+protected:
+  static std::string sout(const std::string& a_string) {
+    return std::string("\"")+a_string+"\"";
+  }
+protected:
+  ifile& m_file;
+  std::vector<key*> m_keys;
+  // Record (stored in file):
+  date m_date_C;           //Date and time when directory is created
+  date m_date_M;           //Date and time of last modification
+  uint32 m_nbytes_keys;      //Number of bytes for the keys
+  uint32 m_nbytes_name;      //Number of bytes in TNamed at creation time
+  seek m_seek_directory;   //Location of directory on file
+  seek m_seek_parent;      //Location of parent directory on file
+  seek m_seek_keys;        //Location of Keys record on file
+};
+
+}}
+
+#endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.hh 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4DynamicParticle.hh 81373 2014-05-27 13:06:32Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -93,6 +93,10 @@ class G4DynamicParticle
      G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
 			G4double aTotalEnergy,
                         const G4ThreeVector &aParticleMomentum);
+     G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
+		       const G4ThreeVector& aMomentumDirection,
+		       G4double aKineticEnergy,
+		       const G4double dynamicalMass);
 
      G4DynamicParticle(const G4DynamicParticle &right);
 

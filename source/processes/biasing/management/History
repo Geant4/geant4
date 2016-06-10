@@ -1,4 +1,4 @@
-$Id: History 77477 2013-11-25 09:42:24Z gcosmo $
+$Id: History 86417 2014-11-11 08:52:10Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 10th, 2014 M. Verderi
+- Fix G4BiasingOperatorStateNotifier::Notify(...) to detect
+  start of run.
+- tag : proc-biasmng-V10-00-01
+
+November 7th, 2014 M. Verderi
+- G4VBiasingOperation : suppression of DenyProcessPostStepDoIt(...)
+  as redondant and special case of ApplyFinalStateBiasing(...).
+  tag : proc-biasmng-V10-00-00 
+
 
 November 22nd, 2013  A.Howard
 - Moved G4VProcessPlacer and G4ProcessPlacer from importance

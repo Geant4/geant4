@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 68733 2013-04-05 09:45:28Z gcosmo $
+# $Id: sources.cmake 83514 2014-08-27 12:48:54Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -48,11 +48,13 @@ GEANT4_DEFINE_MODULE(NAME G4scoring
         G4EnergySplitter.hh
         G4EnergySplitter.icc
         G4ParallelWorldProcess.hh
+        G4ParallelWorldProcessStore.hh
         G4ParallelWorldScoringProcess.hh
         G4ScoreSplittingProcess.hh
     SOURCES
         G4EnergySplitter.cc
         G4ParallelWorldProcess.cc
+        G4ParallelWorldProcessStore.cc
         G4ParallelWorldScoringProcess.cc
         G4ScoreSplittingProcess.cc
     GRANULAR_DEPENDENCIES

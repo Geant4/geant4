@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -48,7 +49,7 @@ namespace G4INCL {
   ParticleEntryChannel::~ParticleEntryChannel()
   {}
 
-  FinalState* ParticleEntryChannel::getFinalState() {
+  void ParticleEntryChannel::fillFinalState(FinalState *fs) {
     // Behaves slightly differency if a third body (the projectile) is present
     G4bool isNN = theNucleus->isNucleusNucleusCollision();
 
@@ -143,13 +144,12 @@ namespace G4INCL {
       const G4int ZCN = theNucleus->getZ() + theParticle->getZ();
       // Correction to the Q-value of the entering particle
       theCorrection = theParticle->getEmissionQValueCorrection(ACN,ZCN);
-      INCL_DEBUG("The following Particle enters with correction " << theCorrection
-          << theParticle->print() << std::endl);
+      INCL_DEBUG("The following Particle enters with correction " << theCorrection << '\n'
+          << theParticle->print() << '\n');
     }
 
     const G4double energyBefore = theParticle->getEnergy() - theCorrection;
     G4bool success = particleEnters(theCorrection);
-    FinalState *fs = new FinalState();
     fs->addEnteringParticle(theParticle);
 
     if(!success) {
@@ -162,7 +162,6 @@ namespace G4INCL {
     }
 
     fs->setTotalEnergyBeforeInteraction(energyBefore);
-    return fs;
   }
 
   G4bool ParticleEntryChannel::particleEnters(const G4double theQValueCorrection) {
@@ -234,14 +233,15 @@ namespace G4INCL {
 
     G4double v = theNucleus->getPotential()->computePotentialEnergy(theParticle);
     if(theParticle->getKineticEnergy()+v-theQValueCorrection<0.) { // Particle entering below 0. Die gracefully
-      INCL_DEBUG("Particle " << theParticle->getID() << " is trying to enter below 0" << std::endl);
+      INCL_DEBUG("Particle " << theParticle->getID() << " is trying to enter below 0" << '\n');
       return false;
     }
     const RootFinder::Solution theSolution = RootFinder::solve(&theIncomingEFunctor, v);
     if(theSolution.success) { // Apply the solution
       theIncomingEFunctor(theSolution.x);
+      INCL_DEBUG("Particle successfully entered:\n" << theParticle->print() << '\n');
     } else {
-      INCL_WARN("Couldn't compute the potential for incoming particle, root-finding algorithm failed." << std::endl);
+      INCL_WARN("Couldn't compute the potential for incoming particle, root-finding algorithm failed." << '\n');
     }
     return theSolution.success;
   }

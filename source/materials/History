@@ -1,4 +1,4 @@
-$Id: History 76883 2013-11-18 12:50:08Z gcosmo $
+$Id: History 84401 2014-10-15 07:23:36Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,109 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13-10-14 V.Ivanchenko (materials-V10-00-26)
+- G4SandiaData - optimized run time methods
+
+06-10-14 P.Gumplinger (materials-V10-00-25)
+- add methods SetMRMaxProbability and SetMRMaxTransProbability in 
+  G4UCNMaterialPropertiesTable
+- Compare not the energy but normal component of energy to the Fermi potential
+  in G4UCNMicroRoughnessHelper::IntIminus
+  and G4UCNMaterialPropertiesTable::TransConditionsValid
+
+25-09-14 W.Pokorski (materials-V10-00-24)
+- G4IonisParamMat - adding initialization of G4DensityEffectData in
+  the default constructor
+
+05-08-14 V.Ivanchenko (materials-V10-00-23)
+- G4SandiaData - proper deletion of G4PhysicsVectors end of job
+
+24-07-14 V.Ivanchenko (materials-V10-00-22)
+- G4ElementData, G4IonStoppingData - proper deletion of G4PhysicsVectors
+    end of job
+
+10-07-14 V.Ivanchenko (materials-V10-00-21)
+- G4SandiaTable.cc : modify low limit for water (similar to previous tag)
+    and clean-up the class.
+     
+09-07-14 mma (materials-V10-00-20)
+- G4SandiaTable.cc : modify low limit in GetSandiaCofPerAtom() and Material.
+  
+27-06-14 P.Gumplinger (materials-V10-00-19)
+- fix Coverity error uninitilized non-static class members in
+  G4UCNMaterialPropertiesTable
+
+18-06-14 P.Gumplinger (materials-V10-00-18)
+- fix Valgrid uninitialised value error in G4UCNMaterialPropertiesTable
+
+16-06-14 P.Gumplinger (materials-V10-00-17)
+- fix cases of floating-point exceptions in G4UCNMicroRoughnessHelper
+
+11-06-14 G.Folger     (materials-V10-00-16)
+- add new classes G4UCNMaterialPropertiesTable and G4UCNMicroRoughnessHelper
+   to sources.cmake
+	
+06-06-14 P.Gumplinger (materials-V10-00-15)
+- add G4UCNMaterialPropertiesTable and G4UCNMicroRoughnessHelper classes
+
+26-05-14 V.Ivanchenko (materials-V10-00-14)
+- G4Material - make copy constructor private 
+
+26-05-14 V.Ivanchenko (materials-V10-00-13)
+- G4Material, G4IonisParamElm, G4IonisParamMat - fixed Coverity 
+    reports - copy constructor is private, because it is not 
+    assumed to create a new material as a copy 
+
+13-05-14 V.Ivanchenko (materials-V10-00-12)
+- G4Material - revert back modifications due to fail of tests,
+    improve material printout only to address #1563    
+
+12-05-14 V.Ivanchenko (materials-V10-00-11)
+- G4Material - commented out method GetNuclearInterLength() and 
+    extention for material printout to address bug report #1563 
+
+09-05-14 G.Cosmo (materials-V10-00-10, materials-V10-00-09)
+- Replaced size_t with int type for 'fNumberOfIsotopes' in G4Element
+  and 'fNumberOfComponents' and 'fNumberOfElements' in G4Material.
+  Adapted code accordingly.
+  Workaround to overcome limitation in Root I/O for object persistency.
+
+08-05-14 P.Gumplinger (materials-V10-00-08)
+- Further attempts at avoiding all Coverity errors
+
+06-04-14 V.Ivanchenko (materials-V10-00-07)
+- G4NistmaterialBuilder - added new material G4_lBr - at STP Bromine
+    is mainly liquid while in NIST DB it is described as a gas.
+    This is a bugfix #1607. Data are taken from
+    http://en.wikipedia.org/wiki/Bromine
+
+30-04-14 P.Gumplinger (materials-V10-00-06)
+- Attempt at avoiding Coverity errors 37180 and 37340
+
+28-04-14 M.Asai (materials-V10-00-05)
+- G4MaterialPropertyTable: fix race condition problem. Addressing to
+  bug report #1590.
+
+22-04-14 G.Cosmo (materials-V10-00-04, materials-V10-00-03)
+- G4Material: corrected initialisation of pointers in fake default constructor
+  per use of persistency.
+
+15-04-14 G.Cosmo (materials-V10-00-02)
+- G4Material: corrected typo in printout for duplicate materials in
+  function InitializePointers().
+
+09-04-14 V.Ivanchenko (materials-V10-00-01)
+- G4Material, G4Element - defined defaulut names and symbols for elements
+    and isotopes if they are not explicitly defined by users - this fixing
+    names for gdml IO which has problem to work with names starting from a
+    decimal number     
+
+14-02-14 V.Ivanchenko (materials-V10-00-00)
+14-02-14 V.Ivanchenko (materials-V10-10-00)
+- G4SandiaTable - make run time methods const, because materials are shared
+    between threads; added new methods GetSandiaCofWater(), 
+    GetWaterEnergyLimit(), GetWaterCofForMaterial()
 
 16-11-13 M.Kelsey (materials-V09-06-34)
 - G4LatticePhysical:  Drop use of G4Transform3D and related objects in favor
@@ -87,7 +190,7 @@ committal in the CVS repository !
 - Partially fix for coverity errors in G4OpticalSurface.cc
 
 06-06-13 V.Ivanchenko (materials-V09-06-17)
-- G4Material - added warning if new material has doublicate name
+- G4Material - added warning if new material has duplicate name
 
 05-06-13 P.Gumplinger (materials-V09-06-16)
 - Add dichroic filter surface

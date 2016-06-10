@@ -42,7 +42,6 @@
 #include "G4PVPlacement.hh"
 #include "G4UserLimits.hh"
 #include "G4PVParameterised.hh"
-#include "PhantomConfiguration.hh"
 #include "CellParameterisation.hh"
 
 #include "EMField.hh"
@@ -65,11 +64,11 @@ public:
   
   void ConstructSDandField();
      
-  void SetMassNucleus(G4float mN){ fMassNucleus = mN;}
-  G4float GetMassNucleus(){return fMassNucleus;}          
+  void SetMassNucleus(G4double mN){ fMassNucleus = mN;}
+  G4double GetMassNucleus(){return fMassNucleus;}          
 
-  void SetMassCytoplasm(G4float mC){ fMassCytoplasm = mC;}
-  G4float GetMassCytoplasm(){return fMassCytoplasm;}          
+  void SetMassCytoplasm(G4double mC){ fMassCytoplasm = mC;}
+  G4double GetMassCytoplasm(){return fMassCytoplasm;}          
 
   void SetNbOfPixelsInPhantom(G4int nP){ fNbOfPixelsInPhantom = nP;}
   G4int GetNbOfPixelsInPhantom(){return fNbOfPixelsInPhantom;}          
@@ -82,11 +81,19 @@ public:
   G4LogicalVolume* GetLogicalPolyprop() {return fLogicBoite3;};
   G4LogicalVolume* GetLogicalKgm() {return fLogicKgm;};
   
+  G4Material * GetNucleusMaterial1() {return  fNucleusMaterial1;};
+  G4Material * GetNucleusMaterial2() {return  fNucleusMaterial2;};
+  G4Material * GetNucleusMaterial3() {return  fNucleusMaterial3;};
+  G4Material * GetCytoplasmMaterial1() {return  fCytoplasmMaterial1;};
+  G4Material * GetCytoplasmMaterial2() {return  fCytoplasmMaterial2;};
+  G4Material * GetCytoplasmMaterial3() {return  fCytoplasmMaterial3;};
+  
+  CellParameterisation * GetCellParameterisation() {return fMyCellParameterisation;};
+  
 private:
 
-  G4float fMassPhantom;
-  G4float fMassNucleus;
-  G4float fMassCytoplasm;
+  G4double fMassNucleus;
+  G4double fMassCytoplasm;
 
   G4double fDensityPhantom;
   G4double fDensityNucleus;
@@ -202,10 +209,9 @@ private:
   G4LogicalVolume*   fLogicPhantom;  
   G4Box*             fSolidPhantom; 
 
+  CellParameterisation * fMyCellParameterisation;
+  
   //
-
-  PhantomConfiguration fMyPhantomConfiguration;
-  CellParameterisation* fPhantomParam ; 
   
   static G4ThreadLocal EMField * fField;
 
@@ -214,6 +220,9 @@ private:
   G4EqMagElectricField * fEquation;
   G4MagInt_Driver * fIntgrDriver;
   G4ChordFinder * fChordFinder ;
+  
+  // FROM NANOBEAM EX. TUNINGS
+  
   G4PropagatorInField * fPropInField;
 
   //

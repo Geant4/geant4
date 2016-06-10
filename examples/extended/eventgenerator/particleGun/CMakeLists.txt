@@ -40,7 +40,7 @@ target_link_libraries(particleGun ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(particleGun_SCRIPTS
-    particleGun.in run1.mac run2.mac run3.mac run4.mac vis.mac
+    particleGun.in plotHisto.C run0.mac run1.mac run2.mac run3.mac run4.mac vis.mac
   )
 
 foreach(_script ${particleGun_SCRIPTS})

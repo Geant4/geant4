@@ -17,6 +17,44 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24-November-2014: G.Cosmo (externals-V10-00-08)
+- Updated to CLHEP-2.2.0.4:
+  o Fixed a type mismatch in Utility/memory.h,
+    reported as compilation warning on Windows/VC9.
+  o Use pragma in RanshiEngine.cc to ignore aggressive 32bit gcc compiler
+    warnings.
+  o Synchronised inlining of Hep3Vector::operator () (int i).
+
+14-November-2014: G.Cosmo (externals-V10-00-07)
+- Updated to CLHEP-2.2.0.3: moved definition of pi into SystemOfUnits.h
+  so that its hard-coded value is not defined twice.
+
+12-November-2014: G.Cosmo (externals-V10-00-06)
+- Removed unused 'tpmalloc' and 'memoryprotection' modules.
+- Update to CLHEP Hep3Vector to move operators 'operator()(int)' to be
+  inline and removed printout to improve CPU performance.
+
+30-October-2014: B.Morgan (externals-V10-00-05)
+- Update build of USolids library to ensure it is built for
+  the default global mode.
+
+29-October-2014: G.Cosmo (externals-V10-00-04)
+- Moved module from source/geometry/solids to source/externals.
+  Adapted scripts for optional external USolids library build.
+
+17-June-2014: G.Cosmo (externals-V10-00-03)
+- Updated to CLHEP-2.2.0.0: fixes for compilation warnings on clang compiler
+  for RanshiEngine.cc and MTwistEngine.cc.
+
+24-April-2014: G.Cosmo (externals-V10-00-02)
+- Corrected definition of 'thread_local' keyword in CLHEP module.
+
+09-April-2014: G.Cosmo (externals-V10-00-01)
+- Updated CLHEP module to version 2.2.0.0.b01.
+
+24-February-2014: G.Cosmo (externals-V10-00-00)
+- Removed deprecated 'register' qualifiers in implementation of CLHEP classes.
+
 14-November-2013: G.Cosmo (externals-V09-06-07, externals-V09-06-06)
 - Updated CLHEP module to version 2.1.4.1.
 

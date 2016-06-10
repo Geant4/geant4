@@ -1,0 +1,54 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_cmathT
+#define tools_cmathT
+
+#include <cmath>
+
+namespace tools {
+
+//NOTE : const <type>& in args to be compatible and efficient with inlib::symbol.
+
+//float
+inline float _pow(const float& a_x,const float& a_y) {return ::powf(a_x,a_y);}
+inline float _exp(const float& a_x) {return ::expf(a_x);}
+inline float _log(const float& a_x) {return ::logf(a_x);}
+inline float _sqrt(const float& a_x) {return ::sqrtf(a_x);}
+inline float _cos(const float& a_x) {return ::cosf(a_x);}
+inline float _sin(const float& a_x) {return ::sinf(a_x);}
+inline float _fabs(const float& a_x) {return ::fabsf(a_x);}
+inline float _tan(const float& a_x) {return ::tanf(a_x);}
+inline void _half_pi(float& a_v) {a_v = float(1.5707963267948965580E0);}
+inline void _pi(float& a_v) {a_v = float(3.1415926535897931160E0);}
+
+
+//double
+inline double _pow(const double& a_x,const double& a_y) {return ::pow(a_x,a_y);}
+inline double _exp(const double& a_x) {return ::exp(a_x);}
+inline double _log(const double& a_x) {return ::log(a_x);}
+inline double _sqrt(const double& a_x) {return ::sqrt(a_x);}
+inline double _cos(const double& a_x) {return ::cos(a_x);}
+inline double _sin(const double& a_x) {return ::sin(a_x);}
+inline double _fabs(const double& a_x) {return ::fabs(a_x);}
+inline double _tan(const double& a_x) {return ::tan(a_x);}
+inline void _half_pi(double& a_v) {a_v = 1.5707963267948965580E0;}
+inline void _pi(double& a_v) {a_v = 3.1415926535897931160E0;}
+
+//long double
+#ifndef ANDROID
+inline long double _pow(const long double& a_x,const long double& a_y) {return ::powl(a_x,a_y);}
+inline long double _exp(const long double& a_x) {return ::expl(a_x);}
+inline long double _log(const long double& a_x) {return ::logl(a_x);}
+inline long double _sqrt(const long double& a_x) {return ::sqrtl(a_x);}
+inline long double _cos(const long double& a_x) {return ::cosl(a_x);}
+inline long double _sin(const long double& a_x) {return ::sinl(a_x);}
+inline long double _fabs(const long double& a_x) {return ::fabsl(a_x);}
+inline long double _tan(const long double& a_x) {return ::tanl(a_x);}
+inline void _half_pi(long double& a_v) {a_v = 1.5707963267948965580E0;}
+inline void _pi(long double& a_v) {a_v = 3.1415926535897931160E0;}
+#endif
+
+}
+
+#endif

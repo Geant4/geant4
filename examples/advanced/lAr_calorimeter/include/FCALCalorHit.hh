@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALCalorHit.hh 67976 2013-03-13 10:23:17Z gcosmo $
+// $Id: FCALCalorHit.hh 84371 2014-10-14 12:51:18Z gcosmo $
 //
 // 
 
@@ -36,7 +36,7 @@
 #include "G4VHit.hh"
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
-
+#include "G4Threading.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class FCALCalorHit : public G4VHit
@@ -76,14 +76,15 @@ class FCALCalorHit : public G4VHit
 
 typedef G4THitsCollection<FCALCalorHit> FCALCalorHitsCollection;
 
-extern G4Allocator<FCALCalorHit> FCALCalorHitAllocator;
+extern G4ThreadLocal G4Allocator<FCALCalorHit>* FCALCalorHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void* FCALCalorHit::operator new(size_t)
 {
+  if ( FCALCalorHitAllocator == 0 ) FCALCalorHitAllocator = new G4Allocator<FCALCalorHit>;
   void* aHit;
-  aHit = (void*) FCALCalorHitAllocator.MallocSingle();
+  aHit = (void*) FCALCalorHitAllocator->MallocSingle();
   return aHit;
 }
 
@@ -91,7 +92,7 @@ inline void* FCALCalorHit::operator new(size_t)
 
 inline void FCALCalorHit::operator delete(void* aHit)
 {
-  FCALCalorHitAllocator.FreeSingle((FCALCalorHit*) aHit);
+  FCALCalorHitAllocator->FreeSingle((FCALCalorHit*) aHit);
 }
 
 #endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Colour.hh 75130 2013-10-28 10:05:45Z gcosmo $
+// $Id: G4Colour.hh 78955 2014-02-05 09:45:46Z gcosmo $
 //
 // 
 // John Allison 20th October 1996
@@ -87,7 +87,7 @@ class G4Colour {
 public: // With description
 
   G4Colour (G4double r = 1., G4double g = 1., G4double b = 1.,
-	    G4double a = 1.);
+            G4double a = 1.);
 
   G4Colour (G4ThreeVector);
   // Converts the components of the 3-vector into red, green, blue.

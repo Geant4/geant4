@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -38,6 +39,8 @@
 #include "G4INCLKinematicsUtils.hh"
 #include "G4INCLParticleTable.hh"
 #include "G4INCLLogger.hh"
+#include "G4INCLCrossSectionsINCL46.hh"
+#include "G4INCLCrossSectionsMultiPions.hh"
 // #include <cassert>
 
 namespace G4INCL {
@@ -55,17 +58,25 @@ namespace G4INCL {
       return theCrossSections->total(p1,p2);
     }
 
-    G4double pionNucleon(Particle const * const p1, Particle const * const p2) {
-      return theCrossSections->pionNucleon(p1,p2);
+    G4double NDeltaToNN(Particle const * const p1, Particle const * const p2) {
+      return theCrossSections->NDeltaToNN(p1,p2);
     }
 
-    G4double recombination(Particle const * const p1, Particle const * const p2) {
-      return theCrossSections->recombination(p1,p2);
+    G4double NNToNDelta(Particle const * const p1, Particle const * const p2) {
+      return theCrossSections->NNToNDelta(p1,p2);
     }
 
-    G4double deltaProduction(Particle const * const p1, Particle const * const p2) {
-      return theCrossSections->deltaProduction(p1,p2);
-    }
+      G4double NNToxPiNN(const G4int xpi, Particle const * const p1, Particle const * const p2) {
+          return theCrossSections->NNToxPiNN(xpi,p1,p2);
+      }
+
+      G4double piNToDelta(Particle const * const p1, Particle const * const p2) {
+          return theCrossSections->piNToDelta(p1,p2);
+      }
+
+      G4double piNToxPiN(const G4int xpi, Particle const * const p1, Particle const * const p2) {
+          return theCrossSections->piNToxPiN(xpi,p1,p2);
+      }
 
     G4double calculateNNAngularSlope(G4double energyCM, G4int iso) {
       return theCrossSections->calculateNNAngularSlope(energyCM, iso);
@@ -142,6 +153,14 @@ namespace G4INCL {
     void deleteCrossSections() {
       delete theCrossSections;
       theCrossSections = NULL;
+    }
+
+    void initialize(Config const * const theConfig) {
+      CrossSectionsType crossSections = theConfig->getCrossSectionsType();
+      if(crossSections == INCL46CrossSections)
+        setCrossSections(new CrossSectionsINCL46);
+      else if(crossSections == MultiPionsCrossSections)
+        setCrossSections(new CrossSectionsMultiPions);
     }
   }
 }

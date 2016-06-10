@@ -26,10 +26,10 @@
 /// \file electromagnetic/TestEm7/TestEm7.cc
 /// \brief Main program of the electromagnetic/TestEm7 example
 //
-// $Id: TestEm7.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: TestEm7.cc 82280 2014-06-13 14:45:31Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -40,7 +40,6 @@
 #include "PrimaryGeneratorAction.hh"
 
 #include "RunAction.hh"
-#include "EventAction.hh"
 #include "TrackingAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
@@ -78,13 +77,11 @@ int main(int argc,char** argv) {
   //
   PrimaryGeneratorAction* kin   = new PrimaryGeneratorAction(det);  
   RunAction*              run   = new RunAction(det,phys,kin);
-  EventAction*            event = new EventAction();
   TrackingAction*         track = new TrackingAction(det,run);
   SteppingAction*         step  = new SteppingAction(det,run);
   
   runManager->SetUserAction(kin); 
   runManager->SetUserAction(run); 
-  runManager->SetUserAction(event);
   runManager->SetUserAction(track);  
   runManager->SetUserAction(step);
 
@@ -123,4 +120,4 @@ int main(int argc,char** argv) {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,0 +1,22 @@
+$Id: History 85990 2014-11-06 15:40:51Z gcosmo $
+--------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    analysis/shared History file
+                    ----------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+06-11-14 I. Hrivnacova (analysisShared-V10-00-01)
+- Moved scripts from upper directory in shared
+     
+05-11-14 I. Hrivnacova (analysisShared-V10-00-00)
+- Tagged version which will be included in AnaEx0N examples

@@ -1,4 +1,4 @@
-$Id: History 78110 2013-12-03 14:57:31Z gcosmo $
+$Id: History 84606 2014-10-17 07:50:04Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16 October 14: I. Hrivnacova (monopole-V10-00-00)
+- Fixed coding guidelines (long lines) in G4MonopoleTransportation.cc  
 
 03 December 13: I. Hrivnacova (monopole-V09-06-06)
 - Updated README for removing AIDA

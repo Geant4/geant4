@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelMuonPhysics.hh 66508 2012-12-19 10:16:45Z gcosmo $
+// $Id: GammaRayTelMuonPhysics.hh 85586 2014-10-31 09:10:31Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -50,7 +50,7 @@
 #include "G4MuIonisation.hh"
 #include "G4hIonisation.hh"
 
-#include "G4MuonMinusCaptureAtRest.hh"
+#include "G4MuonMinusCapture.hh"
 
 class GammaRayTelMuonPhysics : public G4VPhysicsConstructor
 {
@@ -80,7 +80,7 @@ class GammaRayTelMuonPhysics : public G4VPhysicsConstructor
    G4MuPairProduction     fMuMinusPairProduction;
    G4MuIonisation         fMuMinusIonisation;
 
-   G4MuonMinusCaptureAtRest fMuMinusCaptureAtRest;
+   G4MuonMinusCapture fMuMinusCaptureAtRest;
 
    // Tau physics
    G4hMultipleScattering   fTauPlusMultipleScattering;

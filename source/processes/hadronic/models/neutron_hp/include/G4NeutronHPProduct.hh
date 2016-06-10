@@ -45,12 +45,24 @@
 #include "G4NeutronHPNBodyPhaseSpace.hh"
 #include "G4NeutronHPLabAngularEnergy.hh"
 
+#include "G4Cache.hh"
+
 class G4NeutronHPProduct
 {
+
+   struct toBeCached {
+      G4ReactionProduct* theNeutron;
+      G4ReactionProduct* theTarget;
+      G4int theCurrentMultiplicity;
+      toBeCached() : theNeutron(NULL),theTarget(NULL),theCurrentMultiplicity(-1) {};
+   };
+
   public:
   G4NeutronHPProduct()
   {
     theDist = 0;
+      toBeCached val;
+      fCache.Put( val );
   }
   ~G4NeutronHPProduct()
   {
@@ -70,6 +82,7 @@ class G4NeutronHPProduct
     theGroundStateQValue*= CLHEP::eV;
     theActualStateQValue*= CLHEP::eV;
     theYield.Init(aDataFile, CLHEP::eV);
+    theYield.Hash();
     if(theDistLaw==0)
     {
       // distribution not known, use E-independent, isotropic angular distribution
@@ -135,17 +148,17 @@ class G4NeutronHPProduct
   
   void SetNeutron(G4ReactionProduct * aNeutron) 
   { 
-    theNeutron = aNeutron; 
+    fCache.Get().theNeutron = aNeutron; 
   }
   
   void SetTarget(G4ReactionProduct * aTarget)
   { 
-    theTarget = aTarget; 
+    fCache.Get().theTarget = aTarget; 
   }
   
-  inline G4ReactionProduct * GetTarget() { return theTarget; }
+  inline G4ReactionProduct * GetTarget() { return fCache.Get().theTarget; }
   
-  inline G4ReactionProduct * GetNeutron() { return theNeutron; }
+  inline G4ReactionProduct * GetNeutron() { return fCache.Get().theNeutron; }
   
   inline G4double MeanEnergyOfThisInteraction() 
   { 
@@ -157,7 +170,7 @@ class G4NeutronHPProduct
     else
     {
       result=theDist->MeanEnergyOfThisInteraction();
-      result *= theCurrentMultiplicity;
+      result *= fCache.Get().theCurrentMultiplicity;
     }
     return result;
   }
@@ -178,13 +191,15 @@ class G4NeutronHPProduct
    
    // Utility quantities
    
-   G4ReactionProduct * theTarget;
-   G4ReactionProduct * theNeutron;
+   //G4ReactionProduct * theTarget;
+   //G4ReactionProduct * theNeutron;
 
    // cashed values
    
-   G4int theCurrentMultiplicity;
-  
+   //G4int theCurrentMultiplicity;
+   //
+  private:
+     G4Cache<toBeCached> fCache; 
 };
 
 #endif

@@ -32,6 +32,8 @@
 #include "G4PreCompoundModel.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4HadronicInteractionRegistry.hh"
+#include "G4NeutronInelasticProcess.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
 
 G4INCLXXNeutronBuilder::
 G4INCLXXNeutronBuilder() 
@@ -59,7 +61,7 @@ Build(G4NeutronInelasticProcess * aP)
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
   aP->RegisterMe(theModel);
-  aP->AddDataSet(new G4NeutronInelasticXS);
+  aP->AddDataSet((G4NeutronInelasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronInelasticXS::Default_Name()));
 }
 
 G4INCLXXNeutronBuilder::

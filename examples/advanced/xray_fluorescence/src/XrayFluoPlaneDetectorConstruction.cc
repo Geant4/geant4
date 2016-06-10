@@ -51,9 +51,12 @@
 #include "G4RunManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-#include "G4ios.hh"
 #include "G4PVReplica.hh"
 #include "G4UserLimits.hh"
+#include "G4GeometryManager.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -152,7 +155,9 @@ void XrayFluoPlaneDetectorConstruction::SetDetectorType(G4String type)
     }
 }
 
-XrayFluoVDetectorType* XrayFluoPlaneDetectorConstruction::GetDetectorType()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+XrayFluoVDetectorType* XrayFluoPlaneDetectorConstruction::GetDetectorType() const 
 {
   return detectorType;
 }
@@ -504,20 +509,6 @@ G4VPhysicalVolume* XrayFluoPlaneDetectorConstruction::ConstructApparate()
       }  
   }
 
-  G4SDManager* SDman = G4SDManager::GetSDMpointer();    
-
-  if(!HPGeSD)
-    {
-      HPGeSD = new XrayFluoSD ("HPGeSD",this);
-      SDman->AddNewDetector(HPGeSD);
-    }
-  
-  
-  if (logicPixel)
-    {
-      logicPixel->SetSensitiveDetector(HPGeSD);
-    }
-  
   // Visualization attributes
   
   logicWorld->SetVisAttributes (G4VisAttributes::Invisible);
@@ -559,6 +550,23 @@ G4VPhysicalVolume* XrayFluoPlaneDetectorConstruction::ConstructApparate()
   return physiWorld;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
+
+void XrayFluoPlaneDetectorConstruction::ConstructSDandField()
+{
+  //                               
+  // Sensitive Detectors 
+  //
+  if (HPGeSD.Get() == 0) 
+    {    
+      XrayFluoSD* SD = new XrayFluoSD ("HPGeSD",this);
+      HPGeSD.Put( SD );
+    }
+  
+  if (logicPixel)    
+    SetSensitiveDetector(logicPixel,HPGeSD.Get());  
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayFluoPlaneDetectorConstruction::PrintApparateParameters()
@@ -587,33 +595,17 @@ void XrayFluoPlaneDetectorConstruction::PrintApparateParameters()
 
 void XrayFluoPlaneDetectorConstruction::UpdateGeometry()
 {
-
-  delete solidHPGe;
-  delete logicHPGe;
-  delete physiHPGe;
-  delete solidPixel;
-  delete logicPixel;
-  delete physiPixel;
-  delete solidOhmicNeg;
-  delete logicOhmicNeg;
-  delete physiOhmicNeg;
-  delete solidOhmicPos;
-  delete logicOhmicPos;
-  delete physiOhmicPos;
-  delete solidPlane;
-  delete logicPlane;
-  delete physiPlane;
-  delete solidScreen;
-  delete logicScreen;
-  delete physiScreen;
-  delete solidWorld;
-  delete logicWorld;
-  delete physiWorld;
-
+  G4GeometryManager::GetInstance()->OpenGeometry();
+  G4PhysicalVolumeStore::Clean();
+  G4LogicalVolumeStore::Clean();
+  G4SolidStore::Clean();
+ 
   zRotPhiHPGe.rotateX(-1.*PhiHPGe);
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructApparate());
+  //Triggers a new call of Construct() and of all the geometry resets.
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayFluoPlaneDetectorConstruction::DeleteGrainObjects()
 {
@@ -624,17 +616,20 @@ void XrayFluoPlaneDetectorConstruction::DeleteGrainObjects()
   }
 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void XrayFluoPlaneDetectorConstruction::SetPlaneMaterial(G4String newMaterial)
 {
-
-
-    G4cout << "Material!!!!" << newMaterial << G4endl;
-    logicPlane->SetMaterial(materials->GetMaterial(newMaterial));
-    PrintApparateParameters();
-  
+  //G4cout << "Material!!!!" << newMaterial << G4endl;
+  logicPlane->SetMaterial(materials->GetMaterial(newMaterial));
+  PrintApparateParameters();
+  //GeometryHasBeenModified is called by the messenger
+    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 
 
 

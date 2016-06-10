@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 73917 2013-09-17 07:34:57Z gcosmo $
+# $Id: sources.cmake 85358 2014-10-28 10:02:44Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -77,6 +77,7 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4MaterialScanner.hh
 	G4PhysicsListHelper.hh
 	G4PhysicsListOrderingParameter.hh
+        G4PhysicsListWorkspace.hh
         G4Run.hh
         G4RunManager.hh
 	G4MTRunManager.hh
@@ -111,6 +112,7 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4MaterialScanner.cc
 	G4PhysicsListHelper.cc
 	G4PhysicsListOrderingParamater.cc
+        G4PhysicsListWorkspace.cc
         G4Run.cc
         G4RunManager.cc
 	G4MTRunManager.cc

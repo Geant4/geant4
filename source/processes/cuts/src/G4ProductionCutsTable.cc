@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc 71792 2013-06-24 14:11:27Z gcosmo $
+// $Id: G4ProductionCutsTable.cc 78776 2014-01-23 11:26:01Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -971,10 +971,10 @@ G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& directory,
       break;
     }
 
+    if (fOK) {
 #ifdef G4VERBOSE
-    // debug information 
-    if (verboseLevel >1) {
-      if (fOK) {
+      // debug information 
+      if (verboseLevel >1) {
 	G4String regionname(region_name);
 	G4Region* fRegion = 0;
 	if ( regionname != "NONE" ) {
@@ -1009,20 +1009,23 @@ G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& directory,
 	  G4cout << " is consistent with current setup" << G4endl;
 	}
       }
-    }
-    if ((!fOK) && (verboseLevel >0)) {
-      G4cout << "G4ProductionCutTable::CheckMaterialCutsCoupleInfo ";
-      G4cout << "Couples is not defined in the current detector setup  ";
-      G4cout << index << ": in " << fileName  << G4endl;
-      G4cout << " material: " << mat_name ;
-      G4cout << " region: " << region_name << G4endl;
-      for (size_t ii=0; ii< NumberOfG4CutIndex; ii++) {
-	G4cout << "cut[" << ii << "]=" << cutValues[ii]/mm;
-	G4cout << " mm   :  ";
-      }
-      G4cout << G4endl;
-    }
 #endif
+    } else {
+#ifdef G4VERBOSE
+      if (verboseLevel >0) {
+        G4cout << "G4ProductionCutTable::CheckMaterialCutsCoupleInfo ";
+        G4cout << "Couples is not defined in the current detector setup  ";
+        G4cout << index << ": in " << fileName  << G4endl;
+        G4cout << " material: " << mat_name ;
+        G4cout << " region: " << region_name << G4endl;
+        for (size_t ii=0; ii< NumberOfG4CutIndex; ii++) {
+	  G4cout << "cut[" << ii << "]=" << cutValues[ii]/mm;
+	  G4cout << " mm   :  ";
+        }
+        G4cout << G4endl;
+      }
+#endif
+    }
 
   }
   fIn.close();

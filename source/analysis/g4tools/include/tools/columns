@@ -1,0 +1,607 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_columns
+#define tools_columns
+
+#include <vector>
+#include <ostream>
+
+#include "forit"
+
+#ifdef TOOLS_MEM
+#include "mem"
+#include "S_STRING"
+#endif
+
+namespace tools {
+namespace columns {
+
+class tree {
+#ifdef TOOLS_MEM
+  TOOLS_SCLASS(tools::columns::tree)
+#endif
+public:
+  tree(tree* a_parent):m_parent(a_parent){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~tree(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  tree(const tree& a_from)
+  :m_dcl(a_from.m_dcl)
+  ,m_sub(a_from.m_sub)
+  ,m_parent(a_from.m_parent)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  tree& operator=(const tree& a_from) {
+    if(&a_from==this) return *this;
+    m_dcl = a_from.m_dcl;
+    m_sub = a_from.m_sub;
+    m_parent = a_from.m_parent;
+    return *this;
+  }
+public: 
+  void clear(){
+    m_dcl.clear();
+    tools_vforit(tree,m_sub,it) (*it).clear();
+  }
+  void dump_tree(std::ostream& a_out,const std::string& a_margin) {
+#ifdef WIN32
+    if(m_dcl.size()) a_out << a_margin.c_str() << m_dcl.c_str() << std::endl;
+#else
+    if(m_dcl.size()) a_out << a_margin << m_dcl << std::endl;
+#endif
+   {tools_vforit(tree,m_sub,it) {
+#ifdef WIN32
+      std::string s = a_margin;s += "  ";
+      (*it).dump_tree(a_out,s);
+#else
+      (*it).dump_tree(a_out,a_margin+"  ");
+#endif
+    }}
+  }
+public:
+  std::string m_dcl;
+  std::vector<tree> m_sub;
+  tree* m_parent;
+};
+
+}}
+
+#include "strip"
+
+namespace tools {
+namespace columns {
+
+class parser {
+public:
+  parser():m_top(0){}
+  virtual ~parser(){m_top.clear();}
+protected:
+  parser(const parser& a_from):m_top(a_from.m_top){}
+  parser& operator=(const parser&){return *this;}
+public:
+  bool parse(const std::string& a_s){
+    m_top.clear();
+    tree* prev = &m_top;
+   {tree tmp(0);
+    std::string s;
+    for(std::string::const_iterator it=a_s.begin();;++it) {
+      if(it==a_s.end()) {
+        if(s.size()) {
+          tmp.m_dcl = s;
+          tmp.m_parent = prev;
+          prev->m_sub.push_back(tmp);
+          s.clear();
+        }
+        tmp.clear();
+        break;
+      } else {
+        const char& c = *it;
+        if(c==',') {
+          if(s.size()) {
+            tmp.m_dcl = s;
+            tmp.m_parent = prev;
+            prev->m_sub.push_back(tmp);
+            s.clear();
+          }
+          tmp.clear();
+        } else if(c=='{') {
+          tmp.clear();
+          if(s.size()) {
+            tmp.m_dcl = s;
+            s.clear();
+          }
+          tmp.m_parent = prev;
+          prev->m_sub.push_back(tmp);      
+          prev = &(prev->m_sub.back());
+        } else if(c=='}') {
+          if(s.size()) {
+            tmp.m_dcl = s;
+            tmp.m_parent = prev;
+            prev->m_sub.push_back(tmp);
+            s.clear();
+          }
+          tmp.clear();
+          prev = prev->m_parent;
+          if(!prev) return false; //should not happen.
+        } else {
+          s += c;
+        }
+      }
+    }}
+    return true;
+  }
+
+  void dump(std::ostream& a_out) {m_top.dump_tree(a_out,"");}
+protected:
+  tree m_top;
+};
+
+}}
+
+#include "words"
+#include "value"
+
+namespace tools {
+namespace columns {
+
+inline void delete_columns(std::vector<value>& a_vars) {
+  tools_vforit(value,a_vars,it) {
+    if((*it).type()==value::VOID_STAR) {
+      std::vector<value>* vars = 
+        (std::vector<value>*)(*it).get_void_star();
+      delete_columns(*vars);
+      delete vars;
+    }
+  }
+  a_vars.clear();
+}
+
+inline void copy_columns(const std::vector<value>& a_from,
+                         std::vector<value>& a_to) {
+  std::vector<value>::const_iterator it;
+  for(it=a_from.begin();it!=a_from.end();++it) {
+    if((*it).type()==value::VOID_STAR) {
+      std::vector<value>* vars = new std::vector<value>();
+      value v((void*)vars);
+      v.set_label((*it).label());
+      a_to.push_back(v);
+      std::vector<value>* p = 
+        (std::vector<value>*)(*it).get_void_star(); 
+      copy_columns(*p,*vars);
+    } else {
+      a_to.push_back(*it);
+    }
+  }
+}
+
+inline void dump_columns(std::ostream& a_out,
+                         const std::vector<value>& a_vars,
+                         const std::string& a_margin = "") {
+  std::vector<value>::const_iterator it;
+  for(it=a_vars.begin();it!=a_vars.end();++it) {
+    if((*it).type()==value::VOID_STAR) {
+      a_out << a_margin
+            << "ITuple : " << (*it).label() << " : begin "
+            << std::endl;
+      std::vector<value>* vars = 
+        (std::vector<value>*)(*it).get_void_star();
+      dump_columns(a_out,*vars,a_margin+"  ");
+      //a_out << a_margin
+      //      << "ITuple : " << (*it).label() << " : end "
+      //      << std::endl;
+    } else {
+      //(*it).print(a_out);
+      std::string stype;        
+      (*it).s_type(stype);
+      std::string sval;        
+      (*it).tos(sval);
+
+      a_out << a_margin
+            << stype << " : " 
+            << (*it).label() << " : " 
+            << sval
+            << std::endl;
+    }
+  }
+}
+
+class finder : public tools::columns::parser {
+public:
+  finder(std::ostream& a_out,const std::string& a_script) 
+  :m_out(a_out)
+  ,m_script(a_script)
+  //,fSuccess(false)
+  ,m_cur_type(value::NONE)
+  {}
+  virtual ~finder() {clear();}
+protected:
+  finder(const finder& a_from):parser(a_from),m_out(a_from.m_out){}
+  finder& operator=(const finder&){return *this;}
+public:
+  //void setScript(const std::string& a_string) { m_script = a_string;}
+  bool find_variables() {
+    clear();
+    if(m_script.empty()) return false; //keep old version logic.
+    if(!parse(m_script)) return false;    
+    //dump(m_out);
+    //analyse m_top :
+    if(!analyse(m_top,m_stack)) {clear();return false;}
+    return true;
+  }
+
+  std::vector<value> result() const {
+    std::vector<value> vars;
+    copy_columns(m_stack,vars);
+    return vars;
+  }
+
+  void clear() {
+    m_top.clear();
+    delete_columns(m_stack);
+    m_cur_type = value::NONE;
+  }
+/*
+  const std::string& script() const { return m_script;}
+  std::string script() { return m_script;}
+  //bool isSuccess() const { return fSuccess;}
+  std::ostream& out() const {return m_out;}
+*/
+protected:
+  bool analyse(tools::columns::tree& a_tree,
+                      std::vector<value>& a_stack) {
+    if(a_tree.m_dcl.empty()) { //top
+      //std::cout << "debug : dcl empty" << std::endl;
+      tools_vforit(tools::columns::tree,a_tree.m_sub,it) {
+        if(!analyse(*it,a_stack)) return false;
+      }
+    } else {
+      //std::cout << "debug : dcl not empty" << std::endl;
+      value* v = analyse_dcl(a_tree.m_dcl);
+      if(!v) return false;
+      //std::cout << "debug : dcl label " << v->label() << std::endl;
+      if(a_tree.m_sub.size()) {
+        if(v->type()!=value::VOID_STAR) {
+          m_out << "tools::columns::finder::analyse :"
+                << " Expect a VOID_STAR."
+                << std::endl;
+          delete v;
+          return false;
+        }
+        m_cur_type = value::NONE;
+        std::vector<value>* stk = new std::vector<value>();
+        tools_vforit(tools::columns::tree,a_tree.m_sub,it) {
+          if(!analyse(*it,*stk)) {
+            delete v;
+            return false;
+          }
+        }
+        v->set((void*)stk);
+      } else {
+        m_cur_type = v->type();
+      }
+      a_stack.push_back(*v);
+      delete v;
+    }
+    return true;
+  }
+  value* analyse_dcl(const std::string& a_s) {
+    std::vector<std::string> words;
+    tools::words(a_s,"=",false,words);
+    if(words.size()==2) { //<type> <name>=<value>
+      std::vector<std::string> swords;
+      tools::words(words[0]," ",false,swords);
+      if(swords.size()==2) {
+
+        tools::strip(swords[0]);
+        tools::strip(swords[1]);
+
+        if(swords[0]=="ITuple") {
+  
+          //create a value::VOID_STAR :
+          value* v = new value((void*)0);
+          v->set_label(swords[1]);
+          return v;
+  
+        } else {
+  
+          value::e_type type;
+          if(!s2type(swords[0],type)){
+            m_out << "tools::columns::finder::analyse_dcl :"
+                  << " s2type failed for " << tools::sout(swords[0]) << "."
+                  << std::endl;
+            return 0;
+          }
+
+          tools::strip(words[1]);
+          value* v = new_value(type,words[1]);
+          if(!v) {
+            m_out << "tools::columns::finder::analyse_dcl :"
+                  << " syntax error in " << tools::sout(a_s) << "."
+                  << " new_value() failed."
+                  << std::endl;
+            return 0;
+          }
+          v->set_label(swords[1]);
+          return v;
+
+        }
+
+      } else if(swords.size()==1) {
+        if(m_cur_type==value::NONE) {
+          m_out << "tools::columns::finder::analyse_dcl :"
+                << " (1) current type is NONE."
+                << std::endl;
+          return 0;
+        }
+
+        tools::strip(words[1]);
+        value* v = new_value(m_cur_type,words[1]);
+        if(!v) {
+          m_out << "tools::columns::finder::analyse_dcl :"
+                << " syntax error in " << tools::sout(a_s) << "."
+                << " Bad value " << tools::sout(words[1]) << "."
+                << std::endl;
+          return 0;
+        }
+        v->set_label(swords[0]);
+        return v;
+
+      } else {
+        m_out << "tools::columns::finder::analyse_dcl :"
+              << " syntax error in " << tools::sout(a_s)
+              << ". Case 1."
+              << std::endl;
+        return 0;
+      }
+
+    } else if(words.size()==1) {
+      //<type> <name>
+      //<type> <name>={
+      std::vector<std::string> swords;
+      tools::words(words[0]," ",false,swords);
+      if(swords.size()==2) {
+        tools::strip(swords[0]);
+        tools::strip(swords[1]);
+
+        if(swords[0]=="ITuple") {
+  
+          //create a value::VOID_STAR :
+          value* v = new value((void*)0);
+          v->set_label(swords[1]);
+          return v;
+
+	} else {
+          value::e_type type;
+          if(!s2type(swords[0],type)){
+            m_out << "tools::columns::finder::analyse_dcl :"
+                  << " s2type failed for " << tools::sout(swords[0]) << "."
+                  << std::endl;
+            return 0;
+          }
+
+          value* v = new_value(type,"");
+          if(!v) {
+            m_out << "tools::columns::finder::analyse_dcl :"
+                  << " (2) syntax error in " << tools::sout(words[0]) << "."
+                  << " Unknown type " << tools::sout(swords[0]) << "."
+                  << std::endl;
+            return 0;
+          }
+          v->set_label(swords[1]);
+          return v;
+        }
+
+      } else if(swords.size()==1) {
+
+        if(m_cur_type==value::NONE) {
+          m_out << "tools::columns::finder::analyse_dcl :"
+                << " (1) current type is NONE."
+                << std::endl;
+          return 0;
+        }
+
+        value* v = new value();
+        v->set_type(m_cur_type);       
+        v->set_label(swords[0]);
+        return v;
+
+      } else {
+        m_out << "tools::columns::finder::analyse_dcl :"
+              << " syntax error in " << tools::sout(a_s)
+              << ". Case 2."
+              << std::endl;
+        return 0;
+      }
+
+    } else {
+      m_out << "tools::columns::finder::analyse_dcl :"
+            << " syntax error in " << tools::sout(a_s)
+            << ". Case 3."
+            << std::endl;
+      return 0;
+    }
+  }
+protected:
+  static bool s2type(const std::string& a_s,
+                            value::e_type& a_type){
+           if(a_s=="float") {
+      a_type = value::FLOAT;    
+    } else if(a_s=="double") {
+      a_type = value::DOUBLE;    
+    //} else if(a_s=="char") {
+    //  a_type = value::CHAR;    
+    } else if(a_s=="short") {
+      a_type = value::SHORT;    
+    } else if(a_s=="int") {
+      a_type = value::INT;    
+    } else if(a_s=="long") {
+      a_type = value::INT64;    
+    } else if((a_s=="bool")||(a_s=="boolean")) {
+      a_type = value::BOOL;    
+    } else if((a_s=="string")||(a_s=="java.lang.String")){
+      a_type = value::STRING;    
+    //} else if(a_s=="byte") {
+    //  a_type = value::UNSIGNED_CHAR;    
+
+    } else if(a_s=="float[]") {
+      a_type = value::ARRAY_FLOAT;
+    } else if(a_s=="double[]") {
+      a_type = value::ARRAY_DOUBLE;
+    //} else if(a_s=="char[]") {
+    //  a_type = value::ARRAY_CHAR;
+    //} else if(a_s=="byte[]") {
+    //  a_type = value::ARRAY_UNSIGNED_CHAR;
+    } else if(a_s=="short[]") {
+      a_type = value::ARRAY_SHORT;
+    } else if(a_s=="int[]") {
+      a_type = value::ARRAY_INT;
+    } else if(a_s=="long[]") {
+      a_type = value::ARRAY_INT64;
+    } else if((a_s=="bool[]")||(a_s=="boolean[]")) {
+      a_type = value::ARRAY_BOOL;
+    } else if((a_s=="string[]")||(a_s=="java.lang.String[]")){
+      a_type = value::ARRAY_STRING;
+
+    // not AIDA :
+    //} else if(a_s=="uchar") {
+    //  a_type = value::UNSIGNED_CHAR;    
+    } else if(a_s=="ushort") {
+      a_type = value::UNSIGNED_SHORT;    
+    } else if(a_s=="uint") {
+      a_type = value::UNSIGNED_INT;    
+    } else if(a_s=="ulong") {
+      a_type = value::UNSIGNED_INT64;    
+    } else {
+      return false;
+    }
+    return true;
+  }
+  static value* new_value(value::e_type a_type,
+                                        const std::string& a_v) {
+           if(a_type==value::FLOAT) {
+      float v = 0;
+      if(a_v.size()) {if(!tools::to<float>(a_v,v)) return 0;}
+      return new value(v);    
+    } else if(a_type==value::DOUBLE) {
+      double v = 0;
+      if(a_v.size()) {if(!tools::to<double>(a_v,v)) return 0;}
+      return new value(v);    
+    //} else if(a_type==value::CHAR) {
+    //  char v = 0;
+    //  if(a_v.size()) {if(!tools::to<char>(a_v,v)) return 0;}
+    //  return new value(v);    
+    } else if(a_type==value::SHORT) {
+      short v = 0;
+      if(a_v.size()) {if(!tools::to<short>(a_v,v)) return 0;}
+      return new value(v);    
+    } else if(a_type==value::INT) {
+      int v = 0;
+      if(a_v.size()) {if(!tools::to<int>(a_v,v)) return 0;}
+      return new value(v);    
+
+    } else if(a_type==value::INT64) {
+      int64 v = 0;
+      if(a_v.size()) {if(!tools::to<int64>(a_v,v)) return 0;}
+      return new value(v);    
+    } else if(a_type==value::BOOL) {
+      bool v = false;
+      if(a_v.size()) {if(!tools::to(a_v,v)) return 0;}
+      return new value(v);    
+
+    } else if(a_type==value::STRING) {
+      if( (a_v.size()>=2) && (a_v[0]=='"') && (a_v[a_v.size()-1]=='"') ){
+        return new value(a_v.substr(1,a_v.size()-2));
+      } else {
+        return new value(a_v);    
+      }
+
+    //} else if(a_type==value::UNSIGNED_CHAR) {
+    //  unsigned short v = 0;
+    //  if(a_v.size()) {if(!tools::to<unsigned short>(a_v,v)) return 0;}
+    //  return new value((unsigned char)v);    
+
+    } else if(a_type==value::UNSIGNED_SHORT) {
+      unsigned short v = 0;
+      if(a_v.size()) {if(!tools::to<unsigned short>(a_v,v)) return 0;}
+      return new value(v);    
+    } else if(a_type==value::UNSIGNED_INT) {
+      unsigned int v = 0;
+      if(a_v.size()) {if(!tools::to<unsigned int>(a_v,v)) return 0;}
+      return new value(v);    
+
+    } else if(a_type==value::UNSIGNED_INT64) {
+      uint64 v = 0;
+      if(a_v.size()) {if(!tools::to<uint64>(a_v,v)) return 0;}
+      return new value(v);    
+
+    } else if(a_type==value::ARRAY_FLOAT) {
+      if(a_v.size()) return 0;
+      value* v = new value();    
+      v->set_type(value::ARRAY_FLOAT);
+      return v;
+    } else if(a_type==value::ARRAY_DOUBLE) {
+      if(a_v.size()) return 0;
+      value* v = new value();
+      v->set_type(value::ARRAY_DOUBLE);
+      return v;
+    //} else if(a_type==value::ARRAY_UNSIGNED_CHAR) {
+    //  if(a_v.size()) return 0;
+    //  value* v = new value();
+    //  v->set_type(value::ARRAY_UNSIGNED_CHAR);
+    //  return v;
+    //} else if(a_type==value::ARRAY_CHAR) {
+    //  if(a_v.size()) return 0;
+    //  value* v = new value();
+    //  v->set_type(value::ARRAY_CHAR);
+    //  return v;
+    } else if(a_type==value::ARRAY_SHORT) {
+      if(a_v.size()) return 0;
+      value* v = new value();
+      v->set_type(value::ARRAY_SHORT);
+      return v;
+    } else if(a_type==value::ARRAY_INT) {
+      if(a_v.size()) return 0;
+      value* v = new value();
+      v->set_type(value::ARRAY_INT);
+      return v;
+    } else if(a_type==value::ARRAY_INT64) {
+      if(a_v.size()) return 0;
+      value* v = new value();
+      v->set_type(value::ARRAY_INT64);
+      return v;
+    } else if(a_type==value::ARRAY_BOOL) {
+      if(a_v.size()) return 0;
+      value* v = new value();
+      v->set_type(value::ARRAY_BOOL);
+      return v;
+    } else if(a_type==value::ARRAY_STRING) {
+      if(a_v.size()) return 0;
+      value* v = new value();
+      v->set_type(value::ARRAY_STRING);
+      return v;
+    } else {
+      return 0;
+    }
+  }
+public:
+  std::ostream& m_out;
+  std::string m_script;
+  std::vector<value> m_stack;
+  value::e_type m_cur_type;
+  //bool fSuccess;
+};
+
+}}
+
+#endif

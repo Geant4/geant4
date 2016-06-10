@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PSCellCharge.cc 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4PSCellCharge.cc 81087 2014-05-20 15:44:27Z gcosmo $
 //
 // G4PSCellCharge
 #include "G4PSCellCharge.hh"
@@ -41,14 +41,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSCellCharge::G4PSCellCharge(G4String name, G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1)
+    :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0)
 {
     SetUnit("e+");
 }
 
 G4PSCellCharge::G4PSCellCharge(G4String name, const G4String& unit, 
 			       G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1)
+    :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0)
 {
     SetUnit(unit);
 }

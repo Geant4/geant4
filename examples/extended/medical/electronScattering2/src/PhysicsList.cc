@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc 75702 2013-11-05 13:08:48Z gcosmo $
+// $Id: PhysicsList.cc 82042 2014-06-10 08:02:58Z gcosmo $
 //
 /// \file medical/electronScattering2/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
@@ -40,6 +40,8 @@
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh"
+#include "G4EmLowEPPhysics.hh"
 
 #include "G4UnitsTable.hh"
 
@@ -81,11 +83,6 @@ PhysicsList::PhysicsList()
     // EM physics
     fEmName = G4String("local");
     fEmPhysicsList = new PhysListEmStandard(fEmName);
-    
-    defaultCutValue = 1.*mm;
-    fCutForGamma     = defaultCutValue;
-    fCutForElectron  = defaultCutValue;
-    fCutForPositron  = defaultCutValue;
     
     SetVerboseLevel(1);
 }
@@ -236,7 +233,18 @@ void PhysicsList::AddPhysicsList(const G4String& name)
         fEmName = name;
         delete fEmPhysicsList;
         fEmPhysicsList = new G4EmStandardPhysics_option3();
+
+    } else if (name == "emstandard_opt4") {
         
+        fEmName = name;
+        delete fEmPhysicsList;
+        fEmPhysicsList = new G4EmStandardPhysics_option4();
+
+    } else if (name == "emlowenergy") {
+        fEmName = name;
+        delete fEmPhysicsList;
+        fEmPhysicsList = new G4EmLowEPPhysics();
+
     } else if (name == "standardSS") {
         
         fEmName = name;
@@ -256,55 +264,14 @@ void PhysicsList::AddPhysicsList(const G4String& name)
         fEmPhysicsList = new PhysListEmStandardWVI(name);
         
     } else {
-        
-        G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
-        << " is not defined"
-        << G4endl;
-        exit(1);
+    
+        G4ExceptionDescription description;
+        description
+          << "      "
+          << "PhysicsList::AddPhysicsList: <" << name << "> is not defined";
+        G4Exception("PhysicsList::AddPhysicsList",
+                "electronScattering2_F001", FatalException, description);
     }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCuts()
-{
-    
-    if (verboseLevel >0){
-        G4cout << "PhysicsList::SetCuts:";
-        G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-    }
-    
-    // set cut values for gamma at first and for e- second and next for e+,
-    // because some processes for e+/e- need cut values for gamma
-    SetCutValue(fCutForGamma, "gamma");
-    SetCutValue(fCutForElectron, "e-");
-    SetCutValue(fCutForPositron, "e+");
-    
-    if (verboseLevel>0) DumpCutValuesTable();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForGamma(G4double cut)
-{
-    fCutForGamma = cut;
-    SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForElectron(G4double cut)
-{
-    fCutForElectron = cut;
-    SetParticleCuts(fCutForElectron, G4Electron::Electron());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForPositron(G4double cut)
-{
-    fCutForPositron = cut;
-    SetParticleCuts(fCutForPositron, G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

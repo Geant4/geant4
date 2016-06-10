@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonisParamMat.hh 68070 2013-03-13 15:03:06Z gcosmo $
+// $Id: G4IonisParamMat.hh 81374 2014-05-27 13:07:25Z gcosmo $
 //
 
 // class description
@@ -111,9 +111,7 @@ public:
   void      SetMeanEnergyPerIonPair(G4double value) {fMeanEnergyPerIon = value;}; 
   G4double  GetMeanEnergyPerIonPair()         const {return fMeanEnergyPerIon;};
       
-public:  // without description
-
-  G4IonisParamMat(const G4IonisParamMat&);
+  // operators
   G4IonisParamMat& operator=(const G4IonisParamMat&);          
   G4int operator==(const G4IonisParamMat&) const;
   G4int operator!=(const G4IonisParamMat&) const;
@@ -137,7 +135,7 @@ private:
   // Compute parameters for ion parameterizations
   void ComputeIonParameters();
 
-private:
+  G4IonisParamMat(const G4IonisParamMat&);
 
 //
 // data members

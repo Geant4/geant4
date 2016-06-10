@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -38,6 +39,7 @@
 #define G4INCLParticleStore_hh 1
 
 #include <map>
+#include <set>
 #include <list>
 #include <string>
 #include <algorithm>
@@ -50,6 +52,16 @@
 #ifdef INCLXX_IN_GEANT4_MODE
 #define INCL_AVATAR_SEARCH_MinElement 1
 #endif // INCLXX_IN_GEANT4_MODE
+
+#if !defined(NDEBUG) && !defined(INCLXX_IN_GEANT4_MODE)
+// Force instantiation of all the std::multimap<Particle*,IAvatar*> methods for
+// debugging purposes
+namespace G4INCL {
+  class Particle;
+  class IAvatar;
+}
+template class std::multimap<G4INCL::Particle*, G4INCL::IAvatar*>;
+#endif
 
 namespace G4INCL {
 
@@ -79,6 +91,12 @@ namespace G4INCL {
      * 2. add an empty entry for this particle into map AvatarID -> [ParticleID]
      */
     void add(Particle *p);
+
+    /** \brief Add a list of particles to the Store
+     *
+     * This acts as if add(Particle *) was called on each element of the list.
+     */
+    void add(ParticleList const &pL);
 
     /// \brief Add one ParticleEntry avatar
     void addParticleEntryAvatar(IAvatar *a);
@@ -136,12 +154,16 @@ namespace G4INCL {
       clearIncoming();
     }
 
-    /**
+    /** \brief Notify the Store about a particle update
+     *
      * Notify the Store that a particle has been updated. This
-     * triggers the removal of obsolete avatars and their
-     * disconnection from the particle.
+     * schedules the removal of obsolete avatars and their disconnection from
+     * the particle.
      */
     void particleHasBeenUpdated(Particle * const);
+
+    /// \brief Remove avatars that have been scheduled
+    void removeScheduledAvatars();
 
     /**
      * Find the avatar that has the smallest time.
@@ -276,18 +298,11 @@ namespace G4INCL {
      */
     void clearAvatars();
 
-    /** \brief Initialise the particleAvatarConnections map
-     *
-     * Generate an empty avatar-ID vector for each particle in the inside list
-     * and fill in the relevant particle-avatar map entry.
-     */
-    void initialiseParticleAvatarConnections();
-
     /**
      * Load particle configuration from ASCII file (see
      * avatarPredictionTest).
      */
-    void loadParticles(std::string filename);
+    void loadParticles(std::string const &filename);
 
     /**
      * Get the value of the nucleus mass number that we read from file
@@ -315,7 +330,7 @@ namespace G4INCL {
     /**
      * Print the nucleon configuration of the nucleus.
      */
-    void writeParticles(std::string filename);
+    void writeParticles(std::string const &filename);
 
     /**
      * Print the list of avatars
@@ -337,21 +352,6 @@ namespace G4INCL {
     static G4bool avatarComparisonPredicate(IAvatar *lhs, IAvatar *rhs) {
       return (lhs->getTime() < rhs->getTime());
     }
-#elif defined(INCL_AVATAR_SEARCH_INCLSort)
-    /** \brief Perform a binary search on the avatarIterList.
-     *
-     * By construction, the avatarIterList is always sorted in descending time
-     * order. Thus, we can use binary search if we need to look for a specific
-     * avatar in the list.
-     *
-     * Adapted from  STL's binary_search algorithm, as seen on
-     * http://www.cplusplus.com/reference/algorithm/binary_search/.
-     *
-     * \param avatar a pointer to the searched avatar.
-     * \return an iterator to the IAvatarIter, if the avatar is found; otherwise,
-     *         IAvatarList.end().
-     */
-    std::list<IAvatarIter>::iterator binaryIterSearch(IAvatar const * const avatar);
 #endif
 
   private:
@@ -386,26 +386,26 @@ namespace G4INCL {
     /** \brief Remove an avatar from the list of avatars
      *
      * Removes an avatar from the list of all avatars. The avatar is *not*
-     * deleted. Use removeAndDeleteAvatar for that.
+     * deleted.
      *
      * \param a the avatar to remove
      */
     void removeAvatar(IAvatar * const a);
 
-    /** \brief Remove an avatar from the list of avatars
-     *
-     * Removes an avatar from the list of all avatars and deletes it.
-     *
-     * \param a the avatar to remove and delete
-     */
-    void removeAndDeleteAvatar(IAvatar * const a);
-
   private:
     /**
      * Map particle -> [avatar]
      */
-    std::map<Particle*, IAvatarList* > particleAvatarConnections;
+    std::multimap<Particle*, IAvatar*> particleAvatarConnections;
+    typedef std::multimap<Particle*, IAvatar*>::value_type PAPair;
+    typedef std::multimap<Particle*, IAvatar*>::iterator PAIter;
+    typedef std::pair<PAIter, PAIter> PAIterPair;
 
+    /// \brief Set of avatars to be removed
+    std::set<IAvatar*> avatarsToBeRemoved;
+    typedef std::set<IAvatar*>::const_iterator ASIter;
+
+  private:
     /**
      * List of all avatars
      */
@@ -461,15 +461,7 @@ namespace G4INCL {
      */
     Config const * theConfig;
 
-#ifdef INCL_AVATAR_SEARCH_INCLSort
-    /** \brief Internal stack for the INCLSort search algorithm.
-     *
-     * List of std::list<IAvatar*>::const_iterator to keep track of the best
-     * avatars so far.
-     */
-    std::list<IAvatarIter> avatarIterList;
-#endif
-
   };
 }
+
 #endif

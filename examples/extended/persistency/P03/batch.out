@@ -4,11 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
+
+<<< Geant4 Physics List simulation engine: G4GenericPhysicsList
 
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
@@ -75,6 +77,7 @@ Attributes available for modeling and filtering with
   "/vis/filtering/trajectories/create/attributeFilter" commands:
 G4TrajectoriesModel:
   Event ID (EventID): G4int
+  Run ID (RunID): G4int
 G4SmoothTrajectory:
   Charge (Ch): unit: e+ (G4double)
   Track ID (ID): G4int
@@ -96,36 +99,6 @@ G4SmoothTrajectoryPoint:
 /vis/scene/notifyHandlers scene-0
 /vis/scene/endOfEventAction accumulate
 /vis/viewer/set/autoRefresh true
-/vis/viewer/refresh
-G4ASCIITreeSceneHandler::BeginModeling: writing to G4 standard output (G4cout)
-#  Set verbosity with "/vis/ASCIITree/verbose <verbosity>":
-#    <  10: - does not print daughters of repeated placements, does not repeat replicas.
-#    >= 10: prints all physical volumes.
-#  The level of detail is given by verbosity%10:
-#  for each volume:
-#    >=  0: physical volume name.
-#    >=  1: logical volume name (and names of sensitive detector and readout geometry, if any).
-#    >=  2: solid name and type.
-#    >=  3: volume and density.
-#    >=  5: daughter-subtracted volume and mass.
-#  and in the summary at the end of printing:
-#    >=  4: daughter-included mass of top physical volume(s) in scene to depth specified.
-#  Note: by default, culling is switched off so all volumes are seen.
-#  Note: the mass calculation takes into account daughters, which can be time consuming.  If you want the mass of a particular subtree to a particular depth:
-#    /vis/open ATree
-#    /vis/ASCIITree/verbose 14
-#    /vis/scene/create
-#    /vis/scene/add/volume <subtree-physical-volume> ! <depth>
-#    /vis/sceneHandler/attach
-#    /vis/viewer/flush
-#  Now printing with verbosity 0
-#  Format is: PV:n
-#  Abbreviations: PV = Physical Volume,     LV = Logical Volume,
-#                 SD = Sensitive Detector,  RO = Read Out Geometry.
-  "world":0
-    "my tube":1
-      "sphere":1
-G4ASCIITreeSceneHandler::EndModeling
 /vis/verbose warnings
 Visualization verbosity changed to warnings (3)
 /gun/particle gamma
@@ -138,34 +111,34 @@ Region <DefaultRegionForTheWorld> --  -- appears in <world> world volume
  Root logical volume(s) : world 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air G4_WATER G4_AIR 
- Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+ Production cuts :   gamma 700 um      e- 700 um      e+ 700 um  proton 700 um 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+ Production cuts :   gamma 700 um      e- 700 um      e+ 700 um  proton 700 um 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes
  Material : Air
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.94056 keV    e-  351.877 keV    e+  342.545 keV proton 100 keV
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.51944 keV    e-  276.265 keV    e+  270.751 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : G4_AIR
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -177,71 +150,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 /vis/scene/notifyHandlers scene-0
-G4ASCIITreeSceneHandler::BeginModeling: writing to G4 standard output (G4cout)
-#  Set verbosity with "/vis/ASCIITree/verbose <verbosity>":
-#    <  10: - does not print daughters of repeated placements, does not repeat replicas.
-#    >= 10: prints all physical volumes.
-#  The level of detail is given by verbosity%10:
-#  for each volume:
-#    >=  0: physical volume name.
-#    >=  1: logical volume name (and names of sensitive detector and readout geometry, if any).
-#    >=  2: solid name and type.
-#    >=  3: volume and density.
-#    >=  5: daughter-subtracted volume and mass.
-#  and in the summary at the end of printing:
-#    >=  4: daughter-included mass of top physical volume(s) in scene to depth specified.
-#  Note: by default, culling is switched off so all volumes are seen.
-#  Note: the mass calculation takes into account daughters, which can be time consuming.  If you want the mass of a particular subtree to a particular depth:
-#    /vis/open ATree
-#    /vis/ASCIITree/verbose 14
-#    /vis/scene/create
-#    /vis/scene/add/volume <subtree-physical-volume> ! <depth>
-#    /vis/sceneHandler/attach
-#    /vis/viewer/flush
-#  Now printing with verbosity 0
-#  Format is: PV:n
-#  Abbreviations: PV = Physical Volume,     LV = Logical Volume,
-#                 SD = Sensitive Detector,  RO = Read Out Geometry.
-  "world":0
-    "my tube":1
-      "sphere":1
-G4ASCIITreeSceneHandler::EndModeling
 ### Run 0 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10
   User=0s Real=0s Sys=0s
 WARNING: 10 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them.
-G4ASCIITreeSceneHandler::BeginModeling: writing to G4 standard output (G4cout)
-#  Set verbosity with "/vis/ASCIITree/verbose <verbosity>":
-#    <  10: - does not print daughters of repeated placements, does not repeat replicas.
-#    >= 10: prints all physical volumes.
-#  The level of detail is given by verbosity%10:
-#  for each volume:
-#    >=  0: physical volume name.
-#    >=  1: logical volume name (and names of sensitive detector and readout geometry, if any).
-#    >=  2: solid name and type.
-#    >=  3: volume and density.
-#    >=  5: daughter-subtracted volume and mass.
-#  and in the summary at the end of printing:
-#    >=  4: daughter-included mass of top physical volume(s) in scene to depth specified.
-#  Note: by default, culling is switched off so all volumes are seen.
-#  Note: the mass calculation takes into account daughters, which can be time consuming.  If you want the mass of a particular subtree to a particular depth:
-#    /vis/open ATree
-#    /vis/ASCIITree/verbose 14
-#    /vis/scene/create
-#    /vis/scene/add/volume <subtree-physical-volume> ! <depth>
-#    /vis/sceneHandler/attach
-#    /vis/viewer/flush
-#  Now printing with verbosity 0
-#  Format is: PV:n
-#  Abbreviations: PV = Physical Volume,     LV = Logical Volume,
-#                 SD = Sensitive Detector,  RO = Read Out Geometry.
-  "world":0
-    "my tube":1
-      "sphere":1
-G4ASCIITreeSceneHandler::EndModeling
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
@@ -253,9 +168,10 @@ UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
+Total navigation history collections cleaned: 7
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 0.29 Mb
+Number of memory pools allocated: 12 of which, static: 0
+Dynamic pools deleted: 12 / Total memory freed: 0.016 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

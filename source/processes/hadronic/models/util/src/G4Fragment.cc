@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.cc 67984 2013-03-13 10:44:01Z gcosmo $
+// $Id: G4Fragment.cc 85824 2014-11-05 15:26:17Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -45,7 +45,9 @@
 #include "G4ios.hh"
 #include <iomanip>
 
-G4ThreadLocal G4int G4Fragment::errCount = 0;
+//#define debug_G4Fragment 
+
+G4ThreadLocal G4Allocator<G4Fragment> *pFragmentAllocator = 0;
 
 // Default constructor
 G4Fragment::G4Fragment() :
@@ -55,6 +57,7 @@ G4Fragment::G4Fragment() :
   theGroundStateMass(0.0),
   theMomentum(G4LorentzVector(0,0,0,0)),
   theAngularMomentum(G4ThreeVector(0,0,0)),
+  creatorModel(-1),
   numberOfParticles(0),
   numberOfCharged(0),
   numberOfHoles(0),
@@ -74,6 +77,7 @@ G4Fragment::G4Fragment(const G4Fragment &right)
    theGroundStateMass = right.theGroundStateMass;
    theMomentum  = right.theMomentum;
    theAngularMomentum = right.theAngularMomentum;
+   creatorModel = right.creatorModel;
    numberOfParticles = right.numberOfParticles;
    numberOfCharged = right.numberOfCharged;
    numberOfHoles = right.numberOfHoles;
@@ -92,6 +96,7 @@ G4Fragment::G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum) :
   theZ(Z),
   theMomentum(aMomentum),
   theAngularMomentum(G4ThreeVector(0,0,0)),
+  creatorModel(-1),
   numberOfParticles(0),
   numberOfCharged(0),
   numberOfHoles(0),
@@ -115,11 +120,12 @@ G4Fragment::G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum) :
 
 // This constructor is for initialize photons or electrons
 G4Fragment::G4Fragment(const G4LorentzVector& aMomentum, 
-		       G4ParticleDefinition * aParticleDefinition) :
+		       const G4ParticleDefinition * aParticleDefinition) :
   theA(0),
   theZ(0),
   theMomentum(aMomentum),
   theAngularMomentum(G4ThreeVector(0,0,0)),
+  creatorModel(-1),
   numberOfParticles(0),
   numberOfCharged(0),
   numberOfHoles(0),
@@ -130,8 +136,8 @@ G4Fragment::G4Fragment(const G4LorentzVector& aMomentum,
   isStable(true)
 {
   theExcitationEnergy = 0.0;
-  if(aParticleDefinition != G4Gamma::Gamma() && 
-     aParticleDefinition != G4Electron::Electron()) {
+  if(aParticleDefinition->GetPDGEncoding() != 22 && 
+     aParticleDefinition->GetPDGEncoding() != 11) {
     G4String text = "G4Fragment::G4Fragment constructor for gamma used for "
       + aParticleDefinition->GetParticleName();  
     throw G4HadronicException(__FILE__, __LINE__, text);
@@ -148,6 +154,7 @@ G4Fragment & G4Fragment::operator=(const G4Fragment &right)
     theGroundStateMass = right.theGroundStateMass;
     theMomentum  = right.theMomentum;
     theAngularMomentum = right.theAngularMomentum;
+    creatorModel = right.creatorModel;
     numberOfParticles = right.numberOfParticles;
     numberOfCharged = right.numberOfCharged;
     numberOfHoles = right.numberOfHoles;
@@ -189,7 +196,11 @@ std::ostream& operator << (std::ostream &out, const G4Fragment *theFragment)
 
   out << std::setprecision(3)
       << ", U = " << theFragment->GetExcitationEnergy()/CLHEP::MeV 
-      << " MeV  IsStable= " << theFragment->IsStable() << G4endl
+      << " MeV  IsStable= " << theFragment->IsStable();
+  if(theFragment->creatorModel >= 0) { 
+    out << " creatorModelType= " << theFragment->creatorModel; 
+  }
+  out << G4endl
       << "          P = (" 
       << theFragment->theMomentum.x()/CLHEP::MeV << ","
       << theFragment->theMomentum.y()/CLHEP::MeV << ","
@@ -199,7 +210,6 @@ std::ostream& operator << (std::ostream &out, const G4Fragment *theFragment)
       << G4endl;
        
   // What about Angular momentum???
-
   if (theFragment->GetNumberOfExcitons() != 0) {
     out << "          " 
 	<< "#Particles= " << theFragment->numberOfParticles 
@@ -223,15 +233,18 @@ std::ostream& operator << (std::ostream &out, const G4Fragment &theFragment)
 void G4Fragment::ExcitationEnergyWarning()
 {
   if (theExcitationEnergy < -10 * CLHEP::eV) {
-    ++errCount;
-    if ( errCount <= 1 ) {
-      G4cout << "G4Fragment::CalculateExcitationEnergy(): WARNING "<<G4endl;
-      G4cout << *this << G4endl;
-      if( errCount == 10 ) {
-	G4String text = "G4Fragment::G4Fragment Excitation Energy < 0.0  10 times!";
-	throw G4HadronicException(__FILE__, __LINE__, text);
-      }
-    }
+
+#ifdef G4VERBOSE
+    G4cout << "G4Fragment::CalculateExcitationEnergy(): WARNING "<<G4endl;
+    G4cout << *this << G4endl;
+#endif
+
+#ifdef debug_G4Fragment
+    G4ExceptionDescription ed;
+    ed << *this << G4endl;
+    G4Exception("G4Fragment::ExcitationEnergyWarning()", "had777", 
+		FatalException,ed);
+#endif
   }
   theExcitationEnergy = 0.0;
 }

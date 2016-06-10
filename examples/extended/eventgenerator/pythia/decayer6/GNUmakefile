@@ -1,34 +1,44 @@
-# $Id: GNUmakefile 72244 2013-07-12 08:49:56Z gcosmo $
+# $Id: GNUmakefile 85904 2014-11-06 08:50:03Z gcosmo $
 # --------------------------------------------------------------
 # GNUmakefile for examples module
 # --------------------------------------------------------------
 
 name := pythia6_decayer
+
 G4TARGET := $(name)
 G4EXLIB := true
+SUBDIRS := common
 
 ifndef G4INSTALL
   G4INSTALL = ../../../../..
 endif
 
-.PHONY: setup clean_setup all
-
-all: pythia6 lib bin
+.PHONY: all makesub clean cleansub
+all: pythia6 makesub lib bin
 
 EXTRALIBS = $(G4TMPDIR)/libPythia6.so
 
-setup:
-	@echo "Copying files from common"
-	@$(G4INSTALL)/examples/extended/common/scripts/copy_files.sh
-
-clean_setup:
-	@echo "Removing files copied from common"
-	@$(G4INSTALL)/examples/extended/common/scripts/clean_files.sh
-
 include $(G4INSTALL)/config/binmake.gmk
 
+CPPFLAGS += -I./common/include
 CCFLAGS += -c
 FCFLAGS += -c
+
+makesub:
+	@for dir in $(SUBDIRS); do ( \
+	echo Entering $$dir ... ; \
+	cd $$dir; \
+	$(MAKE) obj name=pythia6_decayer );\
+	done
+
+clean:: cleansub
+
+cleansub:
+	@for dir in $(SUBDIRS); do ( \
+	echo Entering $$dir ...; \
+	cd $$dir; \
+	$(MAKE) clean );\
+	done
 
 visclean:
 	rm -f g4*.prim g4*.eps g4*.wrl

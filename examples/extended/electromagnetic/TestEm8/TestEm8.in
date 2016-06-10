@@ -4,7 +4,8 @@
 # It creates the default geometry (simple absorber cylinder )        
 #
 /control/verbose 2
-/run/verbose 2
+/control/cout/ignoreThreadsExcept 0
+/run/verbose 1
 #/tracking/verbose 2
 #
 #  select EM PhysicsList
@@ -21,8 +22,9 @@
 #
 /run/setCut  0.5 mm
 /run/setCutForRegion GasDetector 1.8 mm
-/run/particle/dumpCutValues
+#/run/particle/dumpCutValues
 #
+#/process/eLoss/fluct false
 #/gun/particle e-
 #
 /gun/particle proton

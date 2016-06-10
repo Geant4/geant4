@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4DisplacedSolid.cc 84211 2014-10-10 14:47:30Z gcosmo $
 //
 // Implementation for G4DisplacedSolid class for boolean 
 // operations between other solids
@@ -55,7 +55,7 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
                                           G4VSolid* pSolid ,
                                           G4RotationMatrix* rotMatrix,
                                     const G4ThreeVector& transVector    )
-  : G4VSolid(pName), fpPolyhedron(0)
+  : G4VSolid(pName), fRebuildPolyhedron(false), fpPolyhedron(0)
 {
   fPtrSolid = pSolid ;
   fPtrTransform = new G4AffineTransform(rotMatrix,transVector) ;
@@ -70,7 +70,7 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
 G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
                                           G4VSolid* pSolid ,
                                     const G4Transform3D& transform  )
-  : G4VSolid(pName), fpPolyhedron(0)
+  : G4VSolid(pName), fRebuildPolyhedron(false), fpPolyhedron(0)
 {
   fPtrSolid = pSolid ;
   fDirectTransform = new G4AffineTransform(transform.getRotation().inverse(),
@@ -89,7 +89,7 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
 G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
                                           G4VSolid* pSolid ,
                                     const G4AffineTransform directTransform )
-  : G4VSolid(pName), fpPolyhedron(0)
+  : G4VSolid(pName), fRebuildPolyhedron(false), fpPolyhedron(0)
 {
   fPtrSolid = pSolid ;
   fDirectTransform = new G4AffineTransform( directTransform );
@@ -103,7 +103,7 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
 
 G4DisplacedSolid::G4DisplacedSolid( __void__& a )
   : G4VSolid(a), fPtrSolid(0), fPtrTransform(0),
-    fDirectTransform(0), fpPolyhedron(0)
+    fDirectTransform(0), fRebuildPolyhedron(false), fpPolyhedron(0)
 {
 }
 
@@ -114,7 +114,7 @@ G4DisplacedSolid::G4DisplacedSolid( __void__& a )
 G4DisplacedSolid::~G4DisplacedSolid() 
 {
   CleanTransformations();
-  delete fpPolyhedron;
+  delete fpPolyhedron; fpPolyhedron = 0;
 }
 
 ///////////////////////////////////////////////////////////////
@@ -122,7 +122,8 @@ G4DisplacedSolid::~G4DisplacedSolid()
 // Copy constructor
 
 G4DisplacedSolid::G4DisplacedSolid(const G4DisplacedSolid& rhs)
-  : G4VSolid (rhs), fPtrSolid(rhs.fPtrSolid), fpPolyhedron(0)
+  : G4VSolid (rhs), fPtrSolid(rhs.fPtrSolid),
+    fRebuildPolyhedron(false), fpPolyhedron(0)
 {
   fPtrTransform = new G4AffineTransform(*(rhs.fPtrTransform));
   fDirectTransform = new G4AffineTransform(*(rhs.fDirectTransform));
@@ -148,6 +149,7 @@ G4DisplacedSolid& G4DisplacedSolid::operator = (const G4DisplacedSolid& rhs)
   delete fPtrTransform; delete fDirectTransform;
   fPtrTransform = new G4AffineTransform(*(rhs.fPtrTransform));
   fDirectTransform = new G4AffineTransform(*(rhs.fDirectTransform));
+  fRebuildPolyhedron = false;
   delete fpPolyhedron; fpPolyhedron= 0;
 
   return *this;
@@ -188,7 +190,7 @@ G4AffineTransform  G4DisplacedSolid::GetTransform() const
 void G4DisplacedSolid::SetTransform(G4AffineTransform& transform) 
 {
   fPtrTransform = &transform ;
-  fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -202,7 +204,7 @@ G4AffineTransform  G4DisplacedSolid::GetDirectTransform() const
 void G4DisplacedSolid::SetDirectTransform(G4AffineTransform& transform) 
 {
   fDirectTransform = &transform ;
-  fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -216,7 +218,7 @@ G4RotationMatrix G4DisplacedSolid::GetFrameRotation() const
 void G4DisplacedSolid::SetFrameRotation(const G4RotationMatrix& matrix)
 {
   fDirectTransform->SetNetRotation(matrix);
-  fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -229,7 +231,7 @@ G4ThreeVector  G4DisplacedSolid::GetFrameTranslation() const
 void G4DisplacedSolid::SetFrameTranslation(const G4ThreeVector& vector)
 {
   fPtrTransform->SetNetTranslation(vector);
-  fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 ///////////////////////////////////////////////////////////////
@@ -243,7 +245,7 @@ G4RotationMatrix G4DisplacedSolid::GetObjectRotation() const
 void G4DisplacedSolid::SetObjectRotation(const G4RotationMatrix& matrix)
 {
   fPtrTransform->SetNetRotation(matrix);
-  fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -256,7 +258,7 @@ G4ThreeVector  G4DisplacedSolid::GetObjectTranslation() const
 void G4DisplacedSolid::SetObjectTranslation(const G4ThreeVector& vector)
 {
   fDirectTransform->SetNetTranslation(vector);
-  fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 ///////////////////////////////////////////////////////////////
@@ -457,11 +459,12 @@ G4DisplacedSolid::CreatePolyhedron () const
 G4Polyhedron* G4DisplacedSolid::GetPolyhedron () const
 {
   if (!fpPolyhedron ||
+      fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())
     {
-      delete fpPolyhedron;
       fpPolyhedron = CreatePolyhedron();
+      fRebuildPolyhedron = false;
     }
   return fpPolyhedron;
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4RunManager.cc 76884 2013-11-18 12:54:03Z gcosmo $
+// $Id: pyG4RunManager.cc 86749 2014-11-17 15:03:05Z gcosmo $
 // ====================================================================
 //   pyG4RunManager.cc
 //
@@ -89,6 +89,10 @@ BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_AbortRun, AbortRun, 0, 1)
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_DefineWorldVolume,
                                        DefineWorldVolume, 1, 2)
 
+// GeometryHasBeenModified()
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GeometryHasBeenModified,
+                                       GeometryHasBeenModified, 0, 1)
+    
 }
 
 using namespace pyG4RunManager;
@@ -111,7 +115,7 @@ void export_G4RunManager()
     // ---
     .def("Initialize",      &G4RunManager::Initialize)
     .def("BeamOn",          &G4RunManager::BeamOn,
-   f_BeamOn((arg("n_event"), arg("macroFile")=0,
+       f_BeamOn((arg("n_event"), arg("macroFile")=0,
        arg("n_select")=-1),
       "Starts event loop."))
     // ---
@@ -159,7 +163,8 @@ void export_G4RunManager()
     .def("SetRandomNumberStore", &G4RunManager::SetRandomNumberStore)
     .def("GetRandomNumberStore", &G4RunManager::GetRandomNumberStore)
     .def("SetRandomNumberStoreDir", &G4RunManager::SetRandomNumberStoreDir)
-    .def("GeometryHasBeenModified", &G4RunManager::GeometryHasBeenModified)
+    .def("GeometryHasBeenModified", &G4RunManager::GeometryHasBeenModified,
+         f_GeometryHasBeenModified())
     .def("PhysicsHasBeenModified",  &G4RunManager::PhysicsHasBeenModified)
     .def("GetGeometryToBeOptimized",&G4RunManager::GetGeometryToBeOptimized)
     .def("GetCurrentRun",  &G4RunManager::GetCurrentRun,
@@ -167,16 +172,10 @@ void export_G4RunManager()
     .def("GetCurrentEvent", &G4RunManager::GetCurrentEvent,
     return_value_policy<reference_existing_object>())
     .def("SetRunIDCounter",        &G4RunManager::SetRunIDCounter)
-
-#if G4VERSION_NUMBER >= 932
     .def("GetVersionString",     &G4RunManager::GetVersionString,
     return_value_policy<reference_existing_object>())
     .def("GetRandomNumberStoreDir", &G4RunManager::GetRandomNumberStoreDir,
     return_internal_reference<>())
-#else
-    .def("GetVersionString",        &G4RunManager::GetVersionString)
-    .def("GetRandomNumberStoreDir", &G4RunManager::GetRandomNumberStoreDir)
-#endif
     ;
 
     // reduced functionality...

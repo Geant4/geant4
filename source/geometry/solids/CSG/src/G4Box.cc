@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc 76263 2013-11-08 11:41:52Z gcosmo $
+// $Id: G4Box.cc 83572 2014-09-01 15:23:27Z gcosmo $
 //
 // 
 //
@@ -51,7 +51,6 @@
 #include "G4VPVParameterisation.hh"
 
 #include "G4VGraphicsScene.hh"
-#include "G4Polyhedron.hh"
 #include "G4VisExtent.hh"
 
 ////////////////////////////////////////////////////////////////////////
@@ -146,7 +145,7 @@ void G4Box::SetXHalfLength(G4double dx)
   }
   fCubicVolume= 0.;
   fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 } 
 
 void G4Box::SetYHalfLength(G4double dy) 
@@ -166,7 +165,7 @@ void G4Box::SetYHalfLength(G4double dy)
   }
   fCubicVolume= 0.;
   fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 } 
 
 void G4Box::SetZHalfLength(G4double dz) 
@@ -186,7 +185,7 @@ void G4Box::SetZHalfLength(G4double dz)
   }
   fCubicVolume= 0.;
   fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 } 
 
 ////////////////////////////////////////////////////////////////////////

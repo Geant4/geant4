@@ -1,4 +1,4 @@
-$Id: History 77094 2013-11-21 10:51:54Z gcosmo $
+$Id: History 86976 2014-11-21 12:07:00Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,33 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20-11-14 V.Ivant (testem8-V10-00-07)
+- DetectorConstruction, TargetSD - attempt to fix crash at 
+    destruction in MT mode
+
+03-11-14 V.Ivant (testem8-V10-00-06)
+- TestEm8.in - reduce statistics to 1000
+
+25-10-14 V.Ivant (testem8-V10-00-05)
+- RunAction - fixed compillation warning
+
+24-10-14 V.Ivant (testem8-V10-00-04)
+- Migrated to MT mode (A.Bagulya)
+  removed Histo, HistoManager, HistoMessenger classes
+  added ActionInitialization, Run, TestParameters classes
+
+12-06-14 V.Ivant (testem8-V10-00-03)
+- applied code guidlines
+
+28-04-14 V.Ivant (testem8-V10-00-02)
+- added "emlowenergy" option for EM physics 
+
+16-01-14 V.Ivant (testem8-V10-00-01)
+- HistoManager - fixed output of rms of mean energy
+
+01-01-14 V.Ivant (testem8-V10-00-00)
+- HistoManager - more accurate computation of mean energy deposition
 
 21-05-13 V.Ivant (testem8-V09-06-03)
 - PhysicsList - substituted obsolete G4PAIPhotonMOdel by G4PAIPhotModel 

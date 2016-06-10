@@ -37,11 +37,10 @@
 ##########################
 # Set here the cut and the step max for the tracking. 
 # Suggested values of cut and step:
-#
-# Set cuts outside detector 
-/Physics/setCuts 0.01 mm
-# Set cuts ONLY inside detector
-/Physics/setDetectorCuts 0.01 mm
+# Set cuts OUTSIDE the detector
+/run/setCut 0.01 mm
+# Set cuts ONLY inside the detector
+/run/setCutForRegion DetectorLog 0.01 mm
 
 /Step/waterPhantomStepMax 0.01 mm 
 
@@ -54,9 +53,9 @@
 
 #---------------------------gps-----------------
 /gps/pos/shape Circle
-/gps/pos/centre -270. 0. 0. cm
-/gps/pos/radius 3. mm
-/gps/pos/sigma_r 0. mm
+/gps/pos/centre -310. 0. 0. cm
+/gps/pos/radius 0. mm
+/gps/pos/sigma_r 2. mm
 /gps/particle proton
 /gps/pos/type Beam
 
@@ -71,7 +70,7 @@
 #
 /gps/ene/type Gauss
 /gps/energy 62 MeV
-/gps/ene/sigma 400 keV
+/gps/ene/sigma 300 keV
 /gps/direction 1 0 0
 
 # Copy & Paste in a new macro the previous and ONE of the following groups of commands

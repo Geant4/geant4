@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -38,23 +39,25 @@
 #define G4INCLCrossSections_hh 1
 
 #include "G4INCLICrossSections.hh"
+#include "G4INCLConfig.hh"
 
 namespace G4INCL {
   namespace CrossSections {
       G4double elastic(Particle const * const p1, Particle const * const p2);
       G4double total(Particle const * const p1, Particle const * const p2);
 
-      G4double pionNucleon(Particle const * const p1, Particle const * const p2);
-
-      G4double recombination(Particle const * const p1, Particle const * const p2);
-      G4double deltaProduction(Particle const * const p1, Particle const * const p2);
+      G4double NDeltaToNN(Particle const * const p1, Particle const * const p2);
+      G4double NNToNDelta(Particle const * const p1, Particle const * const p2);
+      G4double NNToxPiNN(const G4int xpi, Particle const * const p1, Particle const * const p2);
+      G4double piNToDelta(Particle const * const p1, Particle const * const p2);
+      G4double piNToxPiN(const G4int xpi, Particle const * const p1, Particle const * const p2);
 
       /** \brief Calculate the slope of the NN DDXS.
        *
        * \param energyCM energy in the CM frame, in MeV
        * \param iso total isospin of the system
        *
-       * \return the slope of the angular distribution
+       * \return the slope of the angular distribution, in (GeV/c)^(-2)
        */
       G4double calculateNNAngularSlope(G4double energyCM, G4int iso);
 
@@ -79,6 +82,8 @@ namespace G4INCL {
       void setCrossSections(ICrossSections *c);
 
       void deleteCrossSections();
+
+      void initialize(Config const * const theConfig);
 
   }
 }

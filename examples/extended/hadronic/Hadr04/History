@@ -13,6 +13,27 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+19-11-14 mma (exhadr04-V10-00-06)
+- cosmetic in envHadronic.csh
+	 
+11-09-14 mma (exhadr04-V10-00-05)
+- Hadr04.cc : SetNumberOfThreads(G4Threading::G4GetNumberOfCores())
+
+15-09-14 I. Hrivnacova (exhadr04-V10-00-04)
+- Fixed test in envHadronic.sh
+     
+09-05-14 mma (exhadr04-V10-00-03)
+- NeutronHPphysics: check for pre-existing processes
+     
+24-04-14 mma (exhadr04-V10-00-02)
+- small cleanup in NeutronHPphysics.cc
+      
+25-03-14 mma (exhadr04-V10-00-01)
+- Run.cc : modify map fProcCounter 
+    
+12-12-13 mma (exhadr04-V10-00-00)
+- pass primary kinematic to Run
 
 21-11-13 A.Dotti       (exhadr04-V09-06-07)
 - Use G4RunManager::ReinitializeGeometry() to trigger geometry

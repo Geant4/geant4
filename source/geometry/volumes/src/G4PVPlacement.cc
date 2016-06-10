@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.cc 74459 2013-10-07 15:24:43Z gcosmo $
+// $Id: G4PVPlacement.cc 85846 2014-11-05 15:45:28Z gcosmo $
 //
 // 
 // class G4PVPlacement Implementation
@@ -167,14 +167,6 @@ G4PVPlacement::~G4PVPlacement()
 G4bool G4PVPlacement::IsMany() const
 {
   return fmany; 
-}
-
-// ----------------------------------------------------------------------
-// GetCopyNo
-//
-G4int G4PVPlacement::GetCopyNo() const
-{
-  return fcopyNo;
 }
 
 // ----------------------------------------------------------------------

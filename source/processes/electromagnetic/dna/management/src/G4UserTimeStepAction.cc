@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UserTimeStepAction.cc 74551 2013-10-14 12:59:14Z gcosmo $
+// $Id: G4UserTimeStepAction.cc 85244 2014-10-27 08:24:13Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
 //
@@ -33,6 +33,7 @@
 //
 // -------------------------------------------------------------------
 
+#include <G4VScheduler.hh>
 #include "G4UserTimeStepAction.hh"
 
 G4UserTimeStepAction::G4UserTimeStepAction()
@@ -47,4 +48,14 @@ G4UserTimeStepAction& G4UserTimeStepAction::operator=(const G4UserTimeStepAction
 {
     if (this == &rhs) return *this;
     return *this;
+}
+
+void G4UserTimeStepAction::SetMinimumTimeSteps(std::map<double, double>* timeSteps)
+{
+	G4VScheduler::Instance()-> SetTimeSteps(timeSteps);
+}
+
+void G4UserTimeStepAction::AddTimeStep(double startingTime, double timeStep)
+{
+  G4VScheduler::Instance()-> AddTimeStep(startingTime,timeStep);
 }

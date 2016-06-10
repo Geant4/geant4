@@ -24,13 +24,31 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.icc 73598 2013-09-02 09:18:28Z gcosmo $
+// $Id: G4ParticleDefinition.icc 79342 2014-02-24 11:42:42Z gcosmo $
 //
 
 inline 
  G4int G4ParticleDefinition::GetInstanceID() const
 { 
   return g4particleDefinitionInstanceID; 
+}
+
+inline
+ G4bool G4ParticleDefinition::GetPDGStable() const
+{
+  if(IsGeneralIon())
+  { return (GetIonLifeTime()<0.); }
+  else
+  { return thePDGStable; }
+}
+
+inline
+ G4double G4ParticleDefinition::GetPDGLifeTime() const
+{
+  if(IsGeneralIon())
+  { return GetIonLifeTime(); }
+  else
+  { return thePDGLifeTime; }
 }
 
 inline 

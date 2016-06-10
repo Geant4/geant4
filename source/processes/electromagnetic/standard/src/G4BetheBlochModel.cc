@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc 74790 2013-10-22 07:31:37Z gcosmo $
+// $Id: G4BetheBlochModel.cc 81579 2014-06-03 10:15:54Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -143,6 +143,8 @@ G4double G4BetheBlochModel::GetParticleCharge(const G4ParticleDefinition* p,
 					      const G4Material* mat,
 					      G4double kineticEnergy)
 {
+  //G4cout<<"G4BetheBlochModel::GetParticleCharge e= "<<kineticEnergy <<
+  //  " q= " <<  corr->GetParticleCharge(p,mat,kineticEnergy) <<G4endl;
   // this method is called only for ions, so no check if it is an ion
   return corr->GetParticleCharge(p,mat,kineticEnergy);
 }
@@ -198,7 +200,7 @@ G4BetheBlochModel::ComputeCrossSectionPerElectron(const G4ParticleDefinition* p,
     G4double energy2   = totEnergy*totEnergy;
     G4double beta2     = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
 
-    cross = 1.0/cutEnergy - 1.0/maxEnergy 
+    cross = (maxEnergy - cutEnergy)/(cutEnergy*maxEnergy) 
       - beta2*G4Log(maxEnergy/cutEnergy)/tmax;
 
     // +term for spin=1/2 particle

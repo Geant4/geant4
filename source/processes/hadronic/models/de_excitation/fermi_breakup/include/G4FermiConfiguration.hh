@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FermiConfiguration.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4FermiConfiguration.hh 85841 2014-11-05 15:35:06Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -39,18 +39,16 @@
 class G4FermiConfiguration 
 {
 public:
-  // Constructors
+
   G4FermiConfiguration(const std::vector<const G4VFermiFragment*>&);
 
   ~G4FermiConfiguration();
-
-  G4FragmentVector* GetFragments(const G4Fragment & theNucleus);
 
   inline G4int GetA() const;
   inline G4int GetZ() const;
   inline G4double GetMass() const;
   
-  inline const std::vector<const G4VFermiFragment*>& GetFragmentList();
+  inline const std::vector<const G4VFermiFragment*>* GetFragmentList() const;
 
 private:
 
@@ -83,10 +81,10 @@ inline G4double G4FermiConfiguration::GetMass() const
   return totalMass;
 }
 
-inline const std::vector<const G4VFermiFragment*>& 
-G4FermiConfiguration::GetFragmentList()
+inline const std::vector<const G4VFermiFragment*>* 
+G4FermiConfiguration::GetFragmentList() const
 {
-  return Configuration;
+  return &Configuration;
 }
 
 #endif

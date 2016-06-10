@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CreatorFactoryT.hh 66376 2012-12-18 09:42:59Z gcosmo $
+// $Id: G4CreatorFactoryT.hh 78955 2014-02-05 09:45:46Z gcosmo $
 //
 // Generic identifier-creator based factory. Based on 
 // factory presented in "Modern C++ Design, Andrei Alexandrescu"
@@ -71,7 +71,7 @@ G4CreatorFactoryT<T, Identifier, Creator>::~G4CreatorFactoryT() {}
 template <typename T, typename Identifier, typename Creator>
 G4bool
 G4CreatorFactoryT<T, Identifier, Creator>::Register(const Identifier& id, 
-						    Creator creator)
+                                                    Creator creator)
 {
   if (fMap.find(id) != fMap.end()) {
     G4ExceptionDescription ed;
@@ -98,8 +98,8 @@ G4CreatorFactoryT<T, Identifier, Creator>::Create(const Identifier& id) const
     G4ExceptionDescription ed;
     ed << "Identifier "<<id<<" does not exist."<<G4endl;
     G4Exception("G4CreatorFactoryT::Create(const Identifier& id)",
-		"greps0103", JustWarning, ed,
-		"Non-existent identifier");
+                "greps0103", JustWarning, ed,
+                "Non-existent identifier");
     return 0;
   }
   

@@ -70,7 +70,6 @@
 #include "G4EMDissociationCrossSection.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
-#include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "G4GeneralPhaseSpaceDecay.hh"
 #include "G4DecayProducts.hh"
@@ -249,7 +248,7 @@ G4HadFinalState *G4EMDissociation::ApplyYourself
         G4cout <<"Projectile underwent EM dissociation producing a proton"
                <<G4endl;
       typeNucleon = G4Proton::ProtonDefinition();
-      typeDaughter = G4ParticleTable::GetParticleTable()->
+      typeDaughter = G4IonTable::GetIonTable()->
       GetIon((G4int) ZP-1, (G4int) AP-1, 0.0);
     }
     else
@@ -258,7 +257,7 @@ G4HadFinalState *G4EMDissociation::ApplyYourself
         G4cout <<"Projectile underwent EM dissociation producing a neutron"
                <<G4endl;
       typeNucleon = G4Neutron::NeutronDefinition();
-      typeDaughter = G4ParticleTable::GetParticleTable()->
+      typeDaughter = G4IonTable::GetIonTable()->
       GetIon((G4int) ZP, (G4int) AP-1, 0.0);
     }
     if (G4UniformRand() < (*crossSectionP)[0]/totCrossSectionP)
@@ -296,7 +295,7 @@ G4HadFinalState *G4EMDissociation::ApplyYourself
         G4cout <<"Target underwent EM dissociation producing a proton"
                <<G4endl;
       typeNucleon = G4Proton::ProtonDefinition();
-      typeDaughter = G4ParticleTable::GetParticleTable()->
+      typeDaughter = G4IonTable::GetIonTable()->
       GetIon((G4int) ZT-1, (G4int) AT-1, 0.0);
     }
     else
@@ -305,7 +304,7 @@ G4HadFinalState *G4EMDissociation::ApplyYourself
         G4cout <<"Target underwent EM dissociation producing a neutron"
                <<G4endl;
       typeNucleon = G4Neutron::NeutronDefinition();
-      typeDaughter = G4ParticleTable::GetParticleTable()->
+      typeDaughter = G4IonTable::GetIonTable()->
       GetIon((G4int) ZT, (G4int) AT-1, 0.0);
     }
     if (G4UniformRand() < (*crossSectionT)[0]/totCrossSectionT)
@@ -327,8 +326,7 @@ G4HadFinalState *G4EMDissociation::ApplyYourself
 
     G4ThreeVector v = pP.vect();
     v.setMag(1.0);
-    G4DynamicParticle *changedP = new G4DynamicParticle
-      (const_cast<G4ParticleDefinition*>(definitionP), v, E*AP-Eg);
+    G4DynamicParticle *changedP = new G4DynamicParticle (definitionP, v, E*AP-Eg);
     theParticleChange.AddSecondary (changedP);
     if (verboseLevel >= 2)
     {

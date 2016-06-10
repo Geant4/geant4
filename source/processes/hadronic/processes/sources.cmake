@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66499 2012-12-19 09:16:35Z gcosmo $
+# $Id: sources.cmake 86165 2014-11-07 14:02:48Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -21,6 +21,8 @@ include_directories(${CLHEP_INCLUDE_DIRS})
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/navigation/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/magneticfield/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
@@ -37,7 +39,11 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/inc
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/scoring/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/hits/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/detector/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 
 #
 # Define the Geant4 Module.
@@ -63,6 +69,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
         G4HadronCaptureProcess.hh
         G4HadronElasticProcess.hh
         G4HadronFissionProcess.hh
+        G4He3InelasticProcess.hh
         G4IonInelasticProcess.hh
         G4KaonMinusInelasticProcess.hh
         G4KaonPlusInelasticProcess.hh
@@ -80,6 +87,12 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
         G4SigmaMinusInelasticProcess.hh
         G4SigmaPlusInelasticProcess.hh
         G4TritonInelasticProcess.hh
+        G4UCNProcessSubType.hh
+        G4UCNBoundaryProcess.hh
+        G4UCNBoundaryProcessMessenger.hh
+        G4UCNLoss.hh
+        G4UCNAbsorption.hh
+        G4UCNMultiScattering.hh
         G4XiMinusInelasticProcess.hh
         G4XiZeroInelasticProcess.hh
     SOURCES
@@ -101,6 +114,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
         G4HadronCaptureProcess.cc
         G4HadronElasticProcess.cc
         G4HadronFissionProcess.cc
+        G4He3InelasticProcess.cc
         G4IonInelasticProcess.cc
         G4KaonMinusInelasticProcess.cc
         G4KaonPlusInelasticProcess.cc
@@ -118,6 +132,11 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
         G4SigmaMinusInelasticProcess.cc
         G4SigmaPlusInelasticProcess.cc
         G4TritonInelasticProcess.cc
+        G4UCNBoundaryProcess.cc
+        G4UCNBoundaryProcessMessenger.cc
+        G4UCNLoss.cc
+        G4UCNAbsorption.cc
+        G4UCNMultiScattering.cc
         G4XiMinusInelasticProcess.cc
         G4XiZeroInelasticProcess.cc
     GRANULAR_DEPENDENCIES
@@ -130,20 +149,28 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
         G4hadronic_mgt
         G4hadronic_util
         G4hadronic_xsect
+        G4magneticfield
         G4ions
         G4leptons
-        G4materials
         G4mesons
+        G4materials
+        G4navigation
         G4partman
         G4procman
         G4track
         G4volumes
+        G4digits
+        G4hits
+        G4scoring
+        G4intercoms
     GLOBAL_DEPENDENCIES
+        G4digits_hits
         G4geometry
         G4global
         G4materials
         G4particles
         G4track
+        G4intercoms
     LINK_LIBRARIES
 )
 

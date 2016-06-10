@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamElm.cc 68721 2013-04-05 09:20:30Z gcosmo $
+// $Id: G4IonisParamElm.cc 81374 2014-05-27 13:07:25Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -153,13 +153,13 @@ G4IonisParamElm::~G4IonisParamElm()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
+/*
 G4IonisParamElm::G4IonisParamElm(G4IonisParamElm& right)
 {
   fShellCorrectionVector = 0;
   *this = right;
 }
-
+*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 G4IonisParamElm& G4IonisParamElm::operator=(const G4IonisParamElm& right)

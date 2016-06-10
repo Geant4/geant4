@@ -639,29 +639,26 @@ void B03PhysicsList::SetCuts()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4ParallelWorldScoringProcess.hh"
+#include "G4ParallelWorldProcess.hh"
 void B03PhysicsList::AddScoringProcess(){
 
   G4int npw = fParaWorldName.size();
   for ( G4int i = 0; i < npw; i++){
-    G4ParallelWorldScoringProcess* theParallelWorldScoringProcess
-      = new G4ParallelWorldScoringProcess("ParaWorldScoringProc");
-    theParallelWorldScoringProcess->SetParallelWorld(fParaWorldName[i]);
+   G4String procName = "ParaWorldProc_"+fParaWorldName[i];
+   G4ParallelWorldProcess* theParallelWorldProcess
+     = new G4ParallelWorldProcess(procName);
+   theParallelWorldProcess->SetParallelWorld(fParaWorldName[i]);
 
-    theParticleIterator->reset();
-    while( (*theParticleIterator)() ){
-      G4ParticleDefinition* particle = theParticleIterator->value();
-      if ( !particle->IsShortLived() ){
-        G4ProcessManager* pmanager = particle->GetProcessManager();
-        pmanager->AddProcess(theParallelWorldScoringProcess);
-        pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess
-                                          ,idxAtRest);
-        pmanager->SetProcessOrdering(theParallelWorldScoringProcess
-                                    ,idxAlongStep,1);
-        pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess
-                                          ,idxPostStep);
-      }
-    }
+   theParticleIterator->reset();
+   while( (*theParticleIterator)() ){
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
+    pmanager->AddProcess(theParallelWorldProcess);
+    if(theParallelWorldProcess->IsAtRestRequired(particle))
+    {pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9999);}
+    pmanager->SetProcessOrdering(theParallelWorldProcess, idxAlongStep, 1);
+    pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9999);
+   }
   }
 
 }

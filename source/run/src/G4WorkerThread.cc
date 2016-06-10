@@ -47,34 +47,12 @@ G4int G4WorkerThread::GetNumberThreads() const
     return numThreads;
 }
 
-//TODO: refactorize? Parts of these delegated to correct classes?
-#include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4PVReplica.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4Region.hh"
-#include "G4Material.hh"
-#include "G4PhysicsVector.hh"
-/////@@#include "G4VDecayChannel.hh"
-#include "G4PhysicalVolumeStore.hh"
-#include "G4LogicalVolumeStore.hh"
-#include "G4MaterialTable.hh"
-#include "G4PolyconeSide.hh"
-#include "G4PolyhedraSide.hh"
-#include "G4PVParameterised.hh"
-#include "G4Threading.hh"
-#include "G4AutoLock.hh"
-#include "G4VUserPhysicsList.hh"
-#include "G4VPhysicsConstructor.hh"
-#include "G4VModularPhysicsList.hh"
 #include "G4GeometryWorkspace.hh"
 #include "G4GeometryWorkspacePool.hh"
 #include "G4SolidsWorkspace.hh"
 #include "G4SolidsWorkspacePool.hh"
-
-//namespace  {
-//    G4Mutex solidclone = G4MUTEX_INITIALIZER;
-//}
+#include "G4ParticlesWorkspace.hh"
+#include "G4PhysicsListWorkspace.hh"
 
 void G4WorkerThread::BuildGeometryAndPhysicsVector()
 {
@@ -82,75 +60,11 @@ void G4WorkerThread::BuildGeometryAndPhysicsVector()
     G4GeometryWorkspacePool::GetInstance()->CreateAndUseWorkspace();
     G4SolidsWorkspacePool::GetInstance()->CreateAndUseWorkspace();
 
-    //Geometry related, split classes mechanism: instantiate sub-instance for this thread
-    //const_cast<G4LVManager&>(G4LogicalVolume::GetSubInstanceManager()).SlaveCopySubInstanceArray();
-    //const_cast<G4PVManager&>(G4VPhysicalVolume::GetSubInstanceManager()).SlaveCopySubInstanceArray();
-    //const_cast<G4PVRManager&>(G4PVReplica::GetSubInstanceManager()).SlaveCopySubInstanceArray();
-    //const_cast<G4RegionManager&>(G4Region::GetSubInstanceManager()).SlaveInitializeSubInstance();
-    //G4Material::g4materialSubInstanceManager.SlaveCopySubInstanceArray(); //< Not anymore splitted class
-    //const_cast<G4PlSideManager&>(G4PolyconeSide::GetSubInstanceManager()).SlaveInitializeSubInstance();
-    //const_cast<G4PhSideManager&>(G4PolyhedraSide::GetSubInstanceManager()).SlaveInitializeSubInstance();
-    //Physics related
-    //const_cast<G4PVecManager&>(G4PhysicsVector::GetSubInstanceManager()).SlaveInitializeSubInstance();
-/////@@    const_cast<G4DecayChannelManager&>(G4VDecayChannel::GetSubInstanceManager()).NewSubInstances();
-    const_cast<G4PDefManager&>(G4ParticleDefinition::GetSubInstanceManager()).NewSubInstances();
-    const_cast<G4VUPLManager&>(G4VUserPhysicsList::GetSubInstanceManager()).NewSubInstances();
-    const_cast<G4VPCManager&>(G4VPhysicsConstructor::GetSubInstanceManager()).NewSubInstances();
-    const_cast<G4VMPLManager&>(G4VModularPhysicsList::GetSubInstanceManager()).SlaveCopySubInstanceArray();
-    /*
-    G4PhysicalVolumeStore* physVolStore = G4PhysicalVolumeStore::GetInstance();
-    for (size_t ip=0; ip<physVolStore->size(); ip++)
-    {
-        G4VPhysicalVolume* physVol = (*physVolStore)[ip];
-        G4LogicalVolume *g4LogicalVolume = physVol->GetLogicalVolume();
-        //use shadow pointer
-        G4VSolid *g4VSolid = g4LogicalVolume->GetMasterSolid();
-        G4PVReplica *g4PVReplica = 0;
-        g4PVReplica =  dynamic_cast<G4PVReplica*>(physVol);
-        if (g4PVReplica)
-        {
-            //g4PVReplica->SlaveG4PVReplica(g4PVReplica);
-            g4PVReplica->InitialiseWorker(g4PVReplica);
-            G4PVParameterised *g4PVParameterised = 0;
-            g4PVParameterised =  dynamic_cast<G4PVParameterised*>(physVol);
-            if (g4PVParameterised)
-            {
-                //01.25.2009 Xin Dong: For a G4PVParameterised instance, assoicated a
-                //cloned solid for each worker thread. If all solids support this clone
-                //method, we do not need to dynamically cast to solids that support this
-                //clone method. Before all solids support this clone method, we do similar
-                //thing here to dynamically cast and then get the clone method.
-                
-                //Threads may clone some solids simultaneously. Those cloned solids will be
-                //Registered into a shared solid store (C++ container). Need a lock to
-                //guarantee thread safety
-                G4AutoLock aLock(&solidclone);
-                G4VSolid *slaveg4VSolid = g4VSolid->Clone();
-                aLock.unlock();
-                //g4LogicalVolume->SlaveG4LogicalVolume(g4LogicalVolume, slaveg4VSolid, 0);
-                g4LogicalVolume->InitialiseWorker(g4LogicalVolume,slaveg4VSolid,0);
-            }
-            else
-            {
-                //g4LogicalVolume->SlaveG4LogicalVolume(g4LogicalVolume, g4VSolid, 0);
-                g4LogicalVolume->InitialiseWorker(g4LogicalVolume,g4VSolid,0);
-            }
-        }
-        else
-        {
-            //g4LogicalVolume->SlaveG4LogicalVolume(g4LogicalVolume, g4VSolid, 0);
-            g4LogicalVolume->InitialiseWorker(g4LogicalVolume,g4VSolid,0);
-        }
-    }
-     */
-    
-    //const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-    
-    //size_t nmat = theMaterialTable->size();
-    //size_t i;
-    //for(i=0; i<nmat; i++) {
-    //    ((*theMaterialTable)[i])->SlaveG4Material();
-    //}
+    G4ParticlesWorkspace::GetPool()->CreateAndUseWorkspace();
+    G4PhysicsListWorkspace::GetPool()->CreateAndUseWorkspace();
+//    const_cast<G4VUPLManager&>(G4VUserPhysicsList::GetSubInstanceManager()).NewSubInstances();
+//    const_cast<G4VPCManager&>(G4VPhysicsConstructor::GetSubInstanceManager()).NewSubInstances();
+//    const_cast<G4VMPLManager&>(G4VModularPhysicsList::GetSubInstanceManager()).WorkerCopySubInstanceArray();
 }
 
 void G4WorkerThread::DestroyGeometryAndPhysicsVector()
@@ -166,67 +80,23 @@ void G4WorkerThread::DestroyGeometryAndPhysicsVector()
     // G4GeometryWorkspacePool::GetInstance()->ReleaseAndDestroyMyWorkspace();
     G4GeometryWorkspacePool::GetInstance()->GetWorkspace()->DestroyWorkspace();
     G4SolidsWorkspacePool::GetInstance()->GetWorkspace()->DestroyWorkspace();
+    G4ParticlesWorkspace::GetPool()->GetWorkspace()->DestroyWorkspace();
+    
+    G4PhysicsListWorkspace::GetPool()->GetWorkspace()->DestroyWorkspace();
 #endif
-//    
-//
-//    G4PhysicalVolumeStore* physVolStore = G4PhysicalVolumeStore::GetInstance();
-//    for (size_t ip=0; ip<physVolStore->size(); ip++)
-//    {
-//        G4VPhysicalVolume* physVol = (*physVolStore)[ip];
-//        G4LogicalVolume *g4LogicalVolume = physVol->GetLogicalVolume();
-//        //    G4VSolid *g4VSolid = g4LogicalVolume->fSolid;
-//        G4PVReplica *g4PVReplica = 0;
-//        g4PVReplica =  dynamic_cast<G4PVReplica*>(physVol);
-//        if (g4PVReplica)
-//        {
-//            //g4PVReplica->DestroySlaveG4PVReplica(g4PVReplica);
-//            g4PVReplica->TerminateWorker(g4PVReplica);
-//            G4PVParameterised *g4PVParameterised = 0;
-//            g4PVParameterised =  dynamic_cast<G4PVParameterised*>(physVol);
-//            if (g4PVParameterised)
-//            {
-//                //        G4VSolid *slaveg4VSolid = g4VSolid->Clone();
-//                //g4LogicalVolume->DestroySlaveG4LogicalVolume(g4LogicalVolume);
-//                g4LogicalVolume->TerminateWorker(g4LogicalVolume);
-//                //        delete slaveg4VSolid;
-//            }
-//            else
-//            {
-//                //g4LogicalVolume->DestroySlaveG4LogicalVolume(g4LogicalVolume);
-//                g4LogicalVolume->TerminateWorker(g4LogicalVolume);
-//            }
-//        }
-//        else
-//        {
-//            //g4LogicalVolume->DestroySlaveG4LogicalVolume(g4LogicalVolume);
-//            g4LogicalVolume->TerminateWorker(g4LogicalVolume);
-//        }
-//    }
-//    
-//    //const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-//    
-//    //size_t nmat = theMaterialTable->size();
-//    //size_t i;
-//    //for(i=0; i<nmat; i++) {
-//    //    ((*theMaterialTable)[i])->DestroySlaveG4Material();
-//    //}
-//    
-//    const_cast<G4LVManager&>(G4LogicalVolume::GetSubInstanceManager()).FreeSlave();
-//    const_cast<G4PVManager&>(G4VPhysicalVolume::GetSubInstanceManager()).FreeSlave();
-//    const_cast<G4PVRManager&>(G4PVReplica::GetSubInstanceManager()).FreeSlave();
-//    const_cast<G4PDefManager&>(G4ParticleDefinition::GetSubInstanceManager()).FreeSlave();
-//    const_cast<G4RegionManager&>(G4Region::GetSubInstanceManager()).FreeSlave();
-//    //const_cast<G4PVecManager&>(G4PhysicsVector::GetSubInstanceManager()).FreeSlave();
-///////@@    const_cast<G4DecayChannelManager&>(G4VDecayChannel::GetSubInstanceManager()).FreeSlave();
-//    const_cast<G4PlSideManager&>(G4PolyconeSide::GetSubInstanceManager()).FreeSlave();
-//    const_cast<G4PhSideManager&>(G4PolyhedraSide::GetSubInstanceManager()).FreeSlave();
-    const_cast<G4VUPLManager&>(G4VUserPhysicsList::GetSubInstanceManager()).FreeSlave();
-    const_cast<G4VPCManager&>(G4VPhysicsConstructor::GetSubInstanceManager()).FreeSlave();
-    const_cast<G4VMPLManager&>(G4VModularPhysicsList::GetSubInstanceManager()).FreeSlave();
+
+//    const_cast<G4VUPLManager&>(G4VUserPhysicsList::GetSubInstanceManager()).FreeWorker();
+//    const_cast<G4VPCManager&>(G4VPhysicsConstructor::GetSubInstanceManager()).FreeWorker();
+//    const_cast<G4VMPLManager&>(G4VModularPhysicsList::GetSubInstanceManager()).FreeWorker();
 }
 
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
+#include "G4LogicalVolume.hh"
+#include "G4Region.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+
 
 void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
 {
@@ -238,8 +108,8 @@ void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
     // (note that all the stuff after this will reset SD and Field
     typedef std::map<G4LogicalVolume*,std::pair<G4VSensitiveDetector*,G4FieldManager*> > LV2SDFM;
     LV2SDFM lvmap;
-    typedef std::map<G4LogicalVolume*,std::pair<G4Region*,G4bool> > LV2Region;
-    LV2Region lv2rmap;
+//    typedef std::map<G4LogicalVolume*,std::pair<G4Region*,G4bool> > LV2Region;
+//    LV2Region lv2rmap;
     typedef std::map<G4Region*,std::pair<G4FastSimulationManager*,G4UserSteppingAction*> > R2FSM;
     R2FSM rgnmap;
     G4LogicalVolumeStore* mLogVolStore = G4LogicalVolumeStore::GetInstance();
@@ -265,9 +135,9 @@ void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
         if ( lv->GetMasterSensitiveDetector() != 0 ) sd = lv->GetSensitiveDetector();
         if ( lv->GetMasterFieldManager() != 0 ) fmgr = lv->GetFieldManager();
         if ( sd || fmgr ) lvmap[lv] = std::make_pair(sd,fmgr);
-        G4Region* rgn = lv->GetRegion();
-        G4bool isRoot = lv->IsRootRegion();
-        if ( rgn || isRoot ) lv2rmap[lv] = std::make_pair(rgn,isRoot);
+//        G4Region* rgn = lv->GetRegion();
+//        G4bool isRoot = lv->IsRootRegion();
+//        if ( rgn || isRoot ) lv2rmap[lv] = std::make_pair(rgn,isRoot);
     }
     G4RegionStore* mRegStore = G4RegionStore::GetInstance();
     for(size_t ir=0; ir<mRegStore->size(); ir++)
@@ -312,14 +182,17 @@ void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
         if(fmgr) lv->SetFieldManager(fmgr, false); //What should be the second parameter? We use always false for MT mode
         if(sd) lv->SetSensitiveDetector(sd);
     }
-    for ( LV2Region::const_iterator it2 = lv2rmap.begin() ; it2 != lv2rmap.end() ; it2++ )
-    {
-        G4LogicalVolume* lv2 = it2->first;
-        G4Region* rgn = (it2->second).first;
-        if(rgn) lv2->SetRegion(rgn);
-        G4bool isRoot = (it2->second).second;
-        lv2->SetRegionRootFlag(isRoot);
-    }
+    
+//    for ( LV2Region::const_iterator it2 = lv2rmap.begin() ; it2 != lv2rmap.end() ; it2++ )
+//    {
+//        G4LogicalVolume* lv2 = it2->first;
+//        G4Region* rgn = (it2->second).first;
+//        if(rgn) lv2->SetRegion(rgn);
+//        G4bool isRoot = (it2->second).second;
+//        lv2->SetRegionRootFlag(isRoot);
+//    }
+
+    
     for ( R2FSM::const_iterator it3 = rgnmap.begin() ; it3 != rgnmap.end() ; it3++ )
     {
         G4Region* reg = it3->first;

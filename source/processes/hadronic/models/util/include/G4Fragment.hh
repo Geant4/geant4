@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.hh 67984 2013-03-13 10:44:01Z gcosmo $
+// $Id: G4Fragment.hh 85824 2014-11-05 15:26:17Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -51,6 +51,7 @@
 #include <vector>
 
 #include "globals.hh"
+#include "G4Allocator.hh"
 #include "G4LorentzVector.hh"
 #include "G4ThreeVector.hh"
 #include "G4NucleiProperties.hh"
@@ -84,7 +85,7 @@ public:
 
   // 4-momentum and pointer to G4particleDefinition (for gammas, e-)
   G4Fragment(const G4LorentzVector& aMomentum, 
-	     G4ParticleDefinition* aParticleDefinition);
+	     const G4ParticleDefinition* aParticleDefinition);
 
   // ============= OPERATORS ==================
     
@@ -94,6 +95,10 @@ public:
 
   friend std::ostream& operator<<(std::ostream&, const G4Fragment*);
   friend std::ostream& operator<<(std::ostream&, const G4Fragment&);
+
+  //  new/delete operators are overloded to use G4Allocator
+  inline void *operator new(size_t);
+  inline void operator delete(void *aFragment);
 
   // ============= GENERAL METHODS ==================
 
@@ -116,7 +121,11 @@ public:
   // computation of mass for any Z and A
   inline G4double ComputeGroundStateMass(G4int Z, G4int A) const;
 
+  inline G4int GetCreatorModelType() const;
+  inline void SetCreatorModelType(G4int value);
+
   // obsolete methods
+  
   inline G4double GetZ() const;
   inline G4double GetA() const;
   inline void SetZ(G4double value);
@@ -143,8 +152,8 @@ public:
   inline G4int GetNumberOfElectrons() const;
   inline void SetNumberOfElectrons(G4int value);
 
-  inline G4ParticleDefinition * GetParticleDefinition() const;
-  inline void SetParticleDefinition(G4ParticleDefinition * p);
+  inline const G4ParticleDefinition * GetParticleDefinition() const;
+  inline void SetParticleDefinition(const G4ParticleDefinition * p);
 
   inline G4double GetCreationTime() const;
   inline void SetCreationTime(G4double time);
@@ -166,8 +175,6 @@ private:
 
   // ============= DATA MEMBERS ==================
 
-  static G4ThreadLocal G4int errCount;
-
   G4int theA;
   
   G4int theZ;
@@ -180,8 +187,9 @@ private:
   
   G4ThreeVector theAngularMomentum;
 
-  // Exciton model data members
-  
+  G4int creatorModel;
+
+  // Exciton model data members  
   G4int numberOfParticles;
   
   G4int numberOfCharged;
@@ -191,10 +199,9 @@ private:
   G4int numberOfChargedHoles;
 
   // Gamma evaporation data members
-
   G4int numberOfShellElectrons;
 
-  G4ParticleDefinition * theParticleDefinition;
+  const G4ParticleDefinition * theParticleDefinition;
   
   G4double theCreationTime;
 
@@ -204,10 +211,28 @@ private:
 
 // ============= INLINE METHOD IMPLEMENTATIONS ===================
 
+#if defined G4HADRONIC_ALLOC_EXPORT
+  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4Fragment> *pFragmentAllocator;
+#else
+  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4Fragment> *pFragmentAllocator;
+#endif
+
+inline void * G4Fragment::operator new(size_t)
+{
+  if (!pFragmentAllocator) { pFragmentAllocator = new G4Allocator<G4Fragment>; }
+  return (void*) pFragmentAllocator->MallocSingle();
+}
+
+inline void G4Fragment::operator delete(void * aFragment)
+{
+  pFragmentAllocator->FreeSingle((G4Fragment *) aFragment);
+}
+
 inline void G4Fragment::CalculateExcitationEnergy()
 {
   theExcitationEnergy = theMomentum.mag() - theGroundStateMass;
   if(theExcitationEnergy < 0.0) { ExcitationEnergyWarning(); }
+  if(theExcitationEnergy < CLHEP::keV) { isStable = true; }
 }
 	 
 inline void G4Fragment::CalculateGroundStateMass() 
@@ -364,13 +389,23 @@ inline void G4Fragment::SetNumberOfElectrons(G4int value)
   numberOfShellElectrons = value;
 }
 
+inline G4int G4Fragment::GetCreatorModelType() const
+{
+  return creatorModel;
+}
+
+inline void G4Fragment::SetCreatorModelType(G4int value)
+{
+  creatorModel = value;
+}
+
 inline 
-G4ParticleDefinition * G4Fragment::GetParticleDefinition(void) const
+const G4ParticleDefinition * G4Fragment::GetParticleDefinition(void) const
 {
   return theParticleDefinition;
 }
 
-inline void G4Fragment::SetParticleDefinition(G4ParticleDefinition * p)
+inline void G4Fragment::SetParticleDefinition(const G4ParticleDefinition * p)
 {
   theParticleDefinition = p;
 }

@@ -1,4 +1,4 @@
-$Id: History 78019 2013-12-02 15:52:19Z gcosmo $
+$Id: History 86123 2014-11-07 11:05:05Z gcosmo $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,29 @@ modifications introduced in the code and keep track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06/11/2014 - I.Hrivnacova (p6decayer-V10-00-03)
+-------------------------
+- Fixed CMakeLists.txt in common (excommon-V10-00-06)
+
+05/11/2014 - I.Hrivnacova (p6decayer-V10-00-02)
+-------------------------
+- Added common directory via svn:externals property;
+  in this tag based on excommon-V10-00-05;
+  updated CMake and GNUmake files and documentation
+
+11/06/2014 - I.Hrivnacova (p6decayer-V10-00-01)
+-------------------------
+- Fixed path to copy_files.sh, clean_files.sh in GNUmakefile
+  (this makes GNUmake build working with Geant4 installation via
+   CMake)
+
+28/05/2014 - I.Hrivnacova (p6decayer-V10-00-00)
+-------------------------
+Code clean-up:
+- Removed P6DPhysicsList
+- Fixed order of instantiating Vis/UI (according to B1)
+- replaced std::cerr with G4cerr
 
 02/12/2013 - I.Hrivnacova (p6decayer-V09-06-01)
 -------------------------

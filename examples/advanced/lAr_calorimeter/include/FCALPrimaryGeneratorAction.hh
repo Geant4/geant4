@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALPrimaryGeneratorAction.hh 68716 2013-04-05 09:13:43Z gcosmo $
+// $Id: FCALPrimaryGeneratorAction.hh 84371 2014-10-14 12:51:18Z gcosmo $
 //
 // 
 
@@ -53,21 +53,9 @@ public:
   void SetVerbosity(G4int ver){fVerbosity = ver;};
 
 private:
-  void ReadKinematicFromFile(G4double energy);
-  
   G4ParticleGun*  particleGun;	  //pointer a to G4 service class
   
-  G4DataVector* fX;
-  G4DataVector* fY;
-  G4DataVector* fZ;
-  G4DataVector* fCosX;
-  G4DataVector* fCosY;
-  G4DataVector* fCosZ;
-  
-  G4bool isFileRead;
   G4int fVerbosity;
-  
-  size_t nEvent;
   
 };
 

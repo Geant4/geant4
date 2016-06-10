@@ -229,7 +229,7 @@
 
 #define gl2ps Geant4_gl2ps
 
-#ifndef G4VIS_BUILD_OPENGLWT_DRIVER
+#ifndef G4OPENGL_VERSION_2
 #include "gl2ps.h"
 #endif
 

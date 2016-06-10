@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSPPionBuilder.cc 75290 2013-10-30 09:20:47Z gcosmo $
+// $Id: G4QGSPPionBuilder.cc 83699 2014-09-10 07:18:25Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -46,13 +46,12 @@
 #include "G4ProcessManager.hh"
 #include "G4PiNuclearCrossSection.hh"
 #include "G4CrossSectionPairGG.hh"
-#include "G4ExcitationHandler.hh"
-
+#include "G4CrossSectionDataSetRegistry.hh"
 
 G4QGSPPionBuilder::
 G4QGSPPionBuilder(G4bool quasiElastic) 
 {
-  thePiData = new G4CrossSectionPairGG(new G4PiNuclearCrossSection(), 91*GeV);
+  thePiData = new G4CrossSectionPairGG((G4PiNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4PiNuclearCrossSection::Default_Name()), 91*GeV);
   theMin = 12*GeV;
   theModel = new G4TheoFSGenerator("QGSP");
 
@@ -61,9 +60,7 @@ G4QGSPPionBuilder(G4bool quasiElastic)
   theStringModel->SetFragmentationModel(theStringDecay);
   
 
-  theCascade = new G4GeneratorPrecompoundInterface;
-  thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
-  theCascade->SetDeExcitation(thePreEquilib);  
+  theCascade = new G4GeneratorPrecompoundInterface();
 
   theModel->SetHighEnergyGenerator(theStringModel);
   if (quasiElastic)
@@ -79,12 +76,9 @@ G4QGSPPionBuilder(G4bool quasiElastic)
 G4QGSPPionBuilder::
 ~G4QGSPPionBuilder() 
 {
-  delete theCascade;
-  delete thePreEquilib;
   if ( theQuasiElastic ) delete theQuasiElastic;
   delete theStringDecay;
   delete theStringModel;
-  delete theModel;
   delete theQGSM;
 }
 

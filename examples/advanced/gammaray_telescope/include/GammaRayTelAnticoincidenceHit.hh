@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnticoincidenceHit.hh 66508 2012-12-19 10:16:45Z gcosmo $
+// $Id: GammaRayTelAnticoincidenceHit.hh 82268 2014-06-13 13:47:30Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -89,22 +89,22 @@ public:
 
 typedef G4THitsCollection<GammaRayTelAnticoincidenceHit> GammaRayTelAnticoincidenceHitsCollection;
 
-extern G4Allocator<GammaRayTelAnticoincidenceHit> GammaRayTelAnticoincidenceHitAllocator;
+extern G4ThreadLocal G4Allocator<GammaRayTelAnticoincidenceHit> *GammaRayTelAnticoincidenceHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void* GammaRayTelAnticoincidenceHit::operator new(size_t)
 {
-  void* aHit;
-  aHit = (void*) GammaRayTelAnticoincidenceHitAllocator.MallocSingle();
-  return aHit;
+  if (!GammaRayTelAnticoincidenceHitAllocator)
+    GammaRayTelAnticoincidenceHitAllocator = new G4Allocator<GammaRayTelAnticoincidenceHit> ;
+  return (void*) GammaRayTelAnticoincidenceHitAllocator->MallocSingle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void GammaRayTelAnticoincidenceHit::operator delete(void* aHit)
 {
-  GammaRayTelAnticoincidenceHitAllocator.FreeSingle((GammaRayTelAnticoincidenceHit*) aHit);
+  GammaRayTelAnticoincidenceHitAllocator->FreeSingle((GammaRayTelAnticoincidenceHit*) aHit);
 }
 
 #endif

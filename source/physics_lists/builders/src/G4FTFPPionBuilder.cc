@@ -38,11 +38,12 @@
 #include "G4ProcessManager.hh"
 #include "G4PiNuclearCrossSection.hh"
 #include "G4CrossSectionPairGG.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
 
 G4FTFPPionBuilder::
 G4FTFPPionBuilder(G4bool quasiElastic) 
 {
-  thePiData = new G4CrossSectionPairGG(new G4PiNuclearCrossSection(), 91*GeV);
+  thePiData = new G4CrossSectionPairGG((G4PiNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4PiNuclearCrossSection::Default_Name()), 91*GeV);
   theMin = 4*GeV;
   theMax = 100*TeV;
   theModel = new G4TheoFSGenerator("FTFP");
@@ -51,8 +52,7 @@ G4FTFPPionBuilder(G4bool quasiElastic)
   theStringDecay = new G4ExcitedStringDecay(theLund = new G4LundStringFragmentation);
   theStringModel->SetFragmentationModel(theStringDecay);
 
-  thePreEquilib = new G4PreCompoundModel(theHandler = new G4ExcitationHandler);
-  theCascade = new G4GeneratorPrecompoundInterface(thePreEquilib);
+  theCascade = new G4GeneratorPrecompoundInterface();
 
   theModel->SetHighEnergyGenerator(theStringModel);
   if (quasiElastic)
@@ -69,12 +69,9 @@ G4FTFPPionBuilder(G4bool quasiElastic)
 
 G4FTFPPionBuilder::~G4FTFPPionBuilder() 
 {
-  delete theCascade;
   delete theStringDecay;
   delete theStringModel;
-  delete theModel;
   if ( theQuasiElastic ) delete theQuasiElastic;
-  //delete theHandler;
   delete theLund;
 }
 

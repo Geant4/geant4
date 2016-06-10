@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -91,7 +92,7 @@ namespace G4INCL {
         G4int iterations=0;
         do {
           if(iterations > maxIterations) {
-            INCL_DEBUG("Could not bracket the root." << std::endl);
+            INCL_DEBUG("Could not bracket the root." << '\n');
             return std::make_pair((G4double) 1.,(G4double) -1.);
           }
 
@@ -133,7 +134,7 @@ namespace G4INCL {
           f->cleanUp(true);
           return Solution(0.,y_at_zero);
         } else {
-          INCL_DEBUG("Root-finding algorithm could not bracket the root." << std::endl);
+          INCL_DEBUG("Root-finding algorithm could not bracket the root." << '\n');
           f->cleanUp(false);
           return Solution();
         }
@@ -154,7 +155,7 @@ namespace G4INCL {
       for(G4int iterations=0; std::abs(y) > toleranceY; iterations++) {
 
         if(iterations > maxIterations) {
-          INCL_DEBUG("Root-finding algorithm did not converge." << std::endl);
+          INCL_DEBUG("Root-finding algorithm did not converge." << '\n');
           f->cleanUp(false);
           return Solution();
         }

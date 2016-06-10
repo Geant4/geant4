@@ -1,0 +1,8 @@
+/tracking/verbose 0
+/run/verbose 2
+/process/eLoss/verbose 1
+/gun/particle proton
+/gun/energy 5 MeV
+/run/initialize
+/run/beamOn 2
+

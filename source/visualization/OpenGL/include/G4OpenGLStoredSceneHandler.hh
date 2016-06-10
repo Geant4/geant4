@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4OpenGLStoredSceneHandler.hh 81942 2014-06-06 15:54:20Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -72,7 +72,9 @@ public:
 
 protected:
 
-  G4bool AddPrimitivePreamble(const G4Visible& visible);
+  G4bool AddPrimitivePreamble(const G4VMarker& visible);
+  G4bool AddPrimitivePreamble(const G4Polyline& visible);
+  G4bool AddPrimitivePreamble(const G4Polyhedron& visible);
   // Return false if no further processing required.
 
   void AddPrimitivePostamble();
@@ -143,6 +145,9 @@ protected:
   // Stop-gap solution of structure re-use.
   // A proper implementation would use geometry hierarchy.
   std::map <const G4VSolid*, G4int, std::less <const G4VSolid*> > fSolidMap;
+
+private:
+  bool AddPrimitivePreambleInternal(const G4Visible& visible, bool isMarker, bool isPolyline);
 
 };
 

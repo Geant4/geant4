@@ -1,4 +1,4 @@
-$Id: README 66241 2012-12-13 18:34:42Z gunter $
+$Id: README 86746 2014-11-17 15:00:13Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -27,11 +27,14 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
  	
  2- PHYSICS LIST
  
- 	The Physics List of the example uses the main local physics constructor
-        (builder) which called "standard". In this builder a limited set 
+ 	The Physics List of the example uses the main physics constructor
+        (builder) called "emstandard_opt0". As an alternative "local" 
+        constructor is provided in which only a limited set 
         of physics processes are defined for muons, pions and proton:
-        ionisation, bremsstrahlung and e+e- pair production. Energy range 
-        for these processes is from 100*eV to 1000*PeV.
+        ionisation, bremsstrahlung and e+e- pair production. 
+
+        Default energy range for EM processes in this example 
+        is from 100*eV to 1000*PeV.
 
         Optionally "muNucl" builder may be added activating muon-nuclear 
         inelastic interaction.
@@ -51,8 +54,8 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
 	
 	The number of interactions are plotted as a function of the energy 
 	transfered to the secondaries.
-	The total number of interactions is recorded, and the total cross section
-	computed from this.  
+	The total number of interactions is recorded, and the total cross 
+        section computed from this.  
 
         At EndOfRun, the above results are compared with analytic calculations.
 	The functions which compute the theoretical cross sections have been
@@ -60,15 +63,19 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
 
  5- HISTOGRAMS
          
-	The test contains 4 built-in 1D histograms, which are managed by the
-	HistoManager class and its Messenger.
+	The test contains built-in 1D histograms for muons filled during
+        Monte Carlo simulation, which are managed by the HistoManager class 
+        and its Messenger:
 
-        1 Monte-Carlo relative transferred energy distribution histo
+        1 Relative muon transferred energy distribution 
             (log10(eps/Emu kin) for knock-on electrons (ionization)
-        2  -"- direct (e+,e-) pair production
-        3  -"- bremsstrahlung
-        4  -"- nuclear interaction
-	
+        2  -"- direct (e+,e-) pair production by muons
+        3  -"- bremsstrahlung by muons
+        4  -"- nuclear interaction by muons
+        5  ionistion for hadrons
+        6  (e+,e-) pair production by hadrons
+        7  bremsstrahlung by hadrons
+
 	The histos can be activated individually with the command :
 	/testem/histo/setHisto id nbBins  valMin valMax : 
           min and max values of log10(eps/Emu kin).
@@ -79,10 +86,7 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
  	One can control the name and the type of the histograms file with 
 	the command:
  	/testem/histo/setFileName  name  (default testem17)
-   
-        It is possible to choose the format of the histogram file :
-        root (default), xml, csv, by using namespace in HistoManager.hh
-     	 				
+        	 				
  6- VISUALIZATION
  
  	The Visualization Manager is set in the main().

@@ -1,4 +1,4 @@
-# $Id: kulchi.mac 66241 2012-12-13 18:34:42Z gunter $
+# $Id: kulchi.mac 81528 2014-06-02 16:21:24Z vnivanch $
 #
 # macro file for TestEm5.cc
 #
@@ -8,6 +8,7 @@
 # Gaussian th1/e = 9.50 +- 0.40 deg
 # proj. distr. fit: exp(-0.5*(th/th0)**2) ====> th0 = th1/e/sqrt(2)
 #
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
 /run/verbose 2
 #
@@ -15,8 +16,7 @@
 /testem/det/setAbsThick 98.5185 um
 /testem/det/setAbsYZ     1 cm
 #
-/testem/phys/setCuts 1 mm
-###/run/setCut 1 mm
+/run/setCut 1 mm
 #
 /run/initialize
 #

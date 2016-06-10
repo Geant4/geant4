@@ -43,6 +43,7 @@ target_link_libraries(XrayTel ${Geant4_LIBRARIES} )
 set(xray_telescope_SCRIPTS
     test.mac
     vis.mac
+    geantino.mac
   )
 
 foreach(_script ${xray_telescope_SCRIPTS})

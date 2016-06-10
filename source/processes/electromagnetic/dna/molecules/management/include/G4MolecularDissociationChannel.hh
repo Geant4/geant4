@@ -28,13 +28,28 @@
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.
 //
+// The code is developed in the framework of the ESA AO7146
+//
+// We would be very happy hearing from you, send us your feedback! :)
+//
+// In order for Geant4-DNA to be maintained and still open-source,
+// article citations are crucial. 
+// If you use Geant4-DNA chemistry and you publish papers about your software, 
+// in addition to the general paper on Geant4-DNA:
+//
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// we ask that you please cite the following reference papers on chemistry:
+//
+// J. Comput. Phys. 274 (2014) 841-882
+// Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
+//
 // ----------------------------------------------------------------
 //      GEANT 4 class header file
 //
 //      History: first implementation, Alfonso Mantero 6 Mar 2009
 // ----------------------------------------------------------------
 //
-
 
 #ifndef G4MolecularDecayChannel_h
 #define G4MolecularDecayChannel_h 1
@@ -52,7 +67,7 @@ class G4Molecule;
 
 struct CompMoleculePointer;
 
-class G4MolecularDecayChannel
+class G4MolecularDissociationChannel
 {
     // Class Description
     // This is where are stored and can be retrieved data of one decay channel
@@ -60,11 +75,11 @@ class G4MolecularDecayChannel
 
 public: //With Description
 
-    G4MolecularDecayChannel();
-    G4MolecularDecayChannel(G4String);
-    ~G4MolecularDecayChannel();
-    G4MolecularDecayChannel(const G4MolecularDecayChannel&);
-    G4MolecularDecayChannel & operator=(const G4MolecularDecayChannel &right);
+    G4MolecularDissociationChannel();
+    G4MolecularDissociationChannel(G4String);
+    ~G4MolecularDissociationChannel();
+    G4MolecularDissociationChannel(const G4MolecularDissociationChannel&);
+    G4MolecularDissociationChannel & operator=(const G4MolecularDissociationChannel &right);
 
 public:
 
@@ -73,7 +88,9 @@ public:
 
     // methods to construct decay channels "interactively"
 
-    void  AddProduct(const G4Molecule*,G4double = 0);
+    void AddProduct(const G4Molecule*,G4double = 0);
+    void AddProduct(const G4String& molecule, G4double displacement = 0);
+
     inline void  SetName(const G4String&);
     inline void  SetEnergy(G4double);
     inline void  SetProbability(G4double);
@@ -97,7 +114,8 @@ private:
 
     DisplacementType fDisplacementType;
     G4String fName;
-    std::vector<G4MoleculeHandle>* fProductsVector;
+//    std::vector<G4MoleculeHandle>* fProductsVector;
+    std::vector<const G4Molecule*>* fProductsVector;
     G4double fReleasedEnergy;
     G4double fProbability;
     G4double fDecayTime; // To be taken into account in the next releases
@@ -107,70 +125,70 @@ private:
     std::vector<G4double> fRMSProductsDisplacementVector;
 };
 
-inline void G4MolecularDecayChannel::SetName(const G4String& value)
+inline void G4MolecularDissociationChannel::SetName(const G4String& value)
 {
     fName = value;
 }
 
-inline void G4MolecularDecayChannel::SetEnergy(G4double value)
+inline void G4MolecularDissociationChannel::SetEnergy(G4double value)
 {
     fReleasedEnergy = value;
 }
 
 
-inline void G4MolecularDecayChannel::SetProbability(G4double value)
+inline void G4MolecularDissociationChannel::SetProbability(G4double value)
 {
     fProbability = value;
 }
 
-inline void G4MolecularDecayChannel::SetDecayTime(G4double value)
+inline void G4MolecularDissociationChannel::SetDecayTime(G4double value)
 {
 
     fDecayTime = value;
 }
 
-inline void G4MolecularDecayChannel::SetRMSMotherMoleculeDisplacement(G4double value)
+inline void G4MolecularDissociationChannel::SetRMSMotherMoleculeDisplacement(G4double value)
 {
     fRMSMotherMoleculeDisplacement = value;
 }
 
-inline const G4String& G4MolecularDecayChannel::GetName() const
+inline const G4String& G4MolecularDissociationChannel::GetName() const
 {
     return fName;
 }
 
-inline const std::vector<G4double>& G4MolecularDecayChannel::GetRMSProductsDisplacement() const
+inline const std::vector<G4double>& G4MolecularDissociationChannel::GetRMSProductsDisplacement() const
 {
     return fRMSProductsDisplacementVector;
 }
 
-inline G4double G4MolecularDecayChannel::GetEnergy() const
+inline G4double G4MolecularDissociationChannel::GetEnergy() const
 {
 
     return fReleasedEnergy;
 }
 
-inline G4double G4MolecularDecayChannel::GetProbability() const
+inline G4double G4MolecularDissociationChannel::GetProbability() const
 {
     return fProbability;
 }
 
-inline G4double G4MolecularDecayChannel::GetDecayTime() const
+inline G4double G4MolecularDissociationChannel::GetDecayTime() const
 {
     return fDecayTime;
 }
 
-inline G4double G4MolecularDecayChannel::GetRMSMotherMoleculeDisplacement() const
+inline G4double G4MolecularDissociationChannel::GetRMSMotherMoleculeDisplacement() const
 {
     return fRMSMotherMoleculeDisplacement;
 }
 
-inline void G4MolecularDecayChannel::SetDisplacementType(DisplacementType aDisplacementType)
+inline void G4MolecularDissociationChannel::SetDisplacementType(DisplacementType aDisplacementType)
 {
     fDisplacementType = aDisplacementType;
 }
 
-inline DisplacementType G4MolecularDecayChannel::GetDisplacementType() const
+inline DisplacementType G4MolecularDissociationChannel::GetDisplacementType() const
 {
     return fDisplacementType;
 }

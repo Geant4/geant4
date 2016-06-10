@@ -1,0 +1,395 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: G4KDTree.icc 87443 2014-12-04 12:26:31Z gunter $
+//
+// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
+//
+// History:
+// -----------
+// 10 Oct 2011 M.Karamitros created
+//
+// -------------------------------------------------------------------
+/*
+ * Based on ``kdtree'', a library for working with kd-trees.
+ * Copyright (C) 2007-2009 John Tsiombikas <nuclear@siggraph.org>
+ * The original open-source version of this code
+ * may be found at http://code.google.com/p/kdtree/
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ * 1. Redistributions of source code must retain the above copyright
+ * notice, this
+ * list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ * notice,
+ *  this list of conditions and the following disclaimer in the
+ * documentation
+ *  and/or other materials provided with the distribution.
+ * 3. The name of the author may not be used to endorse or promote products
+ *  derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+/* single nearest neighbor search written by Tamas Nepusz
+ * <tamas@cs.rhul.ac.uk>
+ */
+
+template<typename PointT>
+  G4KDNode_Base* G4KDTree::InsertMap(PointT* point)
+  {
+    G4KDNode<PointT>* node = new G4KDNode<PointT>(this, point, 0);
+    this->__InsertMap(node);
+    return node;
+  }
+
+template<typename PointT>
+  G4KDNode_Base* G4KDTree::Insert(PointT* pos)
+  {
+    G4KDNode_Base* node = 0;
+    if (!fRoot)
+    {
+      fRoot = new G4KDNode<PointT>(this, pos, 0);
+      node = fRoot;
+      fNbNodes = 0;
+      fNbNodes++;
+      fNbActiveNodes++;
+    }
+    else
+    {
+      if ((node = fRoot->Insert<PointT>(pos)))
+      {
+        fNbNodes++;
+        fNbActiveNodes++;
+      }
+    }
+
+    if (fRect == 0)
+    {
+      fRect = new HyperRect(fDim);
+      fRect->SetMinMax(*pos, *pos);
+    }
+    else
+    {
+      fRect->Extend(*pos);
+    }
+
+    return node;
+  }
+
+//__________________________________________________________________
+template<typename Position>
+  int G4KDTree::__NearestInRange(G4KDNode_Base* node,
+                                 const Position& pos,
+                                 const double& range_sq,
+                                 const double& range,
+                                 G4KDTreeResult& list,
+                                 int ordered,
+                                 G4KDNode_Base *source_node)
+  {
+    if (!node) return 0;
+
+    double dist_sq(DBL_MAX), dx(DBL_MAX);
+    int ret(-1), added_res(0);
+
+    if (node->IsValid() && node != source_node)
+    {
+      bool do_break = false;
+      dist_sq = 0;
+      for (size_t i = 0; i < fDim; i++)
+      {
+        dist_sq += sqr((*node)[i] - pos[i]);
+        if (dist_sq > range_sq)
+        {
+          do_break = true;
+          break;
+        }
+      }
+      if (!do_break && dist_sq <= range_sq)
+      {
+        list.Insert(dist_sq, node);
+        added_res = 1;
+      }
+    }
+
+    dx = pos[node->GetAxis()] - (*node)[node->GetAxis()];
+
+    ret = __NearestInRange(dx <= 0.0 ? node->GetLeft() : node->GetRight(), pos,
+                           range_sq, range, list, ordered, source_node);
+    if (ret >= 0 && std::fabs(dx) <= range)
+    {
+      added_res += ret;
+      ret = __NearestInRange(dx <= 0.0 ? node->GetRight() : node->GetLeft(),
+                             pos, range_sq, range, list, ordered, source_node);
+    }
+
+    if (ret == -1)
+    {
+      return -1;
+    }
+    added_res += ret;
+
+    return added_res;
+  }
+
+//__________________________________________________________________
+template<typename Position>
+  void G4KDTree::__NearestToPosition(G4KDNode_Base *node,
+                                     const Position &pos,
+                                     G4KDNode_Base *&result,
+                                     double *result_dist_sq,
+                                     HyperRect* rect)
+  {
+    int dir = node->GetAxis();
+    double dummy(0.), dist_sq(-1.);
+    G4KDNode_Base* nearer_subtree(0), *farther_subtree(0);
+    double *nearer_hyperrect_coord(0), *farther_hyperrect_coord(0);
+
+    /* Decide whether to go left or right in the tree */
+    dummy = pos[dir] - (*node)[dir];
+    if (dummy <= 0)
+    {
+      nearer_subtree = node->GetLeft();
+      farther_subtree = node->GetRight();
+
+      nearer_hyperrect_coord = rect->GetMax() + dir;
+      farther_hyperrect_coord = rect->GetMin() + dir;
+    }
+    else
+    {
+      nearer_subtree = node->GetRight();
+      farther_subtree = node->GetLeft();
+      nearer_hyperrect_coord = rect->GetMin() + dir;
+      farther_hyperrect_coord = rect->GetMax() + dir;
+    }
+
+    if (nearer_subtree)
+    {
+      /* Slice the hyperrect to get the hyperrect of the nearer subtree */
+      dummy = *nearer_hyperrect_coord;
+      *nearer_hyperrect_coord = (*node)[dir];
+      /* Recurse down into nearer subtree */
+      __NearestToPosition(nearer_subtree, pos, result, result_dist_sq, rect);
+      /* Undo the slice */
+      *nearer_hyperrect_coord = dummy;
+    }
+
+    /* Check the distance of the point at the current node, compare it
+     * with our best so far */
+    if (node->IsValid()) // TODO
+    {
+      dist_sq = 0;
+      bool do_break = false;
+      for (size_t i = 0; i < fDim; i++)
+      {
+        dist_sq += sqr((*node)[i] - pos[i]);
+        if (dist_sq > *result_dist_sq)
+        {
+          do_break = true;
+          break;
+        }
+      }
+      if (!do_break && dist_sq < *result_dist_sq)
+      {
+        result = node;
+        *result_dist_sq = dist_sq;
+      }
+    }
+
+    if (farther_subtree)
+    {
+      /* Get the hyperrect of the farther subtree */
+      dummy = *farther_hyperrect_coord;
+      *farther_hyperrect_coord = (*node)[dir];
+      /* Check if we have to recurse down by calculating the closest
+       * point of the hyperrect and see if it's closer than our
+       * minimum distance in result_dist_sq. */
+      if (rect->CompareDistSqr(pos, result_dist_sq))
+      {
+        /* Recurse down into farther subtree */
+        __NearestToPosition(farther_subtree, pos, result, result_dist_sq, rect);
+      }
+      /* Undo the slice on the hyperrect */
+      *farther_hyperrect_coord = dummy;
+    }
+  }
+
+template<typename Position>
+  G4KDTreeResultHandle G4KDTree::Nearest(const Position& pos)
+  {
+    //    G4cout << "Nearest(pos)" << G4endl ;
+
+    if (!fRect) return 0;
+
+    G4KDNode_Base *result(0);
+    double dist_sq = DBL_MAX;
+
+    /* Duplicate the bounding hyperrectangle, we will work on the copy */
+    HyperRect* newrect = new HyperRect(*fRect);
+
+    /* Our first guesstimate is the root node */
+    /* Search for the nearest neighbour recursively */
+    __NearestToPosition(fRoot, pos, result, &dist_sq, newrect);
+
+    /* Free the copy of the hyperrect */
+    delete newrect;
+
+    /* Store the result */
+    if (result)
+    {
+      G4KDTreeResultHandle rset = new G4KDTreeResult(this);
+      rset->Insert(dist_sq, result);
+      rset->Rewind();
+      return rset;
+    }
+    else
+    {
+      return 0;
+    }
+  }
+
+//__________________________________________________________________
+template<typename Position>
+  void G4KDTree::__NearestToNode(G4KDNode_Base* source_node,
+                                 G4KDNode_Base* node,
+                                 const Position& pos,
+                                 std::vector<G4KDNode_Base*>& result,
+                                 double *result_dist_sq,
+                                 HyperRect* rect,
+                                 int& nbresult)
+  {
+    int dir = node->GetAxis();
+    double dummy, dist_sq;
+    G4KDNode_Base *nearer_subtree(0), *farther_subtree(0);
+    double *nearer_hyperrect_coord(0), *farther_hyperrect_coord(0);
+
+    /* Decide whether to go left or right in the tree */
+    dummy = pos[dir] - (*node)[dir];
+    if (dummy <= 0)
+    {
+      nearer_subtree = node->GetLeft();
+      farther_subtree = node->GetRight();
+      nearer_hyperrect_coord = rect->GetMax() + dir;
+      farther_hyperrect_coord = rect->GetMin() + dir;
+    }
+    else
+    {
+      nearer_subtree = node->GetRight();
+      farther_subtree = node->GetLeft();
+      nearer_hyperrect_coord = rect->GetMin() + dir;
+      farther_hyperrect_coord = rect->GetMax() + dir;
+    }
+
+    if (nearer_subtree)
+    {
+      /* Slice the hyperrect to get the hyperrect of the nearer subtree */
+      dummy = *nearer_hyperrect_coord;
+      *nearer_hyperrect_coord = (*node)[dir];
+      /* Recurse down into nearer subtree */
+      __NearestToNode(source_node, nearer_subtree, pos, result, result_dist_sq,
+                      rect, nbresult);
+      /* Undo the slice */
+      *nearer_hyperrect_coord = dummy;
+    }
+
+    /* Check the distance of the point at the current node, compare it
+     * with our best so far */
+    if (node->IsValid() && node != source_node)
+    {
+      dist_sq = 0;
+      bool do_break = false;
+      for (size_t i = 0; i < fDim; i++)
+      {
+        dist_sq += sqr((*node)[i] - pos[i]);
+        if (dist_sq > *result_dist_sq)
+        {
+          do_break = true;
+          break;
+        }
+      }
+      if (!do_break)
+      {
+        if (dist_sq < *result_dist_sq)
+        {
+          result.clear();
+          nbresult = 1;
+          result.push_back(node);
+          *result_dist_sq = dist_sq;
+        }
+        else if (dist_sq == *result_dist_sq)
+        {
+          result.push_back(node);
+          nbresult++;
+        }
+      }
+    }
+
+    if (farther_subtree)
+    {
+      /* Get the hyperrect of the farther subtree */
+      dummy = *farther_hyperrect_coord;
+      *farther_hyperrect_coord = (*node)[dir];
+      /* Check if we have to recurse down by calculating the closest
+       * point of the hyperrect and see if it's closer than our
+       * minimum distance in result_dist_sq. */
+      //        if (hyperrect_dist_sq(rect, pos) < *result_dist_sq)
+      if (rect->CompareDistSqr(pos, result_dist_sq))
+      {
+        /* Recurse down into farther subtree */
+        __NearestToNode(source_node, farther_subtree, pos, result,
+                        result_dist_sq, rect, nbresult);
+      }
+      /* Undo the slice on the hyperrect */
+      *farther_hyperrect_coord = dummy;
+    }
+  }
+
+template<typename Position>
+  G4KDTreeResultHandle G4KDTree::NearestInRange(const Position& pos,
+                                                const double& range)
+  {
+    int ret(-1);
+
+    const double range_sq = sqr(range);
+
+    G4KDTreeResultHandle rset = new G4KDTreeResult(this);
+    if ((ret = __NearestInRange(fRoot, pos, range_sq, range, *(rset()), 0)) == -1)
+    {
+      rset = 0;
+      return rset;
+    }
+    rset->Sort();
+    rset->Rewind();
+    return rset;
+  }

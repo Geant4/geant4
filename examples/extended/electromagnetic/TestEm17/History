@@ -1,4 +1,4 @@
-$Id: History 71788 2013-06-24 12:22:46Z gcosmo $
+$Id: History 86746 2014-11-17 15:00:13Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16-11-14 V.Ivant (testem17-V10-00-01)
+- fixed ROOT macro and README
+
+27-10-14 V.Ivant (testem17-V10-00-00)
+- Use G4EmStandardPhysics and G4EmParameters classes in PhysicsList,
+  removed SetCuts method
 
 21-06-13 mma (testem17-V09-06-07)
 - SteppingVerbose: use G4Step::GetSecondaryInCurrentStep()

@@ -32,10 +32,10 @@
 #ifndef G4VFileManager_h
 #define G4VFileManager_h 1
 
-#include "G4BaseAnalysisManager.hh"
+#include "G4BaseFileManager.hh"
 #include "globals.hh"
 
-class G4VFileManager
+class G4VFileManager : public G4BaseFileManager
 {
   public:
     G4VFileManager(const G4AnalysisManagerState& state);
@@ -47,37 +47,50 @@ class G4VFileManager
     virtual G4bool CloseFile() = 0; 
     
     // Methods for handling files and directories names
-    G4bool SetFileName(const G4String& fileName);
-    G4bool SetHistoDirectoryName(const G4String& dirName);
-    G4bool SetNtupleDirectoryName(const G4String& dirName);
-    G4String GetFileName() const;
-    G4String GetFullFileName() const;
-    G4String GetNtupleFileName(const G4String& ntupleName) const;
-    G4String GetHistoDirectoryName() const;
-    G4String GetNtupleDirectoryName() const;
+    //
+    void LockHistoDirectoryName();
+    void LockProfileDirectoryName();
+    void LockNtupleDirectoryName();
 
-    // The manager file type (starts with a lowercase letter)
-    G4String GetFileType() const;                 
+    virtual G4bool SetFileName(const G4String& fileName);
+    
+    G4bool SetHistoDirectoryName(const G4String& dirName);
+    G4bool SetProfileDirectoryName(const G4String& dirName);
+    G4bool SetNtupleDirectoryName(const G4String& dirName); 
+
+    G4String GetHistoDirectoryName() const;
+    G4String GetProfileDirectoryName() const;
+    G4String GetNtupleDirectoryName() const;
 
   protected:
     // data members
-    const G4AnalysisManagerState& fState;
-    G4String fFileName;
     G4String fHistoDirectoryName;
+    G4String fProfileDirectoryName;
     G4String fNtupleDirectoryName; 
     G4bool   fLockFileName;     
     G4bool   fLockHistoDirectoryName;     
+    G4bool   fLockProfileDirectoryName;     
     G4bool   fLockNtupleDirectoryName;
 };
 
 // inline functions
 
-inline G4String G4VFileManager::GetFileName() const {
-  return fFileName;
-}  
+inline void G4VFileManager::LockHistoDirectoryName()
+{ fLockHistoDirectoryName = true; }
+
+inline void G4VFileManager::LockProfileDirectoryName()
+{ fLockProfileDirectoryName = true; }
+
+inline void G4VFileManager::LockNtupleDirectoryName()
+{ fLockNtupleDirectoryName = true; }
+
 
 inline G4String G4VFileManager::GetHistoDirectoryName() const {
   return fHistoDirectoryName;
+}  
+
+inline G4String G4VFileManager::GetProfileDirectoryName() const {
+  return fProfileDirectoryName;
 }  
 
 inline G4String G4VFileManager::GetNtupleDirectoryName() const {
@@ -85,4 +98,3 @@ inline G4String G4VFileManager::GetNtupleDirectoryName() const {
 }  
   
 #endif
-

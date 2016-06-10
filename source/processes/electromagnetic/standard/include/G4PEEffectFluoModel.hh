@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PEEffectFluoModel.hh 67990 2013-03-13 10:56:28Z gcosmo $
+// $Id: G4PEEffectFluoModel.hh 84397 2014-10-15 07:19:14Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -97,6 +97,7 @@ private:
 
   G4double                  fminimalEnergy;
   std::vector<G4double>     fSandiaCof;
+  std::vector<G4double>     fMatEnergyTh;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

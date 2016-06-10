@@ -1,4 +1,4 @@
-# $Id: run02.mac 75118 2013-10-28 09:40:24Z gcosmo $
+# $Id: run02.mac 83431 2014-08-21 15:49:56Z gcosmo $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -8,7 +8,6 @@
 #  Experimental results: Electron-induced cascade showers
 #                        J&H Crannel - Phys. Rev. 184-2 - August69
 #
-/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
 /run/verbose 2
 #
@@ -21,12 +20,11 @@
 /run/setCut 2.0 mm
 #
 /run/initialize
-/process/em/workerVerbose 0
 #
 /gun/particle e-
 /gun/energy 1 GeV
 #
-/testem/event/printModulo 10
+/run/printProgress 10
 #
 /run/beamOn 500
 

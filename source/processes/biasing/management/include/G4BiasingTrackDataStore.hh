@@ -62,7 +62,6 @@ public:
 
 private:
   G4BiasingTrackDataStore();
-  //static G4BiasingTrackDataStore* fInstance;
   std::map < const G4Track*, G4BiasingTrackData* > fTrackDataStore;
 };
 

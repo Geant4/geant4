@@ -1,0 +1,810 @@
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  OpenGLImmediateX (OGLIX)
+  OpenGLImmediateXm (OGLI, OGLIXm)
+  OpenGLStoredX (OGLSX)
+  OpenGLStoredXm (OGL, OGLS, OGLSXm)
+  RayTracer (RayTracer)
+  RayTracerX (RayTracerX)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+  drawByAttribute
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+  attributeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+Available colours:
+  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
+
+#
+#
+#
+# Initialize New Phantom
+#
+# Choose model: ORNL, MIRD, MIX
+#
+/phantom/setPhantomModel MIRD
+ >> Phantom MIRD will be built.
+#
+# Choose Sex of Phantom: Male or Female
+#
+/phantom/setPhantomSex Male
+>> Male Phantom will be built.
+# Construct your Phantom
+#
+/phantom/buildNewPhantom
+ ****************>>>> NEW PHANTOM CONSTRUCTION <<<<***************** 
+/run/initialize
+MotherVolume: physicalWorld
+sensitivity : 0
+Construct Head with mother physicalWorld
+Checking overlaps for volume physicalHead ... OK! 
+Volume of Head = 4651.91 cm^3
+Material of Head = soft_tissue
+Density of Material = 0.9869 g/cm^3
+Mass of Head = 4590.97 g
+MotherVolume: physicalHead
+sensitivity : 0
+Construct Skull with mother volume physicalHead
+Checking overlaps for volume physicalSkull ... OK! 
+Skull created !!!!!!
+Volume of Skull = 843.246 cm^3
+Material of Skull = skeleton
+Density of Material = 1.4862 g/cm^3
+Mass of Skull = 1253.23 g
+Construct Brain with mother physicalHead
+Checking overlaps for volume physicalBrain ... OK! 
+Volume of Brain = 1470.27 cm^3
+Material of Brain = soft_tissue
+Density of Material = 0.9869 g/cm^3
+Mass of Brain = 1451 g
+MotherVolume: physicalWorld
+sensitivity : 0
+Construct Trunk with mother volume physicalWorld
+Checking overlaps for volume physicalTrunk ... OK! 
+Trunk created !!!!!!
+Volume of Trunk = 43960.6 cm^3
+Material of Trunk = soft_tissue
+Density of Material = 0.9869 g/cm^3
+Mass of Trunk = 43384.7 g
+MotherVolume: physicalWorld
+sensitivity : 0
+Construct LeftLeg with mother volume physicalWorld
+Checking overlaps for volume physicalLeftLeg ... OK! 
+LeftLeg created !!!!!!
+Volume of LeftLeg = 10388.2 cm^3
+Material of LeftLeg = soft_tissue
+Density of Material = 0.9869 g/cm^3
+Mass of LeftLeg = 10252.1 g
+MotherVolume: physicalWorld
+sensitivity : 0
+Construct RightLeg with mother volume physicalWorld
+Checking overlaps for volume physicalRightLeg ... OK! 
+RightLeg created !!!!!!
+Volume of RightLeg = 10388.2 cm^3
+Material of RightLeg = soft_tissue
+Density of Material = 0.9869 g/cm^3
+Mass of RightLeg = 10252.1 g
+MotherVolume: physicalTrunk
+sensitivity : 0
+Construct LeftArmBone with mother physicalTrunk
+Checking overlaps for volume physicalLeftArmBone ... OK! 
+LeftArmBone created !!!!!!
+Volume of LeftArmBone = 819.271 cm^3
+Material of LeftArmBone = skeleton
+Density of Material = 1.4862 g/cm^3
+Mass of LeftArmBone = 1217.6 g
+MotherVolume: physicalTrunk
+sensitivity : 0
+Construct RightArmBone with mother volume physicalTrunk
+Checking overlaps for volume physicalRightArmBone ... OK! 
+RightArmBone created !!!!!!
+Volume of RightArmBone = 819.635 cm^3
+Material of RightArmBone = skeleton
+Density of Material = 1.4862 g/cm^3
+Mass of RightArmBone = 1218.14 g
+MotherVolume: physicalLeftLeg
+sensitivity : 0
+Construct LeftLegBone with mother volume physicalLeftLeg
+Checking overlaps for volume physicalLeftLegBone ... OK! 
+LeftLegBone created !!!!!!
+Volume of LeftLegBone = 1399.74 cm^3
+Material of LeftLegBone = skeleton
+Density of Material = 1.4862 g/cm^3
+Mass of LeftLegBone = 2080.29 g
+MotherVolume: physicalRightLeg
+sensitivity : 0
+Construct RightLegBone with mother volume physicalRightLeg
+Checking overlaps for volume physicalRightLegBone ... OK! 
+RightLegBone created !!!!!!
+Volume of RightLegBone = 1399.74 cm^3
+Material of RightLegBone = skeleton
+Density of Material = 1.4862 g/cm^3
+Mass of RightLegBone = 2080.29 g
+MotherVolume: physicalHead
+sensitivity : 0
+Construct UpperSpine with mother volume physicalHead
+Checking overlaps for volume physicalUpperSpine ... OK! 
+UpperSpine created !!!!!!
+Volume of UpperSpine = 126.456 cm^3
+Material of UpperSpine = skeleton
+Density of Material = 1.4862 g/cm^3
+Mass of UpperSpine = 187.938 g
+MotherVolume: physicalTrunk
+sensitivity : 0
+Construct LeftScapula with mother volume physicalTrunk
+Checking overlaps for volume physicalLeftScapula ... OK! 
+LeftScapula created !!!!!!
+Volume of LeftScapula = 101.683 cm^3
+Material of LeftScapula = skeleton
+Density of Material = 1.4862 g/cm^3
+Mass of LeftScapula = 151.121 g
+MotherVolume: physicalTrunk
+sensitivity : 0
+Construct RightScapula with mother volume physicalTrunk
+Checking overlaps for volume physicalRightScapula ... OK! 
+RightScapula created !!!!!!
+Volume of RightScapula = 100.468 cm^3
+Material of RightScapula = skeleton
+Density of Material = 1.4862 g/cm^3
+Mass of RightScapula = 149.315 g
+Construct LeftAdrenal with mother physicalTrunk
+Checking overlaps for volume physicalLeftAdrenal ... OK! 
+Left LeftAdrenal created !!!!!!
+Volume of LeftAdrenal = 7.85398 cm^3
+Material of LeftAdrenal = soft_tissue
+Density of Material = 0.9869 g/cm^3
+Mass of LeftAdrenal = 7.75109 g
+Construct RightAdrenal with mother volume physicalTrunk
+Checking overlaps for volume physicalRightAdrenal ... OK! 
+Right RightAdrenal created !!!!!!
+Volume of RightAdrenal = 7.85398 cm^3
+Material of RightAdrenal = soft_tissue
+Density of Material = 0.9869 g/cm^3
+Mass of RightAdrenal = 7.75109 g
+Construct Thymus with mother volume physicalTrunk
+Checking overlaps for volume physicalThymus ... OK! 
+Thymus created !!!!!!
+Volume of Thymus = 25.1327 cm^3
+Material of Thymus = soft_tissue
+Density of Material = 0.9869 g/cm^3
+Mass of Thymus = 24.8035 g
+MotherVolume: physicalTrunk
+sensitivity : 0
+Construct LeftClavicle with mother volume physicalTrunk
+Checking overlaps for volume physicalLeftClavicle ... OK! 
+LeftClavicle created !!!!!!
+Volume of LeftClavicle = 13.6657 cm^3
+Material of LeftClavicle = skeleton
+Density of Material = 1.4862 g/cm^3
+Mass of LeftClavicle = 20.3099 g
+MotherVolume: physicalTrunk
+sensitivity : 0
+Construct RightClavicle with mother volume physicalTrunk
+Checking overlaps for volume physicalRightClavicle ... OK! 
+RightClavicle created !!!!!!
+Volume of RightClavicle = 13.6657 cm^3
+Material of RightClavicle = skeleton
+Density of Material = 1.4862 g/cm^3
+Mass of RightClavicle = 20.3099 g
+Construct SmallIntestine with mother volume physicalTrunk
+Checking overlaps for volume physicalSmallIntestine ... OK! 
+SmallIntestine created !!!!!!
+Volume of SmallIntestine = 1020.98 cm^3
+Material of SmallIntestine = soft_tissue
+Density of Material = 0.9869 g/cm^3
+Mass of SmallIntestine = 1007.61 g
+Construct RibCage with mother volume physicalTrunk
+Checking overlaps for volume physicalRibCage ... OK! 
+Checking overlaps for volume physicalRib ... OK! 
+Checking overlaps for volume physicalRib ... OK! 
+Checking overlaps for volume physicalRib ... OK! 
+Checking overlaps for volume physicalRib ... OK! 
+Checking overlaps for volume physicalRib ... OK! 
+Checking overlaps for volume physicalRib ... OK! 
+Checking overlaps for volume physicalRib ... OK! 
+Checking overlaps for volume physicalRib ... OK! 
+Checking overlaps for volume physicalRib ... OK! 
+Checking overlaps for volume physicalRib ... OK! 
+Checking overlaps for volume physicalRib ... OK! 
+Checking overlaps for volume physicalRib ... OK! 
+RibCage created !!!!!!
+Volume of RibCage = 693.291 cm^3
+Material of RibCage = skeleton
+Density of Material = 1.4862 g/cm^3
+Mass of RibCage = 1030.37 g
+MotherVolume: physicalTrunk
+sensitivity : 0
+Construct MiddleLowerSpine with mother volume physicalTrunk
+Checking overlaps for volume physicalMiddleLowerSpine ... OK! 
+MiddleLowerSpine created !!!!!!
+Volume of MiddleLowerSpine = 753.8 cm^3
+Material of MiddleLowerSpine = skeleton
+Density of Material = 1.4862 g/cm^3
+Mass of MiddleLowerSpine = 1120.3 g
+Construct Pelvis with mother volume physicalTrunk
+Checking overlaps for volume physicalPelvis ... OK! 
+Pelvis created !!!!!!
+Volume of Pelvis = 603.174 cm^3
+Material of Pelvis = skeleton
+Density of Material = 1.4862 g/cm^3
+Mass of Pelvis = 896.437 g
+Construct Stomach with mother volume physicalTrunk
+Checking overlaps for volume physicalStomach ... OK! 
+Stomach created !!!!!!
+Volume of Stomach = 402.124 cm^3
+Material of Stomach = soft_tissue
+Density of Material = 0.9869 g/cm^3
+Mass of Stomach = 396.856 g
+Construct UpperLargeIntestine with mother volume physicalTrunk
+Checking overlaps for volume physicalUpperLargeIntestine ... OK! 
+UpperLargeIntestine created !!!!!!
+Volume of UpperLargeIntestine = 435.511 cm^3
+Material of UpperLargeIntestine = soft_tissue
+Density of Material = 0.9869 g/cm^3
+Mass of UpperLargeIntestine = 429.805 g
+Construct LowerLargeIntestine with mother volume physicalTrunk
+Checking overlaps for volume physicalLowerLargeIntestine ... OK! 
+LowerLargeIntestine created !!!!!!
+Volume of LowerLargeIntestine = 344.779 cm^3
+Material of LowerLargeIntestine = soft_tissue
+Density of Material = 0.9869 g/cm^3
+Mass of LowerLargeIntestine = 340.262 g
+Construct Spleen with mother volume physicalTrunk
+Checking overlaps for volume physicalSpleen ... OK! 
+Spleen created !!!!!!
+Volume of Spleen = 175.929 cm^3
+Material of Spleen = soft_tissue
+Density of Material = 0.9869 g/cm^3
+Mass of Spleen = 173.625 g
+Construct Pancreas with mother volume physicalTrunk
+Checking overlaps for volume physicalPancreas ... OK! 
+Pancreas created !!!!!!
+Volume of Pancreas = 61.0002 cm^3
+Material of Pancreas = soft_tissue
+Density of Material = 0.9869 g/cm^3
+Mass of Pancreas = 60.2011 g
+Construct LeftKidney with mother volume physicalTrunk
+Checking overlaps for volume physicalLeftKidney ... OK! 
+Left LeftKidney created !!!!!!
+Volume of LeftKidney = 144.107 cm^3
+Material of LeftKidney = soft_tissue
+Density of Material = 0.9869 g/cm^3
+Mass of LeftKidney = 142.219 g
+Construct RightKidney with mother volume physicalTrunk
+Checking overlaps for volume physicalRightKidney ... OK! 
+RightKidney created !!!!!!
+Volume of RightKidney = 143.9 cm^3
+Material of RightKidney = soft_tissue
+Density of Material = 0.9869 g/cm^3
+Mass of RightKidney = 142.015 g
+Construct UrinaryBladder with mother volume physicalTrunk
+Checking overlaps for volume physicalUrinaryBladder ... OK! 
+UrinaryBladder created !!!!!!
+Volume of UrinaryBladder = 45.5462 cm^3
+Material of UrinaryBladder = soft_tissue
+Density of Material = 0.9869 g/cm^3
+Mass of UrinaryBladder = 44.9496 g
+MotherVolume: physicalWorld
+sensitivity : 0
+Construct MaleGenitalia with mother volume physicalWorld
+Checking overlaps for volume physicalMaleGenitalia ... OK! 
+MaleGenitalia created !!!!!!
+Volume of MaleGenitalia = 229.385 cm^3
+Material of MaleGenitalia = soft_tissue
+Density of Material = 0.9869 g/cm^3
+Mass of MaleGenitalia = 226.38 g
+MotherVolume: physicalWorld
+sensitivity : 0
+Construct LeftTeste with mother volume physicalMaleGenitalia
+Checking overlaps for volume physicalLeftTeste ... OK! 
+LeftTeste created !!!!!!
+Volume of LeftTeste = 18.7867 cm^3
+Material of LeftTeste = soft_tissue
+Density of Material = 0.9869 g/cm^3
+Mass of LeftTeste = 18.5406 g
+MotherVolume: physicalWorld
+sensitivity : 0
+Construct RightTeste with mother volume physicalMaleGenitalia
+Checking overlaps for volume physicalRightTeste ... OK! 
+RightTeste created !!!!!!
+Volume of RightTeste = 18.7867 cm^3
+Material of RightTeste = soft_tissue
+Density of Material = 0.9869 g/cm^3
+Mass of RightTeste = 18.5406 g
+# or ...
+#/control/execute adultMIRDFemale.mac
+# or ...
+#/control/execute adultORNLMale.mac
+# or...
+#/control/execute adultORNLFemale.mac
+#
+# Primary radiation field
+/control/execute primary.mac
+#
+### Radiation field defined
+### by means of GPS 
+/gps/verbose 0
+Verbosity Set to: 0
+/gps/particle e-
+/gps/energy 1 MeV
+#
+/gps/pos/type Volume
+#
+/gps/pos/shape Para
+/gps/pos/halfx 20 cm
+/gps/pos/halfy 1 mm
+/gps/pos/halfz 100 cm
+/gps/pos/centre 0. 30. 0. cm
+/gps/direction 0 -1 0
+#
+/run/beamOn 100
+
+phot:   for  gamma    SubType= 12  BuildTable= 0
+      LambdaPrime table from 200 keV to 10 TeV in 154 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermorePhElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
+
+compt:   for  gamma    SubType= 13  BuildTable= 1
+      Lambda table from 100 eV  to 1 MeV, 20 bins per decade, spline: 1
+      LambdaPrime table from 1 MeV to 10 TeV in 140 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LowEPComptonModel :  Emin=        0 eV    Emax=       20 MeV  FluoActive
+        KleinNishina :  Emin=       20 MeV   Emax=       10 TeV  FluoActive
+
+conv:   for  gamma    SubType= 14  BuildTable= 1
+      Lambda table from 1.022 MeV to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       PenConversion :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
+
+Rayl:   for  gamma    SubType= 11  BuildTable= 1
+      Lambda table from 100 eV  to 100 keV, 20 bins per decade, spline: 0
+      LambdaPrime table from 100 keV to 10 TeV in 160 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :  Emin=        0 eV    Emax=       10 TeV   CullenGenerator
+
+msc:   for e-    SubType= 10
+      RangeFactor= 0.02, stepLimitType: 2, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 120 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 100 bins Emin=    100 MeV   Emax=     10 TeV
+
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
+          DefaultRegionForTheWorld
+
+eIoni:   for  e-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV   deltaVI
+
+eBrem:   for  e-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGen2BS
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGen2BS
+
+CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from 100 MeV to 10 TeV, 20 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
+
+msc:   for e+    SubType= 10
+      RangeFactor= 0.02, stepLimitType: 2, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 120 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 100 bins Emin=    100 MeV   Emax=     10 TeV
+
+eIoni:   for  e+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV   deltaVI
+
+eBrem:   for  e+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGen2BS
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGen2BS
+
+annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  e+, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from 100 MeV to 10 TeV, 20 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
+
+msc:   for proton    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=        2 MeV   deltaVI
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
+
+hBrems:   for  proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
+
+hPairProd:   for  proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+nuclearStopping:   for  proton    SubType= 8  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
+
+msc:   for GenericIon    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
+
+ionIoni:   for  GenericIon    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+         ParamICRU73 :  Emin=        0 eV    Emax=       10 TeV   deltaVI
+
+nuclearStopping:   for  GenericIon    SubType= 8  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
+
+msc:   for alpha    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+ionIoni:   for  alpha    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV   deltaVI
+          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV   deltaVI
+
+nuclearStopping:   for  alpha    SubType= 8  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
+
+msc:   for anti_proton    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  anti_proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV   deltaVI
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
+
+hBrems:   for  anti_proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
+
+hPairProd:   for  anti_proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+nuclearStopping:   for  anti_proton    SubType= 8  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
+
+msc:   for kaon+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  kaon+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV   deltaVI
+
+hBrems:   for  kaon+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
+
+hPairProd:   for  kaon+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for kaon-    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  kaon-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV   deltaVI
+
+hBrems:   for  kaon-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
+
+hPairProd:   for  kaon-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for mu+    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+muIoni:   for  mu+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=      200 keV   deltaVI
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
+
+muBrems:   for  mu+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
+
+muPairProd:   for  mu+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  mu+, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 20 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for mu-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+muIoni:   for  mu-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=      200 keV   deltaVI
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
+
+muBrems:   for  mu-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
+
+muPairProd:   for  mu-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  mu-, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 20 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  pi+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV   deltaVI
+
+hBrems:   for  pi+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
+
+hPairProd:   for  pi+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for pi-    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  pi-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV   deltaVI
+
+hBrems:   for  pi-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+      ===== Limit on energy threshold has been applied 
+
+hPairProd:   for  pi-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Air
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  250 eV     e-  339.229 eV     e+  333.259 eV  proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : soft_tissue
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  2.79506 keV    e-  349.375 keV    e+  336.864 keV proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes
+ Material : skeleton
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  3.99576 keV    e-  444.448 keV    e+  425.418 keV proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 0 start.
+Number of events = 100
+Energy Total in Run:logicalBrain, ID: 0, Energy Deposition (MeV): 0
+Energy Total in Run:logicalHead, ID: 1, Energy Deposition (MeV): 1.90695
+Energy Total in Run:logicalHeart, ID: 2, Energy Deposition (MeV): 0
+Energy Total in Run:logicalLeftAdrenal, ID: 3, Energy Deposition (MeV): 0
+Energy Total in Run:logicalLeftArmBone, ID: 4, Energy Deposition (MeV): 0
+Energy Total in Run:logicalLeftBreast, ID: 5, Energy Deposition (MeV): 0
+Energy Total in Run:logicalLeftClavicle, ID: 6, Energy Deposition (MeV): 0
+Energy Total in Run:logicalLeftKidney, ID: 7, Energy Deposition (MeV): 0
+Energy Total in Run:logicalLeftLeg, ID: 8, Energy Deposition (MeV): 6.43544
+Energy Total in Run:logicalLeftLegBone, ID: 9, Energy Deposition (MeV): 0
+Energy Total in Run:logicalLeftLung, ID: 10, Energy Deposition (MeV): 0
+Energy Total in Run:logicalLeftOvary, ID: 11, Energy Deposition (MeV): 0
+Energy Total in Run:logicalLeftScapula, ID: 12, Energy Deposition (MeV): 0
+Energy Total in Run:logicalLeftTeste, ID: 13, Energy Deposition (MeV): 0
+Energy Total in Run:logicalLowerLargeIntestine, ID: 14, Energy Deposition (MeV): 0
+Energy Total in Run:logicalMaleGenitalia, ID: 15, Energy Deposition (MeV): 0.603324
+Energy Total in Run:logicalMiddleLowerSpine, ID: 16, Energy Deposition (MeV): 0
+Energy Total in Run:logicalPancreas, ID: 17, Energy Deposition (MeV): 0
+Energy Total in Run:logicalPelvis, ID: 18, Energy Deposition (MeV): 0
+Energy Total in Run:logicalRibCage, ID: 19, Energy Deposition (MeV): 1.74931
+Energy Total in Run:logicalRightAdrenal, ID: 20, Energy Deposition (MeV): 0
+Energy Total in Run:logicalRightArmBone, ID: 21, Energy Deposition (MeV): 0
+Energy Total in Run:logicalRightBreast, ID: 22, Energy Deposition (MeV): 0
+Energy Total in Run:logicalRightClavicle, ID: 23, Energy Deposition (MeV): 0
+Energy Total in Run:logicalRightKidney, ID: 24, Energy Deposition (MeV): 0
+Energy Total in Run:logicalRightLeg, ID: 25, Energy Deposition (MeV): 9.37257
+Energy Total in Run:logicalRightLegBone, ID: 26, Energy Deposition (MeV): 0
+Energy Total in Run:logicalRightLung, ID: 27, Energy Deposition (MeV): 0
+Energy Total in Run:logicalRightOvary, ID: 28, Energy Deposition (MeV): 0
+Energy Total in Run:logicalRightScapula, ID: 29, Energy Deposition (MeV): 0
+Energy Total in Run:logicalRightTeste, ID: 30, Energy Deposition (MeV): 0
+Energy Total in Run:logicalSkull, ID: 31, Energy Deposition (MeV): 0
+Energy Total in Run:logicalSmallIntestine, ID: 32, Energy Deposition (MeV): 0
+Energy Total in Run:logicalSpleen, ID: 33, Energy Deposition (MeV): 0
+Energy Total in Run:logicalStomach, ID: 34, Energy Deposition (MeV): 0
+Energy Total in Run:logicalThymus, ID: 35, Energy Deposition (MeV): 0
+Energy Total in Run:logicalThyroid, ID: 36, Energy Deposition (MeV): 0
+Energy Total in Run:logicalTrunk, ID: 37, Energy Deposition (MeV): 28.7101
+Energy Total in Run:logicalUpperLargeIntestine, ID: 38, Energy Deposition (MeV): 0
+Energy Total in Run:logicalUpperSpine, ID: 39, Energy Deposition (MeV): 0
+Energy Total in Run:logicalUrinaryBladder, ID: 40, Energy Deposition (MeV): 0
+Energy Total in Run:logicalUterus, ID: 41, Energy Deposition (MeV): 0
+Total Energy deposit in the body is: 48.7777 MeV
+Graphics systems deleted.
+Visualization Manager deleting...
+Total navigation history collections cleaned: 7

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionProbability.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4FissionProbability.hh 84396 2014-10-15 07:18:24Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) 
@@ -37,8 +37,7 @@
 
 
 #include "G4VEmissionProbability.hh"
-#include "G4EvaporationLevelDensityParameter.hh"
-#include "G4FissionLevelDensityParameter.hh"
+#include "G4VLevelDensityParameter.hh"
 
 class G4FissionProbability : public G4VEmissionProbability
 {
@@ -59,9 +58,25 @@ private:
 public:
   G4double EmissionProbability(const G4Fragment & fragment, G4double MaximalKineticEnergy);
 
+  inline void SetEvaporationLevelDensityParameter(G4VLevelDensityParameter * aLevelDensity)
+  { 
+    if (ownEvapLDP) delete theEvapLDP;
+    theEvapLDP = aLevelDensity;
+    ownEvapLDP = false;
+  }
+
+  inline void SetFissionLevelDensityParameter(G4VLevelDensityParameter * aLevelDensity)
+  { 
+    if (ownFissLDP) delete theFissLDP;
+    theFissLDP = aLevelDensity;
+    ownFissLDP = false;
+  }
+
 private:
-  G4EvaporationLevelDensityParameter theEvapLDP;
-  G4FissionLevelDensityParameter theFissLDP;
+  G4VLevelDensityParameter *theEvapLDP;
+  G4VLevelDensityParameter *theFissLDP;
+  bool ownEvapLDP;
+  bool ownFissLDP;
 
 
 };

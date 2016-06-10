@@ -14,6 +14,47 @@ code and to keep track of all tags.
     * Please list in reverse chronological order (last date on top)
     ---------------------------------------------------------------
 
+9 November 2014  Tatsumi Koi (hadr-fission-V10-00-09)
+----------------------------------------------------
+- Re-tag for testing 
+
+27 October 2014  Tatsumi Koi (hadr-fission-V10-00-08)
+----------------------------------------------------
+- Re-tag for testing 
+
+26 October 2014  Tatsumi Koi (hadr-fission-V10-00-07)
+----------------------------------------------------
+- G4FissionLibrary.hh: Interface change along with "hadr-hpn-V10-00-28"
+
+8 July 2014  Jerome Verbeke (hadr-fission-V10-00-06)
+----------------------------------------------------
+- G4FissionLibrary.hh: replaced c calls to
+                       genfissevt_, getnnu_, getpnu_
+                       getneng_, getndircosu_, getndircosv_, getndircosw_
+                       getpeng_, getpdircosu_, getpdircosv_, getpdircosw_
+                     by their c++ equivalent:
+                       G4fissionEvent::G4fissionEvent G4fissionEvent::getNeutronNu(), 
+                       G4fissionEvent::getPhotonNu(), G4fissionEvent::getNeutronEnergy(), 
+                       G4fissionEvent::getNeutronDircosu(), G4fissionEvent::getNeutronDircosv(), 
+                       G4fissionEvent::getNeutronDircosw(), G4fissionEvent::getPhotonEnergy(), 
+                       G4fissionEvent::getPhotonDircosu(), G4fissionEvent::getPhotonDircosv(), 
+                       G4fissionEvent::getPhotonDircosw()
+- G4FissionLibrary.cc: same as G4FissionLibrary.hh
+
+- G4FissLib.hh: because the Fission Library does not produce fission 
+                fragments, fission events do not conserve energy/
+                momentum. Energy/momentum conservation checks are 
+                loosened to effectively avoid triggering re-sampling
+                of the fission event.
+- G4FissLib.cc: same as G4FissLib.hh
+- G4FissionLibrary.cc: adapted to read the new data format
+- G4SmpTerrell.cc: added the sampled nubar to the error message
+
+10 March 2014  Dennis Wright (hadr-fission-V10-00-00)
+-----------------------------------------------------
+- G4FissionLibrary.cc: remove const_cast now that pointer to 
+  G4ParticleDefinition is const
+
 8 November 2013  Alberto Ribon (hadr-fission-V09-06-00)
 -------------------------------------------------------
 - Created a new directory under models, fission/ , which is now

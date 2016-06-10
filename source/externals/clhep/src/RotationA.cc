@@ -26,14 +26,14 @@ namespace CLHEP  {
 
 HepRotation & HepRotation::set( const Hep3Vector & aaxis, double ddelta ) {
 
-  register double sinDelta = std::sin(ddelta), cosDelta = std::cos(ddelta);
-  register double oneMinusCosDelta = 1.0 - cosDelta;
+  double sinDelta = std::sin(ddelta), cosDelta = std::cos(ddelta);
+  double oneMinusCosDelta = 1.0 - cosDelta;
 
   Hep3Vector u = aaxis.unit();
 
-  register double uX = u.getX();
-  register double uY = u.getY();
-  register double uZ = u.getZ();
+  double uX = u.getX();
+  double uY = u.getY();
+  double uZ = u.getZ();
 
   rxx = oneMinusCosDelta * uX * uX  +  cosDelta;
   rxy = oneMinusCosDelta * uX * uY  -  sinDelta * uZ;

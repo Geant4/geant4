@@ -85,7 +85,12 @@ G4double G4fissionEvent::G4SmpTerrell(G4double nubar) {
   G4double rw, theta, sampleg;
 
 
-  if (nubar < WIDTH) G4fissionerr(6, "SmpTerrell", "fission nubar out of range");
+  if (nubar < WIDTH) {
+    std::ostringstream o;
+    o << nubar;
+    std::string errMsg = "fission nubar out of range, nubar=" + o.str();
+    G4fissionerr(6, "SmpTerrell", errMsg);
+  }
 
   width = SQRT2 * WIDTH;
   temp1 = nubar + 0.5;

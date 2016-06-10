@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RPGKPlusInelastic.cc 79697 2014-03-12 13:10:09Z gcosmo $
 //
  
 #include "G4RPGKPlusInelastic.hh"
@@ -58,8 +58,9 @@ G4RPGKPlusInelastic::ApplyYourself( const G4HadProjectile &aTrack,
     G4cout << "target material = " << targetMaterial->GetName() << ", ";
     G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
            << G4endl;
-  }    
-  G4ReactionProduct currentParticle( const_cast<G4ParticleDefinition *>(originalIncident->GetDefinition()));
+  }
+   
+  G4ReactionProduct currentParticle(originalIncident->GetDefinition() );
   currentParticle.SetMomentum( originalIncident->Get4Momentum().vect() );
   currentParticle.SetKineticEnergy( originalIncident->GetKineticEnergy() );
     

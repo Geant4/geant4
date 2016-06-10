@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -153,10 +154,10 @@ namespace G4INCL {
     G4double runningPotentials[ParticleTable::maxClusterMass+1];
 #if defined(INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON_HashMask)
     Hashing::NucleonItem runningConfiguration[ParticleTable::maxClusterMass];
-#elif defined(INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON_Set)
+#elif defined(INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON_Set) || defined(INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON_None)
     G4int runningConfiguration[ParticleTable::maxClusterMass];
 #else
-#error Unrecognized INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON. Allowed values are: Set, HashMask.
+#error Unrecognized INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON. Allowed values are: Set, HashMask, None.
 #endif
 
     G4int selectedA, selectedZ;
@@ -298,8 +299,8 @@ namespace G4INCL {
 
     /// \brief Array of containers for configurations that have already been checked
     SortedNucleonConfigurationContainer checkedConfigurations[ParticleTable::maxClusterMass-2];
-#else
-#error Unrecognized INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON. Allowed values are: Set, HashMask.
+#elif !defined(INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON_None)
+#error Unrecognized INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON. Allowed values are: Set, HashMask, None.
 #endif
 
     /** \brief Maximum mass for configuration storage

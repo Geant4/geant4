@@ -1,4 +1,4 @@
-$Id: History 78050 2013-12-03 08:17:33Z gcosmo $
+$Id: History 87218 2014-11-27 09:55:11Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,24 +17,45 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 27, 2014 G.Cosmo                  geommng-V10-00-06
+- Fixed implementation of StreamInfo() for G4USolid.
+
+October 29, 2014 G.Cosmo                   geommng-V10-00-05
+- Moved G4USolid bridge class from internal USolids module.
+
+October 3, 2014 G.Cosmo                    geommng-V10-00-04
+- Moved constructor for partial voxels refinements from protected to public.
+
+September 25, 2014 W. Pokorski             geommng-V10-00-03
+- Some fixes in the default constructor for Root-I/O persistency.
+
+July 11, 2014 A. Dotti			   geommng-V10-00-02
+- Solves possible data-race condition in G4GeaomSplitter.
+
+April 10, 2014 G.Cosmo                     geommng-V10-00-01
+- Get rid of deprecated 'register' storage class specifier in source files.
+
+March 31, 2014 G.Cosmo                     geommng-V10-00-00
+- Fixed operator=() signature in G4LogicalSurface.
+
 December 2, 2013 A.Dotti                   geommng-V09-06-17
 - Correctly initialize shadow pointers in G4PhysicalVolume.
 
-December 2, 2013 M.Asai                   geommng-V09-06-16
+December 2, 2013 M.Asai                    geommng-V09-06-16
 - Correctly initialize shadow pointers in G4LogicalVolume.
 
-November 30, 2013 M.Asai                  geommng-V09-06-15
+November 30, 2013 M.Asai                   geommng-V09-06-15
 - Explicitely initialize data members of G4LVData.
 
-November 27, 2013 J.Apostolakis           geommng-V09-06-14
+November 27, 2013 J.Apostolakis            geommng-V09-06-14
 - Fix in G4GeomSplitter::FreeSlave(): use free() to delete memory 
    which was allocated with malloc().
 
-October  18, 2013, A. Dotti		geommng-V09-06-13
+October 18, 2013, A. Dotti                 geommng-V09-06-13
 - Bug fixing in G4GeomSplitter::UseWorkspace method
   check if offset pointer is assigned AND different from new value
 
-October   3, 2013 J.Apostolakis           geommng-V09-06-12
+October 3, 2013 J.Apostolakis              geommng-V09-06-12
 - Cleanup of G4LogicalVolume, G4VPhysicalVolume
      Moved long description of helper classes to end of headers.
      Moved macros to icc file. 
@@ -45,10 +66,10 @@ October   3, 2013 J.Apostolakis           geommng-V09-06-12
      * Get/Set Solid( G4LVData, .) for potential performance improvement
      * bool fChangedState.
 
-August 27, 2013 G.Cosmo                  geommng-V09-06-11
+August 27, 2013 G.Cosmo                    geommng-V09-06-11
 - Added G4Ellipsoid among solids enabled for parameterisation.
 
-August 22, 2013 G.Cosmo                  geommng-V09-06-10
+August 22, 2013 G.Cosmo                    geommng-V09-06-10
 - Added parameter to specify maximum number of overlap errors to report
   in G4VPhysicalVolume::CheckOverlaps().
 

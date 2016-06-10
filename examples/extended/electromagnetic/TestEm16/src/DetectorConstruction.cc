@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm16/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id: DetectorConstruction.cc 84365 2014-10-14 12:43:52Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,14 +38,15 @@
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
-#include "G4UniformMagField.hh"
-#include "G4PropagatorInField.hh"
 #include "G4UserLimits.hh"
+#include "G4TransportationManager.hh"
+#include "G4PropagatorInField.hh"
 
 #include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
+#include "G4RunManager.hh"
 
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
@@ -54,7 +55,7 @@
 
 DetectorConstruction::DetectorConstruction()
 :G4VUserDetectorConstruction(),
- fBox(0), fBoxSize(500*m), fMaterial(0), fMagField(0),
+ fLBox(0), fBox(0), fBoxSize(500*m), fMaterial(0),
  fUserLimits(0), fDetectorMessenger(0)
 {
   DefineMaterials();
@@ -91,7 +92,7 @@ void DetectorConstruction::DefineMaterials()
 
  // define a vacuum with a restgas pressure  typical for accelerators
  G4double const Torr  = atmosphere/760.;         // 1 Torr
- G4double pressure = 10e-9*Torr, temperature = 296.150*kelvin;         // 23  Celsius
+ G4double pressure = 10e-9*Torr, temperature = 296.150*kelvin;    // 23  Celsius
  new G4Material("Vacuum", z=7., a=14.01*g/mole, density= 1.516784e-11*kg/m3,
                  kStateGas, temperature, pressure);
 
@@ -111,18 +112,17 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   sBox = new G4Box("Container",                                //its name
                    fBoxSize/2,fBoxSize/2,fBoxSize/2);        //its dimensions
 
-  G4LogicalVolume*                                           
-  lBox = new G4LogicalVolume(sBox,                        //its shape
+  fLBox = new G4LogicalVolume(sBox,                        //its shape
                              fMaterial,                        //its material
                              fMaterial->GetName());        //its name
                         
-  lBox->SetUserLimits(fUserLimits);                        
+  fLBox->SetUserLimits(fUserLimits);                        
 
   fBox = new G4PVPlacement(0,                                //no rotation
                              G4ThreeVector(),                //at (0,0,0)
-                           lBox,                        //its logical volume
+                           fLBox,                        //its logical volume
                            fMaterial->GetName(),        //its name
-                           0,                                       //its mother  volume
+                           0,                            //its mother  volume
                            false,                        //no boolean operation
                            0);                                //copy number
 
@@ -148,7 +148,11 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
 {
   // search the material by its name
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
-  if (pttoMaterial) fMaterial = pttoMaterial;
+  if (pttoMaterial) {
+     fMaterial = pttoMaterial;
+     if ( fLBox ) fLBox->SetMaterial(fMaterial);
+ }
+ G4RunManager::GetRunManager()->PhysicsHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -156,31 +160,27 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
 void DetectorConstruction::SetSize(G4double value)
 {
   fBoxSize = value;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
+#include "G4GlobalMagFieldMessenger.hh"
+#include "G4AutoDelete.hh"
 
-void DetectorConstruction::SetMagField(G4double fieldValue)
+void DetectorConstruction::ConstructSDandField()
 {
-  //apply a global uniform magnetic field along Z axis
-  G4FieldManager* fieldMgr
-   = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-
-  if (fMagField) delete fMagField;        //delete the existing magn field
-
-  if (fieldValue!=0.)                        // create a new one if non null
-    {
-      fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
-      fieldMgr->SetDetectorField(fMagField);
-      fieldMgr->CreateChordFinder(fMagField);
-    }
-   else
-    {
-      fMagField = 0;
-      fieldMgr->SetDetectorField(fMagField);
+    if ( fFieldMessenger.Get() == 0 ) {
+        // Create global magnetic field messenger.
+        // Uniform magnetic field is then created automatically if
+        // the field value is not zero.
+        G4ThreeVector fieldValue = G4ThreeVector();
+        G4GlobalMagFieldMessenger* msg =
+        new G4GlobalMagFieldMessenger(fieldValue);
+        //msg->SetVerboseLevel(1);
+        G4AutoDelete::Register(msg);
+        fFieldMessenger.Put( msg );
+        
     }
 }
 
@@ -213,15 +213,6 @@ void DetectorConstruction::SetMaxStepLength(G4double val)
     G4TransportationManager::GetTransportationManager();
   tmanager->GetPropagatorInField()
           ->SetLargestAcceptableStep(val);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4RunManager.hh"
-
-void DetectorConstruction::UpdateGeometry()
-{
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

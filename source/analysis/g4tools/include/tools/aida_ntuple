@@ -1,0 +1,1313 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_aida_ntuple
+#define tools_aida_ntuple
+
+// An in memory ntuple able to have "sub ntuple" on a column.
+// It is used in ioda to read ntuples in XML/AIDA files.
+
+#ifdef TOOLS_MEM
+#include "mem"
+#endif
+
+#include "vmanip"
+#include "vfind"
+#include "typedefs"
+#include "scast"
+#include "forit"
+#include "ntuple_binding"
+
+#include <string>
+#include <vector>
+#include <ostream>
+
+namespace tools {
+namespace aida {
+
+class base_col {
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::aida::base_col");
+    return s_v;
+  }
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<base_col>(this,a_class)) {return p;}
+    return 0;
+  }
+public:
+  virtual base_col* copy() const = 0;
+  virtual uint64 num_elems() const = 0;
+  virtual bool add() = 0;
+  virtual bool reset() = 0;
+  //binded column reading API :
+  virtual bool fetch_entry() const = 0;
+  virtual void set_user_variable(void*) = 0;
+protected:
+  base_col(std::ostream& a_out,const std::string& a_name)
+  :m_out(a_out)
+  ,m_name(a_name),m_index(0){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+public:
+  virtual ~base_col(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  base_col(const base_col& a_from)
+  :m_out(a_from.m_out)
+  ,m_name(a_from.m_name)
+  ,m_index(a_from.m_index){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  base_col& operator=(const base_col& a_from){
+    m_name = a_from.m_name;
+    m_index = a_from.m_index;
+    return *this;
+  }
+public:
+  std::string name() {return m_name;}
+  const std::string& name() const {return m_name;}
+
+  void set_index(uint64 a_index){m_index = a_index;}
+protected:
+  std::ostream& m_out;
+  std::string m_name;
+  uint64 m_index;
+};
+
+class base_ntu {
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::aida::base_ntu");
+    return s_v;
+  }
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<base_ntu>(this,a_class)) {return p;}
+    return 0;
+  }
+protected:
+  base_ntu(std::ostream& a_out,const std::string& a_title)
+  :m_out(a_out),m_title(a_title),m_index(-1){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~base_ntu() {
+    clear();
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  base_ntu(const base_ntu& a_from)
+  :m_out(a_from.m_out)
+  ,m_title(a_from.m_title),m_index(a_from.m_index)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    tools_vforcit(base_col*,a_from.m_cols,it) {
+      base_col* column = (*it)->copy();
+      if(!column) {
+        m_out << s_class() << "::cstor :"
+              << " can't copy column."
+              << std::endl;
+        tools::clear<base_col>(m_cols);
+        m_index = -1;
+        return; //throw
+      }
+      m_cols.push_back(column);
+    }
+  }
+  base_ntu& operator=(const base_ntu& a_from){
+    if(&a_from==this) return *this;
+
+    tools::clear<base_col>(m_cols);
+    m_index = a_from.m_index;
+
+    m_title = a_from.m_title;
+    tools_vforcit(base_col*,a_from.m_cols,it) {
+      base_col* column = (*it)->copy();
+      if(!column) {
+        m_out << s_class() << "::operator=() :"
+              << " can't copy column."
+              << std::endl;
+        tools::clear<base_col>(m_cols);
+        m_index = -1;
+        return *this;
+      }
+      m_cols.push_back(column);
+    }
+
+    return *this;
+  }
+public:
+  std::ostream& out() {return m_out;}
+  const std::vector<base_col*>& cols() const {return m_cols;}
+
+  std::string title() {return m_title;}
+  const std::string& title() const {return m_title;}
+  void set_title(const std::string& a_title) {m_title = a_title;}
+
+  uint64 rows() const {
+    if(m_cols.empty()) return 0;
+    return m_cols.front()->num_elems();
+  }
+
+  void clear() { //must not be confused with reset().
+    tools::clear<base_col>(m_cols);
+    m_index = -1;
+  }
+
+  bool reset() { //clear data in columns (but not the column set)
+    bool status = true;
+    tools_vforit(base_col*,m_cols,it) {
+      if(!(*it)->reset()) status = false;
+    }
+    m_index = -1;
+    return status;
+  }
+
+  // reading :
+  void start() {m_index = -1;set_columns_index(0);}
+  bool next() { 
+    // a tuple loop is of the form :
+    //  tuple.start();
+    //  while(tuple.next()) {
+    //    ...
+    //    double v;
+    //    if(!col->get_entry(v)) {}
+    //    ...
+    //  }
+    if((m_index+1)>=(int64)rows()) return false;
+    m_index++;
+    set_columns_index(m_index);
+    return true;
+  }
+  int64 row_index() const {return m_index;}
+
+  // filling :
+  bool add_row() {
+    bool status = true;
+    tools_vforit(base_col*,m_cols,it) {
+      if(!(*it)->add()) status = false;
+    }
+    return status;
+  }
+public:
+  base_col* find_column(const std::string& a_name){
+    return find_named<base_col>(m_cols,a_name);
+  }
+
+  void add_column(base_col* a_col) { //we take ownership.
+    m_cols.push_back(a_col);
+  }
+protected:
+  void set_columns_index(uint64 a_index) {
+    tools_vforit(base_col*,m_cols,it) {
+      (*it)->set_index(a_index);
+    }
+  }
+protected:
+  std::ostream& m_out;
+  std::string m_title;
+  int64 m_index;
+  std::vector<base_col*> m_cols;
+};
+
+}}
+
+#include "tos"
+#include "sto"
+#include "columns"
+#include "stype"
+
+namespace tools {
+namespace aida {
+
+//inline const std::string& s_aida_type(char) {
+//  static const std::string s_v("char");
+//  return s_v;
+//}
+inline const std::string& s_aida_type(short) {
+  static const std::string s_v("short");
+  return s_v;
+}
+inline const std::string& s_aida_type(int) {
+  static const std::string s_v("int");
+  return s_v;
+}
+inline const std::string& s_aida_type(float) {
+  static const std::string s_v("float");
+  return s_v;
+}
+inline const std::string& s_aida_type(double) {
+  static const std::string s_v("double");
+  return s_v;
+}
+
+/////////////////////////////////////////
+/////////////////////////////////////////
+//inline const std::string& s_aida_type(unsigned char) {
+//  static const std::string s_v("byte");
+//  return s_v;
+//}
+
+inline const std::string& s_aida_type(bool) {
+  static const std::string s_v("boolean");
+  return s_v;
+}
+inline const std::string& s_aida_type(const std::string&) {
+  static const std::string s_v("string");
+  return s_v;
+}
+inline const std::string& s_aida_type(int64) {
+  static const std::string s_v("long");
+  return s_v;
+}
+inline const std::string& s_aida_type(const std::vector<double>&) {
+  static const std::string s_v("double[]");
+  return s_v;
+}
+
+inline const std::string& s_aida_type_ituple() {
+  static const std::string s_v("ITuple");
+  return s_v;
+}
+
+/////////////////////////////////////////
+/// not AIDA ! //////////////////////////
+/////////////////////////////////////////
+inline const std::string& s_aida_type(unsigned short) {
+  static const std::string s_v("ushort");
+  return s_v;
+}
+inline const std::string& s_aida_type(unsigned int) {
+  static const std::string s_v("uint");
+  return s_v;
+}
+inline const std::string& s_aida_type(uint64) {
+  static const std::string s_v("ulong");
+  return s_v;
+}
+
+class aida_base_col : public base_col {
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::aida::aida_base_col");
+    return s_v;
+  }
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<aida_base_col>(this,a_class)) {return p;}
+    return base_col::cast(a_class);
+  }
+public:
+  virtual std::string aida_type() const = 0;
+  virtual bool s_default_value(std::string&) const = 0;
+  virtual bool s_value(std::string&) const = 0;
+  virtual bool s_fill(const std::string&) = 0;
+public:
+  aida_base_col(std::ostream& a_out,const std::string& a_name)
+  :base_col(a_out,a_name){}
+public:
+  virtual ~aida_base_col(){}
+public:
+  aida_base_col(const aida_base_col& a_from)
+  :base_col(a_from)
+  {}
+  aida_base_col& operator=(const aida_base_col& a_from){
+    base_col::operator=(a_from);
+    return *this;
+  }
+};
+
+inline bool s__fill(const std::string& a_s,std::string& a_v) {
+  a_v = a_s;
+  return true;
+}
+inline bool s__fill(const std::string& a_s,char& a_v) {
+  //for exlib/cbk/aida_ntu
+  if(a_s.empty()) return false;
+  a_v = a_s[0];
+  return true;
+}
+inline bool s__fill(const std::string& a_s,unsigned char& a_v) {
+  //for exlib/cbk/aida_ntu
+  if(a_s.empty()) return false;
+  a_v = a_s[0];
+  return true;
+}
+inline bool s__fill(const std::string& a_s,bool& a_v) {
+  return to(a_s,a_v);
+}
+inline bool s__fill(const std::string& a_s,short& a_v) {
+  return to<short>(a_s,a_v);
+}
+inline bool s__fill(const std::string& a_s,unsigned short& a_v) {
+  return to<unsigned short>(a_s,a_v);
+}
+inline bool s__fill(const std::string& a_s,int& a_v) {
+  return to<int>(a_s,a_v);
+}
+inline bool s__fill(const std::string& a_s,unsigned int& a_v) {
+  return to<unsigned int>(a_s,a_v);
+}
+inline bool s__fill(const std::string& a_s,int64& a_v) {
+  return to<int64>(a_s,a_v);
+}
+inline bool s__fill(const std::string& a_s,uint64& a_v) {
+  return to<uint64>(a_s,a_v);
+}
+inline bool s__fill(const std::string& a_s,float& a_v) {
+  return to<float>(a_s,a_v);
+}
+inline bool s__fill(const std::string& a_s,double& a_v) {
+  return to<double>(a_s,a_v);
+}
+
+template <class T>
+class aida_col : public aida_base_col {
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::aida::aida_col<"+stype(T())+">");
+    return s_v;
+  }
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast< aida_col<T> >(this,a_class)) {return p;}
+    return aida_base_col::cast(a_class);
+  }
+public:
+  virtual base_col* copy() const {return new aida_col(*this);}
+  virtual bool add() {m_data.push_back(m_tmp);m_tmp = m_default;return true;}
+  virtual bool reset() {
+    m_data.clear();
+    m_index = 0;
+    m_tmp = m_default;
+    return true;
+  }
+  virtual uint64 num_elems() const {return m_data.size();}
+public:
+  virtual std::string aida_type() const {return s_aida_type(T());}
+  virtual bool s_default_value(std::string& a_s) const {
+    a_s = tos(m_default);
+    return true;
+  }
+  virtual bool s_value(std::string& a_s) const {
+    typedef typename std::vector<T>::size_type sz_t;
+    a_s = tos(m_data[sz_t(m_index)]);
+    return true;
+  }
+
+  // for exlib/raxml/tuple :
+  virtual bool s_fill(const std::string& a_s) {
+    //if(!to<T>(a_s,m_tmp)) {
+    if(!s__fill(a_s,m_tmp)) {
+      m_out << s_class() << "::fill :"
+            << " can't convert " << sout(a_s) << "."
+            << std::endl;
+      return false;
+    }
+    return true;
+  }
+
+  virtual void set_user_variable(void* a_user_var) {m_user_var = (T*)a_user_var;} //not owner.
+public:
+  aida_col(std::ostream& a_out,const std::string& a_name,const T& a_def)
+  :aida_base_col(a_out,a_name)
+  ,m_default(a_def)
+  ,m_tmp(a_def)
+  ,m_user_var(0) //not owner
+  {}
+public:
+  virtual ~aida_col(){}
+public:
+  aida_col(const aida_col& a_from)
+  :aida_base_col(a_from)
+  ,m_data(a_from.m_data)
+  ,m_default(a_from.m_default)
+  ,m_tmp(a_from.m_tmp)
+  ,m_user_var(a_from.m_user_var)
+  {}
+  aida_col& operator=(const aida_col& a_from){
+    aida_base_col::operator=(a_from);
+    if(&a_from==this) return *this;
+    m_data = a_from.m_data;
+    m_default = a_from.m_default;
+    m_tmp = a_from.m_tmp;
+    m_user_var = a_from.m_user_var;
+    return *this;
+  }
+public:
+  bool fill(const T& a_value) {m_tmp = a_value;return true;}
+  bool get_entry(T& a_v) const {
+    if(m_index>=m_data.size()) {
+      m_out << s_class() << "::get_entry :"
+            << " bad index " << m_index
+            << ". Vec size is " << m_data.size() << "."
+            << "."
+            << std::endl;
+      a_v = T();
+      return false;
+    }
+    typedef typename std::vector<T>::size_type sz_t;
+    a_v = m_data[sz_t(m_index)];
+    return true;
+  }
+  virtual bool fetch_entry() const {
+    //NOTE : it is ok to have a NULL m_user_var.
+    if(m_index>=m_data.size()) {
+      m_out << s_class() << "::get_entry :"
+            << " bad index " << m_index
+            << ". Vec size is " << m_data.size() << "."
+            << "."
+            << std::endl;
+      if(m_user_var) *m_user_var = T();
+      return false;
+    }
+    typedef typename std::vector<T>::size_type sz_t;
+    if(m_user_var) *m_user_var = m_data[sz_t(m_index)];
+    return true;
+  }
+protected:
+  std::vector<T> m_data;
+  T m_default;
+  T m_tmp;
+  T* m_user_var;
+};
+
+class ntuple : public base_ntu {
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::aida::ntuple");
+    return s_v;
+  }
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<ntuple>(this,a_class)) {return p;}
+    return base_ntu::cast(a_class);
+  }
+public:
+  ntuple(std::ostream& a_out,const std::string& a_title)
+  :base_ntu(a_out,a_title)
+  {}
+  virtual ~ntuple() {}
+public:
+  ntuple(const ntuple& a_from): base_ntu(a_from){}
+  ntuple& operator=(const ntuple& a_from){
+    base_ntu::operator=(a_from);
+    return *this;
+  }
+public:
+  template <class T>
+  aida_col<T>* create_col(const std::string& a_name,const T& a_def = T()) {
+    if(find_named<base_col>(m_cols,a_name)) {
+      m_out << s_class() << "::create_col :"
+            << " a column with name " << sout(a_name) << " already exists."
+            << std::endl;
+      return 0;
+    }
+    aida_col<T>* col = new aida_col<T>(m_out,a_name,a_def);
+    if(!col) {
+      m_out << s_class() << "::create_col :"
+            << " can't create aida_col<T> " << sout(a_name) << "."
+            << std::endl;
+      return 0;
+    }    
+    m_cols.push_back(col);
+    return col;
+  }
+
+  template <class T>
+  aida_col<T>* find_column(const std::string& a_name){
+    base_col* col = find_named<base_col>(m_cols,a_name);
+    if(!col) return 0;
+    return safe_cast<base_col, aida_col<T> >(*col);
+  }
+
+  bool get_row() const {
+    bool status = true;
+    tools_vforcit(base_col*,m_cols,it) {
+      if(!(*it)->fetch_entry()) status = false;
+    }
+    return status;
+  }
+
+  bool set_binding(std::ostream& a_out,const ntuple_binding& a_bd = ntuple_binding()) {
+    tools_vforcit(column_binding,a_bd.columns(),itb) {
+      bool found = false;
+      tools_vforcit(base_col*,m_cols,itc) {
+        if((*itc)->name()==(*itb).name()) {
+          (*itc)->set_user_variable((*itb).user_obj());
+          found = true;
+        }
+      }
+      if(!found) {
+        a_out << "tools::aida::ntuple :"
+              << " binding name " << sout((*itb).name()) << " does not match any ntuple column."
+              << std::endl;
+        return false;
+      }
+    }
+    return true;
+  }
+
+};
+
+////////////////////////////////////////////////////////////
+/// some special column that can't be done with aida_col<T> ////
+////////////////////////////////////////////////////////////
+
+class aida_col_ntu : public base_col {
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::aida::aida_col_ntu");
+    return s_v;
+  }
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<aida_col_ntu>(this,a_class)) {return p;}
+    return base_col::cast(a_class);
+  }
+public:
+  virtual base_col* copy() const {return new aida_col_ntu(*this);}
+  virtual bool add() {m_data.push_back(m_tmp);m_tmp.reset();return true;}
+  virtual bool reset() {m_data.clear();m_index = 0;return true;}
+  virtual uint64 num_elems() const {return m_data.size();}
+public:
+  base_ntu* get_entry() {
+    if(m_index>=m_data.size()) {
+      m_out << s_class() << "::get_entry :"
+            << " bad index " << m_index
+            << ". Vec size is " << m_data.size() << "."
+            << "."
+            << std::endl;
+      return 0;
+    }
+    typedef std::vector<ntuple>::size_type sz_t;
+    return &(m_data[sz_t(m_index)]);
+  }
+
+  virtual void set_user_variable(void* a_user_var) {m_user_var = (ntuple*)a_user_var;} //not owner.
+  virtual bool fetch_entry() const {
+    if(m_index>=m_data.size()) {
+      m_out << s_class() << "::fetch_entry :"
+            << " bad index " << m_index
+            << ". Vec size is " << m_data.size() << "."
+            << "."
+            << std::endl;
+      if(m_user_var) *m_user_var = ntuple(m_out,"");
+      return false;
+    }
+    typedef std::vector<ntuple>::size_type sz_t;
+    if(m_user_var) *m_user_var = m_data[sz_t(m_index)];
+    return true;
+  }
+
+  virtual base_ntu* get_to_fill() {return &m_tmp;}
+public:
+  aida_col_ntu(std::ostream& a_out,const std::string& a_name)
+  :base_col(a_out,a_name)
+  ,m_tmp(a_out,"tmp")
+  ,m_user_var(0) //not owner
+  {}
+public:
+  virtual ~aida_col_ntu(){}
+public:
+  aida_col_ntu(const aida_col_ntu& a_from)
+  :base_col(a_from)
+  ,m_data(a_from.m_data)
+
+  ,m_tmp(a_from.m_tmp)
+  ,m_user_var(a_from.m_user_var)
+  {}
+  aida_col_ntu& operator=(const aida_col_ntu& a_from){
+    base_col::operator=(a_from);
+    if(&a_from==this) return *this;
+    m_data = a_from.m_data;
+
+    m_tmp = a_from.m_tmp;
+    m_user_var = a_from.m_user_var;
+    return *this;
+  }
+protected:
+  std::vector<ntuple> m_data;
+  ntuple m_tmp;
+  ntuple* m_user_var;
+};
+
+inline bool create_cols_from_vals(ntuple& a_ntu,
+                                  const std::vector<value>& a_vars,
+                                  bool a_verbose = false){
+  tools_vforcit(value,a_vars,it) {
+      if((*it).type()==value::VOID_STAR) {
+        if(a_verbose){
+          a_ntu.out() << "tools::aida::create_cols_from_vals :"
+                      << " ITuple : " << (*it).label() << " : begin "
+                      << std::endl;
+        }
+        std::vector<value>* vars = (std::vector<value>*)(*it).get_void_star();
+
+        aida_col_ntu* col_ntu = new aida_col_ntu(a_ntu.out(),(*it).label());
+        // create sub columns on the "fillable" of col_ntu :
+        base_ntu* sub_base_ntu = col_ntu->get_to_fill();
+        if(!sub_base_ntu) {
+          delete col_ntu;
+          return false;
+        }
+        ntuple* sub_aida = safe_cast<base_ntu,ntuple>(*sub_base_ntu);
+        if(!sub_aida) {
+          delete col_ntu;
+          return false;
+        }
+
+        if(!create_cols_from_vals(*sub_aida,*vars,a_verbose)) {
+          delete col_ntu;
+          return false;
+        }
+
+        a_ntu.add_column(col_ntu);
+
+    } else {
+        if(a_verbose){
+          std::string stype;        
+          (*it).s_type(stype);
+          std::string sval;        
+          (*it).tos(sval);
+          a_ntu.out() << "tools::aida::create_cols_from_vals :"
+                      << " " << stype << " : " 
+                      << (*it).label() << " : " 
+                      << sval
+                      << std::endl;
+        }
+
+        //   char,short,int,float,double
+        //   byte,boolean,string,long(for int64)
+        //   double[]
+
+        base_col* col = 0;
+      /*if((*it).type()==value::CHAR) {
+          col = a_ntu.create_col<char>((*it).label(),(*it).get_char());
+        } else*/ if((*it).type()==value::SHORT) {
+          col = a_ntu.create_col<short>((*it).label(),(*it).get_short());
+        } else if((*it).type()==value::INT) {
+          col = a_ntu.create_col<int>((*it).label(),(*it).get_int());
+        } else if((*it).type()==value::INT64) {
+          col = a_ntu.create_col<int64>((*it).label(),(*it).get_int64());
+        } else if((*it).type()==value::FLOAT) {
+          col = a_ntu.create_col<float>((*it).label(),(*it).get_float());
+        } else if((*it).type()==value::DOUBLE) {
+          col = a_ntu.create_col<double>((*it).label(),(*it).get_double());
+
+        //} else if((*it).type()==value::UNSIGNED_CHAR) {
+        //  col = a_ntu.create_col<unsigned char>
+        //          ((*it).label(),(*it).get_unsigned_char());
+        } else if((*it).type()==value::UNSIGNED_SHORT) {
+          col = a_ntu.create_col<unsigned short>
+                  ((*it).label(),(*it).get_unsigned_short());
+        } else if((*it).type()==value::UNSIGNED_INT) {
+          col = a_ntu.create_col<unsigned int>
+                  ((*it).label(),(*it).get_unsigned_int());
+        } else if((*it).type()==value::UNSIGNED_INT64) {
+          col = a_ntu.create_col<uint64>
+                  ((*it).label(),(*it).get_unsigned_int64());
+
+        } else if((*it).type()==value::BOOL) {
+          col = a_ntu.create_col<bool>((*it).label(),(*it).get_bool());
+        } else if((*it).type()==value::STRING) {
+          col = a_ntu.create_col<std::string>
+                  ((*it).label(),(*it).get_string());
+        } else if((*it).type()==value::INT64) {
+          col = a_ntu.create_col<int64>((*it).label(),(*it).get_int64());
+        }
+
+        if(!col) {
+          std::string stype;        
+          (*it).s_type(stype);
+          std::string sval;        
+          (*it).tos(sval);
+          a_ntu.out() << "tools::aida::create_cols_from_vals :"
+                      << " failed for " << stype << " : " 
+                      << (*it).label() << " : " 
+                      << sval
+                      << std::endl;
+          return false;
+        }
+      }
+  }
+  return true;
+}
+
+// for raxml :
+inline bool create_col(ntuple& a_ntu,
+                       const std::string& a_type,
+                       const std::string& a_name,
+                       const std::string& a_s, //def or booking.
+                       bool a_is_ntu){
+/*
+  if(a_type==s_aida_type((char)0)) {
+    char v = 0;
+    if(a_s.size()&&!to<char>(a_s,v)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't convert def " << sout(a_s)
+                  << " to a " << a_type
+                  << std::endl;
+      return false;
+    }
+    if(!a_ntu.create_col<char>(a_name,v)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't create column of type " << sout(a_type)
+                  << std::endl;
+      return false;
+    }
+
+  } else*/ if(a_type==s_aida_type((short)0)) {
+    short v = 0;
+    if(a_s.size()&&!to<short>(a_s,v)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't convert def " << sout(a_s)
+                  << " to a " << a_type
+                  << std::endl;
+      return false;
+    }
+    if(!a_ntu.create_col<short>(a_name,v)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't create column of type " << sout(a_type)
+                  << std::endl;
+      return false;
+    }
+
+  } else if(a_type==s_aida_type((int)0)) {
+    int v = 0;
+    if(a_s.size()&&!to<int>(a_s,v)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't convert def " << sout(a_s)
+                  << " to a " << a_type
+                  << std::endl;
+      return false;
+    }
+    if(!a_ntu.create_col<int>(a_name,v)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't create column of type " << sout(a_type)
+                  << std::endl;
+      return false;
+    }
+
+  } else if(a_type==s_aida_type((int64)0)) {
+    int64 v = 0;
+    if(a_s.size()&&!to<int64>(a_s,v)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't convert def " << sout(a_s)
+                  << " to a " << a_type
+                  << std::endl;
+      return false;
+    }
+    if(!a_ntu.create_col<int64>(a_name,v)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't create column of type " << sout(a_type)
+                  << std::endl;
+      return false;
+    }
+
+  } else if(a_type==s_aida_type((float)0)) {
+    float v = 0;
+    if(a_s.size()&&!to<float>(a_s,v)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't convert def " << sout(a_s)
+                  << " to a " << a_type
+                  << std::endl;
+      return false;
+    }
+    if(!a_ntu.create_col<float>(a_name,v)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't create column of type " << sout(a_type)
+                  << std::endl;
+      return false;
+    }
+
+
+  } else if(a_type==s_aida_type((double)0)) {
+    double v = 0;
+    if(a_s.size()&&!to<double>(a_s,v)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't convert def " << sout(a_s)
+                  << " to a " << a_type
+                  << std::endl;
+      return false;
+    }
+    if(!a_ntu.create_col<double>(a_name,v)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't create column of type " << sout(a_type)
+                  << std::endl;
+      return false;
+    }
+
+/*  } else if(a_type==s_aida_type((unsigned char)0)) { //byte
+    unsigned int v = 0;
+    if(a_s.size()&&!to<unsigned int>(a_s,v)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't convert def " << sout(a_s)
+                  << " to a " << a_type
+                  << std::endl;
+      return false;
+    }    
+    if(v>=256) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't convert def " << sout(a_s)
+                  << " to byte."
+                  << std::endl;
+      return false;
+    }
+    if(!a_ntu.create_col<unsigned char>(a_name,v)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't create column of type " << sout(a_type)
+                  << std::endl;
+      return false;
+    }
+*/
+  } else if(a_type==s_aida_type((unsigned short)0)) {
+    unsigned short v = 0;
+    if(a_s.size()&&!to<unsigned short>(a_s,v)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't convert def " << sout(a_s)
+                  << " to a " << a_type
+                  << std::endl;
+      return false;
+    }
+    if(!a_ntu.create_col<unsigned short>(a_name,v)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't create column of type " << sout(a_type)
+                  << std::endl;
+      return false;
+    }
+
+  } else if(a_type==s_aida_type((unsigned int)0)) {
+    unsigned int v = 0;
+    if(a_s.size()&&!to<unsigned int>(a_s,v)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't convert def " << sout(a_s)
+                  << " to a " << a_type
+                  << std::endl;
+      return false;
+    }
+    if(!a_ntu.create_col<unsigned int>(a_name,v)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't create column of type " << sout(a_type)
+                  << std::endl;
+      return false;
+    }
+
+  } else if(a_type==s_aida_type((uint64)0)) {
+    uint64 v = 0;
+    if(a_s.size()&&!to<uint64>(a_s,v)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't convert def " << sout(a_s)
+                  << " to a " << a_type
+                  << std::endl;
+      return false;
+    }
+    if(!a_ntu.create_col<uint64>(a_name,v)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't create column of type " << sout(a_type)
+                  << std::endl;
+      return false;
+    }
+
+  /////////////////////////////////////////
+  /////////////////////////////////////////
+  } else if(a_type==s_aida_type((bool)true)) {
+    bool v = false;
+    if(a_s.size()&&!to(a_s,v)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't convert def " << sout(a_s)
+                  << " to a " << a_type
+                  << std::endl;
+      return false;
+    }
+    if(!a_ntu.create_col<bool>(a_name,v)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't create column of type " << sout(a_type)
+                  << std::endl;
+      return false;
+    }
+
+  } else if(a_type==s_aida_type(std::string())) {
+    if(!a_ntu.create_col<std::string>(a_name,a_s)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't create column of type " << sout(a_type)
+                  << std::endl;
+      return false;
+    }
+
+  } else if(a_type==s_aida_type((int64)0)) {
+    int64 v = 0;
+    if(a_s.size()&&!to<int64>(a_s,v)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't convert def " << sout(a_s)
+                  << " to a " << a_type
+                  << std::endl;
+      return false;
+    }
+    if(!a_ntu.create_col<int64>(a_name,v)) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " can't create column of type " << sout(a_type)
+                  << std::endl;
+      return false;
+    }
+
+  } else if(a_type==s_aida_type_ituple()) {
+    // we expect a booking string on a_s.
+
+    if(!a_is_ntu) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " mismatch a_is_ntu/a_type."
+                  << std::endl;
+      return false;
+    }
+    if(a_s.empty()) {
+      a_ntu.out() << "tools::aida::create_col :" 
+                  << " empty booking string."
+                  << std::endl;
+      return false;
+    }
+
+    columns::finder f(a_ntu.out(),a_s);
+    if(!f.find_variables()) {
+      a_ntu.out() << "tools::aida::create_col :" 
+            << " find_variables() failed for " << sout(a_s) << "."
+            << std::endl;
+      return false;
+    }
+
+    aida_col_ntu* col_ntu = new aida_col_ntu(a_ntu.out(),a_name);
+    //create columns on the fillable.
+    base_ntu* sub_base_ntu = col_ntu->get_to_fill();
+    if(!sub_base_ntu) {delete col_ntu;return false;}
+    ntuple* sub_aida = safe_cast<base_ntu,ntuple>(*sub_base_ntu);
+    if(!sub_aida) {delete col_ntu;return false;}
+
+    std::vector<value> vars = f.result();
+    if(!create_cols_from_vals(*sub_aida,vars)) {
+      columns::delete_columns(vars);
+      delete col_ntu;
+      return false;
+    }
+    columns::delete_columns(vars);
+    a_ntu.add_column(col_ntu);
+
+    //FIXME : double[]
+
+  } else {
+    a_ntu.out() << "tools::aida::create_col :" 
+                << " col type " << sout(a_type)
+                << " not yet handled."
+                << std::endl;
+    return false;
+  }
+
+  return true;
+}
+
+// for waxml :
+inline bool create_cols_from_string(ntuple& a_ntu,
+                                    const std::string& a_booking,
+                                    bool a_verbose = false){
+  a_ntu.clear();
+  if(a_booking.empty()) {
+    a_ntu.out() << "tools::aida::create_cols_from_string :"
+                << " empty booking string."
+                << std::endl;
+    return false;
+  }
+
+  columns::finder f(a_ntu.out(),a_booking);
+  if(!f.find_variables()) {
+    a_ntu.out() << "tools::aida::create_cols_from_string :"
+          << " find_variables() failed."
+          << std::endl;
+    return false;
+  }
+  std::vector<value> vars = f.result();
+  if(a_verbose) columns::dump_columns(a_ntu.out(),vars);
+
+  if(!create_cols_from_vals(a_ntu,vars)) {
+    columns::delete_columns(vars);
+    a_ntu.clear();
+    return false;
+  }
+  columns::delete_columns(vars);
+  return true;
+}
+
+inline aida_col_ntu* find_col_ntu(ntuple& a_ntu,
+                                  const std::string& a_name){
+  base_col* col = find_named<base_col>(a_ntu.cols(),a_name);
+  if(!col) return 0;
+  return safe_cast<base_col, aida_col_ntu >(*col);
+}
+
+template <class T>
+class base_looper {
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::aida::base_looper<"+stype(T())+">");
+    return s_v;
+  }
+protected:
+  virtual bool action(const T& a_value) = 0; //return false to stop processing.
+public:
+  base_looper(base_ntu& a_ntu,const base_col& a_col)
+  :m_ntu(a_ntu),m_col(a_col){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~base_looper(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  base_looper(const base_looper& a_from)
+  :m_ntu(a_from.m_ntu),m_col(a_from.m_col){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  base_looper& operator=(const base_looper&){return *this;}
+public:
+  bool process() {
+    std::vector<unsigned int> is;
+    bool found = false;
+    if(!find_is(m_ntu,&m_col,is,found)) {
+      m_ntu.out() << s_class() << "::process :"
+                  << " find_is failed."
+                  << std::endl;
+      return false;
+    }
+    if(!found) {
+      m_ntu.out() << s_class() << "::process :"
+                  << " find_is : col not found."
+                  << std::endl;
+      return false;
+    }
+    if(is.empty()) {
+      m_ntu.out() << s_class() << "::process :"
+                  << " is vec empty."
+                  << std::endl;
+      return false;
+    }
+
+    bool stop = false;
+    if(!_looper(m_ntu,is,0,stop)) {
+      m_ntu.out() << s_class() << "::process :"
+                  << " _looper failed."
+                  << std::endl;
+      return false;
+    }
+    return true;
+  }
+protected:
+  static bool find_is(const base_ntu& a_ntu,const base_col* a_col,
+                             std::vector<unsigned int>& a_is,
+                             bool& a_found){
+    // search the indices to reach the sub leaf a_col from the main a_ntu.    
+    // Note : it is assumed that a_is is empty and a_found = false before
+    //        calling with function.
+  
+    const std::vector<base_col*>& cols = a_ntu.cols();
+  
+    // look if a_col is a leaf col of a_ntu :
+   {unsigned int index = 0;
+    tools_vforcit(base_col*,cols,it) {
+      if(*it==a_col) {
+        a_is.push_back(index); //leaf index is the last one in a_is.
+        a_found = true;
+        return true;
+      }
+      index++;
+    }}
+  
+    // go down sub ntu :
+   {unsigned int index = 0;
+    tools_vforcit(base_col*,cols,it) {
+      aida_col_ntu* col = safe_cast<base_col,aida_col_ntu>(*(*it));
+      if(col) {
+        base_ntu* sub = col->get_to_fill(); //it holds the "sub" cols schema.
+        if(!sub) {a_is.clear();return false;}
+        a_is.push_back(index);
+        if(!find_is(*sub,a_col,a_is,a_found)) {a_is.clear();return false;}
+        if(a_found) return true;
+        a_is.pop_back();
+      }
+      index++;
+    }}
+    return true;
+  }  
+protected:
+  bool _looper(base_ntu& a_sub,
+                      const std::vector<unsigned int>& a_is,
+                      unsigned int a_depth,
+                      bool& a_stop) {
+    if(a_depth>=a_is.size()) return false;
+
+    unsigned int coli = a_is[a_depth];  
+    const std::vector<base_col*>& cols = a_sub.cols();
+    if(coli>=cols.size()) return false;
+
+    if(a_depth==(a_is.size()-1)) { //we reach the leaf.
+      aida_col<T>* col = safe_cast<base_col, aida_col<T> >(*(cols[coli]));
+      if(!col) return false;
+      a_sub.start();
+      while(a_sub.next()) {
+        T v;
+        if(!col->get_entry(v)) return false;
+        if(!action(v)) {a_stop = true;break;}
+      }
+    } else {
+      aida_col_ntu* col = safe_cast<base_col,aida_col_ntu>(*(cols[coli]));
+      if(!col) return false;
+      a_sub.start();
+      while(a_sub.next()) {
+        base_ntu* ntu = col->get_entry(); //not const.
+	if(!ntu) return false;
+        ntu->start();
+        while(ntu->next()) {
+          if(!_looper(*ntu,a_is,a_depth+1,a_stop)) return false;
+          if(a_stop) break;
+        }
+      }
+    }
+    return true;
+  }
+protected:
+  base_ntu& m_ntu;
+  const base_col& m_col;
+};
+
+}}
+
+#include "mnmx"
+
+namespace tools {
+namespace aida {
+
+template <class T>
+class stat_looper : public base_looper<T> {
+protected:
+  virtual bool action(const T& a_v) {
+    if(m_first) {
+      m_mn = a_v;
+      m_mx = a_v;
+      m_S = a_v;
+      m_S2 = a_v*a_v;
+
+      m_first = false;
+    } else {
+      m_mn = tools::mn<T>(m_mn,a_v);
+      m_mx = tools::mx<T>(m_mx,a_v);
+      m_S += a_v;
+      m_S2 += a_v*a_v;
+    }
+    m_counter++;
+    return true; //continue looping.
+  }
+public:
+  stat_looper(base_ntu& a_ntu,const base_col& a_col)
+  : base_looper<T>(a_ntu,a_col)
+  ,m_first(true)
+  ,m_mn(T())
+  ,m_mx(T())
+  ,m_S(T())
+  ,m_S2(T())
+  ,m_counter(0)
+  {}
+  virtual ~stat_looper(){}
+public:
+  stat_looper(const stat_looper& a_from)
+  : base_looper<T>(a_from)
+  ,m_first(true)
+  ,m_mn(T())
+  ,m_mx(T())
+  ,m_S(T())
+  ,m_S2(T())
+  ,m_counter(0)
+  {}
+  stat_looper& operator=(const stat_looper& a_from){
+    base_looper<T>::operator=(a_from);
+    if(&a_from==this) return *this;
+    m_first = true;
+    m_mn = T();
+    m_mx = T();
+    m_S = T();
+    m_S2 = T();
+    m_counter = 0;
+    return *this;
+  }  
+public:
+  bool process() {
+    m_counter = 0;
+    if(!base_looper<T>::process()) {
+      m_mn = T();
+      m_mx = T();
+      m_S = T();
+      m_S2 = T();
+      m_counter = 0;
+      return false;
+    }
+    return true;
+  }
+  T mn() const {return m_mn;}
+  T mx() const {return m_mx;}
+  T S() const {return m_S;}
+  T S2() const {return m_S2;}
+  uint64 counter() const {return m_counter;}
+protected:
+  bool m_first;
+  T m_mn;
+  T m_mx;
+  T m_S;
+  T m_S2;
+  uint64 m_counter;
+};
+
+template <class T>
+inline bool column_infos(base_ntu& a_ntu,
+                         base_col& a_col,
+                         T& a_mn,T& a_mx,T& a_S,T& a_S2,
+                         uint64& a_count){
+  stat_looper<T> lpr(a_ntu,a_col);
+  bool status = lpr.process();
+  a_mn = lpr.mn();
+  a_mx = lpr.mx();
+  a_S = lpr.S();
+  a_S2 = lpr.S2();
+  a_count = lpr.counter();
+  if(!status) return false;
+  if(!a_count) return false;
+  return true;
+}
+
+inline base_col* find_leaf_column(const base_ntu& a_ntu,const std::string& a_name){
+  const std::vector<base_col*>& cols = a_ntu.cols();
+  tools_vforcit(base_col*,cols,it) {
+    aida_col_ntu* col = safe_cast<base_col,aida_col_ntu>(*(*it));
+    if(col) {
+      base_ntu* sub = col->get_to_fill(); //it holds the "sub" cols schema.
+      if(!sub) return 0;
+      base_col* fcol = find_leaf_column(*sub,a_name);
+      if(fcol) return fcol;      
+    } else {
+      if((*it)->name()==a_name) return *it;
+    }
+  }
+  return 0;
+}  
+
+}}
+
+#endif

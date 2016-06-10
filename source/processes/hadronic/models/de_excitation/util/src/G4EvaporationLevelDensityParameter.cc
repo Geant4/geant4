@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationLevelDensityParameter.cc 68724 2013-04-05 09:26:32Z gcosmo $
+// $Id: G4EvaporationLevelDensityParameter.cc 85443 2014-10-29 14:35:57Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -39,11 +39,15 @@ G4EvaporationLevelDensityParameter::G4EvaporationLevelDensityParameter()
 G4EvaporationLevelDensityParameter::~G4EvaporationLevelDensityParameter() 
 {}
 
-/*
+G4double 
+G4EvaporationLevelDensityParameter::LevelDensityParameter(G4int A, G4int, G4double) const 
+{
+  return 0.1*A;
+}
 
+/*
 #include "G4ShellCorrections.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4HadronicException.hh"
 
 // Those values are from table 3 in 
 // A.S. Iljinov et al. Nucl Phys A543 (1992) 517-557
@@ -51,43 +55,22 @@ G4EvaporationLevelDensityParameter::~G4EvaporationLevelDensityParameter()
 // whithout collective effects. f-factor = 2.31.
 
 //JMQ 17-04-08 these are not used at present in G4Evaporation 
-const G4double G4EvaporationLevelDensityParameter::ConstEvapLevelDensityParameter = 0.125/MeV;
-//const G4double G4EvaporationLevelDensityParameter::ConstEvapLevelDensityParameter= 0.0769231/MeV;
+const G4double 
+G4EvaporationLevelDensityParameter::ConstEvapLevelDensityParameter = 0.125/MeV;
+const G4double 
+G4EvaporationLevelDensityParameter::ConstEvapLevelDensityParameter= 0.0769231/MeV;
 const G4double G4EvaporationLevelDensityParameter::alpha = 0.072/MeV;
 const G4double G4EvaporationLevelDensityParameter::beta = 0.257/MeV;
 const G4double G4EvaporationLevelDensityParameter::gamma = 0.059/MeV;
 const G4double G4EvaporationLevelDensityParameter::Bs = 1.0;
 
-G4EvaporationLevelDensityParameter::G4EvaporationLevelDensityParameter() 
-{
-  //  SPtr = G4ShellCorrections::GetInstance()->GetCameronTruranHilfShellCorrections();
-}
-
-G4EvaporationLevelDensityParameter::~G4EvaporationLevelDensityParameter() 
-{}
-
-G4double 
-G4EvaporationLevelDensityParameter::LevelDensityParameter(G4int A, G4int, G4double) const 
-//JMQ (Apr .08) this is the method used in G4Evaporation 
-{
-
-  //JMQ 25/04/08  a=A/10 according to original Gudima's prescription
-  G4double a=static_cast<G4double>(A)/10.;
-  return a;
-//
-
-//    G4int N = A - Z;
-
-    // Asymptotic Level Density Parameter
-//    G4double AsymptoticLDP = (alpha*static_cast<G4double>(A) + beta*std::pow(static_cast<G4double>(A),2./3.)*Bs)/MeV;
+// Asymptotic Level Density Parameter
+G4double AsymptoticLDP = (alpha*A + beta*std::pow(static_cast<G4double>(A),2./3.)*Bs)/MeV;
 	
-    // Shape of the LDP U dependence
-//    G4double exponent = -gamma*U;
-//    G4double f = 1.;
-//    if (exponent > -300.) f -= std::exp(exponent);
-	
-    // Level Density Parameter
-//    G4double a = AsymptoticLDP*(1. + ShellCorrection(Z,N)*f/U);
-//    return a;
-}
+// Shape of the LDP U dependence
+G4double exponent = -gamma*U;
+G4double f = 1.;
+if (exponent > -300.) f -= G4Exp(exponent);
+G4double a = AsymptoticLDP*(1. + ShellCorrection(Z,N)*f/U);
+return a;
 */

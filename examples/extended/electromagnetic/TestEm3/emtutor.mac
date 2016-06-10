@@ -1,8 +1,8 @@
-# $Id: emtutor.mac 66241 2012-12-13 18:34:42Z gunter $
+# $Id: emtutor.mac 83395 2014-08-21 14:40:22Z gcosmo $
 #
 # Macro file for "TestEm3.cc" 
 #
-# water 1 layer;
+#  1 layer;
 #
 /control/verbose 2
 #
@@ -11,10 +11,16 @@
 /testem/det/setAbsor 1 Aluminium 10 cm
 /testem/det/setSizeYZ 10 cm
 #
-/testem/phys/setCuts 2 cm
+/run/setCut 2 cm
 #
 /run/initialize
+#
+/globalField/setValue 0 0 10 tesla
 #
 /control/execute vis.mac
 #
 /testem/gun/setDefault
+/gun/particle proton
+/gun/energy 300 MeV
+#
+/run/beamOn 10

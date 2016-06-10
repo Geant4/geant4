@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm16/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 68208 2013-03-18 18:17:16Z maire $
+// $Id: RunAction.hh 84365 2014-10-14 12:43:52Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,7 +39,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4Run;
+class Run;
 class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,15 +51,12 @@ class RunAction : public G4UserRunAction
    ~RunAction();
 
   public:
+    virtual G4Run* GenerateRun();
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
 
-    G4int    f_n_gam_sync;     // nb of synchrotron radiation photons generated
-    G4double f_e_gam_sync, f_e_gam_sync2; // energy of synchrotron
-    G4double f_e_gam_sync_max;            // radiation photons generated
-    G4double f_lam_gam_sync;   // step length between synchr radiation photons
-
   private:
+    Run*          fRun;   
     HistoManager* fHistoManager;
 };
 

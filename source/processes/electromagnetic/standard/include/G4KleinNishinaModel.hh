@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaModel.hh 73607 2013-09-02 10:04:03Z gcosmo $
+// $Id: G4KleinNishinaModel.hh 82754 2014-07-08 14:06:13Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -89,7 +89,7 @@ protected:
   G4ParticleDefinition*     theGamma;
   G4ParticleDefinition*     theElectron;
   G4ParticleChangeForGamma* fParticleChange;
-  G4double                  lowestGammaEnergy;
+  G4double                  lowestSecondaryEnergy;
 
 private:
 

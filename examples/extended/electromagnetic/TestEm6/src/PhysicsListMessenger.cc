@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm6/src/PhysicsListMessenger.cc
 /// \brief Implementation of the PhysicsListMessenger class
 //
-// $Id: PhysicsListMessenger.cc 68192 2013-03-18 14:50:18Z maire $
+// $Id: PhysicsListMessenger.cc 83428 2014-08-21 15:46:01Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,6 +36,8 @@
 #include "PhysicsList.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithADouble.hh"
+#include "G4UIcmdWithAString.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -44,7 +46,8 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* physL)
  fPhysDir(0),    
  fGammaToMuPairFacCmd(0),
  fAnnihiToMuPairFacCmd(0),
- fAnnihiToHadronFacCmd(0)
+ fAnnihiToHadronFacCmd(0),
+ fListCmd(0)
 {
   fPhysDir = new G4UIdirectory("/testem/phys/");
   fPhysDir->SetGuidance("physics list commands");
@@ -65,13 +68,18 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* physL)
   fAnnihiToMuPairFacCmd->SetRange("AnnihiToMuPairFac>0.0");
   fAnnihiToMuPairFacCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  fAnnihiToHadronFacCmd=new G4UIcmdWithADouble
-                                      ("/testem/phys/SetAnnihiToHadronFac",this);
+  fAnnihiToHadronFacCmd=
+    new G4UIcmdWithADouble("/testem/phys/SetAnnihiToHadronFac",this);
   fAnnihiToHadronFacCmd->SetGuidance(
        "Set factor to artificially increase the AnnihiToHadrons cross section");
   fAnnihiToHadronFacCmd->SetParameterName("AnnihiToHadFac",false);
   fAnnihiToHadronFacCmd->SetRange("AnnihiToHadFac>0.0");
-  fAnnihiToHadronFacCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+  fAnnihiToHadronFacCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  fListCmd = new G4UIcmdWithAString("/testem/phys/addPhysics",this);
+  fListCmd->SetGuidance("Add modula physics list.");
+  fListCmd->SetParameterName("PList",false);
+  fListCmd->AvailableForStates(G4State_PreInit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,6 +90,7 @@ PhysicsListMessenger::~PhysicsListMessenger()
   delete fAnnihiToMuPairFacCmd;
   delete fAnnihiToHadronFacCmd;  
   delete fPhysDir;  
+  delete fListCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -91,7 +100,7 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
 { 
   if(command == fGammaToMuPairFacCmd)
    { fPhysList->SetGammaToMuPairFac(
-                           fGammaToMuPairFacCmd->GetNewDoubleValue(newValue));}   
+          fGammaToMuPairFacCmd->GetNewDoubleValue(newValue));}   
 
   if( command == fAnnihiToMuPairFacCmd)
    { fPhysList->SetAnnihiToMuPairFac(
@@ -100,6 +109,10 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
   if( command == fAnnihiToHadronFacCmd)
    { fPhysList->SetAnnihiToHadronFac(
                           fAnnihiToHadronFacCmd->GetNewDoubleValue(newValue));}
+
+  if( command == fListCmd )
+   { fPhysList->AddPhysicsList(newValue); }
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,0 +1,40 @@
+#
+#  This file permits to customize, with commands,
+# the menu bar of the G4UIXm, G4UIQt, G4UIWin32 sessions.
+# It has no effect with G4UIterminal.
+#
+
+# File :
+/gui/addMenu g4file G4File
+/gui/addButton g4file Exit "exit"
+#
+
+#icons
+/gui/addIcon "Open MAC file" open /control/execute
+#
+
+# Run menu :
+/gui/addMenu run Run
+/gui/addButton run run "/control/execute beam.in"
+/gui/addButton run beamOn "/run/beamOn 1"
+#
+
+# Gun menu :
+/gui/addMenu gun Gun
+/gui/addButton gun "10 keV"  "/gun/energy 10 keV"
+/gui/addButton gun "100 keV"  "/gun/energy 100 keV"
+/gui/addButton gun "1 MeV"   "/gun/energy 1 MeV"
+/gui/addButton gun "10 MeV"  "/gun/energy 5 MeV"
+/gui/addButton gun "e-"      "/gun/particle e-"
+/gui/addButton gun "proton"  "/gun/particle proton"
+#
+
+# Viewer menu :
+/gui/addMenu viewer Viewer
+/gui/addButton viewer "Set style surface" "/vis/viewer/set/style surface"
+/gui/addButton viewer "Set style wireframe" "/vis/viewer/set/style wire"
+/gui/addButton viewer "Refresh viewer" "/vis/viewer/refresh"
+/gui/addButton viewer "Update viewer (interaction or end-of-file)" "/vis/viewer/update"
+/gui/addButton viewer "Flush viewer (= refresh + update)" "/vis/viewer/flush"
+/gui/addButton viewer "Update scene" "/vis/scene/notifyHandlers"
+#

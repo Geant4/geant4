@@ -63,11 +63,12 @@ public:
   
 private:
   // -- Mandatory from base class :
-  virtual G4VBiasingOperation*  ProposeOccurenceBiasingOperation(const G4Track* track, const G4BiasingProcessInterface* callingProcess);
-  virtual G4VBiasingOperation* ProposeFinalStateBiasingOperation(const G4Track*, const G4BiasingProcessInterface*) {return 0;}
   virtual G4VBiasingOperation* ProposeNonPhysicsBiasingOperation(const G4Track* track, const G4BiasingProcessInterface* callingProcess);
+  virtual G4VBiasingOperation*  ProposeOccurenceBiasingOperation(const G4Track* track, const G4BiasingProcessInterface* callingProcess);
+  virtual G4VBiasingOperation* ProposeFinalStateBiasingOperation(const G4Track* track, const G4BiasingProcessInterface* callingProcess);
   // -- optional methods from base class:
 public:
+  virtual void      StartRun();
   virtual void StartTracking( const G4Track* track );
   virtual void   ExitBiasing( const G4Track*, const G4BiasingProcessInterface* );
 
@@ -83,13 +84,10 @@ private:
   G4BOptnForceCommonTruncatedExp*  fSharedForceInteractionOperation;
   G4BOptnCloning*                                 fCloningOperation;
   G4double                                      fInitialTrackWeight;
-  //G4double                                         fWeightToRestore;
-  std::vector < const G4VProcess* >   fProcesses;
-  const G4VProcess *fFirstProcess, *fLastProcess;
-  G4bool                                  fSetup;
-  const G4ParticleDefinition*          fParticle;
-  G4VBiasingOperation* fPreviousOperationApplied;
-  G4ThreeVector                fPreviousMomentum;
+  G4bool                                                     fSetup;
+  const G4ParticleDefinition*                       fParticleToBias;
+  G4VBiasingOperation*                    fPreviousOperationApplied;
+  G4ThreeVector                                   fPreviousMomentum;
 
 
 };

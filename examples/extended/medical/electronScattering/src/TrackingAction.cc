@@ -27,7 +27,7 @@
 /// \brief Implementation of the TrackingAction class
 //
 //
-// $Id: TrackingAction.cc 69009 2013-04-15 09:33:05Z gcosmo $
+// $Id: TrackingAction.cc 86064 2014-11-07 08:49:32Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,17 +35,18 @@
 #include "TrackingAction.hh"
 
 #include "DetectorConstruction.hh"
-#include "RunAction.hh"
+#include "Run.hh"
 #include "HistoManager.hh"
 
 #include "G4Track.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(DetectorConstruction* DET,RunAction* RA)
-:fDetector(DET), fRunAction(RA)
+TrackingAction::TrackingAction(DetectorConstruction* DET)
+:fDetector(DET)
 {
  fZend = 0.5*(fDetector->GetThicknessWorld()); 
 }
@@ -73,7 +74,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   G4int ih = 1;
     
   //projected angle at exit
-  //
+  
   G4double ux = direction.x(), uy = direction.y(), uz = direction.z();
   G4double thetax = std::atan(ux/uz);
   G4double thetay = std::atan(uy/uz);
@@ -81,7 +82,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   analysisManager->FillH1(ih, thetay);
       
   //dN/dS at exit
-  //
+  
   G4double x = position.x(), y = position.y();
   G4double r = std::sqrt(x*x + y*y);
   ih = 2;
@@ -91,7 +92,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   analysisManager->FillH1(ih, r, 1/ds);  
       
   //d(N/cost)/dS at exit
-  //
+  
   ih = 3;
   dr = analysisManager->GetH1Width(ih);
   rmin = ((int)(r/dr))*dr;
@@ -99,11 +100,14 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   analysisManager->FillH1(ih, r, 1/(uz*ds));
   
   //vector of d(N/cost)/dS at exit
-  //
-  fRunAction->SumFluence(r, 1/uz);
+  
+  Run* run = static_cast<Run*>(
+             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+
+  run->SumFluence(r, 1/uz);
   
   //space angle at exit : dN/dOmega
-  //
+  
   ih = 5;
   G4double theta = std::acos(uz);
   if (theta > 0.) {

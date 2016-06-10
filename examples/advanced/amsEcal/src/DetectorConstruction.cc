@@ -23,13 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc 68740 2013-04-05 09:56:39Z gcosmo $
+// $Id: DetectorConstruction.cc 83418 2014-08-21 15:30:47Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorConstruction.hh"
-#include "DetectorMessenger.hh"
 
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
@@ -39,16 +38,13 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
+#include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"
-
-#include "G4UniformMagField.hh"
 
 #include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
-
-#include "G4UnitsTable.hh"
 
 #include "G4VisAttributes.hh"
 
@@ -58,7 +54,7 @@
 DetectorConstruction::DetectorConstruction()
 :fiberMat(0),lvol_fiber(0), absorberMat(0),lvol_layer(0),
  moduleMat(0),lvol_module(0), calorimeterMat(0),lvol_calorimeter(0),
- worldMat(0),pvol_world(0), defaultMat(0), magField(0)
+ worldMat(0),pvol_world(0), defaultMat(0)
 {
   // materials
   DefineMaterials();
@@ -68,36 +64,18 @@ DetectorConstruction::DetectorConstruction()
   fiberDiameter       = 1.13*mm; 	//1.08*mm
   nbOfFibers          = 490;		//490
   distanceInterFibers = 1.35*mm;	//1.35*mm
-  layerThickness      = 1.73*mm;	//1.68*mm
-  milledLayer         = 1.00*mm;        //1.40*mm ?
-  nbOfLayers          = 10;		//10
-  nbOfModules         = 9;		//9
+  layerThickness      = 1.73*mm;	//1.68*mm  
+  milledLayer         = 1.00*mm;    //1.40*mm ?
+  nbOfLayers          = 10;		    //10
+  nbOfModules         = 9;		    //9
      
-  fiberLength         = (nbOfFibers+1)*distanceInterFibers;	//658*mm
-      
-  //pixels readout
-  //
-  G4int nSubModul     = 2;			//2   
-  n1pxl               = nbOfModules*nSubModul;	//18
-  n2pxl	              = 72;			//72
-  
-  n1shift = 1;
-  if (n1pxl > 1)   n1shift = 10;
-  if (n1pxl > 10)  n1shift = 100;
-  if (n1pxl > 100) n1shift = 1000;        
-  
-  sizeVectorPxl    = n1pxl*n1shift;		//1800
-  
-  // create commands for interactive definition of the calorimeter
-  detectorMessenger = new DetectorMessenger(this);   
+  fiberLength         = (nbOfFibers+0.5)*distanceInterFibers;	//662.175*mm
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
-{ 
-  delete detectorMessenger;
-}
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -215,7 +193,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
                       "fiber",	   			//name
                       lvol_layer,        		//mother
                       false,             		//no boulean operat
-                      k);               		//copy number
+                      k+1);               		//copy number
 
   }
 				   
@@ -248,7 +226,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
                       "layer",	   			//name
                       lvol_module,        		//mother
                       false,             		//no boulean operat
-                      k);               		//copy number
+                      k+1);               		//copy number
 
   }				   				   
 
@@ -272,22 +250,18 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   //  
   Xcenter = -0.5*(calorThickness + moduleThickness);
   
-  //rotation matrix to place modules
-  G4RotationMatrix* rotm = 0;  
-  G4RotationMatrix* rotmX = new G4RotationMatrix();
-  rotmX->rotateX(90*deg);
-    
+
   for (G4int k=0; k<nbOfModules; k++) {
-    rotm = 0;
-    if ((k+1)%2 == 0) rotm = rotmX;
-    Xcenter += moduleThickness;    
-    new G4PVPlacement(rotm,		   		//rotation
-      		  G4ThreeVector(Xcenter,0.,0.),		//position
+    Xcenter += moduleThickness;		  
+    G4RotationMatrix rotm;                    //rotation matrix to place modules    
+    if ((k+1)%2 == 0) rotm.rotateX(90*deg);
+	G4Transform3D transform(rotm, G4ThreeVector(Xcenter,0.,0.));    
+    new G4PVPlacement(transform,		   		//rotation+position
                       lvol_module,	     		//logical volume	
-                      "module", 	   		//name
-                      lvol_calorimeter,        		//mother
+                      "module", 	   		    //name
+                      lvol_calorimeter,        	//mother
                       false,             		//no boulean operat
-                      k);               		//copy number
+                      k+1);               		//copy number
   }
 
   // world
@@ -331,18 +305,15 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   lvol_fiber->SetVisAttributes (G4VisAttributes::Invisible);  
   lvol_layer->SetVisAttributes (G4VisAttributes::Invisible);
   lvol_world->SetVisAttributes (G4VisAttributes::Invisible);
-  
-  // Pixels readout
-  //
-  d1pxl = calorThickness/n1pxl;
-  d2pxl = fiberLength/n2pxl;
-  
+    
   //always return the physical World
   //
   return pvol_world;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4UnitsTable.hh"
 
 void DetectorConstruction::PrintCalorParameters()
 {
@@ -380,35 +351,23 @@ void DetectorConstruction::PrintCalorParameters()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
+#include "G4GlobalMagFieldMessenger.hh"
+#include "G4AutoDelete.hh"
 
-void DetectorConstruction::SetMagField(G4double fieldValue)
+void DetectorConstruction::ConstructSDandField()
 {
-  //apply a global uniform magnetic field along Z axis
-  //
-  G4FieldManager* fieldMgr
-   = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-
-  if(magField) delete magField;		//delete the existing magn field
-
-  if(fieldValue!=0.)			// create a new one if non nul
-  { magField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
-    fieldMgr->SetDetectorField(magField);
-    fieldMgr->CreateChordFinder(magField);
-  } else {
-    magField = 0;
-    fieldMgr->SetDetectorField(magField);
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4RunManager.hh"
-
-void DetectorConstruction::UpdateGeometry()
-{
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructCalorimeter());
+    if ( fFieldMessenger.Get() == 0 ) {
+        // Create global magnetic field messenger.
+        // Uniform magnetic field is then created automatically if
+        // the field value is not zero.
+        G4ThreeVector fieldValue = G4ThreeVector();
+        G4GlobalMagFieldMessenger* msg =
+        new G4GlobalMagFieldMessenger(fieldValue);
+        //msg->SetVerboseLevel(1);
+        G4AutoDelete::Register(msg);
+        fFieldMessenger.Put( msg );
+        
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

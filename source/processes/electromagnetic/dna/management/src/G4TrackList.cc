@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrackList.cc 65022 2012-11-12 16:43:12Z gcosmo $
+// $Id: G4TrackList.cc 87454 2014-12-04 14:54:12Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
@@ -33,391 +33,155 @@
 //
 // -------------------------------------------------------------------
 
+/*
+ * G4FastList.cc
+ *
+ *  Created on: 18 nov. 2014
+ *      Author: kara
+ */
+
 #include "G4TrackList.hh"
-#include "G4IT.hh"
-#include "G4Track.hh"
 
-using namespace std;
-
-//***********************************************************
-// TrackList_iterator
-G4Track*
-G4TrackList_iterator::operator*()
-{ return fpNode->GetTrack(); }
-
-G4Track*
-G4TrackList_iterator::operator->()
-{ return fpNode->GetTrack(); }
-
-const G4Track*
-G4TrackList_iterator::operator*() const
-{ return fpNode->GetTrack(); }
-
-const G4Track*
-G4TrackList_iterator::operator->() const
-{ return fpNode->GetTrack(); }
-
-
-//***********************************************************
-// TrackNodeList
-
-G4TrackListNode::G4TrackListNode(G4Track* track) :
-    fpTrack(track),
-    fpPrevious(0),
-    fpNext(0)
+//! SPECIFIC TO TRACKS
+template<>
+G4FastListNode<G4Track>* G4FastList<G4Track>::__GetNode(G4Track* __track)
 {
-    fAttachedToList = false;
+  G4IT* __IT = GetIT(__track);
+  G4FastListNode<G4Track>* __trackListNode = __IT->GetListNode();
+  // TODO : complete the exception
+  if (__trackListNode == 0)
+  {
+    G4ExceptionDescription exceptionDescription;
+    exceptionDescription << "This track " << GetIT(__track)->GetName();
+    exceptionDescription << " was not connected to any trackList ";
+    G4Exception("G4FastList<OBJECT>::Unflag", "G4TrackList003", FatalErrorInArgument,
+        exceptionDescription);
+    return 0;
+  }
+  return __trackListNode;
 }
 
-G4TrackListNode::~G4TrackListNode()
-{;}
-
-//***********************************************************
-
-G4TrackList::G4TrackList() : fBoundary()
+//! SPECIFIC TO TRACKS
+template<>
+void G4FastList<G4Track>::DeleteObject(G4Track* __track)
 {
-    fListRef    = new _ListRef(this);
-    fpStart      = 0;
-    fpFinish     = 0;
-    fNbTracks   = 0 ;
-    fBoundary.SetPrevious(&fBoundary);
-    fBoundary.SetNext(&fBoundary);
-    fBoundary.fAttachedToList = true;
+  if (!G4AllocatorList::GetAllocatorListIfExist()) return;
+
+  G4Step* __step = const_cast<G4Step*>(__track->GetStep());
+  if (__step)
+  {
+    if (__step->GetfSecondary())
+      __step->DeleteSecondaryVector();
+    delete __step;
+  }
+  delete __track;
 }
 
-// should not be used
-G4TrackList::G4TrackList(const G4TrackList& /*other*/) : fBoundary()
-{
-    // One track should not belong to two different trackLists
 
-    fpFinish = 0;
-    fpStart = 0;
-    fNbTracks = 0;
-    fListRef = 0;
-}
-
-G4TrackList& G4TrackList::operator=(const G4TrackList& other)
-{
-    // One track should not belong to two different trackList
-    if (this == &other) return *this; // handle self assignment
-    //assignment operator
-    return *this;
-}
-
-G4TrackList::~G4TrackList()
-{
-    if( fNbTracks != 0 )
+template<>
+  void G4FastListNode<G4Track>::DetachYourSelf()
+  {
+    if(fpObject)
     {
-        G4TrackListNode * __stackedTrack = fpStart;
-        G4TrackListNode * __nextStackedTrack;
-
-        // delete tracks in the stack
-        while(  __stackedTrack && __stackedTrack != &(fBoundary) )
-        {
-            __nextStackedTrack = __stackedTrack->GetNext();
-            G4Track* __track = __stackedTrack->GetTrack();
-
-            delete __stackedTrack;
-            __stackedTrack = 0;
-
-            if(__track)
-            {
-                //////////////
-                DeleteTrack(__track);
-                __track = 0;
-                //////////////
-            }
-
-            __stackedTrack = __nextStackedTrack;
-        }
+      GetIT(fpObject)->SetListNode(0);
     }
-    fNbTracks = 0;
+  }
+
+
+//! SPECIFIC TO TRACKS
+template<>
+bool G4FastList<G4Track>::Holds(const G4Track* track) const
+{
+  return (GetIT(track)->GetListNode()->fListRef->fpList == this);
 }
 
-bool G4TrackList::Holds(const G4Track* track) const
+//! SPECIFIC TO TRACKS
+template<>
+G4FastListNode<G4Track>* G4FastList<G4Track>::Flag(G4Track* __track)
 {
-    return (GetIT(track)->GetTrackListNode()->fListRef->fpTrackList == this)  ;
-}
+  G4IT* __iTrack = GetIT(__track);
+  G4FastListNode<G4Track>* __trackListNode = __iTrack->GetListNode();
 
-G4TrackListNode* G4TrackList::Flag(G4Track* __track)
-{
-    G4IT* __iTrack = GetIT(__track);
-    G4TrackListNode* __trackListNode = __iTrack->GetTrackListNode();
-
-    if(__trackListNode != 0)
+  if (__trackListNode != 0)
+  {
+    // Suggestion move the node to this list
+    if (__trackListNode->fAttachedToList)
     {
-        // Suggestion move the node to this list
-        if(__trackListNode->fAttachedToList)
-        {
-            G4ExceptionDescription exceptionDescription ;
-            exceptionDescription << "This track "<< __iTrack->GetName() ;
-            exceptionDescription << " is already attached to a TrackList ";
-            G4Exception("G4TrackList::Flag","G4TrackList001",
-                        FatalErrorInArgument,exceptionDescription);
-         }
+      G4ExceptionDescription exceptionDescription;
+      exceptionDescription << "This track " << __iTrack->GetName();
+      exceptionDescription << " is already attached to a TrackList ";
+      G4Exception("G4FastList<OBJECT>::Flag", "G4TrackList001",
+          FatalErrorInArgument,
+          exceptionDescription);
     }
-    else
-    {
-        __trackListNode = new G4TrackListNode(__track);
-        __iTrack->SetTrackListNode(__trackListNode);
-    }
+  } else
+  {
+    __trackListNode = new G4FastListNode<G4Track>(__track);
+    __iTrack->SetListNode(__trackListNode);
+  }
 
-    __trackListNode->fAttachedToList = true;
-    __trackListNode->fListRef = fListRef;
-    return __trackListNode;
+  __trackListNode->fAttachedToList = true;
+  __trackListNode->fListRef = fListRef;
+  return __trackListNode;
 }
 
-G4TrackListNode* G4TrackList::CreateNode(G4Track* __track)
+//! SPECIFIC TO TRACKS
+template<>
+void G4FastList<G4Track>::CheckFlag(G4FastListNode<G4Track>* __trackListNode)
 {
-    G4TrackListNode* __trackListNode = Flag(__track);
-    return __trackListNode;
+  if (__trackListNode->fListRef->fpList != this)
+  {
+    G4Track* track = __trackListNode->GetObject();
+    G4ExceptionDescription exceptionDescription;
+    exceptionDescription << "The track " << GetIT(track)->GetName()
+        << " with trackID " << track->GetTrackID()
+        << " is not correctly linked to a TrackList."
+        << G4endl
+        << "You are probably trying to withdraw this track "
+        << "from the list but it probably does not belong to "
+        << "this track list." << G4endl;
+    G4Exception("G4FastList<OBJECT>::CheckFlag", "G4FastList002",
+        FatalErrorInArgument, exceptionDescription);
+  }
 }
 
-void G4TrackList::Hook(G4TrackListNode* __position, G4TrackListNode* __toHook)
+//! SPECIFIC TO TRACKS
+template<>
+G4FastListNode<G4Track>* G4FastList<G4Track>::EraseListNode(G4Track* __track)
 {
-    if(fNbTracks == 0)
-    {
-        // DEBUG
-        //        G4cout << "fNbTracks == 0" << G4endl;
-        fpStart = __toHook;
-        fpFinish = __toHook;
-        __toHook->SetNext(&fBoundary);
-        __toHook->SetPrevious(&fBoundary);
-        fBoundary.SetNext(__toHook);
-        fBoundary.SetPrevious(__toHook);
-    }
-    else if( __position == &fBoundary)
-    {
-        // DEBUG
-        //        G4cout << "__position == &fBoundary" << G4endl;
-        fpFinish->SetNext( __toHook );
-        __toHook->SetPrevious( fpFinish );
-
-        __toHook->SetNext(&fBoundary);
-        fBoundary.SetPrevious( __toHook );
-
-        fpFinish = __toHook;
-    }
-    else if( __position == fpStart )
-    {
-        // DEBUG
-        //        G4cout << "__position == fStart" << G4endl;
-        __toHook->SetPrevious( &fBoundary );
-        fBoundary.SetNext(__toHook);
-        __toHook->SetNext(fpStart);
-        fpStart->SetPrevious(__toHook);
-        fpStart = __toHook;
-    }
-    else
-    {
-        // DEBUG
-        //        G4cout << "else" << G4endl;
-        G4TrackListNode* __previous = __position->GetPrevious();
-        __toHook->SetPrevious(__previous);
-        __toHook->SetNext(__position);
-        __position->SetPrevious(__toHook);
-        __previous->SetNext(__toHook);
-    }
-
-    fNbTracks++;
+  G4FastListNode<G4Track>* __node = Unflag(__track);
+  G4FastListNode<G4Track>* __next = __node->GetNext();
+  Unhook(__node);
+  __node->DetachYourSelf();
+  delete __node;
+  return __next;
 }
 
-void G4TrackList::Unhook(G4TrackListNode* __toUnHook)
+
+//! SPECIFIC TO TRACKS
+template<>
+G4FastListNode<G4Track>* G4FastList<G4Track>::GetNode(G4Track* __track)
 {
-    G4TrackListNode* __previous = __toUnHook->GetPrevious();
-    G4TrackListNode* __next = __toUnHook->GetNext();
-
-    __toUnHook->SetPrevious(0);
-    __toUnHook->SetNext(0);
-
-    if( fNbTracks == 1 )
-    {
-        fpStart = 0;
-        fpFinish = 0;
-    }
-    else
-    {
-        if(__toUnHook == fpFinish)
-        {
-            fpFinish = __previous;
-        }
-        if(__toUnHook == fpStart)
-        {
-            fpStart = __next;
-        }
-    }
-
-    // There should be always a __next and a __previous
-    // because it is a circle link
-    __next->SetPrevious(__previous);
-    __previous->SetNext(__next);
-
-    fNbTracks--;
+  G4IT* __IT = GetIT(__track);
+  G4FastListNode<G4Track>* __trackListNode = __IT->GetListNode();
+  // TODO : complete the exception
+  if (__trackListNode == 0)
+  {
+    return 0;
+  }
+  return __trackListNode;
 }
 
-G4TrackList::iterator G4TrackList::insert(G4TrackList::iterator __position, G4Track* __track)
+//! SPECIFIC TO TRACKS
+template<>
+G4FastList<G4Track>* G4FastList<G4Track>::GetList(G4Track* __track)
 {
-    G4TrackListNode* __node = CreateNode(__track);
-    Hook(__position.fpNode, __node);
-    return iterator(__node);
+  G4IT* __IT = GetIT(__track);
+  G4FastListNode<G4Track>* __trackListNode = __IT->GetListNode();
+
+  if(__trackListNode == 0) return 0;
+  if(__trackListNode->fListRef == 0) return 0;
+
+  return __trackListNode->fListRef->fpList;
 }
 
-//____________________________________________________________________
-//
-//                      WITHDRAW FROM LIST
-//____________________________________________________________________
-void G4TrackList::CheckFlag(G4TrackListNode* __trackListNode)
-{
-    if(__trackListNode -> fListRef->fpTrackList != this)
-    {
-        G4Track* track = __trackListNode->GetTrack();
-        G4ExceptionDescription exceptionDescription ;
-        exceptionDescription
-                << "The track "<< GetIT(track)->GetName()
-                << " with trackID " << track->GetTrackID()
-                << " is not correctly linked to a TrackList."
-                << G4endl
-                << "You are probably trying to withdraw this track "
-                << "from the list but it probably does not belong to "
-                << "this track list." << G4endl;
-        G4Exception("G4TrackList::CheckFlag","G4TrackList002",
-                    FatalErrorInArgument,exceptionDescription);
-    }
-}
-
-G4TrackListNode* G4TrackList::Unflag(G4Track* __track)
-{
-    G4IT* __IT = GetIT(__track);
-    G4TrackListNode* __trackListNode = __IT->GetTrackListNode();
-    // TODO : complete the exception
-    if(__trackListNode == 0)
-    {
-        G4ExceptionDescription exceptionDescription ;
-        exceptionDescription << "This track "<< GetIT(__track)->GetName() ;
-        exceptionDescription << " was not connected to any trackList ";
-        G4Exception("G4TrackList::Unflag","G4TrackList003",
-                    FatalErrorInArgument,exceptionDescription);
-        return 0;
-    }
-    CheckFlag(__trackListNode);
-    __trackListNode->fAttachedToList = false;
-    __trackListNode->fListRef = 0;
-    return __trackListNode;
-}
-
-G4Track* G4TrackList::pop_back()
-{
-    if( fNbTracks == 0 ) return 0;
-    G4TrackListNode * __aStackedTrack = fpFinish;
-    Unhook( __aStackedTrack );
-    Unflag( __aStackedTrack->GetTrack() );
-    return __aStackedTrack->GetTrack();
-}
-
-G4TrackList::iterator G4TrackList::pop(G4Track* __track)
-{
-    G4TrackListNode* __node = Unflag(__track);
-    iterator __next(__node->GetNext());
-    Unhook(__node);
-    return __next;
-}
-
-G4TrackListNode* G4TrackList::EraseTrackListNode(G4Track* __track)
-{
-    G4TrackListNode* __node = Unflag(__track);
-    GetIT(__track)->SetTrackListNode(0);
-    G4TrackListNode* __next = __node->GetNext();
-    Unhook(__node);
-    delete __node;
-    return __next;
-}
-
-void G4TrackList::DeleteTrack(G4Track* __track)
-{
-    G4Step* __step = const_cast<G4Step*>(__track->GetStep());
-    if(__step)
-    {
-        if(__step->GetfSecondary()) __step->DeleteSecondaryVector();
-        delete __step;
-    }
-    delete __track;
-}
-
-G4TrackList::iterator G4TrackList::erase(G4Track* __track)
-{
-    G4TrackListNode* __next_node = EraseTrackListNode(__track);
-    //////////////////
-    DeleteTrack(__track);
-    __track = 0;
-    //////////////////
-    iterator __next(__next_node);
-    return __next;
-}
-
-void G4TrackList::remove(G4Track* __track)
-{
-    this->erase(__track);
-}
-
-G4TrackList::iterator
-G4TrackList::pop(iterator __first, iterator __last)
-{
-    if(fNbTracks == 0) return iterator(&fBoundary);
-
-    while (__first != __last)
-    {
-        if(__first . fpNode)
-            __first = pop(*__first);
-    }
-    return __last;
-}
-
-
-G4TrackList::iterator
-G4TrackList::erase(iterator __first, iterator __last)
-{
-    if(fNbTracks == 0) return iterator(&fBoundary);
-
-    while (__first != __last)
-    {
-        if(__first . fpNode)
-            __first = erase(*__first);
-    }
-    return __last;
-}
-
-void G4TrackList::transferTo(G4TrackList* __destination)
-{
-    if(fNbTracks==0) return;
-
-    if(__destination->fNbTracks == 0)
-    {
-        __destination->fpStart       =    this->fpStart ;
-        __destination->fpFinish      =    this->fpFinish ;
-        __destination->fNbTracks    =    this->fNbTracks;
-
-        __destination->fBoundary.SetNext(fpStart);
-        __destination->fBoundary.SetPrevious(fpFinish);
-
-        __destination->fpFinish->SetNext(&__destination->fBoundary);
-        __destination->fpStart->SetPrevious(&__destination->fBoundary);
-    }
-    else
-    {
-        this->fpStart->SetPrevious(__destination->fpFinish);
-        __destination->fpFinish->SetNext(this->fpStart);
-        __destination->fBoundary.SetPrevious(this->fpFinish);
-        this->fpFinish->SetNext(&__destination->fBoundary);
-
-        __destination->fpFinish = this->fpFinish;
-        __destination->fNbTracks += this->fNbTracks;
-    }
-
-    fNbTracks = 0;
-    fpStart = 0;
-    fpFinish = 0;
-    this->fBoundary.SetPrevious(&this->fBoundary);
-    this->fBoundary.SetNext(&this->fBoundary);
-
-    fListRef->fpTrackList = __destination;
-}

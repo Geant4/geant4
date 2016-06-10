@@ -24,8 +24,8 @@ inline HepEulerAngles::HepEulerAngles()
 {}  // HepEulerAngles::HepEulerAngles()
 
 inline HepEulerAngles::HepEulerAngles ( 
-				double phi1, double theta1, double psi1 )
-				: phi_( phi1 ), theta_( theta1 ), psi_( psi1 )
+				double phi1, double ttheta, double psi1 )
+				: phi_( phi1 ), theta_( ttheta ), psi_( psi1 )
 {}  // HepEulerAngles::HepEulerAngles()
 
 inline double HepEulerAngles::getPhi() const {
@@ -49,8 +49,8 @@ inline double HepEulerAngles::theta() const {
   return  theta_;
 }  // HepEulerAngles::theta()
 
-inline HepEulerAngles & HepEulerAngles::setTheta( double theta1 ) {
-  theta_ = theta1;
+inline HepEulerAngles & HepEulerAngles::setTheta( double ttheta ) {
+  theta_ = ttheta;
   return  *this;
 }  // HepEulerAngles::setTheta()
 
@@ -68,8 +68,8 @@ inline HepEulerAngles & HepEulerAngles::setPsi( double psi1 ) {
 }  // HepEulerAngles::setPsi()
 
 inline HepEulerAngles & 
-	HepEulerAngles::set( double phi1, double theta1, double psi1 ) {
-  phi_ = phi1, theta_ = theta1, psi_ = psi1;
+	HepEulerAngles::set( double phi1, double ttheta, double psi1 ) {
+  phi_ = phi1, theta_ = ttheta, psi_ = psi1;
   return *this;
 }  // HepEulerAngles::set()
 

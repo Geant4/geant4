@@ -27,7 +27,7 @@
 /// \brief Implementation of the HistoManager class
 //
 //
-// $Id: HistoManager.cc 69011 2013-04-15 09:35:47Z gcosmo $
+// $Id: HistoManager.cc 85311 2014-10-27 14:23:25Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -178,7 +178,7 @@ void HistoManager::SetHisto(G4int ih,
   }
 
   fExist[ih] = true;
-  fLabel[ih] = id[ih];
+  fLabel[ih] = "h"+id[ih];
   fTitle[ih] = titl;
   fNbins[ih] = nbins;
   fVmin[ih]  = vmin;

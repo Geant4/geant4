@@ -19,8 +19,10 @@
 /process/inactivate hadElastic
 #
 /analysis/setFileName inelastic
-/analysis/h1/set 2  100  0.  400 keV	#recoil ion
-/analysis/h1/set 3  100  0. 8000 keV	#gamma
-/analysis/h1/set 11 100 -10  +0  MeV	#Q
+/analysis/h1/set 2  100  0. 8000 keV	#gamma
+/analysis/h1/set 7  100  0.  400 keV	#nuclei
+/analysis/h1/set 10 100 -10  +0  MeV	#Q
+#
+/run/printProgress 1000
 #
 /run/beamOn 10000

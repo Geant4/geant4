@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpWLS.cc 71487 2013-06-17 08:19:40Z gcosmo $
+// $Id: G4OpWLS.cc 86052 2014-11-07 08:31:04Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon WaveLength Shifting (WLS) Class Implementation
@@ -57,6 +57,10 @@
 // Class Implementation
 /////////////////////////
 
+        //////////////////////
+        // static data members
+        //////////////////////
+
 /////////////////
 // Constructors
 /////////////////
@@ -67,14 +71,11 @@ G4OpWLS::G4OpWLS(const G4String& processName, G4ProcessType type)
   SetProcessSubType(fOpWLS);
 
   theIntegralTable = NULL;
- 
-  if (verboseLevel>0) {
-    G4cout << GetProcessName() << " is created " << G4endl;
-  }
 
   WLSTimeGeneratorProfile = 
-       new G4WLSTimeGeneratorProfileDelta("WLSTimeGeneratorProfileDelta");
-
+          new G4WLSTimeGeneratorProfileDelta("WLSTimeGeneratorProfileDelta");
+ 
+  if (verboseLevel>0) G4cout << GetProcessName() << " is created " << G4endl;
 }
 
 ////////////////
@@ -83,7 +84,7 @@ G4OpWLS::G4OpWLS(const G4String& processName, G4ProcessType type)
 
 G4OpWLS::~G4OpWLS()
 {
-  if (theIntegralTable != 0) {
+  if (theIntegralTable) {
     theIntegralTable->clearAndDestroy();
     delete theIntegralTable;
   }
@@ -93,11 +94,6 @@ G4OpWLS::~G4OpWLS()
 ////////////
 // Methods
 ////////////
-
-void G4OpWLS::BuildPhysicsTable(const G4ParticleDefinition&)
-{
-    if (!theIntegralTable) BuildThePhysicsTable();
-}
 
 // PostStepDoIt
 // -------------
@@ -285,21 +281,24 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
   return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 }
 
-// BuildThePhysicsTable for the wavelength shifting process
+// BuildPhysicsTable for the wavelength shifting process
 // --------------------------------------------------
-//
 
-void G4OpWLS::BuildThePhysicsTable()
+void G4OpWLS::BuildPhysicsTable(const G4ParticleDefinition&)
 {
-  if (theIntegralTable) return;
-  
+  if (theIntegralTable) {
+     theIntegralTable->clearAndDestroy();
+     delete theIntegralTable;
+     theIntegralTable = NULL;
+  }
+
   const G4MaterialTable* theMaterialTable = 
     G4Material::GetMaterialTable();
   G4int numOfMaterials = G4Material::GetNumberOfMaterials();
   
   // create new physics table
   
-  if(!theIntegralTable)theIntegralTable = new G4PhysicsTable(numOfMaterials);
+  theIntegralTable = new G4PhysicsTable(numOfMaterials);
   
   // loop for materials
   

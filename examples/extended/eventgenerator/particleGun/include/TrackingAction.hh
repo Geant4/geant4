@@ -27,10 +27,10 @@
 /// \brief Definition of the TrackingAction class
 //
 //
-// $Id: TrackingAction.hh 68734 2013-04-05 09:47:02Z gcosmo $
+// $Id: TrackingAction.hh 83585 2014-09-02 08:48:17Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef TrackingAction_h
 #define TrackingAction_h 1
@@ -57,12 +57,6 @@ class TrackingAction : public G4UserTrackingAction {
 
    // parameters for generator action #3
     G4ThreeVector fNewUz;
-
-   // parameters for generator action #4
-    G4double fDeltaR3;
-    G4double fCosAlphaMin; 
-    G4double fCosAlphaMax;  //opening angle
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

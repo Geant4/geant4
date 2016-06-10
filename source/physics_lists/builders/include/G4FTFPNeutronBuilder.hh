@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFPNeutronBuilder.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4FTFPNeutronBuilder.hh 81935 2014-06-06 15:41:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -48,8 +48,6 @@
 #include "G4VNeutronBuilder.hh"
 
 #include "G4TheoFSGenerator.hh"
-#include "G4ExcitationHandler.hh"
-#include "G4PreCompoundModel.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4FTFModel.hh"
 #include "G4LundStringFragmentation.hh"
@@ -73,13 +71,11 @@ class G4FTFPNeutronBuilder : public G4VNeutronBuilder
 
   private:
     G4TheoFSGenerator * theModel;
-    G4PreCompoundModel * thePreEquilib;
     G4GeneratorPrecompoundInterface * theCascade;
     G4FTFModel * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
     G4LundStringFragmentation * theLund;
-    G4ExcitationHandler * theHandler;
 
     G4double theMin;
     G4double theMax;

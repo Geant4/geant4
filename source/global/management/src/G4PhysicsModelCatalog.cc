@@ -36,13 +36,19 @@
 modelCatalog* G4PhysicsModelCatalog::catalog = 0;
 
 G4PhysicsModelCatalog::G4PhysicsModelCatalog()
-{ catalog = new modelCatalog; }
+{ if(!catalog) { 
+    static modelCatalog catal;
+    catalog = &catal; 
+  } 
+}
 
 G4PhysicsModelCatalog::~G4PhysicsModelCatalog()
-{ delete catalog; catalog = 0; }
+{}
+//{ delete catalog; catalog = 0; }
 
-G4int G4PhysicsModelCatalog::Register(G4String& name)
+G4int G4PhysicsModelCatalog::Register(const G4String& name)
 {
+  G4PhysicsModelCatalog();
   G4int idx = GetIndex(name);
   if(idx>=0) return idx;
 #ifdef G4MULTITHREADED
@@ -52,18 +58,16 @@ G4int G4PhysicsModelCatalog::Register(G4String& name)
   return catalog->size()-1;
 }
 
-G4String& G4PhysicsModelCatalog::GetModelName(G4int idx) 
+const G4String& G4PhysicsModelCatalog::GetModelName(G4int idx) 
 {
-  static G4String undef = "Undefined";
-  if(!catalog) new G4PhysicsModelCatalog;
+  static const G4String undef = "Undefined";
   if(idx>=0 && idx<Entries()) return (*catalog)[idx];
   return undef;
 }
 
-G4int G4PhysicsModelCatalog::GetIndex(G4String& name) 
+G4int G4PhysicsModelCatalog::GetIndex(const G4String& name) 
 {
-  if(!catalog) new G4PhysicsModelCatalog;
-  for(G4int idx=0;idx<Entries();idx++)
+  for(G4int idx=0;idx<Entries();++idx)
   { if((*catalog)[idx]==name) return idx; }
   return -1;
 }
@@ -72,12 +76,5 @@ G4int G4PhysicsModelCatalog::Entries()
 { return (catalog) ? G4int(catalog->size()) : -1; }
 
 void G4PhysicsModelCatalog::Destroy()
-{ 
-#ifdef G4MULTITHREADED
-  if(G4Threading::IsWorkerThread()) return;
-#endif
-  if(catalog) delete catalog;
-  catalog = 0;
-}
-
+{}
 

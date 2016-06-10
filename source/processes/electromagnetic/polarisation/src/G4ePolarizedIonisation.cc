@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ePolarizedIonisation.cc 76472 2013-11-11 10:34:07Z gcosmo $
+// $Id: G4ePolarizedIonisation.cc 85018 2014-10-23 09:51:37Z gcosmo $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -61,6 +61,7 @@
 #include "G4PolarizationManager.hh"
 #include "G4PolarizationHelper.hh"
 #include "G4StokesVector.hh"
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -73,14 +74,8 @@ G4ePolarizedIonisation::G4ePolarizedIonisation(const G4String& name)
     theTransverseAsymmetryTable(NULL)
 {
   verboseLevel=0;
-  //  SetDEDXBinning(120);
-  //  SetLambdaBinning(120);
-  //  numBinAsymmetryTable=78;
-
-  //  SetMinKinEnergy(0.1*keV);
-  //  SetMaxKinEnergy(100.0*TeV);
-  //  PrintInfoDefinition();
   SetProcessSubType(fIonisation);
+  SetSecondaryParticle(theElectron);
   flucModel = 0;
   emModel = 0; 
 }
@@ -101,18 +96,16 @@ void G4ePolarizedIonisation::InitialiseEnergyLossProcess(
 {
   if(!isInitialised) {
 
-    if(part == G4Positron::Positron()) isElectron = false;
-    SetSecondaryParticle(theElectron);
+    if(part == G4Positron::Positron()) { isElectron = false; }
 
+    if (!FluctModel()) { SetFluctModel(new G4UniversalFluctuation()); }
+    flucModel = FluctModel();
 
-
-    flucModel = new G4UniversalFluctuation();
-    //flucModel = new G4BohrFluctuations();
-
-    //    G4VEmModel* em = new G4MollerBhabhaModel();
-    emModel = new G4PolarizedMollerBhabhaModel;
-    emModel->SetLowEnergyLimit(MinKinEnergy());
-    emModel->SetHighEnergyLimit(MaxKinEnergy());
+    emModel = new  G4PolarizedMollerBhabhaModel();
+    SetEmModel(emModel, 1);
+    G4EmParameters* param = G4EmParameters::Instance();
+    emModel->SetLowEnergyLimit(param->MinKinEnergy());
+    emModel->SetHighEnergyLimit(param->MaxKinEnergy());
     AddEmModel(1, emModel, flucModel);
 
     isInitialised = true;
@@ -122,11 +115,7 @@ void G4ePolarizedIonisation::InitialiseEnergyLossProcess(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4ePolarizedIonisation::PrintInfo()
-{
-  G4cout << "      Delta cross sections from Moller+Bhabha, "
-         << "good description from 1 KeV to 100 GeV."
-         << G4endl;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -22,9 +22,9 @@ namespace CLHEP  {
 // Metric flexibility
 //-******************
 
-ZMpvMetric_t HepLorentzVector::setMetric( ZMpvMetric_t met ) {
+ZMpvMetric_t HepLorentzVector::setMetric( ZMpvMetric_t a1 ) {
   ZMpvMetric_t oldMetric = (metric > 0) ? TimePositive : TimeNegative;
-  if ( met == TimeNegative ) {
+  if ( a1 == TimeNegative ) {
     metric = -1.0;
   } else {
     metric =  1.0;
@@ -126,7 +126,7 @@ double HepLorentzVector::gamma() const {
 //-***************
 
 double HepLorentzVector::rapidity() const {
-  register double z1 = pp.getZ();
+  double z1 = pp.getZ();
 //  if (std::fabs(ee) == std::fabs(z1)) {
 //    std::cerr << "HepLorentzVector::rapidity() - "
 //      << "rapidity for 4-vector with |E| = |Pz| -- infinite result"
@@ -145,14 +145,14 @@ double HepLorentzVector::rapidity() const {
 } /* rapidity */
 
 double HepLorentzVector::rapidity(const Hep3Vector & ref) const {
-  register double r = ref.mag2();
+  double r = ref.mag2();
   if (r == 0) {
     std::cerr << "HepLorentzVector::rapidity() - "
       << "A zero vector used as reference to LorentzVector rapidity"
       << std::endl;
     return 0;
   }
-  register double vdotu = pp.dot(ref)/std::sqrt(r);
+  double vdotu = pp.dot(ref)/std::sqrt(r);
 //  if (std::fabs(ee) == std::fabs(vdotu)) {
 //    std::cerr << "HepLorentzVector::rapidity() - "
 //      << "rapidity for 4-vector with |E| = |Pu| -- infinite result"
@@ -169,7 +169,7 @@ double HepLorentzVector::rapidity(const Hep3Vector & ref) const {
 } /* rapidity(ref) */
 
 double HepLorentzVector::coLinearRapidity() const {
-  register double v1 = pp.mag();
+  double v1 = pp.mag();
 //  if (std::fabs(ee) == std::fabs(v1)) {
 //    std::cerr << "HepLorentzVector::coLinearRapidity() - "
 //      << "co-Linear rapidity for 4-vector with |E| = |P| -- infinite result"

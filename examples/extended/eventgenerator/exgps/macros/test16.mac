@@ -1,0 +1,36 @@
+# test16
+#
+/run/initialize
+#
+/gps/particle geantino
+
+# source 
+/gps/pos/type Volume
+/gps/pos/shape Para
+/gps/pos/centre 2. 2. 2. cm
+/gps/pos/halfx 2. cm
+/gps/pos/halfy 3. cm
+/gps/pos/halfz 4. cm
+/gps/pos/rot1 1. 0.57735 0.
+/gps/pos/rot2 -0.57735 1. -0.66667
+
+# angular distribution
+/gps/ang/type iso
+
+# energy distribution
+/gps/ene/type Brem
+/gps/ene/min 1. keV
+/gps/ene/max 2. MeV
+/gps/ene/temp 2e9
+
+# commands below are independent of gps
+#
+/analysis/setFileName test16
+/analysis/h1/set 1 100 0 3 MeV
+/analysis/h2/set 4 120 0 360 deg none linear 100 -1 1 none none linear
+#
+#/control/execute vis.mac
+#
+/run/printProgress 10000
+#
+/run/beamOn 100000

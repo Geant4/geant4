@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomRegularDetectorConstruction.cc 74809 2013-10-22 09:49:26Z gcosmo $
+// $Id: DicomRegularDetectorConstruction.cc 74592 2013-10-15 21:20:11Z jmadsen 
 //
 /// \file DicomRegularDetectorConstruction.cc
 /// \brief Implementation of the DicomRegularDetectorConstruction clas
@@ -68,7 +68,8 @@ void DicomRegularDetectorConstruction::ConstructPhantom()
 #endif
 
   //----- Create parameterisation 
-  DicomPhantomParameterisationColour* param = new DicomPhantomParameterisationColour();
+  DicomPhantomParameterisationColour* param = 
+    new DicomPhantomParameterisationColour();
 
   //----- Set voxel dimensions
   param->SetVoxelDimensions( fVoxelHalfDimX, fVoxelHalfDimY, fVoxelHalfDimZ );
@@ -80,22 +81,27 @@ void DicomRegularDetectorConstruction::ConstructPhantom()
   param->SetMaterials( fMaterials ); 
 
   //----- Set list of material indices: for each voxel it is a number that
-  // correspond to the index of its material in the vector of materials defined above
+  // correspond to the index of its material in the vector of materials
+  // defined above
   param->SetMaterialIndices( fMateIDs );
 
   //----- Define voxel logical volume
-  G4Box* voxel_solid = new G4Box( "Voxel", fVoxelHalfDimX, fVoxelHalfDimY, fVoxelHalfDimZ);
-  G4LogicalVolume* voxel_logic = new G4LogicalVolume(voxel_solid,fMaterials[0],"VoxelLogical",
+  G4Box* voxel_solid = 
+    new G4Box( "Voxel", fVoxelHalfDimX, fVoxelHalfDimY, fVoxelHalfDimZ);
+  G4LogicalVolume* voxel_logic = 
+    new G4LogicalVolume(voxel_solid,fMaterials[0],"VoxelLogical",
                              0,0,0);
   // material is not relevant, it will be changed by the
   // ComputeMaterial method of the parameterisation
 
-    voxel_logic->SetVisAttributes(new G4VisAttributes(G4VisAttributes::Invisible));
+    voxel_logic->SetVisAttributes(
+                     new G4VisAttributes(G4VisAttributes::Invisible));
     
   //--- Assign the fContainer volume of the parameterisation
   param->BuildContainerSolid(fContainer_phys);
 
-  //--- Assure yourself that the voxels are completely filling the fContainer volume
+  //--- Assure yourself that the voxels are completely filling the 
+  // fContainer volume
   param->CheckVoxelsFillContainer( fContainer_solid->GetXHalfLength(), 
                                    fContainer_solid->GetYHalfLength(), 
                                    fContainer_solid->GetZHalfLength() );
@@ -103,14 +109,17 @@ void DicomRegularDetectorConstruction::ConstructPhantom()
 
   //----- The G4PVParameterised object that uses the created parameterisation
   // should be placed in the fContainer logical volume
-  G4PVParameterised * phantom_phys = new G4PVParameterised("phantom",voxel_logic,fContainer_logic,
-                        kXAxis, fNVoxelX*fNVoxelY*fNVoxelZ, param);
-  // if axis is set as kUndefined instead of kXAxis, GEANT4 will do an smart voxel optimisation 
+  G4PVParameterised * phantom_phys = 
+    new G4PVParameterised("phantom",voxel_logic,fContainer_logic,
+                          kXAxis, fNVoxelX*fNVoxelY*fNVoxelZ, param);
+  // if axis is set as kUndefined instead of kXAxis, GEANT4 will 
+  //  do an smart voxel optimisation 
   // (not needed if G4RegularNavigation is used)
 
-  //----- Set this physical volume as having a regular structure of type 1, so that 
-  // G4RegularNavigation is used
-  phantom_phys->SetRegularStructureId(1); // if not set, G4VoxelNavigation will be used instead 
+  //----- Set this physical volume as having a regular structure of type 1, 
+  // so that G4RegularNavigation is used
+  phantom_phys->SetRegularStructureId(1); // if not set, G4VoxelNavigation
+  //will be used instead 
 
   SetScorer(voxel_logic);
 }

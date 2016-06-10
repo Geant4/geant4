@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutron.cc 69557 2013-05-08 12:01:40Z gcosmo $
+// $Id: G4AntiNeutron.cc 83749 2014-09-12 12:14:59Z gcosmo $
 // GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 // 
@@ -73,11 +73,11 @@ G4AntiNeutron* G4AntiNeutron::Definition()
   // static const double  neutron_mass_c2 = 939.56563 * MeV;
 
   anInstance = new G4ParticleDefinition(
-                 name, neutron_mass_c2, 7.467e-28*GeV,         0.0, 
+                 name, neutron_mass_c2, 7.477e-28*GeV,         0.0, 
 		    1,              +1,             0,          
 		    1,              +1,             0,             
 	     "baryon",               0,            -1,       -2112,
-		 true,    885.7*second,          NULL,
+		 true,    880.3*second,          NULL,
 	        false,       "nucleon",          2112
               );
     // Magnetic Moment

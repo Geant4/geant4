@@ -1,4 +1,4 @@
-$Id: README 66241 2012-12-13 18:34:42Z gunter $
+$Id: README 83423 2014-08-21 15:38:28Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -26,8 +26,9 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
 
  2- PHYSICS LIST
 
-     The particle list is the one of novice/exampleN03 and TestEm6
-     with in addition synchrotron radiation.
+     The particle list include EM processes for gamma, e+, e-, mu+, mu-,
+     and protons, for the rest of particles only transportation. 
+     Synchrotron radiation is added to all charged particles.
      To make the synchrotron radiation easily visible, a very low
      pressure "vaccuum" and a magnetic field of by default 1 Tesla
      in z-direction is used.

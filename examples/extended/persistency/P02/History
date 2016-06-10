@@ -14,6 +14,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 13th, 2014 W. Pokorski (exampleP02-V10-00-01)
+- adding missing line in selection.xml
+
+June 11th, 2014 W. Pokorski (exampleP02-V10-00-00)
+- changes to comply with the coding conventions
+
 June 20th, 2013 W. Pokorski (exampleP02-V09-06-02)
 - corrected a missing coma in ExP02DetectorConstruction.cc
 

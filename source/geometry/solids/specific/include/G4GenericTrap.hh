@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.hh 72937 2013-08-14 13:20:38Z gcosmo $
+// $Id: G4GenericTrap.hh 83851 2014-09-19 10:12:12Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -66,6 +66,15 @@
 
 #ifndef G4GenericTrap_HH
 #define G4GenericTrap_HH
+
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UGENERICTRAP 1
+#endif
+
+#if defined(G4GEOM_USE_UGENERICTRAP)
+  #define G4UGenericTrap G4GenericTrap
+  #include "G4UGenericTrap.hh"
+#else
 
 #include <vector>
 
@@ -188,6 +197,7 @@ class G4GenericTrap : public G4VSolid
                                 const G4ThreeVector& p3) const;
   protected:
 
+     mutable G4bool fRebuildPolyhedron;
      mutable G4Polyhedron*   fpPolyhedron;
 
   private:
@@ -219,5 +229,7 @@ class G4GenericTrap : public G4VSolid
 };    
 
 #include "G4GenericTrap.icc"
+
+#endif
 
 #endif

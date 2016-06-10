@@ -32,7 +32,7 @@
 //    *                                       *
 //    *****************************************
 //
-// $Id: PurgMagDetectorConstruction.hh 69086 2013-04-18 07:29:59Z gcosmo $
+// $Id: PurgMagDetectorConstruction.hh 84393 2014-10-15 07:11:25Z gcosmo $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -44,6 +44,8 @@
 #include "globals.hh"
 #include "G4ThreeVector.hh"
 #include "G4RotationMatrix.hh"
+#include "G4Cache.hh"
+#include "G4MagneticField.hh"
 
 
 class G4Box;
@@ -65,16 +67,17 @@ public:
 public:  
      
   G4VPhysicalVolume* Construct();
+  void ConstructSDandField();
      
 public:
 
   void PrintDetectorParameters();
                     
-  G4double GetWorldSizeXY()          {return WorldSizeXY;};
-  G4double GetWorldSizeZ()           {return WorldSizeZ;}; 
+  G4double GetWorldSizeXY()  const       {return WorldSizeXY;};
+  G4double GetWorldSizeZ() const          {return WorldSizeZ;}; 
 
-  G4double GetMeasureVolumeSizeXY()  {return MeasureVolumeSizeXY;}; 
-  G4double GetMeasureVolumeSizeZ()   {return MeasureVolumeSizeZ;};
+  G4double GetMeasureVolumeSizeXY() const {return MeasureVolumeSizeXY;}; 
+  G4double GetMeasureVolumeSizeZ() const  {return MeasureVolumeSizeZ;};
 
   G4double GetGapSizeX1()            {return GapSizeX1;}; 
   G4double GetGapSizeX2()            {return GapSizeX2;}; 
@@ -85,10 +88,10 @@ public:
   G4Material* GetWorldMaterial()         {return WorldMaterial;};
   G4Material* GetGapMaterial()           {return GapMaterial;};
   
-  const G4VPhysicalVolume* GetWorld()           {return physiWorld;};           
-  const G4VPhysicalVolume* GetMeasureVolume()   {return physiMeasureVolume;};           
-  const G4VPhysicalVolume* GetGap1()            {return physiGap1;};
-  const G4VPhysicalVolume* GetGap2()            {return physiGap2;};
+  const G4VPhysicalVolume* GetWorld() const          {return physiWorld;};           
+  const G4VPhysicalVolume* GetMeasureVolume() const  {return physiMeasureVolume;};           
+  const G4VPhysicalVolume* GetGap1() const           {return physiGap1;};
+  const G4VPhysicalVolume* GetGap2() const      {return physiGap2;};
 
 private:
    
@@ -137,10 +140,12 @@ private:
   G4Material*        WorldMaterial;
   G4Material*        GapMaterial;
 
-
+  G4Cache<G4MagneticField*> fField;  //pointer to the thread-local fields
 
 private:
-    
+  
+
+
   void DefineMaterials();
   G4VPhysicalVolume* ConstructCalorimeter();     
 };

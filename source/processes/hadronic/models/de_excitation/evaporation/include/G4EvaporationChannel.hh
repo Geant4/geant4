@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationChannel.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4EvaporationChannel.hh 85841 2014-11-05 15:35:06Z gcosmo $
 //
 //
 //J.M. Quesada (August2008). Based on:
@@ -43,17 +43,19 @@
 #include "G4VCoulombBarrier.hh"
 
 class G4EvaporationLevelDensityParameter;
+class G4PairingCorrection;
 
 class G4EvaporationChannel : public G4VEvaporationChannel
 {
 public:
-  // constructor
+
   G4EvaporationChannel(G4int theA, G4int theZ, const G4String & aName,
 		       G4EvaporationProbability * aEmissionStrategy,
 	               G4VCoulombBarrier * aCoulombBarrier);
 
-  // destructor
   virtual ~G4EvaporationChannel();
+
+  void Initialise();
   
   inline void SetEmissionStrategy(G4EvaporationProbability * aEmissionStrategy)
   {theEvaporationProbabilityPtr = aEmissionStrategy;}
@@ -61,31 +63,16 @@ public:
   inline void SetCoulombBarrierStrategy(G4VCoulombBarrier * aCoulombBarrier)
   {theCoulombBarrierPtr = aCoulombBarrier;} 
     
-protected:
-  // default constructor
-  G4EvaporationChannel();
-  
-public:  
-
-  //  virtual void Initialize(const G4Fragment & fragment);
-
   virtual G4double GetEmissionProbability(G4Fragment* fragment); 
 
-  G4FragmentVector * BreakUp(const G4Fragment & theNucleus);
+  virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
 
-  inline G4double GetMaximalKineticEnergy(void) const 
-  { return MaximalKineticEnergy; }
+  virtual G4FragmentVector * BreakUp(const G4Fragment & theNucleus);
   
 private: 
   
-  // Calculate Binding Energy for separate fragment from nucleus
-  G4double CalcBindingEnergy(G4int anA, G4int aZ);
-
-  // Calculate maximal kinetic energy that can be carried by fragment (in MeV)
-  G4double CalcMaximalKineticEnergy(G4double U);
-
-  // Samples fragment kinetic energy.
-  G4double  GetKineticEnergy(const G4Fragment & aFragment);
+ // Samples fragment kinetic energy.
+  G4double  SampleKineticEnergy(const G4Fragment & aFragment);
 
   // This has to be removed and put in Random Generator
   G4ThreeVector IsotropicVector(G4double Magnitude  = 1.0);
@@ -95,8 +82,6 @@ private:
   G4bool operator==(const G4EvaporationChannel & right) const;
   G4bool operator!=(const G4EvaporationChannel & right) const;
 
-	// Data Members
-	// ************
 private:
 
   // This data member define the channel. 
@@ -115,12 +100,13 @@ private:
   G4EvaporationProbability * theEvaporationProbabilityPtr;
 
   // For Level Density calculation
-  // G4bool MyOwnLevelDensity;
   G4VLevelDensityParameter * theLevelDensityPtr;
 
   // For Coulomb Barrier calculation
   G4VCoulombBarrier * theCoulombBarrierPtr;
   G4double CoulombBarrier;
+
+  G4PairingCorrection* pairingCorrection;
    
   //---------------------------------------------------
 

@@ -1,4 +1,4 @@
-$Id: History 76940 2013-11-19 09:54:12Z gcosmo $
+$Id: History 84601 2014-10-17 07:44:52Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,24 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16 October 2014  Ivana Hrivnacova  (rdecay02-V10-00-03)
+------------------------------------------------
+- Fixed coding guidelines (long lines) in exrdmDetectorConstruction.cc
+
+1 July 2014  Dennis Wright  (rdecay02-V10-00-02)
+------------------------------------------------
+- fix bug 1461: no elastic cross section found for generic ions
+  Assigned model G4NuclNuclDiffuseElastic and cross section G4GGNuclNuclCrossSection
+  to generic ions in exrdmPhysListHadron 
+     
+18/02/2014 mma     (rdecay02-V10-00-01)
+- exrdmAnalysisManager::EndOfEvent(), 217 : do not force 'second' 
+     
+07/01/2014 Gunter Folger     (rdecay02-V10-00-00)
+- Fix problem identified in boudary chack mode. In exrdmHisto.cc::AddRow(), 
+   using root, float ar[4] was used to take 6 elements. 
+	Fix is to new ar with proper size.
+	
 18/11/2013  Ivana Hrivnacova (rdecay02-V09-06-06)
 - Fixed .README
 

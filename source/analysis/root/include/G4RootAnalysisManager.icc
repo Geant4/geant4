@@ -27,6 +27,9 @@
 
 #include "G4H1ToolsManager.hh"
 #include "G4H2ToolsManager.hh"
+#include "G4H3ToolsManager.hh"
+#include "G4P1ToolsManager.hh"
+#include "G4P2ToolsManager.hh"
 #include "G4RootNtupleManager.hh"
 
 //_____________________________________________________________________________
@@ -46,6 +49,30 @@ tools::histo::h2d*  G4RootAnalysisManager::GetH2(G4int id, G4bool warn,
 }
 
 //_____________________________________________________________________________
+inline 
+tools::histo::h3d*  G4RootAnalysisManager::GetH3(G4int id, G4bool warn,
+                                                 G4bool onlyIfActive) const 
+{
+  return fH3Manager->GetH3(id, warn, onlyIfActive);
+}
+
+//_____________________________________________________________________________
+inline 
+tools::histo::p1d*  G4RootAnalysisManager::GetP1(G4int id, G4bool warn,
+                                                 G4bool onlyIfActive) const 
+{
+  return fP1Manager->GetP1(id, warn, onlyIfActive);
+}
+
+//_____________________________________________________________________________
+inline 
+tools::histo::p2d*  G4RootAnalysisManager::GetP2(G4int id, G4bool warn,
+                                                 G4bool onlyIfActive) const 
+{
+  return fP2Manager->GetP2(id, warn, onlyIfActive);
+}
+
+//_____________________________________________________________________________
 inline
 tools::wroot::ntuple* G4RootAnalysisManager::GetNtuple() const
 {
@@ -57,4 +84,184 @@ inline
 tools::wroot::ntuple* G4RootAnalysisManager::GetNtuple(G4int ntupleId) const
 {
   return fNtupleManager->GetNtuple(ntupleId);
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h1d*>::iterator G4RootAnalysisManager::BeginH1()
+{
+  return fH1Manager->BeginH1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h1d*>::iterator G4RootAnalysisManager::EndH1()
+{
+  return fH1Manager->EndH1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h1d*>::const_iterator 
+G4RootAnalysisManager::BeginConstH1() const
+{
+  return fH1Manager->BeginConstH1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h1d*>::const_iterator 
+G4RootAnalysisManager::EndConstH1() const
+{
+  return fH1Manager->EndConstH1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h2d*>::iterator G4RootAnalysisManager::BeginH2()
+{
+  return fH2Manager->BeginH2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h2d*>::iterator G4RootAnalysisManager::EndH2()
+{
+  return fH2Manager->EndH2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h2d*>::const_iterator 
+G4RootAnalysisManager::BeginConstH2() const
+{
+  return fH2Manager->BeginConstH2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h2d*>::const_iterator 
+G4RootAnalysisManager::EndConstH2() const
+{
+  return fH2Manager->EndConstH2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h3d*>::iterator G4RootAnalysisManager::BeginH3()
+{
+  return fH3Manager->BeginH3();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h3d*>::iterator G4RootAnalysisManager::EndH3()
+{
+  return fH3Manager->EndH3();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h3d*>::const_iterator 
+G4RootAnalysisManager::BeginConstH3() const
+{
+  return fH3Manager->BeginConstH3();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h3d*>::const_iterator 
+G4RootAnalysisManager::EndConstH3() const
+{
+  return fH3Manager->EndConstH3();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::p1d*>::iterator G4RootAnalysisManager::BeginP1()
+{
+  return fP1Manager->BeginP1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::p1d*>::iterator G4RootAnalysisManager::EndP1()
+{
+  return fP1Manager->EndP1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::p1d*>::const_iterator 
+G4RootAnalysisManager::BeginConstP1() const
+{
+  return fP1Manager->BeginConstP1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::p1d*>::const_iterator 
+G4RootAnalysisManager::EndConstP1() const
+{
+  return fP1Manager->EndConstP1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::p2d*>::iterator G4RootAnalysisManager::BeginP2()
+{
+  return fP2Manager->BeginP2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::p2d*>::iterator G4RootAnalysisManager::EndP2()
+{
+  return fP2Manager->EndP2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::p2d*>::const_iterator 
+G4RootAnalysisManager::BeginConstP2() const
+{
+  return fP2Manager->BeginConstP2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::p2d*>::const_iterator 
+G4RootAnalysisManager::EndConstP2() const
+{
+  return fP2Manager->EndConstP2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::wroot::ntuple*>::iterator G4RootAnalysisManager::BeginNtuple()
+{
+  return fNtupleManager->BeginNtuple();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::wroot::ntuple*>::iterator G4RootAnalysisManager::EndNtuple()
+{
+  return fNtupleManager->EndNtuple();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::wroot::ntuple*>::const_iterator 
+G4RootAnalysisManager::BeginConstNtuple() const
+{
+  return fNtupleManager->BeginConstNtuple();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::wroot::ntuple*>::const_iterator 
+G4RootAnalysisManager::EndConstNtuple() const
+{
+  return fNtupleManager->EndConstNtuple();
 }  

@@ -609,32 +609,23 @@ G4VPhysicalVolume* DetectorConstruction::ConstructLine()
   // CELL PHANTOM
   // ************
 
+  fMyCellParameterisation = new CellParameterisation
+        (fNucleusMaterial1,fCytoplasmMaterial1,
+	 fNucleusMaterial2,fCytoplasmMaterial2,
+	 fNucleusMaterial3,fCytoplasmMaterial3);
+
   fSolidPhantom = new G4Box("Phantom", 
-  	fMyPhantomConfiguration.GetPixelSizeX()/2, 
-	fMyPhantomConfiguration.GetPixelSizeY()/2, 
-	fMyPhantomConfiguration.GetPixelSizeZ()/2); 
+  	fMyCellParameterisation->GetPixelSizeX()/2, 
+	fMyCellParameterisation->GetPixelSizeY()/2, 
+	fMyCellParameterisation->GetPixelSizeZ()/2); 
   
   fLogicPhantom = new G4LogicalVolume(fSolidPhantom,fDefaultMaterial,"Phantom",0,0,0);
     
-  // PHANTOM MASSES
+  SetNbOfPixelsInPhantom (fMyCellParameterisation->GetPhantomTotalPixels());
 
-  SetNbOfPixelsInPhantom (fMyPhantomConfiguration.GetPhantomTotalPixels());
+  SetMassNucleus(fMyCellParameterisation->GetNucleusMass());
 
-  SetMassNucleus(fMyPhantomConfiguration.GetNucleusMass());
-
-  SetMassCytoplasm(fMyPhantomConfiguration.GetCytoplasmMass());
-
-  // PHANTOM
-
-  fPhantomParam = new CellParameterisation
-  	(fMyPhantomConfiguration.GetPhantomTotalPixels(),
-	 fMyPhantomConfiguration.GetPixelSizeX()/2,
-	 fMyPhantomConfiguration.GetPixelSizeY()/2,
-	 fMyPhantomConfiguration.GetPixelSizeZ()/2,
-	 fNucleusMaterial1,fCytoplasmMaterial1,
-	 fNucleusMaterial2,fCytoplasmMaterial2,
-	 fNucleusMaterial3,fCytoplasmMaterial3
-	 );
+  SetMassCytoplasm(fMyCellParameterisation->GetCytoplasmMass());
 
   fPhysiPhantom = new G4PVParameterised(
                             "Phantom",        // their name
@@ -642,11 +633,15 @@ G4VPhysicalVolume* DetectorConstruction::ConstructLine()
                             //logicCyto,      // Mother logical volume is Cyto
                             fLogicKgm,        // Mother logical volume is Kgm
 			    kUndefined,       // Are placed along this axis 
-                            fPhantomParam->GetNoBoxes(),    // Number of boxes
-                            fPhantomParam,false);   // The parametrisation
+                            fMyCellParameterisation->GetPhantomTotalPixels(),    // Number of boxes
+                            fMyCellParameterisation,false);   // The parametrisation
 
-  G4cout << " ==========> The phantom contains " 
-    << fMyPhantomConfiguration.GetPhantomTotalPixels() << " voxels " << G4endl;		    
+  G4cout << " ==========> The phantom contains " << fMyCellParameterisation->GetPhantomTotalPixels() << " voxels " << G4endl;		    
+  G4cout << " ==========> Nucleus mass (kg)=" << fMyCellParameterisation->GetNucleusMass() / kg << G4endl;
+  G4cout << " ==========> Cytoplasm mass (kg)=" << fMyCellParameterisation->GetCytoplasmMass()/ kg << G4endl;
+  G4cout << " ==========> Voxel size X (um)=" << fMyCellParameterisation->GetPixelSizeX()/um << G4endl;
+  G4cout << " ==========> Voxel size Y (um)=" << fMyCellParameterisation->GetPixelSizeY()/um << G4endl;
+  G4cout << " ==========> Voxel size Z (um)=" << fMyCellParameterisation->GetPixelSizeZ()/um << G4endl; 
   G4cout << G4endl; 
 				    		    
   // USER LIMITS ON STEP LENGTH
@@ -735,15 +730,15 @@ void DetectorConstruction::ConstructSDandField()
   if(!fField) fField = new EMField(); 
   
   fEquation = new G4EqMagElectricField(fField);
-  fStepper = new G4ClassicalRK4 (fEquation);
+  fStepper = new G4ClassicalRK4 (fEquation,8);
   fFieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
   fIntgrDriver = new G4MagInt_Driver(0.000001*mm,fStepper,fStepper->GetNumberOfVariables() );
   fChordFinder = new G4ChordFinder(fIntgrDriver);
   fFieldMgr->SetChordFinder(fChordFinder);
   fFieldMgr->SetDetectorField(fField);
-      
+
   // FOLLOWING PARAMETERS TUNED FROM RAY-TRACING SIMULATIONS OF THE AIFIRA NANOBEAM LINE
-      
+  
   fFieldMgr->GetChordFinder()->SetDeltaChord(1e-9*m);
   fFieldMgr->SetDeltaIntersection(1e-9*m);
   fFieldMgr->SetDeltaOneStep(1e-9*m);     

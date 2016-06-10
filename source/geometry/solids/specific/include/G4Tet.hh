@@ -28,7 +28,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tet.hh 76263 2013-11-08 11:41:52Z gcosmo $
+// $Id: G4Tet.hh 83572 2014-09-01 15:23:27Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -130,7 +130,7 @@ class G4Tet : public G4VSolid
       // Copy constructor and assignment operator.
 
     const char* CVSHeaderVers()
-      { return "$Id: G4Tet.hh 76263 2013-11-08 11:41:52Z gcosmo $"; }
+      { return "$Id: G4Tet.hh 83572 2014-09-01 15:23:27Z gcosmo $"; }
     const char* CVSFileVers()
       { return CVSVers; }
     void PrintWarnings(G4bool flag)
@@ -153,6 +153,7 @@ class G4Tet : public G4VSolid
 
     G4double fCubicVolume, fSurfaceArea;
 
+    mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;
 
     G4ThreeVector GetPointOnFace(G4ThreeVector p1, G4ThreeVector p2, 

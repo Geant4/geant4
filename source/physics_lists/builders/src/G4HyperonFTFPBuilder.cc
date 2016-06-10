@@ -71,8 +71,6 @@ G4HyperonFTFPBuilder::G4HyperonFTFPBuilder():
   theStringModel->SetFragmentationModel(theStringDecay);
 
   theCascade = new G4GeneratorPrecompoundInterface;
-  thePreEquilib = new G4PreCompoundModel(theHandler = new G4ExcitationHandler);
-  theCascade->SetDeExcitation(thePreEquilib);  
 
   HyperonFTFP->SetTransport(theCascade);
   HyperonFTFP->SetHighEnergyGenerator(theStringModel);
@@ -96,15 +94,11 @@ G4HyperonFTFPBuilder::G4HyperonFTFPBuilder():
 
 G4HyperonFTFPBuilder::~G4HyperonFTFPBuilder()
 {
-  delete HyperonFTFP;
+  //delete HyperonFTFP;
   delete theStringModel;
   delete theStringDecay;
-  delete theCascade;
-  delete thePreEquilib;
-  //  delete theHandler;
-  delete theBertini;
-  delete AntiHyperonFTFP;
-  
+  //delete AntiHyperonFTFP;
+  /*  
   if (wasActivated) {
      delete theLambdaInelastic;
      delete theAntiLambdaInelastic;
@@ -118,7 +112,8 @@ G4HyperonFTFPBuilder::~G4HyperonFTFPBuilder()
      delete theAntiXiZeroInelastic;
      delete theOmegaMinusInelastic;
      delete theAntiOmegaMinusInelastic;
-  }   
+  } 
+  */  
 }
 
 void G4HyperonFTFPBuilder::Build()

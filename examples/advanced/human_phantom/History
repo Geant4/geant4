@@ -1,4 +1,4 @@
-$Id: History 76462 2013-11-11 10:20:36Z gcosmo $
+$Id: History 84279 2014-10-13 07:19:58Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 9, 2014, S. Guatelli tag human_phantom-V10-00-01
+- warning in running time deleted
+
+May 4, 2014, A. Dotti tag human_phantom-V10-00-00
+- migration to new GPS MT-ready
+
 Nov 11, 2013, S. Guatelli tag human_phantom-V09-06-06
 - warning with CLANG removed
 

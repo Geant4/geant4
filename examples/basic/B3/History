@@ -1,4 +1,4 @@
-$Id: History 75217 2013-10-29 16:09:26Z gcosmo $
+$Id: History 87359 2014-12-01 16:04:27Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,21 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29/11/14 I. Hrivnacova
+- Use G4endl instead of \n in G4cout;
+  this makes each new line in the output on threads preceded with
+  G4WTN >
+
+06/11/14 I. Hrivnacova
+- Finalized modifications in previous tag (01):
+  - Removed G4UI_USE/G4VIS_USE tests and init.mac macro (not needed)
+  - Moved G4UIExecutive at the beginning of main() in all examples
+  - Perform run initialization in macros instead of main()
+
+04/11/14 L. Garnier (exampleB3-V10-00-01)
+- Remove old G4UI_USE/G4VIS_USE
+- Move G4UIExecutive at the beginning of main() 
 
 29/10/13 I. Hrivnacova (exampleB3-V09-06-06)
 - Removed SetNumberOfThreads(4) from main (use Geant4 default)

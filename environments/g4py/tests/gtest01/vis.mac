@@ -1,6 +1,6 @@
 # vis.mac
 
-/vis/open OGLIX
+/vis/open OGLSX
 
 /vis/scene/create
 /vis/scene/add/volume

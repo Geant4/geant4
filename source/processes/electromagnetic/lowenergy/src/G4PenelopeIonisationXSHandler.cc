@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationXSHandler.cc 76882 2013-11-18 12:49:10Z gcosmo $
+// $Id: G4PenelopeIonisationXSHandler.cc 83584 2014-09-02 08:45:37Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -94,18 +94,16 @@ G4PenelopeIonisationXSHandler::~G4PenelopeIonisationXSHandler()
 
   std::map<const G4Material*,G4PhysicsFreeVector*>::iterator k;
   if (theDeltaTable)
-    {
-      /*
+    {      
       for (k=theDeltaTable->begin();k!=theDeltaTable->end();k++)	
  	delete k->second;
-      */ 
+     
       delete theDeltaTable;
       theDeltaTable = 0;
-    }
-  /*
+    } 
   if (energyGrid)
     delete energyGrid;
-  */
+  
   if (verboseLevel > 2)
     G4cout << "G4PenelopeIonisationXSHandler. Tables have been cleared" 
 	   << G4endl;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04PhysicsList.hh 68021 2013-03-13 13:36:07Z gcosmo $
+// $Id: F04PhysicsList.hh 85915 2014-11-06 09:05:23Z gcosmo $
 //
 /// \file field/field04/include/F04PhysicsList.hh
 /// \brief Definition of the F04PhysicsList class
@@ -72,7 +72,7 @@ private:
     G4double fCutForPositron;
 
     G4double fMaxChargedStep;
-    F04StepMax* fStepMaxProcess;
+    static G4ThreadLocal F04StepMax* fStepMaxProcess;
 
     F04PhysicsListMessenger* fMessenger;
 

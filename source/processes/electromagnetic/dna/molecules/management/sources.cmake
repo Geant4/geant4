@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 74551 2013-10-14 12:59:14Z gcosmo $
+# $Id: sources.cmake 80151 2014-04-03 09:42:22Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -35,16 +35,20 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/man
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4emdna-molman
     HEADERS
+        G4FakeParticleID.hh
         G4MolecularConfiguration.hh
         G4MolecularDissociationChannel.hh
         G4MolecularDissociationTable.hh
         G4MoleculeCounter.hh
         G4MoleculeDefinition.hh
+        G4MoleculeFinder.hh
         G4MoleculeHandleManager.hh
         G4Molecule.hh
-        G4MoleculeID.hh
+        G4MoleculeIterator.hh
+        G4MoleculeTable.hh
         G4VMolecularDissociationDisplacer.hh
     SOURCES
+        G4FakeParticleID.cc
         G4MolecularConfiguration.cc
         G4MolecularDissociationChannel.cc
         G4MolecularDissociationTable.cc
@@ -52,7 +56,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-molman
         G4Molecule.cc
         G4MoleculeDefinition.cc
         G4MoleculeHandleManager.cc
-        G4MoleculeID.cc
+        G4MoleculeTable.cc
         G4VMolecularDissociationDisplacer.cc
     GRANULAR_DEPENDENCIES
         G4geometrymng

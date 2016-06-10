@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorSymMatrix.cc 68739 2013-04-05 09:55:11Z gcosmo $
+// $Id: G4ErrorSymMatrix.cc 78318 2013-12-11 15:02:40Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -1051,9 +1051,9 @@ void G4ErrorSymMatrix::invertBunchKaufman(G4int &ifail)
                   temp2 = *mjj * *(mjj + j + 1) - *(mjj + j) * *(mjj + j); 
                   if (temp2 == 0)
                   {
-                    G4cerr
-                      << "G4ErrorSymMatrix::bunch_invert: error in pivot choice"
-                      << G4endl;
+                    G4Exception("G4ErrorSymMatrix::bunch_invert()",
+                                "GEANT4e-Notification", JustWarning,
+                                "Error in pivot choice!");
                   }
                   temp2 = 1. / temp2;
 
@@ -1152,7 +1152,12 @@ void G4ErrorSymMatrix::invertBunchKaufman(G4int &ifail)
           else //2x2 pivot, compute columns j and j-1 of the inverse
             {
               if (piv[j-1] != 0)
-                { G4cerr << "error in piv" << piv[j-1] << G4endl; }
+              {
+                std::ostringstream message;
+                message << "Error in pivot: " << piv[j-1];
+                G4Exception("G4ErrorSymMatrix::invertBunchKaufman()",
+                            "GEANT4e-Notification", JustWarning, message);
+              }
               ss=2; 
               if (j < nrow)
                 {

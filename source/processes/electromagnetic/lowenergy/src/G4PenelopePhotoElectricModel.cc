@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopePhotoElectricModel.cc 76220 2013-11-08 10:15:00Z gcosmo $
+// $Id: G4PenelopePhotoElectricModel.cc 81067 2014-05-20 09:19:32Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -118,6 +118,17 @@ void G4PenelopePhotoElectricModel::Initialise(const G4ParticleDefinition* partic
   if (verboseLevel > 3)
     G4cout << "Calling  G4PenelopePhotoElectricModel::Initialise()" << G4endl;
 
+  fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
+  //Issue warning if the AtomicDeexcitation has not been declared
+  if (!fAtomDeexcitation)
+    {
+      G4cout << G4endl;
+      G4cout << "WARNING from G4PenelopePhotoElectricModel " << G4endl;
+      G4cout << "Atomic de-excitation module is not instantiated, so there will not be ";
+      G4cout << "any fluorescence/Auger emission." << G4endl;
+      G4cout << "Please make sure this is intended" << G4endl;
+    }
+
   SetParticle(particle);
 
   //Only the master model creates/fills/destroys the tables
@@ -147,18 +158,7 @@ void G4PenelopePhotoElectricModel::Initialise(const G4ParticleDefinition* partic
 	}
  
 
-      InitialiseElementSelectors(particle,cuts);
-
-      fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
-      //Issue warning if the AtomicDeexcitation has not been declared
-      if (!fAtomDeexcitation)
-	{
-	  G4cout << G4endl;
-	  G4cout << "WARNING from G4PenelopePhotoElectricModel " << G4endl;
-	  G4cout << "Atomic de-excitation module is not instantiated, so there will not be ";
-	  G4cout << "any fluorescence/Auger emission." << G4endl;
-	  G4cout << "Please make sure this is intended" << G4endl;
-	}
+      InitialiseElementSelectors(particle,cuts);     
       
       if (verboseLevel > 0) { 
 	G4cout << "Penelope Photo-Electric model v2008 is initialized " << G4endl
@@ -193,7 +193,7 @@ void G4PenelopePhotoElectricModel::InitialiseLocal(const G4ParticleDefinition* p
 	static_cast<G4PenelopePhotoElectricModel*> (masterModel);
       
       logAtomicShellXS = theModel->logAtomicShellXS;
-      
+     
       //Same verbosity for all workers, as the master
       verboseLevel = theModel->verboseLevel;
     }
@@ -233,11 +233,15 @@ G4double G4PenelopePhotoElectricModel::ComputeCrossSectionPerAtom(
     {
       //If we are here, it means that Initialize() was inkoved, but the MaterialTable was 
       //not filled up. This can happen in a UnitTest or via G4EmCalculator
-      G4ExceptionDescription ed;
-      ed << "Unable to retrieve the shell cross section table for Z=" << iZ << G4endl;
-      ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;
-      G4Exception("G4PenelopePhotoElectricModel::ComputeCrossSectionPerAtom()",
-		  "em2038",JustWarning,ed);
+      if (verboseLevel > 0)
+	{   
+	  //Issue a G4Exception (warning) only in verbose mode
+	  G4ExceptionDescription ed;
+	  ed << "Unable to retrieve the shell cross section table for Z=" << iZ << G4endl;
+	  ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;
+	  G4Exception("G4PenelopePhotoElectricModel::ComputeCrossSectionPerAtom()",
+		      "em2038",JustWarning,ed);
+	}
       //protect file reading via autolock
       G4AutoLock lock(&PenelopePhotoElectricModelMutex);
       ReadDataFile(iZ);

@@ -10,14 +10,17 @@
 namespace tools {
 namespace histo {
 
-//TC is for a coordinate.
+enum { axis_UNDERFLOW_BIN = -2, axis_OVERFLOW_BIN = -1 }; //AIDA casing.
 
-template <class TC>
+//TC is for a coordinate.
+//TO is for an offset used to identify a bin.
+
+template <class TC,class TO>
 class axis {
 public:
   typedef unsigned int bn_t;
 public:
-  enum { UNDERFLOW_BIN = -2, OVERFLOW_BIN = -1 }; //AIDA casing.
+  enum { UNDERFLOW_BIN = axis_UNDERFLOW_BIN, OVERFLOW_BIN = axis_OVERFLOW_BIN };
 public:
   bool is_fixed_binning() const {return m_fixed;}
   TC lower_edge() const {return m_minimum_value;}
@@ -168,7 +171,7 @@ public:
     m_edges.clear();
     // setup :
     if(aEdges.size()<=1) return false;
-    bn_t number = aEdges.size()-1;
+    bn_t number = (bn_t)aEdges.size()-1;
     for(bn_t index=0;index<number;index++) {
       if((aEdges[index]>=aEdges[index+1])) {
         return false;
@@ -220,29 +223,30 @@ public:
 
   virtual ~axis(){}
 public:
-  axis(const axis& a_axis)
-  :m_offset(a_axis.m_offset)
-  ,m_number_of_bins(a_axis.m_number_of_bins)
-  ,m_minimum_value(a_axis.m_minimum_value)
-  ,m_maximum_value(a_axis.m_maximum_value)
-  ,m_fixed(a_axis.m_fixed)
-  ,m_bin_width(a_axis.m_bin_width)
-  ,m_edges(a_axis.m_edges)
+  axis(const axis& a_from)
+  :m_offset(a_from.m_offset)
+  ,m_number_of_bins(a_from.m_number_of_bins)
+  ,m_minimum_value(a_from.m_minimum_value)
+  ,m_maximum_value(a_from.m_maximum_value)
+  ,m_fixed(a_from.m_fixed)
+  ,m_bin_width(a_from.m_bin_width)
+  ,m_edges(a_from.m_edges)
   {}
 
-  axis& operator=(const axis& a_axis) {
-    m_offset = a_axis.m_offset;
-    m_number_of_bins = a_axis.m_number_of_bins;
-    m_minimum_value = a_axis.m_minimum_value;
-    m_maximum_value = a_axis.m_maximum_value;
-    m_fixed = a_axis.m_fixed;
-    m_bin_width = a_axis.m_bin_width;
-    m_edges = a_axis.m_edges;
+  axis& operator=(const axis& a_from) {
+    if(&a_from==this) return *this;
+    m_offset = a_from.m_offset;
+    m_number_of_bins = a_from.m_number_of_bins;
+    m_minimum_value = a_from.m_minimum_value;
+    m_maximum_value = a_from.m_maximum_value;
+    m_fixed = a_from.m_fixed;
+    m_bin_width = a_from.m_bin_width;
+    m_edges = a_from.m_edges;
     return *this;
   }
 
 public:
-  bn_t m_offset;
+  TO m_offset;
   bn_t m_number_of_bins;
   TC m_minimum_value;
   TC m_maximum_value;

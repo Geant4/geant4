@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDigi.hh 66508 2012-12-19 10:16:45Z gcosmo $
+// $Id: GammaRayTelDigi.hh 82268 2014-06-13 13:47:30Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -93,22 +93,22 @@ public:
 
 typedef G4TDigiCollection<GammaRayTelDigi> GammaRayTelDigitsCollection;
 
-extern G4Allocator<GammaRayTelDigi> GammaRayTelDigiAllocator;
+extern G4ThreadLocal G4Allocator<GammaRayTelDigi> *GammaRayTelDigiAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void* GammaRayTelDigi::operator new(size_t)
 {
-  void* aDigi;
-  aDigi = (void*) GammaRayTelDigiAllocator.MallocSingle();
-  return aDigi;
+  if (!GammaRayTelDigiAllocator)
+    GammaRayTelDigiAllocator = new G4Allocator<GammaRayTelDigi>;
+  return (void*) GammaRayTelDigiAllocator->MallocSingle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void GammaRayTelDigi::operator delete(void* aDigi)
 {
-  GammaRayTelDigiAllocator.FreeSingle((GammaRayTelDigi*) aDigi);
+  GammaRayTelDigiAllocator->FreeSingle((GammaRayTelDigi*) aDigi);
 }
 
 #endif

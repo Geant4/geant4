@@ -1,0 +1,99 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_member_reader
+#define tools_rroot_member_reader
+
+#include "../store/iobj_visitor"
+
+#include "buffer"
+
+namespace tools {
+namespace rroot {
+
+class member_reader : public virtual iobj_visitor {
+public:
+  virtual std::ostream& out() {return m_buf.out();}
+
+  virtual bool visit(bool& a_v){return m_buf.read(a_v);}
+  virtual bool visit(char& a_v){return m_buf.read(a_v);}
+  virtual bool visit(short& a_v){return m_buf.read(a_v);}
+  virtual bool visit(int& a_v){return m_buf.read(a_v);}
+
+  virtual bool visit(unsigned int& a_v){return m_buf.read(a_v);}
+
+  virtual bool visit(int64&){
+    m_buf.out() << "tools::rroot::member_reader::visit(int64) :"
+                << " dummy." << std::endl;
+    return false; //FIXME
+  }
+
+  virtual bool visit(uint64&){
+    m_buf.out() << "tools::rroot::member_reader::visit(uint64) :"
+                << " dummy." << std::endl;
+    return false; //FIXME
+  }
+
+  virtual bool visit(float& a_v){return m_buf.read(a_v);}
+  virtual bool visit(double& a_v){return m_buf.read(a_v);}
+
+  virtual bool visit(std::string& a_v){return m_buf.read(a_v);}
+
+//virtual bool visit(const char* a_v){
+//  return m_buf.read(std::string(a_v));
+//}
+
+  virtual bool visit(std::vector<bool>& a_v){
+    std::vector<unsigned char> data;
+    if(!m_buf.read_array(data)) {a_v.clear();return false;}
+    unsigned int number = data.size();
+    a_v.resize(number);
+    for(unsigned int index=0;index<number;index++) {
+      a_v[index] = (data[index]==1?true:false);  
+    }
+    return true;
+  }
+
+  virtual bool visit(std::vector<char>& a_v){return m_buf.read_array(a_v);}
+
+  virtual bool visit(std::vector<short>& a_v){return m_buf.read_array(a_v);}
+
+  virtual bool visit(std::vector<int>& a_v){return m_buf.read_array(a_v);}
+
+  virtual bool visit(std::vector<int64>& /*a_v*/){
+    //FIXME return ::Rio::writeArray<Slash::int64>(fBuffer,a_v);
+    m_buf.out() << "tools::rroot::member_reader::visit(vector<int64>) :"
+                << " dummy." << std::endl;
+    return false;
+  }
+
+  virtual bool visit(std::vector<float>& a_v){return m_buf.read_array(a_v);}
+
+  virtual bool visit(std::vector<double>& a_v){return m_buf.read_array(a_v);}
+
+  virtual bool visit(std::vector<unsigned char>& a_v){
+    return m_buf.read_array(a_v);
+  }
+
+  virtual bool visit(std::vector<std::string>& a_v){return m_buf.read(a_v);}
+
+  virtual bool visit(std::vector< std::vector<double> >& a_v){
+    return m_buf.read_array2(a_v);
+  }
+
+public:
+  member_reader(buffer& a_buf):m_buf(a_buf){}
+  virtual ~member_reader(){}
+private:
+  member_reader(const member_reader& a_from)
+  :iobj_visitor(a_from)
+  ,m_buf(a_from.m_buf)
+  {}
+  member_reader& operator=(const member_reader&){return *this;}
+protected:
+  buffer& m_buf;
+};
+
+}}
+
+#endif

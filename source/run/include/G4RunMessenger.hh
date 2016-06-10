@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.hh 77649 2013-11-27 08:39:54Z gcosmo $
+// $Id: G4RunMessenger.hh 86051 2014-11-07 08:30:30Z gcosmo $
 //
 // 
 //	GEANT 4 class header file 
@@ -86,7 +86,9 @@ class G4RunMessenger: public G4UImessenger
     G4UIcmdWithAnInteger *      verboseCmd;
     G4UIcmdWithAnInteger *      printProgCmd;
     G4UIcmdWithAnInteger *      nThreadsCmd;
-    G4UIcmdWithAnInteger *      evModCmd;
+    G4UIcmdWithoutParameter *   maxThreadsCmd;
+    G4UIcmdWithAnInteger *      pinAffinityCmd;
+    G4UIcommand *               evModCmd;
     G4UIcmdWithAString *        dumpRegCmd;
     G4UIcmdWithoutParameter *   dumpCoupleCmd;
     G4UIcmdWithABool *          optCmd;

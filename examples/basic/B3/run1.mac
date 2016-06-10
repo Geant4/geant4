@@ -1,6 +1,12 @@
-# $Id: run1.mac 68058 2013-03-13 14:47:43Z gcosmo $
+# $Id: run1.mac 86065 2014-11-07 08:51:15Z gcosmo $
 #
 # Macro file of "exampleB3.cc"
+#
+# Change the default number of workers (in multi-threading mode) 
+#/run/numberOfWorkers 4
+#
+# Initialize kernel
+/run/initialize
 #
 /control/verbose 2
 /tracking/verbose 2

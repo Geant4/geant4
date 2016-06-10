@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DCofThisEvent.hh 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4DCofThisEvent.hh 81087 2014-05-20 15:44:27Z gcosmo $
 //
 
 #ifndef G4DCofThisEvent_h
@@ -58,6 +58,8 @@ class G4DCofThisEvent
 
       void AddDigiCollection(G4int DCID,G4VDigiCollection * aDC);
 
+      G4DCofThisEvent(const G4DCofThisEvent&);
+      G4DCofThisEvent& operator=(const G4DCofThisEvent&);
   private:
       std::vector<G4VDigiCollection*> * DC;
 

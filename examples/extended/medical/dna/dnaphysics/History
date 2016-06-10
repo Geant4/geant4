@@ -1,0 +1,115 @@
+     =========================================================
+ 		      Geant4 - dnaphysics example
+     =========================================================
+
+                       Package History file
+                       --------------------
+
+24 November 2014 - tag dnaphysics-V10-00-04 - M. Karamitros
+- Retag before release
+
+6 November 2014 - I. Hrivnacova
+- Fixes in README files
+
+1 November 2014 - tag dnaphysics-V10-00-03 - M. Karamitros
+- Copy plot.C to bin directory
+
+23 October 2014 - tag dnaphysics-V10-00-02 - M. Karamitros
+- READMEs updated
+
+22 October 2014 - tag dnaphysics-V10-00-01 - M. Karamitros
+- Move to extended category and apply coding guidelines
+- Clean PhysicsList, DetectorConstuction, SteppingAction, RunAction
+- Add .README, missing virtuals
+- dna.mac -> dnaphysics.in as done in other extended examples
+
+30 June 2014 - tag dnaphysics-V10-00-00 - S. Incerti
+- Added lines for ion in dna.mac
+
+03 October 2013 - tag dnaphysics-V09-06-10 - S. Incerti
+- Updated CMakeLists.txt
+
+30 September 2013 - tag dnaphysics-V09-06-09 - I. Hrivnacova
+- Updated for changes in analysis:
+  (removal of G4AnalysisManager::Create(isMaster))
+
+19 August 2013 - tag dnaphysics-V09-06-08 - S. Incerti
+- Updated README
+
+6 August 2013 - tag dnaphysics-V09-06-07 - S. Incerti
+- Removed unused variable in RunAction
+
+1 August 2013 - tag dnaphysics-V09-06-06 - A.Dotti
+- Bug fix for compilation warning with clang32 - second iteration
+
+30 July 2013 - tag dnaphysics-V09-06-05 - A.Dotti
+- Bug fix for compilation warning with clang32
+
+10 June 2013 - tag dnaphysics-V09-06-04 - S. Incerti 
+- Withdraw RunAction from ActionInitialization for master
+
+28 May 2013 - tag dnaphysics-V09-06-03 - S. Incerti 
+- changed modified density
+- removed standard process tagging in SteppingAction
+- updated plot.C
+
+22 May 2013 - tag dnaphysics-V09-06-02 - M. Karamitros 
+- Migrated to MT
+
+13 April 2013 - tag dnaphysics-V09-06-01 - S. Incerti
+- Removed unused electron capture process
+- Changed process naming scheme as in the "microdosimetry" 
+advanced example 
+
+15 February 2013 - tag dnaphysics-V09-06-00 - S. Incerti
+- Changed default water definition 
+
+3 November 2012 - tag dnaphysics-V09-05-07 - S. Incerti
+- Removed shadowing in SteppingAction 
+
+26 October 2012 - tag dnaphysics-V09-05-06 - L. Pandola
+- Changed CMakeLists.txt to deal with VIS 
+
+26 October 2012 - tag dnaphysics-V09-05-05 - S. Incerti
+- Renamed executable.
+
+11 October 2012 - tag dnaphysics-V09-05-04 - G. Cosmo
+- Explicit inclusion of units and constants headers
+
+09 October 2012- tag dnaphysics-V09-05-03 - S. Incerti  
+- cleaned main
+
+09 October 2012- tag dnaphysics-V09-05-02 - S. Incerti  
+- added more histogram variables
+
+15 August 2012- tag dnaphysics-V09-05-01 - S. Incerti  
+- added messenger for material change
+- switched to new analysis interface from Guy Barrand
+
+11 August 2012- tag dnaphysics-V09-05-00 - S. Incerti  
+- updated README and SteppingAction.cc files
+
+05 November 2011- tag dnaphysics-V09-04-08 - S. Incerti  
+- removed export=root option in HistoManager.cc
+
+24 August2011 - tag dnaphysics-V09-04-07 - S. Incerti
+- Added Auger production to dna.mac
+
+18 August 2011 - tag dnaphysics-V09-04-06 - S. Incerti
+- Removed initStep test in SteppingAction
+
+16 August 2011 - tag dnaphysics-V09-04-05 - S. Incerti
+- Removed usage of system command
+
+02 August 2011 - tag dnaphysics-V09-04-04 - S. Incerti
+- increased statistics in dna.mac as suggested by Gunter
+- added total energy deposits in ntuple 
+
+05 April 2011 - tag dnaphysics-V09-04-03 - S. Incerti
+- added comment for use of variable density material
+
+17 February 2011 - tag dnaphysics-V09-04-02 - S. Incerti
+- switched to G4EmDNAPhysics builder
+
+30 January 2011 - tag dnaphysics-V09-04-01 - S. Incerti
+- first version of dnaphysics example committed

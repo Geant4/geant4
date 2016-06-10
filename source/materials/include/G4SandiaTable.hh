@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.hh 75603 2013-11-04 13:15:47Z gcosmo $
+// $Id: G4SandiaTable.hh 79097 2014-02-14 16:08:35Z gcosmo $
 
 // class description
 //
@@ -61,7 +61,6 @@
 #include <CLHEP/Units/PhysicalConstants.h>
 
 class G4Material;
-// class G4MaterialCutsCouple;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -74,18 +73,26 @@ public:  // with description
   ~G4SandiaTable();
 
   //main computation per atom:
-  void GetSandiaCofPerAtom(G4int Z, G4double energy, std::vector<G4double>& coeff);
+  void GetSandiaCofPerAtom(G4int Z, G4double energy, 
+			   std::vector<G4double>& coeff) const;
+
+  void GetSandiaCofWater(G4double energy, 
+			 std::vector<G4double>& coeff) const;
+
+  G4double GetWaterEnergyLimit() const;
+  G4double GetWaterCofForMaterial(G4int,G4int) const;
+
   static G4double GetZtoA(G4int Z);
 
   //per volume of a material:
-  G4int GetMatNbOfIntervals();
-  G4double  GetSandiaCofForMaterial(G4int,G4int);
-  G4double  GetSandiaMatTable(G4int,G4int);
-  const G4double* GetSandiaCofForMaterial(G4double energy);
+  G4int GetMatNbOfIntervals() const;
+  G4double  GetSandiaCofForMaterial(G4int,G4int) const;
+  G4double  GetSandiaMatTable(G4int,G4int) const;
+  const G4double* GetSandiaCofForMaterial(G4double energy) const;
 
-  G4double  GetSandiaCofForMaterialPAI(G4int,G4int);
-  G4double  GetSandiaMatTablePAI(G4int,G4int);
-  const G4double* GetSandiaCofForMaterialPAI(G4double energy);
+  G4double  GetSandiaCofForMaterialPAI(G4int,G4int) const;
+  G4double  GetSandiaMatTablePAI(G4int,G4int) const;
+  const G4double* GetSandiaCofForMaterialPAI(G4double energy) const;
   G4OrderedTable* GetSandiaMatrixPAI();
 
   inline void SetVerbose(G4int ver) { fVerbose = ver; };
@@ -105,7 +112,7 @@ private:
   // methods per atom
   G4int     GetNbOfIntervals(G4int Z);
   G4double  GetSandiaPerAtom(G4int Z, G4int, G4int);
-  G4double  GetIonizationPot(G4int Z);
+  G4double  GetIonizationPot(G4int Z) const;
 
   // static members of the class
   static const G4int      fNumberOfElements;

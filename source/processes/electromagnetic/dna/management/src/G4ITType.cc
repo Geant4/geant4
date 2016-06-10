@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITType.cc 74551 2013-10-14 12:59:14Z gcosmo $
+// $Id: G4ITType.cc 80151 2014-04-03 09:42:22Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -89,7 +89,10 @@ void G4ITTypeManager::ReleaseRessource()
 }
 
 G4ITTypeManager::G4ITTypeManager()
-{ fLastType = 0;}
+{
+	fLastType = 0;
+	fRessource = 0;
+}
 
 G4ITTypeManager::~G4ITTypeManager()
 {;}

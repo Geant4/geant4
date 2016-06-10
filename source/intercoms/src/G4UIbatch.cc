@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UIbatch.cc 67965 2013-03-13 09:35:29Z gcosmo $
+// $Id: G4UIbatch.cc 83401 2014-08-21 15:03:26Z gcosmo $
 //
 // ====================================================================
 //   G4UIbatch.cc
@@ -72,8 +72,8 @@ G4UIbatch::G4UIbatch(const char* fileName, G4UIsession* prevSession)
 {
   macroStream.open(fileName, std::ios::in);
   if(macroStream.fail()) {
-    G4cerr << "***** Can not open a macro file <"
-           << fileName << ">"
+    G4cerr << "ERROR: Can not open a macro file <"
+           << fileName << ">. Set macro path with \"/control/macroPath\" if needed."
            << G4endl;
   } else {
     isOpened= true;

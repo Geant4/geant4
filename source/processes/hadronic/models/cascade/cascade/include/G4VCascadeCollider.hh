@@ -31,6 +31,7 @@
 // 20100711  M. Kelsey -- Allow name to be changed after ctor, by self
 // 20100714  M. Kelsey -- Move concrete functions to G4CascadeColliderBase
 // 20130620  Address Coverity complaint about missing copy actions
+// 20140930  Change name from "const char*" to "const G4String"
 
 #include "globals.hh"
 
@@ -39,7 +40,7 @@ class G4CollisionOutput;
 
 class G4VCascadeCollider {
 public:
-  G4VCascadeCollider(const char* name, G4int verbose=0);
+  G4VCascadeCollider(const G4String& name, G4int verbose=0);
 
   virtual ~G4VCascadeCollider() {}
 
@@ -49,10 +50,10 @@ public:
   virtual void setVerboseLevel(G4int verbose=0) { verboseLevel=verbose; }
 
 protected:
-  const char* theName;
+  G4String theName;
   G4int verboseLevel;
 
-  virtual void setName(const char* name) { theName = name; }
+  virtual void setName(const G4String& name) { theName = name; }
 
 private:
   // Copying of modules is forbidden

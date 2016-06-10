@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KaonBuilder.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4KaonBuilder.cc 81935 2014-06-06 15:41:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -51,12 +51,8 @@ G4KaonBuilder(): wasActivated(false)
 }
 
 G4KaonBuilder::
-~G4KaonBuilder(){
-  delete theKaonPlusInelastic;
-  delete theKaonMinusInelastic;
-  delete theKaonZeroLInelastic;
-  delete theKaonZeroSInelastic;
-}
+~G4KaonBuilder()
+{}
 
 void G4KaonBuilder::
 Build()

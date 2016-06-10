@@ -14,6 +14,101 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 November 2014 G. Folger(hadr-man-V10-00-17)
+---------------------------------------------------
+- G4HadronicProcess::CheckResult(): Add check for dynamic mass 
+    to correspond to PDG mass within ~10%. 
+	 
+12 November 2014 V. Ivanchenko (hadr-man-V10-00-16)
+---------------------------------------------------
+- G4HadronicProcessStore -fixed computation of cross sections for ions
+
+12 November 2014 V. Ivanchenko (hadr-man-V10-00-15)
+---------------------------------------------------
+- G4HadronicProcess - fixed final track status for some models like 
+    G4WilsonAbrasionModel
+
+11 November 2014 V. Ivanchenko (hadr-man-V10-00-14)
+---------------------------------------------------
+- G4HadronicProcess - clear final state before resample interaction
+  due to energy balance violation 
+
+7 November 2014 V. Ivanchenko (hadr-man-V10-00-13)
+------------------------------------------------
+4 November 2014 V. Ivanchenko (hadr-man-V10-00-12)
+------------------------------------------------
+- G4HadronicProcess - added creator model type to secondary 
+
+12 September 2014 Tatsumi Koi (hadr-man-V10-00-11)
+------------------------------------------------
+- Add BuildPhysics method for Initialisation of models before run
+	Co working with hadr-modman-V10-00-05
+	include/G4EnergyRangeManager.hh
+	src/G4EnergyRangeManager.cc
+	src/G4HadronicProcess.cc
+
+4 August 2014 V. Ivanchenko (hadr-man-V10-00-10)
+------------------------------------------------
+- G4HadronicProcessStore, G4HadronicProcess: simplified registration and 
+    de-registration; fixed Coverity report
+
+1 August 2014 Alberto Ribon (hadr-man-V10-00-09)
+------------------------------------------------
+- G4EnergyRangeManager, G4HadronicProcess: moved the computation of
+  the kinetic energy per nucleon (in the case of ion projectile)
+  from G4HadronicProcess to G4EnergyRangeManager.
+
+1 August 2014 Alberto Ribon (hadr-man-V10-00-08)
+------------------------------------------------
+- G4EnergyRangeManager : added a new method GetHadronicInteraction
+  which uses G4HadronicInteraction::IsApplicable.
+- G4HadronicProcess : replaced the old method of G4EnergyRangeManager
+  (still there but deprecated) with the new one.
+
+1 July 2014 Gunter Folger (hadr-man-V10-00-07)
+----------------------------------------------
+- G4HadronicProcessStore::PrintHtml(): include ProcessDescription 
+    inline in physics lists description
+	 
+22 May 2014 Andrea Dotti (hadr-man-V10-00-06)
+--------------------------------------------
+- Code cleanup
+
+22 May 2014 Andrea Dotti (hadr-man-V10-00-05)
+--------------------------------------------
+- Fixing valgrind report
+
+21 May 2014 Andrea Dotti (hadr-man-V10-00-04)
+--------------------------------------------
+- Retagging: previous tag was ok. 
+
+21 May 2014 Alberto Ribon (hadr-man-V10-00-03)
+---------------------------------------------
+- G4HadronicProcessStore : add printout information for deuteron, triton,
+  He3 and alpha.
+
+20 May 2014 Andrea Dotti (hadr-man-V10-00-02)
+---------------------------------------------
+- G4HadronicProcessStore : correct for bug in Clear() for which stopping
+  processes are deleted twice (once because are registered as normal 
+  processes and once are registered as extra processes).
+
+15 May 2014 Vladimir Ivanchenko (hadr-man-V10-00-01)
+---------------------------------------------------
+- G4HadronicProcess: added method  GetHadronicInteractionList() allowing 
+    access to the list of registered models, removed obsolete access
+    methods to G4EnergyRangeManager
+- G4HadronicProcessStore - become G4ThreadLocalSingletone allowing
+    proper destruction of hadronic processes/models/x-sections
+- G4EnergyRangeManager - cleaned up; instead of c-array models pointers
+    are stored in stl vector
+- this tag requires remove deletion of Physics vectors from destructors 
+    of all hadronic classes
+
+03 February 2014 Gunter Folger (hadr-man-V10-00-00)
+---------------------------------------------------
+- G4HadronicProcess: in EnergyMomentumCheck... add printout of 3momentum  
+
 20 June 2013  Dennis Wright  (hadr-man-V09-06-03)
 -------------------------------------------------
 - G4EnergyRangeManager : re-order initialization of hadronicInteractionCounter

@@ -34,7 +34,7 @@
 // Modified:    P.Gumplinger 29.09.2011
 //              (based on code from I. Hrivnacova)
 //
-//----------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 //
 // This class provides construction of default optical physics
 //
@@ -49,20 +49,12 @@
 #include "G4OpticalProcessIndex.hh"
 #include "G4OpticalPhysicsMessenger.hh"
 
-#include "G4OpWLS.hh"
-#include "G4Scintillation.hh"
-#include "G4Cerenkov.hh"
-
-#include "G4OpAbsorption.hh"
-#include "G4OpRayleigh.hh"
-#include "G4OpMieHG.hh"
-#include "G4OpBoundaryProcess.hh"
-
 #include "G4OpticalSurface.hh"
 
 #include <vector>
 
 class G4VProcess;
+class G4EmSaturation;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -89,26 +81,7 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
   public:
 
     // configure G4OpticalPhysics builder
-    void Configure(G4OpticalProcessIndex, G4bool ); 
-
-    // get methods
-    virtual G4Scintillation* GetScintillationProcess() 
-                                       { return fScintillationProcess; }
-    virtual G4Cerenkov* GetCerenkovProcess()
-                                       { return fCerenkovProcess; }
-    virtual G4OpWLS* GetOpWLSProcess() { return fOpWLSProcess; }
-
-    virtual G4OpAbsorption* GetOpAbsorptionProcess()
-                                       { return fOpAbsorptionProcess; }
-    virtual G4OpRayleigh* GetOpRayleighProcess()
-                                       { return fOpRayleighScatteringProcess; }
-    virtual G4OpMieHG* GetOpMieHGProcess()
-                                       { return fOpMieHGScatteringProcess; }
-    virtual G4OpBoundaryProcess* GetOpBoundaryProcess()
-                                       { return fOpBoundaryProcess; }
-
-    // set methods
-    void SetProcessVerbose(G4int , G4int );
+    void Configure(G4OpticalProcessIndex, G4bool );
 
     void SetMaxNumPhotonsPerStep(G4int );
     void SetMaxBetaChangePerStep(G4double );
@@ -117,7 +90,7 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
 
     void SetWLSTimeProfile(G4String );
     void SetScintillationByParticleType(G4bool );
-    void AddScintillationSaturation(G4EmSaturation* );
+    //void AddScintillationSaturation(G4EmSaturation* );
 
     void SetTrackSecondariesFirst(G4OpticalProcessIndex, G4bool );
     void SetFiniteRiseTime(G4bool );
@@ -127,34 +100,15 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
     // methods
     void PrintStatistics() const;
 
-    // data members
-  
-    static G4ThreadLocal G4bool wasActivated;
-
     // messenger
     G4OpticalPhysicsMessenger* fMessenger;
-
-    // The vector of optical processes
-    std::vector<G4VProcess*>    fProcesses;
 
     // The vector of process configuration
     std::vector<G4bool>         fProcessUse;
 
-    // The vector of process verbose level
-    std::vector<G4int>          fProcessVerbose;
-
     // The vector of track secondaries options;
     // the option to track secondaries before finishing their parent track
     std::vector<G4bool>         fProcessTrackSecondariesFirst;
-
-    G4Scintillation*     fScintillationProcess;
-    G4Cerenkov*          fCerenkovProcess;
-    G4OpWLS*             fOpWLSProcess;
-
-    G4OpAbsorption*      fOpAbsorptionProcess;
-    G4OpRayleigh*        fOpRayleighScatteringProcess;
-    G4OpMieHG*           fOpMieHGScatteringProcess;
-    G4OpBoundaryProcess* fOpBoundaryProcess;
 
     /// max number of Cerenkov photons per step
     G4int                       fMaxNumPhotons;
@@ -171,8 +125,8 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
     /// the WLS process time profile
     G4String                    fProfile;
 
-    /// option to set a finite rise-time; Note: the G4Scintillation 
-    /// process expects the user to have set the constant material 
+    /// option to set a finite rise-time; Note: the G4Scintillation
+    /// process expects the user to have set the constant material
     /// property FAST/SLOWSCINTILLATIONRISETIME
     G4bool                      fFiniteRiseTime;
 

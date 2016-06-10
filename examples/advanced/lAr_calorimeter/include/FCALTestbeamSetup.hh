@@ -40,7 +40,6 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
-#include "FCALTestbeamSetupSD.hh"
 
 //class FCALFrontVolumes;
 //class FCALTailVolumes;
@@ -60,7 +59,8 @@ public:
 public:
 
   G4VPhysicalVolume* Construct();
-
+  void ConstructSDandField();
+    
 private:
 
   G4double MotherSizeX, MotherSizeY, MotherSizeZ;
@@ -107,7 +107,7 @@ private:
   G4double CryostatPosX, CryostatPosY, CryostatPosZ;
 
 
-  FCALTestbeamSetupSD* FCALTBSetupSD;  // Senstive detector
+  //FCALTestbeamSetupSD* FCALTBSetupSD;  // Senstive detector
 
   /* 
   G4double TailPosX;
@@ -131,3 +131,4 @@ private:
 };
 
 #endif   /* FCALTestbeamSetup.hh */
+

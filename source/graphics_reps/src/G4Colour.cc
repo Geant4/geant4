@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Colour.cc 69802 2013-05-15 14:52:57Z gcosmo $
+// $Id: G4Colour.cc 78955 2014-02-05 09:45:46Z gcosmo $
 //
 // 
 // John Allison 20th October 1996
@@ -54,7 +54,7 @@ G4Colour::operator G4ThreeVector() {
 
 std::ostream& operator << (std::ostream& os, const G4Colour& c) {
   os << '(' << c.red << ',' << c.green << ',' << c.blue
-	    << ',' << c.alpha << ')';
+            << ',' << c.alpha << ')';
   const std::map<G4String, G4Colour>& colourMap = G4Colour::GetMap();
   // Reverse iterator to pick up English spelling of grey!!  :)
   std::map<G4String, G4Colour>::const_reverse_iterator ri;

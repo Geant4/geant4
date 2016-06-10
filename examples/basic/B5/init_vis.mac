@@ -7,5 +7,11 @@
 /control/saveHistory
 /run/verbose 2
 #
+# Change the default number of threads (in multi-threaded mode)
+#/run/numberOfThreads 4
+#
+# Initialize kernel
+/run/initialize
+#
 # Visualization setting
 /control/execute vis.mac

@@ -1,4 +1,4 @@
-$Id: README 78001 2013-12-02 08:24:53Z gcosmo $
+$Id: README 83399 2014-08-21 14:47:20Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -35,22 +35,22 @@ $Id: README 78001 2013-12-02 08:24:53Z gcosmo $
    /globalField/setValue 0.2 0 0 tesla
 
 
-	|<----layer 0---------->|<----layer 1---------->|<----layer 2---------->|
-	|			|			|			|
-	==========================================================================
-	||		|	||		|	||		|	||
-     	||		|	||		|	||		|	||
- beam   ||   absorber 	|  gap	||   absorber 	|  gap	||   absorber 	|  gap	||
-======>	||		|	||		|	||		|	||
-	||		|	||		|	||		|	||
- 	==========================================================================
-	
+        |<----layer 0---------->|<----layer 1---------->|<----layer 2---------->|
+        |                       |                       |                       |
+        ==========================================================================
+        ||              |       ||              |       ||              |       ||
+        ||              |       ||              |       ||              |       ||
+ beam   ||   absorber   |  gap  ||   absorber   |  gap  ||   absorber   |  gap  ||
+======> ||              |       ||              |       ||              |       ||
+        ||              |       ||              |       ||              |       ||
+        ==========================================================================
+
    A more general version of this geometry can be found in:
    examples/extended/electromagnetic/TestEm3   
    where all the geometry parameters, the absorber and gap materials 
    can be modified interactively via the commands defined in the DetectorMessenger
    class.
- 	    
+
  2- PHYSICS LIST
  
    The particle's type and the physic processes which will be available
@@ -65,7 +65,7 @@ $Id: README 78001 2013-12-02 08:24:53Z gcosmo $
    In addition the build-in interactive command:
                /process/(in)activate processName
    allows to activate/inactivate the processes one by one.
- 	 
+  
  3- ACTION INITALIZATION
 
    A newly introduced class, B4[a,b,c,d]ActionInitialization, 
@@ -89,7 +89,7 @@ $Id: README 78001 2013-12-02 08:24:53Z gcosmo $
    and its energy are set in the B4PrimaryGeneratorAction class, and can
    be changed via the G4 built-in commands of the G4ParticleGun class (see
    the macros provided with this example).
- 	
+ 
  5- RUNS and EVENTS
  
    A run is a set of events. 

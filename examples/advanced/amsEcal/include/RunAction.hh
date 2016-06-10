@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh 68740 2013-04-05 09:56:39Z gcosmo $
+/// \file electromagnetic/TestEm5/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
+// $Id: RunAction.hh 83418 2014-08-21 15:30:47Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,62 +34,36 @@
 #ifndef RunAction_h
 #define RunAction_h 1
 
-#include "DetectorConstruction.hh"
-
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 
-#include <vector>
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+class Run;
+class DetectorConstruction;
 class PrimaryGeneratorAction;
 class HistoManager;
-
-class G4Run;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunAction : public G4UserRunAction
 {
+
 public:
 
-  RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
-  ~RunAction();
+    RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim=0);
+   ~RunAction();
+   
+    virtual G4Run* GenerateRun();    
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void   EndOfRunAction(const G4Run*);
 
-  void BeginOfRunAction(const G4Run*);
-  void   EndOfRunAction(const G4Run*);
 
-  void fillPerEvent_1(G4int,G4double,G4double);
-  void fillPerEvent_2(G4int,G4double,G4double);  
-  void fillPerEvent_3(G4double,G4double,G4double);
-  void fillDetailedLeakage(G4int,G4double);
-  void fillNbRadLen(G4double);
-      
-  void SetWriteFile(G4bool val)    {writeFile = val;};
-  void CreateFilePixels();
-      
-private:
-  
-  DetectorConstruction*   detector;
-  PrimaryGeneratorAction* primary;    
-  HistoManager*           histoManager;
-  
-  std::vector<G4double> visibleEnergy, visibleEnergy2;
-  std::vector<G4double>   totalEnergy,   totalEnergy2;
-  
-  std::vector<G4double> layerEvis, layerEvis2;
-  std::vector<G4double> layerEtot, layerEtot2;
-  
-  G4int    nbEvents;  
-  G4double calorEvis, calorEvis2;
-  G4double calorEtot, calorEtot2;
-  G4double Eleak,     Eleak2;
-  G4double EdLeak[3];
-  G4double nbRadLen, nbRadLen2;
-      
-  G4bool   writeFile;
-    
+  private:
+    DetectorConstruction*   fDetector;
+    PrimaryGeneratorAction* fPrimary;
+    Run*                    fRun;        
+    HistoManager*           fHistoManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomRun.hh 74809 2013-10-22 09:49:26Z gcosmo $
+// $Id: DicomRun.hh 83429 2014-08-21 15:47:32Z gcosmo $
 //
 /// \file medical/DICOM/include/DicomRun.hh
 /// \brief Definition of the DicomRun class
@@ -90,8 +90,6 @@ private:
 template <typename T>
 inline void copy(std::vector<T>& main, const std::vector<T>& data)
 {
-    //std::cout << "Main size :: " << main.size() << G4endl;
-    //std::cout << "Data size :: " << data.size() << G4endl;
     for(unsigned i = main.size(); i < data.size(); ++i) {
         main.push_back(data.at(i));
     }

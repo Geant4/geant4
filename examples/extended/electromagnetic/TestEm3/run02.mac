@@ -1,4 +1,4 @@
-# $Id: run02.mac 66241 2012-12-13 18:34:42Z gunter $
+# $Id: run02.mac 82038 2014-06-10 07:58:08Z gcosmo $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -15,7 +15,7 @@
 /testem/det/setAbsor 1 Tungsten 2 mm
 /testem/det/setAbsor 2 Silicon 0.3 mm
 #
-/testem/phys/setCuts 100 um
+/run/setCut 100 um
 #
 /run/initialize
 #
@@ -27,6 +27,6 @@
 /analysis/h1/set 1 100 900. 1000. MeV
 /analysis/h1/set 2 100   0.   50. MeV
 #
-/testem/event/printModulo 50
+/run/printProgress 50
 #
 /run/beamOn 200

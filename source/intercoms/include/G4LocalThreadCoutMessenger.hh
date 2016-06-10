@@ -60,6 +60,7 @@ class G4LocalThreadCoutMessenger: public G4UImessenger
     G4UIcmdWithABool*      bufferCoutCmd;
     G4UIcmdWithAString*    prefixCmd;
     G4UIcmdWithAnInteger*  ignoreCmd;
+    G4UIcmdWithABool*      ignoreInitCmd;
 };
 
 #endif

@@ -805,8 +805,11 @@ INPUT                  = Doxymain.h \
                          ../extended/eventgenerator/pythia/.README \
                          ../extended/eventgenerator/pythia/decayer6 \
                          ../extended/exoticphysics/.README \
+                         ../extended/exoticphysics/channeling \
                          ../extended/exoticphysics/monopole/.README \
                          ../extended/exoticphysics/phonon \
+                         ../extended/exoticphysics/channeling \
+                         ../extended/exoticphysics/ucn \
                          ../extended/field \
                          ../extended/g3tog4 \
                          ../extended/geometry/.README \
@@ -818,6 +821,8 @@ INPUT                  = Doxymain.h \
                          ../extended/hadronic/Hadr03/.README \
                          ../extended/hadronic/Hadr04/.README \
                          ../extended/hadronic/Hadr05/.README \
+                         ../extended/hadronic/Hadr06/.README \
+                         ../extended/hadronic/FissionFragment \
                          ../extended/medical/.README \
                          ../extended/medical/DICOM \
                          ../extended/medical/electronScattering/.README \
@@ -825,6 +830,14 @@ INPUT                  = Doxymain.h \
                          ../extended/medical/fanoCavity/.README \
                          ../extended/medical/fanoCavity2/.README \
                          ../extended/medical/GammaTherapy/.README \
+                         ../extended/medical/dna/.README \
+                         ../extended/medical/dna/chem1/.README \
+                         ../extended/medical/dna/chem2/.README \
+                         ../extended/medical/dna/chem3/.README \
+                         ../extended/medical/dna/dnaphysics/.README \
+                         ../extended/medical/dna/microdosimetry/.README \
+                         ../extended/medical/dna/pdb4dna/.README \
+                         ../extended/medical/dna/wholeNuclearDNA/.README \
                          ../extended/optical \
                          ../extended/parallel/.README \
                          ../extended/parallel/MPI/.README \
@@ -832,7 +845,9 @@ INPUT                  = Doxymain.h \
                          ../extended/parallel/MPI/examples/exMPI02/.README \
                          ../extended/parallel/TBB \
                          ../extended/parallel/TopC/ParN02/.README \
+                         ../extended/parallel/TopC/ParN02/.README.N02 \
                          ../extended/parallel/TopC/ParN04/.README \
+                         ../extended/parallel/TopC/ParN04/.README.N04 \
                          ../extended/parameterisations \
                          ../extended/persistency \
                          ../extended/polarisation/.README \

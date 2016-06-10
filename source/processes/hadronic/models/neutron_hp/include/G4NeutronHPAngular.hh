@@ -38,8 +38,17 @@
 #include "G4NeutronHPLegendreStore.hh"
 #include "G4NeutronHPPartial.hh"
 
+#include "G4Cache.hh"
+
 class G4NeutronHPAngular
 {
+
+   struct toBeCached {
+      const G4ReactionProduct* theNeutron;
+      const G4ReactionProduct* theTarget;
+      toBeCached() : theNeutron(NULL),theTarget(NULL) {};
+   };
+
     public:
     
   G4NeutronHPAngular()
@@ -51,6 +60,8 @@ class G4NeutronHPAngular
 // TKDB
       theCoefficients = 0;
       theProbArray = 0;
+      toBeCached val;
+      fCache.Put( val );
   } 
 
   ~G4NeutronHPAngular()
@@ -64,9 +75,9 @@ class G4NeutronHPAngular
   
   void SampleAndUpdate(G4ReactionProduct & aNeutron);
     
-  void SetTarget(const G4ReactionProduct & aTarget) { theTarget = aTarget; }
+  void SetTarget(const G4ReactionProduct & aTarget) { fCache.Get().theTarget = &aTarget; }
 
-  void SetNeutron(const G4ReactionProduct & aNeutron) { theNeutron = aNeutron; }
+  void SetNeutron(const G4ReactionProduct & aNeutron) { fCache.Get().theNeutron = &aNeutron; }
 
   inline G4double GetTargetMass() { return targetMass; }
 
@@ -91,8 +102,10 @@ class G4NeutronHPAngular
   
   G4double targetMass;
 
-  G4ReactionProduct theTarget;
-  G4ReactionProduct theNeutron;
+  private:
+  //G4ReactionProduct theTarget;
+  //G4ReactionProduct theNeutron;
+     G4Cache<toBeCached> fCache;
 
 };
 

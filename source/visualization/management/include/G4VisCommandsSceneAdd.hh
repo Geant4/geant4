@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.hh 73609 2013-09-02 10:10:30Z gcosmo $
+// $Id: G4VisCommandsSceneAdd.hh 85582 2014-10-31 09:07:30Z gcosmo $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -147,6 +147,25 @@ private:
     G4int fSize;
     G4double fX, fY;
     G4Text::Layout fLayout;
+  };
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSceneAddExtent: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddExtent ();
+  virtual ~G4VisCommandSceneAddExtent ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddExtent (const G4VisCommandSceneAddExtent&);
+  G4VisCommandSceneAddExtent& operator = (const G4VisCommandSceneAddExtent&);
+  struct Extent {
+    Extent(G4double xmin, G4double xmax,
+           G4double ymin, G4double ymax,
+           G4double zmin, G4double zmax);
+    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    G4VisExtent fExtent;
   };
   G4UIcommand* fpCommand;
 };

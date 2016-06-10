@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SurfaceVoxelizer.cc 78188 2013-12-04 16:32:00Z gcosmo $
+// $Id: G4SurfaceVoxelizer.cc 87449 2014-12-04 14:13:06Z gunter $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file

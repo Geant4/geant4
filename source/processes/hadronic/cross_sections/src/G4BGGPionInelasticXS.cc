@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGPionInelasticXS.cc 70848 2013-06-06 12:00:02Z gcosmo $
+// $Id: G4BGGPionInelasticXS.cc 79981 2014-03-27 15:24:11Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -206,9 +206,8 @@ void G4BGGPionInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   fGlauber->BuildPhysicsTable(*particle);
   if(particle == G4PionPlus::PionPlus()) { isPiplus = true; }
 
-  G4ParticleDefinition* part = const_cast<G4ParticleDefinition*>(particle);
   G4ThreeVector mom(0.0,0.0,1.0);
-  G4DynamicParticle dp(part, mom, fGlauberEnergy);
+  G4DynamicParticle dp(particle, mom, fGlauberEnergy);
 
   G4NistManager* nist = G4NistManager::Instance();
 

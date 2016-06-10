@@ -47,7 +47,7 @@
 
 #include "globals.hh"
 #include "rundefs.hh"
-
+#include "G4AutoLock.hh"
 //
 // This class implements the split-mechanism for shared objects.
 // Let's see how it works.
@@ -58,11 +58,11 @@
 // This creates in memory an "array", pointed by "sharedOffset" of capacity "totalspace"
 // The array contains "totalobj" (<=totalspace) instances (i.e. the array has
 // un-initialized spaces)
-// Note that also the TLS variables "offset" and "slavetotalspace" have also the same stuff
+// Note that also the TLS variables "offset" and "workertotalspace" have also the same stuff
 // When a worker thread is started we can call g4vuplsplitter.NewSubInstances()
 // This will simply allocate enough space in the TLS space "offset" and call
 // T::initialize() onto the new created methods.
-// Alternatively one can call, when the worker thread start, g4vuplsplitter.SlaveCopySubInstanceArray()
+// Alternatively one can call, when the worker thread start, g4vuplsplitter.workerCopySubInstanceArray()
 // That will copy the content of master thread "array" into the TLS one
 
 // To see this stuff in action see:
@@ -73,7 +73,9 @@ class G4VUPLSplitter
 {
   public:
 
-    G4VUPLSplitter() : totalobj(0),totalspace(0),sharedOffset(0) {}
+    G4VUPLSplitter() : totalobj(0),totalspace(0),sharedOffset(0) {
+    	G4MUTEXINIT(mutex);
+    }
 
     G4int CreateSubInstance()
       // Invoked by the master thread to create a new subinstance
@@ -81,13 +83,18 @@ class G4VUPLSplitter
       // This is called by constructor of shared classes, thus only master thread
       // calls this
     {
+    	G4AutoLock l(&mutex);
         //One more instance
         totalobj++;
         //If the number of objects is larger than the available spaces,
         //a re-allocation is needed
-        if (totalobj > slavetotalspace)  { NewSubInstances(); }
+        if (totalobj > workertotalspace)  {
+        	l.unlock();
+        	NewSubInstances();
+        	l.lock();
+        }
         //Since this is called by Master thread, we can remember this
-        totalspace = slavetotalspace;
+        totalspace = workertotalspace;
         sharedOffset = offset;
         return (totalobj - 1);
     }
@@ -97,13 +104,14 @@ class G4VUPLSplitter
       // initialize each new subinstance using a particular method defined
       // by the subclass.
     {
-        if (slavetotalspace  >= totalobj)  { return; }
+    	G4AutoLock l(&mutex);
+    	if (workertotalspace  >= totalobj)  { return; }
         //Remember current large size
-        G4int originaltotalspace = slavetotalspace;
+        G4int originaltotalspace = workertotalspace;
         //Increase its size by some value (purely arbitrary)
-        slavetotalspace = totalobj + 512;
+        workertotalspace = totalobj + 512;
         //Now re-allocate new space
-        offset = (T *) realloc(offset, slavetotalspace * sizeof(T));
+        offset = (T *) realloc(offset, workertotalspace * sizeof(T));
         if (offset == 0)
         {
             G4Exception("G4VUPLSplitter::NewSubInstances()",
@@ -111,13 +119,13 @@ class G4VUPLSplitter
             return;
         }
         //The newly created objects need to be initialized
-        for (G4int i = originaltotalspace; i < slavetotalspace; i++)
+        for (G4int i = originaltotalspace; i < workertotalspace; i++)
         {
             offset[i].initialize();
         }
     }
 
-    void FreeSlave()
+    void FreeWorker()
       // Invoked by all threads to free the subinstance array.
     {
       if (!offset)  { return; }
@@ -125,7 +133,44 @@ class G4VUPLSplitter
       offset = 0;
     }
 
-    void SlaveCopySubInstanceArray()
+    T* GetOffset() { return offset; }
+    
+    void UseWorkArea( T* newOffset )
+    {
+        // Use recycled work area - which was created previously
+        if( offset && offset!=newOffset )
+        {
+            if( newOffset != offset )
+            {
+                G4Exception("G4VUPLSplitter::UseWorkspace()",
+                            "TwoWorkspaces", FatalException,
+                            "Thread already has workspace - cannot use another.");
+            }
+            else
+            {
+                G4Exception("G4VUPLSplitter::UseWorkspace()",
+                            "TwoWorkspaces", JustWarning,
+                            "Thread already has a workspace - trying to set the same again.");
+            }
+        }
+        offset= newOffset;
+        // totalobj= numObjects;
+        // totalspace= numSpace;
+    }
+    
+    T* FreeWorkArea() // G4int* numObjects, G4int* numSpace)
+    {
+        // Detach this thread from this Location
+        // The object which calls this method is responsible for it.
+        //
+        T* offsetRet= offset;
+        
+        offset= 0;
+        
+        return offsetRet;
+    }
+    
+    void WorkerCopySubInstanceArray()
     //Invoked by each worker thread to copy all subinstances array from
     //the master thread
     {
@@ -133,10 +178,11 @@ class G4VUPLSplitter
         //Since this is called by worker threds, totalspace is some valid number > 0
         //Remember totalspace is the number of availabel slots from master.
         //We are sure that it has valid data
+    	G4AutoLock l(&mutex);
         offset = (T *)realloc(offset,totalspace * sizeof(T));
         if (offset == 0)
         {
-            G4Exception("G4VUPLSplitter::SlaveCopySubInstanceArray()",
+            G4Exception("G4VUPLSplitter::WorkerCopySubInstanceArray()",
                         "OutOfMemory", FatalException, "Cannot malloc space!");
             return;
         }
@@ -145,14 +191,14 @@ class G4VUPLSplitter
     }
   public:
 
-    G4RUN_DLL static G4ThreadLocal G4int slavetotalspace; //Per-thread available number of slots
-    G4RUN_DLL static G4ThreadLocal T* offset; //Pointer to first instance of an array
+    G4RUN_DLL G4ThreadLocalStatic G4int workertotalspace; //Per-thread available number of slots
+    G4RUN_DLL G4ThreadLocalStatic T* offset; //Pointer to first instance of an array
 
   private:
-
     G4int totalobj; //Total number of instances from master thread
     G4int totalspace; // Available number of "slots"
     T* sharedOffset;
+    G4Mutex mutex;
 };
 
 #endif

@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -47,7 +48,18 @@
 #include "G4INCLIChannel.hh"
 #include "G4INCLParticle.hh"
 #include "G4INCLFinalState.hh"
+#include "G4INCLUnorderedVector.hh"
+#include "G4INCLAllocationPool.hh"
 #include <string>
+
+#if !defined(NDEBUG) && !defined(INCLXX_IN_GEANT4_MODE)
+// Force instantiation of all the std::vector<IAvatar*> methods for debugging
+// purposes
+namespace G4INCL {
+  class IAvatar;
+}
+template class std::vector<G4INCL::IAvatar*>;
+#endif
 
 namespace G4INCL {
 
@@ -64,9 +76,10 @@ namespace G4INCL {
     virtual ~IAvatar();
 
     virtual G4INCL::IChannel* getChannel() = 0;
-    G4INCL::FinalState *getFinalState();
+    FinalState *getFinalState();
+    void fillFinalState(FinalState *fs);
     virtual void preInteraction() = 0;
-    virtual FinalState *postInteraction(FinalState *) = 0;
+    virtual void postInteraction(FinalState *) = 0;
 
     G4double getTime() const { return theTime; };
 
@@ -87,11 +100,14 @@ namespace G4INCL {
     static G4ThreadLocal long nextID;
   protected:
     G4double theTime;
+
+    INCL_DECLARE_ALLOCATION_POOL(IAvatar);
   };
 
   typedef UnorderedVector<IAvatar*> IAvatarList;
   typedef UnorderedVector<IAvatar*>::const_iterator IAvatarIter;
   typedef UnorderedVector<IAvatar*>::iterator IAvatarMutableIter;
+
 }
 
 #endif /* IAVATAR_HH_ */

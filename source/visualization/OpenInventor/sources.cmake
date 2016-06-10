@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66373 2012-12-18 09:41:34Z gcosmo $
+# $Id: sources.cmake 80852 2014-05-13 15:37:00Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -57,6 +57,7 @@ set(G4VIS_MODULE_OPENINVENTOR_HEADERS
   G4OpenInventorSceneHandler.hh
   G4OpenInventorTransform3D.hh
   G4OpenInventorViewer.hh
+  G4VisFeaturesOfOpenInventor.hh
   Geant4_SoPolyhedron.h
   SoG4LineSet.h
   SoG4MarkerSet.h
@@ -68,6 +69,7 @@ set(G4VIS_MODULE_OPENINVENTOR_SOURCES
   G4OpenInventorSceneHandler.cc
   G4OpenInventorTransform3D.cc
   G4OpenInventorViewer.cc
+  G4VisFeaturesOfOpenInventor.cc
   SbPainter.cc
   SbPainterPS.cc
   SoAlternateRepAction.cc
@@ -94,6 +96,7 @@ if(UNIX)
   list(APPEND G4VIS_MODULE_OPENINVENTOR_HEADERS
     G4OpenInventorX.hh
     G4OpenInventorXt.hh
+    G4OpenInventorXtExaminerViewerMessenger.hh
     G4OpenInventorXtExaminerViewer.hh
     G4OpenInventorXtExtended.hh
     G4OpenInventorXtExtendedViewer.hh
@@ -108,6 +111,7 @@ if(UNIX)
   list(APPEND G4VIS_MODULE_OPENINVENTOR_SOURCES
     G4OpenInventorXt.cc
     G4OpenInventorXtExaminerViewer.cc
+    G4OpenInventorXtExaminerViewerMessenger.cc
     G4OpenInventorXtExtended.cc
     G4OpenInventorXtExtendedViewer.cc
     G4OpenInventorXtViewer.cc

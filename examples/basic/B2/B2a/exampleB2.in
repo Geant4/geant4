@@ -1,4 +1,8 @@
+# Macro file for example B2 test
+
 /tracking/verbose 1
+
+/run/initialize
 
 # e+ 200MeV
 /gun/energy 200 MeV

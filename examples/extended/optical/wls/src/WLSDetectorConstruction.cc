@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSDetectorConstruction.cc 78066 2013-12-03 11:08:36Z gcosmo $
+// $Id: WLSDetectorConstruction.cc 84718 2014-10-20 07:40:45Z gcosmo $
 //
 /// \file optical/wls/src/WLSDetectorConstruction.cc
 /// \brief Implementation of the WLSDetectorConstruction class
@@ -179,12 +179,16 @@ G4VPhysicalVolume* WLSDetectorConstruction::ConstructDetector()
   G4MaterialPropertiesTable* TiO2SurfaceProperty =
                                              new G4MaterialPropertiesTable();
 
-  G4double p_TiO2[2] = {2.00*eV, 3.47*eV};
-  G4double refl_TiO2[2] = {fExtrusionReflectivity,fExtrusionReflectivity};
-  G4double effi_TiO2[2] = {0, 0};
+  G4double p_TiO2[] = {2.00*eV, 3.47*eV};
+  const G4int nbins = sizeof(p_TiO2)/sizeof(G4double);
 
-  TiO2SurfaceProperty -> AddProperty("REFLECTIVITY",p_TiO2,refl_TiO2,2);
-  TiO2SurfaceProperty -> AddProperty("EFFICIENCY",p_TiO2,effi_TiO2,2);
+  G4double refl_TiO2[] = {fExtrusionReflectivity,fExtrusionReflectivity};
+  assert(sizeof(refl_TiO2) == sizeof(p_TiO2));
+  G4double effi_TiO2[] = {0, 0};
+  assert(sizeof(effi_TiO2) == sizeof(p_TiO2));
+
+  TiO2SurfaceProperty -> AddProperty("REFLECTIVITY",p_TiO2,refl_TiO2,nbins);
+  TiO2SurfaceProperty -> AddProperty("EFFICIENCY",p_TiO2,effi_TiO2,nbins);
 
   TiO2Surface -> SetMaterialPropertiesTable(TiO2SurfaceProperty);
 
@@ -546,12 +550,17 @@ void WLSDetectorConstruction::ConstructFiber()
      G4MaterialPropertiesTable* mirrorSurfaceProperty =
                                               new G4MaterialPropertiesTable();
 
-     G4double p_mirror[2] = {2.00*eV, 3.47*eV};
-     G4double refl_mirror[2] = {fMirrorReflectivity,fMirrorReflectivity};
-     G4double effi_mirror[2] = {0, 0};
+     G4double p_mirror[] = {2.00*eV, 3.47*eV};
+     const G4int nbins = sizeof(p_mirror)/sizeof(G4double);
+     G4double refl_mirror[] = {fMirrorReflectivity,fMirrorReflectivity};
+     assert(sizeof(refl_mirror) == sizeof(p_mirror));
+     G4double effi_mirror[] = {0, 0};
+     assert(sizeof(effi_mirror) == sizeof(effi_mirror));
 
-     mirrorSurfaceProperty->AddProperty("REFLECTIVITY",p_mirror,refl_mirror,2);
-     mirrorSurfaceProperty->AddProperty("EFFICIENCY",p_mirror,effi_mirror,2);
+     mirrorSurfaceProperty->
+                       AddProperty("REFLECTIVITY",p_mirror,refl_mirror,nbins);
+     mirrorSurfaceProperty->
+                       AddProperty("EFFICIENCY",p_mirror,effi_mirror,nbins);
 
      mirrorSurface -> SetMaterialPropertiesTable(mirrorSurfaceProperty);
 
@@ -568,7 +577,7 @@ void WLSDetectorConstruction::ConstructFiber()
 
   //--------------------------------------------------
   // Coupling at the read-out end
-  //--------------------------------------------------  
+  //--------------------------------------------------
 
   // Clear Fiber (Coupling Layer)
   G4VSolid* solidCouple = new G4Box("Couple",fCoupleRX,fCoupleRY,fCoupleZ);
@@ -587,9 +596,9 @@ void WLSDetectorConstruction::ConstructFiber()
 
   //--------------------------------------------------
   // A logical layer in front of PhotonDet
-  //--------------------------------------------------  
+  //--------------------------------------------------
 
-  // Purpose: Preventing direct dielectric to metal contact  
+  // Purpose: Preventing direct dielectric to metal contact
 
   // Check for valid placement of PhotonDet
   if (fMPPCTheta > std::atan(fMPPCDist / fMPPCHalfL)) {
@@ -597,20 +606,20 @@ void WLSDetectorConstruction::ConstructFiber()
      fMPPCTheta = 0;
      fMPPCOriginX  = std::sin(fMPPCTheta) * (fMPPCDist + fClrfiberZ);
      fMPPCOriginZ  = -fCoupleZ+std::cos(fMPPCTheta)*(fMPPCDist+fClrfiberZ);
-     G4cerr << "Invalid alignment.  Alignment Reset to 0" << G4endl;     
+     G4cerr << "Invalid alignment.  Alignment Reset to 0" << G4endl;
   }
  
   // Clear Fiber (Coupling Layer)
   G4VSolid* solidClrfiber;
  
   if ( fMPPCShape == "Square" )
-    solidClrfiber = 
+    solidClrfiber =
        new G4Box("ClearFiber",fClrfiberHalfL,fClrfiberHalfL,fClrfiberZ);
   else
     solidClrfiber =
        new G4Tubs("ClearFiber",0.,fClrfiberHalfL,fClrfiberZ,0.0*rad,twopi*rad);
 
-  G4LogicalVolume*   logicClrfiber = 
+  G4LogicalVolume*   logicClrfiber =
                                    new G4LogicalVolume(solidClrfiber,
                                                        FindMaterial("G4_AIR"),
                                                        "ClearFiber");
@@ -621,7 +630,7 @@ void WLSDetectorConstruction::ConstructFiber()
                     "ClearFiber",
                     logicCouple,
                     false,
-                    0); 
+                    0);
 
   //--------------------------------------------------
   // PhotonDet (Sensitive Detector)
@@ -659,19 +668,20 @@ void WLSDetectorConstruction::ConstructFiber()
   G4MaterialPropertiesTable* photonDetSurfaceProperty =
                                                new G4MaterialPropertiesTable();
 
-  G4double p_mppc[2] = {2.00*eV, 3.47*eV};
-  G4double refl_mppc[2] = {fMPPCReflectivity,fMPPCReflectivity};
-  G4double effi_mppc[2] = {1, 1};
+  G4double p_mppc[] = {2.00*eV, 3.47*eV};
+  const G4int nbins = sizeof(p_mppc)/sizeof(G4double);
+  G4double refl_mppc[] = {fMPPCReflectivity,fMPPCReflectivity};
+  assert(sizeof(refl_mppc) == sizeof(p_mppc));
+  G4double effi_mppc[] = {1, 1};
+  assert(sizeof(effi_mppc) == sizeof(p_mppc));
  
-  photonDetSurfaceProperty -> AddProperty("REFLECTIVITY",p_mppc,refl_mppc,2);
-  photonDetSurfaceProperty -> AddProperty("EFFICIENCY",p_mppc,effi_mppc,2);
+  photonDetSurfaceProperty->AddProperty("REFLECTIVITY",p_mppc,refl_mppc,nbins);
+  photonDetSurfaceProperty->AddProperty("EFFICIENCY",p_mppc,effi_mppc,nbins);
 
-  photonDetSurface -> SetMaterialPropertiesTable(photonDetSurfaceProperty);
+  photonDetSurface->SetMaterialPropertiesTable(photonDetSurfaceProperty);
 
- 
-  new G4LogicalSkinSurface("PhotonDetSurface",logicPhotonDet,photonDetSurface); 
+  new G4LogicalSkinSurface("PhotonDetSurface",logicPhotonDet,photonDetSurface);
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -683,8 +693,8 @@ void WLSDetectorConstruction::ConstructSDandField()
      fmppcSD.Put(mppcSD);
   }
   SetSensitiveDetector("PhotonDet_LV", fmppcSD.Get(), true);
-  
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSDetectorConstruction::UpdateGeometryParameters()
@@ -711,15 +721,15 @@ void WLSDetectorConstruction::UpdateGeometryParameters()
  
   fMirrorRmax = fClad2RY;
  
-  fCoupleOrigin = fWLSfiberOrigin + fWLSfiberZ + fCoupleZ; 
-  fMirrorOrigin = fWLSfiberOrigin - fWLSfiberZ - fMirrorZ; 
+  fCoupleOrigin = fWLSfiberOrigin + fWLSfiberZ + fCoupleZ;
+  fMirrorOrigin = fWLSfiberOrigin - fWLSfiberZ - fMirrorZ;
   fMPPCOriginX  = std::sin(fMPPCTheta) * (fMPPCDist + fClrfiberZ);
   fMPPCOriginZ  = -fCoupleZ + std::cos(fMPPCTheta) * (fMPPCDist + fClrfiberZ);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4RotationMatrix 
+G4RotationMatrix
             WLSDetectorConstruction::StringToRotationMatrix(G4String rotation)
 {
   // We apply successive rotations OF THE OBJECT around the FIXED
@@ -739,8 +749,8 @@ G4RotationMatrix
 
         angle = strtod(tmpstring.c_str(),&p) * deg;
  
-        if (!p || (*p != (char)',' && *p != (char)'\0')) { 
-           G4cerr << "Invalid rotation specification: " << 
+        if (!p || (*p != (char)',' && *p != (char)'\0')) {
+           G4cerr << "Invalid rotation specification: " <<
                                                   rotation.c_str() << G4endl;
            return rot;
         }
@@ -929,7 +939,6 @@ void WLSDetectorConstruction::SetXYRatio(G4double r)
   fXYRatio = r;
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

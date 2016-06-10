@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -40,6 +41,7 @@
 #include "G4INCLParticle.hh"
 #include "G4INCLNuclearDensityFactory.hh"
 #include "G4INCLParticleSampler.hh"
+#include "G4INCLAllocationPool.hh"
 
 namespace G4INCL {
 
@@ -170,7 +172,6 @@ namespace G4INCL {
      * energy, size, etc.
      */
     void addParticle(Particle * const p) {
-// assert(p->isNucleon());
       particles.push_back(p);
       theEnergy += p->getEnergy();
       thePotentialEnergy += p->getPotentialEnergy();
@@ -181,10 +182,30 @@ namespace G4INCL {
       nCollisions += p->getNumberOfCollisions();
     }
 
+    /// \brief Set total cluster mass, energy, size, etc. from the particles
+    void updateClusterParameters() {
+      theEnergy = 0.;
+      thePotentialEnergy = 0.;
+      theMomentum = ThreeVector();
+      thePosition = ThreeVector();
+      theA = 0;
+      theZ = 0;
+      nCollisions = 0;
+      for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
+        theEnergy += (*p)->getEnergy();
+        thePotentialEnergy += (*p)->getPotentialEnergy();
+        theMomentum += (*p)->getMomentum();
+        thePosition += (*p)->getPosition();
+        theA += (*p)->getA();
+        theZ += (*p)->getZ();
+        nCollisions += (*p)->getNumberOfCollisions();
+      }
+    }
+
     /// \brief Add a list of particles to the cluster
     void addParticles(ParticleList const &pL) {
-      for(ParticleIter p=pL.begin(), e=pL.end(); p!=e; ++p)
-        addParticle(*p);
+      particles = pL;
+      updateClusterParameters();
     }
 
     /// \brief Returns the list of particles that make up the cluster
@@ -194,22 +215,22 @@ namespace G4INCL {
       std::stringstream ss;
       ss << "Cluster (ID = " << ID << ") type = ";
       ss << ParticleTable::getName(theType);
-      ss << std::endl
-        << "   A = " << theA << std::endl
-        << "   Z = " << theZ << std::endl
-        << "   mass = " << getMass() << std::endl
-        << "   energy = " << theEnergy << std::endl
+      ss << '\n'
+        << "   A = " << theA << '\n'
+        << "   Z = " << theZ << '\n'
+        << "   mass = " << getMass() << '\n'
+        << "   energy = " << theEnergy << '\n'
         << "   momentum = "
         << theMomentum.print()
-        << std::endl
+        << '\n'
         << "   position = "
         << thePosition.print()
-        << std::endl
+        << '\n'
         << "Contains the following particles:"
-        << std::endl;
+        << '\n';
       for(ParticleIter i=particles.begin(), e=particles.end(); i!=e; ++i)
         ss << (*i)->print();
-      ss << std::endl;
+      ss << '\n';
       return ss.str();
     }
 
@@ -265,7 +286,7 @@ namespace G4INCL {
       theMomentum.setZ(0.0);
       theEnergy = getMass();
 
-      INCL_DEBUG("Cluster boosted to internal CM:" << std::endl << print());
+      INCL_DEBUG("Cluster boosted to internal CM:" << '\n' << print());
 
     }
 
@@ -277,7 +298,7 @@ namespace G4INCL {
     void putParticlesOffShell() {
       // Compute the dynamical potential
       const G4double theDynamicalPotential = computeDynamicalPotential();
-      INCL_DEBUG("The dynamical potential is " << theDynamicalPotential << " MeV" << std::endl);
+      INCL_DEBUG("The dynamical potential is " << theDynamicalPotential << " MeV" << '\n');
 
       for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
         const G4double energy = (*p)->getEnergy() - theDynamicalPotential;
@@ -287,7 +308,7 @@ namespace G4INCL {
         (*p)->setEnergy(energy);
         (*p)->setMass(std::sqrt(energy*energy - momentum.mag2()));
       }
-      INCL_DEBUG("Cluster components are now off shell:" << std::endl
+      INCL_DEBUG("Cluster components are now off shell:" << '\n'
             << print());
     }
 
@@ -323,7 +344,7 @@ namespace G4INCL {
 
       INCL_DEBUG("Cluster was boosted with (bx,by,bz)=("
           << aBoostVector.getX() << ", " << aBoostVector.getY() << ", " << aBoostVector.getZ() << "):"
-          << std::endl << print());
+          << '\n' << print());
 
     }
 
@@ -347,19 +368,23 @@ namespace G4INCL {
       }
     }
 
-    /** \brief Rotate position and momentum of all the particles
+    /** \brief Rotate position of all the particles
      *
-     * This includes the cluster components. Overloads Particle::rotate().
+     * This includes the cluster components. Overloads Particle::rotateMomentum().
      *
      * \param angle the rotation angle
      * \param axis a unit vector representing the rotation axis
      */
-    virtual void rotate(const G4double angle, const ThreeVector &axis) {
-      Particle::rotate(angle, axis);
-      for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
-        (*p)->rotate(angle, axis);
-      }
-    }
+    virtual void rotatePosition(const G4double angle, const ThreeVector &axis);
+
+    /** \brief Rotate momentum of all the particles
+     *
+     * This includes the cluster components. Overloads Particle::rotateMomentum().
+     *
+     * \param angle the rotation angle
+     * \param axis a unit vector representing the rotation axis
+     */
+    virtual void rotateMomentum(const G4double angle, const ThreeVector &axis);
 
     /// \brief Make all the components projectile spectators, too
     virtual void makeProjectileSpectator() {
@@ -420,6 +445,7 @@ namespace G4INCL {
     ThreeVector theSpin;
     ParticleSampler *theParticleSampler;
 
+    INCL_DECLARE_ALLOCATION_POOL(Cluster);
   };
 
 }

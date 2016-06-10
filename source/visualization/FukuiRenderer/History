@@ -1,4 +1,4 @@
-$Id: History 77479 2013-11-25 10:01:22Z gcosmo $
+$Id: History 80852 2014-05-13 15:37:00Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,18 @@ committal in the CVS repository !
 
 History file for visualization/FukuiRenderer sub-category
 ---------------------------------------------------------
+
+13th May 2014  John Allison  (DAWN-V10-00-02)
+- Coworks: visman-V10-00-08, opengl-V10-00-05 and openinventor-V10-00-01.
+- Moved G4VisFeaturesOfDAWNFILE and G4VisFeaturesOfFukuiRenderer from
+  management sub-category.
+
+14th March 2014  Laurent Garnier  (DAWN-V10-00-01)
+- G4FRClientServer.cc: Remove MAX_BINDING_TRIAL and BINDING_TRIAL_INTERVAL due to
+  compilation warnings on clang (mac os 10.9)
+
+9th December 2013  John Allison  (DAWN-V10-00-00)
+- G4DAWNFILE.cc: Declared as G4VGraphicsSystem::fileWriter.
 
 15th November 2013  John Allison (DAWN-V09-06-06)
 - Some changes as suggested by PVS.

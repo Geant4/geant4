@@ -474,9 +474,9 @@ G4ComponentGGNuclNuclXsc::GetHadronNucleonXsc(const G4DynamicParticle* aParticle
 //  At = number of nucleons,  Zt = number of protons 
 
 G4double 
-G4ComponentGGNuclNuclXsc::GetHadronNucleonXscPDG(G4ParticleDefinition* pParticle, 
+G4ComponentGGNuclNuclXsc::GetHadronNucleonXscPDG(const G4ParticleDefinition* pParticle, 
                                                  G4double sMand, 
-                                                 G4ParticleDefinition* tParticle)
+                                                 const G4ParticleDefinition* tParticle)
 {
   G4double xsection = 0.;
   // G4bool pORn = (tParticle == theProton || nucleon == theNeutron  );  
@@ -531,9 +531,9 @@ G4ComponentGGNuclNuclXsc::GetHadronNucleonXscPDG(G4ParticleDefinition* pParticle
 // projectile nucleon is pParticle with pTkin shooting target nucleon tParticle
 
 G4double 
-G4ComponentGGNuclNuclXsc::GetHadronNucleonXscNS(G4ParticleDefinition* pParticle, 
+G4ComponentGGNuclNuclXsc::GetHadronNucleonXscNS(const G4ParticleDefinition* pParticle, 
                                                  G4double pTkin, 
-                                                 G4ParticleDefinition* tParticle)
+                                                 const G4ParticleDefinition* tParticle)
 {
   G4double xsection(0);
   // G4double Delta;   DHW 19 May 2011: variable set but not used

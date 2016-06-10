@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggModel.hh 74790 2013-10-22 07:31:37Z gcosmo $
+// $Id: G4BraggModel.hh 83008 2014-07-24 14:49:52Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -157,7 +157,7 @@ private:
   const G4ParticleDefinition* particle;
   G4ParticleDefinition*       theElectron;
   G4ParticleChangeForLoss*    fParticleChange;
-  G4PSTARStopping             pstar;
+  static G4PSTARStopping*     fPSTAR;
 
   const G4Material*           currentMaterial;
 

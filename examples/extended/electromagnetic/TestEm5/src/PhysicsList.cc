@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 76464 2013-11-11 10:22:56Z gcosmo $
+// $Id: PhysicsList.cc 85031 2014-10-23 10:03:11Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,21 +35,25 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysListEmStandard.hh"
-#include "PhysListEmStandardSS.hh"
 #include "PhysListEmStandardSSM.hh"
 #include "PhysListEmStandardGS.hh"
-#include "PhysListEmStandardWVI.hh"
 
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmStandardPhysics_option4.hh"
+#include "G4EmStandardPhysicsWVI.hh"
+#include "G4EmStandardPhysicsSS.hh"
+
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
+#include "G4EmLowEPPhysics.hh"
 
 #include "G4Decay.hh"
 #include "StepMax.hh"
+
+#include "G4LossTableManager.hh"
 
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
@@ -57,46 +61,30 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
-// Bosons
-#include "G4ChargedGeantino.hh"
-#include "G4Geantino.hh"
-#include "G4Gamma.hh"
-#include "G4OpticalPhoton.hh"
+// particles
 
-// leptons
-#include "G4MuonPlus.hh"
-#include "G4MuonMinus.hh"
-#include "G4NeutrinoMu.hh"
-#include "G4AntiNeutrinoMu.hh"
-
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4NeutrinoE.hh"
-#include "G4AntiNeutrinoE.hh"
-
-// Hadrons
+#include "G4BosonConstructor.hh"
+#include "G4LeptonConstructor.hh"
 #include "G4MesonConstructor.hh"
+#include "G4BosonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
+#include "G4ShortLivedConstructor.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList(),
  fMessenger(0),fEmPhysicsList(0)
-{
+{  
   fMessenger = new PhysicsListMessenger(this); 
-   
+  SetVerboseLevel(1);
+     
   // EM physics
   fEmName = G4String("local");
   fEmPhysicsList = new PhysListEmStandard(fEmName);
-      
-  defaultCutValue = 1.*mm;
-
-  fCutForGamma     = defaultCutValue;
-  fCutForElectron  = defaultCutValue;
-  fCutForPositron  = defaultCutValue;
-
-  SetVerboseLevel(1);
+  
+  G4LossTableManager::Instance();
+  SetDefaultCutValue(1*mm);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -111,35 +99,23 @@ PhysicsList::~PhysicsList()
 
 void PhysicsList::ConstructParticle()
 {
-  // pseudo-particles
-  G4Geantino::GeantinoDefinition();
-  G4ChargedGeantino::ChargedGeantinoDefinition();
-  
-  // gamma
-  G4Gamma::GammaDefinition();
-  
-  // leptons
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-  G4MuonPlus::MuonPlusDefinition();
-  G4MuonMinus::MuonMinusDefinition();
+    G4BosonConstructor  pBosonConstructor;
+    pBosonConstructor.ConstructParticle();
 
-  G4NeutrinoE::NeutrinoEDefinition();
-  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
-  G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();  
+    G4LeptonConstructor pLeptonConstructor;
+    pLeptonConstructor.ConstructParticle();
 
-  // mesons
-  G4MesonConstructor mConstructor;
-  mConstructor.ConstructParticle();
+    G4MesonConstructor pMesonConstructor;
+    pMesonConstructor.ConstructParticle();
 
-  // barions
-  G4BaryonConstructor bConstructor;
-  bConstructor.ConstructParticle();
+    G4BaryonConstructor pBaryonConstructor;
+    pBaryonConstructor.ConstructParticle();
 
-  // ions
-  G4IonConstructor iConstructor;
-  iConstructor.ConstructParticle();
+    G4IonConstructor pIonConstructor;
+    pIonConstructor.ConstructParticle();
+
+    G4ShortLivedConstructor pShortLivedConstructor;
+    pShortLivedConstructor.ConstructParticle();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -242,34 +218,39 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option4();
         
-  } else if (name == "standardSS") {
+  } else if (name == "emstandardSS") {
 
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new PhysListEmStandardSS(name);
+    fEmPhysicsList = new G4EmStandardPhysicsSS();
 
   } else if (name == "standardSSM") {
 
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new PhysListEmStandardSSM(name);
+    fEmPhysicsList = new PhysListEmStandardSSM();
 
-  } else if (name == "standardWVI") {
+  } else if (name == "emstandardWVI") {
 
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new PhysListEmStandardWVI(name);
+    fEmPhysicsList = new G4EmStandardPhysicsWVI();
 
   } else if (name == "standardGS") {
 
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new PhysListEmStandardGS(name);
+    fEmPhysicsList = new PhysListEmStandardGS();
 
   } else if (name == "empenelope"){
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmPenelopePhysics();
+
+  } else if (name == "emlowenergy"){
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmLowEPPhysics();
 
   } else if (name == "emlivermore"){
     fEmName = name;
@@ -282,52 +263,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
            << " is not defined"
            << G4endl;
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCuts()
-{
-  if (verboseLevel >0) {
-    G4cout << "PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }
-  
-  // fixe lower limit for cut
-  ///G4ProductionCutsTable::GetProductionCutsTable()
-  ///                                      ->SetEnergyRange(10*eV, 1*GeV);
-  
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma
-  SetCutValue(fCutForGamma, "gamma");
-  SetCutValue(fCutForElectron, "e-");
-  SetCutValue(fCutForPositron, "e+");
-
-  if (verboseLevel>0) DumpCutValuesTable();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForGamma(G4double cut)
-{
-  fCutForGamma = cut;
-  SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForElectron(G4double cut)
-{
-  fCutForElectron = cut;
-  SetParticleCuts(fCutForElectron, G4Electron::Electron());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForPositron(G4double cut)
-{
-  fCutForPositron = cut;
-  SetParticleCuts(fCutForPositron, G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

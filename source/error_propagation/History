@@ -1,4 +1,4 @@
-$Id: History 69836 2013-05-16 08:13:10Z gcosmo $
+$Id: History 78318 2013-12-11 15:02:40Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 December 2013 - G.Cosmo (error-propagation-V10-00-00)
+- Removed use of scattered cerr printouts; use G4Exception instead.
 
 16 May 2013 - G.Cosmo (error-propagation-V09-06-06)
 - Fixed memory leak in G4ErrorPropagator::PropagateOneStep() for track

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InteractionContent.hh 67999 2013-03-13 11:14:32Z gcosmo $
+// $Id: G4InteractionContent.hh 83684 2014-09-09 12:37:39Z gcosmo $
 //
 
 #ifndef G4InteractionContent_h
@@ -40,11 +40,11 @@
 
 #include "globals.hh"
 
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
+//#include "G4PhysicalConstants.hh"       // Uzhi 8.09.2014
+//#include "G4SystemOfUnits.hh"           // Uzhi 8.09.2014
 
 #include "G4VSplitableHadron.hh"
-#include "G4Nucleon.hh"                // Uzhi 16.07.09
+#include "G4Nucleon.hh"
 
 //#define debug_QGSM
 #ifdef debug_QGSM
@@ -67,7 +67,7 @@ class G4InteractionContent
       G4VSplitableHadron * GetProjectile() const ;
       G4VSplitableHadron * GetTarget() const;
 
-      void                 SetProjectileNucleon(G4Nucleon * aNucleon); // Uzhi Nov. 2012
+      void                 SetProjectileNucleon(G4Nucleon * aNucleon);
       G4Nucleon          * GetProjectileNucleon() const;
 
       void                 SetTargetNucleon(G4Nucleon * aNucleon);
@@ -84,10 +84,10 @@ class G4InteractionContent
 
       void SplitHadrons();
 
-      void     SetInteractionTime(G4double aValue); // Uzhi Feb23
-      G4double GetInteractionTime() const;          // Uzhi Feb23
-      void     SetStatus(G4int aValue);             // Uzhi Feb26
-      G4int    GetStatus() const;                   // Uzhi Feb26
+      void     SetInteractionTime(G4double aValue);
+      G4double GetInteractionTime() const;         
+      void     SetStatus(G4int aValue);            
+      G4int    GetStatus() const;                  
  
 #ifdef G4DEBUG
       void Dump();
@@ -136,7 +136,7 @@ inline void G4InteractionContent::SetTarget(G4VSplitableHadron *aTarget)
 	theTarget = aTarget;
 }
 
-inline void G4InteractionContent::SetProjectileNucleon(G4Nucleon * aNucleon)// Uzhi Nov. 2012
+inline void G4InteractionContent::SetProjectileNucleon(G4Nucleon * aNucleon)
 {
         theProjectileNucleon = aNucleon;
 }

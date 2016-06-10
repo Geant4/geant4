@@ -1,10 +1,11 @@
-# $Id: TestEm4.in 75839 2013-11-06 17:27:26Z gcosmo $
+# $Id: TestEm4.in 85264 2014-10-27 09:00:06Z gcosmo $
 #
 # Macro file for "TestEm4.cc"
 # 
 # (can be run in batch, without graphic)
 #
 /control/verbose  2
+/control/cout/ignoreThreadsExcept 0
 /run/verbose 2
 #
 /run/printProgress 10000

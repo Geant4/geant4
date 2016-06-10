@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: field04.cc 78002 2013-12-02 08:25:49Z gcosmo $
+// $Id: field04.cc 78551 2014-01-07 09:45:08Z gcosmo $
 //
 /// \file field/field04/field04.cc
 /// \brief Main program of the field/field04 example
@@ -94,7 +94,7 @@ int main(int argc,char** argv)
 
   G4Random::setTheSeed(myseed);
 
-  G4String physicsList = "QGSP_BERT_HP";
+  G4String physicsList = "QGSP_BERT";
 
 #ifndef WIN32
   G4int c = 0;

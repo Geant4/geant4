@@ -35,53 +35,43 @@
 //
 // -------------------------------------------------------------------
 
-
-
-
-
 #include "XrayFluoSteppingAction.hh"
 #include "G4SteppingManager.hh"
 #include "G4TrackVector.hh"
-#ifdef G4ANALYSIS_USE
 #include "XrayFluoAnalysisManager.hh"
-#endif
-#include "G4ios.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoSteppingAction::XrayFluoSteppingAction() 
     :mercuryFlag(false)
-{
-  G4cout << "XrayFluoSteppingAction created" << G4endl; 
-}
+{;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoSteppingAction::~XrayFluoSteppingAction()
-{ 
-  G4cout << "XrayFluoSteppingAction deleted" << G4endl;
-}
+{;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayFluoSteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-#ifdef G4ANALYSIS_USE
   XrayFluoAnalysisManager* analysis  = XrayFluoAnalysisManager::getInstance();
   analysis->analyseStepping(aStep);
-#endif
 
   if (mercuryFlag){
-    XrayFluoMercuryDetectorConstruction* detector = XrayFluoMercuryDetectorConstruction::GetInstance();
+    const 
+      XrayFluoMercuryDetectorConstruction* detector = 
+      XrayFluoMercuryDetectorConstruction::GetInstance();
 
-    if(aStep->GetTrack()->GetNextVolume()) { 
-
-    if(aStep->GetTrack()->GetNextVolume()->GetName() == "DetectorOptic") {
-      G4ThreeVector particlePosition = aStep->GetPostStepPoint()->GetPosition();
-      G4ThreeVector detectorPosition = detector->GetOptic()->GetObjectTranslation();
-      G4ThreeVector newDirection = detectorPosition - particlePosition;
-      aStep->GetPostStepPoint()->SetMomentumDirection(newDirection);
-    }
-    }
+    if(aStep->GetTrack()->GetNextVolume()) 
+      { 
+	if(aStep->GetTrack()->GetNextVolume()->GetName() == "DetectorOptic") {
+	  G4ThreeVector particlePosition = aStep->GetPostStepPoint()->GetPosition();
+	  G4ThreeVector detectorPosition = detector->GetOptic()->GetObjectTranslation();
+	  G4ThreeVector newDirection = detectorPosition - particlePosition;
+	  aStep->GetPostStepPoint()->SetMomentumDirection(newDirection);
+	}
+      }
   }
 }
 

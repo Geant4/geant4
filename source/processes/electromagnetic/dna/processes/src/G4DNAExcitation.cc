@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAExcitation.cc 70171 2013-05-24 13:34:18Z gcosmo $
+// $Id: G4DNAExcitation.cc 85423 2014-10-29 08:22:38Z gcosmo $
 
 #include "G4DNAExcitation.hh"
+#include "G4LEPTSExcitationModel.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Positron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -55,6 +57,7 @@ G4bool G4DNAExcitation::IsApplicable(const G4ParticleDefinition& p)
   return 
     (
        &p == G4Electron::Electron() 
+    || &p == G4Positron::Positron()
     || &p == G4Proton::ProtonDefinition()
     || &p == instance->GetIon("hydrogen")
     || &p == instance->GetIon("alpha++")
@@ -87,6 +90,15 @@ void G4DNAExcitation::InitialiseProcess(const G4ParticleDefinition* p)
 
       if(!EmModel()) SetEmModel(new G4DNABornExcitationModel);
       EmModel()->SetLowEnergyLimit(9*eV);
+      EmModel()->SetHighEnergyLimit(1*MeV);
+
+      AddEmModel(1, EmModel());   
+    }
+
+    if(name == "e+")
+    {
+      if(!EmModel()) SetEmModel(new G4LEPTSExcitationModel);
+      EmModel()->SetLowEnergyLimit(1*eV);
       EmModel()->SetHighEnergyLimit(1*MeV);
 
       AddEmModel(1, EmModel());   

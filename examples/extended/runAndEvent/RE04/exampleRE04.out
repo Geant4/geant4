@@ -1,0 +1,2800 @@
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+<<< Geant4 Physics List simulation engine: FTFP_BERT 2.0
+
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  OpenGLImmediateX (OGLIX)
+  OpenGLImmediateXm (OGLI, OGLIXm)
+  OpenGLStoredX (OGLSX)
+  OpenGLStoredXm (OGL, OGLS, OGLSXm)
+  RayTracer (RayTracer)
+  RayTracerX (RayTracerX)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+  drawByAttribute
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+  attributeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+Available colours:
+  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
+
+
+The materials defined are : 
+
+
+***** Table : Nb of materials = 3 *****
+
+ Material:   G4_AIR    density:  1.205 mg/cm3  RadL: 303.921 m    Nucl.Int.Length: 710.137 m  
+                       Imean:  85.700 eV   temperature: 273.15 K  pressure:   1.00 atm
+
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.02 % 
+
+   --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+         --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+         --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
+          ElmMassFraction:  75.53 %  ElmAbundance  78.44 % 
+
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  23.18 %  ElmAbundance  21.07 % 
+
+   --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
+         --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
+         --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
+         --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %
+          ElmMassFraction:   1.28 %  ElmAbundance   0.47 % 
+
+
+ Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.504 cm 
+                       Imean:  78.000 eV 
+
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:  11.19 %  ElmAbundance  66.67 % 
+
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
+
+
+ Material:    G4_Pb    density: 11.350 g/cm3   RadL:   5.613 mm   Nucl.Int.Length:  18.247 cm 
+                       Imean: 823.000 eV 
+
+   --->  Element: Pb (Pb)   Z = 82.0   N = 207.2   A = 207.22 g/mole
+         --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
+         --->  Isotope: Pb206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
+         --->  Isotope: Pb207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
+         --->  Isotope: Pb208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+
+ G4PhysicsListHelper::AddTransportation()--- G4CoupledTransportation is used 
+### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
+.... G4ScoringMessenger::MeshBinCommand - G4ScoringBox
+
+phot:   for  gamma    SubType= 12  BuildTable= 0
+      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
+
+compt:   for  gamma    SubType= 13  BuildTable= 1
+      Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
+      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
+
+conv:   for  gamma    SubType= 14  BuildTable= 1
+      Lambda table from 1.022 MeV to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
+
+msc:   for e-    SubType= 10
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 35 bins Emin=    100 MeV   Emax=     10 TeV
+
+eIoni:   for  e-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+
+eBrem:   for  e-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
+
+CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from 100 MeV to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
+
+msc:   for e+    SubType= 10
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 35 bins Emin=    100 MeV   Emax=     10 TeV
+
+eIoni:   for  e+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+
+eBrem:   for  e+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
+
+annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  e+, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from 100 MeV to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
+
+msc:   for proton    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+
+hBrems:   for  proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  proton, integral: 1     SubType= 1  BuildTable= 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for GenericIon    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
+
+ionIoni:   for  GenericIon    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      Stopping Power data for 17 ion/material pairs 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+
+msc:   for alpha    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+ionIoni:   for  alpha    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
+          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
+
+msc:   for anti_proton    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  anti_proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+
+hBrems:   for  anti_proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  anti_proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  anti_proton, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for kaon+    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  kaon+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+
+hBrems:   for  kaon+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  kaon+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  kaon+, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for kaon-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  kaon-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+
+hBrems:   for  kaon-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  kaon-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  kaon-, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for mu+    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+muIoni:   for  mu+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
+
+muBrems:   for  mu+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+
+muPairProd:   for  mu+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  mu+, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for mu-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+muIoni:   for  mu-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
+
+muBrems:   for  mu-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+
+muPairProd:   for  mu-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  mu-, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  pi+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+
+hBrems:   for  pi+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  pi+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  pi+, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for pi-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  pi-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+
+hBrems:   for  pi-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  pi-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+====================================================================
+                  HADRONIC PROCESSES SUMMARY (verbose level 1)
+
+---------------------------------------------------
+                           Hadronic Processes for neutron
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:     ChipsNeutronElasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: neutronInelastic
+        Model:                      FTFP: 4 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: nCapture
+        Model:               nRadCapture: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaCaptureXS: 0 eV  ---> 100 TeV
+
+  Process: nKiller
+
+---------------------------------------------------
+                           Hadronic Processes for GenericIon
+
+  Process: ionInelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for He3
+
+  Process: He3Inelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: alphaInelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_He3Inelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_alphaInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_deuteronInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_neutron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_neutronInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_proton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_protonInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_tritonInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: dInelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for e+
+
+  Process: positronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for e-
+
+  Process: electronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for gamma
+
+  Process: photonNuclear
+        Model:            BertiniCascade: 0 eV  ---> 3.5 GeV
+        Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
+     Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for kaon+
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: kaon+Inelastic
+        Model:                      FTFP: 4 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns:  ChipsKaonPlusInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for kaon-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: kaon-Inelastic
+        Model:                      FTFP: 4 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns: ChipsKaonMinusInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: lambdaInelastic
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns:   ChipsHyperonInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for mu+
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for mu-
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+  Process: muMinusCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for pi+
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
+        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: pi+Inelastic
+        Model:                      FTFP: 4 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
+                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
+                           below 91 GeV, Glauber-Gribov above 
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for pi-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
+        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: pi-Inelastic
+        Model:                      FTFP: 4 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
+                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
+                           below 91 GeV, Glauber-Gribov above 
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for proton
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:      ChipsProtonElasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: protonInelastic
+        Model:                      FTFP: 4 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: tInelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+================================================================
+>>> Summary of Event 0
+
+>>> Summary of Event 1
+
+>>> Summary of Event 2
+
+>>> Summary of Event 3
+
+>>> Summary of Event 4
+
+>>> Summary of Event 5
+
+>>> Summary of Event 6
+
+>>> Summary of Event 7
+
+>>> Summary of Event 8
+
+>>> Summary of Event 9
+
+>>> Summary of Event 10
+
+>>> Summary of Event 11
+
+>>> Summary of Event 12
+
+>>> Summary of Event 13
+
+>>> Summary of Event 14
+
+>>> Summary of Event 15
+
+>>> Summary of Event 16
+
+>>> Summary of Event 17
+
+>>> Summary of Event 18
+
+>>> Summary of Event 19
+
+>>> Summary of Event 20
+
+>>> Summary of Event 21
+
+>>> Summary of Event 22
+
+>>> Summary of Event 23
+
+>>> Summary of Event 24
+
+>>> Summary of Event 25
+
+>>> Summary of Event 26
+
+>>> Summary of Event 27
+
+>>> Summary of Event 28
+
+>>> Summary of Event 29
+
+>>> Summary of Event 30
+
+>>> Summary of Event 31
+
+>>> Summary of Event 32
+
+>>> Summary of Event 33
+
+>>> Summary of Event 34
+
+>>> Summary of Event 35
+
+>>> Summary of Event 36
+
+>>> Summary of Event 37
+
+>>> Summary of Event 38
+
+>>> Summary of Event 39
+
+>>> Summary of Event 40
+
+>>> Summary of Event 41
+
+>>> Summary of Event 42
+
+>>> Summary of Event 43
+
+>>> Summary of Event 44
+
+>>> Summary of Event 45
+
+>>> Summary of Event 46
+
+>>> Summary of Event 47
+
+>>> Summary of Event 48
+
+>>> Summary of Event 49
+
+>>> Summary of Event 50
+
+>>> Summary of Event 51
+
+>>> Summary of Event 52
+
+>>> Summary of Event 53
+
+>>> Summary of Event 54
+
+>>> Summary of Event 55
+
+>>> Summary of Event 56
+
+>>> Summary of Event 57
+
+>>> Summary of Event 58
+
+>>> Summary of Event 59
+
+>>> Summary of Event 60
+
+>>> Summary of Event 61
+
+>>> Summary of Event 62
+
+>>> Summary of Event 63
+
+>>> Summary of Event 64
+
+>>> Summary of Event 65
+
+>>> Summary of Event 66
+
+>>> Summary of Event 67
+
+>>> Summary of Event 68
+
+>>> Summary of Event 69
+
+>>> Summary of Event 70
+
+>>> Summary of Event 71
+
+>>> Summary of Event 72
+
+>>> Summary of Event 73
+
+>>> Summary of Event 74
+
+>>> Summary of Event 75
+
+>>> Summary of Event 76
+
+>>> Summary of Event 77
+
+>>> Summary of Event 78
+
+>>> Summary of Event 79
+
+>>> Summary of Event 80
+
+>>> Summary of Event 81
+
+>>> Summary of Event 82
+
+>>> Summary of Event 83
+
+>>> Summary of Event 84
+
+>>> Summary of Event 85
+
+>>> Summary of Event 86
+
+>>> Summary of Event 87
+
+>>> Summary of Event 88
+
+>>> Summary of Event 89
+
+>>> Summary of Event 90
+
+>>> Summary of Event 91
+
+>>> Summary of Event 92
+
+>>> Summary of Event 93
+
+>>> Summary of Event 94
+
+>>> Summary of Event 95
+
+>>> Summary of Event 96
+
+>>> Summary of Event 97
+
+>>> Summary of Event 98
+
+>>> Summary of Event 99
+
+>>> Summary of Event 100
+
+>>> Summary of Event 101
+
+>>> Summary of Event 102
+
+>>> Summary of Event 103
+
+>>> Summary of Event 104
+
+>>> Summary of Event 105
+
+>>> Summary of Event 106
+
+>>> Summary of Event 107
+
+>>> Summary of Event 108
+
+>>> Summary of Event 109
+
+>>> Summary of Event 110
+
+>>> Summary of Event 111
+
+>>> Summary of Event 112
+
+>>> Summary of Event 113
+
+>>> Summary of Event 114
+
+>>> Summary of Event 115
+
+>>> Summary of Event 116
+
+>>> Summary of Event 117
+
+>>> Summary of Event 118
+
+>>> Summary of Event 119
+
+>>> Summary of Event 120
+
+>>> Summary of Event 121
+
+>>> Summary of Event 122
+
+>>> Summary of Event 123
+
+>>> Summary of Event 124
+
+>>> Summary of Event 125
+
+>>> Summary of Event 126
+
+>>> Summary of Event 127
+
+>>> Summary of Event 128
+
+>>> Summary of Event 129
+
+>>> Summary of Event 130
+
+>>> Summary of Event 131
+
+>>> Summary of Event 132
+
+>>> Summary of Event 133
+
+>>> Summary of Event 134
+
+>>> Summary of Event 135
+
+>>> Summary of Event 136
+
+>>> Summary of Event 137
+
+>>> Summary of Event 138
+
+>>> Summary of Event 139
+
+>>> Summary of Event 140
+
+>>> Summary of Event 141
+
+>>> Summary of Event 142
+
+>>> Summary of Event 143
+
+>>> Summary of Event 144
+
+>>> Summary of Event 145
+
+>>> Summary of Event 146
+
+>>> Summary of Event 147
+
+>>> Summary of Event 148
+
+>>> Summary of Event 149
+
+>>> Summary of Event 150
+
+>>> Summary of Event 151
+
+>>> Summary of Event 152
+
+>>> Summary of Event 153
+
+>>> Summary of Event 154
+
+>>> Summary of Event 155
+
+>>> Summary of Event 156
+
+>>> Summary of Event 157
+
+>>> Summary of Event 158
+
+>>> Summary of Event 159
+
+>>> Summary of Event 160
+
+>>> Summary of Event 161
+
+>>> Summary of Event 162
+
+>>> Summary of Event 163
+
+>>> Summary of Event 164
+
+>>> Summary of Event 165
+
+>>> Summary of Event 166
+
+>>> Summary of Event 167
+
+>>> Summary of Event 168
+
+>>> Summary of Event 169
+
+>>> Summary of Event 170
+
+>>> Summary of Event 171
+
+>>> Summary of Event 172
+
+>>> Summary of Event 173
+
+>>> Summary of Event 174
+
+>>> Summary of Event 175
+
+>>> Summary of Event 176
+
+>>> Summary of Event 177
+
+>>> Summary of Event 178
+
+>>> Summary of Event 179
+
+>>> Summary of Event 180
+
+>>> Summary of Event 181
+
+>>> Summary of Event 182
+
+>>> Summary of Event 183
+
+>>> Summary of Event 184
+
+>>> Summary of Event 185
+
+>>> Summary of Event 186
+
+>>> Summary of Event 187
+
+>>> Summary of Event 188
+
+>>> Summary of Event 189
+
+>>> Summary of Event 190
+
+>>> Summary of Event 191
+
+>>> Summary of Event 192
+
+>>> Summary of Event 193
+
+>>> Summary of Event 194
+
+>>> Summary of Event 195
+
+>>> Summary of Event 196
+
+>>> Summary of Event 197
+
+>>> Summary of Event 198
+
+>>> Summary of Event 199
+
+>>> Summary of Event 200
+
+>>> Summary of Event 201
+
+>>> Summary of Event 202
+
+>>> Summary of Event 203
+
+>>> Summary of Event 204
+
+>>> Summary of Event 205
+
+>>> Summary of Event 206
+
+>>> Summary of Event 207
+
+>>> Summary of Event 208
+
+>>> Summary of Event 209
+
+>>> Summary of Event 210
+
+>>> Summary of Event 211
+
+>>> Summary of Event 212
+
+>>> Summary of Event 213
+
+>>> Summary of Event 214
+
+>>> Summary of Event 215
+
+>>> Summary of Event 216
+
+>>> Summary of Event 217
+
+>>> Summary of Event 218
+
+>>> Summary of Event 219
+
+>>> Summary of Event 220
+
+>>> Summary of Event 221
+
+>>> Summary of Event 222
+
+>>> Summary of Event 223
+
+>>> Summary of Event 224
+
+>>> Summary of Event 225
+
+>>> Summary of Event 226
+
+>>> Summary of Event 227
+
+>>> Summary of Event 228
+
+>>> Summary of Event 229
+
+>>> Summary of Event 230
+
+>>> Summary of Event 231
+
+>>> Summary of Event 232
+
+>>> Summary of Event 233
+
+>>> Summary of Event 234
+
+>>> Summary of Event 235
+
+>>> Summary of Event 236
+
+>>> Summary of Event 237
+
+>>> Summary of Event 238
+
+>>> Summary of Event 239
+
+>>> Summary of Event 240
+
+>>> Summary of Event 241
+
+>>> Summary of Event 242
+
+>>> Summary of Event 243
+
+>>> Summary of Event 244
+
+>>> Summary of Event 245
+
+>>> Summary of Event 246
+
+>>> Summary of Event 247
+
+>>> Summary of Event 248
+
+>>> Summary of Event 249
+
+>>> Summary of Event 250
+
+>>> Summary of Event 251
+
+>>> Summary of Event 252
+
+>>> Summary of Event 253
+
+>>> Summary of Event 254
+
+>>> Summary of Event 255
+
+>>> Summary of Event 256
+
+>>> Summary of Event 257
+
+>>> Summary of Event 258
+
+>>> Summary of Event 259
+
+>>> Summary of Event 260
+
+>>> Summary of Event 261
+
+>>> Summary of Event 262
+
+>>> Summary of Event 263
+
+>>> Summary of Event 264
+
+>>> Summary of Event 265
+
+>>> Summary of Event 266
+
+>>> Summary of Event 267
+
+>>> Summary of Event 268
+
+>>> Summary of Event 269
+
+>>> Summary of Event 270
+
+>>> Summary of Event 271
+
+>>> Summary of Event 272
+
+>>> Summary of Event 273
+
+>>> Summary of Event 274
+
+>>> Summary of Event 275
+
+>>> Summary of Event 276
+
+>>> Summary of Event 277
+
+>>> Summary of Event 278
+
+>>> Summary of Event 279
+
+>>> Summary of Event 280
+
+>>> Summary of Event 281
+
+>>> Summary of Event 282
+
+>>> Summary of Event 283
+
+>>> Summary of Event 284
+
+>>> Summary of Event 285
+
+>>> Summary of Event 286
+
+>>> Summary of Event 287
+
+>>> Summary of Event 288
+
+>>> Summary of Event 289
+
+>>> Summary of Event 290
+
+>>> Summary of Event 291
+
+>>> Summary of Event 292
+
+>>> Summary of Event 293
+
+>>> Summary of Event 294
+
+>>> Summary of Event 295
+
+>>> Summary of Event 296
+
+>>> Summary of Event 297
+
+>>> Summary of Event 298
+
+>>> Summary of Event 299
+
+>>> Summary of Event 300
+
+>>> Summary of Event 301
+
+>>> Summary of Event 302
+
+>>> Summary of Event 303
+
+>>> Summary of Event 304
+
+>>> Summary of Event 305
+
+>>> Summary of Event 306
+
+>>> Summary of Event 307
+
+>>> Summary of Event 308
+
+>>> Summary of Event 309
+
+>>> Summary of Event 310
+
+>>> Summary of Event 311
+
+>>> Summary of Event 312
+
+>>> Summary of Event 313
+
+>>> Summary of Event 314
+
+>>> Summary of Event 315
+
+>>> Summary of Event 316
+
+>>> Summary of Event 317
+
+>>> Summary of Event 318
+
+>>> Summary of Event 319
+
+>>> Summary of Event 320
+
+>>> Summary of Event 321
+
+>>> Summary of Event 322
+
+>>> Summary of Event 323
+
+>>> Summary of Event 324
+
+>>> Summary of Event 325
+
+>>> Summary of Event 326
+
+>>> Summary of Event 327
+
+>>> Summary of Event 328
+
+>>> Summary of Event 329
+
+>>> Summary of Event 330
+
+>>> Summary of Event 331
+
+>>> Summary of Event 332
+
+>>> Summary of Event 333
+
+>>> Summary of Event 334
+
+>>> Summary of Event 335
+
+>>> Summary of Event 336
+
+>>> Summary of Event 337
+
+>>> Summary of Event 338
+
+>>> Summary of Event 339
+
+>>> Summary of Event 340
+
+>>> Summary of Event 341
+
+>>> Summary of Event 342
+
+>>> Summary of Event 343
+
+>>> Summary of Event 344
+
+>>> Summary of Event 345
+
+>>> Summary of Event 346
+
+>>> Summary of Event 347
+
+>>> Summary of Event 348
+
+>>> Summary of Event 349
+
+>>> Summary of Event 350
+
+>>> Summary of Event 351
+
+>>> Summary of Event 352
+
+>>> Summary of Event 353
+
+>>> Summary of Event 354
+
+>>> Summary of Event 355
+
+>>> Summary of Event 356
+
+>>> Summary of Event 357
+
+>>> Summary of Event 358
+
+>>> Summary of Event 359
+
+>>> Summary of Event 360
+
+>>> Summary of Event 361
+
+>>> Summary of Event 362
+
+>>> Summary of Event 363
+
+>>> Summary of Event 364
+
+>>> Summary of Event 365
+
+>>> Summary of Event 366
+
+>>> Summary of Event 367
+
+>>> Summary of Event 368
+
+>>> Summary of Event 369
+
+>>> Summary of Event 370
+
+>>> Summary of Event 371
+
+>>> Summary of Event 372
+
+>>> Summary of Event 373
+
+>>> Summary of Event 374
+
+>>> Summary of Event 375
+
+>>> Summary of Event 376
+
+>>> Summary of Event 377
+
+>>> Summary of Event 378
+
+>>> Summary of Event 379
+
+>>> Summary of Event 380
+
+>>> Summary of Event 381
+
+>>> Summary of Event 382
+
+>>> Summary of Event 383
+
+>>> Summary of Event 384
+
+>>> Summary of Event 385
+
+>>> Summary of Event 386
+
+>>> Summary of Event 387
+
+>>> Summary of Event 388
+
+>>> Summary of Event 389
+
+>>> Summary of Event 390
+
+>>> Summary of Event 391
+
+>>> Summary of Event 392
+
+>>> Summary of Event 393
+
+>>> Summary of Event 394
+
+>>> Summary of Event 395
+
+>>> Summary of Event 396
+
+>>> Summary of Event 397
+
+>>> Summary of Event 398
+
+>>> Summary of Event 399
+
+>>> Summary of Event 400
+
+>>> Summary of Event 401
+
+>>> Summary of Event 402
+
+>>> Summary of Event 403
+
+>>> Summary of Event 404
+
+>>> Summary of Event 405
+
+>>> Summary of Event 406
+
+>>> Summary of Event 407
+
+>>> Summary of Event 408
+
+>>> Summary of Event 409
+
+>>> Summary of Event 410
+
+>>> Summary of Event 411
+
+>>> Summary of Event 412
+
+>>> Summary of Event 413
+
+>>> Summary of Event 414
+
+>>> Summary of Event 415
+
+>>> Summary of Event 416
+
+>>> Summary of Event 417
+
+>>> Summary of Event 418
+
+>>> Summary of Event 419
+
+>>> Summary of Event 420
+
+>>> Summary of Event 421
+
+>>> Summary of Event 422
+
+>>> Summary of Event 423
+
+>>> Summary of Event 424
+
+>>> Summary of Event 425
+
+>>> Summary of Event 426
+
+>>> Summary of Event 427
+
+>>> Summary of Event 428
+
+>>> Summary of Event 429
+
+>>> Summary of Event 430
+
+>>> Summary of Event 431
+
+>>> Summary of Event 432
+
+>>> Summary of Event 433
+
+>>> Summary of Event 434
+
+>>> Summary of Event 435
+
+>>> Summary of Event 436
+
+>>> Summary of Event 437
+
+>>> Summary of Event 438
+
+>>> Summary of Event 439
+
+>>> Summary of Event 440
+
+>>> Summary of Event 441
+
+>>> Summary of Event 442
+
+>>> Summary of Event 443
+
+>>> Summary of Event 444
+
+>>> Summary of Event 445
+
+>>> Summary of Event 446
+
+>>> Summary of Event 447
+
+>>> Summary of Event 448
+
+>>> Summary of Event 449
+
+>>> Summary of Event 450
+
+>>> Summary of Event 451
+
+>>> Summary of Event 452
+
+>>> Summary of Event 453
+
+>>> Summary of Event 454
+
+>>> Summary of Event 455
+
+>>> Summary of Event 456
+
+>>> Summary of Event 457
+
+>>> Summary of Event 458
+
+>>> Summary of Event 459
+
+>>> Summary of Event 460
+
+>>> Summary of Event 461
+
+>>> Summary of Event 462
+
+>>> Summary of Event 463
+
+>>> Summary of Event 464
+
+>>> Summary of Event 465
+
+>>> Summary of Event 466
+
+>>> Summary of Event 467
+
+>>> Summary of Event 468
+
+>>> Summary of Event 469
+
+>>> Summary of Event 470
+
+>>> Summary of Event 471
+
+>>> Summary of Event 472
+
+>>> Summary of Event 473
+
+>>> Summary of Event 474
+
+>>> Summary of Event 475
+
+>>> Summary of Event 476
+
+>>> Summary of Event 477
+
+>>> Summary of Event 478
+
+>>> Summary of Event 479
+
+>>> Summary of Event 480
+
+>>> Summary of Event 481
+
+>>> Summary of Event 482
+
+>>> Summary of Event 483
+
+>>> Summary of Event 484
+
+>>> Summary of Event 485
+
+>>> Summary of Event 486
+
+>>> Summary of Event 487
+
+>>> Summary of Event 488
+
+>>> Summary of Event 489
+
+>>> Summary of Event 490
+
+>>> Summary of Event 491
+
+>>> Summary of Event 492
+
+>>> Summary of Event 493
+
+>>> Summary of Event 494
+
+>>> Summary of Event 495
+
+>>> Summary of Event 496
+
+>>> Summary of Event 497
+
+>>> Summary of Event 498
+
+>>> Summary of Event 499
+
+>>> Summary of Event 500
+
+>>> Summary of Event 501
+
+>>> Summary of Event 502
+
+>>> Summary of Event 503
+
+>>> Summary of Event 504
+
+>>> Summary of Event 505
+
+>>> Summary of Event 506
+
+>>> Summary of Event 507
+
+>>> Summary of Event 508
+
+>>> Summary of Event 509
+
+>>> Summary of Event 510
+
+>>> Summary of Event 511
+
+>>> Summary of Event 512
+
+>>> Summary of Event 513
+
+>>> Summary of Event 514
+
+>>> Summary of Event 515
+
+>>> Summary of Event 516
+
+>>> Summary of Event 517
+
+>>> Summary of Event 518
+
+>>> Summary of Event 519
+
+>>> Summary of Event 520
+
+>>> Summary of Event 521
+
+>>> Summary of Event 522
+
+>>> Summary of Event 523
+
+>>> Summary of Event 524
+
+>>> Summary of Event 525
+
+>>> Summary of Event 526
+
+>>> Summary of Event 527
+
+>>> Summary of Event 528
+
+>>> Summary of Event 529
+
+>>> Summary of Event 530
+
+>>> Summary of Event 531
+
+>>> Summary of Event 532
+
+>>> Summary of Event 533
+
+>>> Summary of Event 534
+
+>>> Summary of Event 535
+
+>>> Summary of Event 536
+
+>>> Summary of Event 537
+
+>>> Summary of Event 538
+
+>>> Summary of Event 539
+
+>>> Summary of Event 540
+
+>>> Summary of Event 541
+
+>>> Summary of Event 542
+
+>>> Summary of Event 543
+
+>>> Summary of Event 544
+
+>>> Summary of Event 545
+
+>>> Summary of Event 546
+
+>>> Summary of Event 547
+
+>>> Summary of Event 548
+
+>>> Summary of Event 549
+
+>>> Summary of Event 550
+
+>>> Summary of Event 551
+
+>>> Summary of Event 552
+
+>>> Summary of Event 553
+
+>>> Summary of Event 554
+
+>>> Summary of Event 555
+
+>>> Summary of Event 556
+
+>>> Summary of Event 557
+
+>>> Summary of Event 558
+
+>>> Summary of Event 559
+
+>>> Summary of Event 560
+
+>>> Summary of Event 561
+
+>>> Summary of Event 562
+
+>>> Summary of Event 563
+
+>>> Summary of Event 564
+
+>>> Summary of Event 565
+
+>>> Summary of Event 566
+
+>>> Summary of Event 567
+
+>>> Summary of Event 568
+
+>>> Summary of Event 569
+
+>>> Summary of Event 570
+
+>>> Summary of Event 571
+
+>>> Summary of Event 572
+
+>>> Summary of Event 573
+
+>>> Summary of Event 574
+
+>>> Summary of Event 575
+
+>>> Summary of Event 576
+
+>>> Summary of Event 577
+
+>>> Summary of Event 578
+
+>>> Summary of Event 579
+
+>>> Summary of Event 580
+
+>>> Summary of Event 581
+
+>>> Summary of Event 582
+
+>>> Summary of Event 583
+
+>>> Summary of Event 584
+
+>>> Summary of Event 585
+
+>>> Summary of Event 586
+
+>>> Summary of Event 587
+
+>>> Summary of Event 588
+
+>>> Summary of Event 589
+
+>>> Summary of Event 590
+
+>>> Summary of Event 591
+
+>>> Summary of Event 592
+
+>>> Summary of Event 593
+
+>>> Summary of Event 594
+
+>>> Summary of Event 595
+
+>>> Summary of Event 596
+
+>>> Summary of Event 597
+
+>>> Summary of Event 598
+
+>>> Summary of Event 599
+
+>>> Summary of Event 600
+
+>>> Summary of Event 601
+
+>>> Summary of Event 602
+
+>>> Summary of Event 603
+
+>>> Summary of Event 604
+
+>>> Summary of Event 605
+
+>>> Summary of Event 606
+
+>>> Summary of Event 607
+
+>>> Summary of Event 608
+
+>>> Summary of Event 609
+
+>>> Summary of Event 610
+
+>>> Summary of Event 611
+
+>>> Summary of Event 612
+
+>>> Summary of Event 613
+
+>>> Summary of Event 614
+
+>>> Summary of Event 615
+
+>>> Summary of Event 616
+
+>>> Summary of Event 617
+
+>>> Summary of Event 618
+
+>>> Summary of Event 619
+
+>>> Summary of Event 620
+
+>>> Summary of Event 621
+
+>>> Summary of Event 622
+
+>>> Summary of Event 623
+
+>>> Summary of Event 624
+
+>>> Summary of Event 625
+
+>>> Summary of Event 626
+
+>>> Summary of Event 627
+
+>>> Summary of Event 628
+
+>>> Summary of Event 629
+
+>>> Summary of Event 630
+
+>>> Summary of Event 631
+
+>>> Summary of Event 632
+
+>>> Summary of Event 633
+
+>>> Summary of Event 634
+
+>>> Summary of Event 635
+
+>>> Summary of Event 636
+
+>>> Summary of Event 637
+
+>>> Summary of Event 638
+
+>>> Summary of Event 639
+
+>>> Summary of Event 640
+
+>>> Summary of Event 641
+
+>>> Summary of Event 642
+
+>>> Summary of Event 643
+
+>>> Summary of Event 644
+
+>>> Summary of Event 645
+
+>>> Summary of Event 646
+
+>>> Summary of Event 647
+
+>>> Summary of Event 648
+
+>>> Summary of Event 649
+
+>>> Summary of Event 650
+
+>>> Summary of Event 651
+
+>>> Summary of Event 652
+
+>>> Summary of Event 653
+
+>>> Summary of Event 654
+
+>>> Summary of Event 655
+
+>>> Summary of Event 656
+
+>>> Summary of Event 657
+
+>>> Summary of Event 658
+
+>>> Summary of Event 659
+
+>>> Summary of Event 660
+
+>>> Summary of Event 661
+
+>>> Summary of Event 662
+
+>>> Summary of Event 663
+
+>>> Summary of Event 664
+
+>>> Summary of Event 665
+
+>>> Summary of Event 666
+
+>>> Summary of Event 667
+
+>>> Summary of Event 668
+
+>>> Summary of Event 669
+
+>>> Summary of Event 670
+
+>>> Summary of Event 671
+
+>>> Summary of Event 672
+
+>>> Summary of Event 673
+
+>>> Summary of Event 674
+
+>>> Summary of Event 675
+
+>>> Summary of Event 676
+
+>>> Summary of Event 677
+
+>>> Summary of Event 678
+
+>>> Summary of Event 679
+
+>>> Summary of Event 680
+
+>>> Summary of Event 681
+
+>>> Summary of Event 682
+
+>>> Summary of Event 683
+
+>>> Summary of Event 684
+
+>>> Summary of Event 685
+
+>>> Summary of Event 686
+
+>>> Summary of Event 687
+
+>>> Summary of Event 688
+
+>>> Summary of Event 689
+
+>>> Summary of Event 690
+
+>>> Summary of Event 691
+
+>>> Summary of Event 692
+
+>>> Summary of Event 693
+
+>>> Summary of Event 694
+
+>>> Summary of Event 695
+
+>>> Summary of Event 696
+
+>>> Summary of Event 697
+
+>>> Summary of Event 698
+
+>>> Summary of Event 699
+
+>>> Summary of Event 700
+
+>>> Summary of Event 701
+
+>>> Summary of Event 702
+
+>>> Summary of Event 703
+
+>>> Summary of Event 704
+
+>>> Summary of Event 705
+
+>>> Summary of Event 706
+
+>>> Summary of Event 707
+
+>>> Summary of Event 708
+
+>>> Summary of Event 709
+
+>>> Summary of Event 710
+
+>>> Summary of Event 711
+
+>>> Summary of Event 712
+
+>>> Summary of Event 713
+
+>>> Summary of Event 714
+
+>>> Summary of Event 715
+
+>>> Summary of Event 716
+
+>>> Summary of Event 717
+
+>>> Summary of Event 718
+
+>>> Summary of Event 719
+
+>>> Summary of Event 720
+
+>>> Summary of Event 721
+
+>>> Summary of Event 722
+
+>>> Summary of Event 723
+
+>>> Summary of Event 724
+
+>>> Summary of Event 725
+
+>>> Summary of Event 726
+
+>>> Summary of Event 727
+
+>>> Summary of Event 728
+
+>>> Summary of Event 729
+
+>>> Summary of Event 730
+
+>>> Summary of Event 731
+
+>>> Summary of Event 732
+
+>>> Summary of Event 733
+
+>>> Summary of Event 734
+
+>>> Summary of Event 735
+
+>>> Summary of Event 736
+
+>>> Summary of Event 737
+
+>>> Summary of Event 738
+
+>>> Summary of Event 739
+
+>>> Summary of Event 740
+
+>>> Summary of Event 741
+
+>>> Summary of Event 742
+
+>>> Summary of Event 743
+
+>>> Summary of Event 744
+
+>>> Summary of Event 745
+
+>>> Summary of Event 746
+
+>>> Summary of Event 747
+
+>>> Summary of Event 748
+
+>>> Summary of Event 749
+
+>>> Summary of Event 750
+
+>>> Summary of Event 751
+
+>>> Summary of Event 752
+
+>>> Summary of Event 753
+
+>>> Summary of Event 754
+
+>>> Summary of Event 755
+
+>>> Summary of Event 756
+
+>>> Summary of Event 757
+
+>>> Summary of Event 758
+
+>>> Summary of Event 759
+
+>>> Summary of Event 760
+
+>>> Summary of Event 761
+
+>>> Summary of Event 762
+
+>>> Summary of Event 763
+
+>>> Summary of Event 764
+
+>>> Summary of Event 765
+
+>>> Summary of Event 766
+
+>>> Summary of Event 767
+
+>>> Summary of Event 768
+
+>>> Summary of Event 769
+
+>>> Summary of Event 770
+
+>>> Summary of Event 771
+
+>>> Summary of Event 772
+
+>>> Summary of Event 773
+
+>>> Summary of Event 774
+
+>>> Summary of Event 775
+
+>>> Summary of Event 776
+
+>>> Summary of Event 777
+
+>>> Summary of Event 778
+
+>>> Summary of Event 779
+
+>>> Summary of Event 780
+
+>>> Summary of Event 781
+
+>>> Summary of Event 782
+
+>>> Summary of Event 783
+
+>>> Summary of Event 784
+
+>>> Summary of Event 785
+
+>>> Summary of Event 786
+
+>>> Summary of Event 787
+
+>>> Summary of Event 788
+
+>>> Summary of Event 789
+
+>>> Summary of Event 790
+
+>>> Summary of Event 791
+
+>>> Summary of Event 792
+
+>>> Summary of Event 793
+
+>>> Summary of Event 794
+
+>>> Summary of Event 795
+
+>>> Summary of Event 796
+
+>>> Summary of Event 797
+
+>>> Summary of Event 798
+
+>>> Summary of Event 799
+
+>>> Summary of Event 800
+
+>>> Summary of Event 801
+
+>>> Summary of Event 802
+
+>>> Summary of Event 803
+
+>>> Summary of Event 804
+
+>>> Summary of Event 805
+
+>>> Summary of Event 806
+
+>>> Summary of Event 807
+
+>>> Summary of Event 808
+
+>>> Summary of Event 809
+
+>>> Summary of Event 810
+
+>>> Summary of Event 811
+
+>>> Summary of Event 812
+
+>>> Summary of Event 813
+
+>>> Summary of Event 814
+
+>>> Summary of Event 815
+
+>>> Summary of Event 816
+
+>>> Summary of Event 817
+
+>>> Summary of Event 818
+
+>>> Summary of Event 819
+
+>>> Summary of Event 820
+
+>>> Summary of Event 821
+
+>>> Summary of Event 822
+
+>>> Summary of Event 823
+
+>>> Summary of Event 824
+
+>>> Summary of Event 825
+
+>>> Summary of Event 826
+
+>>> Summary of Event 827
+
+>>> Summary of Event 828
+
+>>> Summary of Event 829
+
+>>> Summary of Event 830
+
+>>> Summary of Event 831
+
+>>> Summary of Event 832
+
+>>> Summary of Event 833
+
+>>> Summary of Event 834
+
+>>> Summary of Event 835
+
+>>> Summary of Event 836
+
+>>> Summary of Event 837
+
+>>> Summary of Event 838
+
+>>> Summary of Event 839
+
+>>> Summary of Event 840
+
+>>> Summary of Event 841
+
+>>> Summary of Event 842
+
+>>> Summary of Event 843
+
+>>> Summary of Event 844
+
+>>> Summary of Event 845
+
+>>> Summary of Event 846
+
+>>> Summary of Event 847
+
+>>> Summary of Event 848
+
+>>> Summary of Event 849
+
+>>> Summary of Event 850
+
+>>> Summary of Event 851
+
+>>> Summary of Event 852
+
+>>> Summary of Event 853
+
+>>> Summary of Event 854
+
+>>> Summary of Event 855
+
+>>> Summary of Event 856
+
+>>> Summary of Event 857
+
+>>> Summary of Event 858
+
+>>> Summary of Event 859
+
+>>> Summary of Event 860
+
+>>> Summary of Event 861
+
+>>> Summary of Event 862
+
+>>> Summary of Event 863
+
+>>> Summary of Event 864
+
+>>> Summary of Event 865
+
+>>> Summary of Event 866
+
+>>> Summary of Event 867
+
+>>> Summary of Event 868
+
+>>> Summary of Event 869
+
+>>> Summary of Event 870
+
+>>> Summary of Event 871
+
+>>> Summary of Event 872
+
+>>> Summary of Event 873
+
+>>> Summary of Event 874
+
+>>> Summary of Event 875
+
+>>> Summary of Event 876
+
+>>> Summary of Event 877
+
+>>> Summary of Event 878
+
+>>> Summary of Event 879
+
+>>> Summary of Event 880
+
+>>> Summary of Event 881
+
+>>> Summary of Event 882
+
+>>> Summary of Event 883
+
+>>> Summary of Event 884
+
+>>> Summary of Event 885
+
+>>> Summary of Event 886
+
+>>> Summary of Event 887
+
+>>> Summary of Event 888
+
+>>> Summary of Event 889
+
+>>> Summary of Event 890
+
+>>> Summary of Event 891
+
+>>> Summary of Event 892
+
+>>> Summary of Event 893
+
+>>> Summary of Event 894
+
+>>> Summary of Event 895
+
+>>> Summary of Event 896
+
+>>> Summary of Event 897
+
+>>> Summary of Event 898
+
+>>> Summary of Event 899
+
+>>> Summary of Event 900
+
+>>> Summary of Event 901
+
+>>> Summary of Event 902
+
+>>> Summary of Event 903
+
+>>> Summary of Event 904
+
+>>> Summary of Event 905
+
+>>> Summary of Event 906
+
+>>> Summary of Event 907
+
+>>> Summary of Event 908
+
+>>> Summary of Event 909
+
+>>> Summary of Event 910
+
+>>> Summary of Event 911
+
+>>> Summary of Event 912
+
+>>> Summary of Event 913
+
+>>> Summary of Event 914
+
+>>> Summary of Event 915
+
+>>> Summary of Event 916
+
+>>> Summary of Event 917
+
+>>> Summary of Event 918
+
+>>> Summary of Event 919
+
+>>> Summary of Event 920
+
+>>> Summary of Event 921
+
+>>> Summary of Event 922
+
+>>> Summary of Event 923
+
+>>> Summary of Event 924
+
+>>> Summary of Event 925
+
+>>> Summary of Event 926
+
+>>> Summary of Event 927
+
+>>> Summary of Event 928
+
+>>> Summary of Event 929
+
+>>> Summary of Event 930
+
+>>> Summary of Event 931
+
+>>> Summary of Event 932
+
+>>> Summary of Event 933
+
+>>> Summary of Event 934
+
+>>> Summary of Event 935
+
+>>> Summary of Event 936
+
+>>> Summary of Event 937
+
+>>> Summary of Event 938
+
+>>> Summary of Event 939
+
+>>> Summary of Event 940
+
+>>> Summary of Event 941
+
+>>> Summary of Event 942
+
+>>> Summary of Event 943
+
+>>> Summary of Event 944
+
+>>> Summary of Event 945
+
+>>> Summary of Event 946
+
+>>> Summary of Event 947
+
+>>> Summary of Event 948
+
+>>> Summary of Event 949
+
+>>> Summary of Event 950
+
+>>> Summary of Event 951
+
+>>> Summary of Event 952
+
+>>> Summary of Event 953
+
+>>> Summary of Event 954
+
+>>> Summary of Event 955
+
+>>> Summary of Event 956
+
+>>> Summary of Event 957
+
+>>> Summary of Event 958
+
+>>> Summary of Event 959
+
+>>> Summary of Event 960
+
+>>> Summary of Event 961
+
+>>> Summary of Event 962
+
+>>> Summary of Event 963
+
+>>> Summary of Event 964
+
+>>> Summary of Event 965
+
+>>> Summary of Event 966
+
+>>> Summary of Event 967
+
+>>> Summary of Event 968
+
+>>> Summary of Event 969
+
+>>> Summary of Event 970
+
+>>> Summary of Event 971
+
+>>> Summary of Event 972
+
+>>> Summary of Event 973
+
+>>> Summary of Event 974
+
+>>> Summary of Event 975
+
+>>> Summary of Event 976
+
+>>> Summary of Event 977
+
+>>> Summary of Event 978
+
+>>> Summary of Event 979
+
+>>> Summary of Event 980
+
+>>> Summary of Event 981
+
+>>> Summary of Event 982
+
+>>> Summary of Event 983
+
+>>> Summary of Event 984
+
+>>> Summary of Event 985
+
+>>> Summary of Event 986
+
+>>> Summary of Event 987
+
+>>> Summary of Event 988
+
+>>> Summary of Event 989
+
+>>> Summary of Event 990
+
+>>> Summary of Event 991
+
+>>> Summary of Event 992
+
+>>> Summary of Event 993
+
+>>> Summary of Event 994
+
+>>> Summary of Event 995
+
+>>> Summary of Event 996
+
+>>> Summary of Event 997
+
+>>> Summary of Event 998
+
+>>> Summary of Event 999
+
+WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
+  has been instantiated.  Use "/vis/open" or "/vis/sceneHandler/create".
+  Alternatively, to avoid this message, suppress instantiation of vis
+  manager (G4VisExecutive), possibly by setting G4VIS_NONE, and ensure
+  drawing code is executed only if G4VVisManager::GetConcreteInstance()
+  is non-zero.
+G4VisManager::Enable: WARNING: visualization remains disabled for
+  above reasons.  Rectifying with valid vis commands will
+  automatically enable.
+Graphics systems deleted.
+Visualization Manager deleting...
+Total navigation history collections cleaned: 61

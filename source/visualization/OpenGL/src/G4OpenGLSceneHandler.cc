@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc 75567 2013-11-04 11:35:11Z gcosmo $
+// $Id: G4OpenGLSceneHandler.cc 85263 2014-10-27 08:58:31Z gcosmo $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -73,7 +73,8 @@ fThreePassCapable(false),
 fSecondPassForTransparencyRequested(false),
 fSecondPassForTransparency(false),
 fThirdPassForNonHiddenMarkersRequested(false),
-fThirdPassForNonHiddenMarkers(false)
+fThirdPassForNonHiddenMarkers(false),
+fEdgeFlag(true)
 {
 }
 
@@ -197,8 +198,10 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
 
   // Note: colour and depth test treated in sub-class.
 
+#ifndef G4OPENGL_VERSION_2
   glDisable (GL_LIGHTING);
-
+#endif
+  
   // Get vis attributes - pick up defaults if none.
   const G4VisAttributes* pVA =
     fpViewer -> GetApplicableVisAttributes (line.GetVisAttributes ());
@@ -211,8 +214,13 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
   G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
   if (pGLViewer) pGLViewer->ChangeLineWidth(lineWidth);
 
+  fEdgeFlag = true;
 #ifndef G4OPENGL_VERSION_2
   glBegin (GL_LINE_STRIP);
+  // No ned glEdgeFlag for lines :
+  // Boundary and nonboundary edge flags on vertices are significant only if GL_POLYGON_MODE is set to GL_POINT or GL_LINE.  See glPolygonMode.
+  
+  //  glEdgeFlag (GL_TRUE);
   for (G4int iPoint = 0; iPoint < nPoints; iPoint++) {
   G4double x, y, z;
     x = line[iPoint].x(); 
@@ -246,50 +254,56 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
 
   // Note: colour and depth test treated in sub-class.
 
+#ifndef G4OPENGL_VERSION_2
   glDisable (GL_LIGHTING);
+#endif
   
   // Get vis attributes - pick up defaults if none.
   const G4VisAttributes* pVA =
     fpViewer -> GetApplicableVisAttributes (polymarker.GetVisAttributes ());
 
-  G4double lineWidth = GetLineWidth(pVA);
+  MarkerSizeType sizeType;
+  G4double size = GetMarkerSize(polymarker, sizeType);
+
   // Need access to method in G4OpenGLViewer.  static_cast doesn't
   // work with a virtual base class, so use dynamic_cast.  No need to
   // test the outcome since viewer is guaranteed to be a
   // G4OpenGLViewer, but test it anyway to keep Coverity happy.
   G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
   if (!pGLViewer) return;
-  pGLViewer->ChangeLineWidth(lineWidth);
 
-  G4VMarker::FillStyle style = polymarker.GetFillStyle();
-
-  // G4bool filled = false;  Not actually used - comment out to prevent compiler warnings (JA).
-  static G4bool hashedWarned = false;
+  if (sizeType == world) {  // Size specified in world coordinates.
+    G4double lineWidth = GetLineWidth(pVA);
+    pGLViewer->ChangeLineWidth(lineWidth);
   
-  switch (style) {
-  case G4VMarker::noFill: 
-    glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
-    //filled = false;
-    break;
-  case G4VMarker::hashed:
-    if (!hashedWarned) {
-      G4cout << "Hashed fill style in G4OpenGLSceneHandler."
-	     << "\n  Not implemented.  Using G4VMarker::filled."
-	     << G4endl;
-      hashedWarned = true;
+    G4VMarker::FillStyle style = polymarker.GetFillStyle();
+    
+    // G4bool filled = false;  Not actually used - comment out to prevent compiler warnings (JA).
+    static G4bool hashedWarned = false;
+    
+    switch (style) {
+      case G4VMarker::noFill:
+        glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
+        glEdgeFlag (GL_TRUE);
+        //filled = false;
+        break;
+      case G4VMarker::hashed:
+        if (!hashedWarned) {
+          G4cout << "Hashed fill style in G4OpenGLSceneHandler."
+          << "\n  Not implemented.  Using G4VMarker::filled."
+          << G4endl;
+          hashedWarned = true;
+        }
+        // Maybe use
+        //glPolygonStipple (fStippleMaskHashed);
+        // Drop through to filled...
+      case G4VMarker::filled:
+        glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
+        //filled = true;
+        break;
     }
-    // Maybe use
-    //glPolygonStipple (fStippleMaskHashed);
-    // Drop through to filled...  
-  case G4VMarker::filled:
-    glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
-    //filled = true;
-    break;
   }
-
-  MarkerSizeType sizeType;
-  G4double size = GetMarkerSize(polymarker, sizeType);
-
+  
   // Draw...
   if (sizeType == world) {  // Size specified in world coordinates.
 
@@ -319,6 +333,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
     G4double phi;
     G4int i;
     for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
+      fEdgeFlag = true;
 #ifndef G4OPENGL_VERSION_2
       glBegin (GL_POLYGON);
       for (i = 0, phi = startPhi; i < nSides; i++, phi += dPhi) {
@@ -353,6 +368,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
     pGLViewer->ChangePointSize(size);
 
     //Antialiasing only for circles
+#ifndef G4OPENGL_VERSION_2
     switch (polymarker.GetMarkerType()) {
     default:
     case G4Polymarker::dots:
@@ -361,6 +377,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
     case G4Polymarker::squares:
       glDisable (GL_POINT_SMOOTH); break;
     }
+#endif
 #ifndef G4OPENGL_VERSION_2
     glBegin (GL_POINTS);
     for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
@@ -440,6 +457,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   //  list, it is the colour _at the time of_ creation of the display list, so
   //  even if the colour is changed, for example, by interaction with a Qt
   //  window, current_colour does not change.
+  GLfloat* painting_colour;
   GLfloat current_colour [4];
   glGetFloatv (GL_CURRENT_COLOR, current_colour);
   
@@ -448,10 +466,16 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     isTransparent = true;
   }
 
-  // This is the colour used to paint surfaces in hlr mode.
-  GLfloat clear_colour[4];
-  glGetFloatv (GL_COLOR_CLEAR_VALUE, clear_colour);
   
+  if  (drawing_style == G4ViewParameters::hlr) {
+    // This is the colour used to paint surfaces in hlr mode.
+    GLfloat clear_colour[4];
+    glGetFloatv (GL_COLOR_CLEAR_VALUE, clear_colour);
+    painting_colour = clear_colour;
+  } else {  // drawing_style == G4ViewParameters::hlhsr
+    painting_colour = current_colour;
+  }
+
   G4double lineWidth = GetLineWidth(pVA);
   pGLViewer->ChangeLineWidth(lineWidth);
 
@@ -460,7 +484,9 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   G4bool clipping = pGLViewer->fVP.IsSection() || pGLViewer->fVP.IsCutaway();
 
   // Lighting disabled unless otherwise requested
+#ifndef G4OPENGL_VERSION_2
   glDisable (GL_LIGHTING);
+#endif
 
   switch (drawing_style) {
   case (G4ViewParameters::hlhsr):
@@ -502,7 +528,9 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       // Transparent...
       glDepthMask (GL_FALSE);  // Make depth buffer read-only.
       glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+#ifndef G4OPENGL_VERSION_2
       glEnable(GL_COLOR_MATERIAL);
+#endif
       glDisable (GL_CULL_FACE);
       glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
     } else {
@@ -515,14 +543,18 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 	glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
       } else {
         glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+#ifndef G4OPENGL_VERSION_2
         glEnable(GL_COLOR_MATERIAL);
-	glEnable (GL_CULL_FACE);
+#endif
+  glEnable (GL_CULL_FACE);
 	glCullFace (GL_BACK);
 	glPolygonMode (GL_FRONT, GL_FILL);
       }
     }
+#ifndef G4OPENGL_VERSION_2
     if (!fProcessing2D) glEnable (GL_LIGHTING);
-    break;
+#endif
+      break;
   case (G4ViewParameters::wireframe):
   default:
     glEnable (GL_DEPTH_TEST);
@@ -533,8 +565,10 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   }
 
   //Loop through all the facets...
+  fEdgeFlag = true;
 #ifndef G4OPENGL_VERSION_2
   glBegin (GL_QUADS);
+  glEdgeFlag (GL_TRUE);
 #else
   fEmulate_GL_QUADS = true;
   glBeginVBO(GL_TRIANGLE_STRIP);
@@ -555,12 +589,18 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       if (isAuxEdgeVisible) {
 	edgeFlag[edgeCount] = 1;
       }
-      if (edgeFlag[edgeCount] > 0) {
-	glEdgeFlag (GL_TRUE);
-      } else {
-	glEdgeFlag (GL_FALSE);
-      }
 #ifndef G4OPENGL_VERSION_2
+      if (edgeFlag[edgeCount] > 0) {
+        if (fEdgeFlag != true) {
+          glEdgeFlag (GL_TRUE);
+          fEdgeFlag = true;
+        }
+      } else {
+        if (fEdgeFlag != false) {
+          glEdgeFlag (GL_FALSE);
+          fEdgeFlag = false;
+        }
+      }
       glNormal3d (normals[edgeCount].x(),
 		  normals[edgeCount].y(),
 		  normals[edgeCount].z());
@@ -587,10 +627,13 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       G4int edgeCount = 3;
       normals[edgeCount] = normals[0];
       vertex[edgeCount] = vertex[0];
-      edgeFlag[edgeCount] = -1;
-      glEdgeFlag (GL_FALSE);
-
 #ifndef G4OPENGL_VERSION_2
+      edgeFlag[edgeCount] = -1;
+      if (fEdgeFlag != false) {
+        glEdgeFlag (GL_FALSE);
+        fEdgeFlag = false;
+      }
+
       glNormal3d (normals[edgeCount].x(),
 		  normals[edgeCount].y(), 
 		  normals[edgeCount].z());
@@ -615,11 +658,14 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 	"\n   G4Polyhedron facet with " << nEdges << " edges" << G4endl;
     }
 
-    glDisable(GL_COLOR_MATERIAL); // Revert to glMaterial for hlr/sr.
-
+    
     // Do it all over again (twice) for hlr...
     if  (drawing_style == G4ViewParameters::hlr ||
 	 drawing_style == G4ViewParameters::hlhsr) {
+
+#ifndef G4OPENGL_VERSION_2
+      glDisable(GL_COLOR_MATERIAL); // Revert to glMaterial for hlr/sr.
+#endif
 
 #ifndef G4OPENGL_VERSION_2
       glEnd ();  // Placed here to balance glBegin above, allowing GL
@@ -658,15 +704,11 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 	  glPolygonMode (GL_FRONT, GL_FILL);
 	}
       }
-      GLfloat* painting_colour;
       if  (drawing_style == G4ViewParameters::hlr) {
 	if (isTransparent) {
 	  // Transparent - don't paint...
 	  goto end_of_drawing_through_stencil;
 	}
-	painting_colour = clear_colour;
-      } else {  // drawing_style == G4ViewParameters::hlhsr
-	painting_colour = current_colour;
       }
       if (isTransparent) {
 	// Transparent...
@@ -678,18 +720,26 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       glColor4fv (painting_colour);
 #ifndef G4OPENGL_VERSION_2
       glBegin (GL_QUADS);
+      glEdgeFlag (GL_TRUE);
+      fEdgeFlag = true;
 #else
       fEmulate_GL_QUADS = true;
       glBeginVBO(GL_TRIANGLE_STRIP);
 #endif
 
       for (int edgeCount = 0; edgeCount < 4; ++edgeCount) {
-  if (edgeFlag[edgeCount] > 0) {
-    glEdgeFlag (GL_TRUE);
-  } else {
-    glEdgeFlag (GL_FALSE);
-        }
 #ifndef G4OPENGL_VERSION_2
+        if (edgeFlag[edgeCount] > 0) {
+          if (fEdgeFlag != true) {
+            glEdgeFlag (GL_TRUE);
+            fEdgeFlag = true;
+          }
+        } else {
+          if (fEdgeFlag != false) {
+            glEdgeFlag (GL_FALSE);
+            fEdgeFlag = false;
+          }
+        }
 				glNormal3d (normals[edgeCount].x(),
 							normals[edgeCount].y(),
 							normals[edgeCount].z());
@@ -738,19 +788,28 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       }
       glDisable (GL_LIGHTING);
       glColor4fv (current_colour);
+      fEdgeFlag = true;
 #ifndef G4OPENGL_VERSION_2
       glBegin (GL_QUADS);
+      glEdgeFlag (GL_TRUE);
+      fEdgeFlag = true;
 #else
       fEmulate_GL_QUADS = true;
       glBeginVBO(GL_TRIANGLE_STRIP);
 #endif
       for (int edgeCount = 0; edgeCount < 4; ++edgeCount) {
-	if (edgeFlag[edgeCount] > 0) {
-	  glEdgeFlag (GL_TRUE);
-	} else {
-	  glEdgeFlag (GL_FALSE);
-	}
 #ifndef G4OPENGL_VERSION_2
+        if (edgeFlag[edgeCount] > 0) {
+          if (fEdgeFlag != true) {
+            glEdgeFlag (GL_TRUE);
+            fEdgeFlag = true;
+          }
+        } else {
+          if (fEdgeFlag != false) {
+            glEdgeFlag (GL_FALSE);
+            fEdgeFlag = false;
+          }
+        }
         glNormal3d (normals[edgeCount].x(),
                     normals[edgeCount].y(),
                     normals[edgeCount].z());
@@ -778,8 +837,11 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 #endif
 
       glDepthFunc (GL_LEQUAL);   // Revert for next facet.
+      fEdgeFlag = true;
 #ifndef G4OPENGL_VERSION_2
       glBegin (GL_QUADS);      // Ready for next facet.  GL
+      glEdgeFlag (GL_TRUE);
+      fEdgeFlag = true;
       // says it ignores incomplete
       // quadrilaterals, so final empty
       // glBegin/End sequence should be OK.
@@ -803,7 +865,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   if (dynamic_cast<const G4PolyhedronTrd2*>(&polyhedron)) {
 //    OptimizeVBOForTrd();
   } else if (dynamic_cast<const G4PolyhedronCons*>(&polyhedron)) {
-    OptimizeVBOForCons((polyhedron.GetNoVertices()-2)/2 ); // top + bottom + all faces
+//    OptimizeVBOForCons((polyhedron.GetNoVertices()-2)/2 ); // top + bottom + all faces
   }
 
   glEndVBO();
@@ -812,7 +874,9 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   
   glDisable (GL_STENCIL_TEST);  // Revert to default for next primitive.
   glDepthMask (GL_TRUE);        // Revert to default for next primitive.
+#ifndef G4OPENGL_VERSION_2
   glDisable (GL_LIGHTING);      // Revert to default for next primitive.
+#endif
 }
 
 void G4OpenGLSceneHandler::AddCompound(const G4VTrajectory& traj) {
@@ -1020,7 +1084,7 @@ void G4OpenGLSceneHandler::glEndVBO()  {
     int sizeV = fOglVertex.size();
     // FIXME : perhaps a problem withBufferData in OpenGL other than WebGL ?
 //    void glBufferData(	GLenum target, GLsizeiptr size, const GLvoid * data, GLenum usage);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(double)*sizeV, &fOglVertex[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(double)*sizeV, &fOglVertex[0], GL_STATIC_DRAW);
 #else
     glBufferDatafv(GL_ARRAY_BUFFER, fOglVertex.begin(), fOglVertex.end(), GL_STATIC_DRAW);
 #endif
@@ -1031,9 +1095,9 @@ void G4OpenGLSceneHandler::glEndVBO()  {
     // Load fOglVertex into VBO
 #ifndef G4VIS_BUILD_OPENGLWT_DRIVER
     int sizeI = fOglIndices.size();
-    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(int)*sizeI, &fOglIndices[0]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(int)*sizeI, &fOglIndices[0], GL_STATIC_DRAW);
 #else
-    glBufferDataiv(GL_ELEMENT_ARRAY_BUFFER, fOglIndices.begin(), fOglIndices.end(), GL_STATIC_DRAW);
+    glBufferDataiv(GL_ELEMENT_ARRAY_BUFFER, fOglIndices.begin(), fOglIndices.end(), GL_STATIC_DRAW, GL_UNSIGNED_BYTE);
 #endif
     
     //----------------------------
@@ -1046,12 +1110,12 @@ void G4OpenGLSceneHandler::glEndVBO()  {
     printf("G4OpenGLSceneHandler::glEndVBO() To DrawElements:%d vertex and %d indices\n",fOglVertex.size()/6,fOglIndices.size());
 #endif
     
-    // the vertexPositionAttribute_ is inside the G4OpenGLViewer
+    // the fVertexPositionAttribute is inside the G4OpenGLViewer
     G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
     if (pGLViewer) {
-      glEnableVertexAttribArray(pGLViewer->vertexPositionAttribute_);
+      glEnableVertexAttribArray(pGLViewer->fVertexPositionAttribute);
 
-      glVertexAttribPointer(pGLViewer->vertexPositionAttribute_,
+      glVertexAttribPointer(pGLViewer->fVertexPositionAttribute,
                             3,     // size: Every vertex has an X, Y anc Z component
                             GL_FLOAT, // type: They are floats
                             GL_FALSE, // normalized: Please, do NOT normalize the vertices
@@ -1063,16 +1127,13 @@ void G4OpenGLSceneHandler::glEndVBO()  {
     }
     
     
-    /*  glDrawArrays(fDrawArrayType, // GL_POINTS, GL_LINE_STRIP, GL_LINE_LOOP, GL_LINES, GL_TRIANGLE_FAN, GL_TRIANGLE_STRIP, and GL_TRIANGLES
-     0, fOglVertex.size()/6);
-     */
     glBindBuffer(GL_ARRAY_BUFFER, fVertexBufferObject);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, fIndicesBufferObject);
 //    glDrawElements(fDrawArrayType, fOglIndices.size(), GL_UNSIGNED_SHORT, 0);
     glDrawElements(fDrawArrayType, fOglIndices.size(), GL_UNSIGNED_SHORT, 0);
     
     if (pGLViewer) {
-      glDisableVertexAttribArray(pGLViewer->vertexPositionAttribute_);
+      glDisableVertexAttribArray(pGLViewer->fVertexPositionAttribute);
     }
 
     // delete the buffer
@@ -1098,8 +1159,7 @@ void G4OpenGLSceneHandler::drawVBOArray(std::vector<double> vertices)  {
   // Load oglData into VBO
 #ifndef G4VIS_BUILD_OPENGLWT_DRIVER
   int s = vertices.size();
-  glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(double)*s, &vertices[0]);
-  
+  glBufferData(GL_ARRAY_BUFFER, sizeof(double)*s, &vertices[0], GL_STATIC_DRAW);
 #else
   glBufferDatafv(GL_ARRAY_BUFFER, vertices.begin(), vertices.end(), GL_STATIC_DRAW);
 #endif
@@ -1109,30 +1169,50 @@ void G4OpenGLSceneHandler::drawVBOArray(std::vector<double> vertices)  {
   //----------------------------
   glBindBuffer(GL_ARRAY_BUFFER, fVertexBufferObject);
   
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLSceneHandler::drawVBOArray To DrawArray:%d\n",vertices.size()/6);
-#endif
-  
-  // the vertexPositionAttribute_ is inside the G4OpenGLViewer
+  // the fVertexPositionAttribute is inside the G4OpenGLViewer
   G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
   if (pGLViewer) {
-    glEnableVertexAttribArray(pGLViewer->vertexPositionAttribute_);
+    glEnableVertexAttribArray(pGLViewer->fVertexPositionAttribute);
 
-    glVertexAttribPointer(pGLViewer->vertexPositionAttribute_,
+//    glVertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer)
+
+/*
+ GL_DOUBLE
+ Warning: This section describes legacy OpenGL APIs that have been removed from core OpenGL 3.1 and above (they are only deprecated in OpenGL 3.0). It is recommended that you not use this functionality in your programs.
+ 
+ glLoadMatrixd, glRotated and any other function that have to do with the double type. Most GPUs don't support GL_DOUBLE (double) so the driver will convert the data to GL_FLOAT (float) and send to the GPU. If you put GL_DOUBLE data in a VBO, the performance might even be much worst than immediate mode (immediate mode means glBegin, glVertex, glEnd). GL doesn't offer any better way to know what the GPU prefers.
+ */
+#ifndef G4VIS_BUILD_OPENGLWT_DRIVER
+    glVertexAttribPointer(pGLViewer->fVertexPositionAttribute,
                           3,     // size: Every vertex has an X, Y anc Z component
-                          GL_FLOAT, // type: They are floats
+                          GL_DOUBLE, // type: They are double
                           GL_FALSE, // normalized: Please, do NOT normalize the vertices
-                          2*3*4, // stride: The first byte of the next vertex is located this
+                          6*sizeof(double), // stride: The first byte of the next vertex is located this
                           //         amount of bytes further. The format of the VBO is
                           //         vx, vy, vz, nx, ny, nz and every element is a
                           //         Float32, hence 4 bytes large
                           0);    // offset: The byte position of the first vertex in the buffer
+#else
+    glVertexAttribPointer(pGLViewer->fVertexPositionAttribute,
+                          3,     // size: Every vertex has an X, Y anc Z component
+                          GL_FLOAT, // type: They are floats
+                          GL_FALSE, // normalized: Please, do NOT normalize the vertices
+                          2*3*4,    // stride: The first byte of the next vertex is located this
+                          //         amount of bytes further. The format of the VBO is
+                          //         vx, vy, vz, nx, ny, nz and every element is a
+                          //         Float32, hence 4 bytes large
+                          0);    // offset: The byte position of the first vertex in the buffer
+#endif
   }
   
   glDrawArrays(fDrawArrayType, // GL_POINTS, GL_LINE_STRIP, GL_LINE_LOOP, GL_LINES, GL_TRIANGLE_FAN, GL_TRIANGLE_STRIP, and GL_TRIANGLES
                0, vertices.size()/6);
   if (pGLViewer) {
-    glDisableVertexAttribArray(pGLViewer->vertexPositionAttribute_);
+#ifndef G4VIS_BUILD_OPENGLWT_DRIVER
+    glDisableClientState( GL_VERTEX_ARRAY );
+#else
+    glDisableVertexAttribArray(pGLViewer->fVertexPositionAttribute);
+#endif
   }
   
   // delet the buffer

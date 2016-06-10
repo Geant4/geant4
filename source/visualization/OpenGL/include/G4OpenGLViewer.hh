@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh 75567 2013-11-04 11:35:11Z gcosmo $
+// $Id: G4OpenGLViewer.hh 86360 2014-11-10 08:34:16Z gcosmo $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -37,13 +37,65 @@
 
 #include "G4VViewer.hh"
 #include "G4OpenGL.hh"
+#ifdef G4OPENGL_VERSION_2
+#include "G4OpenGLVboDrawer.hh"
+#endif
 
 class G4OpenGLSceneHandler;
 class G4OpenGL2PSAction;
 class G4Text;
-#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
-#include "G4OpenGLWtDrawer.hh"
-#endif
+
+class G4OpenGLViewerPickMap {
+  public :
+  inline void setName(G4String n) {
+    fName = n;
+  }
+  
+  inline void setHitNumber(G4int n) {
+    fHitNumber = n;
+  }
+
+  inline void setSubHitNumber(G4int n) {
+    fSubHitNumber = n;
+  }
+  inline void setPickName(G4int n) {
+    fPickName= n;
+  }
+
+  inline void addAttributes(G4String att) {
+    fAttributes.push_back(att);
+  }
+
+
+  inline G4String getName() {
+    return fName;
+  }
+  inline G4int getHitNumber() {
+    return fHitNumber;
+  }
+
+  inline G4int getSubHitNumber() {
+    return fSubHitNumber;
+  }
+
+  inline G4int getPickName() {
+    return fPickName;
+  }
+
+  inline std::vector <G4String > getAttributes() {
+    return fAttributes;
+  }
+
+  G4String print();
+  
+  private :
+  G4String fName;
+  G4int fHitNumber;
+  G4int fSubHitNumber;
+  G4int fPickName;
+  std::vector <G4String > fAttributes;
+
+};
 
 // Base class for various OpenGLView classes.
 class G4OpenGLViewer: virtual public G4VViewer {
@@ -56,16 +108,25 @@ class G4OpenGLViewer: virtual public G4VViewer {
 
 public:
   void ClearView  ();
+  void ClearViewWithoutFlush ();
 //////////////////////////////Vectored PostScript production functions///
-  void printEPS();
+  bool printEPS();
+  virtual bool exportImage(std::string name="", int width=-1, int height=-1);
+
+  bool setExportImageFormat(std::string format,bool quiet = false);
+  // change the export image format according to thoses available for the current viewer
 
   // Special case for Wt, we want to have acces to the drawer
-#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
-  inline G4OpenGLWtDrawer* getWtDrawer() {return fWtDrawer;}
+#ifdef G4OPENGL_VERSION_2
+  inline G4OpenGLVboDrawer* getWtDrawer() {return fVboDrawer;}
   
   // Associate the Wt drawer to the OpenGLViewer and the OpenGLSceneHandler
-  void setWtDrawer(G4OpenGLWtDrawer* drawer);
-  G4OpenGLWtDrawer* fWtDrawer;
+  void setVboDrawer(G4OpenGLVboDrawer* drawer);
+  G4OpenGLVboDrawer* fVboDrawer;
+
+  inline bool isInitialized() {
+    return fGlViewInitialized;
+  }
 #endif
 
 protected:
@@ -91,20 +152,23 @@ protected:
   void InitializeGLView ();
   void ResizeGLView();
   void ResizeWindow(unsigned int, unsigned int);
-  void Pick(GLdouble x, GLdouble y);
+  virtual G4String Pick(GLdouble x, GLdouble y);
+  std::vector < G4OpenGLViewerPickMap* > GetPickDetails(GLdouble x, GLdouble y);
   virtual void CreateFontLists () {}
   void rotateScene (G4double dx, G4double dy);
   void rotateSceneToggle (G4double dx, G4double dy);
 //////////////////////////////Vectored PostScript production functions///
   // print EPS file. Depending of fVectoredPs, it will print Vectored or not
-  void setPrintSize(G4int,G4int);
+  void setExportSize(G4int,G4int);
   // set the new print size. 
   // -1 means 'print size' = 'window size'
   // Setting size greater than max OpenGL viewport size will set the size to
   // maximum
-  void setPrintFilename(G4String name,G4bool inc);
-  // set print filename. 
+  bool setExportFilename(G4String name,G4bool inc = true);
+  // set export filename.
   // if inc, then the filename will be increment by one each time
+  // try to guesss the correct format according to the extention
+
   std::string getRealPrintFilename();
   unsigned int getWinWidth() const;
   unsigned int getWinHeight() const;
@@ -113,7 +177,19 @@ protected:
   GLdouble getSceneNearWidth();
   GLdouble getSceneFarWidth();
   GLdouble getSceneDepth();
+  void addExportImageFormat(std::string format);
+  // add a image format to the available export format list
   G4bool isGl2psWriting();
+  void g4GluPickMatrix(GLdouble x, GLdouble y, GLdouble width, GLdouble height,
+                       GLint viewport[4]);
+  // MESA implementation of gluPickMatrix
+  
+  void g4GluLookAt( GLdouble eyex, GLdouble eyey, GLdouble eyez,
+                   GLdouble centerx, GLdouble centery, GLdouble
+                   centerz,
+                   GLdouble upx, GLdouble upy, GLdouble upz );
+  // MESA implementation of gluLookAt
+
   G4bool                            fPrintColour;
   G4bool                            fVectoredPs;
 
@@ -137,65 +213,31 @@ protected:
 
   G4double     fRot_sens;        // Rotation sensibility in degrees
   G4double     fPan_sens;        // Translation sensibility
+  unsigned int fWinSize_x;
+  unsigned int fWinSize_y;
+  std::vector < std::string > fExportImageFormatVector;
+  std::string fDefaultExportImageFormat;
+  std::string fExportImageFormat;
+  int fExportFilenameIndex;
+  G4int fPrintSizeX;
+  G4int fPrintSizeY;
 
-public :
-#ifdef G4OPENGL_VERSION_2
-  // define the shaders for vertex and fragment in plain text format
-  std::string vertexShader_;
-  std::string fragmentShader_;
 
-
-  // define the keyword shader to handle it in a better way for OpenGL and WebGL
-#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
-  #define Shader Wt::WGLWidget::Shader
-#else
-  #define Shader GLuint
-#endif
-  
-  // define some attributes and variables for OpenGL and WebGL
-#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
-  Wt::WGLWidget::Program shaderProgram_;
-
-  // Program and related variables
-  Wt::WGLWidget::AttribLocation vertexPositionAttribute_;
-  Wt::WGLWidget::AttribLocation vertexNormalAttribute_;
-  Wt::WGLWidget::UniformLocation pMatrixUniform_;
-  Wt::WGLWidget::UniformLocation cMatrixUniform_;
-  Wt::WGLWidget::UniformLocation mvMatrixUniform_;
-  Wt::WGLWidget::UniformLocation nMatrixUniform_;
-  Wt::WGLWidget::UniformLocation tMatrixUniform_;
-#else
-  GLuint shaderProgram_;
-
-  // Program and related variables
-  GLuint vertexPositionAttribute_;
-  GLuint vertexNormalAttribute_;
-  GLuint pMatrixUniform_;
-  GLuint cMatrixUniform_;
-  GLuint mvMatrixUniform_;
-  GLuint nMatrixUniform_;
-  GLuint tMatrixUniform_;
-#endif
-  
-#endif
-  
 private :
-  static G4int                             fPrintSizeX;
-  static G4int                             fPrintSizeY;
-  static G4String                          fPrintFilename;
-  static int                               fPrintFilenameIndex;
-  unsigned int fWinSize_x, fWinSize_y;
-  G4float                           fPointSize;
+  G4float fPointSize;
+  G4String fExportFilename;
+  G4String fDefaultExportFilename;
   G4bool fSizeHasChanged;
   int fGl2psDefaultLineWith;
   int fGl2psDefaultPointSize;
-
+  bool fGlViewInitialized;
+  
   // size of the OpenGL frame
   void rotateSceneThetaPhi(G4double dx, G4double dy);
   void rotateSceneInViewDirection (G4double dx, G4double dy);
   bool printGl2PS();
-  G4int getRealPrintSizeX();
-  G4int getRealPrintSizeY();
+  G4int getRealExportWidth();
+  G4int getRealExportHeight();
   GLubyte* grabPixels (int inColor,
 		       unsigned int width,
 		       unsigned int height);
@@ -204,6 +246,72 @@ private :
 
   bool printVectoredEPS();
   // print vectored EPS files
+  
+  bool fIsGettingPickInfos;
+  // Block SetView() during picking
+  
+#ifdef G4OPENGL_VERSION_2
+public:
+#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+  inline Wt::WGLWidget::Program getShaderProgram() {
+    return fShaderProgram;
+  }
+  inline Wt::WGLWidget::UniformLocation getShaderProjectionMatrix() {
+    return fpMatrixUniform;
+  }
+  inline Wt::WGLWidget::UniformLocation getShaderTransformMatrix() {
+    return ftMatrixUniform;
+  }
+#else
+  inline GLuint getShaderProgram() {
+    return fShaderProgram;
+  }
+  inline GLuint getShaderProjectionMatrix() {
+    return fpMatrixUniform;
+  }
+  inline GLuint getShaderTransformMatrix() {
+    return ftMatrixUniform;
+  }
+  inline GLuint getShaderViewModelMatrix() {
+    return fmvMatrixUniform;
+  }
+#endif
+
+protected :
+  
+  // define the keyword shader to handle it in a better way for OpenGL and WebGL
+#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+#define Shader Wt::WGLWidget::Shader
+#else
+#define Shader GLuint
+#endif
+  
+  // define some attributes and variables for OpenGL and WebGL
+#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+  Wt::WGLWidget::Program fShaderProgram;
+  
+  // Program and related variables
+  Wt::WGLWidget::AttribLocation fVertexPositionAttribute;
+  Wt::WGLWidget::AttribLocation fVertexNormalAttribute;
+  Wt::WGLWidget::UniformLocation fpMatrixUniform;
+  Wt::WGLWidget::UniformLocation fcMatrixUniform;
+  Wt::WGLWidget::UniformLocation fmvMatrixUniform;
+  Wt::WGLWidget::UniformLocation fnMatrixUniform;
+  Wt::WGLWidget::UniformLocation ftMatrixUniform;
+#else
+  GLuint fShaderProgram;
+  
+  // Program and related variables
+  GLuint fVertexPositionAttribute;
+  GLuint fVertexNormalAttribute;
+  GLuint fpMatrixUniform;
+  GLuint fcMatrixUniform;
+  GLuint fmvMatrixUniform;
+  GLuint fnMatrixUniform;
+  GLuint ftMatrixUniform;
+#endif
+  
+#endif
 };
 
 #endif

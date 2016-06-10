@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepFile.cc 66870 2013-01-14 23:38:59Z adotti $
+// $Id: G4HepRepFile.cc 78838 2014-01-28 08:46:17Z gcosmo $
 //
 // 
 // Joseph Perl  1 October 2001
@@ -44,7 +44,7 @@ G4HepRepFile::G4HepRepFile():
   G4VGraphicsSystem("G4HepRepFile",
 		    "HepRepFile",
 		    "A HepRep (format 1) ascii file driver",
-		    G4VGraphicsSystem::threeD) {
+		    G4VGraphicsSystem::fileWriter) {
 		G4HepRepMessenger::GetInstance();
         hepRepXMLWriter = new G4HepRepFileXMLWriter();
 }

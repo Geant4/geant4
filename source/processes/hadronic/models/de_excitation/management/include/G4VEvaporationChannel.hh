@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEvaporationChannel.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4VEvaporationChannel.hh 86986 2014-11-21 13:00:05Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -61,6 +61,9 @@ public:
 			G4EvaporationChannelType timeType = fDelayedEmission);
   virtual ~G4VEvaporationChannel();
 
+  // option definition
+  virtual void Initialise();
+
   // return level life time, by default zero
   virtual G4double GetLifeTime(G4Fragment* theNucleus);
 
@@ -72,11 +75,19 @@ public:
   // but not included in this vector
   virtual G4FragmentVector* BreakUpFragment(G4Fragment* theNucleus);
 
+  // returns "true" if primary fragment is decayed and deleted
+  // returns "false" if primary fragment is modified but stay alive
+  // emitted fragments are added to the vector of results
+  virtual G4bool 
+  BreakUpChain(G4FragmentVector* theResult, G4Fragment* theNucleus);
+
   // old method initial fragment is not modified, its copy included 
   // in the list of emitted fragments
   virtual G4FragmentVector * BreakUp(const G4Fragment & theNucleus) = 0;
 
   virtual G4double GetEmissionProbability(G4Fragment* theNucleus) = 0;
+
+  virtual void Dump() const;
 
   inline G4String GetName() const {return Name;}
   inline void SetName(const G4String & aName) { Name = aName;}
@@ -99,9 +110,6 @@ private:
   const G4VEvaporationChannel & operator=(const G4VEvaporationChannel & right);
   G4bool operator==(const G4VEvaporationChannel & right) const;
   G4bool operator!=(const G4VEvaporationChannel & right) const;
-
-  
-
 };
 
 

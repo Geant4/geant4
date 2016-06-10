@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B2aDetectorConstruction.cc 77603 2013-11-26 17:11:49Z gcosmo $
+// $Id: B2aDetectorConstruction.cc 87359 2014-12-01 16:04:27Z gcosmo $
 //
 /// \file B2aDetectorConstruction.cc
 /// \brief Implementation of the B2aDetectorConstruction class
@@ -214,9 +214,11 @@ G4VPhysicalVolume* B2aDetectorConstruction::DefineVolumes()
   // Tracker segments
 
   G4cout << "There are " << fNbOfChambers << " chambers in the tracker region. "
-         << "\nThe chambers are " << chamberWidth/cm << " cm of "
-         << fChamberMaterial->GetName() << "\nThe distance between chamber is "
-         << chamberSpacing/cm << " cm" << G4endl;
+         << G4endl
+         << "The chambers are " << chamberWidth/cm << " cm of "
+         << fChamberMaterial->GetName() << G4endl
+         << "The distance between chamber is " << chamberSpacing/cm << " cm" 
+         << G4endl;
   
   G4double firstPosition = -trackerSize + chamberSpacing;
   G4double firstLength   = trackerLength/10;
@@ -320,10 +322,14 @@ void B2aDetectorConstruction::SetTargetMaterial(G4String materialName)
      if ( pttoMaterial ) {
         fTargetMaterial = pttoMaterial;
         if (fLogicTarget) fLogicTarget->SetMaterial(fTargetMaterial);
-        G4cout << "\n----> The target is made of " << materialName << G4endl;
+        G4cout 
+          << G4endl 
+          << "----> The target is made of " << materialName << G4endl;
      } else {
-        G4cout << "\n-->  WARNING from SetTargetMaterial : "
-               << materialName << " not found" << G4endl;
+        G4cout 
+          << G4endl 
+          << "-->  WARNING from SetTargetMaterial : "
+          << materialName << " not found" << G4endl;
      }
   }
 }
@@ -344,10 +350,14 @@ void B2aDetectorConstruction::SetChamberMaterial(G4String materialName)
             if (fLogicChamber[copyNo]) fLogicChamber[copyNo]->
                                                SetMaterial(fChamberMaterial);
         }
-        G4cout << "\n----> The chambers are made of " << materialName << G4endl;
+        G4cout 
+          << G4endl 
+          << "----> The chambers are made of " << materialName << G4endl;
      } else {
-        G4cout << "\n-->  WARNING from SetChamberMaterial : "
-               << materialName << " not found" << G4endl;
+        G4cout 
+          << G4endl 
+          << "-->  WARNING from SetChamberMaterial : "
+          << materialName << " not found" << G4endl;
      }
   }
 }

@@ -76,8 +76,8 @@ class DMXPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
   G4double energy_pri;
 
    public:
-  const long* GetEventSeeds()        {return seeds;};
-  G4double GetEnergyPrimary()   {return energy_pri;};
+  const long* GetEventSeeds() const       {return seeds;};
+  G4double GetEnergyPrimary() const  {return energy_pri;};
 
 
 };

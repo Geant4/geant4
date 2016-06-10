@@ -3,7 +3,7 @@
 #
 # 21st September 2010 Ben Morgan
 #
-# $Id: CMakeLists.txt 78013 2013-12-02 12:51:57Z gcosmo $
+# $Id: CMakeLists.txt 87059 2014-11-24 11:41:07Z gcosmo $
 #
 
 #------------------------------------------------------------------------------
@@ -22,12 +22,33 @@ endif()
 #------------------------------------------------------------------------------
 # - Define CMake requirements and override make rules as needed
 #
-cmake_minimum_required(VERSION 2.6.4 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.8.4 FATAL_ERROR)
+
+# If Policy CMP0022 exists, use OLD because Geant4 still needs
+# to support versions < 2.8.12.
+# This relates to LINK_INTERFACE_LIBRARIES and can be removed once
+# minimum required CMake version reaches 2.8.12
+if(POLICY CMP0022)
+  cmake_policy(SET CMP0022 OLD)
+endif()
+
+# If Policy CMP0042 exists, use OLD to prefer the use of install names
+# instead of the new @rpath default. This is temporary to suppress warnings
+# on newer CMake versions.
+if(POLICY CMP0042)
+  cmake_policy(SET CMP0042 OLD)
+endif()
+
+# If Policy CMP0043 exists, use OLD because Geant4 still needs
+# to support Geant4 =< 2.8.12.
+# This relates to the use of generator expressions to set COMPILE_DEFINITIONS
+# and can be removed once the minimum required CMake version reaches 2.8.10.
+if(POLICY CMP0043)
+  cmake_policy(SET CMP0043 OLD)
+endif()
+
 set(CMAKE_USER_MAKE_RULES_OVERRIDE_CXX
    ${CMAKE_SOURCE_DIR}/cmake/Modules/Geant4MakeRules_cxx.cmake)
-
-#set(CMAKE_USER_MAKE_RULES_OVERRIDE_Fortran
-#   ${CMAKE_SOURCE_DIR}/cmake/Modules/Geant4MakeRules_fortran.cmake)
 
 #------------------------------------------------------------------------------
 # - Project definition
@@ -51,9 +72,9 @@ set(CMAKE_MODULE_PATH
 # See the documentation in each of these modules for further details.
 #
 # - Versioning. We do this here for now
-set(${PROJECT_NAME}_VERSION "10.0.0")
+set(${PROJECT_NAME}_VERSION "10.1.0")
 set(${PROJECT_NAME}_VERSION_MAJOR "10")
-set(${PROJECT_NAME}_VERSION_MINOR "0")
+set(${PROJECT_NAME}_VERSION_MINOR "1")
 set(${PROJECT_NAME}_VERSION_PATCH "0")
 
 # - Provide dependent options as these are needed for some Geant4 features
@@ -97,7 +118,7 @@ add_subdirectory(source)
 #----------------------------------------------------------------------------
 # - Perform all post build tasks
 # At the CMake level, this simply means that we must know about targets
-# and other properties processed in source and environments trees before 
+# and other properties processed in source and environments trees before
 # these tasks can be performed.
 #
 #----------------------------------------------------------------------------

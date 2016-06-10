@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBinaryNeutronBuilder.cc 68750 2013-04-05 10:19:04Z gcosmo $
+// $Id: G4FTFBinaryNeutronBuilder.cc 83616 2014-09-04 13:30:16Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -43,7 +43,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4NeutronInelasticCrossSection.hh"
 #include "G4BGGNucleonInelasticXS.hh"
 
 G4FTFBinaryNeutronBuilder::
@@ -76,7 +75,6 @@ G4FTFBinaryNeutronBuilder::
 {
   delete theStringDecay;
   delete theStringModel;
-  delete theCascade;
   if ( theQuasiElastic ) delete theQuasiElastic;
 }
 

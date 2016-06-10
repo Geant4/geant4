@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.cc 76744 2013-11-14 15:50:20Z gcosmo $
+// $Id: G4LundStringFragmentation.cc 87361 2014-12-01 16:10:28Z gcosmo $
 // GEANT4 tag $Name:  $ 1.8
 //
 // -----------------------------------------------------------------------------
@@ -39,6 +39,8 @@
 #include "G4FragmentingString.hh"
 #include "G4DiQuarks.hh"
 #include "G4Quarks.hh"
+
+//#define debug_LUNDfragmentation                       // Uzhi 20.06.2014
 
 // Class G4LundStringFragmentation 
 //*************************************************************************************
@@ -55,20 +57,20 @@ G4LundStringFragmentation::G4LundStringFragmentation()
 // ------ Minimal invariant mass used at a string fragmentation -
     WminLUND = 0.45*GeV; //0.23*GeV;                   // Uzhi 0.7 -> 0.23 3.8.10 //0.8 1.5
 // ------ Smooth parameter used at a string fragmentation for ---
-// ------ smearinr sharp mass cut-off ---------------------------
+// ------ smearing sharp mass cut-off ---------------------------
     SmoothParam  = 0.2;                   
 
-//    SetStringTensionParameter(0.25);                           
     SetStringTensionParameter(1.);                         
-    SetDiquarkSuppression(0.087);                 // Uzhi 18.05.2012
-    SetDiquarkBreakProbability(0.05); 
-    SetStrangenessSuppression(0.47);              // Uzhi 18.05.2012
+    SetDiquarkBreakProbability(0.05); // 0.05                          Uzhi 27.09.2014
+    SetStrangenessSuppression(0.447); // 0.47                          Uzhi 27.09.2014
+    SetDiquarkSuppression(0.05);      // 0.087                         Uzhi 27.09.2014
 
 // For treating of small string decays
    for(G4int i=0; i<3; i++)
    {  for(G4int j=0; j<3; j++)
       {  for(G4int k=0; k<6; k++)
-         {  Meson[i][j][k]=0; MesonWeight[i][j][k]=0.;
+         {
+           Meson[i][j][k]=0; MesonWeight[i][j][k]=0.;
          }
       }
    }
@@ -383,10 +385,10 @@ G4LundStringFragmentation::G4LundStringFragmentation()
 		G4int Uzhi;
 		G4cin>>Uzhi;
     */
-   //StrangeSuppress=0.38;
+
    Prob_QQbar[0]=StrangeSuppress;         // Probability of ddbar production
    Prob_QQbar[1]=StrangeSuppress;         // Probability of uubar production
-   Prob_QQbar[2]=StrangeSuppress/(2.+StrangeSuppress);//(1.-2.*StrangeSuppress); // Probability of ssbar production
+   Prob_QQbar[2]=1.0-2.*StrangeSuppress;  // Probability of ssbar production Uzhi May 2014
 
    //A.R. 25-Jul-2012 : Coverity fix.
    for ( G4int i=0 ; i<35 ; i++ ) { 
@@ -408,59 +410,73 @@ void G4LundStringFragmentation::SetMinimalStringMass(const G4FragmentingString  
 {
 	G4double EstimatedMass=0.;
 	G4int Number_of_quarks=0;
-
+        G4int Number_of_squarks=0;
+        
 	G4double StringM=string->Get4Momentum().mag();
 
 	G4int Qleft =std::abs(string->GetLeftParton()->GetPDGEncoding());
 
-	//G4cout<<"Min mass Qleft -------------------"<<G4endl;
-	//G4cout<<"String mass"<<string->Get4Momentum().mag()<<G4endl;
+#ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
+//  G4cout<<"MinStringMass// Input String mass "<<string->Get4Momentum().mag()<<" Qleft "<<Qleft<<G4endl;
+#endif
+
 	if( Qleft > 1000)
 	{
 		Number_of_quarks+=2;
 		G4int q1=Qleft/1000;
 		if( q1 < 3) {EstimatedMass +=Mass_of_light_quark;}
-		if( q1 > 2) {EstimatedMass +=Mass_of_heavy_quark;}
+		if( q1 > 2) {EstimatedMass +=Mass_of_heavy_quark; Number_of_squarks++;}
 
 		G4int q2=(Qleft/100)%10;
 		if( q2 < 3) {EstimatedMass +=Mass_of_light_quark;}
-		if( q2 > 2) {EstimatedMass +=Mass_of_heavy_quark;}
-		EstimatedMass +=Mass_of_string_junction;
+		if( q2 > 2) {EstimatedMass +=Mass_of_heavy_quark; Number_of_squarks++;}
+//		EstimatedMass +=Mass_of_string_junction;
+//if((q1 > 2)||(q2 > 2)) EstimatedMass -= 120*MeV;                 // Uzhi April 2014 ???
 	}
 	else
 	{
 		Number_of_quarks++;
 		if( Qleft < 3) {EstimatedMass +=Mass_of_light_quark;}
-		if( Qleft > 2) {EstimatedMass +=Mass_of_heavy_quark;}
+		if( Qleft > 2) {EstimatedMass +=Mass_of_heavy_quark; Number_of_squarks++;}
 	}
 
-	//G4cout<<"Min mass Qleft "<<Qleft<<" "<<EstimatedMass<<G4endl;
-
+#ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
+//  G4cout<<"Min mass with Qleft "<<Qleft<<" "<<EstimatedMass<<G4endl;
+#endif
 	G4int Qright=std::abs(string->GetRightParton()->GetPDGEncoding());
-
 	if( Qright > 1000)
 	{
 		Number_of_quarks+=2;
 		G4int q1=Qright/1000;
 		if( q1 < 3) {EstimatedMass +=Mass_of_light_quark;}
-		if( q1 > 2) {EstimatedMass +=Mass_of_heavy_quark;}
+		if( q1 > 2) {EstimatedMass +=Mass_of_heavy_quark; Number_of_squarks++;}
 
 		G4int q2=(Qright/100)%10;
 		if( q2 < 3) {EstimatedMass +=Mass_of_light_quark;}
-		if( q2 > 2) {EstimatedMass +=Mass_of_heavy_quark;}
-		EstimatedMass +=Mass_of_string_junction;
+		if( q2 > 2) {EstimatedMass +=Mass_of_heavy_quark; Number_of_squarks++;}
+		//EstimatedMass +=Mass_of_string_junction;
+//if((q1 > 2)||(q2 > 2)) EstimatedMass -= 120*MeV;                 // Uzhi April 2014 ???
 	}
 	else
 	{
 		Number_of_quarks++;
 		if( Qright < 3) {EstimatedMass +=Mass_of_light_quark;}
-		if( Qright > 2) {EstimatedMass +=Mass_of_heavy_quark;}
+		if( Qright > 2) {EstimatedMass +=Mass_of_heavy_quark; Number_of_squarks++;}
 	}
 
-	//G4cout<<"Min mass Qright "<<Qright<<" "<<EstimatedMass<<G4endl;
+#ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
+//  G4cout<<"Min mass with Qleft and Qright "<<Qright<<" "<<EstimatedMass<<G4endl;
+#endif
 
-	if(Number_of_quarks==2){EstimatedMass +=100.*MeV;}
-	if(Number_of_quarks==3){EstimatedMass += 20.*MeV;}
+	if(Number_of_quarks==2){EstimatedMass += 70.*MeV;} //100.*MeV;}
+//	if(Number_of_quarks==3){EstimatedMass += 20.*MeV;}
+        if(Number_of_quarks==3)
+        { 
+          if(Number_of_squarks==0) {EstimatedMass += 740.*MeV;} // 700 Uzhi July 2014
+          if(Number_of_squarks==1) {EstimatedMass += 740.*MeV;} // 740 Uzhi Nov 2014
+          if(Number_of_squarks==2) {EstimatedMass += 400.*MeV;}        
+          if(Number_of_squarks==3) {EstimatedMass += 382.*MeV;}
+        }
 	if(Number_of_quarks==4)
 	{
 		if((StringM > 1880.) && ( EstimatedMass < 2100))     {EstimatedMass = 2020.;}//1880.;}
@@ -469,28 +485,27 @@ void G4LundStringFragmentation::SetMinimalStringMass(const G4FragmentingString  
 		else if((StringM > 5130.) && ( EstimatedMass < 3450)){EstimatedMass = 5130.;}
 		else
 		{
-			EstimatedMass -=2.*Mass_of_string_junction;
+// VU 30 May 2014			EstimatedMass -=2.*Mass_of_string_junction;
 			if(EstimatedMass <= 1600.*MeV){EstimatedMass-=200.*MeV;}
 			else                          {EstimatedMass+=100.*MeV;}
 		}
 	}
 
-	//G4cout<<"EstimatedMass  "<<EstimatedMass <<G4endl;
-	//G4int Uzhi; G4cin>>Uzhi;
+#ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
+//  G4cout<<"EstimatedMass -------------------- "<<EstimatedMass <<G4endl;
+#endif
 	MinimalStringMass=EstimatedMass;
 	SetMinimalStringMass2(EstimatedMass);
 }
 
 //--------------------------------------------------------------------------------------
-void G4LundStringFragmentation::SetMinimalStringMass2(
-		const G4double aValue)
+void G4LundStringFragmentation::SetMinimalStringMass2(const G4double aValue)
 {
 	MinimalStringMass2=aValue * aValue;
 }
 
 //--------------------------------------------------------------------------------------
-G4KineticTrackVector* G4LundStringFragmentation::FragmentString(
-		const G4ExcitedString& theString)
+G4KineticTrackVector* G4LundStringFragmentation::FragmentString(const G4ExcitedString& theString)
 {
 	// Can no longer modify Parameters for Fragmentation.
 	PastInitPhase=true;
@@ -501,20 +516,33 @@ G4KineticTrackVector* G4LundStringFragmentation::FragmentString(
 	G4FragmentingString  aString(theString);
 	SetMinimalStringMass(&aString);
 
+#ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
+  G4cout<<G4endl<<"LUND StringFragm: String Mass "
+                             <<theString.Get4Momentum().mag()<<" Pz "
+                             <<theString.Get4Momentum().pz()
+                             <<"------------------------------------"<<G4endl;
+  G4cout<<"String ends Direct "<<theString.GetLeftParton()->GetPDGcode()<<" "
+                               <<theString.GetRightParton()->GetPDGcode()<<" "
+                               <<theString.GetDirection()<< G4endl;
+  G4cout<<"Left  mom "<<theString.GetLeftParton()->Get4Momentum()<<G4endl;
+  G4cout<<"Right mom "<<theString.GetRightParton()->Get4Momentum()<<G4endl;
+  G4cout<<"Check for Fragmentation "<<G4endl;
+#endif
+
 	G4KineticTrackVector * LeftVector(0);
 
-	if(!IsFragmentable(&aString)) // produce 1 hadron
+	if(!IsFragmentable(&aString)) // produce 1 hadron   True ===============
 	{
-		//G4cout<<"Non fragmentable"<<G4endl;
-		SetMassCut(1000.*MeV);
+#ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
+  G4cout<<"Non fragmentable - the string is converted to one hadron "<<G4endl;
+#endif
+		SetMassCut(10000.*MeV);
 		LeftVector=LightFragmentationTest(&theString);
 		SetMassCut(160.*MeV);
-	}  // end of if(!IsFragmentable(&aString))
 
-	if ( LeftVector != 0 ) {
-		// Uzhi insert 6.05.08 start
 		LeftVector->operator[](0)->SetFormationTime(theString.GetTimeOfCreation());
 		LeftVector->operator[](0)->SetPosition(theString.GetPosition());
+
 		if(LeftVector->size() > 1)
                 {
 		        // 2 hadrons created from qq-qqbar are stored
@@ -522,15 +550,33 @@ G4KineticTrackVector* G4LundStringFragmentation::FragmentString(
 			LeftVector->operator[](1)->SetPosition(theString.GetPosition());
 		}
 		return LeftVector;
-	}
+	}  // end of if(!IsFragmentable(&aString))
+
+#ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
+  G4cout<<"The string will be fragmented. "<<G4endl;
+#endif
 
 	// The string can fragment. At least two particles can be produced.
 	LeftVector =new G4KineticTrackVector;
 	G4KineticTrackVector * RightVector=new G4KineticTrackVector;
 
 	G4ExcitedString *theStringInCMS=CPExcited(theString);
+#ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
+  G4cout<<"CMS Left  mom "<<theStringInCMS->GetLeftParton()->Get4Momentum()<<G4endl;
+  G4cout<<"CMS Right mom "<<theStringInCMS->GetRightParton()->Get4Momentum()<<G4endl;
+#endif
 	G4LorentzRotation toCms=theStringInCMS->TransformToAlignedCms();
-
+#ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
+  G4cout<<"aligCMS Left  mom "<<theStringInCMS->GetLeftParton()->Get4Momentum()<<G4endl;
+  G4cout<<"aligCMS Right mom "<<theStringInCMS->GetRightParton()->Get4Momentum()<<G4endl;
+  G4cout<<G4endl<<"LUND StringFragm: String Mass "
+                             <<theStringInCMS->Get4Momentum().mag()<<" Pz Lab "
+                             <<theStringInCMS->Get4Momentum().pz()
+                             <<"------------------------------------"<<G4endl;
+  G4cout<<"String ends and Direction "<<theStringInCMS->GetLeftParton()->GetPDGcode()<<" "
+                                      <<theStringInCMS->GetRightParton()->GetPDGcode()<<" "
+                                      <<theStringInCMS->GetDirection()<< G4endl;
+#endif
         G4bool success = Loop_toFragmentString(theStringInCMS, LeftVector, RightVector);
 
 	delete theStringInCMS;
@@ -559,7 +605,6 @@ G4KineticTrackVector* G4LundStringFragmentation::FragmentString(
 	G4double TimeOftheStringCreation=theString.GetTimeOfCreation();
 	G4ThreeVector PositionOftheStringCreation(theString.GetPosition());
 
-	//G4cout<<"# prod hadrons "<<LeftVector->size()<<G4endl;
 	for(size_t C1 = 0; C1 < LeftVector->size(); C1++)
 	{
 		G4KineticTrack* Hadron = LeftVector->operator[](C1);
@@ -582,8 +627,9 @@ G4KineticTrackVector* G4LundStringFragmentation::FragmentString(
 G4bool G4LundStringFragmentation::IsFragmentable(const G4FragmentingString * const string)
 {
 	SetMinimalStringMass(string);
-	//  return sqr(MinimalStringMass + WminLUND) < string->Get4Momentum().mag2();
-	return MinimalStringMass < string->Get4Momentum().mag(); // 21.07.2010
+//  return sqr(MinimalStringMass + WminLUND) < string->Get4Momentum().mag2();
+//  G4cout<<"MinM StrM "<<MinimalStringMass<<" "<< string->Get4Momentum().mag()<<G4endl;
+	return MinimalStringMass < string->Get4Momentum().mag();
 }
 
 //----------------------------------------------------------------------------------------
@@ -602,11 +648,13 @@ G4bool G4LundStringFragmentation::StopFragmenting(const G4FragmentingString * co
 
 //----------------------------------------------------------------------------------------------------------
 G4bool G4LundStringFragmentation::SplitLast(G4FragmentingString * string,
-		G4KineticTrackVector * LeftVector,
-		G4KineticTrackVector * RightVector)
+                                            G4KineticTrackVector * LeftVector,
+                                            G4KineticTrackVector * RightVector)
 {
 	//... perform last cluster decay
-	//G4cout<<"Split last-----------------------------------------"<<G4endl;
+#ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
+  G4cout<<"Split last-----------------------------------------"<<G4endl;
+#endif
 	G4LorentzVector Str4Mom=string->Get4Momentum();
 	G4ThreeVector ClusterVel=string->Get4Momentum().boostVector();
 	G4double StringMass=string->Mass();
@@ -616,7 +664,11 @@ G4bool G4LundStringFragmentation::SplitLast(G4FragmentingString * string,
         NumberOf_FS=0;
 	for(G4int i=0; i<35; i++) {FS_Weight[i]=0.;}
 
-	//G4cout<<"StrMass "<<StringMass<<" q "<<string->GetLeftParton()->GetParticleName()<<" "<<string->GetRightParton()->GetParticleName()<<" StringMassSqr "<<StringMassSqr<<G4endl;
+#ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
+  G4cout<<"StrMass "<<StringMass<<" q "
+        <<string->GetLeftParton()->GetParticleName()<<" "
+        <<string->GetRightParton()->GetParticleName()<<G4endl;
+#endif
 
 	string->SetLeftPartonStable(); // to query quark contents..
 
@@ -636,9 +688,8 @@ G4bool G4LundStringFragmentation::SplitLast(G4FragmentingString * string,
 			Diquark_AntiDiquark_aboveThreshold_lastSplitting(string, LeftHadron, RightHadron);
 
 			if(NumberOf_FS == 0) return false;
-			//G4cout<<"NumberOf_FS "<<NumberOf_FS<<G4endl;
+
                         G4int sampledState = SampleState();
-			//SampledState=16;
 			if(string->GetLeftParton()->GetPDGEncoding() < 0)
 			{
 				LeftHadron =FS_LeftHadron[sampledState];
@@ -654,22 +705,28 @@ G4bool G4LundStringFragmentation::SplitLast(G4FragmentingString * string,
 	{
 		if (string->DecayIsQuark() && string->StableIsQuark() )
 		{       //... there are quarks on cluster ends
-			//G4cout<<"Q Q string"<<G4endl;
+#ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
+  G4cout<<"Q Q string LastSplit"<<G4endl;
+#endif
 			Quark_AntiQuark_lastSplitting(string, LeftHadron, RightHadron);
 		} else 
 		{       //... there is a Diquark on one of the cluster ends
-			//G4cout<<"DiQ Q string"<<G4endl;
+#ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
+  G4cout<<"DiQ Q string Last Split"<<G4endl;
+#endif
+
 			Quark_Diquark_lastSplitting(string, LeftHadron, RightHadron);
 		}
 		
 		if(NumberOf_FS == 0) return false;
-		//G4cout<<"NumberOf_FS "<<NumberOf_FS<<G4endl;
                 G4int sampledState = SampleState();
-		//sampledState=17;
 		LeftHadron =FS_LeftHadron[sampledState];
 		RightHadron=FS_RightHadron[sampledState];
-		//G4cout<<"Selected "<<sampledState<<" "<<LeftHadron->GetParticleName()<<" "<<RightHadron->GetParticleName()<<G4endl;
-		//G4int Uzhi; G4cin>>Uzhi;
+
+#ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
+  G4cout<<"Selected LeftHad RightHad "<<sampledState<<" "
+        <<LeftHadron->GetParticleName()<<" "<<RightHadron->GetParticleName()<<G4endl;
+#endif
 
 	}  // End of if(!string->FourQuarkString())
 
@@ -691,15 +748,19 @@ G4bool G4LundStringFragmentation::SplitLast(G4FragmentingString * string,
 }
 
 //----------------------------------------------------------------------------------------------------------
-void G4LundStringFragmentation::Sample4Momentum(G4LorentzVector* Mom, G4double Mass, G4LorentzVector* AntiMom, G4double AntiMass, G4double InitialMass) 
+void G4LundStringFragmentation::Sample4Momentum(G4LorentzVector*     Mom, G4double     Mass, 
+                                                G4LorentzVector* AntiMom, G4double AntiMass, 
+                                                G4double InitialMass) 
 {
 	// ------ Sampling of momenta of 2 last produced hadrons --------------------
 	G4ThreeVector Pt;
 	G4double MassMt2, AntiMassMt2;
 	G4double AvailablePz, AvailablePz2;
 
-	//G4cout<<"Masses "<<InitialMass<<" "<<Mass<<" "<<AntiMass<<G4endl;
-	//
+#ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
+  G4cout<<"Sampling of momenta of 2 last produced hadrons ----------------"<<G4endl;
+  G4cout<<"Masses "<<InitialMass<<" "<<Mass<<" "<<AntiMass<<G4endl;
+#endif
 
 	if((Mass > 930. || AntiMass > 930.)) //If there is a baryon
 	{
@@ -725,7 +786,6 @@ void G4LundStringFragmentation::Sample4Momentum(G4LorentzVector* Mom, G4double M
 		//G4int Uzhi; G4cin>>Uzhi;
 	}
 	else
-		//
 	{
 		do
 		{
@@ -763,66 +823,94 @@ void G4LundStringFragmentation::Sample4Momentum(G4LorentzVector* Mom, G4double M
 
 //-----------------------------------------------------------------------------
 G4LorentzVector * G4LundStringFragmentation::SplitEandP(G4ParticleDefinition * pHadron,
-		G4FragmentingString * string, G4FragmentingString * newString)
+                                                        G4FragmentingString *   string, 
+                                                        G4FragmentingString * newString)
 { 
-	//G4cout<<"Start SplitEandP "<<G4endl;
 	G4LorentzVector String4Momentum=string->Get4Momentum();
-	G4double StringMT2=string->Get4Momentum().mt2();
+	G4double StringMT2=string->MassT2();
+	G4double StringMT =std::sqrt(StringMT2);
 
 	G4double HadronMass = pHadron->GetPDGMass();
 
 	SetMinimalStringMass(newString);
-	//G4cout<<"HadM MinimalStringMassLeft StringM "<<HadronMass<<" "<<MinimalStringMass<<" "<<String4Momentum.mag()<<G4endl;
 
-	if(HadronMass + MinimalStringMass > String4Momentum.mag()) {return 0;}// have to start all over!
+#ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
+  G4cout<<G4endl<<"Start LUND SplitEandP "<<G4endl;
+  G4cout<<"String 4 mom, String M and Mt "<<String4Momentum<<" "<<String4Momentum.mag()<<" "<<std::sqrt(StringMT2)<<G4endl;
+  G4cout<<"Hadron "<<pHadron->GetParticleName()<<G4endl;
+  G4cout<<"HadM MinimalStringMassLeft StringM hM+sM "<<HadronMass<<" "<<MinimalStringMass<<" "
+        <<String4Momentum.mag()<<" "<<HadronMass+MinimalStringMass<<G4endl;
+#endif
+
+	if(HadronMass + MinimalStringMass > string->Mass()) 
+	{
+#ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
+  G4cout<<"Mass of the string is not sufficient to produce the hadron!"<<G4endl;
+#endif
+	 return 0;
+	}// have to start all over!
+
 	String4Momentum.setPz(0.);
 	G4ThreeVector StringPt=String4Momentum.vect();
 
 	// calculate and assign hadron transverse momentum component HadronPx and HadronPy
-	G4ThreeVector thePt;
-	thePt=SampleQuarkPt();
+	G4ThreeVector HadronPt    , RemSysPt; 
+	G4double      HadronMassT2, ResidualMassT2;
 
-	G4ThreeVector HadronPt = thePt +string->DecayPt();
-	HadronPt.setZ(0);
+        //...  sample Pt of the hadron
+        G4int attempt=0;
+        do
+        {
+         attempt++; if(attempt > StringLoopInterrupt) return 0;
 
-	G4ThreeVector RemSysPt = StringPt - HadronPt;
+         HadronPt =SampleQuarkPt()  + string->DecayPt();	
+         HadronPt.setZ(0);
+         RemSysPt = StringPt - HadronPt;
+
+         HadronMassT2 = sqr(HadronMass) + HadronPt.mag2();
+         ResidualMassT2=sqr(MinimalStringMass) + RemSysPt.mag2();
+
+        } while(std::sqrt(HadronMassT2) + std::sqrt(ResidualMassT2) > StringMT);
 
 	//...  sample z to define hadron longitudinal momentum and energy
 	//... but first check the available phase space
 
-	G4double HadronMassT2 = sqr(HadronMass) + HadronPt.mag2();
-	G4double ResidualMassT2=sqr(MinimalStringMass) + RemSysPt.mag2();
-
 	G4double Pz2 = (sqr(StringMT2 - HadronMassT2 - ResidualMassT2) -
 			4*HadronMassT2 * ResidualMassT2)/4./StringMT2;
-	//G4cout<<"Pz2 "<<Pz2<<G4endl;
+
 	if(Pz2 < 0 ) {return 0;}          // have to start all over!
 
 	//... then compute allowed z region  z_min <= z <= z_max
 
 	G4double Pz = std::sqrt(Pz2);
 	G4double zMin = (std::sqrt(HadronMassT2+Pz2) - Pz)/std::sqrt(StringMT2);
+//	G4double zMin = (std::sqrt(HadronMassT2+Pz2) - 0.)/std::sqrt(StringMT2); // Uzhi 2014
 	G4double zMax = (std::sqrt(HadronMassT2+Pz2) + Pz)/std::sqrt(StringMT2);
 
-	//G4cout<<"if (zMin >= zMax) return 0 "<<zMin<<" "<<zMax<<G4endl;
 	if (zMin >= zMax) return 0;		// have to start all over!
 
 	G4double z = GetLightConeZ(zMin, zMax,
 			string->GetDecayParton()->GetPDGEncoding(), pHadron,
 			HadronPt.x(), HadronPt.y());
-	//G4cout<<"z "<<z<<G4endl;
+
 	//... now compute hadron longitudinal momentum and energy
 	// longitudinal hadron momentum component HadronPz
 
 	HadronPt.setZ(0.5* string->GetDecayDirection() *
-			(z * string->LightConeDecay() - 
+		      (z * string->LightConeDecay() - 
 					HadronMassT2/(z * string->LightConeDecay())));
-
 	G4double HadronE  = 0.5* (z * string->LightConeDecay() +
-			HadronMassT2/(z * string->LightConeDecay()));
+					HadronMassT2/(z * string->LightConeDecay()));
 
 	G4LorentzVector * a4Momentum= new G4LorentzVector(HadronPt,HadronE);
-	//G4cout<<"Out SplitEandP "<<G4endl;
+#ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
+  G4cout<<"string->LightConeDecay() "<<string->LightConeDecay()<<G4endl;
+  G4cout<<"HadronPt,HadronE "<<HadronPt<<" "<<HadronE<<G4endl;
+  G4cout<<"String4Momentum "<<String4Momentum<<G4endl;
+//G4int Uzhi; G4cin>>Uzhi;
+  G4cout<<"Out of LUND SplitEandP "<<G4endl;
+#endif
+
 	return a4Momentum;
 }
 
@@ -832,37 +920,55 @@ G4double G4LundStringFragmentation::GetLightConeZ(G4double zmin, G4double zmax,
 		G4ParticleDefinition* pHadron,
 		G4double Px, G4double Py)
 {
-
-	//    If blund get restored, you MUST adapt the calculation of zOfMaxyf.
-	//    const G4double  blund = 1;
-
 	G4double Mass = pHadron->GetPDGMass();
-	//  G4int HadronEncoding=pHadron->GetPDGEncoding();
+//	G4int HadronEncoding=std::abs(pHadron->GetPDGEncoding());
 
 	G4double Mt2 = Px*Px + Py*Py + Mass*Mass;
 
 	G4double  alund;
+	G4double zOfMaxyf(0.), maxYf(1.), z(0.), yf(1.);
 	if(std::abs(PDGEncodingOfDecayParton) < 1000)
 	{    // ---------------- Quark fragmentation ----------------------
-		alund=0.35/GeV/GeV; // Instead of 0.7 because kinks are not considered
-	}
-	else
-	{    // ---------------- Di-quark fragmentation ----------------------
-		alund=0.7/GeV/GeV;    // 0.7 2.0
-	}
-	G4double zOfMaxyf=alund*Mt2/(alund*Mt2 + 1.);
-	G4double maxYf=(1-zOfMaxyf)/zOfMaxyf * std::exp(-alund*Mt2/zOfMaxyf);
-	G4double z, yf;
-	do
-	{
-		z = zmin + G4UniformRand()*(zmax-zmin);
-		//        yf = std::pow(1. - z, blund)/z*std::exp(-alund*Mt2/z);
-		yf = (1-z)/z * std::exp(-alund*Mt2/z);
-	}
-	while (G4UniformRand()*maxYf > yf);
+          alund=0.7/GeV/GeV;
+	//    If blund get restored, you MUST adapt the calculation of zOfMaxyf.
+	//    const G4double  blund = 1;
 
+	   zOfMaxyf=alund*Mt2/(alund*Mt2 + 1.);
+	   maxYf=(1-zOfMaxyf)/zOfMaxyf * std::exp(-alund*Mt2/zOfMaxyf);
+
+	   do
+	   {
+		z = zmin + G4UniformRand()*(zmax-zmin);
+		yf = (1-z)/z * std::exp(-alund*Mt2/z);
+	//	yf = std::pow(1.0-z,blund)/z*std::exp(-alund*Mt2/z
+	   }
+	   while (G4UniformRand()*maxYf > yf);
+	   return z;
+        }
+
+	if(std::abs(PDGEncodingOfDecayParton) > 1000)         // Uzhi Sept. 2014
+	{
+/*
+         if(HadronEncoding < 3000)
+         {
+	    maxYf=(zmax-zmin);
+	    do
+	    {
+		z = zmin + G4UniformRand()*(zmax-zmin);
+		//yf=std::exp(-sqr(z-Zc)/2/sqr(0.28));  // 0.42 0.632 0.28 a'la UrQMD
+		yf =(z-zmin);
+	    }
+	    while (G4UniformRand()*maxYf > yf);
+         }
+         else
+         {            // Strange baryons
+*/
+	    z = zmin + G4UniformRand()*(zmax-zmin);
+//         }
+	}
 
 	return z;
+
 }
 
 //------------------------------------------------------------------------
@@ -884,11 +990,18 @@ G4bool G4LundStringFragmentation::Loop_toFragmentString(G4ExcitedString * & theS
                                                         G4KineticTrackVector * & LeftVector, 
                                                         G4KineticTrackVector * & RightVector)
 {
+#ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
+  G4cout<<"Loop_toFrag "<<theStringInCMS->GetLeftParton()->GetPDGcode()<<" "
+                        <<theStringInCMS->GetRightParton()->GetPDGcode()<<" "
+                        <<theStringInCMS->GetDirection()<< G4endl;
+#endif
+
 	G4bool final_success=false;
         G4bool inner_success=true;
 	G4int attempt=0;
 	while ( ! final_success && attempt++ < StringLoopInterrupt )
 	{       // If the string fragmentation do not be happend, repeat the fragmentation.
+
 		G4FragmentingString *currentString=new G4FragmentingString(*theStringInCMS);
 		//G4cout<<"Main loop start whilecounter "<<attempt<<G4endl;
 		// Cleaning up the previously produced hadrons
@@ -901,14 +1014,22 @@ G4bool G4LundStringFragmentation::Loop_toFragmentString(G4ExcitedString * & theS
 		inner_success=true;  // set false on failure.
 		while (! StopFragmenting(currentString) )
 		{       // Split current string into hadron + new string
+#ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
+  G4cout<<"The string can fragment. "<<G4endl;;
+//G4cout<<"1 "<<currentString->GetDecayDirection()<<G4endl;
+#endif
 			G4FragmentingString *newString=0;  // used as output from SplitUp.
 			G4KineticTrack * Hadron=Splitup(currentString,newString);
 			if ( Hadron != 0 )  // Store the hadron                               
 			{
-				//G4cout<<"Hadron prod at fragm. "<<Hadron->GetDefinition()->GetParticleName()<<G4endl;
+#ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
+  G4cout<<"Hadron prod at fragm. "<<Hadron->GetDefinition()->GetParticleName()<<G4endl;
+//G4cout<<"2 "<<currentString->GetDecayDirection()<<G4endl;
+#endif
+
 				if ( currentString->GetDecayDirection() > 0 )
                                 {
-					LeftVector->push_back(Hadron);
+					LeftVector->push_back(Hadron); 
                                 } else
                                 {
 					RightVector->push_back(Hadron);
@@ -918,10 +1039,16 @@ G4bool G4LundStringFragmentation::Loop_toFragmentString(G4ExcitedString * & theS
 			}
 		}; 
 		// Split remaining string into 2 final hadrons.
+#ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
+  G4cout<<"Split remaining string into 2 final hadrons."<<G4endl;
+#endif
+//                                                                                            Uzhi Sept 2014
 		if ( inner_success && SplitLast(currentString, LeftVector, RightVector) )
 		{
 			final_success=true;
 		}
+//
+//final_success=true;                                                                       // Uzhi Sept 2014
 		delete currentString;
 	}  // End of the loop where we try to fragment the string.
 	return final_success;
@@ -979,9 +1106,6 @@ Diquark_AntiDiquark_aboveThreshold_lastSplitting(G4FragmentingString * & string,
 {
 	// StringMass-MinimalStringMass > 0. Creation of 2 baryons is possible ----
 
-        //G4cout<<"DiQ Anti-DiQ string"<<G4endl;
-	//G4cout<<string->GetLeftParton()->GetPDGEncoding()<<" "<<string->GetRightParton()->GetPDGEncoding()<<G4endl;
-
 	G4double StringMass   = string->Mass();
 	G4double StringMassSqr= sqr(StringMass); 
 	G4ParticleDefinition * Di_Quark;
@@ -1008,19 +1132,12 @@ Diquark_AntiDiquark_aboveThreshold_lastSplitting(G4FragmentingString * & string,
 	G4int Di_q1=AbsIDdi_quark/1000;
 	G4int Di_q2=(AbsIDdi_quark-Di_q1*1000)/100;
 
-	//G4cout<<"IDs Anti "<<ADi_q1<<" "<<ADi_q2<<G4endl;
-	//G4cout<<"IDs      "<< Di_q1<<" "<< Di_q2<<G4endl;
-
 	NumberOf_FS=0;
 	for(G4int ProdQ=1; ProdQ < 4; ProdQ++)
 	{
-		//G4cout<<"Insert QQbar "<<ProdQ<<G4endl;
-
 		G4int StateADiQ=0;
 		do  // while(Meson[AbsIDquark-1][ProdQ-1][StateQ]<>0);
 		{
-			//G4cout<<G4endl<<"AbsIDquark ProdQ StateQ "<<MesonWeight[AbsIDquark-1][ProdQ-1][StateQ]<<" "<<AbsIDquark<<" "<<ProdQ<<" "<<StateQ<<G4endl;
-			//G4cout<<G4endl<<"AbsIDquark ProdQ StateQ "<<SignQ*Meson[AbsIDquark-1][ProdQ-1][StateQ]<<" "<<AbsIDquark<<" "<<ProdQ<<" "<<StateQ<<G4endl;
 			LeftHadron=G4ParticleTable::GetParticleTable()->FindParticle(
 							-Baryon[ADi_q1-1][ADi_q2-1][ProdQ-1][StateADiQ]);
 			G4double LeftHadronMass=LeftHadron->GetPDGMass();
@@ -1030,17 +1147,20 @@ Diquark_AntiDiquark_aboveThreshold_lastSplitting(G4FragmentingString * & string,
 			G4int StateDiQ=0;
 			do // while(Baryon[Di_q1-1][Di_q2-1][ProdQ-1][StateDiQ]<>0);
 			{
-				//G4cout<<G4endl<<"Di_q1 Di_q2 ProdQ StateDiQ "<<BaryonWeight[Di_q1-1][Di_q2-1][ProdQ-1][StateDiQ]<<" "<<Di_q1-1<<" "<<Di_q2-1<<" "<<ProdQ-1<<" "<<StateDiQ<<G4endl;
 				RightHadron=G4ParticleTable::GetParticleTable()->FindParticle(
 								+Baryon[Di_q1-1][Di_q2-1][ProdQ-1][StateDiQ]);
 				G4double RightHadronMass=RightHadron->GetPDGMass();
 
-				//G4cout<<"Baryon "<<RightHadron->GetParticleName()<<G4endl;
-
-				//G4cout<<"StringMass LeftHadronMass RightHadronMass "<<StringMass<<" "<<LeftHadronMass<<" "<< RightHadronMass<<G4endl;
-
 				if(StringMass >= LeftHadronMass + RightHadronMass)
 				{
+                                        if ( NumberOf_FS > 34 ) {
+                                          G4ExceptionDescription ed;
+                                          ed << " NumberOf_FS exceeds its limit: NumberOf_FS=" << NumberOf_FS << G4endl;
+                                          G4Exception( "G4LundStringFragmentation::Diquark_AntiDiquark_aboveThreshold_lastSplitting ",
+                                                       "HAD_LUND_001", JustWarning, ed );
+                                          NumberOf_FS = 34;
+                                        }
+
 					G4double FS_Psqr=lambda(StringMassSqr,sqr(LeftHadronMass),
 								sqr(RightHadronMass));
 					//FS_Psqr=1.;
@@ -1052,16 +1172,11 @@ Diquark_AntiDiquark_aboveThreshold_lastSplitting(G4FragmentingString * & string,
 					FS_LeftHadron[NumberOf_FS] = LeftHadron;
 					FS_RightHadron[NumberOf_FS]= RightHadron;
 
-					//G4cout<<"State "<<NumberOf_FS<<" "<<BaryonWeight[ADi_q1-1][ADi_q2-1][ProdQ-1][StateADiQ]*BaryonWeight[Di_q1-1][Di_q2-1][ProdQ-1][StateDiQ]<<G4endl;
-					//G4cout<<"State "<<NumberOf_FS<<" "<<std::sqrt(FS_Psqr/4./StringMassSqr)<<" "<<std::sqrt(FS_Psqr)<<" "<<FS_Weight[NumberOf_FS]<<G4endl;
 					NumberOf_FS++;
-
-					if(NumberOf_FS > 34)
-					{G4int Uzhi; G4cout<<"QQ_QQbar string #_FS "<<NumberOf_FS<<G4endl; G4cin>>Uzhi;}
 				} // End of if(StringMass >= LeftHadronMass + RightHadronMass)
 
 				StateDiQ++;
-				//G4cout<<Baryon[Di_q1-1][Di_q2-1][ProdQ-1][StateDiQ]<<" "<<Di_q1-1<<" "<<Di_q2-1<<" "<<ProdQ-1<<" "<<StateDiQ<<G4endl;
+
 			} while(Baryon[Di_q1-1][Di_q2-1][ProdQ-1][StateDiQ]!=0);
 
 			StateADiQ++;
@@ -1099,7 +1214,6 @@ Quark_Diquark_lastSplitting(G4FragmentingString * & string,
 	G4int AbsIDdi_quark=std::abs(IDdi_quark);
 	G4int Di_q1=AbsIDdi_quark/1000;
 	G4int Di_q2=(AbsIDdi_quark-Di_q1*1000)/100;
-	//G4cout<<"IDs "<<IDdi_quark<<" "<<IDquark<<G4endl;
 
 	G4int              SignDiQ= 1;
 	if(IDdi_quark < 0) SignDiQ=-1;
@@ -1129,28 +1243,27 @@ Quark_Diquark_lastSplitting(G4FragmentingString * & string,
 		G4int StateQ=0;
 		do  // while(Meson[AbsIDquark-1][ProdQ-1][StateQ]<>0);
 		{
-			//G4cout<<G4endl<<"AbsIDquark ProdQ StateQ "<<MesonWeight[AbsIDquark-1][ProdQ-1][StateQ]<<" "<<AbsIDquark<<" "<<ProdQ<<" "<<StateQ<<G4endl;
-			//G4cout<<G4endl<<"AbsIDquark ProdQ StateQ "<<SignQ*Meson[AbsIDquark-1][ProdQ-1][StateQ]<<" "<<AbsIDquark<<" "<<ProdQ<<" "<<StateQ<<G4endl;
 			LeftHadron=G4ParticleTable::GetParticleTable()->FindParticle(SignQ*
 							Meson[AbsIDquark-1][ProdQ-1][StateQ]);
 			G4double LeftHadronMass=LeftHadron->GetPDGMass();
 
-			//G4cout<<"Meson "<<LeftHadron->GetParticleName()<<G4endl;
-
 			G4int StateDiQ=0;
 			do // while(Baryon[Di_q1-1][Di_q2-1][ProdQ-1][StateDiQ]<>0);
 			{
-				//G4cout<<G4endl<<"Di_q1 Di_q2 ProdQ StateDiQ "<<BaryonWeight[Di_q1-1][Di_q2-1][ProdQ-1][StateDiQ]<<" "<<Di_q1-1<<" "<<Di_q2-1<<" "<<ProdQ-1<<" "<<StateDiQ<<G4endl;
 				RightHadron=G4ParticleTable::GetParticleTable()->FindParticle(SignDiQ*
 								Baryon[Di_q1-1][Di_q2-1][ProdQ-1][StateDiQ]);
 				G4double RightHadronMass=RightHadron->GetPDGMass();
 
-				//G4cout<<"Baryon "<<RightHadron->GetParticleName()<<G4endl;
-
-				//G4cout<<"StringMass LeftHadronMass RightHadronMass "<<StringMass<<" "<<LeftHadronMass<<" "<< RightHadronMass<<G4endl;
-
 				if(StringMass >= LeftHadronMass + RightHadronMass)
 				{
+                                        if ( NumberOf_FS > 34 ) {
+                                          G4ExceptionDescription ed;
+                                          ed << " NumberOf_FS exceeds its limit: NumberOf_FS=" << NumberOf_FS << G4endl;
+                                          G4Exception( "G4LundStringFragmentation::Quark_Diquark_lastSplitting ",
+                                                       "HAD_LUND_002", JustWarning, ed );
+                                          NumberOf_FS = 34;
+                                        }
+
 					G4double FS_Psqr=lambda(StringMassSqr,sqr(LeftHadronMass),
 								sqr(RightHadronMass));
 					FS_Weight[NumberOf_FS]=std::sqrt(FS_Psqr)*
@@ -1161,16 +1274,11 @@ Quark_Diquark_lastSplitting(G4FragmentingString * & string,
 					FS_LeftHadron[NumberOf_FS] = LeftHadron;
 					FS_RightHadron[NumberOf_FS]= RightHadron;
 
-					//G4cout<<"State "<<NumberOf_FS<<" "<<std::sqrt(FS_Psqr/4./StringMassSqr)<<" "<<std::sqrt(FS_Psqr)<<" "<<FS_Weight[NumberOf_FS]<<G4endl;
-					//G4cout<<"++++++++++++++++++++++++++++++++"<<G4endl;
 					NumberOf_FS++;
-
-					if(NumberOf_FS > 34)
-					{G4int Uzhi; G4cout<<"QQbar string #_FS "<<NumberOf_FS<<G4endl; G4cin>>Uzhi;}
 				} // End of if(StringMass >= LeftHadronMass + RightHadronMass)
 
 				StateDiQ++;
-				//G4cout<<Baryon[Di_q1-1][Di_q2-1][ProdQ-1][StateDiQ]<<" "<<Di_q1-1<<" "<<Di_q2-1<<" "<<ProdQ-1<<" "<<StateDiQ<<G4endl;
+
 			} while(Baryon[Di_q1-1][Di_q2-1][ProdQ-1][StateDiQ]!=0);
 
 			StateQ++;
@@ -1202,7 +1310,6 @@ Quark_AntiQuark_lastSplitting(G4FragmentingString * & string,
 		Anti_Quark=string->GetLeftParton();
 	}
 
-	//G4cout<<" Quarks "<<Quark->GetParticleName()<<" "<<Anti_Quark->GetParticleName()<<G4endl;
 	G4int IDquark        =Quark->GetPDGEncoding();
 	G4int AbsIDquark     =std::abs(IDquark);
 	G4int IDanti_quark   =Anti_Quark->GetPDGEncoding();
@@ -1211,7 +1318,6 @@ Quark_AntiQuark_lastSplitting(G4FragmentingString * & string,
 	NumberOf_FS=0;
 	for(G4int ProdQ=1; ProdQ < 4; ProdQ++)
 	{
-		//G4cout<<"ProdQ "<<ProdQ<<G4endl;
 		G4int                              SignQ=-1;
 		if(IDquark == 2)                   SignQ= 1;
 		if((IDquark == 1) && (ProdQ == 3)) SignQ= 1; // K0
@@ -1230,7 +1336,6 @@ Quark_AntiQuark_lastSplitting(G4FragmentingString * & string,
 			LeftHadron=G4ParticleTable::GetParticleTable()->FindParticle(SignQ*
 						       Meson[AbsIDquark-1][ProdQ-1][StateQ]);
 			G4double LeftHadronMass=LeftHadron->GetPDGMass();
-			StateQ++;
 
 			G4int StateAQ=0;
 			do // while(Meson[AbsIDanti_quark-1][ProdQ-1][StateAQ]<>0);
@@ -1238,11 +1343,18 @@ Quark_AntiQuark_lastSplitting(G4FragmentingString * & string,
 				RightHadron=G4ParticleTable::GetParticleTable()->FindParticle(SignAQ*
 								Meson[AbsIDanti_quark-1][ProdQ-1][StateAQ]);
 				G4double RightHadronMass=RightHadron->GetPDGMass();
-				StateAQ++;
 
 				if(StringMass >= LeftHadronMass + RightHadronMass)
 				{
-					G4double FS_Psqr=lambda(StringMassSqr,sqr(LeftHadronMass),
+                                        if ( NumberOf_FS > 34 ) {
+                                          G4ExceptionDescription ed;
+                                          ed << " NumberOf_FS exceeds its limit: NumberOf_FS=" << NumberOf_FS << G4endl;
+                                          G4Exception( "G4LundStringFragmentation::Quark_AntiQuark_lastSplitting ",
+                                                       "HAD_LUND_003", JustWarning, ed );
+                                          NumberOf_FS = 34;
+                                        }
+
+                                        G4double FS_Psqr=lambda(StringMassSqr,sqr(LeftHadronMass),
 								sqr(RightHadronMass));
 					//FS_Psqr=1.;
 					FS_Weight[NumberOf_FS]=std::sqrt(FS_Psqr)*
@@ -1260,13 +1372,13 @@ Quark_AntiQuark_lastSplitting(G4FragmentingString * & string,
 						FS_RightHadron[NumberOf_FS]= RightHadron;
 					}
 					NumberOf_FS++;
-					//G4cout<<LeftHadron->GetParticleName()<<" "<<RightHadron->GetParticleName()<<" ";
-					//G4cout<<"Masses "<<StringMass<<" "<<LeftHadronMass<<" "<<RightHadronMass<<" "<<NumberOf_FS-1<<G4endl; //FS_Psqr<<G4endl;
 
-					if(NumberOf_FS > 34)
-					{G4int Uzhi; G4cout<<"QQbar string #_FS "<<NumberOf_FS<<G4endl; G4cin>>Uzhi;}
 				} // End of if(StringMass >= LeftHadronMass + RightHadronMass)
+
+				StateAQ++;
 			} while(Meson[AbsIDanti_quark-1][ProdQ-1][StateAQ]!=0);
+
+			StateQ++;
 		} while(Meson[AbsIDquark-1][ProdQ-1][StateQ]!=0);
 	} // End of for(G4int ProdQ=1; ProdQ < 4; ProdQ++)
 
@@ -1276,8 +1388,16 @@ Quark_AntiQuark_lastSplitting(G4FragmentingString * & string,
 //----------------------------------------------------------------------------------------------------------
 G4int G4LundStringFragmentation::SampleState(void) 
 {
+        if ( NumberOf_FS > 34 ) {
+          G4ExceptionDescription ed;
+          ed << " NumberOf_FS exceeds its limit: NumberOf_FS=" << NumberOf_FS << G4endl;
+          G4Exception( "G4LundStringFragmentation::SampleState ", "HAD_LUND_004", JustWarning, ed );
+          NumberOf_FS = 34;
+        }
+
 	G4double SumWeights=0.;
-	for(G4int i=0; i<NumberOf_FS; i++) {SumWeights+=FS_Weight[i];}
+
+	for(G4int i=0; i<NumberOf_FS; i++) {SumWeights+=FS_Weight[i];}// G4cout<<i<<" "<<FS_Weight[i]<<G4endl;}
 
 	G4double ksi=G4UniformRand();
 	G4double Sum=0.;
@@ -1291,4 +1411,63 @@ G4int G4LundStringFragmentation::SampleState(void)
 	}
 	return indexPosition;
 }
+// Uzhi June 2014 Insert from G4ExcitedStringDecay.cc
+//-----------------------------------------------------------------------------
 
+G4ParticleDefinition * G4LundStringFragmentation::DiQuarkSplitup(
+                                                        G4ParticleDefinition* decay,
+                                                        G4ParticleDefinition *&created)
+{
+   //... can Diquark break or not?
+   if (G4UniformRand() < DiquarkBreakProb ){
+   //... Diquark break
+
+      G4int stableQuarkEncoding = decay->GetPDGEncoding()/1000;
+      G4int decayQuarkEncoding = (decay->GetPDGEncoding()/100)%10;
+      if (G4UniformRand() < 0.5)
+         {
+         G4int Swap = stableQuarkEncoding;
+         stableQuarkEncoding = decayQuarkEncoding;
+         decayQuarkEncoding = Swap;
+         }
+
+      G4int IsParticle=(decayQuarkEncoding>0) ? -1 : +1;
+                        // if we have a quark, we need antiquark)
+
+//G4cout<<"GetStrangeSuppress() "<<GetStrangeSuppress()<<G4endl;
+//G4int Uzhi; G4cin>>Uzhi;
+
+//G4double StrSup=GetStrangeSuppress(); 
+//StrangeSuppress=0.34;
+      pDefPair QuarkPair = CreatePartonPair(IsParticle,false);  // no diquarks wanted
+//StrangeSuppress=StrSup;
+      //... Build new Diquark
+      G4int QuarkEncoding=QuarkPair.second->GetPDGEncoding();
+      G4int i10  = std::max(std::abs(QuarkEncoding), std::abs(stableQuarkEncoding));
+      G4int i20  = std::min(std::abs(QuarkEncoding), std::abs(stableQuarkEncoding));
+      G4int spin = (i10 != i20 && G4UniformRand() <= 0.5)? 1 : 3;
+      G4int NewDecayEncoding = -1*IsParticle*(i10 * 1000 + i20 * 100 + spin);
+      created = FindParticle(NewDecayEncoding);
+      G4ParticleDefinition * decayQuark=FindParticle(decayQuarkEncoding);
+      G4ParticleDefinition * had=hadronizer->Build(QuarkPair.first, decayQuark);
+      return had;
+//      return hadronizer->Build(QuarkPair.first, decayQuark);
+
+   } else {
+   //... Diquark does not break
+
+      G4int IsParticle=(decay->GetPDGEncoding()>0) ? +1 : -1;
+                        // if we have a diquark, we need quark)
+
+G4double StrSup=GetStrangeSuppress();                           // Uzhi Sept. 2014
+StrangeSuppress=0.43;   //0.42 0.38                             // Uzhi Sept. 2014
+      pDefPair QuarkPair = CreatePartonPair(IsParticle,false);  // no diquarks wanted
+StrangeSuppress=StrSup;                                         // Uzhi Sept. 2014
+
+      created = QuarkPair.second;
+
+      G4ParticleDefinition * had=hadronizer->Build(QuarkPair.first, decay);
+      return had;
+   }
+}
+// Uzhi June 2014 End of the inserting

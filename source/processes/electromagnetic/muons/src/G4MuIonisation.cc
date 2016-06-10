@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.cc 68035 2013-03-13 14:12:34Z gcosmo $
+// $Id: G4MuIonisation.cc 85023 2014-10-23 09:56:39Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -61,7 +61,7 @@
 // 04-08-03 Set integral=false to be default (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
-// 10-02-04 Calculation of radiative corrections using R.Kokoulin model (V.Ivanchenko)
+// 10-02-04 Calculation of radiative corrections using R.Kokoulin model (V.I.)
 // 27-05-04 Set integral to be a default regime (V.Ivanchenko)
 // 17-08-04 Utilise mu+ tables for mu- (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
@@ -90,6 +90,7 @@
 #include "G4BohrFluctuations.hh"
 #include "G4UnitsTable.hh"
 #include "G4ICRU73QOModel.hh"
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -102,9 +103,6 @@ G4MuIonisation::G4MuIonisation(const G4String& name)
     isInitialised(false)
 {
   mass = ratio = 0;
-  //  SetStepFunction(0.2, 1*mm);
-  //SetIntegral(true);
-  //SetVerboseLevel(1);
   SetProcessSubType(fIonisation);
   SetSecondaryParticle(G4Electron::Electron());
 }
@@ -144,14 +142,18 @@ void G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
 
     mass = theParticle->GetPDGMass();
     G4double q = theParticle->GetPDGCharge();
+
+    G4EmParameters* param = G4EmParameters::Instance();
     G4double elow = 0.2*MeV;
+    G4double emax = param->MaxKinEnergy();
+    G4double ehigh = std::min(1*GeV, emax);
 
     // Bragg peak model
     if (!EmModel(1)) {
       if(q > 0.0) { SetEmModel(new G4BraggModel(),1); }
       else { SetEmModel(new G4ICRU73QOModel(),1); }
     }
-    EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
+    EmModel(1)->SetLowEnergyLimit(param->MinKinEnergy());
     EmModel(1)->SetHighEnergyLimit(elow); 
     AddEmModel(1, EmModel(1), new G4IonFluctuations());
 
@@ -161,15 +163,16 @@ void G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
     // moderate energy model
     if (!EmModel(2)) { SetEmModel(new G4BetheBlochModel(),2); }
     EmModel(2)->SetLowEnergyLimit(elow);
-    EmModel(2)->SetHighEnergyLimit(1.0*GeV);
+    EmModel(2)->SetHighEnergyLimit(ehigh);
     AddEmModel(2, EmModel(2), FluctModel());
 
     // high energy model
-    if (!EmModel(3)) { SetEmModel(new G4MuBetheBlochModel(),3); }
-    EmModel(3)->SetLowEnergyLimit(1.0*GeV);
-    EmModel(3)->SetHighEnergyLimit(MaxKinEnergy());
-    AddEmModel(3, EmModel(3), FluctModel());
-
+    if(ehigh < emax) {
+      if (!EmModel(3)) { SetEmModel(new G4MuBetheBlochModel(),3); }
+      EmModel(3)->SetLowEnergyLimit(ehigh);
+      EmModel(3)->SetHighEnergyLimit(emax);
+      AddEmModel(3, EmModel(3), FluctModel());
+    }
     ratio = electron_mass_c2/mass;
     isInitialised = true;
   }

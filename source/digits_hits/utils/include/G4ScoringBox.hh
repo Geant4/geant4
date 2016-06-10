@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.hh 68735 2013-04-05 09:49:13Z gcosmo $
+// $Id: G4ScoringBox.hh 83518 2014-08-27 12:57:10Z gcosmo $
 //
 
 #ifndef G4ScoringBox_h
@@ -46,9 +46,11 @@ public:
   G4ScoringBox(G4String wName);
   ~G4ScoringBox();
 
-public:
-  virtual void Construct(G4VPhysicalVolume* fWorldPhys);
+protected:
+  // construct this mesh
+  virtual void SetupGeometry(G4VPhysicalVolume * fWorldPhys);
 
+public:
   void List() const;
   void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111);
   void DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
@@ -58,8 +60,6 @@ public:
   void SetSegmentDirection(G4int dir) {fSegmentDirection = dir;}
 
 private:
-  // construct this mesh
-  void SetupGeometry(G4VPhysicalVolume * fWorldPhys);
   // get replicated position from 3D index (x,y,z)
   G4ThreeVector GetReplicaPosition(G4int x, G4int y, G4int z);
   // get 3D index (x,y,z) from sequential index

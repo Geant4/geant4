@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 74459 2013-10-07 15:24:43Z gcosmo $
+# $Id: sources.cmake 80876 2014-05-14 08:51:07Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -52,6 +52,7 @@ GEANT4_DEFINE_MODULE(NAME G4volumes
         G4LogicalSkinSurface.icc
         G4NavigationHistory.hh
         G4NavigationHistory.icc
+        G4NavigationHistoryPool.hh
         G4NavigationLevel.hh
         G4NavigationLevel.icc
         G4NavigationLevelRep.hh
@@ -72,6 +73,7 @@ GEANT4_DEFINE_MODULE(NAME G4volumes
         G4LogicalBorderSurface.cc
         G4LogicalSkinSurface.cc
         G4NavigationHistory.cc
+        G4NavigationHistoryPool.cc
         G4NavigationLevel.cc
         G4NavigationLevelRep.cc
         G4PVParameterised.cc

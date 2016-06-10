@@ -11,66 +11,38 @@
 namespace tools {
 namespace histo {
 
-template <class TC,class TN,class TW,class TH>
-class b2 : public base_histo<TC,TN,TW,TH> {
-  typedef base_histo<TC,TN,TW,TH> parent;
-  typedef axis<TC> axis_t;
+template <class TC,class TO,class TN,class TW,class TH>
+class b2 : public base_histo<TC,TO,TN,TW,TH> {
+  typedef base_histo<TC,TO,TN,TW,TH> parent;
 protected:
   enum {AxisX=0,AxisY=1};
 public:
-  typedef typename base_histo<TC,TN,TW,TH>::bn_t bn_t;
+  typedef axis<TC,TO> axis_t;
+  typedef typename parent::bn_t bn_t;
 public:
   virtual TH bin_error(int,int) const = 0; //for print
 public:
-  void update_fast_getters() {
-    m_in_range_entries = 0;
-    m_in_range_Sw = 0;
-    m_in_range_Sxw = 0;
-    m_in_range_Syw = 0;
-    m_in_range_Sx2w = 0;
-    m_in_range_Sy2w = 0;
-    bn_t ibin,jbin,offset;     
-    bn_t xbins = parent::m_axes[0].bins();
-    bn_t ybins = parent::m_axes[1].bins();
-    bn_t yoffset = parent::m_axes[1].m_offset;
-    for(ibin=1;ibin<=xbins;ibin++) {
-      offset = ibin + yoffset;
-      for(jbin=1;jbin<=ybins;jbin++) {
-        //offset = ibin + jbin * m_axes[1].m_offset;
-  
-        m_in_range_entries += parent::m_bin_entries[offset];
-        m_in_range_Sw += parent::m_bin_Sw[offset];
-        m_in_range_Sxw += parent::m_bin_Sxw[offset][0];
-        m_in_range_Syw += parent::m_bin_Sxw[offset][1];
-        m_in_range_Sx2w += parent::m_bin_Sx2w[offset][0];
-        m_in_range_Sy2w += parent::m_bin_Sx2w[offset][1];
-  
-        offset += yoffset;
-      }
-    }
-  }
-
   // Partition :
   TC mean_x() const {
-    if(m_in_range_Sw==0) return 0;
-    return m_in_range_Sxw/m_in_range_Sw;
+    if(parent::m_in_range_Sw==0) return 0;
+    return parent::m_in_range_Sxw[0]/parent::m_in_range_Sw;
   }
 
   TC mean_y() const {
-    if(m_in_range_Sw==0) return 0;
-    return m_in_range_Syw/m_in_range_Sw;
+    if(parent::m_in_range_Sw==0) return 0;
+    return parent::m_in_range_Sxw[1]/parent::m_in_range_Sw;
   }
 
   TC rms_x() const {
-    if(m_in_range_Sw==0) return 0;
-    TC mean = m_in_range_Sxw/m_in_range_Sw;
-    return ::sqrt(::fabs((m_in_range_Sx2w / m_in_range_Sw) - mean * mean));
+    if(parent::m_in_range_Sw==0) return 0;
+    TC mean = parent::m_in_range_Sxw[0]/parent::m_in_range_Sw;
+    return ::sqrt(::fabs((parent::m_in_range_Sx2w[0] / parent::m_in_range_Sw) - mean * mean));
   }
 
   TC rms_y() const {
-    if(m_in_range_Sw==0) return 0;
-    TC mean = m_in_range_Syw/m_in_range_Sw;
-    return ::sqrt(::fabs((m_in_range_Sy2w / m_in_range_Sw) - mean * mean));
+    if(parent::m_in_range_Sw==0) return 0;
+    TC mean = parent::m_in_range_Sxw[1]/parent::m_in_range_Sw;
+    return ::sqrt(::fabs((parent::m_in_range_Sx2w[1] / parent::m_in_range_Sw) - mean * mean));
   }
 
   int coord_to_index_x(TC aCoord) const {
@@ -82,70 +54,46 @@ public:
 
   // bins :
   TN bin_entries(int aI,int aJ) const {
-    if(parent::m_bin_number==0) return 0;
-    bn_t ibin,jbin;
-    if(!parent::m_axes[0].in_range_to_absolute_index(aI,ibin)) return 0;
-    if(!parent::m_axes[1].in_range_to_absolute_index(aJ,jbin)) return 0;
-    bn_t offset = ibin + jbin * parent::m_axes[1].m_offset;
+    TO offset;
+    if(!_find_offset(aI,aJ,offset)) return 0;
     return parent::m_bin_entries[offset];
   }
 
   TW bin_Sw(int aI,int aJ) const {
-    if(parent::m_bin_number==0) return 0;
-    bn_t ibin,jbin;
-    if(!parent::m_axes[0].in_range_to_absolute_index(aI,ibin)) return 0;
-    if(!parent::m_axes[1].in_range_to_absolute_index(aJ,jbin)) return 0;
-    bn_t offset = ibin + jbin * parent::m_axes[1].m_offset;
+    TO offset;
+    if(!_find_offset(aI,aJ,offset)) return 0;
     return parent::m_bin_Sw[offset];
   }
 
   TW bin_Sw2(int aI,int aJ) const {
-    if(parent::m_bin_number==0) return 0;
-    bn_t ibin,jbin;
-    if(!parent::m_axes[0].in_range_to_absolute_index(aI,ibin)) return 0;
-    if(!parent::m_axes[1].in_range_to_absolute_index(aJ,jbin)) return 0;
-    bn_t offset = ibin + jbin * parent::m_axes[1].m_offset;
+    TO offset;
+    if(!_find_offset(aI,aJ,offset)) return 0;
     return parent::m_bin_Sw2[offset];
   }
   TC bin_Sxw(int aI,int aJ) const {
-    if(parent::m_bin_number==0) return 0;
-    bn_t ibin,jbin;
-    if(!parent::m_axes[0].in_range_to_absolute_index(aI,ibin)) return 0;
-    if(!parent::m_axes[1].in_range_to_absolute_index(aJ,jbin)) return 0;
-    bn_t offset = ibin + jbin * parent::m_axes[1].m_offset;
+    TO offset;
+    if(!_find_offset(aI,aJ,offset)) return 0;
     return parent::m_bin_Sxw[offset][AxisX];
   }
   TC bin_Sx2w(int aI,int aJ) const {
-    if(parent::m_bin_number==0) return 0;
-    bn_t ibin,jbin;
-    if(!parent::m_axes[0].in_range_to_absolute_index(aI,ibin)) return 0;
-    if(!parent::m_axes[1].in_range_to_absolute_index(aJ,jbin)) return 0;
-    bn_t offset = ibin + jbin * parent::m_axes[1].m_offset;
+    TO offset;
+    if(!_find_offset(aI,aJ,offset)) return 0;
     return parent::m_bin_Sx2w[offset][AxisX];
   }
   TC bin_Syw(int aI,int aJ) const {
-    if(parent::m_bin_number==0) return 0;
-    bn_t ibin,jbin;
-    if(!parent::m_axes[0].in_range_to_absolute_index(aI,ibin)) return 0;
-    if(!parent::m_axes[1].in_range_to_absolute_index(aJ,jbin)) return 0;
-    bn_t offset = ibin + jbin * parent::m_axes[1].m_offset;
+    TO offset;
+    if(!_find_offset(aI,aJ,offset)) return 0;
     return parent::m_bin_Sxw[offset][AxisY];
   }
   TC bin_Sy2w(int aI,int aJ) const {
-    if(parent::m_bin_number==0) return 0;
-    bn_t ibin,jbin;
-    if(!parent::m_axes[0].in_range_to_absolute_index(aI,ibin)) return 0;
-    if(!parent::m_axes[1].in_range_to_absolute_index(aJ,jbin)) return 0;
-    bn_t offset = ibin + jbin * parent::m_axes[1].m_offset;
+    TO offset;
+    if(!_find_offset(aI,aJ,offset)) return 0;
     return parent::m_bin_Sx2w[offset][AxisY];
   }
 
   TH bin_height(int aI,int aJ) const {
-    if(parent::m_bin_number==0) return 0;
-    bn_t ibin,jbin;
-    if(!parent::m_axes[0].in_range_to_absolute_index(aI,ibin)) return 0;
-    if(!parent::m_axes[1].in_range_to_absolute_index(aJ,jbin)) return 0;
-    bn_t offset = ibin + jbin * parent::m_axes[1].m_offset;
+    TO offset;
+    if(!_find_offset(aI,aJ,offset)) return 0;
     return this->get_bin_height(offset);
   }
 
@@ -157,33 +105,24 @@ public:
   }
 
   TC bin_mean_x(int aI,int aJ) const {
-    if(parent::m_bin_number==0) return 0;
-    bn_t ibin,jbin;
-    if(!parent::m_axes[0].in_range_to_absolute_index(aI,ibin)) return 0;
-    if(!parent::m_axes[1].in_range_to_absolute_index(aJ,jbin)) return 0;
-    bn_t offset = ibin + jbin * parent::m_axes[1].m_offset;
+    TO offset;
+    if(!_find_offset(aI,aJ,offset)) return 0;
     TW sw = parent::m_bin_Sw[offset];
     if(sw==0) return 0;
     return parent::m_bin_Sxw[offset][AxisX]/sw;
   }
 
   TC bin_mean_y(int aI,int aJ) const {
-    if(parent::m_bin_number==0) return 0;
-    bn_t ibin,jbin;
-    if(!parent::m_axes[0].in_range_to_absolute_index(aI,ibin)) return 0;
-    if(!parent::m_axes[1].in_range_to_absolute_index(aJ,jbin)) return 0;
-    bn_t offset = ibin + jbin * parent::m_axes[1].m_offset;
+    TO offset;
+    if(!_find_offset(aI,aJ,offset)) return 0;
     TW sw = parent::m_bin_Sw[offset];
     if(sw==0) return 0;
     return parent::m_bin_Sxw[offset][AxisY]/sw;
   }
 
   TC bin_rms_x(int aI,int aJ) const {
-    if(parent::m_bin_number==0) return 0;
-    bn_t ibin,jbin;
-    if(!parent::m_axes[0].in_range_to_absolute_index(aI,ibin)) return 0;
-    if(!parent::m_axes[1].in_range_to_absolute_index(aJ,jbin)) return 0;
-    bn_t offset = ibin + jbin * parent::m_axes[1].m_offset;
+    TO offset;
+    if(!_find_offset(aI,aJ,offset)) return 0;
     TW sw = parent::m_bin_Sw[offset];
     if(sw==0) return 0;
     TC sxw = parent::m_bin_Sxw[offset][AxisX];
@@ -193,11 +132,8 @@ public:
   }
 
   TC bin_rms_y(int aI,int aJ) const {
-    if(parent::m_bin_number==0) return 0;
-    bn_t ibin,jbin;
-    if(!parent::m_axes[0].in_range_to_absolute_index(aI,ibin)) return 0;
-    if(!parent::m_axes[1].in_range_to_absolute_index(aJ,jbin)) return 0;
-    bn_t offset = ibin + jbin * parent::m_axes[1].m_offset;
+    TO offset;
+    if(!_find_offset(aI,aJ,offset)) return 0;
     TW sw = parent::m_bin_Sw[offset];
     if(sw==0) return 0;
     TC sxw = parent::m_bin_Sxw[offset][AxisY];
@@ -207,10 +143,10 @@ public:
   }
 
   // Axes :
-  const axis<TC>& axis_x() const {return parent::m_axes[0];}
-  const axis<TC>& axis_y() const {return parent::m_axes[1];}
-  axis<TC>& axis_x() {return parent::m_axes[0];} //touchy
-  axis<TC>& axis_y() {return parent::m_axes[1];} //touchy
+  const axis_t& axis_x() const {return parent::m_axes[0];}
+  const axis_t& axis_y() const {return parent::m_axes[1];}
+  axis_t& axis_x() {return parent::m_axes[0];} //touchy
+  axis_t& axis_y() {return parent::m_axes[1];} //touchy
   // Projection :
 
   TN bin_entries_x(int aI) const {
@@ -218,7 +154,7 @@ public:
     bn_t ibin;
     if(!parent::m_axes[0].in_range_to_absolute_index(aI,ibin)) return 0;
     bn_t ybins = parent::m_axes[1].bins()+2;
-    bn_t offset;
+    TO offset;
     TN _entries = 0;
     for(bn_t jbin=0;jbin<ybins;jbin++) {
       offset = ibin + jbin * parent::m_axes[1].m_offset;
@@ -232,7 +168,7 @@ public:
     bn_t ibin;
     if(!parent::m_axes[0].in_range_to_absolute_index(aI,ibin)) return 0;
     bn_t ybins = parent::m_axes[1].bins()+2;
-    bn_t offset;
+    TO offset;
     TW sw = 0;
     for(bn_t jbin=0;jbin<ybins;jbin++) {
       offset = ibin + jbin * parent::m_axes[1].m_offset;
@@ -246,7 +182,7 @@ public:
     bn_t jbin;
     if(!parent::m_axes[1].in_range_to_absolute_index(aJ,jbin)) return 0;
     bn_t xbins = parent::m_axes[0].bins()+2;
-    bn_t offset;
+    TO offset;
     TN _entries = 0;
     for(bn_t ibin=0;ibin<xbins;ibin++) {
       offset = ibin + jbin * parent::m_axes[1].m_offset;
@@ -260,7 +196,7 @@ public:
     bn_t jbin;
     if(!parent::m_axes[1].in_range_to_absolute_index(aJ,jbin)) return 0;
     bn_t xbins = parent::m_axes[0].bins()+2;
-    bn_t offset;
+    TO offset;
     TW sw = 0;
     for(bn_t ibin=0;ibin<xbins;ibin++) {
       offset = ibin + jbin * parent::m_axes[1].m_offset;
@@ -351,16 +287,7 @@ public:
       << std::endl;
   }
 protected:
-  b2(const std::string& a_title,
-     bn_t aXnumber,TC aXmin,TC aXmax,
-     bn_t aYnumber,TC aYmin,TC aYmax)
-  :m_in_range_entries(0)
-  ,m_in_range_Sw(0)
-  ,m_in_range_Sxw(0)
-  ,m_in_range_Syw(0)
-  ,m_in_range_Sx2w(0)
-  ,m_in_range_Sy2w(0)
-  {
+  b2(const std::string& a_title,bn_t aXnumber,TC aXmin,TC aXmax,bn_t aYnumber,TC aYmin,TC aYmax) {
     parent::m_title = a_title;
     std::vector<bn_t> nbins;
     nbins.push_back(aXnumber);
@@ -374,16 +301,7 @@ protected:
     parent::configure(2,nbins,mins,maxs);
   }
 
-  b2(const std::string& a_title,
-                const std::vector<TC>& aEdgesX,
-                const std::vector<TC>& aEdgesY)
-  :m_in_range_entries(0)
-  ,m_in_range_Sw(0)
-  ,m_in_range_Sxw(0)
-  ,m_in_range_Syw(0)
-  ,m_in_range_Sx2w(0)
-  ,m_in_range_Sy2w(0)
-  {
+  b2(const std::string& a_title,const std::vector<TC>& aEdgesX,const std::vector<TC>& aEdgesY) {
     parent::m_title = a_title;
     std::vector< std::vector<TC> > edges(2);
     edges[0] = aEdgesX;
@@ -393,40 +311,10 @@ protected:
 
   virtual ~b2(){}
 protected:
-  b2(const b2& a_from)
-  : parent(a_from)
-  ,m_in_range_entries(a_from.m_in_range_entries)
-  ,m_in_range_Sw(a_from.m_in_range_Sw)
-  ,m_in_range_Sxw(a_from.m_in_range_Sxw)
-  ,m_in_range_Syw(a_from.m_in_range_Syw)
-  ,m_in_range_Sx2w(a_from.m_in_range_Sx2w)
-  ,m_in_range_Sy2w(a_from.m_in_range_Sy2w)
-  {
-    update_fast_getters();
-  }
-
-  b2& operator=(const b2& a_from) {
-    parent::operator=(a_from);
-    m_in_range_entries = a_from.m_in_range_entries;
-    m_in_range_Sw = a_from.m_in_range_Sw;
-    m_in_range_Sxw = a_from.m_in_range_Sxw;
-    m_in_range_Syw = a_from.m_in_range_Syw;
-    m_in_range_Sx2w = a_from.m_in_range_Sx2w;
-    m_in_range_Sy2w = a_from.m_in_range_Sy2w;
-    update_fast_getters();
-    return *this;
-  }
-
+  b2(const b2& a_from):parent(a_from) {}
+  b2& operator=(const b2& a_from) {parent::operator=(a_from);return *this;}
 public:
-  bool configure(bn_t aXnumber,TC aXmin,TC aXmax,
-                 bn_t aYnumber,TC aYmin,TC aYmax){
-    m_in_range_entries = 0;
-    m_in_range_Sw = 0;
-    m_in_range_Sxw = 0;
-    m_in_range_Syw = 0;
-    m_in_range_Sx2w = 0;
-    m_in_range_Sy2w = 0;
-
+  bool configure(bn_t aXnumber,TC aXmin,TC aXmax,bn_t aYnumber,TC aYmin,TC aYmax){
     std::vector<bn_t> nbins;
     nbins.push_back(aXnumber);
     nbins.push_back(aYnumber);
@@ -439,15 +327,7 @@ public:
     return parent::configure(2,nbins,mins,maxs);
   }
 
-  bool configure(const std::vector<TC>& aEdgesX,
-                 const std::vector<TC>& aEdgesY){
-    m_in_range_entries = 0;
-    m_in_range_Sw = 0;
-    m_in_range_Sxw = 0;
-    m_in_range_Syw = 0;
-    m_in_range_Sx2w = 0;
-    m_in_range_Sy2w = 0;
-
+  bool configure(const std::vector<TC>& aEdgesX,const std::vector<TC>& aEdgesY){
     std::vector< std::vector<TC> > edges(2);
     edges[0] = aEdgesX;
     edges[1] = aEdgesY;
@@ -455,12 +335,14 @@ public:
   }
 
 protected:
-  TN m_in_range_entries;
-  TW m_in_range_Sw;
-  TC m_in_range_Sxw;
-  TC m_in_range_Syw;
-  TC m_in_range_Sx2w;
-  TC m_in_range_Sy2w;
+  bool _find_offset(int aI,int aJ,TO& a_offset) const {
+    if(parent::m_dimension!=2) {a_offset=0;return false;}
+    bn_t ibin,jbin;
+    if(!parent::m_axes[0].in_range_to_absolute_index(aI,ibin)) {a_offset=0;return false;}
+    if(!parent::m_axes[1].in_range_to_absolute_index(aJ,jbin)) {a_offset=0;return false;}
+    a_offset = ibin + jbin * parent::m_axes[1].m_offset;
+    return true;
+  }
 };
 
 }}

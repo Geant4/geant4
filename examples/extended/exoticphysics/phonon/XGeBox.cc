@@ -26,12 +26,17 @@
 /// \file exoticphysics/phonon/XGeBox.cc
 /// \brief Main program of the exoticphysics/phonon example
 //
-// $Id: XGeBox.cc 76246 2013-11-08 11:17:29Z gcosmo $
+// $Id: XGeBox.cc 84197 2014-10-10 14:33:03Z gcosmo $
 //
- 
-#include "G4RunManager.hh"
+
 #include "G4UImanager.hh"
 #include "G4UserSteppingAction.hh"
+
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
+#include "G4RunManager.hh"
+#endif
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -41,18 +46,21 @@
 #include "G4UIExecutive.hh"
 #endif
 
+#include "XActionInitialization.hh"
 #include "XDetectorConstruction.hh"
 #include "XPhysicsList.hh"
-#include "XPrimaryGeneratorAction.hh"
-#include "XPhononStackingAction.hh"
 
-int main(int argc,char** argv)
-{
-  
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+int main(int argc,char** argv) {
  // Construct the run manager
  //
- G4RunManager * runManager = new G4RunManager;
+#ifdef G4MULTITHREADED
+ G4MTRunManager* runManager = new G4MTRunManager;
+#else
+ G4RunManager* runManager = new G4RunManager;
+#endif
 
  // Set mandatory initialization classes
  //
@@ -65,15 +73,7 @@ int main(int argc,char** argv)
     
  // Set user action classes
  //
-
- runManager->SetUserAction(new XPhononStackingAction);
- // runManager->SetUserAction(new DriftingElectronStackingAction);
- // runManager->SetUserAction(new XPhononTrackingAction);
- // runManager->SetUserAction(new PhononSteppingAction);
-
- G4VUserPrimaryGeneratorAction* gen_action = new XPrimaryGeneratorAction();
- runManager->SetUserAction(gen_action);
- //
+ runManager->SetUserInitialization(new XActionInitialization);
 
 #ifdef G4VIS_USE
  // Visualization manager
@@ -82,7 +82,7 @@ int main(int argc,char** argv)
  visManager->Initialize();
 #endif
     
- // Initialize G4 kernel
+ // Initialize G4 kernel (replaces /run/initialize macro command)
  //
  runManager->Initialize();
   

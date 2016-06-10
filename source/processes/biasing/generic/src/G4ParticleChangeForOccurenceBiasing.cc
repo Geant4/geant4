@@ -66,7 +66,6 @@ G4Step* G4ParticleChangeForOccurenceBiasing::UpdateStepForAlongStep(G4Step* step
   
   // -- multiply parent weight by weight due to occurence biasing:
   G4StepPoint* postStepPoint = step->GetPostStepPoint();
-  //  G4cout << " part change along : w = " <<  postStepPoint->GetWeight() << " , wOcc =  " << fOccurenceWeightForNonInteraction << G4endl; // !
   postStepPoint->SetWeight( postStepPoint->GetWeight() * fOccurenceWeightForNonInteraction );
   
   return step;

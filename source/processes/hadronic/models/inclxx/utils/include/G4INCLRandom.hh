@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -50,7 +51,7 @@
 #include "G4INCLIRandomGenerator.hh"
 #include "G4INCLThreeVector.hh"
 #include "G4INCLGlobals.hh"
-#include "G4INCLLogger.hh"
+#include "G4INCLConfig.hh"
 
 namespace G4INCL {
 
@@ -92,7 +93,9 @@ namespace G4INCL {
     /**
      * Return a random integer in the [0,n[ interval
      */
-    template<typename T> T shootInteger(T n);
+    template<typename T> T shootInteger(T n){
+      return static_cast<T>(shoot1() * n);
+    }
 
     /**
      * Generate random numbers using gaussian distribution.
@@ -133,6 +136,30 @@ namespace G4INCL {
      */
     G4bool isInitialized();
 
+#ifdef INCL_COUNT_RND_CALLS
+    /// \brief Return the number of calls to the RNG
+    unsigned long long getNumberOfCalls();
+#endif
+
+    /// \brief Save the status of the random-number generator
+    void saveSeeds();
+
+    /// \brief Get the saved status of the random-number generator
+    SeedVector getSavedSeeds();
+
+    /// \brief Initialize generator according to a Config object
+#ifdef INCLXX_IN_GEANT4_MODE
+    void initialize(Config const * const);
+#else
+    void initialize(Config const * const theConfig);
+#endif
+
+    class Adapter {
+      public:
+        G4int operator()(const G4int n) const;
+    };
+
+    Adapter const &getAdapter();
   }
 
 }

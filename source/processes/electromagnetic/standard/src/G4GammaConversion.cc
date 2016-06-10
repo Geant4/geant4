@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GammaConversion.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4GammaConversion.cc 84598 2014-10-17 07:39:15Z gcosmo $
 //
 // 
 //------------------ G4GammaConversion physics process -------------------------
@@ -71,6 +71,7 @@
 #include "G4BetheHeitlerModel.hh"
 #include "G4PairProductionRelModel.hh"
 #include "G4Electron.hh"
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -85,6 +86,7 @@ G4GammaConversion::G4GammaConversion(const G4String& processName,
   SetStartFromNullFlag(true);
   SetBuildTableFlag(true);
   SetSecondaryParticle(G4Electron::Electron());
+  SetLambdaBinning(220);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -105,21 +107,21 @@ void G4GammaConversion::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    const G4double limit = 80*GeV;
-    G4double emin = std::max(MinKinEnergy(), 2*electron_mass_c2);
-    G4double emax = MaxKinEnergy();
+    G4EmParameters* param = G4EmParameters::Instance();
+    G4double emin = std::max(param->MinKinEnergy(), 2*electron_mass_c2);
+    G4double emax = param->MaxKinEnergy();
+    G4double energyLimit = std::min(emax, 80*GeV);
+
     SetMinKinEnergy(emin);
 
     if(!EmModel(1)) { SetEmModel(new G4BetheHeitlerModel(), 1); }
     EmModel(1)->SetLowEnergyLimit(emin);
-    G4double ehigh = std::min(emax,limit);
-    ehigh = std::min(ehigh,EmModel(1)->HighEnergyLimit());
-    EmModel(1)->SetHighEnergyLimit(ehigh);
+    EmModel(1)->SetHighEnergyLimit(energyLimit);
     AddEmModel(1, EmModel(1));
 
-    if(emax > ehigh) {
+    if(emax > energyLimit) {
       if(!EmModel(2)) { SetEmModel(new G4PairProductionRelModel(), 2); }
-      EmModel(2)->SetLowEnergyLimit(ehigh);
+      EmModel(2)->SetLowEnergyLimit(energyLimit);
       EmModel(2)->SetHighEnergyLimit(emax);
       AddEmModel(2, EmModel(2));
     }

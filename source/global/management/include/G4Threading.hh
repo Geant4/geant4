@@ -69,6 +69,7 @@
 
     // Macro to iniaizlie a Mutex
     #define G4MUTEXINIT(mutex) pthread_mutex_init( &mutex , NULL);
+    #define G4MUTEXDESTROY(mutex) pthread_mutex_destroy( &mutex );
 
     // Macro to create a G4Thread object
     //
@@ -80,9 +81,11 @@
         pthread_create( worker, &attr, func , arg ); \
     }
 
-    // Macro to join a G4Thread
-    //
+    // Macro to join thread
     #define G4THREADJOIN( worker ) pthread_join( worker , NULL)
+
+   // Macro to retrieve caller thread
+   #define G4THREADSELF pthread_self
 
     // Some useful types
     //
@@ -121,6 +124,7 @@
 
     // #define G4MUTEXINIT(mutex) InitializeCriticalSection( &mutex );
     #define G4MUTEXINIT(mutex);
+    #define G4MUTEXDESTROY(mutex);
 
     // Not clear why following two lines are needed...
     //
@@ -129,6 +133,7 @@
 
     #define G4THREADCREATE( worker, func, arg ) { *worker = CreateThread( NULL, 16*1024*1024 , func , arg , 0 , NULL ); }
     #define G4THREADJOIN( worker ) WaitForSingleObject( worker , INFINITE);
+    #define G4THREADSELF GetCurrentThreadId
     #define G4ThreadFunReturnType DWORD WINAPI
     typedef LPVOID G4ThreadFunArgType;
     typedef DWORD (*thread_lock)(G4Mutex);
@@ -158,10 +163,12 @@
   #define G4MUTEX_INITIALIZER 1
   G4int fake_mutex_lock_unlock( G4Mutex* );// { return 0; }
   #define G4MUTEXINIT(mutex) ;;
+  #define G4MUTEXDESTROY(mutex) ;;
   #define G4MUTEXLOCK fake_mutex_lock_unlock
   #define G4MUTEXUNLOCK fake_mutex_lock_unlock
   #define G4THREADCREATE( worker , func , arg ) ;;
   #define G4THREADJOIN( worker ) ;;
+  #define G4THREADSELF( nothing ) G4Thread(nothing); 
   typedef void* G4ThreadFunReturnType;
   typedef void* G4ThreadFunArgType;
   typedef G4int (*thread_lock)(G4Mutex*);
@@ -174,11 +181,22 @@
 
 #endif //G4MULTITHREADING
 
-namespace G4Threading {
+namespace G4Threading
+{
+  enum {
+        SEQUENTIAL_ID = -2,
+        MASTER_ID = -1,
+        WORKER_ID = 0,
+        GENERICTHREAD_ID = -1000
+    };
   G4Pid_t G4GetPidId();
   G4int G4GetNumberOfCores();
   G4int G4GetThreadId();
   G4bool IsWorkerThread();
   void G4SetThreadId( G4int aNewValue );
+  G4bool G4SetPinAffinity( G4int idx , G4Thread& at);
+  void SetMultithreadedApplication(G4bool value);
+  G4bool IsMultithreadedApplication();
 }
+
 #endif //G4Threading_hh

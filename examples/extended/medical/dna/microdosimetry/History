@@ -1,0 +1,202 @@
+-------------------------------------------------------------------
+$Id: History 73136 2013-08-19 14:28:09Z sincerti $
+-------------------------------------------------------------------
+
+     =========================================================
+ 		      Geant4 - Microdosimetry example
+     =========================================================
+
+                       Package History file
+                       --------------------
+
+24 Nov 2014 - M. Karamitros - microdosimetry-V10-00-08
+- Retag before release
+
+12 Nov 2014 - M. Karamitros - microdosimetry-V10-00-07
+- Add a ifdef G4UI_USE_QT to avoid compilation error on ctest
+- Copy README to bin directory
+- Only create the vis viewer in the main
+
+10 Nov 2014 - M. Karamitros - microdosimetry-V10-00-06
+- Correct the check on the output file command line option
+
+10 Nov 2014 - M. Karamitros - microdosimetry-V10-00-05
+- Following Laurent's development: add a tab in the Qt interface 
+displaying the README
+
+10 Nov 2014 - M. Karamitros - microdosimetry-V10-00-04
+- CommandLine updated
+- Default output file's name corrected
+- remove microdosmietry.mac
+
+08 Nov 2014 - M.Karamitros - microdosimetry-V10-00-03
+- Clean command line options
+
+06 Nov 2014 - M.Karamitros - microdosimetry-V10-00-02
+- Check analysis manager is actived removed
+- Select gui + vis from command line option 
+
+23 Oct 2013 - V.Ivanchenko - microdosimetry-V10-00-01
+- Fixed user actions and enter flexible number of threads
+
+22 Oct 2013 - M. Karamitros - microdosimetry-V10-00-00
+- confusion : 09-06 -> 10-00 - change name of the tag
+
+22 Oct 2013 - M. Karamitros - microdosimetry-V09-06-12
+- Update READMEs
+
+22 Oct 2013 - M. Karamitros - microdosimetry-V09-06-11
+- src: Add missing base class initialization
+
+22 Oct 2013 - M. Karamitros - microdosimetry-V09-06-10
+- Migration to extended
+- Add missing virtuals, clean classes
+- Add .README
+- microdosimetry.mac -> microdosimetry.in
+- CMakeLists.txt: improve configuration of mac files
+- Add RunInitObserver class and make TrackingAction dependent on it
+
+3 Oct 2013 - S. Incerti - microdosimetry-V09-06-09
+- Updated CMakeLists.txt
+
+30 Sep 2013 - I. Hrivnacova - microdosimetry-V09-06-08
+- Updated for changes in analysis:
+  (removal of G4AnalysisManager::Create(isMaster))
+
+22 Aug 2013 - S. Incerti - microdosimetry-V09-06-07
+- Updated README
+
+19 Aug 2013 - S. Incerti - microdosimetry-V09-06-06
+- Updated README
+
+30 July 2013 - A.Dotti - microdosimetry-V09-06-05
+- Fix compilation warnings from clang32
+
+7 June 2013 - M. Karamitros - microdosimetry-V09-06-04
+- Remove unnecessary output
+
+7 June 2013 - M. Karamitros - microdosimetry-V09-06-03
+- Code clean up and comments added for beta release
+
+3 June 2013 - M. Karamitros - microdosimetry-V09-06-02
+- Fix initialization of sequential run
+
+10 Apr 2013 - M. Karamitros - microdosimetry-V09-06-01
+- Migration to MT
+
+10 Apr 2013 - S. Incerti - microdosimetry-V09-06-00
+- Updated msc model
+
+3 Nov 2012 - S.Incerti - microdosimetry-V09-05-06
+- Removed shadowing in SteppingAction
+- Updated physics list for usage of SetEmModel() method
+
+26 Oct 2012 - L.Pandola - microdosimetry-V09-05-05
+- Changed CMakeLists.txt to deal with VIS/UI
+
+26 Oct 2012 - S.Incerti - microdosimetry-V09-05-04
+- Renamed executable
+
+12 Oct 2012 - G.Cosmo - microdosimetry-V09-05-03
+- Explicit inclusion of units and constants headers
+
+1 Oct 2012 - V. Ivantchenko - microdosimetry-V09-05-02
+- G4ElectronCapture - clean up killing captured electron
+
+16 Aug 2012 - S. Incerti - microdosimetry-V09-05-01
+- Switched to new analysis interface
+
+10 Aug 2012 - S. Incerti - microdosimetry-V09-05-00
+- Removed export=root option in HistoManager
+
+23 July 2012 - M. Karamitros -  microdosimetry-V09-04-07
+- Added TrackingAction (count N secondaries created in/outside
+  "target" region) + Modified related classes (RunAct and main)
+
+18 August 2011 - S. Incerti -  microdosimetry-V09-04-06
+- Added scoring of msc 
+
+18 August 2011 - S. Incerti -  microdosimetry-V09-04-05
+- Removed initStep test in SteppingAction
+
+16 August 2011 - S. Incerti -  microdosimetry-V09-04-04
+- Removed usage of system command
+
+27 May 2011 - S. Incerti -  microdosimetry-V09-04-03
+- Switched back to ordered physics list
+
+20 May 2011 - S. Incerti -  microdosimetry-V09-04-02
+- Switched to non-ordered physics list
+
+02 April 2011 - S. Incerti -  microdosimetry-V09-04-01
+- Added new variables to histogram
+
+13 March 2011 - S. Incerti -  microdosimetry-V09-04-00
+- Switched to G4ionIonisation and 5 MeV proton
+
+18 November 2010 - J. Allison -  microdosimetry-V09-03-10
+- Introduced G4UIExecutive.
+
+12 November 2010 - S. Incerti -  microdosimetry-V09-03-09
+- Modified energy limit of Sanche vib excitation for e-
+
+09 November 2010 - M. Asai - microdosimetry-V09-03-08
+- Fix AIDA file option.
+
+08 October 2010 - S. Incerti - microdosimetry-V09-03-07
+- added H excitation
+
+06 October 2010 - S. Incerti - microdosimetry-V09-03-06
+- update for production of histograms with AIDA
+
+13 September 2010 - S. Incerti - microdosimetry-V09-03-05
+- added new G4DNA electron processes
+- updated SteppingAction and plot.C accordingly
+
+31 August 2010 - V.Ivanchenko - microdosimetry-V09-03-04
+- added electron capture process inside the target
+
+25 August 2010 - S. Incerti - microdosimetry-V09-03-03
+- switched to G4DNABornExcitationModel for electrons
+
+12 June 2010 - V.Ivanchenko    - microdosimetry-V09-03-02
+- added target region and defined DNA physics for this region
+
+03 June 2010 - J.Perl    - microdosimetry-V09-03-01
+- update vis usage
+
+25 March 2010 - G.Folger    - microdosimetry-V09-03-00
+- do not use G4UItcsh on windows
+
+15 August 2009 - S. Incerti - microdosimetry-V09-02-04
+- fixed type in GenericIonDefinition in PhysicsList.cc
+  (to be used with emlowen-V09-02-50 and above)
+
+13 August 2009 - S. Incerti - microdosimetry-V09-02-03
+- replaced H2O material by NIST G4_WATER 
+  (to be used with emlowen-V09-02-50 and above) 
+
+10 August 2009 - S. Incerti - microdosimetry-V09-02-02
+- added GenericIon definition to PhysicsList (required by rules of G4VUserPhysicsList)
+
+29 April 2009 - S. Incerti - microdosimetry-V09-02-01
+- modified PhysicsList for migrated Geant4-DNA processes
+- modified SteppingAction accordingly
+- updated README
+
+27 June 2008 - S. Incerti - microdosimetry-V09-01-04
+- modified PhysicsList.cc and SteppingAction.cc to take into account
+new G4CrossSectionElasticScreenedRutherfordLE and HE classes
+(from emlowen-V09-01-21 only !)
+- removed G4CrossSectionExcitationEmfietzoglou.cc
+
+20 June 2008 - S. Incerti - microdosimetry-V09-01-03
+- updated History
+
+10 June 2008 - S. Incerti - microdosimetry-V09-01-02
+- added G4CrossSectionExcitationEmfietzoglou.cc with higher low energy limit (10 eV) than default (7.4 eV)
+- added G4DNA process names in Physics list
+- removed useless G4DNAProcess.hh and G4DNAProcess.icc files
+
+06 June 2008 - S. Incerti - microdosimetry-V09-01-01
+- Package created.
