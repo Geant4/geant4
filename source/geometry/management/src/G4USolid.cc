@@ -73,14 +73,19 @@ EInside G4USolid::Inside(const G4ThreeVector& p) const
   UVector3 pt;
   VUSolid::EnumInside in_temp;
   EInside in = kOutside;
-  pt.x = p.x();
-  pt.y = p.y();
-  pt.z = p.z(); // better assign at construction
+  pt.x() = p.x();
+  pt.y() = p.y();
+  pt.z() = p.z(); // better assign at construction
 
   in_temp = fShape->Inside(pt);
 
+#ifndef G4USE_STD11
   if (in_temp == VUSolid::eSurface)return kSurface;
   if (in_temp == VUSolid::eInside)return kInside;
+#else
+  if (in_temp == VUSolid::EnumInside::eSurface)return kSurface;
+  if (in_temp == VUSolid::EnumInside::eInside)return kInside;
+#endif
 
   return in;
 }
@@ -88,25 +93,25 @@ EInside G4USolid::Inside(const G4ThreeVector& p) const
 G4ThreeVector G4USolid::SurfaceNormal(const G4ThreeVector& pt) const
 {
   UVector3 p;
-  p.x = pt.x();
-  p.y = pt.y();
-  p.z = pt.z();
+  p.x() = pt.x();
+  p.y() = pt.y();
+  p.z() = pt.z();
   UVector3 n;
   fShape->Normal(p, n);
-  return G4ThreeVector(n.x, n.y, n.z);
+  return G4ThreeVector(n.x(), n.y(), n.z());
 }
 
 G4double G4USolid::DistanceToIn(const G4ThreeVector& pt,
                                 const G4ThreeVector& d)const
 {
   UVector3 p;
-  p.x = pt.x();
-  p.y = pt.y();
-  p.z = pt.z(); // better assign at construction
+  p.x() = pt.x();
+  p.y() = pt.y();
+  p.z() = pt.z(); // better assign at construction
   UVector3 v;
-  v.x = d.x();
-  v.y = d.y();
-  v.z = d.z(); // better assign at construction
+  v.x() = d.x();
+  v.y() = d.y();
+  v.z() = d.z(); // better assign at construction
   G4double dist = fShape->DistanceToIn(p, v);
   if (dist > kInfinity) dist = kInfinity;
   return dist;
@@ -115,9 +120,9 @@ G4double G4USolid::DistanceToIn(const G4ThreeVector& pt,
 G4double G4USolid::DistanceToIn(const G4ThreeVector& pt) const
 {
   UVector3 p;
-  p.x = pt.x();
-  p.y = pt.y();
-  p.z = pt.z(); // better assign at construction
+  p.x() = pt.x();
+  p.y() = pt.y();
+  p.z() = pt.z(); // better assign at construction
   G4double dist = fShape->SafetyFromOutside(p); // true?
   if (dist > kInfinity) dist = kInfinity;
   return dist;
@@ -130,13 +135,13 @@ G4double G4USolid::DistanceToOut(const G4ThreeVector& pt,
                                  G4ThreeVector* norm) const
 {
   UVector3 p;
-  p.x = pt.x();
-  p.y = pt.y();
-  p.z = pt.z(); // better assign at construction
+  p.x() = pt.x();
+  p.y() = pt.y();
+  p.z() = pt.z(); // better assign at construction
   UVector3 v;
-  v.x = d.x();
-  v.y = d.y();
-  v.z = d.z(); // better assign at construction
+  v.x() = d.x();
+  v.y() = d.y();
+  v.z() = d.z(); // better assign at construction
   UVector3 n;
   bool valid;
   G4double dist = fShape->DistanceToOut(p, v, n,valid); // should use local variable
@@ -145,9 +150,9 @@ G4double G4USolid::DistanceToOut(const G4ThreeVector& pt,
     if(valid){ *validNorm = true;}
     else {* validNorm =false;}
     if(*validNorm)
-    { norm->setX(n.x);
-      norm->setY(n.y);
-      norm->setZ(n.z);
+    { norm->setX(n.x());
+      norm->setY(n.y());
+      norm->setZ(n.z());
     } // *norm = n, but only after calcNorm check
   }
   if (dist > kInfinity) dist = kInfinity;
@@ -157,9 +162,9 @@ G4double G4USolid::DistanceToOut(const G4ThreeVector& pt,
 G4double G4USolid::DistanceToOut(const G4ThreeVector& pt) const
 {
   UVector3 p;
-  p.x = pt.x();
-  p.y = pt.y();
-  p.z = pt.z(); // better assign at construction
+  p.x() = pt.x();
+  p.y() = pt.y();
+  p.z() = pt.z(); // better assign at construction
   return fShape->SafetyFromInside(p); // true?
 }
 
@@ -177,7 +182,7 @@ G4ThreeVector G4USolid::GetPointOnSurface() const
 {
   UVector3 p;
   p = fShape->GetPointOnSurface();
-  return G4ThreeVector(p.x, p.y, p.z);
+  return G4ThreeVector(p.x(), p.y(), p.z());
 }
 
 G4bool G4USolid::CalculateExtent(const EAxis pAxis,
@@ -532,7 +537,7 @@ G4Polyhedron* G4USolid::CreatePolyhedron() const
            v!=(*uPolyhedron).vertices.end(); v++)
      {
            UVector3 p=(*v);
-           G4ThreeVector pt(p.x,p.y,p.z);
+           G4ThreeVector pt(p.x(),p.y(),p.z());
 
            polyhedron->AddVertex(pt);
       }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.cc 87077 2014-11-24 15:29:00Z gcosmo $
+// $Id: G4GDMLWriteSolids.cc 90766 2015-06-09 10:13:41Z gcosmo $
 //
 // class G4GDMLWriteSolids Implementation
 //
@@ -1029,7 +1029,7 @@ void G4GDMLWriteSolids::AddSolid(const G4VSolid* const solidPtr)
    if (const G4BooleanSolid* const booleanPtr
      = dynamic_cast<const G4BooleanSolid*>(solidPtr))
      { BooleanWrite(solidsElement,booleanPtr); } else
-   if (solidPtr->GetEntityType()=="G4MultipleUnion")
+   if (solidPtr->GetEntityType()=="G4MultiUnion")
      { const G4MultiUnion* const munionPtr
      = static_cast<const G4MultiUnion*>(solidPtr);
        MultiUnionWrite(solidsElement,munionPtr); } else

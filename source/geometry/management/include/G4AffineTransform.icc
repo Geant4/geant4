@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AffineTransform.icc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4AffineTransform.icc 90701 2015-06-08 09:43:16Z gcosmo $
 //
 //
 // G4AffineTransformation Inline implementation
@@ -394,4 +394,62 @@ void G4AffineTransform::SetNetTranslation(const G4ThreeVector& tlate)
         tx=tlate.x();
         ty=tlate.y();
         tz=tlate.z();
+}
+
+inline
+std::ostream&
+  operator << (std::ostream &os, const G4AffineTransform &transf)
+{
+  char  buffer[1024];
+  int oldPrec= os.precision(6); 
+  double DeviationTolerance= 1.0e-05;
+
+  double diagDeviation= 0.0; 
+  double offdDeviationUL= 0.0;
+  double offdDeviationDR= 0.0;
+  double offdDeviation= 0.0; 
+                                     
+  os << "  Transformation: " << G4endl; 
+
+  // double  a = std::max ( 1, 2, 3 ) ; 
+  
+  bool UnitTr = ! transf.IsRotated(); 
+  diagDeviation= std::max ( std::fabs( transf[0] - 1.0 ) ,     //  | rxx - 1 |
+                            std::fabs( transf[5] - 1.0 ) );     //  | ryy - 1 |
+  diagDeviation= std::max ( diagDeviation, 
+                            std::fabs( transf[10] - 1.0 ) );   //  | rzz - 1 |
+  
+  offdDeviationUL= std::max ( std::fabs( transf[1] ) ,      //  | rxy |
+                              std::fabs( transf[2] ) );     //  | rxz |
+  offdDeviationUL= std::max ( offdDeviationUL, 
+                              std::fabs( transf[4] ) );     //  | ryx |
+  
+  offdDeviationDR= std::max ( std::fabs( transf[6] ) ,      //  | ryz |
+                              std::fabs( transf[8] ) );     //  | rzx |
+  offdDeviationDR= std::max ( offdDeviationDR, 
+                              std::fabs( transf[9] )   );   //  | rzy |
+  offdDeviation= std::max( offdDeviationUL, offdDeviationDR ); 
+
+  if( UnitTr || std::max( diagDeviation, offdDeviation ) < DeviationTolerance ) {
+     os << "    UNIT  Rotation " << G4endl;
+  } else {
+//      os << "   " << transf[0]  << " " << transf[1] << " " << transf[2] << G4endl
+//            << "   " << transf[4]  << " " << transf[5] << " " << transf[6] << G4endl
+//            << "   " << transf[8]  << " " << transf[9] << " " << transf[10] << G4endl
+//            << "   " << transf[12]  << " " << transf[13] << " " << transf[14] << G4endl
+//            << G4endl;
+     sprintf( buffer, "rx/x,y,z  %10.6f  %10.6f  %10.6f ", transf[0], transf[1], transf[2] ); 
+     os << buffer << G4endl;
+     sprintf( buffer, "ry/x,y,z  %10.6f  %10.6f  %10.6f ", transf[4], transf[5], transf[6] );
+     os << buffer << G4endl;
+     sprintf( buffer, "rz/x,y,z  %10.6f  %10.6f  %10.6f ", transf[8], transf[9], transf[10] );
+     os << buffer << G4endl;
+  }
+
+  sprintf( buffer, "tr/x,y,z  %10.6f  %10.6f  %10.6f ", transf[12], transf[13], transf[14] );
+  os << buffer << G4endl;
+  
+  os.precision(oldPrec); 
+
+  return os; 
 }

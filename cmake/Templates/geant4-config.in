@@ -132,7 +132,7 @@ feature_list="${feature_list} clhep[${have_clhep}]"
 
 if test "x${have_clhep}" = "xno" ; then
   cflags="${cflags} `${clhep_config_exe} --include`"
-  libs="${libs} `${clhep_config_exe} --libs`"
+  libs="${libs} @G4_SYSTEM_CLHEP_LIBRARIES@"
 fi
 if test "x${have_clhep}" = "xyes" ; then
   libs="${libs} -lG4clhep"

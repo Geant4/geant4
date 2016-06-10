@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.cc 80287 2014-04-10 09:49:49Z gcosmo $
+// $Id: G4ParameterisedNavigation.cc 90836 2015-06-10 09:31:06Z gcosmo $
 //
 //
 // class G4ParameterisedNavigation Implementation
@@ -50,6 +50,8 @@
 #include "G4ParameterisedNavigation.hh"
 #include "G4TouchableHistory.hh"
 #include "G4VNestedParameterisation.hh"
+
+#include "G4AuxiliaryNavServices.hh"
 
 // ********************************************************************
 // Constructor
@@ -91,7 +93,11 @@ G4double G4ParameterisedNavigation::
   G4LogicalVolume *motherLogical;
   G4VSolid *motherSolid, *sampleSolid;
   G4ThreeVector sampleDirection;
-  G4double ourStep=currentProposedStepLength, motherSafety, ourSafety;
+  G4double ourStep=currentProposedStepLength, ourSafety;
+  G4double motherSafety, motherStep=DBL_MAX;
+  G4bool motherValidExitNormal=false;
+  G4ThreeVector motherExitNormal;
+  
   G4int sampleNo;
 
   G4bool initialNode, noStep;
@@ -153,18 +159,46 @@ G4double G4ParameterisedNavigation::
                     "GeomNav1002", JustWarning, message,
                     "Point is a little outside Current Volume."); 
     }
+
+    // Compute early:
+    //  a) to check whether point is (wrongly) outside
+    //               (signaled if step < 0 or step == kInfinity )
+    //  b) to check value against answer of daughters!
+    //
+    motherStep = motherSolid->DistanceToOut(localPoint,
+                                            localDirection,
+                                            true,
+                                           &motherValidExitNormal,
+                                           &motherExitNormal);
+  
+    if( (motherStep >= kInfinity) || (motherStep < 0.0) )
+    {
+      // Error - indication of being outside solid !!
+      //
+      fLogger->ReportOutsideMother(localPoint, localDirection, motherPhysical);
+
+      ourStep = motherStep = 0.0;
+      exiting = true;
+      entering = false;
+    
+      // If we are outside the solid does the normal make sense?
+      validExitNormal = motherValidExitNormal;
+      exitNormal = motherExitNormal;
+    
+      *pBlockedPhysical= 0; // or motherPhysical ?
+      blockedReplicaNo= 0;  // or motherReplicaNumber ?
+    
+      newSafety= 0.0;
+      return ourStep;
+    }
   }
 #endif
-
-  //
-  // Compute daughter safeties & intersections
-  //
 
   initialNode = true;
   noStep = true;
 
-  // By definition, parameterised volumes exist as first
-  // daughter of the mother volume
+  // By definition, the parameterised volume is the first
+  // (and only) daughter of the mother volume
   //
   samplePhysical = motherLogical->GetDaughter(0);
   samplePhysical->GetReplicationData(axis,nReplicas,width,offset,consuming);
@@ -187,6 +221,8 @@ G4double G4ParameterisedNavigation::
   entering = false;
 
   sampleParam = samplePhysical->GetParameterisation();
+
+  // Loop over voxels & compute daughter safeties & intersections
 
   do
   {
@@ -292,37 +328,37 @@ G4double G4ParameterisedNavigation::
       }
       else
       {
-        //
-        // Compute mother intersection if required
+        // Consider intersection with mother solid
         //
         if ( motherSafety<=ourStep )
         {
-          G4double motherStep = motherSolid->DistanceToOut(localPoint,
-                                                           localDirection,
-                                                           true,
-                                                           &validExitNormal,
-                                                           &exitNormal);
+          if ( !fCheck )           
+          {
+            motherStep = motherSolid->DistanceToOut(localPoint,
+                                                   localDirection,
+                                                   true,
+                                                   &motherValidExitNormal,
+                                                   &motherExitNormal);
+          }
+
+          if( ( motherStep < 0.0 ) || ( motherStep >= kInfinity) )
+          {
 #ifdef G4VERBOSE
-          if ( fCheck ) 
-            if( ( motherStep < 0.0 ) || ( motherStep >= kInfinity) )
-            {
-              G4int oldPrOut= G4cout.precision(16); 
-              G4int oldPrErr= G4cerr.precision(16);
-              std::ostringstream message;
-              message << "Current point is outside the current solid !"
-                      << G4endl
-                      << "        Problem in Navigation"  << G4endl
-                      << "        Point (local coordinates): "
-                      << localPoint << G4endl
-                      << "        Local Direction: "
-                      << localDirection << G4endl
-                      << "        Solid: " << motherSolid->GetName(); 
-              motherSolid->DumpInfo();
-              G4Exception("G4ParameterisedNavigation::ComputeStep()",
-                          "GeomNav0003", FatalException, message);
-              G4cout.precision(oldPrOut);
-              G4cerr.precision(oldPrErr);
-            }
+            fLogger->ReportOutsideMother(localPoint, localDirection, motherPhysical);
+#endif
+            ourStep = motherStep = 0.0;
+            // Rely on the code below to set the remaining state, i.e.
+            // exiting, entering,  exitNormal & validExitNormal,
+            // pBlockedPhysical etc.
+          }
+#ifdef G4VERBOSE
+          if( motherValidExitNormal && ( fCheck || (motherStep<=ourStep)) )
+          {
+            fLogger->CheckAndReportBadNormal(motherExitNormal,
+                                             localPoint, localDirection,
+                                             motherStep, motherSolid,
+                                             "From motherSolid::DistanceToOut");
+          }
 #endif
           if ( motherStep<=ourStep )
           {

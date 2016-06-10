@@ -466,7 +466,7 @@ bool UPolyhedraSide::Distance(const UVector3& p,
     if (solutions == 2 && s2 > 0 && (s2 < s1 || s1 < 0))
       s1 = s2;
 
-    segment = PhiSegment(std::atan2(p.y + s1 * v.y, p.x + s1 * v.x));
+    segment = PhiSegment(std::atan2(p.y() + s1 * v.y(), p.x() + s1 * v.x()));
   }
 
   UVector3 q = p + v;
@@ -644,7 +644,7 @@ double UPolyhedraSide::Extent(const UVector3 axis)
     //
     // Special case
     //
-    return axis.z < 0 ? -cone->ZLo() : cone->ZHi();
+    return axis.z() < 0 ? -cone->ZLo() : cone->ZHi();
   }
 
   int iPhi, i1, i2;
@@ -833,7 +833,7 @@ int UPolyhedraSide::LineHitsSegments(const UVector3& p,
   //
   // Try first intersection.
   //
-  *i1 = PhiSegment(std::atan2(p.y + s1 * v.y, p.x + s1 * v.x));
+  *i1 = PhiSegment(std::atan2(p.y() + s1 * v.y(), p.x() + s1 * v.x()));
   if (n == 1)
   {
     return (*i1 < 0) ? 0 : 1;
@@ -842,7 +842,7 @@ int UPolyhedraSide::LineHitsSegments(const UVector3& p,
   //
   // Try second intersection
   //
-  *i2 = PhiSegment(std::atan2(p.y + s2 * v.y, p.x + s2 * v.x));
+  *i2 = PhiSegment(std::atan2(p.y() + s2 * v.y(), p.x() + s2 * v.x()));
   if (*i1 == *i2) return 0;
 
   if (*i1 < 0)

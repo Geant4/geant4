@@ -33,14 +33,14 @@ void UUtils::TransformLimits(UVector3& min, UVector3& max, const UTransform3D& t
   // "transformation"
   UVector3 vertices[8] =     // Detemination of the vertices thanks to the extension of each solid:
   {
-    UVector3(min.x, min.y, min.z), // 1st vertice:
-    UVector3(min.x, max.y, min.z), // 2nd vertice:
-    UVector3(max.x, max.y, min.z),
-    UVector3(max.x, min.y, min.z),
-    UVector3(min.x, min.y, max.z),
-    UVector3(min.x, max.y, max.z),
-    UVector3(max.x, max.y, max.z),
-    UVector3(max.x, min.y, max.z)
+    UVector3(min.x(), min.y(), min.z()), // 1st vertice:
+    UVector3(min.x(), max.y(), min.z()), // 2nd vertice:
+    UVector3(max.x(), max.y(), min.z()),
+    UVector3(max.x(), min.y(), min.z()),
+    UVector3(min.x(), min.y(), max.z()),
+    UVector3(min.x(), max.y(), max.z()),
+    UVector3(max.x(), max.y(), max.z()),
+    UVector3(max.x(), min.y(), max.z())
   };
 
   min.Set(kInfinity);
@@ -55,14 +55,14 @@ void UUtils::TransformLimits(UVector3& min, UVector3& max, const UTransform3D& t
     UVector3 current = transformation.GlobalPoint(vertices[i]);
 
     // If need be, replacement of the min & max values:
-    if (current.x > max.x) max.x = current.x;
-    if (current.x < min.x) min.x = current.x;
+    if (current.x() > max.x()) max.x() = current.x();
+    if (current.x() < min.x()) min.x() = current.x();
 
-    if (current.y > max.y) max.y = current.y;
-    if (current.y < min.y) min.y = current.y;
+    if (current.y() > max.y()) max.y() = current.y();
+    if (current.y() < min.y()) min.y() = current.y();
 
-    if (current.z > max.z) max.z = current.z;
-    if (current.z < min.z) min.z = current.z;
+    if (current.z() > max.z()) max.z() = current.z();
+    if (current.z() < min.z()) min.z() = current.z();
   }
 }
 
@@ -142,19 +142,19 @@ void UUtils:: Exception(const char* originOfException,
           << description << std::endl;
   switch (severity)
   {
-    case FatalError:
+    case UFatalError:
       std::cerr << es_banner << message.str() << "*** Fatal Exception ***"
                 << ee_banner << std::endl;
       break;
-    case FatalErrorInArguments:
+    case UFatalErrorInArguments:
       std::cerr << es_banner << message.str() << "*** Fatal Error In Argument ***"
                 << ee_banner << std::endl;
       break;
-    case Error:
+    case UError:
       std::cerr << es_banner << message.str() << "*** Error ***" << level
                 << ee_banner << std::endl;
       break;
-    case Warning:
+    case UWarning:
       std::cerr << ws_banner << message.str() << "*** This is just a warning message ***"
                 << we_banner << std::endl;
       toBeAborted = false;

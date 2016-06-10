@@ -1,0 +1,273 @@
+
+                 Geant4 10.1 - patch-02 Release Notes
+                 ------------------------------------
+
+                                                            19 June 2015
+
+List of fixes included in this public patch since the public release 10.1.p01:
+
+  o Configuration:
+    -------------
+    + CMake:
+      o Added extensions to allow use of system CLHEP granular libraries.
+        Provide new advanced option GEANT4_USE_SYSTEM_CLHEP_GRANULAR, which can
+        be set to enable use of CLHEP granular libraries from the system; when
+        activated, use new FindCLHEP interface to search for Geant4's required
+        Export and document a new variable "Geant4_system_clhep_ISGRANULAR" that
+        clients can query to check whether the system CLHEP was linked in granular
+        mode. Support CLHEP granular library listing in '--libs' argument.
+        Added CLHEP_ROOT_DIR to CMake cache, allowing it to be edited in the
+        CMake curses/GUI.
+      o Updated AppleClang version regex to properly parse LLVM version
+        number in Xcode 6.3.
+      o Corrected Qt5 settings for test applications.
+      o Added '-no-gcc' compilation option for Intel-icc compiler.
+    + GNUMake:
+      o Updated CPPFLAGS for Linux-icc and WIN32-g++ configurations.
+
+  o Analysis:
+    --------
+    + Updated to g4tools 1.17.2: changes for Windows (MinGW) to use '_MSC_VER'
+      in place of 'WIN32' flag. Addressing problem report #1721.
+
+  o Event:
+    -----
+    + Increased level of verbosity of /gps/verbose command.
+      /gps/verbose now acts globally on all sources in case of multiple ones
+      (no need to activate verbosity for each source).
+      Protecting the command /gps/source/set in case of out-of-bound index.
+      Addressing problem report #1744.
+    + Clean up code and removed not needed thread-local data that 
+      need to be shared for UI commands to work properly.
+    + Fixes for Coverity defects.
+
+  o Externals:
+    ---------
+    + CLHEP:
+      o Fixed usage of std::abs() in RandGaussZiggurat.
+      o Moved static methods handling static data in G4RandGauss from inline
+        to source. Addressing problem report #1754.
+      o Switch off warnings for deprecated calls to auto_ptr in Utility headers.
+    + USolids:
+      o Corrected string returned as type-ID by GetEntityType() to conform
+        to shape kind in: UExtrudedSolid, UMultiUnion, UQuadrangularFacet,
+        UTessellatedSolid, UTrap, UTriangularFacet and UVCSGfaceted.
+      o Replaced Exception IDs in UUtils to avoid clashes with wild global
+        extern functions in Root.
+      o UVector3: made data private and defined accessors x(), y() and z().
+        Made implementations operators +(), -(), *(), and /() inline.
+        Adapted all classes to the change.
+      o Fixed DistanceToOut(p) and Inside(p) in USphere for sphere cut in theta
+        for point (0,0,0) and for cases when Start/End angle have not to be taken
+        in account (STheta==0 || eTheta==pi).
+      o Added method GetPointOnEdge() to UBox.
+      o Fixed Coverity defect for unused variable quantity in UCons.
+      o Some code cleanup and minor fixes...
+
+  o Geometry:
+    --------
+    + divisions:
+      o G4VDivisionParameterisation: avoid creation/deletion of rotation matrix
+        for ChangeRotMatrix(). Addressing problem report #1743.
+      o Fixed Coverity defect in G4ReplicatedSlice for uninitialised pointer.
+    + management:
+      o Added streaming operator <<() to G4AffineTransform.
+      o Removed unused data-member in G4LogicalVolume, and fixed minor
+        Coverity defect for unitialised member 'fBiasWeight' in constructor.
+      o G4USolid: use accessors x(), y() and z() from UVector3, instead of
+        directly accessing its data-members.
+        Use scoped enum for EnumSide if c++11 enabled.
+    + navigation:
+      o Enabled ComputeStep() in navigation helper classes (Normal, Voxel,
+        and Parameterised) to recognise invalid points outside the mother
+        volume. Before it was not recognised, but used instead as a numeric
+        value (kInfinity). In case it was kInfinity, this meant the volume
+        could not be chosen, and the track never exited the volume. This
+        invalid response now triggers an immediate exit from the volume
+        and daughters do not need to be considered.
+        Use return value of motherSolid DistanceToOut(p,v), each time
+        that it is called. Correct 'invalid' answer ('kInfinity' or
+        negative) to zero.
+      o Improvements in G4PropagatorInField to enable identification of first
+        and last step in a volume, when tracking in a field.
+        Addressing old problem report #1032.
+        Added new methods to report looping and stuck tracks and correction
+        for roundoff issue.
+      o NavigationLogger: added method for Reporting a point is outside the
+        mother volume: CheckAndReportBadNormal(), CheckDaughterEntryPoint().
+      o G4AuxiliaryNavigationServices: optimised to reuse dot product, rather
+        than recomputing; added optional printout (protected by debug flag).
+      o G4VIntersectionLocator: added PrintStatus() method with additional
+        ostringstream argument.
+      o Code cleanup and various minor fixes.
+    + solids/Boolean:
+      o G4UMultiUnion: use accessors x(), y() and z() from UVector3, instead
+        of directly accessing its data-members.
+    + solids/CSG:
+      o Fixed calculation of Normal in G4Para for kPX and kMX sides in
+        DistanceToOut(p,v) and ApproxSurfaceNormal(p).
+        Addressing problem report #1736.
+      o Fixed DistanceToOut(p) and Inside(p) in G4Sphere for sphere cut in theta
+        for point (0,0,0) and for cases when Start/End angle have not to be taken
+        in account (STheta==0 || eTheta==pi).
+        Added corresponding test cases to unit test for testG4Sphere.
+        Fix triggered by analysing setup provided in problem report #1702.
+      o Use accessors x(), y() and z() from UVector3 in USolids wrappers, instead
+        of directly accessing its data-members.
+      o Fixed Coverity defect for unused variable quantity in G4Cons.
+    + solids/specific:
+      o Use accessors x(), y() and z() from UVector3 in USolids wrappers, instead
+        of directly accessing its data-members.
+    + volumes:
+      o Simplified implementation in G4NavigationHistoryPool to make use of simple
+        stack of free entries. Pre-allocate size of vectors and inlined GetLevels().
+        Also addressing problem report #1730.
+
+  o Generic Processes:
+    -----------------
+    + Transportation:
+      o G4Transportation, G4CoupledTransportation: added ability to identify last
+        step in volume for the case of propagation in field.
+        Addresses old problem report #1032.
+
+  o Global:
+    ------
+    + Fix in G4StatDouble to return RMS 0 instead of -1 in the case the number
+      of entries is below 2 (fixes arithmetic exceptions in examples for run
+      with 1 event only).
+    + Fixed bug in G4CacheReference::Destroy(); modified behavior to identify
+      internal inconsistencies and throw exception.
+    + Added copy constructor and assignment operator to G4Cache.
+      Addressing problem report #1739.
+    + Corrected logic for use of TLS on clang compiler for the Random module.
+    + Added guard against potential loop in G4RandomTools::G4LambertianRand().
+    + Added "g/mole" Molar mass definition to G4UnitsTable.
+    + Define G4THREADSLEEP(tick) macro in G4Threading.hh also for sequential
+      builds.
+    + Updated date and version for 10.1.p02.
+
+  o Materials:
+    ---------
+    + G4NistManager: corrected printout of elements and materials.
+      Addressing problem report #1747.
+
+  o Persistency:
+    -----------
+    + GDML:
+      o Added missing "dichroic" surface model for optical property,
+        consistent with addition done since release 10.0.
+      o Avoid use of standard evaluator for import of units; adopt G4UnitsTable
+        instead, in order to avoid loss of precision due to unit's conversion.
+      o Correction for optional stripping of world-volume.
+      o Corrected parsing of shape type-ID for MultiUnion in G4GDMLWriteSolids.
+      o Improved text in G4Exception for failed import of file in G4GDMLRead.
+      o Fixed non-initialised boolean flag in G4GDMLRead, reported by Coverity.
+
+  o Physics Lists:
+    -------------
+    + constructors/gamma_lepto_nuclear:
+      o G4EmExtraPhysics, G4EmMessenger: clean up messenger and added new
+        UI commands. Addresses problem report #1752.
+      o Fixed Coverity defects.
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + dna:
+      o Fixed reproducibility of the chemistry module.
+      o Fixed bug for "no reaction table found"; new class G4ITReaction.
+      o Added Fe56 into G4DNARuddIonisationExtendedModel.
+      o BornIonisation: corrected array cleaning.
+      o ScreenRutherfordElastic: corrected retrieval of water density.
+      o Added missing virtual GetValue() method in G4DNAChemistryManager.
+      o Removed "virtual" keyword when accessing position in G4IT.
+      o G4shared_ptr refers to std::shared_ptr when C++11 is activated.
+      o Some code cleanup.
+    + high-energy:
+      o G4eeTo3PiModel: do not use default constructor for G4LorentzVector.
+    + low-energy:
+      o G4LivermorePhotoElectricModel: implemented protection to avoid rare
+        precision lost in de-excitation.
+      o G4EMDataSet: fixed Coverity defects.
+    + standard:
+      o G4WentzelVIModel: repeat check on safety for new steps.
+        In SampleScattering optimized use of random engine.
+      o G4UniversalFluctuation, G4KleinNishinaCompton, G4KleinNishinaModel:
+        define local pointer to random engine.
+      o G4WentzelOKandVIxSection: improved angular sampling.
+      o G4KleinNishinaModel, G4WentzelOKandVIxSection: accurate initialisation
+        of G4ThreeVectors and G4LorentzVector in constructors.
+      o G4PAIModel, G4PAIModelData, G4PAIPhotModel, G4PAIPhotModelData: fixed
+        initialisation of cuts to happen only in run-time methods; added copy
+        of vector of G4MaterialCutsCouple from master to worker threads.
+        Addresses problem report #1731.
+    + utils:
+      o G4VMultipleScattering, G4VMscModel, G4VEmAngularDistribution: accurate
+        initialisation of G4ThreeVectors and G4LorentzVector in constructors.
+
+  o Processes - Hadronic:
+    --------------------
+    + cross_sections:
+      o G4ComponentGGHadronNucleusXsc: extended applicability for kaons down
+        to 0.1*MeV.
+    + models/binary_cascade:
+      o Use const address as argument to typeid() in method
+        G4BinaryCascade::DebugApplyCollisionFail(), fixing compilation
+        warning on clang-3.6.
+    + models/cascade:
+      o G4PreCompoundDeexcitation: properly delete precompound products (i.e.
+        G4ReactionProduct objects). Fixes issue of constant memory growth in
+        the use of G4Allocator. Also addressing problem report #1735.
+    + models/de_excitation:
+      o G4NeutronRadCapture: added check on initial kinematics for all isotopes;
+        proper initialisation of G4LorentzVector in class constructor, fixed
+        Coverity reports.
+    + models/parton_string:
+      o G4FTFParticipants: added a new method to clean up the member vector;
+        using the above new method in G4FTFModel::GetStrings() to release
+        memory allocated and otherwise leaked; reduces observed memory growth
+        in use of G4Allocator. Also addressing problem report #1735.
+      o G4FTFModel: fixed bug in the method SamplingNucleonKinematics().
+        Addressing problem report #1741.
+        Fixed energy non-conservation in nucleus-nucleus interactions.
+      o G4FTFParameters: fixed bug in nucleon-nucleon cross-section, and
+        added protection against zero inelastic cross-section.
+    + models/pre_equilibrium:
+      o G4PreCompoundTransition: added protection against numerical problem
+        due too high excitation energy; use G4Log and G4Exp instead of G4Pow;
+        cleanup sampling of number of charged excitons.
+      o Fixed Coverity defects and some code cleanup.
+    + models/quasi_elastic:
+      o Code cleanup: removed unneeded statics and thread-local variables.
+    + models/theo_high_energy:
+      o Updated according to new quasi-elastic code cleanup.
+
+  o Track
+    -----
+    + Improved G4ParticleChangeForTransport by adding update for FirstStep
+      in volume. Also addressing problem report #1715.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + extended/electromagnetic/TestEm8:
+      o PhysicsList: fix in configuration of models per G4Region in MT mode.
+        Addressing problem report #1731.
+      o Run: added protection against numerical exception for run
+        with 0 or 1 events
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 10.1 or 10.1.p01.
+  o  Technical notes distributed for release 10.1 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 10.1.p02 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

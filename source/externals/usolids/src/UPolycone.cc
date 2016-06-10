@@ -67,7 +67,7 @@ UPolycone::UPolycone(const std::string& name,
     message << "Polycone " << GetName() << "cannot be converted" << std::endl
             << "to Polycone with (Rmin,Rmaz,Z) parameters! Use GenericPolycone" ;
     UUtils::Exception("UPolycone::UPolycone()", "GeomSolids0002",
-                      FatalError, 1, message.str().c_str());
+                      UFatalError, 1, message.str().c_str());
   }
   else
   {
@@ -154,7 +154,7 @@ void UPolycone::Init(double phiStart,
               << "        rMin[" << j << "] = " << rInner[j]
               << " -- rMax[" << j << "] = " << rOuter[j];
        UUtils::Exception("UPolycone::UPolycone()", "GeomSolids0002",
-                         FatalErrorInArguments, 1, message.str().c_str());
+                         UFatalErrorInArguments, 1, message.str().c_str());
     }
   }
   //
@@ -181,7 +181,7 @@ void UPolycone::Init(double phiStart,
                 << " rMin[" << i + 1 << "] = " << rInner[i + 1]
                 << " -- rMax[" << i << "] = " << rOuter[i];
         UUtils::Exception("UPolycone::UPolycone()", "GeomSolids0002",
-                          FatalErrorInArguments, 1, message.str().c_str());
+                          UFatalErrorInArguments, 1, message.str().c_str());
       }
     }
 
@@ -206,7 +206,7 @@ void UPolycone::Init(double phiStart,
                   << "  zPlane[" << i - 1 << "] = " << zPlane[i - 1]
                   << " -- rPlane[" << i << "] = " << zPlane[i];
           UUtils::Exception("UPolycone::UPolycone()", "GeomSolids0002",
-                            FatalErrorInArguments, 1, message.str().c_str());
+                            UFatalErrorInArguments, 1, message.str().c_str());
 
 
 
@@ -291,7 +291,7 @@ void UPolycone::Init(double phiStart,
      message << "Illegal input parameters - " << GetName() << std::endl
              << "        All R values must be >= 0 !";
      UUtils::Exception("UPolycone::Init()", "GeomSolids0002",
-                       FatalErrorInArguments,1, message.str().c_str());
+                       UFatalErrorInArguments,1, message.str().c_str());
   }
      
 
@@ -388,15 +388,15 @@ std::ostream& UPolycone::StreamInfo(std::ostream& os) const
 VUSolid::EnumInside UPolycone::InsideSection(int index, const UVector3& p) const
 {
   const UPolyconeSection& section = fSections[index];
-  UVector3 ps(p.x, p.y, p.z - section.shift);
+  UVector3 ps(p.x(), p.y(), p.z() - section.shift);
 
 //  if (fNumSides) return section.solid->Inside(ps);
 
   double rMinPlus, rMaxPlus , rMinMinus, rMaxMinus;
   double dz;
-  double halfTolerance = fgTolerance * 0.5;
+  static const double halfTolerance = fgTolerance * 0.5;
 
-  double r2 = p.x * p.x + p.y * p.y;
+  double r2 = p.x() * p.x() + p.y() * p.y();
 
   if (section.tubular)
   {
@@ -417,7 +417,7 @@ VUSolid::EnumInside UPolycone::InsideSection(int index, const UVector3& p) const
     double rMin1 = cons->GetRmin1();
     double rMin2 = cons->GetRmin2();
     dz = cons->GetDz();
-    double ratio = (ps.z + dz) / (2 * dz);
+    double ratio = (ps.z() + dz) / (2 * dz);
     rMinPlus = rMin1 + (rMin2 - rMin1) * ratio + halfTolerance;
     rMaxPlus = rMax1 + (rMax2 - rMax1) * ratio + halfTolerance;
     rMinMinus = rMinPlus - 2*halfTolerance;
@@ -433,7 +433,7 @@ VUSolid::EnumInside UPolycone::InsideSection(int index, const UVector3& p) const
     }
     if (rMinMinus <= 0)  { pos = eSurface; }
     if ( ((pos == eInside) || (pos == eSurface))
-      && ((ps.z < -dz+halfTolerance) || (ps.z > dz-halfTolerance)))
+      && ((ps.z() < -dz+halfTolerance) || (ps.z() > dz-halfTolerance)))
     {
       pos = eSurface;
     }
@@ -451,13 +451,13 @@ VUSolid::EnumInside UPolycone::InsideSection(int index, const UVector3& p) const
 
   if (! phiIsOpen)
   {
-    if ( (ps.z < -dz+halfTolerance) || (ps.z > dz-halfTolerance) )
+    if ( (ps.z() < -dz+halfTolerance) || (ps.z() > dz-halfTolerance) )
     {
       return eSurface;
     }
     return eInside;
   }
-  double phi = std::atan2(p.y, p.x); // * UUtils::kTwoPi;
+  double phi = std::atan2(p.y(), p.x()); // * UUtils::kTwoPi;
    
   if ( (phi < 0) || (endPhi > UUtils::kTwoPi) )  { phi += UUtils::kTwoPi; }
 
@@ -466,7 +466,7 @@ VUSolid::EnumInside UPolycone::InsideSection(int index, const UVector3& p) const
   
   if ( (phi <= endPhi+ frTolerance) && (phi>= startPhi-frTolerance) )
   { 
-    if ( (ps.z < -dz+halfTolerance) || (ps.z > dz-halfTolerance) )
+    if ( (ps.z() < -dz+halfTolerance) || (ps.z() > dz-halfTolerance) )
     {
       return eSurface;
     }
@@ -491,7 +491,7 @@ VUSolid::EnumInside UPolycone::InsideSection(int index, const UVector3& p) const
 VUSolid::EnumInside UPolycone::Inside(const UVector3& p) const
 {
   double shift = fZs[0] + fBox.GetZHalfLength();
-  UVector3 pb(p.x, p.y, p.z - shift);
+  UVector3 pb(p.x(), p.y(), p.z() - shift);
 
   if (fBox.Inside(pb) == eOutside)
   {
@@ -499,7 +499,7 @@ VUSolid::EnumInside UPolycone::Inside(const UVector3& p) const
   }
 
   static const double htolerance = 0.5 * fgTolerance;
-  int index = GetSection(p.z);
+  int index = GetSection(p.z());
 
   EnumInside pos = InsideSection(index, p);
   if (pos == eInside)  { return eInside; }
@@ -507,12 +507,12 @@ VUSolid::EnumInside UPolycone::Inside(const UVector3& p) const
   int nextSection;
   EnumInside nextPos;
 
-  if (index > 0 && p.z  - fZs[index] < htolerance)
+  if (index > 0 && p.z()  - fZs[index] < htolerance)
   {
     nextSection = index - 1;
     nextPos = InsideSection(nextSection, p);
   }
-  else if (index < fMaxSection && fZs[index + 1] - p.z < htolerance)
+  else if (index < fMaxSection && fZs[index + 1] - p.z() < htolerance)
   {
     nextSection = index + 1;
     nextPos = InsideSection(nextSection, p);
@@ -540,7 +540,7 @@ double UPolycone::DistanceToIn(const UVector3& p,
                                const UVector3& v, double) const
 {
   double shift = fZs[0] + fBox.GetZHalfLength();
-  UVector3 pb(p.x, p.y, p.z - shift);
+  UVector3 pb(p.x(), p.y(), p.z() - shift);
 
   double idistance;
 
@@ -559,24 +559,24 @@ double UPolycone::DistanceToIn(const UVector3& p,
   //  if (idistance == UUtils::kInfinity) return idistance;
 
   pb = p + idistance * v;
-  int index = GetSection(pb.z);
+  int index = GetSection(pb.z());
   pb = p;
-  int increment = (v.z > 0) ? 1 : -1;
-  if (std::fabs(v.z) < fgTolerance) increment = 0;
+  int increment = (v.z() > 0) ? 1 : -1;
+  if (std::fabs(v.z()) < fgTolerance) increment = 0;
 
   double distance = UUtils::kInfinity;
   do
   {
     const UPolyconeSection& section = fSections[index];
-    pb.z -= section.shift;
+    pb.z() -= section.shift;
     distance = section.solid->DistanceToIn(pb, v);
     if (distance < UUtils::kInfinity || !increment)
       break;
     index += increment;
-    pb.z += section.shift;
+    pb.z() += section.shift;
   }
   while (index >= 0 && index <= fMaxSection);
-  //if(Inside(p)==eInside)return UUtils::kInfinity;
+
   return distance;
 }
 
@@ -589,18 +589,18 @@ double UPolycone::DistanceToOut(const UVector3&  p, const UVector3& v,
   if (fOriginalParameters->fNumZPlanes == 2)
   {
     const UPolyconeSection& section = fSections[0];
-    pn.z -= section.shift;
+    pn.z() -= section.shift;
     return section.solid->DistanceToOut(pn, v, n, convex);
   }
 
-  int indexLow = GetSection(p.z-fgTolerance);
-  int indexHigh = GetSection(p.z+fgTolerance);
+  int indexLow = GetSection(p.z()-fgTolerance);
+  int indexHigh = GetSection(p.z()+fgTolerance);
   int index = 0;
  
   if ( indexLow != indexHigh )  // we are close to Surface,
   {                             // section has to be identified
     const UPolyconeSection& section = fSections[indexLow];
-    pn.z -= section.shift;
+    pn.z() -= section.shift;
     if (section.solid->Inside(pn) == eOutside)
     {
       index=indexHigh;
@@ -609,14 +609,14 @@ double UPolycone::DistanceToOut(const UVector3&  p, const UVector3& v,
     {
       index=indexLow;
     }
-    pn.z=p.z;
+    pn.z()=p.z();
   }
   else
   {
     index=indexLow;
   } 
   double totalDistance = 0;
-  int increment = (v.z > 0) ? 1 : -1;
+  int increment = (v.z() > 0) ? 1 : -1;
   bool convexloc = true;
  
   UVector3 section_norm;
@@ -630,7 +630,7 @@ double UPolycone::DistanceToOut(const UVector3&  p, const UVector3& v,
     {
       pn = p + (totalDistance ) * v; // point must be shifted, so it could
                                      // eventually get into another solid
-      pn.z -= section.shift;
+      pn.z() -= section.shift;
       if (section.solid->Inside(pn) == eOutside)
       {
         break;
@@ -638,7 +638,7 @@ double UPolycone::DistanceToOut(const UVector3&  p, const UVector3& v,
     }
     else
     {
-      pn.z -= section.shift;
+      pn.z() -= section.shift;
     }
     istep = istep+1;
     double distance = section.solid-> DistanceToOut(pn, v, n, convexloc);
@@ -657,7 +657,7 @@ double UPolycone::DistanceToOut(const UVector3&  p, const UVector3& v,
       }
       UVector3 pte = p+(totalDistance+distance)*v;
       const UPolyconeSection& section1 = fSections[index1];
-      pte.z -= section1.shift;
+      pte.z() -= section1.shift;
       if (section1.solid->Inside(pte) == eOutside)
       {
        break;
@@ -688,8 +688,8 @@ double UPolycone::DistanceToOut(const UVector3&  p, const UVector3& v,
     double halfTolerance = 0.5*fgTolerance;
     if( (index < fMaxSection) && (index > 0 ) )
     {
-      double dz1 = std::fabs(pn.z-fZs[index]);
-      double dz2 = std::fabs(pn.z-fZs[index+1]);
+      double dz1 = std::fabs(pn.z()-fZs[index]);
+      double dz2 = std::fabs(pn.z()-fZs[index+1]);
       if(dz1 < halfTolerance)  { convex=false; }
       if(dz2 < halfTolerance)  { convex=false; }
     }
@@ -697,13 +697,13 @@ double UPolycone::DistanceToOut(const UVector3&  p, const UVector3& v,
     {
       if(index>=fMaxSection)
       {
-        if (std::fabs(pn.z-fZs[fMaxSection]) < halfTolerance) { convex=false; }
+        if (std::fabs(pn.z()-fZs[fMaxSection]) < halfTolerance) { convex=false; }
       }
       else
       {
         if(index<=0)
         {
-          if (std::fabs(pn.z-fZs[1]) < halfTolerance) { convex=false;}
+          if (std::fabs(pn.z()-fZs[1]) < halfTolerance) { convex=false;}
         }
       }
     }
@@ -716,13 +716,13 @@ double UPolycone::DistanceToOut(const UVector3&  p, const UVector3& v,
 
 double UPolycone::SafetyFromInside(const UVector3& p, bool) const
 {
-  int index = UVoxelizer::BinarySearch(fZs, p.z);
+  int index = UVoxelizer::BinarySearch(fZs, p.z());
   if (index < 0 || index > fMaxSection) return 0;
   
-  double rho=std::sqrt(p.x*p.x+p.y*p.y);
+  double rho=std::sqrt(p.x()*p.x()+p.y()*p.y());
   double safeR = SafetyFromInsideSection(index,rho, p);
-  double safeDown = p.z-fZs[index];
-  double safeUp = fZs[index+1]-p.z;
+  double safeDown = p.z()-fZs[index];
+  double safeUp = fZs[index+1]-p.z();
   
   double minSafety =safeR;
   
@@ -731,8 +731,8 @@ double UPolycone::SafetyFromInside(const UVector3& p, bool) const
  
   for (int i = index + 1; i <= fMaxSection; ++i)
   {
-    double dz1 = fZs[i] - p.z;
-    double dz2 = fZs[i+1] - p.z;
+    double dz1 = fZs[i] - p.z();
+    double dz2 = fZs[i+1] - p.z();
     safeR = SafetyFromOutsideSection(i,rho, p); 
     if (safeR < 0.) { safeUp=dz1; break; } 
     if (dz1 < dz2) { safeR = std::sqrt(safeR*safeR+dz1*dz1); }
@@ -746,8 +746,8 @@ double UPolycone::SafetyFromInside(const UVector3& p, bool) const
   {
     for (int i = index - 1; i >= 0; --i)
     {
-      double dz1 = p.z-fZs[i+1];
-      double dz2 = p.z-fZs[i];
+      double dz1 = p.z()-fZs[i+1];
+      double dz2 = p.z()-fZs[i];
       safeR = SafetyFromOutsideSection(i,rho, p); 
       if (safeR < 0.) { safeDown=dz1; break; } 
       if(dz1 < dz2) { safeR = std::sqrt(safeR*safeR+dz1*dz1); }
@@ -768,7 +768,7 @@ double UPolycone::SafetyFromOutside(const UVector3& p, bool aAccurate) const
   if (!aAccurate)
     return enclosingCylinder->SafetyFromOutside(p);
 
-  int index = GetSection(p.z);
+  int index = GetSection(p.z());
   double minSafety = SafetyFromOutsideSection(index, p);
   if (minSafety < 1e-6) return minSafety;
 
@@ -795,17 +795,17 @@ double UPolycone::SafetyFromOutside(const UVector3& p, bool aAccurate) const
 bool UPolycone::Normal(const UVector3& p, UVector3& n) const
 {
   double htolerance = 0.5 * fgTolerance;
-  int index = GetSection(p.z);
+  int index = GetSection(p.z());
 
   EnumInside nextPos;
   int nextSection;
 
-  if (index > 0 && p.z  - fZs[index] < htolerance)
+  if (index > 0 && p.z()  - fZs[index] < htolerance)
   {
     nextSection = index - 1;
     nextPos = InsideSection(nextSection, p);
   }
-  else if (index < fMaxSection && fZs[index + 1] - p.z < htolerance)
+  else if (index < fMaxSection && fZs[index + 1] - p.z() < htolerance)
   {
     nextSection = index + 1;
     nextPos = InsideSection(nextSection, p);
@@ -813,28 +813,9 @@ bool UPolycone::Normal(const UVector3& p, UVector3& n) const
   else
   {
     const UPolyconeSection& section = fSections[index];
-    UVector3 ps(p.x, p.y, p.z - section.shift);
+    UVector3 ps(p.x(), p.y(), p.z() - section.shift);
     bool res = section.solid->Normal(ps, n);
-    if(n.Mag()<0.9)std::cout<<"UPcon Norm 1 ="<<n<<" res="<<res<<" p="<<p<<" name="<<GetName()<<std::endl;
     return res;
-
-    // the code bellow is not used can be deleted
-
-    nextPos = section.solid->Inside(ps);
-    if (nextPos == eSurface)
-    {
-      if(n.Mag()<0.9)std::cout<<"UPcon Norm 2 ="<<n<<" res="<<res<<" p="<<p<<" name="<<GetName()<<std::endl;
-      return res;
-    }
-    else
-    {
-      //TODO: here should be implementation for case point was not on surface. We would have to look also at other sections. It is not clear if it is possible to solve this problem at all, since we would need precise safety... If it is outside, than it might be OK, but if it is inside..., than I beleive we do not have precise safety
-
-      // ... or we should at least warn that this case is not supported. actually,
-      //  i do not see any algorithm which would obtain right normal of point closest to surface.;
-      if(n.Mag()<0.9)std::cout<<"UPcon Norm 3 ="<<n<<std::endl;
-      return false;
-    }
   }
 
   // even if it says we are on the surface, actually it do not have to be
@@ -846,15 +827,12 @@ bool UPolycone::Normal(const UVector3& p, UVector3& n) const
 
   if (nextPos == eInside)
   {
-    //UVector3 n;
     NormalSection(index, p, n);
-    if(n.Mag()<0.9)std::cout<<"UPcon Norm 4 ="<<n<<std::endl;
     return false;
   }
 
   if (pos == eSurface && nextPos == eSurface)
   {
-    //UVector3 n, n2;
     UVector3 n2;
     NormalSection(index, p, n);
     NormalSection(nextSection, p, n2);
@@ -863,7 +841,6 @@ bool UPolycone::Normal(const UVector3& p, UVector3& n) const
       // "we are inside. see TODO above";
       
       NormalSection(index, p, n);
-      if(n.Mag()<0.9)std::cout<<"UPcon Norm 5 ="<<n<<std::endl;
       return false;
     }
   }
@@ -872,23 +849,19 @@ bool UPolycone::Normal(const UVector3& p, UVector3& n) const
   {
     if (pos != eSurface) index = nextSection;
     bool res = NormalSection(index, p, n);
-    if(n.Mag()<0.9)std::cout<<"UPcon Norm 6 ="<<n<<std::endl;
     return res;
   }
 
   NormalSection(index, p, n);
-  if(n.Mag()<0.9)std::cout<<"UPcon Norm 7 ="<<n<<std::endl;
   // "we are outside. see TODO above";
   return false;
 }
-
 
 void UPolycone::Extent(UVector3& aMin, UVector3& aMax) const
 {
   double r = enclosingCylinder->radius;
   aMin.Set(-r, -r, fZs.front());
   aMax.Set(r, r, fZs.back());
-  //std::cout<<"UPOLy Extent "<<aMin<<" 2="<<" name="<<aMax<<GetName()<<std::endl;
 }
 
 double UPolycone::Capacity()
@@ -1607,7 +1580,7 @@ bool  UPolycone::SetOriginalParameters(UReduciblePolygon* rz)
     message << "Polycone " << GetName() << std::endl
             << "cannot be converted to Polycone with (Rmin,Rmaz,Z) parameters!";
     UUtils::Exception("UPolycone::SetOriginalParameters()", "GeomSolids0002",
-                      Warning, 1, "can not convert");
+                      UWarning, 1, "can not convert");
 
     fOriginalParameters = new UPolyconeHistorical;
 

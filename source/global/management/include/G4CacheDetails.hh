@@ -63,6 +63,7 @@
 
 #include <vector>
 #include "G4Threading.hh"
+#include "globals.hh"
 
 #ifdef g4cdebug
 #include <iostream>
@@ -159,7 +160,14 @@ void G4CacheReference<V>::Destroy( unsigned int id, G4bool last )
 #ifdef g4cdebug
         cout<<"Destroying element"<<id<<" is last?"<<last<<endl;
 #endif
-        if ( cache->size() <id && (*cache)[id] ) {
+        if ( cache->size() < id ) {
+        	G4ExceptionDescription msg;
+        	msg<<"Internal fatal error. Invalid G4Cache size (requested id: "<<id<<" but cache has size: "<<cache->size();
+        	msg<<" Possibly client created G4Cache object in a thread and tried to delete it from another thread!";
+        	G4Exception("G4CacheReference<V>::Destroy","Cache001",FatalException,msg);
+        	return;
+        }
+        if ( cache->size() > id && (*cache)[id] ) {
             delete (*cache)[id];
             (*cache)[id]=0;
         }
@@ -202,7 +210,14 @@ inline void G4CacheReference<V*>::Destroy( unsigned int id , G4bool last)
 #ifdef g4cdebug
         cout<<"Destroying element"<<id<<" is last?"<<last<<"-Pointer template specialization-"<<endl;
 #endif
-        if ( cache->size() <id && (*cache)[id] ) {
+        if ( cache->size() < id ) {
+        	G4ExceptionDescription msg;
+        	msg<<"Internal fatal error. Invalid G4Cache size (requested id: "<<id<<" but cache has size: "<<cache->size();
+        	msg<<" Possibly client created G4Cache object in a thread and tried to delete it from another thread!";
+        	G4Exception("G4CacheReference<V*>::Destroy","Cache001",FatalException,msg);
+        	return;
+        }
+        if ( cache->size() > id && (*cache)[id] ) {
             //Ownership is for client
             //delete (*cache)[id];
             (*cache)[id]=0;
@@ -235,7 +250,11 @@ void G4CacheReference<G4double>::Initialize( unsigned int id )
         cache->resize(id+1,static_cast<G4double>(0));
 }
 
+#ifdef g4cdebug
+void G4CacheReference<G4double>::Destroy( unsigned int id , G4bool last) {
+#else
 void G4CacheReference<G4double>::Destroy( unsigned int /*id*/ , G4bool last) {
+#endif
     if ( cache && last ) {
 #ifdef g4cdebug
         cout<<"Destroying element"<<id<<" is last?"<<last<<"-Pointer template specialization-"<<endl;

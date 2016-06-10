@@ -1,4 +1,4 @@
-$Id: History 89039 2015-03-18 09:28:24Z gcosmo $
+$Id: History 90770 2015-06-09 12:12:47Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-04-15 V.Ivant (testem8-V10-00-09)
+- PhysicsList - fixed problem #1731 in configuration of models per 
+                G4Region in MT mode
+- Run - added protection against numerical exception for run with 
+        0 or 1 events
 
 04-02-15 V.Ivant (testem8-V10-00-08)
 - DetectorConstruction - removed local pointer to sensitive detector

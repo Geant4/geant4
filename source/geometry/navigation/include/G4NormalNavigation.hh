@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NormalNavigation.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4NormalNavigation.hh 90836 2015-06-10 09:31:06Z gcosmo $
 //
 // 
 // class G4NormalNavigation
@@ -43,12 +43,14 @@
 #include <iomanip>
 
 #include "G4NavigationHistory.hh"
-#include "G4NavigationLogger.hh"
+
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
 #include "G4ThreeVector.hh"
-#include "G4AuxiliaryNavServices.hh"    // Needed for inline methods
+#include "G4AuxiliaryNavServices.hh"
+
+class G4NavigationLogger;
 
 class G4NormalNavigation
 {
@@ -60,7 +62,7 @@ class G4NormalNavigation
     ~G4NormalNavigation();
       // Destructor
 
-    G4bool LevelLocate( G4NavigationHistory &history,
+    inline G4bool LevelLocate( G4NavigationHistory &history,
                   const G4VPhysicalVolume *blockedVol,
                   const G4int blockedNum,
                   const G4ThreeVector &globalPoint,
@@ -90,8 +92,8 @@ class G4NormalNavigation
                             const G4NavigationHistory &history,
                             const G4double pMaxLength=DBL_MAX );
 
-    inline G4int GetVerboseLevel() const;
-    inline void  SetVerboseLevel(G4int level);
+    G4int GetVerboseLevel() const;
+    void  SetVerboseLevel(G4int level);
       // Get/Set Verbose(ness) level.
       // [if level>0 && G4VERBOSE, printout can occur]
 

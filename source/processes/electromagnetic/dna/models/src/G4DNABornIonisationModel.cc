@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornIonisationModel.cc 87137 2014-11-25 09:12:48Z gcosmo $
+// $Id: G4DNABornIonisationModel.cc 90769 2015-06-09 10:33:41Z gcosmo $
 //
 
 #include "G4DNABornIonisationModel.hh"
@@ -161,15 +161,17 @@ void G4DNABornIonisationModel::Initialise(const G4ParticleDefinition* particle,
   eVecm.clear();
   pVecm.clear();
 
-  eProbaShellMap->clear();
-  pProbaShellMap->clear();
+  for (int j=0; j<5; j++)
+  {
+    eProbaShellMap[j].clear();
+    pProbaShellMap[j].clear();
 
-  eDiffCrossSectionData->clear();
-  pDiffCrossSectionData->clear();
+    eDiffCrossSectionData[j].clear();
+    pDiffCrossSectionData[j].clear();
 
-  eNrjTransfData->clear();
-  pNrjTransfData->clear();
-
+    eNrjTransfData[j].clear();
+    pNrjTransfData[j].clear();
+  }
   //
 
   eTdummyVec.push_back(0.);
@@ -179,9 +181,13 @@ void G4DNABornIonisationModel::Initialise(const G4ParticleDefinition* particle,
     double eDummy;
     eDiffCrossSection>>tDummy>>eDummy;
     if (tDummy != eTdummyVec.back()) eTdummyVec.push_back(tDummy);
+
+    double tmp;
     for (int j=0; j<5; j++)
     {
-      eDiffCrossSection>>eDiffCrossSectionData[j][tDummy][eDummy];
+      eDiffCrossSection>> tmp;
+
+      eDiffCrossSectionData[j][tDummy][eDummy] = tmp;
 
       if (fasterCode)
       {

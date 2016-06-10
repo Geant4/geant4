@@ -26,9 +26,6 @@
 class UTransform3D
 {
   public:
-    UVector3            fTr;    // Translation
-    double            fRot[9];   // Rotation
-
 
     UTransform3D();  // Initialize to identity
     UTransform3D(double tx, double ty, double tz,
@@ -36,9 +33,9 @@ class UTransform3D
     UTransform3D(const UTransform3D& other);
     ~UTransform3D() {}
 
-    virtual void         RotateX(double angle);
-    virtual void         RotateY(double angle);
-    virtual void         RotateZ(double angle);
+    void                 RotateX(double angle);
+    void                 RotateY(double angle);
+    void                 RotateZ(double angle);
     void                 SetAngles(double phi, double theta, double psi);
 
     // Local<->global coordinate and vector conversions
@@ -47,11 +44,13 @@ class UTransform3D
     UVector3             LocalPoint(const UVector3& global) const;
     UVector3             LocalVector(const UVector3& global) const;
 
-
     // Operators
     UTransform3D& operator = (const UTransform3D& other);
     UTransform3D& operator *= (const UTransform3D& other);
     UTransform3D& operator *= (const UVector3& vect);
+
+    UVector3          fTr;       // Translation
+    double            fRot[9];   // Rotation
 };
 // Vector-matrix multiplication
 UVector3 operator * (const UVector3& p, const UTransform3D& trans);

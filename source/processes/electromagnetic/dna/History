@@ -14,6 +14,26 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+05-06-2015, MK,  tag emdna-V10-00-66
+- G4IT: remove a "virtual" keyword when accessing position
+
+12-02-2015, MK,  tag emdna-V10-00-65
+- G4ITReaction: Remove "gAll" introduced for testing
+- G4ITModelProcessor: Remove "assert" introduced for testing
+- G4ITTransportation: Remove extra parenthesis in the undef of PrepareState 
+
+11-02-2015, MK
+- Fix reproductibility of the chemistry module
+- Fix the "no reaction table found" bug: G4ITReaction class created
+- G4shared_ptr refers to std::shared_ptr when C++11 is activated
+
+16-01-2015, SI
+- added Fe56 into G4DNARuddIonisationExtendedModel
+
+14-12-2014, MK
+- BornIonisation: correct array cleaning
+- ScreenRutherfordElastic: correct retrieval of water density 
+
 12-12-2014, G.Cosmo,  tag emdna-V10-00-64
 - Explicitly initialise to zero TLS pointers in G4KDNode.hh and G4ITFinder.icc
   to allow for compilation on Linux/clang-3.5.

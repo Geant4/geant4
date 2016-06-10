@@ -1,4 +1,4 @@
-$Id: History 88950 2015-03-16 16:31:29Z gcosmo $
+$Id: History 90710 2015-06-08 10:06:27Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 15th, 2015 G.Cosmo                  - geomvol-V10-00-10
+- Simplified implementation in G4NavigationHistoryPool to make use of simple
+  stack of free entries. Pre-allocate size of vectors and inlined GetLevels().
+
+April 8th, 2015 A.Dotti
+- Updated unit-tests to new G4Exception signature.
 
 December 12th, 2014 G.Cosmo               - geomvol-V10-00-09
 - Use canonical form for copy-ctor and operator=() in G4GRSSolid, G4GRSVolume,

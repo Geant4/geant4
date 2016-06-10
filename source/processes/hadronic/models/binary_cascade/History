@@ -13,6 +13,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+27-April 2015, Gunter Folger           had-binary-V10-00-03
+- Fix for compiler warning (clang 3.6) on expression with side effects
+  - G4BinaryCascade::DebugApplyCollisionFail(): use const & as 
+       argument to typeid()
+
 11-November 2014 Gunter Folger    had-binary-V10-00-11
 - BinaryLightReaction: Momentum correction wrong in case of no Fragment, but 
        primary projectile nucleon(s) in final state. 

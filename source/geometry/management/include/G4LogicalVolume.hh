@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.hh 78050 2013-12-03 08:17:33Z gcosmo $
+// $Id: G4LogicalVolume.hh 90701 2015-06-08 09:43:16Z gcosmo $
 //
 // 
 // class G4LogicalVolume
@@ -416,9 +416,6 @@ class G4LogicalVolume
       // Pointer to the cuts region (if any)
     G4double fBiasWeight;
       // Weight used in the event biasing technique.
-  
-    G4bool fChangedState;
-      // Invalidates any estimations from previous state
   
     G4int instanceID;
       // This new field is used as instance ID.

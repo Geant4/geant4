@@ -61,12 +61,12 @@ UPolyPhiFace::UPolyPhiFace(const UReduciblePolygon* rz,
   // Build normal
   //
   double zSign = start ? 1 : -1;
-  normal = UVector3(zSign * radial.y, -zSign * radial.x, 0);
+  normal = UVector3(zSign * radial.y(), -zSign * radial.x(), 0);
 
   //
   // Is allBehind?
   //
-  allBehind = (zSign * (std::cos(phiOther) * radial.y - std::sin(phiOther) * radial.x) < 0);
+  allBehind = (zSign * (std::cos(phiOther) * radial.y() - std::sin(phiOther) * radial.x()) < 0);
 
   //
   // Adjacent edges
@@ -92,8 +92,8 @@ UPolyPhiFace::UPolyPhiFace(const UReduciblePolygon* rz,
   {
     corn->r = iterRZ.GetA();
     corn->z = iterRZ.GetB();
-    corn->x = corn->r * radial.x;
-    corn->y = corn->r * radial.y;
+    corn->x = corn->r * radial.x();
+    corn->y = corn->r * radial.y();
 
     // Add pointer on prev corner
     //
@@ -242,7 +242,7 @@ UPolyPhiFace::UPolyPhiFace(const UReduciblePolygon* rz,
   //
   double rAve = 0.5 * (rMax - rMin),
          zAve = 0.5 * (zMax - zMin);
-  surface = UVector3(rAve * radial.x, rAve * radial.y, zAve);
+  surface = UVector3(rAve * radial.x(), rAve * radial.y(), zAve);
 }
 
 
@@ -265,7 +265,7 @@ void UPolyPhiFace::Diagnose(VUSolid* owner)
     if (owner->Inside(test) != VUSolid::eInside)
     {
       UUtils::Exception("UPolyPhiFace::Diagnose()", "GeomSolids0002",
-                        FatalError, 1, "Bad vertex normal found.");
+                        UFatalError, 1, "Bad vertex normal found.");
     }
   }
   while (++corner < corners + numEdges);
@@ -428,7 +428,7 @@ bool UPolyPhiFace::Distance(const UVector3& p,
   //
   // And is it inside the r/z extent?
   //
-  return InsideEdgesExact(r, ip.z, normSign, p, v);
+  return InsideEdgesExact(r, ip.z(), normSign, p, v);
 }
 
 
@@ -459,7 +459,7 @@ double UPolyPhiFace::Safety(const UVector3& p, bool outgoing)
   //
   double distRZ2;
 
-  if (InsideEdges(r, p.z, &distRZ2, 0))
+  if (InsideEdges(r, p.z(), &distRZ2, 0))
   {
     //
     // Yup, answer is just distPhi
@@ -502,7 +502,7 @@ VUSolid::EnumInside UPolyPhiFace::Inside(const UVector3& p,
   UPolyPhiFaceVertex* base3Dnorm;
   UVector3*      head3Dnorm;
 
-  if (InsideEdges(r, p.z, &distRZ2, &base3Dnorm, &head3Dnorm))
+  if (InsideEdges(r, p.z(), &distRZ2, &base3Dnorm, &head3Dnorm))
   {
     //
     // Looks like we're inside. Distance is distance in phi.
@@ -527,8 +527,8 @@ VUSolid::EnumInside UPolyPhiFace::Inside(const UVector3& p,
     //
     // Use edge normal to decide fate
     //
-    UVector3 cc(base3Dnorm->r * radial.x,
-                base3Dnorm->r * radial.y,
+    UVector3 cc(base3Dnorm->r * radial.x(),
+                base3Dnorm->r * radial.y(),
                 base3Dnorm->z);
     cc = p - cc;
     double normDist = head3Dnorm->Dot(cc);
@@ -572,7 +572,7 @@ UVector3 UPolyPhiFace::Normal(const UVector3& p,
   //
   double distRZ2;
 
-  if (InsideEdges(r, p.z, &distRZ2, 0))
+  if (InsideEdges(r, p.z(), &distRZ2, 0))
   {
     //
     // Yup, answer is just distPhi
@@ -603,9 +603,9 @@ double UPolyPhiFace::Extent(const UVector3 axis)
   UPolyPhiFaceVertex* corner = corners;
   do
   {
-    double here = axis.x * corner->r * radial.x
-                  + axis.y * corner->r * radial.y
-                  + axis.z * corner->z;
+    double here = axis.x() * corner->r * radial.x()
+                  + axis.y() * corner->r * radial.y()
+                  + axis.z() * corner->z;
     if (here > max) max = here;
   }
   while (++corner < corners + numEdges);
@@ -692,9 +692,9 @@ bool UPolyPhiFace::InsideEdgesExact(double r, double z,
   //
   // Exact check: loop over all vertices
   //
-  double qx = p.x + v.x,
-         qy = p.y + v.y,
-         qz = p.z + v.z;
+  double qx = p.x() + v.x(),
+         qy = p.y() + v.y(),
+         qz = p.z() + v.z();
 
   int answer = 0;
   UPolyPhiFaceVertex* corn = corners,
@@ -1287,7 +1287,7 @@ void UPolyPhiFace::Triangulate()
     if (i >= max_n_loops)
     {
       UUtils::Exception("UPolyPhiFace::Triangulation()",
-                        "GeomSolids0003", FatalError, 1,
+                        "GeomSolids0003", UFatalError, 1,
                         "Maximum number of steps is reached for triangulation!");
     }
   }  // end outer while loop

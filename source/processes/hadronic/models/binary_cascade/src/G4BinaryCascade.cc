@@ -876,8 +876,8 @@ G4bool  G4BinaryCascade::BuildLateParticleCollisions(G4KineticTrackVector * seco
       }
    }
    //theCollisionMgr->Print();
-
    const G4HadProjectile * primary = GetPrimaryProjectile();  // check for primary from TheoHE model
+
    if (primary){
       G4LorentzVector mom=primary->Get4Momentum();
       theProjectile4Momentum += mom;
@@ -1147,7 +1147,6 @@ void  G4BinaryCascade::FindCollisions(G4KineticTrackVector * secondaries)
     for(std::vector<G4KineticTrack *>::iterator i = secondaries->begin();
             i != secondaries->end(); ++i)
     {
-
         for(std::vector<G4BCAction *>::iterator j = theImR.begin();
                 j!=theImR.end(); j++)
         {
@@ -3104,7 +3103,8 @@ void G4BinaryCascade::DebugApplyCollisionFail(G4CollisionInitialState * collisio
    }
    if ( !products  || havePion)
    {
-      G4cout << " Collision " << collision << ", type: "<< typeid(*collision->GetGenerator()).name()
+		const G4BCAction &action= *collision->GetGenerator();
+      G4cout << " Collision " << collision << ", type: "<< typeid(action).name()
 							                    << ", with NO products! " <<G4endl;
       G4cout << G4endl<<"Initial condition are these:"<<G4endl;
       G4cout << "proj: "<<collision->GetPrimary()->GetDefinition()->GetParticleName()<<G4endl;

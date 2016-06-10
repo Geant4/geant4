@@ -207,6 +207,7 @@ public:
     G4double GetMaxTheta();
     G4double GetMinPhi();
     G4double GetMaxPhi();
+    G4ThreeVector GetDirection();
   //
   G4ParticleMomentum GenerateOne();
   

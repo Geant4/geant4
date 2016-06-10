@@ -354,8 +354,9 @@ void G4Scheduler::Reset()
 
   fNbSteps = 0;
   fContinue = true;
-  fReactingTracks.clear();
+  // fReactingTracks.clear();
   fLeadingTracks.clear();
+  fReactionSet.CleanAllReaction();
 }
 //_________________________________________________________________________
 
@@ -723,7 +724,8 @@ void G4Scheduler::Stepping()
     // Give the priority to the IL
   {
     fInteractionStep = true;
-    fReactingTracks.clear(); // Give the priority to the IL
+//    fReactingTracks.clear(); // Give the priority to the IL
+    fReactionSet.CleanAllReaction();
     fTimeStep = fILTimeStep;
     fITStepStatus = eInteractionWithMedium;
   }
@@ -741,7 +743,8 @@ void G4Scheduler::Stepping()
     fTimeStep = fEndTime - fGlobalTime;
     fITStepStatus = eInteractionWithMedium; // ie: transportation
     fInteractionStep = true;
-    fReactingTracks.clear();
+//    fReactingTracks.clear();
+    fReactionSet.CleanAllReaction();
     ResetLeadingTracks();
   }
 
@@ -1125,7 +1128,8 @@ void G4Scheduler::ExtractTimeStepperData(G4ITModelProcessor* MP)
          */
 
         fTSTimeStep = sampledMinTimeStep;
-        fReactingTracks.clear();
+        //fReactingTracks.clear();
+        fReactionSet.CleanAllReaction();
         if (bool(reactants))
         {
           // G4cout << "*** (1) G4Scheduler::ExtractTimeStepperData insert
@@ -1134,7 +1138,8 @@ void G4Scheduler::ExtractTimeStepperData(G4ITModelProcessor* MP)
           // G4cout << reactants->size() << G4endl;
           // G4cout << GetIT(reactants->operator[](0))->GetName() << G4endl;
 
-          fReactingTracks.insert(make_pair(track, reactants));
+         //  fReactingTracks.insert(make_pair(track, reactants));
+          fReactionSet.AddReactions(fTSTimeStep, track, reactants);
           stepper->ResetReactants();
         }
       }
@@ -1161,7 +1166,8 @@ void G4Scheduler::ExtractTimeStepperData(G4ITModelProcessor* MP)
           // G4cout << reactants->size() << G4endl;
           // G4cout << GetIT(reactants->operator[](0))->GetName() << G4endl;
 
-          fReactingTracks.insert(make_pair(track, reactants));
+         // fReactingTracks.insert(make_pair(track, reactants));
+          fReactionSet.AddReactions(fTSTimeStep, track, reactants);
           stepper->ResetReactants();
         }
       }
@@ -1487,12 +1493,14 @@ void G4Scheduler::ExtractDoItData(G4ITStepProcessor* SP)
       break;
 
     case fStopAndKill:
+      fReactionSet.RemoveReactionSet(track);
       PushSecondaries(SP);
       G4TrackList::Pop(track);
       EndTracking(track);
       break;
 
     case fKillTrackAndSecondaries:
+      fReactionSet.RemoveReactionSet(track);
       G4TrackVector* secondaries = SP->GetSecondaries();
       if (secondaries)
       {
@@ -1536,7 +1544,8 @@ void G4Scheduler::PushSecondaries(G4ITStepProcessor* SP)
 
 void G4Scheduler::ComputeTrackReaction()
 {
-  if (fReactingTracks.empty())
+//  if (fReactingTracks.empty())
+  if (fReactionSet.Empty())
   {
     return;
   }
@@ -1544,7 +1553,8 @@ void G4Scheduler::ComputeTrackReaction()
   if (fITStepStatus == eCollisionBetweenTracks)
   //        if(fInteractionStep == false)
   {
-    fpModelProcessor->FindReaction(&fReactingTracks, fTimeStep,
+    fpModelProcessor->FindReaction(&fReactionSet,
+                                   fTimeStep,
                                    fPreviousTimeStep, fReachedUserTimeLimit);
     // TODO
     // A ne faire uniquement si le temps choisis est celui calculé par le time stepper
@@ -1694,7 +1704,8 @@ void G4Scheduler::ComputeTrackReaction()
   //    G4cout << "fInteractionStep == true" << G4endl ;
   //}
 
-  fReactingTracks.clear();
+//  fReactingTracks.clear();
+  fReactionSet.CleanAllReaction();
 }
 
 //_________________________________________________________________________
@@ -1759,6 +1770,7 @@ void G4Scheduler::ResetLeadingTracks()
 
 void G4Scheduler::EndTracking(G4Track* trackToBeKilled)
 {
+//  fReactionSet.RemoveReactionSet(trackToBeKilled);
   fpTrackingManager->EndTracking(trackToBeKilled);
   fTrackContainer.PushToKill(trackToBeKilled);
 }

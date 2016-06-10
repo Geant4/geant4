@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundTransitions.cc 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4PreCompoundTransitions.cc 90591 2015-06-04 13:45:29Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -49,10 +49,13 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
-#include "G4Pow.hh"
-#include "G4HadronicException.hh"
 #include "G4PreCompoundParameters.hh"
+#include "G4Fragment.hh"
 #include "G4Proton.hh"
+#include "G4Exp.hh"
+#include "G4Log.hh"
+
+static const G4double sixdpi2 = 6.0/CLHEP::pi2;
 
 G4PreCompoundTransitions::G4PreCompoundTransitions() 
 {
@@ -61,7 +64,6 @@ G4PreCompoundTransitions::G4PreCompoundTransitions()
   FermiEnergy = param.GetFermiEnergy();
   r0 = param.GetTransitionsr0();
   aLDP = param.GetLevelDensity();
-  g4pow = G4Pow::GetInstance();
 }
 
 G4PreCompoundTransitions::~G4PreCompoundTransitions() 
@@ -82,6 +84,8 @@ CalculateProbability(const G4Fragment & aFragment)
   G4int A = aFragment.GetA_asInt();
   G4int Z = aFragment.GetZ_asInt();
   G4double U = aFragment.GetExcitationEnergy();
+  TransitionProb2 = 0.0;
+  TransitionProb3 = 0.0;
 
   //G4cout << aFragment << G4endl;
   
@@ -92,28 +96,24 @@ CalculateProbability(const G4Fragment & aFragment)
   //       (original in G4PreCompound from VL) 
   // OPT=2 Transitions are calculated according to Gupta's formulae
   //
-  if (useCEMtr){
-
+  if (useCEMtr) {
     // Relative Energy (T_{rel})
     G4double RelativeEnergy = 1.6*FermiEnergy + U/G4double(N);
     
     // Sample kind of nucleon-projectile 
     G4bool ChargedNucleon(false);
-    G4double chtest = 0.5;
-    if (P > 0) { 
-      chtest = G4double(aFragment.GetNumberOfCharged())/G4double(P); 
+    if(G4int(P*G4UniformRand()) <= aFragment.GetNumberOfCharged()) {
+      ChargedNucleon = true; 
     }
-    if (G4UniformRand() < chtest) { ChargedNucleon = true; }
     
     // Relative Velocity: 
     // <V_{rel}>^2
-    G4double RelativeVelocitySqr(0.0);
+    G4double RelativeVelocitySqr;
     if (ChargedNucleon) { 
-      RelativeVelocitySqr = 2.0*RelativeEnergy/CLHEP::proton_mass_c2; 
+      RelativeVelocitySqr = 2*RelativeEnergy/CLHEP::proton_mass_c2; 
     } else { 
-      RelativeVelocitySqr = 2.0*RelativeEnergy/CLHEP::neutron_mass_c2; 
+      RelativeVelocitySqr = 2*RelativeEnergy/CLHEP::neutron_mass_c2; 
     }
-    
     // <V_{rel}>
     G4double RelativeVelocity = std::sqrt(RelativeVelocitySqr);
     
@@ -127,18 +127,15 @@ CalculateProbability(const G4Fragment & aFragment)
       * CLHEP::millibarn;
     
     // Averaged Cross Section: \sigma(V_{rel})
-    //  G4double AveragedXSection = (ppXSection+npXSection)/2.0;
-    G4double AveragedXSection(0.0);
+    G4double AveragedXSection;
     if (ChargedNucleon)
       {
         //JMQ: small bug fixed
-        //AveragedXSection=((Z-1.0) * ppXSection + (A-Z-1.0) * npXSection)/(A-1.0);
         AveragedXSection = ((Z-1)*ppXSection + (A-Z)*npXSection)/G4double(A-1);
       }
     else 
       {
         AveragedXSection = ((A-Z-1)*ppXSection + Z*npXSection)/G4double(A-1);
-        //AveragedXSection = ((A-Z-1)*npXSection + Z*ppXSection)/G4double(A-1);
       }
     
     // Fermi relative energy ratio
@@ -149,82 +146,58 @@ CalculateProbability(const G4Fragment & aFragment)
     if (FermiRelRatio > 0.5) {
       G4double x = 2.0 - 1.0/FermiRelRatio;
       PauliFactor += 0.4*FermiRelRatio*x*x*std::sqrt(x);
-      //PauliFactor += 
-      //(2.0/5.0)*FermiRelRatio*std::pow(2.0 - (1.0/FermiRelRatio), 5.0/2.0);
     }
     // Interaction volume 
-    //  G4double Vint = (4.0/3.0)
-    //*pi*std::pow(2.0*r0 + hbarc/(proton_mass_c2*RelativeVelocity) , 3.0);
-    G4double xx = 2.0*r0 + hbarc/(CLHEP::proton_mass_c2*RelativeVelocity);
-    //    G4double Vint = (4.0/3.0)*CLHEP::pi*xx*xx*xx;
+    G4double xx = 2*r0 + CLHEP::hbarc/(CLHEP::proton_mass_c2*RelativeVelocity);
     G4double Vint = CLHEP::pi*xx*xx*xx/0.75;
     
     // Transition probability for \Delta n = +2
     
-    TransitionProb1 = AveragedXSection*PauliFactor
-      *std::sqrt(2.0*RelativeEnergy/CLHEP::proton_mass_c2)/Vint;
+    TransitionProb1 = std::max(0.0, AveragedXSection*PauliFactor
+      *std::sqrt(2.0*RelativeEnergy/CLHEP::proton_mass_c2)/Vint);
 
     //JMQ 281009  phenomenological factor in order to increase 
     //   equilibrium contribution
     //   G4double factor=5.0;
     //   TransitionProb1 *= factor;
-    //
-    if (TransitionProb1 < 0.0) { TransitionProb1 = 0.0; } 
     
     // GE = g*E where E is Excitation Energy
-    G4double GE = (6.0/pi2)*aLDP*A*U;
+    G4double GE = sixdpi2*aLDP*A*U;
+    G4double Fph = G4double(P*P+H*H+P-3*H)*0.25;
     
-    //G4double Fph = ((P*P+H*H+P-H)/4.0 - H/2.0);
-    G4double Fph = G4double(P*P+H*H+P-3*H)/4.0;
-    
-    G4bool NeverGoBack(false);
-    if(useNGB) { NeverGoBack=true; }
-    
-    //JMQ/AH  bug fixed: if (U-Fph < 0.0) NeverGoBack = true;
-    if (GE-Fph < 0.0) { NeverGoBack = true; }
-    
-    // F(p+1,h+1)
-    G4double Fph1 = Fph + N/2.0;
-    
-    G4double ProbFactor = g4pow->powN((GE-Fph)/(GE-Fph1),N+1);
-    
-    if (NeverGoBack)
-      {
-	TransitionProb2 = 0.0;
-	TransitionProb3 = 0.0;
-      }
-    else 
-      {
-        // Transition probability for \Delta n = -2 (at F(p,h) = 0)
-        TransitionProb2 = 
-	  TransitionProb1 * ProbFactor * (P*H*(N+1)*(N-2))/((GE-Fph)*(GE-Fph));
-        if (TransitionProb2 < 0.0) { TransitionProb2 = 0.0; } 
+    if(!useNGB) { 
         
-        // Transition probability for \Delta n = 0 (at F(p,h) = 0)
-        TransitionProb3 = TransitionProb1*(N+1)* ProbFactor  
-	  * (P*(P-1) + 4.0*P*H + H*(H-1))/(N*(GE-Fph));
-        if (TransitionProb3 < 0.0) { TransitionProb3 = 0.0; }
+      // F(p+1,h+1)
+      G4double Fph1 = Fph + N*0.5;
+
+      static const G4double plimit = 100;
+
+      //JMQ/AH  bug fixed: if (U-Fph < 0.0) 
+      if (GE-Fph1 > 0.0) { 
+        G4double x0 = GE-Fph;
+	G4double x1 = (N+1)*G4Log(x0/(GE-Fph1));
+	if(x1 < plimit) {
+	  x1 = G4Exp(x1)*TransitionProb1/x0;
+    
+	  // Transition probability for \Delta n = -2 (at F(p,h) = 0)
+	  TransitionProb2 = std::max(0.0, (P*H*(N+1)*(N-2))*x1/x0);
+        
+	  // Transition probability for \Delta n = 0 (at F(p,h) = 0)
+	  TransitionProb3 = std::max(0.0,((N+1)*(P*(P-1) + 4*P*H + H*(H-1)))*x1
+				     /G4double(N));
+	}
       }
+    }
+
   } else {
     //JMQ: Transition probabilities from Gupta's work    
     // GE = g*E where E is Excitation Energy
-    G4double GE = (6.0/pi2)*aLDP*A*U;
- 
-    G4double Kmfp=2.;
-        
-    //TransitionProb1=1./Kmfp*3./8.*1./c_light*1.0e-9*(1.4e+21*U-2./(N+1)*6.0e+18*U*U);
-    TransitionProb1 = 3.0e-9*(1.4e+21*U - 1.2e+19*U*U/G4double(N+1))
-      /(8*Kmfp*CLHEP::c_light);
-    if (TransitionProb1 < 0.0) { TransitionProb1 = 0.0; }
+    TransitionProb1 = std::max(0.0, U*(4.2e+12 - 3.6e+10*U/G4double(N+1)))
+      /(16*CLHEP::c_light); 
 
-    TransitionProb2=0.;
-    TransitionProb3=0.;
-    
     if (!useNGB && N > 1) {
-      // TransitionProb2=1./Kmfp*3./8.*1./c_light*1.0e-9*(N-1.)*(N-2.)*P*H/(GE*GE)*(1.4e+21*U - 2./(N-1)*6.0e+18*U*U);      
-      TransitionProb2 = 
-	3.0e-9*(N-2)*P*H*(1.4e+21*U*(N-1) - 1.2e+19*U*U)/(8*Kmfp*c_light*GE*GE);      
-      if (TransitionProb2 < 0.0) TransitionProb2 = 0.0; 
+      G4double GE = sixdpi2*aLDP*A*U; 
+      TransitionProb2 = ((N-1)*(N-2)*P*H)*TransitionProb1/(GE*GE);  
     }
   }
   //  G4cout<<"U = "<<U<<G4endl;
@@ -239,7 +212,6 @@ void G4PreCompoundTransitions::PerformTransition(G4Fragment & result)
   G4double ChosenTransition = 
     G4UniformRand()*(TransitionProb1 + TransitionProb2 + TransitionProb3);
   G4int deltaN = 0;
-  //  G4int Nexcitons = result.GetNumberOfExcitons();
   G4int Npart     = result.GetNumberOfParticles();
   G4int Ncharged  = result.GetNumberOfCharged();
   G4int Nholes    = result.GetNumberOfHoles();
@@ -261,22 +233,23 @@ void G4PreCompoundTransitions::PerformTransition(G4Fragment & result)
 
   //G4cout << "deltaN= " << deltaN << G4endl;
 
-  // JMQ the following lines have to be before SetNumberOfCharged, otherwise the check on 
-  // number of charged vs. number of particles fails
+  // JMQ the following lines have to be before SetNumberOfCharged, 
+  //     otherwise the check on number of charged vs. number of particles fails
   result.SetNumberOfParticles(Npart+deltaN);
   result.SetNumberOfHoles(Nholes+deltaN); 
 
   if(deltaN < 0) {
-    if( Ncharged >= 1 && G4int(Npart*G4UniformRand()) <= Ncharged) 
+    if( (Ncharged == Npart) ||
+	(Ncharged >= 1 && G4int(Npart*G4UniformRand()) <= Ncharged)) 
       { 
 	result.SetNumberOfCharged(Ncharged+deltaN); // deltaN is negative!
       }
 
   } else if ( deltaN > 0 ) {
     // With weight Z/A, number of charged particles is increased with +1
-    G4int A = result.GetA_asInt();
-    G4int Z = result.GetZ_asInt();
-    if( G4int(std::max(1, A - Npart)*G4UniformRand()) <= Z) 
+    G4int A = result.GetA_asInt() - Npart;
+    G4int Z = result.GetZ_asInt() - Ncharged;
+    if((Z == A) ||  (Z > 0 && G4int(A*G4UniformRand()) <= Z)) 
       {
 	result.SetNumberOfCharged(Ncharged+deltaN);
       }

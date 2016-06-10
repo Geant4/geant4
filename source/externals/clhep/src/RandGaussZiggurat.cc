@@ -94,7 +94,7 @@ float RandGaussZiggurat::ziggurat_nfix(long hz,HepRandomEngine* anEngine)
     /* initiate, try to exit for(;;) for loop*/
     hz=(signed)ziggurat_SHR3(anEngine);
     iz=hz&127;
-    if((unsigned long)abs(hz)<kn[iz]) return (hz*wn[iz]);
+    if((unsigned long)std::abs(hz)<kn[iz]) return (hz*wn[iz]);
   }
 }
 

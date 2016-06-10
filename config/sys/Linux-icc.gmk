@@ -1,10 +1,11 @@
 #
-# ------ GNU/LINUX ------         Intel icc 11.0
+# ------ GNU/LINUX ------         Intel icc 15.x.x
 #
 ifeq ($(G4SYSTEM),Linux-icc)
   CXX       := icc
   CXXFLAGS  := -ansi -fp-model precise -no-gcc -w1
   ifdef G4USE_STD11
+    CPPFLAGS  += -std=c++0x
     CXXFLAGS  += -std=c++11
   endif
   ifdef G4MULTITHREADED

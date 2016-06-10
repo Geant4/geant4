@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.cc 71484 2013-06-17 08:12:51Z gcosmo $
+// $Id: G4VMscModel.cc 90579 2015-06-04 10:00:26Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -67,6 +67,7 @@ G4VMscModel::G4VMscModel(const G4String& nam):
   lambdalimit(mm),
   geomMin(1.e-6*CLHEP::mm),
   geomMax(1.e50*CLHEP::mm),
+  fDisplacement(0.,0.,0.),
   steppingAlgorithm(fUseSafety),
   samplez(false),
   latDisplasment(true)

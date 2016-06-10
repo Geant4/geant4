@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadParamvol.cc 77913 2013-11-29 10:59:07Z gcosmo $
+// $Id: G4GDMLReadParamvol.cc 90766 2015-06-09 10:13:41Z gcosmo $
 //
 // class G4GDMLReadParamvol Implementation
 //
@@ -37,6 +37,7 @@
 #include "G4PVParameterised.hh"
 #include "G4PVPlacement.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4UnitsTable.hh"
 
 G4GDMLReadParamvol::G4GDMLReadParamvol()
   : G4GDMLReadSetup(), parameterisation(0)
@@ -75,7 +76,7 @@ Box_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
-      if (attName=="lunit") { lunit = eval.Evaluate(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="x") { parameter.dimension[0] = eval.Evaluate(attValue); } else
       if (attName=="y") { parameter.dimension[1] = eval.Evaluate(attValue); } else
       if (attName=="z") { parameter.dimension[2] = eval.Evaluate(attValue); }
@@ -114,7 +115,7 @@ Trd_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
-      if (attName=="lunit") { lunit = eval.Evaluate(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="x1") { parameter.dimension[0]=eval.Evaluate(attValue); } else
       if (attName=="x2") { parameter.dimension[1]=eval.Evaluate(attValue); } else
       if (attName=="y1") { parameter.dimension[2]=eval.Evaluate(attValue); } else
@@ -159,9 +160,9 @@ Trap_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="lunit")
-        { lunit = eval.Evaluate(attValue); } else
+        { lunit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="aunit")
-        { aunit = eval.Evaluate(attValue); } else
+        { aunit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="z")
         { parameter.dimension[0] = eval.Evaluate(attValue); } else
       if (attName=="theta")
@@ -229,9 +230,9 @@ Tube_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attValue = Transcode(attribute->getValue());
     
       if (attName=="lunit")
-        { lunit = eval.Evaluate(attValue); } else
+        { lunit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="aunit")
-        { aunit = eval.Evaluate(attValue); } else
+        { aunit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="InR")
         { parameter.dimension[0] = eval.Evaluate(attValue); } else
       if (attName=="OutR")
@@ -281,9 +282,9 @@ Cone_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="lunit")
-        { lunit = eval.Evaluate(attValue); } else
+        { lunit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="aunit")
-        { aunit = eval.Evaluate(attValue); } else
+        { aunit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="rmin1")
         { parameter.dimension[0] = eval.Evaluate(attValue); } else
       if (attName=="rmax1")
@@ -339,9 +340,9 @@ Sphere_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="lunit")
-        { lunit = eval.Evaluate(attValue); } else
+        { lunit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="aunit")
-        { aunit = eval.Evaluate(attValue); } else
+        { aunit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="rmin")
         { parameter.dimension[0] = eval.Evaluate(attValue); } else
       if (attName=="rmax")
@@ -392,7 +393,7 @@ Orb_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
-      if (attName=="lunit") { lunit = eval.Evaluate(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="r") { parameter.dimension[0] = eval.Evaluate(attValue); }
    }
 
@@ -429,9 +430,9 @@ Torus_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="lunit")
-        { lunit = eval.Evaluate(attValue); } else
+        { lunit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="aunit")
-        { aunit = eval.Evaluate(attValue); } else
+        { aunit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="rmin")
         { parameter.dimension[0] = eval.Evaluate(attValue); } else
       if (attName=="rmax")
@@ -479,7 +480,7 @@ Ellipsoid_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="lunit")
-        { lunit = eval.Evaluate(attValue); } else
+        { lunit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="ax")
         { parameter.dimension[0] = eval.Evaluate(attValue); } else
       if (attName=="by")
@@ -529,9 +530,9 @@ Para_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="lunit")
-        { lunit = eval.Evaluate(attValue); } else
+        { lunit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="aunit")
-        { aunit = eval.Evaluate(attValue); } else
+        { aunit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="x")
         { parameter.dimension[0] = eval.Evaluate(attValue); } else
       if (attName=="y")
@@ -584,9 +585,9 @@ Hype_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="lunit")
-        { lunit = eval.Evaluate(attValue); } else
+        { lunit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="aunit")
-        { aunit = eval.Evaluate(attValue); } else
+        { aunit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="rmin")
         { parameter.dimension[0] = eval.Evaluate(attValue); } else
       if (attName=="rmax")
@@ -638,9 +639,9 @@ Polycone_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attValue = Transcode(attribute->getValue());
     
       if (attName=="lunit")
-        { lunit = eval.Evaluate(attValue); } else
+        { lunit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="aunit")
-        { aunit = eval.Evaluate(attValue); } else
+        { aunit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="startPhi")
         { parameter.dimension[0] = eval.Evaluate(attValue); } else
       if (attName=="openPhi")
@@ -711,9 +712,9 @@ Polyhedra_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attValue = Transcode(attribute->getValue());
     
       if (attName=="lunit")
-        { lunit = eval.Evaluate(attValue); } else
+        { lunit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="aunit")
-        { aunit = eval.Evaluate(attValue); } else
+        { aunit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="startPhi")
         { parameter.dimension[0] = eval.Evaluate(attValue); } else
       if (attName=="openPhi")

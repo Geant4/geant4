@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
+ Geant4 version Name: geant4-10-01-patch-02    (19-June-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -366,7 +366,6 @@ Mass of RightTeste = 18.5406 g
 ### Radiation field defined
 ### by means of GPS 
 /gps/verbose 0
-Verbosity Set to: 0
 /gps/particle e-
 /gps/energy 1 MeV
 #

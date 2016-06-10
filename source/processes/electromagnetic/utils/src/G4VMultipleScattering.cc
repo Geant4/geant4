@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc 88981 2015-03-17 10:14:15Z gcosmo $
+// $Id: G4VMultipleScattering.cc 90579 2015-06-04 10:00:26Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -101,6 +101,8 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
   facrange(0.04),
   latDisplacement(true),
   isIon(false),
+  fNewPosition(0.,0.,0.),
+  fNewDirection(0.,0.,1.),
   fDispBeyondSafety(false)
 {
   theParameters = G4EmParameters::Instance();

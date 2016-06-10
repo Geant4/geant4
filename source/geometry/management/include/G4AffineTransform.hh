@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AffineTransform.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4AffineTransform.hh 90701 2015-06-08 09:43:16Z gcosmo $
 //
 //
 // class G4AffineTransform
@@ -164,6 +164,9 @@ private:
   G4double rzx,rzy,rzz;
   G4double tx,ty,tz;
 };
+
+std::ostream&
+  operator << (std::ostream &os, const G4AffineTransform &transf);
 
 #include "G4AffineTransform.icc"
 

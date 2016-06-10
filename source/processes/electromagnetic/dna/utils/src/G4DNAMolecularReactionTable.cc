@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularReactionTable.cc 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id: G4DNAMolecularReactionTable.cc 90769 2015-06-09 10:33:41Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -96,7 +96,7 @@ G4DNAMolecularReactionData::G4DNAMolecularReactionData(G4double reactionRate,
   {
     sumDiffCoeff = reactive1->GetDiffusionCoefficient();
     fReducedReactionRadius = fReactionRate
-        / (4 * pi * reactive1->GetDiffusionCoefficient() * Avogadro);
+        / (4 * pi * sumDiffCoeff * Avogadro);
   }
   else
   {
@@ -121,7 +121,7 @@ G4DNAMolecularReactionData::G4DNAMolecularReactionData(G4double reactionRate,
   {
     sumDiffCoeff = fReactive1->GetDiffusionCoefficient();
     fReducedReactionRadius = fReactionRate
-        / (4 * pi * fReactive1->GetDiffusionCoefficient() * Avogadro);
+        / (4 * pi * sumDiffCoeff * Avogadro);
   }
   else
   {

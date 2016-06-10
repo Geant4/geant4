@@ -190,62 +190,72 @@ class G4GeneralParticleSource : public G4VPrimaryGenerator
         void ListSource();
         void SetCurrentSourceto(G4int) ;
         void SetCurrentSourceIntensity(G4double);
-        G4SingleParticleSource* GetCurrentSource() {return currentSource;};
-        G4int GetCurrentSourceIndex() { return currentSourceIdx; };
-        G4double GetCurrentSourceIntensity() { return GPSData->GetIntensity(currentSourceIdx); };
+        G4SingleParticleSource* GetCurrentSource() const
+          {return GPSData->GetCurrentSource();}
+        G4int GetCurrentSourceIndex() const
+          { return GPSData->GetCurrentSourceIdx(); }
+        G4double GetCurrentSourceIntensity() const
+          { return GPSData->GetIntensity(GetCurrentSourceIndex()); }
         void ClearAll();
         void AddaSource (G4double);
         void DeleteaSource(G4int);
 
         // Set the verbosity level.
-        void SetVerbosity(G4int i) {currentSource->SetVerbosity(i);} ;
+        void SetVerbosity(G4int i) {GPSData->SetVerbosityAllSources(i);} ;
 
         // Set if multiple vertex per event.
-        void SetMultipleVertex(G4bool av) {multiple_vertex = av;} ;
+        void SetMultipleVertex(G4bool av) { GPSData->SetMultipleVertex(av);} ;
 
         // set if flat_sampling is applied in multiple source case
 
-        void SetFlatSampling(G4bool av) {flat_sampling = av; GPSData->SetFlatSampling(av); normalised = false;} ;
+        void SetFlatSampling(G4bool av) { GPSData->SetFlatSampling(av); normalised = false;} ;
 
         // Set the particle species
         void SetParticleDefinition (G4ParticleDefinition * aParticleDefinition) 
-        {currentSource->SetParticleDefinition(aParticleDefinition); } ;
+          {GPSData->GetCurrentSource()->SetParticleDefinition(aParticleDefinition); } ;
 
-        G4ParticleDefinition * GetParticleDefinition () { return currentSource->GetParticleDefinition();} ;
+        G4ParticleDefinition * GetParticleDefinition () const
+          { return GPSData->GetCurrentSource()->GetParticleDefinition();} ;
 
-        void SetParticleCharge(G4double aCharge) { currentSource->SetParticleCharge(aCharge); } ;
+        void SetParticleCharge(G4double aCharge)
+          { GPSData->GetCurrentSource()->SetParticleCharge(aCharge); } ;
 
         // Set polarization
-        void SetParticlePolarization (G4ThreeVector aVal) {currentSource->SetParticlePolarization(aVal);};
-        G4ThreeVector GetParticlePolarization ()  {return currentSource->GetParticlePolarization();};
+        void SetParticlePolarization (G4ThreeVector aVal)
+          {GPSData->GetCurrentSource()->SetParticlePolarization(aVal);};
+        G4ThreeVector GetParticlePolarization () const
+          {return GPSData->GetCurrentSource()->GetParticlePolarization();};
 
         // Set Time.
-        void SetParticleTime(G4double aTime)  { currentSource->SetParticleTime(aTime); };
-        G4double GetParticleTime()  { return currentSource->GetParticleTime(); };
+        void SetParticleTime(G4double aTime)
+          { GPSData->GetCurrentSource()->SetParticleTime(aTime); };
+        G4double GetParticleTime() const
+          { return GPSData->GetCurrentSource()->GetParticleTime(); };
 
-        void SetNumberOfParticles(G4int i)  { currentSource->SetNumberOfParticles(i); };
+        void SetNumberOfParticles(G4int i)
+          { GPSData->GetCurrentSource()->SetNumberOfParticles(i); };
         //
-        G4int GetNumberOfParticles() { return currentSource->GetNumberOfParticles(); };
-        G4ThreeVector GetParticlePosition()  { return currentSource->GetParticlePosition();};
-        G4ThreeVector GetParticleMomentumDirection()  { return currentSource->GetParticleMomentumDirection();};
-        G4double GetParticleEnergy()  {return currentSource->GetParticleEnergy();};
+        G4int GetNumberOfParticles() const
+          { return GPSData->GetCurrentSource()->GetNumberOfParticles(); };
+        G4ThreeVector GetParticlePosition() const
+          { return GPSData->GetCurrentSource()->GetParticlePosition();};
+        G4ThreeVector GetParticleMomentumDirection() const
+          { return GPSData->GetCurrentSource()->GetParticleMomentumDirection();};
+        G4double GetParticleEnergy() const
+          {return GPSData->GetCurrentSource()->GetParticleEnergy();};
 
 private:
 
   void IntensityNormalization();
 
 private:
-  G4bool multiple_vertex;
-  G4bool flat_sampling;
+  //Helper boolean, used to reduce number of locks
+  //at run time (see GeneratePrimaryVertex)
   G4bool normalised;
-  G4int currentSourceIdx;
-  G4SingleParticleSource* currentSource;
-  std::vector <G4SingleParticleSource*> sourceVector;
-  std::vector <G4double> sourceIntensity;
-  std::vector <G4double> sourceProbability;
 
+  //Note this is a shared resource among MT workers
   G4GeneralParticleSourceMessenger* theMessenger;
-  //Note this will be a shared resource among MT
+  //Note this is a shared resource among MT workers
   G4GeneralParticleSourceData* GPSData;
   
 };

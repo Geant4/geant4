@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.icc 78050 2013-12-03 08:17:33Z gcosmo $
+// $Id: G4LogicalVolume.icc 90701 2015-06-08 09:43:16Z gcosmo $
 //
 // 
 // class G4LogicalVolume Inline Implementation file
@@ -266,7 +266,6 @@ inline
 void G4LogicalVolume::ResetMass()
 {
   G4MT_mass= 0.0;
-  // Do not fChangedState= 1; 
 }
 
 // ********************************************************************

@@ -166,6 +166,26 @@ void RandGauss::fireArray( const int size, double* vect,
     *v = fire( mean, stdDev );
 }
 
+bool RandGauss::getFlag()
+{
+  return set_st;
+}
+
+void RandGauss::setFlag( bool val )
+{
+  set_st = val;
+}
+
+double RandGauss::getVal()
+{
+  return nextGauss_st;
+}
+
+void RandGauss::setVal( double nextVal )
+{
+  nextGauss_st = nextVal;
+}
+
 void RandGauss::saveEngineStatus ( const char filename[] ) {
 
   // First save the engine status just like the base class would do:

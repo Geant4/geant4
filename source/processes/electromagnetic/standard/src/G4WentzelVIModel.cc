@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc 88979 2015-03-17 10:10:21Z gcosmo $
+// $Id: G4WentzelVIModel.cc 90583 2015-06-04 11:16:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -244,7 +244,6 @@ G4double G4WentzelVIModel::ComputeCrossSectionPerAtom(
 void G4WentzelVIModel::StartTracking(G4Track* track)
 {
   SetupParticle(track->GetDynamicParticle()->GetDefinition());
-  inside = false;
   G4VEmModel::StartTracking(track);
 }
 
@@ -280,7 +279,7 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   if(tlimit > currentRange) { tlimit = currentRange; }
 
   // stop here if small range particle
-  if(inside || tlimit < tlimitminfix) { 
+  if(tlimit < tlimitminfix) { 
     return ConvertTrueToGeom(tlimit, currentMinimalStep); 
   }
 
@@ -288,7 +287,6 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   G4double presafety = sp->GetSafety();
   // far from geometry boundary
   if(currentRange < presafety) {
-    inside = true;  
     return ConvertTrueToGeom(tlimit, currentMinimalStep);
   }
 
@@ -297,7 +295,6 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   if(stepStatus != fGeomBoundary && presafety < tlimitminfix) {
     presafety = ComputeSafety(sp->GetPosition(), tlimit); 
     if(currentRange < presafety) {
-      inside = true;  
       return ConvertTrueToGeom(tlimit, currentMinimalStep);
     }
   }
@@ -521,7 +518,6 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
   G4double prob2 = 0.0;
 
   // large scattering angle case - two step approach
-
   if(!singleScatteringMode) {
     static const G4double zzmin = 0.05;
     if(useSecondMoment) { 
@@ -547,7 +543,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
 
   // step limit due to single scattering
   G4double x1 = 2*tPathLength;
-  if(0.0 < xtsec) { x1 = -G4Log(G4UniformRand())/xtsec; }
+  if(0.0 < xtsec) { x1 = -G4Log(rndmEngineMod->flat())/xtsec; }
 
   // no scattering case
   if(singleScatteringMode && x1 > tPathLength)  
@@ -606,7 +602,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
       // select element
       G4int i = 0;
       if(nelm > 1) {
-	G4double qsec = G4UniformRand()*xtsec;
+	G4double qsec = rndmEngineMod->flat()*xtsec;
 	for (; i<nelm; ++i) { if(xsecn[i] >= qsec) { break; } }
       }
       G4double cosTetM = 
@@ -622,7 +618,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
 
       // new proposed step length
       x2 -= step; 
-      x1  = -G4Log(G4UniformRand())/xtsec; 
+      x1  = -G4Log(rndmEngineMod->flat())/xtsec; 
 
     // multiple scattering
     } else { 
@@ -632,11 +628,11 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
 
       // sample z in interval 0 - 1
       G4bool isFirst = true;
-      if(prob2 > 0.0 && G4UniformRand() < prob2) { isFirst = false; } 
+      if(prob2 > 0.0 && rndmEngineMod->flat() < prob2) { isFirst = false; } 
       do {
-	//z = -z0*G4Log(1.0 - (1.0 - zzz)*G4UniformRand());
-	if(isFirst) { z = -G4Log(G4UniformRand()); }
-        else        { z = G4RandGamma::shoot(2.0,2.0); }
+	//z = -z0*G4Log(1.0 - (1.0 - zzz)*rndmEngineMod->flat());
+	if(isFirst) { z = -G4Log(rndmEngineMod->flat()); }
+        else        { z = G4RandGamma::shoot(rndmEngineMod, 2.0, 2.0); }
 	z *= z0;
       } while(z > 1.0);
 
@@ -644,7 +640,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
       if(cost > 1.0)       { cost = 1.0; }
       else if(cost < -1.0) { cost =-1.0; }
       sint = sqrt((1.0 - cost)*(1.0 + cost));
-      phi  = twopi*G4UniformRand();
+      phi  = twopi*rndmEngineMod->flat();
       G4double vx1 = sint*cos(phi);
       G4double vy1 = sint*sin(phi);
 
@@ -652,8 +648,8 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
       if (latDisplasment) {
 	G4double rms = invsqrt12*sqrt(2*z0);
 	G4double r   = x0*mscfac;
-	G4double dx  = r*(0.5*vx1 + rms*G4RandGauss::shoot(0.0,1.0));
-	G4double dy  = r*(0.5*vy1 + rms*G4RandGauss::shoot(0.0,1.0));
+	G4double dx  = r*(0.5*vx1 + rms*G4RandGauss::shoot(rndmEngineMod, 0.0, 1.0));
+	G4double dy  = r*(0.5*vy1 + rms*G4RandGauss::shoot(rndmEngineMod, 0.0, 1.0));
 	G4double dz;
 	G4double d   = r*r - dx*dx - dy*dy;
 

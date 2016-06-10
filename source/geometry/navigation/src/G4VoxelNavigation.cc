@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4VoxelNavigation.cc 90836 2015-06-10 09:31:06Z gcosmo $
 //
 //
 // class G4VoxelNavigation Implementation
@@ -32,10 +32,17 @@
 // Author: P.Kent, 1996
 //
 // --------------------------------------------------------------------
+#include <ostream>
 
 #include "G4VoxelNavigation.hh"
 #include "G4GeometryTolerance.hh"
 #include "G4VoxelSafety.hh"
+
+#include "G4AuxiliaryNavServices.hh"
+
+#ifdef G4DEBUG_NAVIGATION
+static int debugVerboseLevel= 5;    // Reports most about daughter volumes
+#endif
 
 // ********************************************************************
 // Constructor
@@ -51,7 +58,11 @@ G4VoxelNavigation::G4VoxelNavigation()
     fVoxelNode(0), fpVoxelSafety(0), fCheck(false), fBestSafety(false)
 {
   fLogger = new G4NavigationLogger("G4VoxelNavigation");
-  fpVoxelSafety = new G4VoxelSafety (); 
+  fpVoxelSafety = new G4VoxelSafety();
+
+#ifdef G4DEBUG_NAVIGATION
+  SetVerboseLevel(debugVerboseLevel);   // Reports most about daughter volumes
+#endif
 }
 
 // ********************************************************************
@@ -85,7 +96,8 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
   G4LogicalVolume *motherLogical;
   G4VSolid *motherSolid;
   G4ThreeVector sampleDirection;
-  G4double ourStep=currentProposedStepLength, motherSafety, ourSafety;
+  G4double ourStep=currentProposedStepLength, ourSafety;
+  G4double motherSafety, motherStep=DBL_MAX;
   G4int localNoDaughters, sampleNo;
 
   G4bool initialNode, noStep;
@@ -130,6 +142,50 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
   exiting = false;
   entering = false;
 
+  // For extra checking,  get the distance to Mother early !!
+  G4bool   motherValidExitNormal= false;
+  G4ThreeVector motherExitNormal(0.0, 0.0, 0.0);
+
+#ifdef G4VERBOSE
+  if ( fCheck )
+  {
+    // Compute early -- a) for validity
+    //                  b) to check against answer of daughters!
+    motherStep = motherSolid->DistanceToOut(localPoint,
+                                            localDirection,
+                                            true,
+                                           &motherValidExitNormal,
+                                           &motherExitNormal);
+
+    fLogger->PostComputeStepLog(motherSolid, localPoint, localDirection,
+                                motherStep, motherSafety);
+
+    if( (motherStep >= kInfinity) || (motherStep < 0.0) )
+    {
+      // Error - indication of being outside solid !!
+      fLogger->ReportOutsideMother(localPoint, localDirection, motherPhysical);
+    
+      ourStep = 0.0;
+    
+      exiting= true;
+      entering= false;
+    
+      // validExitNormal= motherValidExitNormal;
+      // exitNormal= motherExitNormal;
+      // Makes sense and is useful only if the point is very close ...
+      //  Alternatives: i) validExitNormal= false;
+      //               ii) Check safety from outside and choose !!
+      validExitNormal= false;
+    
+      *pBlockedPhysical= 0; // or motherPhysical ?
+      blockedReplicaNo= 0;  // or motherReplicaNumber ?
+    
+      newSafety= 0.0;
+      return ourStep;
+    }
+  }
+#endif
+
   localNoDaughters = motherLogical->GetNoDaughters();
 
   fBList.Enlarge(localNoDaughters);
@@ -160,12 +216,7 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
                      samplePhysical->GetLogicalVolume()->GetSolid();
           const G4double sampleSafety     =
                      sampleSolid->DistanceToIn(samplePoint);
-#ifdef G4VERBOSE
-          if( fCheck )
-          {
-            fLogger->PrintDaughterLog(sampleSolid,samplePoint,sampleSafety,0);
-          }
-#endif
+
           if ( sampleSafety<ourSafety )
           {
             ourSafety = sampleSafety;
@@ -179,7 +230,8 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
             if( fCheck )
             {
               fLogger->PrintDaughterLog(sampleSolid, samplePoint,
-                                        sampleSafety, sampleStep);
+                                        sampleSafety, true,
+                                        sampleDirection, sampleStep);
             }
 #endif
             if ( sampleStep<=ourStep )
@@ -191,9 +243,7 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
               blockedReplicaNo = -1;
 #ifdef G4VERBOSE
               // Check to see that the resulting point is indeed in/on volume.
-              // This check could eventually be made only for successful
-              // candidate.
-
+              // This could be done only for successful candidate.
               if ( fCheck )
               {
                 fLogger->AlongComputeStepLog (sampleSolid, samplePoint,
@@ -201,7 +251,31 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
               }
 #endif
             }
+#ifdef G4VERBOSE
+            if ( fCheck && ( sampleStep < kInfinity )
+                        && ( sampleStep >= motherStep ) )            
+            {               
+               // The intersection point with the daughter is after the exit
+               // point from the mother volume.  Double check this !!
+               fLogger->CheckDaughterEntryPoint(sampleSolid,
+                                                samplePoint, sampleDirection,
+                                                motherSolid,
+                                                localPoint, localDirection,
+                                                motherStep, sampleStep);
+            }
+#endif
+          }            
+#ifdef G4VERBOSE
+          else // ie if sampleSafety > outStep 
+          {
+            if( fCheck )
+            {
+              fLogger->PrintDaughterLog(sampleSolid, samplePoint,
+                                        sampleSafety, false,
+                                        G4ThreeVector(0.,0.,0.), -1.0 );
+            }
           }
+#endif                         
         }
       }
     }
@@ -230,22 +304,63 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
         //
         if ( motherSafety<=ourStep )
         {
-          G4double motherStep =
-              motherSolid->DistanceToOut(localPoint,
-                                         localDirection,
-                                         true, &validExitNormal, &exitNormal);
+          if( !fCheck )
+          {
+            motherStep = motherSolid->DistanceToOut(localPoint, localDirection,
+                              true, &motherValidExitNormal, &motherExitNormal);
+          }
+          // Not correct - unless mother limits step (see below)
+          // validExitNormal= motherValidExitNormal;
+          // exitNormal= motherExitNormal;
 #ifdef G4VERBOSE
-          if ( fCheck )
+          else // check_mode
           {
             fLogger->PostComputeStepLog(motherSolid, localPoint, localDirection,
                                         motherStep, motherSafety);
+            if( motherValidExitNormal )
+            {
+              fLogger->CheckAndReportBadNormal(motherExitNormal,
+                                              localPoint, localDirection, 
+                                              motherStep, motherSolid,                                    
+                                        "From motherSolid::DistanceToOut" );
+            }          
           }
 #endif
+          if( (motherStep >= kInfinity) || (motherStep < 0.0) )
+          {
+            // Error - indication of being outside solid !!
+            //
+            fLogger->ReportOutsideMother(localPoint, localDirection, motherPhysical);
+             
+            motherStep = 0.0;
+            ourStep = 0.0;
+            exiting = true;
+            entering = false;
+             
+            // validExitNormal= motherValidExitNormal;
+            // exitNormal= motherExitNormal;
+            // Useful only if the point is very close to surface
+            // => but it would need to be rotated to grand-mother ref frame !
+            validExitNormal= false;
+
+            *pBlockedPhysical= 0; // or motherPhysical ?
+            blockedReplicaNo= 0;  // or motherReplicaNumber ?
+    
+            newSafety= 0.0;
+            return ourStep;
+          }          
+          
           if ( motherStep<=ourStep )
           {
             ourStep = motherStep;
             exiting = true;
             entering = false;
+
+            // Exit normal: Natural location to set these;confirmed short step
+            //
+            validExitNormal= motherValidExitNormal;
+            exitNormal= motherExitNormal;
+
             if ( validExitNormal )
             {
               const G4RotationMatrix *rot = motherPhysical->GetRotation();
@@ -622,7 +737,7 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
 #ifdef G4VERBOSE
   if( fCheck )
   {
-    fLogger->ComputeSafetyLog (motherSolid, localPoint, motherSafety, true);
+    fLogger->ComputeSafetyLog (motherSolid,localPoint,motherSafety,true,true);
   }
 #endif
   //
@@ -653,7 +768,7 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
 #ifdef G4VERBOSE
     if( fCheck )
     {
-      fLogger->ComputeSafetyLog (sampleSolid,samplePoint,sampleSafety,false);
+      fLogger->ComputeSafetyLog(sampleSolid,samplePoint,sampleSafety,false,false);
     }
 #endif
   }

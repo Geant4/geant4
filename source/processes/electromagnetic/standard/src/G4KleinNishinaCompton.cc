@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaCompton.cc 82754 2014-07-08 14:06:13Z gcosmo $
+// $Id: G4KleinNishinaCompton.cc 90583 2015-06-04 11:16:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -175,6 +175,8 @@ void G4KleinNishinaCompton::SampleSecondaries(
   G4double epsilon0sq = eps0*eps0;
   G4double alpha1     = - G4Log(eps0);
   G4double alpha2     = 0.5*(1.- epsilon0sq);
+
+  rndmEngineMod = G4Random::getTheEngine();
 
   G4int nloop = 0;
   do {

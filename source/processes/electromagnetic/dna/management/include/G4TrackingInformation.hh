@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrackingInformation.hh 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id: G4TrackingInformation.hh 90769 2015-06-09 10:33:41Z gcosmo $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
@@ -111,9 +111,9 @@ public:
    * computed at the InteractionLegth stage in the track.
    */
 
-  G4::shared_ptr<G4ProcessState_Lock> GetProcessState(size_t index);
+  G4shared_ptr<G4ProcessState_Lock> GetProcessState(size_t index);
 
-  inline void RecordProcessState(G4::shared_ptr<G4ProcessState_Lock>,
+  inline void RecordProcessState(G4shared_ptr<G4ProcessState_Lock>,
                                  size_t index);
 
   //___________________________________________________
@@ -198,7 +198,7 @@ protected:
    * (cf. G4ITStepProcessor header)
    */
 //    std::vector<G4ProcessState_Lock*> fProcessState;
-  std::vector<G4::shared_ptr<G4ProcessState_Lock> > fProcessState;
+  std::vector<G4shared_ptr<G4ProcessState_Lock> > fProcessState;
 
   //_______________________________________________________
   G4ITStepProcessorState_Lock* fpStepProcessorState;
@@ -235,7 +235,7 @@ inline G4ITStepProcessorState_Lock* G4TrackingInformation::GetStepProcessorState
  }*/
 
 inline
-void G4TrackingInformation::RecordProcessState(G4::shared_ptr<G4ProcessState_Lock> state,
+void G4TrackingInformation::RecordProcessState(G4shared_ptr<G4ProcessState_Lock> state,
                                                size_t index)
 {
   // G4cout << "G4TrackingInformation::RecordProcessState" << G4endl;

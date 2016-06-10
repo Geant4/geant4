@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiElasticChannel.cc 81565 2014-06-03 08:42:52Z gcosmo $
+// $Id: G4QuasiElasticChannel.cc 90783 2015-06-09 14:55:15Z gcosmo $
 //
 
 // Author : Gunter Folger March 2007
@@ -60,12 +60,14 @@
 
 
 G4QuasiElasticChannel::G4QuasiElasticChannel()
-  : theQuasiElastic(G4QuasiElRatios::GetPointer()),
-    the3DNucleus(new G4Fancy3DNucleus) {}
+  : theQuasiElastic(new G4QuasiElRatios),
+    the3DNucleus(new G4Fancy3DNucleus) {
+}
 
 G4QuasiElasticChannel::~G4QuasiElasticChannel()
 {
   delete the3DNucleus;
+  delete theQuasiElastic;
 }
 
 G4double G4QuasiElasticChannel::GetFraction(G4Nucleus &theNucleus,

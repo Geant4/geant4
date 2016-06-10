@@ -23,16 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AuxiliaryNavServices.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4AuxiliaryNavServices.cc 90836 2015-06-10 09:31:06Z gcosmo $
 //
 // --------------------------------------------------------------------
 
 #include "G4AuxiliaryNavServices.hh"
+#include "G4GeometryTolerance.hh"
 
-// This method currently exists only to allow compilers to find
-// the inline method (which are the core of this class)
-//
-G4bool G4AuxiliaryNavServices::testOne()
+// The existence a method here allows compilers to find the inline method
+// (which are the core of this class)
+// [ Compilers store the inline method in the module with the first 
+//   non-inline method.]
+// If this method did not exist, there would be none.
+
+void G4AuxiliaryNavServices::ReportTolerances()
 {
-  return true;
+   G4int oldPrec= G4cout.precision(16);
+   
+   G4cout << " Cartesian Tolerance (kCarTolerance): " << G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()
+          << " (global) " << G4endl;
+   G4cout << " Radial Tolerance (kRadTolerance): " << G4GeometryTolerance::GetInstance()->GetRadialTolerance()
+          << " (global) " << G4endl;
+   G4cout << " Angular Tolerance (kAngTolerance): " << G4GeometryTolerance::GetInstance()->GetAngularTolerance()
+          << " (global) " << G4endl;
+   G4cout.precision(oldPrec); 
 }

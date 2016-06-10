@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc 67970 2013-03-13 10:10:06Z gcosmo $
+// $Id: G4UnitsTable.cc 90717 2015-06-08 14:19:29Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -322,6 +322,7 @@ void G4UnitDefinition::BuildUnitsTable()
  
  //Amount of substance
  new G4UnitDefinition("mole","mol","Amount of substance",mole);
+ new G4UnitDefinition("g/mole","g/mol","Molar mass",g/mole);
  
  //Activity
  new G4UnitDefinition("becquerel","Bq","Activity",becquerel);

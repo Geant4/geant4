@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadStructure.hh 68053 2013-03-13 14:39:51Z gcosmo $
+// $Id: G4GDMLReadStructure.hh 90766 2015-06-09 10:13:41Z gcosmo $
 //
 //
 // class G4GDMLReadStructure
@@ -101,6 +101,7 @@ class G4GDMLReadStructure : public G4GDMLReadParamvol
    G4GDMLAssemblyMapType assemblyMap;
    G4LogicalVolume *pMotherLogical;
    std::map<std::string, G4VPhysicalVolume*> setuptoPV;
+   G4bool strip;
 };
 
 #endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc 87208 2014-11-27 08:57:44Z gcosmo $
+// $Id: G4ReplicaNavigation.cc 90836 2015-06-10 09:31:06Z gcosmo $
 //
 //
 // class G4ReplicaNavigation Implementation
@@ -801,10 +801,8 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
   G4ExitNormal normalOutStc;
   const G4int topDepth= history.GetDepth();
 
-  if ( sampleSafety<ourSafety )
-  {
-    ourSafety = sampleSafety;
-  }
+  ourSafety = std::min( ourSafety, sampleSafety);
+
   if ( sampleSafety<ourStep )
   {
 

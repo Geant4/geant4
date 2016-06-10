@@ -19,10 +19,15 @@
 @GEANT4_ENV_SELFLOCATE_COMMAND@
 @GEANT4_TC_IF_SELFLOCATED@
 #-----------------------------------------------------------------------
-# Setup binary and library paths...
+# Setup Geant4 binary and library paths...
 #
 @GEANT4_ENV_BINPATH_SETUP@
 @GEANT4_ENV_LIBPATH_SETUP@
+
+#-----------------------------------------------------------------------
+# Setup Third-party binary and library paths...
+# - CLHEP
+@GEANT4_TC_CLHEP_LIB_PATH_SETUP@
 
 #-----------------------------------------------------------------------
 # Resource file paths

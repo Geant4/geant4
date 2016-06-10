@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIntersectionLocator.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4VIntersectionLocator.hh 90836 2015-06-10 09:31:06Z gcosmo $
 //
 //
 // Class G4VIntersectionLocator 
@@ -125,6 +125,14 @@ class G4VIntersectionLocator
     inline G4bool AreIntersectionsAdjusted(){ return fUseNormalCorrection; }  
       // Change adjustment flag  ( New Interface ) 
 
+     void printStatus( const G4FieldTrack& startFT,
+                       const G4FieldTrack& currentFT, 
+                             G4double      requestStep, 
+                             G4double      safety,
+                             G4int         step,
+                       std::ostringstream& oss);
+       // Print Method for any ostream - e.g. cerr -- and for G4Exception
+    
   protected:  // with description
 
     G4FieldTrack ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,  
@@ -172,6 +180,23 @@ class G4VIntersectionLocator
                           G4bool validNormal   );
       // Print a three-line report on the current "sub-step", ie trial intersection
 
+    G4bool LocateGlobalPointWithinVolumeAndCheck( const G4ThreeVector& pos );
+      // Locate point using navigator - updates state of Navigator.
+      // By default, it assumes that the point is inside the current volume,
+      // and returns true.
+      // In check mode, checks whether the point is *inside* the volume.
+      //   If it is inside, it returns true.
+      //   If not, issues a warning and returns false.
+
+    void LocateGlobalPointWithinVolumeCheckAndReport( const G4ThreeVector& pos,
+                                            const G4String& CodeLocationInfo,
+                                                  G4int     CheckMode );
+      // As above, but report information about code location.
+      // If CheckMode > 1, report extra information.
+   
+    inline void   SetCheckMode( G4bool value ) { fCheckMode = value; }
+    inline G4bool GetCheckMode()               { return fCheckMode; }
+
   private:  // no description
 
     G4ThreeVector GetLocalSurfaceNormal(const G4ThreeVector &CurrentE_Point,
@@ -190,7 +215,8 @@ class G4VIntersectionLocator
 
     G4int    fVerboseLevel;          // For debugging
     G4bool   fUseNormalCorrection;   // Configuration parameter
-
+    G4bool   fCheckMode;
+   
     G4Navigator   *fiNavigator;
 
     G4ChordFinder *fiChordFinder;

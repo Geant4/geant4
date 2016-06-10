@@ -1,4 +1,4 @@
-svn log $Id: History 85534 2014-10-30 16:19:42Z gcosmo $
+svn log $Id: History 90693 2015-06-08 08:53:38Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28th May 2015   Gabriele Cosmo  (config-V10-00-12)
+- Updated CPPFLAGS for Linux-icc and WIN32-g++ configurations.
 
 29th October 2014   Gabriele Cosmo  (config-V10-00-11/10)
 - Moved geometry/solids/usolids module to externals.

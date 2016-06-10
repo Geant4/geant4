@@ -114,7 +114,7 @@ void G4SingleParticleSource::SetVerbosity(int vL) {
 	posGenerator->SetVerbosity(vL);
 	angGenerator->SetVerbosity(vL);
 	eneGenerator->SetVerbosity(vL);
-	G4cout << "Verbosity Set to: " << verbosityLevel << G4endl;
+	//G4cout << "Verbosity Set to: " << verbosityLevel << G4endl;
 }
 
 void G4SingleParticleSource::SetParticleDefinition(
@@ -127,8 +127,11 @@ void G4SingleParticleSource::GeneratePrimaryVertex(G4Event *evt) {
 
     //G4AutoLock l(&mutex);
         //part_prop_t& pp = ParticleProperties.Get();
-	if (definition == NULL)
-		return;
+	if (definition == NULL) {
+		//TODO: Should this rise an exception???
+		return ;
+	}
+		//return;
 
 	if (verbosityLevel > 1)
 		G4cout << " NumberOfParticlesToBeGenerated: "

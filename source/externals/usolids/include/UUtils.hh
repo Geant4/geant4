@@ -20,6 +20,8 @@
 #ifndef USOLIDS_UUtils
 #define USOLIDS_UUtils
 
+#include "UVector3.hh"
+
 #include <iostream>
 #include <fstream>
 #include <limits>
@@ -28,11 +30,10 @@
 #include <vector>
 #include <algorithm>
 
-struct UVector3;
 class UTransform3D;
 
 enum UExceptionSeverity
-{ FatalError, FatalErrorInArguments, Error, Warning, Info };
+{ UFatalError, UFatalErrorInArguments, UError, UWarning, UInfo };
 
 namespace UUtils
 {

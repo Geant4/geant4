@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IT.hh 87061 2014-11-24 11:43:34Z gcosmo $
+// $Id: G4IT.hh 90900 2015-06-11 08:06:17Z gcosmo $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
@@ -126,7 +126,7 @@ public:
   inline const G4Track* GetTrack() const;
 
   virtual const G4ThreeVector& GetPosition() const;
-  virtual const double& operator[](int i) const;
+  double operator[](int i) const;
 
   void RecordCurrentPositionNTime();
 

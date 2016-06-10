@@ -116,7 +116,7 @@ protected:
     if(!ziggurat_is_init) ziggurat_init();
     long hz=(signed)ziggurat_SHR3(anEngine);
     unsigned long iz=hz&127;
-    return ((unsigned long)abs(hz)<kn[iz]) ? hz*wn[iz] : ziggurat_nfix(hz,anEngine);
+    return ((unsigned long)std::abs(hz)<kn[iz]) ? hz*wn[iz] : ziggurat_nfix(hz,anEngine);
   };
   static float ziggurat_nfix(long hz,HepRandomEngine* anEngine);
   

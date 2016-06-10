@@ -36,7 +36,7 @@ UBox::UBox(const std::string& name, double dx, double dy, double dz)
     std::ostringstream message;
     message << "Dimensions too small for Solid: " << GetName() << "!" << std::endl
             << "     dx, dy, dz = " << dx << ", " << dy << ", " << dz;
-    UUtils::Exception("UBox::UBox()", "UGeomSolids", FatalErrorInArguments, 1, message.str().c_str());
+    UUtils::Exception("UBox::UBox()", "GeomSolids0002", UFatalErrorInArguments, 1, message.str().c_str());
   }
 }
 
@@ -49,9 +49,9 @@ void UBox::Set(double dx, double dy, double dz)
 
 void UBox::Set(const UVector3& vec)
 {
-  fDx = vec.x;
-  fDy = vec.y;
-  fDz = vec.z;
+  fDx = vec.x();
+  fDy = vec.y();
+  fDz = vec.z();
 }
 //Destructor
 UBox::~UBox()
@@ -103,11 +103,11 @@ VUSolid::EnumInside UBox::Inside(const UVector3& aPoint) const
   static const double delta = VUSolid::fgTolerance;
   // Early returns on outside condition on any axis. Check Z first for faster
   // exclusion in  phi symmetric geometries.
-  double ddz = std::abs(aPoint.z) - fDz;
+  double ddz = std::abs(aPoint.z()) - fDz;
   if (ddz > delta) return eOutside;
-  double ddx = std::abs(aPoint.x) - fDx;
+  double ddx = std::abs(aPoint.x()) - fDx;
   if (ddx > delta) return eOutside;
-  double ddy = std::abs(aPoint.y) - fDy;
+  double ddy = std::abs(aPoint.y()) - fDy;
   if (ddy > delta) return eOutside;
   if (ddx > - delta || ddy > -delta || ddz > -delta) return eSurface;
   return eInside;
@@ -130,9 +130,9 @@ double UBox::DistanceToIn(const UVector3& aPoint,
   // Early exits if safety bigger than proposed step.
   static const double delta = VUSolid::fgTolerance;
   //   aNormal.SetNull();
-  double safx = std::abs(aPoint.x) - fDx;
-  double safy = std::abs(aPoint.y) - fDy;
-  double safz = std::abs(aPoint.z) - fDz;
+  double safx = std::abs(aPoint.x()) - fDx;
+  double safy = std::abs(aPoint.y()) - fDy;
+  double safz = std::abs(aPoint.z()) - fDz;
   if ((safx > aPstep) || (safy > aPstep) || (safz > aPstep))
     return UUtils::kInfinity;
   // Check numerical outside.
@@ -142,15 +142,15 @@ double UBox::DistanceToIn(const UVector3& aPoint,
     // If point close to this surface, check against the normal
     if (safx > -delta)
     {
-      if (aPoint.x * aDirection.x > 0) return UUtils::kInfinity ;
+      if (aPoint.x() * aDirection.x() > 0) return UUtils::kInfinity ;
     }
     if (safy > -delta)
     {
-      if (aPoint.y * aDirection.y > 0) return UUtils::kInfinity ;
+      if (aPoint.y() * aDirection.y() > 0) return UUtils::kInfinity ;
     }
     if (safz > -delta)
     {
-      if (aPoint.z * aDirection.z > 0) return UUtils::kInfinity ;
+      if (aPoint.z() * aDirection.z() > 0) return UUtils::kInfinity ;
     }
     // Point actually "deep" inside, return zero distance, normal un-defined
     return 0.0;
@@ -162,15 +162,15 @@ double UBox::DistanceToIn(const UVector3& aPoint,
   double coordinate = 0.0;
   if (safx > 0)
   {
-    if (aPoint.x * aDirection.x >= 0) return UUtils::kInfinity;
-    dist = safx / std::abs(aDirection.x);
-    coordinate = aPoint.y + dist * aDirection.y;
+    if (aPoint.x() * aDirection.x() >= 0) return UUtils::kInfinity;
+    dist = safx / std::abs(aDirection.x());
+    coordinate = aPoint.y() + dist * aDirection.y();
     if (std::abs(coordinate) < fDy)
     {
-      coordinate = aPoint.z + dist * aDirection.z;
+      coordinate = aPoint.z() + dist * aDirection.z();
       if (std::abs(coordinate) < fDz)
       {
-        //            aNormal.x = UUtils::Sign(1.0, aPoint.x);
+        //            aNormal.x() = UUtils::Sign(1.0, aPoint.x());
         if (dist < 0.5 * delta) dist = 0.;
         return dist;
       }
@@ -178,15 +178,15 @@ double UBox::DistanceToIn(const UVector3& aPoint,
   }
   if (safy > 0)
   {
-    if (aPoint.y * aDirection.y >= 0) return UUtils::kInfinity;
-    dist = safy / std::abs(aDirection.y);
-    coordinate = aPoint.x + dist * aDirection.x;
+    if (aPoint.y() * aDirection.y() >= 0) return UUtils::kInfinity;
+    dist = safy / std::abs(aDirection.y());
+    coordinate = aPoint.x() + dist * aDirection.x();
     if (std::abs(coordinate) < fDx)
     {
-      coordinate = aPoint.z + dist * aDirection.z;
+      coordinate = aPoint.z() + dist * aDirection.z();
       if (std::abs(coordinate) < fDz)
       {
-        //            aNormal.y = UUtils::Sign(1.0, aPoint.y);
+        //            aNormal.y() = UUtils::Sign(1.0, aPoint.y());
         if (dist < 0.5 * delta) dist = 0.;
         return dist;
       }
@@ -194,15 +194,15 @@ double UBox::DistanceToIn(const UVector3& aPoint,
   }
   if (safz > 0)
   {
-    if (aPoint.z * aDirection.z >= 0) return UUtils::kInfinity;
-    dist = safz / std::abs(aDirection.z);
-    coordinate = aPoint.x + dist * aDirection.x;
+    if (aPoint.z() * aDirection.z() >= 0) return UUtils::kInfinity;
+    dist = safz / std::abs(aDirection.z());
+    coordinate = aPoint.x() + dist * aDirection.x();
     if (std::abs(coordinate) < fDx)
     {
-      coordinate = aPoint.y + dist * aDirection.y;
+      coordinate = aPoint.y() + dist * aDirection.y();
       if (std::abs(coordinate) < fDy)
       {
-        //            aNormal.z = UUtils::Sign(1.0, aPoint.z);
+        //            aNormal.z() = UUtils::Sign(1.0, aPoint.z());
         if (dist < 0.5 * delta) dist = 0.;
         return dist;
       }
@@ -228,19 +228,19 @@ double UBox::DistanceToOut(const UVector3&  aPoint, const UVector3& aDirection,
   convex = true;  //   Box is convex (even if the starting point is outside)
   // Check always the "away" surface along direction on axis. This responds
   // corectly even for points outside the solid (no need for tolerance check)
-  if (aDirection.x != 0.0)
+  if (aDirection.x() != 0.0)
     { 
-    signDir = UUtils::Sign(1.0, aDirection.x);
+    signDir = UUtils::Sign(1.0, aDirection.x());
     aNormal.Set(signDir, 0., 0.);
-    snxt = (-aPoint.x + signDir * fDx) / aDirection.x;
+    snxt = (-aPoint.x() + signDir * fDx) / aDirection.x();
     if (snxt <= 0) return 0.0;   // point outside moving outwards
     smin = snxt;
   }
 
-  if (aDirection.y != 0.0)
+  if (aDirection.y() != 0.0)
     { 
-    signDir = UUtils::Sign(1.0, aDirection.y);
-    snxt = (-aPoint.y + signDir * fDy) / aDirection.y;
+    signDir = UUtils::Sign(1.0, aDirection.y());
+    snxt = (-aPoint.y() + signDir * fDy) / aDirection.y();
     if (snxt <= 0)
     {
       aNormal.Set(0., signDir, 0.);
@@ -253,10 +253,10 @@ double UBox::DistanceToOut(const UVector3&  aPoint, const UVector3& aDirection,
     }
   }
 
-  if (aDirection.z != 0.0)
+  if (aDirection.z() != 0.0)
     { 
-    signDir = UUtils::Sign(1.0, aDirection.z);
-    snxt = (-aPoint.z + signDir * fDz) / aDirection.z;
+    signDir = UUtils::Sign(1.0, aDirection.z());
+    snxt = (-aPoint.z() + signDir * fDz) / aDirection.z();
     if (snxt <= 0)
     {
       aNormal.Set(0., 0., signDir);
@@ -280,10 +280,10 @@ double UBox::SafetyFromInside(const UVector3& aPoint,
   // of its surfaces. The algorithm may be accurate or should provide a fast
   // underestimate.
   double safe, safy, safz;
-  safe = fDx - std::abs(aPoint.x);
-  safy = fDy - std::abs(aPoint.y);
+  safe = fDx - std::abs(aPoint.x());
+  safy = fDy - std::abs(aPoint.y());
   if (safy < safe) safe = safy;
-  safz = fDz - std::abs(aPoint.z);
+  safz = fDz - std::abs(aPoint.z());
   if (safz < safe) safe = safz;
   return std::max(0.0, safe);
 }
@@ -296,10 +296,10 @@ double UBox::SafetyFromOutside(const UVector3& aPoint,
   // of its surfaces. The algorithm may be accurate or should provide a fast
   // underestimate.
   double safe, safx, safy, safz;
-  safe = safx = -fDx + std::abs(aPoint.x);
-  safy = -fDy + std::abs(aPoint.y);
+  safe = safx = -fDx + std::abs(aPoint.x());
+  safy = -fDy + std::abs(aPoint.y());
   if (safy > safe) safe = safy;
-  safz = -fDz + std::abs(aPoint.z);
+  safz = -fDz + std::abs(aPoint.z());
   if (safz > safe) safe = safz;
   if (safe < 0.0) return 0.0; // point is inside
   if (!aAccurate) return safe;
@@ -340,17 +340,17 @@ bool UBox::Normal(const UVector3& aPoint, UVector3& aNormal) const
   aNormal.Set(0.);
   UVector3 crt_normal, min_normal;
   int nsurf = 0;
-  double safx = std::abs(std::abs(aPoint.x) - fDx);
+  double safx = std::abs(std::abs(aPoint.x()) - fDx);
   double safmin = safx;
-  crt_normal.Set(UUtils::Sign(1., aPoint.x), 0., 0.);
+  crt_normal.Set(UUtils::Sign(1., aPoint.x()), 0., 0.);
   min_normal = crt_normal;
   if (safx < delta)
   {
     nsurf++;
     aNormal += crt_normal;
   }
-  double safy = std::abs(std::abs(aPoint.y) - fDy);
-  crt_normal.Set(0., UUtils::Sign(1., aPoint.y), 0.);
+  double safy = std::abs(std::abs(aPoint.y()) - fDy);
+  crt_normal.Set(0., UUtils::Sign(1., aPoint.y()), 0.);
   if (safy < delta)
   {
     nsurf++;
@@ -361,8 +361,8 @@ bool UBox::Normal(const UVector3& aPoint, UVector3& aNormal) const
     min_normal = crt_normal;
     safmin = safy;
   }
-  double safz = std::abs(std::abs(aPoint.z) - fDz);
-  crt_normal.Set(0., 0., UUtils::Sign(1., aPoint.z));
+  double safz = std::abs(std::abs(aPoint.z()) - fDz);
+  crt_normal.Set(0., 0., UUtils::Sign(1., aPoint.z()));
   if (safz < delta)
   {
     nsurf++;
@@ -397,12 +397,12 @@ bool UBox::Normal(const UVector3& aPoint, UVector3& aNormal) const
 void UBox::Extent(UVector3& aMin, UVector3& aMax) const
 {
   // Returns the full 3D cartesian extent of the solid.
-  aMin.x = -fDx;
-  aMax.x = fDx;
-  aMin.y = -fDy;
-  aMax.y = fDy;
-  aMin.z = -fDz;
-  aMax.z = fDz;
+  aMin.x() = -fDx;
+  aMax.x() = fDx;
+  aMin.y() = -fDy;
+  aMax.y() = fDy;
+  aMin.z() = -fDz;
+  aMax.z() = fDz;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -465,6 +465,49 @@ UVector3 UBox::GetPointOnSurface() const
   return UVector3(px, py, pz);
 }
 
+/////////////////////////////////////////////////////////////////////////////////////
+//
+// GetPointOnEdge
+//
+// Return a point (UVector3) randomly and uniformly selected
+// on the solid edge
+
+UVector3 UBox::GetPointOnEdge() const
+{
+  double select, sumL;
+  double Lx = 2 * fDx, Ly = 2 * fDy, Lz= 2 * fDz;
+
+  sumL   = Lx + Ly + Lz;
+  select = sumL * UUtils::Random();
+
+  if (select < Lx)
+  {
+    select = UUtils::Random();
+    if (select < 0.25) return UVector3( -fDx + 2 * fDx* UUtils::Random(),-fDy,-fDz);
+    if (select < 0.5 ) return UVector3( -fDx + 2 * fDx* UUtils::Random(), fDy,-fDz);
+    if (select < 0.75) return UVector3( -fDx + 2 * fDx* UUtils::Random(),-fDy, fDz);
+    return UVector3( -fDx + 2 * fDx* UUtils::Random(),fDy,fDz);
+  }
+  else if ((select - Lx) < Ly)
+  {
+    select = UUtils::Random();
+    if (select < 0.25) return UVector3( -fDx,-fDy + 2 * fDy* UUtils::Random(),-fDz);
+    if (select < 0.5 ) return UVector3(  fDx,-fDy + 2 * fDy* UUtils::Random(),-fDz);
+    if (select < 0.75) return UVector3( -fDx,-fDy + 2 * fDy* UUtils::Random(), fDz);
+    return UVector3( fDx,-fDy + 2 * fDy* UUtils::Random(),fDz);
+  }
+  else
+  {
+   select = UUtils::Random();
+   if (select < 0.25) return UVector3( -fDx,-fDy,-fDz + 2 * fDz* UUtils::Random());
+   if (select < 0.5 ) return UVector3(  fDx,-fDy,-fDz + 2 * fDz* UUtils::Random());
+   if (select < 0.75) return UVector3( -fDx, fDy,-fDz + 2 * fDz* UUtils::Random());
+   return UVector3( fDx,fDy,-fDz + 2 * fDz* UUtils::Random());
+    
+  }
+  return 0;
+}
+
 std::ostream& UBox::StreamInfo(std::ostream& os) const
 {
   int oldprc = os.precision(16);
@@ -495,7 +538,7 @@ void UBox::SetXHalfLength(double dx)
             << std::endl
             << "       hX = " << dx;
     UUtils::Exception("UBox::SetXHalfLength()", "GeomSolids0002",
-                      FatalErrorInArguments, 1, message.str().c_str());
+                      UFatalErrorInArguments, 1, message.str().c_str());
   }
   fCubicVolume = 0.;
   fSurfaceArea = 0.;
@@ -515,7 +558,7 @@ void UBox::SetYHalfLength(double dy)
             << std::endl
             << "       hY = " << dy;
     UUtils::Exception("UBox::SetYHalfLength()", "GeomSolids0002",
-                      FatalErrorInArguments, 1, message.str().c_str());
+                      UFatalErrorInArguments, 1, message.str().c_str());
   }
   fCubicVolume = 0.;
   fSurfaceArea = 0.;
@@ -535,7 +578,7 @@ void UBox::SetZHalfLength(double dz)
             << std::endl
             << "       hZ = " << dz;
     UUtils::Exception("G4Box::SetZHalfLength()", "GeomSolids0002",
-                      FatalErrorInArguments, 1, message.str().c_str());
+                      UFatalErrorInArguments, 1, message.str().c_str());
   }
   fCubicVolume = 0.;
   fSurfaceArea = 0.;

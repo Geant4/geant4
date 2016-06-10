@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
+ Geant4 version Name: geant4-10-01-patch-02    (19-June-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -288,7 +288,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=18.4s Real=18.42s Sys=0s
+  User=13.84s Real=15.13s Sys=0s
 
  ======================== run summary ======================
 
@@ -311,7 +311,7 @@ Units table cleared.
 Total navigation history collections cleaned: 11
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.022 Mb
+Dynamic pools deleted: 9 / Total memory freed: 0.023 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

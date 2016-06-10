@@ -1,4 +1,4 @@
-$Id: History 88948 2015-03-16 16:26:50Z gcosmo $
+$Id: History 90708 2015-06-08 10:01:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03-Mar-2015  G.Cosmo               (geom-specific-V10-00-13)
+- Use accessors x(), y() and z() from UVector3, instead of directly accessing
+  its data-members.
 
 23-Feb-2015  T.Nikitina            (geom-specific-V10-00-12)
 - Fix in SetOriginalParameters() for G4Polycone and G4Polyhedra, in case

@@ -191,25 +191,25 @@ class G4GeneralParticleSourceMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit  *parphiCmd1;  
     G4UIcmdWithAString         *confineCmd1;
          
-  //old ones, will be reomved soon
-  G4UIcmdWithAString         *typeCmd;
-  G4UIcmdWithAString         *shapeCmd;
-  G4UIcmdWith3VectorAndUnit  *centreCmd;
-  G4UIcmdWith3Vector         *posrot1Cmd;
-  G4UIcmdWith3Vector         *posrot2Cmd;
-  G4UIcmdWithADoubleAndUnit  *halfxCmd;
-  G4UIcmdWithADoubleAndUnit  *halfyCmd;
-  G4UIcmdWithADoubleAndUnit  *halfzCmd;
-  G4UIcmdWithADoubleAndUnit  *radiusCmd;
-  G4UIcmdWithADoubleAndUnit  *radius0Cmd;
-  G4UIcmdWithADoubleAndUnit  *possigmarCmd;
-  G4UIcmdWithADoubleAndUnit  *possigmaxCmd;
-  G4UIcmdWithADoubleAndUnit  *possigmayCmd;
-  G4UIcmdWithADoubleAndUnit  *paralpCmd;
-  G4UIcmdWithADoubleAndUnit  *partheCmd;
-  G4UIcmdWithADoubleAndUnit  *parphiCmd;  
-  G4UIcmdWithAString         *confineCmd; 
-        
+//  //old ones, will be reomved soon
+ G4UIcmdWithAString         *typeCmd;
+ G4UIcmdWithAString         *shapeCmd;
+ G4UIcmdWith3VectorAndUnit  *centreCmd;
+ G4UIcmdWith3Vector         *posrot1Cmd;
+ G4UIcmdWith3Vector         *posrot2Cmd;
+ G4UIcmdWithADoubleAndUnit  *halfxCmd;
+ G4UIcmdWithADoubleAndUnit  *halfyCmd;
+ G4UIcmdWithADoubleAndUnit  *halfzCmd;
+ G4UIcmdWithADoubleAndUnit  *radiusCmd;
+ G4UIcmdWithADoubleAndUnit  *radius0Cmd;
+ G4UIcmdWithADoubleAndUnit  *possigmarCmd;
+ G4UIcmdWithADoubleAndUnit  *possigmaxCmd;
+ G4UIcmdWithADoubleAndUnit  *possigmayCmd;
+ G4UIcmdWithADoubleAndUnit  *paralpCmd;
+ G4UIcmdWithADoubleAndUnit  *partheCmd;
+ G4UIcmdWithADoubleAndUnit  *parphiCmd;  
+ G4UIcmdWithAString         *confineCmd; 
+    
     // angular commands
     G4UIdirectory* angularDirectory;
     G4UIcmdWithAString         *angtypeCmd1;
@@ -227,18 +227,18 @@ class G4GeneralParticleSourceMessenger: public G4UImessenger
     G4UIcmdWithABool           *surfnormCmd1;
 
   // old ones, will be removed soon
-  G4UIcmdWithAString         *angtypeCmd;
-  G4UIcmdWith3Vector         *angrot1Cmd;
-  G4UIcmdWith3Vector         *angrot2Cmd;
-  G4UIcmdWithADoubleAndUnit  *minthetaCmd;
-  G4UIcmdWithADoubleAndUnit  *maxthetaCmd;
-  G4UIcmdWithADoubleAndUnit  *minphiCmd;
-  G4UIcmdWithADoubleAndUnit  *maxphiCmd;
-  G4UIcmdWithADoubleAndUnit  *angsigmarCmd;
-  G4UIcmdWithADoubleAndUnit  *angsigmaxCmd;
-  G4UIcmdWithADoubleAndUnit  *angsigmayCmd;
-  G4UIcmdWithABool           *useuserangaxisCmd;
-  G4UIcmdWithABool           *surfnormCmd;
+ G4UIcmdWithAString         *angtypeCmd;
+ G4UIcmdWith3Vector         *angrot1Cmd;
+ G4UIcmdWith3Vector         *angrot2Cmd;
+ G4UIcmdWithADoubleAndUnit  *minthetaCmd;
+ G4UIcmdWithADoubleAndUnit  *maxthetaCmd;
+ G4UIcmdWithADoubleAndUnit  *minphiCmd;
+ G4UIcmdWithADoubleAndUnit  *maxphiCmd;
+ G4UIcmdWithADoubleAndUnit  *angsigmarCmd;
+ G4UIcmdWithADoubleAndUnit  *angsigmaxCmd;
+ G4UIcmdWithADoubleAndUnit  *angsigmayCmd;
+ G4UIcmdWithABool           *useuserangaxisCmd;
+ G4UIcmdWithABool           *surfnormCmd;
 
     // energy commands
     G4UIdirectory* energyDirectory;
@@ -258,19 +258,19 @@ class G4GeneralParticleSourceMessenger: public G4UImessenger
     G4UIcmdWithABool           *diffspecCmd1;
 
     // old ones, will be removed soon
-    G4UIcmdWithAString         *energytypeCmd;
-    G4UIcmdWithADoubleAndUnit  *eminCmd;
-    G4UIcmdWithADoubleAndUnit  *emaxCmd;
-    G4UIcmdWithADoubleAndUnit  *monoenergyCmd;
-    G4UIcmdWithADoubleAndUnit  *engsigmaCmd;
-    G4UIcmdWithADouble         *alphaCmd;
-    G4UIcmdWithADouble         *tempCmd;
-    G4UIcmdWithADouble         *ezeroCmd;
-    G4UIcmdWithADouble         *gradientCmd;
-    G4UIcmdWithADouble         *interceptCmd;
-    G4UIcmdWithoutParameter    *calculateCmd;
-    G4UIcmdWithABool           *energyspecCmd;
-    G4UIcmdWithABool           *diffspecCmd;
+   G4UIcmdWithAString         *energytypeCmd;
+   G4UIcmdWithADoubleAndUnit  *eminCmd;
+   G4UIcmdWithADoubleAndUnit  *emaxCmd;
+   G4UIcmdWithADoubleAndUnit  *monoenergyCmd;
+   G4UIcmdWithADoubleAndUnit  *engsigmaCmd;
+   G4UIcmdWithADouble         *alphaCmd;
+   G4UIcmdWithADouble         *tempCmd;
+   G4UIcmdWithADouble         *ezeroCmd;
+   G4UIcmdWithADouble         *gradientCmd;
+   G4UIcmdWithADouble         *interceptCmd;
+   G4UIcmdWithoutParameter    *calculateCmd;
+   G4UIcmdWithABool           *energyspecCmd;
+   G4UIcmdWithABool           *diffspecCmd;
 
     // histogram commands
     G4UIdirectory              *histDirectory;

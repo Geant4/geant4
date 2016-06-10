@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh 84661 2014-10-17 14:30:16Z gcosmo $
+// $Id: G4VEmModel.hh 91064 2015-06-17 09:08:14Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -426,6 +426,7 @@ private:
 inline void G4VEmModel::SetCurrentCouple(const G4MaterialCutsCouple* p)
 {
   fCurrentCouple = p;
+  rndmEngineMod = G4Random::getTheEngine();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

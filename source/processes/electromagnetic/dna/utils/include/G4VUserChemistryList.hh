@@ -50,7 +50,7 @@ class G4DNAMolecularReactionTable;
 class G4VITStepModel;
 class G4MoleculeDefinition;
 
-class G4VPhysicsContructor;
+class G4VPhysicsConstructor;
 
 class G4VUserChemistryList
 {
@@ -62,7 +62,7 @@ public:
   // please put this flag to true
   virtual bool IsPhysicsConstructor()
   {
-    if((G4VPhysicsContructor*)(this)) return true;
+    if((G4VPhysicsConstructor*)(this)) return true;
     return false;
   }
 

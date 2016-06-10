@@ -1,4 +1,4 @@
-$Id: History 88957 2015-03-16 16:46:05Z gcosmo $
+$Id: History 90722 2015-06-08 14:30:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28-05-15 V.Ivanchenko (materials-V10-00-28)
+- G4NistManager - fixed problem #1747 - correct printout of elements
+    and materials
 
 06-02-15 V.Ivanchenko (materials-V10-00-27)
 - G4Material, G4NistManager, G4NistMaterialBuilder, G4IonisParamMat 

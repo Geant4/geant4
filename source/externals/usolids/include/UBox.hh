@@ -96,6 +96,7 @@ class UBox : public VUSolid
     }
 
     UVector3 GetPointOnSurface() const;
+    UVector3 GetPointOnEdge() const;
 
     std::ostream& StreamInfo(std::ostream& os) const;
 

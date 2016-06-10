@@ -63,12 +63,12 @@ UTet::UTet(const std::string& name,
   UVector3 fV43 = p4 - p3;
   UVector3 fV32 = p3 - p2;
 
-  fXMin = std::min(std::min(std::min(anchor.x, p2.x), p3.x), p4.x);
-  fXMax = std::max(std::max(std::max(anchor.x, p2.x), p3.x), p4.x);
-  fYMin = std::min(std::min(std::min(anchor.y, p2.y), p3.y), p4.y);
-  fYMax = std::max(std::max(std::max(anchor.y, p2.y), p3.y), p4.y);
-  fZMin = std::min(std::min(std::min(anchor.z, p2.z), p3.z), p4.z);
-  fZMax = std::max(std::max(std::max(anchor.z, p2.z), p3.z), p4.z);
+  fXMin = std::min(std::min(std::min(anchor.x(), p2.x()), p3.x()), p4.x());
+  fXMax = std::max(std::max(std::max(anchor.x(), p2.x()), p3.x()), p4.x());
+  fYMin = std::min(std::min(std::min(anchor.y(), p2.y()), p3.y()), p4.y());
+  fYMax = std::max(std::max(std::max(anchor.y(), p2.y()), p3.y()), p4.y());
+  fZMin = std::min(std::min(std::min(anchor.z(), p2.z()), p3.z()), p4.z());
+  fZMax = std::max(std::max(std::max(anchor.z(), p2.z()), p3.z()), p4.z());
 
   fDx = (fXMax - fXMin) * 0.5;
   fDy = (fYMax - fYMin) * 0.5;
@@ -85,7 +85,7 @@ UTet::UTet(const std::string& name,
   if (degeneracyFlag) *degeneracyFlag = degenerate;
   else if (degenerate)
   {
-    UUtils::Exception("UTet::UTet()", "GeomSolids0002", FatalErrorInArguments, 1,
+    UUtils::Exception("UTet::UTet()", "GeomSolids0002", UFatalErrorInArguments, 1,
                       "Degenerate tetrahedron not allowed.");
   }
 
@@ -477,7 +477,7 @@ double UTet::DistanceToOut(const UVector3&  p, const UVector3& v,
             << t1 << ", " << t2 << ", " << t3 << ", " << t4;
 
     UUtils::Exception("UTet::DistanceToOut(p,v,...)", "GeomSolids1002",
-                      Warning, 1, message.str().c_str());
+                      UWarning, 1, message.str().c_str());
     if (convex)
     {
       convex = false; // flag normal as meaningless
@@ -630,28 +630,28 @@ std::vector<UVector3> UTet::GetVertices() const
 void UTet::Extent(UVector3& aMin, UVector3& aMax) const
 {
   // Returns the full 3D cartesian extent of the solid.
-  aMin.x = fXMin;
-  aMax.x = fXMax;
-  aMin.y = fYMin;
-  aMax.y = fYMax;
-  aMin.z = fZMin;
-  aMax.z = fZMax;
+  aMin.x() = fXMin;
+  aMax.x() = fXMax;
+  aMin.y() = fYMin;
+  aMax.y() = fYMax;
+  aMin.z() = fZMin;
+  aMax.z() = fZMax;
 }
 //______________________________________________________________________________
 void UTet::GetParametersList(int, double* aArray) const
 {
-  aArray[0] = fAnchor.x;
-  aArray[1] = fAnchor.y;
-  aArray[2] = fAnchor.z;
-  aArray[3] = fP2.x;
-  aArray[4] = fP2.y;
-  aArray[5] = fP2.z;
-  aArray[6] = fP3.x;
-  aArray[7] = fP3.y;
-  aArray[8] = fP3.z;
-  aArray[9] = fP4.x;
-  aArray[10] = fP4.y;
-  aArray[11] = fP4.z;
+  aArray[0] = fAnchor.x();
+  aArray[1] = fAnchor.y();
+  aArray[2] = fAnchor.z();
+  aArray[3] = fP2.x();
+  aArray[4] = fP2.y();
+  aArray[5] = fP2.z();
+  aArray[6] = fP3.x();
+  aArray[7] = fP3.y();
+  aArray[8] = fP3.z();
+  aArray[9] = fP4.x();
+  aArray[10] = fP4.y();
+  aArray[11] = fP4.z();
 }
 //______________________________________________________________________________
 VUSolid* UTet::Clone() const

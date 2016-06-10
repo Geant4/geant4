@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.cc 83991 2014-09-26 09:22:26Z gcosmo $
+// $Id: G4LogicalVolume.cc 90701 2015-06-08 09:43:16Z gcosmo $
 //
 // 
 // class G4LogicalVolume Implementation
@@ -144,7 +144,7 @@ G4LogicalVolume::G4LogicalVolume( G4VSolid* pSolid,
                                   G4bool optimise )
  : fDaughters(0,(G4VPhysicalVolume*)0), 
    fVoxel(0), fOptimise(optimise), fRootRegion(false), fLock(false),
-   fSmartless(2.), fVisAttributes(0), fRegion(0)
+   fSmartless(2.), fVisAttributes(0), fRegion(0), fBiasWeight(1.)
 {
   // Initialize 'Shadow'/master pointers - for use in copying to workers
   fSolid = pSolid;
@@ -178,7 +178,7 @@ G4LogicalVolume::G4LogicalVolume( __void__& )
  : fDaughters(0,(G4VPhysicalVolume*)0),
    fName(""), fUserLimits(0),
    fVoxel(0), fOptimise(true), fRootRegion(false), fLock(false),
-   fSmartless(2.), fVisAttributes(0), fRegion(0), fBiasWeight(0.),
+   fSmartless(2.), fVisAttributes(0), fRegion(0), fBiasWeight(1.),
    fSolid(0), fSensitiveDetector(0), fFieldManager(0)
 {
   instanceID = subInstanceManager.CreateSubInstance();

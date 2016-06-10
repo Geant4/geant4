@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
+ Geant4 version Name: geant4-10-01-patch-02    (19-June-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -829,36 +829,36 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.27s Real=0.27s Sys=0s
-RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0156616
+  User=0.22s Real=0.24s Sys=0s
+RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0162494
  ================== run summary =====================
    End of Run TotNbofEvents    = 1000
    Energy(keV) per ADC channel = 3.0769
 
-   Mean energy deposit in absorber = 15.662 +- 0.55154 keV    RMS/Emean = 1.1136
-   Mean number of steps in absorber= 1.242  mean number of ion-clusters = 782.78 MeanCluster= 783.03
+   Mean energy deposit in absorber = 16.249 +- 0.63843 keV    RMS/Emean = 1.2424
+   Mean number of steps in absorber= 1.217  mean number of ion-clusters = 811.81 MeanCluster= 812.15
 
- ====== Energy deposit distribution   Noverflows= 0.01 ====== 
+ ====== Energy deposit distribution   Noverflows= 0.018 ====== 
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3          10        0.01
-    2         6          90        0.09
-    3         9         281       0.281
-    4        12         252       0.252
-    5        15         141       0.141
-    6        18          83       0.083
-    7        21          47       0.047
-    8        24          32       0.032
-    9        27          20        0.02
-   10        30          10        0.01
-   11        33           3       0.003
-   12        36           4       0.004
+    1         3           2       0.002
+    2         6         106       0.106
+    3         9         263       0.263
+    4        12         250        0.25
+    5        15         152       0.152
+    6        18          87       0.087
+    7        21          54       0.054
+    8        24          23       0.023
+    9        27          11       0.011
+   10        30           6       0.006
+   11        33           9       0.009
+   12        36           1       0.001
    13        39           3       0.003
-   14        42           6       0.006
+   14        42           2       0.002
    15        45           3       0.003
    16        48           2       0.002
-   17        51           2       0.002
-   18        54           0           0
+   17        51           4       0.004
+   18        54           3       0.003
    19        57           1       0.001
  ================== run end ==========================
 ... write Root file : testem8.root - done

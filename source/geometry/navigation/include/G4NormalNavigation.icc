@@ -24,12 +24,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4NormalNavigation.icc 80287 2014-04-10 09:49:49Z gcosmo $
+// $Id: G4NormalNavigation.icc 90836 2015-06-10 09:31:06Z gcosmo $
 //
 // 
 // G4NormalNavigation Inline Implementation
 //
 // --------------------------------------------------------------------
+
+// ********************************************************************
+// CheckMode
+// ********************************************************************
+//
+inline
+void G4NormalNavigation::CheckMode(G4bool mode)
+{
+  fCheck = mode;
+}
 
 // ********************************************************************
 // LevelLocate
@@ -90,34 +100,4 @@ G4NormalNavigation::LevelLocate( G4NavigationHistory& history,
     }
   }
   return found;
-}
-
-// ********************************************************************
-// GetVerboseLevel
-// ********************************************************************
-//
-inline
-G4int G4NormalNavigation::GetVerboseLevel() const
-{
-  return fLogger->GetVerboseLevel();
-}
-
-// ********************************************************************
-// SetVerboseLevel
-// ********************************************************************
-//
-inline
-void G4NormalNavigation::SetVerboseLevel(G4int level)
-{
-  fLogger->SetVerboseLevel(level);
-}
-
-// ********************************************************************
-// CheckMode
-// ********************************************************************
-//
-inline
-void G4NormalNavigation::CheckMode(G4bool mode)
-{
-  fCheck = mode;
 }

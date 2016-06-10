@@ -109,6 +109,12 @@
 # system APIs as required, and you should use these to ensure you compile
 # and link against the same API version.
 #
+# An additional variable is set for CLHEP when Geant4 was built using a
+# system install to indicate whether the single/granular CLHEP library/ies
+# was/were linked against
+#
+#  Geant4_system_clhep_ISGRANULAR (TRUE is Geant4 linked to granular CLHEP)
+#
 # Environment variables for, and directory paths to, physics datasets
 # used by some Geant4 physics processes may be determined from the
 # variables
@@ -262,6 +268,10 @@ unset(Geant4_DATASET_DESCRIPTIONS)
 #
 # Builtin/External packages
 set(Geant4_builtin_clhep_FOUND @GEANT4_USE_BUILTIN_CLHEP@)
+if(NOT Geant4_builtin_clhep_FOUND)
+  set(Geant4_system_clhep_ISGRANULAR @GEANT4_USE_SYSTEM_CLHEP_GRANULAR@)
+endif()
+
 set(Geant4_builtin_expat_FOUND @GEANT4_USE_BUILTIN_EXPAT@)
 set(Geant4_builtin_zlib_FOUND @GEANT4_USE_BUILTIN_ZLIB@)
 set(Geant4_builtin_usolids_FOUND @GEANT4_USE_BUILTIN_USOLIDS@)
@@ -357,18 +367,20 @@ endif()
 set(Geant4_qt_FOUND @GEANT4_USE_QT@)
 set(Geant4_USES_QT5 @Qt5Core_FOUND@)
 if(Geant4_qt_FOUND)
-  if(Geant4_FIND_REQUIRED_qt OR Geant4_FIND_REQUIRED_ui_all OR
-      Geant4_FIND_REQUIRED_vis_all)
+  # Must always refind Qt5 to recreate imported targets. Because these
+  # are in the public interface, always need linking.
+  if(Geant4_USES_QT5)
+    find_package(Qt5Core REQUIRED PATHS "@Qt5Core_DIR@")
+    find_package(Qt5Gui REQUIRED PATHS "@Qt5Gui_DIR@")
+    find_package(Qt5Widgets REQUIRED PATHS "@Qt5Widgets_DIR@")
+    find_package(Qt5OpenGL REQUIRED PATHS "@Qt5OpenGL_DIR@")
+    find_package(Qt5PrintSupport REQUIRED PATHS "@Qt5PrintSupport_DIR@")
+  endif()
+
+  if(Geant4_FIND_REQUIRED_qt OR Geant4_FIND_REQUIRED_ui_all OR Geant4_FIND_REQUIRED_vis_all)
     # If we have Qt5, we need to refind the components because they use
     # imported targets, so linking will not work unless we recreate
     # them
-    if(Geant4_USES_QT5)
-      find_package(Qt5Core REQUIRED PATHS "@Qt5Core_DIR@")
-      find_package(Qt5Gui REQUIRED PATHS "@Qt5Gui_DIR@")
-      find_package(Qt5Widgets REQUIRED PATHS "@Qt5Widgets_DIR@")
-      find_package(Qt5OpenGL REQUIRED PATHS "@Qt5OpenGL_DIR@")
-      find_package(Qt5PrintSupport REQUIRED PATHS "@Qt5PrintSupport_DIR@")
-    endif()
 
     list(APPEND
       Geant4_DEFINITIONS

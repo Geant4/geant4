@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrackingInformation.cc 80151 2014-04-03 09:42:22Z gcosmo $
+// $Id: G4TrackingInformation.cc 90769 2015-06-09 10:33:41Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -104,7 +104,7 @@ G4TrackingInformation& G4TrackingInformation::operator=(const G4TrackingInformat
 //    return fProcessState[index];
 //}
 
-G4::shared_ptr<G4ProcessState_Lock> G4TrackingInformation::GetProcessState(size_t index)
+G4shared_ptr<G4ProcessState_Lock> G4TrackingInformation::GetProcessState(size_t index)
 {
     if(index> G4VITProcess::GetMaxProcessIndex())
     {

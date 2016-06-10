@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.hh 66872 2013-01-15 01:25:57Z japost $
+// $Id: G4VDivisionParameterisation.hh 90699 2015-06-08 09:34:37Z gcosmo $
 //
 // class G4VDivisionParameterisation
 //
@@ -45,6 +45,7 @@
 #include "G4Types.hh"
 #include "geomdefs.hh"
 #include "G4VPVParameterisation.hh"
+#include "G4RotationMatrix.hh"
 
 enum DivisionType { DivNDIVandWIDTH, DivNDIV, DivWIDTH };
 
@@ -110,6 +111,8 @@ class G4VDivisionParameterisation : public G4VPVParameterisation
     G4double kCarTolerance;
 
     G4double fhgap;
+
+    G4RotationMatrix* fRotMatrix;
 };
 
 #include "G4VDivisionParameterisation.icc"

@@ -27,7 +27,7 @@ inline UVector2 UExtrudedSolid::GetVertex(int index) const
   if (index < 0 || index >= fNv)
   {
     UUtils::Exception ("UExtrudedSolid::GetVertex()", "GeomSolids0003",
-                       FatalError, 1, "Index outside range.");
+                       UFatalError, 1, "Index outside range.");
     return UVector2();
   }
   return fPolygon[index];
@@ -51,7 +51,7 @@ UExtrudedSolid::ZSection UExtrudedSolid::GetZSection(int index) const
   if (index < 0 || index >= fNz)
   {
     UUtils::Exception ("UExtrudedSolid::GetZSection()", "GeomSolids0003",
-                       FatalError, 1, "Index outside range.");
+                       UFatalError, 1, "Index outside range.");
     return ZSection(0.0, UVector2(), 0.0);
   }
   return fZSections[index];

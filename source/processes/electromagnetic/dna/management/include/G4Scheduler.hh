@@ -58,6 +58,7 @@
 #include "G4ITStepStatus.hh"
 #include "G4ITTrackHolder.hh"
 #include "G4VStateDependent.hh"
+#include "G4ITReaction.hh"
 
 class G4ITTrackingManager;
 class G4ITModelProcessor;
@@ -67,6 +68,18 @@ class G4UserTimeStepAction;
 class G4SchedulerMessenger;
 class G4ITTrackingInteractivity;
 class G4ITGun;
+
+#ifndef compTrackPerID__
+#define compTrackPerID__
+  struct compTrackPerID
+  {
+    bool operator()(G4Track* rhs, G4Track* lhs) const
+    {
+      return rhs->GetTrackID() < lhs->GetTrackID();
+    }
+  };
+#endif
+
 
 /**
  * G4ITStepManager enables to synchronize in time
@@ -241,7 +254,8 @@ private:
   // Time calculated by the interaction length methods
   // in ComputeInteractionLength()
 
-  std::map<G4Track*, G4TrackVectorHandle> fReactingTracks;
+  // std::map<G4Track*, G4TrackVectorHandle, compTrackPerID> fReactingTracks;
+  G4ITReactionSet fReactionSet;
   std::vector<G4Track*> fLeadingTracks;
 
   bool fInteractionStep;

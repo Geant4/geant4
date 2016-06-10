@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc 81577 2014-06-03 10:13:36Z gcosmo $
+// $Id: G4PropagatorInField.icc 90836 2015-06-10 09:31:06Z gcosmo $
 //
 // 
 // ------------------------------------------------------------------------
@@ -203,7 +203,11 @@ G4int G4PropagatorInField::GetThresholdNoZeroSteps( G4int i )
    return t;
 }
 
-inline G4double  G4PropagatorInField::GetZeroStepThreshold(){ return fZeroStepThreshold; }
+inline G4double  G4PropagatorInField::GetZeroStepThreshold()
+{
+  return fZeroStepThreshold;
+}
+
 inline void      G4PropagatorInField::SetZeroStepThreshold( G4double newLength )
 { 
   fZeroStepThreshold= newLength;
@@ -273,10 +277,32 @@ G4bool G4PropagatorInField::IntersectChord( const G4ThreeVector&  StartPointA,
 {
   // Calculate the direction and length of the chord AB
   //
-  return fIntersectionLocator
+#ifdef G4DEBUG_PROPAGATION   
+  if( fVerbTracePiF )
+     G4cout << "**** G4PropagatorInField::IntersectChord called."
+            << " InPut: StartPointA: " << StartPointA
+            << " EndPointB= " << EndPointB
+            << " StepLength= " << LinearStepLength
+            << " IntersecLen= " << IntersectionPoint
+            << G4endl;
+#endif  
+
+  G4bool retVal=
+     fIntersectionLocator
          ->IntersectChord(StartPointA,EndPointB,NewSafety,
                           fPreviousSafety,fPreviousSftOrigin,
                           LinearStepLength,IntersectionPoint);
+
+#ifdef G4DEBUG_PROPAGATION
+  if( fVerbTracePiF )
+     G4cout << "**** G4PropagatorInField::IntersectChord  ended."
+            << " OutPut: Safety= " << NewSafety
+            << " StepLength= " << LinearStepLength
+            << " IntersecPt= " << IntersectionPoint
+            << G4endl;
+#endif  
+
+  return retVal;
 }
 
 inline G4EquationOfMotion*   G4PropagatorInField::GetCurrentEquationOfMotion()

@@ -106,33 +106,6 @@ inline void UCons::CheckSPhiAngle(double sPhi)
   }
 }
 
-inline void UCons::CheckDPhiAngle(double dPhi)
-{
-  fPhiFullCone = true;
-  if (dPhi >= 2 * UUtils::kPi - kAngTolerance * 0.5)
-  {
-    fDPhi = 2 * UUtils::kPi;
-    fSPhi = 0;
-  }
-  else
-  {
-    fPhiFullCone = false;
-    if (dPhi > 0)
-    {
-      fDPhi = dPhi;
-    }
-    else
-    {
-      std::ostringstream message;
-      message << "Invalid dphi." << std::endl
-              << "Negative or zero delta-Phi (" << dPhi << ") in solid: "
-              << GetName();
-      UUtils::Exception("UCons::CheckDPhiAngle()", "GeomSolids0002",
-                        FatalErrorInArguments, 1, message.str().c_str());
-    }
-  }
-}
-
 inline void UCons::CheckPhiAngles(double sPhi, double dPhi)
 {
   CheckDPhiAngle(dPhi);
@@ -300,18 +273,18 @@ double UCons::SafetyToPhi(const UVector3& p,
   double cosPsi, safePhi = 0.0;
   outside = false;
  
-  cosPsi = (p.x * cosCPhi + p.y * sinCPhi) / rho;
+  cosPsi = (p.x() * cosCPhi + p.y() * sinCPhi) / rho;
  
   if (cosPsi < std::cos(fDPhi * 0.5)) // Point lies outside phi range
   {
     outside = true;
-    if ((p.y * cosCPhi - p.x * sinCPhi) <= 0.0)
+    if ((p.y() * cosCPhi - p.x() * sinCPhi) <= 0.0)
     {
-      safePhi = std::fabs(p.x * std::sin(fSPhi) - p.y * std::cos(fSPhi));
+      safePhi = std::fabs(p.x() * std::sin(fSPhi) - p.y() * std::cos(fSPhi));
     }
     else
     {
-      safePhi = std::fabs(p.x * sinEPhi - p.y * cosEPhi);
+      safePhi = std::fabs(p.x() * sinEPhi - p.y() * cosEPhi);
     }
  }
  return safePhi;
@@ -327,7 +300,7 @@ double UCons::SafetyFromInsideR(const UVector3& p,
 
   if (fRmin1 || fRmin2)
   {
-    pRMin  = tanRMin * p.z + (fRmin1 + fRmin2) * 0.5;
+    pRMin  = tanRMin * p.z() + (fRmin1 + fRmin2) * 0.5;
     safeR1  = (rho - pRMin) / secRMin;
   }
   else
@@ -335,7 +308,7 @@ double UCons::SafetyFromInsideR(const UVector3& p,
     safeR1 = UUtils::kInfinity;
   }
 
-  pRMax  = tanRMax * p.z + (fRmax1 + fRmax2) * 0.5;
+  pRMax  = tanRMax * p.z() + (fRmax1 + fRmax2) * 0.5;
   safeR2  = (pRMax - rho) / secRMax;
 
   if (safeR1 < safeR2)
@@ -353,13 +326,13 @@ double UCons::SafetyFromInsideR(const UVector3& p,
   {
     // Above/below central phi of UCons?
  
-    if ((p.y * cosCPhi - p.x * sinCPhi) <= 0)
+    if ((p.y() * cosCPhi - p.x() * sinCPhi) <= 0)
     {
-      safePhi = -(p.x * sinSPhi - p.y * cosSPhi);
+      safePhi = -(p.x() * sinSPhi - p.y() * cosSPhi);
     }
     else
     {
-      safePhi = (p.x * sinEPhi - p.y * cosEPhi);
+      safePhi = (p.x() * sinEPhi - p.y() * cosEPhi);
     }
     if (safePhi < safe)
     {
@@ -385,10 +358,10 @@ double UCons::SafetyFromOutsideR(const UVector3& p,
   bool outside;
   if (fRmin1 || fRmin2)
   {
-    pRMin  = tanRMin * p.z + (fRmin1 + fRmin2) * 0.5;
+    pRMin  = tanRMin * p.z() + (fRmin1 + fRmin2) * 0.5;
     safeR1  = (rho-pRMin ) / secRMin;
 
-    pRMax  = tanRMax * p.z + (fRmax1 + fRmax2) * 0.5;
+    pRMax  = tanRMax * p.z() + (fRmax1 + fRmax2) * 0.5;
     safeR2  = (rho - pRMax) / secRMax;
 
     if (safeR1 > safeR2)
@@ -402,7 +375,7 @@ double UCons::SafetyFromOutsideR(const UVector3& p,
   }
   else
   {
-    pRMax  = tanRMax * p.z + (fRmax1 + fRmax2) * 0.5;
+    pRMax  = tanRMax * p.z() + (fRmax1 + fRmax2) * 0.5;
     safe    = (rho - pRMax) / secRMax;
   }
   if (!fPhiFullCone)
@@ -420,7 +393,7 @@ double UCons::SafetyFromOutsideR(const UVector3& p,
   }
   return safe; // not accurate safety
 }
- 
+
 inline
 VUSolid::EnumInside UCons::Inside(const UVector3& p) const
 {
@@ -430,11 +403,11 @@ VUSolid::EnumInside UCons::Inside(const UVector3& p) const
   static const double halfRadTolerance = kRadTolerance * 0.5;
   static const double halfAngTolerance = kAngTolerance * 0.5;
 
-  if (std::fabs(p.z) > fDz + halfCarTolerance)
+  if (std::fabs(p.z()) > fDz + halfCarTolerance)
   {
     return in = eOutside;
   }
-  else if (std::fabs(p.z) >= fDz - halfCarTolerance)
+  else if (std::fabs(p.z()) >= fDz - halfCarTolerance)
   {
     in = eSurface;
   }
@@ -442,9 +415,9 @@ VUSolid::EnumInside UCons::Inside(const UVector3& p) const
   {
     in = eInside;
   }
-  r2 = p.x * p.x + p.y * p.y;
-  rl = 0.5 * (fRmin2 * (p.z + fDz) + fRmin1 * (fDz - p.z)) / fDz;
-  rh = 0.5 * (fRmax2 * (p.z + fDz) + fRmax1 * (fDz - p.z)) / fDz;
+  r2 = p.x() * p.x() + p.y() * p.y();
+  rl = 0.5 * (fRmin2 * (p.z() + fDz) + fRmin1 * (fDz - p.z())) / fDz;
+  rh = 0.5 * (fRmax2 * (p.z() + fDz) + fRmax1 * (fDz - p.z())) / fDz;
 
   tolRMin = rl - halfRadTolerance;
   if (tolRMin < 0)
@@ -474,9 +447,9 @@ VUSolid::EnumInside UCons::Inside(const UVector3& p) const
       in = eSurface;
     }
   }
-  if (!fPhiFullCone && ((p.x != 0.0) || (p.y != 0.0)))
+  if (!fPhiFullCone && ((p.x() != 0.0) || (p.y() != 0.0)))
   {
-    pPhi = std::atan2(p.y, p.x);
+    pPhi = std::atan2(p.y(), p.x());
     if (pPhi < fSPhi - halfAngTolerance)
     {
       pPhi += 2 * UUtils::kPi;

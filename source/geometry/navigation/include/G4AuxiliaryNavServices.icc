@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AuxiliaryNavServices.icc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4AuxiliaryNavServices.icc 90836 2015-06-10 09:31:06Z gcosmo $
 //
 //
 // class G4AuxiliaryNavServices Inline implementation
@@ -55,9 +55,23 @@ CheckPointOnSurface( const G4VSolid* sampleSolid,
       // Check whether we enter the volume
       // 
       sampleNormal = sampleSolid->SurfaceNormal(localPoint);
-      if ( sampleNormal.dot(localDirection) <= 0 )
+
+      G4double dotProd= sampleNormal.dot(localDirection);
+      
+#ifdef G4DEBUG_AUX_NAVIGATION
+      G4cout << " dir.norm= " << dotProd // sampleNormal.dot(localDirection) 
+             << " localDirection= " << localDirection
+             << " sampleNormal= " << sampleNormal;
+      if( dotProd == 0.0 )
       {
-        if( sampleNormal.dot(localDirection) == 0 )
+        G4cout << " distanceToIn = " 
+               << sampleSolid->DistanceToIn( localPoint, localDirection );
+      }
+#endif
+
+      if ( dotProd <= 0.0 )         
+      {
+        if( dotProd == 0.0 )
         {
           // We can't decide yet, let's make sure we're entering the solid.
           // If by a confusion we entered the next solid we find out now
@@ -83,6 +97,10 @@ CheckPointOnSurface( const G4VSolid* sampleSolid,
       enter = true;
     }
   }
+#ifdef G4DEBUG_AUX_NAVIGATION  
+  G4cout << " enter = " << (enter ? "true" : "false" ) << G4endl;
+#endif
+  
   return enter;
 }
 

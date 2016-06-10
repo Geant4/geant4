@@ -81,7 +81,7 @@ void UPolyhedra::Init(
     message << "Solid must have at least one side - " << GetName() << std::endl
             << "        No sides specified !";
     UUtils::Exception("UPolyhedra::UPolyhedra()", "GeomSolids0002",
-                      FatalErrorInArguments, 1, message.str().c_str());
+                      UFatalErrorInArguments, 1, message.str().c_str());
   }
 
   //
@@ -125,7 +125,7 @@ void UPolyhedra::Init(
                 << "        rMin[" << i + 1 << "] = " << rInner[i + 1]
                 << " -- rMax[" << i << "] = " << rOuter[i];
         UUtils::Exception("UPolyhedra::UPolyhedra()", "GeomSolids0002",
-                          FatalErrorInArguments, 1, message.str().c_str());
+                          UFatalErrorInArguments, 1, message.str().c_str());
       }
     }
     fOriginalParameters.fZValues[i] = zPlane[i];
@@ -194,7 +194,7 @@ void UPolyhedra::Create(double phiStart,
     message << "Illegal input parameters - " << GetName() << std::endl
             << "        All R values must be >= 0 !";
     UUtils::Exception("UPolyhedra::Create()", "GeomSolids0002",
-                      FatalErrorInArguments, 1, message.str().c_str());
+                      UFatalErrorInArguments, 1, message.str().c_str());
   }
 
   double rzArea = rz->Area();
@@ -207,7 +207,7 @@ void UPolyhedra::Create(double phiStart,
     message << "Illegal input parameters - " << GetName() << std::endl
             << "        R/Z Cross section is zero or near zero: " << rzArea;
     UUtils::Exception("UPolyhedra::Create()", "GeomSolids0002",
-                      FatalErrorInArguments, 1, message.str().c_str());
+                      UFatalErrorInArguments, 1, message.str().c_str());
   }
 
   if ((!rz->RemoveDuplicateVertices(VUSolid::Tolerance()))
@@ -217,7 +217,7 @@ void UPolyhedra::Create(double phiStart,
     message << "Illegal input parameters - " << GetName() << std::endl
             << "        Too few unique R/Z values !";
     UUtils::Exception("UPolyhedra::Create()", "GeomSolids0002",
-                      FatalErrorInArguments, 1, message.str().c_str());
+                      UFatalErrorInArguments, 1, message.str().c_str());
   }
 
   if (rz->CrossesItself(1 / UUtils::kInfinity))
@@ -226,7 +226,7 @@ void UPolyhedra::Create(double phiStart,
     message << "Illegal input parameters - " << GetName() << std::endl
             << "        R/Z segments Cross !";
     UUtils::Exception("UPolyhedra::Create()", "GeomSolids0002",
-                      FatalErrorInArguments, 1, message.str().c_str());
+                      UFatalErrorInArguments, 1, message.str().c_str());
   }
 
   fNumCorner = rz->NumVertices();
@@ -469,7 +469,7 @@ bool UPolyhedra::Reset()
     message << "Solid " << GetName() << " built using generic construct."
             << std::endl << "Not applicable to the generic construct !";
     UUtils::Exception("UPolyhedra::Reset(,,)", "GeomSolids1001",
-                      Warning, 1,  message.str().c_str());
+                      UWarning, 1,  message.str().c_str());
     return 1;
   }
 

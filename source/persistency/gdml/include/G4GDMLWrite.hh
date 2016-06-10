@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.hh 69013 2013-04-15 09:41:13Z gcosmo $
+// $Id: G4GDMLWrite.hh 90766 2015-06-09 10:13:41Z gcosmo $
 //
 //
 // class G4GDMLWrite
@@ -98,6 +98,8 @@ class G4GDMLWrite
       // inheriting from G4GDMLWriteStructure and being registered
       // as argument to G4GDMLParser.
 
+    G4String GenerateName(const G4String&,const void* const);
+
   protected:
 
     G4GDMLWrite();
@@ -105,7 +107,6 @@ class G4GDMLWrite
 
     VolumeMapType& VolumeMap();
 
-    G4String GenerateName(const G4String&,const void* const);
     xercesc::DOMAttr* NewAttribute(const G4String&, const G4String&);
     xercesc::DOMAttr* NewAttribute(const G4String&, const G4double&);
     xercesc::DOMElement* NewElement(const G4String&);

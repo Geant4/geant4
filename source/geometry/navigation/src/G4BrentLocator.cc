@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BrentLocator.cc 66872 2013-01-15 01:25:57Z japost $
+// $Id: G4BrentLocator.cc 90836 2015-06-10 09:31:06Z gcosmo $
 //
 // Class G4BrentLocator implementation
 //
@@ -189,7 +189,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
 #ifdef G4DEBUG_FIELD
   static G4double tolerance= 1.0e-8; 
   G4ThreeVector  StartPosition= CurveStartPointVelocity.GetPosition(); 
-  if( (TrialPoint - StartPosition).mag() < tolerance * mm ) 
+  if( (TrialPoint - StartPosition).mag() < tolerance * CLHEP::mm ) 
   {
      G4Exception("G4BrentLocator::EstimateIntersectionPoint()", 
                  "GeomNav1002", JustWarning,

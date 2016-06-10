@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicatedSlice.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4ReplicatedSlice.cc 90699 2015-06-08 09:34:37Z gcosmo $
 //
 // --------------------------------------------------------------------
 
@@ -319,6 +319,7 @@ void G4ReplicatedSlice::SetParameterisation( G4LogicalVolume* motherLogical,
 {
   G4VSolid* mSolid = motherLogical->GetSolid();
   G4String mSolidType = mSolid->GetEntityType();
+  fparam = 0;
 
   // If the solid is a reflected one, update type to its
   // real constituent solid.

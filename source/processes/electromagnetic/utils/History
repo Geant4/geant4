@@ -1,4 +1,4 @@
-$Id: History 88981 2015-03-17 10:14:15Z gcosmo $
+$Id: History 91064 2015-06-17 09:08:14Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27 April 15: V.Ivant (emutils-V10-00-49)
+- G4VMultipleScattering, G4VMscModel, G4VEmAngularDistribution 
+    accurate initialisation of G4ThreeVectors and G4LorentzVector 
+    in constructors
 
 06 February 15: V.Ivant (emutils-V10-00-47)
 - G4VEmProcess - fixed crash in printout for verbose level > 2 

@@ -14,6 +14,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+17-Apr-2015, W.Pokorski                 (had-theo-HE-V10-00-08)
+- fixing memory leak
+
+17-Apr-2015, W.Pokorski
+- fixing stupid mistake in the previous tag
+
+17-Apr-2015, W.Pokorski
+- update for new quasi-elastic class structure
+
 6-Nov-2014, G.Folger                    (had-theo-HE-V10-00-07)
 - remove G4LMsdGenerator and G4LMsdChannel also in source.cmake
 

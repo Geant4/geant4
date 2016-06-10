@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundTransitions.hh 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4PreCompoundTransitions.hh 90591 2015-06-04 13:45:29Z gcosmo $
 //
 // by V. Lara
 // 01.05.2008 J. M. Quesada . New methods for accessing to individual transition 
@@ -42,12 +42,10 @@
 //                    number of excitons will be the same
 
 #include "G4VPreCompoundTransitions.hh"
-
 #include "globals.hh"
-#include "G4Fragment.hh"
 
 class G4ParticleDefinition;
-class G4Pow;
+class G4Fragment;
 
 class G4PreCompoundTransitions : public G4VPreCompoundTransitions
 {
@@ -68,7 +66,6 @@ private:
   G4bool operator==(const G4PreCompoundTransitions &right) const;
   G4bool operator!=(const G4PreCompoundTransitions &right) const;
 
-  G4Pow* g4pow;
   const G4ParticleDefinition* proton;
 
   G4double FermiEnergy;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.hh 74627 2013-10-17 07:04:38Z gcosmo $
+// $Id: G4FTFParticipants.hh 90572 2015-06-04 09:32:32Z gcosmo $
 //
 
 #ifndef G4FTFParticipants_h
@@ -63,6 +63,7 @@ class G4FTFParticipants : public G4VParticipants {
     void SortInteractionsIncT();
     void ShiftInteractionTime();
     G4InteractionContent& GetInteraction();  
+    void Clean();
     std::vector< G4InteractionContent* > theInteractions;
 
   private:

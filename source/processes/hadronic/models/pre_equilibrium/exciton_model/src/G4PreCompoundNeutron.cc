@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundNeutron.cc 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4PreCompoundNeutron.cc 90591 2015-06-04 13:45:29Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -86,15 +86,9 @@ G4double G4PreCompoundNeutron::CrossSection(const  G4double K)
   FragmentA = theA + ResidualA;
   FragmentAthrd = g4pow->Z13(FragmentA);
 
-  if (OPTxs==0) { return GetOpt0( K); }
-  else if( OPTxs==1 || OPTxs==2) { return GetOpt12( K); }
-  else if (OPTxs==3 || OPTxs==4) { return GetOpt34( K); }
-  else{
-    std::ostringstream errOs;
-    errOs << "BAD NEUTRON CROSS SECTION OPTION !!"  <<G4endl;
-    throw G4HadronicException(__FILE__, __LINE__, errOs.str());
-    return 0.;
-  }
+  if (OPTxs==0)        { return GetOpt0( K); }
+  else if( OPTxs <= 2) { return GetOpt12( K); }
+  else                 { return GetOpt34( K); }
 }
 
 G4double G4PreCompoundNeutron::GetAlpha()
@@ -120,89 +114,83 @@ G4double G4PreCompoundNeutron::GetOpt12(G4double K)
   // JMQ  xsec is set constat above limit of validity
   if (K > 50*MeV) { Kc = 50*MeV; }
 
-  G4double landa, landa0, landa1, mu, mm0, mu1,nu, nu0, nu1, nu2,xs;
+  const G4double landa0 = 18.57;
+  const G4double landa1 = -22.93;
+  const G4double mm0 = 381.7;
+  const G4double mu1 = 24.31;
+  const G4double nu0 = 0.172;
+  const G4double nu1 = -15.39;
+  const G4double nu2 = 804.8;
 
-  landa0 = 18.57;
-  landa1 = -22.93;
-  mm0 = 381.7;
-  mu1 = 24.31;
-  nu0 = 0.172;
-  nu1 = -15.39;
-  nu2 = 804.8;
-  landa = landa0/ResidualAthrd + landa1;
-  mu = mm0*ResidualAthrd + mu1*ResidualAthrd*ResidualAthrd;
-  nu = nu0*ResidualAthrd*ResidualA + nu1*ResidualAthrd*ResidualAthrd + nu2 ;
-  xs=landa*Kc + mu + nu/Kc;
-  if (xs <= 0.0 ){
-    std::ostringstream errOs;
-    G4cout<<"WARNING:  NEGATIVE OPT=1 neutron cross section "<<G4endl;     
-    errOs << "RESIDUAL: Ar=" << ResidualA << " Zr=" << ResidualZ <<G4endl;
-    errOs <<"  xsec("<<Kc<<" MeV) ="<<xs <<G4endl;
-    throw G4HadronicException(__FILE__, __LINE__, errOs.str());
-              }
+  G4double landa = landa0/ResidualAthrd + landa1;
+  G4double mu = mm0*ResidualAthrd + mu1*ResidualAthrd*ResidualAthrd;
+  G4double nu = nu0*ResidualAthrd*ResidualA + nu1*ResidualAthrd*ResidualAthrd + nu2 ;
+  G4double xs = landa*Kc + mu + nu/Kc;
+
+  xs = std::max(xs, 0.0);
   return xs;
 }
 
 // *********** OPT=3,4 : Kalbach's cross sections (from PRECO code)*************
 G4double G4PreCompoundNeutron::GetOpt34(G4double K)
 {
-  G4double landa, landa0, landa1, mu, mm0, mu1,nu, nu0, nu1, nu2;
-  G4double p, p0;
-  G4double flow,ec,ecsq,xnulam,etest(0.),ra(0.),a,signor(1.),sig; 
-  G4double b,ecut,cut,ecut2,geom,elab;
 
-  flow = 1.e-18;
+  const G4double flow = 1.e-18;
 
   // PRECO xs for neutrons is choosen
-  p0 = -312.;
-  landa0 = 12.10;
-  landa1=  -11.27;
-  mm0 = 234.1;
-  mu1 = 38.26;
-  nu0 = 1.55;
-  nu1 = -106.1;
-  nu2 = 1280.8; 
+  const G4double p0 = -312.;
+  const G4double landa0 = 12.10;
+  const G4double landa1=  -11.27;
+  const G4double mm0 = 234.1;
+  const G4double mu1 = 38.26;
+  const G4double nu0 = 1.55;
+  const G4double nu1 = -106.1;
+  const G4double nu2 = 1280.8; 
+  const G4double ra  = 0.0;
 
-  if (ResidualA < 40)  { signor =0.7 + ResidualA*0.0075; }
-  if (ResidualA > 210) { signor = 1. + (ResidualA-210)/250.; }
-  landa = landa0/ResidualAthrd + landa1;
-  mu = mm0*ResidualAthrd + mu1*ResidualAthrd*ResidualAthrd;
-  nu = nu0*ResidualAthrd*ResidualA + nu1*ResidualAthrd*ResidualAthrd + nu2;
+  G4double signor = 1.0;
+  if(ResidualA < 40)       { signor =0.7 + ResidualA*0.0075; }
+  else if(ResidualA > 210) { signor = 1. + (ResidualA-210)/250.; }
+
+  G4double landa = landa0/ResidualAthrd + landa1;
+  G4double mu = mm0*ResidualAthrd + mu1*ResidualAthrd*ResidualAthrd;
+  G4double nu = nu0*ResidualAthrd*ResidualA + nu1*ResidualAthrd*ResidualAthrd + nu2;
 
   // JMQ very low energy behaviour corrected (problem  for A (apprx.)>60)
-  if (nu < 0.) { nu=-nu; }
+  if (nu < 0.) { nu = -nu; }
 
-  ec = 0.5;
-  ecsq = 0.25;
-  p = p0;
-  xnulam = 1.;
-  etest = 32.;
+  G4double ec = 0.5;
+  G4double ecsq = 0.25;
+  G4double p = p0;
+  G4double xnulam = 1.;
+  G4double etest = 32.;
   //          ** etest is the energy above which the rxn cross section is
   //          ** compared with the geometrical limit and the max taken.
   //          ** xnulam here is a dummy value to be used later.
 
-  a = -2.*p*ec + landa - nu/ecsq;
-  b = p*ecsq + mu + 2.*nu/ec;
-  ecut = 0.;
-  cut = a*a - 4.*p*b;
+  G4double a = -2.*p*ec + landa - nu/ecsq;
+  G4double b = p*ecsq + mu + 2.*nu/ec;
+  G4double ecut = 0.;
+  G4double cut = a*a - 4.*p*b;
   if (cut > 0.) { ecut = std::sqrt(cut); }
-  ecut = (ecut-a) / (p+p);
-  ecut2 = ecut;
-  if (cut < 0.) { ecut2 = ecut - 2.; }
-  elab = K * FragmentA / G4double(ResidualA);
-  sig = 0.;
-  if (elab <= ec) { //start for E<Ec 
-    if (elab > ecut2) { sig = (p*elab*elab+a*elab+b) * signor; } 
-  }              //end for E<Ec
-  else {           //start for  E>Ec
-    sig = (landa*elab+mu+nu/elab) * signor;
-    geom = 0.;
-    if (xnulam < flow || elab < etest) { return sig; }
-    geom = std::sqrt(theA*K);
-    geom = 1.23*ResidualAthrd + ra + 4.573/geom;
-    geom = 31.416 * geom * geom;
-    sig = std::max(geom,sig);
+  ecut = (ecut-a) / (2*p);
+  if (cut < 0.) { ecut -= 2.; }
 
-  }
-  return sig;
+  G4double elab = K * FragmentA / G4double(ResidualA);
+  G4double sig = 0.;
+
+  if (elab <= ec) { 
+    if (elab > ecut) { sig = std::max(0.0,(p*elab*elab+a*elab+b) * signor); }
+
+  } else {           
+    sig = (landa*elab+mu+nu/elab) * signor;
+    G4double geom = 0.;
+    if (xnulam >= flow && elab >= etest) { 
+      geom = std::sqrt(theA*K);
+      geom = 1.23*ResidualAthrd + ra + 4.573/geom;
+      geom = 31.416 * geom * geom;
+    }
+    sig = std::max(geom,sig);
+  } 
+  return sig; 
 }

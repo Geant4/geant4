@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadDefine.cc 68053 2013-03-13 14:39:51Z gcosmo $
+// $Id: G4GDMLReadDefine.cc 90766 2015-06-09 10:13:41Z gcosmo $
 //
 // class G4GDMLReadDefine Implementation
 //
@@ -32,6 +32,7 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLReadDefine.hh"
+#include "G4UnitsTable.hh"
 
 G4GDMLMatrix::G4GDMLMatrix()
   : m(0), rows(0), cols(0)
@@ -297,7 +298,7 @@ G4GDMLReadDefine::PositionRead(const xercesc::DOMElement* const positionElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); }  else
-      if (attName=="unit") { unit = eval.Evaluate(attValue); } else
+      if (attName=="unit") { unit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="x") { position.setX(eval.Evaluate(attValue)); } else
       if (attName=="y") { position.setY(eval.Evaluate(attValue)); } else
       if (attName=="z") { position.setZ(eval.Evaluate(attValue)); }
@@ -336,7 +337,7 @@ G4GDMLReadDefine::RotationRead(const xercesc::DOMElement* const rotationElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); }  else
-      if (attName=="unit") { unit = eval.Evaluate(attValue); } else
+      if (attName=="unit") { unit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="x") { rotation.setX(eval.Evaluate(attValue)); } else
       if (attName=="y") { rotation.setY(eval.Evaluate(attValue)); } else
       if (attName=="z") { rotation.setZ(eval.Evaluate(attValue)); }
@@ -446,7 +447,7 @@ void G4GDMLReadDefine::QuantityRead(const xercesc::DOMElement* const element)
 
       if (attName=="name") { name = attValue; } else
       if (attName=="value") { value = eval.Evaluate(attValue); } else
-      if (attName=="unit") { unit = eval.Evaluate(attValue); }
+      if (attName=="unit") { unit = G4UnitDefinition::GetValueOf(attValue); }
    }
 
    quantityMap[name] = value*unit;
@@ -519,7 +520,7 @@ G4GDMLReadDefine::VectorRead(const xercesc::DOMElement* const vectorElement,
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
-      if (attName=="unit") { unit = eval.Evaluate(attValue); } else
+      if (attName=="unit") { unit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="x") { vec.setX(eval.Evaluate(attValue)); } else
       if (attName=="y") { vec.setY(eval.Evaluate(attValue)); } else
       if (attName=="z") { vec.setZ(eval.Evaluate(attValue)); }

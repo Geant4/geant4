@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLRead.cc 81112 2014-05-21 08:50:44Z gcosmo $
+// $Id: G4GDMLRead.cc 90766 2015-06-09 10:13:41Z gcosmo $
 //
 // class G4GDMLRead Implementation
 //
@@ -43,7 +43,7 @@
 #include "G4PhysicalVolumeStore.hh"
 
 G4GDMLRead::G4GDMLRead()
-  : validate(true), check(false), inLoop(0), loopCount(0)
+  : validate(true), check(false), dostrip(true), inLoop(0), loopCount(0)
 {
    G4UnitDefinition::BuildUnitsTable();
 }
@@ -72,12 +72,9 @@ G4String G4GDMLRead::GenerateName(const G4String& nameIn, G4bool strip)
    if (inLoop>0)
    {
      nameOut = eval.SolveBrackets(nameOut);
-//     std::stringstream stream;
-//     stream << "0x" << loopCount;
-//     nameOut = nameOut + stream.str();
    }
    if (strip) { StripName(nameOut); }
-
+   
    return nameOut;
 }
 
@@ -127,7 +124,7 @@ void G4GDMLRead::StripNames() const
 
   // Solids...
   //
-  for (i=0; i<solids->size(); i++)
+  for (i=0; i<solids->size(); ++i)
   {
     G4VSolid* psol = (*solids)[i];
     sname = psol->GetName();
@@ -137,7 +134,7 @@ void G4GDMLRead::StripNames() const
 
   // Logical volumes...
   //
-  for (i=0; i<lvols->size(); i++)
+  for (i=0; i<lvols->size(); ++i)
   {
     G4LogicalVolume* lvol = (*lvols)[i];
     sname = lvol->GetName();
@@ -147,7 +144,7 @@ void G4GDMLRead::StripNames() const
 
   // Physical volumes...
   //
-  for (i=0; i<pvols->size(); i++)
+  for (i=0; i<pvols->size(); ++i)
   {
     G4VPhysicalVolume* pvol = (*pvols)[i];
     sname = pvol->GetName();
@@ -157,7 +154,7 @@ void G4GDMLRead::StripNames() const
 
   // Materials...
   //
-  for (i=0; i<materials->size(); i++)
+  for (i=0; i<materials->size(); ++i)
   {
     G4Material* pmat = (*materials)[i];
     sname = pmat->GetName();
@@ -167,7 +164,7 @@ void G4GDMLRead::StripNames() const
 
   // Elements...
   //
-  for (i=0; i<elements->size(); i++)
+  for (i=0; i<elements->size(); ++i)
   {
     G4Element* pelm = (*elements)[i];
     sname = pelm->GetName();
@@ -273,6 +270,7 @@ void G4GDMLRead::Read(const G4String& fileName,
                             G4bool isModule,
                             G4bool strip)
 {
+   dostrip = strip;
    if (isModule)
    {
       G4cout << "G4GDML: Reading module '" << fileName << "'..." << G4endl;
@@ -320,12 +318,14 @@ void G4GDMLRead::Read(const G4String& fileName,
    if (!element)
    {
      std::ostringstream message;
-     message << "ERROR - Empty document!" << G4endl
+     message << "ERROR - Empty document or unable to validate schema!" << G4endl
              << "        Check Internet connection is ON in case of schema"
              << G4endl
              << "        validation enabled and location defined as URL in"
              << G4endl
-             << "        the GDML file - " << fileName << " - being imported!";
+             << "        the GDML file - " << fileName << " - being imported!"
+             << G4endl
+             << "        Otherwise, verify GDML schema server is reachable!";
      G4Exception("G4GDMLRead::Read()", "InvalidRead", FatalException, message);
      return;
    }

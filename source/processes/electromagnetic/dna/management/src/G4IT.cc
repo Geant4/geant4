@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IT.cc 87061 2014-11-24 11:43:34Z gcosmo $
+// $Id: G4IT.cc 90900 2015-06-11 08:06:17Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
@@ -212,7 +212,7 @@ const G4ThreeVector& G4IT::GetPosition() const
   return *(new G4ThreeVector());
 }
 
-const double& G4IT::operator[](int i) const
+double G4IT::operator[](int i) const
 {
-  return const_cast<G4ThreeVector&>(GetTrack()->GetPosition())[i];
+  return GetTrack()->GetPosition()[i];
 }

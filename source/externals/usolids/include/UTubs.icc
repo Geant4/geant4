@@ -113,7 +113,7 @@ inline void UTubs::CheckDPhiAngle(double dPhi)
               << "Negative or zero delta-Phi (" << dPhi << "), for solid: "
               << GetName();
       UUtils::Exception("UTubs::CheckDPhiAngle()", "GeomSolids0002",
-                        FatalError, 1, message.str().c_str());
+                        UFatalError, 1, message.str().c_str());
     }
   }
 }
@@ -140,7 +140,7 @@ void UTubs::SetInnerRadius(double newRMin)
             << ", fRMax = " << fRMax << std::endl
             << "				Negative inner radius!";
     UUtils::Exception("UTubs::SetInnerRadius()", "GeomSolids0002",
-                      FatalError, 1, message.str().c_str());
+                      UFatalError, 1, message.str().c_str());
   }
   fRMin = newRMin;
   Initialize();
@@ -158,7 +158,7 @@ void UTubs::SetOuterRadius(double newRMax)
             << ", newRMax = " << newRMax << std::endl
             << "				Invalid outer radius!";
     UUtils::Exception("UTubs::SetOuterRadius()", "GeomSolids0002",
-                      FatalError, 1, message.str().c_str());
+                      UFatalError, 1, message.str().c_str());
   }
   fRMax = newRMax;
   Initialize();
@@ -174,7 +174,7 @@ void UTubs::SetZHalfLength(double newDz)
             << "Negative Z half-length (" << newDz << "), for solid: "
             << GetName();
     UUtils::Exception("UTubs::SetZHalfLength()", "GeomSolids0002",
-                      FatalError, 1, message.str().c_str());
+                      UFatalError, 1, message.str().c_str());
   }
   fDz = newDz;
   Initialize();
@@ -297,13 +297,13 @@ double UTubs::SafetyFromInsideR(const UVector3& p,
   //
   if (!fPhiFullTube)
   {
-    if (p.y * fCosCPhi - p.x * fSinCPhi <= 0)
+    if (p.y() * fCosCPhi - p.x() * fSinCPhi <= 0)
     {
-      safePhi = -(p.x * fSinSPhi - p.y * fCosSPhi);
+      safePhi = -(p.x() * fSinSPhi - p.y() * fCosSPhi);
     }
     else
     {
-      safePhi = (p.x * fSinEPhi - p.y * fCosEPhi);
+      safePhi = (p.x() * fSinEPhi - p.y() * fCosEPhi);
     }
     if (safePhi < safe)
     {
@@ -355,20 +355,20 @@ double UTubs::SafetyToPhi(const UVector3& p,
   
   // Psi=angle from central phi to point
   //
-  cosPsi = (p.x * fCosCPhi + p.y * fSinCPhi) / rho;
+  cosPsi = (p.x() * fCosCPhi + p.y() * fSinCPhi) / rho;
   outside = false;
   if (cosPsi < std::cos(fDPhi * 0.5))
   {
     // Point lies outside phi range
     //
     outside=true;
-    if ((p.y * fCosCPhi - p.x * fSinCPhi) <= 0)
+    if ((p.y() * fCosCPhi - p.x() * fSinCPhi) <= 0)
     {
-      safePhi = std::fabs(p.x * fSinSPhi - p.y * fCosSPhi);
+      safePhi = std::fabs(p.x() * fSinSPhi - p.y() * fCosSPhi);
     }
     else
     {
-      safePhi = std::fabs(p.x * fSinEPhi - p.y * fCosEPhi);
+      safePhi = std::fabs(p.x() * fSinEPhi - p.y() * fCosEPhi);
     }
   }
 

@@ -47,12 +47,8 @@
 
 #include "G4EmMessenger.hh"
 
-#include "G4SynchrotronRadiation.hh"
-#include "G4BertiniElectroNuclearBuilder.hh"
-#include "G4MuonNuclearProcess.hh"
-#include "G4MuonVDNuclearModel.hh"
-
 class G4BertiniElectroNuclearBuilder;
+class G4SynchrotronRadiation;
 
 class G4EmExtraPhysics : public G4VPhysicsConstructor
 {
@@ -68,26 +64,22 @@ public:
   void ConstructParticle();
   void ConstructProcess();
 
-  void Synch(G4String & aState);
-  void GammaNuclear(G4String & aState);
-  void MuonNuclear(G4String & aState);
+  void Synch(G4bool val);
+  void SynchAll(G4bool val);
+  void GammaNuclear(G4bool val);
+  void MuonNuclear(G4bool val);
 
 private:
 
-  void BuildSynch();
-  void BuildGammaNuclear();
-  void BuildMuonNuclear();
+  static G4bool gnActivated;
+  static G4bool munActivated;
+  static G4bool synActivated;
+  static G4bool synActivatedForAll;
 
-  static G4ThreadLocal G4bool wasBuilt;
-  static G4ThreadLocal G4bool gnActivated;
-  static G4ThreadLocal G4bool munActivated;
-  static G4ThreadLocal G4bool synActivated;
-  static G4ThreadLocal G4bool synchOn;
-  static G4ThreadLocal G4bool gammNucOn;
-  static G4ThreadLocal G4bool muNucOn;
+  static G4ThreadLocal G4BertiniElectroNuclearBuilder* theGNPhysics;
+  static G4ThreadLocal G4SynchrotronRadiation* theSynchRad;
 
-  G4BertiniElectroNuclearBuilder* theGNPhysics;
-  G4EmMessenger*           theMessenger;
+  G4EmMessenger* theMessenger;
   G4int verbose;
 };
 

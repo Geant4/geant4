@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 82219 2014-06-12 09:38:27Z gcosmo $
+// $Id: PhysicsList.cc 90770 2015-06-09 12:12:47Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -67,6 +67,8 @@
 #include "G4SystemOfUnits.hh"
 #include "G4LossTableManager.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4EmConfigurator.hh"
+#include "G4EmParameters.hh"
 
 #include "StepMax.hh"
 
@@ -77,14 +79,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList(),
-  fConfig(0),
   fEmPhysicsList(0),
   fDecayPhysicsList(0),
   fStepMaxProcess(0),
-  fMessenger(0)
+  fMessenger(0),
+  fPAI(false)
 {
-  fConfig = G4LossTableManager::Instance()->EmConfigurator();
-  G4LossTableManager::Instance()->SetVerbose(1);
+  G4EmParameters::Instance()->SetVerbose(1);
 
   SetDefaultCutValue(1*mm);
  
@@ -126,9 +127,11 @@ void PhysicsList::ConstructProcess()
 {
   AddTransportation();
   fEmPhysicsList->ConstructProcess();
+  if(fPAI) { AddPAIModel(fEmName); }
   fDecayPhysicsList->ConstructProcess();
   for(size_t i=0; i<fHadronPhys.size(); ++i) { 
-    fHadronPhys[i]->ConstructProcess(); }
+    fHadronPhys[i]->ConstructProcess(); 
+  }
   AddStepMax();
 }
 
@@ -188,12 +191,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "pai") {
 
     fEmName = name;
-    AddPAIModel(name);
+    fPAI = true;
 
   } else if (name == "pai_photon") { 
 
     fEmName = name;
-    AddPAIModel(name);
+    fPAI = true;
 
   } else {
 
@@ -260,15 +263,16 @@ void PhysicsList::NewPAIModel(const G4ParticleDefinition* part,
                               const G4String& modname,
                               const G4String& procname)
 {
+  G4EmConfigurator* config = G4LossTableManager::Instance()->EmConfigurator();
   G4String partname = part->GetParticleName();
   if(modname == "pai") {
     G4PAIModel* pai = new G4PAIModel(part,"PAIModel");
-    fConfig->SetExtraEmModel(partname,procname,pai,"GasDetector",
-                              0.0,100.*TeV,pai);
+    config->SetExtraEmModel(partname,procname,pai,"GasDetector",
+                            0.0,100.*TeV,pai);
   } else if(modname == "pai_photon") {
     G4PAIPhotModel* pai = new G4PAIPhotModel(part,"PAIPhotModel");
-    fConfig->SetExtraEmModel(partname,procname,pai,"GasDetector",
-                              0.0,100.*TeV,pai);
+    config->SetExtraEmModel(partname,procname,pai,"GasDetector",
+                            0.0,100.*TeV,pai);
   }
 }
 

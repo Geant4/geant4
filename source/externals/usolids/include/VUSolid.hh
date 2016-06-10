@@ -117,7 +117,7 @@ public:
   //        where an implementation is not available, it defaults to PointOnSurface.
 
   // Visualisation
-   virtual void GetParametersList(int aNumber,double *aArray) const =0;
+  virtual void GetParametersList(int aNumber,double *aArray) const =0;
  
   virtual VUSolid* Clone() const =0; 
   // o provide a new object which is a clone of the solid

@@ -1,4 +1,4 @@
-$Id: History 88975 2015-03-17 10:00:42Z gcosmo $
+$Id: History 90578 2015-06-04 09:55:07Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30.04.2015 V. Ivanchenko, tag emlowen-V10-00-24
+           - G4EMDataSet - fixed Coverity warnings
+           - G4LivermorePhotoElectricModel - implement the same protection as in
+               standard model to avoid rare precision lost in de-excitation
 
 05.12.2014 G. Cosmo, tag emlowen-V10-00-23
            - Corrected sources.cmake to include missing files:

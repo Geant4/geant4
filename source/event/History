@@ -1,4 +1,4 @@
-$Id: History 88933 2015-03-16 14:47:19Z gcosmo $
+$Id: History 90978 2015-06-12 08:26:22Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,31 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 11th, 2015 A.Dotti (event-V10-00-23)
+- Re-enabling legacy UI commands as in G4 Ver 10.1.p01
+
+June 8th, 2015 A.Dotti
+- Fixing valgring report
+
+June 6th, 2015 A.Dotti (event-V10-00-22)
+- Protecting the command /gps/source/set in case
+  of out-of-bound index.
+
+June 5th, 2015 A.Dotti
+- Further refinement for bug #1744: address case in which 
+  /gps/source/clear is used  
+- Increase verbosity of error message for GPS in case 
+  no sources are defined
+
+May 28th, 2015 A.Dotti
+- Addressing bug #1744
+- Increased level of verbosity of /gps/verbose
+- /gps/verbose now acts globally on all sources in case of multiple ones
+  (no need to activate verbosity for each source)
+
+April 6th, 2015 A.Dotti
+- Coverity fixes
 
 February 20th, 2015 A.Dotti (event-V10-00-21)
 - Clean code and remove not needed thread-local data that 

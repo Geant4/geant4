@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITModelProcessor.hh 87375 2014-12-02 08:17:28Z gcosmo $
+// $Id: G4ITModelProcessor.hh 90769 2015-06-09 10:33:41Z gcosmo $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
@@ -55,6 +55,18 @@
 class G4VITTimeStepComputer;
 class G4VITReactionProcess;
 class G4ITModelHandler;
+class G4ITReactionSet;
+
+//#ifndef compTrackPerID__
+//#define compTrackPerID__
+//  struct compTrackPerID
+//  {
+//    bool operator()(G4Track* rhs, G4Track* lhs) const
+//    {
+//      return rhs->GetTrackID() < lhs->GetTrackID();
+//    }
+//  };
+//#endif
 
 /**
  * The G4ITModelProcessor will call the two processes defined in G4VITModel.
@@ -93,7 +105,7 @@ public:
 
   //____________________________________________________________
   // Reaction process part
-  void FindReaction(std::map<G4Track*, G4TrackVectorHandle>*,
+  void FindReaction(G4ITReactionSet* reactionSet,
                     const double currentStepTime,
                     const double previousStepTime,
                     const bool reachedUserStepTimeLimit);

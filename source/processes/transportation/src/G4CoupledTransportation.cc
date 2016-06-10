@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc 89285 2015-03-31 08:14:25Z gcosmo $
+// $Id: G4CoupledTransportation.cc 90840 2015-06-10 09:51:07Z gcosmo $
 //
 // ------------------------------------------------------------
 //  GEANT 4 class implementation
@@ -295,6 +295,8 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
         equationOfMotion->SetChargeMomentumMass( chargeState,
                                                  momentumMagnitude,
                                                  restMass );
+     }else{
+        G4cerr << " ERROR > Cannot find valid Equation of motion - Unable to pass Charge, Momentum and Mass "  << G4endl;
      }
   }
 

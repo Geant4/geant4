@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc 87183 2014-11-26 15:23:34Z gcosmo $
+// $Id: G4FTFModel.cc 90572 2015-06-04 09:32:32Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -153,6 +153,8 @@ void G4FTFModel::Init( const G4Nucleus& aNucleus, const G4DynamicParticle& aProj
          << "FTF init Target A Z " << aNucleus.GetA_asInt() 
          << " " << aNucleus.GetZ_asInt() << G4endl;
   #endif
+
+  theParticipants.Clean();
 
   theParticipants.SetProjectileNucleus( 0 );
 
@@ -349,6 +351,8 @@ G4ExcitedStringVector* G4FTFModel::GetStrings() {
   G4int Uzhi; G4cin >> Uzhi;
   #endif
 
+  theParticipants.Clean();
+
   return theStrings;
 }
 
@@ -465,7 +469,8 @@ void G4FTFModel::ReggeonCascade() {
   if ( ! GetProjectileNucleus() ) return;
 
   // Nucleus-Nucleus Interaction : Destruction of Projectile
-  for ( G4int InvPN = 0; InvPN < NumberOfInvolvedNucleonsOfProjectile; InvPN++ ) { 
+  G4int InitNINp = NumberOfInvolvedNucleonsOfProjectile;
+  for ( G4int InvPN = 0; InvPN < InitNINp; InvPN++ ) { 
     G4Nucleon* aProjectileNucleon = TheInvolvedNucleonsOfProjectile[ InvPN ];
     aProjectileNucleon->SetBindingEnergy( ExcitationE );
 
@@ -2754,9 +2759,9 @@ GenerateDeltaIsobar( const G4double sqrtS,                  // input parameter
 //============================================================================
 
 G4bool G4FTFModel::
-SamplingNucleonKinematics( const G4double averagePt2,             // input parameter
+SamplingNucleonKinematics( G4double averagePt2,                   // input parameter
                            const G4double maxPt2,                 // input parameter
-                           const G4double dCor,                   // input parameter
+                           G4double dCor,                         // input parameter
                            G4V3DNucleus* nucleus,                 // input parameter
                            const G4LorentzVector& pResidual,      // input parameter
                            const G4double residualMass,           // input parameter
@@ -2777,7 +2782,19 @@ SamplingNucleonKinematics( const G4double averagePt2,             // input param
 
   if ( ! nucleus ) return false;
 
-  G4bool success = true;
+  if ( residualMassNumber == 0  &&  numberOfInvolvedNucleons == 1 ) {
+    dCor = 0.0; 
+    averagePt2 = 0.0;
+  } 
+
+  G4bool success = true;                            
+
+  G4double SumMasses = residualMass; 
+  for ( G4int i = 0; i < numberOfInvolvedNucleons; i++ ) {
+    G4Nucleon* aNucleon = involvedNucleons[i];
+    if ( ! aNucleon ) continue;
+    SumMasses += aNucleon->GetSplitableHadron()->GetDefinition()->GetPDGMass();
+  }
 
   do {  // while ( ! success )
 
@@ -2791,12 +2808,21 @@ SamplingNucleonKinematics( const G4double averagePt2,             // input param
       G4ThreeVector tmpPt = GaussianPt( averagePt2, maxPt2 );
       ptSum += tmpPt;
       G4ThreeVector tmpX = GaussianPt( dCor*dCor, 1.0 );
-      G4double x = tmpX.x();
+      G4double x = tmpX.x() +
+                   aNucleon->GetSplitableHadron()->GetDefinition()->GetPDGMass() / SumMasses;
+      if ( x < 0.0 || x > 1.0 ) { 
+        success = false; 
+        break; 
+      }
       xSum += x;
       //AR The energy is in the lab (instead of cms) frame but it will not be used.
       G4LorentzVector tmp( tmpPt.x(), tmpPt.y(), x, aNucleon->Get4Momentum().e() );
       aNucleon->SetMomentum( tmp );
     }
+
+    if ( xSum < 0.0  ||  xSum > 1.0 ) success = false;
+
+    if ( ! success ) continue;
 
     G4double deltaPx = ( ptSum.x() - pResidual.x() ) / numberOfInvolvedNucleons;
     G4double deltaPy = ( ptSum.y() - pResidual.y() ) / numberOfInvolvedNucleons;
@@ -2804,12 +2830,11 @@ SamplingNucleonKinematics( const G4double averagePt2,             // input param
     if ( residualMassNumber == 0 ) {
       delta = ( xSum - 1.0 ) / numberOfInvolvedNucleons;
     } else {
-      delta = -1.0 / nucleus->GetMassNumber();
+      delta = 0.0;
     }
 
     xSum = 1.0;
     mass2 = 0.0;
-
     for ( G4int i = 0; i < numberOfInvolvedNucleons; i++ ) {
       G4Nucleon* aNucleon = involvedNucleons[i];
       if ( ! aNucleon ) continue;

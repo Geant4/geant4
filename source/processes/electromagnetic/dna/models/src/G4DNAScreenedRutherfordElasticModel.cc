@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAScreenedRutherfordElasticModel.cc 87137 2014-11-25 09:12:48Z gcosmo $
+// $Id: G4DNAScreenedRutherfordElasticModel.cc 90769 2015-06-09 10:33:41Z gcosmo $
 //
 
 #include "G4DNAScreenedRutherfordElasticModel.hh"
@@ -206,7 +206,7 @@ G4double G4DNAScreenedRutherfordElasticModel::CrossSectionPerVolume(const G4Mate
 
   }
 
-  return sigma*material->GetAtomicNumDensityVector()[1];
+  return sigma*waterDensity;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

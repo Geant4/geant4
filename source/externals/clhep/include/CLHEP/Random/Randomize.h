@@ -58,7 +58,11 @@ namespace CLHEP {
 // On some compilers the static instance of the HepRandom generator
 // needs to be created explicitly in the client code (i.e. here).
 
+#if __GNUC__
+static const int HepRandomGenActive __attribute__((unused)) = HepRandom::createInstance();
+#else
 static const int HepRandomGenActive = HepRandom::createInstance();
+#endif
 
 }  // namespace CLHEP
 

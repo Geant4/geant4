@@ -9,6 +9,7 @@
 #
 # Options configured here:
 #  CLHEP   - Control use of internal G4clhep, or locate external CLHEP
+#            Also control selection of singular or modular CLHEP libs
 #  EXPAT   - Control use of internal G4expat, or locate external EXPAT.
 #  ZLIB    - Control use of internal G4zlib, or locate external ZLIB
 #  GDML    - Requires external XercesC
@@ -24,6 +25,9 @@
 # We also allow that it can be automatically enabled by providing
 # the CLHEP_ROOT_DIR option (which FindCLHEP will recognize)
 #
+# As requested by ATLAS, an additional option for preferring use of
+# CLHEP's granular libs is provided when using a system CLHEP.
+#
 # KNOWNISSUE : For internal CLHEP, how to deal with static and shared?
 if(CLHEP_ROOT_DIR)
   set(_default_use_system_clhep ON)
@@ -34,9 +38,24 @@ endif()
 option(GEANT4_USE_SYSTEM_CLHEP "Use system CLHEP library" ${_default_use_system_clhep})
 
 if(GEANT4_USE_SYSTEM_CLHEP)
+  set(__system_clhep_mode " (singular)")
+  # Further advanced option to select granular CLHEP libs
+  option(GEANT4_USE_SYSTEM_CLHEP_GRANULAR "Use system CLHEP granular libraries" OFF)
+  mark_as_advanced(GEANT4_USE_SYSTEM_CLHEP_GRANULAR)
+
+  if(GEANT4_USE_SYSTEM_CLHEP_GRANULAR)
+    set(__g4_clhep_components
+      Evaluator
+      Geometry
+      Random
+      Vector
+      )
+    set(__system_clhep_mode " (granular)")
+  endif()
+
   # We keep this as required, because if the user chooses to use a
   # system option we assume that we absolutely, positively require this.
-  find_package(CLHEP 2.1.2.3 REQUIRED)
+  find_package(CLHEP 2.1.2.3 REQUIRED ${__g4_clhep_components})
   set(GEANT4_USE_SYSTEM_CLHEP TRUE)
 else()
   set(CLHEP_FOUND TRUE)
@@ -49,7 +68,7 @@ else()
   endif()
 endif()
 
-GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_CLHEP "Using system CLHEP library")
+GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_CLHEP "Using system CLHEP library${__system_clhep_mode}")
 
 #-----------------------------------------------------------------------
 # Find required EXPAT package

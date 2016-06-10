@@ -120,6 +120,12 @@ void G4PreCompoundDeexcitation::deExcite(const G4Fragment& fragment,
     globalOutput.addOutgoingParticles(precompoundProducts);
     globalOutput.setVerboseLevel(0);
 
+    for ( size_t i = 0; i < precompoundProducts->size(); i++ ) {
+      if ( (*precompoundProducts)[ i ] ) {
+        delete (*precompoundProducts)[ i ];
+        (*precompoundProducts)[ i ] = 0;
+      }
+    }
     precompoundProducts->clear();
     delete precompoundProducts;
   }

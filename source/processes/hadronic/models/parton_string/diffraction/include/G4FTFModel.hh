@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.hh 83402 2014-08-21 15:05:10Z gcosmo $
+// $Id: G4FTFModel.hh 90572 2015-06-04 09:32:32Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 // Class Description
@@ -103,8 +103,8 @@ class G4FTFModel : public G4VPartonStringModel {
                                 G4Nucleon* involvedNucleons[], G4double& sumMasses );
     // Utility method used by PutOnMassShell.
 
-    G4bool SamplingNucleonKinematics( const G4double averagePt2, const G4double maxPt2,
-                                      const G4double dCor, G4V3DNucleus* nucleus, 
+    G4bool SamplingNucleonKinematics( G4double averagePt2, const G4double maxPt2,
+                                      G4double dCor, G4V3DNucleus* nucleus, 
                                       const G4LorentzVector& pResidual, 
                                       const G4double residualMass, const G4int residualMassNumber,
                                       const G4int numberOfInvolvedNucleons,

@@ -156,6 +156,7 @@
 @GEANT4_TC_CLHEP_BASE_DIR@
 @GEANT4_TC_CLHEP_INCLUDE_DIR@
 @GEANT4_TC_CLHEP_LIB_DIR@
+@GEANT4_TC_CLHEP_LIB@
 @GEANT4_TC_CLHEP_LIB_PATH_SETUP@
 
 #-----------------------------------------------------------------------

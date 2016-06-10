@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
+ Geant4 version Name: geant4-10-01-patch-02    (19-June-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -558,35 +558,35 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=8.39s Real=8.4s Sys=0.01s
+  User=5.39s Real=5.52s Sys=0s
 
  ===== SUMMARY ===== 
 
  Total number of events:        100
- Mean number of charged steps:  7253.87
- Mean number of neutral steps:  3909.81
+ Mean number of charged steps:  7267.28
+ Mean number of neutral steps:  3909.90
 
- energy deposit :   94.88 % E0 +-    1.36 % E0
- charged traklen:  481.58 radl +-    7.03 radl
- neutral traklen: 4219.44 radl +-  127.62 radl
+ energy deposit :   94.98 % E0 +-    1.03 % E0
+ charged traklen:  482.29 radl +-    5.39 radl
+ neutral traklen: 4223.15 radl +-  116.92 radl
 
  90.00 % confinement: radius = 2.95 radl  (2.63 cm )
 
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.948799  delEdep= -0.000201018 nrms= -0.245143
-Erms: 0.0136215  delErms= 0.00542154 nrms= 6.61163
-<<<<END>>>>   IS NOT ACCEPTED
+Edep: 0.949826  delEdep= 0.000825984 nrms= 1.0073
+Erms: 0.0103363  delErms= 0.00213634 nrms= 2.60529
+<<<<END>>>>   IS ACCEPTED
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 288803869, 1875579769
+ Current couple of seeds = 323177789, 1421127619
 ----------------------------------------
 ... write Root file : testem2.root - done
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.23 Mb
+Dynamic pools deleted: 9 / Total memory freed: 0.2 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

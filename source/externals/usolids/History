@@ -17,6 +17,38 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 27, 2015  T.Nikitina                  geom-usolids-V10-00-28
+- Fixed DistanceToOut(p) and Inside(p) in USphere for sphere cut in theta
+  for point (0,0,0) and for cases when Start/End angle have not to be taken
+  in account (STheta==0 || eTheta==pi).
+  Fix triggered by analysing setup provided in Geant4 problem report #1702.
+
+May 4,  2015  G.Cosmo
+- Fixed Coverity defect for unused variable quantity in UCons.
+
+April 24,  2015  G.Cosmo
+- Commented out use of shrink_to_fit() in UTessellatedSolid as not yet
+  part of the C++ Standard on Linux...
+
+April 24,  2015  G.Cosmo
+- Some code cleanup and minor fixes...
+  Syncronised implementation with USolids module in VecGeom.
+
+April 23,  2015  G.Cosmo
+- Replaced Exception IDs in UUtils to avoid clashes with wild global
+  extern functions in Root.
+
+April 20,  2015  G.Cosmo
+- Corrected string returned as type-ID by GetEntityType() to conform
+  to shape kind in: UExtrudedSolid, UMultiUnion, UQuadrangularFacet,
+  UTessellatedSolid, UTrap, UTriangularFacet and UVCSGfaceted.
+
+March 3,  2015  G.Cosmo
+- UVector3: made data private and defined accessors x(), y() and z().
+- Made implementations operators +(), -(), *(), and /() inline.
+- Adapted all classes to the change.
+- Added method GetPointOnEdge() to UBox.
+
 February 23,  2015  T.Nikitina            geom-usolids-V10-00-27
 - Fix in SetOriginalParameters() for UPolycone, in case of presence of
   'rings' structures constructed by (r,z) corners.

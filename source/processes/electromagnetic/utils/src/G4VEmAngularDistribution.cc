@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmAngularDistribution.cc 73847 2013-09-13 14:32:39Z gcosmo $
+// $Id: G4VEmAngularDistribution.cc 90579 2015-06-04 10:00:26Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -51,10 +51,8 @@
 #include "G4VEmAngularDistribution.hh"
 
 G4VEmAngularDistribution::G4VEmAngularDistribution(const G4String& name) 
-  : fName(name)
-{
-  fLocalDirection.set(0.0,0.0,1.0);
-}
+  : fLocalDirection(0.0,0.0,1.0),fName(name)
+{}
 
 G4VEmAngularDistribution::~G4VEmAngularDistribution() 
 {}

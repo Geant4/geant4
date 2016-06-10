@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMoleculeEncounterStepper.cc 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id: G4DNAMoleculeEncounterStepper.cc 90769 2015-06-09 10:33:41Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
 //
@@ -328,15 +328,16 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA,
 //     G4cout << "Potential reactions :" << G4endl;
 //        G4cout << GetMolecule(trackA)->GetName()
 //    << " ("<< trackA.GetTrackID()<< ") " << " + ..." << G4endl;
-//    << " | " << trackB->GetTrackID() << G4endl;
+//    //<< " | " << trackB->GetTrackID() << G4endl;
 //
-//        for(int j = 0 ; j < fReactants->size() ; j++)
+//        for(int j = 0 ; j < (int) fReactants->size() ; j++)
 //        {
 //         G4cout << GetMolecule(fReactants->at(j) )->GetName()
 //    <<" ("<< fReactants->at(j)->GetTrackID() << ")" << G4endl;
 //        }
 //  }
-  }
+
+ }
 
 #ifdef G4VERBOSE
   //    DEBUG

@@ -50,7 +50,7 @@ USphere::USphere(const std::string& pName,
     message << "Invalid radii for Solid: " << GetName() << std::endl
             << "pRmin = " << pRmin << ", pRmax = " << pRmax;
     UUtils::Exception("USphere::USphere()", "GeomSolids0002",
-                      FatalErrorInArguments, 1, message.str().c_str());
+                      UFatalErrorInArguments, 1, message.str().c_str());
   }
   fRmin = pRmin;
   fRmax = pRmax;
@@ -172,13 +172,29 @@ VUSolid::EnumInside USphere::Inside(const UVector3& p) const
   const double rMaxMinus = fRmax - halfTolerance;
   const double rMinPlus = (fRmin > 0) ? fRmin + halfRminTolerance : 0;
 
-  rho2 = p.x * p.x + p.y * p.y;
-  rad2 = rho2 + p.z * p.z;
+  rho2 = p.x() * p.x() + p.y() * p.y();
+  rad2 = rho2 + p.z() * p.z();
 
   // Check radial surfaces. Sets 'in'
 
   tolRMin = rMinPlus;
   tolRMax = rMaxMinus;
+
+  if(rad2 == 0.0)
+  { 
+    if (fRmin > 0.0)
+    {
+      return in = eOutside;
+    }
+    if ( (!fFullPhiSphere) || (!fFullThetaSphere) )
+    {
+      return in = eSurface;
+    }
+    else
+    {
+      return in = eInside; 
+    }
+  }
 
   if ((rad2 <= rMaxMinus * rMaxMinus) && (rad2 >= rMinPlus * rMinPlus))
   {
@@ -200,9 +216,9 @@ VUSolid::EnumInside USphere::Inside(const UVector3& p) const
 
   // Phi boundaries  : Do not check if it has no phi boundary!
 
-  if (!fFullPhiSphere && rho2)  // [fDPhi < 2*UUtils::kPi] and [p.x or p.y]
+  if (!fFullPhiSphere && rho2)  // [fDPhi < 2*UUtils::kPi] and [p.x() or p.y()]
   {
-    pPhi = std::atan2(p.y, p.x);
+    pPhi = std::atan2(p.y(), p.x());
 
     if (pPhi < fSPhi - halfAngTolerance)
     {
@@ -231,18 +247,20 @@ VUSolid::EnumInside USphere::Inside(const UVector3& p) const
 
   // Theta bondaries
 
-  if ((rho2 || p.z) && (!fFullThetaSphere))
+  if ((rho2 || p.z()) && (!fFullThetaSphere))
   {
     rho   = std::sqrt(rho2);
-    pTheta = std::atan2(rho, p.z);
+    pTheta = std::atan2(rho, p.z());
 
     if (in == eInside)
     {
-      if ((pTheta < fSTheta + halfAngTolerance)
-          || (pTheta > eTheta - halfAngTolerance))
+      if ( ((fSTheta > 0.0) && (pTheta < fSTheta + halfAngTolerance))
+        || ((eTheta < UUtils::kPi) && (pTheta > eTheta - halfAngTolerance)) ) 
       {
-        if ((pTheta >= fSTheta - halfAngTolerance)
-            && (pTheta <= eTheta + halfAngTolerance))
+
+       if ( (( (fSTheta>0.0)&&(pTheta>=fSTheta-halfAngTolerance) )
+            || (fSTheta == 0.0) )
+          && ((eTheta==UUtils::kPi)||(pTheta <= eTheta + halfAngTolerance) ) )
         {
           in = eSurface;
         }
@@ -254,8 +272,8 @@ VUSolid::EnumInside USphere::Inside(const UVector3& p) const
     }
     else
     {
-      if ((pTheta < fSTheta - halfAngTolerance)
-          || (pTheta > eTheta + halfAngTolerance))
+      if ( ((fSTheta > 0.0)&&(pTheta < fSTheta - halfAngTolerance))
+	   ||((eTheta < UUtils::kPi  )&&(pTheta > eTheta + halfAngTolerance)) )
       {
         in = eOutside;
       }
@@ -283,8 +301,8 @@ bool USphere::Normal(const UVector3& p, UVector3& n) const
   static const double halfCarTolerance = 0.5 * VUSolid::Tolerance();
   static const double halfAngTolerance = 0.5 * kAngTolerance;
 
-  rho2 = p.x * p.x + p.y * p.y;
-  radius = std::sqrt(rho2 + p.z * p.z);
+  rho2 = p.x() * p.x() + p.y() * p.y();
+  radius = std::sqrt(rho2 + p.z() * p.z());
   rho = std::sqrt(rho2);
 
   double    distRMax = std::fabs(radius - fRmax);
@@ -292,7 +310,7 @@ bool USphere::Normal(const UVector3& p, UVector3& n) const
 
   if (rho && !fFullSphere)
   {
-    pPhi = std::atan2(p.y, p.x);
+    pPhi = std::atan2(p.y(), p.x());
 
     if (pPhi < fSPhi - halfAngTolerance)
     {
@@ -322,16 +340,16 @@ bool USphere::Normal(const UVector3& p, UVector3& n) const
   {
     if (rho)
     {
-      pTheta     = std::atan2(rho, p.z);
+      pTheta     = std::atan2(rho, p.z());
       distSTheta = std::fabs(pTheta - fSTheta);
       distETheta = std::fabs(pTheta - eTheta);
 
-      nTs = UVector3(-cosSTheta * p.x / rho,
-                     -cosSTheta * p.y / rho,
+      nTs = UVector3(-cosSTheta * p.x() / rho,
+                     -cosSTheta * p.y() / rho,
                      sinSTheta);
 
-      nTe = UVector3(cosETheta * p.x / rho,
-                     cosETheta * p.y / rho,
+      nTe = UVector3(cosETheta * p.x() / rho,
+                     cosETheta * p.y() / rho,
                      -sinETheta);
     }
     else if (!fRmin)
@@ -350,7 +368,7 @@ bool USphere::Normal(const UVector3& p, UVector3& n) const
   }
   if (radius)
   {
-    nR = UVector3(p.x / radius, p.y / radius, p.z / radius);
+    nR = UVector3(p.x() / radius, p.y() / radius, p.z() / radius);
   }
 
   if (distRMax <= halfCarTolerance)
@@ -401,7 +419,7 @@ bool USphere::Normal(const UVector3& p, UVector3& n) const
       {
         sumnorm += nTe;
       }
-      if (sumnorm.z == 0.)
+      if (sumnorm.z() == 0.)
       {
         sumnorm += nZ;
       }
@@ -411,7 +429,7 @@ bool USphere::Normal(const UVector3& p, UVector3& n) const
   {
 #ifdef UDEBUG
     UUtils::Exception("USphere::SurfaceNormal(p)", "GeomSolids1002",
-                      Warning, 1, "Point p is not on surface !?");
+                      UWarning, 1, "Point p is not on surface !?");
 #endif
     norm = ApproxSurfaceNormal(p);
   }
@@ -441,8 +459,8 @@ UVector3 USphere::ApproxSurfaceNormal(const UVector3& p) const
   double distRMin, distRMax, distSPhi, distEPhi,
          distSTheta, distETheta, distMin;
 
-  rho2 = p.x * p.x + p.y * p.y;
-  radius = std::sqrt(rho2 + p.z * p.z);
+  rho2 = p.x() * p.x() + p.y() * p.y();
+  radius = std::sqrt(rho2 + p.z() * p.z());
   rho = std::sqrt(rho2);
 
   //
@@ -475,7 +493,7 @@ UVector3 USphere::ApproxSurfaceNormal(const UVector3& p) const
   //
   // Protected against (0,0,z)
 
-  pPhi = std::atan2(p.y, p.x);
+  pPhi = std::atan2(p.y(), p.x());
   if (pPhi < 0)
   {
     pPhi += 2 * UUtils::kPi;
@@ -520,7 +538,7 @@ UVector3 USphere::ApproxSurfaceNormal(const UVector3& p) const
 
   if (!fFullThetaSphere && radius)
   {
-    pTheta = std::atan2(rho, p.z);
+    pTheta = std::atan2(rho, p.z());
     distSTheta = std::fabs(pTheta - fSTheta) * radius;
     distETheta = std::fabs(pTheta - fSTheta - fDTheta) * radius;
 
@@ -547,10 +565,10 @@ UVector3 USphere::ApproxSurfaceNormal(const UVector3& p) const
   switch (side)
   {
     case kNRMin:      // Inner radius
-      norm = UVector3(-p.x / radius, -p.y / radius, -p.z / radius);
+      norm = UVector3(-p.x() / radius, -p.y() / radius, -p.z() / radius);
       break;
     case kNRMax:      // Outer radius
-      norm = UVector3(p.x / radius, p.y / radius, p.z / radius);
+      norm = UVector3(p.x() / radius, p.y() / radius, p.z() / radius);
       break;
     case kNSPhi:
       norm = UVector3(sinSPhi, -cosSPhi, 0);
@@ -571,7 +589,7 @@ UVector3 USphere::ApproxSurfaceNormal(const UVector3& p) const
     default:          // Should never reach this case ...
 
       UUtils::Exception("USphere::ApproxSurfaceNormal()",
-                        "GeomSolids1002", Warning, 1,
+                        "GeomSolids1002", UWarning, 1,
                         "Undefined side for valid surface normal to solid.");
       break;
   }
@@ -647,12 +665,12 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
 
   // General Precalcs
   //
-  rho2 = p.x * p.x + p.y * p.y;
-  rad2 = rho2 + p.z * p.z;
-  pTheta = std::atan2(std::sqrt(rho2), p.z);
+  rho2 = p.x() * p.x() + p.y() * p.y();
+  rad2 = rho2 + p.z() * p.z();
+  pTheta = std::atan2(std::sqrt(rho2), p.z());
 
-  pDotV2d = p.x * v.x + p.y * v.y;
-  pDotV3d = pDotV2d + p.z * v.z;
+  pDotV2d = p.x() * v.x() + p.y() * v.y();
+  pDotV3d = pDotV2d + p.z() * v.z();
 
   // Theta precalcs
   //
@@ -697,8 +715,8 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
           double fTerm = sd - std::fmod(sd, dRmax);
           sd = fTerm + DistanceToIn(p + fTerm * v, v);
         }
-        xi   = p.x + sd * v.x;
-        yi   = p.y + sd * v.y;
+        xi   = p.x() + sd * v.x();
+        yi   = p.y() + sd * v.y();
         rhoi = std::sqrt(xi * xi + yi * yi);
 
         if (!fFullPhiSphere && rhoi)    // Check phi intersection
@@ -709,7 +727,7 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
           {
             if (!fFullThetaSphere)   // Check theta intersection
             {
-              zi = p.z + sd * v.z;
+              zi = p.z() + sd * v.z();
 
               // rhoi & zi can never both be 0
               // (=>intersect at origin =>fRmax=0)
@@ -730,7 +748,7 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
         {
           if (!fFullThetaSphere)    // Check theta intersection
           {
-            zi = p.z + sd * v.z;
+            zi = p.z() + sd * v.z();
 
             // rhoi & zi can never both be 0
             // (=>intersect at origin => fRmax=0 !)
@@ -768,7 +786,7 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
         // Use inner phi tolerant boundary -> if on tolerant
         // phi boundaries, phi intersect code handles leaving/entering checks
 
-        cosPsi = (p.x * cosCPhi + p.y * sinCPhi) / std::sqrt(rho2);
+        cosPsi = (p.x() * cosCPhi + p.y() * sinCPhi) / std::sqrt(rho2);
 
         if (cosPsi >= cosHDPhiIT)
         {
@@ -827,7 +845,7 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
         // Use inner phi tolerant boundary -> if on tolerant
         // phi boundaries, phi intersect code handles leaving/entering checks
 
-        cosPsi = (p.x * cosCPhi + p.y * sinCPhi) / std::sqrt(rho2);
+        cosPsi = (p.x() * cosCPhi + p.y() * sinCPhi) / std::sqrt(rho2);
         if (cosPsi >= cosHDPhiIT)
         {
           // inside radii, delta r -ve, inside phi
@@ -869,8 +887,8 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
         sd = -pDotV3d + std::sqrt(d2);
         if (sd >= halfRminTolerance)  // It was >= 0 ??
         {
-          xi   = p.x + sd * v.x;
-          yi   = p.y + sd * v.y;
+          xi   = p.x() + sd * v.x();
+          yi   = p.y() + sd * v.y();
           rhoi = std::sqrt(xi * xi + yi * yi);
 
           if (!fFullPhiSphere && rhoi)   // Check phi intersection
@@ -881,7 +899,7 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
             {
               if (!fFullThetaSphere)  // Check theta intersection
               {
-                zi = p.z + sd * v.z;
+                zi = p.z() + sd * v.z();
 
                 // rhoi & zi can never both be 0
                 // (=>intersect at origin =>fRmax=0)
@@ -902,7 +920,7 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
           {
             if (!fFullThetaSphere)   // Check theta intersection
             {
-              zi = p.z + sd * v.z;
+              zi = p.z() + sd * v.z();
 
               // rhoi & zi can never both be 0
               // (=>intersect at origin => fRmax=0 !)
@@ -937,11 +955,11 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
     // First phi surface ('S'tarting phi)
     // Comp = Component in outwards normal dirn
     //
-    Comp = v.x * sinSPhi - v.y * cosSPhi;
+    Comp = v.x() * sinSPhi - v.y() * cosSPhi;
 
     if (Comp < 0)
     {
-      Dist = p.y * cosSPhi - p.x * sinSPhi;
+      Dist = p.y() * cosSPhi - p.x() * sinSPhi;
 
       if (Dist < halfCarTolerance)
       {
@@ -951,18 +969,18 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
         {
           if (sd > 0)
           {
-            xi = p.x + sd * v.x;
-            yi = p.y + sd * v.y;
-            zi = p.z + sd * v.z;
+            xi = p.x() + sd * v.x();
+            yi = p.y() + sd * v.y();
+            zi = p.z() + sd * v.z();
             rhoi2 = xi * xi + yi * yi ;
             radi2 = rhoi2 + zi * zi ;
           }
           else
           {
             sd    = 0;
-            xi    = p.x;
-            yi    = p.y;
-            zi    = p.z;
+            xi    = p.x();
+            yi    = p.y();
+            zi    = p.z();
             rhoi2 = rho2;
             radi2 = rad2;
           }
@@ -1000,11 +1018,11 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
     // Second phi surface ('E'nding phi)
     // Component in outwards normal dirn
 
-    Comp = -(v.x * sinEPhi - v.y * cosEPhi);
+    Comp = -(v.x() * sinEPhi - v.y() * cosEPhi);
 
     if (Comp < 0)
     {
-      Dist = -(p.y * cosEPhi - p.x * sinEPhi);
+      Dist = -(p.y() * cosEPhi - p.x() * sinEPhi);
       if (Dist < halfCarTolerance)
       {
         sd = Dist / Comp;
@@ -1013,18 +1031,18 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
         {
           if (sd > 0)
           {
-            xi    = p.x + sd * v.x;
-            yi    = p.y + sd * v.y;
-            zi    = p.z + sd * v.z;
+            xi    = p.x() + sd * v.x();
+            yi    = p.y() + sd * v.y();
+            zi    = p.z() + sd * v.z();
             rhoi2 = xi * xi + yi * yi ;
             radi2 = rhoi2 + zi * zi ;
           }
           else
           {
             sd    = 0   ;
-            xi    = p.x;
-            yi    = p.y;
-            zi    = p.z;
+            xi    = p.x();
+            yi    = p.y();
+            zi    = p.z();
             rhoi2 = rho2  ;
             radi2 = rad2  ;
           }
@@ -1086,7 +1104,7 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
 
     if (fSTheta)
     {
-      dist2STheta = rho2 - p.z * p.z * tanSTheta2;
+      dist2STheta = rho2 - p.z() * p.z() * tanSTheta2;
     }
     else
     {
@@ -1094,7 +1112,7 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
     }
     if (eTheta < UUtils::kPi)
     {
-      dist2ETheta = rho2 - p.z * p.z * tanETheta2;
+      dist2ETheta = rho2 - p.z() * p.z() * tanETheta2;
     }
     else
     {
@@ -1105,8 +1123,8 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
       // Inside (theta<stheta-tol) stheta cone
       // First root of stheta cone, second if first root -ve
 
-      t1 = 1 - v.z * v.z * (1 + tanSTheta2);
-      t2 = pDotV2d - p.z * v.z * tanSTheta2;
+      t1 = 1 - v.z() * v.z() * (1 + tanSTheta2);
+      t2 = pDotV2d - p.z() * v.z() * tanSTheta2;
       if (t1)
       {
         b = t2 / t1;
@@ -1117,7 +1135,7 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
         {
           d = std::sqrt(d2);
           sd = -b - d;    // First root
-          zi = p.z + sd * v.z;
+          zi = p.z() + sd * v.z();
 
           if ((sd < 0) || (zi * (fSTheta - UUtils::kPi / 2) > 0))
           {
@@ -1125,9 +1143,9 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
           }
           if ((sd >= 0) && (sd < snxt))
           {
-            xi    = p.x + sd * v.x;
-            yi    = p.y + sd * v.y;
-            zi    = p.z + sd * v.z;
+            xi    = p.x() + sd * v.x();
+            yi    = p.y() + sd * v.y();
+            zi    = p.z() + sd * v.z();
             rhoi2 = xi * xi + yi * yi;
             radi2 = rhoi2 + zi * zi;
             if ((radi2 <= tolORMax2)
@@ -1156,8 +1174,8 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
 
       if (eTheta < UUtils::kPi)
       {
-        t1 = 1 - v.z * v.z * (1 + tanETheta2);
-        t2 = pDotV2d - p.z * v.z * tanETheta2;
+        t1 = 1 - v.z() * v.z() * (1 + tanETheta2);
+        t2 = pDotV2d - p.z() * v.z() * tanETheta2;
         if (t1)
         {
           b = t2 / t1;
@@ -1171,9 +1189,9 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
 
             if ((sd >= 0) && (sd < snxt))
             {
-              xi    = p.x + sd * v.x;
-              yi    = p.y + sd * v.y;
-              zi    = p.z + sd * v.z;
+              xi    = p.x() + sd * v.x();
+              yi    = p.y() + sd * v.y();
+              zi    = p.z() + sd * v.z();
               rhoi2 = xi * xi + yi * yi;
               radi2 = rhoi2 + zi * zi;
 
@@ -1205,8 +1223,8 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
       // Inside (theta > etheta+tol) e-theta cone
       // First root of etheta cone, second if first root 'imaginary'
 
-      t1 = 1 - v.z * v.z * (1 + tanETheta2);
-      t2 = pDotV2d - p.z * v.z * tanETheta2;
+      t1 = 1 - v.z() * v.z() * (1 + tanETheta2);
+      t2 = pDotV2d - p.z() * v.z() * tanETheta2;
       if (t1)
       {
         b = t2 / t1;
@@ -1217,7 +1235,7 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
         {
           d = std::sqrt(d2);
           sd = -b - d;    // First root
-          zi = p.z + sd * v.z;
+          zi = p.z() + sd * v.z();
 
           if ((sd < 0) || (zi * (eTheta - UUtils::kPi / 2) > 0))
           {
@@ -1225,9 +1243,9 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
           }
           if ((sd >= 0) && (sd < snxt))
           {
-            xi    = p.x + sd * v.x;
-            yi    = p.y + sd * v.y;
-            zi    = p.z + sd * v.z;
+            xi    = p.x() + sd * v.x();
+            yi    = p.y() + sd * v.y();
+            zi    = p.z() + sd * v.z();
             rhoi2 = xi * xi + yi * yi;
             radi2 = rhoi2 + zi * zi;
 
@@ -1257,8 +1275,8 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
 
       if (fSTheta)
       {
-        t1 = 1 - v.z * v.z * (1 + tanSTheta2);
-        t2 = pDotV2d - p.z * v.z * tanSTheta2;
+        t1 = 1 - v.z() * v.z() * (1 + tanSTheta2);
+        t2 = pDotV2d - p.z() * v.z() * tanSTheta2;
         if (t1)
         {
           b = t2 / t1;
@@ -1272,9 +1290,9 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
 
             if ((sd >= 0) && (sd < snxt))
             {
-              xi    = p.x + sd * v.x;
-              yi    = p.y + sd * v.y;
-              zi    = p.z + sd * v.z;
+              xi    = p.x() + sd * v.x();
+              yi    = p.y() + sd * v.y();
+              zi    = p.z() + sd * v.z();
               rhoi2 = xi * xi + yi * yi;
               radi2 = rhoi2 + zi * zi;
 
@@ -1307,14 +1325,14 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
       // If entering through solid [r,phi] => 0 to in
       // else try 2nd root
 
-      t2 = pDotV2d - p.z * v.z * tanSTheta2;
+      t2 = pDotV2d - p.z() * v.z() * tanSTheta2;
       if ((t2 >= 0 && tolIRMin2 < rad2 && rad2 < tolIRMax2 && fSTheta < UUtils::kPi / 2)
           || (t2 < 0  && tolIRMin2 < rad2 && rad2 < tolIRMax2 && fSTheta > UUtils::kPi / 2)
-          || (v.z < 0 && tolIRMin2 < rad2 && rad2 < tolIRMax2 && fSTheta == UUtils::kPi / 2))
+          || (v.z() < 0 && tolIRMin2 < rad2 && rad2 < tolIRMax2 && fSTheta == UUtils::kPi / 2))
       {
         if (!fFullPhiSphere && rho2)  // Check phi intersection
         {
-          cosPsi = (p.x * cosCPhi + p.y * sinCPhi) / std::sqrt(rho2);
+          cosPsi = (p.x() * cosCPhi + p.y() * sinCPhi) / std::sqrt(rho2);
           if (cosPsi >= cosHDPhiIT)
           {
             return 0;
@@ -1328,7 +1346,7 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
 
       // Not entering immediately/travelling through
 
-      t1 = 1 - v.z * v.z * (1 + tanSTheta2);
+      t1 = 1 - v.z() * v.z() * (1 + tanSTheta2);
       if (t1)
       {
         b = t2 / t1;
@@ -1342,9 +1360,9 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
           if ((sd >= halfCarTolerance) && (sd < snxt) && (fSTheta < UUtils::kPi / 2))
           {
             // ^^^^^^^^^^^^^^^^^^^^^ shouldn't it be >=0 instead ?
-            xi    = p.x + sd * v.x;
-            yi    = p.y + sd * v.y;
-            zi    = p.z + sd * v.z;
+            xi    = p.x() + sd * v.x();
+            yi    = p.y() + sd * v.y();
+            zi    = p.z() + sd * v.z();
             rhoi2 = xi * xi + yi * yi;
             radi2 = rhoi2 + zi * zi;
 
@@ -1376,18 +1394,18 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
       // If entering through solid [r,phi] => 0 to in
       // else try 2nd root
 
-      t2 = pDotV2d - p.z * v.z * tanETheta2;
+      t2 = pDotV2d - p.z() * v.z() * tanETheta2;
 
       if (((t2 < 0) && (eTheta < UUtils::kPi / 2)
            && (tolIRMin2 < rad2) && (rad2 < tolIRMax2))
           || ((t2 >= 0) && (eTheta > UUtils::kPi / 2)
               && (tolIRMin2 < rad2) && (rad2 < tolIRMax2))
-          || ((v.z > 0) && (eTheta == UUtils::kPi / 2)
+          || ((v.z() > 0) && (eTheta == UUtils::kPi / 2)
               && (tolIRMin2 < rad2) && (rad2 < tolIRMax2)))
       {
         if (!fFullPhiSphere && rho2)   // Check phi intersection
         {
-          cosPsi = (p.x * cosCPhi + p.y * sinCPhi) / std::sqrt(rho2);
+          cosPsi = (p.x() * cosCPhi + p.y() * sinCPhi) / std::sqrt(rho2);
           if (cosPsi >= cosHDPhiIT)
           {
             return 0;
@@ -1401,7 +1419,7 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
 
       // Not entering immediately/travelling through
 
-      t1 = 1 - v.z * v.z * (1 + tanETheta2);
+      t1 = 1 - v.z() * v.z() * (1 + tanETheta2);
       if (t1)
       {
         b = t2 / t1;
@@ -1416,9 +1434,9 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
           if ((sd >= halfCarTolerance)
               && (sd < snxt) && (eTheta > UUtils::kPi / 2))
           {
-            xi    = p.x + sd * v.x;
-            yi    = p.y + sd * v.y;
-            zi    = p.z + sd * v.z;
+            xi    = p.x() + sd * v.x();
+            yi    = p.y() + sd * v.y();
+            zi    = p.z() + sd * v.z();
             rhoi2 = xi * xi + yi * yi;
             radi2 = rhoi2 + zi * zi;
 
@@ -1448,8 +1466,8 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
       // stheta+tol<theta<etheta-tol
       // For BOTH stheta & etheta check 2nd root for validity [r,phi]
 
-      t1 = 1 - v.z * v.z * (1 + tanSTheta2);
-      t2 = pDotV2d - p.z * v.z * tanSTheta2;
+      t1 = 1 - v.z() * v.z() * (1 + tanSTheta2);
+      t2 = pDotV2d - p.z() * v.z() * tanSTheta2;
       if (t1)
       {
         b = t2 / t1;
@@ -1463,9 +1481,9 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
 
           if ((sd >= 0) && (sd < snxt))
           {
-            xi    = p.x + sd * v.x;
-            yi    = p.y + sd * v.y;
-            zi    = p.z + sd * v.z;
+            xi    = p.x() + sd * v.x();
+            yi    = p.y() + sd * v.y();
+            zi    = p.z() + sd * v.z();
             rhoi2 = xi * xi + yi * yi;
             radi2 = rhoi2 + zi * zi;
 
@@ -1489,8 +1507,8 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
           }
         }
       }
-      t1 = 1 - v.z * v.z * (1 + tanETheta2);
-      t2 = pDotV2d - p.z * v.z * tanETheta2;
+      t1 = 1 - v.z() * v.z() * (1 + tanETheta2);
+      t2 = pDotV2d - p.z() * v.z() * tanETheta2;
       if (t1)
       {
         b = t2 / t1;
@@ -1504,9 +1522,9 @@ double USphere::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPst
 
           if ((sd >= 0) && (sd < snxt))
           {
-            xi    = p.x + sd * v.x;
-            yi    = p.y + sd * v.y;
-            zi    = p.z + sd * v.z;
+            xi    = p.x() + sd * v.x();
+            yi    = p.y() + sd * v.y();
+            zi    = p.z() + sd * v.z();
             rhoi2 = xi * xi + yi * yi;
             radi2 = rhoi2 + zi * zi;
 
@@ -1549,8 +1567,8 @@ double USphere::SafetyFromOutside(const UVector3& p, bool /*aAccurate*/) const
   double rho2, rds, rho;
   double cosPsi;
   double pTheta, dTheta1, dTheta2;
-  rho2 = p.x * p.x + p.y * p.y;
-  rds = std::sqrt(rho2 + p.z * p.z);
+  rho2 = p.x() * p.x() + p.y() * p.y();
+  rds = std::sqrt(rho2 + p.z() * p.z());
   rho = std::sqrt(rho2);
 
   //
@@ -1581,18 +1599,18 @@ double USphere::SafetyFromOutside(const UVector3& p, bool /*aAccurate*/) const
   {
     // Psi=angle from central phi to point
     //
-    cosPsi = (p.x * cosCPhi + p.y * sinCPhi) / rho;
+    cosPsi = (p.x() * cosCPhi + p.y() * sinCPhi) / rho;
     if (cosPsi < std::cos(hDPhi))
     {
       // Point lies outside phi range
       //
-      if ((p.y * cosCPhi - p.x * sinCPhi) <= 0)
+      if ((p.y() * cosCPhi - p.x() * sinCPhi) <= 0)
       {
-        safePhi = std::fabs(p.x * sinSPhi - p.y * cosSPhi);
+        safePhi = std::fabs(p.x() * sinSPhi - p.y() * cosSPhi);
       }
       else
       {
-        safePhi = std::fabs(p.x * sinEPhi - p.y * cosEPhi);
+        safePhi = std::fabs(p.x() * sinEPhi - p.y() * cosEPhi);
       }
       if (safePhi > safe)
       {
@@ -1605,7 +1623,7 @@ double USphere::SafetyFromOutside(const UVector3& p, bool /*aAccurate*/) const
   //
   if ((rds != 0.0) && (!fFullThetaSphere))
   {
-    pTheta = std::acos(p.z / rds);
+    pTheta = std::acos(p.z() / rds);
     if (pTheta < 0)
     {
       pTheta += UUtils::kPi;
@@ -1679,11 +1697,11 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
 
   // General Precalcs
   //
-  rho2 = p.x * p.x + p.y * p.y;
-  rad2 = rho2 + p.z * p.z;
+  rho2 = p.x() * p.x() + p.y() * p.y();
+  rad2 = rho2 + p.z() * p.z();
 
-  pDotV2d = p.x * v.x + p.y * v.y;
-  pDotV3d = pDotV2d + p.z * v.z;
+  pDotV2d = p.x() * v.x() + p.y() * v.y();
+  pDotV3d = pDotV2d + p.z() * v.z();
 
   // Radial Intersections from USphere::DistanceToIn
   //
@@ -1723,7 +1741,7 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
         // not re-entering
       {
         validNorm = true;
-        n        = UVector3(p.x / fRmax, p.y / fRmax, p.z / fRmax);
+        n        = UVector3(p.x() / fRmax, p.y() / fRmax, p.z() / fRmax);
         return snxt = 0;
       }
       else
@@ -1748,7 +1766,7 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
             && (d2 >= fRminTolerance * fRmin) && (pDotV3d < 0))
         {
           validNorm = false;  // Rmin surface is concave
-          n        = UVector3(-p.x / fRmin, -p.y / fRmin, -p.z / fRmin);
+          n        = UVector3(-p.x() / fRmin, -p.y() / fRmin, -p.z() / fRmin);
           return snxt = 0;
         }
         else
@@ -1798,42 +1816,42 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
     {
       if (std::fabs(tanSTheta) > 5. / kAngTolerance) // kons is plane z=0
       {
-        if (v.z > 0.)
+        if (v.z() > 0.)
         {
-          if (std::fabs(p.z) <= halfTolerance)
+          if (std::fabs(p.z()) <= halfTolerance)
           {
             validNorm = true;
             n = UVector3(0., 0., 1.);
             return snxt = 0;
           }
-          stheta    = -p.z / v.z;
+          stheta    = -p.z() / v.z();
           sidetheta = kSTheta;
         }
       }
       else // kons is not plane
       {
-        t1          = 1 - v.z * v.z * (1 + tanSTheta2);
-        t2          = pDotV2d - p.z * v.z * tanSTheta2; // ~vDotN if p on cons
-        dist2STheta = rho2 - p.z * p.z * tanSTheta2; // t3
+        t1          = 1 - v.z() * v.z() * (1 + tanSTheta2);
+        t2          = pDotV2d - p.z() * v.z() * tanSTheta2; // ~vDotN if p on cons
+        dist2STheta = rho2 - p.z() * p.z() * tanSTheta2; // t3
 
-        distTheta = std::sqrt(rho2) - p.z * tanSTheta;
+        distTheta = std::sqrt(rho2) - p.z() * tanSTheta;
 
         if (std::fabs(t1) < halfAngTolerance) // 1st order equation,
         {
           // v parallel to kons
-          if (v.z > 0.)
+          if (v.z() > 0.)
           {
             if (std::fabs(distTheta) < halfTolerance) // p on surface
             {
-              if ((fSTheta < UUtils::kPi / 2) && (p.z > 0.))
+              if ((fSTheta < UUtils::kPi / 2) && (p.z() > 0.))
               {
                 validNorm = false;
                 if (rho2)
               {
                 rhoSecTheta = std::sqrt(rho2 * (1 + tanSTheta2));
 
-                n = UVector3(p.x / rhoSecTheta,
-                             p.y / rhoSecTheta,
+                n = UVector3(p.x() / rhoSecTheta,
+                             p.y() / rhoSecTheta,
                              -std::sin(fSTheta));
               }
               else
@@ -1842,15 +1860,15 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
               }
                 return snxt = 0.;
               }
-              else if ((fSTheta > UUtils::kPi / 2) && (p.z <= 0))
+              else if ((fSTheta > UUtils::kPi / 2) && (p.z() <= 0))
               {
                 validNorm = true;
                 if (rho2)
                 {
                   rhoSecTheta = std::sqrt(rho2 * (1 + tanSTheta2));
 
-                  n = UVector3(p.x / rhoSecTheta,
-                               p.y / rhoSecTheta,
+                  n = UVector3(p.x() / rhoSecTheta,
+                               p.y() / rhoSecTheta,
                                std::sin(fSTheta));
                 }
                 else n = UVector3(0., 0., 1.);
@@ -1872,8 +1890,8 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
               {
                 rhoSecTheta = std::sqrt(rho2 * (1 + tanSTheta2));
 
-                n = UVector3(p.x / rhoSecTheta,
-                             p.y / rhoSecTheta,
+                n = UVector3(p.x() / rhoSecTheta,
+                             p.y() / rhoSecTheta,
                              std::sin(fSTheta));
               }
               else
@@ -1882,15 +1900,15 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
               }
               return snxt = 0.;
             }
-            else if ((fSTheta < UUtils::kPi / 2) && (t2 < 0.) && (p.z >= 0.)) // leave
+            else if ((fSTheta < UUtils::kPi / 2) && (t2 < 0.) && (p.z() >= 0.)) // leave
             {
               validNorm = false;
               if (rho2)
               {
                 rhoSecTheta = std::sqrt(rho2 * (1 + tanSTheta2));
 
-                n = UVector3(p.x / rhoSecTheta,
-                             p.y / rhoSecTheta,
+                n = UVector3(p.x() / rhoSecTheta,
+                             p.y() / rhoSecTheta,
                              -std::sin(fSTheta));
               }
               else
@@ -1914,11 +1932,11 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
               sd = -b - d;         // First root
 
               if (((std::fabs(sd) < halfTolerance) && (t2 < 0.))
-                  || (sd < 0.) || ((sd > 0.) && (p.z + sd * v.z > 0.)))
+                  || (sd < 0.) || ((sd > 0.) && (p.z() + sd * v.z() > 0.)))
               {
                 sd = -b + d; // 2nd root
               }
-              if ((sd > halfTolerance) && (p.z + sd * v.z <= 0.))
+              if ((sd > halfTolerance) && (p.z() + sd * v.z() <= 0.))
               {
                 stheta    = sd;
                 sidetheta = kSTheta;
@@ -1929,11 +1947,11 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
               sd = -b - d;         // First root
 
               if (((std::fabs(sd) < halfTolerance) && (t2 >= 0.))
-                  || (sd < 0.) || ((sd > 0.) && (p.z + sd * v.z < 0.)))
+                  || (sd < 0.) || ((sd > 0.) && (p.z() + sd * v.z() < 0.)))
               {
                 sd = -b + d; // 2nd root
               }
-              if ((sd > halfTolerance) && (p.z + sd * v.z >= 0.))
+              if ((sd > halfTolerance) && (p.z() + sd * v.z() >= 0.))
               {
                 stheta    = sd;
                 sidetheta = kSTheta;
@@ -1947,15 +1965,15 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
     {
       if (std::fabs(tanETheta) > 5. / kAngTolerance) // kons is plane z=0
       {
-        if (v.z < 0.)
+        if (v.z() < 0.)
         {
-          if (std::fabs(p.z) <= halfTolerance)
+          if (std::fabs(p.z()) <= halfTolerance)
           {
             validNorm = true;
             n = UVector3(0., 0., -1.);
             return snxt = 0;
           }
-          sd = -p.z / v.z;
+          sd = -p.z() / v.z();
 
           if (sd < stheta)
           {
@@ -1966,27 +1984,27 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
       }
       else // kons is not plane
       {
-        t1          = 1 - v.z * v.z * (1 + tanETheta2);
-        t2          = pDotV2d - p.z * v.z * tanETheta2; // ~vDotN if p on cons
-        dist2ETheta = rho2 - p.z * p.z * tanETheta2; // t3
+        t1          = 1 - v.z() * v.z() * (1 + tanETheta2);
+        t2          = pDotV2d - p.z() * v.z() * tanETheta2; // ~vDotN if p on cons
+        dist2ETheta = rho2 - p.z() * p.z() * tanETheta2; // t3
 
-        distTheta = std::sqrt(rho2) - p.z * tanETheta;
+        distTheta = std::sqrt(rho2) - p.z() * tanETheta;
 
         if (std::fabs(t1) < halfAngTolerance) // 1st order equation,
         {
           // v parallel to kons
-          if (v.z < 0.)
+          if (v.z() < 0.)
           {
             if (std::fabs(distTheta) < halfTolerance) // p on surface
             {
-              if ((eTheta > UUtils::kPi / 2) && (p.z < 0.))
+              if ((eTheta > UUtils::kPi / 2) && (p.z() < 0.))
               {
                 validNorm = false;
                  if (rho2)
                 {
                   rhoSecTheta = std::sqrt(rho2 * (1 + tanETheta2));
-                  n = UVector3(p.x / rhoSecTheta,
-                               p.y / rhoSecTheta,
+                  n = UVector3(p.x() / rhoSecTheta,
+                               p.y() / rhoSecTheta,
                                sinETheta);
                 }
                 else
@@ -1995,14 +2013,14 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
                 }
                 return snxt = 0.;
               }
-              else if ((eTheta < UUtils::kPi / 2) && (p.z >= 0))
+              else if ((eTheta < UUtils::kPi / 2) && (p.z() >= 0))
               {
                 validNorm = true;
                 if (rho2)
                 {
                   rhoSecTheta = std::sqrt(rho2 * (1 + tanETheta2));
-                  n = UVector3(p.x / rhoSecTheta,
-                               p.y / rhoSecTheta,
+                  n = UVector3(p.x() / rhoSecTheta,
+                               p.y() / rhoSecTheta,
                                -sinETheta);
                 }
                 else
@@ -2031,22 +2049,22 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
               if (rho2)
               {
                 rhoSecTheta = std::sqrt(rho2 * (1 + tanETheta2));
-                n = UVector3(p.x / rhoSecTheta,
-                             p.y / rhoSecTheta,
+                n = UVector3(p.x() / rhoSecTheta,
+                             p.y() / rhoSecTheta,
                              -sinETheta);
               }
               else n = UVector3(0., 0., -1.);
               return snxt = 0.;
             }
             else if ((eTheta > UUtils::kPi / 2)
-                     && (t2 < 0.) && (p.z <= 0.)) // leave
+                     && (t2 < 0.) && (p.z() <= 0.)) // leave
             {
               validNorm = false;
                if (rho2)
               {
                 rhoSecTheta = std::sqrt(rho2 * (1 + tanETheta2));
-                n = -UVector3(p.x / rhoSecTheta,
-                             p.y / rhoSecTheta,
+                n = -UVector3(p.x() / rhoSecTheta,
+                             p.y() / rhoSecTheta,
                              sinETheta);
               }
               else n = UVector3(0., 0., -1.);
@@ -2085,11 +2103,11 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
               sd = -b - d;         // First root
 
               if (((std::fabs(sd) < halfTolerance) && (t2 >= 0.))
-                  || (sd < 0.) || ((sd > 0.) && (p.z + sd * v.z > 0.)))
+                  || (sd < 0.) || ((sd > 0.) && (p.z() + sd * v.z() > 0.)))
               {
                 sd = -b + d; // 2nd root
               }
-              if ((sd > halfTolerance) && (p.z + sd * v.z <= 0.))
+              if ((sd > halfTolerance) && (p.z() + sd * v.z() <= 0.))
               {
                 if (sd < stheta)
                 {
@@ -2109,17 +2127,17 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
 
   if (!fFullPhiSphere)
   {
-    if (p.x || p.y) // Check if on z axis (rho not needed later)
+    if (p.x() || p.y()) // Check if on z axis (rho not needed later)
     {
       // pDist -ve when inside
 
-      pDistS = p.x * sinSPhi - p.y * cosSPhi;
-      pDistE = -p.x * sinEPhi + p.y * cosEPhi;
+      pDistS = p.x() * sinSPhi - p.y() * cosSPhi;
+      pDistE = -p.x() * sinEPhi + p.y() * cosEPhi;
 
       // Comp -ve when in direction of outwards normal
 
-      compS  = -sinSPhi * v.x + cosSPhi * v.y;
-      compE  =  sinEPhi * v.x - cosEPhi * v.y;
+      compS  = -sinSPhi * v.x() + cosSPhi * v.y();
+      compE  =  sinEPhi * v.x() - cosEPhi * v.y();
       sidephi = kNull;
 
       if ((pDistS <= 0) && (pDistE <= 0))
@@ -2129,14 +2147,14 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
         if (compS < 0)
         {
           sphi = pDistS / compS;
-          xi   = p.x + sphi * v.x;
-          yi   = p.y + sphi * v.y;
+          xi   = p.x() + sphi * v.x();
+          yi   = p.y() + sphi * v.y();
 
           // Check intersection with correct half-plane (if not -> no intersect)
           //
           if ((std::fabs(xi) <= VUSolid::Tolerance()) && (std::fabs(yi) <= VUSolid::Tolerance()))
           {
-            vphi = std::atan2(v.y, v.x);
+            vphi = std::atan2(v.y(), v.x());
             sidephi = kSPhi;
             if (((fSPhi - halfAngTolerance) <= vphi)
                 && ((ePhi + halfAngTolerance) >= vphi))
@@ -2167,8 +2185,8 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
           sphi2 = pDistE / compE;
           if (sphi2 < sphi) // Only check further if < starting phi intersection
           {
-            xi = p.x + sphi2 * v.x;
-            yi = p.y + sphi2 * v.y;
+            xi = p.x() + sphi2 * v.x();
+            yi = p.y() + sphi2 * v.y();
 
             // Check intersection with correct half-plane
             //
@@ -2176,7 +2194,7 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
             {
               // Leaving via ending phi
               //
-              vphi = std::atan2(v.y, v.x);
+              vphi = std::atan2(v.y(), v.x());
 
               if (!((fSPhi - halfAngTolerance <= vphi)
                     && (fSPhi + fDPhi + halfAngTolerance >= vphi)))
@@ -2252,15 +2270,15 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
           if (compE < 0)
           {
             sphi = pDistE / compE;
-            xi   = p.x + sphi * v.x;
-            yi   = p.y + sphi * v.y;
+            xi   = p.x() + sphi * v.x();
+            yi   = p.y() + sphi * v.y();
 
             // Check intersection in correct half-plane
             // (if not -> not leaving phi extent)
             //
             if ((std::fabs(xi) <= VUSolid::Tolerance()) && (std::fabs(yi) <= VUSolid::Tolerance()))
             {
-              vphi = std::atan2(v.y, v.x);
+              vphi = std::atan2(v.y(), v.x());
               sidephi = kSPhi;
               if (((fSPhi - halfAngTolerance) <= vphi)
                   && ((ePhi + halfAngTolerance) >= vphi))
@@ -2293,15 +2311,15 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
             if (compE < 0)
             {
               sphi = pDistE / compE;
-              xi   = p.x + sphi * v.x;
-              yi   = p.y + sphi * v.y;
+              xi   = p.x() + sphi * v.x();
+              yi   = p.y() + sphi * v.y();
 
               // Check intersection in correct half-plane
               // (if not -> remain in extent)
               //
               if ((std::fabs(xi) <= VUSolid::Tolerance()) && (std::fabs(yi) <= VUSolid::Tolerance()))
               {
-                vphi = std::atan2(v.y, v.x);
+                vphi = std::atan2(v.y(), v.x());
                 sidephi = kSPhi;
                 if (((fSPhi - halfAngTolerance) <= vphi)
                     && ((ePhi + halfAngTolerance) >= vphi))
@@ -2337,15 +2355,15 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
           if (compS < 0)
           {
             sphi = pDistS / compS;
-            xi = p.x + sphi * v.x;
-            yi = p.y + sphi * v.y;
+            xi = p.x() + sphi * v.x();
+            yi = p.y() + sphi * v.y();
 
             // Check intersection in correct half-plane
             // (if not -> not leaving phi extent)
             //
             if ((std::fabs(xi) <= VUSolid::Tolerance()) && (std::fabs(yi) <= VUSolid::Tolerance()))
             {
-              vphi = std::atan2(v.y, v.x);
+              vphi = std::atan2(v.y(), v.x());
               sidephi = kSPhi;
               if (((fSPhi - halfAngTolerance) <= vphi)
                   && ((ePhi + halfAngTolerance) >= vphi))
@@ -2378,15 +2396,15 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
             if (compS < 0)
             {
               sphi = pDistS / compS;
-              xi   = p.x + sphi * v.x;
-              yi   = p.y + sphi * v.y;
+              xi   = p.x() + sphi * v.x();
+              yi   = p.y() + sphi * v.y();
 
               // Check intersection in correct half-plane
               // (if not -> remain in extent)
               //
               if ((std::fabs(xi) <= VUSolid::Tolerance()) && (std::fabs(yi) <= VUSolid::Tolerance()))
               {
-                vphi = std::atan2(v.y, v.x);
+                vphi = std::atan2(v.y(), v.x());
                 sidephi = kSPhi;
                 if (((fSPhi - halfAngTolerance) <= vphi)
                     && ((ePhi + halfAngTolerance) >= vphi))
@@ -2421,9 +2439,9 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
       // On z axis + travel not || to z axis -> if phi of vector direction
       // within phi of shape, Step limited by rmax, else Step =0
 
-      if (v.x || v.y)
+      if (v.x() || v.y())
       {
-        vphi = std::atan2(v.y, v.x);
+        vphi = std::atan2(v.y(), v.x());
         if ((fSPhi - halfAngTolerance < vphi) && (vphi < ePhi + halfAngTolerance))
         {
           sphi = UUtils::Infinity();
@@ -2454,17 +2472,17 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
   switch (side)
   {
     case kRMax:
-      xi = p.x + snxt * v.x;
-      yi = p.y + snxt * v.y;
-      zi = p.z + snxt * v.z;
+      xi = p.x() + snxt * v.x();
+      yi = p.y() + snxt * v.y();
+      zi = p.z() + snxt * v.z();
       n = UVector3(xi / fRmax, yi / fRmax, zi / fRmax);
       validNorm = true;
       break;
 
     case kRMin:
-      xi = p.x + snxt * v.x;
-      yi = p.y + snxt * v.y;
-      zi = p.z + snxt * v.z;
+      xi = p.x() + snxt * v.x();
+      yi = p.y() + snxt * v.y();
+      zi = p.z() + snxt * v.z();
       n = UVector3(-xi / fRmin, -yi / fRmin, -zi / fRmin);
       validNorm = false; // Rmin is concave
       break;
@@ -2503,8 +2521,8 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
       }
       else if (fSTheta > UUtils::kPi / 2)
       {
-        xi = p.x + snxt * v.x;
-        yi = p.y + snxt * v.y;
+        xi = p.x() + snxt * v.x();
+        yi = p.y() + snxt * v.y();
         rho2 = xi * xi + yi * yi;
         if (rho2)
         {
@@ -2520,8 +2538,8 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
       }
       else
       {
-       xi = p.x + snxt * v.x;
-        yi = p.y + snxt * v.y;
+       xi = p.x() + snxt * v.x();
+        yi = p.y() + snxt * v.y();
         rho2 = xi * xi + yi * yi;
         if (rho2)
         {
@@ -2546,8 +2564,8 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
       }
       else if (eTheta < UUtils::kPi / 2)
       {
-        xi = p.x + snxt * v.x;
-        yi = p.y + snxt * v.y;
+        xi = p.x() + snxt * v.x();
+        yi = p.y() + snxt * v.y();
         rho2 = xi * xi + yi * yi;
         if (rho2)
         {
@@ -2563,8 +2581,8 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
       }
       else
       {
-        xi = p.x + snxt * v.x;
-        yi = p.y + snxt * v.y;
+        xi = p.x() + snxt * v.x();
+        yi = p.y() + snxt * v.y();
         rho2 = xi * xi + yi * yi;
         if (rho2)
         {
@@ -2588,18 +2606,18 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
       message << "Undefined side for valid surface normal to solid."
               << std::endl
               << "Position:"  << std::endl << std::endl
-              << "p.x = "  << p.x << " mm" << std::endl
-              << "p.y = "  << p.y << " mm" << std::endl
-              << "p.z = "  << p.z << " mm" << std::endl << std::endl
+              << "p.x = "  << p.x() << " mm" << std::endl
+              << "p.y = "  << p.y() << " mm" << std::endl
+              << "p.z = "  << p.z() << " mm" << std::endl << std::endl
               << "Direction:" << std::endl << std::endl
-              << "v.x = "  << v.x << std::endl
-              << "v.y = "  << v.y << std::endl
-              << "v.z = "  << v.z << std::endl << std::endl
+              << "v.x = "  << v.x() << std::endl
+              << "v.y = "  << v.y() << std::endl
+              << "v.z = "  << v.z() << std::endl << std::endl
               << "Proposed distance :" << std::endl << std::endl
               << "snxt = "    << snxt << " mm" << std::endl;
       message.precision(oldprc);
       UUtils::Exception("USphere::DistanceToOut(p,v,..)",
-                        "GeomSolids1002", Warning, 1, message.str().c_str());
+                        "GeomSolids1002", UWarning, 1, message.str().c_str());
       break;
   }
   if (snxt == UUtils::Infinity())
@@ -2610,20 +2628,20 @@ double USphere::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
     int oldprc = message.precision(16);
     message << "Logic error: snxt = UUtils::Infinity() ???" << std::endl
             << "Position:"  << std::endl << std::endl
-            << "p.x = "  << p.x << " mm" << std::endl
-            << "p.y = "  << p.y << " mm" << std::endl
-            << "p.z = "  << p.z << " mm" << std::endl << std::endl
-            << "Rp = " << std::sqrt(p.x * p.x + p.y * p.y + p.z * p.z)
+            << "p.x = "  << p.x() << " mm" << std::endl
+            << "p.y = "  << p.y() << " mm" << std::endl
+            << "p.z = "  << p.z() << " mm" << std::endl << std::endl
+            << "Rp = " << std::sqrt(p.x() * p.x() + p.y() * p.y() + p.z() * p.z())
             << " mm" << std::endl << std::endl
             << "Direction:" << std::endl << std::endl
-            << "v.x = "  << v.x << std::endl
-            << "v.y = "  << v.y << std::endl
-            << "v.z = "  << v.z << std::endl << std::endl
+            << "v.x = "  << v.x() << std::endl
+            << "v.y = "  << v.y() << std::endl
+            << "v.z = "  << v.z() << std::endl << std::endl
             << "Proposed distance :" << std::endl << std::endl
             << "snxt = "    << snxt << " mm" << std::endl;
     message.precision(oldprc);
     UUtils::Exception("USphere::DistanceToOut(p,v,..)",
-                      "GeomSolids1002", Warning, 1, message.str().c_str());
+                      "GeomSolids1002", UWarning, 1, message.str().c_str());
   }
 
   return snxt;
@@ -2637,9 +2655,9 @@ double USphere::SafetyFromInside(const UVector3& p, bool /*aAccurate*/) const
 {
   double safe = 0.0, safeRMin, safeRMax, safePhi, safeTheta;
   double rho2, rds, rho;
-  double pTheta, dTheta1, dTheta2;
-  rho2 = p.x * p.x + p.y * p.y;
-  rds = std::sqrt(rho2 + p.z * p.z);
+  double pTheta, dTheta1 = UUtils::Infinity(),dTheta2 = UUtils::Infinity();
+  rho2 = p.x() * p.x() + p.y() * p.y();
+  rds = std::sqrt(rho2 + p.z() * p.z());
   rho = std::sqrt(rho2);
 
 #ifdef UDEBUG
@@ -2649,85 +2667,76 @@ double USphere::SafetyFromInside(const UVector3& p, bool /*aAccurate*/) const
     cout << std::endl;
 
     cout << "Position:"  << std::endl << std::endl;
-    cout << "p.x = "  << p.x << " mm" << std::endl;
-    cout << "p.y = "  << p.y << " mm" << std::endl;
-    cout << "p.z = "  << p.z << " mm" << std::endl << std::endl;
+    cout << "p.x = "  << p.x() << " mm" << std::endl;
+    cout << "p.y = "  << p.y() << " mm" << std::endl;
+    cout << "p.z = "  << p.z() << " mm" << std::endl << std::endl;
     cout.precision(old_prc);
     UUtils::Exception("USphere::DistanceToOut(p)",
-                      "GeomSolids1002", Warning, 1, "Point p is outside !?");
+                      "GeomSolids1002", UWarning, 1, "Point p is outside !?");
   }
 #endif
 
-  //
   // Distance to r shells
   //
+  safeRMax = fRmax-rds;
+  safe = safeRMax;  
   if (fRmin)
   {
-    safeRMin = rds - fRmin;
-    safeRMax = fRmax - rds;
-    if (safeRMin < safeRMax)
-    {
-      safe = safeRMin;
-    }
-    else
-    {
-      safe = safeRMax;
-    }
-  }
-  else
-  {
-    safe = fRmax - rds;
+     safeRMin = rds-fRmin;
+     safe = std::min( safeRMin, safeRMax ); 
   }
 
-  //
   // Distance to phi extent
   //
-  if (!fFullPhiSphere && rho)
+  if ( !fFullPhiSphere )
   {
-    if ((p.y * cosCPhi - p.x * sinCPhi) <= 0)
-    {
-      safePhi = -(p.x * sinSPhi - p.y * cosSPhi);
-    }
-    else
-    {
-      safePhi = (p.x * sinEPhi - p.y * cosEPhi);
-    }
-    if (safePhi < safe)
-    {
-      safe = safePhi;
-    }
+     if (rho>0.0)
+     {
+        if ((p.y()*cosCPhi-p.x()*sinCPhi)<=0)
+        {
+           safePhi=-(p.x()*sinSPhi-p.y()*cosSPhi);
+        }
+        else
+        {
+           safePhi=(p.x()*sinEPhi-p.y()*cosEPhi);
+        }
+     }
+     else
+     {
+        safePhi = 0.0;  // Distance to both Phi surfaces (extended)
+     }
+     // Both cases above can be improved - in case fRMin > 0.0
+     //  although it may be costlier (good for precise, not fast version)
+     
+     safe= std::min(safe, safePhi);
   }
 
-  //
   // Distance to Theta extent
   //
-  if ((rds)&&(!fFullThetaSphere))
+  if ( !fFullThetaSphere )
   {
-    pTheta = std::acos(p.z / rds);
-    if (pTheta < 0)
+    if( rds > 0.0 )
     {
-      pTheta += UUtils::kPi;
-    }
-    dTheta1 = pTheta - fSTheta;
-    dTheta2 = eTheta - pTheta;
-    if (dTheta1 < dTheta2)
-    {
-      safeTheta = rds * std::sin(dTheta1);
+       pTheta=std::acos(p.z()/rds);
+       if (pTheta<0) { pTheta+=UUtils::kPi; }
+       if(fSTheta>0.)
+       { dTheta1=pTheta-fSTheta;}
+       if(eTheta<UUtils::kPi)
+       { dTheta2=eTheta-pTheta;}
+      
+       safeTheta=rds*std::sin(std::min(dTheta1, dTheta2) );
     }
     else
     {
-      safeTheta = rds * std::sin(dTheta2);
+       safeTheta= 0.0;
+         // An improvement will be to return negative answer if outside (TODO)
     }
-    if (safe > safeTheta)
-    {
-      safe = safeTheta;
-    }
+    safe = std::min( safe, safeTheta );
   }
 
-  if (safe < 0)
-  {
-    safe = 0;
-  }
+  if (safe<0.0) { safe=0; }
+    // An improvement to return negative answer if outside (TODO)
+  
   return safe;
 }
 
@@ -2857,7 +2866,7 @@ USphere::CreateRotatedVertices(const UAffineTransform& pTransform,
   {
 
   UUtils::Exception("USphere::CreateRotatedVertices()",
-                "GeomSolids0003", FatalError,1,
+                "GeomSolids0003", UFatalError,1,
                 "Error in allocation of vertices. Out of memory !");
   }
 

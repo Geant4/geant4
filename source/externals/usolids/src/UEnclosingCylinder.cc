@@ -100,20 +100,20 @@ bool UEnclosingCylinder::MustBeOutside(const UVector3& p) const
 {
 //  if (p.Perp() > radius ) return true;
   if (p.Perp2() > radius * radius) return true;
-  if (p.z < zLo) return true;
-  if (p.z > zHi) return true;
+  if (p.z() < zLo) return true;
+  if (p.z() > zHi) return true;
 
   if (phiIsOpen)
   {
     if (concave)
     {
-      if (((p.x - dx1)*ry1 - (p.y - dy1)*rx1) < 0) return false;
-      if (((p.x - dx2)*ry2 - (p.y - dy2)*rx2) > 0) return false;
+      if (((p.x() - dx1)*ry1 - (p.y() - dy1)*rx1) < 0) return false;
+      if (((p.x() - dx2)*ry2 - (p.y() - dy2)*rx2) > 0) return false;
     }
     else
     {
-      if (((p.x - dx1)*ry1 - (p.y - dy1)*rx1) > 0) return true;
-      if (((p.x - dx2)*ry2 - (p.y - dy2)*rx2) < 0) return true;
+      if (((p.x() - dx1)*ry1 - (p.y() - dy1)*rx1) > 0) return true;
+      if (((p.x() - dx2)*ry2 - (p.y() - dy2)*rx2) < 0) return true;
     }
   }
 
@@ -133,16 +133,16 @@ bool UEnclosingCylinder::ShouldMiss(const UVector3& p,
 {
   if (!MustBeOutside(p)) return false;
 
-//  if (p.z < zLo - VUSolid::Tolerance() && v.z <= 0) return true;
-//  if (p.z > zHi + VUSolid::Tolerance() && v.z >= 0) return true;
+//  if (p.z() < zLo - VUSolid::Tolerance() && v.z() <= 0) return true;
+//  if (p.z() > zHi + VUSolid::Tolerance() && v.z() >= 0) return true;
 
-  double cross = p.x * v.y - p.y * v.x;
+  double cross = p.x() * v.y() - p.y() * v.x();
   if (cross > radius) return true;
 
   double r2 = p.Perp2();
   if (r2 > radius * radius)
   {
-    double dot = p.x * v.x + p.y * v.y;
+    double dot = p.x() * v.x() + p.y() * v.y();
     if (dot > 0) return true;
 
 //    double n = v.Perp2();
@@ -155,13 +155,13 @@ bool UEnclosingCylinder::ShouldMiss(const UVector3& p,
   {
     if (concave)
     {
-      if ( ((p.x-dx1)*ry1 - (p.y-dy1)*rx1) < 0) return false;
-      if ( ((p.x-dx2)*ry2 - (p.y-dy2)*rx2) > 0) return false;
+      if ( ((p.x()-dx1)*ry1 - (p.y()-dy1)*rx1) < 0) return false;
+      if ( ((p.x()-dx2)*ry2 - (p.y()-dy2)*rx2) > 0) return false;
     }
     else
     {
-      if ( ((p.x-dx1)*ry1 - (p.y-dy1)*rx1) > 0) return true;
-      if ( ((p.x-dx2)*ry2 - (p.y-dy2)*rx2) < 0) return true;
+      if ( ((p.x()-dx1)*ry1 - (p.y()-dy1)*rx1) > 0) return true;
+      if ( ((p.x()-dx2)*ry2 - (p.y()-dy2)*rx2) < 0) return true;
     }
     return false;
   }

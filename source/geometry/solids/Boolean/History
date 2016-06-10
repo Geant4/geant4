@@ -1,5 +1,5 @@
 
-$Id: History 86201 2014-11-07 15:22:50Z gcosmo $
+$Id: History 90704 2015-06-08 09:50:07Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ March 3, 2015  G.Cosmo                  geom-bool-V10-00-10
+ - Use accessors x(), y() and z() from UVector3, instead of directly accessing
+   its data-members.
 
  November 7, 2014  G.Cosmo               geom-bool-V10-00-09
  - Fixed Coverity defects in G4UMultiUnion::CreatePolyhedron() for

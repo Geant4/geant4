@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaModel.cc 88979 2015-03-17 10:10:21Z gcosmo $
+// $Id: G4KleinNishinaModel.cc 90583 2015-06-04 11:16:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -75,7 +75,10 @@ static const G4double dT0 = keV;
 static const G4int nlooplim = 1000;
 
 G4KleinNishinaModel::G4KleinNishinaModel(const G4String& nam)
-  : G4VEmModel(nam)
+  : G4VEmModel(nam), 
+    lv1(0.,0.,0.,0.),
+    lv2(0.,0.,0.,0.),
+    bst(0.,0.,0.)
 {
   theGamma = G4Gamma::Gamma();
   theElectron = G4Electron::Electron();
@@ -191,6 +194,7 @@ void G4KleinNishinaModel::SampleSecondaries(
 
   //static const G4double eminus2 =  1.0 - G4Exp(-2.0);
 
+  rndmEngineMod = G4Random::getTheEngine();
   do {
     ++nloop;
     G4double xprob = totprob*rndmEngineMod->flat();
@@ -349,7 +353,7 @@ void G4KleinNishinaModel::SampleSecondaries(
 		   << "  Eshell(keV)= " << shell->BindingEnergy()/keV 
 		   << G4endl;
 	  */
-	  // delete the rest of secondaries
+	  // delete the rest of secondaries (should not happens)
 	  for (G4int jj=nafter-1; jj>j; --jj) { 
 	    delete (*fvect)[jj]; 
 	    fvect->pop_back(); 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc 88979 2015-03-17 10:10:21Z gcosmo $
+// $Id: G4UniversalFluctuation.cc 91066 2015-06-17 09:17:45Z gcosmo $
 //
 // -------------------------------------------------------------------
 //

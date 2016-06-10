@@ -1,4 +1,4 @@
-$Id: History 89065 2015-03-18 10:32:32Z gcosmo $
+$Id: History 90575 2015-06-04 09:45:37Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,12 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-March 17, 2015 I. Hrivnacova (analysis-V10-00-43)
+April 9, 2015 I. Hrivnacova (analysis-V10-00-44)
+- Updated to g4tools 1.17.2 (Guy Barrand):
+  Changes for Windows (MinGW) - fixing problem #1721 (mainly to change 
+  #ifdef WIN32 to #ifdef _MSC_VER, which more clean)
+
+March 18, 2015 I. Hrivnacova (analysis-V10-00-43)
 - Fixed reading XML ntuples with a column of a vector type:
   tools do not support direct use of ntuple_bindings with a vector,
   use of a temorary sub-ntuple is needed
@@ -26,17 +31,17 @@ March 13, 2015 I. Hrivnacova (analysis-V10-00-42)
 - Fixed G4AnalysisManager::IsActive() - now taken into all Hn & Pn
   managers
 
-February 04, 2015 I. Hrivnacova
+February 04, 2015 I. Hrivnacova (analysis-V10-01-02)
 - Updated to g4tools 1.17.1 (Guy Barrand):
   Fixed resetting histograms;
   see History_tools for the complete list of modifications.
 
-January 21, 2015 I. Hrivnacova
+January 21, 2015 I. Hrivnacova (analysis-V10-01-01)
 - Updated to g4tools 1.17.0 (Guy Barrand):
   Fixes in the Root files output to be compatible with ROOT 6.02/x;
   see History_tools for the complete list of modifications.
 
-December 5, 2014 G. Cosmo
+December 5, 2014 G. Cosmo (analysis-V10-01-00)
 - Corrected csv/sources.cmake to include missing file:
     G4CsvAnalysisReader.icc
 
@@ -45,7 +50,7 @@ November 24, 2014 I. Hrivnacova (analysis-V10-00-41)
   the update of g4tools/src/csz_inflate.cc with Coverity fix 
   was missing
 
-November 07, 2014 I. Hrivnacova
+November 07, 2014 I. Hrivnacova (analysis-V09-06-33)
 - Fixed createH2/setH2 commands implementation
   (was missing in the previous tag V09-06-32)
 

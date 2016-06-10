@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegionStore.hh 66872 2013-01-15 01:25:57Z japost $
+// $Id: G4RegionStore.hh 90701 2015-06-08 09:43:16Z gcosmo $
 //
 // class G4RegionStore
 //
@@ -64,9 +64,9 @@ class G4RegionStore : public std::vector<G4Region*>
 {
   public:  // with description
 
-    static void Register(G4Region* pSolid);
+    static void Register(G4Region* pRegion);
       // Add the region to the collection.
-    static void DeRegister(G4Region* pSolid);
+    static void DeRegister(G4Region* pRegion);
       // Remove the region from the collection.
     static G4RegionStore* GetInstance();
       // Get a ptr to the unique G4RegionStore, creating it if necessary.

@@ -17,6 +17,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19-June-2015: G.Cosmo (externals-V10-00-15)
+- Updated to CLHEP-2.2.0.8:
+  o Avoid gcc-5 warnings on deprecated calls to auto_ptr in Utility headers.
+  o Switch off gcc-5 warning for unused variable in Randomize.h header.
+
+11-June-2015: G.Cosmo (externals-V10-00-10)
+- CLHEP: Moved static methods handling static data in G4RandGauss from inline
+  to source. Addressing problem report #1754.
+  Switch off warnings for deprecated calls to auto_ptr in Utility headers.
+
+9-April-2015: G.Cosmo
+- CLHEP: Fixed usage of std::abs() in RandGaussZiggurat source.
+
+12-December-2014: G.Cosmo
+- CLHEP: Fixed usage of std::abs() in RandGaussZiggurat header.
+- USolids: Use canonical form for operator=() in UPolycone.
+
 24-November-2014: G.Cosmo (externals-V10-00-08)
 - Updated to CLHEP-2.2.0.4:
   o Fixed a type mismatch in Utility/memory.h,

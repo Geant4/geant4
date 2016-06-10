@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.cc 87254 2014-11-28 07:49:23Z gcosmo $
+// $Id: G4FTFParticipants.cc 90572 2015-06-04 09:32:32Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -347,3 +347,18 @@ void G4FTFParticipants::ShiftInteractionTime() {
   }
   return;
 }
+
+
+//============================================================================
+
+void G4FTFParticipants::Clean() {
+  for ( size_t i = 0; i < theInteractions.size(); i++ ) {
+    if ( theInteractions[ i ] ) {
+      delete theInteractions[ i ];
+      theInteractions[ i ] = 0;
+    }
+  }
+  theInteractions.clear();
+  currentInteraction = -1;
+}
+

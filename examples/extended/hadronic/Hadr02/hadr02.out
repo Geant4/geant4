@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
+ Geant4 version Name: geant4-10-01-patch-02    (19-June-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -760,28 +760,28 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.29s Real=0.3s Sys=0s
+  User=0.25s Real=0.25s Sys=0s
 RunAction: End of run action is starting
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        S32
 Beam Energy(GeV)                     200
 Number of events                     100
-Average energy deposit (GeV)         6.503   RMS(GeV) 4.16
-Average number of steps              55.14
-Average number of gamma              0.53
+Average energy deposit (GeV)         6.299   RMS(GeV) 4.402
+Average number of steps              53.56
+Average number of gamma              0.74
 Average number of e-                 0
 Average number of e+                 0
-Average number of neutrons           13.7
-Average number of protons            14.29
+Average number of neutrons           11.9
+Average number of protons            11.75
 Average number of antiprotons        0
-Average number of pi+ & pi-          7.06
-Average number of pi0                3.71
-Average number of kaons              0.42
+Average number of pi+ & pi-          9.44
+Average number of pi0                4.73
+Average number of kaons              0.28
 Average number of muons              0
-Average number of deuterons+tritons  1.71
-Average number of He3+alpha          1.3
-Average number of ions               0.73
+Average number of deuterons+tritons  1.62
+Average number of He3+alpha          1.68
+Average number of ions               0.88
 ========================================================
 
 G4 kernel has come to Quit state.

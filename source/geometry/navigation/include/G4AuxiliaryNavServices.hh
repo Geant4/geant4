@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AuxiliaryNavServices.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4AuxiliaryNavServices.hh 90836 2015-06-10 09:31:06Z gcosmo $
 //
 // 
 // class G4AuxiliaryNavServices
@@ -71,10 +71,8 @@ class G4AuxiliaryNavServices
      // Is the track (point, direction) exiting the solid 'sampleSolid' ? 
      // Returns true if we are going to exit the volume.
 
- private:
- 
-   G4bool testOne();
-
+   static void ReportTolerances();
+     // Print global values of Cartesian, Radial and Angle Tolerances
 };
 
 #include "G4AuxiliaryNavServices.icc"
