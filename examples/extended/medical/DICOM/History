@@ -1,4 +1,4 @@
-$Id: History 78105 2013-12-03 14:46:36Z gcosmo $
+$Id: History 81911 2014-06-06 14:06:19Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History 78105 2013-12-03 14:46:36Z gcosmo $
                       Category History file
 
                       ---------------------
+
+03.12.2013 - Gabriele Cosmo (DICOM-V09-06-10)
+           - Attempt to fix Valgrind run-time error from printout in
+             DicomHandler::CheckFileFormat().
 
 03.12.2013 - Ivana Hrivnacova (DICOM-V09-06-09)
            - Updated README and .README to match (Pedro Arce)

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclNuclDiffuseElastic.cc 71874 2013-06-27 13:39:59Z gunter $
+// $Id: G4NuclNuclDiffuseElastic.cc 81874 2014-06-06 12:04:10Z gcosmo $
 //
 //
 // Physics model class G4NuclNuclDiffuseElastic 
@@ -1960,7 +1960,7 @@ G4complex G4NuclNuclDiffuseElastic::GammaLogarithm(G4complex zz)
   const G4double cof[6] = { 76.18009172947146,     -86.50532032941677,
                              24.01409824083091,      -1.231739572450155,
                               0.1208650973866179e-2, -0.5395239384953e-5  } ;
-  register G4int j;
+  G4int j;
   G4complex z = zz - 1.0;
   G4complex tmp = z + 5.5;
   tmp -= (z + 0.5) * std::log(tmp);

@@ -136,9 +136,9 @@ bool HepBoost::isNear (const HepLorentzRotation & lt,
 // ----------  Properties:
 
 double HepBoost::norm2() const {
-  register double bgx = rep_.xt_;
-  register double bgy = rep_.yt_;
-  register double bgz = rep_.zt_;
+  double bgx = rep_.xt_;
+  double bgy = rep_.yt_;
+  double bgz = rep_.zt_;
   return bgx*bgx+bgy*bgy+bgz*bgz;
 }
 

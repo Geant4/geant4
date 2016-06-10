@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserSpecialCuts.cc 68048 2013-03-13 14:34:07Z gcosmo $
+// $Id: G4UserSpecialCuts.cc 81893 2014-06-06 13:30:07Z gcosmo $
 //
 // --------------------------------------------------------------
 // History
@@ -74,6 +74,7 @@ G4UserSpecialCuts::~G4UserSpecialCuts()
 G4UserSpecialCuts::G4UserSpecialCuts(G4UserSpecialCuts& right)
   : G4VProcess(right)
 {
+  theLossTableManager = G4LossTableManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

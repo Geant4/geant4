@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.icc 68795 2013-04-05 13:24:46Z gcosmo $
+// $Id: G4Step.icc 81898 2014-06-06 13:43:20Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -43,6 +43,7 @@ inline
 inline 
  void G4Step::SetPreStepPoint(G4StepPoint* value)
  { 
+   delete fpPreStepPoint;
    fpPreStepPoint = value; 
  }
 
@@ -55,7 +56,8 @@ inline
 inline 
  void G4Step::SetPostStepPoint(G4StepPoint* value)
  { 
-   fpPostStepPoint = value; 
+    delete fpPostStepPoint;
+    fpPostStepPoint = value; 
  }
 
 inline 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalBorderSurface.hh 73926 2013-09-17 07:59:06Z gcosmo $
+// $Id: G4LogicalBorderSurface.hh 81646 2014-06-04 09:28:37Z gcosmo $
 //
 // class G4LogicalBorderSurface
 //
@@ -89,7 +89,7 @@ class G4LogicalBorderSurface : public G4LogicalSurface
   private:
 
     G4LogicalBorderSurface(const G4LogicalBorderSurface &right);
-    const G4LogicalBorderSurface& operator=(const G4LogicalBorderSurface &right);
+    G4LogicalBorderSurface& operator=(const G4LogicalBorderSurface &right);
 
   private:
 

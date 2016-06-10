@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc 78057 2013-12-03 08:31:15Z gcosmo $
+// $Id: G4ScoringMessenger.cc 81447 2014-05-28 15:13:56Z gcosmo $
 //
 // ---------------------------------------------------------------------
 
@@ -195,6 +195,7 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param = new G4UIparameter("proj",'i',true);
   param->SetDefaultValue(111);
   drawCmd->SetParameter(param);
+  drawCmd->SetToBeBroadcasted(false);
 
   // Draw column
   drawColumnCmd = new G4UIcommand("/score/drawColumn",this);
@@ -213,17 +214,20 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param = new G4UIparameter("colorMapName",'s',true);
   param->SetDefaultValue("defaultLinearColorMap");
   drawColumnCmd->SetParameter(param);
+  drawColumnCmd->SetToBeBroadcasted(false);
 
   colorMapDir = new G4UIdirectory("/score/colorMap/");
   colorMapDir->SetGuidance("Color map commands.");
 
   listColorMapCmd = new G4UIcmdWithoutParameter("/score/colorMap/listScoreColorMaps",this);
   listColorMapCmd->SetGuidance("List registered score color maps.");
+  listColorMapCmd->SetToBeBroadcasted(false);
 
   floatMinMaxCmd = new G4UIcmdWithAString("/score/colorMap/floatMinMax",this);
   floatMinMaxCmd->SetGuidance("Min/Max of the color map is calculated accorging to the actual scores.");
   floatMinMaxCmd->SetParameterName("colorMapName",true,false);
   floatMinMaxCmd->SetDefaultValue("defaultLinearColorMap");
+  floatMinMaxCmd->SetToBeBroadcasted(false);
 
   colorMapMinMaxCmd = new G4UIcommand("/score/colorMap/setMinMax",this);
   colorMapMinMaxCmd->SetGuidance("Define min/max value of the color map.");
@@ -234,6 +238,7 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   colorMapMinMaxCmd->SetParameter(param);
   param = new G4UIparameter("maxValue",'d',false);
   colorMapMinMaxCmd->SetParameter(param);
+  colorMapMinMaxCmd->SetToBeBroadcasted(false);
 
   /*
   chartCmd = new G4UIcommand("/score/drawChart",this);
@@ -266,6 +271,7 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   dumpQtyToFileCmd->SetParameter(param);
   param = new G4UIparameter("option", 's', true);
   dumpQtyToFileCmd->SetParameter(param);
+  dumpQtyToFileCmd->SetToBeBroadcasted(false);
 
   // Dump all scored quantities
   dumpAllQtsToFileCmd = new G4UIcommand("/score/dumpAllQuantitiesToFile", this);
@@ -276,6 +282,7 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   dumpAllQtsToFileCmd->SetParameter(param);
   param = new G4UIparameter("option", 's', true);
   dumpAllQtsToFileCmd->SetParameter(param);
+  dumpAllQtsToFileCmd->SetToBeBroadcasted(false);
 
 }
 
@@ -389,7 +396,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
   } else if(command==meshCylinderCreateCmd) {
       G4VScoringMesh* currentmesh = fSMan->GetCurrentMesh(); 
       if ( currentmesh ){
-	G4cerr << "ERROR[" << meshBoxCreateCmd->GetCommandPath()
+	G4cerr << "ERROR[" << meshCylinderCreateCmd->GetCommandPath()
 	       << "] : Mesh <" << currentmesh->GetWorldName() 
 	       << "> is still open. Close it first. Command ignored." << G4endl;
       } else {

@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 April 2014 Gabriele Cosmo (externals-V09-06-08)
+-  Get rid of deprecated 'register' storage class specifier in zlib module.
+
+18 March 2014 Gabriele Cosmo
+-  Fixed compilation warnings from clang-3.4 for unused variables in
+   zlib module. 
+
+24-February-2014: G.Cosmo
+- Removed deprecated 'register' qualifiers in implementation of CLHEP classes.
+
 14-November-2013: G.Cosmo (externals-V09-06-07, externals-V09-06-06)
 - Updated CLHEP module to version 2.1.4.1.
 

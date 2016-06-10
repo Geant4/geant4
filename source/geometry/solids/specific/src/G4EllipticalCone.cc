@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EllipticalCone.cc 72937 2013-08-14 13:20:38Z gcosmo $
+// $Id: G4EllipticalCone.cc 81641 2014-06-04 09:11:38Z gcosmo $
 //
 // Implementation of G4EllipticalCone class
 //
@@ -52,7 +52,6 @@
 #include "Randomize.hh"
 
 #include "G4VGraphicsScene.hh"
-#include "G4Polyhedron.hh"
 #include "G4VisExtent.hh"
 
 //#define G4SPECSDEBUG 1    
@@ -131,6 +130,7 @@ G4EllipticalCone::G4EllipticalCone(const G4EllipticalCone& rhs)
     xSemiAxis(rhs.xSemiAxis), ySemiAxis(rhs.ySemiAxis), zheight(rhs.zheight),
     semiAxisMax(rhs.semiAxisMax), zTopCut(rhs.zTopCut)
 {
+  fpPolyhedron = GetPolyhedron();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -149,11 +149,12 @@ G4EllipticalCone& G4EllipticalCone::operator = (const G4EllipticalCone& rhs)
 
    // Copy data
    //
-   fpPolyhedron = 0; kRadTolerance = rhs.kRadTolerance;
+   kRadTolerance = rhs.kRadTolerance;
    halfRadTol = rhs.halfRadTol; halfCarTol = rhs.halfCarTol;
    fCubicVolume = rhs.fCubicVolume; fSurfaceArea = rhs.fSurfaceArea;
    xSemiAxis = rhs.xSemiAxis; ySemiAxis = rhs.ySemiAxis;
    zheight = rhs.zheight; semiAxisMax = rhs.semiAxisMax; zTopCut = rhs.zTopCut;
+   delete fpPolyhedron; fpPolyhedron = 0; fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

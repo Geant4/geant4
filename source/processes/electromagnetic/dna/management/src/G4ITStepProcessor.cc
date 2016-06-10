@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITStepProcessor.cc 74551 2013-10-14 12:59:14Z gcosmo $
+// $Id: G4ITStepProcessor.cc 82326 2014-06-16 09:19:18Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -481,7 +481,8 @@ void G4ITStepProcessor::GetAtRestIL()
         fCondition=NotForced;
         fpCurrentProcess->SetProcessState(fpTrackingInfo->GetProcessState(fpCurrentProcess->GetProcessID()));
         lifeTime = fpCurrentProcess->AtRestGPIL( *fpTrack, &fCondition );
-        fpCurrentProcess->SetProcessState(0);
+        //fpCurrentProcess->SetProcessState(0);
+        fpCurrentProcess->ResetProcessState();
 
         if(fCondition==Forced)
         {
@@ -756,7 +757,8 @@ void G4ITStepProcessor::DoDefinePhysicalStepLength()
                 PostStepGPIL( *fpTrack,
                               fpState->fPreviousStepSize,
                               &fCondition );
-        fpCurrentProcess->SetProcessState(0);
+        //fpCurrentProcess->SetProcessState(0);
+        fpCurrentProcess->ResetProcessState();
 
         switch (fCondition)
         {
@@ -926,7 +928,8 @@ void G4ITStepProcessor::DoDefinePhysicalStepLength()
             }
         }
 
-        fpCurrentProcess->SetProcessState(0);
+        //fpCurrentProcess->SetProcessState(0);
+        fpCurrentProcess->ResetProcessState();
 
         // Make sure to check the safety, even if Step is not limited
         //  by this process.                      J. Apostolakis, June 20, 1998

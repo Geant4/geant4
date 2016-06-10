@@ -1,4 +1,4 @@
-$Id: History 76744 2013-11-14 15:50:20Z gcosmo $
+$Id: History 81884 2014-06-06 13:03:02Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,11 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+24-Apr-2014, A.Ribon       (had-hadronization-V09-06-03)
+- Applied Novak's bug fix in G4LundStringFragmentation.cc : replacing
+  ">=" with ">" in three if statements, which caused crashes in the
+  case of anti_sigma+ capture at rest on hydrogen.
 
 14-Nov-2013, A.Ribon       (had-hadronization-V09-06-02)
 - Fixed two mistakes in the index manipulation of the BaryonWeight

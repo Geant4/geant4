@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAdjointReverseReaction.hh 68044 2013-03-13 14:29:07Z gcosmo $
+// $Id: G4VAdjointReverseReaction.hh 81856 2014-06-06 10:06:15Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Module:		G4VAdjointReverseReaction
@@ -112,7 +112,8 @@ private:
   G4bool IsIntegralModeUsed;
   
   
-  
+  G4int trackid;
+  G4int nstep;  
 
  
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABrownianTransportation.cc 74551 2013-10-14 12:59:14Z gcosmo $
+// $Id: G4DNABrownianTransportation.cc 82326 2014-06-16 09:19:18Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -57,7 +57,7 @@
 using namespace std;
 
 #ifndef State
-#define State(theXInfo) (fpBrownianState->theXInfo)
+#define State(theXInfo) (GetState<G4ITBrownianState>()->theXInfo)
 #endif
 
 //#ifndef State
@@ -81,10 +81,10 @@ static double InvErfc(double x)
 }
 
 G4DNABrownianTransportation::G4DNABrownianTransportation(const G4String& aName, G4int verbosity) :
-    G4ITTransportation(aName, verbosity),
-    InitProcessState(fpBrownianState, fTransportationState)
-{
+    G4ITTransportation(aName, verbosity)
+ {
     //ctor
+   	fpState.reset(new G4ITBrownianState());
     SetProcessSubType(61);
     verboseLevel = 1;
     fUseMaximumTimeBeforeReachingBoundary = true;
@@ -96,8 +96,7 @@ G4DNABrownianTransportation::~G4DNABrownianTransportation()
 {;}
 
 G4DNABrownianTransportation::G4DNABrownianTransportation(const G4DNABrownianTransportation& right) :
-    G4ITTransportation(right),
-    InitProcessState(fpBrownianState, fTransportationState)
+    G4ITTransportation(right)
 {
     //copy ctor
     SetProcessSubType(61);
@@ -121,7 +120,7 @@ G4DNABrownianTransportation::G4ITBrownianState::G4ITBrownianState() : G4ITTransp
 
 void G4DNABrownianTransportation::StartTracking(G4Track* track)
 {
-    fpState = new G4ITBrownianState();
+    fpState.reset(new G4ITBrownianState());
     SetInstantiateProcessState(false);
     G4ITTransportation::StartTracking(track);
 }

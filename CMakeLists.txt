@@ -3,7 +3,7 @@
 #
 # 21st September 2010 Ben Morgan
 #
-# $Id: CMakeLists.txt 79108 2014-02-17 09:54:05Z gcosmo $
+# $Id: CMakeLists.txt 82139 2014-06-11 10:58:09Z gcosmo $
 #
 
 #------------------------------------------------------------------------------
@@ -51,10 +51,10 @@ set(CMAKE_MODULE_PATH
 # See the documentation in each of these modules for further details.
 #
 # - Versioning. We do this here for now
-set(${PROJECT_NAME}_VERSION "10.0.1")
+set(${PROJECT_NAME}_VERSION "10.0.2")
 set(${PROJECT_NAME}_VERSION_MAJOR "10")
 set(${PROJECT_NAME}_VERSION_MINOR "0")
-set(${PROJECT_NAME}_VERSION_PATCH "1")
+set(${PROJECT_NAME}_VERSION_PATCH "2")
 
 # - Provide dependent options as these are needed for some Geant4 features
 include(CMakeDependentOption)

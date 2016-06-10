@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Material.cc 70847 2013-06-06 11:56:34Z gcosmo $
+// $Id: G4Material.cc 81839 2014-06-06 08:47:44Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -74,6 +74,7 @@
 #include <iomanip>
 
 #include "G4Material.hh"
+#include "G4NistManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -112,7 +113,20 @@ G4Material::G4Material(const G4String& name, G4double z,
   fArrayLength           = maxNbComponents;
   fImplicitElement       = true;
   theElementVector       = new G4ElementVector();
-  theElementVector->push_back( new G4Element(name, " ", z, a));  
+
+  const std::vector<G4String> elmnames = 
+    G4NistManager::Instance()->GetNistElementNames();
+  G4String enam, snam;
+  G4int iz = G4lrint(z);
+  if(iz < (G4int)elmnames.size()) { 
+    snam = elmnames[iz]; 
+    enam = snam; 
+  } else { 
+    enam = "ELM_" + name; 
+    snam = name;
+  }
+  theElementVector->push_back(new G4Element(enam, snam, z, a));  
+
   fMassFractionVector    = new G4double[1];
   fMassFractionVector[0] = 1. ;
   fMassOfMolecule        = a/Avogadro;
@@ -211,12 +225,14 @@ G4Material::G4Material(const G4String& name, G4double density,
 //                            for usage restricted to object persistency
 
 G4Material::G4Material(__void__&)
-  : fNumberOfComponents(0), fNumberOfElements(0), theElementVector(0), 
-    fImplicitElement(false), fMassFractionVector(0), fAtomsVector(0), 
-    fMaterialPropertiesTable(0), fIndexInTable(0), 
-    VecNbOfAtomsPerVolume(0)
+  : fChemicalFormula(""), fDensity(0.0), fState(kStateUndefined), fTemp(0.0), 
+    fPressure(0.0), maxNbComponents(0), fArrayLength(0), fNumberOfComponents(0),
+    fNumberOfElements(0), theElementVector(0), fImplicitElement(false),
+    fMassFractionVector(0), fAtomsVector(0), fMaterialPropertiesTable(0),
+    fIndexInTable(0), VecNbOfAtomsPerVolume(0), TotNbOfAtomsPerVolume(0),
+    TotNbOfElectPerVolume(0), fRadlen(0.0), fNuclInterLen(0.0),
+    fIonisation(0), fSandiaTable(0), fBaseMaterial(0), fMassOfMolecule(0.0)
 {
-  InitializePointers();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -273,7 +289,7 @@ void G4Material::InitializePointers()
   fIndexInTable = theMaterialTable.size();
   for(size_t i=0; i<fIndexInTable; ++i) {
     if(theMaterialTable[i]->GetName() == fName) {
-      G4cout << "G4Material WARNING: doublicate name of the new material "
+      G4cout << "G4Material WARNING: duplicate name of material "
 	     << fName << G4endl;
       break;
     }
@@ -319,8 +335,10 @@ void G4Material::CopyPointersOfBaseMaterial()
   TotNbOfAtomsPerVolume = factor*fBaseMaterial->GetTotNbOfAtomsPerVolume();
   TotNbOfElectPerVolume = factor*fBaseMaterial->GetTotNbOfElectPerVolume();
 
-  theElementVector = const_cast<G4ElementVector*>(fBaseMaterial->GetElementVector());
-  fMassFractionVector = const_cast<G4double*>(fBaseMaterial->GetFractionVector());
+  theElementVector = 
+    const_cast<G4ElementVector*>(fBaseMaterial->GetElementVector());
+  fMassFractionVector = 
+    const_cast<G4double*>(fBaseMaterial->GetFractionVector());
   fAtomsVector = const_cast<G4int*>(fBaseMaterial->GetAtomsVector());
 
   const G4double* v = fBaseMaterial->GetVecNbOfAtomsPerVolume();
@@ -453,7 +471,7 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
     G4cout << "G4Material::AddMaterial ERROR for " << fName << " and " 
 	   << material->GetName() << "  mass fraction= " << fraction 
 	   << " is wrong ";
-    G4Exception ("G4Material::AddMaterial()", "mat034", FatalException, 	   
+    G4Exception ("G4Material::AddMaterial()", "mat034", FatalException,
                  "Attempt to add material with wrong mass fraction");	   
   }
   // initialization
@@ -525,7 +543,7 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
 	     <<  wtSum << " is not 1 - results may be wrong" 
 	     << G4endl;
     }
-    for (i=0;i<fNumberOfElements;i++) {
+    for (i=0; i<fNumberOfElements; ++i) {
       fAtomsVector[i] = 
 	G4lrint(fMassFractionVector[i]*Amol/(*theElementVector)[i]->GetA());
     }
@@ -549,11 +567,16 @@ void G4Material::ComputeRadiationLength()
 
 void G4Material::ComputeNuclearInterLength()
 {
-  static const G4double lambda0 = 35*g/cm2;
+  static const G4double lambda0 = 35*CLHEP::g/CLHEP::cm2;
   G4double NILinv = 0.0;
   for (size_t i=0; i<fNumberOfElements; ++i) {
-    NILinv +=
-      VecNbOfAtomsPerVolume[i]*std::pow((*theElementVector)[i]->GetN(),0.6666666667); 
+    G4int Z = G4lrint( (*theElementVector)[i]->GetZ());
+    G4double A = (*theElementVector)[i]->GetN();
+    if(1 == Z) {
+      NILinv += VecNbOfAtomsPerVolume[i]*A;
+    } else {
+      NILinv += VecNbOfAtomsPerVolume[i]*std::pow(A, 0.6666666667);
+    } 
   }
   NILinv *= amu/lambda0; 
   fNuclInterLen = (NILinv <= 0.0 ? DBL_MAX : 1./NILinv);
@@ -575,7 +598,8 @@ size_t G4Material::GetNumberOfMaterials()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Material* G4Material::GetMaterial(const G4String& materialName, G4bool warning)
+G4Material* 
+G4Material::GetMaterial(const G4String& materialName, G4bool warning)
 {  
   // search the material by its name 
   for (size_t J=0 ; J<theMaterialTable.size() ; ++J)
@@ -587,7 +611,8 @@ G4Material* G4Material::GetMaterial(const G4String& materialName, G4bool warning
   // the material does not exist in the table
   if (warning) {
     G4cout << "G4Material::GetMaterial() WARNING: The material: "
-	   << materialName << " does not exist in the table. Return NULL pointer."
+	   << materialName 
+	   << " does not exist in the table. Return NULL pointer."
 	   << G4endl;
   }	 
   return 0;          
@@ -619,10 +644,10 @@ G4double G4Material::GetZ() const
 G4double G4Material::GetA() const
 { 
   if (fNumberOfElements > 1) { 
-     G4cout << "G4Material ERROR in GetA. The material: " << fName 
-	    << " is a mixture.";
-     G4Exception ("G4Material::GetA()", "mat037", FatalException,  
-                  "the Atomic mass is not well defined." );
+    G4cout << "G4Material ERROR in GetA. The material: " << fName 
+	   << " is a mixture.";
+    G4Exception ("G4Material::GetA()", "mat037", FatalException,  
+		 "the Atomic mass is not well defined." );
   } 
   return  (*theElementVector)[0]->GetA();      
 }
@@ -728,7 +753,8 @@ std::ostream& operator<<(std::ostream& flux, G4Material* material)
       << std::setw(6)<< std::setprecision(2) 
       << (material->fMassFractionVector[i])/perCent << " %" 
       << "  ElmAbundance "     << std::setw(6)<< std::setprecision(2) 
-      << 100*(material->VecNbOfAtomsPerVolume[i])/(material->TotNbOfAtomsPerVolume)
+      << 100*(material->VecNbOfAtomsPerVolume[i])
+      /(material->TotNbOfAtomsPerVolume)
       << " % \n";
   }
   flux.precision(prec);    

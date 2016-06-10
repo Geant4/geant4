@@ -28,6 +28,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4Nucleus.hh"
 #include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
   
 G4HadFinalState * G4LENDCapture::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTarg )
 {
@@ -90,12 +91,12 @@ G4HadFinalState * G4LENDCapture::ApplyYourself(const G4HadProjectile& aTrack, G4
          {
             if ( jA != 0 )
             {
-               theSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon( jZ , jA , 0 , 0 ) );
+               theSec->SetDefinition( G4IonTable::GetIonTable()->FindIon( jZ , jA , iM ) );
                totN += jA;
             }
             else 
             {
-               theSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon( jZ , iA+1-totN , 0 , 0 ) );
+               theSec->SetDefinition( G4IonTable::GetIonTable()->FindIon( jZ , iA+1-totN , iM ) );
             }
          } 
          else

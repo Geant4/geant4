@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04GlobalField.cc 79251 2014-02-20 16:16:23Z gcosmo $
+// $Id: F04GlobalField.cc 81915 2014-06-06 14:14:24Z gcosmo $
 //
 /// \file field/field04/src/F04GlobalField.cc
 /// \brief Implementation of the F04GlobalField class
@@ -92,11 +92,11 @@ F04GlobalField::~F04GlobalField()
 {
   Clear();
 
+  delete fFields;
+
   delete fFieldMessenger;
 
   if (fEquation)        delete fEquation;
-  if (fFieldManager)    delete fFieldManager;
-  if (fFieldPropagator) delete fFieldPropagator;
   if (fStepper)         delete fStepper;
   if (fChordFinder)     delete fChordFinder;
 }
@@ -299,7 +299,9 @@ void F04GlobalField::Clear()
      }
   }
 
-  if (fFp) delete[] fFp;
+  if (fFp) delete [] fFp; fFirst = true;
+  fNfp = 0;
+  fFp = NULL;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -14,6 +14,19 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+27 May 2014 V. Ivantchenko (hadr-stopping-V09-06-13)
+--------------------------------------------------------------------
+- G4MuonMinusCaptureAtRest, G4AntiNeutronAnnihilationAtRest -
+    fixed Coverity defects
+
+14 May 2014 V. Ivantchenko
+--------------------------
+- G4MuMinusCapturePrecompound - added simplified model for capture
+    in deuterium and in He4; reduced number of trials to find neutrino
+    4-momentum from 1000 to 100; added protection 1 keV for negative
+    excitation energy, substitute FatalException by JustWarning.
+    All this addressing the recent ATLAS report 
+
 31 January 2014 V. Ivantchenko (hadr-stopping-V09-06-12)
 --------------------------------------------------------------------
 - G4MuMinusCapturePrecompound - fix infonite loop (bug #1536) by 

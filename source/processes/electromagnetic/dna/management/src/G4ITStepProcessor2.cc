@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITStepProcessor2.cc 77292 2013-11-22 10:58:39Z gcosmo $
+// $Id: G4ITStepProcessor2.cc 82326 2014-06-16 09:19:18Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -293,7 +293,9 @@ void G4ITStepProcessor::InvokeAtRestDoItProcs()
                         fpTrackingInfo->GetProcessState(fpCurrentProcess->GetProcessID()));
             fpParticleChange
                     = fpCurrentProcess->AtRestDoIt( *fpTrack, *fpStep);
-            fpCurrentProcess->SetProcessState(0);
+            //fpCurrentProcess->SetProcessState(0);
+            fpCurrentProcess->ResetProcessState();
+
 
             // Set the current process as a process which defined this Step length
             fpStep->GetPostStepPoint()
@@ -341,7 +343,8 @@ void G4ITStepProcessor::InvokeAlongStepDoItProcs()
         fpCurrentProcess->SetProcessState(fpTrackingInfo->GetProcessState(fpCurrentProcess->GetProcessID()));
         fpParticleChange
                 = fpCurrentProcess->AlongStepDoIt( *fpTrack, *fpStep );
-        fpCurrentProcess->SetProcessState(0);
+        //fpCurrentProcess->SetProcessState(0);
+        fpCurrentProcess->ResetProcessState();
         // Update the PostStepPoint of Step according to ParticleChange
 
         fpParticleChange->UpdateStepForAlongStep(fpStep);
@@ -433,7 +436,8 @@ void G4ITStepProcessor::InvokePSDIP(size_t np)
     fpCurrentProcess->SetProcessState(fpTrackingInfo->GetProcessState(fpCurrentProcess->GetProcessID()));
     fpParticleChange
             = fpCurrentProcess->PostStepDoIt( *fpTrack, *fpStep);
-    fpCurrentProcess->SetProcessState(0);
+    //fpCurrentProcess->SetProcessState(0);
+    fpCurrentProcess->ResetProcessState();
 
     // Update PostStepPoint of Step according to ParticleChange
     fpParticleChange->UpdateStepForPostStep(fpStep);
@@ -500,7 +504,8 @@ void G4ITStepProcessor::FindTransportationStep()
     {
         fpTransportation->SetProcessState(fpTrackingInfo->GetProcessState(fpTransportation->GetProcessID()));
         fpTransportation->ComputeStep(*fpTrack, *fpStep, fTimeStep, physicalStep) ;
-        fpTransportation->SetProcessState(0);
+        //fpCurrentProcess->SetProcessState(0);
+        fpCurrentProcess->ResetProcessState();
     }
 
     if(physicalStep >= DBL_MAX)

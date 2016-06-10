@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GammaConversion.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4GammaConversion.cc 81865 2014-06-06 11:32:58Z gcosmo $
 //
 // 
 //------------------ G4GammaConversion physics process -------------------------
@@ -85,6 +85,7 @@ G4GammaConversion::G4GammaConversion(const G4String& processName,
   SetStartFromNullFlag(true);
   SetBuildTableFlag(true);
   SetSecondaryParticle(G4Electron::Electron());
+  SetLambdaBinning(140);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

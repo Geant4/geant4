@@ -29,7 +29,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4VCSGfaceted.cc 81641 2014-06-04 09:11:38Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -105,7 +105,7 @@ G4VCSGfaceted::G4VCSGfaceted( const G4VCSGfaceted &source )
 //
 // Assignment operator
 //
-const G4VCSGfaceted &G4VCSGfaceted::operator=( const G4VCSGfaceted &source )
+G4VCSGfaceted &G4VCSGfaceted::operator=( const G4VCSGfaceted &source )
 {
   if (&source == this) { return *this; }
   
@@ -167,6 +167,7 @@ void G4VCSGfaceted::DeleteStuff()
 
     delete [] faces;
   }
+  delete fpPolyhedron; fpPolyhedron = 0;
 }
 
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopePhotoElectricModel.cc 79186 2014-02-20 09:20:02Z gcosmo $
+// $Id: G4PenelopePhotoElectricModel.cc 81862 2014-06-06 10:19:30Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -118,6 +118,17 @@ void G4PenelopePhotoElectricModel::Initialise(const G4ParticleDefinition* partic
   if (verboseLevel > 3)
     G4cout << "Calling  G4PenelopePhotoElectricModel::Initialise()" << G4endl;
 
+  fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
+  //Issue warning if the AtomicDeexcitation has not been declared
+  if (!fAtomDeexcitation)
+    {
+      G4cout << G4endl;
+      G4cout << "WARNING from G4PenelopePhotoElectricModel " << G4endl;
+      G4cout << "Atomic de-excitation module is not instantiated, so there will not be ";
+      G4cout << "any fluorescence/Auger emission." << G4endl;
+      G4cout << "Please make sure this is intended" << G4endl;
+    }
+
   SetParticle(particle);
 
   //Only the master model creates/fills/destroys the tables
@@ -147,18 +158,7 @@ void G4PenelopePhotoElectricModel::Initialise(const G4ParticleDefinition* partic
 	}
  
 
-      InitialiseElementSelectors(particle,cuts);
-
-      fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
-      //Issue warning if the AtomicDeexcitation has not been declared
-      if (!fAtomDeexcitation)
-	{
-	  G4cout << G4endl;
-	  G4cout << "WARNING from G4PenelopePhotoElectricModel " << G4endl;
-	  G4cout << "Atomic de-excitation module is not instantiated, so there will not be ";
-	  G4cout << "any fluorescence/Auger emission." << G4endl;
-	  G4cout << "Please make sure this is intended" << G4endl;
-	}
+      InitialiseElementSelectors(particle,cuts);     
       
       if (verboseLevel > 0) { 
 	G4cout << "Penelope Photo-Electric model v2008 is initialized " << G4endl
@@ -193,7 +193,7 @@ void G4PenelopePhotoElectricModel::InitialiseLocal(const G4ParticleDefinition* p
 	static_cast<G4PenelopePhotoElectricModel*> (masterModel);
       
       logAtomicShellXS = theModel->logAtomicShellXS;
-      
+     
       //Same verbosity for all workers, as the master
       verboseLevel = theModel->verboseLevel;
     }

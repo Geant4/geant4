@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc 66872 2013-01-15 01:25:57Z japost $
+// $Id: G4MagIntegratorDriver.cc 81686 2014-06-04 14:44:57Z gcosmo $
 //
 // 
 //
@@ -553,7 +553,8 @@ G4MagInt_Driver::OneGoodStep(      G4double y[],        // InOut
   const G4int max_trials=100; 
 
   G4ThreeVector Spin(y[9],y[10],y[11]);
-  G4bool     hasSpin= (Spin.mag2() > 0.0); 
+  G4double   spin_mag2 =Spin.mag2() ;
+  G4bool     hasSpin= (spin_mag2 > 0.0); 
 
   for (iter=0; iter<max_trials ;iter++)
   {
@@ -569,8 +570,15 @@ G4MagInt_Driver::OneGoodStep(      G4double y[],        // InOut
     errpos_sq *= inv_eps_pos_sq; // Scale relative to required tolerance
 
     // Accuracy for momentum
-    errvel_sq =  (sqr(yerr[3]) + sqr(yerr[4]) + sqr(yerr[5]) )
-               / (sqr(y[3]) + sqr(y[4]) + sqr(y[5]) );
+    G4double magvel_sq=  sqr(y[3]) + sqr(y[4]) + sqr(y[5]) ;
+    G4double sumerr_sq =  sqr(yerr[3]) + sqr(yerr[4]) + sqr(yerr[5]) ; 
+    if( magvel_sq > 0.0 ) { 
+       errvel_sq = sumerr_sq / magvel_sq; 
+    }else{
+       G4cerr << "** G4MagIntegrationDriver: found case of zero momentum." 
+              << " iteration=  " << iter << " h= " << h << G4endl; 
+       errvel_sq = sumerr_sq; 
+    }
     errvel_sq *= inv_eps_vel_sq;
     errmax_sq = std::max( errpos_sq, errvel_sq ); // Square of maximum error
 
@@ -578,10 +586,10 @@ G4MagInt_Driver::OneGoodStep(      G4double y[],        // InOut
     { 
       // Accuracy for spin
       errspin_sq =  ( sqr(yerr[9]) + sqr(yerr[10]) + sqr(yerr[11]) )
-                 /  ( sqr(y[9]) + sqr(y[10]) + sqr(y[11]) );
+                    /  spin_mag2; // ( sqr(y[9]) + sqr(y[10]) + sqr(y[11]) );
       errspin_sq *= inv_eps_vel_sq;
       errmax_sq = std::max( errmax_sq, errspin_sq ); 
-   }
+    }
 
     if ( errmax_sq <= 1.0 )  { break; } // Step succeeded. 
 

@@ -241,8 +241,8 @@ unsigned long ZEXPORT crc32(unsigned long crc, const unsigned char FAR *buf, uIn
 /* ========================================================================= */
 local unsigned long crc32_little(unsigned long crc, const unsigned char FAR *buf, unsigned len)
 {
-    register z_crc_t c;
-    register const z_crc_t FAR *buf4;
+    z_crc_t c;
+    const z_crc_t FAR *buf4;
 
     c = (z_crc_t)crc;
     c = ~c;
@@ -278,8 +278,8 @@ local unsigned long crc32_little(unsigned long crc, const unsigned char FAR *buf
 /* ========================================================================= */
 local unsigned long crc32_big(unsigned long crc, const unsigned char FAR *buf, unsigned  len)
 {
-    register z_crc_t c;
-    register const z_crc_t FAR *buf4;
+    z_crc_t c;
+    const z_crc_t FAR *buf4;
 
     c = ZSWAP32((z_crc_t)crc);
     c = ~c;

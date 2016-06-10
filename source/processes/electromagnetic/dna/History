@@ -14,6 +14,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+12.05.2014  MK,          tag emdna-V09-06-25
+	    - Fixed compilation warnings and errors on MacOS/clang-3.4
+	      for c++11 standard.
+
+27-03-2014  G.Cosmo	 tag emdna-V09-06-24
+	    - Corrected typo in DLL import flag in G4DNAWaterDissociationDisplacer.hh.
+
 12-12-2013  M.K		 tag emdna-V09-06-23
 	    - G4DNAMolecularMaterial: Remove unused variable
 

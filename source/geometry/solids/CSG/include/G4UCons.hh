@@ -45,6 +45,7 @@
 
 #include "G4USolid.hh"
 #include "UCons.hh"
+#include "G4Polyhedron.hh"
 
 class G4UCons : public G4USolid
 {
@@ -136,37 +137,37 @@ inline G4double G4UCons::GetDeltaPhiAngle() const
 inline void G4UCons::SetInnerRadiusMinusZ(G4double Rmin1)
 {
   GetShape()->SetInnerRadiusMinusZ(Rmin1);
-  fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = 0;
 }
 inline void G4UCons::SetOuterRadiusMinusZ(G4double Rmax1)
 {
   GetShape()->SetOuterRadiusMinusZ(Rmax1);
-  fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = 0;
 }
 inline void G4UCons::SetInnerRadiusPlusZ(G4double Rmin2)
 {
   GetShape()->SetInnerRadiusPlusZ(Rmin2);
-  fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = 0;
 }
 inline void G4UCons::SetOuterRadiusPlusZ(G4double Rmax2)
 {
   GetShape()->SetOuterRadiusPlusZ(Rmax2);
-  fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = 0;
 }
 inline void G4UCons::SetZHalfLength(G4double newDz)
 {
   GetShape()->SetZHalfLength(newDz);
-  fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = 0;
 }
 inline void G4UCons::SetStartPhiAngle(G4double newSPhi, G4bool trig)
 {
   GetShape()->SetStartPhiAngle(newSPhi, trig);
-  fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = 0;
 }
 inline void G4UCons::SetDeltaPhiAngle(G4double newDPhi)
 {
   GetShape()->SetDeltaPhiAngle(newDPhi);
-  fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = 0;
 }
 
 #endif

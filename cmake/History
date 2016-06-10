@@ -31,6 +31,44 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
+06th June 2014 - Ben Morgan (cmake-V09-06-49)
+- Templates/geant4-config.in : Add zlib and g3tog4 to list of features
+  that --has-feature recognizes and can query (Patch from Ivana
+  Hrivnacova)
+
+27th May 2014 - Ben Morgan (cmake-V09-06-48)
+- Modules/Geant4MakeRules_cxx.cmake : Factor -ftls-model flag
+  out of GEANT4_MULTITHREADED_CXX_FLAGS and provide function
+  supplying available thread local storage model flag arguments.
+  Addresses JIRA DEV-142
+- Modules/Geant4LibraryBuildOptions.cmake : Provide advanced option
+  to select thread local storage model when building multithreaded.
+  Default to supported initial-exec model. Addresses JIRA DEV-142.
+ 
+26th May 2014 - Ben Morgan
+- Modules/Geant4MakeRules_cxx.cmake : Add -DG4FPE_DEBUG to GNU/Clang
+  flags for Debug build mode. Added following discussion with Gunter
+  Folger to help developers diagnose FPE problems.
+
+20th March 2014 - Ben Morgan (cmake-V09-06-47)
+- Templates/Geant4Config.cmake.in : Fixes by Witold Pokorski for correct
+  static archive flags on Clang and syntax fixes for GNU.
+
+6th March 2014 - Ben Morgan
+- Modules/Geant4Config.cmake.in : When static libraries are used,
+  wrap G4physicslists library with flags suitable to import whole
+  archive. Implemented for GNU/Clang/Intel compilers. Other compilers
+  require further checks on flags and how to apply to single library.
+  This functionality is needed to support global registration of
+  factories.
+
+5th March 2014 - Ben Morgan
+- Modules/Geant4MacroLibraryTargets.cmake : Fixup usage of shared/static
+  builtin libraries. Ensure that shared builtins do not get linked to
+  static.
+- Templates/Geant4Config.cmake.in : Add new component 'static' allowing
+  user to select static Geant4 libraries if they are available.
+
 18th February 2014 - Ben Morgan (cmake-V09-06-46)
 - Modules/Geant4ConfigureConfigScript.cmake : Export use of builtin
   zlib or otherwise to geant4-config (Bugfix #1572).

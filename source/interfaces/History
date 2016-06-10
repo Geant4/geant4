@@ -1,4 +1,4 @@
-$Id: History 79182 2014-02-20 09:06:39Z gcosmo $
+$Id: History 81837 2014-06-06 08:34:45Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 25th 2014 Koichi Murakami (interfaces-V09-06-20)
+- basic/src/G4UIterminal.cc, fixed the problem that some commands cannot be
+  processed, because of a bug in G4SubString== operator like nC(0,3)="xxx".
+  Use substr() instead of () operator for the comparison of substr.
 
 22nd Janvier 2014  Laurent Garnier (interfaces-V09-06-19)
 - G4Qt : BUGFIX : bugzilla 1487 : Explicitly set the LC_NUMBERIC locale to "C"

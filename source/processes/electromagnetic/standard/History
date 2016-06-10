@@ -1,4 +1,4 @@
-$Id: History 79188 2014-02-20 09:22:48Z gcosmo $
+$Id: History 82133 2014-06-11 10:37:00Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,32 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+
+27 May 14: V.Ivanchenko (emstand-V09-06-82)
+- G4IonCoulombCrossSection - tunned computation of the screen 
+    factor 
+
+05 May 14: V.Ivanchenko
+- G4IonCoulombCrossSection - fixed screen factor for projectile
+    and target Z=1 
+
+03 April 14: V.Ivanchenko
+- G4WentzelVIModel - optimized transition between multiple and single 
+    scattering modes; changed order of displacement and angular 
+    deflection (second order effect)
+
+01 April 14: V.Ivanchenko
+- G4IonCoulombScatteringModel - fixed final state generation
+- G4GammaConversion - switch default number of bins from 220 to 140
+- G4WentzelOKandVIxSection - fixed mass of recoil for Hydrogen target
+
+31 March 14: V.Ivanchenko
+- G4GammaConversion - switch default number of bins from 77 to 220
+
+28 March 14: V.Ivanchenko
+- G4CoulombScattering - use G4IonCoulombScatteringModel for ions
+    by default
+- G4IonCoulombScatteringModel - fixed warning from G4ParticleTable
 
 10 February 14: V.Ivanchenko (emstand-V09-06-80)
 - G4UrbanMscModel - (L.Urban) methods ComputeTheta0,SimpleScattering,

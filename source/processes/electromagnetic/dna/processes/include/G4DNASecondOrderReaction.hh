@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNASecondOrderReaction.hh 64057 2012-10-30 15:04:49Z gcosmo $
+// $Id: G4DNASecondOrderReaction.hh 82326 2014-06-16 09:19:18Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
@@ -117,7 +117,6 @@ protected:
     G4double fReactionRate;
     G4double fConcentration;
     G4double fMolarMassOfMaterial;
-    SecondOrderReactionState*& fpSecondOrderReactionState;
     G4ParticleChange fParticleChange;
 
     const G4MolecularConfiguration* fpMolecularConfiguration;

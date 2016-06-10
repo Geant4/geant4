@@ -53,70 +53,65 @@
 // -------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 #include "G4IonCoulombCrossSection.hh"
 #include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 #include "G4Proton.hh"
-#include "G4LossTableManager.hh"
+#include "G4Exp.hh"
+#include "G4Log.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 using namespace std;
+
+const G4double a0 = CLHEP::electron_mass_c2/0.88534;
 
 G4IonCoulombCrossSection::G4IonCoulombCrossSection():
    cosThetaMin(1.0),
    cosThetaMax(-1.0),
    alpha2(fine_structure_const*fine_structure_const)
 {
-  	fNistManager = G4NistManager::Instance();
-        theProton   = G4Proton::Proton();
-        particle=0;
+  fNistManager = G4NistManager::Instance();
+  theProton   = G4Proton::Proton();
+  particle=0;
 
-  	G4double p0 = electron_mass_c2*classic_electr_radius;
-  	coeff  = twopi*p0*p0;
+  G4double p0 = electron_mass_c2*classic_electr_radius;
+  coeff  = twopi*p0*p0;
 
-	cosTetMinNuc=0;
-	cosTetMaxNuc=0;
-	nucXSection =0;
+  cosTetMinNuc=0;
+  cosTetMaxNuc=0;
+  nucXSection =0;
 
+  chargeSquare = spin = mass = 0.0;
+  tkinLab = momLab2 = invbetaLab2 = tkin = mom2 = invbeta2 = 0.0;
 
-	chargeSquare = spin = mass =0;
-	tkinLab = momLab2 = invbetaLab2=0;
-        tkin = mom2 = invbeta2=0;
-
-	targetZ = targetMass = screenZ =0;
-        ScreenRSquare=0.;
-
-	etag = ecut = 0.0;
-
+  targetZ = targetMass = screenZ = ScreenRSquare = etag = ecut = 0.0;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4IonCoulombCrossSection::~G4IonCoulombCrossSection()
 {}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4IonCoulombCrossSection::Initialise(const G4ParticleDefinition* p,
                                           G4double CosThetaLim)
 {
-
-	SetupParticle(p);
-  	nucXSection = 0.0;
-  	tkin = targetZ = mom2 = DBL_MIN;
-  	ecut = etag = DBL_MAX;
-  	particle = p;
-
-		
-  	cosThetaMin = CosThetaLim; 
-
+  SetupParticle(p);
+  nucXSection = 0.0;
+  tkin = targetZ = mom2 = DBL_MIN;
+  ecut = etag = DBL_MAX;
+  particle = p;		
+  cosThetaMin = CosThetaLim; 
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4IonCoulombCrossSection::SetupKinematic(G4double ekin,
-                                                     G4double cut,G4int iz )
+					      G4double cut, G4double tmass)
 {
-  if(ekin != tkinLab || ecut != cut) {
+  if(ekin != tkinLab || ecut != cut || tmass != targetMass) {
 
     // lab
     tkinLab = ekin;
@@ -127,8 +122,7 @@ void G4IonCoulombCrossSection::SetupKinematic(G4double ekin,
     G4double ptot = sqrt(momLab2);
     G4double m12  = mass*mass;
 
-    targetMass=fNistManager->GetAtomicMassAmu(iz)*amu_c2;
-
+    targetMass = tmass;
     // relativistic reduced mass from publucation
     // A.P. Martynenko, R.N. Faustov, Teoret. mat. Fiz. 64 (1985) 179
         
@@ -140,93 +134,78 @@ void G4IonCoulombCrossSection::SetupKinematic(G4double ekin,
     mom2 = momCM*momCM;
     invbeta2 = 1.0 +  mu_rel*mu_rel/mom2;
     tkin = momCM*sqrt(invbeta2) - mu_rel;//Ekin of mu_rel
-    //.........................................................
 
     cosTetMinNuc = cosThetaMin;
     cosTetMaxNuc = cosThetaMax;
-
   }
-
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
-void G4IonCoulombCrossSection::SetupTarget(G4double Z, G4double e, G4int heavycorr)
+void G4IonCoulombCrossSection::SetupTarget(G4double Z, G4double e, 
+					   G4int heavycorr)
 {
-        if(Z != targetZ || e != etag) {
-                etag    = e;
-                targetZ = Z;
-                G4int iz= G4int(Z);
+  if(Z != targetZ || e != etag) {
+    etag    = e;
+    targetZ = Z;
+    G4int iz= G4lrint(Z);
 
-                SetScreenRSquare(iz);
-  		screenZ =0;
-        	screenZ = ScreenRSquare/mom2;
+    SetScreenRSquare(iz);
+    screenZ = 0;
+    screenZ = ScreenRSquare/mom2;
+    //	G4cout<< "heavycorr "<<heavycorr<<G4endl;
 
-	//	G4cout<< "heavycorr "<<heavycorr<<G4endl;
+    if(heavycorr!=0 && particle != theProton){
+      G4double corr=5.*twopi*Z*std::sqrt(chargeSquare*alpha2);
+      corr=G4Exp(G4Log(corr)*0.12);
+      screenZ *=0.5*(1.13 + corr*3.76*Z*Z*chargeSquare*invbeta2*alpha2);
+      // G4cout<<" heavycorr Z e corr....2As "<< heavycorr << "\t"
+      //  <<Z <<"\t"<<e/MeV <<"\t"<<screenZ<<G4endl;
+    }else{ 
+      screenZ *= 0.5*(1.13 + 3.76*Z*Z*chargeSquare*invbeta2*alpha2);
+      //  G4cout<<"  heavycorr Z e....2As "<< heavycorr << "\t"
+      //  <<Z <<"\t"<< e/MeV <<"\t"  <<screenZ<<G4endl;
+    }
 
-		if(heavycorr!=0 && particle != theProton){
-			G4double corr=5.*twopi*Z*std::sqrt(chargeSquare*alpha2);
-			corr=std::pow(corr,0.12);
-			screenZ *=(1.13 + corr*3.76*Z*Z*chargeSquare*invbeta2*alpha2)/2.;
-//			G4cout<<" heavycorr Z e corr....2As "<< heavycorr << "\t"
-//				<<Z <<"\t"<<e/MeV <<"\t"<<screenZ<<G4endl;
-
-		}else{ screenZ *=(1.13 + 3.76*Z*Z*chargeSquare*invbeta2*alpha2)/2.;
-//                        G4cout<<"  heavycorr Z e....2As "<< heavycorr << "\t"
-//				<<Z <<"\t"<< e/MeV <<"\t"  <<screenZ<<G4endl;
-		}
-
-                if(1 == iz && particle == theProton && cosTetMaxNuc < 0.0) {
-                        cosTetMaxNuc = 0.0;
-                }
-
-        }
+    if(1 == iz && particle == theProton && cosTetMaxNuc < 0.0) {
+      cosTetMaxNuc = 0.0;
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-void G4IonCoulombCrossSection::SetScreenRSquare(G4int iz){
 
-                G4double a0 = electron_mass_c2/0.88534;
+void G4IonCoulombCrossSection::SetScreenRSquare(G4int iz)
+{
+  //for proton Thomas-Fermi screening length	
+  G4int Z1 = G4lrint(std::sqrt(chargeSquare));
+  G4double Z1023 = G4Exp(fNistManager->GetLOGZ(Z1)*0.23);
+  G4double Z2023 = G4Exp(fNistManager->GetLOGZ(iz)*0.23);
+                
+  // Universal screening length
+  G4double x = a0*(Z1023+Z2023);
 
-                //target nucleus
-       	        G4double Z1=std::sqrt(chargeSquare);
-                G4double Z2=targetZ;
-        
-               	G4double Z1023=std::pow(Z1,0.23);
-        	G4double Z2023=std::pow(Z2,0.23);
-        
-		// Universal screening length
-		G4double x=a0*(Z1023+Z2023);
-
-        	//for proton Thomas-Fermi screening length	
-		if(particle == theProton){ 
-				x = a0*fNistManager->GetZ13(iz);
-                 		}		
-                ScreenRSquare  = alpha2*x*x;
-
-	 
+  ScreenRSquare  = alpha2*x*x;
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4IonCoulombCrossSection::NuclearCrossSection()
 {
-  	// This method needs initialisation before be called
+  // This method needs initialisation before be called
+  // scattering with target nucleus
+  G4double fac = coeff*targetZ*(targetZ + 1)*chargeSquare*invbeta2/mom2;
 
-	// scattering with target nucleus
-        G4double fac = coeff*targetZ*targetZ*chargeSquare*invbeta2/mom2;
+  nucXSection  = 0.0;
 
-  	nucXSection  = 0.0;
+  G4double x  = 1.0 - cosTetMinNuc;
+  G4double x1 = x + screenZ;
 
-  	G4double x  = 1.0 - cosTetMinNuc;
-  	G4double x1 = x + screenZ;
-
-	// scattering with nucleus
-  	if(cosTetMaxNuc < cosTetMinNuc) {
-
-		nucXSection =fac*(cosTetMinNuc - cosTetMaxNuc)/
-                        (x1*(1.0 - cosTetMaxNuc + screenZ));
-
-    		}
+  // scattering with nucleus
+  if(cosTetMaxNuc < cosTetMinNuc) {
+    nucXSection = fac*(cosTetMinNuc - cosTetMaxNuc)/
+      (x1*(1.0 - cosTetMaxNuc + screenZ));
+  }
 
   return nucXSection;
 }
@@ -234,17 +213,15 @@ G4double G4IonCoulombCrossSection::NuclearCrossSection()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4IonCoulombCrossSection::SampleCosineTheta()
-{
-  	
-  	if(cosTetMaxNuc >= cosTetMinNuc) return 0.0;
+{  	
+  G4double z1 = 0.0;
+  if(cosTetMaxNuc < cosTetMinNuc) {
 
-  	G4double x1 = 1. - cosTetMinNuc + screenZ;
-  	G4double x2 = 1. - cosTetMaxNuc + screenZ;
-  	G4double dx = cosTetMinNuc - cosTetMaxNuc;
-  	G4double /*grej,*/ z1;
-
-    		z1 = x1*x2/(x1 + G4UniformRand()*dx) - screenZ;
-                //grej = 1.0/(1.0 + z1);
+    G4double x1 = 1. - cosTetMinNuc + screenZ;
+    G4double x2 = 1. - cosTetMaxNuc + screenZ;
+    G4double dx = cosTetMinNuc - cosTetMaxNuc;
+    z1 = x1*x2/(x1 + G4UniformRand()*dx) - screenZ;
+  }
   return z1;
 }
 

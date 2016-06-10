@@ -58,11 +58,11 @@ class UTrd : public VUSolid
 
     virtual double SafetyFromInside(const UVector3& aPoint, bool aAccurate = false) const;
 
-    inline double SafetyFromInsideAccurate(const UVector3& aPoint) const;
+    double SafetyFromInsideAccurate(const UVector3& aPoint) const;
 
     virtual double SafetyFromOutside(const UVector3& aPoint, bool aAccurate = false) const;
 
-    inline double SafetyFromOutsideAccurate(const UVector3& aPoint) const;
+    double SafetyFromOutsideAccurate(const UVector3& aPoint) const;
 
     virtual double DistanceToIn(const UVector3& aPoint,
                                 const UVector3& aDirection,
@@ -102,7 +102,7 @@ class UTrd : public VUSolid
     UVector3 GetPointOnSurface() const;
 
   private:
-    inline UVector3 ApproxSurfaceNormal(const UVector3& p) const;
+    UVector3 ApproxSurfaceNormal(const UVector3& p) const;
     inline double amin(int n, const double* a) const;
     inline double amax(int n, const double* a)const;
     double fDx1, fDx2, fDy1, fDy2, fDz;

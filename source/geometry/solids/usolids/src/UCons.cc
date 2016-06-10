@@ -53,9 +53,8 @@ UCons::UCons(const std::string& pName,
   {
     std::ostringstream message;
     message << "Invalid Z half-length for Solid: " << GetName() << std::endl
-            << "				hZ = " << pDz;
+            << "  hZ = " << pDz;
     UUtils::Exception("UCons::UCons()", "UGeomSolids", FatalErrorInArguments, 1, message.str().c_str());
-
   }
 
   // Check radii
@@ -64,7 +63,7 @@ UCons::UCons(const std::string& pName,
   {
     std::ostringstream message;
     message << "Invalid values of radii for Solid: " << GetName() << std::endl
-            << "				pRmin1 = " << pRmin1 << ", pRmin2 = " << pRmin2
+            << "  pRmin1 = " << pRmin1 << ", pRmin2 = " << pRmin2
             << ", pRmax1 = " << pRmax1 << ", pRmax2 = " << pRmax2;
     UUtils::Exception("UCons::UCons()", "UGeomSolids", FatalErrorInArguments, 1, message.str().c_str());
 
@@ -1259,8 +1258,9 @@ double UCons::DistanceToIn(const UVector3& p,
 
 double UCons::SafetyFromOutside(const UVector3& p, bool aAccurate) const
 {
-  double safe = 0.0, rho, safeR1, safeR2, safeZ, safePhi, cosPsi;
+  double safe = 0.0, rho, safeR1, safeR2, safeZ, safePhi;
   double pRMin, pRMax;
+  bool outside;
 
   rho  = std::sqrt(p.x * p.x + p.y * p.y);
   safeZ = std::fabs(p.z) - fDz;
@@ -1296,23 +1296,11 @@ double UCons::SafetyFromOutside(const UVector3& p, bool aAccurate) const
   if (!fPhiFullCone && rho)
   {
     // Psi=angle from central phi to point
-
-    cosPsi = (p.x * cosCPhi + p.y * sinCPhi) / rho;
-
-    if (cosPsi < std::cos(fDPhi * 0.5)) // Point lies outside phi range
+    //
+    safePhi = SafetyToPhi(p,rho,outside);
+    if ((outside) && (safePhi > safe))
     {
-      if ((p.y * cosCPhi - p.x * sinCPhi) <= 0.0)
-      {
-        safePhi = std::fabs(p.x * std::sin(fSPhi) - p.y * std::cos(fSPhi));
-      }
-      else
-      {
-        safePhi = std::fabs(p.x * sinEPhi - p.y * cosEPhi);
-      }
-      if (safePhi > safe)
-      {
-        safe = safePhi;
-      }
+      safe = safePhi;
     }
   }
   if (safe < 0.0)
@@ -1632,6 +1620,8 @@ double UCons::DistanceToOut(const UVector3& p,
           if (nt2 < 0.0)
           {
             aConvex = false;
+            risec = std::sqrt(p.x * p.x + p.y * p.y) * secRMin;
+            aNormalVector = UVector3(-p.x / risec, -p.y / risec, tanRMin / secRMin);
             return          snxt      = 0.0;
           }
         }
@@ -1924,6 +1914,10 @@ double UCons::DistanceToOut(const UVector3& p,
       aConvex = true;
       break;
     case kRMin:
+      xi         = p.x + snxt * v.x;
+      yi         = p.y + snxt * v.y;
+      risec = std::sqrt(xi * xi + yi * yi) * secRMin;
+      aNormalVector = UVector3(-xi / risec, -yi / risec, tanRMin / secRMin);
       aConvex = false;  // Rmin is inconvex
       break;
     case kSPhi:
@@ -1934,6 +1928,7 @@ double UCons::DistanceToOut(const UVector3& p,
       }
       else
       {
+        aNormalVector = UVector3(sinSPhi, -cosSPhi, 0);
         aConvex = false;
       }
       break;
@@ -1945,6 +1940,7 @@ double UCons::DistanceToOut(const UVector3& p,
       }
       else
       {
+        aNormalVector = UVector3(-sinEPhi, cosEPhi, 0);
         aConvex = false;
       }
       break;
@@ -1998,10 +1994,8 @@ double UCons::DistanceToOut(const UVector3& p,
 
 double UCons::SafetyFromInside(const UVector3& p, bool) const
 {
-  double safe = 0.0, rho, safeR1, safeR2, safeZ, safePhi;
-  double pRMin;
-  double pRMax;
-
+  double safe = 0.0, rho, safeZ;
+ 
 #ifdef UCSGDEBUG
   if (Inside(p) == eOutside)
   {
@@ -2024,54 +2018,15 @@ double UCons::SafetyFromInside(const UVector3& p, bool) const
 
   }
 #endif
-
+  
   rho = std::sqrt(p.x * p.x + p.y * p.y);
+
+  safe = SafetyFromInsideR(p, rho, false);
   safeZ = fDz - std::fabs(p.z);
 
-  if (fRmin1 || fRmin2)
-  {
-    pRMin  = tanRMin * p.z + (fRmin1 + fRmin2) * 0.5;
-    safeR1  = (rho - pRMin) / secRMin;
-  }
-  else
-  {
-    safeR1 = UUtils::kInfinity;
-  }
-
-  pRMax  = tanRMax * p.z + (fRmax1 + fRmax2) * 0.5;
-  safeR2  = (pRMax - rho) / secRMax;
-
-  if (safeR1 < safeR2)
-  {
-    safe = safeR1;
-  }
-  else
-  {
-    safe = safeR2;
-  }
   if (safeZ < safe)
   {
     safe = safeZ;
-  }
-
-  // Check if phi divided, Calc distances closest phi plane
-
-  if (!fPhiFullCone)
-  {
-    // Above/below central phi of UCons?
-
-    if ((p.y * cosCPhi - p.x * sinCPhi) <= 0)
-    {
-      safePhi = -(p.x * sinSPhi - p.y * cosSPhi);
-    }
-    else
-    {
-      safePhi = (p.x * sinEPhi - p.y * cosEPhi);
-    }
-    if (safePhi < safe)
-    {
-      safe = safePhi;
-    }
   }
   if (safe < 0)
   {
@@ -2109,17 +2064,17 @@ std::ostream& UCons::StreamInfo(std::ostream& os) const
 {
   int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
-     << "		*** Dump for solid - " << GetName() << " ***\n"
-     << "		===================================================\n"
+     << "                *** Dump for solid - " << GetName() << " ***\n"
+     << "                ===================================================\n"
      << " Solid type: UCons\n"
      << " Parameters: \n"
-     << "	 inside	-fDz radius: "  << fRmin1 << " mm \n"
-     << "	 outside -fDz radius: " << fRmax1 << " mm \n"
-     << "	 inside	+fDz radius: "  << fRmin2 << " mm \n"
-     << "	 outside +fDz radius: " << fRmax2 << " mm \n"
-     << "	 half length in Z	 : "  << fDz << " mm \n"
-     << "	 starting angle of segment: " << fSPhi / (UUtils::kPi / 180.0) << " degrees \n"
-     << "	 delta angle of segment	 : " << fDPhi / (UUtils::kPi / 180.0) << " degrees \n"
+     << "         inside -fDz radius : " << fRmin1 << " mm \n"
+     << "         outside -fDz radius: " << fRmax1 << " mm \n"
+     << "         inside +fDz radius : " << fRmin2 << " mm \n"
+     << "         outside +fDz radius: " << fRmax2 << " mm \n"
+     << "         half length in Z   : " << fDz << " mm \n"
+     << "         starting angle of segment: " << fSPhi / (UUtils::kPi / 180.0) << " degrees \n"
+     << "         delta angle of segment   : " << fDPhi / (UUtils::kPi / 180.0) << " degrees \n"
      << "-----------------------------------------------------------\n";
   os.precision(oldprc);
 

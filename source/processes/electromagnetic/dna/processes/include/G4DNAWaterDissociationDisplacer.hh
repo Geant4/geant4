@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAWaterDissociationDisplacer.hh 74551 2013-10-14 12:59:14Z gcosmo $
+// $Id: G4DNAWaterDissociationDisplacer.hh 81860 2014-06-06 10:14:59Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -63,7 +63,7 @@ public :
     G4DLLIMPORT static const DisplacementType A1B1_DissociationDecay;
     G4DLLIMPORT static const DisplacementType B1A1_DissociationDecay;
     G4DLLIMPORT static const DisplacementType AutoIonisation;
-    G4DLLEXPORT static const DisplacementType DissociativeAttachment;
+    G4DLLIMPORT static const DisplacementType DissociativeAttachment;
 #endif
 
 private :

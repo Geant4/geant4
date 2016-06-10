@@ -58,9 +58,9 @@ double & HepLorentzVector::operator () (int i) {
 HepLorentzVector & HepLorentzVector::boost
 				(double bx, double by, double bz){
   double b2 = bx*bx + by*by + bz*bz;
-  register double ggamma = 1.0 / std::sqrt(1.0 - b2);
-  register double bp = bx*x() + by*y() + bz*z();
-  register double gamma2 = b2 > 0 ? (ggamma - 1.0)/b2 : 0.0;
+  double ggamma = 1.0 / std::sqrt(1.0 - b2);
+  double bp = bx*x() + by*y() + bz*z();
+  double gamma2 = b2 > 0 ? (ggamma - 1.0)/b2 : 0.0;
 
   setX(x() + gamma2*bp*bx + ggamma*bx*t());
   setY(y() + gamma2*bp*by + ggamma*by*t());
@@ -195,14 +195,14 @@ Hep3Vector HepLorentzVector::boostVector() const {
 
 
 HepLorentzVector & HepLorentzVector::boostX (double bbeta){
-  register double b2 = bbeta*bbeta;
+  double b2 = bbeta*bbeta;
   if (b2 >= 1) {
     std::cerr << "HepLorentzVector::boostX() - "
       << "boost along X with beta >= 1 (speed of light) -- \n"
       << "no boost done" << std::endl;
   } else {
-    register double ggamma = std::sqrt(1./(1-b2));
-    register double tt = ee;
+    double ggamma = std::sqrt(1./(1-b2));
+    double tt = ee;
     ee = ggamma*(ee + bbeta*pp.getX());
     pp.setX(ggamma*(pp.getX() + bbeta*tt));
   }
@@ -210,14 +210,14 @@ HepLorentzVector & HepLorentzVector::boostX (double bbeta){
 } /* boostX */
 
 HepLorentzVector & HepLorentzVector::boostY (double bbeta){
-  register double b2 = bbeta*bbeta;
+  double b2 = bbeta*bbeta;
   if (b2 >= 1) {
     std::cerr << "HepLorentzVector::boostY() - "
       << "boost along Y with beta >= 1 (speed of light) -- \n"
       << "no boost done" << std::endl;
   } else {
-    register double ggamma = std::sqrt(1./(1-b2));
-    register double tt = ee;
+    double ggamma = std::sqrt(1./(1-b2));
+    double tt = ee;
     ee = ggamma*(ee + bbeta*pp.getY());
     pp.setY(ggamma*(pp.getY() + bbeta*tt));
   }
@@ -225,14 +225,14 @@ HepLorentzVector & HepLorentzVector::boostY (double bbeta){
 } /* boostY */
 
 HepLorentzVector & HepLorentzVector::boostZ (double bbeta){
-  register double b2 = bbeta*bbeta;
+  double b2 = bbeta*bbeta;
   if (b2 >= 1) {
     std::cerr << "HepLorentzVector::boostZ() - "
       << "boost along Z with beta >= 1 (speed of light) -- \n"
       << "no boost done" << std::endl;
   } else {
-    register double ggamma = std::sqrt(1./(1-b2));
-    register double tt = ee;
+    double ggamma = std::sqrt(1./(1-b2));
+    double tt = ee;
     ee = ggamma*(ee + bbeta*pp.getZ());
     pp.setZ(ggamma*(pp.getZ() + bbeta*tt));
   }

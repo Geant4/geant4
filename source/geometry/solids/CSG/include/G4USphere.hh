@@ -44,6 +44,7 @@
 
 #include "G4USolid.hh"
 #include "USphere.hh"
+#include "G4Polyhedron.hh"
 
 class G4USphere : public G4USolid
 {
@@ -130,31 +131,32 @@ inline G4double G4USphere::GetDeltaThetaAngle() const
 inline void G4USphere::SetInnerRadius(G4double newRMin)
 {
   GetShape()->SetInnerRadius(newRMin);
-  fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = 0;
 }
 inline void G4USphere::SetOuterRadius(G4double newRmax)
 {
   GetShape()->SetOuterRadius(newRmax);
-  fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = 0;
 }
 inline void G4USphere::SetStartPhiAngle(G4double newSphi, G4bool trig)
 {
   GetShape()->SetStartPhiAngle(newSphi, trig);
+  delete fPolyhedron; fPolyhedron = 0;
 }
 inline void G4USphere::SetDeltaPhiAngle(G4double newDphi)
 {
   GetShape()->SetDeltaPhiAngle(newDphi);
-  fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = 0;
 }
 inline void G4USphere::SetStartThetaAngle(G4double newSTheta)
 {
   GetShape()->SetStartThetaAngle(newSTheta);
-  fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = 0;
 }
 inline void G4USphere::SetDeltaThetaAngle(G4double newDTheta)
 {
   GetShape()->SetDeltaThetaAngle(newDTheta);
-  fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = 0;
 }
 
 #endif

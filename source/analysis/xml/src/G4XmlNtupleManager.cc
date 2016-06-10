@@ -74,7 +74,7 @@ G4XmlNtupleManager::GetNtupleIColumn(G4int ntupleId, G4int columnId) const
   if ( it == ntupleIColumnMap.end() ) {
     G4ExceptionDescription description;
     description << "      "  << "ntupleId " << ntupleId
-                << "column " << columnId << " does not exist.";
+                << " columnId " << columnId << " does not exist.";
     G4Exception("G4XmlNtupleManager::GetNtupleIColumn()",
                 "Analysis_W009", JustWarning, description);
     return 0;
@@ -98,7 +98,7 @@ G4XmlNtupleManager::GetNtupleFColumn(G4int ntupleId, G4int columnId) const
   if ( it == ntupleFColumnMap.end() ) {
     G4ExceptionDescription description;
     description << "      "  << "ntupleId " << ntupleId
-                << "column " << columnId << " does not exist.";
+                << " columnId " << columnId << " does not exist.";
     G4Exception("G4XmlNtupleManager::GetNtupleFColumn()",
                 "Analysis_W009", JustWarning, description);
     return 0;
@@ -122,7 +122,7 @@ G4XmlNtupleManager::GetNtupleDColumn(G4int ntupleId, G4int columnId) const
   if ( it == ntupleDColumnMap.end() ) {
     G4ExceptionDescription description;
     description << "      "  << "ntupleId " << ntupleId
-                << "column " << columnId << " does not exist.";
+                << " columnId " << columnId << " does not exist.";
     G4Exception("G4XmlNtupleManager::GetNtupleFColumn()",
                 "Analysis_W009", JustWarning, description);
     return 0;
@@ -339,6 +339,8 @@ G4int G4XmlNtupleManager::CreateNtupleIColumn(G4int ntupleId, const G4String& na
 
   G4XmlNtupleDescription* ntupleDescription
     = GetNtupleInFunction(ntupleId, "CreateNtupleIColumn");
+  if ( ! ntupleDescription )  return -1;   
+
   tools::ntuple_booking* ntupleBooking
     = ntupleDescription->fNtupleBooking;  
 
@@ -388,6 +390,8 @@ G4int G4XmlNtupleManager::CreateNtupleFColumn(G4int ntupleId, const G4String& na
 
   G4XmlNtupleDescription* ntupleDescription
     = GetNtupleInFunction(ntupleId, "CreateNtupleFColumn");
+  if ( ! ntupleDescription )  return -1;   
+
   tools::ntuple_booking* ntupleBooking
     = ntupleDescription->fNtupleBooking;  
 
@@ -437,6 +441,8 @@ G4int G4XmlNtupleManager::CreateNtupleDColumn(G4int ntupleId, const G4String& na
 
   G4XmlNtupleDescription* ntupleDescription
     = GetNtupleInFunction(ntupleId, "CreateNtupleDColumn");
+  if ( ! ntupleDescription )  return -1;   
+
   tools::ntuple_booking* ntupleBooking
     = ntupleDescription->fNtupleBooking;  
 
@@ -543,7 +549,7 @@ G4bool G4XmlNtupleManager::FillNtupleIColumn(G4int ntupleId, G4int columnId,
     = GetNtupleIColumn(ntupleId, columnId);
   if ( ! column ) {
     G4ExceptionDescription description;
-    description << "      " << "column " << columnId << " does not exist.";
+    description << "      " << " columnId " << columnId << " does not exist.";
     G4Exception("G4XmlNtupleManager::FillNtupleIColumn()",
                 "Analysis_W009", JustWarning, description);
     return false;
@@ -568,7 +574,7 @@ G4bool G4XmlNtupleManager::FillNtupleFColumn(G4int ntupleId, G4int columnId,
     = GetNtupleFColumn(ntupleId, columnId);
   if ( ! column ) {
     G4ExceptionDescription description;
-    description << "      " << "column " << columnId << " does not exist.";
+    description << "      " << " columnId " << columnId << " does not exist.";
     G4Exception("G4XmlNtupleManager::FillNtupleFColumn()",
                 "Analysis_W009", JustWarning, description);
     return false;
@@ -594,7 +600,7 @@ G4bool G4XmlNtupleManager::FillNtupleDColumn(G4int ntupleId, G4int columnId,
     = GetNtupleDColumn(ntupleId, columnId);
   if ( ! column ) {
     G4ExceptionDescription description;
-    description << "      " << "column " << columnId << " does not exist.";
+    description << "      " << " columnId " << columnId << " does not exist.";
     G4Exception("G4XmlNtupleManager::FillNtupleDColumn()",
                 "Analysis_W009", JustWarning, description);
     return false;
@@ -631,8 +637,9 @@ G4bool G4XmlNtupleManager::AddNtupleRow(G4int ntupleId)
 
   G4XmlNtupleDescription* ntupleDescription
     = GetNtupleInFunction(ntupleId, "AddNtupleRow");
+  if ( ! ntupleDescription ) return false;
 
-  if ( ! ntupleDescription || ! ntupleDescription->fNtuple ) {
+  if ( ! ntupleDescription->fNtuple ) {
     G4ExceptionDescription description;
     description << "      " << "ntuple does not exist. ";
     G4Exception("G4XmlNtupleManager::AddNtupleRow()",

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Paraboloid.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4Paraboloid.hh 81641 2014-06-04 09:11:38Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -60,6 +60,7 @@
 #include <CLHEP/Units/PhysicalConstants.h>
 
 #include "G4VSolid.hh"
+#include "G4Polyhedron.hh"
 
 class G4Paraboloid : public G4VSolid
 {

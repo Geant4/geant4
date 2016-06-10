@@ -1,4 +1,4 @@
-$Id: History 76885 2013-11-18 12:55:15Z gcosmo $
+$Id: History 81891 2014-06-06 13:26:40Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the SVN repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13 March 2014  Gabriele Cosmo (prophonon-V09-06-08)
+---------------------------------------------------
+- Removed inline keywords in methods in G4PhononDownconversion.cc
+  and make coherent use of G4 types.
 
 15 November 2013  Michael Kelsey (prophonon-V09-06-07)
 ------------------------------------------------------

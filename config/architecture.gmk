@@ -1,4 +1,4 @@
-# $Id: architecture.gmk 76241 2013-11-08 11:07:59Z gcosmo $
+# $Id: architecture.gmk 81420 2014-05-28 13:14:40Z gcosmo $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -223,6 +223,11 @@ CPPFLAGS  += -I$(CLHEP_INCLUDE_DIR)
 #
 ifndef LDFLAGS
   LDFLAGS :=
+  #
+  # run-time loading flags
+  #
+  G4STATIC_MODE :=
+  G4NOSTATIC_MODE :=
 endif
 ifndef G4LIB_USE_CLHEP
   ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))

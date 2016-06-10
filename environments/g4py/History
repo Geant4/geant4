@@ -11,6 +11,14 @@ Geant4Py is a Geant4-Python bridge.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 25 2014 Koichi Murakami
+ - remove IsGeneric() method in pyG4Polyone.cc because that method is removed.
+   (bug-id 1544)
+ - configure script, physics list is changed to be always turned on.
+   (bug-id 1546)
+ - pyG4EllipticalCone.cc, add missing return in CreateEllipticalCone() method.
+   (bug-id 1586)
+
 15 November 2013 K.Murakami
  - add support for CMake build
  - updated for 10.0 release

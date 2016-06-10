@@ -1,4 +1,4 @@
-$Id: History 75591 2013-11-04 12:33:11Z gcosmo $
+$Id: History 81856 2014-06-06 10:06:15Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
+
+10 Apr 2014: V.Ivanchenko (emadjoint-V09-06-10)
+- G4VAdjointReverseReaction - added protection against infinite 
+    loop in ReverseMC01 example: if cross section correction 
+    exceed 100 the total cross section is set to zero
 
 31 Oct 2013: L.Desorgher (emadjoint-V09-06-09)
 - Modifications for limitation of convergence peak

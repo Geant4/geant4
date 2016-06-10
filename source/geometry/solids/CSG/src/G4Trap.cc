@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4Trap.cc 81636 2014-06-04 09:06:08Z gcosmo $
 //
 // class G4Trap
 //
@@ -560,6 +560,7 @@ G4Trap::G4Trap(const G4Trap& rhs)
     fPlanes[i].c = rhs.fPlanes[i].c;
     fPlanes[i].d = rhs.fPlanes[i].d;
   }
+  fpPolyhedron = GetPolyhedron();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -589,6 +590,7 @@ G4Trap& G4Trap::operator = (const G4Trap& rhs)
     fPlanes[i].c = rhs.fPlanes[i].c;
     fPlanes[i].d = rhs.fPlanes[i].d;
   }
+  fpPolyhedron = GetPolyhedron();
 
   return *this;
 }
@@ -623,7 +625,7 @@ void G4Trap::SetAllParameters ( G4double pDz,
   }
   fCubicVolume= 0.;
   fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  delete fpPolyhedron; fpPolyhedron = 0;
   fDz=pDz;
   fTthetaCphi=std::tan(pTheta)*std::cos(pPhi);
   fTthetaSphi=std::tan(pTheta)*std::sin(pPhi);

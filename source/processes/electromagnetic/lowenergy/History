@@ -1,4 +1,4 @@
-$Id: History 79186 2014-02-20 09:20:02Z gcosmo $
+$Id: History 81862 2014-06-06 10:19:30Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19.05.2014  V. Ivanchenko/L. Pandola, tag emlowen-V09-06-51
+	    Bug fix in G4PenelopePhotoElectric effect (no fluorescence in 
+            MT mode). 
 
 24.01.2014  V. Ivanchenko, tag emlowen-V09-06-50
             G4LivermorePhotoElectricModel - fixed Coverity report 

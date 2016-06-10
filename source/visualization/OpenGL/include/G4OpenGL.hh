@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenGL.hh 75567 2013-11-04 11:35:11Z gcosmo $
+// $Id: G4OpenGL.hh 81907 2014-06-06 14:03:24Z gcosmo $
 //
 // G.Barrand.
 
@@ -68,6 +68,9 @@
 //#  define G4OPENGL_VERSION_2 1
       #include <OpenGL/gl.h>
       #include <OpenGL/glu.h>
+    #else
+      #include <GL/gl.h>
+      #include <GL/glu.h>
     #endif
     #include <qgl.h>
   #endif

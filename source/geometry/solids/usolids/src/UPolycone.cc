@@ -174,10 +174,10 @@ void UPolycone::Init(double phiStart,
         std::ostringstream message;
         message << "Cannot create a Polycone with no contiguous segments."
                 << std::endl
-                << "				Segments are not contiguous !" << std::endl
-                << "				rMin[" << i << "] = " << rInner[i]
+                << "Segments are not contiguous !" << std::endl
+                << " rMin[" << i << "] = " << rInner[i]
                 << " -- rMax[" << i + 1 << "] = " << rOuter[i + 1] << std::endl
-                << "				rMin[" << i + 1 << "] = " << rInner[i + 1]
+                << " rMin[" << i + 1 << "] = " << rInner[i + 1]
                 << " -- rMax[" << i << "] = " << rOuter[i];
         UUtils::Exception("UPolycone::UPolycone()", "GeomSolids0002",
                           FatalErrorInArguments, 1, message.str().c_str());
@@ -199,10 +199,10 @@ void UPolycone::Init(double phiStart,
           std::ostringstream message;
           message << "Cannot create a Polycone with different Z directions.Use GenericPolycone."
                   << std::endl
-                  << "				ZPlane is changing direction  !" << std::endl
-                  << "	zPlane[0] = " << zPlane[0]
+                  << "ZPlane is changing direction  !" << std::endl
+                  << "  zPlane[0] = " << zPlane[0]
                   << " -- zPlane[1] = " << zPlane[1] << std::endl
-                  << "	zPlane[" << i - 1 << "] = " << zPlane[i - 1]
+                  << "  zPlane[" << i - 1 << "] = " << zPlane[i - 1]
                   << " -- rPlane[" << i << "] = " << zPlane[i];
           UUtils::Exception("UPolycone::UPolycone()", "GeomSolids0002",
                             FatalErrorInArguments, 1, message.str().c_str());
@@ -251,7 +251,7 @@ void UPolycone::Init(double phiStart,
             { section.convex = false;}
           else
             { section.convex = true;}
-	}
+        }
         fSections.push_back(section);
       }
       else
@@ -290,7 +290,7 @@ void UPolycone::Init(double phiStart,
      message << "Illegal input parameters - " << GetName() << std::endl
              << "        All R values must be >= 0 !";
      UUtils::Exception("UPolycone::Init()", "GeomSolids0002",
-		       FatalErrorInArguments,1, message.str().c_str());
+                       FatalErrorInArguments,1, message.str().c_str());
   }
     
   
@@ -362,31 +362,31 @@ std::ostream& UPolycone::StreamInfo(std::ostream& os) const
 {
   int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
-     << "		*** Dump for solid - " << GetName() << " ***\n"
-     << "		===================================================\n"
+     << "                *** Dump for solid - " << GetName() << " ***\n"
+     << "                ===================================================\n"
      << " Solid type: UPolycone3\n"
      << " Parameters: \n"
-     << "		starting phi angle : " << startPhi / (UUtils::kPi / 180.0) << " degrees \n"
-     << "		ending phi angle	 : " << endPhi / (UUtils::kPi / 180.0) << " degrees \n";
+     << "  starting phi angle : " << startPhi / (UUtils::kPi / 180.0) << " degrees \n"
+     << "  ending phi angle   : " << endPhi / (UUtils::kPi / 180.0) << " degrees \n";
   int i = 0;
   int numPlanes = fOriginalParameters->fNumZPlanes;
-    os << "		number of Z planes: " << numPlanes << "\n"
-       << "							Z values: \n";
+    os << "  number of Z planes: " << numPlanes << "\n"
+       << "            Z values: \n";
     for (i = 0; i < numPlanes; i++)
     {
-      os << "							Z plane " << i << ": "
+      os << "    Z plane " << i << ": "
          << fOriginalParameters->fZValues[i] << "\n";
     }
-    os << "							Tangent distances to inner surface (Rmin): \n";
+    os << "  Tangent distances to inner surface (Rmin): \n";
     for (i = 0; i < numPlanes; i++)
     {
-      os << "							Z plane " << i << ": "
+      os << "    Z plane " << i << ": "
          << fOriginalParameters->Rmin[i] << "\n";
     }
-    os << "							Tangent distances to outer surface (Rmax): \n";
+    os << "  Tangent distances to outer surface (Rmax): \n";
     for (i = 0; i < numPlanes; i++)
     {
-      os << "							Z plane " << i << ": "
+      os << "    Z plane " << i << ": "
          << fOriginalParameters->Rmax[i] << "\n";
     }
   os << "-----------------------------------------------------------\n";
@@ -564,25 +564,41 @@ double UPolycone::DistanceToOut(const UVector3&  p, const UVector3& v,
                                 UVector3& n, bool& convex, double /*aPstep*/) const
 {
   UVector3 pn(p);
+  
   if (fOriginalParameters->fNumZPlanes == 2)
   {
     const UPolyconeSection& section = fSections[0];
     pn.z -= section.shift;
     return section.solid->DistanceToOut(pn, v, n, convex);
   }
-  int index =  GetSection(p.z);
+
+  int indexLow = GetSection(p.z-fgTolerance);
+  int indexHigh = GetSection(p.z+fgTolerance);
+  int index = 0;
+ 
+  if ( indexLow != indexHigh )
+    { //we are close to Surface, section has to be identified
+      const UPolyconeSection& section = fSections[indexLow];
+      pn.z -= section.shift;
+      if(section.solid->Inside(pn) == eOutside){index=indexHigh;}
+      else{index=indexLow;}
+      pn.z=p.z;
+    }
+  else{index=indexLow;} 
   double totalDistance = 0;
   int increment = (v.z > 0) ? 1 : -1;
   bool convexloc=true;
-
+ 
+  UVector3 section_norm;
+  section_norm.Set(0);
   do
-  {
+    {
     const UPolyconeSection& section = fSections[index];
+    
     if (totalDistance != 0)
     {
-      pn = p + (totalDistance /*+ 0 * 1e-8*/) * v; // point must be shifted,
-                                                   // so it could eventually
-      pn.z -= section.shift;                       // get into another solid
+      pn = p + (totalDistance /*+ 0 * 1e-8*/) * v; // point must be shifted, so it could eventually get into another solid
+      pn.z -= section.shift;
       if (section.solid->Inside(pn) == eOutside)
       {
         break;
@@ -590,28 +606,56 @@ double UPolycone::DistanceToOut(const UVector3&  p, const UVector3& v,
     }
     else pn.z -= section.shift;
 
-    double distance = section.solid->DistanceToOut(pn, v, n, convex);
-    if ((convexloc) && (section.convex)) { convexloc = true; }
-    else { convexloc = false; }
-
+   double distance = section.solid-> DistanceToOut(pn, v, n, convexloc); //section.solid->DistanceToOut(pn, v, n, convexloc);
+   //Section Surface case   
+   if(std::fabs(distance) < 0.5*fgTolerance)
+   { int index1 = index;
+        if(( index > 0) && ( index < fMaxSection )){index1 += increment;}
+        else{
+        if((index == 0) && ( increment > 0 ))index1 += increment;
+        if((index == fMaxSection) && (increment<0 ))index1 += increment;
+        }
+        UVector3 pte = p+(totalDistance+distance)*v;
+        const UPolyconeSection& section1 = fSections[index1];
+        pte.z -= section1.shift;
+        if (section1.solid->Inside(pte) == eOutside)
+        {
+         break;
+        }
+    }
+    //Convexity    
+    if((index < fMaxSection) && (index > 0 )){
+     if((convexloc) && (section.convex)) {convexloc=true;}
+     else{convexloc=false;}
+    }
+    
     totalDistance += distance;
+
     index += increment;
+
   }
   while (index >= 0 && index <= fMaxSection);
-  
+
   convex=convexloc;
-  if (convex)
-  {
-    // Check final convexity for dz
-    //
+  if(convex){
+  //Check final convexity for dz
     pn = p + (totalDistance) * v;
-    double dz1 = std::fabs(pn.z-fZs[index]);
-    double dz2 = std::fabs(pn.z-fZs[index+1]);
-    double halfTolerance=0.5*fgTolerance;
-    if((dz1 < halfTolerance) && (index>0)) convex = false;
-    if((dz2 < halfTolerance) && (index<fMaxSection)) convex = false;
+    double halfTolerance = 0.5*fgTolerance;
+    if((index < fMaxSection) && (index > 0 ))
+    {
+     double dz1 = std::fabs(pn.z-fZs[index]);
+     double dz2 = std::fabs(pn.z-fZs[index+1]);
+     if(dz1 < halfTolerance)convex=false;
+     if(dz2 < halfTolerance)convex=false;
+     
+    }else{
+      if(index>=fMaxSection){
+       if(std::fabs(pn.z-fZs[fMaxSection]) < halfTolerance)convex=false;
+      }else{
+      if(index<=0){if(std::fabs(pn.z-fZs[1]) < halfTolerance)convex=false;}
+      }
+   }
   }
-  
   return totalDistance;
 }
 
@@ -619,34 +663,50 @@ double UPolycone::SafetyFromInside(const UVector3& p, bool) const
 {
   int index = UVoxelizer::BinarySearch(fZs, p.z);
   if (index < 0 || index > fMaxSection) return 0;
-
-  double minSafety = SafetyFromInsideSection(index, p);
+  
+  double rho=std::sqrt(p.x*p.x+p.y*p.y);
+  double safeR = SafetyFromInsideSection(index,rho, p);
+  double safeDown = p.z-fZs[index];
+  double safeUp = fZs[index+1]-p.z;
+  
+  double minSafety =safeR;
+  
   if (minSafety == UUtils::kInfinity) return 0;
   if (minSafety < 1e-6) return 0;
-
-  double zbase = fZs[index + 1];
+ 
   for (int i = index + 1; i <= fMaxSection; ++i)
   {
-    double dz = fZs[i] - zbase;
-    if (dz >= minSafety) break;
-    double safety = SafetyFromOutsideSection(i, p); // safety from Inside cannot be called in this context, because point is not inside, we have to call SafetyFromOutside for given section
-    if (safety < minSafety) minSafety = safety;
+    double dz1 = fZs[i] - p.z;
+    double dz2 = fZs[i+1] - p.z;
+    safeR = SafetyFromOutsideSection(i,rho, p); 
+    if (safeR < 0.) { safeUp=dz1; break; } 
+    if (dz1 < dz2) { safeR = std::sqrt(safeR*safeR+dz1*dz1); }
+    else {safeR = std::sqrt(safeR*safeR+dz1*dz1); }
+    if (safeR < dz1) { safeUp = safeR; break; }
+    if (safeR < dz2) { safeUp = safeR; break; }
+    safeUp=dz2;
   }
 
   if (index > 0)
   {
-    zbase = fZs[index - 1];
     for (int i = index - 1; i >= 0; --i)
     {
-      double dz = zbase - fZs[i];
-      if (dz >= minSafety) break;
-      double safety = SafetyFromOutsideSection(i, p);
-      if (safety < minSafety) minSafety = safety;
+      double dz1 = p.z-fZs[i+1];
+      double dz2 = p.z-fZs[i];
+      safeR = SafetyFromOutsideSection(i,rho, p); 
+      if (safeR < 0.) { safeDown=dz1; break; } 
+      if(dz1 < dz2) { safeR = std::sqrt(safeR*safeR+dz1*dz1); }
+      else { safeR = std::sqrt(safeR*safeR+dz1*dz1); }
+      if (safeR < dz1) { safeDown = safeR; break; }
+      if (safeR < dz2) { safeDown = safeR; break; }
+      safeDown=dz2;
     }
   }
+  if (safeUp < minSafety) minSafety=safeUp;
+  if (safeDown < minSafety) minSafety=safeDown;
+  
   return minSafety;
 }
-
 
 double UPolycone::SafetyFromOutside(const UVector3& p, bool aAccurate) const
 {
@@ -1528,5 +1588,4 @@ void UPolycone::Reset()
     delete [] R1;
     delete [] Z;
     delete [] R2;
- 
 }

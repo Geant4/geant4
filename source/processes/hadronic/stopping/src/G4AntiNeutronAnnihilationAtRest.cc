@@ -23,14 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//    $Id: G4AntiNeutronAnnihilationAtRest.cc 66872 2013-01-15 01:25:57Z japost $
+//    $Id: G4AntiNeutronAnnihilationAtRest.cc 81888 2014-06-06 13:17:25Z gcosmo $
 //    G4AntiNeutronAnnihilationAtRest physics process
 //    Larry Felawka (TRIUMF), April 1998
 //---------------------------------------------------------------------
 
-#include <string.h>
-#include <cmath>
-#include <stdio.h>
+//#include <string.h>
+//#include <cmath>
+//#include <stdio.h>
 
 #include "G4AntiNeutronAnnihilationAtRest.hh"
 #include "G4SystemOfUnits.hh"
@@ -74,6 +74,9 @@ G4AntiNeutronAnnihilationAtRest::G4AntiNeutronAnnihilationAtRest(const G4String&
   gkin = new G4GHEKinematicsVector [MAX_SECONDARIES];
 
   G4HadronicProcessStore::Instance()->RegisterExtraProcess(this);
+  globalTime = targetAtomicMass = targetCharge = evapEnergy1 
+    = evapEnergy3 = 0.0;
+  ngkine = ntot = 0;
 }
  
 // destructor

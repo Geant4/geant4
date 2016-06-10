@@ -1,4 +1,4 @@
-$Id: History 78050 2013-12-03 08:17:33Z gcosmo $
+$Id: History 81594 2014-06-03 14:05:18Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,24 +17,30 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 10, 2014 G.Cosmo                     geommng-V09-06-18
+- Get rid of deprecated 'register' storage class specifier in source files.
+
+March 31, 2014 G.Cosmo
+- Fixed operator=() signature in G4LogicalSurface.
+
 December 2, 2013 A.Dotti                   geommng-V09-06-17
 - Correctly initialize shadow pointers in G4PhysicalVolume.
 
-December 2, 2013 M.Asai                   geommng-V09-06-16
+December 2, 2013 M.Asai                    geommng-V09-06-16
 - Correctly initialize shadow pointers in G4LogicalVolume.
 
-November 30, 2013 M.Asai                  geommng-V09-06-15
+November 30, 2013 M.Asai                   geommng-V09-06-15
 - Explicitely initialize data members of G4LVData.
 
-November 27, 2013 J.Apostolakis           geommng-V09-06-14
+November 27, 2013 J.Apostolakis            geommng-V09-06-14
 - Fix in G4GeomSplitter::FreeSlave(): use free() to delete memory 
    which was allocated with malloc().
 
-October  18, 2013, A. Dotti		geommng-V09-06-13
+October 18, 2013, A. Dotti                 geommng-V09-06-13
 - Bug fixing in G4GeomSplitter::UseWorkspace method
   check if offset pointer is assigned AND different from new value
 
-October   3, 2013 J.Apostolakis           geommng-V09-06-12
+October 3, 2013 J.Apostolakis              geommng-V09-06-12
 - Cleanup of G4LogicalVolume, G4VPhysicalVolume
      Moved long description of helper classes to end of headers.
      Moved macros to icc file. 
@@ -45,10 +51,10 @@ October   3, 2013 J.Apostolakis           geommng-V09-06-12
      * Get/Set Solid( G4LVData, .) for potential performance improvement
      * bool fChangedState.
 
-August 27, 2013 G.Cosmo                  geommng-V09-06-11
+August 27, 2013 G.Cosmo                    geommng-V09-06-11
 - Added G4Ellipsoid among solids enabled for parameterisation.
 
-August 22, 2013 G.Cosmo                  geommng-V09-06-10
+August 22, 2013 G.Cosmo                    geommng-V09-06-10
 - Added parameter to specify maximum number of overlap errors to report
   in G4VPhysicalVolume::CheckOverlaps().
 

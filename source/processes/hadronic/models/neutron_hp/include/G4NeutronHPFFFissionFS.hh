@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 //
+// $Id$
 //
 #ifndef G4NeutronHPFFFissionFS_h
 #define G4NeutronHPFFFissionFS_h 1
@@ -38,7 +39,7 @@ class G4NeutronHPFFFissionFS : public G4NeutronHPFissionBaseFS
  
    public:
       G4NeutronHPFFFissionFS(){ hasXsec = false; }
-      ~G4NeutronHPFFFissionFS(){}
+      ~G4NeutronHPFFFissionFS();
 
       void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType);
 

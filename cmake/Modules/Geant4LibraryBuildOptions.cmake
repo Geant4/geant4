@@ -36,6 +36,8 @@ endif()
 # OFF by default. Switching on will enable multithreading, adding the
 # G4MULTITHREADED definition globally and appending the relevant
 # compiler flags to CMAKE_CXX_FLAGS
+# Enabling the option allows advanced users to further select the
+# thread local storage model if GNU/Clang/Intel compiler is used.
 option(GEANT4_BUILD_MULTITHREADED "Enable multithreading in Geant4" OFF)
 
 if(WIN32)
@@ -57,6 +59,21 @@ if(GEANT4_BUILD_MULTITHREADED)
     message(WARNING "GEANT4_BUILD_MULTITHREADED IS NOT SUPPORTED on Win32. This option should only be activated by developers")
   endif()
 
+  # - Allow advanced users to select the thread local storage model,
+  # if the compiler supports it, defaulting to that recommended by Geant4
+  if(TLSMODEL_IS_AVAILABLE)
+    enum_option(GEANT4_BUILD_TLS_MODEL
+      DOC "Build libraries with Thread Local Storage model"
+      VALUES ${TLSMODEL_IS_AVAILABLE}
+      CASE_INSENSITIVE
+    )
+    mark_as_advanced(GEANT4_BUILD_TLS_MODEL)
+    geant4_add_feature(GEANT4_BUILD_TLS_MODEL "Building with TLS model '${GEANT4_BUILD_TLS_MODEL}'")
+
+    set(GEANT4_MULTITHREADED_CXX_FLAGS "${GEANT4_MULTITHREADED_CXX_FLAGS} ${${GEANT4_BUILD_TLS_MODEL}_FLAGS}")
+  endif()
+
+  # Set Defs/Compiler Flags
   add_definitions(-DG4MULTITHREADED)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GEANT4_MULTITHREADED_CXX_FLAGS}")
 endif()

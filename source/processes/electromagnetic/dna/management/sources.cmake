@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 75583 2013-11-04 12:16:46Z gcosmo $
+# $Id: sources.cmake 82326 2014-06-16 09:19:18Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -67,6 +67,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4KDTree.hh
         G4KDTreeResult.hh
         G4ReferenceCast.hh
+        G4shared_ptr.hh
         G4TrackingInformation.hh
         G4TrackList.hh
         G4UserTimeStepAction.hh

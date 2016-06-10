@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.icc 74258 2013-10-02 14:27:36Z gcosmo $
+// $Id: G4Sphere.icc 81636 2014-06-04 09:06:08Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -80,7 +80,7 @@ void G4Sphere::Initialize()
 {
   fCubicVolume = 0.;
   fSurfaceArea = 0.;
-  fpPolyhedron = 0;
+  delete fpPolyhedron; fpPolyhedron = 0;
 }
 
 inline

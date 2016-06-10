@@ -125,6 +125,20 @@ function(__configure_cxxstd_intel)
   endforeach()
 endfunction()
 
+#-----------------------------------------------------------------------
+# function __configure_tls_models()
+#          Set available thread local storage models. Valid for GNU,
+#          Clang and Intel compilers.
+#
+function(__configure_tls_models)
+  # available models, default first
+  set(_TLSMODELS initial-exec local-exec global-dynamic local-dynamic)
+
+  set(TLSMODEL_IS_AVAILABLE ${_TLSMODELS} PARENT_SCOPE)
+  foreach(_s ${_TLSMODELS})
+    set(${_s}_FLAGS "-ftls-model=${_s}" PARENT_SCOPE)
+  endforeach()
+endfunction()
 
 #-----------------------------------------------------------------------
 # DEFAULT FLAG SETTING
@@ -133,7 +147,7 @@ endfunction()
 # NB: At present, only identifies clang correctly on CMake > 2.8.1
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   set(CMAKE_CXX_FLAGS_INIT "-W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe")
-  set(CMAKE_CXX_FLAGS_DEBUG_INIT "-g")
+  set(CMAKE_CXX_FLAGS_DEBUG_INIT "-g -DG4FPE_DEBUG")
   set(CMAKE_CXX_FLAGS_RELEASE_INIT "-O2 -DNDEBUG")
   set(CMAKE_CXX_FLAGS_MINSIZEREL_INIT "-Os -DNDEBUG")
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")
@@ -158,7 +172,8 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   endif()
 
   # - Multithreading
-  set(GEANT4_MULTITHREADED_CXX_FLAGS "-ftls-model=initial-exec -pthread")
+  __configure_tls_models()
+  set(GEANT4_MULTITHREADED_CXX_FLAGS "-pthread")
 endif()
 
 
@@ -202,7 +217,8 @@ if(CMAKE_CXX_COMPILER MATCHES "icpc.*|icc.*")
   __configure_cxxstd_intel()
 
   # - Multithreading
-  set(GEANT4_MULTITHREADED_CXX_FLAGS "-ftls-model=initial-exec -pthread")
+  __configure_tls_models()
+  set(GEANT4_MULTITHREADED_CXX_FLAGS "-pthread")
 
   # Linker flags
   set(CMAKE_EXE_LINKER_FLAGS "-i-dynamic -limf")

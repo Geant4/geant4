@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+ <define>
+  <position name="det_in_world" unit="mm" x="0" y="0" z="0" />
+ </define>
+
+ <materials>
+ </materials>
+
+ <solids>
+  <box aunit="radian" lunit="mm" name="world" x="10000" y="10000" z="10000" />
+  <box aunit="radian" lunit="mm" name="det" x="2000" y="2000" z="2000" />
+ </solids>
+ <structure>
+  <volume name="Detector" >
+   <materialref ref="G4_WATER" />
+   <solidref ref="det" />
+  </volume>
+  <volume name="World" >
+   <materialref ref="G4_AIR" />
+   <solidref ref="world" />
+   <physvol>
+    <volumeref ref="Detector" />
+    <positionref ref="det_in_world" />
+   </physvol>
+  </volume>
+ </structure>
+ <setup name="Default" version="1.0" >
+  <world ref="World" />
+ </setup>
+</gdml>

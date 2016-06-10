@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusCaptureAtRest.cc 70681 2013-06-04 07:54:04Z gcosmo $
+// $Id: G4MuonMinusCaptureAtRest.cc 81888 2014-06-06 13:17:25Z gcosmo $
 //
 //   G4MuonMinusCaptureAtRest physics process
 //   Larry Felawka (TRIUMF) and Art Olin (TRIUMF)
@@ -70,6 +70,7 @@ G4MuonMinusCaptureAtRest::G4MuonMinusCaptureAtRest(const G4String& processName,
   theN       = new G4Fancy3DNucleus();
   theHandler = new G4ExcitationHandler();
   G4HadronicProcessStore::Instance()->RegisterExtraProcess(this);
+  targetMass = 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

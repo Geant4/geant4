@@ -189,9 +189,9 @@ inline Hep3Vector HepRotation::operator * (const Hep3Vector & p) const {
 }
 
 inline Hep3Vector HepRotation::operator () (const Hep3Vector & p) const {
-  register double x = p.x();
-  register double y = p.y();
-  register double z = p.z();
+  double x = p.x();
+  double y = p.y();
+  double z = p.z();
   return Hep3Vector(rxx*x + rxy*y + rxz*z,
                     ryx*x + ryy*y + ryz*z,
                     rzx*x + rzy*y + rzz*z);

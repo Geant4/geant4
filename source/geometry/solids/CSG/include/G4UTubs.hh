@@ -46,6 +46,7 @@
 
 #include "G4USolid.hh"
 #include "UTubs.hh"
+#include "G4Polyhedron.hh"
 
 class G4UTubs : public G4USolid
 {
@@ -127,27 +128,27 @@ inline G4double G4UTubs::GetDeltaPhiAngle() const
 inline void G4UTubs::SetInnerRadius(G4double newRMin)
 {
   GetShape()->SetInnerRadius(newRMin);
-  fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = 0;
 }
 inline void G4UTubs::SetOuterRadius(G4double newRMax)
 {
   GetShape()->SetOuterRadius(newRMax);
-  fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = 0;
 }
 inline void G4UTubs::SetZHalfLength(G4double newDz)
 {
   GetShape()->SetZHalfLength(newDz);
-  fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = 0;
 }
 inline void G4UTubs::SetStartPhiAngle(G4double newSPhi, G4bool trig)
 {
   GetShape()->SetStartPhiAngle(newSPhi, trig);
-  fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = 0;
 }
 inline void G4UTubs::SetDeltaPhiAngle(G4double newDPhi)
 {
   GetShape()->SetDeltaPhiAngle(newDPhi);
-  fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = 0;
 }
 
 #endif

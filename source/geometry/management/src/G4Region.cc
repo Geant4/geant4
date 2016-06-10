@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc 67975 2013-03-13 10:19:44Z gcosmo $
+// $Id: G4Region.cc 81594 2014-06-03 14:05:18Z gcosmo $
 //
 // 
 // class G4Region Implementation
@@ -179,7 +179,7 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
     if (pParam->GetMaterialScanner())
     {
       size_t matNo = pParam->GetMaterialScanner()->GetNumberOfMaterials();
-      for (register size_t mat=0; mat<matNo; mat++)
+      for (size_t mat=0; mat<matNo; mat++)
       {
         volMat = pParam->GetMaterialScanner()->GetMaterial(mat);
         if(!volMat && fInMassGeometry)
@@ -204,7 +204,7 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
     else
     {
       size_t repNo = daughterPVol->GetMultiplicity();
-      for (register size_t rep=0; rep<repNo; rep++)
+      for (size_t rep=0; rep<repNo; rep++)
       {
         volMat = pParam->ComputeMaterial(rep, daughterPVol);
         if(!volMat && fInMassGeometry)
@@ -231,7 +231,7 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
   }
   else
   {
-    for (register size_t i=0; i<noDaughters; i++)
+    for (size_t i=0; i<noDaughters; i++)
     {
       G4LogicalVolume* daughterLVol = lv->GetDaughter(i)->GetLogicalVolume();
       if (!daughterLVol->IsRootRegion())

@@ -27,7 +27,7 @@
 // *                                                                  *
 // ********************************************************************
 //
-// $Id: G4Tet.cc 76263 2013-11-08 11:41:52Z gcosmo $
+// $Id: G4Tet.cc 81641 2014-06-04 09:11:38Z gcosmo $
 //
 // class G4Tet
 //
@@ -58,7 +58,7 @@
 
 #if !defined(G4GEOM_USE_UTET)
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc 76263 2013-11-08 11:41:52Z gcosmo $";
+const char G4Tet::CVSVers[]="$Id: G4Tet.cc 81641 2014-06-04 09:11:38Z gcosmo $";
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -224,6 +224,7 @@ G4Tet::G4Tet(const G4Tet& rhs)
     fDx(rhs.fDx), fDy(rhs.fDy), fDz(rhs.fDz), fTol(rhs.fTol),
     fMaxSize(rhs.fMaxSize)
 {
+  fpPolyhedron = GetPolyhedron();
 }
 
 
@@ -244,7 +245,7 @@ G4Tet& G4Tet::operator = (const G4Tet& rhs)
    // Copy data
    //
    fCubicVolume = rhs.fCubicVolume; fSurfaceArea = rhs.fSurfaceArea;
-   fpPolyhedron = 0; fAnchor = rhs.fAnchor;
+   fAnchor = rhs.fAnchor;
    fP2 = rhs.fP2; fP3 = rhs.fP3; fP4 = rhs.fP4; fMiddle = rhs.fMiddle;
    fNormal123 = rhs.fNormal123; fNormal142 = rhs.fNormal142;
    fNormal134 = rhs.fNormal134; fNormal234 = rhs.fNormal234;
@@ -254,6 +255,7 @@ G4Tet& G4Tet::operator = (const G4Tet& rhs)
    fYMin = rhs.fYMin; fYMax = rhs.fYMax; fZMin = rhs.fZMin; fZMax = rhs.fZMax;
    fDx = rhs.fDx; fDy = rhs.fDy; fDz = rhs.fDz; fTol = rhs.fTol;
    fMaxSize = rhs.fMaxSize;
+   delete fpPolyhedron; fpPolyhedron = 0; fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

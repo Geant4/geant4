@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc 77528 2013-11-25 13:06:36Z gcosmo $
+// $Id: G4GDMLReadSolids.cc 81843 2014-06-06 09:11:11Z gcosmo $
 //
 // class G4GDMLReadSolids Implementation
 //
@@ -760,6 +760,10 @@ PolyconeRead(const xercesc::DOMElement* const polyconeElement)
 
    new G4Polycone(name,startphi,deltaphi,numZPlanes,
                   z_array,rmin_array,rmax_array);
+
+   delete [] rmin_array;
+   delete [] rmax_array;
+   delete [] z_array;
 }
 
 void G4GDMLReadSolids::
@@ -827,7 +831,7 @@ GenericPolyconeRead(const xercesc::DOMElement* const polyconeElement)
    G4int numRZPoints = rzPointList.size();
 
    G4double* r_array = new G4double[numRZPoints];
-   G4double* z_array    = new G4double[numRZPoints];
+   G4double* z_array = new G4double[numRZPoints];
 
    for (G4int i=0; i<numRZPoints; i++)
    { 
@@ -836,6 +840,8 @@ GenericPolyconeRead(const xercesc::DOMElement* const polyconeElement)
    }
    new G4GenericPolycone(name,startphi,deltaphi,numRZPoints,
                          r_array,z_array);
+   delete [] r_array;
+   delete [] z_array;
 }
 
 void G4GDMLReadSolids::
@@ -918,6 +924,9 @@ PolyhedraRead(const xercesc::DOMElement* const polyhedraElement)
    new G4Polyhedra(name,startphi,deltaphi,numsides,numZPlanes,
                    z_array,rmin_array,rmax_array);
 
+   delete [] rmin_array;
+   delete [] rmax_array;
+   delete [] z_array;
 }
 
 void G4GDMLReadSolids::
@@ -988,7 +997,6 @@ GenericPolyhedraRead(const xercesc::DOMElement* const polyhedraElement)
 
    G4double* r_array = new G4double[numRZPoints];
    G4double* z_array = new G4double[numRZPoints];
-  
 
    for (G4int i=0; i<numRZPoints; i++)
    { 
@@ -999,6 +1007,8 @@ GenericPolyhedraRead(const xercesc::DOMElement* const polyhedraElement)
    new G4Polyhedra(name,startphi,deltaphi,numsides,numRZPoints,
                    r_array,z_array);
 
+   delete [] r_array;
+   delete [] z_array;
 }
 
 G4QuadrangularFacet* G4GDMLReadSolids::

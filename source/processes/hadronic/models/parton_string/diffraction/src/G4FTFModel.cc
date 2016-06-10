@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc 74627 2013-10-17 07:04:38Z gcosmo $
+// $Id: G4FTFModel.cc 81880 2014-06-06 12:50:36Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -77,7 +77,7 @@ G4FTFModel::G4FTFModel( const G4String& modelName ) :
   NumberOfInvolvedNucleonsOfTarget = 0;
   NumberOfInvolvedNucleonsOfProjectile= 0;
 
-  LowEnergyLimit = 5000.0*MeV;
+  LowEnergyLimit = 2000.0*MeV;
   HighEnergyInter = true;
 
   G4LorentzVector tmp( 0.0, 0.0, 0.0, 0.0 );

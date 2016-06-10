@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc 74543 2013-10-14 12:38:02Z gcosmo $
+// $Id: G4WentzelVIModel.cc 81865 2014-06-06 11:32:58Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -536,11 +536,6 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
       G4double vx1 = sint*cos(phi);
       G4double vy1 = sint*sin(phi);
 
-      // change direction
-      temp.set(vx1,vy1,cost);
-      temp.rotateUz(dir);
-      dir = temp;
-
       // lateral displacement  
       if (latDisplasment && safety > tlimitminfix) {
 	G4double rms = invsqrt12*sqrt(2*z0);
@@ -558,6 +553,10 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
 	  fDisplacement += temp;
 	}
       }
+      // change direction
+      temp.set(vx1,vy1,cost);
+      temp.rotateUz(dir);
+      dir = temp;
     }
   } while (0 < nMscSteps);
     

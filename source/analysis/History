@@ -1,4 +1,4 @@
-$Id: History 79122 2014-02-18 14:54:09Z gcosmo $
+$Id: History 81633 2014-06-04 09:00:33Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,30 @@ committal in the SVN repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 03, 2014 I. Hrivnacova (analysis-V09-06-31)
+- Do not remove Root base file if ntuples are in use
+  (this addresses problem report #1633)
+
+April 25, 2014 I. Hrivnacova (analysis-V09-06-30)
+- Fixed implementation of compound commands in G4H[1,2,n]Messenger classes
+  using new G4AnalysisUtilities::Tokenize() function.
+  This allows to pass multi-word strings within "" and fixes problem report 
+  #1616.
+- Fixed G4H2ToolsManager::SetH2YAxisTitle: set title to y-axis and not x-axis.
+  This addresses problem report #1620.  
+
+April 16, 2014 I. Hrivnacova (analysis-V09-06-29)
+- Do not allow creating objects with empty names
+  (this addresses problem report #1579)
+
+March 12, 2014 I. Hrivnacova (analysis-V09-06-28)
+- Fixed H1, H2 functions to access xmin, xmax and width 
+  (do not apply function and unit to return values)
+
+March 10, 2014 I. Hrivnacova (analysis-V09-06-27)
+- Fixed bug in /analysis/h1/setAscii command 
+  (introduced with refactoring messenger classes in analysis-V09-06-19)
 
 January 21, 2014 I. Hrivnacova (analysis-V09-06-26)
 - Updated to g4tools 1.7.1 (by G. Barrand):

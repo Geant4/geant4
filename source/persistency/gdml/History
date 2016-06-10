@@ -1,4 +1,4 @@
-$Id: History 77913 2013-11-29 10:59:07Z gcosmo $
+$Id: History 81843 2014-06-06 09:11:11Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,32 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21 May 2014 Gabriele Cosmo (gdml-V09-06-10)
+- Added better description to fatal exception in case document content
+  imported happens to be empty in G4GDMLRead::Read().
+
+20 May 2014 Gabriele Cosmo
+- Correction to G4GDMLRead::Read() for the case when schema validation
+  is turned off, to disable initialisation of validation machinery in the
+  parser and allow for standalone parsing off-network.
+
+15 May 2014 Gabriele Cosmo
+- Corrected minor Coverity defect in G4GDMLParser for uninitialised
+  'strip' flag in constructors.
+- Corrected potential memory leak in G4GDMLReadSolids.
+
+11 April 2014 Gabriele Cosmo
+- Corrected dump of 'phi' and 'theta' for G4Trap and G4Para in writer.
+  Addressing problem report #1602.
+
+10 April 2014 Gabriele Cosmo
+- Get rid of deprecated 'register' storage class specifier in source files.
+
+13 March 2014 Gabriele Cosmo
+- Added comparison operator for 3-vector key in 'vertexMap' in
+  G4GDMLWriteSolids for export of tessellated solid.
+  Addressing problem report #1573.
 
 29 November 2013 Tatiana Nikitina (gdml-V09-06-09)
 - Fixed GDML schema for spurious validation errors on last changes introduced

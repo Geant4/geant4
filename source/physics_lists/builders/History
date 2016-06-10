@@ -14,6 +14,13 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09-May-2014, Vladimir Ivanchenko	(phys-builders-V09-06-14)
+- OrderingParameterTable - processes "AnnihToMuMu" and "AnnihToHad"
+    should not be active AtRest - fixed problem report #1598
+
+06-Mar-2014, Alberto Ribon
+- Fixed memory leak in G4FTFBuilder.cc.
+
 07-Nov-2013, Alberto Ribon		(phys-builders-V09-06-13)
 - Removed low_energy and high_energy from sources.cmake and GNUmakefile.
 

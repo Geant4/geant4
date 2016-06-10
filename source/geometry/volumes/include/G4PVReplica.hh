@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.hh 67974 2013-03-13 10:17:37Z gcosmo $
+// $Id: G4PVReplica.hh 81646 2014-06-04 09:28:37Z gcosmo $
 //
 // 
 // class G4PVReplica
@@ -198,7 +198,7 @@ class G4PVReplica : public G4VPhysicalVolume
     void CheckAndSetParameters(const EAxis pAxis, const G4int nReplicas,
                                const G4double width, const G4double offset);
     G4PVReplica(const G4PVReplica&);
-    const G4PVReplica& operator=(const G4PVReplica&);
+    G4PVReplica& operator=(const G4PVReplica&);
 
   private:
 

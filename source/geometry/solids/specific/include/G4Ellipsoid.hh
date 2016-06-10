@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipsoid.hh 73430 2013-08-27 11:04:49Z gcosmo $
+// $Id: G4Ellipsoid.hh 81641 2014-06-04 09:11:38Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -55,6 +55,7 @@
 #include <CLHEP/Units/PhysicalConstants.h>
 
 #include "G4VSolid.hh"
+#include "G4Polyhedron.hh"
 
 class G4Ellipsoid : public G4VSolid
 {

@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc 72937 2013-08-14 13:20:38Z gcosmo $
+// $Id: G4TessellatedSolid.cc 81641 2014-06-04 09:11:38Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -190,6 +190,7 @@ void G4TessellatedSolid::DeleteObjects ()
   G4int size = fFacets.size();
   for (G4int i = 0; i < size; ++i)  { delete fFacets[i]; }
   fFacets.clear();
+  delete fpPolyhedron; fpPolyhedron = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -210,6 +211,7 @@ void G4TessellatedSolid::CopyObjects (const G4TessellatedSolid &ts)
     AddFacet(facetClone);
   }
   if (ts.GetSolidClosed()) SetSolidClosed(true);
+  fpPolyhedron = GetPolyhedron();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

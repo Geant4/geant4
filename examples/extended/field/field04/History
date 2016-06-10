@@ -15,7 +15,24 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-December 27, 2013 M. Asai - (fieldex04-V09-06-10)
+February 28, 2014 G. Cosmo - (fieldex04-V09-06-11)
+- Corrected mismatch for delete/new of fFp pointer array in Clear()...
+
+February 27, 2014 G. Cosmo
+- Set pointer to NULL and fields size to zero in Clear().
+
+February 25, 2014 G. Cosmo
+- F04GlobalField.cc : Fix in destructor to also -avoid- deletion of
+  fFieldManager!
+
+February 25, 2014 G. Cosmo
+- F04GlobalField.cc : Fix in destructor to -not- delete fFieldPropagator
+  and set flag in Clear() for avoiding invalid memory access in GetField().
+
+February 18, 2014 P. Gumplinger
+- F04GlobalField.cc : try to fix double delete.
+
+December 27, 2013 M. Asai
 - F04GlobalField.cc : Fix uninitialized variables.
 
 December 23, 2013 M. Asai

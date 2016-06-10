@@ -45,6 +45,8 @@ ifeq ($(G4SYSTEM),Linux-g++)
     CCFLAGS   += -fPIC
   endif
   G4RUNPATHOPTION := -Wl,-rpath 
+  G4STATIC_MODE += -Wl,--whole-archive
+  G4NOSTATIC_MODE += -Wl,--no-whole-archive
   CC := gcc
   FC := gfortran
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore

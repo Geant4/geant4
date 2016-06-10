@@ -114,6 +114,7 @@
 //    if(Verbose==1)G4cout <<"Vector: delete theData"<<G4endl;
       delete [] theIntegral;
 //    if(Verbose==1)G4cout <<"Vector: delete theIntegral"<<G4endl;
+    theHash.Clear();
     isFreed = 1;
   }
   

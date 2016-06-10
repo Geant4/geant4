@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.cc 68053 2013-03-13 14:39:51Z gcosmo $
+// $Id: G4GDMLParser.cc 81843 2014-06-06 09:11:11Z gcosmo $
 //
 //
 // class G4GDMLParser Implementation
@@ -44,7 +44,7 @@ G4GDMLParser::G4GDMLParser()
 }
 
 G4GDMLParser::G4GDMLParser(G4GDMLReadStructure* extr)
-  : urcode(true), uwcode(false)
+  : urcode(true), uwcode(false), strip(true)
 {
   reader = extr;
   writer = new G4GDMLWriteStructure;
@@ -55,7 +55,7 @@ G4GDMLParser::G4GDMLParser(G4GDMLReadStructure* extr)
 
 G4GDMLParser::G4GDMLParser(G4GDMLReadStructure* extr,
                            G4GDMLWriteStructure* extw)
-  : urcode(true), uwcode(true)
+  : urcode(true), uwcode(true), strip(true)
 {
   reader = extr;
   writer = extw;

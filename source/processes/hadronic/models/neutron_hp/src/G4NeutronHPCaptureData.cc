@@ -62,7 +62,9 @@ G4NeutronHPCaptureData::G4NeutronHPCaptureData()
    
 G4NeutronHPCaptureData::~G4NeutronHPCaptureData()
 {
-   if ( theCrossSections != 0 ) theCrossSections->clearAndDestroy();
+   //This should be now avoided since contained object
+   //are managed by allocator 
+   //if ( theCrossSections != 0 ) theCrossSections->clearAndDestroy();
 
    delete theCrossSections;
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.hh 76510 2013-11-12 10:28:06Z gcosmo $
+// $Id: G4Polycone.hh 81641 2014-06-04 09:11:38Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -73,6 +73,7 @@
 #include "G4VCSGfaceted.hh"
 #include "G4PolyconeSide.hh"
 #include "G4PolyconeHistorical.hh"
+#include "G4Polyhedron.hh"
 
 class G4EnclosingCylinder;
 class G4ReduciblePolygon;
@@ -140,7 +141,7 @@ class G4Polycone : public G4VCSGfaceted
     // persistifiable objects.
 
   G4Polycone( const G4Polycone &source );
-  const G4Polycone &operator=( const G4Polycone &source );
+  G4Polycone &operator=( const G4Polycone &source );
     // Copy constructor and assignment operator.
 
  protected:  // without description

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBuilder.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4FTFBuilder.cc 81845 2014-06-06 09:30:30Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -55,6 +55,7 @@ G4FTFBuilder::G4FTFBuilder(const G4String& aName, G4PreCompoundModel* p)
 G4FTFBuilder::~G4FTFBuilder() 
 {
   delete fStringDecay;
+  delete fStringModel;
   //delete fPrecoInterface;
   delete fLund;
 }                                     

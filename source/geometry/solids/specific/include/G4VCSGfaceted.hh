@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCSGfaceted.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4VCSGfaceted.hh 81641 2014-06-04 09:11:38Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -58,7 +58,7 @@ class G4VCSGfaceted : public G4VSolid
     virtual ~G4VCSGfaceted();
   
     G4VCSGfaceted( const G4VCSGfaceted &source );
-    const G4VCSGfaceted &operator=( const G4VCSGfaceted &source );
+    G4VCSGfaceted &operator=( const G4VCSGfaceted &source );
   
     virtual G4bool CalculateExtent( const EAxis pAxis,
                                     const G4VoxelLimits& pVoxelLimit,

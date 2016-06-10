@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc 69704 2013-05-13 09:06:12Z gcosmo $
+// $Id: G4Element.cc 81839 2014-06-06 08:47:44Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -334,6 +334,14 @@ void G4Element::AddNaturalIsotopes()
   G4NistManager* nist = G4NistManager::Instance();
   G4int n = nist->GetNumberOfNistIsotopes(Z);
   G4int N0 = nist->GetNistFirstIsotopeN(Z);
+
+  if("" == fSymbol) {
+    const std::vector<G4String> elmnames = 
+      G4NistManager::Instance()->GetNistElementNames();
+    if(Z < (G4int)elmnames.size()) { fSymbol = elmnames[Z]; }
+    else { fSymbol = fName; }
+  }
+
   fNumberOfIsotopes = 0;
   for(G4int i=0; i<n; ++i) {
     if(nist->GetIsotopeAbundance(Z, N0+i) > 0.0) { ++fNumberOfIsotopes; }
@@ -348,7 +356,7 @@ void G4Element::AddNaturalIsotopes()
     if(x > 0.0) {
       std::ostringstream strm;
       strm << fSymbol << N;
-      (*theIsotopeVector)[idx] = new G4Isotope(strm.str(),Z, N, 0.0, 0);
+      (*theIsotopeVector)[idx] = new G4Isotope(strm.str(), Z, N, 0.0, 0);
       fRelativeAbundanceVector[idx] = x;
       xsum += x;
       ++idx;

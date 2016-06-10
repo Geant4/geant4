@@ -616,6 +616,9 @@ G4Navigator::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
 // Save the state, in case this is a parasitic call
 // Save fValidExitNormal, fExitNormal, fExiting, fEntering, 
 //      fBlockedPhysicalVolume, fBlockedReplicaNo, fLastStepWasZero; 
+// Note: the state of dependent objects is not currently saved.
+//      This means that the full state is changed by calls between
+//      SetSavedState() and RestoreSavedState(); 
 // ********************************************************************
 //
 void G4Navigator::SetSavedState()
@@ -634,6 +637,7 @@ void G4Navigator::SetSavedState()
   fSaveState.sLastLocatedPointLocal= fLastLocatedPointLocal;
   fSaveState.sEnteredDaughter= fEnteredDaughter;
   fSaveState.sExitedMother= fExitedMother;
+  fSaveState.sWasLimitedByGeometry= fWasLimitedByGeometry;
 
   // Even the safety sphere - if you want to change it do it explicitly!
   //
@@ -663,8 +667,10 @@ void G4Navigator::RestoreSavedState()
   fLastLocatedPointLocal= fSaveState.sLastLocatedPointLocal;
   fEnteredDaughter= fSaveState.sEnteredDaughter;
   fExitedMother= fSaveState.sExitedMother;
-  fSaveState.sPreviousSftOrigin= fPreviousSftOrigin;
-  fSaveState.sPreviousSafety= fPreviousSafety;
+  fWasLimitedByGeometry= fSaveState.sWasLimitedByGeometry;
+
+  fPreviousSftOrigin=   fSaveState.sPreviousSftOrigin;
+  fPreviousSafety= fSaveState.sPreviousSafety;
 }
 
 // ********************************************************************
@@ -1102,7 +1108,6 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
       fExitNormalGlobalFrame= G4ThreeVector( 0., 0., 0.);
     }
   }
-  fStepEndPoint= pGlobalpoint+Step*pDirection; 
 
   if( (Step == pCurrentProposedStepLength) && (!fExiting) && (!fEntering) )
   {
@@ -1156,9 +1161,13 @@ G4double G4Navigator::CheckNextStep( const G4ThreeVector& pGlobalpoint,
                        pCurrentProposedStepLength, 
                        pNewSafety ); 
 
-  // If a parasitic call, then attempt to restore the key parts of the state
+  // It is a parasitic call, so attempt to restore the key parts of the state
   //
   RestoreSavedState(); 
+  // NOTE: the state of the current subnavigator is NOT restored.
+  // ***> TODO: restore subnavigator state
+  //            if( last_located)       Need Position of last location
+  //            if( last_computed step) Need Endposition of last step
 
   return step; 
 }
@@ -1237,15 +1246,21 @@ void G4Navigator::SetupHierarchy()
         pSolid->ComputeDimensions(pParam, replicaNo, current);
         pParam->ComputeTransformation(replicaNo, current);
 
-        G4TouchableHistory touchable( fHistory );
-        touchable.MoveUpHistory();  // move up to the parent level
-      
+        G4TouchableHistory *pTouchable= 0;
+        if( pParam->IsNested() ) {
+           pTouchable= new G4TouchableHistory( fHistory );
+           pTouchable->MoveUpHistory();           // move up to the parent level 
+                                                  // Adequate only if Nested at the Branch level (last)
+           // To extend to other cases:  
+           // pTouchable->MoveUpHistory(cdepth-i-1); // move to the parent level of *Current* level                       // Could replace this line and constructor with a revised c-tor for History( levels to drop)
+        }
         // Set up the correct solid and material in Logical Volume
         //
         G4LogicalVolume *pLogical = current->GetLogicalVolume();
         pLogical->SetSolid( pSolid );
         pLogical->UpdateMaterial( pParam ->
-          ComputeMaterial(replicaNo, current, &touchable) );
+          ComputeMaterial(replicaNo, current, pTouchable) );
+        delete pTouchable;
         break;
     }
   }
@@ -1718,12 +1733,17 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
     newSafety = 0.0; 
   }
 
+  if (keepState)
+  {
+     RestoreSavedState();
+     // This now overwrites the values of the Safety 'sphere' (correction)
+  }
+
   // Remember last safety origin & value
   //
+  // We overwrite the Safety 'sphere' - keeping old behaviour
   fPreviousSftOrigin = pGlobalpoint;
   fPreviousSafety = newSafety; 
-
-  if (keepState)  { RestoreSavedState(); }
 
 #ifdef G4DEBUG_NAVIGATION
   if( fVerbose > 1 )

@@ -53,6 +53,7 @@ G4USolid::G4USolid(__void__& a)
 
 G4USolid::~G4USolid()
 {
+  delete fPolyhedron;
 }
 
 G4bool G4USolid::operator==(const G4USolid& s) const
@@ -362,9 +363,10 @@ std::ostream& G4USolid::StreamInfo(std::ostream& os) const
 }
 
 G4USolid::G4USolid(const G4USolid& rhs)
-  : G4VSolid(rhs), fPolyhedron(rhs.fPolyhedron)
+  : G4VSolid(rhs), fPolyhedron(0)
 {
   fShape = rhs.fShape->Clone();
+  fPolyhedron = GetPolyhedron();
 }
 
 G4USolid& G4USolid::operator=(const G4USolid& rhs)
@@ -383,6 +385,7 @@ G4USolid& G4USolid::operator=(const G4USolid& rhs)
   // Copy data
   //
   fShape = rhs.fShape->Clone();
+  delete fPolyhedron; fPolyhedron = 0; fPolyhedron = GetPolyhedron();
 
   return *this;
 }
@@ -547,7 +550,13 @@ G4Polyhedron* G4USolid::CreatePolyhedron() const
 
 G4Polyhedron* G4USolid::GetPolyhedron() const
 {
-  if (!fPolyhedron) fPolyhedron = CreatePolyhedron();
+  if (!fPolyhedron ||
+      fPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+      fPolyhedron->GetNumberOfRotationSteps())
+  {
+    delete fPolyhedron;
+    fPolyhedron = CreatePolyhedron();
+  }
   return fPolyhedron;
 }
 

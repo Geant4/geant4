@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Paraboloid.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4Paraboloid.cc 81641 2014-06-04 09:11:38Z gcosmo $
 //
 // class G4Paraboloid
 //
@@ -45,7 +45,6 @@
 #include "Randomize.hh"
 
 #include "G4VGraphicsScene.hh"
-#include "G4Polyhedron.hh"
 #include "G4VisExtent.hh"
 
 using namespace CLHEP;
@@ -112,6 +111,7 @@ G4Paraboloid::G4Paraboloid(const G4Paraboloid& rhs)
     fSurfaceArea(rhs.fSurfaceArea), fCubicVolume(rhs.fCubicVolume),
     dz(rhs.dz), r1(rhs.r1), r2(rhs.r2), k1(rhs.k1), k2(rhs.k2)
 {
+  fpPolyhedron = GetPolyhedron();
 }
 
 
@@ -131,9 +131,9 @@ G4Paraboloid& G4Paraboloid::operator = (const G4Paraboloid& rhs)
 
    // Copy data
    //
-   fpPolyhedron = 0; 
    fSurfaceArea = rhs.fSurfaceArea; fCubicVolume = rhs.fCubicVolume;
    dz = rhs.dz; r1 = rhs.r1; r2 = rhs.r2; k1 = rhs.k1; k2 = rhs.k2;
+   delete fpPolyhedron; fpPolyhedron = 0; fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

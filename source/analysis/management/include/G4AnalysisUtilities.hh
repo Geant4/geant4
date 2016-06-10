@@ -44,13 +44,17 @@ const G4int kInvalidId = -1;
 G4bool CheckNbins(G4int nbins);
 G4bool CheckMinMax(G4double xmin, G4double xmax, const G4String& binSchemeName);
 G4bool CheckEdges(const std::vector<G4double>& edges);
+G4bool CheckName(const G4String& name, const G4String& objectType);
 
-// Get unit value with added handling of b"none" 
+// Get unit value with added handling of "none" 
 G4double GetUnitValue(const G4String& unit);
 
 // Add unit & fcn to the title
 void UpdateTitle(G4String& title, 
                  const G4String& unitName, const G4String& fcnName);
+                 
+// Tokenizer with taking into account composed strings within ""               
+void Tokenize(const G4String& line, std::vector<G4String>& tokens);
 
 }
 

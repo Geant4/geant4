@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc 79268 2014-02-20 16:46:31Z gcosmo $
+// $Id: G4VEmProcess.cc 81864 2014-06-06 11:30:54Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -118,21 +118,25 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
 
   // default limit on polar angle
   polarAngleLimit = 0.0;
-  biasFactor = 1.0;
+  biasFactor = fFactor = 1.0;
 
   // particle types
   theGamma     = G4Gamma::Gamma();
   theElectron  = G4Electron::Electron();
   thePositron  = G4Positron::Positron();
 
+  theCuts = theCutsGamma = theCutsElectron = theCutsPositron = 0;
+
   pParticleChange = &fParticleChange;
   fParticleChange.SetSecondaryWeightByProcess(true);
   secParticles.reserve(5);
 
+  baseMaterial = currentMaterial = 0;
+
   preStepLambda = 0.0;
   mfpKinEnergy  = DBL_MAX;
 
-  idxLambda = idxLambdaPrim = 0;
+  idxLambda = idxLambdaPrim = currentCoupleIndex = 0;
 
   modelManager = new G4EmModelManager();
   biasManager  = 0;
@@ -230,8 +234,11 @@ G4VEmModel* G4VEmProcess::GetModelByIndex(G4int idx, G4bool ver) const
 
 void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
-  G4bool isMaster = false;
-  if(GetMasterProcess() == this) { isMaster = true; }
+  G4bool isMaster = true;
+  const G4VEmProcess* masterProcess = 
+    static_cast<const G4VEmProcess*>(GetMasterProcess());
+  if(masterProcess && masterProcess != this) { isMaster = false; }
+
   if(!particle) { SetParticle(&part); }
 
   if(part.GetParticleType() == "nucleus" && 
@@ -324,10 +331,10 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
 void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
-  const G4VEmProcess* masterProc = 0;
-  if(GetMasterProcess() != this) {
-    masterProc = static_cast<const G4VEmProcess*>(GetMasterProcess()); 
-  }
+  G4bool isMaster = true;
+  const G4VEmProcess* masterProc = 
+    static_cast<const G4VEmProcess*>(GetMasterProcess());
+  if(masterProc && masterProc != this) { isMaster = false; }
 
   G4String num = part.GetParticleName();
   if(1 < verboseLevel) {
@@ -343,7 +350,7 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
     G4LossTableBuilder* bld = lManager->GetTableBuilder();
 
     // worker initialisation
-    if(masterProc) {
+    if(!isMaster) {
       theLambdaTable = masterProc->LambdaTable();
       theLambdaTablePrim = masterProc->LambdaTablePrim();
 
@@ -1125,8 +1132,8 @@ G4VEmProcess::ActivateSecondaryBiasing(const G4String& region,
 
 void G4VEmProcess::SetMinKinEnergy(G4double e)
 {
-  nLambdaBins = G4lrint(nLambdaBins*std::log(maxKinEnergy/e)
-			/std::log(maxKinEnergy/minKinEnergy));
+  nLambdaBins = G4lrint(nLambdaBins*G4Log(maxKinEnergy/e)
+			/G4Log(maxKinEnergy/minKinEnergy));
   minKinEnergy = e;
 }
 
@@ -1134,8 +1141,8 @@ void G4VEmProcess::SetMinKinEnergy(G4double e)
 
 void G4VEmProcess::SetMaxKinEnergy(G4double e)
 {
-  nLambdaBins = G4lrint(nLambdaBins*std::log(e/minKinEnergy)
-			/std::log(maxKinEnergy/minKinEnergy));
+  nLambdaBins = G4lrint(nLambdaBins*G4Log(e/minKinEnergy)
+			/G4Log(maxKinEnergy/minKinEnergy));
   maxKinEnergy = e;
 }
 

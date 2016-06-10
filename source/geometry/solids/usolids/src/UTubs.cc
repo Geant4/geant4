@@ -49,7 +49,7 @@ UTubs::UTubs(const std::string& pName,
     std::ostringstream message;
     message << "Invalid values for radii in solid: " << GetName()
             << std::endl
-            << "				pRMin = " << pRMin << ", pRMax = " << pRMax;
+            << "pRMin = " << pRMin << ", pRMax = " << pRMax;
     UUtils::Exception("UTubs::UTubs()", "GeomSolids0002", FatalErrorInArguments, 1, message.str().c_str());
   }
 
@@ -1030,7 +1030,8 @@ double UTubs::DistanceToIn(const UVector3& p, const UVector3& v, double) const
 double UTubs::SafetyFromOutside(const UVector3& p, bool aAccurate) const
 {
   double safe = 0.0, rho, safe1, safe2, safe3;
-  double safePhi, cosPsi;
+  double safePhi;
+  bool outside;
 
   rho  = std::sqrt(p.x * p.x + p.y * p.y);
   safe1 = fRMin - rho;
@@ -1052,28 +1053,13 @@ double UTubs::SafetyFromOutside(const UVector3& p, bool aAccurate) const
 
   if ((!fPhiFullTube) && (rho))
   {
-    // Psi=angle from central phi to point
-    //
-    cosPsi = (p.x * fCosCPhi + p.y * fSinCPhi) / rho;
-
-    if (cosPsi < std::cos(fDPhi * 0.5))
+    safePhi = SafetyToPhi(p,rho,outside);
+    if ((outside) && (safePhi > safe))
     {
-      // Point lies outside phi range
-
-      if ((p.y * fCosCPhi - p.x * fSinCPhi) <= 0)
-      {
-        safePhi = std::fabs(p.x * fSinSPhi - p.y * fCosSPhi);
-      }
-      else
-      {
-        safePhi = std::fabs(p.x * fSinEPhi - p.y * fCosEPhi);
-      }
-      if (safePhi > safe)
-      {
-        safe = safePhi;
-      }
+      safe = safePhi;
     }
   }
+
   if (safe < 0)
   {
     safe = 0; return safe; // point is Inside;
@@ -1131,11 +1117,8 @@ double UTubs::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n, b
     }
     else
     {
-      //      if (calcNorm)
-      {
-        n        = UVector3(0, 0, 1);
-        validNorm = true;
-      }
+      n = UVector3(0, 0, 1);
+      validNorm = true;
       return snxt = 0;
     }
   }
@@ -1150,11 +1133,8 @@ double UTubs::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n, b
     }
     else
     {
-      //      if (calcNorm)
-      {
-        n        = UVector3(0, 0, -1);
-        validNorm = true;
-      }
+      n = UVector3(0, 0, -1);
+      validNorm = true;
       return snxt = 0.0;
     }
   }
@@ -1220,13 +1200,9 @@ double UTubs::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n, b
       {
         // On tolerant boundary & heading outwards (or perpendicular to)
         // outer radial surface -> leaving immediately
-
-        //        if ( calcNorm )
-        {
-          n        = UVector3(p.x / fRMax, p.y / fRMax, 0);
+          n = UVector3(p.x / fRMax, p.y / fRMax, 0);
           validNorm = true;
-        }
-        return snxt = 0; // Leaving by rmax immediately
+          return snxt = 0; // Leaving by rmax immediately
       }
     }
     else if (t2 < 0.)   // i.e.  t2 < 0; Possible rmin intersection
@@ -1252,10 +1228,8 @@ double UTubs::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n, b
           }
           else
           {
-            //if ( calcNorm )
-            {
-              validNorm = false;  // Concave side
-            }
+            validNorm = false;  // Concave side
+            n = UVector3(-p.x / fRMin, -p.y / fRMin, 0);
             return snxt = 0.0;
           }
         }
@@ -1272,11 +1246,8 @@ double UTubs::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n, b
           else // Case: On the border+t2<kRadTolerance
             //       (v is perpendicular to the surface)
           {
-            // if (calcNorm)
-            {
-              n = UVector3(p.x / fRMax, p.y / fRMax, 0);
-              validNorm = true;
-            }
+            n = UVector3(p.x / fRMax, p.y / fRMax, 0);
+            validNorm = true;
             return snxt = 0.0;
           }
         }
@@ -1296,11 +1267,8 @@ double UTubs::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n, b
         else // Case: On the border+t2<kRadTolerance
           //       (v is perpendicular to the surface)
         {
-          //          if (calcNorm)
-          {
-            n = UVector3(p.x / fRMax, p.y / fRMax, 0);
-            validNorm = true;
-          }
+          n = UVector3(p.x / fRMax, p.y / fRMax, 0);
+          validNorm = true;
           return snxt = 0.0;
         }
       }
@@ -1486,17 +1454,21 @@ double UTubs::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n, b
         break;
 
       case kRMin:
+        xi = p.x + snxt * v.x;
+        yi = p.y + snxt * v.y;
+        n = UVector3(-xi / fRMin, -yi / fRMin, 0);
         validNorm = false;  // Rmin is inconvex
         break;
 
       case kSPhi:
         if (fDPhi <= UUtils::kPi)
         {
-          n        = UVector3(fSinSPhi, -fCosSPhi, 0);
+          n = UVector3(fSinSPhi, -fCosSPhi, 0);
           validNorm = true;
         }
         else
         {
+          n = UVector3(fSinSPhi, -fCosSPhi, 0);
           validNorm = false;
         }
         break;
@@ -1509,6 +1481,7 @@ double UTubs::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n, b
         }
         else
         {
+          n = UVector3(-fSinEPhi, fCosEPhi, 0);
           validNorm = false;
         }
         break;
@@ -1554,14 +1527,13 @@ double UTubs::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n, b
   return snxt;
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 //
 // Calculate distance (<=actual) to closest surface of shape from inside
 
 double UTubs::SafetyFromInside(const UVector3& p, bool) const
 {
-  double safe = 0.0, rho, safeR1, safeR2, safeZ, safePhi;
+  double safe = 0.0, rho, safeZ;
   rho = std::sqrt(p.x * p.x + p.y * p.y);
 
 #ifdef UDEBUG
@@ -1579,57 +1551,21 @@ double UTubs::SafetyFromInside(const UVector3& p, bool) const
                       Warning, 1, "Point p is outside !?");
   }
 #endif
-
-  if (fRMin)
-  {
-    safeR1 = rho   - fRMin;
-    safeR2 = fRMax - rho;
-
-    if (safeR1 < safeR2)
-    {
-      safe = safeR1;
-    }
-    else
-    {
-      safe = safeR2;
-    }
-  }
-  else
-  {
-    safe = fRMax - rho;
-  }
+  safe = SafetyFromInsideR(p, rho);
   safeZ = fDz - std::fabs(p.z);
 
   if (safeZ < safe)
   {
     safe = safeZ;
   }
-
-  // Check if phi divided, Calc distances closest phi plane
-  //
-  if (!fPhiFullTube)
-  {
-    if (p.y * fCosCPhi - p.x * fSinCPhi <= 0)
-    {
-      safePhi = -(p.x * fSinSPhi - p.y * fCosSPhi);
-    }
-    else
-    {
-      safePhi = (p.x * fSinEPhi - p.y * fCosEPhi);
-    }
-    if (safePhi < safe)
-    {
-      safe = safePhi;
-    }
-  }
+  
   if (safe < 0)
   {
     safe = 0;
   }
-
+  
   return safe;
 }
-
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -1657,15 +1593,15 @@ std::ostream& UTubs::StreamInfo(std::ostream& os) const
 {
   int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
-     << "		*** Dump for solid - " << GetName() << " ***\n"
-     << "		===================================================\n"
+     << "                *** Dump for solid - " << GetName() << " ***\n"
+     << "                ===================================================\n"
      << " Solid type: UTubs\n"
      << " Parameters: \n"
-     << "		inner radius : " << fRMin << " mm \n"
-     << "		outer radius : " << fRMax << " mm \n"
-     << "		half length Z: " << fDz << " mm \n"
-     << "		starting phi : " << fSPhi / (UUtils::kPi / 180.0) << " degrees \n"
-     << "		delta phi		: " << fDPhi / (UUtils::kPi / 180.0) << " degrees \n"
+     << "                inner radius : " << fRMin << " mm \n"
+     << "                outer radius : " << fRMax << " mm \n"
+     << "                half length Z: " << fDz << " mm \n"
+     << "                starting phi : " << fSPhi / (UUtils::kPi / 180.0) << " degrees \n"
+     << "                delta phi    : " << fDPhi / (UUtils::kPi / 180.0) << " degrees \n"
      << "-----------------------------------------------------------\n";
   os.precision(oldprc);
 

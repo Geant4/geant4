@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4CoulombScattering.cc 81865 2014-06-06 11:32:58Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -50,6 +50,7 @@
 #include "G4CoulombScattering.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4eCoulombScatteringModel.hh"
+#include "G4IonCoulombScatteringModel.hh"
 #include "G4Proton.hh"
 #include "G4LossTableManager.hh"
 
@@ -125,8 +126,10 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
   G4String name = p->GetParticleName();
   //G4cout << name << "  type: " << p->GetParticleType() 
   //<< " mass= " << mass << G4endl;
+  yes = true;
   if (mass > GeV || p->GetParticleType() == "nucleus") {
     SetBuildTableFlag(false);
+    yes = false;
     if(name != "GenericIon") { SetVerboseLevel(0); }
   } else {
     if(name != "e-" && name != "e+" &&
@@ -134,7 +137,10 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
        name != "kaon+" && name != "proton" ) { SetVerboseLevel(0); }
   }
 
-  if(!EmModel(1)) { SetEmModel(new G4eCoulombScatteringModel(), 1); }
+  if(!EmModel(1)) { 
+    if(yes) { SetEmModel(new G4eCoulombScatteringModel(), 1); } 
+    else    { SetEmModel(new G4IonCoulombScatteringModel(), 1); }
+  }
   G4VEmModel* model = EmModel(1);
   G4double emin = std::max(MinKinEnergy(),model->LowEnergyLimit());
   G4double emax = std::min(MaxKinEnergy(),model->HighEnergyLimit());

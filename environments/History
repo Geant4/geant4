@@ -1,4 +1,4 @@
-$Id: History 76884 2013-11-18 12:54:03Z gcosmo $
+$Id: History 81454 2014-05-28 15:35:38Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+envs-V09-06-01 / May 25 2014 Koichi Murakami
+[g4py]
+ - pyG4EllipticalCone.cc, add missing return in CreateEllipticalCone() method.
+ - configure script, physics list is changed to be always turned on.
+ - fix compile error on pyG4Polycone.
 
 envs-V09-06-00 / 15 November 2013 Koichi Murakami
 [g4py]

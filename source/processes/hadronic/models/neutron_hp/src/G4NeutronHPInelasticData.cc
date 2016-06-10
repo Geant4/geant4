@@ -62,7 +62,9 @@ G4NeutronHPInelasticData::G4NeutronHPInelasticData()
    
 G4NeutronHPInelasticData::~G4NeutronHPInelasticData()
 {
-   if ( theCrossSections != 0 ) theCrossSections->clearAndDestroy(); 
+   //This should now be avoided in destructors because content of 
+   //theCrossSections is managed by allocators
+   //if ( theCrossSections != 0 ) theCrossSections->clearAndDestroy(); 
    delete theCrossSections;
 }
 

@@ -23,42 +23,60 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
-#include "G4Types.hh"
+//
+// $Id: G4GeometryWorkspacePool.cc 81646 2014-06-04 09:28:37Z gcosmo $
+//
+// 
+// Class G4GeometryWorkspacePool - implementation
+//
+// ----------------------------------------------------------------------
 
 #include "G4GeometryWorkspacePool.hh"
 #include "G4GeometryWorkspace.hh"
 
 #include "G4AutoLock.hh"
-namespace {
-    G4Mutex singletonM = G4MUTEX_INITIALIZER;
+
+namespace
+{
+  G4Mutex singletonM = G4MUTEX_INITIALIZER;
 }
+
 G4ThreadLocal G4GeometryWorkspace* G4GeometryWorkspacePool::fMyWorkspace=0;
 
 G4GeometryWorkspacePool* G4GeometryWorkspacePool::thePool=0;
 
+// ----------------------------------------------------------------------
+//
 G4GeometryWorkspacePool* G4GeometryWorkspacePool::GetInstance()
 {
-   G4AutoLock l(&singletonM);
-   if( !thePool ) thePool= new G4GeometryWorkspacePool();
-   return thePool;
+  G4AutoLock l(&singletonM);
+  if ( !thePool )  { thePool= new G4GeometryWorkspacePool(); }
+  return thePool;
 }
 
+// ----------------------------------------------------------------------
 // For use with MT and current G4WorkerThread -- which uses static methods
+//
 G4GeometryWorkspace* G4GeometryWorkspacePool::CreateWorkspace()
 {
   G4GeometryWorkspace* geometryWrk=0;
-  if( !fMyWorkspace ){
+  if( !fMyWorkspace )
+  {
     geometryWrk= new G4GeometryWorkspace();
 
-    if( !geometryWrk ) {
-      G4Exception("GeometryWorspacePool::CreateWorkspace", "Geom-003",
+    if( !geometryWrk )
+    {
+      G4Exception("GeometryWorspacePool::CreateWorkspace", "GeomVol003",
                   FatalException, "Failed to create workspace.");
-    }else{
-       fMyWorkspace= geometryWrk;
     }
-  }else{
-    G4Exception("GeometryWorspacePool::CreateWorkspace", "Geom-003",
+    else
+    {
+      fMyWorkspace= geometryWrk;
+    }
+  }
+  else
+  {
+    G4Exception("GeometryWorspacePool::CreateWorkspace", "GeomVol003",
                 FatalException,
                 "Cannot create workspace twice for the same thread.");
     geometryWrk= fMyWorkspace; 
@@ -67,62 +85,56 @@ G4GeometryWorkspace* G4GeometryWorkspacePool::CreateWorkspace()
   return geometryWrk;
 }
 
-
-void G4GeometryWorkspacePool::CreateAndUseWorkspace()  // Create it (as above) and use it
+// ----------------------------------------------------------------------
+// Create it (as above) and use it
+//
+void G4GeometryWorkspacePool::CreateAndUseWorkspace()
 {
   (this->CreateWorkspace())->UseWorkspace();
 }
 
+// ----------------------------------------------------------------------
 // Reuse an existing workspace - or create a new one if needed.
 //
 G4GeometryWorkspace* G4GeometryWorkspacePool::FindOrCreateWorkspace()
 {
-   G4GeometryWorkspace* geometryWrk= fMyWorkspace;
-   if( !geometryWrk ){ 
-      geometryWrk= this->CreateWorkspace(); 
-   } 
-   geometryWrk->UseWorkspace();
+  G4GeometryWorkspace* geometryWrk= fMyWorkspace;
+  if( !geometryWrk )
+  { 
+    geometryWrk= this->CreateWorkspace(); 
+  } 
+  geometryWrk->UseWorkspace();
   
-   fMyWorkspace= geometryWrk; // assign it for use by this thread.
-   return geometryWrk;
+  fMyWorkspace= geometryWrk; // assign it for use by this thread.
+  return geometryWrk;
 }
 
-#if 0
-void G4GeometryWorkspacePool::ReleaseAndDestroyMyWorkspace()
-{
-  ReleaseAndDestroyWorkspace(fMyWorkspace);
-  fMyWorkspace=0;
-}
-
-void G4GeometryWorkspacePool::ReleaseAndDestroyWorkspace(G4GeometryWorkspace *geometryWrk)
-{
-   geometryWrk->ReleaseWorkspace(); 
-   delete geometryWrk; 
-}
-#endif 
-
+// ----------------------------------------------------------------------
+//
 void G4GeometryWorkspacePool::Recycle( G4GeometryWorkspace *geometryWrk )
 {
-   geometryWrk->ReleaseWorkspace(); 
-   //if( fWarehouse ){
-   //} else {
-    delete geometryWrk;
-   //}
+  geometryWrk->ReleaseWorkspace(); 
+  // if( fWarehouse ){
+  // } else {
+  delete geometryWrk;
+  // }
 }
 
+// ----------------------------------------------------------------------
+//
 void G4GeometryWorkspacePool::CleanUpAndDestroyAllWorkspaces()
 {
 }
 
-
+// ----------------------------------------------------------------------
+//
 G4GeometryWorkspacePool::G4GeometryWorkspacePool()
 {
-  //  fWarehouse=0;
+  // fWarehouse=0;
 }
 
+// ----------------------------------------------------------------------
+//
 G4GeometryWorkspacePool::~G4GeometryWorkspacePool()
 {
 }
-
-
-

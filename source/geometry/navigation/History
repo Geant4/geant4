@@ -1,4 +1,4 @@
-$Id: History 79140 2014-02-19 13:29:40Z gcosmo $
+$Id: History 81755 2014-06-05 07:59:56Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,28 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 27, 2014 - J.Apostolakis  (geomnav-V09-06-22)
+----------------------------
+- G4Navigator: corrected saving/restoring of 'navigator state':
+  - Added bool sWasLimitedByGeometry to G4SaveNavigatorState struct
+     ( fixes side effect of call to ComputeSafety. )
+  - Corrected RestoreState() to reset the Safety Origin and Value
+  - ComputeSafety: If at endpoint of step, answer safety=0.0 quickly.
+       Do not save/restore state. 
+
+April 10, 2014 - G.Cosmo  (geomnav-V09-06-21)
+------------------------
+- Get rid of deprecated 'register' storage class specifier in source files.
+
+March 14, 2014 - J.Apostolakis
+------------------------------
+- G4PathFinder: Added method for end of track - needed to signal
+   G4 Transportation Manager to use 'ordinary' Navigator.
+- Revised G4Navigator::SetupHierarchy, to reduce extra cost due to
+   handling the case of Nested Parameterisation.
+- PropagatorInField: When setting up a new Intersection Locator 
+   pass pointer to current Navigator.
 
 December 11th, 2013 - G.Cosmo  (geomnav-V09-06-20)
 -----------------------------

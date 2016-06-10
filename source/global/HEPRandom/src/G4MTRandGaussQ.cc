@@ -118,7 +118,7 @@ G4double G4MTRandGaussQ::transformQuick (G4double r)
     sign = -1.0;
   } 
 
-  register G4int index;
+  G4int index;
   G4double  dx;
 
   if ( r >= Table1step ) { 

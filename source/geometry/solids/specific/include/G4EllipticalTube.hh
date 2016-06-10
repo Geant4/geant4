@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.hh 72937 2013-08-14 13:20:38Z gcosmo $
+// $Id: G4EllipticalTube.hh 81641 2014-06-04 09:11:38Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -51,6 +51,7 @@
 #define G4EllipticalTube_hh
 
 #include "G4VSolid.hh"
+#include "G4Polyhedron.hh"
 
 class G4EllipticalTube : public G4VSolid
 {

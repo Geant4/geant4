@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc 72938 2013-08-14 13:24:12Z gcosmo $
+// $Id: G4Torus.cc 81636 2014-06-04 09:06:08Z gcosmo $
 //
 // 
 // class G4Torus
@@ -103,7 +103,7 @@ G4Torus::SetAllParameters( G4double pRmin,
 
   fCubicVolume = 0.;
   fSurfaceArea = 0.;
-  fpPolyhedron = 0;
+  delete fpPolyhedron; fpPolyhedron = 0;
 
   kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
   kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
@@ -205,6 +205,7 @@ G4Torus::G4Torus(const G4Torus& rhs)
     halfCarTolerance(rhs.halfCarTolerance),
     halfAngTolerance(rhs.halfAngTolerance)
 {
+   fpPolyhedron = GetPolyhedron();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -229,6 +230,7 @@ G4Torus& G4Torus::operator = (const G4Torus& rhs)
    kRadTolerance = rhs.kRadTolerance; kAngTolerance = rhs.kAngTolerance;
    halfCarTolerance = rhs.halfCarTolerance;
    halfAngTolerance = rhs.halfAngTolerance;
+   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

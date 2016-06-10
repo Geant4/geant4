@@ -186,7 +186,7 @@ void Ranlux64Engine::update() {
   // but we can treat the special case of endIters = 1 separately for superior
   // efficiency in the cases of levels 0 and 2.
 
-  register double  y1;
+  double  y1;
 
   if ( endIters == 1 ) {  	// Luxury levels 0 and 2 will go here
     y1 = randoms[ 4] - randoms[11] - carry;
@@ -251,10 +251,10 @@ void Ranlux64Engine::update() {
 
 void Ranlux64Engine::advance(int dozens) {
 
-  register double  y1, y2, y3;
-  register double  cValue = twoToMinus_48();
-  register double  zero = 0.0;
-  register double  one  = 1.0;
+  double  y1, y2, y3;
+  double  cValue = twoToMinus_48();
+  double  zero = 0.0;
+  double  one  = 1.0;
 
 		// Technical note:  We use Luscher's trick to only do the
 		// carry subtraction when we really have to.  Like him, we use 

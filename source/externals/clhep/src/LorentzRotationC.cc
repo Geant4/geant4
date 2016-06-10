@@ -185,7 +185,7 @@ HepLorentzRotation & HepLorentzRotation::setRows
   // Set based on using those rows as columns:
   set (rrow1, rrow2, rrow3, rrow4);
   // Now transpose in place:
-  register double q1, q2, q3;
+  double q1, q2, q3;
   q1  = mxy;  q2  = mxz;  q3  = mxt;
   mxy = myx;  mxz = mzx;  mxt = mtx;
   myx = q1;   mzx = q2;   mtx = q3;

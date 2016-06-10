@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrd.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4TwistedTrd.cc 81641 2014-06-04 09:11:38Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -72,6 +72,7 @@ G4TwistedTrd::~G4TwistedTrd()
 G4TwistedTrd::G4TwistedTrd(const G4TwistedTrd& rhs)
   : G4VTwistedFaceted(rhs)
 {
+  fpPolyhedron = GetPolyhedron();
 }
 
 // Assignment operator
@@ -85,6 +86,7 @@ G4TwistedTrd& G4TwistedTrd::operator = (const G4TwistedTrd& rhs)
    // Copy base class data
    //
    G4VTwistedFaceted::operator=(rhs);
+   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

@@ -844,7 +844,7 @@ inline void findComponents3(unsigned int mask, vector<int>& list, int i)
 
 #endif // USOLIDSONLY
 
-inline void findComponentsFastest(unsigned int mask, vector<int>& list, int i)
+void UVoxelizer::FindComponentsFastest(unsigned int mask, vector<int>& list, int i)
 {
   for (int byte = 0; byte < (int)(sizeof(unsigned int)); byte++)
   {
@@ -902,7 +902,7 @@ int UVoxelizer::GetCandidatesVoxelArray(const UVector3& point, vector<int>& list
       }
       if (crossed && (!(mask &= ~((unsigned int*)crossed->fAllBits)[0]))) return 0;
 
-      findComponentsFastest(mask, list, 0);
+      FindComponentsFastest(mask, list, 0);
     }
     else
     {
@@ -924,7 +924,7 @@ int UVoxelizer::GetCandidatesVoxelArray(const UVector3& point, vector<int>& list
         if (!(mask &= masks[2][i])) continue;
         if (maskCrossed && !(mask &= ~maskCrossed[i])) continue;
 
-        findComponentsFastest(mask, list, i);
+        FindComponentsFastest(mask, list, i);
       }
     }
   }
@@ -957,7 +957,7 @@ int UVoxelizer::GetCandidatesVoxelArray(const vector<int>& voxels, const UBits b
            )) return 0;
       if (crossed && (!(mask &= ~((unsigned int*)crossed->fAllBits)[0]))) return 0;
 
-      findComponentsFastest(mask, list, 0);
+      FindComponentsFastest(mask, list, 0);
     }
     else
     {
@@ -976,7 +976,7 @@ int UVoxelizer::GetCandidatesVoxelArray(const vector<int>& voxels, const UBits b
         if (!(mask &= masks[2][i])) continue;
         if (maskCrossed && !(mask &= ~maskCrossed[i])) continue;
 
-        findComponentsFastest(mask, list, i);
+        FindComponentsFastest(mask, list, i);
       }
     }
   }

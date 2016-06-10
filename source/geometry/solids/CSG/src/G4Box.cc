@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc 76263 2013-11-08 11:41:52Z gcosmo $
+// $Id: G4Box.cc 81636 2014-06-04 09:06:08Z gcosmo $
 //
 // 
 //
@@ -51,7 +51,6 @@
 #include "G4VPVParameterisation.hh"
 
 #include "G4VGraphicsScene.hh"
-#include "G4Polyhedron.hh"
 #include "G4VisExtent.hh"
 
 ////////////////////////////////////////////////////////////////////////
@@ -101,6 +100,7 @@ G4Box::~G4Box()
 G4Box::G4Box(const G4Box& rhs)
   : G4CSGSolid(rhs), fDx(rhs.fDx), fDy(rhs.fDy), fDz(rhs.fDz), delta(rhs.delta)
 {
+   fpPolyhedron = GetPolyhedron();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -123,6 +123,7 @@ G4Box& G4Box::operator = (const G4Box& rhs)
    fDy = rhs.fDy;
    fDz = rhs.fDz;
    delta = rhs.delta;
+   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }
@@ -146,7 +147,7 @@ void G4Box::SetXHalfLength(G4double dx)
   }
   fCubicVolume= 0.;
   fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  delete fpPolyhedron; fpPolyhedron = 0;
 } 
 
 void G4Box::SetYHalfLength(G4double dy) 
@@ -166,7 +167,7 @@ void G4Box::SetYHalfLength(G4double dy)
   }
   fCubicVolume= 0.;
   fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  delete fpPolyhedron; fpPolyhedron = 0;
 } 
 
 void G4Box::SetZHalfLength(G4double dz) 
@@ -186,7 +187,7 @@ void G4Box::SetZHalfLength(G4double dz)
   }
   fCubicVolume= 0.;
   fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  delete fpPolyhedron; fpPolyhedron = 0;
 } 
 
 ////////////////////////////////////////////////////////////////////////

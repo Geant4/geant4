@@ -1,4 +1,4 @@
-# $Id: History 79204 2014-02-20 11:31:10Z gcosmo $
+# $Id: History 81878 2014-06-06 12:19:54Z gcosmo $
 # -----------------------------------------------------------
 
           ==================================================
@@ -14,6 +14,29 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+1 June 2014 Tatsumi Koi (hadr-lend-V09-06-04)
+-----------------------------------------------
+-Fix wrong usage of IonTable
+	src/G4LENDManager.cc
+-Relax Fatal Energy CheckLevel 
+	include/G4LENDFission.hh
+	src/G4LENDFission.cc
+
+28 March 2014 Tatsumi Koi (hadr-lend-V09-06-03)
+-----------------------------------------------
+-Bug fix 
+LEND used G4ParticleTable::GetParticleTable()->GetIon(,,) which obsolete in v10.00
+	src/G4LENDCapture.cc
+	src/G4LENDModel.cc
+	src/G4LENDFission.cc
+	src/G4LENDInelastic.cc
+	src/G4LENDElastic.cc
+
+14 March 2014 Tatsumi Koi
+-------------------------
+Fix compilation warnings detected by clang compiler on MacOS-10.9.
+	src/tpia_product.cc
 
 29 Jan 2014 Gunter Folger (hadr-lend-V09-06-02)
 - Removed low_energy from sources.cmake

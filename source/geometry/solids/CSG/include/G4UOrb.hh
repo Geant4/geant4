@@ -44,6 +44,7 @@
 
 #include "G4USolid.hh"
 #include "UOrb.hh"
+#include "G4Polyhedron.hh"
 
 class G4UOrb : public G4USolid
 {
@@ -93,7 +94,7 @@ inline G4double G4UOrb::GetRadius() const
 inline void G4UOrb::SetRadius(G4double newRmax)
 {
   GetShape()->SetRadius(newRmax);
-  fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = 0;
 }
 
 #endif

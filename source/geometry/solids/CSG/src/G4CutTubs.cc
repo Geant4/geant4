@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CutTubs.cc 76263 2013-11-08 11:41:52Z gcosmo $
+// $Id: G4CutTubs.cc 81636 2014-06-04 09:06:08Z gcosmo $
 //
 // 
 // class G4CutTubs
@@ -164,6 +164,7 @@ G4CutTubs::G4CutTubs(const G4CutTubs& rhs)
     halfRadTolerance(rhs.halfRadTolerance),
     halfAngTolerance(rhs.halfAngTolerance)
 {
+   fpPolyhedron = GetPolyhedron();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -187,6 +188,8 @@ G4CutTubs& G4CutTubs::operator = (const G4CutTubs& rhs)
    halfCarTolerance = rhs.halfCarTolerance;
    halfRadTolerance = rhs.halfRadTolerance;
    halfAngTolerance = rhs.halfAngTolerance;
+
+   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

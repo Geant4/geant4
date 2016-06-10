@@ -95,7 +95,7 @@ enable_openglxm=0
 enable_raytracerx=0
 enable_gl2ps=0
 
-enable_physicslist=0
+enable_physicslist=1
 
 enable_gdml=0
 
@@ -376,15 +376,15 @@ else
 fi
 
 # ---
-echo $ac_n "Checking for physics list support ...$ac_c"
-if [ -f "$g4_incdir"/QGSP.hh ]; then
-  enable_physicslist=1
-fi
-if [ $enable_physicslist = 0 ]; then
-  echo "no"
-else
-  echo "yes"
-fi
+#echo $ac_n "Checking for physics list support ...$ac_c"
+#if [ -f "$g4_incdir"/FTFP_BERT.hh ]; then
+#  enable_physicslist=1
+#fi
+#if [ $enable_physicslist = 0 ]; then
+#  echo "no"
+#else
+#  echo "yes"
+#fi
 
 # ---
 echo $ac_n "Checking for GDML support ...$ac_c"
@@ -518,9 +518,9 @@ if [ $enable_gl2ps = 1 ]; then
   echo $ac_n " gl2ps$ac_c"
 fi
 
-if [ $enable_physicslist = 1 ]; then
-  echo $ac_n " physicslist$ac_c"
-fi
+#if [ $enable_physicslist = 1 ]; then
+#  echo $ac_n " physicslist$ac_c"
+#fi
 
 if [ $enable_gdml = 1 ]; then
   echo $ac_n " gdml$ac_c"

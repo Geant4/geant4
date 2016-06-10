@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFAnnihilation.cc 74627 2013-10-17 07:04:38Z gcosmo $
+// $Id: G4FTFAnnihilation.cc 81880 2014-06-06 12:50:36Z gcosmo $
 //
 
 // ------------------------------------------------------------
@@ -851,7 +851,7 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
     G4cout << "Process d, only 1 quark - anti-quark string" << G4endl;
     #endif
 
-    G4int CandidatsN( 0 ), CandAQ[9], CandQ[9];
+    G4int CandidatsN( 0 ), CandAQ[36], CandQ[36];
     G4int LeftAQ( 0 ), LeftQ( 0 );
 
     for ( G4int iAQ1 = 0; iAQ1 < 3; iAQ1++ ) {

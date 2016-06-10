@@ -1,4 +1,4 @@
-$Id: History 79225 2014-02-20 15:03:24Z gcosmo $
+$Id: History 81898 2014-06-06 13:43:20Z gcosmo $
 -------------------------------------------------------------------
 
 
@@ -17,6 +17,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- May  21,  2014 J.Apostolakis (track-V09-06-06)
+- Fix G4FieldTrackUpdator to energy/momentum passed to field integration: 
+   first set rest mass, then update kinetic energy. Problem affects 
+   propagation in multiple geometries.
+
+- Mar. 07,  2014 H.Kurashige
+- Fix memory leak in G4Step::SetPre/PostStepPoint
+ (Bug # 1583)
 
 - Jan. 04, 2014 H.Kurashige (track-V09-06-05)
 - modify message from CheckIt for G4VParticleChange and G4ParticleChangeForDecay  

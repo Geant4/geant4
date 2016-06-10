@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc 76263 2013-11-08 11:41:52Z gcosmo $
+// $Id: G4Sphere.cc 81636 2014-06-04 09:06:08Z gcosmo $
 //
 // class G4Sphere
 //
@@ -70,7 +70,6 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4VisExtent.hh"
-#include "G4Polyhedron.hh"
 
 using namespace CLHEP;
 
@@ -170,6 +169,7 @@ G4Sphere::G4Sphere(const G4Sphere& rhs)
     halfCarTolerance(rhs.halfCarTolerance),
     halfAngTolerance(rhs.halfAngTolerance)
 {
+   fpPolyhedron = GetPolyhedron();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -205,6 +205,7 @@ G4Sphere& G4Sphere::operator = (const G4Sphere& rhs)
    fFullThetaSphere = rhs.fFullThetaSphere; fFullSphere = rhs.fFullSphere;
    halfCarTolerance = rhs.halfCarTolerance;
    halfAngTolerance = rhs.halfAngTolerance;
+   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

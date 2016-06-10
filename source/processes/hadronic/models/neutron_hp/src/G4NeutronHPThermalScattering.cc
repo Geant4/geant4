@@ -354,7 +354,7 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
 
 //    Select Reaction  (Inelastic, coherent, incoherent)  
 
-      G4ParticleDefinition* pd = const_cast< G4ParticleDefinition* >( aTrack.GetDefinition() );
+      const G4ParticleDefinition* pd = aTrack.GetDefinition();
       G4DynamicParticle* dp = new G4DynamicParticle ( pd , aTrack.Get4Momentum() );
       G4double total = theXSection->GetCrossSection( dp , theElement , theMaterial );
       G4double inelastic = theXSection->GetInelasticCrossSection( dp , theElement , theMaterial );
@@ -566,20 +566,18 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
          E_isoAng anEPM_TL_E;
          E_isoAng anEPM_TH_E;
 
-         if ( tempLH.first != 0.0 && tempLH.second != 0.0 ) 
-         {
+         if ( tempLH.first != 0.0 && tempLH.second != 0.0 ) {
+            //Interpolate TL and TH 
             anEPM_TL_E = create_E_isoAng_from_energy ( aTrack.GetKineticEnergy() , incoherentFSs.find( ielement )->second->find ( tempLH.first/kelvin )->second );
             anEPM_TH_E = create_E_isoAng_from_energy ( aTrack.GetKineticEnergy() , incoherentFSs.find( ielement )->second->find ( tempLH.second/kelvin )->second );
-         }
-         else if ( tempLH.first == 0.0 )
-         {
+         } else if ( tempLH.first == 0.0 ) {
+            //Extrapolate T0 and T1
             anEPM_TL_E = create_E_isoAng_from_energy ( aTrack.GetKineticEnergy() , incoherentFSs.find( ielement )->second->find ( v_temp[ 0 ] )->second );
             anEPM_TH_E = create_E_isoAng_from_energy ( aTrack.GetKineticEnergy() , incoherentFSs.find( ielement )->second->find ( v_temp[ 1 ] )->second );
             tempLH.first = tempLH.second;
             tempLH.second = v_temp[ 1 ];
-         }
-         else if (  tempLH.second == 0.0 )
-         {
+         } else if (  tempLH.second == 0.0 ) {
+            //Extrapolate Tmax-1 and Tmax
             anEPM_TH_E = create_E_isoAng_from_energy ( aTrack.GetKineticEnergy() , incoherentFSs.find( ielement )->second->find ( v_temp.back() )->second );
             std::vector< G4double >::iterator itv;
             itv = v_temp.end();
@@ -672,26 +670,33 @@ std::pair < G4double , G4double >  G4NeutronHPThermalScattering::find_LH ( G4dou
 {
    G4double L = 0.0; 
    G4double H = 0.0; 
-   std::vector< G4double >::iterator  it;
-   for ( it = aVector->begin() ; it != aVector->end() ; it++ )
-   {
-      if ( x <= *it )
-      {
-         H = *it;  
-         if ( it != aVector->begin() )
-         {
-             it--;
-             L = *it;
+
+   // v->size() == 1 --> L=H=v(0)
+   if ( aVector->size() == 1 ) {
+      L = aVector->front();
+      H = aVector->front();
+   } else {
+   // 1) temp < v(0) -> L=0.0 H=v(0)
+   // 2) v(i-1) < temp <= v(i) -> L=v(i-1) H=v(i)
+   // 3) v(imax) < temp -> L=v(imax) H=0.0
+      for ( std::vector< G4double >::iterator 
+            it = aVector->begin() ; it != aVector->end() ; it++ ) {
+         if ( x <= *it ) {
+            H = *it;  
+            if ( it != aVector->begin() ) {
+               // 2)
+               it--;
+               L = *it;
+            } else {
+               // 1)
+               L = 0.0;
+            }
+            break; 
          } 
-         else 
-         {
-             L = 0.0;
-         }
-         break; 
       } 
-   } 
-      if ( H == 0.0 )
-         L = aVector->back();
+      // 3) 
+      if ( H == 0.0 ) L = aVector->back();
+   }
 
    return std::pair < G4double , G4double > ( L , H ); 
 }
@@ -701,10 +706,15 @@ std::pair < G4double , G4double >  G4NeutronHPThermalScattering::find_LH ( G4dou
 G4double G4NeutronHPThermalScattering::get_linear_interpolated ( G4double x , std::pair< G4double , G4double > Low , std::pair< G4double , G4double > High )
 { 
    G4double y=0.0;
-   if ( High.first - Low.first != 0 ) 
+   if ( High.first - Low.first != 0 ) {
       y = ( High.second - Low.second ) / ( High.first - Low.first ) * ( x - Low.first ) + Low.second;
-   else 
-      G4cout << "G4NeutronHPThermalScattering liner interpolation err!!" << G4endl; 
+   } else { 
+      if ( High.second == Low.second ) {
+         y = High.second;
+      } else { 
+         G4cout << "G4NeutronHPThermalScattering liner interpolation err!!" << G4endl; 
+      }
+   }
       
    return y; 
 } 
@@ -824,7 +834,7 @@ G4double G4NeutronHPThermalScattering::get_secondary_energy_from_E_P_E_isoAng ( 
 
 std::pair< G4double , E_isoAng > G4NeutronHPThermalScattering::create_sE_and_EPM_from_pE_and_vE_P_E_isoAng ( G4double rand_for_sE ,  G4double pE , std::vector < E_P_E_isoAng* >*  vNEP_EPM )
 {
-  
+
          std::map< G4double , G4int > map_energy;
          map_energy.clear();
          std::vector< G4double > v_energy;
@@ -878,6 +888,9 @@ std::pair< G4double , E_isoAng > G4NeutronHPThermalScattering::create_sE_and_EPM
          E_isoAng E_isoAng_H = create_E_isoAng_from_energy ( sE , &(pE_P_E_isoAng_EH->vE_isoAngle) );
 
          E_isoAng anE_isoAng; 
+         //For defeating warning message from compiler
+         anE_isoAng.n = 1;
+         anE_isoAng.energy = sE; //never used 
          if ( E_isoAng_L.n == E_isoAng_H.n ) 
          {
             anE_isoAng.n =  E_isoAng_L.n; 
@@ -890,7 +903,8 @@ std::pair< G4double , E_isoAng > G4NeutronHPThermalScattering::create_sE_and_EPM
          }
          else
          {
-            G4cout << "Do not Suuport yet." << G4endl; 
+            //G4cout << "Do not Suuport yet." << G4endl; 
+            throw G4HadronicException(__FILE__, __LINE__, "Unexpected values!");
          }
      
    

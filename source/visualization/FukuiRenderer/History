@@ -1,4 +1,4 @@
-$Id: History 77479 2013-11-25 10:01:22Z gcosmo $
+$Id: History 81905 2014-06-06 13:57:45Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/FukuiRenderer sub-category
 ---------------------------------------------------------
+
+14th March 2014  Laurent Garnier  (DAWN-V09-06-07)
+- G4FRClientServer.cc: Remove MAX_BINDING_TRIAL and BINDING_TRIAL_INTERVAL due to
+  compilation warnings on clang (mac os 10.9)
 
 15th November 2013  John Allison (DAWN-V09-06-06)
 - Some changes as suggested by PVS.

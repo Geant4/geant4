@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PathFinder.hh 69058 2013-04-17 09:08:25Z gcosmo $
+// $Id: G4PathFinder.hh 81596 2014-06-03 14:08:49Z gcosmo $
 // 
 // class G4PathFinder 
 //
@@ -98,6 +98,11 @@ class G4PathFinder
                                G4VPhysicalVolume* massStartVol=0); 
      //
      // Check and cache set of active navigators.
+
+   void EndTrack();
+     // Signal end of tracking of current track.  
+     //   Reset internal state
+     //   Inform TransportationManager to use 'ordinary' Navigator
 
    G4TouchableHandle CreateTouchableHandle( G4int navId ) const;
    inline G4VPhysicalVolume* GetLocatedVolume( G4int navId ) const; 

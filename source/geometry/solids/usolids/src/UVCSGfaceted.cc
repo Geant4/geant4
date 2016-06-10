@@ -176,7 +176,7 @@ VUSolid::EnumInside UVCSGfaceted::Inside( const UVector3 &p ) const
 // test or whatnot) and to call this version only if
 // the simplier test fails.
 //
-inline VUSolid::EnumInside UVCSGfaceted::InsideNoVoxels(const UVector3& p) const
+VUSolid::EnumInside UVCSGfaceted::InsideNoVoxels(const UVector3& p) const
 {
   VUSolid::EnumInside answer = eOutside;
   UVCSGface** face = faces;
@@ -269,7 +269,7 @@ bool UVCSGfaceted::Normal(const UVector3& p, UVector3& n) const
 // DistanceToIn(p,v)
 //
 
-inline double UVCSGfaceted::DistanceToInNoVoxels(const UVector3& p,
+ double UVCSGfaceted::DistanceToInNoVoxels(const UVector3& p,
                                                  const UVector3& v) const
 {
   double distance = UUtils::kInfinity;
@@ -322,7 +322,7 @@ inline double UVCSGfaceted::DistanceToInNoVoxels(const UVector3& p,
 // DistanceToOut(p,v)
 //
 
-inline double UVCSGfaceted::DistanceToOutNoVoxels(const UVector3& p, const UVector3&  v, UVector3& n, bool& aConvex) const
+double UVCSGfaceted::DistanceToOutNoVoxels(const UVector3& p, const UVector3&  v, UVector3& n, bool& aConvex) const
 {
   bool allBehind = true;
   double distance = UUtils::kInfinity;
@@ -383,6 +383,7 @@ inline double UVCSGfaceted::DistanceToOutNoVoxels(const UVector3& p, const UVect
       distance = 0;
     }
     aConvex = false;
+    n = normal;
   }
 
   return distance;
@@ -426,11 +427,11 @@ UGeometryType UVCSGfaceted::GetEntityType() const
 std::ostream& UVCSGfaceted::StreamInfo(std::ostream& os) const
 {
   os << "-----------------------------------------------------------\n"
-     << "		*** Dump for solid - " << GetName() << " ***\n"
-     << "		===================================================\n"
+     << "                *** Dump for solid - " << GetName() << " ***\n"
+     << "                ===================================================\n"
      << " Solid type: UVCSGfaceted\n"
      << " Parameters: \n"
-     << "		number of faces: " << numFace << "\n"
+     << "                number of faces: " << numFace << "\n"
      << "-----------------------------------------------------------\n";
 
   return os;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4ParameterisedNavigation.cc 81596 2014-06-03 14:08:49Z gcosmo $
 //
 //
 // class G4ParameterisedNavigation Implementation
@@ -604,7 +604,7 @@ G4ParameterisedNavigation::LevelLocate( G4NavigationHistory& history,
 
   // Search replicated daughter volume
   //
-  for ( register int sampleNo=voxelNoDaughters-1; sampleNo>=0; sampleNo-- )
+  for ( G4int sampleNo=voxelNoDaughters-1; sampleNo>=0; sampleNo-- )
   {
     replicaNo = motherVoxelNode->GetVolume(sampleNo);
     if ( (replicaNo!=blockedNum) || (pPhysical!=blockedVol) )

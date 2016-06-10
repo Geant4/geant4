@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc 73430 2013-08-27 11:04:49Z gcosmo $
+// $Id: G4Ellipsoid.cc 81641 2014-06-04 09:11:38Z gcosmo $
 //
 // class G4Ellipsoid
 //
@@ -50,7 +50,6 @@
 #include "G4VPVParameterisation.hh"
 
 #include "G4VGraphicsScene.hh"
-#include "G4Polyhedron.hh"
 #include "G4VisExtent.hh"
 
 using namespace CLHEP;
@@ -140,6 +139,7 @@ G4Ellipsoid::G4Ellipsoid(const G4Ellipsoid& rhs)
     zSemiAxis(rhs.zSemiAxis), semiAxisMax(rhs.semiAxisMax),
     zBottomCut(rhs.zBottomCut), zTopCut(rhs.zTopCut)
 {
+  fpPolyhedron = GetPolyhedron();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -158,13 +158,14 @@ G4Ellipsoid& G4Ellipsoid::operator = (const G4Ellipsoid& rhs)
 
    // Copy data
    //
-   fpPolyhedron = 0; kRadTolerance = rhs.kRadTolerance;
+   kRadTolerance = rhs.kRadTolerance;
    halfCarTolerance = rhs.halfCarTolerance;
    halfRadTolerance = rhs.halfRadTolerance;
    fCubicVolume = rhs.fCubicVolume; fSurfaceArea = rhs.fSurfaceArea;
    xSemiAxis = rhs.xSemiAxis; ySemiAxis = rhs.ySemiAxis;
    zSemiAxis = rhs.zSemiAxis; semiAxisMax = rhs.semiAxisMax;
    zBottomCut = rhs.zBottomCut; zTopCut = rhs.zTopCut;
+   delete fpPolyhedron; fpPolyhedron = 0; fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

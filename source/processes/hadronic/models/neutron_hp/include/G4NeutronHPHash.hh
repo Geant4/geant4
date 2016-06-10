@@ -79,6 +79,7 @@ public:
   {
     if(theUpper) 
     {
+      theUpper->Clear();
       delete theUpper;
       theUpper = 0;
     }

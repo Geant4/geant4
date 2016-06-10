@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITTransportation.hh 64374 2012-10-31 16:37:23Z gcosmo $
+// $Id: G4ITTransportation.hh 82326 2014-06-16 09:19:18Z gcosmo $
 //
 /// \brief This class is a slightly modified version of G4Transportation
 ///        initially written by John Apostolakis and colleagues (1997)
@@ -192,8 +192,6 @@ protected :
 
         G4double endpointDistance;
     };
-
-    G4ITTransportationState* const & fTransportationState;
 
     //________________________________________________________________
     // Informations relative to the process only (meaning no information

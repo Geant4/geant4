@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSurface.icc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4LogicalSurface.icc 81594 2014-06-03 14:05:18Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Surface Class Inline Methods
@@ -78,7 +78,7 @@ G4LogicalSurface::SetTransitionRadiationSurface(G4TransitionRadiationSurface*
   // Operators
   //////////////
 
-inline const G4LogicalSurface &
+inline G4LogicalSurface &
 G4LogicalSurface::operator=(const G4LogicalSurface &right)
 {
   if (&right == this)  { return *this; }

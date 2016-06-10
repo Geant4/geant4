@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc 76732 2013-11-14 14:36:57Z gcosmo $
+// $Id: G4Cons.cc 81636 2014-06-04 09:06:08Z gcosmo $
 // GEANT4 tag $Name: $
 //
 //
@@ -57,7 +57,6 @@
 #include "Randomize.hh"
 
 #include "G4VGraphicsScene.hh"
-#include "G4Polyhedron.hh"
 
 using namespace CLHEP;
  
@@ -161,6 +160,7 @@ G4Cons::G4Cons(const G4Cons& rhs)
     halfRadTolerance(rhs.halfRadTolerance),
     halfAngTolerance(rhs.halfAngTolerance)
 {
+   fpPolyhedron = GetPolyhedron();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -192,6 +192,7 @@ G4Cons& G4Cons::operator = (const G4Cons& rhs)
    halfCarTolerance = rhs.halfCarTolerance;
    halfRadTolerance = rhs.halfRadTolerance;
    halfAngTolerance = rhs.halfAngTolerance;
+   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

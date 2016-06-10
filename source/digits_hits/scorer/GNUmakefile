@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 66892 2013-01-17 10:57:59Z gunter $
+# $Id: GNUmakefile 81447 2014-05-28 15:13:56Z gcosmo $
 # --------------------------------------------------------------
 # GNUmakefile for digits+hits library.  Makoto Asai, 1/11/96.
 # --------------------------------------------------------------
@@ -27,6 +27,7 @@ CPPFLAGS += \
             -I$(G4BASE)/digits_hits/detector/include \
             -I$(G4BASE)/digits_hits/digits/include \
             -I$(G4BASE)/intercoms/include \
+            -I$(G4BASE)/graphics_reps/include
 
 include $(G4INSTALL)/config/common.gmk
 

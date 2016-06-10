@@ -26,7 +26,7 @@
 /// \file processes/phonon/src/G4PhononDownconversion.cc
 /// \brief Implementation of the G4PhononDownconversion class
 //
-// $Id: G4PhononDownconversion.cc 76885 2013-11-18 12:55:15Z gcosmo $
+// $Id: G4PhononDownconversion.cc 81891 2014-06-06 13:26:40Z gcosmo $
 //
 // 20131111  Add verbose output for MFP calculation
 // 20131115  Initialize data buffers in ctor
@@ -108,7 +108,7 @@ G4bool G4PhononDownconversion::IsApplicable(const G4ParticleDefinition& aPD) {
 
 //probability density of energy distribution of L'-phonon in L->L'+T process
 
-inline double G4PhononDownconversion::GetLTDecayProb(double d, double x) const {
+G4double G4PhononDownconversion::GetLTDecayProb(G4double d, G4double x) const {
   //d=delta= ratio of group velocities vl/vt and x is the fraction of energy in the longitudinal mode, i.e. x=EL'/EL
   return (1/(x*x))*(1-x*x)*(1-x*x)*((1+x)*(1+x)-d*d*((1-x)*(1-x)))*(1+x*x-d*d*(1-x)*(1-x))*(1+x*x-d*d*(1-x)*(1-x));
 }
@@ -116,8 +116,7 @@ inline double G4PhononDownconversion::GetLTDecayProb(double d, double x) const {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 //probability density of energy distribution of T-phonon in L->T+T process
-
-inline double G4PhononDownconversion::GetTTDecayProb(double d, double x) const {  
+G4double G4PhononDownconversion::GetTTDecayProb(G4double d, G4double x) const {  
   //dynamic constants from Tamura, PRL31, 1985
   G4double A = 0.5*(1-d*d)*(fBeta+fLambda+(1+d*d)*(fGamma+fMu));
   G4double B = fBeta+fLambda+2*d*d*(fGamma+fMu);
@@ -130,7 +129,7 @@ inline double G4PhononDownconversion::GetTTDecayProb(double d, double x) const {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-inline double G4PhononDownconversion::MakeLDeviation(double d, double x) const {
+G4double G4PhononDownconversion::MakeLDeviation(G4double d, G4double x) const {
   //change in L'-phonon propagation direction after decay
 
   return std::acos((1+(x*x)-((d*d)*(1-x)*(1-x)))/(2*x));
@@ -139,7 +138,7 @@ inline double G4PhononDownconversion::MakeLDeviation(double d, double x) const {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-inline double G4PhononDownconversion::MakeTDeviation(double d, double x) const {
+G4double G4PhononDownconversion::MakeTDeviation(G4double d, G4double x) const {
   //change in T-phonon propagation direction after decay (L->L+T process)
   
   return std::acos((1-x*x+d*d*(1-x)*(1-x))/(2*d*(1-x)));
@@ -148,7 +147,7 @@ inline double G4PhononDownconversion::MakeTDeviation(double d, double x) const {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-inline double G4PhononDownconversion::MakeTTDeviation(double d, double x) const {
+G4double G4PhononDownconversion::MakeTTDeviation(G4double d, G4double x) const {
   //change in T-phonon propagation direction after decay (L->T+T process)
 
   return std::acos((1-d*d*(1-x)*(1-x)+d*d*x*x)/(2*d*x));
@@ -247,7 +246,7 @@ void G4PhononDownconversion::MakeLTSecondaries(const G4Track& aTrack) {
   G4double Esec1 = x*E, Esec2 = E-Esec1;
 
   // First secondary is longitudnal
-  int polarization1 = G4PhononPolarization::Long;
+  G4int polarization1 = G4PhononPolarization::Long;
 
   // Make FT or ST phonon (0. means no longitudinal)
   G4int polarization2 = ChoosePolarization(0., theLattice->GetSTDOS(),

@@ -1,4 +1,4 @@
-$Id: History 76883 2013-11-18 12:50:08Z gcosmo $
+$Id: History 81839 2014-06-06 08:47:44Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28-04-14 M.Asai (materials-V09-06-35)
+- G4MaterialPropertyTable: fix race condition problem. Addressing to
+  bug report #1590.
+
+22-04-14 G.Cosmo
+- G4Material: corrected initialisation of pointers in fake default constructor
+  per use of persistency.
+
+15-04-14 G.Cosmo
+- G4Material: corrected typo in printout for duplicate materials in
+  function InitializePointers().
+
+09-04-14 V.Ivanchenko
+- G4Material, G4Element - defined defaulut names and symbols for elements
+    and isotopes if they are not explicitly defined by users - this fixing
+    names for gdml IO which has problem to work with names starting from a
+    decimal number     
 
 16-11-13 M.Kelsey (materials-V09-06-34)
 - G4LatticePhysical:  Drop use of G4Transform3D and related objects in favor

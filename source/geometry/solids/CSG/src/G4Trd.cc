@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc 76263 2013-11-08 11:41:52Z gcosmo $
+// $Id: G4Trd.cc 81636 2014-06-04 09:06:08Z gcosmo $
 //
 //
 // Implementation for G4Trd class
@@ -49,7 +49,6 @@
 #include "Randomize.hh"
 
 #include "G4VGraphicsScene.hh"
-#include "G4Polyhedron.hh"
 
 using namespace CLHEP;
 
@@ -137,6 +136,7 @@ G4Trd::G4Trd(const G4Trd& rhs)
   : G4CSGSolid(rhs), fDx1(rhs.fDx1), fDx2(rhs.fDx2),
     fDy1(rhs.fDy1), fDy2(rhs.fDy2), fDz(rhs.fDz)
 {
+   fpPolyhedron = GetPolyhedron();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -158,6 +158,7 @@ G4Trd& G4Trd::operator = (const G4Trd& rhs)
    fDx1 = rhs.fDx1; fDx2 = rhs.fDx2;
    fDy1 = rhs.fDy1; fDy2 = rhs.fDy2;
    fDz = rhs.fDz;
+   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

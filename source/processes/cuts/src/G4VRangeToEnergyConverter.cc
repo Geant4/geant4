@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.cc 79177 2014-02-19 16:10:41Z gcosmo $
+// $Id: G4VRangeToEnergyConverter.cc 81850 2014-06-06 09:53:57Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -72,9 +72,6 @@ G4VRangeToEnergyConverter & G4VRangeToEnergyConverter::operator=(const G4VRangeT
     theLossTable=0;
  }
 
-  LowestEnergy = right.LowestEnergy;
-  HighestEnergy = right.HighestEnergy;
-  MaxEnergyCut = right.MaxEnergyCut;
   fMaxEnergyCut = right.fMaxEnergyCut;
   NumberOfElements = right.NumberOfElements;
   theParticle = right.theParticle;
@@ -353,8 +350,11 @@ void G4VRangeToEnergyConverter::BuildRangeVector(const G4Material* aMaterial,
   }
    
   // Integrate with Simpson formula with logarithmic binning
-  G4double ltt = std::log(MaxEnergyCut/LowestEnergy);
-  G4double dltau = ltt/TotBin;
+  G4double dltau = 1.0;
+  if (LowestEnergy>0.) {
+      G4double ltt =std::log(MaxEnergyCut/LowestEnergy);
+      dltau = ltt/TotBin;
+  }
 
   G4double s0 = 0.;
   G4double Value;

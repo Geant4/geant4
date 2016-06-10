@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIterminal.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4UIterminal.cc 81837 2014-06-06 08:34:45Z gcosmo $
 //
 // ====================================================================
 //   G4UIterminal.cc
@@ -225,11 +225,11 @@ G4String G4UIterminal::GetCommand(const char* msg)
     G4cout << nC << G4endl;
     newCommand= nullString;
 
-  } else if(nC=="ls" || nC(0,3)=="ls " ) {  // list commands
+  } else if(nC=="ls" || nC.substr(0,3)=="ls " ) {  // list commands
     ListDirectory(nC); 
     newCommand= nullString;
 
-  } else if(nC=="lc" || nC(0,3)=="lc " ) {  // ... by shell
+  } else if(nC=="lc" || nC.substr(0,3)=="lc " ) {  // ... by shell
     shell-> ListCommand(nC.remove(0,2)); 
     newCommand= nullString;
 
@@ -242,12 +242,12 @@ G4String G4UIterminal::GetCommand(const char* msg)
     shell-> ShowCurrentDirectory();
     newCommand= nullString;
 
-  } else if(nC == "cd" || nC(0,3) == "cd ") {  // "cd"
+  } else if(nC == "cd" || nC.substr(0,3) == "cd ") {  // "cd"
     ChangeDirectoryCommand(nC); 
     shell-> SetCurrentDirectory(GetCurrentWorkingDirectory());
     newCommand= nullString;
 
-  } else if(nC == "help" || nC(0,5) == "help ") {  // "help"
+  } else if(nC == "help" || nC.substr(0,5) == "help ") {  // "help"
     TerminalHelp(nC);
     newCommand= nullString;
 

@@ -1,4 +1,4 @@
-$Id: History 79142 2014-02-19 13:35:45Z gcosmo $
+$Id: History 81689 2014-06-04 15:09:00Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22-May-2014  G.Cosmo               (geom-specific-V09-06-39)
+- Added protection in generic constructor of G4Polyhedra for the case when
+  improper number of sides is given as input.
+
+10-Apr-2014  G.Cosmo               (geom-specific-V09-06-38)
+- Get rid of deprecated 'register' storage class specifier in source files.
+
+31-Mar-2014  G.Cosmo
+- Fixed signature of assignment operator to G4VCSGfaceted.
+
+31-Mar-2014  G.Cosmo
+- Fixed signature of assignment operator to G4Polycone, G4Polyhedra and
+  and G4GenericPolycone.
+
+05-Mar-2014  G.Cosmo
+- Fixed proper handling of polyhedron pointer in solids, to avoid memory
+  leak for visualization of parameterised volumes.
 
 12-Feb-2014  G.Cosmo               (geom-specific-V09-06-37)
 - Simply reset polyhedron pointer to zero for modifiers of G4U* wrappers

@@ -40,6 +40,8 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     FCFLAGS   += -fPIC
     CCFLAGS   += -fPIC
   endif
+  G4RUNPATHOPTION := -Wl,-rpath 
+  G4STATIC_MODE += -Wl,-force_load
   FC := gfortran
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
   LDFLAGS += -bind_at_load

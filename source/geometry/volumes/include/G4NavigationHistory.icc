@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.icc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4NavigationHistory.icc 81646 2014-06-04 09:28:37Z gcosmo $
 //
 //
 // class G4NavigationHistory Inline implementation
@@ -43,7 +43,7 @@ G4NavigationHistory::operator=(const G4NavigationHistory &h)
   {
     fNavHistory.resize( h.fStackDepth ); 
   }
-  for ( register G4int ilev=h.fStackDepth; ilev>=0; ilev-- )
+  for ( G4int ilev=h.fStackDepth; ilev>=0; ilev-- )
   { 
     fNavHistory[ilev] = h.fNavHistory[ilev]; 
   } 
@@ -65,7 +65,7 @@ void G4NavigationHistory::Clear()
   G4NavigationLevel tmpNavLevel = G4NavigationLevel(0, origin, kNormal, -1) ;
 
   Reset();
-  for (register G4int ilev=fNavHistory.size()-1; ilev>=0; ilev--)
+  for (G4int ilev=fNavHistory.size()-1; ilev>=0; ilev--)
   {
      fNavHistory[ilev] = tmpNavLevel;
   }

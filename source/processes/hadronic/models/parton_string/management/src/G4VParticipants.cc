@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticipants.cc 67999 2013-03-13 11:14:32Z gcosmo $
+// $Id: G4VParticipants.cc 81886 2014-06-06 13:09:06Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -54,7 +54,7 @@ G4VParticipants::~G4VParticipants()
 }
 
 
-inline void G4VParticipants::Init(G4int theA, G4int theZ)
+void G4VParticipants::Init(G4int theA, G4int theZ)
 {
   if ( theNucleus == NULL ) theNucleus = new G4Fancy3DNucleus();
   theNucleus->Init(theA, theZ);
@@ -62,13 +62,13 @@ inline void G4VParticipants::Init(G4int theA, G4int theZ)
 }
 
 
-inline void G4VParticipants::SetNucleus(G4V3DNucleus * aNucleus)
+void G4VParticipants::SetNucleus(G4V3DNucleus * aNucleus)
 {
   if (theNucleus != NULL) delete theNucleus;
   theNucleus = aNucleus;
 }
 
-inline void G4VParticipants::InitProjectileNucleus(G4int theA, G4int theZ) // Uzhi Nov. 2012
+void G4VParticipants::InitProjectileNucleus(G4int theA, G4int theZ) // Uzhi Nov. 2012
 {
   if ( theProjectileNucleus == NULL ) theProjectileNucleus = new G4Fancy3DNucleus();
   theProjectileNucleus->Init(theA, theZ);
@@ -76,7 +76,7 @@ inline void G4VParticipants::InitProjectileNucleus(G4int theA, G4int theZ) // Uz
 }
 
 
-inline void G4VParticipants::SetProjectileNucleus(G4V3DNucleus * aNucleus)
+void G4VParticipants::SetProjectileNucleus(G4V3DNucleus * aNucleus)
 {
   if (theProjectileNucleus != NULL) delete theProjectileNucleus;
   theProjectileNucleus = aNucleus;

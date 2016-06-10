@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABrownianTransportation.hh 74551 2013-10-14 12:59:14Z gcosmo $
+// $Id: G4DNABrownianTransportation.hh 82326 2014-06-16 09:19:18Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -84,10 +84,12 @@ protected:
     public :
         G4ITBrownianState();
         virtual ~G4ITBrownianState(){;}
+        virtual G4String GetType()
+		{
+			return "G4ITBrownianState";
+		}
         G4bool  fPathLengthWasCorrected;
     };
-
-    G4ITBrownianState* const & fpBrownianState;
 
     G4bool fUseMaximumTimeBeforeReachingBoundary;
     G4Material* fNistWater ;

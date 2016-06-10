@@ -1,4 +1,4 @@
-$Id: History 75567 2013-11-04 11:35:11Z gcosmo $
+$Id: History 81901 2014-06-06 13:49:07Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+8 April 2014 Laurent Garnier (visexternal-V09-06-05)
+- Fix a bad text in G4OpenGL2PSAction
+
 20 Sept 2013 Laurent Garnier
 - add #ifdef statement in in gl2ps.h to prevent having gl2ps AND Wt driver
 

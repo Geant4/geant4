@@ -32,7 +32,6 @@
 #include "G4Polycone.hh"
 #include "G4UPolycone.hh"
 #include "G4VPVParameterisation.hh"
-#include "G4Polyhedron.hh"
 
 ////////////////////////////////////////////////////////////////////////
 //

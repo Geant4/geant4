@@ -1,4 +1,4 @@
-$Id: History 77295 2013-11-22 11:02:41Z gcosmo $
+$Id: History 81863 2014-06-06 10:23:31Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26 May 13: V.Ivanchenko (empolar-V09-06-09)
+- G4PolarizationMessenger - fixed coverity report on non-initialized members
 
 21 November 13: V.Ivanchenko (empolar-V09-06-08)
 - G4PolarizedPairProductionCrossSection, G4PolarizedBremsstrahlungCrossSection

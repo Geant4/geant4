@@ -107,7 +107,7 @@ double MTwistEngine::flat() {
   unsigned int y;
 
    if( count624 >= N ) {
-    register int i;
+    int i;
 
     for( i=0; i < NminusM; ++i ) {
       y = (mt[i] & 0x80000000) | (mt[i+1] & 0x7fffffff);
@@ -222,7 +222,7 @@ MTwistEngine::operator float() {
   unsigned int y;
 
   if( count624 >= N ) {
-    register int i;
+    int i;
 
     for( i=0; i < NminusM; ++i ) {
       y = (mt[i] & 0x80000000) | (mt[i+1] & 0x7fffffff);
@@ -253,7 +253,7 @@ MTwistEngine::operator unsigned int() {
   unsigned int y;
 
   if( count624 >= N ) {
-    register int i;
+    int i;
 
     for( i=0; i < NminusM; ++i ) {
       y = (mt[i] & 0x80000000) | (mt[i+1] & 0x7fffffff);

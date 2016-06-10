@@ -1,4 +1,4 @@
-$Id: History 77651 2013-11-27 08:47:55Z gcosmo $
+$Id: History 81671 2014-06-04 12:15:25Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4 May, 2014 M. Asai (intercoms-V09-06-18)
+- G4GenericMessenger.cc : Fix core dump when GetCurrentValue()
+  method is invoked for a command defined by DeclareMethod().
+
+3 May, 2014 M. Asai
+- Fix the treatment of double-quotes in G4UImanager::ForeachS().
+  Addressing bug report #1614.
+
+16 April, 2014 G. Cosmo
+- Corrected inclusion protection flag in G4GenericMessenger.hh.
+  Addressing old problem report #1527.
+
+04 March, 2014 M. Asai (intercoms-V09-06-17)
+- G4GenericMessenger : introducing three additional methods to make
+  it Geant4-v10.0-compliant. Addressing to bug report #1580.
 
 26 November, 2013 M. Asai (intercoms-V09-06-16)
 - G4GenericMessenger : introducing two methods for declaring a method

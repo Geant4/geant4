@@ -52,6 +52,7 @@
 // 20130314  M. Kelsey -- Use G4IonList typedef for fragment map, encapsulate
 //		it in a static function with mutexes.
 // 20130620  M. Kelsey -- Address Coverity #37503, check self in op=()
+// 20140523  M. Kelsey -- Avoid FPE in setExcitationEnergy() for zero Ekin
 
 #include "G4InuclNuclei.hh"
 #include "G4AutoLock.hh"
@@ -184,8 +185,9 @@ void G4InuclNuclei::setExitationEnergy(G4double e) {
 
   G4double emass = getNucleiMass() + e*MeV/GeV;	// From Bertini to G4 units
 
-  // Directly compute new kinetic energy from old
-  G4double ekin_new = std::sqrt(emass*emass + ekin*(2.*getMass()+ekin)) - emass;
+  // Safety check -- if zero energy, don't do computation
+  G4double ekin_new = (ekin == 0.) ? 0.
+    : std::sqrt(emass*emass + ekin*(2.*getMass()+ekin)) - emass;
 
   setMass(emass);	       // Momentum is computed from mass and Ekin
   setKineticEnergy(ekin_new);

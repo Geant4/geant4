@@ -24,19 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.icc 69699 2013-05-13 08:50:30Z gcosmo $
+// $Id: G4FieldTrack.icc 81686 2014-06-04 14:44:57Z gcosmo $
 //
 // -------------------------------------------------------------------
-
-inline void
-G4FieldTrack::InitialiseSpin( const G4ThreeVector& Spin )
-{
-  // static G4ThreeVector ZeroVec(0.0, 0.0, 0.0); 
-
-  fSpin = Spin;
-  // New Member ??  G4bool fHasSpin; 
-  // fHasSpin = (fSpin != ZeroVec); 
-}
 
 inline
 G4FieldTrack::G4FieldTrack( const G4FieldTrack&  rStVec  )
@@ -46,7 +36,7 @@ G4FieldTrack::G4FieldTrack( const G4FieldTrack&  rStVec  )
    fLabTimeOfFlight( rStVec.fLabTimeOfFlight ), 
    fProperTimeOfFlight( rStVec.fProperTimeOfFlight ), 
    // fMomentumModulus( rStVec.fMomentumModulus ),
-   fSpin( rStVec.fSpin ), 
+   fPolarization( rStVec.fPolarization ), 
    fMomentumDir( rStVec.fMomentumDir ),
    fChargeState( rStVec.fChargeState )
 {
@@ -142,15 +132,15 @@ void G4FieldTrack::SetKineticEnergy(G4double newKinEnergy)
 }
 
 inline
-G4ThreeVector G4FieldTrack::GetSpin() const
+G4ThreeVector G4FieldTrack::GetPolarization() const
 {
-   return fSpin;
+   return fPolarization;
 }
 
 inline
-void G4FieldTrack::SetSpin(G4ThreeVector nSpin)
+void G4FieldTrack::SetPolarization(const G4ThreeVector& vecPlz)
 {
-   fSpin=nSpin;
+   fPolarization= vecPlz;
 }
 
 inline
@@ -231,61 +221,15 @@ void G4FieldTrack::DumpToArray(G4double valArr[ncompSVEC] ) const
   // valArr[6]=fEnergy;  // When it is integrated over, do this ...
   valArr[7]=fLabTimeOfFlight;
   valArr[8]=fProperTimeOfFlight;
-  valArr[9]=fSpin.x();
-  valArr[10]=fSpin.y();
-  valArr[11]=fSpin.z();
+  valArr[9]=fPolarization.x();
+  valArr[10]=fPolarization.y();
+  valArr[11]=fPolarization.z();
   // valArr[13]=fMomentumDir.x(); 
   // valArr[14]=fMomentumDir.y();
   // valArr[15]=fMomentumDir.z();
   // valArr[]=fDistanceAlongCurve; 
 }
 
-// Load values from array
-//  
-//   note that momentum direction must-be/is normalised
-
-inline
-void G4FieldTrack::LoadFromArray(const G4double valArrIn[ncompSVEC], G4int noVarsIntegrated)
-{
-  G4int i;
-
-  // Fill the variables not integrated with zero -- so it's clear !!
-  static G4ThreadLocal G4double valArr[ncompSVEC];
-  for( i=0; i<noVarsIntegrated; i++){
-     valArr[i]= valArrIn[i];
-  }
-  for( i=noVarsIntegrated; i<ncompSVEC; i++) {
-     valArr[i]= 0.0; 
-  }
-
-  SixVector[0]=valArr[0];
-  SixVector[1]=valArr[1];
-  SixVector[2]=valArr[2];
-  SixVector[3]=valArr[3];
-  SixVector[4]=valArr[4];
-  SixVector[5]=valArr[5];
-
-  G4ThreeVector Momentum(valArr[3],valArr[4],valArr[5]);
-
-  G4double momentum_square= Momentum.mag2();
-  fMomentumDir= Momentum.unit();
-
-  fKineticEnergy = momentum_square / 
-                   (std::sqrt(momentum_square+fRestMass_c2*fRestMass_c2)
-                     + fRestMass_c2 ); 
-  // The above equation is stable for small and large momenta
-
-  // The following components may or may not be
-  //    integrated over -- integration is optional
-  // fKineticEnergy= valArr[6];
-
-  fLabTimeOfFlight=valArr[7];
-  fProperTimeOfFlight=valArr[8];
-  fSpin=G4ThreeVector(valArr[9],valArr[10],valArr[11]);
-  // fMomentumDir=G4ThreeVector(valArr[13],valArr[14],valArr[15]);
-  // fDistanceAlongCurve= valArr[]; 
-}
-  
 inline
 G4FieldTrack & G4FieldTrack::operator = ( const G4FieldTrack& rStVec )
 {
@@ -300,9 +244,10 @@ G4FieldTrack & G4FieldTrack::operator = ( const G4FieldTrack& rStVec )
   SetCurveLength( rStVec.GetCurveLength() );
 
   fKineticEnergy= rStVec.fKineticEnergy;
+  fRestMass_c2= rStVec.fRestMass_c2;
   SetLabTimeOfFlight( rStVec.GetLabTimeOfFlight()  ); 
   SetProperTimeOfFlight( rStVec.GetProperTimeOfFlight()  ); 
-  SetSpin( rStVec.GetSpin() );
+  SetPolarization( rStVec.GetPolarization() );
   fMomentumDir= rStVec.fMomentumDir;
 
   fChargeState= rStVec.fChargeState;

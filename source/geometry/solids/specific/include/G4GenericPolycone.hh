@@ -115,7 +115,7 @@ class G4GenericPolycone : public G4VCSGfaceted
     // persistifiable objects.
 
   G4GenericPolycone( const G4GenericPolycone &source );
-  const G4GenericPolycone &operator=( const G4GenericPolycone &source );
+  G4GenericPolycone &operator=( const G4GenericPolycone &source );
     // Copy constructor and assignment operator.
 
  protected:  // without description

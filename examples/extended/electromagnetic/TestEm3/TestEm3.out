@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
+ Geant4 version Name: geant4-10-00-patch-02    (13-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -23,12 +23,12 @@ userDetector->Construct() start.
  	 liquidArgon:    5.7 mm 
 -------------------------------------------------------------
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 113728944.973 pc 
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 113427275.267 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
@@ -90,7 +90,7 @@ compt:   for  gamma    SubType= 13
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -489,35 +489,35 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=7.04s Real=11.98s Sys=0s
+  User=7.15s Real=16.55s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 779.34 MeV :  15.93 MeV     2.044 +- 0.2044 %      54.6 cm  +- 1.16 cm 
-   liquidArgon: 211.25 MeV :  14.91 MeV     7.059 +- 0.7059 %      1.05 m   +- 7.85 cm 
+          Lead: 778.37 MeV :   15.3 MeV     1.965 +- 0.1965 %      54.4 cm  +- 1.26 cm 
+   liquidArgon: 211.36 MeV :  14.18 MeV     6.711 +- 0.6711 %      1.05 m   +- 6.98 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma          512
- Mean number of e-             876
- Mean number of e+             54.5
- Mean number of charged steps  5084.12
- Mean number of neutral steps  3642.52
+ Mean number of gamma          508
+ Mean number of e-             872
+ Mean number of e+             53.2
+ Mean number of charged steps  5034.56
+ Mean number of neutral steps  3647.43
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 779.342 MeV
-liquidArgon:	 211.246 MeV
+      Lead:	 778.368 MeV
+liquidArgon:	 211.286 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1053475609, 1979582572
+ Current couple of seeds = 921570797, 589687205
 ----------------------------------------
 #
 /process/em/setSecBiasing eIoni World 0.3 2 MeV
@@ -547,7 +547,7 @@ compt:   for  gamma    SubType= 13
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -920,7 +920,7 @@ Index : 2     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1053475609, 1979582572
+ Current couple of seeds = 921570797, 589687205
 ----------------------------------------
 
 ---> Begin Of Event: 0
@@ -929,35 +929,35 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=5.96s Real=8.94s Sys=0s
+  User=6.04s Real=13.56s Sys=0.01s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 780.44 MeV :  21.62 MeV      2.77 +- 0.277 %      51.9 cm  +- 1.28 cm 
-   liquidArgon: 211.67 MeV :  18.86 MeV     8.912 +- 0.8912 %         1 m   +- 8.18 cm 
+          Lead: 779.94 MeV :  20.26 MeV     2.598 +- 0.2598 %        52 cm  +-  1.2 cm 
+   liquidArgon: 209.35 MeV :   16.8 MeV     8.026 +- 0.8026 %      99.2 cm  +- 7.82 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma          294
- Mean number of e-             558
- Mean number of e+             53.8
- Mean number of charged steps  4348.24
- Mean number of neutral steps  2908.26
+ Mean number of gamma          296
+ Mean number of e-             561
+ Mean number of e+             54.6
+ Mean number of charged steps  4333.44
+ Mean number of neutral steps  2903.19
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 776.743 MeV
-liquidArgon:	 212.072 MeV
+      Lead:	 777.53 MeV
+liquidArgon:	 211.059 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1722556959, 1133249183
+ Current couple of seeds = 1841303512, 1421244123
 ----------------------------------------
 #
 G4 kernel has come to Quit state.

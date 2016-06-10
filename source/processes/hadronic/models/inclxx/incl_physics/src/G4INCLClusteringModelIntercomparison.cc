@@ -210,7 +210,7 @@ namespace G4INCL {
     return chosenCluster;
   }
 
-  inline G4double ClusteringModelIntercomparison::getPhaseSpace(const G4int oldA, ConsideredPartner const &p) {
+  G4double ClusteringModelIntercomparison::getPhaseSpace(const G4int oldA, ConsideredPartner const &p) {
     const G4double psSpace = (p.position - runningPositions[oldA]).mag2();
     const G4double psMomentum = (p.momentum*oldA - runningMomenta[oldA]).mag2();
     return psSpace * psMomentum * clusterPosFact2[oldA + 1];

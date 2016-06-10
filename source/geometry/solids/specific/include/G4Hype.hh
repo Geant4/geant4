@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.hh 72937 2013-08-14 13:20:38Z gcosmo $
+// $Id: G4Hype.hh 81641 2014-06-04 09:11:38Z gcosmo $
 // $Original: G4Hype.hh,v 1.0 1998/06/09 16:57:50 safai Exp $
 //
 // 
@@ -59,6 +59,7 @@
 
 #include "G4VSolid.hh"
 #include "G4ThreeVector.hh"
+#include "G4Polyhedron.hh"
 
 class G4SolidExtentList;
 class G4ClippablePolygon;

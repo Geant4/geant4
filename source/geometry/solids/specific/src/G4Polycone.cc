@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc 79142 2014-02-19 13:35:45Z gcosmo $
+// $Id: G4Polycone.cc 81641 2014-06-04 09:11:38Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -46,7 +46,6 @@
 
 #include "Randomize.hh"
 
-#include "G4Polyhedron.hh"
 #include "G4EnclosingCylinder.hh"
 #include "G4ReduciblePolygon.hh"
 #include "G4VPVParameterisation.hh"
@@ -373,7 +372,7 @@ G4Polycone::G4Polycone( const G4Polycone &source )
 //
 // Assignment operator
 //
-const G4Polycone &G4Polycone::operator=( const G4Polycone &source )
+G4Polycone &G4Polycone::operator=( const G4Polycone &source )
 {
   if (this == &source) return *this;
   
@@ -428,6 +427,8 @@ void G4Polycone::CopyStuff( const G4Polycone &source )
   // Enclosing cylinder
   //
   enclosingCylinder = new G4EnclosingCylinder( *source.enclosingCylinder );
+
+  fpPolyhedron = GetPolyhedron();
 }
 
 

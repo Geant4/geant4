@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc 78171 2013-12-04 13:22:18Z gunter $
+// $Id: G4VMultipleScattering.cc 81864 2014-06-06 11:30:54Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -104,7 +104,7 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
   SetProcessSubType(fMultipleScattering);
   if("ionmsc" == name) { firstParticle = G4GenericIon::GenericIon(); }
 
-  geomMin = 0.01*CLHEP::nm;
+  geomMin = 0.05*CLHEP::nm;
   lowestKinEnergy = 10*eV;
 
   // default limit on polar angle
@@ -118,6 +118,7 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
   fPositionChanged = false;
   isActive = false;
 
+  currentModel = 0;
   modelManager = new G4EmModelManager();
   emManager = G4LossTableManager::Instance();
   emManager->Register(this);
@@ -180,8 +181,10 @@ G4VMultipleScattering::GetModelByIndex(G4int idx, G4bool ver) const
 void 
 G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
-  G4bool master = true;
-  if(GetMasterProcess() != this) { master = false; }
+ G4bool master = true;
+  const G4VMultipleScattering* masterProc = 
+    static_cast<const G4VMultipleScattering*>(GetMasterProcess());
+  if(masterProc && masterProc != this) { master = false; }
 
   if(!firstParticle) { firstParticle = &part; }
   if(part.GetParticleType() == "nucleus") {
@@ -278,7 +281,7 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
   G4bool master = true;
   const G4VMultipleScattering* masterProcess = 
     static_cast<const G4VMultipleScattering*>(GetMasterProcess()); 
-  if(masterProcess != this) { master = false; }
+  if(masterProcess && masterProcess != this) { master = false; }
 
   if(firstParticle == &part) { 
     /*    

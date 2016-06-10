@@ -1,4 +1,4 @@
-$Id: History 77024 2013-11-20 16:08:38Z gcosmo $
+$Id: History 81646 2014-06-04 09:28:37Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 10th, 2014 G.Cosmo                  - geomvol-V09-06-21
+- Get rid of deprecated 'register' storage class specifier in source files
+
+March 31st, 2014 G.Cosmo
+- Corrected signature of operator=() for G4LogicalBorder/SkinSurface.
+
+February 14th, 2014 G.Cosmo
+- Minor cleanup and optimisation to G4EnhancedAllocator.
+- Code cleanup in G4GeometryWorkspace and G4GeometryWorkspacePool.
+
 November 19th, 2013 J.Apostolakis         - geomvol-V09-06-20
 - Fix(es) for issues identified by Coverity:
    G4GeometryWorkspace: initialisation of data member.

@@ -74,61 +74,6 @@ double UUtils::Random(double min, double max)
   return res;
 }
 
-int UUtils::SaveVectorToExternalFile(const vector<double>& vector, const string& filename)
-{
-  ofstream file(filename.c_str());
-
-  // NEW: set precision, use exponential, precision 4 digits
-  if (file.is_open())
-  {
-    int size = vector.size();
-    file.precision(16);
-    for (int i = 0; i < size; i++)
-    {
-      double value = vector[i];
-      file << value << "\n";
-    }
-    return 0;
-  }
-  return 1;
-}
-
-
-int UUtils::SaveVectorToExternalFile(const vector<int>& vector, const string& filename)
-{
-  ofstream file(filename.c_str());
-
-  if (file.is_open())
-  {
-    int size = vector.size();
-    for (int i = 0; i < size; i++)
-    {
-      int value = vector[i];
-      file << value << "\n";
-    }
-    return 0;
-  }
-  return 1;
-}
-
-int UUtils::SaveVectorToExternalFile(const vector<UVector3>& vector, const string& filename)
-{
-  ofstream file(filename.c_str());
-
-  if (file.is_open())
-  {
-    int size = vector.size();
-    file.precision(16);
-    for (int i = 0; i < size; i++)
-    {
-      const UVector3& vec = vector[i];
-      file << vec.x << "\t" << vec.y << "\t" << vec.z << "\n";
-    }
-    return 0;
-  }
-  return 1;
-}
-
 string UUtils::ToString(int number)
 {
   std::stringstream ss;

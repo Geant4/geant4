@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_BIC_HP.icc 67969 2013-03-13 09:44:42Z gcosmo $
+// $Id: QGSP_BIC_HP.icc 82135 2014-06-11 10:48:08Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -113,6 +113,9 @@ template<class T> void TQGSP_BIC_HP<T>::SetCuts()
 
   this->SetCutsWithDefault();   
   
+  //Set proton cut value to 0 for producing low energy recoil nucleus 
+  this->SetCutValue(0, "proton");    
+
 //  if (this->verboseLevel >0)
 //    G4VUserPhysicsList::DumpCutValuesTable();  
 

@@ -900,4 +900,6 @@ decayTrappedParticle(const G4CascadParticle& trapped) {
       output.addOutgoingParticle(idaugEP);
     }
   }
+
+  delete daughters;		// Clean up memory created by DecayIt()
 }

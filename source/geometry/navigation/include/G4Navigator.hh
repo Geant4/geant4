@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh 70647 2013-06-03 15:12:33Z gcosmo $
+// $Id: G4Navigator.hh 81755 2014-06-05 07:59:56Z gcosmo $
 //
 //
 // class G4Navigator
@@ -456,6 +456,7 @@ class G4Navigator
      G4VPhysicalVolume* spBlockedPhysicalVolume;
      G4int sBlockedReplicaNo;  
      G4int sLastStepWasZero; 
+     G4bool sWasLimitedByGeometry;
 
      //  Potentially relevant
      //

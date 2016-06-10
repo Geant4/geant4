@@ -98,6 +98,9 @@ template<class T> void TFTFP_BERT_HP<T>::SetCuts()
   //   the default cut value for all particle types 
 
   this->SetCutsWithDefault();   
+
+  //Set proton cut value to 0 for producing low energy recoil nucleus 
+  this->SetCutValue(0, "proton");    
  
 //  if (this->verboseLevel > 0)
 //    G4VUserPhysicsList::DumpCutValuesTable();  

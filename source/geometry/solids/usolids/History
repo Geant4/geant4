@@ -17,6 +17,37 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 23, 2014  T.Nikitina                  geom-usolids-V09-06-15
+- Fixed DistanceToOut() for UTubs, UCons, USphere, UVSCGfaceted and UPolycone, 
+  DistanceToOut() return normal even for concave faces.
+- Fixed DistanceToOut() for UPolycone in case of points starting on
+  the Surface or on the Internal Surface. Improved convexity algorithm in 
+  DistanceToOut() for UPolycone for points leaving +/-Dz. 
+
+March 27, 2014  G.Cosmo                   geom-usolids-V09-06-14
+- Removed unused SaveVectorToExternalFile() methods in UUtils, also
+  causing cyclic dependency with UVector3.
+
+March 25, 2014  T.Nikitina
+- Fix to DistanceToIn() for UBox in case of points located on edges.
+
+March 13, 2014  G.Cosmo
+- Fixed use of inline keyword for methods defined in .cc files in UTrd,
+  UVCSGfaceted and UVoxelizer.
+- Moved findComponentFastest() to be a method of UVoxelizer and changed
+  to FindComponentFastest().
+
+March 5, 2014  G.Cosmo
+- Fixed handling of polyhedron pointer in G4USolid.
+
+February 28, 2014  T.Nikitina
+- New Implementation of SafetyFromInside() for UPolycone, skipping internal
+  Z sections.
+- Implementation of auxiliary methods in UTubs and UCons: SafetyFromInsideR(),
+  SafetyFromOutsideR(),SafetyToPhi(). These methds are used in Polycone for
+  SafetyfromInside() calculations. SafetyFromInside() and SafetyFromOutside()
+  are changed in order to avoid duplications.
+  
 February 21, 2014  T.Nikitina             geom-usolids-V09-06-13
 - Implemented precise safety in UTubs and UCons for SafetyFromOutside().
   Precise safety is used in UPolycone for calculation of SafetyFromOutside().

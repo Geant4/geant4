@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RootAnalysisManager.cc 74257 2013-10-02 14:24:55Z gcosmo $
+// $Id: G4RootAnalysisManager.cc 81633 2014-06-04 09:00:33Z gcosmo $
 
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
@@ -316,7 +316,17 @@ G4bool G4RootAnalysisManager::CloseFileImpl()
   fFileManager->CloseFile();  
 
   // No files clean-up in sequential mode
-  if ( ! fState.IsMT() )  return result;
+  // or if ntuples are in use
+  // (to avoid removing non-empty files if a sequential application
+  // is built against MT Geant4 installation_
+  if ( ! fState.IsMT() || ! fNtupleManager->IsEmpty() ) {
+ #ifdef G4VERBOSE
+    if ( fState.GetVerboseL1() ) 
+      fState.GetVerboseL1()
+        ->Message("close", "file", fFileManager->GetFullFileName());
+#endif
+    return result;
+  }  
   
   // Delete files if empty in MT mode
   if ( ( fState.GetIsMaster() && 

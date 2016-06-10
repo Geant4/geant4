@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CSGSolid.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4CSGSolid.cc 81636 2014-06-04 09:06:08Z gcosmo $
 //
 // --------------------------------------------------------------------
 
@@ -93,7 +93,7 @@ G4CSGSolid& G4CSGSolid::operator = (const G4CSGSolid& rhs)
    //
    fCubicVolume = rhs.fCubicVolume;
    fSurfaceArea = rhs.fSurfaceArea;
-   fpPolyhedron = 0;
+   delete fpPolyhedron; fpPolyhedron = 0;
 
    return *this;
 }  

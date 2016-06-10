@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGL2PSAction.cc 70646 2013-06-03 15:07:58Z gcosmo $
+// $Id: G4OpenGL2PSAction.cc 81900 2014-06-06 13:48:16Z gcosmo $
 //
 // 
 
@@ -179,7 +179,7 @@ bool G4OpenGL2PSAction::G4gl2psBegin(
   
   glGetIntegerv(GL_VIEWPORT,fViewport);
 
-  GLint res = gl2psBeginPage("title","HEPVis::G4OpenGL2PSAction", 
+  GLint res = gl2psBeginPage("Geant4 output","Geant4", 
                  fViewport,
                  GL2PS_EPS, 
                  sort, 

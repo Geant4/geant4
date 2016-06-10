@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc 79268 2014-02-20 16:46:31Z gcosmo $
+// $Id: G4LossTableManager.cc 81864 2014-06-06 11:30:54Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -515,7 +515,7 @@ void G4LossTableManager::LocalPhysicsTables(
      G4VEnergyLossProcess* p)
 {
   if(1 < verbose) {
-    G4cout << "### G4LossTableManager::SlavePhysicsTable() for "
+    G4cout << "### G4LossTableManager::LocalPhysicsTable() for "
 	   << aParticle->GetParticleName()
   	   << " and process " << p->GetProcessName()
 	   << G4endl;
@@ -530,7 +530,7 @@ void G4LossTableManager::LocalPhysicsTables(
     ++run;
     SetVerbose(verbose);
     if(1 < verbose) {
-      G4cout << "===== G4LossTableManager::SlavePhysicsTable() for run "
+      G4cout << "===== G4LossTableManager::LocalPhysicsTable() for run "
 	     << run << " =====" << G4endl;
     }
     if(atomDeexcitation) {
@@ -587,7 +587,7 @@ void G4LossTableManager::LocalPhysicsTables(
   SetParameters(aParticle, p);
 
   if(1 < verbose) {
-    G4cout << "### G4LossTableManager::SlavePhysicsTable end"
+    G4cout << "### G4LossTableManager::LocalPhysicsTable end"
 	   << G4endl;
   }
   if(all_tables_are_built) { 
@@ -722,7 +722,7 @@ void G4LossTableManager::CopyTables(const G4ParticleDefinition* part,
 
     if (!tables_are_built[j] && part == base_part_vector[j]) {
       tables_are_built[j] = true;
-      proc->SetDEDXTable(base_proc->DEDXTable(),fRestricted);
+      proc->SetDEDXTable(base_proc->IonisationTable(),fRestricted);
       proc->SetDEDXTable(base_proc->DEDXTableForSubsec(),fSubRestricted);
       proc->SetDEDXTable(base_proc->DEDXunRestrictedTable(),fTotal);
       proc->SetCSDARangeTable(base_proc->CSDARangeTable());
@@ -763,7 +763,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
 
   std::vector<G4PhysicsTable*> t_list;  
   std::vector<G4VEnergyLossProcess*> loss_list;
-  loss_list.clear();
+  std::vector<G4bool> build_flags;
   G4VEnergyLossProcess* em = 0;
   G4VEnergyLossProcess* p = 0;
   G4int iem = 0;
@@ -797,7 +797,9 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
 	  iem= i;
 	}
 	// tables may be shared between particle/anti-particle
+	G4bool val = false;
 	if (!tables_are_built[i]) {
+          val = true;
 	  dedx = p->BuildDEDXTable(fRestricted);
 	  //G4cout << "Build DEDX table for " << p->GetProcessName()
 	  // << " idx= " << i << dedx << " " << dedx->length() << G4endl;
@@ -808,6 +810,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
 	}
 	t_list.push_back(dedx);
 	loss_list.push_back(p);
+        build_flags.push_back(val);
       }
     }
   }
@@ -831,9 +834,9 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
 
   dedx = em->DEDXTable(); 
   em->SetIonisation(true);
+  em->SetDEDXTable(dedx, fIsIonisation);
 
   if (1 < n_dedx) {
-    em->SetDEDXTable(dedx, fIsIonisation);
     dedx = 0;
     dedx = G4PhysicsTableHelper::PreparePhysicsTable(dedx);
     tableBuilder->BuildDEDXTable(dedx, t_list);
@@ -874,13 +877,17 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
   for (i=0; i<n_dedx; ++i) {
     p = loss_list[i];
     if(p != em) { p->SetIonisation(false); }
-    p->SetLambdaTable(p->BuildLambdaTable(fRestricted));
+    if(build_flags[i]) {
+      p->SetLambdaTable(p->BuildLambdaTable(fRestricted));
+    }
     if (0 < nSubRegions) {
       dedx = p->BuildDEDXTable(fSubRestricted);
       p->SetDEDXTable(dedx,fSubRestricted);
       listSub.push_back(dedx);
-      p->SetSubLambdaTable(p->BuildLambdaTable(fSubRestricted));
-      if(p != em) { em->AddCollaborativeProcess(p); }
+      if(build_flags[i]) {
+	p->SetSubLambdaTable(p->BuildLambdaTable(fSubRestricted));
+	if(p != em) { em->AddCollaborativeProcess(p); }
+      }
     }
     if(buildCSDARange) { 
       dedx = p->BuildDEDXTable(fTotal);
@@ -1313,7 +1320,10 @@ G4LossTableBuilder* G4LossTableManager::GetTableBuilder()
  
 void G4LossTableManager::SetAtomDeexcitation(G4VAtomDeexcitation* p)
 {
-  atomDeexcitation = p;
+  if(atomDeexcitation != p) {
+    delete atomDeexcitation;
+    atomDeexcitation = p;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

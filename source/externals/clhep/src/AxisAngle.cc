@@ -19,13 +19,13 @@ double HepAxisAngle::tolerance = Hep3Vector::ToleranceTicks * 1.0e-08;
 
 static void ZMpvAxisAngleRep( const HepAxisAngle & aa, double array[] ) {
 
-  register double sinDelta = std::sin( aa.delta() );
-  register double cosDelta = std::cos( aa.delta() );
-  register double oneMinusCosDelta = 1.0 - cosDelta;
+  double sinDelta = std::sin( aa.delta() );
+  double cosDelta = std::cos( aa.delta() );
+  double oneMinusCosDelta = 1.0 - cosDelta;
 
-  register double uX = aa.getAxis().getX();
-  register double uY = aa.getAxis().getY();
-  register double uZ = aa.getAxis().getZ();
+  double uX = aa.getAxis().getX();
+  double uY = aa.getAxis().getY();
+  double uZ = aa.getAxis().getZ();
 
   array[0] = oneMinusCosDelta * uX * uX  +  cosDelta;
   array[1] = oneMinusCosDelta * uX * uY  -  sinDelta * uZ;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITTransportation.cc 71125 2013-06-11 15:39:09Z gcosmo $
+// $Id: G4ITTransportation.cc 82326 2014-06-16 09:19:18Z gcosmo $
 //
 /// \brief This class is a slightly modified version of G4Transportation
 ///        initially written by John Apostolakis and colleagues
@@ -73,14 +73,13 @@
 class G4VSensitiveDetector;
 
 #ifndef State
-#define State(theXInfo) (fTransportationState->theXInfo)
+#define State(theXInfo) (GetState<G4ITTransportationState>()->theXInfo)
 #endif
 
 //#define G4DEBUG_TRANSPORT 1
 
 G4ITTransportation::G4ITTransportation(const G4String& aName, int verbose) :
     G4VITProcess(aName, fTransportation),
-    InitProcessState(fTransportationState, fpState),
     fThreshold_Warning_Energy( 100 * MeV ),
     fThreshold_Important_Energy( 250 * MeV ),
     fThresholdTrials( 10 ),
@@ -110,13 +109,14 @@ G4ITTransportation::G4ITTransportation(const G4String& aName, int verbose) :
     SetInstantiateProcessState(true);
     G4VITProcess::SetInstantiateProcessState(false);
     fInstantiateProcessState = true;
+    
+        G4VITProcess::fpState.reset(new G4ITTransportationState());
 }
 
 
 G4ITTransportation::G4ITTransportation(const G4ITTransportation& right) :
-    G4VITProcess(right),
-    InitProcessState(fTransportationState, fpState)
-{
+    G4VITProcess(right)
+ {
     // Copy attributes
     fVerboseLevel               = right.fVerboseLevel ;
     fThreshold_Warning_Energy   = right.fThreshold_Warning_Energy;
@@ -937,9 +937,10 @@ G4ITTransportation::StartTracking(G4Track* track)
 {
     G4VProcess::StartTracking(track);
     if(fInstantiateProcessState)
-        G4VITProcess::fpState = new G4ITTransportationState();
+    {
+        G4VITProcess::fpState.reset(new G4ITTransportationState());
     // Will set in the same time fTransportationState
-
+	}
     // The actions here are those that were taken in AlongStepGPIL
     //   when track.GetCurrentStepNumber()==1
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc 72937 2013-08-14 13:20:38Z gcosmo $
+// $Id: G4Hype.cc 81641 2014-06-04 09:11:38Z gcosmo $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 //
 // 
@@ -59,7 +59,6 @@
 #include "Randomize.hh"
 
 #include "G4VGraphicsScene.hh"
-#include "G4Polyhedron.hh"
 #include "G4VisExtent.hh"
 
 using namespace CLHEP;
@@ -162,6 +161,7 @@ G4Hype::G4Hype(const G4Hype& rhs)
     fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
     fHalfTol(rhs.fHalfTol), fpPolyhedron(0)
 {
+  fpPolyhedron = GetPolyhedron();
 }
 
 
@@ -189,7 +189,8 @@ G4Hype& G4Hype::operator = (const G4Hype& rhs)
    endInnerRadius2 = rhs.endInnerRadius2; endOuterRadius2 = rhs.endOuterRadius2;
    endInnerRadius = rhs.endInnerRadius; endOuterRadius = rhs.endOuterRadius;
    fCubicVolume = rhs.fCubicVolume; fSurfaceArea = rhs.fSurfaceArea;
-   fHalfTol = rhs.fHalfTol; fpPolyhedron = 0; 
+   fHalfTol = rhs.fHalfTol;
+   delete fpPolyhedron; fpPolyhedron = 0; fpPolyhedron = GetPolyhedron(); 
 
    return *this;
 }

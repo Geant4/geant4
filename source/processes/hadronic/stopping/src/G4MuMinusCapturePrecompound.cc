@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMinusCapturePrecompound.cc 79215 2014-02-20 14:46:56Z gcosmo $
+// $Id: G4MuMinusCapturePrecompound.cc 81888 2014-06-06 13:17:25Z gcosmo $
 //
 //-----------------------------------------------------------------------------
 //
@@ -110,18 +110,20 @@ G4MuMinusCapturePrecompound::ApplyYourself(const G4HadProjectile& projectile,
   */
   // Energy on K-shell
   G4double muEnergy = fMuMass + muBindingEnergy;
-  G4double muMom = std::sqrt(muBindingEnergy*(muBindingEnergy + 2.0*fMuMass));
+  G4double muMom =std::sqrt(muBindingEnergy*(muBindingEnergy + 2.0*fMuMass));
   G4double availableEnergy = massA + fMuMass - muBindingEnergy;
   G4double residualMass = G4NucleiProperties::GetNuclearMass(A, Z - 1);
 
   G4ThreeVector vmu = muMom*G4RandomDirection();
   G4LorentzVector aMuMom(vmu, muEnergy);
 
+  const G4double nenergy = keV;    
+
   // p or 3He as a target 
   // two body reaction mu- + A(Z,A) -> nuMu + A(Z-1,A)
   if((1 == Z && 1 == A) || (2 == Z && 3 == A)) {
 
-    G4ParticleDefinition* pd = 0;
+    const G4ParticleDefinition* pd = 0;
     if(1 == Z) { pd = fNeutron; }
     else { pd = G4Triton::Triton(); }
 
@@ -136,6 +138,32 @@ G4MuMinusCapturePrecompound::ApplyYourself(const G4HadProjectile& projectile,
     nudir *= -1.0;
     AddNewParticle(pd, nudir, availableEnergy - e - residualMass);
 
+  // d or 4He as a target 
+  // three body reaction mu- + A(Z,A) -> nuMu + n + A(Z-1,A)
+  // extra neutron produced at rest
+  } else if((1 == Z && 2 == A) || (2 == Z && 4 == A)) {
+
+    const G4ParticleDefinition* pd = 0;
+    if(1 == Z) { pd = fNeutron; }
+    else { pd = G4Triton::Triton(); }
+
+    availableEnergy -= neutron_mass_c2 - nenergy;
+    residualMass = pd->GetPDGMass();
+
+    //
+    //  Computation in assumption of CM reaction
+    //  
+    G4double e = 0.5*(availableEnergy - 
+		      residualMass*residualMass/availableEnergy);
+
+    G4ThreeVector nudir = G4RandomDirection();
+    AddNewParticle(G4NeutrinoMu::NeutrinoMu(), nudir, e);
+    nudir *= -1.0;
+    AddNewParticle(pd, nudir, availableEnergy - e - residualMass);
+
+    // extra low-energy neutron
+    nudir = G4RandomDirection();
+    AddNewParticle(fNeutron, nudir, nenergy);
 
   } else {
     // sample mu- + p -> nuMu + n reaction in CM of muonic atom
@@ -148,7 +176,7 @@ G4MuMinusCapturePrecompound::ApplyYourself(const G4HadProjectile& projectile,
     G4double eEx;
     fNucleus.Init(A, Z);
     const std::vector<G4Nucleon>& nucleons= fNucleus.GetNucleons();
-    G4ParticleDefinition* pDef;
+    const G4ParticleDefinition* pDef;
 
     G4int reentryCount = 0;
   
@@ -177,15 +205,20 @@ G4MuMinusCapturePrecompound::ApplyYourself(const G4HadProjectile& projectile,
 	momNu.boost(bst);
 	momResidual = momInitial - momNu;
 	eEx = momResidual.mag() - residualMass;
+        if(eEx < 0.0 && eEx + nenergy >= 0.0) {
+          momResidual.set(0.0, 0.0, 0.0, residualMass);
+	}
       }
-      if(reentryCount > 1000) {
+      if(reentryCount > 100 && eEx < 0.0) {
 	G4ExceptionDescription ed;
 	ed << "Call for " << GetModelName() << G4endl;
 	ed << "Target  Z= " << Z  
 	   << "  A= " << A << "  Eex(MeV)= " << eEx/MeV << G4endl;
-	ed << " ApplyYourself does not completed after 1000 attempts";
+	ed << " ApplyYourself does not completed after 100 attempts -"
+	   << " excitation energy is set to zero";
 	G4Exception("G4MuMinusCapturePrecompound::ApplyYourself", "had006", 
-		    FatalException, ed);        
+		    JustWarning, ed);
+	momResidual.set(0.0, 0.0, 0.0, residualMass);
       }
     } while(eEx <= 0.0);
 

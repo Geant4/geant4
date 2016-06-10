@@ -44,6 +44,7 @@
 
 #include "G4USolid.hh"
 #include "UBox.hh"
+#include "G4Polyhedron.hh"
 
 class G4UBox : public G4USolid 
 {
@@ -107,17 +108,17 @@ inline G4double G4UBox::GetZHalfLength() const
 inline void G4UBox::SetXHalfLength(G4double dx)
 {
   GetShape()->SetXHalfLength(dx);
-  fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = 0;
 }
 inline void G4UBox::SetYHalfLength(G4double dy)
 {
   GetShape()->SetYHalfLength(dy);
-  fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = 0;
 }
 inline void G4UBox::SetZHalfLength(G4double dz)
 {
   GetShape()->SetZHalfLength(dz);
-  fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = 0;
 }
 
 #endif

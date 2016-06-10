@@ -31,7 +31,6 @@
 
 #include "G4Polyhedra.hh"
 #include "G4UPolyhedra.hh"
-#include "G4Polyhedron.hh"
 #include "G4VPVParameterisation.hh"
 
 using CLHEP::twopi;

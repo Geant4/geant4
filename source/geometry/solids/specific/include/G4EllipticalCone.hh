@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalCone.hh 72937 2013-08-14 13:20:38Z gcosmo $
+// $Id: G4EllipticalCone.hh 81641 2014-06-04 09:11:38Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -80,6 +80,7 @@
 #include <CLHEP/Units/PhysicalConstants.h>
 
 #include "G4VSolid.hh"
+#include "G4Polyhedron.hh"
 
 class G4EllipticalCone : public G4VSolid
 {

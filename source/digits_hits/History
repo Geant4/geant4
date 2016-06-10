@@ -1,4 +1,4 @@
-$Id: History 78057 2013-12-03 08:31:15Z gcosmo $
+$Id: History 81447 2014-05-28 15:13:56Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 26, 2014, M.Asai (digits_hits-V09-06-15)
+- G4ScoringMessenger.cc : fix broadcast parameters of the commands
+  that should be used only by the master threads. Addressing to
+  bug report #1554.
+
+Apr 27, 2014, M.Asai
+- G4PSCylinderSurfaceCurrent.cc : remove unnecessary cout. 
+  Addressing to Bug Report #1610.
+
+Mar 5, 2014, G.Cosmo
+- Added missing dependency to graphics_reps in scorer module.
+
+Mar 2, 2014, T.Aso, M.Asai
+- Fix the angle factor in G4PSSphereSurfaceFlux to keep it always
+  positive. Addressing to Bug Report #1479.
 
 Dec 2, 2013, M.Asai (digits_hits-V09-06-13)
 - Remove uninitialized and unused datamember from G4ScoringMessenger.

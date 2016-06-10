@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc 76957 2013-11-19 15:07:20Z gcosmo $
+// $Id: G4EmModelManager.cc 81864 2014-06-06 11:30:54Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -109,12 +109,11 @@ G4RegionModels::~G4RegionModels()
 #include "G4Step.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4PhysicsVector.hh"
-#include "G4Gamma.hh"
-#include "G4Positron.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4RegionStore.hh"
 #include "G4Gamma.hh"
+#include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4UnitsTable.hh"
 #include "G4DataVector.hh"
@@ -447,7 +446,9 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
   size_t idx = 1;
   if(secondaryParticle) {
     if( secondaryParticle == G4Gamma::Gamma() )           { idx = 0; }
+    else if( secondaryParticle == G4Electron::Electron()) { idx = 1; }
     else if( secondaryParticle == G4Positron::Positron()) { idx = 2; }
+    else { idx = 3; }
   }
 
   theCuts = 
